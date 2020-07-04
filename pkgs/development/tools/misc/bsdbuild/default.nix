@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl, libtool, pkgconfig, gettext, mandoc, ed }:
 
 stdenv.mkDerivation rec {
-  name = "bsdbuild-${version}";
+  pname = "bsdbuild";
   version = "3.1";
 
   src = fetchurl {
-    url = "http://stable.hypertriton.com/bsdbuild/${name}.tar.gz";
+    url = "http://stable.hypertriton.com/bsdbuild/${pname}-${version}.tar.gz";
     sha256 = "1zrdjh7a6z4khhfw9zrp490afq306cpl5v8wqz2z55ys7k1n5ifl";
   };
 
@@ -48,7 +48,7 @@ EOF
   ];
 
   meta = {
-    homepage = http://bsdbuild.hypertriton.com;
+    homepage = "http://bsdbuild.hypertriton.com";
     description = "A cross-platform build system.";
 
     longDescription = ''

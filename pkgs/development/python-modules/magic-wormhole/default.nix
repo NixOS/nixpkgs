@@ -1,8 +1,7 @@
-{ lib
+{ stdenv
 , buildPythonPackage
 , fetchPypi
-, pythonAtLeast
-, python
+, isPy27
 , spake2
 , pynacl
 , six
@@ -14,52 +13,54 @@
 , tqdm
 , click
 , humanize
-, ipaddress
 , txtorcon
 , nettools
-, glibc
 , glibcLocales
 , mock
 , magic-wormhole-transit-relay
+, magic-wormhole-mailbox-server
 }:
 
 buildPythonPackage rec {
   pname = "magic-wormhole";
-  version = "0.10.5";
+  version = "0.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9558ea1f3551e535deec3462cd5c8391cb32ebb12ecd8b40b36861dbee4917ee";
+    sha256 = "0q41j99718y7m95zg1vaybnsp31lp6lhyqkbv4yqz5ys6jixh3qv";
   };
 
-  checkInputs = [ mock magic-wormhole-transit-relay ];
-  buildInputs = [ nettools glibcLocales ];
-  propagatedBuildInputs = [ spake2 pynacl six attrs twisted autobahn automat hkdf tqdm click humanize ipaddress txtorcon ];
+  buildInputs = [ glibcLocales ];
+  propagatedBuildInputs = [ spake2 pynacl six attrs twisted autobahn automat hkdf tqdm click humanize txtorcon ];
+  checkInputs = [ mock magic-wormhole-transit-relay magic-wormhole-mailbox-server ];
 
-  postPatch = ''
+  postPatch = stdenv.lib.optionalString stdenv.isLinux ''
     sed -i -e "s|'ifconfig'|'${nettools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
-    sed -i -e "s|if (os.path.dirname(os.path.abspath(wormhole))|if not os.path.abspath(wormhole).startswith('/nix/store') and (os.path.dirname(os.path.abspath(wormhole))|" src/wormhole/test/test_cli.py
-
-    # magic-wormhole will attempt to find all available locales by running
-    # 'locale -a'.  If we're building on Linux, then this may result in us
-    # running the system's locale binary instead of the one from Nix, so let's
-    # ensure we patch this.
-    sed -i -e 's|getProcessOutputAndValue("locale"|getProcessOutputAndValue("${glibc}/bin/locale"|' src/wormhole/test/test_cli.py
-  '' + lib.optionalString (pythonAtLeast "3.3") ''
-    sed -i -e 's|"ipaddress",||' setup.py
   '';
 
-  checkPhase = ''
-    export PATH="$PATH:$out/bin"
+  postInstall = ''
+    install -Dm644 docs/wormhole.1 $out/share/man/man1/wormhole.1
+  '';
+
+  # zope.interface issue
+  doCheck = !isPy27;
+  preCheck = ''
+    export PATH=$out/bin:$PATH
     export LANG="en_US.UTF-8"
     export LC_ALL="en_US.UTF-8"
-    ${python.interpreter} -m wormhole.test.run_trial wormhole
+    substituteInPlace src/wormhole/test/test_cli.py \
+      --replace 'getProcessOutputAndValue("locale", ["-a"])' 'getProcessOutputAndValue("locale", ["-a"], env=os.environ)' \
+      --replace 'if (os.path.dirname(os.path.abspath(wormhole))' 'if not os.path.abspath(wormhole).startswith("/nix/store") and (os.path.dirname(os.path.abspath(wormhole))' \
+      --replace 'locale_env = dict(LC_ALL=locale, LANG=locale)' 'locale_env = dict(LC_ALL=locale, LANG=locale, LOCALE_ARCHIVE=os.getenv("LOCALE_ARCHIVE"))'
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "Securely transfer data between computers";
-    homepage = https://github.com/warner/magic-wormhole;
+    homepage = "https://github.com/warner/magic-wormhole";
     license = licenses.mit;
+    # Currently broken on Python 2.7. See
+    # https://github.com/NixOS/nixpkgs/issues/71826
+    broken = isPy27;
     maintainers = with maintainers; [ asymmetric ];
   };
 }

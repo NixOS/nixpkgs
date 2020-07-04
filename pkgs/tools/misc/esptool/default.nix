@@ -2,21 +2,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "esptool";
-  version = "2.5.1";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esptool";
     rev = "v${version}";
-    sha256 = "19l3b1fqg1n3ch484dcibbi5a3nbmjq086has5pwqn348h4k57mh";
+    sha256 = "1p5hx0rhs986ffqz78rdxg7jayndsq632399xby39k17kvd3mb31";
   };
 
-  checkInputs = with python3.pkgs; [ flake8 flake8-future-import flake8-import-order ];
-  propagatedBuildInputs = with python3.pkgs; [ pyserial pyaes ecdsa openssl ];
+  checkInputs = with python3.pkgs; [ flake8 flake8-future-import flake8-import-order openssl ];
+  propagatedBuildInputs = with python3.pkgs; [ pyserial pyaes ecdsa ];
 
   meta = with stdenv.lib; {
     description = "ESP8266 and ESP32 serial bootloader utility";
-    homepage = https://github.com/espressif/esptool;
+    homepage = "https://github.com/espressif/esptool";
     license = licenses.gpl2;
     maintainers = with maintainers; [ dezgeg dotlambda ];
     platforms = platforms.linux;

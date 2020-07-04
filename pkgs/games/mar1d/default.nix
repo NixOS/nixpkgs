@@ -18,7 +18,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "MAR1D-${version}";
+  pname = "MAR1D";
   version = "0.2.0";
   options = "-w${toString width}"
           + " -s${toString sensitivity}"
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       original, however, the game still takes place in a two dimensional world.
       You must view the world as mario does, as a one dimensional line.
     '';
-    homepage = https://github.com/olynch/fp_mario;
+    homepage = "https://github.com/olynch/fp_mario";
     license = licenses.agpl3;
     maintainers = with maintainers; [ taeer ];
     platforms = platforms.linux;

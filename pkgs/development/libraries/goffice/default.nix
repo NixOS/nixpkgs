@@ -1,18 +1,21 @@
-{ fetchurl, stdenv, pkgconfig, intltool, glib, gtk3
-, libgsf, libxml2, libxslt, cairo, pango, librsvg }:
+{ fetchurl, stdenv, pkgconfig, intltool, glib, gtk3, lasem
+, libgsf, libxml2, libxslt, cairo, pango, librsvg, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "goffice-0.10.43";
+  pname = "goffice";
+  version = "0.10.47";
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/goffice/0.10/${name}.tar.xz";
-    sha256 = "550fceefa74622b8fe57dd0b030003e31db50edf7f87068ff5e146365108b64e";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0xmigfdzvmlpa0fw79mf3xwchmxc8rlidryn5syv8bz7msmrb215";
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];
 
-  propagatedBuildInputs = [ # ToDo lasem library for MathML, opt. introspection?
-    glib gtk3 libxml2 cairo pango libgsf
+  propagatedBuildInputs = [
+    glib gtk3 libxml2 cairo pango libgsf lasem
   ];
 
   buildInputs = [ libxslt librsvg ];
@@ -20,8 +23,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = true;
 
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
+
   meta = {
-    description = "A Glib/GTK+ set of document centric objects and utilities";
+    description = "A Glib/GTK set of document centric objects and utilities";
 
     longDescription = ''
       There are common operations for document centric applications that are

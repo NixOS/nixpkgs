@@ -1,13 +1,30 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, vala, glib, gjs, mutter
-, pango, gtk3, gnome3, dbus, clutter, appstream-glib, wrapGAppsHook, systemd, gobjectIntrospection }:
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, appstream-glib
+, clutter
+, gjs
+, glib
+, gobject-introspection
+, gtk3
+, meson
+, mutter
+, ninja
+, pango
+, pkgconfig
+, vala
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  version = "3.28.2";
-  name = "gpaste-${version}";
+  version = "3.36.3";
+  pname = "gpaste";
 
-  src = fetchurl {
-    url = "https://github.com/Keruspe/GPaste/archive/v${version}.tar.gz";
-    sha256 = "1zfx73qpw976hyzp5k569lywsq2b6dbnnzf2cvhjvn3mvkw8pin2";
+  src = fetchFromGitHub {
+    owner = "Keruspe";
+    repo = "GPaste";
+    rev = "v${version}";
+    sha256 = "1p1p2ng095lkly5fp9120b23wlvkj1xf4fhivzsd72css0szy7mi";
   };
 
   patches = [
@@ -16,32 +33,49 @@ stdenv.mkDerivation rec {
 
   # TODO: switch to substituteAll with placeholder
   # https://github.com/NixOS/nix/issues/1846
-  # https://github.com/NixOS/nixpkgs/pull/37693
   postPatch = ''
     substituteInPlace src/gnome-shell/extension.js \
-      --subst-var-by typelibPath "$out/lib/girepository-1.0"
+      --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
     substituteInPlace src/gnome-shell/prefs.js \
-      --subst-var-by typelibPath "$out/lib/girepository-1.0"
+      --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
     substituteInPlace src/libgpaste/settings/gpaste-settings.c \
-      --subst-var-by gschemasCompiled "$out/share/gsettings-schemas/${name}/glib-2.0/schemas"
+      --subst-var-by gschemasCompiled ${glib.makeSchemaPath (placeholder "out") "${pname}-${version}"}
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig vala wrapGAppsHook ];
-  buildInputs = [ glib gjs mutter gnome3.adwaita-icon-theme
-                  gtk3 gnome3.gnome-control-center dbus
-                  clutter pango appstream-glib systemd gobjectIntrospection ];
+  nativeBuildInputs = [
+    appstream-glib
+    gobject-introspection
+    meson
+    ninja
+    pkgconfig
+    vala
+    wrapGAppsHook
+  ];
 
-  configureFlags = [ "--with-controlcenterdir=$(out)/share/gnome-control-center/keybindings"
-                     "--with-dbusservicesdir=$(out)/share/dbus-1/services"
-                     "--with-systemduserunitdir=$(out)/etc/systemd/user" ];
+  buildInputs = [
+    clutter # required by mutter-clutter
+    gjs
+    glib
+    gtk3
+    mutter
+    pango
+  ];
 
-  enableParallelBuilding = true;
+  mesonFlags = [
+    "-Dcontrol-center-keybindings-dir=${placeholder "out"}/share/gnome-control-center/keybindings"
+    "-Ddbus-services-dir=${placeholder "out"}/share/dbus-1/services"
+    "-Dsystemd-user-unit-dir=${placeholder "out"}/etc/systemd/user"
+  ];
+
+  postInstall = ''
+    ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
+  '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/Keruspe/GPaste;
-    description = "Clipboard management system with GNOME3 integration";
+    homepage = "https://github.com/Keruspe/GPaste";
+    description = "Clipboard management system with GNOME 3 integration";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

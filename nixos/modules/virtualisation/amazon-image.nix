@@ -8,7 +8,13 @@
 
 with lib;
 
-let cfg = config.ec2; in
+let
+  cfg = config.ec2;
+  metadataFetcher = import ./ec2-metadata-fetcher.nix {
+    targetRoot = "$targetRoot/";
+    wgetExtraOptions = "-q";
+  };
+in
 
 {
   imports = [ ../profiles/headless.nix ./ec2-data.nix ./amazon-init.nix ];
@@ -19,19 +25,27 @@ let cfg = config.ec2; in
       { assertion = cfg.hvm;
         message = "Paravirtualized EC2 instances are no longer supported.";
       }
+      { assertion = cfg.efi -> cfg.hvm;
+        message = "EC2 instances using EFI must be HVM instances.";
+      }
     ];
 
     boot.growPartition = cfg.hvm;
 
     fileSystems."/" = {
       device = "/dev/disk/by-label/nixos";
+      fsType = "ext4";
       autoResize = true;
     };
 
-    boot.extraModulePackages =
-      [ config.boot.kernelPackages.ixgbevf
-        config.boot.kernelPackages.ena
-      ];
+    fileSystems."/boot" = mkIf cfg.efi {
+      device = "/dev/disk/by-label/ESP";
+      fsType = "vfat";
+    };
+
+    boot.extraModulePackages = [
+      config.boot.kernelPackages.ena
+    ];
     boot.initrd.kernelModules = [ "xen-blkfront" "xen-netfront" ];
     boot.initrd.availableKernelModules = [ "ixgbevf" "ena" "nvme" ];
     boot.kernelParams = mkIf cfg.hvm [ "console=ttyS0" ];
@@ -44,8 +58,10 @@ let cfg = config.ec2; in
 
     # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
     boot.loader.grub.version = if cfg.hvm then 2 else 1;
-    boot.loader.grub.device = if cfg.hvm then "/dev/xvda" else "nodev";
+    boot.loader.grub.device = if (cfg.hvm && !cfg.efi) then "/dev/xvda" else "nodev";
     boot.loader.grub.extraPerEntryConfig = mkIf (!cfg.hvm) "root (hd0)";
+    boot.loader.grub.efiSupport = cfg.efi;
+    boot.loader.grub.efiInstallAsRemovable = cfg.efi;
     boot.loader.timeout = 0;
 
     boot.initrd.network.enable = true;
@@ -53,7 +69,7 @@ let cfg = config.ec2; in
     # Mount all formatted ephemeral disks and activate all swap devices.
     # We cannot do this with the ‘fileSystems’ and ‘swapDevices’ options
     # because the set of devices is dependent on the instance type
-    # (e.g. "m1.large" has one ephemeral filesystem and one swap device,
+    # (e.g. "m1.small" has one ephemeral filesystem and one swap device,
     # while "m1.large" has two ephemeral filesystems and no swap
     # devices).  Also, put /tmp and /var on /disk0, since it has a lot
     # more space than the root device.  Similarly, "move" /nix to /disk0
@@ -61,26 +77,7 @@ let cfg = config.ec2; in
     # Nix operations.
     boot.initrd.postMountCommands =
       ''
-        metaDir=$targetRoot/etc/ec2-metadata
-        mkdir -m 0755 -p "$metaDir"
-
-        echo "getting EC2 instance metadata..."
-
-        if ! [ -e "$metaDir/ami-manifest-path" ]; then
-          wget -q -O "$metaDir/ami-manifest-path" http://169.254.169.254/1.0/meta-data/ami-manifest-path
-        fi
-
-        if ! [ -e "$metaDir/user-data" ]; then
-          wget -q -O "$metaDir/user-data" http://169.254.169.254/1.0/user-data && chmod 600 "$metaDir/user-data"
-        fi
-
-        if ! [ -e "$metaDir/hostname" ]; then
-          wget -q -O "$metaDir/hostname" http://169.254.169.254/1.0/meta-data/hostname
-        fi
-
-        if ! [ -e "$metaDir/public-keys-0-openssh-key" ]; then
-          wget -q -O "$metaDir/public-keys-0-openssh-key" http://169.254.169.254/1.0/meta-data/public-keys/0/openssh-key
-        fi
+        ${metadataFetcher}
 
         diskNr=0
         diskForUnionfs=
@@ -138,6 +135,9 @@ let cfg = config.ec2; in
     services.openssh.enable = true;
     services.openssh.permitRootLogin = "prohibit-password";
 
+    # Creates symlinks for block device names.
+    services.udev.packages = [ pkgs.ec2-utils ];
+
     # Force getting the hostname from EC2.
     networking.hostName = mkDefault "";
 
@@ -150,7 +150,7 @@ let cfg = config.ec2; in
     networking.timeServers = [ "169.254.169.123" ];
 
     # udisks has become too bloated to have in a headless system
-    # (e.g. it depends on GTK+).
+    # (e.g. it depends on GTK).
     services.udisks2.enable = false;
   };
 }

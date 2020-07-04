@@ -14,13 +14,22 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "${type}krb5-${version}";
-  majorVersion = "1.15";
-  version = "${majorVersion}.2";
+  majorVersion = "1.18"; # remove patches below with next upgrade
+  version = majorVersion;
 
   src = fetchurl {
-    url = "${meta.homepage}dist/krb5/${majorVersion}/krb5-${version}.tar.gz";
-    sha256 = "0zn8s7anb10hw3nzwjz7vg10fgmmgvwnibn2zrn3nppjxn9f6f8n";
+    url = "https://kerberos.org/dist/krb5/${majorVersion}/krb5-${version}.tar.gz";
+    sha256 = "121c5xsy3x0i4wdkrpw62yhvji6virbh6n30ypazkp0isws3k4bk";
   };
+
+  patches = optionals stdenv.hostPlatform.isMusl [
+    # TODO: Remove with next release > 1.18
+    # Patches to fix musl build with 1.18.
+    # Not using `fetchpatch` for these for now to avoid infinite recursion
+    # errors in downstream projects (unclear if it's a nixpkgs issue so far).
+    ./krb5-Fix-Linux-build-error-with-musl-libc.patch
+    ./krb5-Fix-typo-in-musl-build-fix.patch
+  ];
 
   outputs = [ "out" "dev" ];
 
@@ -39,8 +48,9 @@ stdenv.mkDerivation rec {
     ++ optional (!libOnly) yacc
     # Provides the mig command used by the build scripts
     ++ optional stdenv.isDarwin bootstrap_cmds;
+
   buildInputs = [ openssl ]
-    ++ optionals (stdenv.hostPlatform.isLinux) [ keyutils ]
+    ++ optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "bionic" && !(stdenv.hostPlatform.useLLVM or false)) [ keyutils ]
     ++ optionals (!libOnly) [ openldap libedit ];
 
   preConfigure = "cd ./src";
@@ -65,7 +75,7 @@ stdenv.mkDerivation rec {
 
   # not via outputBin, due to reference from libkrb5.so
   postInstall = ''
-    moveToOutput bin "$dev"
+    moveToOutput bin/krb5-config "$dev"
   '';
 
   enableParallelBuilding = true;
@@ -73,10 +83,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "MIT Kerberos 5";
-    homepage = http://web.mit.edu/kerberos/;
+    homepage = "http://web.mit.edu/kerberos/";
     license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
+    platforms = platforms.unix ++ platforms.windows;
   };
 
   passthru.implementation = "krb5";

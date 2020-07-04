@@ -1,51 +1,49 @@
-{ stdenv, lib, fetchFromGitHub, removeReferencesTo
-, go, btrfs-progs }:
+{ lib, fetchFromGitHub, buildGoPackage, btrfs-progs, go-md2man, installShellFiles, utillinux }:
 
 with lib;
 
-stdenv.mkDerivation rec {
-  name = "containerd-${version}";
-  version = "1.2.0";
+buildGoPackage rec {
+  pname = "containerd";
+  version = "1.2.13";
+  # git commit for the above version's tag
+  commit = "7ad184331fa3e55e52b890ea95e65ba581ae3429";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "03d244v85975bavmlg66kd283jdb22yyvwkwcgy91n63jhvvbadk";
+    sha256 = "1rac3iak3jpz57yarxc72bxgxvravwrl0j6s6w2nxrmh2m3kxqzn";
   };
 
-  hardeningDisable = [ "fortify" ];
+  goPackagePath = "github.com/containerd/containerd";
+  outputs = [ "out" "man" ];
 
-  buildInputs = [ removeReferencesTo go btrfs-progs ];
-  buildFlags = "VERSION=v${version}";
+  nativeBuildInputs = [ go-md2man installShellFiles utillinux ];
+
+  buildInputs = [ btrfs-progs ];
+
+  buildFlags = [ "VERSION=v${version}" "REVISION=${commit}" ];
 
   BUILDTAGS = []
     ++ optional (btrfs-progs == null) "no_btrfs";
 
-  preConfigure = ''
-    # Extract the source
-    cd "$NIX_BUILD_TOP"
-    mkdir -p "go/src/github.com/containerd"
-    mv "$sourceRoot" "go/src/github.com/containerd/containerd"
-    export GOPATH=$NIX_BUILD_TOP/go:$GOPATH
-'';
-
-  preBuild = ''
-    cd go/src/github.com/containerd/containerd
+  buildPhase = ''
+    cd go/src/${goPackagePath}
     patchShebangs .
+    make binaries $buildFlags
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp bin/* $out/bin
-  '';
+    for b in bin/*; do
+      install -Dm555 $b $out/$b
+    done
 
-  preFixup = ''
-    find $out -type f -exec remove-references-to -t ${go} '{}' +
+    make man
+    installManPage man/*.[1-9]
   '';
 
   meta = {
-    homepage = https://containerd.io/;
+    homepage = "https://containerd.io/";
     description = "A daemon to control runC";
     license = licenses.asl20;
     maintainers = with maintainers; [ offline vdemeester ];

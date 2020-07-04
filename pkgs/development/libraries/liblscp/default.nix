@@ -1,11 +1,11 @@
 { stdenv, fetchurl, autoconf, automake, libtool, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "liblscp-${version}";
+  pname = "liblscp";
   version = "0.6.0";
 
   src = fetchurl {
-    url = "https://download.linuxsampler.org/packages/${name}.tar.gz";
+    url = "https://download.linuxsampler.org/packages/${pname}-${version}.tar.gz";
     sha256 = "1rl7ssdzj0z3658yvdijmb27n2lcwmplx4qxg5mwrm07pvs7i75k";
   };
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.linuxsampler.org;
+    homepage = "http://www.linuxsampler.org";
     description = "LinuxSampler Control Protocol (LSCP) wrapper library";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];

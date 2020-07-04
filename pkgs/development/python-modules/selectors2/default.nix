@@ -17,11 +17,12 @@ buildPythonPackage rec {
     # Trick to disable certain tests that depend on timing which
     # will always fail on hydra
     export TRAVIS=""
-    nosetests tests/test_selectors2.py
+    nosetests tests/test_selectors2.py \
+      --exclude=test_above_fd_setsize
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.github.com/SethMichaelLarson/selectors2;
+    homepage = "https://www.github.com/SethMichaelLarson/selectors2";
     description = "Back-ported, durable, and portable selectors";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

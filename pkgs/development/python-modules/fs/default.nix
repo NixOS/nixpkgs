@@ -1,4 +1,5 @@
-{ pkgs
+{ lib
+, glibcLocales
 , buildPythonPackage
 , fetchPypi
 , six
@@ -14,37 +15,35 @@
 , mock
 , pythonAtLeast
 , isPy3k
+, pytest
 }:
 
 buildPythonPackage rec {
   pname = "fs";
-  version = "2.1.1";
+  version = "2.4.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b20a4aeac9079b194f0160957d4265bb6c99ce68f1b12e980b0fb96f74aafb70";
+    sha256 = "cc99d476b500f993df8ef697b96dc70928ca2946a455c396a566efe021126767";
   };
 
-  buildInputs = [ pkgs.glibcLocales ];
-  checkInputs = [ nose pyftpdlib mock psutil ];
+  buildInputs = [ glibcLocales ];
+  checkInputs = [ nose pyftpdlib mock psutil pytest ];
   propagatedBuildInputs = [ six appdirs pytz ]
-    ++ pkgs.lib.optionals (!isPy3k) [ backports_os ]
-    ++ pkgs.lib.optionals (!pythonAtLeast "3.6") [ typing ]
-    ++ pkgs.lib.optionals (!pythonAtLeast "3.5") [ scandir ]
-    ++ pkgs.lib.optionals (!pythonAtLeast "3.5") [ enum34 ];
-
-  postPatch = ''
-    # required for installation
-    touch LICENSE
-    # tests modify home directory results in (4 tests failing) / 1600
-    rm tests/test_appfs.py tests/test_opener.py
-  '';
+    ++ lib.optionals (!isPy3k) [ backports_os ]
+    ++ lib.optionals (!pythonAtLeast "3.6") [ typing ]
+    ++ lib.optionals (!pythonAtLeast "3.5") [ scandir ]
+    ++ lib.optionals (!pythonAtLeast "3.5") [ enum34 ];
 
   LC_ALL="en_US.utf-8";
 
-  meta = with pkgs.lib; {
+  checkPhase = ''
+    HOME=$(mktemp -d) pytest -k 'not user_data_repr' --ignore=tests/test_opener.py
+  '';
+
+  meta = with lib; {
     description = "Filesystem abstraction";
-    homepage    = https://github.com/PyFilesystem/pyfilesystem2;
+    homepage    = "https://github.com/PyFilesystem/pyfilesystem2";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;

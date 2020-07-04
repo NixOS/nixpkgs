@@ -1,50 +1,74 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, dmd, gnome3, dbus
-, gsettings-desktop-schemas, desktop-file-utils, gettext, gtkd, libsecret
-, perlPackages, wrapGAppsHook, xdg_utils }:
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, meson
+, ninja
+, python3
+, pkgconfig
+, dmd
+, dconf
+, dbus
+, gsettings-desktop-schemas
+, desktop-file-utils
+, gettext
+, gtkd
+, libsecret
+, glib
+, wrapGAppsHook
+, libunwind
+}:
 
-stdenv.mkDerivation rec {
-  name = "tilix-${version}";
-  version = "1.8.5";
+stdenv.mkDerivation {
+  pname = "tilix";
+  version = "unstable-2019-10-02";
 
   src = fetchFromGitHub {
     owner = "gnunn1";
     repo = "tilix";
-    rev = "${version}";
-    sha256 = "1ixhkssz0xn3x75n2iw6gd3hka6bgmgwfgbvblbjhhx8gcpbw3s7";
+    rev = "ffcd31e3c0e1a560ce89468152d8726065e8fb1f";
+    sha256 = "1bzv7xiqhyblz1rw8ln4zpspmml49vnshn1zsv9di5q7kfgpqrgq";
   };
 
+  # Default upstream else LDC fails to link
+  mesonBuildType = [
+    "debugoptimized"
+  ];
+
   nativeBuildInputs = [
-    autoreconfHook dmd desktop-file-utils perlPackages.Po4a pkgconfig xdg_utils
+    desktop-file-utils
+    dmd
+    meson
+    ninja
+    pkgconfig
+    python3
     wrapGAppsHook
   ];
-  buildInputs = [ gnome3.dconf gettext gsettings-desktop-schemas gtkd dbus libsecret ];
 
-  preBuild = ''
-    makeFlagsArray=(
-      PERL5LIB="${perlPackages.Po4a}/lib/perl5"
-      DCFLAGS='-O -inline -release -version=StdLoggerDisableTrace'
-    )
+  buildInputs = [
+    dbus
+    gettext
+    dconf
+    gsettings-desktop-schemas
+    gtkd
+    libsecret
+    libunwind
+  ];
+
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
   '';
-
-  postInstall = with gnome3; ''
-    ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
-
-    wrapProgram $out/bin/tilix \
-      --prefix LD_LIBRARY_PATH ":" "${libsecret}/lib"
-  '';
-
 
   preFixup = ''
     substituteInPlace $out/share/applications/com.gexperts.Tilix.desktop \
       --replace "Exec=tilix" "Exec=$out/bin/tilix"
-    sed -i '/^DBusActivatable=/d' $out/share/applications/com.gexperts.Tilix.desktop
   '';
 
   meta = with stdenv.lib; {
-    description = "Tiling terminal emulator following the Gnome Human Interface Guidelines.";
-    homepage = https://gnunn1.github.io/tilix-web;
+    description = "Tiling terminal emulator following the Gnome Human Interface Guidelines";
+    homepage = "https://gnunn1.github.io/tilix-web";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ midchildan ];
+    maintainers = with maintainers; [ midchildan worldofpeace ];
     platforms = platforms.linux;
   };
 }

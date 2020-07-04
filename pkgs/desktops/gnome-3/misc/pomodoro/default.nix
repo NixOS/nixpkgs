@@ -1,41 +1,73 @@
-{ stdenv, fetchFromGitHub, autoconf-archive, appstream-glib, intltool, pkgconfig, libtool, wrapGAppsHook,
-  dbus-glib, libcanberra, gst_all_1, vala, gnome3, gtk3, libxml2, autoreconfHook,
-  glib, gobjectIntrospection, libpeas
+{ stdenv
+, fetchFromGitHub
+, autoconf-archive
+, appstream-glib
+, pkgconfig
+, wrapGAppsHook
+, libcanberra
+, gst_all_1
+, vala
+, gtk3
+, gom
+, sqlite
+, libxml2
+, autoreconfHook
+, glib
+, gobject-introspection
+, libpeas
+, gnome-shell
+, gsettings-desktop-schemas
+, adwaita-icon-theme
+, gettext
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.13.4";
-  name = "gnome-shell-pomodoro-${version}";
+  pname = "gnome-shell-pomodoro";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "codito";
     repo = "gnome-pomodoro";
-    rev = "${version}";
-    sha256 = "0fiql99nhj168wbfhvzrhfcm4c4569gikd2zaf10vzszdqjahrl1";
+    rev = version;
+    sha256 = "0s9wzx7wbynpqgj7nlgs5wwx4w2akz7nli89sy7pxcn4xpnahqgn";
   };
 
   nativeBuildInputs = [
-    autoreconfHook vala autoconf-archive libtool intltool appstream-glib
-    wrapGAppsHook pkgconfig libxml2
+    appstream-glib
+    autoconf-archive
+    autoreconfHook
+    gettext
+    gobject-introspection
+    libxml2
+    pkgconfig
+    vala
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    glib gobjectIntrospection libpeas
-    dbus-glib libcanberra gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
-    gnome3.gsettings-desktop-schemas
-    gnome3.gnome-shell gtk3 gnome3.defaultIconTheme
+    adwaita-icon-theme
+    glib
+    gnome-shell
+    gom
+    gsettings-desktop-schemas
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gstreamer
+    gtk3
+    libcanberra
+    libpeas
+    sqlite
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://gnomepomodoro.org/;
-    description = "A time management utility for GNOME based on the pomodoro technique";
+    homepage = "https://gnomepomodoro.org/";
+    description = "Time management utility for GNOME based on the pomodoro technique";
     longDescription = ''
       This GNOME utility helps to manage time according to Pomodoro Technique.
       It intends to improve productivity and focus by taking short breaks.
     '';
-    maintainers = with maintainers; [ jgeerds ];
-    license = licenses.gpl3;
+    maintainers = with maintainers; [ worldofpeace ];
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
 }

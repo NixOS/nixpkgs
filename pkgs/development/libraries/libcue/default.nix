@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, bison, flex }:
 
 stdenv.mkDerivation rec {
-  name = "libcue-${version}";
+  pname = "libcue";
   version = "2.2.1";
 
   src = fetchFromGitHub {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       a file pointer. For handling of the parsed data a convenient API is
       available.
     '';
-    homepage = https://sourceforge.net/projects/libcue/;
+    homepage = "https://sourceforge.net/projects/libcue/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ astsmtl ];
     platforms = platforms.linux ++ platforms.darwin;

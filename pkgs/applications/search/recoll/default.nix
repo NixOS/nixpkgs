@@ -8,12 +8,12 @@
 assert stdenv.hostPlatform.system != "powerpc-linux";
 
 stdenv.mkDerivation rec {
-  ver = "1.23.7";
+  ver = "1.24.5";
   name = "recoll-${ver}";
 
   src = fetchurl {
     url = "https://www.lesbonscomptes.com/recoll/${name}.tar.gz";
-    sha256 = "186bj8zx2xw9hwrzvzxdgdin9nj7msiqh5j57w5g7j4abdlsisjn";
+    sha256 = "10m3a0ghnyipjcxapszlr8adyy2yaaxx4vgrkxrfmz13814z89cv";
   };
 
   configureFlags = [ "--enable-recollq" ]
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
       Recoll is an Xapian frontend that can search through files, archive
       members, email attachments. 
     '';
-    homepage = http://www.lesbonscomptes.com/recoll/;
+    homepage = "https://www.lesbonscomptes.com/recoll/";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = [ maintainers.jcumming ];

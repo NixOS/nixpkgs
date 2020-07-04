@@ -7,8 +7,8 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     urls = [
-      ftp://ftp.info-zip.org/pub/infozip/src/zip30.tgz
-      https://src.fedoraproject.org/repo/pkgs/zip/zip30.tar.gz/7b74551e63f8ee6aab6fbc86676c0d37/zip30.tar.gz
+      "ftp://ftp.info-zip.org/pub/infozip/src/zip30.tgz"
+      "https://src.fedoraproject.org/repo/pkgs/zip/zip30.tar.gz/7b74551e63f8ee6aab6fbc86676c0d37/zip30.tar.gz"
     ];
     sha256 = "0sb3h3067pzf3a7mlxn1hikpcjrsvycjcnj9hl9b1c3ykcgvps7h";
   };
@@ -19,8 +19,11 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   makefile = "unix/Makefile";
-  buildFlags = if stdenv.isCygwin then "cygwin" else "generic";
-  installFlags = "prefix=$(out) INSTALL=cp";
+  buildFlags = if stdenv.isCygwin then [ "cygwin" ] else [ "generic" ];
+  installFlags = [
+    "prefix=${placeholder ''out''}"
+    "INSTALL=cp"
+  ];
 
   patches = if (enableNLS && !stdenv.isCygwin) then [ ./natspec-gentoo.patch.bz2 ] else [];
 
@@ -29,7 +32,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Compressor/archiver for creating and modifying zipfiles";
-    homepage = http://www.info-zip.org;
+    homepage = "http://www.info-zip.org";
     license = licenses.bsdOriginal;
     platforms = platforms.all;
     maintainers = [ ];

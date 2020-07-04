@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, xproto, libX11}:
+{stdenv, fetchurl, perl, xorgproto, libX11}:
 let
   s = # Generated upstream information
   rec {
@@ -10,7 +10,7 @@ let
     sha256="0gnfqhnch9x8jhr87gvdjcp1wsqhchfjilpnqcwx5j0nlqyz6wi6";
   };
   buildInputs = [
-    perl xproto libX11
+    perl xorgproto libX11
   ];
 in
 stdenv.mkDerivation {
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.free ; # 9menu derivative with 9menu license
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = http://www.update.uu.se/~zrajm/programs/;
+    homepage = "http://www.update.uu.se/~zrajm/programs/";
     downloadPage = "http://www.update.uu.se/~zrajm/programs/ratmen/";
     updateWalker = true;
   };

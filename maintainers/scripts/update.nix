@@ -1,11 +1,18 @@
 { package ? null
 , maintainer ? null
 , path ? null
+, max-workers ? null
+, include-overlays ? false
+, keep-going ? null
 }:
 
 # TODO: add assert statements
 
 let
+  pkgs = import ./../../default.nix (if include-overlays then { } else { overlays = []; });
+
+  inherit (pkgs) lib;
+
   /* Remove duplicate elements from the list based on some extracted value. O(n^2) complexity.
    */
   nubOn = f: list:
@@ -13,43 +20,44 @@ let
       []
     else
       let
-        x = pkgs.lib.head list;
-        xs = pkgs.lib.filter (p: f x != f p) (pkgs.lib.drop 1 list);
+        x = lib.head list;
+        xs = lib.filter (p: f x != f p) (lib.drop 1 list);
       in
         [x] ++ nubOn f xs;
 
-  pkgs = import ./../../default.nix { };
+  packagesWithPath = relativePath: cond: return: pathContent:
+    let
+      result = builtins.tryEval pathContent;
 
-  packagesWith = cond: return: set:
-    nubOn (pkg: pkg.updateScript)
-      (pkgs.lib.flatten
-        (pkgs.lib.mapAttrsToList
-          (name: pkg:
-            let
-              result = builtins.tryEval (
-                if pkgs.lib.isDerivation pkg && cond name pkg
-                  then [(return name pkg)]
-                else if pkg.recurseForDerivations or false || pkg.recurseForRelease or false
-                  then packagesWith cond return pkg
-                else []
-              );
-            in
-              if result.success then result.value
-              else []
-          )
-          set
-        )
-      );
+      dedupResults = lst: nubOn (pkg: pkg.updateScript) (lib.concatLists lst);
+    in
+      if result.success then
+        let
+          pathContent = result.value;
+        in
+          if lib.isDerivation pathContent then
+            lib.optional (cond relativePath pathContent) (return relativePath pathContent)
+          else if lib.isAttrs pathContent then
+            # If user explicitly points to an attrSet or it is marked for recursion, we recur.
+            if relativePath == [] || pathContent.recurseForDerivations or false || pathContent.recurseForRelease or false then
+              dedupResults (lib.mapAttrsToList (name: elem: packagesWithPath (relativePath ++ [name]) cond return elem) pathContent)
+            else []
+          else if lib.isList pathContent then
+            dedupResults (lib.imap0 (i: elem: packagesWithPath (relativePath ++ [i]) cond return elem) pathContent)
+          else []
+      else [];
+
+  packagesWith = packagesWithPath [];
 
   packagesWithUpdateScriptAndMaintainer = maintainer':
     let
       maintainer =
-        if ! builtins.hasAttr maintainer' pkgs.lib.maintainers then
+        if ! builtins.hasAttr maintainer' lib.maintainers then
           builtins.throw "Maintainer with name `${maintainer'} does not exist in `maintainers/maintainer-list.nix`."
         else
-          builtins.getAttr maintainer' pkgs.lib.maintainers;
+          builtins.getAttr maintainer' lib.maintainers;
     in
-      packagesWith (name: pkg: builtins.hasAttr "updateScript" pkg &&
+      packagesWith (relativePath: pkg: builtins.hasAttr "updateScript" pkg &&
                                  (if builtins.hasAttr "maintainers" pkg.meta
                                    then (if builtins.isList pkg.meta.maintainers
                                            then builtins.elem maintainer pkg.meta.maintainers
@@ -58,20 +66,23 @@ let
                                    else false
                                  )
                    )
-                   (name: pkg: pkg)
+                   (relativePath: pkg: pkg)
                    pkgs;
 
   packagesWithUpdateScript = path:
     let
-      attrSet = pkgs.lib.attrByPath (pkgs.lib.splitString "." path) null pkgs;
+      pathContent = lib.attrByPath (lib.splitString "." path) null pkgs;
     in
-      packagesWith (name: pkg: builtins.hasAttr "updateScript" pkg)
-                     (name: pkg: pkg)
-                     attrSet;
+      if pathContent == null then
+        builtins.throw "Attribute path `${path}` does not exists."
+      else
+        packagesWith (relativePath: pkg: builtins.hasAttr "updateScript" pkg)
+                       (relativePath: pkg: pkg)
+                       pathContent;
 
   packageByName = name:
     let
-        package = pkgs.lib.attrByPath (pkgs.lib.splitString "." name) null pkgs;
+        package = lib.attrByPath (lib.splitString "." name) null pkgs;
     in
       if package == null then
         builtins.throw "Package with an attribute name `${name}` does not exists."
@@ -98,33 +109,38 @@ let
     to run all update scripts for all packages that lists \`garbas\` as a maintainer
     and have \`updateScript\` defined, or:
 
-        % nix-shell maintainers/scripts/update.nix --argstr package garbas
+        % nix-shell maintainers/scripts/update.nix --argstr package gnome3.nautilus
 
     to run update script for specific package, or
 
         % nix-shell maintainers/scripts/update.nix --argstr path gnome3
 
     to run update script for all package under an attribute path.
+
+    You can also add
+
+        --argstr max-workers 8
+
+    to increase the number of jobs in parallel, or
+
+        --argstr keep-going true
+
+    to continue running when a single update fails.
   '';
 
-  runUpdateScript = package: ''
-    echo -ne " - ${package.name}: UPDATING ..."\\r
-    ${package.updateScript} &> ${(builtins.parseDrvName package.name).name}.log
-    CODE=$?
-    if [ "$CODE" != "0" ]; then
-      echo " - ${package.name}: ERROR       "
-      echo ""
-      echo "--- SHOWING ERROR LOG FOR ${package.name} ----------------------"
-      echo ""
-      cat ${(builtins.parseDrvName package.name).name}.log
-      echo ""
-      echo "--- SHOWING ERROR LOG FOR ${package.name} ----------------------"
-      exit $CODE
-    else
-      rm ${(builtins.parseDrvName package.name).name}.log
-    fi
-    echo " - ${package.name}: DONE.       "
-  '';
+  packageData = package: {
+    name = package.name;
+    pname = lib.getName package;
+    updateScript = map builtins.toString (lib.toList package.updateScript);
+  };
+
+  packagesJson = pkgs.writeText "packages.json" (builtins.toJSON (map packageData packages));
+
+  optionalArgs =
+    lib.optional (max-workers != null) "--max-workers=${max-workers}"
+    ++ lib.optional (keep-going == "true") "--keep-going";
+
+  args = [ packagesJson ] ++ optionalArgs;
 
 in pkgs.stdenv.mkDerivation {
   name = "nixpkgs-update-script";
@@ -139,21 +155,7 @@ in pkgs.stdenv.mkDerivation {
     exit 1
   '';
   shellHook = ''
-    echo ""
-    echo "Going to be running update for following packages:"
-    echo "${builtins.concatStringsSep "\n" (map (x: " - ${x.name}") packages)}"
-    echo ""
-    read -n1 -r -p "Press space to continue..." confirm
-    if [ "$confirm" = "" ]; then
-      echo ""
-      echo "Running update for:"
-      ${builtins.concatStringsSep "\n" (map runUpdateScript packages)}
-      echo ""
-      echo "Packages updated!"
-      exit 0
-    else
-      echo "Aborting!"
-      exit 1
-    fi
+    unset shellHook # do not contaminate nested shells
+    exec ${pkgs.python3.interpreter} ${./update.py} ${builtins.concatStringsSep " " args}
   '';
 }

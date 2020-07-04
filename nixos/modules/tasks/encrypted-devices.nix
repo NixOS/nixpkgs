@@ -12,7 +12,7 @@ let
 
   encryptedFSOptions = {
 
-    encrypted = {
+    options.encrypted = {
       enable = mkOption {
         default = false;
         type = types.bool;
@@ -47,10 +47,10 @@ in
 
   options = {
     fileSystems = mkOption {
-      options = [encryptedFSOptions];
+      type = with lib.types; loaOf (submodule encryptedFSOptions);
     };
     swapDevices = mkOption {
-      options = [encryptedFSOptions];
+      type = with lib.types; listOf (submodule encryptedFSOptions);
     };
   };
 
@@ -65,7 +65,7 @@ in
     boot.initrd = {
       luks = {
         devices =
-          map (dev: { name = dev.encrypted.label; device = dev.encrypted.blkDev; } ) keylessEncDevs;
+          builtins.listToAttrs (map (dev: { name = dev.encrypted.label; value = { device = dev.encrypted.blkDev; }; }) keylessEncDevs);
         forceLuksSupportInInitrd = true;
       };
       postMountCommands =

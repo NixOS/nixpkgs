@@ -1,8 +1,6 @@
 { stdenv
 , runCommandCC
-, lib
 , fetchPypi
-, gcc
 , buildPythonPackage
 , isPyPy
 , pythonOlder
@@ -37,7 +35,11 @@ let
     '';
 
   # Theano spews warnings and disabled flags if the compiler isn't named g++
-  cxx_compiler = wrapped "g++" "\\$HOME/.theano"
+  cxx_compiler_name =
+    if stdenv.cc.isGNU then "g++" else
+    if stdenv.cc.isClang then "clang++" else
+    throw "Unknown C++ compiler";
+  cxx_compiler = wrapped cxx_compiler_name "\\$HOME/.theano"
     (    stdenv.lib.optional cudaSupport libgpuarray_
       ++ stdenv.lib.optional cudnnSupport cudnn );
 
@@ -45,13 +47,13 @@ let
 
 in buildPythonPackage rec {
   pname = "Theano";
-  version = "1.0.3";
+  version = "1.0.4";
 
   disabled = isPyPy || pythonOlder "2.6" || (isPy3k && pythonOlder "3.3");
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "637f3b34d40ef5e0d54dd4c40618475aaa085c26d2491e925c98e2ad4bc2115a";
+    sha256 = "35c9bbef56b61ffa299265a42a4e8f8cb5a07b2997dabaef0f8830b397086913";
   };
 
   postPatch = ''
@@ -80,7 +82,7 @@ in buildPythonPackage rec {
   propagatedBuildInputs = [ numpy numpy.blas scipy six libgpuarray_ ];
 
   meta = with stdenv.lib; {
-    homepage = http://deeplearning.net/software/theano/;
+    homepage = "http://deeplearning.net/software/theano/";
     description = "A Python library for large-scale array computation";
     license = licenses.bsd3;
     maintainers = with maintainers; [ maintainers.bcdarwin ];

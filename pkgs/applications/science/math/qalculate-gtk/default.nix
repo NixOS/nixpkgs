@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, intltool, autoreconfHook, pkgconfig, libqalculate, gtk3, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "qalculate-gtk-${version}";
-  version = "2.6.2";
+  pname = "qalculate-gtk";
+  version = "3.8.0a";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-gtk";
     rev = "v${version}";
-    sha256 = "1yzw6avhka7bbi071z9d8cipcghyjq2bg9x3arv1cf395xlnrmb9";
+    sha256 = "0bjd61bbc5b2i09kz3ss01c0xmxrhmiv5wpbhhplkp3yhw2qrf3m";
   };
 
   patchPhase = ''
@@ -23,8 +23,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The ultimate desktop calculator";
-    homepage = http://qalculate.github.io;
+    homepage = "http://qalculate.github.io";
     maintainers = with maintainers; [ gebner ];
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
   };
 }

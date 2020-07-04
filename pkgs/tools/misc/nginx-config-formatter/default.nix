@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, python3 }:
 
-stdenv.mkDerivation rec {
-  version = "2016-06-16";
-  name = "nginx-config-formatter-${version}";
+stdenv.mkDerivation {
+  version = "2019-02-13";
+  pname = "nginx-config-formatter";
 
   src = fetchFromGitHub {
     owner = "1connect";
     repo = "nginx-config-formatter";
-    rev = "fe5c77d2a503644bebee2caaa8b222c201c0603d";
-    sha256 = "0akpkbq5136k1i1z1ls6yksis35hbr70k8vd10laqwvr1jj41bga";
+    rev = "4ea6bbc1bdeb1d28419548aeca90f323e64e0e05";
+    sha256 = "0h6pj9i0wim9pzkafi92l1nhlnl2a530vnm7qqi3n2ra8iwfyw4f";
   };
 
   buildInputs = [ python3 ];
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "nginx config file formatter";
     maintainers = with maintainers; [ Baughn ];
     license = licenses.asl20;
-    homepage = https://github.com/1connect/nginx-config-formatter;
+    homepage = "https://github.com/1connect/nginx-config-formatter";
   };
 }

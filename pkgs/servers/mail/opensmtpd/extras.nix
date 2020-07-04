@@ -1,18 +1,26 @@
 { stdenv, fetchurl, openssl, libevent, libasr,
-  python2, pkgconfig, lua5, perl, mysql, postgresql, sqlite, hiredis }:
+  python2, pkgconfig, lua5, perl, libmysqlclient, postgresql, sqlite, hiredis,
+  enablePython ? true,
+  enableLua ? true,
+  enablePerl ? true,
+  enableMysql ? true,
+  enablePostgres ? true,
+  enableSqlite ? true,
+  enableRedis ? true,
+}:
 
 stdenv.mkDerivation rec {
-  name = "opensmtpd-extras-${version}";
-  version = "5.7.1";
+  pname = "opensmtpd-extras";
+  version = "6.7.1";
 
   src = fetchurl {
-    url = "https://www.opensmtpd.org/archives/${name}.tar.gz";
-    sha256 = "1kld4hxgz792s0cb2gl7m2n618ikzqkj88w5dhaxdrxg4x2c4vdm";
+    url = "https://www.opensmtpd.org/archives/${pname}-${version}.tar.gz";
+    sha256 = "1b1mx71bvmv92lbm08wr2p60g3qhikvv3n15zsr6dcwbk9aqahzq";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl libevent
-    libasr python2 lua5 perl mysql.connector-c postgresql sqlite hiredis ];
+    libasr python2 lua5 perl libmysqlclient postgresql sqlite hiredis ];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -40,42 +48,44 @@ stdenv.mkDerivation rec {
     "--with-scheduler-ram"
     "--with-scheduler-stub"
 
-  ] ++ stdenv.lib.optional (python2 != null) [
+  ] ++ stdenv.lib.optionals enablePython [
     "--with-python=${python2}"
     "--with-filter-python"
     "--with-queue-python"
     "--with-table-python"
     "--with-scheduler-python"
 
-  ] ++ stdenv.lib.optional (lua5 != null) [
+  ] ++ stdenv.lib.optionals enableLua [
     "--with-lua=${pkgconfig}"
     "--with-filter-lua"
 
-  ] ++ stdenv.lib.optional (perl != null) [
+  ] ++ stdenv.lib.optionals enablePerl [
     "--with-perl=${perl}"
     "--with-filter-perl"
 
-  ] ++ stdenv.lib.optional (mysql != null) [
+  ] ++ stdenv.lib.optionals enableMysql [
     "--with-table-mysql"
 
-  ] ++ stdenv.lib.optional (postgresql != null) [
+  ] ++ stdenv.lib.optionals enablePostgres [
     "--with-table-postgres"
 
-  ] ++ stdenv.lib.optional (sqlite != null) [
+  ] ++ stdenv.lib.optionals enableSqlite [
     "--with-table-sqlite"
 
-  ] ++ stdenv.lib.optional (hiredis != null) [
+  ] ++ stdenv.lib.optionals enableRedis [
     "--with-table-redis"
   ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optional (hiredis != null) "-I${hiredis}/include/hiredis" ++
-    stdenv.lib.optional (mysql != null) "-L${mysql.connector-c}/lib/mysql";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString enableRedis
+      "-I${hiredis}/include/hiredis -lhiredis"
+    + stdenv.lib.optionalString enableMysql
+      " -L${libmysqlclient}/lib/mysql";
 
   meta = with stdenv.lib; {
-    homepage = https://www.opensmtpd.org/;
+    homepage = "https://www.opensmtpd.org/";
     description = "Extra plugins for the OpenSMTPD mail server";
     license = licenses.isc;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ gebner ekleog ];
   };
 }

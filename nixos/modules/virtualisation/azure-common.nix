@@ -15,6 +15,8 @@ with lib;
   boot.loader.grub.version = 2;
   boot.loader.timeout = 0;
 
+  boot.growPartition = true;
+
   # Don't put old configurations in the GRUB menu.  The user has no
   # way to select them anyway.
   boot.loader.grub.configurationLimit = 0;

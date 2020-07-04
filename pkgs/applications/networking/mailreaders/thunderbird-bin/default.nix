@@ -1,5 +1,4 @@
 { stdenv, fetchurl, config, makeWrapper
-, gconf
 , alsaLib
 , at-spi2-atk
 , atk
@@ -10,28 +9,27 @@
 , dbus
 , fontconfig
 , freetype
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , glibc
-, gst-plugins-base
-, gstreamer
 , gtk2
 , gtk3
 , kerberos
 , libX11
 , libXScrnSaver
 , libXcomposite
+, libXcursor
 , libXdamage
 , libXext
 , libXfixes
+, libXi
 , libXinerama
 , libXrender
 , libXt
-, libcanberra-gtk2
-, libgnome
-, libgnomeui
-, defaultIconTheme
-, libGLU_combined
+, libxcb
+, libcanberra
+, gnome3
+, libGLU, libGL
 , nspr
 , nss
 , pango
@@ -41,6 +39,7 @@
 , gnused
 , gnugrep
 , gnupg
+, runtimeShell
 }:
 
 # imports `version` and `sources`
@@ -78,7 +77,6 @@ stdenv.mkDerivation {
 
   libPath = stdenv.lib.makeLibraryPath
     [ stdenv.cc.cc
-      gconf
       alsaLib
       at-spi2-atk
       atk
@@ -89,27 +87,26 @@ stdenv.mkDerivation {
       dbus
       fontconfig
       freetype
-      gdk_pixbuf
+      gdk-pixbuf
       glib
       glibc
-      gst-plugins-base
-      gstreamer
       gtk2
       gtk3
       kerberos
       libX11
       libXScrnSaver
       libXcomposite
+      libXcursor
       libXdamage
       libXext
       libXfixes
+      libXi
       libXinerama
       libXrender
       libXt
-      libcanberra-gtk2
-      libgnome
-      libgnomeui
-      libGLU_combined
+      libxcb
+      libcanberra
+      libGLU libGL
       nspr
       nss
       pango
@@ -117,7 +114,7 @@ stdenv.mkDerivation {
       stdenv.cc.cc
     ];
 
-  buildInputs = [ gtk3 defaultIconTheme ];
+  buildInputs = [ gtk3 gnome3.adwaita-icon-theme ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -152,14 +149,20 @@ stdenv.mkDerivation {
       Categories=Application;Network;
       EOF
 
+      # SNAP_NAME: https://github.com/NixOS/nixpkgs/pull/61980
+      # MOZ_LEGACY_PROFILES and MOZ_ALLOW_DOWNGRADE:
+      #   commit 87e261843c4236c541ee0113988286f77d2fa1ee
       wrapProgram "$out/bin/thunderbird" \
         --argv0 "$out/bin/.thunderbird-wrapped" \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:" \
-        --suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
+        --suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS" \
+        --set SNAP_NAME "thunderbird" \
+        --set MOZ_LEGACY_PROFILES 1 \
+        --set MOZ_ALLOW_DOWNGRADE 1
     '';
 
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
-    inherit name writeScript xidel coreutils gnused gnugrep curl gnupg;
+    inherit name writeScript xidel coreutils gnused gnugrep curl gnupg runtimeShell;
     baseName = "thunderbird";
     channel = "release";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";
@@ -167,12 +170,12 @@ stdenv.mkDerivation {
   };
   meta = with stdenv.lib; {
     description = "Mozilla Thunderbird, a full-featured email client (binary package)";
-    homepage = http://www.mozilla.org/thunderbird/;
+    homepage = "http://www.mozilla.org/thunderbird/";
     license = {
       free = false;
-      url = http://www.mozilla.org/en-US/foundation/trademarks/policy/;
+      url = "http://www.mozilla.org/en-US/foundation/trademarks/policy/";
     };
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = platforms.linux;
   };
 }

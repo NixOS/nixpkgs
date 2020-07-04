@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, pkgconfig, ocaml }:
 
 stdenv.mkDerivation rec {
-  name = "ott-${version}";
-  version = "0.28";
+  pname = "ott";
+  version = "0.30";
 
   src = fetchFromGitHub {
     owner = "ott-lang";
     repo = "ott";
     rev = version;
-    sha256 = "0mzbrvqayqpns9zzg4m1scxx24dv9askhn51dawyb9pisvlyvai0";
+    sha256 = "16bxfnm30z94x36vr8vs6zd6fj55vnb7aypjl6hf7clk42040brc";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       terms of the defined language, parsing them and replacing them by
       target-system terms.
     '';
-    homepage = http://www.cl.cam.ac.uk/~pes20/ott;
+    homepage = "http://www.cl.cam.ac.uk/~pes20/ott";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ jwiegley ];
     platforms = stdenv.lib.platforms.unix;

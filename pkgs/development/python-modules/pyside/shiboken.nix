@@ -1,4 +1,4 @@
-{ lib, fetchurl, cmake, buildPythonPackage, libxml2, libxslt, pysideApiextractor, pysideGeneratorrunner, python, sphinx, qt4, isPy3k, isPy35, isPy36 }:
+{ lib, fetchurl, cmake, buildPythonPackage, libxml2, libxslt, pysideApiextractor, pysideGeneratorrunner, python, sphinx, qt4, isPy3k, isPy35, isPy36, isPy37 }:
 
 # This derivation provides a Python module and should therefore be called via `python-packages.nix`.
 # Python 3.5 is not supported: https://github.com/PySide/Shiboken/issues/77
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake libxml2 libxslt pysideApiextractor pysideGeneratorrunner python sphinx qt4 ];
+  nativeBuildInputs = [ cmake libxml2 libxslt pysideApiextractor pysideGeneratorrunner python sphinx qt4 ];
 
   preConfigure = ''
     echo "preConfigure: Fixing shiboken_generator install target."
@@ -25,15 +25,15 @@ buildPythonPackage rec {
   '';
 
   # gcc6 patch was also sent upstream: https://github.com/pyside/Shiboken/pull/86
-  patches = [ ./gcc6.patch ] ++ (lib.optional (isPy35 || isPy36) ./shiboken_py35.patch);
+  patches = [ ./gcc6.patch ] ++ (lib.optional (isPy35 || isPy36 || isPy37) ./shiboken_py35.patch);
 
-  cmakeFlags = if isPy3k then "-DUSE_PYTHON3=TRUE" else null;
+  cmakeFlags = lib.optional isPy3k "-DUSE_PYTHON3=TRUE";
 
   meta = {
     description = "Plugin (front-end) for pyside-generatorrunner, that generates bindings for C++ libraries using CPython source code";
     license = lib.licenses.gpl2;
-    homepage = http://www.pyside.org/docs/shiboken/;
-    maintainers = [ lib.maintainers.chaoflow ];
+    homepage = "http://www.pyside.org/docs/shiboken/";
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

@@ -47,7 +47,8 @@ if test -n "$bootable"; then
 
     isoBootFlags="-eltorito-boot ${bootImage}
                   -eltorito-catalog .boot.cat
-                  -no-emul-boot -boot-load-size 4 -boot-info-table"
+                  -no-emul-boot -boot-load-size 4 -boot-info-table
+                  --sort-weight 1 /isolinux" # Make sure isolinux is near the beginning of the ISO
 fi
 
 if test -n "$usbBootable"; then
@@ -106,13 +107,14 @@ xorriso="xorriso
  -publisher nixos
  -graft-points
  -full-iso9660-filenames
+ -joliet
  ${isoBootFlags}
  ${usbBootFlags}
  ${efiBootFlags}
  -r
  -path-list pathlist
  --sort-weight 0 /
- --sort-weight 1 /isolinux" # Make sure isolinux is near the beginning of the ISO
+"
 
 $xorriso -output $out/iso/$isoName
 
@@ -127,9 +129,14 @@ fi
 
 if test -n "$compressImage"; then
     echo "Compressing image..."
-    bzip2 $out/iso/$isoName
+    zstd -T$NIX_BUILD_CORES --rm $out/iso/$isoName
 fi
 
 mkdir -p $out/nix-support
 echo $system > $out/nix-support/system
-echo "file iso $out/iso/$isoName" >> $out/nix-support/hydra-build-products
+
+if test -n "$compressImage"; then
+    echo "file iso $out/iso/$isoName.zst" >> $out/nix-support/hydra-build-products
+else
+    echo "file iso $out/iso/$isoName" >> $out/nix-support/hydra-build-products
+fi

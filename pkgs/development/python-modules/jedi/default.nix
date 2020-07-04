@@ -2,16 +2,12 @@
 
 buildPythonPackage rec {
   pname = "jedi";
-  version = "0.12.1";
+  version = "0.17.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b409ed0f6913a701ed474a614a3bb46e6953639033e31f769ca7581da5bd1ec1";
+    sha256 = "df40c97641cb943661d2db4c33c2e1ff75d491189423249e989bcea4464f3030";
   };
-
-  postPatch = ''
-    substituteInPlace requirements.txt --replace "parso==0.1.0" "parso"
-  '';
 
   checkInputs = [ pytest glibcLocales tox pytestcov ];
 
@@ -25,9 +21,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/davidhalter/jedi;
+    homepage = "https://github.com/davidhalter/jedi";
     description = "An autocompletion tool for Python that can be used for text editors";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

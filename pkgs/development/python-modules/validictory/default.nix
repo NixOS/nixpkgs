@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Validate dicts against a schema";
-    homepage = https://github.com/sunlightlabs/validictory;
+    homepage = "https://github.com/sunlightlabs/validictory";
     license = licenses.mit;
   };
 

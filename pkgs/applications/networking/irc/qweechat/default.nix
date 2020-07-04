@@ -18,11 +18,11 @@ python27Packages.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with python27Packages; [
-     pyside
+     pyside setuptools
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/weechat/qweechat;
+    homepage = "https://github.com/weechat/qweechat";
     description = "Qt remote GUI for WeeChat";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ramkromberg ];

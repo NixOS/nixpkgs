@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "deform";
-  version = "2.0.6";
+  version = "2.0.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bda0b809c8a668e105e30650a6766103207eafdd12c313acd59274ccd2c4d297";
+    sha256 = "8936b70c622406eb8c8259c88841f19eb2996dffcf2bac123126ada851da7271";
   };
 
   postPatch = ''
@@ -34,8 +34,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Form library with advanced features like nested forms";
-    homepage = https://docs.pylonsproject.org/projects/deform/en/latest/;
+    homepage = "https://docs.pylonsproject.org/projects/deform/en/latest/";
     license = licenses.free; # http://www.repoze.org/LICENSE.txt
-    maintainers = with maintainers; [ garbas domenkozar ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 }

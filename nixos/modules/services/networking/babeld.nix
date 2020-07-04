@@ -35,12 +35,7 @@ in
 
     services.babeld = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to run the babeld network routing daemon.
-        '';
-      };
+      enable = mkEnableOption "the babeld network routing daemon";
 
       interfaceDefaults = mkOption {
         default = null;
@@ -52,7 +47,7 @@ in
         example =
           {
             type = "tunnel";
-            "split-horizon" = true;
+            split-horizon = true;
           };
       };
 
@@ -66,8 +61,8 @@ in
         example =
           { enp0s2 =
             { type = "wired";
-              "hello-interval" = 5;
-              "split-horizon" = "auto";
+              hello-interval = 5;
+              split-horizon = "auto";
             };
           };
       };

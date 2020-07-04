@@ -1,21 +1,21 @@
-{ stdenv, fetchurl, fetchFromGitHub, makeDesktopItem, makeWrapper, jre
+{ stdenv, fetchurl, makeDesktopItem, makeWrapper, jre
 , useCCTweaked ? true
 }:
 
 let
-  version = "1.1.0";
-  rev = "a12239148332ca7a0b1c44a93e1585452d3631c9";
+  version = "1.1.1";
+  rev = "af12e2e4da586275ba931eae8f40a2201251bf59";
 
   baseUrl = "https://emux.cc/versions/${stdenv.lib.substring 0 8 rev}/CCEmuX";
   jar =
     if useCCTweaked
     then fetchurl {
       url = "${baseUrl}-cct.jar";
-      sha256 = "1i767v3wnb8jsh7ciqqvw548pka1b8vl18k1rdv5dn21la6n0r1d";
+      sha256 = "0d9gzi1h5vz32fp4lfn7dam189jcm7bwbqwmlpj0c47p8l0d4lsv";
     }
     else fetchurl {
       url = "${baseUrl}-cc.jar";
-      sha256 = "0x9hs814ln193cwybd565mcj6vhnii4wirkiz9na7vcas0y5vmmq";
+      sha256 = "0ky5vxh8m1v98zllifxif8xxd25j2xdp19hjnj4xlkck71lbnb34";
     };
 
   desktopIcon = fetchurl {
@@ -25,19 +25,20 @@ let
   desktopItem =  makeDesktopItem {
     name = "CCEmuX";
     exec = "ccemux";
-    icon = "${desktopIcon}";
+    icon = desktopIcon;
     comment = "A modular ComputerCraft emulator";
     desktopName = "CCEmuX";
     genericName = "ComputerCraft Emulator";
-    categories = "Application;Emulator;";
+    categories = "Emulator;";
   };
 in
 
 stdenv.mkDerivation rec {
-  name = "ccemux-${version}";
+  pname = "ccemux";
+  inherit version;
 
   src = jar;
-  unpackPhase = "true";
+  dontUnpack = true;
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A modular ComputerCraft emulator";
-    homepage = https://github.com/CCEmuX/CCEmuX;
+    homepage = "https://github.com/CCEmuX/CCEmuX";
     license = licenses.mit;
     maintainers = with maintainers; [ CrazedProgrammer ];
   };

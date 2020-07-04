@@ -1,0 +1,48 @@
+From 6d71bf9764fb81d437678a603826167850bbf453 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maciej=20Kr=C3=BCger?= <mkg20001@gmail.com>
+Date: Tue, 21 Jan 2020 03:19:28 +0100
+Subject: [PATCH] fix: use an impure path to csd-backlight-helper to fix
+ policy-reload bug
+
+---
+ plugins/power/csd-power-manager.c                             | 4 ++--
+ .../org.cinnamon.settings-daemon.plugins.power.policy.in.in   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/plugins/power/csd-power-manager.c b/plugins/power/csd-power-manager.c
+index b24c456..212c47e 100755
+--- a/plugins/power/csd-power-manager.c
++++ b/plugins/power/csd-power-manager.c
+@@ -2519,7 +2519,7 @@ backlight_helper_get_value (const gchar *argument, CsdPowerManager* manager,
+ #endif
+
+         /* get the data */
+-        command = g_strdup_printf (LIBEXECDIR "/csd-backlight-helper --%s %s",
++        command = g_strdup_printf ("/run/current-system/sw/bin/cinnamon-settings-daemon/csd-backlight-helper --%s %s",
+                                    argument,
+                                    manager->priv->backlight_helper_preference_args);
+         ret = g_spawn_command_line_sync (command,
+@@ -2609,7 +2609,7 @@ backlight_helper_set_value (const gchar *argument,
+ #endif
+
+         /* get the data */
+-        command = g_strdup_printf ("pkexec " LIBEXECDIR "/csd-backlight-helper --%s %i %s",
++        command = g_strdup_printf ("pkexec " "/run/current-system/sw/bin/cinnamon-settings-daemon/csd-backlight-helper --%s %i %s",
+                                    argument, value,
+                                    manager->priv->backlight_helper_preference_args);
+         ret = g_spawn_command_line_sync (command,
+diff --git a/plugins/power/org.cinnamon.settings-daemon.plugins.power.policy.in.in b/plugins/power/org.cinnamon.settings-daemon.plugins.power.policy.in.in
+index 2c44e62..c0a2348 100755
+--- a/plugins/power/org.cinnamon.settings-daemon.plugins.power.policy.in.in
++++ b/plugins/power/org.cinnamon.settings-daemon.plugins.power.policy.in.in
+@@ -25,7 +25,7 @@
+       <allow_inactive>no</allow_inactive>
+       <allow_active>yes</allow_active>
+     </defaults>
+-    <annotate key="org.freedesktop.policykit.exec.path">@libexecdir@/csd-backlight-helper</annotate>
++    <annotate key="org.freedesktop.policykit.exec.path">/run/current-system/sw/bin/cinnamon-settings-daemon/csd-backlight-helper</annotate>
+   </action>
+
+ </policyconfig>
+--
+2.24.1

@@ -1,8 +1,8 @@
 {stdenv, fetchFromGitHub, libX11, libXi, libXt, libXfixes, libXext}:
 
 stdenv.mkDerivation rec {
-  version = "1.5";
-  name = "xbanish-${version}";
+  version = "1.7";
+  pname = "xbanish";
 
   buildInputs = [
     libX11 libXi libXt libXfixes libXext
@@ -10,9 +10,9 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jcs";
-    repo = "xbanish";
-    rev = "5cbc51a88739bc7ebe3ea3114ec423890d180146";
-    sha256 = "0n5aiqfwx9ga8qjszymfmbnmygcracrgvvpmgll7mflp2jnvzq6j";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0ic5f7zgc32p5g1wxas9y5h8dhik0pvsa8wmn6skdry56gw9vg9q";
   };
 
   makeFlags=[ "PREFIX=$(out)" ];

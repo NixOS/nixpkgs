@@ -27,8 +27,8 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Config file reading, writing and validation";
-    homepage = https://pypi.python.org/pypi/configobj;
+    homepage = "https://pypi.python.org/pypi/configobj";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

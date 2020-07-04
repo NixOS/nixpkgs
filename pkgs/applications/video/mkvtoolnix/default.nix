@@ -1,24 +1,25 @@
-{ stdenv, fetchFromGitLab, pkgconfig, autoconf, automake, libiconv
-, drake, ruby, docbook_xsl, file, xdg_utils, gettext, expat, boost
-, libebml, zlib, libmatroska, libogg, libvorbis, flac, libxslt, cmark
+{ stdenv, fetchFromGitLab, pkgconfig, autoconf, automake, libiconv, drake
+, ruby, docbook_xsl, file, xdg_utils, gettext, expat, boost, libebml, zlib
+, fmt, libmatroska, libogg, libvorbis, flac, libxslt, cmark
 , withGUI ? true
   , qtbase ? null
   , qtmultimedia ? null
+  , wrapQtAppsHook ? null
 }:
 
-assert withGUI -> qtbase != null && qtmultimedia != null;
+assert withGUI -> qtbase != null && qtmultimedia != null && wrapQtAppsHook != null;
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "mkvtoolnix-${version}";
-  version = "28.2.0";
+  pname = "mkvtoolnix";
+  version = "47.0.0";
 
   src = fetchFromGitLab {
     owner  = "mbunkus";
     repo   = "mkvtoolnix";
     rev    = "release-${version}";
-    sha256 = "162qj5z9wzm63im6jnd0n95ggzdk6fzq5bxgrr0l3y82ahfb7qwa";
+    sha256 = "1s8y9khyfjg06mr7rmm26pk0b3nbkcrs56r29a9l57wbkqyl7qp9";
   };
 
   nativeBuildInputs = [
@@ -27,10 +28,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    expat file xdg_utils boost libebml zlib
+    expat file xdg_utils boost libebml zlib fmt
     libmatroska libogg libvorbis flac cmark
   ] ++ optional  stdenv.isDarwin libiconv
-    ++ optionals withGUI [ qtbase qtmultimedia ];
+    ++ optionals withGUI [ qtbase qtmultimedia wrapQtAppsHook ];
 
   preConfigure = "./autogen.sh; patchShebangs .";
   buildPhase   = "drake -j $NIX_BUILD_CORES";
@@ -49,11 +50,18 @@ stdenv.mkDerivation rec {
     (enableFeature withGUI "qt")
   ];
 
+  CXXFLAGS = optional stdenv.cc.isClang "-std=c++17";
+
+  dontWrapQtApps = true;
+  postFixup = optionalString withGUI ''
+    wrapQtApp $out/bin/mkvtoolnix-gui
+  '';
+
   meta = with stdenv.lib; {
     description = "Cross-platform tools for Matroska";
-    homepage    = http://www.bunkus.org/videotools/mkvtoolnix/;
+    homepage    = "http://www.bunkus.org/videotools/mkvtoolnix/";
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ codyopel fuuzetsu rnhmjoj ];
+    maintainers = with maintainers; [ codyopel rnhmjoj ];
     platforms   = platforms.linux
       ++ optionals (!withGUI) platforms.darwin;
   };

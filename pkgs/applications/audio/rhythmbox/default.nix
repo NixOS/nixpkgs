@@ -4,8 +4,10 @@
 , perlPackages
 , gtk3
 , intltool
+, libpeas
 , libsoup
 , gnome3
+, totem-pl-parser
 , tdb
 , json-glib
 , itstool
@@ -15,23 +17,14 @@
 }:
 let
   pname = "rhythmbox";
-  version = "3.4.2";
+  version = "3.4.4";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0hzcns8gf5yb0rm4ss8jd8qzarcaplp5cylk6plwilsqfvxj4xn2";
+    sha256 = "142xcvw4l19jyr5i72nbnrihs953pvrrzcbijjn9dxmxszbv03pf";
   };
-
-  patches = [
-    # build with GStreamer 1.14 https://bugzilla.gnome.org/show_bug.cgi?id=788706
-    (fetchurl {
-      name = "fmradio-Fix-build-with-GStreamer-master.patch";
-      url = https://bugzilla.gnome.org/attachment.cgi?id=361178;
-      sha256 = "1h09mimlglj9hcmc3pfp0d6c277mqh2khwv9fryk43pkv3904d2w";
-    })
-  ];
 
   nativeBuildInputs = [
     pkgconfig
@@ -47,9 +40,9 @@ in stdenv.mkDerivation rec {
     json-glib
 
     gtk3
-    gnome3.libpeas
-    gnome3.totem-pl-parser
-    gnome3.defaultIconTheme
+    libpeas
+    totem-pl-parser
+    gnome3.adwaita-icon-theme
 
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -65,7 +58,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Rhythmbox;
+    homepage = "https://wiki.gnome.org/Apps/Rhythmbox";
     description = "A music playing application for GNOME";
     license = licenses.gpl2;
     platforms = platforms.linux;

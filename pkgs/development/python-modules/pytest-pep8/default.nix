@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     license = licenses.mit;
-    homepage = https://pypi.python.org/pypi/pytest-pep8;
+    homepage = "https://pypi.python.org/pypi/pytest-pep8";
     description = "pytest plugin to check PEP8 requirements";
   };
 }

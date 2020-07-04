@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # Don't try to write to /var/cache/fontconfig at install time.
-  installFlags = "sysconfdir=$(out)/etc fc_cachedir=$(TMPDIR)/dummy RUN_FC_CACHE_TEST=false";
+  installFlags = [ "sysconfdir=$(out)/etc" "fc_cachedir=$(TMPDIR)/dummy" "RUN_FC_CACHE_TEST=false" ];
 
   passthru = {
     # Empty for backward compatibility, there was no versioning before 2.11
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library for font customization and configuration";
-    homepage = http://fontconfig.org/;
+    homepage = "http://fontconfig.org/";
     license = licenses.bsd2; # custom but very bsd-like
     platforms = platforms.all;
     maintainers = [ maintainers.vcunat ];

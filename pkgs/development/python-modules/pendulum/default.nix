@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "pendulum";
-  version = "2.0.3";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d07962450e808556b3e6209a5830e2bbf8c7747129580c3b5b09e641f72617ab";
+    sha256 = "093cab342e10516660e64b935a6da1a043e0286de36cc229fb48471415981ffe";
   };
 
   propagatedBuildInputs = [ dateutil pytzdata ] ++ lib.optional (pythonOlder "3.5") typing;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python datetimes made easy";
-    homepage = https://github.com/sdispater/pendulum;
+    homepage = "https://github.com/sdispater/pendulum";
     license = licenses.mit;
   };
 }

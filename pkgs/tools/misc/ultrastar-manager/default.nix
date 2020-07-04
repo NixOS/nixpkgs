@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, pkgconfig, symlinkJoin, qmake, diffPlugins
+{ lib, mkDerivation, fetchFromGitHub, pkgconfig, symlinkJoin, qmake, diffPlugins
 , qtbase, qtmultimedia, taglib, libmediainfo, libzen, libbass }:
 
 let
-  version = "2017-05-24";
-  rev = "eed5dc41c849ab29b2dee37d97852fffdb45e390";
-  sha256 = "1ymdgaffazndg9vhh47qqjr5873ld7j066hycp670r08bm519ysg";
+  version = "2019-04-23";
+  rev = "ef4524e2239ddbb60f26e05bfba1f4f28cb7b54f";
+  sha256 = "0dl2qp686vbs160b3i9qypb7sv37phy2wn21kgzljbk3wnci3yv4";
   buildInputs = [ qtbase qtmultimedia taglib libmediainfo libzen libbass ];
 
   plugins = [
@@ -24,12 +24,12 @@ let
       repo = "UltraStar-Manager";
       inherit rev sha256;
     };
-    in stdenv.mkDerivation {
+    in mkDerivation {
       name = "${src.name}-patched";
       inherit src;
       phases = [ "unpackPhase" "patchPhase" ];
 
-      patchPhase = with stdenv.lib; ''
+      patchPhase = with lib; ''
         # we don’t want prebuild binaries checked into version control!
         rm -rf lib include
 
@@ -55,7 +55,7 @@ let
     sed -e "s|QCore.*applicationDirPath()|QString(\"${path}\")|" -i "${file}"
   '';
 
-  buildPlugin = name: stdenv.mkDerivation {
+  buildPlugin = name: mkDerivation {
     name = "ultrastar-manager-${name}-plugin-${version}";
     src = patchedSrc;
 
@@ -82,8 +82,9 @@ let
       paths = map buildPlugin plugins;
     };
 
-in stdenv.mkDerivation {
-  name = "ultrastar-manager-${version}";
+in mkDerivation {
+  pname = "ultrastar-manager";
+  inherit version;
   src = patchedSrc;
 
   postPatch = ''
@@ -111,9 +112,9 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
   inherit buildInputs;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ultrastar karaoke song manager";
-    homepage = https://github.com/UltraStar-Deluxe/UltraStar-Manager;
+    homepage = "https://github.com/UltraStar-Deluxe/UltraStar-Manager";
     license = licenses.gpl2;
     maintainers = with maintainers; [ Profpatsch ];
   };

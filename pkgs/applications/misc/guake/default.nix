@@ -1,37 +1,63 @@
-{ stdenv, fetchFromGitHub, python3, gettext, gobjectIntrospection, wrapGAppsHook, glibcLocales
-, gtk3, keybinder3, libnotify, libutempter, vte }:
+{ stdenv
+, fetchFromGitHub
+, python3
+, gettext
+, gobject-introspection
+, wrapGAppsHook
+, gtk3
+, keybinder3
+, libnotify
+, libutempter
+, vte
+, libwnck3
+}:
 
-let
-  version = "3.4.0";
-in python3.pkgs.buildPythonApplication rec {
-  name = "guake-${version}";
+python3.pkgs.buildPythonApplication rec {
+  pname = "guake";
+  version = "3.6.3";
+
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Guake";
     repo = "guake";
     rev = version;
-    sha256 = "1j38z968ha8ij6wrgbwvr8ad930nvhybm9g7pf4s4zv6d3vln0vm";
+    sha256 = "13ipnmqcyixpa6qv83m0f91za4kar14s5jpib68b32z65x1h0j3b";
   };
 
-  nativeBuildInputs = [ gettext gobjectIntrospection wrapGAppsHook python3.pkgs.pip glibcLocales ];
+  # Strict deps breaks guake
+  # See https://github.com/NixOS/nixpkgs/issues/59930
+  # and https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
 
-  buildInputs = [ gtk3 keybinder3 libnotify python3 vte ];
+  nativeBuildInputs = [
+    gettext
+    gobject-introspection
+    wrapGAppsHook
+    python3.pkgs.pip
+  ];
 
-  propagatedBuildInputs = with python3.pkgs; [ dbus-python pbr pycairo pygobject3 ];
+  buildInputs = [
+    gtk3
+    keybinder3
+    libnotify
+    libwnck3
+    python3
+    vte
+  ];
 
-  LC_ALL = "en_US.UTF-8"; # fixes weird encoding error, see https://github.com/NixOS/nixpkgs/pull/38642#issuecomment-379727699
+  propagatedBuildInputs = with python3.pkgs; [
+    dbus-python
+    pbr
+    pycairo
+    pygobject3
+    setuptools
+  ];
 
   PBR_VERSION = version; # pbr needs either .git directory, sdist, or env var
 
-  postPatch = ''
-    # unnecessary /usr/bin/env in Makefile
-    # https://github.com/Guake/guake/pull/1285
-    substituteInPlace "Makefile" --replace "/usr/bin/env python3" "python3"
-  '';
-
   makeFlags = [
-    "prefix=$(out)"
+    "prefix=${placeholder ''out''}"
   ];
 
   preFixup = ''
@@ -40,9 +66,9 @@ in python3.pkgs.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Drop-down terminal for GNOME";
-    homepage = http://guake-project.org;
+    homepage = "http://guake-project.org";
     license = licenses.gpl2;
-    platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];
+    platforms = platforms.linux;
   };
 }

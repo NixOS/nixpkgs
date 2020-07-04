@@ -6,6 +6,14 @@ let
   cfg = config.hardware;
 in {
 
+  imports = [
+    (mkRenamedOptionModule [ "networking" "enableRT73Firmware" ] [ "hardware" "enableRedistributableFirmware" ])
+    (mkRenamedOptionModule [ "networking" "enableIntel3945ABGFirmware" ] [ "hardware" "enableRedistributableFirmware" ])
+    (mkRenamedOptionModule [ "networking" "enableIntel2100BGFirmware" ] [ "hardware" "enableRedistributableFirmware" ])
+    (mkRenamedOptionModule [ "networking" "enableRalinkFirmware" ] [ "hardware" "enableRedistributableFirmware" ])
+    (mkRenamedOptionModule [ "networking" "enableRTL8192cFirmware" ] [ "hardware" "enableRedistributableFirmware" ])
+  ];
+
   ###### interface
 
   options = {
@@ -38,7 +46,14 @@ in {
         firmwareLinuxNonfree
         intel2200BGFirmware
         rtl8192su-firmware
-      ] ++ optional (pkgs.stdenv.isAarch32 || pkgs.stdenv.isAarch64) raspberrypiWirelessFirmware
+        rt5677-firmware
+        rtl8723bs-firmware
+        rtlwifi_new-firmware
+        zd1211fw
+        alsa-firmware
+        sof-firmware
+        openelec-dvb-firmware
+      ] ++ optional (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) raspberrypiWirelessFirmware
         ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "4.13") [
         rtl8723bs-firmware
       ];
@@ -54,7 +69,10 @@ in {
       }];
       hardware.firmware = with pkgs; [
         broadcom-bt-firmware
-      ];
+        b43Firmware_5_1_138
+        b43Firmware_6_30_163_46
+        b43FirmwareCutter
+      ] ++ optional (pkgs.stdenv.hostPlatform.isi686 || pkgs.stdenv.hostPlatform.isx86_64) facetimehd-firmware;
     })
   ];
 }

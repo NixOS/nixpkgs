@@ -1,11 +1,11 @@
 { stdenv, fetchurl, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "siege-4.0.4";
+  name = "siege-4.0.5";
 
   src = fetchurl {
     url = "http://download.joedog.org/siege/${name}.tar.gz";
-    sha256 = "0vzaj5nzb0fir2a4l7ghv3wa5d1nk2ss8gmwjb6bjavjplccyzcg";
+    sha256 = "0c82h0idkvfbzspy7h6w97wyk671694nl1ir94zhzn54mw0p0jrv";
   };
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";

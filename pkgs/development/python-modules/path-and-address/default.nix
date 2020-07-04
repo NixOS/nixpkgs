@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Functions for server CLI applications used by humans";
-    homepage = https://github.com/joeyespo/path-and-address;
+    homepage = "https://github.com/joeyespo/path-and-address";
     license = licenses.mit;
     maintainers = with maintainers; [ koral];
   };

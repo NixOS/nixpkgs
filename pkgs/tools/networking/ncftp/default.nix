@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ncurses, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "ncftp-${version}";
+  pname = "ncftp";
   version = "3.2.6";
 
   src = fetchurl {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Command line FTP (File Transfer Protocol) client";
-    homepage = https://www.ncftp.com/ncftp/;
+    homepage = "https://www.ncftp.com/ncftp/";
     maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.unix;
     license = licenses.clArtistic;

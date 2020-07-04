@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, python, pythonPackages, unzip }:
+{ stdenv, runtimeShell, lib, fetchurl, python, pythonPackages, unzip }:
 
 # This package uses a precompiled "binary" distribution of CuraByDagoma,
 # distributed by the editor.
@@ -14,7 +14,7 @@
 # If, however, someone needs it, we certainly can find a solution.
 
 stdenv.mkDerivation rec {
-  name = "curabydagoma-${version}";
+  pname = "curabydagoma";
   # Version is the date, UNIX format
   version = "1520506579";
   # Hash of the user's choice: os, arch, package type...
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
     mkdir $out/bin
     cat > $out/bin/curabydago <<EOF
-    #!/bin/sh
+    #!${runtimeShell}
     export PYTHONPATH=$PYTHONPATH
     ${python.out}/bin/python $out/curabydago/cura.py
     EOF
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Slicer for 3D printers built by Dagoma";
-    homepage = https://dagoma.fr/cura-by-dagoma.html;
+    homepage = "https://dagoma.fr/cura-by-dagoma.html";
     license = licenses.agpl3;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ tiramiseb ];

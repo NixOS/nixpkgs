@@ -1,6 +1,8 @@
 { stdenv, lib, buildPackages, fetchurl
 , enableStatic ? false
 , enableMinimal ? false
+# Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
+# nix build -f pkgs/top-level/release.nix stdenvBootstrapTools.x86_64-linux.dist
 , useMusl ? stdenv.hostPlatform.libc == "musl", musl
 , extraConfig ? ""
 }:
@@ -32,21 +34,22 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "busybox-1.29.3";
+  name = "busybox-1.31.1";
 
   # Note to whoever is updating busybox: please verify that:
   # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
   # still builds after the update.
   src = fetchurl {
     url = "https://busybox.net/downloads/${name}.tar.bz2";
-    sha256 = "1dzg45vgy2w1xcd3p6h8d76ykhabbvk1h0lf8yb24ikrwlv8cr4p";
+    sha256 = "1659aabzp8w4hayr4z8kcpbk2z1q2wqhw7i1yb0l72b45ykl1yfh";
   };
 
-  hardeningDisable = [ "format" ] ++ lib.optionals enableStatic [ "fortify" ];
+  hardeningDisable = [ "format" "pie" ]
+    ++ lib.optionals enableStatic [ "fortify" ];
 
   patches = [
     ./busybox-in-store.patch
-  ];
+  ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 
   postPatch = "patchShebangs .";
 
@@ -87,13 +90,13 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  postConfigure = lib.optionalString useMusl ''
+  postConfigure = lib.optionalString (useMusl && stdenv.hostPlatform.libc != "musl") ''
     makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  buildInputs = lib.optionals (enableStatic && !useMusl) [ stdenv.cc.libc stdenv.cc.libc.static ];
+  buildInputs = lib.optionals (enableStatic && !useMusl && stdenv.cc.libc ? static) [ stdenv.cc.libc stdenv.cc.libc.static ];
 
   enableParallelBuilding = true;
 
@@ -101,9 +104,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tiny versions of common UNIX utilities in a single small executable";
-    homepage = https://busybox.net/;
+    homepage = "https://busybox.net/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    priority = 10;
   };
 }

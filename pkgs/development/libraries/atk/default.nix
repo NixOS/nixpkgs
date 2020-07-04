@@ -1,10 +1,10 @@
 { stdenv, fetchurl, meson, ninja, gettext, pkgconfig, glib
-, fixDarwinDylibNames, gobjectIntrospection, gnome3
+, fixDarwinDylibNames, gobject-introspection, gnome3
 }:
 
 let
   pname = "atk";
-  version = "2.28.1";
+  version = "2.36.0";
 in
 
 stdenv.mkDerivation rec {
@@ -12,26 +12,24 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1z7laf6qwv5zsqcnj222dm5f43c6f3liil0cgx4s4s62xjk1wfnd";
+    sha256 = "1217cmmykjgkkim0zr1lv5j13733m4w5vipmy4ivw0ll6rz28xpv";
   };
-
-  patches = [
-    # darwin linker arguments https://bugzilla.gnome.org/show_bug.cgi?id=794326
-    (fetchurl {
-      url = https://bugzilla.gnome.org/attachment.cgi?id=369680;
-      sha256 = "11v8fhpsbapa04ifb2268cga398vfk1nq8i628441632zjz1diwg";
-    })
-  ];
 
   outputs = [ "out" "dev" ];
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext gobjectIntrospection ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext gobject-introspection glib ];
 
   propagatedBuildInputs = [
     # Required by atk.pc
     glib
+  ];
+
+  patches = [
+    # meson builds an incorrect .pc file
+    # glib should be Requires not Requires.private
+    ./fix_pc.patch
   ];
 
   doCheck = true;
@@ -53,7 +51,7 @@ stdenv.mkDerivation rec {
       control running applications.
     '';
 
-    homepage = http://library.gnome.org/devel/atk/;
+    homepage = "http://library.gnome.org/devel/atk/";
 
     license = stdenv.lib.licenses.lgpl2Plus;
 

@@ -1,64 +1,39 @@
-{ stable, branch, version, sha256Hash }:
+{ stable, branch, version, sha256Hash, mkOverride, commonOverrides }:
 
-{ stdenv, python3Packages, fetchFromGitHub, fetchurl }:
+{ lib, stdenv, python3, fetchFromGitHub }:
 
 let
-  pythonPackages = python3Packages;
-  async-timeout = (stdenv.lib.overrideDerivation pythonPackages.async-timeout
-    (oldAttrs:
-      rec {
-        pname = "async-timeout";
-        version = "2.0.1";
-        src = pythonPackages.fetchPypi {
-          inherit pname version;
-          sha256 = "1l3kg062m02mph6rf9rdv8r5c5n356clxa6b6mrn0i77vk9g9kq0";
-        };
-      }));
-  aiohttp = (stdenv.lib.overrideDerivation pythonPackages.aiohttp
-    (oldAttrs:
-      rec {
-        pname = "aiohttp";
-        version = "2.3.10";
-        src = pythonPackages.fetchPypi {
-          inherit pname version;
-          sha256 = "8adda6583ba438a4c70693374e10b60168663ffa6564c5c75d3c7a9055290964";
-        };
-        propagatedBuildInputs = [ async-timeout ]
-          ++ (with pythonPackages; [ attrs chardet multidict yarl ])
-          ++ stdenv.lib.optional (pythonPackages.pythonOlder "3.7") pythonPackages.idna-ssl;
-      }));
-  aiohttp-cors = (stdenv.lib.overrideDerivation pythonPackages.aiohttp-cors
-    (oldAttrs:
-      rec {
-        pname = "aiohttp-cors";
-        version = "0.5.3";
-        name = "${pname}-${version}";
-        src = pythonPackages.fetchPypi {
-          inherit pname version;
-          sha256 = "11b51mhr7wjfiikvj3nc5s8c7miin2zdhl3yrzcga4mbpkj892in";
-        };
-        propagatedBuildInputs = [ aiohttp ]
-          ++ stdenv.lib.optional
-               (pythonPackages.pythonOlder "3.5")
-               pythonPackages.typing;
-      }));
-in pythonPackages.buildPythonPackage rec {
-  name = "${pname}-${version}";
+  defaultOverrides = commonOverrides ++ [
+    (mkOverride "jsonschema" "3.2.0"
+      "0ykr61yiiizgvm3bzipa3l73rvj49wmrybbfwhvpgk3pscl5pa68")
+    (mkOverride "aiofiles" "0.4.0"
+      "1vmvq9qja3wahv8m1adkyk00zm7j0x64pk3f2ry051ja66xa07h2")
+  ];
+
+  python = python3.override {
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
+  };
+in python.pkgs.buildPythonPackage {
   pname = "gns3-server";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "GNS3";
-    repo = pname;
+    repo = "gns3-server";
     rev = "v${version}";
     sha256 = sha256Hash;
   };
 
-  propagatedBuildInputs = [ aiohttp-cors ]
-    ++ (with pythonPackages; [
-      yarl aiohttp multidict
-      jinja2 psutil zipstream raven jsonschema typing
-      prompt_toolkit
-    ]);
+  postPatch = ''
+    # yarl 1.4+ only requires Python 3.6+
+    sed -iE "s/yarl==1.3.0//" requirements.txt
+  '';
+
+  propagatedBuildInputs = with python.pkgs; [
+    aiohttp-cors yarl aiohttp multidict setuptools
+    jinja2 psutil zipstream raven jsonschema distro async_generator aiofiles
+    prompt_toolkit py-cpuinfo
+  ];
 
   # Requires network access
   doCheck = false;
@@ -66,6 +41,7 @@ in pythonPackages.buildPythonPackage rec {
   postInstall = ''
     rm $out/bin/gns3loopback # For Windows only
   '';
+
   meta = with stdenv.lib; {
     description = "Graphical Network Simulator 3 server (${branch} release)";
     longDescription = ''
@@ -73,7 +49,8 @@ in pythonPackages.buildPythonPackage rec {
       Qemu/KVM. Clients like the GNS3 GUI control the server using a HTTP REST
       API.
     '';
-    homepage = https://www.gns3.com/;
+    homepage = "https://www.gns3.com/";
+    changelog = "https://github.com/GNS3/gns3-server/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

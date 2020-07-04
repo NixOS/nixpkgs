@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, qmake4Hook , qt4, libX11, libXext }:
 
 stdenv.mkDerivation rec {
-  name = "qtstyleplugin-kvantum-qt4-${version}";
-  version = "0.10.4";
+  pname = "qtstyleplugin-kvantum-qt4";
+  version = "0.15.3";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "Kvantum";
-    rev = "0527bb03f2252269fd382e11181a34ca72c96b4b";
-    sha256 = "0ky44s1fgqxraywagx1mv07yz76ppgiz3prq447db78wkwqg2d8p";
+    rev = "V${version}";
+    sha256 = "0jq3y63c36nr2rprg7im9ik112p5zvhj46vzgxfbnpvskmg0cchm";
   };
 
   nativeBuildInputs = [ qmake4Hook ];

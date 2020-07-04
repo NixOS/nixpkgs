@@ -1,4 +1,4 @@
-{ stdenv, makeDesktopItem, makeWrapper, patchelf, p7zip
+{ stdenv, lib, makeDesktopItem, makeWrapper, patchelf
 , coreutils, gnugrep, which, git, unzip, libsecret, libnotify
 }:
 
@@ -19,16 +19,16 @@ with stdenv; lib.makeOverridable mkDerivation rec {
     comment = lib.replaceChars ["\n"] [" "] meta.longDescription;
     desktopName = product;
     genericName = meta.description;
-    categories = "Application;Development;";
+    categories = "Development;";
     icon = execName;
     extraEntries = ''
       StartupWMClass=${wmClass}
     '';
   };
 
-  nativeBuildInputs = [ makeWrapper patchelf p7zip unzip ];
+  nativeBuildInputs = [ makeWrapper patchelf unzip ];
 
-  patchPhase = ''
+  patchPhase = lib.optionalString (!stdenv.isDarwin) ''
       get_file_size() {
         local fname="$1"
         echo $(ls -l $fname | cut -d ' ' -f5)
@@ -63,7 +63,7 @@ with stdenv; lib.makeOverridable mkDerivation rec {
     item=${desktopItem}
 
     makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${execName}" \
-      --prefix PATH : "$out/libexec/${name}:${stdenv.lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
+      --prefix PATH : "$out/libexec/${name}:${lib.optionalString (stdenv.isDarwin) "${jdk}/jdk/Contents/Home/bin:"}${stdenv.lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
         # Some internals want libstdc++.so.6
         stdenv.cc.cc.lib libsecret
@@ -77,4 +77,6 @@ with stdenv; lib.makeOverridable mkDerivation rec {
     ln -s "$item/share/applications" $out/share
   '';
 
+} // stdenv.lib.optionalAttrs (!(meta.license.free or true)) {
+  preferLocalBuild = true;
 }

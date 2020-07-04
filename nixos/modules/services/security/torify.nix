@@ -25,6 +25,7 @@ in
     services.tor.tsocks = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to build tsocks wrapper script to relay application traffic via Tor.
@@ -40,6 +41,7 @@ in
       };
 
       server = mkOption {
+        type = types.str;
         default = "localhost:9050";
         example = "192.168.0.20";
         description = ''
@@ -48,6 +50,7 @@ in
       };
 
       config = mkOption {
+        type = types.lines;
         default = "";
         description = ''
           Extra configuration. Contents will be added verbatim to TSocks

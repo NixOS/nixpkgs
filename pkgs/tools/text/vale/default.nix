@@ -1,24 +1,25 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "vale-${version}";
-  version = "1.0.3";
-  rev    = "v${version}";
+  pname = "vale";
+  version = "2.0.0";
+
+  subPackages = [ "." ];
+
+  src = fetchFromGitHub {
+    owner  = "errata-ai";
+    repo   = "vale";
+    rev    = "v${version}";
+    sha256 = "068973ayd883kzkxl60lpammf3icjz090nw07kfccvhcf24x07bh";
+  };
 
   goPackagePath = "github.com/errata-ai/vale";
 
-  src = fetchFromGitHub {
-    inherit rev;
-    owner  = "errata-ai";
-    repo   = "vale";
-    sha256 = "132zzgry19alcdn3m3q62sp2lm3yxc4kil12lm309jl7b3n0850h";
-  };
-
-  goDeps = ./deps.nix;
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
   meta = with stdenv.lib; {
-    homepage = https://errata.ai/vale/getting-started/;
-    description = "Vale is an open source linter for prose";
+    homepage = "https://errata-ai.gitbook.io/vale/";
+    description = "A syntax-aware linter for prose built with speed and extensibility in mind";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];
   };

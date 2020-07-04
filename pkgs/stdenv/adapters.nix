@@ -31,14 +31,23 @@ rec {
 
   # Return a modified stdenv that tries to build statically linked
   # binaries.
-  makeStaticBinaries = stdenv: stdenv //
-    { mkDerivation = args: stdenv.mkDerivation (args // {
-        NIX_CFLAGS_LINK = "-static";
+  makeStaticBinaries = stdenv:
+    let stdenv' = if stdenv.hostPlatform.libc != "glibc" then stdenv else
+      stdenv.override (prev: {
+          extraBuildInputs = prev.extraBuildInputs or [] ++ [
+              stdenv.glibc.static
+            ];
+        });
+    in stdenv' //
+    { mkDerivation = args:
+      if stdenv'.hostPlatform.isDarwin
+      then throw "Cannot build fully static binaries on Darwin/macOS"
+      else stdenv'.mkDerivation (args // {
+        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
         configureFlags = (args.configureFlags or []) ++ [
             "--disable-shared" # brrr...
           ];
       });
-      isStatic = true;
     };
 
 
@@ -51,8 +60,22 @@ rec {
           "--enable-static"
           "--disable-shared"
         ];
+        cmakeFlags = (args.cmakeFlags or []) ++ [ "-DBUILD_SHARED_LIBS:BOOL=OFF" ];
+        mesonFlags = (args.mesonFlags or []) ++ [ "-Ddefault_library=static" ];
       });
     };
+
+
+  /* Modify a stdenv so that all buildInputs are implicitly propagated to
+     consuming derivations
+  */
+  propagateBuildInputs = stdenv: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args // {
+        propagatedBuildInputs = (args.propagatedBuildInputs or []) ++ (args.buildInputs or []);
+        buildInputs = [];
+      });
+    };
+
 
   /* Modify a stdenv so that the specified attributes are added to
      every derivation returned by its mkDerivation function.
@@ -119,7 +142,7 @@ rec {
      with the following function:
 
      isFree = license: with builtins;
-       if isNull license then true
+       if license == null then true
        else if isList license then lib.all isFree license
        else license != "non-free" && license != "unfree";
 

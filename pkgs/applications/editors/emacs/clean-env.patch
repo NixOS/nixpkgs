@@ -1,13 +1,13 @@
 Dump temacs in an empty environment to prevent -dev paths from ending
 up in the dumped image.
 
-diff -ru -x '*~' emacs-25.3/src/Makefile.in emacs-25.3-new/src/Makefile.in
---- emacs-25.3/src/Makefile.in	2017-04-14 17:02:47.000000000 +0200
-+++ emacs-25.3-new/src/Makefile.in	2017-09-25 19:03:02.173861038 +0200
-@@ -532,7 +532,7 @@
- ifeq ($(CANNOT_DUMP),yes)
+diff --git a/src/Makefile.in b/src/Makefile.in
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -535,7 +535,7 @@ ifeq ($(CANNOT_DUMP),yes)
  	ln -f temacs$(EXEEXT) $@
  else
+ 	unset EMACS_HEAP_EXEC; \
 -	LC_ALL=C $(RUN_TEMACS) -batch $(BUILD_DETAILS) -l loadup dump
 +	env -i LC_ALL=C $(RUN_TEMACS) -batch $(BUILD_DETAILS) -l loadup dump
    ifneq ($(PAXCTL_dumped),)

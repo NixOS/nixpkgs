@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Compiler for Doom/Hexen scripts (ACS, BCS)";
-    homepage = https://github.com/wormt/bcc;
+    homepage = "https://github.com/wormt/bcc";
     license = licenses.mit;
     maintainers = with maintainers; [ertes];
   };

@@ -1,8 +1,8 @@
 { stdenv, lib, fetchFromGitHub, pythonPackages, makeWrapper, ffmpeg_3 }:
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication {
 
-  name = "togglesg-download-git-${version}";
+  pname = "togglesg-download-git";
   version = "2017-12-07";
 
   src = fetchFromGitHub {
@@ -32,7 +32,7 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/0x776b7364/toggle.sg-download;
+    homepage = "https://github.com/0x776b7364/toggle.sg-download";
     description = "Command-line tool to download videos from toggle.sg written in Python";
     longDescription = ''
       toggle.sg requires SilverLight in order to view videos. This tool will

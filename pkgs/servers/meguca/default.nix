@@ -1,42 +1,43 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, cmake, ffmpeg-full, ghostscript
-, graphicsmagick, quicktemplate, go-bindata, easyjson, nodePackages, emscripten }:
+{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, cmake, ffmpeg-full
+, ghostscript, graphicsmagick, quicktemplate, go-bindata, easyjson
+, nodePackages, emscripten, opencv, statik }:
 
-buildGoPackage rec {
-  name = "meguca-unstable-${version}";
-  version = "2018-08-13";
+buildGoPackage {
+  pname = "meguca-unstable";
+  version = "2019-03-12";
   goPackagePath = "github.com/bakape/meguca";
   goDeps = ./server_deps.nix;
 
   src = fetchFromGitHub {
     owner = "bakape";
     repo = "meguca";
-    rev = "f8b54370ba74b90f2814e6b42ac003a51fe02ce9";
-    sha256 = "1036qlvvz0la3fp514kw5qrplm1zsh23ywn2drigniacmqz4m7dv";
+    rev = "21b08de09b38918061c5cd0bbd0dc9bcc1280525";
+    sha256 = "1nb3bf1bscbdma83sp9fbgvmxxlxh21j9h80wakfn85sndcrws5i";
     fetchSubmodules = true;
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ pkgconfig cmake ];
-  buildInputs = [ ffmpeg-full graphicsmagick ghostscript quicktemplate go-bindata easyjson emscripten ];
+  nativeBuildInputs = [ pkgconfig cmake go-bindata ];
+
+  buildInputs = [
+    ffmpeg-full graphicsmagick ghostscript quicktemplate
+    easyjson emscripten opencv statik
+  ];
 
   buildPhase = ''
     export HOME=`pwd`
-    export GOPATH=$GOPATH:$HOME/go/src/github.com/bakape/meguca/go
-    cd $HOME/go/src/github.com/bakape/meguca
+    cd go/src/github.com/bakape/meguca
     ln -sf ${nodePackages.meguca}/lib/node_modules/meguca/node_modules
     sed -i "/npm install --progress false --depth 0/d" Makefile
-    make generate_clean
-    go generate meguca/...
-    go build -v -p $NIX_BUILD_CORES meguca
-    make -j $NIX_BUILD_CORES client
+    make -j $NIX_BUILD_CORES generate all
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     make -j $NIX_BUILD_CORES wasm
   '';
 
   installPhase = ''
-    mkdir -p $bin/bin $bin/share/meguca
-    cp meguca $bin/bin
-    cp -r www $bin/share/meguca
+    mkdir -p $out/bin $out/share/meguca
+    cp meguca $out/bin
+    cp -r www $out/share/meguca
   '';
 
   meta = with stdenv.lib; {
@@ -45,5 +46,7 @@ buildGoPackage rec {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ chiiruno ];
     platforms = platforms.all;
+    broken = true; # Broken on Hydra since 2019-04-18:
+    # https://hydra.nixos.org/build/98885902
   };
 }

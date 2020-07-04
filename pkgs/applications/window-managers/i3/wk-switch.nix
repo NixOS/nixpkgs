@@ -1,18 +1,17 @@
-{ stdenv, fetchFromGitHub, python2Packages }:
+{ stdenv, fetchFromGitHub, python3Packages }:
 
-python2Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "i3-wk-switch";
-  version = "2017-08-21";
+  version = "2020-03-18";
 
-  # https://github.com/tmfink/i3-wk-switch/commit/484f840bc4c28ddc60fa3be81e2098f7689e78fb
   src = fetchFromGitHub {
     owner = "tmfink";
     repo = pname;
-    rev = "484f840";
-    sha256 = "0nrc13ld5bx07wrgnpzgpbaixb4rpi93xiapvyb8srd49fj9pcmb";
+    rev = "a618cb8f52120aa8d533bb7c0c8de3ff13b3dc06";
+    sha256 = "0ci0w5igjk5xa8x4rx17cpgmdkamwjmavxhp0vp6213cl93ybjhz";
   };
 
-  propagatedBuildInputs = with python2Packages; [ i3-py ];
+  propagatedBuildInputs = with python3Packages; [ i3ipc ];
 
   dontBuild = true;
   doCheck = false;
@@ -23,10 +22,10 @@ python2Packages.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "XMonad-like workspace switching for i3";
+    description = "XMonad-like workspace switching for i3 and sway";
     maintainers = with maintainers; [ synthetica ];
     platforms = platforms.linux;
     license = licenses.mit;
-    homepage = https://travisf.net/i3-wk-switcher;
+    homepage = "https://travisf.net/i3-wk-switcher";
   };
 }

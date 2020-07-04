@@ -1,26 +1,21 @@
 { stdenv, buildPythonPackage, fetchPypi, isPy3k
 , beautifulsoup4, bottle, chardet, dateutil
-, google_api_python_client, lxml, ply, python_magic
-, nose, requests }:
+, google_api_python_client, lxml, oauth2client
+, ply, python_magic, pytest, requests }:
 
 buildPythonPackage rec {
-  version = "2.1.3";
+  version = "2.3.0";
   pname = "beancount";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4b7b0d3633c82ca88d3cb3d31ad2fd2e45a42401cfa94eaa1cb938ffece34f22";
+    sha256 = "04i788glp2cslwi67dixy1pi5l0izcl078i9mrd1j1sh8f99cvcs";
   };
 
-  checkInputs = [ nose ];
-
-  # Automatic tests cannot be run because it needs to import some local modules for tests.
+  # Tests require files not included in the PyPI archive.
   doCheck = false;
-  checkPhase = ''
-    nosetests
-  '';
 
   propagatedBuildInputs = [
     beautifulsoup4
@@ -29,13 +24,17 @@ buildPythonPackage rec {
     dateutil
     google_api_python_client
     lxml
+    oauth2client
     ply
     python_magic
     requests
+    # pytest really is a runtime dependency
+    # https://bitbucket.org/blais/beancount/commits/554e13057551951e113835196770847c788dd592
+    pytest
   ];
 
   meta = {
-    homepage = http://furius.ca/beancount/;
+    homepage = "http://furius.ca/beancount/";
     description = "Double-entry bookkeeping computer language";
     longDescription = ''
         A double-entry bookkeeping computer language that lets you define

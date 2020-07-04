@@ -18,7 +18,7 @@ let
   ];
 
   eula = fetchurl {
-    url = http://corefonts.sourceforge.net/eula.htm;
+    url = "http://corefonts.sourceforge.net/eula.htm";
     sha256 = "1aqbcnl032g2hd7iy56cs022g47scb0jxxp3mm206x1yqc90vs1c";
   };
 
@@ -41,12 +41,10 @@ stdenv.mkDerivation {
 
     cabextract --lowercase viewer1.cab
 
-    fontDir=$out/share/fonts/truetype
-    mkdir -p $fontDir
-    cp *.ttf $fontDir
+    install -m444 -Dt $out/share/fonts/truetype *.ttf
 
     # Also put the EULA there to be on the safe side.
-    cp ${eula} $fontDir/eula.html
+    cp ${eula} $out/share/fonts/truetype/eula.html
 
     # Set up no-op font configs to override any aliases set up by
     # other packages.
@@ -64,7 +62,7 @@ stdenv.mkDerivation {
   outputHash = "0baadsrgpqj15fgjmcn0aim0k0nk7mvivcxinw1zwg61kkcwhalx";
 
   meta = with stdenv.lib; {
-    homepage = http://corefonts.sourceforge.net/;
+    homepage = "http://corefonts.sourceforge.net/";
     description = "Microsoft's TrueType core fonts for the Web";
     platforms = platforms.all;
     license = licenses.unfreeRedistributable;

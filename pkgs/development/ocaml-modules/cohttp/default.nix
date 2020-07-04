@@ -1,32 +1,25 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, dune
-, ppx_fields_conv, ppx_sexp_conv, ppx_deriving
-, base64, fieldslib, jsonm, re, stringext, uri
+{ lib, fetchurl, buildDunePackage
+, ppx_fields_conv, ppx_sexp_conv, stdlib-shims
+, base64, fieldslib, jsonm, re, stringext, uri-sexp
 }:
 
-stdenv.mkDerivation rec {
-	version = "1.1.1";
-	name = "ocaml${ocaml.version}-cohttp-${version}";
+buildDunePackage rec {
+	pname = "cohttp";
+	version = "2.5.1";
 
-	src = fetchFromGitHub {
-		owner = "mirage";
-		repo = "ocaml-cohttp";
-		rev = "v${version}";
-		sha256 = "1dzd6vy43b7p9xplzg2whylz5br59zxaqywa14b4l377f31gnwq1";
+	src = fetchurl {
+		url = "https://github.com/mirage/ocaml-cohttp/releases/download/v${version}/cohttp-v${version}.tbz";
+		sha256 = "0im91mi3nxzqfd7fs5r0zg5gsparfnf5zaz13mpw247hkd3y3396";
 	};
 
-	buildInputs = [ ocaml findlib dune jsonm ppx_fields_conv ppx_sexp_conv ];
+	buildInputs = [ jsonm ppx_fields_conv ppx_sexp_conv ];
 
-	propagatedBuildInputs = [ ppx_deriving base64 fieldslib re stringext uri ];
-
-	buildPhase = "dune build -p cohttp";
-
-	inherit (dune) installPhase;
+	propagatedBuildInputs = [ base64 fieldslib re stringext uri-sexp stdlib-shims ];
 
 	meta = {
 		description = "HTTP(S) library for Lwt, Async and Mirage";
-		license = stdenv.lib.licenses.isc;
-		maintainers = [ stdenv.lib.maintainers.vbgl ];
-		inherit (src.meta) homepage;
-		inherit (ocaml.meta) platforms;
+		license = lib.licenses.isc;
+		maintainers = [ lib.maintainers.vbgl ];
+		homepage = "https://github.com/mirage/ocaml-cohttp";
 	};
 }

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "yapf";
-  version = "0.24.0";
+  version = "0.30.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0anwby0ydmyzcsgjc5dn1ryddwvii4dq61vck447q0n96npnzfyf";
+    sha256 = "3000abee4c28daebad55da6c85f3cd07b8062ce48e2e9943c8da1b9667d48427";
   };
 
   meta = with stdenv.lib; {

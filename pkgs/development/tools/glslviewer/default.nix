@@ -4,15 +4,15 @@
 , Cocoa
 }:
 
-stdenv.mkDerivation rec {
-  name = "glslviewer-${version}";
-  version = "2018-01-31";
+stdenv.mkDerivation {
+  pname = "glslviewer";
+  version = "2019-04-22";
 
   src = fetchFromGitHub {
     owner = "patriciogonzalezvivo";
     repo = "glslViewer";
-    rev = "cac40f6984dbeb638950744c9508aa88591fea6c";
-    sha256 = "1bykpp68hdxjlxvi1xicyb6822mz69q0adz24faaac372pls4bk0";
+    rev = "fa3e2ed4810927d189e480b704366cca22f281f3";
+    sha256 = "1888jxi84f2nnc0kpzqrn2cada1z4zqyq8ss4ppb5y3wy7d87qjn";
   };
 
   nativeBuildInputs = [ pkgconfig ensureNewerSourcesForZipFilesHook ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     libXi libX11
   ] ++ (with python2Packages; [ python setuptools wrapPython ])
     ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
-  pythonPath = with python2Packages; [ requests.dev ];
+  pythonPath = with python2Packages; [ requests ];
 
   # Makefile has /usr/local/bin hard-coded for 'make install'
   preConfigure = ''
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Live GLSL coding renderer";
-    homepage = http://patriciogonzalezvivo.com/2015/glslViewer/;
+    homepage = "http://patriciogonzalezvivo.com/2015/glslViewer/";
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.hodapp ];

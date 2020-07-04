@@ -2,14 +2,14 @@
 , libxml2, kerberos, kmod, openldap, sssd, cyrus_sasl, openssl }:
 
 let
-  version = "5.1.4";
+  version = "5.1.6";
   name = "autofs-${version}";
 in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "mirror://kernel/linux/daemons/autofs/v5/${name}.tar.xz";
-    sha256 = "08hpphawzcdibwbhw0r3y7hnfczlazpp90sf3bz2imgza7p31klg";
+    sha256 = "1vya21mb4izj3khcr3flibv7xc15vvx2v0rjfk5yd31qnzcy7pnx";
   };
 
   preConfigure = ''
@@ -40,8 +40,8 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "Kernel-based automounter";
-    homepage = http://www.linux-consulting.com/Amd_AutoFS/autofs.html;
-    license = stdenv.lib.licenses.gpl2;
+    homepage = "https://www.kernel.org/pub/linux/daemons/autofs/";
+    license = stdenv.lib.licenses.gpl2Plus;
     executables = [ "automount" ];
     platforms = stdenv.lib.platforms.linux;
   };

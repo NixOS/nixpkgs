@@ -1,14 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, future }:
+{ lib, buildPythonPackage, fetchPypi, future, cppy }:
 
 buildPythonPackage rec {
   pname = "atom";
-  version = "0.4.1";
+  version = "0.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0awzja4k3f32y01gd068yyxvh35km62m4wka0vbg1yyy37ahgjmv";
+    sha256 = "ce0c600e4b26b7553c926b3b8253df7ae19bbf2678bdc2d46eb29b5f9149f172";
   };
 
+  buildInputs = [ cppy ];
   propagatedBuildInputs = [ future ];
 
   # Tests not released to pypi
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Memory efficient Python objects";
     maintainers = [ maintainers.bhipple ];
-    homepage = https://github.com/nucleic/atom;
+    homepage = "https://github.com/nucleic/atom";
     license = licenses.bsd3;
   };
 }

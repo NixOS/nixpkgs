@@ -1,27 +1,38 @@
-{ stdenv, fetchurl, nspr, perl, zlib, sqlite, fixDarwinDylibNames }:
+{ stdenv, fetchurl, nspr, perl, zlib, sqlite, fixDarwinDylibNames, buildPackages }:
 
 let
   nssPEM = fetchurl {
-    url = http://dev.gentoo.org/~polynomial-c/mozilla/nss-3.15.4-pem-support-20140109.patch.xz;
+    url = "http://dev.gentoo.org/~polynomial-c/mozilla/nss-3.15.4-pem-support-20140109.patch.xz";
     sha256 = "10ibz6y0hknac15zr6dw4gv9nb5r5z9ym6gq18j3xqx7v7n3vpdw";
   };
+  version = "3.52.1";
+  underscoreVersion = builtins.replaceStrings ["."] ["_"] version;
 
 in stdenv.mkDerivation rec {
-  name = "nss-${version}";
-  version = "3.39";
+  pname = "nss";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://mozilla/security/nss/releases/NSS_3_39_RTM/src/${name}.tar.gz";
-    sha256 = "0jw6qlfl2g47hhx056nvnj6h92bk3sn46hy3ig61a911dzblvrkb";
+    url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/${pname}-${version}.tar.gz";
+    sha256 = "0y4jb9095f7bbgw7d7kvzm4c3g4p5i6y68fwhb8wlkpb7b1imj5w";
   };
 
-  buildInputs = [ perl zlib sqlite ]
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  nativeBuildInputs = [ perl ];
+
+  buildInputs = [ zlib sqlite ]
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   propagatedBuildInputs = [ nspr ];
 
   prePatch = ''
-    xz -d < ${nssPEM} | patch -p1
+    # strip the trailing whitespace from the patch line and the renamed CKO_NETSCAPE_ enum to CKO_NSS_
+    xz -d < ${nssPEM} | sed \
+       -e '/^-DIRS = builtins $/ s/ $//' \
+       -e 's/CKO_NETSCAPE_/CKO_NSS_/g' \
+       -e 's/CKT_NETSCAPE_/CKT_NSS_/g' \
+       | patch -p1
   '';
 
   patches =
@@ -31,7 +42,7 @@ in stdenv.mkDerivation rec {
       ./ckpem.patch
     ];
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace nss/coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
@@ -41,7 +52,11 @@ in stdenv.mkDerivation rec {
 
   preConfigure = "cd nss";
 
-  makeFlags = [
+  makeFlags = let
+    # NSS's build systems expects aarch32 to be called arm; if we pass in armv6l/armv7l, it
+    # fails with a linker error
+    cpu = if stdenv.hostPlatform.isAarch32 then "arm" else stdenv.hostPlatform.parsed.cpu.name;
+  in [
     "NSPR_INCLUDE_DIR=${nspr.dev}/include"
     "NSPR_LIB_DIR=${nspr.out}/lib"
     "NSDISTMODE=copy"
@@ -50,6 +65,15 @@ in stdenv.mkDerivation rec {
     "NSS_ENABLE_ECC=1"
     "USE_SYSTEM_ZLIB=1"
     "NSS_USE_SYSTEM_SQLITE=1"
+    "NATIVE_CC=${buildPackages.stdenv.cc}/bin/cc"
+  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
+    # Pass in CPU even if we're not cross compiling, because otherwise it tries to guess with
+    # uname, which can be wrong if e.g. we're compiling for aarch32 on aarch64
+    "OS_TEST=${cpu}"
+    "CPU_ARCH=${cpu}"
+  ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "CROSS_COMPILE=1"
+    "NSS_DISABLE_GTESTS=1" # don't want to build tests when cross-compiling
   ] ++ stdenv.lib.optional stdenv.is64bit "USE_64=1"
     ++ stdenv.lib.optional stdenv.isDarwin "CCC=clang++";
 
@@ -93,7 +117,10 @@ in stdenv.mkDerivation rec {
     chmod 0755 $out/bin/nss-config
   '';
 
-  postFixup = ''
+  postFixup = let
+    isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+    nss = if isCross then buildPackages.nss.tools else "$out";
+  in ''
     for libname in freebl3 nssdbm3 softokn3
     do '' +
     (if stdenv.isDarwin
@@ -104,7 +131,7 @@ in stdenv.mkDerivation rec {
        libfile="$out/lib/lib$libname.so"
        LD_LIBRARY_PATH=$out/lib:${nspr.out}/lib \
      '') + ''
-        $out/bin/shlibsign -v -i "$libfile"
+        ${nss}/bin/shlibsign -v -i "$libfile"
     done
 
     moveToOutput bin "$tools"
@@ -114,7 +141,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://developer.mozilla.org/en-US/docs/NSS;
+    homepage = "https://developer.mozilla.org/en-US/docs/NSS";
     description = "A set of libraries for development of security-enabled client and server applications";
     license = licenses.mpl20;
     platforms = platforms.all;

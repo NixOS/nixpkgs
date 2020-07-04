@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A python wrapper around the https://coinmarketcap.com API.";
-    homepage = https://github.com/barnumbirr/coinmarketcap;
+    homepage = "https://github.com/barnumbirr/coinmarketcap";
     license = licenses.asl20;
   };
 }

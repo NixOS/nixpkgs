@@ -1,7 +1,7 @@
 { stdenv, fetchzip, autoreconfHook, libcrafter, libpcap, lua }:
 
 stdenv.mkDerivation rec {
-  name = "tracebox-${version}";
+  pname = "tracebox";
   version = "0.2";
 
   src = fetchzip {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-lua=yes" ];
 
-  NIX_LDFLAGS = [ "${libpcap}/lib/libpcap.so" "${libcrafter}/lib/libcrafter.so" ];
+  NIX_LDFLAGS = "${libpcap}/lib/libpcap.so ${libcrafter}/lib/libcrafter.so";
 
   preAutoreconf = ''
     substituteInPlace Makefile.am --replace "noinst" ""
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.tracebox.org/;
+    homepage = "http://www.tracebox.org/";
     description = "A middlebox detection tool";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ maintainers.lethalman ];

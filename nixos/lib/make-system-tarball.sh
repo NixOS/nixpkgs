@@ -3,7 +3,6 @@ source $stdenv/setup
 sources_=($sources)
 targets_=($targets)
 
-echo $objects
 objects=($objects)
 symlinks=($symlinks)
 
@@ -14,8 +13,6 @@ stripSlash() {
     if test "${res:0:1}" = /; then res=${res:1}; fi
 }
 
-touch pathlist
-
 # Add the individual files.
 for ((i = 0; i < ${#targets_[@]}; i++)); do
     stripSlash "${targets_[$i]}"
@@ -25,9 +22,9 @@ done
 
 
 # Add the closures of the top-level store objects.
+chmod +w .
 mkdir -p nix/store
-storePaths=$(perl $pathsFromGraph closure-*)
-for i in $storePaths; do
+for i in $(< $closureInfo/store-paths); do
     cp -a "$i" "${i:1}"
 done
 
@@ -35,7 +32,7 @@ done
 # TODO tar ruxo
 # Also include a manifest of the closures in a format suitable for
 # nix-store --load-db.
-printRegistration=1 perl $pathsFromGraph closure-* > nix-path-registration
+cp $closureInfo/registration nix-path-registration
 
 # Add symlinks to the top-level store objects.
 for ((n = 0; n < ${#objects[*]}; n++)); do

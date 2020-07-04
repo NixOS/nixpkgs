@@ -1,30 +1,33 @@
-{ lib, stdenv, fetchurl, pkgconfig, libftdi, pciutils }:
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, libftdi1
+, libusb1
+, pciutils
+}:
 
-let version = "1.0"; in
 stdenv.mkDerivation rec {
-  name = "flashrom-${version}";
+  pname = "flashrom";
+  version = "1.2";
 
   src = fetchurl {
-    url = "https://download.flashrom.org/releases/${name}.tar.bz2";
-    sha256 = "0i9wg1lyfg99bld7d00zqjm9f0lk6m0q3h3n9c195c9yysq5ccfb";
+    url = "https://download.flashrom.org/releases/flashrom-v${version}.tar.bz2";
+    sha256 = "0ax4kqnh7kd3z120ypgp73qy1knz47l6qxsqzrfkd97mh5cdky71";
   };
 
-  # Newer versions of libusb deprecate some API flashrom uses.
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace "-Werror" "-Werror -Wno-error=deprecated-declarations -Wno-error=unused-const-variable="
-  '';
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libftdi pciutils ];
-
-  preConfigure = "export PREFIX=$out";
+  nativeBuildInputs = [ meson pkgconfig ninja ];
+  buildInputs = [ libftdi1 libusb1 pciutils ];
 
   meta = with lib; {
-    homepage = http://www.flashrom.org;
+    homepage = "http://www.flashrom.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
     license = licenses.gpl2;
     maintainers = with maintainers; [ funfunctor fpletz ];
-    platforms = with platforms; linux;
+    platforms = platforms.all;
+    # https://github.com/flashrom/flashrom/issues/125
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

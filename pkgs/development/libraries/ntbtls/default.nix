@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "ntbtls-${version}";
+  pname = "ntbtls";
   version = "0.1.2";
 
   src = fetchurl {

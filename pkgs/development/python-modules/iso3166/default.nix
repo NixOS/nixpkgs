@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, buildPythonPackage, pytest }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "iso3166";
   version = "0.8";
 
@@ -12,14 +12,14 @@ buildPythonPackage rec {
     sha256 = "0zs9za9dr2nl5srxir08yibmp6nffcapmzala0fgh8ny7y6rafrx";
   };
 
-  buildInputs = [ pytest ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
     py.test
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/deactivated/python-iso3166;
+    homepage = "https://github.com/deactivated/python-iso3166";
     description = "Self-contained ISO 3166-1 country definitions";
     license = licenses.mit;
     maintainers = with maintainers; [ zraexy ];

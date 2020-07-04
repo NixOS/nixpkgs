@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tlaps-${version}";
+  pname = "tlaps";
   version = "1.4.3";
   src = fetchurl {
     url = "https://tla.msr-inria.inria.fr/tlaps/dist/current/tlaps-${version}.tar.gz";
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       and scalable to large system specifications. It provides a
       consistent abstraction over the various “backend” verifiers.
     '';
-    homepage    = https://tla.msr-inria.inria.fr/tlaps/content/Home.html;
+    homepage    = "https://tla.msr-inria.inria.fr/tlaps/content/Home.html";
     license     = stdenv.lib.licenses.bsd2;
     platforms   = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.badi ];

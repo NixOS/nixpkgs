@@ -1,27 +1,24 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "lazygit-${version}";
-  version = "0.4";
+  pname = "lazygit";
+  version = "0.20.4";
 
   goPackagePath = "github.com/jesseduffield/lazygit";
 
+  subPackages = [ "." ];
+
   src = fetchFromGitHub {
     owner = "jesseduffield";
-    repo = "lazygit";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0piljnwv778z7zc1pglkidiys1a3yv4d7z9wsrcj1nszlcn3ifyz";
+    sha256 = "134f04ybzgghm7ghyxair111aflmkjrbfj0bkxfp1w0a3jm6sfsk";
   };
 
-  postPatch = ''
-    rm -rf scripts
-  '';
-
   meta = with stdenv.lib; {
-    inherit (src.meta) homepage;
     description = "Simple terminal UI for git commands";
+    homepage = "https://github.com/jesseduffield/lazygit";
     license = licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ fpletz ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with maintainers; [ fpletz equirosa filalex77 ];
   };
 }

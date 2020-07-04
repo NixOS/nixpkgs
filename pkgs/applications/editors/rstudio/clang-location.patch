@@ -1,0 +1,25 @@
+diff --git i/src/cpp/core/libclang/LibClang.cpp w/src/cpp/core/libclang/LibClang.cpp
+index ec12a3a1ff..8c81b633ae 100644
+--- i/src/cpp/core/libclang/LibClang.cpp
++++ w/src/cpp/core/libclang/LibClang.cpp
+@@ -54,7 +54,7 @@ std::vector<std::string> defaultCompileArgs(LibraryVersion version)
+ 
+    // we need to add in the associated libclang headers as
+    // they are not discovered / used by default during compilation
+-   FilePath llvmPath = s_libraryPath.parent().parent();
++   FilePath llvmPath("@clang@");
+    boost::format fmt("%1%/lib/clang/%2%/include");
+    fmt % llvmPath.absolutePath() % version.asString();
+    std::string includePath = fmt.str();
+@@ -77,10 +77,7 @@ std::vector<std::string> systemClangVersions()
+ #elif defined(__unix__)
+    // default set of versions
+    clangVersions = {
+-      "/usr/lib/libclang.so",
+-      "/usr/lib/llvm/libclang.so",
+-      "/usr/lib64/libclang.so",
+-      "/usr/lib64/llvm/libclang.so",
++      "@libclang.so@"
+    };
+    
+    // iterate through the set of available 'llvm' directories

@@ -4,19 +4,21 @@
 }:
 
 stdenv.mkDerivation rec {
-  emacsVersion = "26.1";
-  emacsName = "emacs-${emacsVersion}";
-  macportVersion = "7.2";
-  name = "emacs-mac-${emacsVersion}-${macportVersion}";
+  pname = "emacs";
+  version = "26.3";
+
+  emacsName = "emacs-${version}";
+  macportVersion = "7.7";
+  name = "emacs-mac-${version}-${macportVersion}";
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${emacsName}.tar.xz";
-    sha256 = "0b6k1wq44rc8gkvxhi1bbjxbz3cwg29qbq8mklq2az6p1hjgrx0w";
+    sha256 = "119ldpk7sgn9jlpyngv5y4z3i7bb8q3xp4p0qqi7i5nq39syd42d";
   };
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${emacsName}-mac-${macportVersion}.tar.gz";
-    sha256 = "0j4dcjv7kh84d6lzzxdzambk6ybbdr2j7r63nkbivssjv29z7zag";
+    sha256 = "18jadknm47ymbl7skrgc7y8xsdldcbgnlfl7qpgzm1ym8d92as6j";
   };
 
   hiresSrc = fetchurl {
@@ -51,6 +53,10 @@ stdenv.mkDerivation rec {
 
     # use newer emacs icon
     cp nextstep/Cocoa/Emacs.base/Contents/Resources/Emacs.icns mac/Emacs.app/Contents/Resources/Emacs.icns
+
+    # Fix sandbox impurities.
+    substituteInPlace Makefile.in --replace '/bin/pwd' 'pwd'
+    substituteInPlace lib-src/Makefile.in --replace '/bin/pwd' 'pwd'
   '';
 
   configureFlags = [
@@ -62,7 +68,7 @@ stdenv.mkDerivation rec {
     "--enable-mac-app=$$out/Applications"
   ];
 
-  CFLAGS = "-O3 -DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10 -DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_10";
+  CFLAGS = "-O3";
   LDFLAGS = "-O3 -L${ncurses.out}/lib";
 
   postInstall = ''
@@ -74,7 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The extensible, customizable text editor";
-    homepage    = http://www.gnu.org/software/emacs/;
+    homepage    = "https://www.gnu.org/software/emacs/";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ jwiegley matthewbauer ];
     platforms   = platforms.darwin;

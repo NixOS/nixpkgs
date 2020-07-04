@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Backport of hashlib.sha3 for 2.7 to 3.5";
-    homepage = https://github.com/tiran/pysha3;
+    homepage = "https://github.com/tiran/pysha3";
     license = lib.licenses.psfl;
   };
 }

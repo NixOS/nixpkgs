@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "conway_polynomials-${version}";
+  pname = "conway_polynomials";
   version = "0.5";
 
   pythonEnv = python.withPackages (ps: with ps; [ six ]);

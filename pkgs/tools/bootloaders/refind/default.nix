@@ -2,8 +2,9 @@
 
 let
   archids = {
-    "x86_64-linux" = { hostarch = "x86_64"; efiPlatform = "x64"; };
-    "i686-linux" = rec { hostarch = "ia32"; efiPlatform = hostarch; };
+    x86_64-linux = { hostarch = "x86_64"; efiPlatform = "x64"; };
+    i686-linux = rec { hostarch = "ia32"; efiPlatform = hostarch; };
+    aarch64-linux = { hostarch = "aarch64"; efiPlatform = "aa64"; };
   };
 
   inherit
@@ -12,14 +13,18 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "refind-${version}";
-  version = "0.11.3";
+  pname = "refind";
+  version = "0.12.0";
   srcName = "refind-src-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/refind/${version}/${srcName}.tar.gz";
-    sha256 = "13q1yap9r4lzm5xjx1zi434gckd3gk5p8n4vh6jav0h3r3ayp633";
+    sha256 = "1i5p3sir3mx4i2q5w78360xn2kbgsj8rmgrqvsvag1zzr5dm1f3v";
   };
+
+  patches = [
+    ./0001-toolchain.patch
+  ];
 
   buildInputs = [ gnu-efi ];
 
@@ -32,6 +37,7 @@ stdenv.mkDerivation rec {
       "GNUEFILIB=${gnu-efi}/lib"
       "EFICRT0=${gnu-efi}/lib"
       "HOSTARCH=${hostarch}"
+      "ARCH=${hostarch}"
     ];
 
   buildFlags = [ "gnuefi" "fs_gnuefi" ];
@@ -114,9 +120,9 @@ stdenv.mkDerivation rec {
       runtime makes it very easy to use, particularly when paired with
       Linux kernels that provide EFI stub support.
     '';
-    homepage = http://refind.sourceforge.net/;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    homepage = "http://refind.sourceforge.net/";
+    maintainers = with maintainers; [ AndersonTorres samueldr ];
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
     license = licenses.gpl3Plus;
   };
 

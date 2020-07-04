@@ -1,6 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, gnome3, gmime3, webkitgtk222x
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, gnome3, gmime3, webkitgtk
 , libsass, notmuch, boost, wrapGAppsHook, glib-networking, protobuf, vim_configurable
-, makeWrapper, python3, python3Packages
+, gtkmm3, libpeas, gsettings-desktop-schemas
+, python3, python3Packages
 , vim ? vim_configurable.override {
                     features = "normal";
                     gui = "auto";
@@ -9,22 +10,24 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "astroid-${version}";
-  version = "0.14";
+  pname = "astroid";
+  version = "0.15";
 
   src = fetchFromGitHub {
     owner = "astroidmail";
     repo = "astroid";
     rev = "v${version}";
-    sha256 = "1wkv1icsx3g3gq485dnvcdhr9srrjgz4ws1i1krcw9n61bj7gxh8";
+    sha256 = "11cxbva9ni98gii59xmbxh4c6idcg3mg0pgdsp1c3j0yg7ix0lj3";
   };
 
   nativeBuildInputs = [ cmake ronn pkgconfig wrapGAppsHook ];
 
-  buildInputs = [ gnome3.gtkmm gmime3 webkitgtk222x libsass gnome3.libpeas
-                  python3 python3Packages.pygobject3
-                  notmuch boost gnome3.gsettings-desktop-schemas gnome3.defaultIconTheme
-                  glib-networking protobuf ] ++ (if vim == null then [] else [ vim ]);
+  buildInputs = [
+    gtkmm3 gmime3 webkitgtk libsass libpeas
+    python3 python3Packages.pygobject3
+    notmuch boost gsettings-desktop-schemas gnome3.adwaita-icon-theme
+    glib-networking protobuf
+   ] ++ (if vim == null then [] else [ vim ]);
 
   postPatch = ''
     sed -i "s~gvim ~${vim}/bin/vim -g ~g" src/config.cc
@@ -36,8 +39,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://astroidmail.github.io/;
-    description = "GTK+ frontend to the notmuch mail system";
+    homepage = "https://astroidmail.github.io/";
+    description = "GTK frontend to the notmuch mail system";
     maintainers = with maintainers; [ bdimcheff SuprDewd ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

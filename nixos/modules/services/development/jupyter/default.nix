@@ -118,15 +118,15 @@ in {
           in {
             displayName = "Python 3 for machine learning";
             argv = [
-              "$ {env.interpreter}"
+              "''${env.interpreter}"
               "-m"
               "ipykernel_launcher"
               "-f"
               "{connection_file}"
             ];
             language = "python";
-            logo32 = "$ {env.sitePackages}/ipykernel/resources/logo-32x32.png";
-            logo64 = "$ {env.sitePackages}/ipykernel/resources/logo-64x64.png";
+            logo32 = "''${env.sitePackages}/ipykernel/resources/logo-32x32.png";
+            logo64 = "''${env.sitePackages}/ipykernel/resources/logo-64x64.png";
           };
         }
       '';
@@ -145,6 +145,7 @@ in {
       systemd.services.jupyter = {
         description = "Jupyter development server";
 
+        after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
 
         # TODO: Patch notebook so we can explicitly pass in a shell

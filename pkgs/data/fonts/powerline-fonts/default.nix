@@ -1,31 +1,25 @@
-{ stdenv, fetchzip}:
+{ lib, fetchFromGitHub }:
 
-fetchzip {
-  name = "powerline-fonts-2017-05-25";
+fetchFromGitHub {
+  name = "powerline-fonts-2018-11-11";
 
-  url = https://github.com/powerline/fonts/archive/fe396ef6f6b9b315f30af7d7229ff21f67a66e12.zip;
+  owner = "powerline";
+  repo = "fonts";
+  rev = "e80e3eba9091dac0655a0a77472e10f53e754bb0";
 
   postFetch = ''
-    mkdir -p $out/share/fonts/opentype
-    unzip -j $downloadedFile '*.otf' -d $out/share/fonts/opentype
-
-    mkdir -p $out/share/fonts/truetype
-    unzip -j $downloadedFile '*.ttf' -d $out/share/fonts/truetype
-
-    mkdir -p $out/share/fonts/bdf
-    unzip -j $downloadedFile '*/BDF/*.bdf' -d $out/share/fonts/bdf
-
-    mkdir -p $out/share/fonts/pcf
-    unzip -j $downloadedFile '*/PCF/*.pcf.gz' -d $out/share/fonts/pcf
-
-    mkdir -p $out/share/fonts/psf
-    unzip -j $downloadedFile '*/PSF/*.psf.gz' -d $out/share/fonts/psf
+    tar xf $downloadedFile --strip=1
+    find . -name '*.otf'    -exec install -Dt $out/share/fonts/opentype {} \;
+    find . -name '*.ttf'    -exec install -Dt $out/share/fonts/truetype {} \;
+    find . -name '*.bdf'    -exec install -Dt $out/share/fonts/bdf      {} \;
+    find . -name '*.pcf.gz' -exec install -Dt $out/share/fonts/pcf      {} \;
+    find . -name '*.psf.gz' -exec install -Dt $out/share/consolefonts   {} \;
   '';
 
-  sha256 = "07yjbwri7nnnnynps86sz0dlivwqw7gfw045v63q969nab9dw388";
+  sha256 = "0r8p4z3db17f5p8jr7sv80nglmjxhg83ncfvwg1dszldswr0dhvr";
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/powerline/fonts;
+  meta = with lib; {
+    homepage = "https://github.com/powerline/fonts";
     description = "Patched fonts for Powerline users";
     longDescription = ''
       Pre-patched and adjusted fonts for usage with the Powerline plugin.

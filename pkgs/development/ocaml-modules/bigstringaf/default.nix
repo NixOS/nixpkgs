@@ -1,32 +1,26 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, dune, alcotest }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml, alcotest, bigarray-compat }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.03"
-then throw "bigstringaf is not available for OCaml ${ocaml.version}"
-else
+buildDunePackage rec {
+  pname = "bigstringaf";
+  version = "0.6.0";
 
-stdenv.mkDerivation rec {
-  version = "0.3.0";
-  name = "ocaml${ocaml.version}-bigstringaf-${version}";
+  minimumOCamlVersion = "4.03";
 
   src = fetchFromGitHub {
     owner = "inhabitedtype";
-    repo = "bigstringaf";
+    repo = pname;
     rev = version;
-    sha256 = "1yx6hv8rk0ldz1h6kk00rwg8abpfc376z00aifl9f5rn7xavpscs";
+    sha256 = "04b088vrqzmxsyan9f9nr8721bxip4b930cgvb5zkbbmrw3ylmwc";
   };
 
-  buildInputs = [ ocaml findlib dune alcotest ];
-
-  doCheck = true;
-  checkPhase = "dune runtest";
-
-  inherit (dune) installPhase;
+  checkInputs = [ alcotest ];
+  propagatedBuildInputs = [ bigarray-compat ];
+  doCheck = lib.versionAtLeast ocaml.version "4.05";
 
   meta = {
     description = "Bigstring intrinsics and fast blits based on memcpy/memmove";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.vbgl ];
     inherit (src.meta) homepage;
-    inherit (ocaml.meta) platforms;
   };
 }

@@ -62,7 +62,7 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "forking";
-        PIDFile = "/var/run/htpdate.pid";
+        PIDFile = "/run/htpdate.pid";
         ExecStart = concatStringsSep " " [
           "${htpdate}/bin/htpdate"
           "-D -u nobody"

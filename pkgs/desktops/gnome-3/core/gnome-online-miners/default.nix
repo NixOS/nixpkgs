@@ -1,32 +1,38 @@
 { stdenv, fetchurl, pkgconfig, glib, gnome3, libxml2
-, libsoup, json-glib, gmp, openssl, dleyna-server, wrapGAppsHook }:
+, libgdata, grilo, libzapojit, grilo-plugins, gnome-online-accounts, libmediaart
+, tracker, gfbgraph, librest, libsoup, json-glib, gmp, openssl, dleyna-server, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-online-miners-${version}";
-  version = "3.26.0";
+  pname = "gnome-online-miners";
+  version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-online-miners/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "7f404db5eccb87524a5dfcef5b6f38b11047b371081559afbe48c34dbca2a98e";
-  };
-
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-online-miners"; attrPath = "gnome3.gnome-online-miners"; };
+    url = "mirror://gnome/sources/gnome-online-miners/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1n2jz9i8a42zwxx5h8j2gdy6q1vyydh4vl00r0al7w8jzdh24p44";
   };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
-  buildInputs = [ glib gnome3.libgdata libxml2 libsoup gmp openssl
-                  gnome3.grilo gnome3.libzapojit gnome3.grilo-plugins
-                  gnome3.gnome-online-accounts gnome3.libmediaart
-                  gnome3.tracker gnome3.gfbgraph json-glib gnome3.rest
-                  dleyna-server ];
+  buildInputs = [
+    glib libgdata libxml2 libsoup gmp openssl
+    grilo libzapojit grilo-plugins
+    gnome-online-accounts libmediaart
+    tracker gfbgraph json-glib librest
+    dleyna-server
+  ];
 
   enableParallelBuilding = true;
 
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-online-miners";
+      attrPath = "gnome3.gnome-online-miners";
+    };
+  };
+
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/GnomeOnlineMiners;
+    homepage = "https://wiki.gnome.org/Projects/GnomeOnlineMiners";
     description = "A set of crawlers that go through your online content and index them locally in Tracker";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

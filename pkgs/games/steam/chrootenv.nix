@@ -1,17 +1,24 @@
-{ stdenv, lib, writeScript, buildFHSUserEnv, steam, glxinfo-i686
+{ config, lib, writeScript, buildFHSUserEnv, steam, glxinfo-i686
 , steam-runtime-wrapped, steam-runtime-wrapped-i686 ? null
-, withJava ? false
-, withPrimus ? false
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
+, extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
 , extraProfile ? "" # string to append to profile
 , nativeOnly ? false
 , runtimeOnly ? false
+, runtimeShell
+
+# DEPRECATED
+, withJava ? config.steam.java or false
+, withPrimus ? config.steam.primus or false
 }:
 
 let
   commonTargetPkgs = pkgs: with pkgs;
     [
       steamPackages.steam-fonts
+      # Needed for operating system detection until
+      # https://github.com/ValveSoftware/steam-for-linux/issues/5909 is resolved
+      lsb-release
       # Errors in output without those
       pciutils
       python2
@@ -25,6 +32,9 @@ let
       iana-etc
       # Steam Play / Proton
       python3
+      # Steam VR
+      procps
+      usbutils
     ] ++ lib.optional withJava jdk
       ++ lib.optional withPrimus primus
       ++ extraPkgs pkgs;
@@ -32,14 +42,18 @@ let
   ldPath = map (x: "/steamrt/${steam-runtime-wrapped.arch}/" + x) steam-runtime-wrapped.libs
            ++ lib.optionals (steam-runtime-wrapped-i686 != null) (map (x: "/steamrt/${steam-runtime-wrapped-i686.arch}/" + x) steam-runtime-wrapped-i686.libs);
 
+  setupSh = writeScript "setup.sh" ''
+    #!${runtimeShell}
+  '';
+
   runSh = writeScript "run.sh" ''
-    #!${stdenv.shell}
-    runtime_paths="${lib.concatStringsSep ":" ldPath}"
+    #!${runtimeShell}
+    runtime_paths="/lib32:/lib64:${lib.concatStringsSep ":" ldPath}"
     if [ "$1" == "--print-steam-runtime-library-paths" ]; then
       echo "$runtime_paths"
       exit 0
     fi
-    export LD_LIBRARY_PATH="$runtime_paths:$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="$runtime_paths''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     exec "$@"
   '';
 
@@ -61,14 +75,42 @@ in buildFHSUserEnv rec {
     xorg.libX11
     xorg.libXfixes
     libGL
+    libva
 
     # Not formally in runtime but needed by some games
+    at-spi2-atk
+    at-spi2-core   # CrossCode
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-ugly
     libdrm
     mono
     xorg.xkeyboardconfig
     xorg.libpciaccess
+    udev # shadow of the tomb raider
+
+    ## screeps dependencies
+    gtk3
+    dbus
+    zlib
+    glib
+    atk
+    cairo
+    freetype
+    gdk-pixbuf
+    pango
+    fontconfig
+
+    # friends options won't display "Launch Game" without it
+    lsof
+
+    # called by steam's setup.sh
+    file
+
+    # Prison Architect
+    libGLU
+    libuuid
+    libbsd
+    alsaLib
   ] ++ (if (!nativeOnly) then [
     (steamPackages.steam-runtime-wrapped.override {
       inherit runtimeOnly;
@@ -79,7 +121,7 @@ in buildFHSUserEnv rec {
     gtk2
     bzip2
     zlib
-    gdk_pixbuf
+    gdk-pixbuf
 
     # Without these it silently fails
     xorg.libXinerama
@@ -116,8 +158,6 @@ in buildFHSUserEnv rec {
     xorg.libXt
     xorg.libXmu
     xorg.libxcb
-    libGLU
-    libuuid
     libogg
     libvorbis
     SDL
@@ -127,7 +167,7 @@ in buildFHSUserEnv rec {
     libidn
     tbb
     wayland
-    mesa_noglu
+    mesa
     libxkbcommon
 
     # Other things from runtime
@@ -156,7 +196,7 @@ in buildFHSUserEnv rec {
     librsvg
     xorg.libXft
     libvdpau
-  ] ++ steamPackages.steam-runtime-wrapped.overridePkgs);
+  ] ++ steamPackages.steam-runtime-wrapped.overridePkgs) ++ extraLibraries pkgs;
 
   extraBuildCommands = if (!nativeOnly) then ''
     mkdir -p steamrt
@@ -165,6 +205,7 @@ in buildFHSUserEnv rec {
       ln -s ../lib32/steam-runtime steamrt/${steam-runtime-wrapped-i686.arch}
     ''}
     ln -s ${runSh} steamrt/run.sh
+    ln -s ${setupSh} steamrt/setup.sh
   '' else ''
     ln -s /usr/lib/libbz2.so usr/lib/libbz2.so.1.0
     ${lib.optionalString (steam-runtime-wrapped-i686 != null) ''
@@ -180,11 +221,20 @@ in buildFHSUserEnv rec {
   '';
 
   profile = ''
+    # Workaround for issue #44254 (Steam cannot connect to friends network)
+    # https://github.com/NixOS/nixpkgs/issues/44254
+    if [ -z ''${TZ+x} ]; then
+      new_TZ="$(readlink -f /etc/localtime | grep -P -o '(?<=/zoneinfo/).*$')"
+      if [ $? -eq 0 ]; then
+        export TZ="$new_TZ"
+      fi
+    fi
+
     export STEAM_RUNTIME=${if nativeOnly then "0" else "/steamrt"}
   '' + extraProfile;
 
   runScript = writeScript "steam-wrapper.sh" ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     if [ -f /host/etc/NIXOS ]; then   # Check only useful on NixOS
       ${glxinfo-i686}/bin/glxinfo >/dev/null 2>&1
       # If there was an error running glxinfo, we know something is wrong with the configuration
@@ -193,7 +243,7 @@ in buildFHSUserEnv rec {
     **
     WARNING: Steam is not set up. Add the following options to /etc/nixos/configuration.nix
     and then run \`sudo nixos-rebuild switch\`:
-    { 
+    {
       hardware.opengl.driSupport32Bit = true;
       hardware.pulseaudio.support32Bit = true;
     }
@@ -215,14 +265,14 @@ in buildFHSUserEnv rec {
     inherit multiPkgs extraBuildCommands;
 
     runScript = writeScript "steam-run" ''
-      #!${stdenv.shell}
+      #!${runtimeShell}
       run="$1"
       if [ "$run" = "" ]; then
         echo "Usage: steam-run command-to-run args..." >&2
         exit 1
       fi
       shift
-      ${lib.optionalString (!nativeOnly) "export LD_LIBRARY_PATH=${lib.concatStringsSep ":" ldPath}:$LD_LIBRARY_PATH"}
+      ${lib.optionalString (!nativeOnly) "export LD_LIBRARY_PATH=/lib32:/lib64:${lib.concatStringsSep ":" ldPath}\${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"}
       exec -- "$run" "$@"
     '';
   };

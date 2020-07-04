@@ -1,47 +1,59 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pytest, six, clint, pyyaml, docopt
-, requests, jsonpatch, args, schema, responses, backports_csv }:
+{ buildPythonPackage
+, fetchFromGitHub
+, pytest
+, six
+, tqdm
+, pyyaml
+, docopt
+, requests
+, jsonpatch
+, args
+, schema
+, responses
+, backports_csv
+, isPy3k
+, lib
+, glibcLocales
+, setuptools
+}:
 
 buildPythonPackage rec {
-
   pname = "internetarchive";
-  version = "1.7.2";
+  version = "1.9.4";
 
   # Can't use pypi, data files for tests missing
   src = fetchFromGitHub {
     owner = "jjjake";
     repo = "internetarchive";
     rev = "v${version}";
-    sha256 = "1cijagy22qi8ydrvizqmi1whnc3qr94yk0910lwgpxjywcygggir";
+    sha256 = "10xlblj21hanahsmw6lfggbrbpw08pdmvdgds1p58l8xd4fazli8";
   };
-    # It is hardcoded to specific versions, I don't know why.
-    preConfigure = ''
-        sed "s/schema>=.*/schema>=0.4.0',/" -i setup.py
-        sed "/backports.csv/d" -i setup.py
-    '';
 
-    #phases = [ "unpackPhase" "configurePhase" "installPhase" "fixupPhase" "installCheckPhase" ];
-    buildInputs = [ pytest responses ];
-    propagatedBuildInputs = [
-      six
-      clint
-      pyyaml
-      docopt
-      requests
-      jsonpatch
-      args
-      schema
-      backports_csv
-    ];
+  propagatedBuildInputs = [
+    six
+    tqdm
+    pyyaml
+    docopt
+    requests
+    jsonpatch
+    args
+    schema
+    setuptools
+  ] ++ lib.optionals (!isPy3k) [ backports_csv ];
 
-    # Tests disabled because ia binary doesn't exist when tests run
-    doCheck = false;
+  checkInputs = [ pytest responses glibcLocales ];
 
-    checkPhase = "pytest tests";
+  # tests depend on network
+  doCheck = false;
 
+  checkPhase = ''
+    LC_ALL=en_US.utf-8 pytest tests
+  '';
 
-  meta = with stdenv.lib; {
-      description = "A python wrapper for the various Internet Archive APIs";
-    homepage = https://github.com/jjjake/internetarchive;
+  meta = with lib; {
+    description = "A Python and Command-Line Interface to Archive.org";
+    homepage = "https://github.com/jjjake/internetarchive";
     license = licenses.agpl3;
+    maintainers = [ maintainers.marsam ];
   };
 }

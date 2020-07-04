@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "smart_open";
-  version = "1.7.1";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0lwlvvz7qndq89i8bhjv4zfkhg0lbd5yjhccb7svszf30k8niiap";
+    sha256 = "555962abf982faff8a8aeb65e0695474e3091f604826055782beffa8400e4e4e";
   };
 
   # nixpkgs version of moto is >=1.2.0, remove version pin to fix build

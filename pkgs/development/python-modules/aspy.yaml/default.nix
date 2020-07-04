@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "aspy.yaml";
-  version = "1.1.1";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ajb97kn044ximkzq2090h4yblrhw77540pwiw345cp7mwzy4xqa";
+    sha256 = "0i9z2jm2hjwdxdv4vw4kbs70h2ciz49rv8w73zbawb7z5qw45iz7";
   };
 
   propagatedBuildInputs = [ pyyaml ];
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A few extensions to pyyaml";
-    homepage = https://github.com/asottile/aspy.yaml;
+    homepage = "https://github.com/asottile/aspy.yaml";
     license = licenses.mit;
   };
 }

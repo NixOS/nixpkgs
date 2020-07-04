@@ -8,7 +8,7 @@ let
   '';
 
 in stdenv.mkDerivation rec {
-  name = "chruby-${version}";
+  pname = "chruby";
 
   version = "0.3.9";
 
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Changes the current Ruby";
-    homepage = https://github.com/postmodern/chruby;
+    homepage = "https://github.com/postmodern/chruby";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ cstrahan ];

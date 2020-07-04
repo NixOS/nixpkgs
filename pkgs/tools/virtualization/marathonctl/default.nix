@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "marathonctl-unstable-${version}";
+buildGoPackage {
+  pname = "marathonctl-unstable";
   version = "2017-03-06";
 
   goPackagePath = "github.com/shoenig/marathonctl";
@@ -16,7 +16,7 @@ buildGoPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/shoenig/marathonctl;
+    homepage = "https://github.com/shoenig/marathonctl";
     description = "CLI tool for Marathon";
     platforms = platforms.all;
     license = licenses.mit;

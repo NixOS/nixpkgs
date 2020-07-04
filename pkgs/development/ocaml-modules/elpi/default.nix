@@ -1,36 +1,28 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, camlp5
+{ lib, fetchzip, buildDunePackage, camlp5
 , ppx_tools_versioned, ppx_deriving, re
 }:
 
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-elpi-${version}";
-  version = "1.1.0";
-  src = fetchFromGitHub {
-    owner = "LPCIC";
-    repo = "elpi";
-    rev = "v${version}";
-    sha256 = "1fd4mqggdcnbhqwrg8r0ikb1j2lv0fc9hv9xfbyjzbzxbjggf5zc";
-  };
+buildDunePackage rec {
+  pname = "elpi";
+  version = "1.11.2";
 
-  buildInputs = [ ocaml findlib ppx_tools_versioned ];
+   src = fetchzip {
+     url = "https://github.com/LPCIC/elpi/releases/download/v${version}/elpi-v${version}.tbz";
+     sha256 = "15hamy9ifr05kczadwh3yj2gmr12a9z1jwppmp5yrns0vykjbj76";
+   };
+
+  minimumOCamlVersion = "4.04";
+
+  buildInputs = [ ppx_tools_versioned ];
 
   propagatedBuildInputs = [ camlp5 ppx_deriving re ];
 
-  createFindlibDestdir = true;
-
-  preInstall = "make byte";
-
-  postInstall = ''
-    mkdir -p $out/bin
-    make install-bin BIN=$out/bin
-    make install-bin BYTE=1 BIN=$out/bin
-  '';
-
   meta = {
     description = "Embeddable λProlog Interpreter";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
-    inherit (ocaml.meta) platforms;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.vbgl ];
+    homepage = "https://github.com/LPCIC/elpi";
   };
+
+  useDune2 = true;
 }

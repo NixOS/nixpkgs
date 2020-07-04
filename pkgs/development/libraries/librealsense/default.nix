@@ -1,18 +1,20 @@
-{ stdenv, fetchFromGitHub, cmake, libusb, ninja, pkgconfig}:
+{ stdenv, fetchFromGitHub, cmake, libusb1, ninja, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "librealsense-${version}";
-  version = "2.16.1";
+  pname = "librealsense";
+  version = "2.35.2";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "IntelRealSense";
-    repo = "librealsense";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0vs2vcfmsb574bvdqrfgdmam0p631c738apk0w9mjdqk59zy1bz2";
+    sha256 = "14vf76vlyhh7b4yjzsnqpg1x3wdhwxrf1syvgf8wyxbjwb9plw82";
   };
 
   buildInputs = [
-    libusb
+    libusb1
   ];
 
   nativeBuildInputs = [
@@ -25,9 +27,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A cross-platform library for Intel® RealSense™ depth cameras (D400 series and the SR300)";
-    homepage = https://github.com/IntelRealSense/librealsense;
+    homepage = "https://github.com/IntelRealSense/librealsense";
     license = licenses.asl20;
     maintainers = with maintainers; [ brian-dawn ];
-    platforms = ["i686-linux" "x86_64-linux" "x86_64-darwin"];
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
   };
 }

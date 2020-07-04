@@ -11,8 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "0griqc675yylf9rvadlfsabz41qy5f5idya30p5rv6ysiakxya64";
   };
 
-  buildInputs = with coq.ocamlPackages; [ ocaml camlp5 python27 ];
-  propagatedBuildInputs = [ coq ];
+  buildInputs = [ coq python27 ] ++ (with coq.ocamlPackages; [ ocaml camlp5 ]);
+
+  prePatch = "patchShebangs etc/coq-scripts";
 
   doCheck = false;
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://plv.csail.mit.edu/fiat/;
+    homepage = "http://plv.csail.mit.edu/fiat/";
     description = "A library for the Coq proof assistant for synthesizing efficient correct-by-construction programs from declarative specifications";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;

@@ -1,38 +1,49 @@
 { stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
-, libtiff, ncurses, pango, pcre, perl, readline, tcl, texLive, tk, xz, zlib
-, less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, openblas
-, curl, Cocoa, Foundation, libobjc, libcxx, tzdata
+, libtiff, ncurses, pango, pcre2, perl, readline, tcl, texLive, tk, xz, zlib
+, less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, blas, lapack
+, curl, Cocoa, Foundation, libobjc, libcxx, tzdata, fetchpatch
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
+# R as of writing does not support outputting both .so and .a files; it outputs:
+#     --enable-R-static-lib conflicts with --enable-R-shlib and will be ignored
+, static ? false
 }:
 
+assert (!blas.isILP64) && (!lapack.isILP64);
+
 stdenv.mkDerivation rec {
-  name = "R-3.5.1";
+  name = "R-4.0.0";
 
   src = fetchurl {
-    url = "https://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "0463bff5eea0f3d93fa071f79c18d0993878fd4f2e18ae6cf22c1639d11457ed";
+    url = "https://cran.r-project.org/src/base/R-4/${name}.tar.gz";
+    sha256 = "0h1995smlyiyhx7gpg9paxsfqrcn6g9bbp5h9r47i6an3clv1gh6";
   };
+
+  dontUseImakeConfigure = true;
 
   buildInputs = [
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
-    pango pcre perl readline texLive xz zlib less texinfo graphviz icu
-    pkgconfig bison imake which jdk openblas curl
-  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ tcl tk ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
+    pango pcre2 perl readline texLive xz zlib less texinfo graphviz icu
+    pkgconfig bison imake which blas lapack curl tcl tk jdk
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
 
-  patches = [ ./no-usr-local-search-paths.patch ];
+  patches = [
+    ./no-usr-local-search-paths.patch
+    ./fix-failing-test.patch
+  ];
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace "-install_name libR.dylib" "-install_name $out/lib/R/lib/libR.dylib"
   '';
 
+  dontDisableStatic = static;
+
   preConfigure = ''
     configureFlagsArray=(
       --disable-lto
       --with${stdenv.lib.optionalString (!withRecommendedPackages) "out"}-recommended-packages
-      --with-blas="-L${openblas}/lib -lopenblas"
-      --with-lapack="-L${openblas}/lib -lopenblas"
+      --with-blas="-L${blas}/lib -lblas"
+      --with-lapack="-L${lapack}/lib -llapack"
       --with-readline
       --with-tcltk --with-tcl-config="${tcl}/lib/tclConfig.sh" --with-tk-config="${tk}/lib/tkConfig.sh"
       --with-cairo
@@ -41,7 +52,7 @@ stdenv.mkDerivation rec {
       --with-libtiff
       --with-ICU
       ${stdenv.lib.optionalString enableStrictBarrier "--enable-strict-barrier"}
-      --enable-R-shlib
+      ${if static then "--enable-R-static-lib" else "--enable-R-shlib"}
       AR=$(type -p ar)
       AWK=$(type -p gawk)
       CC=$(type -p cc)
@@ -51,8 +62,6 @@ stdenv.mkDerivation rec {
       RANLIB=$(type -p ranlib)
       R_SHELL="${stdenv.shell}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
-      --without-tcltk
-      --without-aqua
       --disable-R-framework
       OBJC="clang"
       CPPFLAGS="-isystem ${libcxx}/include/c++/v1"
@@ -65,6 +74,11 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" "install-info" "install-pdf" ];
 
+  # The store path to "which" is baked into src/library/base/R/unix/system.unix.R,
+  # but Nix cannot detect it as a run-time dependency because the installed file
+  # is compiled and compressed, which hides the store path.
+  postFixup = "echo ${which} > $out/nix-support/undetected-runtime-dependencies";
+
   doCheck = true;
   preCheck = "export TZ=CET; bin/Rscript -e 'sessionInfo()'";
 
@@ -73,7 +87,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = with stdenv.lib; {
-    homepage = http://www.r-project.org/;
+    homepage = "http://www.r-project.org/";
     description = "Free software environment for statistical computing and graphics";
     license = licenses.gpl2Plus;
 
@@ -99,6 +113,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     hydraPlatforms = platforms.linux;
 
-    maintainers = [ maintainers.peti ];
+    maintainers = with maintainers; [ peti timokau ];
   };
 }

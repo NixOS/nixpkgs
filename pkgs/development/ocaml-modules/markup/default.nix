@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-${pname}-${version}";
 
   src = fetchzip {
-    url = "http://github.com/aantron/markup.ml/archive/${version}.tar.gz";
+    url = "https://github.com/aantron/markup.ml/archive/${version}.tar.gz";
     sha256 = "09qm73m6c6wjh51w61vnfsnis37m28cf1r6hnkr3bbg903ahwbp5";
     };
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/aantron/markup.ml/;
+    homepage = "https://github.com/aantron/markup.ml/";
     description = "A pair of best-effort parsers implementing the HTML5 and XML specifications";
     license = licenses.bsd2;
     platforms = ocaml.meta.platforms or [];

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, gcc-arm-embedded, ruby
+, gcc-arm-embedded, binutils-arm-embedded, ruby
 }:
 
 let
@@ -8,7 +8,8 @@ let
 
 in stdenv.mkDerivation rec {
 
-  name = "inav-${version}";
+  pname = "inav";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "iNavFlight";
@@ -17,8 +18,8 @@ in stdenv.mkDerivation rec {
     sha256 = "15zai8qf43b06fmws1sbkmdgip51zp7gkfj7pp9b6gi8giarzq3y";
   };
 
-  buildInputs = [
-    gcc-arm-embedded
+  nativeBuildInputs = [
+    gcc-arm-embedded binutils-arm-embedded
     ruby
   ];
 
@@ -26,6 +27,9 @@ in stdenv.mkDerivation rec {
     sed -ri "s/REVISION.*=.*shell git.*/REVISION = ${builtins.substring 0 10 src.rev}/" Makefile # Simulate abbrev'd rev.
     sed -ri "s/-j *[0-9]+//" Makefile # Eliminate parallel build args in submakes
     sed -ri "s/binary hex/hex/" Makefile # No need for anything besides .hex
+
+    substituteInPlace Makefile \
+      --replace "--specs=nano.specs" ""
   '';
 
   enableParallelBuilding = true;
@@ -47,10 +51,10 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Navigation-enabled flight control software";
-    homepage = https://inavflight.github.io;
+    homepage = "https://inavflight.github.io";
     license = licenses.gpl3;
     maintainers = with maintainers; [ elitak ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    broken = true;
   };
 
 }

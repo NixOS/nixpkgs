@@ -7,14 +7,14 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "freewheeling-${version}";
-  version = "0.6.4";
+  pname = "freewheeling";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "free-wheeling";
     repo = "freewheeling";
     rev = "v${version}";
-    sha256 = "1xflbbnjdibjmyxb1zq8liylaw5k03nnl1z3272jh204pqh17ri9";
+    sha256 = "1xff5whr02cixihgd257dc70hnyf22j3zamvhsvg4lp7zq9l2in4";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook libtool ];
@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
       configureFlags = oldAttrs.configureFlags ++ [ "--enable-openssl-compatibility" ];
     }))
   ];
-  NIX_CFLAGS_COMPILE = makeSDLFlags [ SDL SDL_ttf SDL_gfx ] ++ [ "-I${libxml2.dev}/include/libxml2" ];
+  NIX_CFLAGS_COMPILE = toString
+    (makeSDLFlags [ SDL SDL_ttf SDL_gfx ] ++ [ "-I${libxml2.dev}/include/libxml2" ]);
 
   hardeningDisable = [ "format" ];
 
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
         software, released under the GNU GPL license.
     '' ;
 
-    homepage = http://freewheeling.sourceforge.net;
+    homepage = "http://freewheeling.sourceforge.net";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.sepi ];
     platforms = stdenv.lib.platforms.linux;

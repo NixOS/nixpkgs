@@ -1,29 +1,22 @@
-{ stdenv, fetchzip, ocaml, findlib, dune, ounit, seq }:
+{ stdenv, fetchzip, buildDunePackage, ounit, seq }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
-then throw "re is not available for OCaml ${ocaml.version}"
-else
+buildDunePackage rec {
+  pname = "re";
+  version = "1.9.0";
 
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-re-${version}";
-  version = "1.8.0";
+  minimumOCamlVersion = "4.02";
 
   src = fetchzip {
     url = "https://github.com/ocaml/ocaml-re/archive/${version}.tar.gz";
-    sha256 = "0ch6hvmm4ym3w2vghjxf3ka5j1023a37980fqi4zcb7sx756z20i";
+    sha256 = "07ycb103mr4mrkxfd63cwlsn023xvcjp0ra0k7n2gwrg0mwxmfss";
   };
 
-  buildInputs = [ ocaml findlib dune ounit ];
+  buildInputs = [ ounit ];
   propagatedBuildInputs = [ seq ];
-
   doCheck = true;
-  checkPhase = "jbuilder runtest";
-
-  inherit (dune) installPhase;
 
   meta = {
-    homepage = https://github.com/ocaml/ocaml-re;
-    platforms = ocaml.meta.platforms or [];
+    homepage = "https://github.com/ocaml/ocaml-re";
     description = "Pure OCaml regular expressions, with support for Perl and POSIX-style strings";
     license = stdenv.lib.licenses.lgpl2;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "bjoern";
-  version = "2.2.3";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lbwqmqrl32jlfzhffxsb1fm7xbbjgbhjr21imk656agvpib2wx2";
+    sha256 = "01f3b601cf0ab0a9c7cb9c8f944ab7c738baaa6043ca82db20e9bd7a9be5767b";
   };
 
   buildInputs = [ libev ];
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/jonashaag/bjoern;
+    homepage = "https://github.com/jonashaag/bjoern";
     description = "A screamingly fast Python 2/3 WSGI server written in C";
     license = licenses.bsd2;
     maintainers = with maintainers; [ cmcdragonkai ];

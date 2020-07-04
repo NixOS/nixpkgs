@@ -8,8 +8,8 @@ let
     desktopName = pname;
     name = pname;
     exec = "@out@/bin/${pname}";
-    icon = "${pname}";
-    terminal = "False";
+    icon = pname;
+    terminal = "false";
     comment = "An open-source, single-player, role-playing roguelike game set in the world of Eyal.";
     type = "Application";
     categories = "Game;RolePlaying;";
@@ -18,16 +18,22 @@ let
 
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "1.5.5";
+  version = "1.6.7";
 
   src = fetchurl {
     url = "https://te4.org/dl/t-engine/t-engine4-src-${version}.tar.bz2";
-    sha256 = "0v2qgdfpvdzd1bcbp9v8pfahj1bgczsq2d4xfhh5wg11jgjcwz03";
+    sha256 = "0283hvms5hr29zr0grd6gq059k0hg8hcz3fsmwjmysiih8790i68";
   };
 
-  nativeBuildInputs = [ premake4 makeWrapper unzip ];
+  prePatch = ''
+    # http://forums.te4.org/viewtopic.php?f=42&t=49478&view=next#p234354
+    sed -i 's|#include <GL/glext.h>||' src/tgl.h
+  '';
 
-  # tome4 vendors quite a few libraries so someone might want to look into avoiding that...
+  nativeBuildInputs = [ makeWrapper unzip premake4 ];
+
+  # tome4 vendors quite a few libraries so someone might want to look
+  # into avoiding that...
   buildInputs = [
     libGLU openal libpng libvorbis SDL2 SDL2_ttf SDL2_image
   ];
@@ -35,20 +41,7 @@ in stdenv.mkDerivation rec {
   # disable parallel building as it caused sporadic build failures
   enableParallelBuilding = false;
 
-  NIX_CFLAGS_COMPILE = [
-    "-I${SDL2_image}/include/SDL2"
-    "-I${SDL2_ttf}/include/SDL2"
-  ];
-
-  postPatch = ''
-    substituteInPlace premake4.lua \
-      --replace "/opt/SDL-2.0/include/SDL2" "${SDL2.dev}/include/SDL2" \
-      --replace "/usr/include/GL" "/run/opengl-driver/include"
-  '';
-
-  preConfigure = ''
-    premake4 gmake
-  '';
+  NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2 -I${SDL2_image}/include/SDL2 -I${SDL2_ttf}/include/SDL2";
 
   makeFlags = [ "config=release" ];
 
@@ -79,9 +72,9 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tales of Maj'eyal (rogue-like game)";
-    homepage = https://te4.org/;
+    homepage = "https://te4.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ chattered peterhoeg ];
-    platforms = subtractLists ["aarch64-linux"] platforms.linux;
+    platforms = with platforms; [ "i686-linux" "x86_64-linux" ];
   };
 }

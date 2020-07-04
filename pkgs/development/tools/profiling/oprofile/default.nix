@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       modules, the kernel, shared libraries, and applications.
     '';
     license = stdenv.lib.licenses.gpl2;
-    homepage = http://oprofile.sourceforge.net/;
+    homepage = "http://oprofile.sourceforge.net/";
 
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ ];

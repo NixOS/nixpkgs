@@ -24,9 +24,9 @@ let inherit (stdenv.lib) optional optionals; in
 
 stdenv.mkDerivation rec {
   version = "1.8.19";
-  name = "hdf5-${version}";
+  pname = "hdf5";
   src = fetchurl {
-    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/${name}/src/${name}.tar.bz2";
+    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/${pname}-${version}/src/${pname}-${version}.tar.bz2";
     sha256 = "0f3jfbqpaaq21ighi40qzs52nb52kc2d2yjk541rjmsx20b3ih2r" ;
  };
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
       applications for managing, manipulating, viewing, and analyzing data in the HDF5 format.
     '';
     license = stdenv.lib.licenses.free; # BSD-like
-    homepage = https://www.hdfgroup.org/HDF5/;
+    homepage = "https://www.hdfgroup.org/HDF5/";
     platforms = stdenv.lib.platforms.unix;
     broken = (gfortran != null) && stdenv.isDarwin;
   };

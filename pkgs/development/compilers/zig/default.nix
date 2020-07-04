@@ -1,26 +1,48 @@
-{ stdenv, fetchFromGitHub, cmake, llvmPackages, libxml2, zlib }:
+{ stdenv, fetchFromGitHub, cmake, llvmPackages, libxml2, zlib, substituteAll }:
 
-stdenv.mkDerivation rec {
-  version = "0.3.0";
-  name = "zig-${version}";
+llvmPackages.stdenv.mkDerivation rec {
+  version = "0.6.0";
+  pname = "zig";
 
   src = fetchFromGitHub {
     owner = "ziglang";
-    repo = "zig";
-    rev = "${version}";
-    sha256 = "089ywagxjjh7gxv8h8yg7jpmryzjf7n4m5irhdkhp2966d03kyxm";
+    repo = pname;
+    rev = version;
+    sha256 = "13dwm2zpscn4n0p5x8ggs9n7mwmq9cgip383i3qqphg7m3pkls8z";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ llvmPackages.clang-unwrapped llvmPackages.llvm libxml2 zlib ];
-
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
+  buildInputs = [
+    llvmPackages.clang-unwrapped
+    llvmPackages.llvm
+    llvmPackages.lld
+    libxml2
+    zlib
   ];
 
+  patches = [
+    (substituteAll {
+        src = ./llvm10_polly.patch;
+        llvm_extras = "-Wl,${llvmPackages.llvm}/lib/LLVMPolly.so";
+    })
+  ];
+
+  preBuild = ''
+    export HOME=$TMPDIR;
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    ./zig test $src/test/stage1/behavior.zig
+    runHook postCheck
+  '';
+
+  doCheck = true;
+
   meta = with stdenv.lib; {
-    description = "Programming languaged designed for robustness, optimality, and clarity";
-    homepage = https://ziglang.org/;
+    description =
+      "General-purpose programming language and toolchain for maintaining robust, optimal, and reusable software";
+    homepage = "https://ziglang.org/";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = [ maintainers.andrewrk ];

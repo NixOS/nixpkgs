@@ -1,8 +1,10 @@
 { stdenv, fetchFromGitHub
 , vala, cmake, ninja, wrapGAppsHook, pkgconfig, gettext
-, gobjectIntrospection, gnome3, glib, gdk_pixbuf, gtk3, glib-networking
+, gobject-introspection, gnome3, glib, gdk-pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
-, libnotify, libsoup
+, libnotify, libsoup, libgee
+, librsvg, libsignal-protocol-c
+, fetchpatch
 , libgcrypt
 , epoxy
 , at-spi2-core
@@ -10,18 +12,29 @@
 , dbus
 , gpgme
 , pcre
+, qrencode
+, icu
  }:
 
 stdenv.mkDerivation rec {
-  name = "dino-unstable-2018-09-21";
+  pname = "dino";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
-    rev = "6b7ef800f54e781a618425236ba8d4ed2f2fef9c";
-    sha256 = "1si815b6y06lridj88hws0dgq54w9jfam9sqbrq3cfcvmhc38ysk";
-    fetchSubmodules = true;
+    rev = "v${version}";
+    sha256 = "1k5cgj5n8s40i71wqdh6m1q0njl45ichfdbbywx9rga5hljz1c54";
   };
+
+  patches = [
+    (fetchpatch {
+      # Allow newer versions of libsignal-protocol-c
+      url = "https://github.com/dino/dino/commit/fbd70ceaac5ebbddfa21a580c61165bf5b861303.patch";
+      sha256 = "0ydpwsmwrzfsry89fsffkfalhki4n1dw99ixjvpiingdrhjmwyl2";
+      excludes = [ "plugins/signal-protocol/libsignal-protocol-c" ];
+    })
+  ];
 
   nativeBuildInputs = [
     vala
@@ -29,16 +42,18 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     wrapGAppsHook
+    gettext
   ];
 
   buildInputs = [
-    gobjectIntrospection
+    qrencode
+    gobject-introspection
     glib-networking
     glib
-    gnome3.libgee
-    gnome3.defaultIconTheme
+    libgee
+    gnome3.adwaita-icon-theme
     sqlite
-    gdk_pixbuf
+    gdk-pixbuf
     gtk3
     libnotify
     gpgme
@@ -52,14 +67,16 @@ stdenv.mkDerivation rec {
     epoxy
     at-spi2-core
     dbus
-    gettext
+    icu
+    libsignal-protocol-c
+    librsvg
   ];
 
   meta = with stdenv.lib; {
-    description = "Modern Jabber/XMPP Client using GTK+/Vala";
-    homepage = https://github.com/dino/dino;
+    description = "Modern Jabber/XMPP Client using GTK/Vala";
+    homepage = "https://github.com/dino/dino";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = with maintainers; [ mic92 qyliss ];
   };
 }

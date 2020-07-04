@@ -4,12 +4,12 @@
 let
   versionMap = {
     "1.5" = {
-      flinkVersion = "1.5.4";
-      sha256 = "193cgiykzbsm6ygnr1h45504xp2qxjikq188wkgivdj9a4wa04il";
+      flinkVersion = "1.5.5";
+      sha256 = "18wqcqi3gyqd40nspih99gq7ylfs20b35f4dcrspffagwkfp2l4z";
     };
     "1.6" = {
-      flinkVersion = "1.6.1";
-      sha256 = "1z4795va15qnnhk2qx3gzimzgfd9nqchfgn759fnqfmcxh6n9vw3";
+      flinkVersion = "1.9.0";
+      sha256 = "1dzfcmqz5j4b545wq2q3xb2xkbhqllr04s3av1afv54y61l5y952";
     };
   };
 in
@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A distributed stream processing framework";
-    homepage = https://flink.apache.org;
-    downloadPage = https://flink.apache.org/downloads.html;
+    homepage = "https://flink.apache.org";
+    downloadPage = "https://flink.apache.org/downloads.html";
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ mbode ];
-    repositories.git = git://git.apache.org/flink.git;
+    repositories.git = "git://git.apache.org/flink.git";
   };
 }

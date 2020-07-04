@@ -7,11 +7,11 @@ assert lib.elem stdenv.hostPlatform.system platforms;
 # Dropbox client to bootstrap installation.
 # The client is self-updating, so the actual version may be newer.
 let
-  version = "55.4.171";
+  version = "83.4.152";
 
   arch = {
-    "x86_64-linux" = "x86_64";
-    "i686-linux"   = "x86";
+    x86_64-linux = "x86_64";
+    i686-linux   = "x86";
   }.${stdenv.hostPlatform.system};
 
   installer = "https://clientupdates.dropboxstatic.com/dbx-releng/client/dropbox-lnx.${arch}-${version}.tar.gz";
@@ -36,7 +36,7 @@ buildFHSUserEnv {
     libICE libSM libX11 libXcomposite libXdamage libXext libXfixes libXrender
     libXxf86vm libxcb xkeyboardconfig
     curl dbus firefox-bin fontconfig freetype gcc glib gnutar libxml2 libxslt
-    procps zlib
+    procps zlib mesa libxshmfence libpthreadstubs libappindicator
   ];
 
   extraInstallCommands = ''
@@ -77,7 +77,7 @@ buildFHSUserEnv {
 
   meta = with lib; {
     description = "Online stored folders (daemon version)";
-    homepage    = http://www.dropbox.com/;
+    homepage    = "http://www.dropbox.com/";
     license     = licenses.unfree;
     maintainers = with maintainers; [ ttuegel ];
     platforms   = [ "i686-linux" "x86_64-linux" ];

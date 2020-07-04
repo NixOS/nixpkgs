@@ -1,10 +1,15 @@
-{ system ? builtins.currentSystem }:
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
 
-with import ../lib/testing.nix { inherit system; };
+with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
 
+with import common/ec2.nix { inherit makeTest pkgs; };
+
 let
-  image =
+  imageCfg =
     (import ../lib/eval-config.nix {
       inherit system;
       modules = [
@@ -21,80 +26,41 @@ let
             '';
 
           # Needed by nixos-rebuild due to the lack of network
-          # access. Mostly copied from
-          # modules/profiles/installation-device.nix.
+          # access. Determined by trial and error.
           system.extraDependencies =
-            with pkgs; [
-              stdenv busybox perlPackages.ArchiveCpio unionfs-fuse mkinitcpio-nfs-utils
+            with pkgs; (
+              [
+                # Needed for a nixos-rebuild.
+                busybox
+                stdenv
+                stdenvNoCC
+                mkinitcpio-nfs-utils
+                unionfs-fuse
+                cloud-utils
+                desktop-file-utils
+                texinfo
+                libxslt.bin
+                xorg.lndir
 
-              # These are used in the configure-from-userdata tests for EC2. Httpd and valgrind are requested
-              # directly by the configuration we set, and libxslt.bin is used indirectly as a build dependency
-              # of the derivation for dbus configuration files.
-              apacheHttpd valgrind.doc libxslt.bin
-            ];
+                # These are used in the configure-from-userdata tests
+                # for EC2. Httpd and valgrind are requested by the
+                # configuration.
+                apacheHttpd apacheHttpd.doc apacheHttpd.man valgrind.doc
+              ]
+            );
         }
       ];
-    }).config.system.build.amazonImage;
+    }).config;
+  image = "${imageCfg.system.build.amazonImage}/${imageCfg.amazonImage.name}.vhd";
 
-  makeEc2Test = { name, userData, script, hostname ? "ec2-instance", sshPublicKey ? null }:
-    let
-      metaData = pkgs.stdenv.mkDerivation {
-        name = "metadata";
-        buildCommand = ''
-          mkdir -p $out/1.0/meta-data
-          ln -s ${pkgs.writeText "userData" userData} $out/1.0/user-data
-          echo "${hostname}" > $out/1.0/meta-data/hostname
-          echo "(unknown)" > $out/1.0/meta-data/ami-manifest-path
-        '' + optionalString (sshPublicKey != null) ''
-          mkdir -p $out/1.0/meta-data/public-keys/0
-          ln -s ${pkgs.writeText "sshPublicKey" sshPublicKey} $out/1.0/meta-data/public-keys/0/openssh-key
-        '';
-      };
-    in makeTest {
-      name = "ec2-" + name;
-      nodes = {};
-      testScript =
-        ''
-          my $imageDir = ($ENV{'TMPDIR'} // "/tmp") . "/vm-state-machine";
-          mkdir $imageDir, 0700;
-          my $diskImage = "$imageDir/machine.qcow2";
-          system("qemu-img create -f qcow2 -o backing_file=${image}/nixos.qcow2 $diskImage") == 0 or die;
-          system("qemu-img resize $diskImage 10G") == 0 or die;
-
-          # Note: we use net=169.0.0.0/8 rather than
-          # net=169.254.0.0/16 to prevent dhcpcd from getting horribly
-          # confused. (It would get a DHCP lease in the 169.254.*
-          # range, which it would then configure and prompty delete
-          # again when it deletes link-local addresses.) Ideally we'd
-          # turn off the DHCP server, but qemu does not have an option
-          # to do that.
-          my $startCommand = "qemu-kvm -m 768";
-          $startCommand .= " -device virtio-net-pci,netdev=vlan0";
-          $startCommand .= " -netdev 'user,id=vlan0,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${pkgs.micro-httpd}/bin/micro_httpd ${metaData}'";
-          $startCommand .= " -drive file=$diskImage,if=virtio,werror=report";
-          $startCommand .= " \$QEMU_OPTS";
-
-          my $machine = createMachine({ startCommand => $startCommand });
-
-          ${script}
-        '';
-    };
-
-  snakeOilPrivateKey = ''
-    -----BEGIN OPENSSH PRIVATE KEY-----
-    b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
-    QyNTUxOQAAACDEPmwZv5dDPrMUaq0dDP+6eBTTe+QNrz14KBEIdhHd1QAAAJDufJ4S7nye
-    EgAAAAtzc2gtZWQyNTUxOQAAACDEPmwZv5dDPrMUaq0dDP+6eBTTe+QNrz14KBEIdhHd1Q
-    AAAECgwbDlYATM5/jypuptb0GF/+zWZcJfoVIFBG3LQeRyGsQ+bBm/l0M+sxRqrR0M/7p4
-    FNN75A2vPXgoEQh2Ed3VAAAADEVDMiB0ZXN0IGtleQE=
-    -----END OPENSSH PRIVATE KEY-----
-  '';
-
-  snakeOilPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMQ+bBm/l0M+sxRqrR0M/7p4FNN75A2vPXgoEQh2Ed3V EC2 test key";
+  sshKeys = import ./ssh-keys.nix pkgs;
+  snakeOilPrivateKey = sshKeys.snakeOilPrivateKey.text;
+  snakeOilPublicKey = sshKeys.snakeOilPublicKey;
 
 in {
   boot-ec2-nixops = makeEc2Test {
     name         = "nixops-userdata";
+    inherit image;
     sshPublicKey = snakeOilPublicKey; # That's right folks! My user's key is also the host key!
 
     userData = ''
@@ -139,9 +105,10 @@ in {
 
   boot-ec2-config = makeEc2Test {
     name         = "config-userdata";
+    inherit image;
     sshPublicKey = snakeOilPublicKey;
 
-    # ### http://nixos.org/channels/nixos-unstable nixos
+    # ### https://nixos.org/channels/nixos-unstable nixos
     userData = ''
       { pkgs, ... }:
 
@@ -155,16 +122,23 @@ in {
           text = "whoa";
         };
 
+        networking.hostName = "ec2-test-vm"; # required by services.httpd
+
         services.httpd = {
           enable = true;
           adminAddr = "test@example.org";
-          documentRoot = "${pkgs.valgrind.doc}/share/doc/valgrind/html";
+          virtualHosts.localhost.documentRoot = "''${pkgs.valgrind.doc}/share/doc/valgrind/html";
         };
         networking.firewall.allowedTCPPorts = [ 80 ];
       }
     '';
     script = ''
       $machine->start;
+
+      # amazon-init must succeed. if it fails, make the test fail
+      # immediately instead of timing out in waitForFile.
+      $machine->waitForUnit('amazon-init.service');
+
       $machine->waitForFile("/etc/testFile");
       $machine->succeed("cat /etc/testFile | grep -q 'whoa'");
 

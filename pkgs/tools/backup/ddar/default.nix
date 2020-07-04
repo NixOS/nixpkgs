@@ -1,4 +1,4 @@
-{ lib, python2, fetchFromGitHub, roundup }:
+{ lib, python2, fetchFromGitHub, roundup, ncurses }:
 
 python2.pkgs.buildPythonApplication rec {
   pname = "ddar";
@@ -23,9 +23,10 @@ python2.pkgs.buildPythonApplication rec {
     make -f Makefile.prep synctus/ddar_pb2.py
   '';
 
+  nativeBuildInputs = with python2.pkgs; [ protobuf.protobuf ];
   propagatedBuildInputs = with python2.pkgs; [ protobuf ];
 
-  checkInputs = [ roundup ];
+  checkInputs = [ roundup ncurses ];
 
   checkPhase = ''
     roundup t/basic-test.sh

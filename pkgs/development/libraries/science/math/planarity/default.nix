@@ -7,7 +7,6 @@
 stdenv.mkDerivation rec {
   pname = "planarity";
   version = "3.0.0.5";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "graph-algorithms";
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/graph-algorithms/edge-addition-planarity-suite;
+    homepage = "https://github.com/graph-algorithms/edge-addition-planarity-suite";
     description = "A library for implementing graph algorithms";
     license = licenses.bsd3;
     maintainers = with maintainers; [ timokau ];

@@ -6,20 +6,20 @@ let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wi
 
 in stdenv.mkDerivation rec {
   name = "rtl8192eu-${kernel.version}-${version}";
-  version = "4.4.1";
+  version = "4.4.1.20190319";
 
   src = fetchFromGitHub {
     owner = "Mange";
     repo = "rtl8192eu-linux-driver";
-    rev = "4094004";
-    sha256 = "0rgcsp8bd5i5ik9b35qipdhq0xd8pva8kdijixxfaxm4vw6kbrvr";
+    rev = "0a7199b";
+    sha256 = "0xxb8z7fd997ny53bgmf95hyqsmwjplbj6fry0rf65k9x9nggx71";
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  makeFlags = [ "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   enableParallelBuilding = true;
 
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "Realtek rtl8192eu driver";
-    homepage = https://github.com/Mange/rtl8192eu-linux-driver;
+    homepage = "https://github.com/Mange/rtl8192eu-linux-driver";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with maintainers; [ troydm ];

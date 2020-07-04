@@ -5,7 +5,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "fpm2-${version}";
+  pname = "fpm2";
   version = "0.79";
 
   src = fetchurl {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "FPM2 is GTK2 port from Figaro's Password Manager originally developed by John Conneely, with some new enhancements.";
-    homepage    = https://als.regnet.cz/fpm2/;
+    homepage    = "https://als.regnet.cz/fpm2/";
     license     = licenses.gpl2;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ hce ];

@@ -1,22 +1,22 @@
 { stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "1.16.11";
-  name = "clp-${version}";
+  version = "1.17.6";
+  pname = "clp";
   src = fetchurl {
     url = "https://www.coin-or.org/download/source/Clp/Clp-${version}.tgz";
-    sha256 = "0fazlqpp845186nmixa9f1xfxqqkdr1xj4va7q29m8594ca4a9dm";
+    sha256 = "0ap1f0lxppa6pnbc4bg7ih7a96avwaki482nig8w5fr3vg9wvkzr";
   };
 
   propagatedBuildInputs = [ zlib ];
 
   doCheck = true;
 
-  meta = {
-    license = stdenv.lib.licenses.epl10;
-    homepage = https://projects.coin-or.org/Clp;
+  meta = with stdenv.lib; {
+    license = licenses.epl10;
+    homepage = "https://github.com/coin-or/Clp";
     description = "An open-source linear programming solver written in C++";
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    platforms = platforms.darwin ++ [ "x86_64-linux" ];
+    maintainers = [ maintainers.vbgl ];
   };
 }

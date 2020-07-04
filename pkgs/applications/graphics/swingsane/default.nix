@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, makeDesktopItem, unzip, jre }:
+{ stdenv, fetchurl, makeDesktopItem, unzip, jre, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "swingsane-${version}";
+  pname = "swingsane";
   version = "0.2";
 
   src = fetchurl {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installPhase = let
 
     execWrapper = ''
-      #!/bin/sh
+      #!${runtimeShell}
       exec ${jre}/bin/java -jar $out/share/java/swingsane/swingsane-${version}.jar "$@"
     '';
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       desktopName = "SwingSane";
       genericName = "Scan from local or remote SANE servers";
       comment = meta.description;
-      categories = "Office;Application;";
+      categories = "Office;";
     };
 
   in ''
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       simultaneous scan jobs, image transformation jobs (deskew, binarize,
       crop, etc), PDF and PNG output.
     '';
-    homepage = http://swingsane.com/;
+    homepage = "http://swingsane.com/";
     license = licenses.asl20;
     platforms = platforms.all;
   };

@@ -8,6 +8,11 @@ let
   packages = with pkgs; [ pipewire ];
 
 in {
+
+  meta = {
+    maintainers = teams.freedesktop.members;
+  };
+
   ###### interface
   options = {
     services.pipewire = {
@@ -33,5 +38,4 @@ in {
     systemd.user.sockets.pipewire.wantedBy = lib.mkIf cfg.socketActivation [ "sockets.target" ];
   };
 
-  meta.maintainers = with lib.maintainers; [ jtojnar ];
 }

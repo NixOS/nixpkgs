@@ -1,27 +1,60 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook, gobjectIntrospection
-, itstool, libxml2, python3Packages, at-spi2-core
-, dbus, intltool, libwnck3 }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, gnome3
+, gtk3
+, wrapGAppsHook
+, gobject-introspection
+, itstool
+, libxml2
+, python3
+, at-spi2-core
+, dbus
+, gettext
+, libwnck3
+, adwaita-icon-theme
+}:
 
-stdenv.mkDerivation rec {
+ python3.pkgs.buildPythonApplication rec {
   name = "accerciser-${version}";
-  version = "3.22.0";
+  version = "3.36.1";
+
+  format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/accerciser/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "883306274442c7ecc076b24afca5190c835c40871ded1b9790da69347e9ca3c5";
+    sha256 = "1ig9zcg8z7yv2c28q0a4q57ckkpmzjsbnancx01rjihrrjbg9ib2";
   };
 
   nativeBuildInputs = [
-    pkgconfig wrapGAppsHook itstool intltool
-    gobjectIntrospection # For setup hook
-  ];
-  buildInputs = [
-    gtk3 libxml2 python3Packages.python python3Packages.pyatspi
-    python3Packages.pygobject3 python3Packages.ipython
-    at-spi2-core dbus libwnck3 gnome3.defaultIconTheme
+    gettext
+    gobject-introspection # For setup hook
+    itstool
+    libxml2
+    pkgconfig
+    dbus
+    wrapGAppsHook
   ];
 
-  wrapPrefixVariables = [ "PYTHONPATH" ];
+  buildInputs = [
+    adwaita-icon-theme
+    at-spi2-core
+    gtk3
+    libwnck3
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    ipython
+    pyatspi
+    pycairo
+    pygobject3
+    setuptools
+    xlib
+  ];
+
+  # Strict deps breaks accerciser
+  # and https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -31,9 +64,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Accerciser;
+    homepage = "https://wiki.gnome.org/Apps/Accerciser";
     description = "Interactive Python accessibility explorer";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

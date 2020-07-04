@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   name = "opendylan-2016.1pre";
 
   src = fetchgit {
-    url = https://github.com/dylan-lang/opendylan;
+    url = "https://github.com/dylan-lang/opendylan";
     rev = "cd9a8395586d33cc43a8611c1dc0513e69ee82dd";
     sha256 = "00r1dm7mjy5p4hfm13vc4b6qryap40zinia3y15rhvalc3i2np4b";
     fetchSubmodules = true;
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   postInstall = "wrapProgram $out/bin/dylan-compiler --suffix PATH : ${gcc}/bin";
 
   meta = {
-    homepage = https://opendylan.org;
+    homepage = "https://opendylan.org";
     description = "A multi-paradigm functional and object-oriented programming language";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;

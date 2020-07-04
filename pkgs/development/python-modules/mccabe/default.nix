@@ -13,8 +13,8 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "McCabe checker, plugin for flake8";
-    homepage = https://github.com/flintwork/mccabe;
+    homepage = "https://github.com/flintwork/mccabe";
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, openssl, protobufc, libconfig }:
 
 stdenv.mkDerivation rec {
-  name = "umurmur-${version}";
+  pname = "umurmur";
   version = "0.2.17";
 
   src = fetchFromGitHub {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Minimalistic Murmur (Mumble server)";
     license = licenses.bsd3;
-    homepage = https://github.com/umurmur/umurmur;
+    homepage = "https://github.com/umurmur/umurmur";
     platforms = platforms.all;
   };
 }

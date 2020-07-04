@@ -17,9 +17,11 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
-   (fetchpatch { url = http://anonscm.debian.org/cgit/users/robert/super.git/plain/debian/patches/14-Fix-unchecked-setuid-call.patch;
-                 sha256 = "08m9hw4kyfjv0kqns1cqha4v5hkgp4s4z0q1rgif1fnk14xh7wqh";
-               })
+    (fetchpatch {
+      name = "CVE-2014-0470.patch";
+      url = "https://salsa.debian.org/debian/super/raw/debian/3.30.0-7/debian/patches/14-Fix-unchecked-setuid-call.patch";
+      sha256 = "08m9hw4kyfjv0kqns1cqha4v5hkgp4s4z0q1rgif1fnk14xh7wqh";
+    })
   ];
 
   NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
@@ -29,10 +31,10 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
-  installFlags = "sysconfdir=$(out)/etc localstatedir=$(TMPDIR)";
+  installFlags = [ "sysconfdir=$(out)/etc" "localstatedir=$(TMPDIR)" ];
 
   meta = {
-    homepage = http://www.ucolick.org/~will/;
+    homepage = "https://www.ucolick.org/~will/#super";
     description = "Allows users to execute scripts as if they were root";
     longDescription =
       ''

@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Powerful Disassembler Library For x86/AMD64";
-    homepage = https://github.com/gdabah/distorm;
+    homepage = "https://github.com/gdabah/distorm";
     license = licenses.bsd3;
   };
 }

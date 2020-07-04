@@ -8,18 +8,18 @@
 
 buildPythonPackage rec {
   pname = "pyramid_mako";
-  version = "0.3.1";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00811djmsc4rz20kpy2paam05fbx6dmrv2i5jf90f6xp6zw4isy6";
+    sha256 = "0066c863441f1c3ddea60cee1ccc50d00a91a317a8052ca44131da1a12a840e2";
   };
 
   buildInputs = [ webtest ];
   propagatedBuildInputs = [ pyramid Mako ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/Pylons/pyramid_mako;
+    homepage = "https://github.com/Pylons/pyramid_mako";
     description = "Mako template bindings for the Pyramid web framework";
     license = licenses.bsd0;
   };

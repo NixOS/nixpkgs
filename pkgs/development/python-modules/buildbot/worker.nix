@@ -1,12 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, python, setuptoolsTrial, mock, twisted, future }:
+{ lib, buildPythonPackage, fetchPypi, buildbot, setuptoolsTrial, mock, twisted,
+  future, coreutils }:
 
 buildPythonPackage (rec {
   pname = "buildbot-worker";
-  version = "1.4.0";
+  inherit (buildbot) version;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12zvf4c39b6s4g1f2w407q8kkw602m88rc1ggi4w9pkw3bwbxrgy";
+    sha256 = "0p1w6ailp6xpa6ckl5prj413ilxx5s3lga5mzqxj9nn00vni8ik2";
   };
 
   propagatedBuildInputs = [ twisted future ];
@@ -14,13 +15,14 @@ buildPythonPackage (rec {
   checkInputs = [ setuptoolsTrial mock ];
 
   postPatch = ''
-    substituteInPlace buildbot_worker/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
+    substituteInPlace buildbot_worker/scripts/logwatcher.py \
+      --replace /usr/bin/tail "${coreutils}/bin/tail"
   '';
 
   meta = with lib; {
-    homepage = http://buildbot.net/;
+    homepage = "https://buildbot.net/";
     description = "Buildbot Worker Daemon";
-    maintainers = with maintainers; [ nand0p ryansydnor ];
+    maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
     license = licenses.gpl2;
   };
 })

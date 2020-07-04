@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , nose
 , pandas
@@ -8,10 +9,12 @@
 
 buildPythonPackage rec {
   pname = "seaborn";
-  version = "0.9.0";
+  version = "0.10.1";
+  disabled = pythonOlder "3.6";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "76c83f794ca320fb6b23a7c6192d5e185a5fcf4758966a0c0a54baee46d41e2f";
+    sha256 = "2d1a0c9d6bd1bc3cadb0364b8f06540f51322a670cf8438d0fde1c1c7317adc0";
   };
 
   checkInputs = [ nose ];

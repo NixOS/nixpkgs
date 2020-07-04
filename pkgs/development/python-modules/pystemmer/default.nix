@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "PyStemmer";
-  version = "1.3.0";
+  version = "2.0.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d1ac14eb64978c1697fcfba76e3ac7ebe24357c9428e775390f634648947cb91";
+    sha256 = "57d1e353b11c5f90566efec7037deaa0e411b1df1e4e5522ce97d7be34b49478";
   };
 
   nativeBuildInputs = [ cython ];
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Snowball stemming algorithms, for information retrieval";
-    homepage = http://snowball.tartarus.org/;
+    homepage = "http://snowball.tartarus.org/";
     license = licenses.mit;
     platforms = platforms.unix;
   };

@@ -1,0 +1,16 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index feef49d..ecb7ed2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -26,9 +26,9 @@ macro(query_qmake args output)
+     endif()
+ endmacro()
+
+-query_qmake("QT_INSTALL_PLUGINS" QT_INSTALL_PLUGINS)
++set(QT_INSTALL_PLUGINS @plugin_path@)
+
+-set(PLUGIN_INSTALL_PATH ${QT_INSTALL_PLUGINS}/platforms)
++set(PLUGIN_INSTALL_PATH @plugin_path@/platforms)
+ # Find includes in corresponding build directories
+ set(CMAKE_INCLUDE_CURRENT_DIR ON)
+ # Instruct CMake to run moc automatically when needed

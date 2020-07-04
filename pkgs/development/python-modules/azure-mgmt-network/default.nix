@@ -1,37 +1,37 @@
-{ pkgs
+{ lib
 , buildPythonPackage
 , fetchPypi
 , azure-mgmt-common
 , python
+, isPy3k
 }:
 
 buildPythonPackage rec {
-  version = "0.20.1";
+  version = "10.2.0";
   pname = "azure-mgmt-network";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "10vj22h6nxpw0qpvib5x2g6qs5j8z31142icvh4qk8k40fcrs9hx";
+    sha256 = "d50c74cdc1c9be6861ddef9adffd3b05afc5a5092baf0209eea30f4439cba2d9";
   };
 
-  preConfigure = ''
-    # Patch to make this package work on requests >= 2.11.x
-    # CAN BE REMOVED ON NEXT PACKAGE UPDATE
-    sed -i 's|len(request_content)|str(len(request_content))|' azure/mgmt/network/networkresourceprovider.py
-  '';
-
-  postInstall = ''
+  postInstall = if isPy3k then "" else ''
     echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
     echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
   '';
 
-  propagatedBuildInputs = [ azure-mgmt-common ];
+  propagatedBuildInputs = [
+    azure-mgmt-common
+  ];
 
-  meta = with pkgs.lib; {
+  # has no tests
+  doCheck = false;
+
+  meta = with lib; {
     description = "Microsoft Azure SDK for Python";
-    homepage = "https://azure.microsoft.com/en-us/develop/python/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ olcai ];
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ olcai mwilsoninsight ];
   };
 }

@@ -10,9 +10,10 @@ stdenv.mkDerivation rec {
 
   preBuild="makeFlagsArray+=( PREFIX=$out )";
 
-  meta = {
-    homepage = http://piumarta.com/software/peg/;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ ];
+  meta = with stdenv.lib; {
+    homepage = "http://piumarta.com/software/peg/";
+    description = "Tools for generating recursive-descent parsers: programs that perform pattern matching on text";
+    platforms = platforms.all;
+    license = licenses.mit;
   };
 }

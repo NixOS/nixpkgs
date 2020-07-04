@@ -109,8 +109,8 @@ in
 
       httpListenAddr = mkOption {
         type = types.str;
-        default = "0.0.0.0";
-        example = "1.2.3.4";
+        default = "[::1]";
+        example = "0.0.0.0";
         description = ''
           HTTP address to bind to.
         '';
@@ -206,16 +206,16 @@ in
 
           If you would like to be able to modify the contents of this
           directories, it is recommended that you make your user a
-          member of the <literal>resilio</literal> group.
+          member of the <literal>rslsync</literal> group.
 
           Directories in this list should be in the
-          <literal>resilio</literal> group, and that group must have
+          <literal>rslsync</literal> group, and that group must have
           write access to the directory. It is also recommended that
           <literal>chmod g+s</literal> is applied to the directory
           so that any sub directories created will also belong to
-          the <literal>resilio</literal> group. Also,
-          <literal>setfacl -d -m group:resilio:rwx</literal> and
-          <literal>setfacl -m group:resilio:rwx</literal> should also
+          the <literal>rslsync</literal> group. Also,
+          <literal>setfacl -d -m group:rslsync:rwx</literal> and
+          <literal>setfacl -m group:rslsync:rwx</literal> should also
           be applied so that the sub directories are writable by
           the group.
         '';
@@ -244,12 +244,12 @@ in
       group           = "rslsync";
     };
 
-    users.groups = [ { name = "rslsync"; } ];
+    users.groups.rslsync = {};
 
     systemd.services.resilio = with pkgs; {
       description = "Resilio Sync Service";
       wantedBy    = [ "multi-user.target" ];
-      after       = [ "network.target" "local-fs.target" ];
+      after       = [ "network.target" ];
       serviceConfig = {
         Restart   = "on-abort";
         UMask     = "0002";

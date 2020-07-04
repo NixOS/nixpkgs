@@ -15,10 +15,7 @@ in
 
     services.rethinkdb = {
 
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable the RethinkDB server.";
-      };
+      enable = mkEnableOption "RethinkDB server";
 
       #package = mkOption {
       #  default = pkgs.rethinkdb;
@@ -41,7 +38,7 @@ in
       };
 
       pidpath = mkOption {
-        default = "/var/run/rethinkdb";
+        default = "/run/rethinkdb";
         description = "Location where each instance's pid file is located.";
       };
 
@@ -99,6 +96,7 @@ in
     users.users.rethinkdb = mkIf (cfg.user == "rethinkdb")
       { name = "rethinkdb";
         description = "RethinkDB server user";
+        isSystemUser = true;
       };
 
     users.groups = optionalAttrs (cfg.group == "rethinkdb") (singleton

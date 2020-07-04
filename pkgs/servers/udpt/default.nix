@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, boost, sqlite, cmake, gtest }:
 
-stdenv.mkDerivation rec {
-  name = "udpt-${version}";
+stdenv.mkDerivation {
+  pname = "udpt";
   version = "2017-09-27";
 
   enableParallelBuilding = true;
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A lightweight UDP torrent tracker";
-    homepage = https://naim94a.github.io/udpt;
+    homepage = "https://naim94a.github.io/udpt";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ makefu ];

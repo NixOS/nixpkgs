@@ -1,24 +1,27 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , six
 , zope_testing
 }:
 
 buildPythonPackage rec {
   pname = "manuel";
-  version = "1.8.0";
+  version = "1.10.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1diyj6a8bvz2cdf9m0g2bbx9z2yjjnn3ylbg1zinpcjj6vldfx59";
+    sha256 = "1bdzay7j70fly5fy6wbdi8fbrxjrrlxnxnw226rwry1c8a351rpy";
   };
 
-  propagatedBuildInputs = [ six zope_testing ];
+  propagatedBuildInputs = [ six ];
+  checkInputs = [ zope_testing ];
 
   meta = with stdenv.lib; {
     description = "A documentation builder";
-    homepage = https://pypi.python.org/pypi/manuel;
+    homepage = "https://pypi.python.org/pypi/manuel";
     license = licenses.zpl20;
   };
 

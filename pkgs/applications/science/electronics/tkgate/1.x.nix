@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tcl, tk, libX11, glibc, which, yacc, flex, imake, xproto, gccmakedep }:
+{ stdenv, fetchurl, tcl, tk, libX11, glibc, which, yacc, flex, imake, xorgproto, gccmakedep }:
 
 let
   libiconvInc = stdenv.lib.optionalString stdenv.isLinux "${glibc.dev}/include";
@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "1pqywkidfpdbj18i03h97f4cimld4fb3mqfy8jjsxs12kihm18fs";
   };
 
-  buildInputs = [ tcl tk libX11 which yacc flex imake xproto gccmakedep ];
+  nativeBuildInputs = [ which yacc flex imake gccmakedep ];
+  buildInputs = [ tcl tk libX11 xorgproto ];
+  dontUseImakeConfigure = true;
 
   patchPhase = ''
     sed -i config.h \
@@ -32,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Event driven digital circuit simulator with a TCL/TK-based graphical editor";
-    homepage = http://www.tkgate.org/;
+    homepage = "http://www.tkgate.org/";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.peti ];
     hydraPlatforms = stdenv.lib.platforms.linux;

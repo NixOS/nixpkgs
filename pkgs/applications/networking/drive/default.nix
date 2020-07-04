@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "drive-${version}";
+  pname = "drive";
   version = "0.3.8.1";
 
   goPackagePath = "github.com/odeke-em/drive";
@@ -17,9 +17,9 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with lib; {
-    homepage = https://github.com/odeke-em/drive;
+    homepage = "https://github.com/odeke-em/drive";
     description = "Google Drive client for the commandline";
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

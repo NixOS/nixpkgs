@@ -2,8 +2,8 @@
 bison, flex, libGLU, pythonPackages
 }:
 
-stdenv.mkDerivation rec {
-  name = "seexpr-${version}";
+stdenv.mkDerivation {
+  pname = "seexpr";
   version = "2.11";
   src = fetchFromGitHub {
     owner  = "wdas";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake libGLU libpng zlib qt4 pythonPackages.pyqt4 bison flex ];
   meta = with stdenv.lib; {
     description = "Embeddable expression evaluation engine from Disney Animation";
-    homepage = https://www.disneyanimation.com/technology/seexpr.html;
+    homepage = "https://www.disneyanimation.com/technology/seexpr.html";
     maintainers = with maintainers; [ hodapp ];
     license = licenses.asl20;
     platforms = platforms.linux;

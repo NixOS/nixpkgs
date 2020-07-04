@@ -1,8 +1,8 @@
 { lib, buildPythonPackage, fetchFromGitHub, nose }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   version = "0.5.3-2016-09-28";
-  name = "tempita-${version}";
+  pname = "tempita";
 
   src = fetchFromGitHub {
     owner = "gjhiggins";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   buildInputs = [ nose ];
 
   meta = {
-    homepage = https://github.com/gjhiggins/tempita;
+    homepage = "https://github.com/gjhiggins/tempita";
     description = "A very small text templating language";
     license = lib.licenses.mit;
   };

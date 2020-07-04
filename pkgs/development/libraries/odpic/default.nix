@@ -1,12 +1,19 @@
-{ stdenv, fetchurl, fixDarwinDylibNames, oracle-instantclient, libaio }:
+{ stdenv, fetchFromGitHub, fixDarwinDylibNames, oracle-instantclient, libaio }:
 
-stdenv.mkDerivation rec {
-  name = "odpic-${version}";
-  version = "2.4.2";
+let
+  version = "3.3.0";
+  libPath = stdenv.lib.makeLibraryPath [ oracle-instantclient.lib ];
 
-  src = fetchurl {
-    url = "https://github.com/oracle/odpi/archive/v${version}.tar.gz";
-    sha256 = "0hw6b38vnh0cgm1iwpgkqa2am86baal6irp9bglacblwh8sshqdi";
+in stdenv.mkDerivation {
+  inherit version;
+
+  pname = "odpic";
+
+  src = fetchFromGitHub {
+    owner = "oracle";
+    repo = "odpi";
+    rev = "v${version}";
+    sha256 = "0qyfpincifz2vgicjd4q3rk563sg7927xja53rz3l7zv54wp9k62";
   };
 
   nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin [ fixDarwinDylibNames ];
@@ -14,15 +21,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ oracle-instantclient ]
     ++ stdenv.lib.optionals stdenv.isLinux [ libaio ];
 
-  libPath = stdenv.lib.makeLibraryPath
-    [ oracle-instantclient ];
-
   dontPatchELF = true;
   makeFlags = [ "PREFIX=$(out)" "CC=cc" "LD=cc"];
 
   postFixup = ''
     ${stdenv.lib.optionalString (stdenv.isLinux) ''
-      patchelf --set-rpath "${libPath}" $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary}
+      patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary})" $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary}
     ''}
     ${stdenv.lib.optionalString (stdenv.isDarwin) ''
       install_name_tool -add_rpath "${libPath}" $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary}

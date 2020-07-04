@@ -1,68 +1,100 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, gtk-doc, gobjectIntrospection, gnome3
-, glib, systemd, xz, e2fsprogs, libsoup, gpgme, which, autoconf, automake, libtool, fuse, utillinuxMinimal, libselinux
-, libarchive, libcap, bzip2, yacc, libxslt, docbook_xsl, docbook_xml_dtd_42, python3
+{ stdenv
+, fetchurl
+, fetchpatch
+, substituteAll
+, pkgconfig
+, gtk-doc
+, gobject-introspection
+, gjs
+, nixosTests
+, glib
+, systemd
+, xz
+, e2fsprogs
+, libsoup
+, gpgme
+, which
+, makeWrapper
+, autoconf
+, automake
+, libtool
+, fuse
+, utillinuxMinimal
+, libselinux
+, libarchive
+, libcap
+, bzip2
+, yacc
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_42
+, python3
 }:
 
 let
-  version = "2018.8";
-
-  libglnx-src = fetchFromGitHub {
-    owner = "GNOME";
-    repo = "libglnx";
-    rev = "470af8763ff7b99bec950a6ae0a957c1dcfc8edd";
-    sha256 = "1fwik38i6w3r6pn4qkizradcqp1m83n7ljh9jg0y3p3kvrbfxh15";
-  };
-
-  bsdiff-src = fetchFromGitHub {
-    owner = "mendsley";
-    repo = "bsdiff";
-    rev = "1edf9f656850c0c64dae260960fabd8249ea9c60";
-    sha256 = "1h71d2h2d3anp4msvpaff445rnzdxii3id2yglqk7af9i43kdsn1";
-  };
-in stdenv.mkDerivation {
-  name = "ostree-${version}";
+  testPython = (python3.withPackages (p: with p; [
+    pyyaml
+  ]));
+in stdenv.mkDerivation rec {
+  pname = "ostree";
+  version = "2020.3";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
 
-  src = fetchFromGitHub {
-    rev = "v${version}";
-    owner = "ostreedev";
-    repo = "ostree";
-    sha256 = "0i7b7hvlv8m44k39fr5389wskf810vda8s7ivy2whj1nan5951yx";
+  src = fetchurl {
+    url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
+    sha256 = "01cch4as23xspq6pck59al7x5jj60wl21g8p3iqbdxcjl1p3jxsq";
   };
 
   patches = [
-    # Workarounds for https://github.com/ostreedev/ostree/issues/1592
-    ./fix-1592.patch
-    # Disable test-gpg-verify-result.test,
-    # https://github.com/ostreedev/ostree/issues/1634
-    ./disable-test-gpg-verify-result.patch
     # Tests access the helper using relative path
     # https://github.com/ostreedev/ostree/issues/1593
-    (fetchpatch {
-      url = https://github.com/ostreedev/ostree/pull/1633.patch;
-      sha256 = "07xiw1dr7j4yw3w92qhw37f9crlglibflcqj2kf0v5gfrl9i6g4j";
+    # Patch from https://github.com/ostreedev/ostree/pull/1633
+    ./01-Drop-ostree-trivial-httpd-CLI-move-to-tests-director.patch
+
+    # Workarounds for https://github.com/ostreedev/ostree/issues/1592
+    ./fix-1592.patch
+
+    # Hard-code paths in tests
+    (substituteAll {
+      src = ./fix-test-paths.patch;
+      python3 = testPython.interpreter;
     })
   ];
 
   nativeBuildInputs = [
-    autoconf automake libtool pkgconfig gtk-doc gobjectIntrospection which yacc
-    libxslt docbook_xsl docbook_xml_dtd_42
+    autoconf
+    automake
+    libtool
+    pkgconfig
+    gtk-doc
+    gobject-introspection
+    which
+    makeWrapper
+    yacc
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_42
   ];
 
   buildInputs = [
-    glib systemd e2fsprogs libsoup gpgme fuse libselinux libcap
-    libarchive bzip2 xz
+    glib
+    systemd
+    e2fsprogs
+    libsoup
+    gpgme
+    fuse
+    libselinux
+    libcap
+    libarchive
+    bzip2
+    xz
     utillinuxMinimal # for libmount
-    (python3.withPackages (p: with p; [ pyyaml ])) gnome3.gjs # for tests
+
+    # for installed tests
+    testPython
+    gjs
   ];
-
-  prePatch = ''
-    rmdir libglnx bsdiff
-    cp --no-preserve=mode -r ${libglnx-src} libglnx
-    cp --no-preserve=mode -r ${bsdiff-src} bsdiff
-  '';
-
 
   preConfigure = ''
     env NOCONFIGURE=1 ./autogen.sh
@@ -71,20 +103,36 @@ in stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   configureFlags = [
-    "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
-    "--with-systemdsystemgeneratordir=$(out)/lib/systemd/system-generators"
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "--with-systemdsystemgeneratordir=${placeholder "out"}/lib/systemd/system-generators"
     "--enable-installed-tests"
   ];
 
   makeFlags = [
-    "installed_testdir=$(installedTests)/libexec/installed-tests/libostree"
-    "installed_test_metadir=$(installedTests)/share/installed-tests/libostree"
+    "installed_testdir=${placeholder "installedTests"}/libexec/installed-tests/libostree"
+    "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/libostree"
   ];
 
+  postFixup = let
+    typelibPath = stdenv.lib.makeSearchPath "/lib/girepository-1.0" [
+      (placeholder "out")
+      gobject-introspection
+    ];
+  in ''
+    for test in $installedTests/libexec/installed-tests/libostree/*.js; do
+      wrapProgram "$test" --prefix GI_TYPELIB_PATH : "${typelibPath}"
+    done
+  '';
+
+  passthru = {
+    tests = {
+      installedTests = nixosTests.installed-tests.ostree;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Git for operating system binaries";
-    homepage = https://ostree.readthedocs.io/en/latest/;
+    homepage = "https://ostree.readthedocs.io/en/latest/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ copumpkin ];

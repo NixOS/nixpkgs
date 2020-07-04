@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "bmrsa-${version}";
+  pname = "bmrsa";
   version = "11";
 
   src = fetchurl {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "RSA utility";
-    homepage = http://bmrsa.sourceforge.net/;
+    homepage = "http://bmrsa.sourceforge.net/";
     license = licenses.gpl1;
     platforms = platforms.linux;
   };

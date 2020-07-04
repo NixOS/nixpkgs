@@ -1,6 +1,6 @@
 {
   mkDerivation, lib, extra-cmake-modules, qtbase
-, qtdeclarative, kconfig, kcoreaddons, ki18n, kio
+, qtdeclarative, kconfig, kcoreaddons, ki18n, kio, kirigami2
 }:
 
 mkDerivation {
@@ -9,6 +9,6 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     qtbase qtdeclarative kconfig kcoreaddons 
-    ki18n kio
+    ki18n kio kirigami2
   ];
 }

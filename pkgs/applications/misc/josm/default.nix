@@ -1,44 +1,50 @@
-{ fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, jre10 }:
-
-stdenv.mkDerivation rec {
-  name = "josm-${version}";
-  version = "14289";
-
-  src = fetchurl {
-    url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
-    sha256 = "102dph3479qskzf72cpb9139pq9ifka6pzna1c6s5rs2il6mfvsb";
+{ stdenv, fetchurl, fetchsvn, makeWrapper, unzip, jre, libXxf86vm }:
+let
+  pname = "josm";
+  version = "16731";
+  srcs = {
+    jar = fetchurl {
+      url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
+      sha256 = "0r94jcqciggjwjxfz5q3m81sx6cvh94hq5r9mpw44dvpnyfjj6p6";
+    };
+    macosx = fetchurl {
+      url = "https://josm.openstreetmap.de/download/macosx/josm-macosx-${version}.zip";
+      sha256 = "1ilcqy6ssi1jfnbw9nzpd4qlf2dmskfywy2lfm07y4w4gyjsp6w9";
+    };
+    pkg = fetchsvn {
+      url = "https://josm.openstreetmap.de/svn/trunk/native/linux/tested";
+      rev = version;
+      sha256 = "0ybjca6dhnbwl3xqwrc91c444fzs1zrlnz7qr3l79s1vll9r4qd1";
+    };
   };
+in
+stdenv.mkDerivation {
+  inherit pname version;
 
-  buildInputs = [ jre10 makeWrapper ];
+  dontUnpack = true;
 
-  desktopItem = makeDesktopItem {
-    name = "josm";
-    exec = "josm";
-    icon = "josm";
-    desktopName = "JOSM";
-    genericName = "OpenStreetMap Editor";
-    comment = meta.description;
-    categories = "Education;Geoscience;Maps;";
-  };
+  buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [ jre makeWrapper ];
 
-  buildCommand = ''
-    mkdir -p $out/bin $out/share/java
-    cp -v $src $out/share/java/josm.jar
+  installPhase =
+    if stdenv.isDarwin then ''
+      mkdir -p $out/Applications
+      ${unzip}/bin/unzip ${srcs.macosx} 'JOSM.app/*' -d $out/Applications
+    '' else ''
+      install -Dm644 ${srcs.jar} $out/share/josm/josm.jar
+      cp -R ${srcs.pkg}/usr/share $out
 
-    makeWrapper ${jre10}/bin/java $out/bin/josm \
-      --add-flags "-jar $out/share/java/josm.jar"
-
-    mkdir -p $out/share/applications
-    cp $desktopItem/share/applications"/"* $out/share/applications
-    mkdir -p $out/share/pixmaps
-    ${unzip}/bin/unzip -p $src images/logo_48x48x32.png > $out/share/pixmaps/josm.png
-  '';
+      # Add libXxf86vm to path because it is needed by at least Kendzi3D plugin
+      makeWrapper ${jre}/bin/java $out/bin/josm \
+        --add-flags "-Djosm.restart=true -Djava.net.useSystemProxies=true" \
+        --add-flags "-jar $out/share/josm/josm.jar" \
+        --prefix LD_LIBRARY_PATH ":" '${libXxf86vm}/lib'
+    '';
 
   meta = with stdenv.lib; {
     description = "An extensible editor for OpenStreetMap";
-    homepage = https://josm.openstreetmap.de/;
+    homepage = "https://josm.openstreetmap.de/";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.rycee ];
+    maintainers = with maintainers; [ rycee sikmir ];
     platforms = platforms.all;
   };
 }

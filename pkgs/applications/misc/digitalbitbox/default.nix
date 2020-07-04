@@ -3,12 +3,11 @@
 , curl
 , fetchFromGitHub
 , git
-, libcap
 , libevent
 , libtool
-, libqrencode
+, qrencode
 , udev
-, libusb
+, libusb-compat-0_1
 , makeWrapper
 , pkgconfig
 , qtbase
@@ -48,7 +47,7 @@ let
   copyUdevRuleToOutput = name: rule:
     "cp ${writeText name rule} $out/etc/udev/rules.d/${name}";
 in stdenv.mkDerivation rec {
-  name = "digitalbitbox-${version}";
+  pname = "digitalbitbox";
   version = "2.2.2";
 
   src = fetchFromGitHub {
@@ -68,13 +67,11 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    # TODO: remove libcap when pruneLibtoolFiles applies to pulseaudio.
-    libcap
     libevent
     libtool
     udev
-    libusb
-    libqrencode
+    libusb-compat-0_1
+    qrencode
 
     qtbase
     qtwebsockets
@@ -84,7 +81,7 @@ in stdenv.mkDerivation rec {
   LUPDATE="${qttools.dev}/bin/lupdate";
   LRELEASE="${qttools.dev}/bin/lrelease";
   MOC="${qtbase.dev}/bin/moc";
-  QTDIR="${qtbase.dev}";
+  QTDIR=qtbase.dev;
   RCC="${qtbase.dev}/bin/rcc";
   UIC="${qtbase.dev}/bin/uic";
 
@@ -141,5 +138,6 @@ in stdenv.mkDerivation rec {
       vidbina
     ];
     platforms = platforms.linux;
+    broken = true;
   };
 }

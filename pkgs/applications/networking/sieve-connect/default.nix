@@ -1,15 +1,17 @@
-{ stdenv, fetchFromGitHub, makeWrapper, perl, perlPackages }: stdenv.mkDerivation rec {
-  name = "sieve-connect-${version}";
-  version = "0.89";
+{ stdenv, fetchFromGitHub, makeWrapper, perlPackages }:
+
+stdenv.mkDerivation rec {
+  pname = "sieve-connect";
+  version = "0.90";
 
   src = fetchFromGitHub {
     owner = "philpennock";
     repo = "sieve-connect";
     rev = "v${version}";
-    sha256 = "0g7cv29wd5673inl4c87xb802k86bj6gcwh131xrbbg0a0g1c8fp";
+    sha256 = "1ghvfa5ifa68b6imh85bkmy00r93c5f9hs6d039axb73gmma580p";
   };
 
-  buildInputs = [ perl ];
+  buildInputs = [ perlPackages.perl ];
   nativeBuildInputs = [ makeWrapper ];
 
   preBuild = ''
@@ -20,7 +22,7 @@
     echo "$(date +%Y-%m-%d)" > datefile
   '';
 
-  buildFlags = [ "PERL5LIB=${stdenv.lib.makePerlPath [ perlPackages.FileSlurp ]}" "bin" "man" ];
+  buildFlags = [ "PERL5LIB=${perlPackages.makePerlPath [ perlPackages.FileSlurp ]}" "bin" "man" ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1
@@ -28,9 +30,9 @@
     gzip -c sieve-connect.1 > $out/share/man/man1/sieve-connect.1.gz
 
     wrapProgram $out/bin/sieve-connect \
-      --prefix PERL5LIB : "${stdenv.lib.makePerlPath (with perlPackages; [
-        AuthenSASL Socket6 IOSocketInet6 IOSocketSSL NetSSLeay NetDNS PodUsage
-        TermReadKey TermReadLineGnu ])}"
+      --prefix PERL5LIB : "${with perlPackages; makePerlPath [
+        AuthenSASL Socket6 IOSocketInet6 IOSocketSSL NetSSLeay NetDNS
+        TermReadKey TermReadLineGnu ]}"
   '';
 
   meta = with stdenv.lib; {
@@ -40,7 +42,7 @@
       as specifed in RFC 5804. Historically, this was MANAGESIEVE as
       implemented by timsieved in Cyrus IMAP.
     '';
-    homepage = https://github.com/philpennock/sieve-connect;
+    homepage = "https://github.com/philpennock/sieve-connect";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ das_j ];

@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "The Ethereum hashing function keccak256";
-    homepage = https://github.com/ethereum/eth-hash;
+    homepage = "https://github.com/ethereum/eth-hash";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
   };

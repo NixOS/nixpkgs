@@ -1,30 +1,35 @@
 { fetchurl, stdenv, pkgconfig, boost, lua }:
 
 stdenv.mkDerivation rec {
-  name = "ansifilter-${version}";
-  version = "2.10";
+  pname = "ansifilter";
+  version = "2.16";
 
   src = fetchurl {
     url = "http://www.andre-simon.de/zip/ansifilter-${version}.tar.bz2";
-    sha256 = "0gzfxfpic47cs2kqrbvaw166ji62c5nq5cjhh3ngpm2fkm1wzli3";
-
+    sha256 = "1wmszcykhaipxa7kxj4ml0lkmd5z7i9ryaachg9jpkhbaaijzkbz";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ boost lua ];
 
-  makeFlags = "PREFIX=$(out) conf_dir=/etc/ansifilter";
+  postPatch = ''
+    substituteInPlace src/makefile --replace "CC=g++" "CC=c++"
+  '';
+
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "conf_dir=/etc/ansifilter"
+  ];
 
   meta = with stdenv.lib; {
     description = "Tool to convert ANSI to other formats";
     longDescription = ''
-      Tool to remove ANSI or convert them to another format 
+      Tool to remove ANSI or convert them to another format
       (HTML, TeX, LaTeX, RTF, Pango or BBCode)
     '';
-
-    license = licenses.gpl1;
+    homepage = "http://www.andre-simon.de/doku/ansifilter/en/ansifilter.php";
+    license = licenses.gpl3;
     maintainers = [ maintainers.Adjective-Object ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
-

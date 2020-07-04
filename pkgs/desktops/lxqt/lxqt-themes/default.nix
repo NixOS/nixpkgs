@@ -1,34 +1,34 @@
-{ stdenv, fetchFromGitHub, cmake, lxqt }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, lxqt-build-tools
+, lxqtUpdateScript
+}:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "lxqt-themes";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "026hbblxdbq48n9691b1z1xiak99khsk3wf09vn4iaj5zi7dwhw5";
+    sha256 = "1magzckhgrac2b5jm83hj3s8x4hyfnbh2v86lfa4c36whnfvsz29";
   };
 
   nativeBuildInputs = [
     cmake
-    lxqt.lxqt-build-tools
+    lxqt-build-tools
   ];
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "DESTINATION \"\''${LXQT_GRAPHICS_DIR}" "DESTINATION \"share/lxqt/graphics"
-    substituteInPlace themes/CMakeLists.txt \
-      --replace "DESTINATION \"\''${LXQT_SHARE_DIR}" "DESTINATION \"share/lxqt"
-  '';
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Themes, graphics and icons for LXQt";
-    homepage = https://github.com/lxqt/lxqt-themes;
+    homepage = "https://github.com/lxqt/lxqt-themes";
     license = licenses.lgpl21;
-    platforms = with platforms; unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
 }

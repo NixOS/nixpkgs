@@ -4,7 +4,8 @@ let
 
   cfg = config.services.uptime;
 
-  configDir = pkgs.runCommand "config" {} (if cfg.configFile != null then ''
+  configDir = pkgs.runCommand "config" { preferLocalBuild = true; }
+  (if cfg.configFile != null then ''
     mkdir $out
     ext=`echo ${cfg.configFile} | grep -o \\..*`
     ln -sv ${cfg.configFile} $out/default$ext
@@ -56,7 +57,7 @@ in {
     nodeEnv = mkOption {
       description = "The node environment to run in (development, production, etc.)";
 
-      type = types.string;
+      type = types.str;
 
       default = "production";
     };

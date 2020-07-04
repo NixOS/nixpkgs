@@ -1,16 +1,17 @@
-{ stdenv, lib, fetchurl, pkgconfig, zlib, expat, openssl, autoconf
+{ config, stdenv, lib, fetchurl, pkgconfig, zlib, expat, openssl, autoconf
 , libjpeg, libpng, libtiff, freetype, fontconfig, libpaper, jbig2dec
-, libiconv, ijs
-, x11Support ? false, xlibsWrapper ? null
-, cupsSupport ? false, cups ? null
+, libiconv, ijs, lcms2, fetchpatch
+, cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin), cups ? null
+, x11Support ? cupsSupport, xlibsWrapper ? null # with CUPS, X11 only adds very little
 }:
 
 assert x11Support -> xlibsWrapper != null;
 assert cupsSupport -> cups != null;
+
 let
   version = "9.${ver_min}";
-  ver_min = "25";
-  sha512 = "18pcqzva7pq2a9mmqf9pq8x4winb6qmzni49vq2qx50k60rwyv1kdmixik3ym2bpj5p1j8g0vb47w7w2cf4lba5q583ylpd8rshn73s";
+  ver_min = "52";
+  sha512 = "1ksm3v4nw8acc4j817n44l1c65ijk0mr3mp4kryy17jz41bmzzql5d8vr40h59n9dmf8b2wmnbq45bj3an1zrpfagavlf0i9s436jjc";
 
   fonts = stdenv.mkDerivation {
     name = "ghostscript-fonts";
@@ -35,16 +36,20 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "ghostscript-${version}";
+  pname = "ghostscript";
+  inherit version;
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${ver_min}/${name}.tar.xz";
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${ver_min}/${pname}-${version}.tar.xz";
     inherit sha512;
   };
 
   patches = [
     ./urw-font-files.patch
     ./doc-no-ref.diff
+    # rebased version of upstream http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=1b4c3669a20c,
+    # Remove on update to version > 9.52
+    ./0001-Bug-702364-Fix-missing-echogs-dependencies.patch
   ];
 
   outputs = [ "out" "man" "doc" ];
@@ -55,30 +60,33 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ zlib expat openssl
       libjpeg libpng libtiff freetype fontconfig libpaper jbig2dec
-      libiconv ijs
+      libiconv ijs lcms2
     ]
     ++ lib.optional x11Support xlibsWrapper
     ++ lib.optional cupsSupport cups
     ;
-  # No lcms2; upstream "is in process of forking it" and thus won't use one from a library.
 
   preConfigure = ''
     # requires in-tree (heavily patched) openjpeg
-    rm -rf jpeg libpng zlib jasper expat tiff lcms{,2} jbig2dec freetype cups/libs ijs
+    rm -rf jpeg libpng zlib jasper expat tiff lcms2mt jbig2dec freetype cups/libs ijs
 
     sed "s@if ( test -f \$(INCLUDE)[^ ]* )@if ( true )@; s@INCLUDE=/usr/include@INCLUDE=/no-such-path@" -i base/unix-aux.mak
     sed "s@^ZLIBDIR=.*@ZLIBDIR=${zlib.dev}/include@" -i configure.ac
 
     autoconf
-  '' + lib.optionalString cupsSupport ''
-    configureFlags="$configureFlags --with-cups-serverbin=$out/lib/cups --with-cups-serverroot=$out/etc/cups --with-cups-datadir=$out/share/cups"
   '';
 
-  configureFlags =
-    [ "--with-system-libtiff"
-      "--enable-dynamic"
-    ] ++ lib.optional x11Support "--with-x"
-      ++ lib.optional cupsSupport "--enable-cups";
+  configureFlags = [
+    "--with-system-libtiff"
+    "--enable-dynamic"
+  ]
+  ++ lib.optional x11Support "--with-x"
+  ++ lib.optionals cupsSupport [
+    "--enable-cups"
+    "--with-cups-serverbin=$(out)/lib/cups"
+    "--with-cups-serverroot=$(out)/etc/cups"
+    "--with-cups-datadir=$(out)/share/cups"
+  ];
 
   doCheck = true;
 
@@ -108,7 +116,7 @@ stdenv.mkDerivation rec {
   passthru = { inherit version; };
 
   meta = {
-    homepage = https://www.ghostscript.com/;
+    homepage = "https://www.ghostscript.com/";
     description = "PostScript interpreter (mainline version)";
 
     longDescription = ''

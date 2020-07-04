@@ -1,24 +1,32 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv
+, fetchFromGitHub
+, deepin
+}:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "go-dbus-factory";
-  version = "0.0.7.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0gj2xxv45gh7wr5ry3mcsi46kdsyq9nbd7znssn34kapiv40ixcx";
+    sha256 = "06fqyad9f50gcjsjkh7929yyaprahdjhnd0dr4gl2797a7wysl3f";
   };
 
   makeFlags = [
-    "PREFIX=$(out)"
+    "PREFIX=${placeholder "out"}"
   ];
+
+  postPatch = ''
+    sed -i -e 's:/share/gocode:/share/go:' Makefile
+  '';
+
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "GoLang DBus factory for the Deepin Desktop Environment";
-    homepage = https://github.com/linuxdeepin/go-dbus-factory;
+    homepage = "https://github.com/linuxdeepin/go-dbus-factory";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

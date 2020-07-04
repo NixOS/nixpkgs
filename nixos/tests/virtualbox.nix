@@ -1,6 +1,21 @@
-{ system ? builtins.currentSystem, debug ? false, enableUnfree ? false }:
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; },
+  debug ? false,
+  enableUnfree ? false,
+  # Nested KVM virtualization (https://www.linux-kvm.org/page/Nested_Guests)
+  # requires a modprobe flag on the build machine: (kvm-amd for AMD CPUs)
+  #   boot.extraModprobeConfig = "options kvm-intel nested=Y";
+  # Without this VirtualBox will use SW virtualization and will only be able
+  # to run 32-bit guests.
+  useKvmNestedVirt ? false,
+  # Whether to run 64-bit guests instead of 32-bit. Requires nested KVM.
+  use64bitGuest ? false
+}:
 
-with import ../lib/testing.nix { inherit system; };
+assert use64bitGuest -> useKvmNestedVirt;
+
+with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -8,7 +23,7 @@ let
     guestAdditions = pkgs.linuxPackages.virtualboxGuestAdditions;
 
     miniInit = ''
-      #!${pkgs.stdenv.shell} -xe
+      #!${pkgs.runtimeShell} -xe
       export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.utillinux ]}"
 
       mkdir -p /run/dbus
@@ -43,9 +58,6 @@ let
       "init=${pkgs.writeScript "mini-init.sh" miniInit}"
     ];
 
-    # XXX: Remove this once TSS location detection has been fixed in VirtualBox
-    boot.kernelPackages = pkgs.linuxPackages_4_9;
-
     fileSystems."/" = {
       device = "vboxshare";
       fsType = "vboxsf";
@@ -68,7 +80,7 @@ let
       touch /mnt-root/boot-done
       hostname "${vmName}"
       mkdir -p /nix/store
-      unshare -m ${escapeShellArg pkgs.stdenv.shell} -c '
+      unshare -m ${escapeShellArg pkgs.runtimeShell} -c '
         mount -t vboxsf nixstore /nix/store
         exec "$stage2Init"
       '
@@ -89,7 +101,7 @@ let
 
   testVM = vmName: vmScript: let
     cfg = (import ../lib/eval-config.nix {
-      system = "i686-linux";
+      system = if use64bitGuest then "x86_64-linux" else "i686-linux";
       modules = [
         ../modules/profiles/minimal.nix
         (testVMConfig vmName vmScript)
@@ -136,7 +148,7 @@ let
     sharePath = "/home/alice/vboxshare-${name}";
 
     createFlags = mkFlags [
-      "--ostype Linux26"
+      "--ostype ${if use64bitGuest then "Linux26_64" else "Linux26"}"
       "--register"
     ];
 
@@ -341,8 +353,10 @@ let
         vmConfigs = mapAttrsToList mkVMConf vms;
       in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
       virtualisation.memorySize = 2048;
+      virtualisation.qemu.options =
+        if useKvmNestedVirt then ["-cpu" "kvm64,vmx=on"] else [];
       virtualisation.virtualbox.host.enable = true;
-      services.xserver.displayManager.auto.user = "alice";
+      test-support.displayManager.auto.user = "alice";
       users.users.alice.extraGroups = let
         inherit (config.virtualisation.virtualbox.host) enableHardening;
       in lib.mkIf enableHardening (lib.singleton "vboxusers");
@@ -374,7 +388,7 @@ let
     '';
 
     meta = with pkgs.stdenv.lib.maintainers; {
-      maintainers = [ aszlig wkennington cdepillabout ];
+      maintainers = [ aszlig cdepillabout ];
     };
   };
 
@@ -407,9 +421,14 @@ in mapAttrs (mkVBoxTest false vboxVMs) {
     );
     $machine->sleep(5);
     $machine->screenshot("gui_manager_started");
+    # Home to select Tools, down to move to the VM, enter to start it.
+    $machine->sendKeys("home");
+    $machine->sendKeys("down");
     $machine->sendKeys("ret");
     $machine->screenshot("gui_manager_sent_startup");
     waitForStartup_simple (sub {
+      $machine->sendKeys("home");
+      $machine->sendKeys("down");
       $machine->sendKeys("ret");
     });
     $machine->screenshot("gui_started");

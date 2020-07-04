@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "firehol-${version}";
+  pname = "firehol";
   version = "3.1.6";
 
   src = fetchFromGitHub {
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
       FireHOL, an iptables stateful packet filtering firewall for humans!
       FireQOS, a TC based bandwidth shaper for humans!
     '';
-    homepage = https://firehol.org/;
+    homepage = "https://firehol.org/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ geistesk ];
     platforms = platforms.linux;

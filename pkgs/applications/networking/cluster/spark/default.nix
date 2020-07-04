@@ -1,32 +1,25 @@
 { stdenv, fetchzip, makeWrapper, jre, pythonPackages, coreutils, hadoop
 , RSupport? true, R
 , mesosSupport ? true, mesos
-, version
 }:
-
-let
-  sha256 = {
-    "1.6.3" = "142hw73wf20d846l83ydx0yg7qj5qxywm4h7qrhwnd7lsy2sbnjf";
-    "2.2.1" = "10nxsf9a6hj1263sxv0cbdqxdb8mb4cl6iqq32ljq9ydvk32s99c";
-  }.${version};
-in
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
 
-  name = "spark-${version}";
+  pname = "spark";
+  version = "2.4.4";
 
   src = fetchzip {
-    inherit sha256;
-    url    = "mirror://apache/spark/${name}/${name}-bin-without-hadoop.tgz";
+    url    = "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
+    sha256 = "1a9w5k0207fysgpxx6db3a00fs5hdc2ncx99x4ccy2s0v5ndc66g"; 
   };
 
   buildInputs = [ makeWrapper jre pythonPackages.python pythonPackages.numpy ]
     ++ optional RSupport R
     ++ optional mesosSupport mesos;
 
-  untarDir = "${name}-bin-without-hadoop";
+  untarDir = "${pname}-${version}-bin-without-hadoop";
   installPhase = ''
     mkdir -p $out/{lib/${untarDir}/conf,bin,/share/java}
     mv * $out/lib/${untarDir}
@@ -61,6 +54,6 @@ stdenv.mkDerivation rec {
     license          = stdenv.lib.licenses.asl20;
     platforms        = stdenv.lib.platforms.all;
     maintainers      = with maintainers; [ thoughtpolice offline kamilchm ];
-    repositories.git = git://git.apache.org/spark.git;
+    repositories.git = "git://git.apache.org/spark.git";
   };
 }

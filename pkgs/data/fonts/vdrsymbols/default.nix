@@ -1,9 +1,9 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
-fetchzip rec {
+fetchzip {
   name = "vdrsymbols-20100612";
 
-  url = http://andreas.vdr-developer.org/fonts/download/vdrsymbols-ttf-20100612.tgz;
+  url = "http://andreas.vdr-developer.org/fonts/download/vdrsymbols-ttf-20100612.tgz";
 
   sha256 = "0wpxns8zqic98c84j18dr4zmj092v07yq07vwwgzblr0rw9n6gzr";
 
@@ -12,9 +12,9 @@ fetchzip rec {
     install -Dm444 -t "$out/share/fonts/truetype" */*.ttf
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "DejaVu fonts with additional symbols used by VDR";
-    homepage = http://andreas.vdr-developer.org/fonts/;
+    homepage = "http://andreas.vdr-developer.org/fonts/";
     platforms = platforms.all;
     maintainers = with maintainers; [ ck3d ];
 

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, kernel }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, kernel }:
 
 
 # Upstream build for kernel 4.1 is broken, 3.12 and below seems to be working
@@ -6,13 +6,13 @@ assert lib.versionAtLeast kernel.version  "4.2" || lib.versionOlder kernel.versi
 
 stdenv.mkDerivation rec {
   name = "exfat-nofuse-${version}-${kernel.version}";
-  version = "2018-04-16";
+  version = "2019-09-06";
 
   src = fetchFromGitHub {
-    owner = "dorimanx";
+    owner = "AdrianBan";
     repo = "exfat-nofuse";
-    rev = "01c30ad52625a7261e1b0d874553b6ca7af25966";
-    sha256 = "0n1ibamf1yj8iqapc86lfscnky9p07ngsi4f2kpv3d5r2s6mzsh6";
+    rev = "5536f067373c196f152061f5000fe0032dc07c48";
+    sha256 = "00mhadsv2iw8z00a6170hwbvk3afx484nn3irmd5f5kmhs34sw7k";
   };
 
   hardeningDisable = [ "pic" ];
@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "ARCH=${stdenv.hostPlatform.platform.kernelArch}"
+  ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
   installPhase = ''
@@ -29,10 +32,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "exfat kernel module";
-    homepage = https://github.com/dorimanx/exfat-nofuse;
+    inherit (src.meta) homepage;
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ makefu ];
     platforms = lib.platforms.linux;
-    broken = stdenv.lib.versionAtLeast kernel.version "4.18";
   };
 }

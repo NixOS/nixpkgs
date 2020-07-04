@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=format-security";
+
   meta = with stdenv.lib; {
     description = "Out of Linux tree packaging of the kconfig infrastructure";
     longDescription = ''
@@ -29,7 +31,7 @@ stdenv.mkDerivation rec {
       types, simple organization of options, and direct and reverse
       dependencies.
     '';
-    homepage = http://ymorin.is-a-geek.org/projects/kconfig-frontends;
+    homepage = "http://ymorin.is-a-geek.org/projects/kconfig-frontends";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ mbe ];

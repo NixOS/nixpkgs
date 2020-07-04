@@ -1,8 +1,8 @@
-{stdenv, fetchzip}:
+{ lib, fetchzip }:
 
 let
   version = "20130214";
-in fetchzip rec {
+in fetchzip {
   name = "caladea-${version}";
 
   url = "https://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/crosextrafonts-${version}.tar.gz";
@@ -15,10 +15,10 @@ in fetchzip rec {
   '';
   sha256 = "0kwm42ggr8kvcn3554cpmv90xzam1sdncx7x3zs3bzp88mxrnv1z";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     # This font doesn't appear to have any official web site but this
     # one provides some good information and samples.
-    homepage = http://openfontlibrary.org/en/font/caladea;
+    homepage = "http://openfontlibrary.org/en/font/caladea";
     description = "A serif font metric-compatible with Microsoft Cambria";
     longDescription = ''
       Caladea is a free font that is metric-compatible with the

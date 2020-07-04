@@ -1,29 +1,32 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, libdrm, libva
+{ stdenv, fetchFromGitHub, meson, ninja, pkg-config
+, libdrm, libva, libX11, libXext, libXfixes, wayland
 }:
 
 stdenv.mkDerivation rec {
-  name = "libva-utils-${version}";
+  pname = "libva-utils";
   inherit (libva) version;
 
   src = fetchFromGitHub {
-    owner  = "01org";
+    owner  = "intel";
     repo   = "libva-utils";
     rev    = version;
-    sha256 = "113wdmi4r0qligizj9zmd4a8ml1996x9g2zp2i4pmhb8frv9m8j2";
+    sha256 = "13a0dccphi4cpr2cx45kg4djxsssi3d1fcjrkx27b16xiayp5lx9";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
 
-  buildInputs = [ libdrm libva ];
-
-  enableParallelBuilding = true;
+  buildInputs = [ libdrm libva libX11 libXext libXfixes wayland ];
 
   meta = with stdenv.lib; {
-    description = "VAAPI tools: Video Acceleration API";
-    homepage = http://www.freedesktop.org/wiki/Software/vaapi;
+    description = "A collection of utilities and examples for VA-API";
+    longDescription = ''
+      libva-utils is a collection of utilities and examples to exercise VA-API
+      in accordance with the libva project.
+    '';
+    homepage = "https://github.com/intel/libva-utils";
+    changelog = "https://raw.githubusercontent.com/intel/libva-utils/${version}/NEWS";
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ primeos ];
     platforms = platforms.unix;
   };
 }

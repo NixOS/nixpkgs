@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "libtmux";
-  version = "0.8.0";
+  version = "0.8.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2b969b507c26d9db08b85be4808d75774b6418ecf5a0f61956f7a1da44519585";
+    sha256 = "0nh6dvf8g93hv7cma6r8l88k8l20zck6a0ax29mrdg03f9hqdk9a";
   };
 
   checkInputs = [ pytest ];
@@ -19,10 +19,8 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Scripting library for tmux";
-    homepage = https://libtmux.readthedocs.io/;
+    homepage = "https://libtmux.readthedocs.io/";
     license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jgeerds ];
+    maintainers = with maintainers; [ ];
   };
 }
-

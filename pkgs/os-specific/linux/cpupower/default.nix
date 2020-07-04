@@ -1,9 +1,8 @@
 { stdenv, buildPackages, kernel, pciutils, gettext }:
 
 stdenv.mkDerivation {
-  name = "cpupower-${kernel.version}";
-
-  src = kernel.src;
+  pname = "cpupower";
+  inherit (kernel) version src;
 
   nativeBuildInputs = [ gettext ];
   buildInputs = [ pciutils ];
@@ -15,24 +14,30 @@ stdenv.mkDerivation {
     sed -i 's,/usr/bin/install,${buildPackages.coreutils}/bin/install,' Makefile
   '';
 
-  makeFlags = [ "CROSS=${stdenv.cc.targetPrefix}" ];
-
-  installFlags = [
-    "bindir=$(out)/bin"
-    "sbindir=$(out)/sbin"
-    "mandir=$(out)/share/man"
-    "includedir=$(out)/include"
-    "libdir=$(out)/lib"
-    "localedir=$(out)/share/locale"
-    "docdir=$(out)/share/doc/cpupower"
-    "confdir=$(out)/etc"
+  makeFlags = [
+    "CROSS=${stdenv.cc.targetPrefix}"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "LD=${stdenv.cc.targetPrefix}cc"
   ];
+
+  installFlags = stdenv.lib.mapAttrsToList
+    (n: v: "${n}dir=${placeholder "out"}/${v}") {
+    bin = "bin";
+    sbin = "sbin";
+    man = "share/man";
+    include = "include";
+    lib = "lib";
+    locale = "share/locale";
+    doc = "share/doc/cpupower";
+    conf = "etc";
+    bash_completion_ = "share/bash-completion/completions";
+  };
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Tool to examine and tune power saving features";
-    homepage = https://www.kernel.org/;
+    homepage = "https://www.kernel.org/";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

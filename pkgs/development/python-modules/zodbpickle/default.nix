@@ -5,18 +5,18 @@
 
 buildPythonPackage rec {
   pname = "zodbpickle";
-  version = "1.0.2";
+  version = "2.0.0";
   disabled = isPyPy; # https://github.com/zopefoundation/zodbpickle/issues/10
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f26e6eba6550ff1575ef2f2831fc8bc0b465f17f9757d0b6c7db55fab5702061";
+    sha256 = "0fb7c7pnz86pcs6qqwlyw72vnijc04ns2h1zfrm0h7yl8q7r7ng0";
   };
 
   # fails..
   doCheck = false;
 
   meta = {
-    homepage = https://pypi.python.org/pypi/zodbpickle;
+    homepage = "https://pypi.python.org/pypi/zodbpickle";
   };
 }

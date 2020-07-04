@@ -4,33 +4,30 @@
 , fetchPypi
 , pythonOlder
 , pytest
-, cython
+, blis
+, catalogue
 , cymem
+, cython
 , darwin
-, msgpack-numpy
-, msgpack-python
-, preshed
-, numpy
-, murmurhash
-, pathlib
 , hypothesis
-, tqdm
-, cytoolz
-, plac
-, six
 , mock
-, termcolor
-, wrapt
-, dill
+, murmurhash
+, numpy
+, pathlib
+, plac
+, preshed
+, srsly
+, tqdm
+, wasabi
 }:
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "6.12.0";
+  version = "7.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0lfdf08v7rrj9b29z2vf8isaqa0zh16acw9im8chkqsh8bay4ykm";
+    sha256 = "17lampllwq50yjl2djs9bs5rp29xw55gqj762npqi3cvvj2glf81";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
@@ -38,48 +35,46 @@ buildPythonPackage rec {
   ]);
 
   propagatedBuildInputs = [
-   cython
+   blis
+   catalogue
    cymem
-   msgpack-numpy
-   msgpack-python
-   preshed
-   numpy
+   cython
    murmurhash
-   pytest
-   hypothesis
-   tqdm
-   cytoolz
+   numpy
    plac
-   six
-   mock
-   termcolor
-   wrapt
-   dill
+   preshed
+   srsly
+   tqdm
+   wasabi
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
 
   checkInputs = [
+    hypothesis
+    mock
     pytest
   ];
 
-  prePatch = ''
-    substituteInPlace setup.py \
-      --replace "pathlib==1.0.1" "pathlib>=1.0.0,<2.0.0" \
-      --replace "plac>=0.9.6,<1.0.0" "plac>=0.9.6" \
-      --replace "wheel>=0.32.0,<0.33.0" "wheel>=0.31.0"
-  '';
-
   # Cannot find cython modules.
   doCheck = false;
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "catalogue>=0.0.7,<1.1.0" "catalogue>=0.0.7,<3.0" \
+      --replace "plac>=0.9.6,<1.2.0" "plac>=0.9.6,<2.0" \
+      --replace "srsly>=0.0.6,<1.1.0" "srsly>=0.0.6,<3.0"
+  '';
 
   checkPhase = ''
     pytest thinc/tests
   '';
 
+  pythonImportsCheck = [ "thinc" ];
+
   meta = with stdenv.lib; {
     description = "Practical Machine Learning for NLP in Python";
-    homepage = https://github.com/explosion/thinc;
+    homepage = "https://github.com/explosion/thinc";
     license = licenses.mit;
-    maintainers = with maintainers; [ aborsu sdll ];
+    maintainers = with maintainers; [ aborsu danieldk sdll ];
     };
 }

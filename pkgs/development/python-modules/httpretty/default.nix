@@ -6,45 +6,54 @@
 , httplib2
 , sure
 , nose
+, nose-exclude
 , coverage
-, certifi
-, urllib3
-, isPy3k
+, rednose
+, nose-randomly
+, six
+, mock
+, eventlet
+, pytest
+, freezegun
 }:
 
 buildPythonPackage rec {
   pname = "httpretty";
-  version = "0.8.10";
-  doCheck = false;
+  version = "1.0.2";
+
+  # drop this for version > 0.9.7
+  # Flaky tests: https://github.com/gabrielfalcao/HTTPretty/pull/394
+  doCheck = stdenv.lib.versionAtLeast version "0.9.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1nmdk6d89z14x3wg4yxywlxjdip16zc8bqnfb471z1365mr74jj7";
+    sha256 = "24a6fd2fe1c76e94801b74db8f52c0fb42718dc4a199a861b305b1a492b9d868";
   };
 
-  buildInputs = [ tornado requests httplib2 sure nose coverage certifi ];
-  propagatedBuildInputs = [ urllib3 ];
+  propagatedBuildInputs = [ six ];
 
-  postPatch = ''
-    sed -i -e 's/==.*$//' *requirements.txt
-    # XXX: Drop this after version 0.8.4 is released.
-    patch httpretty/core.py <<DIFF
-    ***************
-    *** 566 ****
-    !                 'content-length': len(self.body)
-    --- 566 ----
-    !                 'content-length': str(len(self.body))
-    DIFF
+  checkInputs = [ nose sure coverage mock rednose pytest
+    # Following not declared in setup.py
+    nose-randomly requests tornado httplib2 nose-exclude freezegun
+  ];
 
-    # Explicit encoding flag is required with python3, unless locale is set.
-    ${if !isPy3k then "" else
-      "patch -p0 -i ${./setup.py.patch}"}
+  checkPhase = ''
+    nosetests tests/unit # functional tests cause trouble requiring /etc/protocol
   '';
 
+  __darwinAllowLocalNetworking = true;
+
+  # Those flaky tests are failing intermittently on all platforms
+  NOSE_EXCLUDE = stdenv.lib.concatStringsSep "," [
+    "tests.functional.test_httplib2.test_callback_response"
+    "tests.functional.test_requests.test_streaming_responses"
+    "tests.functional.test_httplib2.test_callback_response"
+    "tests.functional.test_requests.test_httpretty_should_allow_adding_and_overwritting_by_kwargs_u2"
+  ];
+
   meta = with stdenv.lib; {
-    homepage = "https://falcao.it/HTTPretty/";
+    homepage = "https://httpretty.readthedocs.org/";
     description = "HTTP client request mocking tool";
     license = licenses.mit;
   };
-
 }

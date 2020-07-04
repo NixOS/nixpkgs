@@ -6,33 +6,42 @@ assert tkremind -> tk != null;
 assert tkremind -> tcllib != null;
 assert tkremind -> makeWrapper != null;
 
-stdenv.mkDerivation rec {
-  name = "remind-3.1.15";
-  src = fetchurl {
-    url = https://www.roaringpenguin.com/files/download/remind-03.01.15.tar.gz;
-    sha256 = "1hcfcxz5fjzl7606prlb7dgls5kr8z3wb51h48s6qm8ang0b9nla";
-  };
-
-  tclLibraries = if tkremind then [ tcllib tk ] else [];
+let
+  inherit (stdenv.lib) optional optionalString;
+  tclLibraries = stdenv.lib.optionals tkremind [ tcllib tk ];
   tclLibPaths = stdenv.lib.concatStringsSep " "
     (map (p: "${p}/lib/${p.libPrefix}") tclLibraries);
+  tkremindPatch = optionalString tkremind ''
+    substituteInPlace scripts/tkremind --replace "exec wish" "exec ${tk}/bin/wish"
+  '';
+in stdenv.mkDerivation {
+  name = "remind-3.1.16";
+  src = fetchurl {
+    url = "https://dianne.skoll.ca/projects/remind/download/remind-03.01.16.tar.gz";
+    sha256 = "14yavwqmimba8rdpwx3wlav9sfb0v5rcd1iyzqrs08wx07a9pdzf";
+  };
 
-  buildInputs = if tkremind then [ makeWrapper ] else [];
+  nativeBuildInputs = optional tkremind makeWrapper;
   propagatedBuildInputs = tclLibraries;
 
-  postPatch = if tkremind then ''
-    substituteInPlace scripts/tkremind --replace "exec wish" "exec ${tk}/bin/wish"
-  '' else "";
+  postPatch = ''
+    substituteInPlace ./configure \
+      --replace "sleep 1" "true"
+    substituteInPlace ./src/init.c \
+      --replace "rkrphgvba(0);" "" \
+      --replace "rkrphgvba(1);" ""
+    ${tkremindPatch}
+  '';
 
-  postInstall = if tkremind then ''
+  postInstall = optionalString tkremind ''
     wrapProgram $out/bin/tkremind --set TCLLIBPATH "${tclLibPaths}"
-  '' else "";
+  '';
 
   meta = {
-    homepage = http://www.roaringpenguin.com/products/remind;
+    homepage = "https://dianne.skoll.ca/projects/remind/";
     description = "Sophisticated calendar and alarm program for the console";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [raskin kovirobi];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

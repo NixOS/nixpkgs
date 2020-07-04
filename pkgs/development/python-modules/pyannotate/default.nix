@@ -3,22 +3,22 @@
 , fetchPypi
 , pythonOlder
 , six
-, mypy_extensions
+, mypy-extensions
 , typing
 , pytest
 }:
 
 buildPythonPackage rec {
-  version = "1.0.6";
+  version = "1.2.0";
   pname = "pyannotate";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dbdc2a26cbf45490a650e976ba45f99abe9ddbf0af5746307914e5ef419e325e";
+    sha256 = "16bm0mf7wxvy0lgmcs1p8n1ji8pnvj1jvj8zk3am70dkp825iv84";
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [ six mypy_extensions ]
+  propagatedBuildInputs = [ six mypy-extensions ]
     ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
 
   checkPhase = ''
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/dropbox/pyannotate;
+    homepage = "https://github.com/dropbox/pyannotate";
     description = "Auto-generate PEP-484 annotations";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

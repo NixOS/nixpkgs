@@ -1,15 +1,29 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, perl, python, libxml2Python, libxslt, which
-, docbook_xml_dtd_43, docbook_xsl, gnome-doc-utils, gettext, itstool
+{ stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, python3
+, docbook_xml_dtd_43
+, docbook_xsl
+, libxslt
+, gettext
+, gnome3
 , withDblatex ? false, dblatex
 }:
 
-stdenv.mkDerivation rec {
-  name = "gtk-doc-${version}";
-  version = "1.28";
+python3.pkgs.buildPythonApplication rec {
+  pname = "gtk-doc";
+  version = "1.32";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/gtk-doc/${version}/${name}.tar.xz";
-    sha256 = "05apmwibkmn1icx05l8aw241lhymcx01zvk5i499cb150bijj7li";
+  format = "other";
+
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = pname;
+    rev = "GTK_DOC_${stdenv.lib.replaceStrings ["."] ["_"] version }";
+    sha256 = "14fihxj662gg4ln1ngff6s52zzkpbcc58qa0nxysxypnhp0h4ypk";
   };
 
   patches = [
@@ -18,32 +32,59 @@ stdenv.mkDerivation rec {
 
   outputDevdoc = "out";
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs =
-    [ pkgconfig perl python libxml2Python libxslt docbook_xml_dtd_43 docbook_xsl
-      gnome-doc-utils gettext which itstool
-    ] ++ stdenv.lib.optional withDblatex dblatex;
+  nativeBuildInputs = [
+    pkg-config
+    gettext
+    meson
+    ninja
+    libxslt # for xsltproc
+  ];
 
-  configureFlags = [ "--disable-scrollkeeper" ];
+  buildInputs = [
+    docbook_xml_dtd_43
+    docbook_xsl
+    libxslt
+  ] ++ stdenv.lib.optionals withDblatex [
+    dblatex
+  ];
 
-  # Make six available for binaries, python.withPackages creates a wrapper
-  # but scripts are not allowed in shebangs so we link it into sys.path.
-  postInstall = ''
-    ln -s ${python.pkgs.six}/${python.sitePackages}/* $out/share/gtk-doc/python/
-  '';
+  pythonPath = with python3.pkgs; [
+    pygments # Needed for https://gitlab.gnome.org/GNOME/gtk-doc/blob/GTK_DOC_1_32/meson.build#L42
+    (anytree.override { withGraphviz = false; })
+    lxml
+  ];
+
+  mesonFlags = [
+    "-Dtests=false"
+    "-Dyelp_manual=false"
+  ];
 
   doCheck = false; # requires a lot of stuff
   doInstallCheck = false; # fails
 
+  postFixup = ''
+    # Do not propagate Python
+    substituteInPlace $out/nix-support/propagated-build-inputs \
+      --replace "${python3}" ""
+  '';
+
+  # find: ‘...-gtk-doc-1.32/lib/python3.8/site-packages’: No such file or directory
+  # https://github.com/NixOS/nixpkgs/pull/90208#issuecomment-644051108
+  dontUsePythonRecompileBytecode = true;
+
   passthru = {
     # Consumers are expected to copy the m4 files to their source tree, let them reuse the patch
     respect_xml_catalog_files_var_patch = ./respect-xml-catalog-files-var.patch;
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
   };
 
   meta = with stdenv.lib; {
-    homepage = https://www.gtk.org/gtk-doc;
-    description = "Tools to extract documentation embedded in GTK+ and GNOME source code";
+    description = "Tools to extract documentation embedded in GTK and GNOME source code";
+    homepage = "https://www.gtk.org/gtk-doc";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ pSub worldofpeace ];
   };
 }

@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool itstool libxml2 wrapGAppsHook ];
   buildInputs = [
     gtk3 glib libid3tag id3lib taglib libvorbis libogg opusfile flac
-    gsettings-desktop-schemas gnome3.defaultIconTheme
+    gsettings-desktop-schemas gnome3.adwaita-icon-theme
   ];
 
   doCheck = false; # fails 1 out of 9 tests
@@ -33,9 +33,9 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "View and edit tags for various audio files";
-    homepage = https://wiki.gnome.org/Apps/EasyTAG;
+    homepage = "https://wiki.gnome.org/Apps/EasyTAG";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

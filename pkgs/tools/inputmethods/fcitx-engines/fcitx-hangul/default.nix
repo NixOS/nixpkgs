@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, fcitx, libhangul, gettext, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "fcitx-hangul-${version}";
+  pname = "fcitx-hangul";
   version = "0.3.1";
 
   src = fetchurl {
-    url = "http://download.fcitx-im.org/fcitx-hangul/${name}.tar.xz";
+    url = "http://download.fcitx-im.org/fcitx-hangul/${pname}-${version}.tar.xz";
     sha256 = "0ds4071ljq620w7vnprm2jl8zqqkw7qsxvzbjapqak4jarczvmbd";
   };
 

@@ -1,13 +1,12 @@
 { stdenv, fetchurl, htslib, zlib, bzip2, lzma, curl, perl, python, bash }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "bcftools";
-  version = "1.9";
+  version = "1.10.2";
 
   src = fetchurl {
-    url = "https://github.com/samtools/bcftools/releases/download/${version}/${name}.tar.bz2";
-    sha256 = "1j3h638i8kgihzyrlnpj82xg1b23sijibys9hvwari3fy7kd0dkg";
+    url = "https://github.com/samtools/bcftools/releases/download/${version}/${pname}-${version}.tar.bz2";
+    sha256 = "0b2f6lqhxdlrvfjqxv7a4nzqj68c1j4avn16iqxwwm80kn302wzm";
   };
 
   buildInputs = [ htslib zlib bzip2 lzma curl perl python ];
@@ -31,8 +30,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Tools for manipulating BCF2/VCF/gVCF format, SNP and short indel sequence variants";
     license = licenses.mit;
-    homepage = http://www.htslib.org/;
+    homepage = "http://www.htslib.org/";
     platforms = platforms.unix;
-    maintainers = [ maintainers.mimadrid ];
+    maintainers = [ maintainers.mimame ];
   };
 }

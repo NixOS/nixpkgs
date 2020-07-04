@@ -1,17 +1,17 @@
 { stdenv, fetchurl, coq }:
 
 stdenv.mkDerivation rec {
-  version = "20180316";
+  version = "20181116";
   name = "coq${coq.coq-version}-tlc-${version}";
 
   src = fetchurl {
     url = "http://tlc.gforge.inria.fr/releases/tlc-${version}.tar.gz";
-    sha256 = "0y8h0x9dfn9dm60j1jkxr9i8lbfqd3ff626wrc9v49qxhi50szqq";
+    sha256 = "0iv6f6zmrv2lhq3xq57ipmw856ahsql754776ymv5wjm88ld63nm";
   };
 
   buildInputs = [ coq ];
 
-  installFlags = "CONTRIB=$(out)/lib/coq/${coq.coq-version}/user-contrib";
+  installFlags = [ "CONTRIB=$(out)/lib/coq/${coq.coq-version}/user-contrib" ];
 
   meta = {
     homepage = "http://www.chargueraud.org/softs/tlc/";
@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    compatibleCoqVersions = v: stdenv.lib.versionAtLeast v "8.6";
+    compatibleCoqVersions = stdenv.lib.flip builtins.elem [ "8.6" "8.7" "8.8" "8.9" "8.10" ];
   };
 }

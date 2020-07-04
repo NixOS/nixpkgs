@@ -1,6 +1,5 @@
 { stdenv, fetchFromGitHub
 , ninja
-, boost
 , meson
 , pkgconfig
 , wrapGAppsHook
@@ -8,11 +7,10 @@
 , desktop-file-utils
 , gtk3
 , gst_all_1
-, gobjectIntrospection
+, gobject-introspection
 , python3Packages
 , file
 , cairo
-, sqlite
 , gettext
 , gnome3
 }:
@@ -21,14 +19,19 @@ python3Packages.buildPythonApplication rec {
 
   format = "other"; # no setup.py
 
-  name = "cozy-${version}";
-  version = "0.6.3";
+  pname = "cozy";
+  version = "0.6.7";
+
+  # Temporary fix
+  # See https://github.com/NixOS/nixpkgs/issues/57029
+  # and https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
 
   src = fetchFromGitHub {
     owner = "geigi";
-    repo = "cozy";
+    repo = pname;
     rev = version;
-    sha256 = "0xs6vzvmx0nvybpjqlrngggv2x8b2ky073slh760iirs1p0dclbc";
+    sha256 = "0f8dyqj6111czn8spgsnic1fqs3kimjwl1b19mw55fa924b9bhsa";
   };
 
   nativeBuildInputs = [
@@ -36,14 +39,14 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook
     appstream-glib
     desktop-file-utils
-    gobjectIntrospection
+    gobject-introspection
   ];
 
   buildInputs = [
     gtk3
     cairo
     gettext
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
   ] ++ (with gst_all_1; [
     gstreamer
     gst-plugins-good
@@ -66,19 +69,13 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace cozy/magic/magic.py --replace "ctypes.util.find_library('magic')" "'${file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
-  checkPhase = ''
-    ninja test
-  '';
-
   postInstall = ''
     ln -s $out/bin/com.github.geigi.cozy $out/bin/cozy
   '';
 
   meta = with stdenv.lib; {
-    description = ''
-       A modern audio book player for Linux using GTK+ 3
-    '';
-    homepage = https://cozy.geigi.de/;
+    description = "A modern audio book player for Linux using GTK 3";
+    homepage = "https://cozy.geigi.de/";
     maintainers = [ maintainers.makefu ];
     license = licenses.gpl3;
   };

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, flex, bison, libmhash, zlib, acl, attr, libselinux, pcre }:
 
 stdenv.mkDerivation rec {
-  name = "aide-${version}";
-  version = "0.16";
+  pname = "aide";
+  version = "0.16.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/aide/${version}/aide-${version}.tar.gz";
-    sha256 = "0ibkv4z2gk14fn014kq13rp2ysiq6nn2cflv2q5i7zf466hm6758";
+    url = "https://github.com/aide/aide/releases/download/v${version}/${pname}-${version}.tar.gz";
+    sha256 = "15xp47sz7kk1ciffw3f5xw2jg2mb2lqrbr3q6p4bkbz5dap9iy8p";
   };
 
   buildInputs = [ flex bison libmhash zlib acl attr libselinux pcre ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     ];
 
   meta = with stdenv.lib; {
-    homepage = http://aide.sourceforge.net/;
+    homepage = "http://aide.sourceforge.net/";
     description = "A file and directory integrity checker";
     license = licenses.free;
     maintainers = [ maintainers.tstrobel ];

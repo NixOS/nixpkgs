@@ -1,11 +1,11 @@
 { stdenv, fetchurl, openssl, cyrus_sasl, db, groff, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "openldap-2.4.46";
+  name = "openldap-2.4.50";
 
   src = fetchurl {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${name}.tgz";
-    sha256 = "0bab1km8f2nan1x0zgwliknbxg0zlf2pafxrr867kblrdfwdr44s";
+    sha256 = "1f46nlfwmys110j36sifm7ah8m8f3s10c3vaiikmmigmifapvdaw";
   };
 
   # TODO: separate "out" and "bin"
@@ -13,22 +13,44 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ openssl cyrus_sasl db groff libtool ];
+  nativeBuildInputs = [ groff ];
 
-  configureFlags =
-    [ "--enable-overlays"
-      "--disable-dependency-tracking"   # speeds up one-time build
-      "--enable-modules"
-      "--sysconfdir=/etc"
-      "--localstatedir=/var"
-      "--enable-crypt"
-    ] ++ stdenv.lib.optional (openssl == null) "--without-tls"
-      ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
-      ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
+  buildInputs = [ openssl cyrus_sasl db libtool ];
+
+  # Disable install stripping as it breaks cross-compiling.
+  # We strip binaries anyway in fixupPhase.
+  makeFlags= [
+    "STRIP="
+    "prefix=$(out)"
+    "moduledir=$(out)/lib/modules"
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ "CC=cc" ];
+
+  configureFlags = [
+    "--enable-overlays"
+    "--disable-dependency-tracking"   # speeds up one-time build
+    "--enable-modules"
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    "--enable-crypt"
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--with-yielding_select=yes"
+    "ac_cv_func_memcmp_working=yes"
+  ] ++ stdenv.lib.optional (openssl == null) "--without-tls"
+    ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
+    ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
+
+  postBuild = ''
+    make $makeFlags -C contrib/slapd-modules/passwd/sha2
+    make $makeFlags -C contrib/slapd-modules/passwd/pbkdf2
+  '';
 
   doCheck = false; # needs a running LDAP server
 
-  installFlags = [ "sysconfdir=$(out)/etc" "localstatedir=$(out)/var" ];
+  installFlags = [
+    "sysconfdir=$(out)/etc"
+    "localstatedir=$(out)/var"
+    "moduledir=$(out)/lib/modules"
+  ];
 
   # 1. Fixup broken libtool
   # 2. Libraries left in the build location confuse `patchelf --shrink-rpath`
@@ -42,14 +64,17 @@ stdenv.mkDerivation rec {
 
     rm -rf $out/var
     rm -r libraries/*/.libs
+    rm -r contrib/slapd-modules/passwd/*/.libs
   '';
 
   postInstall = ''
+    make $installFlags install -C contrib/slapd-modules/passwd/sha2
+    make $installFlags install -C contrib/slapd-modules/passwd/pbkdf2
     chmod +x "$out"/lib/*.{so,dylib}
   '';
 
   meta = with stdenv.lib; {
-    homepage    = http://www.openldap.org/;
+    homepage = "https://www.openldap.org/";
     description = "An open source implementation of the Lightweight Directory Access Protocol";
     license = licenses.openldap;
     maintainers = with maintainers; [ lovek323 ];

@@ -1,35 +1,36 @@
 { stdenv, buildGoPackage, fetchurl, fetchFromGitHub, go-bindata }:
 
 let
-  version = "1.4.13";
+  version = "1.6.4";
 
   # TODO: must build the extension instead of downloading it. But since it's
   # literally an asset that is indifferent regardless of the platform, this
   # might be just enough.
   webext = fetchurl {
     url = "https://github.com/browsh-org/browsh/releases/download/v${version}/browsh-${version}-an.fx.xpi";
-    sha256 = "11477z7mva8lwfxsrfxckvgqkxrjhc80czra8cqhpakf0fih1a4g";
+    sha256 = "1shf1s9s525wns5vrsc4ns21zjxm1si43lx6v0q8ma6vd5x5445l";
   };
 
 in buildGoPackage rec {
   inherit version;
 
-  name = "browsh-${version}";
+  pname = "browsh";
 
   goPackagePath = "browsh";
 
+  # further go package dependencies are defined in deps.nix, see line below.
   src = fetchFromGitHub {
     owner = "browsh-org";
     repo = "browsh";
     rev = "v${version}";
-    sha256 = "0lvb20zziknlbgy509ccpvlc21sqjc53xar26blmb6sdl6yqkj0w";
+    sha256 = "0gvf5k1gm81xxg7ha309kgfkgl5357dli0fbc4z01rmfgbl0rfa0";
   };
 
-  buildInputs = [ go-bindata ];
+  nativeBuildInputs = [ go-bindata ];
 
   # embed the web extension in a go file and place it where it's supposed to
   # be. See
-  # https://github.com/browsh-org/browsh/blob/9abc3aaa3f575ca6ec9a483408d9fdfcf76300fa/interfacer/contrib/xpi2bin.sh
+  # https://github.com/browsh-org/browsh/blob/v1.5.0/interfacer/contrib/xpi2bin.sh
   preBuild = ''
     xpiprefix="$(mktemp -d)"
     cp "${webext}" "$xpiprefix/browsh.xpi"
@@ -52,7 +53,7 @@ in buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "A fully-modern text-based browser, rendering to TTY and browsers";
-    homepage = https://www.brow.sh/;
+    homepage = "https://www.brow.sh/";
     maintainers = [ maintainers.kalbasit ];
     license = stdenv.lib.licenses.lgpl21;
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, qt4, qmake4Hook, AGL }:
 
 stdenv.mkDerivation rec {
-  name = "qwt-6.1.3";
+  name = "qwt-6.1.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/qwt/${name}.tar.bz2";
-    sha256 = "0cwp63s03dw351xavb3pzbjlqvx7kj88wv7v4a2b18m9f97d7v7k";
+    sha256 = "1navkcnmn0qz8kzsyqmk32d929zl72l0b580w1ica7z5559j2a8m";
   };
 
   buildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Qt widgets for technical applications";
-    homepage = http://qwt.sourceforge.net/;
+    homepage = "http://qwt.sourceforge.net/";
     # LGPL 2.1 plus a few exceptions (more liberal)
     license = stdenv.lib.licenses.qwt;
     platforms = platforms.linux ++ platforms.darwin;

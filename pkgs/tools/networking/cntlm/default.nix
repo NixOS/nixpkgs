@@ -1,11 +1,11 @@
 { stdenv, fetchurl, which}:
 
 stdenv.mkDerivation rec {
-  name = "cntlm-${version}";
+  pname = "cntlm";
   version = "0.92.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cntlm/${name}.tar.gz";
+    url = "mirror://sourceforge/cntlm/${pname}-${version}.tar.gz";
     sha256 = "1632szz849wasvh5sm6rm1zbvbrkq35k7kcyvx474gyl4h4x2flw";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "NTLM/NTLMv2 authenticating HTTP proxy";
-    homepage = http://cntlm.sourceforge.net/;
+    homepage = "http://cntlm.sourceforge.net/";
     license = licenses.gpl2;
     maintainers =
       [

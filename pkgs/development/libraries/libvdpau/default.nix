@@ -1,28 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, xorg, libGL_driver }:
+{ stdenv, fetchurl, pkgconfig, xorg, mesa, meson, ninja }:
 
 stdenv.mkDerivation rec {
-  name = "libvdpau-${version}";
-  version = "1.1.1";
+  pname = "libvdpau";
+  version = "1.4";
 
   src = fetchurl {
-    url = "https://people.freedesktop.org/~aplattner/vdpau/${name}.tar.bz2";
-    sha256 = "857a01932609225b9a3a5bf222b85e39b55c08787d0ad427dbd9ec033d58d736";
+    url = "https://gitlab.freedesktop.org/vdpau/libvdpau/-/archive/${version}/${pname}-${version}.tar.bz2";
+    sha256 = "0c1zsfr6ypzwv8g9z50kdahpb7pirarq4z8avqqyyma5b9684n22";
   };
+  patches = [ ./installdir.patch ];
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = with xorg; [ dri2proto libXext ];
+  nativeBuildInputs = [ meson ninja pkgconfig ];
+  buildInputs = with xorg; [ xorgproto libXext ];
 
   propagatedBuildInputs = [ xorg.libX11 ];
 
-  configureFlags = stdenv.lib.optional stdenv.isLinux
-    "--with-module-dir=${libGL_driver.driverLink}/lib/vdpau";
+  mesonFlags = stdenv.lib.optional stdenv.isLinux
+    [ "-Dmoduledir=${mesa.drivers.driverLink}/lib/vdpau" ];
 
-  installFlags = [ "moduledir=$(out)/lib/vdpau" ];
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lX11";
 
   meta = with stdenv.lib; {
-    homepage = https://people.freedesktop.org/~aplattner/vdpau/;
+    homepage = "https://people.freedesktop.org/~aplattner/vdpau/";
     description = "Library to use the Video Decode and Presentation API for Unix (VDPAU)";
     license = licenses.mit; # expat version
     platforms = platforms.unix;

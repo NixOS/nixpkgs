@@ -1,30 +1,28 @@
-{ fetchurl, stdenv, flex, bash, bison, db, iptables, pkgconfig, libelf }:
+{ stdenv, fetchurl
+, buildPackages, bison, flex, pkg-config
+, db, iptables, libelf, libmnl
+}:
 
 stdenv.mkDerivation rec {
-  name = "iproute2-${version}";
-  version = "4.18.0";
+  pname = "iproute2";
+  version = "5.7.0";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/net/iproute2/${name}.tar.xz";
-    sha256 = "0ida5njr9nacg6ym3rjvl3cc9czw0hn4akhzbqf8f4zmjl6cgrm9";
+    url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "088gs56iqhdlpw1iqjwrss4zxd4zbl2wl8s2implrrdajjxcfpbj";
   };
 
   preConfigure = ''
-    patchShebangs ./configure
+    # Don't try to create /var/lib/arpd:
     sed -e '/ARPDDIR/d' -i Makefile
-    # Don't build netem tools--they're not installed and require HOSTCC
-    substituteInPlace Makefile --replace " netem " " "
   '';
 
-  outputs = [ "out" "dev"];
+  outputs = [ "out" "dev" ];
 
   makeFlags = [
-    "DESTDIR="
-    "LIBDIR=$(out)/lib"
+    "PREFIX=$(out)"
     "SBINDIR=$(out)/sbin"
-    "MANDIR=$(out)/share/man"
-    "BASH_COMPDIR=$(out)/share/bash-completion/completions"
-    "DOCDIR=$(TMPDIR)/share/doc/${name}" # Don't install docs
+    "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
     "HDRDIR=$(dev)/include/iproute2"
   ];
 
@@ -36,20 +34,17 @@ stdenv.mkDerivation rec {
     "CONFDIR=$(out)/etc/iproute2"
   ];
 
-  buildInputs = [ db iptables libelf ];
-  nativeBuildInputs = [ bison flex pkgconfig ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ]; # netem requires $HOSTCC
+  nativeBuildInputs = [ bison flex pkg-config ];
+  buildInputs = [ db iptables libelf libmnl ];
 
   enableParallelBuilding = true;
 
-  postInstall = ''
-    PATH=${bash}/bin:$PATH patchShebangs $out/sbin
-  '';
-
   meta = with stdenv.lib; {
-    homepage = https://wiki.linuxfoundation.org/networking/iproute2;
+    homepage = "https://wiki.linuxfoundation.org/networking/iproute2";
     description = "A collection of utilities for controlling TCP/IP networking and traffic control in Linux";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ eelco wkennington fpletz ];
+    maintainers = with maintainers; [ primeos eelco fpletz globin ];
   };
 }

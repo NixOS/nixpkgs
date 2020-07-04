@@ -2,16 +2,12 @@
 , lib
 , makeWrapper
 , sage-env
-, sage-src
-, openblasCompat
-, openblas-blas-pc
-, openblas-cblas-pc
-, openblas-lapack-pc
+, blas
+, lapack
 , pkg-config
 , three
 , singular
-, libgap
-, gap-libgap-compatible
+, gap
 , giac
 , maxima-ecl
 , pari
@@ -26,21 +22,23 @@
 , pythonEnv
 }:
 
+# lots of segfaults with (64 bit) blas
+assert (!blas.isILP64) && (!lapack.isILP64);
+
+# Wrapper that combined `sagelib` with `sage-env` to produce an actually
+# executable sage. No tests are run yet and no documentation is built.
+
 let
   buildInputs = [
     pythonEnv # for patchShebangs
     makeWrapper
     pkg-config
-    openblasCompat # lots of segfaults with regular (64 bit) openblas
-    openblas-blas-pc
-    openblas-cblas-pc
-    openblas-lapack-pc
+    blas lapack
     singular
     three
     pynac
     giac
-    libgap
-    gap-libgap-compatible
+    gap
     pari
     gmp
     gfan
@@ -65,7 +63,7 @@ let
 
   # return the names of all dependencies in the transitive closure
   transitiveClosure = dep:
-  if isNull dep then
+  if dep == null then
     # propagatedBuildInputs might contain null
     # (although that might be considered a programming error in the derivation)
     []
@@ -92,12 +90,11 @@ let
   input_names = map (dep: pkg_to_spkg_name dep patch_names) transitiveDeps;
 in
 stdenv.mkDerivation rec {
-  version = sage-src.version;
-  name = "sage-with-env-${version}";
+  version = src.version;
+  pname = "sage-with-env";
+  src = sage-env.lib.src;
 
   inherit buildInputs;
-
-  src = sage-src;
 
   configurePhase = "#do nothing";
 
@@ -106,21 +103,35 @@ stdenv.mkDerivation rec {
     for pkg in ${lib.concatStringsSep " " input_names}; do
       touch "installed/$pkg"
     done
+
+    # threejs version is in format 0.<version>.minor, but sage currently still
+    # relies on installed_packages for the online version of threejs to work
+    # and expects the format r<version>. This is a hotfix for now.
+    # upstream: https://trac.sagemath.org/ticket/26434
+    rm "installed/threejs"*
+    touch "installed/threejs-r${lib.versions.minor three.version}"
   '';
 
   installPhase = ''
     mkdir -p "$out/var/lib/sage"
-    cp -r installed $out/var/lib/sage
+    cp -r installed "$out/var/lib/sage"
 
     mkdir -p "$out/etc"
     # sage tests will try to create this file if it doesn't exist
     touch "$out/etc/sage-started.txt"
 
     mkdir -p "$out/build"
+
+    # the scripts in src/bin will find the actual sage source files using environment variables set in `sage-env`
     cp -r src/bin "$out/bin"
     cp -r build/bin "$out/build/bin"
+
     cp -f '${sage-env}/sage-env' "$out/bin/sage-env"
     substituteInPlace "$out/bin/sage-env" \
       --subst-var-by sage-local "$out"
   '';
+
+  passthru = {
+    env = sage-env;
+  };
 }

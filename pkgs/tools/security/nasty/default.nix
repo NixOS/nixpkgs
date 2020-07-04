@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gpgme }:
 
 stdenv.mkDerivation rec {
-  name = "nasty-${version}";
+  pname = "nasty";
   version = "0.6";
 
   src = fetchurl {
-    url = "https://www.vanheusden.com/nasty/${name}.tgz";
+    url = "https://www.vanheusden.com/nasty/${pname}-${version}.tgz";
     sha256 = "1dznlxr728k1pgy1kwmlm7ivyl3j3rlvkmq34qpwbwbj8rnja1vn";
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     in case you forget or lost it. It is mostly a proof-of-concept: with a different implementation
     this program could be at least 100x faster.
     '';
-    homepage = http://www.vanheusden.com/nasty/;
+    homepage = "http://www.vanheusden.com/nasty/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ davidak ];
     platforms = platforms.unix;

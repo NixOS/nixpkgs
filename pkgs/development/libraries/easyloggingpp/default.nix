@@ -3,13 +3,13 @@
 # add_executable(main src/main.cpp ${EASYLOGGINGPP_PREFIX}/include/easylogging++.cc)
 { stdenv, fetchFromGitHub, cmake, gtest }:
 stdenv.mkDerivation rec {
-  name = "easyloggingpp-${version}";
-  version = "9.96.5";
+  pname = "easyloggingpp";
+  version = "9.96.7";
   src = fetchFromGitHub {
     owner = "muflihun";
     repo = "easyloggingpp";
     rev = "v${version}";
-    sha256 = "03jycliki3h6lc8kci26s6lnx5bap47xsnsjd375qgr9l11g76f5";
+    sha256 = "0nhszn0yyjwpnv7swm4vqs3i7admgbnifi5dvq5h01fk5nc8yjqz";
   };
 
   nativeBuildInputs = [cmake];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     description = "C++ logging library";
-    homepage = https://muflihun.github.io/easyloggingpp/;
+    homepage = "https://muflihun.github.io/easyloggingpp/";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [acowley];
     platforms = stdenv.lib.platforms.all;

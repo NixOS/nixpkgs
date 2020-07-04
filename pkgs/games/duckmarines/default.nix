@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, love, lua, makeWrapper, makeDesktopItem }:
+{ stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
 
 let
   pname = "duckmarines";
@@ -11,8 +11,8 @@ let
 
   desktopItem = makeDesktopItem {
     name = "duckmarines";
-    exec = "${pname}";
-    icon = "${icon}";
+    exec = pname;
+    icon = icon;
     comment = "Duck-themed action puzzle video game";
     desktopName = "Duck Marines";
     genericName = "duckmarines";
@@ -25,21 +25,21 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://github.com/SimonLarsen/${pname}/releases/download/v${version}/${pname}-1.0-love.zip";
-    sha256 = "0fpzbsgrhbwm1lff9gyzh6c9jigw328ngddvrj5w7qmjcm2lv6lv";
+    url = "https://github.com/SimonLarsen/${pname}/releases/download/v${version}/${pname}-1.0c.love";
+    sha256 = "1rvgpkvi4h9zhc4fwb4knhsa789yjcx4a14fi4vqfdyybhvg5sh9";
   };
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ lua love ];
 
-  phases = [ "unpackPhase" "installPhase" ];
+  phases = [ "installPhase" ];
 
   installPhase =
   ''
     mkdir -p $out/bin
     mkdir -p $out/share/games/lovegames
 
-    cp -v ./${pname}-1.0.love $out/share/games/lovegames/${pname}.love
+    cp -v ${src} $out/share/games/lovegames/${pname}.love
 
     makeWrapper ${love}/bin/love $out/bin/${pname} --add-flags $out/share/games/lovegames/${pname}.love
 
@@ -52,8 +52,9 @@ stdenv.mkDerivation rec {
     description = "Duck-themed action puzzle video game";
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
+    hydraPlatforms = [];
     license = licenses.free;
-    downloadPage = http://tangramgames.dk/games/duckmarines;
+    downloadPage = "http://tangramgames.dk/games/duckmarines";
   };
 
 }

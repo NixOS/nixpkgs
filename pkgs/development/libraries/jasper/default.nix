@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, fetchpatch, libjpeg, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "jasper-${version}";
-  version = "2.0.14";
+  pname = "jasper";
+  version = "2.0.16";
 
   src = fetchFromGitHub {
     repo = "jasper";
     owner = "mdadams";
     rev = "version-${version}";
-    sha256 = "0aarg8nbik9wrm7fx0451sbm5ypfdfr6i169pxzi354mpdp8gg7f";
+    sha256 = "05l75yd1zsxwv25ykwwwjs8961szv7iywf16nc6vc6qpby27ckv6";
   };
 
   patches = [
@@ -37,9 +37,15 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.ece.uvic.ca/~frodo/jasper/;
+    homepage = "https://www.ece.uvic.ca/~frodo/jasper/";
     description = "JPEG2000 Library";
     platforms = platforms.unix;
+    license = licenses.jasper;
     maintainers = with maintainers; [ pSub ];
+    knownVulnerabilities = [
+      "Numerous CVE unsolved upstream"
+      "See: https://github.com/NixOS/nixpkgs/pull/57681#issuecomment-475857499"
+      "See: https://github.com/mdadams/jasper/issues/208"
+    ];
   };
 }

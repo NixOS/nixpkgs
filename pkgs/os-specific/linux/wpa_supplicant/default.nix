@@ -4,14 +4,22 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  version = "2.6";
+  version = "2.9";
 
-  name = "wpa_supplicant-${version}";
+  pname = "wpa_supplicant";
 
   src = fetchurl {
-    url = "https://w1.fi/releases/${name}.tar.gz";
-    sha256 = "0l0l5gz3d5j9bqjsbjlfcv4w4jwndllp9fmyai4x9kg6qhs6v4xl";
+    url = "https://w1.fi/releases/${pname}-${version}.tar.gz";
+    sha256 = "05qzak1mssnxcgdrafifxh9w86a4ha69qabkg4bsigk499xyxggw";
   };
+
+  patches = [
+    (fetchurl {
+      name = "CVE-2019-16275.patch";
+      url = "https://w1.fi/security/2019-7/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch";
+      sha256 = "15xjyy7crb557wxpx898b5lnyblxghlij0xby5lmj9hpwwss34dz";
+    })
+  ];
 
   # TODO: Patch epoll so that the dbus actually responds
   # TODO: Figure out how to get privsep working, currently getting SIGBUS
@@ -64,6 +72,9 @@ stdenv.mkDerivation rec {
   '');
 
   preBuild = ''
+    for manpage in wpa_supplicant/doc/docbook/wpa_supplicant.conf* ; do
+      substituteInPlace "$manpage" --replace /usr/share/doc $out/share/doc
+    done
     cd wpa_supplicant
     cp -v defconfig .config
     echo "$extraConfig" >> .config
@@ -78,67 +89,26 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  patches = [
-    ./build-fix.patch
-
-    # KRACKAttack.com
-    (fetchurl {
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0001-hostapd-Avoid-key-reinstallation-in-FT-handshake.patch";
-      sha256 = "02zl2x4pxay666yq18g4f3byccrzipfjbky1ydw62v15h76174aj";
-    })
-    (fetchurl {
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0002-Prevent-reinstallation-of-an-already-in-use-group-ke.patch";
-      sha256 = "1mrmqg00x1bqa43dyhxb14msk74lh3kvr4avni43c3qpfjmlfvfq";
-    })
-    (fetchurl {
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0003-Extend-protection-of-GTK-IGTK-reinstallation-of-WNM-.patch";
-      sha256 = "10byyi8wfpcc8i788ag7ndycd3xvq2iwnssyb3rwf34sfcv5wlyl";
-    })
-    (fetchurl {
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0004-Prevent-installation-of-an-all-zero-TK.patch";
-      sha256 = "02z2rsbh4sw81wsc56xjbblbi76ii0clmpnr1m1szdb1h5s58fkr";
-    })
-    (fetchurl {
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0005-Fix-PTK-rekeying-to-generate-a-new-ANonce.patch";
-      sha256 = "17pbrn5h6l5v14y6gn2yr2knqya9i0n2vyq4ck8hasb00yz8lz0l";
-    })
-    (fetchurl {
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0006-TDLS-Reject-TPK-TK-reconfiguration.patch";
-      sha256 = "19mgcqbdyzm4myi182jcn1rn26xi3jib74cpxbbrx1gaccxlsvar";
-    })
-    (fetchurl { # wpa-supplicant only
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0007-WNM-Ignore-WNM-Sleep-Mode-Response-without-pending-r.patch";
-      sha256 = "0di71j8762dkvr0c7h5mrbkqyfdy8mljvnp0dk2qhbgc9bw7m8f5";
-    })
-    (fetchurl {
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0008-FT-Do-not-allow-multiple-Reassociation-Response-fram.patch";
-      sha256 = "1ca312cixbld70rp12q7h66lnjjxzz0qag0ii2sg6cllgf2hv168";
-    })
-
-    # Unauthenticated EAPOL-Key decryption (CVE-2018-14526)
-    (fetchurl {
-      url = "https://w1.fi/security/2018-1/rebased-v2.6-0001-WPA-Ignore-unauthenticated-encrypted-EAPOL-Key-data.patch";
-      sha256 = "0z0zxc9wrikmvciyqpdhx0l5v7qsd8c6b5ph9h5rniqllpr3q34n";
-    })
-  ];
-
   postInstall = ''
     mkdir -p $out/share/man/man5 $out/share/man/man8
     cp -v "doc/docbook/"*.5 $out/share/man/man5/
     cp -v "doc/docbook/"*.8 $out/share/man/man8/
-    mkdir -p $out/etc/dbus-1/system.d $out/share/dbus-1/system-services $out/etc/systemd/system
+
+    mkdir -p $out/share/dbus-1/system.d $out/share/dbus-1/system-services $out/etc/systemd/system
     cp -v "dbus/"*service $out/share/dbus-1/system-services
     sed -e "s@/sbin/wpa_supplicant@$out&@" -i "$out/share/dbus-1/system-services/"*
-    cp -v dbus/dbus-wpa_supplicant.conf $out/etc/dbus-1/system.d
+    cp -v dbus/dbus-wpa_supplicant.conf $out/share/dbus-1/system.d
     cp -v "systemd/"*.service $out/etc/systemd/system
+
     rm $out/share/man/man8/wpa_priv.8
+    install -Dm444 wpa_supplicant.conf $out/share/doc/wpa_supplicant/wpa_supplicant.conf.example
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://hostap.epitest.fi/wpa_supplicant/;
+    homepage = "https://hostap.epitest.fi/wpa_supplicant/";
     description = "A tool for connecting to WPA and WPA2-protected wireless networks";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ marcweber wkennington ];
+    maintainers = with maintainers; [ marcweber ];
     platforms = platforms.linux;
   };
 }

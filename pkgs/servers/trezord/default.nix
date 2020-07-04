@@ -1,11 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, trezor-udev-rules }:
 
 buildGoPackage rec {
-  name = "trezord-go-${version}";
-  version = "2.0.24";
-
-  # Fixes Cgo related build failures (see https://github.com/NixOS/nixpkgs/issues/25959 )
-  hardeningDisable = [ "fortify" ];
+  pname = "trezord-go";
+  version = "2.0.29";
 
   goPackagePath = "github.com/trezor/trezord-go";
 
@@ -13,14 +10,16 @@ buildGoPackage rec {
     owner  = "trezor";
     repo   = "trezord-go";
     rev    = "v${version}";
-    sha256 = "1fl2d57qqrrwl995w4b2d57rvl2cxxy6afjmcp648hhb3dnmp7c3";
+    sha256 = "1ks1fa0027s3xp0z6qp0dxmayvrb4dwwscfhbx7da0khp153f2cp";
   };
+
+  propagatedBuildInputs = [ trezor-udev-rules ];
 
   meta = with stdenv.lib; {
     description = "TREZOR Communication Daemon aka TREZOR Bridge";
-    homepage = https://trezor.io;
+    homepage = "https://trezor.io";
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ canndrew jb55 maintainers."1000101"];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ canndrew jb55 prusnak mmahut maintainers."1000101" ];
+    platforms = platforms.unix;
   };
 }

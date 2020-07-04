@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, cairo, xorg, gdk_pixbuf, fontconfig, pango, gnome2, atk, gtk2, glib
+{ stdenv, fetchurl, unzip, cairo, xorg, gdk-pixbuf, fontconfig, pango, gnome2, atk, gtk2, glib
 , freetype, dbus, nss, nspr, alsaLib, cups, expat, udev, makeDesktopItem
 }:
 
@@ -6,7 +6,7 @@ let
   rpath = stdenv.lib.makeLibraryPath [
     cairo
     stdenv.cc.cc
-    gdk_pixbuf
+    gdk-pixbuf
     fontconfig
     pango
     atk
@@ -37,12 +37,12 @@ let
     xorg.libXScrnSaver
   ];
 in stdenv.mkDerivation rec {
-  name = "react-native-debugger-${version}";
-  version = "0.8.1";
+  pname = "react-native-debugger";
+  version = "0.9.10";
 
   src = fetchurl {
     url = "https://github.com/jhen0409/react-native-debugger/releases/download/v${version}/rn-debugger-linux-x64.zip";
-    sha256 = "180rvcnr3xxg7nb5g4b45l9a67h2dx8ps0l05r6ph3f71kzh4dd9";
+    sha256 = "158275sp37smc8lnrcbj56lp7aa6fj9gzb6fzjgz9r980qgzhia6";
   };
 
   buildInputs = [ unzip ];
@@ -75,9 +75,9 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/jhen0409/react-native-debugger;
+    homepage = "https://github.com/jhen0409/react-native-debugger";
     license = licenses.mit;
     description = "The standalone app based on official debugger of React Native, and includes React Inspector / Redux DevTools";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

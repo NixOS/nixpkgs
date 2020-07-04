@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "discogs-client";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9e32b5e45cff41af8025891c71aa3025b3e1895de59b37c11fd203a8af687414";
+    sha256 = "cc979fcbb5283f74d388c7111c8ed6bef920b01614a014d6b1c5d6fbb554bfc3";
   };
 
   propagatedBuildInputs = [ requests oauthlib ];

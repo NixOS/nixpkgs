@@ -1,10 +1,10 @@
 { mkDerivation }:
 
-mkDerivation rec {
-  version = "21.1.1";
-  sha256 = "1kgny4nvw40d93jn5f4y5bcfhdlshg79n2w7lr0xj35kgwkyci39";
+mkDerivation {
+  version = "21.3.8.3";
+  sha256 = "1szybirrcpqsl2nmlmpbkxjqnm6i7l7bma87m5cpwi0kpvlxwmcw";
 
   prePatch = ''
-    substituteInPlace configure.in --replace '`sw_vers -productVersion`' '10.10'
+    substituteInPlace configure.in --replace '`sw_vers -productVersion`' "''${MACOSX_DEPLOYMENT_TARGET:-10.12}"
   '';
 }

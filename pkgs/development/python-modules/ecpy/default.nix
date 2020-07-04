@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "ECPy";
-  version = "0.9.1";
+  version = "1.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f0df66be67f3de0152dfb3c453f4247bdfa2b4e37aa75b98617a637376032229";
+    sha256 = "6dd09f8cda5a1d673228ff9ef41aea8f036ee5ef3183198de83c14957d68c3e0";
   };
 
   propagatedBuildInputs = lib.optional (!isPy3k) future;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pure Pyhton Elliptic Curve Library";
-    homepage = https://github.com/ubinity/ECPy;
+    homepage = "https://github.com/ubinity/ECPy";
     license = licenses.asl20;
   };
 }

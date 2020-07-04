@@ -4,18 +4,20 @@
 , Babel
 , pytz
 , nine
+, nose
 }:
 
 buildPythonPackage rec {
   pname = "Kajiki";
-  version = "0.5.5";
+  version = "0.8.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "effcae388e25c3358eb0bbd733448509d11a1ec500e46c69241fc673021f0517";
+    sha256 = "bbec46b19285d42769d7c4f5a8a0195b72a62b54cd360a26a8875319d58efef6";
   };
 
   propagatedBuildInputs = [ Babel pytz nine ];
+  checkInputs = [ nose ];
 
   meta = with stdenv.lib; {
     description = "Kajiki provides fast well-formed XML templates";

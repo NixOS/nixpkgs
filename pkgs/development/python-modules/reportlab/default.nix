@@ -11,11 +11,11 @@ let
   ft = freetype.overrideAttrs (oldArgs: { dontDisableStatic = true; });
 in buildPythonPackage rec {
   pname = "reportlab";
-  version = "3.5.9";
+  version = "3.5.42";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f92f81314807cd860f29fe07a1a4100b03910ae6bbfca20a07e02c3b460f4f20";
+    sha256 = "9c21f202697a6cea57b9d716288fc919d99cbabeb30222eebfc7ff77eac32744";
   };
 
   checkInputs = [ glibcLocales ];
@@ -26,6 +26,7 @@ in buildPythonPackage rec {
     # Remove all the test files that require access to the internet to pass.
     rm tests/test_lib_utils.py
     rm tests/test_platypus_general.py
+    rm tests/test_platypus_images.py
 
     # Remove the tests that require Vera fonts installed
     rm tests/test_graphics_render.py
@@ -41,6 +42,6 @@ in buildPythonPackage rec {
 
   meta = {
     description = "An Open Source Python library for generating PDFs and graphics";
-    homepage = http://www.reportlab.com/;
+    homepage = "http://www.reportlab.com/";
   };
 }

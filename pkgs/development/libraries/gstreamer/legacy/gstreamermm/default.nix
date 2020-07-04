@@ -4,7 +4,7 @@ let
   ver_maj = "0.10";
   ver_min = "11";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "gstreamermm-${ver_maj}.${ver_min}";
 
   src = fetchurl {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C++ bindings for the GStreamer streaming multimedia library";
-    homepage = https://www.gtkmm.org/;
+    homepage = "https://www.gtkmm.org/";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ plcplc ];
     platforms = platforms.unix;

@@ -1,32 +1,93 @@
-{ stdenv, meson, ninja, gettext, fetchurl, pkgconfig, gtk, glib, icu
-, wrapGAppsHook, gnome3, libxml2, libxslt, itstool
-, webkitgtk, libsoup, glib-networking, libsecret, gnome-desktop, libnotify, p11-kit
-, sqlite, gcr, isocodes, desktop-file-utils, python3
-, gdk_pixbuf, gst_all_1, json-glib }:
+{ stdenv
+, meson
+, ninja
+, gettext
+, fetchurl
+, pkgconfig
+, gtk3
+, glib
+, icu
+, wrapGAppsHook
+, gnome3
+, libxml2
+, libxslt
+, itstool
+, webkitgtk
+, libsoup
+, glib-networking
+, libsecret
+, gnome-desktop
+, libnotify
+, p11-kit
+, sqlite
+, gcr
+, isocodes
+, desktop-file-utils
+, python3
+, nettle
+, gdk-pixbuf
+, gst_all_1
+, json-glib
+, libdazzle
+, libhandy
+, buildPackages
+}:
 
 stdenv.mkDerivation rec {
-  name = "epiphany-${version}";
-  version = "3.28.3.1";
+  pname = "epiphany";
+  version = "3.36.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/epiphany/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1xz6xl6b0iihvczyr0cs1z5ifvpai6anb4m0ng1caiph06klc1b9";
+    url = "mirror://gnome/sources/epiphany/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0vz1j6yrjv0nmf5lk8prkkm10fbcmd35khy9zsd7d4a86wk5c6v2";
   };
 
   # Tests need an X display
-  mesonFlags = [ "-Dunit_tests=false" ];
+  mesonFlags = [
+    "-Dunit_tests=disabled"
+  ];
 
   nativeBuildInputs = [
-    meson ninja libxslt pkgconfig itstool gettext wrapGAppsHook desktop-file-utils python3
+    desktop-file-utils
+    gettext
+    itstool
+    libxslt
+    meson
+    ninja
+    pkgconfig
+    python3
+    wrapGAppsHook
+    buildPackages.glib
+    buildPackages.gtk3
   ];
 
   buildInputs = [
-    gtk glib webkitgtk libsoup libxml2 libsecret gnome-desktop libnotify
-    sqlite isocodes p11-kit icu
-    gdk_pixbuf gnome3.defaultIconTheme gcr
-    glib-networking gst_all_1.gstreamer gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-libav json-glib
+    gcr
+    gdk-pixbuf
+    glib
+    glib-networking
+    gnome-desktop
+    gnome3.adwaita-icon-theme
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gstreamer
+    gtk3
+    icu
+    isocodes
+    json-glib
+    libdazzle
+    libhandy
+    libnotify
+    libsecret
+    libsoup
+    libxml2
+    nettle
+    p11-kit
+    sqlite
+    webkitgtk
   ];
 
   postPatch = ''
@@ -36,14 +97,14 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = "epiphany";
+      packageName = pname;
     };
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Epiphany;
+    homepage = "https://wiki.gnome.org/Apps/Epiphany";
     description = "WebKit based web browser for GNOME";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

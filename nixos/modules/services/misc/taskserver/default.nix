@@ -48,7 +48,7 @@ let
     type = types.nullOr types.int;
     default = null;
     example = 365;
-    apply = val: if isNull val then -1 else val;
+    apply = val: if val == null then -1 else val;
     description = mkAutoDesc ''
       The expiration time of ${desc} in days or <literal>null</literal> for no
       expiration time.
@@ -82,7 +82,7 @@ let
          then attrByPath newPath (notFound newPath) cfg.pki.manual
          else findPkiDefinitions newPath val;
     in flatten (mapAttrsToList mkSublist attrs);
-  in all isNull (findPkiDefinitions [] manualPkiOptions);
+  in all (x: x == null) (findPkiDefinitions [] manualPkiOptions);
 
   orgOptions = { ... }: {
     options.users = mkOption {
@@ -109,7 +109,7 @@ let
   nixos-taskserver = pkgs.pythonPackages.buildPythonApplication {
     name = "nixos-taskserver";
 
-    src = pkgs.runCommand "nixos-taskserver-src" {} ''
+    src = pkgs.runCommand "nixos-taskserver-src" { preferLocalBuild = true; } ''
       mkdir -p "$out"
       cat "${pkgs.substituteAll {
         src = ./helper-tool.py;
@@ -368,16 +368,16 @@ in {
     (mkIf cfg.enable {
       environment.systemPackages = [ nixos-taskserver ];
 
-      users.users = optional (cfg.user == "taskd") {
-        name = "taskd";
-        uid = config.ids.uids.taskd;
-        description = "Taskserver user";
-        group = cfg.group;
+      users.users = optionalAttrs (cfg.user == "taskd") {
+        taskd = {
+          uid = config.ids.uids.taskd;
+          description = "Taskserver user";
+          group = cfg.group;
+        };
       };
 
-      users.groups = optional (cfg.group == "taskd") {
-        name = "taskd";
-        gid = config.ids.gids.taskd;
+      users.groups = optionalAttrs (cfg.group == "taskd") {
+        taskd.gid = config.ids.gids.taskd;
       };
 
       services.taskserver.config = {
@@ -411,7 +411,7 @@ in {
         } else {
           cert = "${cfg.pki.manual.server.cert}";
           key = "${cfg.pki.manual.server.key}";
-          crl = "${cfg.pki.manual.server.crl}";
+          ${mapNullable (_: "crl") cfg.pki.manual.server.crl} = "${cfg.pki.manual.server.crl}";
         });
 
         ca.cert = if needToCreateCA then "${cfg.dataDir}/keys/ca.cert"

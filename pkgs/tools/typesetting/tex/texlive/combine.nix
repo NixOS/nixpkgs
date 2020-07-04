@@ -15,11 +15,11 @@ let
   pkgList = rec {
     all = lib.filter pkgFilter (combinePkgs pkgSet);
     splitBin = builtins.partition (p: p.tlType == "bin") all;
-    bin = mkUniquePkgs splitBin.right
+    bin = mkUniqueOutPaths splitBin.right
       ++ lib.optional
           (lib.any (p: p.tlType == "run" && p.pname == "pdfcrop") splitBin.wrong)
           (lib.getBin ghostscript);
-    nonbin = mkUniquePkgs splitBin.wrong;
+    nonbin = mkUniqueOutPaths splitBin.wrong;
 
     # extra interpreters needed for shebangs, based on 2015 schemes "medium" and "tetex"
     # (omitted tk needed in pname == "epspdf", bin/epspdftk)
@@ -31,9 +31,16 @@ let
       ++ lib.optional (lib.any pkgNeedsRuby splitBin.wrong) ruby;
   };
 
-  mkUniquePkgs = pkgs: fastUnique (a: b: a < b) # highlighting hack: >
-    # here we deal with those dummy packages needed for hyphenation filtering
-    (map (p: if lib.isDerivation p then p.outPath else "") pkgs);
+  # TODO: replace by buitin once it exists
+  fastUnique = comparator: list: with lib;
+    let un_adj = l: if length l < 2 then l
+      else optional (head l != elemAt l 1) (head l) ++ un_adj (tail l);
+    in un_adj (lib.sort comparator list);
+
+  uniqueStrings = fastUnique (a: b: a < b);
+
+  mkUniqueOutPaths = pkgs: uniqueStrings
+    (map (p: p.outPath) (builtins.filter lib.isDerivation pkgs));
 
 in buildEnv {
   name = "texlive-${extraName}-${bin.texliveYear}";
@@ -42,6 +49,10 @@ in buildEnv {
 
   ignoreCollisions = false;
   paths = pkgList.nonbin;
+  pathsToLink = [
+    "/"
+    "/tex/generic/config" # make it a real directory for scheme-infraonly
+  ];
 
   buildInputs = [ makeWrapper ] ++ pkgList.extraInputs;
 
@@ -61,26 +72,16 @@ in buildEnv {
       '')
       pkgList.bin
     +
-
-    # Patch texlinks.sh back to 2015 version;
-    # otherwise some bin/ links break, e.g. xe(la)tex.
-  ''
-    (
-      cd "$out/share/texmf/scripts/texlive"
-      local target="$(readlink texlinks.sh)"
-      rm texlinks.sh && cp "$target" texlinks.sh
-      patch --verbose -R texlinks.sh < '${./texlinks.diff}'
-    )
-  '' +
   ''
     export PATH="$out/bin:$out/share/texmf/scripts/texlive:${perl}/bin:$PATH"
     export TEXMFCNF="$out/share/texmf/web2c"
     export TEXMFDIST="$out/share/texmf"
     export TEXMFSYSCONFIG="$out/share/texmf-config"
     export TEXMFSYSVAR="$out/share/texmf-var"
-    export PERL5LIB="$out/share/texmf/scripts/texlive"
+    export PERL5LIB="$out/share/texmf/scripts/texlive:${bin.core.out}/share/texmf-dist/scripts/texlive"
   '' +
-    # patch texmf-{dist,local} -> texmf to be sure
+    # patch texmf-dist  -> $out/share/texmf
+    # patch texmf-local -> $out/share/texmf-local
     # TODO: perhaps do lua actions?
     # tried inspiration from install-tl, sub do_texmf_cnf
   ''
@@ -92,8 +93,7 @@ in buildEnv {
         rm ./texmfcnf.lua
         sed \
           -e 's,texmf-dist,texmf,g' \
-          -e 's,texmf-local,texmf,g' \
-          -e "s,\(TEXMFLOCAL[ ]*=[ ]*\)[^\,]*,\1\"$out/share/texmf\",g" \
+          -e "s,\(TEXMFLOCAL[ ]*=[ ]*\)[^\,]*,\1\"$out/share/texmf-local\",g" \
           -e "s,\$SELFAUTOLOC,$out,g" \
           -e "s,selfautodir:/,$out/share/,g" \
           -e "s,selfautodir:,$out/share/,g" \
@@ -109,7 +109,6 @@ in buildEnv {
       rm ./texmf.cnf
       sed \
         -e 's,texmf-dist,texmf,g' \
-        -e 's,texmf-local,texmf,g' \
         -e "s,\$SELFAUTOLOC,$out,g" \
         -e "s,\$SELFAUTODIR,$out/share,g" \
         -e "s,\$SELFAUTOPARENT,$out/share,g" \
@@ -119,16 +118,19 @@ in buildEnv {
 
       patchCnfLua "./texmfcnf.lua"
 
-      rm updmap.cfg
+      mkdir $out/share/texmf-local
     )
   '' +
-    # updmap.cfg seems like not needing changes
-
     # now filter hyphenation patterns, in a hacky way ATM
-  (let script =
-    writeText "hyphens.sed" (
-      lib.concatMapStrings (pkg: "/^\% from ${pkg.pname}/,/^\%/p;\n") pkgList.splitBin.wrong
-      + "1,/^\% from/p;" );
+  (let
+    pnames = uniqueStrings (map (p: p.pname) pkgList.splitBin.wrong);
+    script =
+      writeText "hyphens.sed" (
+        # pick up the header
+        "1,/^% from/p;"
+        # pick up all sections matching packages that we combine
+        + lib.concatMapStrings (pname: "/^% from ${pname}:$/,/^%/p;\n") pnames
+      );
   in ''
     (
       cd ./share/texmf/tex/generic/config/
@@ -155,7 +157,8 @@ in buildEnv {
       rm "$link"
       makeWrapper "$target" "$link" \
         --prefix PATH : "$out/bin:${perl}/bin" \
-        --prefix PERL5LIB : "$out/share/texmf/scripts/texlive"
+        --prefix PERL5LIB : "$PERL5LIB" \
+        --set-default TEXMFCNF "$TEXMFCNF"
 
       # avoid using non-nix shebang in $target by calling interpreter
       if [[ "$(head -c 2 "$target")" = "#!" ]]; then
@@ -185,9 +188,6 @@ in buildEnv {
   '' +
   # texlive post-install actions
   ''
-    mkdir -p "$out/share/texmf/scripts/texlive/"
-    ln -s '${bin.core.out}/share/texmf-dist/scripts/texlive/TeXLive' "$out/share/texmf/scripts/texlive/"
-
     for tool in updmap; do
       ln -sf "$out/share/texmf/scripts/texlive/$tool."* "$out/bin/$tool"
     done
@@ -200,10 +200,15 @@ in buildEnv {
     ln -sf fmtutil "$out/bin/mktexfmt"
 
     perl `type -P mktexlsr.pl` ./share/texmf
-    texlinks.sh "$out/bin" && wrapBin
+    ${bin.texlinks} "$out/bin" && wrapBin
     (perl `type -P fmtutil.pl` --sys --all || true) | grep '^fmtutil' # too verbose
-    #texlinks.sh "$out/bin" && wrapBin # do we need to regenerate format links?
-    perl `type -P updmap.pl` --sys --syncwithtrees --force
+    #${bin.texlinks} "$out/bin" && wrapBin # do we need to regenerate format links?
+
+    # Disable unavailable map files
+    echo y | perl `type -P updmap.pl` --sys --syncwithtrees --force
+    # Regenerate the map files (this is optional)
+    perl `type -P updmap.pl` --sys --force
+
     perl `type -P mktexlsr.pl` ./share/texmf-* # to make sure
   '' +
     # install (wrappers for) scripts, based on a list from upstream texlive
@@ -218,8 +223,29 @@ in buildEnv {
         ln -sv "$(realpath $s)" "$out/bin/$tName" # wrapped below
       done
     )
+  '' +
+    # A hacky way to provide repstopdf
+    #  * Copy is done to have a correct "$0" so that epstopdf enables the restricted mode
+    #  * ./bin/repstopdf needs to be a symlink to be processed by wrapBin
+  ''
+    if [[ -e ./bin/epstopdf ]]; then
+      cp $(realpath ./bin/epstopdf) ./share/texmf/scripts/repstopdf
+      ln -s "$out"/share/texmf/scripts/repstopdf ./bin/repstopdf
+    fi
+  '' +
+    # finish up the wrappers
+  ''
     rm "$out"/bin/*-sys
     wrapBin
+  '' +
+    # Perform a small test to verify that the restricted mode get enabled when
+    # needed (detected by checking if it disallows --gscmd)
+  ''
+    if [[ -e ./bin/epstopdf ]]; then
+      echo "Testing restricted mode for {,r}epstopdf"
+      ! (epstopdf --gscmd echo /dev/null 2>&1 || true) | grep forbidden
+      (repstopdf --gscmd echo /dev/null 2>&1 || true) | grep forbidden
+    fi
   '' +
   # TODO: a context trigger https://www.preining.info/blog/2015/06/debian-tex-live-2015-the-new-layout/
     # http://wiki.contextgarden.net/ConTeXt_Standalone#Unix-like_platforms_.28Linux.2FMacOS_X.2FFreeBSD.2FSolaris.29

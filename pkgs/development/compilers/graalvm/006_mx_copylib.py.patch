@@ -1,0 +1,14 @@
+diff --git a/mx.fastr/mx_copylib.py b/mx.fastr/mx_copylib.py
+index 4f57e1954..db45220d9 100644
+--- a/mx.fastr/mx_copylib.py
++++ b/mx.fastr/mx_copylib.py
+@@ -54,6 +54,9 @@ def _copylib(lib, libpath, plain_libpath_base, target):
+     else:
+         try:
+             if platform.system() == 'Linux':
++                # https://github.com/oracle/fastr/issues/110
++                if libpath.endswith("libgcc_s.so"):
++                    libpath = libpath + ".1"
+                 output = subprocess.check_output(['objdump', '-p', libpath])
+             elif platform.system() == 'SunOS':
+                 output = subprocess.check_output(['elfdump', '-d', libpath])

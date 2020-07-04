@@ -1,19 +1,16 @@
-{ stdenv, fetchurl, meson, ninja, glib, json-glib, pkgconfig, gobjectIntrospection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_43, gnome3 }:
-let
-  version = "3.28.1";
+{ stdenv, fetchurl, meson, ninja, glib, json-glib, pkgconfig, gobject-introspection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_43, gnome3 }:
+stdenv.mkDerivation rec {
   pname = "jsonrpc-glib";
-in
-stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  version = "3.34.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig gobjectIntrospection vala gtk-doc docbook_xsl docbook_xml_dtd_43 ];
+  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_43 ];
   buildInputs = [ glib json-glib ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0avff2ldjvwrb8rnzlgslagdjf6x7bmdx69rsq20k6f38icw4ang";
+    sha256 = "0j05x4xv2cp3cbmp30m68z8g4rdw7b030ip4wszyfj9ya15v5kni";
   };
 
   mesonFlags = [
@@ -32,9 +29,9 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A library to communicate using the JSON-RPC 2.0 specification";
-    homepage = https://gitlab.gnome.org/GNOME/jsonrpc-glib;
+    homepage = "https://gitlab.gnome.org/GNOME/jsonrpc-glib";
     license = licenses.lgpl21Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "1.9.0";
+  version = "2.6.7";
   inherit (stdenv.lib) optional optionals optionalString;
 in
 
@@ -16,13 +16,17 @@ stdenv.mkDerivation {
   name = "harfbuzz${optionalString withIcu "-icu"}-${version}";
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-${version}.tar.bz2";
-    sha256 = "004b4j812wgfv8pmcypyrlwrjfa6149lwpz5df6rnm5cy0msdv0i";
+    url = "https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-${version}.tar.xz";
+    sha256 = "065jg6s8xix45s4msj0l2r0iycw5yyyjdylripv7pyfzdk883r29";
   };
 
   postPatch = ''
     patchShebangs src/gen-def.py
     patchShebangs test
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    # ApplicationServices.framework headers have cast-align warnings.
+    substituteInPlace src/hb.hh \
+      --replace '#pragma GCC diagnostic error   "-Wcast-align"' ""
   '';
 
   outputs = [ "out" "dev" ];
@@ -60,7 +64,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "An OpenType text shaping engine";
-    homepage = http://www.freedesktop.org/wiki/Software/HarfBuzz;
+    homepage = "http://www.freedesktop.org/wiki/Software/HarfBuzz";
     downloadPage = "https://www.freedesktop.org/software/harfbuzz/release/";
     maintainers = [ maintainers.eelco ];
     license = licenses.mit;

@@ -1,21 +1,27 @@
 { stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, libsodium
-, llvmPackages, clang_39, lzma }:
+, llvmPackages, clang, lzma
+, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "rdedup-${version}";
-  version = "3.0.1";
+  pname = "rdedup";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "dpc";
     repo = "rdedup";
-    rev = "e0f26f379a434f76d238c7a5fa6ddd8ae8b32f19";
-    sha256 = "1nhf8ap0w99aa1h0l599cx90lcvfvjaj67nw9flq9bmmzpn53kp9";
+    rev = "rdedup-v${version}";
+    sha256 = "0y34a3mpghdmcb2rx4z62q0s351bfmy1287d75mm07ryfgglgsd7";
   };
 
-  cargoSha256 = "1x6wchlcxb1frww6y04gfx4idxv9h0g9qfxrhgb6g5qy3bqhqq3p";
+  cargoSha256 = "0akwb7ak4h1i1zk4wcn27zyqjz6mrchs47014xbzw22rj8h8dx92";
 
-  nativeBuildInputs = [ pkgconfig llvmPackages.libclang clang_39 ];
-  buildInputs = [ openssl libsodium lzma ];
+  cargoPatches = [
+    ./v3.1.1-fix-Cargo.lock.patch
+  ];
+
+  nativeBuildInputs = [ pkgconfig llvmPackages.libclang clang ];
+  buildInputs = [ openssl libsodium lzma ]
+    ++ (stdenv.lib.optional stdenv.isDarwin Security);
 
   configurePhase = ''
     export LIBCLANG_PATH="${llvmPackages.libclang}/lib"
@@ -23,9 +29,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Data deduplication with compression and public key encryption";
-    homepage = https://github.com/dpc/rdedup;
+    homepage = "https://github.com/dpc/rdedup";
     license = licenses.mpl20;
     maintainers = with maintainers; [ dywedir ];
     platforms = platforms.all;
+    broken = stdenv.isDarwin;
   };
 }

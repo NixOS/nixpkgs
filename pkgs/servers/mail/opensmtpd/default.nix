@@ -1,29 +1,26 @@
-{ stdenv, lib, fetchurl, fetchpatch, autoconf, automake, libtool, bison
-, libasr, libevent, zlib, libressl, db, pam
+{ stdenv, fetchurl, autoconf, automake, libtool, bison
+, libasr, libevent, zlib, libressl, db, pam, nixosTests
 }:
 
 stdenv.mkDerivation rec {
-  name = "opensmtpd-${version}";
-  version = "6.4.0p1";
+  pname = "opensmtpd";
+  version = "6.7.1p1";
 
   nativeBuildInputs = [ autoconf automake libtool bison ];
   buildInputs = [ libasr libevent zlib libressl db pam ];
 
   src = fetchurl {
-    url = "https://www.opensmtpd.org/archives/${name}.tar.gz";
-    sha256 = "1qxxhnlsmpfh9v4azgl0634955r085gsic1c66jdll21bd5w2mq8";
+    url = "https://www.opensmtpd.org/archives/${pname}-${version}.tar.gz";
+    sha256 = "1jh8vxfajm1mvp1v5yh6llrhjzv0n9fgab88mlwllwqynhcfjy3l";
   };
 
   patches = [
-    ./proc_path.diff
-    ./fix-build.diff # See https://github.com/OpenSMTPD/OpenSMTPD/pull/884
+    ./proc_path.diff # TODO: upstream to OpenSMTPD, see https://github.com/NixOS/nixpkgs/issues/54045
   ];
 
   # See https://github.com/OpenSMTPD/OpenSMTPD/issues/885 for the `sh bootstrap`
   # requirement
   postPatch = ''
-    substituteInPlace smtpd/parse.y \
-      --replace "/usr/libexec/" "$out/libexec/opensmtpd/"
     substituteInPlace mk/smtpctl/Makefile.am --replace "chgrp" "true"
     substituteInPlace mk/smtpctl/Makefile.am --replace "chmod 2555" "chmod 0555"
     sh bootstrap
@@ -53,7 +50,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://www.opensmtpd.org/;
+    homepage = "https://www.opensmtpd.org/";
     description = ''
       A free implementation of the server-side SMTP protocol as defined by
       RFC 5321, with some additional standard extensions
@@ -61,5 +58,8 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     platforms = platforms.linux;
     maintainers = with maintainers; [ rickynils obadz ekleog ];
+  };
+  passthru.tests = {
+    basic-functionality-and-dovecot-interaction = nixosTests.opensmtpd;
   };
 }

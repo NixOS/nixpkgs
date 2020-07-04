@@ -3,12 +3,11 @@
 
 buildPythonPackage rec {
   pname = "GPy";
-  version = "1.9.5";
-  name  = "${pname}-${version}";
+  version = "1.9.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "97519bea69e7d7a703d9575c31d68a7c6f974ae125ee9d4a3e1fb510eadfb97e";
+    sha256 = "04faf0c24eacc4dea60727c50a48a07ddf9b5751a3b73c382105e2a31657c7ed";
   };
 
   # running tests produces "ImportError: cannot import name 'linalg_cython'"
@@ -24,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Gaussian process framework in Python";
-    homepage = https://sheffieldml.github.io/GPy;
+    homepage = "https://sheffieldml.github.io/GPy";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
   };

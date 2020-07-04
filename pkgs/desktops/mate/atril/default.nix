@@ -1,22 +1,23 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libxml2, libsecret, poppler, itstool, hicolor-icon-theme, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, gettext, gtk3, glib, libxml2, libsecret, poppler, itstool, hicolor-icon-theme, texlive, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "atril-${version}";
-  version = "1.20.0";
+  pname = "atril";
+  version = "1.24.0";
 
   src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "1639jxcdhcn5wvb4gj9xncdj5d5c3rnyydwwsgqj66cmfmb53l1n";
+    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0967gxw7h2qh2kpwl0jgv58hicz6aa92kr12mnykbpikad25s95y";
   };
 
   nativeBuildInputs = [
     pkgconfig
-    intltool
+    gettext
     wrapGAppsHook
   ];
 
   buildInputs = [
     gtk3
+    glib
     itstool
     libsecret
     libxml2
@@ -24,14 +25,20 @@ stdenv.mkDerivation rec {
     mate.caja
     mate.mate-desktop
     hicolor-icon-theme
+    texlive.bin.core  # for synctex, used by the pdf back-end
   ];
-  
+
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+
   makeFlags = [ "cajaextensiondir=$$out/lib/caja/extensions-2.0" ];
 
-  meta = {
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
     description = "A simple multi-page document viewer for the MATE desktop";
-    homepage = http://mate-desktop.org;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "https://mate-desktop.org";
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
   };
 }

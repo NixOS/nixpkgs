@@ -1,25 +1,29 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "bazel-buildtools-unstable-${version}";
-  version = "2018-10-11";
+  pname = "bazel-buildtools";
+  version = "3.3.0";
 
   goPackagePath = "github.com/bazelbuild/buildtools";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "buildtools";
-    rev = "86b40b7fee59cc67d3371d20f10702fe8c6dd808";
-    sha256 = "10fzqbafwzv0bvx8aag78gh731k5j9nwlbcflhc5xm5zwhla9cyf";
+    rev = version;
+    sha256 = "0g411gjbm02qd5b50iy6kk81kx2n5zw5x1m6i6g7nrmh38p3pn9k";
   };
 
   goDeps = ./deps.nix;
 
+  excludedPackages = [ "generatetables" ];
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.buildVersion=${version} -X main.buildScmRevision=${src.rev}" ];
+
   meta = with stdenv.lib; {
     description = "Tools for working with Google's bazel buildtool. Includes buildifier, buildozer, and unused_deps.";
-    homepage = https://github.com/bazelbuild/buildtools;
+    homepage = "https://github.com/bazelbuild/buildtools";
     license = licenses.asl20;
-    maintainers = with maintainers; [ uri-canva ];
+    maintainers = with maintainers; [ elasticdog uri-canva marsam ];
     platforms = platforms.all;
   };
 }

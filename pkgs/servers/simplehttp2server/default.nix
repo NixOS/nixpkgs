@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "simplehttp2server-${version}";
+  pname = "simplehttp2server";
   version = "3.1.3";
 
   goPackagePath = "github.com/GoogleChromeLabs/simplehttp2server";
@@ -16,7 +16,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
-     homepage = https://github.com/GoogleChromeLabs/simplehttp2server;
+     homepage = "https://github.com/GoogleChromeLabs/simplehttp2server";
      description = "HTTP/2 server for development purposes";
      license = licenses.asl20;
      maintainers = with maintainers; [ yrashk ];

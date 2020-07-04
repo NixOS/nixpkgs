@@ -3,9 +3,11 @@
 , fetchFromGitHub
 , pulseaudio
 , pkgconfig
-, ffmpeg_4
+, ffmpeg
 , patchelf
+, fdk_aac
 , libtool
+, ldacbt
 , cmake
 , bluez
 , dbus
@@ -21,15 +23,14 @@ let
   '';
 
 in stdenv.mkDerivation rec {
-  name = "pulseaudio-modules-bt-${version}";
-  version = "unstable-2018-10-16";
+  pname = "pulseaudio-modules-bt";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "EHfive";
     repo = "pulseaudio-modules-bt";
-    rev = "552c2b48c0cc7dd44d0746b261f7c7d5559e8e30";
-    sha256 = "052jb1hjx1in7bafx4zpn78s7r6f2y7djriwi36dzqy9wmalmyjy";
-    fetchSubmodules = true;
+    rev = "v${version}";
+    sha256 = "0bzg6x405j39axnkvc6n6vkl1hv1frk94y1i9sl170081bk23asd";
   };
 
   patches = [
@@ -44,8 +45,10 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     pulseaudio
-    ffmpeg_4
+    ffmpeg
+    fdk_aac
     libtool
+    ldacbt
     bluez
     dbus
     sbc
@@ -59,20 +62,24 @@ in stdenv.mkDerivation rec {
     # Pulseaudio version is detected with a -rebootstrapped suffix which build system assumptions
     substituteInPlace config.h.in --replace PulseAudio_VERSION ${pulseaudio.version}
     substituteInPlace CMakeLists.txt --replace '${"\${PulseAudio_VERSION}"}' ${pulseaudio.version}
+
+    # Fraunhofer recommends to enable afterburner but upstream has it set to false by default
+    substituteInPlace src/modules/bluetooth/a2dp/a2dp_aac.c \
+      --replace "info->aac_afterburner = false;" "info->aac_afterburner = true;"
   '';
 
   postFixup = ''
     for so in $out/lib/pulse-${pulseaudio.version}/modules/*.so; do
       orig_rpath=$(patchelf --print-rpath "$so")
       patchelf \
-        --set-rpath "${lib.getLib ffmpeg_4}/lib:$out/lib/pulse-${pulseaudio.version}/modules:$orig_rpath" \
+        --set-rpath "${ldacbt}/lib:${lib.getLib ffmpeg}/lib:$out/lib/pulse-${pulseaudio.version}/modules:$orig_rpath" \
         "$so"
     done
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/EHfive/pulseaudio-modules-bt;
-    description = "SBC, Sony LDAC codec (A2DP Audio) support for Pulseaudio";
+    homepage = "https://github.com/EHfive/pulseaudio-modules-bt";
+    description = "LDAC, aptX, aptX HD, AAC codecs (A2DP Audio) support for Linux PulseAudio";
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ adisbladis ];

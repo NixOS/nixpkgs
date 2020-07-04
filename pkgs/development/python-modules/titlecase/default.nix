@@ -12,7 +12,7 @@ buildPythonPackage rec {
   checkInputs = [ nose ];
 
   meta = {
-    homepage = https://github.com/ppannuto/python-titlecase;
+    homepage = "https://github.com/ppannuto/python-titlecase";
     description = "Python Port of John Gruber's titlecase.pl";
     license = lib.licenses.mit;
   };

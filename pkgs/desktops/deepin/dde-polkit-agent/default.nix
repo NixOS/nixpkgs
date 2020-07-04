@@ -1,22 +1,32 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, qttools, polkit-qt,
-dtkcore, dtkwidget, dde-qt-dbus-factory }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, qmake
+, qttools
+, polkit-qt
+, dtkcore
+, dtkwidget
+, dde-qt-dbus-factory
+, deepin
+}:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "dde-polkit-agent";
-  version = "0.2.1";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1n3hys5hhhd99ycpx4im6ihy53vl9c28z7ls7smn117h3ca4c8wc";
+    sha256 = "00p8syx6rfwhq7wdsk37hm9mvwd0kwj9h0s39hii892h1psd84q9";
   };
 
   nativeBuildInputs = [
     pkgconfig
     qmake
     qttools
+    deepin.setupHook
   ];
 
   buildInputs = [
@@ -27,18 +37,22 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs .
+    searchHardCodedPaths
+    patchShebangs translate_generation.sh
 
-    sed -i dde-polkit-agent.pro polkit-dde-authentication-agent-1.desktop \
-      -e "s,/usr,$out,"
-
-    sed -i pluginmanager.cpp \
-      -e "s,/usr/lib/polkit-1-dde/plugins,/run/current-system/sw/lib/polkit-1-dde/plugins,"
+    fixPath $out /usr dde-polkit-agent.pro polkit-dde-authentication-agent-1.desktop
+    fixPath /run/current-system/sw /usr/lib/polkit-1-dde/plugins pluginmanager.cpp
   '';
+
+  postFixup = ''
+    searchHardCodedPaths $out
+  '';
+
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "PolicyKit agent for Deepin Desktop Environment";
-    homepage = https://github.com/linuxdeepin/dde-polkit-agent;
+    homepage = "https://github.com/linuxdeepin/dde-polkit-agent";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

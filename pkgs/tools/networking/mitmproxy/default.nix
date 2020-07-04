@@ -4,25 +4,14 @@ with python3Packages;
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "4.0.4";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "14i9dkafvyl15rq2qa8xldscn5lmkk2g52kbi2hl63nzx9yibx6r";
+    sha256 = "1lirlckpvd3c6s6q3p32w4k4yfna5mlgr1x9g39lhzzq0sdiz3lk";
   };
-
-  patches = [
-    (fetchpatch {
-      # Tests failed due to expired test certificates,
-      # https://github.com/mitmproxy/mitmproxy/issues/3316
-      # TODO: remove on next update
-      name = "test-certificates.patch";
-      url = "https://github.com/mitmproxy/mitmproxy/commit/1b6a8d6acd3d70f9b9627ad4ae9def08103f8250.patch";
-      sha256 = "03y79c25yir7d8xj79czdc81y3irqq1i3ks9ca0mv1az8b7xsvfv";
-    })
-  ];
 
   postPatch = ''
     # remove dependency constraints
@@ -31,29 +20,35 @@ buildPythonPackage rec {
 
   doCheck = (!stdenv.isDarwin);
 
+  # examples.complex.xss_scanner doesn't import correctly with pytest5
   checkPhase = ''
     export HOME=$(mktemp -d)
     export LC_CTYPE=en_US.UTF-8
-    pytest -k 'not test_find_unclaimed_URLs'
+    pytest --ignore test/examples \
+      -k 'not test_find_unclaimed_URLs and not test_tcp'
   '';
 
   propagatedBuildInputs = [
-    blinker click certifi cryptography
-    h2 hyperframe kaitaistruct passlib
-    pyasn1 pyopenssl pyparsing pyperclip
-    ruamel_yaml tornado urwid brotlipy
-    sortedcontainers ldap3 wsproto
+    blinker brotli certifi cffi
+    click cryptography flask h11
+    h2 hpack hyperframe itsdangerous
+    jinja2 kaitaistruct ldap3 markupsafe
+    passlib protobuf publicsuffix2 pyasn1
+    pycparser pyopenssl pyparsing pyperclip
+    ruamel_yaml setuptools six sortedcontainers
+    tornado urwid werkzeug wsproto zstandard
   ];
 
   checkInputs = [
     beautifulsoup4 flask pytest
     requests glibcLocales
     asynctest parver pytest-asyncio
+    hypothesis
   ];
 
   meta = with stdenv.lib; {
     description = "Man-in-the-middle proxy";
-    homepage    = https://mitmproxy.org/;
+    homepage    = "https://mitmproxy.org/";
     license     = licenses.mit;
     maintainers = with maintainers; [ fpletz kamilchm ];
   };

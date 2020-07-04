@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub
-, llvm, qt48Full, libqrencode, libmicrohttpd, libjack2, alsaLib, faust, curl
+, llvm, qt48Full, qrencode, libmicrohttpd, libjack2, alsaLib, faust, curl
 , bc, coreutils, which
 }:
 
-stdenv.mkDerivation rec {
-  name = "faustlive-${version}";
+stdenv.mkDerivation {
+  pname = "faustlive";
   version = "2017-12-05";
   src = fetchFromGitHub {
     owner = "grame-cncm";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    llvm qt48Full libqrencode libmicrohttpd libjack2 alsaLib faust curl
+    llvm qt48Full qrencode libmicrohttpd libjack2 alsaLib faust curl
     bc coreutils which
   ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       together the convenience of a standalone interpreted language with the
       efficiency of a compiled language. It's ideal for fast prototyping.
     '';
-    homepage = http://faust.grame.fr/;
+    homepage = "http://faust.grame.fr/";
     license = licenses.gpl3;
   };
 }

@@ -1,36 +1,38 @@
-{ stdenv, fetchurl, python2Packages, intltool, file
+{ stdenv, fetchurl, python3Packages, intltool, file
 , wrapGAppsHook, gtk-vnc, vte, avahi, dconf
-, gobjectIntrospection, libvirt-glib, system-libvirt
-, gsettings-desktop-schemas, glib, libosinfo, gnome3, gtk3
+, gobject-introspection, libvirt-glib, system-libvirt
+, gsettings-desktop-schemas, glib, libosinfo, gnome3
+, gtksourceview4
 , spiceSupport ? true, spice-gtk ? null
 , cpio, e2fsprogs, findutils, gzip
 }:
 
 with stdenv.lib;
 
-python2Packages.buildPythonApplication rec {
-  name = "virt-manager-${version}";
-  version = "1.5.1";
-  namePrefix = "";
+python3Packages.buildPythonApplication rec {
+  pname = "virt-manager";
+  version = "2.2.1";
 
   src = fetchurl {
-    url = "http://virt-manager.org/download/sources/virt-manager/${name}.tar.gz";
-    sha256 = "1ardmd4sxdmd57y7qpka44gf09c1yq2g0xs074d3k1h925crv27f";
+    url = "http://virt-manager.org/download/sources/virt-manager/${pname}-${version}.tar.gz";
+    sha256 = "06ws0agxlip6p6n3n43knsnjyd91gqhh2dadgc33wl9lx1k8vn6g";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook intltool file
-    gobjectIntrospection # for setup hook populating GI_TYPELIB_PATH
+    intltool file
+    gobject-introspection # for setup hook populating GI_TYPELIB_PATH
   ];
 
-  buildInputs =
-    [ libvirt-glib vte dconf gtk-vnc gnome3.defaultIconTheme avahi
-      gsettings-desktop-schemas libosinfo gtk3
-    ] ++ optional spiceSupport spice-gtk;
+  buildInputs = [
+    wrapGAppsHook
+    libvirt-glib vte dconf gtk-vnc gnome3.adwaita-icon-theme avahi
+    gsettings-desktop-schemas libosinfo gtksourceview4
+    gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
+  ] ++ optional spiceSupport spice-gtk;
 
-  propagatedBuildInputs = with python2Packages;
+  propagatedBuildInputs = with python3Packages;
     [
-      pygobject3 ipaddr libvirt libxml2 requests
+      pygobject3 ipaddress libvirt libxml2 requests
     ];
 
   patchPhase = ''
@@ -39,12 +41,10 @@ python2Packages.buildPythonApplication rec {
   '';
 
   postConfigure = ''
-    ${python2Packages.python.interpreter} setup.py configure --prefix=$out
+    ${python3Packages.python.interpreter} setup.py configure --prefix=$out
   '';
 
-  postInstall = ''
-    ${glib.dev}/bin/glib-compile-schemas "$out"/share/glib-2.0/schemas
-  '';
+  setupPyGlobalFlags = [ "--no-update-icon-cache" ];
 
   preFixup = ''
     gappsWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
@@ -56,7 +56,7 @@ python2Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://virt-manager.org;
+    homepage = "http://virt-manager.org";
     description = "Desktop user interface for managing virtual machines";
     longDescription = ''
       The virt-manager application is a desktop user interface for managing
@@ -66,6 +66,6 @@ python2Packages.buildPythonApplication rec {
     license = licenses.gpl2;
     # exclude Darwin since libvirt-glib currently doesn't build there
     platforms = platforms.linux;
-    maintainers = with maintainers; [ qknight offline fpletz ];
+    maintainers = with maintainers; [ qknight offline fpletz globin ];
   };
 }

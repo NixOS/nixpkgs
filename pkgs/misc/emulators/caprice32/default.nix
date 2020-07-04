@@ -1,29 +1,47 @@
-{ stdenv, fetchFromGitHub, libpng, pkgconfig, SDL, freetype, zlib }:
+{ stdenv, fetchFromGitHub, desktop-file-utils, libpng
+, pkgconfig, SDL, freetype, zlib }:
 
 stdenv.mkDerivation rec {
 
-  repo = "caprice32";
-  version = "unstable-2018-03-05";
-  rev = "317fe638111e245d67e301f6f295094d3c859a70";
-  name = "${repo}-${version}";
+  pname = "caprice32";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
-    inherit rev repo;
+    repo = "caprice32";
+    rev = "v${version}";
     owner = "ColinPitrat";
-    sha256 = "1bywpmkizixcnr057k8zq9nlw0zhcmwkiriln0krgdcm7d3h9b86";
+    sha256 = "0hng5krwgc1h9bz1xlkp2hwnvas965nd7sb3z9mb2m6x9ghxlacz";
   };
 
-  postPatch = "substituteInPlace cap32.cfg --replace /usr/local $out";
+  nativeBuildInputs = [ desktop-file-utils pkgconfig ];
+  buildInputs = [ libpng SDL freetype zlib ];
+
+  makeFlags = [
+    "APP_PATH=${placeholder "out"}/share/caprice32"
+    "RELEASE=1"
+    "DESTDIR=${placeholder "out"}"
+    "prefix=/"
+  ];
+
+  postInstall = ''
+    mkdir -p $out/share/icons/
+    mv $out/share/caprice32/resources/freedesktop/caprice32.png $out/share/icons/
+    mv $out/share/caprice32/resources/freedesktop/emulators.png $out/share/icons/
+
+    desktop-file-install --dir $out/share/applications \
+      $out/share/caprice32/resources/freedesktop/caprice32.desktop
+
+    desktop-file-install --dir $out/share/desktop-directories \
+      $out/share/caprice32/resources/freedesktop/Emulators.directory
+
+    install -Dm644 $out/share/caprice32/resources/freedesktop/caprice32.menu -t $out/etc/xdg/menus/applications-merged/
+  '';
 
   meta = with stdenv.lib; {
     description = "A complete emulation of CPC464, CPC664 and CPC6128";
-    homepage = https://github.com/ColinPitrat/caprice32 ;
+    homepage = "https://github.com/ColinPitrat/caprice32";
     license = licenses.gpl2;
     maintainers = [ maintainers.genesis ];
     platforms = platforms.linux;
   };
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libpng SDL freetype zlib ];
-  makeFlags = [ "GIT_HASH=${src.rev}" "DESTDIR=$(out)" "prefix=/"];
 }

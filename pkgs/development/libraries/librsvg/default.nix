@@ -1,27 +1,29 @@
-{ lib, stdenv, fetchurl, pkgconfig, glib, gdk_pixbuf, pango, cairo, libxml2, libgsf
-, bzip2, libcroco, libintl, darwin, rust, gnome3
-, withGTK ? false, gtk3 ? null
-, vala, gobjectIntrospection }:
+{ lib, stdenv, fetchurl, pkgconfig, glib, gdk-pixbuf, pango, cairo, libxml2
+, bzip2, libintl, darwin, rustc, cargo, gnome3
+, vala, gobject-introspection }:
 
 let
   pname = "librsvg";
-  version = "2.42.4";
+  version = "2.48.7";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1qsd0j7s97ab5fzy5b5gix5b7hbw57cr46ia8pkcrr4ylsi80li2";
+    sha256 = "1h7yw9bszsi174lkq8ig15p1rll7fqafx72jligxiz32wa9mvpim";
   };
 
   outputs = [ "out" "dev" "installedTests" ];
 
-  buildInputs = [ libxml2 libgsf bzip2 libcroco pango libintl ];
+  buildInputs = [ libxml2 bzip2 pango libintl ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.libobjc ];
 
-  propagatedBuildInputs = [ glib gdk_pixbuf cairo ] ++ lib.optional withGTK gtk3;
+  NIX_LDFLAGS = if stdenv.isDarwin then "-lobjc" else null;
 
-  nativeBuildInputs = [ pkgconfig rust.rustc rust.cargo vala gobjectIntrospection ]
+  propagatedBuildInputs = [ glib gdk-pixbuf cairo ];
+
+  nativeBuildInputs = [ pkgconfig rustc cargo vala gobject-introspection ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       ApplicationServices
     ]);
@@ -57,7 +59,7 @@ stdenv.mkDerivation rec {
          -i gdk-pixbuf-loader/Makefile
 
     # Fix thumbnailer path
-    sed -e "s#@bindir@\(/gdk-pixbuf-thumbnailer\)#${gdk_pixbuf}/bin\1#g" \
+    sed -e "s#@bindir@\(/gdk-pixbuf-thumbnailer\)#${gdk-pixbuf}/bin\1#g" \
         -i gdk-pixbuf-loader/librsvg.thumbnailer.in
   '';
 
@@ -66,7 +68,7 @@ stdenv.mkDerivation rec {
   # Merge gdkpixbuf and librsvg loaders
   postInstall = ''
     mv $GDK_PIXBUF/loaders.cache $GDK_PIXBUF/loaders.cache.tmp
-    cat ${gdk_pixbuf.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache.tmp > $GDK_PIXBUF/loaders.cache
+    cat ${gdk-pixbuf.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache.tmp > $GDK_PIXBUF/loaders.cache
     rm $GDK_PIXBUF/loaders.cache.tmp
   '';
 
@@ -78,9 +80,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A small library to render SVG images to Cairo surfaces";
-    homepage = https://wiki.gnome.org/Projects/LibRsvg;
+    homepage = "https://wiki.gnome.org/Projects/LibRsvg";
     license = licenses.lgpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

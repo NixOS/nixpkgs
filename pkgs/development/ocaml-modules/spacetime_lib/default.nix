@@ -1,30 +1,22 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, owee }:
+{ lib, fetchFromGitHub, buildDunePackage, owee }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.04"
-then throw "spacetime_lib is not available for OCaml ${ocaml.version}" else
-
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-spacetime_lib-${version}";
-  version = "0.1.0";
+buildDunePackage rec {
+  pname = "spacetime_lib";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "lpw25";
     repo = "spacetime_lib";
     rev = version;
-    sha256 = "1g91y6wl3z18jhaz2q03wn54zj6xk1qcjidr1nc6nq9a8906lcq5";
+    sha256 = "0biisgbycr5v3nm5jp8i0h6vq76vzasdjkcgh8yr7fhxc81jgv3p";
   };
 
-  buildInputs = [ ocaml findlib ];
-
   propagatedBuildInputs = [ owee ];
-
-  createFindlibDestdir = true;
 
   meta = {
     description = "An OCaml library providing some simple operations for handling OCaml “spacetime” profiles";
     inherit (src.meta) homepage;
-    inherit (ocaml.meta) platforms;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

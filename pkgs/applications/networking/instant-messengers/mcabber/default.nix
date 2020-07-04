@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "mcabber-${version}";
+  pname = "mcabber";
   version = "1.1.0";
 
   src = fetchurl {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = http://mcabber.com/;
+    homepage = "http://mcabber.com/";
     description = "Small Jabber console client";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];

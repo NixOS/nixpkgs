@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
 
-  name = "pekwm-${version}";
+  pname = "pekwm";
   version = "0.1.17";
 
   src = fetchurl {
-    url = "https://www.pekwm.org/projects/pekwm/files/${name}.tar.bz2";
+    url = "https://www.pekwm.org/projects/pekwm/files/${pname}-${version}.tar.bz2";
     sha256 = "003x6bxj1lb2ljxz3v414bn0rdl6z68c0r185fxwgs1qkyzx67wa";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
         appear as they should when starting applications.
       - Chainable Keygrabber, usability for everyone.
     '';
-      homepage = http://www.pekwm.org;
+      homepage = "http://www.pekwm.org";
       license = licenses.gpl2;
       maintainers = [ maintainers.AndersonTorres ];
       platforms = platforms.linux;

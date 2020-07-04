@@ -1,33 +1,64 @@
-{ stdenv, fetchFromGitHub, perl, pkgconfig, cmake, ninja, vala, gobjectIntrospection
-, python3, tzdata, gtk-doc, docbook_xsl, docbook_xml_dtd_43, glib, libxml2, icu }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, glib
+, gobject-introspection
+, icu
+, libxml2
+, ninja
+, perl
+, pkgconfig
+, python3
+, tzdata
+, vala
+}:
 
 stdenv.mkDerivation rec {
-  name = "libical-${version}";
-  version = "3.0.4";
+  pname = "libical";
+  version = "3.0.8";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]; # "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "libical";
     repo = "libical";
     rev = "v${version}";
-    sha256 = "1qgpbdjd6jsivw87v5w52268kqp0rv780kli8cgb3ndlv592wlbm";
+    sha256 = "0pkh74bfrgp1slv8wsv7lbmal2m7qkixwm5llpmfwaiv14njlp68";
   };
 
   nativeBuildInputs = [
-    perl pkgconfig cmake ninja vala gobjectIntrospection
-    (python3.withPackages (pkgs: with pkgs; [ pygobject3 ])) # running libical-glib tests
-    gtk-doc docbook_xsl docbook_xml_dtd_43 # docs
+    cmake
+    gobject-introspection
+    ninja
+    perl
+    pkgconfig
+    vala
+    # Docs building fails:
+    # https://github.com/NixOS/nixpkgs/pull/67204
+    # previously with https://github.com/NixOS/nixpkgs/pull/61657#issuecomment-495579489
+    # gtk-doc docbook_xsl docbook_xml_dtd_43 # for docs
   ];
-  buildInputs = [ glib libxml2 icu ];
+  installCheckInputs = [
+    # running libical-glib tests
+    (python3.withPackages (pkgs: with pkgs; [
+      pygobject3
+    ]))
+  ];
+
+  buildInputs = [
+    glib
+    libxml2
+    icu
+  ];
 
   cmakeFlags = [
     "-DGOBJECT_INTROSPECTION=True"
+    "-DENABLE_GTK_DOC=False"
     "-DICAL_GLIB_VAPI=True"
   ];
 
   patches = [
-    # TODO: upstream this patch
+    # Will appear in 3.1.0
     # https://github.com/libical/libical/issues/350
     ./respect-env-tzdir.patch
   ];
@@ -35,6 +66,7 @@ stdenv.mkDerivation rec {
   # Using install check so we do not have to manually set
   # LD_LIBRARY_PATH and GI_TYPELIB_PATH variables
   doInstallCheck = true;
+  enableParallelChecking = false;
   installCheckPhase = ''
     runHook preInstallCheck
 
@@ -45,10 +77,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/libical/libical;
+    homepage = "https://github.com/libical/libical";
     description = "An Open Source implementation of the iCalendar protocols";
     license = licenses.mpl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

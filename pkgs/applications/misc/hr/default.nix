@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "hr-${version}";
+  pname = "hr";
   version = "1.2";
 
   src = fetchFromGitHub {
@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/LuRsT/hr;
+    homepage = "https://github.com/LuRsT/hr";
     description = "A horizontal bar for your terminal";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = [ maintainers.matthiasbeyer ];
     platforms = platforms.unix;
   };
 }

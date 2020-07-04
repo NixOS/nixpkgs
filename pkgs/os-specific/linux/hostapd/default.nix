@@ -1,66 +1,49 @@
 { stdenv, fetchurl, pkgconfig, libnl, openssl, sqlite ? null }:
 
-with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "hostapd-${version}";
-  version = "2.6";
+  pname = "hostapd";
+  version = "2.9";
 
   src = fetchurl {
-    url = "https://w1.fi/releases/${name}.tar.gz";
-    sha256 = "0z8ilypad82q3l6q6kbv6hczvhjn8k63j8051x5yqfyjq686nlh1";
+    url = "https://w1.fi/releases/${pname}-${version}.tar.gz";
+    sha256 = "1mrbvg4v7vm7mknf0n29mf88k3s4a4qj6r4d51wq8hmjj1m7s7c8";
   };
-
-  patches = [
-    (fetchurl {
-      url = "https://w1.fi/cgit/hostap/patch/?id=0d42179e1246f996d334c8bd18deca469fdb1add";
-      sha256 = "0w5n3ypwavq5zlyfxpcyvbaf96g59xkwbw9xwpjyzb7h5j264615";
-    })
-    (fetchurl {
-      url = "https://w1.fi/cgit/hostap/patch/?id=df426738fb212d62b132d9bb447f0128194e00ab";
-      sha256 = "0ps2prjijlcgv1i97xb5ypw840dhkc7ja1aw8zhlbrap7pbgi1mm";
-    })
-    (fetchurl {
-      url = "https://w1.fi/cgit/hostap/patch/?id=b70d508c50e8e2d2b8fb96ae44ae10f84cf0c1ae";
-      sha256 = "0pslmsbay2cy1k07w1mdcr0b8w059jkrqrr9zi1aljvkm3vbwhj1";
-    })
-
-    #KRACKAttack.com
-    (fetchurl {
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0001-hostapd-Avoid-key-reinstallation-in-FT-handshake.patch";
-      sha256 = "02zl2x4pxay666yq18g4f3byccrzipfjbky1ydw62v15h76174aj";
-    })
-    (fetchurl {
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0002-Prevent-reinstallation-of-an-already-in-use-group-ke.patch";
-      sha256 = "1mrmqg00x1bqa43dyhxb14msk74lh3kvr4avni43c3qpfjmlfvfq";
-    })
-    (fetchurl {
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0003-Extend-protection-of-GTK-IGTK-reinstallation-of-WNM-.patch";
-      sha256 = "10byyi8wfpcc8i788ag7ndycd3xvq2iwnssyb3rwf34sfcv5wlyl";
-    })
-    (fetchurl {
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0004-Prevent-installation-of-an-all-zero-TK.patch";
-      sha256 = "02z2rsbh4sw81wsc56xjbblbi76ii0clmpnr1m1szdb1h5s58fkr";
-    })
-    (fetchurl {
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0005-Fix-PTK-rekeying-to-generate-a-new-ANonce.patch";
-      sha256 = "17pbrn5h6l5v14y6gn2yr2knqya9i0n2vyq4ck8hasb00yz8lz0l";
-    })
-    (fetchurl {
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0006-TDLS-Reject-TPK-TK-reconfiguration.patch";
-      sha256 = "19mgcqbdyzm4myi182jcn1rn26xi3jib74cpxbbrx1gaccxlsvar";
-    })
-    #(fetchurl { # wpa-supplicant only
-    #  url = "http://w1.fi/security/2017-1/rebased-v2.6-0007-WNM-Ignore-WNM-Sleep-Mode-Response-without-pending-r.patch";
-    #  sha256 = "0di71j8762dkvr0c7h5mrbkqyfdy8mljvnp0dk2qhbgc9bw7m8f5";
-    #})
-    (fetchurl {
-      url = "http://w1.fi/security/2017-1/rebased-v2.6-0008-FT-Do-not-allow-multiple-Reassociation-Response-fram.patch";
-      sha256 = "1ca312cixbld70rp12q7h66lnjjxzz0qag0ii2sg6cllgf2hv168";
-    })
-  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libnl openssl sqlite ];
+
+  patches = [
+    (fetchurl {
+      # Note: fetchurl seems to be unhappy with openwrt git
+      # server's URLs containing semicolons. Using the github mirror instead.
+      url = "https://raw.githubusercontent.com/openwrt/openwrt/master/package/network/services/hostapd/patches/300-noscan.patch";
+      sha256 = "04wg4yjc19wmwk6gia067z99gzzk9jacnwxh5wyia7k5wg71yj5k";
+    })
+    # AP mode PMF disconnection protection bypass (CVE.2019-16275), can be removed >= 2.10
+    # https://w1.fi/security/2019-7/
+    (fetchurl {
+      name = "CVE-2019-16275.patch";
+      url = "https://w1.fi/security/2019-7/0001-AP-Silently-ignore-management-frame-from-unexpected-.patch";
+      sha256 = "15xjyy7crb557wxpx898b5lnyblxghlij0xby5lmj9hpwwss34dz";
+    })
+    # Fixes for UPnP SUBSCRIBE misbehavior in hostapd WPS AP (CVE-2020-12695), can be removed >= 2.10
+    # https://w1.fi/security/2020-1/
+    (fetchurl {
+      name = "CVE-2020-12695_0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch";
+      url = "https://w1.fi/security/2020-1/0001-WPS-UPnP-Do-not-allow-event-subscriptions-with-URLs-.patch";
+      sha256 = "1mrbhicqb34jlw1nid5hk2vnjbvfhvp7r5iblaj4l6vgc6fmp6id";
+    })
+    (fetchurl {
+      name = "CVE-2020-12695_0002-WPS-UPnP-Fix-event-message-generation-using-a-long-U.patch";
+      url = "https://w1.fi/security/2020-1/0002-WPS-UPnP-Fix-event-message-generation-using-a-long-U.patch";
+      sha256 = "1pk08b06b24is50bis3rr56xjd3b5kxdcdk8bx39n9vna9db7zj9";
+    })
+    (fetchurl {
+      name = "CVE-2020-12695_0003-WPS-UPnP-Handle-HTTP-initiation-failures-for-events-.patch";
+      url = "https://w1.fi/security/2020-1/0003-WPS-UPnP-Handle-HTTP-initiation-failures-for-events-.patch";
+      sha256 = "12npqp2skgrj934wwkqicgqksma0fxz09di29n1b5fm5i4njl8d8";
+    })
+  ];
 
   outputs = [ "out" "man" ];
 
@@ -91,7 +74,8 @@ stdenv.mkDerivation rec {
     CONFIG_INTERNETWORKING=y
     CONFIG_HS20=y
     CONFIG_ACS=y
-  '' + optionalString (sqlite != null) ''
+    CONFIG_GETRANDOM=y
+  '' + stdenv.lib.optionalString (sqlite != null) ''
     CONFIG_SQLITE=y
   '';
 
@@ -110,12 +94,12 @@ stdenv.mkDerivation rec {
     install -vD hostapd_cli.1 -t $man/share/man/man1
   '';
 
-  meta = {
-    homepage = http://hostap.epitest.fi;
-    repositories.git = git://w1.fi/hostap.git;
+  meta = with stdenv.lib; {
+    homepage = "https://hostap.epitest.fi";
+    repositories.git = "git://w1.fi/hostap.git";
     description = "A user space daemon for access point and authentication servers";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ phreedom wkennington ];
+    maintainers = with maintainers; [ phreedom ninjatrappeur hexa ];
     platforms = platforms.linux;
   };
 }

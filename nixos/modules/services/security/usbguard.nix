@@ -39,6 +39,16 @@ in {
     services.usbguard = {
       enable = mkEnableOption "USBGuard daemon";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.usbguard;
+        defaultText = "pkgs.usbguard";
+        description = ''
+          The usbguard package to use. If you do not need the Qt GUI, use
+          <literal>pkgs.usbguard-nox</literal> to save disk space.
+        '';
+      };
+
       ruleFile = mkOption {
         type = types.path;
         default = "/var/lib/usbguard/rules.conf";
@@ -179,13 +189,13 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.usbguard ];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.services.usbguard = {
       description = "USBGuard daemon";
 
       wantedBy = [ "basic.target" ];
-      wants = [ "systemd-udevd.service" "local-fs.target" ];
+      wants = [ "systemd-udevd.service" ];
 
       # make sure an empty rule file and required directories exist
       preStart = ''
@@ -195,8 +205,31 @@ in {
 
       serviceConfig = {
         Type = "simple";
-        ExecStart = ''${pkgs.usbguard}/bin/usbguard-daemon -P -k -c ${daemonConfFile}'';
+        ExecStart = ''${cfg.package}/bin/usbguard-daemon -P -k -c ${daemonConfFile}'';
         Restart = "on-failure";
+
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "CAP_CHOWN CAP_FOWNER";
+        DeviceAllow = "/dev/null rw";
+        DevicePolicy = "strict";
+        IPAddressDeny = "any";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectKernelModules = true;
+        ProtectSystem = true;
+        ReadOnlyPaths = "-/";
+        ReadWritePaths = "-/dev/shm -${dirOf cfg.auditFilePath} -/tmp -${dirOf cfg.ruleFile}";
+        RestrictAddressFamilies = "AF_UNIX AF_NETLINK";
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = "@system-service";
+        UMask = "0077";
       };
     };
   };

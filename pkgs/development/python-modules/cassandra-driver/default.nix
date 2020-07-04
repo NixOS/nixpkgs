@@ -1,55 +1,46 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
-, pkgs
+{ stdenv, lib, buildPythonPackage, fetchPypi, python, pythonOlder
 , cython
-, futures
-, six
-, python
-, scales
 , eventlet
-, twisted
+, futures
+, libev
 , mock
-, gevent
 , nose
+, pytest
 , pytz
 , pyyaml
+, scales
+, six
 , sure
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "cassandra-driver";
-  version = "3.6.0";
+  version = "3.23.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1aqmy3psn12lxgp659d0zsxkirxzy5lnbnzxf9xjq1a93s3qm704";
+    sha256 = "a3b075bfd36677024b1dcf55a561fac161fc4f4065f01557b21a0b02ebad05c2";
   };
 
-  buildInputs = [ pkgs.libev cython ];
-
+  nativeBuildInputs = [ cython ];
+  buildInputs = [ libev ];
   propagatedBuildInputs = [ six ]
-    ++ stdenv.lib.optionals (pythonOlder "3.4") [ futures ];
+    ++ lib.optionals (pythonOlder "3.4") [ futures ];
 
-  postPatch = ''
-    sed -i "s/<=1.0.1//" setup.py
-  '';
+  checkInputs = [ eventlet mock nose pytest pytz pyyaml sure ];
 
+  # ignore test files which try to do socket.getprotocolname('tcp')
+  # as it fails in sandbox mode due to lack of a /etc/protocols file
   checkPhase = ''
-    ${python.interpreter} setup.py gevent_nosetests
-    ${python.interpreter} setup.py eventlet_nosetests
+    pytest tests/unit \
+      --ignore=tests/unit/io/test_libevreactor.py \
+      --ignore=tests/unit/io/test_eventletreactor.py \
+      --ignore=tests/unit/io/test_asyncorereactor.py
   '';
 
-  checkInputs = [ scales eventlet twisted mock gevent nose pytz pyyaml sure ];
-
-  # Could not get tests running
-  doCheck = false;
-
-  meta = with stdenv.lib; {
-    homepage = http://datastax.github.io/python-driver/;
+  meta = with lib; {
     description = "A Python client driver for Apache Cassandra";
+    homepage = "http://datastax.github.io/python-driver";
     license = licenses.asl20;
   };
-
 }

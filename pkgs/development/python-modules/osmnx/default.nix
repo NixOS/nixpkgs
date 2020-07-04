@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "osmnx";
-  version = "0.8.1";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner  = "gboeing";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1pn2v3dhbmb0yhqif9padg7x3sdx27pgfr95i3kxj4v0yrviaf9k";
+    sha256 = "1k3y5kl4k93vxaxyanc040x44s2fyyc3m1ndy2j3kg0037z8ad4z";
   };
 
   propagatedBuildInputs = [ geopandas descartes matplotlib networkx numpy pandas requests Rtree shapely folium scikitlearn scipy ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A package to easily download, construct, project, visualize, and analyze complex street networks from OpenStreetMap with NetworkX.";
-    homepage = https://github.com/gboeing/osmnx;
+    homepage = "https://github.com/gboeing/osmnx";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

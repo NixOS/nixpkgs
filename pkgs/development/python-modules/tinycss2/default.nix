@@ -1,23 +1,48 @@
-{ lib, buildPythonPackage, fetchPypi, webencodings, pytestrunner, pytestcov, pytest-flake8, pytest-isort, glibcLocales }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, fetchpatch
+, webencodings
+# Check inputs
+, pytest
+, pytestrunner
+, pytestcov
+, pytest-flake8
+, pytest-isort
+}:
 
 buildPythonPackage rec {
   pname = "tinycss2";
-  version = "0.6.1";
+  version = "1.0.2";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7c53c2c0e914c7711c295b3101bcc78e0b7eda23ff20228a936efe11cdcc7136";
+    sha256 = "1kw84y09lggji4krkc58jyhsfj31w8npwhznr7lf19d0zbix09v4";
   };
+
+  patches = [
+    (
+      fetchpatch {
+        name = "tinycss2-fix-pytest-flake8-fail.patch";
+        url = "https://github.com/Kozea/tinycss2/commit/6556604fb98c2153412384d6f0f705db2da1aa60.patch";
+        sha256 = "1srvdzg1bak65fawd611rlskcgn5abmwmyjnk8qrrrasr554bc59";
+      }
+    )
+  ];
 
   propagatedBuildInputs = [ webencodings ];
 
-  checkInputs = [ pytestrunner pytestcov pytest-flake8 pytest-isort glibcLocales ];
-
-  LC_ALL = "en_US.UTF-8";
+  checkInputs = [ pytest pytestrunner pytestcov pytest-flake8 pytest-isort ];
+  preCheck = ''
+    # this fails a flake lint-type check, so just remove it
+    rm tinycss2/css-parsing-tests/make_color3_hsl.py
+  '';
 
   meta = with lib; {
     description = "Low-level CSS parser for Python";
-    homepage = https://github.com/Kozea/tinycss2;
+    homepage = "https://github.com/Kozea/tinycss2";
     license = licenses.bsd3;
   };
 }

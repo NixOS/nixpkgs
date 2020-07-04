@@ -17,7 +17,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ makeWrapper fcitx cmake isocodes gtk3
-    gnome3.defaultIconTheme ];
+    gnome3.adwaita-icon-theme ];
+
+  # Patch paths to `fcitx-remote`
+  prePatch = ''
+    for f in gtk{3,}/config_widget.c; do
+      substituteInPlace $f \
+        --replace 'EXEC_PREFIX "/bin/fcitx-remote"' '"${fcitx}/bin/fcitx-remote"'
+    done
+  '';
 
   preFixup = ''
     wrapProgram $out/bin/fcitx-config-gtk3 \

@@ -1,10 +1,10 @@
 {stdenv, fetchgit
-, wxGTK, perl, python2, zlib, libGLU_combined, libX11
+, wxGTK, perl, python2, zlib, libGLU, libGL, libX11
 , automake, autoconf
 }:
 
 stdenv.mkDerivation rec {
-  name = "golly-${version}";
+  pname = "golly";
   version = "2.8.99.2.20161122";
   #src = fetchurl {
   #  url="mirror://sourceforge/project/golly/golly/golly-2.8/golly-2.8-src.tar.gz";
@@ -23,14 +23,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [autoconf automake];
 
   buildInputs = [
-    wxGTK perl python2 zlib libGLU_combined libX11
+    wxGTK perl python2 zlib libGLU libGL libX11
   ];
 
   # Link against Python explicitly as it is needed for scripts
   makeFlags=[
     "AM_LDFLAGS="
   ];
-  NIX_LDFLAGS="-lpython${python2.majorVersion} -lperl";
+  NIX_LDFLAGS="-l${python2.libPrefix} -lperl -ldl -lGL";
   preConfigure=''
     export NIX_LDFLAGS="$NIX_LDFLAGS -L$(dirname "$(find ${perl} -name libperl.so)")"
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE
@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    downloadPage = "http://sourceforge.net/projects/golly/files/golly";
+    downloadPage = "https://sourceforge.net/projects/golly/files/golly";
   };
 }

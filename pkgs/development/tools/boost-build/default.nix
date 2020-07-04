@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "boost-build-${version}";
+  pname = "boost-build";
   version = "2016.03";
 
   src = fetchFromGitHub {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.boost.org/boost-build2/;
+    homepage = "http://www.boost.org/boost-build2/";
     license = stdenv.lib.licenses.boost;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ivan-tkatchev ];

@@ -1,20 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, gnused_422, perl, python2, zip, libffi, readline, icu, zlib, nspr
+{ stdenv, fetchurl, pkgconfig, gnused_422, perl, python2, zip, libffi, readline, icu, zlib, buildPackages
 , libobjc }:
 
-stdenv.mkDerivation rec {
-  version = "38.2.1.rc0";
-  name = "spidermonkey-${version}";
+with stdenv.lib;
 
-  # the release notes point to some guys home directory, see
-  # https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Releases/38
-  # probably it would be more ideal to pull a particular tag/revision
-  # from the mercurial repo
+stdenv.mkDerivation rec {
+  version = "38.8.0";
+  pname = "spidermonkey";
+
   src = fetchurl {
-    url = "https://people.freebsd.org/~sunpoet/sunpoet/mozjs-${version}.tar.bz2";
-    sha256 = "0p4bmbpgkfsj54xschcny0a118jdrdgg0q29rwxigg3lh5slr681";
+    url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.bz2";
+    sha256 = "10lrync6cxnjlnadc0j3vg8r2dq9b3wwanw8qj1h6ncxwb7asxcl";
   };
 
-  buildInputs = [ libffi readline icu zlib nspr ]
+  buildInputs = [ libffi readline icu zlib ]
                ++ stdenv.lib.optional stdenv.isDarwin libobjc;
   nativeBuildInputs = [ pkgconfig perl python2 zip gnused_422 ];
 
@@ -23,13 +21,13 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export CXXFLAGS="-fpermissive"
     export LIBXUL_DIST=$out
-    export PYTHON="${python2.interpreter}"
+    export PYTHON="${buildPackages.python2.interpreter}"
   '';
 
   configureFlags = [
     "--enable-threadsafe"
     "--with-system-ffi"
-    "--with-system-nspr"
+    "--enable-posix-nspr-emulation"
     "--with-system-zlib"
     "--with-system-icu"
     "--enable-readline"
@@ -38,7 +36,16 @@ stdenv.mkDerivation rec {
     # not be good defaults for other uses.
     "--enable-gcgenerational"
     "--enable-shared-js"
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # Spidermonkey seems to use different host/build terminology for cross
+    # compilation here.
+    "--host=${stdenv.buildPlatform.config}"
+    "--target=${stdenv.hostPlatform.config}"
   ];
+
+  configurePlatforms = [];
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   # This addresses some build system bug. It's quite likely to be safe
   # to re-enable parallel builds if the source revision changes.
@@ -55,7 +62,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Mozilla's JavaScript engine written in C/C++";
-    homepage = https://developer.mozilla.org/en/SpiderMonkey;
+    homepage = "https://developer.mozilla.org/en/SpiderMonkey";
     # TODO: MPL/GPL/LGPL tri-license.
 
     maintainers = [ maintainers.abbradar ];

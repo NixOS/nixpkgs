@@ -1,18 +1,13 @@
 { lib, stdenv, fetchurl, pkgconfig, zlib, shadow
 , ncurses ? null, perl ? null, pam, systemd ? null, minimal ? false }:
 
-let
-  version = lib.concatStringsSep "." ([ majorVersion ]
-    ++ lib.optional (patchVersion != "") patchVersion);
-  majorVersion = "2.32";
-  patchVersion = "1";
-
-in stdenv.mkDerivation rec {
-  name = "util-linux-${version}";
+stdenv.mkDerivation rec {
+  pname = "util-linux";
+  version = "2.35.1";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/util-linux/v${majorVersion}/${name}.tar.xz";
-    sha256 = "1ck7d8srw5szpjq7v0gpmjahnjs6wgqzm311ki4gazww6xx71rl6";
+    url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1yfpy6bkab4jw61mpx48gfy24yrqp4a7arvpis8csrkk53fkxpnr";
   };
 
   patches = [
@@ -27,7 +22,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace include/pathnames.h \
       --replace "/bin/login" "${shadow}/bin/login"
     substituteInPlace sys-utils/eject.c \
-      --replace "/bin/umount" "$out/bin/umount"
+      --replace "/bin/umount" "$bin/bin/umount"
   '';
 
   # !!! It would be better to obtain the path to the mount helpers
@@ -39,17 +34,21 @@ in stdenv.mkDerivation rec {
     "--enable-last"
     "--enable-mesg"
     "--disable-use-tty-group"
-    "--enable-fs-paths-default=/run/wrappers/bin:/var/run/current-system/sw/bin:/sbin"
+    "--enable-fs-paths-default=/run/wrappers/bin:/run/current-system/sw/bin:/sbin"
     "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
+    "--disable-su" # provided by shadow
     (lib.withFeature (ncurses != null) "ncursesw")
     (lib.withFeature (systemd != null) "systemd")
     (lib.withFeatureAs (systemd != null)
-       "systemdsystemunitdir" "$(bin)/lib/systemd/system/")
+       "systemdsystemunitdir" "${placeholder "bin"}/lib/systemd/system/")
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
        "scanf_cv_type_modifier=ms"
   ;
 
-  makeFlags = "usrbin_execdir=$(bin)/bin usrsbin_execdir=$(bin)/sbin";
+  makeFlags = [
+    "usrbin_execdir=${placeholder "bin"}/bin"
+    "usrsbin_execdir=${placeholder "bin"}/sbin"
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs =
@@ -58,16 +57,14 @@ in stdenv.mkDerivation rec {
 
   doCheck = false; # "For development purpose only. Don't execute on production system!"
 
-  postInstall = ''
-    rm "$bin/bin/su" # su should be supplied by the su package (shadow)
-  '' + lib.optionalString minimal ''
+  postInstall = lib.optionalString minimal ''
     rm -rf $out/share/{locale,doc,bash-completion}
   '';
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = https://www.kernel.org/pub/linux/utils/util-linux/;
+    homepage = "https://www.kernel.org/pub/linux/utils/util-linux/";
     description = "A set of system utilities for Linux";
     license = licenses.gpl2; # also contains parts under more permissive licenses
     platforms = platforms.linux;

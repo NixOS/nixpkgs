@@ -1,41 +1,41 @@
-{ stdenv,  autoreconfHook, fetchFromGitHub, pkgconfig, python2Packages, glib }:
+{ stdenv, autoreconfHook, fetchFromGitHub, pkgconfig, enablePython ? false, python, glib }:
 
-let
-  inherit (python2Packages) python cython;
-in
 stdenv.mkDerivation rec {
   pname = "libplist";
-  version = "2018-07-25";
-
-  name = "${pname}-${version}";
+  version = "2019-04-04";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = "db68a9d1070b363eee93147f072f46526064acbc";
-    sha256 = "0lxyb35jjg31m8dxhsv1jr2ccy5s19fsqzisy7lfjk46w7brs4h5";
+    rev = "42bb64ba966082b440cb68cbdadf317f44710017";
+    sha256 = "19yw80yblq29i2jx9yb7bx0lfychy9dncri3fk4as35kq5bf26i8";
   };
 
-  outputs = ["bin" "dev" "out" "py"];
+  outputs = ["bin" "dev" "out" ] ++ stdenv.lib.optional enablePython "py";
 
   nativeBuildInputs = [
     pkgconfig
-    python
-    cython
     autoreconfHook
+  ] ++ stdenv.lib.optionals enablePython [
+    python
+    python.pkgs.cython
+  ];
+
+  configureFlags = stdenv.lib.optionals (!enablePython) [
+    "--without-cython"
   ];
 
   propagatedBuildInputs = [ glib ];
 
-  postFixup = ''
+  postFixup = stdenv.lib.optionalString enablePython ''
     moveToOutput "lib/${python.libPrefix}" "$py"
   '';
 
   meta = with stdenv.lib; {
     description = "A library to handle Apple Property List format in binary or XML";
-    homepage = https://github.com/libimobiledevice/libplist;
+    homepage = "https://github.com/libimobiledevice/libplist";
     license = licenses.lgpl21Plus;
-    maintainers = [ ];
+    maintainers = with maintainers; [ infinisil ];
     platforms = platforms.linux;
   };
 }

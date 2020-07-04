@@ -4,8 +4,8 @@
 
 with python3Packages;
 
-buildPythonApplication rec {
-  name = "steamcontroller-${version}";
+buildPythonApplication {
+  pname = "steamcontroller";
   version = "2017-08-11";
 
   src = fetchFromGitHub {
@@ -27,7 +27,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A standalone Steam controller driver";
-    homepage    = https://github.com/ynsta/steamcontroller;
+    homepage    = "https://github.com/ynsta/steamcontroller";
     license     = licenses.mit;
     maintainers = with maintainers; [ rnhmjoj ];
     platforms   = platforms.linux;

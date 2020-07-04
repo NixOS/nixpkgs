@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "pgf-1.18";
 
   src = fetchurl {
-    url = mirror://sourceforge/pgf/pgf-1.18.tar.gz;
+    url = "mirror://sourceforge/pgf/pgf-1.18.tar.gz";
     sha256 = "0s6b8rx9yfxcjjg18vx1mphnwbd28fl5lnq0dasjz40pp3ypwdjv";
   };
 
@@ -15,8 +15,9 @@ stdenv.mkDerivation {
     cp -prd * $out/share/texmf-nix
   ";
 
-  meta = {
+  meta = with stdenv.lib; {
     branch = "1";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = licenses.gpl2;
   };
 }

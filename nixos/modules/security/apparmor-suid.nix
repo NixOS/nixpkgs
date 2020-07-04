@@ -4,8 +4,12 @@ let
 in
 with lib;
 {
+  imports = [
+    (mkRenamedOptionModule [ "security" "virtualization" "flushL1DataCache" ] [ "security" "virtualisation" "flushL1DataCache" ])
+  ];
 
   options.security.apparmor.confineSUIDApplications = mkOption {
+    type = types.bool;
     default = true;
     description = ''
       Install AppArmor profiles for commonly-used SUID application
@@ -28,7 +32,7 @@ with lib;
         capability setuid,
         network inet raw,
 
-        ${pkgs.glibc.out}/lib/*.so mr,
+        ${pkgs.stdenv.cc.libc.out}/lib/*.so mr,
         ${pkgs.libcap.lib}/lib/libcap.so* mr,
         ${pkgs.attr.out}/lib/libattr.so* mr,
 

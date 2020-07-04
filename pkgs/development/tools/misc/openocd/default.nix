@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, libftdi, libusb1, pkgconfig, hidapi }:
+{ stdenv, lib, fetchurl, fetchpatch, libftdi1, libusb1, pkgconfig, hidapi }:
 
 stdenv.mkDerivation rec {
-  name = "openocd-${version}";
+  pname = "openocd";
   version = "0.10.0";
 
   src = fetchurl {
@@ -9,29 +9,41 @@ stdenv.mkDerivation rec {
     sha256 = "1bhn2c85rdz4gf23358kg050xlzh7yxbbwmqp24c0akmh3bff4kk";
   };
 
+  patches = [
+    # Fix FTDI channel configuration for SheevaPlug
+    # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=837989
+    (fetchpatch {
+      url = "https://salsa.debian.org/electronics-team/openocd/raw/9a94335daa332a37a51920f87afbad4d36fad2d5/debian/patches/fix-sheeva.patch";
+      sha256 = "01x021fagwvgxdpzk7psap7ryqiya4m4mi4nqr27asbmb3q46g5r";
+    })
+  ];
+
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libftdi libusb1 hidapi ];
+  buildInputs = [ libftdi1 libusb1 hidapi ];
 
   configureFlags = [
     "--enable-jtag_vpi"
     "--enable-usb_blaster_libftdi"
-    "--enable-amtjtagaccel"
-    "--enable-gw16012"
+    (lib.enableFeature (! stdenv.isDarwin) "amtjtagaccel")
+    (lib.enableFeature (! stdenv.isDarwin) "gw16012")
     "--enable-presto_libftdi"
     "--enable-openjtag_ftdi"
-    "--enable-oocd_trace"
+    (lib.enableFeature (! stdenv.isDarwin) "oocd_trace")
     "--enable-buspirate"
-    "--enable-sysfsgpio"
+    (lib.enableFeature stdenv.isLinux "sysfsgpio")
     "--enable-remote-bitbang"
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
     "-Wno-implicit-fallthrough"
     "-Wno-format-truncation"
     "-Wno-format-overflow"
-  ];
+    "-Wno-error=tautological-compare"
+    "-Wno-error=array-bounds"
+    "-Wno-error=cpp"
+  ]);
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.isLinux ''
     mkdir -p "$out/etc/udev/rules.d"
     rules="$out/share/openocd/contrib/60-openocd.rules"
     if [ ! -f "$rules" ]; then
@@ -41,7 +53,7 @@ stdenv.mkDerivation rec {
     ln -s "$rules" "$out/etc/udev/rules.d/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free and Open On-Chip Debugging, In-System Programming and Boundary-Scan Testing";
     longDescription = ''
       OpenOCD provides on-chip programming and debugging support with a layered
@@ -52,9 +64,9 @@ stdenv.mkDerivation rec {
       "remote target" for source-level debugging of embedded systems using the
       GNU GDB program.
     '';
-    homepage = http://openocd.sourceforge.net/;
+    homepage = "http://openocd.sourceforge.net/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ bjornfor ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

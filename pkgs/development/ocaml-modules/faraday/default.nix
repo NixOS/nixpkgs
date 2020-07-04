@@ -1,34 +1,26 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, dune, alcotest }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml, alcotest, bigstringaf }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
-then throw "faraday is not available for OCaml ${ocaml.version}"
-else
+buildDunePackage rec {
+  pname = "faraday";
+  version = "0.7.0";
 
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-faraday-${version}";
-  version = "0.5.0";
+  minimumOCamlVersion = "4.02";
 
   src = fetchFromGitHub {
     owner = "inhabitedtype";
-    repo = "faraday";
+    repo = pname;
     rev = version;
-    sha256 = "1kql0il1frsbx6rvwqd7ahi4m14ik6la5an6c2w4x7k00ndm4d7n";
+    sha256 = "0z6ikwlqad91iac0q5z88p3wzq5k15y86ckzmhdq1aqwrcm14bq2";
   };
 
-  buildInputs = [ ocaml findlib dune alcotest ];
-
-  buildPhase = "dune build -p faraday";
-
-  doCheck = true;
-  checkPhase = "jbuilder runtest";
-
-  inherit (dune) installPhase;
+  checkInputs = lib.optional doCheck alcotest;
+  propagatedBuildInputs = [ bigstringaf ];
+  doCheck = lib.versions.majorMinor ocaml.version != "4.07";
 
   meta = {
     description = "Serialization library built for speed and memory efficiency";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.vbgl ];
     inherit (src.meta) homepage;
-    inherit (ocaml.meta) platforms;
   };
 }

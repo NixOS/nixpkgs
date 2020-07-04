@@ -3,8 +3,6 @@
 with python2Packages;
 
 buildPythonApplication rec {
-
-  name = "${pname}-${version}";
   pname = "cloudmonkey";
   version = "5.3.3";
 
@@ -19,7 +17,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "CLI for Apache CloudStack.";
-    homepage = https://cwiki.apache.org/confluence/display/CLOUDSTACK/CloudStack+cloudmonkey+CLI;
+    homepage = "https://cwiki.apache.org/confluence/display/CLOUDSTACK/CloudStack+cloudmonkey+CLI";
     license = [ licenses.asl20 ];
     maintainers = [ maintainers.womfoo ];
   };

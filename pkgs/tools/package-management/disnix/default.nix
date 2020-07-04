@@ -1,30 +1,19 @@
-{ stdenv, fetchFromGitHub, pkgconfig, glib, libxml2, libxslt, getopt, gettext, nixUnstable, dysnomia, libintl, libiconv, help2man, doclifter, docbook5, dblatex, doxygen, docbook5_xsl, libnixxml, autoreconfHook }:
+{ stdenv, fetchurl, pkgconfig, glib, libxml2, libxslt, getopt, gettext, nixUnstable, dysnomia, libintl, libiconv, help2man, doclifter, docbook5, dblatex, doxygen, libnixxml, autoreconfHook }:
 
-stdenv.mkDerivation rec {
-  name = "disnix-${version}";
-  version = "0.9.1";
+stdenv.mkDerivation {
+  name = "disnix-0.9.1";
 
-  src = fetchFromGitHub {
-    owner = "svanderburg";
-    repo = "disnix";
-    rev = "f31ffc8d7d1bbeb197c6b4643d35ce300cf8e87a";
-    sha256 = "sha256-IBDPXM+put9h2aUbxS6TlBeLmautQ8aVPI/jjJjoo+M=";
+  src = fetchurl {
+    url = "https://github.com/svanderburg/disnix/releases/download/disnix-0.9.1/disnix-0.9.1.tar.gz";
+    sha256 = "0bidln5xw3raqkvdks9aipis8aaza8asgyapmilnxkkrxgmw7rdf";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook help2man doclifter docbook5 dblatex doxygen docbook5_xsl ];
-  buildInputs = [ glib libxml2 libxslt getopt gettext nixUnstable libintl libiconv dysnomia libnixxml ];
-  postPatch = ''
-    ./bootstrap
-  '';
-  configureFlags = ''
-    --with-docbook-rng=${docbook5}/xml/rng/docbook
-    --with-docbook-xsl=${docbook5_xsl}/xml/xsl/docbook
-  '';
+  configureFlags = [
+    " --with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
+  ];
 
-  preConfigure = ''
-    # TeX needs a writable font cache.
-    export VARTEXFONTS=$TMPDIR/texfonts
-  '';
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib libxml2 libxslt getopt nixUnstable libintl libiconv dysnomia ];
 
   meta = {
     description = "A Nix-based distributed service deployment tool";

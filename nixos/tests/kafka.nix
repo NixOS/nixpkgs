@@ -1,9 +1,12 @@
-{ system ? builtins.currentSystem }:
-with import ../lib/testing.nix { inherit system; };
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
+
 with pkgs.lib;
 
 let
-  makeKafkaTest = name: kafkaPackage: (makeTest {
+  makeKafkaTest = name: kafkaPackage: (import ./make-test-python.nix ({
     inherit name;
     meta = with pkgs.stdenv.lib.maintainers; {
       maintainers = [ nequissimus ];
@@ -36,29 +39,45 @@ let
 
         networking.firewall.allowedTCPPorts = [ 9092 ];
         # i686 tests: qemu-system-i386 can simulate max 2047MB RAM (not 2048)
-        virtualisation.memorySize = 2047; 
+        virtualisation.memorySize = 2047;
       };
     };
 
     testScript = ''
-      startAll;
+      start_all()
 
-      $zookeeper1->waitForUnit("default.target");
-      $zookeeper1->waitForUnit("zookeeper.service");
-      $zookeeper1->waitForOpenPort(2181);
+      zookeeper1.wait_for_unit("default.target")
+      zookeeper1.wait_for_unit("zookeeper.service")
+      zookeeper1.wait_for_open_port(2181)
 
-      $kafka->waitForUnit("default.target");
-      $kafka->waitForUnit("apache-kafka.service");
-      $kafka->waitForOpenPort(9092);
+      kafka.wait_for_unit("default.target")
+      kafka.wait_for_unit("apache-kafka.service")
+      kafka.wait_for_open_port(9092)
 
-      $kafka->waitUntilSucceeds("${kafkaPackage}/bin/kafka-topics.sh --create --zookeeper zookeeper1:2181 --partitions 1 --replication-factor 1 --topic testtopic");
-      $kafka->mustSucceed("echo 'test 1' | ${kafkaPackage}/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic testtopic");
+      kafka.wait_until_succeeds(
+          "${kafkaPackage}/bin/kafka-topics.sh --create "
+          + "--zookeeper zookeeper1:2181 --partitions 1 "
+          + "--replication-factor 1 --topic testtopic"
+      )
+      kafka.succeed(
+          "echo 'test 1' | "
+          + "${kafkaPackage}/bin/kafka-console-producer.sh "
+          + "--broker-list localhost:9092 --topic testtopic"
+      )
     '' + (if name == "kafka_0_9" then ''
-      $kafka->mustSucceed("${kafkaPackage}/bin/kafka-console-consumer.sh --zookeeper zookeeper1:2181 --topic testtopic --from-beginning --max-messages 1 | grep 'test 1'");
+      assert "test 1" in kafka.succeed(
+          "${kafkaPackage}/bin/kafka-console-consumer.sh "
+          + "--zookeeper zookeeper1:2181 --topic testtopic "
+          + "--from-beginning --max-messages 1"
+      )
     '' else ''
-      $kafka->mustSucceed("${kafkaPackage}/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic testtopic --from-beginning --max-messages 1 | grep 'test 1'");
+      assert "test 1" in kafka.succeed(
+          "${kafkaPackage}/bin/kafka-console-consumer.sh "
+          + "--bootstrap-server localhost:9092 --topic testtopic "
+          + "--from-beginning --max-messages 1"
+      )
     '');
-  });
+  }) { inherit system; });
 
 in with pkgs; {
   kafka_0_9  = makeKafkaTest "kafka_0_9"  apacheKafka_0_9;
@@ -66,4 +85,9 @@ in with pkgs; {
   kafka_0_11 = makeKafkaTest "kafka_0_11" apacheKafka_0_11;
   kafka_1_0  = makeKafkaTest "kafka_1_0"  apacheKafka_1_0;
   kafka_1_1  = makeKafkaTest "kafka_1_1"  apacheKafka_1_1;
+  kafka_2_0  = makeKafkaTest "kafka_2_0"  apacheKafka_2_0;
+  kafka_2_1  = makeKafkaTest "kafka_2_1"  apacheKafka_2_1;
+  kafka_2_2  = makeKafkaTest "kafka_2_2"  apacheKafka_2_2;
+  kafka_2_3  = makeKafkaTest "kafka_2_3"  apacheKafka_2_3;
+  kafka_2_4  = makeKafkaTest "kafka_2_4"  apacheKafka_2_4;
 }

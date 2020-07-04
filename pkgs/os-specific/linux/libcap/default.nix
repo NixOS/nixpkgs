@@ -1,12 +1,12 @@
 { stdenv, buildPackages, fetchurl, attr, perl, pam }:
 
 stdenv.mkDerivation rec {
-  name = "libcap-${version}";
-  version = "2.25";
+  pname = "libcap";
+  version = "2.27";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${name}.tar.xz";
-    sha256 = "0qjiqc5pknaal57453nxcbz3mn1r4hkyywam41wfcglq3v2qlg39";
+    url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${pname}-${version}.tar.xz";
+    sha256 = "0sj8kidl7qgf2qwxcbw1vadnlb30y4zvjzxswsmfdghq04npkhfs";
   };
 
   outputs = [ "out" "dev" "lib" "man" "doc" "pam" ];
@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
       --replace 'man_prefix=$(prefix)' "man_prefix=$doc"
   '';
 
-  installFlags = "RAISE_SETFCAP=no";
+  installFlags = [ "RAISE_SETFCAP=no" ];
 
   postInstall = ''
     rm "$lib"/lib/*.a
-    mkdir -p "$doc/share/doc/${name}"
-    cp License "$doc/share/doc/${name}/"
+    mkdir -p "$doc/share/doc/${pname}-${version}"
+    cp License "$doc/share/doc/${pname}-${version}/"
   '' + stdenv.lib.optionalString (pam != null) ''
     mkdir -p "$pam/lib/security"
     mv "$lib"/lib/security "$pam/lib"

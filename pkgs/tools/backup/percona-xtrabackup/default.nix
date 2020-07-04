@@ -4,13 +4,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "percona-xtrabackup-${version}";
+  pname = "percona-xtrabackup";
   version = "2.4.12";
 
   src = fetchFromGitHub {
     owner = "percona";
     repo = "percona-xtrabackup";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "1w17v2c677b3vfnm81bs63kjbfiin7f12wl9fbgp83hfpyx5msan";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Non-blocking backup tool for MySQL";
-    homepage = http://www.percona.com/software/percona-xtrabackup;
+    homepage = "http://www.percona.com/software/percona-xtrabackup";
     license = licenses.lgpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ izorkin ];

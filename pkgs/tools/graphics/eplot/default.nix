@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gnuplot, ruby }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "eplot-2.07";
 
   # Upstream has been contacted (2015-03) regarding providing versioned
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ruby ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p "$out/bin"
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       This package also includes the complementary 'ec' tool (say "extract
       column").
     '';
-    homepage = http://liris.cnrs.fr/christian.wolf/software/eplot/;
+    homepage = "http://liris.cnrs.fr/christian.wolf/software/eplot/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];

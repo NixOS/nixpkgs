@@ -1,3 +1,4 @@
 source "https://rubygems.org"
 
-gem "travis", "1.8.9"
+gem "travis"
+gem "pry", "~> 0.11.0"

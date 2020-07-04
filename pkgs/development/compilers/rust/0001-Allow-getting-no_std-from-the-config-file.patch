@@ -1,0 +1,52 @@
+From 036c87c82793f1da9f98445e8e27462cc19bbe0a Mon Sep 17 00:00:00 2001
+From: John Ericson <John.Ericson@Obsidian.Systems>
+Date: Sat, 22 Feb 2020 14:38:38 -0500
+Subject: [PATCH] Allow getting `no_std` from the config file
+
+Currently, it is only set correctly in the sanity checking implicit
+default fallback code. Having a config file at all will for force
+`no_std = false`.
+---
+ src/bootstrap/config.rs | 3 +++
+ src/bootstrap/sanity.rs | 4 +---
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/src/bootstrap/config.rs b/src/bootstrap/config.rs
+index 110c8b844d5..83a6934d477 100644
+--- a/src/bootstrap/config.rs
++++ b/src/bootstrap/config.rs
+@@ -350,6 +350,7 @@ struct TomlTarget {
+     musl_root: Option<String>,
+     wasi_root: Option<String>,
+     qemu_rootfs: Option<String>,
++    no_std: Option<bool>,
+ }
+ 
+ impl Config {
+@@ -610,6 +611,8 @@ impl Config {
+                 target.musl_root = cfg.musl_root.clone().map(PathBuf::from);
+                 target.wasi_root = cfg.wasi_root.clone().map(PathBuf::from);
+                 target.qemu_rootfs = cfg.qemu_rootfs.clone().map(PathBuf::from);
++                target.no_std
++                    = cfg.no_std.unwrap_or(triple.contains("-none-") || triple.contains("nvptx"));
+ 
+                 config.target_config.insert(INTERNER.intern_string(triple.clone()), target);
+             }
+diff --git a/src/bootstrap/sanity.rs b/src/bootstrap/sanity.rs
+index 8ff7056e628..76e721ed8e3 100644
+--- a/src/bootstrap/sanity.rs
++++ b/src/bootstrap/sanity.rs
+@@ -194,9 +194,7 @@ pub fn check(build: &mut Build) {
+ 
+         if target.contains("-none-") || target.contains("nvptx") {
+             if build.no_std(*target).is_none() {
+-                let target = build.config.target_config.entry(target.clone()).or_default();
+-
+-                target.no_std = true;
++                build.config.target_config.entry(target.clone()).or_default();
+             }
+ 
+             if build.no_std(*target) == Some(false) {
+-- 
+2.24.1
+

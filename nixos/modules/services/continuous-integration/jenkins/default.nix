@@ -150,20 +150,20 @@ in {
       pkgs.dejavu_fonts
     ];
 
-    users.groups = optional (cfg.group == "jenkins") {
-      name = "jenkins";
-      gid = config.ids.gids.jenkins;
+    users.groups = optionalAttrs (cfg.group == "jenkins") {
+      jenkins.gid = config.ids.gids.jenkins;
     };
 
-    users.users = optional (cfg.user == "jenkins") {
-      name = "jenkins";
-      description = "jenkins user";
-      createHome = true;
-      home = cfg.home;
-      group = cfg.group;
-      extraGroups = cfg.extraGroups;
-      useDefaultShell = true;
-      uid = config.ids.uids.jenkins;
+    users.users = optionalAttrs (cfg.user == "jenkins") {
+      jenkins = {
+        description = "jenkins user";
+        createHome = true;
+        home = cfg.home;
+        group = cfg.group;
+        extraGroups = cfg.extraGroups;
+        useDefaultShell = true;
+        uid = config.ids.uids.jenkins;
+      };
     };
 
     systemd.services.jenkins = {
@@ -189,11 +189,11 @@ in {
 
       preStart =
         let replacePlugins =
-              if isNull cfg.plugins
+              if cfg.plugins == null
               then ""
               else
                 let pluginCmds = lib.attrsets.mapAttrsToList
-                      (n: v: "cp ${v} ${cfg.home}/plugins/${n}.hpi")
+                      (n: v: "cp ${v} ${cfg.home}/plugins/${n}.jpi")
                       cfg.plugins;
                 in ''
                   rm -r ${cfg.home}/plugins || true

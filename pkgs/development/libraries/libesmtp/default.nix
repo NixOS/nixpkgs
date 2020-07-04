@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
-  name = "libESMTP-${version}";
+stdenv.mkDerivation {
+  pname = "libESMTP";
   version = "1.0.6";
 
   src = fetchurl {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://brianstafford.info/libesmtp/index.html;
+    homepage = "http://brianstafford.info/libesmtp/index.html";
     description = "A Library for Posting Electronic Mail";
     license = licenses.lgpl21;
   };

@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "ipyparallel";
-  version = "6.2.3";
+  version = "6.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1k9701r120gv0an0wxvcjrbmhns8lq3zj6px5y2izly56j2dafqy";
+    sha256 = "0a97b276c62db633e9e97a816282bdd166f9df74e28204f0c8fa54b71944cfdc";
   };
 
   buildInputs = [ nose ];
@@ -31,9 +31,11 @@ buildPythonPackage rec {
   # Requires access to cluster
   doCheck = false;
 
+  disabled = !isPy3k;
+
   meta = {
     description = "Interactive Parallel Computing with IPython";
-    homepage = http://ipython.org/;
+    homepage = "http://ipython.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

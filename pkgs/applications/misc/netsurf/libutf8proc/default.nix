@@ -6,11 +6,11 @@ stdenv.mkDerivation rec {
 
   name = "netsurf-${libname}-${version}";
   libname = "libutf8proc";
-  version = "1.3.1";
+  version = "2.4.0-1";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
-    sha256 = "0xf659y3c6ikjnip47r30wv796a34d71p6qhc4xjs64iqszm1sbq";
+    sha256 = "0wn409laqaqlqnz2d77419b5rya99vvc696vj187biy1i5livaq1";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.netsurf-browser.org/;
+    homepage = "http://www.netsurf-browser.org/";
     description = "UTF8 Processing library for netsurf browser";
     license = licenses.gpl2;
     maintainers = [ maintainers.vrthra ];

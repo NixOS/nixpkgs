@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "PyContracts";
-  version = "1.8.6";
+  version = "1.8.14";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8b6ad8750bbb712b1c7b8f89772b42baeefd35b3c7085233e8027b92f277e073";
+    sha256 = "03q5m595ysjrc9h57m7prrca6b9l4yrzvdijnzxnhd61p7jzbh49";
   };
 
   buildInputs = [ nose ];
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Allows to declare constraints on function parameters and return values";
-    homepage = https://pypi.python.org/pypi/PyContracts;
+    homepage = "https://pypi.python.org/pypi/PyContracts";
     license = licenses.lgpl2;
   };
 }

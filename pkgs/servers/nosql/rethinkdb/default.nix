@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "rethinkdb-${version}";
+  pname = "rethinkdb";
   version = "2.3.6";
 
   src = fetchurl {
-    url = "https://download.rethinkdb.com/dist/${name}.tgz";
+    url = "https://download.rethinkdb.com/dist/${pname}-${version}.tgz";
     sha256 = "0a6wlgqa2flf87jrp4fq4y9aihwyhgwclmss56z03b8hd5k5j8f4";
   };
 
@@ -57,9 +57,10 @@ stdenv.mkDerivation rec {
       query language that supports really useful queries like table
       joins and group by, and is easy to setup and learn.
     '';
-    homepage    = http://www.rethinkdb.com;
+    homepage    = "http://www.rethinkdb.com";
     license     = stdenv.lib.licenses.agpl3;
     platforms   = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice bluescreen303 ];
+    broken = true;  # broken with openssl 1.1
   };
 }

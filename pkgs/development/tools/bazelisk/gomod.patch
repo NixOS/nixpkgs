@@ -1,0 +1,12 @@
+diff --git a/go.mod b/go.mod
+index 8eef134..54382cb 100644
+--- a/go.mod
++++ b/go.mod
+@@ -3,6 +3,7 @@ module github.com/bazelbuild/bazelisk
+ go 1.14
+ 
+ require (
++	github.com/bazelbuild/rules_go v0.23.3
+ 	github.com/hashicorp/go-version v1.2.0
+ 	github.com/mitchellh/go-homedir v1.1.0
+ )

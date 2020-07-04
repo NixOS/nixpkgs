@@ -1,13 +1,15 @@
 { stdenv, fetchgit, perl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
+  pname = "mr";
   version = "1.20180726";
-  name = "mr-${version}";
 
   src = fetchgit {
     url = "git://myrepos.branchable.com/";
-    rev = "refs/tags/" + version;
-    sha256 = "15i9bs2i25l7ibv530ghy8280kklcgm5kr6j86s7iwcqqckd0czp";
+    # the repository moved its tags at least once
+    # when updating please continue using the revision hash here
+    rev = "0ad7a17bb455de1fec3b2375c7aac72ab2a22ac4";
+    sha256 = "0jphw61plm8cgklja6hs639xhdvxgvjwbr6jpvjwpp7hc5gmhms5";
   };
 
   postPatch = ''
@@ -16,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
     description = "Multiple Repository management tool";
@@ -28,7 +30,7 @@ stdenv.mkDerivation rec {
       bzr, darcs, fossil and veracity repositories, and support for
       other version control systems can easily be added.
     '';
-    homepage = http://myrepos.branchable.com/;
+    homepage = "http://myrepos.branchable.com/";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ antono henrytill ];

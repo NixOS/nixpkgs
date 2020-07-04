@@ -1,102 +1,155 @@
 { stdenv, lib, fetchurl, fetchFromGitLab, bundlerEnv
-, ruby, tzdata, git, procps, nettools
-, gitlabEnterprise ? false
+, ruby, tzdata, git, nettools, nixosTests, nodejs
+, gitlabEnterprise ? false, callPackage, yarn
+, fixup_yarn_lock, replace
 }:
 
 let
-  rubyEnv = bundlerEnv {
+  data = (builtins.fromJSON (builtins.readFile ./data.json));
+
+  version = data.version;
+  src = fetchFromGitLab {
+    owner = data.owner;
+    repo = data.repo;
+    rev = data.rev;
+    sha256 = data.repo_hash;
+  };
+
+  rubyEnv = bundlerEnv rec {
     name = "gitlab-env-${version}";
     inherit ruby;
-    gemdir = ./rubyEnv- + "${if gitlabEnterprise then "ee" else "ce"}";
-    groups = [ "default" "unicorn" "ed25519" "metrics" ];
+    gemdir = ./rubyEnv;
+    gemset =
+      let x = import (gemdir + "/gemset.nix");
+      in x // {
+        # grpc expects the AR environment variable to contain `ar rpc`. See the
+        # discussion in nixpkgs #63056.
+        grpc = x.grpc // {
+          patches = [ ./fix-grpc-ar.patch ];
+          dontBuild = false;
+        };
+      };
+    groups = [
+      "default" "unicorn" "ed25519" "metrics" "development" "puma" "test" "kerberos"
+    ];
+    # N.B. omniauth_oauth2_generic and apollo_upload_server both provide a
+    # `console` executable.
+    ignoreCollisions = true;
   };
 
-  version = "11.4.0";
+  yarnOfflineCache = (callPackage ./yarnPkgs.nix {}).offline_cache;
 
-  sources = if gitlabEnterprise then {
-    gitlabDeb = fetchurl {
-      url = "https://packages.gitlab.com/gitlab/gitlab-ee/packages/debian/stretch/gitlab-ee_${version}-ee.0_amd64.deb/download.deb";
-      sha256 = "1y2a8acgsgrgcjazijsflhxq4fwqvd9yhrjx5pcncb24vl0x6dg4";
-    };
-    gitlab = fetchFromGitLab {
-      owner = "gitlab-org";
-      repo = "gitlab-ee";
-      rev = "v${version}-ee";
-      sha256 = "1pyqk1c5bml7chs4pq1fcxkrhk5r327xx9my6zmp2cb503s5m590";
-    };
-  } else {
-    gitlabDeb = fetchurl {
-      url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/stretch/gitlab-ce_${version}-ce.0_amd64.deb/download.deb";
-      sha256 = "0wiizjihn1a6hg6a2wpwmnh5a34n102va4djac3sgx74mwx4bniq";
-    };
-    gitlab = fetchFromGitLab {
-      owner = "gitlab-org";
-      repo = "gitlab-ce";
-      rev = "v${version}";
-      sha256 = "1a8pavqc9bblss5z9ikc9b0k0ra33vw73zy7rvn0v1wgvbqpc24k";
-    };
+  assets = stdenv.mkDerivation {
+    pname = "gitlab-assets";
+    inherit version src;
+
+    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git ];
+
+    # Since version 12.6.0, the rake tasks need the location of git,
+    # so we have to apply the location patches here too.
+    patches = [ ./remove-hardcoded-locations.patch ];
+    # One of the patches uses this variable - if it's unset, execution
+    # of rake tasks fails.
+    GITLAB_LOG_PATH = "log";
+    FOSS_ONLY = !gitlabEnterprise;
+
+    configurePhase = ''
+      runHook preConfigure
+
+      # Some rake tasks try to run yarn automatically, which won't work
+      rm lib/tasks/yarn.rake
+
+      # The rake tasks won't run without a basic configuration in place
+      mv config/database.yml.env config/database.yml
+      mv config/gitlab.yml.example config/gitlab.yml
+
+      # Yarn and bundler wants a real home directory to write cache, config, etc to
+      export HOME=$NIX_BUILD_TOP/fake_home
+
+      # Make yarn install packages from our offline cache, not the registry
+      yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+
+      # Fixup "resolved"-entries in yarn.lock to match our offline cache
+      ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
+
+      # fixup_yarn_lock currently doesn't correctly fix the dagre-d3
+      # url, so we have to do it manually
+      ${replace}/bin/replace-literal -f -e '"https://codeload.github.com/dagrejs/dagre-d3/tar.gz/e1a00e5cb518f5d2304a35647e024f31d178e55b"' \
+                                           '"https___codeload.github.com_dagrejs_dagre_d3_tar.gz_e1a00e5cb518f5d2304a35647e024f31d178e55b"' yarn.lock
+
+      yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
+
+      patchShebangs node_modules/
+
+      runHook postConfigure
+    '';
+
+    buildPhase = ''
+      runHook preBuild
+
+      bundle exec rake gettext:po_to_json RAILS_ENV=production NODE_ENV=production
+      bundle exec rake rake:assets:precompile RAILS_ENV=production NODE_ENV=production
+      bundle exec rake webpack:compile RAILS_ENV=production NODE_ENV=production NODE_OPTIONS="--max_old_space_size=3072"
+      bundle exec rake gitlab:assets:fix_urls RAILS_ENV=production NODE_ENV=production
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mv public/assets $out
+
+      runHook postInstall
+    '';
   };
-
 in
+stdenv.mkDerivation {
+  name = "gitlab${lib.optionalString gitlabEnterprise "-ee"}-${version}";
 
-stdenv.mkDerivation rec {
-  name = "gitlab${if gitlabEnterprise then "-ee" else ""}-${version}";
-
-  src = sources.gitlab;
+  inherit src;
 
   buildInputs = [
-    rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git procps nettools
+    rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git nettools
   ];
 
   patches = [ ./remove-hardcoded-locations.patch ];
 
   postPatch = ''
+    ${lib.optionalString (!gitlabEnterprise) ''
+      # Remove all proprietary components
+      rm -rf ee
+    ''}
+
     # For reasons I don't understand "bundle exec" ignores the
     # RAILS_ENV causing tests to be executed that fail because we're
     # not installing development and test gems above. Deleting the
-    # tests works though.:
+    # tests works though.
     rm lib/tasks/test.rake
 
     rm config/initializers/gitlab_shell_secret_token.rb
 
-    substituteInPlace app/controllers/admin/background_jobs_controller.rb \
-        --replace "ps -U" "${procps}/bin/ps -U"
-
     sed -i '/ask_to_continue/d' lib/tasks/gitlab/two_factor.rake
+    sed -ri -e '/log_level/a config.logger = Logger.new(STDERR)' config/environments/production.rb
 
-    # required for some gems:
-    cat > config/database.yml <<EOF
-      production:
-        adapter: <%= ENV["GITLAB_DATABASE_ADAPTER"] || sqlite %>
-        database: gitlab
-        host: <%= ENV["GITLAB_DATABASE_HOST"] || "127.0.0.1" %>
-        password: <%= ENV["GITLAB_DATABASE_PASSWORD"] || "blerg" %>
-        username: gitlab
-        encoding: utf8
-    EOF
+    # Always require lib-files and application.rb through their store
+    # path, not their relative state directory path. This gets rid of
+    # warnings and means we don't have to link back to lib from the
+    # state directory.
+    ${replace}/bin/replace-literal -f -r -e '../lib' "$out/share/gitlab/lib" config
+    ${replace}/bin/replace-literal -f -r -e "require_relative 'application'" "require_relative '$out/share/gitlab/config/application'" config
   '';
 
   buildPhase = ''
-    mv config/gitlab.yml.example config/gitlab.yml
-
-    # Building this requires yarn, node &c, so we just get it from the deb
-    ar p ${sources.gitlabDeb} data.tar.gz | gunzip > gitlab-deb-data.tar
-    # Work around unpacking deb containing binary with suid bit
-    tar -f gitlab-deb-data.tar --delete ./opt/gitlab/embedded/bin/ksu
-    tar -xf gitlab-deb-data.tar
-
-    mv -v opt/gitlab/embedded/service/gitlab-rails/public/assets public
-    rm -rf opt # only directory in data.tar.gz
-
-    mv config/gitlab.yml config/gitlab.yml.example
     rm -f config/secrets.yml
     mv config config.dist
+    rm -r tmp
   '';
 
   installPhase = ''
-    rm -r tmp
     mkdir -p $out/share
     cp -r . $out/share/gitlab
+    ln -sf ${assets} $out/share/gitlab/public/assets
     rm -rf $out/share/gitlab/log
     ln -sf /run/gitlab/log $out/share/gitlab/log
     ln -sf /run/gitlab/uploads $out/share/gitlab/public/uploads
@@ -109,14 +162,21 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit rubyEnv;
+    inherit rubyEnv assets;
     ruby = rubyEnv.wrappedRuby;
+    GITALY_SERVER_VERSION = data.passthru.GITALY_SERVER_VERSION;
+    GITLAB_PAGES_VERSION = data.passthru.GITLAB_PAGES_VERSION;
+    GITLAB_SHELL_VERSION = data.passthru.GITLAB_SHELL_VERSION;
+    GITLAB_WORKHORSE_VERSION = data.passthru.GITLAB_WORKHORSE_VERSION;
+    tests = {
+      nixos-test-passes = nixosTests.gitlab;
+    };
   };
 
   meta = with lib; {
-    homepage = http://www.gitlab.com/;
+    homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin krav ];
+    maintainers = with maintainers; [ fpletz globin krav talyz ];
   } // (if gitlabEnterprise then
     {
       license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE

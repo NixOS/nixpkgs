@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libclthreads-${version}";
+  pname = "libclthreads";
   version = "2.4.2";
 
   src = fetchurl {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Zita thread library";
-    homepage = http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html;
+    homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/index.html";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ magnetophon ];
     platforms = platforms.linux;

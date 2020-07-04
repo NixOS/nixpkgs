@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.2.4";
-  name = "libebur128-${version}";
+  pname = "libebur128";
 
   src = fetchFromGitHub {
     owner = "jiixyj";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Implementation of the EBU R128 loudness standard";
-    homepage = https://github.com/jiixyj/libebur128;
+    homepage = "https://github.com/jiixyj/libebur128";
     license = licenses.mit;
     maintainers = [ maintainers.andrewrk ];
     platforms = platforms.unix;

@@ -8,8 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "1wjslvfy76szf0mgg2i9y9q30858xyjn6v2acc24zal76d1m778b";
   };
 
+  makeFlags = [ "AR=${stdenv.cc.bintools.targetPrefix}ar" ];
+
   meta = {
-    homepage = http://zsync.moria.org.uk/;
+    homepage = "http://zsync.moria.org.uk/";
     description = "File distribution system using the rsync algorithm";
     license = stdenv.lib.licenses.free;
     maintainers = with stdenv.lib.maintainers; [viric];

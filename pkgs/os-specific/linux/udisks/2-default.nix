@@ -1,23 +1,22 @@
-{ stdenv, fetchFromGitHub, substituteAll, libtool, pkgconfig, intltool, gnused
-, gnome3, gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash
+{ stdenv, fetchFromGitHub, fetchpatch, substituteAll, libtool, pkgconfig, gettext, gnused
+, gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash, which
 , expat, libxslt, docbook_xsl, utillinux, mdadm, libgudev, libblockdev, parted
-, gobjectIntrospection, docbook_xml_dtd_412, docbook_xml_dtd_43
+, gobject-introspection, docbook_xml_dtd_412, docbook_xml_dtd_43, autoconf, automake
 , xfsprogs, f2fs-tools, dosfstools, e2fsprogs, btrfs-progs, exfat, nilfs-utils, ntfs3g
 }:
 
-let
-  version = "2.8.1";
-in stdenv.mkDerivation rec {
-  name = "udisks-${version}";
+stdenv.mkDerivation rec {
+  pname = "udisks";
+  version = "2.8.4";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "udisks";
-    rev = name;
-    sha256 = "073iqa0pwa7ab0qw33h3ic89508a78incmg6rq914d6br7s030zy";
+    rev = "${pname}-${version}";
+    sha256 = "01wx2x8xyal595dhdih7rva2bz7gqzgwdp56gi0ikjdzayx17wcf";
   };
 
-  outputs = [ "out" "man" "dev" "devdoc" ];
+  outputs = [ "out" "man" "dev" ] ++ stdenv.lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "devdoc";
 
   patches = [
     (substituteAll {
@@ -33,12 +32,21 @@ in stdenv.mkDerivation rec {
     })
     (substituteAll {
       src = ./force-path.patch;
-      path = stdenv.lib.makeBinPath [ btrfs-progs coreutils dosfstools e2fsprogs exfat f2fs-tools nilfs-utils xfsprogs ntfs3g parted utillinux ];
+      path = stdenv.lib.makeBinPath [
+        btrfs-progs coreutils dosfstools e2fsprogs exfat f2fs-tools nilfs-utils
+        xfsprogs ntfs3g parted utillinux
+      ];
+    })
+
+    # Fix tests: https://github.com/storaged-project/udisks/issues/724
+    (fetchpatch {
+      url = "https://github.com/storaged-project/udisks/commit/60a0c1c967821d317046d9494e45b9a8e4e7a1c1.patch";
+      sha256 = "0rlgqsxn7rb074x6ivm0ya5lywc4llifj5br0zr31mwwckv7hsdm";
     })
   ];
 
   nativeBuildInputs = [
-    pkgconfig gnome3.gnome-common libtool intltool gobjectIntrospection
+    autoconf automake pkgconfig libtool gettext which gobject-introspection
     gtk-doc libxslt docbook_xml_dtd_412 docbook_xml_dtd_43 docbook_xsl
   ];
 
@@ -52,13 +60,14 @@ in stdenv.mkDerivation rec {
     expat libgudev libblockdev acl systemd glib libatasmart polkit
   ];
 
-  preConfigure = "./autogen.sh";
+  preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
   configureFlags = [
-    "--enable-gtk-doc"
+    (stdenv.lib.enableFeature (stdenv.buildPlatform == stdenv.hostPlatform) "gtk-doc")
     "--localstatedir=/var"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-udevdir=$(out)/lib/udev"
+    "--with-tmpfilesdir=no"
   ];
 
   makeFlags = [
@@ -66,13 +75,15 @@ in stdenv.mkDerivation rec {
     "INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0"
   ];
 
-  doCheck = false; # fails
+  enableParallelBuilding = true;
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "A daemon, tools and libraries to access and manipulate disks, storage devices and technologies";
-    homepage = https://www.freedesktop.org/wiki/Software/udisks/;
-    license = licenses.gpl2Plus; # lgpl2Plus for the library, gpl2Plus for the tools & daemon
-    maintainers = with maintainers; [];
+    homepage = "https://www.freedesktop.org/wiki/Software/udisks/";
+    license = with licenses; [ lgpl2Plus gpl2Plus ]; # lgpl2Plus for the library, gpl2Plus for the tools & daemon
+    maintainers = with maintainers; [ johnazoidberg ];
     platforms = platforms.linux;
   };
 }

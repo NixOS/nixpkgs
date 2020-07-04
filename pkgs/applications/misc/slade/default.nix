@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, wxGTK, gtk2, sfml, fluidsynth, curl, freeimage, ftgl, glew, zip }:
 
 stdenv.mkDerivation rec {
-  name = "slade-${version}";
+  pname = "slade";
   version = "3.1.1.5";
 
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Doom editor";
-    homepage = http://slade.mancubus.net/;
+    homepage = "http://slade.mancubus.net/";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ abbradar ];

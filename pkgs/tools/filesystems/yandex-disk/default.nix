@@ -4,21 +4,21 @@ let
   p = if stdenv.is64bit then {
       arch = "x86_64";
       gcclib = "${stdenv.cc.cc.lib}/lib64";
-      sha256 = "1skbzmrcjbw00a3jnbl2llqwz3ahsgvq74mjav68s2hw1wjidvk6";
+      sha256 = "14bpc5ddhxvgfxkxhj5q9z443s7z4nn1zf4k1hxj7rbf13rcpg00";
     }
     else {
       arch = "i386";
       gcclib = "${stdenv.cc.cc.lib}/lib";
-      sha256 = "09h71i3k9d24ki81jdwhnav63fqbc44glbx228s9g3cr4ap41jcx";
+      sha256 = "1s829q8gy9xgz0jm7w70aljqs2h49x402blqfr9zvn806aprmrm5";
     };
 in
 stdenv.mkDerivation rec {
 
-  name = "yandex-disk-${version}";
-  version = "0.1.5.978";
+  pname = "yandex-disk";
+  version = "0.1.5.1039";
 
   src = fetchurl {
-    url = "https://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${name}-1.fedora.${p.arch}.rpm";
+    url = "https://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${pname}-${version}-1.fedora.${p.arch}.rpm";
     sha256 = p.sha256;
   };
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://help.yandex.com/disk/cli-clients.xml;
+    homepage = "https://help.yandex.com/disk/cli-clients.xml";
     description = "A free cloud file storage service";
     maintainers = with stdenv.lib.maintainers; [ smironov jagajaga ];
     platforms = ["i686-linux" "x86_64-linux"];

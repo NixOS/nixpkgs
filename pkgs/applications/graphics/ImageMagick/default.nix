@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig, libtool
-, bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
+, bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, fftw, libheif, libde265
 , ApplicationServices
 }:
@@ -13,8 +13,8 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "6.9.9-34";
-    sha256 = "0sqrgyfi7i7x1akna95c1qhk9sxxswzm3pkssfi4w6v7bn24g25g";
+    version = "6.9.11-14";
+    sha256 = "0x51vf48g75cfp0mbwf3ckmlwa6v00592xx3gvrqzjzx7vlayjyg";
     patches = [];
   }
     # Freeze version on mingw so we don't need to port the patch too often.
@@ -31,8 +31,8 @@ let
       };
 in
 
-stdenv.mkDerivation rec {
-  name = "imagemagick-${version}";
+stdenv.mkDerivation {
+  pname = "imagemagick";
   inherit (cfg) version;
 
   src = fetchFromGitHub {
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     inherit (cfg) sha256;
   };
 
-  patches = [ ./imagetragick.patch ] ++ cfg.patches;
+  patches = cfg.patches;
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
   outputMan = "out"; # it's tiny
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ zlib fontconfig freetype ghostscript
-      libpng libtiff libxml2 libheif libde265
+      libpng libtiff libxml2 libheif libde265 djvulibre
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
       [ openexr librsvg openjpeg ]
@@ -85,9 +85,9 @@ stdenv.mkDerivation rec {
     moveToOutput "lib/ImageMagick-*/config-Q16" "$dev" # includes configure params
     for file in "$dev"/bin/*-config; do
       substituteInPlace "$file" --replace "${pkgconfig}/bin/pkg-config -config" \
-        ${pkgconfig}/bin/pkg-config
+        ${pkgconfig}/bin/${pkgconfig.targetPrefix}pkg-config
       substituteInPlace "$file" --replace ${pkgconfig}/bin/pkg-config \
-        "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '${pkgconfig}/bin/pkg-config'"
+        "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '${pkgconfig}/bin/${pkgconfig.targetPrefix}pkg-config'"
     done
   '' + lib.optionalString (ghostscript != null) ''
     for la in $out/lib/*.la; do
@@ -96,10 +96,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.imagemagick.org/;
+    homepage = "http://www.imagemagick.org/";
     description = "A software suite to create, edit, compose, or convert bitmap images";
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ the-kenny wkennington ];
     license = licenses.asl20;
   };
 }

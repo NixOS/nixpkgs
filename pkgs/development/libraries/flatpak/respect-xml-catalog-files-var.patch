@@ -1,6 +1,8 @@
+diff --git a/acinclude.m4 b/acinclude.m4
+index 92ec3985..b3fccf1d 100644
 --- a/acinclude.m4
 +++ b/acinclude.m4
-@@ -40,8 +40,8 @@
+@@ -40,8 +40,8 @@ AC_DEFUN([JH_CHECK_XML_CATALOG],
  [
    AC_REQUIRE([JH_PATH_XML_CATALOG],[JH_PATH_XML_CATALOG(,[:])])dnl
    AC_MSG_CHECKING([for ifelse([$2],,[$1],[$2]) in XML catalog])

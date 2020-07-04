@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, qmake, qtsvg, makeWrapper, xdg_utils }:
+{ stdenv, mkDerivation, fetchurl, qmake, qtsvg, makeWrapper, xdg_utils }:
 
 let
-  version = "1.43.27";
-in stdenv.mkDerivation rec {
-  name = "mytetra-${version}";
+  version = "1.44.55";
+in mkDerivation {
+  pname = "mytetra";
+  inherit version;
   src = fetchurl {
     url = "https://github.com/xintrea/mytetra_dev/archive/v.${version}.tar.gz";
-    sha256 = "1gzr11jy1bvnp28w2ar3wmh76g55jn9nra5la5qasnal6b5pg28h";
+    sha256 = "13lmfvschm1xwr0ys2ykhs0bb83m2f39rk1jdd7zf8yxlqki4i6l";
   };
 
   nativeBuildInputs = [ qmake makeWrapper ];
@@ -15,11 +16,11 @@ in stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   preBuild = ''
-    substituteInPlace mytetra.pro \
+    substituteInPlace app/app.pro \
       --replace /usr/local/bin $out/bin \
       --replace /usr/share $out/share
 
-    substituteInPlace src/views/mainWindow/MainWindow.cpp \
+    substituteInPlace app/src/views/mainWindow/MainWindow.cpp \
       --replace ":/resource/pic/logo.svg" "$out/share/icons/hicolor/48x48/apps/mytetra.png"
   '';
 
@@ -30,7 +31,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Smart manager for information collecting";
-    homepage = https://webhamster.ru/site/page/index/articles/projectcode/138;
+    homepage = "https://webhamster.ru/site/page/index/articles/projectcode/138";
     license = licenses.gpl3;
     maintainers = [ maintainers.gnidorah ];
     platforms = platforms.linux;

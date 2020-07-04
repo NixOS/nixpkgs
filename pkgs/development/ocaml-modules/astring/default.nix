@@ -5,18 +5,16 @@ stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-astring-${version}";
 
   src = fetchurl {
-    url = "http://erratique.ch/software/astring/releases/astring-${version}.tbz";
+    url = "https://erratique.ch/software/astring/releases/astring-${version}.tbz";
     sha256 = "0ixjwc3plrljvj24za3l9gy0w30lsbggp8yh02lwrzw61ls4cri0";
   };
-
-  unpackCmd = "tar -xf $curSrc";
 
   buildInputs = [ ocaml findlib ocamlbuild topkg ];
 
   inherit (topkg) buildPhase installPhase;
 
   meta = {
-    homepage = http://erratique.ch/software/astring;
+    homepage = "https://erratique.ch/software/astring";
     description = "Alternative String module for OCaml";
     longDescription = ''
       Astring exposes an alternative String module for OCaml. This module tries

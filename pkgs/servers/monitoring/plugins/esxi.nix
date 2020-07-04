@@ -2,17 +2,17 @@
 
 let
   bName = "check_esxi_hardware";
-  pName = stdenv.lib.replaceStrings [ "_" ] [ "-" ] "${bName}";
+  pName = stdenv.lib.replaceStrings [ "_" ] [ "-" ] bName;
 
 in python2Packages.buildPythonApplication rec {
   name = "${pName}-${version}";
-  version = "20161013";
+  version = "20181001";
 
   src = fetchFromGitHub {
     owner  = "Napsty";
     repo   = bName;
     rev    = version;
-    sha256 = "19zybcg62dqcinixnp1p8zw916x3w7xvy6dlsmn347iigfa5s55s";
+    sha256 = "0azfacxcnnxxfqzrhh29k8cnjyr88gz35bi6h8fq931fl3plv10l";
   };
 
   dontBuild = true;
@@ -30,7 +30,7 @@ in python2Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python2Packages; [ pywbem ];
 
   meta = with stdenv.lib; {
-    homepage = https://www.claudiokuenzler.com/nagios-plugins/;
+    homepage = "https://www.claudiokuenzler.com/nagios-plugins/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
   };

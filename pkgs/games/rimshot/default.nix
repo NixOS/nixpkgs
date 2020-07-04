@@ -11,8 +11,8 @@ let
 
   desktopItem = makeDesktopItem {
     name = "rimshot";
-    exec = "${pname}";
-    icon = "${icon}";
+    exec = pname;
+    icon = icon;
     comment = "Create your own music";
     desktopName = "Rimshot";
     genericName = "rimshot";
@@ -21,7 +21,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
     license = licenses.free;
-    downloadPage = http://stabyourself.net/rimshot/;
+    downloadPage = "http://stabyourself.net/rimshot/";
   };
 
 }

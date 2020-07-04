@@ -2,17 +2,17 @@
 , darwin, fontconfig, harfbuzz, openssl, pkgconfig }:
 
 rustPlatform.buildRustPackage rec {
-  name = "tectonic-${version}";
-  version = "0.1.9";
+  pname = "tectonic";
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "tectonic-typesetting";
     repo = "tectonic";
     rev = "v${version}";
-    sha256 = "1prrw1npmmqjx966dxrr4jll16scf0cv24nnc70zlbwwb15zhgiq";
+    sha256 = "0dycv135bkpf71iwlwh8rwwvn287d605nl7v8mjxlrsayiivdmn9";
   };
 
-  cargoSha256 = "00hcs9k9x23xy1pgf8skgb6i5kjwgipy8c0d27nniaxa3dpy5daq";
+  cargoSha256 = "1axrf7d01gmhvrap13rydfvwcsg0lk1zw7z1i7zzm898bc7c02qn";
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Modernized, complete, self-contained TeX/LaTeX engine, powered by XeTeX and TeXLive";
-    homepage = https://tectonic-typesetting.github.io/;
+    homepage = "https://tectonic-typesetting.github.io/";
     license = with licenses; [ mit ];
     maintainers = [ maintainers.lluchs ];
     platforms = platforms.all;

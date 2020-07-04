@@ -4,7 +4,8 @@ let
   version = "2.4.0";
 in
 stdenv.mkDerivation {
-  name = "svn2git-${version}";
+  pname = "svn2git";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/nirvdrum/svn2git/archive/v${version}.tar.gz";
@@ -30,11 +31,9 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://github.com/nirvdrum/svn2git;
+    homepage = "https://github.com/nirvdrum/svn2git";
     description = "Tool for importing Subversion repositories into git";
     license = stdenv.lib.licenses.mit;
-
-    maintainers = [ stdenv.lib.maintainers.the-kenny ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

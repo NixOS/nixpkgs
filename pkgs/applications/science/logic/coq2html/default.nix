@@ -1,11 +1,12 @@
-{ stdenv, make, fetchgit, ocaml }:
+{ stdenv, fetchgit, ocaml }:
 
 let 
   version = "20170720";
 in
 
 stdenv.mkDerivation {
-  name = "coq2html-${version}";
+  pname = "coq2html";
+  inherit version;
 
   src = fetchgit {
     url = "https://github.com/xavierleroy/coq2html";
@@ -13,7 +14,7 @@ stdenv.mkDerivation {
     sha256 = "1x466j0pyjggyz0870pdllv9f5vpnfrgkd0w7ajvm9rkwyp3f610";
   };
 
-  buildInputs = [ make ocaml ];
+  buildInputs = [ ocaml ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -30,7 +31,7 @@ stdenv.mkDerivation {
       initially hidden, but can be revealed one by one by clicking on the
       "Proof" keyword.
     '';
-    homepage = https://github.com/xavierleroy/coq2html;
+    homepage = "https://github.com/xavierleroy/coq2html";
     license = licenses.gpl2;
     maintainers = with maintainers; [ jwiegley ];
     platforms = platforms.unix;

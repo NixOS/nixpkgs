@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ pure libiodbc ];
-  makeFlags = "libdir=$(out)/lib prefix=$(out)/";
+  makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
     description = "A simple ODBC interface for the Pure programming language";
-    homepage = http://puredocs.bitbucket.org/pure-odbc.html;
+    homepage = "http://puredocs.bitbucket.org/pure-odbc.html";
     license = stdenv.lib.licenses.lgpl3Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ asppsa ];

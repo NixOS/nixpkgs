@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "py-cpuinfo";
-  version = "4.0.0";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
      owner = "workhorsy";
      repo = pname;
      rev = "v${version}";
-     sha256 = "1pp561lj80jnvr2038nrzhmks2akxsbdqxvfrqa6n340x81981lm";
+     sha256 = "0lxl9n6djaz5h1zrb2jca4qwl41c2plxy8chr7yhcxnzg0srddqi";
   };
 
   checkInputs = [
@@ -27,7 +27,14 @@ buildPythonPackage rec {
 
   meta = {
     description = "Get CPU info with pure Python 2 & 3";
-    homepage = https://github.com/workhorsy/py-cpuinfo;
+    longDescription = ''
+      Py-cpuinfo gets CPU info with pure Python and should work without any
+      extra programs or libraries, beyond what your OS provides. It does not
+      require any compilation (C/C++, assembly, etc.) to use and works with
+      Python 2 and 3.
+    '';
+    inherit (src.meta) homepage;
+    changelog = "https://github.com/workhorsy/py-cpuinfo/blob/v${version}/ChangeLog";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ costrouc ];
   };

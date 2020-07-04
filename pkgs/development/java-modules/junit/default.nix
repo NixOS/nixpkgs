@@ -6,7 +6,7 @@ let
   poms = import (../poms.nix) { inherit fetchMaven; };
   collections = import (../collections.nix) { inherit pkgs; };
 in rec {
-  junitGen = { mavenDeps, sha512, version }: mavenbuild rec {
+  junitGen = { mavenDeps, sha512, version }: mavenbuild {
     inherit mavenDeps sha512 version;
 
     name = "junit-${version}";
@@ -19,7 +19,7 @@ in rec {
     m2Path = "/junit/junit/${version}";
 
     meta = {
-      homepage = https://junit.org/junit4/;
+      homepage = "https://junit.org/junit4/";
       description = "Simple framework to write repeatable tests. It is an instance of the xUnit architecture for unit testing frameworks";
       license = stdenv.lib.licenses.epl10;
       platforms = stdenv.lib.platforms.all;

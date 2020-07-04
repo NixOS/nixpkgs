@@ -1,8 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , pytest
+, pytest-asyncio
 , python-rapidjson
 , pretend
 , freezegun
@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "structlog";
-  version = "18.2.0";
+  version = "20.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e361edb3b9aeaa85cd38a1bc9ddbb60cda8a991fc29de9db26832f6300e81eb4";
+    sha256 = "7a48375db6274ed1d0ae6123c486472aa1d0890b08d314d2b016f3aa7f35990b";
   };
 
-  checkInputs = [ pytest pretend freezegun simplejson twisted ]
+  checkInputs = [ pytest pytest-asyncio pretend freezegun simplejson twisted ]
     ++ lib.optionals (pythonAtLeast "3.6") [ python-rapidjson ];
   propagatedBuildInputs = [ six ];
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Painless structural logging";
-    homepage = http://www.structlog.org/;
+    homepage = "http://www.structlog.org/";
     license = lib.licenses.asl20;
   };
 }

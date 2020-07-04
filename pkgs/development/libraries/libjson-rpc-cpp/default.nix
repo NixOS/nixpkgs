@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libjson-rpc-cpp-${version}";
+  pname = "libjson-rpc-cpp";
   version = "0.7.0";
 
   src = fetchFromGitHub {
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C++ framework for json-rpc (json remote procedure call)";
-    homepage = https://github.com/cinemast/libjson-rpc-cpp;
+    homepage = "https://github.com/cinemast/libjson-rpc-cpp";
     license = licenses.mit;
     platforms = platforms.linux;
   };

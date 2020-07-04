@@ -1,29 +1,23 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytest, pytestrunner, pytestcov, pytestflakes, pytestpep8, sphinx, six }:
+{ lib, buildPythonPackage, fetchPypi, pytest, pytestrunner, pytestcov, pytest-flakes, pytestpep8, sphinx, six }:
 
 buildPythonPackage rec {
   pname = "python-utils";
-  version = "2.3.0";
-  name = pname + "-" + version;
+  version = "2.4.0";
 
-  src = fetchFromGitHub {
-    owner = "WoLpH";
-    repo = "python-utils";
-    rev = "v${version}";
-    sha256 = "14gyphcqwa77wfbnrzj363v3fdkxy08378lgd7l3jqnpvr8pfp5c";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "12c0glzkm81ljgf6pwh0d4rmdm1r7vvgg3ifzp8yp9cfyngw07zj";
   };
 
-  checkInputs = [ pytest pytestrunner pytestcov pytestflakes pytestpep8 sphinx ];
-
   postPatch = ''
-    # pytest-runner is only actually required in checkPhase
-    substituteInPlace setup.py --replace "setup_requires=['pytest-runner']," ""
+    rm -r tests/__pycache__
+    rm tests/*.pyc
   '';
 
-  # Tests failing
-  doCheck = false;
+  checkInputs = [ pytest pytestrunner pytestcov pytest-flakes pytestpep8 sphinx ];
 
   checkPhase = ''
-    py.test
+    py.test tests
   '';
 
   propagatedBuildInputs = [ six ];

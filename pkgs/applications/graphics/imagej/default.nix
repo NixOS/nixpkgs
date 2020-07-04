@@ -7,8 +7,8 @@
 #    on linux systems, but we here do not attempt to fix it.)
 
 let
-  imagej150 = stdenv.mkDerivation rec {
-    name = "imagej-${version}";
+  imagej150 = stdenv.mkDerivation {
+    pname = "imagej";
     version = "150";
 
     src = fetchurl {
@@ -32,7 +32,7 @@ let
         --add-flags "-jar $out/share/java/ij.jar -ijpath $out/share"
     '';
     meta = with stdenv.lib; {
-      homepage = https://imagej.nih.gov/ij/;
+      homepage = "https://imagej.nih.gov/ij/";
       description = "Image processing and analysis in Java";
       longDescription = ''
         ImageJ is a public domain Java image processing program

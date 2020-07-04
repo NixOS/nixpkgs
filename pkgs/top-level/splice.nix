@@ -96,19 +96,20 @@ let
                    } @ args:
     if actuallySplice then spliceReal args else pkgsHostTarget;
 
-  splicedPackages = splicePackages rec {
-    pkgsBuildBuild = pkgs.buildPackages.buildPackages;
-    pkgsBuildHost = pkgs.buildPackages;
-    pkgsBuildTarget =
-      if pkgs.stdenv.targetPlatform == pkgs.stdenv.hostPlatform
-      then pkgsBuildHost
-      else assert pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform; pkgsHostTarget;
-    pkgsHostHost = {}; # unimplemented
-    pkgsHostTarget = pkgs;
-    pkgsTargetTarget = pkgs.targetPackages;
+  splicedPackages = splicePackages {
+    inherit (pkgs)
+      pkgsBuildBuild pkgsBuildHost pkgsBuildTarget
+      pkgsHostHost pkgsHostTarget
+      pkgsTargetTarget
+      ;
   } // {
     # These should never be spliced under any circumstances
-    inherit (pkgs) pkgs buildPackages targetPackages;
+    inherit (pkgs)
+      pkgsBuildBuild pkgsBuildHost pkgsBuildTarget
+      pkgsHostHost pkgsHostTarget
+      pkgsTargetTarget
+      buildPackages pkgs targetPackages
+      ;
     inherit (pkgs.stdenv) buildPlatform targetPlatform hostPlatform;
   };
 

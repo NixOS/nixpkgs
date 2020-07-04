@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchgit
 , pyptlib
-, argparse
 , twisted
 , pycrypto
 , pyyaml
@@ -23,15 +22,15 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "argparse" ""
   '';
 
-  propagatedBuildInputs = [ pyptlib argparse twisted pycrypto pyyaml ];
+  propagatedBuildInputs = [ pyptlib twisted pycrypto pyyaml ];
 
   # No tests in archive
   doCheck = false;
 
   meta = with stdenv.lib; {
     description = "A pluggable transport proxy";
-    homepage = https://www.torproject.org/projects/obfsproxy;
-    repositories.git = https://git.torproject.org/pluggable-transports/obfsproxy.git;
+    homepage = "https://www.torproject.org/projects/obfsproxy";
+    repositories.git = "https://git.torproject.org/pluggable-transports/obfsproxy.git";
     maintainers = with maintainers; [ phreedom thoughtpolice ];
   };
 

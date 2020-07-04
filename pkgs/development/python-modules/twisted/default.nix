@@ -11,19 +11,20 @@
 , attrs
 , pyopenssl
 , service-identity
+, setuptools
 , idna
 }:
 buildPythonPackage rec {
   pname = "Twisted";
-  version = "18.7.0";
+  version = "20.3.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.bz2";
-    sha256 = "95ae985716e8107816d8d0df249d558dbaabb677987cc2ace45272c166b267e4";
+    sha256 = "040yzha6cyshnn6ljgk2birgh6mh2cnra48xp5ina5vfsnsmab6p";
   };
 
-  propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink pyhamcrest attrs ];
+  propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink pyhamcrest attrs setuptools ];
 
   passthru.extras.tls = [ pyopenssl service-identity idna ];
 
@@ -38,7 +39,9 @@ buildPythonPackage rec {
   # http://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3
   # and http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=477103 for
   # details.
-  postInstall = "$out/bin/twistd --help > /dev/null";
+  postFixup = ''
+    $out/bin/twistd --help > /dev/null
+  '';
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s twisted/test
@@ -47,7 +50,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://twistedmatrix.com/;
+    homepage = "https://twistedmatrix.com/";
     description = "Twisted, an event-driven networking engine written in Python";
     longDescription = ''
       Twisted is an event-driven networking engine written in Python

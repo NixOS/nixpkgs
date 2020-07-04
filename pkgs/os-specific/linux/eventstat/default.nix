@@ -1,11 +1,11 @@
 { stdenv, lib, fetchzip, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "eventstat-${version}";
-  version = "0.04.04";
+  pname = "eventstat";
+  version = "0.04.09";
   src = fetchzip {
-    url = "http://kernel.ubuntu.com/~cking/tarballs/eventstat/eventstat-${version}.tar.gz";
-    sha256 = "034xpdr3ip4w9k713wjc45x66k3nz6wg9wkzmchrjifxk4dldbd8";
+    url = "https://kernel.ubuntu.com/~cking/tarballs/eventstat/eventstat-${version}.tar.gz";
+    sha256 = "1b3m58mak62ym2amnmk62c2d6fypk30fw6jsmirh1qz7dwix4bl5";
   };
   buildInputs = [ ncurses ];
   installFlags = [ "DESTDIR=$(out)" ];

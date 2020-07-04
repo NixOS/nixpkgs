@@ -1,26 +1,19 @@
-{ stdenv, fetchurl, sane-backends, qtbase, qtsvg, nss, autoPatchelfHook, lib, makeWrapper }:
+{ stdenv, fetchurl, sane-backends, qtbase, qtsvg, nss, autoPatchelfHook, lib, wrapQtAppsHook }:
 
-let
-  version = "5.1.60";
-
-in stdenv.mkDerivation {
-  name = "masterpdfeditor-${version}";
+stdenv.mkDerivation rec {
+  pname = "masterpdfeditor";
+  version = "5.4.38";
 
   src = fetchurl {
-    url = "https://code-industry.net/public/master-pdf-editor-${version}_qt5.amd64.tar.gz";
-    sha256 = "0br5f04klzpbd25igbjjj1dqasmrcrw2zsan5bv0ydnr2lmpb2fz";
+    url = "https://code-industry.net/public/master-pdf-editor-${version}-qt5.amd64.tar.gz";
+    sha256 = "0fidy8gd4mqvyfgmrwdiz8z53dyzihqqhgfrffj0z0idm2zi4mcq";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [ autoPatchelfHook wrapQtAppsHook ];
 
   buildInputs = [ nss qtbase qtsvg sane-backends stdenv.cc.cc ];
 
   dontStrip = true;
-
-  # Please remove this when #44047 is fixed
-  postInstall = ''
-    wrapProgram $out/bin/masterpdfeditor5 --prefix QT_PLUGIN_PATH : ${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
-  '';
 
   installPhase = ''
     runHook preInstall

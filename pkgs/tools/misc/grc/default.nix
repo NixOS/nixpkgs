@@ -1,8 +1,9 @@
-{ stdenv, fetchFromGitHub, python3Packages, makeWrapper }:
+{ stdenv, fetchFromGitHub, python3Packages }:
 
-stdenv.mkDerivation rec {
-  name    = "grc-${version}";
+python3Packages.buildPythonApplication rec {
+  pname = "grc";
   version = "1.11.3";
+  format = "other";
 
   src = fetchFromGitHub {
     owner  = "garabik";
@@ -11,29 +12,25 @@ stdenv.mkDerivation rec {
     sha256 = "0b3wx9zr7l642hizk93ysbdss7rfymn22b2ykj4kpkf1agjkbv35";
   };
 
-  buildInputs = with python3Packages; [ wrapPython makeWrapper ];
+  postPatch = ''
+    for f in grc grcat; do
+      substituteInPlace $f \
+        --replace /usr/local/ $out/
+    done
+  '';
 
   installPhase = ''
     runHook preInstall
 
     ./install.sh "$out" "$out"
-
-    for f in $out/bin/* ; do
-      patchPythonScript $f
-      substituteInPlace $f \
-        --replace ' /usr/bin/env python3' '${python3Packages.python.interpreter}' \
-        --replace "'/etc/grc.conf'"   "'$out/etc/grc.conf'" \
-        --replace "'/usr/share/grc/'" "'$out/share/grc/'"
-      wrapProgram $f \
-        --prefix PATH : $out/bin
-    done
+    install -Dm444 -t $out/share/zsh/vendor-completions _grc
 
     runHook postInstall
   '';
 
   meta = with stdenv.lib; {
     description = "Yet another colouriser for beautifying your logfiles or output of commands";
-    homepage    = http://korpus.juls.savba.sk/~garabik/software/grc.html;
+    homepage    = "http://korpus.juls.savba.sk/~garabik/software/grc.html";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ lovek323 AndersonTorres peterhoeg ];
     platforms   = platforms.unix;

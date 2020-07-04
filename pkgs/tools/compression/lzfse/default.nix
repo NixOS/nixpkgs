@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "lzfse-${version}";
+stdenv.mkDerivation {
+  pname = "lzfse";
   version = "2017-03-08";
 
   src = fetchFromGitHub {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false; #bug
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/lzfse/lzfse;
+    homepage = "https://github.com/lzfse/lzfse";
     description = "a reference C implementation of the LZFSE compressor";
     longDescription = ''
       This is a reference C implementation of the LZFSE compressor introduced in the Compression library with OS X 10.11 and iOS 9.

@@ -11,8 +11,10 @@
   kcoreaddons, kcrash, kdeclarative, kdecoration, kglobalaccel, ki18n,
   kiconthemes, kidletime, kinit, kio, knewstuff, knotifications, kpackage,
   kscreenlocker, kservice, kwayland, kwidgetsaddons, kwindowsystem, kxmlgui,
-  plasma-framework, qtsensors, libcap, libdrm
+  plasma-framework, qtsensors, libcap, libdrm, mesa
 }:
+
+# TODO (ttuegel): investigate qmlplugindump failure
 
 mkDerivation {
   name = "kwin";
@@ -27,10 +29,13 @@ mkDerivation {
     kcoreaddons kcrash kdeclarative kdecoration kglobalaccel ki18n kiconthemes
     kidletime kinit kio knewstuff knotifications kpackage kscreenlocker kservice
     kwayland kwidgetsaddons kwindowsystem kxmlgui plasma-framework
-    libcap libdrm
+    libcap libdrm mesa
   ];
   outputs = [ "bin" "dev" "out" ];
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [
+    ./0001-follow-symlinks.patch
+    ./0002-xwayland.patch
+  ];
   CXXFLAGS = [
     ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''
   ];

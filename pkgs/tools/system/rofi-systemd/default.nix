@@ -2,7 +2,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "rofi-systemd-${version}";
+  pname = "rofi-systemd";
   version = "0.1.0";
 
   src = fetchFromGitHub {
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Control your systemd units using rofi";
-    homepage = https://github.com/IvanMalison/rofi-systemd;
+    homepage = "https://github.com/IvanMalison/rofi-systemd";
     maintainers = with stdenv.lib.maintainers; [ imalison ];
     license = stdenv.lib.licenses.gpl3;
     platforms = with stdenv.lib.platforms; linux;

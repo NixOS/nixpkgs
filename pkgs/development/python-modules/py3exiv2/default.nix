@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "py3exiv2";
-  version = "0.4.0";
+  version = "0.7.0";
   disabled = !(isPy3k);
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4042492db49efbdfc53e0afa89509695826b3fb74fb52444ed04f64c229a65f5";
+    sha256 = "1gcvmglyl8ad2f336w88gwkd5djjsxdx1ind9wnlbqc3jn9i05cg";
   };
 
   buildInputs = [ exiv2 boost ];
@@ -29,5 +29,6 @@ buildPythonPackage rec {
     license = with stdenv.lib.licenses; [ gpl3 ];
     maintainers = with stdenv.lib.maintainers; [ vinymeuh ];
     platforms = with stdenv.lib.platforms; linux ++ darwin;
+    broken = true;
   };
 }

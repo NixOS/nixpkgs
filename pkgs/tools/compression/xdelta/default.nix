@@ -9,11 +9,11 @@ let
     then "--with-${name}"
     else "--without-${name}";
 in stdenv.mkDerivation rec {
-  name = "xdelta-${version}";
-  version = "3.0.11";
+  pname = "xdelta";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
-    sha256 = "1c7xym7xr26phyf4wb9hh2w88ybzbzh2w3h1kyqq3da0ndidmf2r";
+    sha256 = "09mmsalc7dwlvgrda56s2k927rpl3a5dzfa88aslkqcjnr790wjy";
     rev = "v${version}";
     repo = "xdelta-devel";
     owner = "jmacd";
@@ -54,7 +54,7 @@ in stdenv.mkDerivation rec {
       file differences. This is similar to diff and patch, but it is targeted
       for binary files and does not generate human readable output.
     '';
-    homepage = http://xdelta.org/;
+    homepage = "http://xdelta.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

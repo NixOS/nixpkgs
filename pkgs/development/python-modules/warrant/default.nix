@@ -2,7 +2,7 @@
 , mock
 , boto3, envs, python-jose, requests }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "warrant";
   version = "0.6.1";
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for using AWS Cognito with support for SRP";
-    homepage = https://github.com/capless/warrant;
+    homepage = "https://github.com/capless/warrant";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ peterhoeg ];
   };

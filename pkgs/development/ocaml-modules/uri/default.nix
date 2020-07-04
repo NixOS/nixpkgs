@@ -1,33 +1,25 @@
-{ stdenv, fetchurl, ocaml, findlib, dune, ppx_sexp_conv, ounit
-, re, sexplib, stringext
+{ lib, fetchurl, buildDunePackage, ounit
+, re, stringext
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.9.6";
-  name = "ocaml${ocaml.version}-uri-${version}";
+buildDunePackage rec {
+  minimumOCamlVersion = "4.03";
+  pname = "uri";
+  version = "3.1.0";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-uri/releases/download/v${version}/uri-${version}.tbz";
-    sha256 = "1m845rwd70wi4iijkrigyz939m1x84ba70hvv0d9sgk6971w4kz0";
+    url = "https://github.com/mirage/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
+    sha256 = "0hxc2mshmqxz2qmjya47dzf858s6lsf3xvqswpzprkvhv0zq4ln4";
   };
 
-  unpackCmd = "tar -xjf $curSrc";
-
-  buildInputs = [ ocaml findlib dune ounit ];
-  propagatedBuildInputs = [ ppx_sexp_conv re sexplib stringext ];
-
-  buildPhase = "jbuilder build";
-
+  buildInputs = [ ounit ];
+  propagatedBuildInputs = [ re stringext ];
   doCheck = true;
-  checkPhase = "jbuilder runtest";
-
-  inherit (dune) installPhase;
 
   meta = {
     homepage = "https://github.com/mirage/ocaml-uri";
     description = "RFC3986 URI parsing library for OCaml";
-    license = stdenv.lib.licenses.isc;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
-    inherit (ocaml.meta) platforms;
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

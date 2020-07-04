@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub
-, pkgconfig, cmake, autoconf, automake, libtool
-, wget, xxd, desktop-file-utils
-, glib, zlib, cairo, openssl, fuse, xz, squashfuse, inotify-tools, libarchive
+, pkgconfig, cmake, autoconf, automake, libtool, makeWrapper
+, wget, xxd, desktop-file-utils, file
+, gnupg, glib, zlib, cairo, openssl, fuse, xz, squashfuse, inotify-tools, libarchive
 , squashfsTools
 , gtest
 }:
@@ -72,8 +72,12 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     glib zlib cairo openssl fuse
     xz inotify-tools libarchive
-    squashfsTools
+    squashfsTools makeWrapper
   ];
+
+  postPatch = ''
+    substituteInPlace src/appimagetool.c --replace "/usr/bin/file" "${file}/bin/file"
+  '';
 
   preConfigure = ''
     export HOME=$(pwd)
@@ -87,8 +91,15 @@ in stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_LIBARCHIVE=ON"
     "-DUSE_SYSTEM_GTEST=ON"
     "-DUSE_SYSTEM_MKSQUASHFS=ON"
-    "-DBUILD_TESTING=${if doCheck then "ON" else "OFF"}"
   ];
+
+  postInstall = ''
+    cp "${squashfsTools}/bin/mksquashfs" "$out/lib/appimagekit/"
+    cp "${desktop-file-utils}/bin/desktop-file-validate" "$out/bin"
+
+    wrapProgram "$out/bin/appimagetool" \
+      --prefix PATH : "${stdenv.lib.makeBinPath [ file gnupg ]}"
+  '';
 
   checkInputs = [ gtest ];
   doCheck = false; # fails 1 out of 4 tests, I'm too lazy to debug why

@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   pname = "blockdiag";
   version = "1.5.3";
-  name = pname + "-" + version;
 
   src = fetchurl {
     url = "https://bitbucket.org/blockdiag/blockdiag/get/${version}.tar.bz2";
@@ -23,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Generate block-diagram image from spec-text file (similar to Graphviz)";
-    homepage = http://blockdiag.com/;
+    homepage = "http://blockdiag.com/";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor ];

@@ -1,43 +1,47 @@
-{ stdenv, lib, go, procps, removeReferencesTo, fetchFromGitHub }:
+{ buildGoModule, stdenv, lib, procps, fetchFromGitHub, nixosTests }:
 
 let
-  common = { stname, target, patches ? [], postInstall ? "" }:
-    stdenv.mkDerivation rec {
-      version = "0.14.51";
+  common = { stname, target, postInstall ? "" }:
+    buildGoModule rec {
+      version = "1.6.1";
       name = "${stname}-${version}";
 
       src = fetchFromGitHub {
         owner  = "syncthing";
         repo   = "syncthing";
         rev    = "v${version}";
-        sha256 = "1ycly3vh10s04pk0fk9hb0my7w5b16dfgmnk1mi0zjylcii3yzi5";
+        sha256 = "1lhbx1mh2hdjjwks3s17i8y9vbl3fnapc1czaf42pp7nf8245q3j";
       };
 
-      inherit patches;
+      vendorSha256 = "12g63a6jsshzqjgww792xmvybhfbkjx5aza4xnyljjsp453iky7k";
 
-      buildInputs = [ go ];
-      nativeBuildInputs = [ removeReferencesTo ];
+      patches = [
+        ./add-stcli-target.patch
+      ];
+      BUILD_USER="nix";
+      BUILD_HOST="nix";
 
       buildPhase = ''
-        # Syncthing expects that it is checked out in $GOPATH, if that variable is
-        # set.  Since this isn't true when we're fetching source, we can explicitly
-        # unset it and force Syncthing to set up a temporary one for us.
-        env GOPATH= BUILD_USER=nix BUILD_HOST=nix go run build.go -no-upgrade -version v${version} build ${target}
+        runHook preBuild
+        go run build.go -no-upgrade -version v${version} build ${target}
+        runHook postBuild
       '';
 
       installPhase = ''
+        runHook preInstall
         install -Dm755 ${target} $out/bin/${target}
         runHook postInstall
       '';
 
       inherit postInstall;
 
-      preFixup = ''
-        find $out/bin -type f -exec remove-references-to -t ${go} '{}' '+'
-      '';
+      passthru.tests = with nixosTests; {
+        init = syncthing-init;
+        relay = syncthing-relay;
+      };
 
       meta = with lib; {
-        homepage = https://www.syncthing.net/;
+        homepage = "https://www.syncthing.net/";
         description = "Open Source Continuous File Synchronization";
         license = licenses.mpl20;
         maintainers = with maintainers; [ pshendry joko peterhoeg andrew-d ];
@@ -79,7 +83,6 @@ in {
   syncthing-cli = common {
     stname = "syncthing-cli";
 
-    patches = [ ./add-stcli-target.patch ];
     target = "stcli";
   };
 

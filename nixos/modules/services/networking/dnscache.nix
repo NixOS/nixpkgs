@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.dnscache;
 
-  dnscache-root = pkgs.runCommand "dnscache-root" {} ''
+  dnscache-root = pkgs.runCommand "dnscache-root" { preferLocalBuild = true; } ''
     mkdir -p $out/{servers,ip}
 
     ${concatMapStrings (ip: ''
@@ -61,10 +61,12 @@ in {
           Table of {hostname: server} pairs to use as authoritative servers for hosts (and subhosts).
           If entry for @ is not specified predefined list of root servers is used.
         '';
-        example = {
-          "@" = ["8.8.8.8" "8.8.4.4"];
-          "example.com" = ["192.168.100.100"];
-        };
+        example = literalExample ''
+          {
+            "@" = ["8.8.8.8" "8.8.4.4"];
+            "example.com" = ["192.168.100.100"];
+          }
+        '';
       };
 
       forwardOnly = mkOption {
@@ -84,7 +86,7 @@ in {
 
   config = mkIf config.services.dnscache.enable {
     environment.systemPackages = [ pkgs.djbdns ];
-    users.users.dnscache = {};
+    users.users.dnscache.isSystemUser = true;
 
     systemd.services.dnscache = {
       description = "djbdns dnscache server";

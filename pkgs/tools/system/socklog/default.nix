@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "socklog-${version}";
+  pname = "socklog";
   version = "2.1.0";
 
   src = fetchurl {
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "System and kernel logging services";
-    homepage = http://smarden.org/socklog/;
+    homepage = "http://smarden.org/socklog/";
     license = licenses.publicDomain;
     platforms = platforms.unix;
     maintainers = [ maintainers.joachifm ];

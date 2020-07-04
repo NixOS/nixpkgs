@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "raven";
-  version = "6.9.0";
+  version = "6.10.0";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "raven-python";
     rev = version;
-    sha256 = "1kggp34i8gqi47khca2v5n2i32zrg66m1pga6c00yqmlbv74d84v";
+    sha256 = "16x9ldl8cy7flw5kh7qmgbmflqyf210j3q6ac2lw61sgwajsnvw8";
   };
 
   # way too many dependencies to run tests
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A Python client for Sentry (getsentry.com)";
-    homepage = https://github.com/getsentry/raven-python;
+    homepage = "https://github.com/getsentry/raven-python";
     license = [ lib.licenses.bsd3 ];
     maintainers = with lib.maintainers; [ primeos ];
   };

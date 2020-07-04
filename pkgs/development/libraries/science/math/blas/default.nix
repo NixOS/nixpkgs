@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gfortran }:
 
 stdenv.mkDerivation rec {
-  name = "blas-${version}";
+  pname = "blas";
   version = "3.8.0";
 
   src = fetchurl {
-    url = "http://www.netlib.org/blas/${name}.tgz";
+    url = "http://www.netlib.org/blas/${pname}-${version}.tgz";
     sha256 = "1s24iry5197pskml4iygasw196bdhplj0jmbsb9jhabcjqj2mpsm";
   };
 
@@ -44,6 +44,15 @@ stdenv.mkDerivation rec {
     install ${dashD} -m755 libblas.so.${version} "$out/lib/libblas.so.${version}"
     ln -s libblas.so.${version} "$out/lib/libblas.so.3"
     ln -s libblas.so.${version} "$out/lib/libblas.so"
+    # Write pkgconfig alias.
+    # See also openblas/default.nix
+    mkdir $out/lib/pkgconfig
+    cat <<EOF > $out/lib/pkgconfig/blas.pc
+Name: blas
+Version: ${version}
+Description: blas provided by the BLAS package.
+Libs: -L$out/lib -lblas
+EOF
   '';
 
   preFixup = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -56,13 +65,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Basic Linear Algebra Subprograms";
     license = stdenv.lib.licenses.publicDomain;
-    homepage = http://www.netlib.org/blas/;
+    homepage = "http://www.netlib.org/blas/";
     platforms = stdenv.lib.platforms.unix;
   };
-
-  # We use linkName to pass a different name to --with-blas-libs for
-  # fflas-ffpack and linbox, because we use blas on darwin but openblas
-  # elsewhere.
-  # See see https://github.com/NixOS/nixpkgs/pull/45013.
-  passthru.linkName = "blas";
 }

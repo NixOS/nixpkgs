@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.1.5";
-  name = "nanomsg-${version}";
+  pname = "nanomsg";
 
   src = fetchFromGitHub {
     owner = "nanomsg";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description= "Socket library that provides several common communication patterns";
-    homepage = https://nanomsg.org/;
+    homepage = "https://nanomsg.org/";
     license = licenses.mit;
     platforms = platforms.unix;
   };

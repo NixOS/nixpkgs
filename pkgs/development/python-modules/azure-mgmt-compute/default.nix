@@ -1,37 +1,34 @@
-{ pkgs
+{ lib
 , buildPythonPackage
 , fetchPypi
 , python
 , azure-mgmt-common
+, isPy3k
 }:
 
 buildPythonPackage rec {
-  version = "0.20.0";
+  version = "12.0.0";
   pname = "azure-mgmt-compute";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "12hr5vxdg2sk2fzr608a37f4i8nbchca7dgdmly2w5fc7x88jx2v";
+    sha256 = "0vzq93g2fpnij4rykkk3391xq2knhlbz87vhim4zvj8s45sx6z8q";
   };
 
-  preConfigure = ''
-    # Patch to make this package work on requests >= 2.11.x
-    # CAN BE REMOVED ON NEXT PACKAGE UPDATE
-    sed -i 's|len(request_content)|str(len(request_content))|' azure/mgmt/compute/computemanagement.py
-  '';
+  propagatedBuildInputs = [
+    azure-mgmt-common
+  ];
 
-  postInstall = ''
-    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
-  '';
+  pythonNamespaces = [ "azure.mgmt" ];
 
-  propagatedBuildInputs = [ azure-mgmt-common ];
+  # has no tests
+  doCheck = false;
 
-  meta = with pkgs.lib; {
-    description = "Microsoft Azure SDK for Python";
-    homepage = "https://azure.microsoft.com/en-us/develop/python/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ olcai ];
+  meta = with lib; {
+    description = "This is the Microsoft Azure Compute Management Client Library";
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ olcai mwilsoninsight ];
   };
 }

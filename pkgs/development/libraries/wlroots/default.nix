@@ -1,87 +1,57 @@
-{ stdenv, fetchFromGitHub, fetchpatch, meson, ninja, pkgconfig
-, wayland, libGL, wayland-protocols, libinput, libxkbcommon, pixman
-, xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa_noglu
-, libpng, ffmpeg_4
-, python3Packages # TODO: Temporary
+{ stdenv, fetchFromGitHub, meson, ninja, pkg-config, wayland
+, libGL, wayland-protocols, libinput, libxkbcommon, pixman
+, xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa
+, libpng, ffmpeg
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "wlroots";
-  version = "0.1";
-  meson480 = meson.overrideAttrs (oldAttrs: rec {
-    name = pname + "-" + version;
-    pname = "meson";
-    version = "0.48.0";
-
-    src = python3Packages.fetchPypi {
-      inherit pname version;
-      sha256 = "0qawsm6px1vca3babnqwn0hmkzsxy4w0gi345apd2qk3v0cv7ipc";
-    };
-    patches = builtins.filter # Remove gir-fallback-path.patch
-      (str: !(stdenv.lib.hasSuffix "gir-fallback-path.patch" str))
-      oldAttrs.patches;
-  });
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "wlroots";
     rev = version;
-    sha256 = "0xfipgg2qh2xcf3a1pzx8pyh1aqpb9rijdyi0as4s6fhgy4w269c";
+    sha256 = "0j2lh9vc92zhn44rjbia5aw3y1rpgfng1x1h17lcvj5m4i6vj0pc";
   };
 
-  patches = [ (fetchpatch { # TODO: Only required for version 0.1
-    url = https://github.com/swaywm/wlroots/commit/be6210cf8216c08a91e085dac0ec11d0e34fb217.patch;
-    sha256 = "0njv7mr4ark603w79cxcsln29galh87vpzsx2dzkrl1x5x4i6cj5";
-  }) ];
+  # $out for the library and $examples for the example programs (in examples):
+  outputs = [ "out" "examples" ];
 
-  # $out for the library, $bin for rootston, and $examples for the example
-  # programs (in examples) AND rootston
-  outputs = [ "out" "bin" "examples" ];
-
-  nativeBuildInputs = [ meson480 ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland ];
 
   buildInputs = [
-    wayland libGL wayland-protocols libinput libxkbcommon pixman
-    xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa_noglu
-    libpng ffmpeg_4
-  ];
-
-  mesonFlags = [
-    "-Dlibcap=enabled" "-Dlogind=enabled" "-Dxwayland=enabled" "-Dx11-backend=enabled"
-    "-Dxcb-icccm=enabled" "-Dxcb-xkb=enabled" "-Dxcb-errors=enabled"
+    libGL wayland-protocols libinput libxkbcommon pixman
+    xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa
+    libpng ffmpeg
   ];
 
   postInstall = ''
-    # Install rootston (the reference compositor) to $bin and $examples
-    for output in "$bin" "$examples"; do
-      mkdir -p $output/bin
-      cp rootston/rootston $output/bin/
-      mkdir $output/lib
-      cp libwlroots* $output/lib/
-      patchelf \
-        --set-rpath "$output/lib:${stdenv.lib.makeLibraryPath buildInputs}" \
-        $output/bin/rootston
-      mkdir $output/etc
-      cp ../rootston/rootston.ini.example $output/etc/rootston.ini
-    done
+    # Copy the library to $examples
+    mkdir -p $examples/lib
+    cp -P libwlroots* $examples/lib/
+  '';
+
+  postFixup = ''
     # Install ALL example programs to $examples:
     # screencopy dmabuf-capture input-inhibitor layer-shell idle-inhibit idle
     # screenshot output-layout multi-pointer rotation tablet touch pointer
     # simple
     mkdir -p $examples/bin
-    for binary in $(find ./examples -executable -type f | grep -vE '\.so'); do
-      patchelf \
-        --set-rpath "$examples/lib:${stdenv.lib.makeLibraryPath buildInputs}" \
-        "$binary"
-      cp "$binary" $examples/bin/
+    cd ./examples
+    for binary in $(find . -executable -type f -printf '%P\n' | grep -vE '\.so'); do
+      cp "$binary" "$examples/bin/wlroots-$binary"
     done
   '';
 
   meta = with stdenv.lib; {
     description = "A modular Wayland compositor library";
+    longDescription = ''
+      Pluggable, composable, unopinionated modules for building a Wayland
+      compositor; or about 50,000 lines of code you were going to write anyway.
+    '';
     inherit (src.meta) homepage;
+    changelog = "https://github.com/swaywm/wlroots/releases/tag/${version}";
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ primeos ];

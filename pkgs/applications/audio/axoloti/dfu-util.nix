@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, libusb1-axoloti }:
 
 stdenv.mkDerivation rec {
-  name="dfu-util-${version}";
+  pname = "dfu-util";
   version = "0.8";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libusb1-axoloti ];
 
   src = fetchurl {
-    url = "http://dfu-util.sourceforge.net/releases/${name}.tar.gz";
+    url = "http://dfu-util.sourceforge.net/releases/${pname}-${version}.tar.gz";
     sha256 = "0n7h08avlzin04j93m6hkq9id6hxjiiix7ff9gc2n89aw6dxxjsm";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       phones. With dfu-util you are able to download firmware to your device or
       upload firmware from it.
     '';
-    homepage = http://dfu-util.sourceforge.net;
+    homepage = "http://dfu-util.sourceforge.net";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ ];

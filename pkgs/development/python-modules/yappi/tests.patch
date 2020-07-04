@@ -1,0 +1,12 @@
+--- a/tests/test_functionality.py
++++ b/tests/test_functionality.py
+@@ -74,2 +74,3 @@ class BasicUsage(utils.YappiUnitTestCase):
+    
++    @_unittest.skip('wall-clock-time-sensitive')
+     def test_get_clock(self):
+--- a/tests/test_hooks.py
++++ b/tests/test_hooks.py
+@@ -124,2 +124,3 @@ class ContextIdCallbackTest(utils.YappiUnitTestCase):
+ 
++    @unittest.skip('wall-clock-time-sensitive')
+     def test_pause_resume(self):

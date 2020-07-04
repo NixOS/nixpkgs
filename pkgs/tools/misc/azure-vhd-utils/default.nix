@@ -2,7 +2,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "azure-vhd-utils-${version}";
+  pname = "azure-vhd-utils";
   version = "20160614-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "070db2d701a462ca2edcf89d677ed3cac309d8e8";
 
@@ -17,7 +17,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/Microsoft/azure-vhd-utils;
+    homepage = "https://github.com/Microsoft/azure-vhd-utils";
     description = "Read, inspect and upload VHD files for Azure";
     longDescription = "Go package to read Virtual Hard Disk (VHD) file, a CLI interface to upload local VHD to Azure storage and to inspect a local VHD";
     license = licenses.mit;

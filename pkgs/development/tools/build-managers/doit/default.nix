@@ -3,19 +3,21 @@
 let
 
   name = "doit";
-  version = "0.31.1";
+  version = "0.32.0";
 
 in python3Packages.buildPythonApplication {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/d/${name}/${name}-${version}.tar.gz";
-    sha256 = "1spm8vfjh4kvalaj0i2ggbdln1yy5k68d8mfwfnpqlzxxx4ikl5s";
+    sha256 = "033m6y9763l81kgqd07rm62bngv3dsm3k9p28nwsn2qawl8h8g9j";
   };
 
   buildInputs = with python3Packages; [ mock pytest ];
 
-  propagatedBuildInputs = with python3Packages; [ cloudpickle pyinotify ];
+  propagatedBuildInputs = with python3Packages; [ cloudpickle ]
+    ++ stdenv.lib.optional stdenv.isLinux pyinotify
+    ++ stdenv.lib.optional stdenv.isDarwin macfsevents;
 
   # Tests fail due to mysterious gdbm.open() resource temporarily
   # unavailable errors.
@@ -23,7 +25,7 @@ in python3Packages.buildPythonApplication {
   checkPhase = "py.test";
 
   meta = with stdenv.lib; {
-    homepage = http://pydoit.org/;
+    homepage = "https://pydoit.org/";
     description = "A task management & automation tool";
     license = licenses.mit;
     longDescription = ''

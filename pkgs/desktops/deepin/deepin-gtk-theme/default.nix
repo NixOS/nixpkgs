@@ -1,25 +1,35 @@
-{ stdenv, fetchFromGitHub, gtk-engine-murrine }:
+{ stdenv
+, fetchFromGitHub
+, gtk-engine-murrine
+, deepin
+}:
 
 stdenv.mkDerivation rec {
-  name = "deepin-gtk-theme-${version}";
-  version = "17.10.8";
+  pname = "deepin-gtk-theme";
+  version = "17.10.11";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "deepin-gtk-theme";
     rev = version;
-    sha256 = "1z5f5dnda18gixkjcxpvsavhv9m5l2kq61958fdfm1idi0cbr7fp";
+    sha256 = "0zs6mq70yd1k3d9zm3q6zxnw1md56r4imad5imdxwx58yxdx47fw";
   };
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [
+    gtk-engine-murrine
+  ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
 
-  meta = {
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
+
+  meta = with stdenv.lib; {
     description = "Deepin GTK Theme";
-    homepage = https://github.com/linuxdeepin/deepin-gtk-theme;
-    license = stdenv.lib.licenses.lgpl3;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    homepage = "https://github.com/linuxdeepin/deepin-gtk-theme";
+    license = licenses.lgpl3;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
   };
 }

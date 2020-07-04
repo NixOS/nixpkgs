@@ -2,14 +2,15 @@
 , openssl, nss, makeWrapper }:
 
 let
-  version = "1.2.26";
+  version = "1.2.28";
 in
-stdenv.mkDerivation rec {
-  name = "xmlsec-${version}";
+stdenv.mkDerivation {
+  pname = "xmlsec";
+  inherit version;
 
   src = fetchurl {
     url = "https://www.aleksey.com/xmlsec/download/xmlsec1-${version}.tar.gz";
-    sha256 = "0l1dk344rn3j2vnj13daz72xd8j1msvzhg82n2il5ji0qz4pd0ld";
+    sha256 = "1m12caglhyx08g8lh2sl3nkldlpryzdx2d572q73y3m33s0w9vhk";
   };
 
   outputs = [ "out" "dev" ];
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-soap" ];
 
   # otherwise libxmlsec1-gnutls.so won't find libgcrypt.so, after #909
-  NIX_LDFLAGS = [ "-lgcrypt" ];
+  NIX_LDFLAGS = "-lgcrypt";
 
   postInstall = ''
     moveToOutput "bin/xmlsec1-config" "$dev"
@@ -38,8 +39,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.aleksey.com/xmlsec;
-    downloadPage = https://www.aleksey.com/xmlsec/download.html;
+    homepage = "http://www.aleksey.com/xmlsec";
+    downloadPage = "https://www.aleksey.com/xmlsec/download.html";
     description = "XML Security Library in C based on libxml2";
     license = stdenv.lib.licenses.mit;
     platforms = with stdenv.lib.platforms; linux ++ darwin;

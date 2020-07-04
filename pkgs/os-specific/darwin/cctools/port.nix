@@ -1,17 +1,11 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool_2, autoreconfHook
-, libcxxabi, libuuid, llvm
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, autoreconfHook
+, installShellFiles
+, libcxxabi, libuuid
 , libobjc ? null, maloader ? null
-, enableDumpNormalizedLibArgs ? false
+, enableTapiSupport ? true, libtapi
 }:
 
 let
-
-  # We need to use an old version of cctools-port to support linking TBD files
-  # in the iOS SDK. Note that this only provides support for SDK versions up to
-  # 10.x. For 11.0 and higher we will need to upgrade to a newer cctools than the
-  # default version here, which can support the new TBD format via Apple's
-  # libtapi.
-  useOld = stdenv.targetPlatform.isiOS;
 
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
@@ -23,51 +17,28 @@ in
 # Non-Darwin alternatives
 assert (!stdenv.hostPlatform.isDarwin) -> maloader != null;
 
-assert enableDumpNormalizedLibArgs -> (!useOld);
-
 let
   baseParams = rec {
-    name = "${targetPrefix}cctools-port-${version}";
-    version = if useOld then "886" else "895";
+    name = "${targetPrefix}cctools-port";
+    version = "927.0.2";
 
-    src = fetchFromGitHub (if enableDumpNormalizedLibArgs then {
+    src = fetchFromGitHub {
       owner  = "tpoechtrager";
       repo   = "cctools-port";
-      # master with https://github.com/tpoechtrager/cctools-port/pull/34
-      rev    = "8395d4b2c3350356e2fb02f5e04f4f463c7388df";
-      sha256 = "10vbf1cfzx02q8chc77s84fp2kydjpx2y682mr6mrbb7sq5rwh8f";
-    } else if useOld then {
-      owner  = "tpoechtrager";
-      repo   = "cctools-port";
-      rev    = "02f0b8ecd87a3951653d838a321ae744815e21a5";
-      sha256 = "0bzyabzr5dvbxglr74d0kbrk2ij5x7s5qcamqi1v546q1had1wz1";
-    } else {
-      owner  = "tpoechtrager";
-      repo   = "cctools-port";
-      rev    = "2e569d765440b8cd6414a695637617521aa2375b"; # From branch 895-ld64-274.2
-      sha256 = "0l45mvyags56jfi24rawms8j2ihbc45mq7v13pkrrwppghqrdn52";
-    });
+      rev    = "8239a5211bcf07d6b9d359782e1a889ec1d7cce5";
+      sha256 = "0h8b1my0wf1jyjq63wbiqkl2clgxsf87f6i4fjhqs431fzlq8sac";
+    };
 
-    outputs = [ "out" "dev" ];
+    outputs = [ "out" "dev" "man" ];
 
-    nativeBuildInputs = [
-      autoconf automake libtool_2
-    ] ++ stdenv.lib.optionals useOld [
-      autoreconfHook
-    ];
-    buildInputs = [ libuuid ] ++
-      stdenv.lib.optionals stdenv.isDarwin [ llvm libcxxabi libobjc ];
+    nativeBuildInputs = [ autoconf automake libtool autoreconfHook installShellFiles ];
+    buildInputs = [ libuuid ]
+      ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ]
+      ++ stdenv.lib.optional enableTapiSupport libtapi;
 
-    patches = [
-      ./ld-rpath-nonfinal.patch ./ld-ignore-rpath-link.patch
-    ] ++ stdenv.lib.optionals useOld [
-      # See https://github.com/tpoechtrager/cctools-port/issues/24. Remove when that's fixed.
-      ./undo-unknown-triple.patch
-      ./ld-tbd-v2.patch
-      ./support-ios.patch
-    ];
+    patches = [ ./ld-ignore-rpath-link.patch ./ld-rpath-nonfinal.patch ];
 
-    __propagatedImpureHostDeps = stdenv.lib.optionals (!useOld) [
+    __propagatedImpureHostDeps = [
       # As far as I can tell, otool from cctools is the only thing that depends on these two, and we should fix them
       "/usr/lib/libobjc.A.dylib"
       "/usr/lib/libobjc.dylib"
@@ -76,9 +47,17 @@ let
     enableParallelBuilding = true;
 
     # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
-    configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+    configurePlatforms = [ "build" "host" ]
+      ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+    configureFlags = [ "--disable-clang-as" ]
+      ++ stdenv.lib.optionals enableTapiSupport [
+        "--enable-tapi-support"
+        "--with-libtapi=${libtapi}"
+      ];
 
-    postPatch = ''
+    postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace cctools/Makefile.am --replace libobjc2 ""
+    '' + ''
       sed -i -e 's/addStandardLibraryDirectories = true/addStandardLibraryDirectories = false/' cctools/ld64/src/ld/Options.cpp
 
       # FIXME: there are far more absolute path references that I don't want to fix right now
@@ -106,23 +85,12 @@ let
       cd cctools
     '';
 
-    # TODO: this builds an ld without support for LLVM's LTO. We need to teach it, but that's rather
-    # hairy to handle during bootstrap. Perhaps it could be optional?
-    preConfigure = ''
-      sh autogen.sh
-    '';
-
     preInstall = ''
       pushd include
       make DSTROOT=$out/include RC_OS=common install
       popd
-    '';
 
-    postInstall = ''
-      cat >$out/bin/dsymutil << EOF
-      #!${stdenv.shell}
-      EOF
-      chmod +x $out/bin/dsymutil
+      installManPage ar/ar.{1,5}
     '';
 
     passthru = {
@@ -131,9 +99,10 @@ let
 
     meta = {
       broken = !stdenv.targetPlatform.isDarwin; # Only supports darwin targets
-      homepage = http://www.opensource.apple.com/source/cctools/;
+      homepage = "http://www.opensource.apple.com/source/cctools/";
       description = "MacOS Compiler Tools (cross-platform port)";
       license = stdenv.lib.licenses.apsl20;
+      maintainers = with stdenv.lib.maintainers; [ matthewbauer ];
     };
   };
 in stdenv.mkDerivation baseParams

@@ -1,12 +1,13 @@
 { stdenv, lib, fetchgit, cmake, perl, libubox, json_c }:
 
 stdenv.mkDerivation {
-  name = "uqmi-2016-12-19";
+  pname = "uqmi";
+  version = "unstable-2019-06-27";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/uqmi.git";
-    rev = "8ceeab690d8c6f1e3afbd4bcaee7bc2ba3fbe165";
-    sha256 = "1fw9r36d024iiq6bq2cikaq5pams5pnbc4z6pcmcny2k4l5cdb6m";
+    rev = "1965c713937495a5cb029165c16acdb6572c3f87";
+    sha256 = "1gn8sdcl4lwfs3lwabmnjbvdhhk1l42bwbajwds7j4936fpbklx0";
   };
 
   postPatch = ''

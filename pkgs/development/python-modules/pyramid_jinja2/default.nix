@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pyramid_jinja2";
-  version = "2.5";
+  version = "2.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "93c86e3103b454301f4d66640191aba047f2ab85ba75647aa18667b7448396bd";
+    sha256 = "81e0615cb3108f2a251ff3141ad0d698a5d03685819f3a836ea84787e8489502";
   };
 
   buildInputs = [ webtest ];
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Jinja2 template bindings for the Pyramid web framework";
-    homepage = https://github.com/Pylons/pyramid_jinja2;
+    homepage = "https://github.com/Pylons/pyramid_jinja2";
     license = licenses.bsd0;
     maintainers = with maintainers; [ domenkozar ];
   };

@@ -2,7 +2,7 @@
   asciidoc, libxml2, docbook_xml_dtd_45, docbook_xsl, libxslt }:
 
 stdenv.mkDerivation rec {
-  name = "lsyncd-${version}";
+  pname = "lsyncd";
   version = "2.2.3";
 
   src = fetchFromGitHub {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/axkibe/lsyncd;
+    homepage = "https://github.com/axkibe/lsyncd";
     description = "A utility that synchronizes local directories with remote targets";
     license = licenses.gpl2;
     platforms = platforms.linux;

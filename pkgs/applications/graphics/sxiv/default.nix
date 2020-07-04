@@ -3,36 +3,32 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "sxiv-${version}";
-  version = "24";
+  pname = "sxiv";
+  version = "26";
 
   src = fetchFromGitHub {
     owner = "muennich";
-    repo = "sxiv";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "020n1bdxbzqncprh8a4rnjzc4frp335yxbqh5w6dr970f7n5qm8d";
+    sha256 = "0xaawlfdy7b277m38mgg4423kd7p1ffn0dq4hciqs6ivbb3q9c4f";
   };
-
-  postUnpack = ''
-    substituteInPlace $sourceRoot/Makefile \
-      --replace /usr/local $out
-  '';
 
   configFile = optionalString (conf!=null) (builtins.toFile "config.def.h" conf);
   preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
 
   buildInputs = [ libXft imlib2 giflib libexif ];
 
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
   postInstall = ''
-    mkdir -p $out/share/applications/
-    cp -v sxiv.desktop $out/share/applications/
+    install -Dt $out/share/applications sxiv.desktop
   '';
 
   meta = {
     description = "Simple X Image Viewer";
-    homepage = https://github.com/muennich/sxiv;
+    homepage = "https://github.com/muennich/sxiv";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with maintainers; [ jfrankenau fuuzetsu ];
+    maintainers = with maintainers; [ jfrankenau ];
   };
 }

@@ -7,9 +7,10 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libX11 libXtst qt4 ];
+  NIX_LDFLAGS = "-lX11";
   patchPhase = ''
     cd src
-    substituteInPlace config --replace /bin/bash /bin/sh
+    substituteInPlace config --replace /bin/bash ${stdenv.shell}
     mkdir -p $out
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath ${libX11}/lib"
   '';
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
       of gaming devices in Linux, and makes the Linux gaming
       experience just a little bit nicer.
     '';
-    homepage = http://qjoypad.sourceforge.net;
+    homepage = "http://qjoypad.sourceforge.net";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
     platforms = with stdenv.lib.platforms; linux;

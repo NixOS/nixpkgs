@@ -1,40 +1,44 @@
-import ./make-test.nix ({ pkgs, lib, ... }:
-{
-  name = "redmine";
-  meta.maintainers = [ lib.maintainers.aanderse ];
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; }
+}:
 
-  machine =
-    { config, pkgs, ... }:
-    { services.mysql.enable = true;
-      services.mysql.package = pkgs.mariadb;
-      services.mysql.ensureDatabases = [ "redmine" ];
-      services.mysql.ensureUsers = [
-        { name = "redmine";
-          ensurePermissions = { "redmine.*" = "ALL PRIVILEGES"; };
-        }
-      ];
+with import ../lib/testing-python.nix { inherit system pkgs; };
+with pkgs.lib;
 
-      services.redmine.enable = true;
-      services.redmine.database.socket = "/run/mysqld/mysqld.sock";
-      services.redmine.plugins = {
-        redmine_env_auth = pkgs.fetchurl {
-          url = https://github.com/Intera/redmine_env_auth/archive/0.6.zip;
-          sha256 = "0yyr1yjd8gvvh832wdc8m3xfnhhxzk2pk3gm2psg5w9jdvd6skak";
+let
+  redmineTest = { name, type }: makeTest {
+    name = "redmine-${name}";
+    machine = { config, pkgs, ... }: {
+      services.redmine = {
+        enable = true;
+        package = pkgs.redmine;
+        database.type = type;
+        plugins = {
+          redmine_env_auth = pkgs.fetchurl {
+            url = "https://github.com/Intera/redmine_env_auth/archive/0.7.zip";
+            sha256 = "1xb8lyarc7mpi86yflnlgyllh9hfwb9z304f19dx409gqpia99sc";
+          };
         };
-      };
-      services.redmine.themes = {
-        dkuk-redmine_alex_skin = pkgs.fetchurl {
-          url = https://bitbucket.org/dkuk/redmine_alex_skin/get/1842ef675ef3.zip;
-          sha256 = "0hrin9lzyi50k4w2bd2b30vrf1i4fi1c0gyas5801wn8i7kpm9yl";
+        themes = {
+          dkuk-redmine_alex_skin = pkgs.fetchurl {
+            url = "https://bitbucket.org/dkuk/redmine_alex_skin/get/1842ef675ef3.zip";
+            sha256 = "0hrin9lzyi50k4w2bd2b30vrf1i4fi1c0gyas5801wn8i7kpm9yl";
+          };
         };
       };
     };
 
-  testScript = ''
-    startAll;
-
-    $machine->waitForUnit('redmine.service');
-    $machine->waitForOpenPort('3000');
-    $machine->succeed("curl --fail http://localhost:3000/");
-  '';
-})
+    testScript = ''
+      start_all()
+      machine.wait_for_unit("redmine.service")
+      machine.wait_for_open_port(3000)
+      machine.succeed("curl --fail http://localhost:3000/")
+    '';
+  } // {
+    meta.maintainers = [ maintainers.aanderse ];
+  };
+in {
+  mysql = redmineTest { name = "mysql"; type = "mysql2"; };
+  pgsql = redmineTest { name = "pgsql"; type = "postgresql"; };
+}

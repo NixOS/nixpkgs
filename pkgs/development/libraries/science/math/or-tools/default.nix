@@ -1,15 +1,20 @@
-{ stdenv, fetchFromGitHub, cmake, google-gflags, which
-, lsb-release, glog, protobuf, cbc, zlib }:
+{ stdenv, fetchFromGitHub, cmake, abseil-cpp, gflags, which
+, lsb-release, glog, protobuf3_11, cbc, zlib
+, ensureNewerSourcesForZipFilesHook, python, swig }:
 
-stdenv.mkDerivation rec {
-  name = "or-tools-${version}";
-  version = "v6.9.1";
+let
+  protobuf = protobuf3_11;
+  pythonProtobuf = python.pkgs.protobuf.override { inherit protobuf; };
+
+in stdenv.mkDerivation rec {
+  pname = "or-tools";
+  version = "7.6";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "or-tools";
-    rev = version;
-    sha256 = "099j1mc7vvry0a2fiz9zvk6divivglzphv48wbw0c6nd5w8hb27c";
+    rev = "v${version}";
+    sha256 = "0605q3y7vh7x7m9azrbkx44blq12zrab6v28b9wmpcn1lmykbw1b";
   };
 
   # The original build system uses cmake which does things like pull
@@ -18,46 +23,51 @@ stdenv.mkDerivation rec {
   # dependencies straight from nixpkgs and use the make build method.
   configurePhase = ''
     cat <<EOF > Makefile.local
-    UNIX_GFLAGS_DIR=${google-gflags}
+    UNIX_ABSL_DIR=${abseil-cpp}
+    UNIX_GFLAGS_DIR=${gflags}
     UNIX_GLOG_DIR=${glog}
     UNIX_PROTOBUF_DIR=${protobuf}
     UNIX_CBC_DIR=${cbc}
     EOF
   '';
 
-  buildPhase = ''
-    make cc
-  '';
-
-  installPhase = ''
-    make install_cc prefix=$out
-  '';
-
-  patches = [
-    # In "expected" way of compilation, the glog package is compiled
-    # with gflags support which then makes gflags header transitively
-    # included through glog. However in nixpkgs we don't compile glog
-    # with gflags so we have to include it ourselves. Upstream should
-    # always include gflags to support both ways I think.
-    #
-    # Upstream ticket: https://github.com/google/or-tools/issues/902
-    ./gflags-include.patch
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+    "PROTOBUF_PYTHON_DESC=${pythonProtobuf}/${python.sitePackages}/google/protobuf/descriptor_pb2.py"
   ];
+  buildFlags = [ "cc" "pypi_archive" ];
+
+  checkTarget = "test_cc";
+  doCheck = true;
+
+  installTargets = [ "install_cc" ];
+  # The upstream install_python target installs to $HOME.
+  postInstall = ''
+    mkdir -p "$python/${python.sitePackages}"
+    (cd temp_python/ortools; PYTHONPATH="$python/${python.sitePackages}:$PYTHONPATH" python setup.py install '--prefix=$python')
+  '';
 
   nativeBuildInputs = [
-    cmake lsb-release which zlib
+    cmake lsb-release swig which zlib python
+    ensureNewerSourcesForZipFilesHook
+    python.pkgs.setuptools python.pkgs.wheel
   ];
   propagatedBuildInputs = [
-    google-gflags glog protobuf cbc
+    abseil-cpp gflags glog protobuf cbc
+    pythonProtobuf python.pkgs.six
   ];
 
+  enableParallelBuilding = true;
+
+  outputs = [ "out" "python" ];
+
   meta = with stdenv.lib; {
-    homepage = https://github.com/google/or-tools;
+    homepage = "https://github.com/google/or-tools";
     license = licenses.asl20;
     description = ''
       Google's software suite for combinatorial optimization.
     '';
-    maintainers = with maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ andersk ];
     platforms = with platforms; linux;
   };
 }

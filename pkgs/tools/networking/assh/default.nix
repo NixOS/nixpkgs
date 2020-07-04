@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, openssh, makeWrapper }:
 
 buildGoPackage rec {
-  name = "assh-${version}";
+  pname = "assh";
   version = "2.7.0";
 
   goPackagePath = "github.com/moul/advanced-ssh-config";
@@ -10,7 +10,7 @@ buildGoPackage rec {
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    wrapProgram "$bin/bin/assh" \
+    wrapProgram "$out/bin/assh" \
       --prefix PATH : ${openssh}/bin
   '';
 
@@ -23,7 +23,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Advanced SSH config - Regex, aliases, gateways, includes and dynamic hosts";
-    homepage = https://github.com/moul/advanced-ssh-config;
+    homepage = "https://github.com/moul/advanced-ssh-config";
     license = licenses.mit;
     maintainers = with maintainers; [ zzamboni ];
     platforms = with platforms; linux ++ darwin;

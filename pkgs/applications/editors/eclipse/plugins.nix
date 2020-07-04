@@ -106,7 +106,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/tobiasmelcher/EclipseAceJump;
+      homepage = "https://github.com/tobiasmelcher/EclipseAceJump";
       description = "Provides fast jumps to text based on initial letter";
       license = licenses.mit;
       platforms = platforms.all;
@@ -141,7 +141,7 @@ rec {
     name = "antlr-runtime-4.5.3";
 
     src = fetchurl {
-      url = "http://www.antlr.org/download/${name}.jar";
+      url = "https://www.antlr.org/download/${name}.jar";
       sha256 = "0lm78i2annlczlc2cg5xvby0g1dyl0sh1y5xc2pymjlmr67a1g4k";
     };
 
@@ -153,7 +153,7 @@ rec {
 
     meta = with stdenv.lib; {
       description = "A powerful parser generator for processing structured text or binary files";
-      homepage = http://www.antlr.org/;
+      homepage = "https://www.antlr.org/";
       license = licenses.bsd3;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
@@ -164,7 +164,7 @@ rec {
     name = "antlr-runtime-4.7.1";
 
     src = fetchurl {
-      url = "http://www.antlr.org/download/${name}.jar";
+      url = "https://www.antlr.org/download/${name}.jar";
       sha256 = "07f91mjclacrvkl8a307w2abq5wcqp0gcsnh0jg90ddfpqcnsla3";
     };
 
@@ -176,7 +176,7 @@ rec {
 
     meta = with stdenv.lib; {
       description = "A powerful parser generator for processing structured text or binary files";
-      homepage = http://www.antlr.org/;
+      homepage = "https://www.antlr.org/";
       license = licenses.bsd3;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
@@ -198,7 +198,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://andrei.gmxhome.de/anyedit/;
+      homepage = "http://andrei.gmxhome.de/anyedit/";
       description = "Adds new tools to the context menu of text-based editors";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -221,7 +221,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/cypher256/eclipse-encoding-plugin;
+      homepage = "https://github.com/cypher256/eclipse-encoding-plugin";
       description = "Show file encoding and line ending for the active editor in the eclipse status bar";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -244,7 +244,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://andrei.gmxhome.de/bytecode/;
+      homepage = "http://andrei.gmxhome.de/bytecode/";
       description = "Shows disassembled bytecode of current java editor or class file";
       license = licenses.bsd2;
       platforms = platforms.all;
@@ -254,16 +254,17 @@ rec {
 
   cdt = buildEclipseUpdateSite rec {
     name = "cdt-${version}";
-    version = "9.0.1";
+    # find current version at https://www.eclipse.org/cdt/downloads.php
+    version = "9.11.1";
 
     src = fetchzip {
       stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/9.0/${name}.zip";
-      sha256 = "0vdx0j9ci533wnk7y17qjvjyqx38hlrdw67z6pi05vfv3r6ys39x";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/9.11/${name}/${name}.zip";
+      sha256 = "00cpaal6jm9xb4nbkljrf381r3lf1rb1p06vrbn4l0lxnbckb9df";
     };
 
     meta = with stdenv.lib; {
-      homepage = https://eclipse.org/cdt/;
+      homepage = "https://eclipse.org/cdt/";
       description = "C/C++ development tooling";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -282,7 +283,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://eclipse-cs.sourceforge.net/;
+      homepage = "https://eclipse-cs.sourceforge.net/";
       description = "Checkstyle integration into the Eclipse IDE";
       license = licenses.lgpl21;
       platforms = platforms.all;
@@ -306,7 +307,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://eclipsecolorthemes.org/;
+      homepage = "http://eclipsecolorthemes.org/";
       description = "Plugin to switch color themes conveniently and without side effects";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -339,10 +340,37 @@ rec {
     propagatedBuildInputs = [ zest ];
 
     meta = with stdenv.lib; {
-      homepage = http://www2.cs.tum.edu/projects/cup/eclipse.php;
+      homepage = "http://www2.cs.tum.edu/projects/cup/eclipse.php";
       description = "IDE for developing CUP based parsers";
       platforms = platforms.all;
       maintainers = [ maintainers.romildo ];
+    };
+  };
+
+  drools = buildEclipseUpdateSite rec {
+    name = "drools-${version}";
+    version = "7.17.0.Final";
+
+    src = fetchzip {
+      url = "https://download.jboss.org/drools/release/${version}/droolsjbpm-tools-distribution-${version}.zip";
+      sha512 = "2qzc1iszqfrfnw8xip78n3kp6hlwrvrr708vlmdk7nv525xhs0ssjaxriqdhcr0s6jripmmazxivv3763rnk2bfkh31hmbnckpx4r3m";
+      extraPostFetch = ''
+        # work around https://github.com/NixOS/nixpkgs/issues/38649
+        chmod go-w $out;
+
+        # update site is a couple levels deep, alongside some other irrelevant stuff
+        cd $out;
+        find . -type f -not -path ./binaries/org.drools.updatesite/\* -exec rm {} \;
+        rmdir sources;
+        mv binaries/org.drools.updatesite/* .;
+        rmdir binaries/org.drools.updatesite binaries;
+      '';
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "https://www.drools.org/";
+      description = "Drools is a Business Rules Management System (BRMS) solution";
+      license = licenses.asl20;
     };
   };
 
@@ -357,31 +385,8 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://www.eclemma.org/;
+      homepage = "https://www.eclemma.org/";
       description = "EclEmma is a free Java code coverage tool for Eclipse";
-      license = licenses.epl10;
-      platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
-    };
-  };
-
-  emacsplus = buildEclipsePlugin rec {
-    name = "emacsplus-${version}";
-    version = "4.2.0";
-
-    srcFeature = fetchurl {
-      url = "http://www.mulgasoft.com/emacsplus/e4/update-site/features/com.mulgasoft.emacsplus.feature_${version}.jar";
-      sha256 = "0wja3cd7gq8w25797fxnafvcncjnmlv8qkl5iwqj7zja2f45vka8";
-    };
-
-    srcPlugin = fetchurl {
-      url = "http://www.mulgasoft.com/emacsplus/e4/update-site/plugins/com.mulgasoft.emacsplus_${version}.jar";
-      sha256 = "08yw45nr90mlpdzim74vsvdaxj41sgpxcrqk5ia6l2dzvrqlsjs1";
-    };
-
-    meta = with stdenv.lib; {
-      homepage = http://www.mulgasoft.com/emacsplus/;
-      description = "Provides a more Emacs-like experience in the Eclipse text editors";
       license = licenses.epl10;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
@@ -403,7 +408,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://findbugs.sourceforge.net/;
+      homepage = "http://findbugs.sourceforge.net/";
       description = "Plugin that uses static analysis to look for bugs in Java code";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -422,7 +427,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://gnuarmeclipse.livius.net/;
+      homepage = "http://gnuarmeclipse.livius.net/";
       description = "GNU ARM Eclipse Plug-ins";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -461,7 +466,7 @@ rec {
 
     meta = with stdenv.lib; {
       description = "Adds support for JSON files to Eclipse";
-      homepage = https://github.com/boothen/Json-Eclipse-Plugin;
+      homepage = "https://github.com/boothen/Json-Eclipse-Plugin";
       license = licenses.epl10;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
@@ -470,16 +475,16 @@ rec {
 
   jdt = buildEclipseUpdateSite rec {
     name = "jdt-${version}";
-    version = "4.9";
+    version = "4.16";
 
     src = fetchzip {
       stripRoot = false;
-      url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.9-201809060745/org.eclipse.jdt-4.9.zip;
-      sha256 = "144rqrw0crxd2v862dqxm2p5y60n4pbzdryv709xnhcw54rycm7n";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-${version}-202006040540/org.eclipse.jdt-${version}.zip";
+      sha256 = "0g349hg2nv1y628daxf84396wpf33z52wxv0gawlgrirbbizaznd";
     };
 
     meta = with stdenv.lib; {
-      homepage = https://www.eclipse.org/jdt/;
+      homepage = "https://www.eclipse.org/jdt/";
       description = "Eclipse Java development tools";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -502,7 +507,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/angelozerr/jdt-codemining;
+      homepage = "https://github.com/angelozerr/jdt-codemining";
       description = "Provides JDT Java CodeMining";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -528,7 +533,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/RustDT;
+      homepage = "https://github.com/RustDT";
       description = "Rust development tooling";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -545,7 +550,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://scala-ide.org/;
+      homepage = "http://scala-ide.org/";
       description = "The Scala IDE for Eclipse";
       license = licenses.bsd3;
       platforms = platforms.all;
@@ -555,16 +560,16 @@ rec {
 
   spotbugs = buildEclipseUpdateSite rec {
     name = "spotbugs-${version}";
-    version = "3.1.8";
+    version = "3.1.11";
 
     src = fetchzip {
       stripRoot = false;
       url = "https://github.com/spotbugs/spotbugs/releases/download/${version}/eclipsePlugin.zip";
-      sha256 = "0086shivxx745f69226f59xcv7l9xliwyr9kxm6zyn753c888js3";
+      sha256 = "0aanqwx3gy1arpbkqd846381hiy6272lzwhfjl94x8jhfykpqqbj";
     };
 
     meta = with stdenv.lib; {
-      homepage = https://spotbugs.github.io/;
+      homepage = "https://spotbugs.github.io/";
       description = "Plugin that uses static analysis to look for bugs in Java code";
       license = licenses.lgpl21;
       platforms = platforms.all;
@@ -587,7 +592,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = http://testng.org/;
+      homepage = "https://testng.org/doc/";
       description = "Eclipse plugin for the TestNG testing framework";
       license = licenses.asl20;
       platforms = platforms.all;
@@ -632,7 +637,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/oyse/yedit;
+      homepage = "https://github.com/oyse/yedit";
       description = "A YAML editor plugin for Eclipse";
       license = licenses.epl10;
       platforms = platforms.all;
@@ -650,7 +655,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = https://www.eclipse.org/gef/zest/;
+      homepage = "https://www.eclipse.org/gef/zest/";
       description = "The Eclipse Visualization Toolkit";
       platforms = platforms.all;
       maintainers = [ maintainers.romildo ];

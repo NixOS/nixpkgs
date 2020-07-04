@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "zsh-navigation-tools-${version}";
+  pname = "zsh-navigation-tools";
   version = "2.2.7";
 
   src = fetchFromGitHub {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Curses-based tools for ZSH";
-    homepage = https://github.com/psprint/zsh-navigation-tools;
+    homepage = "https://github.com/psprint/zsh-navigation-tools";
     license = licenses.gpl3;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; unix;

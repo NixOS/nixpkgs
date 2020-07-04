@@ -1,19 +1,21 @@
-{ stdenv, fetchFromGitHub, cmake, perl, openssl, curl, libusb1
+{ stdenv, fetchFromGitHub
+, cmake, perl, pkgconfig
+, openssl, curl, libusb1, protobufc
 , enableUnsafe ? false }:
 
-stdenv.mkDerivation rec {
-  name = "ttwatch-${version}";
-  version = "2018-02-01";
+stdenv.mkDerivation {
+  pname = "ttwatch";
+  version = "2020-02-05";
 
   src = fetchFromGitHub {
     owner = "ryanbinns";
     repo = "ttwatch";
-    rev = "b5c54647ed9b640584e53c4c15ee12d210790021";
-    sha256 = "136sskz9hnbwp49gxp983mswzgpl8yfc25ni79csbsnwp0k4lb94";
+    rev = "bfdf1372515574e1fb3871dc1039f8d8a5dbdada";
+    sha256 = "07nd4dbkchxy8js1h1f6pzn63pls2afww97wyiiw6zid43mpqyg4";
   };
 
-  nativeBuildInputs = [ cmake perl ];
-  buildInputs = [ openssl curl libusb1 ];
+  nativeBuildInputs = [ cmake perl pkgconfig ];
+  buildInputs = [ openssl curl libusb1 protobufc ];
 
   cmakeFlags = stdenv.lib.optional enableUnsafe [ "-Dunsafe=on" ];
 
@@ -22,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ryanbinns/ttwatch;
+    homepage = "https://github.com/ryanbinns/ttwatch";
     description = "Linux TomTom GPS Watch Utilities";
     maintainers = with maintainers; [ dotlambda ];
     license = licenses.mit;

@@ -8,12 +8,7 @@ in {
   ###### interface
   options = {
     services.thermald = {
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable thermald, the temperature management daemon.
-        '';
-      };
+      enable = mkEnableOption "thermald, the temperature management daemon";
 
       debug = mkOption {
         type = types.bool;

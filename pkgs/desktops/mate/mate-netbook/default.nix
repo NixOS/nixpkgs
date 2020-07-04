@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libwnck3, libfakekey, libXtst, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, gettext, gtk3, libwnck3, libfakekey, libXtst, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "mate-netbook-${version}";
-  version = "1.20.1";
+  pname = "mate-netbook";
+  version = "1.24.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "1ils0lav6j779kgz2py6zdalcfifpnp01clspbnkhb3v1ha1ncsq";
+    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1bmk9gq5gcqkvfppa7i1hqfph8sajc3xs189s4ha97g0ifwd98a8";
   };
 
   nativeBuildInputs = [
     pkgconfig
-    intltool
+    gettext
     wrapGAppsHook
   ];
 
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     mate.mate-panel
   ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "MATE utilities for netbooks";
     longDescription = ''
@@ -32,7 +34,7 @@ stdenv.mkDerivation rec {
       Installing these utilities is recommended for netbooks and similar
       devices with low resolution displays.
     '';
-    homepage = http://mate-desktop.org;
+    homepage = "https://mate-desktop.org";
     license = with licenses; [ gpl3 lgpl2Plus ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

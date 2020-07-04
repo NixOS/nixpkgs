@@ -12,7 +12,7 @@
         cp -v "$script" "$target"/"$scriptName"
         chmod 755 "$target"/"$scriptName"
         patchShebangs "$target"/"$scriptName"
-        substituteInPlace "$target"/"$scriptName" --replace pkg-config ${pkgconfig}/bin/pkg-config
+        substituteInPlace "$target"/"$scriptName" --replace pkg-config ${pkgconfig}/bin/${pkgconfig.targetPrefix}pkg-config
         substituteInPlace "$target"/"$scriptName" --replace monodis ${mono}/bin/monodis
       done
     ''

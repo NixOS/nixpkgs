@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitLab, python, pkgconfig
 , xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_412 }:
 
-stdenv.mkDerivation rec {
-  name = "irker-${version}";
+stdenv.mkDerivation {
+  pname = "irker";
   version = "2017-02-12";
 
   src = fetchFromGitLab {
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "IRC client that runs as a daemon accepting notification requests";
-    homepage = https://gitlab.com/esr/irker;
+    homepage = "https://gitlab.com/esr/irker";
     license = licenses.bsd2;
     maintainers = with maintainers; [ dtzWill ];
     platforms = platforms.unix;

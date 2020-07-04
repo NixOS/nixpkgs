@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, kernel, writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts
+{ stdenv, lib, fetchFromGitHub, kernel, writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, runtimeShell
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}"
-    "SHELL=/bin/sh"
+    "SHELL=${stdenv.shell}"
     "HDAPS=1"
   ];
 
@@ -34,14 +34,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.updateScript = import ./update.nix {
-    inherit lib writeScript coreutils gnugrep jq curl common-updater-scripts;
+    inherit lib writeScript coreutils gnugrep jq curl common-updater-scripts runtimeShell;
   };
 
   meta = {
     description = "IBM ThinkPad hardware functions driver";
-    homepage = https://github.com/evgeni/tp_smapi;
+    homepage = "https://github.com/evgeni/tp_smapi";
     license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.garbas ];
+    maintainers = [ ];
     # driver is only ment for linux thinkpads i think  bellow platforms should cover it.
     platforms = [ "x86_64-linux" "i686-linux" ];
   };

@@ -1,14 +1,22 @@
-{ stdenv, lib, fetchurl, libiconv, xz }:
+{ stdenv, lib, fetchurl, libiconv, xz, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "gettext-${version}";
-  version = "0.19.8.1";
+  pname = "gettext";
+  version = "0.20.1";
 
   src = fetchurl {
-    url = "mirror://gnu/gettext/${name}.tar.gz";
-    sha256 = "0hsw28f9q9xaggjlsdp2qmbp2rbd1mp0njzan2ld9kiqwkq2m57z";
+    url = "mirror://gnu/gettext/${pname}-${version}.tar.gz";
+    sha256 = "0p3zwkk27wm2m2ccfqm57nj7vqkmfpn7ja1nf65zmhz8qqs5chb6";
   };
-  patches = [ ./absolute-paths.diff ];
+  patches = [
+    ./absolute-paths.diff
+    ./gettext.git-2336451ed68d91ff4b5ae1acbc1eca30e47a86a9.patch
+  ]
+  ++ lib.optional stdenv.isDarwin
+      (fetchpatch {
+        url = "https://git.savannah.gnu.org/cgit/gettext.git/patch?id=ec0e6b307456ceab352669ae6bccca9702108753";
+        sha256 = "0xqs01c7xl7vmw6bqvsmrzxxjxk2a4spcdpmlwm3b4hi2wc2lxnf";
+      });
 
   outputs = [ "out" "man" "doc" "info" ];
 
@@ -18,10 +26,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
      "--disable-csharp" "--with-xz"
-     # avoid retaining reference to CF during stdenv bootstrap
-  ] ++ lib.optionals stdenv.isDarwin [
-    "gt_cv_func_CFPreferencesCopyAppValue=no"
-    "gt_cv_func_CFLocaleCopyCurrent=no"
   ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # On cross building, gettext supposes that the wchar.h from libc
     # does not fulfill gettext needs, so it tries to work with its
@@ -40,7 +44,10 @@ stdenv.mkDerivation rec {
     sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
   '';
 
-  nativeBuildInputs = [ xz xz.bin ];
+  nativeBuildInputs = [
+    xz
+    xz.bin
+  ];
   # HACK, see #10874 (and 14664)
   buildInputs = stdenv.lib.optional (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) libiconv;
 
@@ -75,7 +82,7 @@ stdenv.mkDerivation rec {
       GNU packages produce multi-lingual messages.
     '';
 
-    homepage = http://www.gnu.org/software/gettext/;
+    homepage = "https://www.gnu.org/software/gettext/";
 
     maintainers = with maintainers; [ zimbatm vrthra ];
     license = licenses.gpl2Plus;
@@ -84,5 +91,5 @@ stdenv.mkDerivation rec {
 }
 
 // stdenv.lib.optionalAttrs stdenv.isDarwin {
-  makeFlags = "CFLAGS=-D_FORTIFY_SOURCE=0";
+  makeFlags = [ "CFLAGS=-D_FORTIFY_SOURCE=0" ];
 }

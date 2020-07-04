@@ -1,25 +1,27 @@
 { stdenv, fetchFromGitHub, makeWrapper
-, python, git, gnupg, less, cacert
+, python3, git, gnupg, less
 }:
 
 stdenv.mkDerivation rec {
-  name = "git-repo-${version}";
-  version = "1.12.37";
+  pname = "git-repo";
+  version = "2.8";
 
   src = fetchFromGitHub {
     owner = "android";
     repo = "tools_repo";
     rev = "v${version}";
-    sha256 = "0qp7jqhblv7xblfgpcq4n18dyjdv8shz7r60c3vnjxx2fngkj2jd";
+    sha256 = "00sahddplisg55zpjz4v4sc7zqbh3apx36xv77g55nabwz7han8d";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ python ];
+  patches = [ ./import-ssl-module.patch ];
 
-  # TODO: Cleanup
-  patchPhase = ''
-    CA_PATH="$(echo '${cacert}/etc/ssl/certs/ca-bundle.crt' | sed 's/\//\\\//g')" # / -> \/
-    sed -i -E 's/urlopen\(url\)/urlopen(url, cafile="'$CA_PATH'")/' repo
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ python3 ];
+
+  postPatch = ''
+    substituteInPlace repo --replace \
+      'urllib.request.urlopen(url)' \
+      'urllib.request.urlopen(url, context=ssl.create_default_context())'
   '';
 
   installPhase = ''
@@ -41,7 +43,7 @@ stdenv.mkDerivation rec {
       parts of the development workflow. Repo is not meant to replace Git, only
       to make it easier to work with Git.
     '';
-    homepage = https://android.googlesource.com/tools/repo;
+    homepage = "https://android.googlesource.com/tools/repo";
     license = licenses.asl20;
     maintainers = [ maintainers.primeos ];
     platforms = platforms.unix;

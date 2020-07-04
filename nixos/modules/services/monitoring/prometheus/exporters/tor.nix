@@ -1,4 +1,4 @@
-{ config, lib, pkgs }:
+{ config, lib, pkgs, options }:
 
 with lib;
 
@@ -26,7 +26,6 @@ in
   };
   serviceOpts = {
     serviceConfig = {
-      DynamicUser = true;
       ExecStart = ''
         ${pkgs.prometheus-tor-exporter}/bin/prometheus-tor-exporter \
           -b ${cfg.listenAddress} \
@@ -36,5 +35,10 @@ in
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };
+
+    # CPython requires a process to either have $HOME defined or run as a UID
+    # defined in /etc/passwd. The latter is false with DynamicUser, so define a
+    # dummy $HOME. https://bugs.python.org/issue10496
+    environment = { HOME = "/var/empty"; };
   };
 }

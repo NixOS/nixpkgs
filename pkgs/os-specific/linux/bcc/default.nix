@@ -1,25 +1,22 @@
-{ stdenv, fetchFromGitHub, makeWrapper, cmake, llvmPackages, kernel
+{ stdenv, fetchurl, makeWrapper, cmake, llvmPackages, kernel
 , flex, bison, elfutils, python, luajit, netperf, iperf, libelf
-, systemtap
+, systemtap, bash
 }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "0.7.0";
-  name = "bcc-${version}";
+  pname = "bcc";
+  version = "0.15.0";
 
-  src = fetchFromGitHub {
-    owner  = "iovisor";
-    repo   = "bcc";
-    rev    = "v${version}";
-    sha256 = "1ww7l0chx2ivw9d2ahxjyhxmh6hz3w5z69r4lz02f0361rnrvk7f";
+  src = fetchurl {
+    url = "https://github.com/iovisor/bcc/releases/download/v${version}/bcc-src-with-submodule.tar.gz";
+    sha256 = "1k00xbhdzdvqp4hfxpgg34bbhnx597jjhpg1x6dz2w80r7xzsj28";
   };
-
   format = "other";
 
-  buildInputs = [
-    llvmPackages.llvm llvmPackages.clang-unwrapped kernel
+  buildInputs = with llvmPackages; [
+    llvm clang-unwrapped kernel
     elfutils luajit netperf iperf
-    systemtap.stapBuild
+    systemtap.stapBuild flex bash
   ];
 
   patches = [
@@ -28,6 +25,7 @@ python.pkgs.buildPythonApplication rec {
     ./fix-deadlock-detector-import.patch
   ];
 
+  propagatedBuildInputs = [ python.pkgs.netaddr ];
   nativeBuildInputs = [ makeWrapper cmake flex bison ]
     # libelf is incompatible with elfutils-libelf
     ++ stdenv.lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
@@ -44,10 +42,6 @@ python.pkgs.buildPythonApplication rec {
     patch -p1 < libbcc-path.patch
   '';
 
-  propagatedBuildInputs = [
-    python.pkgs.netaddr
-  ];
-
   postInstall = ''
     mkdir -p $out/bin $out/share
     rm -r $out/share/bcc/tools/old
@@ -60,6 +54,8 @@ python.pkgs.buildPythonApplication rec {
       if [ ! -e $bin ]; then
         ln -s $f $bin
       fi
+      substituteInPlace "$f" \
+        --replace '$(dirname $0)/lib' "$out/share/bcc/tools/lib"
     done
 
     sed -i -e "s!lib=.*!lib=$out/bin!" $out/bin/{java,ruby,node,python}gc
@@ -71,8 +67,8 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Dynamic Tracing Tools for Linux";
-    homepage = https://iovisor.github.io/bcc/;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ragge mic92 ];
+    homepage    = "https://iovisor.github.io/bcc/";
+    license     = licenses.asl20;
+    maintainers = with maintainers; [ ragge mic92 thoughtpolice ];
   };
 }

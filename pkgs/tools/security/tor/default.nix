@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libevent, openssl, zlib, torsocks
-, libseccomp, systemd, libcap
+, libseccomp, systemd, libcap, lzma, zstd, scrypt
 
 # for update.nix
 , writeScript
@@ -14,18 +14,25 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tor-0.3.4.8";
+  pname = "tor";
+  version = "0.4.3.5";
 
   src = fetchurl {
-    url = "https://dist.torproject.org/${name}.tar.gz";
-    sha256 = "08qhzcmzxp5xr2l5721vagksqnnbrzzzy5hmz5y9r8lrq2r4qsl2";
+    url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
+    sha256 = "0s6qspi102drn1nk3gfxs51x992xarc44gkfsi8y3l48wr50wsk1";
   };
 
   outputs = [ "out" "geoip" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libevent openssl zlib ] ++
+  buildInputs = [ libevent openssl zlib lzma zstd scrypt ] ++
     stdenv.lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
+
+  patches = [ ./disable-monotonic-timer-tests.patch ];
+
+  # cross compiles correctly but needs the following
+  configureFlags = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    "--disable-tool-name-check";
 
   NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
@@ -33,10 +40,11 @@ stdenv.mkDerivation rec {
     substituteInPlace contrib/client-tools/torify \
       --replace 'pathfind torsocks' true          \
       --replace 'exec torsocks' 'exec ${torsocks}/bin/torsocks'
+
+    patchShebangs ./scripts/maint/checkShellScripts.sh
   '';
 
   enableParallelBuilding = true;
-  enableParallelChecking = false; # 4 tests fail randomly
 
   doCheck = true;
 
@@ -62,8 +70,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://www.torproject.org/;
-    repositories.git = https://git.torproject.org/git/tor;
+    homepage = "https://www.torproject.org/";
+    repositories.git = "https://git.torproject.org/git/tor";
     description = "Anonymizing overlay network";
 
     longDescription = ''

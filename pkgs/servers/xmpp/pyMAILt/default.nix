@@ -1,7 +1,7 @@
-{ stdenv, python, xmpppy, pythonPackages, fetchcvs } :
+{ stdenv, python, xmpppy, pythonPackages, fetchcvs, runtimeShell } :
 
 stdenv.mkDerivation rec {
-  name = "pyMAILt-${version}";
+  pname = "pyMAILt";
   version = "20090101";
 
   src = fetchcvs {
@@ -14,26 +14,26 @@ stdenv.mkDerivation rec {
   pythonPath = [ xmpppy ];
   buildInputs = [ pythonPackages.wrapPython ];
 
-  /* doConfigure should be removed if not needed */
   installPhase = ''
     cd mail-transport
-    mkdir -p $out/bin $out/share/${name}
+    mkdir -p $out/bin $out/share/${pname}-${version}
     sed -e 's@/usr/bin/@${python}/bin/@' -i mail.py
     sed -e '/configFiles/aconfigFiles += [os.getenv("HOME")+"/.pyMAILt.xml"]' -i config.py
     sed -e '/configFiles/aconfigFiles += [os.getenv("HOME")+"/.python-mail-transport.xml"]' -i config.py
     sed -e '/configFiles/iimport os' -i config.py
     cp * $out/share/$name
     cat > $out/bin/pyMAILt <<EOF
-      #!${stdenv.shell}
-      cd $out/share/${name}
+      #!${runtimeShell}
+      cd $out/share/${pname}-${version}
       ./mail.py \"$@\"
     EOF
-    chmod a+rx  $out/bin/pyMAILt $out/share/${name}/mail.py
+    chmod a+rx  $out/bin/pyMAILt $out/share/${pname}-${version}/mail.py
     wrapPythonPrograms
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Email transport module for XMPP";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = licenses.gpl2;
   };
 }

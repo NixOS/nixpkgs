@@ -11,7 +11,7 @@ mkDerivation {
   name = "konsole";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = with lib.maintainers; [ ttuegel turion ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
@@ -19,5 +19,6 @@ mkDerivation {
     kguiaddons ki18n kiconthemes kinit kio knotifications knotifyconfig kparts kpty
     kservice ktextwidgets kwidgetsaddons kwindowsystem kxmlgui qtscript knewstuff
   ];
+
   propagatedUserEnvPkgs = [ (lib.getBin kinit) ];
 }

@@ -4,8 +4,8 @@
 , libnfc
 }:
 
-stdenv.mkDerivation rec {
-  name = "ifdnfc-${version}";
+stdenv.mkDerivation {
+  pname = "ifdnfc";
   version = "2016-03-01";
 
   src = fetchFromGitHub {
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
        Supports the pn533 smart-card reader chip which is for example used in
        the SCM SCL3711.
     '';
-    homepage = https://github.com/nfc-tools/ifdnfc;
+    homepage = "https://github.com/nfc-tools/ifdnfc";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ makefu ];

@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Python package to parse and build CSS";
-    homepage = http://code.google.com/p/cssutils/;
+    homepage = "http://cthedot.de/cssutils/";
     license = licenses.lgpl3Plus;
   };
 }

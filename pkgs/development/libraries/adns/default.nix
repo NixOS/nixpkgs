@@ -4,7 +4,8 @@ let
   version = "1.5.1";
 in
 stdenv.mkDerivation {
-  name = "adns-${version}";
+  pname = "adns";
+  inherit version;
 
   src = fetchurl {
     urls = [
@@ -18,7 +19,7 @@ stdenv.mkDerivation {
   preConfigure =
     stdenv.lib.optionalString stdenv.isDarwin "sed -i -e 's|-Wl,-soname=$(SHLIBSONAME)||' configure";
 
-  # http://thread.gmane.org/gmane.linux.distributions.nixos/1328 for details.
+  # https://www.mail-archive.com/nix-dev@cs.uu.nl/msg01347.html for details.
   doCheck = false;
 
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -26,7 +27,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.chiark.greenend.org.uk/~ian/adns/;
+    homepage = "http://www.chiark.greenend.org.uk/~ian/adns/";
     description = "Asynchronous DNS Resolver Library";
     license = stdenv.lib.licenses.lgpl2;
 

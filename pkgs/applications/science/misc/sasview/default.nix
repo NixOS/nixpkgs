@@ -67,7 +67,7 @@ python.pkgs.buildPythonApplication rec {
   patches = [ ./pyparsing-fix.patch ./local_config.patch ];
 
   meta = with lib; {
-    homepage = https://www.sasview.org;
+    homepage = "https://www.sasview.org";
     description = "Fitting and data analysis for small angle scattering data";
     maintainers = with maintainers; [ rprospero ];
     license = licenses.bsd3;

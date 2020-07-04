@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, fastjet, ghostscript, gsl, hepmc, imagemagick, less, python2, texlive, yoda, which, makeWrapper }:
+{ stdenv, fetchurl, fastjet, fastjet-contrib, ghostscript, gsl, hepmc, imagemagick, less, python3, rsync, texlive, yoda, which, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "rivet-${version}";
-  version = "2.6.1";
+  pname = "rivet";
+  version = "3.1.2";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
-    sha256 = "08lhr10h97vqhy6ci4zna4ngx9875j32zs8ad5sy38xgbbrx3474";
+    sha256 = "0yjpx7n6ry3pfgkf7d7v7mcc3yv7681kf8nq2b1fgspl8jbd0hf0";
   };
 
   patches = [
@@ -17,35 +17,38 @@ stdenv.mkDerivation rec {
     scheme-basic
     collection-pstricks
     collection-fontsrecommended
+    l3kernel
+    l3packages
     mathastext
     pgf
     relsize
     sfmath
+    siunitx
     xcolor
     xkeyval
+    xstring
     ;};
-  buildInputs = [ hepmc imagemagick python2 latex makeWrapper ];
-  propagatedBuildInputs = [ fastjet ghostscript gsl yoda ];
+
+  nativeBuildInputs = [ rsync makeWrapper ];
+  buildInputs = [ hepmc imagemagick python3 latex python3.pkgs.yoda ];
+  propagatedBuildInputs = [ fastjet fastjet-contrib ];
 
   preConfigure = ''
-    substituteInPlace Makefile.in \
-      --replace "SUBDIRS = src pyext data include bin analyses doc test" "SUBDIRS = src pyext data include bin analyses test"
-    substituteInPlace analyses/Makefile.in \
-      --replace "!(tmp)" ""
-    substituteInPlace bin/rivet-buildplugin.in \
-      --replace '"which"' '"${which}/bin/which"' \
+    substituteInPlace bin/rivet-build.in \
+      --replace 'num_jobs=$(getconf _NPROCESSORS_ONLN)' 'num_jobs=''${NIX_BUILD_CORES:-$(getconf _NPROCESSORS_ONLN)}' \
+      --replace 'which' '"${which}/bin/which"' \
       --replace 'mycxx=' 'mycxx=${stdenv.cc}/bin/${if stdenv.cc.isClang or false then "clang++" else "g++"}  #' \
-      --replace 'mycxxflags="' "mycxxflags=\"-std=c++11 $NIX_CFLAGS_COMPILE $NIX_CXXSTDLIB_COMPILE $NIX_CFLAGS_LINK "
+      --replace 'mycxxflags="' "mycxxflags=\"$NIX_CFLAGS_COMPILE $NIX_CXXSTDLIB_COMPILE $NIX_CFLAGS_LINK "
   '';
 
   preInstall = ''
     substituteInPlace bin/make-plots \
       --replace '"which"' '"${which}/bin/which"' \
-      --replace '"latex"' '"${latex}/bin/latex"' \
-      --replace '"dvips"' '"${latex}/bin/dvips"' \
+      --replace '"latex"' '"'$latex'/bin/latex"' \
+      --replace '"dvips"' '"'$latex'/bin/dvips"' \
       --replace '"ps2pdf"' '"${ghostscript}/bin/ps2pdf"' \
       --replace '"ps2eps"' '"${ghostscript}/bin/ps2eps"' \
-      --replace '"kpsewhich"' '"${latex}/bin/kpsewhich"' \
+      --replace '"kpsewhich"' '"'$latex'/bin/kpsewhich"' \
       --replace '"convert"' '"${imagemagick.out}/bin/convert"'
     substituteInPlace bin/rivet \
       --replace '"less"' '"${less}/bin/less"'
@@ -56,9 +59,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-fastjet=${fastjet}"
-    "--with-hepmc=${hepmc}"
     "--with-yoda=${yoda}"
-  ];
+  ] ++ (if stdenv.lib.versions.major hepmc.version == "3" then [
+    "--with-hepmc3=${hepmc}"
+  ] else [
+    "--with-hepmc=${hepmc}"
+  ]);
 
   enableParallelBuilding = true;
 
@@ -68,11 +74,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A framework for comparison of experimental measurements from high-energy particle colliders to theory predictions";
-    license     = stdenv.lib.licenses.gpl2;
-    homepage    = https://rivet.hepforge.org;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ veprbl ];
+    license     = licenses.gpl3;
+    homepage    = "https://rivet.hepforge.org";
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ veprbl ];
   };
 }

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.gwtproject.org/;
+    homepage = "http://www.gwtproject.org/";
     description = "A development toolkit for building and optimizing complex browser-based applications";
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.unix;

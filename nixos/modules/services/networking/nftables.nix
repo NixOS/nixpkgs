@@ -52,7 +52,7 @@ in
             ip protocol icmp icmp type { destination-unreachable, router-advertisement, time-exceeded, parameter-problem } accept
 
             # allow "ping"
-            ip6 nexthdr icmp icmpv6 type echo-request accept
+            ip6 nexthdr icmpv6 icmpv6 type echo-request accept
             ip protocol icmp icmp type echo-request accept
 
             # accept SSH connections (required for a server)

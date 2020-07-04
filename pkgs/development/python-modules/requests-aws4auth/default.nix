@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, fetchzip, isPy3k, requests }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, requests }:
 with lib;
 buildPythonPackage rec {
   pname = "requests-aws4auth";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Amazon Web Services version 4 authentication for the Python Requests library.";
-    homepage = https://github.com/sam-washington/requests-aws4auth;
+    homepage = "https://github.com/sam-washington/requests-aws4auth";
     license = licenses.mit;
     maintainers = [ maintainers.basvandijk ];
   };

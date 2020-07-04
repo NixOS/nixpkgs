@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, fetchpatch, getopt, libcap }:
+{ stdenv, fetchurl, fetchpatch, getopt, libcap, gnused }:
 
 stdenv.mkDerivation rec {
   version = "1.23";
-  name = "fakeroot-${version}";
+  pname = "fakeroot";
 
   src = fetchurl {
     url = "http://http.debian.net/debian/pool/main/f/fakeroot/fakeroot_${version}.orig.tar.xz";
@@ -29,18 +29,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ getopt ]
+  buildInputs = [ getopt gnused ]
     ++ stdenv.lib.optional (!stdenv.isDarwin) libcap
     ;
 
   postUnpack = ''
-    for prog in getopt; do
-      sed -i "s@getopt@$(type -p getopt)@g" ${name}/scripts/fakeroot.in
-    done
+    sed -i -e "s@getopt@$(type -p getopt)@g" -e "s@sed@$(type -p sed)@g" ${pname}-${version}/scripts/fakeroot.in
   '';
 
   meta = {
-    homepage = http://fakeroot.alioth.debian.org/;
+    homepage = "https://salsa.debian.org/clint/fakeroot";
     description = "Give a fake root environment through LD_PRELOAD";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];

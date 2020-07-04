@@ -4,18 +4,18 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "guile-reader-${version}";
+  pname = "guile-reader";
   version = "0.6.2";
 
   src = fetchurl {
-    url = "http://download.savannah.nongnu.org/releases/guile-reader/${name}.tar.gz";
+    url = "http://download.savannah.nongnu.org/releases/guile-reader/${pname}-${version}.tar.gz";
     sha256 = "0592s2s8ampqmqwilc4fvcild6rb9gy79di6vxv5kcdmv23abkgx";
   };
 
   patches = [
     (fetchpatch {
        name = "0001-fix-prototypes.patch";
-       url = https://aur.archlinux.org/cgit/aur.git/plain/reader_flag.patch?h=guile-reader&id=63ac0413a1aa65eb6a0db57bc16ef4481b70dc31;
+       url = "https://aur.archlinux.org/cgit/aur.git/plain/reader_flag.patch?h=guile-reader&id=63ac0413a1aa65eb6a0db57bc16ef4481b70dc31";
        sha256 = "01ar34xgpxyli8v2bk4kj6876kyrxhxhfpv9v07lx36d254bzrjb";
      }) ];
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
        "token readers" of a standard Scheme readers. For example, it
        is used to implement Skribilo's R5RS-derived document syntax.
     '';
-    homepage = https://www.nongnu.org/guile-reader/;
+    homepage = "https://www.nongnu.org/guile-reader/";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.gnu;

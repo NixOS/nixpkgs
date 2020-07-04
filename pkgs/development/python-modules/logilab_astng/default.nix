@@ -16,7 +16,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ logilab_common ];
 
   meta = with stdenv.lib; {
-    homepage = https://www.logilab.org/project/logilab-astng;
+    homepage = "https://www.logilab.org/project/logilab-astng";
     description = "Python Abstract Syntax Tree New Generation";
     license = licenses.lgpl2;
   };

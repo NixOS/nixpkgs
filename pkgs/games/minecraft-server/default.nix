@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, fetchurl, jre_headless }:
+stdenv.mkDerivation {
+  pname = "minecraft-server";
+  version = "1.16.1";
 
-stdenv.mkDerivation rec {
-  name    = "minecraft-server-${version}";
-  version = "1.12.2";
-
-  src  = fetchurl {
-    url    = "https://s3.amazonaws.com/Minecraft.Download/versions/${version}/minecraft_server.${version}.jar";
-    sha256 = "0zhnac6yvkdgdaag0gb0fgrkgizbwrpf7s76yqdiknfswrs947zy";
+  src = fetchurl {
+    url = "https://launcher.mojang.com/v1/objects/a412fd69db1f81db3f511c1463fd304675244077/server.jar";
+    # sha1 because that comes from mojang via api
+    sha1 = "a412fd69db1f81db3f511c1463fd304675244077";
   };
 
   preferLocalBuild = true;
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
     cat > $out/bin/minecraft-server << EOF
     #!/bin/sh
-    exec ${jre}/bin/java \$@ -jar $out/lib/minecraft/server.jar nogui
+    exec ${jre_headless}/bin/java \$@ -jar $out/lib/minecraft/server.jar nogui
     EOF
 
     chmod +x $out/bin/minecraft-server
@@ -25,11 +25,13 @@ stdenv.mkDerivation rec {
 
   phases = "installPhase";
 
-  meta = {
+  passthru.updateScript = ./update.sh;
+
+  meta = with stdenv.lib; {
     description = "Minecraft Server";
-    homepage    = "https://minecraft.net";
-    license     = stdenv.lib.licenses.unfreeRedistributable;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice stdenv.lib.maintainers.tomberek ];
+    homepage = "https://minecraft.net";
+    license = licenses.unfreeRedistributable;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ thoughtpolice tomberek costrouc ];
   };
 }

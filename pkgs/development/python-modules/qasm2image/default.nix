@@ -8,9 +8,10 @@
 , svgwrite
 , colorama
 , python
+, pythonOlder
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "qasm2image";
   version = "0.8.0";
 
@@ -20,6 +21,8 @@ buildPythonPackage rec {
     rev = "2c01756946ba9782973359dbd7bbf6651af6bee5";
     sha256 = "1bnkzv7wrdvrq71dmsqanb3v2hcsxh5zaglfcxm2d9zzpmvb4a2n";
   };
+
+  disabled = pythonOlder "3.5";
 
   propagatedBuildInputs = [
     cairocffi
@@ -36,12 +39,15 @@ buildPythonPackage rec {
     ${python.interpreter} tests/launch_tests.py
   '';
 
+  LC_ALL="en_US.UTF-8";
+
   meta = {
     description = "A Python module to visualise quantum circuit";
-    homepage    = https://github.com/nelimeee/qasm2image;
+    homepage    = "https://github.com/nelimeee/qasm2image";
     license     = lib.licenses.cecill-b;
     maintainers = with lib.maintainers; [
       pandaman
     ];
+    broken = true;  # last update Oct 2018, failed tests don't error the build, and out-of-date with latest python3Packages.qiskit
   };
 }

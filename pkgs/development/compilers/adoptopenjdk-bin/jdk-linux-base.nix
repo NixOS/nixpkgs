@@ -1,74 +1,44 @@
-{ name
-, url
-, sha256
-}:
+sourcePerArch:
 
-{ swingSupport ? true
-, stdenv
+{ stdenv
+, lib
 , fetchurl
-, file
-, xorg ? null
-, glib
-, libxml2
-, ffmpeg_2
-, libxslt
-, libGL
+, autoPatchelfHook
+, alsaLib
 , freetype
 , fontconfig
-, gtk2
-, pango
-, cairo
-, alsaLib
-, atk
-, gdk_pixbuf
 , zlib
-, elfutils
+, xorg
+, libffi
 }:
 
-assert swingSupport -> xorg != null;
-
 let
-  rSubPaths = [
-    "lib/jli"
-    "lib/server"
-    "lib/compressedrefs" # OpenJ9
-    "lib/j9vm" # OpenJ9
-    "lib"
-  ];
-
-  libraries = [
-    stdenv.cc.libc glib libxml2 ffmpeg_2 libxslt libGL
-    xorg.libXxf86vm alsaLib fontconfig freetype pango gtk2 cairo gdk_pixbuf
-    atk zlib elfutils
-  ] ++ (stdenv.lib.optionals swingSupport [
-    xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXp xorg.libXt
-    xorg.libXrender
-    stdenv.cc.cc
-  ]);
+  cpuName = stdenv.hostPlatform.parsed.cpu.name;
 in
 
 let result = stdenv.mkDerivation rec {
-  inherit name;
+  name = if sourcePerArch.packageType == "jdk"
+    then "adoptopenjdk-${sourcePerArch.vmType}-bin-${version}"
+    else "adoptopenjdk-${sourcePerArch.packageType}-${sourcePerArch.vmType}-bin-${version}";
+
+  version = sourcePerArch.${cpuName}.version or (throw "unsupported CPU ${cpuName}");
 
   src = fetchurl {
-    inherit url sha256;
+    inherit (sourcePerArch.${cpuName}) url sha256;
   };
 
-  nativeBuildInputs = [ file ];
+  buildInputs = [
+    alsaLib freetype fontconfig zlib xorg.libX11 xorg.libXext xorg.libXtst
+    xorg.libXi xorg.libXrender
+  ] ++ lib.optional stdenv.isAarch32 libffi;
+
+  nativeBuildInputs = [ autoPatchelfHook ];
 
   # See: https://github.com/NixOS/patchelf/issues/10
   dontStrip = 1;
 
   installPhase = ''
     cd ..
-
-    # Set PaX markings
-    exes=$(file $sourceRoot/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
-    for file in $exes; do
-      paxmark m "$file"
-      # On x86 for heap sizes over 700MB disable SEGMEXEC and PAGEEXEC as well.
-      ${stdenv.lib.optionalString stdenv.isi686 ''paxmark msp "$file"''}
-    done
 
     mv $sourceRoot $out
 
@@ -77,43 +47,33 @@ let result = stdenv.mkDerivation rec {
     # Remove some broken manpages.
     rm -rf $out/man/ja*
 
-    # for backward compatibility
-    ln -s $out $out/jre
+    # Remove embedded freetype to avoid problems like
+    # https://github.com/NixOS/nixpkgs/issues/57733
+    find "$out" -name 'libfreetype.so*' -delete
 
     mkdir -p $out/nix-support
 
     # Set JAVA_HOME automatically.
-    cat <<EOF >> $out/nix-support/setup-hook
-    if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
+    cat <<EOF >> "$out/nix-support/setup-hook"
+    if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
     EOF
   '';
 
-  postFixup = ''
-    rpath+="''${rpath:+:}${stdenv.lib.concatStringsSep ":" (map (a: "$out/${a}") rSubPaths)}"
-
-    # set all the dynamic linkers
-    find $out -type f -perm -0100 \
-        -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "$rpath" {} \;
-
-    find $out -name "*.so" -exec patchelf --set-rpath "$rpath" {} \;
+  preFixup = ''
+    find "$out" -name libfontmanager.so -exec \
+      patchelf --add-needed libfontconfig.so {} \;
   '';
-
-  rpath = stdenv.lib.strings.makeLibraryPath libraries;
 
   # FIXME: use multiple outputs or return actual JRE package
   passthru.jre = result;
 
   passthru.home = result;
 
-  # for backward compatibility
-  passthru.architecture = "";
-
   meta = with stdenv.lib; {
     license = licenses.gpl2Classpath;
     description = "AdoptOpenJDK, prebuilt OpenJDK binary";
-    platforms = [ "x86_64-linux" ]; # some inherit jre.meta.platforms
-    maintainers = with stdenv.lib.maintainers; [ taku0 ];
+    platforms = lib.mapAttrsToList (arch: _: arch + "-linux") sourcePerArch; # some inherit jre.meta.platforms
+    maintainers = with lib.maintainers; [ taku0 ];
   };
 
 }; in result

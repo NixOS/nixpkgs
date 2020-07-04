@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "nameparser";
-  version = "1.0.1";
+  version = "1.0.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c7eeeffbf16e263452b17b5f4b544d366c3364e966721f39d490e6c7c8b44b7f";
+    sha256 = "0av5kraczczp0hvwpkdaw7kl2hk9k4dyll08rg180n52a2dm0pra";
   };
 
   LC_ALL="en_US.UTF-8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A simple Python module for parsing human names into their individual components";
-    homepage = https://github.com/derek73/python-nameparser;
+    homepage = "https://github.com/derek73/python-nameparser";
     license = licenses.lgpl21Plus;
   };
 

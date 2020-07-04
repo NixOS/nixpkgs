@@ -1,13 +1,13 @@
 { stdenv, curl, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "stdman-${version}";
+  pname = "stdman";
   version = "2018.03.11";
 
   src = fetchFromGitHub {
     owner = "jeaye";
     repo = "stdman";
-    rev = "${version}";
+    rev = version;
     sha256 = "1017vwhcwlwi5sa8h6pkhj048in826wxnhl6qarykmzksvidff3r";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       files from cppreference and generates groff-formatted manual
       pages for Unix-based systems. The goal is to provide excellent
       formatting for easy readability.";
-    homepage = https://github.com/jeaye/stdman;
+    homepage = "https://github.com/jeaye/stdman";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = [ maintainers.twey ];

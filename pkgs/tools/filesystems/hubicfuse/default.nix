@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, curl, openssl, fuse, libxml2, json_c, file }:
 
 stdenv.mkDerivation rec {
-  name = "hubicfuse-${version}";
+  pname = "hubicfuse";
   version = "3.0.1";
 
   src = fetchFromGitHub {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/TurboGit/hubicfuse;
+    homepage = "https://github.com/TurboGit/hubicfuse";
     description = "FUSE-based filesystem to access hubic cloud storage";
     platforms = platforms.linux;
     license = licenses.mit;

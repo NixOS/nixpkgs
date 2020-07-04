@@ -1,8 +1,8 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkgconfig, doxygen,
-  libX11, libXinerama, libXrandr, libGLU_combined,
+  libX11, libXinerama, libXrandr, libGLU, libGL,
   glib, ilmbase, libxml2, pcre, zlib,
   jpegSupport ? true, libjpeg,
-  jasperSupport ? true, jasper,
+  jasperSupport ? false, jasper,  # disable jasper by default (many CVE)
   exrSupport ? false, openexr,
   gifSupport ? true, giflib,
   pngSupport ? true, libpng,
@@ -11,7 +11,7 @@
   curlSupport ? true, curl,
   colladaSupport ? false, opencollada,
   opencascadeSupport ? false, opencascade,
-  ffmpegSupport ? false, ffmpeg,
+  ffmpegSupport ? false, ffmpeg_3,
   nvttSupport ? false, nvidia-texture-tools,
   freetypeSupport ? true, freetype,
   svgSupport ? false, librsvg,
@@ -26,20 +26,20 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "openscenegraph-${version}";
-  version = "3.6.2";
+  pname = "openscenegraph";
+  version = "3.6.4";
 
   src = fetchFromGitHub {
     owner = "openscenegraph";
     repo = "OpenSceneGraph";
-    rev = "fb40a0d1db018ff39a08699a7f17f7eb6d949c36";
-    sha256 = "03jk6lclyd4biniaw04w7j0z1spkm69f1c19i37b8v9x3zv1p1id";
+    rev = "OpenSceneGraph-${version}";
+    sha256 = "0x8hdbzw0b71j91fzp9cwmy9a7ava8v8wwyj8nxijq942vdx1785";
   };
 
   nativeBuildInputs = [ pkgconfig cmake doxygen ];
 
   buildInputs = [
-    libX11 libXinerama libXrandr libGLU_combined
+    libX11 libXinerama libXrandr libGLU libGL
     glib ilmbase libxml2 pcre zlib
   ] ++ lib.optional jpegSupport libjpeg
     ++ lib.optional jasperSupport jasper
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional curlSupport curl
     ++ lib.optional colladaSupport opencollada
     ++ lib.optional opencascadeSupport opencascade
-    ++ lib.optional ffmpegSupport ffmpeg
+    ++ lib.optional ffmpegSupport ffmpeg_3
     ++ lib.optional nvttSupport nvidia-texture-tools
     ++ lib.optional freetypeSupport freetype
     ++ lib.optional svgSupport librsvg
@@ -64,14 +64,12 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withExamples [ fltk wxGTK ]
   ;
 
-  enableParallelBuilding = true;
-
   cmakeFlags = lib.optional (!withApps) "-DBUILD_OSG_APPLICATIONS=OFF" ++ lib.optional withExamples "-DBUILD_OSG_EXAMPLES=ON";
 
   meta = with stdenv.lib; {
     description = "A 3D graphics toolkit";
-    homepage = http://www.openscenegraph.org/;
-    maintainers = [ maintainers.raskin ];
+    homepage = "http://www.openscenegraph.org/";
+    maintainers = with maintainers; [ aanderse raskin ];
     platforms = platforms.linux;
     license = "OpenSceneGraph Public License - free LGPL-based license";
   };

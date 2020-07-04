@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, libX11, libXft, libXinerama, libXpm }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "dzen2-0.9.5";
 
   nativeBuildInputs = [ pkgconfig ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://github.com/robm/dzen;
+    homepage = "https://github.com/robm/dzen";
     license = stdenv.lib.licenses.mit;
     description = "X notification utility";
     platforms = stdenv.lib.platforms.linux;

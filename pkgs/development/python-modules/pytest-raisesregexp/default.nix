@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Simple pytest plugin to look for regex in Exceptions";
-    homepage = https://github.com/Walkman/pytest_raisesregexp;
+    homepage = "https://github.com/Walkman/pytest_raisesregexp";
     license = with licenses; [ mit ];
   };
 }

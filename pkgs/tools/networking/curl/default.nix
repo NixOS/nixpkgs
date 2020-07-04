@@ -2,11 +2,12 @@
 , http2Support ? true, nghttp2
 , idnSupport ? false, libidn ? null
 , ldapSupport ? false, openldap ? null
-, zlibSupport ? false, zlib ? null
-, sslSupport ? false, openssl ? null
+, zlibSupport ? true, zlib ? null
+, sslSupport ? zlibSupport, openssl ? null
 , gnutlsSupport ? false, gnutls ? null
-, scpSupport ? false, libssh2 ? null
-, gssSupport ? false, kerberos ? null
+, wolfsslSupport ? false, wolfssl ? null
+, scpSupport ? zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin, libssh2 ? null
+, gssSupport ? !stdenv.hostPlatform.isWindows, libkrb5 ? null
 , c-aresSupport ? false, c-ares ? null
 , brotliSupport ? false, brotli ? null
 }:
@@ -17,21 +18,25 @@ assert ldapSupport -> openldap != null;
 assert zlibSupport -> zlib != null;
 assert sslSupport -> openssl != null;
 assert !(gnutlsSupport && sslSupport);
+assert !(gnutlsSupport && wolfsslSupport);
+assert !(sslSupport && wolfsslSupport);
 assert gnutlsSupport -> gnutls != null;
+assert wolfsslSupport -> wolfssl != null;
 assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
 assert brotliSupport -> brotli != null;
-assert gssSupport -> kerberos != null;
+assert gssSupport -> libkrb5 != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.61.1";
+  pname = "curl";
+  version = "7.70.0";
 
   src = fetchurl {
     urls = [
-      "https://curl.haxx.se/download/${name}.tar.bz2"
-      "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] name}/${name}.tar.bz2"
+      "https://curl.haxx.se/download/${pname}-${version}.tar.bz2"
+      "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] pname}-${version}/${pname}-${version}.tar.bz2"
     ];
-    sha256 = "1f8rljpa98g7ry7qyvv6657cmvgrwmam9mdbjklv45lspiykf253";
+    sha256 = "1l19b2xmzwjl2fqlbv46kwlz1823miaxczyx2a5lz8k7mmigw2x5";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -49,10 +54,11 @@ stdenv.mkDerivation rec {
     optional idnSupport libidn ++
     optional ldapSupport openldap ++
     optional zlibSupport zlib ++
-    optional gssSupport kerberos ++
+    optional gssSupport libkrb5 ++
     optional c-aresSupport c-ares ++
     optional sslSupport openssl ++
     optional gnutlsSupport gnutls ++
+    optional wolfsslSupport wolfssl ++
     optional scpSupport libssh2 ++
     optional brotliSupport brotli;
 
@@ -67,7 +73,8 @@ stdenv.mkDerivation rec {
       # to nss-cacert from the default profile.
       "--without-ca-bundle"
       "--without-ca-path"
-      "--with-ca-fallback"
+      # The build fails when using wolfssl with --with-ca-fallback
+      ( if wolfsslSupport then "--without-ca-fallback" else "--with-ca-fallback")
       "--disable-manual"
       ( if sslSupport then "--with-ssl=${openssl.dev}" else "--without-ssl" )
       ( if gnutlsSupport then "--with-gnutls=${gnutls.dev}" else "--without-gnutls" )
@@ -77,8 +84,9 @@ stdenv.mkDerivation rec {
       ( if idnSupport then "--with-libidn=${libidn.dev}" else "--without-libidn" )
       ( if brotliSupport then "--with-brotli" else "--without-brotli" )
     ]
+    ++ stdenv.lib.optional wolfsslSupport "--with-wolfssl=${wolfssl.dev}"
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
-    ++ stdenv.lib.optional gssSupport "--with-gssapi=${kerberos.dev}"
+    ++ stdenv.lib.optional gssSupport "--with-gssapi=${libkrb5.dev}"
        # For the 'urandom', maybe it should be a cross-system option
     ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
        "--with-random=/dev/urandom"
@@ -94,6 +102,10 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     moveToOutput bin/curl-config "$dev"
+
+    # Install completions
+    make -C scripts install
+  '' + stdenv.lib.optionalString scpSupport ''
     sed '/^dependency_libs/s|${libssh2.dev}|${libssh2.out}|' -i "$out"/lib/*.la
   '' + stdenv.lib.optionalString gnutlsSupport ''
     ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so
@@ -107,9 +119,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A command line tool for transferring files with URL syntax";
-    homepage    = https://curl.haxx.se/;
-    maintainers = with maintainers; [ lovek323 ];
+    homepage    = "https://curl.haxx.se/";
     license = licenses.curl;
+    maintainers = with maintainers; [ lovek323 ];
     platforms = platforms.all;
   };
 }

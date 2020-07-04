@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, zeromq3, jdk }:
 
 stdenv.mkDerivation rec {
-  name = "jzmq-${version}";
+  pname = "jzmq";
   version = "3.1.0";
 
   src = fetchFromGitHub {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.zeromq.org;
+    homepage = "http://www.zeromq.org";
     description = "Java bindings for ZeroMQ";
     platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.lgpl3;

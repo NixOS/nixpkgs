@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/wodim $out/bin/cdrecord
   '';
 
-  makeFlags = "PREFIX=\$(out)";
+  makeFlags = [ "PREFIX=\$(out)" ];
 
   meta = {
     description = "Portable command-line CD/DVD recorder software, mostly compatible with cdrtools";
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       independent project.
     '';
     
-    homepage = http://cdrkit.org/;
+    homepage = "http://cdrkit.org/";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

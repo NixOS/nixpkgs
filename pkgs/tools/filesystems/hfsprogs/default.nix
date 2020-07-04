@@ -2,7 +2,7 @@
 
 let version = "332.25";
     package_name = "hfsprogs"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${package_name}-${version}";
   srcs = [
     (fetchurl {

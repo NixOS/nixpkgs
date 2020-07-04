@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkgconfig }:
 
-stdenv.mkDerivation rec {
-  name = "elementary-cmake-modules-${version}";
+stdenv.mkDerivation {
+  pname = "elementary-cmake-modules";
   version = "0.1.0";
 
   src = fetchFromGitHub {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     platforms = platforms.linux ++ platforms.darwin;
-    homepage = https://github.com/elementary/cmake-modules;
+    homepage = "https://github.com/elementary/cmake-modules";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.samdroid-apps ];
   };

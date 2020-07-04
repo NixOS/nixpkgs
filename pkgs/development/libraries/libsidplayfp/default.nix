@@ -9,10 +9,9 @@ stdenv.mkDerivation rec {
   minor = "8";
   level = "7";
   version = "${major}.${minor}.${level}";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/sidplay-residfp/${pname}/${major}.${minor}/${name}.tar.gz";
+    url = "mirror://sourceforge/sidplay-residfp/${pname}/${major}.${minor}/${pname}-${version}.tar.gz";
     sha256 = "14k1sbdcbhykwfcadq5lbpnm9xp2r7vs7fyi84h72g89y8pjg0da";
   };
 
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library to play Commodore 64 music derived from libsidplay2";
-    homepage = https://sourceforge.net/projects/sidplay-residfp/;
+    homepage = "https://sourceforge.net/projects/sidplay-residfp/";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ ramkromberg ];
     platforms = with platforms; unix;

@@ -1,25 +1,25 @@
 { stdenv, meson, ninja, vala, gettext, itstool, fetchurl, pkgconfig, libxml2
-, gtk3, glib, gtksourceview3, wrapGAppsHook, gobjectIntrospection, python3
-, gnome3, mpfr, gmp, libsoup, libmpc }:
+, gtk3, glib, gtksourceview4, wrapGAppsHook, gobject-introspection, python3
+, gnome3, mpfr, gmp, libsoup, libmpc, gsettings-desktop-schemas, libgee }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-calculator-${version}";
-  version = "3.28.2";
+  pname = "gnome-calculator";
+  version = "3.36.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-calculator/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0izsrqc9fm2lh25jr3nzi94p5hh2d3cklxqczbq16by85wr1xm5s";
+    url = "mirror://gnome/sources/gnome-calculator/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1cqd4b25qp1i0p04m669jssg1l5sdapc1mniv9jssvw5r7wk1s52";
   };
 
   nativeBuildInputs = [
     meson ninja pkgconfig vala gettext itstool wrapGAppsHook python3
-    gobjectIntrospection # for finding vapi files
+    gobject-introspection # for finding vapi files
   ];
 
   buildInputs = [
-    gtk3 glib libxml2 gtksourceview3 mpfr gmp
-    gnome3.defaultIconTheme
-    gnome3.gsettings-desktop-schemas libsoup libmpc
+    gtk3 glib libxml2 gtksourceview4 mpfr gmp
+    gnome3.adwaita-icon-theme libgee
+    gsettings-desktop-schemas libsoup libmpc
   ];
 
   doCheck = true;
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Calculator;
+    homepage = "https://wiki.gnome.org/Apps/Calculator";
     description = "Application that solves mathematical equations and is suitable as a default application in a Desktop environment";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

@@ -5,7 +5,6 @@ with python3Packages;
 buildPythonApplication rec {
   pname = "topydo";
   version = "0.13";
-  name  = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "bram85";

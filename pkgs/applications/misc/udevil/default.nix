@@ -2,7 +2,7 @@
 stdenv.mkDerivation {
   name = "udevil-0.4.4";
   src = fetchurl {
-    url = https://github.com/IgnorantGuru/udevil/archive/0.4.4.tar.gz;
+    url = "https://github.com/IgnorantGuru/udevil/archive/0.4.4.tar.gz";
     sha256 = "0z1bhaayambrcn7bgnrqk445k50ifabmw8q4i9qj49nnbcvxhbxd";
   };
   nativeBuildInputs = [ pkgconfig ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   patches = [ ./device-info-sys-stat.patch ];
   meta = {
     description = "A command line Linux program which mounts and unmounts removable devices without a password, shows device info, and monitors device changes";
-    homepage = https://ignorantguru.github.io/udevil/;
+    homepage = "https://ignorantguru.github.io/udevil/";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl3;
   };

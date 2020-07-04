@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "mmake-${version}";
+  pname = "mmake";
   version = "1.2.0";
 
   goPackagePath = "github.com/tj/mmake";
@@ -16,7 +16,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/tj/mmake;
+    homepage = "https://github.com/tj/mmake";
     description = "A small program  which wraps make to provide additional functionality";
     longDescription = ''
       Mmake is a small program  which wraps make to provide additional

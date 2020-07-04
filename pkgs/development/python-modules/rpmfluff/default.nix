@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "rpmfluff";
-  version = "0.5.5";
+  version = "0.5.7.1";
 
   src = fetchurl {
   url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0m92ihii8fgdyma9vn3s6fhq0px8n930c27zs554la0mm4548ss3";
+    sha256 = "19vnlzma8b0aghdiixk0q3wc10y6306hsnic0qvswaaiki94fss1";
   };
 
   LC_ALL="en_US.utf-8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "lightweight way of building RPMs, and sabotaging them";
-    homepage = https://pagure.io/rpmfluff;
+    homepage = "https://pagure.io/rpmfluff";
     license = licenses.gpl2;
     maintainers = with maintainers; [ disassembler ];
   };

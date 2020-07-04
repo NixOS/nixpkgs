@@ -1,0 +1,13 @@
+diff --git a/sys_linux.c b/sys_linux.c
+index 898dc7a7f75..fcd334ecf03 100644
+--- a/sys_linux.c
++++ b/sys_linux.c
+@@ -503,7 +503,7 @@ SYS_Linux_EnableSystemCallFilter(int level)
+     SCMP_SYS(socketcall),
+     /* General I/O */
+     SCMP_SYS(_newselect), SCMP_SYS(close), SCMP_SYS(open), SCMP_SYS(openat), SCMP_SYS(pipe),
+-    SCMP_SYS(pipe2), SCMP_SYS(poll), SCMP_SYS(ppoll), SCMP_SYS(pselect6), SCMP_SYS(read),
++    SCMP_SYS(pipe2), SCMP_SYS(poll), SCMP_SYS(pselect6), SCMP_SYS(read),
+     SCMP_SYS(futex), SCMP_SYS(select), SCMP_SYS(set_robust_list), SCMP_SYS(write),
+     /* Miscellaneous */
+     SCMP_SYS(getrandom), SCMP_SYS(sysinfo), SCMP_SYS(uname),

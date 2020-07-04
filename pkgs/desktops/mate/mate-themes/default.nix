@@ -1,24 +1,32 @@
-{ stdenv, fetchurl, pkgconfig, intltool, mate, gtk2, gtk_engines,
-  gtk-engine-murrine, gdk_pixbuf, librsvg }:
+{ stdenv, fetchurl, pkgconfig, gettext, mate-icon-theme, gtk2, gtk3,
+  gtk_engines, gtk-engine-murrine, gdk-pixbuf, librsvg }:
 
 stdenv.mkDerivation rec {
-  name = "mate-themes-${version}";
-  version = "3.22.18";
+  pname = "mate-themes";
+  version = "3.22.21";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/themes/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0538bw8qismp16ymxbjk0ww7yjw1ch5v3f3d4vib3770xvgmmcfm";
+    url = "https://pub.mate-desktop.org/releases/themes/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "051g2vq817g84yrqzf7hjcqr4xrghnw1rprjd6jf5mhhzmwcas6n";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig gettext gtk3 ];
 
-  buildInputs = [ mate.mate-icon-theme gtk2 gtk_engines gdk_pixbuf librsvg ];
+  buildInputs = [ mate-icon-theme gtk2 gtk_engines gdk-pixbuf librsvg ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
+  dontDropIconThemeCache = true;
+
+  postInstall = ''
+    gtk-update-icon-cache "$out"/share/icons/ContrastHigh
+  '';
+
+  enableParallelBuilding = true;
+
   meta = {
     description = "A set of themes from MATE";
-    homepage = http://mate-desktop.org;
+    homepage = "https://mate-desktop.org";
     license = stdenv.lib.licenses.lgpl21;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.romildo ];

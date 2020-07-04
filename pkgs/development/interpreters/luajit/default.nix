@@ -1,71 +1,109 @@
-{ stdenv, lib, fetchurl }:
-rec {
+{ stdenv, fetchFromGitHub, buildPackages
+, name ? "luajit-${version}"
+, isStable
+, sha256
+, rev
+, version
+, extraMeta ? {}
+, callPackage
+, self
+, packageOverrides ? (self: super: {})
+, enableFFI ? true
+, enableJIT ? true
+, enableJITDebugModule ? enableJIT
+, enableGC64 ? stdenv.hostPlatform.isAarch64
+, enable52Compat ? false
+, enableValgrindSupport ? false
+, valgrind ? null
+, enableGDBJITSupport ? false
+, enableAPICheck ? false
+, enableVMAssertions ? false
+, useSystemMalloc ? false
+}:
+assert enableJITDebugModule -> enableJIT;
+assert enableGDBJITSupport -> enableJIT;
+assert enableValgrindSupport -> valgrind != null;
+let
+  luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
 
-  luajit = luajit_2_1;
+  XCFLAGS = with stdenv.lib;
+     optional (!enableFFI) "-DLUAJIT_DISABLE_FFI"
+  ++ optional (!enableJIT) "-DLUAJIT_DISABLE_JIT"
+  ++ optional enable52Compat "-DLUAJIT_ENABLE_LUA52COMPAT"
+  ++ optional (!enableGC64) "-DLUAJIT_DISABLE_GC64"
+  ++ optional useSystemMalloc "-DLUAJIT_USE_SYSMALLOC"
+  ++ optional enableValgrindSupport "-DLUAJIT_USE_VALGRIND"
+  ++ optional enableGDBJITSupport "-DLUAJIT_USE_GDBJIT"
+  ++ optional enableAPICheck "-DLUAJIT_USE_APICHECK"
+  ++ optional enableVMAssertions "-DLUAJIT_USE_ASSERT"
+  ;
+in
+stdenv.mkDerivation rec {
+  inherit name version;
+  src = fetchFromGitHub {
+    owner  = "LuaJIT";
+    repo   = "LuaJIT";
+    inherit sha256 rev;
+  };
 
-  luajit_2_0 = generic {
-    version = "2.0.5";
-    isStable = true;
-    sha256 = "0yg9q4q6v028bgh85317ykc9whgxgysp76qzaqgq55y6jy11yjw7";
-    meta = genericMeta // {
-      platforms = lib.filter (p: p != "aarch64-linux") genericMeta.platforms;
+  luaversion = "5.1";
+
+  postPatch = ''
+    substituteInPlace Makefile --replace ldconfig :
+    if test -n "''${dontStrip-}"; then
+      # CCDEBUG must be non-empty or everything will be stripped, -g being
+      # passed by nixpkgs CC wrapper is insufficient on its own
+      substituteInPlace src/Makefile --replace "#CCDEBUG= -g" "CCDEBUG= -g"
+    fi
+  '';
+
+  configurePhase = false;
+
+  buildInputs = stdenv.lib.optional enableValgrindSupport valgrind;
+
+  buildFlags = [
+    "amalg" # Build highly optimized version
+  ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "DEFAULT_CC=cc"
+    "CROSS=${stdenv.cc.targetPrefix}"
+    # TODO: when pointer size differs, we would need e.g. -m32
+    "HOST_CC=${buildPackages.stdenv.cc}/bin/cc"
+  ] ++ stdenv.lib.optional enableJITDebugModule "INSTALL_LJLIBD=$(INSTALL_LMOD)";
+  enableParallelBuilding = true;
+  NIX_CFLAGS_COMPILE = XCFLAGS;
+
+  postInstall = ''
+    ( cd "$out/include"; ln -s luajit-*/* . )
+    ln -s "$out"/bin/luajit-* "$out"/bin/lua
+  '' + stdenv.lib.optionalString (!isStable) ''
+    ln -s "$out"/bin/luajit-* "$out"/bin/luajit
+  '';
+
+  LuaPathSearchPaths = [
+    "lib/lua/${luaversion}/?.lua" "share/lua/${luaversion}/?.lua"
+    "share/lua/${luaversion}/?/init.lua" "lib/lua/${luaversion}/?/init.lua"
+    "share/${name}/?.lua"
+  ];
+  LuaCPathSearchPaths = [ "lib/lua/${luaversion}/?.so" "share/lua/${luaversion}/?.so" ];
+  setupHook = luaPackages.lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
+
+  passthru = rec {
+    buildEnv = callPackage ../lua-5/wrapper.nix {
+      lua = self;
+      inherit (luaPackages) requiredLuaModules;
     };
+    withPackages = import ../lua-5/with-packages.nix { inherit buildEnv luaPackages;};
+    pkgs = luaPackages;
+    interpreter = "${self}/bin/lua";
   };
 
-  luajit_2_1 = generic {
-    version = "2.1.0-beta3";
-    isStable = false;
-    sha256 = "1hyrhpkwjqsv54hnnx4cl8vk44h9d6c9w0fz1jfjz00w255y7lhs";
-  };
-
-  genericMeta = with stdenv.lib; {
+  meta = with stdenv.lib; {
     description = "High-performance JIT compiler for Lua 5.1";
-    homepage    = http://luajit.org;
+    homepage    = "http://luajit.org";
     license     = licenses.mit;
     platforms   = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ thoughtpolice smironov vcunat andir ];
-  };
-
-  generic =
-    { version, sha256 ? null, isStable
-    , name ? "luajit-${version}"
-    , src ?
-      (fetchurl {
-        url = "http://luajit.org/download/LuaJIT-${version}.tar.gz";
-        inherit sha256;
-      })
-    , meta ? genericMeta
-    }:
-
-    stdenv.mkDerivation rec {
-      inherit name version src meta;
-
-      luaversion = "5.1";
-
-      patchPhase = ''
-        substituteInPlace Makefile \
-          --replace /usr/local "$out"
-
-        substituteInPlace src/Makefile --replace gcc cc
-      '' + stdenv.lib.optionalString (stdenv.cc.libc != null)
-      ''
-        substituteInPlace Makefile \
-          --replace ldconfig ${stdenv.cc.libc.bin or stdenv.cc.libc}/bin/ldconfig
-      '';
-
-      configurePhase = false;
-
-      buildFlags = [ "amalg" ]; # Build highly optimized version
-      enableParallelBuilding = true;
-
-      installPhase   = ''
-        make install PREFIX="$out"
-        ( cd "$out/include"; ln -s luajit-*/* . )
-        ln -s "$out"/bin/luajit-* "$out"/bin/lua
-      ''
-        + stdenv.lib.optionalString (!isStable)
-          ''
-            ln -s "$out"/bin/luajit-* "$out"/bin/luajit
-          '';
-    };
+  } // extraMeta;
 }

@@ -176,7 +176,8 @@ in {
 
     sub checkClientCert ($) {
       my $user = $_[0];
-      my $cmd = "gnutls-cli".
+      # debug level 3 is a workaround for gnutls issue https://gitlab.com/gnutls/gnutls/-/issues/1040
+      my $cmd = "gnutls-cli -d 3".
         " --x509cafile=/home/$user/.task/keys/ca.cert".
         " --x509keyfile=/home/$user/.task/keys/private.key".
         " --x509certfile=/home/$user/.task/keys/public.cert".

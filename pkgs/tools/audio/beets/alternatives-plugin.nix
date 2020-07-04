@@ -1,20 +1,16 @@
 { stdenv, fetchFromGitHub, beets, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "beets-alternatives-${version}";
-  version = "0.8.2";
+  pname = "beets-alternatives";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     repo = "beets-alternatives";
-    owner = "wisp3rwind";
+    owner = "geigerzaehler";
     # This is 0.8.2 with fixes against Beets 1.4.6 and Python 3 compatibility.
-    rev = "331eb406786a2d4dc3dd721a534225b087474b1e";
-    sha256 = "1avds2x5sp72c89l1j52pszprm85g9sm750jh1dhnyvgcbk91cb5";
+    rev = "v${version}";
+    sha256 = "19160gwg5j6asy8mc21g2kf87mx4zs9x2gbk8q4r6330z4kpl5pm";
   };
-
-  postPatch = ''
-    sed -i -e '/long_description/d' setup.py
-  '';
 
   nativeBuildInputs = [ beets pythonPackages.nose ];
 
@@ -22,7 +18,8 @@ pythonPackages.buildPythonApplication rec {
 
   meta = {
     description = "Beets plugin to manage external files";
-    homepage = https://github.com/geigerzaehler/beets-alternatives;
+    homepage = "https://github.com/geigerzaehler/beets-alternatives";
+    maintainers = [ stdenv.lib.maintainers.aszlig ];
     license = stdenv.lib.licenses.mit;
   };
 }

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   version = "1.1.0";
-  name = "2fa-${version}";
+  pname = "2fa";
 
   goPackagePath = "rsc.io/2fa";
 
@@ -14,7 +14,7 @@ buildGoPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://rsc.io/2fa;
+    homepage = "https://rsc.io/2fa";
     description = "Two-factor authentication on the command line";
     platforms = platforms.all;
     maintainers = with maintainers; [ rvolosatovs ];

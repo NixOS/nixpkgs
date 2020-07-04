@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "reikna";
-  version = "0.7.2";
+  version = "0.7.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c52f5ae13e35284feda8f6b67c0d6223c02c0292b1495969cf7a42f547b3fc18";
+    sha256 = "d01f4264c8379ef2962a93aacb002d491b92ef9b5b22b45f77e7821dfa87bef7";
   };
 
   checkInputs = [ sphinx pytestcov pytest ];
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "GPGPU algorithms for PyCUDA and PyOpenCL";
-    homepage = https://github.com/fjarri/reikna;
+    homepage = "https://github.com/fjarri/reikna";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.fridh ];
 

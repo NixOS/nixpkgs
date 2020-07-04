@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, pidgin, minixml, libxml2, sqlite, libgcrypt }:
 
 stdenv.mkDerivation rec {
-  name = "purple-lurch-${version}";
+  pname = "purple-lurch";
   version = "0.6.7";
 
   src = fetchFromGitHub {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/gkdr/lurch;
+    homepage = "https://github.com/gkdr/lurch";
     description = "XEP-0384: OMEMO Encryption for libpurple";
     license = licenses.gpl3;
     platforms = platforms.linux;

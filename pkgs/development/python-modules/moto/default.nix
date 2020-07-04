@@ -1,54 +1,102 @@
-{ buildPythonPackage, fetchPypi, jinja2, werkzeug, flask
-, requests, pytz, backports_tempfile, cookies, jsondiff, botocore, aws-xray-sdk, docker, responses
-, six, boto, httpretty, xmltodict, nose, sure, boto3, freezegun, dateutil, mock, pyaml, python-jose }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, fetchpatch
+, aws-xray-sdk
+, backports_tempfile
+, boto
+, boto3
+, botocore
+, cfn-lint
+, docker
+, flask
+, freezegun
+, jinja2
+, jsondiff
+, mock
+, nose
+, pyaml
+, python-jose
+, pytz
+, requests
+, responses
+, six
+, sshpubkeys
+, sure
+, werkzeug
+, xmltodict
+, parameterized
+, idna
+}:
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "1.3.6";
+  version = "1.3.14";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "58fe0a0d55cbd9a001c02c146c15790cfcebf010c6648cb9990e6c3204709cbb";
+    sha256 = "0fm09074qic24h8rw9a0paklygyb7xd0ch4890y4v8lj2pnsxbkr";
   };
 
   postPatch = ''
-    # dateutil upper bound was just to keep compatibility with Python 2.6
-    # see https://github.com/spulec/moto/pull/1519 and https://github.com/boto/botocore/pull/1402
-    # regarding aws-xray-sdk: https://github.com/spulec/moto/commit/31eac49e1555c5345021a252cb0c95043197ea16
     substituteInPlace setup.py \
-      --replace "python-dateutil<2.7.0" "python-dateutil<3.0.0" \
-      --replace "aws-xray-sdk<0.96," "aws-xray-sdk" \
-      --replace "jsondiff==1.1.1" "jsondiff>=1.1.1"
+      --replace "jsondiff==1.1.2" "jsondiff~=1.1"
+    sed -i '/datetime/d' setup.py # should be taken care of by std library
   '';
+
+  patches = [
+    # loosen idna upper limit
+    (fetchpatch {
+      url = "https://github.com/spulec/moto/commit/649b497f71cce95a6474a3ff6f3c9c3339efb68f.patch";
+      sha256 = "03qdybzlskgbdadmlcg6ayxfp821b5iaa8q2542cwkcq7msqbbqc";
+    })
+  ];
 
   propagatedBuildInputs = [
     aws-xray-sdk
     boto
     boto3
-    dateutil
-    flask
-    httpretty
+    botocore
+    cfn-lint
+    docker
+    flask # required for server
     jinja2
-    pytz
-    werkzeug
-    requests
-    six
-    xmltodict
+    jsondiff
     mock
     pyaml
-    backports_tempfile
-    cookies
-    jsondiff
-    botocore
-    docker
-    responses
     python-jose
-  ];
+    pytz
+    six
+    requests
+    responses
+    sshpubkeys
+    werkzeug
+    xmltodict
+    idna
+  ] ++ lib.optionals isPy27 [ backports_tempfile ];
 
-  checkInputs = [ boto3 nose sure freezegun ];
+  checkInputs = [ boto3 freezegun nose sure parameterized ];
 
-  checkPhase = "nosetests";
+  checkPhase = ''
+    nosetests -v ./tests/ \
+              -e test_invoke_function_from_sns \
+              -e test_invoke_requestresponse_function \
+              -e test_context_manager \
+              -e test_decorator_start_and_stop \
+              -e test_invoke_event_function \
+              -e test_invoke_function_from_dynamodb \
+              -e test_invoke_function_from_sqs \
+              -e test_invoke_lambda_error \
+              -e test_invoke_async_function \
+              -e test_passthrough_requests
+  '';
 
-  # TODO: make this true; I think lots of the tests want network access but we can probably run the others
+  # Disabling because of 20 failing tests due to https://github.com/spulec/moto/issues/2728
+  # We should enable these as soon as possible again though. Note the issue
+  # is unrelated to the docutils 0.16 bump.
   doCheck = false;
+
+  meta = with lib; {
+    description = "Allows your tests to easily mock out AWS Services";
+    homepage = "https://github.com/spulec/moto";
+    license = licenses.asl20;
+    maintainers = [ ];
+  };
 }

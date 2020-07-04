@@ -4,23 +4,25 @@ with lib;
 
 let
   cfg = config.services.nginx;
+  certs = config.security.acme.certs;
+  vhostsConfigs = mapAttrsToList (vhostName: vhostConfig: vhostConfig) virtualHosts;
+  acmeEnabledVhosts = filter (vhostConfig: vhostConfig.enableACME && vhostConfig.useACMEHost == null) vhostsConfigs;
   virtualHosts = mapAttrs (vhostName: vhostConfig:
     let
       serverName = if vhostConfig.serverName != null
         then vhostConfig.serverName
         else vhostName;
-      acmeDirectory = config.security.acme.directory;
     in
     vhostConfig // {
       inherit serverName;
     } // (optionalAttrs vhostConfig.enableACME {
-      sslCertificate = "${acmeDirectory}/${serverName}/fullchain.pem";
-      sslCertificateKey = "${acmeDirectory}/${serverName}/key.pem";
-      sslTrustedCertificate = "${acmeDirectory}/${serverName}/full.pem";
+      sslCertificate = "${certs.${serverName}.directory}/fullchain.pem";
+      sslCertificateKey = "${certs.${serverName}.directory}/key.pem";
+      sslTrustedCertificate = "${certs.${serverName}.directory}/full.pem";
     }) // (optionalAttrs (vhostConfig.useACMEHost != null) {
-      sslCertificate = "${acmeDirectory}/${vhostConfig.useACMEHost}/fullchain.pem";
-      sslCertificateKey = "${acmeDirectory}/${vhostConfig.useACMEHost}/key.pem";
-      sslTrustedCertificate = "${acmeDirectory}/${vhostConfig.useACMEHost}/full.pem";
+      sslCertificate = "${certs.${vhostConfig.useACMEHost}.directory}/fullchain.pem";
+      sslCertificateKey = "${certs.${vhostConfig.useACMEHost}.directory}/key.pem";
+      sslTrustedCertificate = "${certs.${vhostConfig.useACMEHost}.directory}/fullchain.pem";
     })
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
@@ -44,9 +46,18 @@ let
     }
   ''));
 
-  configFile = pkgs.writeText "nginx.conf" ''
-    user ${cfg.user} ${cfg.group};
-    error_log stderr;
+  commonHttpConfig = ''
+      # The mime type definitions included with nginx are very incomplete, so
+      # we use a list of mime types from the mailcap package, which is also
+      # used by most other Linux distributions by default.
+      include ${pkgs.mailcap}/etc/nginx/mime.types;
+      include ${cfg.package}/conf/fastcgi.conf;
+      include ${cfg.package}/conf/uwsgi_params;
+  '';
+
+  configFile = pkgs.writers.writeNginxConfig "nginx.conf" ''
+    pid /run/nginx/nginx.pid;
+    error_log ${cfg.logError};
     daemon off;
 
     ${cfg.config}
@@ -59,12 +70,10 @@ let
 
     ${optionalString (cfg.httpConfig == "" && cfg.config == "") ''
     http {
-      include ${cfg.package}/conf/mime.types;
-      include ${cfg.package}/conf/fastcgi.conf;
-      include ${cfg.package}/conf/uwsgi_params;
+      ${commonHttpConfig}
 
       ${optionalString (cfg.resolver.addresses != []) ''
-        resolver ${toString cfg.resolver.addresses} ${optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"};
+        resolver ${toString cfg.resolver.addresses} ${optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"} ${optionalString (!cfg.resolver.ipv6) "ipv6=off"};
       ''}
       ${upstreamConfig}
 
@@ -74,7 +83,7 @@ let
         tcp_nopush on;
         tcp_nodelay on;
         keepalive_timeout 65;
-        types_hash_max_size 2048;
+        types_hash_max_size 4096;
       ''}
 
       ssl_protocols ${cfg.sslProtocols};
@@ -82,17 +91,23 @@ let
       ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
 
       ${optionalString (cfg.recommendedTlsSettings) ''
-        ssl_session_cache shared:SSL:42m;
-        ssl_session_timeout 23m;
-        ssl_ecdh_curve secp384r1;
-        ssl_prefer_server_ciphers on;
+        # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
+
+        ssl_session_timeout 1d;
+        ssl_session_cache shared:SSL:10m;
+        # Breaks forward secrecy: https://github.com/mozilla/server-side-tls/issues/135
+        ssl_session_tickets off;
+        # We don't enable insecure ciphers by default, so this allows
+        # clients to pick the most performant, per https://github.com/mozilla/server-side-tls/issues/260
+        ssl_prefer_server_ciphers off;
+
+        # OCSP stapling
         ssl_stapling on;
         ssl_stapling_verify on;
       ''}
 
       ${optionalString (cfg.recommendedGzipSettings) ''
         gzip on;
-        gzip_disable "msie6";
         gzip_proxied any;
         gzip_comp_level 5;
         gzip_types
@@ -116,6 +131,14 @@ let
         proxy_read_timeout      90;
         proxy_http_version      1.0;
         include ${recommendedProxyConfig};
+      ''}
+
+      ${optionalString (cfg.mapHashBucketSize != null) ''
+        map_hash_bucket_size ${toString cfg.mapHashBucketSize};
+      ''}
+
+      ${optionalString (cfg.mapHashMaxSize != null) ''
+        map_hash_max_size ${toString cfg.mapHashMaxSize};
       ''}
 
       # $connection_upgrade is used for websocket proxying
@@ -153,14 +176,18 @@ let
 
     ${optionalString (cfg.httpConfig != "") ''
     http {
-      include ${cfg.package}/conf/mime.types;
-      include ${cfg.package}/conf/fastcgi.conf;
-      include ${cfg.package}/conf/uwsgi_params;
+      ${commonHttpConfig}
       ${cfg.httpConfig}
     }''}
 
     ${cfg.appendConfig}
   '';
+
+  configPath = if cfg.enableReload
+    then "/etc/nginx/nginx.conf"
+    else configFile;
+
+  execCommand = "${cfg.package}/bin/nginx -c '${configPath}'";
 
   vhosts = concatStringsSep "\n" (mapAttrsToList (vhostName: vhost:
     let
@@ -182,11 +209,12 @@ let
             then filter (x: x.ssl) defaultListen
             else defaultListen;
 
-        listenString = { addr, port, ssl, ... }:
+        listenString = { addr, port, ssl, extraParameters ? [], ... }:
           "listen ${addr}:${toString port} "
           + optionalString ssl "ssl "
           + optionalString (ssl && vhost.http2) "http2 "
           + optionalString vhost.default "default_server "
+          + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
           + ";";
 
         redirectListen = filter (x: !x.ssl) defaultListen;
@@ -263,21 +291,11 @@ let
       ${optionalString (config.tryFiles != null) "try_files ${config.tryFiles};"}
       ${optionalString (config.root != null) "root ${config.root};"}
       ${optionalString (config.alias != null) "alias ${config.alias};"}
+      ${optionalString (config.return != null) "return ${config.return};"}
       ${config.extraConfig}
       ${optionalString (config.proxyPass != null && cfg.recommendedProxySettings) "include ${recommendedProxyConfig};"}
     }
   '') (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations)));
-  mkBasicAuth = vhostName: authDef: let
-    htpasswdFile = pkgs.writeText "${vhostName}.htpasswd" (
-      concatStringsSep "\n" (mapAttrsToList (user: password: ''
-        ${user}:{PLAIN}${password}
-      '') authDef)
-    );
-  in ''
-    auth_basic secured;
-    auth_basic_user_file ${htpasswdFile};
-  '';
-
   mkHtpasswd = vhostName: authDef: pkgs.writeText "${vhostName}.htpasswd" (
     concatStringsSep "\n" (mapAttrsToList (user: password: ''
       ${user}:{PLAIN}${password}
@@ -338,6 +356,30 @@ in
           Nginx package to use. This defaults to the stable version. Note
           that the nginx team recommends to use the mainline version which
           available in nixpkgs as <literal>nginxMainline</literal>.
+        ";
+      };
+
+      logError = mkOption {
+        default = "stderr";
+        description = "
+          Configures logging.
+          The first parameter defines a file that will store the log. The
+          special value stderr selects the standard error file. Logging to
+          syslog can be configured by specifying the “syslog:” prefix.
+          The second parameter determines the level of logging, and can be
+          one of the following: debug, info, notice, warn, error, crit,
+          alert, or emerg. Log levels above are listed in the order of
+          increasing severity. Setting a certain log level will cause all
+          messages of the specified and more severe log levels to be logged.
+          If this parameter is omitted then error is used.
+        ";
+      };
+
+      preStart =  mkOption {
+        type = types.lines;
+        default = "";
+        description = "
+          Shell commands executed before the service's nginx is started.
         ";
       };
 
@@ -411,11 +453,22 @@ in
         ";
       };
 
-      stateDir = mkOption {
-        default = "/var/spool/nginx";
-        description = "
-          Directory holding all state for nginx to run.
-        ";
+      enableReload = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Reload nginx when configuration file changes (instead of restart).
+          The configuration file is exposed at <filename>/etc/nginx/nginx.conf</filename>.
+          See also <literal>systemd.services.*.restartIfChanged</literal>.
+        '';
+      };
+
+      enableSandbox = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Starting Nginx web server with additional sandbox/hardening options.
+        '';
       };
 
       user = mkOption {
@@ -437,21 +490,22 @@ in
       };
 
       clientMaxBodySize = mkOption {
-        type = types.string;
+        type = types.str;
         default = "10m";
         description = "Set nginx global client_max_body_size.";
       };
 
       sslCiphers = mkOption {
         type = types.str;
-        default = "EECDH+aRSA+AESGCM:EDH+aRSA:EECDH+aRSA:+AES256:+AES128:+SHA1:!CAMELLIA:!SEED:!3DES:!DES:!RC4:!eNULL";
-        description = "Ciphers to choose from when negotiating tls handshakes.";
+        # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
+        default = "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384";
+        description = "Ciphers to choose from when negotiating TLS handshakes.";
       };
 
       sslProtocols = mkOption {
         type = types.str;
-        default = "TLSv1.2";
-        example = "TLSv1 TLSv1.1 TLSv1.2";
+        default = "TLSv1.2 TLSv1.3";
+        example = "TLSv1 TLSv1.1 TLSv1.2 TLSv1.3";
         description = "Allowed TLS protocol versions.";
       };
 
@@ -472,6 +526,23 @@ in
         '';
       };
 
+      mapHashBucketSize = mkOption {
+        type = types.nullOr (types.enum [ 32 64 128 ]);
+        default = null;
+        description = ''
+            Sets the bucket size for the map variables hash tables. Default
+            value depends on the processor’s cache line size.
+          '';
+      };
+
+      mapHashMaxSize = mkOption {
+        type = types.nullOr types.ints.positive;
+        default = null;
+        description = ''
+            Sets the maximum size of the map variables hash tables.
+          '';
+      };
+
       resolver = mkOption {
         type = types.submodule {
           options = {
@@ -488,6 +559,15 @@ in
               description = ''
                 By default, nginx caches answers using the TTL value of a response.
                 An optional valid parameter allows overriding it
+              '';
+            };
+            ipv6 = mkOption {
+              type = types.bool;
+              default = true;
+              description = ''
+                By default, nginx will look up both IPv4 and IPv6 addresses while resolving.
+                If looking up of IPv6 addresses is not desired, the ipv6=off parameter can be
+                specified.
               '';
             };
           };
@@ -557,6 +637,13 @@ in
     };
   };
 
+  imports = [
+    (mkRemovedOptionModule [ "services" "nginx" "stateDir" ] ''
+      The Nginx log directory has been moved to /var/log/nginx, the cache directory
+      to /var/cache/nginx. The option services.nginx.stateDir has been removed.
+    '')
+  ];
+
   config = mkIf cfg.enable {
     # TODO: test user supplied config file pases syntax test
 
@@ -603,51 +690,109 @@ in
 
     systemd.services.nginx = {
       description = "Nginx Web Server";
-      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      wants = concatLists (map (vhostConfig: ["acme-${vhostConfig.serverName}.service" "acme-selfsigned-${vhostConfig.serverName}.service"]) acmeEnabledVhosts);
+      after = [ "network.target" ] ++ map (vhostConfig: "acme-selfsigned-${vhostConfig.serverName}.service") acmeEnabledVhosts;
+      # Nginx needs to be started in order to be able to request certificates
+      # (it's hosting the acme challenge after all)
+      # This fixes https://github.com/NixOS/nixpkgs/issues/81842
+      before = map (vhostConfig: "acme-${vhostConfig.serverName}.service") acmeEnabledVhosts;
       stopIfChanged = false;
-      preStart =
-        ''
-        mkdir -p ${cfg.stateDir}/logs
-        chmod 700 ${cfg.stateDir}
-        chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
-        ${cfg.package}/bin/nginx -c ${configFile} -p ${cfg.stateDir} -t
-        '';
+      preStart = ''
+        ${cfg.preStart}
+        ${execCommand} -t
+      '';
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/nginx -c ${configFile} -p ${cfg.stateDir}";
+        ExecStart = execCommand;
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "always";
         RestartSec = "10s";
         StartLimitInterval = "1min";
+        # User and group
+        User = cfg.user;
+        Group = cfg.group;
+        # Runtime directory and mode
+        RuntimeDirectory = "nginx";
+        RuntimeDirectoryMode = "0750";
+        # Cache directory and mode
+        CacheDirectory = "nginx";
+        CacheDirectoryMode = "0750";
+        # Logs directory and mode
+        LogsDirectory = "nginx";
+        LogsDirectoryMode = "0750";
+        # Capabilities
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ];
+        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ];
+        # Security
+        NoNewPrivileges = true;
+      } // optionalAttrs cfg.enableSandbox {
+        # Sandboxing
+        ProtectSystem = "strict";
+        ProtectHome = mkDefault true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectHostname = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectControlGroups = true;
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        LockPersonality = true;
+        MemoryDenyWriteExecute = !(builtins.any (mod: (mod.allowMemoryWriteExecute or false)) pkgs.nginx.modules);
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        PrivateMounts = true;
+        # System Call Filtering
+        SystemCallArchitectures = "native";
       };
+    };
+
+    environment.etc."nginx/nginx.conf" = mkIf cfg.enableReload {
+      source = configFile;
+    };
+
+    systemd.services.nginx-config-reload = mkIf cfg.enableReload {
+      wants = [ "nginx.service" ];
+      wantedBy = [ "multi-user.target" ];
+      restartTriggers = [ configFile ];
+      # commented, because can cause extra delays during activate for this config:
+      #      services.nginx.virtualHosts."_".locations."/".proxyPass = "http://blabla:3000";
+      # stopIfChanged = false;
+      serviceConfig.Type = "oneshot";
+      serviceConfig.TimeoutSec = 60;
+      script = ''
+        if /run/current-system/systemd/bin/systemctl -q is-active nginx.service ; then
+          ${execCommand} -t && \
+            /run/current-system/systemd/bin/systemctl reload nginx.service
+        fi
+      '';
+      serviceConfig.RemainAfterExit = true;
     };
 
     security.acme.certs = filterAttrs (n: v: v != {}) (
       let
-        vhostsConfigs = mapAttrsToList (vhostName: vhostConfig: vhostConfig) virtualHosts;
-        acmeEnabledVhosts = filter (vhostConfig: vhostConfig.enableACME && vhostConfig.useACMEHost == null) vhostsConfigs;
         acmePairs = map (vhostConfig: { name = vhostConfig.serverName; value = {
             user = cfg.user;
             group = lib.mkDefault cfg.group;
             webroot = vhostConfig.acmeRoot;
             extraDomains = genAttrs vhostConfig.serverAliases (alias: null);
             postRun = ''
-              systemctl reload nginx
+              /run/current-system/systemd/bin/systemctl reload nginx
             '';
           }; }) acmeEnabledVhosts;
       in
         listToAttrs acmePairs
     );
 
-    users.users = optionalAttrs (cfg.user == "nginx") (singleton
-      { name = "nginx";
+    users.users = optionalAttrs (cfg.user == "nginx") {
+      nginx = {
         group = cfg.group;
         uid = config.ids.uids.nginx;
-      });
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == "nginx") (singleton
-      { name = "nginx";
-        gid = config.ids.gids.nginx;
-      });
+    users.groups = optionalAttrs (cfg.group == "nginx") {
+      nginx.gid = config.ids.gids.nginx;
+    };
+
   };
 }

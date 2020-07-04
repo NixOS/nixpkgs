@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "any-nix-shell-${version}";
+  pname = "any-nix-shell";
   version = "1.1.0";
 
   src = fetchFromGitHub {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "fish and zsh support for nix-shell";
     license = licenses.mit;
-    homepage = https://github.com/haslersn/any-nix-shell;
+    homepage = "https://github.com/haslersn/any-nix-shell";
     maintainers = with maintainers; [ haslersn ];
   };
 }

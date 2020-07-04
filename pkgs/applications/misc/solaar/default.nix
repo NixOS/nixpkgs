@@ -1,16 +1,18 @@
-{fetchFromGitHub, stdenv, gtk3, pythonPackages, gobjectIntrospection}:
-pythonPackages.buildPythonApplication rec {
-  name = "solaar-unstable-${version}";
-  version = "2018-02-02";
-  namePrefix = "";
+{ fetchFromGitHub, lib, gobject-introspection, gtk3, python3Packages }:
+# Although we copy in the udev rules here, you probably just want to use logitech-udev-rules instead of
+# adding this to services.udev.packages on NixOS
+python3Packages.buildPythonApplication rec {
+  pname = "solaar";
+  version = "1.0.2";
   src = fetchFromGitHub {
-    owner = "pwr";
+    owner = "pwr-Solaar";
     repo = "Solaar";
-    rev = "59b7285fdfc875119f0c92cfd5f5909e8a8e578c";
-    sha256 = "0zy5vmjzdybnjf0mpp8rny11sc43gmm8172svsm9s51h7x0v83y3";
+    rev = "${version}";
+    sha256 = "0k5z9dap6rawiafkg1x7zjx51ala7wra6j6lvc2nn0y8r79yp7a9";
   };
 
-  propagatedBuildInputs = [pythonPackages.pygobject3 pythonPackages.pyudev gobjectIntrospection gtk3];
+  propagatedBuildInputs = with python3Packages; [ gobject-introspection gtk3 pygobject3 pyudev ];
+
   postInstall = ''
     wrapProgram "$out/bin/solaar" \
       --prefix PYTHONPATH : "$PYTHONPATH" \
@@ -18,10 +20,12 @@ pythonPackages.buildPythonApplication rec {
     wrapProgram "$out/bin/solaar-cli" \
       --prefix PYTHONPATH : "$PYTHONPATH" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH"
+
+    install -Dm644 -t $out/etc/udev/rules.d rules.d/*.rules
   '';
 
   enableParallelBuilding = true;
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux devices manager for the Logitech Unifying Receiver";
     longDescription = ''
       Solaar is a Linux device manager for Logitech’s Unifying Receiver
@@ -35,8 +39,8 @@ pythonPackages.buildPythonApplication rec {
       To be able to use it, make sure you have access to /dev/hidraw* files.
     '';
     license = licenses.gpl2;
-    homepage = https://pwr.github.io/Solaar/;
+    homepage = "https://pwr-solaar.github.io/Solaar/";
     platforms = platforms.linux;
-    maintainers = [maintainers.spinus maintainers.ysndr];
+    maintainers = with maintainers; [ spinus ysndr ];
   };
 }

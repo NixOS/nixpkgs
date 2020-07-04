@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "kazoo";
-  version = "2.5.0";
+  version = "2.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1963l6994vzzy7bjh77y5wnf8lh8zwwibcpcgpfd1rzcppvp9dwd";
+    sha256 = "1jvpn1rcnnq3by1y6wlhfl9jynb110xv5lvd0x0ifkld7vfzd0v8";
   };
 
   propagatedBuildInputs = [ six ];

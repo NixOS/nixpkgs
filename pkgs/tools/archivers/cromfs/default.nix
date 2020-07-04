@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "FUSE Compressed ROM filesystem with lzma";
-    homepage = https://bisqwit.iki.fi/source/cromfs.html;
+    homepage = "https://bisqwit.iki.fi/source/cromfs.html";
     license = licenses.gpl3;
     maintainers = [ maintainers.viric ];
     platforms = platforms.linux;

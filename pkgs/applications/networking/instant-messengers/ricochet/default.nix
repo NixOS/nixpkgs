@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, makeDesktopItem
+{ mkDerivation, stdenv, fetchurl, pkgconfig, makeDesktopItem
 , qtbase, qttools, qtmultimedia, qtquick1, qtquickcontrols
 , openssl, protobuf, qmake
 }:
 
-stdenv.mkDerivation rec {
-  name = "ricochet-${version}";
+mkDerivation rec {
+  pname = "ricochet";
   version = "1.1.4";
 
   src = fetchurl {
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Anonymous peer-to-peer instant messaging";
-    homepage = https://ricochet.im;
+    homepage = "https://ricochet.im";
     license = licenses.bsd3;
     maintainers = [ maintainers.codsl maintainers.jgillich maintainers.np ];
     platforms = platforms.linux;

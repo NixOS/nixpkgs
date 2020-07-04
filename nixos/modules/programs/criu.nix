@@ -8,6 +8,7 @@ in {
   options = {
     programs.criu = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Install <command>criu</command> along with necessary kernel options.

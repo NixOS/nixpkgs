@@ -1,31 +1,37 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
+, isPy27
+, nose
 }:
 
 buildPythonPackage rec {
   pname = "dill";
-  version = "0.2.8.2";
+  version = "0.3.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "624dc244b94371bb2d6e7f40084228a2edfff02373fe20e018bef1ee92fdd5b3";
+    sha256 = "42d8ef819367516592a825746a18073ced42ca169ab1f5f4044134703e7a049c";
   };
 
-  # Messy test suite. Even when running the tests like tox does, it fails
-  doCheck = false;
+  # python2 can't import a test fixture
+  doCheck = !isPy27;
+  checkInputs = [ nose ];
   checkPhase = ''
-    for test in tests/*.py; do
-      ${python.interpreter} $test
-    done
+    PYTHONPATH=$PWD/tests:$PYTHONPATH
+    nosetests \
+      --ignore-files="test_classdef" \
+      --ignore-files="test_objects" \
+      --ignore-files="test_selected" \
+      --exclude="test_the_rest" \
+      --exclude="test_importable"
   '';
-  # Following error without setting checkPhase
-  # TypeError: don't know how to make test from: {'byref': False, 'recurse': False, 'protocol': 3, 'fmode': 0}
+  # Tests seem to fail because of import pathing and referencing items/classes in modules.
+  # Seems to be a Nix/pathing related issue, not the codebase, so disabling failing tests.
 
   meta = {
     description = "Serialize all of python (almost)";
-    homepage = http://www.cacr.caltech.edu/~mmckerns/dill.htm;
+    homepage = "https://github.com/uqfoundation/dill/";
     license = lib.licenses.bsd3;
   };
 }

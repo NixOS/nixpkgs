@@ -41,7 +41,7 @@ in
 
     # In stage 1 of the boot, mount the CD/DVD as the root FS by label
     # so that we don't need to know its device.
-    fileSystems = [ ];
+    fileSystems = { };
 
     # boot.initrd.availableKernelModules = [ "mvsdio" "reiserfs" "ext3" "ext4" ];
 
@@ -68,7 +68,7 @@ in
 
     # Create the tarball
     system.build.tarball = import ../../../lib/make-system-tarball.nix {
-      inherit (pkgs) stdenv perl xz pathsFromGraph;
+      inherit (pkgs) stdenv closureInfo pixz;
 
       inherit (config.tarball) contents storeContents;
     };

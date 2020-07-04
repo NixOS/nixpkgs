@@ -19,21 +19,27 @@ let
   # iconv tool, implemented by musl author.
   # Original: http://git.etalabs.net/cgit/noxcuse/plain/src/iconv.c?id=02d288d89683e99fd18fe9f54d4e731a6c474a4f
   # We use copy from Alpine which fixes error messages, see:
-  # https://git.alpinelinux.org/cgit/aports/commit/main/musl/iconv.c?id=a3d97e95f766c9c378194ee49361b375f093b26f
+  # https://git.alpinelinux.org/aports/commit/main/musl/iconv.c?id=a3d97e95f766c9c378194ee49361b375f093b26f
   iconv_c = fetchurl {
     name = "iconv.c";
-    url = "https://git.alpinelinux.org/cgit/aports/plain/main/musl/iconv.c?id=a3d97e95f766c9c378194ee49361b375f093b26f";
+    url = "https://git.alpinelinux.org/aports/plain/main/musl/iconv.c?id=a3d97e95f766c9c378194ee49361b375f093b26f";
     sha256 = "1mzxnc2ncq8lw9x6n7p00fvfklc9p3wfv28m68j0dfz5l8q2k6pp";
   };
 
+  arch = if stdenv.hostPlatform.isx86_64
+    then "x86_64"
+    else if stdenv.hostPlatform.isx86_32
+      then "i386"
+      else null;
+
 in
 stdenv.mkDerivation rec {
-  name    = "musl-${version}";
-  version = "1.1.20";
+  pname = "musl";
+  version = "1.1.24";
 
   src = fetchurl {
-    url    = "https://www.musl-libc.org/releases/musl-${version}.tar.gz";
-    sha256 = "0q8dsjxl41dccscv9a0r78bs7jap57mn4mni5pwbbip6s1qqggj4";
+    url    = "https://www.musl-libc.org/releases/${pname}-${version}.tar.gz";
+    sha256 = "18r2a00k82hz0mqdvgm7crzc7305l36109c0j9yjmkxj2alcjw0k";
   };
 
   enableParallelBuilding = true;
@@ -53,32 +59,10 @@ stdenv.mkDerivation rec {
   patches = [
     # Minor touchup to build system making dynamic linker symlink relative
     (fetchurl {
-      url = https://raw.githubusercontent.com/openwrt/openwrt/87606e25afac6776d1bbc67ed284434ec5a832b4/toolchain/musl/patches/300-relative.patch;
+      url = "https://raw.githubusercontent.com/openwrt/openwrt/87606e25afac6776d1bbc67ed284434ec5a832b4/toolchain/musl/patches/300-relative.patch";
       sha256 = "0hfadrycb60sm6hb6by4ycgaqc9sgrhh42k39v8xpmcvdzxrsq2n";
     })
-    # Upstream bugfix, see: https://git.musl-libc.org/cgit/musl/commit/?id=0db393d3a77bb9f300a356c6a5484fc2dddb161d
-    # Explicitly flagged for inclusion by distributions using musl
-    ./fix-file-locking-race.patch
-    # More specific error reporting
-    ./tty-more-precise-errors.patch
-    # Use execveat to impl fexecve when avail (useful for containers)
-    ./fexecve-execveat.patch
-    # improve behavior in few cases
-    ./0001-in-pthread_mutex_trylock-EBUSY-out-more-directly-whe.patch
-    ./0002-in-pthread_mutex_timedlock-avoid-repeatedly-reading-.patch
-    ./0003-fix-namespace-violation-for-c11-mutex-functions.patch
-    # Fix getaddrinfo usage encountered sometimes in containers
-    ./fix-getaddrinfo-regression-with-AI_ADDRCONFIG.patch
-    # name_to_handle_at
-    ./name-to-handle-at.patch
-    ./max-handle-sz-for-name-to-handle-at.patch
-    # stacksize bump (upstream)
-    ./stacksize-bump.patch
   ];
-  preConfigure = ''
-    configureFlagsArray+=("--syslibdir=$out/lib")
-  '';
-
   CFLAGS = [ "-fstack-protector-strong" ]
     ++ lib.optional stdenv.hostPlatform.isPower "-mlong-double-64";
 
@@ -87,6 +71,7 @@ stdenv.mkDerivation rec {
     "--enable-static"
     "--enable-debug"
     "--enable-wrapper=all"
+    "--syslibdir=${placeholder "out"}/lib"
   ];
 
   outputs = [ "out" "dev" ];
@@ -123,6 +108,9 @@ stdenv.mkDerivation rec {
       -lc \
       -B $out/lib \
       -Wl,-dynamic-linker=$(ls $out/lib/ld-*)
+  '' + lib.optionalString (arch != null) ''
+    # Create 'libc.musl-$arch' symlink
+    ln -rs $out/lib/libc.so $out/lib/libc.musl-${arch}.so.1
   '' + lib.optionalString useBSDCompatHeaders ''
     install -D ${queue_h} $dev/include/sys/queue.h
     install -D ${cdefs_h} $dev/include/sys/cdefs.h
@@ -131,11 +119,11 @@ stdenv.mkDerivation rec {
 
   passthru.linuxHeaders = linuxHeaders;
 
-  meta = {
+  meta = with lib; {
     description = "An efficient, small, quality libc implementation";
     homepage    = "http://www.musl-libc.org";
-    license     = lib.licenses.mit;
-    platforms   = lib.platforms.linux;
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    license     = licenses.mit;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ thoughtpolice dtzWill ];
   };
 }

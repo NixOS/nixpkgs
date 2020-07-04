@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "7";
-  name = "libuecc-${version}";
+  pname = "libuecc";
 
   src = fetchgit {
     url = "git://git.universe-factory.net/libuecc";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Very small Elliptic Curve Cryptography library";
-    homepage = https://git.universe-factory.net/libuecc;
+    homepage = "https://git.universe-factory.net/libuecc";
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz ];

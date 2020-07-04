@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i perl -p perl perlPackages.NetAmazonS3 perlPackages.FileSlurp nixUnstable nixUnstable.perl-bindings
+#! nix-shell -i perl -p perl perlPackages.NetAmazonS3 perlPackages.FileSlurp perlPackages.JSON perlPackages.LWPProtocolHttps nixUnstable nixUnstable.perl-bindings
 
 # This command uploads tarballs to tarballs.nixos.org, the
 # content-addressed cache used by fetchurl as a fallback for when
@@ -101,8 +101,8 @@ sub uploadFile {
         my ($name, $dest) = @_;
         #print STDERR "linking $name to $dest...\n";
         $bucket->add_key($name, "", {
-	    'x-amz-website-redirect-location' => "/" . $dest,
-	    'x-amz-acl' => "public-read"
+            'x-amz-website-redirect-location' => "/" . $dest,
+            'x-amz-acl' => "public-read"
         })
             or die "failed to create redirect from $name to $dest\n";
         $cache{$name} = 1;
@@ -116,8 +116,8 @@ sub uploadFile {
     # Upload the file as sha512/<hash-in-base-16>.
     print STDERR "uploading $fn to $mainKey...\n";
     $bucket->add_key_filename($mainKey, $fn, {
-	'x-amz-meta-original-name' => $name,
-	'x-amz-acl' => "public-read"
+        'x-amz-meta-original-name' => $name,
+        'x-amz-acl' => "public-read"
     })
         or die "failed to upload $fn to $mainKey\n";
     $cache{$mainKey} = 1;

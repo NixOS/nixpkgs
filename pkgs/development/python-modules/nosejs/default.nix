@@ -13,14 +13,14 @@ buildPythonPackage rec {
     sha256 = "0qrhkd3sga56qf6k0sqyhwfcladwi05gl6aqmr0xriiq1sgva5dy";
   };
 
-  buildInputs = [ nose ];
+  checkInputs = [ nose ];
 
   checkPhase = ''
     nosetests -v
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://pypi.org/project/NoseJS/;
+    homepage = "https://pypi.org/project/NoseJS/";
     description = "A Nose plugin for integrating JavaScript tests into a Python test suite";
     license = licenses.free;
   };

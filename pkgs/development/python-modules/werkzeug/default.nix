@@ -1,25 +1,27 @@
 { stdenv, buildPythonPackage, fetchPypi
 , itsdangerous, hypothesis
-, pytest, requests, glibcLocales }:
+, pytest, requests
+, pytest-timeout
+ }:
 
 buildPythonPackage rec {
   pname = "Werkzeug";
-  version = "0.14.1";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c3fd7a7d41976d9f44db327260e263132466836cef6f91512889ed60ad26557c";
+    sha256 = "6c80b1e5ad3665290ea39320b91e1be1e0d5f60652b964a3070216de83d2e47c";
   };
 
   propagatedBuildInputs = [ itsdangerous ];
-  checkInputs = [ pytest requests glibcLocales hypothesis ];
+  checkInputs = [ pytest requests hypothesis pytest-timeout ];
 
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" py.test ${stdenv.lib.optionalString stdenv.isDarwin "-k 'not test_get_machine_id'"}
+    pytest ${stdenv.lib.optionalString stdenv.isDarwin "-k 'not test_get_machine_id'"}
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://werkzeug.pocoo.org/;
+    homepage = "https://palletsprojects.com/p/werkzeug/";
     description = "A WSGI utility library for Python";
     license = licenses.bsd3;
   };

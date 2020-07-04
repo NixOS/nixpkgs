@@ -1,40 +1,35 @@
 { stdenv, fetchFromGitHub, cmake, python3, vulkan-headers, pkgconfig
-, xlibsWrapper, libxcb, libXrandr, libXext, wayland, libGL_driver }:
+, xlibsWrapper, libxcb, libXrandr, libXext, wayland, addOpenGLRunpath }:
 
-let
-  version = "1.1.85";
-in
-
-assert version == vulkan-headers.version;
 stdenv.mkDerivation rec {
-  name = "vulkan-loader-${version}";
-  inherit version;
+  pname = "vulkan-loader";
+  version = "1.2.131.2";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Loader";
-    rev = "b02f64293680c484e1d7ff6ecb88f89277c0dc8c";
-    sha256 = "1n4vjyxlmi2ygx34srwbvalc5gz95gcsrmdw0k10353xja755gmj";
+    rev = "sdk-${version}";
+    sha256 = "12n4mxc6db89258k8i47ql1zna7k94lkwv7lpxg39nm8ypa1ywrv";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake python3 xlibsWrapper libxcb libXrandr libXext wayland ];
+  nativeBuildInputs = [ pkgconfig cmake ];
+  buildInputs = [ python3 xlibsWrapper libxcb libXrandr libXext wayland ];
   enableParallelBuilding = true;
 
+  preConfigure = ''
+    substituteInPlace loader/vulkan.pc.in --replace 'includedir=''${prefix}/include' 'includedir=${vulkan-headers}/include'
+  '';
+
   cmakeFlags = [
-    "-DFALLBACK_DATA_DIRS=${libGL_driver.driverLink}/share:/usr/local/share:/usr/share"
+    "-DSYSCONFDIR=${addOpenGLRunpath.driverLink}/share"
     "-DVULKAN_HEADERS_INSTALL_DIR=${vulkan-headers}"
   ];
 
   outputs = [ "out" "dev" ];
 
-  postInstall = ''
-    cp -r "${vulkan-headers}/include" "$dev"
-  '';
-
   meta = with stdenv.lib; {
     description = "LunarG Vulkan loader";
-    homepage    = https://www.lunarg.com;
+    homepage    = "https://www.lunarg.com";
     platforms   = platforms.linux;
     license     = licenses.asl20;
     maintainers = [ maintainers.ralith ];

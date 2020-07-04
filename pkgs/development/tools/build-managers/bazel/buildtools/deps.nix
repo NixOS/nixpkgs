@@ -1,29 +1,20 @@
 [
   {
-    goPackagePath = "github.com/bazelbuild/buildtools";
-    fetch = {
-      type = "git";
-      url = "https://github.com/bazelbuild/buildtools";
-      rev = "588d90030bc8054b550967aa45a8a8d170deba0b";
-      sha256 = "18q1z138545kh4s5k0jcqwhpzc1w7il4x00l7yzv9wq8bg1vn1rv";
-    };
-  }
-  {
     goPackagePath = "github.com/golang/protobuf";
     fetch = {
       type = "git";
       url = "https://github.com/golang/protobuf";
-      rev = "3a3da3a4e26776cc22a79ef46d5d58477532dede";
-      sha256 = "05l0kjgk6ss98qii7vpjj2bqszyd16h448w47sv4422mp2xbni40";
+      rev = "84668698ea25b64748563aa20726db66a6b8d299";
+      sha256 = "1gkd1942vk9n8kfzdwy1iil6wgvlwjq7a3y5jc49ck4lz9rhmgkq";
     };
   }
   {
-    goPackagePath = "github.com/google/skylark";
+    goPackagePath = "go.starlark.net";
     fetch = {
       type = "git";
-      url = "https://github.com/google/skylark";
-      rev = "572cea2bd78e2f1de8f3e136db9413cf02f097eb";
-      sha256 = "0hc7gwvqsw421if06nlfdl86h6jl8wgjx1j2x2mzpnzdh1r03w92";
+      url = "https://github.com/google/starlark-go";
+      rev = "6677ee5c7211380ec7e6a1b50dc45287e40ca9e1";
+      sha256 = "1dl8q1lwvmm38w2lzfwray2djdcq40z89yy6vzy387w0xrax0jj0";
     };
   }
 ]

@@ -12,8 +12,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "A configurable HTML Minifier with safety features";
-    homepage = https://pypi.python.org/pypi/htmlmin;
+    homepage = "https://pypi.python.org/pypi/htmlmin";
     license = stdenv.lib.licenses.bsd3;
-    maintainers = [stdenv.lib.maintainers.ahmedtd];
+    maintainers = [];
   };
 }

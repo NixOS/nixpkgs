@@ -2,16 +2,16 @@
 
 buildPythonPackage rec {
   pname = "pyotp";
-  version = "2.2.6";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dd9130dd91a0340d89a0f06f887dbd76dd07fb95a8886dc4bc401239f2eebd69";
+    sha256 = "18d13ikra1iq0xyfqfm72zhgwxi2qi9ps6z1a6zmqp4qrn57wlzw";
   };
 
   meta = with lib; {
     description = "Python One Time Password Library";
-    homepage = https://github.com/pyotp/pyotp;
+    homepage = "https://github.com/pyotp/pyotp";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

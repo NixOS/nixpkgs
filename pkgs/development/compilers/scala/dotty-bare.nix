@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ stdenv, fetchurl, makeWrapper, jre, ncurses }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.0-RC1";
-  name = "dotty-bare-${version}";
+  version = "0.23.0-RC1";
+  pname = "dotty-bare";
 
   src = fetchurl {
     url = "https://github.com/lampepfl/dotty/releases/download/${version}/dotty-${version}.tar.gz";
-    sha256 = "1c24692081231415cb560ff1288ede3f0d28c8b994ce8ca7c7b06edf7978bfb8";
+    sha256 = "0c64dw2qp8mhgsll8viqaiy34wq1ablkbc4bi813a1r4nqg57sv0";
   };
 
-  propagatedBuildInputs = [ jre ] ;
+  propagatedBuildInputs = [ jre ncurses.dev ] ;
   buildInputs = [ makeWrapper ] ;
 
   installPhase = ''
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   fixupPhase = ''
         bin_files=$(find $out/bin -type f ! -name common)
         for f in $bin_files ; do
-          wrapProgram $f --set JAVA_HOME ${jre}
+          wrapProgram $f --set JAVA_HOME ${jre} --prefix PATH : '${ncurses.dev}/bin'
         done
   '';
 
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
        and try to boil down Scala’s types into a smaller set of more fundamental constructs.
        The theory behind these constructs is researched in DOT, a calculus for dependent object types.
     '';
-    homepage = http://dotty.epfl.ch/;
+    homepage = "http://dotty.epfl.ch/";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = [maintainers.karolchmist];
+    maintainers = [maintainers.karolchmist maintainers.virusdave];
   };
 }

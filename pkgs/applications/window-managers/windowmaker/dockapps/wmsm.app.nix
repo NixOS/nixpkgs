@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "wmsm.app-0.2.1";
   src = fetchurl {
-     url = http://linux-bsd-unix.strefa.pl/wmsm.app-0.2.1.tar.bz2;
+     url = "http://linux-bsd-unix.strefa.pl/wmsm.app-0.2.1.tar.bz2";
      sha256 = "369a8f2e5673c6b7ab0cf85166f38fbf553dd966c3c1cfeec0e32837defd32c7";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "System monitor for Windowmaker";
-    homepage = http://linux-bsd-unix.strefa.pl;
+    homepage = "http://linux-bsd-unix.strefa.pl";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.bstrik ];
   };

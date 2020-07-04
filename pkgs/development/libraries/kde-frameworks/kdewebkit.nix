@@ -8,4 +8,7 @@ mkDerivation {
   buildInputs = [ kconfig kcoreaddons kio kparts ];
   propagatedBuildInputs = [ qtwebkit ];
   outputs = [ "out" "dev" ];
+  cmakeFlags = [
+    "-DBUILD_DESIGNERPLUGIN=OFF"
+  ];
 }

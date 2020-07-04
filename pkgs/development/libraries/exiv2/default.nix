@@ -1,53 +1,117 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, zlib, expat, gettext
-, autoconf }:
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, zlib
+, expat
+, cmake
+, which
+, libxml2
+, python3
+, gettext
+, doxygen
+, graphviz
+, libxslt
+}:
 
 stdenv.mkDerivation rec {
-  name = "exiv2-0.26.2018.06.09";
+  pname = "exiv2";
+  version = "0.27.2";
 
-    #url = "http://www.exiv2.org/builds/${name}-trunk.tar.gz";
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "exiv2";
     repo  = "exiv2";
-    rev = "4aa57ad";
-    sha256 = "1kblpxbi4wlb0l57xmr7g23zn9adjmfswhs6kcwmd7skwi2yivcd";
+    rev = "v${version}";
+    sha256 = "0n8il52yzbmvbkryrl8waz7hd9a2fdkw8zsrmhyh63jlvmmc31gf";
   };
 
   patches = [
-    (fetchurl rec {
-      name = "CVE-2017-9239.patch";
-      url = let patchname = "0006-1296-Fix-submitted.patch";
-          in "https://src.fedoraproject.org/lookaside/pkgs/exiv2/${patchname}"
-          + "/sha512/${sha512}/${patchname}";
-      sha512 = "3f9242dbd4bfa9dcdf8c9820243b13dc14990373a800c4ebb6cf7eac5653cfef"
-             + "e6f2c47a94fbee4ed24f0d8c2842729d721f6100a2b215e0f663c89bfefe9e32";
-    })
-    # Two backports from master, submitted as https://github.com/Exiv2/exiv2/pull/398
+    # included in next release
     (fetchpatch {
-      name = "CVE-2018-12264.diff";
-      url = "https://github.com/vcunat/exiv2/commit/fd18e853.diff";
-      sha256 = "0y7ahh45lpaiazjnfllndfaa5pyixh6z4kcn2ywp7qy4ra7qpwdr";
-    })
-    (fetchpatch {
-      name = "CVE-2018-12265.diff";
-      url = "https://github.com/vcunat/exiv2/commit/9ed1671bd4.diff";
-      sha256 = "1cn446pfcgsh1bn9vxikkkcy1cqq7ghz2w291h1094ydqg6w7q6w";
+      name = "cve-2019-20421.patch";
+      url = "https://github.com/Exiv2/exiv2/commit/a82098f4f90cd86297131b5663c3dec6a34470e8.patch";
+      sha256 = "16r19qb9l5j43ixm5jqid9sdv5brlkk1wq0w79rm5agxq4kblfyc";
+      excludes = [ "tests/bugfixes/github/test_issue_1011.py" "test/data/Jp2Image_readMetadata_loop.poc" ];
     })
   ];
 
-  postPatch = "patchShebangs ./src/svn_version.sh";
+  cmakeFlags = [
+    "-DEXIV2_BUILD_PO=ON"
+    "-DEXIV2_BUILD_DOC=ON"
+    # the cmake package does not handle absolute CMAKE_INSTALL_INCLUDEDIR correctly
+    # (setting it to an absolute path causes include files to go to $out/$out/include,
+    #  because the absolute path is interpreted with root at $out).
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+  ];
 
-  preConfigure = "make config"; # needed because not using tarball
-
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "doc" "man" ];
 
   nativeBuildInputs = [
+    cmake
+    doxygen
     gettext
-    autoconf # needed because not using tarball
+    graphviz
+    libxslt
   ];
-  propagatedBuildInputs = [ zlib expat ];
+
+  propagatedBuildInputs = [
+    expat
+    zlib
+  ];
+
+  checkInputs = [
+    libxml2.bin
+    python3
+    which
+  ];
+
+  buildFlags = [
+    "doc"
+  ];
+
+  doCheck = true;
+
+  # Test setup found by inspecting ${src}/.travis/run.sh; problems without cmake.
+  checkTarget = "tests";
+
+  preCheck = ''
+    patchShebangs ../test/
+    mkdir ../test/tmp
+    export LD_LIBRARY_PATH="$(realpath ../build/lib)"
+
+    ${stdenv.lib.optionalString (stdenv.isAarch64 || stdenv.isAarch32) ''
+      # Fix tests on arm
+      # https://github.com/Exiv2/exiv2/issues/933
+      rm -f ../tests/bugfixes/github/test_CVE_2018_12265.py
+    ''}
+
+    ${stdenv.lib.optionalString stdenv.isDarwin ''
+      export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}`pwd`/lib
+      # Removing tests depending on charset conversion
+      substituteInPlace ../test/Makefile --replace "conversions.sh" ""
+      rm -f ../tests/bugfixes/redmine/test_issue_460.py
+      rm -f ../tests/bugfixes/redmine/test_issue_662.py
+     ''}
+  '';
+
+  postCheck = ''
+    (cd ../tests/ && python3 runner.py)
+  '';
+
+  # With cmake we have to enable samples or there won't be
+  # a tests target. This removes them.
+  postInstall = ''
+    ( cd "$out/bin"
+      mv exiv2 .exiv2
+      rm *
+      mv .exiv2 exiv2
+    )
+  '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.exiv2.org/;
+    homepage = "https://www.exiv2.org/";
     description = "A library and command-line utility to manage image metadata";
     platforms = platforms.all;
     license = licenses.gpl2Plus;

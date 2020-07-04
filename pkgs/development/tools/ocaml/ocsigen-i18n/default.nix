@@ -1,13 +1,11 @@
-{ stdenv, fetchurl, ocamlPackages }:
+{ stdenv, fetchzip, ocamlPackages }:
 
 stdenv.mkDerivation rec
 {
   pname = "ocsigen-i18n";
-  name = "${pname}-${version}";
-  version = "3.1.0";
+  version = "3.5.0";
 
-  buildInputs = with ocamlPackages; [ ocaml findlib ];
-
+  buildInputs = with ocamlPackages; [ ocaml findlib ppx_tools ];
 
   dontStrip = true;
 
@@ -16,13 +14,13 @@ stdenv.mkDerivation rec
     make bindir=$out/bin install
   '';
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/besport/${pname}/archive/${version}.tar.gz";
-    sha256 = "0cw0mmr67wx03j4279z7ldxwb01smkqz9rbklx5lafrj5sf99178";
+    sha256 = "1qsgwfl64b53w235wm7nnchqinzgsvd2gb52xm0kra2wlwp69rfq";
   };
 
   meta = {
-    homepage = https://github.com/besport/ocsigen-i18n;
+    homepage = "https://github.com/besport/ocsigen-i18n";
     description = "I18n made easy for web sites written with eliom";
     license = stdenv.lib.licenses.lgpl21;
     maintainers = [ stdenv.lib.maintainers.gal_bolle ];

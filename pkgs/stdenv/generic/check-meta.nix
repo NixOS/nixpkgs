@@ -1,9 +1,14 @@
 # Checks derivation meta and attrs for problems (like brokenness,
 # licenses, etc).
 
-{ lib, config, hostPlatform, meta }:
+{ lib, config, hostPlatform }:
 
 let
+  # If we're in hydra, we can dispense with the more verbose error
+  # messages and make problems easier to spot.
+  inHydra = config.inHydra or false;
+  getName = attrs: attrs.name or ("${attrs.pname or "«name-missing»"}-${attrs.version or "«version-missing»"}");
+
   # See discussion at https://github.com/NixOS/nixpkgs/pull/25304#issuecomment-298385426
   # for why this defaults to false, but I (@copumpkin) want to default it to true soon.
   shouldCheckMeta = config.checkMeta or false;
@@ -31,10 +36,10 @@ let
     attrs ? meta.license;
 
   hasWhitelistedLicense = assert areLicenseListsValid; attrs:
-    hasLicense attrs && builtins.elem attrs.meta.license whitelist;
+    hasLicense attrs && lib.lists.any (l: builtins.elem l whitelist) (lib.lists.toList attrs.meta.license);
 
   hasBlacklistedLicense = assert areLicenseListsValid; attrs:
-    hasLicense attrs && builtins.elem attrs.meta.license blacklist;
+    hasLicense attrs && lib.lists.any (l: builtins.elem l blacklist) (lib.lists.toList attrs.meta.license);
 
   allowBroken = config.allowBroken or false
     || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
@@ -62,7 +67,7 @@ let
     isUnfree (lib.lists.toList attrs.meta.license) &&
     !allowUnfreePredicate attrs;
 
-  allowInsecureDefaultPredicate = x: builtins.elem x.name (config.permittedInsecurePackages or []);
+  allowInsecureDefaultPredicate = x: builtins.elem (getName x) (config.permittedInsecurePackages or []);
   allowInsecurePredicate = x: (config.allowInsecurePredicate or allowInsecureDefaultPredicate) x;
 
   hasAllowedInsecure = attrs:
@@ -70,9 +75,9 @@ let
     allowInsecurePredicate attrs ||
     builtins.getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
 
-  showLicense = license: license.shortName or "unknown";
+  showLicense = license: toString (map (l: l.shortName or "unknown") (lib.lists.toList license));
 
-  pos_str = meta.position or "«unknown-file»";
+  pos_str = meta: meta.position or "«unknown-file»";
 
   remediation = {
     unfree = remediate_whitelist "Unfree";
@@ -103,23 +108,28 @@ let
         You can install it anyway by whitelisting this package, using the
         following methods:
 
-        a) for `nixos-rebuild` you can add ‘${attrs.name or "«name-missing»"}’ to
+        a) To temporarily allow all insecure packages, you can use an environment
+           variable for a single invocation of the nix tools:
+
+             $ export NIXPKGS_ALLOW_INSECURE=1
+
+        b) for `nixos-rebuild` you can add ‘${getName attrs}’ to
            `nixpkgs.config.permittedInsecurePackages` in the configuration.nix,
            like so:
 
              {
                nixpkgs.config.permittedInsecurePackages = [
-                 "${attrs.name or "«name-missing»"}"
+                 "${getName attrs}"
                ];
              }
 
-        b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
-        ‘${attrs.name or "«name-missing»"}’ to `permittedInsecurePackages` in
-        ~/.config/nixpkgs/config.nix, like so:
+        c) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
+           ‘${getName attrs}’ to `permittedInsecurePackages` in
+           ~/.config/nixpkgs/config.nix, like so:
 
              {
                permittedInsecurePackages = [
-                 "${attrs.name or "«name-missing»"}"
+                 "${getName attrs}"
                ];
              }
 
@@ -130,23 +140,25 @@ let
       actualOutputs = attrs.outputs or [ "out" ];
       missingOutputs = builtins.filter (output: ! builtins.elem output actualOutputs) expectedOutputs;
     in ''
-      The package ${attrs.name} has set meta.outputsToInstall to: ${builtins.concatStringsSep ", " expectedOutputs}
+      The package ${getName attrs} has set meta.outputsToInstall to: ${builtins.concatStringsSep ", " expectedOutputs}
 
-      however ${attrs.name} only has the outputs: ${builtins.concatStringsSep ", " actualOutputs}
+      however ${getName attrs} only has the outputs: ${builtins.concatStringsSep ", " actualOutputs}
 
       and is missing the following ouputs:
 
       ${lib.concatStrings (builtins.map (output: "  - ${output}\n") missingOutputs)}
     '';
 
-  handleEvalIssue = attrs: { reason , errormsg ? "" }:
+  handleEvalIssue = { meta, attrs }: { reason , errormsg ? "" }:
     let
-      msg = ''
-        Package ‘${attrs.name or "«name-missing»"}’ in ${pos_str} ${errormsg}, refusing to evaluate.
+      msg = if inHydra
+        then "Failed to evaluate ${getName attrs}: «${reason}»: ${errormsg}"
+        else ''
+          Package ‘${getName attrs}’ in ${pos_str meta} ${errormsg}, refusing to evaluate.
 
-      '' + (builtins.getAttr reason remediation) attrs;
+        '' + (builtins.getAttr reason remediation) attrs;
 
-      handler = if config ? "handleEvalIssue"
+      handler = if config ? handleEvalIssue
         then config.handleEvalIssue reason
         else throw;
     in handler msg;
@@ -159,12 +171,24 @@ let
     branch = str;
     homepage = either (listOf str) str;
     downloadPage = str;
+    changelog = either (listOf str) str;
     license = either (listOf lib.types.attrs) (either lib.types.attrs str);
     maintainers = listOf (attrsOf str);
     priority = int;
-    platforms = listOf (either str lib.systems.parsedPlatform.types.system);
+    platforms = listOf str;
     hydraPlatforms = listOf str;
     broken = bool;
+    # TODO: refactor once something like Profpatsch's types-simple will land
+    # This is currently dead code due to https://github.com/NixOS/nix/issues/2532
+    tests = attrsOf (mkOptionType {
+      name = "test";
+      check = x: x == {} || ( # Accept {} for tests that are unsupported
+        isDerivation x &&
+        x ? meta.timeout
+      );
+      merge = lib.options.mergeOneOption;
+    });
+    timeout = int;
 
     # Weirder stuff that doesn't appear in the documentation?
     knownVulnerabilities = listOf str;
@@ -184,8 +208,6 @@ let
     isIbusEngine = bool;
     isGutenprint = bool;
     badPlatforms = platforms;
-    # Hydra build timeout
-    timeout = int;
   };
 
   checkMetaAttr = k: v:
@@ -193,11 +215,6 @@ let
       if metaTypes.${k}.check v then null else "key '${k}' has a value ${toString v} of an invalid type ${builtins.typeOf v}; expected ${metaTypes.${k}.description}"
     else "key '${k}' is unrecognized; expected one of: \n\t      [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
   checkMeta = meta: if shouldCheckMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [];
-
-  checkPlatform = attrs: let
-      anyMatch = lib.any (lib.meta.platformMatch hostPlatform);
-    in  anyMatch (attrs.meta.platforms or lib.platforms.all) &&
-      ! anyMatch (attrs.meta.badPlatforms or []);
 
   checkOutputsToInstall = attrs: let
       expectedOutputs = attrs.meta.outputsToInstall or [];
@@ -220,8 +237,10 @@ let
       { valid = false; reason = "blacklisted"; errormsg = "has a blacklisted license (‘${showLicense attrs.meta.license}’)"; }
     else if !allowBroken && attrs.meta.broken or false then
       { valid = false; reason = "broken"; errormsg = "is marked as broken"; }
-    else if !allowUnsupportedSystem && !(checkPlatform attrs) then
-      { valid = false; reason = "unsupported"; errormsg = "is not supported on ‘${hostPlatform.config}’"; }
+    else if !allowUnsupportedSystem &&
+            (!lib.lists.elem hostPlatform.system (attrs.meta.platforms or lib.platforms.all) ||
+              lib.lists.elem hostPlatform.system (attrs.meta.badPlatforms or [])) then
+      { valid = false; reason = "unsupported"; errormsg = "is not supported on ‘${hostPlatform.system}’"; }
     else if !(hasAllowedInsecure attrs) then
       { valid = false; reason = "insecure"; errormsg = "is marked as insecure"; }
     else if checkOutputsToInstall attrs then
@@ -230,12 +249,12 @@ let
       { valid = false; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
     else { valid = true; };
 
-  assertValidity = attrs: let
+  assertValidity = { meta, attrs }: let
       validity = checkValidity attrs;
     in validity // {
       # Throw an error if trying to evaluate an non-valid derivation
       handled = if !validity.valid
-        then handleEvalIssue attrs (removeAttrs validity ["valid"])
+        then handleEvalIssue { inherit meta attrs; } (removeAttrs validity ["valid"])
         else true;
   };
 

@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "packaging";
-  version = "17.1";
+  version = "20.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f019b770dd64e585a99714f1fd5e01c7a8f11b45635aa953fd41c689a657375b";
+    sha256 = "4357f74f47b9c12db93624a82154e9b120fa8293699949152b22065d556079f8";
   };
 
   propagatedBuildInputs = [ pyparsing six ];
@@ -18,9 +18,12 @@ buildPythonPackage rec {
     py.test tests
   '';
 
+  # Prevent circular dependency
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "Core utilities for Python packages";
-    homepage = https://github.com/pypa/packaging;
+    homepage = "https://github.com/pypa/packaging";
     license = [ licenses.bsd2 licenses.asl20 ];
     maintainers = with maintainers; [ bennofs ];
   };

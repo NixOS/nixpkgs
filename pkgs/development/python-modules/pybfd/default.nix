@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, buildPythonPackage, isPyPy, isPy3k, libbfd, libopcodes }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pybfd";
   version = "-0.1.1.2017-12-31";
 
@@ -19,10 +19,11 @@ buildPythonPackage rec {
   LIBOPCODES_LIBRARY = "${libopcodes}/lib/libopcodes.so";
 
   meta = {
-    homepage = https://github.com/Groundworkstech/pybfd;
+    homepage = "https://github.com/Groundworkstech/pybfd";
     description = "A Python interface to the GNU Binary File Descriptor (BFD) library";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ orivej ];
+    broken = true;
   };
 }

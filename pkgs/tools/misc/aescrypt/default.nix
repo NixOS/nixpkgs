@@ -1,12 +1,12 @@
 { stdenv, fetchurl, libiconv }:
 
 stdenv.mkDerivation rec {
-  version = "3.13";
-  name = "aescrypt-${version}";
+  version = "3.14";
+  pname = "aescrypt";
 
   src = fetchurl {
-    url = "https://www.aescrypt.com/download/v3/linux/${name}.tgz";
-    sha256 = "1a1rs7xmbxh355qg3v02rln3gshvy3j6wkx4g9ir72l22mp6zkc7";
+    url = "https://www.aescrypt.com/download/v3/linux/${pname}-${version}.tgz";
+    sha256 = "1iziymcbpc64d44djgqfifpblsly4sr5bxsp5g29jgxz552kjlah";
   };
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-liconv";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Encrypt files with Advanced Encryption Standard (AES)";
-    homepage    = https://www.aescrypt.com/;
+    homepage    = "https://www.aescrypt.com/";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ lovek323 qknight ];
     platforms   = stdenv.lib.platforms.all;

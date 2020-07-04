@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.6.2";
-  name = "docopt.cpp-${version}";
+  pname = "docopt.cpp";
 
   src = fetchFromGitHub {
     owner = "docopt";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C++11 port of docopt";
-    homepage = https://github.com/docopt/docopt.cpp;
+    homepage = "https://github.com/docopt/docopt.cpp";
     license = with licenses; [ mit boost ];
     platforms = platforms.all;
     maintainers = with maintainers; [ knedlsepp ];

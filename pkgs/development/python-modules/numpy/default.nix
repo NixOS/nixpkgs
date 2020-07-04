@@ -1,37 +1,58 @@
-{ stdenv, lib, fetchPypi, python, buildPythonPackage, isPyPy, gfortran, pytest, blas }:
+{ lib
+, fetchPypi
+, python
+, buildPythonPackage
+, gfortran
+, pytest
+, blas
+, lapack
+, writeTextFile
+, isPyPy
+, cython
+, setuptoolsBuildHook
+ }:
 
-buildPythonPackage rec {
+assert (!blas.isILP64) && (!lapack.isILP64);
+
+let
+  cfg = writeTextFile {
+    name = "site.cfg";
+    text = (lib.generators.toINI {} {
+      ${blas.implementation} = {
+        include_dirs = "${lib.getDev blas}/include:${lib.getDev lapack}/include";
+        library_dirs = "${blas}/lib:${lapack}/lib";
+        libraries = "lapack,lapacke,blas,cblas";
+      };
+      lapack = {
+        include_dirs = "${lib.getDev lapack}/include";
+        library_dirs = "${lapack}/lib";
+      };
+      blas = {
+        include_dirs = "${lib.getDev blas}/include";
+        library_dirs = "${blas}/lib";
+      };
+    });
+  };
+in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.15.2";
+  version = "1.18.5";
+  format = "pyproject.toml";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "27a0d018f608a3fe34ac5e2b876f4c23c47e38295c47dd0775cc294cd2614bc1";
+    sha256 = "34e96e9dae65c4839bd80012023aadd6ee2ccb73ce7fdf3074c62f301e63120b";
   };
 
-  disabled = isPyPy;
-  nativeBuildInputs = [ gfortran pytest ];
-  buildInputs = [ blas ];
+  nativeBuildInputs = [ gfortran pytest cython setuptoolsBuildHook ];
+  buildInputs = [ blas lapack ];
 
-  patches = lib.optionals (python.hasDistutilsCxxPatch or false) [
+  patches = lib.optionals python.hasDistutilsCxxPatch [
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
     # Patching of numpy.distutils is needed to prevent it from undoing the
     # patch to distutils.
     ./numpy-distutils-C++.patch
   ];
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
-    # Use fenv.h
-    sed -i \
-      numpy/core/src/npymath/ieee754.c.src \
-      numpy/core/include/numpy/ufuncobject.h \
-      -e 's/__GLIBC__/__linux__/'
-    # Don't use various complex trig functions
-    substituteInPlace numpy/core/src/private/npy_config.h \
-      --replace '#if defined(__GLIBC__)' "#if 1" \
-      --replace '#if !__GLIBC_PREREQ(2, 18)' "#if 1"
-  '';
 
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
@@ -39,15 +60,12 @@ buildPythonPackage rec {
   '';
 
   preBuild = ''
-    echo "Creating site.cfg file..."
-    cat << EOF > site.cfg
-    [openblas]
-    include_dirs = ${blas}/include
-    library_dirs = ${blas}/lib
-    EOF
+    ln -s ${cfg} site.cfg
   '';
 
   enableParallelBuilding = true;
+
+  doCheck = !isPyPy; # numpy 1.16+ hits a bug in pypy's ctypes, using either numpy or pypy HEAD fixes this (https://github.com/numpy/numpy/issues/13807)
 
   checkPhase = ''
     runHook preCheck
@@ -58,17 +76,19 @@ buildPythonPackage rec {
   '';
 
   passthru = {
-    blas = blas;
+    # just for backwards compatibility
+    blas = blas.provider;
+    blasImplementation = blas.implementation;
+    inherit cfg;
   };
 
-  # Disable two tests
-  # - test_f2py: f2py isn't yet on path.
+  # Disable test
   # - test_large_file_support: takes a long time and can cause the machine to run out of disk space
-  NOSE_EXCLUDE="test_f2py,test_large_file_support";
+  NOSE_EXCLUDE="test_large_file_support";
 
   meta = {
     description = "Scientific tools for Python";
-    homepage = http://numpy.scipy.org/;
+    homepage = "https://numpy.org/";
     maintainers = with lib.maintainers; [ fridh ];
   };
 }

@@ -1,25 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, zlib, which, IOKit, qtbase }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, zlib, which, IOKit, qtbase, libusb-compat-0_1 }:
 
 stdenv.mkDerivation rec {
-  name = "gpsbabel-${version}";
-  version = "1.5.4";
+  pname = "gpsbabel";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "gpsbabel";
     repo = "gpsbabel";
     rev = "gpsbabel_${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "0v6wpp14zkfbarmksf9dn3wmpj1araxd7xi5xp7gpl7kafb9aiwi";
+    sha256 = "0q17jhmaf7z5lld2ff7h6jb3v1yz8hbwd2rmaq2dsamc53dls8iw";
   };
 
   patches = [
-    ./clang-4.patch
     (fetchpatch {
-      url = https://sources.debian.net/data/main/g/gpsbabel/1.5.3-2/debian/patches/use_minizip;
+      url = "https://sources.debian.net/data/main/g/gpsbabel/1.5.3-2/debian/patches/use_minizip";
       sha256 = "03fpsmlx1wc48d1j405zkzp8j64hcp0z72islf4mk1immql3ibcr";
     })
   ];
 
-  buildInputs = [ zlib qtbase which ]
+  buildInputs = [ zlib qtbase which libusb-compat-0_1 ]
     ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
   /* FIXME: Building the documentation, with "make doc", requires this:
@@ -70,7 +69,7 @@ stdenv.mkDerivation rec {
       process data that may (or may not be) placed on a map, such as
       waypoints, tracks, and routes.
     '';
-    homepage = http://www.gpsbabel.org/;
+    homepage = "http://www.gpsbabel.org/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.rycee ];
     platforms = platforms.all;

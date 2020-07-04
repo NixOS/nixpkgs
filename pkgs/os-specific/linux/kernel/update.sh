@@ -15,7 +15,7 @@ fi
 # Inspect each file and see if it has the latest version
 NIXPKGS="$(git rev-parse --show-toplevel)"
 ls $NIXPKGS/pkgs/os-specific/linux/kernel | while read FILE; do
-  KERNEL="$(sed -n $LINUXSED <<< "$FILE")"
+  KERNEL="$(sed -n -e $LINUXSED <<< "$FILE")"
   [ -z "$KERNEL" ] && continue
 
   # Find the matching new kernel version
@@ -45,18 +45,21 @@ ls $NIXPKGS/pkgs/os-specific/linux/kernel | while read FILE; do
     echo "Failed to get hash of $URL"
     continue
   fi
-  sed -i "s/sha256 = \".*\"/sha256 = \"$HASH\"/g" $NIXPKGS/pkgs/os-specific/linux/kernel/$FILE
+  sed -i -e "s/sha256 = \".*\"/sha256 = \"$HASH\"/g" $NIXPKGS/pkgs/os-specific/linux/kernel/$FILE
 
   # Rewrite the expression
-  sed -i -e '/version = /d' -e '/modDirVersion = /d' $NIXPKGS/pkgs/os-specific/linux/kernel/$FILE
-  if grep -q '^[0-9]\+.[0-9]\+$' <<< "$V"; then
-    sed -i "\#buildLinux (args // rec {#a \  modDirVersion = \"${V}.0\";" $NIXPKGS/pkgs/os-specific/linux/kernel/$FILE
-  fi
-  sed -i "\#buildLinux (args // rec {#a \  version = \"$V\";" $NIXPKGS/pkgs/os-specific/linux/kernel/$FILE
+  sed -i -e '/version = /d' $NIXPKGS/pkgs/os-specific/linux/kernel/$FILE
+  sed -i -e "\#buildLinux (args // rec {#a \  version = \"$V\";" $NIXPKGS/pkgs/os-specific/linux/kernel/$FILE
 
   # Commit the changes
   git add -u $NIXPKGS/pkgs/os-specific/linux/kernel/$FILE
-  git commit -m "kernel: $OLDVER -> $V" >/dev/null 2>&1
+  git commit -m "linux: $OLDVER -> $V" >/dev/null 2>&1
 
   echo "Updated $OLDVER -> $V"
 done
+
+# Update linux-libre
+COMMIT=1 $NIXPKGS/pkgs/os-specific/linux/kernel/update-libre.sh
+
+# Update linux-hardened
+COMMIT=1 $NIXPKGS/pkgs/os-specific/linux/kernel/hardened/update.py

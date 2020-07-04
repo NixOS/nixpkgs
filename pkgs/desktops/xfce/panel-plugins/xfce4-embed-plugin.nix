@@ -1,23 +1,41 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui, xfconf, gtk2 }:
+{ stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4-panel, libxfce4ui, gtk2, xfce }:
+
+let
+  category = "panel-plugins";
+in
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  p_name  = "xfce4-embed-plugin";
-  ver_maj = "1.6";
-  ver_min = "0";
+  pname  = "xfce4-embed-plugin";
+  version = "1.6.0";
 
   src = fetchurl {
-    url = "mirror://xfce/src/panel-plugins/${p_name}/${ver_maj}/${name}.tar.bz2";
+    url = "mirror://xfce/src/${category}/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
     sha256 = "0a72kqsjjh45swimqlpyrahdnplp0383v0i4phr4n6g8c1ixyry7";
   };
-  name = "${p_name}-${ver_maj}.${ver_min}";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool libxfce4util libxfce4ui xfce4-panel xfconf gtk2 ];
+  nativeBuildInputs = [
+    pkgconfig
+    intltool
+  ];
+
+  buildInputs = [
+    libxfce4util
+    libxfce4ui
+    xfce4-panel
+    gtk2
+  ];
+
+  passthru.updateScript = xfce.updateScript {
+    inherit pname version;
+    attrPath = "xfce.${pname}";
+    versionLister = xfce.archiveLister category pname;
+  };
 
   meta = {
-    homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";
+    homepage = "https://docs.xfce.org/panel-plugins/xfce4-embed-plugin";
     description = "Embed arbitrary app windows on Xfce panel";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.AndersonTorres ];
   };

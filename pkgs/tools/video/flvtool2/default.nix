@@ -9,7 +9,7 @@ buildRubyGem rec {
 
   meta = {
     broken = true; # depends on ruby 2.2
-    homepage = https://github.com/unnu/flvtool2;
+    homepage = "https://github.com/unnu/flvtool2";
     description = "A tool to manipulate Macromedia Flash Video files";
     platforms = ruby.meta.platforms;
     license = lib.licenses.bsd3;

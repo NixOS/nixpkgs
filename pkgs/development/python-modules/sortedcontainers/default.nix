@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "sortedcontainers";
-  version = "2.0.5";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b74f2756fb5e23512572cc76f0fe0832fd86310f77dfee54335a35fb33f6b950";
+    sha256 = "974e9a32f56b17c1bac2aebd9dcf197f3eb9cd30553c5852a3187ad162e1a03a";
   };
 
   # pypi tarball does not come with tests
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python Sorted Container Types: SortedList, SortedDict, and SortedSet";
-    homepage = http://www.grantjenks.com/docs/sortedcontainers/;
+    homepage = "http://www.grantjenks.com/docs/sortedcontainers/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ costrouc ];
   };

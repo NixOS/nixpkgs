@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "An API towards the Ubiquity Networks UniFi controller";
-    homepage    = https://pypi.python.org/pypi/unifi/;
+    homepage    = "https://pypi.python.org/pypi/unifi/";
     license     = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };

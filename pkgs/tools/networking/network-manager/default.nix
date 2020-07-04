@@ -1,115 +1,96 @@
-{ stdenv, fetchurl, fetchpatch, substituteAll, intltool, pkgconfig, dbus-glib
-, gnome3, systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables
-, libgcrypt, dnsmasq, bluez5, readline
-, gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup
-, ethtool, gnused, coreutils, file, inetutils, kmod, jansson, libxslt
-, python3Packages, docbook_xsl, openconnect, curl, autoreconfHook }:
+{ stdenv, fetchurl, substituteAll, intltool, pkgconfig, fetchpatch, dbus
+, gnome3, systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables, python3, vala
+, libgcrypt, dnsmasq, bluez5, readline, libselinux, audit
+, gobject-introspection, modemmanager, openresolv, libndp, newt, libsoup
+, ethtool, gnused, iputils, kmod, jansson, gtk-doc, libxslt
+, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_42, docbook_xml_dtd_43
+, openconnect, curl, meson, ninja, libpsl, mobile-broadband-provider-info, runtimeShell }:
 
 let
-  pname = "NetworkManager";
+  pythonForDocs = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in stdenv.mkDerivation rec {
-  name = "network-manager-${version}";
-  version = "1.12.2";
+  pname = "network-manager";
+  version = "1.22.10";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "09hsh34m8hg4m402pw5n11f29vsfjw6lm3p5m56yxwq57bwnzq3b";
+    url = "mirror://gnome/sources/NetworkManager/${stdenv.lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
+    sha256 = "0xyaizyp3yz6x3pladw3nvl3hf4n5g140zx9jnxfp9qvag0wqa9b";
   };
 
-  outputs = [ "out" "dev" ];
-
-  postPatch = ''
-    patchShebangs ./tools
-  '';
-
-  preConfigure = ''
-    substituteInPlace configure --replace /usr/bin/uname ${coreutils}/bin/uname
-    substituteInPlace configure --replace /usr/bin/file ${file}/bin/file
-    substituteInPlace data/84-nm-drivers.rules \
-      --replace /bin/sh ${stdenv.shell}
-    substituteInPlace data/85-nm-unmanaged.rules \
-      --replace /bin/sh ${stdenv.shell} \
-      --replace /usr/sbin/ethtool ${ethtool}/sbin/ethtool \
-      --replace /bin/sed ${gnused}/bin/sed
-    substituteInPlace data/NetworkManager.service.in \
-      --replace /bin/kill ${coreutils}/bin/kill
-    # to enable link-local connections
-    configureFlags="$configureFlags --with-udev-dir=$out/lib/udev"
-
-    # Fixes: error: po/Makefile.in.in was not created by intltoolize.
-    intltoolize --automake --copy --force
-  '';
+  outputs = [ "out" "dev" "devdoc" "man" "doc" ];
 
   # Right now we hardcode quite a few paths at build time. Probably we should
   # patch networkmanager to allow passing these path in config file. This will
   # remove unneeded build-time dependencies.
-  configureFlags = [
-    "--with-dhclient=${dhcp}/bin/dhclient"
-    "--with-dnsmasq=${dnsmasq}/bin/dnsmasq"
+  mesonFlags = [
+    "-Ddhclient=${dhcp}/bin/dhclient"
+    "-Ddnsmasq=${dnsmasq}/bin/dnsmasq"
     # Upstream prefers dhclient, so don't add dhcpcd to the closure
-    "--with-dhcpcd=no"
-    "--with-pppd=${ppp}/bin/pppd"
-    "--with-iptables=${iptables}/bin/iptables"
-    #"--with-udev-dir=$(out)/lib/udev"
-    "--with-resolvconf=${openresolv}/sbin/resolvconf"
-    "--sysconfdir=/etc" "--localstatedir=/var"
-    "--with-dbus-sys-dir=\${out}/etc/dbus-1/system.d"
-    "--with-crypto=gnutls" "--disable-more-warnings"
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-    "--with-kernel-firmware-dir=/run/current-system/firmware"
-    "--with-session-tracking=systemd"
-    "--with-modem-manager-1"
-    "--with-nmtui"
-    "--disable-gtk-doc"
-    "--with-libnm-glib" # legacy library, TODO: remove
-    "--disable-tests"
+    "-Ddhcpcd=no"
+    "-Ddhcpcanon=no"
+    "-Dpppd=${ppp}/bin/pppd"
+    "-Diptables=${iptables}/bin/iptables"
+    # to enable link-local connections
+    "-Dudev_dir=${placeholder "out"}/lib/udev"
+    "-Dresolvconf=${openresolv}/bin/resolvconf"
+    "-Ddbus_conf_dir=${placeholder "out"}/share/dbus-1/system.d"
+    "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "-Dkernel_firmware_dir=/run/current-system/firmware"
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    "-Dcrypto=gnutls"
+    "-Dsession_tracking=systemd"
+    "-Dmodem_manager=true"
+    "-Dpolkit_agent=true"
+    "-Dnmtui=true"
+    "-Ddocs=true"
+    "-Dtests=no"
+    "-Dqt=false"
+    # Allow using iwd when configured to do so
+    "-Diwd=true"
+    "-Dlibaudit=yes-disabled-by-default"
   ];
 
   patches = [
-    # https://bugzilla.gnome.org/show_bug.cgi?id=796751
-    (fetchpatch {
-      url = https://bugzilla.gnome.org/attachment.cgi?id=372953;
-      sha256 = "0xg7bzs6dvkbv2qp67i7mi1c5yrmfd471xgmlkn15b33pqkzy3mc";
-    })
-    (fetchpatch {
-      url = https://gitlab.freedesktop.org/NetworkManager/NetworkManager/commit/0a3755c1799d3a4dc1875d4c59c7c568a64c8456.patch;
-      sha256 = "0r7338q3za7mf419a244vi65b1q497rg84avijybmv6w4x6p1ksd";
-    })
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit inetutils kmod openconnect;
+      inherit iputils kmod openconnect ethtool gnused systemd;
+      inherit runtimeShell;
     })
 
+    # Meson does not support using different directories during build and
+    # for installation like Autotools did with flags passed to make install.
+    ./fix-install-paths.patch
   ];
 
   buildInputs = [
-    systemd libuuid polkit ppp libndp curl
-    bluez5 dnsmasq gobjectIntrospection modemmanager readline newt libsoup jansson
+    systemd libselinux audit libpsl libuuid polkit ppp libndp curl mobile-broadband-provider-info
+    bluez5 dnsmasq gobject-introspection modemmanager readline newt libsoup jansson
   ];
 
-  propagatedBuildInputs = [ dbus-glib gnutls libgcrypt python3Packages.pygobject3 ];
+  propagatedBuildInputs = [ gnutls libgcrypt ];
 
-  nativeBuildInputs = [ autoreconfHook intltool pkgconfig libxslt docbook_xsl ];
+  nativeBuildInputs = [
+    meson ninja intltool pkgconfig
+    vala gobject-introspection dbus
+    # Docs
+    gtk-doc libxslt docbook_xsl docbook_xml_dtd_412 docbook_xml_dtd_42 docbook_xml_dtd_43 pythonForDocs
+  ];
 
   doCheck = false; # requires /sys, the net
 
-  preInstall = ''
-    installFlagsArray=( "sysconfdir=$out/etc" "localstatedir=$out/var" "runstatedir=$out/var/run" )
+  postPatch = ''
+    patchShebangs ./tools
+    patchShebangs libnm/generate-setting-docs.py
   '';
 
-  postInstall = ''
-    mkdir -p $out/lib/NetworkManager
-
-    # FIXME: Workaround until NixOS' dbus+systemd supports at_console policy
-    substituteInPlace $out/etc/dbus-1/system.d/org.freedesktop.NetworkManager.conf --replace 'at_console="true"' 'group="networkmanager"'
-
-    # rename to network-manager to be in style
-    mv $out/etc/systemd/system/NetworkManager.service $out/etc/systemd/system/network-manager.service
-
-    # systemd in NixOS doesn't use `systemctl enable`, so we need to establish
-    # aliases ourselves.
-    ln -s $out/etc/systemd/system/NetworkManager-dispatcher.service $out/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
-    ln -s $out/etc/systemd/system/network-manager.service $out/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
+  preBuild = ''
+    # Our gobject-introspection patches make the shared library paths absolute
+    # in the GIR files. When building docs, the library is not yet installed,
+    # though, so we need to replace the absolute path with a local one during build.
+    # We are using a symlink that will be overridden during installation.
+    mkdir -p ${placeholder "out"}/lib
+    ln -s $PWD/libnm/libnm.so.0 ${placeholder "out"}/lib/libnm.so.0
   '';
 
   passthru = {
@@ -120,10 +101,10 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/NetworkManager;
+    homepage = "https://wiki.gnome.org/Projects/NetworkManager";
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ phreedom rickynils domenkozar obadz ];
+    maintainers = with maintainers; [ phreedom domenkozar obadz worldofpeace ];
     platforms = platforms.linux;
   };
 }

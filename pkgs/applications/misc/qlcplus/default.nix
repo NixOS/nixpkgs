@@ -1,22 +1,22 @@
 { stdenv, mkDerivation, fetchFromGitHub, qmake, pkgconfig, udev
-, qtmultimedia, qtscript, alsaLib, ola, libftdi1, libusb
+, qtmultimedia, qtscript, alsaLib, ola, libftdi1, libusb-compat-0_1
 , libsndfile, libmad
 }:
 
 mkDerivation rec {
-  name = "qlcplus-${version}";
-  version = "4.11.2";
+  pname = "qlcplus";
+  version = "4.12.2";
 
   src = fetchFromGitHub {
     owner = "mcallegari";
     repo = "qlcplus";
     rev = "QLC+_${version}";
-    sha256 = "0ry7j8d5mm3h3mzd49xqlagnldmfhfr6plwk73pz62hxr4j58s6w";
+    sha256 = "1j0jhgql78p5ghcaz36l1k55447s5qiv396a448qic7xqpym2vl3";
   };
 
   nativeBuildInputs = [ qmake pkgconfig ];
   buildInputs = [
-    udev qtmultimedia qtscript alsaLib ola libftdi1 libusb libsndfile libmad
+    udev qtmultimedia qtscript alsaLib ola libftdi1 libusb-compat-0_1 libsndfile libmad
   ];
 
   qmakeFlags = [ "INSTALLROOT=$(out)" ];
@@ -25,8 +25,14 @@ mkDerivation rec {
     patchShebangs .
     sed -i -e '/unix:!macx:INSTALLROOT += \/usr/d' \
             -e "s@\$\$LIBSDIR/qt4/plugins@''${qtPluginPrefix}@" \
-            -e "s@/etc/udev/rules.d@''${out}/lib/udev@" \
+            -e "s@/etc/udev/rules.d@''${out}/lib/udev/rules.d@" \
       variables.pri
+  '';
+
+  enableParallelBuilding = true;
+
+  postInstall = ''
+    ln -sf $out/lib/*/libqlcplus* $out/lib
   '';
 
   meta = with stdenv.lib; {
@@ -34,6 +40,6 @@ mkDerivation rec {
     maintainers = [ maintainers.globin ];
     license = licenses.asl20;
     platforms = platforms.all;
-    homepage = "http://www.qlcplus.org/";
+    homepage = "https://www.qlcplus.org/";
   };
 }

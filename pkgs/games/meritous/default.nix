@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitLab, SDL, SDL_image, SDL_mixer, zlib }:
 
-stdenv.mkDerivation rec {
-  name = "meritous-${version}";
+stdenv.mkDerivation {
+  pname = "meritous";
   version = "1.4";
 
   src = fetchFromGitLab {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Action-adventure dungeon crawl game";
-    homepage = http://www.asceai.net/meritous/;
+    homepage = "http://www.asceai.net/meritous/";
     license = licenses.gpl3;
     maintainers = [ maintainers.alexvorobiev ];
     platforms = platforms.linux;

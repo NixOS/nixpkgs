@@ -1,11 +1,11 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, libzen, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "18.08.1";
-  name = "libmediainfo-${version}";
+  version = "20.03";
+  pname = "libmediainfo";
   src = fetchurl {
     url = "https://mediaarea.net/download/source/libmediainfo/${version}/libmediainfo_${version}.tar.xz";
-    sha256 = "1h6brg98i39xprcl54gvs1scmv8d6f3iw5h2diwz5bbz4lspy8vs";
+    sha256 = "0wkzj5s34m8dvy7hif4h8f90q8ncrzd930gij1zzw3h5nw732j38";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Shared library for mediainfo";
-    homepage = https://mediaarea.net/;
+    homepage = "https://mediaarea.net/";
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = [ maintainers.devhell ];

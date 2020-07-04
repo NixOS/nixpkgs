@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gpshell-${version}";
+  pname = "gpshell";
   version = "1.4.4";
 
   src = fetchurl {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://sourceforge.net/p/globalplatform/wiki/Home/;
+    homepage = "https://sourceforge.net/p/globalplatform/wiki/Home/";
     description = "Smartcard management application";
     license = licenses.gpl3;
     platforms = platforms.all;

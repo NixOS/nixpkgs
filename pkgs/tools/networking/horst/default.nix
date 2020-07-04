@@ -1,30 +1,24 @@
 {stdenv, fetchFromGitHub, pkgconfig, ncurses, libnl }:
 
 stdenv.mkDerivation rec {
-  name = "horst-${version}";
-  version = "5.0";
+  pname = "horst";
+  version = "5.1";
 
   src = fetchFromGitHub {
     owner = "br101";
     repo = "horst";
-    rev = "version-${version}";
-    sha256 = "0m7gc6dj816z8wyq5bdkqj7fw6rmxaah84s34ncsaispz2llva1x";
+    rev = "v${version}";
+    sha256 = "140pyv6rlsh4c745w4b59pz3hrarr39qq3mz9z1lsd3avc12nx1a";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ncurses libnl ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    mv horst $out/bin
-
-    mkdir -p $out/man/man1
-    cp horst.1 $out/man/man1
-  '';
+  installFlags = [ "DESTDIR=${placeholder "out"}" ];
 
   meta = with stdenv.lib; {
     description = "Small and lightweight IEEE802.11 wireless LAN analyzer with a text interface";
-    homepage = http://br1.einfach.org/tech/horst/;
+    homepage = "http://br1.einfach.org/tech/horst/";
     maintainers = [ maintainers.fpletz ];
     license = licenses.gpl3;
     platforms = platforms.linux;

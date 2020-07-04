@@ -1,29 +1,31 @@
-{ stdenv, fetchurl, pkgconfig, xlibsWrapper, inputproto, libXi
-, freeglut, libGLU_combined, libjpeg, zlib, libXft, libpng
-, darwin, libtiff, freetype
+{ stdenv, fetchurl, pkgconfig, xlibsWrapper, xorgproto, libXi
+, freeglut, libGL, libGLU, libjpeg, zlib, libXft, libpng
+, libtiff, freetype, Cocoa, AGL, GLUT
 }:
 
 let
-  version = "1.3.4";
-in stdenv.mkDerivation {
-  name = "fltk-${version}";
+  version = "1.3.5";
+in
+
+stdenv.mkDerivation {
+  pname = "fltk";
+  inherit version;
 
   src = fetchurl {
-    url = "http://fltk.org/pub/fltk/${version}/fltk-${version}-source.tar.gz";
-    sha256 = "13y57pnayrkfzm8azdfvysm8b77ysac8zhhdsh8kxmb0x3203ay8";
+    url = "https://www.fltk.org/pub/fltk/${version}/fltk-${version}-source.tar.gz";
+    sha256 = "00jp24z1818k9n6nn6lx7qflqf2k13g4kxr0p8v1d37kanhb4ac7";
   };
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./nsosv.patch ];
 
   nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libGLU libGL libjpeg zlib libpng libXft ]
+    ++ stdenv.lib.optional stdenv.isDarwin [ AGL Cocoa GLUT ];
 
-  buildInputs = [
-    libGLU_combined
-    libjpeg
-    zlib
-    libpng
-    libXft
-  ];
+  propagatedBuildInputs = [ xorgproto ]
+    ++ (if stdenv.isDarwin
+        then [ freetype libtiff ]
+        else [ xlibsWrapper libXi freeglut ]);
 
   configureFlags = [
     "--enable-gl"
@@ -33,18 +35,12 @@ in stdenv.mkDerivation {
     "--enable-xft"
   ];
 
-  propagatedBuildInputs = [ inputproto ]
-    ++ (if stdenv.isDarwin
-        then (with darwin.apple_sdk.frameworks; [Cocoa AGL GLUT freetype libtiff])
-        else [ xlibsWrapper libXi freeglut ]);
-
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A C++ cross-platform lightweight GUI library";
-    homepage = http://www.fltk.org;
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    license = stdenv.lib.licenses.gpl2;
+    homepage = "https://www.fltk.org";
+    platforms = platforms.linux ++ platforms.darwin;
+    license = licenses.gpl2;
   };
-
 }

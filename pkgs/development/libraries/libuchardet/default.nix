@@ -1,25 +1,28 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "libuchardet-${version}";
+  pname = "uchardet";
+  version = "0.0.7";
 
-  version = "0.0.5";
+  outputs = [ "bin" "out" "man" "dev" ];
 
-  src = fetchFromGitHub {
-    owner  = "BYVoid";
-    repo   = "uchardet";
-    rev    = "v${version}";
-    sha256 = "0rkym5bhq3hn7623fy0fggw0qaghha71k8bi41ywqd2lchpahrrm";
+  src = fetchurl {
+    url = "https://www.freedesktop.org/software/${pname}/releases/${pname}-${version}.tar.xz";
+    sha256 = "1ca51sryhryqz82v4d0graaiqqq5w2f33a9gj83b910xmq499irz";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
-  doCheck = false; # fails all the tests (ctest)
+  cmakeFlags = [
+    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
+  ];
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Mozilla's Universal Charset Detector C/C++ API";
-    homepage    = https://www.byvoid.com/zht/project/uchardet;
-    license     = licenses.mpl11;
+    homepage = "https://www.freedesktop.org/wiki/Software/uchardet/";
+    license = licenses.mpl11;
     maintainers = with maintainers; [ cstrahan ];
     platforms = with platforms; unix;
   };

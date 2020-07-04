@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "u-msgpack-python";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7ff18ae3721fa75571f9329c08f7c0120416a6ae36194bd8674f65b3b78d0702";
+    sha256 = "754edb07eaee39a9686a99823892e3a1be4e0948d9cc5c717946750c27643c9c";
   };
 
   LC_ALL="en_US.UTF-8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A portable, lightweight MessagePack serializer and deserializer written in pure Python";
-    homepage = https://github.com/vsergeev/u-msgpack-python;
+    homepage = "https://github.com/vsergeev/u-msgpack-python";
     license = lib.licenses.mit;
   };
 

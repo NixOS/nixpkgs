@@ -1,28 +1,48 @@
-{ stdenv, fetchFromGitHub, valgrind }:
+{ stdenv, fetchFromGitHub, valgrind, fetchpatch
+, enableStatic ? false, enableShared ? true
+}:
 
 stdenv.mkDerivation rec {
-  name = "lz4-${version}";
-  version = "1.8.3";
+  pname = "lz4";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
-    sha256 = "0lq00yi7alr9aip6dw0flykzi8yv7z43aay177n86spn9qms7s3g";
+    sha256 = "0lpaypmk70ag2ks3kf2dl4ac3ba40n5kc1ainkp9wfjawz76mh61";
     rev = "v${version}";
-    repo = "lz4";
-    owner = "lz4";
+    repo = pname;
+    owner = pname;
   };
 
-  outputs = [ "out" "dev" ];
+  # TODO(@Ericson2314): Separate binaries and libraries
+  outputs = [ "bin" "out" "dev" ];
 
   buildInputs = stdenv.lib.optional doCheck valgrind;
 
   enableParallelBuilding = true;
 
-  makeFlags = [ "PREFIX=$(out)" "INCLUDEDIR=$(dev)/include" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "INCLUDEDIR=$(dev)/include"
+    "BUILD_STATIC=${if enableStatic then "yes" else "no"}"
+    "BUILD_SHARED=${if enableShared then "yes" else "no"}"
+    "WINDRES:=${stdenv.cc.bintools.targetPrefix}windres"
+  ]
+    # TODO make full dictionary
+    ++ stdenv.lib.optional stdenv.hostPlatform.isMinGW "TARGET_OS=MINGW"
+    ;
 
   doCheck = false; # tests take a very long time
   checkTarget = "test";
 
-  postInstall = "rm $out/lib/*.a";
+  # TODO(@Ericson2314): Make resusable setup hook for this issue on Windows.
+  postInstall =
+    stdenv.lib.optionalString stdenv.hostPlatform.isWindows ''
+      mv $out/bin/*.dll $out/lib
+      ln -s $out/lib/*.dll
+    ''
+    + ''
+      moveToOutput bin "$bin"
+    '';
 
   meta = with stdenv.lib; {
     description = "Extremely fast compression algorithm";
@@ -33,8 +53,8 @@ stdenv.mkDerivation rec {
       multiple GB/s per core, typically reaching RAM speed limits on
       multi-core systems.
     '';
-    homepage = https://lz4.github.io/lz4/;
+    homepage = "https://lz4.github.io/lz4/";
     license = with licenses; [ bsd2 gpl2Plus ];
-    platforms = platforms.unix;
+    platforms = platforms.all;
   };
 }

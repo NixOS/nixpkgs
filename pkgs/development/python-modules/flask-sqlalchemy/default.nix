@@ -1,16 +1,16 @@
-{ stdenv, buildPythonPackage, fetchPypi, flask, sqlalchemy, pytest }:
+{ stdenv, buildPythonPackage, fetchPypi, flask, mock, sqlalchemy, pytest }:
 
 buildPythonPackage rec {
   pname = "Flask-SQLAlchemy";
-  version = "2.3.2";
+  version = "2.4.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0lvfynbk9y0whpkhqz7kf3hk342sfa3lwqyv25gnb22q5f2vjwar";
+    sha256 = "0b656fbf87c5f24109d859bafa791d29751fabbda2302b606881ae5485b557a5";
   };
 
   propagatedBuildInputs = [ flask sqlalchemy ];
-  checkInputs = [ pytest ];
+  checkInputs = [ mock pytest ];
 
   checkPhase = ''
     pytest
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "SQLAlchemy extension for Flask";
-    homepage = http://flask-sqlalchemy.pocoo.org/;
+    homepage = "http://flask-sqlalchemy.pocoo.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ gerschtli ];
   };

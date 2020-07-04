@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, xmpppy, pythonIRClib, python, pythonPackages } :
+{ stdenv, fetchurl, xmpppy, pythonIRClib, python, pythonPackages, runtimeShell } :
 
 stdenv.mkDerivation rec {
-  name = "pyIRCt-${version}";
+  pname = "pyIRCt";
   version = "0.4";
 
   src = fetchurl {
@@ -15,27 +15,27 @@ stdenv.mkDerivation rec {
     xmpppy pythonIRClib
   ];
 
-  /* doConfigure should be removed if not needed */
   # phaseNames = ["deploy" (a.makeManyWrappers "$out/share/${name}/irc.py" a.pythonWrapperArguments)];
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/${name}
+    mkdir -p $out/bin $out/share/${pname}-${version}
     sed -e 's@/usr/bin/@${python}/bin/@' -i irc.py
     sed -e '/configFiles/aconfigFiles += [os.getenv("HOME")+"/.pyIRCt.xml"]' -i config.py
     sed -e '/configFiles/aconfigFiles += [os.getenv("HOME")+"/.python-irc-transport.xml"]' -i config.py
     sed -e '/configFiles/iimport os' -i config.py
-    cp * $out/share/${name}
+    cp * $out/share/${pname}-${version}
     cat > $out/bin/pyIRCt <<EOF
-      #!${stdenv.shell}
-      cd $out/share/${name}
+      #!${runtimeShell}
+      cd $out/share/${pname}-${version}
       ./irc.py \"$@\"
     EOF
-    chmod a+rx  $out/bin/pyIRCt $out/share/${name}/irc.py
+    chmod a+rx  $out/bin/pyIRCt $out/share/${pname}-${version}/irc.py
     wrapPythonPrograms
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "IRC transport module for XMPP";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = licenses.gpl2;
   };
 }

@@ -150,3 +150,14 @@ index b276a81eac..070e3ebd81 100644
        end
      end
    end
+--- a/lib/gitlab/authorized_keys.rb
++++ b/lib/gitlab/authorized_keys.rb
+@@ -157,7 +157,7 @@
+         raise KeyError, "Invalid ID: #{id.inspect}"
+       end
+ 
+-      "#{File.join(Gitlab.config.gitlab_shell.path, 'bin', 'gitlab-shell')} #{id}"
++      "#{File.join('/run/current-system/sw/bin', 'gitlab-shell')} #{id}"
+     end
+ 
+     def strip(key)

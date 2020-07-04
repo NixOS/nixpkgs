@@ -17,11 +17,11 @@ let
   configVersion = "2.11"; # bump whenever fontconfig breaks compatibility with older configurations
 in
 stdenv.mkDerivation rec {
-  name = "fontconfig-${version}";
+  pname = "fontconfig";
   version = "2.12.6";
 
   src = fetchurl {
-    url = "http://fontconfig.org/release/${name}.tar.bz2";
+    url = "http://fontconfig.org/release/${pname}-${version}.tar.bz2";
     sha256 = "05zh65zni11kgnhg726gjbrd55swspdvhqbcnj5a5xh8gn03036g";
   };
 
@@ -30,12 +30,15 @@ stdenv.mkDerivation rec {
       src = ./config-compat.patch;
       inherit configVersion;
     })
+
+    # https://gitlab.freedesktop.org/fontconfig/fontconfig/merge_requests/67
+    ./fix-joypixels.patch
   ];
 
   outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
 
   propagatedBuildInputs = [ freetype ];
-  nativeBuildInputs = [ pkgconfig gperf ];
+  nativeBuildInputs = [ pkgconfig gperf libxslt ];
   buildInputs = [ expat ];
 
   configureFlags = [
@@ -53,11 +56,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # Don't try to write to /var/cache/fontconfig at install time.
-  installFlags = "fc_cachedir=$(TMPDIR)/dummy RUN_FC_CACHE_TEST=false";
+  installFlags = [ "fc_cachedir=$(TMPDIR)/dummy" "RUN_FC_CACHE_TEST=false" ];
 
   postInstall = ''
     cd "$out/etc/fonts"
-    "${libxslt.bin}/bin/xsltproc" --stringparam fontDirectories "${dejavu_fonts.minimal}" \
+    xsltproc --stringparam fontDirectories "${dejavu_fonts.minimal}" \
       --stringparam fontconfigConfigVersion "${configVersion}" \
       --path $out/share/xml/fontconfig \
       ${./make-fonts-conf.xsl} $out/etc/fonts/fonts.conf \
@@ -71,10 +74,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library for font customization and configuration";
-    homepage = http://fontconfig.org/;
+    homepage = "http://fontconfig.org/";
     license = licenses.bsd2; # custom but very bsd-like
     platforms = platforms.all;
     maintainers = [ maintainers.vcunat ];
   };
 }
-

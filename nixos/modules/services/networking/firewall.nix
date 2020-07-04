@@ -42,21 +42,15 @@ let
 
   kernelHasRPFilter = ((kernel.config.isEnabled or (x: false)) "IP_NF_MATCH_RPFILTER") || (kernel.features.netfilterRPFilter or false);
 
-  helpers =
-    ''
-      # Helper command to manipulate both the IPv4 and IPv6 tables.
-      ip46tables() {
-        iptables -w "$@"
-        ${optionalString config.networking.enableIPv6 ''
-          ip6tables -w "$@"
-        ''}
-      }
-    '';
+  helpers = import ./helpers.nix { inherit config lib; };
 
   writeShScript = name: text: let dir = pkgs.writeScriptBin name ''
     #! ${pkgs.runtimeShell} -e
     ${text}
   ''; in "${dir}/bin/${name}";
+
+  defaultInterface = { default = mapAttrs (name: value: cfg.${name}) commonOptions; };
+  allInterfaces = defaultInterface // cfg.interfaces;
 
   startScript = writeShScript "firewall-start" ''
     ${helpers}
@@ -154,7 +148,7 @@ let
           ip46tables -A nixos-fw -p tcp --dport ${toString port} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
         ''
       ) cfg.allowedTCPPorts
-    ) cfg.interfaces)}
+    ) allInterfaces)}
 
     # Accept connections to the allowed TCP port ranges.
     ${concatStrings (mapAttrsToList (iface: cfg:
@@ -164,7 +158,7 @@ let
           ip46tables -A nixos-fw -p tcp --dport ${range} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
         ''
       ) cfg.allowedTCPPortRanges
-    ) cfg.interfaces)}
+    ) allInterfaces)}
 
     # Accept packets on the allowed UDP ports.
     ${concatStrings (mapAttrsToList (iface: cfg:
@@ -173,7 +167,7 @@ let
           ip46tables -A nixos-fw -p udp --dport ${toString port} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
         ''
       ) cfg.allowedUDPPorts
-    ) cfg.interfaces)}
+    ) allInterfaces)}
 
     # Accept packets on the allowed UDP port ranges.
     ${concatStrings (mapAttrsToList (iface: cfg:
@@ -183,7 +177,7 @@ let
           ip46tables -A nixos-fw -p udp --dport ${range} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
         ''
       ) cfg.allowedUDPPortRanges
-    ) cfg.interfaces)}
+    ) allInterfaces)}
 
     # Accept IPv4 multicast.  Not a big security risk since
     # probably nobody is listening anyway.
@@ -258,32 +252,37 @@ let
     fi
   '';
 
+  canonicalizePortList =
+    ports: lib.unique (builtins.sort builtins.lessThan ports);
+
   commonOptions = {
     allowedTCPPorts = mkOption {
-      type = types.listOf types.int;
+      type = types.listOf types.port;
       default = [ ];
+      apply = canonicalizePortList;
       example = [ 22 80 ];
       description =
-        '' 
+        ''
           List of TCP ports on which incoming connections are
           accepted.
         '';
     };
 
     allowedTCPPortRanges = mkOption {
-      type = types.listOf (types.attrsOf types.int);
+      type = types.listOf (types.attrsOf types.port);
       default = [ ];
       example = [ { from = 8999; to = 9003; } ];
       description =
-        '' 
+        ''
           A range of TCP ports on which incoming connections are
           accepted.
         '';
     };
 
     allowedUDPPorts = mkOption {
-      type = types.listOf types.int;
+      type = types.listOf types.port;
       default = [ ];
+      apply = canonicalizePortList;
       example = [ 53 ];
       description =
         ''
@@ -292,7 +291,7 @@ let
     };
 
     allowedUDPPortRanges = mkOption {
-      type = types.listOf (types.attrsOf types.int);
+      type = types.listOf (types.attrsOf types.port);
       default = [ ];
       example = [ { from = 60000; to = 61000; } ];
       description =
@@ -320,6 +319,17 @@ in
             firewall that blocks connection attempts to unauthorised TCP
             or UDP ports on this machine.  It does not affect packet
             forwarding.
+          '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.iptables;
+        defaultText = "pkgs.iptables";
+        example = literalExample "pkgs.iptables-nftables-compat";
+        description =
+          ''
+            The iptables package to use for running the firewall service."
           '';
       };
 
@@ -508,15 +518,11 @@ in
       };
 
       interfaces = mkOption {
-        default = {
-          default = mapAttrs (name: value: cfg."${name}") commonOptions;
-        };
+        default = { };
         type = with types; attrsOf (submodule [ { options = commonOptions; } ]);
         description =
           ''
-            Interface-specific open ports. Setting this value will override
-            all values of the <literal>networking.firewall.allowed*</literal>
-            options.
+            Interface-specific open ports.
           '';
       };
     } // commonOptions;
@@ -532,7 +538,7 @@ in
 
     networking.firewall.trustedInterfaces = [ "lo" ];
 
-    environment.systemPackages = [ pkgs.iptables ] ++ cfg.extraPackages;
+    environment.systemPackages = [ cfg.package ] ++ cfg.extraPackages;
 
     boot.kernelModules = (optional cfg.autoLoadConntrackHelpers "nf_conntrack")
       ++ map (x: "nf_conntrack_${x}") cfg.connectionTrackingModules;
@@ -540,9 +546,13 @@ in
       options nf_conntrack nf_conntrack_helper=1
     '';
 
-    assertions = [ { assertion = (cfg.checkReversePath != false) || kernelHasRPFilter;
-                     message = "This kernel does not support rpfilter"; }
-                 ];
+    assertions = [
+      # This is approximately "checkReversePath -> kernelHasRPFilter",
+      # but the checkReversePath option can include non-boolean
+      # values.
+      { assertion = cfg.checkReversePath == false || kernelHasRPFilter;
+        message = "This kernel does not support rpfilter"; }
+    ];
 
     systemd.services.firewall = {
       description = "Firewall";
@@ -551,7 +561,7 @@ in
       before = [ "network-pre.target" ];
       after = [ "systemd-modules-load.service" ];
 
-      path = [ pkgs.iptables ] ++ cfg.extraPackages;
+      path = [ cfg.package ] ++ cfg.extraPackages;
 
       # FIXME: this module may also try to load kernel modules, but
       # containers don't have CAP_SYS_MODULE.  So the host system had

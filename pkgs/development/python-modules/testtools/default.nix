@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "testtools";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5827ec6cf8233e0f29f51025addd713ca010061204fdea77484a2934690a0559";
+    sha256 = "64c974a6cca4385d05f4bbfa2deca1c39ce88ede31c3448bee86a7259a9a61c8";
   };
 
   propagatedBuildInputs = [ pbr python_mimeparse extras unittest2 ];
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A set of extensions to the Python standard library's unit testing framework";
-    homepage = https://pypi.python.org/pypi/testtools;
+    homepage = "https://pypi.python.org/pypi/testtools";
     license = lib.licenses.mit;
   };
 }

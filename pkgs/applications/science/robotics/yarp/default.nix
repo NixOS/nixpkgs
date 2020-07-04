@@ -2,7 +2,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "yarp-${version}";
+  pname = "yarp";
   version = "2.3.70.2";
   src = fetchFromGitHub {
     owner = "robotology";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Yet Another Robot Platform";
-    homepage = http://yarp.it;
+    homepage = "http://yarp.it";
     license = stdenv.lib.licenses.lgpl21;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.nico202 ];

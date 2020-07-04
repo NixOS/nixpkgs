@@ -5,7 +5,7 @@ let
   inherit (python2Packages) python numpy;
   # Might want to use `python2.withPackages(ps: [ps.numpy]);` here...
 in stdenv.mkDerivation rec {
-  name = "vigra-${version}";
+  pname = "vigra";
   version = "1.11.1";
 
   src = fetchurl {
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Novel computer vision C++ library with customizable algorithms and data structures";
-    homepage = https://hci.iwr.uni-heidelberg.de/vigra;
+    homepage = "https://hci.iwr.uni-heidelberg.de/vigra";
     license = licenses.mit;
     maintainers = [ maintainers.viric ];
     platforms = platforms.unix;

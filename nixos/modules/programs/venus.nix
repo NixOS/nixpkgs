@@ -75,7 +75,7 @@ in
       };
 
       link = mkOption {
-        default = "http://planet.nixos.org";
+        default = "https://planet.nixos.org";
         type = types.str;
         description = ''
           Link to the main page.

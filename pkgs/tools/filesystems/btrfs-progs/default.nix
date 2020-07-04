@@ -1,21 +1,29 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, attr, acl, zlib, libuuid, e2fsprogs, lzo
-, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt, zstd, python3, python3Packages
+{ stdenv, fetchurl, pkgconfig, attr, acl, zlib, libuuid, e2fsprogs, lzo
+, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt, zstd, python3
 }:
 
 stdenv.mkDerivation rec {
-  name = "btrfs-progs-${version}";
-  version = "4.17.1";
+  pname = "btrfs-progs";
+  version = "5.6.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "0x6d53fbrcmzvhv461575fzsv3373427p4srz646w2wcagqk82xz";
+    sha256 = "1nwnvjdnr9fjj2q2p2vpjabfdhcrwykgj9knjcsqy0c7p1bgbk2h";
   };
 
   nativeBuildInputs = [
-    pkgconfig asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt python3 python3Packages.setuptools
+    pkgconfig asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt
+    python3 python3.pkgs.setuptools
   ];
 
-  buildInputs = [ attr acl zlib libuuid e2fsprogs lzo zstd ];
+  buildInputs = [ attr acl zlib libuuid e2fsprogs lzo zstd python3 ];
+
+  # for python cross-compiling
+  _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
+  # The i686 case is a quick hack; I don't know what's wrong.
+  postConfigure = stdenv.lib.optionalString (!stdenv.isi686) ''
+    export LDSHARED="$LD -shared"
+  '';
 
   # gcc bug with -O1 on ARM with gcc 4.8
   # This should be fine on all platforms so apply universally
@@ -29,9 +37,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Utilities for the btrfs filesystem";
-    homepage = https://btrfs.wiki.kernel.org/;
+    homepage = "https://btrfs.wiki.kernel.org/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ raskin wkennington ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };
 }

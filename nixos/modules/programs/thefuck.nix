@@ -17,7 +17,7 @@ in
 
         alias = mkOption {
           default = "fuck";
-          type = types.string;
+          type = types.str;
 
           description = ''
             `thefuck` needs an alias to be configured.

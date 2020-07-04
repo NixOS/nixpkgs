@@ -1,12 +1,12 @@
 { lib, buildPythonPackage, fetchPypi, requests, pytest }:
 
 buildPythonPackage rec {
-  version = "2.3.3";
+  version = "4.0.0";
   pname = "plaid-python";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0jblc0bvzcns1dmsax6n0cvdg8867hm7snvdxa2l7v305h6gssjw";
+    sha256 = "2bf91e4c1054c920ec8911038f86efdc76067bf6b55a9787bd846129ce01ff4a";
   };
 
   checkInputs = [ pytest ];
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python client library for the Plaid API and Link";
-    homepage = https://github.com/plaid/plaid-python;
+    homepage = "https://github.com/plaid/plaid-python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bhipple ];
   };

@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, pythonPackages, glibcLocales }:
+{ stdenv, fetchFromGitHub, pythonPackages, glibcLocales }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "i3minator-${version}";
+  pname = "i3minator";
   version = "0.0.4";
 
-  src = fetchurl {
-    url = "https://github.com/carlesso/i3minator/archive/${version}.tar.gz";
-    sha256 = "11dn062788kwfs8k2ry4v8zr2gn40r6lsw770s9g2gvhl5n469dw";
+  src = fetchFromGitHub {
+    owner = "carlesso";
+    repo = "i3minator";
+    rev = version;
+    sha256 = "07dic5d2m0zw0psginpl43xn0mpxw7wilj49d02knz69f7c416lm";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -23,7 +25,7 @@ pythonPackages.buildPythonApplication rec {
       manage workspaces defining windows and their layout. The
       project is inspired by tmuxinator and uses i3-py.
     '';
-    homepage = https://github.com/carlesso/i3minator;
+    homepage = "https://github.com/carlesso/i3minator";
     license = stdenv.lib.licenses.wtfpl;
     maintainers = with maintainers; [ domenkozar ];
     platforms = stdenv.lib.platforms.linux;

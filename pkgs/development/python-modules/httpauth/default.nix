@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "WSGI HTTP Digest Authentication middleware";
-    homepage = https://github.com/jonashaag/httpauth;
+    homepage = "https://github.com/jonashaag/httpauth";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ];
   };

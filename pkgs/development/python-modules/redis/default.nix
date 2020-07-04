@@ -1,18 +1,20 @@
-{ fetchPypi, buildPythonPackage }:
+{ lib, fetchPypi, buildPythonPackage }:
+
 buildPythonPackage rec {
   pname = "redis";
-  version = "2.10.6";
+  version = "3.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03vcgklykny0g0wpvqmy8p6azi2s078317wgb2xjv5m2rs9sjb52";
+    sha256 = "0e7e0cfca8660dea8b7d5cd8c4f6c5e29e11f31158c0b0ae91a397f00e5a05a2";
   };
 
   # tests require a running redis
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Python client for Redis key-value store";
     homepage = "https://pypi.python.org/pypi/redis/";
+    license = with licenses; [ mit ];
   };
 }

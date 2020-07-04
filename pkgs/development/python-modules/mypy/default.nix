@@ -1,21 +1,30 @@
-{ stdenv, fetchPypi, buildPythonPackage, lxml, typed-ast, psutil, isPy3k
-,mypy_extensions }:
+{ stdenv, fetchPypi, buildPythonPackage, typed-ast, psutil, isPy3k
+, mypy-extensions
+, typing-extensions
+}:
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "0.641";
+  version = "0.780";
+  disabled = !isPy3k;
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "4ef13b619a289aa025f2273e05e755f8049bb4eaba6d703a425de37d495d178d";
+  };
+
+  propagatedBuildInputs = [ typed-ast psutil mypy-extensions typing-extensions ];
 
   # Tests not included in pip package.
   doCheck = false;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0ma4l7px96zzb8x89dk9mkrrdzdhdqckvfsbld4fj9n25k1iw1wf";
-  };
-
-  disabled = !isPy3k;
-
-  propagatedBuildInputs = [ lxml typed-ast psutil mypy_extensions ];
+  pythonImportsCheck = [
+    "mypy"
+    "mypy.types"
+    "mypy.api"
+    "mypy.fastparse"
+    "mypy.report"
+  ];
 
   meta = with stdenv.lib; {
     description = "Optional static typing for Python";

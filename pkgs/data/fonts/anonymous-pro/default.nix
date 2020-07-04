@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   version = "1.002";
@@ -13,8 +13,8 @@ in fetchzip rec {
   '';
   sha256 = "05rgzag38qc77b31sm5i2vwwrxbrvwzfsqh3slv11skx36pz337f";
 
-  meta = with stdenv.lib; {
-    homepage = https://www.marksimonson.com/fonts/view/anonymous-pro;
+  meta = with lib; {
+    homepage = "https://www.marksimonson.com/fonts/view/anonymous-pro";
     description = "TrueType font set intended for source code";
     longDescription = ''
       Anonymous Pro (2009) is a family of four fixed-width fonts

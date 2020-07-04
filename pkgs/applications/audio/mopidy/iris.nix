@@ -1,32 +1,27 @@
-{ stdenv, pythonPackages, mopidy, mopidy-local-images }:
+{ stdenv, python3Packages, mopidy, mopidy-local-images }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "Mopidy-Iris";
-  version = "3.28.1";
+  version = "3.49.0";
 
-  src = pythonPackages.fetchPypi {
+  src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0yph01z8lw0r5bw3aa14w0l7z1ymxvpmb131gbaw3ib0srssgz64";
+    sha256 = "0zddm7286iwx437gjz47m4g28s8gdcxnm2hmly9w1dzi08aa4fas";
   };
 
   propagatedBuildInputs = [
     mopidy
-    mopidy-local-images
-  ] ++ (with pythonPackages; [
+  ] ++ (with python3Packages; [
     configobj
-    pylast
-    spotipy
-    raven
-    tornado
+    requests
+    tornado_4
   ]);
-
-  postPatch = "sed -i /tornado/d setup.py";
 
   # no tests implemented
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/jaedb/Iris;
+    homepage = "https://github.com/jaedb/Iris";
     description = "A fully-functional Mopidy web client encompassing Spotify and many other backends";
     license = licenses.asl20;
     maintainers = [ maintainers.rvolosatovs ];

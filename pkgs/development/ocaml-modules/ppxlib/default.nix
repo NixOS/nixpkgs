@@ -1,34 +1,40 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, dune
+{ lib, fetchFromGitHub, buildDunePackage, ocaml
+, legacy ? false
 , ocaml-compiler-libs, ocaml-migrate-parsetree, ppx_derivers, stdio
 }:
 
-stdenv.mkDerivation rec {
-  version = "0.3.1";
-  name = "ocaml${ocaml.version}-ppxlib-${version}";
+let param =
+  if legacy then {
+    version = "0.8.1";
+    sha256 = "0vm0jajmg8135scbg0x60ivyy5gzv4abwnl7zls2mrw23ac6kml6";
+  } else {
+    version = "0.12.0";
+    sha256 = "1cg0is23c05k1rc94zcdz452p9zn11dpqxm1pnifwx5iygz3w0a1";
+  }; in
+
+if lib.versionAtLeast ocaml.version "4.10" && legacy
+then throw "ppxlib-${param.version} is not available for OCaml ${ocaml.version}"
+else
+
+buildDunePackage rec {
+  pname = "ppxlib";
+  inherit (param) version;
 
   src = fetchFromGitHub {
     owner = "ocaml-ppx";
-    repo = "ppxlib";
+    repo = pname;
     rev = version;
-    sha256 = "0qpjl84x8abq9zivifb0k8ld7fa1lrhkbajmmccvfv06ja3as1v4";
+    inherit (param) sha256;
   };
-
-  buildInputs = [ ocaml findlib dune ];
 
   propagatedBuildInputs = [
     ocaml-compiler-libs ocaml-migrate-parsetree ppx_derivers stdio
   ];
 
-  buildPhase = "dune build";
-
-  inherit (dune) installPhase;
-
   meta = {
     description = "Comprehensive ppx tool set";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vbgl ];
     inherit (src.meta) homepage;
-    inherit (ocaml.meta) platforms;
   };
-
 }

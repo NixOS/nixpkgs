@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Pythonic argument parser, that will make you smile";
-    homepage = http://docopt.org/;
+    homepage = "http://docopt.org/";
     license = licenses.mit;
   };
 }

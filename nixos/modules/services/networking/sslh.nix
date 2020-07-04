@@ -15,7 +15,11 @@ let
 
     listen:
     (
-      { host: "${cfg.listenAddress}"; port: "${toString cfg.port}"; }
+      ${
+        concatMapStringsSep ",\n"
+        (addr: ''{ host: "${addr}"; port: "${toString cfg.port}"; }'')
+        cfg.listenAddresses
+      }
     );
 
     ${cfg.appendConfig}
@@ -33,6 +37,10 @@ let
   '';
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "sslh" "listenAddress" ] [ "services" "sslh" "listenAddresses" ])
+  ];
+
   options = {
     services.sslh = {
       enable = mkEnableOption "sslh";
@@ -55,10 +63,10 @@ in
         description = "Will the services behind sslh (Apache, sshd and so on) see the external IP and ports as if the external world connected directly to them";
       };
 
-      listenAddress = mkOption {
-        type = types.str;
-        default = "0.0.0.0";
-        description = "Listening address or hostname.";
+      listenAddresses = mkOption {
+        type = types.coercedTo types.str singleton (types.listOf types.str);
+        default = [ "0.0.0.0" "[::]" ];
+        description = "Listening addresses or hostnames.";
       };
 
       port = mkOption {
@@ -77,19 +85,14 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
-      users.users.${user} = {
-        description = "sslh daemon user";
-        isSystemUser = true;
-      };
-
       systemd.services.sslh = {
         description = "Applicative Protocol Multiplexer (e.g. share SSH and HTTPS on the same port)";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
 
         serviceConfig = {
-          User                 = user;
-          Group                = "nogroup";
+          DynamicUser          = true;
+          User                 = "sslh";
           PermissionsStartOnly = true;
           Restart              = "always";
           RestartSec           = "1s";

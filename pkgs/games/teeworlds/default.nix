@@ -1,36 +1,43 @@
-{ fetchurl, stdenv, cmake, pkgconfig, makeWrapper, python, alsaLib
-, libX11, libGLU, SDL, lua5, zlib, freetype, wavpack
+{ fetchFromGitHub, stdenv, cmake, pkgconfig, python3, alsaLib
+, libX11, libGLU, SDL2, lua5_3, zlib, freetype, wavpack, icoutils
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
-  name = "teeworlds-0.6.5";
+  pname = "teeworlds";
+  version = "0.7.5";
 
-  src = fetchurl {
-    url = "https://downloads.teeworlds.com/teeworlds-0.6.5-src.tar.gz";
-    sha256 = "07llxjc47d1gd9jqj3vf08cmw26ha6189mwcix1khwa3frfbilqb";
+  src = fetchFromGitHub {
+    owner = "teeworlds";
+    repo = "teeworlds";
+    rev = version;
+    sha256 = "1l19ksmimg6b8zzjy0skyhh7z11ql7n5gvilkv7ay5x2b9ndbqwz";
+    fetchSubmodules = true;
   };
 
   postPatch = ''
-    # we always want to use system libs instead of these
-    rm -r other/{freetype,sdl}/{include,mac,windows}
-
     # set compiled-in DATA_DIR so resources can be found
     substituteInPlace src/engine/shared/storage.cpp \
       --replace '#define DATA_DIR "data"' \
                 '#define DATA_DIR "${placeholder "out"}/share/teeworlds/data"'
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-
+  nativeBuildInputs = [ cmake pkgconfig icoutils ];
 
   buildInputs = [
-    python alsaLib libX11 libGLU SDL lua5 zlib freetype wavpack
+    python3 alsaLib libX11 libGLU SDL2 lua5_3 zlib freetype wavpack
   ];
 
   postInstall = ''
-    mkdir -p $out/share/doc/teeworlds
-    cp -v *.txt $out/share/doc/teeworlds/
+    # Convert and install desktop icon
+    mkdir -p $out/share/pixmaps
+    icotool --extract --index 1 --output $out/share/pixmaps/teeworlds.png $src/other/icons/teeworlds.ico
+
+    # Install menu item
+    install -D $src/other/teeworlds.desktop $out/share/applications/teeworlds.desktop
   '';
+
+  passthru.tests.teeworlds = nixosTests.teeworlds;
 
   meta = {
     description = "Retro multiplayer shooter game";
@@ -42,9 +49,9 @@ stdenv.mkDerivation rec {
       Flag.  You can even design your own maps!
     '';
 
-    homepage = https://teeworlds.com/;
+    homepage = "https://teeworlds.com/";
     license = "BSD-style, see `license.txt'";
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

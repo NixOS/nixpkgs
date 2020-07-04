@@ -1,19 +1,23 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig
+{ stdenv, mkDerivation, lib, fetchzip, cmake, pkgconfig
 , alsaLib, freetype, libjack2, lame, libogg, libpulseaudio, libsndfile, libvorbis
-, portaudio, portmidi, qtbase, qtdeclarative, qtscript, qtsvg, qttools
-, qtwebkit, qtxmlpatterns
+, portaudio, portmidi, qtbase, qtdeclarative, qtgraphicaleffects
+, qtquickcontrols2, qtscript, qtsvg, qttools
+, qtwebengine, qtxmlpatterns
 }:
 
-stdenv.mkDerivation rec {
-  name = "musescore-${version}";
-  version = "2.3.2";
+mkDerivation rec {
+  pname = "musescore";
+  version = "3.4.2";
 
-  src = fetchFromGitHub {
-    owner  = "musescore";
-    repo   = "MuseScore";
-    rev    = "v${version}";
-    sha256 = "0ncv0xfmq87plqa43cm0fpidlwzz1nq5s7h7139llrbc36yp3pr1";
+  src = fetchzip {
+    url = "https://github.com/musescore/MuseScore/releases/download/v${version}/MuseScore-${version}.zip";
+    sha256 = "1laskvp40dncs12brkgvk7wl0qrvzy52rn7nf3b67ps1vmd130gp";
+    stripRoot = false;
   };
+
+  patches = [
+    ./remove_qtwebengine_install_hack.patch
+  ];
 
   cmakeFlags = [
   ] ++ lib.optional (lib.versionAtLeast freetype.version "2.5.2") "-DUSE_SYSTEM_FREETYPE=ON";
@@ -23,15 +27,16 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsaLib libjack2 freetype lame libogg libpulseaudio libsndfile libvorbis
     portaudio portmidi # tesseract
-    qtbase qtdeclarative qtscript qtsvg qttools qtwebkit qtxmlpatterns
+    qtbase qtdeclarative qtgraphicaleffects qtquickcontrols2
+    qtscript qtsvg qttools qtwebengine qtxmlpatterns
   ];
 
   meta = with stdenv.lib; {
     description = "Music notation and composition software";
-    homepage = https://musescore.org/;
+    homepage = "https://musescore.org/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ vandenoever ];
+    maintainers = with maintainers; [ vandenoever turion ];
     platforms = platforms.linux;
-    repositories.git = https://github.com/musescore/MuseScore;
+    repositories.git = "https://github.com/musescore/MuseScore";
   };
 }

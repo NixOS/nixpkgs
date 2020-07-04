@@ -1,7 +1,7 @@
 { stdenv, fetchurl, glib, nss, nspr, gconf, fontconfig, freetype
 , pango , cairo, libX11 , libXi, libXcursor, libXext, libXfixes
 , libXrender, libXcomposite , alsaLib, libXdamage, libXtst, libXrandr
-, expat, libcap, systemd , dbus, gtk2 , gdk_pixbuf, libnotify
+, expat, libcap, systemd , dbus, gtk2 , gdk-pixbuf, libnotify
 }:
 
 let
@@ -14,7 +14,7 @@ let
     else throw "Encryptr for ${stdenv.hostPlatform.system} not supported!";
 
 in stdenv.mkDerivation rec {
-  name = "encryptr-${version}";
+  pname = "encryptr";
   version = "2.0.0";
 
   src = fetchurl {
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
   rpath = stdenv.lib.makeLibraryPath [
     glib nss nspr gconf fontconfig freetype pango cairo libX11 libXi
     libXcursor libXext libXfixes libXrender libXcomposite alsaLib
-    libXdamage libXtst libXrandr expat libcap dbus gtk2 gdk_pixbuf
+    libXdamage libXtst libXrandr expat libcap dbus gtk2 gdk-pixbuf
     libnotify stdenv.cc.cc
   ];
 
@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = with stdenv.lib; {
-    homepage = https://spideroak.com/solutions/encryptr;
+    homepage = "https://spideroak.com/solutions/encryptr";
     description = "Free, private and secure password management tool and e-wallet";
     license = licenses.unfree;
     maintainers = with maintainers; [ guillaumekoenig ];

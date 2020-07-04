@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, ... }: stdenv.mkDerivation rec {
-  name = "tt-rss-plugin-tumblr-gdpr-${version}";
-  version = "1.2";
+  pname = "tt-rss-plugin-tumblr-gdpr";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "GregThib";
     repo = "ttrss-tumblr-gdpr";
     rev = "v${version}";
-    sha256 = "1qqnzysg1d0b169kr9fbgi50yjnvw7lrvgrl2zjx6px6z61jhv4j";
+    sha256 = "09cbghi5b6ww4i5677i39qc9rhpq70xmygp0d7x30239r3i23rpq";
   };
 
   installPhase = ''
@@ -23,7 +23,7 @@
       The name of the plugin in TT-RSS is 'tumblr_gdpr'.
     '';
     license = licenses.gpl3;
-    homepage = https://github.com/GregThib/ttrss-tumblr-gdpr;
+    homepage = "https://github.com/GregThib/ttrss-tumblr-gdpr";
     maintainers = with maintainers; [ das_j ];
     platforms = platforms.all;
   };

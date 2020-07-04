@@ -1,7 +1,8 @@
 { stdenv, fetchurl, pkgconfig, nix, git }: let
   version = "4.1.6";
 in stdenv.mkDerivation {
-  name = "nix-exec-${version}";
+  pname = "nix-exec";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/shlevy/nix-exec/releases/download/v${version}/nix-exec-${version}.tar.xz";
@@ -15,7 +16,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "Run programs defined in nix expressions";
-    homepage = https://github.com/shlevy/nix-exec;
+    homepage = "https://github.com/shlevy/nix-exec";
     license = stdenv.lib.licenses.mit;
     platforms = nix.meta.platforms;
     broken = true;

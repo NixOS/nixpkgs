@@ -1,4 +1,4 @@
-{ stdenv, requireFile, p7zip, jre, libusb1, platformTools, gtk2, glib, libXtst }:
+{ stdenv, requireFile, p7zip, jre, libusb1, platform-tools, gtk2, glib, libXtst }:
 
 # TODO:
 #
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
-    ln -s ${platformTools}/platform-tools/adb x10flasher_lib/adb.linux
-    ln -s ${platformTools}/platform-tools/fastboot x10flasher_lib/fastboot.linux
+    ln -s ${platform-tools}/libexec/android-sdk/platform-tools/adb x10flasher_lib/adb.linux
+    ln -s ${platform-tools}/libexec/android-sdk/platform-tools/fastboot x10flasher_lib/fastboot.linux
     ln -s ${libusb1.out}/lib/libusb-1.0.so.0 ./x10flasher_lib/linux/lib32/libusbx-1.0.so
 
     chmod +x x10flasher_lib/unyaffs.linux.x86 x10flasher_lib/bin2elf x10flasher_lib/bin2sin
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.flashtool.net/;
+    homepage = "http://www.flashtool.net/";
     description = "S1 flashing software for Sony phones from X10 to Xperia Z Ultra";
     license = stdenv.lib.licenses.unfreeRedistributableFirmware;
     platforms = [ "i686-linux" ];

@@ -1,19 +1,20 @@
 # TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
 # but I have gvim with python support now :) - Marc
-{ source ? "default", callPackage, fetchurl, stdenv, ncurses, pkgconfig, gettext
-, writeText, config, glib, gtk2, gtk3, lua, python, perl, tcl, ruby
+{ source ? "default", callPackage, stdenv, ncurses, pkgconfig, gettext
+, writeText, config, glib, gtk2-x11, gtk3-x11, lua, python, perl, tcl, ruby
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
 , libICE
 , vimPlugins
 , makeWrapper
 , wrapGAppsHook
+, runtimeShell
 
 # apple frameworks
-, CoreServices, CoreData, Cocoa, Foundation, libobjc, cf-private
+, CoreServices, CoreData, Cocoa, Foundation, libobjc
 
 , features          ? "huge" # One of tiny, small, normal, big or huge
 , wrapPythonDrv     ? false
-, guiSupport        ? config.vim.gui or "gtk3"
+, guiSupport        ? config.vim.gui or (if stdenv.isDarwin then "gtk2" else "gtk3")
 , luaSupport        ? config.vim.lua or true
 , perlSupport       ? config.vim.perl or false      # Perl interpreter
 , pythonSupport     ? config.vim.python or true     # Python interpreter
@@ -67,12 +68,12 @@ let
 
 in stdenv.mkDerivation rec {
 
-  name = "vim_configurable-${version}";
+  pname = "vim_configurable";
 
   inherit (common) version postPatch hardeningDisable enableParallelBuilding meta;
 
   src = builtins.getAttr source {
-    "default" = common.src; # latest release
+    default = common.src; # latest release
   };
 
   patches = [ ./cflags-prune.diff ] ++ stdenv.lib.optional ftNixSupport ./ft-nix-support.patch;
@@ -103,6 +104,8 @@ in stdenv.mkDerivation rec {
   ++ stdenv.lib.optionals luaSupport [
     "--with-lua-prefix=${lua}"
     "--enable-luainterp"
+  ] ++ stdenv.lib.optional lua.pkgs.isLuaJIT [
+    "--with-luajit"
   ]
   ++ stdenv.lib.optionals pythonSupport [
     "--enable-python${if isPython3 then "3" else ""}interp=yes"
@@ -129,9 +132,9 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses libX11 libXext libSM libXpm libXt libXaw libXau
     libXmu glib libICE ]
-    ++ stdenv.lib.optional (guiSupport == "gtk2") gtk2
-    ++ stdenv.lib.optional (guiSupport == "gtk3") gtk3
-    ++ stdenv.lib.optionals darwinSupport [ CoreServices CoreData Cocoa Foundation libobjc cf-private ]
+    ++ stdenv.lib.optional (guiSupport == "gtk2") gtk2-x11
+    ++ stdenv.lib.optional (guiSupport == "gtk3") gtk3-x11
+    ++ stdenv.lib.optionals darwinSupport [ CoreServices CoreData Cocoa Foundation libobjc ]
     ++ stdenv.lib.optional luaSupport lua
     ++ stdenv.lib.optional pythonSupport python
     ++ stdenv.lib.optional tclSupport tcl
@@ -144,7 +147,12 @@ in stdenv.mkDerivation rec {
       cp ${vimPlugins.vim-nix.src}/syntax/nix.vim runtime/syntax/nix.vim
     '';
 
+  preInstall = ''
+    mkdir -p $out/share/applications $out/share/icons/{hicolor,locolor}/{16x16,32x32,48x48}/apps
+  '';
+
   postInstall = ''
+    ln -s $out/bin/vim $out/bin/vi
   '' + stdenv.lib.optionalString stdenv.isLinux ''
     patchelf --set-rpath \
       "$(patchelf --print-rpath $out/bin/vim):${stdenv.lib.makeLibraryPath buildInputs}" \
@@ -157,28 +165,24 @@ in stdenv.mkDerivation rec {
 
     rewrap () {
       rm -f "$out/bin/$1"
-      echo -e '#!${stdenv.shell}\n"'"$out/bin/vim"'" '"$2"' "$@"' > "$out/bin/$1"
+      echo -e '#!${runtimeShell}\n"'"$out/bin/vim"'" '"$2"' "$@"' > "$out/bin/$1"
       chmod a+x "$out/bin/$1"
     }
 
-    rewrap ex -e	
-    rewrap view -R	
-    rewrap gvim -g	
-    rewrap gex -eg	
-    rewrap gview -Rg	
-    rewrap rvim -Z	
-    rewrap rview -RZ	
-    rewrap rgvim -gZ	
+    rewrap ex -e
+    rewrap view -R
+    rewrap gvim -g
+    rewrap gex -eg
+    rewrap gview -Rg
+    rewrap rvim -Z
+    rewrap rview -RZ
+    rewrap rgvim -gZ
     rewrap rgview -RgZ
     rewrap evim    -y
     rewrap eview   -yR
-    rewrap vimdiff -d	
+    rewrap vimdiff -d
     rewrap gvimdiff -gd
   '';
 
-  preInstall = ''
-    mkdir -p $out/share/applications $out/share/icons/{hicolor,locolor}/{16x16,32x32,48x48}/apps
-  '';
-
-  dontStrip = 1;
+  dontStrip = true;
 }

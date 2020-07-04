@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "wmCalClock-1.25";
   src = fetchurl {
-     url = http://www.cs.mun.ca/~gstarkes/wmaker/dockapps/files/wmCalClock-1.25.tar.gz;
+     url = "http://www.cs.mun.ca/~gstarkes/wmaker/dockapps/files/wmCalClock-1.25.tar.gz";
      sha256 = "4b42b55bb7c1d7c58b5ee1f0058c683d3e4f3e3380d3a69c54a50b983c7c1b3f";
   };
 

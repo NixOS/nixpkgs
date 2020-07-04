@@ -1,7 +1,7 @@
 { stdenv, which, coreutils, fetchzip, qt4 }:
 
 stdenv.mkDerivation rec {
-  name = "qxt-${version}";
+  pname = "qxt";
   version = "0.6.2";
   
   src = fetchzip {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   prefixKey = "-prefix ";
 
   meta = {
-    homepage = http://libqxt.org;
+    homepage = "http://libqxt.org";
     description = "An extension library for Qt";
     longDescription = ''
       An extension library for Qt providing a suite of cross-platform utility

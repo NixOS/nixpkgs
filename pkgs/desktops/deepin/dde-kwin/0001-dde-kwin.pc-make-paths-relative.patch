@@ -1,0 +1,56 @@
+From c4edb65554f90a5abfc2ecbf63587b8c6ef2653d Mon Sep 17 00:00:00 2001
+From: worldofpeace <worldofpeace@protonmail.ch>
+Date: Tue, 22 Oct 2019 17:20:24 -0400
+Subject: [PATCH] dde-kwin.pc: make paths relative
+
+Values like libdir should be relative to the literal ${prefix}.
+We also use @ONLY so we don't substitute values like ${prefix}
+with CMake resulting in an unintentional replacement.
+---
+ plugins/kwin-xcb/lib/CMakeLists.txt |  2 +-
+ plugins/kwin-xcb/lib/dde-kwin.pc.in | 18 +++++++++---------
+ 2 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/plugins/kwin-xcb/lib/CMakeLists.txt b/plugins/kwin-xcb/lib/CMakeLists.txt
+index 0189b74..62e5553 100644
+--- a/plugins/kwin-xcb/lib/CMakeLists.txt
++++ b/plugins/kwin-xcb/lib/CMakeLists.txt
+@@ -61,7 +61,7 @@ install_files(
+     kwinutils.h
+ )
+ 
+-configure_file(${PROJECT_NAME}.pc.in ${PROJECT_NAME}.pc)
++configure_file(${PROJECT_NAME}.pc.in ${PROJECT_NAME}.pc @ONLY)
+ if (CMAKE_INSTALL_LIBDIR)
+     install_files("/${CMAKE_INSTALL_LIBDIR}/pkgconfig" FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc)
+ elseif (CMAKE_LIBRARY_OUTPUT_DIRECTORY)
+diff --git a/plugins/kwin-xcb/lib/dde-kwin.pc.in b/plugins/kwin-xcb/lib/dde-kwin.pc.in
+index 9b1d813..1179761 100644
+--- a/plugins/kwin-xcb/lib/dde-kwin.pc.in
++++ b/plugins/kwin-xcb/lib/dde-kwin.pc.in
+@@ -1,13 +1,13 @@
+-prefix=${CMAKE_INSTALL_PREFIX}
+-exec_prefix=${CMAKE_INSTALL_PREFIX}
+-libdir=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}
+-includedir=${INCLUDE_OUTPUT_PATH}
++prefix=@CMAKE_INSTALL_PREFIX@
++exec_prefix=${prefix}
++libdir=${prefix}/lib
++includedir=@INCLUDE_OUTPUT_PATH@
+ 
+ 
+-Name: ${PROJECT_NAME}
++Name: @PROJECT_NAME@
+ Description: DDE KWin plugin library
+-Version: ${PROJECT_VERSION}
+-Libs: -l${PROJECT_NAME}
+-Libs.private: -L/usr/X11R6/lib64 -lQt5X11Extras -lKF5WindowSystem -lQt5Widgets -lQt5Gui -lKF5ConfigCore -lKF5CoreAddons -lQt5Core -lGL -lpthread   
+-Cflags: -I${INCLUDE_OUTPUT_PATH}
++Version: @PROJECT_VERSION@
++Libs: -l$@PROJECT_NAME@
++Libs.private: -L/usr/X11R6/lib64 -lQt5X11Extras -lKF5WindowSystem -lQt5Widgets -lQt5Gui -lKF5ConfigCore -lKF5CoreAddons -lQt5Core -lGL -lpthread
++Cflags: -I@INCLUDE_OUTPUT_PATH@
+ 
+-- 
+2.23.0
+

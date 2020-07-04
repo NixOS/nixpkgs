@@ -1,25 +1,24 @@
 { lib, buildGoPackage, fetchFromGitHub, go-bindata, pkgconfig, makeWrapper
-, glib, gtk3, libappindicator-gtk3, gpgme, ostree, libselinux, btrfs-progs
+, glib, gtk3, libappindicator-gtk3, gpgme, openshift, ostree, libselinux, btrfs-progs
 , lvm2, docker-machine-kvm
 }:
 
 let
-  version = "1.25.0";
+  version = "1.34.2";
 
   # Update these on version bumps according to Makefile
-  b2dIsoVersion = "v1.3.0";
-  centOsIsoVersion = "v1.12.0";
+  centOsIsoVersion = "v1.15.0";
   openshiftVersion = "v3.11.0";
 
 in buildGoPackage rec {
-  name = "minishift-${version}";
+  pname = "minishift";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "minishift";
     repo = "minishift";
     rev = "v${version}";
-    sha256 = "12a1irj92lplzkr88g049blpjsdsfwfihs2xix971cq7v0w38fkf";
+    sha256 = "1xzjzmjs2ijg7zzw53v02lgrg1j82jd7ljcn6lprg01hhvfrwgg7";
   };
 
   nativeBuildInputs = [ pkgconfig go-bindata makeWrapper ];
@@ -29,14 +28,15 @@ in buildGoPackage rec {
   subPackages = [ "cmd/minishift" ];
 
   postPatch = ''
-    substituteInPlace vendor/github.com/containers/image/storage/storage_image.go \
-      --replace 'nil, diff' 'diff'
+    # minishift downloads openshift if not found therefore set the cache to /nix/store/...
+    substituteInPlace pkg/minishift/cache/oc_caching.go \
+      --replace 'filepath.Join(oc.MinishiftCacheDir, OC_CACHE_DIR, oc.OpenShiftVersion, runtime.GOOS)' '"${openshift}/bin"' \
+      --replace '"runtime"' ""
   '';
 
   buildFlagsArray = ''
     -ldflags=
       -X ${goPackagePath}/pkg/version.minishiftVersion=${version}
-      -X ${goPackagePath}/pkg/version.b2dIsoVersion=${b2dIsoVersion}
       -X ${goPackagePath}/pkg/version.centOsIsoVersion=${centOsIsoVersion}
       -X ${goPackagePath}/pkg/version.openshiftVersion=${openshiftVersion}
   '';
@@ -48,8 +48,8 @@ in buildGoPackage rec {
   '';
 
   postInstall = ''
-    wrapProgram "$bin/bin/minishift" \
-      --prefix PATH ':' '${lib.makeBinPath [ docker-machine-kvm ]}'
+    wrapProgram "$out/bin/minishift" \
+      --prefix PATH ':' '${lib.makeBinPath [ docker-machine-kvm openshift ]}'
   '';
 
   meta = with lib; {
@@ -59,8 +59,8 @@ in buildGoPackage rec {
       a single-node OpenShift cluster inside a VM. You can try out OpenShift
       or develop with it, day-to-day, on your local host.
     '';
-    homepage = https://github.com/minishift/minishift;
-    maintainers = with maintainers; [ fpletz ];
+    homepage = "https://github.com/minishift/minishift";
+    maintainers = with maintainers; [ fpletz vdemeester ];
     platforms = platforms.linux;
     license = licenses.asl20;
   };

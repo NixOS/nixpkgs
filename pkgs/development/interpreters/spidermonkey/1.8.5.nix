@@ -1,7 +1,7 @@
 { stdenv, lib, autoconf213, fetchurl, fetchpatch, pkgconfig, nspr, perl, python2, zip }:
 
-stdenv.mkDerivation rec {
-  name = "spidermonkey-${version}";
+stdenv.mkDerivation {
+  pname = "spidermonkey";
   version = "1.8.5";
 
   src = fetchurl {
@@ -35,7 +35,13 @@ stdenv.mkDerivation rec {
     ./1.8.5-arm-flags.patch
   ];
 
-  patchFlags = "-p3";
+  patchFlags = [ "-p3" ];
+
+  # fixes build on gcc8
+  postPatch = ''
+    substituteInPlace ./methodjit/MethodJIT.cpp \
+      --replace 'asm volatile' 'asm'
+  '';
 
   # On the Sheevaplug, ARM, its nanojit thing segfaults in japi-tests in
   # "make check". Disabling tracejit makes it work, but then it needs the
@@ -44,7 +50,7 @@ stdenv.mkDerivation rec {
   # so the failure of that test does not matter much.
   configureFlags = [ "--enable-threadsafe" "--with-system-nspr" ] ++
     stdenv.lib.optionals (stdenv.hostPlatform.system == "armv5tel-linux") [
-        "--with-cpu-arch=armv5t" 
+        "--with-cpu-arch=armv5t"
         "--disable-tracejit" ];
 
   # hack around a make problem, see https://github.com/NixOS/nixpkgs/issues/1279#issuecomment-29547393
@@ -59,14 +65,11 @@ stdenv.mkDerivation rec {
 
   preCheck = ''
     rm jit-test/tests/sunspider/check-date-format-tofte.js    # https://bugzil.la/600522
-
-    paxmark mr shell/js
-    paxmark mr jsapi-tests/jsapi-tests
   '';
 
   meta = with stdenv.lib; {
     description = "Mozilla's JavaScript engine written in C/C++";
-    homepage = https://developer.mozilla.org/en/SpiderMonkey;
+    homepage = "https://developer.mozilla.org/en/SpiderMonkey";
     # TODO: MPL/GPL/LGPL tri-license.
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

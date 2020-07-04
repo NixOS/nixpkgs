@@ -1,31 +1,38 @@
 { stdenv, fetchgit
-, pkgconfig
-, qmake, qtbase, qtquickcontrols2, qtmultimedia
+, pkgconfig, wrapQtAppsHook
+, cmake
+, qtbase, qttools, qtquickcontrols2, qtmultimedia, qtkeychain
 , libpulseaudio
 # Not mentioned but seems needed
 , qtgraphicaleffects
-# Unsure but needed by similar
-, qtdeclarative, qtsvg
+, qtdeclarative
+, qtmacextras
+, olm, libsecret, cmark
 }:
 
-stdenv.mkDerivation rec {
-  name = "spectral-${version}";
-  version = "2018-09-24";
+let qtkeychain-qt5 = qtkeychain.override {
+  inherit qtbase qttools;
+  withQt5 = true;
+};
+in stdenv.mkDerivation rec {
+  pname = "spectral";
+  version = "817";
 
   src = fetchgit {
-    url = "https://gitlab.com/b0/spectral.git";
-    rev = "c9d1d6887722860a52b597a0f74d0ce39c8622e1";
-    sha256 = "1ym8jlqls4lcq5rd81vxw1dni79fc6ph00ip8nsydl6i16fngl4c";
+    url = "https://gitlab.com/spectral-im/spectral.git";
+    rev = version;
+    sha256 = "0lg0bkz621cmqb67kz1zmn4xwbspcqalz68byll5iszqz9y4gnp1";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig qmake ];
-  buildInputs = [ qtbase qtquickcontrols2 qtmultimedia qtgraphicaleffects qtdeclarative qtsvg ]
-    ++ stdenv.lib.optional stdenv.hostPlatform.isLinux libpulseaudio;
+  nativeBuildInputs = [ pkgconfig cmake wrapQtAppsHook ];
+  buildInputs = [ qtbase qtkeychain-qt5 qtquickcontrols2 qtmultimedia qtgraphicaleffects qtdeclarative olm libsecret cmark ]
+    ++ stdenv.lib.optional stdenv.hostPlatform.isLinux libpulseaudio
+    ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin qtmacextras;
 
   meta = with stdenv.lib; {
-    description = "A glossy client for Matrix, written in QtQuick Controls 2 and C++";
-    homepage = https://gitlab.com/b0/spectral;
+    description = "A glossy cross-platform Matrix client.";
+    homepage = "https://spectral.im";
     license = licenses.gpl3;
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ dtzWill ];

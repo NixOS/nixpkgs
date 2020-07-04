@@ -16,6 +16,17 @@
     fsType = "ext4";
   };
 </programlisting>
+  This will create an entry in <filename>/etc/fstab</filename>, which will
+  generate a corresponding
+  <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.mount.html">systemd.mount</link>
+  unit via
+  <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd-fstab-generator.html">systemd-fstab-generator</link>.
+  The filesystem will be mounted automatically unless
+  <literal>"noauto"</literal> is present in <link
+  linkend="opt-fileSystems._name__.options">options</link>.
+  <literal>"noauto"</literal> filesystems can be mounted explicitly using
+  <command>systemctl</command> e.g. <command>systemctl start
+  data.mount</command>.
   Mount points are created automatically if they don’t already exist. For
   <option><link linkend="opt-fileSystems._name__.device">device</link></option>,
   it’s best to use the topology-independent device aliases in

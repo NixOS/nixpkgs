@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, cimg, imagemagick }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "pHash";
   version = "0.9.4";
 
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [maintainers.imalsogreg];
     platforms = platforms.all;
-    homepage = http://www.phash.org;
+    homepage = "http://www.phash.org";
     downloadPage = "https://github.com/clearscene/pHash";
     updateWalker = true;
   };

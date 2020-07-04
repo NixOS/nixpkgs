@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ pure fcgi ];
-  makeFlags = "libdir=$(out)/lib prefix=$(out)/";
+  makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
     description = "Lets you write FastCGI scripts with Pure, to be run by web servers like Apache";
-    homepage = http://puredocs.bitbucket.org/pure-fastcgi.html;
+    homepage = "http://puredocs.bitbucket.org/pure-fastcgi.html";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ asppsa ];

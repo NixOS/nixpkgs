@@ -1,17 +1,26 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, gettext, itstool, libcanberra-gtk3, librsvg, libxml2 }:
+, gettext, meson, gsound, librsvg, itstool, vala
+, python3, ninja, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
-  name = "four-in-a-row-${version}";
-  version = "3.28.0";
+  pname = "four-in-a-row";
+  version = "3.36.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/four-in-a-row/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1iszaay2r92swb0q67lmip6r1w3hw2dwmlgnz9v2h6blgdyncs4k";
+    url = "mirror://gnome/sources/four-in-a-row/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1qc6s0v8gnzw3wfbfaaindb031cc8akdjdn2sjqqfxhbpx6mhzmr";
   };
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook gettext itstool libxml2 ];
-  buildInputs = [ gtk3 libcanberra-gtk3 librsvg gnome3.defaultIconTheme ];
+  nativeBuildInputs = [
+    pkgconfig wrapGAppsHook gettext meson itstool vala
+    ninja python3 desktop-file-utils
+  ];
+  buildInputs = [ gtk3 gsound librsvg gnome3.adwaita-icon-theme ];
+
+  postPatch = ''
+    chmod +x build-aux/meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -21,9 +30,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Four-in-a-row;
+    homepage = "https://wiki.gnome.org/Apps/Four-in-a-row";
     description = "Make lines of the same color to win";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

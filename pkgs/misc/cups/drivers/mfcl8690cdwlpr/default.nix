@@ -2,12 +2,12 @@
 makeWrapper, perl, pkgs, stdenv, which }:
 
 stdenv.mkDerivation rec {
-  name = "mfcl8690cdwlpr-${version}";
-  version = "1.2.0-0";
+  pname = "mfcl8690cdwlpr";
+  version = "1.3.0-0";
 
   src = fetchurl {
-    url = "http://download.brother.com/welcome/dlf103241/${name}.i386.deb";
-    sha256 = "02k43nh51pn4lf7gaid9yhil0a3ikpy4krw7dhgphmm5pap907sx";
+    url = "http://download.brother.com/welcome/dlf103241/${pname}-${version}.i386.deb";
+    sha256 = "0x8zd4b1psmw1znp2ibncs37xm5mljcy9yza2rx8jm8lp0a3l85v";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Brother MFC-L8690CDW LPR printer driver";
-    homepage = http://www.brother.com/;
+    homepage = "http://www.brother.com/";
     license = stdenv.lib.licenses.unfree;
     maintainers = [ stdenv.lib.maintainers.fuzzy-id ];
     platforms = [ "i686-linux" ];

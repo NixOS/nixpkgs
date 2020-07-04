@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "allpairspy";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e8b35751f91692bf0318091b3f44cdf9bbbe3f37a2ff4786eaffc09dc7114fb3";
+    sha256 = "9358484c91abe74ba18daf9d6d6904c5be7cc8818397d05248c9d336023c28b1";
   };
 
   propagatedBuildInputs = [ six ];
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pairwise test combinations generator";
-    homepage = https://github.com/thombashi/allpairspy;
+    homepage = "https://github.com/thombashi/allpairspy";
     license = licenses.mit;
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name    = "daemonize-${version}";
+  pname = "daemonize";
   version = "1.7.8";
 
   src = fetchurl {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Runs a command as a Unix daemon";
-    homepage    = http://software.clapper.org/daemonize/;
+    homepage    = "http://software.clapper.org/daemonize/";
     license     = licenses.bsd3;
     platforms = with platforms; linux ++ freebsd ++ darwin;
   };

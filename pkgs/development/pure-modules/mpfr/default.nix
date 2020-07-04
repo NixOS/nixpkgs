@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ pure ];
-  makeFlags = "libdir=$(out)/lib prefix=$(out)/";
+  makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
   setupHook = ../generic-setup-hook.sh;
 
   meta = {
     description = "This module makes the MPFR multiprecision floats available in Pure";
-    homepage = http://puredocs.bitbucket.org/pure-mpfr.html;
+    homepage = "http://puredocs.bitbucket.org/pure-mpfr.html";
     license = stdenv.lib.licenses.lgpl3Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ asppsa ];

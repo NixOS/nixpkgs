@@ -1,29 +1,59 @@
-{ stdenv, buildPythonPackage, fetchPypi, numpy, scipy, scikitimage, opencv3, six }:
+{ buildPythonPackage
+, fetchFromGitHub
+, imageio
+, imagecorruptions
+, numpy
+, opencv3
+, pytest
+, scikitimage
+, scipy
+, shapely
+, six
+, stdenv
+}:
 
 buildPythonPackage rec {
   pname = "imgaug";
-  version = "0.2.6";
+  version = "0.4.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1wy8ydkqq0jrwxwdv04q89n3gwsr9pjaspsbw26ipg5a5lnhb9c2";
+  src = fetchFromGitHub {
+    owner = "aleju";
+    repo = "imgaug";
+    rev = version;
+    sha256 = "17hbxndxphk3bfnq35y805adrfa6gnm5x7grjxbwdw4kqmbbqzah";
   };
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "opencv-python-headless" ""
+    substituteInPlace setup.py \
+      --replace "opencv-python-headless" ""
+    substituteInPlace pytest.ini \
+      --replace "--xdoctest --xdoctest-global-exec=\"import imgaug as ia\nfrom imgaug import augmenters as iaa\"" ""
+  '';
+
   propagatedBuildInputs = [
+    imageio
+    imagecorruptions
     numpy
-    scipy
-    scikitimage
     opencv3
+    scikitimage
+    scipy
+    shapely
     six
   ];
 
-  # disable tests when there are no tests in the PyPI archive
-  doCheck = false;
+  checkPhase = ''
+     pytest ./test
+  '';
+
+  checkInputs = [ opencv3 pytest ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/aleju/imgaug;
+    homepage = "https://github.com/aleju/imgaug";
     description = "Image augmentation for machine learning experiments";
     license = licenses.mit;
-    maintainers = with maintainers; [ cmcdragonkai ];
+    maintainers = with maintainers; [ cmcdragonkai rakesh4g ];
+    platforms = platforms.linux;
   };
 }

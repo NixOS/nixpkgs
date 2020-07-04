@@ -8,11 +8,12 @@
 , libwnck3
 , makeWrapper
 , pkgconfig
+, gsettings-desktop-schemas
 }:
 
 let baseURI = "https://launchpad.net/~leolik/+archive/leolik";
 in stdenv.mkDerivation rec {
-  name = "notify-osd-${version}";
+  pname = "notify-osd";
   version = "0.9.35+16.04.20160415";
 
   src = fetchurl {
@@ -26,11 +27,11 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     glib libwnck3 libnotify dbus-glib makeWrapper
-    gnome3.gsettings-desktop-schemas gnome3.gnome-common
+    gsettings-desktop-schemas gnome3.gnome-common
     libtool
   ];
 
-  configureFlags = "--libexecdir=$(out)/bin";
+  configureFlags = [ "--libexecdir=$(out)/bin" ];
 
   preFixup = ''
     wrapProgram "$out/bin/notify-osd" \
@@ -39,7 +40,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Daemon that displays passive pop-up notifications";
-    homepage = https://launchpad.net/notify-osd;
+    homepage = "https://launchpad.net/notify-osd";
     license = licenses.gpl3;
     maintainers = [ maintainers.imalison ];
     platforms = platforms.linux;

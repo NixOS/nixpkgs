@@ -1,35 +1,87 @@
 { stdenv, fetchFromGitHub, cmake
-, icestorm, python3, boost, qtbase
+, boost, python3, eigen
+, icestorm, trellis
+, llvmPackages
+
+, enableGui ? true
+, wrapQtAppsHook
+, qtbase
+, OpenGL ? null
 }:
 
 let
   boostPython = boost.override { python = python3; enablePython = true; };
 in
-stdenv.mkDerivation rec {
-  name = "nextpnr-${version}";
-  version = "2018.10.17";
+with stdenv; mkDerivation rec {
+  pname = "nextpnr";
+  version = "2020.06.12";
 
-  src = fetchFromGitHub {
-    owner  = "yosyshq";
-    repo   = "nextpnr";
-    rev    = "529a595157a2eef24f8529b0de0c504a40ed503b";
-    sha256 = "06yp89rpvb2s4zc1qkbcp76kqwkk9s8j2ckblqw547dy5ah2cl7h";
-  };
+  srcs = [
+    (fetchFromGitHub {
+      owner  = "YosysHQ";
+      repo   = "nextpnr";
+      rev    = "c9e7d1448eaa4644d18073316e30586f2cb1d75a";
+      sha256 = "13jyg9d8q9xs1gpb8mz315hcyi3npr4kbfi31x2laz4zmki6ibai";
+      name   = "nextpnr";
+    })
+    (fetchFromGitHub {
+      owner  = "YosysHQ";
+      repo   = "nextpnr-tests";
+      rev    = "8f93e7e0f897b1b5da469919c9a43ba28b623b2a";
+      sha256 = "0zpd0w49k9l7rs3wmi2v8z5s4l4lad5rprs5l83w13667himpzyc";
+      name   = "nextpnr-tests";
+    })
+  ];
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ boostPython python3 qtbase ];
+  sourceRoot = "nextpnr";
+
+  nativeBuildInputs
+     = [ cmake ]
+    ++ (lib.optional enableGui wrapQtAppsHook);
+  buildInputs
+     = [ boostPython python3 eigen ]
+    ++ (lib.optional enableGui qtbase)
+    ++ (lib.optional stdenv.cc.isClang llvmPackages.openmp);
 
   enableParallelBuilding = true;
   cmakeFlags =
-    [ "-DARCH=generic;ice40"
+    [ "-DCURRENT_GIT_VERSION=${lib.substring 0 7 (lib.elemAt srcs 0).rev}"
+      "-DARCH=generic;ice40;ecp5"
+      "-DBUILD_TESTS=ON"
       "-DICEBOX_ROOT=${icestorm}/share/icebox"
-    ];
+      "-DTRELLIS_INSTALL_PREFIX=${trellis}"
+      "-DPYTRELLIS_LIBDIR=${trellis}/lib/trellis"
+      "-DUSE_OPENMP=ON"
+      # warning: high RAM usage
+      "-DSERIALIZE_CHIPDB=OFF"
+    ]
+    ++ (lib.optional (!enableGui) "-DBUILD_GUI=OFF")
+    ++ (lib.optional (enableGui && stdenv.isDarwin)
+        "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks");
 
-  meta = with stdenv.lib; {
+  patchPhase = with builtins; ''
+    # use PyPy for icestorm if enabled
+    substituteInPlace ./ice40/family.cmake \
+      --replace ''\'''${PYTHON_EXECUTABLE}' '${icestorm.pythonInterp}'
+  '';
+
+  preBuild = ''
+    ln -s ../nextpnr-tests tests
+  '';
+
+  doCheck = true;
+
+  postFixup = lib.optionalString enableGui ''
+    wrapQtApp $out/bin/nextpnr-generic
+    wrapQtApp $out/bin/nextpnr-ice40
+    wrapQtApp $out/bin/nextpnr-ecp5
+  '';
+
+  meta = with lib; {
     description = "Place and route tool for FPGAs";
-    homepage    = https://github.com/yosyshq/nextpnr;
+    homepage    = "https://github.com/yosyshq/nextpnr";
     license     = licenses.isc;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice ];
+    platforms   = platforms.all;
+    maintainers = with maintainers; [ thoughtpolice emily ];
   };
 }

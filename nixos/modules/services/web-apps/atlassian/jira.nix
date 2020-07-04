@@ -6,7 +6,7 @@ let
 
   cfg = config.services.jira;
 
-  pkg = pkgs.atlassian-jira.override (optionalAttrs cfg.sso.enable {
+  pkg = cfg.package.override (optionalAttrs cfg.sso.enable {
     enableSSO = cfg.sso.enable;
     crowdProperties = ''
       application.name                        ${cfg.sso.applicationName}
@@ -131,6 +131,13 @@ in
         };
       };
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.atlassian-jira;
+        defaultText = "pkgs.atlassian-jira";
+        description = "Atlassian JIRA package to use.";
+      };
+
       jrePackage = mkOption {
         type = types.package;
         default = pkgs.oraclejre8;
@@ -141,12 +148,23 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.users."${cfg.user}" = {
+    users.users.${cfg.user} = {
       isSystemUser = true;
       group = cfg.group;
     };
 
-    users.groups."${cfg.group}" = {};
+    users.groups.${cfg.group} = {};
+
+    systemd.tmpfiles.rules = [
+      "d '${cfg.home}' - ${cfg.user} - - -"
+      "d /run/atlassian-jira - - - - -"
+
+      "L+ /run/atlassian-jira/home - - - - ${cfg.home}"
+      "L+ /run/atlassian-jira/logs - - - - ${cfg.home}/logs"
+      "L+ /run/atlassian-jira/work - - - - ${cfg.home}/work"
+      "L+ /run/atlassian-jira/temp - - - - ${cfg.home}/temp"
+      "L+ /run/atlassian-jira/server.xml - - - - ${cfg.home}/server.xml"
+    ];
 
     systemd.services.atlassian-jira = {
       description = "Atlassian JIRA";
@@ -167,12 +185,6 @@ in
       preStart = ''
         mkdir -p ${cfg.home}/{logs,work,temp,deploy}
 
-        mkdir -p /run/atlassian-jira
-        ln -sf ${cfg.home}/{logs,work,temp,server.xml} /run/atlassian-jira
-        ln -sf ${cfg.home} /run/atlassian-jira/home
-
-        chown -R ${cfg.user} ${cfg.home}
-
         sed -e 's,port="8080",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
         '' + (lib.optionalString cfg.proxy.enable ''
           -e 's,protocol="HTTP/1.1",protocol="HTTP/1.1" proxyName="${cfg.proxy.name}" proxyPort="${toString cfg.proxy.port}" scheme="${cfg.proxy.scheme}" secure="${toString cfg.proxy.secure}",' \
@@ -184,7 +196,6 @@ in
         User = cfg.user;
         Group = cfg.group;
         PrivateTmp = true;
-        PermissionsStartOnly = true;
         ExecStart = "${pkg}/bin/start-jira.sh -fg";
         ExecStop = "${pkg}/bin/stop-jira.sh";
       };

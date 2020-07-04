@@ -4,6 +4,10 @@
 with lib;
 
 {
+  meta = {
+    maintainers = teams.gnome.members;
+  };
+
   ###### interface
   options = {
     services.gnome3.chrome-gnome-shell.enable = mkEnableOption ''
@@ -23,5 +27,7 @@ with lib;
     environment.systemPackages = [ pkgs.chrome-gnome-shell ];
 
     services.dbus.packages = [ pkgs.chrome-gnome-shell ];
+
+    nixpkgs.config.firefox.enableGnomeExtensions = true;
   };
 }

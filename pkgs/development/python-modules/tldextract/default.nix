@@ -5,18 +5,18 @@
 
 buildPythonPackage rec {
   pname   = "tldextract";
-  version = "2.2.0";
+  version = "2.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d5s8v6kpsgazyahflhji1cfdcf89rv7l7z55v774bhzvcjp2y99";
+    sha256 = "9aa21a1f7827df4209e242ec4fc2293af5940ec730cde46ea80f66ed97bfc808";
   };
 
   propagatedBuildInputs = [ requests requests-file idna ];
   checkInputs = [ pytest responses ];
 
   meta = {
-    homepage = https://github.com/john-kurkowski/tldextract;
+    homepage = "https://github.com/john-kurkowski/tldextract";
     description = "Accurately separate the TLD from the registered domain and subdomains of a URL, using the Public Suffix List.";
     license = lib.licenses.bsd3;
   };

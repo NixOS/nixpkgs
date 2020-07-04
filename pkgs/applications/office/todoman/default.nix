@@ -1,16 +1,15 @@
-{ stdenv, python3, glibcLocales }:
+{ stdenv, python3, glibcLocales, installShellFiles, jq }:
 
 let
   inherit (python3.pkgs) buildPythonApplication fetchPypi;
 in
 buildPythonApplication rec {
   pname = "todoman";
-  version = "3.4.0";
-  name = "${pname}-${version}";
+  version = "3.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09441fdrwz2irsbrxnpwys51372z6rn6gnxn87p95r3fv9gmh0fw";
+    sha256 = "1aq7f63bhs9dnwzp15nfr07f2ki6s3lnqfap3b09rhchn6lfznwb";
   };
 
     LOCALE_ARCHIVE = stdenv.lib.optionalString stdenv.isLinux
@@ -18,9 +17,10 @@ buildPythonApplication rec {
     LANG = "en_US.UTF-8";
     LC_TYPE = "en_US.UTF-8";
 
+  nativeBuildInputs = [ installShellFiles ];
   buildInputs = [ glibcLocales ];
   propagatedBuildInputs = with python3.pkgs;
-    [ atomicwrites click click-log configobj humanize icalendar parsedatetime
+    [ atomicwrites click click-log click-repl configobj humanize icalendar parsedatetime
       python-dateutil pyxdg tabulate urwid ];
 
   checkInputs = with python3.pkgs;
@@ -29,13 +29,20 @@ buildPythonApplication rec {
   makeWrapperArgs = [ "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
                       "--set CHARSET en_us.UTF-8" ];
 
+  postInstall = ''
+    installShellCompletion --bash contrib/completion/bash/_todo
+    substituteInPlace contrib/completion/zsh/_todo --replace "jq " "${jq}/bin/jq "
+    installShellCompletion --zsh contrib/completion/zsh/_todo
+  '';
+
   preCheck = ''
     # Remove one failing test that only checks whether the command line works
     rm tests/test_main.py
+    rm tests/test_cli.py
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/pimutils/todoman;
+    homepage = "https://github.com/pimutils/todoman";
     description = "Standards-based task manager based on iCalendar";
     longDescription = ''
       Todoman is a simple, standards-based, cli todo (aka: task) manager. Todos

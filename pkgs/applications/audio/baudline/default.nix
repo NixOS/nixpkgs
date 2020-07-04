@@ -7,7 +7,7 @@ let
     [ libXmu libXt libX11 libXext libXxf86vm libjack2 ];
 in
 stdenv.mkDerivation rec {
-  name = "baudline-${version}";
+  pname = "baudline";
   version = "1.08";
 
   src =
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       displays, and continuous capture tools for hunting down and studying
       elusive signal characteristics.
     '';
-    homepage = http://www.baudline.com/;
+    homepage = "http://www.baudline.com/";
     # See http://www.baudline.com/faq.html#licensing_terms.
     # (Do NOT (re)distribute on hydra.)
     license = licenses.unfree;

@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, itstool, libxml2, mate, gnome3, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, gettext, glib, itstool, libxml2, mate, dconf, gtk3, vte, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "mate-terminal-${version}";
-  version = "1.21.0";
+  pname = "mate-terminal";
+  version = "1.24.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "15vx7b5nbjbym22pz3l3cyqhv4dnd6vl2hb56xhwq625aw2a7chv";
+    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0nc23nmbkya2fgf7j65z85dcibwi5akkr8nscqrvk039ckirhk97";
   };
 
   buildInputs = [
@@ -16,21 +16,24 @@ stdenv.mkDerivation rec {
 
      mate.mate-desktop
 
-     gnome3.vte
-     gnome3.gtk
-     gnome3.dconf
+     vte
+     gtk3
+     dconf
   ];
 
   nativeBuildInputs = [
     pkgconfig
-    intltool
+    gettext
     wrapGAppsHook
   ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "The MATE Terminal Emulator";
-    homepage = http://mate-desktop.org;
+    homepage = "https://mate-desktop.org";
     license = licenses.gpl3;
     platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
   };
 }

@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "shaarli-${version}";
-  version = "0.10.2";
+  pname = "shaarli";
+  version = "0.11.1";
 
   src = fetchurl {
     url = "https://github.com/shaarli/Shaarli/releases/download/v${version}/shaarli-v${version}-full.tar.gz";
-    sha256 = "0h8sspj7siy3vgpi2i3gdrjcr5935fr4dfwq2zwd70sjx2sh9s78";
+    sha256 = "1psijcmi24hk0gxh1zdsm299xj11i7find2045nnx3r96cgnwjpn";
   };
 
   outputs = [ "out" "doc" ];
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "The personal, minimalist, super-fast, database free, bookmarking service";
     license = licenses.gpl3Plus;
-    homepage = https://github.com/shaarli/Shaarli;
+    homepage = "https://github.com/shaarli/Shaarli";
     maintainers = with maintainers; [ schneefux ];
     platforms = platforms.all;
   };

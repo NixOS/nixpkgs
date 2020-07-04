@@ -1,12 +1,12 @@
 { stdenv, fetchurl, cmake, bison, ncurses, openssl, zlib, libaio, perl }:
 
 stdenv.mkDerivation rec {
-  name = "percona-server-${version}";
-  version = "5.6.35-80.0";
+  pname = "percona-server";
+  version = "5.6.43-84.3";
 
   src = fetchurl {
     url = "https://www.percona.com/downloads/Percona-Server-5.6/Percona-Server-${version}/source/tarball/percona-server-${version}.tar.gz";
-    sha256 = "0szjywx902da09pg8yqj8l2acplmh69hn5smrk45i291qsi5m6r5";
+    sha256 = "1cc0lfmpq4pw90bcsszsygw06vd4j4bh3ph5x0yn3z7wddvmjlpw";
   };
 
   buildInputs = [ cmake bison ncurses openssl zlib libaio perl ];
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     "-DINSTALL_SHAREDIR=share/mysql"
   ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=address-of-packed-member" ];
   NIX_LDFLAGS = "-lgcc_s";
 
   prePatch = ''
@@ -46,17 +47,15 @@ stdenv.mkDerivation rec {
   postInstall = ''
     sed -i -e "s|basedir=\"\"|basedir=\"$out\"|" $out/bin/mysql_install_db
     rm -r $out/mysql-test $out/sql-bench $out/data "$out"/lib/*.a
-    rm $out/share/man/man1/mysql-test-run.pl.1
   '';
 
   passthru.mysqlVersion = "5.6";
 
   meta = with stdenv.lib; {
-    homepage = https://www.percona.com;
+    homepage = "https://www.percona.com";
     description = "a free, fully compatible, enhanced, open source drop-in replacement for MySQL that provides superior performance, scalability and instrumentation";
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = with maintainers; [ grahamc ];
-    broken = true; # 2018-04-11
   };
 }

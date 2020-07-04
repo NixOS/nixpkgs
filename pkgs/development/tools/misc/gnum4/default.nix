@@ -1,6 +1,6 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "gnum4-1.4.18";
 
   src = fetchurl {
@@ -13,10 +13,18 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-syscmd-shell=${stdenv.shell}" ];
 
   # Upstream is aware of it; it may be in the next release.
-  patches = [ ./s_isdir.patch ] ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin stdenv.secure-format-patch;
+  patches =
+    [
+      ./s_isdir.patch
+      (fetchurl {
+        url = "https://sources.debian.org/data/main/m/m4/1.4.18-2/debian/patches/01-fix-ftbfs-with-glibc-2.28.patch";
+        sha256 = "12lmdnbml9lfvy0khpjc42riicddaz7li8wmbnsam7zsw6al11qk";
+      })
+    ]
+    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-secure-format.patch;
 
   meta = {
-    homepage = http://www.gnu.org/software/m4/;
+    homepage = "https://www.gnu.org/software/m4/";
     description = "GNU M4, a macro processor";
 
     longDescription = ''
@@ -37,7 +45,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.unix ++ stdenv.lib.platforms.windows;
   };
 
 }

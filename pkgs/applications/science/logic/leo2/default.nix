@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, eprover, ocaml, perl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "leo2-${version}";
+  pname = "leo2";
   version = "1.6.2";
 
   src = fetchurl {
@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
     license = licenses.bsd3;
-    homepage = http://www.leoprover.org/;
+    homepage = "http://www.leoprover.org/";
   };
 }

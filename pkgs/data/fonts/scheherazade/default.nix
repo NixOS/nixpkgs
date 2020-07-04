@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   version = "2.100";
@@ -17,8 +17,8 @@ in fetchzip rec {
 
   sha256 = "1g5f5f9gzamkq3kqyf7vbzvl4rdj3wmjf6chdrbxksrm3rnb926z";
 
-  meta = with stdenv.lib; {
-    homepage = https://software.sil.org/scheherazade/;
+  meta = with lib; {
+    homepage = "https://software.sil.org/scheherazade/";
     description = "A font designed in a similar style to traditional Naskh typefaces";
     longDescription = ''
       Scheherazade, named after the heroine of the classic Arabian Nights tale,

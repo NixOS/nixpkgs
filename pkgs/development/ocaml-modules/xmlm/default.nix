@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg }:
 let
   pname = "xmlm";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 
 if !stdenv.lib.versionAtLeast ocaml.version "4.02"
@@ -19,13 +19,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml findlib ocamlbuild topkg ];
 
-  unpackCmd = "tar xjf $src";
-
   inherit (topkg) buildPhase installPhase;
 
   meta = with stdenv.lib; {
     description = "An OCaml streaming codec to decode and encode the XML data format";
-    homepage = "${webpage}";
+    homepage = webpage;
     platforms = ocaml.meta.platforms or [];
     maintainers = [ maintainers.vbgl ];
     license = licenses.bsd3;

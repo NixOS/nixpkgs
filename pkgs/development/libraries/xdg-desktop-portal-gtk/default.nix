@@ -1,19 +1,41 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libxml2, xdg-desktop-portal, gtk3, glib }:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, libxml2
+, xdg-desktop-portal
+, gtk3
+, gnome3
+, glib
+, wrapGAppsHook
+, gsettings-desktop-schemas
+}:
 
-let
-  version = "1.0.2";
-in stdenv.mkDerivation rec {
-  name = "xdg-desktop-portal-gtk-${version}";
+stdenv.mkDerivation rec {
+  pname = "xdg-desktop-portal-gtk";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "flatpak";
-    repo = "xdg-desktop-portal-gtk";
+    repo = pname;
     rev = version;
-    sha256 = "06dzh3vzq5nw3r89kb1qi3r2z8wjh9zmzc0hfnva4vnx7mwgm7ax";
+    sha256 = "183iha9dxmvprn99ymgz17jx1lyn1fj5jyj6ghxl716zn9mxmird";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig libxml2 xdg-desktop-portal ];
-  buildInputs = [ glib gtk3 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    libxml2
+    pkgconfig
+    wrapGAppsHook
+    xdg-desktop-portal
+  ];
+
+  buildInputs = [
+    glib
+    gsettings-desktop-schemas
+    gtk3
+    gnome3.gnome-desktop
+  ];
 
   meta = with stdenv.lib; {
     description = "Desktop integration portals for sandboxed apps";

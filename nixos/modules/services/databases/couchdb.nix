@@ -56,7 +56,7 @@ in {
 
 
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = "couchdb";
         description = ''
           User account under which couchdb runs.
@@ -64,7 +64,7 @@ in {
       };
 
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "couchdb";
         description = ''
           Group account under which couchdb runs.
@@ -85,7 +85,7 @@ in {
 
       uriFile = mkOption {
         type = types.path;
-        default = "/var/run/couchdb/couchdb.uri";
+        default = "/run/couchdb/couchdb.uri";
         description = ''
           This file contains the full URI that can be used to access this
           instance of CouchDB. It is used to help discover the port CouchDB is
@@ -106,7 +106,7 @@ in {
       };
 
       bindAddress = mkOption {
-        type = types.string;
+        type = types.str;
         default = "127.0.0.1";
         description = ''
           Defines the IP address by which CouchDB will be accessible.
@@ -138,7 +138,7 @@ in {
       };
 
       configFile = mkOption {
-        type = types.string;
+        type = types.path;
         description = ''
           Configuration file for persisting runtime changes. File
           needs to be readable and writable from couchdb user/group.
@@ -158,28 +158,20 @@ in {
     services.couchdb.configFile = mkDefault
       (if useVersion2 then "/var/lib/couchdb/local.ini" else "/var/lib/couchdb/couchdb.ini");
 
+    systemd.tmpfiles.rules = [
+      "d '${dirOf cfg.uriFile}' - ${cfg.user} ${cfg.group} - -"
+      "f '${cfg.logFile}' - ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.databaseDir}' -  ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.viewIndexDir}' -  ${cfg.user} ${cfg.group} - -"
+    ];
+
     systemd.services.couchdb = {
       description = "CouchDB Server";
       wantedBy = [ "multi-user.target" ];
 
-      preStart =
-        ''
-        mkdir -p `dirname ${cfg.uriFile}`;
-        mkdir -p `dirname ${cfg.logFile}`;
-        mkdir -p ${cfg.databaseDir};
-        mkdir -p ${cfg.viewIndexDir};
+      preStart = ''
         touch ${cfg.configFile}
-        touch -a ${cfg.logFile}
-
-        if [ "$(id -u)" = 0 ]; then
-          chown ${cfg.user}:${cfg.group} `dirname ${cfg.uriFile}`;
-          (test -f ${cfg.uriFile} && chown ${cfg.user}:${cfg.group} ${cfg.uriFile}) || true
-          chown ${cfg.user}:${cfg.group} ${cfg.databaseDir}
-          chown ${cfg.user}:${cfg.group} ${cfg.viewIndexDir}
-          chown ${cfg.user}:${cfg.group} ${cfg.configFile}
-          chown ${cfg.user}:${cfg.group} ${cfg.logFile}
-        fi
-        '';
+      '';
 
       environment = mkIf useVersion2 {
         # we are actually specifying 4 configuration files:
@@ -191,7 +183,6 @@ in {
       };
 
       serviceConfig = {
-        PermissionsStartOnly = true;
         User = cfg.user;
         Group = cfg.group;
         ExecStart = executable;

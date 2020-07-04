@@ -1,21 +1,33 @@
-{ stdenv, lib, fetchgit, perl, cdrkit, syslinux, xz, openssl
+{ stdenv, lib, fetchFromGitHub, perl, cdrkit, syslinux, xz, openssl, gnu-efi, mtools
 , embedScript ? null
+, additionalTargets ? {}
 }:
 
 let
-  date = "20180220";
-  rev = "47849be3a900c546cf92066849be0806f4e611d9";
+  targets = additionalTargets // lib.optionalAttrs stdenv.isx86_64 {
+    "bin-x86_64-efi/ipxe.efi" = null;
+    "bin-x86_64-efi/ipxe.efirom" = null;
+    "bin-x86_64-efi/ipxe.usb" = "ipxe-efi.usb";
+  } // {
+    "bin/ipxe.dsk" = null;
+    "bin/ipxe.usb" = null;
+    "bin/ipxe.iso" = null;
+    "bin/ipxe.lkrn" = null;
+    "bin/undionly.kpxe" = null;
+  };
 in
 
-stdenv.mkDerivation {
-  name = "ipxe-${date}-${builtins.substring 0 7 rev}";
+stdenv.mkDerivation rec {
+  pname = "ipxe";
+  version = "1.20.1";
 
-  buildInputs = [ perl cdrkit syslinux xz openssl ];
+  nativeBuildInputs = [ perl cdrkit syslinux xz openssl gnu-efi mtools ];
 
-  src = fetchgit {
-    url = git://git.ipxe.org/ipxe.git;
-    sha256 = "1f4pi1dp2zqnrbfnggnzycfvrxv0bqgw73dxbyy3hfy4mhdj6z45";
-    inherit rev;
+  src = fetchFromGitHub {
+    owner = "ipxe";
+    repo = "ipxe";
+    rev = "v${version}";
+    sha256 = "0w7h7y97gj9nqvbmsg1zp6zj5mpbbpckqbbx7bpp6k3ahy5fk8zp";
   };
 
   # not possible due to assembler code
@@ -30,20 +42,31 @@ stdenv.mkDerivation {
     ] ++ lib.optional (embedScript != null) "EMBED=${embedScript}";
 
 
-  enabledOptions = [ "DOWNLOAD_PROTO_HTTPS" ];
+  enabledOptions = [
+    "PING_CMD"
+    "IMAGE_TRUST_CMD"
+    "DOWNLOAD_PROTO_HTTP"
+    "DOWNLOAD_PROTO_HTTPS"
+  ];
 
   configurePhase = ''
     runHook preConfigure
     for opt in $enabledOptions; do echo "#define $opt" >> src/config/general.h; done
     sed -i '/cp \''${ISOLINUX_BIN}/s/$/ --no-preserve=mode/' src/util/geniso
+    substituteInPlace src/Makefile.housekeeping --replace '/bin/echo' echo
     runHook postConfigure
   '';
 
   preBuild = "cd src";
 
+  buildFlags = lib.attrNames targets;
+
   installPhase = ''
     mkdir -p $out
-    cp bin/ipxe.dsk bin/ipxe.usb bin/ipxe.iso bin/ipxe.lkrn bin/undionly.kpxe $out
+    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (from: to:
+      if to == null
+      then "cp -v ${from} $out"
+      else "cp -v ${from} $out/${to}") targets)}
 
     # Some PXE constellations especially with dnsmasq are looking for the file with .0 ending
     # let's provide it as a symlink to be compatible in this case.
@@ -54,9 +77,9 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib;
     { description = "Network boot firmware";
-      homepage = http://ipxe.org/;
+      homepage = "https://ipxe.org/";
       license = licenses.gpl2;
       maintainers = with maintainers; [ ehmry ];
-      platforms = platforms.all;
+      platforms = [ "x86_64-linux" "i686-linux" ];
     };
 }

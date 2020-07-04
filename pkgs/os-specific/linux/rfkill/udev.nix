@@ -1,4 +1,4 @@
-{ stdenv }:
+{ stdenv, substituteAll }:
 
 # Provides a facility to hook into rfkill changes.
 #
@@ -8,42 +8,49 @@
 #   udev.packages = [ pkgs.rfkill_udev ];
 #
 # Add a hook script in the managed etc directory, e.g.:
-#   etc = [
-#     { source = pkgs.writeScript "rtfkill.hook" ''
-#         #!/bin/sh
+#   etc."rfkill.hook" = {
+#     mode = "0755";
+#     text = ''
+#       #!${pkgs.runtimeShell}
 #
-#         if [ "$RFKILL_STATE" -eq "1" ]; then
-#           exec ${config.system.build.upstart}/sbin/initctl emit -n antenna-on
-#         else
-#           exec ${config.system.build.upstart}/sbin/initctl emit -n antenna-off
-#         fi
-#       '';
-#       target = "rfkill.hook";
-#     }
+#       if [ "$RFKILL_STATE" -eq "1" ]; then
+#         exec ${config.system.build.upstart}/sbin/initctl emit -n antenna-on
+#       else
+#         exec ${config.system.build.upstart}/sbin/initctl emit -n antenna-off
+#       fi
+#     '';
+#   }
 
 # Note: this package does not need the binaries
 # in the rfkill package.
 
-stdenv.mkDerivation {
+let
+  rfkillHook =
+    substituteAll {
+      inherit (stdenv) shell;
+      isExecutable = true;
+      src = ./rfkill-hook.sh;
+    };
+in stdenv.mkDerivation {
   name = "rfkill-udev";
 
-  unpackPhase = "true";
+  dontUnpack = true;
   dontBuild = true;
 
   installPhase = ''
     mkdir -p "$out/etc/udev/rules.d/";
     cat > "$out/etc/udev/rules.d/90-rfkill.rules" << EOF
-      SUBSYSTEM=="rfkill", ATTR{type}=="wlan", RUN+="$out/bin/rfkill-hook.sh" 
+      SUBSYSTEM=="rfkill", ATTR{type}=="wlan", RUN+="$out/bin/rfkill-hook.sh"
     EOF
 
     mkdir -p "$out/bin/";
-    cp ${./rfkill-hook.sh} "$out/bin/rfkill-hook.sh"
-    chmod +x "$out/bin/rfkill-hook.sh";
+    cp ${rfkillHook} "$out/bin/rfkill-hook.sh"
   '';
 
-  meta = {
-    homepage = http://wireless.kernel.org/en/users/Documentation/rfkill;
+  meta = with stdenv.lib; {
+    homepage = "http://wireless.kernel.org/en/users/Documentation/rfkill";
     description = "Rules+hook for udev to catch rfkill state changes";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.mit;
   };
 }

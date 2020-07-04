@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "cvc4-${version}";
+  pname = "cvc4";
   version = "1.6";
 
   src = fetchurl {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A high-performance theorem prover and SMT solver";
-    homepage    = http://cvc4.cs.stanford.edu/web/;
+    homepage    = "http://cvc4.cs.stanford.edu/web/";
     license     = licenses.gpl3;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ vbgl thoughtpolice gebner ];

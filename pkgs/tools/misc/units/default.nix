@@ -1,21 +1,45 @@
-{ stdenv, fetchurl, readline }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  readline,
+  enableCurrenciesUpdater ? true,
+  pythonPackages ? null
+}:
+
+assert enableCurrenciesUpdater -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
-  name = "units-${version}";
-  version = "2.18";
+  pname = "units";
+  version = "2.19";
 
   src = fetchurl {
-    url = "mirror://gnu/units/${name}.tar.gz";
-    sha256 = "0y26kj349i048y4z3xrk90bvciw2j6ds3rka7r7yn3183hirr5b4";
+    url = "mirror://gnu/units/${pname}-${version}.tar.gz";
+    sha256 = "0mk562g7dnidjgfgvkxxpvlba66fh1ykmfd9ylzvcln1vxmi6qj2";
   };
 
-  buildInputs = [ readline ];
+  pythonEnv = pythonPackages.python.withPackages(ps: [
+    ps.requests
+  ]);
+
+  buildInputs = [ readline ]
+    ++ lib.optionals enableCurrenciesUpdater [
+      pythonEnv
+    ]
+  ;
+  prePatch = ''
+    substituteInPlace units_cur \
+      --replace "#!/usr/bin/env python" ${pythonEnv}/bin/python
+  '';
+  postInstall = ''
+    cp units_cur ${placeholder "out"}/bin/
+  '';
 
   doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Unit conversion tool";
-    homepage = https://www.gnu.org/software/units/;
+    homepage = "https://www.gnu.org/software/units/";
     license = [ licenses.gpl3Plus ];
     platforms = platforms.all;
     maintainers = [ maintainers.vrthra ];

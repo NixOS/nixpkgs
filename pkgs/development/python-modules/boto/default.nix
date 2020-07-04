@@ -1,6 +1,7 @@
 { pkgs
 , buildPythonPackage
 , fetchPypi
+, isPy38
 , python
 , nose
 , mock
@@ -21,11 +22,12 @@ buildPythonPackage rec {
     ${python.interpreter} tests/test.py default
   '';
 
+  doCheck = (!isPy38); # hmac functionality has changed
   checkInputs = [ nose mock ];
   propagatedBuildInputs = [ requests httpretty ];
 
   meta = with pkgs.lib; {
-    homepage = https://github.com/boto/boto;
+    homepage = "https://github.com/boto/boto";
     license = licenses.mit;
     description = "Python interface to Amazon Web Services";
     longDescription = ''

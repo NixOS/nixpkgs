@@ -1,22 +1,22 @@
 { stdenv, fetchurl, libcddb, pkgconfig, ncurses, help2man, libiconv, Carbon, IOKit }:
 
 stdenv.mkDerivation rec {
-  name = "libcdio-2.0.0";
+  name = "libcdio-2.1.0";
 
   src = fetchurl {
     url = "mirror://gnu/libcdio/${name}.tar.bz2";
-    sha256 = "0jr8ppdm80c533nzmrpz3iffnpc6nhvsria1di9f4jg1l19a03fd";
+    sha256 = "0avi6apv5ydjy6b9c3z9a46rvp5i57qyr09vr7x4nndxkmcfjl45";
   };
 
   postPatch = ''
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libcddb ncurses help2man ]
+  nativeBuildInputs = [ pkgconfig help2man ];
+  buildInputs = [ libcddb ncurses ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Carbon IOKit ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   meta = with stdenv.lib; {
     description = "A library for OS-independent CD-ROM and CD image access";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       ISO-9660 filesystems (libiso9660), as well as utility
       programs such as an audio CD player and an extractor.
     '';
-    homepage = http://www.gnu.org/software/libcdio/;
+    homepage = "https://www.gnu.org/software/libcdio/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
   };

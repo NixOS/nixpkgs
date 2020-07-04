@@ -1,18 +1,18 @@
-{ stdenv, lib, fetchzip, autoconf, automake, cups, glib, libxml2, libusb, libtool
+{ stdenv, lib, fetchzip, autoconf, automake, cups, glib, libxml2, libusb1, libtool
 , withDebug ? false }:
 
-stdenv.mkDerivation rec {
-  name = "cnijfilter2-${version}";
+stdenv.mkDerivation {
+  pname = "cnijfilter2";
 
-  version = "5.30";
+  version = "5.70";
 
   src = fetchzip {
-    url = "http://gdlp01.c-wss.com/gds/9/0100007129/01/cnijfilter2-source-5.30-1.tar.gz";
-    sha256 = "0gnl9arwmkblljsczspcgggx85a19vcmhmbjfyv1bq236yqixv5c";
+    url = "http://gdlp01.c-wss.com/gds/0/0100009930/01/cnijfilter2-source-5.70-1.tar.gz";
+    sha256 = "045zjsmaidn1m44ki6m1018gjzbj77gm234n5i2lshxpbzpyh0is";
   };
 
   buildInputs = [
-    cups automake autoconf glib libxml2 libusb libtool
+    cups automake autoconf glib libxml2 libusb1 libtool
   ];
 
   # lgmon3's --enable-libdir flag is used soley for specifying in which
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       cd lgmon3
       substituteInPlace src/Makefile.am \
         --replace /usr/include/libusb-1.0 \
-                  ${libusb.dev}/include/libusb-1.0
+                  ${libusb1.dev}/include/libusb-1.0
       ./autogen.sh --prefix=$out --enable-progpath=$out/bin \
                    --datadir=$out/share \
                    --enable-libdir=/var/cache/cups
@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Canon InkJet printer drivers for the MG7500, MG6700, MG6600, MG5600, MG2900, MB2000, MB2300, iB4000, MB5000, MB5300, iP110, E450, MX490, E480, MG7700, MG6900, MG6800, MG5700, MG3600, and G3000 series.";
-    homepage = http://support-th.canon-asia.com/contents/TH/EN/0100712901.html;
+    homepage = "http://support-th.canon-asia.com/contents/TH/EN/0100712901.html";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

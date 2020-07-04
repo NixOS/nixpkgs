@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, python3Packages, ffmpeg, mplayer, vcdimager, cdrkit, dvdauthor
-, gtk3, gettext, wrapGAppsHook, gdk_pixbuf }:
+{ stdenv, fetchFromGitHub, python3Packages, ffmpeg_3, mplayer, vcdimager, cdrkit, dvdauthor
+, gtk3, gettext, wrapGAppsHook, gdk-pixbuf, gobject-introspection }:
 
 let
-  inherit (python3Packages) dbus-python buildPythonApplication pygobject3 urllib3;
+  inherit (python3Packages) dbus-python buildPythonApplication pygobject3 urllib3 setuptools;
 
-in buildPythonApplication rec {
+in buildPythonApplication {
   name = "devede-4.8.8";
   namePrefix = "";
 
@@ -15,16 +15,26 @@ in buildPythonApplication rec {
     sha256 = "0ncb8nykchrjlllbzfjpvirmfvfaps9qhilc56kvcw3nzqrnkx8q";
   };
 
+  # Temporary fix
+  # See https://github.com/NixOS/nixpkgs/issues/61578
+  # and https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
+
   nativeBuildInputs = [
     gettext wrapGAppsHook
+
+    # Temporary fix
+    # See https://github.com/NixOS/nixpkgs/issues/61578
+    # and https://github.com/NixOS/nixpkgs/issues/56943
+    gobject-introspection
   ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_3
   ];
 
   propagatedBuildInputs = [
-    gtk3 pygobject3 gdk_pixbuf dbus-python ffmpeg mplayer dvdauthor vcdimager cdrkit urllib3
+    gtk3 pygobject3 gdk-pixbuf dbus-python ffmpeg_3 mplayer dvdauthor vcdimager cdrkit urllib3 setuptools
   ];
 
   postPatch = ''
@@ -36,7 +46,7 @@ in buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "DVD Creator for Linux";
-    homepage = http://www.rastersoft.com/programas/devede.html;
+    homepage = "http://www.rastersoft.com/programas/devede.html";
     license = licenses.gpl3;
     maintainers = [ maintainers.bdimcheff ];
   };

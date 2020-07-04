@@ -3,7 +3,7 @@
 let deps = stdenv.lib.makeBinPath [ curl gnugrep libnotify scrot which xclip ];
 in stdenv.mkDerivation rec {
   version = "1.7.4";
-  name = "imgur-screenshot-${version}";
+  pname = "imgur-screenshot";
 
   src = fetchFromGitHub {
     owner = "jomo";
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A tool for easy screencapping and uploading to imgur";
-    homepage = https://github.com/jomo/imgur-screenshot/;
+    homepage = "https://github.com/jomo/imgur-screenshot/";
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ lw ];

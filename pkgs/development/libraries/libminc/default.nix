@@ -1,17 +1,16 @@
 { stdenv, fetchFromGitHub, cmake, zlib, netcdf, nifticlib, hdf5 }:
 
 stdenv.mkDerivation rec {
-  pname = "libminc";
-  name  = "${pname}-2018-01-17";
+  pname   = "libminc";
+  version = "2.4.03";
 
   owner = "BIC-MNI";
 
-  # current master is significantly ahead of most recent release, so use Git version:
   src = fetchFromGitHub {
     inherit owner;
     repo   = pname;
-    rev    = "a9cbe1353eae9791b7d5b03af16e0f86922ce40b";
-    sha256 = "0mn4n3ihzcr1jw2g1vy6c8p4lkc88jwljk04argmj7k4djrgpxpa";
+    rev    = "release-${version}";
+    sha256 = "0kpmqs9df836ywsqj749qbsfavf5bnldblxrmnmxqq9pywc8yfrm";
   };
 
   postPatch = ''
@@ -22,13 +21,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib netcdf nifticlib hdf5 ];
 
   cmakeFlags = [
-    "-DBUILD_TESTING=${if doCheck then "ON" else "OFF"}"
     "-DLIBMINC_MINC1_SUPPORT=ON"
     "-DLIBMINC_BUILD_SHARED_LIBS=ON"
     "-DLIBMINC_USE_SYSTEM_NIFTI=ON"
   ];
 
-  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
+  doCheck = !stdenv.isDarwin;
   checkPhase = ''
     export LD_LIBRARY_PATH="$(pwd)"  # see #22060
     ctest -E 'ezminc_rw_test|minc_conversion' --output-on-failure

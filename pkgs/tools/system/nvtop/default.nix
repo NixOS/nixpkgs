@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, nvidia_x11, cudatoolkit, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "nvtop-${version}";
-  version = "0.2.2";
+  pname = "nvtop";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "Syllo";
     repo  = "nvtop";
     rev = version;
-    sha256 = "0gampikzmd1l0vdhvarl0hckl6kmjh2rwcllpg6rrm2p75njw7hv";
+    sha256 = "1b6yz54xddip1r0k8cbqg41dpyhds18fj29bj3yf40xvysklb0f4";
   };
 
   cmakeFlags = [
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A (h)top like like task monitor for NVIDIA GPUs";
-    homepage = https://github.com/Syllo/nvtop;
+    homepage = "https://github.com/Syllo/nvtop";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ willibutz ];

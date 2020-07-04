@@ -2,21 +2,25 @@
 , lua52Packages, libXft, ncurses, ninja, readline, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "wordgrinder-${version}";
-  version = "0.7.1";
+  pname = "wordgrinder";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     repo = "wordgrinder";
     owner = "davidgiven";
-    rev = "${version}";
-    sha256 = "19n4vn8zyvcvgwygm63d3jcmiwh6a2ikrrqqmkm8fvhdvwkqgr9k";
+    rev = version;
+    sha256 = "08lnq5wmspfqdjmqm15gizcq0xr7mg4h62qhvwj63v0sd6ks1cal";
   };
 
   makeFlags = [
     "PREFIX=$(out)"
     "LUA_INCLUDE=${lua52Packages.lua}/include"
     "LUA_LIB=${lua52Packages.lua}/lib/liblua.so"
-  ] ++ stdenv.lib.optional stdenv.isLinux "XFT_PACKAGE=--libs=\{-lX11 -lXft\}";
+  ];
+
+  preBuild = stdenv.lib.optionalString stdenv.isLinux ''
+    makeFlagsArray+=('XFT_PACKAGE=--cflags={} --libs={-lX11 -lXft}')
+  '';
 
   dontUseNinjaBuild = true;
   dontUseNinjaInstall = true;
@@ -47,9 +51,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Text-based word processor";
-    homepage = https://cowlark.com/wordgrinder;
+    homepage = "https://cowlark.com/wordgrinder";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ matthiasbeyer ];
     platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

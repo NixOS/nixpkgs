@@ -1,15 +1,16 @@
-{ fetchFromGitHub, stdenv, pythonPackages, gnupg, perl }:
+{ fetchFromGitHub, stdenv, python3Packages, gnupg, perl }:
 
-let version = "2.2.6"; in
-pythonPackages.buildPythonApplication {
-  name = "pius-${version}";
+let version = "3.0.0"; in
+python3Packages.buildPythonApplication {
+  pname = "pius";
   namePrefix = "";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "jaymzh";
     repo = "pius";
     rev = "v${version}";
-    sha256 = "1rffwyjd84rwx1w5yyqckirm1kdj80ldfwjlw91kk74swhpbpzzj";
+    sha256 = "0l87dx7n6iwy8alxnhvval8h1kl4da6a59hsilbi65c6bpj4dh3y";
   };
 
   patchPhase = ''
@@ -21,7 +22,7 @@ pythonPackages.buildPythonApplication {
   buildInputs = [ perl ];
 
   meta = {
-    homepage = https://www.phildev.net/pius/;
+    homepage = "https://www.phildev.net/pius/";
 
     description = "PGP Individual UID Signer (PIUS), quickly and easily sign UIDs on a set of PGP keys";
 
@@ -35,6 +36,6 @@ pythonPackages.buildPythonApplication {
     license = stdenv.lib.licenses.gpl2;
 
     platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu kierdavis ];
+    maintainers = with stdenv.lib.maintainers; [ kierdavis ];
   };
 }

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Keras_Applications";
-  version = "1.0.6";
+  version = "1.0.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a03af60ddc9c5afdae4d5c9a8dd4ca857550e0b793733a5072e0725829b87017";
+    sha256 = "5579f9a12bcde9748f4a12233925a59b93b73ae6947409ff34aa2ba258189fe5";
   };
 
   # Cyclic dependency: keras-applications requires keras, which requires keras-applications
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Reference implementations of popular deep learning models";
-    homepage = https://github.com/keras-team/keras-applications;
+    homepage = "https://github.com/keras-team/keras-applications";
     license = licenses.mit;
   };
 }

@@ -2,8 +2,8 @@
   libpulseaudio, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "cava-${version}";
-  version = "0.6.1";
+  pname = "cava";
+  version = "0.7.1";
 
   buildInputs = [
     alsaLib
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "karlstav";
     repo = "cava";
     rev = version;
-    sha256 = "1kvhqgijs29909w3sq9m0bslx2zxxn4b3i07kdz4hb0dqkppxpjy";
+    sha256 = "0p2g3xxl2n425bghs1qnff30jaj9cba94j2gbhgxmwaxhz26vbk7";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Console-based Audio Visualizer for Alsa";
-    homepage = https://github.com/karlstav/cava;
+    homepage = "https://github.com/karlstav/cava";
     license = licenses.mit;
     maintainers = with maintainers; [ offline mirrexagon ];
     platforms = platforms.linux;

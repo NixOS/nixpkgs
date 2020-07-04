@@ -1,8 +1,8 @@
 { pkgs, stdenv, fetchFromGitHub, makeWrapper, gawk, gnum4, gnused
-, libxml2, libxslt, ncurses, openssl, perl, autoreconfHook
+, libxml2, libxslt, ncurses, openssl, perl, autoconf
 , openjdk ? null # javacSupport
 , unixODBC ? null # odbcSupport
-, libGLU_combined ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
+, libGL ? null, libGLU ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
 , withSystemd ? stdenv.isLinux, systemd # systemd support in epmd
 }:
 
@@ -18,13 +18,13 @@
 , enableKernelPoll ? true
 , javacSupport ? false, javacPackages ? [ openjdk ]
 , odbcSupport ? false, odbcPackages ? [ unixODBC ]
-, wxSupport ? !stdenv.isDarwin, wxPackages ? [ libGLU_combined wxGTK xorg.libX11 ]
+, wxSupport ? true, wxPackages ? [ libGL libGLU wxGTK xorg.libX11 ]
 , preUnpack ? "", postUnpack ? ""
 , patches ? [], patchPhase ? "", prePatch ? "", postPatch ? ""
 , configureFlags ? [], configurePhase ? "", preConfigure ? "", postConfigure ? ""
 , buildPhase ? "", preBuild ? "", postBuild ? ""
 , installPhase ? "", preInstall ? "", postInstall ? ""
-, installTargets ? "install install-docs"
+, installTargets ? [ "install" "install-docs" ]
 , checkPhase ? "", preCheck ? "", postCheck ? ""
 , fixupPhase ? "", preFixup ? "", postFixup ? ""
 , meta ? {}
@@ -32,7 +32,7 @@
 
 assert wxSupport -> (if stdenv.isDarwin
   then wxmac != null
-  else libGLU_combined != null && wxGTK != null && xorg != null);
+  else libGL != null && libGLU != null && wxGTK != null && xorg != null);
 
 assert odbcSupport -> unixODBC != null;
 assert javacSupport -> openjdk != null;
@@ -48,7 +48,7 @@ in stdenv.mkDerivation ({
 
   inherit src version;
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper perl gnum4 libxslt libxml2 ];
+  nativeBuildInputs = [ autoconf makeWrapper perl gnum4 libxslt libxml2 ];
 
   buildInputs = [ ncurses openssl ]
     ++ optionals wxSupport wxPackages2
@@ -59,7 +59,8 @@ in stdenv.mkDerivation ({
 
   debugInfo = enableDebugInfo;
 
-  enableParallelBuilding = true;
+  # On some machines, parallel build reliably crashes on `GEN    asn1ct_eval_ext.erl` step
+  enableParallelBuilding = false;
 
   # Clang 4 (rightfully) thinks signed comparisons of pointers with NULL are nonsense
   prePatch = ''
@@ -107,8 +108,8 @@ in stdenv.mkDerivation ({
   setupHook = ./setup-hook.sh;
 
   meta = with stdenv.lib; ({
-    homepage = http://www.erlang.org/;
-    downloadPage = "http://www.erlang.org/download.html";
+    homepage = "https://www.erlang.org/";
+    downloadPage = "https://www.erlang.org/download.html";
     description = "Programming language used for massively scalable soft real-time systems";
 
     longDescription = ''
@@ -121,7 +122,7 @@ in stdenv.mkDerivation ({
     '';
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ the-kenny sjmackenzie couchemar gleber ];
+    maintainers = with maintainers; [ sjmackenzie couchemar gleber ];
     license = licenses.asl20;
   } // meta);
 }
@@ -140,7 +141,7 @@ in stdenv.mkDerivation ({
 // optionalAttrs (preCheck != "")       { inherit preCheck; }
 // optionalAttrs (postCheck != "")      { inherit postCheck; }
 // optionalAttrs (installPhase != "")   { inherit installPhase; }
-// optionalAttrs (installTargets != "") { inherit installTargets; }
+// optionalAttrs (installTargets != []) { inherit installTargets; }
 // optionalAttrs (preInstall != "")     { inherit preInstall; }
 // optionalAttrs (fixupPhase != "")     { inherit fixupPhase; }
 // optionalAttrs (preFixup != "")       { inherit preFixup; }

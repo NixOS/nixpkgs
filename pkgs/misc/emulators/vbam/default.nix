@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , ffmpeg
 , gettext
-, libGLU_combined
+, libGLU, libGL
 , openal
 , pkgconfig
 , SDL2
@@ -14,23 +14,23 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "visualboyadvance-m-${version}";
-  version = "2.1.0";
+  pname = "visualboyadvance-m";
+  version = "2.1.4";
   src = fetchFromGitHub {
     owner = "visualboyadvance-m";
     repo = "visualboyadvance-m";
     rev = "v${version}";
-    sha256 = "1dppfvy24rgg3h84gv33l1y7zznkv3zxn2hf98w85pca6k1y2afz";
+    sha256 = "1kgpbvng3c12ws0dy92zc0azd94h0i3j4vm7b67zc8mi3pqsppdg";
   };
+
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
     cairo
-    cmake
     ffmpeg
     gettext
-    libGLU_combined
+    libGLU libGL
     openal
-    pkgconfig
     SDL2
     sfml
     zip
@@ -46,11 +46,12 @@ stdenv.mkDerivation rec {
     "-DENABLE_SDL='true'"
   ];
 
-  meta = {
+  meta =  with stdenv.lib; {
     description = "A merge of the original Visual Boy Advance forks";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.lassulus ];
-    homepage = http://vba-m.com/;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ lassulus ];
+    homepage = "https://vba-m.com/";
     platforms = stdenv.lib.platforms.linux;
+    badPlatforms = [ "aarch64-linux" ];
   };
 }

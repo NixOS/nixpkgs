@@ -1,16 +1,16 @@
 { stdenv, fetchFromGitHub, pkgconfig, SDL2, alsaLib, gtk3
-, makeWrapper, libGLU_combined, libarchive, libao, unzip, xdg_utils
-, epoxy, gdk_pixbuf, gnome3, wrapGAppsHook
+, makeWrapper, libGLU, libGL, libarchive, libao, unzip, xdg_utils
+, epoxy, gdk-pixbuf, gnome3, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   version = "1.47";
-  name = "nestopia-${version}";
+  pname = "nestopia";
 
   src = fetchFromGitHub {
     owner = "rdanbrook";
     repo = "nestopia";
-    rev = "${version}";
+    rev = version;
     sha256 = "0frr0gvjh5mxzdhj0ii3sh671slgnzlm8naqlc4h87rx4p4sz2y2";
   };
 
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
     alsaLib
     epoxy
     gtk3
-    gdk_pixbuf
-    libGLU_combined
+    gdk-pixbuf
+    libGLU libGL
     libarchive
     libao
     unzip
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = http://0ldsk00l.ca/nestopia/;
+    homepage = "http://0ldsk00l.ca/nestopia/";
     description = "NES emulator with a focus on accuracy";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

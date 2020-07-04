@@ -1,4 +1,5 @@
 { lib
+, isPy3k
 , buildPythonPackage
 , fetchPypi
 , flask
@@ -32,9 +33,12 @@ buildPythonPackage rec {
     py.test
   '';
 
+  # ImportError: No module named google.auth
+  doCheck = isPy3k;
+
   meta = {
     description = "Google Authentication Library: httplib2 transport";
-    homepage = https://github.com/GoogleCloudPlatform/google-auth-library-python-httplib2;
+    homepage = "https://github.com/GoogleCloudPlatform/google-auth-library-python-httplib2";
     license = lib.licenses.asl20;
   };
 

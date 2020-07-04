@@ -11,10 +11,8 @@ let
     sha256="0868lynb45lm79yvx5f10lj5h6bfv0yck8whcls2j080vmk3n7rk";
   };
 
-  compileFlags = stdenv.lib.concatStringsSep " " ([ "-O3" "-mtune=generic" "-DNDEBUG" ]
+  compileFlags = stdenv.lib.concatStringsSep " " ([ "-O3" "-DNDEBUG" ]
     ++ stdenv.lib.optional (stdenv.hostPlatform.isUnix) "-Dunix -pthread"
-    ++ stdenv.lib.optional (stdenv.hostPlatform.isi686) "-march=i686"
-    ++ stdenv.lib.optional (stdenv.hostPlatform.isx86_64) "-march=nocona"
     ++ stdenv.lib.optional (!stdenv.hostPlatform.isx86) "-DNOJIT");
 in
 stdenv.mkDerivation {

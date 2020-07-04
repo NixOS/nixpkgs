@@ -8,7 +8,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "tomboy-${version}";
+  pname = "tomboy";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/tomboy-notes/tomboy/releases/download/${version}/tomboy-${version}.tar.xz";
@@ -33,7 +34,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Tomboy;
+    homepage = "https://wiki.gnome.org/Apps/Tomboy";
     description = "A simple note-taking application with synchronization";
     platforms = platforms.linux;
     license = stdenv.lib.licenses.lgpl2;

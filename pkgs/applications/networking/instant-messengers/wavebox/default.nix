@@ -1,16 +1,18 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper, autoPatchelfHook
-, xorg, gtk2, gtk3 , gnome2, gnome3, nss, alsaLib, udev, libnotify, xdg_utils }:
+{ alsaLib, autoPatchelfHook, fetchurl, gtk3, libnotify
+, makeDesktopItem, makeWrapper, nss, stdenv, udev, xdg_utils
+, xorg
+}:
 
 with stdenv.lib;
 
 let
   bits = "x86_64";
 
-  version = "4.4.0";
+  version = "4.11.3";
 
   desktopItem = makeDesktopItem rec {
     name = "Wavebox";
-    exec = name;
+    exec = "wavebox";
     icon = "wavebox";
     desktopName = name;
     genericName = name;
@@ -19,11 +21,12 @@ let
 
   tarball = "Wavebox_${replaceStrings ["."] ["_"] (toString version)}_linux_${bits}.tar.gz";
 
-in stdenv.mkDerivation rec {
-  name = "wavebox-${version}";
+in stdenv.mkDerivation {
+  pname = "wavebox";
+  inherit version;
   src = fetchurl {
     url = "https://github.com/wavebox/waveboxapp/releases/download/v${version}/${tarball}";
-    sha256 = "0g77clrxks1ivldq496bg14hv57hm0kjh4g1askxyck69yf8illn";
+    sha256 = "0z04071lq9bfyrlg034fmvd4346swgfhxbmsnl12m7c2m2b9z784";
   };
 
   # don't remove runtime deps
@@ -32,9 +35,9 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 
   buildInputs = with xorg; [
-    libXScrnSaver libXtst
+    libXdmcp libXScrnSaver libXtst
   ] ++ [
-    gtk3 nss gtk2 alsaLib gnome2.GConf
+    alsaLib gtk3 nss
   ];
 
   runtimeDependencies = [ udev.lib libnotify ];
@@ -50,14 +53,13 @@ in stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    paxmark m $out/opt/wavebox/Wavebox
     makeWrapper $out/opt/wavebox/Wavebox $out/bin/wavebox \
       --prefix PATH : ${xdg_utils}/bin
   '';
 
   meta = with stdenv.lib; {
     description = "Wavebox messaging application";
-    homepage = https://wavebox.io;
+    homepage = "https://wavebox.io";
     license = licenses.mpl20;
     maintainers = with maintainers; [ rawkode ];
     platforms = ["x86_64-linux"];

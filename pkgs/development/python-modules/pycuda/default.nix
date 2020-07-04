@@ -13,7 +13,6 @@
 , python
 , mkDerivation
 , stdenv
-, isPy3k
 }:
 let
   compyte = import ./compyte.nix {
@@ -22,18 +21,19 @@ let
 in
 buildPythonPackage rec {
   pname = "pycuda";
-  version = "2018.1.1";
+  version = "2019.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "49d575fca3fd3c95467c3b0fb51967ad17d0c4cc18e078a6748309af4de36a8d";
+    sha256 = "ada56ce98a41f9f95fe18809f38afbae473a5c62d346cfa126a2d5477f24cc8a";
   };
 
-  preConfigure = ''
+  preConfigure = with stdenv.lib.versions; ''
     ${python.interpreter} configure.py --boost-inc-dir=${boost.dev}/include \
                           --boost-lib-dir=${boost}/lib \
                           --no-use-shipped-boost \
-                          --boost-python-libname=boost_python${stdenv.lib.optionalString isPy3k "3"}
+                          --boost-python-libname=boost_python${major python.version}${minor python.version} \
+                          --cuda-root=${cudatoolkit}
   '';
 
   postInstall = ''
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/inducer/pycuda/;
+    homepage = "https://github.com/inducer/pycuda/";
     description = "CUDA integration for Python.";
     license = licenses.mit;
     maintainers = with maintainers; [ artuuge ];

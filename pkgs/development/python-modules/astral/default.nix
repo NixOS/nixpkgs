@@ -1,26 +1,25 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytz, requests, pytest }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy27, pytz, requests, pytest, freezegun }:
 
 buildPythonPackage rec {
   pname = "astral";
-  version = "1.6.1";
+  version = "2.2";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ab0c08f2467d35fcaeb7bad15274743d3ac1ad18b5391f64a0058a9cd192d37d";
+    sha256 = "e41d9967d5c48be421346552f0f4dedad43ff39a83574f5ff2ad32b6627b6fbe";
   };
 
-  propagatedBuildInputs = [ pytz requests ];
+  propagatedBuildInputs = [ pytz requests freezegun ];
 
   checkInputs = [ pytest ];
   checkPhase = ''
-    # https://github.com/sffjunkie/astral/pull/13
-    touch src/test/.api_key
     py.test -m "not webtest"
   '';
 
   meta = with stdenv.lib; {
     description = "Calculations for the position of the sun and the moon";
-    homepage = https://github.com/sffjunkie/astral/;
+    homepage = "https://github.com/sffjunkie/astral/";
     license = licenses.asl20;
     maintainers = with maintainers; [ flokli ];
   };

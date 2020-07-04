@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "pyls-black";
-  version = "0.3.0";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "rupert";
     repo = "pyls-black";
     rev = "v${version}";
-    sha256 = "1pagbafb9r9glzy7nbvrq19msjy4wqahrvmc0wll0a0r4msqpi1d";
+    sha256 = "1ynynay9g6yma39szbzf15ypq3c72fg1i0kjmq1dwxarj68i2gf9";
   };
 
   disabled = !isPy3k;
@@ -24,9 +24,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ black toml python-language-server ];
 
   meta = with lib; {
-    homepage = https://github.com/rupert/pyls-black;
+    homepage = "https://github.com/rupert/pyls-black";
     description = "Black plugin for the Python Language Server";
     license = licenses.mit;
+    # Not compatible with 0.33.1
+    # https://github.com/rupert/pyls-black/issues/24
+    broken = true; # since 2020-06-16
     maintainers = [ maintainers.mic92 ];
   };
 }

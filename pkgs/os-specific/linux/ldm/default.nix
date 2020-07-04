@@ -4,10 +4,11 @@ assert mountPath != "";
 
 let
   version = "0.5";
-  git = https://github.com/LemonBoy/ldm.git;
+  git = "https://github.com/LemonBoy/ldm.git";
 in
 stdenv.mkDerivation rec {
-  name = "ldm-${version}";
+  pname = "ldm";
+  inherit version;
 
   # There is a stable release, but we'll use the lvm branch, which
   # contains important fixes for LVM setups.
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
     sed '16i#include <sys/stat.h>' -i ldm.c
   '';
 
-  buildFlags = "ldm";
+  buildFlags = [ "ldm" ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -37,7 +38,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
 
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.the-kenny ];
     repositories.git = git;
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, glib, dbus-glib
-, desktopSupport, xorg
+, desktopSupport ? "gnomeflashback", xorg
 , gtk2
 , gtk3, gnome3, mate
 , libxfce4util, xfce4-panel
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_LIBXFCE4PANEL_1_0_LIBDIR = "$(out)/lib";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/kalj/xmonad-log-applet;
+    homepage = "https://github.com/kalj/xmonad-log-applet";
     license = licenses.bsd3;
     description = "An applet that will display XMonad log information (${desktopSupport} version)";
     platforms = platforms.linux;

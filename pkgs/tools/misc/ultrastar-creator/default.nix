@@ -1,18 +1,23 @@
-{ stdenv, fetchFromGitHub
+{ lib, mkDerivation, fetchFromGitHub
 , qmake, qtbase, pkgconfig, taglib, libbass, libbass_fx }:
 
-stdenv.mkDerivation rec {
-  name = "ultrastar-creator-${version}";
-  version = "2017-04-12";
+# TODO: get rid of (unfree) libbass
+# issue:https://github.com/UltraStar-Deluxe/UltraStar-Creator/issues/3
+# there’s a WIP branch here:
+# https://github.com/UltraStar-Deluxe/UltraStar-Creator/commits/BASS_removed
+
+mkDerivation {
+  pname = "ultrastar-creator";
+  version = "2019-04-23";
 
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "UltraStar-Creator";
-    rev = "ac519a003f8283bfbe5e2d8e9cdff3a3faf97001";
-    sha256 = "00idr8a178gvmylq722n13bli59kpxlsy5d8hlplqn7fih48mnzi";
+    rev = "36583b4e482b68f6aa949e77ef2744776aa587b1";
+    sha256 = "1rzz04l7s7pxj74xam0cxlq569lfpgig35kpbsplq531d4007pc9";
   };
 
-  postPatch = with stdenv.lib; ''
+  postPatch = with lib; ''
     # we don’t want prebuild binaries checked into version control!
     rm -rf lib include
     sed -e "s|DESTDIR =.*$|DESTDIR = $out/bin|" \
@@ -31,9 +36,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ qmake pkgconfig ];
   buildInputs = [ qtbase taglib libbass libbass_fx ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ultrastar karaoke song creation tool";
-    homepage = https://github.com/UltraStar-Deluxe/UltraStar-Creator;
+    homepage = "https://github.com/UltraStar-Deluxe/UltraStar-Creator";
     license = licenses.gpl2;
     maintainers = with maintainers; [ Profpatsch ];
   };

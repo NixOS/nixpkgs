@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "iniparser-${version}";
+  pname = "iniparser";
   version = "4.1";
 
   src = fetchFromGitHub {
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/include
     cp src/*.h $out/include
 
-    mkdir -p $out/share/doc/${name}
+    mkdir -p $out/share/doc/${pname}-${version}
     for i in AUTHORS INSTALL LICENSE README.md; do
-      bzip2 -c -9 $i > $out/share/doc/${name}/$i.bz2;
+      bzip2 -c -9 $i > $out/share/doc/${pname}-${version}/$i.bz2;
     done;
-    cp -r html $out/share/doc/${name}
+    cp -r html $out/share/doc/${pname}-${version}
 
     cp libiniparser.a $out/lib
     cp libiniparser.so.1 $out/lib

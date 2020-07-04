@@ -18,7 +18,7 @@ build-idris-package  {
 
   meta = {
     description = "Purely functional data structures in Idris";
-    homepage = https://github.com/timjb/idris-pfds;
+    homepage = "https://github.com/timjb/idris-pfds";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
   };

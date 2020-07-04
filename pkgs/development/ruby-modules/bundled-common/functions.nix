@@ -1,5 +1,10 @@
 { lib, gemConfig, ... }:
-rec {
+
+let
+  inherit (lib) attrValues concatMap converge filterAttrs getAttrs
+                intersectLists;
+
+in rec {
   bundlerFiles = {
     gemfile ? null
   , lockfile ? null
@@ -22,25 +27,36 @@ rec {
     else gemset;
   };
 
-  filterGemset = {ruby, groups,...}: gemset: lib.filterAttrs (name: attrs: platformMatches ruby attrs && groupMatches groups attrs) gemset;
+  filterGemset = { ruby, groups, ... }: gemset:
+    let
+      platformGems = filterAttrs (_: platformMatches ruby) gemset;
+      directlyMatchingGems = filterAttrs (_: groupMatches groups) platformGems;
+
+      expandDependencies = gems:
+        let
+          depNames = concatMap (gem: gem.dependencies or []) (attrValues gems);
+          deps = getAttrs depNames platformGems;
+        in
+          gems // deps;
+    in
+      converge expandDependencies directlyMatchingGems;
 
   platformMatches = {rubyEngine, version, ...}: attrs: (
-  !(attrs ? "platforms") ||
+  !(attrs ? platforms) ||
   builtins.length attrs.platforms == 0 ||
     builtins.any (platform:
       platform.engine == rubyEngine &&
-        (!(platform ? "version") || platform.version == version.majMin)
+        (!(platform ? version) || platform.version == version.majMin)
     ) attrs.platforms
   );
 
-  groupMatches = groups: attrs: (
-  !(attrs ? "groups") ||
-    builtins.any (gemGroup: builtins.any (group: group == gemGroup) groups) attrs.groups
-  );
+  groupMatches = groups: attrs:
+    groups == null || !(attrs ? groups) ||
+      (intersectLists (groups ++ [ "default" ]) attrs.groups) != [];
 
   applyGemConfigs = attrs:
-    (if gemConfig ? "${attrs.gemName}"
-    then attrs // gemConfig."${attrs.gemName}" attrs
+    (if gemConfig ? ${attrs.gemName}
+    then attrs // gemConfig.${attrs.gemName} attrs
     else attrs);
 
   genStubsScript = { lib, ruby, confFiles, bundler, groups, binPaths, ... }: ''
@@ -48,7 +64,7 @@ rec {
         "${ruby}/bin/ruby" \
         "${confFiles}/Gemfile" \
         "$out/${ruby.gemPath}" \
-        "${bundler}/${ruby.gemPath}" \
+        "${bundler}/${ruby.gemPath}/gems/bundler-${bundler.version}" \
         ${lib.escapeShellArg binPaths} \
         ${lib.escapeShellArg groups}
     '';
@@ -72,6 +88,6 @@ rec {
     inherit (attrs.source) type;
     source = removeAttrs attrs.source ["type"];
     gemName = name;
-    gemPath = map (gemName: gems."${gemName}") (attrs.dependencies or []);
+    gemPath = map (gemName: gems.${gemName}) (attrs.dependencies or []);
   });
 }

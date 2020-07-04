@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-icon-hider-${version}";
-  version = "19";
+  pname = "gnome-shell-extension-icon-hider";
+  version = "23";
 
   src = fetchFromGitHub {
     owner = "ikalnytskyi";
     repo = "gnome-shell-extension-icon-hider";
     rev = "v${version}";
-    sha256 = "0cifm6cmxwxrrrva41wvjvrzsdqaczfbillf2vv3wsb60dqr6h39";
+    sha256 = "18c8zkdrmdbghqqz7b450vhgpykgz25mgigwn2nggcb2lxmvm9ks";
   };
 
   uuid = "icon-hider@kalnitsky.org";
@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
     description = "Icon Hider is a GNOME Shell extension for managing status area items";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jonafato ];
-    platforms = platforms.linux;
-    homepage = https://github.com/ikalnytskyi/gnome-shell-extension-icon-hider;
+    platforms = gnome3.gnome-shell.meta.platforms;
+    homepage = "https://github.com/ikalnytskyi/gnome-shell-extension-icon-hider";
+    broken = versionAtLeast gnome3.gnome-shell.version "3.32"; # Doesn't support 3.34
   };
 }

@@ -2,25 +2,26 @@
 , buildPythonPackage
 , fetchPypi
 , django
+, six
 }:
 
 buildPythonPackage rec {
   pname = "django-classy-tags";
-  version = "0.6.1";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wxvpmjdzk0aajk33y4himn3wqjx7k0aqlka9j8ay3yfav78bdq0";
+    sha256 = "1cayqddvxd5prhybqi77lif2z4j7mmfmxgc61pq9i82q5gy2asmd";
   };
 
-  propagatedBuildInputs = [ django ];
+  propagatedBuildInputs = [ django six ];
 
-  # tests appear to be broken on 0.6.1 at least
-  doCheck = ( version != "0.6.1" );
+  # pypi version doesn't include runtest.py, needed to run tests
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Class based template tags for Django";
-    homepage = https://github.com/ojii/django-classy-tags;
+    homepage = "https://github.com/divio/django-classy-tags";
     license = licenses.bsd3;
   };
 

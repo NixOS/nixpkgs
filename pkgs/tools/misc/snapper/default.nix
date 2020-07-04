@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ stdenv, fetchFromGitHub
 , autoreconfHook, pkgconfig, docbook_xsl, libxslt, docbook_xml_dtd_45
 , acl, attr, boost, btrfs-progs, dbus, diffutils, e2fsprogs, libxml2
-, lvm2, pam, python, utillinux }:
+, lvm2, pam, python, utillinux, fetchpatch, json_c, nixosTests }:
 
 stdenv.mkDerivation rec {
-  name = "snapper-${version}";
-  version = "0.7.2";
+  pname = "snapper";
+  version = "0.8.10";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "1dm1kf4wrbcaaagxgbc8q0f5j9dq3bmp6ycl7zx8p70s4nv3xnbc";
+    sha256 = "0bw8aal3a9823zcwini3an9zdxmf7vm912jbyb95rjac0wilqfw7";
   };
 
   nativeBuildInputs = [
@@ -20,12 +20,22 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     acl attr boost btrfs-progs dbus diffutils e2fsprogs libxml2
-    lvm2 pam python utillinux
+    lvm2 pam python utillinux json_c
+  ];
+
+  passthru.tests.snapper = nixosTests.snapper;
+
+  patches = [
+    # Don't use etc/dbus-1/system.d
+    (fetchpatch {
+      url = "https://github.com/openSUSE/snapper/commit/c51708aea22d9436da287cba84424557ad03644b.patch";
+      sha256 = "106pf7pv8z3q37c8ckmgwxs1phf2fy7l53a9g5xq5kk2rjj1cx34";
+    })
   ];
 
   postPatch = ''
     # Hard-coded root paths, hard-coded root paths everywhere...
-    for file in {client,data,pam,scripts}/Makefile.am; do
+    for file in {client,data,pam,scripts,zypp-plugin}/Makefile.am; do
       substituteInPlace $file \
         --replace '$(DESTDIR)/usr' "$out" \
         --replace "DESTDIR" "out" \
@@ -41,9 +51,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = [
-    "-I${libxml2.dev}/include/libxml2"
-  ];
+  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
   postInstall = ''
     rm -r $out/etc/cron.*
@@ -59,9 +67,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tool for Linux filesystem snapshot management";
-    homepage = http://snapper.io;
+    homepage = "http://snapper.io";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tstrobel ];
+    maintainers = with maintainers; [ tstrobel markuskowa ];
   };
 }

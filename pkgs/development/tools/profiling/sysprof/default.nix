@@ -6,6 +6,7 @@
 , glib
 , gtk3
 , itstool
+, libdazzle
 , libxml2
 , meson, ninja
 , pango
@@ -16,38 +17,44 @@
 , wrapGAppsHook
 , gnome3
 }:
-let
-  version = "3.28.1";
+
+stdenv.mkDerivation rec {
   pname = "sysprof";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.36.0";
 
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "05534dvwrzrmryb4y2m1sb2q0r8i6nr88pzjg7xs5nr9zq8a87p3";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "024i0gzqnm79rpr4gqxdvcj6gvf82xdlcp2p1k9ikcppmi6xnw46";
   };
 
   patches = [
-    # fix includedir in pkgconfig
-    # https://gitlab.gnome.org/GNOME/sysprof/merge_requests/2
+    # Fix 32-bit builds
+    # https://gitlab.gnome.org/GNOME/sysprof/merge_requests/24
     (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/sysprof/commit/d19a496bb55b8646e866df8bb07bc6ad3c55eaf2.patch;
-      sha256 = "15w6di9c4n1gsymkpk413f5f9gd3iq23wdkzs01y9xrxwqpm7hm4";
+      url = "https://gitlab.gnome.org/GNOME/sysprof/commit/5dea152c7728f5a37370ad8a229115833e36b4f6.patch";
+      sha256 = "0c76s7r329pbdlmgvm3grn89iylrxv5wg87craqp937nwk3wb80g";
     })
   ];
 
-  nativeBuildInputs = [ desktop-file-utils gettext itstool libxml2 meson ninja pkgconfig shared-mime-info wrapGAppsHook ];
-  buildInputs = [ glib gtk3 pango polkit systemd.dev systemd.lib ];
+  nativeBuildInputs = [
+    desktop-file-utils
+    gettext
+    itstool
+    libxml2
+    meson
+    ninja
+    pkgconfig
+    shared-mime-info
+    wrapGAppsHook
+    gnome3.adwaita-icon-theme
+  ];
+  buildInputs = [ glib gtk3 pango polkit systemd.dev systemd.lib libdazzle ];
 
   mesonFlags = [
     "-Dsystemdunitdir=lib/systemd/system"
   ];
-
-  postInstall = ''
-    rm $out/share/applications/mimeinfo.cache
-  '';
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -57,7 +64,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "System-wide profiler for Linux";
-    homepage = https://wiki.gnome.org/Apps/Sysprof;
+    homepage = "https://wiki.gnome.org/Apps/Sysprof";
     longDescription = ''
       Sysprof is a sampling CPU profiler for Linux that uses the perf_event_open
       system call to profile the entire system, not just a single
@@ -66,7 +73,7 @@ in stdenv.mkDerivation rec {
       be restarted.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = teams.gnome.members;
+    platforms = platforms.linux;
   };
 }

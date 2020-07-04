@@ -5,8 +5,9 @@
 , ...
 }:
 
-stdenv.mkDerivation rec {
-  name = "tcl-${version}";
+stdenv.mkDerivation {
+  pname = "tcl";
+  inherit version;
 
   inherit src;
 
@@ -15,28 +16,35 @@ stdenv.mkDerivation rec {
   setOutputFlags = false;
 
   preConfigure = ''
-    # Note: using $out instead of $man to prevent a runtime dependency on $man.
-    configureFlagsArray+=(--mandir=$out/share/man --enable-man-symlinks)
-
-    # Don't install tzdata because NixOS already has a more up-to-date copy.
-    configureFlagsArray+=(--with-tzdata=no)
-
     cd unix
   '';
 
+  configureFlags = [
+    "--enable-threads"
+    # Note: using $out instead of $man to prevent a runtime dependency on $man.
+    "--mandir=${placeholder "out"}/share/man"
+    "--enable-man-symlinks"
+    # Don't install tzdata because NixOS already has a more up-to-date copy.
+    "--with-tzdata=no"
+    "tcl_cv_strtod_unbroken=ok"
+  ] ++ stdenv.lib.optional stdenv.is64bit "--enable-64bit";
+
   enableParallelBuilding = true;
 
-  postInstall = ''
+  postInstall = let
+    dllExtension = stdenv.hostPlatform.extensions.sharedLibrary;
+  in ''
     make install-private-headers
     ln -s $out/bin/tclsh${release} $out/bin/tclsh
+    ln -s $out/lib/libtcl${release}${dllExtension} $out/lib/libtcl${dllExtension}
   '';
 
   meta = with stdenv.lib; {
-    description = "The Tcl scription language";
-    homepage = http://www.tcl.tk/;
+    description = "The Tcl scripting language";
+    homepage = "https://www.tcl.tk/";
     license = licenses.tcltk;
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington vrthra ];
+    maintainers = with maintainers; [ vrthra ];
   };
 
   passthru = rec {

@@ -1,17 +1,44 @@
-{ stdenv, fetchurl, lib }:
+{ stdenv, fetchurl, lib, cmake, cacert, fetchpatch, buildShared ? true }:
 
 let
 
-  generic = { version, sha256 }: stdenv.mkDerivation rec {
-    name = "libressl-${version}";
+  generic = { version, sha256, patches ? [] }: stdenv.mkDerivation rec {
+    pname = "libressl";
     inherit version;
 
     src = fetchurl {
-      url = "mirror://openbsd/LibreSSL/${name}.tar.gz";
+      url = "mirror://openbsd/LibreSSL/${pname}-${version}.tar.gz";
       inherit sha256;
     };
 
-    configureFlags = [ "--enable-nc" ];
+    nativeBuildInputs = [ cmake ];
+
+    cmakeFlags = [
+      "-DENABLE_NC=ON"
+      # Ensure that the output libraries do not require an executable stack.
+      # Without this define, assembly files in libcrypto do not include a
+      # .note.GNU-stack section, and if that section is missing from any object,
+      # the linker will make the stack executable.
+      "-DCMAKE_C_FLAGS=-DHAVE_GNU_STACK"
+      # libressl will append this to the regular prefix for libdir
+      "-DCMAKE_INSTALL_LIBDIR=lib"
+    ] ++ lib.optional buildShared "-DBUILD_SHARED_LIBS=ON";
+
+    # The autoconf build is broken as of 2.9.1, resulting in the following error:
+    # libressl-2.9.1/tls/.libs/libtls.a', needed by 'handshake_table'.
+    # Fortunately LibreSSL provides a CMake build as well, so opt for CMake by
+    # removing ./configure pre-config.
+    preConfigure = ''
+      rm configure
+    '';
+
+    inherit patches;
+
+    # Since 2.9.x the default location can't be configured from the build using
+    # DEFAULT_CA_FILE anymore, instead we have to patch the default value.
+    postPatch = lib.optionalString (lib.versionAtLeast version "2.9.2") ''
+      substituteInPlace ./tls/tls_config.c --replace '"/etc/ssl/cert.pem"' '"${cacert}/etc/ssl/certs/ca-bundle.crt"'
+    '';
 
     enableParallelBuilding = true;
 
@@ -19,6 +46,8 @@ let
 
     postFixup = ''
       moveToOutput "bin/nc" "$nc"
+      moveToOutput "bin/openssl" "$bin"
+      moveToOutput "bin/ocspcheck" "$bin"
       moveToOutput "share/man/man1/nc.1${lib.optionalString (dontGzipMan==null) ".gz"}" "$nc"
     '';
 
@@ -27,26 +56,20 @@ let
     meta = with lib; {
       description = "Free TLS/SSL implementation";
       homepage    = "https://www.libressl.org";
-      license = with licenses; [ publicDomain bsdOriginal bsd0 bsd3 gpl3 isc ];
+      license = with licenses; [ publicDomain bsdOriginal bsd0 bsd3 gpl3 isc openssl ];
       platforms   = platforms.all;
-      maintainers = with maintainers; [ thoughtpolice wkennington fpletz globin ];
+      maintainers = with maintainers; [ thoughtpolice fpletz ];
     };
   };
 
 in {
-
-  libressl_2_6 = generic {
-    version = "2.6.5";
-    sha256 = "0anx9nlgixdjn811zclim85jm5yxmxwycj71ix27rlhr233xz7l5";
+  libressl_3_0 = generic {
+    version = "3.0.2";
+    sha256 = "13ir2lpxz8y1m151k7lrx306498nzfhwlvgkgv97v5cvywmifyyz";
   };
 
-  libressl_2_7 = generic {
-    version = "2.7.4";
-    sha256 = "19kxa5i97q7p6rrps9qm0nd8zqhdjvzx02j72400c73cl2nryfhy";
-  };
-
-  libressl_2_8 = generic {
-    version = "2.8.2";
-    sha256 = "1mag4lf3lmg2fh2yzkh663l69h4vjriadwl0zixmb50jkzjk3jxq";
+  libressl_3_1 = generic {
+    version = "3.1.3";
+    sha256 = "184znscbkww65aavy2p4v4xncalp1ni19c2w5yvfq4pnmhb06sy7";
   };
 }

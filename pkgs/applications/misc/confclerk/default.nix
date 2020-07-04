@@ -2,7 +2,8 @@
 
 let version = "0.6.4"; in
 stdenv.mkDerivation {
-  name = "confclerk-${version}";
+  pname = "confclerk";
+  inherit version;
 
   src = fetchurl {
     url = "https://www.toastfreeware.priv.at/tarballs/confclerk/confclerk-${version}.tar.gz";
@@ -20,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Offline conference schedule viewer";
-    homepage = http://www.toastfreeware.priv.at/confclerk;
+    homepage = "http://www.toastfreeware.priv.at/confclerk";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ ehmry ];
     platforms = stdenv.lib.platforms.linux;

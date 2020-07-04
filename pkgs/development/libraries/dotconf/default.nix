@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A configuration parser library";
     maintainers = with maintainers; [ pSub ];
-    homepage = https://github.com/williamh/dotconf;
+    homepage = "https://github.com/williamh/dotconf";
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
   };

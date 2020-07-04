@@ -1,20 +1,11 @@
-{ callPackage, self, stdenv, gettext, gvfs, libunique, bison2, rarian
-, libstartup_notification, overrides ? {} }:
+{ config, stdenv, pkgs, lib }:
 
-let overridden = set // overrides; set = with overridden; {
-  # Backward compatibility.
-  gtkdoc = self.gtk-doc;
-  startup_notification = libstartup_notification;
-  startupnotification = libstartup_notification;
-  gnomedocutils = self.gnome-doc-utils;
-  gnomeicontheme = self.gnome_icon_theme;
-  gnome_common = gnome-common;
-  inherit rarian;
+lib.makeScope pkgs.newScope (self: with self; {
 
 #### PLATFORM
 
   libIDL = callPackage ./platform/libIDL {
-    gettext = if stdenv.isDarwin then gettext else null;
+    gettext = if stdenv.isDarwin then pkgs.gettext else null;
   };
 
   ORBit2 = callPackage ./platform/ORBit2 { };
@@ -23,9 +14,7 @@ let overridden = set // overrides; set = with overridden; {
 
   libglade = callPackage ./platform/libglade { };
 
-  libgnomeprint = callPackage ./platform/libgnomeprint {
-    bison = bison2;
-  };
+  libgnomeprint = callPackage ./platform/libgnomeprint { };
 
   libgnomeprintui = callPackage ./platform/libgnomeprintui { };
 
@@ -47,7 +36,6 @@ let overridden = set // overrides; set = with overridden; {
   gnome_python = callPackage ./bindings/gnome-python { };
 
   gnome_python_desktop = callPackage ./bindings/gnome-python-desktop { };
-  python_rsvg = overridden.gnome_python_desktop;
 
   gnome_vfs = callPackage ./platform/gnome-vfs { };
 
@@ -59,25 +47,18 @@ let overridden = set // overrides; set = with overridden; {
 
   libbonoboui = callPackage ./platform/libbonoboui { };
 
-  gtkhtml = callPackage ./platform/gtkhtml { };
+  gtkhtml = callPackage ./platform/gtkhtml { enchant = pkgs.enchant1; };
 
-  gtkhtml4 = callPackage ./platform/gtkhtml/4.x.nix { };
-
-  # Required for nautilus
-  inherit (libunique);
+  gtkhtml4 = callPackage ./platform/gtkhtml/4.x.nix { enchant = pkgs.enchant1; };
 
   gtkglext = callPackage ./platform/gtkglext { };
 
 #### DESKTOP
 
-  gvfs = gvfs.override { gnome = self; };
-
   # Removed from recent GNOME releases, but still required
   scrollkeeper = callPackage ./desktop/scrollkeeper { };
 
   gtksourceview = callPackage ./desktop/gtksourceview { };
-
-  gnome_icon_theme = callPackage ./desktop/gnome-icon-theme { };
 
   vte = callPackage ./desktop/vte { };
 
@@ -85,4 +66,27 @@ let overridden = set // overrides; set = with overridden; {
 
   libglademm = callPackage ./bindings/libglademm { };
 
-}; in overridden
+} // lib.optionalAttrs (config.allowAliases or true) {
+  inherit (pkgs)
+    # GTK Libs
+    glib glibmm atk atkmm cairo pango pangomm gdk_pixbuf gtkmm2 libcanberra-gtk2
+
+    # Included for backwards compatibility
+    libsoup libwnck gtk-doc gnome-doc-utils rarian
+
+    gvfs # added 2019-09-03
+  ;
+
+  gtk = pkgs.gtk2;
+  gtkmm = pkgs.gtkmm2;
+  python_rsvg = self.gnome_python_desktop;
+
+  gtkdoc = pkgs.gtk-doc;
+  startup_notification = pkgs.libstartup_notification;
+  startupnotification = pkgs.libstartup_notification;
+  gnomedocutils = pkgs.gnome-doc-utils;
+  gnome-icon-theme = pkgs.gnome-icon-theme;
+  gnome_icon_theme = self.gnome-icon-theme;
+  gnomeicontheme = self.gnome-icon-theme;
+  gnome_common = gnome-common;
+})

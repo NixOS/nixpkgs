@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libusb1, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "libmtp-1.1.15";
+  name = "libmtp-1.1.17";
 
   src = fetchurl {
     url = "mirror://sourceforge/libmtp/${name}.tar.gz";
-    sha256 = "089h79nkz7wcr3lbqi7025l8p75hbp0aigxk3wdk2zkm8q5r0h6h";
+    sha256 = "1p3r38nvdip40ab1h4scj3mzfjkx6kd14szjqyw9r6wz5pslr8zq";
   };
 
   outputs = [ "bin" "dev" "out" ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-udev=$$bin/lib/udev" ];
 
   meta = with stdenv.lib; {
-    homepage = http://libmtp.sourceforge.net;
+    homepage = "http://libmtp.sourceforge.net";
     description = "An implementation of Microsoft's Media Transfer Protocol";
     longDescription = ''
       libmtp is an implementation of Microsoft's Media Transfer Protocol (MTP)

@@ -1,40 +1,49 @@
-{ stdenv, fetchFromGitHub
-, cmake, pkgconfig, asciidoc, libxslt, docbook_xsl
-, wayland, wlc, libxkbcommon, pcre, json_c, dbus
-, pango, cairo, libinput, libcap, pam, gdk_pixbuf, libpthreadstubs
-, libXdmcp
-, buildDocs ? true
+{ stdenv, fetchFromGitHub, makeWrapper
+, meson, ninja
+, pkgconfig, scdoc
+, wayland, libxkbcommon, pcre, json_c, dbus, libevdev
+, pango, cairo, libinput, libcap, pam, gdk-pixbuf, librsvg
+, wlroots, wayland-protocols
 }:
 
 stdenv.mkDerivation rec {
-  name = "sway-${version}";
-  version = "0.15.2";
+  pname = "sway-unwrapped";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = version;
-    sha256 = "1p9j5gv85lsgj4z28qja07dqyvqk41w6mlaflvvm9yxafx477g5n";
+    sha256 = "11qf89y3q92g696a6f4d23qb44gqixg6qxq740vwv2jw59ms34ja";
   };
 
+  patches = [
+    ./sway-config-no-nix-store-references.patch
+    ./load-configuration-from-etc.patch
+  ];
+
   nativeBuildInputs = [
-    cmake pkgconfig
-  ] ++ stdenv.lib.optional buildDocs [ asciidoc libxslt docbook_xsl ];
+    pkgconfig meson ninja scdoc
+  ];
+
   buildInputs = [
-    wayland wlc libxkbcommon pcre json_c dbus
-    pango cairo libinput libcap pam gdk_pixbuf libpthreadstubs
-    libXdmcp
+    wayland libxkbcommon pcre json_c dbus libevdev
+    pango cairo libinput libcap pam gdk-pixbuf librsvg
+    wlroots wayland-protocols
   ];
 
   enableParallelBuilding = true;
 
-  cmakeFlags = "-DVERSION=${version} -DLD_LIBRARY_PATH=/run/opengl-driver/lib:/run/opengl-driver-32/lib";
+  mesonFlags = [
+    "-Ddefault-wallpaper=false" "-Dxwayland=enabled" "-Dgdk-pixbuf=enabled"
+    "-Dtray=enabled" "-Dman-pages=enabled"
+  ];
 
   meta = with stdenv.lib; {
-    description = "i3-compatible window manager for Wayland";
-    homepage    = https://swaywm.org;
+    description = "i3-compatible tiling Wayland compositor";
+    homepage    = "https://swaywm.org";
     license     = licenses.mit;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ primeos ]; # Trying to keep it up-to-date.
+    maintainers = with maintainers; [ primeos synthetica ma27 ];
   };
 }

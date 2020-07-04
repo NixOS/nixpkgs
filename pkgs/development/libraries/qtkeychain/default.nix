@@ -1,6 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, qt4 ? null
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, qt4 ? null
 , withQt5 ? false, qtbase ? null, qttools ? null
 , darwin ? null
+, libsecret
 }:
 
 assert withQt5 -> qtbase != null;
@@ -18,27 +19,24 @@ stdenv.mkDerivation rec {
     sha256 = "0h4wgngn2yl35hapbjs24amkjfbzsvnna4ixfhn87snjnq5lmjbc"; # v0.9.1
   };
 
-  patches = if withQt5 then null else [ ./0001-Fixes-build-with-Qt4.patch ];
+  patches = (if withQt5 then [] else [ ./0001-Fixes-build-with-Qt4.patch ]) ++ (if stdenv.isDarwin then [ ./0002-Fix-install-name-Darwin.patch ] else []);
 
-  cmakeFlags = [ "-DQT_TRANSLATIONS_DIR=share/qt/translations" ]
-    ++ stdenv.lib.optional stdenv.isDarwin [
-       # correctly detect the compiler
-       # for details see cmake --help-policy CMP0025
-       "-DCMAKE_POLICY_DEFAULT_CMP0025=NEW"
-       ]
-   ;
+  cmakeFlags = [ "-DQT_TRANSLATIONS_DIR=share/qt/translations" ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ]
+    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ pkgconfig ] # for finding libsecret
+  ;
 
-  buildInputs = if withQt5 then [ qtbase qttools ] else [ qt4 ]
-    ++ stdenv.lib.optional stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-         CoreFoundation Security
+  buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [ libsecret ]
+    ++ (if withQt5 then [ qtbase qttools ] else [ qt4 ])
+    ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      CoreFoundation Security
     ])
   ;
 
   meta = {
     description = "Platform-independent Qt API for storing passwords securely";
-    homepage = https://github.com/frankosterfeld/qtkeychain;
+    homepage = "https://github.com/frankosterfeld/qtkeychain";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.unix;
   };

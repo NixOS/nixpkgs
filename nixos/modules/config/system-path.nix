@@ -7,9 +7,8 @@ with lib;
 
 let
 
-  requiredPackages =
-    [ config.nix.package
-      pkgs.acl
+  requiredPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
+    [ pkgs.acl
       pkgs.attr
       pkgs.bashInteractive # bash with ncurses support
       pkgs.bzip2
@@ -19,7 +18,9 @@ let
       pkgs.diffutils
       pkgs.findutils
       pkgs.gawk
-      pkgs.glibc # for ldd, getent
+      pkgs.stdenv.cc.libc
+      pkgs.getent
+      pkgs.getconf
       pkgs.gnugrep
       pkgs.gnupatch
       pkgs.gnused
@@ -31,7 +32,6 @@ let
       pkgs.nano
       pkgs.ncurses
       pkgs.netcat
-      pkgs.nix-info
       config.programs.ssh.package
       pkgs.perl
       pkgs.procps
@@ -41,6 +41,7 @@ let
       pkgs.time
       pkgs.utillinux
       pkgs.which # 88K size
+      pkgs.zstd
     ];
 
 in
@@ -114,6 +115,7 @@ in
         "/lib" # FIXME: remove and update debug-info.nix
         "/sbin"
         "/share/emacs"
+        "/share/hunspell"
         "/share/nano"
         "/share/org"
         "/share/themes"
@@ -133,9 +135,8 @@ in
       # outputs TODO: note that the tools will often not be linked by default
       postBuild =
         ''
-          if [ -x $out/bin/gtk-update-icon-cache -a -f $out/share/icons/hicolor/index.theme ]; then
-              $out/bin/gtk-update-icon-cache $out/share/icons/hicolor
-          fi
+          # Remove wrapped binaries, they shouldn't be accessible via PATH.
+          find $out/bin -maxdepth 1 -name ".*-wrapped" -type l -delete
 
           if [ -x $out/bin/glib-compile-schemas -a -w $out/share/glib-2.0/schemas ]; then
               $out/bin/glib-compile-schemas $out/share/glib-2.0/schemas

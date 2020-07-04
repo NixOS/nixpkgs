@@ -5,7 +5,6 @@
 stdenv.mkDerivation rec {
   pname = "stoken";
   version = "0.92";
-  name = "${pname}-${version}";
   src = fetchFromGitHub {
     owner = "cernekee";
     repo = pname;
@@ -29,9 +28,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Software Token for Linux/UNIX";
-    homepage = https://github.com/cernekee/stoken;
+    homepage = "https://github.com/cernekee/stoken";
     license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.fuuzetsu ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

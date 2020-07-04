@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, makeWrapper, mono, openssl, ocl-icd }:
+{ stdenv, fetchFromGitHub, makeWrapper, mono, openssl_1_0_2, ocl-icd }:
 
 stdenv.mkDerivation rec {
   version = "2.1";
-  name = "scallion-${version}";
+  pname = "scallion";
 
   src = fetchFromGitHub {
     owner = "lachesis";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share
     cp scallion/bin/Debug/* $out/share/
     makeWrapper ${mono}/bin/mono $out/bin/scallion \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ openssl ocl-icd ]} \
+      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ openssl_1_0_2 ocl-icd ]} \
       --add-flags $out/share/scallion.exe
   '';
 

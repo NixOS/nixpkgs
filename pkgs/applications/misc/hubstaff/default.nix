@@ -5,7 +5,9 @@
 
 let
 
-  version = "1.3.1-ff75f26";
+  data = builtins.fromJSON (builtins.readFile ./revision.json);
+
+  inherit (data) version url sha256;
 
   rpath = stdenv.lib.makeLibraryPath
     [ libX11 zlib libSM libICE libXext freetype libXrender fontconfig libXft
@@ -15,12 +17,10 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "hubstaff-${version}";
+  pname = "hubstaff";
+  inherit version;
 
-  src = fetchurl {
-    url = "https://hubstaff-production.s3.amazonaws.com/downloads/HubstaffClient/Builds/Release/${version}/Hubstaff-${version}.sh";
-    sha256 = "0jm5l34r6lkfkg8vsdfqbr0axngxznhagwcl9y184lnyji91fmdl";
-  };
+  src = fetchurl { inherit sha256 url; };
 
   nativeBuildInputs = [ unzip makeWrapper ];
 
@@ -58,9 +58,9 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Time tracking software";
-    homepage = https://hubstaff.com/;
+    homepage = "https://hubstaff.com/";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.michalrus ];
+    maintainers = with maintainers; [ michalrus srghma ];
   };
 }

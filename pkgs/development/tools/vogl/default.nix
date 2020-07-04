@@ -7,8 +7,8 @@
 , fetchpatch
 }:
 
-mkDerivation rec {
-  name = "vogl-${version}";
+mkDerivation {
+  pname = "vogl";
   version = "2016-05-13";
 
   src = fetchFromGitHub {
@@ -48,9 +48,10 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "OpenGL capture / playback debugger.";
-    homepage = https://github.com/ValveSoftware/vogl;
+    homepage = "https://github.com/ValveSoftware/vogl";
     license = licenses.mit;
     maintainers = [ maintainers.deepfire ];
     platforms = [ "x86_64-linux" "i686-linux" ];
+    broken = true;
   };
 }

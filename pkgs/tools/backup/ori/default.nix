@@ -1,8 +1,8 @@
 { stdenv, fetchurl, boost, pkgconfig, scons, utillinux, fuse, libevent, openssl, zlib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.8.1";
-  name = "ori-${version}";
+  pname = "ori";
 
   src = fetchurl {
     url = "https://bitbucket.org/orifs/ori/downloads/ori-0.8.1.tar.xz";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A secure distributed file system";
-    homepage = http://ori.scs.stanford.edu/;
+    homepage = "http://ori.scs.stanford.edu/";
     license = licenses.mit;
     platforms = platforms.unix;
     broken = true; # 2018-04-11

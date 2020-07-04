@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "This module contains useful functions for general use in the TiCC software stack and beyond.";
-    homepage    = https://github.com/LanguageMachines/ticcutils;
+    homepage    = "https://github.com/LanguageMachines/ticcutils";
     license     = licenses.gpl3;
     platforms   = platforms.all;
     maintainers = with maintainers; [ roberth ];

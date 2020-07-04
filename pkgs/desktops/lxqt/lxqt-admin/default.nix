@@ -1,15 +1,27 @@
-{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtx11extras, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, polkit-qt }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, lxqt-build-tools
+, qtx11extras
+, qttools
+, qtsvg
+, kwindowsystem
+, liblxqt
+, libqtxdg
+, polkit-qt
+, lxqtUpdateScript
+}:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "lxqt-admin";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1nsf8sbgmfanvcxw67drhz1wrizkcd0p87jwr1za5rcgd50bi2yy";
+    sha256 = "16fbnlvla8lq6rkv5gpmkw2jj9h1wzd3jcf8sjrbns6ygyfdxx3a";
   };
 
   nativeBuildInputs = [
@@ -27,18 +39,18 @@ stdenv.mkDerivation rec {
     polkit-qt
   ];
 
-  patchPhase = ''
+  postPatch = ''
     sed "s|\''${POLKITQT-1_POLICY_FILES_INSTALL_DIR}|''${out}/share/polkit-1/actions|" \
       -i lxqt-admin-user/CMakeLists.txt
   '';
 
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LXQt system administration tool";
-    homepage = https://github.com/lxqt/lxqt-admin;
+    homepage = "https://github.com/lxqt/lxqt-admin";
     license = licenses.lgpl21;
-    platforms = with platforms; unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
 }

@@ -2,15 +2,14 @@
 , texinfo, gnused, usePython ? true }:
 
 stdenv.mkDerivation rec {
-  name = "ledger-${version}";
-  version = "3.1.1";
+  pname = "ledger";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner  = "ledger";
     repo   = "ledger";
     rev    = "v${version}";
-    sha256 = "1j4p7djkmdmd858hylrsc3inamh9z0vkfl98s9wiqfmrzw51pmxp";
-    fetchSubmodules = true;
+    sha256 = "0bfnrqrd6wqgsngfpqi30xh6yy86pwl25iwzrqy44q31r0zl4mm3";
   };
 
   buildInputs = [
@@ -22,17 +21,18 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" (stdenv.lib.optionalString usePython "-DUSE_PYTHON=true") ];
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DBUILD_DOCS:BOOL=ON"
+    (stdenv.lib.optionalString usePython "-DUSE_PYTHON=true")
+   ];
 
-  # Skip byte-compiling of emacs-lisp files because this is currently
-  # broken in ledger...
-  postInstall = ''
-    mkdir -p $out/share/emacs/site-lisp/
-    cp -v "$src/lisp/"*.el $out/share/emacs/site-lisp/
+  postBuild = ''
+    make doc
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://ledger-cli.org/;
+    homepage = "https://ledger-cli.org/";
     description = "A double-entry accounting system with a command-line reporting interface";
     license = licenses.bsd3;
 
@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.all;
-    maintainers = with maintainers; [ the-kenny jwiegley ];
+    maintainers = with maintainers; [ jwiegley ];
   };
 }

@@ -1,21 +1,21 @@
 { stdenv, fetchurl }:
 
 let
-  rev = "b75cdc942a6172f63b34faf642b8c797239f6776";
+  rev = "a8d79c3130da83c7cacd6fee31b9acc53799c406";
 
   # Don't use fetchgit as this is needed during Aarch64 bootstrapping
   configGuess = fetchurl {
-    url = "http://git.savannah.gnu.org/cgit/config.git/plain/config.guess?id=${rev}";
-    sha256 = "1bb8z1wzjs81p9qrvji4bc2a8zyxjinz90k8xq7sxxdp6zrmq1sv";
+    url = "https://git.savannah.gnu.org/cgit/config.git/plain/config.guess?id=${rev}";
+    sha256 = "0qbq49gr2cmf4gzrjvrmpwxxgzl3vap1xm902xa8pkcqdvriq0qw";
   };
   configSub = fetchurl {
-    url = "http://git.savannah.gnu.org/cgit/config.git/plain/config.sub?id=${rev}";
-    sha256 = "00dn5i2cp4iqap5vr368r5ifrgcjfq5pr97i4dkkdbha1han5hsc";
+    url = "https://git.savannah.gnu.org/cgit/config.git/plain/config.sub?id=${rev}";
+    sha256 = "0i699axqfkxk9mgv1hlms5r44pf0s642yz75ajjjpwzhw4d5pnv4";
   };
 in
-stdenv.mkDerivation rec {
-  name = "gnu-config-${version}";
-  version = "2016-12-31";
+stdenv.mkDerivation {
+  pname = "gnu-config";
+  version = "2019-04-15";
 
   buildCommand = ''
     mkdir -p $out
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Attempt to guess a canonical system name";
-    homepage = http://savannah.gnu.org/projects/config;
+    homepage = "https://savannah.gnu.org/projects/config";
     license = licenses.gpl3;
     # In addition to GPLv3:
     #   As a special exception to the GNU General Public License, if you

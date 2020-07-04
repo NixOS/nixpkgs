@@ -1,6 +1,6 @@
 { stdenv, fetchurl, unzip, puredata }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "helmholtz";
 
   src = fetchurl {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Time domain pitch tracker for Pure Data";
-    homepage = http://www.katjaas.nl/helmholtz/helmholtz.html;
+    homepage = "http://www.katjaas.nl/helmholtz/helmholtz.html";
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];
     platforms = stdenv.lib.platforms.linux;

@@ -3,7 +3,8 @@
 let
   version = "1.8.4.2";
   drv = stdenv.mkDerivation {
-    name = "keepasshttp-${version}";
+    pname = "keepasshttp";
+    inherit version;
     src = fetchFromGitHub {
       owner = "pfn";
       repo = "keepasshttp";
@@ -16,7 +17,7 @@ let
 
     meta = {
       description = "KeePass plugin to expose password entries securely (256bit AES/CBC) over HTTP";
-      homepage    = https://github.com/pfn/keepasshttp;
+      homepage    = "https://github.com/pfn/keepasshttp";
       platforms   = with stdenv.lib.platforms; linux;
       license     = stdenv.lib.licenses.gpl3;
     };

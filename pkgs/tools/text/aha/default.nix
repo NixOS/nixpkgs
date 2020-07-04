@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "aha-${version}";
-  version = "0.4.10.6";
+  pname = "aha";
+  version = "0.5";
 
   src = fetchFromGitHub {
-    sha256 = "18mz3f5aqw4vbdrxf8wblqm6nca73ppq9hb2z2ppw6k0557i71kz";
+    sha256 = "0byml4rmpiaalwx69jcixl3yvpvwmwiss1jzgsqwshilb2p4qnmz";
     rev = version;
     repo = "aha";
     owner = "theZiz";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       aha takes ANSI SGR-coloured input and produces W3C-conformant HTML code.
     '';
-    homepage = https://github.com/theZiz/aha;
+    homepage = "https://github.com/theZiz/aha";
     license = with licenses; [ lgpl2Plus mpl11 ];
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;

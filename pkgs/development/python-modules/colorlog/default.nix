@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "colorlog";
-  version = "3.1.4";
+  version = "4.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "418db638c9577f37f0fae4914074f395847a728158a011be2a193ac491b9779d";
+    sha256 = "1lpk8zmfv8vz090h5d0hzb4n39wgasxdd3x3bpn3v1x1n9dfzaih";
   };
 
   checkInputs = [ pytest ];
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Log formatting with colors";
-    homepage = https://github.com/borntyping/python-colorlog;
+    homepage = "https://github.com/borntyping/python-colorlog";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

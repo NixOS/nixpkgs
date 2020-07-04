@@ -21,7 +21,7 @@ build-idris-package  {
 
   meta = {
     description = "Parsers for various configuration files written in Idris.";
-    homepage = https://github.com/benclifford/idris-config;
+    homepage = "https://github.com/benclifford/idris-config";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
   };

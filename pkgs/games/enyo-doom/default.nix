@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitLab, cmake, qtbase }:
+{ mkDerivation, stdenv, fetchFromGitLab, cmake, qtbase }:
 
-stdenv.mkDerivation rec {
-  name = "enyo-doom-${version}";
-  version = "1.05";
+mkDerivation rec {
+  pname = "enyo-doom";
+  version = "1.06.9";
 
   src = fetchFromGitLab {
     owner = "sdcofer70";
     repo = "enyo-doom";
     rev = version;
-    sha256 = "1bmpgqwcp7640dbq1w8bkbk6mkn4nj5yxkvmjrl5wnlg0m1g0jr7";
+    sha256 = "0vx5zy47cqrqdgyx31wg56ivva0qqiyww8bp1x32ax99danymjyf";
   };
 
   nativeBuildInputs = [ cmake ];

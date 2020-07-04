@@ -1,8 +1,6 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, docutils
-, virtualenv
 , webtest
 , zope_component
 , hupper
@@ -10,7 +8,6 @@
 , plaster
 , plaster-pastedeploy
 , repoze_lru
-, repoze_sphinx_autointerface
 , translationstring
 , venusian
 , webob
@@ -21,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "pyramid";
-  version = "1.9.1";
+  version = "1.10.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dhbzc4q0vsnv3aihy728aczg56xs6h9s1rmvr096q4lb6yln3w4";
+    sha256 = "d80ccb8cfa550139b50801591d4ca8a5575334adb493c402fce2312f55d07d66";
   };
 
-  checkInputs = [ docutils virtualenv webtest zope_component ];
+  checkInputs = [ webtest zope_component ];
 
-  propagatedBuildInputs = [ hupper PasteDeploy plaster plaster-pastedeploy repoze_lru repoze_sphinx_autointerface translationstring venusian webob zope_deprecation zope_interface ];
+  propagatedBuildInputs = [ hupper PasteDeploy plaster plaster-pastedeploy repoze_lru translationstring venusian webob zope_deprecation zope_interface ];
 
   # Failing tests
   # https://github.com/Pylons/pyramid/issues/1899
@@ -38,9 +35,9 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "The Pyramid Web Framework, a Pylons project";
-    homepage = https://trypyramid.com/;
+    homepage = "https://trypyramid.com/";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ garbas domenkozar ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 
 }

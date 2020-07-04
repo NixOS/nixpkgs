@@ -42,9 +42,11 @@ buildPythonPackage rec {
     inherit pname sha256 version;
   };
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "A web framework and asynchronous networking library";
-    homepage = http://www.tornadoweb.org/;
+    homepage = "http://www.tornadoweb.org/";
     license = lib.licenses.asl20;
   };
 }

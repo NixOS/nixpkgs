@@ -1,24 +1,26 @@
-{ stdenv, fetchurl } :
+{ stdenv, fetchFromGitHub } :
 
 stdenv.mkDerivation rec {
-  version = "2.5.1";
-  name = "afio-${version}";
+  version = "2.5.2";
+  pname = "afio";
 
-  src = fetchurl {
-    url = "http://members.chello.nl/~k.holtman/${name}.tgz";
-    sha256 = "363457a5d6ee422d9b704ef56d26369ca5ee671d7209cfe799cab6e30bf2b99a";
+  src = fetchFromGitHub {
+    owner = "kholtman";
+    repo = "afio";
+    rev = "v${version}";
+    sha256 = "1vbxl66r5rp5a1qssjrkfsjqjjgld1cq57c871gd0m4qiq9rmcfy";
   };
 
   /*
    * A patch to simplify the installation and for removing the
    * hard coded dependency on GCC.
    */
-  patches = [ ./afio-2.5.1-install.patch ];
+  patches = [ ./0001-makefile-fix-installation.patch ];
 
-  installFlags = "DESTDIR=$(out)";
+  installFlags = [ "DESTDIR=$(out)" ];
 
   meta = {
-    homepage = http://members.chello.nl/~k.holtman/afio.html;
+    homepage = "https://github.com/kholtman/afio";
     description = "Fault tolerant cpio archiver targeting backups";
     platforms = stdenv.lib.platforms.all;
     /*

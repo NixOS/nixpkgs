@@ -1,6 +1,6 @@
 { stdenv, fetchurl, netcdf, hdf5, curl }:
 stdenv.mkDerivation rec {
-  name = "netcdf-cxx4-${version}";
+  pname = "netcdf-cxx4";
   version = "4.3.0";
 
   src = fetchurl {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "C++ API to manipulate netcdf files";
-    homepage = https://www.unidata.ucar.edu/software/netcdf/;
+    homepage = "https://www.unidata.ucar.edu/software/netcdf/";
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.unix;
   };

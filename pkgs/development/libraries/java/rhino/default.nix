@@ -10,7 +10,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "rhino-${version}";
+  pname = "rhino";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://mozilla/js/rhino1_7R2.zip";
@@ -51,7 +52,7 @@ stdenv.mkDerivation {
          to provide scripting to end users.
       '';
 
-    homepage = http://www.mozilla.org/rhino/;
+    homepage = "http://www.mozilla.org/rhino/";
 
     license = with licenses; [ mpl11 /* or */ gpl2Plus ];
     platforms = platforms.linux ++ platforms.darwin;

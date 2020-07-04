@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
+  NIX_LDFLAGS = "-lbluetooth";
+
   postInstall = ''
     # Some programs (for example, cabal-install) have problems with the double 0
     sed -i -e "s/0.6.00/0.6.0/" $out/lib/pkgconfig/cwiid.pc
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Linux Nintendo Wiimote interface";
-    homepage    = http://cwiid.org;
+    homepage    = "http://cwiid.org";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ bennofs ];
     platforms   = platforms.linux;

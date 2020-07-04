@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, libusb, libyubikey, json_c }:
+{ stdenv, fetchurl, pkgconfig, libusb1, libyubikey, json_c }:
 
 stdenv.mkDerivation rec {
-  name = "yubikey-personalization-${version}";
-  version = "1.19.0";
+  pname = "yubikey-personalization";
+  version = "1.20.0";
 
   src = fetchurl {
     url = "https://developers.yubico.com/yubikey-personalization/Releases/ykpers-${version}.tar.gz";
-    sha256 = "104lc0nnqdr365fa7c4vrq67rxp1dp8idndsh9jlhnj9dnhszj1b";
+    sha256 = "14wvlwqnwj0gllkpvfqiy8ns938bwvjsz8x1hmymmx32m074vj0f";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libusb libyubikey json_c ];
+  buildInputs = [ libusb1 libyubikey json_c ];
 
   configureFlags = [
     "--with-backend=libusb-1.0"
@@ -24,10 +24,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://developers.yubico.com/yubikey-personalization;
+    homepage = "https://developers.yubico.com/yubikey-personalization";
     description = "A library and command line tool to personalize YubiKeys";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

@@ -8,8 +8,8 @@
 #   dependencies on a Ruby interpreter etc.
 # - We for the moment do not package them to keep the dependencies slim.
 #   Probably, shall package the newer tools as skktools-extra in the future.
-stdenv.mkDerivation rec {
-  name = "skktools-${version}";
+stdenv.mkDerivation {
+  pname = "skktools";
   version = "1.3.3";
   src = fetchFromGitHub {
     owner = "skk-dev";
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       (merge, sort etc.) the dictionaries formatted for SKK Japanese
       input method.
     '';
-    homepage = https://github.com/skk-dev/skktools;
+    homepage = "https://github.com/skk-dev/skktools";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ yuriaisaka ];
     platforms = with stdenv.lib.platforms; linux ++ darwin;

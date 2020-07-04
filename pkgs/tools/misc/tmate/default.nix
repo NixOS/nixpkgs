@@ -2,14 +2,14 @@
 , zlib, openssl, libevent, ncurses, ruby, msgpack, libssh }:
 
 stdenv.mkDerivation rec {
-  name = "tmate-${version}";
-  version = "2.2.1";
+  pname = "tmate";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner  = "tmate-io";
     repo   = "tmate";
     rev    = version;
-    sha256 = "0pfl9vrswzim9ydi1n652h3rax2zrmy6sqkp0r09yy3lw83h4y1r";
+    sha256 = "0x5c31yq7ansmiy20a0qf59wagba9v3pq97mlkxrqxn4n1gcc6vi";
   };
 
   dontUseCmakeConfigure = true;
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage    = https://tmate.io/;
+    homepage    = "https://tmate.io/";
     description = "Instant Terminal Sharing";
     license     = licenses.mit;
     platforms   = platforms.unix;

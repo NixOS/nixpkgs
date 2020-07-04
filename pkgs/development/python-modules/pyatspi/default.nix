@@ -2,17 +2,18 @@
 
 buildPythonPackage rec {
   pname = "pyatspi";
-  version = "2.26.0";
+  version = "2.36.0";
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0xdnix7gxzgf75xy9ris4dd6b05mqwicw190b98xqmypydyf95n6";
+    sha256 = "1pg1zzjl167iavin6xzzm20mh3m6dvl7d8h1r571s44yj6zw2dji";
   };
+
+  nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [
     at-spi2-core
-    pkgconfig
     pygobject3
   ];
 
@@ -27,9 +28,9 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python client bindings for D-Bus AT-SPI";
-    homepage = https://wiki.linuxfoundation.org/accessibility/d-bus;
+    homepage = "https://wiki.linuxfoundation.org/accessibility/d-bus";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ jgeerds jtojnar ];
+    maintainers = with maintainers; [ jtojnar ];
     platforms = with platforms; unix;
   };
 }

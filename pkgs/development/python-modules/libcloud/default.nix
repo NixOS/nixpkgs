@@ -1,30 +1,36 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , mock
 , pycrypto
+, requests
+, pytestrunner
+, pytest
+, requests-mock
+, typing
 }:
 
 buildPythonPackage rec {
   pname = "apache-libcloud";
-  version = "1.2.1";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0qlhyz5f32xg8i10biyzqscks8d28vklk63hvj45vzy1amw60kqz";
+    sha256 = "b9eef1a61383fd401a537cf0796a1067a265288b7ab89be93f5571961a8a2902";
   };
 
-  buildInputs = [ mock ];
-  propagatedBuildInputs = [ pycrypto ];
+  checkInputs = [ mock pytest pytestrunner requests-mock ];
+  propagatedBuildInputs = [ pycrypto requests ] ++ lib.optionals isPy27 [ typing ];
 
   preConfigure = "cp libcloud/test/secrets.py-dist libcloud/test/secrets.py";
 
-  # failing tests for 26 and 27
+  # requires a certificates file
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A unified interface to many cloud providers";
-    homepage = http://incubator.apache.org/libcloud/;
+    homepage = "http://incubator.apache.org/libcloud/";
     license = licenses.asl20;
   };
 

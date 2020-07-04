@@ -1,27 +1,37 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, python3Packages }:
 
-pythonPackages.buildPythonApplication rec {
-  name = "hy-${version}";
-  version = "0.14.0";
+python3Packages.buildPythonApplication rec {
+  pname = "hy";
+  version = "0.18.0";
 
-  src = fetchurl {
-    url = "mirror://pypi/h/hy/${name}.tar.gz";
-    sha256 = "0cbdh1q0zm00p4h7i44kir4qhw0p6sid78xf6llrx2p21llsnv98";
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "04dfwm336gw61fmgwikvh0cnxk682p19b4w555wl5d7mlym4rwj2";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ appdirs clint astor rply ];
+  checkInputs = with python3Packages; [ flake8 pytest ];
 
-  # The build generates a .json parser file in the home directory under .cache.
-  # This is needed to get it to not try and open files in /homeless-shelter
-  preConfigure = ''
-    export HOME=$TMP
+  propagatedBuildInputs = with python3Packages; [
+    appdirs
+    astor
+    clint
+    colorama
+    fastentrypoints
+    funcparserlib
+    rply
+    pygments
+  ];
+
+  # Hy does not include tests in the source distribution from PyPI, so only test executable.
+  checkPhase = ''
+    $out/bin/hy --help > /dev/null
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A LISP dialect embedded in Python";
-    homepage = http://hylang.org/;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.nixy ];
-    platforms = stdenv.lib.platforms.all;
+    homepage = "http://hylang.org/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nixy ];
+    platforms = platforms.all;
   };
 }

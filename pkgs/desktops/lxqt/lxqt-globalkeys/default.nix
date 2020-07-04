@@ -1,15 +1,27 @@
-{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtx11extras, qtsvg, kwindowsystem, liblxqt, libqtxdg }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, lxqt-build-tools
+, qtbase
+, qttools
+, qtx11extras
+, qtsvg
+, kwindowsystem
+, liblxqt
+, libqtxdg
+, lxqtUpdateScript
+}:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "lxqt-globalkeys";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1fmi0n5chnrpbgf7zwzc3hi55r85hkxaq5jylbwaahmxhnb5hdid";
+    sha256 = "09vib713zbmnwicijycl3n9q35l45lrcw129lf9z95s3ch81x1hm";
   };
 
   nativeBuildInputs = [
@@ -27,20 +39,13 @@ stdenv.mkDerivation rec {
     libqtxdg
   ];
 
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
-  postPatch = ''
-    for dir in autostart xdg; do
-      substituteInPlace $dir/CMakeLists.txt \
-        --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg"
-    done
-  '';
-
-  meta = with stdenv.lib; {
-    description = "Daemon used to register global keyboard shortcuts";
-    homepage = https://github.com/lxqt/lxqt-globalkeys;
+  meta = with lib; {
+    description = "LXQt service for global keyboard shortcuts registration";
+    homepage = "https://github.com/lxqt/lxqt-globalkeys";
     license = licenses.lgpl21;
-    platforms = with platforms; unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
 }

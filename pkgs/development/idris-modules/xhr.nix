@@ -18,7 +18,7 @@ build-idris-package  {
 
   meta = {
     description = "Idris library to interact with xhr";
-    homepage = https://github.com/pierrebeaucamp/idris-xhr;
+    homepage = "https://github.com/pierrebeaucamp/idris-xhr";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.brainrape ];
   };

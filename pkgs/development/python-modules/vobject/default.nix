@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module for reading vCard and vCalendar files";
-    homepage = http://eventable.github.io/vobject/;
+    homepage = "http://eventable.github.io/vobject/";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

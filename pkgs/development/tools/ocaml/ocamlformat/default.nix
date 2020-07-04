@@ -1,50 +1,35 @@
-{ stdenv, fetchFromGitHub, ocamlPackages, dune }:
+{ lib, fetchurl, ocamlPackages }:
 
-with ocamlPackages;
-
-if !stdenv.lib.versionAtLeast ocaml.version "4.05"
-then throw "ocamlformat is not available for OCaml ${ocaml.version}"
-else
-
-stdenv.mkDerivation rec {
-  version = "0.8";
+with ocamlPackages; buildDunePackage rec {
   pname = "ocamlformat";
-  name = "${pname}-${version}";
+  version = "0.14.2";
 
-  src = fetchFromGitHub {
-    owner = "ocaml-ppx";
-    repo = pname;
-    rev = version;
-    sha256 = "1i7rsbs00p43362yv7z7dw0qsnv7vjf630qk676qvfg7kg422w6j";
+  minimumOCamlVersion = "4.06";
+
+  useDune2 = true;
+
+  src = fetchurl {
+    url = "https://github.com/ocaml-ppx/ocamlformat/releases/download/${version}/ocamlformat-${version}.tbz";
+    sha256 = "16phz1sg9b070p6fm8d42j0piizg05vghdjmw8aj7xm82b1pm7sz";
   };
 
   buildInputs = [
-    ocaml
-    dune
-    findlib
-    base
     cmdliner
     fpath
     ocaml-migrate-parsetree
+    odoc
+    re
     stdio
+    uuseg
+    uutf
+    fix
+    menhir
   ];
-
-  configurePhase = ''
-    patchShebangs tools/gen_version.sh
-    tools/gen_version.sh src/Version.ml version
-  '';
-
-  buildPhase = ''
-    dune build -p ocamlformat
-  '';
-
-  inherit (dune) installPhase;
 
   meta = {
     homepage = "https://github.com/ocaml-ppx/ocamlformat";
     description = "Auto-formatter for OCaml code";
-    maintainers = [ stdenv.lib.maintainers.Zimmi48 ];
-    license = stdenv.lib.licenses.mit;
-    inherit (ocamlPackages.ocaml.meta) platforms;
+    maintainers = [ lib.maintainers.Zimmi48 ];
+    license = lib.licenses.mit;
   };
 }

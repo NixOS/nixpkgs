@@ -15,7 +15,7 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
   #
   # One particular example are the boot tests where we want instrumentation
   # within the images but not other stuff like setting up 9p filesystems.
-  options.virtualisation.qemu.program = mkOption { type = types.path; };
+  options.virtualisation.qemu = { };
 
   config = {
 
@@ -55,8 +55,7 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
     systemd.services."serial-getty@hvc0".enable = false;
 
     # Only use a serial console, no TTY.
-    # hvc1: socket backdoor, see "Debugging NixOS tests" section in NixOS manual
-    virtualisation.qemu.consoles = [ "hvc1" qemuSerialDevice ];
+    virtualisation.qemu.consoles = [ qemuSerialDevice ];
 
     boot.initrd.preDeviceCommands =
       ''
@@ -130,9 +129,6 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
     users.users.root.initialHashedPassword = mkOverride 150 "";
 
     services.xserver.displayManager.job.logToJournal = true;
-
-    # set default stateVersion to avoid warnings during eval
-    system.stateVersion = mkDefault "18.03";
   };
 
 }

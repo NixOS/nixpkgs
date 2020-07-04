@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, curl }:
 
 stdenv.mkDerivation rec {
-  name = "sblim-sfcc-${version}";
+  pname = "sblim-sfcc";
   version = "2.2.9"; # this is technically 2.2.9-preview
 
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Small Footprint CIM Client Library";
-    homepage    = https://sourceforge.net/projects/sblim/;
+    homepage    = "https://sourceforge.net/projects/sblim/";
     license     = licenses.cpl10;
     maintainers = with maintainers; [ deepfire ];
     platforms   = platforms.unix;

@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ curl libnxml ];
 
   meta = {
-    homepage = http://www.autistici.org/bakunin/libmrss/doc;
+    homepage = "http://www.autistici.org/bakunin/libmrss/doc";
     description = "C library for parsing, writing and creating RSS/ATOM files or streams";
     license = stdenv.lib.licenses.lgpl2;
 

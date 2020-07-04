@@ -1,49 +1,93 @@
-{ stdenv, fetchurl, fetchpatch, meson, ninja, pkgconfig, glib, gettext, gnutls, p11-kit, libproxy, gnome3
-, gsettings-desktop-schemas }:
+{ stdenv
+, fetchurl
+, substituteAll
+, meson
+, ninja
+, nixosTests
+, pkgconfig
+, glib
+, gettext
+, makeWrapper
+, python3
+, gnutls
+, p11-kit
+, libproxy
+, gnome3
+, gsettings-desktop-schemas
+}:
 
-let
-  pname = "glib-networking";
-  version = "2.56.0";
-in
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "glib-networking";
+  version = "2.64.3";
+
+  outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "14vw8xwajd7m31bpavg2psk693plhjikwpk8bzf3jl1fmsy11za7";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0s518l4bwvdvcp51lbjqcw8g0vq18bznpf5hq2zi6a054jqhcylk";
   };
 
-  outputs = [ "out" "dev" ]; # to deal with propagatedBuildInputs
-
   patches = [
-    # Use GNUTLS system trust for certificates
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/glib-networking/commit/f1c8feee014007cc913b71357acb609f8d1200df.patch;
-      sha256 = "1rbxqsrcb5if3xs2d18pqzd9xnjysdj715ijc41n5w326fsawg7i";
+    (substituteAll {
+      src = ./hardcode-gsettings.patch;
+      gds_gsettings_path = glib.getSchemaPath gsettings-desktop-schemas;
     })
-  ];
 
-  PKG_CONFIG_GIO_2_0_GIOMODULEDIR = "${placeholder "out"}/lib/gio/modules";
+    ./installed-tests-path.patch
+  ];
 
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file
     patchShebangs meson_post_install.py
   '';
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext ];
-  propagatedBuildInputs = [ glib gnutls p11-kit libproxy gsettings-desktop-schemas ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    gettext
+    makeWrapper
+    python3 # for install_script
+  ];
+
+  buildInputs = [
+    glib
+    gnutls
+    p11-kit
+    libproxy
+    gsettings-desktop-schemas
+  ];
 
   doCheck = false; # tests need to access the certificates (among other things)
+
+  mesonFlags = [
+    "-Dinstalled_tests=true"
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+  ];
+
+  postFixup = ''
+    find "$installedTests/libexec" "$out/libexec" -type f -executable -print0 \
+      | while IFS= read -r -d "" file; do
+      echo "Wrapping program '$file'"
+      wrapProgram "$file" --prefix GIO_EXTRA_MODULES : "$out/lib/gio/modules"
+    done
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
     };
+
+    tests = {
+      installedTests = nixosTests.installed-tests.glib-networking;
+    };
   };
 
   meta = with stdenv.lib; {
     description = "Network-related giomodules for glib";
-    license = licenses.lgpl2Plus;
+    homepage = "https://gitlab.gnome.org/GNOME/glib-networking";
+    license = licenses.lgpl21Plus;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

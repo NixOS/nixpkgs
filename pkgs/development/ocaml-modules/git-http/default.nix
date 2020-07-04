@@ -1,24 +1,15 @@
-{ stdenv, ocaml, findlib, dune, git, cohttp-lwt
-, alcotest, mtime, nocrypto
-}:
+{ buildDunePackage, git, cohttp, cohttp-lwt }:
 
-stdenv.mkDerivation rec {
-	name = "ocaml${ocaml.version}-git-http-${version}";
-	inherit (git) version src;
+buildDunePackage {
+	pname = "git-http";
+	inherit (git) version src minimumOCamlVersion;
 
-	buildInputs = [ ocaml findlib dune alcotest mtime nocrypto ];
+	useDune2 = true;
 
-	propagatedBuildInputs = [ git cohttp-lwt ];
-
-	buildPhase = "dune build -p git-http";
-
-	inherit (dune) installPhase;
-
-	doCheck = true;
-	checkPhase = "dune runtest -p git-http";
+	propagatedBuildInputs = [ git cohttp cohttp-lwt ];
 
 	meta = {
 		description = "Client implementation of the “Smart” HTTP Git protocol in pure OCaml";
-		inherit (git.meta) homepage license maintainers platforms;
+		inherit (git.meta) homepage license maintainers;
 	};
 }

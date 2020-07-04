@@ -1,22 +1,23 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, which, pkgconfig, libiconv
-, libffi, libtasn1 }:
+{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkgconfig, which
+, gettext, libffi, libiconv, libtasn1
+}:
 
 stdenv.mkDerivation rec {
-  name = "p11-kit-${version}";
-  version = "0.23.14";
+  pname = "p11-kit";
+  version = "0.23.20";
 
   src = fetchFromGitHub {
     owner = "p11-glue";
-    repo = "p11-kit";
+    repo = pname;
     rev = version;
-    sha256 = "0zmrw1ciybhnxjlsfb07wnf11ak5vrmy8y8fnz3mwm8v3w8dzlvw";
+    sha256 = "00xxhzgd7cpin9nzwrrzykvhjwqg5l45p0cq2gv68y3sxq2p9q6y";
   };
 
   outputs = [ "out" "dev"];
   outputBin = "dev";
 
-  nativeBuildInputs = [ autoreconfHook which pkgconfig ];
-  buildInputs = [ libffi libtasn1 libiconv ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig which ];
+  buildInputs = [ gettext libffi libiconv libtasn1 ];
 
   autoreconfPhase = ''
     NOCONFIGURE=1 ./autogen.sh
@@ -25,18 +26,26 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "--without-trust-paths"
+    "--with-trust-paths=/etc/ssl/certs/ca-certificates.crt"
   ];
 
-  installFlags = [ "exampledir=\${out}/etc/pkcs11" ];
-
-  doInstallCheck = false; # probably a bug in this derivation
   enableParallelBuilding = true;
 
+  doCheck = !stdenv.isDarwin;
+
+  installFlags = [
+    "exampledir=${placeholder "out"}/etc/pkcs11"
+  ];
+
   meta = with stdenv.lib; {
-    homepage = https://p11-glue.freedesktop.org/;
+    description = "Library for loading and sharing PKCS#11 modules";
+    longDescription = ''
+      Provides a way to load and enumerate PKCS#11 modules.
+      Provides a standard configuration setup for installing
+      PKCS#11 modules in such a way that they're discoverable.
+    '';
+    homepage = "https://p11-glue.github.io/p11-glue/p11-kit.html";
     platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
-    license = licenses.mit;
+    license = licenses.bsd3;
   };
 }

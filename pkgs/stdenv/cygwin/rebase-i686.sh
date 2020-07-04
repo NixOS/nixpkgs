@@ -1,7 +1,7 @@
 fixupOutputHooks+=(_cygwinFixAutoImageBase)
 
 _cygwinFixAutoImageBase() {
-    if [ "$dontRebase" == 1 ] || [ ! -d "$prefix" ]; then
+    if [ "${dontRebase-}" == 1 ] || [ ! -d "$prefix" ]; then
         return
     fi
     find "$prefix" -name "*.dll" -type f | while read DLL; do

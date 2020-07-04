@@ -1,6 +1,7 @@
 { lib
-, fetchurl
+, fetchPypi
 , buildPythonPackage
+, isPy27
 , numpy
 , scipy
 , matplotlib
@@ -10,12 +11,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.16.2";
   pname = "ase";
+  version = "3.19.1";
+  disabled = isPy27;
 
-  src = fetchurl {
-     url = "https://gitlab.com/${pname}/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
-     sha256 = "171j3f4a261cfnqjq98px5fldxql65i3jgf60wc945xvh0mbc8ds";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "03xzpmpask2q2609kkq0hfgzsfvkyjpbjws7qx00nnfrbbnjk443";
   };
 
   propagatedBuildInputs = [ numpy scipy matplotlib flask pillow psycopg2 ];
@@ -27,10 +29,10 @@ buildPythonPackage rec {
   # tests just hang most likely due to something with subprocesses and cli
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Atomic Simulation Environment";
-    homepage = https://wiki.fysik.dtu.dk/ase/;
-    license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ costrouc ];
+    homepage = "https://wiki.fysik.dtu.dk/ase/";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ costrouc ];
   };
 }

@@ -1,9 +1,9 @@
 { stdenv, alsaLib, atk, cairo, cups, dbus, dpkg, expat, fetchurl
-, fontconfig, freetype, gdk_pixbuf, glib, gnome2, gtk3, libX11
+, fontconfig, freetype, gdk-pixbuf, glib, gnome2, gtk3, libX11
 , libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
 , libXi, libXrandr, libXrender, libXtst, libappindicator-gtk3, libcxx
 , libnotify, libpulseaudio, libxcb, makeDesktopItem, makeWrapper, nspr, nss
-, nwjs, pango, systemd }:
+, pango, systemd }:
 
 let gitterDirectorySuffix = "opt/gitter";
     doELFPatch = target: ''
@@ -12,7 +12,7 @@ let gitterDirectorySuffix = "opt/gitter";
          $out/${gitterDirectorySuffix}/${target}
        '';
    libPath = stdenv.lib.makeLibraryPath [
-     alsaLib atk cairo cups dbus expat fontconfig freetype gdk_pixbuf glib
+     alsaLib atk cairo cups dbus expat fontconfig freetype gdk-pixbuf glib
      gnome2.GConf gtk3 libX11 libXScrnSaver libXcomposite libXcursor libXdamage
      libXext libXfixes libXi libXrandr libXrender libXtst libappindicator-gtk3
      libcxx libnotify libpulseaudio libxcb nspr nss pango stdenv.cc.cc systemd
@@ -20,7 +20,6 @@ let gitterDirectorySuffix = "opt/gitter";
 in stdenv.mkDerivation rec {
   pname = "gitter";
   version = "4.1.0";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://update.gitter.im/linux64/${pname}_${version}_amd64.deb";

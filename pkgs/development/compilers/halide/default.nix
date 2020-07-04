@@ -1,9 +1,12 @@
 { llvmPackages, lib, fetchFromGitHub, cmake
-, libpng, libjpeg, mesa_noglu, eigen3_3, openblas
+, libpng, libjpeg, mesa, eigen
+, openblas, blas, lapack
 }:
 
+assert blas.implementation == "openblas" && lapack.implementation == "openblas";
+
 let
-  version = "2018_02_15";
+  version = "2019_08_27";
 
 in llvmPackages.stdenv.mkDerivation {
 
@@ -13,7 +16,7 @@ in llvmPackages.stdenv.mkDerivation {
     owner = "halide";
     repo = "Halide";
     rev = "release_${version}";
-    sha256 = "14lmpbxydx7ii0pxds6rgq5vw4i6yfjsq0bai1l5wwpv1rnwmbxd";
+    sha256 = "09xf8v9zyxx2fn6s1yzjkyzcf9zyzrg3x5vivgd2ljzbfhm8wh7n";
   };
 
   patches = [ ./nix.patch ];
@@ -29,7 +32,7 @@ in llvmPackages.stdenv.mkDerivation {
   # To handle the lack of 'local' RPATH; required, as they call one of
   # their built binaries requiring their libs, in the build process.
   preBuild = ''
-    export LD_LIBRARY_PATH="$(pwd)/lib:$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="$(pwd)/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
   '';
 
   enableParallelBuilding = true;
@@ -37,7 +40,7 @@ in llvmPackages.stdenv.mkDerivation {
   # Note: only openblas and not atlas part of this Nix expression
   # see pkgs/development/libraries/science/math/liblapack/3.5.0.nix
   # to get a hint howto setup atlas instead of openblas
-  buildInputs = [ llvmPackages.llvm libpng libjpeg mesa_noglu eigen3_3 openblas ];
+  buildInputs = [ llvmPackages.llvm libpng libjpeg mesa eigen openblas ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -58,7 +61,7 @@ in llvmPackages.stdenv.mkDerivation {
     description = "C++ based language for image processing and computational photography";
     homepage = "https://halide-lang.org";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = [ maintainers.ck3d ];
   };
 }

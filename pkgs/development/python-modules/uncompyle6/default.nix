@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "uncompyle6";
-  version = "3.2.3";
+  version = "3.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bd882f3c979b49d28ba7accc5ce7380ced8cab12e782e9170769ca15f0b81f8a";
+    sha256 = "cb0d5dd28ed6b82da17bcb29b84f5823dc8398d9dafb0e4ee8e6f958db220134";
   };
 
   checkInputs = [ nose pytest hypothesis six ];
@@ -23,14 +23,15 @@ buildPythonPackage rec {
 
   # six import errors (yet it is supplied...)
   checkPhase = ''
-    pytest ./pytest --ignore=pytest/test_build_const_key_map.py \
-                    --ignore=pytest/test_grammar.py
+    runHook preCheck
+    pytest ./pytest --ignore=pytest/test_function_call.py
+    runHook postCheck
   '';
 
   meta = with stdenv.lib; {
     description = "Python cross-version byte-code deparser";
-    homepage = https://github.com/rocky/python-uncompyle6/;
-    license = licenses.mit;
+    homepage = "https://github.com/rocky/python-uncompyle6/";
+    license = licenses.gpl3;
   };
 
 }

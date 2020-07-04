@@ -1,6 +1,5 @@
 {stdenv, fetchurl, libX11, libXft}:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "xfractint";
   version = "20.04p14";
   # or fetchFromGitHub(owner,repo,rev) or fetchgit(rev)
@@ -25,6 +24,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.unfree;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = https://www.fractint.net/;
+    homepage = "https://www.fractint.net/";
   };
 }

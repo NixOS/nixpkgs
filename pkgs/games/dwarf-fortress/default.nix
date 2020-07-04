@@ -40,10 +40,16 @@ let
   # The latest Dwarf Fortress version. Maintainers: when a new version comes
   # out, ensure that (unfuck|dfhack|twbt) are all up to date before changing
   # this.
-  latestVersion = "0.44.12";
+  latestVersion = "0.47.04";
 
   # Converts a version to a package name.
   versionToName = version: "dwarf-fortress_${lib.replaceStrings ["."] ["_"] version}";
+
+  dwarf-therapist-original = pkgs.qt5.callPackage ./dwarf-therapist {
+    texlive = pkgs.texlive.combine {
+      inherit (pkgs.texlive) scheme-basic float caption wrapfig adjmulticol sidecap preprint enumitem;
+    };
+  };
 
   # A map of names to each Dwarf Fortress package we know about.
   df-games = lib.listToAttrs (map (dfVersion: {
@@ -70,18 +76,13 @@ let
 
         dwarf-therapist = callPackage ./dwarf-therapist/wrapper.nix {
           inherit dwarf-fortress;
-          dwarf-therapist = pkgs.qt5.callPackage ./dwarf-therapist {
-            texlive = pkgs.texlive.combine {
-              inherit (pkgs.texlive) scheme-basic float caption wrapfig adjmulticol sidecap preprint enumitem;
-            };
-          };
+          dwarf-therapist = dwarf-therapist-original;
         };
       in
       callPackage ./wrapper {
         inherit (self) themes;
 
         dwarf-fortress = dwarf-fortress;
-        dwarf-fortress-unfuck = dwarf-fortress-unfuck;
         twbt = twbt;
         dfhack = dfhack;
         dwarf-therapist = dwarf-therapist;
@@ -93,13 +94,14 @@ let
 
     # Aliases for the latest Dwarf Fortress and the selected Therapist install
     dwarf-fortress = getAttr (versionToName latestVersion) df-games;
+    inherit dwarf-therapist-original;
     dwarf-therapist = dwarf-fortress.dwarf-therapist;
     dwarf-fortress-original = dwarf-fortress.dwarf-fortress;
 
     dwarf-fortress-full = callPackage ./lazy-pack.nix {
       inherit df-games versionToName latestVersion;
     };
-    
+
     soundSense = callPackage ./soundsense.nix { };
 
     legends-browser = callPackage ./legends-browser {};

@@ -2,11 +2,11 @@
 , libarchive, gspell, webkitgtk, libgringotts, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "osmo-${version}";
+  pname = "osmo";
   version = "0.4.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/osmo-pim/${name}.tar.gz";
+    url = "mirror://sourceforge/osmo-pim/${pname}-${version}.tar.gz";
     sha256 = "1gjd4w9jckfpqr9n0bw0w25h3qhfyzw1xvilh3hqdadfinwyal2v";
   };
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A handy personal organizer";
-    homepage = http://clayo.org/osmo/;
+    homepage = "http://clayo.org/osmo/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];

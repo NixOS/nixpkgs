@@ -1,7 +1,7 @@
 { stdenv, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
-  name = "todiff-${version}";
+  pname = "todiff";
   version = "0.6.1";
 
   src = fetchFromGitHub {
@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1y0v8nkaqb8kn61xwarpbyrq019gxx1f5f5p1hzw73nqxadc1rcm";
   };
 
-  cargoSha256 = "1r7l9zbw6kq8yb5cv6h0qgl2gp71bkn9xv7b2n49a5r7by98jjqr";
+  cargoSha256 = "1vyc230a2b0dry2057mkdkrjb7s9d0p43fnz4q67aqrpyr4jxwx2";
 
   checkPhase = "cargo test --features=integration_tests";
 

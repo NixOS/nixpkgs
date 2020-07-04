@@ -1,12 +1,18 @@
-{ stdenv, fetchFromGitHub, rustPlatform,
-  xorg, python3, pkgconfig, cairo, libxkbcommon }:
-let
+{ stdenv, fetchFromGitHub, rustPlatform
+, xorg, python3, pkgconfig, cairo, libxkbcommon }:
+
+rustPlatform.buildRustPackage rec {
   pname = "wmfocus";
-  version = "1.0.2";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
-  name = "${pname}-${version}";
+  version = "1.1.3";
+
+  src = fetchFromGitHub {
+    owner = "svenstaro";
+    repo = pname;
+    rev = version;
+    sha256 = "17qdsqp9072yr7rcm6g1h620rff95ldawr8ldpkbjmkh0rc86skn";
+  };
+
+  cargoSha256 = "1nsdvzrsgprwq7lsvfpymqslhggdzfk3840y8x92qjb0l2g4jhw1";
 
   nativeBuildInputs = [ python3 pkgconfig ];
   buildInputs = [ cairo libxkbcommon xorg.xcbutilkeysyms ];
@@ -14,25 +20,13 @@ rustPlatform.buildRustPackage {
   # For now, this is the only available featureset. This is also why the file is
   # in the i3 folder, even though it might be useful for more than just i3
   # users.
-  cargoBuildFlags = ["--features i3"];
-
-  src = fetchFromGitHub {
-    owner = "svenstaro";
-    repo = pname;
-    rev = version;
-    sha256 = "14yxg2jiqx7gng677sbmvv0a0msb9wpvp3qh8h3nkq0vi17ds668";
-  };
-
-  cargoSha256 = "0lwzw8gf970ybblaxxkwn3pxrncxp0hhvykffbzirs7fic4fnvsg";
+  cargoBuildFlags = [ "--features i3" ];
 
   meta = with stdenv.lib; {
-    description = ''
-      Tool that allows you to rapidly choose a specific window directly
-      without having to use the mouse or directional keyboard navigation.
-    '';
+    description = "Visually focus windows by label";
+    homepage = "https://github.com/svenstaro/wmfocus";
+    license = licenses.mit;
     maintainers = with maintainers; [ synthetica ];
     platforms = platforms.linux;
-    license = licenses.mit;
-    homepage = https://github.com/svenstaro/wmfocus;
   };
 }

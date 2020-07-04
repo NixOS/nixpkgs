@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage, python, fetchPypi, isPy3k, glibcLocales }:
 
 buildPythonPackage rec {
-  pname = "pystache-${version}";
+  pname = "pystache";
   version = "0.5.4";
 
   src = fetchPypi {
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A framework-agnostic, logic-free templating system inspired by ctemplate and et";
-    homepage = https://github.com/defunkt/pystache;
+    homepage = "https://github.com/defunkt/pystache";
     license = licenses.mit;
   };
 }

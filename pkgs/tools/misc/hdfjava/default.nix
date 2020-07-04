@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, javac }:
 
 stdenv.mkDerivation rec {
-  name = "hdf-java-${version}";
+  pname = "hdf-java";
   version = "3.3.2";
 
   src = fetchurl {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake javac ];
 
-  configurePhase = "true";
+  dontConfigure = true;
   buildPhase = "./build-hdfjava-unix.sh";
   installPhase = ''
     mkdir -p $out
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A Java package that implements HDF4 and HDF5 data objects in an object-oriented form";
     license = stdenv.lib.licenses.free; # BSD-like
-    homepage = https://support.hdfgroup.org/products/java/index.html;
+    homepage = "https://support.hdfgroup.org/products/java/index.html";
     platforms = stdenv.lib.platforms.linux;
   };
 }

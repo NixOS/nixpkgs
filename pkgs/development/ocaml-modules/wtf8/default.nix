@@ -1,30 +1,20 @@
-{ stdenv, fetchurl, ocaml, findlib, dune }:
+{ stdenv, fetchurl, buildDunePackage }:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.01";
-
-stdenv.mkDerivation rec {
+buildDunePackage rec {
   pname = "wtf8";
-  name = "ocaml-${pname}-${version}";
-  version = "1.0.1";
+  version = "1.0.2";
+
+  minimumOCamlVersion = "4.02";
 
   src = fetchurl {
-    url = "https://github.com/flowtype/ocaml-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    sha256 = "1msg3vycd3k8qqj61sc23qks541cxpb97vrnrvrhjnqxsqnh6ygq";
+    url = "https://github.com/flowtype/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
+    sha256 = "09ygcxxd5warkdzz17rgpidrd0pg14cy2svvnvy1hna080lzg7vp";
   };
 
-  unpackCmd = "tar xjf $src";
-
-  buildInputs = [ ocaml findlib dune ];
-
-  buildPhase = "dune build -p wtf8";
-
-  inherit (dune) installPhase;
-
   meta = with stdenv.lib; {
-    homepage = https://github.com/flowtype/ocaml-wtf8;
+    homepage = "https://github.com/flowtype/ocaml-wtf8";
     description = "WTF-8 is a superset of UTF-8 that allows unpaired surrogates.";
     license = licenses.mit;
-    platforms = ocaml.meta.platforms or [];
     maintainers = [ maintainers.eqyiel ];
   };
 }

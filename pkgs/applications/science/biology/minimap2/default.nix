@@ -1,15 +1,14 @@
 { stdenv, fetchFromGitHub, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "minimap2";
-  version = "2.10";
+  version = "2.17";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "lh3";
     rev = "v${version}";
-    sha256 = "0b35w14j9h2q9qbh3sxc518mcx0ifsvwqr1nv70rv6mgy1cqqkw0";
+    sha256 = "0qdwlkib3aa6112372hdgvnvk86hsjjkhjar0p53pq4ajrr2cdlb";
   };
 
   buildInputs = [ zlib ];
@@ -23,7 +22,7 @@ stdenv.mkDerivation rec {
   
   meta = with stdenv.lib; {
     description = "A versatile pairwise aligner for genomic and spliced nucleotide sequences";
-    homepage = https://lh3.github.io/minimap2;
+    homepage = "https://lh3.github.io/minimap2";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.arcadio ];

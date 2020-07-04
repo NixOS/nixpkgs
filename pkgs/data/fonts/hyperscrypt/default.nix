@@ -1,11 +1,11 @@
-{ stdenv, fetchzip, lib }:
+{ fetchzip, lib }:
 
 let
   version = "1.1";
   pname = "HyperScrypt";
 in
 
-fetchzip rec {
+fetchzip {
   name = "${lib.toLower pname}-font-${version}";
   url = "https://gitlab.com/StudioTriple/Hyper-Scrypt/-/archive/${version}/Hyper-Scrypt-${version}.zip";
   sha256 = "01pf5p2scmw02s0gxnibiwxbpzczphaaapv0v4s7svk9aw2gmc0m";
@@ -15,8 +15,8 @@ fetchzip rec {
     unzip -j $downloadedFile \*${pname}.otf -d $out/share/fonts/opentype/${pname}.otf
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://velvetyne.fr/fonts/hyper-scrypt/;
+  meta = with lib; {
+    homepage = "http://velvetyne.fr/fonts/hyper-scrypt/";
     description = "A modern stencil typeface inspired by stained glass technique";
     longDescription = ''
       The Hyper Scrypt typeface was designed for the Hyper Chapelle

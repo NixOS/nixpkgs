@@ -1,9 +1,9 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 fetchzip {
   name = "lato-2.0";
 
-  url = http://www.latofonts.com/download/Lato2OFL.zip;
+  url = "http://www.latofonts.com/download/Lato2OFL.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts
@@ -12,8 +12,8 @@ fetchzip {
 
   sha256 = "1amwn6vcaggxrd2s4zw21s2pr47zmzdf2xfy4x9lxa2cd9bkhvg5";
 
-  meta = with stdenv.lib; {
-    homepage = http://www.latofonts.com/;
+  meta = with lib; {
+    homepage = "http://www.latofonts.com/";
 
     description = ''
       Sans-serif typeface family designed in Summer 2010 by Łukasz Dziedzic

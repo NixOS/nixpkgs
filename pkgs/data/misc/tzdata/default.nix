@@ -1,17 +1,17 @@
 { stdenv, fetchurl, buildPackages }:
 
 stdenv.mkDerivation rec {
-  name = "tzdata-${version}";
-  version = "2018e";
+  pname = "tzdata";
+  version = "2019c";
 
   srcs =
     [ (fetchurl {
-        url = "http://www.iana.org/time-zones/repository/releases/tzdata${version}.tar.gz";
-        sha256 = "0bk97fv2i5ns42prpmlaadsswdjwv0ifi7whj2s4q6l44rcqwa3b";
+        url = "https://data.iana.org/time-zones/releases/tzdata${version}.tar.gz";
+        sha256 = "0z7w1yv37cfk8yhix2cillam091vgp1j4g8fv84261q9mdnq1ivr";
       })
       (fetchurl {
-        url = "http://www.iana.org/time-zones/repository/releases/tzcode${version}.tar.gz";
-        sha256 = "1kpb02631s58i068mwq63xlamcv1ffj4p6y4wpb9kdl01vr0qd6a";
+        url = "https://data.iana.org/time-zones/releases/tzcode${version}.tar.gz";
+        sha256 = "1m3y2rnf1nggxxhxplab5zdd5whvar3ijyrv7lifvm82irkd7szn";
       })
     ];
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   setupHook = ./tzdata-setup-hook.sh;
 
   meta = with stdenv.lib; {
-    homepage = http://www.iana.org/time-zones;
+    homepage = "http://www.iana.org/time-zones";
     description = "Database of current and historical time zones";
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz ];

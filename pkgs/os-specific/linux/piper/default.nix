@@ -1,10 +1,10 @@
 { stdenv, meson, ninja, pkgconfig, gettext, fetchFromGitHub, python3
 , wrapGAppsHook, gtk3, glib, desktop-file-utils, appstream-glib, gnome3
-, gobjectIntrospection }:
+, gobject-introspection }:
 
 python3.pkgs.buildPythonApplication rec {
-  pname = "piper-${version}";
-  version = "0.2.902";
+  pname = "piper";
+  version = "0.5";
 
   format = "other";
 
@@ -12,12 +12,16 @@ python3.pkgs.buildPythonApplication rec {
     owner  = "libratbag";
     repo   = "piper";
     rev    =  version;
-    sha256 = "1ny0vf8ym9v040cb5h084k5wwn929fnhq9infbdq8f8vvy61magb";
+    sha256 = "00vrcsbsv2477l1ncpyzc61lhxgac84dsgr3sjs8qxw3nh1gaasv";
   };
 
-  nativeBuildInputs = [ meson ninja gettext pkgconfig wrapGAppsHook desktop-file-utils appstream-glib gobjectIntrospection ];
-  buildInputs = [ gtk3 glib gnome3.defaultIconTheme python3 ];
-  propagatedBuildInputs = with python3.pkgs; [ lxml evdev pygobject3 ];
+  nativeBuildInputs = [ meson ninja gettext pkgconfig wrapGAppsHook desktop-file-utils appstream-glib gobject-introspection ];
+  buildInputs = [
+    gtk3 glib gnome3.adwaita-icon-theme python3
+  ];
+  propagatedBuildInputs = with python3.pkgs; [ lxml evdev pygobject3 ] ++ [
+    gobject-introspection # fixes https://github.com/NixOS/nixpkgs/issues/56943 for now
+  ];
 
   postPatch = ''
     chmod +x meson_install.sh # patchShebangs requires executable file
@@ -26,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "GTK frontend for ratbagd mouse config daemon";
-    homepage    = https://github.com/libratbag/piper;
+    homepage    = "https://github.com/libratbag/piper";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ mvnetbiz ];
     platforms   = platforms.linux;

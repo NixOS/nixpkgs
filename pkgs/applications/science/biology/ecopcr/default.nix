@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       coverage and barcode specificity. New barcode primers can be
       developed using the ecoPrimers software.
     '';
-    homepage = https://git.metabarcoding.org/obitools/ecopcr/wikis/home;
+    homepage = "https://git.metabarcoding.org/obitools/ecopcr/wikis/home";
     license = licenses.cecill20;
     maintainers = [ maintainers.metabar ];
   };

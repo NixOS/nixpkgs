@@ -1,16 +1,27 @@
-{ stdenv, fetchPypi, buildPythonPackage, six }:
+{ stdenv
+, fetchPypi
+, buildPythonPackage
+, six
+, wheel
+ }:
 
 buildPythonPackage rec {
   pname = "astunparse";
-  version =  "1.5.0";
+  version =  "1.6.3";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1kc9lm2jvfcip3z8snj04dar5a9jh857a704m6lvcv4xclm3rpsm";
+    sha256 = "5ad93a8456f0d084c3456d059fd9a92cce667963232cbf763eac3bc5b7940872";
   };
-  propagatedBuildInputs = [ six ];
-  doCheck = false; # no tests
+
+  propagatedBuildInputs = [ six wheel ];
+
+  # tests not included with pypi release
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "This is a factored out version of unparse found in the Python source distribution";
+    homepage = "https://github.com/simonpercivall/astunparse";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jyp ];
   };

@@ -1,20 +1,24 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi, setuptools }:
 
 buildPythonPackage rec {
   pname = "nodeenv";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0vs9nyf9w3655j1vv3abxj4vbig61c0hjmhpfb91gblv32shl15a";
+    sha256 = "ad8259494cf1c9034539f6cced78a1da4840a4b157e23640bc4a0c0546b0cb7a";
   };
+
+  propagatedBuildInputs = [
+    setuptools
+  ];
 
   # Tests not included in PyPI tarball
   doCheck = false;
 
   meta = with lib; {
     description = "Node.js virtual environment builder";
-    homepage = https://github.com/ekalinin/nodeenv;
+    homepage = "https://github.com/ekalinin/nodeenv";
     license = licenses.bsd3;
   };
 }

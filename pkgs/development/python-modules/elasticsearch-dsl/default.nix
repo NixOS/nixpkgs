@@ -5,17 +5,16 @@
 , elasticsearch
 , ipaddress
 , python-dateutil
-, pytz
 , six
 }:
 
 buildPythonPackage rec {
   pname = "elasticsearch-dsl";
-  version = "6.2.1";
+  version = "7.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f0w23kzyym0fkzisdkcl4xpnm8fsi97v1kskyvfrhj3mxy179fh";
+    sha256 = "1e345535164cb684de4b825e1d0daf81b75554b30d3905446584a9e4af0cc3e7";
   };
 
   propagatedBuildInputs = [ elasticsearch python-dateutil six ]
@@ -32,7 +31,7 @@ buildPythonPackage rec {
       writing and running queries against Elasticsearch. It is built on top of
       the official low-level client (elasticsearch-py).
     '';
-    homepage = https://github.com/elasticsearch/elasticsearch-dsl-py;
+    homepage = "https://github.com/elasticsearch/elasticsearch-dsl-py";
     license = licenses.asl20;
     maintainers = with maintainers; [ desiderius ];
   };

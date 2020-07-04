@@ -1,11 +1,11 @@
 { stdenv, lib, fetchurl, python, zip, fop }:
 
-stdenv.mkDerivation rec {
-  name = "bgnet-${version}";
+stdenv.mkDerivation {
+  pname = "bgnet";
   version = "3.0.21";
 
   src = fetchurl {
-    url = https://beej.us/guide/bgnet/bgnet.tgz;
+    url = "https://beej.us/guide/bgnet/bgnet.tgz";
     sha256 = "00ggr5prc5i3w9gaaw2sadfq6haq7lmh0vdilaxx8xz9z5znxvyv";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Beej’s Guide to Network Programming";
-    homepage = https://beej.us/guide/bgnet/;
+    homepage = "https://beej.us/guide/bgnet/";
     license = lib.licenses.unfree;
 
     maintainers = with lib.maintainers; [ Profpatsch ];

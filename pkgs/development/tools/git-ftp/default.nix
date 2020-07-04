@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, pandoc, man }:
 stdenv.mkDerivation rec {
-  name = "git-ftp-${version}";
-  version = "1.5.1";
+  pname = "git-ftp";
+  version = "1.6.0";
   src = fetchFromGitHub {
     owner = "git-ftp";
     repo = "git-ftp";
     rev = version;
-    sha256 = "0nh2f58rwwfzmglm75fmmm10470a80q0vsihc2msa8xswngihg22";
+    sha256 = "1hxkqf7jbrx24q18yxpnd3dxzh4xk6asymwkylp1x7zg6mcci87d";
   };
 
   dontBuild = true;
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Git powered FTP client written as shell script.";
-    homepage = https://git-ftp.github.io/;
+    homepage = "https://git-ftp.github.io/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ tweber ];
     platforms = platforms.unix;

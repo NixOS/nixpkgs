@@ -1,9 +1,17 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv
+, buildGoPackage
+, fetchFromGitHub
+, makeWrapper
+, mercurial
+, git
+}:
 
 buildGoPackage rec {
-  name = "hound-unstable-${version}";
-  version = "20170324";
-  rev = "effbe5873f329fcdf982e906b756b535e2804ebc";
+  pname = "hound-unstable";
+  version = "2018-11-02";
+  rev = "74ec7448a234d8d09e800b92e52c92e378c07742";
+
+  nativeBuildInputs = [ makeWrapper ];
 
   goPackagePath = "github.com/etsy/hound";
 
@@ -11,10 +19,16 @@ buildGoPackage rec {
     inherit rev;
     owner = "etsy";
     repo = "hound";
-    sha256 = "0zc769lygad5an63z5mivaggbmm07d9ynngi2jx3f7651wpji4aw";
+    sha256 = "0g6nvgqjabprcl9z5ci5frhbam1dzq978h1d6aanf8vvzslfgdpq";
   };
 
   goDeps = ./deps.nix;
+
+  postInstall = with stdenv; let
+    binPath = lib.makeBinPath [ mercurial git ];
+  in ''
+    wrapProgram $out/bin/houndd --prefix PATH : ${binPath}
+  '';
 
   meta = {
     inherit (src.meta) homepage;

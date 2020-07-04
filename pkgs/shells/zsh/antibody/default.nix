@@ -1,25 +1,24 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "antibody-${version}";
-  version = "4.0.0";
-  rev = "v${version}";
-
-  goPackagePath = "github.com/getantibody/antibody";
+buildGoModule rec {
+  pname = "antibody";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
-    inherit rev;
-    owner  = "getantibody";
-    repo   = "antibody";
-    sha256 = "0iq3dfwwh39hmk8qmhrfgkn8pcabxf67c03s7vh18n7w9aay4jfz";
+    owner = "getantibody";
+    repo = "antibody";
+    rev = "v${version}";
+    sha256 = "0ix2liy8h48s3n7ykr85ik03kwj45iqwhwn79ap8y21bar00gybs";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "072kxr68p9f58w2q98fjcn4wzd5szy5l5sz8sh4ssapljvic2lam";
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
   meta = with lib; {
     description = "The fastest shell plugin manager";
-    homepage    = https://github.com/getantibody/antibody;
-    license     = licenses.mit;
-    maintainers = with maintainers; [ worldofpeace ];
+    homepage = "https://github.com/getantibody/antibody";
+    license = licenses.mit;
+    maintainers = with maintainers; [ filalex77 worldofpeace ];
   };
 }

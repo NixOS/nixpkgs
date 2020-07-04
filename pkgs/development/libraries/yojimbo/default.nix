@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, premake5, doxygen, libsodium, mbedtls }:
 
-stdenv.mkDerivation rec {
-  name = "yojimbo";
+stdenv.mkDerivation {
+  pname = "yojimbo";
   version = "1.1";
 
   src = fetchFromGitHub {
@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ premake5 doxygen ];
   propagatedBuildInputs = [ libsodium mbedtls ];
 
-  buildPhase = ''
-    premake5 gmake
-    make all
+  postBuild = ''
     premake5 docs
   '';
 
@@ -28,6 +26,8 @@ stdenv.mkDerivation rec {
     cp -r docs/html $out/share/doc/yojimbo
   '';
 
+  doCheck = true;
+
   meta = with stdenv.lib; {
     description = "A network library for client/server games with dedicated servers";
     longDescription = ''
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       It's designed around the networking requirements of competitive multiplayer games like first person shooters.
       As such it provides a time critical networking layer on top of UDP, with a client/server architecture supporting up to 64 players per-dedicated server instance.
     '';
-    homepage = https://github.com/networkprotocol/yojimbo;
+    homepage = "https://github.com/networkprotocol/yojimbo";
     license = licenses.bsd3;
     platforms = platforms.x86_64;
     maintainers = with maintainers; [ paddygord ];

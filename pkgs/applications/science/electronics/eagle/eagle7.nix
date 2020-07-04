@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeDesktopItem, patchelf, zlib, freetype, fontconfig
 , openssl, libXrender, libXrandr, libXcursor, libX11, libXext, libXi
-, libxcb, cups, xkeyboardconfig
+, libxcb, cups, xkeyboardconfig, runtimeShell
 }:
 
 let
@@ -13,7 +13,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "eagle-${version}";
+  pname = "eagle";
   version = "7.7.0";
 
   src =
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     comment = "Schematic capture and PCB layout";
     desktopName = "Eagle";
     genericName = "Schematic editor";
-    categories = "Application;Development;";
+    categories = "Development;";
   };
 
   buildInputs =
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     dynlinker="$(cat $NIX_CC/nix-support/dynamic-linker)"
     mkdir -p "$out"/bin
     cat > "$out"/bin/eagle << EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
     export LD_LIBRARY_PATH="${stdenv.cc.cc.lib}/lib:${libPath}"
     export LD_PRELOAD="$out/lib/eagle_fixer.so"
     export QT_XKB_CONFIG_ROOT="${xkeyboardconfig}/share/X11/xkb"
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Schematic editor and PCB layout tool from CadSoft";
-    homepage = http://www.cadsoftusa.com/;
+    homepage = "http://www.cadsoftusa.com/";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

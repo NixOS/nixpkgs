@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, ant, jdk, jre, gtk2, glib, xorg, Cocoa }:
 
 let
-  _version = "2.8.2";
-  _build = "450";
+  _version = "2.8.6";
+  _build = "455";
   version = "${_version}-${_build}";
   name = "jameica-${version}";
 
@@ -17,7 +17,7 @@ let
     comment = "Free Runtime Environment for Java Applications.";
     desktopName = "Jameica";
     genericName = "Jameica";
-    categories = "Application;Office;";
+    categories = "Office;";
   };
 in
 stdenv.mkDerivation rec {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "willuhn";
     repo = "jameica";
     rev = "V_${builtins.replaceStrings ["."] ["_"] _version}_BUILD_${_build}";
-    sha256 = "197n35lvx51k6cbp3fhndvfb38sikl4mjqcd42fgvn2khy2sij68";
+    sha256 = "1pndklxsvixy6zyblqr62ki3pqaq8lfrzgasrvhclqxxh76gjlss";
   };
 
   # there is also a build.gradle, but it only seems to be used to vendor 3rd party libraries
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.willuhn.de/products/jameica/;
+    homepage = "https://www.willuhn.de/products/jameica/";
     description = "Free Runtime Environment for Java Applications";
     longDescription = ''
       Runtime Environment for plugins like Hibiscus (HBCI Online Banking),

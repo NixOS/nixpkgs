@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''cl-markdown'';
   version = ''20101006-darcs'';
 

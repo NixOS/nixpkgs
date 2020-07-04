@@ -1,22 +1,22 @@
 { stdenv, fetchFromGitHub, libpng, python3
-, libGLU_combined, qtbase, ncurses
+, libGLU, libGL, qtbase, wrapQtAppsHook, ncurses
 , cmake, flex, lemon
 }:
 
 let
-  gitRev    = "60a58688e552f12501980c4bdab034ab0f2ba059";
+  gitRev    = "8fb4b0929ce84cf375bfb83a9d522ccd80681eaf";
   gitBranch = "develop";
   gitTag    = "0.9.3";
 in
-  stdenv.mkDerivation rec {
-    name    = "antimony-${version}";
-    version = "2018-07-17";
+  stdenv.mkDerivation {
+    pname = "antimony";
+    version = "2020-03-28";
 
     src = fetchFromGitHub {
       owner  = "mkeeter";
       repo   = "antimony";
       rev    = gitRev;
-      sha256 = "0pgf6kr23xw012xsil56j5gq78mlirmrlqdm09m5wlgcf4vr6xnl";
+      sha256 = "1s0zmq5jmhmb1wcsyaxfmii448g6x8b41mzvb1awlljj85qj0k2s";
     };
 
     patches = [ ./paths-fix.patch ];
@@ -24,15 +24,15 @@ in
     postPatch = ''
        sed -i "s,/usr/local,$out,g" \
        app/CMakeLists.txt app/app/app.cpp app/app/main.cpp
-       sed -i "s,python-py35,python36," CMakeLists.txt
+       sed -i "s,python3,${python3.executable}," CMakeLists.txt
     '';
 
     buildInputs = [
       libpng python3 python3.pkgs.boost
-      libGLU_combined qtbase ncurses
+      libGLU libGL qtbase ncurses
     ];
 
-    nativeBuildInputs = [ cmake flex lemon ];
+    nativeBuildInputs = [ cmake flex lemon wrapQtAppsHook ];
 
     cmakeFlags= [
       "-DGITREV=${gitRev}"

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "s3gof3r-${version}";
+  pname = "s3gof3r";
   version = "20151109-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "31603a0dc94aefb822bfe2ceea75a6be6013b445";
   

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, unzip, mesa_noglu, libX11 }:
+{ stdenv, fetchurl, unzip, mesa, libX11 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "soil";
 
   src = fetchurl {
@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "00gpwp9dldzhsdhksjvmbhsd2ialraqbv6v6dpikdmpncj6mnc52";
   };
 
-  buildInputs = [ unzip mesa_noglu libX11 ];
-  
+  buildInputs = [ unzip mesa libX11 ];
+
   sourceRoot = "Simple OpenGL Image Library/projects/makefile";
   preBuild   = "mkdir obj";
   preInstall = "mkdir -p $out/lib $out/include";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       SOIL is a tiny C library used primarily for uploading textures
       into OpenGL.
     '';
-    homepage  = https://www.lonesock.net/soil.html;
+    homepage  = "https://www.lonesock.net/soil.html";
     license   = stdenv.lib.licenses.publicDomain;
     platforms = stdenv.lib.platforms.linux;
   };

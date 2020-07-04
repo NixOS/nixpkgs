@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
     pname = "dbf";
-    version = "0.97.11";
+    version = "0.98.3";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "8aa5a73d8b140aa3c511a3b5b204a67d391962e90c66b380dd048fcae6ddbb68";
+      sha256 = "01d71vya2x87f3kl9x0s8xp0n7wixn6ksrd054y7idq3n1mjaxzh";
     };
 
-    propagatedBuildInputs = [ aenum ] ++ stdenv.lib.optional (pythonOlder "3.4") [ enum34 ];
+    propagatedBuildInputs = [ aenum ] ++ stdenv.lib.optional (pythonOlder "3.4") enum34;
 
     doCheck = !isPy3k;
     # tests are not yet ported.

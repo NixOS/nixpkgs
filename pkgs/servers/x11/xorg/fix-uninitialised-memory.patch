@@ -1,0 +1,61 @@
+From 51e8117654fb092ae5412d7aa184bfc6b498c954 Mon Sep 17 00:00:00 2001
+From: rnhmjoj <rnhmjoj@inventati.org>
+Date: Fri, 7 Feb 2020 17:46:54 +0100
+Subject: [PATCH 1/2] Fix incorrect error handling in macTime()
+
+mktime() and time() return (time_t -1) to signal an error.
+Checking for negative values will incorrectly assume an error
+happened for any calendar date before the unix epoch.
+---
+ util.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/util.c b/util.c
+index bcbfa2f..4482c9a 100644
+--- a/util.c
++++ b/util.c
+@@ -213,10 +213,10 @@ macTime(int *hi, unsigned *lo)
+     tm.tm_isdst = -1;
+ 
+     macEpoch = mktime_gmt(&tm);
+-    if(macEpoch < 0) return -1;
++    if(macEpoch == -1) return -1;
+ 
+     current = time(NULL);
+-    if(current < 0)
++    if(current == -1)
+         return -1;
+ 
+     if(current < macEpoch) {
+-- 
+2.23.0
+
+From 81a61c049e6de80120531f0770b22e7637c9acb9 Mon Sep 17 00:00:00 2001
+From: rnhmjoj <rnhmjoj@inventati.org>
+Date: Fri, 7 Feb 2020 17:47:52 +0100
+Subject: [PATCH 2/2] Fix uninitialised memory write
+
+If macTime() fails write zeros instead of unitialized memory to
+the date fields.
+---
+ write.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/write.c b/write.c
+index 318adef..c8a86e4 100644
+--- a/write.c
++++ b/write.c
+@@ -434,8 +434,8 @@ fixupChecksum(FILE *out, int full_length, int head_position)
+ static int 
+ writehead(FILE* out, FontPtr font)
+ {
+-    int time_hi;
+-    unsigned time_lo;
++    int time_hi = 0;
++    unsigned time_lo = 0;
+ 
+     macTime(&time_hi, &time_lo);
+ 
+-- 
+2.23.0
+

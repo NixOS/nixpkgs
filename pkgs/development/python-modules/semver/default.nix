@@ -1,22 +1,27 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, pytest }:
+{ stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, pytestCheckHook
+, pytestcov
+}:
 
 buildPythonPackage rec {
   pname = "semver";
-  version = "2.7.9";
+  version = "2.10.2";
 
   src = fetchFromGitHub {
-    owner = "k-bx";
+    owner = "python-semver";
     repo = "python-semver";
-    rev = "2001c62d1a0361c44acc7076d8ce91e1d1c66141"; # not tagged in repository
-    sha256 = "01c05sv97dyr672sa0nr3fnh2aqbmvkfw19d6rkaj16h2sdsyg0i";
+    rev = version;
+    sha256 = "0yxjmcgk5iwp53l9z1cg0ajrj18i09ircs11ifpdrggzm8n1blf3";
   };
 
-  checkInputs = [ pytest ];
-  checkPhase = "pytest -v tests.py";
+  preCheck = "rm -rf dist"; # confuses source vs dist imports in pytest
+  checkInputs = [ pytestCheckHook pytestcov ];
 
   meta = with stdenv.lib; {
     description = "Python package to work with Semantic Versioning (http://semver.org/)";
-    homepage = https://github.com/k-bx/python-semver;
+    homepage = "https://python-semver.readthedocs.io/en/latest/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ np ];
   };

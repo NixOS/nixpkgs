@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, perl, python3, boost, valgrind
+{ stdenv, fetchFromGitLab, cmake, perl, python3, boost, valgrind
 # Optional requirements
 # Lua 5.3 needed and not available now
 #, luaSupport ? false, lua5
@@ -13,18 +13,19 @@
 with stdenv.lib;
 
 let
-  optionOnOff = option: "${if option then "on" else "off"}";
+  optionOnOff = option: if option then "on" else "off";
 in
 
 stdenv.mkDerivation rec {
-  name = "simgrid-${version}";
-  version = "3.20";
+  pname = "simgrid";
+  version = "3.25";
 
-  src = fetchFromGitHub {
-    owner = "simgrid";
-    repo = "simgrid";
+  src = fetchFromGitLab {
+    domain = "framagit.org";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0xb20qhvsah2dz2hvn850i3w9a5ghsbcx8vka2ap6xsdkxf593gy";
+    sha256 = "019fgryfwpcrkv1f3271v7qxk0mfw2w990vgnk1cqhmr9i1f17gs";
   };
 
   nativeBuildInputs = [ cmake perl python3 boost valgrind ]
@@ -52,29 +53,29 @@ stdenv.mkDerivation rec {
   # - lua53:  for enable_lua
   #
   # For more information see:
-  # http://simgrid.gforge.inria.fr/simgrid/latest/doc/install.html#install_cmake_list
-  cmakeFlags= ''
-    -Denable_documentation=${optionOnOff buildDocumentation}
-    -Denable_java=${optionOnOff buildJavaBindings}
-    -Denable_fortran=${optionOnOff fortranSupport}
-    -Denable_model-checking=${optionOnOff modelCheckingSupport}
-    -Denable_ns3=off
-    -Denable_lua=off
-    -Denable_lib_in_jar=off
-    -Denable_maintainer_mode=off
-    -Denable_mallocators=on
-    -Denable_debug=on
-    -Denable_smpi=on
-    -Denable_smpi_ISP_testsuite=${optionOnOff moreTests}
-    -Denable_smpi_MPICH3_testsuite=${optionOnOff moreTests}
-    -Denable_compile_warnings=${optionOnOff debug}
-    -Denable_compile_optimizations=${optionOnOff (!debug)}
-    -Denable_lto=${optionOnOff (!debug)}
-  '';
-  # -Denable_lua=${optionOnOff luaSupport}
-  # -Denable_smpi_papi=${optionOnOff moreTests}
+  # https://simgrid.org/doc/3.22/Installing_SimGrid.html#simgrid-compilation-options)
+  cmakeFlags = [
+    "-Denable_documentation=${optionOnOff buildDocumentation}"
+    "-Denable_java=${optionOnOff buildJavaBindings}"
+    "-Denable_fortran=${optionOnOff fortranSupport}"
+    "-Denable_model-checking=${optionOnOff modelCheckingSupport}"
+    "-Denable_ns3=off"
+    "-Denable_lua=off"
+    "-Denable_lib_in_jar=off"
+    "-Denable_maintainer_mode=off"
+    "-Denable_mallocators=on"
+    "-Denable_debug=on"
+    "-Denable_smpi=on"
+    "-Denable_smpi_ISP_testsuite=${optionOnOff moreTests}"
+    "-Denable_smpi_MPICH3_testsuite=${optionOnOff moreTests}"
+    "-Denable_compile_warnings=${optionOnOff debug}"
+    "-Denable_compile_optimizations=${optionOnOff (!debug)}"
+    "-Denable_lto=${optionOnOff (!debug)}"
+    # "-Denable_lua=${optionOnOff luaSupport}"
+    # "-Denable_smpi_papi=${optionOnOff moreTests}"
+  ];
 
-  makeFlags = optionalString debug "VERBOSE=1";
+  makeFlags = optional debug "VERBOSE=1";
 
   # Some Perl scripts are called to generate test during build which
   # is before the fixupPhase, so do this manualy here:
@@ -84,12 +85,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkPhase = ''
-    runHook preCheck
-
-    ctest -j $NIX_BUILD_CORES --output-on-failure -E smpi-replay-multiple
-
-    runHook postCheck
+  # Prevent the execution of tests known to fail.
+  preCheck = ''
+    cat <<EOW >CTestCustom.cmake
+    SET(CTEST_CUSTOM_TESTS_IGNORE smpi-replay-multiple)
+    EOW
   '';
 
   enableParallelBuilding = true;
@@ -104,9 +104,9 @@ stdenv.mkDerivation rec {
       scheduling on distributed computing platforms ranging from simple
       network of workstations to Computational Grids.
     '';
-    homepage = http://simgrid.gforge.inria.fr/;
+    homepage = "https://simgrid.org/";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ mickours ];
-    platforms = platforms.x86_64;
+    maintainers = with maintainers; [ mickours mpoquet ];
+    platforms = ["x86_64-linux"];
   };
 }

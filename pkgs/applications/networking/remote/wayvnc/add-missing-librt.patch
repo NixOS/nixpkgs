@@ -1,0 +1,20 @@
+diff --git a/meson.build b/meson.build
+index cc6fa03..7c2b280 100644
+--- a/meson.build
++++ b/meson.build
+@@ -24,6 +24,7 @@ add_project_arguments(c_args, language: 'c')
+ cc = meson.get_compiler('c')
+ 
+ libm = cc.find_library('m', required: false)
++librt = cc.find_library('rt', required: false)
+ 
+ pixman = dependency('pixman-1')
+ libuv = dependency('libuv')
+@@ -65,6 +66,7 @@ sources = [
+ 
+ dependencies = [
+ 	libm,
++	librt,
+ 	pixman,
+ 	libuv,
+ 	egl,

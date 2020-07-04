@@ -23,9 +23,9 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "ASCII art to image converter";
-    homepage = https://launchpad.net/aafigure/;
+    homepage = "https://launchpad.net/aafigure/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ bjornfor ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -8,7 +8,7 @@
 stdenv.mkDerivation {
   name = "multitran-data-0.3";
   src = fetchurl {
-      url = mirror://sourceforge/multitran/multitran-data.tar.bz2;
+      url = "mirror://sourceforge/multitran/multitran-data.tar.bz2";
       sha256 = "9c2ff5027c2fe72b0cdf056311cd7543f447feb02b455982f20d4a3966b7828c";
   };
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://multitran.sourceforge.net/;
+    homepage = "http://multitran.sourceforge.net/";
     description = "Multitran data english-russian";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;

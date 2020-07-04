@@ -86,11 +86,19 @@ in with lib; {
       default = false;
       description = "Serve and listen only through HTTPS.";
     };
+
+    videoPaths = mkOption {
+      type = types.listOf types.path;
+      default = [];
+      example = [ "/home/okina/Videos/tehe_pero.webm" ];
+      description = "Videos that will be symlinked into www/videos.";
+    };
   };
 
   config = mkIf cfg.enable {
     security.sudo.enable = cfg.enable;
     services.postgresql.enable = cfg.enable;
+    services.postgresql.package = pkgs.postgresql_11;
     services.meguca.passwordFile = mkDefault (pkgs.writeText "meguca-password-file" cfg.password);
     services.meguca.postgresArgsFile = mkDefault (pkgs.writeText "meguca-postgres-args" cfg.postgresArgs);
     services.meguca.postgresArgs = mkDefault "user=meguca password=${cfg.password} dbname=meguca sslmode=disable";
@@ -102,8 +110,16 @@ in with lib; {
 
       preStart = ''
         # Ensure folder exists or create it and links and permissions are correct
-        mkdir -p ${escapeShellArg cfg.dataDir}
-        ln -sf ${pkgs.meguca}/share/meguca/www ${escapeShellArg cfg.dataDir}
+        mkdir -p ${escapeShellArg cfg.dataDir}/www
+        rm -rf ${escapeShellArg cfg.dataDir}/www/videos
+        ln -sf ${pkgs.meguca}/share/meguca/www/* ${escapeShellArg cfg.dataDir}/www
+        unlink ${escapeShellArg cfg.dataDir}/www/videos
+        mkdir -p ${escapeShellArg cfg.dataDir}/www/videos
+
+        for vid in ${escapeShellArg cfg.videoPaths}; do
+          ln -sf $vid ${escapeShellArg cfg.dataDir}/www/videos
+        done
+
         chmod 750 ${escapeShellArg cfg.dataDir}
         chown -R meguca:meguca ${escapeShellArg cfg.dataDir}
 

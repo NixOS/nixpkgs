@@ -1,7 +1,7 @@
 { stdenv, fetchzip, autoconf, automake, libtool, libpcap }:
 
 stdenv.mkDerivation rec {
-  name = "libcrafter-${version}";
+  pname = "libcrafter";
   version = "0.3";
 
   src = fetchzip {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libpcap ];
 
   meta = {
-    homepage = https://github.com/pellegre/libcrafter;
+    homepage = "https://github.com/pellegre/libcrafter";
     description = "High level C++ network packet sniffing and crafting library";
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.lethalman ];

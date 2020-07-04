@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pythonPackages }:
 
 stdenv.mkDerivation rec {
-  name = "transmission-remote-cli-${version}";
+  pname = "transmission-remote-cli";
   version = "1.7.1";
 
   src = fetchurl {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Curses interface for the Transmission BitTorrent daemon";
-    homepage = https://github.com/fagga/transmission-remote-cli;
+    homepage = "https://github.com/fagga/transmission-remote-cli";
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.unix;
   };

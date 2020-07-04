@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, buildGoPackage }:
 buildGoPackage rec {
-  name = "terraform-provider-gandi-${version}";
+  pname = "terraform-provider-gandi";
   version = "1.0.0";
 
   goPackagePath = "github.com/tiramiseb/terraform-provider-gandi";

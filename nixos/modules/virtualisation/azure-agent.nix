@@ -48,7 +48,7 @@ let
 
   provisionedHook = pkgs.writeScript "provisioned-hook" ''
     #!${pkgs.runtimeShell}
-    ${config.systemd.package}/bin/systemctl start provisioned.target
+    /run/current-system/systemd/bin/systemctl start provisioned.target
   '';
 
 in
@@ -166,7 +166,6 @@ in
 
       wantedBy = [ "sshd.service" "waagent.service" ];
       before = [ "sshd.service" "waagent.service" ];
-      after = [ "local-fs.target" ];
 
       path  = [ pkgs.coreutils ];
       script =

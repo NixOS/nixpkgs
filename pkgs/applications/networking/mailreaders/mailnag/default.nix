@@ -1,48 +1,67 @@
-{ stdenv, fetchurl, gettext, gtk3, pythonPackages
-, gdk_pixbuf, libnotify, gst_all_1
-, libgnome-keyring3
-, wrapGAppsHook, gnome3
-# otherwise passwords are stored unencrypted
-, withGnomeKeyring ? true
+{ stdenv
+, fetchFromGitHub
+, gettext
+, gtk3
+, pythonPackages
+, gdk-pixbuf
+, libnotify
+, gst_all_1
+, libsecret
+, wrapGAppsHook
+, gsettings-desktop-schemas
+, glib
+, gobject-introspection
 }:
 
-let
-  inherit (pythonPackages) python;
-in pythonPackages.buildPythonApplication rec {
-  name = "mailnag-${version}";
-  version = "1.2.1";
+pythonPackages.buildPythonApplication rec {
+  pname = "mailnag";
+  version = "2.0.0";
 
-  src = fetchurl {
-    url = "https://github.com/pulb/mailnag/archive/v${version}.tar.gz";
-    sha256 = "ec7ac027d93bc7d88fc270858f5a181453a6ff07f43cab20563d185818801fee";
+  src = fetchFromGitHub {
+    owner = "pulb";
+    repo = "mailnag";
+    rev = "v${version}";
+    sha256 = "0q97v9i96br22z3h6r2mz79i68ib8m8x42yxky78szfrf8j60i30";
   };
+  preFixup = ''
+    substituteInPlace $out/${pythonPackages.python.sitePackages}/Mailnag/common/dist_cfg.py \
+      --replace "/usr/" $out/
+    for desktop_file in $out/share/applications/*.desktop; do
+      substituteInPlace "$desktop_file" \
+      --replace "/usr/bin" $out/bin
+    done
+  '';
 
   buildInputs = [
-    gettext gtk3 gdk_pixbuf libnotify gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
+    gtk3
+    gdk-pixbuf
+    glib
+    libnotify
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
-    gnome3.defaultIconTheme
-  ] ++ stdenv.lib.optional withGnomeKeyring libgnome-keyring3;
+    gobject-introspection
+    libsecret
+  ];
 
   nativeBuildInputs = [
+    gettext
     wrapGAppsHook
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    pygobject3 dbus-python pyxdg
+    gsettings-desktop-schemas
+    pygobject3
+    dbus-python
+    pyxdg
   ];
-
-  buildPhase = "";
-
-  installPhase = "${python}/bin/python setup.py install --prefix=$out";
-
-  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "An extensible mail notification daemon";
-    homepage = https://github.com/pulb/mailnag;
+    homepage = "https://github.com/pulb/mailnag";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jgeerds ];
+    maintainers = with maintainers; [ doronbehar ];
   };
 }

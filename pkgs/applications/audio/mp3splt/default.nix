@@ -3,11 +3,10 @@
 stdenv.mkDerivation rec {
   pname = "mp3splt";
   version = "2.6.2";
-  name = "${pname}-${version}";
 
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${name}.tar.gz";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
     sha256 = "1aiv20gypb6r84qabz8gblk8vi42cg3x333vk2pi3fyqvl82phry";
   };
 
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Utility to split mp3, ogg vorbis and FLAC files without decoding";
-    homepage = https://sourceforge.net/projects/mp3splt/;
+    homepage = "https://sourceforge.net/projects/mp3splt/";
     license = licenses.gpl2;
     maintainers = [ maintainers.bosu ];
     platforms = platforms.unix;

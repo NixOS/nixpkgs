@@ -2,18 +2,18 @@
 
 buildPythonPackage rec {
     pname = "agate-sql";
-    version = "0.5.3";
+    version = "0.5.4";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "877b7b85adb5f0325455bba8d50a1623fa32af33680b554feca7c756a15ad9b4";
+      sha256 = "9277490ba8b8e7c747a9ae3671f52fe486784b48d4a14e78ca197fb0e36f281b";
     };
 
     propagatedBuildInputs = [ agate sqlalchemy ];
 
     meta = with stdenv.lib; {
       description = "Adds SQL read/write support to agate.";
-      homepage    = https://github.com/wireservice/agate-sql;
+      homepage    = "https://github.com/wireservice/agate-sql";
       license     = with licenses; [ mit ];
       maintainers = with maintainers; [ vrthra ];
     };

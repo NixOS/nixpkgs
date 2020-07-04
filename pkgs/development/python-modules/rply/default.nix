@@ -2,16 +2,16 @@
 
 buildPythonPackage rec {
   pname = "rply";
-  version = "0.7.6";
+  version = "0.7.7";
 
   src = fetchFromGitHub {
     owner = "alex";
     repo = "rply";
     rev = "v${version}";
-    sha256 = "0a9r81kaibgr26psss02rn2nc6bf84a8q9nsywkm1xcswy8xrmcx";
+    sha256 = "1qv37hn7hhxd388znri76g0zjxsbwhxhcaic94dvw9pq4l60vqp6";
   };
 
-  buildInputs = [ appdirs ];
+  propagatedBuildInputs = [ appdirs ];
 
   checkInputs = [ pytest ];
   checkPhase = ''
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A python Lex/Yacc that works with RPython";
-    homepage = https://github.com/alex/rply;
+    homepage = "https://github.com/alex/rply";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nixy ];
   };

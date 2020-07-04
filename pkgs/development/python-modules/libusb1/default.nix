@@ -1,12 +1,12 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, python, libusb1, pytest }:
+{ stdenv, buildPythonPackage, fetchPypi, libusb1, pytest }:
 
 buildPythonPackage rec {
   pname = "libusb1";
-  version = "1.6.6";
+  version = "1.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a49917a2262cf7134396f6720c8be011f14aabfc5cdc53f880cc672c0f39d271";
+    sha256 = "240f65ac70ba3fab77749ec84a412e4e89624804cb80d6c9d394eef5af8878d6";
   };
 
   postPatch = ''
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage    = https://github.com/vpelletier/python-libusb1;
+    homepage    = "https://github.com/vpelletier/python-libusb1";
     description = "Python ctype-based wrapper around libusb1";
     license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ rnhmjoj ];

@@ -27,7 +27,7 @@ buildPythonPackage rec {
   doCheck = !isPy3k;
 
   meta = {
-    homepage = https://github.com/click-contrib/click-threading/;
+    homepage = "https://github.com/click-contrib/click-threading/";
     description = "Multithreaded Click apps made easy";
     license = lib.licenses.mit;
   };

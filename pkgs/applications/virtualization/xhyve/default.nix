@@ -1,15 +1,17 @@
-{ stdenv, lib, fetchurl, Hypervisor, vmnet, xpc, libobjc }:
+{ stdenv, lib, fetchFromGitHub, Hypervisor, vmnet, xpc, libobjc, zlib }:
 
 stdenv.mkDerivation rec {
-  name    = "xhyve-${version}";
-  version = "1f1dbe305";
+  pname = "xhyve";
+  version = "20191001";
 
-  src = fetchurl {
-    url    = "https://github.com/mist64/xhyve/archive/1f1dbe3059904f885e4ab2b3328f4bb350ea5c37.tar.gz";
-    sha256 = "0hfix8yr90szlv2yyqb2rlq5qsrxyam8kg52sly0adja0cpwfjvx";
+  src = fetchFromGitHub {
+    owner = "machyve";
+    repo = "xhyve";
+    rev = "1f46a3d0bbeb6c90883f302425844fcc3800a776";
+    sha256 = "0mm9xa0v6n7xl2qypnppq5abdncd31vffiklrhcrlni5ymyh9ia5";
   };
 
-  buildInputs = [ Hypervisor vmnet xpc libobjc ];
+  buildInputs = [ Hypervisor vmnet xpc libobjc zlib ];
 
   # Don't use git to determine version
   prePatch = ''
@@ -25,10 +27,11 @@ stdenv.mkDerivation rec {
     cp build/xhyve $out/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Lightweight Virtualization on macOS Based on bhyve";
-    homepage = https://github.com/mist64/xhyve;
-    maintainers = [ lib.maintainers.lnl7 ];
-    platforms = lib.platforms.darwin;
+    homepage = "https://github.com/mist64/xhyve";
+    maintainers = [ maintainers.lnl7 ];
+    license = licenses.bsd2;
+    platforms = platforms.darwin;
   };
 }

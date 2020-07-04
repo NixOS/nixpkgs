@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -6,7 +6,7 @@ let
   cfg = config.networking.wireless;
   configFile = if cfg.networks != {} then pkgs.writeText "wpa_supplicant.conf" ''
     ${optionalString cfg.userControlled.enable ''
-      ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=${cfg.userControlled.group}
+      ctrl_interface=DIR=/run/wpa_supplicant GROUP=${cfg.userControlled.group}
       update_config=1''}
     ${cfg.extraConfig}
     ${concatStringsSep "\n" (mapAttrsToList (ssid: config: with config; let
@@ -86,7 +86,12 @@ in {
               '';
               description = ''
                 Use this option to configure advanced authentication methods like EAP.
-                See wpa_supplicant.conf(5) for example configurations.
+                See
+                <citerefentry>
+                  <refentrytitle>wpa_supplicant.conf</refentrytitle>
+                  <manvolnum>5</manvolnum>
+                </citerefentry>
+                for example configurations.
 
                 Mutually exclusive with <varname>psk</varname> and <varname>pskRaw</varname>.
               '';
@@ -97,6 +102,13 @@ in {
               default = false;
               description = ''
                 Set this to <literal>true</literal> if the SSID of the network is hidden.
+              '';
+              example = literalExample ''
+                { echelon = {
+                    hidden = true;
+                    psk = "abcdefgh";
+                  };
+                }
               '';
             };
 
@@ -122,7 +134,12 @@ in {
               '';
               description = ''
                 Extra configuration lines appended to the network block.
-                See wpa_supplicant.conf(5) for available options.
+                See
+                <citerefentry>
+                  <refentrytitle>wpa_supplicant.conf</refentrytitle>
+                  <manvolnum>5</manvolnum>
+                </citerefentry>
+                for available options.
               '';
             };
 
@@ -136,10 +153,13 @@ in {
         '';
         default = {};
         example = literalExample ''
-          { echelon = {
+          { echelon = {                   # SSID with no spaces or special characters
               psk = "abcdefgh";
             };
-            "free.wifi" = {};
+            "echelon's AP" = {            # SSID with spaces and/or special characters
+               psk = "ijklmnop";
+            };
+            "free.wifi" = {};             # Public wireless network
           }
         '';
       };
@@ -174,7 +194,12 @@ in {
         '';
         description = ''
           Extra lines appended to the configuration file.
-          See wpa_supplicant.conf(5) for available options.
+          See
+          <citerefentry>
+            <refentrytitle>wpa_supplicant.conf</refentrytitle>
+            <manvolnum>5</manvolnum>
+          </citerefentry>
+          for available options.
         '';
       };
     };
@@ -189,11 +214,12 @@ in {
     environment.systemPackages =  [ pkgs.wpa_supplicant ];
 
     services.dbus.packages = [ pkgs.wpa_supplicant ];
+    services.udev.packages = [ pkgs.crda ];
 
     # FIXME: start a separate wpa_supplicant instance per interface.
     systemd.services.wpa_supplicant = let
       ifaces = cfg.interfaces;
-      deviceUnit = interface: [ "sys-subsystem-net-devices-${interface}.device" ];
+      deviceUnit = interface: [ "sys-subsystem-net-devices-${utils.escapeSystemdPath interface}.device" ];
     in {
       description = "WPA Supplicant";
 
@@ -207,28 +233,32 @@ in {
       path = [ pkgs.wpa_supplicant ];
 
       script = ''
+        iface_args="-s -u -D${cfg.driver} -c ${configFile}"
         ${if ifaces == [] then ''
           for i in $(cd /sys/class/net && echo *); do
             DEVTYPE=
-            source /sys/class/net/$i/uevent
-            if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
-              ifaces="$ifaces''${ifaces:+ -N} -i$i"
+            UEVENT_PATH=/sys/class/net/$i/uevent
+            if [ -e "$UEVENT_PATH" ]; then
+              source "$UEVENT_PATH"
+              if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
+                args+="''${args:+ -N} -i$i $iface_args"
+              fi
             fi
           done
         '' else ''
-          ifaces="${concatStringsSep " -N " (map (i: "-i${i}") ifaces)}"
+          args="${concatMapStringsSep " -N " (i: "-i${i} $iface_args") ifaces}"
         ''}
-        exec wpa_supplicant -s -u -D${cfg.driver} -c ${configFile} $ifaces
+        exec wpa_supplicant $args
       '';
     };
 
     powerManagement.resumeCommands = ''
-      ${config.systemd.package}/bin/systemctl try-restart wpa_supplicant
+      /run/current-system/systemd/bin/systemctl try-restart wpa_supplicant
     '';
 
     # Restart wpa_supplicant when a wlan device appears or disappears.
     services.udev.extraRules = ''
-      ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", RUN+="${config.systemd.package}/bin/systemctl try-restart wpa_supplicant.service"
+      ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", RUN+="/run/current-system/systemd/bin/systemctl try-restart wpa_supplicant.service"
     '';
   };
 

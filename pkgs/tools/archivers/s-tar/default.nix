@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "s-tar-${version}";
-  version = "1.5.3";
+  pname = "s-tar";
+  version = "1.6";
   src = fetchurl {
     url = "mirror://sourceforge/s-tar/star-${version}.tar.bz2";
-    sha256 = "0nsg3adv8lwqsbizicgmyxx8w26d1f4almprkcb08cd87s1l40q7";
+    sha256 = "0xpp8gf0ghwdgncdwx17fpadxislwrj48gcm42851hz6p8p6c60v";
   };
 
   preConfigure = "rm configure";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       The way star acts may be modified by additional options.
       Note that unpacking tar archives may be a security risk because star may overwrite existing files.
     '';
-    homepage = http://cdrtools.sourceforge.net/private/star.html;
+    homepage = "http://cdrtools.sourceforge.net/private/star.html";
     license = stdenv.lib.licenses.cddl;
     maintainers = [ stdenv.lib.maintainers.wucke13 ];
     platforms = [ "x86_64-linux" ];

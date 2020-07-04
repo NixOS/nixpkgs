@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, spotify, xorg }:
-stdenv.mkDerivation rec {
-  name = "spotifywm-unstable-${version}";
+{ stdenv, fetchFromGitHub, spotify, xorg, runtimeShell }:
+stdenv.mkDerivation {
+  pname = "spotifywm-unstable";
   version = "2016-11-28";
 
   src = fetchFromGitHub {
@@ -15,14 +15,14 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ spotify ];
 
   installPhase = ''
-    echo "#!${stdenv.shell}" > spotifywm
+    echo "#!${runtimeShell}" > spotifywm
     echo "LD_PRELOAD="$out/lib/spotifywm.so" ${spotify}/bin/spotify \$*" >> spotifywm
     install -Dm644 spotifywm.so $out/lib/spotifywm.so
     install -Dm755 spotifywm $out/bin/spotifywm
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/dasJ/spotifywm;
+    homepage = "https://github.com/dasJ/spotifywm";
     description = "Wrapper around Spotify that correctly sets class name before opening the window";
     license = licenses.mit;
     platforms = platforms.linux;

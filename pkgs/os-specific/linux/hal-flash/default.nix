@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   preConfigure = "libtoolize && aclocal && autoconf && automake --add-missing";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/cshorler/hal-flash;
+    homepage = "https://github.com/cshorler/hal-flash";
     description = "libhal stub library to satisfy the Flash Player DRM requirements";
     longDescription =
       ''

@@ -1,22 +1,25 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "godef-${version}";
-  version = "1.0.0";
-  rev = "7b4626be9fa8081987905fd4719d2f6628f9d8b5";
+buildGoModule rec {
+  pname = "godef";
+  version = "1.1.2";
+  rev = "v${version}";
 
   goPackagePath = "github.com/rogpeppe/godef";
-  excludedPackages = "go/printer/testdata";
+  subPackages = [ "." ];
 
-  src = fetchgit {
+  vendorSha256 = null;
+
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/rogpeppe/godef";
-    sha256 = "0zhw4ba19hy0kv74c58ax759h8721khmwj04fak2y5800ymsgndg";
+    owner = "rogpeppe";
+    repo = "godef";
+    sha256 = "0rhhg73kzai6qzhw31yxw3nhpsijn849qai2v9am955svmnckvf4";
   };
 
   meta = {
     description = "Print where symbols are defined in Go source code";
-    homepage = https://github.com/rogpeppe/godef/;
+    homepage = "https://github.com/rogpeppe/godef/";
     maintainers = with stdenv.lib.maintainers; [ vdemeester rvolosatovs ];
     license = stdenv.lib.licenses.bsd3;
   };

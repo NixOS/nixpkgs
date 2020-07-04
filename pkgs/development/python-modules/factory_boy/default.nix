@@ -1,23 +1,29 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, fake_factory
+, isPy27
+, faker
+, python
+, ipaddress
 }:
 
 buildPythonPackage rec {
   pname = "factory_boy";
-  version = "2.6.1";
+  version = "2.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0a21f8kq917fj8xgmyp6gy8vcrlzzgwn80qas0d76h3vjbdy0bdq";
+    sha256 = "0w53hjgag6ad5i2vmrys8ysk54agsqvgbjy9lg8g0d8pi9h8vx7s";
   };
 
-  propagatedBuildInputs = [ fake_factory ];
+  propagatedBuildInputs = [ faker ] ++ lib.optionals isPy27 [ ipaddress ];
 
-  meta = with stdenv.lib; {
+  # tests not included with pypi release
+  doCheck = false;
+
+  meta = with lib; {
     description = "A Python package to create factories for complex objects";
-    homepage    = https://github.com/rbarrois/factory_boy;
+    homepage    = "https://github.com/rbarrois/factory_boy";
     license     = licenses.mit;
   };
 

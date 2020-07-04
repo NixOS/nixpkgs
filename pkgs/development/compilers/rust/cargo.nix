@@ -1,39 +1,31 @@
-{ stdenv, file, curl, pkgconfig, python, openssl, cmake, zlib
-, makeWrapper, libiconv, cacert, rustPlatform, rustc, libgit2
+{ stdenv, file, curl, pkgconfig, python3, openssl, cmake, zlib
+, installShellFiles, makeWrapper, libiconv, cacert, rustPlatform, rustc
 , CoreFoundation, Security
-, version
-, patches ? []
-, src }:
+}:
 
-rustPlatform.buildRustPackage rec {
-  name = "cargo-${version}";
-  inherit version src patches;
+rustPlatform.buildRustPackage {
+  name = "cargo-${rustc.version}";
+  inherit (rustc) version src;
 
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
-  cargoVendorDir = "src/vendor";
-  preBuild = "cd src; pushd tools/cargo";
-  postBuild = "popd";
+  cargoVendorDir = "vendor";
+  buildAndTestSubdir = "src/tools/cargo";
 
   passthru.rustc = rustc;
 
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cacert file curl python openssl cmake zlib makeWrapper libgit2 ]
+  nativeBuildInputs = [ pkgconfig cmake installShellFiles makeWrapper ];
+  buildInputs = [ cacert file curl python3 openssl zlib ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
 
-  LIBGIT2_SYS_USE_PKG_CONFIG=1;
+  # cargo uses git-rs which is made for a version of libgit2 from recent master that
+  # is not compatible with the current version in nixpkgs.
+  #LIBGIT2_SYS_USE_PKG_CONFIG = 1;
 
   # fixes: the cargo feature `edition` requires a nightly version of Cargo, but this is the `stable` channel
-  RUSTC_BOOTSTRAP=1;
-
-  # FIXME: Use impure version of CoreFoundation because of missing symbols.
-  # CFURLSetResourcePropertyForKey is defined in the headers but there's no
-  # corresponding implementation in the sources from opensource.apple.com.
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-    export NIX_CFLAGS_COMPILE="-F${CoreFoundation}/Library/Frameworks $NIX_CFLAGS_COMPILE"
-  '';
+  RUSTC_BOOTSTRAP = 1;
 
   postInstall = ''
     # NOTE: We override the `http.cainfo` option usually specified in
@@ -44,6 +36,8 @@ rustPlatform.buildRustPackage rec {
       --suffix PATH : "${rustc}/bin" \
       --set CARGO_HTTP_CAINFO "${cacert}/etc/ssl/certs/ca-bundle.crt" \
       --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt"
+
+    installManPage src/tools/cargo/src/etc/man/*
   '';
 
   checkPhase = ''
@@ -56,9 +50,9 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://crates.io;
+    homepage = "https://crates.io";
     description = "Downloads your Rust project's dependencies and builds your project";
-    maintainers = with maintainers; [ wizeman retrry ];
+    maintainers = with maintainers; [ retrry ];
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.unix;
   };

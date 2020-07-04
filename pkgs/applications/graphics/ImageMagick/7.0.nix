@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkgconfig, libtool
-, bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
+, bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg, djvulibre
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, libheif
 , ApplicationServices
 }:
@@ -13,14 +13,14 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "7.0.8-12";
-    sha256 = "0rq7qhbfsxvclazi1l6kqi4wqsph7hmzcjbh2pmf0276mrkgm7cd";
+    version = "7.0.10-17";
+    sha256 = "15cj9qkikx13j6gfqaawi4nh09lnzg3asf5mdcswx6z6yhbf90zx";
     patches = [];
   };
 in
 
-stdenv.mkDerivation rec {
-  name = "imagemagick-${version}";
+stdenv.mkDerivation {
+  pname = "imagemagick";
   inherit (cfg) version;
 
   src = fetchFromGitHub {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     inherit (cfg) sha256;
   };
 
-  patches = [ ./imagetragick.patch ] ++ cfg.patches;
+  patches = cfg.patches;
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
   outputMan = "out"; # it's tiny
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ zlib fontconfig freetype ghostscript
-      libpng libtiff libxml2 libheif
+      libpng libtiff libxml2 libheif djvulibre
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
       [ openexr librsvg openjpeg ]
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     moveToOutput "lib/ImageMagick-*/config-Q16HDRI" "$dev" # includes configure params
     for file in "$dev"/bin/*-config; do
       substituteInPlace "$file" --replace pkg-config \
-        "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '${pkgconfig}/bin/pkg-config'"
+        "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '${pkgconfig}/bin/${pkgconfig.targetPrefix}pkg-config'"
     done
   '' + lib.optionalString (ghostscript != null) ''
     for la in $out/lib/*.la; do
@@ -80,10 +80,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.imagemagick.org/;
+    homepage = "http://www.imagemagick.org/";
     description = "A software suite to create, edit, compose, or convert bitmap images";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.asl20;
-    maintainers = with maintainers; [ the-kenny wkennington ];
   };
 }

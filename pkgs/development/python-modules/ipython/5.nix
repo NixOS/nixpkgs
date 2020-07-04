@@ -26,11 +26,11 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "5.7.0";
+  version = "5.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0g1jm06qriq48m58311cs7askp83ipq3yq96hv4kg431nxzkmd4d";
+    sha256 = "4bac649857611baaaf76bc82c173aa542f7486446c335fe1a6c05d0d491c8906";
   };
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -38,12 +38,11 @@ buildPythonPackage rec {
   '';
 
   patches = [
-    # improve cython support, needed by sage, accepted upstream
-    # https://github.com/ipython/ipython/pull/11139
+    # Use the proper pygments lexer for python2 (https://github.com/ipython/ipython/pull/12095)
     (fetchpatch {
-      name = "signature-use-inspect.patch";
-      url = "https://github.com/ipython/ipython/commit/8d399b98d3ed5c765835594100c4d36fb2f739dc.patch";
-      sha256 = "1r7v9clwwbskmj4y160vcj6g0vzqbvnj4y1bm2n4bskafapm42g0";
+      name = "python2-lexer.patch";
+      url = "https://github.com/ipython/ipython/pull/12095/commits/8805293b5e4bce9150cc2ad9c5d6d984849ae447.patch";
+      sha256 = "16p4gl7a49v76w33j39ih7yspy6x2d14p9bh4wdpg9cafhw9nbc0";
     })
   ];
 
@@ -66,8 +65,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "IPython: Productive Interactive Computing";
-    homepage = http://ipython.org/;
+    homepage = "http://ipython.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ bjornfor jgeerds orivej lnl7 ];
+    maintainers = with lib.maintainers; [ bjornfor orivej lnl7 ];
   };
 }

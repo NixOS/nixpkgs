@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "identify";
-  version = "1.1.7";
+  version = "1.4.19";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5e956558a9a1e3b3891d7c6609fc9709657a11878af288ace484d1a46a93922b";
+    sha256 = "249ebc7e2066d6393d27c1b1be3b70433f824a120b1d8274d362f1eb419e3b52";
   };
 
   # Tests not included in PyPI tarball
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "File identification library for Python";
-    homepage = https://github.com/chriskuehl/identify;
+    homepage = "https://github.com/chriskuehl/identify";
     license = licenses.mit;
   };
 }

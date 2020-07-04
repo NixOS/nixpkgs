@@ -1,0 +1,10 @@
+--- a/src/LV2/xputty/xfilepicker.cpp
++++ b/src/LV2/xputty/xfilepicker.cpp
+@@ -191,6 +191,6 @@
+     filepicker->selected_file = NULL;
+     filepicker->path = NULL;
+     filepicker->filter = NULL;
+-    asprintf(&filepicker->path, path);
++    asprintf(&filepicker->path, "%s", path);
+     assert(filepicker->path != NULL);
+ }

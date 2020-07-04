@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "log4cxx-${version}";
+  pname = "log4cxx";
   version = "0.10.0";
 
   src = fetchurl {
-    url = "http://apache.mirrors.hoobly.com/logging/log4cxx/${version}/apache-${name}.tar.gz";
+    url = "http://apache.mirrors.hoobly.com/logging/log4cxx/${version}/apache-${pname}-${version}.tar.gz";
     sha256 = "130cjafck1jlqv92mxbn47yhxd2ccwwnprk605c6lmm941i3kq0d";
   };
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ libtool ];
 
   meta = {
-    homepage = https://logging.apache.org/log4cxx/index.html;
+    homepage = "https://logging.apache.org/log4cxx/index.html";
     description = "A logging framework for C++ patterned after Apache log4j";
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.unix;

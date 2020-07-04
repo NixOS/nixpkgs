@@ -1,5 +1,5 @@
 { stdenv, buildPythonApplication, fetchFromGitHub
-, gtk3, gobjectIntrospection
+, gtk3, gobject-introspection
 , wrapGAppsHook, python3Packages }:
 
 buildPythonApplication rec {
@@ -17,7 +17,7 @@ buildPythonApplication rec {
 
   buildInputs = [
     gtk3
-    gobjectIntrospection
+    gobject-introspection
   ];
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -29,7 +29,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A graphical implementation of the Shogi board game, also known as Japanese Chess";
-    homepage = http://johncheetham.com/projects/gshogi/;
+    homepage = "http://johncheetham.com/projects/gshogi/";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.ciil ];

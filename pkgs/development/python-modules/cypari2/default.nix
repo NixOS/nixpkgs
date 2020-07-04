@@ -1,5 +1,4 @@
 { stdenv
-, bootstrapped-pip
 , buildPythonPackage
 , python
 , fetchPypi
@@ -12,11 +11,11 @@
 buildPythonPackage rec {
   pname = "cypari2";
   # upgrade may break sage, please test the sage build or ping @timokau on upgrade
-  version = "1.3.1";
+  version = "2.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04f00xp8aaz37v00iqg1mv5wjq00a5qhk8cqa93s13009s9x984r";
+    sha256 = "df1ef62e771ec36e5a456f5fc8b51bc6745b70f0efdd0c7a30c3f0b5f1fb93db";
   };
 
   # This differs slightly from the default python installPhase in that it pip-installs
@@ -24,15 +23,17 @@ buildPythonPackage rec {
   # That is because while the default install phase succeeds to build the package,
   # it fails to generate the file "auto_paridecl.pxd".
   installPhase = ''
-    mkdir -p "$out/lib/${python.libPrefix}/site-packages"
-    export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+    export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
 
     # install "." instead of "*.whl"
-    ${bootstrapped-pip}/bin/pip install --no-index --prefix=$out --no-cache --build=tmpdir .
+    ${python.pythonForBuild.pkgs.bootstrapped-pip}/bin/pip install --no-index --prefix=$out --no-cache --build=tmpdir .
   '';
 
-  buildInputs = [
+  nativeBuildInputs = [
     pari
+  ];
+
+  buildInputs = [
     gmp
   ];
 
@@ -49,6 +50,6 @@ buildPythonPackage rec {
     description = "Cython bindings for PARI";
     license = licenses.gpl2;
     maintainers = with maintainers; [ timokau ];
-    homepage = https://github.com/defeo/cypari2;
+    homepage = "https://github.com/defeo/cypari2";
   };
 }

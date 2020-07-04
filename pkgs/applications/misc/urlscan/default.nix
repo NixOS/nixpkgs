@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "urlscan";
-  version = "0.9.0";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = pname;
     rev = version;
-    sha256 = "0vad1g234r9agvkdsry9xb6hmn6lg4mygfcy0mg68gibmrg7h1ji";
+    sha256 = "11wkwjqsq848ks6m2jqsb8h0xnz75fb60bm0c4jkxys9wzy4chg5";
   };
 
   propagatedBuildInputs = [ python3Packages.urwid ];
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Mutt and terminal url selector (similar to urlview)";
-    homepage = https://github.com/firecat53/urlscan;
+    homepage = "https://github.com/firecat53/urlscan";
     license = licenses.gpl2;
     maintainers = with maintainers; [ dpaetzel jfrankenau ];
   };

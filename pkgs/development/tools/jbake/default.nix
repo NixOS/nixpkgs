@@ -1,12 +1,12 @@
 { stdenv, fetchzip, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  version = "2.6.3";
-  name = "jbake-${version}";
+  version = "2.6.5";
+  pname = "jbake";
 
   src = fetchzip {
-    url = "https://dl.bintray.com/jbake/binary/${name}-bin.zip";
-    sha256 = "000ax5vzirrhiykk86fmy4hibhl3pab0gkh5y35hiwhzhw5rwzk8";
+    url = "https://dl.bintray.com/jbake/binary/${pname}-${version}-bin.zip";
+    sha256 = "0ripayv1vf4f4ylxr7h9kad2xhy3y98ca8s4p38z7dn8l47zg0qw";
   };
 
   buildInputs = [ makeWrapper jre ];

@@ -1,27 +1,30 @@
-{ stdenv, buildPythonPackage, fetchPypi, termcolor, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, termcolor
+, pytest
+, packaging
+}:
 
 buildPythonPackage rec {
   pname = "pytest-sugar";
-  version = "0.9.1";
+  version = "0.9.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ab8cc42faf121344a4e9b13f39a51257f26f410e416c52ea11078cdd00d98a2c";
+    sha256 = "1630b5b7ea3624919b73fde37cffb87965c5087a4afab8a43074ff44e0d810c4";
   };
 
-  propagatedBuildInputs = [ termcolor pytest ];
+  propagatedBuildInputs = [
+    termcolor
+    pytest
+    packaging
+  ];
 
-  checkPhase = ''
-    py.test
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A plugin that changes the default look and feel of py.test";
-    homepage = https://github.com/Frozenball/pytest-sugar;
+    homepage = "https://github.com/Frozenball/pytest-sugar";
     license = licenses.bsd3;
-
-    # incompatible with pytest 3.5
-    # https://github.com/Frozenball/pytest-sugar/issues/134
-    broken = true; # 2018-04-20
+    maintainers = [ maintainers.costrouc ];
   };
 }

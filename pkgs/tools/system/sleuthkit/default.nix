@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, autoreconfHook, libewf, afflib, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "4.6.3";
-  name = "sleuthkit-${version}";
+  version = "4.6.5";
+  pname = "sleuthkit";
 
   src = fetchFromGitHub {
     owner = "sleuthkit";
     repo = "sleuthkit";
-    rev = name;
-    sha256 = "1qaggb8day6idbafncslyaz7a475sq6p0xnjwc4c99f0z7i9cahp";
+    rev = "${pname}-${version}";
+    sha256 = "1q1cdixnfv9v4qlzza8xwdsyvq1vdw6gjgkd41yc1d57ldp1qm0c";
   };
 
   postPatch = ''
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A forensic/data recovery tool";
-    homepage = https://www.sleuthkit.org/;
+    homepage = "https://www.sleuthkit.org/";
     maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.ipl10;

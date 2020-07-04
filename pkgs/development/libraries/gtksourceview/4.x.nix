@@ -1,15 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, atk, cairo, glib, gtk3, pango, vala_0_40
-, libxml2, perl, gettext, gnome3, gobjectIntrospection, dbus, xvfb_run, shared-mime-info }:
+{ stdenv, fetchurl, pkgconfig, atk, cairo, glib, gtk3, pango, fribidi, vala
+, libxml2, perl, gettext, gnome3, gobject-introspection, dbus, xvfb_run, shared-mime-info
+, meson, ninja }:
 
-let
-  checkInputs = [ xvfb_run dbus ];
-in stdenv.mkDerivation rec {
-  name = "gtksourceview-${version}";
-  version = "4.0.0";
+stdenv.mkDerivation rec {
+  pname = "gtksourceview";
+  version = "4.6.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtksourceview/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0amkspjsvxr3rjznmnwjwsgw030hayf6bw49ya4nligslwl7lp3f";
+    url = "mirror://gnome/sources/gtksourceview/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "11csdnb5xj1gkn1shynp3jdsfhhi7ks3apgmavfan0p6n85f64sc";
   };
 
   propagatedBuildInputs = [
@@ -21,10 +20,11 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig gettext perl gobjectIntrospection vala_0_40 ]
-    ++ stdenv.lib.optionals doCheck checkInputs;
+  nativeBuildInputs = [ meson ninja pkgconfig gettext perl gobject-introspection vala ];
 
-  buildInputs = [ atk cairo glib pango libxml2 ];
+  checkInputs = [ xvfb_run dbus ];
+
+  buildInputs = [ atk cairo glib pango fribidi libxml2 ];
 
   patches = [ ./4.x-nix_share_path.patch ];
 
@@ -32,23 +32,23 @@ in stdenv.mkDerivation rec {
 
   doCheck = stdenv.isLinux;
   checkPhase = ''
-    export NO_AT_BRIDGE=1
+    XDG_DATA_DIRS="$XDG_DATA_DIRS:${shared-mime-info}/share" \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-      make check
+      meson test --no-rebuild --print-errorlogs
   '';
 
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "gtksourceview";
-      attrPath = "gnome3.gtksourceview";
+      attrPath = "gtksourceview4";
     };
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/GtkSourceView;
+    homepage = "https://wiki.gnome.org/Projects/GtkSourceView";
     platforms = with platforms; linux ++ darwin;
     license = licenses.lgpl21;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

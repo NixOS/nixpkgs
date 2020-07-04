@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   meta = {
-    homepage = http://ocamlsdl.sourceforge.net/;
+    homepage = "http://ocamlsdl.sourceforge.net/";
     description = "OCaml bindings for SDL 1.2";
     license = stdenv.lib.licenses.lgpl21;
   };

@@ -1,17 +1,32 @@
-{ callPackage, stdenv }:
+{ callPackage }:
 
 let
-  stableVersion = "2.1.11";
-  # Currently there is no preview version.
+  stableVersion = "2.2.8";
   previewVersion = stableVersion;
   addVersion = args:
     let version = if args.stable then stableVersion else previewVersion;
         branch = if args.stable then "stable" else "preview";
     in args // { inherit version branch; };
-  mkGui = args: callPackage (import ./gui.nix (addVersion args)) { };
-  mkServer = args: callPackage (import ./server.nix (addVersion args)) { };
-  guiSrcHash = "1skcb47r0wvv7l7z487b2165pwvc397b23abfq24kw79806vknzn";
-  serverSrcHash = "09j2nafxvgc6plk7s3qwv5qc0cc2bi41h4fhg8g7c85ixfx5yz8a";
+  extraArgs = rec {
+    mkOverride = attrname: version: sha256:
+      self: super: {
+        ${attrname} = super.${attrname}.overridePythonAttrs (oldAttrs: {
+          inherit version;
+          src = oldAttrs.src.override {
+            inherit version sha256;
+          };
+          doCheck = oldAttrs.doCheck && (attrname != "psutil");
+        });
+      };
+    commonOverrides = [
+      (mkOverride "psutil" "5.6.6"
+        "1rs6z8bfy6bqzw88s4i5zllrx3i18hnkv4akvmw7bifngcgjh8dd")
+    ];
+  };
+  mkGui = args: callPackage (import ./gui.nix (addVersion args // extraArgs)) { };
+  mkServer = args: callPackage (import ./server.nix (addVersion args // extraArgs)) { };
+  guiSrcHash = "1qgzad9hdbvkdalzdnlg5gnlzn2f9qlpd1aj8djmi6w1mmdkf9q7";
+  serverSrcHash = "1kg38dh0xk4yvi7hz0d5dq9k0wany0sfd185l0zxs3nz78zd23an";
 in {
   guiStable = mkGui {
     stable = true;

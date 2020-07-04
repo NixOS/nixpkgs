@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, fetchpatch, makeWrapper
-, perl, perlPackages, flac, faad2, sox, lame, monkeysAudio, wavpack }:
+{ stdenv, fetchurl, makeWrapper
+, perlPackages, flac, faad2, sox, lame, monkeysAudio, wavpack }:
 
 perlPackages.buildPerlPackage rec {
-  name = "slimserver-${version}";
+  pname = "slimserver";
   version = "7.9.1";
 
   src = fetchurl {
@@ -12,7 +12,7 @@ perlPackages.buildPerlPackage rec {
 
   buildInputs = [
     makeWrapper
-    perl
+    perlPackages.perl
     perlPackages.AnyEvent
     perlPackages.AudioScan
     perlPackages.CarpClan
@@ -77,9 +77,9 @@ perlPackages.buildPerlPackage rec {
 
   buildPhase = ''
     mv lib tmp
-    mkdir -p lib/perl5/site_perl
-    mv CPAN_used/* lib/perl5/site_perl
-    cp -rf tmp/* lib/perl5/site_perl
+    mkdir -p ${perlPackages.perl.libPrefix}
+    mv CPAN_used/* ${perlPackages.perl.libPrefix}
+    cp -rf tmp/* ${perlPackages.perl.libPrefix}
   '';
 
   doCheck = false;
@@ -93,12 +93,12 @@ perlPackages.buildPerlPackage rec {
   outputs = [ "out" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/Logitech/slimserver;
+    homepage = "https://github.com/Logitech/slimserver";
     description = "Server for Logitech Squeezebox players. This server is also called Logitech Media Server";
     # the firmware is not under a free license!
     # https://github.com/Logitech/slimserver/blob/public/7.9/License.txt
     license = licenses.unfree;
     maintainers = [ maintainers.phile314 ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -1,15 +1,26 @@
 { stdenv, lib, fetchFromGitHub, pkgconfig, cmake, git, doxygen, help2man, ncurses, tecla
 , libusb1, udev }:
 
-stdenv.mkDerivation rec {
-  version = "1.9.0";
-  name = "libbladeRF-${version}";
+let
+  # fetch submodule
+  noos = fetchFromGitHub {
+    owner = "analogdevicesinc";
+    repo = "no-OS";
+    rev = "0bba46e6f6f75785a65d425ece37d0a04daf6157";
+    sha256 = "0is79dhsyp9xmlnfdr1i5s1c22ipjafk9d35jpn5dynpvj86m99c";
+  };
+
+  version = "2.2.1";
+
+in stdenv.mkDerivation {
+  pname = "libbladeRF";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "Nuand";
     repo = "bladeRF";
     rev = "libbladeRF_v${version}";
-    sha256 = "0frvphp4xxdxwzmi94b0asl7b891sd3fk8iw9kfk8h6f3cdhj8xa";
+    sha256 = "0g89al4kwfbx1l3zjddgb9ay4mhr7zk0ndchca3sm1vq2j47nf4l";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -18,11 +29,16 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isLinux [ udev ]
     ++ lib.optionals stdenv.isDarwin [ ncurses ];
 
+
+  postUnpack = ''
+    cp -r ${noos}/* source/thirdparty/analogdevicesinc/no-OS/
+  '';
+
   # Fixup shebang
   prePatch = "patchShebangs host/utilities/bladeRF-cli/src/cmd/doc/generate.bash";
 
   # Let us avoid nettools as a dependency.
-  patchPhase = ''
+  postPatch = ''
     sed -i 's/$(hostname)/hostname/' host/utilities/bladeRF-cli/src/cmd/doc/generate.bash
   '';
 
@@ -31,12 +47,13 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [
     "-DUDEV_RULES_PATH=etc/udev/rules.d"
     "-DINSTALL_UDEV_RULES=ON"
+    "-DBLADERF_GROUP=bladerf"
   ];
 
   hardeningDisable = [ "fortify" ];
 
   meta = with lib; {
-    homepage = https://nuand.com/libbladeRF-doc;
+    homepage = "https://nuand.com/libbladeRF-doc";
     description = "Supporting library of the BladeRF SDR opensource hardware";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ funfunctor ];

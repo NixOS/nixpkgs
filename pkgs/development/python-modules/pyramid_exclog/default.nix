@@ -6,20 +6,20 @@
 
 buildPythonPackage rec {
   pname = "pyramid_exclog";
-  version = "0.7";
+  version = "1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a58c82866c3e1a350684e6b83b440d5dc5e92ca5d23794b56d53aac06fb65a2c";
+    sha256 = "d05ced5c12407507154de6750036bc83861b85c11be70b3ec3098c929652c14b";
   };
 
   propagatedBuildInputs = [ pyramid ];
 
   meta = with stdenv.lib; {
     description = "A package which logs to a Python logger when an exception is raised by a Pyramid application";
-    homepage = http://docs.pylonsproject.org/;
+    homepage = "https://docs.pylonsproject.org/";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ garbas domenkozar ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 
 }

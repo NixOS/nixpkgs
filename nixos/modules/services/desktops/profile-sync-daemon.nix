@@ -34,7 +34,7 @@ in {
           psd = {
             enable = true;
             description = "Profile Sync daemon";
-            wants = [ "psd-resync.service" "local-fs.target" ];
+            wants = [ "psd-resync.service" ];
             wantedBy = [ "default.target" ];
             path = with pkgs; [ rsync kmod gawk nettools utillinux profile-sync-daemon ];
             unitConfig = {

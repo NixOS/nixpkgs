@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, readline, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "augeas-${version}";
-  version = "1.11.0";
+  pname = "augeas";
+  version = "1.12.0";
 
   src = fetchurl {
-    url = "http://download.augeas.net/${name}.tar.gz";
-    sha256 = "1c507qj6dfn2dnsl27w94zs9r45xrgm07y8bqba9ry2s0psfhg1r";
+    url = "http://download.augeas.net/${pname}-${version}.tar.gz";
+    sha256 = "11ybhb13wkkilsn7b416a1dn61m1xrq0lbdpkhp5w61jrk4l469j";
   };
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ readline libxml2 ];
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Configuration editing tool";
     license = licenses.lgpl2;
-    homepage = http://augeas.net/;
-    maintainers = with maintainers; [ offline ndowens ];
+    homepage = "http://augeas.net/";
+    maintainers = with maintainers; [ offline ];
     platforms = platforms.unix;
   };
 }

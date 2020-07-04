@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, guile, gtk2, flex, gawk, perl }:
 
-stdenv.mkDerivation rec {
-  name = "geda-${version}";
+stdenv.mkDerivation {
+  pname = "geda";
   version = "1.8.2-20130925";
 
   src = fetchurl {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Full GPL'd suite of Electronic Design Automation tools";
-    homepage = http://www.geda-project.org/;
+    homepage = "http://www.geda-project.org/";
     maintainers = with maintainers; [ pjones ];
     platforms = platforms.linux;
     license = licenses.gpl2;

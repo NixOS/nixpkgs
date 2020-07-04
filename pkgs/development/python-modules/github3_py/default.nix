@@ -1,42 +1,44 @@
-{ stdenv
+{ lib
+, pythonOlder
 , buildPythonPackage
 , fetchPypi
-, unittest2
-, pytest
-, mock
 , betamax
+, pytest
 , betamax-matchers
-, dateutil
+, unittest2
+, mock
 , requests
+, uritemplate
+, dateutil
+, jwcrypto
 , pyopenssl
-, uritemplate_py
 , ndg-httpsclient
-, requests_toolbelt
 , pyasn1
 }:
 
 buildPythonPackage rec {
   pname = "github3.py";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1cxaqdqmz9w2afc0cw2jyv783fp0grydbik0frzj79azzkhyg4gf";
+    sha256 = "15a115c18f7bfcf934dfef7ab103844eb9f620c586bad65967708926da47cbda";
   };
 
-  buildInputs = [ unittest2 pytest mock betamax betamax-matchers dateutil ];
-  propagatedBuildInputs = [ requests pyopenssl uritemplate_py ndg-httpsclient requests_toolbelt pyasn1 ];
+  checkInputs = [ betamax pytest betamax-matchers ]
+    ++ lib.optional (pythonOlder "3") unittest2
+    ++ lib.optional (pythonOlder "3.3") mock;
+  propagatedBuildInputs = [ requests uritemplate dateutil jwcrypto pyopenssl ndg-httpsclient pyasn1 ];
 
   postPatch = ''
-    sed -i -e 's/mock ==1.0.1/mock>=1.0.1/' setup.py
     sed -i -e 's/unittest2 ==0.5.1/unittest2>=0.5.1/' setup.py
   '';
 
   # TODO: only disable the tests that require network
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = http://github3py.readthedocs.org/en/master/;
+  meta = with lib; {
+    homepage = "https://github3py.readthedocs.org/en/master/";
     description = "A wrapper for the GitHub API written in python";
     license = licenses.bsd3;
     maintainers = with maintainers; [ pSub ];

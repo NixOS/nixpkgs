@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, fetchpatch, makeDesktopItem, makeWrapper, pkgconfig
-, cmake, epoxy, libzip, ffmpeg, imagemagick, SDL2, qtbase, qtmultimedia, libedit
-, qttools, minizip }:
+{ stdenv, fetchFromGitHub, makeDesktopItem, wrapQtAppsHook, pkgconfig
+, cmake, epoxy, libzip, libelf, libedit, ffmpeg_3, SDL2, imagemagick
+, qtbase, qtmultimedia, qttools, minizip }:
 
 let
   desktopItem = makeDesktopItem {
@@ -14,37 +14,30 @@ let
     startupNotify = "false";
   };
 in stdenv.mkDerivation rec {
-  name = "mgba-${version}";
-  version = "0.6.3";
+  pname = "mgba";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
     rev = version;
-    sha256 = "0m1pkxa6i94gq95cankv390wsbp88b3x41c7hf415rp9rkfq25vk";
+    sha256 = "0dlwhn3hrpaqnl5hjs53y8j2i16idxrg3gy688gcwrc9z1a6bkn2";
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ makeWrapper pkgconfig cmake ];
+  nativeBuildInputs = [ wrapQtAppsHook pkgconfig cmake ];
 
   buildInputs = [
-    libzip epoxy ffmpeg imagemagick SDL2 qtbase qtmultimedia libedit minizip
-    qttools
+    epoxy libzip libelf libedit ffmpeg_3 SDL2 imagemagick
+    qtbase qtmultimedia qttools minizip
   ];
-
-  patches = [(fetchpatch {
-      url = "https://github.com/mgba-emu/mgba/commit/7f41dd354176b720c8e3310553c6b772278b9dca.patch";
-      sha256 = "0j334v8wf594kg8s1hngmh58wv1pi003z8avy6fjhj5qpjmbbavh";
-  })];
 
   postInstall = ''
     cp -r ${desktopItem}/share/applications $out/share
-    wrapProgram $out/bin/mgba-qt --suffix QT_PLUGIN_PATH : \
-      ${qtbase.bin}/${qtbase.qtPluginPrefix}
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://mgba.io;
+    homepage = "https://mgba.io";
     description = "A modern GBA emulator with a focus on accuracy";
 
     longDescription = ''

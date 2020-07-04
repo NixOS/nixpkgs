@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, coreutils, findutils, git }:
 
 stdenv.mkDerivation rec {
-  name = "gibo-${version}";
+  pname = "gibo";
   version = "1.0.6";
 
   src = fetchFromGitHub {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://github.com/simonwhitaker/gibo;
+    homepage = "https://github.com/simonwhitaker/gibo";
     license = stdenv.lib.licenses.publicDomain;
     description = "A shell script for easily accessing gitignore boilerplates";
     platforms = stdenv.lib.platforms.unix;

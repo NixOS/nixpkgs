@@ -1,34 +1,41 @@
 { lib
+, setuptools
+, pip
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytest
 , pytestcov
 , coverage
 , jsonschema
+, bootstrapped-pip
 }:
 
 buildPythonPackage rec {
   pname = "wheel";
-  version = "0.31.1";
+  version = "0.33.6";
+  format = "other";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0a2e54558a0628f2145d2fc822137e322412115173e8a2ddbe1c9024338ae83c";
+  src = fetchFromGitHub {
+    owner = "pypa";
+    repo = pname;
+    rev = version;
+    sha256 = "1bg4bxazsjxp621ymaykd8l75k7rvcvwawlipmjk7nsrl72l4p0s";
+    name = "${pname}-${version}-source";
   };
 
   checkInputs = [ pytest pytestcov coverage ];
+  nativeBuildInputs = [ bootstrapped-pip setuptools ];
 
-  propagatedBuildInputs = [ jsonschema ];
-
+  catchConflicts = false;
   # No tests in archive
   doCheck = false;
 
   # We add this flag to ignore the copy installed by bootstrapped-pip
-  installFlags = [ "--ignore-installed" ];
+  pipInstallFlags = [ "--ignore-installed" ];
 
   meta = {
     description = "A built-package format for Python";
     license = with lib.licenses; [ mit ];
-    homepage = https://bitbucket.org/pypa/wheel/;
+    homepage = "https://bitbucket.org/pypa/wheel/";
   };
 }

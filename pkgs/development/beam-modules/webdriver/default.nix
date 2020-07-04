@@ -6,7 +6,7 @@ let
     buildInputs = [ drv ];
   };
 
-  pkg = self: stdenv.mkDerivation rec {
+  pkg = self: stdenv.mkDerivation {
     name = "webdriver";
     version = "0.0.0+build.18.7ceaf1f";
 
@@ -23,12 +23,12 @@ let
 
     buildInputs = [ erlang ];
 
-    installFlags = "PREFIX=$(out)/lib/erlang/lib";
+    installFlags = [ "PREFIX=$(out)/lib/erlang/lib" ];
 
     meta = {
       description = "WebDriver implementation in Erlang";
       license = stdenv.lib.licenses.mit;
-      homepage = https://github.com/Quviq/webdrv;
+      homepage = "https://github.com/Quviq/webdrv";
       maintainers = with stdenv.lib.maintainers; [ ericbmerritt ];
     };
 

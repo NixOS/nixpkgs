@@ -1,20 +1,19 @@
-{ stdenv, fetchgit, cmake, SDL2, qtbase, qtmultimedia, boost, curl, gtest }:
+{ stdenv, mkDerivation, lib, fetchgit, cmake, SDL2, qtbase, qtmultimedia, boost }:
 
-stdenv.mkDerivation rec { 
-  name = "citra-${version}";
-  version = "2018-06-09";
+mkDerivation {
+  pname = "citra";
+  version = "2020-03-21";
 
   # Submodules
   src = fetchgit {
     url = "https://github.com/citra-emu/citra";
-    rev = "cf9bfe0690f1934847500cc5079b1aaf3299a507";
-    sha256 = "1ryc5d3fnhzlrzh1yljbq9x5n79dsb5hgqdba8z4x56iccx0kd0p";
+    rev = "8722b970c52f2c0d8e82561477edb62a53ae9dbb";
+    sha256 = "0c1zn1f84h4f6n6p0aqz905yvv5qpdmkj2z58yla6bfgbzabfyrj";
   };
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ SDL2 qtbase qtmultimedia boost curl gtest ];
-  cmakeFlags = [ "-DUSE_SYSTEM_CURL=ON" "-DUSE_SYSTEM_GTEST=ON" ];
+  buildInputs = [ SDL2 qtbase qtmultimedia boost ];
 
   preConfigure = ''
     # Trick configure system.

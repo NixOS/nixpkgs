@@ -75,32 +75,6 @@ index ce0f288..6193108 100644
              return supR3HardenedSetError3(VERR_SUPLIB_WRITE_NON_SYS_GROUP, pErrInfo,
                                            "An unknown (and thus untrusted) group has write access to '", pszPath,
                                            "' and we therefore cannot trust the directory content or that of any subdirectory");
-diff --git a/src/VBox/Main/src-server/MachineImpl.cpp b/src/VBox/Main/src-server/MachineImpl.cpp
-index 320c569..9bfe41f 100644
---- a/src/VBox/Main/src-server/MachineImpl.cpp
-+++ b/src/VBox/Main/src-server/MachineImpl.cpp
-@@ -7543,7 +7543,7 @@ HRESULT Machine::i_launchVMProcess(IInternalSessionControl *aControl,
-
-     /* get the path to the executable */
-     char szPath[RTPATH_MAX];
--    RTPathAppPrivateArch(szPath, sizeof(szPath) - 1);
-+    RTStrCopy(szPath, sizeof(szPath) - 1, "/run/wrappers/bin");
-     size_t cchBufLeft = strlen(szPath);
-     szPath[cchBufLeft++] = RTPATH_DELIMITER;
-     szPath[cchBufLeft] = 0;
-diff --git a/src/VBox/Main/src-server/NetworkServiceRunner.cpp b/src/VBox/Main/src-server/NetworkServiceRunner.cpp
-index 1e38d99..5e43dda 100644
---- a/src/VBox/Main/src-server/NetworkServiceRunner.cpp
-+++ b/src/VBox/Main/src-server/NetworkServiceRunner.cpp
-@@ -85,7 +85,7 @@ int NetworkServiceRunner::start(bool aKillProcOnStop)
-
-     /* get the path to the executable */
-     char exePathBuf[RTPATH_MAX];
--    const char *exePath = RTProcGetExecutablePath(exePathBuf, RTPATH_MAX);
-+    const char *exePath = RTProcGetSuidPath(exePathBuf, RTPATH_MAX);
-     char *substrSl = strrchr(exePathBuf, '/');
-     char *substrBs = strrchr(exePathBuf, '\\');
-     char *suffix = substrSl ? substrSl : substrBs;
 diff --git a/src/VBox/Main/src-server/generic/NetIf-generic.cpp b/src/VBox/Main/src-server/generic/NetIf-generic.cpp
 index 98dc91a..43a819f 100644
 --- a/src/VBox/Main/src-server/generic/NetIf-generic.cpp
@@ -180,3 +154,29 @@ index 2aab645..9795f21 100644
 
  RTR3DECL(const char *) RTProcShortName(void)
  {
+diff --git a/src/VBox/Main/src-server/NetworkServiceRunner.cpp b/src/VBox/Main/src-server/NetworkServiceRunner.cpp
+index 2e57690..3272c84 100644
+--- a/src/VBox/Main/src-server/NetworkServiceRunner.cpp
++++ b/src/VBox/Main/src-server/NetworkServiceRunner.cpp
+@@ -188,7 +188,7 @@ int NetworkServiceRunner::start(bool aKillProcessOnStop)
+      * ASSUME it is relative to the directory that holds VBoxSVC.
+      */
+     char szExePath[RTPATH_MAX];
+-    AssertReturn(RTProcGetExecutablePath(szExePath, RTPATH_MAX), VERR_FILENAME_TOO_LONG);
++    AssertReturn(RTProcGetSuidPath(szExePath, RTPATH_MAX), VERR_FILENAME_TOO_LONG);
+     RTPathStripFilename(szExePath);
+     int vrc = RTPathAppend(szExePath, sizeof(szExePath), m->pszProcName);
+     AssertLogRelRCReturn(vrc, vrc);
+diff --git a/src/VBox/Main/src-all/MachineLaunchVMCommonWorker.cpp b/src/VBox/Main/src-all/MachineLaunchVMCommonWorker.cpp
+index 2991d3a7..d042a08b 100644
+--- a/src/VBox/Main/src-all/MachineLaunchVMCommonWorker.cpp
++++ b/src/VBox/Main/src-all/MachineLaunchVMCommonWorker.cpp
+@@ -90,7 +90,7 @@ int MachineLaunchVMCommonWorker(const Utf8Str &aNameOrId,
+ 
+     /* Get the path to the executable directory w/ trailing slash: */
+     char szPath[RTPATH_MAX];
+-    int vrc = RTPathAppPrivateArch(szPath, sizeof(szPath));
++    int vrc = RTStrCopy(szPath, sizeof(szPath) - 1, "/run/wrappers/bin");
+     AssertRCReturn(vrc, vrc);
+     size_t cbBufLeft = RTPathEnsureTrailingSeparator(szPath, sizeof(szPath));
+     AssertReturn(cbBufLeft > 0, VERR_FILENAME_TOO_LONG);

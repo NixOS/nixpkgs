@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, python, ninja, libxml2, objc4, ICU, curl }:
+{ stdenv, fetchFromGitHub, fetchurl, ninja, python3, curl, libxml2, objc4, ICU }:
 
 let
   # 10.12 adds a new sysdir.h that our version of CF in the main derivation depends on, but
@@ -8,7 +8,9 @@ let
     url    = "https://raw.githubusercontent.com/apple/swift-corelibs-foundation/9a5d8420f7793e63a8d5ec1ede516c4ebec939f0/CoreFoundation/Base.subproj/CFSystemDirectories.c";
     sha256 = "0krfyghj4f096arvvpf884ra5czqlmbrgf8yyc0b3avqmb613pcc";
   };
-in stdenv.mkDerivation {
+in
+
+stdenv.mkDerivation {
   name = "swift-corefoundation";
 
   src = fetchFromGitHub {
@@ -18,8 +20,8 @@ in stdenv.mkDerivation {
     sha256 = "17kpql0f27xxz4jjw84vpas5f5sn4vdqwv10g151rc3rswbwln1z";
   };
 
-  nativeBuildInputs = [ ninja python ];
-  buildInputs = [ libxml2 objc4 ICU curl ];
+  nativeBuildInputs = [ ninja python3 ];
+  buildInputs = [ curl libxml2 objc4 ICU ];
 
   sourceRoot = "source/CoreFoundation";
 
@@ -33,6 +35,10 @@ in stdenv.mkDerivation {
     substituteInPlace build.py \
       --replace "cf.CFLAGS += '-DDEPLOYMENT" '#' \
       --replace "cf.LDFLAGS += '-ldispatch" '#'
+
+    # Fix sandbox impurities.
+    substituteInPlace ../lib/script.py \
+      --replace '/bin/cp' cp
 
     # Includes xpc for some initialization routine that they don't define anyway, so no harm here
     substituteInPlace PlugIn.subproj/CFBundlePriv.h \
@@ -53,14 +59,35 @@ in stdenv.mkDerivation {
 
   BUILD_DIR = "./Build";
   CFLAGS = "-DINCLUDE_OBJC -I${libxml2.dev}/include/libxml2"; # They seem to assume we include objc in some places and not in others, make a PR; also not sure why but libxml2 include path isn't getting picked up from buildInputs
-  
+
   # I'm guessing at the version here. https://github.com/apple/swift-corelibs-foundation/commit/df3ec55fe6c162d590a7653d89ad669c2b9716b1 imported "high sierra"
   # and this version is a version from there. No idea how accurate it is.
   LDFLAGS = "-current_version 1454.90.0 -compatibility_version 150.0.0 -init ___CFInitialize";
-  configurePhase = "../configure release --sysroot UNUSED";
+
+  configurePhase = ''
+    ../configure release --sysroot UNUSED
+  '';
 
   enableParallelBuilding = true;
-  buildPhase = "ninja -j $NIX_BUILD_CORES";
+
+  # FIXME: Workaround for intermittent build failures of CFRuntime.c.
+  # Based on testing this issue seems to only occur with clang_7, so
+  # please remove this when updating the default llvm versions to 8 or
+  # later.
+  buildPhase = stdenv.lib.optionalString true ''
+    for i in {1..512}; do
+        if ninja -j $NIX_BUILD_CORES; then
+            break
+        fi
+
+        echo >&2
+        echo "[$i/512] retrying build, workaround for #66811" >&2
+        echo "  With clang_7 the build of CFRuntime.c fails intermittently." >&2
+        echo "  See https://github.com/NixOS/nixpkgs/issues/66811 for more details." >&2
+        echo >&2
+        continue
+    done
+  '';
 
   # TODO: their build system sorta kinda can do this, but it doesn't seem to work right now
   # Also, this includes a bunch of private headers in the framework, which is not what we want

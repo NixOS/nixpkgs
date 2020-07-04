@@ -9,23 +9,23 @@
 
 buildPythonPackage rec {
   pname = "pytest-localserver";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a72af60a1ec8f73668a7884c86baf1fbe48394573cb4fa36709887217736c021";
+    sha256 = "3a5427909d1dfda10772c1bae4b9803679c0a8f04adb66c338ac607773bfefc2";
   };
 
   propagatedBuildInputs = [ werkzeug ];
-  buildInputs = [ pytest six requests ];
+  checkInputs = [ pytest six requests ];
 
   checkPhase = ''
-    py.test
+    pytest
   '';
 
   meta = {
     description = "Plugin for the pytest testing framework to test server connections locally";
-    homepage = https://pypi.python.org/pypi/pytest-localserver;
+    homepage = "https://pypi.python.org/pypi/pytest-localserver";
     license = lib.licenses.mit;
   };
 }

@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "yarl";
-  version = "1.2.6";
+  version = "1.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c8cbc21bbfa1dd7d5386d48cc814fe3d35b80f60299cdde9279046f399c3b0d8";
+    sha256 = "58cd9c469eced558cd81aa3f484b2924e8897049e06889e8ff2510435b7ef74b";
   };
 
   checkInputs = [ pytest pytestrunner ];
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Yet another URL library";
-    homepage = https://github.com/aio-libs/yarl/;
+    homepage = "https://github.com/aio-libs/yarl/";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];
   };

@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "premake5-${version}";
+  pname = "premake5";
   version = "5.0.0-alpha12";
 
   src = fetchFromGitHub {
@@ -31,8 +31,11 @@ stdenv.mkDerivation rec {
     install -Dm755 bin/release/premake5 $out/bin/premake5
   '';
 
+  premake_cmd = "premake5";
+  setupHook = ./setup-hook.sh;
+
   meta = {
-    homepage = https://premake.github.io;
+    homepage = "https://premake.github.io";
     description = "A simple build configuration and project generation tool using lua";
     license = stdenv.lib.licenses.bsd3;
     platforms = platforms.darwin ++ platforms.linux;

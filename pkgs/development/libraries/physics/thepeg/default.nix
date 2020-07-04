@@ -1,29 +1,29 @@
-{ stdenv, fetchurl, boost, fastjet, gsl, hepmc, lhapdf, rivet, zlib }:
+{ stdenv, fetchurl, boost, fastjet, gsl, hepmc2, lhapdf, rivet, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "thepeg-${version}";
-  version = "2.1.3";
+  pname = "thepeg";
+  version = "2.2.1";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/thepeg/ThePEG-${version}.tar.bz2";
-    sha256 = "030wpk78mwb56iph5iqmblsxgzpydsa25bbkv07bihihfm8gds0n";
+    sha256 = "13x5gssv22mpa2w6i0vaalwcr57170vh3b4xrw8mrm3abqhwgav3";
   };
 
-  buildInputs = [ boost fastjet gsl hepmc lhapdf rivet zlib ];
+  buildInputs = [ boost fastjet gsl hepmc2 lhapdf rivet zlib ];
 
   configureFlags = [
-    "--with-hepmc=${hepmc}"
+    "--with-hepmc=${hepmc2}"
     "--with-rivet=${rivet}"
     "--without-javagui"
   ];
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Toolkit for High Energy Physics Event Generation";
-    license     = stdenv.lib.licenses.gpl2;
-    homepage    = https://herwig.hepforge.org/;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ veprbl ];
+    homepage = "https://herwig.hepforge.org/";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ veprbl ];
+    platforms = platforms.unix;
   };
 }

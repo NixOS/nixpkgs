@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, apacheHttpd, python2 }:
+{ stdenv, fetchurl, apacheHttpd, python, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "mod_wsgi-${version}";
-  version = "4.6.4";
+  pname = "mod_wsgi";
+  version = "4.7.1";
 
   src = fetchurl {
     url = "https://github.com/GrahamDumpleton/mod_wsgi/archive/${version}.tar.gz";
-    sha256 = "1hyaxr9km7cj4k6b0d6xx3bplpa8483fhyk9x802sl22m3f2vc1k";
+    sha256 = "0dbxhrp3x689ccrhvm2lw2icmmj8i4p86z2lq3xn1zlsf43fax16";
   };
 
-  buildInputs = [ apacheHttpd python2 ];
+  buildInputs = [ apacheHttpd python ncurses ];
 
   patchPhase = ''
     sed -r -i -e "s|^LIBEXECDIR=.*$|LIBEXECDIR=$out/modules|" \
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://github.com/GrahamDumpleton/mod_wsgi;
+    homepage = "https://github.com/GrahamDumpleton/mod_wsgi";
     description = "Host Python applications in Apache through the WSGI interface";
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.linux;

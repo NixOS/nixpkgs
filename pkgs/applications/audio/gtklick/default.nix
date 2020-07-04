@@ -14,7 +14,7 @@ pythonPackages.buildPythonApplication rec {
     pyGtkGlade
   ];
 
-  buildInputs = [ gettext ];
+  nativeBuildInputs = [ gettext ];
 
   propagatedBuildInputs = [ klick ];
 
@@ -27,7 +27,7 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   meta = {
-    homepage = http://das.nasophon.de/gtklick/;
+    homepage = "http://das.nasophon.de/gtklick/";
     description = "Simple metronome with an easy-to-use GTK interface";
     license = stdenv.lib.licenses.gpl2Plus;
   };

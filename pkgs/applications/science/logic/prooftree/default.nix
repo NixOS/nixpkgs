@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, ncurses, ocamlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "prooftree-${version}";
+  pname = "prooftree";
   version = "0.13";
 
   src = fetchurl {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       below the tree (on single click) or in a separate window (on double or
       shift-click).
     '';
-    homepage = http://askra.de/software/prooftree;
+    homepage = "http://askra.de/software/prooftree";
     platforms = platforms.unix;
     maintainers = [ maintainers.jwiegley ];
     license = licenses.gpl3;

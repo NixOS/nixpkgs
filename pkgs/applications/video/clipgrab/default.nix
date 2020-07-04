@@ -1,22 +1,25 @@
-{ stdenv, fetchurl, makeDesktopItem, ffmpeg, qt4, qmake4Hook }:
+{ stdenv, fetchurl, makeDesktopItem, ffmpeg_3
+, qmake, qttools, mkDerivation
+, qtbase, qtdeclarative, qtlocation, qtquickcontrols2, qtwebchannel, qtwebengine
+}:
 
-stdenv.mkDerivation rec {
-  name = "clipgrab-${version}";
-  version = "3.7.1";
+mkDerivation rec {
+  pname = "clipgrab";
+  version = "3.8.13";
 
   src = fetchurl {
-    sha256 = "0bhzkmcinlsfp5ldgqp59xnkaz6ikzdnq78drcdf1w7q4z05ipxd";
+    sha256 = "0ryaha33m41y0xjrspa838qqr4iy2c8vbvhbb334qimpqn1hj3q5";
     # The .tar.bz2 "Download" link is a binary blob, the source is the .tar.gz!
-    url = "https://download.clipgrab.org/${name}.tar.gz";
+    url = "https://download.clipgrab.org/${pname}-${version}.tar.gz";
   };
 
-  buildInputs = [ ffmpeg qt4 ];
-  nativeBuildInputs = [ qmake4Hook ];
+  buildInputs = [ ffmpeg_3 qtbase qtdeclarative qtlocation qtquickcontrols2 qtwebchannel qtwebengine ];
+  nativeBuildInputs = [ qmake qttools ];
 
-  postPatch = stdenv.lib.optionalString (ffmpeg != null) ''
+  postPatch = stdenv.lib.optionalString (ffmpeg_3 != null) ''
   substituteInPlace converter_ffmpeg.cpp \
-    --replace '"ffmpeg"' '"${ffmpeg.bin}/bin/ffmpeg"' \
-    --replace '"ffmpeg ' '"${ffmpeg.bin}/bin/ffmpeg '
+    --replace '"ffmpeg"' '"${ffmpeg_3.bin}/bin/ffmpeg"' \
+    --replace '"ffmpeg ' '"${ffmpeg_3.bin}/bin/ffmpeg '
   '';
 
   qmakeFlags = [ "clipgrab.pro" ];
@@ -46,7 +49,7 @@ stdenv.mkDerivation rec {
       Dailymotion and many other online video sites. It converts downloaded
       videos to MPEG4, MP3 or other formats in just one easy step.
     '';
-    homepage = https://clipgrab.org/;
+    homepage = "https://clipgrab.org/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

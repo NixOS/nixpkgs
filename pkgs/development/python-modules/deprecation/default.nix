@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "deprecation";
-  version = "2.0.6";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "68071e5ae7cd7e9da6c7dffd750922be4825c7c3a6780d29314076009cc39c35";
+    sha256 = "1zqqjlgmhgkpzg9ss5ki8wamxl83xn51fs6gn2a8cxsx9vkbvcvj";
   };
 
   propagatedBuildInputs = [ packaging ];
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A library to handle automated deprecations";
-    homepage = https://deprecation.readthedocs.io/;
+    homepage = "https://deprecation.readthedocs.io/";
     license = licenses.asl20;
   };
 }

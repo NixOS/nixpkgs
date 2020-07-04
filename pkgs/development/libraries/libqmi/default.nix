@@ -1,29 +1,41 @@
-{ stdenv, fetchurl, pkgconfig, glib, python, libgudev, libmbim }:
+{ stdenv, fetchurl, pkg-config, gobject-introspection, glib, python3, libgudev, libmbim }:
 
 stdenv.mkDerivation rec {
-  name = "libqmi-1.20.2";
+  pname = "libqmi";
+  version = "1.25.900";
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/libqmi/${name}.tar.xz";
-    sha256 = "0i6aw8jyxv84d5x8lj2g9lb8xxf1dyad8n3q0kw164pyig55jd67";
+    url = "https://www.freedesktop.org/software/libqmi/${pname}-${version}.tar.xz";
+    sha256 = "0a96f4ab7qy4szwzqs8ir2mvsnpqzk7zsiv6zahlhpf0jhp1vxf7";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  preBuild = ''
-    patchShebangs .
-  '';
+  configureFlags = [
+    "--with-udev-base-dir=${placeholder "out"}/lib/udev"
+    "--enable-introspection"
+  ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib python libgudev libmbim ];
+  nativeBuildInputs = [
+    pkg-config
+    gobject-introspection
+    python3
+  ];
 
-  configureFlags = ["--enable-mbim-qmux" ];
+  buildInputs = [
+    glib
+    libgudev
+    libmbim
+  ];
+
+  enableParallelBuilding = true;
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.freedesktop.org/wiki/Software/libqmi/;
+    homepage = "https://www.freedesktop.org/wiki/Software/libqmi/";
     description = "Modem protocol helper library";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ wkennington ];
   };
 }

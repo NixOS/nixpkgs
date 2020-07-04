@@ -1,14 +1,15 @@
 { stdenv, fetchFromGitHub, fetchurl, makeWrapper, unzip
-, gnumake, gcc-arm-embedded, dfu-util-axoloti, jdk, ant, libfaketime }:
+, gnumake, gcc-arm-embedded, binutils-arm-embedded
+, dfu-util-axoloti, jdk, ant, libfaketime }:
 
 stdenv.mkDerivation rec {
   version = "1.0.12-2";
-  name = "axoloti-${version}";
+  pname = "axoloti";
 
   src = fetchFromGitHub {
     owner = "axoloti";
     repo = "axoloti";
-    rev = "${version}";
+    rev = version;
     sha256 = "1qffis277wshldr3i939b0r2x3a2mlr53samxqmr2nk1sfm2b4w9";
   };
 
@@ -20,7 +21,15 @@ stdenv.mkDerivation rec {
     sha256 = "0lb5s8pkj80mqhsy47mmq0lqk34s2a2m3xagzihalvabwd0frhlj";
   };
 
-  buildInputs = [ makeWrapper unzip gcc-arm-embedded dfu-util-axoloti jdk ant libfaketime ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+    gcc-arm-embedded
+    binutils-arm-embedded
+    dfu-util-axoloti
+    ant
+  ];
+  buildInputs = [jdk libfaketime ];
 
   patchPhase = ''
     unzip ${chibios}
@@ -30,15 +39,6 @@ stdenv.mkDerivation rec {
     # Remove source of non-determinism in ChibiOS
     substituteInPlace "chibios/os/various/shell.c" \
       --replace "#ifdef __DATE__" "#if 0"
-
-    # Hardcode full path to compiler tools
-    for f in "firmware/Makefile.patch" \
-             "firmware/Makefile" \
-             "firmware/flasher/Makefile" \
-             "firmware/mounter/Makefile"; do
-      substituteInPlace "$f" \
-        --replace "arm-none-eabi-" "${gcc-arm-embedded}/bin/arm-none-eabi-"
-    done
 
     # Hardcode path to "make"
     for f in "firmware/compile_firmware_linux.sh" \
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.axoloti.com;
+    homepage = "http://www.axoloti.com";
     description = ''
       Sketching embedded digital audio algorithms.
 

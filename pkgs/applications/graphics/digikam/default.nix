@@ -6,9 +6,10 @@
 , qtbase
 , qtxmlpatterns
 , qtsvg
-, qtwebkit
+, qtwebengine
 
-, kcalcore
+, akonadi-contacts
+, kcalendarcore
 , kconfigwidgets
 , kcoreaddons
 , kdoctools
@@ -23,8 +24,9 @@
 , boost
 , eigen
 , exiv2
+, ffmpeg
 , flex
-, jasper
+, jasper ? null, withJpeg2k ? false  # disable JPEG2000 support, jasper has unfixed CVE
 , lcms2
 , lensfun
 , libgphoto2
@@ -49,14 +51,14 @@
 }:
 
 mkDerivation rec {
-  name    = "digikam-${version}";
-  version = "5.9.0";
+  pname   = "digikam";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner  = "KDE";
     repo   = "digikam";
     rev    = "v${version}";
-    sha256 = "09diw273h9i7rss89ba82yrfy6jb2njv3k0dknrrg7bb998vrw2d";
+    sha256 = "1l1nb1nwicmip2jxhn5gzr7h60igvns0zs3kzp36r6qf4wvg3v2z";
   };
 
   nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
@@ -66,8 +68,8 @@ mkDerivation rec {
     boost
     eigen
     exiv2
+    ffmpeg
     flex
-    jasper
     lcms2
     lensfun
     libgphoto2
@@ -84,9 +86,10 @@ mkDerivation rec {
     qtbase
     qtxmlpatterns
     qtsvg
-    qtwebkit
+    qtwebengine
 
-    kcalcore
+    akonadi-contacts
+    kcalendarcore
     kconfigwidgets
     kcoreaddons
     kfilemetadata
@@ -99,16 +102,21 @@ mkDerivation rec {
     marble
     oxygen
     threadweaver
-  ];
+  ]
+  ++ lib.optionals withJpeg2k [ jasper ];
+
+  enableParallelBuilding = true;
 
   cmakeFlags = [
     "-DENABLE_MYSQLSUPPORT=1"
     "-DENABLE_INTERNALMYSQL=1"
     "-DENABLE_MEDIAPLAYER=1"
+    "-DENABLE_QWEBENGINE=on"
   ];
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ gnumake hugin enblend-enfuse ]})
+    gappsWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${qtbase.qtPluginPrefix}/${pname})
     substituteInPlace $out/bin/digitaglinktree \
       --replace "/usr/bin/perl" "${perl}/bin/perl" \
       --replace "/usr/bin/sqlite3" "${sqlite}/bin/sqlite3"
@@ -117,8 +125,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Photo Management Program";
     license = licenses.gpl2;
-    homepage = https://www.digikam.org;
-    maintainers = with maintainers; [ the-kenny ];
+    homepage = "https://www.digikam.org";
     platforms = platforms.linux;
   };
 }

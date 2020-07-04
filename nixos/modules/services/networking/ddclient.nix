@@ -20,8 +20,8 @@ let
     wildcard=YES
     quiet=${boolToStr cfg.quiet}
     verbose=${boolToStr cfg.verbose}
-    ${lib.concatStringsSep "," cfg.domains}
     ${cfg.extraConfig}
+    ${lib.concatStringsSep "," cfg.domains}
   '';
 
 in
@@ -29,6 +29,14 @@ in
 with lib;
 
 {
+
+  imports = [
+    (mkChangedOptionModule [ "services" "ddclient" "domain" ] [ "services" "ddclient" "domains" ]
+      (config:
+        let value = getAttrFromPath [ "services" "ddclient" "domain" ] config;
+        in if value != "" then [ value ] else []))
+    (mkRemovedOptionModule [ "services" "ddclient" "homeDir" ] "")
+  ];
 
   ###### interface
 
@@ -182,10 +190,9 @@ with lib;
       serviceConfig = rec {
         DynamicUser = true;
         RuntimeDirectory = StateDirectory;
-        RuntimeDirectoryMode = "0750";
         StateDirectory = builtins.baseNameOf dataDir;
         Type = "oneshot";
-        ExecStartPre = "!${lib.getBin pkgs.coreutils}/bin/install -m660 ${cfg.configFile} /run/${RuntimeDirectory}/ddclient.conf";
+        ExecStartPre = "!${lib.getBin pkgs.coreutils}/bin/install -m666 ${cfg.configFile} /run/${RuntimeDirectory}/ddclient.conf";
         ExecStart = "${lib.getBin pkgs.ddclient}/bin/ddclient -file /run/${RuntimeDirectory}/ddclient.conf";
       };
     };

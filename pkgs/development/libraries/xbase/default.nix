@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "xbase-3.1.2";
 
   src = fetchurl {
-    url = mirror://sourceforge/xdb/xbase64-3.1.2.tar.gz;
+    url = "mirror://sourceforge/xdb/xbase64-3.1.2.tar.gz";
     sha256 = "17287kz1nmmm64y7zp9nhhl7slzlba09h6cc83w4mvsqwd9w882r";
   };
 
@@ -25,10 +25,10 @@ stdenv.mkDerivation {
     })
   ];
 
-  meta = {
-    homepage = http://linux.techass.com/projects/xdb/;
+  meta = with stdenv.lib; {
+    homepage = "http://linux.techass.com/projects/xdb/";
     description = "C++ class library formerly known as XDB";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ ];
+    platforms = platforms.linux;
+    license = licenses.lgpl2;
   };
 }

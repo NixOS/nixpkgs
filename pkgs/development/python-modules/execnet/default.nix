@@ -1,5 +1,7 @@
 { stdenv
+, lib
 , buildPythonPackage
+, isPyPy
 , fetchPypi
 , pytest
 , setuptools_scm
@@ -8,14 +10,15 @@
 
 buildPythonPackage rec {
   pname = "execnet";
-  version = "1.4.1";
+  version = "1.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1rpk1vyclhg911p3hql0m0nrpq7q7mysxnaaw6vs29cpa6kx8vgn";
+    sha256 = "cacb9df31c9680ec5f95553976c4da484d407e85e41c83cb812aa014f0eddc50";
   };
 
-  buildInputs = [ pytest setuptools_scm ];
+  checkInputs = [ pytest ];
+  nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ apipkg ];
 
   # remove vbox tests
@@ -24,6 +27,7 @@ buildPythonPackage rec {
     rm -v testing/test_channel.py
     rm -v testing/test_xspec.py
     rm -v testing/test_gateway.py
+    ${lib.optionalString isPyPy "rm -v testing/test_multi.py"}
   '';
 
   checkPhase = ''
@@ -35,7 +39,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Rapid multi-Python deployment";
     license = licenses.gpl2;
-    homepage = "http://codespeak.net/execnet";
+    homepage = "https://execnet.readthedocs.io/";
     maintainers = with maintainers; [ nand0p ];
   };
 

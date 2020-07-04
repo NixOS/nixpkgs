@@ -1,29 +1,27 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, isPy3k
-, nose
 , jinja2
 , pyyaml
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "j2cli";
-  version = "0.3.1-0";
-  disabled = isPy3k;
+  version = "0.3.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0y3w1x9935qzx8w6m2r6g4ghyjmxn33wryiif6xb56q7cj9w1433";
+    sha256 = "6f6f643b3fa5c0f72fbe9f07e246f8e138052b9f689e14c7c64d582c59709ae4";
   };
 
-  buildInputs = [ nose ];
-  propagatedBuildInputs = [ jinja2 pyyaml ];
+  doCheck = false; # tests aren't installed thus aren't found, so skip
+  propagatedBuildInputs = [ jinja2 pyyaml setuptools ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/kolypto/j2cli;
+    homepage = "https://github.com/kolypto/j2cli";
     description = "Jinja2 Command-Line Tool";
-    license = licenses.bsd3;
+    license = licenses.bsd2;
     longDescription = ''
       J2Cli is a command-line tool for templating in shell-scripts,
       leveraging the Jinja2 library.

@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "emem";
   version = "0.2.50";
-  name = "${pname}-${version}";
 
   inherit jdk;
 
@@ -30,7 +29,7 @@ EOF
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ebzzry/emem;
+    homepage = "https://github.com/ebzzry/emem";
     description = "A trivial Markdown to HTML converter";
     license = licenses.epl10;
     maintainers = [ maintainers.ebzzry ];

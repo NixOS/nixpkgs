@@ -1,27 +1,42 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, buildPackages, installShellFiles }:
 
 buildGoPackage rec {
-  name = "rclone-${version}";
-  version = "1.44";
-
-  goPackagePath = "github.com/ncw/rclone";
+  pname = "rclone";
+  version = "1.52.2";
 
   src = fetchFromGitHub {
-    owner = "ncw";
-    repo = "rclone";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0kpx9r4kksscsvia7r79z9h8ghph25ay9dgpqrnp599fq1bqky61";
+    sha256 = "1da6azr4j5sbzb5xpy2xk4vqi6bdpmzlq3pxrmakaskicz64nnld";
   };
 
-  outputs = [ "bin" "out" "man" ];
+  goPackagePath = "github.com/rclone/rclone";
 
-  postInstall = ''
-    install -D -m644 $src/rclone.1 $man/share/man/man1/rclone.1
-  '';
+  subPackages = [ "." ];
+
+  outputs = [ "out" "man" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall =
+    let
+      rcloneBin =
+        if stdenv.buildPlatform == stdenv.hostPlatform
+        then "$out"
+        else stdenv.lib.getBin buildPackages.rclone;
+    in
+      ''
+        installManPage $src/rclone.1
+        for shell in bash zsh fish; do
+          ${rcloneBin}/bin/rclone genautocomplete $shell rclone.$shell
+          installShellCompletion rclone.$shell
+        done
+      '';
 
   meta = with stdenv.lib; {
     description = "Command line program to sync files and directories to and from major cloud storage";
-    homepage = https://rclone.org;
+    homepage = "https://rclone.org";
     license = licenses.mit;
     maintainers = with maintainers; [ danielfullmer ];
     platforms = platforms.all;

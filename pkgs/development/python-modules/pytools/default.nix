@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pytools";
-  version = "2018.5.2";
+  version = "2020.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3b3f41e1235b579dc4f4a3d6f5f8ae187841968e72a4f73ac481c6bfe4c1668b";
+    sha256 = "3cacefed54148aafb07502c7c907cae8d9327ea35df16e3366c883a706ed5601";
   };
 
   checkInputs = [ pytest ];
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = https://github.com/inducer/pytools/;
+    homepage = "https://github.com/inducer/pytools/";
     description = "Miscellaneous Python lifesavers.";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ artuuge ];

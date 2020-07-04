@@ -1,12 +1,12 @@
 { stdenv 
 , fetchgit
 }:
-stdenv.mkDerivation rec {
-  name = "argtable-${version}";
+stdenv.mkDerivation {
+  pname = "argtable";
   version = "3.0.1";
 
   src = fetchgit {
-    url = https://github.com/argtable/argtable3.git;
+    url = "https://github.com/argtable/argtable3.git";
     rev = "de93cfd85f755250285b337cba053a709a270721";
     sha256 = "0fbvk78s3dwryrzgafdra0lb8w7lb873c6xgldl94ps9828x85i3";
   };
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.argtable.org/;
+    homepage = "https://www.argtable.org/";
     description = "A Cross-Platform, Single-File, ANSI C Command-Line Parsing Library";
     license = licenses.bsd3;
     maintainers = with maintainers; [ artuuge ];

@@ -3,12 +3,12 @@
 , libGLU, lv2, gtk2, cairo, pango, fftwFloat, zita-convolver }:
 
 stdenv.mkDerivation rec {
-  version = "20180812";
-  name = "x42-plugins-${version}";
+  version = "20200411";
+  pname = "x42-plugins";
 
   src = fetchurl {
-    url = "https://gareus.org/misc/x42-plugins/${name}.tar.xz";
-    sha256 = "0gzwzxpa2k2w9c6j3pspwi9slfyd57wb192d6yqcg92pfmnxy9dz";
+    url = "https://gareus.org/misc/x42-plugins/${pname}-${version}.tar.xz";
+    sha256 = "0y6778l2zc80kvp31mqw3vkcyi7g613jxn3g3lxqfa31i617gh6j";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -26,14 +26,16 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     patchShebangs ./stepseq.lv2/gridgen.sh
+    patchShebangs ./matrixmixer.lv2/genttl.sh
+    patchShebangs ./matrixmixer.lv2/genhead.sh
     sed -i 's|/usr/include/zita-convolver.h|${zita-convolver}/include/zita-convolver.h|g' ./convoLV2/Makefile
   '';
 
   meta = with stdenv.lib;
     { description = "Collection of LV2 plugins by Robin Gareus";
-      homepage = https://github.com/x42/x42-plugins;
+      homepage = "https://github.com/x42/x42-plugins";
       maintainers = with maintainers; [ magnetophon ];
       license = licenses.gpl2;
-      platforms = platforms.linux;
+      platforms = [ "i686-linux" "x86_64-linux" ];
     };
 }

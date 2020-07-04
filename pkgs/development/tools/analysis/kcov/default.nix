@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, cmake, pkgconfig, zlib, curl, elfutils, python, libiberty, libopcodes}:
 
 stdenv.mkDerivation rec {
-  name = "kcov-${version}";
+  pname = "kcov";
   version = "36";
 
   src = fetchFromGitHub {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       applications.
     '';
 
-    homepage = http://simonkagstrom.github.io/kcov/index.html;
+    homepage = "http://simonkagstrom.github.io/kcov/index.html";
     license = licenses.gpl2;
 
     maintainers = with maintainers; [ gal_bolle ekleog ];

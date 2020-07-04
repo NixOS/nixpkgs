@@ -2,8 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , nose
-, nosejs
-, sphinx
 , isPy3k
 }:
 
@@ -17,15 +15,14 @@ buildPythonPackage rec {
     sha256 = "1p7g6hv9qxscbzjv2n5pczpkkp55mp3s56adfc912w9qpf3rv4nr";
   };
 
-  buildInputs = [ nose nosejs ];
-  propagatedBuildInputs = [ sphinx ];
+  checkInputs = [ nose ];
 
   checkPhase = ''
     nosetests -v
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/fudge-py/fudge;
+    homepage = "https://github.com/fudge-py/fudge";
     description = "Replace real objects with fakes (mocks, stubs, etc) while testing";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "facebook-sdk";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f3d450ec313b62d3716fadc4e5098183760e1d2a9e0434a94b74e59ea6ea3e4d";
+    sha256 = "138grz0n6plzdqgi4h6hhszf58bsvx9v76cwj51g1nd3kvkd5g6a";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with pkgs.lib; {
     description = "Client library that supports the Facebook Graph API and the official Facebook JavaScript SDK";
-    homepage = https://github.com/pythonforfacebook/facebook-sdk;
+    homepage = "https://github.com/pythonforfacebook/facebook-sdk";
     license = licenses.asl20 ;
     maintainers = [ maintainers.costrouc ];
   };

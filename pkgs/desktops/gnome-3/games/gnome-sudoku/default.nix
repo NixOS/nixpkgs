@@ -1,27 +1,34 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, gnome3, wrapGAppsHook
-, json-glib, qqwing, itstool, libxml2 }:
+{ stdenv, fetchurl, meson, ninja, vala, pkgconfig, gobject-introspection, gettext, gtk3, gnome3, wrapGAppsHook
+, libgee, json-glib, qqwing, itstool, libxml2, python3, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-sudoku-${version}";
-  version = "3.28.0";
+  pname = "gnome-sudoku";
+  version = "3.36.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-sudoku/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "07b4lzniaf3gjsss6zl1lslv18smwc4nrijykvn2z90f423q2xav";
+    url = "mirror://gnome/sources/gnome-sudoku/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "17a1r2jk5yygrxil1dycmamxyvyi64mr29mbyfgcx5hm2fylxxwm";
   };
+
+  nativeBuildInputs = [ meson ninja vala pkgconfig gobject-introspection gettext itstool libxml2 python3 desktop-file-utils wrapGAppsHook ];
+  buildInputs = [ gtk3 libgee json-glib qqwing ];
+
+  postPatch = ''
+    chmod +x build-aux/post_install.py
+    patchShebangs build-aux/post_install.py
+  '';
 
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-sudoku"; attrPath = "gnome3.gnome-sudoku"; };
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-sudoku";
+      attrPath = "gnome3.gnome-sudoku";
+    };
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool wrapGAppsHook gtk3 gnome3.libgee
-                  json-glib qqwing itstool libxml2 ];
-
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Sudoku;
+    homepage = "https://wiki.gnome.org/Apps/Sudoku";
     description = "Test your logic skills in this number grid puzzle";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

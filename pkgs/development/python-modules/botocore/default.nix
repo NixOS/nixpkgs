@@ -7,15 +7,16 @@
 , simplejson
 , mock
 , nose
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.10.84";
+  version = "1.17.3"; # N.B: if you change this, change boto3 and awscli to a matching version
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d3e4b5a2c903ea30d19d41ea2f65d0e51dce54f4f4c4dfd6ecd7b04f240844a8";
+    sha256 = "0mrkkb7vc7jdxrr9gyg92i6ar801kpss53nfqp1di6xfi4jxkx0k";
   };
 
   propagatedBuildInputs = [
@@ -24,7 +25,12 @@ buildPythonPackage rec {
     docutils
     ordereddict
     simplejson
+    urllib3
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py --replace "docutils>=0.10,<0.16" "docutils>=0.10"
+  '';
 
   checkInputs = [ mock nose ];
 
@@ -36,7 +42,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://github.com/boto/botocore;
+    homepage = "https://github.com/boto/botocore";
     license = "bsd";
     description = "A low-level interface to a growing number of Amazon Web Services";
   };

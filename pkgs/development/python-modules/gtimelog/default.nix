@@ -1,6 +1,5 @@
 { stdenv
 , buildPythonPackage
-, fetchurl
 , pkgs
 , python
 , pygobject3
@@ -20,7 +19,7 @@ buildPythonPackage rec {
   LC_ALL="en_US.UTF-8";
 
   # TODO: AppIndicator
-  propagatedBuildInputs = [ pkgs.gobjectIntrospection pygobject3 pkgs.makeWrapper pkgs.gtk3 ];
+  propagatedBuildInputs = [ pkgs.gobject-introspection pygobject3 pkgs.makeWrapper pkgs.gtk3 ];
 
   checkPhase = ''
     substituteInPlace runtests --replace "/usr/bin/env python" "${python}/bin/${python.executable}"
@@ -34,8 +33,8 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A small Gtk+ app for keeping track of your time. It's main goal is to be as unintrusive as possible";
-    homepage = https://mg.pov.lt/gtimelog/;
+    description = "A small GTK app for keeping track of your time. It's main goal is to be as unintrusive as possible";
+    homepage = "https://mg.pov.lt/gtimelog/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ocharles ];
     platforms = platforms.unix;

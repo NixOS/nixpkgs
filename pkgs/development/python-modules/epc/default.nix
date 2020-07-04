@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "epc";
-  version = "0.0.3";
+  version = "0.0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "30b594bd4a4acbd5bda0d3fa3d25b4e8117f2ff8f24d2d1e3e36c90374f3c55e";
+    sha256 = "a14d2ea74817955a20eb00812e3a4630a132897eb4d976420240f1152c0d7d25";
   };
 
   propagatedBuildInputs = [ sexpdata ];

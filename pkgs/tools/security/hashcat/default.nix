@@ -1,29 +1,30 @@
-{ stdenv, fetchurl, makeWrapper, opencl-headers, ocl-icd }:
+{ stdenv
+, fetchurl
+, makeWrapper
+, opencl-headers
+, ocl-icd
+, xxHash
+}:
 
 stdenv.mkDerivation rec {
-  name    = "hashcat-${version}";
-  version = "4.2.1";
+  pname   = "hashcat";
+  version = "6.0.0";
 
   src = fetchurl {
     url = "https://hashcat.net/files/hashcat-${version}.tar.gz";
-    sha256 = "082k5srjwkfvnvz0bfcg5r12m9c2qjyfhnp135mparkf831p7bbx";
+    sha256 = "118jxk4xh55m1vhaz5h2j2385mp4p397m16g9hi4x2k0b8m0zrz8";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ opencl-headers ];
+  buildInputs = [ opencl-headers xxHash ];
 
   makeFlags = [
-    "OPENCL_HEADERS_KHRONOS=${opencl-headers}/include"
+    "PREFIX=${placeholder "out"}"
     "COMPTIME=1337"
     "VERSION_TAG=${version}"
+    "USE_SYSTEM_OPENCL=1"
+    "USE_SYSTEM_XXHASH=1"
   ];
-
-  # $out is not known until the build has started.
-  configurePhase = ''
-    runHook preConfigure
-    makeFlags="$makeFlags PREFIX=$out"
-    runHook postConfigure
-  '';
 
   postFixup = ''
     wrapProgram $out/bin/hashcat --prefix LD_LIBRARY_PATH : ${ocl-icd}/lib
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Fast password cracker";
-    homepage    = https://hashcat.net/hashcat/;
+    homepage    = "https://hashcat.net/hashcat/";
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ kierdavis zimbatm ];

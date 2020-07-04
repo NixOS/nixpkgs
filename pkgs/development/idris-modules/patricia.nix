@@ -18,7 +18,7 @@ build-idris-package  {
 
   meta = {
     description = "Immutable map from integer keys to values based on patricia tree. Basically persistent array.";
-    homepage = https://github.com/ChShersh/idris-patricia;
+    homepage = "https://github.com/ChShersh/idris-patricia";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
   };

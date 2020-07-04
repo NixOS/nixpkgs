@@ -24,6 +24,7 @@ let
     # packaging
     customisation = callLibs ./customisation.nix;
     maintainers = import ../maintainers/maintainer-list.nix;
+    teams = callLibs ../maintainers/team-list.nix;
     meta = callLibs ./meta.nix;
     sources = callLibs ./sources.nix;
     versions = callLibs ./versions.nix;
@@ -37,10 +38,13 @@ let
     licenses = callLibs ./licenses.nix;
     systems = callLibs ./systems;
 
+    # serialization
+    cli = callLibs ./cli.nix;
+    generators = callLibs ./generators.nix;
+
     # misc
     asserts = callLibs ./asserts.nix;
     debug = callLibs ./debug.nix;
-    generators = callLibs ./generators.nix;
     misc = callLibs ./deprecated.nix;
 
     # domain-specific
@@ -50,28 +54,32 @@ let
     filesystem = callLibs ./filesystem.nix;
 
     # back-compat aliases
-    platforms = systems.forMeta;
+    platforms = systems.doubles;
+
+    # linux kernel configuration
+    kernel = callLibs ./kernel.nix;
 
     inherit (builtins) add addErrorContext attrNames concatLists
       deepSeq elem elemAt filter genericClosure genList getAttr
       hasAttr head isAttrs isBool isInt isList isString length
       lessThan listToAttrs pathExists readFile replaceStrings seq
       stringLength sub substring tail;
-    inherit (trivial) id const concat or and bitAnd bitOr bitXor bitNot
-      boolToString mergeAttrs flip mapNullable inNixShell min max
-      importJSON warn info nixpkgsVersion version mod compare
+    inherit (trivial) id const pipe concat or and bitAnd bitOr bitXor
+      bitNot boolToString mergeAttrs flip mapNullable inNixShell min max
+      importJSON warn info showWarnings nixpkgsVersion version mod compare
       splitByAndCompare functionArgs setFunctionArgs isFunction;
-    inherit (fixedPoints) fix fix' extends composeExtensions
+    inherit (fixedPoints) fix fix' converge extends composeExtensions
       makeExtensible makeExtensibleWithCustomName;
     inherit (attrsets) attrByPath hasAttrByPath setAttrByPath
-      getAttrFromPath attrVals attrValues catAttrs filterAttrs
+      getAttrFromPath attrVals attrValues getAttrs catAttrs filterAttrs
       filterAttrsRecursive foldAttrs collect nameValuePair mapAttrs
       mapAttrs' mapAttrsToList mapAttrsRecursive mapAttrsRecursiveCond
       genAttrs isDerivation toDerivation optionalAttrs
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil
       recursiveUpdate matchAttrs overrideExisting getOutput getBin
-      getLib getDev chooseDevOutputs zipWithNames zip;
-    inherit (lists) singleton foldr fold foldl foldl' imap0 imap1
+      getLib getDev getMan chooseDevOutputs zipWithNames zip
+      recurseIntoAttrs dontRecurseIntoAttrs;
+    inherit (lists) singleton forEach foldr fold foldl foldl' imap0 imap1
       concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range partition zipListsWith zipLists
       reverseList listDfs toposort sort naturalSort compareLists take
@@ -80,11 +88,12 @@ let
     inherit (strings) concatStrings concatMapStrings concatImapStrings
       intersperse concatStringsSep concatMapStringsSep
       concatImapStringsSep makeSearchPath makeSearchPathOutput
-      makeLibraryPath makeBinPath makePerlPath makeFullPerlPath optionalString
-      hasPrefix hasSuffix stringToCharacters stringAsChars escape
+      makeLibraryPath makeBinPath optionalString
+      hasInfix hasPrefix hasSuffix stringToCharacters stringAsChars escape
       escapeShellArg escapeShellArgs replaceChars lowerChars
       upperChars toLower toUpper addContextFrom splitString
-      removePrefix removeSuffix versionOlder versionAtLeast getVersion
+      removePrefix removeSuffix versionOlder versionAtLeast
+      getName getVersion
       nameFromURL enableFeature enableFeatureAs withFeature
       withFeatureAs fixedWidthString fixedWidthNumber isStorePath
       toInt readPathsFromFile fileContents;
@@ -94,14 +103,14 @@ let
       callPackageWith callPackagesWith extendDerivation hydraJob
       makeScope;
     inherit (meta) addMetaAttrs dontDistribute setName updateName
-      appendToName mapDerivationAttrset lowPrio lowPrioSet hiPrio
+      appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
       hiPrioSet;
     inherit (sources) pathType pathIsDirectory cleanSourceFilter
       cleanSource sourceByRegex sourceFilesBySuffices
       commitIdFromGitRepo cleanSourceWith pathHasContext
-      canCleanSource;
-    inherit (modules) evalModules closeModules unifyModuleSyntax
-      applyIfFunction unpackSubmodule packSubmodule mergeModules
+      canCleanSource pathIsRegularFile pathIsGitRepo;
+    inherit (modules) evalModules unifyModuleSyntax
+      applyIfFunction mergeModules
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions
       pushDownProperties dischargeProperties filterOverrides
       sortProperties fixupOptionType mkIf mkAssert mkMerge mkOverride
@@ -109,7 +118,7 @@ let
       mkFixStrictness mkOrder mkBefore mkAfter mkAliasDefinitions
       mkAliasAndWrapDefinitions fixMergeModules mkRemovedOptionModule
       mkRenamedOptionModule mkMergedOptionModule mkChangedOptionModule
-      mkAliasOptionModule doRename filterModules;
+      mkAliasOptionModule doRename;
     inherit (options) isOption mkEnableOption mkSinkUndeclaredOptions
       mergeDefaultOption mergeOneOption mergeEqualOption getValues
       getFiles optionAttrSetToDocList optionAttrSetToDocList'
@@ -125,14 +134,16 @@ let
       traceShowValMarked showVal traceCall traceCall2 traceCall3
       traceValIfNot runTests testAllTrue traceCallXml attrNamesToStr;
     inherit (misc) maybeEnv defaultMergeArg defaultMerge foldArgs
-      defaultOverridableDelayableArgs composedArgsAndFun
       maybeAttrNullable maybeAttr ifEnable checkFlag getValue
       checkReqs uniqList uniqListExt condConcat lazyGenericClosure
       innerModifySumArgs modifySumArgs innerClosePropagation
       closePropagation mapAttrsFlatten nvs setAttr setAttrMerge
       mergeAttrsWithFunc mergeAttrsConcatenateValues
       mergeAttrsNoOverride mergeAttrByFunc mergeAttrsByFuncDefaults
-      mergeAttrsByFuncDefaultsClean mergeAttrBy prepareDerivationArgs
-      nixType imap overridableDelayableArgs;
+      mergeAttrsByFuncDefaultsClean mergeAttrBy
+      fakeHash fakeSha256 fakeSha512
+      nixType imap;
+    inherit (versions)
+      splitVersion;
   });
 in lib

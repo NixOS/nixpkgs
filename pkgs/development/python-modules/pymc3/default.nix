@@ -9,6 +9,8 @@
 , tqdm
 , six
 , h5py
+, arviz
+, packaging
 , pytest
 , nose
 , parameterized
@@ -16,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "pymc3";
-  version = "3.5";
+  version = "3.8";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6088e683c6d730bb21350a0f54ee083fa5a28e4d5ef52d57878141c9c20f21ee";
+    sha256 = "1bb2915e4a29877c681ead13932b0b7d276f7f496e9c3f09ba96b977c99caf00";
   };
 
   # No need for coverage stats in Nix builds
@@ -37,6 +39,8 @@ buildPythonPackage rec {
     tqdm
     six
     h5py
+    arviz
+    packaging
   ];
 
   checkInputs = [
@@ -56,7 +60,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Bayesian estimation, particularly using Markov chain Monte Carlo (MCMC)";
-    homepage = https://github.com/pymc-devs/pymc3;
+    homepage = "https://github.com/pymc-devs/pymc3";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ilya-kolpakov ];
   };

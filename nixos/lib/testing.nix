@@ -1,23 +1,30 @@
-{ system, minimal ? false, config ? {} }:
+{ system
+, pkgs ? import ../.. { inherit system config; }
+  # Use a minimal kernel?
+, minimal ? false
+  # Ignored
+, config ? {}
+  # Modules to add to each VM
+, extraConfigurations ? [] }:
 
-with import ./build-vms.nix { inherit system minimal config; };
+with import ./build-vms.nix { inherit system pkgs minimal extraConfigurations; };
 with pkgs;
 
-let
-  jquery-ui = callPackage ./testing/jquery-ui.nix { };
-  jquery = callPackage ./testing/jquery.nix { };
-
-in rec {
+rec {
 
   inherit pkgs;
 
 
-  testDriver = stdenv.mkDerivation {
+  testDriver = lib.warn ''
+    Perl VM tests are deprecated and will be removed for 20.09.
+    Please update your tests to use the python test driver.
+    See https://github.com/NixOS/nixpkgs/pull/71684 for details.
+  '' stdenv.mkDerivation {
     name = "nixos-test-driver";
 
     buildInputs = [ makeWrapper perl ];
 
-    unpackPhase = "true";
+    dontUnpack = true;
 
     preferLocalBuild = true;
 
@@ -27,14 +34,14 @@ in rec {
         cp ${./test-driver/test-driver.pl} $out/bin/nixos-test-driver
         chmod u+x $out/bin/nixos-test-driver
 
-        libDir=$out/lib/perl5/site_perl
+        libDir=$out/${perl.libPrefix}
         mkdir -p $libDir
         cp ${./test-driver/Machine.pm} $libDir/Machine.pm
         cp ${./test-driver/Logger.pm} $libDir/Logger.pm
 
         wrapProgram $out/bin/nixos-test-driver \
           --prefix PATH : "${lib.makeBinPath [ qemu_test vde2 netpbm coreutils ]}" \
-          --prefix PERL5LIB : "${with perlPackages; lib.makePerlPath [ TermReadLineGnu XMLWriter IOTty FileSlurp ]}:$out/lib/perl5/site_perl"
+          --prefix PERL5LIB : "${with perlPackages; makePerlPath [ TermReadLineGnu XMLWriter IOTty FileSlurp ]}:$out/${perl.libPrefix}"
       '';
   };
 
@@ -47,29 +54,17 @@ in rec {
 
       requiredSystemFeatures = [ "kvm" "nixos-test" ];
 
-      buildInputs = [ libxslt ];
-
       buildCommand =
         ''
-          mkdir -p $out/nix-support
+          mkdir -p $out
 
-          LOGFILE=$out/log.xml tests='eval $ENV{testScript}; die $@ if $@;' ${driver}/bin/nixos-test-driver
-
-          # Generate a pretty-printed log.
-          xsltproc --output $out/log.html ${./test-driver/log2html.xsl} $out/log.xml
-          ln -s ${./test-driver/logfile.css} $out/logfile.css
-          ln -s ${./test-driver/treebits.js} $out/treebits.js
-          ln -s ${jquery}/js/jquery.min.js $out/
-          ln -s ${jquery-ui}/js/jquery-ui.min.js $out/
-
-          touch $out/nix-support/hydra-build-products
-          echo "report testlog $out log.html" >> $out/nix-support/hydra-build-products
+          LOGFILE=/dev/null tests='eval $ENV{testScript}; die $@ if $@;' ${driver}/bin/nixos-test-driver
 
           for i in */xchg/coverage-data; do
             mkdir -p $out/coverage-data
             mv $i $out/coverage-data/$(dirname $(dirname $i))
           done
-        ''; # */
+        '';
     };
 
 
@@ -109,7 +104,7 @@ in rec {
 
       vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
 
-      ocrProg = tesseract_4.override { enableLanguages = [ "eng" ]; };
+      ocrProg = tesseract4.override { enableLanguages = [ "eng" ]; };
 
       imagemagick_tiff = imagemagick_light.override { inherit libtiff; };
 
@@ -149,9 +144,23 @@ in rec {
       test = passMeta (runTests driver);
       report = passMeta (releaseTools.gcovReport { coverageRuns = [ test ]; });
 
-    in (if makeCoverageReport then report else test) // {
-      inherit nodes driver test;
-    };
+      nodeNames = builtins.attrNames nodes;
+      invalidNodeNames = lib.filter
+        (node: builtins.match "^[A-z_][A-z0-9_]+$" node == null) nodeNames;
+
+    in
+      if lib.length invalidNodeNames > 0 then
+        throw ''
+          Cannot create machines out of (${lib.concatStringsSep ", " invalidNodeNames})!
+          All machines are referenced as perl variables in the testing framework which will break the
+          script when special characters are used.
+
+          Please stick to alphanumeric chars and underscores as separation.
+        ''
+      else
+        (if makeCoverageReport then report else test) // {
+          inherit nodes driver test;
+        };
 
   runInMachine =
     { drv
@@ -225,13 +234,14 @@ in rec {
         { ... }:
         {
           inherit require;
+          imports = [
+            ../tests/common/auto.nix
+          ];
           virtualisation.memorySize = 1024;
           services.xserver.enable = true;
-          services.xserver.displayManager.slim.enable = false;
-          services.xserver.displayManager.auto.enable = true;
-          services.xserver.windowManager.default = "icewm";
+          test-support.displayManager.auto.enable = true;
+          services.xserver.displayManager.defaultSession = "none+icewm";
           services.xserver.windowManager.icewm.enable = true;
-          services.xserver.desktopManager.default = "none";
         };
     in
       runInMachine ({

@@ -38,9 +38,13 @@ in
   config = mkIf cfg.enable {
     systemd.services.zerotierone = {
       description = "ZeroTierOne";
-      path = [ cfg.package ];
-      after = [ "network.target" ];
+
       wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      wants = [ "network-online.target" ];
+
+      path = [ cfg.package ];
+
       preStart = ''
         mkdir -p /var/lib/zerotier-one/networks.d
         chmod 700 /var/lib/zerotier-one
@@ -52,6 +56,7 @@ in
         ExecStart = "${cfg.package}/bin/zerotier-one -p${toString cfg.port}";
         Restart = "always";
         KillMode = "process";
+        TimeoutStopSec = 5;
       };
     };
 
@@ -62,5 +67,16 @@ in
     networking.firewall.allowedUDPPorts = [ cfg.port ];
 
     environment.systemPackages = [ cfg.package ];
+
+    # Prevent systemd from potentially changing the MAC address
+    systemd.network.links."50-zerotier" = {
+      matchConfig = {
+        OriginalName = "zt*";
+      };
+      linkConfig = {
+        AutoNegotiation = false;
+        MACAddressPolicy = "none";
+      };
+    };
   };
 }

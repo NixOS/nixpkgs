@@ -1,17 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, perl
-, MIMEtools, HTMLParser
-, cursesSupport ? true, CursesUI
-, uriFindSupport ? true, URIFind
+{ stdenv, lib, fetchFromGitHub, makeWrapper, perlPackages
+, cursesSupport ? true
+, uriFindSupport ? true
 }:
 
 let
   perlDeps =
-    [ MIMEtools HTMLParser ]
-    ++ lib.optional cursesSupport CursesUI
-    ++ lib.optional uriFindSupport URIFind;
+    [ perlPackages.MIMEtools perlPackages.HTMLParser ]
+    ++ lib.optional cursesSupport perlPackages.CursesUI
+    ++ lib.optional uriFindSupport perlPackages.URIFind;
 
 in stdenv.mkDerivation rec {
-  name = "extract_url-${version}";
+  pname = "extract_url";
   version = "1.6.2";
 
   src = fetchFromGitHub {
@@ -22,18 +21,18 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perl ] ++ perlDeps;
+  buildInputs = [ perlPackages.perl ] ++ perlDeps;
 
   makeFlags = [ "prefix=$(out)" ];
   installFlags = [ "INSTALL=install" ];
 
   postFixup = ''
     wrapProgram "$out/bin/extract_url" \
-      --set PERL5LIB "${lib.makeFullPerlPath perlDeps}"
+      --set PERL5LIB "${perlPackages.makeFullPerlPath perlDeps}"
   '';
 
   meta = with lib; {
-    homepage = https://www.memoryhole.net/~kyle/extract_url/;
+    homepage = "https://www.memoryhole.net/~kyle/extract_url/";
     description = "Extracts URLs from MIME messages or plain text";
     license = licenses.bsd2;
     maintainers = [ maintainers.qyliss ];

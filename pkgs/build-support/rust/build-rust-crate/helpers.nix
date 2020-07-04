@@ -2,22 +2,24 @@
 {
   kernel = stdenv.hostPlatform.parsed.kernel.name;
   abi = stdenv.hostPlatform.parsed.abi.name;
-   updateFeatures = f: up: functions: builtins.deepSeq f (lib.lists.foldl' (features: fun: fun features) (lib.attrsets.recursiveUpdate f up) functions);
+  cpu = stdenv.hostPlatform.parsed.cpu.name;
+   updateFeatures = f: up: functions: lib.deepSeq f (lib.foldl' (features: fun: fun features) (lib.attrsets.recursiveUpdate f up) functions);
    mapFeatures = features: map (fun: fun { features = features; });
-   mkFeatures = feat: lib.lists.foldl (features: featureName:
+   mkFeatures = feat: lib.foldl (features: featureName:
      if feat.${featureName} or false then
        [ featureName ] ++ features
      else
        features
-   ) [] (builtins.attrNames feat);
+   ) [] (lib.attrNames feat);
   include = includedFiles: src: builtins.filterSource (path: type:
-    lib.lists.any (f:
-      let p = toString (src + ("/" + f)); in
-      (path == p) || (type == "directory" && lib.strings.hasPrefix path p)
-    ) includedFiles
+     lib.any (f:
+       let p = toString (src + ("/" + f));
+       in
+       p == path || (lib.strings.hasPrefix (p + "/") path)
+     ) includedFiles
   ) src;
   exclude = excludedFiles: src: builtins.filterSource (path: type:
-    lib.lists.all (f:
+    lib.all (f:
        !lib.strings.hasPrefix (toString (src + ("/" + f))) path
     ) excludedFiles
   ) src;

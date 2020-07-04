@@ -1,16 +1,14 @@
-{ stdenv, fetchFromGitHub, qtbase, qmake, exiv2 }:
+{ mkDerivation, stdenv, fetchFromGitHub, qtbase, qmake, exiv2 }:
 
-stdenv.mkDerivation rec {
-  name = "phototonic-${version}";
-  version = "1.7.1";
+mkDerivation rec {
+  pname = "phototonic";
+  version = "2.1";
 
   src = fetchFromGitHub {
     repo = "phototonic";
     owner = "oferkv";
-    # There is currently no tag for 1.7.1 see
-    # https://github.com/oferkv/phototonic/issues/214
-    rev = "c37070e4a068570d34ece8de1e48aa0882c80c5b";
-    sha256 = "1agd3bsrpljd019qrjvlbim5l0bhpx53dhpc0gvyn0wmcdzn92gj";
+    rev = "v${version}";
+    sha256 = "0csidmxl1sfmn6gq81vn9f9jckb4swz3sgngnwqa4f75lr6604h7";
   };
 
   buildInputs = [ qtbase exiv2 ];
@@ -22,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An image viewer and organizer";
-    homepage = https://sourceforge.net/projects/phototonic/;
+    homepage = "https://sourceforge.net/projects/phototonic/";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];

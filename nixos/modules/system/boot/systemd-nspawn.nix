@@ -10,8 +10,13 @@ let
   checkExec = checkUnitConfig "Exec" [
     (assertOnlyFields [
       "Boot" "ProcessTwo" "Parameters" "Environment" "User" "WorkingDirectory"
-      "Capability" "DropCapability" "KillSignal" "Personality" "MachineId"
-      "PrivateUsers" "NotifyReady"
+      "PivotRoot" "Capability" "DropCapability" "NoNewPrivileges" "KillSignal"
+      "Personality" "MachineId" "PrivateUsers" "NotifyReady" "SystemCallFilter"
+      "LimitCPU" "LimitFSIZE" "LimitDATA" "LimitSTACK" "LimitCORE" "LimitRSS"
+      "LimitNOFILE" "LimitAS" "LimitNPROC" "LimitMEMLOCK" "LimitLOCKS"
+      "LimitSIGPENDING" "LimitMSGQUEUE" "LimitNICE" "LimitRTPRIO" "LimitRTTIME"
+      "OOMScoreAdjust" "CPUAffinity" "Hostname" "ResolvConf" "Timezone"
+      "LinkJournal"
     ])
     (assertValueOneOf "Boot" boolValues)
     (assertValueOneOf "ProcessTwo" boolValues)
@@ -20,8 +25,8 @@ let
 
   checkFiles = checkUnitConfig "Files" [
     (assertOnlyFields [
-      "ReadOnly" "Volatile" "Bind" "BindReadOnly" "TemporaryFileSystems"
-      "PrivateUsersChown"
+      "ReadOnly" "Volatile" "Bind" "BindReadOnly" "TemporaryFileSystem"
+      "Overlay" "OverlayReadOnly" "PrivateUsersChown"
     ])
     (assertValueOneOf "ReadOnly" boolValues)
     (assertValueOneOf "Volatile" (boolValues ++ [ "state" ]))
@@ -108,10 +113,21 @@ in {
   config =
     let
       units = mapAttrs' (n: v: let nspawnFile = "${n}.nspawn"; in nameValuePair nspawnFile (instanceToUnit nspawnFile v)) cfg;
-    in mkIf (cfg != {}) {
+    in 
+      mkMerge [
+        (mkIf (cfg != {}) { 
+          environment.etc."systemd/nspawn".source = mkIf (cfg != {}) (generateUnits' false "nspawn" units [] []);
+        })
+        {
+          systemd.targets.multi-user.wants = [ "machines.target" ];
 
-      environment.etc."systemd/nspawn".source = generateUnits "nspawn" units [] [];
-
-  };
-
+          # Workaround for https://github.com/NixOS/nixpkgs/pull/67232#issuecomment-531315437 and https://github.com/systemd/systemd/issues/13622
+          # Once systemd fixes this upstream, we can re-enable -U
+          systemd.services."systemd-nspawn@".serviceConfig.ExecStart = [ 
+            ""  # deliberately empty. signals systemd to override the ExecStart
+            # Only difference between upstream is that we do not pass the -U flag
+            "${config.systemd.package}/bin/systemd-nspawn --quiet --keep-unit --boot --link-journal=try-guest --network-veth --settings=override --machine=%i"
+          ];
+        }
+      ];
 }

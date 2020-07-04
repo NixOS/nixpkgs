@@ -1,9 +1,7 @@
-{ lib, stdenv, fetchurl, fetchcvs, makeWrapper, makeDesktopItem, jdk, jre, ant
+{ lib, stdenv, fetchurl, fetchsvn, makeWrapper, makeDesktopItem, jdk, jre, ant
 , gtk3, gsettings-desktop-schemas, p7zip, libXxf86vm }:
 
 let
-
-  getDesktopFileName = drvName: (builtins.parseDrvName drvName).name;
 
   # TODO: Should we move this to `lib`? Seems like its would be useful in many cases.
   extensionOf = filePath:
@@ -15,18 +13,18 @@ let
   '') icons);
 
   mkSweetHome3D =
-  { name, module, version, src, license, description, desktopName, icons }:
+  { pname, module, version, src, license, description, desktopName, icons }:
 
   stdenv.mkDerivation rec {
-    inherit name version src description;
+    inherit pname version src description;
     exec = stdenv.lib.toLower module;
     sweethome3dItem = makeDesktopItem {
       inherit exec desktopName;
-      name = getDesktopFileName name;
-      icon = getDesktopFileName name;
+      name = pname;
+      icon = pname;
       comment =  description;
       genericName = "Computer Aided (Interior) Design";
-      categories = "Application;Graphics;2DGraphics;3DGraphics;";
+      categories = "Graphics;2DGraphics;3DGraphics;";
     };
 
     patchPhase = ''
@@ -49,7 +47,7 @@ let
       mkdir -p $out/bin
       cp install/${module}-${version}.jar $out/share/java/.
 
-      ${installIcons (getDesktopFileName name) icons}
+      ${installIcons pname icons}
 
       cp "${sweethome3dItem}/share/applications/"* $out/share/applications
 
@@ -61,7 +59,7 @@ let
     dontStrip = true;
 
     meta = {
-      homepage = http://www.sweethome3d.com/index.jsp;
+      homepage = "http://www.sweethome3d.com/index.jsp";
       inherit description;
       inherit license;
       maintainers = [ stdenv.lib.maintainers.edwtjo ];
@@ -71,19 +69,18 @@ let
 
   d2u = stdenv.lib.replaceChars ["."] ["_"];
 
-in rec {
+in {
 
   application = mkSweetHome3D rec {
-    version = "5.4";
+    pname = stdenv.lib.toLower module + "-application";
+    version = "6.3";
     module = "SweetHome3D";
-    name = stdenv.lib.toLower module + "-application-" + version;
     description = "Design and visualize your future home";
     license = stdenv.lib.licenses.gpl2Plus;
-    src = fetchcvs {
-      cvsRoot = ":pserver:anonymous@sweethome3d.cvs.sourceforge.net:/cvsroot/sweethome3d";
-      sha256 = "09sk4svmaiw8dabcya3407iq5yjwxbss8pik1rzalrlds2428vyw";
-      module = module;
-      tag = "V_" + d2u version;
+    src = fetchsvn {
+      url = "https://svn.code.sf.net/p/sweethome3d/code/tags/V_" + d2u version + "/SweetHome3D/";
+      sha256 = "1c13g0f73jgbzmjhdm9knqq1kh3vdl04zl3xlp30g9a1n0jkr38i";
+      rev = "6896";
     };
     desktopName = "Sweet Home 3D";
     icons = {

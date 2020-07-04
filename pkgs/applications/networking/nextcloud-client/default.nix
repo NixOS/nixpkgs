@@ -1,54 +1,66 @@
-{ stdenv, fetchgit, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, qttools, sqlite
-, inotify-tools, withGnomeKeyring ? false, makeWrapper, libgnome-keyring }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, inotify-tools
+, libcloudproviders
+, libsecret
+, openssl
+, pcre
+, pkgconfig
+, qtbase
+, qtkeychain
+, qttools
+, qtwebengine
+, sqlite
+}:
 
-stdenv.mkDerivation rec {
-  name = "nextcloud-client-${version}";
-  version = "2.3.3";
+mkDerivation rec {
+  pname = "nextcloud-client";
+  version = "2.6.4";
 
-  src = fetchgit {
-    url = "git://github.com/nextcloud/client_theming.git";
-    rev = "ab40efe1e1475efddd636c09251d8917627261da";
-    sha256 = "19a1kqydgx47sa1a917j46zlbc5g9nynsanasyad9c8sqi0qvyip";
-    fetchSubmodules = true;
+  src = fetchFromGitHub {
+    owner = "nextcloud";
+    repo = "desktop";
+    rev = "v${version}";
+    sha256 = "1wr57qwcjfzbpb4p0ybfjpw2hhwp91yrk2n3ywrqywcvjj38jg1q";
   };
 
-  patches = [ ./find-sql.patch ];
-  patchFlags = "-d client -p1";
-
-  nativeBuildInputs = [ pkgconfig cmake ];
-
-  buildInputs = [ qtbase qtwebkit qtkeychain qttools sqlite ]
-    ++ stdenv.lib.optional stdenv.isLinux inotify-tools
-    ++ stdenv.lib.optional withGnomeKeyring makeWrapper;
-
-  enableParallelBuilding = true;
-
-  dontUseCmakeBuildDir = true;
-
-  cmakeDir = "client";
-
-  cmakeFlags = [
-    "-UCMAKE_INSTALL_LIBDIR"
-    "-DCMAKE_BUILD_TYPE=Release"
-    "-DOEM_THEME_DIR=${src}/nextcloudtheme"
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
-    "-DINOTIFY_LIBRARY=${inotify-tools}/lib/libinotifytools.so"
-    "-DINOTIFY_INCLUDE_DIR=${inotify-tools}/include"
+  patches = [
+    ./0001-Explicitly-copy-dbus-files-into-the-store-dir.patch
   ];
 
-  postInstall = ''
-    sed -i 's/\(Icon.*\)=nextcloud/\1=Nextcloud/g' \
-      $out/share/applications/nextcloud.desktop
-  '' + stdenv.lib.optionalString (withGnomeKeyring) ''
-    wrapProgram "$out/bin/nextcloud" \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libgnome-keyring ]}
-  '';
+  nativeBuildInputs = [
+    pkgconfig
+    cmake
+  ];
 
-  meta = with stdenv.lib; {
+  buildInputs = [
+    inotify-tools
+    libcloudproviders
+    openssl
+    pcre
+    qtbase
+    qtkeychain
+    qttools
+    qtwebengine
+    sqlite
+  ];
+
+  qtWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}"
+  ];
+
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_LIBDIR=lib" # expected to be prefix-relative by build code setting RPATH
+    "-DNO_SHIBBOLETH=1" # allows to compile without qtwebkit
+  ];
+
+  meta = with lib; {
     description = "Nextcloud themed desktop client";
-    homepage = https://nextcloud.com;
+    homepage = "https://nextcloud.com";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ caugner ];
+    maintainers = with maintainers; [ caugner ma27 ];
     platforms = platforms.linux;
   };
 }

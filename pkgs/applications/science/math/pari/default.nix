@@ -1,19 +1,33 @@
-{ stdenv, fetchurl
-, gmp, readline, libX11, tex, perl
+{ stdenv
+, fetchurl
+, fetchpatch
+, gmp
+, readline
+, libX11
+, tex
+, perl
 , withThread ? true, libpthreadstubs
 }:
 
 assert withThread -> libpthreadstubs != null;
 
 stdenv.mkDerivation rec {
-
-  name = "pari-${version}";
-  version = "2.11.0";
+  pname = "pari";
+  version = "2.11.3";
 
   src = fetchurl {
-    url = "https://pari.math.u-bordeaux.fr/pub/pari/unix/${name}.tar.gz";
-    sha256 = "18f9yj8ffn3dxignbxj1x36771zbxy4js0r18mv6831ymb6cld9q";
+    url = "https://pari.math.u-bordeaux.fr/pub/pari/unix/${pname}-${version}.tar.gz";
+    sha256 = "1jd65h2psrmba2dx7rkf5qidf9ka0cwbsg20pd18k45ggr30l467";
   };
+
+  patches = [
+    # https://trac.sagemath.org/ticket/29313#comment:1
+    (fetchpatch {
+      name = "backport-bug-fix.patch";
+      url = "https://git.archlinux.org/svntogit/community.git/plain/repos/community-x86_64/c7a1d35f.patch?h=packages/pari&id=27893d227290dc3821d68aa25877d9765c204dad";
+      sha256 = "0vm0fwyzj66cr32imip6srksd47s2s2sjl1rb26ph8gpfi3nalii";
+    })
+  ];
 
   buildInputs = [
     gmp
@@ -67,10 +81,10 @@ stdenv.mkDerivation rec {
           run 3 or 4 times faster.) gp2c currently only understands a subset
            of the GP language.
     '';
-    homepage    = http://pari.math.u-bordeaux.fr;
-    downloadPage = http://pari.math.u-bordeaux.fr/download.html;
+    homepage    = "http://pari.math.u-bordeaux.fr";
+    downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ertes raskin AndersonTorres ];
+    maintainers = with maintainers; [ ertes raskin AndersonTorres timokau ];
     platforms   = platforms.linux ++ platforms.darwin;
     updateWalker = true;
   };

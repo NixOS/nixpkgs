@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "stem";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1awiglfiajnx2hva9aqpj3fmdvdb4qg7cwnlfyih827m68y3cq8v";
+    sha256 = "1hk8alc0r4m669ggngdfvryndd0fbx0w62sclcmg55af4ak8xd50";
   };
 
   postPatch = ''
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Controller library that allows applications to interact with Tor";
-    homepage = https://stem.torproject.org/;
+    homepage = "https://stem.torproject.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ phreedom ];
   };

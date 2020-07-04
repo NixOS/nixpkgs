@@ -13,20 +13,19 @@
 , scipy
 , hdmedians
 , scikitlearn
-, pytest
 , coverage
 , python
 , isPy3k
 }:
 
 buildPythonPackage rec {
-  version = "0.5.4";
+  version = "0.5.6";
   pname = "scikit-bio";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3243f1995ef24643c09ff4d9391a79528aadd8232e5aa5d66c38d7b2e0c92f24";
+    sha256 = "48b73ec53ce0ff2c2e3e05f3cfcf93527c1525a8d3e9dd4ae317b4219c37f0ea";
   };
 
   buildInputs = [ cython ];
@@ -47,7 +46,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://scikit-bio.org/;
+    homepage = "http://scikit-bio.org/";
     description = "Data structures, algorithms and educational resources for bioinformatics";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];

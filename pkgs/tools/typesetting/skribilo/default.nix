@@ -10,11 +10,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "skribilo-${version}";
+  pname = "skribilo";
   version = "0.9.4";
 
   src = fetchurl {
-    url = "http://download.savannah.nongnu.org/releases/skribilo/${name}.tar.gz";
+    url = "http://download.savannah.nongnu.org/releases/skribilo/${pname}-${version}.tar.gz";
     sha256 = "06ywnfjfa9sxrzdszb5sryzg266380g519cm64kq62sskzl7zmnf";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       outline mode and from other conventions used in emails, Usenet
       and text.
     '';
-    homepage = https://www.nongnu.org/skribilo/;
+    homepage = "https://www.nongnu.org/skribilo/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;

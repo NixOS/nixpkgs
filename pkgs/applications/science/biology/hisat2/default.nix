@@ -1,7 +1,7 @@
-{stdenv, fetchurl, unzip, which, python}:
+{stdenv, fetchurl, unzip, which, python, perl}:
 
 stdenv.mkDerivation rec {
-  name = "hisat2-${version}";
+  pname = "hisat2";
   version = "2.1.0";
 
   src = fetchurl {
@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "10g73sdf6vqqfhhd92hliw7bbpkb8v4pp5012r5l21zws7p7d8l9";
   };
 
-  buildInputs = [ unzip  which python ];
+  nativeBuildInputs = [ unzip which ];
+  buildInputs = [ python perl ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Graph based aligner";
     license = licenses.gpl3;
-    homepage = https://ccb.jhu.edu/software/hisat2/index.shtml;
+    homepage = "https://ccb.jhu.edu/software/hisat2/index.shtml";
     maintainers = with maintainers; [ jbedo ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };

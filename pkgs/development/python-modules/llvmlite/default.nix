@@ -6,20 +6,22 @@
 , pythonOlder
 , isPyPy
 , enum34
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "llvmlite";
-  version = "0.24.0";
+  version = "0.32.1";
 
-  disabled = isPyPy;
+  disabled = isPyPy || !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "320de4c4a1c105b91629305be069d217f3a9d7fbe32cb22bcfb016361895fc07";
+    sha256 = "41262a47b8cbba5a09203b15b65fbdf11192f92aa226c81e99115acdee8f3b8d";
   };
 
-  propagatedBuildInputs = [ llvm ] ++ stdenv.lib.optional (pythonOlder "3.4") enum34;
+  nativeBuildInputs = [ llvm ];
+  propagatedBuildInputs = [ ] ++ stdenv.lib.optional (pythonOlder "3.4") enum34;
 
   # Disable static linking
   # https://github.com/numba/llvmlite/issues/93
@@ -42,7 +44,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A lightweight LLVM python binding for writing JIT compilers";
-    homepage = http://llvmlite.pydata.org/;
+    homepage = "http://llvmlite.pydata.org/";
     license = stdenv.lib.licenses.bsd2;
     maintainers = with stdenv.lib.maintainers; [ fridh ];
   };

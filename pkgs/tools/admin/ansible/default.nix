@@ -1,67 +1,27 @@
-{ stdenv, fetchurl, python2
-, windowsSupport ? false
-}:
+{ python3Packages, fetchurl }:
 
-let
-  generic = { version, sha256, py ? python2 }: py.pkgs.buildPythonPackage rec {
+rec {
+  ansible = ansible_2_9;
+
+  ansible_2_9 = python3Packages.toPythonApplication python3Packages.ansible;
+
+  ansible_2_8 = python3Packages.toPythonApplication (python3Packages.ansible.overridePythonAttrs (old: rec {
     pname = "ansible";
-    inherit version;
-
-    outputs = [ "out" "man" ];
+    version = "2.8.12";
 
     src = fetchurl {
       url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
-      inherit sha256;
+      sha256 = "091id1da3hlnmf0hwvrhv2r0mnyna3mc6s7rwdg5kll7yfiy4k1a";
     };
+  }));
 
-    prePatch = ''
-      sed -i "s,/usr/,$out," lib/ansible/constants.py
-    '';
+  ansible_2_7 = python3Packages.toPythonApplication (python3Packages.ansible.overridePythonAttrs (old: rec {
+    pname = "ansible";
+    version = "2.7.18";
 
-    postInstall = ''
-      wrapPythonProgramsIn "$out/bin" "$out $PYTHONPATH"
-
-      for m in docs/man/man1/*; do
-        install -vD $m -t $man/share/man/man1
-      done
-    '';
-
-    doCheck = false;
-    dontStrip = true;
-    dontPatchELF = true;
-    dontPatchShebangs = false;
-
-    propagatedBuildInputs = with py.pkgs; [
-      pycrypto paramiko jinja2 pyyaml httplib2 boto six netaddr dnspython jmespath dopy
-    ] ++ stdenv.lib.optional windowsSupport pywinrm;
-
-    meta = with stdenv.lib; {
-      homepage = http://www.ansible.com;
-      description = "A simple automation tool";
-      license = with licenses; [ gpl3 ] ;
-      maintainers = with maintainers; [ jgeerds joamaki ];
-      platforms = with platforms; linux ++ darwin;
+    src = fetchurl {
+      url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
+      sha256 = "0sgshaaqyjq3i035yi5hivmrrwrq05hxrbjrv1w3hfzmvljn41d1";
     };
-  };
-
-in rec {
-  # We will carry all the supported versions
-
-  ansible_2_4 = generic {
-    version = "2.4.4.0";
-    sha256  = "0n1k6h0h6av74nw8vq98fmh6q4pq6brpwmx45282vh3bkdmpa0ib";
-  };
-
-  ansible_2_5 = generic {
-    version = "2.5.2";
-    sha256  = "1r9sq30xz3jrvx6yqssj5wmkml1f75rx1amd7g89f3ryngrq6m59";
-  };
-
-  ansible_2_6 = generic {
-    version = "2.6.2";
-    sha256  = "1y5gd9h641p6pphwd7j99yyqglyj23rkmid7wgzk62611754qzkl";
-  };
-
-  ansible2 = ansible_2_6;
-  ansible  = ansible2;
+  }));
 }

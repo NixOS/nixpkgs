@@ -3,7 +3,8 @@
 let version = "1.0.10"; in
 
 stdenv.mkDerivation {
-  name = "classads-${version}";
+  pname = "classads";
+  inherit version;
 
   src = fetchurl {
     url = "ftp://ftp.cs.wisc.edu/condor/classad/c++/classads-${version}.tar.gz";
@@ -17,7 +18,7 @@ stdenv.mkDerivation {
   ];
   
   meta = {
-    homepage = http://www.cs.wisc.edu/condor/classad/;
+    homepage = "http://www.cs.wisc.edu/condor/classad/";
     description = "The Classified Advertisements library provides a generic means for matching resources";
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.unix;

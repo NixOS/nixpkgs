@@ -8,12 +8,13 @@ set this environment variable. Instead, we patch iscan to set this variable
 before loading libesci-interpreter-gt-f720.so.
 --- backend/channel-usb.c.orig	2017-08-14 11:24:27.669582456 +0200
 +++ backend/channel-usb.c	2017-08-14 11:31:40.509010897 +0200
-@@ -169,6 +169,9 @@
+@@ -169,6 +169,10 @@
  {
    SANE_Status s;
  
 +  setenv("ESCI_FIRMWARE_DIR", NIX_ESCI_PREFIX, 1);
 +  setenv("ISCAN_FW_DIR", NIX_ESCI_PREFIX, 1);
++  setenv("ISCAN_FIRMWARE_DIR", NIX_ESCI_PREFIX, 1);
 +
    s = sanei_usb_open (self->name, &self->fd);
  

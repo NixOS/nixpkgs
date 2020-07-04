@@ -2,27 +2,20 @@
 
 buildPythonPackage rec {
   pname = "piexif";
-  version = "1.0.13";
+  version = "1.1.3";
 
-  # pillow needed for unit tests
-  buildInputs = [ pillow ];
-
-  postPatch = ''
-    # incompatibility with pillow => 4.2.0
-    # has been resolved in https://github.com/hMatoba/Piexif/commit/c3a8272f5e6418f223b25f6486d8ddda201bbdf1
-    # remove this in the next version
-    sed -i -e 's/RGBA/RGB/' tests/s_test.py
-  '';
+  # Pillow needed for unit tests
+  checkInputs = [ pillow ];
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1d3dde03bd6298393645bc11d585b67a6ea98fd7e9e1aded6d5d6ec3e4cfbdda";
+    sha256 = "06sz58q4mrw472p8fbnq7wsj8zpi5js5r8phm2hiwfmz0v33bjw3";
   };
 
   meta = with stdenv.lib; {
     description = "Simplify Exif manipulations with Python";
-    homepage = https://github.com/hMatoba/Piexif;
+    homepage = "https://github.com/hMatoba/Piexif";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];
   };

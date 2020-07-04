@@ -14,22 +14,23 @@ let
     genericName = "Apache Directory Studio";
     categories = "Java;Network";
   };
-
+  version = "2.0.0-M14";
+  versionWithDate = "2.0.0.v20180908-M14";
 in
 stdenv.mkDerivation rec {
-  name = "apache-directory-studio-${version}";
-  version = "2.0.0.v20170904-M13";
+  pname = "apache-directory-studio";
+  inherit version;
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
-        url = "mirror://apache/directory/studio/${version}/ApacheDirectoryStudio-${version}-linux.gtk.x86_64.tar.gz";
-        sha256 = "1jfnm6m0ijk31r30hhrxxnizk742dm317iny041p29v897rma7aq";
+        url = "mirror://apache/directory/studio/${versionWithDate}/ApacheDirectoryStudio-${versionWithDate}-linux.gtk.x86_64.tar.gz";
+        sha256 = "0kq4l3755q69p7bry9xpm5xxw56ksncp76fdqqd1xzbvsg309bps";
       }
     else if stdenv.hostPlatform.system == "i686-linux" then
       fetchurl {
-        url = "mirror://apache/directory/studio/${version}/ApacheDirectoryStudio-${version}-linux.gtk.x86.tar.gz";
-        sha256 = "1bxmgram42qyhrqkgp5k8770f5mjjdd4c6xl4gj09smiycm1qa4n";
+        url = "mirror://apache/directory/studio/${versionWithDate}/ApacheDirectoryStudio-${versionWithDate}-linux.gtk.x86.tar.gz";
+        sha256 = "038dy8jjgq5gj5r56y9ps3ycqi9gn57i4q1r3mmjx1b1950wmh1q";
       }
     else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 

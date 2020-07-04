@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, pkgconfig, perl, texinfo, yasm
+{ stdenv, ffmpeg, addOpenGLRunpath, fetchurl, fetchpatch, pkgconfig, perl, texinfo, yasm
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
  */
 , gplLicensing ? true # GPL: fdkaac,openssl,frei0r,cdio,samba,utvideo,vidstab,x265,x265,xavs,avid,zvbi,x11grab
-, version3Licensing ? true # (L)GPL3: opencore-amrnb,opencore-amrwb,samba,vo-aacenc,vo-amrwbenc
+, version3Licensing ? true # (L)GPL3: libvmaf,opencore-amrnb,opencore-amrwb,samba,vo-aacenc,vo-amrwbenc
 , nonfreeLicensing ? false # NONFREE: openssl,fdkaac,blackmagic-design-desktop-video
 /*
  *  Build options
@@ -52,6 +52,7 @@
 , bzip2 ? null
 , celt ? null # CELT decoder
 #, crystalhd ? null # Broadcom CrystalHD hardware acceleration
+, dav1d ? null # AV1 decoder (focused on speed and correctness)
 #, decklinkExtlib ? false, blackmagic-design-desktop-video ? null # Blackmagic Design DeckLink I/O support
 , fdkaacExtlib ? false, fdk_aac ? null # Fraunhofer FDK AAC de/encoder
 #, flite ? null # Flite (voice synthesis) support
@@ -75,17 +76,19 @@
 , libdc1394 ? null, libraw1394 ? null # IIDC-1394 grabbing (ieee 1394)
 , libiconv ? null
 #, libiec61883 ? null, libavc1394 ? null # iec61883 (also uses libraw1394)
-#, libmfx ? null # Hardware acceleration vis libmfx
+, libmfx ? null # Hardware acceleration vis libmfx
 , libmodplug ? null # ModPlug support
 , libmysofa ? null # HRTF support via SOFAlizer
 #, libnut ? null # NUT (de)muxer, native (de)muser exists
 , libogg ? null # Ogg container used by vorbis & theora
 , libopus ? null # Opus de/encoder
+, librsvg ? null # SVG protocol
 , libssh ? null # SFTP protocol
 , libtheora ? null # Theora encoder
 , libv4l ? null # Video 4 Linux support
 , libva ? null # Vaapi hardware acceleration
 , libvdpau ? null # Vdpau hardware acceleration
+, libvmaf ? null # Netflix's VMAF (Video Multi-Method Assessment Fusion)
 , libvorbis ? null # Vorbis de/encoding, native encoder exists
 , libvpx ? null # VP8 & VP9 de/encoding
 , libwebp ? null # WebP encoder
@@ -95,14 +98,14 @@
 , libxcbxfixesExtlib ? true # X11 grabbing mouse rendering
 , libxcbshapeExtlib ? true # X11 grabbing shape rendering
 , libXv ? null # Xlib support
+, libXext ? null # Xlib support
 , lzma ? null # xz-utils
-, nvenc ? false, nvidia-video-sdk ? null # NVIDIA NVENC support
-, callPackage # needed for NVENC to access external ffmpeg nvidia headers
+, nvenc ? !stdenv.isDarwin && !stdenv.isAarch64, nv-codec-headers ? null # NVIDIA NVENC support
 , openal ? null # OpenAL 1.1 capture support
 #, opencl ? null # OpenCL code
 , opencore-amr ? null # AMR-NB de/encoder & AMR-WB decoder
 #, opencv ? null # Video filtering
-, openglExtlib ? false, libGLU_combined ? null # OpenGL rendering
+, openglExtlib ? false, libGL ? null, libGLU ? null # OpenGL rendering
 #, openh264 ? null # H.264/AVC encoder
 , openjpeg ? null # JPEG 2000 de/encoder
 , opensslExtlib ? false, openssl ? null
@@ -115,6 +118,7 @@
 #, shine ? null # Fixed-point MP3 encoder
 , soxr ? null # Resampling via soxr
 , speex ? null # Speex de/encoder
+, srt ? null # Secure Reliable Transport (SRT) protocol
 #, twolame ? null # MP2 encoder
 #, utvideo ? null # Ut Video de/encoder
 , vid-stab ? null # Video stabilization
@@ -139,7 +143,7 @@
  *  Darwin frameworks
  */
 , Cocoa, CoreAudio, CoreServices, AVFoundation, MediaToolbox
-, VideoDecodeAcceleration, CF
+, VideoDecodeAcceleration
 }:
 
 /* Maintainer notes:
@@ -155,12 +159,16 @@
  *
  * Not packaged:
  *   aacplus avisynth cdio-paranoia crystalhd libavc1394 libiec61883
- *   libmxf libnut libquvi nvenc opencl openh264 oss shine twolame
+ *   libnut libquvi nvenc opencl openh264 oss shine twolame
  *   utvideo vo-aacenc vo-amrwbenc xvmc zvbi blackmagic-design-desktop-video
  *
  * Need fixes to support Darwin:
- *   frei0r, game-music-emu, gsm, libjack2, libssh, libvpx(stable 1.3.0), openal, openjpeg,
- *   pulseaudio, rtmpdump, samba, vid-stab, wavpack, x265. xavs
+ *   frei0r game-music-emu gsm libjack2 libmfx(intel-media-sdk) libssh
+ *   libvpx(stable 1.3.0) openal openjpeg pulseaudio rtmpdump samba vid-stab
+ *   wavpack x265 xavs
+ *
+ * Need fixes to support AArch64:
+ *   libmfx(intel-media-sdk) nvenc
  *
  * Not supported:
  *   stagefright-h264(android only)
@@ -174,10 +182,8 @@
  */
 
 let
-  inherit (stdenv) isCygwin isFreeBSD isLinux;
+  inherit (stdenv) isCygwin isDarwin isFreeBSD isLinux isAarch64;
   inherit (stdenv.lib) optional optionals optionalString enableFeature;
-
-  nv-codec-headers = callPackage ./nv-codec-headers.nix { };
 in
 
 /*
@@ -190,6 +196,10 @@ assert nonfreeLicensing -> gplLicensing && version3Licensing;
  */
 assert networkBuild -> gnutls != null || opensslExtlib;
 assert pixelutilsBuild -> avutilLibrary;
+/*
+ *  Platform dependencies
+ */
+assert isDarwin -> !nvenc;
 /*
  *  Program dependencies
  */
@@ -226,18 +236,12 @@ assert gnutls != null -> !opensslExtlib;
 assert libxcbshmExtlib -> libxcb != null;
 assert libxcbxfixesExtlib -> libxcb != null;
 assert libxcbshapeExtlib -> libxcb != null;
-assert openglExtlib -> libGLU_combined != null;
+assert openglExtlib -> libGL != null && libGLU != null;
 assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
-assert nvenc -> nvidia-video-sdk != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
-  name = "ffmpeg-full-${version}";
-  version = "4.0.2";
-
-  src = fetchurl {
-    url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "15rgzcmdccy4flajs63gkz4n3k24wkkg50r13l1r83lrxg4hqp59";
-  };
+  pname = "ffmpeg-full";
+  inherit (ffmpeg) src version;
 
   prePatch = ''
     patchShebangs .
@@ -264,7 +268,7 @@ stdenv.mkDerivation rec {
      *  Build flags
      */
     # On some ARM platforms --enable-thumb
-    "--enable-shared --disable-static"
+    "--enable-shared"
     (enableFeature true "pic")
     (if stdenv.cc.isClang then "--cc=clang" else null)
     (enableFeature smallBuild "small")
@@ -320,6 +324,7 @@ stdenv.mkDerivation rec {
     (enableFeature (bzip2 != null) "bzlib")
     (enableFeature (celt != null) "libcelt")
     #(enableFeature crystalhd "crystalhd")
+    (enableFeature (dav1d != null) "libdav1d")
     #(enableFeature decklinkExtlib "decklink")
     (enableFeature (fdkaacExtlib && gplLicensing) "libfdk-aac")
     #(enableFeature (flite != null) "libflite")
@@ -343,21 +348,25 @@ stdenv.mkDerivation rec {
     #(enableFeature (cdio-paranoia != null && gplLicensing) "libcdio")
     (enableFeature (if isLinux then libdc1394 != null && libraw1394 != null else false) "libdc1394")
     (enableFeature (libiconv != null) "iconv")
+    (enableFeature (libjack2 != null) "libjack")
     #(enableFeature (if isLinux then libiec61883 != null && libavc1394 != null && libraw1394 != null else false) "libiec61883")
-    #(enableFeature (libmfx != null) "libmfx")
+    (enableFeature (if isLinux && !isAarch64 then libmfx != null else false) "libmfx")
     (enableFeature (libmodplug != null) "libmodplug")
     (enableFeature (libmysofa != null) "libmysofa")
     #(enableFeature (libnut != null) "libnut")
     (enableFeature (libopus != null) "libopus")
+    (enableFeature (librsvg != null) "librsvg")
+    (enableFeature (srt != null) "libsrt")
     (enableFeature (libssh != null) "libssh")
     (enableFeature (libtheora != null) "libtheora")
     (enableFeature (if isLinux then libv4l != null else false) "libv4l2")
     (enableFeature ((isLinux || isFreeBSD) && libva != null) "vaapi")
     (enableFeature (libvdpau != null) "vdpau")
     (enableFeature (libvorbis != null) "libvorbis")
+    (enableFeature (!isAarch64 && libvmaf != null && version3Licensing) "libvmaf")
     (enableFeature (libvpx != null) "libvpx")
     (enableFeature (libwebp != null) "libwebp")
-    (enableFeature (libX11 != null && libXv != null) "xlib")
+    (enableFeature (libX11 != null && libXv != null && libXext != null) "xlib")
     (enableFeature (libxcb != null) "libxcb")
     (enableFeature libxcbshmExtlib "libxcb-shm")
     (enableFeature libxcbxfixesExtlib "libxcb-xfixes")
@@ -404,45 +413,46 @@ stdenv.mkDerivation rec {
     "--enable-cross-compile"
   ];
 
-  nativeBuildInputs = [ perl pkgconfig texinfo yasm ];
+  nativeBuildInputs = [ addOpenGLRunpath perl pkgconfig texinfo yasm ];
 
   buildInputs = [
-    bzip2 celt fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
+    bzip2 celt dav1d fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
     libjack2 ladspaH lame libaom libass libbluray libbs2b libcaca libdc1394 libmodplug libmysofa
-    libogg libopus libssh libtheora libvdpau libvorbis libvpx libwebp libX11
-    libxcb libXv lzma openal openjpeg libpulseaudio rtmpdump opencore-amr
-    samba SDL2 soxr speex vid-stab vo-amrwbenc wavpack x264 x265 xavs xvidcore
+    libogg libopus librsvg libssh libtheora libvdpau libvorbis libvpx libwebp libX11
+    libxcb libXv libXext lzma openal openjpeg libpulseaudio rtmpdump opencore-amr
+    samba SDL2 soxr speex srt vid-stab vo-amrwbenc wavpack x264 x265 xavs xvidcore
     zeromq4 zlib
-  ] ++ optional openglExtlib libGLU_combined
+  ] ++ optionals openglExtlib [ libGL libGLU ]
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
+    ++ optional (!isAarch64 && libvmaf != null && version3Licensing) libvmaf
     ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
-    ++ optionals nvenc [ nvidia-video-sdk nv-codec-headers ]
+    ++ optional (isLinux && !isAarch64 && libmfx != null) libmfx
+    ++ optional nvenc nv-codec-headers
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation
                                    MediaToolbox VideoDecodeAcceleration
                                    libiconv ];
 
-  # Build qt-faststart executable
-  buildPhase = optional qtFaststartProgram ''make tools/qt-faststart'';
+  buildFlags = [ "all" ]
+    ++ optional qtFaststartProgram "tools/qt-faststart"; # Build qt-faststart executable
 
   # Hacky framework patching technique borrowed from the phantomjs2 package
   postInstall = optionalString qtFaststartProgram ''
     cp -a tools/qt-faststart $out/bin/
-  '' + optionalString stdenv.isDarwin ''
-    FILES=($(ls $out/bin/*))
-    FILES+=($(ls $out/lib/*.dylib))
-    for f in ''${FILES[@]}; do
-      if [ ! -h "$f" ]; then
-        install_name_tool -change ${CF}/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation /System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation "$f"
-      fi
-    done
+  '';
+
+  postFixup = optionalString stdenv.isLinux ''
+    # Set RUNPATH so that libnvcuvid and libcuda in /run/opengl-driver(-32)/lib can be found.
+    # See the explanation in addOpenGLRunpath.
+    addOpenGLRunpath $out/lib/libavcodec.so
+    addOpenGLRunpath $out/lib/libavutil.so
   '';
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
-    homepage = https://www.ffmpeg.org/;
+    homepage = "https://www.ffmpeg.org/";
     longDescription = ''
       FFmpeg is the leading multimedia framework, able to decode, encode, transcode,
       mux, demux, stream, filter and play pretty much anything that humans and machines
@@ -461,6 +471,6 @@ stdenv.mkDerivation rec {
         licenses.lgpl21Plus
     );
     platforms = platforms.all;
-    maintainers = with maintainers; [ codyopel fuuzetsu ];
+    maintainers = with maintainers; [ codyopel ];
   };
 }

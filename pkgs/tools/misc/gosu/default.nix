@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "gosu-${version}";
+  pname = "gosu";
   version = "2017-05-09";
   rev = "e87cf95808a7b16208515c49012aa3410bc5bba8";
 

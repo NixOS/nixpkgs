@@ -1,31 +1,35 @@
-{ stdenv, fetchurl, jre, unzip }:
+{ stdenv, fetchurl, makeWrapper, jre }:
 
-stdenv.mkDerivation {
-  name = "mediathekview-9";
+stdenv.mkDerivation rec {
+  version = "13.5.1";
+  pname = "mediathekview";
   src = fetchurl {
-    url = "mirror://sourceforge/zdfmediathk/MediathekView_9.zip";
-    sha256 = "1wff0igr33z9p1mjw7yvb6658smdwnp22dv8klz0y8qg116wx7a4";
+    url = "https://download.mediathekview.de/stabil/MediathekView-${version}-linux.tar.gz";
+    sha256 = "0fixr6drim0wmh4q44zikcla4mrnm44nm95d5naqsgx6idalddrc";
   };
-  unpackPhase = "true";
 
-  buildInputs = [ unzip ];
-  
-  # Could use some more love
-  # Maybe we can also preconfigure locations for vlc and the others.
+  nativeBuildInputs = [ makeWrapper ];
+
   installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/opt/mediathekview
-    cd $out/opt/mediathekview
-    unzip $src
-    find . -iname '*.exe' -delete
-    sed -i -e 's, java, ${jre}/bin/java,' MediathekView__Linux.sh
-    ln -s $out/opt/mediathekview/MediathekView__Linux.sh $out/bin/mediathekview
+    mkdir -p $out/{bin,lib}
+
+    install -m644 MediathekView.jar $out/lib
+
+    makeWrapper ${jre}/bin/java $out/bin/mediathek \
+      --add-flags "-Xmx1G -jar $out/lib/MediathekView.jar"
+
+    makeWrapper ${jre}/bin/java $out/bin/MediathekView \
+      --add-flags "-Xmx1G -jar $out/lib/MediathekView.jar"
+
+    makeWrapper ${jre}/bin/java $out/bin/MediathekView_ipv4 \
+      --add-flags "-Xmx1G -Djava.net.preferIPv4Stack=true -jar $out/lib/MediathekView.jar"
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://zdfmediathk.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ maintainers.chaoflow ];
-    platforms = platforms.linux;  #  also macOS and cygwin, but not investigated, yet
+    description = "Offers access to the Mediathek of different tv stations (ARD, ZDF, Arte, etc.)";
+    homepage = "https://mediathekview.de/";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ moredread ];
+    platforms = platforms.all;
   };
 }

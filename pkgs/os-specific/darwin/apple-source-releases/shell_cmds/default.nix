@@ -1,6 +1,6 @@
 { stdenv, appleDerivation, xcbuildHook }:
 
-appleDerivation rec {
+appleDerivation {
   nativeBuildInputs = [ xcbuildHook ];
 
   patchPhase = ''
@@ -28,8 +28,11 @@ appleDerivation rec {
 
   # temporary install phase until xcodebuild has "install" support
   installPhase = ''
-    mkdir -p $out/usr/bin
-    install Products/Release/* $out/usr/bin
+    for f in Products/Release/*; do
+      if [ -f $f ]; then
+        install -D $f $out/usr/bin/$(basename $f)
+      fi
+    done
 
     export DSTROOT=$out
     export SRCROOT=$PWD

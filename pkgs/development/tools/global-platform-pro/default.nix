@@ -1,21 +1,20 @@
-{ stdenv, fetchFromGitHub, jdk, maven, writeText, makeWrapper, jre_headless, pcsclite }:
+{ stdenv, fetchFromGitHub, jdk, maven, makeWrapper, jre_headless, pcsclite }:
 
 # TODO: This is quite a bit of duplicated logic with gephi. Factor it out?
 stdenv.mkDerivation rec {
   pname = "global-platform-pro";
   version = "18.09.14";
   GPPRO_VERSION = "18.09.14-0-gb439b52"; # git describe --tags --always --long --dirty
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "martinpaljak";
     repo = "GlobalPlatformPro";
-    rev = "${version}";
+    rev = version;
     sha256 = "1vws6cbgm3mrwc2xz9j1y262vw21x3hjc9m7rqc4hn3m7gjpwsvg";
   };
 
   deps = stdenv.mkDerivation {
-    name = "${name}-deps";
+    name = "${pname}-${version}-deps";
     inherit src;
     nativeBuildInputs = [ jdk maven ];
     installPhase = ''
@@ -60,8 +59,9 @@ stdenv.mkDerivation rec {
       The executable requires the PC/SC daemon running for correct execution.
       If you run NixOS, it can be enabled with `services.pcscd.enable = true;`.
     '';
-    homepage = https://github.com/martinpaljak/GlobalPlatformPro;
+    homepage = "https://github.com/martinpaljak/GlobalPlatformPro";
     license = with licenses; [ lgpl3 ];
+    maintainers = with maintainers; [ ekleog ];
     platforms = platforms.all;
   };
 }
