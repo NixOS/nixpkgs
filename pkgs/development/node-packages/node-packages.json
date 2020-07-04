@@ -105,6 +105,7 @@
 , "json-server"
 , "jsonlint"
 , "karma"
+, "kubebox"
 , "lcov-result-merger"
 , "leetcode-cli"
 , "lerna"

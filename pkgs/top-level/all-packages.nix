@@ -10855,6 +10855,8 @@ in
 
   kube-aws = callPackage ../development/tools/kube-aws { };
 
+  kubebox = nodePackages.kubebox;
+
   kubectx = callPackage ../development/tools/kubectx { };
 
   kube-prompt = callPackage ../development/tools/kube-prompt { };
