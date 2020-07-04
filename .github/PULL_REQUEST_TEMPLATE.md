@@ -13,7 +13,10 @@ Reviewing guidelines: https://hydra.nixos.org/job/nixpkgs/trunk/manual/latest/do
 
 ###### Things done
 
-<!-- Please check what applies. Note that these are not hard requirements but merely serve as information for reviewers. -->
+<!-- 
+Please check what applies. Note that these are not hard requirements but merely serve as information for reviewers. 
+You might find this discussion useful: https://discourse.nixos.org/t/making-the-pull-request-template-more-beginner-friendly-nixpkgs/388
+-->
 
 - [ ] Tested using sandboxing ([nix.useSandbox](https://nixos.org/nixos/manual/options.html#opt-nix.useSandbox) on NixOS, or option `sandbox` in [`nix.conf`](https://nixos.org/nix/manual/#sec-conf-file) on non-NixOS linux)
 - Built on platform(s)
@@ -21,7 +24,7 @@ Reviewing guidelines: https://hydra.nixos.org/job/nixpkgs/trunk/manual/latest/do
    - [ ] macOS
    - [ ] other Linux distributions
 - [ ] Tested via one or more NixOS test(s) if existing and applicable for the change (look inside [nixos/tests](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests))
-- [ ] Tested compilation of all pkgs that depend on this change using `nix-shell -p nixpkgs-review --run "nixpkgs-review wip"`
+- [ ] Tested compilation of all pkgs that depend on this change using `nix-shell -p nixpkgs-review --run "nixpkgs-review wip"` (on [uncommitted changes](https://discourse.nixos.org/t/making-the-pull-request-template-more-beginner-friendly-nixpkgs/388/4))
 - [ ] Tested execution of all binary files (usually in `./result/bin/`)
 - [ ] Determined the impact on package closure size (by running `nix path-info -S` before and after)
 - [ ] Ensured that relevant documentation is up to date
