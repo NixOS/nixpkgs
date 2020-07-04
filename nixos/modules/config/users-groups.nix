@@ -33,7 +33,7 @@ let
 
     For logins with a fixed password (including the empty-string password with
     prompt), use one of the un-hashed password options instead, such as
-    <option>users.users.<name?>.password</option>.
+    <option>users.users.&lt;name?&gt;.password</option>.
 
     Such unprotected logins should only be used for e.g. bootable live systems.
   '';
