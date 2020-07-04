@@ -19,6 +19,7 @@
 , flex
 , librsvg
 , check
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
     sed -i 's/~root/~nobody/g' test/helper-expand.c
   '';
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [ meson ninja pkg-config makeWrapper ];
   buildInputs = [
     libxkbcommon
     pango
@@ -58,13 +59,18 @@ stdenv.mkDerivation rec {
     which
   ];
 
+  postInstall = ''
+    wrapProgram $out/bin/rofi \
+      --run 'export XDG_DATA_DIRS="$(sed "s| |/share:|g" < <(echo $NIX_PROFILES))/share:$XDG_DATA_DIRS"'
+  '';
+
   doCheck = false;
 
   meta = with lib; {
     description = "Window switcher, run dialog and dmenu replacement";
     homepage = "https://github.com/davatorium/rofi";
     license = licenses.mit;
-    maintainers = with maintainers; [ bew ];
+    maintainers = with maintainers; [ bew shamilton ];
     platforms = with platforms; linux;
   };
 }
