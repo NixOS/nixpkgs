@@ -22419,6 +22419,8 @@ with pkgs;
 
   ristate = callPackage ../tools/misc/ristate { };
 
+  rlite = callPackage ../os-specific/linux/rlite { };
+
   roccat-tools = callPackage ../os-specific/linux/roccat-tools { };
 
   rtsp-simple-server = callPackage ../servers/rtsp-simple-server { };
