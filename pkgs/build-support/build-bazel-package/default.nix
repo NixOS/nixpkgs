@@ -30,6 +30,13 @@ args@{
 , removeRulesCC ? true
 , removeLocalConfigCc ? true
 , removeLocal ? true
+
+# Use build --nobuild instead of fetch. This allows fetching the dependencies
+# required for the build as configured, rather than fetching all the dependencies
+# which may not work in some situations (e.g. Java code which ends up relying on
+# Debian-specific /usr/share/java paths, but doesn't in the configured build).
+, fetchConfigured ? false
+
 , ...
 }:
 
@@ -79,7 +86,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
       bazel \
         --output_base="$bazelOut" \
         --output_user_root="$bazelUserRoot" \
-        fetch \
+        ${if fetchConfigured then "build --nobuild" else "fetch"} \
         --loading_phase_threads=1 \
         $bazelFlags \
         $bazelFetchFlags \
@@ -112,7 +119,8 @@ in stdenv.mkDerivation (fBuildAttrs // {
       # platforms -> NIX_BUILD_TOP/tmp/install/35282f5123611afa742331368e9ae529/_embedded_binaries/platforms
       find $bazelOut/external -maxdepth 1 -type l | while read symlink; do
         name="$(basename "$symlink")"
-        rm "$symlink" "$bazelOut/external/@$name.marker"
+        rm "$symlink"
+        test -f "$bazelOut/external/@$name.marker" && rm "$bazelOut/external/@$name.marker"
       done
 
       # Patching symlinks to remove build directory reference
