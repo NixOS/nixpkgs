@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   buildCommand = ''
-    install -Dm555 $src $out/bin/coursier
-    patchShebangs $out/bin/coursier
-    wrapProgram $out/bin/coursier --prefix PATH ":" ${jre}/bin
+    install -Dm555 $src $out/bin/cs
+    patchShebangs $out/bin/cs
+    wrapProgram $out/bin/cs --prefix PATH ":" ${jre}/bin
 
     # copy zsh completion
     install -Dm755 ${zshCompletion version} $out/share/zsh/site-functions/_coursier
