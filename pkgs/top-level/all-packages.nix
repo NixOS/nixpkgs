@@ -3881,6 +3881,8 @@ with pkgs;
 
   libngspice = callPackage ../development/libraries/libngspice { };
 
+  libnixxml = callPackage ../development/libraries/libnixxml { };
+
   libpointmatcher = callPackage ../development/libraries/libpointmatcher { };
 
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };

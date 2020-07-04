@@ -1,20 +1,35 @@
-{ stdenv, fetchurl, pkgconfig, glib, libxml2, libxslt, getopt, nixUnstable, dysnomia, libintl, libiconv }:
+{ stdenv, fetchFromGitHub, pkgconfig, glib, libxml2, libxslt, getopt, gettext, nixUnstable, dysnomia, libintl, libiconv, help2man, doclifter, docbook5, dblatex, doxygen, docbook5_xsl, libnixxml, autoreconfHook }:
 
-stdenv.mkDerivation {
-  name = "disnix-0.8";
+stdenv.mkDerivation rec {
+  name = "disnix-${version}";
+  version = "0.9.1";
 
-  src = fetchurl {
-    url = https://github.com/svanderburg/disnix/files/1756701/disnix-0.8.tar.gz;
-    sha256 = "02cmj1jqk5i90szjsn5csr7qb7n42v04rvl9syx0zi9sx9ldnb0w";
+  src = fetchFromGitHub {
+    owner = "svanderburg";
+    repo = "disnix";
+    rev = "f31ffc8d7d1bbeb197c6b4643d35ce300cf8e87a";
+    sha256 = "sha256-IBDPXM+put9h2aUbxS6TlBeLmautQ8aVPI/jjJjoo+M=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib libxml2 libxslt getopt nixUnstable libintl libiconv dysnomia ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook help2man doclifter docbook5 dblatex doxygen docbook5_xsl ];
+  buildInputs = [ glib libxml2 libxslt getopt gettext nixUnstable libintl libiconv dysnomia libnixxml ];
+  postPatch = ''
+    ./bootstrap
+  '';
+  configureFlags = ''
+    --with-docbook-rng=${docbook5}/xml/rng/docbook
+    --with-docbook-xsl=${docbook5_xsl}/xml/xsl/docbook
+  '';
+
+  preConfigure = ''
+    # TeX needs a writable font cache.
+    export VARTEXFONTS=$TMPDIR/texfonts
+  '';
 
   meta = {
     description = "A Nix-based distributed service deployment tool";
     license = stdenv.lib.licenses.lgpl21Plus;
-    maintainers = [ stdenv.lib.maintainers.sander ];
+    maintainers = with stdenv.lib.maintainers; [ sander tomberek ];
     platforms = stdenv.lib.platforms.unix;
   };
 }
