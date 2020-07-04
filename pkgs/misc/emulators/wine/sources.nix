@@ -52,6 +52,9 @@ in rec {
     owner = "wine-staging";
     repo = "wine-staging";
     rev = "v${version}";
+
+    # Just keep list empty, if current release haven't broken patchsets
+    disabledPatchsets = [ "xactengine-initial" ];
   };
 
   winetricks = fetchFromGitHub rec {

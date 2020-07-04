@@ -18,7 +18,7 @@ in assert stdenv.lib.getVersion wineUnstable == patch.version;
     chmod +w patches
     cd patches
     patchShebangs gitapply.sh
-    ./patchinstall.sh DESTDIR="$PWD/.." --all
+    ./patchinstall.sh DESTDIR="$PWD/.." --all ${stdenv.lib.concatMapStringsSep " " (ps: "-W ${ps}") patch.disabledPatchsets}
     cd ..
   '';
 })) // {
