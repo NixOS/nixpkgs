@@ -53,7 +53,7 @@ in
 , maintainers ? []
 , doCoverage ? false
 , doHaddock ? !(ghc.isHaLVM or false)
-, doHaddockInterfaces ? true
+, doHaddockInterfaces ? stdenv.lib.versionAtLeast ghc.version "8.12"
 , passthru ? {}
 , pkgconfigDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? [], benchmarkPkgconfigDepends ? []
 , testDepends ? [], testHaskellDepends ? [], testSystemDepends ? [], testFrameworkDepends ? []
