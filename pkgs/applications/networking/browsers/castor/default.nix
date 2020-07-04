@@ -13,14 +13,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "castor";
-  version = "0.8.14";
+  version = "0.8.15";
 
   src = fetchurl {
     url = "https://git.sr.ht/~julienxx/castor/archive/${version}.tar.gz";
-    sha256 = "1ykpmbimhfy3ys2hvv0mn8xiwxzdl43gpny1nc58i0gzv07ar8sc";
+    sha256 = "1i6550akxg78c9bh9111c4458ry1nmp3xh7ik7s2zqrp7lmxaf46";
   };
 
-  cargoSha256 = "04w49wka1vkb295lk6fzd6c5rwhzrqkp26hd5d94rx7bhcjmmb9w";
+  cargoSha256 = "1y047cm46l5hph3n48h60xvyh2hr0yagzswp375kiil96ndk206i";
 
   nativeBuildInputs = [
     pkg-config

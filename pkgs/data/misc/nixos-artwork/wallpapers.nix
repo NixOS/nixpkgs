@@ -46,6 +46,15 @@ in
 
 rec {
 
+  dracula = mkNixBackground {
+    name = "dracula-2020-07-02";
+    description = "Nix background based on the Dracula color palette";
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/03c6c20be96c38827037d2238357f2c777ec4aa5/wallpapers/nix-wallpaper-dracula.png";
+      sha256 = "07ly21bhs6cgfl7pv4xlqzdqm44h22frwfhdqyd4gkn2jla1waab";
+    };
+  };
+
   gnome-dark = simple-dark-gray-bottom;
 
   mosaic-blue = mkNixBackground {
@@ -54,6 +63,24 @@ rec {
     src = fetchurl {
       url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/766f10e0c93cb1236a85925a089d861b52ed2905/wallpapers/nix-wallpaper-mosaic-blue.png";
       sha256 = "1cbcssa8qi0giza0k240w5yy4yb2bhc1p1r7pw8qmziprcmwv5n5";
+    };
+  };
+
+  nineish = mkNixBackground {
+    name = "nineish-2019-12-04";
+    description = "Nix background inspired by simpler times";
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/da01f68d21ddfdc9f1c6e520c2170871c81f1cf5/wallpapers/nix-wallpaper-nineish.png";
+      sha256 = "1mwvnmflp0z1biyyhfz7mjn7i1nna94n7jyns3na2shbfkaq7i0h";
+    };
+  };
+
+  nineish-dark-gray = mkNixBackground {
+    name = "nineish-dark-gray-2020-07-02";
+    description = "Dark gray Nix background inspired by simpler times";
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/NixOS/nixos-artwork/f07707cecfd89bc1459d5dad76a3a4c5315efba1/wallpapers/nix-wallpaper-nineish-dark-gray.png";
+      sha256 = "07zl1dlxqh9dav9pibnhr2x1llywwnyphmzcdqaby7dz5js184ly";
     };
   };
 
