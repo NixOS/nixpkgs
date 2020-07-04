@@ -2,6 +2,7 @@
 , autoreconfHook, pkgconfig, libxkbcommon, pango, which, git
 , cairo, libxcb, xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification
 , bison, flex, librsvg, check
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -19,10 +20,15 @@ stdenv.mkDerivation rec {
     sed -i 's/~root/~nobody/g' test/helper-expand.c
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper ];
   buildInputs = [ libxkbcommon pango cairo git bison flex librsvg check
     libstartup_notification libxcb xcbutil xcbutilwm xcbutilxrm which
   ];
+
+  postInstall = ''
+    wrapProgram $out/bin/rofi \
+      --run 'export XDG_DATA_DIRS="$(sed "s| |/share:|g" < <(echo $NIX_PROFILES))/share:$XDG_DATA_DIRS"'
+  '';
 
   doCheck = false;
 
