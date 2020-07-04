@@ -36,7 +36,13 @@ buildPythonPackage rec {
   ];
 
   # Tests try to access the network.
-  doCheck = false;
+  checkPhase = ''
+    export HOME="$TMP"
+    mkdir -p "$HOME/.kaggle/"
+    echo '{"username":"foobar","key":"00000000000000000000000000000000"}' > "$HOME/.kaggle/kaggle.json"
+    $out/bin/kaggle --help > /dev/null
+  '';
+  pythonImportsCheck = [ "kaggle" ];
 
   meta = with lib; {
     description = "Official API for https://www.kaggle.com, accessible using a command line tool implemented in Python 3";
@@ -45,4 +51,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ cdepillabout ];
   };
 }
-
