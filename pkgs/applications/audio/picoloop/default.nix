@@ -38,12 +38,13 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/{bin,share}
     cp PatternPlayer_debian_RtAudio_sdl20 $out/bin/picoloop
-    cp font.* $out/share
+    cp {font.*,LICENSE} $out/share
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Picoloop is a synth and a stepsequencer (a clone of the famous nanoloop).";
     homepage = "https://github.com/yoyz/picoloop";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.bsd3;
   };
 }
