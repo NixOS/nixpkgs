@@ -1,0 +1,42 @@
+---
+ configure | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/configure b/configure
+index d5688cd4..f0985ee3 100755
+--- a/configure
++++ b/configure
+@@ -398,7 +398,7 @@ if [ ${BUILD_USER} == "y" ]; then
+         # have "scan-build" available for the superuser (and the
+         # ker target is invoked on "sudo make install")
+         KER_INSTALL_DEPS=""
+-        if [ $(which scan-build) ]; then
++        if [ $(type -P scan-build) ]; then
+             CLANG_PREFIX="scan-build"
+         fi
+     fi
+@@ -444,8 +444,8 @@ ln -sf ../../common/utils.c utils.c
+ )
+ 
+ if [[ "$USE_CLANG" == "y" ]]; then
+-    export CC=/usr/bin/clang
+-    export CXX=/usr/bin/clang++
++    export CC=$(type -P clang)
++    export CXX=$(type -P clang++)
+ fi
+ 
+ if [ ${BUILD_USER} == "y" ]; then
+@@ -454,8 +454,8 @@ if [ ${BUILD_USER} == "y" ]; then
+     mkdir build || exit 255
+ 
+     if [ "$IWYU" == "y" ]; then
+-        CMAKE_EXTRA+="-DCMAKE_CXX_INCLUDE_WHAT_YOU_USE=/usr/bin/iwyu;-Xiwyu;any;-Xiwyu;iwyu;-Xiwyu;args"
+-        CMAKE_EXTRA+="-DCMAKE_C_INCLUDE_WHAT_YOU_USE=/usr/bin/iwyu;-Xiwyu;any;-Xiwyu;iwyu;-Xiwyu;args"
++        CMAKE_EXTRA+="-DCMAKE_CXX_INCLUDE_WHAT_YOU_USE=$(type -P iwyu);-Xiwyu;any;-Xiwyu;iwyu;-Xiwyu;args"
++        CMAKE_EXTRA+="-DCMAKE_C_INCLUDE_WHAT_YOU_USE=$(type -P iwyu);-Xiwyu;any;-Xiwyu;iwyu;-Xiwyu;args"
+     fi
+ 
+     (
+-- 
+2.26.2
+

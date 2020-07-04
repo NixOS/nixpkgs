@@ -17250,6 +17250,8 @@ in
     # Disable for kernels 4.15 and above due to compatibility issues
     prl-tools = if stdenv.lib.versionOlder kernel.version "4.15" then callPackage ../os-specific/linux/prl-tools { } else null;
 
+    rlite = callPackage ../os-specific/linux/rlite { };
+
     sch_cake = callPackage ../os-specific/linux/sch_cake { };
 
     sysdig = callPackage ../os-specific/linux/sysdig {};
