@@ -13,6 +13,10 @@ buildGoModule rec {
 
   vendorSha256 = "0i0n89lal99fqnzva51kp9f7wzqsfmncpshwxhq26kvykp7ji7sw";
 
+  subPackages = [ "cmd/tendermint" ];
+
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/tendermint/tendermint/version.GitCommit=${src.rev}" ];
+
   meta = with stdenv.lib; {
     description = "Byzantine-Fault Tolerant State Machines. Or Blockchain, for short.";
     homepage = "https://tendermint.com/";
