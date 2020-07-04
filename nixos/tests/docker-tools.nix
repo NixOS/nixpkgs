@@ -178,5 +178,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         # This check may be loosened to allow an *empty* store rather than *no* store.
         docker.succeed("docker run --rm no-store-paths ls /")
         docker.fail("docker run --rm no-store-paths ls /nix/store")
+
+    with subtest("Ensure buildLayeredImage supports files directly under /nix/store"):
+        docker.succeed(
+            "docker load --input='${pkgs.dockerTools.examples.filesInStore}'",
+            "docker run file-in-store |& grep 'some data'",
+        )
   '';
 })

@@ -335,4 +335,14 @@ rec {
     };
   };
 
+  # 19. Support files in the store on buildLayeredImage
+  # See: https://github.com/NixOS/nixpkgs/pull/91084#issuecomment-653496223
+  filesInStore = pkgs.dockerTools.buildLayeredImage {
+    name = "file-in-store";
+    tag = "latest";
+    config.Cmd = [
+      "${pkgs.coreutils}/bin/cat"
+      (pkgs.writeText "somefile" "some data")
+    ];
+  };
 }
