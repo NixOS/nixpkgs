@@ -22992,6 +22992,8 @@ in
 
   weston = callPackage ../applications/window-managers/weston { pipewire = pipewire_0_2; };
 
+  whatmp3 = callPackage ../applications/audio/whatmp3 {};
+
   whitebox-tools = callPackage ../applications/gis/whitebox-tools {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
