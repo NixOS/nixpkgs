@@ -1,0 +1,62 @@
+diff -ur a/Makefile b/Makefile
+--- a/Makefile	2013-10-21 16:17:01.000000000 +0200
++++ b/Makefile	2020-07-03 21:01:26.684818543 +0200
+@@ -5,7 +5,6 @@
+ 
+ PREFIX ?= /usr
+ BINDIR ?= $(PREFIX)/bin
+-MANDIR ?= $(PREFIX)/share/man/man1
+ APPDIR ?= $(PREFIX)/share/applications
+ 
+ PACKAGES = x11 xcomposite xfixes xdamage xrender xext xrandr
+@@ -102,8 +101,6 @@
+ CFLAGS += -Wall
+ 
+ BINS = compton bin/compton-trans
+-MANPAGES = man/compton.1 man/compton-trans.1
+-MANPAGES_HTML = $(addsuffix .html,$(MANPAGES))
+ 
+ # === Recipes ===
+ .DEFAULT_GOAL := compton
+@@ -117,37 +114,19 @@
+ compton: $(OBJS)
+ 	$(CC) $(CFG) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) -o $@ $(OBJS) $(LIBS)
+ 
+-man/%.1: man/%.1.asciidoc
+-	a2x --format manpage $<
+-
+-man/%.1.html: man/%.1.asciidoc
+-	asciidoc $<
+-
+-docs: $(MANPAGES) $(MANPAGES_HTML)
+-
+-install: $(BINS) docs
+-	@install -d "$(DESTDIR)$(BINDIR)" "$(DESTDIR)$(MANDIR)" "$(DESTDIR)$(APPDIR)"
++install: $(BINS)
++	@install -d "$(DESTDIR)$(BINDIR)" "$(DESTDIR)$(APPDIR)"
+ 	@install -m755 $(BINS) "$(DESTDIR)$(BINDIR)"/ 
+-	@install -m644 $(MANPAGES) "$(DESTDIR)$(MANDIR)"/
+ 	@install -m644 compton.desktop "$(DESTDIR)$(APPDIR)"/
+-ifneq "$(DOCDIR)" ""
+-	@install -d "$(DESTDIR)$(DOCDIR)"
+-	@install -m644 README.md compton.sample.conf "$(DESTDIR)$(DOCDIR)"/
+-	@install -m755 dbus-examples/cdbus-driver.sh "$(DESTDIR)$(DOCDIR)"/
+-endif
+ 
+ uninstall:
+ 	@rm -f "$(DESTDIR)$(BINDIR)/compton" "$(DESTDIR)$(BINDIR)/compton-trans"
+-	@rm -f $(addprefix "$(DESTDIR)$(MANDIR)"/, compton.1 compton-trans.1)
+ 	@rm -f "$(DESTDIR)$(APPDIR)/compton.desktop"
+-ifneq "$(DOCDIR)" ""
+-	@rm -f $(addprefix "$(DESTDIR)$(DOCDIR)"/, README.md compton.sample.conf cdbus-driver.sh)
+-endif
+ 
+ clean:
+-	@rm -f $(OBJS) compton $(MANPAGES) $(MANPAGES_HTML) .clang_complete
++	@rm -f $(OBJS) compton .clang_complete
+ 
+ version:
+ 	@echo "$(COMPTON_VERSION)"
+ 
+-.PHONY: uninstall clean docs version
++.PHONY: uninstall clean version

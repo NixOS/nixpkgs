@@ -2770,6 +2770,8 @@ in
 
   compass = callPackage ../development/tools/compass { };
 
+  compton = callPackage ../tools/X11/compton { };
+
   conda = callPackage ../tools/package-management/conda { };
 
   convmv = callPackage ../tools/misc/convmv { };
