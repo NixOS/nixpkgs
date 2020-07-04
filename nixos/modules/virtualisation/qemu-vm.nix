@@ -46,6 +46,13 @@ let
         description = "Extra options passed to device flag.";
       };
 
+      name = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description =
+          "A name for the drive. Must be unique in the drives list. Not passed to qemu.";
+      };
+
     };
 
   };
@@ -73,6 +80,24 @@ let
       "-drive ${driveOpts} ${device}";
 
   drivesCmdLine = drives: concatStringsSep " " (imap1 driveCmdline drives);
+
+  # Creates a device name from a 1-based a numerical index, e.g.
+  # * `driveDeviceName 1` -> `/dev/vda`
+  # * `driveDeviceName 2` -> `/dev/vdb`
+  driveDeviceName = idx:
+    let letter = elemAt lowerChars (idx - 1);
+    in if cfg.qemu.diskInterface == "scsi" then
+      "/dev/sd${letter}"
+    else
+      "/dev/vd${letter}";
+
+  lookupDriveDeviceName = driveName: driveList:
+    (findSingle (drive: drive.name == driveName)
+      (throw "Drive ${driveName} not found")
+      (throw "Multiple drives named ${driveName}") driveList).device;
+
+  addDeviceNames =
+    imap1 (idx: drive: drive // { device = driveDeviceName idx; });
 
   # Shell script to start the VM.
   startVM =
@@ -396,6 +421,7 @@ in
         mkOption {
           type = types.listOf (types.submodule driveOpts);
           description = "Drives passed to qemu.";
+          apply = addDeviceNames;
         };
 
       diskInterface =
@@ -512,8 +538,7 @@ in
       optional cfg.writableStore "overlay"
       ++ optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx";
 
-    virtualisation.bootDevice =
-      mkDefault (if cfg.qemu.diskInterface == "scsi" then "/dev/sda" else "/dev/vda");
+    virtualisation.bootDevice = mkDefault (driveDeviceName 1);
 
     virtualisation.pathsInNixDB = [ config.system.build.toplevel ];
 
@@ -542,23 +567,18 @@ in
     ];
 
     virtualisation.qemu.drives = mkMerge [
+      [{
+        name = "root";
+        file = "$NIX_DISK_IMAGE";
+        driveExtraOpts.cache = "writeback";
+        driveExtraOpts.werror = "report";
+      }]
       (mkIf cfg.useBootLoader [
         {
-          file = "$NIX_DISK_IMAGE";
-          driveExtraOpts.cache = "writeback";
-          driveExtraOpts.werror = "report";
-        }
-        {
+          name = "boot";
           file = "$TMPDIR/disk.img";
           driveExtraOpts.media = "disk";
           deviceExtraOpts.bootindex = "1";
-        }
-      ])
-      (mkIf (!cfg.useBootLoader) [
-        {
-          file = "$NIX_DISK_IMAGE";
-          driveExtraOpts.cache = "writeback";
-          driveExtraOpts.werror = "report";
         }
       ])
       (imap0 (idx: _: {
@@ -608,7 +628,7 @@ in
           };
       } // optionalAttrs cfg.useBootLoader
       { "/boot" =
-          { device = "/dev/vdb2";
+          { device = "${lookupDriveDeviceName "boot" cfg.qemu.drives}2";
             fsType = "vfat";
             options = [ "ro" ];
             noCheck = true; # fsck fails on a r/o filesystem

@@ -2459,7 +2459,7 @@ in {
 
   pretend = callPackage ../development/python-modules/pretend { };
 
-  detox = callPackage ../development/python-modules/detox { };
+  detox = throw "detox is no longer maintained, and was broken since may 2019"; # added 2020-07-04
 
   pbkdf2 = callPackage ../development/python-modules/pbkdf2 { };
 

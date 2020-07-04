@@ -10588,6 +10588,7 @@ in
   gradle_4_10 = res.gradleGen.gradle_4_10;
   gradle_4 = gradle_4_10;
   gradle_5 = res.gradleGen.gradle_5_6;
+  gradle_6 = res.gradleGen.gradle_6_5;
 
   gperf = callPackage ../development/tools/misc/gperf { };
   # 3.1 changed some parameters from int to size_t, leading to mismatches.
@@ -19239,7 +19240,9 @@ in
 
   coyim = callPackage ../applications/networking/instant-messengers/coyim {};
 
-  cq-editor = libsForQt5.callPackage ../applications/graphics/cq-editor { };
+  cq-editor = libsForQt5.callPackage ../applications/graphics/cq-editor {
+    python3Packages = python37Packages;
+  };
 
   cpp_ethereum = callPackage ../applications/misc/cpp-ethereum { };
 
