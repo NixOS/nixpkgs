@@ -7292,6 +7292,8 @@ in
 
   uqmi = callPackage ../tools/networking/uqmi { };
 
+  urdfdom = callPackage ../development/libraries/urdfdom {};
+
   urdfdom-headers = callPackage ../development/libraries/urdfdom-headers {};
 
   uriparser = callPackage ../development/libraries/uriparser {};
