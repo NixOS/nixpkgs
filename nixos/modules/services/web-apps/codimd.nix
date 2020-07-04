@@ -385,7 +385,7 @@ in
         type = types.bool;
         default = true;
         description = ''
-          Wether to enable email registration.
+          Whether to enable email registration.
         '';
       };
       allowGravatar = mkOption {
