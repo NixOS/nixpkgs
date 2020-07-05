@@ -3857,6 +3857,8 @@ in
 
   feedreader = callPackage ../applications/networking/feedreaders/feedreader {};
 
+  feeds = callPackage ../applications/networking/feedreaders/feeds {};
+
   fend = callPackage ../tools/misc/fend { };
 
   ferm = callPackage ../tools/networking/ferm { };
