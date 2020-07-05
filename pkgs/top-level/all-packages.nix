@@ -12901,7 +12901,9 @@ in
     libGL = null;
   };
 
-  libdigidoc = callPackage ../development/libraries/libdigidoc { };
+  libdigidoc = callPackage ../development/libraries/libdigidoc {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   libdigidocpp = callPackage ../development/libraries/libdigidocpp { };
 
