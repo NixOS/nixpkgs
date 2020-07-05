@@ -2267,6 +2267,8 @@ in {
 
   cftime = callPackage ../development/python-modules/cftime {};
 
+  cfunits = callPackage ../development/python-modules/cfunits { };
+
   cjson = callPackage ../development/python-modules/cjson { };
 
   cld2-cffi = callPackage ../development/python-modules/cld2-cffi {};

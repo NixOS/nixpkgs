@@ -904,6 +904,8 @@ in
 
   cconv = callPackage ../tools/text/cconv { };
 
+  cfchecker = python3Packages.callPackage ../tools/misc/cfchecker { };
+
   go-check = callPackage ../development/tools/check { };
 
   chkcrontab = callPackage ../tools/admin/chkcrontab { };
