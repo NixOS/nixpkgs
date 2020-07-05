@@ -1,37 +1,47 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
-, boost, bison, curl, ncurses, openssl, xxd
-, libaio, libev, libgcrypt, libgpgerror, libtool, zlib
+{ stdenv, fetchFromGitHub, bison, boost, cmake, makeWrapper, pkgconfig
+, curl, cyrus_sasl, libaio, libedit, libev, libevent, libgcrypt, libgpgerror, lz4
+, ncurses, numactl, openssl, protobuf, valgrind, xxd, zlib
+, perlPackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "percona-xtrabackup";
-  version = "2.4.12";
+  version = "2.4.20";
 
   src = fetchFromGitHub {
     owner = "percona";
     repo = "percona-xtrabackup";
     rev = "${pname}-${version}";
-    sha256 = "1w17v2c677b3vfnm81bs63kjbfiin7f12wl9fbgp83hfpyx5msan";
+    sha256 = "0awdpkcgvx2aq7pwxy8jyzkin6cyrrh3d576x9ldm851kis9n5ii";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ bison boost cmake makeWrapper pkgconfig ];
 
   buildInputs = [
-    boost bison curl ncurses openssl xxd
-    libaio libev libgcrypt libgpgerror libtool zlib
-  ];
+    curl cyrus_sasl libaio libedit libev libevent libgcrypt libgpgerror lz4
+    ncurses numactl openssl protobuf valgrind xxd zlib
+  ] ++ (with perlPackages; [ perl DBI DBDmysql ]);
 
   cmakeFlags = [
+    "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
     "-DBUILD_CONFIG=xtrabackup_release"
     "-DINSTALL_MYSQLTESTDIR=OFF"
     "-DWITH_BOOST=system"
+    "-DWITH_CURL=system"
+    "-DWITH_EDITLINE=system"
+    "-DWITH_LIBEVENT=system"
+    "-DWITH_LZ4=system"
+    "-DWITH_PROTOBUF=system"
+    "-DWITH_SASL=system"
     "-DWITH_SSL=system"
     "-DWITH_ZLIB=system"
+    "-DWITH_VALGRIND=ON"
     "-DWITH_MAN_PAGES=OFF"
-    "-DCMAKE_CXX_FLAGS=-std=gnu++03"
+    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # To run libmysql/libmysql_api_test during build.
   ];
 
   postInstall = ''
+    wrapProgram "$out"/bin/xtrabackup --prefix PERL5LIB : $PERL5LIB
     rm -r "$out"/lib/plugin/debug
   '';
 
