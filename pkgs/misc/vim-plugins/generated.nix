@@ -5930,6 +5930,18 @@ let
     meta.homepage = "https://github.com/racer-rust/vim-racer/";
   };
 
+  vim-rails = buildVimPluginFrom2Nix {
+    pname = "vim-rails";
+    version = "2020-06-19";
+    src = fetchFromGitHub {
+      owner = "tpope";
+      repo = "vim-rails";
+      rev = "187742a3c18d93e6968f024d7db0f4fc5548408e";
+      sha256 = "132rvyn5pwg5xkm6q64k33vm6q9hfpng0wq25387l8l8a7hvj3az";
+    };
+    meta.homepage = "https://github.com/tpope/vim-rails/";
+  };
+
   vim-repeat = buildVimPluginFrom2Nix {
     pname = "vim-repeat";
     version = "2019-11-13";
