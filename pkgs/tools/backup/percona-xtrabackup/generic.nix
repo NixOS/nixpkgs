@@ -2,17 +2,18 @@
 , curl, cyrus_sasl, libaio, libedit, libev, libevent, libgcrypt, libgpgerror, lz4
 , ncurses, numactl, openssl, protobuf, valgrind, xxd, zlib
 , perlPackages
+, version, sha256, extraPatches ? [], extraPostInstall ? "", ...
 }:
 
 stdenv.mkDerivation rec {
   pname = "percona-xtrabackup";
-  version = "2.4.20";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "percona";
     repo = "percona-xtrabackup";
     rev = "${pname}-${version}";
-    sha256 = "0awdpkcgvx2aq7pwxy8jyzkin6cyrrh3d576x9ldm851kis9n5ii";
+    inherit sha256;
   };
 
   nativeBuildInputs = [ bison boost cmake makeWrapper pkgconfig ];
@@ -21,6 +22,8 @@ stdenv.mkDerivation rec {
     curl cyrus_sasl libaio libedit libev libevent libgcrypt libgpgerror lz4
     ncurses numactl openssl protobuf valgrind xxd zlib
   ] ++ (with perlPackages; [ perl DBI DBDmysql ]);
+
+  patches = extraPatches;
 
   cmakeFlags = [
     "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
@@ -43,7 +46,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram "$out"/bin/xtrabackup --prefix PERL5LIB : $PERL5LIB
     rm -r "$out"/lib/plugin/debug
-  '';
+  '' + extraPostInstall;
 
   meta = with stdenv.lib; {
     description = "Non-blocking backup tool for MySQL";
