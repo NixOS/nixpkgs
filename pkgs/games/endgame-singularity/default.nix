@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , unzip
 , python3
+, enableDefaultMusicPack ? true
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -16,18 +17,19 @@ python3.pkgs.buildPythonApplication rec {
       rev = "v${version}";
       sha256 = "0ndrnxwii8lag6vrjpwpf5n36hhv223bb46d431l9gsigbizv0hl";
     })
-    (fetchurl {
+  ] ++ stdenv.lib.optional enableDefaultMusicPack (
+    fetchurl {
       url = "http://www.emhsoft.com/singularity/endgame-singularity-music-007.zip";
       sha256 = "0vf2qaf66jh56728pq1zbnw50yckjz6pf6c6qw6dl7vk60kkqnpb";
-    })
-  ];
+    }
+  );
   sourceRoot = "source";
 
   nativeBuildInputs = [ unzip ]; # The music is zipped
   propagatedBuildInputs = with python3.pkgs; [ pygame numpy polib ];
 
   # Add the music
-  postInstall = ''
+  postInstall = stdenv.lib.optionalString enableDefaultMusicPack ''
     cp -R "../endgame-singularity-music-007" \
           "$(echo $out/lib/python*/site-packages/singularity)/music"
           # ↑ we cannot glob on [...]/music, it doesn't exist yet
