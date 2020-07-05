@@ -682,6 +682,12 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
        behaviour and keep the same VM state between different test runs.
      </para>
    </listitem>
+   <listitem>
+    <para>
+     The <link linkend="opt-nix.buildMachine">nix.buildMachine</link> option is now type-checked.
+     There are no functional changes, however this may require updating some configurations to use correct types for all attributes.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
