@@ -200,25 +200,9 @@ let
           hardeningDisable = [ "bindnow" ];
 
           preConfigure =
-          # Don't record the configure flags since this causes unnecessary
-          # runtime dependencies
           ''
-            for i in main/build-defs.h.in scripts/php-config.in; do
-              substituteInPlace $i \
-                --replace '@CONFIGURE_COMMAND@' '(omitted)' \
-                --replace '@CONFIGURE_OPTIONS@' "" \
-                --replace '@PHP_LDFLAGS@' ""
-            done
-
             export EXTENSION_DIR=$out/lib/php/extensions
-          ''
-          # PKG_CONFIG need not be a relative path
-          + lib.optionalString (! lib.versionAtLeast version "7.4") ''
-            for i in $(find . -type f -name "*.m4"); do
-              substituteInPlace $i \
-                --replace 'test -x "$PKG_CONFIG"' 'type -P "$PKG_CONFIG" >/dev/null'
-            done
-          '' + ''
+
             ./buildconf --copy --force
 
             if test -f $src/genfiles; then
@@ -271,21 +255,38 @@ let
     version = "7.2.31";
     sha256 = "0057x1s43f9jidmrl8daka6wpxclxc1b1pm5cjbz616p8nbmb9qv";
 
-    # https://bugs.php.net/bug.php?id=76826
-    extraPatches = lib.optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
+    extraPatches = [
+      # Don't record the configure flags since this causes unnecessary runtime dependencies
+      ./fix-runtime-deps-php72.patch
+      # PKG_CONFIG need not be a relative path
+      ./fix-paths-pkgconfig-php72.patch
+    ]
+      # https://bugs.php.net/bug.php?id=76826
+      ++ lib.optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
   });
 
   php73base = callPackage generic (_args // {
     version = "7.3.19";
     sha256 = "199l1lr7ima92icic7b1bqlb036md78m305lc3v6zd4zw8qix70d";
 
-    # https://bugs.php.net/bug.php?id=76826
-    extraPatches = lib.optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
+    extraPatches = [
+      # Don't record the configure flags since this causes unnecessary runtime dependencies
+      ./fix-runtime-deps-php73.patch
+      # PKG_CONFIG need not be a relative path
+      ./fix-paths-pkgconfig-php73.patch
+    ]
+      # https://bugs.php.net/bug.php?id=76826
+      ++ lib.optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
   });
 
   php74base = callPackage generic (_args // {
     version = "7.4.7";
     sha256 = "0ynq4fz54jpzh9nxvbgn3vrdad2clbac0989ai0yrj2ryc0hs3l0";
+
+    extraPatches = [
+      # Don't record the configure flags since this causes unnecessary runtime dependencies
+      ./fix-runtime-deps-php74.patch
+    ];
   });
 
   defaultPhpExtensions = { all, ... }: with all; ([
