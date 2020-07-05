@@ -777,6 +777,11 @@ in {
 
   glom = callPackage ../development/python-modules/glom { };
 
+  gdcm = disabledIf isPy27 (toPythonModule (pkgs.gdcm.override {
+    inherit (self) python;
+    enablePython = true;
+  }));
+
   goocalendar = callPackage ../development/python-modules/goocalendar { };
 
   grandalf = callPackage ../development/python-modules/grandalf { };
