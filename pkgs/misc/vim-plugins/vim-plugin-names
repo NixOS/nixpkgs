@@ -371,6 +371,7 @@ ntpeters/vim-better-whitespace
 numirias/semshi
 nvie/vim-flake8
 nvim-lua/completion-nvim
+nvim-treesitter/completion-treesitter
 nvim-treesitter/nvim-treesitter
 octol/vim-cpp-enhanced-highlight
 Olical/conjure

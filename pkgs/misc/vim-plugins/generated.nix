@@ -856,6 +856,18 @@ let
     meta.homepage = "https://github.com/nvim-lua/completion-nvim/";
   };
 
+  completion-treesitter = buildVimPluginFrom2Nix {
+    pname = "completion-treesitter";
+    version = "2020-06-26";
+    src = fetchFromGitHub {
+      owner = "nvim-treesitter";
+      repo = "completion-treesitter";
+      rev = "45c9b2faff4785539a0d0c655440c2465fed985a";
+      sha256 = "19pgdzzk7zq85b1grfjf0nncvs5vxrd4rj1p90iw2amq4mvqrx3l";
+    };
+    meta.homepage = "https://github.com/nvim-treesitter/completion-treesitter/";
+  };
+
   concealedyank-vim = buildVimPluginFrom2Nix {
     pname = "concealedyank-vim";
     version = "2013-03-24";
