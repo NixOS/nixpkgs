@@ -71,6 +71,17 @@ if ! test -e "$mountPoint"; then
     exit 1
 fi
 
+# Verify permissions are okay-enough
+checkPath="$(realpath "$mountPoint")"
+while [[ "$checkPath" != "/" ]]; do
+    mode="$(stat -c '%a' "$checkPath")"
+    if [[ "${mode: -1}" -lt "5" ]]; then
+        echo "path $checkPath should have permissions 755, but had permissions $mode. Consider running 'chmod o+rx $checkPath'."
+        exit 1
+    fi
+    checkPath="$(dirname "$checkPath")"
+done
+
 # Get the path of the NixOS configuration file.
 if [[ -z $NIXOS_CONFIG ]]; then
     NIXOS_CONFIG=$mountPoint/etc/nixos/configuration.nix
