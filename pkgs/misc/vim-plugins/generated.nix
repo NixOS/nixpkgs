@@ -1990,6 +1990,18 @@ let
     meta.homepage = "https://github.com/vim-scripts/matchit.zip/";
   };
 
+  MatchTagAlways = buildVimPluginFrom2Nix {
+    pname = "MatchTagAlways";
+    version = "2017-05-20";
+    src = fetchFromGitHub {
+      owner = "Valloric";
+      repo = "MatchTagAlways";
+      rev = "352eb479a4ad1608e0880b79ab2357aac2cf4bed";
+      sha256 = "0y8gq4cs0wm2ijagc2frpmm664z355iridxyl5893576v5aqp8z1";
+    };
+    meta.homepage = "https://github.com/Valloric/MatchTagAlways/";
+  };
+
   mattn-calendar-vim = buildVimPluginFrom2Nix {
     pname = "mattn-calendar-vim";
     version = "2019-11-24";
