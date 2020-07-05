@@ -18340,6 +18340,8 @@ in
 
   manrope = callPackage ../data/fonts/manrope { };
 
+  marwaita = callPackage ../data/themes/marwaita { };
+
   matcha-gtk-theme = callPackage ../data/themes/matcha { };
 
   materia-theme = callPackage ../data/themes/materia-theme { };
