@@ -151,6 +151,12 @@
     githubId = 124545;
     name = "Anthony Cowley";
   };
+  adamse = {
+    email = "adam@sandbergeriksson.se";
+    github = "adamse";
+    githubId = 75746;
+    name = "Adam Sandberg Eriksson";
+  };
   adamt = {
     email = "mail@adamtulinius.dk";
     github = "adamtulinius";
