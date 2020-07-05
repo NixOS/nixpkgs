@@ -69,12 +69,6 @@ rustPlatform.buildRustPackage rec {
   checkPhase = null;
   installPhase = null;
 
-  postFixup = ''
-    # Substitute the placeholder created by desktop-in.patch
-    substituteInPlace "$out/share/applications/sm.puri.Squeekboard.desktop" \
-        --replace "@bindir@" "$out/bin"
-  '';
-
   meta = with stdenv.lib; {
     description = "Squeekboard is a virtual keyboard supporting Wayland";
     homepage = "https://source.puri.sm/Librem5/squeekboard";
