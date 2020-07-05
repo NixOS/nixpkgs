@@ -47,19 +47,26 @@ pkgs.runCommand "acme-snakeoil-ca" {
       default_bits = 4096
       prompt = no
       default_md = sha256
-      req_extensions = req_ext
       distinguished_name = dn
       [dn]
       CN = ${fqdn}
-      [req_ext]
-      subjectAltName = DNS:${fqdn}
+    '';
+    v3ExtFile = pkgs.writeText "v3.ext" ''
+      authorityKeyIdentifier=keyid,issuer
+      basicConstraints=CA:FALSE
+      keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+      subjectAltName = @alt_names
+      
+      [alt_names]
+      DNS.1 = ${fqdn}
     '';
   in ''
     export OPENSSL_CONF=${lib.escapeShellArg opensslConfig}
     openssl genrsa -out snakeoil.key 4096
     openssl req -new -key snakeoil.key -out snakeoil.csr
     openssl x509 -req -in snakeoil.csr -sha256 -set_serial 666 \
-      -CA ca.pem -CAkey ca.key -out snakeoil.pem -days 36500
+      -CA ca.pem -CAkey ca.key -out snakeoil.pem -days 36500 \
+      -extfile ${lib.escapeShellArg v3ExtFile}
     addpem snakeoil.key ${lib.escapeShellArg fqdn} key
     addpem snakeoil.pem ${lib.escapeShellArg fqdn} cert
   '') domains}
