@@ -893,7 +893,7 @@ def run_tests() -> None:
             try:
                 exec(tests, globals())
             except Exception as e:
-                print("error: ")
+                eprint("error: ")
                 traceback.print_exc()
                 sys.exit(1)
     else:
