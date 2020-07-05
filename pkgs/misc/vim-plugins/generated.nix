@@ -844,6 +844,18 @@ let
     meta.homepage = "https://github.com/rhysd/committia.vim/";
   };
 
+  completion-nvim = buildVimPluginFrom2Nix {
+    pname = "completion-nvim";
+    version = "2020-07-05";
+    src = fetchFromGitHub {
+      owner = "nvim-lua";
+      repo = "completion-nvim";
+      rev = "e4dddd8e29224c667972fc33a2537a2e7e1e1a4c";
+      sha256 = "1jlfcs3ajkxs43sad07z24xlfjm70zfh49ww1z5ifw1s05hwhmhy";
+    };
+    meta.homepage = "https://github.com/nvim-lua/completion-nvim/";
+  };
+
   concealedyank-vim = buildVimPluginFrom2Nix {
     pname = "concealedyank-vim";
     version = "2013-03-24";
