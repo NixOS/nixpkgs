@@ -25,9 +25,9 @@ in {
   dev = mkFlutter rec {
     pname = "flutter-dev";
     channel = "dev";
-    version = "1.20.0-0.0.pre";
+    version = "1.20.0-3.0.pre";
     filename = "flutter_linux_${version}-${channel}.tar.xz";
-    sha256Hash = "1gjsvsw9wnfcip1hcm0dksgyp23jnvfl98gzj1dl1gyrqdrmj15b";
+    sha256Hash = "0pi5xmg8b863l07fzx7m7pdzh9gmpfsgva1sahx8a6nxkqdpgc50";
     patches = getPatches ./patches/beta;
   };
 }
