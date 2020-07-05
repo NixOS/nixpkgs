@@ -9,9 +9,9 @@ in {
   stable = mkFlutter rec {
     pname = "flutter";
     channel = "stable";
-    version = "1.17.3";
+    version = "1.17.5";
     filename = "flutter_linux_${version}-${channel}.tar.xz";
-    sha256Hash = "16ymnphah0xqf9vn44syznmr66xbkdh4y75ynk7nr8aisrcdd81z";
+    sha256Hash = "0kapja3nh7dfhjbn2np02wghijrjnpzsv4hz10fj54hs8hdx19di";
     patches = getPatches ./patches/stable;
   };
   beta = mkFlutter rec {
