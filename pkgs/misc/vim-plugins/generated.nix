@@ -5881,6 +5881,18 @@ let
     meta.homepage = "https://github.com/jceb/vim-orgmode/";
   };
 
+  vim-over = buildVimPluginFrom2Nix {
+    pname = "vim-over";
+    version = "2020-01-26";
+    src = fetchFromGitHub {
+      owner = "osyo-manga";
+      repo = "vim-over";
+      rev = "878f83bdac0cda308f599d319f45c7877d5274a9";
+      sha256 = "00k29pcn69d9036jhjpd1xqxh59qwl30l37lsfijlv18ks0wwiqn";
+    };
+    meta.homepage = "https://github.com/osyo-manga/vim-over/";
+  };
+
   vim-packer = buildVimPluginFrom2Nix {
     pname = "vim-packer";
     version = "2018-11-11";
