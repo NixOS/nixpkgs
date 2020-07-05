@@ -34,9 +34,6 @@ qtModule {
     bison flex gdb gperf perl pkgconfig python2 ruby
   ] ++ optional usingAnnulenWebkitFork cmake;
 
-  # Temporary fix for https://github.com/NixOS/nixpkgs/commit/be1b22538a60e52987d238bb11f93043682b6e9a
-  setOutputFlags = true;
-
   cmakeFlags = optionals usingAnnulenWebkitFork ([ "-DPORT=Qt" ]
     ++ optionals stdenv.isDarwin [
       "-DQt5Multimedia_DIR=${getDev qtmultimedia}/lib/cmake/Qt5Multimedia"
