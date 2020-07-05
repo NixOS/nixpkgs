@@ -17,9 +17,9 @@ in {
   beta = mkFlutter rec {
     pname = "flutter-beta";
     channel = "beta";
-    version = "1.19.0-4.1.pre";
+    version = "1.19.0-4.3.pre";
     filename = "flutter_linux_${version}-${channel}.tar.xz";
-    sha256Hash = "002aprwjx7wd79dy6rb61knddb8n23gwa5z8a9dydv0igjw50r32";
+    sha256Hash = "1hlkvvcfy53g69qnqq29izh5c0ylmx4w9m5kb78x97yld6jzf37p";
     patches = getPatches ./patches/beta;
   };
   dev = mkFlutter rec {
