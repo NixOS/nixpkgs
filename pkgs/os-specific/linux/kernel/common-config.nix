@@ -255,7 +255,7 @@ let
       SND_HDA_RECONFIG    = yes; # Support reconfiguration of jack functions
       # Support configuring jack functions via fw mechanism at boot
       SND_HDA_PATCH_LOADER = yes;
-      SND_HDA_CODEC_CA0132_DSP = whenOlder "5.8" yes; # Enable DSP firmware loading on Creative Soundblaster Z/Zx/ZxR/Recon
+      SND_HDA_CODEC_CA0132_DSP = whenOlder "5.7" yes; # Enable DSP firmware loading on Creative Soundblaster Z/Zx/ZxR/Recon
       SND_OSSEMUL         = yes;
       SND_USB_CAIAQ_INPUT = yes;
       # Enable PSS mixer (Beethoven ADSP-16 and other compatible)
@@ -638,6 +638,14 @@ let
       HID_BATTERY_STRENGTH = yes;
       # enabled by default in x86_64 but not arm64, so we do that here
       HIDRAW               = yes;
+
+      HID_ACRUX_FF       = yes;
+      DRAGONRISE_FF      = yes;
+      HOLTEK_FF          = yes;
+      SONY_FF            = yes;
+      SMARTJOYPLUS_FF    = yes;
+      THRUSTMASTER_FF    = yes;
+      ZEROPLUS_FF        = yes;
 
       MODULE_COMPRESS    = yes;
       MODULE_COMPRESS_XZ = yes;

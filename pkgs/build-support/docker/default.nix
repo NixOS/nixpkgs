@@ -11,6 +11,7 @@
   jq,
   jshon,
   lib,
+  makeWrapper,
   moreutils,
   nix,
   pigz,
@@ -29,6 +30,7 @@
   writeReferencesToFile,
   writeScript,
   writeText,
+  writePython3,
 }:
 
 # WARNING: this API is unstable and may be subject to backwards-incompatible changes in the future.
@@ -204,23 +206,16 @@ rec {
         mkdir image
         tar -C image -xpf "$fromImage"
 
-        # If the image name isn't set, read it from the image repository json.
-        if [[ -z "$fromImageName" ]]; then
-          fromImageName=$(jshon -k < image/repositories | head -n 1)
-          echo "From-image name wasn't set. Read $fromImageName."
+        if [[ -n "$fromImageName" ]] && [[ -n "$fromImageTag" ]]; then
+          parentID="$(
+            cat "image/manifest.json" |
+              jq -r '.[] | select(.RepoTags | contains([$desiredTag])) | rtrimstr(".json")' \
+                --arg desiredTag "$fromImageName:$fromImageTag"
+          )"
+        else
+          echo "From-image name or tag wasn't set. Reading the first ID."
+          parentID="$(cat "image/manifest.json" | jq -r '.[0].Config | rtrimstr(".json")')"
         fi
-
-        # If the tag isn't set, use the name as an index into the json
-        # and read the first key found.
-        if [[ -z "$fromImageTag" ]]; then
-          fromImageTag=$(jshon -e $fromImageName -k < image/repositories \
-                         | head -n1)
-          echo "From-image tag wasn't set. Read $fromImageTag."
-        fi
-
-        # Use the name and tag to get the parent ID field.
-        parentID=$(jshon -e $fromImageName -e $fromImageTag -u \
-                   < image/repositories)
 
         cat ./image/manifest.json  | jq -r '.[0].Layers | .[]' > layer-list
       else
@@ -305,106 +300,6 @@ rec {
       ${text}
     '';
 
-  # Create $maxLayers worth of Docker Layers, one layer per store path
-  # unless there are more paths than $maxLayers. In that case, create
-  # $maxLayers-1 for the most popular layers, and smush the remainaing
-  # store paths in to one final layer.
-  #
-  # NOTE: the `closures` parameter is a list of closures to include.
-  # The TOP LEVEL store paths themselves will never be present in the
-  # resulting image. At this time (2019-12-16) none of these layers
-  # are appropriate to include, as they are all created as
-  # implementation details of dockerTools.
-  mkManyPureLayers = {
-    name,
-    # Files to add to the layer.
-    closures,
-    configJson,
-    # Docker has a 125-layer maximum, we pick 100 to ensure there is
-    # plenty of room for extension.
-    # https://github.com/moby/moby/blob/b3e9f7b13b0f0c414fa6253e1f17a86b2cff68b5/layer/layer_store.go#L23-L26
-    maxLayers ? 100
-  }:
-    let
-      storePathToLayer = substituteAll
-      { shell = runtimeShell;
-        isExecutable = true;
-        src = ./store-path-to-layer.sh;
-      };
-
-      overallClosure = writeText "closure" (lib.concatStringsSep " " closures);
-    in
-    runCommand "${name}-granular-docker-layers" {
-      inherit maxLayers;
-      paths = referencesByPopularity overallClosure;
-      nativeBuildInputs = [ jshon rsync tarsum moreutils ];
-      enableParallelBuilding = true;
-    }
-    ''
-      mkdir layers
-
-      # Delete impurities for store path layers, so they don't get
-      # shared and taint other projects.
-      cat ${configJson} \
-        | jshon -d config \
-        | jshon -s "1970-01-01T00:00:01Z" -i created > generic.json
-
-      # WARNING!
-      # The following code is fiddly w.r.t. ensuring every layer is
-      # created, and that no paths are missed. If you change the
-      # following head and tail call lines, double-check that your
-      # code behaves properly when the number of layers equals:
-      #      maxLayers-1, maxLayers, and maxLayers+1, 0
-      paths() {
-        cat $paths ${lib.concatMapStringsSep " " (path: "| (grep -v ${path} || true)") (closures ++ [ overallClosure ])}
-      }
-
-      paths | head -n $((maxLayers - 1)) | cat -n | xargs -r -P$NIX_BUILD_CORES -n2 ${storePathToLayer}
-      if [ $(paths | wc -l) -ge $maxLayers ]; then
-        paths | tail -n+$maxLayers | xargs ${storePathToLayer} $maxLayers
-      fi
-
-      echo "Finished building layer '$name'"
-
-      mv ./layers $out
-    '';
-
-  # Create a "Customisation" layer which adds symlinks at the root of
-  # the image to the root paths of the closure. Also add the config
-  # data like what command to run and the environment to run it in.
-  mkCustomisationLayer = {
-    name,
-    # Files to add to the layer.
-    contents,
-    baseJson,
-    extraCommands,
-    uid ? 0, gid ? 0,
-  }:
-    runCommand "${name}-customisation-layer" {
-      nativeBuildInputs = [ jshon rsync tarsum ];
-      inherit extraCommands;
-    }
-    ''
-      cp -r ${contents}/ ./layer
-
-      if [[ -n $extraCommands ]]; then
-        chmod ug+w layer
-        (cd layer; eval "$extraCommands")
-      fi
-
-      # Tar up the layer and throw it into 'layer.tar', while calculating its checksum.
-      echo "Packing layer..."
-      mkdir $out
-      tarhash=$(tar --transform='s|^\./||' -C layer --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf - . | tee $out/layer.tar | tarsum)
-
-      # Add a 'checksum' field to the JSON, with the value set to the
-      # checksum of the tarball.
-      cat ${baseJson} | jshon -s "$tarhash" -i checksum > $out/json
-
-      # Indicate to docker that we're using schema version 1.0.
-      echo -n "1.0" > $out/VERSION
-    '';
-
   # Create a "layer" (set of files).
   mkPureLayer = {
     # Name of the layer
@@ -438,7 +333,7 @@ rec {
 
       chmod ug+w layer
 
-      if [[ -n $extraCommands ]]; then
+      if [[ -n "$extraCommands" ]]; then
         (cd layer; eval "$extraCommands")
       fi
 
@@ -541,131 +436,14 @@ rec {
       '';
     };
 
-  buildLayeredImage = {
-    # Image Name
-    name,
-    # Image tag, the Nix's output hash will be used if null
-    tag ? null,
-    # Files to put on the image (a nix store path or list of paths).
-    contents ? [],
-    # Docker config; e.g. what command to run on the container.
-    config ? {},
-    # Time of creation of the image. Passing "now" will make the
-    # created date be the time of building.
-    created ? "1970-01-01T00:00:01Z",
-    # Optional bash script to run on the files prior to fixturizing the layer.
-    extraCommands ? "", uid ? 0, gid ? 0,
-    # We pick 100 to ensure there is plenty of room for extension. I
-    # believe the actual maximum is 128.
-    maxLayers ? 100
-  }:
-    assert
-      (lib.assertMsg (maxLayers > 1)
-      "the maxLayers argument of dockerTools.buildLayeredImage function must be greather than 1 (current value: ${toString maxLayers})");
+  buildLayeredImage = {name, ...}@args:
     let
-      baseName = baseNameOf name;
-      contentsEnv = symlinkJoin {
-        name = "bulk-layers";
-        paths = if builtins.isList contents
-          then contents
-          else [ contents ];
-      };
-
-      configJson = let
-          pure = writeText "${baseName}-config.json" (builtins.toJSON {
-            inherit created config;
-            architecture = buildPackages.go.GOARCH;
-            os = "linux";
-          });
-          impure = runCommand "${baseName}-standard-dynamic-date.json"
-            { nativeBuildInputs = [ jq ]; }
-            ''
-               jq ".created = \"$(TZ=utc date --iso-8601="seconds")\"" ${pure} > $out
-            '';
-        in if created == "now" then impure else pure;
-
-      bulkLayers = mkManyPureLayers {
-          name = baseName;
-          closures = [ contentsEnv configJson ];
-          # One layer will be taken up by the customisationLayer, so
-          # take up one less.
-          maxLayers = maxLayers - 1;
-          inherit configJson;
-        };
-      customisationLayer = mkCustomisationLayer {
-          name = baseName;
-          contents = contentsEnv;
-          baseJson = configJson;
-          inherit uid gid extraCommands;
-        };
-      result = runCommand "docker-image-${baseName}.tar.gz" {
-        nativeBuildInputs = [ jshon pigz coreutils findutils jq ];
-        # Image name and tag must be lowercase
-        imageName = lib.toLower name;
-        baseJson = configJson;
-        passthru.imageTag =
-          if tag == null
-          then lib.head (lib.splitString "-" (lib.last (lib.splitString "/" result)))
-          else lib.toLower tag;
-        # Docker can't be made to run darwin binaries
-        meta.badPlatforms = lib.platforms.darwin;
-      } ''
-        ${if (tag == null) then ''
-          outName="$(basename "$out")"
-          outHash=$(echo "$outName" | cut -d - -f 1)
-
-          imageTag=$outHash
-        '' else ''
-          imageTag="${tag}"
-        ''}
-
-        find ${bulkLayers} -mindepth 1 -maxdepth 1 | sort -t/ -k5 -n > layer-list
-        echo ${customisationLayer} >> layer-list
-
-        mkdir image
-        imageJson=$(cat ${configJson} | jq ". + {\"rootfs\": {\"diff_ids\": [], \"type\": \"layers\"}}")
-        manifestJson=$(jq -n "[{\"RepoTags\":[\"$imageName:$imageTag\"]}]")
-        for layer in $(cat layer-list); do
-          layerChecksum=$(sha256sum $layer/layer.tar | cut -d ' ' -f1)
-          layerID=$(sha256sum "$layer/json" | cut -d ' ' -f 1)
-          ln -s "$layer" "./image/$layerID"
-
-          manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= . + [\"$layerID/layer.tar\"]")
-          imageJson=$(echo "$imageJson" | jq ".history |= . + [{\"created\": \"$(jq -r .created ${configJson})\"}]")
-          imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= . + [\"sha256:$layerChecksum\"]")
-        done
-        imageJsonChecksum=$(echo "$imageJson" | sha256sum | cut -d ' ' -f1)
-        echo "$imageJson" > "image/$imageJsonChecksum.json"
-        manifestJson=$(echo "$manifestJson" | jq ".[0].Config = \"$imageJsonChecksum.json\"")
-        echo "$manifestJson" > image/manifest.json
-
-        jshon -n object \
-          -n object -s "$layerID" -i "$imageTag" \
-          -i "$imageName" > image/repositories
-
-        echo "Cooking the image..."
-        # tar exits with an exit code of 1 if files changed while it was
-        # reading them. It considers a change in the number of hard links
-        # to be a "change", which can cause this to fail if images are being
-        # built concurrently and the auto-optimise-store nix option is turned on.
-        # Since the contents of these files will not change, we can reasonably
-        # ignore this exit code.
-        set +e
-        tar -C image --dereference --hard-dereference --sort=name \
-          --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0  \
-          --mode=a-w --xform s:'^./':: --use-compress-program='pigz -nT' \
-          --warning=no-file-changed -cf $out .
-        RET=$?
-        if [ $RET -ne 0 ] && [ $RET -ne 1 ]; then
-          exit $RET
-        fi
-        set -e
-
-        echo "Finished."
-      '';
-
+      stream = streamLayeredImage args;
     in
-    result;
+      runCommand "${name}.tar.gz" {
+        inherit (stream) imageName;
+        buildInputs = [ pigz ];
+      } "${stream} | pigz -nT > $out";
 
   # 1. extract the base image
   # 2. create the layer
@@ -774,19 +552,21 @@ rec {
           configName="$(cat ./image/manifest.json | jq -r '.[0].Config')"
           baseEnvs="$(cat "./image/$configName" | jq '.config.Env // []')"
 
+          # Extract the parentID from the manifest
+          if [[ -n "$fromImageName" ]] && [[ -n "$fromImageTag" ]]; then
+            parentID="$(
+              cat "image/manifest.json" |
+                jq -r '.[] | select(.RepoTags | contains([$desiredTag])) | rtrimstr(".json")' \
+                  --arg desiredTag "$fromImageName:$fromImageTag"
+            )"
+          else
+            echo "From-image name or tag wasn't set. Reading the first ID."
+            parentID="$(cat "image/manifest.json" | jq -r '.[0].Config | rtrimstr(".json")')"
+          fi
+
           # Otherwise do not import the base image configuration and manifest
           chmod a+w image image/*.json
           rm -f image/*.json
-
-          if [[ -z "$fromImageName" ]]; then
-            fromImageName=$(jshon -k < image/repositories|head -n1)
-          fi
-          if [[ -z "$fromImageTag" ]]; then
-            fromImageTag=$(jshon -e $fromImageName -k \
-                           < image/repositories|head -n1)
-          fi
-          parentID=$(jshon -e $fromImageName -e $fromImageTag -u \
-                     < image/repositories)
 
           for l in image/*/layer.tar; do
             ls_tar $l >> baseFiles
@@ -904,4 +684,117 @@ rec {
     })
   );
 
+  streamLayeredImage = {
+    # Image Name
+    name,
+    # Image tag, the Nix's output hash will be used if null
+    tag ? null,
+    # Files to put on the image (a nix store path or list of paths).
+    contents ? [],
+    # Docker config; e.g. what command to run on the container.
+    config ? {},
+    # Time of creation of the image. Passing "now" will make the
+    # created date be the time of building.
+    created ? "1970-01-01T00:00:01Z",
+    # Optional bash script to run on the files prior to fixturizing the layer.
+    extraCommands ? "",
+    # We pick 100 to ensure there is plenty of room for extension. I
+    # believe the actual maximum is 128.
+    maxLayers ? 100
+  }:
+    assert
+      (lib.assertMsg (maxLayers > 1)
+      "the maxLayers argument of dockerTools.buildLayeredImage function must be greather than 1 (current value: ${toString maxLayers})");
+    let
+      streamScript = writePython3 "stream" {} ./stream_layered_image.py;
+      baseJson = writeText "${name}-base.json" (builtins.toJSON {
+         inherit config;
+         architecture = buildPackages.go.GOARCH;
+         os = "linux";
+      });
+      customisationLayer = runCommand "${name}-customisation-layer" { inherit extraCommands; } ''
+        cp -r ${contentsEnv}/ $out
+
+        if [[ -n $extraCommands ]]; then
+          chmod u+w $out
+          (cd $out; eval "$extraCommands")
+        fi
+      '';
+      contentsEnv = symlinkJoin {
+        name = "${name}-bulk-layers";
+        paths = if builtins.isList contents
+          then contents
+          else [ contents ];
+      };
+
+      # NOTE: the `closures` parameter is a list of closures to include.
+      # The TOP LEVEL store paths themselves will never be present in the
+      # resulting image. At this time (2020-06-18) none of these layers
+      # are appropriate to include, as they are all created as
+      # implementation details of dockerTools.
+      closures = [ baseJson contentsEnv ];
+      overallClosure = writeText "closure" (lib.concatStringsSep " " closures);
+      conf = runCommand "${name}-conf.json" {
+        inherit maxLayers created;
+        imageName = lib.toLower name;
+        paths = referencesByPopularity overallClosure;
+        buildInputs = [ jq ];
+      } ''
+        paths() {
+          cat $paths ${lib.concatMapStringsSep " " (path: "| (grep -v ${path} || true)") (closures ++ [ overallClosure ])}
+        }
+        ${if (tag == null) then ''
+          outName="$(basename "$out")"
+          outHash=$(echo "$outName" | cut -d - -f 1)
+
+          imageTag=$outHash
+        '' else ''
+          imageTag="${tag}"
+        ''}
+
+        # convert "created" to iso format
+        if [[ "$created" != "now" ]]; then
+            created="$(date -Iseconds -d "$created")"
+        fi
+
+        # Create $maxLayers worth of Docker Layers, one layer per store path
+        # unless there are more paths than $maxLayers. In that case, create
+        # $maxLayers-1 for the most popular layers, and smush the remainaing
+        # store paths in to one final layer.
+        #
+        # The following code is fiddly w.r.t. ensuring every layer is
+        # created, and that no paths are missed. If you change the
+        # following lines, double-check that your code behaves properly
+        # when the number of layers equals:
+        #      maxLayers-1, maxLayers, and maxLayers+1, 0
+        store_layers="$(
+          paths |
+            jq -sR '
+              rtrimstr("\n") | split("\n")
+                | (.[:$maxLayers-1] | map([.])) + [ .[$maxLayers-1:] ]
+                | map(select(length > 0))
+            ' \
+              --argjson maxLayers "$(( maxLayers - 1 ))" # one layer will be taken up by the customisation layer
+        )"
+
+        cat ${baseJson} | jq '
+          . + {
+            "store_layers": $store_layers,
+            "customisation_layer", $customisation_layer,
+            "repo_tag": $repo_tag,
+            "created": $created
+          }
+          ' --argjson store_layers "$store_layers" \
+            --arg customisation_layer ${customisationLayer} \
+            --arg repo_tag "$imageName:$imageTag" \
+            --arg created "$created" |
+          tee $out
+      '';
+      result = runCommand "stream-${name}" {
+        inherit (conf) imageName;
+        buildInputs = [ makeWrapper ];
+      } ''
+        makeWrapper ${streamScript} $out --add-flags ${conf}
+      '';
+    in result;
 }

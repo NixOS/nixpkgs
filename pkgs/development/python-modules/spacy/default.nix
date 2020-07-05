@@ -21,11 +21,11 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "2.2.4";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fgm1zlw8mjhmk64skxs79ymhcningml13y9c9fy7rj1b1yadwzh";
+    sha256 = "0nri437dyapiq5gx8lbmjdfvqw2cnw3di13kp44rzr17bm5yh2jv";
   };
 
   propagatedBuildInputs = [
@@ -54,13 +54,19 @@ buildPythonPackage rec {
   # '';
 
   postPatch = ''
-    substituteInPlace setup.cfg --replace "thinc==7.4.0" "thinc>=7.4.0,<8"
+    substituteInPlace setup.cfg \
+      --replace "catalogue>=0.0.7,<1.1.0" "catalogue>=0.0.7,<3.0" \
+      --replace "plac>=0.9.6,<1.2.0" "plac>=0.9.6,<2.0" \
+      --replace "srsly>=1.0.2,<1.1.0" "srsly>=1.0.2,<3.0" \
+      --replace "thinc==7.4.1" "thinc>=7.4.1,<8"
   '';
+
+  pythonImportsCheck = [ "spacy" ];
 
   meta = with lib; {
     description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
     homepage = "https://github.com/explosion/spaCy";
     license = licenses.mit;
     maintainers = with maintainers; [ danieldk sdll ];
-    };
+  };
 }

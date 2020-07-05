@@ -31,6 +31,7 @@ stdenvNoCC.mkDerivation {
     overlays = "${raspberrypifw}/share/raspberrypi/boot/overlays";
   };
   meta = with stdenvNoCC.lib; {
-    platforms = [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
+    inherit (raspberrypifw.meta) platforms homepage license;
+    description = "DTBs for the Raspberry Pi";
   };
 }

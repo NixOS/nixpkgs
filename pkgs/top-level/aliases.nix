@@ -566,6 +566,7 @@ mapAliases ({
   telepathy_idle = telepathy-idle; # added 2018-02-25
   telepathy_logger = telepathy-logger; # added 2018-02-25
   telepathy_mission_control = telepathy-mission-control; # added 2018-02-25
+  telepathy-qt = throw "telepathy-qt no longer supports Qt 4. Please use libsForQt5.telepathy instead."; # added 2020-07-02
   telepathy_qt = telepathy-qt; # added 2018-02-25
   telepathy_qt5 = libsForQt5.telepathy;  # added 2015-12-19
   telepathy_salut = telepathy-salut; # added 2018-02-25
@@ -626,6 +627,7 @@ mapAliases ({
   xfce4-14 = xfce;
   xfce4-12 = throw "xfce4-12 has been replaced by xfce4-14"; # added 2020-03-14
   x11 = xlibsWrapper; # added 2015-09
+  xara = throw "xara has been removed from nixpkgs. Unmaintained since 2006"; # added 2020-06-24
   xbmc = kodi; # added 2018-04-25
   xbmcPlain = kodiPlain; # added 2018-04-25
   xbmcPlugins = kodiPlugins; # added 2018-04-25

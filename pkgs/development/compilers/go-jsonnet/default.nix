@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "0nsm4gsbbn8myz4yfi6m7qc3iizhdambsr18iks0clkdn3mi2jn1";
 
-  subPackages = [ "cmd/jsonnet" ];
+  subPackages = [ "cmd/jsonnet" "cmd/jsonnetfmt" ];
 
   meta = with lib; {
     description = "An implementation of Jsonnet in pure Go";

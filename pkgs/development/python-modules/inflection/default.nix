@@ -1,12 +1,13 @@
-{ lib, fetchPypi, buildPythonPackage, pytest } :
+{ lib, fetchPypi, buildPythonPackage, isPy27, pytest } :
 
 buildPythonPackage rec {
   pname = "inflection";
-  version = "0.3.1";
+  version = "0.4.0";
+  disabled = isPy27;
 
   src = fetchPypi {
    inherit pname version;
-   sha256 = "1jhnxgnw8y3mbzjssixh6qkc7a3afc4fygajhqrqalnilyvpzshq";
+   sha256 = "32a5c3341d9583ec319548b9015b7fbdf8c429cbcb575d326c33ae3a0e90d52c";
   };
 
   checkInputs = [ pytest ];

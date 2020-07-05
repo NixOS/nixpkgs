@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , pytest
 , pytestrunner
 , numpy
@@ -8,12 +9,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.4.2";
+  version = "2.0.0";
   pname = "pydicom";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1483hv74fhfk4q18r4rda7yixqqdxrd1djzp3492s81ykxd4k24l";
+    sha256 = "594c91f715c415ef439f498351ae68fb770c776fc5aa72f3c87eb500dc2a7470";
   };
 
   propagatedBuildInputs = [ numpy pillow ];

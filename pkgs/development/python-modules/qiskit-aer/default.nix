@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aer";
-  version = "0.5.1";
+  version = "0.5.2";
 
   disabled = pythonOlder "3.5";
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     repo = "qiskit-aer";
     rev = version;
     fetchSubmodules = true; # fetch muparserx and other required libraries
-    sha256 = "0pbi8ldz8f1zm7pf2n5229g6kccriq21f24q9cb7bd4j5gdky5sk";
+    sha256 = "0vw6b69h8pvzxhaz3k8sg9ac792gz3kklfv0izs6ra83y1dfwhjz";
   };
 
   nativeBuildInputs = [
@@ -46,14 +46,6 @@ buildPythonPackage rec {
     cython  # generates some cython files at runtime that need to be cython-ized
     numpy
     pybind11
-  ];
-
-  patches = [
-    (fetchpatch{
-      name = "qiskit-aer-pr-727-fix-random-unitary-test.patch";
-      url = "https://github.com/Qiskit/qiskit-aer/commit/09afb3b6b0710042ab65d88e863363f2c843dcb0.patch";
-      sha256 = "0521b7i4fpc5brqs08w381g3c655f9cbn6my1740jnk7dv5lhsv9";
-    })
   ];
 
   postPatch = ''
@@ -85,6 +77,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
   dontUseSetuptoolsCheck = true;  # Otherwise runs tests twice
+  disabledTests = [
+    # broken with cvxpy >= 1.1.0, see https://github.com/Qiskit/qiskit-aer/issues/779.
+    # TODO: Remove once resolved, probably next qiskit-aer version
+    "test_clifford"
+  ];
 
   preCheck = ''
     # Tests include a compiled "circuit" which is auto-built in $HOME

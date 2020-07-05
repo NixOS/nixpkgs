@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, autoreconfHook,
   fuse, libmspack, openssl, pam, xercesc, icu, libdnet, procps,
   libX11, libXext, libXinerama, libXi, libXrender, libXrandr, libXtst,
-  pkgconfig, glib, gtk3, gtkmm3, iproute, dbus, systemd, which,
+  pkgconfig, glib, gdk-pixbuf-xlib, gtk3, gtkmm3, iproute, dbus, systemd, which,
   withX ? true }:
 
 stdenv.mkDerivation rec {
@@ -21,9 +21,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook makeWrapper pkgconfig ];
   buildInputs = [ fuse glib icu libdnet libmspack openssl pam procps xercesc ]
-      ++ lib.optionals withX [ gtk3 gtkmm3 libX11 libXext libXinerama libXi libXrender libXrandr libXtst ];
+      ++ lib.optionals withX [ gdk-pixbuf-xlib gtk3 gtkmm3 libX11 libXext libXinerama libXi libXrender libXrandr libXtst ];
 
-  patches = [ ./recognize_nixos.patch ];
+  patches = [ 
+    ./recognize_nixos.patch 
+    ./find_gdk_pixbuf_xlib.patch #See https://github.com/vmware/open-vm-tools/pull/438
+  ];
+
   postPatch = ''
      # Build bugfix for 10.1.0, stolen from Arch PKGBUILD
      mkdir -p common-agent/etc/config

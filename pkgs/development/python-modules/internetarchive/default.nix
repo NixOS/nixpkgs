@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "1.9.3";
+  version = "1.9.4";
 
   # Can't use pypi, data files for tests missing
   src = fetchFromGitHub {
     owner = "jjjake";
     repo = "internetarchive";
     rev = "v${version}";
-    sha256 = "19av6cpps2qldfl3wb9mcirs1a48a4466m1v9k9yhdznqi4zb0ji";
+    sha256 = "10xlblj21hanahsmw6lfggbrbpw08pdmvdgds1p58l8xd4fazli8";
   };
 
   propagatedBuildInputs = [

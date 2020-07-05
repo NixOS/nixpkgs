@@ -1,6 +1,9 @@
-{ stdenv, buildPythonPackage, fetchurl, spacy }:
+{ stdenv, lib, buildPythonPackage, fetchurl, jieba, pkuseg, spacy }:
 let
-  buildModelPackage = { pname, version, sha256, license }: buildPythonPackage {
+  buildModelPackage = { pname, version, sha256, license }:
+  let
+    lang = builtins.substring 0 2 pname;
+  in buildPythonPackage {
     inherit pname version;
 
     src = fetchurl {
@@ -8,7 +11,8 @@ let
       inherit sha256;
     };
 
-    propagatedBuildInputs = [ spacy ];
+    propagatedBuildInputs = [ spacy ]
+      ++ lib.optionals (lang == "zh") [ jieba pkuseg ];
 
     meta = with stdenv.lib; {
       description = "Models for the spaCy NLP library";

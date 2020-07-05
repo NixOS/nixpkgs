@@ -31,6 +31,9 @@ in stdenv.mkDerivation {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
+  # Avoid referencing -dev paths because of debug assertions.
+  NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
+
   nativeBuildInputs = [
     bison cmake flex pkgconfig
   ] ++ optional withQt qt5.wrapQtAppsHook;

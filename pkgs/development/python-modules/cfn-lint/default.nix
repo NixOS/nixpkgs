@@ -12,15 +12,17 @@
 , jsonschema
 , pathlib2
 , setuptools
+, junit-xml
+, networkx
 }:
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "0.26.3";
+  version = "0.33.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "384c37d239579c7b9f61a3aaadb92ebe81f37cd6ee6a161485401179af6c7a44";
+    sha256 = "b74bb89a3d0da4a744179b07bc186b9fbc4800f929bf635bb6246e80fb91a953";
   };
 
   propagatedBuildInputs = [
@@ -32,6 +34,8 @@ buildPythonPackage rec {
     jsonschema
     pathlib2
     setuptools
+    junit-xml
+    networkx
   ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata importlib-resources ];
 
   # No tests included in archive

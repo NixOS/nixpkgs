@@ -40,6 +40,7 @@ with lib.maintainers; {
       cstrahan
       Frostman
       kalbasit
+      mdlayher
       mic92
       orivej
       rvolosatovs
@@ -55,6 +56,18 @@ with lib.maintainers; {
       worldofpeace
     ];
     scope = "Maintain GNOME desktop environment and platform.";
+  };
+
+  matrix = {
+    members = [
+      ma27
+      pacien
+      fadenb
+      mguentner
+      ekleog
+      ralith
+    ];
+    scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
   };
 
   php = {

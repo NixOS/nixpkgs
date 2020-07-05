@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13nzc40c71kxvjxahgnc6c974xp5fpm02gqymwgfjbj2dmlzmayg";
+    sha256 = "cfabfa696d422ee91eaf1e3f01ea75e576721233cc3ea8badc7d86c30061df8e";
   };
 
   nativeBuildInputs = [ setuptools pytestrunner ];

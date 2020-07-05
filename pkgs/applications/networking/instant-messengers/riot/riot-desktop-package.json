@@ -2,7 +2,7 @@
   "name": "riot-desktop",
   "productName": "Riot",
   "main": "src/electron-main.js",
-  "version": "1.6.5",
+  "version": "1.6.7",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
@@ -48,17 +48,18 @@
     "find-npm-prefix": "^1.0.2",
     "fs-extra": "^8.1.0",
     "glob": "^7.1.6",
-    "matrix-js-sdk": "6.2.2",
+    "matrix-js-sdk": "7.0.0",
     "mkdirp": "^1.0.3",
-    "needle": "^2.3.2",
-    "node-pre-gyp": "^0.14.0",
+    "needle": "^2.5.0",
+    "node-pre-gyp": "^0.15.0",
     "npm": "^6.13.7",
     "rimraf": "^3.0.2",
     "semver": "^7.1.3",
     "tar": "^6.0.1"
   },
   "hakDependencies": {
-    "matrix-seshat": "^1.3.3"
+    "matrix-seshat": "^1.3.3",
+    "keytar": "^5.6.0"
   },
   "build": {
     "appId": "im.riot.app",

@@ -475,6 +475,20 @@ let
       '';
     };
 
+    redis = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider.services.redis.enable = true;
+      exporterTest = ''
+        wait_for_unit("redis.service")
+        wait_for_unit("prometheus-redis-exporter.service")
+        wait_for_open_port(6379)
+        wait_for_open_port(9121)
+        wait_until_succeeds("curl -sSf localhost:9121/metrics | grep -q 'redis_up 1'")
+      '';
+    };
+
     rspamd = {
       exporterConfig = {
         enable = true;

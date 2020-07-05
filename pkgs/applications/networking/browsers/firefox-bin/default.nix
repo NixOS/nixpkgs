@@ -8,7 +8,6 @@
 , dbus
 , fontconfig
 , freetype
-, gconf
 , gdk-pixbuf
 , glib
 , glibc
@@ -27,9 +26,7 @@
 , libXinerama
 , libXrender
 , libXt
-, libcanberra-gtk2
-, libgnome
-, libgnomeui
+, libcanberra
 , libnotify
 , gnome3
 , libGLU, libGL
@@ -103,7 +100,6 @@ stdenv.mkDerivation {
       dbus
       fontconfig
       freetype
-      gconf
       gdk-pixbuf
       glib
       glibc
@@ -122,9 +118,7 @@ stdenv.mkDerivation {
       libXinerama
       libXrender
       libXt
-      libcanberra-gtk2
-      libgnome
-      libgnomeui
+      libcanberra
       libnotify
       libGLU libGL
       nspr

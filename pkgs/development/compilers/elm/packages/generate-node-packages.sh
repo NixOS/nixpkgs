@@ -6,7 +6,7 @@ set -eu -o pipefail
 
 rm -f node-env.nix
 $(nix-build $ROOT -A nodePackages.node2nix --no-out-link)/bin/node2nix \
-    --nodejs-10 \
+    --nodejs-12 \
     -i node-packages.json \
     -o node-packages.nix \
     -c node-composition.nix \

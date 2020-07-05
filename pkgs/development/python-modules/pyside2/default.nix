@@ -23,11 +23,12 @@ stdenv.mkDerivation rec {
     "-DPYTHON_EXECUTABLE=${python.interpreter}"
   ];
 
-  nativeBuildInputs = [ cmake ninja qt5.qmake shiboken2 python ];
+  nativeBuildInputs = [ cmake ninja qt5.qmake python ];
   buildInputs = with qt5; [
     qtbase qtxmlpatterns qtmultimedia qttools qtx11extras qtlocation qtscript
     qtwebsockets qtwebengine qtwebchannel qtcharts qtsensors qtsvg
   ];
+  propagatedBuildInputs = [ shiboken2 ];
 
   meta = with stdenv.lib; {
     description = "LGPL-licensed Python bindings for Qt";

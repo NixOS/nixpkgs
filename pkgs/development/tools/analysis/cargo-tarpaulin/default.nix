@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-tarpaulin";
-  version = "0.13.3";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "xd009642";
     repo = "tarpaulin";
     rev = "${version}";
-    sha256 = "1zc03frbag0lhxxbrdhip5h61ah16rqfcs314nyx7lfn3jd0gqzd";
+    sha256 = "1ilqynjvvczxdvsfszkmrz1casrbsbklw8nbgh5l1nx8kxsp5lx7";
   };
 
   nativeBuildInputs = [
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [ openssl ];
 
-  cargoSha256 = "15qf5hb6gm4lm1dcsqqs8nmd43m1qmw2g2zpj3c0abs5fbdz8k3a";
+  cargoSha256 = "0jcn1b4v9glh058sfd270b33g988n672q50f8kyhwl8xip7xzj06";
   #checkFlags = [ "--test-threads" "1" ];
   doCheck = false;
 

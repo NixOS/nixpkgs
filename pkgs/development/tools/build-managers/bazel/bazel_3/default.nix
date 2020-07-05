@@ -25,11 +25,11 @@
 }:
 
 let
-  version = "3.2.0";
+  version = "3.3.1";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "1ylbfdcb6rhnc3sr292c6shl754i0h0i050f4gr4bppn6sa15v24";
+    sha256 = "0ir796kl8r9hpr3li26qsdy1z2lx2bv82zmk4a2s7q64clyg9wg0";
   };
 
   # Update with `eval $(nix-build -A bazel.updater)`,
@@ -53,8 +53,8 @@ let
        else srcs."java_tools_javac11_linux-v8.0.zip")
       srcs."coverage_output_generator-v2.1.zip"
       srcs.build_bazel_rules_nodejs
-      srcs."android_tools_pkg-0.16.0.tar.gz"
-      srcs."3.1.0.tar.gz"
+      srcs."android_tools_pkg-0.19.0rc1.tar.gz"
+      srcs."bazel-toolchains-3.1.0.tar.gz"
       srcs.rules_pkg
       srcs.rules_cc
       srcs.rules_java

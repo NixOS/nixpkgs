@@ -42,6 +42,20 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker rmi ${examples.nix.imageName}",
         )
 
+    with subtest("The nix binary symlinks are intact"):
+        docker.succeed(
+            "docker load --input='${examples.nix}'",
+            "docker run --rm ${examples.nix.imageName} ${pkgs.bash}/bin/bash -c 'test nix == $(readlink ${pkgs.nix}/bin/nix-daemon)'",
+            "docker rmi ${examples.nix.imageName}",
+        )
+
+    with subtest("The nix binary symlinks are intact when the image is layered"):
+        docker.succeed(
+            "docker load --input='${examples.nixLayered}'",
+            "docker run --rm ${examples.nixLayered.imageName} ${pkgs.bash}/bin/bash -c 'test nix == $(readlink ${pkgs.nix}/bin/nix-daemon)'",
+            "docker rmi ${examples.nixLayered.imageName}",
+        )
+
     with subtest("The pullImage tool works"):
         docker.succeed(
             "docker load --input='${examples.nixFromDockerHub}'",

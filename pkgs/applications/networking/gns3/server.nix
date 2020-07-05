@@ -4,8 +4,10 @@
 
 let
   defaultOverrides = commonOverrides ++ [
-    (mkOverride "jsonschema" "2.6.0"
-      "00kf3zmpp9ya4sydffpifn0j0mzm342a2vzh82p6r0vh10cg7xbg")
+    (mkOverride "jsonschema" "3.2.0"
+      "0ykr61yiiizgvm3bzipa3l73rvj49wmrybbfwhvpgk3pscl5pa68")
+    (mkOverride "aiofiles" "0.4.0"
+      "1vmvq9qja3wahv8m1adkyk00zm7j0x64pk3f2ry051ja66xa07h2")
   ];
 
   python = python3.override {

@@ -27,6 +27,15 @@ let
   hashedPasswordDescription = ''
     To generate hashed password install <literal>mkpasswd</literal>
     package and run <literal>mkpasswd -m sha-512</literal>.
+
+    For password-less logins without password prompt, use
+    the empty string <literal>""</literal>.
+
+    For logins with a fixed password (including the empty-string password with
+    prompt), use one of the un-hashed password options instead, such as
+    <option>users.users.&lt;name?&gt;.password</option>.
+
+    Such unprotected logins should only be used for e.g. bootable live systems.
   '';
 
   userOpts = { name, config, ... }: {
@@ -626,7 +635,7 @@ in {
         then
         ''
           The password hash of user "${name}" may be invalid. You must set a
-          valid hash or the user will be locked out of his account. Please
+          valid hash or the user will be locked out of their account. Please
           check the value of option `users.users."${name}".hashedPassword`.
         ''
         else null

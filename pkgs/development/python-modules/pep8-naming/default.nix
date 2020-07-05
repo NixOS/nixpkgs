@@ -1,5 +1,7 @@
-{ lib, fetchPypi, buildPythonPackage
-, flake8-polyfill }:
+{ lib, fetchPypi, buildPythonPackage, pythonOlder
+, flake8-polyfill
+, importlib-metadata
+}:
 
 buildPythonPackage rec {
   pname = "pep8-naming";
@@ -12,6 +14,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     flake8-polyfill
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
   meta = with lib; {

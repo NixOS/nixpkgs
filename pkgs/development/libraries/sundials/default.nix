@@ -11,14 +11,14 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "sundials";
-  version = "5.1.0";
+  version = "5.3.0";
 
   buildInputs = [ python ] ++ stdenv.lib.optionals (lapackSupport) [ gfortran blas lapack ];
   nativeBuildInputs = [ cmake ];
 
   src = fetchurl {
     url = "https://computation.llnl.gov/projects/${pname}/download/${pname}-${version}.tar.gz";
-    sha256 = "08cvzmbr2qc09ayq4f5j07lw97hl06q4dl26vh4kh822mm7x28pv";
+    sha256 = "19xwi7pz35s2nqgldm6r0jl2k0bs36zhbpnmmzc56s1n3bhzgpw8";
   };
 
   patches = [

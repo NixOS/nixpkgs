@@ -121,6 +121,7 @@ rec {
       # the image env variable NIX_PAGER.
       pkgs.coreutils
       pkgs.nix
+      pkgs.bash
     ];
     config = {
       Env = [
@@ -313,4 +314,25 @@ rec {
       )
     ];
   };
+
+  nixLayered = pkgs.dockerTools.buildLayeredImageWithNixDb {
+    name = "nix-layered";
+    tag = "latest";
+    contents = [
+      # nix-store uses cat program to display results as specified by
+      # the image env variable NIX_PAGER.
+      pkgs.coreutils
+      pkgs.nix
+      pkgs.bash
+    ];
+    config = {
+      Env = [
+        "NIX_PAGER=cat"
+        # A user is required by nix
+        # https://github.com/NixOS/nix/blob/9348f9291e5d9e4ba3c4347ea1b235640f54fd79/src/libutil/util.cc#L478
+        "USER=nobody"
+      ];
+    };
+  };
+
 }
