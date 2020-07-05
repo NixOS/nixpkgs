@@ -2507,6 +2507,18 @@ let
     meta.homepage = "https://github.com/albfan/nerdtree-git-plugin/";
   };
 
+  neuron-vim = buildVimPluginFrom2Nix {
+    pname = "neuron-vim";
+    version = "2020-07-05";
+    src = fetchFromGitHub {
+      owner = "ihsanturk";
+      repo = "neuron.vim";
+      rev = "4ccd13f95a2c9f3dafef2d4adf633e0b18a16019";
+      sha256 = "1z7i0szajykhdqckjydgh297k6b83ni9yds809skx90dlgbxwpfx";
+    };
+    meta.homepage = "https://github.com/ihsanturk/neuron.vim/";
+  };
+
   nim-vim = buildVimPluginFrom2Nix {
     pname = "nim-vim";
     version = "2019-04-26";
