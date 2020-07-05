@@ -7441,6 +7441,8 @@ in
 
   viu = callPackage ../tools/graphics/viu { };
 
+  vkBasalt = callPackage ../tools/graphics/vkBasalt { };
+
   vnc2flv = callPackage ../tools/video/vnc2flv {};
 
   vncrec = callPackage ../tools/video/vncrec { };
