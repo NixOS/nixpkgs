@@ -7148,6 +7148,12 @@
     githubId = 24496705;
     name = "Scott Hamilton";
   };
+  ShamrockLee = {
+    name = "Shamrock Lee";
+    email = "44064051+ShamrockLee@users.noreply.github.com";
+    github = "ShamrockLee";
+    githubId = 44064051;
+  };
   shanemikel = {
     email = "shanepearlman@pm.me";
     github = "shanemikel";
