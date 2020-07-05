@@ -2627,6 +2627,18 @@ let
     meta.homepage = "https://github.com/norcalli/nvim-terminal.lua/";
   };
 
+  nvim-treesitter = buildVimPluginFrom2Nix {
+    pname = "nvim-treesitter";
+    version = "2020-07-05";
+    src = fetchFromGitHub {
+      owner = "nvim-treesitter";
+      repo = "nvim-treesitter";
+      rev = "ab1916f3854c8181c7d68f1a4801bc5f217dd4be";
+      sha256 = "0jkvlqmjkykriyyjc9ca4l24jl5p9ixd01nzdczv4m848x5fmc6d";
+    };
+    meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter/";
+  };
+
   nvim-yarp = buildVimPluginFrom2Nix {
     pname = "nvim-yarp";
     version = "2020-04-08";
