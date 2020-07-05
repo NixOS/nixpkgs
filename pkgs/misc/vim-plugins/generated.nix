@@ -521,12 +521,12 @@ let
 
   coc-metals = buildVimPluginFrom2Nix {
     pname = "coc-metals";
-    version = "2020-07-02";
+    version = "2020-07-04";
     src = fetchFromGitHub {
       owner = "ckipp01";
       repo = "coc-metals";
-      rev = "c99a4ea7902293460b4d903cdcce4892f12046f5";
-      sha256 = "0r4xs0mhdxvac81cly89jqnby14h1dmrpkdfs0chz5ji4gbsgair";
+      rev = "3dbe29b9462a1dd910ff653564cadd72146386c8";
+      sha256 = "1j2z557lzsr25s9ijdfiyg8zd7f967qnq8imacwn6qzfs1r337nj";
     };
     meta.homepage = "https://github.com/ckipp01/coc-metals/";
   };
@@ -605,12 +605,12 @@ let
 
   coc-rust-analyzer = buildVimPluginFrom2Nix {
     pname = "coc-rust-analyzer";
-    version = "2020-07-03";
+    version = "2020-07-04";
     src = fetchFromGitHub {
       owner = "fannheyward";
       repo = "coc-rust-analyzer";
-      rev = "3a055d616ac8047e1411912ba2eff73f1ec3fce8";
-      sha256 = "1ypkx7m8z7nhdbrh7jbskwmb4yjis1m56bmp4sp1nygr52jshz03";
+      rev = "6502de6ac34a5f15285530082644d5923986f77e";
+      sha256 = "09z1nbp8yr77mr7rn4nbsf278q6qwf6snfdh25il61bal9pvh4cz";
     };
     meta.homepage = "https://github.com/fannheyward/coc-rust-analyzer/";
   };
@@ -1014,12 +1014,12 @@ let
 
   defx-nvim = buildVimPluginFrom2Nix {
     pname = "defx-nvim";
-    version = "2020-06-29";
+    version = "2020-07-05";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "defx.nvim";
-      rev = "a17b460fe6b571135347e7464df1d5769c589fdc";
-      sha256 = "0fldnfn4w2sarc7mxmp157xijwqhf8d8jy85qxppibfah4wicaia";
+      rev = "17c86b95f2667c674fd87d54c3807ff1e449a714";
+      sha256 = "1zqvblnp1654l8fkn77a6q4k7gb005ps2cvzj3pw2g4ksdmfznxy";
     };
     meta.homepage = "https://github.com/Shougo/defx.nvim/";
   };
@@ -1074,12 +1074,12 @@ let
 
   deol-nvim = buildVimPluginFrom2Nix {
     pname = "deol-nvim";
-    version = "2020-07-01";
+    version = "2020-07-04";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "deol.nvim";
-      rev = "b9113d9defa0bf92cd69c2811450943a33526344";
-      sha256 = "07v3b3lcl8qjsc9rxv3zkw8idgsp633q1n986wm6pg1310scxw07";
+      rev = "b07a1f2a23a4e68010c53a1e4e1d2a9e46e37ec5";
+      sha256 = "0dac5q55cqzl2xawfb2dnqnvbwribbbc58lsm612iz425bhv2yn3";
     };
     meta.homepage = "https://github.com/Shougo/deol.nvim/";
   };
@@ -2341,12 +2341,12 @@ let
 
   neoformat = buildVimPluginFrom2Nix {
     pname = "neoformat";
-    version = "2020-06-30";
+    version = "2020-07-04";
     src = fetchFromGitHub {
       owner = "sbdchd";
       repo = "neoformat";
-      rev = "96c3cbdee4d0ddbe385388319d7e976e4009e943";
-      sha256 = "1cvg4ziadjlxr4gkjmdrr6ddhpw7gsc24c8jsj85p45x7ijaqhbl";
+      rev = "0182a798813f974f21d5779d76747fa68e9717e8";
+      sha256 = "02jh8ph55bns8dhxd1rpl62b4z7i5rx8v28b1ldrrvc29y1ymqs2";
     };
     meta.homepage = "https://github.com/sbdchd/neoformat/";
   };
@@ -2593,12 +2593,12 @@ let
 
   nvim-lsp = buildVimPluginFrom2Nix {
     pname = "nvim-lsp";
-    version = "2020-06-24";
+    version = "2020-07-04";
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "nvim-lsp";
-      rev = "8e978339b57cd03d97ae301659136ce103435910";
-      sha256 = "14j15cfbzxv2m12i4r5j3fk3438l7k27knnrbkqas83jvrkb3q2f";
+      rev = "8defde900a60b4a377384d3758b2b9a11930ed90";
+      sha256 = "0gzy50ih60v6h13cvmg8ywsr43a1z7gmxqz7gx3s33fbbvlbgah2";
     };
     meta.homepage = "https://github.com/neovim/nvim-lsp/";
   };
@@ -3229,12 +3229,12 @@ let
 
   splitjoin-vim = buildVimPluginFrom2Nix {
     pname = "splitjoin-vim";
-    version = "2020-06-20";
+    version = "2020-07-05";
     src = fetchFromGitHub {
       owner = "AndrewRadev";
       repo = "splitjoin.vim";
-      rev = "20e41455e1155f5989ecac007fc92c9415244822";
-      sha256 = "1jzqz0pi9zaf2ivdvb2prv5k86003dswpv2n3vh5vkmwgl1r3ml4";
+      rev = "f60b6c5ee3341e66373457d3d8007c8b9c2e0a74";
+      sha256 = "1vyirnzswjipimc14gdxnm07wvbkw1sp3kpsggqccwjkibh3fxhh";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/AndrewRadev/splitjoin.vim/";
@@ -3290,12 +3290,12 @@ let
 
   syntastic = buildVimPluginFrom2Nix {
     pname = "syntastic";
-    version = "2020-06-22";
+    version = "2020-07-05";
     src = fetchFromGitHub {
       owner = "vim-syntastic";
       repo = "syntastic";
-      rev = "140f516eaeae855b3d57068e6e66c8f40fd45295";
-      sha256 = "1df2lm8rms535gmcgwnlpjr5bmcd76h6hisyfl922kbj4b02v0b6";
+      rev = "63b74a7473ec01548298284c210fee0a78a6156d";
+      sha256 = "1xp63bfb9ln80gz4jsp4gjk9ckhlkzxmfi5sb72vvlsravw5g3v7";
     };
     meta.homepage = "https://github.com/vim-syntastic/syntastic/";
   };
@@ -3867,12 +3867,12 @@ let
 
   vim-airline = buildVimPluginFrom2Nix {
     pname = "vim-airline";
-    version = "2020-06-29";
+    version = "2020-07-05";
     src = fetchFromGitHub {
       owner = "vim-airline";
       repo = "vim-airline";
-      rev = "ba9b3e183929263bffc44592e5c9a92d2ab8a62d";
-      sha256 = "0xkqh68x7nx1w4a5668ih7mmz1xy8qimb4z827dhgv6i23zh6yq6";
+      rev = "b843321428209c892f4a1fab7a5fe473f0b7d386";
+      sha256 = "143x1235p2wdnifpv637lbhi6jsxwdws07z6hrf6915qjc39zi53";
     };
     meta.homepage = "https://github.com/vim-airline/vim-airline/";
   };
@@ -4299,12 +4299,12 @@ let
 
   vim-devicons = buildVimPluginFrom2Nix {
     pname = "vim-devicons";
-    version = "2020-06-23";
+    version = "2020-07-04";
     src = fetchFromGitHub {
       owner = "ryanoasis";
       repo = "vim-devicons";
-      rev = "c08e526760c0403d307583afdf7110fbaf98577f";
-      sha256 = "0mv6vlf6s6hx244rb4qn7chir1sdg6qr4ffkdiqlbn1lnbm93i8a";
+      rev = "1ac58941ba3da654c0e1060e3d6077c5cf93427e";
+      sha256 = "1mzmlza640iikip0l9fpm8v3g5b6k6ijxc1z7gj1fdfz145zvsli";
     };
     meta.homepage = "https://github.com/ryanoasis/vim-devicons/";
   };
@@ -4743,12 +4743,12 @@ let
 
   vim-go = buildVimPluginFrom2Nix {
     pname = "vim-go";
-    version = "2020-07-02";
+    version = "2020-07-04";
     src = fetchFromGitHub {
       owner = "fatih";
       repo = "vim-go";
-      rev = "f919e0c50deffba7ae2789cf785ed491a6bec9d4";
-      sha256 = "068msrfl0v64djws1cb5p2yvwsk29j4msdqqf4c13bafjyhxqwb7";
+      rev = "54a49ebd7c884da13f0a12136bf46232a1bcc564";
+      sha256 = "1wikchbwyvlr2i9vbxfz4nvic3wwirssm89hsxbqqs5xny147b6i";
     };
     meta.homepage = "https://github.com/fatih/vim-go/";
   };
@@ -5440,12 +5440,12 @@ let
 
   vim-move = buildVimPluginFrom2Nix {
     pname = "vim-move";
-    version = "2020-06-22";
+    version = "2020-07-05";
     src = fetchFromGitHub {
       owner = "matze";
       repo = "vim-move";
-      rev = "54f06c405bfd1ec3142750e8788f4dcd0ca0c065";
-      sha256 = "0wnfk164fyfyyl5pbbfa7wzy39arn2ny790d6g14bf6zl2kapkas";
+      rev = "07459060d9166a19a2279740fedef2412eeee807";
+      sha256 = "1xikw6cq2pp5j2w0n8sckyq6l91y8gzqs2y1cs0h3bd5qba62nna";
     };
     meta.homepage = "https://github.com/matze/vim-move/";
   };
@@ -6148,12 +6148,12 @@ let
 
   vim-slime = buildVimPluginFrom2Nix {
     pname = "vim-slime";
-    version = "2020-04-12";
+    version = "2020-07-04";
     src = fetchFromGitHub {
       owner = "jpalardy";
       repo = "vim-slime";
-      rev = "a81139239d6447b1c021e4873e6a14b47f32b65a";
-      sha256 = "0wavkm9k2vm23nm5bmc3lpm6cac7mihzjcyk4r77qgdgmnnxkm49";
+      rev = "f7442cdb1fb37778ddff93649e172b0ad752c237";
+      sha256 = "0xf9qj0i4jpimbk0qyzvg88s74dfxgd4kzvzcvjpcd3q6cn8sard";
     };
     meta.homepage = "https://github.com/jpalardy/vim-slime/";
   };
@@ -7072,12 +7072,12 @@ let
 
   yats-vim = buildVimPluginFrom2Nix {
     pname = "yats-vim";
-    version = "2020-06-20";
+    version = "2020-07-04";
     src = fetchFromGitHub {
       owner = "HerringtonDarkholme";
       repo = "yats.vim";
-      rev = "7f4e88b3ba11261e6ec4c7364c5a420d48e253ac";
-      sha256 = "1q98pf0cr38k1z9czm57pvb0mari57q89swsk4aq0pl6b6cvi5d5";
+      rev = "e6f121561506f011d878855b66ca8116a46121ae";
+      sha256 = "09241155jwrwqqifkh7a64nk5x8yf96835jkywwysl554ppjz8s5";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/HerringtonDarkholme/yats.vim/";
