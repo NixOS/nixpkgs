@@ -3432,6 +3432,8 @@ in
 
   fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
 
+  chewing-editor = libsForQt5.callPackage ../applications/misc/chewing-editor { };
+
   fcppt = callPackage ../development/libraries/fcppt { };
 
   fcrackzip = callPackage ../tools/security/fcrackzip { };
