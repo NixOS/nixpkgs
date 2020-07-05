@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkOption mkIf types;
+  inherit (lib) mkEnableOption mkIf types;
   cfg = config.programs.phosh-ui;
 
   # Based on https://source.puri.sm/Librem5/librem5-base/-/blob/4596c1056dd75ac7f043aede07887990fd46f572/default/sm.puri.OSK0.desktop
@@ -27,13 +27,9 @@ in
 
   options = {
     programs.phosh-ui = {
-      enable = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          Phosh, related packages and default configurations.
-        '';
-      };
+      enable = mkEnableOption ''
+        Whether to enable, Phosh, related packages and default configurations.
+      '';
     };
   };
 
