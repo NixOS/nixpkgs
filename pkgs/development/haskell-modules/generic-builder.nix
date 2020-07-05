@@ -35,7 +35,7 @@ in
 , enableSharedExecutables ? false
 , enableSharedLibraries ? (ghc.enableShared or false)
 , enableDeadCodeElimination ? (!stdenv.isDarwin)  # TODO: use -dead_strip for darwin
-, enableStaticLibraries ? !stdenv.hostPlatform.isWindows
+, enableStaticLibraries ? !(stdenv.hostPlatform.isWindows or stdenv.hostPlatform.isWasm)
 , enableHsc2hsViaAsm ? stdenv.hostPlatform.isWindows && stdenv.lib.versionAtLeast ghc.version "8.4"
 , extraLibraries ? [], librarySystemDepends ? [], executableSystemDepends ? []
 # On macOS, statically linking against system frameworks is not supported;
@@ -90,6 +90,7 @@ assert editedCabalFile != null -> revision != null;
 # --enable-static does not work on windows. This is a bug in GHC.
 # --enable-static will pass -staticlib to ghc, which only works for mach-o and elf.
 assert stdenv.hostPlatform.isWindows -> enableStaticLibraries == false;
+assert stdenv.hostPlatform.isWasm -> enableStaticLibraries == false;
 
 let
 
