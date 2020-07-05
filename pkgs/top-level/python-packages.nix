@@ -4645,7 +4645,7 @@ in {
   mesa = callPackage ../development/python-modules/mesa { };
 
   meson = disabledIf (pythonOlder "3.5") (toPythonModule ((pkgs.meson.override {
-    python3Packages = self;
+    python3 = python;
   }).overrideAttrs(oldAttrs: {
      # We do not want the setup hook in Python packages
      # because the build is performed differently.
