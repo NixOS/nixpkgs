@@ -8009,6 +8009,8 @@ in
 
   bash-completion = callPackage ../shells/bash/bash-completion { };
 
+  bash-bd = callPackage ../shells/bash/bash-bd { };
+
   gradle-completion = callPackage ../shells/zsh/gradle-completion { };
 
   nix-bash-completions = callPackage ../shells/bash/nix-bash-completions { };
