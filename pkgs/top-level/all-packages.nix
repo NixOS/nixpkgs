@@ -1872,6 +1872,8 @@ in
 
   tllist = callPackage ../development/libraries/tllist { };
 
+  fcft = callPackage ../development/libraries/fcft { };
+
   fwup = callPackage ../tools/misc/fwup { };
 
   fx_cast_bridge = callPackage ../tools/misc/fx_cast { };
