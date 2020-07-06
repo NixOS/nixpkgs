@@ -5590,6 +5590,8 @@ in
 
   nwdiag = with python3Packages; toPythonApplication nwdiag;
 
+  nxpmicro-mfgtools = callPackage ../development/tools/misc/nxpmicro-mfgtools { };
+
   nyancat = callPackage ../tools/misc/nyancat { };
 
   nylon = callPackage ../tools/networking/nylon { };
