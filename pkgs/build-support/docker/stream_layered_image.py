@@ -97,6 +97,7 @@ def archive_paths_to(obj, paths, mtime, add_nix, filter=None):
                 if ti.islnk():
                     ti.type = tarfile.REGTYPE
                     ti.linkname = ""
+                    ti.size = filename.stat().st_size
 
                 ti = apply_filters(ti)
                 if ti.isfile():
