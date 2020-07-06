@@ -2656,6 +2656,12 @@
       fingerprint = "F549 3B7F 9372 5578 FDD3  D0B8 A1BC 8428 323E CFE8";
     }];
   };
+  fionera = {
+    email = "nix@fionera.de";
+    github = "fionera";
+    githubId = 5741401;
+    name = "Tim Windelschmidt";
+  };
   FireyFly = {
     email = "nix@firefly.nu";
     github = "FireyFly";
