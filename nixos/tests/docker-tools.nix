@@ -179,10 +179,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         docker.succeed("docker run --rm no-store-paths ls /")
         docker.fail("docker run --rm no-store-paths ls /nix/store")
 
-    with subtest("Ensure buildLayeredImage supports files directly under /nix/store"):
+    with subtest("Ensure buildLayeredImage does not change store path contents."):
         docker.succeed(
             "docker load --input='${pkgs.dockerTools.examples.filesInStore}'",
-            "docker run file-in-store |& grep 'some data'",
+            "docker run --rm file-in-store nix-store --verify --check-contents",
+            "docker run --rm file-in-store |& grep 'some data'",
         )
   '';
 })
