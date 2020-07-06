@@ -5,13 +5,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.5.0";
+  version = "1.5.1";
   pname = "azure-mgmt-hdinsight";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d13088bb506700a7aecf59faf042cb48dc82c423082482b2f50cc2403ac43e55";
+    sha256 = "18xfq3n2i1bnai417p3q67f4bikxjcqyg6yp4f06kipx8cz4zfbn";
     extension = "zip";
   };
 
