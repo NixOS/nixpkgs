@@ -1,4 +1,5 @@
 { lib, python, buildPythonPackage, fetchPypi, isPy27
+, fetchpatch
 , azure-common
 , azure-core
 , msrest
@@ -22,6 +23,14 @@ buildPythonPackage rec {
     msrest
     msrestazure
     requests
+  ];
+
+  # Fix to actually install the package
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/Azure/azure-multiapi-storage-python/pull/29/commits/1c8b08dfc9c5445498de3475dec8820eafbd0ca1.patch";
+      sha256 = "1f80sdbw4pagrlp9dhcimhp23sdmy0whiba07aa84agkpv4df9ny";
+    })
   ];
 
   # fix namespace
