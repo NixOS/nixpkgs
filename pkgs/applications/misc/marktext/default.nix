@@ -2,14 +2,14 @@
 
 let
   pname = "marktext";
-  version = "v0.16.1";
+  version = "v0.16.2";
 in
 appimageTools.wrapType2 rec {
   name = "${pname}-${version}-binary";
 
   src = fetchurl {
     url = "https://github.com/marktext/marktext/releases/download/${version}/marktext-x86_64.AppImage";
-    sha256 = "1v2kjvccxfqj76c2krlmfnhrhs03y5n1pjcljgxaj2kc5vi80c1p";
+    sha256 = "0ivf9lvv2jk7dvxmqprzcsxgya3617xmx5bppjvik44z14b5x8r7";
   };
 
   profile = ''
