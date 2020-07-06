@@ -4667,6 +4667,12 @@
     githubId = 10626;
     name = "Andreas Wagner";
   };
+  lperkins = {
+    email = "lucperkins@gmail.com";
+    github = "lucperkins";
+    githubId = 1523104;
+    name = "Luc Perkins";
+  };
   lschuermann = {
     email = "leon.git@is.currently.online";
     github = "lschuermann";

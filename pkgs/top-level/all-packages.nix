@@ -10067,6 +10067,9 @@ in
   apacheKafka_2_3 = callPackage ../servers/apache-kafka { majorVersion = "2.3"; };
   apacheKafka_2_4 = callPackage ../servers/apache-kafka { majorVersion = "2.4"; };
 
+  apachePulsar = apachePulsar_2_6;
+  apachePulsar_2_6 = callPackage ../servers/apache-pulsar { version = "2.6.0"; };
+
   kt = callPackage ../tools/misc/kt {};
 
   argbash = callPackage ../development/tools/misc/argbash {};
