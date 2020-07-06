@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     # wrapped in the enlightenment service module, and the wrapped
     # executables should be used instead.
     ./0001-wrapped-setuid-executables.patch
+    ./0003-setuid-missing-path.patch
   ];
 
   postPatch = ''
