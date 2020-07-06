@@ -369,7 +369,7 @@
     "imap" = ps: with ps; [ ]; # missing inputs: aioimaplib
     "imap_email_content" = ps: with ps; [ ];
     "incomfort" = ps: with ps; [ ]; # missing inputs: incomfort-client
-    "influxdb" = ps: with ps; [ influxdb]; # missing inputs: influxdb-client
+    "influxdb" = ps: with ps; [ influxdb-client influxdb];
     "input_boolean" = ps: with ps; [ ];
     "input_datetime" = ps: with ps; [ ];
     "input_number" = ps: with ps; [ ];
