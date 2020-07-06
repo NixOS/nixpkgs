@@ -1,18 +1,18 @@
-{ stdenv, rustPlatform, fetchFromGitHub, stfl, sqlite, curl, gettext, pkgconfig, libxml2, json_c, ncurses
+{ stdenv, rustPlatform, fetchFromGitHub, stfl, sqlite, curl, gettext, pkg-config, libxml2, json_c, ncurses
 , asciidoctor, libiconv, Security, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "newsboat";
-  version = "2.19";
+  version = "2.20.1";
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
     rev = "r${version}";
-    sha256 = "0yyrq8a90l6pkrczm9qvdg75jhsdq0niwp79vrdpm8rsxqpdmfq7";
+    sha256 = "1i9dpkdlsm3ya0w2x4c8kplrp3qzd8slbkcqvzfpqggb67gvczvv";
   };
 
-  cargoSha256 = "1q3jf3d80c0ik38qk8jgbhfz5jxv0cy3lzmkyh2l002azp9hvv59";
+  cargoSha256 = "1ykffx2lhn4w56qm1wypkg9wsqpvzzrz419qkl95w1384xf3f7ix";
 
   postPatch = ''
     substituteInPlace Makefile --replace "|| true" ""
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     asciidoctor
     gettext
   ] ++ stdenv.lib.optionals stdenv.isDarwin [ makeWrapper ncurses ];

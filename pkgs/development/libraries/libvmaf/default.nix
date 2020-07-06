@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libvmaf";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "netflix";
     repo = "vmaf";
     rev = "v${version}";
-    sha256 = "10fw53k9k4aq4p2qi5qkfjfnhldw4p5bbmxggf8220gfa95nvyl3";
+    sha256 = "18w0z3w90fdbzsqaa4diwvq0xmvg0aiw4hi3aaa4pq0zgnb8g3mk";
   };
 
   sourceRoot = "source/libvmaf";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Netflix/vmaf";
     description = "Perceptual video quality assessment based on multi-method fusion (VMAF)";
     platforms = platforms.unix;
-    license = licenses.asl20;
+    license = licenses.bsd2Patent;
     maintainers = [ maintainers.cfsmp3 maintainers.marsam ];
   };
 

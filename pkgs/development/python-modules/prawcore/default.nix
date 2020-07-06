@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ stdenv, buildPythonPackage, fetchPypi, isPy27
 , requests
 , testfixtures, mock, requests_toolbelt
 , betamax, betamax-serializers, betamax-matchers, pytest
@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "prawcore";
   version = "1.4.0";
+  disabled = isPy27; # see https://github.com/praw-dev/prawcore/pull/101
 
   src = fetchPypi {
     inherit pname version;

@@ -12,11 +12,11 @@ buildPythonPackage rec {
     sha256 = "b95e31850f3af163c2283ed40432f053acbc8fc6eba6a069cb518d9dbf71848c";
   };
 
-  nativeBuildInputs = [ pytestrunner toml ];
+  nativeBuildInputs = [ pytestrunner ];
 
   checkInputs = [ pytestCheckHook pytest-benchmark ];
 
-  propagatedBuildInputs = [ astroid isort mccabe ];
+  propagatedBuildInputs = [ astroid isort mccabe toml ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     # Remove broken darwin test

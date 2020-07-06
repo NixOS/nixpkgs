@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub }:
 stdenv.mkDerivation rec {
   pname = "git-quick-stats";
-  version = "2.1.1";
+  version = "2.1.2";
   src = fetchFromGitHub {
     repo = "git-quick-stats";
     owner = "arzzen";
     rev = version;
-    sha256 = "1mdja838jxhcasi251fsc3yig3s5vmfqab1wpm34xinr8blii90f";
+    sha256 = "1q0iy732smad1v25da9vmlk8r5iscjrk678pq6mda9sbmiq693r3";
   };
   PREFIX = builtins.placeholder "out";
   meta = with stdenv.lib; {

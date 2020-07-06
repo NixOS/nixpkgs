@@ -183,6 +183,8 @@ in
 
   deadcode = callPackage ../development/tools/deadcode { };
 
+  eclipse-mat = callPackage ../development/tools/eclipse-mat { };
+
   glade = callPackage ../development/tools/glade { };
 
   hobbes = callPackage ../development/tools/hobbes { };
@@ -213,7 +215,9 @@ in
 
   grsync = callPackage ../applications/misc/grsync { };
 
-  dockerTools = callPackage ../build-support/docker { };
+  dockerTools = callPackage ../build-support/docker {
+    writePython3 = writers.writePython3;
+  };
 
   snapTools = callPackage ../build-support/snap { };
 
@@ -647,6 +651,8 @@ in
 
   almanah = callPackage ../applications/misc/almanah { };
 
+  alpine-make-vm-image = callPackage ../tools/virtualization/alpine-make-vm-image { };
+
   amazon-ecs-cli = callPackage ../tools/virtualization/amazon-ecs-cli { };
 
   amazon-glacier-cmd-interface = callPackage ../tools/backup/amazon-glacier-cmd-interface { };
@@ -673,6 +679,10 @@ in
   antora = callPackage ../development/tools/documentation/antora {};
 
   apfs-fuse = callPackage ../tools/filesystems/apfs-fuse { };
+
+  apk-tools = callPackage ../tools/package-management/apk-tools {
+    lua = lua5_3;
+  };
 
   apktool = callPackage ../development/tools/apktool {
     inherit (androidenv.androidPkgs_9_0) build-tools;
@@ -734,6 +744,8 @@ in
 
   asciiquarium = callPackage ../applications/misc/asciiquarium {};
 
+  asls = callPackage ../development/tools/misc/asls { };
+
   asymptote = callPackage ../tools/graphics/asymptote {
     texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super texinfo; };
     gsl = gsl_1;
@@ -759,6 +771,8 @@ in
 
   awscli = callPackage ../tools/admin/awscli { };
 
+  awscli2 = callPackage ../tools/admin/awscli2 { };
+
   awsebcli = callPackage ../tools/virtualization/awsebcli {};
 
   awslogs = callPackage ../tools/admin/awslogs { };
@@ -770,8 +784,6 @@ in
   aws-okta = callPackage ../tools/security/aws-okta { };
 
   aws-rotate-key = callPackage ../tools/admin/aws-rotate-key { };
-
-  aws_shell = callPackage ../tools/admin/aws_shell { };
 
   aws-sam-cli = callPackage ../development/tools/aws-sam-cli { python = python3; };
 
@@ -855,6 +867,8 @@ in
   bonfire = callPackage ../tools/misc/bonfire { };
 
   boulder = callPackage ../tools/admin/boulder { };
+
+  btrfs-heatmap = callPackage ../tools/filesystems/btrfs-heatmap { };
 
   buildbot = with python3Packages; toPythonApplication buildbot;
   buildbot-ui = with python3Packages; toPythonApplication buildbot-ui;
@@ -1792,6 +1806,8 @@ in
 
   eschalot = callPackage ../tools/security/eschalot { };
 
+  espanso = callPackage ../applications/office/espanso { };
+
   esphome = callPackage ../tools/misc/esphome { };
 
   esptool = callPackage ../tools/misc/esptool { };
@@ -2032,6 +2048,8 @@ in
 
   ir-standard-fonts = callPackage ../data/fonts/ir-standard-fonts { };
 
+  kaggle = with python3Packages; toPythonApplication kaggle;
+
   lynis = callPackage ../tools/security/lynis { };
 
   mapproxy = callPackage ../applications/misc/mapproxy { };
@@ -2150,7 +2168,9 @@ in
 
   pbzx = callPackage ../tools/compression/pbzx { };
 
-  persepolis = python3Packages.callPackage ../tools/networking/persepolis { };
+  persepolis = python3Packages.callPackage ../tools/networking/persepolis {
+    wrapQtAppsHook = qt5.wrapQtAppsHook;
+  };
 
   pev = callPackage ../development/tools/analysis/pev { };
 
@@ -2895,6 +2915,8 @@ in
 
   ddccontrol-db = callPackage ../data/misc/ddccontrol-db { };
 
+  ddcui = libsForQt5.callPackage ../applications/misc/ddcui { };
+
   ddcutil = callPackage ../tools/misc/ddcutil { };
 
   ddclient = callPackage ../tools/networking/ddclient { };
@@ -3187,6 +3209,8 @@ in
 
   vorta = python3Packages.callPackage ../applications/backup/vorta { };
 
+  utahfs = callPackage ../applications/networking/utahfs { };
+
   wallutils = callPackage ../tools/graphics/wallutils { };
 
   wev = callPackage ../tools/misc/wev { };
@@ -3407,6 +3431,8 @@ in
   };
 
   fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
+
+  chewing-editor = libsForQt5.callPackage ../applications/misc/chewing-editor { };
 
   fcppt = callPackage ../development/libraries/fcppt { };
 
@@ -4325,6 +4351,8 @@ in
 
   incron = callPackage ../tools/system/incron { };
 
+  industrializer = callPackage ../applications/audio/industrializer { };
+
   inetutils = callPackage ../tools/networking/inetutils { };
 
   inform7 = callPackage ../development/compilers/inform7 { };
@@ -4533,6 +4561,10 @@ in
 
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
+  kbs2 = callPackage ../tools/security/kbs2 {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
+
   kdbplus = pkgsi686Linux.callPackage ../applications/misc/kdbplus { };
 
   keepalived = callPackage ../tools/networking/keepalived { };
@@ -4730,9 +4762,7 @@ in
 
   mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp { };
 
-  mcfly = callPackage ../tools/misc/mcfly {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  mcfly = callPackage ../tools/misc/mcfly { };
 
   mdbook = callPackage ../tools/text/mdbook {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -5111,7 +5141,7 @@ in
   mailhog = callPackage ../servers/mail/mailhog {};
 
   mailnag = callPackage ../applications/networking/mailreaders/mailnag {
-    pythonPackages = python2Packages;
+    pythonPackages = python3Packages;
   };
 
   mailsend = callPackage ../tools/networking/mailsend { };
@@ -5538,6 +5568,8 @@ in
 
   nilfs-utils = callPackage ../tools/filesystems/nilfs-utils {};
 
+  nimmm = callPackage ../applications/misc/nimmm { };
+
   nitrogen = callPackage ../tools/X11/nitrogen {};
 
   nms = callPackage ../tools/misc/nms { };
@@ -5950,9 +5982,7 @@ in
 
   brickd = callPackage ../servers/brickd { };
 
-  bully = callPackage ../tools/networking/bully {
-    openssl = openssl_1_0_2;
-  };
+  bully = callPackage ../tools/networking/bully { };
 
   pcapc = callPackage ../tools/networking/pcapc { };
 
@@ -7701,6 +7731,8 @@ in
 
   whsniff = callPackage ../applications/networking/sniffers/whsniff { };
 
+  wiiuse = callPackage ../development/libraries/wiiuse { };
+
   woeusb = callPackage ../tools/misc/woeusb { };
 
   chase = callPackage ../tools/system/chase { };
@@ -7810,9 +7842,7 @@ in
     libxml2 = libxml2Python;
   };
 
-  xsecurelock = callPackage ../tools/X11/xsecurelock {
-    xset = xorg.xset;
-  };
+  xsecurelock = callPackage ../tools/X11/xsecurelock { };
 
   xsel = callPackage ../tools/misc/xsel { };
 
@@ -8760,6 +8790,13 @@ in
     buildPackages = buildPackages // { stdenv = gcc8Stdenv; };
   });
 
+  go_1_15 = callPackage ../development/compilers/go/1.15.nix ({
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  } // lib.optionalAttrs stdenv.isAarch64 {
+    stdenv = gcc8Stdenv;
+    buildPackages = buildPackages // { stdenv = gcc8Stdenv; };
+  });
+
   go = go_1_14;
 
   go-repo-root = callPackage ../development/tools/go-repo-root { };
@@ -9263,7 +9300,7 @@ in
   };
   cargo-insta = callPackage ../development/tools/rust/cargo-insta { };
   cargo-make = callPackage ../development/tools/rust/cargo-make {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
   cargo-raze = callPackage ../development/tools/rust/cargo-raze {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -10433,6 +10470,8 @@ in
 
   drush = callPackage ../development/tools/misc/drush { };
 
+  easypdkprog = callPackage ../development/tools/misc/easypdkprog { };
+
   editorconfig-checker = callPackage ../development/tools/misc/editorconfig-checker { };
 
   editorconfig-core-c = callPackage ../development/tools/misc/editorconfig-core-c { };
@@ -10565,6 +10604,7 @@ in
   gradle_4_10 = res.gradleGen.gradle_4_10;
   gradle_4 = gradle_4_10;
   gradle_5 = res.gradleGen.gradle_5_6;
+  gradle_6 = res.gradleGen.gradle_6_5;
 
   gperf = callPackage ../development/tools/misc/gperf { };
   # 3.1 changed some parameters from int to size_t, leading to mismatches.
@@ -12867,7 +12907,9 @@ in
     libGL = null;
   };
 
-  libdigidoc = callPackage ../development/libraries/libdigidoc { };
+  libdigidoc = callPackage ../development/libraries/libdigidoc {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   libdigidocpp = callPackage ../development/libraries/libdigidocpp { };
 
@@ -14966,8 +15008,6 @@ in
 
   telepathy-farstream = callPackage ../development/libraries/telepathy/farstream {};
 
-  telepathy-qt = callPackage ../development/libraries/telepathy/qt { qtbase = qt4; };
-
   termbox = callPackage ../development/libraries/termbox { };
 
   tevent = callPackage ../development/libraries/tevent { };
@@ -15480,6 +15520,9 @@ in
   buildGo114Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_14;
   };
+  buildGo115Package = callPackage ../development/go-packages/generic {
+    go = buildPackages.go_1_15;
+  };
 
   buildGoPackage = buildGo114Package;
 
@@ -15488,6 +15531,9 @@ in
   };
   buildGo114Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_14;
+  };
+  buildGo115Module = callPackage ../development/go-modules/generic {
+    go = buildPackages.go_1_15;
   };
 
   buildGoModule = buildGo114Module;
@@ -16329,9 +16375,10 @@ in
   };
 
   radicale1 = callPackage ../servers/radicale/1.x.nix { };
-  radicale2 = callPackage ../servers/radicale { };
+  radicale2 = callPackage ../servers/radicale/2.x.nix { };
+  radicale3 = callPackage ../servers/radicale/3.x.nix { };
 
-  radicale = radicale2;
+  radicale = radicale3;
 
   rake = callPackage ../development/tools/build-managers/rake { };
 
@@ -17319,7 +17366,7 @@ in
   # Hardened Linux
   hardenedLinuxPackagesFor = kernel': overrides:
     let # Note: We use this hack since the hardened patches can lag behind and we don't want to delay updates:
-      linux_latest_for_hardened = pkgs.linux_5_6; # TODO: Update to linux_latest
+      linux_latest_for_hardened = pkgs.linux_latest;
       kernel = (if kernel' == pkgs.linux_latest then linux_latest_for_hardened else kernel').override overrides;
     in linuxPackagesFor (kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
@@ -18938,6 +18985,8 @@ in
 
   batik = callPackage ../applications/graphics/batik { };
 
+  batsignal = callPackage ../applications/misc/batsignal { };
+
   baudline = callPackage ../applications/audio/baudline { };
 
   bb =  callPackage ../applications/misc/bb { };
@@ -19209,7 +19258,9 @@ in
 
   coyim = callPackage ../applications/networking/instant-messengers/coyim {};
 
-  cq-editor = libsForQt5.callPackage ../applications/graphics/cq-editor { };
+  cq-editor = libsForQt5.callPackage ../applications/graphics/cq-editor {
+    python3Packages = python37Packages;
+  };
 
   cpp_ethereum = callPackage ../applications/misc/cpp-ethereum { };
 
@@ -20575,6 +20626,8 @@ in
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
 
+  k4dirstat = libsForQt5.callPackage ../applications/misc/k4dirstat { };
+
   kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };
 
   kdecoration-viewer = libsForQt5.callPackage ../tools/misc/kdecoration-viewer { };
@@ -21481,6 +21534,8 @@ in
   obs-v4l2sink = libsForQt5.callPackage ../applications/video/obs-studio/v4l2sink.nix { };
 
   obs-ndi = callPackage ../applications/video/obs-studio/obs-ndi.nix { };
+
+  obsidian = callPackage ../applications/misc/obsidian { };
 
   octoprint = callPackage ../applications/misc/octoprint { };
 
@@ -22548,7 +22603,9 @@ in
 
   tint2 = callPackage ../applications/misc/tint2 { };
 
-  tiny = callPackage ../applications/networking/irc/tiny { };
+  tiny = callPackage ../applications/networking/irc/tiny {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   tipp10 = qt5.callPackage ../applications/misc/tipp10 { };
 
@@ -23595,6 +23652,8 @@ in
   particl-core = callPackage ../applications/blockchains/particl/particl-core.nix { miniupnpc = miniupnpc_2; };
 
   quorum = callPackage ../applications/blockchains/quorum.nix { };
+
+  whirlpool-gui = callPackage ../applications/blockchains/whirlpool-gui { };
 
   ### GAMES
 
@@ -25699,6 +25758,8 @@ in
   dell-530cdn = callPackage ../misc/drivers/dell-530cdn {};
 
   dosbox = callPackage ../misc/emulators/dosbox { };
+
+  emu2 = callPackage ../misc/emulators/emu2 { };
 
   dpkg = callPackage ../tools/package-management/dpkg { };
 

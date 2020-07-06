@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
+, pygments
 , pytest
 , pytestcov
 , uvloop
@@ -20,6 +21,10 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "0wcj8prkijb889ic8n6varms7xkwy028hhw0imgkd1i0p64lm3m4";
   };
+
+  propagatedBuildInputs = [
+    pygments
+  ];
 
   checkInputs = [
     pytest

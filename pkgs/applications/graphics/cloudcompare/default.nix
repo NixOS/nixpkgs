@@ -1,7 +1,7 @@
-{ stdenv
+{ lib
+, mkDerivation
 , fetchFromGitHub
 , cmake
-, wrapQtAppsHook
 , dxflib
 , eigen
 , flann
@@ -16,7 +16,7 @@
 , xercesc
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "cloudcompare";
   version = "2.11.0";
 
@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     eigen # header-only
-    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -73,7 +72,7 @@ stdenv.mkDerivation rec {
     "-DPLUGIN_IO_QRDB=OFF" # Riegl rdblib is proprietary; not packaged in nixpkgs
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "3D point cloud and mesh processing software";
     homepage = "https://cloudcompare.org";
     license = licenses.gpl2Plus;

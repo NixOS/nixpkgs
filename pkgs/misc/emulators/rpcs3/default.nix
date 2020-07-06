@@ -1,5 +1,6 @@
 { mkDerivation, lib, fetchgit, cmake, pkgconfig, git
-, qtbase, qtquickcontrols, openal, glew, vulkan-loader, libpng, ffmpeg_3, libevdev, python3
+, qtbase, qtquickcontrols, openal, glew, vulkan-headers, vulkan-loader, libpng
+, ffmpeg, libevdev, python3
 , pulseaudioSupport ? true, libpulseaudio
 , waylandSupport ? true, wayland
 , alsaSupport ? true, alsaLib
@@ -15,7 +16,7 @@ mkDerivation {
 
   src = fetchgit {
     url = "https://github.com/RPCS3/rpcs3";
-    rev = "341fdf7eb14763fd06e2eab9a4b2b8f1adf9fdbd";
+    rev = "v${majorVersion}";
     sha256 = "1qx97zkkjl6bmv5rhfyjqynbz0v8h40b2wxqnl59g287wj0yk3y1";
   };
 
@@ -36,7 +37,8 @@ mkDerivation {
   nativeBuildInputs = [ cmake pkgconfig git ];
 
   buildInputs = [
-    qtbase qtquickcontrols openal glew vulkan-loader libpng ffmpeg_3 libevdev python3
+    qtbase qtquickcontrols openal glew vulkan-headers vulkan-loader libpng ffmpeg
+    libevdev python3
   ] ++ lib.optional pulseaudioSupport libpulseaudio
     ++ lib.optional alsaSupport alsaLib
     ++ lib.optional waylandSupport wayland;

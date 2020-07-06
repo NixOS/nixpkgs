@@ -1,8 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , isPy27
 , appdirs
+, importlib-metadata
 , requests
 , pytest
 }:
@@ -20,7 +22,15 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     appdirs
     requests
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
+
+  # can be removed when https://github.com/nschloe/pipdate/pull/41 gets merged
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "importlib_metadata" "importlib_metadata; python_version < \"3.8\""
+  '';
 
   checkInputs = [
     pytest

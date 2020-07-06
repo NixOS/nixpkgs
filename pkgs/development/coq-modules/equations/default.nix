@@ -33,9 +33,15 @@ let
     };
 
     "8.11" = {
-      version = "1.2.1";
-      rev = "v1.2.1-8.11";
-      sha256 = "06k0h7lansxs479is3vj5ikg8s5k4c6svnqcwmxbni4wx8bhmg17";
+      version = "1.2.2";
+      rev = "v1.2.2-8.11";
+      sha256 = "0g2y0s8kb2imbqyrx9hmvjzpwmicid7shv7ma10fnb8dgk2dqkf9";
+    };
+
+    "8.12" = {
+      version = "1.2.2";
+      rev = "v1.2.2-8.12";
+      sha256 = "0fkz78i2gn9x9scfa7n8fl2sq7czppsicy7w5mq919qqfp0w1aj0";
     };
   };
   param = params.${coq.coq-version};

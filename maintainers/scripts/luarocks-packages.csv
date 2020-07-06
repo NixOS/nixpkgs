@@ -74,6 +74,7 @@ moonscript,,,,,arobyn
 nvim-client,,,,,
 penlight,,,,,
 rapidjson,,,,,
+readline,,,,,
 say,,,,,
 std__debug,std._debug,,,,
 std_normalize,std.normalize,,,,

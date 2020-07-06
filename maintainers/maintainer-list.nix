@@ -283,6 +283,12 @@
     githubId = 273837;
     name = "Mateusz Czapliński";
   };
+  akamaus = {
+    email = "dmitryvyal@gmail.com";
+    github = "akamaus";
+    githubId = 58955;
+    name = "Dmitry Vyal";
+  };
   akaWolf = {
     email = "akawolf0@gmail.com";
     github = "akaWolf";
@@ -1604,6 +1610,12 @@
     githubId = 32609395;
     name = "B YI";
   };
+  conradmearns = {
+    email = "conradmearns+github@pm.me";
+    github = "ConradMearns";
+    githubId = 5510514;
+    name = "Conrad Mearns";
+  };
   couchemar = {
     email = "couchemar@yandex.ru";
     github = "couchemar";
@@ -1781,6 +1793,12 @@
   dasuxullebt = {
     email = "christoph.senjak@googlemail.com";
     name = "Christoph-Simon Senjak";
+  };
+  david-sawatzke = {
+    email = "d-nix@sawatzke.dev";
+    github = "david-sawatzke";
+    githubId = 11035569;
+    name = "David Sawatzke";
   };
   david50407 = {
     email = "me@davy.tw";
@@ -3703,6 +3721,12 @@
     github = "joachifm";
     githubId = 41977;
     name = "Joachim Fasting";
+  };
+  joachimschmidt557 = {
+    email = "joachim.schmidt557@outlook.com";
+    github = "joachimschmidt557";
+    githubId = 28556218;
+    name = "Joachim Schmidt";
   };
   joamaki = {
     email = "joamaki@gmail.com";
@@ -6302,6 +6326,12 @@
       fingerprint = "240B 57DE 4271 2480 7CE3  EAC8 4F74 D536 1C4C A31E";
     }];
   };
+  priegger = {
+    email = "philipp@riegger.name";
+    github = "priegger";
+    githubId = 228931;
+    name = "Philipp Riegger";
+  };
   prikhi = {
     email = "pavan.rikhi@gmail.com";
     github = "prikhi";
@@ -7159,6 +7189,12 @@
     github = "SCOTT-HAMILTON";
     githubId = 24496705;
     name = "Scott Hamilton";
+  };
+  ShamrockLee = {
+    name = "Shamrock Lee";
+    email = "44064051+ShamrockLee@users.noreply.github.com";
+    github = "ShamrockLee";
+    githubId = 44064051;
   };
   shanemikel = {
     email = "shanepearlman@pm.me";
@@ -8982,5 +9018,17 @@
     email = "417981+cpcloud@users.noreply.github.com";
     github = "cpcloud";
     githubId = 417981;
+  };
+  davegallant = {
+    name = "Dave Gallant";
+    email = "davegallant@gmail.com";
+    github = "davegallant";
+    githubId = 4519234;
+  };
+  saulecabrera = {
+    name = "Saúl Cabrera";
+    email = "saulecabrera@gmail.com";
+    github = "saulecabrera";
+    githubId = 1423601;
   };
 }

@@ -32,7 +32,9 @@ stdenv.mkDerivation {
     cp exe/* $out/bin
   '';
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    description = "PDF to XML converter";
+    platforms = platforms.unix;
+    license = licenses.gpl2;
   };
 }

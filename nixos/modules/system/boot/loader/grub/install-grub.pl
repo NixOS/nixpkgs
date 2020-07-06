@@ -247,6 +247,45 @@ if ($grubVersion == 1) {
 }
 
 else {
+    my @users = ();
+    foreach my $user ($dom->findnodes('/expr/attrs/attr[@name = "users"]/attrs/attr')) {
+        my $name = $user->findvalue('@name') or die;
+        my $hashedPassword = $user->findvalue('./attrs/attr[@name = "hashedPassword"]/string/@value');
+        my $hashedPasswordFile = $user->findvalue('./attrs/attr[@name = "hashedPasswordFile"]/string/@value');
+        my $password = $user->findvalue('./attrs/attr[@name = "password"]/string/@value');
+        my $passwordFile = $user->findvalue('./attrs/attr[@name = "passwordFile"]/string/@value');
+
+        if ($hashedPasswordFile) {
+            open(my $f, '<', $hashedPasswordFile) or die "Can't read file '$hashedPasswordFile'!";
+            $hashedPassword = <$f>;
+            chomp $hashedPassword;
+        }
+        if ($passwordFile) {
+            open(my $f, '<', $passwordFile) or die "Can't read file '$passwordFile'!";
+            $password = <$f>;
+            chomp $password;
+        }
+
+        if ($hashedPassword) {
+            if (index($hashedPassword, "grub.pbkdf2.") == 0) {
+                $conf .= "\npassword_pbkdf2 $name $hashedPassword";
+            }
+            else {
+                die "Password hash for GRUB user '$name' is not valid!";
+            }
+        }
+        elsif ($password) {
+            $conf .= "\npassword $name $password";
+        }
+        else {
+            die "GRUB user '$name' has no password!";
+        }
+        push(@users, $name);
+    }
+    if (@users) {
+        $conf .= "\nset superusers=\"" . join(' ',@users) . "\"\n";
+    }
+
     if ($copyKernels == 0) {
         $conf .= "
             " . $grubStore->search;
@@ -350,7 +389,7 @@ sub copyToKernelsDir {
 }
 
 sub addEntry {
-    my ($name, $path) = @_;
+    my ($name, $path, $options) = @_;
     return unless -e "$path/kernel" && -e "$path/initrd";
 
     my $kernel = copyToKernelsDir(Cwd::abs_path("$path/kernel"));
@@ -396,7 +435,7 @@ sub addEntry {
         $conf .= "  " . ($xen ? "module" : "kernel") . " $kernel $kernelParams\n";
         $conf .= "  " . ($xen ? "module" : "initrd") . " $initrd\n\n";
     } else {
-        $conf .= "menuentry \"$name\" {\n";
+        $conf .= "menuentry \"$name\" " . ($options||"") . " {\n";
         $conf .= $grubBoot->search . "\n";
         if ($copyKernels == 0) {
             $conf .= $grubStore->search . "\n";
@@ -413,7 +452,7 @@ sub addEntry {
 # Add default entries.
 $conf .= "$extraEntries\n" if $extraEntriesBeforeNixOS;
 
-addEntry("NixOS - Default", $defaultConfig);
+addEntry("NixOS - Default", $defaultConfig, "--unrestricted");
 
 $conf .= "$extraEntries\n" unless $extraEntriesBeforeNixOS;
 

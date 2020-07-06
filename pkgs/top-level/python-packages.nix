@@ -557,6 +557,8 @@ in {
 
   browsermob-proxy = disabledIf isPy3k (callPackage ../development/python-modules/browsermob-proxy {});
 
+  btrfs = callPackage ../development/python-modules/btrfs { };
+
   bt_proximity = callPackage ../development/python-modules/bt-proximity { };
 
   bugseverywhere = throw "bugseverywhere has been removed: Abandoned by upstream."; # Added 2019-11-27
@@ -1015,6 +1017,8 @@ in {
   nvchecker = callPackage ../development/python-modules/nvchecker { };
 
   numericalunits = callPackage ../development/python-modules/numericalunits { };
+  
+  nunavut = callPackage ../development/python-modules/nunavut { };
 
   oath = callPackage ../development/python-modules/oath { };
 
@@ -1302,6 +1306,8 @@ in {
 
   pyscreenshot = callPackage ../development/python-modules/pyscreenshot { };
 
+  pydsdl = callPackage ../development/python-modules/pydsdl { };
+
   pyside = callPackage ../development/python-modules/pyside {
     inherit (pkgs) mesa;
   };
@@ -1502,6 +1508,9 @@ in {
     inherit (pkgs) sentencepiece pkgconfig;
   };
 
+  tokenizers = disabledIf (!isPy3k)
+    (toPythonModule (callPackage ../development/python-modules/tokenizers { }));
+
   transformers = callPackage ../development/python-modules/transformers { };
 
   transforms3d = callPackage ../development/python-modules/transforms3d { };
@@ -1561,6 +1570,8 @@ in {
   sparse = callPackage ../development/python-modules/sparse { };
 
   spglib = callPackage ../development/python-modules/spglib { };
+
+  spidev = callPackage ../development/python-modules/spidev { };
 
   srvlookup = callPackage ../development/python-modules/srvlookup { };
 
@@ -1636,6 +1647,17 @@ in {
 
   uvloop = callPackage ../development/python-modules/uvloop {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
+  };
+
+  pyuavcan = callPackage ../development/python-modules/pyuavcan { 
+    # this version pinpoint to anold version is necessary due to a regression
+    nunavut = self.nunavut.overridePythonAttrs ( old: rec {
+      version = "0.2.3";
+      src = old.src.override {
+        inherit version;
+        sha256 = "0x8a9h4mc2r2yz49s9arsbs4bn3h25mvmg4zbgksm9hcyi9536x5";
+      };
+    });
   };
 
   pyunifi = callPackage ../development/python-modules/pyunifi { };
@@ -2454,7 +2476,7 @@ in {
 
   pretend = callPackage ../development/python-modules/pretend { };
 
-  detox = callPackage ../development/python-modules/detox { };
+  detox = throw "detox is no longer maintained, and was broken since may 2019"; # added 2020-07-04
 
   pbkdf2 = callPackage ../development/python-modules/pbkdf2 { };
 
@@ -2714,6 +2736,10 @@ in {
   python-dateutil = callPackage ../development/python-modules/dateutil { };
   # Alias that we should deprecate
   dateutil = self.python-dateutil;
+
+  debugpy = callPackage ../development/python-modules/debugpy {
+    django = if isPy27 then self.django_1_11 else self.django;
+  };
 
   decorator = callPackage ../development/python-modules/decorator { };
 
@@ -3731,6 +3757,8 @@ in {
 
   eventlet = callPackage ../development/python-modules/eventlet { };
 
+  executing = callPackage ../development/python-modules/executing { };
+
   exifread = callPackage ../development/python-modules/exifread { };
 
   fastimport = callPackage ../development/python-modules/fastimport { };
@@ -4153,6 +4181,8 @@ in {
 
   htmllaundry = callPackage ../development/python-modules/htmllaundry { };
 
+  html-sanitizer = callPackage ../development/python-modules/html-sanitizer { };
+
   html5lib = callPackage ../development/python-modules/html5lib { };
 
   httmock = callPackage ../development/python-modules/httmock { };
@@ -4201,6 +4231,8 @@ in {
   iapws = callPackage ../development/python-modules/iapws { };
 
   icalendar = callPackage ../development/python-modules/icalendar { };
+
+  icecream = callPackage ../development/python-modules/icecream { };
 
   ics = callPackage ../development/python-modules/ics { };
 
@@ -4324,6 +4356,8 @@ in {
   jupyterhub = callPackage ../development/python-modules/jupyterhub { };
 
   jupyterhub-ldapauthenticator = callPackage ../development/python-modules/jupyterhub-ldapauthenticator { };
+
+  kaggle = callPackage ../development/python-modules/kaggle { };
 
   keyring = if isPy3k then
     callPackage ../development/python-modules/keyring { }
@@ -7238,6 +7272,8 @@ in {
 
   suseapi = callPackage ../development/python-modules/suseapi { };
 
+  tensorboardx = callPackage ../development/python-modules/tensorboardx { };
+
   typed-ast = callPackage ../development/python-modules/typed-ast { };
 
   stripe = callPackage ../development/python-modules/stripe { };
@@ -7329,6 +7365,8 @@ in {
   ftfy = callPackage ../development/python-modules/ftfy { };
 
   murmurhash = callPackage ../development/python-modules/murmurhash { };
+
+  pkuseg = callPackage ../development/python-modules/pkuseg { };
 
   plac = callPackage ../development/python-modules/plac { };
 
