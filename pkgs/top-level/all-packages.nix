@@ -10566,6 +10566,7 @@ in
   m4 = gnum4;
 
   gnumake = callPackage ../development/tools/build-managers/gnumake { };
+  gnumake42 = callPackage ../development/tools/build-managers/gnumake/4.2 { };
 
   gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep {});
 
