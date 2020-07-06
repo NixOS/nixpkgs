@@ -302,6 +302,11 @@ in
                 lpath = "acme/${cert}";
                 apath = "/var/lib/${lpath}";
                 spath = "/var/lib/acme/.lego/${cert}";
+                keyName = builtins.replaceStrings ["*"] ["_"] data.domain;
+                requestedDomains = pipe ([ data.domain ] ++ (attrNames data.extraDomains)) [
+                  (domains: sort builtins.lessThan domains)
+                  (domains: concatStringsSep "," domains)
+                ];
                 fileMode = if data.allowKeysForGroup then "640" else "600";
                 globalOpts = [ "-d" data.domain "--email" data.email "--path" "." "--key-type" data.keyType ]
                           ++ optionals (cfg.acceptTerms) [ "--accept-tos" ]
@@ -316,6 +321,7 @@ in
                   certOpts ++ data.extraLegoRenewFlags);
                 acmeService = {
                   description = "Renew ACME Certificate for ${cert}";
+                  path = with pkgs; [ openssl ];
                   after = [ "network.target" "network-online.target" ];
                   wants = [ "network-online.target" ];
                   wantedBy = mkIf (!config.boot.isContainer) [ "multi-user.target" ];
@@ -332,11 +338,18 @@ in
                     ExecStart = pkgs.writeScript "acme-start" ''
                       #!${pkgs.runtimeShell} -e
                       test -L ${spath}/accounts -o -d ${spath}/accounts || ln -s ../accounts ${spath}/accounts
-                      ${pkgs.lego}/bin/lego ${renewOpts} || ${pkgs.lego}/bin/lego ${runOpts}
+                      LEGO_ARGS=(${runOpts})
+                      if [ -e ${spath}/certificates/${keyName}.crt ]; then
+                        REQUESTED_DOMAINS="${requestedDomains}"
+                        EXISTING_DOMAINS="$(openssl x509 -in ${spath}/certificates/${keyName}.crt -noout -ext subjectAltName | tail -n1 | sed -e 's/ *DNS://g')"
+                        if [ "''${REQUESTED_DOMAINS}" == "''${EXISTING_DOMAINS}" ]; then
+                          LEGO_ARGS=(${renewOpts})
+                        fi
+                      fi
+                      ${pkgs.lego}/bin/lego ''${LEGO_ARGS[@]}
                     '';
                     ExecStartPost =
                       let
-                        keyName = builtins.replaceStrings ["*"] ["_"] data.domain;
                         script = pkgs.writeScript "acme-post-start" ''
                           #!${pkgs.runtimeShell} -e
                           cd ${apath}
