@@ -25,18 +25,19 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "3000.3";
+  version = "3001";
 
   src = py.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "19yfjhidx93rl9s03lvrfz7kp0xxigyv4d3zb9792zb9bsc4kjpw";
+    sha256 = "0m7immip3r8yffiv7qlcqibszvhlg48qpgcm16skvrn85hdhv9jw";
   };
 
   propagatedBuildInputs = with py.pkgs; [
+    distro
     jinja2
     markupsafe
     msgpack
-    pycrypto
+    pycryptodomex
     pyyaml
     pyzmq
     requests
