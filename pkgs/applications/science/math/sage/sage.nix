@@ -64,5 +64,7 @@ stdenv.mkDerivation rec {
     description = "Open Source Mathematics Software, free alternative to Magma, Maple, Mathematica, and Matlab";
     license = licenses.gpl2;
     maintainers = with maintainers; [ timokau ];
+    # See https://github.com/NixOS/nixpkgs/issues/92518
+    broken = true;
   };
 }
