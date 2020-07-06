@@ -280,6 +280,17 @@ in
         description = "Whether to enable smtp submission.";
       };
 
+      enableSubmissions = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to enable smtp submission via smtps.
+
+          According to RFC 8314 this should be preferred
+          over STARTTLS for submission of messages by end user clients.
+        '';
+      };
+
       submissionOptions = mkOption {
         type = types.attrs;
         default = {
@@ -296,6 +307,29 @@ in
           milter_macro_daemon_name = "ORIGINATING";
         };
         description = "Options for the submission config in master.cf";
+      };
+
+      submissionsOptions = mkOption {
+        type = types.attrs;
+        default = {
+          smtpd_sasl_auth_enable = "yes";
+          smtpd_client_restrictions = "permit_sasl_authenticated,reject";
+          milter_macro_daemon_name = "ORIGINATING";
+        };
+        example = {
+          smtpd_sasl_auth_enable = "yes";
+          smtpd_sasl_type = "dovecot";
+          smtpd_client_restrictions = "permit_sasl_authenticated,reject";
+          milter_macro_daemon_name = "ORIGINATING";
+        };
+        description = ''
+          Options for the submission config via smtps in master.cf.
+
+          smtpd_tls_security_level will be set to encrypt, if it is missing
+          or has one of the values "may" or "none".
+
+          smtpd_tls_wrappermode with value "yes" will be added automatically.
+        '';
       };
 
       setSendmail = mkOption {
@@ -877,6 +911,23 @@ in
         relay = {
           command = "smtp";
           args = [ "-o" "smtp_fallback_relay=" ];
+        };
+      } // optionalAttrs cfg.enableSubmissions {
+        submissions = {
+          type = "inet";
+          private = false;
+          command = "smtpd";
+          args = let
+            mkKeyVal = opt: val: [ "-o" (opt + "=" + val) ];
+            adjustSmtpTlsSecurityLevel = !(cfg.submissionsOptions ? smtpd_tls_security_level) ||
+                                      cfg.submissionsOptions.smtpd_tls_security_level == "none" ||
+                                      cfg.submissionsOptions.smtpd_tls_security_level == "may";
+            submissionsOptions = cfg.submissionsOptions // {
+              smtpd_tls_wrappermode = "yes";
+            } // optionalAttrs adjustSmtpTlsSecurityLevel {
+              smtpd_tls_security_level = "encrypt";
+            };
+          in concatLists (mapAttrsToList mkKeyVal submissionsOptions);
         };
       };
     }
