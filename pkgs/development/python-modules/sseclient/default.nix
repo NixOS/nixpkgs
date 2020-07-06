@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi
 , requests, six
-, backports_unittest-mock, pytest, pytestrunner }:
+, backports_unittest-mock, pytestCheckHook, pytestrunner }:
 
 buildPythonPackage rec {
   pname = "sseclient";
@@ -13,7 +13,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests six ];
 
-  checkInputs = [ backports_unittest-mock pytest pytestrunner ];
+  checkInputs = [ backports_unittest-mock pytestCheckHook pytestrunner ];
+
+  # tries to open connection to wikipedia
+  disabledTests = [ "event_stream" ];
 
   meta = with stdenv.lib; {
     description = "Client library for reading Server Sent Event streams";

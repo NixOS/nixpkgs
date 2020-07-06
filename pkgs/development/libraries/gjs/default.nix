@@ -17,6 +17,7 @@
 , dbus
 , gdk-pixbuf
 , makeWrapper
+, which
 , xvfb_run
 , nixosTests
 }:
@@ -28,11 +29,11 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "gjs";
-  version = "1.64.2";
+  version = "1.64.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0ywrsfmkxaw11z83dnmb9yqkn6k3c1mkxw2mv6arbwad6x6q7zqm";
+    sha256 = "1rl524rmdbpmp5xdkm8dx3znq47l7dgvh192x80zjf8wc1af35lx";
   };
 
   outputs = [ "out" "dev" "installedTests" ];
@@ -42,6 +43,7 @@ in stdenv.mkDerivation rec {
     ninja
     pkgconfig
     makeWrapper
+    which # for locale detection
     libxml2 # for xml-stripblanks
   ];
 
@@ -74,11 +76,10 @@ in stdenv.mkDerivation rec {
     ./installed-tests-path.patch
   ];
 
-  # Gio test is failing
-  # https://github.com/NixOS/nixpkgs/pull/81626#issuecomment-599325843
-  doCheck = false;
+  doCheck = true;
 
   postPatch = ''
+    patchShebangs build/choose-tests-locale.sh
     substituteInPlace installed-tests/debugger-test.sh --subst-var-by gjsConsole $out/bin/gjs-console
   '';
 
@@ -95,7 +96,15 @@ in stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
+    # TODO: make the glib setup hook handle this
+    installedTestsSchemaDatadir="$installedTests/share/gsettings-schemas/${pname}-${version}"
+    mkdir -p "$installedTestsSchemaDatadir"
+    mv "$installedTests/share/glib-2.0" "$installedTestsSchemaDatadir"
+  '';
+
+  postFixup = ''
     wrapProgram "$installedTests/libexec/gjs/installed-tests/minijasmine" \
+      --prefix XDG_DATA_DIRS : "$installedTestsSchemaDatadir" \
       --prefix GI_TYPELIB_PATH : "${stdenv.lib.makeSearchPath "lib/girepository-1.0" testDeps}"
   '';
 

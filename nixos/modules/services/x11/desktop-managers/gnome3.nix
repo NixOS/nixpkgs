@@ -320,8 +320,8 @@ in
         gnome-shell
         gnome-shell-extensions
         gnome-themes-extra
-        nixos-artwork.wallpapers.simple-dark-gray
-        nixos-artwork.wallpapers.simple-dark-gray-bottom
+        pkgs.nixos-artwork.wallpapers.simple-dark-gray
+        pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom
         pkgs.gnome-user-docs
         pkgs.orca
         pkgs.glib # for gsettings

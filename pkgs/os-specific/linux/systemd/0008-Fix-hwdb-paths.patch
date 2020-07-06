@@ -1,4 +1,4 @@
-From b56fc7b6ae8014eb2f71924c89498f395a1a81bd Mon Sep 17 00:00:00 2001
+From 5a6aad633a7ceffd62b009ce0c4ab6673129f7ff Mon Sep 17 00:00:00 2001
 From: Nikolay Amiantov <ab@fmap.me>
 Date: Thu, 7 Jul 2016 02:47:13 +0300
 Subject: [PATCH 08/18] Fix hwdb paths

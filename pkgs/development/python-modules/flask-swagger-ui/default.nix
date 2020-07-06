@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "flask-swagger-ui";
-  version = "3.20.9";
+  version = "3.25.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3282c770764c8053360f33b2fc120e1d169ecca2138537d0e6e1135b1f9d4ff2";
+    sha256 = "42d098997e06b04f992609c4945cc990738b269c153d8388fc59a91a5dfcee9e";
   };
 
   doCheck = false;  # there are no tests

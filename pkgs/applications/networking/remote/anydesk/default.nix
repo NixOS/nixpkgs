@@ -22,7 +22,7 @@ let
     icon = "anydesk";
     desktopName = "AnyDesk";
     genericName = description;
-    categories = "Application;Network;";
+    categories = "Network;";
     startupNotify = "false";
   };
 

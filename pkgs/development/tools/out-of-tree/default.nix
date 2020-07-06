@@ -2,17 +2,17 @@
 
 buildGoModule rec {
   pname = "out-of-tree";
-  version = "1.3.0";
+  version = "1.4.0";
 
   buildInputs = [ makeWrapper ];
 
   src = fetchgit {
     rev = "refs/tags/v${version}";
     url = "https://code.dumpstack.io/tools/${pname}.git";
-    sha256 = "02xh23nbwyyf087jqkm97jbnwpja1myaz190q5r166mpwcdpz2dn";
+    sha256 = "1rn824l3dzh3xjxsbzzj053qg1abhzjimc8l73r0n5qrl44k2qk2";
   };
 
-  vendorSha256 = "1dk0cipdgj2yyg1bc9l7nvy4y373pmqwy8xiyc0wg7pchb4h9p7s";
+  vendorSha256 = "0kg5c4h7xnwfcfshrh5n76xv98wzr73kxzr8q65iphsjimbxcpy3";
 
   postFixup = ''
     wrapProgram $out/bin/out-of-tree \

@@ -1,17 +1,18 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, isort }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, mock, pytest, isort }:
 
 buildPythonPackage rec {
   pname = "pytest-isort";
-  version = "0.3.1";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4bfee60dad1870b51700d55a85f5ceda766bd9d3d2878c1bbabee80e61b1be1a";
+    sha256 = "758156cb4dc1db72adc1b7e253011f5eea117fab32af03cedb4cbfc6058b5f8f";
   };
 
   propagatedBuildInputs = [ isort ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest ]
+    ++ lib.optionals isPy27 [ mock ];
 
   checkPhase = ''
     py.test -vs --cache-clear

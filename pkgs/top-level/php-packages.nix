@@ -3,7 +3,7 @@
 , html-tidy, libzip, zlib, pcre, pcre2, libxslt, aspell, openldap, cyrus_sasl
 , uwimap, pam, libiconv, enchant1, libXpm, gd, libwebp, libjpeg, libpng
 , freetype, libffi, freetds, postgresql, sqlite, net-snmp, unixODBC, libedit
-, readline, rsync
+, readline, rsync, fetchpatch
 }:
 
 let
@@ -947,6 +947,12 @@ in
         enable = lib.versionOlder php.version "7.4"; }
       { name = "gettext";
         buildInputs = [ gettext ];
+        patches = lib.optionals (lib.versionOlder php.version "7.4") [
+          (fetchpatch {
+            url = "https://github.com/php/php-src/commit/632b6e7aac207194adc3d0b41615bfb610757f41.patch";
+            sha256 = "0xn3ivhc4p070vbk5yx0mzj2n7p04drz3f98i77amr51w0vzv046";
+          })
+        ];
         postPhpize = ''substituteInPlace configure --replace 'as_fn_error $? "Cannot locate header file libintl.h" "$LINENO" 5' ':' '';
         configureFlags = "--with-gettext=${gettext}"; }
       { name = "gmp";
@@ -965,7 +971,13 @@ in
         # uwimap doesn't build on darwin.
         enable = (!stdenv.isDarwin); }
       # interbase (7.3, 7.2)
-      { name = "intl"; buildInputs = [ icu ]; }
+      { name = "intl";
+        buildInputs = [ icu ];
+        patches = lib.optional (lib.versionOlder php.version "7.4") (fetchpatch {
+          url = "https://github.com/php/php-src/commit/93a9b56c90c334896e977721bfb3f38b1721cec6.patch";
+          sha256 = "055l40lpyhb0rbjn6y23qkzdhvpp7inbnn6x13cpn4inmhjqfpg4";
+        });
+      }
       { name = "json"; }
       { name = "ldap";
         buildInputs = [ openldap cyrus_sasl ];
@@ -1157,6 +1169,10 @@ in
         doCheck = false; }
       { name = "zlib";
         buildInputs = [ zlib ];
+        patches = lib.optionals (lib.versionOlder php.version "7.4") [
+          # Derived from https://github.com/php/php-src/commit/f16b012116d6c015632741a3caada5b30ef8a699
+          ../development/interpreters/php/zlib-darwin-tests.patch
+        ];
         configureFlags = [ "--with-zlib" ]
           ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-zlib-dir=${zlib.dev}" ]; }
     ];

@@ -1178,14 +1178,22 @@ in
       users.users.systemd-network.group = "systemd-network";
 
       systemd.additionalUpstreamSystemUnits = [
-        "systemd-networkd.service" "systemd-networkd-wait-online.service"
+        "systemd-networkd-wait-online.service"
+        "systemd-networkd.service"
+        "systemd-networkd.socket"
       ];
 
       systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.netdev" (netdevToUnit n v)) cfg.netdevs
         // mapAttrs' (n: v: nameValuePair "${n}.network" (networkToUnit n v)) cfg.networks;
 
+      # systemd-networkd is socket-activated by kernel netlink route change
+      # messages. It is important to have systemd buffer those on behalf of
+      # networkd.
+      systemd.sockets.systemd-networkd.wantedBy = [ "sockets.target" ];
+
       systemd.services.systemd-networkd = {
         wantedBy = [ "multi-user.target" ];
+        aliases = [ "dbus-org.freedesktop.network1.service" ];
         restartTriggers = map (x: x.source) (attrValues unitFiles);
         # prevent race condition with interface renaming (#39069)
         requires = [ "systemd-udev-settle.service" ];

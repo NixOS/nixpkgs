@@ -13,6 +13,8 @@ self: super: {
 
     pg_bigm = super.callPackage ./ext/pg_bigm.nix { };
 
+    pg_ed25519 = super.callPackage ./ext/pg_ed25519.nix { };
+
     pg_repack = super.callPackage ./ext/pg_repack.nix { };
 
     pg_similarity = super.callPackage ./ext/pg_similarity.nix { };

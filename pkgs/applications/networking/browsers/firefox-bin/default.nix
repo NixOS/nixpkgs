@@ -8,7 +8,6 @@
 , dbus
 , fontconfig
 , freetype
-, gconf
 , gdk-pixbuf
 , glib
 , glibc
@@ -27,9 +26,7 @@
 , libXinerama
 , libXrender
 , libXt
-, libcanberra-gtk2
-, libgnome
-, libgnomeui
+, libcanberra
 , libnotify
 , gnome3
 , libGLU, libGL
@@ -48,7 +45,7 @@
 , gnused
 , gnugrep
 , gnupg
-, ffmpeg
+, ffmpeg_3
 , runtimeShell
 , systemLocale ? config.i18n.defaultLocale or "en-US"
 }:
@@ -103,7 +100,6 @@ stdenv.mkDerivation {
       dbus
       fontconfig
       freetype
-      gconf
       gdk-pixbuf
       glib
       glibc
@@ -122,9 +118,7 @@ stdenv.mkDerivation {
       libXinerama
       libXrender
       libXt
-      libcanberra-gtk2
-      libgnome
-      libgnomeui
+      libcanberra
       libnotify
       libGLU libGL
       nspr
@@ -134,7 +128,7 @@ stdenv.mkDerivation {
       libpulseaudio
       (lib.getDev libpulseaudio)
       systemd
-      ffmpeg
+      ffmpeg_3
     ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];

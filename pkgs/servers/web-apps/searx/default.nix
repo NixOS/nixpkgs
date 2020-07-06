@@ -1,4 +1,4 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub, fetchpatch }:
 
 with python3Packages;
 
@@ -14,6 +14,11 @@ buildPythonApplication rec {
     sha256 = "0hfa4nmis98yvghxw866rzjpmhb2ln8l6l8g9yx4m79b2lk76xcs";
   };
 
+  patches = [(fetchpatch {
+    url = "https://github.com/asciimoo/searx/commit/b8b13372c8fd3bfe978a1c724ab98b05348df054.patch";
+    sha256 = "1zc3dx8pgqfg0bj48ihckjk9xrrm33jlnmj8k02g17gfcmj7566a";
+  })];
+
   postPatch = ''
     substituteInPlace requirements.txt \
       --replace 'certifi==2019.3.9' 'certifi' \
@@ -25,7 +30,8 @@ buildPythonApplication rec {
       --replace 'pygments==2.1.3' 'pygments>=2.1,<3.0' \
       --replace 'pyopenssl==19.0.0' 'pyopenssl' \
       --replace 'python-dateutil==2.8.0' 'python-dateutil==2.8.*' \
-      --replace 'pyyaml==5.1' 'pyyaml'
+      --replace 'pyyaml==5.1' 'pyyaml' \
+      --replace 'requests[socks]==2.22.0' 'requests[socks]'
     substituteInPlace requirements-dev.txt \
       --replace 'plone.testing==5.0.0' 'plone.testing' \
       --replace 'pep8==1.7.0' 'pep8==1.7.*' \

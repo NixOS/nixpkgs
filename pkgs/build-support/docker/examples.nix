@@ -121,6 +121,7 @@ rec {
       # the image env variable NIX_PAGER.
       pkgs.coreutils
       pkgs.nix
+      pkgs.bash
     ];
     config = {
       Env = [
@@ -312,5 +313,45 @@ rec {
       ''
       )
     ];
+  };
+
+  nixLayered = pkgs.dockerTools.buildLayeredImageWithNixDb {
+    name = "nix-layered";
+    tag = "latest";
+    contents = [
+      # nix-store uses cat program to display results as specified by
+      # the image env variable NIX_PAGER.
+      pkgs.coreutils
+      pkgs.nix
+      pkgs.bash
+    ];
+    config = {
+      Env = [
+        "NIX_PAGER=cat"
+        # A user is required by nix
+        # https://github.com/NixOS/nix/blob/9348f9291e5d9e4ba3c4347ea1b235640f54fd79/src/libutil/util.cc#L478
+        "USER=nobody"
+      ];
+    };
+  };
+
+  # 19. Support files in the store on buildLayeredImage
+  # See: https://github.com/NixOS/nixpkgs/pull/91084#issuecomment-653496223
+  filesInStore = pkgs.dockerTools.buildLayeredImageWithNixDb {
+    name = "file-in-store";
+    tag = "latest";
+    contents = [
+      pkgs.coreutils
+      pkgs.nix
+      (pkgs.writeScriptBin "myscript" ''
+        #!${pkgs.runtimeShell}
+        cat ${pkgs.writeText "somefile" "some data"}
+      '')
+    ];
+    config = {
+      Cmd = [ "myscript" ];
+      # For some reason 'nix-store --verify' requires this environment variable
+      Env = [ "USER=root" ];
+    };
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, meson, ninja, pkg-config, wayland
 , libGL, wayland-protocols, libinput, libxkbcommon, pixman
 , xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa
-, libpng, ffmpeg_4
+, libpng, ffmpeg
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libGL wayland-protocols libinput libxkbcommon pixman
     xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa
-    libpng ffmpeg_4
+    libpng ffmpeg
   ];
 
   postInstall = ''

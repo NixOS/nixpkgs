@@ -3,14 +3,14 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  version = "nc0.19.1";
+  version = "nc0.20.0";
   name = "namecoin" + toString (optional (!withGui) "d") + "-" + version;
 
   src = fetchFromGitHub {
     owner = "namecoin";
     repo = "namecoin-core";
     rev = version;
-    sha256 = "13rdvngrl2w0gk7km3sd9fy8yxzgxlkcwn50ajsbrhgzl8kx4q7m";
+    sha256 = "115nlsq5g169mj4qjmkhxx1bnx740871zqyng9zbm2y4i0xf71c4";
   };
 
   nativeBuildInputs = [

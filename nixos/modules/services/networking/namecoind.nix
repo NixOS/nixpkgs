@@ -149,11 +149,6 @@ in
 
   config = mkIf cfg.enable {
 
-    services.dnschain.extraConfig = ''
-      [namecoin]
-      config = ${configFile}
-    '';
-
     users.users.namecoin = {
       uid  = config.ids.uids.namecoin;
       description = "Namecoin daemon user";

@@ -39,7 +39,7 @@
 
 , name ? "nixos-disk-image"
 
-, # Disk image format, one of qcow2, qcow2-compressed, vpc, raw.
+, # Disk image format, one of qcow2, qcow2-compressed, vdi, vpc, raw.
   format ? "raw"
 }:
 
@@ -57,6 +57,7 @@ let format' = format; in let
 
   filename = "nixos." + {
     qcow2 = "qcow2";
+    vdi   = "vdi";
     vpc   = "vhd";
     raw   = "img";
   }.${format};

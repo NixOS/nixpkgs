@@ -24,6 +24,7 @@
 , gomodifytags, gotags, gotools, go-motion
 , gnused, reftools, gogetdoc, golangci-lint
 , impl, iferr, gocode, gocode-gomod, go-tools
+, gopls
 
 # direnv-vim dependencies
 , direnv
@@ -555,6 +556,10 @@ self: super: {
     dependencies = with super; [ vim-maktaba ];
   });
 
+  vim-beancount = super.vim-beancount.overrideAttrs(old: {
+    passthru.python3Dependencies = ps: with ps; [ beancount ];
+  });
+
   vim-codefmt = super.vim-codefmt.overrideAttrs(old: {
     dependencies = with super; [ vim-maktaba ];
   });
@@ -593,6 +598,7 @@ self: super: {
       golint
       golangci-lint
       gomodifytags
+      gopls
       gotags
       gotools
       iferr

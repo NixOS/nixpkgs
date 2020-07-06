@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "zict";
-  version = "1.0.0";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04532600mnsvzv43l2jvjrn7sflg0wkjqzy7nj7m3vvxm5gd4kg3";
+    sha256 = "8e2969797627c8a663575c2fc6fcb53a05e37cdb83ee65f341fc6e0c3d0ced16";
   };
 
   buildInputs = [ pytest ];

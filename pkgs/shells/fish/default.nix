@@ -79,20 +79,17 @@ let
 
       # additional profiles are expected in order of precedence, which means the reverse of the
       # NIX_PROFILES variable (same as config.environment.profiles)
-      set -l __nix_profile_paths (echo $NIX_PROFILES | ${coreutils}/bin/tr ' ' '\n')[-1..1]
+      set -l __nix_profile_paths (string split ' ' $NIX_PROFILES)[-1..1]
 
-      set __extra_completionsdir \
+      set -p __extra_completionsdir \
         $__nix_profile_paths"/etc/fish/completions" \
-        $__nix_profile_paths"/share/fish/vendor_completions.d" \
-        $__extra_completionsdir
-      set __extra_functionsdir \
+        $__nix_profile_paths"/share/fish/vendor_completions.d"
+      set -p __extra_functionsdir \
         $__nix_profile_paths"/etc/fish/functions" \
-        $__nix_profile_paths"/share/fish/vendor_functions.d" \
-        $__extra_functionsdir
-      set __extra_confdir \
+        $__nix_profile_paths"/share/fish/vendor_functions.d"
+      set -p __extra_confdir \
         $__nix_profile_paths"/etc/fish/conf.d" \
-        $__nix_profile_paths"/share/fish/vendor_conf.d" \
-        $__extra_confdir
+        $__nix_profile_paths"/share/fish/vendor_conf.d"
     end
   '';
 
@@ -123,6 +120,10 @@ let
       ncurses
       libiconv
       pcre2
+    ];
+
+    cmakeFlags = [
+      "-DCMAKE_INSTALL_DOCDIR=${placeholder "out"}/share/doc/fish"
     ];
 
     preConfigure = ''

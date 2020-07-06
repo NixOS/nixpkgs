@@ -4,7 +4,7 @@
 , pkgconfig
 , cmake
 , bluez
-, ffmpeg
+, ffmpeg_3
 , libao
 , gtk2
 , glib
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bluez
-    ffmpeg
+    ffmpeg_3
     libao
     libGLU
     libGL

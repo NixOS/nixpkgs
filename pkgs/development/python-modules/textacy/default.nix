@@ -17,12 +17,12 @@
 
 buildPythonPackage rec {
   pname = "textacy";
-  version = "0.9.1";
+  version = "0.10.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jhj02g6kh5vc0z4az7n547siav3gj5571bqpzdryskj6bsma2z1";
+    sha256 = "0a824333f53d19d24ca864c92da52f3fecd412f4ef3e1448864c45f06189fd6d";
   };
 
   propagatedBuildInputs = [

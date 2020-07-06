@@ -27,6 +27,15 @@ let
   hashedPasswordDescription = ''
     To generate hashed password install <literal>mkpasswd</literal>
     package and run <literal>mkpasswd -m sha-512</literal>.
+
+    For password-less logins without password prompt, use
+    the empty string <literal>""</literal>.
+
+    For logins with a fixed password (including the empty-string password with
+    prompt), use one of the un-hashed password options instead, such as
+    <option>users.users.&lt;name?&gt;.password</option>.
+
+    Such unprotected logins should only be used for e.g. bootable live systems.
   '';
 
   userOpts = { name, config, ... }: {
@@ -599,6 +608,38 @@ in {
           You must set one to prevent being locked out of your system.'';
       }
     ];
+
+    warnings =
+      builtins.filter (x: x != null) (
+        flip mapAttrsToList cfg.users (name: user:
+        # This regex matches a subset of the Modular Crypto Format (MCF)[1]
+        # informal standard. Since this depends largely on the OS or the
+        # specific implementation of crypt(3) we only support the (sane)
+        # schemes implemented by glibc and BSDs. In particular the original
+        # DES hash is excluded since, having no structure, it would validate
+        # common mistakes like typing the plaintext password.
+        #
+        # [1]: https://en.wikipedia.org/wiki/Crypt_(C)
+        let
+          sep = "\\$";
+          base64 = "[a-zA-Z0-9./]+";
+          id = "[a-z0-9-]+";
+          value = "[a-zA-Z0-9/+.-]+";
+          options = "${id}(=${value})?(,${id}=${value})*";
+          scheme  = "${id}(${sep}${options})?";
+          content = "${base64}${sep}${base64}";
+          mcf = "^${sep}${scheme}${sep}${content}$";
+        in
+        if (user.hashedPassword != null
+            && builtins.match mcf user.hashedPassword == null)
+        then
+        ''
+          The password hash of user "${name}" may be invalid. You must set a
+          valid hash or the user will be locked out of their account. Please
+          check the value of option `users.users."${name}".hashedPassword`.
+        ''
+        else null
+      ));
 
   };
 

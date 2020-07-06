@@ -1,8 +1,38 @@
-{ stdenv, fetchurl, fetchpatch, faust, gettext, intltool, pkgconfig, python2
-, avahi, bluez, boost, eigen, fftw, glib, glib-networking
-, glibmm, gsettings-desktop-schemas, gtkmm2, libjack2
-, ladspaH, libav, libsndfile, lilv, lrdf, lv2, serd, sord, sratom
-, wrapGAppsHook, zita-convolver, zita-resampler, curl, wafHook
+{ stdenv
+, fetchurl
+, avahi
+, bluez
+, boost
+, curl
+, eigen
+, fftw
+, gettext
+, glib
+, glib-networking
+, glibmm
+, gnome3
+, gsettings-desktop-schemas
+, gtk3
+, gtkmm3
+, hicolor-icon-theme
+, intltool
+, ladspaH
+, libav
+, libjack2
+, libsndfile
+, lilv
+, lrdf
+, lv2
+, pkgconfig
+, python2
+, sassc
+, serd
+, sord
+, sratom
+, wafHook
+, wrapGAppsHook
+, zita-convolver
+, zita-resampler
 , optimizationSupport ? false # Enable support for native CPU extensions
 }:
 
@@ -12,43 +42,67 @@ in
 
 stdenv.mkDerivation rec {
   pname = "guitarix";
-  version = "0.39.0";
+  version = "0.40.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/guitarix/guitarix2-${version}.tar.xz";
-    sha256 = "1nn80m1qagfhvv69za60f0w6ck87vmk77qmqarj7fbr8avwg63s9";
+    sha256 = "0q9050499hcj19hvbxb069vxh5yclawjg04vryh46lxm4sfy9g57";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/guitarix-0.39.0-fix_faust_and_lv2_plugins.patch?id=8579b4dfe85e04303ad2d9771ed699f04ea7b7cf";
-      stripLen = 1;
-      sha256 = "0pgkhi4v4vrzjnig0ggmz207q4x5iyk2n6rjj8s5lv15fia7qzp4";
-    })
-  ];
+  # see: https://sourceforge.net/p/guitarix/bugs/105
+  patches = [ ./fix-build.patch ];
 
-  nativeBuildInputs = [ faust gettext intltool wrapGAppsHook pkgconfig python2 wafHook ];
+  nativeBuildInputs = [
+    gettext
+    hicolor-icon-theme
+    intltool
+    pkgconfig
+    python2
+    wafHook
+    wrapGAppsHook
+  ];
 
   buildInputs = [
-    avahi bluez boost eigen fftw glib glibmm glib-networking.out
-    gsettings-desktop-schemas gtkmm2 libjack2 ladspaH libav
-    libsndfile lilv lrdf lv2 serd sord sratom zita-convolver
-    zita-resampler curl
+    avahi
+    bluez
+    boost
+    curl
+    eigen
+    fftw
+    glib
+    glib-networking.out
+    glibmm
+    gnome3.adwaita-icon-theme
+    gsettings-desktop-schemas
+    gtk3
+    gtkmm3
+    ladspaH
+    libav
+    libjack2
+    libsndfile
+    lilv
+    lrdf
+    lv2
+    sassc
+    serd
+    sord
+    sratom
+    zita-convolver
+    zita-resampler
   ];
 
-  postPatch = ''
-    # Fix build with lv2 1.18: https://github.com/brummer10/guitarix/commit/c0334c72
-    find . -type f -exec fgrep -q LV2UI_Descriptor {} \; \
-      -exec sed -i {} -e 's/const struct _\?LV2UI_Descriptor/const LV2UI_Descriptor/' \;
-  '';
-
+  # this doesnt build, probably because we have the wrong faust version:
+  #       "--faust"
+  # aproved versions are 2.20.2 and 2.15.11
   wafConfigureFlags = [
+    "--no-faust"
+    "--no-font-cache-update"
     "--shared-lib"
     "--no-desktop-update"
     "--enable-nls"
     "--install-roboto-font"
     "--includeresampler"
-    "--convolver-ffmpeg"
+    "--includeconvolver"
   ] ++ optional optimizationSupport "--optimization";
 
   meta = with stdenv.lib; {

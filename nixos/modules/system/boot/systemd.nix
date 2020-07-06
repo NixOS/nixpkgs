@@ -826,8 +826,13 @@ in
   config = {
 
     warnings = concatLists (mapAttrsToList (name: service:
-      optional (service.serviceConfig.Type or "" == "oneshot" && service.serviceConfig.Restart or "no" != "no")
-        "Service ‘${name}.service’ with ‘Type=oneshot’ must have ‘Restart=no’") cfg.services);
+      let
+        type = service.serviceConfig.Type or "";
+        restart = service.serviceConfig.Restart or "no";
+      in optional
+      (type == "oneshot" && (restart == "always" || restart == "on-success"))
+      "Service '${name}.service' with 'Type=oneshot' cannot have 'Restart=always' or 'Restart=on-success'")
+      cfg.services);
 
     system.build.units = cfg.units;
 

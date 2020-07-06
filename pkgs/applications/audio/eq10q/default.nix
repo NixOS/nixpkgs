@@ -19,6 +19,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+     # Fix build with lv2 1.18: https://sourceforge.net/p/eq10q/bugs/23/
+     find . -type f -exec fgrep -q LV2UI_Descriptor {} \; \
+       -exec sed -i {} -e 's/const _\?LV2UI_Descriptor/const LV2UI_Descriptor/' \;
+   '';
+
   installFlags = [ "DESTDIR=$(out)" ];
 
   fixupPhase = ''

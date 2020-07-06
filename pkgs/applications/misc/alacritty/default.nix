@@ -90,8 +90,6 @@ rustPlatform.buildRustPackage rec {
       --replace xdg-open ${xdg_utils}/bin/xdg-open
   '';
 
-  postBuild = lib.optionalString stdenv.isDarwin "make app";
-
   installPhase = ''
     runHook preInstall
 
@@ -100,7 +98,8 @@ rustPlatform.buildRustPackage rec {
   '' + (
     if stdenv.isDarwin then ''
       mkdir $out/Applications
-      cp -r $releaseDir/osx/Alacritty.app $out/Applications/Alacritty.app
+      cp -r extra/osx/Alacritty.app $out/Applications
+      ln -s $out/bin $out/Applications/Alacritty.app/Contents/MacOS
     '' else ''
       install -D extra/linux/Alacritty.desktop -t $out/share/applications/
       install -D extra/logo/compat/alacritty-term.svg $out/share/icons/hicolor/scalable/apps/Alacritty.svg
@@ -120,6 +119,8 @@ rustPlatform.buildRustPackage rec {
 
     install -dm 755 "$out/share/man/man1"
     gzip -c extra/alacritty.man > "$out/share/man/man1/alacritty.1.gz"
+
+    install -Dm 644 alacritty.yml $out/share/doc/alacritty.yml
 
     install -dm 755 "$terminfo/share/terminfo/a/"
     tic -xe alacritty,alacritty-direct -o "$terminfo/share/terminfo" extra/alacritty.info

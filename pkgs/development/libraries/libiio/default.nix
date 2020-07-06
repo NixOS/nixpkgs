@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libiio";
-  version = "0.19";
+  version = "0.20";
 
   src = fetchFromGitHub {
     owner  = "analogdevicesinc";
     repo   = "libiio";
     rev    = "refs/tags/v${version}";
-    sha256 = "1r67h5mayx9krh3mmzs5vz20mvwb2lw04hpbyyisygl01ndc77kq";
+    sha256 = "1929gvizkqmm9cwh3vihxxszfxvgcp5saq9q6chdk3fpdhzajc00";
   };
 
   outputs = [ "out" "lib" "dev" "python" ];

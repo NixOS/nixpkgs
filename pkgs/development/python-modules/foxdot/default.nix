@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "FoxDot";
-  version = "0.8.8";
+  version = "0.8.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06y626kgaz1wn1qajlngihpvd4qz8m6lx6sknmjqhhrznyji58wi";
+    sha256 = "00yqpkv7cxwk301cyiwjzr9yfq8hpnhqyspw3z874ydrl3cmssdb";
   };
 
   propagatedBuildInputs = [ tkinter supercollider ];

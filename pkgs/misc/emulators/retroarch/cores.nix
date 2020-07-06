@@ -1,6 +1,6 @@
 { stdenv, fetchgit, fetchFromGitHub, fetchFromGitLab, cmake, pkgconfig, makeWrapper, python27, python37, retroarch
 , alsaLib, fluidsynth, curl, hidapi, libGLU, gettext, glib, gtk2, portaudio, SDL, SDL_net, SDL2, SDL2_image, libGL
-, ffmpeg, pcre, libevdev, libpng, libjpeg, libzip, udev, libvorbis, snappy, which, hexdump
+, ffmpeg_3, pcre, libevdev, libpng, libjpeg, libzip, udev, libvorbis, snappy, which, hexdump
 , miniupnpc, sfml, xorg, zlib, nasm, libpcap, boost, icu, openssl
 , buildPackages }:
 
@@ -834,7 +834,7 @@ in with stdenv.lib.licenses;
     description = "ppsspp libretro port";
     license = gpl2;
     extraNativeBuildInputs = [ cmake pkgconfig ];
-    extraBuildInputs = [ libGLU libGL libzip ffmpeg python37 snappy xorg.libX11 ];
+    extraBuildInputs = [ libGLU libGL libzip ffmpeg_3 python37 snappy xorg.libX11 ];
     makefile = "Makefile";
     cmakeFlags = [ "-DLIBRETRO=ON -DUSE_SYSTEM_FFMPEG=ON -DUSE_SYSTEM_SNAPPY=ON -DUSE_SYSTEM_LIBZIP=ON -DOpenGL_GL_PREFERENCE=GLVND" ];
     postBuild = "mv lib/ppsspp_libretro${stdenv.hostPlatform.extensions.sharedLibrary} ppsspp_libretro${stdenv.hostPlatform.extensions.sharedLibrary}";

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchurl, substituteAll, cmake, makeWrapper, pkgconfig
-, curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mysql, pcre, perl, perlPackages
+, curl, ffmpeg_3, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mysql, pcre, perl, perlPackages
 , polkit, utillinuxMinimal, x264, zlib
 , coreutils, procps, psmisc, nixosTests }:
 
@@ -138,7 +138,7 @@ in stdenv.mkDerivation rec {
 
     for f in includes/Event.php views/image.php ; do
       substituteInPlace web/$f \
-        --replace "'ffmpeg " "'${ffmpeg}/bin/ffmpeg "
+        --replace "'ffmpeg " "'${ffmpeg_3}/bin/ffmpeg "
     done
 
     substituteInPlace web/includes/functions.php \
@@ -147,7 +147,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    curl ffmpeg glib libjpeg libselinux libsepol mp4v2 libmysqlclient mysql.client pcre perl polkit x264 zlib
+    curl ffmpeg_3 glib libjpeg libselinux libsepol mp4v2 libmysqlclient mysql.client pcre perl polkit x264 zlib
     utillinuxMinimal # for libmount
   ] ++ (with perlPackages; [
     # build-time dependencies

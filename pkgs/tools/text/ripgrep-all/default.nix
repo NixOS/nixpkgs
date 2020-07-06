@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, makeWrapper, ffmpeg
+{ stdenv, lib, fetchFromGitHub, rustPlatform, makeWrapper, ffmpeg_3
 , pandoc, poppler_utils, ripgrep, Security, imagemagick, tesseract
 }:
 
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/rga \
-      --prefix PATH ":" "${lib.makeBinPath [ ffmpeg pandoc poppler_utils ripgrep imagemagick tesseract ]}"
+      --prefix PATH ":" "${lib.makeBinPath [ ffmpeg_3 pandoc poppler_utils ripgrep imagemagick tesseract ]}"
   '';
 
   # Use upstream's example data to run a couple of queries to ensure the dependencies

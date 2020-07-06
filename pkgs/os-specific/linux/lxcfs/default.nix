@@ -1,4 +1,5 @@
 { config, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, help2man, fuse
+, utillinux, makeWrapper
 , enableDebugBuild ? config.lxcfs.enableDebugBuild or false }:
 
 with stdenv.lib;
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig help2man autoreconfHook ];
-  buildInputs = [ fuse ];
+  buildInputs = [ fuse makeWrapper ];
 
   preConfigure = stdenv.lib.optionalString enableDebugBuild ''
     sed -i 's,#AM_CFLAGS += -DDEBUG,AM_CFLAGS += -DDEBUG,' Makefile.am
@@ -26,6 +27,12 @@ stdenv.mkDerivation rec {
   ];
 
   installFlags = [ "SYSTEMD_UNIT_DIR=\${out}/lib/systemd" ];
+
+  postInstall = ''
+    # `mount` hook requires access to the `mount` command from `utillinux`:
+    wrapProgram "$out/share/lxcfs/lxc.mount.hook" \
+      --prefix PATH : "${utillinux}/bin"
+  '';
 
   postFixup = ''
     # liblxcfs.so is reloaded with dlopen()

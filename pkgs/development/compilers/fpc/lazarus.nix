@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/startlazarus --prefix NIX_LDFLAGS ' ' \
       "$(echo "$NIX_LDFLAGS" | sed -re 's/-rpath [^ ]+//g')" \
-      --prefix NIX_${binutils.infixSalt}_LDFLAGS ' ' \
+      --prefix NIX_LDFLAGS_${binutils.suffixSalt} ' ' \
       "$(echo "$NIX_LDFLAGS" | sed -re 's/-rpath [^ ]+//g')" \
       --prefix LCL_PLATFORM ' ' "$LCL_PLATFORM" \
       --prefix PATH ':' "${fpc}/bin:${gdb}/bin:${gnumake}/bin:${binutils}/bin"

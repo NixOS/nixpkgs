@@ -1,17 +1,17 @@
 { stdenv, autoconf, automake, c-ares, cryptopp, curl, doxygen, fetchFromGitHub
-, fetchpatch, ffmpeg, libmediainfo, libraw, libsodium, libtool, libuv, libzen
+, fetchpatch, ffmpeg_3, libmediainfo, libraw, libsodium, libtool, libuv, libzen
 , lsb-release, mkDerivation, pkgconfig, qtbase, qttools, sqlite, swig, unzip
 , wget }:
 
 mkDerivation rec {
   pname = "megasync";
-  version = "4.3.0.8";
+  version = "4.3.1.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAsync";
     rev = "v${version}_Linux";
-    sha256 = "1rhxkc6j3039rcsi8cxy3n00g6w7acir82ymnksbpsnp4yxqv5r3";
+    sha256 = "0b68wpif8a0wf1vfn1nr19dmz8f31dprb27jpldxrxhyfslc43yj";
     fetchSubmodules = true;
   };
 
@@ -21,7 +21,7 @@ mkDerivation rec {
     c-ares
     cryptopp
     curl
-    ffmpeg
+    ffmpeg_3
     libmediainfo
     libraw
     libsodium

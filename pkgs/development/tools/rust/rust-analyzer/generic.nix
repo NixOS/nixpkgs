@@ -15,9 +15,7 @@ rustPlatform.buildRustPackage {
     inherit rev sha256;
   };
 
-  preBuild = "pushd crates/rust-analyzer";
-  # Do not checking other crates in checkPhase.
-  preInstall = "popd";
+  buildAndTestSubdir = "crates/rust-analyzer";
 
   cargoBuildFlags = lib.optional useJemalloc "--features=jemalloc";
 

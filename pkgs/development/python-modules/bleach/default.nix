@@ -6,6 +6,7 @@
 , six
 , html5lib
 , setuptools
+, packaging
 }:
 
 buildPythonPackage rec {
@@ -18,11 +19,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest pytestrunner ];
-  propagatedBuildInputs = [ six html5lib setuptools ];
-
-  postPatch = ''
-    substituteInPlace setup.py --replace ",<3dev" ""
-  '';
+  propagatedBuildInputs = [ packaging six html5lib setuptools ];
 
   # Disable network tests
   checkPhase = ''

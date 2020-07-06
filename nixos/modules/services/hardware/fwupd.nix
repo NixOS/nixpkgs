@@ -6,6 +6,23 @@ with lib;
 
 let
   cfg = config.services.fwupd;
+
+  customEtc = {
+    "fwupd/daemon.conf" = {
+      source = pkgs.writeText "daemon.conf" ''
+        [fwupd]
+        BlacklistDevices=${lib.concatStringsSep ";" cfg.blacklistDevices}
+        BlacklistPlugins=${lib.concatStringsSep ";" cfg.blacklistPlugins}
+      '';
+    };
+    "fwupd/uefi.conf" = {
+      source = pkgs.writeText "uefi.conf" ''
+        [uefi]
+        OverrideESPMountPoint=${config.boot.loader.efi.efiSysMountPoint}
+      '';
+    };
+  };
+
   originalEtc =
     let
       mkEtcFile = n: nameValuePair n { source = "${cfg.package}/etc/${n}"; };
@@ -96,22 +113,8 @@ in {
 
     environment.systemPackages = [ cfg.package ];
 
-    environment.etc = {
-      "fwupd/daemon.conf" = {
-        source = pkgs.writeText "daemon.conf" ''
-          [fwupd]
-          BlacklistDevices=${lib.concatStringsSep ";" cfg.blacklistDevices}
-          BlacklistPlugins=${lib.concatStringsSep ";" cfg.blacklistPlugins}
-        '';
-      };
-      "fwupd/uefi.conf" = {
-        source = pkgs.writeText "uefi.conf" ''
-          [uefi]
-          OverrideESPMountPoint=${config.boot.loader.efi.efiSysMountPoint}
-        '';
-      };
-
-    } // originalEtc // extraTrustedKeys // testRemote;
+    # customEtc overrides some files from the package
+    environment.etc = originalEtc // customEtc // extraTrustedKeys // testRemote;
 
     services.dbus.packages = [ cfg.package ];
 

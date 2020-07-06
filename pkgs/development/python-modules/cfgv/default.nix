@@ -1,12 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, six }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, six }:
 
 buildPythonPackage rec {
   pname = "cfgv";
-  version = "2.0.1";
+  version = "3.1.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0i1iam461bd6bphd402r7payr2m71xivy5zp6k2gjnv67fa8gczd";
+    sha256 = "c8e8f552ffcc6194f4e18dd4f68d9aef0c0d58ae7e7be8c82bee3c5e9edfa513";
   };
 
   propagatedBuildInputs = [ six ];

@@ -8,7 +8,7 @@
 , qtx11extras
 , dtkcore
 , dtkwidget
-, ffmpeg
+, ffmpeg_3
 , ffmpegthumbnailer
 , mpv
 , pulseaudio
@@ -41,7 +41,7 @@ mkDerivation rec {
   buildInputs = [
     dtkcore
     dtkwidget
-    ffmpeg
+    ffmpeg_3
     ffmpegthumbnailer
     libdvdnav
     libdvdread

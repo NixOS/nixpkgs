@@ -24,7 +24,7 @@ self: super:
       nativeBuildInputs = old.nativeBuildInputs ++ [
         pkgs.pkgconfig
       ];
-      buildInputs = old.buildInputs ++ [ pkgs.ffmpeg_4 ];
+      buildInputs = old.buildInputs ++ [ pkgs.ffmpeg ];
     }
   );
 

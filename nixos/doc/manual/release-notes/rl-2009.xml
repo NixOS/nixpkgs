@@ -44,6 +44,11 @@
    </listitem>
    <listitem>
     <para>
+     Python 3 now defaults to Python 3.8 instead of 3.7.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      Two new options, <link linkend="opt-services.openssh.authorizedKeysCommand">authorizedKeysCommand</link>
      and <link linkend="opt-services.openssh.authorizedKeysCommandUser">authorizedKeysCommandUser</link>, have
      been added to the <literal>openssh</literal> module. If you have <literal>AuthorizedKeysCommand</literal>
@@ -87,6 +92,31 @@ services.mysql.initialScript = pkgs.writeText "mariadb-init.sql" ''
 '';
 </programlisting>
       When MariaDB data directory is just upgraded (not initialized), the users are not created or modified.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      MySQL server is now started with additional systemd sandbox/hardening options for better security. The PrivateTmp, ProtectHome, and ProtectSystem options
+      may be problematic when MySQL is attempting to read from or write to your filesystem anywhere outside of its own state directory, for example when
+      calling <literal>LOAD DATA INFILE or SELECT * INTO OUTFILE</literal>. In this scenario a variant of the following may be required:
+        - allow MySQL to read from /home and /tmp directories when using <literal>LOAD DATA INFILE</literal>
+<programlisting>
+systemd.services.mysql.serviceConfig.ProtectHome = lib.mkForce "read-only";
+</programlisting>
+        - allow MySQL to write to custom folder <literal>/var/data</literal> when using <literal>SELECT * INTO OUTFILE</literal>, assuming the mysql user has write
+          access to <literal>/var/data</literal>
+<programlisting>
+systemd.services.mysql.serviceConfig.ReadWritePaths = [ "/var/data" ];
+</programlisting>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      Two new option <link linkend="opt-documentation.man.generateCaches">documentation.man.generateCaches</link>
+      has been added to automatically generate the <literal>man-db</literal> caches, which are needed by utilities
+      like <command>whatis</command> and <command>apropos</command>. The caches are generated during the build of
+      the NixOS configuration: since this can be expensive when a large number of packages are installed, the
+      feature is disabled by default.
     </para>
    </listitem>
   </itemizedlist>
@@ -174,6 +204,12 @@ services.mysql.initialScript = pkgs.writeText "mariadb-init.sql" ''
     <para>
       <literal>security.duosec.ikey</literal> has been renamed to
       <link linkend="opt-security.duosec.integrationKey">security.duosec.integrationKey</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      <literal>vmware</literal> has been removed from the <literal>services.x11.videoDrivers</literal> defaults.
+      For VMWare guests set <literal>virtualisation.vmware.guest.enable</literal> to <literal>true</literal> which will include the appropriate drivers.
     </para>
    </listitem>
    <listitem>
@@ -455,6 +491,29 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
      initrd file has not been deleted.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <link xlink:href="https://github.com/okTurtles/dnschain">DNSChain</link>
+     package and NixOS module have been removed from Nixpkgs as the software is
+     unmaintained and can't be built. For more information see issue
+     <link xlink:href="https://github.com/NixOS/nixpkgs/issues/89205">#89205</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     In the <literal>resilio</literal> module, <xref linkend="opt-services.resilio.httpListenAddr"/> has been changed to listen to <literal>[::1]</literal> instead of <literal>0.0.0.0</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Radicale's default package has changed from 2.x to 3.x. An upgrade
+     checklist can be found
+     <link xlink:href="https://github.com/Kozea/Radicale/blob/3.0.x/NEWS.md#upgrade-checklist">here</link>.
+     You can use the newer version in the NixOS service by setting the
+     <literal>package</literal> to <literal>radicale3</literal>, which is done
+     automatically if <literal>stateVersion</literal> is 20.09 or higher.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -467,7 +526,7 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
 
   <itemizedlist>
    <listitem>
-     <para>SD and ISO images are now compressed by default using <literal>zstd</literal>.</para>
+    <para>SD images are now compressed by default using <literal>zstd</literal>. The compression for ISO images has also been changed to <literal>zstd</literal>, but ISO images are still not compressed by default.</para>
    </listitem>
    <listitem>
     <para>
@@ -486,8 +545,31 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
     </para>
    </listitem>
    <listitem>
+    <para>
+      The default output of <literal>buildGoPackage</literal> is now <literal>$out</literal> instead of <literal>$bin</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Packages built using <literal>buildRustPackage</literal> now use <literal>release</literal>
+     mode for the <literal>checkPhase</literal> by default.
+    </para>
+    <para>
+     Please note that Rust packages utilizing a custom build/install procedure
+     (e.g. by using a <filename>Makefile</filename>) or test suites that rely on the
+     structure of the <filename>target/</filename> directory may break due to those assumptions.
+     For further information, please read the Rust section in the Nixpkgs manual.
+    </para>
+   </listitem>
+   <listitem>
    <para>
-     The default output of <literal>buildGoPackage</literal> is now <literal>$out</literal> instead of <literal>$bin</literal>.
+     The cc- and binutils-wrapper's "infix salt" and <literal>_BUILD_</literal> and <literal>_TARGET_</literal> user infixes have been replaced with with a "suffix salt" and suffixes and <literal>_FOR_BUILD</literal> and <literal>_FOR_TARGET</literal>.
+      This matches the autotools convention for env vars which standard for these things, making interfacing with other tools easier.
+   </para>
+   </listitem>
+   <listitem>
+   <para>
+     Additional Git documentation (HTML and text files) is now available via the <literal>git-doc</literal> package.
    </para>
    </listitem>
    <listitem>
@@ -516,6 +598,94 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
      image rendering support, and plugins must now be signed by default. More
      information can be found
      <link xlink:href="https://grafana.com/docs/grafana/latest/installation/upgrading/#upgrading-to-v7-0">in the Grafana documentation</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>hardware.u2f</literal> module, which was installing udev rules
+     was removed, as udev gained native support to handle FIDO security tokens.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     With this release <literal>systemd-networkd</literal> (when enabled through <xref linkend="opt-networking.useNetworkd"/>)
+     has it's netlink socket created through a <literal>systemd.socket</literal> unit. This gives us control over
+     socket buffer sizes and other parameters. For larger setups where networkd has to create a lot of (virtual)
+     devices the default buffer size (currently 128MB) is not enough.
+    </para>
+    <para>
+     On a machine with &gt;100 virtual interfaces (e.g., wireguard tunnels, VLANs, …), that all have to
+     be brought up during system startup, the receive buffer size will spike for a brief period.
+     Eventually some of the message will be dropped since there is not enough (permitted) buffer
+     space available.
+    </para>
+    <para>
+     By having <literal>systemd-networkd</literal> start with a netlink socket created by
+     <literal>systemd</literal> we can configure the <literal>ReceiveBufferSize=</literal> parameter
+     in the socket options (i.e. <literal>systemd.sockets.systemd-networkd.socketOptions.ReceiveBufferSize</literal>)
+     without recompiling <literal>systemd-networkd</literal>.
+    </para>
+    <para>
+     Since the actual memory requirements depend on hardware, timing, exact
+     configurations etc. it isn't currently possible to infer a good default
+     from within the NixOS module system. Administrators are advised to
+     monitor the logs of <literal>systemd-networkd</literal> for <literal>rtnl: kernel receive buffer
+     overrun</literal> spam and increase the memory limit as they see fit.
+    </para>
+    <para>
+     Note: Increasing the <literal>ReceiveBufferSize=</literal> doesn't allocate any memory. It just increases
+     the upper bound on the kernel side. The memory allocation depends on the amount of messages that are
+     queued on the kernel side of the netlink socket.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Specifying <link linkend="opt-services.dovecot2.mailboxes">mailboxes</link> in the <package>dovecot2</package> module
+     as a list is deprecated and will break eval in 21.03. Instead, an attribute-set should be specified where the <literal>name</literal>
+     should be the key of the attribute.
+    </para>
+    <para>
+     This means that a configuration like this
+<programlisting>{
+  <link linkend="opt-services.dovecot2.mailboxes">services.dovecot2.mailboxes</link> = [
+    { name = "Junk";
+      auto = "create";
+    }
+  ];
+}</programlisting>
+    should now look like this:
+<programlisting>{
+  <link linkend="opt-services.dovecot2.mailboxes">services.dovecot2.mailboxes</link> = {
+    Junk.auto = "create";
+  };
+}</programlisting>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      <package>netbeans</package> was upgraded to 12.0 and now defaults to OpenJDK 11. This might cause problems if your projects depend on packages that were removed in Java 11.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <package>nextcloud</package> has been updated to <link xlink:href="https://nextcloud.com/blog/nextcloud-hub-brings-productivity-to-home-office/">v19</link>.
+    </para>
+    <para>
+     If you have an existing installation, please make sure that you're on
+     <package>nextcloud18</package> before upgrading to <package>nextcloud19</package>
+     since Nextcloud doesn't support upgrades across multiple major versions.
+    </para>
+     <para>
+       The <literal>nixos-run-vms</literal> script now deletes the
+       previous run machines states on test startup. You can use the
+       <literal>--keep-vm-state</literal> flag to match the previous
+       behaviour and keep the same VM state between different test runs.
+     </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <link linkend="opt-nix.buildMachines">nix.buildMachines</link> option is now type-checked.
+     There are no functional changes, however this may require updating some configurations to use correct types for all attributes.
     </para>
    </listitem>
   </itemizedlist>

@@ -11,12 +11,7 @@ stdenv.mkDerivation rec {
     owner = "puppetlabs";
   };
 
-  NIX_CFLAGS_COMPILE = builtins.toString [
-    "-Wno-error=ignored-qualifiers"
-    "-Wno-error=class-memaccess"
-    "-Wno-error=catch-value"
-    "-Wno-error=deprecated-copy"
-  ];
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost curl ruby ];
@@ -28,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "A collection of C++ and CMake utility libraries";
     license = licenses.asl20;
     maintainers = [ maintainers.womfoo ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 
 }

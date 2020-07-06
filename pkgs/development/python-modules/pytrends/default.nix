@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pytrends";
-  version = "4.7.2";
+  version = "4.7.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1cf80573276b3a93c4fb2ff296c260fa86e7ab43709473ce34f3bad3841f06df";
+    sha256 = "8ccb06c57c31fa157b978a0d810de7718ee46583d28cf818250d45f36abd2faa";
   };
 
   doCheck = false;

@@ -26,7 +26,9 @@ let
 
   darcs-to-git = callPackage ./darcs-to-git { };
 
-  delta = callPackage ./delta { };
+  delta = callPackage ./delta {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   diff-so-fancy = callPackage ./diff-so-fancy { };
 
@@ -81,6 +83,14 @@ let
   git-dit = callPackage ./git-dit {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
+
+  git-doc = lib.addMetaAttrs {
+    description = "Additional documentation for Git";
+    longDescription = ''
+      This package contains additional documentation (HTML and text files) that
+      is referenced in the man pages of Git.
+    '';
+  } gitFull.doc;
 
   git-extras = callPackage ./git-extras { };
 

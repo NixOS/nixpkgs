@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rtmpdump, php, pythonPackages, ffmpeg }:
+{ stdenv, fetchFromGitHub, rtmpdump, php, pythonPackages, ffmpeg_3 }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "yle-dl";
@@ -12,7 +12,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with pythonPackages; [
-    lxml pyamf pycrypto requests future ffmpeg setuptools
+    lxml pyamf pycrypto requests future ffmpeg_3 setuptools
   ];
   pythonPath = [ rtmpdump php ];
 

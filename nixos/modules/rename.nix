@@ -55,6 +55,12 @@ with lib;
       prey-bash-client is deprecated upstream
     '')
 
+    (mkRemovedOptionModule ["hardware" "u2f" ] ''
+      The U2F modules module was removed, as all it did was adding the
+      udev rules from libu2f-host to the system. Udev gained native support
+      to handle FIDO security tokens, so this isn't necessary anymore.
+    '')
+
     # Do NOT add any option renames here, see top of the file
   ];
 }

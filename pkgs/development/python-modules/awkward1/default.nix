@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "awkward1";
-  version = "0.2.19";
+  version = "0.2.23";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "23446eacdf52cad1fb0b5bb0f2ed16c1ae8bb5a282d667ad37ab69494e1ef27f";
+    sha256 = "d7458b499959af66e0a640e29e6b676a39cc9614cd504e5a2e8f8d0c7f546597";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -36,7 +36,7 @@ let
     icon = "minecraft-launcher";
     comment = "Official launcher for Minecraft, a sandbox-building game";
     desktopName = "Minecraft Launcher";
-    categories = "Game;Application;";
+    categories = "Game;";
   };
 
   envLibPath = stdenv.lib.makeLibraryPath [
@@ -87,11 +87,11 @@ in
 stdenv.mkDerivation rec {
   pname = "minecraft-launcher";
 
-  version = "2.1.14947";
+  version = "2.1.15166";
 
   src = fetchurl {
     url = "https://launcher.mojang.com/download/linux/x86_64/minecraft-launcher_${version}.tar.gz";
-    sha256 = "1lsc39n1kq08sssnpr6kf4lfpy01a7i7rgvi298mmxsprjmc7a9q";
+    sha256 = "14q41zk370zvzz2jbynhfw11r98l9x49142lqf2izfl42fhv8yhw";
   };
 
   icon = fetchurl {
@@ -134,6 +134,7 @@ stdenv.mkDerivation rec {
     makeWrapper $out/opt/minecraft-launcher/minecraft-launcher $out/bin/minecraft-launcher \
       --prefix LD_LIBRARY_PATH : ${envLibPath} \
       --prefix PATH : ${stdenv.lib.makeBinPath [ jre ]} \
+      --set JAVA_HOME ${stdenv.lib.makeBinPath [ jre ]} \
       --run "cd /tmp" \
       "''${gappsWrapperArgs[@]}"
   '';

@@ -39,6 +39,7 @@
 , luajit
 , lz4
 , mesa
+, mint-x-icons
 , openjpeg
 , openssl
 , poppler
@@ -92,7 +93,7 @@ stdenv.mkDerivation rec {
     xorg.libXcursor
     xorg.xorgproto
     zlib
-    # still missing parent icon themes: Mint-X, RAVE-X, Faenza
+    # still missing parent icon themes: RAVE-X, Faenza
   ];
 
   propagatedBuildInputs = [
@@ -107,6 +108,7 @@ stdenv.mkDerivation rec {
     fribidi
     ghostscript
     harfbuzz
+    hicolor-icon-theme # for the icon theme
     jbig2dec
     libdrm
     libinput
@@ -117,6 +119,7 @@ stdenv.mkDerivation rec {
     libwebp
     libxkbcommon
     luajit
+    mint-x-icons # Mint-X is a parent icon theme of Enlightenment-X
     openjpeg
     poppler
     utillinux

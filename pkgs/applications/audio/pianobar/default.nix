@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, libao, json_c, libgcrypt, ffmpeg, curl }:
+{ fetchurl, stdenv, pkgconfig, libao, json_c, libgcrypt, ffmpeg_3, curl }:
 
 stdenv.mkDerivation rec {
   name = "pianobar-2020.04.05";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    libao json_c libgcrypt ffmpeg curl
+    libao json_c libgcrypt ffmpeg_3 curl
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];

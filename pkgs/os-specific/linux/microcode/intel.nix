@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "microcode-intel";
-  version = "20200520";
+  version = "20200616";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "Intel-Linux-Processor-Microcode-Data-Files";
     rev = "microcode-${version}";
-    sha256 = "1cs4b7q9j2lw2y09rfa82aijbfmy4lddahz8qlz9gwajf2ziqns8";
+    sha256 = "13jrs8hwh7dhjjb9kncb8lk199afaxglkh1cfisl6zca1h36g563";
   };
 
   nativeBuildInputs = [ iucode-tool libarchive ];

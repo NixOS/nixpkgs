@@ -30,8 +30,7 @@ buildPythonPackage rec {
   checkInputs = [ nose ];
 
   checkPhase = ''
-    ${python.interpreter} test.py --with-hg "${mercurial}/bin/hg" -v \
-      --exclude=test_merge_prompt_cb # https://bz.mercurial-scm.org/show_bug.cgi?id=6265
+    ${python.interpreter} test.py --with-hg "${mercurial}/bin/hg" -v
   '';
 
   meta = with stdenv.lib; {

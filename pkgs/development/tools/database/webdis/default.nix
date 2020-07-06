@@ -2,22 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "webdis";
-  version = "0.1.9";
+  version = "0.1.10";
 
   src = fetchFromGitHub {
     owner = "nicolasff";
     repo = pname;
     rev = version;
-    sha256 = "1kglzbs1sw3w05i678qr3lv4pxia20k2a8s3pjhfcxdlnlcy23sk";
+    sha256 = "1hn4fq0asivfs56rw9ck1vc3g6h6fnwywh8v4zs2bkyn62fg9mcw";
   };
-
-  patches = [
-    # Do not use DESTDIR. See: https://github.com/nicolasff/webdis/pull/172
-    (fetchpatch {
-      url = "https://github.com/nicolasff/webdis/commit/a44a2964a59f2e583f4945eeb65cd19235059270.patch";
-      sha256 = "0i41p98gc201vpp5ppjc9gxdyb1bpimr0qrvibaf3iq3sy4jr1gb";
-    })
-  ];
 
   buildInputs = [ hiredis http-parser jansson libevent ];
 

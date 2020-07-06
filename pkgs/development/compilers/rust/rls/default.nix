@@ -10,8 +10,9 @@ rustPlatform.buildRustPackage {
   dontUpdateAutotoolsGnuConfigScripts = true;
 
   cargoVendorDir = "vendor";
+  buildAndTestSubdir = "src/tools/rls";
+
   preBuild = ''
-    pushd src/tools/rls
     # client tests are flaky
     rm tests/client.rs
   '';
@@ -27,8 +28,6 @@ rustPlatform.buildRustPackage {
     ++ (stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security ]);
 
   doCheck = true;
-
-  preInstall = "popd";
 
   doInstallCheck = true;
   installCheckPhase = ''

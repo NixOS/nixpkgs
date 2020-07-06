@@ -67,7 +67,17 @@ A derivation can then be written using `agdaPackages.mkDerivation`. This has sim
 + `libraryName` should be the name that appears in the `*.agda-lib` file, defaulting to `pname`.
 + `libraryFile` should be the file name of the `*.agda-lib` file, defaulting to `${libraryName}.agda-lib`.
 
-The build phase for `agdaPackages.mkDerivation` simply runs `agda` on the `Everything.agda` file. If something else is needed to build the package (e.g. `make`) then the `buildPhase` should be overridden (or a `preBuild` or `configurePhase` can be used if there are steps that need to be done prior to checking the `Everything.agda` file). `agda` and the Agda libraries contained in `buildInputs` are made available during the build phase. The install phase simply copies all `.agda`, `.agdai` and `.agda-lib` files to the output directory. Again, this can be overridden.
+### Building Agda packages
+The default build phase for `agdaPackages.mkDerivation` simply runs `agda` on the `Everything.agda` file.
+If something else is needed to build the package (e.g. `make`) then the `buildPhase` should be overridden.
+Additionally, a `preBuild` or `configurePhase` can be used if there are steps that need to be done prior to checking the `Everything.agda` file.
+`agda` and the Agda libraries contained in `buildInputs` are made available during the build phase.
+
+### Installing Agda packages
+The default install phase copies agda source files, agda interface files (`*.agdai`) and `*.agda-lib` files to the output directory.
+This can be overridden.
+
+By default, agda sources are files ending on  `.agda`, or literate agda files ending on `.lagda`, `.lagda.tex`, `.lagda.org`, `.lagda.md`, `.lagda.rst`. The list of recognised agda source extensions can be extended by setting the `extraExtensions` config variable.
 
 To add an agda package to `nixpkgs`, the derivation should be written to `pkgs/development/libraries/agda/${library-name}/` and an entry should be added to `pkgs/top-level/agda-packages.nix`. Here it is called in a scope with access to all other agda libraries, so the top line of the `default.nix` can look like:
 ```

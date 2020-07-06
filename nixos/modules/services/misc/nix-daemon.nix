@@ -193,50 +193,111 @@ in
       };
 
       buildMachines = mkOption {
-        type = types.listOf types.attrs;
+        type = types.listOf (types.submodule ({
+          options = {
+            hostName = mkOption {
+              type = types.str;
+              example = "nixbuilder.example.org";
+              description = ''
+                The hostname of the build machine.
+              '';
+            };
+            system = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              example = "x86_64-linux";
+              description = ''
+                The system type the build machine can execute derivations on.
+                Either this attribute or <varname>systems</varname> must be
+                present, where <varname>system</varname> takes precedence if
+                both are set.
+              '';
+            };
+            systems = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "x86_64-linux" "aarch64-linux" ];
+              description = ''
+                The system types the build machine can execute derivations on.
+                Either this attribute or <varname>system</varname> must be
+                present, where <varname>system</varname> takes precedence if
+                both are set.
+              '';
+            };
+            sshUser = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              example = "builder";
+              description = ''
+                The username to log in as on the remote host. This user must be
+                able to log in and run nix commands non-interactively. It must
+                also be privileged to build derivations, so must be included in
+                <option>nix.trustedUsers</option>.
+              '';
+            };
+            sshKey = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              example = "/root/.ssh/id_buildhost_builduser";
+              description = ''
+                The path to the SSH private key with which to authenticate on
+                the build machine. The private key must not have a passphrase.
+                If null, the building user (root on NixOS machines) must have an
+                appropriate ssh configuration to log in non-interactively.
+
+                Note that for security reasons, this path must point to a file
+                in the local filesystem, *not* to the nix store.
+              '';
+            };
+            maxJobs = mkOption {
+              type = types.int;
+              default = 1;
+              description = ''
+                The number of concurrent jobs the build machine supports. The
+                build machine will enforce its own limits, but this allows hydra
+                to schedule better since there is no work-stealing between build
+                machines.
+              '';
+            };
+            speedFactor = mkOption {
+              type = types.int;
+              default = 1;
+              description = ''
+                The relative speed of this builder. This is an arbitrary integer
+                that indicates the speed of this builder, relative to other
+                builders. Higher is faster.
+              '';
+            };
+            mandatoryFeatures = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "big-parallel" ];
+              description = ''
+                A list of features mandatory for this builder. The builder will
+                be ignored for derivations that don't require all features in
+                this list. All mandatory features are automatically included in
+                <varname>supportedFeatures</varname>.
+              '';
+            };
+            supportedFeatures = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "kvm" "big-parallel" ];
+              description = ''
+                A list of features supported by this builder. The builder will
+                be ignored for derivations that require features not in this
+                list.
+              '';
+            };
+          };
+        }));
         default = [];
-        example = literalExample ''
-          [ { hostName = "voila.labs.cs.uu.nl";
-              sshUser = "nix";
-              sshKey = "/root/.ssh/id_buildfarm";
-              system = "powerpc-darwin";
-              maxJobs = 1;
-            }
-            { hostName = "linux64.example.org";
-              sshUser = "buildfarm";
-              sshKey = "/root/.ssh/id_buildfarm";
-              system = "x86_64-linux";
-              maxJobs = 2;
-              speedFactor = 2;
-              supportedFeatures = [ "kvm" ];
-              mandatoryFeatures = [ "perf" ];
-            }
-          ]
-        '';
         description = ''
-          This option lists the machines to be used if distributed
-          builds are enabled (see
-          <option>nix.distributedBuilds</option>).  Nix will perform
-          derivations on those machines via SSH by copying the inputs
-          to the Nix store on the remote machine, starting the build,
-          then copying the output back to the local Nix store.  Each
-          element of the list should be an attribute set containing
-          the machine's host name (<varname>hostname</varname>), the
-          user name to be used for the SSH connection
-          (<varname>sshUser</varname>), the Nix system type
-          (<varname>system</varname>, e.g.,
-          <literal>"i686-linux"</literal>), the maximum number of
-          jobs to be run in parallel on that machine
-          (<varname>maxJobs</varname>), the path to the SSH private
-          key to be used to connect (<varname>sshKey</varname>), a
-          list of supported features of the machine
-          (<varname>supportedFeatures</varname>) and a list of
-          mandatory features of the machine
-          (<varname>mandatoryFeatures</varname>). The SSH private key
-          should not have a passphrase, and the corresponding public
-          key should be added to
-          <filename>~<replaceable>sshUser</replaceable>/authorized_keys</filename>
-          on the remote machine.
+          This option lists the machines to be used if distributed builds are
+          enabled (see <option>nix.distributedBuilds</option>).
+          Nix will perform derivations on those machines via SSH by copying the
+          inputs to the Nix store on the remote machine, starting the build,
+          then copying the output back to the local Nix store.
         '';
       };
 
@@ -461,14 +522,14 @@ in
       { enable = cfg.buildMachines != [];
         text =
           concatMapStrings (machine:
-            "${if machine ? sshUser then "${machine.sshUser}@" else ""}${machine.hostName} "
-            + machine.system or (concatStringsSep "," machine.systems)
-            + " ${machine.sshKey or "-"} ${toString machine.maxJobs or 1} "
-            + toString (machine.speedFactor or 1)
+            "${if machine.sshUser != null then "${machine.sshUser}@" else ""}${machine.hostName} "
+            + (if machine.system != null then machine.system else concatStringsSep "," machine.systems)
+            + " ${if machine.sshKey != null then machine.sshKey else "-"} ${toString machine.maxJobs} "
+            + toString (machine.speedFactor)
             + " "
-            + concatStringsSep "," (machine.mandatoryFeatures or [] ++ machine.supportedFeatures or [])
+            + concatStringsSep "," (machine.mandatoryFeatures ++ machine.supportedFeatures)
             + " "
-            + concatStringsSep "," machine.mandatoryFeatures or []
+            + concatStringsSep "," machine.mandatoryFeatures
             + "\n"
           ) cfg.buildMachines;
       };

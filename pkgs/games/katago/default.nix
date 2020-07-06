@@ -35,13 +35,13 @@ let
 
 in env.mkDerivation rec {
   pname = "katago";
-  version = "1.4.2";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "lightvector";
     repo = "katago";
     rev = "v${version}";
-    sha256 = "0qdc9hgbzd175b2xkjs62dy6gyybcn9lf1mifiyhjbzjpgv192h4";
+    sha256 = "14xs2bm8sky9cdsjdahjqs82q6blzcw05f5d9r1h171dm1hcx566";
   };
 
   # To workaround CMake 3.17.0's new buggy behavior wrt CUDA Compiler testing

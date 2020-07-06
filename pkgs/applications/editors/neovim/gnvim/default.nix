@@ -33,6 +33,10 @@ rustPlatform.buildRustPackage rec {
     EOF
   '';
 
+  buildPhase = ''
+    make build
+  '';
+
   installPhase = ''
     make install PREFIX="${placeholder "out"}"
   '';

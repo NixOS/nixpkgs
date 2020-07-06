@@ -4,7 +4,7 @@
 , withCC ? true, opencc
 , withEpwing ? true, libeb
 , withExtraTiff ? true, libtiff
-, withFFmpeg ? true, libao, ffmpeg
+, withFFmpeg ? true, libao, ffmpeg_3
 , withMultimedia ? true
 , withZim ? true, zstd }:
 
@@ -39,7 +39,7 @@ mkDerivation rec {
     ++ stdenv.lib.optional withCC opencc
     ++ stdenv.lib.optional withEpwing libeb
     ++ stdenv.lib.optional withExtraTiff libtiff
-    ++ stdenv.lib.optionals withFFmpeg [ libao ffmpeg ]
+    ++ stdenv.lib.optionals withFFmpeg [ libao ffmpeg_3 ]
     ++ stdenv.lib.optional withZim zstd;
 
   qmakeFlags = with stdenv.lib; [

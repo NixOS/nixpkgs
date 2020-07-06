@@ -1,9 +1,7 @@
-{ stdenv, fetchurl, fetchpatch, libxml2, findXMLCatalogs, python, libgcrypt
+{ stdenv, fetchurl, fetchpatch, libxml2, findXMLCatalogs, gettext, python, libgcrypt
 , cryptoSupport ? false
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 }:
-
-with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "libxslt";
@@ -17,6 +15,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" "doc" ] ++ stdenv.lib.optional pythonSupport "py";
 
   buildInputs = [ libxml2.dev ]
+    ++ stdenv.lib.optional stdenv.isDarwin gettext
     ++ stdenv.lib.optionals pythonSupport [ libxml2.py python ]
     ++ stdenv.lib.optionals cryptoSupport [ libgcrypt ];
 
@@ -27,14 +26,14 @@ stdenv.mkDerivation rec {
     "--without-debug"
     "--without-mem-debug"
     "--without-debugger"
-  ] ++ optional pythonSupport "--with-python=${python}"
-    ++ optional (!cryptoSupport) "--without-crypto";
+  ] ++ stdenv.lib.optional pythonSupport "--with-python=${python}"
+    ++ stdenv.lib.optional (!cryptoSupport) "--without-crypto";
 
   postFixup = ''
     moveToOutput bin/xslt-config "$dev"
     moveToOutput lib/xsltConf.sh "$dev"
     moveToOutput share/man/man1 "$bin"
-  '' + optionalString pythonSupport ''
+  '' + stdenv.lib.optionalString pythonSupport ''
     mkdir -p $py/nix-support
     echo ${libxml2.py} >> $py/nix-support/propagated-build-inputs
     moveToOutput ${python.libPrefix} "$py"

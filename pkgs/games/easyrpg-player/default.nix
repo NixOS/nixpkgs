@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "easyrpg-player";
-  version = "0.6.2";
+  version = "0.6.2.1";
 
   src = fetchFromGitHub {
     owner = "EasyRPG";
     repo = "Player";
     rev = version;
-    sha256 = "1xjisqxmx1jc1afsr55hyr0l9v20gvchllby76pygkfkgifyidyp";
+    sha256 = "19wpjvlkjmjhdv1dbph6i2da1xx479zhr532x0ili1aphw1j9hi6";
   };
 
   nativeBuildInputs = [ cmake doxygen pkgconfig ];

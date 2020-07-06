@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
           + lib.optionalString useNcurses "-cursesUI"
           + lib.optionalString withQt5 "-qt5UI"
           + lib.optionalString useQt4 "-qt4UI";
-  version = "3.17.2";
+  version = "3.17.3";
 
   src = fetchurl {
     url = "${meta.homepage}files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
     # compare with https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}-SHA-256.txt
-    sha256 = "199srp8yfai51pcbpmfyc4s8vzrmh2dm91bp582hj2l29x634xzw";
+    sha256 = "0h4c3nwk7wmzcmmlwyb16zmjqr44l4k591m2y9p9zp3m498hvmhb";
   };
 
   patches = [
@@ -63,8 +63,10 @@ stdenv.mkDerivation rec {
       --subst-var-by libc_lib ${lib.getLib stdenv.cc.libc}
     substituteInPlace Modules/FindCxxTest.cmake \
       --replace "$""{PYTHON_EXECUTABLE}" ${stdenv.shell}
-    # BUILD_CC and BUILD_CXX are used to bootstrap cmake
-    configureFlags="--parallel=''${NIX_BUILD_CORES:-1} CC=$BUILD_CC CXX=$BUILD_CXX $configureFlags"
+  ''
+  # CC_FOR_BUILD and CXX_FOR_BUILD are used to bootstrap cmake
+  + ''
+    configureFlags="--parallel=''${NIX_BUILD_CORES:-1} CC=$CC_FOR_BUILD CXX=$CXX_FOR_BUILD $configureFlags"
   '';
 
   configureFlags = [

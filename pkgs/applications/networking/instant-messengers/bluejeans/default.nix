@@ -40,11 +40,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bluejeans";
-  version = "2.1.0";
+  version = "2.4.0";
 
   src = fetchurl {
     url = "https://swdl.bluejeans.com/desktop-app/linux/${version}/BlueJeans.rpm";
-    sha256 = "1zhh0pla5gk75p8x84va9flvnk456pbcm1n6x8l82c9682fwr7dd";
+    sha256 = "180hc854ngwfn6y6nsrfn74rv78cxhq6sgshrca5zqv6wq3l98g0";
   };
 
   nativeBuildInputs = [ rpmextract makeWrapper ];
@@ -109,6 +109,9 @@ stdenv.mkDerivation rec {
     makeWrapper $out/opt/BlueJeans/bluejeans-v2 $out/bin/bluejeans \
       --set LD_LIBRARY_PATH "${libPath}":"${placeholder "out"}"/opt/BlueJeans \
       --set LD_PRELOAD "$out"/opt/BlueJeans/liblocaltime64_stub.so
+
+    substituteInPlace "$out"/share/applications/bluejeans-v2.desktop \
+      --replace "/opt/BlueJeans/bluejeans-v2" "$out/bin/bluejeans"
 
     patchShebangs "$out"
   '';

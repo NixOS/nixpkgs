@@ -4,20 +4,21 @@
 , pytest
 , sh
 , typing
+, mock
 }:
 
 buildPythonPackage rec {
   pname = "python-dotenv";
-  version = "0.10.5";
+  version = "0.13.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1p6xk0f1yj1s4n8wjs9m8xqilc5bcwvfzsy9nv5lrmkhr78bym7j";
+    sha256 = "3b9909bc96b0edc6b01586e1eed05e71174ef4e04c71da5786370cebea53ad74";
   };
 
   propagatedBuildInputs = [ click ] ++ lib.optionals isPy27 [ typing ];
 
-  checkInputs = [ ipython pytest sh ];
+  checkInputs = [ ipython mock pytest sh ];
 
   # cli tests are impure
   checkPhase = ''

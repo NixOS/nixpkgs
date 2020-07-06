@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libosinfo";
-  version = "1.7.1";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1s97sv24bybggjx6hgqba2qdqz3ivfpd4cmkh4zm5y59sim109mv";
+    sha256 = "1988l5rykpzvml1l7bi2hcax0gdc811vja0f92cnr7r01nz35zs9";
   };
 
   outputs = [ "out" "dev" "devdoc" ];

@@ -13,9 +13,10 @@
 , bison, gperf
 , glib, gtk3, dbus-glib
 , glibc
+, xorg
 , libXScrnSaver, libXcursor, libXtst, libGLU, libGL
 , protobuf, speechd, libXdamage, cups
-, ffmpeg, libxslt, libxml2, at-spi2-core
+, ffmpeg_3, libxslt, libxml2, at-spi2-core
 , jre
 , pipewire_0_2
 
@@ -80,7 +81,7 @@ let
     # "ffmpeg" # https://crbug.com/731766
     # "harfbuzz-ng" # in versions over 63 harfbuzz and freetype are being built together
                     # so we can't build with one from system and other from source
-  ] ++ optional (upstream-info.channel != "dev") "yasm";
+  ] ++ optional (versionRange "0" "84") "yasm";
 
   opusWithCustomModes = libopus.override {
     withCustomModes = true;
@@ -92,10 +93,10 @@ let
     libpng libcap
     xdg_utils minizip libwebp
     libusb1 re2 zlib
-    ffmpeg libxslt libxml2
+    ffmpeg_3 libxslt libxml2
     # harfbuzz # in versions over 63 harfbuzz and freetype are being built together
                # so we can't build with one from system and other from source
-  ] ++ (if upstream-info.channel == "dev" then [ nasm ] else [ yasm ]);
+  ] ++ (if (versionRange "0" "84") then [ yasm ] else [ nasm ]);
 
   # build paths and release info
   packageName = extraAttrs.packageName or extraAttrs.name;
@@ -123,7 +124,8 @@ let
       ninja which python2Packages.python perl pkgconfig
       python2Packages.ply python2Packages.jinja2 nodejs
       gnutar
-    ] ++ optional (versionAtLeast version "83") python2Packages.setuptools;
+    ] ++ optional (versionAtLeast version "83") python2Packages.setuptools
+      ++ optional (versionAtLeast version "84") (xorg.xcbproto.override { python = python2Packages.python; });
 
     buildInputs = defaultDependencies ++ [
       nspr nss systemd
@@ -224,9 +226,14 @@ let
       ln -s ${stdenv.cc}/bin/clang              third_party/llvm-build/Release+Asserts/bin/clang
       ln -s ${stdenv.cc}/bin/clang++            third_party/llvm-build/Release+Asserts/bin/clang++
       ln -s ${llvmPackages.llvm}/bin/llvm-ar    third_party/llvm-build/Release+Asserts/bin/llvm-ar
+    '' + optionalString (versionAtLeast version "84") ''
+      substituteInPlace ui/gfx/x/BUILD.gn \
+        --replace \
+          '/usr/share/xcb' \
+          '${xorg.xcbproto}/share/xcb/'
     '';
 
-    gnFlags = mkGnFlags (optionalAttrs (upstream-info.channel != "dev") {
+    gnFlags = mkGnFlags (optionalAttrs (versionRange "0" "84") {
       linux_use_bundled_binutils = false;
     } // {
       use_lld = false;

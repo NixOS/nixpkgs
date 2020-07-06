@@ -8,12 +8,12 @@
 
 let
   executableName = "riot-desktop";
-  version = "1.6.4";
+  version = "1.6.7";
   src = fetchFromGitHub {
     owner = "vector-im";
     repo = "riot-desktop";
     rev = "v${version}";
-    sha256 = "05z7mggsp33m7ljl4ibk9r4dccglbsc2arp4i3dknq364zdga3m2";
+    sha256 = "0l1ih7rkb0nnc79607kkg0k69j9kwqrczhgkqzsmvqxjz7pk9kgn";
   };
   electron = electron_7;
 
@@ -78,7 +78,7 @@ in mkYarnPackage rec {
     description = "A feature-rich client for Matrix.org";
     homepage = "https://about.riot.im/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ pacien worldofpeace ma27 ];
+    maintainers = teams.matrix.members;
     inherit (electron.meta) platforms;
   };
 }

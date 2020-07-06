@@ -12,7 +12,7 @@
 , libass
 , fftw
 , ffms
-, ffmpeg
+, ffmpeg_3
 , pkg-config
 , zlib
 , icu
@@ -85,7 +85,7 @@ stdenv.mkDerivation
     libass
     fftw
     ffms
-    ffmpeg
+    ffmpeg_3
     zlib
     icu
     boost

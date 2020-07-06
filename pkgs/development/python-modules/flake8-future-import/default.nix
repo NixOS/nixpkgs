@@ -1,4 +1,4 @@
-{ lib, isPy27, fetchFromGitHub, buildPythonPackage, fetchpatch, flake8, six }:
+{ lib, isPy27, fetchFromGitHub, buildPythonPackage, pythonOlder, fetchpatch, flake8, importlib-metadata, six }:
 
 buildPythonPackage rec {
   pname = "flake8-future-import";
@@ -12,7 +12,10 @@ buildPythonPackage rec {
     sha256 = "00q8n15xdnvqj454arn7xxksyrzh0dw996kjyy7g9rdk0rf8x82z";
   };
 
-  propagatedBuildInputs = [ flake8 six ];
+  propagatedBuildInputs = [ flake8 six ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      importlib-metadata
+    ];
 
   # Upstream disables this test case naturally on python 3, but it also fails
   # inside NixPkgs for python 2. Since it's going to be deleted, we just skip it
