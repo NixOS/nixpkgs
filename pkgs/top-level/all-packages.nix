@@ -5301,6 +5301,8 @@ in
 
   file-rename = callPackage ../tools/filesystems/file-rename { };
 
+  kcollectd = libsForQt5.callPackage ../tools/misc/kcollectd {};
+
   kea = callPackage ../tools/networking/kea { };
 
   keysmith = libsForQt5.callPackage ../tools/security/keysmith { };
