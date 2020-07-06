@@ -11685,6 +11685,31 @@ let
     };
   };
 
+  MetaCPANClient = buildPerlPackage {
+    pname = "MetaCPAN-Client";
+    version = "2.026000";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MICKEY/MetaCPAN-Client-2.026000.tar.gz";
+      sha256 = "ee711619d59655dac1bd2e4b894ffeb3171bd73b1ed38ba4b7b07d3690f94465";
+    };
+
+    # Most tests are online, so we only include offline tests
+    postPatch = ''
+      substituteInPlace Makefile.PL \
+         --replace '"t/*.t t/api/*.t"' \
+        '"t/00-report-prereqs.t t/api/_get.t t/api/_get_or_search.t t/api/_search.t t/entity.t t/request.t t/resultset.t"'
+    '';
+
+    buildInputs = [ LWPProtocolhttps TestFatal TestNeeds ];
+    propagatedBuildInputs = [ IOSocketSSL JSONMaybeXS Moo NetSSLeay RefUtil SafeIsa TypeTiny URI ];
+    meta = {
+      homepage = "https://github.com/metacpan/metacpan-client";
+      description = "A comprehensive, DWIM-featured client to the MetaCPAN API";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ sgo ];
+    };
+  };
+
   MethodSignaturesSimple = buildPerlPackage {
     pname = "Method-Signatures-Simple";
     version = "1.07";
