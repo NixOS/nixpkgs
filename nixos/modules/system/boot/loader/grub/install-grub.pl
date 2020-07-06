@@ -638,8 +638,11 @@ sub readGrubState {
     # guaranteed to be present.
     $jsonStateLine = defined $jsonStateLine ? $jsonStateLine : '{}'; # empty JSON object
     chomp($jsonStateLine);
+    if ($jsonStateLine eq "") {
+        $jsonStateLine = '{}'; # empty JSON object
+    }
     my %jsonState = %{decode_json($jsonStateLine)};
-    my @extraGrubInstallArgs = @{$jsonState{'extraGrubInstallArgs'}};
+    my @extraGrubInstallArgs = exists($jsonState{'extraGrubInstallArgs'}) ? @{$jsonState{'extraGrubInstallArgs'}} : ();
     close FILE;
     my $grubState = GrubState->new(name => $name, version => $version, efi => $efi, devices => $devices, efiMountPoint => $efiMountPoint, extraGrubInstallArgs => \@extraGrubInstallArgs );
     return $grubState
