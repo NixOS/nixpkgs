@@ -5703,7 +5703,6 @@ in {
 
   qscintilla-qt5 = pkgs.libsForQt5.callPackage ../development/python-modules/qscintilla-qt5 {
     pythonPackages = self;
-    lndir = pkgs.xorg.lndir;
   };
 
   qscintilla = self.qscintilla-qt4;
