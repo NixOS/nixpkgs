@@ -157,7 +157,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Ripple P2P payment network reference server";
     homepage = "https://github.com/ripple/rippled";
-    maintainers = with maintainers; [ ehmry offline ];
+    maintainers = with maintainers; [ ehmry offline RaghavSood ];
     license = licenses.isc;
     platforms = [ "x86_64-linux" ];
   };

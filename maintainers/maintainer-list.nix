@@ -6486,6 +6486,12 @@
     githubId = 131856;
     name = "Arnout Engelen";
   };
+  RaghavSood = {
+    email = "r@raghavsood.com";
+    github = "RaghavSood";
+    githubId = 903072;
+    name = "Raghav Sood";
+  };
   rafaelgg = {
     email = "rafael.garcia.gallego@gmail.com";
     github = "rafaelgg";
