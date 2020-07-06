@@ -151,6 +151,9 @@ let
       azure-mgmt-consumption = overrideAzureMgmtPackage super.azure-mgmt-consumption "2.0.0" "zip"
         "12ai4qps73ivawh0yzvgb148ksx02r30pqlvfihx497j62gsi1cs";
 
+      azure-mgmt-containerinstance = overrideAzureMgmtPackage super.azure-mgmt-containerinstance "1.4.0" "zip"
+        "1qw6228bia5pimcijr755npli2l33jyfka1s2bzgl1w4h3prsji7";
+
       azure-mgmt-containerservice = overrideAzureMgmtPackage super.azure-mgmt-containerservice "9.0.1" "zip"
         "11nqjpi9qypb0xvfy63l98q5m5jfv5iqx15mliksm96vkdkmji3y";
 
