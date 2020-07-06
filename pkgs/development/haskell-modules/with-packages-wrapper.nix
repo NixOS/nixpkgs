@@ -127,7 +127,18 @@ symlinkJoin {
       rm $f-tmp
     done
   '') + ''
-    ${lib.optionalString hasLibraries "$out/bin/${ghcCommand}-pkg recache"}
+    ${lib.optionalString hasLibraries ''
+     # GHC 8.10 changes.
+     # Instead of replacing package.cache[.lock] with the new file,
+     # ghc-pkg is now trying to open the file.  These file are symlink
+     # to another nix derivation, so they are not writable.  Removing
+     # them allow the correct behavior of ghc-pkg recache
+     # See: https://github.com/NixOS/nixpkgs/issues/79441
+     rm $out/lib/${ghc.name}/package.conf.d/package.cache.lock
+     rm $out/lib/${ghc.name}/package.conf.d/package.cache
+
+     $out/bin/${ghcCommand}-pkg recache
+     ''}
     ${# ghcjs will read the ghc_libdir file when resolving plugins.
       lib.optionalString (isGhcjs && ghcLibdir != null) ''
       mkdir -p "${libDir}"
