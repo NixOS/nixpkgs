@@ -22,6 +22,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import traceback
 import unicodedata
 
 CHAR_TO_KEY = {
@@ -892,7 +893,8 @@ def run_tests() -> None:
             try:
                 exec(tests, globals())
             except Exception as e:
-                eprint("error: {}".format(str(e)))
+                eprint("error: ")
+                traceback.print_exc()
                 sys.exit(1)
     else:
         ptpython.repl.embed(locals(), globals())
