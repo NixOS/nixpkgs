@@ -176,6 +176,8 @@ let
 
   # Generate a hard disk image containing a /boot partition and GRUB
   # in the MBR.  Used when the `useBootLoader' option is set.
+  # Uses `runInLinuxVM` to create the image in a throwaway VM.
+  # See note [Disk layout with `useBootLoader`].
   # FIXME: use nixos/lib/make-disk-image.nix.
   bootDisk =
     pkgs.vmTools.runInLinuxVM (
@@ -210,6 +212,19 @@ let
             --partition-guid=2:970C694F-AFD0-4B99-B750-CDB7A329AB6F \
             --hybrid 2 \
             --recompute-chs /dev/vda
+
+          ${optionalString (config.boot.loader.grub.device != "/dev/vda")
+            # In this throwaway VM, we only have the /dev/vda disk, but the
+            # actual VM described by `config` (used by `switch-to-configuration`
+            # below) may set `boot.loader.grub.device` to a different device
+            # that's nonexistent in the throwaway VM.
+            # Create a symlink for that device, so that the `grub-install`
+            # by `switch-to-configuration` will hit /dev/vda anyway.
+            ''
+              ln -s /dev/vda ${config.boot.loader.grub.device}
+            ''
+          }
+
           ${pkgs.dosfstools}/bin/mkfs.fat -F16 /dev/vda2
           export MTOOLS_SKIP_CHECK=1
           ${pkgs.mtools}/bin/mlabel -i /dev/vda2 ::boot
@@ -510,7 +525,27 @@ in
 
   config = {
 
-    boot.loader.grub.device = mkVMOverride cfg.bootDevice;
+    # Note [Disk layout with `useBootLoader`]
+    #
+    # If `useBootLoader = true`, we configure 2 drives:
+    # `/dev/?da` for the root disk, and `/dev/?db` for the boot disk
+    # which has the `/boot` partition and the boot loader.
+    # Concretely:
+    #
+    # * The second drive's image `disk.img` is created in `bootDisk = ...`
+    #   using a throwaway VM. Note that there the disk is always `/dev/vda`,
+    #   even though in the final VM it will be at `/dev/*b`.
+    # * The disks are attached in `virtualisation.qemu.drives`.
+    #   Their order makes them appear as devices `a`, `b`, etc.
+    # * `fileSystems."/boot"` is adjusted to be on device `b`.
+
+    # If `useBootLoader`, GRUB goes to the second disk, see
+    # note [Disk layout with `useBootLoader`].
+    boot.loader.grub.device = mkVMOverride (
+      if cfg.useBootLoader
+        then driveDeviceName 2 # second disk
+        else cfg.bootDevice
+    );
 
     boot.initrd.extraUtilsCommands =
       ''
@@ -602,6 +637,8 @@ in
         driveExtraOpts.werror = "report";
       }]
       (mkIf cfg.useBootLoader [
+        # The order of this list determines the device names, see
+        # note [Disk layout with `useBootLoader`].
         {
           name = "boot";
           file = "$TMPDIR/disk.img";
@@ -656,9 +693,9 @@ in
           };
       } // optionalAttrs cfg.useBootLoader
       { "/boot" =
-          { device = "${lookupDriveDeviceName "boot" cfg.qemu.drives}2";
+          # see note [Disk layout with `useBootLoader`]
+          { device = "${lookupDriveDeviceName "boot" cfg.qemu.drives}2"; # 2 for e.g. `vdb2`, as created in `bootDisk`
             fsType = "vfat";
-            options = [ "ro" ];
             noCheck = true; # fsck fails on a r/o filesystem
           };
       });
