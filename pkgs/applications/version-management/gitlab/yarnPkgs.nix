@@ -13226,11 +13226,11 @@
       };
     }
     {
-      name = "xterm___xterm_3.5.0.tgz";
+      name = "xterm___xterm_3.14.5.tgz";
       path = fetchurl {
-        name = "xterm___xterm_3.5.0.tgz";
-        url  = "https://registry.yarnpkg.com/xterm/-/xterm-3.5.0.tgz";
-        sha1 = "ba3f464bc5730c9d259ebe62131862224db9ddcc";
+        name = "xterm___xterm_3.14.5.tgz";
+        url  = "https://registry.yarnpkg.com/xterm/-/xterm-3.14.5.tgz";
+        sha1 = "c9d14e48be6873aa46fb429f22f2165557fd2dea";
       };
     }
     {

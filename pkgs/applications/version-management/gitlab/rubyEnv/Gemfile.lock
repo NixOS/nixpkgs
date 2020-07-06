@@ -569,8 +569,8 @@ GEM
       kaminari-core (= 1.2.1)
     kaminari-activerecord (1.2.1)
       activerecord
-      kaminari-core (= 1.0.1)
-    kaminari-core (1.0.1)
+      kaminari-core (= 1.2.1)
+    kaminari-core (1.2.1)
     kgio (2.11.3)
     knapsack (1.17.0)
       rake
