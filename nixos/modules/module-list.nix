@@ -76,6 +76,7 @@
   ./hardware/video/nvidia.nix
   ./hardware/video/uvcvideo/default.nix
   ./hardware/video/webcam/facetimehd.nix
+  ./hardware/xpadneo.nix
   ./i18n/input-method/default.nix
   ./i18n/input-method/fcitx.nix
   ./i18n/input-method/ibus.nix
