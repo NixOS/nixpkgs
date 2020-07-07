@@ -30,7 +30,7 @@ Requirements:
 - [ ] Tested sucessful built of final PR `GITHUB_TOKEN=<YOUR_TOKEN> nixpkgs-review pr <pr-number>`.
       If suceeded, within the resulting `nix-shell`:
    - [ ] Manually tested execution of all binary files (in `./results/bin/`)
-   - [ ] Include the manual checks and validations you did at the end in `editor ./report.md`
+   - [ ] Included manual checks and validations at the end of `editor ./report.md`
    - [ ] If ok, posted the results: `nix-shell> nixpkgs-review post-result`
 
 - Platform(s), I built on (reviewers, please complement!):
