@@ -27,6 +27,7 @@ let
     , icon ? browserName
     , extraNativeMessagingHosts ? []
     , forceWayland ? false
+    , useGlvnd ? true
     , cfg ? config.${browserName} or {}
     }:
 
@@ -68,7 +69,7 @@ let
       libs =   lib.optionals stdenv.isLinux [ udev libva ]
             ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport kerberos
-            ++ lib.optional gdkWayland libglvnd
+            ++ lib.optional useGlvnd libglvnd
             ++ lib.optionals (cfg.enableQuakeLive or false)
             (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
             ++ lib.optional (enableAdobeFlash && (cfg.enableAdobeFlashDRM or false)) hal-flash
