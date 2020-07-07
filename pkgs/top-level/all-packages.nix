@@ -5797,6 +5797,8 @@ in
 
   oppai-ng = callPackage ../tools/misc/oppai-ng { };
 
+  operator-sdk = callPackage ../development/tools/operator-sdk { };
+
   update-dotdee = with python3Packages; toPythonApplication update-dotdee;
 
   update-resolv-conf = callPackage ../tools/networking/openvpn/update-resolv-conf.nix { };
