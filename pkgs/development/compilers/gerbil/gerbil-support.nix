@@ -8,6 +8,7 @@ rec {
     gerbil-crypto = callPackage ./gerbil-crypto.nix { };
     gerbil-poo = callPackage ./gerbil-poo.nix { };
     gerbil-persist = callPackage ./gerbil-persist.nix { };
+    gerbil-ethereum = callPackage ./gerbil-ethereum.nix { };
   };
 
   # Use this function in any package that uses Gerbil libraries, to define the GERBIL_LOADPATH.
