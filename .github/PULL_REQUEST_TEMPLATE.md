@@ -18,7 +18,7 @@ Reviewing guidelines: https://hydra.nixos.org/job/nixpkgs/trunk/manual/latest/do
 ###### Things done
 
 <!-- 
-Requirements: 
+It is strongly suggested to use `nipkgs-review`:
 - install `nixpkgs-review` for good with `nix-env -f '<nixpkgs>' -iA nixpkgs-review`
 - consult usage documentation: https://github.com/Mic92/nixpkgs-review#usage
 -->
