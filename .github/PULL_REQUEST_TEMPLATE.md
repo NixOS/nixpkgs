@@ -32,7 +32,8 @@ Requirements:
    - [ ] Manually tested execution of all binary files (usually in `./result/bin/`)
    - [ ] If ok, posted the results: `nix-shell> nixpkgs-review post-result`
 
-- Tick the the platform(s) at hand that you did built on (more is better, reviewers are encouraged to complement):
+- Platform(s), I built on (reviewers, please complement!):
+<!-- more is better, reviewers might complement -->
    - [ ] NixOS
    - [ ] macOS
    - [ ] other Linux (Ubuntu, Archlinux, Alpine, etc.). Please specify: ...
@@ -42,7 +43,7 @@ Requirements:
 
 - [ ] No documentation affected by this change
 
-- [ ] Or: Ensured that relevant documentation is up to date
+- [ ] Or: ensured that relevant documentation is up to date
 
 - [ ] Fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/.github/CONTRIBUTING.md).
 
