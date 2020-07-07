@@ -37,7 +37,7 @@ Requirements:
    - [ ] other Linux (Ubuntu, Archlinux, Alpine, etc.).
 
 - [ ] If available: tested via one or more NixOS test(s) `GITHUB_TOKEN=<YOUR_TOKEN> nixpkgs-review pr -p nixosTests.<test> <package> <pr-number>` (look inside [nixos/tests](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests)
-<!-- Note, that only few tests are available, if you'd want to write your own have a look at: https://github.com/NixOS/nixpkgs/issues/34987 and other tests throughout the source. >
+<!-- Note, that only few tests are available, if you'd want to write your own have a look at: https://github.com/NixOS/nixpkgs/issues/34987 and other tests throughout the source. -->
 
 - [ ] No documentation affected by this change
 
