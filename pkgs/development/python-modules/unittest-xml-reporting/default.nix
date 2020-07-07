@@ -1,8 +1,9 @@
-{lib, fetchPypi, buildPythonPackage, six}:
+{lib, fetchPypi, buildPythonPackage, isPy27, six}:
 
 buildPythonPackage rec {
   pname = "unittest-xml-reporting";
   version = "3.0.2";
+  disabled = isPy27;
 
   propagatedBuildInputs = [six];
 
