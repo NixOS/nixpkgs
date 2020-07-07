@@ -21773,6 +21773,7 @@ let
       url = "mirror://cpan/authors/id/T/TO/TODDR/YAML-Syck-1.32.tar.gz";
       sha256 = "1fz9r9vvsmjkzvcbznxw65b319vkmwzd0ck09q9nwip00gn907fv";
     };
+    perlPreHook = stdenv.lib.optionalString stdenv.isDarwin "export LD=$CC";
     meta = {
       description = "Fast, lightweight YAML loader and dumper";
       license = stdenv.lib.licenses.mit;
