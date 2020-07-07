@@ -95,11 +95,11 @@ rec {
   };
 
   sdk_3_1 = buildNetCoreSdk {
-    version = "3.1.102";
+    version = "3.1.301";
     sha512 = {
-      x86_64-linux = "0lmz8ac5j0i4zcq4904kr6qibvyjcm2ckfg27kqyqfii00qmm80xb5sk3i7f06xqkbgkrqkbg9rsldk75akw6m5dxg932j602bxrb4w";
-      aarch64-linux = "34k6cm69gxm7vcd9m6bp47sdx96j32z6lfhb2vjcdznc6xgs2wy8zcang3b1mjm5919dq7v6iysm6ffcpgjhhphy7prlnaqa69q5mks";
-      x86_64-darwin = "00xs87zj94v6yr6xs294bficp6lxpghyfswhnwqfkx62jy80qr5fa2y7s10ich3cbm2daa8dby56iizdvi7rnlvp23gfkq12gq4w1g8";
+      x86_64-linux = "179p4j1rqfyy7m8pq678ckhqmj4q6y7cfxfskd3gsy4k03bnk0arxam7m5g14h6956gplq6aygf4wi3yx8dnfws3xbc3f1qyhfr6ffx";
+      aarch64-linux = "2h21ag5jmy9blxa5w1as7idzb7k4vgf7lrls2z85mbz7dw400fkw3zhxzbvp6n9rsykv4wp8m9xxmaqfiasbz5dyny7msihjy1cakc3";
+      x86_64-darwin = "2h4xvx9ybqp0x67ajpffjhmpmbvbfav3nmyy2w5mip1bpaa75hqxd2ywcl2w6imbryp7f8hn18lj01j8vsvb1gx1vc4nhs7h1lqhaqb";
     };
   };
 }
