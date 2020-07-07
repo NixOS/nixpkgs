@@ -5205,6 +5205,8 @@ in {
 
   pymetar = callPackage ../development/python-modules/pymetar { };
 
+  pypubsub = callPackage ../development/python-modules/pypubsub { };
+
   pysftp = callPackage ../development/python-modules/pysftp { };
 
   soundfile = callPackage ../development/python-modules/soundfile { };
