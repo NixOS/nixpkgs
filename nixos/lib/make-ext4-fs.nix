@@ -39,15 +39,12 @@ pkgs.stdenv.mkDerivation {
 
       echo "Preparing store paths for image..."
 
-      # Create nix/store before copying path
+      mv ./files ./rootImage
+
+      # Create nix/store before copying paths
       mkdir -p ./rootImage/nix/store
 
       xargs -I % cp -a --reflink=auto % -t ./rootImage/nix/store/ < ${sdClosureInfo}/store-paths
-      (
-        GLOBIGNORE=".:.."
-        shopt -u dotglob
-        cp -a --reflink=auto ./files/* -t ./rootImage/
-      )
 
       # Also include a manifest of the closures in a format suitable for nix-store --load-db
       cp ${sdClosureInfo}/registration ./rootImage/nix-path-registration
