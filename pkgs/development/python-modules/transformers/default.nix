@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1l8l82zi021sq5dnzlbjx3wx0n4yy7k96n3m2fr893y9lfkhhd8z";
+    sha256 = "0rdlikh2qilwd0s9f3zif51p1q7sp3amxaccqic8p5qm6dqpfpz6";
   };
 
   propagatedBuildInputs = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "tokenizers == 0.8.0-rc4" "tokenizers>=0.8,<0.9"
+      --replace "tokenizers == 0.8.1.rc1" "tokenizers>=0.8"
   '';
 
   preCheck = ''
