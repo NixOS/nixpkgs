@@ -10,6 +10,15 @@
     };
   }
   {
+    goPackagePath = "dmitri.shuralyov.com/gpu/mtl";
+    fetch = {
+      type = "git";
+      url = "https://dmitri.shuralyov.com/gpu/mtl";
+      rev = "666a987793e9";
+      sha256 = "1isd03hgiwcf2ld1rlp0plrnfz7r4i7c5q4kb6hkcd22axnmrv0z";
+    };
+  }
+  {
     goPackagePath = "github.com/BurntSushi/toml";
     fetch = {
       type = "git";
