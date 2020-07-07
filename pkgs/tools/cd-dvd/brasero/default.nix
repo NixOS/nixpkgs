@@ -1,11 +1,11 @@
 { stdenv, lib, fetchurl, pkgconfig, gtk3, itstool, gst_all_1, libxml2, libnotify
 , libcanberra-gtk3, intltool, dvdauthor, libburn, libisofs
-, vcdimager, wrapGAppsHook, hicolor-icon-theme }:
+, vcdimager, wrapGAppsHook, hicolor-icon-theme, cdrtools }:
 
 let
   major = "3.12";
   minor = "2";
-  binpath = lib.makeBinPath [ dvdauthor vcdimager ];
+  binpath = lib.makeBinPath [ dvdauthor vcdimager cdrtools ];
 
 in stdenv.mkDerivation rec {
   version = "${major}.${minor}";
