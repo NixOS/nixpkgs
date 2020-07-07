@@ -5307,6 +5307,8 @@ in
 
   mandoc = callPackage ../tools/misc/mandoc { };
 
+  mario = callPackage ../applications/misc/mario { };
+
   marktext = callPackage ../applications/misc/marktext { };
 
   mawk = callPackage ../tools/text/mawk { };
