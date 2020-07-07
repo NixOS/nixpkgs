@@ -2301,6 +2301,8 @@ in {
 
   cheetah = callPackage ../development/python-modules/cheetah { };
 
+  cheetah3 = callPackage ../development/python-modules/cheetah3 { };
+
   cherrypy = if isPy3k then
     callPackage ../development/python-modules/cherrypy { }
   else

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, scons, boost, gperftools, pcre-cpp, snappy, zlib, libyamlcpp
-, sasl, openssl, libpcap, python27, curl, Security, CoreFoundation, cctools }:
+, sasl, openssl, libpcap, python27, python38, curl, Security, CoreFoundation, cctools }:
 
 # Note:
 # The command line tools are written in Go as part of a different package (mongodb-tools)
@@ -11,6 +11,17 @@ with stdenv.lib;
 }@args:
 
 let
+  variants = if versionAtLeast version "4.2"
+    then { python = python38.withPackages (ps: with ps; [ pyyaml cheetah3 psutil setuptools ]);
+            scons = scons;
+            mozjsVersion = "60";
+            mozjsReplace = "defined(HAVE___SINCOS)";
+          }
+    else { python = python27.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
+            scons = scons.py2;
+            mozjsVersion = "45";
+            mozjsReplace = "defined(HAVE_SINCOS)";
+          };
   python = python27.withPackages (ps: with ps; [ pyyaml typing cheetah ]);
   system-libraries = [
     "boost"
@@ -34,7 +45,7 @@ in stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ scons.py2 ];
+  nativeBuildInputs = [ variants.scons ];
   buildInputs = [
     boost
     curl
@@ -43,7 +54,7 @@ in stdenv.mkDerivation rec {
     libyamlcpp
     openssl
     pcre-cpp
-    python
+    variants.python
     sasl
     snappy
     zlib
@@ -59,7 +70,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace SConstruct \
         --replace "env = Environment(" "env = Environment(ENV = os.environ,"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace src/third_party/mozjs-45/extract/js/src/jsmath.cpp --replace 'defined(HAVE_SINCOS)' 0
+    substituteInPlace src/third_party/mozjs-${variants.mozjsVersion}/extract/js/src/jsmath.cpp --replace '${variants.mozjsReplace}' 0
 
     substituteInPlace src/third_party/s2/s1angle.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s1interval.cc --replace drem remainder
