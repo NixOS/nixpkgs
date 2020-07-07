@@ -64,6 +64,7 @@ perlPackages.buildPerlPackage rec {
 
     # Add runtime dependencies
     wrapProgram "$out/bin/gscan2pdf" \
+      --prefix PATH : "${sane-backends}/bin" \
       --prefix PATH : "${imagemagick}/bin" \
       --prefix PATH : "${libtiff}/bin" \
       --prefix PATH : "${djvulibre}/bin" \
