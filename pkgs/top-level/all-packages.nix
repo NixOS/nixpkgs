@@ -9210,6 +9210,8 @@ in
 
   ocaml-crunch = ocamlPackages.crunch.bin;
 
+  ocaml-lsp = callPackage ../development/tools/ocaml/ocaml-lsp { };
+
   ocamlformat = callPackage ../development/tools/ocaml/ocamlformat { };
 
   orc = callPackage ../development/compilers/orc { };
