@@ -1,7 +1,8 @@
 { stdenv
 , mkDerivation
 , fetchFromGitHub
-, pkgconfig
+, fetchpatch
+, pkg-config
 , cmake
 , deepin
 , qttools
@@ -9,7 +10,6 @@
 , networkmanager
 , qtsvg
 , qtx11extras
-, dtkcore
 , dtkwidget
 , geoip
 , gsettings-qt
@@ -24,34 +24,34 @@
 , qt5integration
 , deepin-desktop-base
 , deepin-desktop-schemas
-, dbus
 , systemd
 , dde-qt-dbus-factory
 , qtmultimedia
 , qtbase
 , glib
 , gnome3
-, which
 , substituteAll
 , tzdata
+, udisks2-qt5
+, libpwquality
 , wrapGAppsHook
 }:
 
 mkDerivation rec {
   pname = "dde-control-center";
-  version = "5.0.0";
+  version = "5.3.0.9";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "10bx8bpvi3ib32a3l4nyb1j0iq3bch8jm9wfm6d5v0ym1zb92x3b";
+    sha256 = "19ahksgs4zjqg1g51rpfl8d9y27pdvjmwwbq4z9g7h3f3jl959c8";
   };
 
   nativeBuildInputs = [
     cmake
     deepin.setupHook
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 
@@ -62,7 +62,6 @@ mkDerivation rec {
     dde-qt-dbus-factory
     deepin-desktop-base
     deepin-desktop-schemas
-    dtkcore
     dtkwidget
     fontconfig
     freetype
@@ -73,6 +72,7 @@ mkDerivation rec {
     gnome3.networkmanager-openvpn
     gnome3.networkmanager-vpnc
     gsettings-qt
+    libpwquality
     mtdev
     networkmanager-qt
     qt5integration
@@ -82,6 +82,7 @@ mkDerivation rec {
     qtsvg
     qttools
     qtx11extras
+    udisks2-qt5
     xorg.libX11
     xorg.libXext
     xorg.libXrandr
@@ -94,10 +95,18 @@ mkDerivation rec {
   ];
 
   patches = [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-community/packages/deepin-control-center/trunk/deepin-control-center-no-user-experience.patch";
+      sha256 = "0n4kzk7vc5hai4fi9wga64756y4zms9hy504bddasvqsg8sw0mw7";
+    })
+    # (fetchpatch {
+    #   name = "deepin-control-center-build-fix.patch";
+    #   url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/deepin-control-center-build-fix.patch?h=packages/deepin-control-center";
+    #   sha256 = "09k0vlwwg9zsqhp1y0miagch39hf8s0r2yi98p11gjydkh8nm1cz";
+    # })
     (substituteAll {
       src = ./fix-paths.patch;
       nmcli = "${networkmanager}/bin/nmcli";
-      which = "${which}/bin/which";
       # not packaged
       # dman = "${deepin-manual}/bin/dman";
       inherit tzdata;
@@ -114,14 +123,40 @@ mkDerivation rec {
     patchShebangs translate_generation.sh
     patchShebangs translate_desktop2ts.sh
 
-    fixPath $out /usr dde-control-center-autostart.desktop \
+    fixPath $out /usr \
+      abrecovery/deepin-ab-recovery.desktop \
       com.deepin.dde.ControlCenter.service \
-      src/frame/widgets/utils.h
+      dde-control-center-autostart.desktop \
+      include/widgets/utils.h \
+      src/frame/window/mainwindow.cpp
 
-    substituteInPlace dde-control-center.desktop \
-      --replace "dbus-send" "${dbus}/bin/dbus-send"
+    fixPath ${tzdata} /usr/share/zoneinfo \
+      src/frame/modules/datetime/timezone_dialog/timezone.cpp
+
+    fixPath ${dde-network-utils} /usr/share/dde-network-utils \
+      src/frame/main.cpp
+
+    fixPath $out /usr/share/dde-control-center/translations \
+      abrecovery/main.cpp \
+      src/dialogs/main.cpp
+
+    substituteInPlace abrecovery/CMakeLists.txt \
+      --replace "DESTINATION /usr/bin" "DESTINATION $out/bin" \
+      --replace "DESTINATION /etc/xdg" "DESTINATION $out/etc/xdg"
+
     substituteInPlace com.deepin.controlcenter.addomain.policy \
       --replace "/bin/systemctl" "/run/current-system/sw/bin/systemctl"
+
+    substituteInPlace dde-control-center.desktop \
+      --replace Exec=dde-control-center Exec=$out/bin/dde-control-center
+
+    # remove after they obey -DDISABLE_SYS_UPDATE properly
+    sed -i '/new UpdateModule/d' src/frame/window/mainwindow.cpp
+  '';
+
+  postInstall = ''
+    rm $out/etc/xdg/autostart/deepin-ab-recovery.desktop
+    rmdir $out/etc/xdg/autostart $out/etc/xdg $out/etc
   '';
 
   dontWrapQtApps = true;

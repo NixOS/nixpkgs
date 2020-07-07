@@ -1,5 +1,17 @@
+From d6e868b933b63fc047b541c0ab69e0df02a7bfed Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jos=C3=A9=20Romildo=20Malaquias?= <malaquias@gmail.com>
+Date: Fri, 12 Jun 2020 11:55:35 -0300
+Subject: [PATCH] fix build paths
+
+---
+ src/frame/frame.cpp                                        | 2 +-
+ src/frame/modules/datetime/timezone_dialog/timezone.cpp    | 2 +-
+ src/frame/window/modules/network/connectionvpneditpage.cpp | 2 +-
+ src/frame/window/modules/network/vpnpage.cpp               | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
 diff --git a/src/frame/frame.cpp b/src/frame/frame.cpp
-index 90d06f8..7cdad04 100644
+index 90d06f82a..7cdad0453 100644
 --- a/src/frame/frame.cpp
 +++ b/src/frame/frame.cpp
 @@ -375,7 +375,7 @@ void Frame::keyPressEvent(QKeyEvent *e)
@@ -12,7 +24,7 @@ index 90d06f8..7cdad04 100644
      }
  }
 diff --git a/src/frame/modules/datetime/timezone_dialog/timezone.cpp b/src/frame/modules/datetime/timezone_dialog/timezone.cpp
-index 3dd4aad..5f1b363 100644
+index 3dd4aade5..5f1b363da 100644
 --- a/src/frame/modules/datetime/timezone_dialog/timezone.cpp
 +++ b/src/frame/modules/datetime/timezone_dialog/timezone.cpp
 @@ -46,7 +46,7 @@ namespace installer {
@@ -24,11 +36,11 @@ index 3dd4aad..5f1b363 100644
  
  // Absolute path to backward timezone file.
  const char kTimezoneAliasFile[] = "/timezone_alias";
-diff --git a/src/frame/modules/network/connectionvpneditpage.cpp b/src/frame/modules/network/connectionvpneditpage.cpp
-index e292865..95c5a2b 100644
---- a/src/frame/modules/network/connectionvpneditpage.cpp
-+++ b/src/frame/modules/network/connectionvpneditpage.cpp
-@@ -215,7 +215,7 @@ void ConnectionVpnEditPage::exportConnConfig()
+diff --git a/src/frame/window/modules/network/connectionvpneditpage.cpp b/src/frame/window/modules/network/connectionvpneditpage.cpp
+index 6a287d629..7c0e45723 100644
+--- a/src/frame/window/modules/network/connectionvpneditpage.cpp
++++ b/src/frame/window/modules/network/connectionvpneditpage.cpp
+@@ -247,7 +247,7 @@ void ConnectionVpnEditPage::exportConnConfig()
      qDebug() << Q_FUNC_INFO << args;
  
      QProcess p;
@@ -37,11 +49,11 @@ index e292865..95c5a2b 100644
      p.waitForFinished();
      qDebug() << p.readAllStandardOutput();
      qDebug() << p.readAllStandardError();
-diff --git a/src/frame/modules/network/vpnpage.cpp b/src/frame/modules/network/vpnpage.cpp
-index 521a603..450d1a6 100644
---- a/src/frame/modules/network/vpnpage.cpp
-+++ b/src/frame/modules/network/vpnpage.cpp
-@@ -224,7 +224,7 @@ void VpnPage::importVPN()
+diff --git a/src/frame/window/modules/network/vpnpage.cpp b/src/frame/window/modules/network/vpnpage.cpp
+index 1769e50dd..3aa3ccd16 100644
+--- a/src/frame/window/modules/network/vpnpage.cpp
++++ b/src/frame/window/modules/network/vpnpage.cpp
+@@ -336,7 +336,7 @@ void VpnPage::importVPN()
      qDebug() << args;
  
      QProcess p;
@@ -50,16 +62,6 @@ index 521a603..450d1a6 100644
      p.waitForFinished();
      const auto stat = p.exitCode();
      const QString output = p.readAllStandardOutput();
-diff --git a/src/frame/modules/sync/syncworker.cpp b/src/frame/modules/sync/syncworker.cpp
-index 3f929bf..6f240d9 100644
---- a/src/frame/modules/sync/syncworker.cpp
-+++ b/src/frame/modules/sync/syncworker.cpp
-@@ -24,7 +24,7 @@ SyncWorker::SyncWorker(SyncModel *model, QObject *parent)
- 
-     m_model->setSyncIsValid(
-         QProcess::execute(
--            "which", QStringList() << "/usr/lib/deepin-sync-daemon/deepin-sync-daemon") ==
-+            "@which@", QStringList() << "@deepin_sync@/lib/deepin-sync-daemon/deepin-sync-daemon") ==
-             0 &&
-         valueByQSettings<bool>(DCC_CONFIG_FILES, "CloudSync", "AllowCloudSync", false));
- }
+-- 
+2.26.2
+
