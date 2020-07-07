@@ -153,6 +153,8 @@ let
 
       ${genDefault cfg.defaultFonts.monospace "monospace"}
 
+      ${genDefault cfg.defaultFonts.emoji "emoji"}
+
     </fontconfig>
   '';
 
