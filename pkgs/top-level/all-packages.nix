@@ -17550,6 +17550,8 @@ in
 
   iferr = callPackage ../development/tools/iferr { };
 
+  stuffbin = callPackage ../development/tools/stuffbin { };
+
   go-bindata = callPackage ../development/tools/go-bindata { };
 
   go-bindata-assetfs = callPackage ../development/tools/go-bindata-assetfs { };
