@@ -6767,6 +6767,12 @@
     githubId = 920910;
     name = "peelz";
   };
+  python-mario = {
+    email = "python-mario+nixpkgs@cordaz.com";
+    github = "python-mario-bot";
+    githubId = 50342915;
+    name = "Python Mario Team";
+  };
   q3k = {
     email = "q3k@q3k.org";
     github = "q3k";
