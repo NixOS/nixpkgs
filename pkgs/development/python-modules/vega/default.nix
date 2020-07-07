@@ -1,9 +1,10 @@
-{ stdenv, buildPythonPackage , fetchPypi
+{ stdenv, buildPythonPackage , fetchPypi, pythonOlder
 , pytest, jupyter_core, pandas, ipywidgets }:
 
 buildPythonPackage rec {
   pname = "vega";
   version = "3.4.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
