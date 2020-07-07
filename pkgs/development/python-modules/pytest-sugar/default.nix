@@ -4,6 +4,7 @@
 , termcolor
 , pytest
 , packaging
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -19,6 +20,10 @@ buildPythonPackage rec {
     termcolor
     pytest
     packaging
+  ];
+
+  checkInputs = [
+    pytestCheckHook
   ];
 
   meta = with lib; {
