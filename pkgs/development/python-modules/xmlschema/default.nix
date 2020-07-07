@@ -1,22 +1,23 @@
 { lib, buildPythonPackage, fetchFromGitHub
 , elementpath
+, lxml
 , pytest
 }:
 
 buildPythonPackage rec {
-  version = "1.1.0";
+  version = "1.2.2";
   pname = "xmlschema";
 
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "xmlschema";
     rev = "v${version}";
-    sha256 = "1h8321jb6q3dhlh3608y3f3sbbzfd3jg1psyirxkrm4w5xs3lbvy";
+    sha256 = "04rlcm5777cv7aw9mf0z1xrj8cn2rljfzs9i2za6sdk6h1ngpj3q";
   };
 
   propagatedBuildInputs = [ elementpath ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ lxml pytest ];
 
   postPatch = ''
     substituteInPlace setup.py \
