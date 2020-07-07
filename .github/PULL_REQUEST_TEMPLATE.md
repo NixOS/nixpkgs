@@ -21,7 +21,7 @@ Reviewing guidelines: https://hydra.nixos.org/job/nixpkgs/trunk/manual/latest/do
    - [ ] macOS
    - [ ] other Linux distributions
 - [ ] Tested via one or more NixOS test(s) if existing and applicable for the change (look inside [nixos/tests](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests))
-- [ ] Tested compilation of all pkgs that depend on this change using `nix-shell -p nixpkgs-review --run "nixpkgs-review wip"` (on uncommitted changes)
+- [ ] Tested compilation of all pkgs that depend on this change using `nix-shell -p nixpkgs-review --run "nixpkgs-review wip"` on uncommitted changes
 - [ ] Tested execution of all binary files (usually in `./result/bin/`)
 - [ ] Determined the impact on package closure size (by running `nix path-info -S` before and after)
 - [ ] Ensured that relevant documentation is up to date
