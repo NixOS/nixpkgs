@@ -1,48 +1,73 @@
 { stdenv
 , mkDerivation
 , fetchFromGitHub
-, pkgconfig
 , cmake
-, qttools
-, deepin-gettext-tools
-, dtkcore
+, dbus
+, dde-qt-dbus-factory
+, deepin-shortcut-viewer
 , dtkwidget
+, pkg-config
+, qttools
 , deepin
+, wrapGAppsHook
 }:
 
 mkDerivation rec {
   pname = "dde-calendar";
-  version = "5.0.1";
+  version = "5.7.0.5";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1zzr3crkz4l5l135y0m53vqhv7fkrbvbspk8295swz9gsm3f7ah9";
+    sha256 = "1f7n1w6czpp8v9nipbvaslz6qzmhwk9hkqsda24wppkh2x1n0j55";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     qttools
-    deepin-gettext-tools
     deepin.setupHook
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    dtkcore
+    dbus
+    dde-qt-dbus-factory
+    deepin-shortcut-viewer
     dtkwidget
   ];
 
   postPatch = ''
     searchHardCodedPaths
-    patchShebangs translate_generation.sh
-    patchShebangs translate_desktop.sh
+    fixPath $out /usr CMakeLists.txt
+    fixPath $out /usr/bin/dde-calendar assets/dbus/com.deepin.Calendar.service
+    substituteInPlace assets/dde-calendar.desktop --replace Exec=dde-calendar Exec=$out/bin/dde-calendar
+    substituteInPlace src/calendarmainwindow.cpp --replace \"deepin-shortcut-viewer\" \"${deepin-shortcut-viewer}/bin/deepin-shortcut-viewer\"
+    substituteInPlace src/main.cpp --replace dbus-send ${dbus}/bin/dbus-send
 
-    fixPath $out /usr com.deepin.Calendar.service
 
-    sed -i translate_desktop.sh \
-      -e "s,/usr/bin/deepin-desktop-ts-convert,deepin-desktop-ts-convert,"
+    # Fixes from archlinux
+
+    sed -i '/<QQueue>/a #include <QMouseEvent>' src/daymonthview.cpp
+    sed -i '/<QStylePainter>/a #include <QMouseEvent>' src/schcedulesearchview.cpp
+    sed -i '/include <QJsonObject>/a #include <QMouseEvent>' src/draginfographicsview.cpp
+
+    # Not included in https://github.com/linuxdeepin/dde-calendar/pull/30 yet
+    sed -i '/include <QPainter>/a #include <QPainterPath>' src/schcedulesearchview.cpp src/daymonthview.cpp src/weekheadview.cpp src/customframe.cpp
+    sed -i '/include <QMessageBox>/a #include <QWheelEvent>' src/yearwindow.cpp
+  '';
+
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+    )
+  '';
+
+  postFixup = ''
+    searchHardCodedPaths $out
   '';
 
   passthru.updateScript = deepin.updateScript { inherit pname version src; };
