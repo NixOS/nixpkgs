@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, gtk3, pkgconfig, intltool, libxslt }:
 
 stdenv.mkDerivation rec {
-  version = "0.5.4.14";
+  version = "0.5.4.15";
   pname = "xarchiver";
 
   src = fetchFromGitHub {
     owner = "ib";
     repo = "xarchiver";
     rev = version;
-    sha256 = "1iklwgykgymrwcc5p1cdbh91v0ih1m58s3w9ndl5kyd44bwlb7px";
+    sha256 = "0a3y54r5zp2c0cqm77r07qrl1vh200wvqmbhm35diy22fvkq5mwc";
   };
 
   nativeBuildInputs = [ pkgconfig ];
