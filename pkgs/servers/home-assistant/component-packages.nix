@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.112.2";
+  version = "0.112.3";
   components = {
     "abode" = ps: with ps; [ ]; # missing inputs: abodepy
     "acer_projector" = ps: with ps; [ pyserial];
@@ -144,7 +144,7 @@
     "darksky" = ps: with ps; [ python-forecastio];
     "datadog" = ps: with ps; [ datadog];
     "ddwrt" = ps: with ps; [ ];
-    "debugpy" = ps: with ps; [ ]; # missing inputs: debugpy
+    "debugpy" = ps: with ps; [ debugpy];
     "deconz" = ps: with ps; [ ]; # missing inputs: pydeconz
     "decora" = ps: with ps; [ bluepy]; # missing inputs: decora
     "decora_wifi" = ps: with ps; [ ]; # missing inputs: decora_wifi
