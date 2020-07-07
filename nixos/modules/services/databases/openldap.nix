@@ -8,6 +8,7 @@ let
   openldap = cfg.package;
 
   dataFile = pkgs.writeText "ldap-contents.ldif" cfg.declarativeContents;
+  bootstrapFile = pkgs.writeText "bootstrap.ldif" cfg.bootstrapContents;
   configFile = pkgs.writeText "slapd.conf" ((optionalString cfg.defaultSchemas ''
     include ${openldap.out}/etc/schema/core.schema
     include ${openldap.out}/etc/schema/cosine.schema
@@ -207,6 +208,26 @@ in
         '';
       };
 
+      bootstrapContents = mkOption {
+        type = with types; nullOr lines;
+        default = null;
+        description = ''
+          Initial contents for the LDAP database, in LDIF format.
+
+          This differs from <code>declarativeContents</code> in that this will
+          only be used to create the database if it doesn't exist, not replace
+          the contents each startup.
+
+          Cannot be used alongside <code>declarativeContents</code>, as that
+          would completely override this option.
+        '';
+        example = ''
+          dn: dc=example,dc=org
+          objectClass: domain
+          dc: example
+        '';
+      };
+
       extraDatabaseConfig = mkOption {
         type = types.lines;
         default = "";
@@ -256,6 +277,10 @@ in
         assertion = cfg.configDir != null || cfg.rootpwFile != null || cfg.rootpw != null;
         message = "services.openldap: Unless configDir is set, either rootpw or rootpwFile must be set";
       }
+      {
+        assertion = cfg.declarativeContents == null || cfg.bootstrapContents == null;
+        message = "services.openldap: Only one of declarativeContents and bootstrapContents may be set";
+      }
     ];
 
     environment.systemPackages = [ openldap ];
@@ -273,6 +298,12 @@ in
         mkdir -p "${cfg.dataDir}"
         ${optionalString (cfg.declarativeContents != null) ''
           ${openldap.out}/bin/slapadd ${configOpts} -l ${dataFile}
+        ''}
+        ${optionalString (cfg.bootstrapContents != null) ''
+          if [ ! -f "${cfg.dataDir}/.bootstraped" ]; then
+            ${openldap.out}/bin/slapadd ${configOpts} -l ${bootstrapFile}
+            touch "${cfg.dataDir}/.bootstraped"
+          fi
         ''}
         chown -R "${cfg.user}:${cfg.group}" "${cfg.dataDir}"
 
