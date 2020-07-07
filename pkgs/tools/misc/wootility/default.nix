@@ -1,15 +1,22 @@
-{ appimageTools, fetchurl, lib, gsettings-desktop-schemas, gtk3, udev, wooting-udev-rules }:
-
+{ appimageTools
+, fetchurl
+, lib
+, gsettings-desktop-schemas
+, gtk3
+, libxkbfile
+, udev
+, wooting-udev-rules
+}:
 let
   pname = "wootility";
-  version = "3.4.6";
+  version = "3.5.10";
 in
 appimageTools.wrapType2 rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://s3.eu-west-2.amazonaws.com/wooting-update/wootility-linux-latest/wootility-${version}.AppImage";
-    sha256 = "02ivbgnzr657iqb9hviaylmsym2kki2c84xmqfix3b0awsphn05q";
+    sha256 = "1bhk4jcziis01lyn8dmx93abd6p41gmbrysphcd5810l7zcfz59y";
   };
 
   profile = ''
@@ -19,7 +26,11 @@ appimageTools.wrapType2 rec {
 
   multiPkgs = extraPkgs;
   extraPkgs =
-    pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ ([ udev wooting-udev-rules ]);
+    pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ ([
+      udev
+      wooting-udev-rules
+      libxkbfile
+    ]);
   extraInstallCommands = "mv $out/bin/{${name},${pname}}";
 
   meta = with lib; {
