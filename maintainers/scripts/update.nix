@@ -9,7 +9,13 @@
 # TODO: add assert statements
 
 let
-  pkgs = import ./../../default.nix (if include-overlays then { } else { overlays = []; });
+  pkgs = import ./../../default.nix (
+    if include-overlays == false then
+      { overlays = []; }
+    else if include-overlays == true then
+      { } # Let Nixpkgs include overlays impurely.
+    else { overlays = include-overlays; }
+  );
 
   inherit (pkgs) lib;
 
