@@ -80,6 +80,9 @@ stdenv.mkDerivation rec {
     # Bump from 4KB, much faster I/O
     CONFIG_FEATURE_COPYBUF_KB 64
 
+    # Set the path for the udhcpc script
+    CONFIG_UDHCPC_DEFAULT_SCRIPT "$out/share/default.script"
+
     ${extraConfig}
     CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cc.targetPrefix}"
     ${libcConfig}
@@ -92,6 +95,12 @@ stdenv.mkDerivation rec {
 
   postConfigure = lib.optionalString (useMusl && stdenv.hostPlatform.libc != "musl") ''
     makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
+  '';
+
+  postInstall = ''
+    mkdir $out/share
+    substituteAll ${./default.script} $out/share/default.script
+    chmod +x $out/share/default.script
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];

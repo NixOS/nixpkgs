@@ -1,0 +1,66 @@
+#!@bash@/bin/sh
+# Busybox udhcpc dispatcher script.
+# Copyright (C) 2009 by Axel Beckert.
+# Copyright (C) 2014 by Michael Tokarev.
+#
+# Based on the busybox example scripts and the old udhcp source
+# package default.* scripts.
+
+RESOLV_CONF="/etc/resolv.conf"
+
+log() {
+    @out@/bin/logger -t "udhcpc[$PPID]" -p daemon.$1 "$interface: $2"
+}
+
+case $1 in
+    bound|renew)
+
+	# Configure new IP address.
+	# Do it unconditionally even if the address hasn't changed,
+	# to also set subnet, broadcast, mtu, ...
+	@out@/bin/ifconfig $interface ${mtu:+mtu $mtu} \
+	    $ip netmask $subnet ${broadcast:+broadcast $broadcast}
+
+	# get current ("old") routes (after setting new IP)
+	crouter=$(@out@/bin/ip -4 route show dev $interface |
+	          @out@/bin/awk '$1 == "default" { print $3; }')
+	router="${router%% *}" # linux kernel supports only one (default) route
+	if [ ".$router" != ".$crouter" ]; then
+	    # reset just default routes
+	    @out@/bin/ip -4 route flush exact 0.0.0.0/0 dev $interface
+	fi
+	if [ -n "$router" ]; then
+	    # special case for /32 subnets: use onlink keyword
+	    [ ".$subnet" = .255.255.255.255 ] \
+		    && onlink=onlink || onlink=
+	    @out@/bin/ip -4 route add default via $router dev $interface $onlink
+	fi
+
+	# Update resolver configuration file
+	[ -n "$domain" ] && R="domain $domain" || R=""
+	for i in $dns; do
+	    R="$R
+nameserver $i"
+	done
+
+        echo "$R" > "$RESOLV_CONF"
+
+	log info "$1: IP=$ip/$subnet router=$router domain=\"$domain\" dns=\"$dns\" lease=$lease"
+	;;
+
+    deconfig)
+	@out@/bin/ip link set $interface up
+	@out@/bin/ip -4 addr flush dev $interface
+	@out@/bin/ip -4 route flush dev $interface
+	log notice "deconfigured"
+	;;
+
+    leasefail | nak)
+	log err "configuration failed: $1: $message"
+	;;
+
+    *)
+	echo "$0: Unknown udhcpc command: $1" >&2
+	exit 1
+	;;
+esac
