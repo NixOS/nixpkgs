@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_LDFLAGS = "-lcrypt -lssl -lcrypto -lpam -lcap";
+  NIX_CFLAGS_COMPILE = "-Wno-error=enum-conversion";
 
   enableParallelBuilding = true;
 
