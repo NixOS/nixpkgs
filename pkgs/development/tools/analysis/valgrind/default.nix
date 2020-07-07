@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl, gdb, cctools, xnu, bootstrap_cmds }:
 
 stdenv.mkDerivation rec {
-  name = "valgrind-3.15.0";
+  name = "valgrind-3.16.1";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/valgrind/${name}.tar.bz2";
-    sha256 = "1ccawxrni8brcvwhygy12iprkvz409hbr9xkk1bd03gnm2fplz21";
+    sha256 = "1jik19rcd34ip8a5c9nv5wfj8k8maqb8cyclr4xhznq2gcpkl7y9";
   };
 
   outputs = [ "out" "dev" "man" "doc" ];
