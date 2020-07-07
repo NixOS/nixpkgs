@@ -1,10 +1,17 @@
 <!--
 To help with the large amounts of pull requests, we would appreciate your
-reviews of other pull requests, especially simple package updates. Just leave a
-comment describing what you have tested in the relevant package/service.
-Reviewing helps to reduce the average time-to-merge for everyone.
-Thanks a lot if you do!
+reviews of other pull requests, especially simple package updates.
+
+You can start by reviewing packages on your platform to complement the
+author's platform (see steps below).
+
+In any case, just leave a comment describing what you have tested in the
+relevant package/service.
+
 List of open PRs: https://github.com/NixOS/nixpkgs/pulls
+Marvin needs_reviewer: https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+label%3Aneeds_reviewer+
+Marvin needs_merger: https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+label%3Aneeds_merger+
+
 Reviewing guidelines: https://hydra.nixos.org/job/nixpkgs/trunk/manual/latest/download/1/nixpkgs/manual.html#chap-reviewing-contributions
 -->
 
@@ -13,16 +20,28 @@ Reviewing guidelines: https://hydra.nixos.org/job/nixpkgs/trunk/manual/latest/do
 
 ###### Things done
 
-<!-- Please check what applies. Note that these are not hard requirements but merely serve as information for reviewers. -->
+<!-- 
+Requirements: 
+- install `nixpkgs-review` for good with `nix-env -f '<nixpkgs>' -iA nixpkgs-review`
+- consult usage documentation: https://github.com/Mic92/nixpkgs-review#usage
+- setup github api token: https://github.com/Mic92/nixpkgs-review#github-api-token
+-->
 
-- [ ] Tested using sandboxing ([nix.useSandbox](https://nixos.org/nixos/manual/options.html#opt-nix.useSandbox) on NixOS, or option `sandbox` in [`nix.conf`](https://nixos.org/nix/manual/#sec-conf-file) on non-NixOS linux)
-- Built on platform(s)
+- [ ] Tested sucessful built of final PR `GITHUB_TOKEN=<YOUR_TOKEN> nixpkgs-review pr <pr-number>`.
+      If suceeded, within the resulting `nix-shell`:
+   - [ ] Manually tested execution of all binary files (usually in `./result/bin/`)
+   - [ ] If ok, posted the results: `nix-shell> nixpkgs-review post-result`
+
+- Tick the the platform(s) at hand that you did built on (more is better, reviewers are encouraged to complement):
    - [ ] NixOS
    - [ ] macOS
-   - [ ] other Linux distributions
-- [ ] Tested via one or more NixOS test(s) if existing and applicable for the change (look inside [nixos/tests](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests))
-- [ ] Tested compilation of all pkgs that depend on this change using `nix-shell -p nixpkgs-review --run "nixpkgs-review wip"`
-- [ ] Tested execution of all binary files (usually in `./result/bin/`)
-- [ ] Determined the impact on package closure size (by running `nix path-info -S` before and after)
-- [ ] Ensured that relevant documentation is up to date
+   - [ ] other Linux (Ubuntu, Archlinux, Alpine, etc.). Please specify: ...
+
+- [ ] If available*: tested via one or more NixOS test(s) `GITHUB_TOKEN=<YOUR_TOKEN> nixpkgs-review pr -p nixosTests.<test> <package> <pr-number>` (look inside [nixos/tests](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests)
+
+- [ ] No documentation affected by this change
+- [ ] Or: Ensured that relevant documentation is up to date
+
 - [ ] Fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/.github/CONTRIBUTING.md).
+
+\* Note, that only few tests are available, if you'd want to write your own have a look at: https://github.com/NixOS/nixpkgs/issues/34987 and other tests throughout the source.
