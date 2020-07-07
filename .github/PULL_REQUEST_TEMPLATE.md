@@ -24,7 +24,7 @@ Requirements:
 - setup github api token: https://github.com/Mic92/nixpkgs-review#github-api-token
 -->
 
-- [ ] Tested sucessful built of final PR `GITHUB_TOKEN=<YOUR_TOKEN> nixpkgs-review pr <pr-number>`.
+- [ ] Tested sucessful build of final PR `GITHUB_TOKEN=<YOUR_TOKEN> nixpkgs-review pr <pr-number>`.
       If suceeded, within the resulting `nix-shell`:
    - [ ] Manually tested execution of all binary files (in `./results/bin/`)
    - [ ] Included manual checks and validations at the end of `editor ./report.md`
