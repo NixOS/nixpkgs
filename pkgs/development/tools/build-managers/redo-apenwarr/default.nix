@@ -1,5 +1,5 @@
-{ stdenv, lib, python3, fetchFromGitHub, mkdocs, which, findutils, coreutils
-, perl
+{ stdenv, lib, python3, fetchFromGitHub, which, findutils, coreutils
+, perl, installShellFiles
 , doCheck ? true
 }: stdenv.mkDerivation rec {
 
@@ -53,7 +53,12 @@
     (with python3.pkgs; [ beautifulsoup4 markdown ])
     which
     findutils
+    installShellFiles
   ];
+
+  postInstall = ''
+    installShellCompletion --bash contrib/bash_completion.d/redo
+  '';
 
   meta = with lib; {
     description = "Smaller, easier, more powerful, and more reliable than make. An implementation of djb's redo";
