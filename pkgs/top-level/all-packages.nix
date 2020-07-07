@@ -2388,6 +2388,8 @@ in
 
   bdsync = callPackage ../tools/backup/bdsync { };
 
+  beamerpresenter = libsForQt5.callPackage ../applications/office/beamerpresenter { };
+
   beanstalkd = callPackage ../servers/beanstalkd { };
 
   beets = callPackage ../tools/audio/beets {
