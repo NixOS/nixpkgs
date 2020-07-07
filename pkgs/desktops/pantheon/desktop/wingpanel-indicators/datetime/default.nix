@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-datetime";
-  version = "2.2.4";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0wrvya9438ncb2rvcz99aa497v95b4yhdw1479iacnb9f94jacns";
+    sha256 = "0z5a4jkmg8jw3yjdq89njhqcpms2rbq7rnsh83q9gh8v3qidk75d";
   };
 
   passthru = {
