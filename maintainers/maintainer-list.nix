@@ -9071,4 +9071,10 @@
     github = "saulecabrera";
     githubId = 1423601;
   };
+  tfmoraes = {
+    name = "Thiago Franco de Moraes";
+    email = "351108+tfmoraes@users.noreply.github.com";
+    github = "tfmoraes";
+    githubId = 351108;
+  };
 }
