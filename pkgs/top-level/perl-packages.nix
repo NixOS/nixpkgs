@@ -3969,7 +3969,7 @@ let
       url = "mirror://cpan/authors/id/G/GT/GTERMARS/CSS-Minifier-XS-0.09.tar.gz";
       sha256 = "1myswrmh0sqp5xjpp03x45z8arfmgkjx0srl3r6kjsyzl1zrk9l8";
     };
-    perlPreHook = stdenv.lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
+    perlPreHook = stdenv.lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
     meta = {
       description = "XS based CSS minifier";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -9879,7 +9879,7 @@ let
       url = "mirror://cpan/authors/id/G/GT/GTERMARS/JavaScript-Minifier-XS-0.11.tar.gz";
       sha256 = "1vlyhckpjbrg2v4dy9szsxxl0q44n0y1xl763mg2y2ym9g5144hm";
     };
-    perlPreHook = stdenv.lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
+    perlPreHook = stdenv.lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
     meta = {
       description = "XS based JavaScript minifier";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -12429,6 +12429,22 @@ let
       description = "Real-time web framework";
       license = stdenv.lib.licenses.artistic2;
       maintainers = with maintainers; [ thoughtpolice sgo ];
+    };
+  };
+
+  MojoliciousPluginAssetPack = buildPerlPackage {
+    pname = "Mojolicious-Plugin-AssetPack";
+    version = "2.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-AssetPack-2.08.tar.gz";
+      sha256 = "585d9e056258b00590da109b4d5ee573fa3eb2248425247aebbfedac5a157152";
+    };
+    propagatedBuildInputs = [ FileWhich IPCRun3 Mojolicious JavaScriptMinifierXS CSSMinifierXS ];
+    meta = {
+      homepage = "https://github.com/jhthorsen/mojolicious-plugin-assetpack";
+      description = "Compress and convert css, less, sass, javascript and coffeescript files";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = with maintainers; [ sgo ];
     };
   };
 
