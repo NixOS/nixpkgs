@@ -2121,6 +2121,8 @@ in
 
   mlarchive2maildir = callPackage ../applications/networking/mailreaders/mlarchive2maildir { };
 
+  molly-brown = callPackage ../servers/gemini/molly-brown { };
+
   monetdb = callPackage ../servers/sql/monetdb { };
 
   mons = callPackage ../tools/misc/mons {};
