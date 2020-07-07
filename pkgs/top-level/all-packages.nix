@@ -19292,7 +19292,9 @@ in
 
   sysklogd = callPackage ../os-specific/linux/sysklogd { };
 
-  syslinux = callPackage ../os-specific/linux/syslinux { };
+  syslinux = callPackage ../os-specific/linux/syslinux {
+    stdenv = gcc9Stdenv; # Fails with "undefined reference to `strlen'" on gcc10
+  };
 
   sysstat = callPackage ../os-specific/linux/sysstat { };
 
