@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pantheon-agent-polkit";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1gkispg1wr3fmwhbaaw722hc7cfqvj18gwb1nvv7rz3ghk9ih4jy";
+    sha256 = "1kd6spwfwy5r2mrf7xh5l2wrazqia8vr4j3g27s97vn7fcg4pgb0";
   };
 
   passthru = {
