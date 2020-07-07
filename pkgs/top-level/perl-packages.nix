@@ -2562,6 +2562,19 @@ let
     };
   };
 
+  ClassLoader = buildPerlPackage rec {
+    pname = "Class-Loader";
+    version = "2.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/V/VI/VIPUL/${pname}-${version}.tar.gz";
+      sha256 = "4fef2076ead60423454ff1f4e82859a9a9b9942b5fb8eee0c98b9c63c9f2b8e7";
+    };
+    meta = {
+      description = "Load modules and create objects on demand";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ClassMakeMethods = buildPerlPackage {
     pname = "Class-MakeMethods";
     version = "1.01";
@@ -3676,6 +3689,20 @@ let
       description = "Provide strong randomness for seeding";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  CryptRandom = buildPerlPackage rec {
+    pname = "Crypt-Random";
+    version = "1.52";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/V/VI/VIPUL/${pname}-${version}.tar.gz";
+      sha256 = "a93c06de409e6f2eb2e9868ea6d4e653d99f2f7900b2c1831e1f65ace0c4ef84";
+    };
+    propagatedBuildInputs = [ ClassLoader MathPari StatisticsChiSquare ];
+    meta = {
+      description = "Interface to /dev/random and /dev/urandom";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -11488,6 +11515,27 @@ let
     };
   };
 
+  MathPari = buildPerlPackage rec {
+    pname = "Math-Pari";
+    version = "2.030518";
+    nativeBuildInputs = [ pkgs.unzip ];
+    pariversion = "2.1.7";
+    pari_tgz = fetchurl {
+      url = "https://pari.math.u-bordeaux.fr/pub/pari/OLD/2.1/pari-${pariversion}.tgz";
+      sha256 = "1yjml5z1qdn258qh6329v7vib2gyx6q2np0s5ybci0rhmz6z4hli";
+    };
+    preConfigure = "cp ${pari_tgz} pari-${pariversion}.tgz";
+    makeMakerFlags = "pari_tgz=pari-${pariversion}.tgz";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/I/IL/ILYAZ/modules/${pname}-${version}.zip";
+      sha256 = "dc38955a9690be6bafa8de2526212377c3ec9fe8da5ec02263a9caf94b58bb91";
+    };
+    meta = {
+      description = "Perl interface to PARI";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   MathPlanePath = buildPerlPackage {
     pname = "Math-PlanePath";
     version = "127";
@@ -17051,6 +17099,19 @@ let
     };
     meta = {
       description = "Efficient resampling and calculation of medians with confidence intervals";
+    };
+  };
+
+  StatisticsChiSquare = buildPerlPackage rec {
+    pname = "Statistics-ChiSquare";
+    version = "1.0000";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/${pname}-${version}.tar.gz";
+      sha256 = "255a5a38336d048ddb9077222691e000984e907aae09a4ea695a9cfd49a1ddd0";
+    };
+    meta = {
+      description = "Implements the Chi Squared test, using pre-computed tables";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
