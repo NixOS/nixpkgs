@@ -5557,6 +5557,8 @@ in
 
   mkgmap = callPackage ../applications/misc/mkgmap { };
 
+  mkgmap-splitter = callPackage ../applications/misc/mkgmap/splitter { };
+
   mpack = callPackage ../tools/networking/mpack { };
 
   mtm = callPackage ../tools/misc/mtm { };

@@ -12,6 +12,10 @@
     url = "https://repo1.maven.org/maven2/com/google/protobuf/protobuf-java/2.5.0/protobuf-java-2.5.0.jar";
     sha256 = "0x6c4pbsizvk3lm6nxcgi1g2iqgrxcna1ip74lbn01f0fm2wdhg0";
   };
+  xpp3 = fetchurl {
+    url = "https://repo1.maven.org/maven2/xpp3/xpp3/1.1.4c/xpp3-1.1.4c.jar";
+    sha256 = "1f9ifnxxj295xb1494jycbfm76476xm5l52p7608gf0v91d3jh83";
+  };
   jaxb-api = fetchurl {
     url = "https://repo1.maven.org/maven2/javax/xml/bind/jaxb-api/2.3.0/jaxb-api-2.3.0.jar";
     sha256 = "00rxpc0m30d3jc572ni01ryxq8gcbnr955xsabrijg9pknc0fc48";
