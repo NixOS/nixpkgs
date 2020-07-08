@@ -16,6 +16,8 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.commit=${src.rev} -X main.date=19700101-00:00:00" ];
+
   postInstall = ''
     for shell in bash zsh; do
       HOME=$TMPDIR $out/bin/golangci-lint completion $shell > golangci-lint.$shell
