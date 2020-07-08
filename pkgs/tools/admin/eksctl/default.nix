@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "eksctl";
-  version = "0.22.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
