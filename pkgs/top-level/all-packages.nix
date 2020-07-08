@@ -3612,7 +3612,13 @@ in
 
   fprintd = callPackage ../tools/security/fprintd { };
 
-  franz = callPackage ../applications/networking/instant-messengers/franz { };
+  ferdi = callPackage ../applications/networking/instant-messengers/ferdi {
+    mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
+  };
+
+  franz = callPackage ../applications/networking/instant-messengers/franz {
+    mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
+  };
 
   freedroidrpg = callPackage ../games/freedroidrpg { };
 
