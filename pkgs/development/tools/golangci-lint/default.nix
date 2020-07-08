@@ -26,10 +26,9 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "Linters Runner for Go. 5x faster than gometalinter. Nice colored output.";
-    homepage = "https://golangci.com/";
-    license = licenses.agpl3;
-    platforms = platforms.unix;
+    description = "Fast linters Runner for Go";
+    homepage = "https://golangci-lint.run/";
+    license = licenses.gpl3;
     maintainers = with maintainers; [ anpryl manveru ];
   };
 }
