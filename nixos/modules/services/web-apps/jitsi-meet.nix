@@ -277,18 +277,14 @@ in
         enableACME = mkDefault true;
         forceSSL = mkDefault true;
         root = pkgs.jitsi-meet;
-        locations."~ ^/([a-zA-Z0-9=\\?]+)$" = {
-          extraConfig = ''
-            rewrite ^/(.*)$ / break;
-          '';
-        };
-        locations."/" = {
-          index = "index.html";
-          extraConfig = ''
-            ssi on;
-          '';
-        };
-        locations."/http-bind" = {
+        extraConfig = ''
+          ssi on;
+        '';
+        locations."@root_path".extraConfig = ''
+          rewrite ^/(.*)$ / break;
+        '';
+        locations."~ ^/([^/\\?&:'\"]+)$".tryFiles = "$uri @root_path";
+        locations."=/http-bind" = {
           proxyPass = "http://localhost:5280/http-bind";
           extraConfig = ''
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
