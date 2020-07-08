@@ -2691,6 +2691,8 @@ package-maintainers:
     # - ttn-client
     - update-nix-fetchgit
     - zre
+  utdemir:
+    - nix-tree
 
 unsupported-platforms:
   alsa-mixer:                                   [ x86_64-darwin ]
