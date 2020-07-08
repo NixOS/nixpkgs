@@ -1,29 +1,33 @@
-{ stdenv, python3Packages, fetchurl, makeWrapper
-, coreutils, iptables, nettools, openssh, procps }:
+{ stdenv
+, python3Packages
+, makeWrapper
+, coreutils
+, iptables
+, nettools
+, openssh
+, procps
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "sshuttle";
-  version = "0.78.5";
+  version = "1.0.2";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0vp13xwrhx4m6zgsyzvai84lkq9mzkaw47j58dk0ll95kaymk2x8";
+    sha256 = "02c3r27alch7dfy39v40n9g7mccsrj5hwnb1s0gkw4iwxkx2lzg1";
   };
 
   patches = [ ./sudo.patch ];
 
   nativeBuildInputs = [ makeWrapper python3Packages.setuptools_scm ];
-  buildInputs =
-    [ coreutils openssh procps nettools ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ iptables ];
 
   checkInputs = with python3Packages; [ mock pytest pytestcov pytestrunner flake8 ];
 
-  postInstall = let
-    mapPath = f: x: stdenv.lib.concatStringsSep ":" (map f x);
-  in ''
-  wrapProgram $out/bin/sshuttle \
-    --prefix PATH : "${mapPath (x: "${x}/bin") buildInputs}" \
+  runtimeDeps = [ coreutils openssh procps ] ++ stdenv.lib.optionals stdenv.isLinux [ iptables nettools ];
+
+  postInstall = ''
+    wrapProgram $out/bin/sshuttle \
+      --prefix PATH : "${stdenv.lib.makeBinPath runtimeDeps}" \
   '';
 
   meta = with stdenv.lib; {
