@@ -15,8 +15,6 @@ let
           sha256 = "1lp5b0h9v59igf8wybjn42w6ajw08blhiqmjwp4r7qnvmvmyaxhh";
         };
 
-        nativeBuildInputs = p.nativeBuildInputs ++ [ git ];
-
         preBuild = ''
           export SETUPTOOLS_SCM_PRETEND_VERSION="${sshuttleTelepresenceRev}"
         '';
