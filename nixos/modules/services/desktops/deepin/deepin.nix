@@ -43,7 +43,7 @@
         pkgs.deepin.dde-api
         pkgs.deepin.dde-control-center
         pkgs.deepin.dde-daemon
-        pkgs.deepin.dde-dock
+        (pkgs.deepin.dde-dock.override { plugins = [ pkgs.deepin.dde-file-manager ]; })
         pkgs.deepin.dde-launcher
         pkgs.deepin.dde-file-manager
         pkgs.deepin.dde-session-ui
@@ -55,7 +55,7 @@
         pkgs.deepin.dde-api
         pkgs.deepin.dde-control-center
         pkgs.deepin.dde-daemon
-        pkgs.deepin.dde-dock
+        (pkgs.deepin.dde-dock.override { plugins = [ pkgs.deepin.dde-file-manager ]; })
         pkgs.deepin.dde-launcher
         pkgs.deepin.dde-file-manager
         pkgs.deepin.dde-session-ui
