@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "the-way";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "out-of-cheese-error";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02aa4iwwi89r6sj1q5sj74n2cy1rj94yfh39cp97zlx4lam9pj6b";
+    sha256 = "0q7yg90yxnpaafg6sg7mqkh86qkn43kxy73p9nqkkgrikdnrjh5a";
   };
 
-  cargoSha256 = "09d9gaa83djfkfdx3m4d3kkq550q8y67wb292mrj4xb0kcfrhnpq";
+  cargoSha256 = "1a747bmc6s007ram0w4xf1y2nb3pphvqnlx59098lr3v7gllp7x3";
   checkFlags = "--test-threads=1";
 
   meta = with stdenv.lib; {
