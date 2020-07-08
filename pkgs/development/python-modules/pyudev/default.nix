@@ -17,7 +17,7 @@ buildPythonPackage rec {
     '';
 
   checkInputs = [ pytest mock hypothesis docutils ];
-  propagatedBuildInputs = [ systemd six ];
+  propagatedBuildInputs = [ six ];
 
   checkPhase = ''
     py.test
