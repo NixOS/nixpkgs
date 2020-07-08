@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, fetchpatch
 , fetchurl
 , substituteAll
 , pkgconfig
@@ -132,6 +133,12 @@ in stdenv.mkDerivation rec {
     (substituteAll {
       src = ./remove-cc-reference.patch;
       cc_version = stdenv.cc.cc.name;
+    })
+
+    (fetchpatch {
+      name = "segfault_in_gimp_param_spec_layer_id.patch";
+      url = "https://github.com/glimpse-editor/Glimpse/commit/2dcb60016eb52659932fc71ff2e635986c06ebc0.patch";
+      sha256 = "00j17fqvf9iw6wkmb6kk5kb5v6wpsy1pg7r7nlk7prylv4kh08a1";
     })
   ];
 
