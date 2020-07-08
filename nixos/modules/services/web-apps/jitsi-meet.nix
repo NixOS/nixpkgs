@@ -135,15 +135,11 @@ in
       description = ''
         Whether to enable nginx virtual host that will serve the javascript application and act as
         a proxy for the XMPP server. Further nginx configuration can be done by adapting
-        <option>services.nginx.virtualHosts.&lt;hostName&gt;</option>. It is highly recommended to
-        enable the <option>enableACME</option> and <option>forceSSL</option> options:
-
-        <programlisting>
-        services.nginx.virtualHosts.''${config.services.jitsi-meet.hostName} = {
-          enableACME = true;
-          forceSSL = true;
-        };
-        </programlisting>
+        <option>services.nginx.virtualHosts.&lt;hostName&gt;</option>.
+        When this is enabled, ACME will be used to retrieve a TLS certificate by default. To disable
+        this, set the <option>services.nginx.virtualHosts.&lt;hostName&gt;.enableACME</option> to
+        <literal>false</literal> and if appropriate do the same for
+        <option>services.nginx.virtualHosts.&lt;hostName&gt;.forceSSL</option>.
       '';
     };
 
@@ -278,6 +274,8 @@ in
     services.nginx = mkIf cfg.nginx.enable {
       enable = mkDefault true;
       virtualHosts.${cfg.hostName} = {
+        enableACME = mkDefault true;
+        forceSSL = mkDefault true;
         root = pkgs.jitsi-meet;
         locations."~ ^/([a-zA-Z0-9=\\?]+)$" = {
           extraConfig = ''
