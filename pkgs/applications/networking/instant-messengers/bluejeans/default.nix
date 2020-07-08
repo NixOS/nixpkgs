@@ -1,8 +1,6 @@
 { stdenv
 , fetchurl
 , rpmextract
-, patchelf
-, patchelfUnstable
 , libnotify
 , libuuid
 , cairo
@@ -96,11 +94,11 @@ stdenv.mkDerivation rec {
     mv usr/share share
     rmdir usr
 
-    ${patchelf}/bin/patchelf \
+    patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       --replace-needed libudev.so.0 libudev.so.1 \
       opt/BlueJeans/bluejeans-v2
-    ${patchelfUnstable}/bin/patchelf \
+    patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       opt/BlueJeans/resources/BluejeansHelper
 
