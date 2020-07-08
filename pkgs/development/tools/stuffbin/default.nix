@@ -20,6 +20,5 @@ buildGoModule rec {
     description = "Compress and embed static files and assets into Go binaries and access them with a virtual file system in production";
     maintainers = with maintainers; [ RaghavSood ];
     license = licenses.mit;
-    platforms = platforms.all;
   };
 }
