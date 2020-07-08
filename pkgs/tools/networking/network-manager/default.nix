@@ -10,11 +10,11 @@ let
   pythonForDocs = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in stdenv.mkDerivation rec {
   pname = "network-manager";
-  version = "1.24.0";
+  version = "1.24.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${stdenv.lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    sha256 = "06044fl60bjlj7c6rqqfbm5795h61h6yzp7ch392hzcnm46wwhn3";
+    sha256 = "1cnf0cif0l45wxf823xqri3ly9n0ai3ndxx34qs3yk1m85f0giic";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
