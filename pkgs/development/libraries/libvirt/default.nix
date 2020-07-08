@@ -65,6 +65,7 @@ in stdenv.mkDerivation rec {
   dontAddDisableDepTrack = true;
 
   configureFlags = [
+    "--with-runstatedir=/run" # TODO: remove when autoconf 1.70 is released
     "--localstatedir=/var"
     "--sysconfdir=/var/lib"
     "--with-libpcap"
@@ -97,6 +98,7 @@ in stdenv.mkDerivation rec {
   ];
 
   installFlags = [
+    "runstatedir=${placeholder "out"}/run"
     "localstatedir=$(TMPDIR)/var"
     "sysconfdir=$(out)/var/lib"
   ];
