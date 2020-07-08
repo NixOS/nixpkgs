@@ -36,7 +36,7 @@ It is strongly suggested to use `nipkgs-review`:
    - [ ] other Linux distributions (Ubuntu, Arch Linux, Alpine, etc.).
 
 - [ ] If available: tested via one or more NixOS test(s) `nixpkgs-review pr -p nixosTests.<test> <package> <pr-number>` (look inside [nixos/tests](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests)
-<!-- Note, that only few tests are available, if you'd want to write your own have a look at: https://github.com/NixOS/nixpkgs/issues/34987 and furthermore read through https://nixos.org/nixos/manual/index.html#sec-nixos-tests. Looking through the source code should be helpful, as well. -->
+<!-- Note, that only few tests are available, if you'd want to write your own have a look at: https://github.com/NixOS/nixpkgs/issues/34987 and furthermore read through https://nixos.org/nixos/manual/index.html#sec-nixos-tests. Looking through the source code should be helpful as well. -->
 
 - [ ] Ensured that relevant documentation is up to date
 
