@@ -1652,6 +1652,16 @@
     githubId = 1222362;
     name = "Matías Lang";
   };
+  CRTified = {
+    email = "carl.schneider+nixos@rub.de";
+    github = "CRTified";
+    githubId = 2440581;
+    name = "Carl Richard Theodor Schneider";
+    keys = [{
+      longkeyid = "rsa4096/0x45BCC1E2709B1788";
+      fingerprint = "2017 E152 BB81 5C16 955C  E612 45BC C1E2 709B 1788";
+    }];
+  };
   cryptix = {
     email = "cryptix@riseup.net";
     github = "cryptix";
