@@ -142,7 +142,7 @@ in
 
     environment.etc."jitsi/jicofo/sip-communicator.properties".source =
       pkgs.writeText "sip-communicator.properties" (
-        concatStringsSep "\n" (mapAttrsToList (k: v: "${k}=${v}") cfg.config)
+        generators.toKeyValue {} cfg.config
       );
     environment.etc."jitsi/jicofo/logging.properties".source =
       mkDefault "${pkgs.jicofo}/etc/jitsi/jicofo/logging.properties-journal";
