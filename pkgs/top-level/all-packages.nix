@@ -10253,6 +10253,8 @@ in
 
   cbrowser = callPackage ../development/tools/misc/cbrowser { };
 
+  cc-tool = callPackage ../development/tools/misc/cc-tool { };
+
   ccache = callPackage ../development/tools/misc/ccache { };
 
   # Wrapper that works as gcc or g++
