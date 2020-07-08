@@ -4,6 +4,7 @@
 , fetchPypi
 , substituteAll
 , pkgs
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     })
   ];
 
-  doCheck = false;
+  checkInputs = [ pytestCheckHook ];
 
   meta = with stdenv.lib; {
     description = "Python wrapper around the libevdev C library";
