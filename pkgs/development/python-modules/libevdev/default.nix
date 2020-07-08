@@ -1,4 +1,10 @@
-{ stdenv, buildPythonPackage, isPy27, fetchPypi }:
+{ stdenv
+, buildPythonPackage
+, isPy27
+, fetchPypi
+, substituteAll
+, pkgs
+}:
 
 buildPythonPackage rec {
   pname = "libevdev";
@@ -9,6 +15,13 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "17agnigmzscmdjqmrylg1lza03hwjhgxbpf4l705s6i7p7ndaqrs";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      libevdev = stdenv.lib.getLib pkgs.libevdev;
+    })
+  ];
 
   doCheck = false;
 
