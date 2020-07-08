@@ -41,19 +41,23 @@ buildPythonPackage rec {
       # --ignore=tests/unit/io/test_eventletreactor.py \
   #     --ignore=tests/unit/io/test_asyncorereactor.py
   # '';
-  disabledTests = [
-    "test_libevreactor"
-    "test_eventletreactor"
-    "test_asyncorereactor"
-  ];
-  # Disabling them via disabledTests won't work because already building them seems to fail
+  # disabledTests = [
+  #   "test_libevreactor"
+  #   "test_eventletreactor"
+  #   "test_asyncorereactor"
+  #   "test_asyncioreactor"
+  #   "test_twistedreactor"
+  # ];
+  # Disabling them via disabledTests won't work because already building them seems to fail?
   pytestFlagsArray = [
     "--ignore=tests/unit/io/test_libevreactor.py"
     "--ignore=tests/unit/io/test_eventletreactor.py"
     "--ignore=tests/unit/io/test_asyncorereactor.py"
+    "--ignore=tests/unit/io/test_asyncioreactor.py"
+    "--ignore=tests/unit/io/test_twistedreactor.py"
   ];
   # TODO Maybe the flags were added much earlier back when there were only three tests in io
-  doCheck = false;
+  # doCheck = false;
 
   meta = with lib; {
     description = "A Python client driver for Apache Cassandra";
