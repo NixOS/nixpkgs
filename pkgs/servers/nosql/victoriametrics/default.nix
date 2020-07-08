@@ -13,6 +13,8 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/VictoriaMetrics/VictoriaMetrics";
 
+  buildFlagsArray = [ "-ldflags=-s -w -X ${goPackagePath}/lib/buildinfo.Version=${version}" ];
+
   meta = with lib; {
     homepage = "https://victoriametrics.com/";
     description = "fast, cost-effective and scalable time series database, long-term remote storage for Prometheus";
