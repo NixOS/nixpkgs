@@ -12,7 +12,6 @@ buildGo114Package rec {
   };
 
   goPackagePath = "github.com/exoscale/cli";
-  goDeps = ./deps.nix;
 
   # ensures only the cli binary is built and we don't clutter bin/ with submodules
   subPackages = [ "." ];
