@@ -579,6 +579,8 @@ in {
 
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
+  certbot-dns-cloudflare = callPackage ../development/python-modules/certbot-dns-cloudflare { };
+
   cfn-flip = callPackage ../development/python-modules/cfn-flip { };
 
   chalice = callPackage ../development/python-modules/chalice { };
