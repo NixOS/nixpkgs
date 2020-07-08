@@ -3,7 +3,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xidlehook";
-  version = "0.8.2";
+  version = "0.9.1";
 
   doCheck = false;
 
@@ -12,11 +12,11 @@ rustPlatform.buildRustPackage rec {
     repo = "xidlehook";
     rev = version;
 
-    sha256 = "1zvr3vk76x0gsq6z5rrnliv2bvshsm8bhkspc41bbj4kniz4h5bw";
+    sha256 = "00j2iwp25hz9jlr45qszyipljqdnh7h3ni9bkd2lmk58kkvmhf1s";
   };
 
   cargoBuildFlags = lib.optionals (!stdenv.isLinux) ["--no-default-features" "--features" "pulse"];
-  cargoSha256 = "0dxz5mbdc93xb02vnmd29i2kdh05c7vx9h28x5qgs3jvddyb3xmn";
+  cargoSha256 = "050ihjhg33223x6pgvhqrjprx1clkj2x3jr6acf716vbwm3m0bmz";
 
   buildInputs = [ xlibsWrapper xorg.libXScrnSaver libpulseaudio ] ++ lib.optional stdenv.isDarwin Security;
   nativeBuildInputs = [ pkgconfig patchelf python3 ];
