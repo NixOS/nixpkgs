@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "weaveworks";
     repo = pname;
     rev = version;
-    sha256 = "1l7wcx89d7nil5lbr4x2w04lwranz0z83y892v290wv2l0xnmshj";
+    sha256 = "092xpyxc6aiwjqg3386wqnhv5dh964jm934sry5sqvd9n1nf0ccy";
   };
 
-  vendorSha256 = "0fy9m72iciz5pjf2b3323brgi15w6a9fg1m1srpaiay3md87gagg";
+  vendorSha256 = "180j17g173wjb3cw0wy6qjxv137p67w10h3va3l9lgjj5hc0ahhb";
 
   subPackages = [ "cmd/eksctl" ];
 
