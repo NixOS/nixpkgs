@@ -1,14 +1,15 @@
 # Cataclysm: Dark Days Ahead
 
-## Installation
+## How to install Cataclysm DDA
 
-To install the latest stable release of Cataclysm DDA, run
-`nix-env -f "<nixpkgs>" -iA cataclysm-dda`.
-For the curses build (build without tiles), install `cataclysmDDA.stable.curses`.
-Note: `cataclysm-dda` is an alias to `cataclysmDDA.stable.tiles`.
+To install the latest stable release of Cataclysm DDA to your profile, execute
+`nix-env -f "<nixpkgs>" -iA cataclysm-dda`. For the curses build (build
+without tiles), install `cataclysmDDA.stable.curses`. Note: `cataclysm-dda` is
+an alias to `cataclysmDDA.stable.tiles`.
 
-If you like access to a development build of your favorite git revision, override
-`cataclysm-dda-git` (or `cataclysmDDA.git.curses` if you like no tiles):
+If you like access to a development build of your favorite git revision,
+override `cataclysm-dda-git` (or `cataclysmDDA.git.curses` if you like curses
+build):
 
 ```nix
 cataclysm-dda-git.override {
@@ -24,9 +25,19 @@ The sha256 checksum can be obtained by
 nix-prefetch-url --unpack "https://github.com/CleverRaven/Cataclysm-DDA/archive/${YOUR_FAVORITE_REVISION}.tar.gz"
 ```
 
+The default configuration directory is `~/.cataclysm-dda`. If you prefer
+`$XDG_CONFIG_HOME/cataclysm-dda`, override the derivation:
+
+```nix
+cataclysm-dda.override {
+  useXdgDir = true;
+}
+```
+
 ## Customizing with mods
 
-To install the game with mods of your choice, you can use `withMods` attribute:
+To install Cataclysm DDA with mods of your choice, you can use `withMods`
+attribute:
 
 ```nix
 cataclysm-dda.withMods (mods: with mods; [
@@ -37,8 +48,8 @@ cataclysm-dda.withMods (mods: with mods; [
 All mods, soundpacks, and tilesets available in nixpkgs are found in
 `cataclysmDDA.pkgs`.
 
-To modify existing mods and/or add more mods not available in nixpkgs, you can
-do it like this way:
+Here is an example to modify existing mods and/or add more mods not available
+in nixpkgs:
 
 ```nix
 let
