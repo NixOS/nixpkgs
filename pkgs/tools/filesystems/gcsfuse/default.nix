@@ -20,6 +20,8 @@ buildGoPackage rec {
     ln -s $out/bin/mount_gcsfuse $out/bin/mount.fuse.gcsfuse
   '';
 
+  buildFlagsArray = [ "-ldflags=-s -w -X main.gcsfuseVersion=${version}" ];
+
   meta = with lib;{
     description = "A user-space file system for interacting with Google Cloud Storage";
     homepage = "https://cloud.google.com/storage/docs/gcs-fuse";
