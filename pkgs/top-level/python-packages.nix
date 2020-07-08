@@ -581,6 +581,8 @@ in {
 
   certbot-dns-cloudflare = callPackage ../development/python-modules/certbot-dns-cloudflare { };
 
+  certbot-dns-rfc2136 = callPackage ../development/python-modules/certbot-dns-rfc2136 { };
+
   certbot-dns-route53 = callPackage ../development/python-modules/certbot-dns-route53 { };
 
   cfn-flip = callPackage ../development/python-modules/cfn-flip { };
