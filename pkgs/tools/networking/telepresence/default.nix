@@ -17,10 +17,10 @@ let
   });
 in pythonPackages.buildPythonPackage rec {
   pname = "telepresence";
-  version = "0.104";
+  version = "0.105";
 
   src = fetchFromGitHub {
-    owner = "datawire";
+    owner = "telepresenceio";
     repo = "telepresence";
     rev = version;
     sha256 = "0fccbd54ryd9rcbhfh5lx8qcc3kx3k9jads918rwnzwllqzjf7sg";
