@@ -99,8 +99,10 @@ in
       type = types.int;
       default = 18;
       description = ''
-        The maximum attachment size in MB. Note: Since roundcube only uses 70% of max upload values configured in php
-        30% is added to <xref linkend="maxAttachmentSize"/>.
+        The maximum attachment size in MB.
+
+        Note: Since roundcube only uses 70% of max upload values configured in php
+        30% is added automatically to <xref linkend="opt-services.roundcube.maxAttachmentSize"/>.
       '';
       apply = configuredMaxAttachmentSize: "${toString (configuredMaxAttachmentSize * 1.3)}M";
     };
