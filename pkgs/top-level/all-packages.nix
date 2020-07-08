@@ -2786,6 +2786,8 @@ in
 
   conda = callPackage ../tools/package-management/conda { };
 
+  console-bridge = callPackage ../development/libraries/console-bridge { };
+
   convmv = callPackage ../tools/misc/convmv { };
 
   convoy = callPackage ../tools/filesystems/convoy { };
@@ -7355,6 +7357,10 @@ in
   uq = callPackage ../misc/uq { };
 
   uqmi = callPackage ../tools/networking/uqmi { };
+
+  urdfdom = callPackage ../development/libraries/urdfdom {};
+
+  urdfdom-headers = callPackage ../development/libraries/urdfdom-headers {};
 
   uriparser = callPackage ../development/libraries/uriparser {};
 
