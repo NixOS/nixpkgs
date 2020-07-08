@@ -15,9 +15,7 @@ let
           sha256 = "1lp5b0h9v59igf8wybjn42w6ajw08blhiqmjwp4r7qnvmvmyaxhh";
         };
 
-        preBuild = ''
-          export SETUPTOOLS_SCM_PRETEND_VERSION="${sshuttleTelepresenceRev}"
-        '';
+        SETUPTOOLS_SCM_PRETEND_VERSION="${sshuttleTelepresenceRev}";
 
         postPatch = "rm sshuttle/tests/client/test_methods_nat.py";
         postInstall = "mv $out/bin/sshuttle $out/bin/sshuttle-telepresence";
