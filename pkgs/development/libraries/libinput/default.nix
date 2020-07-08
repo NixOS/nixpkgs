@@ -47,10 +47,23 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig meson ninja ]
     ++ optionals documentationSupport [ doxygen graphviz sphinx-build ];
 
-  buildInputs = [ libevdev mtdev libwacom ]
+  buildInputs = [
+    libevdev
+    mtdev
+    libwacom
+    (python3.withPackages (pp: with pp; [
+      pp.libevdev # already in scope
+      pyudev
+      pyyaml
+      setuptools
+    ]))
+  ]
     ++ optionals eventGUISupport [ cairo glib gtk3 ];
 
-  checkInputs = [ (python3.withPackages (pkgs: with pkgs; [ evdev ])) check valgrind ];
+  checkInputs = [
+    check
+    valgrind
+  ];
 
   propagatedBuildInputs = [ udev ];
 
@@ -60,6 +73,7 @@ stdenv.mkDerivation rec {
     patchShebangs tools/helper-copy-and-exec-from-tmp.sh
     patchShebangs test/symbols-leak-test
     patchShebangs test/check-leftover-udev-rules.sh
+    patchShebangs test/helper-copy-and-exec-from-tmp.sh
   '';
 
   doCheck = testsSupport && stdenv.hostPlatform == stdenv.buildPlatform;
