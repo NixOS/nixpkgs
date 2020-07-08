@@ -14,12 +14,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ zlib curl expat fuse openssl python3 ];
+  buildInputs = [ zlib curl expat openssl python3 ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ fuse ];
 
   meta = {
     homepage = "http://afflib.sourceforge.net/";
     description = "Advanced forensic format library";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.bsdOriginal;
     maintainers = [ stdenv.lib.maintainers.raskin ];
     inherit version;
