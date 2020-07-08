@@ -12,6 +12,8 @@ callPackage ./generic.nix (rec {
     sha256 = "1b0cxrpgkmgas7pwxglsvgcig8rnhffkf990b42z7awji5lw055v";
   };
 
+  vendorSha256 = "0d2qmnmlkl884ccg0qcd2yhfj0dwxnb9dz3cih7rcipz85w2f2rs";
+
   assets = {
     # MIT licensed
     "geoip.dat" = let
