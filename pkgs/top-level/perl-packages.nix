@@ -2322,6 +2322,19 @@ let
     };
   };
 
+  CiscoIPPhone = buildPerlPackage {
+    pname = "Cisco-IPPhone";
+    version = "0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MR/MRPALMER/Cisco-IPPhone-0.05.tar.gz";
+      sha256 = "b03ca263f8f41a6ec545c5393213a3146d36bd45335ade99af51dd42ab6ee16d";
+    };
+    meta = {
+      description = "Package for creating Cisco IPPhone XML objects";
+      license = with stdenv.lib.licenses; [ artistic1 ];
+    };
+  };
+
   CLASS = buildPerlPackage {
     pname = "CLASS";
     version = "1.00";
