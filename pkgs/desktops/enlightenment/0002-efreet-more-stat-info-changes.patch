@@ -1,0 +1,623 @@
+                                                                     
+                                                                     
+                                                                     
+                                             
+diff --git a/src/bin/efreet/efreet_icon_cache_create.c b/src/bin/efreet/efreet_icon_cache_create.c
+index 6810ca684e..6478df4dbd 100644
+--- a/src/bin/efreet/efreet_icon_cache_create.c
++++ b/src/bin/efreet/efreet_icon_cache_create.c
+@@ -38,38 +38,36 @@ static Eina_Hash *icon_themes = NULL;
+ static Eina_Bool
+ cache_directory_modified(Eina_Hash *dirs, const char *dir)
+ {
+-    Efreet_Cache_Directory *dcache;
+-    long long time;
+-
+-    if (!dirs) return EINA_TRUE;
+-
+-    time = ecore_file_mod_time(dir);
+-    if (!time)
+-      return EINA_FALSE;
+-    dcache = eina_hash_find(dirs, dir);
+-    if (!dcache)
+-    {
++   Efreet_Cache_Directory *dcache;
++   Efreet_Cache_Check check;
++
++   if (!dirs) return EINA_TRUE;
++   if (!efreet_file_cache_fill(dir, &check)) return EINA_FALSE;
++   dcache = eina_hash_find(dirs, dir);
++   if (!dcache)
++     {
+         dcache = malloc(sizeof (Efreet_Cache_Directory));
+         if (!dcache) return EINA_TRUE;
+-
+-        dcache->modified_time = time;
++        dcache->check = check;
+         eina_hash_add(dirs, dir, dcache);
+-    }
+-    else if (dcache->modified_time == time) return EINA_FALSE;
+-    dcache->modified_time = time;
+-
+-    return EINA_TRUE;
++     }
++   else if (efreet_file_cache_check(&check, &dcache->check))
++     return EINA_FALSE;
++   else
++     dcache->check = check;
++   return EINA_TRUE;
+ }
+ 
+ static Eina_Bool
+ cache_extension_lookup(const char *ext)
+ {
+-    unsigned int i;
++   unsigned int i;
+ 
+-    for (i = 0; i < exts->count; ++i)
+-        if (!strcmp(exts->data[i], ext))
+-            return EINA_TRUE;
+-    return EINA_FALSE;
++   for (i = 0; i < exts->count; ++i)
++     {
++        if (!strcmp(exts->data[i], ext)) return EINA_TRUE;
++     }
++   return EINA_FALSE;
+ }
+ 
+ static Eina_Bool
+@@ -223,6 +221,37 @@ check_fallback_changed(Efreet_Cache_Icon_Theme *theme)
+     return EINA_FALSE;
+ }
+ 
++typedef struct
++{
++  char *path;
++  int name_start;
++} Scanned_Entry;
++
++static Eina_Hash *already_scanned_path = NULL;
++
++static void
++cache_theme_change_verify(Efreet_Cache_Icon_Theme *theme)
++{
++   Eina_Bool changed = EINA_FALSE;
++   Eina_List *l;
++   Efreet_Icon_Theme_Directory *d;
++   char buf[PATH_MAX], *tdir, *sep;
++
++   tdir = strdup(theme->path);
++   sep = strrchr(tdir, '/');
++   if (sep) *sep = 0;
++   EINA_LIST_FOREACH(theme->theme.directories, l, d)
++     {
++        snprintf(buf, sizeof(buf), "%s/%s", tdir, d->name);
++        if (cache_directory_modified(theme->dirs, buf))
++          {
++             changed = EINA_TRUE;
++          }
++     }
++   free(tdir);
++   if (changed) theme->changed = changed;
++}
++
+ static Eina_Bool
+ cache_scan_path_dir(Efreet_Icon_Theme *theme,
+                     const char *path,
+@@ -232,29 +261,63 @@ cache_scan_path_dir(Efreet_Icon_Theme *theme,
+     Eina_Iterator *it;
+     char buf[PATH_MAX];
+     Eina_File_Direct_Info *entry;
++    Eina_List *dirs = NULL;
++    Eina_List *l;
++    char *ext;
++    Scanned_Entry *scentry;
+ 
+     snprintf(buf, sizeof(buf), "%s/%s", path, dir->name);
++    // we wont ever free this - no point
++    if (!already_scanned_path)
++      already_scanned_path = eina_hash_string_superfast_new(NULL);
++    dirs = eina_hash_find(already_scanned_path, buf);
++    if ((intptr_t)dirs == (intptr_t)(-1L)) return EINA_TRUE;
++    else if (!dirs)
++    {
++       it = eina_file_stat_ls(buf);
++       if (!it)
++         {
++            eina_hash_add(already_scanned_path, buf, (void *)(intptr_t)(-1L));
++            return EINA_TRUE;
++         }
++
++       EINA_ITERATOR_FOREACH(it, entry)
++         {
++            if (entry->type == EINA_FILE_DIR) continue;
++            ext = strrchr(entry->path + entry->name_start, '.');
++            if (!ext || !cache_extension_lookup(ext)) continue;
++            scentry = malloc(sizeof(Scanned_Entry));
++            if (!scentry)
++              {
++                 ERR("Out of memory");
++                 exit(1);
++              }
++            scentry->name_start = entry->name_start;
++            scentry->path = strdup(entry->path);
++            if (!scentry->path)
++              {
++                 ERR("Out of memory");
++                 exit(1);
++              }
++            dirs = eina_list_append(dirs, scentry);
++         }
++       eina_iterator_free(it);
++       if (dirs)
++         eina_hash_add(already_scanned_path, buf, dirs);
++       else
++         eina_hash_add(already_scanned_path, buf, (void *)(intptr_t)(-1L));
++    }
+ 
+-    it = eina_file_stat_ls(buf);
+-    if (!it) return EINA_TRUE;
+-
+-    EINA_ITERATOR_FOREACH(it, entry)
++   EINA_LIST_FOREACH(dirs, l, scentry)
+     {
+         Efreet_Cache_Icon *icon;
+         char *name;
+-        char *ext;
+         const char **tmp;
+         unsigned int i;
+ 
+-        if (entry->type == EINA_FILE_DIR)
+-            continue;
+-
+-        ext = strrchr(entry->path + entry->name_start, '.');
+-        if (!ext || !cache_extension_lookup(ext))
+-            continue;
+-
++        ext = strrchr(scentry->path + scentry->name_start, '.');
+         /* icon with known extension */
+-        name = entry->path + entry->name_start;
++        name = scentry->path + scentry->name_start;
+         *ext = '\0';
+ 
+         icon = eina_hash_find(icons, name);
+@@ -284,7 +347,7 @@ cache_scan_path_dir(Efreet_Icon_Theme *theme,
+ 
+             /* check if the path already exist */
+             for (j = 0; j < icon->icons[i]->paths_count; ++j)
+-                if (!strcmp(icon->icons[i]->paths[j], entry->path))
++                if (!strcmp(icon->icons[i]->paths[j], scentry->path))
+                     break;
+ 
+             if (j != icon->icons[i]->paths_count)
+@@ -348,12 +411,9 @@ cache_scan_path_dir(Efreet_Icon_Theme *theme,
+            exit(1);
+         }
+         icon->icons[i]->paths = tmp;
+-        icon->icons[i]->paths[icon->icons[i]->paths_count] = eina_stringshare_add(entry->path);
++        icon->icons[i]->paths[icon->icons[i]->paths_count] = eina_stringshare_add(scentry->path);
+         eina_array_push(strs, icon->icons[i]->paths[icon->icons[i]->paths_count++]);
+     }
+-
+-    eina_iterator_free(it);
+-
+     return EINA_TRUE;
+ }
+ 
+@@ -364,7 +424,9 @@ cache_scan_path(Efreet_Icon_Theme *theme, Eina_Hash *icons, const char *path)
+     Efreet_Icon_Theme_Directory *dir;
+ 
+     EINA_LIST_FOREACH(theme->directories, l, dir)
++     {
+         if (!cache_scan_path_dir(theme, path, dir, icons)) return EINA_FALSE;
++     }
+ 
+     return EINA_TRUE;
+ }
+@@ -511,13 +573,13 @@ icon_theme_index_read(Efreet_Cache_Icon_Theme *theme, const char *path)
+     Efreet_Ini *ini;
+     Efreet_Icon_Theme_Directory *dir;
+     const char *tmp;
+-    long long time;
++    Efreet_Cache_Check check;
+ 
+     if (!theme || !path) return EINA_FALSE;
+ 
+-    time = ecore_file_mod_time(path);
+-    if (!time) return EINA_FALSE;
+-    if (theme->path && !strcmp(theme->path, path) && theme->last_cache_check >= time)
++    if (!efreet_file_cache_fill(path, &check)) return EINA_FALSE;
++    if (theme->path && !strcmp(theme->path, path) &&
++        efreet_file_cache_check(&check, &(theme->check)))
+     {
+         /* no change */
+         theme->valid = 1;
+@@ -528,8 +590,7 @@ icon_theme_index_read(Efreet_Cache_Icon_Theme *theme, const char *path)
+         theme->path = eina_stringshare_add(path);
+         eina_array_push(strs, theme->path);
+     }
+-    if (time > theme->last_cache_check)
+-        theme->last_cache_check = time;
++    theme->check = check;
+     theme->changed = 1;
+ 
+     ini = efreet_ini_new(path);
+@@ -644,10 +705,10 @@ cache_theme_scan(const char *dir)
+         Efreet_Cache_Icon_Theme *theme;
+         const char *name;
+         const char *path;
+-        long long time;
++        Efreet_Cache_Check check;
++        Efreet_Cache_Directory *d;
+ 
+-        time = ecore_file_mod_time(entry->path);
+-        if (!time) continue;
++        if (!efreet_file_cache_fill(entry->path, &check)) continue;
+ 
+         if ((entry->type != EINA_FILE_DIR) &&
+             (entry->type != EINA_FILE_LNK))
+@@ -669,10 +730,26 @@ cache_theme_scan(const char *dir)
+                           (void *)theme->theme.name.internal, theme);
+             theme->changed = 1;
+         }
+-        if (time > theme->last_cache_check)
+-        {
+-            theme->last_cache_check = time;
++
++       d = NULL;
++       if (theme->dirs)
++         d = eina_hash_find(theme->dirs, entry->path);
++       if (!d)
++         {
++            if (!theme->dirs)
++              theme->dirs = eina_hash_string_superfast_new(NULL);
+             theme->changed = 1;
++            d = NEW(Efreet_Cache_Directory, 1);
++            d->check = check;
++            eina_hash_add(theme->dirs, entry->path, d);
++         }
++       else
++         {
++            if (!efreet_file_cache_check(&check, &(d->check)))
++              {
++                 d->check = check;
++                 theme->changed = 1;
++              }
+         }
+ 
+         /* TODO: We need to handle change in order of included paths */
+@@ -732,8 +809,7 @@ icon_theme_free(Efreet_Cache_Icon_Theme *theme)
+ 
+     eina_list_free(theme->theme.paths);
+     eina_list_free(theme->theme.inherits);
+-    EINA_LIST_FREE(theme->theme.directories, data)
+-        free(data);
++    EINA_LIST_FREE(theme->theme.directories, data) free(data);
+     if (theme->dirs) efreet_hash_free(theme->dirs, free);
+     free(theme);
+ }
+@@ -926,7 +1002,7 @@ main(int argc, char **argv)
+         if (!theme->theme.name.name) continue;
+ #endif
+         INF("scan theme %s", theme->theme.name.name);
+-
++        cache_theme_change_verify(theme);
+         theme->changed = check_changed(theme);
+         if (flush)
+             theme->changed = EINA_TRUE;
+@@ -981,18 +1057,18 @@ main(int argc, char **argv)
+ 
+                 icons_it = eina_hash_iterator_tuple_new(icons);
+                 EINA_ITERATOR_FOREACH(icons_it, tuple)
+-                    eet_data_write(icon_ef, icon_edd, tuple->key, tuple->data, 1);
++                    eet_data_write(icon_ef, icon_edd, tuple->key, tuple->data, EET_COMPRESSION_SUPERFAST);
+                 eina_iterator_free(icons_it);
+ 
+-                INF("theme change: %s %lld", theme->theme.name.internal, theme->last_cache_check);
+-                eet_data_write(theme_ef, theme_edd, theme->theme.name.internal, theme, 1);
++                INF("theme change: %s %lld", theme->theme.name.internal, theme->check.mtime);
++                eet_data_write(theme_ef, theme_edd, theme->theme.name.internal, theme, EET_COMPRESSION_SUPERFAST);
+             }
+             eina_hash_free(themes);
+             eina_hash_free(icons);
+             changed = EINA_TRUE;
+         }
+ 
+-        eet_data_write(icon_ef, efreet_version_edd(), EFREET_CACHE_VERSION, icon_version, 1);
++        eet_data_write(icon_ef, efreet_version_edd(), EFREET_CACHE_VERSION, icon_version, EET_COMPRESSION_SUPERFAST);
+         eet_close(icon_ef);
+         efreet_setowner(efreet_icon_cache_file(theme->theme.name.internal));
+         free(icon_version);
+@@ -1064,17 +1140,17 @@ main(int argc, char **argv)
+ 
+             icons_it = eina_hash_iterator_tuple_new(icons);
+             EINA_ITERATOR_FOREACH(icons_it, tuple)
+-                eet_data_write(icon_ef, fallback_edd, tuple->key, tuple->data, 1);
++                eet_data_write(icon_ef, fallback_edd, tuple->key, tuple->data, EET_COMPRESSION_SUPERFAST);
+             eina_iterator_free(icons_it);
+         }
+         eina_hash_free(icons);
+ 
+-        eet_data_write(theme_ef, theme_edd, EFREET_CACHE_ICON_FALLBACK, theme, 1);
++        eet_data_write(theme_ef, theme_edd, EFREET_CACHE_ICON_FALLBACK, theme, EET_COMPRESSION_SUPERFAST);
+     }
+ 
+     icon_theme_free(theme);
+ 
+-    eet_data_write(icon_ef, efreet_version_edd(), EFREET_CACHE_VERSION, icon_version, 1);
++    eet_data_write(icon_ef, efreet_version_edd(), EFREET_CACHE_VERSION, icon_version, EET_COMPRESSION_SUPERFAST);
+     eet_close(icon_ef);
+     efreet_setowner(efreet_icon_cache_file(EFREET_CACHE_ICON_FALLBACK));
+     free(icon_version);
+@@ -1082,7 +1158,7 @@ main(int argc, char **argv)
+     eina_hash_free(icon_themes);
+ 
+     /* save data */
+-    eet_data_write(theme_ef, efreet_version_edd(), EFREET_CACHE_VERSION, theme_version, 1);
++    eet_data_write(theme_ef, efreet_version_edd(), EFREET_CACHE_VERSION, theme_version, EET_COMPRESSION_SUPERFAST);
+ 
+     eet_close(theme_ef);
+     theme_ef = NULL;
+diff --git a/src/lib/efreet/efreet_cache.c b/src/lib/efreet/efreet_cache.c
+index f859c630f0..2b5d0c9f5f 100644
+--- a/src/lib/efreet/efreet_cache.c
++++ b/src/lib/efreet/efreet_cache.c
+@@ -1,3 +1,4 @@
++
+ #ifdef HAVE_CONFIG_H
+ # include <config.h>
+ #endif
+@@ -536,6 +537,137 @@ efreet_desktop_util_cache_file(void)
+ /*
+  * Needs EAPI because of helper binaries
+  */
++#define SHSH(n, v) ((((v) << (n)) & 0xffffffff) | ((v) >> (32 - (n))))
++
++static inline int
++int_to_bigendian(int in)
++{
++   static const unsigned char test[4] = { 0x11, 0x22, 0x33, 0x44 };
++   static const unsigned int *test_i = (const unsigned int *)test;
++   if (test_i[0] == 0x44332211) return eina_swap32(in);
++   return in;
++}
++
++static void
++sha1(unsigned char *data, int size, unsigned char *dst)
++{
++   unsigned int digest[5], word[80], wa, wb, wc, wd, we, t;
++   unsigned char buf[64], *d;
++   int idx, left, i;
++   const unsigned int magic[4] =
++     { 0x5a827999, 0x6ed9eba1, 0x8f1bbcdc, 0xca62c1d6 };
++
++   idx = 0;
++   digest[0] = 0x67452301; digest[1] = 0xefcdab89; digest[2] = 0x98badcfe;
++   digest[3] = 0x10325476; digest[4] = 0xc3d2e1f0;
++
++   memset(buf, 0, sizeof(buf));
++   for (left = size, d = data; left > 0; left--, d++)
++     {
++        if ((idx == 0) && (left < 64))
++          {
++             memset(buf, 0, 60);
++             buf[60] = (size >> 24) & 0xff;
++             buf[61] = (size >> 16) & 0xff;
++             buf[62] = (size >> 8) & 0xff;
++             buf[63] = (size) & 0xff;
++          }
++        buf[idx] = *d;
++        idx++;
++        if ((idx == 64) || (left == 1))
++          {
++             if ((left == 1) && (idx < 64)) buf[idx] = 0x80;
++             for (i = 0; i < 16; i++)
++               {
++                  word[i]  = (unsigned int)buf[(i * 4)    ] << 24;
++                  word[i] |= (unsigned int)buf[(i * 4) + 1] << 16;
++                  word[i] |= (unsigned int)buf[(i * 4) + 2] << 8;
++                  word[i] |= (unsigned int)buf[(i * 4) + 3];
++               }
++             for (i = 16; i < 80; i++)
++               word[i] = SHSH(1,
++                              word[i - 3 ] ^ word[i - 8 ] ^
++                              word[i - 14] ^ word[i - 16]);
++             wa = digest[0]; wb = digest[1]; wc = digest[2];
++             wd = digest[3]; we = digest[4];
++             for (i = 0; i < 80; i++)
++               {
++                  if (i < 20)
++                    t = SHSH(5, wa) + ((wb & wc) | ((~wb) & wd)) +
++                        we + word[i] + magic[0];
++                  else if (i < 40)
++                    t = SHSH(5, wa) + (wb ^ wc ^ wd) +
++                        we + word[i] + magic[1];
++                  else if (i < 60)
++                    t = SHSH(5, wa) + ((wb & wc) | (wb & wd) | (wc & wd)) +
++                        we + word[i] + magic[2];
++                  else if (i < 80)
++                    t = SHSH(5, wa) + (wb ^ wc ^ wd) +
++                        we + word[i] + magic[3];
++                  we = wd;
++                  wd = wc;
++                  wc = SHSH(30, wb);
++                  wb = wa;
++                  wa = t;
++               }
++             digest[0] += wa; digest[1] += wb; digest[2] += wc;
++             digest[3] += wd; digest[4] += we;
++             idx = 0;
++          }
++     }
++   t = int_to_bigendian(digest[0]); digest[0] = t;
++   t = int_to_bigendian(digest[1]); digest[1] = t;
++   t = int_to_bigendian(digest[2]); digest[2] = t;
++   t = int_to_bigendian(digest[3]); digest[3] = t;
++   t = int_to_bigendian(digest[4]); digest[4] = t;
++   memcpy(dst, digest, 5 * 4);
++}
++
++EAPI Eina_Bool
++efreet_file_cache_fill(const char *file, Efreet_Cache_Check *check)
++{
++   struct stat st;
++   ssize_t size = 0;
++   char link[PATH_MAX];
++
++   if (lstat(file, &st) != 0) return EINA_FALSE;
++   if (S_ISLNK(st.st_mode))
++     {
++        size = readlink(file, link, sizeof(link));
++        if ((size > 0) && ((size_t)size >= sizeof(link))) return EINA_FALSE;
++        if (stat(file, &st) != 0) return EINA_FALSE;
++     }
++
++   memset(check, 0, sizeof(Efreet_Cache_Check));
++   if (size > 0) sha1((unsigned char *)link, size, check->link_sha1);
++   else memset(check->link_sha1, 0, sizeof(check->link_sha1));
++   check->uid    = st.st_uid;
++   check->gid    = st.st_gid;
++   check->size   = st.st_size;
++   check->blocks = st.st_blocks;
++   check->mtime  = st.st_mtime;
++   check->chtime = st.st_ctime;
++   check->mode   = st.st_mode;
++   return EINA_TRUE;
++}
++
++EAPI Eina_Bool // true if matches
++efreet_file_cache_check(const Efreet_Cache_Check *check1, const Efreet_Cache_Check *check2)
++{
++   if ((check1->mtime  != check2->mtime ) ||
++       (check1->size   != check2->size  ) ||
++       (check1->chtime != check2->chtime ) ||
++       (check1->blocks != check2->blocks) ||
++       (check1->mode   != check2->mode  ) ||
++       (check1->uid    != check2->uid   ) ||
++       (check1->gid    != check2->gid   ) ||
++       (memcmp(check1->link_sha1, check2->link_sha1, 20) != 0))
++     {
++        return EINA_FALSE;
++     }
++   return EINA_TRUE; // matches
++}
++
+ EAPI Eet_Data_Descriptor *
+ efreet_version_edd(void)
+ {
+@@ -691,8 +823,22 @@ efreet_icon_directory_edd(void)
+     directory_edd = eet_data_descriptor_file_new(&eddc);
+     if (!directory_edd) return NULL;
+ 
+-    EET_DATA_DESCRIPTOR_ADD_BASIC(directory_edd, Efreet_Cache_Directory,
+-                                  "modified_time", modified_time, EET_T_LONG_LONG);
++   EET_DATA_DESCRIPTOR_ADD_BASIC(directory_edd, Efreet_Cache_Directory,
++                                 "check.uid", check.uid, EET_T_LONG_LONG);
++   EET_DATA_DESCRIPTOR_ADD_BASIC(directory_edd, Efreet_Cache_Directory,
++                                 "check.gid", check.gid, EET_T_LONG_LONG);
++   EET_DATA_DESCRIPTOR_ADD_BASIC(directory_edd, Efreet_Cache_Directory,
++                                 "check.size", check.size, EET_T_LONG_LONG);
++   EET_DATA_DESCRIPTOR_ADD_BASIC(directory_edd, Efreet_Cache_Directory,
++                                 "check.blocks", check.blocks, EET_T_LONG_LONG);
++   EET_DATA_DESCRIPTOR_ADD_BASIC(directory_edd, Efreet_Cache_Directory,
++                                 "check.mtime", check.mtime, EET_T_LONG_LONG);
++   EET_DATA_DESCRIPTOR_ADD_BASIC(directory_edd, Efreet_Cache_Directory,
++                                 "check.chtime", check.chtime, EET_T_LONG_LONG);
++   EET_DATA_DESCRIPTOR_ADD_BASIC(directory_edd, Efreet_Cache_Directory,
++                                 "check.mode", check.mode, EET_T_INT);
++   EET_DATA_DESCRIPTOR_ADD_BASIC_ARRAY(directory_edd, Efreet_Cache_Directory,
++                                       "check.link_sha1", check.link_sha1, EET_T_CHAR);
+ 
+     return directory_edd;
+ }
+@@ -790,7 +936,21 @@ efreet_icon_theme_edd(Eina_Bool cache)
+     if (cache)
+     {
+         EET_DATA_DESCRIPTOR_ADD_BASIC(icon_theme_edd, Efreet_Cache_Icon_Theme,
+-                                      "last_cache_check", last_cache_check, EET_T_LONG_LONG);
++                                      "check.uid", check.uid, EET_T_LONG_LONG);
++        EET_DATA_DESCRIPTOR_ADD_BASIC(icon_theme_edd, Efreet_Cache_Icon_Theme,
++                                      "check.gid", check.gid, EET_T_LONG_LONG);
++        EET_DATA_DESCRIPTOR_ADD_BASIC(icon_theme_edd, Efreet_Cache_Icon_Theme,
++                                      "check.size", check.size, EET_T_LONG_LONG);
++        EET_DATA_DESCRIPTOR_ADD_BASIC(icon_theme_edd, Efreet_Cache_Icon_Theme,
++                                      "check.blocks", check.blocks, EET_T_LONG_LONG);
++        EET_DATA_DESCRIPTOR_ADD_BASIC(icon_theme_edd, Efreet_Cache_Icon_Theme,
++                                      "check.mtime", check.mtime, EET_T_LONG_LONG);
++        EET_DATA_DESCRIPTOR_ADD_BASIC(icon_theme_edd, Efreet_Cache_Icon_Theme,
++                                      "check.chtime", check.chtime, EET_T_LONG_LONG);
++        EET_DATA_DESCRIPTOR_ADD_BASIC(icon_theme_edd, Efreet_Cache_Icon_Theme,
++                                      "check.mode", check.mode, EET_T_INT);
++        EET_DATA_DESCRIPTOR_ADD_BASIC_ARRAY(icon_theme_edd, Efreet_Cache_Icon_Theme,
++                                            "check.link_sha1", check.link_sha1, EET_T_CHAR);
+ 
+         EET_DATA_DESCRIPTOR_ADD_BASIC(icon_theme_edd, Efreet_Cache_Icon_Theme,
+                                       "path", path, EET_T_STRING);
+diff --git a/src/lib/efreet/efreet_cache_private.h b/src/lib/efreet/efreet_cache_private.h
+index 97dbd45a1e..1edbb3b5ff 100644
+--- a/src/lib/efreet/efreet_cache_private.h
++++ b/src/lib/efreet/efreet_cache_private.h
+@@ -38,11 +38,20 @@
+ # endif
+ #endif
+ 
++typedef struct _Efreet_Cache_Check Efreet_Cache_Check;
++
++typedef struct _Efreet_Cache_Icon_Theme Efreet_Cache_Icon_Theme;
++typedef struct _Efreet_Cache_Directory Efreet_Cache_Directory;
++typedef struct _Efreet_Cache_Desktop Efreet_Cache_Desktop;
++
+ EAPI const char *efreet_desktop_util_cache_file(void);
+ EAPI const char *efreet_desktop_cache_file(void);
+ EAPI const char *efreet_icon_cache_file(const char *theme);
+ EAPI const char *efreet_icon_theme_cache_file(void);
+ 
++EAPI Eina_Bool efreet_file_cache_fill(const char *file, Efreet_Cache_Check *check);
++EAPI Eina_Bool efreet_file_cache_check(const Efreet_Cache_Check *check1, const Efreet_Cache_Check *check2);
++
+ EAPI Eet_Data_Descriptor *efreet_version_edd(void);
+ EAPI Eet_Data_Descriptor *efreet_desktop_edd(void);
+ EAPI Eet_Data_Descriptor *efreet_hash_array_string_edd(void);
+@@ -52,15 +61,23 @@ EAPI Eet_Data_Descriptor *efreet_icon_theme_edd(Eina_Bool cache);
+ EAPI Eet_Data_Descriptor *efreet_icon_edd(void);
+ EAPI Eet_Data_Descriptor *efreet_icon_fallback_edd(void);
+ 
+-typedef struct _Efreet_Cache_Icon_Theme Efreet_Cache_Icon_Theme;
+-typedef struct _Efreet_Cache_Directory Efreet_Cache_Directory;
+-typedef struct _Efreet_Cache_Desktop Efreet_Cache_Desktop;
++struct _Efreet_Cache_Check
++{
++   unsigned long long uid;
++   unsigned long long gid;
++   unsigned long long size;
++   unsigned long long blocks;
++   unsigned long long mtime;
++   unsigned long long chtime;
++   unsigned int       mode;
++   unsigned char      link_sha1[20];
++};
+ 
+ struct _Efreet_Cache_Icon_Theme
+ {
+     Efreet_Icon_Theme theme;
+ 
+-    long long last_cache_check; /**< Last time the cache was checked */
++    Efreet_Cache_Check check; /**< relevant stat info from last check */
+ 
+     Eina_Hash *dirs;            /**< All possible icon paths for this theme */
+ 
+@@ -73,13 +90,14 @@ struct _Efreet_Cache_Icon_Theme
+ 
+ struct _Efreet_Cache_Directory
+ {
+-    long long modified_time;
++    Efreet_Cache_Check check; /**< relevant stat info from last check */
+ };
+ 
+ struct _Efreet_Cache_Desktop
+ {
+     Efreet_Desktop desktop;
+ 
++    Efreet_Cache_Check check; /**< relevant stat info from last check */
+     double check_time; /**< Last time we check for disk modification */
+ };
