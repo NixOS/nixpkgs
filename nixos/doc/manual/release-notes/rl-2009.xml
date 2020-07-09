@@ -119,6 +119,11 @@ systemd.services.mysql.serviceConfig.ReadWritePaths = [ "/var/data" ];
       feature is disabled by default.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <varname>services.postfix.sslCACert</varname> was replaced by <varname>services.postfix.tlsTrustedAuthorities</varname> which now defaults to system certifcate authorities.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
