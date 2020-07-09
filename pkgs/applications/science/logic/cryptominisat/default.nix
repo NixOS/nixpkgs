@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "00hmxdlyhn7pwk9jlvc5g0l5z5xqfchjzf5jgn3pkj9xhl8yqq50";
   };
 
+  patches = [ ./0001-fix-build-on-Nix-macOS.patch ];
+
   buildInputs = [ python3 boost ];
   nativeBuildInputs = [ cmake xxd ];
 
