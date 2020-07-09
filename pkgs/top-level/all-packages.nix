@@ -11020,6 +11020,8 @@ in
 
   redo-apenwarr = callPackage ../development/tools/build-managers/redo-apenwarr { };
 
+  redo-c = callPackage ../development/tools/build-managers/redo-c { };
+
   redo-sh = callPackage ../development/tools/build-managers/redo-sh { };
 
   reno = callPackage ../development/tools/reno { };
