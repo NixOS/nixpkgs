@@ -59,22 +59,13 @@ let
         (assertValueOneOf "GenericReceiveOffload" boolValues)
         (assertValueOneOf "LargeReceiveOffload" boolValues)
         (assertInt "RxChannels")
-        # The following checks won't work on nix <= 2.2
-        # see https://github.com/NixOS/nix/pull/2378
-        #
-        # Add this again when we'll have drop the
-        # nix < 2.2 support.
-        # (assertRange "RxChannels" 1 4294967295)
-        (assertMinimum "RxChannels" 1)
+        (assertRange "RxChannels" 1 4294967295)
         (assertInt "TxChannels")
-        # (assertRange "TxChannels" 1 4294967295)
-        (assertMinimum "TxChannels" 1)
+        (assertRange "TxChannels" 1 4294967295)
         (assertInt "OtherChannels")
-        # (assertRange "OtherChannels" 1 4294967295)
-        (assertMinimum "OtherChannels" 1)
+        (assertRange "OtherChannels" 1 4294967295)
         (assertInt "CombinedChannels")
-        # (assertRange "CombinedChannels" 1 4294967295)
-        (assertMinimum "CombinedChannels" 1)
+        (assertRange "CombinedChannels" 1 4294967295)
         (assertInt "RxBufferSize")
         (assertInt "TxBufferSize")
       ];
@@ -153,6 +144,7 @@ let
           "LooseBinding"
           "ReorderHeader"
         ])
+        (assertInt "Id")
         (assertRange "Id" 0 4094)
         (assertValueOneOf "GVRP" boolValues)
         (assertValueOneOf "MVRP" boolValues)
@@ -194,6 +186,7 @@ let
           "FlowLabel"
           "IPDoNotFragment"
         ])
+        (assertInt "VNI")
         (assertRange "VNI" 1 16777215)
         (assertValueOneOf "MacLearning" boolValues)
         (assertInt "MaximumFDBEntries")
@@ -208,6 +201,7 @@ let
         (assertValueOneOf "RemoteChecksumRx" boolValues)
         (assertValueOneOf "GroupPolicyExtension" boolValues)
         (assertValueOneOf "GenericProtocolExtension" boolValues)
+        (assertInt "FlowLabel")
         (assertRange "FlowLabel" 0 1048575)
         (assertValueOneOf "IPDoNotFragment" (boolValues + ["inherit"]))
       ];
@@ -238,6 +232,7 @@ let
           "SerializeTunneledPackets"
           "ERSPANIndex"
         ])
+        (assertInt "TTL")
         (assertRange "TTL" 0 255)
         (assertValueOneOf "DiscoverPathMTU" boolValues)
         (assertValueOneOf "CopyDSCP" boolValues)
@@ -251,6 +246,7 @@ let
         (assertValueOneOf "Encapsulation" ["FooOverUDP" "GenericUDPEncapsulation"])
         (assertValueOneOf "ISATAP" boolValues)
         (assertValueOneOf "SerializeTunneledPackets" boolValues)
+        (assertInt "ERSPANIndex")
         (assertRange "ERSPANIndex" 1 1048575)
       ];
 
@@ -275,12 +271,8 @@ let
           "ListenPort"
           "FirewallMark"
         ])
-        # The following check won't work on nix <= 2.2
-        # see https://github.com/NixOS/nix/pull/2378
-        #
-        # Add this again when we'll have drop the
-        # nix < 2.2 support.
-        # (assertRange "FirewallMark" 1 4294967295)
+        (assertInt "FirewallMark")
+        (assertRange "FirewallMark" 1 4294967295)
       ];
 
       # NOTE The PresharedKey directive is missing on purpose here, please
@@ -294,6 +286,7 @@ let
           "Endpoint"
           "PersistentKeepalive"
         ])
+        (assertInt "PersistentKeepalive")
         (assertRange "PersistentKeepalive" 0 65535)
       ];
 
@@ -341,14 +334,19 @@ let
         ])
         (assertValueOneOf "LACPTransmitRate" ["slow" "fast"])
         (assertValueOneOf "AdSelect" ["stable" "bandwidth" "count"])
+        (assertInt "AdActorSystemPriority")
         (assertRange "AdActorSystemPriority" 1 65535)
+        (assertInt "AdUserPortKey")
         (assertRange "AdUserPortKey" 0 1023)
         (assertValueOneOf "FailOverMACPolicy" ["none" "active" "follow"])
         (assertValueOneOf "ARPValidate" ["none" "active" "backup" "all"])
         (assertValueOneOf "ARPAllTargets" ["any" "all"])
         (assertValueOneOf "PrimaryReselectPolicy" ["always" "better" "failure"])
+        (assertInt "ResendIGMP")
         (assertRange "ResendIGMP" 0 255)
+        (assertInt "PacketsPerSlave")
         (assertRange "PacketsPerSlave" 0 65535)
+        (assertInt "GratuitousARP")
         (assertRange "GratuitousARP" 0 255)
         (assertValueOneOf "AllSlavesActive" boolValues)
         (assertValueOneOf "DynamicTransmitLoadBalancing" boolValues)
@@ -361,12 +359,8 @@ let
           "InterfaceId"
           "Independent"
         ])
-        # The following check won't work on nix <= 2.2
-        # see https://github.com/NixOS/nix/pull/2378
-        #
-        # Add this again when we'll have drop the
-        # nix < 2.2 support.
-        # (assertRange "InterfaceId" 1 4294967295)
+        (assertInt "InterfaceId")
+        (assertRange "InterfaceId" 1 4294967295)
         (assertValueOneOf "Independent" boolValues)
       ];
 
@@ -533,20 +527,16 @@ let
           "User"
           "SuppressPrefixLength"
         ])
+        (assertInt "TypeOfService")
         (assertRange "TypeOfService" 0 255)
         (assertInt "FirewallMark")
-        # The following check won't work on nix <= 2.2
-        # see https://github.com/NixOS/nix/pull/2378
-        #
-        # Add this again when we'll have drop the
-        # nix < 2.2 support.
-        #  (assertRange "FirewallMark" 1 4294967295)
-        (assertMinimum "FirewallMark" 1)
+        (assertRange "FirewallMark" 1 4294967295)
         (assertInt "Priority")
         (assertPort "SourcePort")
         (assertPort "DestinationPort")
         (assertValueOneOf "InvertRule" boolValues)
         (assertValueOneOf "Family" ["ipv4" "ipv6" "both"])
+        (assertInt "SuppressPrefixLength")
         (assertRange "SuppressPrefixLength" 0 128)
       ];
 
@@ -644,13 +634,7 @@ let
         (assertValueOneOf "RequestBroadcast" boolValues)
         (assertInt "RouteMetric")
         (assertInt "RouteTable")
-        # The following check won't work on nix <= 2.2
-        # see https://github.com/NixOS/nix/pull/2378
-        #
-        # Add this again when we'll have drop the
-        # nix < 2.2 support.
-        # (assertRange "RouteTable" 0 4294967295)
-        (assertMinimum "RouteTable" 0)
+        (assertRange "RouteTable" 0 4294967295)
         (assertByteFormat "RouteMTUBytes")
         (assertPort "ListenPort")
         (assertValueOneOf "SendRelease" boolValues)
