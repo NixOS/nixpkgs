@@ -931,6 +931,8 @@ in
 
   cue = callPackage ../development/tools/cue { };
 
+  create_ap = callPackage ../tools/networking/create_ap { };
+
   deltachat-electron = callPackage
     ../applications/networking/instant-messengers/deltachat-electron { };
 
