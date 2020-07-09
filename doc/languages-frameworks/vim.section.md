@@ -121,6 +121,68 @@ The resulting package can be added to `packageOverrides` in `~/.nixpkgs/config.n
 
 After that you can install your special grafted `myVim` or `myNeovim` packages.
 
+### What if your favourite Vim plugin isn't already packaged?
+
+If one of your favourite plugins isn't packaged, you can package it yourself:
+
+```
+{ config, pkgs, ... }:
+
+let
+
+  coverage = pkgs.vimUtils.buildVimPlugin {
+    name = "vim-coverage";
+    src = pkgs.fetchFromGitHub {
+      owner = "ruanyl";
+      repo = "coverage.vim";
+      rev = "1d4cd01e1e99d567b640004a8122be8105046921";
+      sha256 = "1vr6ylppwd61rj0l7m6xb0scrld91wgqm0bvnxs54b20vjbqcsap";
+    };
+  };
+
+  easygrep = pkgs.vimUtils.buildVimPlugin {
+    name = "vim-easygrep";
+    src = pkgs.fetchFromGitHub {
+      owner = "dkprice";
+      repo = "vim-easygrep";
+      rev = "d0c36a77cc63c22648e792796b1815b44164653a";
+      sha256 = "0y2p5mz0d5fhg6n68lhfhl8p4mlwkb82q337c22djs4w5zyzggbc";
+    };
+  };
+
+in
+
+{
+  environment.variables = { EDITOR = "vim"; };
+
+  environment.systemPackages = [
+    pkgs.fzf
+    pkgs.git
+    pkgs.gitAndTools.gh
+    pkgs.nodejs
+    pkgs.nodePackages.serverless
+    pkgs.ripgrep
+    (
+      pkgs.neovim.override {
+        vimAlias = true;
+        configure = {
+          packages.myPlugins = with pkgs.vimPlugins; {
+          start = [
+            vim-go # already packaged plugin
+            vim-nix
+            coverage # custom package
+            easygrep # custom package
+          ];
+          opt = [];
+        };
+        customRC = builtins.readFile ./../dotfiles/.vimrc;
+      };
+     }
+    )
+  ];
+}
+```
+
 ## Managing plugins with vim-plug
 
 To use [vim-plug](https://github.com/junegunn/vim-plug) to manage your Vim
