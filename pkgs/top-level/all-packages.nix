@@ -5540,6 +5540,8 @@ in
 
   ndstool = callPackage ../tools/archivers/ndstool { };
 
+  nfs-ganesha = callPackage ../servers/nfs-ganesha { };
+
   ngrep = callPackage ../tools/networking/ngrep { };
 
   ngrok = ngrok-2;
