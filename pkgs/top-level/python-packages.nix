@@ -4898,6 +4898,8 @@ in {
 
   notify2 = callPackage ../development/python-modules/notify2 {};
 
+  notifymuch = callPackage ../development/python-modules/notifymuch {};
+
   notmuch = callPackage ../development/python-modules/notmuch {
     inherit (pkgs) notmuch;
   };
