@@ -7541,7 +7541,9 @@ in
 
   woof = callPackage ../tools/misc/woof { };
 
-  wootility = callPackage ../tools/misc/wootility { };
+  wootility = callPackage ../tools/misc/wootility {
+    inherit (xorg) libxkbfile;
+  };
 
   wpscan = callPackage ../tools/security/wpscan { };
 
