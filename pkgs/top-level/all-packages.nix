@@ -27821,4 +27821,6 @@ in
   gpio-utils = callPackage ../os-specific/linux/kernel/gpio-utils.nix { };
 
   navidrome = callPackage ../servers/misc/navidrome {};
+
+  zettlr = callPackage ../applications/misc/zettlr { };
 }
