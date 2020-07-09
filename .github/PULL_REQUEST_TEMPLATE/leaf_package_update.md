@@ -10,7 +10,13 @@ Marvin needs_merger:   https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aope
 Reviewing guidelines:  https://hydra.nixos.org/job/nixpkgs/trunk/manual/latest/download/1/nixpkgs/manual.html#chap-reviewing-contributions
 -->
 
-##### Motivation for this change
+##### Motivation for this _leaf_ / _near leaf_ package update
+<!-- 
+"leaf" or "near leaf" packages have a relatively low (or zero) number of packages that
+depend on it. The below workflow only performs sufficiently on such packages.
+
+For "core" or "near core" packages, use the alternative PR template.
+-->
 
 
 ##### General review
