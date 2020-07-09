@@ -19,11 +19,11 @@ let gitterDirectorySuffix = "opt/gitter";
   ];
 in stdenv.mkDerivation rec {
   pname = "gitter";
-  version = "4.1.0";
+  version = "5.0.1";
 
   src = fetchurl {
     url = "https://update.gitter.im/linux64/${pname}_${version}_amd64.deb";
-    sha256 = "1gny9i2pywvczzrs93k8krqn6hwm6c2zg8yr3xmjqs3p88817wbi";
+    sha256 = "1ps9akylqrril4902r8mi0mprm0hb5wra51ry6c1rb5xz5nrzgh1";
   };
 
   nativeBuildInputs = [ makeWrapper dpkg ];
