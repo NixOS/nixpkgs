@@ -1,6 +1,6 @@
 <!--
 This project's monthly turnover might well be beyond 1500 PRs. Since we are community driven,
-let's do tit for tat: submitters are kindly ask to pick an open pull request for review.
+let's do tit for tat: submitters are kindly asked to pick an open pull request for review.
 
 Start with packages updates. They are relatively simple.
 Since you'll be required to do those very steps below, it'll be easy.
