@@ -20,12 +20,12 @@ Reviewing guidelines:  https://hydra.nixos.org/job/nixpkgs/trunk/manual/latest/d
 - [ ] fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/.github/CONTRIBUTING.md).
 
 ##### Package build
-<!-- Tipp: pipe those commands through bash directly from your editor -->
+<!-- Tip: pipe those commands through bash directly from your editor -->
 
 ```
 uname -srm
 ---
-lsb_release -a
+nix-shell -p lsb-release --run "lsb_release -a" 2> /dev/null
 ```
 
 <details>
@@ -48,7 +48,7 @@ and test "not ok" binaries manually
 -->
 for cmd in $(ls ./results/**/**/**); do if $($cmd --help > /dev/null); then echo "- [x] \`$cmd --help\`: ok"; else "- [ ] \`$cmd --help\`: not ok -- tested otherwise"; fi; done
 
-##### Documentation (if aplicable)
+##### Documentation (if applicable)
 
 - [ ] updated documentation
 - [ ] introduced no ortographical errors

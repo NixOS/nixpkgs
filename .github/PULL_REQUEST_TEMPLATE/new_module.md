@@ -16,7 +16,7 @@ Reviewing guidelines:  https://hydra.nixos.org/job/nixpkgs/trunk/manual/latest/d
 ##### General review
 
 - [ ] module path fits the guidelines
-- [ ] module tests succeed on ARCHITECTURE
+- [ ] module tests succeed
 - [ ] options have appropriate types
 - [ ] options have default
 - [ ] options have example
@@ -26,12 +26,12 @@ Reviewing guidelines:  https://hydra.nixos.org/job/nixpkgs/trunk/manual/latest/d
 - [ ] fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/.github/CONTRIBUTING.md).
 
 ##### Package build
-<!-- Tipp: pipe those commands through bash directly from your editor -->
+<!-- Tip: pipe those commands through bash directly from your editor -->
 
 ```
 uname -srm
 ---
-lsb_release -a
+nix-shell -p lsb-release --run "lsb_release -a" 2> /dev/null
 ```
 
 <details>
