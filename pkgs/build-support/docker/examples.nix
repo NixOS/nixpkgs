@@ -354,4 +354,14 @@ rec {
       Env = [ "USER=root" ];
     };
   };
+
+  # 20. Ensure that setting created to now results in a date which
+  # isn't the epoch + 1 for layered images.
+  unstableDateLayered = pkgs.dockerTools.buildLayeredImage {
+    name = "unstable-date-layered";
+    tag = "latest";
+    contents = [ pkgs.coreutils ];
+    created = "now";
+  };
+
 }
