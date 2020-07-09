@@ -112,7 +112,10 @@ let
     ps.pyjwt
     ps.webob
     ps.bcrypt
-    ps.scipy
+    # scipy > 1.3 breaks diskprediction_local, leading to mgr hang on startup
+    # Bump (and get rid of scipy_1_3) once these issues are resolved:
+    # https://tracker.ceph.com/issues/42764 https://tracker.ceph.com/issues/45147
+    ps.scipy_1_3
     ps.six
     ps.pyyaml
   ]);
