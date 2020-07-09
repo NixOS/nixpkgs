@@ -11594,6 +11594,12 @@ in
 
   certbot = python3.pkgs.toPythonApplication python3.pkgs.certbot;
 
+  certbot-full = certbot.withPlugins (cp: with cp; [
+    certbot-dns-cloudflare
+    certbot-dns-rfc2136
+    certbot-dns-route53
+  ]);
+
   caf = callPackage ../development/libraries/caf {};
 
   # CGAL 5 has API changes
