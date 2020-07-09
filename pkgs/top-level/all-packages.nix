@@ -5642,6 +5642,8 @@ in
 
   ntfy = callPackage ../tools/misc/ntfy {};
 
+  ntirpc = callPackage ../development/libraries/ntirpc { };
+
   ntopng = callPackage ../tools/networking/ntopng { };
 
   ntp = callPackage ../tools/networking/ntp {
