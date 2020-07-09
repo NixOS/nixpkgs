@@ -66,7 +66,11 @@ in
       port = mkOption {
         type = types.int;
         default = 6379;
-        description = "The port for Redis to listen to.";
+        description = ''
+          The port for Redis to listen to. If port 0 is specified Redis will
+          not listen on a TCP socket.
+        '';
+        example = 0;
       };
 
       vmOverCommit = mkOption {
