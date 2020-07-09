@@ -585,6 +585,8 @@ in {
 
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
+  certbot = callPackage ../development/python-modules/certbot { };
+
   certbot-dns-cloudflare = callPackage ../development/python-modules/certbot-dns-cloudflare { };
 
   certbot-dns-rfc2136 = callPackage ../development/python-modules/certbot-dns-rfc2136 { };

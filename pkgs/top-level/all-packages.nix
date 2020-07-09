@@ -11592,7 +11592,7 @@ in
     ogre = ogre1_10;
   };
 
-  certbot = python3Packages.callPackage ../tools/admin/certbot { };
+  certbot = python3.pkgs.toPythonApplication python3.pkgs.certbot;
 
   caf = callPackage ../development/libraries/caf {};
 
