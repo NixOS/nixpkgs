@@ -6190,6 +6190,8 @@ in
 
   pmacct = callPackage ../tools/networking/pmacct { };
 
+  pmix = callPackage ../development/libraries/pmix { };
+
   polygraph = callPackage ../tools/networking/polygraph { };
 
   progress = callPackage ../tools/misc/progress { };
