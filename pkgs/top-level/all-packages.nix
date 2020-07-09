@@ -15435,6 +15435,8 @@ in
 
   yubikey-personalization-gui = libsForQt5.callPackage ../tools/misc/yubikey-personalization-gui { };
 
+  yubikey-agent = callPackage ../tools/security/yubikey-agent { };
+
   zchunk = callPackage ../development/libraries/zchunk { };
 
   zeitgeist = callPackage ../development/libraries/zeitgeist { };
