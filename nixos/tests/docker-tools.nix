@@ -90,10 +90,19 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     with subtest("Ensure Docker images can use an unstable date"):
         docker.succeed(
-            "docker load --input='${examples.bash}'"
+            "docker load --input='${examples.unstableDate}'"
         )
         assert unix_time_second1 not in docker.succeed(
             "docker inspect ${examples.unstableDate.imageName} "
+            + "| ${pkgs.jq}/bin/jq -r .[].Created"
+        )
+
+    with subtest("Ensure Layered Docker images can use an unstable date"):
+        docker.succeed(
+            "docker load --input='${examples.unstableDateLayered}'"
+        )
+        assert unix_time_second1 not in docker.succeed(
+            "docker inspect ${examples.unstableDateLayered.imageName} "
             + "| ${pkgs.jq}/bin/jq -r .[].Created"
         )
 

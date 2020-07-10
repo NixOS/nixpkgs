@@ -41,7 +41,7 @@ import pathlib
 import tarfile
 import itertools
 import threading
-from datetime import datetime
+from datetime import datetime, timezone
 from collections import namedtuple
 
 
@@ -242,7 +242,7 @@ def main():
         conf = json.load(f)
 
     created = (
-      datetime.now(tz=datetime.timezone.utc)
+      datetime.now(tz=timezone.utc)
       if conf["created"] == "now"
       else datetime.fromisoformat(conf["created"])
     )
@@ -280,7 +280,7 @@ def main():
             },
             "history": [
                 {
-                  "created": conf["created"],
+                  "created": datetime.isoformat(created),
                   "comment": f"store paths: {layer.paths}"
                 }
                 for layer in layers
