@@ -22138,6 +22138,8 @@ in
 
   rofi-systemd = callPackage ../tools/system/rofi-systemd { };
 
+  rofi-blocks = callPackage ../applications/misc/rofi-blocks { };
+
   rootlesskit = callPackage ../tools/virtualization/rootlesskit {};
 
   rpcs3 = libsForQt5.callPackage ../misc/emulators/rpcs3 { };

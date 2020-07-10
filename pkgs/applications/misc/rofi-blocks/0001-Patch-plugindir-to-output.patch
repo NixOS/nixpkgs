@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index 1ca2cc6..078001b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -57,7 +57,7 @@ PKG_CHECK_MODULES([glib],     [glib-2.0 >= 2.40 gio-unix-2.0 gmodule-2.0 json-gl
+ PKG_CHECK_MODULES([cairo],    [cairo])
+ PKG_CHECK_MODULES([rofi],     [rofi])
+ 
+-[rofi_PLUGIN_INSTALL_DIR]="`$PKG_CONFIG --variable=pluginsdir rofi`"
++[rofi_PLUGIN_INSTALL_DIR]="`echo $out/lib/rofi`"
+ AC_SUBST([rofi_PLUGIN_INSTALL_DIR])
+ 
+ LT_INIT([disable-static])
