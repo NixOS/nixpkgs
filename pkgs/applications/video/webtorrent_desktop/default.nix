@@ -39,13 +39,13 @@
     ]);
   in stdenv.mkDerivation rec {
     pname = "webtorrent-desktop";
-    version = "0.21.0";
+    version = "0.20.0";
 
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
-          url = "https://github.com/webtorrent/webtorrent-desktop/releases/download/v${version}/webtorrent-desktop_${version}_amd64.deb";
-          sha256 = "012mf5sa5z234p3yjjphcr49anc2vna6h90mdmgc439z7l6krvrm";
+          url = "https://github.com/webtorrent/webtorrent-desktop/releases/download/v0.20.0/webtorrent-desktop_${version}-1_amd64.deb";
+          sha256 = "1kkrnbimiip5pn2nwpln35bbdda9gc3cgrjwphq4fqasbjf2781k";
         }
         else
           throw "Webtorrent is not currently supported on ${stdenv.hostPlatform.system}";
