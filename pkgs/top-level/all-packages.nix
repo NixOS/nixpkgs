@@ -9453,7 +9453,7 @@ in
   };
 
   julia_1 = julia_10;
-  julia = julia_1;
+  julia = callPackage ../development/compilers/julia { };
 
   jwasm =  callPackage ../development/compilers/jwasm { };
 
