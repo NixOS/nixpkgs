@@ -16752,6 +16752,8 @@ in
 
   cifs-utils = callPackage ../os-specific/linux/cifs-utils { };
 
+  cm-rgb = python3Packages.callPackage ../tools/system/cm-rgb { };
+
   cpustat = callPackage ../os-specific/linux/cpustat { };
 
   cockroachdb = callPackage ../servers/sql/cockroachdb { };
