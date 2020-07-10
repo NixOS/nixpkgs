@@ -5352,6 +5352,8 @@ in
 
   molly-guard = callPackage ../os-specific/linux/molly-guard { };
 
+  molotov = callPackage ../applications/video/molotov {};
+
   moneyplex = callPackage ../applications/office/moneyplex { };
 
   monit = callPackage ../tools/system/monit { };
