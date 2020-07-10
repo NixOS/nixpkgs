@@ -18817,6 +18817,8 @@ in
 
   sierra-gtk-theme = callPackage ../data/themes/sierra { };
 
+  snap7 = callPackage ../development/libraries/snap7 {};
+
   snowblind = callPackage ../data/themes/snowblind { };
 
   solarc-gtk-theme = callPackage ../data/themes/solarc { };
