@@ -543,6 +543,18 @@ let
     meta.homepage = "https://github.com/neoclide/coc-lists/";
   };
 
+  coc-markdownlint = buildVimPluginFrom2Nix {
+    pname = "coc-markdownlint";
+    version = "2020-07-08";
+    src = fetchFromGitHub {
+      owner = "fannheyward";
+      repo = "coc-markdownlint";
+      rev = "4ec732afabd22d7d093eeee905287e342ca3e98f";
+      sha256 = "0xlk6fbf9rjd6r9bzldk5xn5f25gs6y9yzfsgshg555ybfy3dyjk";
+    };
+    meta.homepage = "https://github.com/fannheyward/coc-markdownlint/";
+  };
+
   coc-metals = buildVimPluginFrom2Nix {
     pname = "coc-metals";
     version = "2020-08-09";
