@@ -82,6 +82,7 @@ let
       eventviews = callPackage ./eventviews.nix {};
       ffmpegthumbs = callPackage ./ffmpegthumbs.nix { };
       filelight = callPackage ./filelight.nix {};
+      granatier = callPackage ./granatier.nix {};
       grantleetheme = callPackage ./grantleetheme {};
       gwenview = callPackage ./gwenview.nix {};
       incidenceeditor = callPackage ./incidenceeditor.nix {};
