@@ -9233,6 +9233,8 @@ in
 
   rgbds = callPackage ../development/compilers/rgbds { };
 
+  rocm-runtime = callPackage ../development/libraries/rocm-runtime { };
+
   rocm-thunk = callPackage ../development/libraries/rocm-thunk { };
 
   rtags = callPackage ../development/tools/rtags {
