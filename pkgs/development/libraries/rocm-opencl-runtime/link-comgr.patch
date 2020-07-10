@@ -1,0 +1,12 @@
+diff --exclude '*~' -ruN A/api/opencl/amdocl/CMakeLists.txt C/api/opencl/amdocl/CMakeLists.txt
+--- A/api/opencl/amdocl/CMakeLists.txt	2019-12-31 19:30:48.537701243 -0500
++++ C/api/opencl/amdocl/CMakeLists.txt	2020-01-02 13:03:34.864085580 -0500
+@@ -78,7 +78,7 @@
+   ${ADDITIONAL_LIBRARIES}
+ )
+ if(${USE_COMGR_LIBRARY} MATCHES "yes")
+-  target_link_libraries(amdocl64 oclelf pthread dl ${ROCT_LIBRARIES} ${ROCR_LIBRARIES})
++  target_link_libraries(amdocl64 $<TARGET_OBJECTS:amd_comgr> oclelf pthread dl ${ROCT_LIBRARIES} ${ROCR_LIBRARIES})
+ else()
+   target_link_libraries(amdocl64 opencl_driver oclelf pthread dl ${ROCT_LIBRARIES} ${ROCR_LIBRARIES})
+ endif()
