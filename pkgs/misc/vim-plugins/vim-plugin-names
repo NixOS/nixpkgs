@@ -149,6 +149,7 @@ hrsh7th/vim-vsnip-integ
 hsanson/vim-android
 hsitz/VimOrganizer
 iamcco/coc-spell-checker
+iamcco/coc-vimlsp
 ianks/vim-tsx
 idris-hackers/idris-vim
 ihsanturk/neuron.vim
