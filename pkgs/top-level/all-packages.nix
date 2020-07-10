@@ -9233,6 +9233,8 @@ in
 
   rgbds = callPackage ../development/compilers/rgbds { };
 
+  roct = callPackage ../development/libraries/roct { };
+
   rtags = callPackage ../development/tools/rtags {
     inherit (darwin) apple_sdk;
   };
