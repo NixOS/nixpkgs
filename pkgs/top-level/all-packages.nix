@@ -20977,6 +20977,8 @@ in
 
   matrix-recorder = callPackage ../applications/networking/instant-messengers/matrix-recorder {};
 
+  matrix-mirage = qt5.callPackage ../applications/networking/instant-messengers/mirage { };
+
   mblaze = callPackage ../applications/networking/mailreaders/mblaze { };
 
   mcpp = callPackage ../development/compilers/mcpp { };
