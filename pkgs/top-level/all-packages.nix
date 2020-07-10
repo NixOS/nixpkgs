@@ -9250,6 +9250,11 @@ in
     inherit (llvmPackages_rocm) clang clang-unwrapped lld llvm;
   };
 
+  rocm-opencl-runtime = callPackage ../development/libraries/rocm-opencl-runtime {
+    stdenv = overrideCC stdenv llvmPackages_rocm.clang;
+    inherit (llvmPackages_rocm) clang clang-unwrapped lld llvm;
+  };
+
   rocm-runtime = callPackage ../development/libraries/rocm-runtime { };
 
   rocm-thunk = callPackage ../development/libraries/rocm-thunk { };
