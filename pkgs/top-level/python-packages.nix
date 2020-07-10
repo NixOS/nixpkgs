@@ -519,6 +519,8 @@ in {
 
   beancount_docverif = callPackage ../development/python-modules/beancount_docverif { };
 
+  biplist = callPackage ../development/python-modules/biplist { };
+
   bitarray = callPackage ../development/python-modules/bitarray { };
 
   bitcoinlib = callPackage ../development/python-modules/bitcoinlib { };
