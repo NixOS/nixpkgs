@@ -20,6 +20,7 @@
 , zlib
 , icu
 , systemd
+, libcxx
 }:
 
 stdenv.mkDerivation rec {
@@ -54,8 +55,11 @@ stdenv.mkDerivation rec {
     pcre2
     zlib
     icu
-    systemd
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ systemd ];
+
+  mesonFlags = lib.optionals stdenv.cc.isClang [ "-D_b_symbolic_functions=false" ];
+
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
   propagatedBuildInputs = [
     # Required by vte-2.91.pc.
