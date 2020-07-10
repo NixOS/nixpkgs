@@ -9235,6 +9235,8 @@ in
 
   roct = callPackage ../development/libraries/roct { };
 
+  rocr = callPackage ../development/libraries/rocr { };
+
   rtags = callPackage ../development/tools/rtags {
     inherit (darwin) apple_sdk;
   };
