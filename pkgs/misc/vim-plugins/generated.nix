@@ -759,6 +759,18 @@ let
     meta.homepage = "https://github.com/neoclide/coc-vetur/";
   };
 
+  coc-vimlsp = buildVimPluginFrom2Nix {
+    pname = "coc-vimlsp";
+    version = "2020-07-01";
+    src = fetchFromGitHub {
+      owner = "iamcco";
+      repo = "coc-vimlsp";
+      rev = "0b7001dfe05cb89546ce00684fcfdb14321cc7db";
+      sha256 = "001a1l5b7jbs1810i5vg10avqbsbf9f1lm7darvn70jsiccz3f4y";
+    };
+    meta.homepage = "https://github.com/iamcco/coc-vimlsp/";
+  };
+
   coc-vimtex = buildVimPluginFrom2Nix {
     pname = "coc-vimtex";
     version = "2020-07-22";
