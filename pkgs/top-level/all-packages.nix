@@ -9101,6 +9101,8 @@ in
 
   llvmPackages_latest = llvmPackages_10;
 
+  llvmPackages_rocm = callPackage ../development/compilers/llvm/rocm { };
+
   lorri = callPackage ../tools/misc/lorri {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
