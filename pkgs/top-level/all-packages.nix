@@ -9239,6 +9239,11 @@ in
     inherit (llvmPackages_rocm) clang lld llvm;
   };
 
+  rocm-comgr = callPackage ../development/libraries/rocm-comgr {
+    inherit (llvmPackages_rocm) clang lld llvm;
+    device-libs = rocm-device-libs;
+  };
+
   roct = callPackage ../development/libraries/roct { };
 
   rocr = callPackage ../development/libraries/rocr { };
