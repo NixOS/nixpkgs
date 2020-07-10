@@ -143,6 +143,8 @@ let
 
     conduit = callPackage ../development/ocaml-modules/conduit { };
 
+    conduit-async = callPackage ../development/ocaml-modules/conduit/async.nix { };
+
     conduit-lwt = callPackage ../development/ocaml-modules/conduit/lwt.nix { };
 
     conduit-lwt-unix = callPackage ../development/ocaml-modules/conduit/lwt-unix.nix { };
