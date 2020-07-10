@@ -609,6 +609,7 @@ VundleVim/Vundle.vim
 w0ng/vim-hybrid
 wakatime/vim-wakatime
 wannesm/wmgraphviz.vim
+weirongxu/coc-explorer
 wellle/targets.vim
 wellle/tmux-complete.vim
 will133/vim-dirdiff
