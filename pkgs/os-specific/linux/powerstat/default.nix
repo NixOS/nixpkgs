@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "powerstat";
-  version = "0.02.23";
+  version = "0.02.24";
   
   src = fetchurl {
     url = "https://kernel.ubuntu.com/~cking/tarballs/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1yj8ja0hw92wscazxh9vr3qdz24wpw2fgd3w7w088srfzg2aqf3a";
+    sha256 = "0yrc1xi9flxn2mvmzp0b0vd0md5z4p8fd4y8bszc67xy12qiqy0j";
   };
   
   installFlags = [ "DESTDIR=${placeholder "out"}" ];
