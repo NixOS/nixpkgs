@@ -1,8 +1,7 @@
 { stdenv
 , mkDerivation
 , fetchFromGitHub
-, fetchpatch
-, pkgconfig
+, pkg-config
 , qtbase
 , udisks2-qt5
 , utillinux
@@ -12,29 +11,19 @@
 
 mkDerivation rec {
   pname = "deepin-anything";
-  version = "5.0.1";
+  version = "5.0.1-1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1kvyffrii4b012f6ld1ih14qrn7gg5cxbdpbkac0wxb22hnz0azm";
+    sha256 = "023qw4npmlp5ydxp1dnkqmqblcqa6vb8f5891w9lwxslydmijjnj";
   };
-
-  patches = [
-    # fix compilation error and add support to kernel 5.6
-    # https://github.com/linuxdeepin/deepin-anything/pull/27
-    (fetchpatch {
-      name = "linux-5.6.patch";
-      url = "https://github.com/linuxdeepin/deepin-anything/commit/764b820c2bcd7248993349b32f91043fc58ee958.patch";
-      sha256 = "1ww4xllxc2s04px6fy8wp5cyw54xaz155ry30sqz21vl8awfr36h";
-    })
-  ];
 
   outputs = [ "out" "modsrc" ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     deepin.setupHook
   ];
 
@@ -63,6 +52,8 @@ mkDerivation rec {
       server/tool/com.deepin.anything.service \
       server/monitor/deepin-anything-monitor.service
     sed -e 's,/lib/systemd,$$PREFIX/lib/systemd,' -i server/monitor/src/src.pro server/tool/tool.pro
+
+    sed -i '/^QMAKE_PKGCONFIG_LIBDIR/i QMAKE_PKGCONFIG_PREFIX = $$PREFIX' server/lib/lib.pro
   '';
 
   postFixup = ''
