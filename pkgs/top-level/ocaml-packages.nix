@@ -137,6 +137,8 @@ let
 
     cohttp = callPackage ../development/ocaml-modules/cohttp { };
 
+    cohttp-async = callPackage ../development/ocaml-modules/cohttp/async.nix { };
+
     cohttp-lwt = callPackage ../development/ocaml-modules/cohttp/lwt.nix { };
 
     cohttp-lwt-unix = callPackage ../development/ocaml-modules/cohttp/lwt-unix.nix { };
