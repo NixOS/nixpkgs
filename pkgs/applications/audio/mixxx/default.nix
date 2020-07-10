@@ -48,6 +48,19 @@ mkDerivation rec {
     "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
   ];
 
+  # NOTE: Remove this workaround when upstream SConscript installs the udev
+  # rules at the correct location.
+  postInstall = stdenv.lib.optionalString stdenv.isLinux ''
+    rules="$src/res/linux/mixxx.usb.rules"
+    if [ ! -f "$rules" ]; then
+        echo "$rules is missing, must update the Nix file."
+        exit 1
+    fi
+
+    mkdir -p "$out/lib/udev/rules.d"
+    cp "$rules" "$out/lib/udev/rules.d/69-mixxx-usb-uaccess.rules"
+  '';
+
   meta = with stdenv.lib; {
     homepage = "https://mixxx.org";
     description = "Digital DJ mixing software";
