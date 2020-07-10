@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "0c6lygdqi26mczij41sn8ckc3g6qaakkkh3iasf10a4d07amxci1";
   };
 
-  modSha256 = "063ds35dzv8m4bjk7v1q3f6jwyp7j5jrkrhrl41z1c1mbzzkagkq";
+  vendorSha256 = "1clar59x2dvn7yj4fbylby9nrzy8kdixi48hkbmrv8g5l8n0wdl2";
 
   subPackages = [ "cmd/cowsay" "cmd/cowthink" ];
 

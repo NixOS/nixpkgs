@@ -1,8 +1,38 @@
-{ stdenv, fetchurl, gettext, intltool, pkgconfig, python2
-, avahi, bluez, boost, eigen, fftw, glib, glib-networking
-, glibmm, gsettings-desktop-schemas, gtkmm2, libjack2
-, ladspaH, libav, libsndfile, lilv, lrdf, lv2, serd, sord, sratom
-, wrapGAppsHook, zita-convolver, zita-resampler, curl, wafHook
+{ stdenv
+, fetchurl
+, avahi
+, bluez
+, boost
+, curl
+, eigen
+, fftw
+, gettext
+, glib
+, glib-networking
+, glibmm
+, gnome3
+, gsettings-desktop-schemas
+, gtk3
+, gtkmm3
+, hicolor-icon-theme
+, intltool
+, ladspaH
+, libav
+, libjack2
+, libsndfile
+, lilv
+, lrdf
+, lv2
+, pkgconfig
+, python2
+, sassc
+, serd
+, sord
+, sratom
+, wafHook
+, wrapGAppsHook
+, zita-convolver
+, zita-resampler
 , optimizationSupport ? false # Enable support for native CPU extensions
 }:
 
@@ -12,30 +42,67 @@ in
 
 stdenv.mkDerivation rec {
   pname = "guitarix";
-  version = "0.39.0";
+  version = "0.40.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/guitarix/guitarix2-${version}.tar.xz";
-    sha256 = "1nn80m1qagfhvv69za60f0w6ck87vmk77qmqarj7fbr8avwg63s9";
+    sha256 = "0q9050499hcj19hvbxb069vxh5yclawjg04vryh46lxm4sfy9g57";
   };
 
-  nativeBuildInputs = [ gettext intltool wrapGAppsHook pkgconfig python2 wafHook ];
+  # see: https://sourceforge.net/p/guitarix/bugs/105
+  patches = [ ./fix-build.patch ];
 
-  buildInputs = [
-    avahi bluez boost eigen fftw glib glibmm glib-networking.out
-    gsettings-desktop-schemas gtkmm2 libjack2 ladspaH libav
-    libsndfile lilv lrdf lv2 serd sord sratom zita-convolver
-    zita-resampler curl
+  nativeBuildInputs = [
+    gettext
+    hicolor-icon-theme
+    intltool
+    pkgconfig
+    python2
+    wafHook
+    wrapGAppsHook
   ];
 
+  buildInputs = [
+    avahi
+    bluez
+    boost
+    curl
+    eigen
+    fftw
+    glib
+    glib-networking.out
+    glibmm
+    gnome3.adwaita-icon-theme
+    gsettings-desktop-schemas
+    gtk3
+    gtkmm3
+    ladspaH
+    libav
+    libjack2
+    libsndfile
+    lilv
+    lrdf
+    lv2
+    sassc
+    serd
+    sord
+    sratom
+    zita-convolver
+    zita-resampler
+  ];
+
+  # this doesnt build, probably because we have the wrong faust version:
+  #       "--faust"
+  # aproved versions are 2.20.2 and 2.15.11
   wafConfigureFlags = [
+    "--no-faust"
+    "--no-font-cache-update"
     "--shared-lib"
     "--no-desktop-update"
     "--enable-nls"
-    "--no-faust" # todo: find out why --faust doesn't work
     "--install-roboto-font"
     "--includeresampler"
-    "--convolver-ffmpeg"
+    "--includeconvolver"
   ] ++ optional optimizationSupport "--optimization";
 
   meta = with stdenv.lib; {

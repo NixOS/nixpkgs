@@ -6,6 +6,7 @@
 
 # now defaults to false because some tests can be flaky (clipboard etc)
 , doCheck ? false
+, nodejs ? null, fish ? null, python ? null
 }:
 
 with stdenv.lib;
@@ -17,6 +18,8 @@ let
         nvim-client luv coxpcall busted luafilesystem penlight inspect
       ]
     ));
+
+  pyEnv = python.withPackages(ps: [ ps.pynvim ps.msgpack ]);
 in
   stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";
@@ -65,6 +68,13 @@ in
       cmake
       gettext
       pkgconfig
+    ];
+
+    # extra programs test via `make functionaltest`
+    checkInputs = [
+      fish
+      nodejs
+      pyEnv      # for src/clint.py
     ];
 
 

@@ -1,3 +1,5 @@
+{ kernelPackages ? null }:
+
 import ../make-test-python.nix ({ pkgs, lib, ... }:
   let
     wg-snakeoil-keys = import ./snakeoil-keys.nix;
@@ -14,6 +16,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
         ip4 = "192.168.0.1";
         ip6 = "fd00::1";
         extraConfig = {
+          boot = lib.mkIf (kernelPackages != null) { inherit kernelPackages; };
           networking.firewall.allowedUDPPorts = [ 23542 ];
           networking.wg-quick.interfaces.wg0 = {
             address = [ "10.23.42.1/32" "fc00::1/128" ];
@@ -34,6 +37,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
         ip4 = "192.168.0.2";
         ip6 = "fd00::2";
         extraConfig = {
+          boot = lib.mkIf (kernelPackages != null) { inherit kernelPackages; };
           networking.wg-quick.interfaces.wg0 = {
             address = [ "10.23.42.2/32" "fc00::2/128" ];
             inherit (wg-snakeoil-keys.peer1) privateKey;

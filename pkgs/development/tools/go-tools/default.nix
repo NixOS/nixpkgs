@@ -5,18 +5,16 @@
 
 buildGoModule rec {
   pname = "go-tools";
-  version = "2020.1.3";
-
-  excludedPackages = ''\(simple\|ssa\|ssa/ssautil\|lint\|staticcheck\|stylecheck\|unused\)/testdata'';
+  version = "2020.1.4";
 
   src = fetchFromGitHub {
     owner = "dominikh";
     repo = "go-tools";
     rev = version;
-    sha256 = "0pvi1mzhy6zgx4zfgdypbl4zhvgg11hl5qv7blf2qs0a96j2djhf";
+    sha256 = "182j3zzx1bj4j4jiamqn49v9nd3vcrx727f7i9zgcrgmiscvw3mh";
   };
 
-  modSha256 = "03560xjr2531xj87paskfx2zs364fz6y4kpsid8x08s1syq9nq7p";
+  vendorSha256 = "0nbbngsphklzhcmqafrw1im2l1vnfcma9sb4vskdpdrsadv5ss5r";
 
   meta = with lib; {
     description = "A collection of tools and libraries for working with Go code, including linters and static analysis";

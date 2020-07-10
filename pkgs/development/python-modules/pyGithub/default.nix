@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "PyGithub";
     repo = "PyGithub";
     rev = "v${version}";
-    hash = "sha256-8uQCFiw1ByPOX8ZRUlSLYPIibjmd19r/JtTnmQdz5cM=";
+    sha256 = "1hz5fc3rkryl4vzxmmwx75p25wk0ida54lf6bz7261rm5hb05r7j";
   };
 
   checkInputs = [ httpretty parameterized pytestCheckHook ];

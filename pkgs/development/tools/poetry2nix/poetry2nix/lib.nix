@@ -20,7 +20,7 @@ let
       minor = l: lib.elemAt l 1;
       joinVersion = v: lib.concatStringsSep "." v;
     in
-    joinVersion ( if major pyVer == major ver && minor pyVer == minor ver then ver else pyVer);
+    joinVersion (if major pyVer == major ver && minor pyVer == minor ver then ver else pyVer);
 
   # Compare a semver expression with a version
   isCompatible = version:
@@ -45,28 +45,27 @@ let
           state = operators."${operator}" acc.state (satisfiesSemver version v);
         };
       initial = { operator = "&&"; state = true; };
-    in if expr == "" then true else (builtins.foldl' combine initial tokens).state;
+    in
+    if expr == "" then true else (builtins.foldl' combine initial tokens).state;
   fromTOML = builtins.fromTOML or
     (
-      toml: builtins.fromJSON
-        (
-          builtins.readFile
-            (
-              pkgs.runCommand "from-toml"
-                {
-                  inherit toml;
-                  allowSubstitutes = false;
-                  preferLocalBuild = true;
-                }
-                ''
-                  ${pkgs.remarshal}/bin/remarshal \
-                    -if toml \
-                    -i <(echo "$toml") \
-                    -of json \
-                    -o $out
-                ''
-            )
+      toml: builtins.fromJSON (
+        builtins.readFile (
+          pkgs.runCommand "from-toml"
+            {
+              inherit toml;
+              allowSubstitutes = false;
+              preferLocalBuild = true;
+            }
+            ''
+              ${pkgs.remarshal}/bin/remarshal \
+                -if toml \
+                -i <(echo "$toml") \
+                -of json \
+                -o $out
+            ''
         )
+      )
     );
   readTOML = path: fromTOML (builtins.readFile path);
 
@@ -88,11 +87,10 @@ let
   #   file: filename including extension
   #   hash: SRI hash
   #   kind: Language implementation and version tag
-  predictURLFromPypi = lib.makeOverridable
-    (
-      { pname, file, hash, kind }:
-      "https://files.pythonhosted.org/packages/${kind}/${lib.toLower (builtins.substring 0 1 file)}/${pname}/${file}"
-    );
+  predictURLFromPypi = lib.makeOverridable (
+    { pname, file, hash, kind }:
+    "https://files.pythonhosted.org/packages/${kind}/${lib.toLower (builtins.substring 0 1 file)}/${pname}/${file}"
+  );
 
 
   # Fetch the wheels from the PyPI index.
@@ -102,36 +100,35 @@ let
   #   file: filename including extension
   #   hash: SRI hash
   #   kind: Language implementation and version tag
-  fetchWheelFromPypi = lib.makeOverridable
-    (
-      { pname, file, hash, kind, curlOpts ? "" }:
-      let
-        version = builtins.elemAt (builtins.split "-" file) 2;
-      in
-      (pkgs.stdenvNoCC.mkDerivation {
-        name = file;
-        nativeBuildInputs = [
-          pkgs.curl
-          pkgs.jq
-        ];
-        isWheel = true;
-        system = "builtin";
+  fetchWheelFromPypi = lib.makeOverridable (
+    { pname, file, hash, kind, curlOpts ? "" }:
+    let
+      version = builtins.elemAt (builtins.split "-" file) 2;
+    in
+    (pkgs.stdenvNoCC.mkDerivation {
+      name = file;
+      nativeBuildInputs = [
+        pkgs.curl
+        pkgs.jq
+      ];
+      isWheel = true;
+      system = "builtin";
 
-        preferLocalBuild = true;
-        impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-          "NIX_CURL_FLAGS"
-        ];
+      preferLocalBuild = true;
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+        "NIX_CURL_FLAGS"
+      ];
 
-        predictedURL = predictURLFromPypi { inherit pname file hash kind; };
-        inherit pname file version curlOpts;
+      predictedURL = predictURLFromPypi { inherit pname file hash kind; };
+      inherit pname file version curlOpts;
 
-        builder = ./fetch-wheel.sh;
+      builder = ./fetch-wheel.sh;
 
-        outputHashMode = "flat";
-        outputHashAlgo = "sha256";
-        outputHash = hash;
-      })
-    );
+      outputHashMode = "flat";
+      outputHashAlgo = "sha256";
+      outputHash = hash;
+    })
+  );
 
   # Fetch the artifacts from the PyPI index. Since we get all
   # info we need from the lock file we don't use nixpkgs' fetchPyPi
@@ -143,16 +140,15 @@ let
   #   file: filename including extension
   #   hash: SRI hash
   #   kind: Language implementation and version tag https://www.python.org/dev/peps/pep-0427/#file-name-convention
-  fetchFromPypi = lib.makeOverridable
-    (
-      { pname, file, hash, kind }:
-      if lib.strings.hasSuffix "whl" file then fetchWheelFromPypi { inherit pname file hash kind; }
-      else
-        pkgs.fetchurl {
-          url = predictURLFromPypi { inherit pname file hash kind; };
-          inherit hash;
-        }
-    );
+  fetchFromPypi = lib.makeOverridable (
+    { pname, file, hash, kind }:
+    if lib.strings.hasSuffix "whl" file then fetchWheelFromPypi { inherit pname file hash kind; }
+    else
+      pkgs.fetchurl {
+        url = predictURLFromPypi { inherit pname file hash kind; };
+        inherit hash;
+      }
+  );
   getBuildSystemPkgs =
     { pythonPackages
     , pyProject

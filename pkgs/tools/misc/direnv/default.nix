@@ -1,9 +1,10 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, bash }:
+{ stdenv, fetchFromGitHub, buildGoModule, bash }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "direnv";
   version = "2.21.3";
-  goPackagePath = "github.com/direnv/direnv";
+
+  vendorSha256 = null;
 
   src = fetchFromGitHub {
     owner = "direnv";
@@ -12,17 +13,17 @@ buildGoPackage rec {
     sha256 = "1adi6ld9g4zgz0f6q0kkzrywclqrmikyp7yh22zm9lfdvd5hs8wp";
   };
 
-  postConfigure = ''
-    cd $NIX_BUILD_TOP/go/src/$goPackagePath
+  # we have no bash at the moment for windows
+  BASH_PATH =
+    stdenv.lib.optionalString (!stdenv.hostPlatform.isWindows)
+    "${bash}/bin/bash";
+
+  # replace the build phase to use the GNUMakefile instead
+  buildPhase = ''
+    make BASH_PATH=$BASH_PATH
   '';
 
-  # we have no bash at the moment for windows
-  makeFlags = stdenv.lib.optional (!stdenv.hostPlatform.isWindows) [
-    "BASH_PATH=${bash}/bin/bash"
-  ];
-
   installPhase = ''
-    mkdir -p $out
     make install DESTDIR=$out
     mkdir -p $out/share/fish/vendor_conf.d
     echo "eval ($out/bin/direnv hook fish)" > $out/share/fish/vendor_conf.d/direnv.fish

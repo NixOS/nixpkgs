@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "1w6ndp0nrpps6pkxnq38hikbnzwahi6j9gn8l0bxd0qkf7cjc5w0";
   };
 
-  modSha256 = "0zwq7n1lggj27j5yxgfplbaccw5fhbm7vm0sja839r1jamrn3ips";
+  vendorSha256 = "0w5l1lkzx4frllflkbilj8qqwf54wkz7hin7q8xn1vflkv3lxcnp";
 
   subPackages = [ "cmd/fluxctl" ];
 

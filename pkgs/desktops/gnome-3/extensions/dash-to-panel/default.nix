@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "home-sweet-gnome";
     repo = "dash-to-panel";
     rev = "v${version}";
-    sha256 = "A8Ft+tLNv8KlTnVUzrWGavBWpP0u2rhkuG5LZls1A24=";
+    sha256 = "0vh36mdncjvfp1jbinifznj5dw3ahsswwm3m9sjw5gydsbx6vh83";
   };
 
   buildInputs = [

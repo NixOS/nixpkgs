@@ -3,14 +3,14 @@
 , hcxdumptool, pyrit, which }:
 
 python3.pkgs.buildPythonApplication rec {
-  version = "2.5.3";
+  version = "2.5.5";
   pname = "wifite2";
 
   src = fetchFromGitHub {
     owner = "kimocoder";
     repo = "wifite2";
     rev = version;
-    sha256 = "080hbjpbgdnzr6jkmg5cb8dvzxm57zpi4c9x0y92yy472vqll3ax";
+    sha256 = "0rh54gj471dn8442imxwasjrrwzsx4m40nylkw3y6p8rbjmb92h4";
   };
 
   patches = [

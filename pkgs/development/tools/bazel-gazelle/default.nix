@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "1rw9zq8rmc0zr91kk70xl67dl6jx4dswwisv3bd1f16yncqgv2a1";
   };
 
-  modSha256 = "0bfhy0ig8apxb5qzxjdj6q7jr2i6rdq0ffby0pha8viadah8v2rm";
+  vendorSha256 = null;
 
   subPackages = [ "cmd/gazelle" ];
 

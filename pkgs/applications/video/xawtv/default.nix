@@ -19,11 +19,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "xawtv-3.106";
+  name = "xawtv-3.107";
 
   src = fetchurl {
     url = "https://linuxtv.org/downloads/xawtv/${name}.tar.bz2";
-    sha256 = "174wd36rk0k23mgx9nlnpc398yd1f0wiv060963axg6sz0v4rksp";
+    sha256 = "055p0wia0xsj073l8mg4ifa6m81dmv6p45qyh99brramq5iylfy5";
   };
 
   buildInputs = [

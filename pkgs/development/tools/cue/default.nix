@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "cue";
-  version = "0.1.1";
+  version = "0.2.1";
 
   src = fetchgit {
     url = "https://cue.googlesource.com/cue";
     rev = "v${version}";
-    sha256 = "1qbnm3qb8jz9bljw2gb5bb9g41s5lbq4xvcaj3zgi4fc3708hlji";
+    sha256 = "0v9ynbpv7q4lgi1q4qqvfn24z09z2l9lwqjldaffb4i04vyymdfx";
   };
 
-  modSha256 = "0n9idgishlp4gaq12kngi42rq9rnkas7g6cj7jpkk8p30c74ki6z";
+  vendorSha256 = "1s6mm3lsrs5vgvw4i4a3wxksd9wanbkjlahyz6hbnm3451ra0nyq";
 
   subPackages = [ "cmd/cue" ];
 

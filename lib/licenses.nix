@@ -95,6 +95,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = ''BSD 2-clause "Simplified" License'';
   };
 
+  bsd2Patent = spdx {
+    spdxId = "BSD-2-Clause-Patent";
+    fullName = ''BSD-2-Clause Plus Patent License'';
+  };
+
   bsd3 = spdx {
     spdxId = "BSD-3-Clause";
     fullName = ''BSD 3-clause "New" or "Revised" License'';
@@ -274,6 +279,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   eupl12 = spdx {
     spdxId = "EUPL-1.2";
     fullName = "European Union Public License 1.2";
+  };
+
+  fdl11 = spdx {
+    spdxId = "GFDL-1.1-only";
+    fullName = "GNU Free Documentation License v1.1 only";
   };
 
   fdl12 = spdx {
@@ -457,6 +467,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = "GNU Lesser General Public License v3.0 or later";
   };
 
+  lgpllr = spdx {
+    spdxId = "LGPLLR";
+    fullName = "Lesser General Public License For Linguistic Resources";
+  };
+
   libpng = spdx {
     spdxId = "Libpng";
     fullName = "libpng License";
@@ -475,6 +490,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   llgpl21 = {
     fullName = "Lisp LGPL; GNU Lesser General Public License version 2.1 with Franz Inc. preamble for clarification of LGPL terms in context of Lisp";
     url = "https://opensource.franz.com/preamble.html";
+  };
+
+  llvm-exception = spdx {
+    spdxId = "LLVM-exception";
+    fullName = "LLVM Exception"; # LLVM exceptions to the Apache 2.0 License
   };
 
   lppl12 = spdx {
@@ -538,6 +558,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   nposl3 = spdx {
     spdxId = "NPOSL-3.0";
     fullName = "Non-Profit Open Software License 3.0";
+  };
+
+  obsidian = {
+    fullName = "Obsidian End User Agreement";
+    url = "https://obsidian.md/eula";
+    free = false;
   };
 
   ocamlpro_nc = {

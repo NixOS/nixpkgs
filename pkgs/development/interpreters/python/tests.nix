@@ -9,6 +9,7 @@ let
   envs = let
     inherit python;
     pythonEnv = python.withPackages(ps: with ps; [ ]);
+    pythonVirtualEnv = python.withPackages(ps: with ps; [ virtualenv ]);
   in {
     # Plain Python interpreter
     plain = rec {
@@ -16,6 +17,18 @@ let
       interpreter = env.interpreter;
       is_venv = "False";
       is_nixenv = "False";
+      is_virtualenv = "False";
+    };
+  } // lib.optionalAttrs (!python.isPyPy) {
+    # Use virtualenv from a Nix env.
+    nixenv-virtualenv = rec {
+      env = runCommand "${python.name}-virtualenv" {} ''
+        ${pythonVirtualEnv.interpreter} -m virtualenv $out
+      '';
+      interpreter = "${env}/bin/${python.executable}";
+      is_venv = "False";
+      is_nixenv = "True";
+      is_virtualenv = "True";
     };
   } // lib.optionalAttrs (python.implementation != "graal") {
     # Python Nix environment (python.buildEnv)
@@ -24,6 +37,7 @@ let
       interpreter = env.interpreter;
       is_venv = "False";
       is_nixenv = "True";
+      is_virtualenv = "False";
     };
   } // lib.optionalAttrs (python.isPy3k && (!python.isPyPy)) rec {
     # Venv built using plain Python
@@ -36,6 +50,7 @@ let
       interpreter = "${env}/bin/${python.executable}";
       is_venv = "True";
       is_nixenv = "False";
+      is_virtualenv = "False";
     };
 
   } // lib.optionalAttrs (python.pythonAtLeast "3.8") {
@@ -49,6 +64,7 @@ let
       interpreter = "${env}/bin/${pythonEnv.executable}";
       is_venv = "True";
       is_nixenv = "True";
+      is_virtualenv = "False";
     };
   };
 

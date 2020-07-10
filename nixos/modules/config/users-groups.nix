@@ -6,6 +6,16 @@ let
   ids = config.ids;
   cfg = config.users;
 
+  # Check whether a password hash will allow login.
+  allowsLogin = hash:
+    hash == "" # login without password
+    || !(lib.elem hash
+      [ null   # password login disabled
+        "!"    # password login disabled
+        "!!"   # a variant of "!"
+        "*"    # password unset
+      ]);
+
   passwordDescription = ''
     The options <option>hashedPassword</option>,
     <option>password</option> and <option>passwordFile</option>
@@ -25,8 +35,19 @@ let
   '';
 
   hashedPasswordDescription = ''
-    To generate hashed password install <literal>mkpasswd</literal>
+    To generate a hashed password install the <literal>mkpasswd</literal>
     package and run <literal>mkpasswd -m sha-512</literal>.
+
+    If set to an empty string (<literal>""</literal>), this user will
+    be able to log in without being asked for a password (but not via remote
+    services such as SSH, or indirectly via <command>su</command> or
+    <command>sudo</command>). This should only be used for e.g. bootable
+    live systems. Note: this is different from setting an empty password,
+    which ca be achieved using <option>users.users.&lt;name?&gt;.password</option>.
+
+    If set to <literal>null</literal> (default) this user will not
+    be able to log in using a password (i.e. via <command>login</command>
+    command).
   '';
 
   userOpts = { name, config, ... }: {
@@ -406,6 +427,12 @@ in {
   imports = [
     (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
     (mkAliasOptionModule [ "users" "extraGroups" ] [ "users" "groups" ])
+    (mkChangedOptionModule
+      [ "security" "initialRootPassword" ]
+      [ "users" "users" "root" "initialHashedPassword" ]
+      (cfg: if cfg.security.initialHashedPassword == "!"
+            then null
+            else cfg.security.initialHashedPassword))
   ];
 
   ###### interface
@@ -477,14 +504,6 @@ in {
       '';
     };
 
-    # FIXME: obsolete - will remove.
-    security.initialRootPassword = mkOption {
-      type = types.str;
-      default = "!";
-      example = "";
-      visible = false;
-    };
-
   };
 
 
@@ -499,7 +518,6 @@ in {
         home = "/root";
         shell = mkDefault cfg.defaultUserShell;
         group = "root";
-        initialHashedPassword = mkDefault config.security.initialRootPassword;
       };
       nobody = {
         uid = ids.uids.nobody;
@@ -588,7 +606,7 @@ in {
              || cfg.group == "wheel"
              || elem "wheel" cfg.extraGroups)
             &&
-            ((cfg.hashedPassword != null && cfg.hashedPassword != "!")
+            (allowsLogin cfg.hashedPassword
              || cfg.password != null
              || cfg.passwordFile != null
              || cfg.openssh.authorizedKeys.keys != []
@@ -598,7 +616,48 @@ in {
           Neither the root account nor any wheel user has a password or SSH authorized key.
           You must set one to prevent being locked out of your system.'';
       }
-    ];
+    ] ++ flip mapAttrsToList cfg.users (name: user:
+      {
+        assertion = (user.hashedPassword != null)
+                    -> (builtins.match ".*:.*" user.hashedPassword == null);
+        message = ''
+          The password hash of user "${name}" contains a ":" character.
+          This is invalid and would break the login system because the fields
+          of /etc/shadow (file where hashes are stored) are colon-separated.
+          Please check the value of option `users.users."${name}".hashedPassword`.'';
+      }
+    );
+
+    warnings =
+      builtins.filter (x: x != null) (
+        flip mapAttrsToList cfg.users (name: user:
+        # This regex matches a subset of the Modular Crypto Format (MCF)[1]
+        # informal standard. Since this depends largely on the OS or the
+        # specific implementation of crypt(3) we only support the (sane)
+        # schemes implemented by glibc and BSDs. In particular the original
+        # DES hash is excluded since, having no structure, it would validate
+        # common mistakes like typing the plaintext password.
+        #
+        # [1]: https://en.wikipedia.org/wiki/Crypt_(C)
+        let
+          sep = "\\$";
+          base64 = "[a-zA-Z0-9./]+";
+          id = "[a-z0-9-]+";
+          value = "[a-zA-Z0-9/+.-]+";
+          options = "${id}(=${value})?(,${id}=${value})*";
+          scheme  = "${id}(${sep}${options})?";
+          content = "${base64}${sep}${base64}";
+          mcf = "^${sep}${scheme}${sep}${content}$";
+        in
+        if (allowsLogin user.hashedPassword
+            && user.hashedPassword != ""  # login without password
+            && builtins.match mcf user.hashedPassword == null)
+        then ''
+          The password hash of user "${name}" may be invalid. You must set a
+          valid hash or the user will be locked out of their account. Please
+          check the value of option `users.users."${name}".hashedPassword`.''
+        else null
+      ));
 
   };
 

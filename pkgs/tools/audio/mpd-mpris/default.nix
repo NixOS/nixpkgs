@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "1cr5j2z2ynj1hwkjzi5amcg59vmgazsci41v6vpsj119g7psjmzm";
   };
 
-  modSha256 = "1a95kfy8w952269x4llbl0afyxr5fjkg30mxsn81zdh5wr8gabwh";
+  vendorSha256 = "108yjymp64iqx1b2wqjbkmbm2w199wq46g7hrmqhcziv6f4aqljp";
 
   subPackages = [ "cmd/${pname}" ];
 
@@ -30,4 +30,3 @@ buildGoModule rec {
     platforms = platforms.linux;
   };
 }
-

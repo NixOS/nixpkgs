@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libmypaint";
-  version = "1.6.0";
+  version = "1.6.1";
 
   outputs = [ "out" "dev" ];
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "mypaint";
     repo = "libmypaint";
     rev = "v${version}";
-    sha256 = "1fdyywm915mmilfmzp7lz4rnmm05kkw0adrdqpqi4n8icp4d530g";
+    sha256 = "1ppgpmnhph9h8ayx9776f79a0bxbdszfw9c6bw7c3ffy2yk40178";
   };
 
   nativeBuildInputs = [

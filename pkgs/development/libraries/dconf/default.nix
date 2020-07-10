@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     # https://gitlab.gnome.org/GNOME/dconf/merge_requests/58
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/dconf/commit/b3c9423c6151f3c28e526083ea2f04987a780fdf.patch";
-      sha256 = "zrIPKmgEpa1iIGUKv03+z+GNwJwgdf2hDATgP3i8qk0=";
+      sha256 = "0kdapiw3zq041jhzsx90kk08vqfgzr6vy2k541iav984d0m0zcnf";
     })
   ];
 

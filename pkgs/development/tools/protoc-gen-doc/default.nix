@@ -11,7 +11,7 @@ buildGoModule {
     sha256 = "004axh2gqc4f115mdxxg59d19hph3rr0bq9d08n3nyl315f590kj";
   };
 
-  modSha256 = "1952ycdkgl00q2s3qmhislhhim15nn6nmlkwbfdvrsfzznqj47rd";
+  vendorSha256 = "17qdpsff8jk7ks5v6ix1rb966x3yvq03vk5bs2zbnxfdra7bv3n6";
 
   meta = with lib; {
     description = "Documentation generator plugin for Google Protocol Buffers";

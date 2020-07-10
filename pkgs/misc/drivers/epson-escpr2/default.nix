@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "epson-inkjet-printer-escpr2";
-  version = "1.1.11";
+  version = "1.1.13";
 
   src = fetchurl {
     # To find new versions, visit
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
     # some printer like for instance "WF-7210" to get to the most recent
     # version.  
     # NOTE: Don't forget to update the webarchive link too!
-    urls = [ 
-      "https://download3.ebz.epson.net/dsc/f/03/00/11/01/98/8ff121831d0a6be76e86b87c78178f3c93df6d0f/epson-inkjet-printer-escpr2-1.1.11-1lsb3.2.src.rpm"
-      "https://web.archive.org/web/20200425154102/https://download3.ebz.epson.net/dsc/f/03/00/11/01/98/8ff121831d0a6be76e86b87c78178f3c93df6d0f/epson-inkjet-printer-escpr2-1.1.11-1lsb3.2.src.rpm"
+    urls = [
+      "https://download3.ebz.epson.net/dsc/f/03/00/11/33/72/48e6a853e518a1bedaee575113e087c0bd5d6e2e/epson-inkjet-printer-escpr2-1.1.13-1lsb3.2.src.rpm"
+      "https://web.archive.org/web/20200629154055if_/https://download3.ebz.epson.net/dsc/f/03/00/11/33/72/48e6a853e518a1bedaee575113e087c0bd5d6e2e/epson-inkjet-printer-escpr2-1.1.13-1lsb3.2.src.rpm"
     ];
-    sha256 = "1gcdzmqli7jycljm66mdssivb3lk223ih6zg0l3lyn7hj2gbkinm";
+    sha256 = "07g62vndn2wh9bablvdl2cxn9wq3hzn16mqji27j20h33cwqmzj1";
   };
 
   patches = [ ./cups-filter-ppd-dirs.patch ];

@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "1hslhs9i4wib6c74gdq9yail958ff1y11pymjww2xr84wkwd9v7i";
   };
 
-  modSha256 = "0kwl5gwc5gc0cq2gldg13nvswp9wd90xiv1qb3g8yxcczywkpmrm";
+  vendorSha256 = "0jjr33k27k6h27sa01ipz0aydch3i9klknqb3yq8f048zkb54gv8";
 
   buildInputs = [ brotli ];
 

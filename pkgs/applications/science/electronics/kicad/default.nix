@@ -8,7 +8,7 @@
 , oceSupport ? false, opencascade
 , withOCCT ? true, opencascade-occt
 , ngspiceSupport ? true, libngspice
-, scriptingSupport ? true, swig, python3, python3Packages
+, scriptingSupport ? true, swig, python3
 , debug ? false, valgrind
 , with3d ? true
 , withI18n ? true
@@ -31,9 +31,9 @@ let
     # but brings high DPI support?
     else wxGTK31.override { withGtk2 = false; };
 
-  pythonPackages = python3Packages;
+  pythonPackages = python.pkgs;
   python = python3;
-  wxPython = python3Packages.wxPython_4_0;
+  wxPython = pythonPackages.wxPython_4_0;
 
 in
 stdenv.mkDerivation rec {

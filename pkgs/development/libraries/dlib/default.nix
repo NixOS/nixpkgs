@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dlib";
-  version = "19.19";
+  version = "19.20";
 
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
     rev ="v${version}";
-    sha256 = "0574p46zf85nx33cam4yqcg20g94kkmrvi5689r1xshprr0szghp";
+    sha256 = "10b5hrprlls0nhljx18ys8cms7bgqirvhxlx6gbvbprbi6q16f9r";
   };
 
   postPatch = ''

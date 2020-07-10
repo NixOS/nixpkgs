@@ -6,6 +6,7 @@
 , qttools
 , darwin
 
+, asciidoctor
 , curl
 , glibcLocales
 , libXi
@@ -39,13 +40,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "keepassxc";
-  version = "2.5.4";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     rev = version;
-    sha256 = "1xih9q1pxszalc0l29fmjxwn1vrrrrbnhc8gmi8brw5sclhbs6bh";
+    sha256 = "0yi6kxnsrqirjn6hxhwym2krzf86qxf3kc6bfpkmiaggnd2kqpkp";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang [
@@ -63,11 +64,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./darwin.patch
-    # use wl-copy on Wayland - can be dropped with the next version update
-    (fetchpatch {
-      url = "https://github.com/keepassxreboot/keepassxc/commit/6128e5d58294f26411160f44da91087ebe7f4b07.patch";
-      sha256 = "16q0h7kijqjdbskmk4ar6p3g8vcxr0bq1zrlq2bk16pk10nv4bh1";
-    })
   ];
 
   cmakeFlags = [
@@ -97,6 +93,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake wrapQtAppsHook qttools ];
 
   buildInputs = [
+    asciidoctor
     curl
     glibcLocales
     libXi

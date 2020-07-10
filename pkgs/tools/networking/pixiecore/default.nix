@@ -12,7 +12,7 @@ buildGoModule rec {
     sha256 = "14dslmx3gk08h9gqfjw5y27x7d2c6r8ir7mjd7l9ybysagpzr02a";
   };
 
-  modSha256 = "1waqaglm6f9zy5296z309ppkck2vmydhk9gjnxrgzmhqld5lcq4f";
+  vendorSha256 = "08n3m6fkwh8jmmzky3ygij4gxlcqidqk5ywi8ki8bkyzzs2lqaw7";
   subPackages = [ "cmd/pixiecore" ];
 
   meta = {

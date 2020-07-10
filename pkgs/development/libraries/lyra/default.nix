@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lyra";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "bfgroup";
     repo = "lyra";
     rev = version;
-    sha256 = "0rpk1hadfcvjps5k307sddv23q73m2918wclfxfi6mj8l7gwkcn9";
+    sha256 = "08g6kqaj079aq7i6c1pwj778lrr3yk188wn1byxdd6zqpwrsv71q";
   };
 
   nativeBuildInputs = [ meson ninja ];

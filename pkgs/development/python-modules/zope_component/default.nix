@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "zope.component";
-  version = "4.6";
+  version = "4.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ec2afc5bbe611dcace98bb39822c122d44743d635dafc7315b9aef25097db9e6";
+    sha256 = "d9c7c27673d787faff8a83797ce34d6ebcae26a370e25bddb465ac2182766aca";
   };
 
   propagatedBuildInputs = [

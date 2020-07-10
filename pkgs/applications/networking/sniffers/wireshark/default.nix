@@ -10,8 +10,9 @@ assert withQt  -> qt5  != null;
 with stdenv.lib;
 
 let
-  version = "3.2.3";
+  version = "3.2.4";
   variant = if withQt then "qt" else "cli";
+  pcap = libpcap.override { withBluez = stdenv.isLinux; };
 
 in stdenv.mkDerivation {
   pname = "wireshark-${variant}";
@@ -20,7 +21,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "1fpsfjrap7j84sy728yhcr2gad9nq3n5gq03mwrmxnc6ijwf81zh";
+    sha256 = "1amqgn94g6h6cfnsccm2zb4c73pfv1qmzi1i6h1hnbcyhhg4czfi";
   };
 
   cmakeFlags = [
@@ -30,12 +31,15 @@ in stdenv.mkDerivation {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
+  # Avoid referencing -dev paths because of debug assertions.
+  NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
+
   nativeBuildInputs = [
     bison cmake flex pkgconfig
   ] ++ optional withQt qt5.wrapQtAppsHook;
 
   buildInputs = [
-    gettext pcre perl libpcap lua5 libssh nghttp2 openssl libgcrypt
+    gettext pcre perl pcap lua5 libssh nghttp2 openssl libgcrypt
     libgpgerror gnutls geoip c-ares python3 glib zlib makeWrapper
   ] ++ optionals withQt  (with qt5; [ qtbase qtmultimedia qtsvg qttools ])
     ++ optionals stdenv.isLinux  [ libcap libnl ]

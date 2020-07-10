@@ -11,7 +11,7 @@ let
   downloadDir = "${homeDir}/Downloads";
   incompleteDir = "${homeDir}/.incomplete";
 
-  settingsDir = "${homeDir}/.config/transmission-daemon";
+  settingsDir = "${homeDir}/config";
   settingsFile = pkgs.writeText "settings.json" (builtins.toJSON fullSettings);
 
   # for users in group "transmission" to have access to torrents
@@ -20,12 +20,6 @@ let
   preStart = pkgs.writeScript "transmission-pre-start" ''
     #!${pkgs.runtimeShell}
     set -ex
-    for DIR in "${homeDir}" "${settingsDir}" "${fullSettings.download-dir}" "${fullSettings.incomplete-dir}"; do
-      mkdir -p "$DIR"
-    done
-    chmod 755 "${homeDir}"
-    chmod 700 "${settingsDir}"
-    chmod ${downloadDirPermissions} "${fullSettings.download-dir}" "${fullSettings.incomplete-dir}"
     cp -f ${settingsFile} ${settingsDir}/settings.json
   '';
 in
@@ -110,6 +104,13 @@ in
   };
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${homeDir}' 0770 '${cfg.user}' '${cfg.group}' - -"
+      "d '${settingsDir}' 0700 '${cfg.user}' '${cfg.group}' - -"
+      "d '${fullSettings.download-dir}' '${downloadDirPermissions}' '${cfg.user}' '${cfg.group}' - -"
+      "d '${fullSettings.incomplete-dir}' '${downloadDirPermissions}' '${cfg.user}' '${cfg.group}' - -"
+    ];
+
     systemd.services.transmission = {
       description = "Transmission BitTorrent Service";
       after = [ "network.target" ] ++ optional apparmor "apparmor.service";
@@ -178,6 +179,8 @@ in
           ${getLib pkgs.utillinuxMinimal.out}/lib/libblkid.so.* mr,
           ${getLib pkgs.utillinuxMinimal.out}/lib/libmount.so.* mr,
           ${getLib pkgs.utillinuxMinimal.out}/lib/libuuid.so.* mr,
+          ${getLib pkgs.gcc.cc.lib}/lib/libstdc++.so.* mr,
+          ${getLib pkgs.gcc.cc.lib}/lib/libgcc_s.so.* mr,
 
           @{PROC}/sys/kernel/random/uuid   r,
           @{PROC}/sys/vm/overcommit_memory r,

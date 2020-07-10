@@ -10,8 +10,8 @@ with stdenv.lib;
 
 let
   os = stdenv.lib.optionalString;
-  majorVersion = "7.1";
-  minorVersion = "1";
+  majorVersion = "8.2";
+  minorVersion = "0";
   version = "${majorVersion}.${minorVersion}";
 in
 
@@ -19,20 +19,13 @@ stdenv.mkDerivation rec {
   name = "vtk-${os (qtLib != null) "qvtk-"}${version}";
   src = fetchurl {
     url = "${meta.homepage}files/release/${majorVersion}/VTK-${version}.tar.gz";
-    sha256 = "0nm7xwwj7rnsxjdv2ssviys8nhci4n9iiiqm2y14s520hl2dsp1d";
+    sha256 = "1fspgp8k0myr6p2a6wkc21ldcswb4bvmb484m12mxgk1a9vxrhrl";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://gitlab.kitware.com/vtk/vtk/-/commit/706f1b397df09a27ab8981ab9464547028d0c322.diff";
-      sha256 = "1q3pi5h40g05pzpbqp75xlgzvbfvyw8raza51svmi7d8dlslqybx";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ libtiff ]
-    ++ optional (qtLib != null) qtLib
+    ++ optionals (qtLib != null) (with qtLib; [ qtbase qtx11extras qttools ])
     ++ optionals stdenv.isLinux [ libGLU libGL libX11 xorgproto libXt ]
     ++ optionals stdenv.isDarwin [ xpc Cocoa CoreServices DiskArbitration IOKit
                                    CFNetwork Security ApplicationServices CoreText
@@ -47,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Shared libraries don't work, because of rpath troubles with the current
-  # nixpkgs camke approach. It wants to call a binary at build time, just
+  # nixpkgs cmake approach. It wants to call a binary at build time, just
   # built and requiring one of the shared objects.
   # At least, we use -fPIC for other packages to be able to use this in shared
   # objects.

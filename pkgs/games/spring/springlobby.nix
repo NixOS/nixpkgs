@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "springlobby";
-  version = "0.269";
+  version = "0.270";
 
   src = fetchurl {
     url = "https://springlobby.springrts.com/dl/stable/springlobby-${version}.tar.bz2";
-    sha256 = "1shgrfs4ssjj8m0c7805jisjzpc60796l0vja3yjfdksrz7yxvhg";
+    sha256 = "1r1g2hw9ipsmsmzbhsi7bxqra1za6x7j1kw12qzl5psqyq8rqbgs";
   };
 
   nativeBuildInputs = [ pkgconfig ];

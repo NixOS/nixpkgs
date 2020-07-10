@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, wrapGAppsHook, gettext, glib, gtk3
 , libmowgli, dbus-glib, libxml2, xorg, gnome3, alsaLib
 , libpulseaudio, libjack2, fluidsynth, libmad, libogg, libvorbis
-, libcdio, libcddb, flac, ffmpeg, mpg123, libcue, libmms, libbs2b
+, libcdio, libcddb, flac, ffmpeg_3, mpg123, libcue, libmms, libbs2b
 , libsndfile, libmodplug, libsamplerate, soxr, lirc, curl, wavpack
 , neon, faad2, lame, libnotify, libsidplayfp
 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     gettext glib gtk3 libmowgli dbus-glib libxml2
     xorg.libXcomposite gnome3.adwaita-icon-theme alsaLib libjack2
     libpulseaudio fluidsynth libmad libogg libvorbis libcdio
-    libcddb flac ffmpeg mpg123 libcue libmms libbs2b libsndfile
+    libcddb flac ffmpeg_3 mpg123 libcue libmms libbs2b libsndfile
     libmodplug libsamplerate soxr lirc curl wavpack neon faad2
     lame libnotify libsidplayfp
   ];

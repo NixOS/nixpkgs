@@ -32,14 +32,14 @@ let
   php74-unit = php74.override phpConfig;
 
 in stdenv.mkDerivation rec {
-  version = "1.17.0";
+  version = "1.18.0";
   pname = "unit";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = "unit";
     rev = version;
-    sha256 = "1q3659vw8rxv4fk7ljkjav8ga72sb3arljfxcqw8b080f9hvi7hh";
+    sha256 = "0r2l3ra63qjjbpjzrmx75jp9fvz83yis4j3qxqdnmxm77psykwy8";
   };
 
   nativeBuildInputs = [ which ];
@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
     ++ optionals withPython3 [ python3 ncurses ]
     ++ optional withPHP72 php72-unit
     ++ optional withPHP73 php73-unit
-    ++ optional withPHP73 php74-unit
+    ++ optional withPHP74 php74-unit
     ++ optional withPerl528 perl528
     ++ optional withPerl530 perl530
     ++ optional withPerldevel perldevel
@@ -67,9 +67,14 @@ in stdenv.mkDerivation rec {
     ++ optional (!withIPv6) "--no-ipv6"
     ++ optional withDebug   "--debug";
 
+  # Optionally add the PHP derivations used so they can be addressed in the configs
+  usedPhp72 = optionals withPHP72 php72-unit;
+  usedPhp73 = optionals withPHP73 php73-unit;
+  usedPhp74 = optionals withPHP74 php74-unit;
+
   postConfigure = ''
-    ${optionalString withPython2    "./configure python --module=python2  --config=${python2}/bin/python2-config  --lib-path=${python2}/lib"}
-    ${optionalString withPython3    "./configure python --module=python3  --config=${python3}/bin/python3-config  --lib-path=${python3}/lib"}
+    ${optionalString withPython2    "./configure python --module=python2  --config=python2-config  --lib-path=${python2}/lib"}
+    ${optionalString withPython3    "./configure python --module=python3  --config=python3-config  --lib-path=${python3}/lib"}
     ${optionalString withPHP72      "./configure php    --module=php72    --config=${php72-unit.unwrapped.dev}/bin/php-config --lib-path=${php72-unit}/lib"}
     ${optionalString withPHP73      "./configure php    --module=php73    --config=${php73-unit.unwrapped.dev}/bin/php-config --lib-path=${php73-unit}/lib"}
     ${optionalString withPHP74      "./configure php    --module=php74    --config=${php74-unit.unwrapped.dev}/bin/php-config --lib-path=${php74-unit}/lib"}

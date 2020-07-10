@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://www.keybase.io/";
     description = "The Keybase official GUI";
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ avaq rvolosatovs puffnfresh np filalex77 ];
     license = licenses.bsd3;
   };

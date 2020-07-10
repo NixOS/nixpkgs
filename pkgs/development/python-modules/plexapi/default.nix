@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "PlexAPI";
-  version = "3.2.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "pkkid";
     repo = "python-plexapi";
     rev = version;
-    sha256 = "1rzy018zcsws56mcghnphhzwj650pwj7qg6nh9z1kjvgwwjfmghf";
+    sha256 = "1lzp3367hmcpqwbkp4ckdv6hv37knwnwya88jicwl1smznpmjdfv";
   };
 
   propagatedBuildInputs = [ requests tqdm websocket_client ];

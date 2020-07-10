@@ -129,9 +129,14 @@ fi
 
 if test -n "$compressImage"; then
     echo "Compressing image..."
-    bzip2 $out/iso/$isoName
+    zstd -T$NIX_BUILD_CORES --rm $out/iso/$isoName
 fi
 
 mkdir -p $out/nix-support
 echo $system > $out/nix-support/system
-echo "file iso $out/iso/$isoName" >> $out/nix-support/hydra-build-products
+
+if test -n "$compressImage"; then
+    echo "file iso $out/iso/$isoName.zst" >> $out/nix-support/hydra-build-products
+else
+    echo "file iso $out/iso/$isoName" >> $out/nix-support/hydra-build-products
+fi

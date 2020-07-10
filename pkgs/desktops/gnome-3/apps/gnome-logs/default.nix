@@ -1,25 +1,57 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gnome3, glib, gtk3, wrapGAppsHook
-, gettext, itstool, libxml2, libxslt, docbook_xsl, docbook_xml_dtd_43, systemd, python3, gsettings-desktop-schemas }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, gnome3
+, glib
+, gtk3
+, wrapGAppsHook
+, gettext
+, itstool
+, libxml2
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_43
+, systemd
+, python3
+, gsettings-desktop-schemas
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-logs";
-  version = "3.34.0";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-logs/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "16jfwg912asirrdmipf6wh7zr5zrww3nyhf99mi230y8hmqazx0m";
+    sha256 = "0w1nfdxbv3f0wnhmdy21ydvr4swfc108hypda561p7l9lrhnnxj4";
   };
+
+  nativeBuildInputs = [
+    python3
+    meson
+    ninja
+    pkgconfig
+    wrapGAppsHook
+    gettext
+    itstool
+    libxml2
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_43
+  ];
+
+  buildInputs = [
+    glib
+    gtk3
+    systemd
+    gsettings-desktop-schemas
+    gnome3.adwaita-icon-theme
+  ];
 
   mesonFlags = [
     "-Dman=true"
   ];
-
-  nativeBuildInputs = [
-    python3
-    meson ninja pkgconfig wrapGAppsHook gettext itstool
-    libxml2 libxslt docbook_xsl docbook_xml_dtd_43
-  ];
-  buildInputs = [ glib gtk3 systemd gsettings-desktop-schemas gnome3.adwaita-icon-theme ];
 
   postPatch = ''
     chmod +x meson_post_install.py

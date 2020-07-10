@@ -11,14 +11,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "apostrophe";
-  version = "2.2.0.2";
+  version = "2.2.0.3";
 
   src = fetchFromGitLab {
     owner  = "somas";
     repo   = pname;
     domain = "gitlab.gnome.org";
     rev    = "v${version}";
-    sha256 = "13wvfkg0jw9mayd9ifzkqnhf8fmfjgr1lsj4niqbyrw130y9r9f6";
+    sha256 = "06bl1hc69ixk2vcb2ig74mwid14sl5zq6rfna7lx9na6j3l04879";
   };
 
   nativeBuildInputs = [ meson ninja cmake pkgconfig desktop-file-utils

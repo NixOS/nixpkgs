@@ -13,14 +13,16 @@ assert builtins.elem type [ "aspnetcore" "netcore" "sdk"];
 , curl
 }: 
 let pname = if type == "aspnetcore" then "aspnetcore-runtime" else if type == "netcore" then "dotnet-runtime" else "dotnet-sdk";
+    platform = if stdenv.isDarwin then "osx" else "linux";
     suffix = {
       x86_64-linux  = "x64";
       aarch64-linux = "arm64";
+      x86_64-darwin = "x64";
     }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
     urls = {
-        aspnetcore = "https://dotnetcli.azureedge.net/dotnet/aspnetcore/Runtime/${version}/${pname}-${version}-linux-${suffix}.tar.gz";
-        netcore = "https://dotnetcli.azureedge.net/dotnet/Runtime/${version}/${pname}-${version}-linux-${suffix}.tar.gz";
-        sdk = "https://dotnetcli.azureedge.net/dotnet/Sdk/${version}/${pname}-${version}-linux-${suffix}.tar.gz";
+        aspnetcore = "https://dotnetcli.azureedge.net/dotnet/aspnetcore/Runtime/${version}/${pname}-${version}-${platform}-${suffix}.tar.gz";
+        netcore = "https://dotnetcli.azureedge.net/dotnet/Runtime/${version}/${pname}-${version}-${platform}-${suffix}.tar.gz";
+        sdk = "https://dotnetcli.azureedge.net/dotnet/Sdk/${version}/${pname}-${version}-${platform}-${suffix}.tar.gz";
     };
     descriptions = {
         aspnetcore = "ASP .NET Core runtime ${version}";
@@ -50,7 +52,7 @@ in stdenv.mkDerivation rec {
         runHook postInstall
     '';
 
-    postFixup = ''
+    postFixup = stdenv.lib.optionalString stdenv.isLinux ''
         patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $out/dotnet
         patchelf --set-rpath "${rpath}" $out/dotnet
         find $out -type f -name "*.so" -exec patchelf --set-rpath '$ORIGIN:${rpath}' {} \;
@@ -65,7 +67,7 @@ in stdenv.mkDerivation rec {
     meta = with stdenv.lib; {
         homepage = "https://dotnet.github.io/";
         description = builtins.getAttr type descriptions;
-        platforms = [ "x86_64-linux" "aarch64-linux" ];
+        platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
         maintainers = with maintainers; [ kuznero ];
         license = licenses.mit;
     };

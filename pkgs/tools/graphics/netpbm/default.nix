@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/netpbm/code/advanced";
     rev = "3735";
-    sha256 = "hRepEUBlf83p77Amjze+Qz7XTHhCuPdV01K/UabR89Q=";
+    sha256 = "1m7ks6k53gsjsdazgf22g16dfgj3pqvqy9mhxzlwszv5808sj5w5";
   };
 
   postPatch = ''

@@ -3,7 +3,7 @@
   pkgs ? import ../../.. { inherit system config; }
 }:
 
-with import ../../lib/testing.nix { inherit system pkgs; };
+with import ../../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -75,10 +75,8 @@ let
       ) machines;
 
       testScript = ''
-        startAll;
-
-        ${test}
-      '';
+        start_all()
+      '' + test;
     };
 
   mkKubernetesMultiNodeTest = attrs: mkKubernetesBaseTest ({

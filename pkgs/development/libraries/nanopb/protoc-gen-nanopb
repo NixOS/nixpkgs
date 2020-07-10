@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+exec @python@ @out@/share/nanopb/generator/nanopb_generator.py --protoc-plugin

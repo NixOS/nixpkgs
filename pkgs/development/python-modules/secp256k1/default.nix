@@ -36,6 +36,7 @@ buildPythonPackage rec {
   '';
 
   postPatch = ''
+    sed -i '38,45d' setup.py
     substituteInPlace setup.py --replace ", 'pytest-runner==2.6.2'" ""
   '';
 

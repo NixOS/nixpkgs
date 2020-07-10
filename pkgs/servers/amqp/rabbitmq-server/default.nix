@@ -8,12 +8,12 @@
 stdenv.mkDerivation rec {
   pname = "rabbitmq-server";
 
-  version = "3.8.3";
+  version = "3.8.5";
 
   # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
     url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "1fhs3g2pgrq2xi4hnlc437hkv3261l4i134m6mxid00sf1c89p5f";
+    sha256 = "014pfgfj90scas40lf0yjx14vhx5l5zbi3by2nnb704lg8w2n456";
   };
 
   buildInputs =
@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     export LANG=C.UTF-8 # fix elixir locale warning
   '';
 
-  runtimePath = stdenv.lib.makeBinPath [
+  runtimePath = stdenv.lib.makeBinPath ([
     erlang
     getconf # for getting memory limits
-    socat systemd procps # for systemd unit activation check
+    socat procps
     gnused coreutils # used by helper scripts
-  ];
+  ] ++ stdenv.lib.optionals stdenv.isLinux [ systemd ]); # for systemd unit activation check
   postInstall = ''
     # rabbitmq-env calls to sed/coreutils, so provide everything early
     sed -i $out/sbin/rabbitmq-env -e '2s|^|PATH=${runtimePath}\''${PATH:+:}\$PATH/\n|'

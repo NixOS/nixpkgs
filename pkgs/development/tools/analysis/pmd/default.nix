@@ -1,20 +1,21 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchurl, unzip, makeWrapper, openjdk }:
 
 stdenv.mkDerivation rec {
   pname = "pmd";
-  version = "6.17.0";
-
-  nativeBuildInputs = [ unzip ];
+  version = "6.25.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/pmd/pmd-bin-${version}.zip";
-    sha256 = "0000w28dg5z8gs7cxhx7d0fv10ry0yxamk5my28ncqqsg7a4qy8w";
+    sha256 = "0ykg0wylyfiwjlhkbfjqfam34174paihrw7x1dwfq9anyn5bjf0k";
   };
+
+  nativeBuildInputs = [ unzip makeWrapper ];
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out
     cp -R {bin,lib} $out
+    wrapProgram $out/bin/run.sh --prefix PATH : ${openjdk.jre}/bin
     runHook postInstall
   '';
 

@@ -1,22 +1,17 @@
 { buildGoModule, fetchFromGitHub, lib }:
 
 buildGoModule rec {
-  name = "jx";
-  version = "1.3.967";
+  pname = "jx";
+  version = "2.1.90";
 
   src = fetchFromGitHub {
     owner = "jenkins-x";
     repo = "jx";
     rev = "v${version}";
-    sha256 = "0a25m7sz134kch21bg6l86kvwl4cg6babqf57kqidq6kid1zgdaq";
+    sha256 = "1m2gq1hh8fjgxwx2sipq56q5mlz0m3npnbsw103n2kq4xv1qf3f6";
   };
 
-  patches = [
-    # https://github.com/jenkins-x/jx/pull/3321
-    ./3321-fix-location-of-thrift.patch
-  ];
-
-  modSha256 = "0ljf0c0c3pc12nmhdbrwflcaj6hs8igzjw5hi6fyhi6n9cy87vac";
+  vendorSha256 = "0kj6x7323fx1qhrlg789a21mh1fvhil7ng2fhmbmlwq0fcrngdnj";
 
   subPackages = [ "cmd/jx" ];
 

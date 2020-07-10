@@ -14,10 +14,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postInstall = ''
-    install -D -t $out/lib/udev/rules.d 70-u2f.rules
-  '';
-
   meta = with stdenv.lib; {
     homepage = "https://developers.yubico.com/libu2f-host";
     description = "A C library and command-line tool that implements the host-side of the U2F protocol";

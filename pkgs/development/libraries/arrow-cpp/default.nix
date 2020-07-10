@@ -1,24 +1,24 @@
 { stdenv, lib, fetchurl, fetchFromGitHub, fetchpatch, fixDarwinDylibNames, autoconf, boost
 , brotli, cmake, flatbuffers, gflags, glog, gtest, lz4, perl
-, python, rapidjson, snappy, thrift, which, zlib, zstd
+, python3, rapidjson, snappy, thrift, which, zlib, zstd
 , enableShared ? true }:
 
 let
   parquet-testing = fetchFromGitHub {
     owner = "apache";
     repo = "parquet-testing";
-    rev = "46c9e977f58f6c5ef1b81f782f3746b3656e5a8c";
-    sha256 = "1z2s6zh58nf484s0yraw7b1aqgx66dn2wzp1bzv9ndq03msklwly";
+    rev = "bcd9ebcf9204a346df47204fe21b85c8d0498816";
+    sha256 = "0m16pqzbvxiaradq088q5ai6fwnz9srbap996397znwppvva479b";
   };
 
 in stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "0.16.0";
+  version = "0.17.1";
 
   src = fetchurl {
     url =
       "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    sha256 = "1xdp1yni9i1cpml326s78qql1g832m800h7zjlqmk89983g94696";
+    sha256 = "18lyvbibfdw3w77cy5whbq7c6mshn5fg2bhvgw7v226a7cs1rifb";
   };
 
   sourceRoot = "apache-arrow-${version}/cpp";
@@ -28,19 +28,18 @@ in stdenv.mkDerivation rec {
     # ./cpp/cmake_modules/ThirdpartyToolchain.cmake
     # ./cpp/thirdparty/versions.txt
     url =
-      "https://github.com/jemalloc/jemalloc/releases/download/5.2.0/jemalloc-5.2.0.tar.bz2";
-    sha256 = "1d73a5c5qdrwck0fa5pxz0myizaf3s9alsvhiqwrjahdlr29zgkl";
+      "https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2";
+    sha256 = "1xl7z0vwbn5iycg7amka9jd6hxd8nmfk7nahi4p9w2bnw9f0wcrl";
   };
 
   patches = [
     # patch to fix python-test
     ./darwin.patch
-    # Adjust CMake target names to make -DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON work.
-    # Remove this when updating to the next version.
+
+    # fix musl build
     (fetchpatch {
-      name = "arrow-use-upstream-cmake-target-names.patch";
-      url = "https://github.com/apache/arrow/commit/396861b38d2f4e805db7c2ecd2c96fff0ca2678b.patch";
-      sha256 = "0ki7nx858374anvwyi4szz5hgnnzv4fghdd05c38bzry9rfljgb1";
+      url = "https://github.com/apache/arrow/commit/de4168786dfd8ab932f48801e0a7a6b8a370c19d.diff";
+      sha256 = "1nl4y1rwdl0gn67v7l05ibc4lwkn6x7fhwbmslmm08cqmwfjsx3y";
       stripLen = 1;
     })
   ] ++ lib.optionals (!enableShared) [
@@ -66,8 +65,9 @@ in stdenv.mkDerivation rec {
     thrift
     zlib
     zstd
-    python.pkgs.python
-    python.pkgs.numpy
+  ] ++ lib.optionals enableShared [
+    python3.pkgs.python
+    python3.pkgs.numpy
   ];
 
   preConfigure = ''
@@ -92,8 +92,6 @@ in stdenv.mkDerivation rec {
     # Parquet options:
     "-DARROW_PARQUET=ON"
     "-DPARQUET_BUILD_EXECUTABLES=ON"
-    "-DTHRIFT_COMPILER=${thrift}/bin/thrift"
-    "-DTHRIFT_VERSION=${thrift.version}"
   ] ++ lib.optionals (!enableShared) [
     "-DARROW_BUILD_SHARED=OFF"
     "-DARROW_BOOST_USE_SHARED=OFF"

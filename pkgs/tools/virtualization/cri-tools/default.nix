@@ -1,10 +1,10 @@
 { lib
-, buildGoPackage
+, buildGoModule
 , fetchFromGitHub
 , installShellFiles
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "cri-tools";
   version = "1.18.0";
 
@@ -15,12 +15,11 @@ buildGoPackage rec {
     sha256 = "06sxjhjpd893fn945c1s4adri2bf7s50ddvcw5pnwb6qndzfljw6";
   };
 
-  goPackagePath = "github.com/kubernetes-sigs/cri-tools";
+  vendorSha256 = null;
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildPhase = ''
-    pushd go/src/${goPackagePath}
     make binaries VERSION=${version}
   '';
 

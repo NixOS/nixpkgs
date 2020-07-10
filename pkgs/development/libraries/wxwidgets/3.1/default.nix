@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, fetchurl, pkgconfig
-, gtk2, gtk3, libXinerama, libSM, libXxf86vm
-, xorgproto, gstreamer, gst-plugins-base, GConf, setfile
+, libXinerama, libSM, libXxf86vm
+, gtk2, GConf ? null, gtk3
+, xorgproto, gstreamer, gst-plugins-base, setfile
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , withMesa ? libGLSupported, libGLU ? null, libGL ? null
 , compat28 ? false, compat30 ? true, unicode ? true
@@ -27,9 +28,10 @@ stdenv.mkDerivation rec {
     sha256 = "0gfdhb7xq5vzasm7s1di39nchv42zsp0dmn4v6knzb7mgsb107wb";
   };
 
-  buildInputs =
-    [ (if withGtk2 then gtk2 else gtk3) libXinerama libSM libXxf86vm xorgproto gstreamer
-      gst-plugins-base GConf ]
+  buildInputs = [
+    libXinerama libSM libXxf86vm xorgproto gstreamer gst-plugins-base
+  ] ++ optionals withGtk2 [ gtk2 GConf ]
+    ++ optional (!withGtk2) gtk3
     ++ optional withMesa libGLU
     ++ optional withWebKit webkitgtk
     ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QTKit ];

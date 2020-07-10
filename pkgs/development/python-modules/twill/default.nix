@@ -1,16 +1,24 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, nose }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, nose
+, lxml
+, requests
+, pyparsing
+}:
 buildPythonPackage rec {
   pname = "twill";
-  version = "1.8.0";
-
-  disabled = isPy3k;
+  version = "2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d63e8b09aa4f6645571c70cd3ba47a911abbae4d7baa4b38fc7eb72f6cfda188";
+    sha256 = "225e114da85555d50433a1e242ed4215fe613c30072d13fbe4c4aacf0ad53b0a";
   };
 
   checkInputs = [ nose ];
+
+  propagatedBuildInputs = [
+    lxml
+    requests
+    pyparsing
+  ];
 
   doCheck = false; # pypi package comes without tests, other homepage does not provide all verisons
 

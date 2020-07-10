@@ -10,11 +10,7 @@
 with import ./build-vms.nix { inherit system pkgs minimal extraConfigurations; };
 with pkgs;
 
-let
-  jquery-ui = callPackage ./testing/jquery-ui.nix { };
-  jquery = callPackage ./testing/jquery.nix { };
-
-in rec {
+rec {
 
   inherit pkgs;
 
@@ -118,7 +114,7 @@ in rec {
 
       imagemagick_tiff = imagemagick_light.override { inherit libtiff; };
 
-      # Generate onvenience wrappers for running the test driver
+      # Generate convenience wrappers for running the test driver
       # interactively with the specified network, and for starting the
       # VMs from the command line.
       driver = let warn = if skipLint then lib.warn "Linting is disabled!" else lib.id; in warn (runCommand testDriverName

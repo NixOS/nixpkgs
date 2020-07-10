@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "pysnow";
-  version = "0.7.14";
+  version = "0.7.16";
   
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0a6ce8b5f247fbfe5a53829c2f22391161e88646742283f861bce32bfe1626f1";
+    sha256 = "5df61091470e48b5b3a6ea75637f69d3aacae20041487ea457a9a0e3093fba8c";
   };
 
   propagatedBuildInputs = [

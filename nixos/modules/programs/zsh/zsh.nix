@@ -135,6 +135,13 @@ in
         type = types.bool;
       };
 
+      enableBashCompletion = mkOption {
+        default = false;
+        description = ''
+          Enable compatibility with bash's programmable completion system.
+        '';
+        type = types.bool;
+      };
 
       enableGlobalCompInit = mkOption {
         default = cfg.enableCompletion;
@@ -237,6 +244,11 @@ in
         ${optionalString cfg.enableGlobalCompInit ''
           # Enable autocompletion.
           autoload -U compinit && compinit
+        ''}
+
+        ${optionalString cfg.enableBashCompletion ''
+          # Enable compatibility with bash's completion system.
+          autoload -U bashcompinit && bashcompinit
         ''}
 
         # Setup custom interactive shell init stuff.

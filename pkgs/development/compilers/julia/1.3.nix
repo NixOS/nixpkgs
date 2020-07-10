@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
 
   LD_LIBRARY_PATH = makeLibraryPath [
     arpack fftw fftwSinglePrec gmp libgit2 mpfr blas openlibm
-    openspecfun pcre2
+    openspecfun pcre2 lapack
   ];
 
   enableParallelBuilding = true;

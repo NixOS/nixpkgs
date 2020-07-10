@@ -6,6 +6,7 @@
 , langJava ? false
 , langGo ? false
 , profiledCompiler ? false
+, langJit ? false
 , staticCompiler ? false
 , enableShared ? true
 , enableLTO ? true
@@ -126,7 +127,7 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
-  outputs = if langJava || langGo then ["out" "man" "info"]
+  outputs = if langJava || langGo || langJit then ["out" "man" "info"]
     else [ "out" "lib" "man" "info" ];
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
@@ -136,21 +137,17 @@ stdenv.mkDerivation ({
   hardeningDisable = [ "format" "pie" ];
 
   prePatch =
-    (stdenv.lib.optionalString (langJava || langGo) ''
-      export lib=$out
-    '')
-
     # This should kill all the stdinc frameworks that gcc and friends like to
     # insert into default search paths.
-    + stdenv.lib.optionalString hostPlatform.isDarwin ''
+    stdenv.lib.optionalString hostPlatform.isDarwin ''
       substituteInPlace gcc/config/darwin-c.c \
         --replace 'if (stdinc)' 'if (0)'
 
       substituteInPlace libgcc/config/t-slibgcc-darwin \
-        --replace "-install_name @shlib_slibdir@/\$(SHLIB_INSTALL_NAME)" "-install_name $lib/lib/\$(SHLIB_INSTALL_NAME)"
+        --replace "-install_name @shlib_slibdir@/\$(SHLIB_INSTALL_NAME)" "-install_name ''${!outputLib}/lib/\$(SHLIB_INSTALL_NAME)"
 
       substituteInPlace libgfortran/configure \
-        --replace "-install_name \\\$rpath/\\\$soname" "-install_name $lib/lib/\\\$soname"
+        --replace "-install_name \\\$rpath/\\\$soname" "-install_name ''${!outputLib}/lib/\\\$soname"
     '';
 
   postPatch =
@@ -244,6 +241,7 @@ stdenv.mkDerivation ({
       langGo
       langObjC
       langObjCpp
+      langJit
       ;
   };
 
@@ -294,8 +292,8 @@ stdenv.mkDerivation ({
     (import ../common/extra-target-flags.nix {
       inherit stdenv crossStageStatic libcCross threadsCross;
     })
-    EXTRA_TARGET_FLAGS
-    EXTRA_TARGET_LDFLAGS
+    EXTRA_FLAGS_FOR_TARGET
+    EXTRA_LDFLAGS_FOR_TARGET
     ;
 
   passthru = {

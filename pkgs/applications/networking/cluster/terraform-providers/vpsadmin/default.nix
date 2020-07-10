@@ -7,10 +7,10 @@ buildGoModule rec {
     owner = "vpsfreecz";
     repo = "terraform-provider-vpsadmin";
     rev = "v${version}";
-    hash = "sha256-+6jRjcManQdoKh7ewOJI1UaulY5OSbkIUHmtrBI33u4=";
+    sha256 = "1vny6w9arbbra04bjjafisaswinm93ic1phy59l0g78sqf6x3a7v";
   };
 
-  modSha256 = "sha256-gz+t50uHFj4BQnJg6kOJI/joJVE+usLpVzTqziek2wY=";
+  vendorSha256 = "0j90fnzba23mwf9bzf9w5h0hszkl3h61p5i780s9v9c0hbzhbqsh";
 
   subPackages = [ "." ];
 

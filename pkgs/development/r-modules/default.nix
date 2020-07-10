@@ -445,6 +445,7 @@ let
     ucminf = [ pkgs.libiconv ];
     glmnet = [ pkgs.libiconv ];
     mvtnorm = [ pkgs.libiconv ];
+    statmod = [ pkgs.libiconv ];
   };
 
   packagesRequireingX = [

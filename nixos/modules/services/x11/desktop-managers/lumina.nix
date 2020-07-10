@@ -23,12 +23,9 @@ in
 
   config = mkIf cfg.enable {
 
-    services.xserver.desktopManager.session = singleton {
-      name = "lumina";
-      start = ''
-        exec ${pkgs.lumina.lumina}/bin/start-lumina-desktop
-      '';
-    };
+    services.xserver.displayManager.sessionPackages = [
+      pkgs.lumina.lumina
+    ];
 
     environment.systemPackages =
       pkgs.lumina.preRequisitePackages ++

@@ -13,11 +13,11 @@
 # '';
 # See also <https://nixos.org/nixpkgs/manual/#sec-language-gnome>.
 , gtkSupport ? true, glib ? null, gtk3 ? null
-, videoSupport ? true, ffmpeg ? null, libmpeg2 ? null}:
+, videoSupport ? true, ffmpeg_3 ? null, libmpeg2 ? null}:
 
 assert gstreamerSupport -> gst_all_1 != null && builtins.isList (gstPlugins gst_all_1);
 assert gtkSupport -> glib != null && gtk3 != null;
-assert videoSupport -> ffmpeg != null && libmpeg2 != null;
+assert videoSupport -> ffmpeg_3 != null && libmpeg2 != null;
 
 stdenv.mkDerivation rec {
   name = "libextractor-1.9";
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
    ] ++ stdenv.lib.optionals gstreamerSupport
           ([ gst_all_1.gstreamer ] ++ gstPlugins gst_all_1)
      ++ stdenv.lib.optionals gtkSupport [ glib gtk3 ]
-     ++ stdenv.lib.optionals videoSupport [ ffmpeg libmpeg2 ];
+     ++ stdenv.lib.optionals videoSupport [ ffmpeg_3 libmpeg2 ];
 
   configureFlags = [
     "--disable-ltdl-install"

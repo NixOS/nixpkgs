@@ -1,4 +1,4 @@
-{ alsaLib, alsaUtils, cifs-utils, fetchurl, ffmpeg, libav, mono, stdenv }:
+{ alsaLib, alsaUtils, cifs-utils, fetchurl, ffmpeg_3, libav, mono, stdenv }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     # Check script
-    sed -i '3i PATH=$PATH:${makeBinPath [ cifs-utils ffmpeg libav ]}' check.sh
+    sed -i '3i PATH=$PATH:${makeBinPath [ cifs-utils ffmpeg_3 libav ]}' check.sh
     sed -i '/check_ulimit$/d' check.sh
 
     # Start script
-    sed -i '3i PATH=$PATH:${makeBinPath [ alsaUtils cifs-utils ffmpeg libav ]}' start.sh
+    sed -i '3i PATH=$PATH:${makeBinPath [ alsaUtils cifs-utils ffmpeg_3 libav ]}' start.sh
 
     # Debug logging
     sed -i '/--debug--gc=sgen --server/exec "$HARDLINK" --debug --gc=sgen --server "$SCRIPT.exe" "$@" -storagetrace -watchertrace' Appliance/RoonAppliance

@@ -16,6 +16,7 @@ ENV = "@env@"
 INTERPRETER = "@interpreter@"
 PYTHON_VERSION = "@pythonVersion@"
 
+IS_VIRTUALENV = @is_virtualenv@
 IS_VENV = @is_venv@
 IS_NIXENV = @is_nixenv@
 IS_PYPY = platform.python_implementation() == "PyPy"
@@ -37,10 +38,14 @@ class TestCasePython(unittest.TestCase):
 
     @unittest.skipIf(IS_PYPY or sys.version_info.major==2, "Python 2 does not have base_prefix")
     def test_base_prefix(self):
-        if IS_VENV or IS_NIXENV:
+        if IS_VENV or IS_NIXENV or IS_VIRTUALENV:
             self.assertNotEqual(sys.prefix, sys.base_prefix)
         else:
             self.assertEqual(sys.prefix, sys.base_prefix)
+
+    @unittest.skipIf(sys.version_info.major==3, "sys.real_prefix is only set by virtualenv in case of Python 2.")
+    def test_real_prefix(self):
+        self.assertTrue(hasattr(sys, "real_prefix") == IS_VIRTUALENV)
 
     def test_python_version(self):
         self.assertTrue(platform.python_version().startswith(PYTHON_VERSION))

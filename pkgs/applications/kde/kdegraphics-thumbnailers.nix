@@ -13,7 +13,7 @@ mkDerivation {
     # Fix a bug with thumbnail.so processes hanging:
     # https://bugs.kde.org/show_bug.cgi?id=404652
     (fetchpatch {
-      url = "https://phabricator.kde.org/file/data/tnk4b6roouixzifi6vre/PHID-FILE-qkkedevt7svx7lv56ea5/D26635.diff";
+      url = "https://github.com/KDE/kdegraphics-thumbnailers/commit/3e2ea6e924d0e2a2cdd9bb435b06965117d6d34c.patch";
       sha256 = "0fq85zhymmrq8vl0y6vgh87qf4c6fhcq704p4kpkaq7y0isxj4h1";
     })
   ];

@@ -4,7 +4,7 @@
 , bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
 , libpng, libcap
-, xdg_utils, yasm, minizip, libwebp
+, xdg_utils, yasm, nasm, minizip, libwebp
 , libusb1, pciutils, nss, re2, zlib
 
 , python2Packages, perl, pkgconfig
@@ -13,10 +13,12 @@
 , bison, gperf
 , glib, gtk3, dbus-glib
 , glibc
+, xorg
 , libXScrnSaver, libXcursor, libXtst, libGLU, libGL
 , protobuf, speechd, libXdamage, cups
-, ffmpeg, libxslt, libxml2, at-spi2-core
+, ffmpeg_3, libxslt, libxml2, at-spi2-core
 , jre
+, pipewire_0_2
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -72,14 +74,14 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "libwebp" "libxslt" "yasm" "opus" "snappy" "libpng"
+    "flac" "libwebp" "libxslt" "opus" "snappy" "libpng"
     # "zlib" # version 77 reports unresolved dependency on //third_party/zlib:zlib_config
     # "libjpeg" # fails with multiple undefined references to chromium_jpeg_*
     # "re2" # fails with linker errors
     # "ffmpeg" # https://crbug.com/731766
     # "harfbuzz-ng" # in versions over 63 harfbuzz and freetype are being built together
                     # so we can't build with one from system and other from source
-  ];
+  ] ++ optional (versionRange "0" "84") "yasm";
 
   opusWithCustomModes = libopus.override {
     withCustomModes = true;
@@ -89,12 +91,12 @@ let
     bzip2 flac speex opusWithCustomModes
     libevent expat libjpeg snappy
     libpng libcap
-    xdg_utils yasm minizip libwebp
+    xdg_utils minizip libwebp
     libusb1 re2 zlib
-    ffmpeg libxslt libxml2
+    ffmpeg_3 libxslt libxml2
     # harfbuzz # in versions over 63 harfbuzz and freetype are being built together
                # so we can't build with one from system and other from source
-  ];
+  ] ++ (if (versionRange "0" "84") then [ yasm ] else [ nasm ]);
 
   # build paths and release info
   packageName = extraAttrs.packageName or extraAttrs.name;
@@ -122,7 +124,8 @@ let
       ninja which python2Packages.python perl pkgconfig
       python2Packages.ply python2Packages.jinja2 nodejs
       gnutar
-    ] ++ optional (versionAtLeast version "83") python2Packages.setuptools;
+    ] ++ optional (versionAtLeast version "83") python2Packages.setuptools
+      ++ optional (versionAtLeast version "84") (xorg.xcbproto.override { python = python2Packages.python; });
 
     buildInputs = defaultDependencies ++ [
       nspr nss systemd
@@ -132,6 +135,7 @@ let
       libXScrnSaver libXcursor libXtst libGLU libGL
       pciutils protobuf speechd libXdamage at-spi2-core
       jre
+      pipewire_0_2
     ] ++ optional useVaapi libva
       ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
@@ -154,13 +158,10 @@ let
       #
       # ++ optionals (channel == "dev") [ ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" ) ]
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
-    ] ++ optionals (useVaapi) ([ # Fixes for the VA-API build:
+    ] ++ optionals (useVaapi) [ # Improvements for the VA-API build:
       ./patches/enable-vdpau-support-for-nvidia.patch # https://aur.archlinux.org/cgit/aur.git/tree/vdpau-support.patch?h=chromium-vaapi
       ./patches/enable-video-acceleration-on-linux.patch # Can be controlled at runtime (i.e. without rebuilding Chromium)
-    ] ++ optionals (versionRange "81" "82") [
-      (githubPatch "5b2ff215473e0526b5b24aeff4ad90d369b21c75" "0n00vh8wfpn2ay5fqsxcsx0zadnv7mihm72bcvnrfzh75nzbg902")
-      (githubPatch "98e343ab369e4262511b5fce547728e3e5eefba8" "00wwp653jk0k0yvix00vr7ymgck9dj7fxjwx4nc67ynn84dh6064")
-    ]);
+    ];
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
@@ -225,10 +226,16 @@ let
       ln -s ${stdenv.cc}/bin/clang              third_party/llvm-build/Release+Asserts/bin/clang
       ln -s ${stdenv.cc}/bin/clang++            third_party/llvm-build/Release+Asserts/bin/clang++
       ln -s ${llvmPackages.llvm}/bin/llvm-ar    third_party/llvm-build/Release+Asserts/bin/llvm-ar
+    '' + optionalString (versionAtLeast version "84") ''
+      substituteInPlace ui/gfx/x/BUILD.gn \
+        --replace \
+          '/usr/share/xcb' \
+          '${xorg.xcbproto}/share/xcb/'
     '';
 
-    gnFlags = mkGnFlags ({
+    gnFlags = mkGnFlags (optionalAttrs (versionRange "0" "84") {
       linux_use_bundled_binutils = false;
+    } // {
       use_lld = false;
       use_gold = true;
       gold_path = "${stdenv.cc}/bin";
@@ -246,6 +253,8 @@ let
       # added later in the wrapped -wv build or downloaded from Google.
       enable_widevine = true;
       use_cups = cupsSupport;
+      # Provides the enable-webrtc-pipewire-capturer flag to support Wayland screen capture.
+      rtc_use_pipewire = true;
 
       treat_warnings_as_errors = false;
       is_clang = stdenv.cc.isClang;

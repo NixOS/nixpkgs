@@ -21,7 +21,7 @@ buildGoModule rec {
     sha256 = import ./source-sha.nix;
   };
 
-  modSha256 = import ./mod-sha.nix;
+  vendorSha256 = import ./vendor-sha.nix;
 
   postPatch = ''
     substituteInPlace app.go \

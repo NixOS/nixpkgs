@@ -24,6 +24,7 @@ with lib;
     (mkRemovedOptionModule [ "environment" "blcr" "enable" ] "The BLCR module has been removed")
     (mkRemovedOptionModule [ "services" "beegfsEnable" ] "The BeeGFS module has been removed")
     (mkRemovedOptionModule [ "services" "beegfs" ] "The BeeGFS module has been removed")
+    (mkRemovedOptionModule ["services" "cgmanager" "enable"] "cgmanager was deprecated by lxc and therefore removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "osquery" ] "The osquery module has been removed")
     (mkRemovedOptionModule [ "services" "fourStore" ] "The fourStore module has been removed")
     (mkRemovedOptionModule [ "services" "fourStoreEndpoint" ] "The fourStoreEndpoint module has been removed")
@@ -38,8 +39,8 @@ with lib;
       The services.xserver.displayManager.auto module has been removed
       because it was only intended for use in internal NixOS tests, and gave the
       false impression of it being a special display manager when it's actually
-      LightDM. Please use the generic services.xserver.displayManager.autoLogin options
-      instead, as all display managers in NixOS support auto-login.
+      LightDM. Please use the services.xserver.displayManager.autoLogin options
+      instead, or any other display manager in NixOS as they all support auto-login.
     '')
     (mkRemovedOptionModule [ "services" "dnscrypt-proxy" ] "Use services.dnscrypt-proxy2 instead")
     (mkRemovedOptionModule ["hardware" "brightnessctl" ] ''
@@ -48,9 +49,16 @@ with lib;
       systemd-logind API). Instead of using the module you can now
       simply add the brightnessctl package to environment.systemPackages.
     '')
+    (mkRemovedOptionModule [ "virtualisation" "rkt" ] "The rkt module has been removed, it was archived by upstream")
 
     (mkRemovedOptionModule ["services" "prey" ] ''
       prey-bash-client is deprecated upstream
+    '')
+
+    (mkRemovedOptionModule ["hardware" "u2f" ] ''
+      The U2F modules module was removed, as all it did was adding the
+      udev rules from libu2f-host to the system. Udev gained native support
+      to handle FIDO security tokens, so this isn't necessary anymore.
     '')
 
     # Do NOT add any option renames here, see top of the file

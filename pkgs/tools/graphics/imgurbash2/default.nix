@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "imgurbash2";
-  version = "3.1";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "ram-on";
     repo = "imgurbash2";
     rev = version;
-    sha256 = "1hqghlk8c6svfszhmp02bhkc791lqhqffgiypf05giqmr5d8b9a9";
+    sha256 = "10zs6p17psl1vq5vpkfkf9nrlmibk6v1ds3yxbf1rip1zaqlwxg6";
   };
 
   installPhase = ''

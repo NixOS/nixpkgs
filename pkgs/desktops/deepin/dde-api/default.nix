@@ -6,7 +6,6 @@
 , bc
 , blur-effect
 , coreutils
-, dbus-factory
 , deepin
 , deepin-gettext-tools
 , fontconfig
@@ -43,7 +42,6 @@ buildGoPackage rec {
   nativeBuildInputs = [
     pkgconfig
     deepin-gettext-tools # build
-    dbus-factory         # build
     deepin.setupHook
 
     # TODO: using $PATH to find run time executable does not work with cross compiling

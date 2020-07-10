@@ -8,7 +8,7 @@
 , qtx11extras
 , qtmultimedia
 , qtsvg
-, qt5dxcb-plugin
+, qt5platform-plugins
 , qtstyleplugins
 , dtkcore
 , dtkwidget
@@ -34,7 +34,7 @@ mkDerivation rec {
   buildInputs = [
     dtkcore
     dtkwidget
-    qt5dxcb-plugin
+    qt5platform-plugins
     mtdev
     lxqt.libqtxdg
     qtstyleplugins

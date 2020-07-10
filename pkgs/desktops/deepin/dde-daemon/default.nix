@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , fetchpatch
 , pkgconfig
-, dbus-factory
 , go-dbus-factory
 , go-gir-generator
 , go-lib
@@ -59,7 +58,6 @@ buildGoPackage rec {
 
   nativeBuildInputs = [
     pkgconfig
-    dbus-factory
     deepin-gettext-tools
     gettext
     networkmanager

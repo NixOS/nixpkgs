@@ -2,7 +2,7 @@
 , unzip, zlib, SDL, readline, libGLU, libGL, libX11 }:
 
 with stdenv.lib;
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "atari800";
   version = "4.2.0";
 

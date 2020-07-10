@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "serpent";
-  version = "1.28";
+  version = "1.30.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1arnckykpkvv2qrp49l1k7q5mr5pisswl0rvdx98x8wsl1n361pk";
+    sha256 = "72753820246a7d8486e8b385353e3bbf769abfceec2e850fa527a288b084ff7a";
   };
 
   propagatedBuildInputs = lib.optionals isPy27 [ enum34 ];

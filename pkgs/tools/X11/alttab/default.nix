@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     xorg.libXrender
   ];
 
-  enableParallelBuild = true;
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/sagb/alttab";

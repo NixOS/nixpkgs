@@ -121,7 +121,7 @@ mkDerivation rec {
     substituteInPlace dde-control-center.desktop \
       --replace "dbus-send" "${dbus}/bin/dbus-send"
     substituteInPlace com.deepin.controlcenter.addomain.policy \
-      --replace "/bin/systemctl" "${systemd}/bin/systemctl"
+      --replace "/bin/systemctl" "/run/current-system/sw/bin/systemctl"
   '';
 
   dontWrapQtApps = true;

@@ -1,18 +1,22 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "wordpress";
-  version = "5.4.1";
+  version = "5.4.2";
 
   src = fetchurl {
     url = "https://wordpress.org/${pname}-${version}.tar.gz";
-    sha256 = "0i9ndfhm9iwilqwbqs3dngmzzjmazw4vwbyccjabs3zmzliis6vv";
+    sha256 = "1pnl11yws2r2d5dfq0z85zcy5ilvm298bfs7h9z1sjakkwkh5sph";
   };
 
   installPhase = ''
     mkdir -p $out/share/wordpress
     cp -r . $out/share/wordpress
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) wordpress;
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://wordpress.org";

@@ -9,6 +9,8 @@ py = python.override {
         inherit version;
         sha256 = "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b";
       };
+      doCheck = false;
+      postPatch = "";
     });
   };
 };

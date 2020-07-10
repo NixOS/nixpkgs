@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg
 , uchar, result, gg, uutf, otfm
-, js_of_ocaml, js_of_ocaml-ocamlbuild, js_of_ocaml-ppx,
+, js_of_ocaml, js_of_ocaml-ppx,
   pdfBackend ? true, # depends on uutf and otfm
   htmlcBackend ? true # depends on js_of_ocaml
 }:
@@ -11,7 +11,7 @@ let
   inherit (stdenv.lib) optionals versionAtLeast;
 
   pname = "vg";
-  version = "0.9.3";
+  version = "0.9.4";
   webpage = "https://erratique.ch/software/${pname}";
 in
 
@@ -25,14 +25,14 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "0jj5hrqxdb6yyplnz0r7am4mbjzgcn876qp7sqs2x93a97fk6lwd";
+    sha256 = "181sz6l5xrj5jvwg4m2yqsjzwp2s5h8v0mwhjcwbam90kdfx2nak";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild topkg ];
 
   propagatedBuildInputs = [ uchar result gg ]
                           ++ optionals pdfBackend [ uutf otfm ]
-                          ++ optionals htmlcBackend [ js_of_ocaml js_of_ocaml-ocamlbuild js_of_ocaml-ppx ];
+                          ++ optionals htmlcBackend [ js_of_ocaml js_of_ocaml-ppx ];
 
   buildPhase = topkg.buildPhase
     + " --with-uutf ${boolToString pdfBackend}"

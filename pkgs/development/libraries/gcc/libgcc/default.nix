@@ -63,7 +63,7 @@ stdenvNoLibs.mkDerivation rec {
       export CPP_FOR_TARGET=${stdenvNoLibs.cc}/bin/$CPP
       export LD_FOR_TARGET=${stdenvNoLibs.cc.bintools}/bin/$LD
 
-      export NIX_BUILD_CFLAGS_COMPILE+=' -DGENERATOR_FILE=1'
+      export NIX_CFLAGS_COMPILE_FOR_BUILD+=' -DGENERATOR_FILE=1'
 
       "$sourceRoot/../gcc/configure" $gccConfigureFlags
 

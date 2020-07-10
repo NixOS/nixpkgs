@@ -14,14 +14,14 @@ with stdenv.lib;
 let
   go-d-plugin = callPackage ./go.d.plugin.nix {};
 in stdenv.mkDerivation rec {
-  version = "1.21.1";
+  version = "1.23.0";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "0i0k64r8j1g02s2bi2gm0j47y52l3xli63w686ncpgmlhwmdfz65";
+    sha256 = "04x53hr2d086y4q990h7lazaykaizb5g45nmfvahqzxj72b0hvdf";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

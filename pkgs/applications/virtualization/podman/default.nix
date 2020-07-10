@@ -2,48 +2,60 @@
 , fetchFromGitHub
 , pkg-config
 , installShellFiles
-, buildGoPackage
+, buildGoModule
 , gpgme
 , lvm2
 , btrfs-progs
+, libapparmor
 , libseccomp
+, libselinux
 , systemd
 , go-md2man
 , nixosTests
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "podman";
-  version = "1.9.1";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "libpod";
     rev = "v${version}";
-    sha256 = "0dr5vd52fnjwx3zn2nj2nlvkbvh5bg579nf3qw8swrn8i1jwxd6j";
+    sha256 = "11avj4q3xh7qbcbs8h4jis0bdfkvvh193sflwiz8hcp41qjvinz4";
   };
 
-  goPackagePath = "github.com/containers/libpod";
+  vendorSha256 = null;
 
   outputs = [ "out" "man" ];
 
   nativeBuildInputs = [ pkg-config go-md2man installShellFiles ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ btrfs-progs libseccomp gpgme lvm2 systemd ];
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [
+    btrfs-progs
+    gpgme
+    libapparmor
+    libseccomp
+    libselinux
+    lvm2
+    systemd
+  ];
 
   buildPhase = ''
-    pushd go/src/${goPackagePath}
     patchShebangs .
     ${if stdenv.isDarwin
-      then "make CGO_ENABLED=0 BUILDTAGS='remoteclient containers_image_openpgp exclude_graphdriver_devicemapper' varlink_generate all"
-      else "make binaries docs"}
+      then "make podman-remote"
+      else "make podman"}
+    make docs
   '';
 
-  installPhase = ''
+  installPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+    mv bin/{podman-remote,podman}
+  '' + ''
     install -Dm555 bin/podman $out/bin/podman
     installShellCompletion --bash completions/bash/podman
     installShellCompletion --zsh completions/zsh/_podman
-    MANDIR=$man/share/man make install.man
+    MANDIR=$man/share/man make install.man-nobuild
   '';
 
   passthru.tests.podman = nixosTests.podman;
@@ -54,6 +66,5 @@ buildGoPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ] ++ teams.podman.members;
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
   };
 }

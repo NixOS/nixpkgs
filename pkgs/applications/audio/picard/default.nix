@@ -18,7 +18,7 @@ in pythonPackages.buildPythonApplication rec {
     owner = "metabrainz";
     repo = pname;
     rev = "release-${version}";
-    sha256 = "sha256-rJbpoPjNMlw4diWjwNQ/DPo3rltvISU4kuRqBbvlBZ0=";
+    sha256 = "1785wnxhasp4j8w2a8bgbfp3gyhc7zac18r5fqw5qcndz2hfk5mc";
   };
 
   nativeBuildInputs = [ gettext qt5.wrapQtAppsHook qt5.qtbase ]

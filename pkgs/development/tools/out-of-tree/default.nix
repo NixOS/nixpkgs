@@ -1,20 +1,18 @@
-{ stdenv, buildGoPackage, fetchgit, qemu, docker, which, makeWrapper }:
+{ stdenv, buildGoModule, fetchgit, qemu, docker, which, makeWrapper }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "out-of-tree";
-  version = "1.2.1";
+  version = "1.4.0";
 
   buildInputs = [ makeWrapper ];
-
-  goPackagePath = "code.dumpstack.io/tools/${pname}";
 
   src = fetchgit {
     rev = "refs/tags/v${version}";
     url = "https://code.dumpstack.io/tools/${pname}.git";
-    sha256 = "0wh4yh865wgl3hs203ncdjh1gaxznmhxdg56mciibng0dghgyw7n";
+    sha256 = "1rn824l3dzh3xjxsbzzj053qg1abhzjimc8l73r0n5qrl44k2qk2";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "0kg5c4h7xnwfcfshrh5n76xv98wzr73kxzr8q65iphsjimbxcpy3";
 
   postFixup = ''
     wrapProgram $out/bin/out-of-tree \

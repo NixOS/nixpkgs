@@ -430,7 +430,10 @@ in buildPythonPackage {
     EOF
   '';
 
-  passthru.libtensorflow = bazel-build.out;
+  passthru = {
+    deps = bazel-build.deps;
+    libtensorflow = bazel-build.out;
+  };
 
   inherit (bazel-build) meta;
 }

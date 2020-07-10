@@ -4,14 +4,12 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "img2pdf";
-  version = "0.3.4";
+  version = "0.3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0jgfk191vvxn2r6bbdknvw5v510mx9g0xrgnmcghaxkv65zjnj0b";
+    sha256 = "1yx0ljbg7phpix507wq584qvspp2jgax7flpp1148pxpc2d51mcc";
   };
-
-  doCheck = false; # needs pdfrw
 
   propagatedBuildInputs = [
     pillow

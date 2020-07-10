@@ -13,15 +13,17 @@ common =
   , bash, coreutils, gzip, gnutar
   , pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, editline, nlohmann_json
   , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns
-  , jq, libarchive, rustc, cargo
+  , jq, libarchive
+  # Used by tests
+  , gmock
   , busybox-sandbox-shell
   , storeDir
   , stateDir
   , confDir
   , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
-  , withAWS ? stdenv.isLinux || stdenv.isDarwin, aws-sdk-cpp
-
-  , name, suffix ? "", src, crates ? null
+  , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
+  , enableStatic ? false
+  , name, suffix ? "", src
 
   }:
   let
@@ -39,14 +41,15 @@ common =
 
       nativeBuildInputs =
         [ pkgconfig ]
-        ++ lib.optionals is24 [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook_xsl_ns jq ];
+        ++ lib.optionals is24 [ autoreconfHook autoconf-archive bison flex libxml2 libxslt
+                                docbook5 docbook_xsl_ns jq ];
 
       buildInputs =
         [ curl openssl sqlite xz bzip2 nlohmann_json
           brotli boost editline
         ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-        ++ lib.optionals is24 [ libarchive rustc cargo ]
+        ++ lib.optionals is24 [ libarchive gmock ]
         ++ lib.optional withLibseccomp libseccomp
         ++ lib.optional withAWS
             ((aws-sdk-cpp.override {
@@ -62,12 +65,21 @@ common =
       propagatedBuildInputs = [ boehmgc ];
 
       # Seems to be required when using std::atomic with 64-bit types
-      NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
+      NIX_LDFLAGS =
+        # need to list libraries individually until
+        # https://github.com/NixOS/nix/commit/3e85c57a6cbf46d5f0fe8a89b368a43abd26daba
+        # is in a release
+          lib.optionalString enableStatic "-lssl -lbrotlicommon -lssh2 -lz -lnghttp2 -lcrypto"
+
+        # need to detect it here until
+        # https://github.com/NixOS/nix/commits/74b4737d8f0e1922ef5314a158271acf81cd79f8
+        # is in a release
+        + lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
 
       preConfigure =
         # Copy libboost_context so we don't get all of Boost in our closure.
         # https://github.com/NixOS/nixpkgs/issues/45462
-        ''
+        lib.optionalString (!enableStatic) ''
           mkdir -p $out/lib
           cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
           rm -f $out/lib/*.a
@@ -75,11 +87,6 @@ common =
             chmod u+w $out/lib/*.so.*
             patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
           ''}
-        '' +
-        # Unpack the Rust crates.
-        lib.optionalString is24 ''
-          tar xvf ${crates} -C nix-rust/
-          mv nix-rust/nix-vendored-crates* nix-rust/vendor
         '' +
         # For Nix-2.3, patch around an issue where the Nix configure step pulls in the
         # build system's bash and other utilities when cross-compiling
@@ -112,7 +119,8 @@ common =
            # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
         ++ lib.optional (!withLibseccomp) "--disable-seccomp-sandboxing";
 
-      makeFlags = [ "profiledir=$(out)/etc/profile.d" ];
+      makeFlags = [ "profiledir=$(out)/etc/profile.d" ]
+        ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "PRECOMPILE_HEADERS=0";
 
       installFlags = [ "sysconfdir=$(out)/etc" ];
 
@@ -175,10 +183,10 @@ in rec {
   nix = nixStable;
 
   nixStable = callPackage common (rec {
-    name = "nix-2.3.4";
+    name = "nix-2.3.7";
     src = fetchurl {
       url = "https://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "1c626a0de0acc69830b1891ec4d3c96aabe673b2a9fd04cef84f2304d05ad00d";
+      sha256 = "dd8f52849414e5a878afe7e797aa4e22bab77c875d9da5a38d5f1bada704e596";
     };
 
     inherit storeDir stateDir confDir boehmgc;
@@ -188,18 +196,13 @@ in rec {
 
   nixUnstable = lib.lowPrio (callPackage common rec {
     name = "nix-2.4${suffix}";
-    suffix = "pre7346_5e7ccdc9";
+    suffix = "pre7805_984e5213";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "5e7ccdc9e3ddd61dc85e20c898001345bfb497a5";
-      sha256 = "10jg0rq92xbigbbri7harn4b75blqaf6rjgq4hhvlnggf2w9iprg";
-    };
-
-    crates = fetchurl {
-      url = "https://hydra.nixos.org/build/115942497/download/1/nix-vendored-crates-2.4pre20200403_3473b19.tar.xz";
-      sha256 = "a83785553bb4bc5b28220562153e201ec555a00171466ac08b716f0c97aee45a";
+      rev = "984e521392b3f41f7cdab203e5c00f3e00e27a28";
+      sha256 = "1dch48018dwzx9cysnfxrdpszav87s0d635zqw810mgmqpm25fw8";
     };
 
     inherit storeDir stateDir confDir boehmgc;
@@ -207,18 +210,13 @@ in rec {
 
   nixFlakes = lib.lowPrio (callPackage common rec {
     name = "nix-2.4${suffix}";
-    suffix = "pre20200501_941f952";
+    suffix = "pre20200622_334e26b";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "941f95284ab57e9baa317791327cf1715d8564b5";
-      sha256 = "0d99jl5baxji5dmqb4fwmbffx0z04k0naanms5zzbwvxdmzn3yhs";
-    };
-
-    crates = fetchurl {
-      url = "https://hydra.nixos.org/build/118093786/download/1/nix-vendored-crates-2.4pre20200501_941f952.tar.xz";
-      sha256 = "060f4n5srdbb8vsj0m14aqch7im79a4h5g3nrs41p1xc602vhcdl";
+      rev = "334e26bfc2ce82912602e8a0f9f9c7e0fb5c3221";
+      sha256 = "14a2yyn1ygymlci6hl5d308fs3p3m0mgcfs5dc8dn0s3lg5qvbmp";
     };
 
     inherit storeDir stateDir confDir boehmgc;

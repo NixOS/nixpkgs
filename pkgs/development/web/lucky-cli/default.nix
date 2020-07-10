@@ -2,13 +2,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "lucky-cli";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "luckyframework";
     repo = "lucky_cli";
     rev = "v${version}";
-    sha256 = "0n7fgnsivf39bkxpf7xgg9dqkam08axdn1j45wl1n0r4qmfkjs94";
+    sha256 = "0g0arf13brh6g0hynxs8bsp8jh3dd66rmf2d3qh2qjvk10101g0r";
   };
 
   # the integration tests will try to clone a remote repos

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "pwithnall";
     repo = pname;
     rev = version;
-    sha256 = "cP2l6nl6cuBQYwkmBj8APu/vH3jTeScXf3ffcuSfqlM=";
+    sha256 = "0lxakzj75pvpgwbjfyfkg0gyzvry00zhc9h9cd8f0wksg7mabzbh";
   };
 
   patches = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     # https://gitlab.freedesktop.org/pwithnall/malcontent/merge_requests/50
     (fetchpatch {
       url = "https://gitlab.freedesktop.org/pwithnall/malcontent/commit/5d102eeb0604e65fc977ca77d4b249e986e634cc.patch";
-      sha256 = "5PD/eJBw/8Uqcia7ena9mu45DgREBFj0zUJpcd0vQ+8=";
+      sha256 = "1vs35zfp2sa2rps5h1240h73kvlspmv7mfr6f8mcbzvhj1wgzw74";
     })
   ];
 

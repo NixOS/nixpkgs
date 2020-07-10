@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python3, asciidoc }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
 
   name = "eweb-${meta.version}";
 

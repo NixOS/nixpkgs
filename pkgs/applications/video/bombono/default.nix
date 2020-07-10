@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, wrapGAppsHook, gtk2, boost, gtkmm2, scons,
-mjpegtools, libdvdread, dvdauthor, gettext, dvdplusrwtools, libxmlxx, ffmpeg,
+mjpegtools, libdvdread, dvdauthor, gettext, dvdplusrwtools, libxmlxx, ffmpeg_3,
 enca, pkgconfig, fetchpatch }:
 
 let fetchPatchFromAur = {name, sha256}:
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk2 gtkmm2 mjpegtools libdvdread dvdauthor boost dvdplusrwtools
-    libxmlxx ffmpeg enca
+    libxmlxx ffmpeg_3 enca
     ];
 
   prefixKey = "PREFIX=";

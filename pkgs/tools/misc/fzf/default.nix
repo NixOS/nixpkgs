@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "0piz1dzczcw1nsff775zicvpm6iy0iw0v0ba7rj7i0xqv9ni1prw";
   };
 
-  modSha256 = "16bb0a9z49jqhh9lmq8rvl7x9vh79mi4ygkb9sm04g41g5z6ag1s";
+  vendorSha256 = "1c2iz28hjrw9rig9a6r27wd8clycdhi8fgs3da91c63w4qi140zm";
 
   outputs = [ "out" "man" ];
 
@@ -60,7 +60,7 @@ buildGoModule rec {
     homepage = "https://github.com/junegunn/fzf";
     description = "A command-line fuzzy finder written in Go";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ma27 ];
+    maintainers = with maintainers; [ filalex77 ma27 zowoq ];
     platforms = platforms.unix;
   };
 }

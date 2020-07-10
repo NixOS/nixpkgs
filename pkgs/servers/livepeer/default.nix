@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, buildGoPackage
-, pkgconfig, ffmpeg
+, pkgconfig, ffmpeg_3
 }:
 
 buildGoPackage rec {
@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ ffmpeg ];
+  buildInputs = [ ffmpeg_3 ];
 
   enableParallelBuilding = true;
 

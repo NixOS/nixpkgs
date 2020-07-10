@@ -7,7 +7,7 @@ in buildGoModule rec {
   revision = "v${version}";
   goPackagePath = "github.com/drone/drone-cli";
 
-  modSha256 = "0g0vq4vm2hy00r2gjsrhg57xv9sldlqix3wzimiqdli085bcz46b";
+  vendorSha256 = "1zzx5yy0pp0c8pias4sfxfvdzhhrff9f8j51qf6dkif99xwdq3hb";
 
   preBuild = ''
     buildFlagsArray+=("-ldflags" "-X main.version=${version}")

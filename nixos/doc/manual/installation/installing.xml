@@ -146,7 +146,7 @@
        partition. It uses the initially reserved 512MiB at the start of the
        disk.
 <screen language="commands"><prompt># </prompt>parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
-<prompt># </prompt>parted /dev/sda -- set 3 boot on</screen>
+<prompt># </prompt>parted /dev/sda -- set 3 esp on</screen>
       </para>
      </listitem>
     </orderedlist>
@@ -513,7 +513,7 @@ Retype new UNIX password: ***</screen>
 <prompt># </prompt>parted /dev/sda -- mkpart primary 512MiB -8GiB
 <prompt># </prompt>parted /dev/sda -- mkpart primary linux-swap -8GiB 100%
 <prompt># </prompt>parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
-<prompt># </prompt>parted /dev/sda -- set 3 boot on</screen>
+<prompt># </prompt>parted /dev/sda -- set 3 esp on</screen>
   </example>
 
   <example xml:id="ex-install-sequence">

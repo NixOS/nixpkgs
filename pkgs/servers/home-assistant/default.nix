@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, fetchpatch, python3, protobuf3_6
+{ stdenv, nixosTests, lib, fetchurl, fetchFromGitHub, fetchpatch, python3, protobuf3_6
 
 # Look up dependencies of specified components in component-packages.nix
 , extraComponents ? [ ]
@@ -22,10 +22,15 @@ let
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py
 
-    # used by check_config script
-    # can be unpinned once https://github.com/home-assistant/home-assistant/issues/11917 is resolved
-    (mkOverride "colorlog" "4.0.2"
-      "3cf31b25cbc8f86ec01fef582ef3b840950dea414084ed19ab922c8b493f9b42")
+    # required by the sun/moon plugins
+    # https://github.com/home-assistant/core/issues/36636
+    (mkOverride "astral" "1.10.1"
+      "d2a67243c4503131c856cafb1b1276de52a86e5b8a1d507b7e08bee51cb67bf1")
+
+    # We have 3.x in nixpkgs which is incompatible with home-assistant atm:
+    # https://github.com/home-assistant/core/blob/dev/requirements_all.txt
+    (mkOverride "pyowm" "2.10.0"
+      "1xvcv3sbcn9na8cwz21nnjlixysfk5lymnf65d1nqkbgacc1mm4g")
 
     # required by aioesphomeapi
     (self: super: {
@@ -67,7 +72,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.109.6";
+  hassVersion = "0.112.3";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -84,9 +89,9 @@ in with py.pkgs; buildPythonApplication rec {
   # PyPI tarball is missing tests/ directory
   src = fetchFromGitHub {
     owner = "home-assistant";
-    repo = "home-assistant";
+    repo = "core";
     rev = version;
-    sha256 = "133l6n165yivnc9qmrahk423hmns0hn0dbnx4ys7yaw3x5hqwyns";
+    sha256 = "1azfbjnyaamdnl2f3cllh6pd3kinl1wjqb4hlb569gb8zqs5bsx2";
   };
 
   propagatedBuildInputs = [
@@ -123,12 +128,15 @@ in with py.pkgs; buildPythonApplication rec {
 
   passthru = {
     inherit (py.pkgs) hass-frontend;
+    tests = {
+      inherit (nixosTests) home-assistant;
+    };
   };
 
   meta = with lib; {
     homepage = "https://home-assistant.io/";
     description = "Open-source home automation platform running on Python 3";
     license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda globin mic92 ];
+    maintainers = with maintainers; [ dotlambda globin mic92 hexa ];
   };
 }

@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-shortcut-overlay";
-  version = "1.1.1";
+  version = "1.1.2";
 
   repoName = "shortcut-overlay";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "03wnc3vfnrkm5i7h370n7h2mbcmaxnhynmjs37q63vq6vq7agldb";
+    sha256 = "0v8fx58fn309glxi2zxxlnddw8lkmjr025f22ml3p483zkvbcm2c";
   };
 
   passthru = {

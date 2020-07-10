@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard";
-  version = "2.3.9";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0gq2gi14ywmhhlq3vablzqjzxq2ms60l9b10splzsf3zd7k2dqz2";
+    sha256 = "12xir2gssr0x21sgm5m620bvd6b6y8dcm26cj4s1wsn8qb59jx9p";
   };
 
   passthru = {

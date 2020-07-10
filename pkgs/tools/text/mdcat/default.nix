@@ -2,28 +2,31 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "0.16.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "lunaryorn";
     repo = pname;
     rev = "mdcat-${version}";
-    sha256 = "10svzq7656lynfcgnbyaibfvv48i4289ymxfc0bn0212biyrl1zb";
+    hash = "sha256-1qxz6p7VaJ9eMcLQaTW/M4+Xo0WLihzyEAycbkjjPyA=";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl ] ++ stdenv.lib.optional stdenv.isDarwin Security;
 
-  cargoSha256 = "05nh3dfr7mdw21sdavyyjhr8sa4jcfqzwizbgg92ib7r834ir3m0";
+  cargoSha256 = "sha256-/mAwlxed1MOFUA1jDSrgPzJuURbKzwucBWORVVHlrt8=";
 
   checkInputs = [ ansi2html ];
   checkPhase = ''
     # Skip tests that use the network and that include files.
-    cargo test -- --skip terminal::iterm2 \
-      --skip magic::tests::detect_mimetype_of_svg_image \
+    cargo test -- \
+      --skip magic::tests::detect_mimetype_of_larger_than_magic_param_bytes_max_length \
+      --skip magic::tests::detect_mimetype_of_magic_param_bytes_max_length \
       --skip magic::tests::detect_mimetype_of_png_image \
+      --skip magic::tests::detect_mimetype_of_svg_image \
       --skip resources::tests::read_url_with_http_url_fails_when_status_404 \
-      --skip resources::tests::read_url_with_http_url_returns_content_when_status_200
+      --skip resources::tests::read_url_with_http_url_returns_content_when_status_200 \
+      --skip iterm2_tests_render_md_samples_images_md
   '';
 
   meta = with stdenv.lib; {

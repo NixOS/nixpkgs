@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "papirus-icon-theme";
-  version = "20200430";
+  version = "20200702";
 
   src = fetchFromGitHub {
     owner = "PapirusDevelopmentTeam";
     repo = pname;
     rev = version;
-    sha256 = "1dgxf3fi4x5iy504xncj1jba8cd51axkn2j1cfb220rpc6mzv25l";
+    sha256 = "0p1grfgnmqawayk15qxnl09jai96avx9731qladmcbm2lik4qdpl";
   };
 
   nativeBuildInputs = [

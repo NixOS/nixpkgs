@@ -38,12 +38,21 @@ in
 
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "gdm" "autoLogin" "enable" ]
-      "Set the option `services.xserver.displayManager.autoLogin.enable' instead.")
-    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "gdm" "autoLogin" "user" ]
-      "Set the option `services.xserver.displayManager.autoLogin.user' instead.")
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "gdm" "autoLogin" "enable" ] [
+      "services"
+      "xserver"
+      "displayManager"
+      "autoLogin"
+      "enable"
+    ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "gdm" "autoLogin" "user" ] [
+      "services"
+      "xserver"
+      "displayManager"
+      "autoLogin"
+      "user"
+    ])
   ];
-
 
   meta = {
     maintainers = teams.gnome.members;

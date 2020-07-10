@@ -63,10 +63,6 @@ let
     ${cfg.extraConfig}
   '';
 
-  phpExtensions = with pkgs.phpPackages; [
-    { pkg = apcu; name = "apcu"; }
-  ];
-
 in {
   options = {
     services.zoneminder = with lib; {
@@ -289,11 +285,9 @@ in {
       phpfpm = lib.mkIf useNginx {
         pools.zoneminder = {
           inherit user group;
+          phpPackage = pkgs.php.withExtensions ({ enabled, all }: enabled ++ [ all.apcu ]);
           phpOptions = ''
             date.timezone = "${config.time.timeZone}"
-
-            ${lib.concatStringsSep "\n" (map (e:
-            "extension=${e.pkg}/lib/php/extensions/${e.name}.so") phpExtensions)}
           '';
           settings = lib.mapAttrs (name: lib.mkDefault) {
             "listen.owner" = user;

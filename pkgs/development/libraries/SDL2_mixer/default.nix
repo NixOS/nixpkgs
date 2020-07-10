@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, autoreconfHook, pkgconfig, which
-, SDL2, libogg, libvorbis, smpeg2, flac, libmodplug, opusfile
+, SDL2, libogg, libvorbis, smpeg2, flac, libmodplug, opusfile, mpg123
 , CoreServices, AudioUnit, AudioToolbox
 , enableNativeMidi ? false, fluidsynth ? null }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
 
-  propagatedBuildInputs = [ SDL2 libogg libvorbis fluidsynth smpeg2 flac libmodplug opusfile ];
+  propagatedBuildInputs = [ SDL2 libogg libvorbis fluidsynth smpeg2 flac libmodplug opusfile mpg123 ];
 
   configureFlags = [ "--disable-music-ogg-shared" ]
     ++ lib.optional enableNativeMidi "--enable-music-native-midi-gpl"

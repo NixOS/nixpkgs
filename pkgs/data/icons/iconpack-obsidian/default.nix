@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "iconpack-obsidian";
-  version = "4.11";
+  version = "4.12";
 
   src = fetchFromGitHub {
     owner = "madmaxms";
     repo = pname;
     rev = "v${version}";
-    sha256 = "18sqnrvh4bbmg3zzm78n4s2hvv8a77ilg7xa3hl94mp9qla6gasn";
+    sha256 = "0139ps707mh1zkypaxsqzy58mmsm5whdxxx2nbsmqfswb7qisz2b";
   };
 
   nativeBuildInputs = [ gtk3 ];

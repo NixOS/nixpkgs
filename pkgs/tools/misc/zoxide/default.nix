@@ -1,25 +1,29 @@
 { lib
 , fetchFromGitHub
 , rustPlatform
+, withFzf ? true
 , fzf
 }:
-
-rustPlatform.buildRustPackage rec {
+let
+  version = "0.4.3";
+in
+rustPlatform.buildRustPackage {
   pname = "zoxide";
-  version = "0.4.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "ajeetdsouza";
     repo = "zoxide";
     rev = "v${version}";
-    sha256 = "1qkvmjrkcivfzbm6swl5lgvpqz9av9jxcn9i8ms3wz4vfsibmlxv";
+    sha256 = "1ghdal6pqkp56rqawhj26ch1x4cvnjj032xz3626aiddqgn134zj";
   };
 
-  buildInputs = [
-    fzf
-  ];
+  postPatch = lib.optionalString withFzf ''
+    substituteInPlace src/fzf.rs \
+      --replace '"fzf"' '"${fzf}/bin/fzf"'
+  '';
 
-  cargoSha256 = "1w921f7b6kzc1mjzff1bcs3mg4cp9h48698w2zlv5jzjs7nwgb8n";
+  cargoSha256 = "0klnjmda77bq9i9f0rz48jzaw4rcf7hafcjjpb0i570d7hlxnwsr";
 
   meta = with lib; {
     description = "A fast cd command that learns your habits";

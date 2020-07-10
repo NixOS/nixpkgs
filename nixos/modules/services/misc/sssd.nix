@@ -42,11 +42,6 @@ in {
   };
   config = mkMerge [
     (mkIf cfg.enable {
-      assertions = singleton {
-        assertion = nscd.enable;
-        message = "nscd must be enabled through `services.nscd.enable` for SSSD to work.";
-      };
-
       systemd.services.sssd = {
         description = "System Security Services Daemon";
         wantedBy    = [ "multi-user.target" ];
@@ -74,11 +69,12 @@ in {
         mode = "0400";
       };
 
-      system.nssModules = optional cfg.enable pkgs.sssd;
+      system.nssModules = pkgs.sssd;
       system.nssDatabases = {
+        group = [ "sss" ];
         passwd = [ "sss" ];
-        shadow = [ "sss" ];
         services = [ "sss" ];
+        shadow = [ "sss" ];
       };
       services.dbus.packages = [ pkgs.sssd ];
     })

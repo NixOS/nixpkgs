@@ -7,6 +7,7 @@
 , gnused
 , gnugrep
 , groff
+, gawk
 , man-db
 , getent
 , libiconv
@@ -79,20 +80,17 @@ let
 
       # additional profiles are expected in order of precedence, which means the reverse of the
       # NIX_PROFILES variable (same as config.environment.profiles)
-      set -l __nix_profile_paths (echo $NIX_PROFILES | ${coreutils}/bin/tr ' ' '\n')[-1..1]
+      set -l __nix_profile_paths (string split ' ' $NIX_PROFILES)[-1..1]
 
-      set __extra_completionsdir \
+      set -p __extra_completionsdir \
         $__nix_profile_paths"/etc/fish/completions" \
-        $__nix_profile_paths"/share/fish/vendor_completions.d" \
-        $__extra_completionsdir
-      set __extra_functionsdir \
+        $__nix_profile_paths"/share/fish/vendor_completions.d"
+      set -p __extra_functionsdir \
         $__nix_profile_paths"/etc/fish/functions" \
-        $__nix_profile_paths"/share/fish/vendor_functions.d" \
-        $__extra_functionsdir
-      set __extra_confdir \
+        $__nix_profile_paths"/share/fish/vendor_functions.d"
+      set -p __extra_confdir \
         $__nix_profile_paths"/etc/fish/conf.d" \
-        $__nix_profile_paths"/share/fish/vendor_conf.d" \
-        $__extra_confdir
+        $__nix_profile_paths"/share/fish/vendor_conf.d"
     end
   '';
 
@@ -123,6 +121,10 @@ let
       ncurses
       libiconv
       pcre2
+    ];
+
+    cmakeFlags = [
+      "-DCMAKE_INSTALL_DOCDIR=${placeholder "out"}/share/doc/fish"
     ];
 
     preConfigure = ''
@@ -164,6 +166,9 @@ let
           -i $out/share/fish/functions/{__fish_config_interactive.fish,fish_config.fish,fish_update_completions.fish}
       sed -i "s|/usr/local/sbin /sbin /usr/sbin||"         \
              $out/share/fish/completions/{sudo.fish,doas.fish}
+      sed -e "s| awk | ${gawk}/bin/awk |"                  \
+          -i $out/share/fish/functions/{__fish_print_packages.fish,__fish_print_addresses.fish,__fish_describe_command.fish,__fish_complete_man.fish,__fish_complete_convert_options.fish} \
+             $out/share/fish/completions/{cwebp,adb,ezjail-admin,grunt,helm,heroku,lsusb,make,p4,psql,rmmod,vim-addons}.fish
 
       cat > $out/share/fish/functions/__fish_anypython.fish <<EOF
       function __fish_anypython

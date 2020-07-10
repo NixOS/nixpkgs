@@ -28,7 +28,7 @@ in buildFHSUserEnv {
     # DGen // TODO: libarchive is broken
 
     # Dolphin
-    bluez ffmpeg gettext portaudio wxGTK30 miniupnpc mbedtls lzo sfml gsm
+    bluez ffmpeg_3 gettext portaudio wxGTK30 miniupnpc mbedtls lzo sfml gsm
     wavpack orc nettle gmp pcre vulkan-loader
 
     # DOSBox
@@ -97,13 +97,16 @@ in buildFHSUserEnv {
     libcap libtiff libva libgphoto2 libxslt libsndfile giflib zlib glib
     alsaLib zziplib bash dbus keyutils zip cabextract freetype unzip coreutils
     readline gcc SDL SDL2 curl graphite2 gtk2 gtk3 udev ncurses wayland libglvnd
-    vulkan-loader xdg_utils sqlite gnutls libbsd
+    vulkan-loader xdg_utils sqlite gnutls p11-kit libbsd
 
     # PCSX2 // TODO: "libgobject-2.0.so.0: wrong ELF class: ELFCLASS64"
 
     # WINE
     cups lcms2 mpg123 cairo unixODBC samba4 sane-backends openldap
     ocl-icd utillinux libkrb5
+
+    # Proton
+    libselinux
 
     # Winetricks
     fribidi

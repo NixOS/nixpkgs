@@ -421,7 +421,10 @@ in buildPythonPackage {
   '';
   # Regression test for #77626 removed because not more `tensorflow.contrib`.
 
-  passthru.libtensorflow = bazel-build.out;
+  passthru = {
+    deps = bazel-build.deps;
+    libtensorflow = bazel-build.out;
+  };
 
   inherit (bazel-build) meta;
 }

@@ -34,13 +34,41 @@ with lib.maintainers; {
     scope = "Maintain Freedesktop.org packages for graphical desktop.";
   };
 
+  golang = {
+    members = [
+      c00w
+      cstrahan
+      Frostman
+      kalbasit
+      mdlayher
+      mic92
+      orivej
+      rvolosatovs
+      zowoq
+    ];
+    scope = "Maintain Golang compilers.";
+  };
+
   gnome = {
     members = [
       hedning
       jtojnar
       worldofpeace
+      dasj19
     ];
     scope = "Maintain GNOME desktop environment and platform.";
+  };
+
+  matrix = {
+    members = [
+      ma27
+      pacien
+      fadenb
+      mguentner
+      ekleog
+      ralith
+    ];
+    scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
   };
 
   php = {

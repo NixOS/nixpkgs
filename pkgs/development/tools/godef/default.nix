@@ -8,7 +8,7 @@ buildGoModule rec {
   goPackagePath = "github.com/rogpeppe/godef";
   subPackages = [ "." ];
 
-  modSha256 = "06mi8f2qs54gk2anxqcf70h96s63a99xhnlm294djyv37wy1yffi";
+  vendorSha256 = null;
 
   src = fetchFromGitHub {
     inherit rev;

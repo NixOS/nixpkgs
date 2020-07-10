@@ -19,23 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-datetime";
-  version = "2.2.2";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0a0pqrpmrdd5pch30lizr9righlc7165z7krmnaxrzd0fvfkbr2h";
+    sha256 = "0z5a4jkmg8jw3yjdq89njhqcpms2rbq7rnsh83q9gh8v3qidk75d";
   };
-
-  patches = [
-    # https://github.com/elementary/wingpanel-indicator-datetime/pull/207
-    # Fixes lots of issues despite being rejected upstream
-    # https://github.com/elementary/wingpanel-indicator-datetime/issues/206
-    # https://github.com/elementary/wingpanel-indicator-datetime/issues/55
-    # https://github.com/elementary/wingpanel-indicator-datetime/issues/127
-    ./207.patch
-  ];
 
   passthru = {
     updateScript = pantheon.updateScript {

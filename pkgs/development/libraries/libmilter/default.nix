@@ -28,10 +28,11 @@ stdenv.mkDerivation rec {
       define(\`confLIBGRP', \`root')
       APPENDDEF(\`confENVDEF', \`-DNETINET6')
     EOF
+    export MILTER_SOVER=1
     sh Build -f ./a.m4
   '';
 
-  patches = [ ./install.patch ./sharedlib.patch ./glibc-2.30.patch ];
+  patches = [ ./install.patch ./sharedlib.patch ./glibc-2.30.patch ./darwin.patch ];
 
   nativeBuildInputs = [ m4 ];
 

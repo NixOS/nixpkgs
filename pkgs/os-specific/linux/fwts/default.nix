@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fwts";
-  version = "20.03.00";
+  version = "20.06.01";
 
   src = fetchzip {
     url = "http://fwts.ubuntu.com/release/${pname}-V${version}.tar.gz";
-    sha256 = "0h56lclvs8l5jf6zh790ki9k4mp9r8sqv2pynnciqlkz8nj71qah";
+    sha256 = "04wxhmibykhm7jjw3xdmbn0rn25dsr11cig77k2jkhp7nwwqdm11";
     stripRoot = false;
   };
 

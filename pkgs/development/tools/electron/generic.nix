@@ -1,4 +1,4 @@
-{ stdenv, libXScrnSaver, makeWrapper, fetchurl, wrapGAppsHook, glib, gtk3, unzip, atomEnv, libuuid, at-spi2-atk, at-spi2-core}:
+{ stdenv, libXScrnSaver, makeWrapper, fetchurl, wrapGAppsHook, glib, gtk3, unzip, atomEnv, libuuid, at-spi2-atk, at-spi2-core, libdrm, mesa }:
 
 version: hashes:
 let
@@ -8,7 +8,7 @@ let
     description = "Cross platform desktop application shell";
     homepage = "https://github.com/electron/electron";
     license = licenses.mit;
-    maintainers = with maintainers; [ travisbhartwell manveru ];
+    maintainers = with maintainers; [ travisbhartwell manveru prusnak ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" "armv7l-linux" "aarch64-linux" ];
   };
 
@@ -33,6 +33,8 @@ let
     src = fetcher version (get tags platform) (get hashes platform);
   };
 
+  electronLibPath = stdenv.lib.makeLibraryPath ([ libuuid at-spi2-atk at-spi2-core ] ++ stdenv.lib.optionals (version > "9") [ libdrm mesa ]);
+
   linux = {
     buildInputs = [ glib gtk3 ];
 
@@ -56,7 +58,7 @@ let
     postFixup = ''
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${atomEnv.libPath}:${stdenv.lib.makeLibraryPath [ libuuid at-spi2-atk at-spi2-core ]}:$out/lib/electron" \
+        --set-rpath "${atomEnv.libPath}:${electronLibPath}:$out/lib/electron" \
         $out/lib/electron/electron
 
       wrapProgram $out/lib/electron/electron \

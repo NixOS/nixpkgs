@@ -1,17 +1,20 @@
-{ stdenv, steamArch, fetchurl, writeText, python2, dpkg }:
+{ stdenv, fetchurl }:
 
-let input = builtins.getAttr steamArch (import ./runtime-generated.nix { inherit fetchurl; });
+stdenv.mkDerivation rec {
 
-    inputFile = writeText "steam-runtime.json" (builtins.toJSON input);
+  name = "steam-runtime";
+  # from https://repo.steampowered.com/steamrt-images-scout/snapshots/
+  version = "0.20200417.0";
 
-in stdenv.mkDerivation {
-  name = "steam-runtime-2016-08-13";
-
-  nativeBuildInputs = [ python2 dpkg stdenv.cc.bintools ];
+  src = fetchurl {
+    url = "https://repo.steampowered.com/steamrt-images-scout/snapshots/${version}/steam-runtime.tar.xz";
+    sha256 = "0d4dfl6i31i8187wj8rr9yvmrg32bx96bsgs2ya21b00czf070sy";
+    name = "scout-runtime-${version}.tar.gz";
+  };
 
   buildCommand = ''
     mkdir -p $out
-    python2 ${./build-runtime.py} -i ${inputFile} -r $out
+    tar -C $out --strip=1 -x -f $src
   '';
 
   meta = with stdenv.lib; {

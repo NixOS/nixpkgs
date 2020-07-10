@@ -244,6 +244,10 @@ in
       if cfg.daemon.enable then nss_pam_ldapd else nss_ldap
     );
 
+    system.nssDatabases.group = optional cfg.nsswitch "ldap";
+    system.nssDatabases.passwd = optional cfg.nsswitch "ldap";
+    system.nssDatabases.shadow = optional cfg.nsswitch "ldap";
+
     users = mkIf cfg.daemon.enable {
       groups.nslcd = {
         gid = config.ids.gids.nslcd;

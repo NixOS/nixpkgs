@@ -9,7 +9,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "hoPS37W6qeUBqaZO66XCwRF+rbeBqxzXqdJVg0r22u8=";
+    sha256 = "1vysyr586mfjm7biraw1nynpw4f1qajynkm6m40ybadsnpgx50w6";
   };
 
   outputs = [ "out" "dev" ];

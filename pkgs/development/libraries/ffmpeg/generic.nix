@@ -163,7 +163,6 @@ stdenv.mkDerivation rec {
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"
-      "--pkg-config=pkg-config" # Override ffmpeg's ./configure assumption that pkg-config is prefixed by the architecture. (e.g. aarch64-unknown-linux-gnu-pkg-config)
   ] ++ optional stdenv.cc.isClang "--cc=clang");
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -174,7 +173,7 @@ stdenv.mkDerivation rec {
     libvorbis lzma soxr x264 x265 xvidcore zlib libopus speex nv-codec-headers
   ] ++ optionals openglSupport [ libGL libGLU ]
     ++ optional libmfxSupport intel-media-sdk
-    ++ optional vpxSupport libaom
+    ++ optional libaomSupport libaom
     ++ optional vpxSupport libvpx
     ++ optionals (!isDarwin && !isAarch32) [ libpulseaudio ] # Need to be fixed on Darwin and ARM
     ++ optional ((isLinux || isFreeBSD) && !isAarch32) libva
@@ -199,9 +198,10 @@ stdenv.mkDerivation rec {
         --replace "includedir=$out" "includedir=''${!outputInclude}"
     done
   '' + optionalString stdenv.isLinux ''
-    # Set RUNPATH so that libnvcuvid in /run/opengl-driver(-32)/lib can be found.
+    # Set RUNPATH so that libnvcuvid and libcuda in /run/opengl-driver(-32)/lib can be found.
     # See the explanation in addOpenGLRunpath.
-    addOpenGLRunpath $out/lib/libavcodec.so*
+    addOpenGLRunpath $out/lib/libavcodec.so
+    addOpenGLRunpath $out/lib/libavutil.so
   '';
 
   installFlags = [ "install-man" ];

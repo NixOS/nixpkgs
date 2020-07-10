@@ -11,7 +11,7 @@
 , dbus
 , gst_all_1
 , alsaLib
-, ffmpeg
+, ffmpeg_3
 , libjack2
 , udev
 , libva
@@ -33,7 +33,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pipewire";
-  version = "0.3.2";
+  version = "0.3.6";
 
   outputs = [ "out" "lib" "dev" "doc" ];
 
@@ -42,8 +42,15 @@ stdenv.mkDerivation rec {
     owner = "pipewire";
     repo = "pipewire";
     rev = version;
-    sha256 = "U7lqvn2vMIxARNplzNX9H3Ztlfv1IH8LozJsq7JSEKs=";
+    sha256 = "0g149vyaigf4gzm764fcgxxci9niw19z0af9afs4diwq5xzr1qd3";
   };
+
+  patches = [ (fetchpatch {
+    # Brought by https://gitlab.freedesktop.org/pipewire/pipewire/-/merge_requests/263,
+    # should be part of > 0.3.6
+    url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/d1162f28efd502fcb973e172867970f5cc8d7a6b.patch";
+    sha256 = "0ng34yin5726cvv0nll1b2xigyq6mj6j516l3xi0ys1i2g2fyby9";
+  })];
 
   nativeBuildInputs = [
     doxygen
@@ -59,7 +66,7 @@ stdenv.mkDerivation rec {
     alsaLib
     bluez
     dbus
-    ffmpeg
+    ffmpeg_3
     glib
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
@@ -72,13 +79,6 @@ stdenv.mkDerivation rec {
     vulkan-headers
     vulkan-loader
     xorg.libX11
-  ];
-  patches = [
-      # fix SIGILL in fmt-ops: https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/227
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/1b3aaba206f48e75bb34ff0cd00321bd3d6db2b4.patch";
-        sha256 = "08bmr9k2r0q4r7vhhm28k558nk3mz3jfnqswvq9mcj7p0srmfb4x";
-      })
   ];
 
   mesonFlags = [

@@ -29,7 +29,7 @@
 
 # Media support (implies audio support)
 , mediaSupport ? true
-, ffmpeg
+, ffmpeg_3
 
 , gmp
 
@@ -83,26 +83,26 @@ let
   ]
   ++ optionals pulseaudioSupport [ libpulseaudio ]
   ++ optionals mediaSupport [
-    ffmpeg
+    ffmpeg_3
   ];
 
   # Library search path for the fte transport
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "9.0.9";
+  version = "9.5";
 
   lang = "en-US";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
-      sha256 = "0ws4s0jn559j1ih60wqspxvr5wpqww29kzk0xzzbr56wfyahp4fg";
+      sha256 = "0l4fz2zkgwv2qniia4nv53a4pd79hfbgb66jn68r44diails1z08";
     };
 
     i686-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
-      sha256 = "0sv73jlv0qwlkxgqkmqg1flsa9lbkxa4yahny5wrfgsbw74xibkl";
+      sha256 = "1h4awhyaiws68s727pq9r32xqg2878dl2df4kbc2nmllwrl2fxq3";
     };
   };
 in
@@ -401,6 +401,7 @@ stdenv.mkDerivation rec {
       the `/nix/store`.
     '';
     homepage = "https://www.torproject.org/";
+    changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
     platforms = attrNames srcs;
     maintainers = with maintainers; [ offline matejc doublec thoughtpolice joachifm hax404 cap ];
     hydraPlatforms = [];

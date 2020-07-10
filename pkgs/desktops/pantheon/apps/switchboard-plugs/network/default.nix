@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-network";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0pqkr7swjgla8klcjdcwgk2fipiwvylk8m71l1fymazvzwxrbxw6";
+    sha256 = "1k7925qrgjvh1x8ijhkh3p0z4ypgmx3lg21ygr8qhlp7xr3zm8d5";
   };
 
   passthru = {

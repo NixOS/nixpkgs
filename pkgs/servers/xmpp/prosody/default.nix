@@ -1,5 +1,6 @@
 { stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg
 , lua5, luasocket, luasec, luaexpat, luafilesystem, luabitop
+, nixosTests
 , withLibevent ? true, luaevent ? null
 , withDBI ? true, luadbi ? null
 # use withExtraLibs to add additional dependencies of community modules
@@ -71,7 +72,13 @@ stdenv.mkDerivation rec {
         --prefix LUA_CPATH ';' "$LUA_CPATH"
     '';
 
-  passthru.communityModules = withCommunityModules;
+  passthru = {
+    communityModules = withCommunityModules;
+    tests = {
+      main = nixosTests.prosody;
+      mysql = nixosTests.prosodyMysql;
+    };
+  };
 
   meta = {
     description = "Open-source XMPP application server written in Lua";

@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
       location-aware applications GPS/AIS logs for diagnostic purposes.
     '';
     homepage = "http://catb.org/gpsd/";
-    license = "BSD-style";
+    license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor rasendubi ];
   };

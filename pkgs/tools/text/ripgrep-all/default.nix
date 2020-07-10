@@ -1,25 +1,25 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, makeWrapper, ffmpeg
+{ stdenv, lib, fetchFromGitHub, rustPlatform, makeWrapper, ffmpeg_3
 , pandoc, poppler_utils, ripgrep, Security, imagemagick, tesseract
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ripgrep-all";
-  version = "0.9.5";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "phiresky";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1nl03i36ilhxn5xbcry6pcr7vbl5667m43flpxaa0lf1wijzn5c2";
+    sha256 = "1wjpgi7m3lxybllkr3r60zaphp02ykq2syq72q9ail2760cjcir6";
   };
 
-  cargoSha256 = "0ndyd8qrvljkk6yvpsp0w17iizxb529sh5q2bj790m32x0gz2w8l";
+  cargoSha256 = "0arwxqrpxdws4q1pnqzqkp1yv5aas08lkzh1vcgmf26j58sycniy";
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = lib.optional stdenv.isDarwin Security;
 
   postInstall = ''
     wrapProgram $out/bin/rga \
-      --prefix PATH ":" "${lib.makeBinPath [ ffmpeg pandoc poppler_utils ripgrep imagemagick tesseract ]}"
+      --prefix PATH ":" "${lib.makeBinPath [ ffmpeg_3 pandoc poppler_utils ripgrep imagemagick tesseract ]}"
   '';
 
   # Use upstream's example data to run a couple of queries to ensure the dependencies

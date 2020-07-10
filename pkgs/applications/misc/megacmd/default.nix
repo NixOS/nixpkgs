@@ -5,7 +5,7 @@
 , cryptopp
 , curl
 , fetchFromGitHub
-, ffmpeg
+, ffmpeg_3
 , freeimage
 , gcc-unwrapped
 , libmediainfo
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     c-ares
     cryptopp
     curl
-    ffmpeg
+    ffmpeg_3
     freeimage
     gcc-unwrapped
     libmediainfo

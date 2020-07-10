@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     # https://gitlab.gnome.org/GNOME/polari/-/merge_requests/141
     (fetchpatch {
       url = "https://github.com/TelepathyIM/telepathy-mission-control/commit/d8dab08fe8db137c6bbd8bbdc3d9b01d98c48910.patch";
-      sha256 = "Sw+V5QcWQ5zugwTTdkwa3pqV+v5XD0OhH6xI5ymgkOU=";
+      sha256 = "1rchl0lyfj5c3yhl63spzvx9b6ny3967dlq4hgp9qhqn0zjra3sb";
     })
   ];
 

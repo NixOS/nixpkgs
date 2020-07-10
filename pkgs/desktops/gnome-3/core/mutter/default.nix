@@ -44,13 +44,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "3.36.2";
+  version = "3.36.4";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1x6svmd1k6w6a2m6ssq4hi997nxyq6z64fjjaid97z2rn177dcvm";
+    sha256 = "0p3jglw6f2h67kwk89qz1rz23y25lip8m2mp2xshf2vrg4a930as";
   };
 
   mesonFlags = [

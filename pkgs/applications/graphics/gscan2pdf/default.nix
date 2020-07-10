@@ -10,11 +10,11 @@ with stdenv.lib;
 
 perlPackages.buildPerlPackage rec {
   pname = "gscan2pdf";
-  version = "2.6.5";
+  version = "2.8.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/gscan2pdf/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0x8931i5zs4zl3iqjhlp7h8y6ssklxiqsddz5kh84nl3p0izbg0y";
+    sha256 = "0rqx41hkppil3lp1dhkxwlhv0kwp8w8fkgzlapryq1yd9pgkx6lw";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -64,6 +64,7 @@ perlPackages.buildPerlPackage rec {
 
     # Add runtime dependencies
     wrapProgram "$out/bin/gscan2pdf" \
+      --prefix PATH : "${sane-backends}/bin" \
       --prefix PATH : "${imagemagick}/bin" \
       --prefix PATH : "${libtiff}/bin" \
       --prefix PATH : "${djvulibre}/bin" \

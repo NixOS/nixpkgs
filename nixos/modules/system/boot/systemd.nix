@@ -164,7 +164,6 @@ let
       "systemd-timedated.service"
       "systemd-localed.service"
       "systemd-hostnamed.service"
-      "systemd-binfmt.service"
       "systemd-exit.service"
       "systemd-update-done.service"
     ] ++ optionals config.services.journald.enableHttpGateway [
@@ -827,27 +826,28 @@ in
   config = {
 
     warnings = concatLists (mapAttrsToList (name: service:
-      optional (service.serviceConfig.Type or "" == "oneshot" && service.serviceConfig.Restart or "no" != "no")
-        "Service ‘${name}.service’ with ‘Type=oneshot’ must have ‘Restart=no’") cfg.services);
+      let
+        type = service.serviceConfig.Type or "";
+        restart = service.serviceConfig.Restart or "no";
+      in optional
+      (type == "oneshot" && (restart == "always" || restart == "on-success"))
+      "Service '${name}.service' with 'Type=oneshot' cannot have 'Restart=always' or 'Restart=on-success'")
+      cfg.services);
 
     system.build.units = cfg.units;
 
-    # Systemd provides various NSS modules to look up dynamic users, locally
-    # configured IP adresses and local container hostnames.
-    # On NixOS, these can only be passed to the NSS system via nscd (and its
-    # LD_LIBRARY_PATH), which is why it's usually a very good idea to have nscd
-    # enabled (also see the config.nscd.enable description).
-    # While there is already an assertion in place complaining loudly about
-    # having nssModules configured and nscd disabled, for some reason we still
-    # check for nscd being enabled before adding to nssModules.
-    system.nssModules = optional config.services.nscd.enable systemd.out;
-    system.nssDatabases = mkIf config.services.nscd.enable {
+    system.nssModules = [ systemd.out ];
+    system.nssDatabases = {
       hosts = (mkMerge [
         [ "mymachines" ]
         (mkOrder 1600 [ "myhostname" ] # 1600 to ensure it's always the last
       )
       ]);
       passwd = (mkMerge [
+        [ "mymachines" ]
+        (mkAfter [ "systemd" ])
+      ]);
+      group = (mkMerge [
         [ "mymachines" ]
         (mkAfter [ "systemd" ])
       ]);
@@ -1060,7 +1060,6 @@ in
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
-    systemd.services.systemd-binfmt.wants = [ "proc-sys-fs-binfmt_misc.mount" ];
     systemd.services.systemd-importd.environment = proxy_env;
 
     # Don't bother with certain units in containers.

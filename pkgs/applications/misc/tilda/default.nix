@@ -7,13 +7,13 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   pname = "tilda";
-  version = "1.5.0";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "lanoxx";
     repo = "tilda";
     rev = "${pname}-${version}";
-    sha256 = "13djibj3s7ig13c57ywy38pxy3qfmqihii2c0g15fy2h9q8xp1gx";
+    sha256 = "0psq0f4s0s92bba6wwcf6b0j7i59b76svqxhvpavwv53yvhmmamn";
   };
 
   nativeBuildInputs = [ autoreconfHook makeWrapper pkgconfig ];

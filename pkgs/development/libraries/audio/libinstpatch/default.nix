@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libinstpatch";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "swami";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1v7mv43xxwrzi3agrc60agcw46jaidr8ql9kkm1w4jxkf4c6z6dz";
+    sha256 = "0psx4hc5yksfd3k2xqsc7c8lbz2d4yybikyddyd9hlkhq979cmjb";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

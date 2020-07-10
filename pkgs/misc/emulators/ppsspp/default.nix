@@ -1,7 +1,7 @@
 { SDL2
 , cmake
 , fetchFromGitHub
-, ffmpeg
+, ffmpeg_3
 , glew
 , lib
 , libzip
@@ -37,7 +37,7 @@ mkDerivation rec {
 
   buildInputs = [
     SDL2
-    ffmpeg
+    ffmpeg_3
     glew
     libzip
     qtbase

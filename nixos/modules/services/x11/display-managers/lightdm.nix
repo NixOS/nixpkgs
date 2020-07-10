@@ -53,8 +53,8 @@ let
       ${optionalString cfg.greeter.enable ''
         greeter-session = ${cfg.greeter.name}
       ''}
-      ${optionalString config.services.xserver.displayManager.autoLogin.enable ''
-        autologin-user = ${config.services.xserver.displayManager.autoLogin.user}
+      ${optionalString dmcfg.autoLogin.enable ''
+        autologin-user = ${dmcfg.autoLogin.user}
         autologin-user-timeout = ${toString cfg.autoLogin.timeout}
         autologin-session = ${sessionData.autologinSession}
       ''}
@@ -82,10 +82,20 @@ in
     ./lightdm-greeters/enso-os.nix
     ./lightdm-greeters/pantheon.nix
     ./lightdm-greeters/tiny.nix
-    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "lightdm" "autoLogin" "enable" ]
-      "Set the option `services.xserver.displayManager.autoLogin.enable' instead.")
-    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "lightdm" "autoLogin" "user" ]
-      "Set the option `services.xserver.displayManager.autoLogin.user' instead.")
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "lightdm" "autoLogin" "enable" ] [
+      "services"
+      "xserver"
+      "displayManager"
+      "autoLogin"
+      "enable"
+    ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "lightdm" "autoLogin" "user" ] [
+     "services"
+     "xserver"
+     "displayManager"
+     "autoLogin"
+     "user"
+    ])
   ];
 
   options = {
@@ -136,8 +146,9 @@ in
       };
 
       background = mkOption {
-        type = types.str;
-        default = "${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom}/share/artwork/gnome/nix-wallpaper-simple-dark-gray_bottom.png";
+        type = types.path;
+        # Manual cannot depend on packages, we are actually setting the default in config below.
+        defaultText = "pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath";
         description = ''
           The background image or color to use.
         '';
@@ -172,12 +183,12 @@ in
           LightDM requires services.xserver.enable to be true
         '';
       }
-      { assertion = config.services.xserver.displayManager.autoLogin.enable -> sessionData.autologinSession != null;
+      { assertion = dmcfg.autoLogin.enable -> sessionData.autologinSession != null;
         message = ''
           LightDM auto-login requires that services.xserver.displayManager.defaultSession is set.
         '';
       }
-      { assertion = !cfg.greeter.enable -> (config.services.xserver.displayManager.autoLogin.enable && cfg.autoLogin.timeout == 0);
+      { assertion = !cfg.greeter.enable -> (dmcfg.autoLogin.enable && cfg.autoLogin.timeout == 0);
         message = ''
           LightDM can only run without greeter if automatic login is enabled and the timeout for it
           is set to zero.
@@ -185,9 +196,12 @@ in
       }
     ];
 
+    # Keep in sync with the defaultText value from the option definition.
+    services.xserver.displayManager.lightdm.background = mkDefault pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath;
+
     # Set default session in session chooser to a specified values – basically ignore session history.
     # Auto-login is already covered by a config value.
-    services.xserver.displayManager.job.preStart = optionalString (!config.services.xserver.displayManager.autoLogin.enable && dmcfg.defaultSession != null) ''
+    services.xserver.displayManager.job.preStart = optionalString (!dmcfg.autoLogin.enable && dmcfg.defaultSession != null) ''
       ${setSessionScript}/bin/set-session ${dmcfg.defaultSession}
     '';
 

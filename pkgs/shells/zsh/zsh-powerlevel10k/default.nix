@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "powerlevel10k";
-  version = "1.7.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "romkatv";
     repo = "powerlevel10k";
     rev = "v${version}";
-    sha256 = "04j37qmgzj62gixysj3di9dccfib4hx1c4ld9kcms3ag7k403bgj";
+    sha256 = "1z6abvp642n40biya88n86ff1wiry00dlwawqwxp7q5ds55jhbv1";
   };
 
   patches = [
@@ -25,8 +25,7 @@ stdenv.mkDerivation rec {
     install -D powerlevel10k.zsh-theme --target-directory=$out/share/zsh-powerlevel10k
     install -D config/* --target-directory=$out/share/zsh-powerlevel10k/config
     install -D internal/* --target-directory=$out/share/zsh-powerlevel10k/internal
-    rm -r gitstatus/bin
-    install -D gitstatus/* --target-directory=$out/share/zsh-powerlevel10k/gitstatus
+    cp -R gitstatus $out/share/zsh-powerlevel10k/gitstatus
   '';
 
   meta = {

@@ -15,6 +15,7 @@
 , libpulseaudio
 , AudioUnit, Cocoa, CoreAudio, CoreServices, ForceFeedback, OpenGL
 , audiofile, libiconv
+, withStatic ? false
 }:
 
 # NOTE: When editing this expression see if the same change applies to
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
     sha256 = "0qy8wbqvfkb5ps8kxgaaf2zzpkjqbsw712hlp74znbn0jpv6i4il";
   };
-
+  dontDisableStatic = withStatic;
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
 

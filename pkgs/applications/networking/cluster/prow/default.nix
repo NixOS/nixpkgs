@@ -13,7 +13,7 @@ buildGoModule rec {
     sha256 = "0mc3ynmbf3kidibdy8k3v3xjlvmxl8w7zm1z2m0skmhd0y4bpmk4";
   };
 
-  modSha256 = "1xajdg10a27icc7g1y3ym4pkgg64rp4afybbjlhbg3k3whir9xa1";
+  vendorSha256 = "16fdc5r28andm8my4fxj0f1yygx6j2mvn92i6xdfhbcra0lvr4ql";
 
   subPackages = [
     "prow/cmd/admission"
