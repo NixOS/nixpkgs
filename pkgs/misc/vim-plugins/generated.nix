@@ -411,6 +411,18 @@ let
     meta.homepage = "https://github.com/neoclide/coc-eslint/";
   };
 
+  coc-explorer = buildVimPluginFrom2Nix {
+    pname = "coc-explorer";
+    version = "2020-07-07";
+    src = fetchFromGitHub {
+      owner = "weirongxu";
+      repo = "coc-explorer";
+      rev = "ec4b3f67c677211d65491c3bb042b27e92188efc";
+      sha256 = "13xqs85brqmcj06dndqhxgjxk8z178jpd2qjis0j8h92w0wwac71";
+    };
+    meta.homepage = "https://github.com/weirongxu/coc-explorer/";
+  };
+
   coc-fzf = buildVimPluginFrom2Nix {
     pname = "coc-fzf";
     version = "2020-08-13";
