@@ -9235,6 +9235,10 @@ in
 
   rgbds = callPackage ../development/compilers/rgbds { };
 
+  rocm-device-libs = callPackage ../development/libraries/rocm-device-libs {
+    inherit (llvmPackages_rocm) clang clang-unwrapped lld llvm;
+  };
+
   rocm-runtime = callPackage ../development/libraries/rocm-runtime { };
 
   rocm-thunk = callPackage ../development/libraries/rocm-thunk { };
