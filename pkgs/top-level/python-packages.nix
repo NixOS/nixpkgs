@@ -930,6 +930,8 @@ in {
 
   logzero = callPackage ../development/python-modules/logzero { };
 
+  mac_alias = callPackage ../development/python-modules/mac_alias { };
+
   macropy = callPackage ../development/python-modules/macropy { };
 
   mail-parser = callPackage ../development/python-modules/mail-parser { };
