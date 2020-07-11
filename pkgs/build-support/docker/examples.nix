@@ -364,4 +364,22 @@ rec {
     created = "now";
   };
 
+  # buildImage without explicit tag
+  bashNoTag = pkgs.dockerTools.buildImage {
+    name = "bash-no-tag";
+    contents = pkgs.bashInteractive;
+  };
+
+  # buildLayeredImage without explicit tag
+  bashNoTagLayered = pkgs.dockerTools.buildLayeredImage {
+    name = "bash-no-tag-layered";
+    contents = pkgs.bashInteractive;
+  };
+
+  # buildImage without explicit tag
+  bashNoTagStreamLayered = pkgs.dockerTools.streamLayeredImage {
+    name = "bash-no-tag-stream-layered";
+    contents = pkgs.bashInteractive;
+  };
+
 }

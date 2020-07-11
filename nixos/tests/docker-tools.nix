@@ -30,7 +30,44 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         )
 
     docker.succeed("docker run --rm ${examples.bash.imageName} bash --version")
+    # Check imageTag attribute matches image
+    docker.succeed("docker images --format '{{.Tag}}' | grep -F '${examples.bash.imageTag}'")
     docker.succeed("docker rmi ${examples.bash.imageName}")
+
+    # The remaining combinations
+    with subtest("Ensure imageTag attribute matches image"):
+        docker.succeed(
+            "docker load --input='${examples.bashNoTag}'"
+        )
+        docker.succeed(
+            "docker images --format '{{.Tag}}' | grep -F '${examples.bashNoTag.imageTag}'"
+        )
+        docker.succeed("docker rmi ${examples.bashNoTag.imageName}:${examples.bashNoTag.imageTag}")
+
+        docker.succeed(
+            "docker load --input='${examples.bashNoTagLayered}'"
+        )
+        docker.succeed(
+            "docker images --format '{{.Tag}}' | grep -F '${examples.bashNoTagLayered.imageTag}'"
+        )
+        docker.succeed("docker rmi ${examples.bashNoTagLayered.imageName}:${examples.bashNoTagLayered.imageTag}")
+
+        docker.succeed(
+            "${examples.bashNoTagStreamLayered} | docker load"
+        )
+        docker.succeed(
+            "docker images --format '{{.Tag}}' | grep -F '${examples.bashNoTagStreamLayered.imageTag}'"
+        )
+        docker.succeed(
+            "docker rmi ${examples.bashNoTagStreamLayered.imageName}:${examples.bashNoTagStreamLayered.imageTag}"
+        )
+
+        docker.succeed(
+            "docker load --input='${examples.nixLayered}'"
+        )
+        docker.succeed("docker images --format '{{.Tag}}' | grep -F '${examples.nixLayered.imageTag}'")
+        docker.succeed("docker rmi ${examples.nixLayered.imageName}")
+
 
     with subtest(
         "Check if the nix store is correctly initialized by listing "
