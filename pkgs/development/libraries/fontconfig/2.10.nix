@@ -43,5 +43,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2; # custom but very bsd-like
     platforms = platforms.all;
     maintainers = [ maintainers.vcunat ];
+    # this package is unused in nixpkgs, removed in 20.09
+    knownVulnerabilities = [ "CVE-2016-5384" ];
   };
 }
