@@ -119,6 +119,11 @@ systemd.services.mysql.serviceConfig.ReadWritePaths = [ "/var/data" ];
       feature is disabled by default.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <varname>services.postfix.sslCACert</varname> was replaced by <varname>services.postfix.tlsTrustedAuthorities</varname> which now defaults to system certifcate authorities.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -514,6 +519,12 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
      automatically if <literal>stateVersion</literal> is 20.09 or higher.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     We now have a unified <xref linkend="opt-services.xserver.displayManager.autoLogin"/> option interface
+     to be used for every display-manager in NixOS.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -681,6 +692,12 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
        <literal>--keep-vm-state</literal> flag to match the previous
        behaviour and keep the same VM state between different test runs.
      </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <link linkend="opt-nix.buildMachines">nix.buildMachines</link> option is now type-checked.
+     There are no functional changes, however this may require updating some configurations to use correct types for all attributes.
+    </para>
    </listitem>
   </itemizedlist>
  </section>

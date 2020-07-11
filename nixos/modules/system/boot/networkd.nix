@@ -488,7 +488,7 @@ let
 
     vlanConfig = mkOption {
       default = {};
-      example = { Id = "4"; };
+      example = { Id = 4; };
       type = types.addCheck (types.attrsOf unitOption) checkVlan;
       description = ''
         Each attribute in this set specifies an option in the

@@ -19,12 +19,12 @@
 
 mkDerivation rec {
   pname = "trojita";
-  version = "0.7.20190618";
+  version = "0.7.20200706";
 
   src = fetchgit {
     url = "https://anongit.kde.org/trojita.git";
-    rev = "90b417b131853553c94ff93aef62abaf301aa8f1";
-    sha256 = "0xpxq5bzqaa68lkz90wima5q2m0mdcn0rvnigb66lylb4n20mnql";
+    rev = "e973a5169f18ca862ceb8ad749c93cd621d86e14";
+    sha256 = "0r8nmlqwgsqkk0k8xh32fkwvv6iylj35xq2h8b7l3g03yc342kbn";
   };
 
   buildInputs = [

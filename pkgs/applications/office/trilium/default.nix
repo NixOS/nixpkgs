@@ -19,16 +19,16 @@ let
     maintainers = with maintainers; [ emmanuelrosa dtzWill kampka ];
   };
 
-  version = "0.42.2";
+  version = "0.43.1";
 
   desktopSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
-    sha256 = "14vb5a2kad1h8kd1vipgaxpv6rch2fl6j0s2ja0y16xypga82wrx";
+    sha256 = "137gxd0jyvxawjlgwfmkn78z7xkngpfvcnkfhjwfdk8k6asc51w2";
   };
 
   serverSource = {
     url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz";
-    sha256 = "16dz2i4g0vgwz4fi69lmg261aqb8hs6ipfy004wv73vg46wf1pnv";
+    sha256 = "0cmkw0kqwvrf0i2zgvlpri0cg7rbfzmrhmxp92bz1hwly0bid8z7";
   };
 
 in {

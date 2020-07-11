@@ -6,6 +6,7 @@
 , biopython
 , numpy
 , scipy
+, scikitlearn
 , pandas
 , matplotlib
 , reportlab
@@ -29,6 +30,7 @@ buildPythonPackage rec {
     biopython
     numpy
     scipy
+    scikitlearn
     pandas
     matplotlib
     reportlab
@@ -43,6 +45,8 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "pandas >= 0.20.1, < 0.25.0" "pandas"
   '';
+
+  pythonImportsCheck = [ "cnvlib" ];
 
   meta = with lib; {
     homepage = "https://cnvkit.readthedocs.io";

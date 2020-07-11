@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "pint";
-  version = "0.11";
+  version = "0.14";
 
   src = fetchPypi {
     inherit version;
     pname = "Pint";
-    sha256 = "0kfgnmcs6z9ndhzvwg2xzhpwxgyyagdsdz5dns1jy40fa1q113rh";
+    sha256 = "0wkzb7g20wzpqr3xaqpq96dlfv6irw202icsz81ys8npp7mm194s";
   };
 
   disabled = pythonOlder "3.6";

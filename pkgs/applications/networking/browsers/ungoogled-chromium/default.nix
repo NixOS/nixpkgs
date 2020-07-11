@@ -2,7 +2,7 @@
 , makeWrapper, ed
 , glib, gtk3, gnome3, gsettings-desktop-schemas, gn, fetchgit
 , libva ? null
-, gcc, nspr, nss, patchelfUnstable, runCommand
+, gcc, nspr, nss, runCommand
 , lib
 
 # package customization
@@ -66,8 +66,6 @@ let
 
     # The .deb file for Google Chrome
     src = upstream-info.binary;
-
-    nativeBuildInputs = [ patchelfUnstable ];
 
     phases = [ "unpackPhase" "patchPhase" "installPhase" "checkPhase" ];
 

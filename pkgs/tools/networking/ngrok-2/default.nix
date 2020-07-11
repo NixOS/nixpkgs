@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, patchelfUnstable }:
+{ stdenv, fetchurl }:
 
 with stdenv.lib;
 
@@ -23,8 +23,6 @@ stdenv.mkDerivation {
   src = fetchurl { inherit sha256 url; };
 
   sourceRoot = ".";
-
-  nativeBuildInputs = optionals stdenv.isLinux [ patchelfUnstable ];
 
   unpackPhase = "cp $src ngrok";
 

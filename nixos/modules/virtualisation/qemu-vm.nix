@@ -81,6 +81,7 @@ let
 
   drivesCmdLine = drives: concatStringsSep " " (imap1 driveCmdline drives);
 
+
   # Creates a device name from a 1-based a numerical index, e.g.
   # * `driveDeviceName 1` -> `/dev/vda`
   # * `driveDeviceName 2` -> `/dev/vdb`
@@ -98,6 +99,13 @@ let
 
   addDeviceNames =
     imap1 (idx: drive: drive // { device = driveDeviceName idx; });
+
+  efiPrefix =
+    if (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then "${pkgs.OVMF.fd}/FV/OVMF"
+    else if pkgs.stdenv.isAarch64 then "${pkgs.OVMF.fd}/FV/AAVMF"
+    else throw "No EFI firmware available for platform";
+  efiFirmware = "${efiPrefix}_CODE.fd";
+  efiVarsDefault = "${efiPrefix}_VARS.fd";
 
   # Shell script to start the VM.
   startVM =
@@ -124,10 +132,14 @@ let
         # A writable boot disk can be booted from automatically.
         ${qemu}/bin/qemu-img create -f qcow2 -b ${bootDisk}/disk.img $TMPDIR/disk.img || exit 1
 
+        NIX_EFI_VARS=$(readlink -f ''${NIX_EFI_VARS:-${cfg.efiVars}})
+
         ${if cfg.useEFIBoot then ''
-          # VM needs a writable flash BIOS.
-          cp ${bootDisk}/bios.bin $TMPDIR || exit 1
-          chmod 0644 $TMPDIR/bios.bin || exit 1
+          # VM needs writable EFI vars
+          if ! test -e "$NIX_EFI_VARS"; then
+            cp ${bootDisk}/efi-vars.fd "$NIX_EFI_VARS" || exit 1
+            chmod 0644 "$NIX_EFI_VARS" || exit 1
+          fi
         '' else ''
         ''}
       '' else ''
@@ -164,6 +176,8 @@ let
 
   # Generate a hard disk image containing a /boot partition and GRUB
   # in the MBR.  Used when the `useBootLoader' option is set.
+  # Uses `runInLinuxVM` to create the image in a throwaway VM.
+  # See note [Disk layout with `useBootLoader`].
   # FIXME: use nixos/lib/make-disk-image.nix.
   bootDisk =
     pkgs.vmTools.runInLinuxVM (
@@ -172,21 +186,22 @@ let
             ''
               mkdir $out
               diskImage=$out/disk.img
-              bootFlash=$out/bios.bin
-              ${qemu}/bin/qemu-img create -f qcow2 $diskImage "40M"
+              ${qemu}/bin/qemu-img create -f qcow2 $diskImage "60M"
               ${if cfg.useEFIBoot then ''
-                cp ${pkgs.OVMF-CSM.fd}/FV/OVMF.fd $bootFlash
-                chmod 0644 $bootFlash
+                efiVars=$out/efi-vars.fd
+                cp ${efiVarsDefault} $efiVars
+                chmod 0644 $efiVars
               '' else ''
               ''}
             '';
           buildInputs = [ pkgs.utillinux ];
-          QEMU_OPTS = if cfg.useEFIBoot
-                      then "-pflash $out/bios.bin -nographic -serial pty"
-                      else "-nographic -serial pty";
+          QEMU_OPTS = "-nographic -serial stdio -monitor none"
+                      + lib.optionalString cfg.useEFIBoot (
+                        " -drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
+                      + " -drive if=pflash,format=raw,unit=1,file=$efiVars");
         }
         ''
-          # Create a /boot EFI partition with 40M and arbitrary but fixed GUIDs for reproducibility
+          # Create a /boot EFI partition with 60M and arbitrary but fixed GUIDs for reproducibility
           ${pkgs.gptfdisk}/bin/sgdisk \
             --set-alignment=1 --new=1:34:2047 --change-name=1:BIOSBootPartition --typecode=1:ef02 \
             --set-alignment=512 --largest-new=2 --change-name=2:EFISystem --typecode=2:ef00 \
@@ -197,6 +212,19 @@ let
             --partition-guid=2:970C694F-AFD0-4B99-B750-CDB7A329AB6F \
             --hybrid 2 \
             --recompute-chs /dev/vda
+
+          ${optionalString (config.boot.loader.grub.device != "/dev/vda")
+            # In this throwaway VM, we only have the /dev/vda disk, but the
+            # actual VM described by `config` (used by `switch-to-configuration`
+            # below) may set `boot.loader.grub.device` to a different device
+            # that's nonexistent in the throwaway VM.
+            # Create a symlink for that device, so that the `grub-install`
+            # by `switch-to-configuration` will hit /dev/vda anyway.
+            ''
+              ln -s /dev/vda ${config.boot.loader.grub.device}
+            ''
+          }
+
           ${pkgs.dosfstools}/bin/mkfs.fat -F16 /dev/vda2
           export MTOOLS_SKIP_CHECK=1
           ${pkgs.mtools}/bin/mlabel -i /dev/vda2 ::boot
@@ -209,6 +237,10 @@ let
           ${pkgs.kmod}/bin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/efivarfs/efivarfs.ko.xz || true
           mkdir /boot
           mount /dev/vda2 /boot
+
+          ${optionalString config.boot.loader.efi.canTouchEfiVariables ''
+            mount -t efivarfs efivarfs /sys/firmware/efi/efivars
+          ''}
 
           # This is needed for GRUB 0.97, which doesn't know about virtio devices.
           mkdir /boot/grub
@@ -467,6 +499,16 @@ in
           '';
       };
 
+    virtualisation.efiVars =
+      mkOption {
+        default = "./${vmName}-efi-vars.fd";
+        description =
+          ''
+            Path to nvram image containing UEFI variables.  The will be created
+            on startup if it does not exist.
+          '';
+      };
+
     virtualisation.bios =
       mkOption {
         default = null;
@@ -483,7 +525,27 @@ in
 
   config = {
 
-    boot.loader.grub.device = mkVMOverride cfg.bootDevice;
+    # Note [Disk layout with `useBootLoader`]
+    #
+    # If `useBootLoader = true`, we configure 2 drives:
+    # `/dev/?da` for the root disk, and `/dev/?db` for the boot disk
+    # which has the `/boot` partition and the boot loader.
+    # Concretely:
+    #
+    # * The second drive's image `disk.img` is created in `bootDisk = ...`
+    #   using a throwaway VM. Note that there the disk is always `/dev/vda`,
+    #   even though in the final VM it will be at `/dev/*b`.
+    # * The disks are attached in `virtualisation.qemu.drives`.
+    #   Their order makes them appear as devices `a`, `b`, etc.
+    # * `fileSystems."/boot"` is adjusted to be on device `b`.
+
+    # If `useBootLoader`, GRUB goes to the second disk, see
+    # note [Disk layout with `useBootLoader`].
+    boot.loader.grub.device = mkVMOverride (
+      if cfg.useBootLoader
+        then driveDeviceName 2 # second disk
+        else cfg.bootDevice
+    );
 
     boot.initrd.extraUtilsCommands =
       ''
@@ -556,7 +618,8 @@ in
         ''-append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${consoles} $QEMU_KERNEL_PARAMS"''
       ])
       (mkIf cfg.useEFIBoot [
-        "-pflash $TMPDIR/bios.bin"
+        "-drive if=pflash,format=raw,unit=0,readonly,file=${efiFirmware}"
+        "-drive if=pflash,format=raw,unit=1,file=$NIX_EFI_VARS"
       ])
       (mkIf (cfg.bios != null) [
         "-bios ${cfg.bios}/bios.bin"
@@ -574,6 +637,8 @@ in
         driveExtraOpts.werror = "report";
       }]
       (mkIf cfg.useBootLoader [
+        # The order of this list determines the device names, see
+        # note [Disk layout with `useBootLoader`].
         {
           name = "boot";
           file = "$TMPDIR/disk.img";
@@ -628,9 +693,9 @@ in
           };
       } // optionalAttrs cfg.useBootLoader
       { "/boot" =
-          { device = "${lookupDriveDeviceName "boot" cfg.qemu.drives}2";
+          # see note [Disk layout with `useBootLoader`]
+          { device = "${lookupDriveDeviceName "boot" cfg.qemu.drives}2"; # 2 for e.g. `vdb2`, as created in `bootDisk`
             fsType = "vfat";
-            options = [ "ro" ];
             noCheck = true; # fsck fails on a r/o filesystem
           };
       });

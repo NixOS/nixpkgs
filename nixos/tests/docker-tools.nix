@@ -90,10 +90,19 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     with subtest("Ensure Docker images can use an unstable date"):
         docker.succeed(
-            "docker load --input='${examples.bash}'"
+            "docker load --input='${examples.unstableDate}'"
         )
         assert unix_time_second1 not in docker.succeed(
             "docker inspect ${examples.unstableDate.imageName} "
+            + "| ${pkgs.jq}/bin/jq -r .[].Created"
+        )
+
+    with subtest("Ensure Layered Docker images can use an unstable date"):
+        docker.succeed(
+            "docker load --input='${examples.unstableDateLayered}'"
+        )
+        assert unix_time_second1 not in docker.succeed(
+            "docker inspect ${examples.unstableDateLayered.imageName} "
             + "| ${pkgs.jq}/bin/jq -r .[].Created"
         )
 
@@ -178,5 +187,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         # This check may be loosened to allow an *empty* store rather than *no* store.
         docker.succeed("docker run --rm no-store-paths ls /")
         docker.fail("docker run --rm no-store-paths ls /nix/store")
+
+    with subtest("Ensure buildLayeredImage does not change store path contents."):
+        docker.succeed(
+            "docker load --input='${pkgs.dockerTools.examples.filesInStore}'",
+            "docker run --rm file-in-store nix-store --verify --check-contents",
+            "docker run --rm file-in-store |& grep 'some data'",
+        )
   '';
 })

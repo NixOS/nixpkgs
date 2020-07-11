@@ -7,11 +7,11 @@ let
   python3Env = buildPackages.python3.withPackages (p: [p.six]);
 in stdenv.mkDerivation rec {
   pname = "spidermonkey";
-  version = "68.7.0";
+  version = "68.10.0";
 
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
-    sha256 = "0w3mad0r4khcd7hfmm3xix9x6mp5yp8g8kyh18vanfnjqdls0gmd";
+    sha256 = "0azdinwqjfv2q37gqpxmfvzsk86pvsi6cjaq1310zs26gric5j1f";
   };
 
   outputs = [ "out" "dev" ];

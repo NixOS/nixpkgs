@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, m4, zlib, bzip2, bison, flex, gettext, xz, setupDebugInfoDirs }:
+{ lib, stdenv, fetchurl, m4, zlib, bzip2, bison, flex, gettext, xz, setupDebugInfoDirs, argp-standalone }:
 
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
@@ -17,9 +17,14 @@ stdenv.mkDerivation rec {
   # We need bzip2 in NativeInputs because otherwise we can't unpack the src,
   # as the host-bzip2 will be in the path.
   nativeBuildInputs = [ m4 bison flex gettext bzip2 ];
-  buildInputs = [ zlib bzip2 xz ];
+  buildInputs = [ zlib bzip2 xz ]
+    ++ lib.optional stdenv.hostPlatform.isMusl argp-standalone;
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
+
+  preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
+    NIX_CFLAGS_COMPILE+=" -fgnu89-inline"
+  '';
 
   configureFlags =
     [ "--program-prefix=eu-" # prevent collisions with binutils
