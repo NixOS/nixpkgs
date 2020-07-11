@@ -30077,6 +30077,8 @@ in
 
   atlantis = callPackage ../applications/networking/cluster/atlantis { };
 
+  fn-cli = callPackage ../applications/networking/cluster/fn-cli { };
+
   auctex = callPackage ../tools/typesetting/tex/auctex { };
 
   areca = callPackage ../applications/backup/areca {
