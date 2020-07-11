@@ -1,13 +1,13 @@
-{ alsaLib, alsaUtils, cifs-utils, fetchurl, ffmpeg_3, libav, mono, stdenv }:
+{ alsaLib, alsaUtils, cifs-utils, fetchurl, ffmpeg_3, libav, zlib, stdenv }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "roon-server";
-  version = "100600401";
+  version = "100700571";
 
   src = fetchurl {
     url = "http://download.roonlabs.com/updates/stable/RoonServer_linuxx64_${version}.tar.bz2";
-    sha256 = "121mmdh35q4bpgsqhcps6a6q1f4ld9v4hq9gp181bf2n779pk8sh";
+    sha256 = "191vlzf10ypkk1prp6x2rszlmsihdwpd3wvgf2jg6ckwyxy2hc6k";
   };
 
   installPhase = ''
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     sed -i '/ln -sf/ d' Server/RoonServer
     mkdir -p $out/opt
     mv * $out/opt
+    ln -s ${zlib}/lib/libz.so.1 $out/opt/RoonMono/lib/libz.so.1
     ln -sf $out/opt/RoonMono/bin/mono-sgen $out/opt/RoonMono/bin/RoonServer
     ln -sf $out/opt/RoonMono/bin/mono-sgen $out/opt/RoonMono/bin/RoonAppliance
     ln -sf $out/opt/RoonMono/bin/mono-sgen $out/opt/RoonMono/bin/RAATServer
