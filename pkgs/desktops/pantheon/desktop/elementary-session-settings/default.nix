@@ -1,7 +1,8 @@
 { stdenv
 , fetchFromGitHub
-, fetchpatch
 , substituteAll
+, desktop-file-utils
+, pkg-config
 , writeScript
 , pantheon
 , gnome-keyring
@@ -16,7 +17,6 @@
 , writeText
 , meson
 , ninja
-, pkg-config
 }:
 
 let
@@ -69,52 +69,42 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "elementary-session-settings";
-  version = "unstable-2019-11-12";
+  pname = "elementary-session-settings-unstable";
+  version = "2020-06-11";
 
   repoName = "session-settings";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = repoName;
-    rev = "f9d5afed16ce447cf6ae3c2d1c1db5eece84daca";
-    sha256 = "0n1m41aapr58rb1ffvfkjq6c6w3f0ynjzzhja50s4di98p4m7y0q";
+    rev = "130c9ae221913032ed18bcf6d21e3dcdba3c4209";
+    sha256 = "0bzg9vbq0ssnxgcb2vxpx6x9zv8ngkm9r3ki5q83m9al9919n0pr";
   };
 
-  patches = [
-    # Map Pantheon required components by g-s-d versions
-    # https://github.com/elementary/session-settings/pull/23
-    (fetchpatch {
-      url = "https://github.com/elementary/session-settings/commit/39918f4ec64fa9ed5affa109d6a692b97ae4ff01.patch";
-      sha256 = "0v2kqcsibymnslnnw4v67yh098znsrhrcycgxkw8vymvwlinc502";
-    })
-  ];
-
   nativeBuildInputs = [
+    desktop-file-utils
     meson
     ninja
     pkg-config
   ];
 
   buildInputs = [
-    elementary-settings-daemon
+    pantheon.elementary-settings-daemon
+    gnome-keyring
+    onboard
+    orca
   ];
 
   mesonFlags = [
-    "-Ddefaults-list=false"
-    "-Dpatched-gsd-autostarts=false"
-    "-Dpatched-ubuntu-autostarts=false"
+    "-Dmimeapps-list=false"
     "-Dfallback-session=GNOME"
+    "-Ddetect-program-prefixes=true"
+    "--sysconfdir=${placeholder "out"}/etc"
   ];
 
   postInstall = ''
     mkdir -p $out/share/applications
     cp -av ${./pantheon-mimeapps.list} $out/share/applications/pantheon-mimeapps.list
-
-    mkdir -p $out/etc/xdg/autostart
-    for package in ${gnome-keyring} ${orca} ${onboard} ${at-spi2-core}; do
-      cp -av $package/etc/xdg/autostart/* $out/etc/xdg/autostart
-    done
 
     cp "${dockitemAutostart}" $out/etc/xdg/autostart/default-elementary-dockitems.desktop
 
@@ -127,21 +117,16 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/xsessions/pantheon.desktop \
       --replace "gnome-session --session=pantheon" "$out/libexec/pantheon" \
       --replace "wingpanel" "${wingpanel}/bin/wingpanel"
-
-    for f in $out/etc/xdg/autostart/*; do mv "$f" "''${f%.desktop}-pantheon.desktop"; done
-
-    for autostart in $(grep -rl "OnlyShowIn=GNOME;" $out/etc/xdg/autostart)
-    do
-      echo "Patching OnlyShowIn to Pantheon in: $autostart"
-      sed -i "s,OnlyShowIn=GNOME;,OnlyShowIn=Pantheon;," $autostart
-    done
   '';
 
   passthru = {
     updateScript = pantheon.updateScript {
       attrPath = "pantheon.${pname}";
     };
-    providedSessions = [ "pantheon" ];
+
+    providedSessions = [
+      "pantheon"
+    ];
   };
 
   meta = with stdenv.lib; {

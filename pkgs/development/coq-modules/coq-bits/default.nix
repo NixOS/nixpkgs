@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/coq-community/coq-bits";
+    homepage = "https://github.com/coq-community/bits";
     description = "A formalization of bitset operations in Coq";
     license = licenses.asl20;
     maintainers = with maintainers; [ ptival ];
@@ -33,6 +33,6 @@ stdenv.mkDerivation {
   };
 
   passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.7" "8.8" "8.9" "8.10" ];
+    compatibleCoqVersions = v: builtins.elem v [ "8.7" "8.8" "8.9" "8.10" "8.11" "8.12" ];
   };
 }

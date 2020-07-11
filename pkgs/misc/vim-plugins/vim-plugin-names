@@ -146,6 +146,7 @@ hsitz/VimOrganizer
 iamcco/coc-spell-checker
 ianks/vim-tsx
 idris-hackers/idris-vim
+ihsanturk/neuron.vim
 Inazuma110/deoplete-greek
 inkarkat/vim-SyntaxRange
 int3/vim-extradite
@@ -369,6 +370,9 @@ norcalli/nvim-terminal.lua
 ntpeters/vim-better-whitespace
 numirias/semshi
 nvie/vim-flake8
+nvim-lua/completion-nvim
+nvim-treesitter/completion-treesitter
+nvim-treesitter/nvim-treesitter
 octol/vim-cpp-enhanced-highlight
 Olical/conjure
 OrangeT/vim-csharp

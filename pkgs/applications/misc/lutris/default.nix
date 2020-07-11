@@ -37,6 +37,7 @@
 , wine
 , fluidsynth
 , xorgserver
+, xorg
 }:
 
 let
@@ -55,6 +56,8 @@ let
     wine
     fluidsynth
     xorgserver
+    xorg.setxkbmap
+    xorg.xkbcomp
   ];
 
   gstDeps = with gst_all_1; [

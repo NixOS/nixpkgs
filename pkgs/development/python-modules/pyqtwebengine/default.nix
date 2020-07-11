@@ -10,12 +10,12 @@ let
 
 in buildPythonPackage rec {
   pname = "PyQtWebEngine";
-  version = "5.14.0";
+  version = "5.15.0";
   format = "other";
 
   src = pythonPackages.fetchPypi {
     inherit pname version;
-    sha256 = "14hw49akb35n9pgiw564x8ykmsifihn9p2ax2x4zmywb3w2ra5g1";
+    sha256 = "0xdzhl07x3mzfnr5cf4d640168vxi7fyl0fz1pvpbgs0irl14237";
   };
 
   outputs = [ "out" "dev" ];

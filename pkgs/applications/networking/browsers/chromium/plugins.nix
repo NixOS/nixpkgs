@@ -4,7 +4,6 @@
 , nspr
 , nss
 , fetchzip
-, patchelfUnstable
 , enablePepperFlash ? false
 
 , upstream-info

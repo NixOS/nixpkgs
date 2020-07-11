@@ -151,6 +151,7 @@ in
   incron = handleTest ./incron.nix {};
   influxdb = handleTest ./influxdb.nix {};
   initrd-network-ssh = handleTest ./initrd-network-ssh {};
+  initrd-network-openvpn = handleTest ./initrd-network-openvpn {};
   initrdNetwork = handleTest ./initrd-network.nix {};
   installer = handleTest ./installer.nix {};
   iodine = handleTest ./iodine.nix {};
@@ -220,6 +221,7 @@ in
   nat.firewall = handleTest ./nat.nix { withFirewall = true; };
   nat.firewall-conntrack = handleTest ./nat.nix { withFirewall = true; withConntrackHelpers = true; };
   nat.standalone = handleTest ./nat.nix { withFirewall = false; };
+  ncdns = handleTest ./ncdns.nix {};
   ndppd = handleTest ./ndppd.nix {};
   neo4j = handleTest ./neo4j.nix {};
   specialisation = handleTest ./specialisation.nix {};
@@ -266,7 +268,9 @@ in
   php = handleTest ./php {};
   plasma5 = handleTest ./plasma5.nix {};
   plotinus = handleTest ./plotinus.nix {};
-  podman = handleTest ./podman.nix {};
+  podman = handleTestOn ["x86_64-linux"] ./podman.nix {};
+  postfix = handleTest ./postfix.nix {};
+  postfix-raise-smtpd-tls-security-level = handleTest ./postfix-raise-smtpd-tls-security-level.nix {};
   postgis = handleTest ./postgis.nix {};
   postgresql = handleTest ./postgresql.nix {};
   postgresql-wal-receiver = handleTest ./postgresql-wal-receiver.nix {};
@@ -320,7 +324,7 @@ in
   systemd = handleTest ./systemd.nix {};
   systemd-analyze = handleTest ./systemd-analyze.nix {};
   systemd-binfmt = handleTestOn ["x86_64-linux"] ./systemd-binfmt.nix {};
-  systemd-boot = handleTestOn ["x86_64-linux"] ./systemd-boot.nix {};
+  systemd-boot = handleTest ./systemd-boot.nix {};
   systemd-confinement = handleTest ./systemd-confinement.nix {};
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
   systemd-networkd-vrf = handleTest ./systemd-networkd-vrf.nix {};

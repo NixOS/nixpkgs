@@ -305,10 +305,16 @@ self: super: {
   ldap-client = dontCheck super.ldap-client;
   lensref = dontCheck super.lensref;
   lvmrun = disableHardening (dontCheck super.lvmrun) ["format"];
+  math-functions = if pkgs.stdenv.isDarwin
+    then dontCheck super.math-functions # "erf table" test fails on Darwin https://github.com/bos/math-functions/issues/63
+    else super.math-functions;
   matplotlib = dontCheck super.matplotlib;
   memcache = dontCheck super.memcache;
   metrics = dontCheck super.metrics;
   milena = dontCheck super.milena;
+  mockery = if pkgs.stdenv.isDarwin
+    then overrideCabal super.mockery (drv: { preCheck = "export TRAVIS=true"; }) # darwin doesn't have sub-second resolution https://github.com/hspec/mockery/issues/11
+    else super.mockery;
   modular-arithmetic = dontCheck super.modular-arithmetic; # tests require a very old Glob (0.7.*)
   nats-queue = dontCheck super.nats-queue;
   netpbm = dontCheck super.netpbm;

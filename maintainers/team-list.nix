@@ -54,6 +54,7 @@ with lib.maintainers; {
       hedning
       jtojnar
       worldofpeace
+      dasj19
     ];
     scope = "Maintain GNOME desktop environment and platform.";
   };

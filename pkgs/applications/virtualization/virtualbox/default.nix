@@ -14,7 +14,6 @@
 , enableHardening ? false
 , headless ? false
 , enable32bitGuests ? true
-, patchelfUnstable # needed until 0.10 is released
 }:
 
 with stdenv.lib;
@@ -46,7 +45,7 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" "modsrc" ];
 
-  nativeBuildInputs = [ pkgconfig which docbook_xsl docbook_xml_dtd_43 patchelfUnstable ]
+  nativeBuildInputs = [ pkgconfig which docbook_xsl docbook_xml_dtd_43 ]
     ++ optional (!headless) wrapQtAppsHook;
 
   # Wrap manually because we wrap just a small number of executables.

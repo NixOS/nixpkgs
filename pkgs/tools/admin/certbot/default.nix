@@ -8,18 +8,14 @@
 
 buildPythonApplication rec {
   pname = "certbot";
-  version = "1.3.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1nzp1l63f64qqp89y1vyd4lgfhykfp5dkr6iwfiyf273y7sjwpsa";
+    sha256 = "1y0m5qm853i6pcpb2mrf8kjkr9wr80mdrx1qmck38ayvr2v2p5lc";
   };
-
-  patches = [
-    ./0001-Don-t-use-distutils.StrictVersion-that-cannot-handle.patch
-  ];
 
   propagatedBuildInputs = [
     ConfigArgParse

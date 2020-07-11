@@ -5,6 +5,7 @@
 , numpy
 , pandas
 , python
+, setuptools
 , isPy3k
 }:
 
@@ -18,7 +19,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [numpy pandas];
+  propagatedBuildInputs = [ numpy pandas setuptools ];
 
   checkPhase = ''
     pytest $out/${python.sitePackages}

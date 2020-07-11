@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "atlassian-python-api";
-  version = "1.15.9";
+  version = "1.16.0";
   
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c6a3125ee68ecf4d11947497c1f891b6436df9d8453f8865cabf595813504cc1";
+    sha256 = "1sp036192vdl5nqifcswg2j838vf8i9k8bfd0w4qh1vz4f0pjz7y";
   };
   
   checkInputs = [ pytestrunner pytest ];

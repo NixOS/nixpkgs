@@ -42,14 +42,14 @@ common =
       nativeBuildInputs =
         [ pkgconfig ]
         ++ lib.optionals is24 [ autoreconfHook autoconf-archive bison flex libxml2 libxslt
-                                docbook5 docbook_xsl_ns jq gmock ];
+                                docbook5 docbook_xsl_ns jq ];
 
       buildInputs =
         [ curl openssl sqlite xz bzip2 nlohmann_json
           brotli boost editline
         ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-        ++ lib.optionals is24 [ libarchive ]
+        ++ lib.optionals is24 [ libarchive gmock ]
         ++ lib.optional withLibseccomp libseccomp
         ++ lib.optional withAWS
             ((aws-sdk-cpp.override {
@@ -119,7 +119,8 @@ common =
            # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
         ++ lib.optional (!withLibseccomp) "--disable-seccomp-sandboxing";
 
-      makeFlags = [ "profiledir=$(out)/etc/profile.d" ];
+      makeFlags = [ "profiledir=$(out)/etc/profile.d" ]
+        ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "PRECOMPILE_HEADERS=0";
 
       installFlags = [ "sysconfdir=$(out)/etc" ];
 
@@ -182,10 +183,10 @@ in rec {
   nix = nixStable;
 
   nixStable = callPackage common (rec {
-    name = "nix-2.3.6";
+    name = "nix-2.3.7";
     src = fetchurl {
       url = "https://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "05e90529c9dc9f4bf656cbceae61cafdca49935bb79cd291c8f078a095701d89";
+      sha256 = "dd8f52849414e5a878afe7e797aa4e22bab77c875d9da5a38d5f1bada704e596";
     };
 
     inherit storeDir stateDir confDir boehmgc;

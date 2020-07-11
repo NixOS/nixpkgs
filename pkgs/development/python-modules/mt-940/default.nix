@@ -15,9 +15,13 @@ buildPythonPackage rec {
 
   checkInputs = [ pyyaml pytest ];
 
+  # requires tests files that are not present
+  doCheck = false;
   checkPhase = ''
     py.test
   '';
+
+  pythonImportsCheck = [ "mt940" ];
 
   meta = with lib; {
     description = "A library to parse MT940 files and returns smart Python collections for statistics and manipulation";

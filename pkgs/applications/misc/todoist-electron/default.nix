@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "todoist-electron";
-  version = "1.22";
+  version = "1.23.0";
 
   src = fetchurl {
-    url = "https://github.com/KryDos/todoist-linux/releases/download/${version}/Todoist_${version}.0_amd64.deb";
-    sha256 = "09w2040xkvv78190fmhx99c0dwy7vpab5fvxs67s7yyjwh5n4693";
+    url = "https://github.com/KryDos/todoist-linux/releases/download/${version}/Todoist_${version}_amd64.deb";
+    sha256 = "1yxa0fdc3fnffny6jf1hm7545792pw7828mc27il17l4kn346g98";
   };
 
   desktopItem = makeDesktopItem {
