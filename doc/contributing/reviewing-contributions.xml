@@ -49,7 +49,7 @@
   <itemizedlist>
    <listitem>
     <para>
-     Add labels to the pull request. (Requires commit rights)
+     Add labels to the pull request. (Requires maintainer rights)
     </para>
     <itemizedlist>
      <listitem>
@@ -188,7 +188,7 @@
   <itemizedlist>
    <listitem>
     <para>
-     Add labels to the pull request. (Requires commit rights)
+     Add labels to the pull request. (Requires maintainer rights)
     </para>
     <itemizedlist>
      <listitem>
@@ -304,7 +304,7 @@
   <itemizedlist>
    <listitem>
     <para>
-     Add labels to the pull request. (Requires commit rights)
+     Add labels to the pull request. (Requires maintainer rights)
     </para>
     <itemizedlist>
      <listitem>
@@ -408,7 +408,7 @@
   <itemizedlist>
    <listitem>
     <para>
-     Add labels to the pull request. (Requires commit rights)
+     Add labels to the pull request. (Requires maintainer rights)
     </para>
     <itemizedlist>
      <listitem>
