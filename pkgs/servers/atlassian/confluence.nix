@@ -8,11 +8,11 @@ assert withMysql -> (mysql_jdbc != null);
 
 stdenvNoCC.mkDerivation rec {
   pname = "atlassian-confluence";
-  version = "7.5.2";
+  version = "7.6.0";
 
   src = fetchurl {
     url = "https://product-downloads.atlassian.com/software/confluence/downloads/${pname}-${version}.tar.gz";
-    sha256 = "0wkzx9grghl7p0k0p1w9xmh51xkqv97mm0kjyija3q3fvh68dj50";
+    sha256 = "1s69b19kz8z8dbac3dsj9yvkvynlygzgnlpm72fbnqg6knp95fyz";
   };
 
   buildPhase = ''
