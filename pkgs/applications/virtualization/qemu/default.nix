@@ -18,6 +18,7 @@
 , openGLSupport ? sdlSupport, mesa, epoxy, libdrm
 , virglSupport ? openGLSupport, virglrenderer
 , smbdSupport ? false, samba
+, tpmSupport ? true
 , hostCpuOnly ? false
 , hostCpuTargets ? (if hostCpuOnly
                     then (stdenv.lib.optional stdenv.isx86_64 "i386-softmmu"
@@ -127,6 +128,7 @@ stdenv.mkDerivation rec {
     ++ optional cephSupport "--enable-rbd"
     ++ optional openGLSupport "--enable-opengl"
     ++ optional virglSupport "--enable-virglrenderer"
+    ++ optional tpmSupport "--enable-tpm"
     ++ optional smbdSupport "--smbd=${samba}/bin/smbd";
 
   doCheck = false; # tries to access /dev
