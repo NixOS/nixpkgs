@@ -32,16 +32,16 @@ let
   };
 in rustPlatform.buildRustPackage rec {
   pname = "tokenizers";
-  version = "0.8.0";
+  version = "0.8.1.rc1";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "python-v${version}";
-    sha256 = "0f5r1wm5ybyk3jvihj1g98y7ihq0iklg0pwkaa11pk1gv0k869w3";
+    sha256 = "1bzvfffnjjskx8zlq1qsqfd47570my2wnbq4ip8i1hkz10q900qv";
   };
 
-  cargoSha256 = "131bvf35q5n65mq6zws1rp5fn2qkfwfg9sbxi5y6if24n8fpdz4m";
+  cargoSha256 = "0s5z3g1njb7wlyb32ba6xas4zc62c3zhmp1mrvghmaxpvljp6k7b";
 
   sourceRoot = "source/bindings/python";
 
