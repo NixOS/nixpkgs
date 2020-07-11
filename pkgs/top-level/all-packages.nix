@@ -15423,6 +15423,8 @@ in
     inherit (darwin.apple_sdk.frameworks) PCSC;
   };
 
+  yubikey-agent = callPackage ../tools/misc/yubikey-agent { };
+
   yubikey-manager = callPackage ../tools/misc/yubikey-manager { };
 
   yubikey-manager-qt = libsForQt5.callPackage ../tools/misc/yubikey-manager-qt {
