@@ -8,11 +8,11 @@ with stdenv.lib;
 
 buildGoPackage rec {
   pname = "gitea";
-  version = "1.12.1";
+  version = "1.12.2";
 
   src = fetchurl {
     url = "https://github.com/go-gitea/gitea/releases/download/v${version}/gitea-src-${version}.tar.gz";
-    sha256 = "0n92msf5pbgb5q6pa2p0nj9lnzs4y0qis62c5mp4hp8rc1j22wlb";
+    sha256 = "12zzb1c4cl07ccxaravkmia8vdyw5ffxrlx9v95ampvv6a0swpb9";
   };
 
   unpackPhase = ''
