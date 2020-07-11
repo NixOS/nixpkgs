@@ -7,13 +7,13 @@ python3Packages.buildPythonApplication rec {
   pname = "stig";
   # This project has a different concept for pre release / alpha,
   # Read the project's README for details: https://github.com/rndusr/stig#stig
-  version = "0.11.0a";
+  version = "0.11.2a0";
 
   src = fetchFromGitHub {
     owner = "rndusr";
     repo = "stig";
     rev = "v${version}";
-    sha256 = "192v8f80jfly12bqzsslpxlvm72kdqm3jl40x1az5czpg4ab3lb7";
+    sha256 = "05dn6mr86ly65gdqarl16a2jk1bwiw5xa6r4kyag3s6lqsv66iw8";
   };
 
   # urwidtrees 1.0.3 is requested by the developer because 1.0.2 (which is packaged
