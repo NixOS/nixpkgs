@@ -284,8 +284,8 @@ let
   });
 
   php74base = callPackage generic (_args // {
-    version = "7.4.7";
-    sha256 = "0ynq4fz54jpzh9nxvbgn3vrdad2clbac0989ai0yrj2ryc0hs3l0";
+    version = "7.4.8";
+    sha256 = "0ql01sfg8l7y2bfwmnjxnfw9irpibnz57ssck24b00y00nkd6j3a";
   });
 
   defaultPhpExtensions = { all, ... }: with all; ([
