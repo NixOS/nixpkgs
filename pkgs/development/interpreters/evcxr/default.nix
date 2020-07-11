@@ -17,6 +17,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
   postInstall = ''
     wrapProgram $out/bin/evcxr --prefix PATH : ${stdenv.lib.makeBinPath [ cargo gcc ]}
+    wrapProgram $out/bin/evcxr_jupyter --prefix PATH : ${stdenv.lib.makeBinPath [ cargo gcc ]}
     rm $out/bin/testing_runtime
   '';
 
