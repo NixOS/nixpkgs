@@ -2,6 +2,8 @@
 , fetchurl
 , coursier
 , autoPatchelfHook
+, installShellFiles
+, jre
 , lib
 , zlib
 }:
@@ -30,8 +32,12 @@ stdenv.mkDerivation rec {
     sha256 = "1xzg0qfkjdmzm3mvg82mc4iia8cl7b6vbl8ng4ir2xsz00zjrlsq";
   };
 
-  bloop-coursier = stdenv.mkDerivation {
+  bloop-coursier = stdenv.mkDerivation rec {
     name = "${pname}-coursier-${version}";
+
+    platform = if stdenv.isLinux && stdenv.isx86_64 then "x86_64-pc-linux"
+               else if stdenv.isDarwin && stdenv.isx86_64 then "x86_64-apple-darwin"
+               else throw "unsupported platform";
 
     phases = [ "installPhase" ];
     installPhase = ''
@@ -40,8 +46,7 @@ stdenv.mkDerivation rec {
 
       mkdir channel
       ln -s ${bloop-coursier-channel} channel/bloop.json
-      ${coursier}/bin/coursier install --install-dir $out --default-channels=false --channel channel --only-prebuilt=true bloop
-
+      ${coursier}/bin/coursier install --install-dir $out --install-platform ${platform} --default-channels=false --channel channel --only-prebuilt=true bloop
 
       # Remove binary part of the coursier launcher script to make derivation output hash stable
       sed -i '5,$ d' $out/bloop
@@ -49,12 +54,15 @@ stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "1ncl34f39mvk0zb5jl1l77cwjdg3xfnhjxbzz11pdfqw0d7wqywj";
+    outputHash     = if stdenv.isLinux && stdenv.isx86_64 then "1ncl34f39mvk0zb5jl1l77cwjdg3xfnhjxbzz11pdfqw0d7wqywj"
+                     else if stdenv.isDarwin && stdenv.isx86_64 then "06c885w088yvh8l1r1jbrz0549gx2xvc8xr6rlxy6y27jk5655p2"
+                     else throw "unsupported platform";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook ] ;
-  phases = [ "installPhase" "fixupPhase" ];
-  buildInputs = [ stdenv.cc.cc.lib zlib ] ;
+  dontUnpack = true;
+  nativeBuildInputs = [ autoPatchelfHook installShellFiles ];
+  buildInputs = [ stdenv.cc.cc.lib zlib ];
+  propagatedBuildInputs = [ jre ];
 
   installPhase = ''
     export COURSIER_CACHE=$(pwd)
@@ -69,18 +77,16 @@ stdenv.mkDerivation rec {
     sed "s|\$(dirname \"\$0\")|$out|" -i $out/bloop
 
     #Install completions
-    mkdir -p $out/etc/bash_completion.d
-    ln -s ${bloop-bash} $out/etc/bash_completion.d/bloop
-    mkdir -p $out/share/zsh/site-functions
-    ln -s ${bloop-zsh} $out/share/zsh/site-functions/_bloop
-    mkdir -p $out/usr/share/fish/vendor_completions.d/
-    ln -s ${bloop-fish} $out/usr/share/fish/vendor_completions.d/bloop.fish
+    installShellCompletion --name bloop --bash ${bloop-bash}
+    installShellCompletion --name _bloop --zsh ${bloop-zsh}
+    installShellCompletion --name bloop.fish --fish ${bloop-fish}
   '';
 
   meta = with stdenv.lib; {
     homepage = "https://scalacenter.github.io/bloop/";
     license = licenses.asl20;
     description = "Bloop is a Scala build server and command-line tool to make the compile and test developer workflows fast and productive in a build-tool-agnostic way.";
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ tomahna ];
   };
 }
