@@ -53,6 +53,9 @@ stdenv.mkDerivation rec {
     sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in
     substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
       --replace /usr/bin/udevadm /run/current-system/systemd/bin/udevadm
+    # https://github.com/lvmteam/lvm2/issues/36
+    substituteInPlace udev/69-dm-lvm-metad.rules.in \
+      --replace "(BINDIR)/systemd-run" /run/current-system/systemd/bin/systemd-run
 
     substituteInPlace make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
     substituteInPlace libdm/make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
