@@ -190,7 +190,7 @@ in
           <filename><replaceable>pkg</replaceable>/lib/udev/rules.d</filename>
           will be included.
         '';
-        apply = map getBin;
+        apply = map getLib;
       };
 
       path = mkOption {

@@ -699,6 +699,12 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
      There are no functional changes, however this may require updating some configurations to use correct types for all attributes.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     In the case of multiple output derivations, the <link linkend="opt-services.udev.packages">services.udev.packages</link> option
+     now takes udev rules from <literal>lib</literal>, not <literal>bin</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
