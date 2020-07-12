@@ -1,4 +1,3 @@
 #!@shell@
 
-cd @out@/lib/node_modules/webtorrent-desktop
-exec @electron@/bin/electron .
+exec @electron@/bin/electron @out@/lib/node_modules/webtorrent-desktop

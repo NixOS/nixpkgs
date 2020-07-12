@@ -1,13 +1,13 @@
-{ lib, stdenv, callPackage, runCommand, writeScript, linkFarm, electron_6, nodejs-12_x }:
+{ lib, stdenv, callPackage, runCommand, writeScript, electron_9, nodejs-14_x }:
 
 let
-  electron = electron_6;
-  nodejs = nodejs-12_x;
+  electron = electron_9;
+  nodejs = nodejs-14_x;
 
   source = lib.importJSON ./source.json;
   pkg = (callPackage ./from-source.nix {
     inherit nodejs;
-  }).package.override {
+  })."webtorrent-desktop-git://github.com/webtorrent/webtorrent-desktop.git#${source.rev}".override {
     postInstall = "npm run build";
   };
 in

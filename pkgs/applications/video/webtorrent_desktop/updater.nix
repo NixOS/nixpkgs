@@ -1,4 +1,4 @@
-{ lib, stdenv, writeScript, fetchFromGitHub, nodePackages, jq, curl, nix-prefetch-github, nix }:
+{ lib, stdenv, writeText, writeScript, fetchFromGitHub, nodePackages, jq, curl, nix-prefetch-github, nix }:
 
 let
   source = lib.importJSON ./source.json;
@@ -19,22 +19,9 @@ writeScript "webtorrent-desktop-sources" ''
   , "sha256":"$SHA"
   }
   EOF
-
-    SRC=$(${nix}/bin/nix-build --no-out-link -E "
-    with import ../../../../default.nix {};
-    let
-      source = lib.importJSON ./source.json;
-    in
-      fetchFromGitHub {
-        owner = \"webtorrent\";
-        repo = \"webtorrent-desktop\";
-        inherit (source) rev sha256;
-      }
-    ")
     ${nodePackages.node2nix}/bin/node2nix \
       --nodejs-12 \
-      -i $SRC/package.json \
-      -l $SRC/package-lock.json \
+      -i <(echo "[{\"webtorrent-desktop\": \"git://github.com/webtorrent/webtorrent-desktop.git#$VERSION\"}]") \
       -c from-source.nix \
       --strip-optional-dependencies \
       --supplement-input supplement.json
