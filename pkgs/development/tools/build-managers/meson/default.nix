@@ -8,11 +8,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "0.54.2";
+  version = "0.55.0";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0m84zb0q67vnxmd6ldz477w6yjdnk9c44xhlwh1g1pzqx3m6wwd7";
+    sha256 = "Chriv+KuFKxHWTU3+TKQ+3npt3XFW0xTwoK8PKN0WzU=";
   };
 
   patches = [
@@ -50,6 +50,10 @@ python3.pkgs.buildPythonApplication rec {
   # Ensure there will always be a native C compiler when meson is used, as a
   # workaround until https://github.com/mesonbuild/meson/pull/6512 lands.
   depsHostHostPropagated = [ pkgsHostHost.stdenv.cc ];
+
+  pythonPath = [
+    python3.pkgs.setuptools # for pkg_resources
+  ];
 
   # 0.45 update enabled tests but they are failing
   doCheck = false;
