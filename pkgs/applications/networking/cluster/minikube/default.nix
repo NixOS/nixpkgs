@@ -11,18 +11,18 @@
 
 buildGoModule rec {
   pname = "minikube";
-  version = "1.11.0";
+  version = "1.12.0";
 
   # for -ldflags
   commit = "57e2f55f47effe9ce396cea42a1e0eb4f611ebbd";
 
-  vendorSha256 = "1l9dxn7yy21x4b3cg6l5a08wx2ng8qf531ilg8yf1rznwfwjajrv";
+  vendorSha256 = "0wcm7kw5z7d0ch59nyx5xlv5ci7jrwnzspmsh1yb76318cx2aghi";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "minikube";
     rev = "v${version}";
-    sha256 = "0y761svwyrpc4ywdd4vr9hxkg6593wg4wwqzn8n86g0zcz6qg11d";
+    sha256 = "0bvdyfx5vjcgnkqd23rpbbhxf1zigpzxlqpay2sb6dpldsj0nhdk";
   };
 
   nativeBuildInputs = [ go-bindata installShellFiles pkg-config which ];
