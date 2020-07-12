@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ctypes.sh";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "taviso";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07rqbdxw33h92mllh0srymjjx52mddafs3jyzqpsflq3v0l0dk37";
+    sha256 = "1wafyfhwd7nf7xdici0djpwgykizaz7jlarn0r1b4spnpjx1zbx4";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
