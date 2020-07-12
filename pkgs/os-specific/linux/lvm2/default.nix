@@ -28,18 +28,19 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--disable-readline"
     "--enable-pkgconfig"
-    "--bindir=${placeholder "bin"}/bin"
-    "--sbindir=${placeholder "bin"}/bin"
-    "--libdir=${placeholder "lib"}/lib"
     "--with-default-locking-dir=/run/lock/lvm"
     "--with-default-run-dir=/run/lvm"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-  ] ++ stdenv.lib.optionals enable_dmeventd [
+  ] ++ stdenv.lib.optionals (!enable_cmdlib) [
+    "--bindir=${placeholder "bin"}/bin"
+    "--sbindir=${placeholder "bin"}/bin"
+    "--libdir=${placeholder "lib"}/lib"
+  ] ++ stdenv.lib.optional enable_cmdlib "--enable-cmdlib"
+  ++ stdenv.lib.optionals enable_dmeventd [
     "--enable-dmeventd"
     "--with-dmeventd-pidfile=/run/dmeventd/pid"
     "--with-default-dm-run-dir=/run/dmeventd"
-  ] ++ stdenv.lib.optional enable_cmdlib "--enable-cmdlib"
-  ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
   ] ++
@@ -100,11 +101,19 @@ stdenv.mkDerivation rec {
     "install_tmpfiles_configuration"
   ];
 
-  postInstall = ''
+  # only split bin and lib out from out if cmdlib isn't enabled
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ] ++ stdenv.lib.optionals (enable_cmdlib != true) [
+    "bin"
+    "lib"
+  ];
+
+  postInstall = stdenv.lib.optionalString (enable_cmdlib != true) ''
     moveToOutput lib/libdevmapper.so $lib
   '';
-
-  outputs = [ "out" "bin" "lib" "dev" "man" ];
 
   meta = with stdenv.lib; {
     homepage = "http://sourceware.org/lvm2/";
