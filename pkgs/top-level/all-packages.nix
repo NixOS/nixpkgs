@@ -16133,6 +16133,8 @@ in
 
   osrm-backend = callPackage ../servers/osrm-backend { };
 
+  oven-media-engine = callPackage ../servers/misc/oven-media-engine { };
+
   p910nd = callPackage ../servers/p910nd { };
 
   petidomo = callPackage ../servers/mail/petidomo { };
