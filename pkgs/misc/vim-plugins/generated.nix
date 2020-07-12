@@ -521,14 +521,14 @@ let
 
   coc-metals = buildVimPluginFrom2Nix {
     pname = "coc-metals";
-    version = "2020-07-04";
+    version = "2020-07-12";
     src = fetchFromGitHub {
-      owner = "ckipp01";
+      owner = "scalameta";
       repo = "coc-metals";
-      rev = "3dbe29b9462a1dd910ff653564cadd72146386c8";
-      sha256 = "1j2z557lzsr25s9ijdfiyg8zd7f967qnq8imacwn6qzfs1r337nj";
+      rev = "c99a4ea7902293460b4d903cdcce4892f12046f5";
+      sha256 = "0r4xs0mhdxvac81cly89jqnby14h1dmrpkdfs0chz5ji4gbsgair";
     };
-    meta.homepage = "https://github.com/ckipp01/coc-metals/";
+    meta.homepage = "https://github.com/scalameta/coc-metals/";
   };
 
   coc-neco = buildVimPluginFrom2Nix {

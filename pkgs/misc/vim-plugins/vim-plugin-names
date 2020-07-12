@@ -52,7 +52,6 @@ chriskempson/base16-vim
 christoomey/vim-sort-motion
 christoomey/vim-tmux-navigator
 ckarnell/antonys-macro-repeater
-ckipp01/coc-metals
 cloudhead/neovim-fuzzy
 CoatiSoftware/vim-sourcetrail
 cocopon/iceberg.vim
@@ -430,6 +429,7 @@ sakhnik/nvim-gdb
 saltstack/salt-vim
 samoshkin/vim-mergetool
 sbdchd/neoformat
+scalameta/coc-metals
 sebastianmarkow/deoplete-rust
 SevereOverfl0w/deoplete-github
 sheerun/vim-polyglot
