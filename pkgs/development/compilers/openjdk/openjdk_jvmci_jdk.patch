@@ -1,0 +1,191 @@
+diff --git a/jdk/make/BuildJdk.gmk b/jdk/make/BuildJdk.gmk
+--- a/jdk/make/BuildJdk.gmk
++++ b/jdk/make/BuildJdk.gmk
+@@ -99,6 +99,7 @@
+ # in these cases.
+ images:
+ 	+$(MAKE) PROFILE="" -f CreateJars.gmk
++	+$(MAKE) PROFILE="" -f StaticLibs.gmk
+ 	+$(MAKE) PROFILE="" -f Images.gmk
+         ifeq ($(OPENJDK_TARGET_OS), macosx)
+ 	  +$(MAKE) -f Bundles.gmk
+diff --git a/jdk/make/StaticLibs.gmk b/jdk/make/StaticLibs.gmk
+new file mode 100644
+--- /dev/null
++++ b/jdk/make/StaticLibs.gmk
+@@ -0,0 +1,56 @@
++#
++# Copyright (c) 2018, Oracle and/or its affiliates. All rights reserved.
++# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
++#
++# This code is free software; you can redistribute it and/or modify it
++# under the terms of the GNU General Public License version 2 only, as
++# published by the Free Software Foundation.  Oracle designates this
++# particular file as subject to the "Classpath" exception as provided
++# by Oracle in the LICENSE file that accompanied this code.
++#
++# This code is distributed in the hope that it will be useful, but WITHOUT
++# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
++# version 2 for more details (a copy is included in the LICENSE file that
++# accompanied this code).
++#
++# You should have received a copy of the GNU General Public License version
++# 2 along with this work; if not, write to the Free Software Foundation,
++# Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
++#
++# Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
++# or visit www.oracle.com if you need additional information or have any
++# questions.
++#
++
++include $(SPEC)
++include MakeBase.gmk
++include JavaCompilation.gmk
++include Setup.gmk
++
++default: jdk-static-libs
++
++ifeq ($(STATIC_BUILD),true)
++JDK_STATIC_LIB_TARGETS = $(JDK_OUTPUTDIR)/lib/$(LIBRARY_PREFIX)java$(STATIC_LIBRARY_SUFFIX) \
++                  $(JDK_OUTPUTDIR)/lib/$(LIBRARY_PREFIX)net$(STATIC_LIBRARY_SUFFIX) \
++                  $(JDK_OUTPUTDIR)/lib/$(LIBRARY_PREFIX)nio$(STATIC_LIBRARY_SUFFIX) \
++                  $(JDK_OUTPUTDIR)/lib/$(LIBRARY_PREFIX)zip$(STATIC_LIBRARY_SUFFIX) \
++                  $(JDK_OUTPUTDIR)/lib/$(LIBRARY_PREFIX)fdlibm$(STATIC_LIBRARY_SUFFIX) \
++                  $(JDK_OUTPUTDIR)/lib/$(LIBRARY_PREFIX)jaas$(STATIC_LIBRARY_SUFFIX) \
++                  $(JDK_OUTPUTDIR)/lib/$(LIBRARY_PREFIX)sunec$(STATIC_LIBRARY_SUFFIX)
++
++jdk-static-libs: $(JDK_STATIC_LIB_TARGETS)
++
++$(JDK_STATIC_LIB_TARGETS):
++	$(CD) $(JDK_OUTPUTDIR)/objs/lib$(patsubst $(LIBRARY_PREFIX)%,%,$(basename $(notdir $@))) && \
++	$(AR) $(AR_OUT_OPTION)$(LIBRARY_PREFIX)$(patsubst $(LIBRARY_PREFIX)%,%,$(basename $(notdir $@)))$(STATIC_LIBRARY_SUFFIX) *$(OBJ_SUFFIX)
++	$(CD) $(JDK_OUTPUTDIR)/objs/lib$(patsubst $(LIBRARY_PREFIX)%,%,$(basename $(notdir $@))) && \
++	$(CP) $(LIBRARY_PREFIX)$(patsubst $(LIBRARY_PREFIX)%,%,$(basename $(notdir $@)))$(STATIC_LIBRARY_SUFFIX) \
++$(JDK_OUTPUTDIR)/lib/$(LIBRARY_PREFIX)$(patsubst $(LIBRARY_PREFIX)%,%,$(basename $(notdir $@)))$(STATIC_LIBRARY_SUFFIX)
++
++else
++JDK_STATIC_LIB_TARGETS =
++
++jdk-static-libs:
++endif
++
++.PHONY: jdk-static-libs
++
+diff --git a/jdk/src/share/native/common/check_version.c b/jdk/src/share/native/common/check_version.c
+--- a/jdk/src/share/native/common/check_version.c
++++ b/jdk/src/share/native/common/check_version.c
+@@ -27,7 +27,8 @@
+ #include "jvm.h"
+
+ JNIEXPORT jint JNICALL
++#define JNI_REQ_VERSION JNI_VERSION_1_8
++JNI_OnLoad_java(JavaVM *vm, void *reserved)
+-JNI_OnLoad(JavaVM *vm, void *reserved)
+ {
+     jint vm_version = JVM_GetInterfaceVersion();
+     if (vm_version != JVM_INTERFACE_VERSION) {
+@@ -35,10 +41,11 @@
+         char buf[128];
+         sprintf(buf, "JVM interface version mismatch: expecting %d, got %d.",
+                 JVM_INTERFACE_VERSION, (int)vm_version);
+-        (*vm)->GetEnv(vm, (void **)&env, JNI_VERSION_1_2);
++        (*vm)->GetEnv(vm, (void **)&env, JNI_REQ_VERSION);
+         if (env) {
+             (*env)->FatalError(env, buf);
+         }
+     }
+-    return JNI_VERSION_1_2;
++    return JNI_REQ_VERSION;
+ }
++
+diff --git a/jdk/src/share/native/java/net/net_util.c b/jdk/src/share/native/java/net/net_util.c
+--- a/jdk/src/share/native/java/net/net_util.c
++++ b/jdk/src/share/native/java/net/net_util.c
+@@ -38,7 +38,8 @@
+ }
+
+ JNIEXPORT jint JNICALL
++#define JNI_REQ_VERSION JNI_VERSION_1_8
++JNI_OnLoad_net(JavaVM *vm, void *reserved)
+-JNI_OnLoad(JavaVM *vm, void *reserved)
+ {
+     JNIEnv *env;
+     jclass iCls;
+@@ -50,15 +56,15 @@
+         if (JVM_InitializeSocketLibrary() < 0) {
+             JNU_ThrowByName(env, "java/lang/UnsatisfiedLinkError",
+                             "failed to initialize net library.");
+-            return JNI_VERSION_1_2;
++            return JNI_REQ_VERSION;
+         }
+     }
+     iCls = (*env)->FindClass(env, "java/lang/Boolean");
+-    CHECK_NULL_RETURN(iCls, JNI_VERSION_1_2);
++    CHECK_NULL_RETURN(iCls, JNI_REQ_VERSION);
+     mid = (*env)->GetStaticMethodID(env, iCls, "getBoolean", "(Ljava/lang/String;)Z");
+-    CHECK_NULL_RETURN(mid, JNI_VERSION_1_2);
++    CHECK_NULL_RETURN(mid, JNI_REQ_VERSION);
+     s = (*env)->NewStringUTF(env, "java.net.preferIPv4Stack");
+-    CHECK_NULL_RETURN(s, JNI_VERSION_1_2);
++    CHECK_NULL_RETURN(s, JNI_REQ_VERSION);
+     preferIPv4Stack = (*env)->CallStaticBooleanMethod(env, iCls, mid, s);
+
+     /*
+@@ -70,7 +76,7 @@
+     platformInit();
+     parseExclusiveBindProperty(env);
+
+-    return JNI_VERSION_1_2;
++    return JNI_REQ_VERSION;
+ }
+
+ static int initialized = 0;
+diff --git a/jdk/src/share/native/java/util/zip/ZipFile.c b/jdk/src/share/native/java/util/zip/ZipFile.c
+--- a/jdk/src/share/native/java/util/zip/ZipFile.c
++++ b/jdk/src/share/native/java/util/zip/ZipFile.c
+@@ -55,6 +55,12 @@
+ static int OPEN_READ = java_util_zip_ZipFile_OPEN_READ;
+ static int OPEN_DELETE = java_util_zip_ZipFile_OPEN_DELETE;
+
++JNIEXPORT jint JNICALL
++JNI_OnLoad_zip(JavaVM *vm, void *reserved)
++{
++    return JNI_VERSION_1_8;
++}
++
+ JNIEXPORT void JNICALL
+ Java_java_util_zip_ZipFile_initIDs(JNIEnv *env, jclass cls)
+ {
+diff --git a/jdk/src/solaris/native/sun/nio/ch/FileChannelImpl.c b/jdk/src/solaris/native/sun/nio/ch/FileChannelImpl.c
+--- a/jdk/src/solaris/native/sun/nio/ch/FileChannelImpl.c
++++ b/jdk/src/solaris/native/sun/nio/ch/FileChannelImpl.c
+@@ -52,6 +52,12 @@
+
+ static jfieldID chan_fd;        /* jobject 'fd' in sun.io.FileChannelImpl */
+
++JNIEXPORT jint JNICALL
++JNI_OnLoad_nio(JavaVM *vm, void *reserved)
++{
++    return JNI_VERSION_1_8;
++}
++
+ JNIEXPORT jlong JNICALL
+ Java_sun_nio_ch_FileChannelImpl_initIDs(JNIEnv *env, jclass clazz)
+ {
+diff --git a/jdk/src/windows/native/sun/nio/ch/FileChannelImpl.c b/jdk/src/windows/native/sun/nio/ch/FileChannelImpl.c
+--- a/jdk/src/windows/native/sun/nio/ch/FileChannelImpl.c
++++ b/jdk/src/windows/native/sun/nio/ch/FileChannelImpl.c
+@@ -38,6 +38,12 @@
+
+ static jfieldID chan_fd; /* id for jobject 'fd' in java.io.FileChannel */
+
++JNIEXPORT jint JNICALL
++JNI_OnLoad_nio(JavaVM *vm, void *reserved)
++{
++    return JNI_VERSION_1_8;
++}
++
+ /**************************************************************
+  * static method to store field ID's in initializers
+  * and retrieve the allocation granularity

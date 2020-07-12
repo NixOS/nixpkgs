@@ -1,0 +1,103 @@
+:100644 100644 ba84788a1b 0000000000 M	hotspot/src/os/linux/vm/jvm_linux.cpp
+:100644 100644 03cabfefb4 0000000000 M	hotspot/src/os/linux/vm/os_linux.cpp
+:100644 100644 a23bd56313 0000000000 M	hotspot/src/os/linux/vm/os_linux.inline.hpp
+:100644 100644 1a7375afc7 0000000000 M	hotspot/src/os_cpu/linux_x86/vm/os_linux_x86.cpp
+:100644 100644 efa0b4e1ad 0000000000 M	hotspot/src/share/vm/utilities/globalDefinitions_gcc.hpp
+
+diff --git a/hotspot/src/os/linux/vm/jvm_linux.cpp b/hotspot/src/os/linux/vm/jvm_linux.cpp
+index ba84788a1b..c22281f7ca 100644
+--- a/hotspot/src/os/linux/vm/jvm_linux.cpp
++++ b/hotspot/src/os/linux/vm/jvm_linux.cpp
+@@ -154,7 +154,9 @@ struct siglabel siglabels[] = {
+ #ifdef SIGSTKFLT
+   "STKFLT",     SIGSTKFLT,      /* Stack fault.  */
+ #endif
++#ifdef SIGCLD
+   "CLD",        SIGCLD,         /* Same as SIGCHLD (System V).  */
++#endif
+   "CHLD",       SIGCHLD,        /* Child status has changed (POSIX).  */
+   "CONT",       SIGCONT,        /* Continue (POSIX).  */
+   "STOP",       SIGSTOP,        /* Stop, unblockable (POSIX).  */
+diff --git a/hotspot/src/os/linux/vm/os_linux.cpp b/hotspot/src/os/linux/vm/os_linux.cpp
+index 03cabfefb4..c20a674fa2 100644
+--- a/hotspot/src/os/linux/vm/os_linux.cpp
++++ b/hotspot/src/os/linux/vm/os_linux.cpp
+@@ -95,7 +95,6 @@
+ # include <string.h>
+ # include <syscall.h>
+ # include <sys/sysinfo.h>
+-# include <gnu/libc-version.h>
+ # include <sys/ipc.h>
+ # include <sys/shm.h>
+ # include <link.h>
+@@ -581,6 +580,12 @@ void os::Linux::hotspot_sigmask(Thread* thread) {
+ // detecting pthread library
+ 
+ void os::Linux::libpthread_init() {
++#if 1
++  os::Linux::set_glibc_version("glibc 2.9");
++  os::Linux::set_libpthread_version("NPTL");
++  os::Linux::set_is_NPTL();
++  os::Linux::set_is_floating_stack();
++#else
+   // Save glibc and pthread version strings. Note that _CS_GNU_LIBC_VERSION
+   // and _CS_GNU_LIBPTHREAD_VERSION are supported in glibc >= 2.3.2. Use a
+   // generic name for earlier versions.
+@@ -639,6 +644,7 @@ void os::Linux::libpthread_init() {
+   if (os::Linux::is_NPTL() || os::Linux::supports_variable_stack_size()) {
+      os::Linux::set_is_floating_stack();
+   }
++#endif
+ }
+ 
+ /////////////////////////////////////////////////////////////////////////////
+@@ -2932,6 +2938,9 @@ int os::Linux::sched_getcpu_syscall(void) {
+ extern "C" JNIEXPORT void numa_warn(int number, char *where, ...) { }
+ extern "C" JNIEXPORT void numa_error(char *where) { }
+ extern "C" JNIEXPORT int fork1() { return fork(); }
++static void *dlvsym(void *handle, const char *name, const char *ver) {
++  return dlsym(handle, name);
++}
+ 
+ // Handle request to load libnuma symbol version 1.1 (API v1). If it fails
+ // load symbol from base version instead.
+diff --git a/hotspot/src/os/linux/vm/os_linux.inline.hpp b/hotspot/src/os/linux/vm/os_linux.inline.hpp
+index a23bd56313..9d56de0ef0 100644
+--- a/hotspot/src/os/linux/vm/os_linux.inline.hpp
++++ b/hotspot/src/os/linux/vm/os_linux.inline.hpp
+@@ -33,7 +33,7 @@
+ 
+ #include <unistd.h>
+ #include <sys/socket.h>
+-#include <sys/poll.h>
++#include <poll.h>
+ #include <netdb.h>
+ 
+ inline void* os::thread_local_storage_at(int index) {
+diff --git a/hotspot/src/os_cpu/linux_x86/vm/os_linux_x86.cpp b/hotspot/src/os_cpu/linux_x86/vm/os_linux_x86.cpp
+index 1a7375afc7..e6859306fd 100644
+--- a/hotspot/src/os_cpu/linux_x86/vm/os_linux_x86.cpp
++++ b/hotspot/src/os_cpu/linux_x86/vm/os_linux_x86.cpp
+@@ -72,7 +72,8 @@
+ # include <pwd.h>
+ # include <poll.h>
+ # include <ucontext.h>
+-# include <fpu_control.h>
++#define _FPU_GETCW(cw) __asm__ __volatile__ ("fnstcw %0" : "=m" (*&cw))
++#define _FPU_SETCW(cw) __asm__ __volatile__ ("fldcw %0" : : "m" (*&cw))
+ 
+ #ifdef AMD64
+ #define REG_SP REG_RSP
+diff --git a/hotspot/src/share/vm/utilities/globalDefinitions_gcc.hpp b/hotspot/src/share/vm/utilities/globalDefinitions_gcc.hpp
+index efa0b4e1ad..6df2302ee8 100644
+--- a/hotspot/src/share/vm/utilities/globalDefinitions_gcc.hpp
++++ b/hotspot/src/share/vm/utilities/globalDefinitions_gcc.hpp
+@@ -235,7 +235,7 @@ inline int g_isnan(double f) { return isnand(f); }
+ #elif defined(__APPLE__)
+ inline int g_isnan(double f) { return isnan(f); }
+ #elif defined(LINUX) || defined(_ALLBSD_SOURCE)
+-inline int g_isnan(float  f) { return isnanf(f); }
++inline int g_isnan(float  f) { return isnan(f); }
+ inline int g_isnan(double f) { return isnan(f); }
+ #else
+ #error "missing platform-specific definition here"

@@ -1,0 +1,59 @@
+:100644 100644 6f6c52a11a 0000000000 M	common/autoconf/jdk-options.m4
+:100644 100644 496c3e128a 0000000000 M	hotspot/make/linux/makefiles/defs.make
+:100644 100644 ffc0ec5ce5 0000000000 M	hotspot/make/linux/makefiles/saproc.make
+
+diff --git a/common/autoconf/jdk-options.m4 b/common/autoconf/jdk-options.m4
+index 6f6c52a11a..e94c38e73c 100644
+--- a/common/autoconf/jdk-options.m4
++++ b/common/autoconf/jdk-options.m4
+@@ -151,7 +151,7 @@ AC_DEFUN_ONCE([JDKOPT_SETUP_JVM_VARIANTS],
+   AC_SUBST(JVM_VARIANT_ZEROSHARK)
+   AC_SUBST(JVM_VARIANT_CORE)
+ 
+-  INCLUDE_SA=true
++  INCLUDE_SA=false
+   if test "x$JVM_VARIANT_ZERO" = xtrue ; then
+     INCLUDE_SA=false
+   fi
+diff --git a/hotspot/make/linux/makefiles/defs.make b/hotspot/make/linux/makefiles/defs.make
+index 496c3e128a..3c853ce66b 100644
+--- a/hotspot/make/linux/makefiles/defs.make
++++ b/hotspot/make/linux/makefiles/defs.make
+@@ -296,6 +296,7 @@ endif
+ 
+ # Serviceability Binaries
+ # No SA Support for PPC, IA64, ARM or zero
++ifeq (0,1)
+ ADD_SA_BINARIES/x86   = $(EXPORT_JRE_LIB_ARCH_DIR)/libsaproc.$(LIBRARY_SUFFIX) \
+                         $(EXPORT_LIB_DIR)/sa-jdi.jar
+ ADD_SA_BINARIES/sparc = $(EXPORT_JRE_LIB_ARCH_DIR)/libsaproc.$(LIBRARY_SUFFIX) \
+@@ -311,6 +312,11 @@ ifeq ($(ENABLE_FULL_DEBUG_SYMBOLS),1)
+     endif
+   endif
+ endif
++else
++ADD_SA_BINARIES/x86 =
++ADD_SA_BINARIES/sparc =
++ADD_SA_BINARIES/aarch64 =
++endif
+ ADD_SA_BINARIES/ppc   =
+ ADD_SA_BINARIES/ia64  =
+ ADD_SA_BINARIES/arm   =
+diff --git a/hotspot/make/linux/makefiles/saproc.make b/hotspot/make/linux/makefiles/saproc.make
+index ffc0ec5ce5..7686302743 100644
+--- a/hotspot/make/linux/makefiles/saproc.make
++++ b/hotspot/make/linux/makefiles/saproc.make
+@@ -67,11 +67,13 @@ endif
+ # if $(AGENT_DIR) does not exist, we don't build SA
+ # also, we don't build SA on Itanium or zero.
+ 
++ifeq (0,1)
+ ifneq ($(wildcard $(AGENT_DIR)),)
+ ifneq ($(filter-out ia64 zero,$(SRCARCH)),)
+   BUILDLIBSAPROC = $(LIBSAPROC)
+ endif
+ endif
++endif
+ 
+ ifneq ($(ALT_SASRCDIR),)
+ ALT_SAINCDIR=-I$(ALT_SASRCDIR) -DALT_SASRCDIR

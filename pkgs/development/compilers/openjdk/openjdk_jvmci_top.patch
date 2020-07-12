@@ -1,0 +1,97 @@
+diff --git a/common/autoconf/configure.ac b/common/autoconf/configure.ac
+--- a/common/autoconf/configure.ac
++++ b/common/autoconf/configure.ac
+@@ -188,6 +188,7 @@
+ PLATFORM_SETUP_OPENJDK_TARGET_ENDIANNESS
+
+ # Configure flags for the tools
++JDKOPT_SETUP_STATIC_BUILD
+ FLAGS_SETUP_COMPILER_FLAGS_FOR_LIBS
+ FLAGS_SETUP_COMPILER_FLAGS_FOR_OPTIMIZATION
+ FLAGS_SETUP_COMPILER_FLAGS_FOR_JDK
+diff --git a/common/autoconf/flags.m4 b/common/autoconf/flags.m4
+--- a/common/autoconf/flags.m4
++++ b/common/autoconf/flags.m4
+@@ -440,6 +440,21 @@
+   LEGACY_EXTRA_CXXFLAGS="$LEGACY_EXTRA_CXXFLAGS $with_extra_cxxflags"
+   LEGACY_EXTRA_LDFLAGS="$LEGACY_EXTRA_LDFLAGS $with_extra_ldflags"
+
++  if test "x$STATIC_BUILD" = xtrue; then
++    CFLAGS_JDK="${CFLAGS_JDK} $with_extra_cflags -DSTATIC_BUILD=1"
++    LEGACY_EXTRA_CFLAGS="${LEGACY_EXTRA_CFLAGS} $with_extra_cflags -DSTATIC_BUILD=1"
++    if test "x$TOOLCHAIN_TYPE" = xgcc; then
++      CFLAGS_SECTIONS="-ffunction-sections -fdata-sections"
++      CFLAGS_JDK="${CFLAGS_JDK} ${CFLAGS_SECTIONS}"
++      LEGACY_EXTRA_CFLAGS="${LEGACY_EXTRA_CFLAGS} ${CFLAGS_SECTIONS}"
++    fi
++    if test "x$TOOLCHAIN_TYPE" = xclang; then
++      CFLAGS_SECTIONS="-ffunction-sections -fdata-sections"
++      CFLAGS_JDK="${CFLAGS_JDK} ${CFLAGS_SECTIONS}"
++      LEGACY_EXTRA_CFLAGS="${LEGACY_EXTRA_CFLAGS} ${CFLAGS_SECTIONS}"
++    fi
++  fi
++
+   AC_SUBST(LEGACY_EXTRA_CFLAGS)
+   AC_SUBST(LEGACY_EXTRA_CXXFLAGS)
+   AC_SUBST(LEGACY_EXTRA_LDFLAGS)
+diff --git a/common/autoconf/jdk-options.m4 b/common/autoconf/jdk-options.m4
+--- a/common/autoconf/jdk-options.m4
++++ b/common/autoconf/jdk-options.m4
+@@ -691,6 +691,28 @@
+   AC_SUBST(ZIP_DEBUGINFO_FILES)
+ ])
+
++################################################################################
++#
++# Static build support.  When enabled will generate static
++# libraries instead of shared libraries for all JDK libs.
++#
++AC_DEFUN_ONCE([JDKOPT_SETUP_STATIC_BUILD],
++[
++  AC_ARG_ENABLE([static-build], [AS_HELP_STRING([--enable-static-build],
++    [enable static library build @<:@disabled@:>@])])
++  STATIC_BUILD=false
++  if test "x$enable_static_build" = "xyes"; then
++    STATIC_BUILD=true
++  elif test "x$enable_static_build" = "xno"; then
++    AC_MSG_CHECKING([if static build is enabled])
++    AC_MSG_RESULT([no])
++  elif test "x$enable_static_build" != "x"; then
++    AC_MSG_ERROR([--enable-static-build can only be assigned "yes" or "no"])
++  fi
++
++  AC_SUBST(STATIC_BUILD)
++])
++
+ # Support for customization of the build process. Some build files
+ # will include counterparts from this location, if they exist. This allows
+ # for a degree of customization of the build targets and the rules/recipes
+diff --git a/common/autoconf/spec.gmk.in b/common/autoconf/spec.gmk.in
+--- a/common/autoconf/spec.gmk.in
++++ b/common/autoconf/spec.gmk.in
+@@ -443,6 +443,7 @@
+ STATIC_LIBRARY_SUFFIX:=@STATIC_LIBRARY_SUFFIX@
+ EXE_SUFFIX:=@EXE_SUFFIX@
+ OBJ_SUFFIX:=@OBJ_SUFFIX@
++STATIC_BUILD:=@STATIC_BUILD@
+
+ POST_STRIP_CMD:=@POST_STRIP_CMD@
+ POST_MCS_CMD:=@POST_MCS_CMD@
+diff --git a/make/common/NativeCompilation.gmk b/make/common/NativeCompilation.gmk
+--- a/make/common/NativeCompilation.gmk
++++ b/make/common/NativeCompilation.gmk
+@@ -411,6 +411,7 @@
+   # mapfile doesnt seem to be implemented on macosx (yet??)
+   ifneq ($(OPENJDK_TARGET_OS),macosx)
+     ifneq ($(OPENJDK_TARGET_OS),windows)
++      ifneq ($(STATIC_BUILD),true)
+       $1_REAL_MAPFILE:=$$($1_MAPFILE)
+       ifneq (,$$($1_REORDER))
+         $1_REAL_MAPFILE:=$$($1_OBJECT_DIR)/mapfile
+@@ -421,6 +422,7 @@
+ 		$$(SED) -e 's=OUTPUTDIR=$$($1_OBJECT_DIR)=' $$($1_REORDER) >> $$@.tmp
+ 		$$(MV) $$@.tmp $$@
+       endif
++      endif
+     endif
+   endif
