@@ -19,8 +19,12 @@ with lib;
 
     };
     whitelist = mkOption {
-      description = "List of hosts to allow,one host per line.";
+      description = "List of hosts names to allow,one host per line.";
       default = "";
+      example = ''
+        site.to.allow.example
+        another.to.allow.example.com
+      '';
       type = types.lines;
 
     };
