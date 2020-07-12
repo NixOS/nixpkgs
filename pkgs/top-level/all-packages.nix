@@ -7544,6 +7544,8 @@ in
     inherit (xorg) libxkbfile;
   };
 
+  wormhole-william = callPackage ../tools/networking/wormhole-william { };
+
   wpscan = callPackage ../tools/security/wpscan { };
 
   wsmancli = callPackage ../tools/system/wsmancli {};
