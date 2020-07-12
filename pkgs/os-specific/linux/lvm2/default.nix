@@ -31,11 +31,12 @@ stdenv.mkDerivation rec {
     "--enable-pkgconfig"
     "--with-default-locking-dir=/run/lock/lvm"
     "--with-default-run-dir=/run/lvm"
-    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
   ] ++ stdenv.lib.optionals (!enableCmdlib) [
     "--bindir=${placeholder "bin"}/bin"
     "--sbindir=${placeholder "bin"}/bin"
     "--libdir=${placeholder "lib"}/lib"
+    "--with-usrsbindir=${placeholder "bin"}/bin"
+    "--with-usrlibdir=${placeholder "lib"}/lib"
   ] ++ stdenv.lib.optional enableCmdlib "--enable-cmdlib"
   ++ stdenv.lib.optionals enableDmeventd [
     "--enable-dmeventd"
@@ -46,8 +47,12 @@ stdenv.mkDerivation rec {
     "ac_cv_func_realloc_0_nonnull=yes"
   ] ++
   stdenv.lib.optionals (udev != null) [
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--enable-udev_rules"
     "--enable-udev_sync"
+  ] ++
+  stdenv.lib.optional stdenv.hostPlatform.isMusl [
+    "--enable-static_link"
   ];
 
   preConfigure = ''
@@ -71,8 +76,8 @@ stdenv.mkDerivation rec {
   patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       name = "fix-stdio-usage.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/lvm2/fix-stdio-usage.patch?h=3.7-stable&id=31bd4a8c2dc00ae79a821f6fe0ad2f23e1534f50";
-      sha256 = "0m6wr6qrvxqi2d2h054cnv974jq1v65lqxy05g1znz946ga73k3p";
+      url = "https://git.alpinelinux.org/aports/plain/main/lvm2/fix-stdio-usage.patch?id=616ca235e685a9ffa3f63c59779f71f5ef9288d8";
+      sha256 = "0qj9ricgn3hg2rziddmil0x228z017mkz371yr6syayv5adqrlk0";
     })
     (fetchpatch {
       name = "mallinfo.patch";
@@ -84,6 +89,7 @@ stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/main/lvm2/mlockall-default-config.patch?h=3.7-stable&id=31bd4a8c2dc00ae79a821f6fe0ad2f23e1534f50";
       sha256 = "1ivbj3sphgf8n1ykfiv5rbw7s8dgnj5jcr9jl2v8cwf28lkacw5l";
     })
+    ./no-dynamic.patch
   ];
 
   doCheck = false; # requires root

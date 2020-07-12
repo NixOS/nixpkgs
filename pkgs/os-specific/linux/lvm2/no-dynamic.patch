@@ -1,0 +1,267 @@
+commit 8b38de92a3a3738f18c48d04e92d31ea3943d5f6
+Author: Arthur Gautier <baloo@superbaloo.net>
+Date:   Sat Aug 22 16:33:36 2020 -0700
+
+    configure: allow to disable shared linking
+
+diff --git a/configure b/configure
+index 716ee9ca7..8bb0a5851 100755
+--- a/configure
++++ b/configure
+@@ -659,6 +659,7 @@ STATIC_LINK
+ STATICDIR
+ SNAPSHOTS
+ SYSCONFDIR
++SHARED_LINK
+ SELINUX_PC
+ SELINUX_LIBS
+ SBINDIR
+@@ -866,6 +867,7 @@ infodir
+ docdir
+ oldincludedir
+ includedir
++runstatedir
+ localstatedir
+ sharedstatedir
+ sysconfdir
+@@ -891,6 +893,7 @@ enable_option_checking
+ enable_dependency_tracking
+ enable_silent_rules
+ enable_static_link
++enable_shared
+ with_user
+ with_group
+ with_device_uid
+@@ -1054,6 +1057,7 @@ datadir='${datarootdir}'
+ sysconfdir='${prefix}/etc'
+ sharedstatedir='${prefix}/com'
+ localstatedir='${prefix}/var'
++runstatedir='${localstatedir}/run'
+ includedir='${prefix}/include'
+ oldincludedir='/usr/include'
+ docdir='${datarootdir}/doc/${PACKAGE}'
+@@ -1306,6 +1310,15 @@ do
+   | -silent | --silent | --silen | --sile | --sil)
+     silent=yes ;;
+ 
++  -runstatedir | --runstatedir | --runstatedi | --runstated \
++  | --runstate | --runstat | --runsta | --runst | --runs \
++  | --run | --ru | --r)
++    ac_prev=runstatedir ;;
++  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
++  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
++  | --run=* | --ru=* | --r=*)
++    runstatedir=$ac_optarg ;;
++
+   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
+     ac_prev=sbindir ;;
+   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
+@@ -1443,7 +1456,7 @@ fi
+ for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
+ 		datadir sysconfdir sharedstatedir localstatedir includedir \
+ 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
+-		libdir localedir mandir
++		libdir localedir mandir runstatedir
+ do
+   eval ac_val=\$$ac_var
+   # Remove trailing slashes.
+@@ -1596,6 +1609,7 @@ Fine tuning of the installation directories:
+   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
+   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
+   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
++  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
+   --libdir=DIR            object code libraries [EPREFIX/lib]
+   --includedir=DIR        C header files [PREFIX/include]
+   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
+@@ -1633,6 +1647,8 @@ Optional Features:
+   --disable-silent-rules  disable silent building
+   --enable-static_link    use this to link the tools to their libraries
+                           statically (default is dynamic linking
++  --enable-shared         use this to enable dynamic linking of tools and
++                          libraries [default=yes]
+   --disable-thin_check_needs_check
+                           required if thin_check version is < 0.3.0
+   --disable-cache_check_needs_check
+@@ -7842,6 +7858,8 @@ main ()
+     if (*(data + i) != *(data3 + i))
+       return 14;
+   close (fd);
++  free (data);
++  free (data3);
+   return 0;
+ }
+ _ACEOF
+@@ -8150,6 +8168,19 @@ fi
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $STATIC_LINK" >&5
+ $as_echo "$STATIC_LINK" >&6; }
+ 
++################################################################################
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable dynamic linking" >&5
++$as_echo_n "checking whether to enable dynamic linking... " >&6; }
++# Check whether --enable-shared was given.
++if test "${enable_shared+set}" = set; then :
++  enableval=$enable_shared; SHARED_LINK=$enableval
++else
++  SHARED_LINK=yes
++fi
++
++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $SHARED_LINK" >&5
++$as_echo "$SHARED_LINK" >&6; }
++
+ ################################################################################
+ 
+ 
+@@ -13927,6 +13958,7 @@ _ACEOF
+ 
+ 
+ 
++
+ 
+ 
+ ################################################################################
+diff --git a/configure.ac b/configure.ac
+index 9a0e41a81..9ee8cf811 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -199,6 +199,16 @@ AC_ARG_ENABLE(static_link,
+ 	      STATIC_LINK=$enableval, STATIC_LINK=no)
+ AC_MSG_RESULT($STATIC_LINK)
+ 
++################################################################################
++dnl -- Disables dynamically-linked tools
++AC_MSG_CHECKING(whether to enable dynamic linking)
++AC_ARG_ENABLE(shared,
++	      AC_HELP_STRING([--enable-shared],
++			     [use this to enable dynamic linking of tools and
++                              libraries [default=yes]]),
++	      SHARED_LINK=$enableval, SHARED_LINK=yes)
++AC_MSG_RESULT($SHARED_LINK)
++
+ ################################################################################
+ dnl -- Check if compiler/linker supports PIE and RELRO
+ AC_TRY_CCFLAG([-pie], [HAVE_PIE], [], [])
+@@ -1773,6 +1783,7 @@ AC_SUBST(SALCK_LIBS)
+ AC_SUBST(SBINDIR)
+ AC_SUBST(SELINUX_LIBS)
+ AC_SUBST(SELINUX_PC)
++AC_SUBST(SHARED_LINK)
+ AC_SUBST(SYSCONFDIR)
+ AC_SUBST(SYSTEMD_LIBS)
+ AC_SUBST(SNAPSHOTS)
+diff --git a/libdm/Makefile.in b/libdm/Makefile.in
+index e9bb5ae2f..a90b3f974 100644
+--- a/libdm/Makefile.in
++++ b/libdm/Makefile.in
+@@ -44,9 +44,15 @@ ifeq ("@STATIC_LINK@", "yes")
+ LIB_STATIC = $(interface)/libdevmapper.a
+ endif
+ 
++ifeq ("@SHARED_LINK@", "yes")
+ LIB_SHARED = $(interface)/libdevmapper.$(LIB_SUFFIX)
++endif
++
+ LIB_VERSION = $(LIB_VERSION_DM)
+-TARGETS = libdevmapper.$(LIB_SUFFIX) libdevmapper.$(LIB_SUFFIX).$(LIB_VERSION)
++TARGETS = 
++ifeq ("@SHARED_LINK@", "yes")
++TARGETS += libdevmapper.$(LIB_SUFFIX) libdevmapper.$(LIB_SUFFIX).$(LIB_VERSION)
++endif
+ 
+ CFLOW_LIST = $(SOURCES)
+ CFLOW_LIST_TARGET = libdevmapper.cflow
+@@ -72,7 +78,11 @@ libdevmapper.$(LIB_SUFFIX) libdevmapper.$(LIB_SUFFIX).$(LIB_VERSION): $(LIB_SHAR
+ 	install_ioctl install_ioctl_static \
+ 	install_pkgconfig
+ 
+-INSTALL_TYPE = install_dynamic
++INSTALL_TYPE =
++
++ifeq ("@SHARED_LINK@", "yes")
++  INSTALL_TYPE += install_dynamic
++endif
+ 
+ ifeq ("@STATIC_LINK@", "yes")
+   INSTALL_TYPE += install_static
+diff --git a/libdm/dm-tools/Makefile.in b/libdm/dm-tools/Makefile.in
+index 15a9d8ef5..75df27316 100644
+--- a/libdm/dm-tools/Makefile.in
++++ b/libdm/dm-tools/Makefile.in
+@@ -19,19 +19,27 @@ top_builddir = @top_builddir@
+ all: device-mapper
+ 
+ SOURCES2 = dmsetup.c
+-TARGETS_DM = dmsetup
+-install_device-mapper: install_dmsetup_dynamic
++TARGETS_DM =
++install_device-mapper:
+ 
+ ifeq ("@STATIC_LINK@", "yes")
+   TARGETS_DM += dmsetup.static
+   install_device-mapper: install_dmsetup_static
+ endif
+ 
++ifeq ("@SHARED_LINK@", "yes")
++  TARGETS_DM += dmsetup
++  install_device-mapper: install_dmsetup_dynamic
++endif
++
+ # dmfilemapd support
+ ifeq ("@BUILD_DMFILEMAPD@", "yes")
+   SOURCES2 += dmfilemapd.c
+-  TARGETS_DM += dmfilemapd
+-  install_dmfilemapd: install_dmfilemapd_dynamic
++
++  ifeq ("@SHARED_LINK@", "yes")
++    TARGETS_DM += dmfilemapd
++    install_dmfilemapd: install_dmfilemapd_dynamic
++  endif
+ 
+   ifeq ("@STATIC_LINK@", "yes")
+     TARGETS_DM += dmfilemapd.static
+diff --git a/make.tmpl.in b/make.tmpl.in
+index 8a2081897..6520c0836 100644
+--- a/make.tmpl.in
++++ b/make.tmpl.in
+@@ -145,6 +145,7 @@ vpath %.po $(srcdir)
+ vpath %.exported_symbols $(srcdir)
+ 
+ interface = @interface@
++interfacebuilddir = $(top_builddir)/libdm/@interface@
+ rpmbuilddir = $(abs_top_builddir)/build
+ 
+ # The number of jobs to run, if blank, defaults to the make standard
+diff --git a/tools/Makefile.in b/tools/Makefile.in
+index 2620daa17..623407838 100644
+--- a/tools/Makefile.in
++++ b/tools/Makefile.in
+@@ -76,12 +76,17 @@ SOURCES2 =\
+ TARGETS =\
+ 	.commands \
+ 	liblvm2cmd.a \
+-	lvm \
+ 	man-generator
+ 
+-INSTALL_LVM_TARGETS = install_tools_dynamic
++INSTALL_LVM_TARGETS =
+ INSTALL_DMSETUP_TARGETS =
+-INSTALL_CMDLIB_TARGETS = install_cmdlib_dynamic install_cmdlib_include 
++INSTALL_CMDLIB_TARGETS = install_cmdlib_include
++
++ifeq ("@SHARED_LINK@", "yes")
++  TARGETS += lvm
++  INSTALL_LVM_TARGETS += install_tools_dynamic
++  INSTALL_CMDLIB_TARGETS += install_cmdlib_dynamic
++endif
+ 
+ ifeq ("@STATIC_LINK@", "yes")
+   TARGETS += lvm.static
+@@ -100,7 +105,9 @@ CLEAN_TARGETS = liblvm2cmd.$(LIB_SUFFIX) $(TARGETS_DM) \
+ 	cmds.h command-lines-input.h command-count.h man-generator.c
+ 
+ ifeq ("@CMDLIB@", "yes")
++ifeq ("@SHARED_LINK@", "yes")
+ 	TARGETS += liblvm2cmd.$(LIB_SUFFIX).$(LIB_VERSION)
++endif
+ 	INSTALL_LVM_TARGETS += $(INSTALL_CMDLIB_TARGETS)
+ endif
+ 
