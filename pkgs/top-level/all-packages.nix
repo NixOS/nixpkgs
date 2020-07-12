@@ -989,6 +989,8 @@ in
 
   gamecube-tools = callPackage ../development/tools/gamecube-tools { };
 
+  gammy = qt5.callPackage ../tools/misc/gammy { };
+
   gams = callPackage ../tools/misc/gams (config.gams or {});
 
   git-fire = callPackage ../tools/misc/git-fire { };
