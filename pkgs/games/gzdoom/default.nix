@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "coelckers";
     repo = "gzdoom";
     rev = "g${version}";
-    sha256 = "0x06069ywl3mndspyi4pq91myivpf3jkclwagbcvcd48zapfkvfh";
+    sha256 = "1xkkmbsdv64wyb9r2fv5mwyqw0bjryk528jghdrh47pndmjs9a38";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
