@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sndio";
-  version = "1.6.0";
+  version = "1.7.0";
   enableParallelBuilding = true;
   buildInputs = stdenv.lib.optionals stdenv.isLinux [ alsaLib ];
 
   src = fetchurl {
     url = "http://www.sndio.org/sndio-${version}.tar.gz";
-    sha256 = "1havdx3q4mipgddmd2bnygr1yh6y64567m1yqwjapkhsq550dq4r";
+    sha256 = "0ljmac0lnjn61admgbcwjfcr5fwccrsblx9rj9bys8wlhz8f796x";
   };
 
   postFixup = stdenv.lib.optionalString stdenv.isDarwin ''
