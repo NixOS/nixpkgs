@@ -37,7 +37,7 @@ buildGoModule rec {
     export MINIKUBE_WANTUPDATENOTIFICATION=false
     export MINIKUBE_WANTKUBECTLDOWNLOADMSG=false
 
-    for shell in bash zsh; do
+    for shell in bash zsh fish; do
       $out/bin/minikube completion $shell > minikube.$shell
       installShellCompletion minikube.$shell
     done
