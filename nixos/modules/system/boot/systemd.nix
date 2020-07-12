@@ -819,7 +819,8 @@ in
     };
 
     systemd.watchdog.device = mkOption {
-      type = types.path;
+      type = types.nullOr types.path;
+      default = null;
       example = "/dev/watchdog";
       description = ''
         The path to a hardware watchdog device which will be managed by systemd.
@@ -828,7 +829,8 @@ in
     };
 
     systemd.watchdog.runtimeTime = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
+      default = null;
       example = "30s";
       description = ''
         The amount of time which can elapse before a watchdog hardware device
@@ -838,7 +840,8 @@ in
     };
 
     systemd.watchdog.rebootTime = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
+      default = null;
       example = "10m";
       description = ''
         The amount of time which can elapse after a reboot has been triggered
@@ -848,7 +851,8 @@ in
     };
 
     systemd.watchdog.kexecTime = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
+      default = null;
       example = "10m";
       description = ''
         The amount of time which can elapse when kexec is being executed before
@@ -928,16 +932,16 @@ in
           DefaultIPAccounting=yes
         ''}
         DefaultLimitCORE=infinity
-        ${optionalString (config.systemd.watchdog.device != "") ''
+        ${optionalString (config.systemd.watchdog.device != null) ''
           WatchdogDevice=${config.systemd.watchdog.device}
         ''}
-        ${optionalString (config.systemd.watchdog.runtimeTime != "") ''
+        ${optionalString (config.systemd.watchdog.runtimeTime != null) ''
           RuntimeWatchdogSec=${config.systemd.watchdog.runtimeTime}
         ''}
-        ${optionalString (config.systemd.watchdog.rebootTime != "") ''
+        ${optionalString (config.systemd.watchdog.rebootTime != null) ''
           RebootWatchdogSec=${config.systemd.watchdog.rebootTime}
         ''}
-        ${optionalString (config.systemd.watchdog.kexecTime != "") ''
+        ${optionalString (config.systemd.watchdog.kexecTime != null) ''
           KExecWatchdogSec=${config.systemd.watchdog.kexecTime}
         ''}
 
