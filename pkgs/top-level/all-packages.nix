@@ -1617,6 +1617,8 @@ in
 
   colpack = callPackage ../applications/science/math/colpack { };
 
+  commitizen = callPackage ../applications/version-management/commitizen {};
+
   compactor = callPackage ../applications/networking/compactor { };
 
   consul = callPackage ../servers/consul { };
