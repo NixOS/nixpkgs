@@ -18,7 +18,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ astring ipaddr ipaddr-sexp sexplib uri ];
 
   meta = {
-    description = "Network connection library for TCP and SSL";
+    description = "A network connection establishment library";
     license = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ alexfmpe vbgl ];
     homepage = "https://github.com/mirage/ocaml-conduit";
