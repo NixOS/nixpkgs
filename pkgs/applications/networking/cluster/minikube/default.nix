@@ -13,9 +13,6 @@ buildGoModule rec {
   pname = "minikube";
   version = "1.12.0";
 
-  # for -ldflags
-  commit = "57e2f55f47effe9ce396cea42a1e0eb4f611ebbd";
-
   vendorSha256 = "0wcm7kw5z7d0ch59nyx5xlv5ci7jrwnzspmsh1yb76318cx2aghi";
 
   src = fetchFromGitHub {
@@ -30,7 +27,7 @@ buildGoModule rec {
   buildInputs = if stdenv.isDarwin then [ vmnet ] else if stdenv.isLinux then [ libvirt ] else null;
 
   buildPhase = ''
-    make COMMIT=${commit}
+    make COMMIT=${src.rev}
   '';
 
   installPhase = ''
