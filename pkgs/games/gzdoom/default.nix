@@ -12,7 +12,7 @@ zmusic = stdenv.mkDerivation {
     rev = "${version}";
     sha256 = "0cr48xdyg4d7wckxp3vvxyw7axzyik79p72yv1i1lyacbj04advk";
   }
-}
+};
 
 stdenv.mkDerivation rec {
   pname = "gzdoom";
