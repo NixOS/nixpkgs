@@ -14217,6 +14217,8 @@ in
 
   nettle = callPackage ../development/libraries/nettle { };
 
+  newman = callPackage ../development/web/newman {};
+
   newt = callPackage ../development/libraries/newt { };
 
   nghttp2 = callPackage ../development/libraries/nghttp2 { };
