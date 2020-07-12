@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     repo = "gzdoom";
     rev = "g${version}";
     sha256 = "1xkkmbsdv64wyb9r2fv5mwyqw0bjryk528jghdrh47pndmjs9a38";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
