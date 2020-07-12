@@ -15790,6 +15790,8 @@ in
     inherit (llvmPackages_9) clang-unwrapped lld lldClang llvm;
   };
 
+  clickhouse-cli = callPackage ../development/tools/database/clickhouse-cli { };
+
   couchdb = callPackage ../servers/http/couchdb {
     spidermonkey = spidermonkey_1_8_5;
     sphinx = python27Packages.sphinx;
