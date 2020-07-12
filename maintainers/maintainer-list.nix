@@ -9099,4 +9099,10 @@
     github = "tfmoraes";
     githubId = 351108;
   };
+  johnpyp = {
+    name = "John Paul Penaloza";
+    email = "20625636+johnpyp@users.noreply.github.com";
+    github = "johnpyp";
+    githubId = 20625636;
+  };
 }
