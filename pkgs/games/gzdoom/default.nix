@@ -2,6 +2,18 @@
 , openal, fluidsynth_1, soundfont-fluid, libGL, SDL2
 , bzip2, zlib, libjpeg, libsndfile, mpg123, game-music-emu }:
 
+zmusic = stdenv.mkDerivation {
+  pname = "zmusic";
+  version = "1.1.0";
+  
+  src = fetchFromGitHub {
+    owner = "coelckers";
+    repo = "zmusic";
+    rev = "${version}";
+    sha256 = "0cr48xdyg4d7wckxp3vvxyw7axzyik79p72yv1i1lyacbj04advk";
+  }
+}
+
 stdenv.mkDerivation rec {
   pname = "gzdoom";
   version = "4.4.2";
@@ -17,7 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [
     SDL2 libGL openal fluidsynth_1 bzip2 zlib libjpeg libsndfile mpg123
-    game-music-emu
+    game-music-emu zmusic
   ];
 
   enableParallelBuilding = true;
