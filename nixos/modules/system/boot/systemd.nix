@@ -749,6 +749,25 @@ in
       '';
     };
 
+    systemd.tmpfiles.packages = mkOption {
+      type = types.listOf types.package;
+      default = [];
+      example = literalExample "[ pkgs.lvm2 ]";
+      apply = map getLib;
+      description = ''
+        List of packages containing <command>systemd-tmpfiles</command> rules.
+
+        All files ending in .conf found in
+        <filename><replaceable>pkg</replaceable>/lib/tmpfiles.d</filename>
+        will be included.
+        If this folder does not exist or does not contain any files an error will be returned instead.
+
+        If a <filename>lib</filename> output is available, rules are searched there and only there.
+        If there is no <filename>lib</filename> output it will fall back to <filename>out</filename>
+        and if that does not exist either, the default output will be used.
+      '';
+    };
+
     systemd.user.units = mkOption {
       description = "Definition of systemd per-user units.";
       default = {};
@@ -992,24 +1011,18 @@ in
       "sysctl.d/50-coredump.conf".source = "${systemd}/example/sysctl.d/50-coredump.conf";
       "sysctl.d/50-default.conf".source = "${systemd}/example/sysctl.d/50-default.conf";
 
-      "tmpfiles.d/00-nixos.conf".text = ''
-        # This file is created automatically and should not be modified.
-        # Please change the option ‘systemd.tmpfiles.rules’ instead.
-
-        ${concatStringsSep "\n" cfg.tmpfiles.rules}
-      '';
-
-      "tmpfiles.d/home.conf".source = "${systemd}/example/tmpfiles.d/home.conf";
-      "tmpfiles.d/journal-nocow.conf".source = "${systemd}/example/tmpfiles.d/journal-nocow.conf";
-      "tmpfiles.d/portables.conf".source = "${systemd}/example/tmpfiles.d/portables.conf";
-      "tmpfiles.d/static-nodes-permissions.conf".source = "${systemd}/example/tmpfiles.d/static-nodes-permissions.conf";
-      "tmpfiles.d/systemd.conf".source = "${systemd}/example/tmpfiles.d/systemd.conf";
-      "tmpfiles.d/systemd-nologin.conf".source = "${systemd}/example/tmpfiles.d/systemd-nologin.conf";
-      "tmpfiles.d/systemd-nspawn.conf".source = "${systemd}/example/tmpfiles.d/systemd-nspawn.conf";
-      "tmpfiles.d/systemd-tmp.conf".source = "${systemd}/example/tmpfiles.d/systemd-tmp.conf";
-      "tmpfiles.d/tmp.conf".source = "${systemd}/example/tmpfiles.d/tmp.conf";
-      "tmpfiles.d/var.conf".source = "${systemd}/example/tmpfiles.d/var.conf";
-      "tmpfiles.d/x11.conf".source = "${systemd}/example/tmpfiles.d/x11.conf";
+      "tmpfiles.d".source = (pkgs.symlinkJoin {
+        name = "tmpfiles.d";
+        paths = cfg.tmpfiles.packages;
+        postBuild = ''
+          for i in $(cat $pathsPath); do
+            (test -d $i/lib/tmpfiles.d && test $(ls $i/lib/tmpfiles.d/*.conf | wc -l) -ge 1) || (
+              echo "ERROR: The path $i was passed to systemd.tmpfiles.packages but either does not contain the folder lib/tmpfiles.d or if it contains that folder, there are no files ending in .conf in it."
+              exit 1
+            )
+          done
+        '';
+      }) + "/lib/tmpfiles.d";
 
       "systemd/system-generators" = { source = hooks "generators" cfg.generators; };
       "systemd/system-shutdown" = { source = hooks "shutdown" cfg.shutdown; };
@@ -1029,6 +1042,36 @@ in
       { description = "Security Keys";
         unitConfig.X-StopOnReconfiguration = true;
       };
+
+    systemd.tmpfiles.packages = [
+      # Default tmpfiles rules provided by systemd
+      (pkgs.runCommand "systemd-default-tmpfiles" {} ''
+        mkdir -p $out/lib/tmpfiles.d
+        cd $out/lib/tmpfiles.d
+
+        ln -s "${systemd}/example/tmpfiles.d/home.conf"
+        ln -s "${systemd}/example/tmpfiles.d/journal-nocow.conf"
+        ln -s "${systemd}/example/tmpfiles.d/static-nodes-permissions.conf"
+        ln -s "${systemd}/example/tmpfiles.d/systemd.conf"
+        ln -s "${systemd}/example/tmpfiles.d/systemd-nologin.conf"
+        ln -s "${systemd}/example/tmpfiles.d/systemd-nspawn.conf"
+        ln -s "${systemd}/example/tmpfiles.d/systemd-tmp.conf"
+        ln -s "${systemd}/example/tmpfiles.d/tmp.conf"
+        ln -s "${systemd}/example/tmpfiles.d/var.conf"
+        ln -s "${systemd}/example/tmpfiles.d/x11.conf"
+      '')
+      # User-specified tmpfiles rules
+      (pkgs.writeTextFile {
+        name = "nixos-tmpfiles.d";
+        destination = "/lib/tmpfiles.d/00-nixos.conf";
+        text = ''
+          # This file is created automatically and should not be modified.
+          # Please change the option ‘systemd.tmpfiles.rules’ instead.
+
+          ${concatStringsSep "\n" cfg.tmpfiles.rules}
+        '';
+      })
+    ];
 
     systemd.units =
          mapAttrs' (n: v: nameValuePair "${n}.path"    (pathToUnit    n v)) cfg.paths

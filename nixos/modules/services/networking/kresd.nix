@@ -134,8 +134,7 @@ in {
       CacheDirectoryMode = "0750";
     };
 
-    environment.etc."tmpfiles.d/knot-resolver.conf".source =
-      "${package}/lib/tmpfiles.d/knot-resolver.conf";
+    systemd.tmpfiles.packages = [ package ];
 
     # Try cleaning up the previously default location of cache file.
     # Note that /var/cache/* should always be safe to remove.
