@@ -507,9 +507,12 @@ stdenv.mkDerivation rec {
     mv ./bazel_src/output/bazel $out/bin/bazel-${version}-${system}-${arch}
 
     # shell completion files
-    mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
-    mv ./bazel_src/output/bazel-complete.bash $out/share/bash-completion/completions/bazel
-    cp ./bazel_src/scripts/zsh_completion/_bazel $out/share/zsh/site-functions/
+    install -Dm644 \
+      ./bazel_src/output/bazel-complete.bash \
+      $out/share/bash-completion/completions/bazel/bazel-complete.bash
+    install -Dm644 \
+      ./bazel_src/scripts/zsh_completion/_bazel \
+      $out/share/zsh/site-functions/_bazel
   '';
 
   doInstallCheck = true;
