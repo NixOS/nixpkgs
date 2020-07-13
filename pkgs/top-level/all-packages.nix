@@ -16961,6 +16961,8 @@ in
 
   irqbalance = callPackage ../os-specific/linux/irqbalance { };
 
+  itpp = callPackage ../development/libraries/science/math/itpp { };
+
   iw = callPackage ../os-specific/linux/iw { };
 
   iwd = callPackage ../os-specific/linux/iwd { };
