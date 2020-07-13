@@ -705,6 +705,10 @@ let
       preConfigure = "patchShebangs configure";
     });
 
+    RcppParallel = old.RcppParallel.overrideDerivation (attrs: {
+      preConfigure = "patchShebangs configure";
+    });
+
     ggbio = old.ggbio.overrideDerivation (attrs: {
       patches = [
         (pkgs.fetchpatch {
