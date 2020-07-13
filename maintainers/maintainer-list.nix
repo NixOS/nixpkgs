@@ -3959,6 +3959,12 @@
     githubId = 4611077;
     name = "Raymond Gauthier";
   };
+  jschievink = {
+    email = "jonasschievink@gmail.com";
+    github = "jonas-schievink";
+    githubId = 1786438;
+    name = "Jonas Schievink";
+  };
   jtcoolen = {
     email = "jtcoolen@pm.me";
     name = "Julien Coolen";
