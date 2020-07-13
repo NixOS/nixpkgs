@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ pkgconfig ];
 
-  nativeBuildInputs = [ pkgconfig wayland ];
+  nativeBuildInputs = [ pkgconfig ] ++ optionals waylandSupport [ wayland ];
 
   propagatedBuildInputs = dlopenPropagatedBuildInputs;
 
