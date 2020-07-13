@@ -1014,6 +1014,7 @@ in
                +----------------------------------------------------------------------+
                | Copyright (c) The PHP Group                                          |
           '')
+        ] ++ lib.optional (lib.versionOlder php.version "7.4.8") [
           (pkgs.writeText "mysqlnd_fix_compression.patch" ''
             --- a/ext/mysqlnd/mysqlnd.h
             +++ b/ext/mysqlnd/mysqlnd.h

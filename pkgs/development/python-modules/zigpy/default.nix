@@ -1,25 +1,24 @@
 { stdenv, buildPythonPackage, fetchPypi
-, aiohttp, crccheck, pycryptodome, pycrypto
+, aiohttp, crccheck, pycryptodome, pycrypto, voluptuous
 , pytest, pytest-asyncio, asynctest }:
 
 buildPythonPackage rec {
-  pname = "zigpy-homeassistant";
-  version = "0.19.0";
+  pname = "zigpy";
+  version = "0.22.0";
 
-  nativeBuildInputs = [ pytest pytest-asyncio asynctest ];
-  buildInputs = [ aiohttp pycryptodome ];
-  propagatedBuildInputs = [ crccheck pycrypto ];
+  propagatedBuildInputs = [ aiohttp crccheck pycrypto pycryptodome voluptuous ];
+  checkInputs = [ pytest pytest-asyncio asynctest ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "779cff7affb86b7141aa641c188342b22be0ec766adee0d180c93e74e2b10adc";
+    sha256 = "1y8n96g5g6qsx8s2z028f1cyp2w8y7kksi8k2yyzpqvmanbxyjhc";
   };
 
   meta = with stdenv.lib; {
     description = "Library implementing a ZigBee stack";
     homepage = "https://github.com/zigpy/zigpy";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ etu ];
+    maintainers = with maintainers; [ etu mvnetbiz ];
     platforms = platforms.linux;
   };
 }

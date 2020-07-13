@@ -5,16 +5,16 @@ let
   inherit (darwin.apple_sdk.frameworks) Security;
 in rustPlatform.buildRustPackage rec {
   name = "maturin-${version}";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "PyO3";
     repo = "maturin";
     rev = "v${version}";
-    sha256 = "16bxxa261k2l6mpdd55gyzl1mx756i0zbvqp15glpzlcwhb9bm2m";
+    sha256 = "1y6bxqbv7k8xvqjzgpf6n2n3yad4qxr2dwwlw8cb0knd7cfl2a2n";
   };
 
-  cargoSha256 = "1s1brfnhwl42jb37qqz4d8mxpyq2ck60jnmjfllkga3mhwm4r8px";
+  cargoSha256 = "1f12k6n58ycv79bv416566fnsnsng8jk3f6fy5j78py1qgy30swm";
 
   nativeBuildInputs = [ pkgconfig ];
 

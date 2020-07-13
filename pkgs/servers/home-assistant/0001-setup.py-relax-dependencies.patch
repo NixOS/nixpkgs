@@ -20,5 +20,6 @@ index 4e46f63217..b1aafee59d 100755
 +    "requests>=2.23.0",
 +    "ruamel.yaml>=0.15.100",
      "voluptuous==0.11.7",
-     "voluptuous-serialize==2.3.0",
+-    "voluptuous-serialize==2.3.0",
++    "voluptuous-serialize>=2.3.0",
  ]
