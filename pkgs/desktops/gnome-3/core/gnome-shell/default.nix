@@ -10,22 +10,16 @@
 , gettext
 , libsecret
 , python3
-, libsoup
 , polkit
-, clutter
 , networkmanager
 , docbook-xsl-nons
-, docbook-xsl-ns
 , at-spi2-core
 , libstartup_notification
 , telepathy-glib
 , telepathy-logger
-, libXtst
 , unzip
-, glibcLocales
 , shared-mime-info
 , libgweather
-, libcanberra-gtk3
 , librsvg
 , geoclue2
 , perl
@@ -114,11 +108,9 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     docbook-xsl-nons
-    docbook-xsl-ns
     docbook_xml_dtd_42
     perl
     wrapGAppsHook
-    glibcLocales
     sassc
     desktop-file-utils
     libxslt.bin
@@ -132,17 +124,14 @@ stdenv.mkDerivation rec {
     gnome-keyring
     glib
     gcr
-    json-glib
     accountsservice
     libsecret
-    libsoup
     polkit
     gdk-pixbuf
     librsvg
     networkmanager
     libstartup_notification
     telepathy-glib
-    libXtst
     gjs
     mutter
     libpulseaudio
@@ -150,7 +139,6 @@ stdenv.mkDerivation rec {
     libical
     gtk3
     gdm
-    libcanberra-gtk3
     geoclue2
     adwaita-icon-theme
     gnome-bluetooth
@@ -162,7 +150,6 @@ stdenv.mkDerivation rec {
     telepathy-logger
     gnome-settings-daemon
     gobject-introspection
-    gnome-autoar
 
     # recording
     gst_all_1.gstreamer
@@ -175,9 +162,9 @@ stdenv.mkDerivation rec {
 
     # for gnome-extension tool
     bash-completion
+    gnome-autoar
+    json-glib
   ];
-
-  LANG = "en_US.UTF-8";
 
   postPatch = ''
     patchShebangs src/data-to-c.pl
