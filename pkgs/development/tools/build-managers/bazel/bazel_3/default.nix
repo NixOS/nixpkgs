@@ -513,6 +513,9 @@ stdenv.mkDerivation rec {
     install -Dm644 \
       ./bazel_src/scripts/zsh_completion/_bazel \
       $out/share/zsh/site-functions/_bazel
+    install -Dm644 \
+      ./bazel_src/scripts/fish/completions/bazel.fish \
+      $out/share/fish/vendor_completions.d/bazel.fish
   '';
 
   doInstallCheck = true;
