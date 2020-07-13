@@ -31,7 +31,7 @@ with stdenv.lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "20.1.3"; # Update only to the final (last planned) release (i.e. X.Y.MAX)?
+  version = "20.1.3";
   branch  = versions.major version;
 in
 
