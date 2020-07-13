@@ -12,6 +12,7 @@
 , python3
 , polkit
 , networkmanager
+, gtk-doc
 , docbook-xsl-nons
 , at-spi2-core
 , libstartup_notification
@@ -23,7 +24,9 @@
 , librsvg
 , geoclue2
 , perl
+, docbook_xml_dtd_412
 , docbook_xml_dtd_42
+, docbook_xml_dtd_43
 , desktop-file-utils
 , libpulseaudio
 , libical
@@ -65,6 +68,8 @@ in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
   version = "3.36.4";
+
+  outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -108,7 +113,10 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     docbook-xsl-nons
+    docbook_xml_dtd_412
     docbook_xml_dtd_42
+    docbook_xml_dtd_43
+    gtk-doc
     perl
     wrapGAppsHook
     sassc
@@ -164,6 +172,10 @@ stdenv.mkDerivation rec {
     bash-completion
     gnome-autoar
     json-glib
+  ];
+
+  mesonFlags = [
+    "-Dgtk_doc=true"
   ];
 
   postPatch = ''
