@@ -1,7 +1,7 @@
 { lib, buildGoModule, minikube }:
 
 buildGoModule rec {
-  inherit (minikube) version src nativeBuildInputs buildInputs vendorSha256 commit;
+  inherit (minikube) version src nativeBuildInputs buildInputs vendorSha256;
 
   pname = "docker-machine-kvm2";
 
@@ -10,7 +10,7 @@ buildGoModule rec {
   '';
 
   buildPhase = ''
-    make docker-machine-driver-kvm2 COMMIT=${commit}
+    make docker-machine-driver-kvm2 COMMIT=${src.rev}
   '';
 
   installPhase = ''
