@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     substituteInPlace tests/unit-utils-io.c --replace "| O_DIRECT" ""
   '';
 
-  NIX_LDFLAGS = "-lgcc_s";
+  NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.hostPlatform.isMusl) "-lgcc_s";
 
   configureFlags = [
     "--enable-cryptsetup-reencrypt"
