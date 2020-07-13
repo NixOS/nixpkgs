@@ -14,11 +14,12 @@ in {
     sha256Hash = "0kapja3nh7dfhjbn2np02wghijrjnpzsv4hz10fj54hs8hdx19di";
     patches = getPatches ./patches/stable;
   };
-  beta = mkFlutter {
+  beta = mkFlutter rec {
     pname = "flutter-beta";
     channel = "beta";
-    version = "1.15.17";
-    sha256Hash = "0iil6y6y477dhjgzx54ab5m9nj0jg4xl8x4zzd9iwh8m756r7qsd";
+    version = "1.19.0-4.3.pre";
+    filename = "flutter_linux_${version}-${channel}.tar.xz";
+    sha256Hash = "1hlkvvcfy53g69qnqq29izh5c0ylmx4w9m5kb78x97yld6jzf37p";
     patches = getPatches ./patches/beta;
   };
   dev = mkFlutter rec {
