@@ -214,15 +214,7 @@ let
     # fontconfig default config files
     ln -s ${supportPkg.out}/etc/fonts/conf.d/*.conf \
           $support_folder/
-    ln -s ${latestPkg.out}/etc/fonts/conf.d/*.conf \
-          $latest_folder/
-
-    # update latest 51-local.conf path to look at the latest local.conf
-    rm    $latest_folder/51-local.conf
-
-    substitute ${latestPkg.out}/etc/fonts/conf.d/51-local.conf \
-               $latest_folder/51-local.conf \
-               --replace local.conf /etc/fonts/${latestVersion}/local.conf
+    # Latest fontconfig is configured to look for the upstream defaults inside the package.
 
     # 00-nixos-cache.conf
     ln -s ${cacheConfSupport} \
@@ -236,7 +228,11 @@ let
     # 50-user.conf
     ${optionalString (!cfg.includeUserConf) ''
     rm $support_folder/50-user.conf
-    rm $latest_folder/50-user.conf
+    ''}
+    # Since latest fontconfig looks for default files inside the package,
+    # we had to move this one elsewhere to be able to exclude it here.
+    ${optionalString cfg.includeUserConf ''
+    ln -s ${latestPkg.out}/etc/fonts/conf.d.bak/50-user.conf $latest_folder/50-user.conf
     ''}
 
     # local.conf (indirect priority 51)
