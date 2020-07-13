@@ -23,8 +23,8 @@ in {
   dev = mkFlutter {
     pname = "flutter-dev";
     channel = "dev";
-    version = "1.17.0-dev.5.0";
-    sha256Hash = "0ks2jf2bd42y2jsc91p33r57q7j3m94d8ihkmlxzwi53x1mwp0pk";
+    version = "1.20.0-7.1.pre";
+    sha256Hash = "1si83xgwkfn6fnwb12xk2cl4wm8cf0pf3m3jrg2jy2b5wmdr36kd";
     patches = getPatches ./patches/beta;
   };
 }
