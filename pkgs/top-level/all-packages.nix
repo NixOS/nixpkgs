@@ -5621,6 +5621,8 @@ in
 
   netkittftp = callPackage ../tools/networking/netkit/tftp { };
 
+  netlify-cli = nodePackages.netlify-cli;
+
   netpbm = callPackage ../tools/graphics/netpbm { };
 
   netrw = callPackage ../tools/networking/netrw { };
