@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./busybox-in-store.patch
+    ./0001-Fix-build-with-glibc-2.31.patch
   ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 
   postPatch = "patchShebangs .";

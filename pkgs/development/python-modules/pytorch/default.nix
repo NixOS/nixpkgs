@@ -110,7 +110,8 @@ in buildPythonPackage rec {
 
   outputs = [
     "out"   # output standard python package
-    "dev"   # output libtorch only
+    "dev"   # output libtorch headers
+    "lib"   # output libtorch libraries
   ];
 
   src = fetchFromGitHub {
@@ -239,9 +240,11 @@ in buildPythonPackage rec {
   ];
   postInstall = ''
     mkdir $dev
-    cp -r $out/${python.sitePackages}/torch/lib     $dev/lib
     cp -r $out/${python.sitePackages}/torch/include $dev/include
     cp -r $out/${python.sitePackages}/torch/share   $dev/share
+
+    mkdir $lib
+    cp -r $out/${python.sitePackages}/torch/lib     $lib/lib
   '';
 
   postFixup = stdenv.lib.optionalString stdenv.isDarwin ''

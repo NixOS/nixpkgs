@@ -430,9 +430,9 @@ in {
     (mkChangedOptionModule
       [ "security" "initialRootPassword" ]
       [ "users" "users" "root" "initialHashedPassword" ]
-      (cfg: if cfg.security.initialHashedPassword == "!"
+      (cfg: if cfg.security.initialRootPassword == "!"
             then null
-            else cfg.security.initialHashedPassword))
+            else cfg.security.initialRootPassword))
   ];
 
   ###### interface

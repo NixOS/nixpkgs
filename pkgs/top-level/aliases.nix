@@ -264,6 +264,7 @@ mapAliases ({
   libudev = udev; # added 2018-04-25
   libusb = libusb1; # added 2020-04-28
   libsexy = throw "libsexy has been removed from nixpkgs, as it's abandoned and no package needed it."; # 2019-12-10
+  libstdcxxHook = throw "libstdcxx hook has been removed because cc-wrapper is now directly aware of the c++ standard library intended to be used."; # 2020-06-22
   libqmatrixclient = throw "libqmatrixclient was renamed to libquotient"; # added 2020-04-09
   links = links2; # added 2016-01-31
   linux_rpi0 = linux_rpi1;
@@ -702,23 +703,6 @@ mapAliases ({
 
   # added 2020-02-09
   dina-font-pcf = dina-font;
-
-    /* Cleanup before 20.09 */
-  llvm_4 = throw ''
-    The LLVM versions 3.5, 3.9 and 4.0 have been removed in NixOS 20.03
-    due to a lack of compatibility with glibc 2.30!
-  '';
-  llvm_39 = llvm_4;
-  llvm_35 = llvm_4;
-  lld_4 = llvm_4;
-
-  llvmPackages_4 = llvm_4;
-  llvmPackages_39 = llvm_4;
-  llvmPackages_35 = llvm_4;
-
-  clang_39 = llvm_4;
-  clang_35 = llvm_4;
-  clang_4 = llvm_4;
 
   # added 2019-04-13
   # *-polly pointed to llvmPackages_latest

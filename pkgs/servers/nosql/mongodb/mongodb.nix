@@ -102,6 +102,13 @@ in stdenv.mkDerivation rec {
     rm -f "$out/bin/install_compass" || true
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    "$out/bin/mongo" --version
+    runHook postInstallCheck
+  '';
+
   prefixKey = "--prefix=";
 
   enableParallelBuilding = true;

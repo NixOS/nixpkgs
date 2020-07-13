@@ -652,7 +652,7 @@ my @deviceTargets = getList('devices');
 my $prevGrubState = readGrubState();
 my @prevDeviceTargets = split/,/, $prevGrubState->devices;
 my @extraGrubInstallArgs = getList('extraGrubInstallArgs');
-my @prevExtraGrubInstallArgs = $prevGrubState->extraGrubInstallArgs;
+my @prevExtraGrubInstallArgs = @{$prevGrubState->extraGrubInstallArgs};
 
 my $devicesDiffer = scalar (List::Compare->new( '-u', '-a', \@deviceTargets, \@prevDeviceTargets)->get_symmetric_difference());
 my $extraGrubInstallArgsDiffer = scalar (List::Compare->new( '-u', '-a', \@extraGrubInstallArgs, \@prevExtraGrubInstallArgs)->get_symmetric_difference());
