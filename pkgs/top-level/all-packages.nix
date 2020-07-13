@@ -17534,6 +17534,8 @@ in
 
   lvm2 = callPackage ../os-specific/linux/lvm2 { };
 
+  mbelib = callPackage ../development/libraries/audio/mbelib { };
+
   mbpfan = callPackage ../os-specific/linux/mbpfan { };
 
   mdadm = mdadm4;
