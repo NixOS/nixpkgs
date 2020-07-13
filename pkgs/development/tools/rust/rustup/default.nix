@@ -39,7 +39,9 @@ rustPlatform.buildRustPackage rec {
     )
   ];
 
-  doCheck = !stdenv.isAarch64 && !stdenv.isDarwin;
+  # Disable tests until they can be run with --features no-self-update
+  doCheck = false;
+  #doCheck = !stdenv.isAarch64 && !stdenv.isDarwin;
 
   postInstall = ''
     pushd $out/bin

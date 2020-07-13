@@ -4530,7 +4530,9 @@ in {
 
   locustio = callPackage ../development/python-modules/locustio { };
 
-  llvmlite = callPackage ../development/python-modules/llvmlite { llvm = pkgs.llvm_8; };
+  llvmlite = callPackage ../development/python-modules/llvmlite { 
+    llvm = pkgs.llvm_9; # llvmlite always requires a specific version of llvm.
+  };
 
   lockfile = callPackage ../development/python-modules/lockfile { };
 
@@ -4930,16 +4932,11 @@ in {
 
   Nuitka = callPackage ../development/python-modules/nuitka { };
 
-  numpy = let
-    numpy_ = callPackage ../development/python-modules/numpy { };
-    numpy_2 = numpy_.overridePythonAttrs(oldAttrs: rec {
-      version = "1.16.5";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "8bb452d94e964b312205b0de1238dd7209da452343653ab214b5d681780e7a0c";
-      };
-    });
-  in if pythonOlder "3.5" then numpy_2 else numpy_;
+  numpy =
+    if pythonOlder "3.5" then
+      callPackage ../development/python-modules/numpy/1.16.nix { }
+    else
+      callPackage ../development/python-modules/numpy { };
 
   numpydoc = callPackage ../development/python-modules/numpydoc { };
 
@@ -6727,8 +6724,12 @@ in {
 
   cmdtest = callPackage ../development/python-modules/cmdtest { };
 
-  tornado = callPackage ../development/python-modules/tornado { };
-  tornado_4 = callPackage ../development/python-modules/tornado { version = "4.5.3"; };
+  tornado = if isPy3k then
+    callPackage ../development/python-modules/tornado { }
+  else
+    callPackage ../development/python-modules/tornado/5.nix { };
+
+  tornado_4 = callPackage ../development/python-modules/tornado/4.nix { };
 
   tokenlib = callPackage ../development/python-modules/tokenlib { };
 

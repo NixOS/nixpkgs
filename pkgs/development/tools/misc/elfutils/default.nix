@@ -3,11 +3,11 @@
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
   pname = "elfutils";
-  version = "0.176";
+  version = "0.180";
 
   src = fetchurl {
     url = "https://sourceware.org/elfutils/ftp/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "08qhrl4g6qqr4ga46jhh78y56a47p3msa5b2x1qhzbxhf71lfmzb";
+    sha256 = "17an1f67bfzxin482nbcxdl5qvywm27i9kypjyx8ilarbkivc9xq";
   };
 
   patches = [ ./debug-info-from-env.patch ];
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   configureFlags =
     [ "--program-prefix=eu-" # prevent collisions with binutils
       "--enable-deterministic-archives"
+      "--disable-debuginfod"
     ];
 
   enableParallelBuilding = true;

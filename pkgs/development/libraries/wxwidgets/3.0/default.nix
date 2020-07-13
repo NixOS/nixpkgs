@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchurl, pkgconfig
 , libXinerama, libSM, libXxf86vm
 , gtk2, GConf ? null, gtk3
-, xorgproto, gstreamer, gst-plugins-base, setfile
+, xorgproto, gst_all_1, setfile
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , withMesa ? libGLSupported
 , libGLU ? null, libGL ? null
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libXinerama libSM libXxf86vm xorgproto gstreamer gst-plugins-base
+    libXinerama libSM libXxf86vm xorgproto gst_all_1.gstreamer gst_all_1.gst-plugins-base
   ] ++ optionals withGtk2 [ gtk2 GConf ]
     ++ optional (!withGtk2) gtk3
     ++ optional withMesa libGLU

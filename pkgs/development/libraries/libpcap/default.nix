@@ -29,7 +29,9 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    rm -f $out/lib/libpcap.a
+    if [ "$dontDisableStatic" -ne "1" ]; then
+      rm -f $out/lib/libpcap.a
+    fi
   '';
 
   meta = {
