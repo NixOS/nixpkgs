@@ -6,11 +6,12 @@ let
     let files = builtins.attrNames (builtins.readDir dir);
     in map (f: dir + ("/" + f)) files;
 in {
-  stable = mkFlutter {
+  stable = mkFlutter rec {
     pname = "flutter";
     channel = "stable";
-    version = "1.12.13+hotfix.9";
-    sha256Hash = "1ql3zvmmk5zk47y30lajxaam04q6vr373dayq15jv4vpc0fzif1y";
+    version = "1.17.5";
+    filename = "flutter_linux_${version}-${channel}.tar.xz";
+    sha256Hash = "0kapja3nh7dfhjbn2np02wghijrjnpzsv4hz10fj54hs8hdx19di";
     patches = getPatches ./patches/stable;
   };
   beta = mkFlutter {
