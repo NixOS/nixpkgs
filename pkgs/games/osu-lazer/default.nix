@@ -13,13 +13,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "osu-lazer";
-  version = "2020.707.0";
+  version = "2020.712.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    sha256 = "0n270gv841567q1j3xj7hpnnqwbgj0yai5wf58kwj0f0spkcy8vz";
+    sha256 = "0j1zg4wm2f7hwj9i6f7mgy22gdw12cakj2qsz4jz6l28d9ykjqc0";
   };
 
   nativeBuildInputs = [ dotnet-sdk dotnetPackages.Nuget makeWrapper ];
