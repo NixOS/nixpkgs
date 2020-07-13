@@ -10988,7 +10988,6 @@ broken-packages:
   - xournal-parser
   - xournal-render
   - xournal-types
-  - xrefcheck
   - xsact
   - XSaiga
   - xsd
