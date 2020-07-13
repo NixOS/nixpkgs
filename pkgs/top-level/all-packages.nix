@@ -21354,6 +21354,8 @@ in
 
   partio = callPackage ../development/libraries/partio {};
 
+  pc-ble-driver = callPackage ../development/libraries/pc-ble-driver {};
+
   pbis-open = callPackage ../tools/security/pbis { };
 
   pcmanfm = callPackage ../applications/misc/pcmanfm { };
