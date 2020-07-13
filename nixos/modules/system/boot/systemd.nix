@@ -818,6 +818,49 @@ in
       '';
     };
 
+    systemd.watchdog.device = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/dev/watchdog";
+      description = ''
+        The path to a hardware watchdog device which will be managed by systemd.
+        If not specified, systemd will default to /dev/watchdog.
+      '';
+    };
+
+    systemd.watchdog.runtimeTime = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "30s";
+      description = ''
+        The amount of time which can elapse before a watchdog hardware device
+        will automatically reboot the system. Valid time units include "ms",
+        "s", "min", "h", "d", and "w".
+      '';
+    };
+
+    systemd.watchdog.rebootTime = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "10m";
+      description = ''
+        The amount of time which can elapse after a reboot has been triggered
+        before a watchdog hardware device will automatically reboot the system.
+        Valid time units include "ms", "s", "min", "h", "d", and "w".
+      '';
+    };
+
+    systemd.watchdog.kexecTime = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "10m";
+      description = ''
+        The amount of time which can elapse when kexec is being executed before
+        a watchdog hardware device will automatically reboot the system. This
+        option should only be enabled if reloadTime is also enabled. Valid
+        time units include "ms", "s", "min", "h", "d", and "w".
+      '';
+    };
   };
 
 
@@ -889,6 +932,19 @@ in
           DefaultIPAccounting=yes
         ''}
         DefaultLimitCORE=infinity
+        ${optionalString (config.systemd.watchdog.device != null) ''
+          WatchdogDevice=${config.systemd.watchdog.device}
+        ''}
+        ${optionalString (config.systemd.watchdog.runtimeTime != null) ''
+          RuntimeWatchdogSec=${config.systemd.watchdog.runtimeTime}
+        ''}
+        ${optionalString (config.systemd.watchdog.rebootTime != null) ''
+          RebootWatchdogSec=${config.systemd.watchdog.rebootTime}
+        ''}
+        ${optionalString (config.systemd.watchdog.kexecTime != null) ''
+          KExecWatchdogSec=${config.systemd.watchdog.kexecTime}
+        ''}
+
         ${config.systemd.extraConfig}
       '';
 

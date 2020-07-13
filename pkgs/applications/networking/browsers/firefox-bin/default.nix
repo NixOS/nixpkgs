@@ -47,6 +47,7 @@
 , gnupg
 , ffmpeg_3
 , runtimeShell
+, mesa # firefox wants gbm for drm+dmabuf
 , systemLocale ? config.i18n.defaultLocale or "en-US"
 }:
 
@@ -106,6 +107,7 @@ stdenv.mkDerivation {
       gtk2
       gtk3
       kerberos
+      mesa
       libX11
       libXScrnSaver
       libXcomposite

@@ -132,15 +132,15 @@ stdenv.mkDerivation {
       ldPath="${bintools_bin}/bin"
     ''
 
+    # Solaris needs an additional ld wrapper.
     + optionalString (targetPlatform.isSunOS && nativePrefix != "") ''
-      # Solaris needs an additional ld wrapper.
       ldPath="${nativePrefix}/bin"
       exec="$ldPath/${targetPrefix}ld"
       wrap ld-solaris ${./ld-solaris-wrapper.sh}
     '')
 
+    # Create a symlink to as (the assembler).
     + ''
-      # Create a symlink to as (the assembler).
       if [ -e $ldPath/${targetPrefix}as ]; then
         ln -s $ldPath/${targetPrefix}as $out/bin/${targetPrefix}as
       fi
@@ -200,26 +200,29 @@ stdenv.mkDerivation {
   ];
 
   postFixup =
+    ##
+    ## General libc support
+    ##
     optionalString (libc != null) (''
-      ##
-      ## General libc support
-      ##
-
-      echo "-L${libc_lib}${libc.libdir or "/lib"}" > $out/nix-support/libc-ldflags
+      touch "$out/nix-support/libc-ldflags"
+      echo "-L${libc_lib}${libc.libdir or "/lib"}" >> $out/nix-support/libc-ldflags
 
       echo "${libc_lib}" > $out/nix-support/orig-libc
       echo "${libc_dev}" > $out/nix-support/orig-libc-dev
+    ''
 
-      ##
-      ## Dynamic linker support
-      ##
-
+    ##
+    ## Dynamic linker support
+    ##
+    + ''
       if [[ -z ''${dynamicLinker+x} ]]; then
         echo "Don't know the name of the dynamic linker for platform '${targetPlatform.config}', so guessing instead." >&2
         local dynamicLinker="${libc_lib}/lib/ld*.so.?"
       fi
+    ''
 
-      # Expand globs to fill array of options
+    # Expand globs to fill array of options
+    + ''
       dynamicLinker=($dynamicLinker)
 
       case ''${#dynamicLinker[@]} in
@@ -228,58 +231,56 @@ stdenv.mkDerivation {
         *) echo "Multiple dynamic linkers found for platform '${targetPlatform.config}'." >&2;;
       esac
 
-      if [ -n "''${dynamicLinker:-}" ]; then
+      if [ -n "''${dynamicLinker-}" ]; then
         echo $dynamicLinker > $out/nix-support/dynamic-linker
 
     '' + (if targetPlatform.isDarwin then ''
         printf "export LD_DYLD_PATH=%q\n" "$dynamicLinker" >> $out/nix-support/setup-hook
-    '' else ''
+      '' else ''
         if [ -e ${libc_lib}/lib/32/ld-linux.so.2 ]; then
           echo ${libc_lib}/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
         fi
-
-        local ldflagsBefore=(-dynamic-linker "$dynamicLinker")
-    '') + ''
-      fi
-
+      ''
       # The dynamic linker is passed in `ldflagsBefore' to allow
       # explicit overrides of the dynamic linker by callers to ld
       # (the *last* value counts, so ours should come first).
-      printWords "''${ldflagsBefore[@]}" > $out/nix-support/libc-ldflags-before
+      + ''
+        echo -dynamic-linker "$dynamicLinker" >> $out/nix-support/libc-ldflags-before
+    '') + ''
+      fi
     '')
 
+    # Ensure consistent LC_VERSION_MIN_MACOSX and remove LC_UUID.
     + optionalString stdenv.targetPlatform.isMacOS ''
-      # Ensure consistent LC_VERSION_MIN_MACOSX and remove LC_UUID.
       echo "-macosx_version_min 10.12 -sdk_version 10.12 -no_uuid" >> $out/nix-support/libc-ldflags-before
     ''
 
-    + optionalString (!nativeTools) ''
-      ##
-      ## User env support
-      ##
+    ##
+    ## User env support
+    ##
 
-      # Propagate the underling unwrapped bintools so that if you
-      # install the wrapper, you get tools like objdump (same for any
-      # binaries of libc).
+    # Propagate the underling unwrapped bintools so that if you
+    # install the wrapper, you get tools like objdump (same for any
+    # binaries of libc).
+    + optionalString (!nativeTools) ''
       printWords ${bintools_bin} ${if libc == null then "" else libc_bin} > $out/nix-support/propagated-user-env-packages
     ''
 
+    ##
+    ## Man page and info support
+    ##
     + optionalString propagateDoc (''
-      ##
-      ## Man page and info support
-      ##
-
       ln -s ${bintools.man} $man
     '' + optionalString (bintools ? info) ''
       ln -s ${bintools.info} $info
     '')
 
-    + ''
-      ##
-      ## Hardening support
-      ##
+    ##
+    ## Hardening support
+    ##
 
-      # some linkers on some platforms don't support specific -z flags
+    # some linkers on some platforms don't support specific -z flags
+    + ''
       export hardening_unsupported_flags=""
       if [[ "$($ldPath/${targetPrefix}ld -z now 2>&1 || true)" =~ un(recognized|known)\ option ]]; then
         hardening_unsupported_flags+=" bindnow"
@@ -304,15 +305,18 @@ stdenv.mkDerivation {
     ''
 
     + ''
+      for flags in "$out/nix-support"/*flags*; do
+        substituteInPlace "$flags" --replace $'\n' ' '
+      done
+
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
-
-      ##
-      ## Extra custom steps
-      ##
     ''
 
+    ##
+    ## Extra custom steps
+    ##
     + extraBuildCommands;
 
   inherit dynamicLinker expand-response-params;

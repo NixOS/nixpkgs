@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
     "STRIP="
     "prefix=$(out)"
     "moduledir=$(out)/lib/modules"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ "CC=cc" ];
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   configureFlags = [
     "--enable-overlays"
@@ -40,8 +41,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
 
   postBuild = ''
-    make $makeFlags -C contrib/slapd-modules/passwd/sha2
-    make $makeFlags -C contrib/slapd-modules/passwd/pbkdf2
+    make $makeFlags CC=$CC -C contrib/slapd-modules/passwd/sha2
+    make $makeFlags CC=$CC -C contrib/slapd-modules/passwd/pbkdf2
   '';
 
   doCheck = false; # needs a running LDAP server

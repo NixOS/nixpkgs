@@ -65,7 +65,7 @@ let majorVersion = "6";
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
     patches =
-      [ ../use-source-date-epoch.patch ]
+      [ ../use-source-date-epoch.patch ./0001-Fix-build-for-glibc-2.31.patch ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional langAda ../gnat-cflags.patch

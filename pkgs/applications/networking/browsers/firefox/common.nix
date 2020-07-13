@@ -177,7 +177,7 @@ stdenv.mkDerivation ({
 
     BINDGEN_CFLAGS="$(< ${stdenv.cc}/nix-support/libc-cflags) \
       $(< ${stdenv.cc}/nix-support/cc-cflags) \
-      ${stdenv.cc.default_cxx_stdlib_compile} \
+      $(< ${stdenv.cc}/nix-support/libcxx-cxxflags) \
       ${lib.optionalString stdenv.cc.isClang "-idirafter ${stdenv.cc.cc}/lib/clang/${lib.getVersion stdenv.cc.cc}/include"} \
       ${lib.optionalString stdenv.cc.isGNU "-isystem ${stdenv.cc.cc}/include/c++/${lib.getVersion stdenv.cc.cc} -isystem ${stdenv.cc.cc}/include/c++/${lib.getVersion stdenv.cc.cc}/${stdenv.hostPlatform.config}"} \
       $NIX_CFLAGS_COMPILE"

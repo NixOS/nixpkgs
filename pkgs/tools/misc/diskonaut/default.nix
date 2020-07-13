@@ -2,21 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "diskonaut";
-  version = "0.3.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "imsnif";
     repo = "diskonaut";
     rev = version;
-    sha256 = "0vnmch2cac0j9b44vlcpqnayqhfdfdwvfa01bn7lwcyrcln5cd0z";
+    sha256 = "125ba9qwh7j8bz74w2zbw729s1wfnjg6dg8yicqrp6559x9k7gq5";
   };
 
-  cargoSha256 = "03hqdg6pnfxnhwk0xwhwmbrk4dicjpjllbbai56a3391xac5wmi6";
-
-  # some tests fail due to non-portable (in terms of filesystems) measurements of block sizes
-  # try to re-enable tests once actual-file-size is added
-  # see https://github.com/imsnif/diskonaut/issues/50 for more info
-  doCheck = false;
+  cargoSha256 = "0vvbrlmviyn9w8i416767vhvd1gqm3qjvia730m0rs0w5h8khiqf";
 
   meta = with stdenv.lib; {
     description = "Terminal disk space navigator";

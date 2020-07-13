@@ -4,16 +4,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustup";
-  version = "1.21.1";
+  version = "1.22.1";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
     rev = version;
-    sha256 = "0d7l3j8js16zgdx37kykavr343v65vchldz88j38jjyc43pcm2pg";
+    sha256 = "0nf42pkyn87y0n93vd63bihx74h4bpisv74aqldg3vcav2iv35s1";
   };
 
-  cargoSha256 = "1y13kfski36rfvqkp3mxxn12aidp339j7rigv49msyr004ac5y8s";
+  cargoSha256 = "0ghjrx7y25s6rjp06h0iyv4195x7daj57bqza01i1j4hm5nkhqhi";
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -39,7 +39,9 @@ rustPlatform.buildRustPackage rec {
     )
   ];
 
-  doCheck = !stdenv.isAarch64 && !stdenv.isDarwin;
+  # Disable tests until they can be run with --features no-self-update
+  doCheck = false;
+  #doCheck = !stdenv.isAarch64 && !stdenv.isDarwin;
 
   postInstall = ''
     pushd $out/bin
