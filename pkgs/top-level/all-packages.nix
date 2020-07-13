@@ -7921,6 +7921,8 @@ in
 
   yank = callPackage ../tools/misc/yank { };
 
+  yamllint = with python3Packages; toPythonApplication yamllint;
+
   yaml-merge = callPackage ../tools/text/yaml-merge { };
 
   yeshup = callPackage ../tools/system/yeshup { };
