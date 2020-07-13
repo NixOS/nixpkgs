@@ -124,6 +124,12 @@ systemd.services.mysql.serviceConfig.ReadWritePaths = [ "/var/data" ];
      <varname>services.postfix.sslCACert</varname> was replaced by <varname>services.postfix.tlsTrustedAuthorities</varname> which now defaults to system certifcate authorities.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      Subordinate GID and UID mappings are now set up automatically for all normal users.
+      This will make container tools like Podman work as non-root users out of the box.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
