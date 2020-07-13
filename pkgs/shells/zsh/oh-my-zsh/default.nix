@@ -35,6 +35,17 @@ stdenv.mkDerivation rec {
          -e 's/\# \(DISABLE_AUTO_UPDATE="true"\)/\1/' \
    $template
 
+  chmod +w oh-my-zsh.sh
+
+  # Both functions expect oh-my-zsh to be in ~/.oh-my-zsh and try to
+  # modify the directory.
+  cat >> oh-my-zsh.sh <<- EOF
+
+  # Undefine functions that don't work on Nix.
+  unfunction uninstall_oh_my_zsh
+  unfunction upgrade_oh_my_zsh
+  EOF
+
   # Look for .zsh_variables, .zsh_aliases, and .zsh_funcs, and source
   # them, if found.
   cat >> $template <<- EOF
