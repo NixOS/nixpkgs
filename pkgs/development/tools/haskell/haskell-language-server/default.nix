@@ -1,28 +1,28 @@
 { mkDerivation, aeson, async, base, base16-bytestring, binary
-, blaze-markup, brittany, bytestring, Cabal, cabal-helper
-, containers, cryptohash-sha1, data-default, deepseq, Diff
-, directory, extra, fetchgit, filepath, floskell, ghc, ghc-check
-, ghc-paths, ghcide, gitrev, hashable, haskell-lsp
-, haskell-lsp-types, hie-bios, hslogger, hspec, hspec-core
-, hspec-expectations, lens, lsp-test, optparse-applicative
-, optparse-simple, ormolu, process, regex-tdfa, safe-exceptions
-, shake, stdenv, stm, stylish-haskell, tasty, tasty-ant-xml
-, tasty-expected-failure, tasty-golden, tasty-hunit, tasty-rerun
-, text, time, transformers, unix, unordered-containers, yaml
+, blaze-markup, brittany, bytestring, cabal-helper, containers
+, cryptohash-sha1, data-default, deepseq, Diff, directory, extra
+, fetchgit, filepath, floskell, ghc, ghc-check, ghc-paths, ghcide
+, gitrev, hashable, haskell-lsp, haskell-lsp-types, hie-bios
+, hslogger, hspec, hspec-core, hspec-expectations, lens, lsp-test
+, optparse-applicative, optparse-simple, ormolu, process
+, regex-tdfa, safe-exceptions, shake, stdenv, stm, stylish-haskell
+, tasty, tasty-ant-xml, tasty-expected-failure, tasty-golden
+, tasty-hunit, tasty-rerun, text, time, transformers, unix
+, unordered-containers, yaml
 }:
 mkDerivation {
   pname = "haskell-language-server";
-  version = "0.1.0.0";
+  version = "0.2.0.0";
   src = fetchgit {
     url = "https://github.com/haskell/haskell-language-server.git";
-    sha256 = "092i32kc9dakl6cg1dpckrb87g4k8s4w1nvrs5x85n9ncgkpqk25";
-    rev = "2a192db290bfe8640dafb6c1d650a0815e70d966";
+    sha256 = "0nkfyb0zg57jwr2gry0f3fycvqvb4rkayx42m841dgd4phyvrfrq";
+    rev = "35205ee3f95a8fbb4ef9a4ae4d9d82ac3d36d3f0";
     fetchSubmodules = true;
   };
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
-    aeson base binary brittany bytestring Cabal cabal-helper containers
+    aeson base binary brittany bytestring cabal-helper containers
     data-default deepseq Diff directory extra filepath floskell ghc
     ghcide gitrev hashable haskell-lsp hie-bios hslogger lens
     optparse-simple ormolu process regex-tdfa shake stylish-haskell
