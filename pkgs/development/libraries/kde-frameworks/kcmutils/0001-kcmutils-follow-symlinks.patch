@@ -1,8 +1,17 @@
+From 4d5dcc309fba688aa1db8dd915a0abdf07f61e81 Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@mailbox.org>
+Date: Mon, 13 Jul 2020 11:23:36 -0500
+Subject: [PATCH] kcmutils follow symlinks
+
+---
+ src/kpluginselector.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
 diff --git a/src/kpluginselector.cpp b/src/kpluginselector.cpp
-index 137c865..097ab75 100644
+index 46deef5..2eacb9f 100644
 --- a/src/kpluginselector.cpp
 +++ b/src/kpluginselector.cpp
-@@ -303,7 +303,7 @@ void KPluginSelector::addPlugins(const QString &componentName,
+@@ -309,7 +309,7 @@ void KPluginSelector::addPlugins(const QString &componentName,
      QStringList desktopFileNames;
      const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, componentName + QStringLiteral("/kpartplugins"), QStandardPaths::LocateDirectory);
      for (const QString &dir : dirs) {
@@ -11,3 +20,6 @@ index 137c865..097ab75 100644
          while (it.hasNext()) {
              desktopFileNames.append(it.next());
          }
+-- 
+2.25.4
+
