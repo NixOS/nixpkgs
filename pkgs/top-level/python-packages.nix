@@ -5873,6 +5873,8 @@ in {
 
   qtpy = callPackage ../development/python-modules/qtpy { };
 
+  qreactor = callPackage ../development/python-modules/qreactor { };
+
   quantities = callPackage ../development/python-modules/quantities { };
 
   qutip = callPackage ../development/python-modules/qutip { };
