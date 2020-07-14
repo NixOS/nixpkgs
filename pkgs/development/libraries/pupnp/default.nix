@@ -1,4 +1,5 @@
-{ fetchFromGitHub, stdenv, autoreconfHook, pkg-config }:
+{ fetchFromGitHub, stdenv, autoreconfHook, pkg-config
+, enableReuseAddr ? false }:
 
 stdenv.mkDerivation rec {
   pname = "libupnp";
@@ -13,6 +14,8 @@ stdenv.mkDerivation rec {
   outputs = [ "dev" "out" ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
+
+  configureFlags = stdenv.lib.optionals enableReuseAddr "--enable-reuseaddr";
 
   hardeningDisable = [ "fortify" ];
 
