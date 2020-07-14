@@ -35,7 +35,8 @@ rustPlatform.buildRustPackage {
     export RUST_SRC_PATH=${rustPlatform.rustcSrc}
   '';
 
-  doInstallCheck = true;
+  # Temporary disabled until #93119 is fixed.
+  doInstallCheck = false;
   installCheckPhase = ''
     runHook preInstallCheck
     versionOutput="$($out/bin/rust-analyzer --version)"
