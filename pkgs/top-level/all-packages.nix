@@ -2369,6 +2369,8 @@ in
 
   beanstalkd = callPackage ../servers/beanstalkd { };
 
+  bee = callPackage ../applications/networking/bee { };
+
   beets = callPackage ../tools/audio/beets {
     pythonPackages = python3Packages;
   };
