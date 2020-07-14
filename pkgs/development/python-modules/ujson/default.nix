@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 , isPyPy
 , setuptools_scm
 }:
@@ -8,7 +9,7 @@
 buildPythonPackage rec {
   pname = "ujson";
   version = "3.0.0";
-  disabled = isPyPy;
+  disabled = isPyPy || (!isPy3k);
 
   src = fetchPypi {
     inherit pname version;
