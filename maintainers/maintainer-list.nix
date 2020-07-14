@@ -6052,6 +6052,12 @@
     githubId = 673857;
     name = "Pash Shocky";
   };
+  paulperegud = {
+    email = "paulperegud@gmail.com";
+    github = "paulperegud";
+    githubId = 247162;
+    name = "Pawel 'pepesza' Peregud";
+  };
   pashev = {
     email = "pashev.igor@gmail.com";
     github = "ip1981";
