@@ -5,16 +5,16 @@
 , utillinux
 , libuuid
 , thin-provisioning-tools, libaio
-, enable_cmdlib ? false
-, enable_dmeventd ? false
+, enableCmdlib ? false
+, enableDmeventd ? false
 , udev ? null
 }:
 
 # configure: error: --enable-dmeventd requires --enable-cmdlib to be used as well
-assert enable_dmeventd -> enable_cmdlib;
+assert enableDmeventd -> enableCmdlib;
 
 stdenv.mkDerivation rec {
-  pname = "lvm2" + stdenv.lib.optionalString enable_dmeventd "with-dmeventd";
+  pname = "lvm2" + stdenv.lib.optionalString enableDmeventd "with-dmeventd";
   version = "2.03.09";
 
   src = fetchurl {
@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     "--with-default-locking-dir=/run/lock/lvm"
     "--with-default-run-dir=/run/lvm"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-  ] ++ stdenv.lib.optionals (!enable_cmdlib) [
+  ] ++ stdenv.lib.optionals (!enableCmdlib) [
     "--bindir=${placeholder "bin"}/bin"
     "--sbindir=${placeholder "bin"}/bin"
     "--libdir=${placeholder "lib"}/lib"
-  ] ++ stdenv.lib.optional enable_cmdlib "--enable-cmdlib"
-  ++ stdenv.lib.optionals enable_dmeventd [
+  ] ++ stdenv.lib.optional enableCmdlib "--enable-cmdlib"
+  ++ stdenv.lib.optionals enableDmeventd [
     "--enable-dmeventd"
     "--with-dmeventd-pidfile=/run/dmeventd/pid"
     "--with-default-dm-run-dir=/run/dmeventd"
@@ -106,12 +106,12 @@ stdenv.mkDerivation rec {
     "out"
     "dev"
     "man"
-  ] ++ stdenv.lib.optionals (enable_cmdlib != true) [
+  ] ++ stdenv.lib.optionals (enableCmdlib != true) [
     "bin"
     "lib"
   ];
 
-  postInstall = stdenv.lib.optionalString (enable_cmdlib != true) ''
+  postInstall = stdenv.lib.optionalString (enableCmdlib != true) ''
     moveToOutput lib/libdevmapper.so $lib
   '';
 

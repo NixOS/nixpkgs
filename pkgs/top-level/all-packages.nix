@@ -17521,8 +17521,8 @@ in
 
   lvm2 = callPackage ../os-specific/linux/lvm2 { };
   lvm2_dmeventd = callPackage ../os-specific/linux/lvm2 {
-    enable_dmeventd = true;
-    enable_cmdlib = true;
+    enableDmeventd = true;
+    enableCmdlib = true;
   };
 
   mbpfan = callPackage ../os-specific/linux/mbpfan { };
