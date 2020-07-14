@@ -8,6 +8,7 @@
 , enableCmdlib ? false
 , enableDmeventd ? false
 , udev ? null
+, nixosTests
 }:
 
 # configure: error: --enable-dmeventd requires --enable-cmdlib to be used as well
@@ -114,6 +115,8 @@ stdenv.mkDerivation rec {
   postInstall = stdenv.lib.optionalString (enableCmdlib != true) ''
     moveToOutput lib/libdevmapper.so $lib
   '';
+
+  passthru.tests.installer = nixosTests.installer.lvm;
 
   meta = with stdenv.lib; {
     homepage = "http://sourceware.org/lvm2/";
