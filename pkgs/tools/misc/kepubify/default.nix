@@ -5,7 +5,7 @@ buildGoModule rec {
   version = "3.1.3";
 
   src = fetchFromGitHub {
-    owner = "geek1011";
+    owner = "pgaskin";
     repo = pname;
     rev = "v${version}";
     sha256 = "1fd7w9cmdca6ivppmpn5bkqxmz50xgihrm2pbz6h8jf92i485md0";
