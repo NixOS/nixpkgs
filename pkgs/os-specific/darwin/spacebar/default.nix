@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spacebar";
-  version = "0.5.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
-    owner = "somdoron";
+    owner = "cmacrae";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0v8v4xsc67qpzm859r93ggq7rr7hmaj6dahdlg6g3ppj81cq0khz";
+    sha256 = "0w0mkf4kb21aicb85zbp3m6nvk6m5306mchbd5nm988kgirmxnl4";
   };
 
   buildInputs = [ Carbon Cocoa ScriptingBridge ];
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A status bar for yabai tiling window management";
-    homepage = "https://github.com/somdoron/spacebar";
+    description = "A minimal status bar for macOS";
+    homepage = "https://github.com/cmacrae/spacebar";
     platforms = platforms.darwin;
     maintainers = [ maintainers.cmacrae ];
     license = licenses.mit;
