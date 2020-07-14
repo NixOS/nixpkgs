@@ -7,6 +7,9 @@ poetry2nix.mkPoetryApplication {
 
   projectDir = ./.;
 
+  # Don't include poetry in inputs
+  __isBootstrap = true;
+
   src = fetchFromGitHub (lib.importJSON ./src.json);
 
   # "Vendor" dependencies (for build-system support)
