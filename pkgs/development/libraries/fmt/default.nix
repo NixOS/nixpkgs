@@ -1,8 +1,10 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake
+, enableShared ? false }:
 
 stdenv.mkDerivation rec {
   pname = "fmt";
   version = "6.2.1";
+  inherit enableShared;
 
   outputs = [ "out" "dev" ];
 
