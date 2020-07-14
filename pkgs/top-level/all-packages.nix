@@ -22254,6 +22254,8 @@ in
 
   protonvpn-cli = callPackage ../applications/networking/protonvpn-cli { };
 
+  protonvpn-gui = callPackage ../applications/networking/protonvpn-gui { };
+
   ps2client = callPackage ../applications/networking/ps2client { };
 
   psi = libsForQt5.callPackage ../applications/networking/instant-messengers/psi { };
