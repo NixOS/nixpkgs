@@ -150,6 +150,8 @@ in {
 
   pynamodb = callPackage ../development/python-modules/pynamodb { };
 
+  aadict = callPackage ../development/python-modules/aadict { };
+
   absl-py = callPackage ../development/python-modules/absl-py { };
 
   adb-homeassistant = callPackage ../development/python-modules/adb-homeassistant { };
@@ -787,6 +789,8 @@ in {
   glymur = callPackage ../development/python-modules/glymur { };
 
   glob2 = callPackage ../development/python-modules/glob2 { };
+
+  globre = callPackage ../development/python-modules/globre { };
 
   glom = callPackage ../development/python-modules/glom { };
 
@@ -3472,6 +3476,8 @@ in {
   python-lzo = callPackage ../development/python-modules/python-lzo {
     inherit (pkgs) lzo;
   };
+
+  pxml = callPackage ../development/python-modules/pxml { };
 
   junos-eznc = callPackage ../development/python-modules/junos-eznc {};
 
