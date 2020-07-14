@@ -1,7 +1,7 @@
 { stdenv, requireFile, makeWrapper, autoPatchelfHook, wrapGAppsHook, which, more
 , file, atk, alsaLib, cairo, fontconfig, gdk-pixbuf, glib, gnome3, gtk2-x11, gtk3
-, heimdal, krb5, libsoup, libvorbis, speex, openssl, zlib, xorg, pango, gtk2, gstreamer
-, gst-plugins-base, gnome2, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
+, heimdal, krb5, libsoup, libvorbis, speex, openssl, zlib, xorg, pango, gtk2
+, gnome2, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
 , libjpeg, libredirect, tzdata, cacert, systemd, libcxxabi, libcxx, e2fsprogs, symlinkJoin
 
 , homepage, version, prefix, hash
@@ -72,8 +72,6 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     gnome2.gtkglext
     gnome3.webkitgtk
-    gst-plugins-base
-    gstreamer
     gtk2
     gtk2-x11
     gtk3
@@ -169,6 +167,11 @@ stdenv.mkDerivation rec {
     # Those files are fallbacks to support older libwekit.so and libjpeg.so
     rm $out/opt/citrix-icaclient/lib/ctxjpeg_fb_8.so
     rm $out/opt/citrix-icaclient/lib/UIDialogLibWebKit.so
+
+    # We support only Gstreamer 1.0
+    rm $ICAInstDir/util/{gst_aud_{play,read},gst_*0.10,libgstflatstm0.10.so}
+    ln -sf $ICAInstDir/util/gst_play1.0 $ICAInstDir/util/gst_play
+    ln -sf $ICAInstDir/util/gst_read1.0 $ICAInstDir/util/gst_read
 
     echo "We arbitrarily set the timezone to UTC. No known consequences at this point."
     echo UTC > "$ICAInstDir/timezone"
