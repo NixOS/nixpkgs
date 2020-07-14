@@ -72,7 +72,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "1.15.2";
+  version = "1.15.3";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -103,7 +103,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      sha256 = "1q0848drjvnaaa38dgns8knmpmkj5plzsc98j20m5ybv68s55w78";
+      sha256 = "1pzh2srfjblmnvas0166ckpksm1w7pnyji5f834rjl9wdqpbdrz8";
     };
 
     patches = [
@@ -307,9 +307,9 @@ let
 
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "09j57w6kc0vkfcdwr0qggy3qgrgq82kfa2jrwvvcnij4bl3wj40j"
+        "1w5hppxshdy38dwiqqh7kx0d14xpbvv39y4ivni7nbb8b934218q"
       else
-        "14g8z49qz7d8n1c2mcsfhr7yqpcy7mhmpm6hgmqvpgb8vm7yvwrc";
+        "02anlijahpwyh95pr3xpll540l9mnfrxxgv855g4dpn2ajr7h4k1";
     };
 
     buildAttrs = {
