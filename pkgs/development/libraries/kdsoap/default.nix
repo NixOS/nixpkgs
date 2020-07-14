@@ -11,7 +11,7 @@ mkDerivation {
   pname = "kdsoap";
   inherit version;
   meta = {
-    shortDescription = "A Qt-based client-side and server-side SOAP component";
+    description = "A Qt-based client-side and server-side SOAP component";
     longDescription = ''
       KD Soap is a Qt-based client-side and server-side SOAP component.
 
