@@ -1,0 +1,13 @@
+diff --git a/opt_einsum/tests/test_input.py b/opt_einsum/tests/test_input.py
+index e5c1677..54ea059 100644
+--- a/opt_einsum/tests/test_input.py
++++ b/opt_einsum/tests/test_input.py
+@@ -34,7 +34,7 @@ def test_type_errors():
+         contract("", 0, out='test')
+ 
+     # order parameter must be a valid order
+-    with pytest.raises(TypeError):
++    with pytest.raises(ValueError):
+         contract("", 0, order='W')
+ 
+     # casting parameter must be a valid casting
