@@ -16817,9 +16817,7 @@ in
 
   directvnc = callPackage ../os-specific/linux/directvnc { };
 
-  dmraid = callPackage ../os-specific/linux/dmraid {
-    lvm2 = lvm2.override {enable_dmeventd = true;};
-  };
+  dmraid = callPackage ../os-specific/linux/dmraid { lvm2 = lvm2_dmeventd; };
 
   drbd = callPackage ../os-specific/linux/drbd { };
 
@@ -17522,6 +17520,10 @@ in
   lsscsi = callPackage ../os-specific/linux/lsscsi { };
 
   lvm2 = callPackage ../os-specific/linux/lvm2 { };
+  lvm2_dmeventd = callPackage ../os-specific/linux/lvm2 {
+    enableDmeventd = true;
+    enableCmdlib = true;
+  };
 
   mbpfan = callPackage ../os-specific/linux/mbpfan { };
 
@@ -17839,14 +17841,6 @@ in
 
   # standalone cryptsetup generator for systemd
   systemd-cryptsetup-generator = callPackage ../os-specific/linux/systemd/cryptsetup-generator.nix { };
-
-  # In nixos, you can set systemd.package = pkgs.systemd_with_lvm2 to get
-  # LVM2 working in systemd.
-  systemd_with_lvm2 = pkgs.appendToName "with-lvm2" (pkgs.lib.overrideDerivation pkgs.systemd (p: {
-      postInstall = p.postInstall + ''
-        cp "${pkgs.lvm2}/lib/systemd/system-generators/"* $out/lib/systemd/system-generators
-      '';
-  }));
 
   systemd-wait = callPackage ../os-specific/linux/systemd-wait { };
 
