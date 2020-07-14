@@ -202,12 +202,18 @@ self: super: {
   # base bound
   digit = doJailbreak super.digit;
 
-  # 2020-06-05: HACK: does not passes own build suite - `dontCheck` We should
+  # 2020-06-05: HACK: does not pass own build suite - `dontCheck` We should
   # generate optparse-applicative completions for the hnix executable.  Sadly
   # building of the executable has been disabled for ghc < 8.10 in hnix.
   # Generating the completions should be activated again, once we default to
   # ghc 8.10.
-  hnix = dontCheck super.hnix;
+  hnix = dontCheck (super.hnix.override {
+    # The neat-interpolation package from stack is to old for hnix.
+    # https://github.com/haskell-nix/hnix/issues/676
+    # Once neat-interpolation >= 0.4 is in our stack release,
+    # (which should happen soon), we can remove this override
+    neat-interpolation = self.neat-interpolation_0_5_1_1;
+  });
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
