@@ -51,8 +51,9 @@ in writeScript "update-${name}" ''
   curl --silent -o $HOME/shasums.asc "$url$version/SHA256SUMS.asc"
   gpgv --keyring=$GNUPGHOME/pubring.kbx $HOME/shasums.asc $HOME/shasums
 
-  # this is a list of sha512 and tarballs for both arches
-  shasums=`cat $HOME/shasums`
+  # this is a list of sha256 and tarballs for both arches
+  # Upstream files contains python repr strings like b'somehash', hence the sed dance
+  shasums=`cat $HOME/shasums | sed -E s/"b'([a-f0-9]{64})'?(.*)"/'\1\2'/`
 
   cat > $tmpfile <<EOF
   {
