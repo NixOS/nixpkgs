@@ -2484,6 +2484,8 @@ in {
 
   enaml = callPackage ../development/python-modules/enaml { };
 
+  enamlx = callPackage ../development/python-modules/enamlx { };
+
   etelemetry = callPackage ../development/python-modules/etelemetry { };
 
   eth-hash = callPackage ../development/python-modules/eth-hash { };
