@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gfbgraph";
-  version = "0.2.3";
+  version = "0.2.4";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1dp0v8ia35fxs9yhnqpxj3ir5lh018jlbiwifjfn8ayy7h47j4fs";
+    sha256 = "0yck7dwvjk16a52nafjpi0a39rxwmg0w833brj45acz76lgkjrb0";
   };
 
   nativeBuildInputs = [ pkgconfig gobject-introspection ];
