@@ -21039,6 +21039,8 @@ in
 
   magnetico = callPackage ../applications/networking/p2p/magnetico { };
 
+  mastodon-bot = nodePackages.mastodon-bot;
+
   matchbox = callPackage ../applications/window-managers/matchbox { };
 
   matrixcli = callPackage ../applications/networking/instant-messengers/matrixcli {
