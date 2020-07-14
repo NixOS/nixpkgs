@@ -1352,15 +1352,18 @@ self: super: {
   # haskell-language-server uses its own fork of ghcide
   # Test disabled: it seems to freeze (is it just that it takes a long time ?)
   hls-ghcide =
-    dontCheck (
+    dontCheck ((
       overrideCabal super.hls-ghcide
         (old: {
           # The integration test run by lsp-test requires the executable to be in the PATH
           preCheck = ''
             export PATH=$PATH:dist/build/ghcide
           '';
-        })
-    );
+        })).override {
+          # we are faster than stack here
+          hie-bios = dontCheck self.hie-bios_0_6_1;
+          lsp-test = dontCheck self.lsp-test_0_11_0_2;
+        });
 
   haskell-language-server = (overrideCabal super.haskell-language-server
     (old: {
@@ -1375,8 +1378,9 @@ self: super: {
     })).override {
       # use a fork of ghcide
       ghcide = self.hls-ghcide;
-      # use specific version
-      ormolu = super.ormolu_0_0_5_0;
+      # we are faster than stack here
+      hie-bios = dontCheck self.hie-bios_0_6_1;
+      lsp-test = dontCheck self.lsp-test_0_11_0_2;
     };
 
   # https://github.com/kowainik/policeman/issues/57
