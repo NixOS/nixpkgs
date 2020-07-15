@@ -27,6 +27,11 @@ let
     (mkOverride "astral" "1.10.1"
       "d2a67243c4503131c856cafb1b1276de52a86e5b8a1d507b7e08bee51cb67bf1")
 
+    # Required by cast component. Can probably be removed in 0.113.x
+    # https://github.com/home-assistant/core/commit/86c27b50f1282658b75fe71f9f6fd2fcabc2eaa2
+    (mkOverride "PyChromecast" "6.0.0"
+      "05f8r3b2pdqbl76hwi5sv2xdi1r7g9lgm69x8ja5g22mn7ysmghm")
+
     # We have 3.x in nixpkgs which is incompatible with home-assistant atm:
     # https://github.com/home-assistant/core/blob/dev/requirements_all.txt
     (mkOverride "pyowm" "2.10.0"
