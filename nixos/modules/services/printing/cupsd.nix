@@ -86,6 +86,47 @@ let
 
     LogLevel ${cfg.logLevel}
 
+    DefaultAuthType Basic
+
+    <Location />
+      Order allow,deny
+      ${cfg.allowFrom}
+    </Location>
+
+    <Location /admin>
+      Order allow,deny
+      ${cfg.allowFrom}
+    </Location>
+
+    <Location /admin/conf>
+      AuthType Basic
+      Require user @SYSTEM
+      Order allow,deny
+      ${cfg.allowFrom}
+    </Location>
+
+    <Policy default>
+      <Limit Send-Document Send-URI Hold-Job Release-Job Restart-Job Purge-Jobs Set-Job-Attributes Create-Job-Subscription Renew-Subscription Cancel-Subscription Get-Notifications Reprocess-Job Cancel-Current-Job Suspend-Current-Job Resume-Job CUPS-Move-Job>
+        Require user @OWNER @SYSTEM
+        Order deny,allow
+      </Limit>
+
+      <Limit Pause-Printer Resume-Printer Set-Printer-Attributes Enable-Printer Disable-Printer Pause-Printer-After-Current-Job Hold-New-Jobs Release-Held-New-Jobs Deactivate-Printer Activate-Printer Restart-Printer Shutdown-Printer Startup-Printer Promote-Job Schedule-Job-After CUPS-Add-Printer CUPS-Delete-Printer CUPS-Add-Class CUPS-Delete-Class CUPS-Accept-Jobs CUPS-Reject-Jobs CUPS-Set-Default>
+        AuthType Basic
+        Require user @SYSTEM
+        Order deny,allow
+      </Limit>
+
+      <Limit Cancel-Job CUPS-Authenticate-Job>
+        Require user @OWNER @SYSTEM
+        Order deny,allow
+      </Limit>
+
+      <Limit All>
+        Order deny,allow
+      </Limit>
+    </Policy>
+
     ${cfg.extraConf}
   '';
 
@@ -406,50 +447,6 @@ in
 
         restartTriggers = [ browsedFile ];
       };
-
-    services.printing.extraConf =
-      ''
-        DefaultAuthType Basic
-
-        <Location />
-          Order allow,deny
-          ${cfg.allowFrom}
-        </Location>
-
-        <Location /admin>
-          Order allow,deny
-          ${cfg.allowFrom}
-        </Location>
-
-        <Location /admin/conf>
-          AuthType Basic
-          Require user @SYSTEM
-          Order allow,deny
-          ${cfg.allowFrom}
-        </Location>
-
-        <Policy default>
-          <Limit Send-Document Send-URI Hold-Job Release-Job Restart-Job Purge-Jobs Set-Job-Attributes Create-Job-Subscription Renew-Subscription Cancel-Subscription Get-Notifications Reprocess-Job Cancel-Current-Job Suspend-Current-Job Resume-Job CUPS-Move-Job>
-            Require user @OWNER @SYSTEM
-            Order deny,allow
-          </Limit>
-
-          <Limit Pause-Printer Resume-Printer Set-Printer-Attributes Enable-Printer Disable-Printer Pause-Printer-After-Current-Job Hold-New-Jobs Release-Held-New-Jobs Deactivate-Printer Activate-Printer Restart-Printer Shutdown-Printer Startup-Printer Promote-Job Schedule-Job-After CUPS-Add-Printer CUPS-Delete-Printer CUPS-Add-Class CUPS-Delete-Class CUPS-Accept-Jobs CUPS-Reject-Jobs CUPS-Set-Default>
-            AuthType Basic
-            Require user @SYSTEM
-            Order deny,allow
-          </Limit>
-
-          <Limit Cancel-Job CUPS-Authenticate-Job>
-            Require user @OWNER @SYSTEM
-            Order deny,allow
-          </Limit>
-
-          <Limit All>
-            Order deny,allow
-          </Limit>
-        </Policy>
-      '';
 
     security.pam.services.cups = {};
 
