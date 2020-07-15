@@ -72,13 +72,13 @@ assert waylandSupport -> gtk3Support == true;
 
 stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "68.10.0";
+  version = "78.0";
 
   src = fetchurl {
     url =
       "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
     sha512 =
-      "24jq4wxhk58403ax8jf6p82fyzf0vszz8am5d8jb6j559da3lp6wv4m5xqavvcf9i57rdivzrmqw9agr8mypfxs8zb908aln5iy7d4d";
+      "0l5cgd95lxwny365x85pih71z7b9zgmix3wc8916k1xj5p46szr20ylf7b20gwwl7kajm4mrxjdldzmfvc9qzdyss76za5r76c25wwr";
   };
 
   nativeBuildInputs = [
@@ -206,14 +206,12 @@ stdenv.mkDerivation rec {
   in [
     "--enable-application=comm/mail"
 
-    "--with-system-bz2"
     "--with-system-icu"
     "--with-system-jpeg"
     "--with-system-libevent"
     "--with-system-nspr"
     "--with-system-nss"
     "--with-system-png" # needs APNG support
-    "--with-system-icu"
     "--with-system-zlib"
     "--with-system-webp"
     "--with-system-libvpx"
@@ -223,12 +221,9 @@ stdenv.mkDerivation rec {
     "--enable-default-toolkit=${toolkitValue}"
     "--enable-js-shell"
     "--enable-necko-wifi"
-    "--enable-startup-notification"
     "--enable-system-ffi"
     "--enable-system-pixman"
-    "--enable-system-sqlite"
 
-    "--disable-gconf"
     "--disable-tests"
     "--disable-updater"
     "--enable-jemalloc"

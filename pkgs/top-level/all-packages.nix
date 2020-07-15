@@ -22785,8 +22785,9 @@ in
   thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
     inherit (rustPackages_1_44) cargo rustc;
     libpng = libpng_apng;
+    icu = icu67;
+    libvpx = libvpx_1_8;
     gtk3Support = true;
-    nss = nss_3_44; # 68.x won't build with newest nss anymore (like firefox-esr-68)
   };
 
   thunderbird-68 = callPackage ../applications/networking/mailreaders/thunderbird/68.nix {
