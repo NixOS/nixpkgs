@@ -9273,7 +9273,6 @@ broken-packages:
   - scgi
   - schedevr
   - schedule-planner
-  - scheduler
   - schedyield
   - schema
   - schemas
