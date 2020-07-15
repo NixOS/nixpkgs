@@ -105,16 +105,17 @@ in
       ];
       environment.JAVA_SYS_PROPS = concatStringsSep " " (mapAttrsToList (k: v: "${k}=${toString v}") jicofoProps);
 
+      script = ''
+        ${pkgs.jicofo}/bin/jicofo \
+          --host=${cfg.xmppHost} \
+          --domain=${if cfg.xmppDomain == null then cfg.xmppHost else cfg.xmppDomain} \
+          --secret=$(cat ${cfg.componentPasswordFile}) \
+          --user_name=${cfg.userName} \
+          --user_domain=${cfg.userDomain} \
+          --user_password=$(cat ${cfg.userPasswordFile})
+      '';
+
       serviceConfig = {
-        ExecStart = ''
-          ${pkgs.jicofo}/bin/jicofo \
-            --host=${cfg.xmppHost} \
-            --domain=${if cfg.xmppDomain == null then cfg.xmppHost else cfg.xmppDomain} \
-            --secret=$(cat ${cfg.componentPasswordFile}) \
-            --user_name=${cfg.userName} \
-            --user_domain=${cfg.userDomain} \
-            --user_password=$(cat ${cfg.userPasswordFile})
-        '';
         Type = "exec";
 
         DynamicUser = true;
