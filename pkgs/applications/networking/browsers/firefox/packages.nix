@@ -54,23 +54,4 @@ rec {
       versionKey = "ffversion";
     };
   };
-} // lib.optionalAttrs (config.allowAliases or true) {
-  #### ALIASES
-  #### remove after 20.03 branchoff
-
-  firefox-esr-52 = throw ''
-    firefoxPackages.firefox-esr-52 was removed as it's an unsupported ESR with
-    open security issues. If you need it because you need to run some plugins
-    not having been ported to WebExtensions API, import it from an older
-    nixpkgs checkout still containing it.
-  '';
-  firefox-esr-60 = throw "firefoxPackages.firefox-esr-60 was removed as it's an unsupported ESR with open security issues.";
-
-  icecat = throw "firefoxPackages.icecat was removed as even its latest upstream version is based on an unsupported ESR release with open security issues.";
-  icecat-52 = throw "firefoxPackages.icecat was removed as even its latest upstream version is based on an unsupported ESR release with open security issues.";
-
-  tor-browser-7-5 = throw "firefoxPackages.tor-browser-7-5 was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
-  tor-browser-8-5 = throw "firefoxPackages.tor-browser-8-5 was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
-  tor-browser = throw "firefoxPackages.tor-browser was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
-
 }

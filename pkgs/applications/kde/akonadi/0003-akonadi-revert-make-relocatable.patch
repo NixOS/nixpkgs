@@ -1,19 +1,18 @@
-From bc018b4bc816a3b51deb9739bedbf8a2268d0684 Mon Sep 17 00:00:00 2001
-From: gnidorah <gnidorah@users.noreply.github.com>
-Date: Fri, 22 Dec 2017 17:36:03 +0300
-Subject: [PATCH] Revert "Make Akonadi installation properly relocatable"
+From 7afe018382cf68b477b35f87b666424d62d19ef4 Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@mailbox.org>
+Date: Mon, 13 Jul 2020 11:41:55 -0500
+Subject: [PATCH 3/3] akonadi revert make relocatable
 
-This reverts commit b2bb55f13f2ac783f89cc414de8c39f62fa2096a.
 ---
  CMakeLists.txt            | 3 ---
  KF5AkonadiConfig.cmake.in | 6 +++---
  2 files changed, 3 insertions(+), 6 deletions(-)
 
-Index: akonadi-19.08.0/CMakeLists.txt
-===================================================================
---- akonadi-19.08.0.orig/CMakeLists.txt
-+++ akonadi-19.08.0/CMakeLists.txt
-@@ -306,9 +306,6 @@ configure_package_config_file(
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d927471..83a74c0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -330,9 +330,6 @@ configure_package_config_file(
      "${CMAKE_CURRENT_SOURCE_DIR}/KF5AkonadiConfig.cmake.in"
      "${CMAKE_CURRENT_BINARY_DIR}/KF5AkonadiConfig.cmake"
      INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR}
@@ -23,11 +22,11 @@ Index: akonadi-19.08.0/CMakeLists.txt
  )
  
  install(FILES
-Index: akonadi-19.08.0/KF5AkonadiConfig.cmake.in
-===================================================================
---- akonadi-19.08.0.orig/KF5AkonadiConfig.cmake.in
-+++ akonadi-19.08.0/KF5AkonadiConfig.cmake.in
-@@ -26,8 +26,8 @@ if(BUILD_TESTING)
+diff --git a/KF5AkonadiConfig.cmake.in b/KF5AkonadiConfig.cmake.in
+index 421e1df..e3abf27 100644
+--- a/KF5AkonadiConfig.cmake.in
++++ b/KF5AkonadiConfig.cmake.in
+@@ -24,8 +24,8 @@ if(BUILD_TESTING)
      find_dependency(Qt5Test "@QT_REQUIRED_VERSION@")
  endif()
  
@@ -38,7 +37,7 @@ Index: akonadi-19.08.0/KF5AkonadiConfig.cmake.in
  
  find_dependency(Boost "@Boost_MINIMUM_VERSION@")
  
-@@ -35,7 +35,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/KF5Ako
+@@ -33,7 +33,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/KF5AkonadiTargets.cmake)
  include(${CMAKE_CURRENT_LIST_DIR}/KF5AkonadiMacros.cmake)
  
  # The directory where akonadi-xml.xsd and kcfg2dbus.xsl are installed
@@ -47,3 +46,6 @@ Index: akonadi-19.08.0/KF5AkonadiConfig.cmake.in
  
  ####################################################################################
  # CMAKE_AUTOMOC
+-- 
+2.25.4
+

@@ -150,6 +150,8 @@ in {
 
   pynamodb = callPackage ../development/python-modules/pynamodb { };
 
+  aadict = callPackage ../development/python-modules/aadict { };
+
   absl-py = callPackage ../development/python-modules/absl-py { };
 
   adb-homeassistant = callPackage ../development/python-modules/adb-homeassistant { };
@@ -519,6 +521,8 @@ in {
 
   beancount_docverif = callPackage ../development/python-modules/beancount_docverif { };
 
+  biplist = callPackage ../development/python-modules/biplist { };
+
   bitarray = callPackage ../development/python-modules/bitarray { };
 
   bitcoinlib = callPackage ../development/python-modules/bitcoinlib { };
@@ -786,6 +790,8 @@ in {
 
   glob2 = callPackage ../development/python-modules/glob2 { };
 
+  globre = callPackage ../development/python-modules/globre { };
+
   glom = callPackage ../development/python-modules/glom { };
 
   gdcm = disabledIf isPy27 (toPythonModule (pkgs.gdcm.override {
@@ -929,6 +935,8 @@ in {
   loguru = callPackage ../development/python-modules/loguru { };
 
   logzero = callPackage ../development/python-modules/logzero { };
+
+  mac_alias = callPackage ../development/python-modules/mac_alias { };
 
   macropy = callPackage ../development/python-modules/macropy { };
 
@@ -3469,6 +3477,8 @@ in {
     inherit (pkgs) lzo;
   };
 
+  pxml = callPackage ../development/python-modules/pxml { };
+
   junos-eznc = callPackage ../development/python-modules/junos-eznc {};
 
   raven = callPackage ../development/python-modules/raven { };
@@ -4783,7 +4793,11 @@ in {
 
   pint = callPackage ../development/python-modules/pint { };
 
+  pkutils = callPackage ../development/python-modules/pkutils { };
+
   pygal = callPackage ../development/python-modules/pygal { };
+
+  pygogo = callPackage ../development/python-modules/pygogo { };
 
   pytaglib = callPackage ../development/python-modules/pytaglib { };
 
@@ -5904,6 +5918,15 @@ in {
       };
     });
   in if pythonOlder "3.5" then scipy_1_2 else scipy_;
+
+  scipy_1_3 = self.scipy.overridePythonAttrs(oldAttrs: rec {
+    version = "1.3.3";
+    src = oldAttrs.src.override {
+      inherit version;
+      sha256 = "02iqb7ws7fw5fd1a83hx705pzrw1imj7z0bphjsl4bfvw254xgv4";
+    };
+    doCheck = false;
+  });
 
   scikitimage = callPackage ../development/python-modules/scikit-image { };
 
