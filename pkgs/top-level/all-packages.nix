@@ -9124,6 +9124,8 @@ in
 
   llvmPackages_latest = llvmPackages_10;
 
+  llvmPackages_rocm = callPackage ../development/compilers/llvm/rocm { };
+
   lorri = callPackage ../tools/misc/lorri {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
@@ -9255,6 +9257,32 @@ in
   rasm = callPackage ../development/compilers/rasm { };
 
   rgbds = callPackage ../development/compilers/rgbds { };
+
+  rocclr = callPackage ../development/libraries/rocclr {
+    inherit (llvmPackages_rocm) clang;
+  };
+
+  rocm-cmake = callPackage ../development/tools/build-managers/rocm-cmake { };
+
+  rocm-comgr = callPackage ../development/libraries/rocm-comgr {
+    inherit (llvmPackages_rocm) clang lld llvm;
+    device-libs = rocm-device-libs;
+  };
+
+  rocm-device-libs = callPackage ../development/libraries/rocm-device-libs {
+    inherit (llvmPackages_rocm) clang clang-unwrapped lld llvm;
+  };
+
+  rocm-opencl-icd = callPackage ../development/libraries/rocm-opencl-icd { };
+
+  rocm-opencl-runtime = callPackage ../development/libraries/rocm-opencl-runtime {
+    stdenv = overrideCC stdenv llvmPackages_rocm.clang;
+    inherit (llvmPackages_rocm) clang clang-unwrapped lld llvm;
+  };
+
+  rocm-runtime = callPackage ../development/libraries/rocm-runtime { };
+
+  rocm-thunk = callPackage ../development/libraries/rocm-thunk { };
 
   rtags = callPackage ../development/tools/rtags {
     inherit (darwin) apple_sdk;
