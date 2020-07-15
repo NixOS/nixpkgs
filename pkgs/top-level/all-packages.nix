@@ -9282,6 +9282,8 @@ in
 
   rocm-runtime = callPackage ../development/libraries/rocm-runtime { };
 
+  rocm-runtime-ext = callPackage ../development/libraries/rocm-runtime-ext { };
+
   rocm-thunk = callPackage ../development/libraries/rocm-thunk { };
 
   rtags = callPackage ../development/tools/rtags {
