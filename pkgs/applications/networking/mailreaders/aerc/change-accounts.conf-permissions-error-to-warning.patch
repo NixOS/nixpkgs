@@ -1,0 +1,54 @@
+From b42bfb795f13803c2a61ce3221785b79128c2de2 Mon Sep 17 00:00:00 2001
+From: josephtheengineer <joseph@theengineer.life>
+Date: Thu, 16 Jul 2020 08:02:06 +1000
+Subject: [PATCH] Change accounts.conf permissions error to warning
+
+Original patch from Siva Mahadevan <me@svmhdvn.name>
+https://lists.sr.ht/~sircmpwn/aerc/%3C20200709211658.19070-1-me%40svmhdvn.name%3E
+
+If the accounts.conf file contains secrets, it shouldn't be readable
+to anyone except the owner of the file. Previously, aerc exits with an
+error if this file is readable to other users, even if there are no
+secrets in the file. This commit changes that behaviour to the
+following:
+- Print a warning if the accounts.conf file is readable to other users
+
+PR https://github.com/NixOS/nixpkgs/pull/93178
+
+Resolves
+https://todo.sr.ht/~sircmpwn/aerc2/426
+https://github.com/rycee/home-manager/pull/1376
+https://lists.sr.ht/~sircmpwn/aerc/%3C20200709211658.19070-1-me%40svmhdvn.name%3E
+---
+ config/config.go | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/config/config.go b/config/config.go
+index ce59944..3bdc910 100644
+--- a/config/config.go
++++ b/config/config.go
+@@ -590,7 +590,7 @@ func LoadConfigFromFile(root *string, sharedir string) (*AercConfig, error) {
+ }
+
+ // checkConfigPerms checks for too open permissions
+-// printing the fix on stdout and returning an error
++// and prints the warning and fix on stderr and return nil.
+ func checkConfigPerms(filename string) error {
+ 	info, err := os.Stat(filename)
+ 	if err != nil {
+@@ -600,10 +600,9 @@ func checkConfigPerms(filename string) error {
+ 	goPerms := perms >> 3
+ 	// group or others have read access
+ 	if goPerms&0x44 != 0 {
+-		fmt.Fprintf(os.Stderr, "The file %v has too open permissions.\n", filename)
+-		fmt.Fprintln(os.Stderr, "This is a security issue (it contains passwords).")
++		fmt.Fprintf(os.Stderr, "Warning: the file %v has too open permissions.\n", filename)
++		fmt.Fprintln(os.Stderr, "This could be a security issue if it contains any secrets.")
+ 		fmt.Fprintf(os.Stderr, "To fix it, run `chmod 600 %v`\n", filename)
+-		return errors.New("account.conf permissions too lax")
+ 	}
+ 	return nil
+ }
+--
+2.27.0
+

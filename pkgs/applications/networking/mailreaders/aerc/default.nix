@@ -36,6 +36,7 @@ buildGoModule rec {
 
   patches = [
     ./runtime-sharedir.patch
+    ./change-accounts.conf-permissions-error-to-warning.patch
   ];
 
   pythonPath = [
