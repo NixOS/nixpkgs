@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchhg, fetchpatch, pkg-config, meson, ninja, wayland, gtk3, wrapGAppsHook }:
+{ stdenv, lib, fetchhg, fetchpatch, pkg-config, meson, ninja, wayland, gtk3, wrapGAppsHook, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "wofi";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "086j5wshawjbwdmmmldivfagc2rr7g5a2gk11l0snqqslm294xsn";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja wrapGAppsHook ];
+  nativeBuildInputs = [ pkg-config meson ninja wrapGAppsHook installShellFiles ];
   buildInputs = [ wayland gtk3 ];
 
   # Fixes icon bug on NixOS.
@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
       sha256 = "1n4jpmh66p7asjhj0z2s94ny91lmaq4hhh2356nj406vlqr15vbb";
     })
   ];
+
+  postInstall = ''
+    installManPage man/wofi*
+  '';
 
   meta = with lib; {
     description = "A launcher/menu program for wlroots based wayland compositors such as sway";

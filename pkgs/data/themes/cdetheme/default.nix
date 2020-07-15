@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python2Packages }:
 
 stdenv.mkDerivation rec {
-  pname = "cde-motif-theme";
+  pname = "cdetheme";
   version = "1.3";
 
   src = fetchFromGitHub {
@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ gnidorah ];
+    hydraPlatforms = [];
   };
 }

@@ -50,7 +50,7 @@ with stdenv; mkDerivation rec {
       "-DBUILD_TESTS=ON"
       "-DICEBOX_ROOT=${icestorm}/share/icebox"
       "-DTRELLIS_INSTALL_PREFIX=${trellis}"
-      "-DPYTRELLIS_LIBDIR=${trellis}/lib/trellis"
+      "-DTRELLIS_LIBDIR=${trellis}/lib/trellis"
       "-DUSE_OPENMP=ON"
       # warning: high RAM usage
       "-DSERIALIZE_CHIPDB=OFF"

@@ -57,6 +57,9 @@ in stdenv.mkDerivation {
   ++ lib.optionals enableQt [ qt5.wrapQtAppsHook ]
   ;
 
+  # Doc has high risk of collisions
+  postInstall = "rm -r $out/share/doc";
+
   buildInputs = [
     openssl
     curl

@@ -23,6 +23,15 @@ in
     maintainers = [] ++ lib.teams.podman.members;
   };
 
+
+  imports = [
+    (
+      lib.mkRemovedOptionModule
+      [ "virtualisation" "containers" "users" ]
+      "All users with `isNormaUser = true` set now get appropriate subuid/subgid mappings."
+    )
+  ];
+
   options.virtualisation.containers = {
 
     enable =
@@ -99,15 +108,6 @@ in
       '';
     };
 
-    users = mkOption {
-      default = [];
-      type = types.listOf types.str;
-      description = ''
-        List of users to set up subuid/subgid mappings for.
-        This is a requirement for running rootless containers.
-      '';
-    };
-
   };
 
   config = lib.mkIf cfg.enable {
@@ -121,26 +121,6 @@ in
     environment.etc."containers/registries.conf".source = toTOML "registries.conf" {
       registries = lib.mapAttrs (n: v: { registries = v; }) cfg.registries;
     };
-
-    users.extraUsers = builtins.listToAttrs (
-      (
-        builtins.foldl' (
-          acc: user: {
-            values = acc.values ++ [
-              {
-                name = user;
-                value = {
-                  subUidRanges = [ { startUid = acc.offset; count = 65536; } ];
-                  subGidRanges = [ { startGid = acc.offset; count = 65536; } ];
-                };
-              }
-            ];
-            offset = acc.offset + 65536;
-          }
-        )
-        { values = []; offset = 100000; } (lib.unique cfg.users)
-      ).values
-    );
 
     environment.etc."containers/policy.json".source =
       if cfg.policy != {} then pkgs.writeText "policy.json" (builtins.toJSON cfg.policy)

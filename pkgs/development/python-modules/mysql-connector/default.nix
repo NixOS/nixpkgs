@@ -4,13 +4,13 @@ let
   py = python;
 in buildPythonPackage rec {
   pname = "mysql-connector";
-  version = "8.0.20";
+  version = "8.0.21";
 
   src = fetchFromGitHub {
     owner = "mysql";
     repo = "mysql-connector-python";
     rev = version;
-    sha256 = "1pm98mjbkhwawhni98cjhp0gg3mim75i0sdby77vzrlcrxajxkbw";
+    sha256 = "0ky7rn9259807gji3fhvkmdmrgyaps431l9l9y6gh66i84kw1b3l";
   };
 
   propagatedBuildInputs = with py.pkgs; [ protobuf dnspython ];

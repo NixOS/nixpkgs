@@ -39,7 +39,7 @@ let
     ] ++ optionals buildClient [
       "-DOpenGL_GL_PREFERENCE=GLVND"
     ];
-    
+
     NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
     nativeBuildInputs = [ cmake doxygen graphviz ];
@@ -47,7 +47,7 @@ let
     buildInputs = [
       irrlicht luajit jsoncpp gettext freetype sqlite curl bzip2 ncurses
       gmp libspatialindex
-    ] ++ optionals stdenv.isDarwin [ 
+    ] ++ optionals stdenv.isDarwin [
       libiconv OpenGL OpenAL Carbon Cocoa
     ] ++ optionals buildClient [
       libpng libjpeg libGLU libGL openal libogg libvorbis xorg.libX11 libXxf86vm
@@ -76,9 +76,9 @@ let
   };
 
   v5 = {
-    version = "5.2.0";
-    sha256 = "0pj9hkxwc1vzng2khbixi79557sbawf6mqkzl589jciyqa7jqkv1";
-    dataSha256 = "1kjz7x3xiqqnpyrd6339a139pbdxx31c4qpg8pmns410hsm8i358";
+    version = "5.3.0";
+    sha256 = "03ga3j3cg38w4lg4d4qxasmnjdl8n3lbizidrinanvyfdyvznyh6";
+    dataSha256 = "1liciwlh013z5h08ib0psjbwn5wkvlr937ir7kslfk4vly984cjx";
   };
 
 in {

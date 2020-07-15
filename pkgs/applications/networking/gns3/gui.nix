@@ -4,8 +4,6 @@
 
 let
   defaultOverrides = commonOverrides ++ [
-    (mkOverride "jsonschema" "3.2.0"
-      "0ykr61yiiizgvm3bzipa3l73rvj49wmrybbfwhvpgk3pscl5pa68")
   ];
 
   python = python3.override {
@@ -23,7 +21,7 @@ in python.pkgs.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with python.pkgs; [
-    raven psutil jsonschema # tox for check
+    sentry-sdk psutil jsonschema # tox for check
     # Runtime dependencies
     sip (pyqt5.override { withWebSockets = true; }) distro setuptools
     pkgs.qt5Full

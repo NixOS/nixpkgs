@@ -375,18 +375,6 @@ let
     };
   };
 
-  mkSubuidEntry = user: concatStrings (
-    map (range: "${user.name}:${toString range.startUid}:${toString range.count}\n")
-      user.subUidRanges);
-
-  subuidFile = concatStrings (map mkSubuidEntry (attrValues cfg.users));
-
-  mkSubgidEntry = user: concatStrings (
-    map (range: "${user.name}:${toString range.startGid}:${toString range.count}\n")
-        user.subGidRanges);
-
-  subgidFile = concatStrings (map mkSubgidEntry (attrValues cfg.users));
-
   idsAreUnique = set: idAttr: !(fold (name: args@{ dup, acc }:
     let
       id = builtins.toString (builtins.getAttr idAttr (builtins.getAttr name set));
@@ -406,6 +394,7 @@ let
       { inherit (u)
           name uid group description home createHome isSystemUser
           password passwordFile hashedPassword
+          isNormalUser subUidRanges subGidRanges
           initialPassword initialHashedPassword;
         shell = utils.toShellPath u.shell;
       }) cfg.users;
@@ -430,9 +419,9 @@ in {
     (mkChangedOptionModule
       [ "security" "initialRootPassword" ]
       [ "users" "users" "root" "initialHashedPassword" ]
-      (cfg: if cfg.security.initialHashedPassword == "!"
+      (cfg: if cfg.security.initialRootPassword == "!"
             then null
-            else cfg.security.initialHashedPassword))
+            else cfg.security.initialRootPassword))
   ];
 
   ###### interface
@@ -567,16 +556,7 @@ in {
     # Install all the user shells
     environment.systemPackages = systemShells;
 
-    environment.etc = {
-      subuid = {
-        text = subuidFile;
-        mode = "0644";
-      };
-      subgid = {
-        text = subgidFile;
-        mode = "0644";
-      };
-    } // (mapAttrs' (name: { packages, ... }: {
+    environment.etc = (mapAttrs' (name: { packages, ... }: {
       name = "profiles/per-user/${name}";
       value.source = pkgs.buildEnv {
         name = "user-environment";

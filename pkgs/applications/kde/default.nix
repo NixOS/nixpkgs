@@ -74,6 +74,7 @@ let
       akregator = callPackage ./akregator.nix {};
       ark = callPackage ./ark {};
       baloo-widgets = callPackage ./baloo-widgets.nix {};
+      bovo = callPackage ./bovo.nix {};
       calendarsupport = callPackage ./calendarsupport.nix {};
       dolphin = callPackage ./dolphin.nix {};
       dolphin-plugins = callPackage ./dolphin-plugins.nix {};
@@ -174,6 +175,7 @@ let
       messagelib = callPackage ./messagelib.nix {};
       minuet = callPackage ./minuet.nix {};
       okular = callPackage ./okular.nix {};
+      picmi = callPackage ./picmi.nix {};
       pimcommon = callPackage ./pimcommon.nix {};
       pim-data-exporter = callPackage ./pim-data-exporter.nix {};
       pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};

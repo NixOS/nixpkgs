@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1jb30zxmw7h9qxa8yi76rfxj4ssk60rv8n9y41m6pzqfk9lwis0y";
   };
 
-  buildInputs = stdenv.lib.optional stdenv.isLinux libunwind;
+  # tcmalloc uses libunwind in a way that works correctly only on non-ARM linux
+  buildInputs = stdenv.lib.optional (stdenv.isLinux && !(stdenv.isAarch64 || stdenv.isAarch32)) libunwind;
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile.am --replace stdc++ c++
