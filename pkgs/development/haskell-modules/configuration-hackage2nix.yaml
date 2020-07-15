@@ -3896,7 +3896,6 @@ broken-packages:
   - collections-api
   - collections-base-instances
   - colonnade
-  - Color
   - color-counter
   - colorless
   - colorless-http-client
