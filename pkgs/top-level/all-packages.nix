@@ -6838,6 +6838,8 @@ in
 
   spectre-meltdown-checker = callPackage ../tools/security/spectre-meltdown-checker { };
 
+  spigot = callPackage ../tools/misc/spigot { };
+
   spiped = callPackage ../tools/networking/spiped { };
 
   sqliteman = callPackage ../applications/misc/sqliteman { };
