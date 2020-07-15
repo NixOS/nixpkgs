@@ -29,12 +29,6 @@ in stdenv.mkDerivation rec {
       url = https://bug787443.bugzilla-attachments.gnome.org/attachment.cgi?id=361056;
       sha256 = "09fyrdci4727fg6qm5aaapsbv71sf4wgfaqz8jqlyy61dibgg490";
     })
-
-    # Fix build with libglvnd headers (these headers used to be provided by mesa)
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/cogl/commit/9c4764224aded552fb855b1c2b85b26d2b894adf.patch";
-      sha256 = "1v9drpzgcd5pq2shhdcw5px7mdiggk6ga13qjbklq8xpd92ac0i1";
-    })
   ];
 
   outputs = [ "out" "dev" ];
