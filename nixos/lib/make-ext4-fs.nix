@@ -46,7 +46,9 @@ pkgs.stdenv.mkDerivation {
       (
         GLOBIGNORE=".:.."
         shopt -u dotglob
-        cp -a --reflink=auto ./files/* -t ./rootImage/
+        if [ "$(ls -A ./files)" ]; then
+          cp -a --reflink=auto ./files/* -t ./rootImage/
+        fi
       )
 
       # Also include a manifest of the closures in a format suitable for nix-store --load-db
