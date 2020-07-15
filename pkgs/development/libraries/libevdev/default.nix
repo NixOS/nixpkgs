@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3 }:
+{ stdenv, fetchurl, fetchpatch, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "libevdev";
@@ -8,6 +8,15 @@ stdenv.mkDerivation rec {
     url = "https://www.freedesktop.org/software/${pname}/${pname}-${version}.tar.xz";
     sha256 = "17pb5375njb1r05xmk0r57a2j986ihglh2n5nqcylbag4rj8mqg7";
   };
+
+  patches = [
+    # Fix libevdev-python tests on aarch64
+    # https://gitlab.freedesktop.org/libevdev/libevdev/merge_requests/63
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/libevdev/libevdev/commit/66113fe84f62bab3a672a336eb10b255d2aa5ce7.patch";
+      sha256 = "gZKr/P+/OqU69IGslP8CQlcGuyzA/ulcm+nGwHdis58=";
+    })
+  ];
 
   nativeBuildInputs = [ python3 ];
 
