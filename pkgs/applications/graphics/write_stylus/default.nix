@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, lib, qtbase, qtsvg, libglvnd, fetchurl, makeDesktopItem }:
+{ mkDerivation, stdenv, lib, qtbase, qtsvg, libglvnd, libX11, libXi, fetchurl, makeDesktopItem }:
 let
   # taken from: https://www.iconfinder.com/icons/50835/edit_pencil_write_icon
   # license: Free for commercial use
@@ -9,7 +9,7 @@ let
 in
 mkDerivation rec {
   pname = "write_stylus";
-  version = "209";
+  version = "300";
 
   desktopItem = makeDesktopItem {
     name = "Write";
@@ -23,7 +23,7 @@ mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.styluslabs.com/write/write${version}.tar.gz";
-    sha256 = "1p6glp4vdpwl8hmhypayc4cvs3j9jfmjfhhrgqm2xkgl5bfbv2qd";
+    sha256 = "1kg4qqxgg7iyxl13hkbl3j27dykra56dj67hbv0392mwdcgavihq";
   };
 
   sourceRoot = ".";
@@ -44,7 +44,9 @@ mkDerivation rec {
       qtbase            # libQt5PrintSupport.so.5
       qtsvg             # libQt5Svg.so.5
       stdenv.cc.cc.lib  # libstdc++.so.6
-      libglvnd          # ibGL.so.1
+      libglvnd          # libGL.so.1
+      libX11            # libX11.so.6
+      libXi             # libXi.so.6
     ];
   in ''
     patchelf \
