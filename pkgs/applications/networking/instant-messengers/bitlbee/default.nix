@@ -14,9 +14,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ] ++ optional doCheck check;
 
-  buildInputs = [ gnutls glib libotr python ]
+  buildInputs = [ gnutls libotr python ]
     ++ optional enableLibPurple pidgin
     ++ optional enablePam pam;
+
+  propagatedBuildInputs = [ glib ];
 
   configureFlags = [
     "--otr=1"
