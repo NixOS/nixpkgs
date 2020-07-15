@@ -5099,6 +5099,12 @@
     githubId = 2971615;
     name = "Marius Bergmann";
   };
+  mcbeth = {
+    email = "mcbeth@broggs.org";
+    github = "mcbeth";
+    githubId = 683809;
+    name = "Jeffrey Brent McBeth";
+  };
   mcmtroffaes = {
     email = "matthias.troffaes@gmail.com";
     github = "mcmtroffaes";
