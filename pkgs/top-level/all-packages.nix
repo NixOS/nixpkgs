@@ -1055,6 +1055,8 @@ in
 
   httperf = callPackage ../tools/networking/httperf { };
 
+  hwi = with python3Packages; toPythonApplication hwi;
+
   ili2c = callPackage ../tools/misc/ili2c { };
 
   imageworsener = callPackage ../tools/graphics/imageworsener { };

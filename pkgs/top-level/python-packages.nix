@@ -872,6 +872,8 @@ in {
 
   httptools = callPackage ../development/python-modules/httptools { };
 
+  hwi = callPackage ../development/python-modules/hwi { };
+
   i3ipc = callPackage ../development/python-modules/i3ipc { };
 
   ignite = callPackage ../development/python-modules/ignite { };
