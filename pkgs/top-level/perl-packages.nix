@@ -16251,7 +16251,7 @@ let
       url = "mirror://cpan/authors/id/D/DO/DOLMEN/Pod-Spell-1.20.tar.gz";
       sha256 = "6383f7bfe22bc0d839a08057a0ce780698b046184aea935be4833d94986dd03c";
     };
-    propagatedBuildInputs = [ ClassTiny FileShareDir LinguaENInflect PathTiny ];
+    propagatedBuildInputs = [ ClassTiny FileShareDir LinguaENInflect PathTiny PodParser ];
     buildInputs = [ FileShareDirInstall TestDeep ];
   };
 
