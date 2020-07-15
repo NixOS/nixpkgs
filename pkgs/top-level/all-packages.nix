@@ -6850,6 +6850,8 @@ in
 
   storebrowse = callPackage ../tools/system/storebrowse { };
 
+  structurizr-cli = callPackage ../development/tools/structurizr { };
+
   stubby = callPackage ../tools/networking/stubby { };
 
   syntex = callPackage ../tools/graphics/syntex {};
