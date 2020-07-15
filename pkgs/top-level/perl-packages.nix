@@ -10920,10 +10920,10 @@ let
 
   LogHandler = buildPerlModule {
     pname = "Log-Handler";
-    version = "0.88";
+    version = "0.90";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BL/BLOONIX/Log-Handler-0.88.tar.gz";
-      sha256 = "45bf540ab2138ed3ff93afc205b0516dc75755b86acdcc5e75c41347833c293d";
+      url = "mirror://cpan/authors/id/B/BL/BLOONIX/Log-Handler-0.90.tar.gz";
+      sha256 = "0kgp3frz0y51j8kw67d6b4yyrrbh7syqraxchc7pfm442bkq0p1s";
     };
     propagatedBuildInputs = [ ParamsValidate ];
     meta = {
