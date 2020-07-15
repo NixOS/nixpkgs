@@ -16,11 +16,19 @@ in
           Whether to install slock screen locker with setuid wrapper.
         '';
       };
+      package = mkOption {
+        type = types.package;
+        default = pkgs.slock;
+        defaultText = "pkgs.slock";
+        description = ''
+          slock package to use.
+        '';
+      };
     };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.slock ];
-    security.wrappers.slock.source = "${pkgs.slock.out}/bin/slock";
+    environment.systemPackages = [ cfg.package ];
+    security.wrappers.slock.source = "${cfg.package}/bin/slock";
   };
 }
