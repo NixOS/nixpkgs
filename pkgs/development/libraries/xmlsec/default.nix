@@ -1,6 +1,7 @@
 { stdenv, fetchurl, libxml2, gnutls, libxslt, pkgconfig, libgcrypt, libtool
-, openssl, nss }:
+, openssl, nss, lib, runCommandCC, writeText }:
 
+lib.fix (self:
 let
   version = "1.2.28";
 in
@@ -41,6 +42,28 @@ stdenv.mkDerivation {
     moveToOutput "lib/xmlsec1Conf.sh" "$dev"
   '';
 
+  passthru.tests.libxmlsec1-crypto = runCommandCC "libxmlsec1-crypto-test"
+    {
+      nativeBuildInputs = [ pkgconfig ];
+      buildInputs = [ self libxml2 libxslt libtool ];
+    } ''
+    $CC $(pkg-config --cflags --libs xmlsec1) -o crypto-test ${writeText "crypto-test.c" ''
+      #include <xmlsec/xmlsec.h>
+      #include <xmlsec/crypto.h>
+
+      int main(int argc, char **argv) {
+        return xmlSecInit() ||
+          xmlSecCryptoDLLoadLibrary(argc > 1 ? argv[1] : 0) ||
+          xmlSecCryptoInit();
+      }
+    ''}
+
+    for crypto in "" gcrypt gnutls nss openssl; do
+      ./crypto-test $crypto
+    done
+    touch $out
+  '';
+
   meta = {
     homepage = http://www.aleksey.com/xmlsec;
     downloadPage = https://www.aleksey.com/xmlsec/download.html;
@@ -50,3 +73,4 @@ stdenv.mkDerivation {
     updateWalker = true;
   };
 }
+)
