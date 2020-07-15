@@ -70,16 +70,18 @@ stdenv.mkDerivation rec {
       url = "https://bug757142.bugzilla-attachments.gnome.org/attachment.cgi?id=344123";
       sha256 = "0g6fhqcv8spfy3mfmxpyji93k8d4p4q4fz1v9a1c1cgcwkz41d7p";
     })
-    # https://gitlab.gnome.org/GNOME/gtk/merge_requests/1002
-    ./patches/01-build-Fix-path-handling-in-pkgconfig.patch
+
+    # Fix path handling in pkg-config
+    # https://gitlab.gnome.org/GNOME/gtk/merge_requests/1793
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gtk/commit/6d9db8610eff8c12d594d53b7813d9eea1247801.patch";
+      sha256 = "0rd1kjh0m4mrj2hkcqlsq1j0d6ahn5c237fd211r158gd1jiwys0";
+    })
   ] ++ optionals stdenv.isDarwin [
     # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
     # let’s drop that dependency in similar way to how other parts of the library do it
     # e.g. https://gitlab.gnome.org/GNOME/gtk/blob/3.24.4/gtk/gtk-launch.c#L31-33
     ./patches/3.0-darwin-x11.patch
-    # 3.24.13 failed to ship a header file
-    # https://gitlab.gnome.org/GNOME/gtk/issues/2279
-    ./patches/missing-header.patch
   ];
 
   separateDebugInfo = stdenv.isLinux;
