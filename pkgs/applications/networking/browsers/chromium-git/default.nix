@@ -247,7 +247,8 @@ in {
   chromium-git_80 = common { version = "80.0.3987.165"; llvmPackages = llvmPackages_9;  };
   chromium-git_81 = common { version = "81.0.4044.155"; llvmPackages = llvmPackages_9;  };
   chromium-git_82 = common { version = "82.0.4085.28" ; llvmPackages = llvmPackages_10; };
-  chromium-git_83 = common { version = "83.0.4103.119"; llvmPackages = llvmPackages_10; };
-  chromium-git_84 = common { version = "84.0.4147.69" ; llvmPackages = llvmPackages_10; };
-  chromium-git_85 = common { version = "85.0.4181.6"  ; llvmPackages = llvmPackages_10; };
+  chromium-git_83 = common { version = "83.0.4103.122"; llvmPackages = llvmPackages_10; };
+  chromium-git_84 = common { version = "84.0.4147.95" ; llvmPackages = llvmPackages_10; };
+  chromium-git_85 = common { version = "85.0.4183.28" ; llvmPackages = llvmPackages_10; };
+  chromium-git_86 = common { version = "86.0.4204.0"  ; llvmPackages = llvmPackages_10; };
 }

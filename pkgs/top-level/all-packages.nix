@@ -18618,7 +18618,8 @@ in
     chromium-git_82
     chromium-git_83
     chromium-git_84
-    chromium-git_85;
+    chromium-git_85
+    chromium-git_86;
 
   chronos = callPackage ../applications/networking/cluster/chronos { };
 
