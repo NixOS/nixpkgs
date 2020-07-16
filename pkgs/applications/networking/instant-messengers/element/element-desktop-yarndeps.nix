@@ -3170,11 +3170,11 @@
       };
     }
     {
-      name = "lodash___lodash_4.17.15.tgz";
+      name = "lodash___lodash_4.17.19.tgz";
       path = fetchurl {
-        name = "lodash___lodash_4.17.15.tgz";
-        url  = "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz";
-        sha1 = "b447f6670a0455bbfeedd11392eff330ea097548";
+        name = "lodash___lodash_4.17.19.tgz";
+        url  = "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz";
+        sha1 = "e48ddedbe30b3321783c5b4301fbd353bc1e4a4b";
       };
     }
     {
