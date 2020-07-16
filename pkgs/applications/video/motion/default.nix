@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     homepage = "https://motion-project.github.io/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ puffnfresh veprbl ];
+    platforms = platforms.unix;
   };
 }
