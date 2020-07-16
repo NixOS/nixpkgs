@@ -14,14 +14,14 @@ with stdenv.lib;
 let
   go-d-plugin = callPackage ./go.d.plugin.nix {};
 in stdenv.mkDerivation rec {
-  version = "1.23.0";
+  version = "1.23.2";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "04x53hr2d086y4q990h7lazaykaizb5g45nmfvahqzxj72b0hvdf";
+    sha256 = "1vv92plk9dxk6fl76ik1zralpzc35ymrfyrf1cr6pv8q3agyy5k4";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -36,6 +36,12 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./no-files-in-etc-and-var.patch
+  ] ++ stdenv.lib.optionals (!stdenv.cc.isGNU) [
+    # fix memcpy typo for non-gnu. Remove with the next release.
+    (fetchpatch {
+      url = "https://github.com/netdata/netdata/commit/da7f267196b489e9a75724b68897e8f2e6137d72.patch";
+      sha256 = "1j2sa06j6v491nw58bjx5nqqyfi1n2n9z3p3jiy4yh74m3asldlv";
+    })
   ];
 
   NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
