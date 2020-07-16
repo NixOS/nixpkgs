@@ -196,8 +196,11 @@ stdenv.mkDerivation rec {
 
     export PATH=$(pwd)/bin:$PATH
 
+    ${optionalString (stdenv.buildPlatform != stdenv.targetPlatform) ''
     # Independent from host/target, CC should produce code for the building system.
+    # We only set it when cross-compiling.
     export CC=${buildPackages.stdenv.cc}/bin/cc
+    ''}
     ulimit -a
   '';
 
