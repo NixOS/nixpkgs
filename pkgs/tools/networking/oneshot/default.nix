@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "oneshot";
-  version = "1.1.0";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "raphaelreyna";
     repo = "oneshot";
     rev = "v${version}";
-    sha256 = "1gcxwamchznkzg3m0gfig7733z2w035lxxj6h18gc6zzcnf6p57w";
+    sha256 = "14s5cl1g0rgqj7fj699xgz2kmkzym1zpckhv3h33ypsn4dq7gjh2";
   };
 
   goPackagePath = "github.com/raphaelreyna/oneshot";

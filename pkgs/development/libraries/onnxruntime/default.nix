@@ -41,8 +41,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-Donnxruntime_USE_OPENMP=ON"
     "-Donnxruntime_BUILD_SHARED_LIB=ON"
-    # flip back to ON next release
-    "-Donnxruntime_ENABLE_LTO=OFF" # https://github.com/microsoft/onnxruntime/issues/2828
+    "-Donnxruntime_ENABLE_LTO=ON"
   ];
 
   # ContribOpTest.StringNormalizerTest sets locale to en_US.UTF-8"
