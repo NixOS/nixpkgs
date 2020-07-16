@@ -908,6 +908,10 @@ in {
 
   labelbox = callPackage ../development/python-modules/labelbox { };
 
+  kfp = callPackage ../development/python-modules/kfp { };
+
+  kfp-server-api = callPackage ../development/python-modules/kfp-server-api { };
+
   lammps-cython = callPackage ../development/python-modules/lammps-cython {
     mpi = pkgs.openmpi;
   };
@@ -7337,6 +7341,8 @@ in {
   tensorboardx = callPackage ../development/python-modules/tensorboardx { };
 
   typed-ast = callPackage ../development/python-modules/typed-ast { };
+
+  strip-hints = callPackage ../development/python-modules/strip-hints { };
 
   stripe = callPackage ../development/python-modules/stripe { };
 
