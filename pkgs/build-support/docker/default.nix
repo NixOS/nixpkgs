@@ -442,6 +442,7 @@ rec {
     in
       runCommand "${name}.tar.gz" {
         inherit (stream) imageName;
+        passthru = { inherit (stream) imageTag; };
         buildInputs = [ pigz ];
       } "${stream} | pigz -nT > $out";
 
@@ -517,6 +518,11 @@ rec {
         layerClosure = writeReferencesToFile layer;
         passthru.buildArgs = args;
         passthru.layer = layer;
+        passthru.imageTag =
+          if tag != null
+            then lib.toLower tag
+            else
+              lib.head (lib.strings.splitString "-" (baseNameOf result.outPath));
         # Docker can't be made to run darwin binaries
         meta.badPlatforms = lib.platforms.darwin;
       } ''
@@ -737,6 +743,11 @@ rec {
       conf = runCommand "${name}-conf.json" {
         inherit maxLayers created;
         imageName = lib.toLower name;
+        passthru.imageTag =
+          if tag != null
+            then tag
+            else
+              lib.head (lib.strings.splitString "-" (baseNameOf conf.outPath));
         paths = referencesByPopularity overallClosure;
         buildInputs = [ jq ];
       } ''
@@ -792,6 +803,7 @@ rec {
       '';
       result = runCommand "stream-${name}" {
         inherit (conf) imageName;
+        passthru = { inherit (conf) imageTag; };
         buildInputs = [ makeWrapper ];
       } ''
         makeWrapper ${streamScript} $out --add-flags ${conf}
