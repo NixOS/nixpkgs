@@ -61,7 +61,7 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
   dontWrapQtApps = true;
 
   postPatch = ''
-    substituteInPlace qutebrowser/app.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
+    substituteInPlace qutebrowser/misc/quitter.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
 
     sed -i "s,/usr/share/,$out/share/,g" qutebrowser/utils/standarddir.py
   '' + lib.optionalString withPdfReader ''
