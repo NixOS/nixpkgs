@@ -4899,6 +4899,8 @@ in {
 
   mohawk = callPackage ../development/python-modules/mohawk { };
 
+  monai = callPackage ../development/python-modules/monai { };
+
   mongodict = callPackage ../development/python-modules/mongodict { };
 
   mongoengine = callPackage ../development/python-modules/mongoengine { };
