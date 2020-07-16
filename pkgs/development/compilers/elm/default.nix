@@ -122,7 +122,7 @@ let
 
       elm-language-server = nodePkgs."@elm-tooling/elm-language-server";
 
-      inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse;
+      inherit (nodePkgs) elm-doc-preview elm-live elm-spa elm-upgrade elm-xref elm-analyse;
     };
 
 in hsPkgs.elmPkgs // elmNodePackages // {
