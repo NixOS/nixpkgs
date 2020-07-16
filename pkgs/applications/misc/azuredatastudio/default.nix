@@ -104,6 +104,10 @@ stdenv.mkDerivation rec {
       ${targetPath}/bin/${edition} \
       $out/bin/azuredatastudio \
       --set LD_LIBRARY_PATH ${rpath}
+    mkdir -p $out/share/applications
+    ${stdenv.lib.concatStrings (map (name: ''
+      substitute ${./. + "/${name}.desktop"} $out/share/applications/${name}.desktop --subst-var out
+    '') [ "azuredatastudio" ])}
   '';
 
   meta = {
