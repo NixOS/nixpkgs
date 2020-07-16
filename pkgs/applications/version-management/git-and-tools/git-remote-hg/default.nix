@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchFromGitHub, mercurial, makeWrapper
+{ stdenv, lib, fetchFromGitHub, python3Packages
 , asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt, libxml2
 }:
 
-stdenv.mkDerivation rec {
+python3Packages.buildPythonApplication rec {
   pname = "git-remote-hg";
   version = "unstable-2020-06-12";
 
@@ -13,17 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "0dw48vbnk7pp0w6fzgl29mq8fyn52pacbya2w14z9c6jfvh5sha1";
   };
 
-  buildInputs = [ mercurial.python mercurial makeWrapper
+  nativeBuildInputs = [
     asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt libxml2
   ];
-
-  doCheck = false;
-
-  installFlags = [ "HOME=\${out}" "install-doc" ];
+  propagatedBuildInputs = with python3Packages; [ mercurial ];
 
   postInstall = ''
-    wrapProgram $out/bin/git-remote-hg \
-      --prefix PYTHONPATH : "$(echo ${mercurial}/lib/python*/site-packages):$(echo ${mercurial.python}/lib/python*/site-packages)${stdenv.lib.concatMapStrings (x: ":$(echo ${x}/lib/python*/site-packages)") mercurial.pythonPackages or []}"
+    make install-doc prefix=$out
   '';
 
   meta = with lib; {
