@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-remote-hg";
-  version = "1.0.1";
+  version = "unstable-2020-06-12";
 
   src = fetchFromGitHub {
     owner = "mnauw";
     repo = "git-remote-hg";
-    rev = "v${version}";
-    sha256 = "1by5ygqvq9ww990kdrjndaqsssyf2jc4n380f9pfh2avsr7871wc";
+    rev = "28ed63b707919734d230cb13bff7d231dfeee8fc";
+    sha256 = "0dw48vbnk7pp0w6fzgl29mq8fyn52pacbya2w14z9c6jfvh5sha1";
   };
 
   buildInputs = [ mercurial.python mercurial makeWrapper
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mnauw/git-remote-hg";
     description = "Semi-official Mercurial bridge from Git project";
     license = licenses.gpl2;
-    maintainers = [ ];
+    maintainers = with maintainers; [ qyliss ];
     platforms = platforms.unix;
   };
 }
