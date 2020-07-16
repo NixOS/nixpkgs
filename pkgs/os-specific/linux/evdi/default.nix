@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Extensible Virtual Display Interface";
+    maintainers = with maintainers; [ eyjhb ];
     platforms = platforms.linux;
     license = with licenses; [ lgpl21 gpl2 ];
     homepage = "https://www.displaylink.com/";
