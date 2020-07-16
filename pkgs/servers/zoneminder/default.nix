@@ -200,7 +200,7 @@ in stdenv.mkDerivation rec {
     description = "Video surveillance software system";
     homepage = "https://zoneminder.com";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }
