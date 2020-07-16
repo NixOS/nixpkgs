@@ -523,6 +523,8 @@ in {
 
   biplist = callPackage ../development/python-modules/biplist { };
 
+  bip_utils = callPackage ../development/python-modules/bip_utils { };
+
   bitarray = callPackage ../development/python-modules/bitarray { };
 
   bitcoinlib = callPackage ../development/python-modules/bitcoinlib { };

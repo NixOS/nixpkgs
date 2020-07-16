@@ -105,6 +105,12 @@ in stdenv.mkDerivation {
     cp -a opt/* $out/share
     cp -a usr/share/* $out/share
 
+    # To fix --use-gl=egl:
+    test -e $out/share/google/$appname/libEGL.so
+    ln -s libEGL.so $out/share/google/$appname/libEGL.so.1
+    test -e $out/share/google/$appname/libGLESv2.so
+    ln -s libGLESv2.so $out/share/google/$appname/libGLESv2.so.2
+
     substituteInPlace $out/share/applications/google-$appname.desktop \
       --replace /usr/bin/google-chrome-$dist $exe
     substituteInPlace $out/share/gnome-control-center/default-apps/google-$appname.xml \

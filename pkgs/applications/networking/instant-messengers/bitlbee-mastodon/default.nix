@@ -3,21 +3,20 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "bitlbee-mastodon";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchgit {
     url = "https://alexschroeder.ch/cgit/bitlbee-mastodon";
     rev = "v${version}";
-    sha256 = "1k9j4403w6x93f4ls3xj8nrabz8ynjby6sigqdmhb7cqv26l987p";
+    sha256 = "0a8196pyr6bjnqg82zn7jdhiv7xsg4npbpzalla1i2h99j30q8pk";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ bitlbee glib ];
+  buildInputs = [ bitlbee ];
 
   preConfigure = ''
     export BITLBEE_PLUGINDIR=$out/lib/bitlbee
     export BITLBEE_DATADIR=$out/share/bitlbee
-    ./autogen.sh
   '';
 
   meta = {
