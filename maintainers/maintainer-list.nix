@@ -9127,4 +9127,10 @@
     github = "tfmoraes";
     githubId = 351108;
   };
+  deifactor = {
+    name = "Ash Zahlen";
+    email = "ext0l@riseup.net";
+    github = "deifactor";
+    githubId = 30192992;
+  };
 }
