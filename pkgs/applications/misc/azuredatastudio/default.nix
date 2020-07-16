@@ -21,11 +21,11 @@
 stdenv.mkDerivation rec {
 
   pname = "azuredatastudio";
-  version = "1.17.1";
+  version = "1.20.0";
 
   src = fetchurl {
-    url = "https://azuredatastudiobuilds.blob.core.windows.net/releases/${version}/azuredatastudio-linux-${version}.tar.gz";
-    sha256 = "0px9n9vyjvyddca4x7d0zindd0dim7350vkjg5dd0506fm8dc38k";
+    url = "https://sqlopsbuilds.azureedge.net/stable/cfbadd1eaef2dfa1fd643009c572137c704f1009/azuredatastudio-linux-${version}.tar.gz";
+    sha256 = "1lbjlg5xspyq7b6nl8hq27j3bzprvk314lknd8659a6wcarm44dx";
   };
 
   nativeBuildInputs = [
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   # this will most likely need to be updated when azuredatastudio's version changes
-  sqltoolsservicePath = "${targetPath}/resources/app/extensions/mssql/sqltoolsservice/Linux/2.0.0-release.56";
+  sqltoolsservicePath = "${targetPath}/resources/app/extensions/mssql/sqltoolsservice/Linux/3.0.0-release.4";
 
   rpath = stdenv.lib.concatStringsSep ":" [
     atomEnv.libPath
