@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "02pihqb1lb76a0xbfwjzs1cd6ay3ldfxsm8dvsbl6qs3vkjxax56";
   };
 
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+  patchPhase = stdenv.lib.optionalString stdenv.cc.isClang ''
     substituteInPlace Makefile --replace "-fno-guess-branch-probability" ""
   '';
 
