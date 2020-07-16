@@ -8778,6 +8778,9 @@ in
     inherit (darwin) apple_sdk;
   };
 
+  rust_1_44 = callPackage ../development/compilers/rust/1_44.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
   rust_1_41_0 = callPackage ../development/compilers/rust/1_41_0.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
@@ -8786,6 +8789,7 @@ in
   };
   rust = rust_1_41_0;
 
+  rustPackages_1_44 = rust_1_44.packages.stable;
   rustPackages_1_41_0 = rust_1_41_0.packages.stable;
   rustPackages_1_38_0 = rust_1_38_0.packages.stable;
   rustPackages = rustPackages_1_41_0;
@@ -21810,7 +21814,6 @@ in
 
   thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
     inherit (gnome2) libIDL;
-    inherit (rustPackages_1_38_0) cargo rustc;
     libpng = libpng_apng;
     gtk3Support = true;
   };
