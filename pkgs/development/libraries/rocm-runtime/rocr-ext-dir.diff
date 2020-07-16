@@ -1,0 +1,24 @@
+diff --git a/src/core/util/lnx/os_linux.cpp b/src/core/util/lnx/os_linux.cpp
+index fdbe19a..42d4ef8 100644
+--- a/src/core/util/lnx/os_linux.cpp
++++ b/src/core/util/lnx/os_linux.cpp
+@@ -161,8 +161,17 @@ static_assert(sizeof(Mutex) == sizeof(pthread_mutex_t*), "OS abstraction size mi
+ static_assert(sizeof(Thread) == sizeof(os_thread*), "OS abstraction size mismatch");
+ 
+ LibHandle LoadLib(std::string filename) {
+-  void* ret = dlopen(filename.c_str(), RTLD_LAZY);
+-  if (ret == nullptr) debug_print("LoadLib(%s) failed: %s\n", filename.c_str(), dlerror());
++  std::string extDirFilename = GetEnvVar("ROCR_EXT_DIR") + "/" + filename;
++  void* ret = dlopen(extDirFilename.c_str(), RTLD_LAZY);
++
++  // Attempt to load from the directory hardcoded by rocrExtDir.
++  if (ret == nullptr) {
++    std::string runpathFilename = std::string("@rocrExtDir@") + "/" + filename;
++    ret = dlopen(runpathFilename.c_str(), RTLD_LAZY);
++
++    if (ret == nullptr) debug_print("LoadLib(%s) failed: %s\n", filename.c_str(), dlerror());
++  }
++
+   return *(LibHandle*)&ret;
+ }
+ 
