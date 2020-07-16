@@ -20,7 +20,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = "libpod";
+    repo = "podman";
     rev = "v${version}";
     sha256 = "12iqj71xjszbjbbz5f2dk5chcvfrrq0n737ki7xxkjcw38k2cnqz";
   };
