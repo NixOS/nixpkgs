@@ -96,7 +96,7 @@ in stdenv.mkDerivation rec {
     "-DARROW_WITH_SNAPPY=ON"
     "-DARROW_WITH_ZLIB=ON"
     "-DARROW_WITH_ZSTD=ON"
-    "-DARROW_ZSTD_USE_SHARED=OFF" # TODO use shared zstd once #91984 hits the master
+    "-DARROW_ZSTD_USE_SHARED=${if enableShared then "ON" else "OFF"}"
     # Parquet options:
     "-DARROW_PARQUET=ON"
     "-DPARQUET_BUILD_EXECUTABLES=ON"
