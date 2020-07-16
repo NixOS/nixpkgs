@@ -20591,7 +20591,7 @@ in
 
   inherit (nodePackages) imapnotify;
 
-  img2pdf = callPackage ../applications/misc/img2pdf { };
+  img2pdf = with python3Packages; toPythonApplication img2pdf;
 
   imgcat = callPackage ../applications/graphics/imgcat { };
 

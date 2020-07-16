@@ -2433,6 +2433,8 @@ in {
 
   impacket = callPackage ../development/python-modules/impacket { };
 
+  img2pdf = callPackage ../development/python-modules/img2pdf { };
+
   jsonlines = callPackage ../development/python-modules/jsonlines { };
 
   json-merge-patch = callPackage ../development/python-modules/json-merge-patch { };
