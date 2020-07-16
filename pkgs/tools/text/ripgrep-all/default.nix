@@ -22,6 +22,8 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH ":" "${lib.makeBinPath [ ffmpeg_3 pandoc poppler_utils ripgrep imagemagick tesseract ]}"
   '';
 
+  checkType = "debug";
+
   # Use upstream's example data to run a couple of queries to ensure the dependencies
   # for all of the adapters are available.
   installCheckPhase = ''
