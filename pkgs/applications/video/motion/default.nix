@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, ffmpeg_3, libjpeg, libmicrohttpd }:
+, ffmpeg, libjpeg, libmicrohttpd }:
 
 stdenv.mkDerivation rec {
   pname = "motion";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  buildInputs = [ ffmpeg_3 libjpeg libmicrohttpd ];
+  buildInputs = [ ffmpeg libjpeg libmicrohttpd ];
 
   meta = with stdenv.lib; {
     description = "Monitors the video signal from cameras";
