@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libevent, openssl, zlib, torsocks
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, libevent, openssl, zlib, torsocks
 , libseccomp, systemd, libcap, lzma, zstd, scrypt
 
 # for update.nix
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "geoip" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ libevent openssl zlib lzma zstd scrypt ] ++
     stdenv.lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
 
