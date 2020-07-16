@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kepubify";
-  version = "3.1.3";
+  version = "3.1.4";
 
   src = fetchFromGitHub {
     owner = "pgaskin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fd7w9cmdca6ivppmpn5bkqxmz50xgihrm2pbz6h8jf92i485md0";
+    sha256 = "0d71d1ra7lk4ayypq3fcigd9lpb2dafa8ci14h0g7rivm4lz8l1j";
   };
 
-  vendorSha256 = "1gzlxdbmrqqnrjx83g65yn7n93w13ci4vr3mpywasxfad866gc24";
+  vendorSha256 = "0jzx5midawvzims9ghh8fbslvwcdczvlpf0k6a9q0bdf4wlp2z5n";
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
