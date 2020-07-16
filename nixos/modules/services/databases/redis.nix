@@ -114,7 +114,7 @@ in
         type = types.str;
         default = "/dev/null";
         description = "Specify the log file name. Also 'stdout' can be used to force Redis to log on the standard output.";
-        example = "/var/log/redis.log";
+        example = "/var/log/redis/redis.log";
       };
 
       syslog = mkOption {
@@ -243,9 +243,37 @@ in
         ExecStart = "${cfg.package}/bin/redis-server /run/redis/redis.conf";
         RuntimeDirectory = "redis";
         StateDirectory = "redis";
+        LogsDirectory = "redis";
         Type = "notify";
         User = "redis";
         Group = "redis";
+
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "";
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = "@system-service";
+        UMask = "0077";
       };
     };
   };
