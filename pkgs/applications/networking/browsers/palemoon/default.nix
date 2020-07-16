@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
     icon = "palemoon";
     desktopName = "Pale Moon";
     genericName = "Web Browser";
-    categories = "Application;Network;WebBrowser;";
+    categories = "Network;WebBrowser;";
     mimeType = lib.concatStringsSep ";" [
       "text/html"
       "text/xml"

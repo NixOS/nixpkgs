@@ -1,18 +1,17 @@
-{ stdenv, fetchFromGitHub, rustPlatform, coreutils, bash, dash
-, installShellFiles }:
+{ stdenv, fetchFromGitHub, rustPlatform, coreutils, bash, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "0.5.11";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0li5lspxfrim8gymqzzd5djjfbfi7jh1m234qlzy5vkx2q9qg0xv";
+    sha256 = "1sl235wr4fdsw0f0x7jynv6ljhvgis4d87xzpvjzajhdaappdp8d";
   };
 
-  cargoSha256 = "1sp8xrh3gmgmphh1bv050p1ybjybk9x8kswyxz2rd93q3zb5hpzz";
+  cargoSha256 = "0k3aqwvdm95403s279gkksklnikgyjpf5qvngsvsrm5xqda438jk";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -24,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh  --name _just     completions/just.zsh
   '';
 
-  checkInputs = [ coreutils bash dash ];
+  checkInputs = [ coreutils bash ];
 
   preCheck = ''
     # USER must not be empty

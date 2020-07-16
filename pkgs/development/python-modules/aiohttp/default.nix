@@ -62,6 +62,7 @@ buildPythonPackage rec {
     "test_read_incomplete_chunk"
     "test_request_tracing_exception"
   ] ++ lib.optionals stdenv.isDarwin [
+    "test_addresses"  # https://github.com/aio-libs/aiohttp/issues/3572
     "test_close"
   ];
 

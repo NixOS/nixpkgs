@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "django-mailman3";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1q9ciy2yawgvbha5kwlzwdmdqvas287dc0i60ygp2799jnfr5dr6";
+    sha256 = "7e37b68bb47e9ae196ca19018f576e2c8c90189c5bd82d4e549d0c2f2f3f35fb";
   };
 
   propagatedBuildInputs = [

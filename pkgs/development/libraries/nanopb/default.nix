@@ -50,6 +50,8 @@ in stdenv.mkDerivation rec {
       --subst-var-by python ${pythonRuntime}/bin/python \
       --subst-var-by out $out
     chmod +x $out/bin/protoc-gen-nanopb
+
+    cp ../pb_common.c ../pb_decode.c ../pb_encode.c $out/include/
   '';
 
   passthru.tests = {

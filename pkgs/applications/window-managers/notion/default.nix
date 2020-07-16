@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "notion";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "raboof";
     repo = pname;
     rev = version;
-    sha256 = "0rqfvwkj0j862hf6i4wsmb6185xibsskfj9kwy896qcpcg8w4kk7";
+    sha256 = "1s0fyacygvc9iz7b9v3b2cmzzqc02nh4g1p9bfcxbg254iscd502";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper groff ];

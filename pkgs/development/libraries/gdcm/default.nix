@@ -1,29 +1,39 @@
-{ stdenv, fetchurl, cmake, vtk_7, darwin }:
+{ stdenv, fetchurl, cmake, vtk_7, darwin
+, enablePython ? false, python ? null,  swig ? null}:
 
 stdenv.mkDerivation rec {
-  version = "3.0.6";
+  version = "3.0.7";
   pname = "gdcm";
 
   src = fetchurl {
     url = "mirror://sourceforge/gdcm/${pname}-${version}.tar.bz2";
-    sha256 = "048ycvhk143cvsf09r7vwmp4sm9ah9bh5pbbrl366m5a4sp7fr89";
+    sha256 = "1mm1190fv059k2vrilh3znm8z1ilygwld1iazdgh5s04mi1qljni";
   };
 
   dontUseCmakeBuildDir = true;
+
+  cmakeFlags = [
+    "-DGDCM_BUILD_APPLICATIONS=ON"
+    "-DGDCM_BUILD_SHARED_LIBS=ON"
+    "-DGDCM_USE_VTK=ON"
+  ]
+  ++ stdenv.lib.optional enablePython [
+    "-DGDCM_WRAP_PYTHON:BOOL=ON"
+    "-DGDCM_INSTALL_PYTHONMODULE_DIR=${placeholder "out"}/${python.sitePackages}"
+  ];
+
   preConfigure = ''
     cmakeDir=$PWD
     mkdir ../build
     cd ../build
   '';
 
-  cmakeFlags = [
-    "-DGDCM_BUILD_APPLICATIONS=ON"
-    "-DGDCM_BUILD_SHARED_LIBS=ON"
-    "-DGDCM_USE_VTK=ON"
-  ];
-
   enableParallelBuilding = true;
-  buildInputs = [ cmake vtk_7 ] ++ stdenv.lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.ApplicationServices darwin.apple_sdk.frameworks.Cocoa ];
+  buildInputs = [ cmake vtk_7 ]
+    ++ stdenv.lib.optional stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.ApplicationServices
+      darwin.apple_sdk.frameworks.Cocoa
+    ] ++ stdenv.lib.optional enablePython [ swig python ];
   propagatedBuildInputs = [ ];
 
   meta = with stdenv.lib; {
@@ -37,4 +47,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

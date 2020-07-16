@@ -14,13 +14,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "19.11.1";
+  version = "20.2.1";
   pname = "BoltzTraP2";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3927ae782b7329dede2bf85ff5ff328c88f0514ecb592267e28912340f395d3e";
+    sha256 = "1cbf17c5479eec82efd1e8a26202c3320b1986597a08706cafa46bfb80cc3001";
   };
 
   dontUseCmakeConfigure = true;

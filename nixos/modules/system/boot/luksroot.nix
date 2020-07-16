@@ -140,7 +140,7 @@ let
     umount /crypt-ramfs 2>/dev/null
   '';
 
-  openCommand = name': { name, device, header, keyFile, keyFileSize, keyFileOffset, allowDiscards, yubikey, gpgCard, fido2, fallbackToPassword, ... }: assert name' == name;
+  openCommand = name': { name, device, header, keyFile, keyFileSize, keyFileOffset, allowDiscards, yubikey, gpgCard, fido2, fallbackToPassword, preOpenCommands, postOpenCommands,... }: assert name' == name;
   let
     csopen   = "cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} ${optionalString (header != null) "--header=${header}"}";
     cschange = "cryptsetup luksChangeKey ${device} ${optionalString (header != null) "--header=${header}"}";
@@ -412,11 +412,17 @@ let
     }
     ''}
 
+    # commands to run right before we mount our device
+    ${preOpenCommands}
+
     ${if (luks.yubikeySupport && (yubikey != null)) || (luks.gpgSupport && (gpgCard != null)) || (luks.fido2Support && (fido2.credential != null)) then ''
     open_with_hardware
     '' else ''
     open_normally
     ''}
+
+    # commands to run right after we mounted our device
+    ${postOpenCommands}
   '';
 
   askPass = pkgs.writeScriptBin "cryptsetup-askpass" ''
@@ -467,8 +473,6 @@ in
         [ "aes" "aes_generic" "blowfish" "twofish"
           "serpent" "cbc" "xts" "lrw" "sha1" "sha256" "sha512"
           "af_alg" "algif_skcipher"
-
-          (if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then "aes_x86_64" else "aes_i586")
         ];
       description = ''
         A list of cryptographic kernel modules needed to decrypt the root device(s).
@@ -734,6 +738,30 @@ in
                 };
               };
             });
+          };
+
+          preOpenCommands = mkOption {
+            type = types.lines;
+            default = "";
+            example = ''
+              mkdir -p /tmp/persistent
+              mount -t zfs rpool/safe/persistent /tmp/persistent
+            '';
+            description = ''
+              Commands that should be run right before we try to mount our LUKS device.
+              This can be useful, if the keys needed to open the drive is on another partion.
+            '';
+          };
+
+          postOpenCommands = mkOption {
+            type = types.lines;
+            default = "";
+            example = ''
+              umount /tmp/persistent
+            '';
+            description = ''
+              Commands that should be run right after we have mounted our LUKS device.
+            '';
           };
         };
       }));

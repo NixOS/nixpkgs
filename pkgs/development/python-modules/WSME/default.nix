@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "WSME";
-  version = "0.9.3";
+  version = "0.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e24fcff24392a0b176e560ffc6591b1f658342bbc992f84e0e8a3c53fd92580a";
+    sha256 = "965b9ce48161e5c50d84aedcf50dca698f05bf07e9d489201bccaec3141cd304";
   };
 
   postPatch = ''

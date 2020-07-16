@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "Object oriented C++ wrapper for CURL";
     platforms = platforms.unix;
     license = licenses.mit;
-    maintainers = with maintainers; [ juliendehos rszibele ];
+    maintainers = with maintainers; [ rszibele ];
   };
 }
 

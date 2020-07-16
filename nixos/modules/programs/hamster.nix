@@ -3,7 +3,7 @@
 with lib;
 
 {
-  meta.maintainers = maintainers.fabianhauser;
+  meta.maintainers = pkgs.hamster.meta.maintainers;
 
   options.programs.hamster.enable =
     mkEnableOption "Whether to enable hamster time tracking.";

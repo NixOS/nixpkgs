@@ -38,6 +38,11 @@ rustPlatform.buildRustPackage {
       --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt"
 
     installManPage src/tools/cargo/src/etc/man/*
+
+    installShellCompletion --bash --name cargo \
+      src/tools/cargo/src/etc/cargo.bashcomp.sh
+
+    installShellCompletion --zsh src/tools/cargo/src/etc/_cargo
   '';
 
   checkPhase = ''

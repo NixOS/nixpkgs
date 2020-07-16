@@ -15,7 +15,11 @@ let
 
     listen:
     (
-      { host: "${cfg.listenAddress}"; port: "${toString cfg.port}"; }
+      ${
+        concatMapStringsSep ",\n"
+        (addr: ''{ host: "${addr}"; port: "${toString cfg.port}"; }'')
+        cfg.listenAddresses
+      }
     );
 
     ${cfg.appendConfig}
@@ -33,6 +37,10 @@ let
   '';
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "sslh" "listenAddress" ] [ "services" "sslh" "listenAddresses" ])
+  ];
+
   options = {
     services.sslh = {
       enable = mkEnableOption "sslh";
@@ -55,10 +63,10 @@ in
         description = "Will the services behind sslh (Apache, sshd and so on) see the external IP and ports as if the external world connected directly to them";
       };
 
-      listenAddress = mkOption {
-        type = types.str;
-        default = "0.0.0.0";
-        description = "Listening address or hostname.";
+      listenAddresses = mkOption {
+        type = types.coercedTo types.str singleton (types.listOf types.str);
+        default = [ "0.0.0.0" "[::]" ];
+        description = "Listening addresses or hostnames.";
       };
 
       port = mkOption {

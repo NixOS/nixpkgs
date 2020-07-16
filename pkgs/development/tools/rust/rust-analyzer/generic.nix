@@ -24,6 +24,8 @@ rustPlatform.buildRustPackage {
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin
     [ darwin.apple_sdk.frameworks.CoreServices ];
 
+  RUST_ANALYZER_REV = rev;
+
   inherit doCheck;
   # Skip tests running `rustup` for `cargo fmt`.
   preCheck = ''
@@ -31,6 +33,16 @@ rustPlatform.buildRustPackage {
     ln -s $(command -v true) $fakeRustup/rustup
     export PATH=$PATH''${PATH:+:}$fakeRustup
     export RUST_SRC_PATH=${rustPlatform.rustcSrc}
+  '';
+
+  # Temporary disabled until #93119 is fixed.
+  doInstallCheck = false;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    versionOutput="$($out/bin/rust-analyzer --version)"
+    echo "'rust-analyzer --version' returns: $versionOutput"
+    [[ "$versionOutput" == "rust-analyzer ${rev}" ]]
+    runHook postInstallCheck
   '';
 
   meta = with stdenv.lib; {

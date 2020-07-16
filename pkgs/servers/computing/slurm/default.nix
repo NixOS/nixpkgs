@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub, pkgconfig, libtool, curl
-, python, munge, perl, pam, openssl, zlib, shadow, coreutils
+, python, munge, perl, pam, zlib, shadow, coreutils
 , ncurses, libmysqlclient, gtk2, lua, hwloc, numactl
-, readline, freeipmi, libssh2, xorg, lz4, rdma-core, nixosTests
+, readline, freeipmi, xorg, lz4, rdma-core, nixosTests
+, pmix
 # enable internal X11 support via libssh2
 , enableX11 ? true
 }:
@@ -22,6 +23,14 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  patches = [
+    # increase string length to allow for full
+    # path of 'echo' in nix store
+    ./common-env-echo.patch
+    # Required for configure to pick up the right dlopen path
+    ./pmix-configure.patch
+  ];
+
   prePatch = ''
     substituteInPlace src/common/env.c \
         --replace "/bin/echo" "${coreutils}/bin/echo"
@@ -37,22 +46,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig libtool ];
   buildInputs = [
-    curl python munge perl pam openssl zlib
+    curl python munge perl pam zlib
       libmysqlclient ncurses gtk2 lz4 rdma-core
       lua hwloc numactl readline freeipmi shadow.su
-  ] ++ stdenv.lib.optionals enableX11 [ libssh2 xorg.xauth ];
+      pmix
+  ] ++ stdenv.lib.optionals enableX11 [ xorg.xauth ];
 
   configureFlags = with stdenv.lib;
     [ "--with-freeipmi=${freeipmi}"
       "--with-hwloc=${hwloc.dev}"
       "--with-lz4=${lz4.dev}"
       "--with-munge=${munge}"
-      "--with-ssl=${openssl.dev}"
       "--with-zlib=${zlib}"
       "--with-ofed=${rdma-core}"
       "--sysconfdir=/etc/slurm"
+      "--with-pmix=${pmix}"
     ] ++ (optional (gtk2 == null)  "--disable-gtktest")
-      ++ (optional enableX11 "--with-libssh2=${libssh2.dev}")
       ++ (optional (!enableX11) "--disable-x11");
 
 

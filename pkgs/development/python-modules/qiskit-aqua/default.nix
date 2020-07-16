@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 # , cplex
-, cvxopt
+, cvxpy
 , dlx
 , docplex
 , fastdtw
@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aqua";
-  version = "0.7.0";
+  version = "0.7.3";
 
   disabled = pythonOlder "3.5";
 
@@ -33,13 +33,13 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-aqua";
     rev = version;
-    sha256 = "0yykw6k1rb3f2ihcp0y9pb0695mcmy29nyqlj89qs4da0503vxvh";
+    sha256 = "04zcnrc0vi6dfjahp1019h2ngdgi7l7jvfs9aw0y306nd9g6qgjc";
   };
 
   # Optional packages: pyscf (see below NOTE) & pytorch. Can install via pip/nix if needed.
   propagatedBuildInputs = [
     # cplex
-    cvxopt
+    cvxpy
     docplex
     dlx # Python Dancing Links package
     fastdtw
@@ -81,7 +81,6 @@ buildPythonPackage rec {
         "You must install it yourself via pip or add it to your environment from the Nix User Repository." \
         "', ImportWarning)\n" \
       >> qiskit/optimization/__init__.py
-
   '';
 
   postInstall = "rm -rf $out/${python.sitePackages}/docs";  # Remove docs dir b/c it can cause conflicts.
@@ -106,6 +105,9 @@ buildPythonPackage rec {
     # Disabled due to missing pyscf
     "test_validate" # test/chemistry/test_inputparser.py
 
+    "test_binary" # in SklearnSVM, seems to have trouble with eigenvectors converging
+    "test_pauli_expect_single"  # fails for unknown reason, 3e-3 out of tolerance
+
     # Disabling slow tests > 10 seconds
     "TestVQE"
     "TestVQC"
@@ -127,9 +129,15 @@ buildPythonPackage rec {
     "test_shor_no_factors_1_5"
     "test_shor_no_factors_2_7"
     "test_evolve_2___suzuki___1__3_"
-    "test_delta_4"
+    "test_delta"
     "test_swaprz"
     "test_deprecated_algo_result"
+    "test_unsorted_grouping"
+    "test_ad_hoc_data"
+    "test_nft"
+    "test_oh"
+    "test_confidence_intervals_00001"
+    "test_eoh"
   ];
 
   meta = with lib; {

@@ -59,13 +59,13 @@ assert remoteSupport -> curl != null;
 
 stdenv.mkDerivation rec {
   pname = "deadbeef";
-  version = "1.8.3";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "DeaDBeeF-Player";
     repo = "deadbeef";
     rev = version;
-    sha256 = "0n0q7zfl56gnadcqqp5rg7sbh1xvfcmp7cvmh2ax07037b346qig";
+    sha256 = "161b0ll8v4cjgwwmk137hzvh0jidlkx56vjkpnr70f0x4jzv2nll";
   };
 
   buildInputs = with stdenv.lib; [ jansson ]

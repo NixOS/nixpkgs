@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "lwt_ssl";
-  version = "1.1.2";
+  version = "1.1.3";
 
   minimumOCamlVersion = "4.02";
 
   src = fetchzip {
     url = "https://github.com/aantron/${pname}/archive/${version}.tar.gz";
-    sha256 = "1q0an3djqjxv83v3iswi7m81braqx93kcrcwrxwmf6jzhdm4pn15";
+    sha256 = "0v417ch5zn0yknj156awa5mrq3mal08pbrvsyribbn63ix6f9y3p";
   };
 
   propagatedBuildInputs = [ ssl lwt ];

@@ -4,13 +4,13 @@
 
 buildDunePackage rec {
   pname = "odoc";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "ocaml";
     repo = pname;
     rev = version;
-    sha256 = "14ilq2glcvda8mfhj27jqqwx3392q8ssp9bq9agz7k1k6ilp9dai";
+    sha256 = "0z2nisg1vb5xlk41hqw8drvj90v52wli7zvnih6a844cg6xsvvj2";
   };
 
   buildInputs = [ astring cmdliner cppo fpath result tyxml ];

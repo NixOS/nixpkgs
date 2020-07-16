@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
-  version = "0.7.0";
+  version = "0.7.2";
 
   disabled = pythonOlder "3.6";
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    sha256 = "1n13jjx1cx5gswwk8rpxfjqyk97cwx1n2hwsabkcbi7fksw3c5jk";
+    sha256 = "11h1ca4v11pajzn1cxqhim1hfziqzj27xzakwln13g8zmiqx3csp";
   };
 
   propagatedBuildInputs = [
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   ];
 
   # websockets seems to be pinned b/c in v8+ it drops py3.5 support. Not an issue here (usually py3.7+, and disabled for older py3.6)
-  prePatch = ''
+  postPatch = ''
     substituteInPlace requirements.txt --replace "websockets>=7,<8" "websockets"
     substituteInPlace setup.py --replace "websockets>=7,<8" "websockets"
   '';

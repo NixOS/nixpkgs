@@ -1,10 +1,16 @@
 { fetchPypi
 , lib
 , buildPythonPackage
+, pythonOlder
 , attrs
 , click
 , effect
 , jinja2
+, git
+, pytestCheckHook
+, pytest-black
+, pytestcov
+, pytest-isort
 }:
 
 buildPythonPackage rec {
@@ -26,6 +32,12 @@ buildPythonPackage rec {
     effect
     jinja2
   ];
+
+  checkInputs = [ pytestCheckHook pytest-black pytestcov pytest-isort git ];
+
+  # latest version of isort will cause tests to fail
+  # ignore tests which are impure
+  disabledTests = [ "isort" "life" "outputs" "fetch_submodules" ];
 
   meta = with lib; {
     description = "Prefetch sources from github";

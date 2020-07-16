@@ -48,12 +48,6 @@ let
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = if nativeTools then "" else getBin coreutils;
 
-  default_cxx_stdlib_compile = if (targetPlatform.isLinux && !(cc.isGNU or false) && !nativeTools && cc ? gcc) && !(targetPlatform.useLLVM or false) then
-    "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/${targetPlatform.config}"
-  else if targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false) && !(targetPlatform.useLLVM or false) then
-    "-isystem ${libcxx}/include/c++/v1"
-  else "";
-
   # The "suffix salt" is a arbitrary string added in the end of env vars
   # defined by cc-wrapper's hooks so that multiple cc-wrappers can be used
   # without interfering. For the moment, it is defined as the target triple,
@@ -68,7 +62,7 @@ let
 
   # older compilers (for example bootstrap's GCC 5) fail with -march=too-modern-cpu
   isGccArchSupported = arch:
-    if cc.isGNU or false then
+    if isGNU then
       { skylake        = versionAtLeast ccVersion "6.0";
         skylake-avx512 = versionAtLeast ccVersion "6.0";
         cannonlake     = versionAtLeast ccVersion "8.0";
@@ -76,7 +70,7 @@ let
         icelake-server = versionAtLeast ccVersion "8.0";
         knm            = versionAtLeast ccVersion "8.0";
       }.${arch} or true
-    else if cc.isClang or false then
+    else if isClang then
       { cannonlake     = versionAtLeast ccVersion "5.0";
         icelake-client = versionAtLeast ccVersion "7.0";
         icelake-server = versionAtLeast ccVersion "7.0";
@@ -116,7 +110,7 @@ stdenv.mkDerivation {
     # Binutils, and Apple's "cctools"; "bintools" as an attempt to find an
     # unused middle-ground name that evokes both.
     inherit bintools;
-    inherit libc nativeTools nativeLibc nativePrefix isGNU isClang default_cxx_stdlib_compile;
+    inherit libc nativeTools nativeLibc nativePrefix isGNU isClang;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
@@ -160,20 +154,20 @@ stdenv.mkDerivation {
       ccPath="${cc}/bin"
     '')
 
+    # Create symlinks to everything in the bintools wrapper.
     + ''
-      # Create symlinks to everything in the bintools wrapper.
       for bbin in $bintools/bin/*; do
         mkdir -p "$out/bin"
         ln -s "$bbin" "$out/bin/$(basename $bbin)"
       done
+    ''
 
-      # We export environment variables pointing to the wrapped nonstandard
-      # cmds, lest some lousy configure script use those to guess compiler
-      # version.
+    # We export environment variables pointing to the wrapped nonstandard
+    # cmds, lest some lousy configure script use those to guess compiler
+    # version.
+    + ''
       export named_cc=${targetPrefix}cc
       export named_cxx=${targetPrefix}c++
-
-      export default_cxx_stdlib_compile="${default_cxx_stdlib_compile}"
 
       if [ -e $ccPath/${targetPrefix}gcc ]; then
         wrap ${targetPrefix}gcc $wrapper $ccPath/${targetPrefix}gcc
@@ -226,7 +220,7 @@ stdenv.mkDerivation {
 
   strictDeps = true;
   propagatedBuildInputs = [ bintools ] ++ extraTools ++ optionals cc.langD or false [ zlib ];
-  depsTargetTargetPropagated = extraPackages;
+  depsTargetTargetPropagated = optional (libcxx != null) libcxx ++ extraPackages;
 
   wrapperName = "CC_WRAPPER";
 
@@ -236,12 +230,19 @@ stdenv.mkDerivation {
   ];
 
   postFixup =
+    # Ensure flags files exists, as some other programs cat them. (That these
+    # are considered an exposed interface is a bit dubious, but fine for now.)
     ''
-      # Backwards compatability for packages expecting this file, e.g. with
-      # `$NIX_CC/nix-support/dynamic-linker`.
-      #
-      # TODO(@Ericson2314): Remove this after stable release and force
-      # everyone to refer to bintools-wrapper directly.
+      touch "$out/nix-support/cc-cflags"
+      touch "$out/nix-support/cc-ldflags"
+    ''
+
+    # Backwards compatability for packages expecting this file, e.g. with
+    # `$NIX_CC/nix-support/dynamic-linker`.
+    #
+    # TODO(@Ericson2314): Remove this after stable release and force
+    # everyone to refer to bintools-wrapper directly.
+    + ''
       if [[ -f "$bintools/nix-support/dynamic-linker" ]]; then
         ln -s "$bintools/nix-support/dynamic-linker" "$out/nix-support"
       fi
@@ -250,22 +251,42 @@ stdenv.mkDerivation {
       fi
     ''
 
-    + optionalString (libc != null) (''
-      ##
-      ## General libc support
-      ##
+    ##
+    ## General Clang support
+    ##
+    + optionalString isClang ''
 
-      # The "-B${libc_lib}/lib/" flag is a quick hack to force gcc to link
-      # against the crt1.o from our own glibc, rather than the one in
-      # /usr/lib.  (This is only an issue when using an `impure'
-      # compiler/linker, i.e., one that searches /usr/lib and so on.)
-      #
-      # Unfortunately, setting -B appears to override the default search
-      # path. Thus, the gcc-specific "../includes-fixed" directory is
-      # now longer searched and glibc's <limits.h> header fails to
-      # compile, because it uses "#include_next <limits.h>" to find the
-      # limits.h file in ../includes-fixed. To remedy the problem,
-      # another -idirafter is necessary to add that directory again.
+      echo "-target ${targetPlatform.config}" >> $out/nix-support/cc-cflags
+    ''
+
+    ##
+    ## GCC libs for non-GCC support
+    ##
+    + optionalString (isClang && libcxx == null && cc ? gcc) ''
+
+      echo "-B${cc.gcc}/lib/gcc/${targetPlatform.config}/${cc.gcc.version}" >> $out/nix-support/cc-cflags
+      echo "-L${cc.gcc}/lib/gcc/${targetPlatform.config}/${cc.gcc.version}" >> $out/nix-support/cc-ldflags
+      echo "-L${cc.gcc.lib}/${targetPlatform.config}/lib" >> $out/nix-support/cc-ldflags
+    ''
+
+    ##
+    ## General libc support
+    ##
+
+    # The "-B${libc_lib}/lib/" flag is a quick hack to force gcc to link
+    # against the crt1.o from our own glibc, rather than the one in
+    # /usr/lib.  (This is only an issue when using an `impure'
+    # compiler/linker, i.e., one that searches /usr/lib and so on.)
+    #
+    # Unfortunately, setting -B appears to override the default search
+    # path. Thus, the gcc-specific "../includes-fixed" directory is
+    # now longer searched and glibc's <limits.h> header fails to
+    # compile, because it uses "#include_next <limits.h>" to find the
+    # limits.h file in ../includes-fixed. To remedy the problem,
+    # another -idirafter is necessary to add that directory again.
+    + optionalString (libc != null) (''
+      touch "$out/nix-support/libc-cflags"
+      touch "$out/nix-support/libc-ldflags"
       echo "-B${libc_lib}${libc.libdir or "/lib/"}" >> $out/nix-support/libc-cflags
     '' + optionalString (!(cc.langD or false)) ''
       echo "-idirafter ${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
@@ -279,15 +300,39 @@ stdenv.mkDerivation {
       echo "${libc_dev}" > $out/nix-support/orig-libc-dev
     '')
 
-    + optionalString (!nativeTools) ''
-      ##
-      ## Initial CFLAGS
-      ##
+    ##
+    ## General libc++ support
+    ##
 
-      # GCC shows ${cc_solib}/lib in `gcc -print-search-dirs', but not
-      # ${cc_solib}/lib64 (even though it does actually search there...)..
-      # This confuses libtool.  So add it to the compiler tool search
-      # path explicitly.
+    # We have a libc++ directly, we have one via "smuggled" GCC, or we have one
+    # bundled with the C compiler because it is GCC
+    + optionalString (libcxx != null || cc.gcc.langCC or false || (isGNU && cc.langCC or false)) ''
+      touch "$out/nix-support/libcxx-cxxflags"
+      touch "$out/nix-support/libcxx-ldflags"
+    '' + optionalString (libcxx == null && cc ? gcc) ''
+      for dir in ${cc.gcc}/include/c++/*; do
+        echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
+      done
+      for dir in ${cc.gcc}/include/c++/*/${targetPlatform.config}; do
+        echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
+      done
+    ''
+    + optionalString (libcxx.isLLVM or false) (''
+      echo "-isystem ${libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
+      echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
+    '' + stdenv.lib.optionalString stdenv.targetPlatform.isLinux ''
+      echo "-lc++abi" >> $out/nix-support/libcxx-ldflags
+    '')
+
+    ##
+    ## Initial CFLAGS
+    ##
+
+    # GCC shows ${cc_solib}/lib in `gcc -print-search-dirs', but not
+    # ${cc_solib}/lib64 (even though it does actually search there...)..
+    # This confuses libtool.  So add it to the compiler tool search
+    # path explicitly.
+    + optionalString (!nativeTools) ''
       if [ -e "${cc_solib}/lib64" -a ! -L "${cc_solib}/lib64" ]; then
         ccLDFlags+=" -L${cc_solib}/lib64"
         ccCFlags+=" -B${cc_solib}/lib64"
@@ -296,32 +341,34 @@ stdenv.mkDerivation {
       ccCFlags+=" -B${cc_solib}/lib"
 
     '' + optionalString cc.langAda or false ''
+      touch "$out/nix-support/gnat-cflags"
+      touch "$out/nix-support/gnat-ldflags"
       basePath=$(echo $cc/lib/*/*/*)
       ccCFlags+=" -B$basePath -I$basePath/adainclude"
       gnatCFlags="-I$basePath/adainclude -I$basePath/adalib"
 
-      echo "$gnatCFlags" > $out/nix-support/gnat-cflags
+      echo "$gnatCFlags" >> $out/nix-support/gnat-cflags
     '' + ''
-      echo "$ccLDFlags" > $out/nix-support/cc-ldflags
-      echo "$ccCFlags" > $out/nix-support/cc-cflags
+      echo "$ccLDFlags" >> $out/nix-support/cc-ldflags
+      echo "$ccCFlags" >> $out/nix-support/cc-cflags
     '' + optionalString (targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false)) ''
       echo " -L${libcxx}/lib" >> $out/nix-support/cc-ldflags
-    '' + optionalString propagateDoc ''
-      ##
-      ## Man page and info support
-      ##
+    ''
 
+    ##
+    ## Man page and info support
+    ##
+    + optionalString propagateDoc ''
       ln -s ${cc.man} $man
       ln -s ${cc.info} $info
     '' + optionalString (cc.langD or false) ''
       echo "-B${zlib}${zlib.libdir or "/lib/"}" >> $out/nix-support/libc-cflags
     ''
 
+    ##
+    ## Hardening support
+    ##
     + ''
-      ##
-      ## Hardening support
-      ##
-
       export hardening_unsupported_flags="${builtins.concatStringsSep " " (cc.hardeningUnsupportedFlags or [])}"
     ''
 
@@ -389,19 +436,18 @@ stdenv.mkDerivation {
     # There are a few tools (to name one libstdcxx5) which do not work
     # well with multi line flags, so make the flags single line again
     + ''
-      if [ -e "$out/nix-support/libc-cflags" ]; then
-        substituteInPlace "$out/nix-support/libc-cflags" --replace $'\n' ' '
-      fi
+      for flags in "$out/nix-support"/*flags*; do
+        substituteInPlace "$flags" --replace $'\n' ' '
+      done
 
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
-
-      ##
-      ## Extra custom steps
-      ##
     ''
 
+    ##
+    ## Extra custom steps
+    ##
     + extraBuildCommands;
 
   inherit expand-response-params;

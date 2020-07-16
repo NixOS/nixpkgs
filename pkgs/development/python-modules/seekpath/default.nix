@@ -1,17 +1,20 @@
-{ stdenv, buildPythonPackage, fetchPypi, numpy, future, spglib, glibcLocales, pytest }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, numpy, future, spglib, glibcLocales, pytest, scipy }:
 
 buildPythonPackage rec {
   pname = "seekpath";
-  version = "1.9.7";
+  version = "2.0.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b83ea23b54209b7f34f3fcabe7248cebbcc3cc164c394f1659b35942edaedb1c";
+  src = fetchFromGitHub {
+    owner = "giovannipizzi";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0x592650ynacmx5n5bilj5lja4iw0gf1nfypy82cmy5z363qhqxn";
   };
 
   LC_ALL = "en_US.utf-8";
 
-  propagatedBuildInputs = [ numpy spglib future ];
+  # scipy isn't listed in install_requires, but used in package
+  propagatedBuildInputs = [ numpy spglib future scipy ];
 
   nativeBuildInputs = [ glibcLocales ];
 

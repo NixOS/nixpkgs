@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-ignis";
-  version = "0.3.0";
+  version = "0.3.3";
 
   disabled = pythonOlder "3.6";
 
@@ -25,13 +25,8 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-ignis";
     rev = version;
-    sha256 = "16h04n9hxw669nq2ii16l6h75x8afisvp3j062n4c62kcqci0x4x";
+    sha256 = "0sy9qpw0jqirsk9y61j5kr18jrw1wa812n7y98fjj6w668rrv560";
   };
-
-  # Fixed qiskit-ignis PR #385, figured this is easier than fetchpatch
-  postPatch = ''
-    substituteInPlace qiskit/ignis/logging/ignis_logging.py --replace "self.configure_logger" "self._configure_logger"
-  '';
 
   propagatedBuildInputs = [
     numpy

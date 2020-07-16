@@ -1407,6 +1407,23 @@ rapidjson = buildLuarocksPackage {
     license.fullName = "MIT";
   };
 };
+readline = buildLuarocksPackage {
+  pname = "readline";
+  version = "2.6-0";
+
+  src = fetchurl {
+    url    = mirror://luarocks/readline-2.6-0.src.rock;
+    sha256 = "1fvz7nqvkdazp30wn5n62n8i97qrfgznbykdpf8cnflqfpd1shms";
+  };
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
+  propagatedBuildInputs = [ lua luaposix ];
+
+  meta = with stdenv.lib; {
+    homepage = "http://www.pjb.com.au/comp/lua/readline.html";
+    description = "Interface to the readline library";
+    license.fullName = "MIT/X11";
+  };
+};
 say = buildLuarocksPackage {
   pname = "say";
   version = "1.3-1";

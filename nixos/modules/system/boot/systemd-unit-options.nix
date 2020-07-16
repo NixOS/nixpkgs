@@ -233,6 +233,7 @@ in rec {
 
     path = mkOption {
       default = [];
+      type = with types; listOf (oneOf [ package str ]);
       apply = ps: "${makeBinPath ps}:${makeSearchPathOutput "bin" "sbin" ps}";
       description = ''
         Packages added to the service's <envar>PATH</envar>

@@ -32,10 +32,10 @@ stdenv.mkDerivation {
 
   installPhase = ":";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Task management system";
     homepage = "http://www.thinkingrock.com.au/";
-    license = "CDDL"; # Common Development and Distribution License
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.cddl;
+    platforms = platforms.unix;
   };
 }

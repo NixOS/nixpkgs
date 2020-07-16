@@ -1,0 +1,13 @@
+diff --git a/supervisor/tests/base.py b/supervisor/tests/base.py
+index 643e609..8aa45e7 100644
+--- a/supervisor/tests/base.py
++++ b/supervisor/tests/base.py
+@@ -358,7 +358,7 @@ class DummySocketConfig:
+         return not self.__eq__(other)
+ 
+     def get_backlog(self):
+-        return 128
++        return 4096
+ 
+     def create_and_bind(self):
+         return DummySocket(self.fd)

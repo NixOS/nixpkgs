@@ -11,8 +11,9 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
 
       services.xserver.enable = true;
 
-      services.xserver.displayManager.gdm = {
-        enable = true;
+      services.xserver.displayManager = {
+        gdm.enable = true;
+        gdm.debug = true;
         autoLogin = {
           enable = true;
           user = "alice";
@@ -20,6 +21,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       };
 
       services.xserver.desktopManager.gnome3.enable = true;
+      services.xserver.desktopManager.gnome3.debug = true;
 
       virtualisation.memorySize = 1024;
     };

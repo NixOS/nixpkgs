@@ -57,6 +57,9 @@ in stdenv.mkDerivation {
   ++ lib.optionals enableQt [ qt5.wrapQtAppsHook ]
   ;
 
+  # Doc has high risk of collisions
+  postInstall = "rm -r $out/share/doc";
+
   buildInputs = [
     openssl
     curl
@@ -71,9 +74,6 @@ in stdenv.mkDerivation {
   ;
 
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
-
-  # Reduce the risk of collisions
-  postInstall = "rm -r $out/share/doc";
 
   meta = {
     description = "A fast, easy and free BitTorrent client";

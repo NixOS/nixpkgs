@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     comment = "G-code generator for 3D printers";
     desktopName = "Slic3r";
     genericName = "3D printer tool";
-    categories = "Application;Development;";
+    categories = "Development;";
   };
 
   prePatch = ''

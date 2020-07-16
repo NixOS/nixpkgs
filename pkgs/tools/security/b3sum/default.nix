@@ -2,18 +2,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "b3sum";
-  version = "0.1.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "BLAKE3-team";
     repo = "BLAKE3";
     rev = version;
-    sha256 = "1aigwwv576ybb3x3fppq46kbvd3k4fc4w1hh2hkzyyic6fibwbpy";
+    sha256 = "02yyv91wvy5w7i05z6f3kzxm5x34a4xgkgmcqxnb0ivsxnnld73h";
   };
 
   sourceRoot = "source/b3sum";
 
-  cargoSha256 = "1rqhz2r60603mylazn37mkm783qb7qhjcg8cqss0iy1g752f3f2i";
+  cargoSha256 = "0ycn5788dc925wx28sgfs121w4x7yggm4mnmwij829ka8859bymk";
 
   cargoPatches = [ ./add-cargo-lock.patch ];
 

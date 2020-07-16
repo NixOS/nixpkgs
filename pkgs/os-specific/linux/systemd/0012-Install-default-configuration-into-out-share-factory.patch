@@ -1,4 +1,4 @@
-From 3dbcdab1ba22c4eeca6d61718c09bcb9b5551764 Mon Sep 17 00:00:00 2001
+From 9262f52b0e30cf8c39d9f7684a8c0e8fd4887cd5 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
 Date: Mon, 26 Feb 2018 14:25:57 +0000
 Subject: [PATCH 12/18] Install default configuration into $out/share/factory
@@ -44,7 +44,7 @@ index 4df6dabf89..02d8d69095 100644
          meson.add_install_script('sh', '-c',
                                   'test -n "$DESTDIR" || @0@/systemd-hwdb update'
 diff --git a/meson.build b/meson.build
-index 078db3bb5d..6e1a6483fc 100644
+index 62eba4186c..b0b2edbb5a 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -154,6 +154,9 @@ udevhwdbdir = join_paths(udevlibexecdir, 'hwdb.d')
@@ -57,7 +57,7 @@ index 078db3bb5d..6e1a6483fc 100644
  bootlibdir = join_paths(prefixdir, 'lib/systemd/boot/efi')
  testsdir = join_paths(prefixdir, 'lib/systemd/tests')
  systemdstatedir = join_paths(localstatedir, 'lib/systemd')
-@@ -2503,7 +2506,7 @@ if conf.get('ENABLE_BINFMT') == 1
+@@ -2511,7 +2514,7 @@ if conf.get('ENABLE_BINFMT') == 1
          meson.add_install_script('sh', '-c',
                                   mkdir_p.format(binfmtdir))
          meson.add_install_script('sh', '-c',
@@ -66,7 +66,7 @@ index 078db3bb5d..6e1a6483fc 100644
  endif
  
  if conf.get('ENABLE_REPART') == 1
-@@ -2604,7 +2607,7 @@ executable('systemd-sleep',
+@@ -2612,7 +2615,7 @@ executable('systemd-sleep',
             install_dir : rootlibexecdir)
  
  install_data('src/sleep/sleep.conf',
@@ -75,7 +75,7 @@ index 078db3bb5d..6e1a6483fc 100644
  
  exe = executable('systemd-sysctl',
                   'src/sysctl/sysctl.c',
-@@ -2916,7 +2919,7 @@ if conf.get('HAVE_KMOD') == 1
+@@ -2924,7 +2927,7 @@ if conf.get('HAVE_KMOD') == 1
          meson.add_install_script('sh', '-c',
                                   mkdir_p.format(modulesloaddir))
          meson.add_install_script('sh', '-c',
@@ -84,7 +84,7 @@ index 078db3bb5d..6e1a6483fc 100644
  endif
  
  exe = executable('systemd-nspawn',
-@@ -3159,7 +3162,7 @@ install_subdir('factory/etc',
+@@ -3167,7 +3170,7 @@ install_subdir('factory/etc',
                 install_dir : factorydir)
  
  install_data('xorg/50-systemd-user.sh',

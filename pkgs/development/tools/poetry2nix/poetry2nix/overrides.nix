@@ -24,7 +24,7 @@ self: super:
       nativeBuildInputs = old.nativeBuildInputs ++ [
         pkgs.pkgconfig
       ];
-      buildInputs = old.buildInputs ++ [ pkgs.ffmpeg ];
+      buildInputs = old.buildInputs ++ [ pkgs.ffmpeg_4 ];
     }
   );
 
@@ -255,6 +255,11 @@ self: super:
     }
   );
 
+  libvirt-python = super.libvirt-python.overridePythonAttrs ({ nativeBuildInputs ? [ ], ... }: {
+    nativeBuildInputs = nativeBuildInputs ++ [ pkgs.pkgconfig ];
+    propagatedBuildInputs = [ pkgs.libvirt ];
+  });
+
   llvmlite = super.llvmlite.overridePythonAttrs (
     old: {
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.llvm ];
@@ -342,6 +347,14 @@ self: super:
     old: {
       buildInputs = old.buildInputs ++ [ self.pytest-runner ];
       doCheck = false;
+    }
+  );
+
+  mip = super.mip.overridePythonAttrs (
+    old: {
+      nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.autoPatchelfHook ];
+
+      buildInputs = old.buildInputs ++ [ pkgs.zlib self.cppy ];
     }
   );
 
@@ -454,7 +467,14 @@ self: super:
       old:
       let
         parseMinor = drv: lib.concatStringsSep "." (lib.take 2 (lib.splitVersion drv.version));
-        _arrow-cpp = pkgs.arrow-cpp.override { inherit (self) python; };
+
+        # Starting with nixpkgs revision f149c7030a7, pyarrow takes "python3" as an argument
+        # instead of "python". Below we inspect function arguments to maintain compatibilitiy.
+        _arrow-cpp = pkgs.arrow-cpp.override (
+          builtins.intersectAttrs
+            (lib.functionArgs pkgs.arrow-cpp.override) { python = self.python; python3 = self.python; }
+        );
+
         ARROW_HOME = _arrow-cpp;
         arrowCppVersion = parseMinor pkgs.arrow-cpp;
         pyArrowVersion = parseMinor super.pyarrow;
@@ -592,6 +612,12 @@ self: super:
   pyopenssl = super.pyopenssl.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [ pkgs.openssl ];
+    }
+  );
+
+  python-ldap = super.python-ldap.overridePythonAttrs (
+    old: {
+      buildInputs = old.buildInputs ++ [ pkgs.openldap pkgs.cyrus_sasl ];
     }
   );
 
@@ -838,6 +864,14 @@ self: super:
       HDF5_DIR = "${pkgs.hdf5}";
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkgconfig ];
       propagatedBuildInputs = old.nativeBuildInputs ++ [ pkgs.hdf5 self.numpy self.numexpr ];
+    }
+  );
+
+  tensorflow = super.tensorflow.overridePythonAttrs (
+    old: {
+      postInstall = ''
+        rm $out/bin/tensorboard
+      '';
     }
   );
 

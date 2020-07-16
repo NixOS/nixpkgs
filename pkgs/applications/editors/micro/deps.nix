@@ -203,8 +203,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/zyedidia/clipboard";
-      rev = "241f98e9b197";
-      sha256 = "1glc8w30sijpbppcvaf3503rmx5nxqkcgw87dr2pr3q3vv1bg3zi";
+      rev = "7c45b8673834";
+      sha256 = "0ag36wd3830d4s6fvpj05v6f662c5rymgdydsj2gq8aaqplfb0v4";
     };
   }
   {
@@ -257,8 +257,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/zyedidia/tcell";
-      rev = "v1.4.4";
-      sha256 = "0d62a9csab15b64y09jcbvq71065wliw4bd5m7lfpl5k8rmrrdyi";
+      rev = "v1.4.7";
+      sha256 = "1ddaznp0haz35mxfjjh2fmamdrlk1igqg65fz22l5r6vvhcdsfxa";
     };
   }
   {

@@ -4,16 +4,17 @@
 , stdenv
 , setuptools_scm
 , pytest
+, typing-extensions
 , glibcLocales
 }:
 
 buildPythonPackage rec {
   pname = "typeguard";
-  version = "2.7.1";
+  version = "2.9.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2d545c71e9439c21bcd7c28f5f55b3606e6106f7031ab58375656a1aed483ef2";
+    sha256 = "123jnq7igm26a5347jf2j60bww9g84l80f208dzlbk49h7cg77jj";
   };
 
   buildInputs = [ setuptools_scm ];
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace " --cov" ""
   '';
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest typing-extensions ];
 
   checkPhase = ''
     py.test .

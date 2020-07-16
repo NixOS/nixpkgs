@@ -39,19 +39,22 @@ in rec {
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the SHA256 for staging as well.
-    version = "5.5";
+    version = "5.12";
     url = "https://dl.winehq.org/wine/source/5.x/wine-${version}.tar.xz";
-    sha256 = "1z7mvl6fgk7cg8vmy157r8azcz89srnckbzvsc6cva7a1fdi7qx0";
+    sha256 = "0bl4ii4h1w4z8kb6dpdc1pgwk0wrhm61c2q2nzpcckkrqra75wc7";
     inherit (stable) mono gecko32 gecko64;
   };
 
   staging = fetchFromGitHub rec {
     # https://github.com/wine-staging/wine-staging/releases
     inherit (unstable) version;
-    sha256 = "0wcj73xcxsk5897m5fg14cjir2md167m09jjjv9z9n6157bfr9fw";
+    sha256 = "1f6ay0khdcxxnsvp4rywg80qpcysbplyrq7qjmqjvdysi7k2wm1w";
     owner = "wine-staging";
     repo = "wine-staging";
     rev = "v${version}";
+
+    # Just keep list empty, if current release haven't broken patchsets
+    disabledPatchsets = [ "xactengine-initial" ];
   };
 
   winetricks = fetchFromGitHub rec {

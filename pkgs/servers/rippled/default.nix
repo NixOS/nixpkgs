@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchgit, fetchurl, runCommand, git, cmake, pkgconfig
-, openssl, boost, zlib }:
+, openssl,  zlib, boost, grpc, c-ares, abseil-cpp, protobuf3_8 }:
 
 let
   sqlite3 = fetchurl rec {
@@ -8,21 +8,43 @@ let
     passthru.url = url;
   };
 
+  boostSharedStatic = boost.override {
+    enableShared = true; 
+    enabledStatic = true;
+  };
+
+  beast = fetchgit {
+    url = "https://github.com/boostorg/beast.git";
+    rev = "2f9a8440c2432d8a196571d6300404cb76314125";
+    sha256 = "1n9ms5cn67b0p0mhldz5psgylds22sm5x22q7knrsf20856vlk5a";
+    fetchSubmodules = false;
+    leaveDotGit = true;
+  };
+
   docca = fetchgit {
     url = "https://github.com/vinniefalco/docca.git";
     rev = "335dbf9c3613e997ed56d540cc8c5ff2e28cab2d";
-    sha256 = "1yisdg7q2p9q9gz0c446796p3ggx9s4d6g8w4j1pjff55655805h";
-    leaveDotGit = true;
+    sha256 = "09cb90k0ygmnlpidybv6nzf6is51i80lnwlvad6ijc3gf1z6i1yh";
     fetchSubmodules = false;
+    leaveDotGit = true;
+  };
+
+  nudb = fetchgit rec {
+    url = "https://github.com/CPPAlliance/NuDB.git";
+    rev = "2.0.1";
+    sha256 = "10hlp2k7pc0c705f8sk0qw6mjfky0k08cjhh262bbjvp9fbdc7r4";
+    leaveDotGit = true;
+    fetchSubmodules = true;
+    postFetch = "cd $out && git tag ${rev}";
   };
 
   rocksdb = fetchgit rec {
     url = "https://github.com/facebook/rocksdb.git";
-    rev = "v5.17.2";
-    sha256 = "0d9ssggjls1hc4zhng65yg8slqlcw0lr23qr6f39shg42lzr227p";
-    leaveDotGit = true;
+    rev = "v6.5.3";
+    sha256 = "11kbwqph1i3w6rbhr0kl2aq4jidhai24gw420y9qi9ab7zl0zcqg";
+    deepClone = true;
     fetchSubmodules = false;
-    postFetch = "cd $out && git tag ${rev}";
+    leaveDotGit = true;
   };
 
   lz4 = fetchgit rec {
@@ -60,19 +82,10 @@ let
     postFetch = "cd $out && git tag ${rev}";
   };
 
-  nudb = fetchgit rec {
-    url = "https://github.com/CPPAlliance/NuDB.git";
-    rev = "2.0.1";
-    sha256 = "0h7hmwavrxzj1v547h3z0031ckwphjayfpv1mgcr6q86wm9p5468";
-    leaveDotGit = true;
-    fetchSubmodules = true; # submodules are needed, rocksdb is dependency
-    postFetch = "cd $out && git tag ${rev}";
-  };
-
-  protobuf = fetchgit rec {
-    url = "https://github.com/protocolbuffers/protobuf.git";
-    rev = "v3.6.1";
-    sha256 = "0zl09q25ggfw95lakcs3mkq5pvsj17mx29b4nqr09g0mnbw9709c";
+  cares = fetchgit rec {
+    url = "https://github.com/c-ares/c-ares.git";
+    rev = "cares-1_15_0";
+    sha256 = "1fkzsyhfk5p5hr4dx4r36pg9xzs0md6cyj1q2dni3cjgqj3s518v";
     leaveDotGit = true;
     fetchSubmodules = false;
     postFetch = "cd $out && git tag ${rev}";
@@ -80,64 +93,58 @@ let
 
   google-test = fetchgit {
     url = "https://github.com/google/googletest.git";
-    rev = "c3bb0ee2a63279a803aaad956b9b26d74bf9e6e2";
-    sha256 = "0pj5b6jnrj5lrccz2disr8hklbnzd8hwmrwbfqmvhiwb9q9p0k2k";
-    fetchSubmodules = false;
+    rev = "5ec7f0c4a113e2f18ac2c6cc7df51ad6afc24081";
+    sha256 = "1ch7hq16z20ddhpc08slp9bny29j88x9vr6bi9r4yf5m77xbplja";
     leaveDotGit = true;
+    fetchSubmodules = false;
   };
 
   google-benchmark = fetchgit {
     url = "https://github.com/google/benchmark.git";
     rev = "5b7683f49e1e9223cf9927b24f6fd3d6bd82e3f8";
-    sha256 = "0qg70j47zqnrbszlgrzmxpr4g88kq0gyq6v16bhaggfm83c6mg6i";
-    fetchSubmodules = false;
+    sha256 = "0kcmb83framkncc50h0lyyz7v8nys6g19ja0h2p8x4sfafnnm6ig";
     leaveDotGit = true;
+    fetchSubmodules = false;
   };
 
-  # hack to merge rocksdb revisions from rocksdb and nudb, so build process
-  # will find both
-  rocksdb-merged = runCommand "rocksdb-merged" {
-    buildInputs = [ git ];
-  } ''
-    commit=$(cd ${nudb} && git ls-tree HEAD extras/rocksdb | awk '{ print $3  }')
-    git clone ${rocksdb} $out && cd $out
-    git fetch ${nudb}/extras/rocksdb $commit
-    git checkout $commit
-  '';
+  date = fetchgit {
+    url = "https://github.com/HowardHinnant/date.git";
+    rev = "fc4cf092f9674f2670fb9177edcdee870399b829";
+    sha256 = "0w618p64mx2l074b6wd0xfc4h6312mabhvzabxxwsnzj4afpajcm";
+    leaveDotGit = true;
+    fetchSubmodules = false;
+  };
 in stdenv.mkDerivation rec {
   pname = "rippled";
-  version = "1.4.0";
+  version = "1.5.0";
 
-  src = fetchFromGitHub {
-    owner = "ripple";
-    repo = "rippled";
+  src = fetchgit {
+    url = "https://github.com/ripple/rippled.git";
     rev = version;
-    sha256 = "1z04378bg8lcyrnn7sl3j2zfxbwwy2biasg1d4fbaq4snxg5d1pq";
+    sha256 = "0nh0x1ygrj3fw558vxbcp0md80qh27yrp3xhdlasrir7h1l2nplv";
+    leaveDotGit = true;
+    fetchSubmodules = true;
   };
 
   hardeningDisable = ["format"];
-  cmakeFlags = [
-    "-Dstatic=OFF"
-    "-DBOOST_LIBRARYDIR=${boost.out}/lib"
-    "-DBOOST_INCLUDEDIR=${boost.dev}/include"
-  ];
+  cmakeFlags = ["-Dstatic=OFF" "-DBoost_NO_BOOST_CMAKE=ON"];
 
   nativeBuildInputs = [ pkgconfig cmake git ];
-  buildInputs = [ openssl openssl.dev zlib ];
+  buildInputs = [ openssl openssl.dev boostSharedStatic zlib grpc c-ares c-ares.cmake-config abseil-cpp protobuf3_8 ];
 
   preConfigure = ''
     export HOME=$PWD
 
+    git config --global url."file://${rocksdb}".insteadOf "${rocksdb.url}"
     git config --global url."file://${docca}".insteadOf "${docca.url}"
-    git config --global url."file://${rocksdb-merged}".insteadOf "${rocksdb.url}"
     git config --global url."file://${lz4}".insteadOf "${lz4.url}"
     git config --global url."file://${libarchive}".insteadOf "${libarchive.url}"
     git config --global url."file://${soci}".insteadOf "${soci.url}"
     git config --global url."file://${snappy}".insteadOf "${snappy.url}"
     git config --global url."file://${nudb}".insteadOf "${nudb.url}"
-    git config --global url."file://${protobuf}".insteadOf "${protobuf.url}"
     git config --global url."file://${google-benchmark}".insteadOf "${google-benchmark.url}"
     git config --global url."file://${google-test}".insteadOf "${google-test.url}"
+    git config --global url."file://${date}".insteadOf "${date.url}"
 
     substituteInPlace Builds/CMake/deps/Sqlite.cmake --replace "URL ${sqlite3.url}" "URL ${sqlite3}"
   '';
@@ -150,7 +157,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Ripple P2P payment network reference server";
     homepage = "https://github.com/ripple/rippled";
-    maintainers = with maintainers; [ ehmry offline ];
+    maintainers = with maintainers; [ ehmry offline RaghavSood ];
     license = licenses.isc;
     platforms = [ "x86_64-linux" ];
   };

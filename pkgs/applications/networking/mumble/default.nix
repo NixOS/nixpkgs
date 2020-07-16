@@ -128,14 +128,14 @@ let
   } source;
 
   source = rec {
-    version = "1.3.1";
+    version = "1.3.2";
 
     # Needs submodules
     src = fetchFromGitHub {
       owner = "mumble-voip";
       repo = "mumble";
       rev = version;
-      sha256 = "1xsla9g7xbq6xniwcsjik5hbjh0xahv44qh4z9hjn7p70b8vgnwc";
+      sha256 = "1ljn7h7dr9iyhvq7rdh0prl7hzn9d2hhnxv0ni6dha6f7d9qbfy6";
       fetchSubmodules = true;
     };
   };

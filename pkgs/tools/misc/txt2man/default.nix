@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "txt2man";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchurl {
     url = "https://github.com/mvertes/txt2man/archive/${pname}-${version}.tar.gz";
-    sha256 = "06jf8hqav095db1v3njavx0rphmpmi3mgki4va6qkxjnvmdx4742";
+    sha256 = "0ka3krmblsprv0v6h6wnm8lv08w30z0ynfnbwns6alks5gx1p6sd";
   };
 
   preConfigure = ''

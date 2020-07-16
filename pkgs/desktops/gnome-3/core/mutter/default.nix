@@ -1,6 +1,7 @@
 { fetchurl
 , fetchpatch
 , substituteAll
+, runCommand
 , stdenv
 , pkgconfig
 , gnome3
@@ -42,15 +43,15 @@
 , wayland-protocols
 }:
 
-stdenv.mkDerivation rec {
+let self = stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "3.36.3";
+  version = "3.36.4";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1lpf7anlm073npmfqc5n005kyj12j0ym8y9dqg9q7448ilp79kka";
+    sha256 = "0p3jglw6f2h67kwk89qz1rz23y25lip8m2mp2xshf2vrg4a930as";
   };
 
   mesonFlags = [
@@ -132,6 +133,18 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    libdir = "${self}/lib/mutter-6";
+
+    tests = {
+      libdirExists = runCommand "mutter-libdir-exists" {} ''
+        if [[ ! -d ${self.libdir} ]]; then
+          echo "passthru.libdir should contain a directory, “${self.libdir}” is not one."
+          exit 1
+        fi
+        touch $out
+      '';
+    };
+
     updateScript = gnome3.updateScript {
       packageName = pname;
       attrPath = "gnome3.${pname}";
@@ -145,4 +158,5 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-}
+};
+in self

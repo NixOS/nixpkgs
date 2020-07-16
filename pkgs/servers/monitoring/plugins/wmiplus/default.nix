@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "check-wmiplus";
-  version = "1.64";
+  version = "1.65";
 
   # We fetch from github.com instead of the proper upstream as nix-build errors
   # out with 406 when trying to fetch the sources
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "speartail";
     repo = "checkwmiplus";
     rev = "v${version}";
-    sha256 = "1m36rd2wnc5dk4mm9q4ch67w19144dl112p9s6lhc1sh6h25ln6r";
+    sha256 = "1as0iyhy4flpm37mb7lvah7rnd6ax88appjm1icwhy7iq03wi8pl";
   };
 
   patches = [

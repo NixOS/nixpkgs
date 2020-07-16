@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , dateutil
 , six
 , mock
@@ -19,6 +20,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ dateutil six ];
   checkInputs = [ mock nose pytest ];
+  # contains python3 specific code
+  doCheck = !isPy27;
 
   meta = with stdenv.lib; {
     description = "FreezeGun: Let your Python tests travel through time";

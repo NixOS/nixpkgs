@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, gfortran, perl, libnl
 , rdma-core, zlib, numactl, libevent, hwloc, targetPackages, symlinkJoin
-, libpsm2, libfabric
+, libpsm2, libfabric, pmix
 
 # Enable CUDA support
 , cudaSupport ? false, cudatoolkit ? null
@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = with stdenv; [ gfortran zlib ]
-    ++ lib.optionals isLinux [ libnl numactl ]
+    ++ lib.optionals isLinux [ libnl numactl pmix ]
     ++ lib.optionals cudaSupport [ cudatoolkit ]
     ++ [ libevent hwloc ]
     ++ lib.optional (isLinux || isFreeBSD) rdma-core
@@ -55,8 +55,11 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl ];
 
   configureFlags = with stdenv; lib.optional (!cudaSupport) "--disable-mca-dso"
-    ++ lib.optional isLinux  "--with-libnl=${libnl.dev}"
-    ++ lib.optional enableSGE "--with-sge"
+    ++ lib.optionals isLinux  [
+      "--with-libnl=${libnl.dev}"
+      "--with-pmix=${pmix}"
+      "--with-pmix-libdir=${pmix}/lib"
+    ] ++ lib.optional enableSGE "--with-sge"
     ++ lib.optional enablePrefix "--enable-mpirun-prefix-by-default"
     # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
     # https://github.com/openucx/ucx
