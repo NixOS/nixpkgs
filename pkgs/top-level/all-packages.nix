@@ -16507,6 +16507,8 @@ in
 
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
 
+  gerbera = callPackage ../servers/gerbera { };
+
   gobetween = callPackage ../servers/gobetween { };
 
   h2o = callPackage ../servers/http/h2o { };
