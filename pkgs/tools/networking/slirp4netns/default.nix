@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "slirp4netns";
-  version = "1.1.2";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "rootless-containers";
     repo = "slirp4netns";
     rev = "v${version}";
-    sha256 = "0hj3jcl3b96ssp8di72ghsgk3dp8d5nkh3gkyg9j7h0z9fncl72f";
+    sha256 = "13hlljkqss9abjpwaa5gcn6qnax0ws03zzh45c4rv1if7rwk6nbl";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
