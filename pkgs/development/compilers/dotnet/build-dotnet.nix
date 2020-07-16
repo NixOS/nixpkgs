@@ -15,13 +15,19 @@ assert builtins.elem type [ "aspnetcore" "netcore" "sdk"];
 }:
 
 let
-  pname = if type == "aspnetcore" then "aspnetcore-runtime" else if type == "netcore" then "dotnet-runtime" else "dotnet-sdk";
+  pname = if type == "aspnetcore" then
+    "aspnetcore-runtime"
+  else if type == "netcore" then
+    "dotnet-runtime"
+  else
+    "dotnet-sdk";
   platform = if stdenv.isDarwin then "osx" else "linux";
   suffix = {
-    x86_64-linux  = "x64";
+    x86_64-linux = "x64";
     aarch64-linux = "arm64";
     x86_64-darwin = "x64";
-  }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  }."${stdenv.hostPlatform.system}" or (throw
+    "Unsupported system: ${stdenv.hostPlatform.system}");
   urls = {
     aspnetcore = "https://dotnetcli.azureedge.net/dotnet/aspnetcore/Runtime/${version}/${pname}-${version}-${platform}-${suffix}.tar.gz";
     netcore = "https://dotnetcli.azureedge.net/dotnet/Runtime/${version}/${pname}-${version}-${platform}-${suffix}.tar.gz";
@@ -35,11 +41,20 @@ let
 in stdenv.mkDerivation rec {
   inherit pname version;
 
-  rpath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc libunwind libuuid icu openssl zlib curl ];
+  rpath = stdenv.lib.makeLibraryPath [
+    curl
+    icu
+    libunwind
+    libuuid
+    openssl
+    stdenv.cc.cc
+    zlib
+  ];
 
   src = fetchurl {
     url = builtins.getAttr type urls;
-    sha512 = sha512."${stdenv.hostPlatform.system}"  or (throw "Missing hash for host system: ${stdenv.hostPlatform.system}");
+    sha512 = sha512."${stdenv.hostPlatform.system}" or (throw
+      "Missing hash for host system: ${stdenv.hostPlatform.system}");
   };
 
   sourceRoot = ".";
