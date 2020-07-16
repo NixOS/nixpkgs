@@ -9,12 +9,12 @@ let
 in
 
 stdenv.mkDerivation (common // rec {
-  version = "0.E";
+  version = "0.E-2";
   name = "cataclysm-dda-${version}";
 
   src = fetchFromCleverRaven {
     rev = version;
-    sha256 = "0pbi0fw37zimzdklfj58s1ql0wlqq7dy6idkcsib3hn910ajaxan";
+    sha256 = "15l6w6lxays7qmsv0ci2ry53asb9an9dh7l7fc13256k085qcg68";
   };
 
   patches = [ ./patches/fix_locale_dir.patch ];
