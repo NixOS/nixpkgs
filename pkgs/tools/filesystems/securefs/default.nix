@@ -1,19 +1,20 @@
 { stdenv, fetchFromGitHub
 , cmake
-, fuse }:
+, fuse, utf8proc }:
 
 stdenv.mkDerivation rec {
   pname = "securefs";
-  version = "0.8.3";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
-    sha256 = "0nf0bd163gz844mikqab2mh7xjlj31ixa6hi85qxdifyjpfjv7y4";
+    sha256 = "06iidgkpzr935qjib7m6pcpbq07a1fi8f4navl3wfxypzisgvmwn";
     rev = version;
     repo = "securefs";
     owner = "netheril96";
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ utf8proc cmake ];
   buildInputs = [ fuse ];
 
   enableParallelBuilding = true;
