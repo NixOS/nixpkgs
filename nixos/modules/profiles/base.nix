@@ -28,6 +28,7 @@
     pkgs.sshfs-fuse
     pkgs.socat
     pkgs.screen
+    pkgs.ifenslave
 
     # Hardware-related tools.
     pkgs.sdparm
