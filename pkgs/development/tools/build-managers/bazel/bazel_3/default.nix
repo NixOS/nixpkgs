@@ -1,4 +1,4 @@
-{ stdenv, callPackage, lib, fetchurl, fetchFromGitHub
+{ stdenv, callPackage, lib, fetchurl, fetchFromGitHub, installShellFiles
 , runCommand, runCommandCC, makeWrapper, recurseIntoAttrs
 # this package (through the fixpoint glass)
 , bazel_self
@@ -465,6 +465,7 @@ stdenv.mkDerivation rec {
   # when a command can’t be found in a bazel build, you might also
   # need to add it to `defaultShellPath`.
   nativeBuildInputs = [
+    installShellFiles
     zip
     python3
     unzip
@@ -507,15 +508,15 @@ stdenv.mkDerivation rec {
     mv ./bazel_src/output/bazel $out/bin/bazel-${version}-${system}-${arch}
 
     # shell completion files
-    install -Dm644 \
-      ./bazel_src/output/bazel-complete.bash \
-      $out/share/bash-completion/completions/bazel/bazel-complete.bash
-    install -Dm644 \
-      ./bazel_src/scripts/zsh_completion/_bazel \
-      $out/share/zsh/site-functions/_bazel
-    install -Dm644 \
-      ./bazel_src/scripts/fish/completions/bazel.fish \
-      $out/share/fish/vendor_completions.d/bazel.fish
+    installShellCompletion --bash \
+      --name bazel.bash \
+      ./bazel_src/output/bazel-complete.bash
+    installShellCompletion --zsh \
+      --name _bazel \
+      ./bazel_src/scripts/zsh_completion/_bazel
+    installShellCompletion --fish \
+      --name bazel.fish \
+      ./bazel_src/scripts/fish/completions/bazel.fish
   '';
 
   doInstallCheck = true;
