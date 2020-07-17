@@ -45,6 +45,10 @@ stdenv.mkDerivation rec {
     libPathEnvVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     libPathPrefix = "$out/lib/darktable" + stdenv.lib.optionalString stdenv.isLinux ":${ocl-icd}/lib";
   in ''
+    for f in $out/share/darktable/kernels/*.cl; do
+      sed -r "s|#include \"(.*)\"|#include \"$out/share/darktable/kernels/\1\"|g" -i "$f"
+    done
+
     gappsWrapperArgs+=(
       --prefix ${libPathEnvVar} ":" "${libPathPrefix}"
     )
