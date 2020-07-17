@@ -5917,8 +5917,12 @@ in
 
   perceptualdiff = callPackage ../tools/graphics/perceptualdiff { };
 
-  percona-xtrabackup = callPackage ../tools/backup/percona-xtrabackup {
+  percona-xtrabackup = percona-xtrabackup_8_0;
+  percona-xtrabackup_2_4 = callPackage ../tools/backup/percona-xtrabackup/2_4.nix {
     boost = boost159;
+  };
+  percona-xtrabackup_8_0 = callPackage ../tools/backup/percona-xtrabackup/8_0.nix {
+    boost = boost170;
   };
 
   pick = callPackage ../tools/misc/pick { };
