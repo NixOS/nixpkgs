@@ -74,7 +74,7 @@ let
     
     postInstall = ''
       patchelf --set-rpath "${SDL2}/lib:${openal}/lib:${fluidsynth}/lib:${bzip2}/lib:${zlib}/lib:${libjpeg}/lib:${glibc}/lib:${gcc}/lib:${mpg123}/lib" $out/lib/gzdoom/gzdoom
-    ''
+    '';
 
     meta = with stdenv.lib; {
       homepage = "https://github.com/coelckers/gzdoom";
