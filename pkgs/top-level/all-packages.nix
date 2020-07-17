@@ -2554,6 +2554,8 @@ in
 
   socklog = callPackage ../tools/system/socklog { };
 
+  spacevim = callPackage ../applications/editors/spacevim { };
+
   ssmsh = callPackage ../tools/admin/ssmsh { };
 
   stagit = callPackage ../development/tools/stagit { };
