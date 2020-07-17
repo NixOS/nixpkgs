@@ -14,22 +14,15 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gpgme";
-  version = "1.13.1";
+  version = "1.14.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
-    sha256 = "0imyjfryvvjdbai454p70zcr95m94j9xnzywrlilqdw2fqi0pqy4";
+    sha256 = "01s3rlspykbm9vmi5rfbdm3d20ip6yni69r48idqzlmhlq8ggwff";
   };
 
   patches = [
-    # Fix tests with gnupg > 2.2.19
-    # https://dev.gnupg.org/T4820
-    (fetchpatch {
-      name = "cff600f1f65a2164ab25ff2b039cba008776ce62.patch";
-      url = "http://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=cff600f1f65a2164ab25ff2b039cba008776ce62";
-      sha256 = "0ds3pvcws37q4hr4g5iwg2b98fj6whvhhcbm9c8f1kgp7dlpdw7n";
-    })
-    (fetchpatch {
+    (fetchpatch { # gpg: Send --with-keygrip when listing keys
       name = "c4cf527ea227edb468a84bf9b8ce996807bd6992.patch";
       url = "http://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=patch;h=c4cf527ea227edb468a84bf9b8ce996807bd6992";
       sha256 = "0y0b0lb2nq5p9kx13b59b2jaz157mvflliw1qdvg1v1hynvgb8m4";
@@ -79,6 +72,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = "https://gnupg.org/software/gpgme/index.html";
+    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=blob;f=NEWS;hb=refs/tags/gpgme-${version}";
     description = "Library for making GnuPG easier to use";
     longDescription = ''
       GnuPG Made Easy (GPGME) is a library designed to make access to GnuPG
