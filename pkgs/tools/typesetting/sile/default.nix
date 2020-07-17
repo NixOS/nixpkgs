@@ -37,15 +37,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sile";
-  version = "0.10.5";
+  version = "0.10.8";
 
   src = fetchurl {
-    url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "16sb9dy0a3mq80qm9b4hjf0d2q5z1aqli439xlx75fj2y8xf4kx1";
+    url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.xz";
+    sha256 = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
   };
 
   configureFlags = [
     "--with-system-luarocks"
+    "--with-manual"
   ];
 
   nativeBuildInputs = [
@@ -91,10 +92,6 @@ stdenv.mkDerivation rec {
   '';
 
   checkTarget = "check";
-
-  postInstall = ''
-    install -D -t $doc/share/doc/sile documentation/sile.pdf
-  '';
 
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''
