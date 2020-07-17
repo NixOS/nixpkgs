@@ -9,6 +9,25 @@ let
   group = cfg.group;
   setgidGroup = cfg.setgidGroup;
 
+  preStartScript = pkgs.writeScript "pre-start-script" ''
+    #!${pkgs.stdenv.shell}
+    set -euo pipefail
+
+    ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
+      test -f '/var/lib/postfix/conf/${to}' || rm -f '/var/lib/postfix/conf/${to}'
+      ln -sf ${from} /var/lib/postfix/conf/${to}
+      ${pkgs.postfix}/bin/postalias /var/lib/postfix/conf/${to}
+    '') cfg.aliasFiles)}
+    ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
+      test -f '/var/lib/postfix/conf/${to}' || rm -f '/var/lib/postfix/conf/${to}'
+      ln -sf ${from} /var/lib/postfix/conf/${to}
+      ${pkgs.postfix}/bin/postmap /var/lib/postfix/conf/${to}
+    '') cfg.mapFiles)}
+
+    # Finally delegate to postfix checking remain directories in /var/lib/postfix and set permissions on them
+    ${pkgs.postfix}/bin/postfix set-permissions config_directory=/var/lib/postfix/conf
+  '';
+
   haveAliases = cfg.postmasterAlias != "" || cfg.rootAlias != ""
                       || cfg.extraAliases != "";
   haveTransport = cfg.transport != "";
@@ -747,37 +766,33 @@ in
             ExecStart = "${pkgs.postfix}/bin/postfix start";
             ExecStop = "${pkgs.postfix}/bin/postfix stop";
             ExecReload = "${pkgs.postfix}/bin/postfix reload";
-            # Capabilities
-            CapabilityBoundingSet = [ "CAP_DAC_OVERRIDE" "CAP_NET_BIND_SERVICE" "CAP_SETGID" "CAP_SETUID" ];
-            # Security
-            NoNewPrivileges = true;
-            # Sandboxing
-            ProtectSystem = "full";
-            ProtectHome = true;
-            PrivateTmp = true;
-            PrivateDevices = true;
-            ProtectHostname = true;
-            ProtectKernelTunables = true;
-            ProtectKernelModules = true;
-            ProtectControlGroups = true;
+            ExecStartPre = "+${preStartScript}";
+
+            ReadWritePaths = [ "/var/lib/postfix" "/var/spool/mail" ];
+
+            CapabilityBoundingSet = "CAP_DAC_READ_SEARCH CAP_NET_BIND_SERVICE CAP_SETGID CAP_SETUID";
+            DevicePolicy = "closed";
             LockPersonality = true;
             MemoryDenyWriteExecute = true;
-            RestrictRealtime = true;
+            NoNewPrivileges = true;
+            PrivateDevices = true;
             PrivateMounts = true;
+            PrivateTmp = true;
+            ProtectClock = true;
+            ProtectControlGroups = true;
+            ProtectHostname = true;
+            ProtectKernelLogs = true;
+            ProtectKernelModules = true;
+            ProtectKernelTunables = true;
+            ProtectSystem = "full";
+            RestrictAddressFamilies = "AF_INET AF_INET6 AF_NETLINK AF_UNIX";
+            RestrictNamespaces = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
+            SystemCallArchitectures = "native";
+            SystemCallFilter = [ "@system-service" "~@resources" ];
+            UMask = "0077";
           };
-
-          preStart = ''
-            ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
-              test -f '/var/lib/postfix/conf/${to}' || rm -f '/var/lib/postfix/conf/${to}'
-              ln -sf ${from} /var/lib/postfix/conf/${to}
-              ${pkgs.postfix}/bin/postalias /var/lib/postfix/conf/${to}
-            '') cfg.aliasFiles)}
-            ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
-              test -f '/var/lib/postfix/conf/${to}' || rm -f '/var/lib/postfix/conf/${to}'
-              ln -sf ${from} /var/lib/postfix/conf/${to}
-              ${pkgs.postfix}/bin/postmap /var/lib/postfix/conf/${to}
-            '') cfg.mapFiles)}
-          '';
         };
 
       services.postfix.config = (mapAttrs (_: v: mkDefault v) {
