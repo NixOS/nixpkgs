@@ -9286,6 +9286,9 @@ in
 
   rocm-runtime-ext = callPackage ../development/libraries/rocm-runtime-ext { };
 
+  # Python >= 3.8 still gives a bunch of warnings.
+  rocm-smi = python37.pkgs.callPackage ../tools/system/rocm-smi { };
+
   rocm-thunk = callPackage ../development/libraries/rocm-thunk { };
 
   rtags = callPackage ../development/tools/rtags {
