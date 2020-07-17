@@ -10218,6 +10218,8 @@ in
 
   bazel-gazelle = callPackage ../development/tools/bazel-gazelle { };
 
+  bazel-kazel = callPackage ../development/tools/bazel-kazel { };
+
   bazelisk = callPackage ../development/tools/bazelisk { };
 
   buildBazelPackage = callPackage ../build-support/build-bazel-package { };
