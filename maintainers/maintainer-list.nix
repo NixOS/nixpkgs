@@ -5826,6 +5826,14 @@
     githubId = 16385648;
     name = "Niko Pavlinek";
   };
+  nixpkgs-go = {
+    email = "go@nixpkgs";
+    name = "Nixpkgs Go Packages";
+  };
+  nixpkgs-rust = {
+    email = "rust@nixpkgs";
+    name = "Nixpkgs Rust Packages";
+  };
   nixy = {
     email = "nixy@nixy.moe";
     github = "nixy";
