@@ -46,11 +46,12 @@ jruby = stdenv.mkDerivation rec {
     libPath = "lib/${rubyEngine}/${rubyVersion.libDir}";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Ruby interpreter written in Java";
     homepage = "http://jruby.org/";
-    license = with stdenv.lib.licenses; [ cpl10 gpl2 lgpl21 ];
-    platforms = stdenv.lib.platforms.unix;
+    license = with licenses; [ cpl10 gpl2 lgpl21 ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.fzakaria ];
   };
 };
 in jruby.overrideAttrs (oldAttrs: {
