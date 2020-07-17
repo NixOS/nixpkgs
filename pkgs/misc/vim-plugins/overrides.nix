@@ -2,6 +2,7 @@
 , python, cmake, meson, vim, ruby
 , which, fetchFromGitHub, fetchgit, fetchurl, fetchzip, fetchpatch
 , llvmPackages, rustPlatform
+, pkgconfig, curl, openssl, libgit2, libiconv
 , xkb-switch, fzf, skim, stylish-haskell
 , python3, boost, icu, ncurses
 , ycmd, rake
@@ -763,5 +764,31 @@ self: super: {
         echo "Building unicode cache"
         ${vim}/bin/vim --cmd ":set rtp^=$PWD" -c 'ru plugin/unicode.vim' -c 'UnicodeCache' -c ':echohl Normal' -c ':q' > /dev/null
       '';
+  });
+
+  vim-clap = super.vim-clap.overrideAttrs(old: {
+    preFixup = let
+      maple-bin = rustPlatform.buildRustPackage {
+        name = "maple";
+        src = old.src;
+
+        nativeBuildInputs = [
+          pkgconfig
+        ];
+
+        buildInputs = [
+          openssl
+        ] ++ stdenv.lib.optionals stdenv.isDarwin [
+          CoreServices
+          curl
+          libgit2
+          libiconv
+        ];
+
+        cargoSha256 = "0qqys51slz85rnx6knjyivnmyq4rj6rrnz7w72kqcl8da8zjbx7b";
+      };
+    in ''
+      ln -s ${maple-bin}/bin/maple $target/bin/maple
+    '';
   });
 }
