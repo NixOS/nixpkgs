@@ -72,7 +72,7 @@ default-package-overrides:
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
-  # LTS Haskell 16.4
+  # LTS Haskell 16.5
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -266,7 +266,7 @@ default-package-overrides:
   - authenticate ==1.3.5
   - authenticate-oauth ==1.6.0.1
   - auto ==0.4.3.1
-  - autoexporter ==1.1.17
+  - autoexporter ==1.1.18
   - auto-update ==0.1.6
   - avers ==0.0.17.1
   - avro ==0.5.2.0
@@ -406,7 +406,7 @@ default-package-overrides:
   - cast ==0.1.0.2
   - category ==0.2.5.0
   - cayley-client ==0.4.13
-  - cborg ==0.2.3.0
+  - cborg ==0.2.4.0
   - cborg-json ==0.2.2.0
   - cereal ==0.5.8.1
   - cereal-conduit ==0.8.0
@@ -439,9 +439,9 @@ default-package-overrides:
   - cipher-des ==0.0.6
   - cipher-rc4 ==0.1.4
   - circle-packing ==0.1.0.6
-  - clash-ghc ==1.2.2
-  - clash-lib ==1.2.2
-  - clash-prelude ==1.2.2
+  - clash-ghc ==1.2.3
+  - clash-lib ==1.2.3
+  - clash-prelude ==1.2.3
   - classy-prelude ==1.5.0
   - classy-prelude-conduit ==1.5.0
   - classy-prelude-yesod ==1.5.0
@@ -687,7 +687,7 @@ default-package-overrides:
   - dynamic-state ==0.3.1
   - dyre ==0.8.12
   - eap ==0.9.0.2
-  - earcut ==0.1.0.2
+  - earcut ==0.1.0.4
   - Earley ==0.13.0.1
   - easy-file ==0.2.2
   - Ebnf2ps ==1.0.15
@@ -1012,7 +1012,7 @@ default-package-overrides:
   - hasty-hamiltonian ==1.3.3
   - HaTeX ==3.22.2.0
   - HaXml ==1.25.5
-  - haxr ==3000.11.4
+  - haxr ==3000.11.4.1
   - HCodecs ==0.5.2
   - hdaemonize ==0.5.6
   - HDBC ==2.4.0.3
@@ -1464,7 +1464,7 @@ default-package-overrides:
   - monad-extras ==0.6.0
   - monadic-arrays ==0.2.2
   - monad-journal ==0.8.1
-  - monad-logger ==0.3.33
+  - monad-logger ==0.3.34
   - monad-logger-json ==0.1.0.0
   - monad-logger-prefix ==0.1.11
   - monad-loops ==0.4.3
@@ -1753,7 +1753,7 @@ default-package-overrides:
   - profiterole ==0.1
   - profunctors ==5.5.2
   - projectroot ==0.2.0.1
-  - project-template ==0.2.0.1
+  - project-template ==0.2.1.0
   - prometheus-client ==1.0.0.1
   - promises ==0.3
   - prompt ==0.1.1.2
@@ -1934,7 +1934,7 @@ default-package-overrides:
   - securemem ==0.1.10
   - selda ==0.5.1.0
   - selda-json ==0.1.1.0
-  - selective ==0.4.1
+  - selective ==0.4.1.1
   - semialign ==1.1
   - semialign-indexed ==1.1
   - semialign-optics ==1.1
@@ -2220,7 +2220,7 @@ default-package-overrides:
   - th-data-compat ==0.1.0.0
   - th-desugar ==1.10
   - th-env ==0.1.0.2
-  - these ==1.1
+  - these ==1.1.1
   - these-lens ==1
   - these-optics ==1
   - th-expand-syns ==0.4.6.0
@@ -2511,7 +2511,7 @@ default-package-overrides:
   - yesod-persistent ==1.6.0.4
   - yesod-recaptcha2 ==1.0.0
   - yesod-sitemap ==1.6.0
-  - yesod-static ==1.6.0.1
+  - yesod-static ==1.6.1.0
   - yesod-test ==1.6.10
   - yesod-websockets ==0.3.0.2
   - yes-precure5-command ==5.5.3
