@@ -3896,7 +3896,6 @@ broken-packages:
   - collections-api
   - collections-base-instances
   - colonnade
-  - Color
   - color-counter
   - colorless
   - colorless-http-client
@@ -7525,9 +7524,6 @@ broken-packages:
   - marxup
   - masakazu-bot
   - MASMGen
-  - massiv
-  - massiv-io
-  - massiv-test
   - master-plan
   - matchable
   - matchable-th
@@ -9273,7 +9269,6 @@ broken-packages:
   - scgi
   - schedevr
   - schedule-planner
-  - scheduler
   - schedyield
   - schema
   - schemas

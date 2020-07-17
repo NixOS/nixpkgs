@@ -1395,4 +1395,8 @@ self: super: {
   gi-soup = doJailbreak super.gi-soup;
   gi-webkit2 = doJailbreak super.gi-webkit2;
 
+  # Missing -Iinclude parameter to doc-tests (pull has been accepted, so should be resolved when 0.5.3 released)
+  # https://github.com/lehins/massiv/pull/104
+  massiv = dontCheck super.massiv;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
