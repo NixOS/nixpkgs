@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchzip, scons, zlib }:
+{ stdenv, fetchurl, fetchzip, sconsPackages, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "nsis";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     chmod -R u+w $out/share/nsis
   '';
 
-  nativeBuildInputs = [ scons.py2 ];
+  nativeBuildInputs = [ sconsPackages.scons_3_1_2 ];
   buildInputs = [ zlib ];
 
   sconsFlags = [
