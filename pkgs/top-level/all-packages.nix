@@ -16060,6 +16060,8 @@ in
 
   moodle = callPackage ../servers/web-apps/moodle { };
 
+  moodle-utils = callPackage ../servers/web-apps/moodle/moodle-utils.nix { };
+
   morty = callPackage ../servers/web-apps/morty { };
 
   mullvad-vpn = callPackage ../applications/networking/mullvad-vpn { };
