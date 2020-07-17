@@ -848,6 +848,8 @@ let
 
     process = callPackage ../development/ocaml-modules/process { };
 
+    prof_spacetime = callPackage ../development/ocaml-modules/prof_spacetime { };
+
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
 
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
