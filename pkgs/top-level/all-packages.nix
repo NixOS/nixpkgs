@@ -20803,6 +20803,8 @@ in
 
   kotatogram-desktop = qt5.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop { };
 
+  kpt = callPackage ../applications/networking/cluster/kpt { };
+
   krita = libsForQt5.callPackage ../applications/graphics/krita {
     openjpeg = openjpeg_1;
   };
