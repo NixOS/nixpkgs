@@ -1,27 +1,31 @@
 { lib, stdenv, fetchurl, bison, cmake, pkgconfig
-, boost, icu, libedit, libevent, lz4, ncurses, openssl, protobuf, re2, readline, zlib
-, numactl, perl, cctools, CoreServices, developer_cmds
+, boost, icu, libedit, libevent, lz4, ncurses, openssl, protobuf, re2, readline
+, zlib, zstd, numactl, perl, cctools, CoreServices, developer_cmds
 }:
 
 let
 self = stdenv.mkDerivation rec {
   pname = "mysql";
-  version = "8.0.17";
+  version = "8.0.21";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-${self.mysqlVersion}/${pname}-${version}.tar.gz";
-    sha256 = "1mjrlxn8vigi69r0r674j2dibdnkaar01ji5965gsyx7k60z7qy6";
+    sha256 = "0d00k55rkzdgn5wj32vxankjk5x3ywfqw62zxzg3m503xrg56mmd";
   };
 
   patches = [
     ./abi-check.patch
-    ./libutils.patch
   ];
+
+  postPatch = ''
+    substituteInPlace cmake/libutils.cmake --replace /usr/bin/ ""
+  '';
 
   nativeBuildInputs = [ bison cmake pkgconfig ];
 
   buildInputs = [
     boost icu libedit libevent lz4 ncurses openssl protobuf re2 readline zlib
+    zstd
   ] ++ lib.optionals stdenv.isLinux [
     numactl
   ] ++ lib.optionals stdenv.isDarwin [
