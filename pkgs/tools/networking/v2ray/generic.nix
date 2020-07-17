@@ -1,7 +1,7 @@
 { lib, linkFarm, buildGoModule, runCommand, makeWrapper
 
 # Version specific args
-, version, src, assets
+, version, src, assets, vendorSha256
 , ... }:
 
 let
@@ -13,7 +13,7 @@ let
     pname = "v2ray-core";
     inherit version src;
 
-    vendorSha256 = "0d2qmnmlkl884ccg0qcd2yhfj0dwxnb9dz3cih7rcipz85w2f2rs";
+    inherit vendorSha256;
 
     buildPhase = ''
       runHook preBuild
