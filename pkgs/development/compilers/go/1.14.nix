@@ -31,11 +31,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.14.5";
+  version = "1.14.6";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "0p1i80j3dk597ph5h6mvvv8p7rbzwmxdfb6558amcpkkj060hk6a";
+    sha256 = "02acr52bxfjlr3m11576gdwn8hjv1pr2pffcis913m0m31w9vz3k";
   };
 
   # perl is used for testing go vet
