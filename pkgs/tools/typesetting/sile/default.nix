@@ -116,6 +116,7 @@ stdenv.mkDerivation rec {
       such as InDesign.
     '';
     homepage = "https://sile-typesetter.org/";
+    maintainers = with maintainers; [ alerque ];
     platforms = platforms.unix;
     license = licenses.mit;
   };
