@@ -2350,6 +2350,18 @@ let
     meta.homepage = "https://github.com/ncm2/ncm2-path/";
   };
 
+  ncm2-syntax = buildVimPluginFrom2Nix {
+    pname = "ncm2-syntax";
+    version = "2018-12-11";
+    src = fetchFromGitHub {
+      owner = "ncm2";
+      repo = "ncm2-syntax";
+      rev = "7cd3857001a219be4bc7593b7378034b462415e4";
+      sha256 = "0l36qvsclhg8vr1ix1kpdl0kh739gp6b7s03f18vf9f0aj0im6w2";
+    };
+    meta.homepage = "https://github.com/ncm2/ncm2-syntax/";
+  };
+
   ncm2-tmux = buildVimPluginFrom2Nix {
     pname = "ncm2-tmux";
     version = "2019-01-11";
