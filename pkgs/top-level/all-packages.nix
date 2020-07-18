@@ -990,6 +990,8 @@ in
 
   gaia = callPackage ../development/libraries/gaia { };
 
+  gama = callPackage ../applications/science/geometry/gama { };
+
   gamecube-tools = callPackage ../development/tools/gamecube-tools { };
 
   gammy = qt5.callPackage ../tools/misc/gammy { };
