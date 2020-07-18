@@ -6434,8 +6434,6 @@ in
 
   rkflashtool = callPackage ../tools/misc/rkflashtool { };
 
-  rkrlv2 = callPackage ../applications/audio/rkrlv2 {};
-
   rmlint = callPackage ../tools/misc/rmlint {
     inherit (pythonPackages) sphinx;
   };
@@ -6724,8 +6722,6 @@ in
   simplescreenrecorder = libsForQt5.callPackage ../applications/video/simplescreenrecorder { };
 
   sipsak = callPackage ../tools/networking/sipsak { };
-
-  sisco.lv2 = callPackage ../applications/audio/sisco.lv2 { };
 
   sit = callPackage ../applications/version-management/sit {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
@@ -14684,6 +14680,8 @@ in
 
   lv2 = callPackage ../development/libraries/audio/lv2 { };
 
+  dawPlugins = callPackage ./daw-plugins.nix { };
+
   lvtk = callPackage ../development/libraries/audio/lvtk { };
 
   qm-dsp = callPackage ../development/libraries/audio/qm-dsp { };
@@ -18919,8 +18917,6 @@ in
 
   AMB-plugins = callPackage ../applications/audio/AMB-plugins { };
 
-  ams-lv2 = callPackage ../applications/audio/ams-lv2 { };
-
   amsn = callPackage ../applications/networking/instant-messengers/amsn { };
 
   androidStudioPackages = recurseIntoAttrs
@@ -19693,8 +19689,6 @@ in
 
   eterm = callPackage ../applications/misc/eterm { };
 
-  eteroj.lv2 = libsForQt5.callPackage ../applications/audio/eteroj.lv2 { };
-
   etesync-dav = callPackage ../applications/misc/etesync-dav {};
 
   etherape = callPackage ../applications/networking/sniffers/etherape { };
@@ -20302,10 +20296,6 @@ in
 
   gxmessage = callPackage ../applications/misc/gxmessage { };
 
-  gxmatcheq-lv2 = callPackage ../applications/audio/gxmatcheq-lv2 { };
-
-  gxplugins-lv2 = callPackage ../applications/audio/gxplugins-lv2 { };
-
   hackrf = callPackage ../applications/radio/hackrf { };
 
   hakuneko = callPackage ../tools/misc/hakuneko { };
@@ -20626,8 +20616,6 @@ in
   irssi = callPackage ../applications/networking/irc/irssi { };
 
   irssi_fish = callPackage ../applications/networking/irc/irssi/fish { };
-
-  ir.lv2 = callPackage ../applications/audio/ir.lv2 { };
 
   bip = callPackage ../applications/networking/irc/bip { };
 
@@ -21046,19 +21034,6 @@ in
 
   mail-notification = callPackage ../desktops/gnome-2/desktop/mail-notification {};
 
-  magnetophonDSP = {
-    CharacterCompressor = callPackage ../applications/audio/magnetophonDSP/CharacterCompressor { };
-    CompBus = callPackage ../applications/audio/magnetophonDSP/CompBus { };
-    ConstantDetuneChorus  = callPackage ../applications/audio/magnetophonDSP/ConstantDetuneChorus { };
-    faustCompressors =  callPackage ../applications/audio/magnetophonDSP/faustCompressors { };
-    LazyLimiter = callPackage ../applications/audio/magnetophonDSP/LazyLimiter { };
-    MBdistortion = callPackage ../applications/audio/magnetophonDSP/MBdistortion { };
-    pluginUtils = callPackage ../applications/audio/magnetophonDSP/pluginUtils  { };
-    RhythmDelay = callPackage ../applications/audio/magnetophonDSP/RhythmDelay { };
-    VoiceOfFaust = callPackage ../applications/audio/magnetophonDSP/VoiceOfFaust { };
-    shelfMultiBand = callPackage ../applications/audio/magnetophonDSP/shelfMultiBand  { };
-  };
-
   makeself = callPackage ../applications/misc/makeself { };
 
   mako = callPackage ../applications/misc/mako { };
@@ -21094,8 +21069,6 @@ in
 
   mcpp = callPackage ../development/compilers/mcpp { };
 
-  mda_lv2 = callPackage ../applications/audio/mda-lv2 { };
-
   mediainfo = callPackage ../applications/misc/mediainfo { };
 
   mediainfo-gui = callPackage ../applications/misc/mediainfo-gui { };
@@ -21130,8 +21103,6 @@ in
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
   meshlab = libsForQt5.callPackage ../applications/graphics/meshlab { };
-
-  metersLv2 = callPackage ../applications/audio/meters_lv2 { };
 
   mhwaveedit = callPackage ../applications/audio/mhwaveedit {};
 
@@ -22550,8 +22521,6 @@ in
   surf-display = callPackage ../desktops/surf-display { };
 
   sunvox = callPackage ../applications/audio/sunvox { };
-
-  swh_lv2 = callPackage ../applications/audio/swh-lv2 { };
 
   swift-im = libsForQt5.callPackage ../applications/networking/instant-messengers/swift-im {
     inherit (gnome2) GConf;
