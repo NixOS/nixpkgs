@@ -405,8 +405,8 @@ in
         StateDirectory = "rspamd";
         StateDirectoryMode = "0700";
 
-        AmbientCapabilities = "";
-        CapabilityBoundingSet = "";
+        AmbientCapabilities = [];
+        CapabilityBoundingSet = [];
         DevicePolicy = "closed";
         LockPersonality = true;
         NoNewPrivileges = true;
@@ -423,7 +423,7 @@ in
         ProtectKernelTunables = true;
         ProtectSystem = "strict";
         RemoveIPC = true;
-        RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
