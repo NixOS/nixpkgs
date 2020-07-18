@@ -9,6 +9,29 @@ let
   name = cfg.package.pname;
   pkg = cfg.package;
   optionYesNo = option: if option then "yes" else "no";
+  # configuration on media directory
+  mediaDirectory = {
+    options = {
+      path = mkOption {
+        type = types.str;
+        description = ''
+          Absolute directory path to the media directory to index.
+        '';
+      };
+      recursive = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether the indexation must take place recursively or not.";
+      };
+      hidden-files = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether to index the hidden files or not.";
+      };
+    };
+  };
+  toMediaDirectory = d: "<directory location=\"${d.path}\" mode=\"inotify\" recursive=\"${optionYesNo d.recursive}\" hidden-files=\"${optionYesNo d.hidden-files}\" />\n";
+
   transcodingConfig = if cfg.transcoding then with pkgs; ''
     <transcoding enabled="yes">
       <mimetype-profile-mappings>
@@ -43,6 +66,10 @@ let
 '';
 
   mtConf = pkgs.writeText "config.xml" ''
+  <!--
+     See http://gerbera.io or read the docs for more
+     information on creating and using config.xml configration files.
+    -->
   <?xml version="1.0" encoding="UTF-8"?>
   <config version="2" xmlns="http://mediatomb.cc/config/2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://mediatomb.cc/config/2 http://mediatomb.cc/config/2.xsd">
     <interface>${cfg.interface}</interface>
@@ -85,6 +112,9 @@ let
       </extended-runtime-options>
     </server>
     <import hidden-files="no">
+      <autoscan use-inotify="auto">
+      ${concatMapStrings toMediaDirectory cfg.mediaDirectories}
+      </autoscan>
       <scripting script-charset="UTF-8">
         <common-script>${pkg}/share/${name}/js/common.js</common-script>
         <playlist-script>${pkg}/share/${name}/js/playlists.js</playlist-script>
@@ -270,6 +300,18 @@ in {
         description = ''
           A unique (on your network) to identify the server by.
         '';
+      };
+
+      mediaDirectories = mkOption {
+        type = with types; listOf (submodule mediaDirectory);
+        default = {};
+        description = ''
+          Declare media directories to index.
+        '';
+        example = [
+          { path = "/data/pictures"; recursive = false; hidden-files = false; }
+          { path = "/data/audio"; recursive = true; hidden-files = false; }
+        ];
       };
 
       customCfg = mkOption {
