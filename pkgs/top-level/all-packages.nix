@@ -16220,6 +16220,7 @@ in
   };
 
   mariadb = callPackage ../servers/sql/mariadb {
+    stdenv = if stdenv.cc.isClang then llvmPackages_7.stdenv else stdenv;
     # As per mariadb's cmake, "static jemalloc_pic.a can only be used up to jemalloc 4".
     # https://jira.mariadb.org/browse/MDEV-15034
     jemalloc450 = jemalloc450.override ({ disableInitExecTls = true; });
