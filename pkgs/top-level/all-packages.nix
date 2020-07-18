@@ -23571,6 +23571,8 @@ in
 
   mblaze = callPackage ../applications/networking/mailreaders/mblaze { };
 
+  mbrola = callPackage ../applications/audio/mbrola { };
+
   mcomix3 = callPackage ../applications/graphics/mcomix3 {};
 
   mcpp = callPackage ../development/compilers/mcpp { };
