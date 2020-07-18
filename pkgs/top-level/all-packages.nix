@@ -5356,7 +5356,9 @@ in
     docbook-xsl = docbook_xsl;
   };
 
-  mosh = callPackage ../tools/networking/mosh { };
+  mosh = callPackage ../tools/networking/mosh {
+    stdenv = if stdenv.cc.isClang then llvmPackages_7.stdenv else stdenv;
+  };
 
   mpage = callPackage ../tools/text/mpage { };
 
