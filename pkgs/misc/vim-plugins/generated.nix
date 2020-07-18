@@ -2302,6 +2302,18 @@ let
     meta.homepage = "https://github.com/ncm2/ncm2-jedi/";
   };
 
+  ncm2-markdown-subscope = buildVimPluginFrom2Nix {
+    pname = "ncm2-markdown-subscope";
+    version = "2020-03-09";
+    src = fetchFromGitHub {
+      owner = "ncm2";
+      repo = "ncm2-markdown-subscope";
+      rev = "beeef1e88df29d2718f0fb73cdd4702eaf449f13";
+      sha256 = "0hh5bs76k5jsjzdp5lm53gma517s8ijrdp0acjjvsagz7r7gymq7";
+    };
+    meta.homepage = "https://github.com/ncm2/ncm2-markdown-subscope/";
+  };
+
   ncm2-path = buildVimPluginFrom2Nix {
     pname = "ncm2-path";
     version = "2019-02-20";
