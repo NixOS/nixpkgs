@@ -16295,6 +16295,8 @@ in
 
   gatling = callPackage ../servers/http/gatling { };
 
+  gitlab-pages = callPackage ../servers/http/gitlab-pages { };
+
   glabels = callPackage ../applications/graphics/glabels { };
 
   nats-server = callPackage ../servers/nats-server { };
