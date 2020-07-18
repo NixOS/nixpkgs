@@ -8797,7 +8797,6 @@ broken-packages:
   - pandoc-placetable
   - pandoc-plantuml-diagrams
   - pandoc-pyplot
-  - pandoc-sidenote
   - pandoc-unlit
   - pandoc-utils
   - PandocAgda
