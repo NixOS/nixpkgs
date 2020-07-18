@@ -66,9 +66,8 @@ let
 '';
 
   configText = optionalString (! cfg.customCfg) ''
-  <?xml version="1.0" encoding="UTF-8"?>
-  <config version="2" xmlns="http://mediatomb.cc/config/2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://mediatomb.cc/config/2 http://mediatomb.cc/config/2.xsd">
-    <interface>${cfg.interface}</interface>
+<?xml version="1.0" encoding="UTF-8"?>
+<config version="2" xmlns="http://mediatomb.cc/config/2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://mediatomb.cc/config/2 http://mediatomb.cc/config/2.xsd">
     <server>
       <ui enabled="yes" show-tooltips="yes">
         <accounts enabled="no" session-timeout="30">
@@ -268,16 +267,19 @@ in {
       };
 
       user = mkOption {
+        type = types.str;
         default = "mediatomb";
         description = "User account under which ${name} runs.";
       };
 
       group = mkOption {
+        type = types.str;
         default = "mediatomb";
         description = "Group account under which ${name} runs.";
       };
 
       port = mkOption {
+        type = types.int;
         default = 49152;
         description = ''
           The network port to listen on.
@@ -285,6 +287,7 @@ in {
       };
 
       interface = mkOption {
+        type = types.str;
         default = "";
         description = ''
           A specific interface to bind to.
@@ -292,6 +295,7 @@ in {
       };
 
       uuid = mkOption {
+        type = types.str;
         default = "fdfc8a4e-a3ad-4c1d-b43d-a2eedb03a687";
         description = ''
           A unique (on your network) to identify the server by.
@@ -335,7 +339,7 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig.ExecStart = "${binaryCommand} --port ${toString cfg.port} ${interfaceFlag} ${configFlag} --home ${cfg.dataDir}";
-      serviceConfig.User = "${cfg.user}";
+      serviceConfig.User = cfg.user;
     };
 
     users.groups = optionalAttrs (cfg.group == "mediatomb") {
@@ -346,7 +350,7 @@ in {
       mediatomb = {
         isSystemUser = true;
         group = cfg.group;
-        home = "${cfg.dataDir}";
+        home = cfg.dataDir;
         createHome = true;
         description = "${name} DLNA Server User";
       };
