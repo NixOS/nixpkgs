@@ -54,7 +54,7 @@ let
     '') gitlabConfig.production.repositories.storages))}
   '';
 
-  gitlabShellConfig = {
+  gitlabShellConfig = flip recursiveUpdate cfg.extraShellConfig {
     user = cfg.user;
     gitlab_url = "http+unix://${pathUrlQuote gitlabSocket}";
     http_settings.self_signed_cert = false;
@@ -515,6 +515,12 @@ in {
           This should be a string, not a nix path, since nix paths are
           copied into the world-readable nix store.
         '';
+      };
+
+      extraShellConfig = mkOption {
+        type = types.attrs;
+        default = {};
+        description = "Extra configuration to merge into shell-config.yml";
       };
 
       extraConfig = mkOption {
