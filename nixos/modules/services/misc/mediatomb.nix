@@ -9,6 +9,38 @@ let
   name = cfg.package.pname;
   pkg = cfg.package;
   optionYesNo = option: if option then "yes" else "no";
+  transcodingConfig = if cfg.transcoding then with pkgs; ''
+    <transcoding enabled="yes">
+      <mimetype-profile-mappings>
+        <transcode mimetype="video/x-flv" using="vlcmpeg" />
+        <transcode mimetype="application/ogg" using="vlcmpeg" />
+        <transcode mimetype="audio/ogg" using="ogg2mp3" />
+        <transcode mimetype="audio/x-flac" using="oggflac2raw"/>
+      </mimetype-profile-mappings>
+      <profiles>
+        <profile name="ogg2mp3" enabled="no" type="external">
+          <mimetype>audio/mpeg</mimetype>
+          <accept-url>no</accept-url>
+          <first-resource>yes</first-resource>
+          <accept-ogg-theora>no</accept-ogg-theora>
+          <agent command="${ffmpeg}/bin/ffmpeg" arguments="-y -i %in -f mp3 %out" />
+          <buffer size="1048576" chunk-size="131072" fill-size="262144" />
+        </profile>
+        <profile name="vlcmpeg" enabled="no" type="external">
+          <mimetype>video/mpeg</mimetype>
+          <accept-url>yes</accept-url>
+          <first-resource>yes</first-resource>
+          <accept-ogg-theora>yes</accept-ogg-theora>
+          <agent command="${libsForQt5.vlc}/bin/vlc"
+            arguments="-I dummy %in --sout #transcode{venc=ffmpeg,vcodec=mp2v,vb=4096,fps=25,aenc=ffmpeg,acodec=mpga,ab=192,samplerate=44100,channels=2}:standard{access=file,mux=ps,dst=%out} vlc:quit" />
+          <buffer size="14400000" chunk-size="512000" fill-size="120000" />
+        </profile>
+      </profiles>
+    </transcoding>
+'' else ''
+    <transcoding enabled="no">
+    </transcoding>
+'';
 
   mtConf = pkgs.writeText "config.xml" ''
   <?xml version="1.0" encoding="UTF-8"?>
@@ -121,37 +153,11 @@ let
         </YouTube>
       </online-content>
     </import>
-    <transcoding enabled="${if cfg.transcoding then "yes" else "no"}">
-      <mimetype-profile-mappings>
-        <transcode mimetype="video/x-flv" using="vlcmpeg"/>
-        <transcode mimetype="application/ogg" using="vlcmpeg"/>
-        <transcode mimetype="application/ogg" using="oggflac2raw"/>
-        <transcode mimetype="audio/x-flac" using="oggflac2raw"/>
-      </mimetype-profile-mappings>
-      <profiles>
-        <profile name="oggflac2raw" enabled="no" type="external">
-          <mimetype>audio/L16</mimetype>
-          <accept-url>no</accept-url>
-          <first-resource>yes</first-resource>
-          <accept-ogg-theora>no</accept-ogg-theora>
-          <agent command="ogg123" arguments="-d raw -o byteorder:big -f %out %in"/>
-          <buffer size="1048576" chunk-size="131072" fill-size="262144"/>
-        </profile>
-        <profile name="vlcmpeg" enabled="no" type="external">
-          <mimetype>video/mpeg</mimetype>
-          <accept-url>yes</accept-url>
-          <first-resource>yes</first-resource>
-          <accept-ogg-theora>yes</accept-ogg-theora>
-          <agent command="vlc" arguments="-I dummy %in --sout #transcode{venc=ffmpeg,vcodec=mp2v,vb=4096,fps=25,aenc=ffmpeg,acodec=mpga,ab=192,samplerate=44100,channels=2}:standard{access=file,mux=ps,dst=%out} vlc:quit"/>
-          <buffer size="14400000" chunk-size="512000" fill-size="120000"/>
-        </profile>
-      </profiles>
-    </transcoding>
+    ${transcodingConfig}
   </config>
-  '';
+'';
 
 in {
-
 
   ###### interface
 
