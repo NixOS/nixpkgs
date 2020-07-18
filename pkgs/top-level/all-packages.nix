@@ -6616,6 +6616,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  sd-switch = callPackage ../os-specific/linux/sd-switch { };
+
   sdate = callPackage ../tools/misc/sdate { };
 
   sdcv = callPackage ../applications/misc/sdcv { };
