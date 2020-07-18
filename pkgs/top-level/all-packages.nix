@@ -10418,10 +10418,7 @@ in
 
   cpplint = callPackage ../development/tools/analysis/cpplint { };
 
-  ccls = callPackage ../development/tools/misc/ccls {
-    llvmPackages = llvmPackages_8;
-    stdenv = llvmPackages_8.stdenv;
-  };
+  ccls = callPackage ../development/tools/misc/ccls { };
 
   credstash = with python3Packages; toPythonApplication credstash;
 
