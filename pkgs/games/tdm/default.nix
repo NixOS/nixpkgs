@@ -11,7 +11,7 @@ let
     name = pname;
     exec = "@out@/bin/${pname}";
     icon = pname;
-    terminal = "False";
+    terminal = "false";
     comment = "The Dark Mod - stealth FPS inspired by the Thief series";
     type = "Application";
     categories = "Game;";
