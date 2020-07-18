@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
       --replace "build/dist" "dist"
   '';
 
-  # TODO: "Invalid SConscript usage - no parameters":
+  # The release tarballs don't contain any tests (runtest.py and test/*):
   doCheck = lib.versionOlder version "4.0.0";
 
   meta = with stdenv.lib; {
