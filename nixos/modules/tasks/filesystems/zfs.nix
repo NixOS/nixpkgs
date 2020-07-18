@@ -191,13 +191,14 @@ in
       };
 
       requestEncryptionCredentials = mkOption {
-        type = types.bool;
+        type = types.either types.bool (types.listOf types.str);
         default = true;
+        example = [ "tank" "data" ];
         description = ''
-          Request encryption keys or passwords for all encrypted datasets on import.
-          For root pools the encryption key can be supplied via both an
-          interactive prompt (keylocation=prompt) and from a file
-          (keylocation=file://).
+          If true on import encryption keys or passwords for all encrypted datasets
+          are requested. To only decrypt selected datasets supply a list of dataset
+          names instead. For root pools the encryption key can be supplied via both
+          an interactive prompt (keylocation=prompt) and from a file (keylocation=file://).
         '';
       };
 
@@ -419,9 +420,13 @@ in
               fi
               poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
             fi
-            ${lib.optionalString cfgZfs.requestEncryptionCredentials ''
-              zfs load-key -a
-            ''}
+            ${if isBool cfgZfs.requestEncryptionCredentials
+              then optionalString cfgZfs.requestEncryptionCredentials ''
+                zfs load-key -a
+              ''
+              else concatMapStrings (fs: ''
+                zfs load-key ${fs}
+              '') cfgZfs.requestEncryptionCredentials}
         '') rootPools));
       };
 
@@ -517,9 +522,16 @@ in
               done
               poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
               if poolImported "${pool}"; then
-                ${optionalString cfgZfs.requestEncryptionCredentials ''
+                ${optionalString (if isBool cfgZfs.requestEncryptionCredentials
+                                  then cfgZfs.requestEncryptionCredentials
+                                  else cfgZfs.requestEncryptionCredentials != []) ''
                   ${packages.zfsUser}/sbin/zfs list -rHo name,keylocation ${pool} | while IFS=$'\t' read ds kl; do
-                    (case "$kl" in
+                    (${optionalString (!isBool cfgZfs.requestEncryptionCredentials) ''
+                         if ! echo '${concatStringsSep "\n" cfgZfs.requestEncryptionCredentials}' | grep -qFx "$ds"; then
+                           continue
+                         fi
+                       ''}
+                    case "$kl" in
                       none )
                         ;;
                       prompt )
