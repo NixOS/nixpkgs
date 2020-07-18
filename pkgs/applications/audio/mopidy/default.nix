@@ -14,6 +14,8 @@ let
 
     mopidy-gmusic = callPackage ./gmusic.nix { };
 
+    mopidy-local = callPackage ./local.nix { };
+
     mopidy-local-images = callPackage ./local-images.nix { };
 
     mopidy-local-sqlite = callPackage ./local-sqlite.nix { };

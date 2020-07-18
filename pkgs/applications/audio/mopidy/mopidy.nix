@@ -16,13 +16,24 @@ pythonPackages.buildPythonApplication rec {
   nativeBuildInputs = [ wrapGAppsHook ];
 
   buildInputs = with gst_all_1; [
-    gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad
-    glib-networking gobject-introspection
+    glib-networking
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
-    gst-python pygobject3 pykka tornado requests setuptools
-  ] ++ stdenv.lib.optional (!stdenv.isDarwin) dbus-python;
+  propagatedBuildInputs = [
+    gobject-introspection
+  ] ++ (with pythonPackages; [
+      gst-python
+      pygobject3
+      pykka
+      requests
+      setuptools
+      tornado
+    ] ++ stdenv.lib.optional (!stdenv.isDarwin) dbus-python
+  );
 
   # There are no tests
   doCheck = false;
