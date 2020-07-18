@@ -390,7 +390,7 @@ start_all()
     <listitem>
      <para>
       Copies a file from host to machine, e.g.,
-      <literal>copy_file_from_host("myfile", "/etc/my/important/file")</literal>.
+      <literal>copy_from_host("myfile", "/etc/my/important/file")</literal>.
      </para>
      <para>
       The first argument is the file on the host. The file needs to be
