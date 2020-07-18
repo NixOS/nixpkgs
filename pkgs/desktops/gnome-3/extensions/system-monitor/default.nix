@@ -27,12 +27,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
     glib-compile-schemas --targetdir=${uuid}/schemas ${uuid}/schemas
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
     cp -r ${uuid} $out/share/gnome-shell/extensions
+    runHook postInstall
   '';
 
   uuid = "system-monitor@paradoxxx.zero.gmail.com";

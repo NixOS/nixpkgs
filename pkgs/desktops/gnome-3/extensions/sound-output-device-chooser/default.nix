@@ -28,8 +28,10 @@ stdenv.mkDerivation rec {
 
   uuid = "sound-output-device-chooser@kgshank.net";
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
     cp -r ${uuid} $out/share/gnome-shell/extensions
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {

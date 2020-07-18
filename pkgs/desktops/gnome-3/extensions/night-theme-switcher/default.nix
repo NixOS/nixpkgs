@@ -18,8 +18,10 @@ stdenv.mkDerivation rec {
   uuid = "nightthemeswitcher@romainvigier.fr";
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions/
     cp -r src/ $out/share/gnome-shell/extensions/${uuid}
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
