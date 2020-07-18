@@ -65,11 +65,7 @@ let
     </transcoding>
 '';
 
-  mtConf = pkgs.writeText "config.xml" ''
-  <!--
-     See http://gerbera.io or read the docs for more
-     information on creating and using config.xml configration files.
-    -->
+  configText = optionalString (! cfg.customCfg) ''
   <?xml version="1.0" encoding="UTF-8"?>
   <config version="2" xmlns="http://mediatomb.cc/config/2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://mediatomb.cc/config/2 http://mediatomb.cc/config/2.xsd">
     <interface>${cfg.interface}</interface>
@@ -330,12 +326,15 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable {
-    systemd.services."${name}"= {
+  config = let binaryCommand = "${pkg}/bin/${name}";
+               interfaceFlag = optionalString ( cfg.interface != "") "--interface ${cfg.interface}";
+               configFlag = optionalString (! cfg.customCfg) "--config ${pkgs.writeText "config.xml" configText}";
+    in mkIf cfg.enable {
+    systemd.services.mediatomb = {
       description = "${cfg.serverName} media Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart = "${pkg}/bin/${name} -p ${toString cfg.port} ${if cfg.interface!="" then "-e ${cfg.interface}" else ""} ${if cfg.customCfg then "" else "-c ${mtConf}"} -m ${cfg.dataDir}";
+      serviceConfig.ExecStart = "${binaryCommand} --port ${toString cfg.port} ${interfaceFlag} ${configFlag} --home ${cfg.dataDir}";
       serviceConfig.User = "${cfg.user}";
     };
 
