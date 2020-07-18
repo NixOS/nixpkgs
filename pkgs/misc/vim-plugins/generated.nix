@@ -2326,6 +2326,18 @@ let
     meta.homepage = "https://github.com/ncm2/ncm2-neoinclude/";
   };
 
+  ncm2-neosnippet = buildVimPluginFrom2Nix {
+    pname = "ncm2-neosnippet";
+    version = "2019-01-26";
+    src = fetchFromGitHub {
+      owner = "ncm2";
+      repo = "ncm2-neosnippet";
+      rev = "650552528a2297179b8bb3afc1d9bb44ea97911b";
+      sha256 = "14ammx1qa72m6mafd64mc9qw3sgnmjqgq5vvcylqzqwy26wwla1b";
+    };
+    meta.homepage = "https://github.com/ncm2/ncm2-neosnippet/";
+  };
+
   ncm2-path = buildVimPluginFrom2Nix {
     pname = "ncm2-path";
     version = "2019-02-20";
