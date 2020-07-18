@@ -12661,7 +12661,9 @@ in
 
   jbigkit = callPackage ../development/libraries/jbigkit { };
 
-  jemalloc = callPackage ../development/libraries/jemalloc { };
+  jemalloc = callPackage ../development/libraries/jemalloc {
+    stdenv = if stdenv.cc.isClang then llvmPackages_8.stdenv else stdenv;
+  };
 
   jemalloc450 = callPackage ../development/libraries/jemalloc/jemalloc450.nix { };
 
