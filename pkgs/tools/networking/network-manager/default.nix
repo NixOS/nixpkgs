@@ -10,11 +10,11 @@ let
   pythonForDocs = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in stdenv.mkDerivation rec {
   pname = "network-manager";
-  version = "1.22.10";
+  version = "1.22.14";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${stdenv.lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    sha256 = "0xyaizyp3yz6x3pladw3nvl3hf4n5g140zx9jnxfp9qvag0wqa9b";
+    sha256 = "1pa9r7qdjfpxvibinxf6zs9sxlkjr4qgipsgp99f473ajdqkk2f6";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -49,6 +49,8 @@ in stdenv.mkDerivation rec {
     # Allow using iwd when configured to do so
     "-Diwd=true"
     "-Dlibaudit=yes-disabled-by-default"
+    # We don't use firewalld in NixOS
+    "-Dfirewalld_zone=false"
   ];
 
   patches = [
