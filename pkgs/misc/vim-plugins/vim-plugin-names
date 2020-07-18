@@ -330,6 +330,7 @@ ncm2/ncm2-syntax
 ncm2/ncm2-tagprefix
 ncm2/ncm2-tmux
 ncm2/ncm2-ultisnips
+ncm2/ncm2-vim
 ndmitchell/ghcid
 neoclide/coc-css
 neoclide/coc-denite

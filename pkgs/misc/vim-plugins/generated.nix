@@ -2398,6 +2398,18 @@ let
     meta.homepage = "https://github.com/ncm2/ncm2-ultisnips/";
   };
 
+  ncm2-vim = buildVimPluginFrom2Nix {
+    pname = "ncm2-vim";
+    version = "2018-08-15";
+    src = fetchFromGitHub {
+      owner = "ncm2";
+      repo = "ncm2-vim";
+      rev = "4ee5d3e8b5710890cb5da7875790bdd5a8b3ca07";
+      sha256 = "0m4rs2bs0j74l7gqyzcdhprvvx2n7hw64bbls877av6kix4azr31";
+    };
+    meta.homepage = "https://github.com/ncm2/ncm2-vim/";
+  };
+
   neco-ghc = buildVimPluginFrom2Nix {
     pname = "neco-ghc";
     version = "2020-06-06";
