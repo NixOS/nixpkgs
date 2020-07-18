@@ -2266,6 +2266,18 @@ let
     meta.homepage = "https://github.com/ncm2/ncm2-cssomni/";
   };
 
+  ncm2-dictionary = buildVimPluginFrom2Nix {
+    pname = "ncm2-dictionary";
+    version = "2018-11-15";
+    src = fetchFromGitHub {
+      owner = "yuki-ycino";
+      repo = "ncm2-dictionary";
+      rev = "c93b52ab0cd1a9ebe5711414c3134f4bba9be6af";
+      sha256 = "096l8prqm7zb2s27j2cpnydggszicaji7xjlmhrav7dzc51avafy";
+    };
+    meta.homepage = "https://github.com/yuki-ycino/ncm2-dictionary/";
+  };
+
   ncm2-github = buildVimPluginFrom2Nix {
     pname = "ncm2-github";
     version = "2018-08-01";

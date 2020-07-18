@@ -608,5 +608,6 @@ xolox/vim-misc
 xuhdev/vim-latex-live-preview
 ycm-core/YouCompleteMe
 Yggdroot/indentLine
+yuki-ycino/ncm2-dictionary
 zah/nim.vim
 ziglang/zig.vim
