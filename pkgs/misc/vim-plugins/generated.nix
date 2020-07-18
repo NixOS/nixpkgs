@@ -2314,6 +2314,18 @@ let
     meta.homepage = "https://github.com/ncm2/ncm2-markdown-subscope/";
   };
 
+  ncm2-neoinclude = buildVimPluginFrom2Nix {
+    pname = "ncm2-neoinclude";
+    version = "2020-01-09";
+    src = fetchFromGitHub {
+      owner = "ncm2";
+      repo = "ncm2-neoinclude";
+      rev = "068ea09b8afa3f8bc97d34d2e96ee824e57816f7";
+      sha256 = "1s3l83g5j57xjszajdm3l98g4jkcqkxa3i249ms18000s2wmfrlj";
+    };
+    meta.homepage = "https://github.com/ncm2/ncm2-neoinclude/";
+  };
+
   ncm2-path = buildVimPluginFrom2Nix {
     pname = "ncm2-path";
     version = "2019-02-20";
