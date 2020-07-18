@@ -18,10 +18,12 @@ stdenv.mkDerivation rec {
 
   uuid = "appindicatorsupport@rgcjonas.gmail.com";
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions/${uuid}
     cp *.js $out/share/gnome-shell/extensions/${uuid}
     cp -r interfaces-xml $out/share/gnome-shell/extensions/${uuid}
     cp metadata.json $out/share/gnome-shell/extensions/${uuid}
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {

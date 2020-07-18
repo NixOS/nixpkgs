@@ -16,12 +16,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
+    runHook preBuild
     make schemas
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
     cp -r impatience $out/share/gnome-shell/extensions/${uuid}
+    runHook postInstall
   '';
 
   uuid = "impatience@gfxmonk.net";

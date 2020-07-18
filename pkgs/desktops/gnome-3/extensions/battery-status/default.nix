@@ -14,8 +14,10 @@ stdenv.mkDerivation rec {
   uuid = "battery_status@milliburn.github.com";
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
     cp -r ${uuid} $out/share/gnome-shell/extensions/
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
