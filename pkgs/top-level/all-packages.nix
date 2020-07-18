@@ -16870,6 +16870,8 @@ in
 
   dropwatch = callPackage ../os-specific/linux/dropwatch { };
 
+  dsd = callPackage ../applications/radio/dsd { };
+
   dstat = callPackage ../os-specific/linux/dstat { };
 
   # unstable until the first 1.x release
@@ -16994,6 +16996,8 @@ in
   ipset = callPackage ../os-specific/linux/ipset { };
 
   irqbalance = callPackage ../os-specific/linux/irqbalance { };
+
+  itpp = callPackage ../development/libraries/science/math/itpp { };
 
   iw = callPackage ../os-specific/linux/iw { };
 
@@ -17567,6 +17571,8 @@ in
   lsscsi = callPackage ../os-specific/linux/lsscsi { };
 
   lvm2 = callPackage ../os-specific/linux/lvm2 { };
+
+  mbelib = callPackage ../development/libraries/audio/mbelib { };
 
   mbpfan = callPackage ../os-specific/linux/mbpfan { };
 
