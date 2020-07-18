@@ -6481,6 +6481,19 @@ let
     meta.homepage = "https://github.com/hashivim/vim-terraform/";
   };
 
+  vim-terraform-completion = buildVimPluginFrom2Nix {
+    pname = "vim-terraform-completion";
+    version = "2019-07-28";
+    src = fetchFromGitHub {
+      owner = "juliosueiras";
+      repo = "vim-terraform-completion";
+      rev = "1c8792d1e85154aa6fc05eb746711bf2df2274d9";
+      sha256 = "0j87vhxkrv8sdrlv9w5p2zkiv9ssb3rckbffjcfhn9365d41bhgr";
+      fetchSubmodules = true;
+    };
+    meta.homepage = "https://github.com/juliosueiras/vim-terraform-completion/";
+  };
+
   vim-test = buildVimPluginFrom2Nix {
     pname = "vim-test";
     version = "2020-07-15";
