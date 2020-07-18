@@ -1399,6 +1399,18 @@ let
     meta.homepage = "https://github.com/elmcast/elm-vim/";
   };
 
+  elvish-vim = buildVimPluginFrom2Nix {
+    pname = "elvish-vim";
+    version = "2019-06-29";
+    src = fetchFromGitHub {
+      owner = "dmix";
+      repo = "elvish.vim";
+      rev = "67ef8e89bff7cb8ea936f2164c8c268bbb3295f0";
+      sha256 = "133hr3i7zxysf2gnnimhz3gf3nda3fyfxmqq7mhq544v2mki4x9m";
+    };
+    meta.homepage = "https://github.com/dmix/elvish.vim/";
+  };
+
   emmet-vim = buildVimPluginFrom2Nix {
     pname = "emmet-vim";
     version = "2020-06-20";
