@@ -18032,6 +18032,8 @@ in
 
   ### DATA
 
+  _3270font = callPackage ../data/fonts/3270font { };
+
   adapta-backgrounds = callPackage ../data/misc/adapta-backgrounds { };
 
   adapta-gtk-theme = callPackage ../data/themes/adapta { };
