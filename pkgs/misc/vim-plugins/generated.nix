@@ -2362,6 +2362,18 @@ let
     meta.homepage = "https://github.com/ncm2/ncm2-syntax/";
   };
 
+  ncm2-tagprefix = buildVimPluginFrom2Nix {
+    pname = "ncm2-tagprefix";
+    version = "2018-11-08";
+    src = fetchFromGitHub {
+      owner = "ncm2";
+      repo = "ncm2-tagprefix";
+      rev = "6bff80cbd3edb02a0c91a26820606d0dcbfeb3bd";
+      sha256 = "0a3dgvs3jflhh5015jw7iahlblvnlq7vllh9avwh9pggd7zwc42k";
+    };
+    meta.homepage = "https://github.com/ncm2/ncm2-tagprefix/";
+  };
+
   ncm2-tmux = buildVimPluginFrom2Nix {
     pname = "ncm2-tmux";
     version = "2019-01-11";
