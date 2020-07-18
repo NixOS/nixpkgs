@@ -23,6 +23,8 @@ buildGoModule rec {
     file
   ];
 
+  buildFlagsArray = [ "-ldflags=-s -w -X main.Version=${version}" ];
+
   meta = with stdenv.lib; {
     description = "General purpose file previewer designed for Ranger, Lf to make scope.sh redundant";
     homepage = "https://github.com/doronbehar/pistol";
