@@ -57,13 +57,14 @@ let
       <home>${cfg.dataDir}</home>
       <interface>${cfg.interface}</interface>
       <webroot>${pkg}/share/${name}/web</webroot>
+      <pc-directory upnp-hide="${optionYesNo cfg.pcDirectoryHide}"/>
       <storage>
         <sqlite3 enabled="yes">
           <database-file>${name}.db</database-file>
         </sqlite3>
       </storage>
       <protocolInfo extend="${optionYesNo cfg.ps3Support}"/>
-      ${lib.optionalString cfg.dsmSupport ''
+      ${optionalString cfg.dsmSupport ''
       <custom-http-headers>
         <add header="X-User-Agent: redsonic"/>
       </custom-http-headers>
@@ -229,6 +230,14 @@ in {
         default = "/var/lib/${name}";
         description = ''
           The directory where ${cfg.serverName} stores its state, data, etc.
+        '';
+      };
+
+      pcDirectoryHide = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to list the top-level directory or not (from upnp client standpoint).
         '';
       };
 
