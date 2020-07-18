@@ -1,4 +1,4 @@
-{ stdenv , fetchurl , blas , gfortran , lapack , python }:
+{ stdenv , darwin , fetchurl , blas , gfortran , lapack , python }:
 
 stdenv.mkDerivation rec {
   pname = "petsc";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       --replace /bin/sh /usr/bin/python
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace config/install.py \
-      --replace /usr/bin/install_name_tool install_name_tool
+      --replace /usr/bin/install_name_tool ${darwin.cctools}/bin/install_name_tool
   '';
 
   preConfigure = ''
