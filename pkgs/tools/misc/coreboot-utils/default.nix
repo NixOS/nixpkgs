@@ -3,7 +3,7 @@
 let
   version = "4.12";
 
-  meta = with stdenv.lib; {
+  commonMeta = with stdenv.lib; {
     description = "Various coreboot-related tools";
     homepage = "https://www.coreboot.org";
     license = licenses.gpl2;
@@ -12,7 +12,7 @@ let
   };
 
   generic = { pname, path ? "util/${pname}", ... }@args: stdenv.mkDerivation (rec {
-    inherit pname version meta;
+    inherit pname version;
 
     src = fetchurl {
       url = "https://coreboot.org/releases/coreboot-${version}.tar.xz";
@@ -29,7 +29,9 @@ let
       "INSTALL=install"
       "PREFIX=${placeholder "out"}"
     ];
-  } // args);
+
+    meta = commonMeta // args.meta;
+  } // (removeAttrs args ["meta"]));
 
   utils = {
     msrtool = generic {
@@ -99,6 +101,7 @@ in utils // {
     paths = stdenv.lib.attrValues utils;
     postBuild = "rm -rf $out/sbin";
   }) // {
-    inherit meta version;
+    inherit version;
+    meta = commonMeta;
   };
 }
