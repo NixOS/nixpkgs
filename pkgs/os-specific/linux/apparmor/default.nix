@@ -30,6 +30,14 @@ let
     sha256 = "03nislxccnbxld89giak2s8xa4mdbwscfxbdwhmw5qpvgz08dgwh";
   };
 
+  # See <https://gitlab.com/apparmor/apparmor/-/issues/74> This and the
+  # accompanying application in prePatchCommon should be removed in 2.13.5
+  gnumake43Patch = fetchpatch {
+    url = "https://gitlab.com/apparmor/apparmor/-/merge_requests/465.patch";
+    name = "2-23-fix-build-with-make-4.3.patch";
+    sha256 = "0xw028iqp69j9mxv0kbwraplgkj5i5djdlgf0anpkc5cdbsf96r9";
+  };
+
   prePatchCommon = ''
     substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2man" "${buildPackages.perl}/bin/pod2man"
     substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2html" "${buildPackages.perl}/bin/pod2html"
@@ -176,7 +184,11 @@ let
 
     buildInputs = [ libapparmor ];
 
-    prePatch = prePatchCommon + ''
+    prePatch = ''
+      patch -p1 < ${gnumake43Patch}
+      chmod a+x ./common/list_capabilities.sh ./common/list_af_names.sh
+      patchShebangs ./common/list_capabilities.sh ./common/list_af_names.sh
+    '' + prePatchCommon + ''
       substituteInPlace ./parser/Makefile --replace "/usr/bin/bison" "${bison}/bin/bison"
       substituteInPlace ./parser/Makefile --replace "/usr/bin/flex" "${flex}/bin/flex"
       substituteInPlace ./parser/Makefile --replace "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
