@@ -11,7 +11,7 @@
   <programlisting>
   #!/usr/bin/env perl
   </programlisting>
-  to take the Perl installation from the <literal>PATH<literal> environment variable, or invoke Perl directly with:
+  to take the Perl installation from the <literal>PATH</literal> environment variable, or invoke Perl directly with:
   <screen>
   <prompt>$ </prompt>perl ./myscript.pl
   </screen>
