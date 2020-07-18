@@ -2266,6 +2266,18 @@ let
     meta.homepage = "https://github.com/ncm2/ncm2-cssomni/";
   };
 
+  ncm2-github = buildVimPluginFrom2Nix {
+    pname = "ncm2-github";
+    version = "2018-08-01";
+    src = fetchFromGitHub {
+      owner = "ncm2";
+      repo = "ncm2-github";
+      rev = "2d7ed04a8fe5b8c27cfef5781a944d9865eed61f";
+      sha256 = "1dcxknbjm2mxrw1l2i56xrjyxlp0vr6gr5l62x5hcd5wfkzi74a1";
+    };
+    meta.homepage = "https://github.com/ncm2/ncm2-github/";
+  };
+
   ncm2-jedi = buildVimPluginFrom2Nix {
     pname = "ncm2-jedi";
     version = "2019-11-19";

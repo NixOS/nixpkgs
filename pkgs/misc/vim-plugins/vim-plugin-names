@@ -319,6 +319,7 @@ ncm2/float-preview.nvim
 ncm2/ncm2
 ncm2/ncm2-bufword
 ncm2/ncm2-cssomni
+ncm2/ncm2-github
 ncm2/ncm2-jedi
 ncm2/ncm2-path
 ncm2/ncm2-tmux
