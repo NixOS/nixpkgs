@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     description = "BDF to SFD converter";
     homepage = "https://github.com/fcambus/bdf2sfd";
     license = licenses.bsd2;
+    platforms = platforms.all;
     maintainers = with maintainers; [ dtzWill ];
   };
 }
