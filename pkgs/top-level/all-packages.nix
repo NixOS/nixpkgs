@@ -4135,9 +4135,7 @@ in
     hdf4 = null;
   };
 
-  haproxy = callPackage ../tools/networking/haproxy {
-    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
-  };
+  haproxy = callPackage ../tools/networking/haproxy { };
 
   hackertyper = callPackage ../tools/misc/hackertyper { };
 
