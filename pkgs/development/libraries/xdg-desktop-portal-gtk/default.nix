@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gtk3
     gnome3.gnome-desktop
+    gnome3.gnome-settings-daemon # schemas needed for settings api (fonts, etc)
   ];
 
   meta = with stdenv.lib; {

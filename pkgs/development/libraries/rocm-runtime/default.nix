@@ -1,4 +1,9 @@
-{ stdenv, fetchFromGitHub, cmake, elfutils, rocm-thunk }:
+{ stdenv
+, fetchFromGitHub
+, addOpenGLRunpath
+, cmake
+, elfutils
+, rocm-thunk }:
 
 stdenv.mkDerivation rec {
   pname = "rocm-runtime";
@@ -17,14 +22,15 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCMAKE_PREFIX_PATH=${rocm-thunk}" ];
 
-  # Use the ROCR_EXT_DIR environment variable to try to find
-  # binary-only extension libraries. This environment variable is set
-  # by the `rocr-ext` derivation. If that derivation is not in scope,
-  # then the extension libraries are not loaded. Without this edit, we
-  # would have to rely on LD_LIBRARY_PATH to let the HSA runtime
-  # discover the shared libraries.
+  # Use the ROCR_EXT_DIR environment variable and/or OpenGL driver
+  # link path to try to find binary-only ROCm runtime extension
+  # libraries.  Without this change, we would have to rely on
+  # LD_LIBRARY_PATH to let the HSA runtime discover the shared
+  # libraries.
   patchPhase = ''
-    sed 's/\(k\(Image\|Finalizer\)Lib\[os_index(os::current_os)\]\)/os::GetEnvVar("ROCR_EXT_DIR") + "\/" + \1/g' -i core/runtime/runtime.cpp
+    substitute '${./rocr-ext-dir.diff}' ./rocr-ext-dir.diff \
+      --subst-var-by rocrExtDir "${addOpenGLRunpath.driverLink}/lib/rocm-runtime-ext"
+    patch -p2 < ./rocr-ext-dir.diff
   '';
 
   fixupPhase = ''

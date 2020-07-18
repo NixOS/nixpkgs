@@ -14,8 +14,10 @@ stdenv.mkDerivation rec {
   uuid = "windowIsReady_Remover@nunofarruca@gmail.com";
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions/
     cp -r ${uuid} $out/share/gnome-shell/extensions/${uuid}
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {

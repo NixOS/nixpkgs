@@ -4803,6 +4803,12 @@
     githubId = 34683288;
     name = "Luke Bentley-Fox";
   };
+  lukegb = {
+    email = "nix@lukegb.com";
+    github = "lukegb";
+    githubId = 246745;
+    name = "Luke Granger-Brown";
+  };
   lukego = {
     email = "luke@snabb.co";
     github = "lukego";
@@ -9126,5 +9132,11 @@
     email = "351108+tfmoraes@users.noreply.github.com";
     github = "tfmoraes";
     githubId = 351108;
+  };
+  deifactor = {
+    name = "Ash Zahlen";
+    email = "ext0l@riseup.net";
+    github = "deifactor";
+    githubId = 30192992;
   };
 }

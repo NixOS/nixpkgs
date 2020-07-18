@@ -34,6 +34,7 @@ let
     "mail"
     "mikrotik"
     "minio"
+    "modemmanager"
     "nextcloud"
     "nginx"
     "node"
