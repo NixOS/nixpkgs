@@ -6697,6 +6697,18 @@ let
     meta.homepage = "https://github.com/tpope/vim-unimpaired/";
   };
 
+  vim-vagrant = buildVimPluginFrom2Nix {
+    pname = "vim-vagrant";
+    version = "2018-11-11";
+    src = fetchFromGitHub {
+      owner = "hashivim";
+      repo = "vim-vagrant";
+      rev = "7741242ed9617ed53ba7e47e801634b819047ac0";
+      sha256 = "0inpgcrca955h0ic7pgl6bfzs7rssjgssvrvqq3y93j5addmh60m";
+    };
+    meta.homepage = "https://github.com/hashivim/vim-vagrant/";
+  };
+
   vim-vinegar = buildVimPluginFrom2Nix {
     pname = "vim-vinegar";
     version = "2020-06-27";
