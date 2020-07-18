@@ -84,6 +84,7 @@ rec {
 
       gst_all_1.gstreamer
       gst_all_1.gst-plugins-ugly
+      gst_all_1.gst-plugins-base
       libdrm
       xorg.xkeyboardconfig
       xorg.libpciaccess
@@ -163,7 +164,6 @@ rec {
       SDL2_ttf
       SDL2_mixer
       gstreamer
-      gst-plugins-base
       libappindicator-gtk2
       libcaca
       libcanberra
