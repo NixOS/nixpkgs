@@ -5689,6 +5689,18 @@ let
     meta.homepage = "https://github.com/jceb/vim-orgmode/";
   };
 
+  vim-packer = buildVimPluginFrom2Nix {
+    pname = "vim-packer";
+    version = "2018-11-11";
+    src = fetchFromGitHub {
+      owner = "hashivim";
+      repo = "vim-packer";
+      rev = "c2561f41e46df8a78a6b51226f60607582052134";
+      sha256 = "070ncbmwh8wxxfzf7phx0hb0dk9krlvsj5mvrn7kr5y3mngdg9v4";
+    };
+    meta.homepage = "https://github.com/hashivim/vim-packer/";
+  };
+
   vim-pager = buildVimPluginFrom2Nix {
     pname = "vim-pager";
     version = "2015-08-26";
