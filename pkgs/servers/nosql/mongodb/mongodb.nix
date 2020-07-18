@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, scons, boost, gperftools, pcre-cpp, snappy, zlib, libyamlcpp
+{ stdenv, fetchurl, sconsPackages, boost, gperftools, pcre-cpp, snappy, zlib, libyamlcpp
 , sasl, openssl, libpcap, python27, curl, Security, CoreFoundation, cctools }:
 
 # Note:
@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ scons.py2 ];
+  nativeBuildInputs = [ sconsPackages.scons_3_1_2 ];
   buildInputs = [
     boost
     curl
