@@ -236,7 +236,7 @@ let
     } // meta // {
       # add an extra maintainer to every package
       maintainers = (meta.maintainers or []) ++
-                    [ lib.maintainers.kalbasit lib.maintainers.nixpkgs-go ];
+                    [ lib.maintainers.kalbasit ];
     };
   });
 in if disabled then
