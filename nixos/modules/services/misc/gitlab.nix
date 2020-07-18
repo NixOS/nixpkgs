@@ -783,6 +783,23 @@ in {
       };
     };
 
+    systemd.services.gitlab-mailroom = mkIf (gitlabConfig.production.incoming_email.enabled or false) {
+      description = "GitLab incoming mail daemon";
+      after = [ "network.target" "redis.service" "gitlab.service" ]; # gitlab.service creates configs
+      wantedBy = [ "multi-user.target" ];
+      environment = gitlabEnv;
+      serviceConfig = {
+        Type = "simple";
+        TimeoutSec = "infinity";
+        Restart = "on-failure";
+
+        User = cfg.user;
+        Group = cfg.group;
+        ExecStart = "${cfg.packages.gitlab.rubyEnv}/bin/bundle exec mail_room -c ${cfg.packages.gitlab}/share/gitlab/config.dist/mail_room.yml";
+        WorkingDirectory = gitlabEnv.HOME;
+      };
+    };
+
     systemd.services.gitlab = {
       after = [ "gitlab-workhorse.service" "gitaly.service" "network.target" "gitlab-postgresql.service" "redis.service" ];
       requires = [ "gitlab-sidekiq.service" ];
