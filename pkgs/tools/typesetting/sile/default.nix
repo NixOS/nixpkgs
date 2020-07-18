@@ -1,14 +1,37 @@
-{ stdenv, darwin, fetchurl, makeWrapper, pkgconfig, autoconf, automake
-, harfbuzz, icu
-, fontconfig, lua, libiconv
-, makeFontsConf, gentium
+{ stdenv
+, darwin
+, fetchurl
+, makeWrapper
+, pkg-config
+, autoconf
+, automake
+, harfbuzz
+, icu
+, fontconfig
+, lua
+, libiconv
+, makeFontsConf
+, gentium
 }:
 
-with stdenv.lib;
-
 let
-  luaEnv = lua.withPackages(ps: with ps;[cassowary cosmo compat53 linenoise lpeg lua-zlib lua_cliargs luaepnf luaexpat luafilesystem luarepl luasec luasocket stdlib vstruct]);
-
+  luaEnv = lua.withPackages(ps: with ps; [
+    cassowary
+    cosmo
+    compat53
+    linenoise
+    lpeg
+    lua-zlib
+    lua_cliargs
+    luaepnf
+    luaexpat
+    luafilesystem
+    luarepl
+    luasec
+    luasocket
+    stdlib
+    vstruct
+  ]);
 in
 
 stdenv.mkDerivation rec {
@@ -20,18 +43,31 @@ stdenv.mkDerivation rec {
     sha256 = "08j2vv6spnzz8bsh62wbdv1pjiziiba71cadscsy5hw6pklzndni";
   };
 
-  configureFlags = [ "--with-system-luarocks" ];
+  configureFlags = [
+    "--with-system-luarocks"
+  ];
 
-  nativeBuildInputs = [ autoconf automake pkgconfig makeWrapper ];
-  buildInputs = [ harfbuzz icu fontconfig libiconv luaEnv ]
-  ++ optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
+  nativeBuildInputs = [
+    autoconf
+    automake
+    pkg-config
+    makeWrapper
+  ];
+  buildInputs = [
+    harfbuzz
+    icu
+    fontconfig
+    libiconv
+    luaEnv
+  ]
+  ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
   ;
 
-  preConfigure = optionalString stdenv.isDarwin ''
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i -e 's|@import AppKit;|#import <AppKit/AppKit.h>|' src/macfonts.m
   '';
 
-  NIX_LDFLAGS = optionalString stdenv.isDarwin "-framework AppKit";
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-framework AppKit";
 
   FONTCONFIG_FILE = makeFontsConf {
     fontDirectories = [
@@ -63,7 +99,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A typesetting system";
     longDescription = ''
       SILE is a typesetting system; its job is to produce beautiful
@@ -77,6 +113,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://sile-typesetter.org/";
     platforms = platforms.unix;
+    maintainers = with maintainers; [ doronbehar ];
     license = licenses.mit;
   };
 }
