@@ -1102,6 +1102,8 @@ in
 
   pebble = callPackage ../tools/admin/pebble { };
 
+  play-with-mpv = callPackage ../tools/video/play-with-mpv { };
+
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace {};
 
   skhd = callPackage ../os-specific/darwin/skhd {
