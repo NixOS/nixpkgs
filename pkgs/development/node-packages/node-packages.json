@@ -146,6 +146,7 @@
 , "purescript-language-server"
 , "purescript-psa"
 , "purty"
+, "pyright"
 , "react-native-cli"
 , "react-tools"
 , "reveal.js"
