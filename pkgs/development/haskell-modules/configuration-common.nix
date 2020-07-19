@@ -1433,6 +1433,18 @@ self: super: {
   # https://github.com/bos/statistics/issues/170
   statistics = dontCheck super.statistics;
 
+  hcoord = overrideCabal super.hcoord (drv: {
+    # Remove when https://github.com/danfran/hcoord/pull/8 is merged.
+    patches = [
+      (pkgs.fetchpatch {
+        url = "https://github.com/danfran/hcoord/pull/8/commits/762738b9e4284139f5c21f553667a9975bad688e.patch";
+        sha256 = "03r4jg9a6xh7w3jz3g4bs7ff35wa4rrmjgcggq51y0jc1sjqvhyz";
+      })
+    ];
+    # Remove when https://github.com/danfran/hcoord/issues/9 is closed.
+    doCheck = false;
+  });
+
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 
 } // (let
