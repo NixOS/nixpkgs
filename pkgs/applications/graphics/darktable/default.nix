@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     "-DUSE_KWALLET=OFF"
   ];
 
+  # Doc has high risk of collisions
+  postInstall = "rm -r $out/share/doc";
 
   # darktable changed its rpath handling in commit
   # 83c70b876af6484506901e6b381304ae0d073d3c and as a result the
@@ -43,6 +45,10 @@ stdenv.mkDerivation rec {
     libPathEnvVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     libPathPrefix = "$out/lib/darktable" + stdenv.lib.optionalString stdenv.isLinux ":${ocl-icd}/lib";
   in ''
+    for f in $out/share/darktable/kernels/*.cl; do
+      sed -r "s|#include \"(.*)\"|#include \"$out/share/darktable/kernels/\1\"|g" -i "$f"
+    done
+
     gappsWrapperArgs+=(
       --prefix ${libPathEnvVar} ":" "${libPathPrefix}"
     )

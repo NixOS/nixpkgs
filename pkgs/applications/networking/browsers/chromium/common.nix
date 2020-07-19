@@ -81,7 +81,7 @@ let
     # "ffmpeg" # https://crbug.com/731766
     # "harfbuzz-ng" # in versions over 63 harfbuzz and freetype are being built together
                     # so we can't build with one from system and other from source
-  ] ++ optional (versionRange "0" "84") "yasm";
+  ];
 
   opusWithCustomModes = libopus.override {
     withCustomModes = true;
@@ -94,9 +94,10 @@ let
     xdg_utils minizip libwebp
     libusb1 re2 zlib
     ffmpeg_3 libxslt libxml2
+    nasm
     # harfbuzz # in versions over 63 harfbuzz and freetype are being built together
                # so we can't build with one from system and other from source
-  ] ++ (if (versionRange "0" "84") then [ yasm ] else [ nasm ]);
+  ];
 
   # build paths and release info
   packageName = extraAttrs.packageName or extraAttrs.name;
@@ -123,9 +124,9 @@ let
     nativeBuildInputs = [
       ninja which python2Packages.python perl pkgconfig
       python2Packages.ply python2Packages.jinja2 nodejs
-      gnutar
-    ] ++ optional (versionAtLeast version "83") python2Packages.setuptools
-      ++ optional (versionAtLeast version "84") (xorg.xcbproto.override { python = python2Packages.python; });
+      gnutar python2Packages.setuptools
+      (xorg.xcbproto.override { python = python2Packages.python; })
+    ];
 
     buildInputs = defaultDependencies ++ [
       nspr nss systemd
@@ -181,6 +182,11 @@ let
           '/usr/share/locale/' \
           '${glibc}/share/locale/'
 
+      substituteInPlace ui/gfx/x/BUILD.gn \
+        --replace \
+          '/usr/share/xcb' \
+          '${xorg.xcbproto}/share/xcb/'
+
       sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg_utils}/bin/xdg-@' \
         chrome/browser/shell_integration_linux.cc
 
@@ -226,16 +232,9 @@ let
       ln -s ${stdenv.cc}/bin/clang              third_party/llvm-build/Release+Asserts/bin/clang
       ln -s ${stdenv.cc}/bin/clang++            third_party/llvm-build/Release+Asserts/bin/clang++
       ln -s ${llvmPackages.llvm}/bin/llvm-ar    third_party/llvm-build/Release+Asserts/bin/llvm-ar
-    '' + optionalString (versionAtLeast version "84") ''
-      substituteInPlace ui/gfx/x/BUILD.gn \
-        --replace \
-          '/usr/share/xcb' \
-          '${xorg.xcbproto}/share/xcb/'
     '';
 
-    gnFlags = mkGnFlags (optionalAttrs (versionRange "0" "84") {
-      linux_use_bundled_binutils = false;
-    } // {
+    gnFlags = mkGnFlags ({
       use_lld = false;
       use_gold = true;
       gold_path = "${stdenv.cc}/bin";

@@ -2,22 +2,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "racer";
-  version = "2.1.30";
+  version = "2.1.33";
 
   src = fetchFromGitHub {
     owner = "racer-rust";
     repo = "racer";
-    rev = "c2b0080243fefdad7f7b223e8a7fdef3e1f0fa77";
-    sha256 = "0svvdkfqpk2rw0wxyrhkxy553k55lg7jxc0ly4w1195iwv14ad3y";
+    rev = "v${version}";
+    sha256 = "0fxcif42k8x70zwpi76h2jxyr048mjzakh52yzqavyr8irl55ll2";
   };
 
-  cargoSha256 = "0zaqa89z3nf23s2q1jpmfz4lygh4zq9ymql71d748fgjy9psr449";
+  cargoSha256 = "115ydgv4wd4bf3xhm96zlc9z1lhmrcnm1v5pgzl9846l27ka1z13";
 
-  buildInputs = [ makeWrapper ]
-                ++ stdenv.lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 
   # a nightly compiler is required unless we use this cheat code.
-  RUSTC_BOOTSTRAP=1;
+  RUSTC_BOOTSTRAP = 1;
 
   RUST_SRC_PATH = rustPlatform.rustcSrc;
   postInstall = ''

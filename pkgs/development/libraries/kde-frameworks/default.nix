@@ -83,7 +83,7 @@ let
 
           in mkDerivation (args // {
             name = "${name}-${version}";
-            inherit meta outputs setupHook src;
+            inherit meta outputs setupHook src version;
           });
 
       };

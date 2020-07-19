@@ -3024,6 +3024,16 @@
     githubId = 615606;
     name = "Glenn Searby";
   };
+  glittershark = {
+    name = "Griffin Smith";
+    email = "root@gws.fyi";
+    github = "glittershark";
+    githubId = 1481027;
+    keys = [{
+      longkeyid = "rsa2048/0x44EF5B5E861C09A7";
+      fingerprint = "0F11 A989 879E 8BBB FDC1  E236 44EF 5B5E 861C 09A7";
+    }];
+  };
   gloaming = {
     email = "ch9871@gmail.com";
     github = "gloaming";
@@ -3959,6 +3969,12 @@
     githubId = 4611077;
     name = "Raymond Gauthier";
   };
+  jschievink = {
+    email = "jonasschievink@gmail.com";
+    github = "jonas-schievink";
+    githubId = 1786438;
+    name = "Jonas Schievink";
+  };
   jtcoolen = {
     email = "jtcoolen@pm.me";
     name = "Julien Coolen";
@@ -4787,6 +4803,12 @@
     githubId = 34683288;
     name = "Luke Bentley-Fox";
   };
+  lukegb = {
+    email = "nix@lukegb.com";
+    github = "lukegb";
+    githubId = 246745;
+    name = "Luke Granger-Brown";
+  };
   lukego = {
     email = "luke@snabb.co";
     github = "lukego";
@@ -5082,6 +5104,12 @@
     github = "mbrgm";
     githubId = 2971615;
     name = "Marius Bergmann";
+  };
+  mcbeth = {
+    email = "mcbeth@broggs.org";
+    github = "mcbeth";
+    githubId = 683809;
+    name = "Jeffrey Brent McBeth";
   };
   mcmtroffaes = {
     email = "matthias.troffaes@gmail.com";
@@ -5639,6 +5667,12 @@
     github = "multun";
     githubId = 5047140;
     name = "Victor Collod";
+  };
+  mupdt = {
+    email = "nix@pdtpartners.com";
+    github = "mupdt";
+    githubId = 25388474;
+    name = "Matej Urbas";
   };
   mvnetbiz = {
     email = "mvnetbiz@gmail.com";
@@ -9098,5 +9132,11 @@
     email = "351108+tfmoraes@users.noreply.github.com";
     github = "tfmoraes";
     githubId = 351108;
+  };
+  deifactor = {
+    name = "Ash Zahlen";
+    email = "ext0l@riseup.net";
+    github = "deifactor";
+    githubId = 30192992;
   };
 }

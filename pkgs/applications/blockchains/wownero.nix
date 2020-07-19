@@ -1,26 +1,26 @@
-{ stdenv, fetchFromGitHub, cmake, boost, miniupnpc_2, openssl, unbound
+{ stdenv, fetchgit, cmake, boost, miniupnpc_2, openssl, unbound
 , readline, libsodium, rapidjson, fetchurl
 }:
 
 with stdenv.lib;
 
 let
-  randomwowVersion = "1.1.6";
+  randomwowVersion = "1.1.7";
   randomwow = fetchurl {
     url = "https://github.com/wownero/RandomWOW/archive/${randomwowVersion}.tar.gz";
-    sha256 = "1c55y2dwrayh6k1avpchs89gq1mvy5c305h92jm2k48kzhw6a792";
+    sha256 = "1xp76zf01hnhnk6rjvqjav9n9pnvxzxlzqa5rc574d1c2qczfy3q";
   };
 in
 
 stdenv.mkDerivation rec {
   pname = "wownero";
-  version = "0.8.0.0";
+  version = "0.8.0.1";
 
-  src = fetchFromGitHub {
-    owner = "wownero";
-    repo = "wownero";
-    rev    = "v${version}";
-    sha256 = "14nggivilgzaqhjd4ng3g2p884yp2hc322hpcpwjdnz2zfc3qq6c";
+  src = fetchgit {
+    url = "https://git.wownero.com/wownero/wownero.git";
+    rev = "v${version}";
+    sha256 = "15443xv6q1nw4627ajk6k4ghhahvh82lb4gyb8nvq753p2v838g3";
+    fetchSubmodules = false;
   };
 
   nativeBuildInputs = [ cmake ];

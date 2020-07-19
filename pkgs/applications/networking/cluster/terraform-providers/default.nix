@@ -144,6 +144,7 @@ let
     elasticsearch = callPackage ./elasticsearch {};
     libvirt = callPackage ./libvirt {};
     lxd = callPackage ./lxd {};
+    shell = callPackage ./shell {};
     vpsadmin = callPackage ./vpsadmin {};
   };
 in

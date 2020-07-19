@@ -162,10 +162,10 @@
 </programlisting>
     </para>
     <para>
-     The following example configuration blacklists the <literal>gpl3</literal> and <literal>agpl3</literal> licenses:
+     The following example configuration blacklists the <literal>gpl3Only</literal> and <literal>agpl3Only</literal> licenses:
 <programlisting>
 {
-  blacklistedLicenses = with stdenv.lib.licenses; [ agpl3 gpl3 ];
+  blacklistedLicenses = with stdenv.lib.licenses; [ agpl3Only gpl3Only ];
 }
 </programlisting>
     </para>

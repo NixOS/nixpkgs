@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "A linter for YAML files";
     homepage = "https://github.com/adrienverge/yamllint";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ mikefaille ];
+    maintainers = with maintainers; [ jonringer mikefaille ];
   };
 }

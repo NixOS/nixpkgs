@@ -198,7 +198,8 @@ in runCommand
       # binaries are also distributed as proprietary software (unlike the
       # source-code itself).
       platforms = [ "x86_64-linux" ];
-      maintainers = with maintainers; [ primeos ];
+      maintainers = with maintainers; ([ ]
+       ++ optional (channel == "stable") primeos);
     };
   }
   ''

@@ -84,6 +84,7 @@ let
       eventviews = callPackage ./eventviews.nix {};
       ffmpegthumbs = callPackage ./ffmpegthumbs.nix { };
       filelight = callPackage ./filelight.nix {};
+      granatier = callPackage ./granatier.nix {};
       grantleetheme = callPackage ./grantleetheme {};
       gwenview = callPackage ./gwenview.nix {};
       incidenceeditor = callPackage ./incidenceeditor.nix {};
@@ -176,6 +177,7 @@ let
       messagelib = callPackage ./messagelib.nix {};
       minuet = callPackage ./minuet.nix {};
       okular = callPackage ./okular.nix {};
+      picmi = callPackage ./picmi.nix {};
       pimcommon = callPackage ./pimcommon.nix {};
       pim-data-exporter = callPackage ./pim-data-exporter.nix {};
       pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};

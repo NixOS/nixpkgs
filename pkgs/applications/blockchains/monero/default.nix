@@ -10,13 +10,13 @@ assert stdenv.isDarwin -> IOKit != null;
 
 stdenv.mkDerivation rec {
   pname = "monero";
-  version = "0.16.0.0";
+  version = "0.16.0.1";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    sha256 = "0x74h5z0nxxxip97ibc854pqmrgd8r4d6w62m424f66i8gbzfskh";
+    sha256 = "0n2cviqm8radpynx70fc0819k1xknjc58cvb4whlc49ilyvh8ky6";
     fetchSubmodules = true;
   };
 

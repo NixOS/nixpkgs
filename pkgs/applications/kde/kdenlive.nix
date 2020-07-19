@@ -25,7 +25,7 @@
 , frei0r
 , phonon-backend-gstreamer
 , qtdeclarative
-, qtquickcontrols
+, qtquickcontrols2
 , qtscript
 , qtwebkit
 , rttr
@@ -60,7 +60,7 @@ mkDerivation {
     mlt
     phonon-backend-gstreamer
     qtdeclarative
-    qtquickcontrols
+    qtquickcontrols2
     qtscript
     qtwebkit
     shared-mime-info

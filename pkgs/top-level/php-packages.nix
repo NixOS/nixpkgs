@@ -57,12 +57,12 @@ in
     };
 
     composer = mkDerivation rec {
-      version = "1.10.6";
+      version = "1.10.8";
       pname = "composer";
 
       src = pkgs.fetchurl {
         url = "https://getcomposer.org/download/${version}/composer.phar";
-        sha256 = "0yzfzgg9qlc388g91bdg7y7rp1q8vqb5hkwykwmr1n1lv8dsrg99";
+        sha256 = "1rbqa56bsc3wrhk8djxdzh755zx1qrqp3wrdid7x0djzbmzp6h2c";
       };
 
       dontUnpack = true;
@@ -232,12 +232,12 @@ in
     };
 
     phpstan = mkDerivation rec {
-      version = "0.12.25";
+      version = "0.12.32";
       pname = "phpstan";
 
       src = pkgs.fetchurl {
         url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-        sha256 = "1a864v7fxpv5kp24nkvczrir3ldl6wxvaq85rd391ppa8ahdhvdd";
+        sha256 = "0sb7yhjjh4wj8wbv4cdf0n1lvhx1ciz7ch8lr73maajj2xbvy1zk";
       };
 
       phases = [ "installPhase" ];

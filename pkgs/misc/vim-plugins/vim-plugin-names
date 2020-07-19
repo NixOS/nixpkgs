@@ -81,6 +81,7 @@ dhruvasagar/vim-table-mode
 digitaltoad/vim-pug
 direnv/direnv.vim
 dleonard0/pony-vim-syntax
+dmix/elvish.vim
 dracula/vim
 drewtempelmeyer/palenight.vim
 drmingdrmer/xptemplate
@@ -130,7 +131,9 @@ guns/vim-clojure-highlight
 guns/vim-clojure-static
 guns/vim-sexp
 guns/xterm-color-table.vim
+hashivim/vim-packer
 hashivim/vim-terraform
+hashivim/vim-vagrant
 haya14busa/incsearch-easymotion.vim
 haya14busa/incsearch.vim
 haya14busa/is.vim
@@ -188,6 +191,7 @@ jsfaint/gen_tags.vim
 JuliaEditorSupport/deoplete-julia
 JuliaEditorSupport/julia-vim
 Julian/vim-textobj-variable-segment
+juliosueiras/vim-terraform-completion
 junegunn/fzf.vim
 junegunn/goyo.vim
 junegunn/gv.vim
@@ -314,10 +318,19 @@ nbouscal/vim-stylish-haskell
 ncm2/float-preview.nvim
 ncm2/ncm2
 ncm2/ncm2-bufword
+ncm2/ncm2-cssomni
+ncm2/ncm2-github
+ncm2/ncm2-html-subscope
 ncm2/ncm2-jedi
+ncm2/ncm2-markdown-subscope
+ncm2/ncm2-neoinclude
+ncm2/ncm2-neosnippet
 ncm2/ncm2-path
+ncm2/ncm2-syntax
+ncm2/ncm2-tagprefix
 ncm2/ncm2-tmux
 ncm2/ncm2-ultisnips
+ncm2/ncm2-vim
 ndmitchell/ghcid
 neoclide/coc-css
 neoclide/coc-denite
@@ -595,5 +608,6 @@ xolox/vim-misc
 xuhdev/vim-latex-live-preview
 ycm-core/YouCompleteMe
 Yggdroot/indentLine
+yuki-ycino/ncm2-dictionary
 zah/nim.vim
 ziglang/zig.vim
