@@ -20460,6 +20460,8 @@ in
   swaylock = callPackage ../applications/window-managers/sway/lock.nix { };
   sway-contrib = recurseIntoAttrs (callPackages ../applications/window-managers/sway/contrib.nix { });
 
+  sgtk-menu = python3Packages.callPackage ../applications/misc/sgtk-menu { };
+
   swaylock-fancy = callPackage ../applications/window-managers/sway/lock-fancy.nix { };
 
   swaylock-effects = callPackage ../applications/window-managers/sway/lock-effects.nix { };
