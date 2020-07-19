@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, scons, libX11, pkgconfig
+{ stdenv, fetchurl, sconsPackages, libX11, pkgconfig
 , libusb1, boost, glib, dbus-glib }:
 
 let
@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
-  nativeBuildInputs = [ pkgconfig scons.py2 ];
+  nativeBuildInputs = [ pkgconfig sconsPackages.scons_3_1_2 ];
   buildInputs = [ libX11 libusb1 boost glib dbus-glib ];
   dontUseSconsInstall = true;
 

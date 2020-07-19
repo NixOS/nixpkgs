@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "ipympl";
-  version = "0.5.6";
+  version = "0.5.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1sak58wcpikn4ww1k8gr2vf1hmwzfly31hzcnwiizp7l0vk40qh7";
+    sha256 = "0cjsabsbn02vpf3yl0x9xdqgf4f707mbnz2hp2bn6zp9qnyyirx5";
   };
 
   propagatedBuildInputs = [ ipywidgets matplotlib ];

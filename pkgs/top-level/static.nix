@@ -242,7 +242,7 @@ in {
   };
 
   zstd = super.zstd.override {
-    enableShared = false;
+    static = true;
   };
 
   llvmPackages_8 = super.llvmPackages_8 // {

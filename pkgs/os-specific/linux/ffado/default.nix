@@ -13,7 +13,7 @@
 , libxmlxx3
 , pkgconfig
 , python3
-, scons
+, sconsPackages
 , which
 , wrapQtAppsHook
 }:
@@ -45,7 +45,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    scons.py2
+    sconsPackages.scons_3_1_2
     pkgconfig
     which
     python

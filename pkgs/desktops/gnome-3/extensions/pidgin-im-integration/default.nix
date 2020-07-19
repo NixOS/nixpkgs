@@ -15,10 +15,12 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     share_dir="$prefix/share"
     extensions_dir="$share_dir/gnome-shell/extensions/pidgin@muffinmad"
     mkdir -p "$extensions_dir"
     mv *.js metadata.json dbus.xml schemas locale "$extensions_dir"
+    runHook postInstall
   '';
 
   uuid = "pidgin@muffinmad";

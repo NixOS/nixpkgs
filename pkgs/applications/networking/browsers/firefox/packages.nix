@@ -1,4 +1,4 @@
-{ config, stdenv, lib, callPackage, fetchurl }:
+{ config, stdenv, lib, callPackage, fetchurl, nss_3_44 }:
 
 let
   common = opts: callPackage (import ./common.nix opts) {};
@@ -33,7 +33,7 @@ rec {
     };
   };
 
-  firefox-esr-68 = common rec {
+  firefox-esr-68 = (common rec {
     pname = "firefox-esr";
     ffversion = "68.10.0esr";
     src = fetchurl {
@@ -53,5 +53,11 @@ rec {
       versionSuffix = "esr";
       versionKey = "ffversion";
     };
+  }).override {
+    # Mozilla unfortunately doesn't support building with latest NSS anymore;
+    # instead they provide ESR releases for NSS:
+    # https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_Releases
+    nss = nss_3_44;
   };
+
 }
