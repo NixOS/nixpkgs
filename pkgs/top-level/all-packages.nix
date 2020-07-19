@@ -22123,7 +22123,6 @@ in
     mopidy-gmusic
     mopidy-iris
     mopidy-local
-    mopidy-local-images
     mopidy-local-sqlite
     mopidy-moped
     mopidy-mopify
