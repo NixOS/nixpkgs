@@ -44,8 +44,6 @@ buildGoModule rec {
 
   buildInputs = [ python3 notmuch ];
 
-  GOFLAGS="-tags=notmuch";
-
   buildPhase = "
     runHook preBuild
     # we use make instead of go build
@@ -54,7 +52,7 @@ buildGoModule rec {
 
   installPhase = ''
     runHook preInstall
-    make PREFIX=$out install
+    make PREFIX=$out GOFLAGS="$GOFLAGS -tags=notmuch" install
     wrapPythonProgramsIn $out/share/aerc/filters "$out $pythonPath"
     runHook postInstall
   '';
