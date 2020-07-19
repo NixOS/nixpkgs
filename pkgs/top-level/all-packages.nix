@@ -20641,6 +20641,8 @@ in
 
   ir.lv2 = callPackage ../applications/audio/ir.lv2 { };
 
+  istioctl = callPackage ../applications/networking/cluster/istioctl { };
+
   bip = callPackage ../applications/networking/irc/bip { };
 
   j4-dmenu-desktop = callPackage ../applications/misc/j4-dmenu-desktop { };
