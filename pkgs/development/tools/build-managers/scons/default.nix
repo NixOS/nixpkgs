@@ -12,7 +12,7 @@ in {
     sha256 = "1yzq2gg9zwz9rvfn42v5jzl3g4qf1khhny6zfbi2hib55zvg60bq";
   }).override { python3Packages = python2Packages; };
   scons_latest = mkScons {
-    version = "4.0.0";
-    sha256 = "1ikw5lh0h206xd74g39jdlrcicb18jj3j80hvm4nbrfgxv1hvibc";
+    version = "4.0.1";
+    sha256 = "0z00l9wzaiqyjq0hapbvsjclvcfjjjq04kmxi7ffq966nl2d2bkj";
   };
 }
