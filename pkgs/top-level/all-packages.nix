@@ -21419,7 +21419,9 @@ in
 
   partio = callPackage ../development/libraries/partio {};
 
-  pc-ble-driver = callPackage ../development/libraries/pc-ble-driver {};
+  pc-ble-driver = callPackage ../development/libraries/pc-ble-driver {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   pbis-open = callPackage ../tools/security/pbis { };
 
