@@ -32,16 +32,26 @@ perlPackages.buildPerlPackage rec {
     patchShebangs script/convos
   '';
 
-  # A test fails since gethostbyaddr(127.0.0.1) fails to resolve to localhost in
-  # the sandbox, we replace the this out from a substitution expression
-  #
-  # Module::Install is a runtime dependency not covered by the tests, so we add
-  # a test for it.
-  #
   preCheck = ''
+    # A test fails since gethostbyaddr(127.0.0.1) fails to resolve to localhost in
+    # the sandbox, we replace the this out from a substitution expression
+    #
     substituteInPlace t/web-register-open-to-public.t \
       --replace '!127.0.0.1!' '!localhost!'
 
+    # Time-impurity in test, (fixed in master)
+    #
+    substituteInPlace t/web-load-user.t \
+      --replace '400' '410'
+
+    # Disk-space check fails on zfs, (fixed in master)
+    #
+    substituteInPlace t/web-admin.t \
+      --replace 'qr{/dev/}' 'qr{\w}'
+
+    # Module::Install is a runtime dependency not covered by the tests, so we add
+    # a test for it.
+    #
     echo "use Test::More tests => 1;require_ok('Module::Install')" \
       > t/00_nixpkgs_module_install.t
   '';
