@@ -72,7 +72,7 @@ stdenv.mkDerivation {
 
   nm -an "$libblas" | cut -f3 -d' ' > symbols
   for symbol in ${toString blasFortranSymbols}; do
-    grep "^$symbol_$" symbols || { echo "$symbol" was not found in "$libblas"; exit 1; }
+    grep -q "^$symbol_$" symbols || { echo "$symbol" was not found in "$libblas"; exit 1; }
   done
 
   cp -L "$libblas" $out/lib/libblas${canonicalExtension}
