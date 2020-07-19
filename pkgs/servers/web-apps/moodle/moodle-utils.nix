@@ -5,7 +5,7 @@ let
     name,
     src,
     pluginType,
-    configuraPhase ? ":",
+    configurePhase ? ":",
     buildPhase ? ":",
     buildInputs ? [ ],
     ...
@@ -14,7 +14,7 @@ let
     name = name;
 
     inherit pluginType;
-    inherit configuraPhase buildPhase;
+    inherit configurePhase buildPhase;
 
     buildInputs = [ unzip ] ++ buildInputs;
 
