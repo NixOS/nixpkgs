@@ -5959,7 +5959,6 @@ broken-packages:
   - hcltest
   - hcoap
   - hcom
-  - hcoord
   - hcron
   - hCsound
   - hcube
