@@ -22687,6 +22687,7 @@ in
     inherit (rustPackages_1_44) cargo rustc;
     libpng = libpng_apng;
     gtk3Support = true;
+    nss = nss_3_44; # 68.x won't build with newest nss anymore (like firefox-esr-68)
   };
 
   thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
