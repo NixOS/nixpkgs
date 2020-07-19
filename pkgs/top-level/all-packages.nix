@@ -19166,6 +19166,8 @@ in
 
   brave = callPackage ../applications/networking/browsers/brave { };
 
+  break-time = callPackage ../applications/misc/break-time { };
+
   breezy = with python3Packages; toPythonApplication breezy;
 
   notmuch-bower = callPackage ../applications/networking/mailreaders/notmuch-bower { };
