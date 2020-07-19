@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
+  ] ++ lib.optional stdenv.hostPlatform.isMusl [
+    ./musl.patch
   ];
 
   outputs = [ "bin" "dev" "out" "man" ];

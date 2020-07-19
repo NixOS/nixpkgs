@@ -1,0 +1,33 @@
+Fixup musl compilation
+
+In file included from misc-utils/kill.c:57:
+./include/pidfd-utils.h: In function 'pidfd_open':
+./include/pidfd-utils.h:20:17: error: 'SYS_pidfd_open' undeclared (first use in this function); did you mean 'pidfd_open'?
+   20 |  return syscall(SYS_pidfd_open, pid, flags);
+      |                 ^~~~~~~~~~~~~~
+      |                 pidfd_open
+./include/pidfd-utils.h:20:17: note: each undeclared identifier is reported only once for each function it appears in
+./include/pidfd-utils.h:21:1: warning: control reaches end of non-void function [-Wreturn-type]
+   21 | }
+      | ^
+
+diff -ur util-linux-2.35.2.orig/include/pidfd-utils.h util-linux-2.35.2/include/pidfd-utils.h
+--- util-linux-2.35.2.orig/include/pidfd-utils.h	2020-05-20 05:27:43.451013558 -0700
++++ util-linux-2.35.2/include/pidfd-utils.h	2020-07-18 19:28:01.513860196 -0700
+@@ -3,6 +3,7 @@
+ 
+ #if defined(__linux__)
+ # include <sys/syscall.h>
++# include <asm-generic/unistd.h>
+ # if defined(SYS_pidfd_send_signal)
+ #  include <sys/types.h>
+ 
+@@ -17,7 +18,7 @@
+ #  ifndef HAVE_PIDFD_SEND_SIGNAL
+ static inline int pidfd_open(pid_t pid, unsigned int flags)
+ {
+-	return syscall(SYS_pidfd_open, pid, flags);
++	return syscall(__NR_pidfd_open, pid, flags);
+ }
+ #  endif
+ 
