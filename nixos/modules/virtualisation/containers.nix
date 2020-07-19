@@ -28,7 +28,7 @@ in
     (
       lib.mkRemovedOptionModule
       [ "virtualisation" "containers" "users" ]
-      "All users with `isNormaUser = true` set now get appropriate subuid/subgid mappings."
+      "All users with `isNormalUser = true` set now get appropriate subuid/subgid mappings."
     )
   ];
 
