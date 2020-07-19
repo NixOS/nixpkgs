@@ -9139,4 +9139,10 @@
     github = "deifactor";
     githubId = 30192992;
   };
+  berbiche = {
+    name = "Nicolas Berbiche";
+    email = "nicolas@normie.dev";
+    github = "berbiche";
+    githubId = 20448408;
+  };
 }
