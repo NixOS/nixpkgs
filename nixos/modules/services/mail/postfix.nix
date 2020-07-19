@@ -770,7 +770,7 @@ in
 
             ReadWritePaths = [ "/var/lib/postfix" "/var/spool/mail" ];
 
-            CapabilityBoundingSet = "CAP_DAC_READ_SEARCH CAP_NET_BIND_SERVICE CAP_SETGID CAP_SETUID";
+            CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH" "CAP_NET_BIND_SERVICE" "CAP_SETGID" "CAP_SETUID" ];
             DevicePolicy = "closed";
             LockPersonality = true;
             MemoryDenyWriteExecute = true;
@@ -785,7 +785,7 @@ in
             ProtectKernelModules = true;
             ProtectKernelTunables = true;
             ProtectSystem = "full";
-            RestrictAddressFamilies = "AF_INET AF_INET6 AF_NETLINK AF_UNIX";
+            RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_NETLINK" "AF_UNIX" ];
             RestrictNamespaces = true;
             RestrictRealtime = true;
             RestrictSUIDSGID = true;
