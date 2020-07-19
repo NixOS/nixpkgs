@@ -13006,7 +13006,9 @@ in
 
   libfido2 = callPackage ../development/libraries/libfido2 { };
 
-  libfilezilla = callPackage ../development/libraries/libfilezilla { };
+  libfilezilla = callPackage ../development/libraries/libfilezilla {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
 
   libfishsound = callPackage ../development/libraries/libfishsound { };
 

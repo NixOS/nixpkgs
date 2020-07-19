@@ -5,6 +5,8 @@
 , gnutls
 , nettle
 , pkgconfig
+, libiconv
+, ApplicationServices
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +20,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ gettext gnutls nettle ];
+  buildInputs = [ gettext gnutls nettle ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ApplicationServices ];
 
   enableParallelBuilding = true;
 
@@ -27,6 +30,6 @@ stdenv.mkDerivation rec {
     description = "A modern C++ library, offering some basic functionality to build high-performing, platform-independent programs";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
