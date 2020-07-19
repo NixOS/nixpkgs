@@ -5610,6 +5610,8 @@ in
 
   noise-repellent = callPackage ../applications/audio/noise-repellent { };
 
+  noisetorch = callPackage ../applications/audio/noisetorch { };
+
   notary = callPackage ../tools/security/notary { };
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
