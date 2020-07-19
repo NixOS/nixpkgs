@@ -10,8 +10,8 @@ mkYarnPackage rec {
     rev = "v${version}";
     sha256 = "0xrb8r4qc9ds7wmfd30nslnkqylxqfwr4gqf7b30v651sjyds29x";
   };
-  packageJSON = src + "/package.json";
   yarnLock = ./yarn.lock;
+  yarnNix = ./yarn.nix;
   nativeBuildInputs = [ makeWrapper ];
   postInstall = ''
     wrapProgram $out/bin/puppeteer \
