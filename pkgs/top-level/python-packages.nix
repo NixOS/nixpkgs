@@ -1336,6 +1336,11 @@ in {
 
   pydsdl = callPackage ../development/python-modules/pydsdl { };
 
+  pyrealsense2 = toPythonModule (pkgs.librealsense.override {
+    withPython = true;
+    pythonPackages = self;
+  });
+
   pyside = callPackage ../development/python-modules/pyside {
     inherit (pkgs) mesa;
   };
