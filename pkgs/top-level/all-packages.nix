@@ -24066,7 +24066,10 @@ in
   frozen-bubble = callPackage ../games/frozen-bubble { };
 
   fsg = callPackage ../games/fsg {
-    wxGTK = wxGTK28.override { unicode = false; };
+    wxGTK = wxGTK28.override {
+      unicode = false;
+      gst-plugins-base = null;
+    };
   };
 
   galaxis = callPackage ../games/galaxis { };
