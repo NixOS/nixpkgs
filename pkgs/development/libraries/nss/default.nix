@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, nspr, perl, zlib, sqlite, fixDarwinDylibNames, buildPackages, ninja }:
+{ stdenv, fetchurl, nspr, perl, zlib, sqlite, darwin, fixDarwinDylibNames, buildPackages, ninja }:
 
 let
   nssPEM = fetchurl {
@@ -19,7 +19,8 @@ in stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ perl ninja (buildPackages.python2.withPackages (ps: with ps; [ gyp ])) ];
+  nativeBuildInputs = [ perl ninja (buildPackages.python3.withPackages (ps: with ps; [ gyp ])) ]
+    ++ stdenv.lib.optional stdenv.isDarwin darwin.cctools;
 
   buildInputs = [ zlib sqlite ]
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
@@ -52,10 +53,6 @@ in stdenv.mkDerivation rec {
     ];
 
   patchFlags = [ "-p0" ];
-
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace nss/coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
-  '';
 
   outputs = [ "out" "dev" "tools" ];
 
