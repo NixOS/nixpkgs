@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "oneAPI Deep Neural Network Library (oneDNN)";
-    homepage = "https://01.org/dnnl";
+    homepage = "https://01.org/oneDNN";
     changelog = "https://github.com/oneapi-src/oneDNN/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = platforms.all;
