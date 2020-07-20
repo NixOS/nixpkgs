@@ -3502,6 +3502,8 @@ in {
 
   mailman-web = callPackage ../servers/mail/mailman/web.nix { };
 
+  rtmixer = callPackage ../development/python-modules/rtmixer { };
+
   mail-parser = callPackage ../development/python-modules/mail-parser { };
 
   Mako = callPackage ../development/python-modules/Mako { };
