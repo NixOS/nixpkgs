@@ -849,6 +849,12 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
      There are no functional changes, however this may require updating some configurations to use correct types for all attributes.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <literal>fontconfig</literal> module stopped generating fontconfig 2.10.x config and cache.
+     Fontconfig 2.10.x was removed from Nixpkgs - it hasn't been used in any nixpkgs package anymore.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
