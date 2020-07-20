@@ -43,17 +43,6 @@ let
       name = "bitwarden-cli-${drv.version}";
     });
 
-    ios-deploy = super.ios-deploy.override (drv: {
-      nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.buildPackages.rsync ];
-      preRebuild = ''
-        LD=$CC
-        tmp=$(mktemp -d)
-        ln -s /usr/bin/xcodebuild $tmp
-        export PATH="$PATH:$tmp"
-      '';
-      meta.platforms = [ pkgs.lib.platforms.darwin ];
-    });
-
     fast-cli = super."fast-cli-1.x".override {
       preRebuild = ''
         # Simply ignore the phantomjs --version check. It seems to need a display but it is safe to ignore
