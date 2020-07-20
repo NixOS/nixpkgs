@@ -102,13 +102,13 @@ runTests {
     expected = 9;
   };
 
-  testToHex = {
-    expr = toHex 250;
+  testToHexString = {
+    expr = toHexString 250;
     expected = "FA";
   };
 
-  testToBase = {
-    expr = toBase 2 6;
+  testToBaseDigits = {
+    expr = toBaseDigits 2 6;
     expected = [ 1 1 0 ];
   };
 

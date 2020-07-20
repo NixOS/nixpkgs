@@ -336,13 +336,13 @@ rec {
   /* Convert the given positive integer to a string of its hexadecimal
      representation. For example:
 
-     toHex 0 => "0"
+     toHexString 0 => "0"
 
-     toHex 16 => "10"
+     toHexString 16 => "10"
 
-     toHex 250 => "FA"
+     toHexString 250 => "FA"
   */
-  toHex = i:
+  toHexString = i:
     let
       toHexDigit = d:
         if d < 10
@@ -357,18 +357,18 @@ rec {
             "15" = "F";
           }.${toString d};
     in
-      lib.concatMapStrings toHexDigit (toBase 16 i);
+      lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
 
-  /* `toBase base i` converts the positive integer i to a list of its
+  /* `toBaseDigits base i` converts the positive integer i to a list of its
      digits in the given base. For example:
 
-     toBase 10 123 => [ 1 2 3 ]
+     toBaseDigits 10 123 => [ 1 2 3 ]
 
-     toBase 2 6 => [ 1 1 0 ]
+     toBaseDigits 2 6 => [ 1 1 0 ]
 
-     toBase 16 250 => [ 15 10 ]
+     toBaseDigits 16 250 => [ 15 10 ]
   */
-  toBase = base: i:
+  toBaseDigits = base: i:
     let
       go = i:
         if i < base

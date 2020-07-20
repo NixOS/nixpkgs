@@ -6,7 +6,7 @@ let
     pkgs.lib.optionalString (n < 16) "0" +
       (if n > 255
        then throw "Can't have more than 255 nets or nodes!"
-       else pkgs.lib.toHex n);
+       else pkgs.lib.toHexString n);
 in
 
 rec {
