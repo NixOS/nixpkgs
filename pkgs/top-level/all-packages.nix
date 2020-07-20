@@ -8996,6 +8996,10 @@ in
         inherit installjdk pluginSupport;
       });
 
+  oraclejdk11 = callPackage ../development/compilers/oraclejdk/jdk11-linux.nix { };
+
+  oraclejdk14 = callPackage ../development/compilers/oraclejdk/jdk14-linux.nix { };
+
   jasmin = callPackage ../development/compilers/jasmin { };
 
   java-service-wrapper = callPackage ../tools/system/java-service-wrapper { };
