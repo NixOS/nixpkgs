@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "dbus-python";
-  version = "1.2.12";
+  version = "1.2.16";
   format = "other";
 
   outputs = [ "out" "dev" ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0q7jmldv0bxxqnbj63cd7i81vs6y85xys4r0n63z4n2y9wndxm6d";
+    sha256 = "196m5rk3qzw5nkmgzjl7wmq0v7vpwfhh8bz2sapdi5f9hqfqy8qi";
   };
 
   patches = [
