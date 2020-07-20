@@ -2928,6 +2928,12 @@
     githubId = 7047019;
     name = "Florent Becker";
   };
+  galagora = {
+    email = "lightningstrikeiv@gmail.com";
+    github = "galagora";
+    githubId = 45048741;
+    name = "Alwanga Oyango";
+  };
   gamb = {
     email = "adam.gamble@pm.me";
     github = "gamb";
