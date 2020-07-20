@@ -1,4 +1,4 @@
-{ callPackage, wxGTK30, openssl_1_0_2 }:
+{ callPackage, wxGTK30, wxGTK31, openssl_1_0_2 }:
 
 rec {
   lib = callPackage ../development/beam-modules/lib.nix {};
@@ -17,7 +17,7 @@ rec {
 
     # R23
     erlangR23 = lib.callErlang ../development/interpreters/erlang/R23.nix {
-      wxGTK = wxGTK30;
+      wxGTK = wxGTK31;
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
     };
@@ -30,7 +30,7 @@ rec {
 
     # R22
     erlangR22 = lib.callErlang ../development/interpreters/erlang/R22.nix {
-      wxGTK = wxGTK30;
+      wxGTK = wxGTK31;
       # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
       parallelBuild = true;
     };
