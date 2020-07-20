@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
 
   # The test driver doesn't add an RPath to the build libdir
   preCheck = ''
-    export LD_LIBRARY_PATH=$PWD/src
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/src
+    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD/src
   '';
 
   # The cmake install gets tripped up and installs a nix tree into $out, in
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "https://01.org/dnnl";
     changelog = "https://github.com/oneapi-src/oneDNN/releases/tag/v${version}";
     license = licenses.asl20;
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    platforms = platforms.all;
     maintainers = with maintainers; [ alexarice bhipple ];
   };
 }
