@@ -196,30 +196,18 @@ in rec {
 
   nixUnstable = lib.lowPrio (callPackage common rec {
     name = "nix-2.4${suffix}";
-    suffix = "pre7805_984e5213";
+    suffix = "pre20200719_a79b6dd";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "984e521392b3f41f7cdab203e5c00f3e00e27a28";
-      sha256 = "1dch48018dwzx9cysnfxrdpszav87s0d635zqw810mgmqpm25fw8";
+      rev = "a79b6ddaa5dd5960da845d1b8d3c80601cd918a4";
+      hash = "sha256-bOXZcOVh/4tnOb0vXCwDpmNHuW7aVfGUvmz3KyYMCuo=";
     };
 
     inherit storeDir stateDir confDir boehmgc;
   });
 
-  nixFlakes = lib.lowPrio (callPackage common rec {
-    name = "nix-2.4${suffix}";
-    suffix = "pre20200622_334e26b";
-
-    src = fetchFromGitHub {
-      owner = "NixOS";
-      repo = "nix";
-      rev = "334e26bfc2ce82912602e8a0f9f9c7e0fb5c3221";
-      sha256 = "14a2yyn1ygymlci6hl5d308fs3p3m0mgcfs5dc8dn0s3lg5qvbmp";
-    };
-
-    inherit storeDir stateDir confDir boehmgc;
-  });
+  nixFlakes = nixUnstable;
 
 }
