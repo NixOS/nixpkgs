@@ -8,6 +8,9 @@
 , electron_6
 }:
 
+let
+  electron = electron_6;
+in
 stdenv.mkDerivation rec {
   pname = "openbazaar-client";
   version = "2.4.6";
@@ -42,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper ${electron_6}/bin/electron $out/bin/${pname} \
+    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app \
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ gcc-unwrapped.lib ]}"
   '';

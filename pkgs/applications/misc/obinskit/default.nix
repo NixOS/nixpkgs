@@ -16,7 +16,7 @@ let
     genericName = "Obinskit keyboard configurator";
     categories = "Utility";
   };
-
+  electron = electron_3;
 in
 stdenv.mkDerivation rec {
   pname = "obinskit";
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper ${electron_3}/bin/electron $out/bin/${pname} \
+    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
       --add-flags $out/opt/obinskit/resources/app.asar \
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc.lib libxkbcommon systemd.lib xorg.libXt ]}"
   '';
