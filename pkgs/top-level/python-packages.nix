@@ -5480,6 +5480,8 @@ in {
 
   pytest-helpers-namespace = callPackage ../development/python-modules/pytest-helpers-namespace { };
 
+  pyopengl-accelerate = callPackage ../development/python-modules/pyopengl-accelerate { };
+
   pytest-html = callPackage ../development/python-modules/pytest-html { };
 
   pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
