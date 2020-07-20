@@ -5098,6 +5098,8 @@ in
 
   logstalgia = callPackage ../tools/graphics/logstalgia {};
 
+  lokalise2-cli = callPackage ../tools/misc/lokalise2-cli { };
+
   loki = callPackage ../development/libraries/loki { };
 
   longview = callPackage ../servers/monitoring/longview { };
