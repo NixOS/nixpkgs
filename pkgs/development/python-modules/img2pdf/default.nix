@@ -1,10 +1,9 @@
-{ stdenv, python3Packages }:
+{ lib, pillow, fetchPypi, buildPythonPackage, isPy27 }:
 
-with python3Packages;
-
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "img2pdf";
   version = "0.3.6";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
@@ -15,7 +14,7 @@ buildPythonApplication rec {
     pillow
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Convert images to PDF via direct JPEG inclusion";
     homepage = "https://gitlab.mister-muffin.de/josch/img2pdf";
     license = licenses.lgpl2;

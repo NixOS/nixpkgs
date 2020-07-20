@@ -990,6 +990,8 @@ in
 
   gaia = callPackage ../development/libraries/gaia { };
 
+  gama = callPackage ../applications/science/geometry/gama { };
+
   gamecube-tools = callPackage ../development/tools/gamecube-tools { };
 
   gammy = qt5.callPackage ../tools/misc/gammy { };
@@ -6616,6 +6618,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  sd-switch = callPackage ../os-specific/linux/sd-switch { };
+
   sdate = callPackage ../tools/misc/sdate { };
 
   sdcv = callPackage ../applications/misc/sdcv { };
@@ -7539,6 +7543,8 @@ in
   wootility = callPackage ../tools/misc/wootility {
     inherit (xorg) libxkbfile;
   };
+
+  wormhole-william = callPackage ../tools/networking/wormhole-william { };
 
   wpscan = callPackage ../tools/security/wpscan { };
 
@@ -13045,7 +13051,9 @@ in
 
   libfido2 = callPackage ../development/libraries/libfido2 { };
 
-  libfilezilla = callPackage ../development/libraries/libfilezilla { };
+  libfilezilla = callPackage ../development/libraries/libfilezilla {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
 
   libfishsound = callPackage ../development/libraries/libfishsound { };
 
@@ -16870,6 +16878,8 @@ in
 
   dropwatch = callPackage ../os-specific/linux/dropwatch { };
 
+  dsd = callPackage ../applications/radio/dsd { };
+
   dstat = callPackage ../os-specific/linux/dstat { };
 
   # unstable until the first 1.x release
@@ -16994,6 +17004,8 @@ in
   ipset = callPackage ../os-specific/linux/ipset { };
 
   irqbalance = callPackage ../os-specific/linux/irqbalance { };
+
+  itpp = callPackage ../development/libraries/science/math/itpp { };
 
   iw = callPackage ../os-specific/linux/iw { };
 
@@ -17572,6 +17584,8 @@ in
     enableCmdlib = true;
   };
 
+  mbelib = callPackage ../development/libraries/audio/mbelib { };
+
   mbpfan = callPackage ../os-specific/linux/mbpfan { };
 
   mdadm = mdadm4;
@@ -18030,6 +18044,8 @@ in
 
   ### DATA
 
+  _3270font = callPackage ../data/fonts/3270font { };
+
   adapta-backgrounds = callPackage ../data/misc/adapta-backgrounds { };
 
   adapta-gtk-theme = callPackage ../data/themes/adapta { };
@@ -18090,6 +18106,8 @@ in
   baekmuk-ttf = callPackage ../data/fonts/baekmuk-ttf { };
 
   bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
+
+  barlow = callPackage ../data/fonts/barlow { };
 
   bgnet = callPackage ../data/documentation/bgnet { };
 
@@ -20589,7 +20607,7 @@ in
 
   inherit (nodePackages) imapnotify;
 
-  img2pdf = callPackage ../applications/misc/img2pdf { };
+  img2pdf = with python3Packages; toPythonApplication img2pdf;
 
   imgcat = callPackage ../applications/graphics/imgcat { };
 
@@ -20716,7 +20734,7 @@ in
       recurseIntoAttrs (makeOverridable mkApplications attrs);
 
   inherit (kdeApplications)
-    akonadi akregator ark bovo dolphin dragon elisa ffmpegthumbs filelight gwenview k3b
+    akonadi akregator ark bovo dolphin dragon elisa ffmpegthumbs filelight granatier gwenview k3b
     kaddressbook kapptemplate kate kcachegrind kcalc kcharselect kcolorchooser kdenlive kdf kdialog
     keditbookmarks kfind kget kgpg khelpcenter kig kleopatra kmail kmix kmplot kolourpaint kompare konsole yakuake
     kpkpass kitinerary kontact korganizer krdc krfb ksystemlog ktouch kwalletmanager marble minuet okular picmi spectacle;
@@ -20798,6 +20816,8 @@ in
   konversation = libsForQt5.callPackage ../applications/networking/irc/konversation { };
 
   kotatogram-desktop = qt5.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop { };
+
+  kpt = callPackage ../applications/networking/cluster/kpt { };
 
   krita = libsForQt5.callPackage ../applications/graphics/krita {
     openjpeg = openjpeg_1;

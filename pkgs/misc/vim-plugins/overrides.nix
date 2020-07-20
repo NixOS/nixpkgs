@@ -440,6 +440,18 @@ self: super: {
     passthru.python3Dependencies = ps: with ps; [ jedi ];
   });
 
+  ncm2-neoinclude = super.ncm2-neoinclude.overrideAttrs(old: {
+    dependencies = with super; [ neoinclude-vim ];
+  });
+
+  ncm2-neosnippet = super.ncm2-neosnippet.overrideAttrs(old: {
+    dependencies = with super; [ neosnippet-vim ];
+  });
+
+  ncm2-syntax = super.ncm2-syntax.overrideAttrs(old: {
+    dependencies = with super; [ neco-syntax ];
+  });
+
   ncm2-ultisnips = super.ncm2-ultisnips.overrideAttrs(old: {
     dependencies = with super; [ ultisnips ];
   });
