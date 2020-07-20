@@ -26103,6 +26103,8 @@ in
 
   openzwave = callPackage ../development/libraries/openzwave { };
 
+  mockbob = callPackage ../applications/misc/mockbob { };
+
   mongoc = callPackage ../development/libraries/mongoc { };
 
   mongoose = callPackage ../development/libraries/science/math/mongoose {};
