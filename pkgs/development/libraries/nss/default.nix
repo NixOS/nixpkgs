@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ perl ninja (buildPackages.python2.withPackages (ps: with ps; [ gyp ])) ];
+  nativeBuildInputs = [ perl ninja (buildPackages.python3.withPackages (ps: with ps; [ gyp ])) ];
 
   buildInputs = [ zlib sqlite ]
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
