@@ -14,14 +14,11 @@ import ./make-test-python.nix ({ pkgs, ... }:
           serverName = "Gerbera";
           package = pkgs.gerbera;
           interface = "eth1";  # accessible from test
+          openFirewall = true;
           mediaDirectories = [
             { path = "/var/lib/gerbera/pictures"; recursive = false; hidden-files = false; }
             { path = "/var/lib/gerbera/audio"; recursive = true; hidden-files = false; }
           ];
-        };
-        networking.firewall = {
-          allowedUDPPorts = [ 1900 port ];
-          allowedTCPPorts = [ port ];
         };
       };
 
@@ -41,7 +38,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
             { path = "/var/lib/mediatomb/audio"; recursive = true; hidden-files = false; }
           ];
         };
-        networking.firewall = {
+        networking.firewall.interfaces.eth1 = {
           allowedUDPPorts = [ 1900 port ];
           allowedTCPPorts = [ port ];
         };

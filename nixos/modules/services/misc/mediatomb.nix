@@ -182,6 +182,13 @@ let
     ${transcodingConfig}
   </config>
 '';
+  defaultFirewallRules = {
+    # udp 1900 port needs to be opened for SSDP (not configurable within
+    # mediatomb/gerbera) cf.
+    # http://docs.gerbera.io/en/latest/run.html?highlight=udp%20port#network-setup
+    allowedUDPPorts = [ 1900 cfg.port ];
+    allowedTCPPorts = [ cfg.port ];
+  };
 
 in {
 
@@ -294,6 +301,18 @@ in {
         '';
       };
 
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If false (the default), this is up to the user to declare the firewall rules.
+          If true, this opens the 1900 (tcp and udp) and ${toString cfg.port} (tcp) ports.
+          If the option cfg.interface is set, the firewall rules opened are
+          dedicated to that interface. Otherwise, those rules are opened
+          globally.
+        '';
+      };
+
       uuid = mkOption {
         type = types.str;
         default = "fdfc8a4e-a3ad-4c1d-b43d-a2eedb03a687";
@@ -324,6 +343,7 @@ in {
           ${cfg.dataDir}/config.xml. It's up to the user to make a correct configuration file.
         '';
       };
+
     };
   };
 
@@ -356,9 +376,12 @@ in {
       };
     };
 
-    networking.firewall.interfaces."${cfg.interface}" = {
-      allowedUDPPorts = [ 1900 cfg.port ];
-      allowedTCPPorts = [ cfg.port ];
-    };
+    # Open firewall only if users enable it
+    networking.firewall = mkMerge [
+      (mkIf (cfg.openFirewall && cfg.interface != "") {
+        interfaces."${cfg.interface}" = defaultFirewallRules;
+      })
+      (mkIf (cfg.openFirewall && cfg.interface == "") defaultFirewallRules)
+    ];
   };
 }
