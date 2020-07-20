@@ -3240,6 +3240,8 @@ in {
 
   libagent = callPackage ../development/python-modules/libagent { };
 
+  pa-ringbuffer = callPackage ../development/python-modules/pa-ringbuffer { };
+
   libais = callPackage ../development/python-modules/libais { };
 
   libarchive-c = callPackage ../development/python-modules/libarchive-c { inherit (pkgs) libarchive; };
