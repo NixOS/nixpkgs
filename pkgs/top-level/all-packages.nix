@@ -20730,6 +20730,8 @@ in
 
   kanshi = callPackage ../tools/misc/kanshi { };
 
+  kata-containers = recurseIntoAttrs (callPackage ../applications/virtualization/kata-containers { });
+
   kdeApplications =
     let
       mkApplications = import ../applications/kde;
