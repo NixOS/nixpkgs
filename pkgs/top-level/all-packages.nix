@@ -20623,6 +20623,10 @@ in
     lcms = lcms2;
   };
 
+  inkscape_0 = callPackage ../applications/graphics/inkscape/0.x.nix {
+    lcms = lcms2;
+  };
+
   inspectrum = libsForQt5.callPackage ../applications/radio/inspectrum { };
 
   ion3 = callPackage ../applications/window-managers/ion-3 {
