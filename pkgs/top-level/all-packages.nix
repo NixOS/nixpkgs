@@ -5610,6 +5610,8 @@ in
 
   noise-repellent = callPackage ../applications/audio/noise-repellent { };
 
+  noisetorch = callPackage ../applications/audio/noisetorch { };
+
   notary = callPackage ../tools/security/notary { };
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
@@ -6445,6 +6447,8 @@ in
   rng-tools = callPackage ../tools/security/rng-tools { };
 
   rnnoise = callPackage ../development/libraries/rnnoise { };
+
+  rnnoise-plugin = callPackage ../development/libraries/rnnoise-plugin {};
 
   rnv = callPackage ../tools/text/xml/rnv { };
 
