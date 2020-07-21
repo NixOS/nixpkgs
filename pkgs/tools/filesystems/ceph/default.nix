@@ -11,6 +11,7 @@
 , rocksdb, makeWrapper
 , leveldb, oathToolkit
 , libnl, libcap_ng
+, rdkafka
 
 # Optional Dependencies
 , yasm ? null, fcgi ? null, expat ? null
@@ -93,7 +94,7 @@ let
   ]);
   sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "14.2.9";
+  version = "14.2.10";
 in rec {
   ceph = stdenv.mkDerivation {
     pname = "ceph";
@@ -101,17 +102,11 @@ in rec {
 
     src = fetchurl {
       url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-      sha256 = "0zkh1a23v8g1fa5flqa2d53lv08ancab3li57gybpqpnja90k7il";
+      sha256 = "0bbs3ag8zav283qpxrrndhvh2z01ykm6126fmwrbc1c5f9jfjq39";
     };
 
     patches = [
       ./0000-fix-SPDK-build-env.patch
-      (fetchurl {
-        # Remove for Ceph > v15.2.3; https://www.openwall.com/lists/oss-security/2020/06/25/5
-        name = "CVE-2020-10753.patch";
-        url = "https://github.com/ceph/ceph/pull/35773/commits/1524d3c0c5cb11775313ea1e2bb36a93257947f2.patch";
-        sha256 = "1c04kirijp4c8a5pgwqx17dzdnzvd29nl2nr3qdvf4fkqwnlf48s";
-      })
     ];
 
     nativeBuildInputs = [
@@ -124,7 +119,7 @@ in rec {
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
       boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
-      snappy rocksdb lz4 oathToolkit leveldb libnl libcap_ng
+      snappy rocksdb lz4 oathToolkit leveldb libnl libcap_ng rdkafka
     ] ++ optionals stdenv.isLinux [
       linuxHeaders utillinux libuuid udev keyutils optLibaio optLibxfs optZfs
       # ceph 14

@@ -267,7 +267,7 @@ in {
       restartIfChanged = false;
     };
 
-    systemd.sockets.libvirtd    .wantedBy = [ "sockets.target" ];
-    systemd.sockets.libvirtd-tcp.wantedBy = [ "sockets.target" ];
+    # https://libvirt.org/daemons.html#monolithic-systemd-integration
+    systemd.sockets.libvirtd.wantedBy = [ "sockets.target" ];
   };
 }

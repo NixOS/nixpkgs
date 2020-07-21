@@ -4,20 +4,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libsecret";
-  version = "0.20.0";
+  version = "0.20.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0hxfpm8f4rlx685igd4bv89wb80v2952h373g3w6l42kniq7667i";
+    sha256 = "1r4habxdzmn02id324m0m4mg5isf22q1z436bg3vjjmcz1b3rjsg";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "rename-internal-functions-to-avoid-conflicts-and-fix-build.patch";
-      url = "https://gitlab.gnome.org/GNOME/libsecret/commit/cf21ad50b62f7c8e4b22ef374f0a73290a99bdb8.patch";
-      sha256 = "1n9nyzq5qrvw7s6sj5gzj33ia3rrx719jpys1cfhfbayg2sxyd4n";
-    })
-  ];
 
   postPatch = ''
     patchShebangs .

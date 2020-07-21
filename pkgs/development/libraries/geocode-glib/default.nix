@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "geocode-glib";
-  version = "3.26.1";
+  version = "3.26.2";
 
   outputs = [ "out" "dev" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/geocode-glib/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "076ydfpyc4n5c9dbqmf26i4pilfi5jpw6cjcgrbgrjbndavnmajv";
+    sha256 = "1l8g0f13xgkrk335afr9w8k46mziwb2jnyhl07jccl5yl37q9zh1";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext gtk-doc docbook_xsl gobject-introspection ];

@@ -14542,6 +14542,8 @@ in
   tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
   tk-8_5 = callPackage ../development/libraries/tk/8.5.nix { tcl = tcl-8_5; };
 
+  tl-expected = callPackage ../development/libraries/tl-expected { };
+
   tnt = callPackage ../development/libraries/tnt { };
 
   tntnet = callPackage ../development/libraries/tntnet { };
@@ -25221,7 +25223,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  nix-linter = haskellPackages.callPackage ../development/tools/analysis/nix-linter { };
+  nix-linter = haskell.lib.justStaticExecutables (haskellPackages.callPackage ../development/tools/analysis/nix-linter { });
 
   nix-pin = callPackage ../tools/package-management/nix-pin { };
 

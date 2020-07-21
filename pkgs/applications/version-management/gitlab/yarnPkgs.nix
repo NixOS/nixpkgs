@@ -11642,11 +11642,11 @@
       };
     }
     {
-      name = "swagger_ui_dist___swagger_ui_dist_3.24.3.tgz";
+      name = "swagger_ui_dist___swagger_ui_dist_3.26.2.tgz";
       path = fetchurl {
-        name = "swagger_ui_dist___swagger_ui_dist_3.24.3.tgz";
-        url  = "https://registry.yarnpkg.com/swagger-ui-dist/-/swagger-ui-dist-3.24.3.tgz";
-        sha1 = "99754d11b0ddd314a1a50db850acb415e4b0a0c6";
+        name = "swagger_ui_dist___swagger_ui_dist_3.26.2.tgz";
+        url  = "https://registry.yarnpkg.com/swagger-ui-dist/-/swagger-ui-dist-3.26.2.tgz";
+        sha1 = "22c700906c8911b1c9956da6c3fca371dba6219f";
       };
     }
     {
