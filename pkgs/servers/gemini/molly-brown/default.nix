@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchgit }:
+{ lib, buildGoPackage, fetchgit, nixosTests }:
 
 buildGoPackage rec {
   pname = "molly-brown";
@@ -14,6 +14,8 @@ buildGoPackage rec {
   };
 
   goDeps = ./deps.nix;
+
+  passthru.tests.basic = nixosTests.molly-brown;
 
   meta = with lib; {
     description = "Full-featured Gemini server";
