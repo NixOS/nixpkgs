@@ -770,7 +770,7 @@ in
 
             ReadWritePaths = [ "/var/lib/postfix" "/var/spool/mail" ];
 
-            CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH" "CAP_NET_BIND_SERVICE" "CAP_SETGID" "CAP_SETUID" ];
+            CapabilityBoundingSet = [ "CAP_DAC_OVERRIDE" "CAP_NET_BIND_SERVICE" "CAP_SETGID" "CAP_SETUID" ];
             DevicePolicy = "closed";
             LockPersonality = true;
             MemoryDenyWriteExecute = true;
