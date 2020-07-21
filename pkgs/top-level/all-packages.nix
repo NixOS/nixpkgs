@@ -14151,6 +14151,8 @@ in
 
   ogrepaged = callPackage ../development/libraries/ogrepaged { };
 
+  okteto = callPackage ../development/tools/okteto { };
+
   olm = callPackage ../development/libraries/olm { };
 
   one_gadget = callPackage ../development/tools/misc/one_gadget { };
