@@ -25151,6 +25151,8 @@ in
 
   lrs = callPackage ../development/libraries/science/math/lrs { };
 
+  mathpix-snipping-tool = callPackage ../applications/science/math/mathpix-snipping-tool { };
+
   m4ri = callPackage ../development/libraries/science/math/m4ri { };
 
   m4rie = callPackage ../development/libraries/science/math/m4rie { };
