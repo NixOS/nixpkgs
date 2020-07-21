@@ -94,5 +94,6 @@ in stdenv.mkDerivation rec {
     # darwin fails at https://github.com/B-Lang-org/bsc/pull/35#issuecomment-583731562
     # aarch64 fails, as GHC fails with "ghc: could not execute: opt"
     maintainers = with stdenv.lib.maintainers; [ flokli thoughtpolice ];
+    broken = true;  # ghc-8.4.4 is gone from Nixpkgs
   };
 }
