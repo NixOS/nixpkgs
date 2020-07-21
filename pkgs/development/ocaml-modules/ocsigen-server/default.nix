@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, which, ocaml, findlib, lwt_react, ssl, lwt_ssl
 , lwt_log, ocamlnet, ocaml_pcre, cryptokit, tyxml, xml-light, ipaddr
 , pgocaml, camlzip, ocaml_sqlite3
-, makeWrapper
+, makeWrapper, fetchpatch
 }:
 
 if !stdenv.lib.versionAtLeast ocaml.version "4.03"
@@ -22,6 +22,12 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "15qdkxcbl9c1bbn0fh9awjw0hjn7r6awcn288a9vyxln7icdbifw";
   };
+
+  # unreleased fix for Makefile typos breaking compilation
+  patches = [ (fetchpatch {
+    url = "https://github.com/ocsigen/ocsigenserver/commit/014aefc4e460686a361b974f16ebb7e0c993b36b.patch";
+    sha256 = "0xda4fj8p5102lh9xmrn5mv3s0ps6yykqj3mpjf72gf4zd6fzcn7";
+  }) ];
 
   buildInputs = [ which makeWrapper ocaml findlib
     lwt_react pgocaml camlzip ocaml_sqlite3
