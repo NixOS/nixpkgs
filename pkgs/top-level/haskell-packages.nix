@@ -5,7 +5,6 @@ let
   integerSimpleExcludes = [
     "ghc822Binary"
     "ghc865Binary"
-    "ghc844"
     "ghcjs"
     "ghcjs86"
     "integer-simple"
@@ -44,12 +43,6 @@ in {
 
     ghc865Binary = callPackage ../development/compilers/ghc/8.6.5-binary.nix { };
 
-    ghc844 = callPackage ../development/compilers/ghc/8.4.4.nix {
-      bootPkgs = packages.ghc822Binary;
-      sphinx = buildPackages.python3Packages.sphinx_1_7_9;
-      buildLlvmPackages = buildPackages.llvmPackages_5;
-      llvmPackages = pkgs.llvmPackages_5;
-    };
     ghc865 = callPackage ../development/compilers/ghc/8.6.5.nix {
       bootPkgs = packages.ghc822Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -123,11 +116,6 @@ in {
       ghc = bh.compiler.ghc865Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
       packageSetConfig = bootstrapPackageSet;
-    };
-    ghc844 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc844;
-      ghc = bh.compiler.ghc844;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
     };
     ghc865 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc865;
