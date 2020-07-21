@@ -2928,6 +2928,12 @@
     githubId = 7047019;
     name = "Florent Becker";
   };
+  galagora = {
+    email = "lightningstrikeiv@gmail.com";
+    github = "galagora";
+    githubId = 45048741;
+    name = "Alwanga Oyango";
+  };
   gamb = {
     email = "adam.gamble@pm.me";
     github = "gamb";
@@ -5196,6 +5202,12 @@
     name = "Kira Bruneau";
     github = "metadark";
     githubId = 382041;
+  };
+  meutraa = {
+    email = "paul+nixpkgs@lost.host";
+    name = "Paul Meredith";
+    github = "meutraa";
+    githubId = 68550871;
   };
   mfossen = {
     email = "msfossen@gmail.com";
