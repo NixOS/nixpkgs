@@ -719,7 +719,8 @@ rec {
          os = "linux";
       });
       customisationLayer = runCommand "${name}-customisation-layer" { inherit extraCommands; } ''
-        cp -r ${contentsEnv}/ $out
+        mkdir $out
+        cp -r ${contentsEnv}/* $out/
 
         if [[ -n $extraCommands ]]; then
           chmod u+w $out
