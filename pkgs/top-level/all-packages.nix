@@ -26865,6 +26865,8 @@ in
 
   zap = callPackage ../tools/networking/zap { };
 
+  zigbee2mqtt = callPackage ../servers/zigbee2mqtt { };
+
   zopfli = callPackage ../tools/compression/zopfli { };
 
   myEnvFun = callPackage ../misc/my-env {
