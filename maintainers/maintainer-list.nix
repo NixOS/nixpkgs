@@ -5203,6 +5203,12 @@
     github = "metadark";
     githubId = 382041;
   };
+  meutraa = {
+    email = "paul+nixpkgs@lost.host";
+    name = "Paul Meredith";
+    github = "meutraa";
+    githubId = 68550871;
+  };
   mfossen = {
     email = "msfossen@gmail.com";
     github = "mfossen";

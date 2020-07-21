@@ -199,9 +199,9 @@ in runCommand
       # source-code itself).
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; rec {
-        stable = [ primeos ];
+        stable = [ meutraa ];
         beta = [ galagora ];
-        canary = [ ];
+        canary = [ meutraa ];
         dev = canary;
       }."${channel}";
     };
