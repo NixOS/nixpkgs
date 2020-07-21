@@ -50,6 +50,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         fi
       '';
     };
+
+    systemd.watchdog = {
+      device = "/dev/watchdog";
+      runtimeTime = "30s";
+      rebootTime = "10min";
+      kexecTime = "5min";
+    };
   };
 
   testScript = ''
@@ -117,5 +124,20 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         retcode, output = machine.execute("systemctl status testservice1.service")
         assert retcode in [0, 3]  # https://bugs.freedesktop.org/show_bug.cgi?id=77507
         assert "CPU:" in output
+
+    # Test systemd is configured to manage a watchdog
+    with subtest("systemd manages hardware watchdog"):
+        machine.wait_for_unit("multi-user.target")
+
+        # It seems that the device's path doesn't appear in 'systemctl show' so
+        # check it separately.
+        assert "WatchdogDevice=/dev/watchdog" in machine.succeed(
+            "cat /etc/systemd/system.conf"
+        )
+
+        output = machine.succeed("systemctl show | grep Watchdog")
+        assert "RuntimeWatchdogUSec=30s" in output
+        assert "RebootWatchdogUSec=10m" in output
+        assert "KExecWatchdogUSec=5m" in output
   '';
 })

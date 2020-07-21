@@ -2,19 +2,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "protonvpn-cli-ng";
-  version = "2.2.2";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "protonvpn";
     repo = "${pname}";
     rev = "v${version}";
-    sha256 = "0ixjb02kj4z79whm1izd8mrn2h0rp9cmw4im1qvp93rahqxdd4n8";
+    sha256 = "08yca0a0prrnrc7ir7ajd56yxvxpcs4m1k8f5kf273f5whgr7wzw";
   };
 
   propagatedBuildInputs = (with python3Packages; [
       requests
       docopt
       setuptools
+      jinja2
       pythondialog
     ]) ++ [
       dialog

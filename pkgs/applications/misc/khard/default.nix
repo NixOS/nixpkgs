@@ -22,6 +22,11 @@ python3.pkgs.buildPythonApplication rec {
     install -D misc/zsh/_khard $out/share/zsh/site-functions/_khard
   '';
 
+  preCheck = ''
+    # see https://github.com/scheibler/khard/issues/263
+    export COLUMNS=80
+  '';
+
   meta = {
     homepage = "https://github.com/scheibler/khard";
     description = "Console carddav client";

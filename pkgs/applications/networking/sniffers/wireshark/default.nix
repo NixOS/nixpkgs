@@ -10,7 +10,7 @@ assert withQt  -> qt5  != null;
 with stdenv.lib;
 
 let
-  version = "3.2.4";
+  version = "3.2.5";
   variant = if withQt then "qt" else "cli";
   pcap = libpcap.override { withBluez = stdenv.isLinux; };
 
@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "1amqgn94g6h6cfnsccm2zb4c73pfv1qmzi1i6h1hnbcyhhg4czfi";
+    sha256 = "0h69m9maq6w5gik4gamv4kfqrr37hmi4kpwh225y1k36awm0b2dx";
   };
 
   cmakeFlags = [
@@ -30,6 +30,9 @@ in stdenv.mkDerivation {
     # Fix `extcap` and `plugins` paths. See https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=16444
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
+
+  # Avoid referencing -dev paths because of debug assertions.
+  NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
 
   nativeBuildInputs = [
     bison cmake flex pkgconfig

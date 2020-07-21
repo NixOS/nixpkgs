@@ -1,34 +1,24 @@
-{ stdenv, lib, go, buildGoPackage, dep, fetchgit, git, cacert }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "dcrd";
-  version = "1.1.2";
-  rev = "refs/tags/v${version}";
-  goPackagePath = "github.com/decred/dcrd";
+  version = "1.5.1";
 
-  buildInputs = [ go git dep cacert ];
-
-  GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-  NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-
-  src = fetchgit {
-    inherit rev;
-    url = "https://${goPackagePath}";
-    sha256 = "0xcynipdn9zmmralxj0hjrwyanvhkwfj2b1vvjk5zfc95s2xc1q9";
+  src = fetchFromGitHub {
+    owner = "decred";
+    repo = "dcrd";
+    rev = "refs/tags/release-v${version}";
+    sha256 = "1ggw289y1f4dqvj3w60q9bahq8bblbfjymn5xy04ldylr3qlxm9x";
   };
 
-  preBuild = ''
-    export CWD=$(pwd)
-    cd go/src/github.com/decred/dcrd
-    dep ensure
-    go install . ./cmd/...
-    cd $CWD
-  '';
+  vendorSha256 = "03aw6mcvp1vr01ppxy673jf5hdryd5032cxndlkaiwg005mxp1dy";
+
+  subPackages = [ "." "cmd/dcrctl" "cmd/promptsecret" ];
 
   meta = {
     homepage = "https://decred.org";
     description = "Decred daemon in Go (golang)";
     license = with lib.licenses; [ isc ];
-    broken = stdenv.isLinux; # 2018-04-10
+    maintainers = with lib.maintainers; [ juaningan ];
   };
 }

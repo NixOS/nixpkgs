@@ -1,0 +1,14 @@
+diff --git a/platformio/exception.py b/platformio/exception.py
+index d291ad7f..4761a35b 100644
+--- a/platformio/exception.py
++++ b/platformio/exception.py
+@@ -195,7 +195,8 @@ class MissedUdevRules(InvalidUdevRules):
+ 
+     MESSAGE = (
+         "Warning! Please install `99-platformio-udev.rules`. \nMode details: "
+-        "https://docs.platformio.org/en/latest/faq.html#platformio-udev-rules"
++        "https://docs.platformio.org/en/latest/faq.html#platformio-udev-rules\n"
++        "On NixOS add the platformio package to services.udev.packages"
+     )
+ 
+ 

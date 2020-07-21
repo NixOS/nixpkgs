@@ -2,16 +2,12 @@
 
 buildPythonPackage rec {
   pname = "jedi";
-  version = "0.15.2";
+  version = "0.17.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e909527104a903606dd63bea6e8e888833f0ef087057829b89a18364a856f807";
+    sha256 = "0qrgyn0znpib485hk0mi68wab6nhwqd3pyjxvp7jn6kijr7mszc0";
   };
-
-  postPatch = ''
-    substituteInPlace requirements.txt --replace "parso==0.1.0" "parso"
-  '';
 
   checkInputs = [ pytest glibcLocales tox pytestcov ];
 

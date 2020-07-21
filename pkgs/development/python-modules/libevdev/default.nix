@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "libevdev";
-  version = "0.7";
+  version = "0.9";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10gwj08kn2rs4waq7807mq34cbavgkpg8fpir8mvnba601b8q4r4";
+    sha256 = "17agnigmzscmdjqmrylg1lza03hwjhgxbpf4l705s6i7p7ndaqrs";
   };
 
   doCheck = false;

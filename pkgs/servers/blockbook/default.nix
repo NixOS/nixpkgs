@@ -61,6 +61,12 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
+  postInstall = ''
+    mkdir -p $out/share/
+    cp -r $src/static/templates/ $out/share/
+    cp -r $src/static/css/ $out/share/
+  '';
+
   meta = with lib; {
     description = "Trezor address/account balance backend";
     homepage = "https://github.com/trezor/blockbook";

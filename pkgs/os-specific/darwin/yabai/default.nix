@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, Carbon, Cocoa, ScriptingBridge }:
+{ stdenv, fetchFromGitHub, Carbon, Cocoa, ScriptingBridge, xxd }:
 
 stdenv.mkDerivation rec {
   pname = "yabai";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "koekeishiya";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1iq5p4k6klffglxfhmzc2jvlilwn0w97vb5v4b91spiyp39nqcfw";
+    sha256 = "11rsi6z2z7ynfqs1xq3bvf187k5xnwm0d45a8ai9hrqdsf3f1j19";
   };
 
-  buildInputs = [ Carbon Cocoa ScriptingBridge ];
+  buildInputs = [ Carbon Cocoa ScriptingBridge xxd ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/koekeishiya/yabai";
     platforms = platforms.darwin;
-    maintainers = [ maintainers.cmacrae maintainers.shardy ];
+    maintainers = with maintainers; [ cmacrae shardy ];
     license = licenses.mit;
   };
 }

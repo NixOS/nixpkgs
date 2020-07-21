@@ -199,7 +199,7 @@ stdenv.mkDerivation (args // {
       -executable ! \( -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \))
   '';
 
-  checkPhase = args.checkPhase or (let
+  installCheckPhase = args.checkPhase or (let
     argstr = "${stdenv.lib.optionalString (checkType == "release") "--release"} --target ${rustTarget} --frozen";
   in ''
     ${stdenv.lib.optionalString (buildAndTestSubdir != null) "pushd ${buildAndTestSubdir}"}

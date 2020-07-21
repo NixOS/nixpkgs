@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "eid-mw";
-  version = "4.4.16";
+  version = "4.4.27";
 
   src = fetchFromGitHub {
-    sha256 = "1q82fw63xzrnrgh1wyh457hal6vfdl6swqfq7l6kviywiwlzx7kd"; 
     rev = "v${version}";
+    sha256 = "17lw8iwp7h5cs3db80sysr84ffi333cf2vrhncs9l6hy6glfl2v1";
     repo = "eid-mw";
     owner = "Fedict";
   };
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     ln -s ${openssl.bin}/bin openssl
     ln -s ${openssl.dev}/include openssl
     export SSL_PREFIX=$(realpath openssl)
+    substituteInPlace plugins_tools/eid-viewer/Makefile.in \
+      --replace "c_rehash" "openssl rehash"
     '';
 
   postPatch = ''

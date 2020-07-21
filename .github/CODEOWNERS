@@ -193,3 +193,6 @@
 /nixos/modules/virtualisation/cri-o.nix      @NixOS/podman
 /nixos/modules/virtualisation/podman.nix     @NixOS/podman
 /nixos/tests/podman.nix                      @NixOS/podman
+
+# Blockchains
+/pkgs/applications/blockchains  @mmahut

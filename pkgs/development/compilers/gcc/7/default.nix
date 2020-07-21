@@ -53,6 +53,8 @@ let majorVersion = "7";
         ./riscv-pthread-reentrant.patch
         # https://gcc.gnu.org/ml/gcc-patches/2018-03/msg00297.html
         ./riscv-no-relax.patch
+
+        ./0001-Fix-build-for-glibc-2.31.patch
       ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optionals targetPlatform.isNetBSD [

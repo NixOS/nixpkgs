@@ -4,10 +4,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "13ywgyyxzlgks7nb17gwqjmdqjjmhc8si3iliv8jhf51lb3s865v";
+      sha256 = "0rg58rd3hgk8wz4fbapn3szwgymk1q9lv4ywg37bkbcflsbi70iy";
       type = "gem";
     };
-    version = "3.17.0";
+    version = "3.17.2";
   };
   concurrent-ruby = {
     groups = ["default"];
@@ -44,10 +44,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "10lfhahnnc91v63xpvk65apn61pib086zha3z5sp1xk9acfx12h4";
+      sha256 = "12lpwaw82bb0rm9f52v1498bpba8aj2l2q359mkwbxsswhpga5af";
       type = "gem";
     };
-    version = "1.12.2";
+    version = "1.13.1";
   };
   gemojione = {
     dependencies = ["json"];
@@ -55,10 +55,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "097mrsahv1h67kjrk1cpiqc1cbrfgvlp2rqwmzdzxrq0kx50461w";
+      sha256 = "0fwd523pgr72w3w6jwpz9i6sggvz52d7831a1s4y3lv8m50j6ima";
       type = "gem";
     };
-    version = "4.3.2";
+    version = "4.3.3";
   };
   github-markup = {
     groups = ["default"];
@@ -87,10 +87,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0r59fyf7i4rlp6wj9ilnqd9pmgpkafv0yl4jmrxa6hr2p4cmnf1g";
+      sha256 = "0pr3djmawqpmifyadw1vfzdkq720dsaqih1wf8k2vksw0lr9la74";
       type = "gem";
     };
-    version = "5.0.3";
+    version = "5.0.4";
   };
   gollum-rugged_adapter = {
     dependencies = ["mime-types" "rugged"];
@@ -98,10 +98,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0016yfac3b3sy34k9wrqg422mjm8cpd1jd1m4gdn4x2d4jxhxkzq";
+      sha256 = "0ln12976vm1ks74yyrssdx576b1z0hs8r82fivr366knv5hlcrdm";
       type = "gem";
     };
-    version = "0.99.4";
+    version = "1.0";
   };
   json = {
     groups = ["default"];
@@ -140,10 +140,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0jk9fgn5ayzbqvzqm11gbkqvas77zdbpkvynlylyiwynclgrn040";
+      sha256 = "1s9hq8bpn6g5vqr3nzyirn3agn7x8agan6151zvq5vmkf6rvmyb2";
       type = "gem";
     };
-    version = "2.5.0";
+    version = "2.6.0";
   };
   mime-types = {
     dependencies = ["mime-types-data"];
@@ -161,10 +161,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "18x61fc36951vw7f74gq8cyybdpxvyg5d0azvqhrs82ddw3v16xh";
+      sha256 = "1z75svngyhsglx0y2f9rnil2j08f9ab54b3l95bpgz67zq2if753";
       type = "gem";
     };
-    version = "3.2019.1009";
+    version = "3.2020.0512";
   };
   mini_portile2 = {
     groups = ["default"];
@@ -234,10 +234,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "10mp9s48ssnw004aksq90gvhdvwczh8j6q82q2kqiqq92jd1zxbp";
+      sha256 = "0i5vs0dph9i5jn8dfc6aqd6njcafmb20rwqngrf759c9cvmyff16";
       type = "gem";
     };
-    version = "2.2.2";
+    version = "2.2.3";
   };
   rack-protection = {
     dependencies = ["rack"];
@@ -255,10 +255,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1lm1k7wpz69jx7jrc92w3ggczkjyjbfziq5mg62vjnxmzs383xx8";
+      sha256 = "1k9bsj7ni0g2fd7scyyy1sk9dy2pg9akniahab0iznvjmhn54h87";
       type = "gem";
     };
-    version = "0.10.3";
+    version = "0.10.4";
   };
   rb-inotify = {
     dependencies = ["ffi"];
@@ -286,10 +286,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0xl7k5paf66p57sphm4nfa4k86yf93lhdzzr0cv0l4divq12g2pr";
+      sha256 = "1r5npy9a95qh5v74lw7ir3nhaq4xrzyhfdixd7c5xy295i92nnic";
       type = "gem";
     };
-    version = "3.17.0";
+    version = "3.20.0";
   };
   rss = {
     dependencies = ["rexml"];
@@ -383,10 +383,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1hy67dwz76n5db00d9n3qy59ici96c2g25c9xpmp2nh8ilvha338";
+      sha256 = "14iq8v16l31bfq7pikfmgcv5x6pkc5lbdmwwg6zlzcy1bibcliar";
       type = "gem";
     };
-    version = "1.2.3";
+    version = "1.3.0";
   };
   therubyrhino = {
     dependencies = ["therubyrhino_jar"];

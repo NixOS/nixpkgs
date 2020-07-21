@@ -7,6 +7,9 @@
 , dbus, gtk2, gtk3, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
 , kerberos, libdrm, mesa
 
+# Command line programs
+, coreutils
+
 # command line arguments which are always set e.g "--disable-gpu"
 , commandLineArgs ? ""
 
@@ -58,7 +61,7 @@ let
     liberation_ttf curl utillinux xdg_utils wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap at-spi2-atk at-spi2-core
-    kerberos libdrm mesa
+    kerberos libdrm mesa coreutils
   ] ++ optional pulseSupport libpulseaudio
     ++ [ gtk ];
 
@@ -101,6 +104,12 @@ in stdenv.mkDerivation {
 
     cp -a opt/* $out/share
     cp -a usr/share/* $out/share
+
+    # To fix --use-gl=egl:
+    test -e $out/share/google/$appname/libEGL.so
+    ln -s libEGL.so $out/share/google/$appname/libEGL.so.1
+    test -e $out/share/google/$appname/libGLESv2.so
+    ln -s libGLESv2.so $out/share/google/$appname/libGLESv2.so.2
 
     substituteInPlace $out/share/applications/google-$appname.desktop \
       --replace /usr/bin/google-chrome-$dist $exe

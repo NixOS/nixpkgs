@@ -83,8 +83,10 @@ stdenv.mkDerivation rec {
     cp -avr ${./launchers} $out/etc/skel/.config/plank/dock1/launchers
 
     # Whitelist wingpanel indicators to be used in the greeter
-    # TODO: is this needed or installed upstream?
-    install -D ${./io.elementary.greeter.whitelist} $out/etc/wingpanel.d/io.elementary.greeter.whitelist
+    # hhttps://github.com/elementary/greeter/blob/fc19752f147c62767cd2097c0c0c0fcce41e5873/debian/io.elementary.greeter.whitelist
+    # wingpanel 2.3.2 renamed this to .allowed to .forbidden
+    # https://github.com/elementary/wingpanel/pull/326
+    install -D ${./io.elementary.greeter.allowed} $out/etc/wingpanel.d/io.elementary.greeter.allowed
   '';
 
   postFixup = ''

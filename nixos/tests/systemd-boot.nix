@@ -11,6 +11,8 @@ let
     virtualisation.useBootLoader = true;
     virtualisation.useEFIBoot = true;
     boot.loader.systemd-boot.enable = true;
+    boot.loader.efi.canTouchEfiVariables = true;
+    environment.systemPackages = [ pkgs.efibootmgr ];
   };
 in
 {
@@ -31,6 +33,36 @@ in
       machine.succeed(
           "test -e /sys/firmware/efi/efivars/LoaderEntrySelected-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f"
       )
+
+      # "bootctl install" should have created an EFI entry
+      machine.succeed('efibootmgr | grep "Linux Boot Manager"')
+    '';
+  };
+
+  # Boot without having created an EFI entry--instead using default "/EFI/BOOT/BOOTX64.EFI"
+  fallback = makeTest {
+    name = "systemd-boot-fallback";
+    meta.maintainers = with pkgs.stdenv.lib.maintainers; [ danielfullmer ];
+
+    machine = { pkgs, lib, ... }: {
+      imports = [ common ];
+      boot.loader.efi.canTouchEfiVariables = mkForce false;
+    };
+
+    testScript = ''
+      machine.start()
+      machine.wait_for_unit("multi-user.target")
+
+      machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+
+      # Ensure we actually booted using systemd-boot
+      # Magic number is the vendor UUID used by systemd-boot.
+      machine.succeed(
+          "test -e /sys/firmware/efi/efivars/LoaderEntrySelected-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f"
+      )
+
+      # "bootctl install" should _not_ have created an EFI entry
+      machine.fail('efibootmgr | grep "Linux Boot Manager"')
     '';
   };
 

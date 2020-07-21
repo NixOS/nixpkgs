@@ -37,6 +37,14 @@ if [ -e @out@/nix-support/libc-cflags ]; then
     NIX_CFLAGS_COMPILE_@suffixSalt@="$(< @out@/nix-support/libc-cflags) $NIX_CFLAGS_COMPILE_@suffixSalt@"
 fi
 
+if [ -e @out@/nix-support/libcxx-cxxflags ]; then
+    NIX_CXXSTDLIB_COMPILE_@suffixSalt@+=" $(< @out@/nix-support/libcxx-cxxflags)"
+fi
+
+if [ -e @out@/nix-support/libcxx-ldflags ]; then
+    NIX_CXXSTDLIB_LINK_@suffixSalt@+=" $(< @out@/nix-support/libcxx-ldflags)"
+fi
+
 if [ -e @out@/nix-support/cc-cflags ]; then
     NIX_CFLAGS_COMPILE_@suffixSalt@="$(< @out@/nix-support/cc-cflags) $NIX_CFLAGS_COMPILE_@suffixSalt@"
 fi

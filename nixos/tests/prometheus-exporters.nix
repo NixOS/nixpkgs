@@ -363,6 +363,31 @@ let
       '';
     };
 
+    modemmanager = {
+      exporterConfig = {
+        enable = true;
+        refreshRate = "10s";
+      };
+      metricProvider = {
+        # ModemManager is installed when NetworkManager is enabled. Ensure it is
+        # started and is wanted by NM and the exporter to start everything up
+        # in the right order.
+        networking.networkmanager.enable = true;
+        systemd.services.ModemManager = {
+          enable = true;
+          wantedBy = [ "NetworkManager.service" "prometheus-modemmanager-exporter.service" ];
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("ModemManager.service")
+        wait_for_unit("prometheus-modemmanager-exporter.service")
+        wait_for_open_port(9539)
+        succeed(
+            "curl -sSf http://localhost:9539/metrics | grep -q 'modemmanager_info'"
+        )
+      '';
+    };
+
     nextcloud = {
       exporterConfig = {
         enable = true;
@@ -472,6 +497,20 @@ let
             "curl -sSf http://localhost:9187/metrics | grep -q 'pg_exporter_last_scrape_error 0'"
         )
         succeed("curl -sSf http://localhost:9187/metrics | grep -q 'pg_up 1'")
+      '';
+    };
+
+    redis = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider.services.redis.enable = true;
+      exporterTest = ''
+        wait_for_unit("redis.service")
+        wait_for_unit("prometheus-redis-exporter.service")
+        wait_for_open_port(6379)
+        wait_for_open_port(9121)
+        wait_until_succeeds("curl -sSf localhost:9121/metrics | grep -q 'redis_up 1'")
       '';
     };
 

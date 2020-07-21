@@ -1,4 +1,4 @@
-{ fetchFromGitHub, nixStable, callPackage, nixFlakes, fetchpatch, nixosTests }:
+{ fetchFromGitHub, nixStable, callPackage, nixFlakes, nixosTests }:
 
 {
   # Package for phase-1 of the db migration for Hydra.
@@ -24,21 +24,14 @@
   # so when having an older version, `pkgs.hydra-migration` should be deployed first.
 
   hydra-unstable = callPackage ./common.nix {
-    version = "2020-06-01";
+    version = "2020-06-23";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "hydra";
-      rev = "750e2e618ac6d3df02c57a2cf8758bc66a27c40a";
-      sha256 = "1szfzf9kw5cj6yn57gfxrffbdkdf8v3xy9914924blpn5qll31g4";
+      rev = "bb32aafa4a9b027c799e29b1bcf68727e3fc5f5b";
+      sha256 = "0kl9h70akwxpik3xf4dbbh7cyqn06023kshfvi14mygdlb84djgx";
     };
     nix = nixFlakes;
-
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/NixOS/hydra/commit/d4822a5f4b57dff26bdbf436723a87dd62bbcf30.patch";
-        sha256 = "1n6hyjz1hzvka4wi78d4wg0sg2wanrdmizqy23vmp7pmv8s3gz8w";
-      })
-    ];
 
     tests = {
       db-migration = nixosTests.hydra-db-migration.mig;

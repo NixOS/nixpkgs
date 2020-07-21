@@ -53,8 +53,8 @@ let
       ${optionalString cfg.greeter.enable ''
         greeter-session = ${cfg.greeter.name}
       ''}
-      ${optionalString cfg.autoLogin.enable ''
-        autologin-user = ${cfg.autoLogin.user}
+      ${optionalString dmcfg.autoLogin.enable ''
+        autologin-user = ${dmcfg.autoLogin.user}
         autologin-user-timeout = ${toString cfg.autoLogin.timeout}
         autologin-session = ${sessionData.autologinSession}
       ''}
@@ -82,6 +82,20 @@ in
     ./lightdm-greeters/enso-os.nix
     ./lightdm-greeters/pantheon.nix
     ./lightdm-greeters/tiny.nix
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "lightdm" "autoLogin" "enable" ] [
+      "services"
+      "xserver"
+      "displayManager"
+      "autoLogin"
+      "enable"
+    ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "lightdm" "autoLogin" "user" ] [
+     "services"
+     "xserver"
+     "displayManager"
+     "autoLogin"
+     "user"
+    ])
   ];
 
   options = {
@@ -149,39 +163,13 @@ in
         description = "Extra lines to append to SeatDefaults section.";
       };
 
-      autoLogin = mkOption {
-        default = {};
+      # Configuration for automatic login specific to LightDM
+      autoLogin.timeout = mkOption {
+        type = types.int;
+        default = 0;
         description = ''
-          Configuration for automatic login.
+          Show the greeter for this many seconds before automatic login occurs.
         '';
-
-        type = types.submodule {
-          options = {
-            enable = mkOption {
-              type = types.bool;
-              default = false;
-              description = ''
-                Automatically log in as the specified <option>autoLogin.user</option>.
-              '';
-            };
-
-            user = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              description = ''
-                User to be used for the automatic login.
-              '';
-            };
-
-            timeout = mkOption {
-              type = types.int;
-              default = 0;
-              description = ''
-                Show the greeter for this many seconds before automatic login occurs.
-              '';
-            };
-          };
-        };
       };
 
     };
@@ -195,17 +183,12 @@ in
           LightDM requires services.xserver.enable to be true
         '';
       }
-      { assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
-        message = ''
-          LightDM auto-login requires services.xserver.displayManager.lightdm.autoLogin.user to be set
-        '';
-      }
-      { assertion = cfg.autoLogin.enable -> sessionData.autologinSession != null;
+      { assertion = dmcfg.autoLogin.enable -> sessionData.autologinSession != null;
         message = ''
           LightDM auto-login requires that services.xserver.displayManager.defaultSession is set.
         '';
       }
-      { assertion = !cfg.greeter.enable -> (cfg.autoLogin.enable && cfg.autoLogin.timeout == 0);
+      { assertion = !cfg.greeter.enable -> (dmcfg.autoLogin.enable && cfg.autoLogin.timeout == 0);
         message = ''
           LightDM can only run without greeter if automatic login is enabled and the timeout for it
           is set to zero.
@@ -218,7 +201,7 @@ in
 
     # Set default session in session chooser to a specified values – basically ignore session history.
     # Auto-login is already covered by a config value.
-    services.xserver.displayManager.job.preStart = optionalString (!cfg.autoLogin.enable && dmcfg.defaultSession != null) ''
+    services.xserver.displayManager.job.preStart = optionalString (!dmcfg.autoLogin.enable && dmcfg.defaultSession != null) ''
       ${setSessionScript}/bin/set-session ${dmcfg.defaultSession}
     '';
 

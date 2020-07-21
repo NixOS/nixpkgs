@@ -158,7 +158,7 @@ let
       mkdir -p $out/Applications
       cp -r ./slack-mnt/Slack.app $out/Applications
       /usr/bin/hdiutil unmount slack-mnt
-      defaults write com.tinyspeck.slackmacgap SlackNoAutoUpdates -bool YES
+      /usr/bin/defaults write com.tinyspeck.slackmacgap SlackNoAutoUpdates -bool YES
     '';
   };
 in if stdenv.isDarwin

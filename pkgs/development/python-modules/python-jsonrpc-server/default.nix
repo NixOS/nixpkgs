@@ -1,6 +1,7 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
 , pytest, mock, pytestcov, coverage
 , future, futures, ujson, isPy38
+, fetchpatch
 }:
 
 buildPythonPackage rec {
@@ -16,6 +17,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     sed -i 's/version=versioneer.get_version(),/version="${version}",/g' setup.py
+    # https://github.com/palantir/python-jsonrpc-server/issues/36
+    sed -i -e 's!ujson<=!ujson>=!' setup.py
   '';
 
   checkInputs = [
@@ -26,7 +29,16 @@ buildPythonPackage rec {
     pytest
   '';
 
-  disabled = isPy38;
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/palantir/python-jsonrpc-server/commit/0a04cc4e9d44233b1038b12d63cd3bd437c2374e.patch";
+      sha256 = "177zdnp1808r2pg189bvzab44l8i2alsgv04kmrlhhnv40h66qyg";
+    })
+    (fetchpatch {
+      url = "https://github.com/palantir/python-jsonrpc-server/commit/5af6e43d0c1fb9a6a29b96d38cfd6dbeec85d0ea.patch";
+      sha256 = "1gx7lc1jxar1ngqqfkdn21s46y1mfnjf7ky2886ydk53nkaba91m";
+    })
+  ];
 
   propagatedBuildInputs = [ future ujson ]
     ++ stdenv.lib.optional (pythonOlder "3.2") futures;

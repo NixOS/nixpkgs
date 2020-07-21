@@ -99,9 +99,6 @@ stdenv.mkDerivation rec {
 
     cp -r Resource "$out/share/ghostscript/${version}"
 
-    mkdir -p "$doc/share/doc/ghostscript"
-    mv "$doc/share/doc/${version}" "$doc/share/doc/ghostscript/"
-
     ln -s "${fonts}" "$out/share/ghostscript/fonts"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     for file in $out/lib/*.dylib* ; do

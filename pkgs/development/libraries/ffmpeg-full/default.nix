@@ -118,6 +118,7 @@
 #, shine ? null # Fixed-point MP3 encoder
 , soxr ? null # Resampling via soxr
 , speex ? null # Speex de/encoder
+, srt ? null # Secure Reliable Transport (SRT) protocol
 #, twolame ? null # MP2 encoder
 #, utvideo ? null # Ut Video de/encoder
 , vid-stab ? null # Video stabilization
@@ -242,8 +243,6 @@ stdenv.mkDerivation rec {
   pname = "ffmpeg-full";
   inherit (ffmpeg) src version;
 
-  patches = [ ./prefer-libdav1d-over-libaom.patch ];
-
   prePatch = ''
     patchShebangs .
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
@@ -357,6 +356,7 @@ stdenv.mkDerivation rec {
     #(enableFeature (libnut != null) "libnut")
     (enableFeature (libopus != null) "libopus")
     (enableFeature (librsvg != null) "librsvg")
+    (enableFeature (srt != null) "libsrt")
     (enableFeature (libssh != null) "libssh")
     (enableFeature (libtheora != null) "libtheora")
     (enableFeature (if isLinux then libv4l != null else false) "libv4l2")
@@ -420,7 +420,7 @@ stdenv.mkDerivation rec {
     libjack2 ladspaH lame libaom libass libbluray libbs2b libcaca libdc1394 libmodplug libmysofa
     libogg libopus librsvg libssh libtheora libvdpau libvorbis libvpx libwebp libX11
     libxcb libXv libXext lzma openal openjpeg libpulseaudio rtmpdump opencore-amr
-    samba SDL2 soxr speex vid-stab vo-amrwbenc wavpack x264 x265 xavs xvidcore
+    samba SDL2 soxr speex srt vid-stab vo-amrwbenc wavpack x264 x265 xavs xvidcore
     zeromq4 zlib
   ] ++ optionals openglExtlib [ libGL libGLU ]
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]

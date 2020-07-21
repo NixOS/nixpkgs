@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "1s08shhg826hbpcjzlhwj0r5qqckz8rv2xjg22rz1qvsjyhkmv7r";
+    sha256 = "0d298v7rf8lxdavhfad68rq4sgmg6gw6vc7phh1lnhx5pbhkvv22";
   };
 
-  cargoSha256 = "0lz7119znpxyaj9ac1skfbx0s0dkh3hwk00g0zjn3r6k8fh9gj4d";
+  cargoSha256 = "0xibrdbqfmmkncqpjsllzx1w79crm0v4liwf2aldnafji7jqclb4";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals (withStableFeatures && stdenv.isLinux) [ python3 ];
@@ -37,6 +37,13 @@ rustPlatform.buildRustPackage rec {
 
   preCheck = ''
     export HOME=$TMPDIR
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    echo "Running cargo test"
+    cargo test
+    runHook postCheck
   '';
 
   meta = with lib; {

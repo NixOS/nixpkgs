@@ -1,14 +1,15 @@
 { stdenv, fetchurl, libunwind }:
 
 stdenv.mkDerivation rec {
-  name = "gperftools-2.7";
+  name = "gperftools-2.8";
 
   src = fetchurl {
     url = "https://github.com/gperftools/gperftools/releases/download/${name}/${name}.tar.gz";
-    sha256 = "1jb30zxmw7h9qxa8yi76rfxj4ssk60rv8n9y41m6pzqfk9lwis0y";
+    sha256 = "0gjiplvday50x695pwjrysnvm5wfvg2b0gmqf6b4bdi8sv6yl394";
   };
 
-  buildInputs = stdenv.lib.optional stdenv.isLinux libunwind;
+  # tcmalloc uses libunwind in a way that works correctly only on non-ARM linux
+  buildInputs = stdenv.lib.optional (stdenv.isLinux && !(stdenv.isAarch64 || stdenv.isAarch32)) libunwind;
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile.am --replace stdc++ c++

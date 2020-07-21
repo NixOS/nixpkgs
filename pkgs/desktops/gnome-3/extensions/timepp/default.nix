@@ -13,8 +13,10 @@ stdenv.mkDerivation rec {
 
   uuid = "timepp@zagortenay333";
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions/${uuid}
     cp -r . $out/share/gnome-shell/extensions/${uuid}
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {

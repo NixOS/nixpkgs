@@ -1,5 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , amqp
+, botocore
 , case
 , Pyro4
 , pytest
@@ -31,7 +32,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [ pytest case pytz Pyro4 sqlalchemy ];
+  checkInputs = [ botocore pytest case pytz Pyro4 sqlalchemy ];
   # test_redis requires fakeredis, which isn't trivial to package
   checkPhase = ''
     pytest --ignore t/unit/transport/test_redis.py

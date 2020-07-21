@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
     desktopName = "Airtame";
     icon = name;
     genericName = comment;
-    categories = "Application;Network;";
+    categories = "Network;";
   };
 
   installPhase = ''

@@ -2,6 +2,7 @@
 , lib
 , fetchurl
 , substituteAll
+, autoreconfHook
 , pkgconfig
 , intltool
 , babl
@@ -28,9 +29,10 @@
 , ghostscript
 , aalib
 , shared-mime-info
-, python2Packages
+, python2
 , libexif
 , gettext
+, makeWrapper
 , xorg
 , glib-networking
 , libmypaint
@@ -47,7 +49,7 @@
 }:
 
 let
-  inherit (python2Packages) pygtk wrapPython python;
+  python = python2.withPackages (pp: [ pp.pygtk ]);
 in stdenv.mkDerivation rec {
   pname = "gimp";
   version = "2.10.20";
@@ -59,11 +61,25 @@ in stdenv.mkDerivation rec {
     sha256 = "4S+fh0saAHxCd7YKqB4LZzML5+YVPldJ6tg5uQL8ezw=";
   };
 
+  patches = [
+    # to remove compiler from the runtime closure, reference was retained via
+    # gimp --version --verbose output
+    (substituteAll {
+      src = ./remove-cc-reference.patch;
+      cc_version = stdenv.cc.cc.name;
+    })
+
+    # Use absolute paths instead of relying on PATH
+    # to make sure plug-ins are loaded by the correct interpreter.
+    ./hardcode-plugin-interpreters.patch
+  ];
+
   nativeBuildInputs = [
+    autoreconfHook # hardcode-plugin-interpreters.patch changes Makefile.am
     pkgconfig
     intltool
     gettext
-    wrapPython
+    makeWrapper
   ];
 
   buildInputs = [
@@ -97,7 +113,6 @@ in stdenv.mkDerivation rec {
     libwebp
     libheif
     python
-    pygtk
     libexif
     xorg.libXpm
     glib-networking
@@ -116,8 +131,6 @@ in stdenv.mkDerivation rec {
     gegl
   ];
 
-  pythonPath = [ pygtk ];
-
   # Check if librsvg was built with --disable-pixbuf-loader.
   PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvg}/${gdk-pixbuf.moduleDir}";
 
@@ -126,19 +139,8 @@ in stdenv.mkDerivation rec {
     export GIO_EXTRA_MODULES="${glib-networking}/lib/gio/modules:$GIO_EXTRA_MODULES"
   '';
 
-  patches = [
-    # to remove compiler from the runtime closure, reference was retained via
-    # gimp --version --verbose output
-    (substituteAll {
-      src = ./remove-cc-reference.patch;
-      cc_version = stdenv.cc.cc.name;
-    })
-  ];
-
   postFixup = ''
-    wrapPythonProgramsIn $out/lib/gimp/${passthru.majorVersion}/plug-ins/
     wrapProgram $out/bin/gimp-${lib.versions.majorMinor version} \
-      --prefix PYTHONPATH : "$PYTHONPATH" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
   '';
 

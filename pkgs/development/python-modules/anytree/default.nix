@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "anytree";
-  version = "2.7.3";
+  version = "2.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05736hamjv4f38jw6z9y4wckc7mz18ivbizm1s3pb0n6fp1sy4zk";
+    sha256 = "3f0f93f355a91bc3e6245319bf4c1d50e3416cc7a35cc1133c1ff38306bbccab";
   };
 
   patches = lib.optionals withGraphviz [

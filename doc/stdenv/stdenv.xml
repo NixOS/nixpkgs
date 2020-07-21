@@ -2019,6 +2019,9 @@ addEnvHooks "$hostOffset" myBashFunction
        In certain situations you may want to run the main command (<command>autoPatchelf</command>) of the setup hook on a file or a set of directories instead of unconditionally patching all outputs. This can be done by setting the <varname>dontAutoPatchelf</varname> environment variable to a non-empty value.
       </para>
       <para>
+       By default <command>autoPatchelf</command> will fail as soon as any ELF file requires a dependency which cannot be resolved via the given build inputs. In some situations you might prefer to just leave missing dependencies unpatched and continue to patch the rest. This can be achieved by setting the <envar>autoPatchelfIgnoreMissingDeps</envar> environment variable to a non-empty value.
+      </para>
+      <para>
        The <command>autoPatchelf</command> command also recognizes a <parameter class="command">--no-recurse</parameter> command line flag, which prevents it from recursing into subdirectories.
       </para>
      </listitem>

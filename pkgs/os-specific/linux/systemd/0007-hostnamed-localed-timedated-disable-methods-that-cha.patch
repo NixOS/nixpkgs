@@ -1,4 +1,4 @@
-From 409fc808794942ad1736c2cc74853d9792e4ad02 Mon Sep 17 00:00:00 2001
+From e2b25ce3606d05ff8a387185c41ab32fb2a36161 Mon Sep 17 00:00:00 2001
 From: Gabriel Ebner <gebner@gebner.org>
 Date: Sun, 6 Dec 2015 14:26:36 +0100
 Subject: [PATCH 07/18] hostnamed, localed, timedated: disable methods that

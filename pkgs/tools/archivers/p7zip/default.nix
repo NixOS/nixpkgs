@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   # Default makefile is full of impurities on Darwin. The patch doesn't hurt Linux so I'm leaving it unconditional
   postPatch = ''
     sed -i '/CC=\/usr/d' makefile.macosx_llvm_64bits
+    chmod +x install.sh
 
     # I think this is a typo and should be CXX? Either way let's kill it
     sed -i '/XX=\/usr/d' makefile.macosx_llvm_64bits
@@ -28,7 +29,6 @@ stdenv.mkDerivation rec {
     # (see DOC/License.txt, https://fedoraproject.org/wiki/Licensing:Unrar)
     rm -r CPP/7zip/Compress/Rar*
     find . -name makefile'*' -exec sed -i '/Rar/d' {} +
-    chmod +x install.sh
   '';
 
   preConfigure = ''

@@ -1,18 +1,12 @@
 { stdenv, buildPythonPackage, fetchFromGitHub
-, codecov, coverage
-, flake8
 , matplotlib
 , mock
 , numpy
 , pillow
 , pytest
 , pytestcov
-, pytest-sugar
-, setuptools
-, twine
-, wheel
 }:
-  
+
 buildPythonPackage rec {
   pname = "word_cloud";
   version = "1.6.0";
@@ -28,12 +22,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ matplotlib numpy pillow ];
 
   # Tests require extra dependencies
-  checkInputs = [ codecov coverage flake8 mock pytest pytestcov pytest-sugar setuptools twine wheel ];
+  checkInputs = [ mock pytest pytestcov ];
   # skip tests which make assumptions about installation
   checkPhase = ''
     pytest -k 'not cli_as_executable'
   '';
-  
+
   meta = with stdenv.lib; {
     description = "A little word cloud generator in Python";
     homepage = "https://github.com/amueller/word_cloud";

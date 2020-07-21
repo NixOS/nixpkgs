@@ -4,13 +4,13 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "reuse";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "fsfe";
     repo = "reuse-tool";
     rev = "v${version}";
-    sha256 = "08dzvrv28ylbq1bm16lakwzyqq530fcbrl71k33zyb84mvgszy97";
+    sha256 = "0wkk107s0bpvbknapns0qdzf8csrzc2j6gliy6pa8z208fcfzyy3";
   };
 
   propagatedBuildInputs = [

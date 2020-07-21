@@ -54,7 +54,6 @@ self: super: {
   async = doJailbreak super.async;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   chell = doJailbreak super.chell;
-  cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
   Diff = dontCheck super.Diff;
   doctest = doJailbreak super.doctest;
   hashable = doJailbreak super.hashable;
@@ -74,7 +73,6 @@ self: super: {
   # TODO: remove when upstream accepts https://github.com/snapframework/io-streams-haproxy/pull/17
   io-streams-haproxy = doJailbreak super.io-streams-haproxy; # base >=4.5 && <4.13
   snap-server = doJailbreak super.snap-server;
-  xmobar = doJailbreak super.xmobar;
   exact-pi = doJailbreak super.exact-pi;
   time-compat = doJailbreak super.time-compat;
   http-media = doJailbreak super.http-media;

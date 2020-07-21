@@ -90,11 +90,11 @@ in rec {
         inherit shell;
         inherit (last) stdenvNoCC;
 
-        extraPackages = lib.optional (libcxx != null) libcxx;
+        extraPackages = [];
 
         nativeTools  = false;
         nativeLibc   = false;
-        inherit buildPackages coreutils gnugrep bintools;
+        inherit buildPackages coreutils gnugrep bintools libcxx;
         libc         = last.pkgs.darwin.Libsystem;
         isClang      = true;
         cc           = { name = "${name}-clang"; outPath = bootstrapTools; };
@@ -168,8 +168,9 @@ in rec {
             ln -s ${bootstrapTools}/lib/libc++.dylib $out/lib/libc++.dylib
             ln -s ${bootstrapTools}/include/c++      $out/include/c++
           '';
-          linkCxxAbi = false;
-          setupHook = ../../development/compilers/llvm/7/libc++/setup-hook.sh;
+          passthru = {
+            isLLVM = true;
+          };
         };
 
         libcxxabi = stdenv.mkDerivation {

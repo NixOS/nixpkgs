@@ -2,19 +2,18 @@
 
 buildGoModule rec {
   pname = "gomuks";
-  version = "0.1.0";
+  version = "0.1.2";
 
   goPackagePath = "maunium.net/go/gomuks";
-  patches = [ ./gomod.patch ];
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = pname;
     rev = "v" + version;
-    sha256 = "1dcqkyxiqiyivzn85fwkjy8xs9yk89810x9mvkaiz0dx3ha57zhi";
+    sha256 = "11bainw4w9fdrhv2jm0j9fw0f7r4cxlblyazbhckgr4j9q900383";
   };
 
-  vendorSha256 = "1mfi167mycnnlq8dwh1kkx6drhhi4ib58aad5fwc90ckdaq1rpb7";
+  vendorSha256 = "11rk7pma6dr6fsyz8hpjyr7nc2c7ichh5m7ds07m89gzk6ar55gb";
 
   buildInputs = [ olm ];
 

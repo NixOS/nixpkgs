@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "bettercap";
-  version = "2.27.1";
+  version = "2.28";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0jb78c3s6p210mj28qg4aacd8ly6d6k5h9c48y88vmcyllzjvbhl";
+    sha256 = "0aihinn3i3jj350l2rqph7nv3wy4nh4f8syidf77zybjcp9nmcys";
   };
 
-  vendorSha256 = "1j272w0zdndcz4fmh9fzbk2q8wmyfi70vn0p6d8cg0r0l231sbyx";
+  vendorSha256 = "0yfs1f18d8frbkrshsajzzbj4wh2azd89g2h35wm6wqknvlipwr0";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libpcap libnfnetlink libnetfilter_queue libusb1 ];

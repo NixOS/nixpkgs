@@ -1,7 +1,7 @@
 { stdenv, buildPythonApplication, fetchFromGitHub, fetchpatch, isPyPy, lib
 , future, psutil, setuptools
 # Optional dependencies:
-, bottle, batinfo, pysnmp
+, bottle, pysnmp
 , hddtemp
 , netifaces # IP module
 }:
@@ -35,7 +35,6 @@ buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
-    batinfo
     bottle
     future
     netifaces

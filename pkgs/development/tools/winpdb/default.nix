@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
     comment = "Platform independend Python debugger";
     desktopName = "Winpdb";
     genericName = "Python Debugger";
-    categories = "Application;Development;Debugger;";
+    categories = "Development;Debugger;";
   };
 
   # Don't call gnome-terminal with "--disable-factory" flag, which is

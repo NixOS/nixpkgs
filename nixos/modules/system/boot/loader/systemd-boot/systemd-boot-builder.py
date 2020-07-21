@@ -47,9 +47,9 @@ def write_loader_conf(profile, generation):
         if "@timeout@" != "":
             f.write("timeout @timeout@\n")
         if profile:
-            f.write("default nixos-%s-generation-%d.conf\n".format(profile, generation))
+            f.write("default nixos-%s-generation-%d.conf\n" % (profile, generation))
         else:
-            f.write("default nixos-generation-%d.conf\n".format(generation))
+            f.write("default nixos-generation-%d.conf\n" % (generation))
         if not @editor@:
             f.write("editor 0\n");
         f.write("console-mode @consoleMode@\n");

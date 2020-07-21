@@ -61,6 +61,11 @@ stdenv.mkDerivation rec {
       ++ lib.optional zeroconfSupport  avahi
   );
 
+  prePatch = ''
+    substituteInPlace bootstrap.sh \
+      --replace pkg-config $PKG_CONFIG
+  '';
+
   autoreconfPhase = ''
     # Performs an autoreconf
     patchShebangs bootstrap.sh

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "guile-cairo";
-  version = "1.11.0";
+  version = "1.11.1";
 
   src = fetchurl {
     url = "mirror://savannah/guile-cairo/${pname}-${version}.tar.gz";
-    sha256 = "11fn2x2973dizzw94fkz6rj9crsyzchphq5097lvbkvqpzbyidyp";
+    sha256 = "1gc642r9ndsjhhmh9bl5cbd3dwvy4dpxwhr0zpsw43y9nmz37xpl";
   };
 
   nativeBuildInputs = [ pkgconfig ];

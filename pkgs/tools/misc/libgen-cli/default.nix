@@ -1,16 +1,16 @@
 { lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 buildGoModule rec {
   pname = "libgen-cli";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "ciehanski";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ahqwrlsvgiig73dwlbjgkarf3a0z3xaihj8psd2ci5i0i07nm5v";
+    sha256 = "15nzdwhmgpm36dqx7an5rjl5sw2r4p66qn2y3jzl6fc0y7224ns1";
   };
 
-  vendorSha256 = "15ch0zfl4a7qvwszsfkfgw5v9492wjk4l4i324iq9b50g70lgyhd";
+  vendorSha256 = "0smb83mq711b2pby57ijcllccn7y2l10zb4fbf779xibb2g09608";
 
   subPackages = [ "." ];
 

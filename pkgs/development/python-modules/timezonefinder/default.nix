@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "timezonefinder";
-  version = "4.2.0";
+  version = "4.4.0";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0q8nd279labn03dz17s4xrglk1d31q9y8wcx99l51i5cxx53zsap";
+    sha256 = "ccb7ee58f5da4b05eae2154eb615eb791487d3cfeaa2a690877737a898580a9e";
   };
 
   propagatedBuildInputs = [

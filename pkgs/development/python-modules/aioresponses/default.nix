@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   # Skip a test which makes requests to httpbin.org
   checkPhase = ''
-    pytest -k "not test_address_as_instance_of_url_combined_with_pass_through"
+    pytest -k "not (test_address_as_instance_of_url_combined_with_pass_through or test_pass_through_with_origin_params)"
   '';
 
   meta = {

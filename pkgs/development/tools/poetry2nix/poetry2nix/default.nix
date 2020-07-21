@@ -7,7 +7,7 @@ let
   inherit (poetryLib) isCompatible readTOML moduleName;
 
   # Poetry2nix version
-  version = "1.9.2";
+  version = "1.10.0";
 
   /* The default list of poetry2nix override overlays */
   defaultPoetryOverrides = (import ./overrides.nix { inherit pkgs lib; });
@@ -22,6 +22,9 @@ let
   # Get license by id falling back to input string
   getLicenseBySpdxId = spdxId: spdxLicenses.${spdxId} or spdxId;
 
+  # Experimental withPlugins functionality
+  toPluginAble = (import ./plugins.nix { inherit pkgs lib; }).toPluginAble;
+
   /*
      Returns an attrset { python, poetryPackages, pyProject, poetryLock } for the given pyproject/lockfile.
   */
@@ -33,6 +36,7 @@ let
     , python ? pkgs.python3
     , pwd ? projectDir
     , preferWheels ? false
+    , __isBootstrap ? false  # Hack: Always add Poetry as a build input unless bootstrapping
     }@attrs:
     let
       poetryPkg = poetry.override { inherit python; };
@@ -77,6 +81,7 @@ let
                   value = self.mkPoetryDep (
                     pkgMeta // {
                       inherit pwd preferWheels;
+                      inherit __isBootstrap;
                       source = pkgMeta.source or null;
                       files = lockFiles.${name};
                       pythonPackages = self;
@@ -105,6 +110,8 @@ let
                   poetry = poetryPkg;
                   # The canonical name is setuptools-scm
                   setuptools-scm = super.setuptools_scm;
+
+                  __toPluginAble = toPluginAble self;
 
                   inherit (hooks) pipBuildHook removePathDependenciesHook poetry2nixFixupHook;
                 }
@@ -176,11 +183,12 @@ let
     , python ? pkgs.python3
     , pwd ? projectDir
     , preferWheels ? false
+    , __isBootstrap ? false  # Hack: Always add Poetry as a build input unless bootstrapping
     , ...
     }@attrs:
     let
       poetryPython = mkPoetryPackages {
-        inherit pyproject poetrylock overrides python pwd preferWheels;
+        inherit pyproject poetrylock overrides python pwd preferWheels __isBootstrap;
       };
       py = poetryPython.python;
 
@@ -206,7 +214,7 @@ let
           (
             dep:
             let
-              pkg = py.pkgs."${dep}";
+              pkg = py.pkgs."${moduleName dep}";
               constraints = deps.${dep}.python or "";
               isCompat = compat constraints;
             in

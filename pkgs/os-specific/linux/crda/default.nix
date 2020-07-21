@@ -31,7 +31,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs utils/
-    substituteInPlace Makefile --replace ldconfig true
+    substituteInPlace Makefile \
+      --replace ldconfig true \
+      --replace pkg-config $PKG_CONFIG
     sed -i crda.c \
       -e "/\/usr\/.*\/regulatory.bin/d" \
       -e "s|/lib/crda|${wireless-regdb}/lib/crda|g"

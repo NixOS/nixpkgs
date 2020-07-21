@@ -1,12 +1,14 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , pytest
 }:
 
 buildPythonPackage rec {
   pname = "JPype1";
   version = "0.7.5";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

@@ -1,6 +1,22 @@
-{ stdenv, fetchFromGitHub
-, gettext, pkgconfig, scons
-, glib, json-glib, libelf, sphinx, utillinux }:
+{ stdenv
+, cairo
+, fetchFromGitHub
+, gettext
+, glib
+, gobject-introspection
+, gtksourceview3
+, json-glib
+, libelf
+, makeWrapper
+, pango
+, pkgconfig
+, polkit
+, python3
+, scons
+, sphinx
+, utillinux
+, wrapGAppsHook
+, withGui ? false }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -17,14 +33,39 @@ stdenv.mkDerivation rec {
   CFLAGS="-I${stdenv.lib.getDev utillinux}/include";
 
   nativeBuildInputs = [
-    pkgconfig sphinx gettext scons
+    pkgconfig
+    sphinx
+    gettext
+    scons
+  ] ++ stdenv.lib.optionals withGui [
+    makeWrapper
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    glib json-glib libelf utillinux
+    glib
+    json-glib
+    libelf
+    utillinux
+  ] ++ stdenv.lib.optionals withGui [
+    cairo
+    gobject-introspection
+    gtksourceview3
+    pango
+    polkit
+    python3
+    python3.pkgs.pygobject3
   ];
 
-  prefixKey = "--prefix=";
+  # this doesn't seem to support configureFlags, and appends $out afterwards,
+  # so add the --without-gui in front of it
+  prefixKey = stdenv.lib.optionalString (!withGui) " --without-gui " + "--prefix=";
+
+  # in GUI mode, this shells out to itself, and tries to import python modules
+  postInstall = stdenv.lib.optionalString withGui ''
+    gappsWrapperArgs+=(--prefix PATH : "$out/bin")
+    gappsWrapperArgs+=(--prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${python3.pkgs.pygobject3}):$(toPythonPath ${python3.pkgs.pycairo})")
+  '';
 
   meta = {
     description = "Extremely fast tool to remove duplicates and other lint from your filesystem";

@@ -127,7 +127,7 @@ let
       export GOSUMDB=off
       export GOPROXY=off
       cd "$modRoot"
-      if [ -n "${go-modules}" ]; then 
+      if [ -n "${go-modules}" ]; then
           rm -rf vendor
           ln -s ${go-modules} vendor
       fi

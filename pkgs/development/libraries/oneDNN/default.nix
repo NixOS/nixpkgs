@@ -5,13 +5,13 @@
 # https://github.com/oneapi-src/oneDNN#oneapi-deep-neural-network-library-onednn
 stdenv.mkDerivation rec {
   pname = "oneDNN";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "oneDNN";
     rev = "v${version}";
-    sha256 = "162fb0c7klahz2irchhyxympi4fq4yp284apc53cadbss41mzld9";
+    sha256 = "0diiy3g4wz5lnz5mdvka5p2nwmrpfldsz83sssr5yiir29m4lqap";
   };
 
   outputs = [ "out" "dev" "doc" ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     homepage = "https://01.org/dnnl";
     changelog = "https://github.com/oneapi-src/oneDNN/releases/tag/v${version}";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "aarch64-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ alexarice bhipple ];
   };
 }

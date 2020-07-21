@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "dropbear-2019.78";
+  name = "dropbear-2020.80";
 
   src = fetchurl {
     url = "https://matt.ucc.asn.au/dropbear/releases/${name}.tar.bz2";
-    sha256 = "19242qlr40pbqfqd0gg6h8qpj38q6lgv03ja6sahj9vj2abnanaj";
+    sha256 = "0jbrbpdzyv11x5rkljdimzq9p6a7da5siw9k405ibnpjj4dr89yr";
   };
 
   dontDisableStatic = enableStatic;

@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, varnish }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, varnish, nixosTests }:
 
 buildGoModule rec {
   pname = "prometheus_varnish_exporter";
@@ -21,6 +21,8 @@ buildGoModule rec {
   '';
 
   doCheck = true;
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) varnish; };
 
   meta = {
     homepage = "https://github.com/jonnenauha/prometheus_varnish_exporter";

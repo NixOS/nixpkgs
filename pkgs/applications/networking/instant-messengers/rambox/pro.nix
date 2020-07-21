@@ -1,8 +1,11 @@
-{ autoPatchelfHook, electron, fetchurl, makeDesktopItem, makeWrapper, nodePackages, nss, stdenv, xdg_utils, xorg }:
+{ autoPatchelfHook, electron_4, fetchurl, makeDesktopItem, makeWrapper, nodePackages, nss, stdenv, xdg_utils, xorg }:
 
+let
+  electron = electron_4;
+in
 stdenv.mkDerivation rec {
   pname = "rambox-pro";
-  version = "1.3.1";
+  version = "1.3.2";
 
   dontBuild = true;
   dontStrip = true;
@@ -12,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/ramboxapp/download/releases/download/v${version}/RamboxPro-${version}-linux-x64.tar.gz";
-    sha256 = "1cy4h2yzrpr3gxd16p4323w06i67d82jjlyx737c3ngzw7aahmq1";
+    sha256 = "010v5i8lxfz77cb5cn9va5cbnfa28nzdymk5k2fcpi65jldw1pxx";
   };
 
   installPhase = ''

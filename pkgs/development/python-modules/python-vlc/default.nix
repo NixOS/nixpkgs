@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "python-vlc";
-  version = "3.0.9113";
+  version = "3.0.10114";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5422b79d347b6419008ee91cfd9663edc37eaf2a0bd8fb9017d4cc2e5f249dda";
+    sha256 = "0fq0w1pk2z7limhiyk8f3bqwa67yfgwcszd0v6ipy9x8psas5a61";
   };
 
   propagatedBuildInputs = [

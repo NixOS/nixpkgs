@@ -55,11 +55,13 @@ let
       storePath = config.boot.loader.grub.storePath;
       bootloaderId = if args.efiBootloaderId == null then "NixOS${efiSysMountPoint'}" else args.efiBootloaderId;
       timeout = if config.boot.loader.timeout == null then -1 else config.boot.loader.timeout;
+      users = if cfg.users == {} || cfg.version != 1 then cfg.users else throw "GRUB version 1 does not support user accounts.";
       inherit efiSysMountPoint;
       inherit (args) devices;
       inherit (efi) canTouchEfiVariables;
       inherit (cfg)
         version extraConfig extraPerEntryConfig extraEntries forceInstall useOSProber
+        extraGrubInstallArgs
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels
         default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios gfxpayloadEfi gfxpayloadBios;
       path = with pkgs; makeBinPath (
@@ -135,6 +137,67 @@ in
           installed. Can be used instead of <literal>device</literal> to
           install GRUB onto multiple devices.
         '';
+      };
+
+      users = mkOption {
+        default = {};
+        example = {
+          root = { hashedPasswordFile = "/path/to/file"; };
+        };
+        description = ''
+          User accounts for GRUB. When specified, the GRUB command line and
+          all boot options except the default are password-protected.
+          All passwords and hashes provided will be stored in /boot/grub/grub.cfg,
+          and will be visible to any local user who can read this file. Additionally,
+          any passwords and hashes provided directly in a Nix configuration
+          (as opposed to external files) will be copied into the Nix store, and
+          will be visible to all local users.
+        '';
+        type = with types; attrsOf (submodule {
+          options = {
+            hashedPasswordFile = mkOption {
+              example = "/path/to/file";
+              default = null;
+              type = with types; uniq (nullOr str);
+              description = ''
+                Specifies the path to a file containing the password hash
+                for the account, generated with grub-mkpasswd-pbkdf2.
+                This hash will be stored in /boot/grub/grub.cfg, and will
+                be visible to any local user who can read this file.
+              '';
+            };
+            hashedPassword = mkOption {
+              example = "grub.pbkdf2.sha512.10000.674DFFDEF76E13EA...2CC972B102CF4355";
+              default = null;
+              type = with types; uniq (nullOr str);
+              description = ''
+                Specifies the password hash for the account,
+                generated with grub-mkpasswd-pbkdf2.
+                This hash will be copied to the Nix store, and will be visible to all local users.
+              '';
+            };
+            passwordFile = mkOption {
+              example = "/path/to/file";
+              default = null;
+              type = with types; uniq (nullOr str);
+              description = ''
+                Specifies the path to a file containing the
+                clear text password for the account.
+                This password will be stored in /boot/grub/grub.cfg, and will
+                be visible to any local user who can read this file.
+              '';
+            };
+            password = mkOption {
+              example = "Pa$$w0rd!";
+              default = null;
+              type = with types; uniq (nullOr str);
+              description = ''
+                Specifies the clear text password for the account.
+                This password will be copied to the Nix store, and will be visible to all local users.
+              '';
+            };
+          };
+        });
       };
 
       mirroredBoots = mkOption {
@@ -233,6 +296,33 @@ in
         description = ''
           Additional GRUB commands inserted in the configuration file
           just before the menu entries.
+        '';
+      };
+
+      extraGrubInstallArgs = mkOption {
+        default = [ ];
+        example = [ "--modules=nativedisk ahci pata part_gpt part_msdos diskfilter mdraid1x lvm ext2" ];
+        type = types.listOf types.str;
+        description = ''
+          Additional arguments passed to <literal>grub-install</literal>.
+
+          A use case for this is to build specific GRUB2 modules
+          directly into the GRUB2 kernel image, so that they are available
+          and activated even in the <literal>grub rescue</literal> shell.
+
+          They are also necessary when the BIOS/UEFI is bugged and cannot
+          correctly read large disks (e.g. above 2 TB), so GRUB2's own
+          <literal>nativedisk</literal> and related modules can be used
+          to use its own disk drivers. The example shows one such case.
+          This is also useful for booting from USB.
+          See the
+          <link xlink:href="http://git.savannah.gnu.org/cgit/grub.git/tree/grub-core/commands/nativedisk.c?h=grub-2.04#n326">
+          GRUB source code
+          </link>
+          for which disk modules are available.
+
+          The list elements are passed directly as <literal>argv</literal>
+          arguments to the <literal>grub-install</literal> program, in order.
         '';
       };
 
@@ -607,7 +697,7 @@ in
         in pkgs.writeScript "install-grub.sh" (''
         #!${pkgs.runtimeShell}
         set -e
-        export PERL5LIB=${with pkgs.perlPackages; makePerlPath [ FileSlurp XMLLibXML XMLSAX XMLSAXBase ListCompare ]}
+        export PERL5LIB=${with pkgs.perlPackages; makePerlPath [ FileSlurp XMLLibXML XMLSAX XMLSAXBase ListCompare JSON ]}
         ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
       '' + flip concatMapStrings cfg.mirroredBoots (args: ''
         ${pkgs.perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@

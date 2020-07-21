@@ -38,7 +38,12 @@ starting VDE switch for network 1
  </para>
 
  <para>
-  The machine state is kept across VM restarts in
-  <filename>/tmp/vm-state-</filename><varname>machinename</varname>.
+   You can re-use the VM states coming from a previous run
+   by setting the <command>--keep-vm-state</command> flag.
+<screen>
+<prompt>$ </prompt>./result/bin/nixos-run-vms --keep-vm-state
+</screen>
+  The machine state is stored in the
+  <filename>$TMPDIR/vm-state-</filename><varname>machinename</varname> directory.
  </para>
 </section>

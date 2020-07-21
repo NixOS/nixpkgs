@@ -2,16 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "cadical";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "arminbiere";
     repo = "cadical";
     rev = "rel-${version}";
-    sha256 = "1a66xkw42ad330fvw8i0sawrmg913m8wrq5c85lw5qandkwvxdi6";
+    sha256 = "05lvnvapjawgkky38xknb9lgaliiwan4kggmb9yggl4ifpjrh8qf";
   };
 
+  doCheck = true;
   dontAddPrefix = true;
+
   installPhase = ''
     install -Dm0755 build/cadical "$out/bin/cadical"
     install -Dm0755 build/mobical "$out/bin/mobical"

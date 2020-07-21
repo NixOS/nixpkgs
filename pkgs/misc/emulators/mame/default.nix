@@ -7,7 +7,7 @@ with stdenv;
 
 let
   majorVersion = "0";
-  minorVersion = "221";
+  minorVersion = "222";
 
   desktopItem = makeDesktopItem {
     name = "MAME";
@@ -26,7 +26,7 @@ in mkDerivation {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${majorVersion}${minorVersion}";
-    sha256 = "1pqwa5qcrk0wgbyns6fkv7j3pn7byf216cixc3phhhgvfidgr8ww";
+    sha256 = "1ij08h7cflr76qzyhhj21948275lqkpzi9r4pbc7h2avrlpsijx4";
   };
 
   hardeningDisable = [ "fortify" ];

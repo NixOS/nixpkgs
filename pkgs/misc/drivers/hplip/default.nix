@@ -230,7 +230,7 @@ python3Packages.buildPythonApplication {
 
   # There are some binaries there, which reference gcc-unwrapped otherwise.
   stripDebugList = [
-    "share/hplip" "lib/cups/backend" "lib/cups/filter" "lib/python3.7/site-packages" "lib/sane"
+    "share/hplip" "lib/cups/backend" "lib/cups/filter" python3Packages.python.sitePackages "lib/sane"
   ];
 
   meta = with stdenv.lib; {

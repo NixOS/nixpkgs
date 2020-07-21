@@ -2,16 +2,18 @@
 
 buildGoPackage rec {
   pname = "VictoriaMetrics";
-  version = "1.37.0";
+  version = "1.37.4";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0p8fk73ydnhrdxgxr4b4xl84729rkkki38227xvxspx84j2fbhci";
+    sha256 = "02jr0qz130jz7ncfch1jry0prd00669j53mlmpb6ky0xiz5y2zq1";
   };
 
   goPackagePath = "github.com/VictoriaMetrics/VictoriaMetrics";
+
+  buildFlagsArray = [ "-ldflags=-s -w -X ${goPackagePath}/lib/buildinfo.Version=${version}" ];
 
   meta = with lib; {
     homepage = "https://victoriametrics.com/";

@@ -181,6 +181,7 @@ let format' = format; in let
     export NIX_STATE_DIR=$TMPDIR/state
     nix-store --load-db < ${closureInfo}/registration
 
+    chmod 755 "$TMPDIR"
     echo "running nixos-install..."
     nixos-install --root $root --no-bootloader --no-root-passwd \
       --system ${config.system.build.toplevel} --channel ${channelSources} --substituters ""

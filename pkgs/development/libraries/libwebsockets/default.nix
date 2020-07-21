@@ -16,8 +16,13 @@ let
 
     nativeBuildInputs = [ cmake ];
 
-    cmakeFlags = [ "-DLWS_WITH_PLUGINS=ON" ];
-    NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable";
+    cmakeFlags = [
+      "-DLWS_WITH_PLUGINS=ON"
+      "-DLWS_WITH_IPV6=ON"
+      "-DLWS_WITH_SOCKS5=ON"
+    ];
+
+    NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-Wno-error=unused-but-set-variable";
 
     meta = with stdenv.lib; {
       description = "Light, portable C library for websockets";

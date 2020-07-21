@@ -27,7 +27,7 @@ let
 
 in stdenv.mkDerivation rec {
   inherit version;
-  name = "mongodb-${version}";
+  pname = "mongodb";
 
   src = fetchurl {
     url = "https://fastdl.mongodb.org/src/mongodb-src-r${version}.tar.gz";
@@ -100,6 +100,13 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     rm -f "$out/bin/install_compass" || true
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    "$out/bin/mongo" --version
+    runHook postInstallCheck
   '';
 
   prefixKey = "--prefix=";

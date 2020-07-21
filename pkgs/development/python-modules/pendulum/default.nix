@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "pendulum";
-  version = "2.0.5";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d3078e007315a959989c41cee5cfd63cfeeca21dd3d8295f4bc24199489e9b6c";
+    sha256 = "093cab342e10516660e64b935a6da1a043e0286de36cc229fb48471415981ffe";
   };
 
   propagatedBuildInputs = [ dateutil pytzdata ] ++ lib.optional (pythonOlder "3.5") typing;

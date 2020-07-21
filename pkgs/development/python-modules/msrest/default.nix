@@ -18,7 +18,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.6.13";
+  version = "0.6.17";
   pname = "msrest";
 
   # no tests in PyPI tarball
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "Azure";
     repo = "msrest-for-python";
     rev = "v${version}";
-    sha256 = "1s34xp6wgas17mbg6ysciqlgb3qc2p2d5bs9brwr05ys62l6y8cz";
+    sha256 = "1f1cpl5x7q0f9lpwxc1pl9j5x5yrksfizl9k939iqklf95ssymff";
   };
 
   propagatedBuildInputs = [

@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "braintree";
-  version = "4.1.0";
+  version = "4.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fqh1bdkk3g222vbrmw3ab4r4mmd1k4x2jayshnqpbspszcqzcdq";
+    sha256 = "0aw5n1hqrg5pb5xmcr1b8y9i7v8zj23q9k2p4b6bwnq2c2fqi8wr";
   };
 
   propagatedBuildInputs = [ requests ];
