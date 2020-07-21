@@ -766,6 +766,8 @@ in {
 
   foxdot = callPackage ../development/python-modules/foxdot { };
 
+  freetype-py = callPackage ../development/python-modules/freetype-py { };
+
   fsspec = callPackage ../development/python-modules/fsspec { };
 
   furl = callPackage ../development/python-modules/furl { };
@@ -6241,6 +6243,8 @@ in {
   virtual-display = callPackage ../development/python-modules/virtual-display { };
 
   virtualenv = callPackage ../development/python-modules/virtualenv { };
+
+  vispy = callPackage ../development/python-modules/vispy { };
 
   vsts = callPackage ../development/python-modules/vsts { };
 
