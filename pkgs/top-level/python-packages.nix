@@ -5292,6 +5292,8 @@ in {
 
   pproxy = callPackage ../development/python-modules/pproxy { };
 
+  pq = callPackage ../development/python-modules/pq { };
+
   praw = if isPy3k then callPackage ../development/python-modules/praw { }
     else callPackage ../development/python-modules/praw/6.3.nix { };
 
