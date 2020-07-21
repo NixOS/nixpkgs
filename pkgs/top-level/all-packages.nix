@@ -1707,6 +1707,10 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  dijo = callPackage ../tools/misc/dijo {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
   ding = callPackage ../applications/misc/ding {
     aspellDicts_de = aspellDicts.de;
     aspellDicts_en = aspellDicts.en;
