@@ -1,14 +1,13 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "hyx-0.1.5";
+  pname = "hyx";
+  version = "2020-06-09";
 
   src = fetchurl {
-    url = "https://yx7.cc/code/hyx/${name}.tar.xz";
-    sha256 = "0gd8fbdyw12jwffa5dgcql4ry22xbdhqdds1qwzk1rkcrkgnc1mg";
+    url = "https://yx7.cc/code/hyx/hyx-${lib.replaceStrings [ "-" ] [ "." ] version}.tar.xz";
+    sha256 = "1x8dmll93hrnj24kn5knpwj36y6r1v2ygwynpjwrg2hwd4c1a8hi";
   };
-
-  patches = [ ./no-wall-by-default.patch ];
 
   installPhase = ''
     install -vD hyx $out/bin/hyx
