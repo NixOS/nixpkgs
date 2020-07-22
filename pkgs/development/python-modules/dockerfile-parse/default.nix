@@ -1,12 +1,12 @@
 { stdenv, buildPythonPackage, fetchPypi, six, pytestcov, pytest }:
 
 buildPythonPackage rec {
-  version = "0.0.17";
+  version = "0.0.18";
   pname = "dockerfile-parse";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a69d4ed44c4a890c16437327009ae59ec3a3afeb1abc3819d0c1b14a46099220";
+    sha256 = "a09eae6871b7b314f8a8bddb67b6c5002708b22247511906cf2a9a45564b83db";
   };
 
   postPatch = ''

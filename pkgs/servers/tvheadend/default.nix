@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, makeWrapper, pkgconfig
-, avahi, dbus, gettext, git, gnutar, gzip, bzip2, ffmpeg, libiconv, openssl, python
+, avahi, dbus, gettext, git, gnutar, gzip, bzip2, ffmpeg_3, libiconv, openssl, python
 , which, zlib }:
 
 let
@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
   };
 
   buildInputs = [
-    avahi dbus gettext git gnutar gzip bzip2 ffmpeg libiconv openssl python
+    avahi dbus gettext git gnutar gzip bzip2 ffmpeg_3 libiconv openssl python
     which zlib
   ];
 

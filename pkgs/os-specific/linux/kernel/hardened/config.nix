@@ -40,11 +40,12 @@ assert (versionAtLeast version "4.9");
   # Perform additional validation of commonly targeted structures.
   DEBUG_CREDENTIALS     = yes;
   DEBUG_NOTIFIERS       = yes;
-  DEBUG_PI_LIST         = yes; # doesn't BUG()
+  DEBUG_PI_LIST         = whenOlder "5.2" yes; # doesn't BUG()
+  DEBUG_PLIST           = whenAtLeast "5.2" yes;
   DEBUG_SG              = yes;
   SCHED_STACK_END_CHECK = yes;
 
-  REFCOUNT_FULL = whenAtLeast "4.13" yes;
+  REFCOUNT_FULL = whenBetween "4.13" "5.5" yes;
 
   # Randomize page allocator when page_alloc.shuffle=1
   SHUFFLE_PAGE_ALLOCATOR = whenAtLeast "5.2" yes;

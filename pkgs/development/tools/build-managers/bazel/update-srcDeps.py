@@ -35,6 +35,7 @@ def list_source_repository(**kw): pass
 def new_local_repository(**kw): pass
 def local_repository(**kw): pass
 DOC_VERSIONS = []
+def stardoc_repositories(**kw): pass
 def skydoc_repositories(**kw): pass
 def rules_sass_dependencies(**kw): pass
 def node_repositories(**kw): pass

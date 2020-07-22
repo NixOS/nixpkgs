@@ -1,6 +1,6 @@
 { stdenv, fetchurl, sqlite }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "libchewing";
   version = "0.5.1";
 

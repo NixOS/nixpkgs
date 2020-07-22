@@ -643,7 +643,7 @@ and in this case the `python38` interpreter is automatically used.
 Versions 2.7, 3.5, 3.6, 3.7 and 3.8 of the CPython interpreter are available as
 respectively `python27`, `python35`, `python36`, `python37` and `python38`. The
 aliases `python2` and `python3` correspond to respectively `python27` and
-`python37`. The default interpreter, `python`, maps to `python2`. The PyPy
+`python38`. The default interpreter, `python`, maps to `python2`. The PyPy
 interpreters compatible with Python 2.7 and 3 are available as `pypy27` and
 `pypy3`, with aliases `pypy2` mapping to `pypy27` and `pypy` mapping to `pypy2`.
 The Nix expressions for the interpreters can be found in
@@ -764,9 +764,6 @@ following are specific to `buildPythonPackage`:
 * `dontWrapPythonPrograms ? false`: Skip wrapping of Python programs.
 * `permitUserSite ? false`: Skip setting the `PYTHONNOUSERSITE` environment
   variable in wrapped programs.
-* `installFlags ? []`: A list of strings. Arguments to be passed to `pip
-  install`. To pass options to `python setup.py install`, use
-  `--install-option`. E.g., `installFlags=["--install-option='--cpp_implementation'"]`.
 * `format ? "setuptools"`: Format of the source. Valid options are
   `"setuptools"`, `"pyproject"`, `"flit"`, `"wheel"`, and `"other"`.
   `"setuptools"` is for when the source has a `setup.py` and `setuptools` is
@@ -782,6 +779,9 @@ following are specific to `buildPythonPackage`:
 * `namePrefix`: Prepends text to `${name}` parameter. In case of libraries, this
   defaults to `"python3.8-"` for Python 3.8, etc., and in case of applications
   to `""`.
+* `pipInstallFlags ? []`: A list of strings. Arguments to be passed to `pip
+  install`. To pass options to `python setup.py install`, use
+  `--install-option`. E.g., `pipInstallFlags=["--install-option='--cpp_implementation'"]`.
 * `pythonPath ? []`: List of packages to be added into `$PYTHONPATH`. Packages
   in `pythonPath` are not propagated (contrary to `propagatedBuildInputs`).
 * `preShellHook`: Hook to execute commands before `shellHook`.

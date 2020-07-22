@@ -1,5 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , amqp
+, botocore
 , case
 , Pyro4
 , pytest
@@ -11,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "kombu";
-  version = "4.6.8";
+  version = "4.6.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xlv1rsfc3vn22l35csaj939zygd15nzmxbz3bcl981685vxl71d";
+    sha256 = "437b9cdea193cc2ed0b8044c85fd0f126bb3615ca2f4d4a35b39de7cacfa3c1a";
   };
 
   postPatch = ''
@@ -31,7 +32,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [ pytest case pytz Pyro4 sqlalchemy ];
+  checkInputs = [ botocore pytest case pytz Pyro4 sqlalchemy ];
   # test_redis requires fakeredis, which isn't trivial to package
   checkPhase = ''
     pytest --ignore t/unit/transport/test_redis.py

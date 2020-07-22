@@ -68,6 +68,10 @@ python3.pkgs.buildPythonApplication rec {
       --replace "${python3}" ""
   '';
 
+  # find: ‘...-gtk-doc-1.32/lib/python3.8/site-packages’: No such file or directory
+  # https://github.com/NixOS/nixpkgs/pull/90208#issuecomment-644051108
+  dontUsePythonRecompileBytecode = true;
+
   passthru = {
     # Consumers are expected to copy the m4 files to their source tree, let them reuse the patch
     respect_xml_catalog_files_var_patch = ./respect-xml-catalog-files-var.patch;

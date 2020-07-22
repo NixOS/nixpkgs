@@ -39,14 +39,6 @@ let
       meta.broken = since "12";
     };
 
-    dnschain = super.dnschain.override {
-      buildInputs = [ pkgs.makeWrapper super.coffee-script ];
-      postInstall = ''
-        wrapProgram $out/bin/dnschain --suffix PATH : ${pkgs.openssl.bin}/bin
-      '';
-      meta.broken = since "14";
-    };
-
     bitwarden-cli = pkgs.lib.overrideDerivation super."@bitwarden/cli" (drv: {
       name = "bitwarden-cli-${drv.version}";
     });
@@ -160,6 +152,9 @@ let
 
     thelounge = super.thelounge.override {
       buildInputs = [ self.node-pre-gyp ];
+      postInstall = ''
+        echo /var/lib/thelounge > $out/lib/node_modules/thelounge/.thelounge_home
+      '';
     };
   };
 in self

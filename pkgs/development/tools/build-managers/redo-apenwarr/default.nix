@@ -1,16 +1,16 @@
-{ stdenv, lib, python3, fetchFromGitHub, mkdocs, which, findutils, coreutils
-, perl
+{ stdenv, lib, python3, fetchFromGitHub, which, findutils, coreutils
+, perl, installShellFiles
 , doCheck ? true
 }: stdenv.mkDerivation rec {
 
   pname = "redo-apenwarr";
-  version = "0.42a";
+  version = "0.42c";
 
   src = fetchFromGitHub rec {
     owner = "apenwarr";
     repo = "redo";
     rev = "${repo}-${version}";
-    sha256 = "172z2idslhcqibd4lw82k6349nl5fdda2vj10dqcjz0lvv6n7php";
+    sha256 = "0kc2gag1n5583195gs38gjm8mb7in9y70c07fxibsay19pvvb8iw";
   };
 
   postPatch = ''
@@ -53,15 +53,21 @@
     (with python3.pkgs; [ beautifulsoup4 markdown ])
     which
     findutils
+    installShellFiles
   ];
 
+  postInstall = ''
+    installShellCompletion --bash contrib/bash_completion.d/redo
+  '';
+
   meta = with lib; {
-    description = "Smaller, easier, more powerful, and more reliable than make. An implementation of djb's redo.";
+    description = "Smaller, easier, more powerful, and more reliable than make. An implementation of djb's redo";
     homepage = "https://github.com/apenwarr/redo";
     maintainers = with maintainers; [
       andrewchambers
       ck3d
     ];
     license = licenses.asl20;
+    platforms = python3.meta.platforms;
   };
 }

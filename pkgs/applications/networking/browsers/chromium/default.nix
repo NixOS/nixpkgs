@@ -1,8 +1,9 @@
 { newScope, config, stdenv, llvmPackages_9, llvmPackages_10
-, makeWrapper, ed
+, makeWrapper, ed, gnugrep
 , glib, gtk3, gnome3, gsettings-desktop-schemas, gn, fetchgit
 , libva ? null
-, gcc, nspr, nss, patchelfUnstable, runCommand
+, pipewire_0_2
+, gcc, nspr, nss, runCommand
 , lib
 
 # package customization
@@ -67,8 +68,6 @@ let
 
     # The .deb file for Google Chrome
     src = upstream-info.binary;
-
-    nativeBuildInputs = [ patchelfUnstable ];
 
     phases = [ "unpackPhase" "patchPhase" "installPhase" "checkPhase" ];
 
@@ -161,7 +160,7 @@ in stdenv.mkDerivation {
   buildCommand = let
     browserBinary = "${chromiumWV}/libexec/chromium/chromium";
     getWrapperFlags = plugin: "$(< \"${plugin}/nix-support/wrapper-flags\")";
-    libPath = stdenv.lib.makeLibraryPath [ libva ];
+    libPath = stdenv.lib.makeLibraryPath [ libva pipewire_0_2 ];
 
   in with stdenv.lib; ''
     mkdir -p "$out/bin"
@@ -188,7 +187,7 @@ in stdenv.mkDerivation {
   '' + ''
 
     # libredirect causes chromium to deadlock on startup
-    export LD_PRELOAD="\$(echo -n "\$LD_PRELOAD" | tr ':' '\n' | grep -v /lib/libredirect\\\\.so$ | tr '\n' ':')"
+    export LD_PRELOAD="\$(echo -n "\$LD_PRELOAD" | tr ':' '\n' | ${gnugrep}/bin/grep -v /lib/libredirect\\\\.so$ | tr '\n' ':')"
 
     export XDG_DATA_DIRS=$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH\''${XDG_DATA_DIRS:+:}\$XDG_DATA_DIRS
 

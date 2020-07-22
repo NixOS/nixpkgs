@@ -5,13 +5,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "dqlite";
-  version = "1.4.1";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04h3wbfv6bkzzmcwaja33x2qkj3czn0p6fgbdgqd1xli8sx2c2k4";
+    sha256 = "0wm7vkapjg8hdjm6bi48hwsf4w4ppgn3r655gqms5ssjxm50m15d";
   };
 
   nativeBuildInputs = [ autoreconfHook file pkgconfig ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sqlite-replication
   ];
 
-  # tests hang for ever on x86_64-linux
+  # tests fail
   doCheck = false;
 
   outputs = [ "dev" "out" ];

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "yeetgif";
-  version = "1.23.5";
+  version = "1.23.6";
 
   goPackagePath = "github.com/sgreben/yeetgif";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "sgreben";
     repo = pname;
     rev = version;
-    sha256 = "1yz4pps8g378lvmi92cnci6msjj7fprp9bxqmnsyn6lqw7s2wb47";
+    sha256 = "05z1ylsra60bb4cvr383g9im94zsph1dgicqbv5p73qgs634ckk7";
   };
 
   meta = with lib; {

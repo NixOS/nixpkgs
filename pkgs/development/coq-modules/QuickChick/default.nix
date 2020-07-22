@@ -27,15 +27,23 @@ let params =
     };
 
     "8.10" = rec {
-      version = "1.2.0";
+      version = "1.2.1";
       rev = "v${version}";
-      sha256 = "1xs4mr3rdb0g44736jb40k370hw3maxdk12jiq1w1dl3q5gfrhah";
+      sha256 = "17vz88xjzxh3q7hs6hnndw61r3hdfawxp5awqpgfaxx4w6ni8z46";
+    };
+
+    "8.11" = rec {
+      version = "1.3.1";
+      rev = "v${version}";
+      sha256 = "0cajan9w52faqrg42r9rxai4wzsggs86qar88w7lcb928jvcakml";
     };
   };
   param = params.${coq.coq-version};
 in
 
-let recent = stdenv.lib.versionAtLeast coq.coq-version "8.8"; in
+let inherit (stdenv.lib) maintainers optional optionals versionAtLeast; in
+
+let recent = versionAtLeast coq.coq-version "8.8"; in
 
 stdenv.mkDerivation {
 
@@ -51,12 +59,16 @@ stdenv.mkDerivation {
     "substituteInPlace Makefile --replace quickChickTool.byte quickChickTool.native";
 
   buildInputs = [ coq ]
-  ++ (with coq.ocamlPackages; [ ocaml camlp5 findlib ])
-  ++ stdenv.lib.optionals recent
-     (with coq.ocamlPackages; [ ocamlbuild num ])
+  ++ (with coq.ocamlPackages; [ ocaml findlib ])
+  ++ optionals (recent && !versionAtLeast coq.coq-version "8.10")
+       (with coq.ocamlPackages; [ camlp5 ocamlbuild ])
+  ++ optional recent coq.ocamlPackages.num
   ;
   propagatedBuildInputs = [ ssreflect ]
-  ++ stdenv.lib.optionals recent [ coq-ext-lib simple-io ];
+  ++ optionals recent [ coq-ext-lib simple-io ]
+  ++ optional (versionAtLeast coq.coq-version "8.10")
+       coq.ocamlPackages.ocamlbuild
+  ;
 
   enableParallelBuilding = false;
 
@@ -64,7 +76,7 @@ stdenv.mkDerivation {
     make -f Makefile.coq COQLIB=$out/lib/coq/${coq.coq-version}/ install
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     homepage = "https://github.com/QuickChick/QuickChick";
     description = "Randomized property-based testing plugin for Coq; a clone of Haskell QuickCheck";
     maintainers = with maintainers; [ jwiegley ];

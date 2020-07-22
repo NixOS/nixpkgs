@@ -8,7 +8,7 @@ let
     { callPackage, lib, stdenv, nixosTests, config, fetchurl, makeWrapper
     , symlinkJoin, writeText, autoconf, automake, bison, flex, libtool
     , pkgconfig, re2c, apacheHttpd, libargon2, libxml2, pcre, pcre2
-    , systemd, valgrind
+    , systemd, valgrind, xcbuild
 
     , version
     , sha256
@@ -143,7 +143,8 @@ let
 
           enableParallelBuilding = true;
 
-          nativeBuildInputs = [ autoconf automake bison flex libtool pkgconfig re2c ];
+          nativeBuildInputs = [ autoconf automake bison flex libtool pkgconfig re2c ]
+            ++ lib.optional stdenv.isDarwin xcbuild;
 
           buildInputs =
             # PCRE extension
@@ -177,7 +178,10 @@ let
             ++ lib.optional (!cliSupport) "--disable-cli"
             ++ lib.optional fpmSupport    "--enable-fpm"
             ++ lib.optional pearSupport [ "--with-pear=$(out)/lib/php/pear" "--enable-xml" "--with-libxml" ]
-            ++ lib.optional (pearSupport && (lib.versionOlder version "7.4")) "--enable-libxml"
+            ++ lib.optionals (pearSupport && (lib.versionOlder version "7.4")) [
+              "--enable-libxml"
+              "--with-libxml-dir=${libxml2.dev}"
+            ]
             ++ lib.optional pharSupport   "--enable-phar"
             ++ lib.optional phpdbgSupport "--enable-phpdbg"
 
@@ -195,9 +199,10 @@ let
 
           hardeningDisable = [ "bindnow" ];
 
-          preConfigure = ''
-            # Don't record the configure flags since this causes unnecessary
-            # runtime dependencies
+          preConfigure =
+          # Don't record the configure flags since this causes unnecessary
+          # runtime dependencies
+          ''
             for i in main/build-defs.h.in scripts/php-config.in; do
               substituteInPlace $i \
                 --replace '@CONFIGURE_COMMAND@' '(omitted)' \
@@ -206,7 +211,14 @@ let
             done
 
             export EXTENSION_DIR=$out/lib/php/extensions
-
+          ''
+          # PKG_CONFIG need not be a relative path
+          + lib.optionalString (! lib.versionAtLeast version "7.4") ''
+            for i in $(find . -type f -name "*.m4"); do
+              substituteInPlace $i \
+                --replace 'test -x "$PKG_CONFIG"' 'type -P "$PKG_CONFIG" >/dev/null'
+            done
+          '' + ''
             ./buildconf --copy --force
 
             if test -f $src/genfiles; then
@@ -256,24 +268,24 @@ let
         };
 
   php72base = callPackage generic (_args // {
-    version = "7.2.29";
-    sha256 = "08xry2fgqgg8s0ym1hh11wkbr36av3zq1bn4krbciw1b7x8gb8ga";
+    version = "7.2.32";
+    sha256 = "19wqbpvsd6c6iaad00h0m0xnx4r8fj56pwfhki2cw5xdfi10lp3i";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = lib.optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
   });
 
   php73base = callPackage generic (_args // {
-    version = "7.3.16";
-    sha256 = "0bh499v9dfgh9k51w4rird1slb9rh9whp5h37fb84c98d992s1xq";
+    version = "7.3.20";
+    sha256 = "1pl9bjwvdva2yx4sh465z9cr4bnr8mvv008w71sy1kqsj6a7ivf6";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = lib.optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
   });
 
   php74base = callPackage generic (_args // {
-    version = "7.4.6";
-    sha256 = "0j133pfwa823d4jhx2hkrrzjl4hswvz00b1z58r5c82xd5sr9vd6";
+    version = "7.4.8";
+    sha256 = "0ql01sfg8l7y2bfwmnjxnfw9irpibnz57ssck24b00y00nkd6j3a";
   });
 
   defaultPhpExtensions = { all, ... }: with all; ([

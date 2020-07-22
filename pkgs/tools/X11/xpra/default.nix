@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, callPackage, substituteAll, python3, pkgconfig, writeText
 , xorg, gtk3, glib, pango, cairo, gdk-pixbuf, atk
 , wrapGAppsHook, xorgserver, getopt, xauth, utillinux, which
-, ffmpeg_4, x264, libvpx, libwebp, x265
+, ffmpeg, x264, libvpx, libwebp, x265
 , libfakeXinerama
 , gst_all_1, pulseaudio, gobject-introspection
 , pam }:
@@ -30,11 +30,11 @@ let
 
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "3.0.9";
+  version = "4.0.2";
 
   src = fetchurl {
     url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    sha256 = "04qskz1x1pvbdfirpxk58d3dfnf1n6dc69q2rdkak0avzl1nlzi7";
+    sha256 = "1cs39jzi59hkl421xmhi549ndmdfzkg0ap45f4nlsn9zr9zwmp3x";
   };
 
   patches = [
@@ -60,7 +60,7 @@ in buildPythonApplication rec {
 
     pango cairo gdk-pixbuf atk.out gtk3 glib
 
-    ffmpeg_4 libvpx x264 libwebp x265
+    ffmpeg libvpx x264 libwebp x265
 
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -85,7 +85,6 @@ in buildPythonApplication rec {
     "--with-Xdummy"
     "--without-strict"
     "--with-gtk3"
-    "--without-gtk2"
     # Override these, setup.py checks for headers in /usr/* paths
     "--with-pam"
     "--with-vsock"

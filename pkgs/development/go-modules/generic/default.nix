@@ -17,7 +17,7 @@
 #
 # if vendorSha256 is null, then we won't fetch any dependencies and
 # rely on the vendor folder within the source.
-, vendorSha256 ? null
+, vendorSha256
 # Whether to delete the vendor folder supplied with the source.
 , deleteVendor ? false
 
@@ -127,7 +127,7 @@ let
       export GOSUMDB=off
       export GOPROXY=off
       cd "$modRoot"
-      if [ -n "${go-modules}" ]; then 
+      if [ -n "${go-modules}" ]; then
           rm -rf vendor
           ln -s ${go-modules} vendor
       fi

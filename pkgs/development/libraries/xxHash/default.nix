@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xxHash";
-  version = "0.7.3";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "Cyan4973";
     repo = "xxHash";
     rev = "v${version}";
-    sha256 = "0bin0jch6lbzl4f8y052a7azfgq2n7iwqihzgqmcccv5vq4vcx5a";
+    sha256 = "08j7wxshhzpyrnyilfnvhyv5ycm0yv5m7jf6q4kxcd7j4dcbhmpb";
   };
 
   outputs = [ "out" "dev" ];

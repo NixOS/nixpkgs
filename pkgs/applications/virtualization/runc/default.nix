@@ -14,13 +14,13 @@
 
 buildGoPackage rec {
   pname = "runc";
-  version = "1.0.0-rc90";
+  version = "1.0.0-rc91";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    sha256 = "0pi3rvj585997m4z9ljkxz2z9yxf9p2jr0pmqbqrc7bc95f5hagk";
+    sha256 = "1hg3hbbjsz76q1piz86q8la6dym86d65xd7h6q12krfmwd2lbhkw";
   };
 
   goPackagePath = "github.com/opencontainers/runc";
@@ -30,7 +30,6 @@ buildGoPackage rec {
 
   buildInputs = [ libselinux libseccomp libapparmor apparmor-parser ];
 
-  # these will be the default in the next release
   makeFlags = [ "BUILDTAGS+=seccomp" "BUILDTAGS+=apparmor" "BUILDTAGS+=selinux" ];
 
   buildPhase = ''

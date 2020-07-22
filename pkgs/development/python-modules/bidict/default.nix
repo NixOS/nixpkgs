@@ -23,6 +23,12 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ sphinx ];
 
+  # this can be removed >0.19.0
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "setuptools_scm < 4" "setuptools_scm"
+  '';
+
   checkInputs = [
     hypothesis
     py

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-workspace-matrix";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "mzur";
     repo = "gnome-shell-wsmatrix";
     rev = "v${version}";
-    sha256 = "0ak4067kgr0yi2hlrsbhsq28ksspmx7l811h0xqy4idg48ly8c1d";
+    sha256 = "1xx2h8k981657lws614f7x4mqjk900xq9907j2h5jdhbbic5ppy6";
   };
 
   uuid = "wsmatrix@martin.zurowietz.de";
@@ -21,8 +21,10 @@ stdenv.mkDerivation rec {
   buildFlags = "schemas";
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
     cp -r ${uuid} $out/share/gnome-shell/extensions
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {

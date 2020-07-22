@@ -1,6 +1,5 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild
+{ stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, ocamlbuild
 , ocaml_lwt # optional lwt support
-, doCheck ? stdenv.lib.versionAtLeast ocaml.version "4.03"
 , ounit, fileutils # only for tests
 }:
 
@@ -15,13 +14,22 @@ stdenv.mkDerivation rec {
 		sha256 = "1s6vmqpx19hxzsi30jvp3h7p56rqnxfhfddpcls4nz8sqca1cz5y";
 	};
 
-	buildInputs = [ ocaml findlib ocamlbuild ocaml_lwt ]
-	++ stdenv.lib.optionals doCheck [ ounit fileutils ];
+	patches = [ (fetchpatch {
+		url = "https://github.com/whitequark/ocaml-inotify/commit/716c8002cc1652f58eb0c400ae92e04003cba8c9.patch";
+		sha256 = "04lfxrrsmk2mc704kaln8jqx93jc4bkxhijmfy2d4cmk1cim7r6k";
+	}) ];
+
+	buildInputs = [ ocaml findlib ocamlbuild ocaml_lwt ];
+	checkInputs = [ ounit fileutils ];
 
 	configureFlags = [ "--enable-lwt"
 	  (stdenv.lib.optionalString doCheck "--enable-tests") ];
 
-	inherit doCheck;
+	postConfigure = stdenv.lib.optionalString doCheck ''
+	  echo '<lib_test/test_inotify_lwt.*>: pkg_threads' | tee -a _tags
+	'';
+
+	doCheck = true;
 	checkTarget = "test";
 
 	createFindlibDestdir = true;

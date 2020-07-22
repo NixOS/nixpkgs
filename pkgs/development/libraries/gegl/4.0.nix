@@ -35,25 +35,15 @@
 
 stdenv.mkDerivation rec {
   pname = "gegl";
-  version = "0.4.22";
+  version = "0.4.24";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/gegl/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0q9cckf90fb82qc5d496fjz459f1xw4j4p3rff1f57yivx0yr20q";
+    sha256 = "d2VJnyc0Gw0WAy5mUxnLwSh2SD/2qUT83ySpxY4+JUo=";
   };
-
-  patches = [
-    # Prevent deadlock making tests time-out
-    # https://gitlab.gnome.org/GNOME/gegl/issues/226
-    # https://gitlab.gnome.org/GNOME/glib/issues/1941
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gegl/commit/1d530816266b52c8788bbe1504c5b2d6eceba036.patch";
-      sha256 = "1d8nhrzvwq35c5ws00xy9y6bfd9wsj3dm0301hiwkfi4niq59ygh";
-    })
-  ];
 
   nativeBuildInputs = [
     pkgconfig

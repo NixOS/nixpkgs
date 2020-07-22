@@ -1,20 +1,19 @@
 { stdenv, buildPythonPackage, fetchFromGitHub
-, enum-compat
 , xorgserver, pytest, pytest-xvfb, pytest-asyncio, i3, python, xlib, xdpyinfo
 , makeFontsConf, coreutils
 }:
 
 buildPythonPackage rec {
   pname = "i3ipc";
-  version = "2.1.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner  = "acrisci";
     repo   = "i3ipc-python";
     rev    = "v${version}";
-    sha256 = "10zpbiw1gcndn439g1vxcdkxllwp02qcmaal4w7hi2rzgaw1xkdk";
+    sha256 = "13bzs9dcv27czpnnbgz7a037lm8h991c8gk0qzzk5mq5yak24715";
   };
-  propagatedBuildInputs = [ enum-compat xlib ];
+  propagatedBuildInputs = [ xlib ];
 
   fontsConf = makeFontsConf {
     fontDirectories = [ ];

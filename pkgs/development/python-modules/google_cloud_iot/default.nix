@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-iot";
-  version = "0.3.1";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ab1070003027e28c6956cee3f11228277830d191a1c38a809c96eb0baf8be670";
+    sha256 = "bfd1511a7bcc7d23c2ea30253dd86b2b2247576d1345d895d7153dc0b262f06e";
   };
 
   checkInputs = [ pytest mock ];

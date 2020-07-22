@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "trickster";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ "1000101" ];
+  meta = with pkgs.stdenv.lib; {
+    maintainers = with maintainers; [ maintainers."1000101" ];
   };
 
   nodes = {

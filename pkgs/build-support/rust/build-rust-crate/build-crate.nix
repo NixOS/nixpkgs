@@ -1,4 +1,4 @@
-{ lib, stdenv, mkRustcDepArgs, rust }:
+{ lib, stdenv, mkRustcDepArgs, mkRustcFeatureArgs, rust }:
 { crateName,
   dependencies,
   crateFeatures, crateRenames, libName, release, libPath,
@@ -13,7 +13,7 @@
       ++ ["-C codegen-units=$NIX_BUILD_CORES"]
       ++ ["--remap-path-prefix=$NIX_BUILD_TOP=/" ]
       ++ [(mkRustcDepArgs dependencies crateRenames)]
-      ++ [crateFeatures]
+      ++ [(mkRustcFeatureArgs crateFeatures)]
       ++ extraRustcOpts
       ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--target ${rust.toRustTarget stdenv.hostPlatform} -C linker=${stdenv.hostPlatform.config}-gcc"
       # since rustc 1.42 the "proc_macro" crate is part of the default crate prelude

@@ -5,7 +5,7 @@
 , fuse
 , pkgconfig
 , libpcap
-, zlib 
+, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     [ fuse libpcap zlib ];
 
   postInstall = ''
+    substituteInPlace $out/sbin/mfscgiserv --replace "datapath=\"$out" "datapath=\""
     wrapProgram $out/sbin/mfscgiserv \
         --prefix PATH ":" "${python}/bin"
   '';

@@ -42,6 +42,13 @@ in stdenv.mkDerivation rec {
       sha256 = "1nl4y1rwdl0gn67v7l05ibc4lwkn6x7fhwbmslmm08cqmwfjsx3y";
       stripLen = 1;
     })
+
+    # fix build for "ZSTD_SOURCE=SYSTEM"
+    (fetchpatch {
+      url = "https://github.com/apache/arrow/commit/13cb3dbded1928d2e96574895bebaf9098a4796d.diff";
+      sha256 = "12z3ys47qp2x8f63lggiyj4xs2kmg804ri4xqysw5krbjz2hr6rb";
+      stripLen = 1;
+    })
   ] ++ lib.optionals (!enableShared) [
     # The shared jemalloc lib is unused and breaks in static mode due to missing -fpic.
     ./jemalloc-disable-shared.patch
@@ -89,6 +96,7 @@ in stdenv.mkDerivation rec {
     "-DARROW_WITH_SNAPPY=ON"
     "-DARROW_WITH_ZLIB=ON"
     "-DARROW_WITH_ZSTD=ON"
+    "-DARROW_ZSTD_USE_SHARED=OFF" # TODO use shared zstd once #91984 hits the master
     # Parquet options:
     "-DARROW_PARQUET=ON"
     "-DPARQUET_BUILD_EXECUTABLES=ON"

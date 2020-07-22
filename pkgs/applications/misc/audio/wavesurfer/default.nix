@@ -20,9 +20,9 @@ stdenv.mkDerivation {
                  --prefix PATH : "${stdenv.lib.makeBinPath [ tcl tk ]}"
   '';
 
-  meta = { 
+  meta = {
     description = "Tool for recording, playing, editing, viewing and labeling of audio";
     homepage = "http://www.speech.kth.se/wavesurfer/";
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd0;
   };
 }

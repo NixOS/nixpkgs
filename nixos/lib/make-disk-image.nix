@@ -39,7 +39,7 @@
 
 , name ? "nixos-disk-image"
 
-, # Disk image format, one of qcow2, qcow2-compressed, vpc, raw.
+, # Disk image format, one of qcow2, qcow2-compressed, vdi, vpc, raw.
   format ? "raw"
 }:
 
@@ -57,6 +57,7 @@ let format' = format; in let
 
   filename = "nixos." + {
     qcow2 = "qcow2";
+    vdi   = "vdi";
     vpc   = "vhd";
     raw   = "img";
   }.${format};
@@ -180,6 +181,7 @@ let format' = format; in let
     export NIX_STATE_DIR=$TMPDIR/state
     nix-store --load-db < ${closureInfo}/registration
 
+    chmod 755 "$TMPDIR"
     echo "running nixos-install..."
     nixos-install --root $root --no-bootloader --no-root-passwd \
       --system ${config.system.build.toplevel} --channel ${channelSources} --substituters ""

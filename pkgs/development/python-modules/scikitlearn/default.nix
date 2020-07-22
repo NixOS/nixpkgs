@@ -8,17 +8,18 @@
 , cython
 , joblib
 , llvmPackages
+, threadpoolctl
 }:
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "0.22.2.post1";
+  version = "0.23.1";
   # UnboundLocalError: local variable 'message' referenced before assignment
   disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0z81n13dxvd6qwq5lsnzw2machmxbirhdhr73v90fi55ic9qslsp";
+    sha256 = "e3fec1c8831f8f93ad85581ca29ca1bb88e2da377fb097cf8322aa89c21bc9b8";
   };
 
   buildInputs = [
@@ -38,6 +39,7 @@ buildPythonPackage rec {
     scipy
     numpy.blas
     joblib
+    threadpoolctl
   ];
   checkInputs = [ pytest ];
 

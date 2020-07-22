@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fixDarwinDylibNames }:
+{ stdenv, fetchFromGitHub, fixDarwinDylibNames, snappy }:
 
 stdenv.mkDerivation rec {
   pname = "leveldb";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "01kxga1hv4wp94agx5vl3ybxfw5klqrdsrb6p6ywvnjmjxm8322y";
   };
+
+  buildInputs = [ snappy ];
 
   nativeBuildInputs = []
     ++ stdenv.lib.optional stdenv.isDarwin [ fixDarwinDylibNames ];

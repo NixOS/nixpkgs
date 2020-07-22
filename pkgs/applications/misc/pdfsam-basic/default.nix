@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     desktopName = "PDFsam Basic";
     genericName = "PDF Split and Merge";
     mimeType = "application/pdf;";
-    categories = "Office;Application;";
+    categories = "Office;";
   };
 
   meta = with stdenv.lib; {

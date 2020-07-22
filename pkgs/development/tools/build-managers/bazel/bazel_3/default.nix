@@ -1,4 +1,4 @@
-{ stdenv, callPackage, lib, fetchurl, fetchFromGitHub
+{ stdenv, callPackage, lib, fetchurl, fetchFromGitHub, installShellFiles
 , runCommand, runCommandCC, makeWrapper, recurseIntoAttrs
 # this package (through the fixpoint glass)
 , bazel_self
@@ -25,11 +25,11 @@
 }:
 
 let
-  version = "3.2.0";
+  version = "3.3.1";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "1ylbfdcb6rhnc3sr292c6shl754i0h0i050f4gr4bppn6sa15v24";
+    sha256 = "0ir796kl8r9hpr3li26qsdy1z2lx2bv82zmk4a2s7q64clyg9wg0";
   };
 
   # Update with `eval $(nix-build -A bazel.updater)`,
@@ -53,8 +53,8 @@ let
        else srcs."java_tools_javac11_linux-v8.0.zip")
       srcs."coverage_output_generator-v2.1.zip"
       srcs.build_bazel_rules_nodejs
-      srcs."android_tools_pkg-0.16.0.tar.gz"
-      srcs."3.1.0.tar.gz"
+      srcs."android_tools_pkg-0.19.0rc1.tar.gz"
+      srcs."bazel-toolchains-3.1.0.tar.gz"
       srcs.rules_pkg
       srcs.rules_cc
       srcs.rules_java
@@ -465,6 +465,7 @@ stdenv.mkDerivation rec {
   # when a command can’t be found in a bazel build, you might also
   # need to add it to `defaultShellPath`.
   nativeBuildInputs = [
+    installShellFiles
     zip
     python3
     unzip
@@ -507,9 +508,15 @@ stdenv.mkDerivation rec {
     mv ./bazel_src/output/bazel $out/bin/bazel-${version}-${system}-${arch}
 
     # shell completion files
-    mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
-    mv ./bazel_src/output/bazel-complete.bash $out/share/bash-completion/completions/bazel
-    cp ./bazel_src/scripts/zsh_completion/_bazel $out/share/zsh/site-functions/
+    installShellCompletion --bash \
+      --name bazel.bash \
+      ./bazel_src/output/bazel-complete.bash
+    installShellCompletion --zsh \
+      --name _bazel \
+      ./bazel_src/scripts/zsh_completion/_bazel
+    installShellCompletion --fish \
+      --name bazel.fish \
+      ./bazel_src/scripts/fish/completions/bazel.fish
   '';
 
   doInstallCheck = true;

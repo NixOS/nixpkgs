@@ -15,7 +15,7 @@
 , glibc
 , libXScrnSaver, libXcursor, libXtst, libGLU, libGL
 , protobuf, speechd, libXdamage, cups
-, ffmpeg, libxslt, libxml2, at-spi2-core
+, ffmpeg_3, libxslt, libxml2, at-spi2-core
 , jre
 
 # optional dependencies
@@ -93,7 +93,7 @@ let
     libpng libcap
     xdg_utils yasm minizip libwebp
     libusb1 re2 zlib
-    ffmpeg libxslt libxml2
+    ffmpeg_3 libxslt libxml2
     # harfbuzz # in versions over 63 harfbuzz and freetype are being built together
                # so we can't build with one from system and other from source
   ];

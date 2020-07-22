@@ -39,7 +39,7 @@ with lib;
       The services.xserver.displayManager.auto module has been removed
       because it was only intended for use in internal NixOS tests, and gave the
       false impression of it being a special display manager when it's actually
-      LightDM. Please use the services.xserver.displayManager.lightdm.autoLogin options
+      LightDM. Please use the services.xserver.displayManager.autoLogin options
       instead, or any other display manager in NixOS as they all support auto-login.
     '')
     (mkRemovedOptionModule [ "services" "dnscrypt-proxy" ] "Use services.dnscrypt-proxy2 instead")
@@ -53,6 +53,12 @@ with lib;
 
     (mkRemovedOptionModule ["services" "prey" ] ''
       prey-bash-client is deprecated upstream
+    '')
+
+    (mkRemovedOptionModule ["hardware" "u2f" ] ''
+      The U2F modules module was removed, as all it did was adding the
+      udev rules from libu2f-host to the system. Udev gained native support
+      to handle FIDO security tokens, so this isn't necessary anymore.
     '')
 
     # Do NOT add any option renames here, see top of the file

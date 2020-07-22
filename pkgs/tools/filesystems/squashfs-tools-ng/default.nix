@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "squashfs-tools-ng";
-  version = "0.9.1";
+  version = "1.0.0";
 
   src = fetchurl {
     url = "https://infraroot.at/pub/squashfs/squashfs-tools-ng-${version}.tar.xz";
-    sha256 = "1ilxkrqbpb5whv7xfwfvph76jwyjzf988njjpyyr99h6jv2r77q1";
+    sha256 = "1dpx0a200s46s1dxp64hkn765vap0hzmyyvmq7wrmcs81mvlrd0l";
   };
 
   nativeBuildInputs = [ doxygen graphviz pkgconfig perl ];

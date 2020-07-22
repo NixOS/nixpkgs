@@ -17,7 +17,7 @@
 , e2fsprogs
 , libfaketime
 , perl
-, lkl
+, fakeroot
 }:
 
 let
@@ -26,7 +26,7 @@ in
 pkgs.stdenv.mkDerivation {
   name = "ext4-fs.img${lib.optionalString compressImage ".zst"}";
 
-  nativeBuildInputs = [ e2fsprogs.bin libfaketime perl lkl ]
+  nativeBuildInputs = [ e2fsprogs.bin libfaketime perl fakeroot ]
   ++ lib.optional compressImage zstd;
 
   buildCommand =
@@ -37,32 +37,31 @@ pkgs.stdenv.mkDerivation {
       ${populateImageCommands}
       )
 
-      # Add the closures of the top-level store objects.
-      storePaths=$(cat ${sdClosureInfo}/store-paths)
+      echo "Preparing store paths for image..."
+
+      # Create nix/store before copying path
+      mkdir -p ./rootImage/nix/store
+
+      xargs -I % cp -a --reflink=auto % -t ./rootImage/nix/store/ < ${sdClosureInfo}/store-paths
+      (
+        GLOBIGNORE=".:.."
+        shopt -u dotglob
+        cp -a --reflink=auto ./files/* -t ./rootImage/
+      )
+
+      # Also include a manifest of the closures in a format suitable for nix-store --load-db
+      cp ${sdClosureInfo}/registration ./rootImage/nix-path-registration
 
       # Make a crude approximation of the size of the target image.
       # If the script starts failing, increase the fudge factors here.
-      numInodes=$(find $storePaths ./files | wc -l)
-      numDataBlocks=$(du -s -c -B 4096 --apparent-size $storePaths ./files | tail -1 | awk '{ print int($1 * 1.03) }')
+      numInodes=$(find ./rootImage | wc -l)
+      numDataBlocks=$(du -s -c -B 4096 --apparent-size ./rootImage | tail -1 | awk '{ print int($1 * 1.10) }')
       bytes=$((2 * 4096 * $numInodes + 4096 * $numDataBlocks))
       echo "Creating an EXT4 image of $bytes bytes (numInodes=$numInodes, numDataBlocks=$numDataBlocks)"
 
       truncate -s $bytes $img
-      faketime -f "1970-01-01 00:00:01" mkfs.ext4 -L ${volumeLabel} -U ${uuid} $img
 
-      # Also include a manifest of the closures in a format suitable for nix-store --load-db.
-      cp ${sdClosureInfo}/registration nix-path-registration
-      cptofs -t ext4 -i $img nix-path-registration /
-
-      # Create nix/store before copying paths
-      faketime -f "1970-01-01 00:00:01" mkdir -p nix/store
-      cptofs -t ext4 -i $img nix /
-
-      echo "copying store paths to image..."
-      cptofs -t ext4 -i $img $storePaths /nix/store/
-
-      echo "copying files to image..."
-      cptofs -t ext4 -i $img ./files/* /
+      faketime -f "1970-01-01 00:00:01" fakeroot mkfs.ext4 -L ${volumeLabel} -U ${uuid} -d ./rootImage $img
 
       export EXT2FS_NO_MTAB_OK=yes
       # I have ended up with corrupted images sometimes, I suspect that happens when the build machine's disk gets full during the build.

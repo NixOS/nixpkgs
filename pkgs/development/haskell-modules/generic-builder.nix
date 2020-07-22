@@ -27,7 +27,8 @@ in
 , doHoogle ? true
 , doHaddockQuickjump ? doHoogle && stdenv.lib.versionAtLeast ghc.version "8.6"
 , editedCabalFile ? null
-, enableLibraryProfiling ? !(ghc.isGhcjs or false)
+# aarch64 outputs otherwise exceed 2GB limit
+, enableLibraryProfiling ? !(ghc.isGhcjs or stdenv.targetPlatform.isAarch64 or false)
 , enableExecutableProfiling ? false
 , profilingDetail ? "exported-functions"
 # TODO enable shared libs for cross-compiling
@@ -48,8 +49,7 @@ in
 , isExecutable ? false, isLibrary ? !isExecutable
 , jailbreak ? false
 , license
-  # aarch64 sometimes crashes for -jn with n>1: https://ghc.haskell.org/trac/ghc/ticket/15449
-, enableParallelBuilding ? !stdenv.buildPlatform.isAarch64
+, enableParallelBuilding ? true
 , maintainers ? []
 , doCoverage ? false
 , doHaddock ? !(ghc.isHaLVM or false)

@@ -33,7 +33,9 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
-  preFixup = stdenv.lib.optionalString stdenv.isLinux ''
+  configureFlags = stdenv.lib.optional (!enableSystemd) "--disable-udev";
+
+  preFixup = stdenv.lib.optionalString enableSystemd ''
     sed 's,-ludev,-L${stdenv.lib.getLib systemd}/lib -ludev,' -i $out/lib/libusb-1.0.la
   '';
 

@@ -1,6 +1,6 @@
 {
   fetchFromGitHub, stdenv, pkgconfig, autoreconfHook,
-  acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib,
+  acl, attr, bzip2, e2fsprogs, libxml2, lzo, openssl, sharutils, xz, zlib, zstd,
 
   # Optional but increases closure only negligibly.
   xarSupport ? true,
@@ -10,19 +10,19 @@ assert xarSupport -> libxml2 != null;
 
 stdenv.mkDerivation rec {
   pname = "libarchive";
-  version = "3.4.2";
+  version = "3.4.3";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${version}";
-    sha256 = "0mjm77wbqs8sbn9j44lj39nwbg6anmgz6pkyfxsww54a4rs0p3iz";
+    sha256 = "1y0v03p6zyv6plr2p0pid1qfgmk8hd427spj8xa93mcdmq5yc3s0";
   };
 
   outputs = [ "out" "lib" "dev" ];
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ sharutils zlib bzip2 openssl xz lzo ]
+  buildInputs = [ sharutils zlib bzip2 openssl xz lzo zstd ]
     ++ stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ]
     ++ stdenv.lib.optional xarSupport libxml2;
 

@@ -4,18 +4,27 @@
 , setuptools
 , nose
 , pyyaml
+, pythonOlder
+, importlib-metadata
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "Markdown";
-  version = "3.1.1";
+  version = "3.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2e50876bcdd74517e7b71f3e7a76102050edec255b3983403f1a63e7c8a41e7a";
+    sha256 = "1fafe3f1ecabfb514a5285fca634a53c1b32a81cb0feb154264d55bf2ff22c17";
   };
 
-  propagatedBuildInputs = [ setuptools ];
+  propagatedBuildInputs = [ 
+    setuptools 
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+  ];
+
+  disabled = !isPy3k;
 
   checkInputs = [ nose pyyaml ];
 

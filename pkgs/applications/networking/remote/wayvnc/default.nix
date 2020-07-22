@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "0aa12fkbwhzs0g2pqw1b27l33nn5dpbcvsf1z8h88kwsf9xdvb2r";
   };
 
+  patches = [ ./add-missing-librt.patch ];
+
   postPatch = ''
     substituteInPlace meson.build \
       --replace "version: '0.1.0'" "version: '${version}'"

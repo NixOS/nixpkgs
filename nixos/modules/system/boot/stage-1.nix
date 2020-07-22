@@ -584,7 +584,7 @@ in
       { assertion = !config.boot.loader.supportsInitrdSecrets ->
           all (source:
             builtins.isPath source ||
-            (builtins.isString source && hasPrefix source builtins.storeDir))
+            (builtins.isString source && hasPrefix builtins.storeDir source))
           (attrValues config.boot.initrd.secrets);
         message = ''
           boot.loader.initrd.secrets values must be unquoted paths when

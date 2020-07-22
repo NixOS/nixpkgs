@@ -12,17 +12,21 @@ stdenv.mkDerivation rec {
     sha256 = "0w0aiszjd58ynxpacwcgf052zpmbpcym4dhci64vbfgch6wryz0w";
   };
 
-  patches = [ ./scons.patch ];
+  patches = [ ./scons.patch ./build-fix.patch ];
 
   sconsFlags = [
     "openssl=${openssl.dev}"
     "boost_includedir=${boost.dev}/include"
     "boost_libdir=${boost.out}/lib"
     "boost_bundled_enable=false"
+    "max_jobs=1"
+    "optimize=1"
+    "debug=0"
+    "swiften_dll=1"
   ];
   preInstall = ''
     installTargets="$out"
-    installFlags+=" SWIFT_INSTALLDIR=$out"
+    installFlags+=" SWIFTEN_INSTALLDIR=$out"
   '';
 
   enableParallelBuilding = true;
@@ -33,6 +37,5 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl2Plus;
     platforms   = platforms.linux;
     maintainers = [ maintainers.twey ];
-    broken = true; # Broken since 2019-11-20 (https://hydra.nixos.org/build/114681755)
   };
 }

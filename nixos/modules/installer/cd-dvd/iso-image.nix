@@ -413,7 +413,7 @@ in
       default = false;
       description = ''
         Whether the ISO image should be compressed using
-        <command>bzip2</command>.
+        <command>zstd</command>.
       '';
     };
 

@@ -6,6 +6,12 @@
 self: super:
 
 {
+  automat = super.automat.overridePythonAttrs (
+    old: rec {
+      propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.m2r ];
+    }
+  );
+
   astroid = super.astroid.overridePythonAttrs (
     old: rec {
       buildInputs = old.buildInputs ++ [ self.pytest-runner ];
@@ -211,6 +217,12 @@ self: super:
     }
   );
 
+  intreehooks = super.intreehooks.overridePythonAttrs (
+    old: {
+      doCheck = false;
+    }
+  );
+
   isort = super.isort.overridePythonAttrs (
     old: {
       propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.setuptools ];
@@ -242,6 +254,11 @@ self: super:
       ];
     }
   );
+
+  libvirt-python = super.libvirt-python.overridePythonAttrs ({ nativeBuildInputs ? [ ], ... }: {
+    nativeBuildInputs = nativeBuildInputs ++ [ pkgs.pkgconfig ];
+    propagatedBuildInputs = [ pkgs.libvirt ];
+  });
 
   llvmlite = super.llvmlite.overridePythonAttrs (
     old: {
@@ -333,6 +350,14 @@ self: super:
     }
   );
 
+  mip = super.mip.overridePythonAttrs (
+    old: {
+      nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.autoPatchelfHook ];
+
+      buildInputs = old.buildInputs ++ [ pkgs.zlib self.cppy ];
+    }
+  );
+
   netcdf4 = super.netcdf4.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [
@@ -398,6 +423,12 @@ self: super:
     }
   );
 
+  parsel = super.parsel.overridePythonAttrs (
+    old: rec {
+      nativeBuildInputs = old.nativeBuildInputs ++ [ self.pytest-runner ];
+    }
+  );
+
   peewee = super.peewee.overridePythonAttrs (
     old:
     let
@@ -436,7 +467,14 @@ self: super:
       old:
       let
         parseMinor = drv: lib.concatStringsSep "." (lib.take 2 (lib.splitVersion drv.version));
-        _arrow-cpp = pkgs.arrow-cpp.override { inherit (self) python; };
+
+        # Starting with nixpkgs revision f149c7030a7, pyarrow takes "python3" as an argument
+        # instead of "python". Below we inspect function arguments to maintain compatibilitiy.
+        _arrow-cpp = pkgs.arrow-cpp.override (
+          builtins.intersectAttrs
+            (lib.functionArgs pkgs.arrow-cpp.override) { python = self.python; python3 = self.python; }
+        );
+
         ARROW_HOME = _arrow-cpp;
         arrowCppVersion = parseMinor pkgs.arrow-cpp;
         pyArrowVersion = parseMinor super.pyarrow;
@@ -517,6 +555,46 @@ self: super:
     }
   );
 
+  pygame = super.pygame.overridePythonAttrs (
+    old: rec {
+      nativeBuildInputs = [
+        pkgs.pkg-config
+        pkgs.SDL
+      ];
+
+      buildInputs = [
+        pkgs.SDL
+        pkgs.SDL_image
+        pkgs.SDL_mixer
+        pkgs.SDL_ttf
+        pkgs.libpng
+        pkgs.libjpeg
+        pkgs.portmidi
+        pkgs.xorg.libX11
+        pkgs.freetype
+      ];
+
+      # Tests fail because of no audio device and display.
+      doCheck = false;
+      preConfigure = ''
+        sed \
+          -e "s/origincdirs = .*/origincdirs = []/" \
+          -e "s/origlibdirs = .*/origlibdirs = []/" \
+          -e "/'\/lib\/i386-linux-gnu', '\/lib\/x86_64-linux-gnu']/d" \
+          -e "/\/include\/smpeg/d" \
+          -i buildconfig/config_unix.py
+        ${lib.concatMapStrings (dep: ''
+          sed \
+            -e "/origincdirs =/a\        origincdirs += ['${lib.getDev dep}/include']" \
+            -e "/origlibdirs =/a\        origlibdirs += ['${lib.getLib dep}/lib']" \
+            -i buildconfig/config_unix.py
+        '') buildInputs
+        }
+        LOCALBASE=/ ${self.python.interpreter} buildconfig/config.py
+      '';
+    }
+  );
+
   pygobject = super.pygobject.overridePythonAttrs (
     old: {
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkgconfig ];
@@ -534,6 +612,18 @@ self: super:
   pyopenssl = super.pyopenssl.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [ pkgs.openssl ];
+    }
+  );
+
+  python-ldap = super.python-ldap.overridePythonAttrs (
+    old: {
+      buildInputs = old.buildInputs ++ [ pkgs.openldap pkgs.cyrus_sasl ];
+    }
+  );
+
+  pytoml = super.pytoml.overridePythonAttrs (
+    old: {
+      doCheck = false;
     }
   );
 
@@ -774,6 +864,14 @@ self: super:
       HDF5_DIR = "${pkgs.hdf5}";
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkgconfig ];
       propagatedBuildInputs = old.nativeBuildInputs ++ [ pkgs.hdf5 self.numpy self.numexpr ];
+    }
+  );
+
+  tensorflow = super.tensorflow.overridePythonAttrs (
+    old: {
+      postInstall = ''
+        rm $out/bin/tensorboard
+      '';
     }
   );
 

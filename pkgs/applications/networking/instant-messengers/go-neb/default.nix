@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule {
   pname = "go-neb";
@@ -15,6 +15,8 @@ buildGoModule {
   patches = [ ./go-mod.patch ];
 
   vendorSha256 = "1k3980yf6zl00dkd1djwhm2f9nnffzrsbs3kq3alpw2gm0aln739";
+
+  passthru.tests.go-neb = nixosTests.go-neb;
 
   meta = with lib; {
     description = "Extensible matrix bot written in Go";

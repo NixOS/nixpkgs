@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, opencv, zlib
 , libxml2, freetype, libjpeg, libtiff, swig, openexr
 , ilmbase, boost165
-, withPython ? true, python35
+, withPython ? true, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     buildInputs = [
       cmake pkgconfig boost165 opencv zlib libxml2 freetype libjpeg libtiff
       swig openexr ilmbase
-    ] ++ stdenv.lib.optional withPython python35;
+    ] ++ stdenv.lib.optional withPython python3;
 
     meta = with stdenv.lib; {
       description = "A free, open source raytracer";

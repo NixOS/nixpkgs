@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "hactool";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "SciresM";
     repo = "hactool";
-    rev = "1.4.0";
+    rev = version;
     sha256 = "0305ngsnwm8npzgyhyifasi4l802xnfz19r0kbzzniirmcn4082d";
   };
 

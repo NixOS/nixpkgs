@@ -10,6 +10,7 @@ let
     license = licenses.mit;
     maintainers = with maintainers; [ travisbhartwell manveru prusnak ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" "armv7l-linux" "aarch64-linux" ];
+    knownVulnerabilities = optional (version < "6") "Electron version ${version} is EOL";
   };
 
   fetcher = vers: tag: hash: fetchurl {

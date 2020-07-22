@@ -29,24 +29,6 @@ in [
   })
 
   (fetchNuGet {
-    name = "LiteDB";
-    version = "4.1.4";
-    sha256 = "1g9258mv3jm9ps2s5wcxbmszh9nqiiw3d9nrfqis8x72jqiqi6js";
-  })
-
-  (fetchNuGet {
-    name = "MSTest.TestAdapter";
-    version = "2.1.0";
-    sha256 = "1g1v8yjnk4nr1c36k3cz116889bnpiw1i1jkmqnpb19wms7sq7cz";
-  })
-
-  (fetchNuGet {
-    name = "MSTest.TestFramework";
-    version = "2.1.0";
-    sha256 = "0mac4h7ylw953chclhz0lrn19yks3bab9dn9x9fpjqi7309gid0p";
-  })
-
-  (fetchNuGet {
     name = "MessagePack";
     version = "2.1.90";
     sha256 = "1j5wjl7aq7nn5ga3j6zaaivdf2wlfyd7w66ak0i7krgrmv26lb8i";
@@ -101,57 +83,21 @@ in [
   })
 
   (fetchNuGet {
-    name = "Microsoft.CSharp";
-    version = "4.0.1";
-    sha256 = "0zxc0apx1gcx361jlq8smc9pfdgmyjh6hpka8dypc9w23nlsh6yj";
-  })
-
-  (fetchNuGet {
     name = "Microsoft.CodeCoverage";
     version = "16.5.0";
     sha256 = "0610wzn4qyywf9lb4538vwqhprxc4g0g7gjbmnjzvx97jr5nd5mf";
   })
 
   (fetchNuGet {
+    name = "Microsoft.CSharp";
+    version = "4.0.1";
+    sha256 = "0zxc0apx1gcx361jlq8smc9pfdgmyjh6hpka8dypc9w23nlsh6yj";
+  })
+
+  (fetchNuGet {
     name = "Microsoft.Extensions.FileSystemGlobbing";
     version = "3.1.2";
     sha256 = "1zwvzp0607irs7irfbq8vnclg5nj2jpyggw9agm4a32la5ngg27m";
-  })
-
-  (fetchNuGet {
-    name = "Microsoft.NET.Test.Sdk";
-    version = "16.5.0";
-    sha256 = "19f5bvzci5mmfz81jwc4dax4qdf7w4k67n263383mn8mawf22bfq";
-  })
-
-  (fetchNuGet {
-    name = "Microsoft.NETCore.Platforms";
-    version = "1.1.0";
-    sha256 = "08vh1r12g6ykjygq5d3vq09zylgb84l63k49jc4v8faw9g93iqqm";
-  })
-
-  (fetchNuGet {
-    name = "Microsoft.NETCore.Platforms";
-    version = "1.1.1";
-    sha256 = "164wycgng4mi9zqi2pnsf1pq6gccbqvw6ib916mqizgjmd8f44pj";
-  })
-
-  (fetchNuGet {
-    name = "Microsoft.NETCore.Platforms";
-    version = "2.0.0";
-    sha256 = "1fk2fk2639i7nzy58m9dvpdnzql4vb8yl8vr19r2fp8lmj9w2jr0";
-  })
-
-  (fetchNuGet {
-    name = "Microsoft.NETCore.Platforms";
-    version = "3.1.0";
-    sha256 = "1gc1x8f95wk8yhgznkwsg80adk1lc65v9n5rx4yaa4bc5dva0z3j";
-  })
-
-  (fetchNuGet {
-    name = "Microsoft.NETCore.Targets";
-    version = "1.1.0";
-    sha256 = "193xwf33fbm0ni3idxzbr5fdq3i2dlfgihsac9jj7whj0gd902nh";
   })
 
   (fetchNuGet {
@@ -206,6 +152,42 @@ in [
     name = "Microsoft.NetCore.App.Runtime.linux-x64";
     version = "3.1.3";
     sha256 = "1ynhzsr8a0hfby2wjhzkdiimj18izgfzp7m2yp3pby2iwb4v3xy9";
+  })
+
+  (fetchNuGet {
+    name = "Microsoft.NETCore.Platforms";
+    version = "1.1.0";
+    sha256 = "08vh1r12g6ykjygq5d3vq09zylgb84l63k49jc4v8faw9g93iqqm";
+  })
+
+  (fetchNuGet {
+    name = "Microsoft.NETCore.Platforms";
+    version = "1.1.1";
+    sha256 = "164wycgng4mi9zqi2pnsf1pq6gccbqvw6ib916mqizgjmd8f44pj";
+  })
+
+  (fetchNuGet {
+    name = "Microsoft.NETCore.Platforms";
+    version = "2.0.0";
+    sha256 = "1fk2fk2639i7nzy58m9dvpdnzql4vb8yl8vr19r2fp8lmj9w2jr0";
+  })
+
+  (fetchNuGet {
+    name = "Microsoft.NETCore.Platforms";
+    version = "3.1.0";
+    sha256 = "1gc1x8f95wk8yhgznkwsg80adk1lc65v9n5rx4yaa4bc5dva0z3j";
+  })
+
+  (fetchNuGet {
+    name = "Microsoft.NETCore.Targets";
+    version = "1.1.0";
+    sha256 = "193xwf33fbm0ni3idxzbr5fdq3i2dlfgihsac9jj7whj0gd902nh";
+  })
+
+  (fetchNuGet {
+    name = "Microsoft.NET.Test.Sdk";
+    version = "16.5.0";
+    sha256 = "19f5bvzci5mmfz81jwc4dax4qdf7w4k67n263383mn8mawf22bfq";
   })
 
   (fetchNuGet {
@@ -269,21 +251,15 @@ in [
   })
 
   (fetchNuGet {
-    name = "NETStandard.Library";
-    version = "1.6.1";
-    sha256 = "1z70wvsx2d847a2cjfii7b83pjfs34q05gb037fdjikv5kbagml8";
+    name = "MSTest.TestAdapter";
+    version = "2.1.0";
+    sha256 = "1g1v8yjnk4nr1c36k3cz116889bnpiw1i1jkmqnpb19wms7sq7cz";
   })
 
   (fetchNuGet {
-    name = "NETStandard.Library";
-    version = "2.0.3";
-    sha256 = "1fn9fxppfcg4jgypp2pmrpr6awl3qz1xmnri0cygpkwvyx27df1y";
-  })
-
-  (fetchNuGet {
-    name = "NSubstitute";
-    version = "4.2.1";
-    sha256 = "0wgfjh032qds994fmgxvsg88nhgjrx7p9rnv6z678jm62qi14asy";
+    name = "MSTest.TestFramework";
+    version = "2.1.0";
+    sha256 = "0mac4h7ylw953chclhz0lrn19yks3bab9dn9x9fpjqi7309gid0p";
   })
 
   (fetchNuGet {
@@ -293,9 +269,15 @@ in [
   })
 
   (fetchNuGet {
-    name = "NewtonSoft.Json";
-    version = "12.0.3";
-    sha256 = "17dzl305d835mzign8r15vkmav2hq8l6g7942dfjpnzr17wwl89x";
+    name = "NETStandard.Library";
+    version = "1.6.1";
+    sha256 = "1z70wvsx2d847a2cjfii7b83pjfs34q05gb037fdjikv5kbagml8";
+  })
+
+  (fetchNuGet {
+    name = "NETStandard.Library";
+    version = "2.0.3";
+    sha256 = "1fn9fxppfcg4jgypp2pmrpr6awl3qz1xmnri0cygpkwvyx27df1y";
   })
 
   (fetchNuGet {
@@ -311,15 +293,339 @@ in [
   })
 
   (fetchNuGet {
+    name = "NewtonSoft.Json";
+    version = "12.0.3";
+    sha256 = "17dzl305d835mzign8r15vkmav2hq8l6g7942dfjpnzr17wwl89x";
+  })
+
+  (fetchNuGet {
     name = "Newtonsoft.Json";
     version = "9.0.1";
     sha256 = "0mcy0i7pnfpqm4pcaiyzzji4g0c8i3a5gjz28rrr28110np8304r";
   })
 
   (fetchNuGet {
+    name = "NSubstitute";
+    version = "4.2.1";
+    sha256 = "0wgfjh032qds994fmgxvsg88nhgjrx7p9rnv6z678jm62qi14asy";
+  })
+
+  (fetchNuGet {
     name = "NuGet.Frameworks";
     version = "5.0.0";
     sha256 = "18ijvmj13cwjdrrm52c8fpq021531zaz4mj4b4zapxaqzzxf2qjr";
+  })
+
+  (fetchNuGet {
+    name = "runtime.any.System.Collections";
+    version = "4.3.0";
+    sha256 = "0bv5qgm6vr47ynxqbnkc7i797fdi8gbjjxii173syrx14nmrkwg0";
+  })
+
+  (fetchNuGet {
+    name = "runtime.any.System.Diagnostics.Tools";
+    version = "4.3.0";
+    sha256 = "1wl76vk12zhdh66vmagni66h5xbhgqq7zkdpgw21jhxhvlbcl8pk";
+  })
+
+  (fetchNuGet {
+    name = "runtime.any.System.Diagnostics.Tracing";
+    version = "4.3.0";
+    sha256 = "00j6nv2xgmd3bi347k00m7wr542wjlig53rmj28pmw7ddcn97jbn";
+  })
+
+  (fetchNuGet {
+    name = "runtime.any.System.Globalization";
+    version = "4.3.0";
+    sha256 = "1daqf33hssad94lamzg01y49xwndy2q97i2lrb7mgn28656qia1x";
+  })
+
+  (fetchNuGet {
+    name = "runtime.any.System.Globalization.Calendars";
+    version = "4.3.0";
+    sha256 = "1ghhhk5psqxcg6w88sxkqrc35bxcz27zbqm2y5p5298pv3v7g201";
+  })
+
+  (fetchNuGet {
+    name = "runtime.any.System.IO";
+    version = "4.3.0";
+    sha256 = "0l8xz8zn46w4d10bcn3l4yyn4vhb3lrj2zw8llvz7jk14k4zps5x";
+  })
+
+  (fetchNuGet {
+    name = "runtime.any.System.Reflection";
+    version = "4.3.0";
+    sha256 = "02c9h3y35pylc0zfq3wcsvc5nqci95nrkq0mszifc0sjx7xrzkly";
+  })
+
+  (fetchNuGet {
+    name = "runtime.any.System.Reflection.Extensions";
+    version = "4.3.0";
+    sha256 = "0zyri97dfc5vyaz9ba65hjj1zbcrzaffhsdlpxc9bh09wy22fq33";
+  })
+
+  (fetchNuGet {
+    name = "runtime.any.System.Reflection.Primitives";
+    version = "4.3.0";
+    sha256 = "0x1mm8c6iy8rlxm8w9vqw7gb7s1ljadrn049fmf70cyh42vdfhrf";
+  })
+
+  (fetchNuGet {
+    name = "runtime.any.System.Resources.ResourceManager";
+    version = "4.3.0";
+    sha256 = "03kickal0iiby82wa5flar18kyv82s9s6d4xhk5h4bi5kfcyfjzl";
+  })
+
+  (fetchNuGet {
+    name = "runtime.any.System.Runtime";
+    version = "4.3.0";
+    sha256 = "1cqh1sv3h5j7ixyb7axxbdkqx6cxy00p4np4j91kpm492rf4s25b";
+  })
+
+  (fetchNuGet {
+    name = "runtime.any.System.Runtime.Handles";
+    version = "4.3.0";
+    sha256 = "0bh5bi25nk9w9xi8z23ws45q5yia6k7dg3i4axhfqlnj145l011x";
+  })
+
+  (fetchNuGet {
+    name = "runtime.any.System.Runtime.InteropServices";
+    version = "4.3.0";
+    sha256 = "0c3g3g3jmhlhw4klrc86ka9fjbl7i59ds1fadsb2l8nqf8z3kb19";
+  })
+
+  (fetchNuGet {
+    name = "runtime.any.System.Text.Encoding";
+    version = "4.3.0";
+    sha256 = "0aqqi1v4wx51h51mk956y783wzags13wa7mgqyclacmsmpv02ps3";
+  })
+
+  (fetchNuGet {
+    name = "runtime.any.System.Text.Encoding.Extensions";
+    version = "4.3.0";
+    sha256 = "0lqhgqi0i8194ryqq6v2gqx0fb86db2gqknbm0aq31wb378j7ip8";
+  })
+
+  (fetchNuGet {
+    name = "runtime.any.System.Threading.Tasks";
+    version = "4.3.0";
+    sha256 = "03mnvkhskbzxddz4hm113zsch1jyzh2cs450dk3rgfjp8crlw1va";
+  })
+
+  (fetchNuGet {
+    name = "runtime.any.System.Threading.Timer";
+    version = "4.3.0";
+    sha256 = "0aw4phrhwqz9m61r79vyfl5la64bjxj8l34qnrcwb28v49fg2086";
+  })
+
+  (fetchNuGet {
+    name = "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl";
+    version = "4.3.0";
+    sha256 = "16rnxzpk5dpbbl1x354yrlsbvwylrq456xzpsha1n9y3glnhyx9d";
+  })
+
+  (fetchNuGet {
+    name = "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl";
+    version = "4.3.2";
+    sha256 = "0rwpqngkqiapqc5c2cpkj7idhngrgss5qpnqg0yh40mbyflcxf8i";
+  })
+
+  (fetchNuGet {
+    name = "runtime.fedora.23-x64.runtime.native.System.Security.Cryptography.OpenSsl";
+    version = "4.3.0";
+    sha256 = "0hkg03sgm2wyq8nqk6dbm9jh5vcq57ry42lkqdmfklrw89lsmr59";
+  })
+
+  (fetchNuGet {
+    name = "runtime.fedora.23-x64.runtime.native.System.Security.Cryptography.OpenSsl";
+    version = "4.3.2";
+    sha256 = "1n06gxwlinhs0w7s8a94r1q3lwqzvynxwd3mp10ws9bg6gck8n4r";
+  })
+
+  (fetchNuGet {
+    name = "runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl";
+    version = "4.3.0";
+    sha256 = "0c2p354hjx58xhhz7wv6div8xpi90sc6ibdm40qin21bvi7ymcaa";
+  })
+
+  (fetchNuGet {
+    name = "runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl";
+    version = "4.3.2";
+    sha256 = "0404wqrc7f2yc0wxv71y3nnybvqx8v4j9d47hlscxy759a525mc3";
+  })
+
+  (fetchNuGet {
+    name = "runtime.native.System";
+    version = "4.3.0";
+    sha256 = "15hgf6zaq9b8br2wi1i3x0zvmk410nlmsmva9p0bbg73v6hml5k4";
+  })
+
+  (fetchNuGet {
+    name = "runtime.native.System.IO.Compression";
+    version = "4.3.0";
+    sha256 = "1vvivbqsk6y4hzcid27pqpm5bsi6sc50hvqwbcx8aap5ifrxfs8d";
+  })
+
+  (fetchNuGet {
+    name = "runtime.native.System.Net.Http";
+    version = "4.3.0";
+    sha256 = "1n6rgz5132lcibbch1qlf0g9jk60r0kqv087hxc0lisy50zpm7kk";
+  })
+
+  (fetchNuGet {
+    name = "runtime.native.System.Security.Cryptography.Apple";
+    version = "4.3.0";
+    sha256 = "1b61p6gw1m02cc1ry996fl49liiwky6181dzr873g9ds92zl326q";
+  })
+
+  (fetchNuGet {
+    name = "runtime.native.System.Security.Cryptography.OpenSsl";
+    version = "4.3.0";
+    sha256 = "18pzfdlwsg2nb1jjjjzyb5qlgy6xjxzmhnfaijq5s2jw3cm3ab97";
+  })
+
+  (fetchNuGet {
+    name = "runtime.native.System.Security.Cryptography.OpenSsl";
+    version = "4.3.2";
+    sha256 = "0zy5r25jppz48i2bkg8b9lfig24xixg6nm3xyr1379zdnqnpm8f6";
+  })
+
+  (fetchNuGet {
+    name = "runtime.opensuse.13.2-x64.runtime.native.System.Security.Cryptography.OpenSsl";
+    version = "4.3.0";
+    sha256 = "0qyynf9nz5i7pc26cwhgi8j62ps27sqmf78ijcfgzab50z9g8ay3";
+  })
+
+  (fetchNuGet {
+    name = "runtime.opensuse.13.2-x64.runtime.native.System.Security.Cryptography.OpenSsl";
+    version = "4.3.2";
+    sha256 = "096ch4n4s8k82xga80lfmpimpzahd2ip1mgwdqgar0ywbbl6x438";
+  })
+
+  (fetchNuGet {
+    name = "runtime.opensuse.42.1-x64.runtime.native.System.Security.Cryptography.OpenSsl";
+    version = "4.3.0";
+    sha256 = "1klrs545awhayryma6l7g2pvnp9xy4z0r1i40r80zb45q3i9nbyf";
+  })
+
+  (fetchNuGet {
+    name = "runtime.opensuse.42.1-x64.runtime.native.System.Security.Cryptography.OpenSsl";
+    version = "4.3.2";
+    sha256 = "1dm8fifl7rf1gy7lnwln78ch4rw54g0pl5g1c189vawavll7p6rj";
+  })
+
+  (fetchNuGet {
+    name = "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.Apple";
+    version = "4.3.0";
+    sha256 = "10yc8jdrwgcl44b4g93f1ds76b176bajd3zqi2faf5rvh1vy9smi";
+  })
+
+  (fetchNuGet {
+    name = "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.OpenSsl";
+    version = "4.3.0";
+    sha256 = "0zcxjv5pckplvkg0r6mw3asggm7aqzbdjimhvsasb0cgm59x09l3";
+  })
+
+  (fetchNuGet {
+    name = "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.OpenSsl";
+    version = "4.3.2";
+    sha256 = "1m9z1k9kzva9n9kwinqxl97x2vgl79qhqjlv17k9s2ymcyv2bwr6";
+  })
+
+  (fetchNuGet {
+    name = "runtime.rhel.7-x64.runtime.native.System.Security.Cryptography.OpenSsl";
+    version = "4.3.0";
+    sha256 = "0vhynn79ih7hw7cwjazn87rm9z9fj0rvxgzlab36jybgcpcgphsn";
+  })
+
+  (fetchNuGet {
+    name = "runtime.rhel.7-x64.runtime.native.System.Security.Cryptography.OpenSsl";
+    version = "4.3.2";
+    sha256 = "1cpx56mcfxz7cpn57wvj18sjisvzq8b5vd9rw16ihd2i6mcp3wa1";
+  })
+
+  (fetchNuGet {
+    name = "runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl";
+    version = "4.3.0";
+    sha256 = "160p68l2c7cqmyqjwxydcvgw7lvl1cr0znkw8fp24d1by9mqc8p3";
+  })
+
+  (fetchNuGet {
+    name = "runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl";
+    version = "4.3.2";
+    sha256 = "15gsm1a8jdmgmf8j5v1slfz8ks124nfdhk2vxs2rw3asrxalg8hi";
+  })
+
+  (fetchNuGet {
+    name = "runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl";
+    version = "4.3.0";
+    sha256 = "15zrc8fgd8zx28hdghcj5f5i34wf3l6bq5177075m2bc2j34jrqy";
+  })
+
+  (fetchNuGet {
+    name = "runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl";
+    version = "4.3.2";
+    sha256 = "0q0n5q1r1wnqmr5i5idsrd9ywl33k0js4pngkwq9p368mbxp8x1w";
+  })
+
+  (fetchNuGet {
+    name = "runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl";
+    version = "4.3.0";
+    sha256 = "1p4dgxax6p7rlgj4q73k73rslcnz4wdcv8q2flg1s8ygwcm58ld5";
+  })
+
+  (fetchNuGet {
+    name = "runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl";
+    version = "4.3.2";
+    sha256 = "1x0g58pbpjrmj2x2qw17rdwwnrcl0wvim2hdwz48lixvwvp22n9c";
+  })
+
+  (fetchNuGet {
+    name = "runtime.unix.Microsoft.Win32.Primitives";
+    version = "4.3.0";
+    sha256 = "0y61k9zbxhdi0glg154v30kkq7f8646nif8lnnxbvkjpakggd5id";
+  })
+
+  (fetchNuGet {
+    name = "runtime.unix.System.Console";
+    version = "4.3.0";
+    sha256 = "1pfpkvc6x2if8zbdzg9rnc5fx51yllprl8zkm5npni2k50lisy80";
+  })
+
+  (fetchNuGet {
+    name = "runtime.unix.System.Diagnostics.Debug";
+    version = "4.3.0";
+    sha256 = "1lps7fbnw34bnh3lm31gs5c0g0dh7548wfmb8zz62v0zqz71msj5";
+  })
+
+  (fetchNuGet {
+    name = "runtime.unix.System.IO.FileSystem";
+    version = "4.3.0";
+    sha256 = "14nbkhvs7sji5r1saj2x8daz82rnf9kx28d3v2qss34qbr32dzix";
+  })
+
+  (fetchNuGet {
+    name = "runtime.unix.System.Net.Primitives";
+    version = "4.3.0";
+    sha256 = "0bdnglg59pzx9394sy4ic66kmxhqp8q8bvmykdxcbs5mm0ipwwm4";
+  })
+
+  (fetchNuGet {
+    name = "runtime.unix.System.Net.Sockets";
+    version = "4.3.0";
+    sha256 = "03npdxzy8gfv035bv1b9rz7c7hv0rxl5904wjz51if491mw0xy12";
+  })
+
+  (fetchNuGet {
+    name = "runtime.unix.System.Private.Uri";
+    version = "4.3.0";
+    sha256 = "1jx02q6kiwlvfksq1q9qr17fj78y5v6mwsszav4qcz9z25d5g6vk";
+  })
+
+  (fetchNuGet {
+    name = "runtime.unix.System.Runtime.Extensions";
+    version = "4.3.0";
+    sha256 = "0pnxxmm8whx38dp6yvwgmh22smknxmqs5n513fc7m4wxvs1bvi4p";
   })
 
   (fetchNuGet {
@@ -1004,318 +1310,6 @@ in [
     name = "System.Xml.XmlDocument";
     version = "4.3.0";
     sha256 = "0bmz1l06dihx52jxjr22dyv5mxv6pj4852lx68grjm7bivhrbfwi";
-  })
-
-  (fetchNuGet {
-    name = "runtime.any.System.Collections";
-    version = "4.3.0";
-    sha256 = "0bv5qgm6vr47ynxqbnkc7i797fdi8gbjjxii173syrx14nmrkwg0";
-  })
-
-  (fetchNuGet {
-    name = "runtime.any.System.Diagnostics.Tools";
-    version = "4.3.0";
-    sha256 = "1wl76vk12zhdh66vmagni66h5xbhgqq7zkdpgw21jhxhvlbcl8pk";
-  })
-
-  (fetchNuGet {
-    name = "runtime.any.System.Diagnostics.Tracing";
-    version = "4.3.0";
-    sha256 = "00j6nv2xgmd3bi347k00m7wr542wjlig53rmj28pmw7ddcn97jbn";
-  })
-
-  (fetchNuGet {
-    name = "runtime.any.System.Globalization";
-    version = "4.3.0";
-    sha256 = "1daqf33hssad94lamzg01y49xwndy2q97i2lrb7mgn28656qia1x";
-  })
-
-  (fetchNuGet {
-    name = "runtime.any.System.Globalization.Calendars";
-    version = "4.3.0";
-    sha256 = "1ghhhk5psqxcg6w88sxkqrc35bxcz27zbqm2y5p5298pv3v7g201";
-  })
-
-  (fetchNuGet {
-    name = "runtime.any.System.IO";
-    version = "4.3.0";
-    sha256 = "0l8xz8zn46w4d10bcn3l4yyn4vhb3lrj2zw8llvz7jk14k4zps5x";
-  })
-
-  (fetchNuGet {
-    name = "runtime.any.System.Reflection";
-    version = "4.3.0";
-    sha256 = "02c9h3y35pylc0zfq3wcsvc5nqci95nrkq0mszifc0sjx7xrzkly";
-  })
-
-  (fetchNuGet {
-    name = "runtime.any.System.Reflection.Extensions";
-    version = "4.3.0";
-    sha256 = "0zyri97dfc5vyaz9ba65hjj1zbcrzaffhsdlpxc9bh09wy22fq33";
-  })
-
-  (fetchNuGet {
-    name = "runtime.any.System.Reflection.Primitives";
-    version = "4.3.0";
-    sha256 = "0x1mm8c6iy8rlxm8w9vqw7gb7s1ljadrn049fmf70cyh42vdfhrf";
-  })
-
-  (fetchNuGet {
-    name = "runtime.any.System.Resources.ResourceManager";
-    version = "4.3.0";
-    sha256 = "03kickal0iiby82wa5flar18kyv82s9s6d4xhk5h4bi5kfcyfjzl";
-  })
-
-  (fetchNuGet {
-    name = "runtime.any.System.Runtime";
-    version = "4.3.0";
-    sha256 = "1cqh1sv3h5j7ixyb7axxbdkqx6cxy00p4np4j91kpm492rf4s25b";
-  })
-
-  (fetchNuGet {
-    name = "runtime.any.System.Runtime.Handles";
-    version = "4.3.0";
-    sha256 = "0bh5bi25nk9w9xi8z23ws45q5yia6k7dg3i4axhfqlnj145l011x";
-  })
-
-  (fetchNuGet {
-    name = "runtime.any.System.Runtime.InteropServices";
-    version = "4.3.0";
-    sha256 = "0c3g3g3jmhlhw4klrc86ka9fjbl7i59ds1fadsb2l8nqf8z3kb19";
-  })
-
-  (fetchNuGet {
-    name = "runtime.any.System.Text.Encoding";
-    version = "4.3.0";
-    sha256 = "0aqqi1v4wx51h51mk956y783wzags13wa7mgqyclacmsmpv02ps3";
-  })
-
-  (fetchNuGet {
-    name = "runtime.any.System.Text.Encoding.Extensions";
-    version = "4.3.0";
-    sha256 = "0lqhgqi0i8194ryqq6v2gqx0fb86db2gqknbm0aq31wb378j7ip8";
-  })
-
-  (fetchNuGet {
-    name = "runtime.any.System.Threading.Tasks";
-    version = "4.3.0";
-    sha256 = "03mnvkhskbzxddz4hm113zsch1jyzh2cs450dk3rgfjp8crlw1va";
-  })
-
-  (fetchNuGet {
-    name = "runtime.any.System.Threading.Timer";
-    version = "4.3.0";
-    sha256 = "0aw4phrhwqz9m61r79vyfl5la64bjxj8l34qnrcwb28v49fg2086";
-  })
-
-  (fetchNuGet {
-    name = "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl";
-    version = "4.3.0";
-    sha256 = "16rnxzpk5dpbbl1x354yrlsbvwylrq456xzpsha1n9y3glnhyx9d";
-  })
-
-  (fetchNuGet {
-    name = "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl";
-    version = "4.3.2";
-    sha256 = "0rwpqngkqiapqc5c2cpkj7idhngrgss5qpnqg0yh40mbyflcxf8i";
-  })
-
-  (fetchNuGet {
-    name = "runtime.fedora.23-x64.runtime.native.System.Security.Cryptography.OpenSsl";
-    version = "4.3.0";
-    sha256 = "0hkg03sgm2wyq8nqk6dbm9jh5vcq57ry42lkqdmfklrw89lsmr59";
-  })
-
-  (fetchNuGet {
-    name = "runtime.fedora.23-x64.runtime.native.System.Security.Cryptography.OpenSsl";
-    version = "4.3.2";
-    sha256 = "1n06gxwlinhs0w7s8a94r1q3lwqzvynxwd3mp10ws9bg6gck8n4r";
-  })
-
-  (fetchNuGet {
-    name = "runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl";
-    version = "4.3.0";
-    sha256 = "0c2p354hjx58xhhz7wv6div8xpi90sc6ibdm40qin21bvi7ymcaa";
-  })
-
-  (fetchNuGet {
-    name = "runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl";
-    version = "4.3.2";
-    sha256 = "0404wqrc7f2yc0wxv71y3nnybvqx8v4j9d47hlscxy759a525mc3";
-  })
-
-  (fetchNuGet {
-    name = "runtime.native.System";
-    version = "4.3.0";
-    sha256 = "15hgf6zaq9b8br2wi1i3x0zvmk410nlmsmva9p0bbg73v6hml5k4";
-  })
-
-  (fetchNuGet {
-    name = "runtime.native.System.IO.Compression";
-    version = "4.3.0";
-    sha256 = "1vvivbqsk6y4hzcid27pqpm5bsi6sc50hvqwbcx8aap5ifrxfs8d";
-  })
-
-  (fetchNuGet {
-    name = "runtime.native.System.Net.Http";
-    version = "4.3.0";
-    sha256 = "1n6rgz5132lcibbch1qlf0g9jk60r0kqv087hxc0lisy50zpm7kk";
-  })
-
-  (fetchNuGet {
-    name = "runtime.native.System.Security.Cryptography.Apple";
-    version = "4.3.0";
-    sha256 = "1b61p6gw1m02cc1ry996fl49liiwky6181dzr873g9ds92zl326q";
-  })
-
-  (fetchNuGet {
-    name = "runtime.native.System.Security.Cryptography.OpenSsl";
-    version = "4.3.0";
-    sha256 = "18pzfdlwsg2nb1jjjjzyb5qlgy6xjxzmhnfaijq5s2jw3cm3ab97";
-  })
-
-  (fetchNuGet {
-    name = "runtime.native.System.Security.Cryptography.OpenSsl";
-    version = "4.3.2";
-    sha256 = "0zy5r25jppz48i2bkg8b9lfig24xixg6nm3xyr1379zdnqnpm8f6";
-  })
-
-  (fetchNuGet {
-    name = "runtime.opensuse.13.2-x64.runtime.native.System.Security.Cryptography.OpenSsl";
-    version = "4.3.0";
-    sha256 = "0qyynf9nz5i7pc26cwhgi8j62ps27sqmf78ijcfgzab50z9g8ay3";
-  })
-
-  (fetchNuGet {
-    name = "runtime.opensuse.13.2-x64.runtime.native.System.Security.Cryptography.OpenSsl";
-    version = "4.3.2";
-    sha256 = "096ch4n4s8k82xga80lfmpimpzahd2ip1mgwdqgar0ywbbl6x438";
-  })
-
-  (fetchNuGet {
-    name = "runtime.opensuse.42.1-x64.runtime.native.System.Security.Cryptography.OpenSsl";
-    version = "4.3.0";
-    sha256 = "1klrs545awhayryma6l7g2pvnp9xy4z0r1i40r80zb45q3i9nbyf";
-  })
-
-  (fetchNuGet {
-    name = "runtime.opensuse.42.1-x64.runtime.native.System.Security.Cryptography.OpenSsl";
-    version = "4.3.2";
-    sha256 = "1dm8fifl7rf1gy7lnwln78ch4rw54g0pl5g1c189vawavll7p6rj";
-  })
-
-  (fetchNuGet {
-    name = "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.Apple";
-    version = "4.3.0";
-    sha256 = "10yc8jdrwgcl44b4g93f1ds76b176bajd3zqi2faf5rvh1vy9smi";
-  })
-
-  (fetchNuGet {
-    name = "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.OpenSsl";
-    version = "4.3.0";
-    sha256 = "0zcxjv5pckplvkg0r6mw3asggm7aqzbdjimhvsasb0cgm59x09l3";
-  })
-
-  (fetchNuGet {
-    name = "runtime.osx.10.10-x64.runtime.native.System.Security.Cryptography.OpenSsl";
-    version = "4.3.2";
-    sha256 = "1m9z1k9kzva9n9kwinqxl97x2vgl79qhqjlv17k9s2ymcyv2bwr6";
-  })
-
-  (fetchNuGet {
-    name = "runtime.rhel.7-x64.runtime.native.System.Security.Cryptography.OpenSsl";
-    version = "4.3.0";
-    sha256 = "0vhynn79ih7hw7cwjazn87rm9z9fj0rvxgzlab36jybgcpcgphsn";
-  })
-
-  (fetchNuGet {
-    name = "runtime.rhel.7-x64.runtime.native.System.Security.Cryptography.OpenSsl";
-    version = "4.3.2";
-    sha256 = "1cpx56mcfxz7cpn57wvj18sjisvzq8b5vd9rw16ihd2i6mcp3wa1";
-  })
-
-  (fetchNuGet {
-    name = "runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl";
-    version = "4.3.0";
-    sha256 = "160p68l2c7cqmyqjwxydcvgw7lvl1cr0znkw8fp24d1by9mqc8p3";
-  })
-
-  (fetchNuGet {
-    name = "runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl";
-    version = "4.3.2";
-    sha256 = "15gsm1a8jdmgmf8j5v1slfz8ks124nfdhk2vxs2rw3asrxalg8hi";
-  })
-
-  (fetchNuGet {
-    name = "runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl";
-    version = "4.3.0";
-    sha256 = "15zrc8fgd8zx28hdghcj5f5i34wf3l6bq5177075m2bc2j34jrqy";
-  })
-
-  (fetchNuGet {
-    name = "runtime.ubuntu.16.04-x64.runtime.native.System.Security.Cryptography.OpenSsl";
-    version = "4.3.2";
-    sha256 = "0q0n5q1r1wnqmr5i5idsrd9ywl33k0js4pngkwq9p368mbxp8x1w";
-  })
-
-  (fetchNuGet {
-    name = "runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl";
-    version = "4.3.0";
-    sha256 = "1p4dgxax6p7rlgj4q73k73rslcnz4wdcv8q2flg1s8ygwcm58ld5";
-  })
-
-  (fetchNuGet {
-    name = "runtime.ubuntu.16.10-x64.runtime.native.System.Security.Cryptography.OpenSsl";
-    version = "4.3.2";
-    sha256 = "1x0g58pbpjrmj2x2qw17rdwwnrcl0wvim2hdwz48lixvwvp22n9c";
-  })
-
-  (fetchNuGet {
-    name = "runtime.unix.Microsoft.Win32.Primitives";
-    version = "4.3.0";
-    sha256 = "0y61k9zbxhdi0glg154v30kkq7f8646nif8lnnxbvkjpakggd5id";
-  })
-
-  (fetchNuGet {
-    name = "runtime.unix.System.Console";
-    version = "4.3.0";
-    sha256 = "1pfpkvc6x2if8zbdzg9rnc5fx51yllprl8zkm5npni2k50lisy80";
-  })
-
-  (fetchNuGet {
-    name = "runtime.unix.System.Diagnostics.Debug";
-    version = "4.3.0";
-    sha256 = "1lps7fbnw34bnh3lm31gs5c0g0dh7548wfmb8zz62v0zqz71msj5";
-  })
-
-  (fetchNuGet {
-    name = "runtime.unix.System.IO.FileSystem";
-    version = "4.3.0";
-    sha256 = "14nbkhvs7sji5r1saj2x8daz82rnf9kx28d3v2qss34qbr32dzix";
-  })
-
-  (fetchNuGet {
-    name = "runtime.unix.System.Net.Primitives";
-    version = "4.3.0";
-    sha256 = "0bdnglg59pzx9394sy4ic66kmxhqp8q8bvmykdxcbs5mm0ipwwm4";
-  })
-
-  (fetchNuGet {
-    name = "runtime.unix.System.Net.Sockets";
-    version = "4.3.0";
-    sha256 = "03npdxzy8gfv035bv1b9rz7c7hv0rxl5904wjz51if491mw0xy12";
-  })
-
-  (fetchNuGet {
-    name = "runtime.unix.System.Private.Uri";
-    version = "4.3.0";
-    sha256 = "1jx02q6kiwlvfksq1q9qr17fj78y5v6mwsszav4qcz9z25d5g6vk";
-  })
-
-  (fetchNuGet {
-    name = "runtime.unix.System.Runtime.Extensions";
-    version = "4.3.0";
-    sha256 = "0pnxxmm8whx38dp6yvwgmh22smknxmqs5n513fc7m4wxvs1bvi4p";
   })
 
 ]

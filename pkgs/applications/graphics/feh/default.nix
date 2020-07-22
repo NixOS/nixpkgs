@@ -1,16 +1,17 @@
 { stdenv, fetchurl, makeWrapper
 , xorg, imlib2, libjpeg, libpng
-, curl, libexif, jpegexiforient, perlPackages }:
+, curl, libexif, jpegexiforient, perlPackages
+, enableAutoreload ? true }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "feh";
-  version = "3.4";
+  version = "3.4.1";
 
   src = fetchurl {
     url = "https://feh.finalrewind.org/${pname}-${version}.tar.bz2";
-    sha256 = "0r83zincbfnk8g13xwm2qaccml9srnwlsmpc1f0nhwjkqyjmqm0q";
+    sha256 = "0yvvj1s7ayn0lwils582smwkmckdk0gij5c58g45n4xh981n693q";
   };
 
   outputs = [ "out" "man" "doc" ];
@@ -21,7 +22,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}" "exif=1"
-  ] ++ optional stdenv.isDarwin "verscmp=0";
+  ] ++ optional stdenv.isDarwin "verscmp=0"
+    ++ optional enableAutoreload "inotify=1";
 
   installTargets = [ "install" ];
   postInstall = ''

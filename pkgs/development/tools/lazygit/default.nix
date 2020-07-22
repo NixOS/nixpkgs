@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "lazygit";
-  version = "0.20.3";
+  version = "0.20.6";
 
   goPackagePath = "github.com/jesseduffield/lazygit";
 
@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "jesseduffield";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1p05lfm74g28ci5575vr22q5db50h19fcvc3lzddp0vyiw570isl";
+    sha256 = "0zim9ipwh2vkw2g41rw3p35i8fz208hyr71npfn4as8f1nl4gi4i";
   };
 
   meta = with stdenv.lib; {

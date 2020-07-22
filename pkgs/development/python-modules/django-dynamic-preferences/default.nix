@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "django-dynamic-preferences";
-  version = "1.8.1";
+  version = "1.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "727f71f865ff29df93c01a0a1686af0dca19776ee786f876ea0ae7e062719b24";
+    sha256 = "407db27bf55d391c4c8a4944e0521f35eff82c2f2fd5a2fc843fb1b4cc1a31f4";
   };
 
   propagatedBuildInputs = [ six django persisting-theory ]; 

@@ -22,14 +22,14 @@ assert withMysql -> libmysqlclient != null;
 let inherit (stdenv.lib) optional; in
 
 stdenv.mkDerivation rec {
-  version = "1.7.3";
+  version = "1.7.5";
   pname = "pmacct";
 
   src = fetchFromGitHub {
     owner = "pmacct";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0j5qmkya67q7jvaddcj00blmaac37bkir1zb3m1xmm95gm5lf2p5";
+    sha256 = "17p5isrq5w58hvmzhc6akbd37ins3c95g0rvhhdm0v33khzxmran";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig libtool ];

@@ -76,6 +76,17 @@ with super;
     */
   });
 
+  ldbus = super.ldbus.override({
+    extraVariables = {
+      DBUS_DIR="${pkgs.dbus.lib}";
+      DBUS_ARCH_INCDIR="${pkgs.dbus.lib}/lib/dbus-1.0/include";
+      DBUS_INCDIR="${pkgs.dbus.dev}/include/dbus-1.0";
+    };
+    buildInputs = with pkgs; [
+      dbus
+    ];
+  });
+
   ljsyscall = super.ljsyscall.override(rec {
     version = "unstable-20180515";
     # package hasn't seen any release for a long time
@@ -314,6 +325,23 @@ with super;
     preBuild = ''
       sed -i '/set(CMAKE_CXX_FLAGS/d' CMakeLists.txt
       sed -i '/set(CMAKE_C_FLAGS/d' CMakeLists.txt
+    '';
+  });
+
+  readline = (super.readline.override ({
+    unpackCmd = ''
+      unzip "$curSrc"
+      tar xf *.tar.gz
+    '';
+    propagatedBuildInputs = super.readline.propagatedBuildInputs ++ [ pkgs.readline ];
+    extraVariables = rec {
+      READLINE_INCDIR = "${pkgs.readline.dev}/include";
+      HISTORY_INCDIR = READLINE_INCDIR;
+    };
+  })).overrideAttrs (old: {
+    # Without this, source root is wrongly set to ./readline-2.6/doc
+    setSourceRoot = ''
+      sourceRoot=./readline-2.6
     '';
   });
 

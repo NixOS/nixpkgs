@@ -75,6 +75,72 @@ pkgs.rustPlatform.buildRustPackage {
 }
 ```
 
+### Running package tests
+
+When using `buildRustPackage`, the `checkPhase` is enabled by default and runs
+`cargo test` on the package to build. To make sure that we don't compile the
+sources twice and to actually test the artifacts that will be used at runtime, 
+the tests will be ran in the `release` mode by default.
+
+However, in some cases the test-suite of a package doesn't work properly in the
+`release` mode. For these situations, the mode for `checkPhase` can be changed like
+so:
+
+```nix
+rustPlatform.buildRustPackage {
+  /* ... */
+  checkType = "debug";
+}
+```
+
+Please note that the code will be compiled twice here: once in `release` mode
+for the `buildPhase`, and again in `debug` mode for the `checkPhase`.
+
+#### Tests relying on the structure of the `target/` directory
+
+Some tests may rely on the structure of the `target/` directory. Those tests
+are likely to fail because we use `cargo --target` during the build. This means that
+the artifacts
+[are stored in `target/<architecture>/release/`](https://doc.rust-lang.org/cargo/guide/build-cache.html),
+rather than in `target/release/`.
+
+This can only be worked around by patching the affected tests accordingly.
+
+#### Disabling package-tests
+
+In some instances, it may be necessary to disable testing altogether (with `doCheck = false;`):
+
+* If no tests exist -- the `checkPhase` should be explicitly disabled to skip
+  unnecessary build steps to speed up the build.
+* If tests are highly impure (e.g. due to network usage).
+
+There will obviously be some corner-cases not listed above where it's sensible to disable tests.
+The above are just guidelines, and exceptions may be granted on a case-by-case basis.
+
+However, please check if it's possible to disable a problematic subset of the
+test suite and leave a comment explaining your reasoning.
+
+### Building a package in `debug` mode
+
+By default, `buildRustPackage` will use `release` mode for builds. If a package
+should be built in `debug` mode, it can be configured like so:
+
+```nix
+rustPlatform.buildRustPackage {
+  /* ... */
+  buildType = "debug";
+}
+```
+
+In this scenario, the `checkPhase` will be ran in `debug` mode as well.
+
+### Custom `build`/`install`-procedures
+
+Some packages may use custom scripts for building/installing, e.g. with a `Makefile`.
+In these cases, it's recommended to override the `buildPhase`/`installPhase`/`checkPhase`.
+
+Otherwise, some steps may fail because of the modified directory structure of `target/`.
+
 ### Building a crate with an absent or out-of-date Cargo.lock file
 
 `buildRustPackage` needs a `Cargo.lock` file to get all dependencies in the

@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , pkgconfig, wxGTK
-, ffmpeg, libexif
+, ffmpeg_3, libexif
 , cairo, pango }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  propagatedBuildInputs = [ wxGTK ffmpeg libexif ];
+  propagatedBuildInputs = [ wxGTK ffmpeg_3 libexif ];
 
   buildInputs = [ cairo pango ];
 

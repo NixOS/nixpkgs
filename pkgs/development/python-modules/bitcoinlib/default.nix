@@ -1,15 +1,17 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, openssl }:
+{ stdenv, lib, buildPythonPackage, isPy3k, fetchFromGitHub, openssl }:
 
 let ext = if stdenv.isDarwin then "dylib" else "so";
 in buildPythonPackage rec {
   pname = "bitcoinlib";
-  version = "0.9.0";
+  version = "0.11.0";
+
+  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner  = "petertodd";
-    rev    = "7a8a47ec6b722339de1d0a8144e55b400216f90f";
     repo   = "python-bitcoinlib";
-    sha256 = "1s1jm2nid7ab7yiwlp1n2v3was9i4q76xmm07wvzpd2zvn5zb91z";
+    rev    = "python-${pname}-v${version}";
+    sha256 = "0pwypd966zzivb37fvg4l6yr7ihplqnr1jwz9zm3biip7x89bdzm";
   };
 
   postPatch = ''
@@ -21,7 +23,7 @@ in buildPythonPackage rec {
   meta = {
     homepage = src.meta.homepage;
     description = "Easy interface to the Bitcoin data structures and protocol";
-    license = with lib.licenses; [ gpl3 ];
+    license = with lib.licenses; [ lgpl3 ];
     maintainers = with lib.maintainers; [ jb55 ];
   };
 }

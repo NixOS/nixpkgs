@@ -24,7 +24,7 @@ import sys
 import tarfile
 import tempfile
 from io import BytesIO
-from typing import Dict, Optional
+from typing import Dict, Optional, Set, Any
 from urllib.request import urlopen
 
 COMPONENT_PREFIX = "homeassistant.components"
@@ -79,11 +79,14 @@ def parse_components(version: str = "master"):
 
 
 # Recursively get the requirements of a component and its dependencies
-def get_reqs(components, component):
+def get_reqs(components: Dict[str, Dict[str, Any]], component: str, processed: Set[str]) -> Set[str]:
     requirements = set(components[component].get("requirements", []))
     deps = components[component].get("dependencies", [])
+    deps.extend(components[component].get("after_dependencies", []))
+    processed.add(component)
     for dependency in deps:
-        requirements.update(get_reqs(components, dependency))
+        if dependency not in processed:
+            requirements.update(get_reqs(components, dependency, processed))
     return requirements
 
 
@@ -143,7 +146,7 @@ def main() -> None:
     for component in sorted(components.keys()):
         attr_paths = []
         missing_reqs = []
-        reqs = sorted(get_reqs(components, component))
+        reqs = sorted(get_reqs(components, component, set()))
         for req in reqs:
             # Some requirements are specified by url, e.g. https://example.org/foobar#xyz==1.0.0
             # Therefore, if there's a "#" in the line, only take the part after it

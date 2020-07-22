@@ -49,13 +49,16 @@ sed "s/cargoSha256 = \".*\"/cargoSha256 = \"$cargo_sha256\"/" \
 build_deps="../../../../misc/vscode-extensions/rust-analyzer/build-deps"
 # We need devDependencies to build vsix.
 jq '{ name, version, dependencies: (.dependencies + .devDependencies) }' "$node_src/package.json" \
-    >"$build_deps/package.json"
+    >"$build_deps/package.json.new"
 
-# FIXME: Lock the version of @type/vscode, the latest one (1.43.0) will cause build failure.
-vscode_lock_ver="$(jq '.dependencies."@types/vscode".version' --raw-output "$node_src/package-lock.json")"
-jq '.dependencies."@types/vscode" = "'$vscode_lock_ver'"' "$build_deps/package.json" >"$build_deps/package.json.new"
-mv "$build_deps"/package.json{.new,}
+if cmp --quiet "$build_deps"/package.json{.new,}; then
+    echo "package.json not changed, skip updating nodePackages"
+    rm "$build_deps"/package.json.new
+else
+    echo "package.json changed, updating nodePackages"
+    mv "$build_deps"/package.json{.new,}
 
-pushd "../../../node-packages"
-./generate.sh
-popd
+    pushd "../../../node-packages"
+    ./generate.sh
+    popd
+fi

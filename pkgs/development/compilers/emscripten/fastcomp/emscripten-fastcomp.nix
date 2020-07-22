@@ -2,6 +2,7 @@
 
 let
   rev = emscriptenVersion;
+  haveGcc = stdenv.cc.isGNU || stdenv.cc.cc ? gcc;
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in
 stdenv.mkDerivation rec {
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     #"-DLLVM_CONFIG=${llvm}/bin/llvm-config"
     "-DLLVM_BUILD_TESTS=ON"
     "-DCLANG_INCLUDE_TESTS=ON"
-  ] ++ (stdenv.lib.optional stdenv.isLinux
+  ] ++ (stdenv.lib.optional (stdenv.isLinux && haveGcc)
     # necessary for clang to find crtend.o
     "-DGCC_INSTALL_PREFIX=${gcc}"
   );
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     isClang = true;
+  } // stdenv.lib.optionalAttrs haveGcc {
     inherit gcc;
   };
 

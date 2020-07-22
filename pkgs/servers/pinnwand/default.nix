@@ -14,11 +14,11 @@ let
   };
 in with python.pkgs; buildPythonApplication rec {
   pname = "pinnwand";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0332i4q7h8qa0lr0gvzskn5qim2l5wb2pi19irsh4b1vxyi24m23";
+    sha256 = "0iincxkfyyx85ggx9ilms2f8aq4lcbg3rkqgrr4wlsflzhljqd0p";
   };
 
   propagatedBuildInputs = [

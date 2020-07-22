@@ -2,7 +2,9 @@
 , lib
 , fetchFromGitHub
 , rustPlatform
-, Security }:
+, rust
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-deb";
@@ -18,6 +20,13 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
   cargoSha256 = "1vqnnqn6rzkdi239bh3lk7gaxr7w6v3c4ws4ya1ah04g6v9hkzlw";
+
+  checkType = "debug";
+
+  preCheck = ''
+    substituteInPlace tests/command.rs \
+      --replace 'target/debug' "target/${rust.toRustTarget stdenv.buildPlatform}/debug"
+  '';
 
   meta = with lib; {
     description = "Generate Debian packages from information in Cargo.toml";

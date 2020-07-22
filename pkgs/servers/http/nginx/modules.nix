@@ -413,7 +413,7 @@ in
       rev = "0.9.0";
       sha256 = "1b0v471mzbcys73pzr7gpvzzhff0cva0l5ff32cv7z1v9c0ypji7";
     };
-    inputs = [ pkgs.ffmpeg ];
+    inputs = [ pkgs.ffmpeg_3 ];
   };
 
   vts = {

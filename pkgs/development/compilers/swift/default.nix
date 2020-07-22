@@ -182,6 +182,9 @@ stdenv.mkDerivation {
   '';
 
   patchPhase = ''
+    # Glibc 2.31 fix
+    patch -p1 -i ${./patches/swift-llvm.patch}
+
     # Just patch all the things for now, we can focus this later
     patchShebangs $SWIFT_SOURCE_ROOT
 
@@ -258,7 +261,7 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     # gcc-6.4.0/include/c++/6.4.0/cstdlib:75:15: fatal error: 'stdlib.h' file not found
-    export NIX_CFLAGS_COMPILE="$( echo ${clang.default_cxx_stdlib_compile} ) $NIX_CFLAGS_COMPILE"
+    export NIX_CFLAGS_COMPILE="$(< $NIX_CC/nix-support/libcxx-cxxflags) $NIX_CFLAGS_COMPILE"
     # During the Swift build, a full local LLVM build is performed and the resulting clang is invoked.
     # This compiler is not using the Nix wrappers, so it needs some help to find things.
     export NIX_LDFLAGS_BEFORE="-rpath ${clang.cc.gcc.lib}/lib -L${clang.cc.gcc.lib}/lib $NIX_LDFLAGS_BEFORE"

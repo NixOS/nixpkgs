@@ -218,6 +218,7 @@ in
       description = "Redis database user";
       isSystemUser = true;
     };
+    users.groups.redis = {};
 
     environment.systemPackages = [ cfg.package ];
 
@@ -240,6 +241,7 @@ in
         StateDirectory = "redis";
         Type = "notify";
         User = "redis";
+        Group = "redis";
       };
     };
   };

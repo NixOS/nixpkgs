@@ -30,6 +30,10 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-libgpg-error-prefix=${libgpgerror.dev}" ]
    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-asm";
 
+  # Necessary to generate correct assembly when compiling for aarch32 on
+  # aarch64
+  configurePlatforms = [ "host" "build" ];
+
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config
   postFixup = ''

@@ -1,4 +1,4 @@
-From 4bd20cf0450455e2f9831b09ba91811ba3d58961 Mon Sep 17 00:00:00 2001
+From c70029539d0aec5df0c1e4203359335a3841a1e5 Mon Sep 17 00:00:00 2001
 From: Andreas Rammhold <andreas@rammhold.de>
 Date: Thu, 9 May 2019 11:15:22 +0200
 Subject: [PATCH 14/18] add rootprefix to lookup dir paths

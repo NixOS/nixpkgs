@@ -628,6 +628,7 @@ EOF
         write_file($fn, <<EOF);
 @configuration@
 EOF
+        print STDERR "For more hardware-specific settings, see https://github.com/NixOS/nixos-hardware"
     } else {
         print STDERR "warning: not overwriting existing $fn\n";
     }

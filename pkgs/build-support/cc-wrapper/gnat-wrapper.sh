@@ -18,12 +18,12 @@ fi
 source @out@/nix-support/utils.bash
 
 # Flirting with a layer violation here.
-if [ -z "${NIX_BINTOOLS_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
+if [ -z "${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source @bintools@/nix-support/add-flags.sh
 fi
 
 # Put this one second so libc ldflags take priority.
-if [ -z "${NIX_CC_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
+if [ -z "${NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
 
@@ -108,7 +108,7 @@ fi
 
 
 # Clear march/mtune=native -- they bring impurity.
-if [ "$NIX_@infixSalt@_ENFORCE_NO_NATIVE" = 1 ]; then
+if [ "$NIX_ENFORCE_NO_NATIVE_@suffixSalt@" = 1 ]; then
     rest=()
     # Old bash empty array hack
     for p in ${params+"${params[@]}"}; do
@@ -124,12 +124,12 @@ fi
 
 if [ "$(basename $0)x" = "gnatmakex" ]; then
     extraBefore=("--GNATBIND=@out@/bin/gnatbind" "--GNATLINK=@out@/bin/gnatlink")
-    extraAfter=($NIX_@infixSalt@_GNATFLAGS_COMPILE)
+    extraAfter=($NIX_GNATFLAGS_COMPILE_@suffixSalt@)
 fi
 
 if [ "$(basename $0)x" = "gnatbindx" ]; then
     extraBefore=()
-    extraAfter=($NIX_@infixSalt@_GNATFLAGS_COMPILE)
+    extraAfter=($NIX_GNATFLAGS_COMPILE_@suffixSalt@)
 fi
 
 if [ "$(basename $0)x" = "gnatlinkx" ]; then

@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-gsconnect";
-  version = "35";
+  version = "38";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "gnome-shell-extension-gsconnect";
     rev = "v${version}";
-    sha256 = "10z8kkp5agf2bfn10ad0kbhbf6hhx6vjpdh2y0z7qf28s55kd8qs";
+    sha256 = "1z5wn3n1sqc2xdxiq0g3dkga7srz5ak41qdyjsh9pzb5x93dxzi5";
   };
 
   patches = [

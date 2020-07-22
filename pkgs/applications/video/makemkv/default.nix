@@ -1,5 +1,5 @@
 { stdenv, mkDerivation, fetchurl, autoPatchelfHook
-, ffmpeg, openssl, qtbase, zlib, pkgconfig
+, ffmpeg_3, openssl, qtbase, zlib, pkgconfig
 }:
 
 let
@@ -29,7 +29,7 @@ in mkDerivation {
 
   nativeBuildInputs = [ autoPatchelfHook pkgconfig ];
 
-  buildInputs = [ ffmpeg openssl qtbase zlib ];
+  buildInputs = [ ffmpeg_3 openssl qtbase zlib ];
 
   installPhase = ''
     runHook preInstall

@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "javaobj-py3";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0j9532i7bnjd0v4a8c36mjj9rsdnbmckk65dh9sbmvnhy3j6jx55";
+    sha256 = "419ff99543469e68149f875abb0db5251cecd350c03d2bfb4c94a5796f1cbc14";
   };
 
   # Tests assume network connectivity

@@ -1,4 +1,4 @@
-{ stdenv, meson, ninja, fetchFromGitHub }:
+{ stdenv, meson, ninja, fetchFromGitHub, nixosTests }:
 
 stdenv.mkDerivation {
   name = "qboot-20200423";
@@ -18,6 +18,8 @@ stdenv.mkDerivation {
   '';
 
   hardeningDisable = [ "stackprotector" "pic" ];
+
+  passthru.tests = { qboot = nixosTests.qboot; };
 
   meta = {
     description = "A simple x86 firmware for booting Linux";

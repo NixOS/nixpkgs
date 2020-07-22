@@ -14,9 +14,6 @@ let
 
         [storage]
         filesystem_folder = /tmp/collections
-
-        [logging]
-        debug = True
       '';
     };
     # WARNING: DON'T DO THIS IN PRODUCTION!
@@ -49,12 +46,17 @@ in
         services.radicale.extraArgs = [
           "--export-storage" "/tmp/collections-new"
         ];
+        system.stateVersion = "17.03";
       };
       radicale2_verify = lib.recursiveUpdate radicale2 {
-        services.radicale.extraArgs = [ "--verify-storage" ];
+        services.radicale.extraArgs = [ "--debug" "--verify-storage" ];
+        system.stateVersion = "17.09";
       };
       radicale2 = lib.recursiveUpdate (common args) {
         system.stateVersion = "17.09";
+      };
+      radicale3 = lib.recursiveUpdate (common args) {
+        system.stateVersion = "20.09";
       };
     };
 
@@ -117,6 +119,22 @@ in
               retcode == 0 and "VCALENDAR" in output
           ), "Could not read calendar from Radicale 2"
 
-      radicale.succeed("curl --fail http://${user}:${password}@localhost:${port}/.web/")
+          radicale.succeed("curl --fail http://${user}:${password}@localhost:${port}/.web/")
+
+      with subtest("Check Radicale 3 functionality"):
+          radicale.succeed(
+              "${switchToConfig "radicale3"} >&2"
+          )
+          radicale.wait_for_unit("radicale.service")
+          radicale.wait_for_open_port(${port})
+
+          (retcode, output) = radicale.execute(
+              "curl --fail http://${user}:${password}@localhost:${port}/someuser/calendar.ics/"
+          )
+          assert (
+              retcode == 0 and "VCALENDAR" in output
+          ), "Could not read calendar from Radicale 3"
+
+          radicale.succeed("curl --fail http://${user}:${password}@localhost:${port}/.web/")
     '';
 })

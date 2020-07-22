@@ -24,7 +24,7 @@ in
       desktopName = longName;
       comment = "Code Editing. Redefined.";
       genericName = "Text Editor";
-      exec = executableName;
+      exec = "${executableName} %U";
       icon = "code";
       startupNotify = "true";
       categories = "Utility;TextEditor;Development;IDE;";

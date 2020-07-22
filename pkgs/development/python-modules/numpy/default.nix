@@ -35,13 +35,13 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.18.4";
+  version = "1.19.0";
   format = "pyproject.toml";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "bbcc85aaf4cd84ba057decaead058f43191cc0e30d6bc5d44fe336dc3d3f4509";
+    sha256 = "76766cc80d6128750075378d3bb7812cf146415bd29b588616f72c943c00d598";
   };
 
   nativeBuildInputs = [ gfortran pytest cython setuptoolsBuildHook ];

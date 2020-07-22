@@ -1,5 +1,6 @@
-{ lib, stdenv, echo_colored, noisily, mkRustcDepArgs }:
-{ build
+{ lib, stdenv, echo_colored, noisily, mkRustcDepArgs, mkRustcFeatureArgs }:
+{
+  build
 , buildDependencies
 , colors
 , completeBuildDeps
@@ -30,6 +31,9 @@ let version_ = lib.splitString "-" crateVersion;
     optLevel = if release then 3 else 0;
     completeDepsDir = lib.concatStringsSep " " completeDeps;
     completeBuildDepsDir = lib.concatStringsSep " " completeBuildDeps;
+    envFeatures = lib.concatStringsSep " " (
+      map (f: lib.replaceChars ["-"] ["_"] (lib.toUpper f)) crateFeatures
+    );
 in ''
   ${echo_colored colors}
   ${noisily colors verbose}
@@ -161,14 +165,24 @@ in ''
        EXTRA_BUILD_FLAGS="$EXTRA_BUILD_FLAGS $(tr '\n' ' ' < target/link.build)"
      fi
      noisily rustc --crate-name build_script_build $BUILD --crate-type bin ${rustcOpts} \
-       ${crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link \
+       ${mkRustcFeatureArgs crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link \
        -L dependency=target/buildDeps ${buildDeps} --cap-lints allow $EXTRA_BUILD_FLAGS --color ${colors}
 
      mkdir -p target/build/${crateName}.out
      export RUST_BACKTRACE=1
      BUILD_OUT_DIR="-L $OUT_DIR"
      mkdir -p $OUT_DIR
-     target/build/${crateName}/build_script_build > target/build/${crateName}.opt
+
+     (
+       # Features should be set as environment variable for build scripts:
+       # https://doc.rust-lang.org/cargo/reference/environment-variables.html#environment-variables-cargo-sets-for-build-scripts
+       for feature in ${envFeatures}; do
+         export CARGO_FEATURE_$feature=1
+       done
+
+       target/build/${crateName}/build_script_build > target/build/${crateName}.opt
+     )
+
      set +e
      EXTRA_BUILD=$(sed -n "s/^cargo:rustc-flags=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ' | sort -u)
      EXTRA_FEATURES=$(sed -n "s/^cargo:rustc-cfg=\(.*\)/--cfg \1/p" target/build/${crateName}.opt | tr '\n' ' ')

@@ -5,17 +5,18 @@
 , pkgconfig
 , gobject-introspection
 , lcms2
+, vala
 }:
 
 stdenv.mkDerivation rec {
   pname = "babl";
-  version = "0.1.74";
+  version = "0.1.78";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/babl/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "03nfcvy3453xkfvsfcnsfcjf2vg2pin09qnr9jlssdysa1lhnwcs";
+    sha256 = "F9VJNjO/9VhdnzdbxN9ZJRV80ccMzXwipjW+dcFyUjo=";
   };
 
   nativeBuildInputs = [
@@ -23,6 +24,7 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     gobject-introspection
+    vala
   ];
 
   buildInputs = [

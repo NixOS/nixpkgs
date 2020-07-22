@@ -1,0 +1,15 @@
+[Desktop Entry]
+Name=MeshLab
+Version=@version@
+Name[en_GB]=MeshLab
+GenericName=Mesh processing
+GenericName[en_GB]=Mesh processing
+Comment=View and process meshes
+Type=Application
+Exec=@out@/bin/meshlab %U
+TryExec=@out@/bin/meshlab
+Icon=@out@/share/icons/hicolor/meshlab.png
+Terminal=false
+MimeType=model/mesh;application/x-3ds;image/x-3ds;application/sla;
+Categories=Graphics;3DGraphics;Viewer;Qt;
+END_DESKTOP

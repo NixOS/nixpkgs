@@ -32,12 +32,11 @@ in vscode-utils.buildVscodeExtension {
 
   nativeBuildInputs = lib.optional setDefaultServerPath jq;
 
-  postFixup = lib.optionalString setDefaultServerPath ''
-    package_json="$out/${publisher}.${pname}/package.json"
+  preInstall = lib.optionalString setDefaultServerPath ''
     jq '.contributes.configuration.properties."rust-analyzer.serverPath".default = $s' \
       --arg s "${rust-analyzer}/bin/rust-analyzer" \
-      $package_json >$package_json.new
-    mv $package_json.new $package_json
+      package.json >package.json.new
+    mv package.json.new package.json
   '';
 
   meta = with lib; {
