@@ -21422,6 +21422,8 @@ in
 
   netease-cloud-music = callPackage ../applications/audio/netease-cloud-music {};
 
+  newsflash = callPackage ../applications/networking/feedreaders/newsflash { };
+
   nicotine-plus = callPackage ../applications/networking/soulseek/nicotine-plus {
     geoip = geoipWithDatabase;
   };
