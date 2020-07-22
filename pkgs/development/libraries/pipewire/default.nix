@@ -33,7 +33,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pipewire";
-  version = "0.3.6";
+  version = "0.3.7";
 
   outputs = [ "out" "lib" "dev" "doc" ];
 
@@ -42,15 +42,8 @@ stdenv.mkDerivation rec {
     owner = "pipewire";
     repo = "pipewire";
     rev = version;
-    sha256 = "0g149vyaigf4gzm764fcgxxci9niw19z0af9afs4diwq5xzr1qd3";
+    sha256 = "04l66p0wj553gp2zf3vwwh6jbr1vkf6wrq4za9zlm9dn144am4j2";
   };
-
-  patches = [ (fetchpatch {
-    # Brought by https://gitlab.freedesktop.org/pipewire/pipewire/-/merge_requests/263,
-    # should be part of > 0.3.6
-    url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/d1162f28efd502fcb973e172867970f5cc8d7a6b.patch";
-    sha256 = "0ng34yin5726cvv0nll1b2xigyq6mj6j516l3xi0ys1i2g2fyby9";
-  })];
 
   nativeBuildInputs = [
     doxygen
