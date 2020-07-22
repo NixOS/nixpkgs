@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libminc ];
 
-  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" ];
+  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake" ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/BIC-MNI/${pname}";
