@@ -1,7 +1,7 @@
 { stdenv
 , lib
-, checkbashisms
 , coreutils
+, debian-devscripts
 , ethtool
 , fetchFromGitHub
 , gawk
@@ -68,7 +68,7 @@
   # XXX: This is disabled because it's basically just noise since upstream
   # itself does not seem to care about the zillion shellcheck errors.
   doCheck = false;
-  checkInputs = [ checkbashisms shellcheck ];
+  checkInputs = [ debian-devscripts shellcheck ];
   checkTarget = [ "checkall" ];
 
   postInstall = let

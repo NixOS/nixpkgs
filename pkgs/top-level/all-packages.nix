@@ -2743,8 +2743,6 @@ in
 
   chafa = callPackage ../tools/misc/chafa { };
 
-  checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
-
   civetweb = callPackage ../development/libraries/civetweb { };
 
   ckb-next = libsForQt5.callPackage ../tools/misc/ckb-next { };
