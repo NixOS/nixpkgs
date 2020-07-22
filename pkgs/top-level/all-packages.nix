@@ -2274,6 +2274,8 @@ in
 
   simg2img = callPackage ../tools/filesystems/simg2img { };
 
+  simplenes = callPackage ../misc/emulators/simplenes { };
+
   snipes = callPackage ../games/snipes { };
 
   snippetpixie = callPackage ../tools/text/snippetpixie { };
