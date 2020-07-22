@@ -16,11 +16,6 @@ let
 
   qemu = config.system.build.qemu or pkgs.qemu_test;
 
-  vmName =
-    if config.networking.hostName == ""
-    then "noname"
-    else config.networking.hostName;
-
   cfg = config.virtualisation;
 
   consoles = lib.concatMapStringsSep " " (c: "console=${c}") cfg.qemu.consoles;
@@ -156,7 +151,7 @@ let
 
       # Start QEMU.
       exec ${qemuBinary qemu} \
-          -name ${vmName} \
+          -name ${config.system.name} \
           -m ${toString config.virtualisation.memorySize} \
           -smp ${toString config.virtualisation.cores} \
           -device virtio-rng-pci \
@@ -294,7 +289,7 @@ in
 
     virtualisation.diskImage =
       mkOption {
-        default = "./${vmName}.qcow2";
+        default = "./${config.system.name}.qcow2";
         description =
           ''
             Path to the disk image containing the root filesystem.
@@ -501,7 +496,7 @@ in
 
     virtualisation.efiVars =
       mkOption {
-        default = "./${vmName}-efi-vars.fd";
+        default = "./${config.system.name}-efi-vars.fd";
         description =
           ''
             Path to nvram image containing UEFI variables.  The will be created
@@ -712,7 +707,7 @@ in
       ''
         mkdir -p $out/bin
         ln -s ${config.system.build.toplevel} $out/system
-        ln -s ${pkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-${vmName}-vm
+        ln -s ${pkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-${config.system.name}-vm
       '';
 
     # When building a regular system configuration, override whatever

@@ -78,7 +78,7 @@ let
           on https://nixos.org/nixpkgs/manual/#sec-weechat .
         '';
         license = stdenv.lib.licenses.gpl3;
-        maintainers = with stdenv.lib.maintainers; [ lovek323 lheckemann ma27 ];
+        maintainers = with stdenv.lib.maintainers; [ lovek323 lheckemann ];
         platforms = stdenv.lib.platforms.unix;
       };
     }

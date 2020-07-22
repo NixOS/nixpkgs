@@ -1,15 +1,14 @@
 { stdenv
 , buildGoModule
-, lib
 , fetchFromGitHub
-, rocksdb
-, bzip2
-, zlib
 , packr
-, snappy
 , pkg-config
-, zeromq
+, bzip2
 , lz4
+, rocksdb
+, snappy
+, zeromq
+, zlib
 }:
 
 buildGoModule rec {
@@ -26,9 +25,9 @@ buildGoModule rec {
 
   vendorSha256 = "1qjlvhizl8cy06cgf4phia70bgbm4lj57z5z2gyr8aglx98bnpdn";
 
-  buildInputs = [ bzip2 zlib snappy zeromq lz4 ];
+  nativeBuildInputs = [ packr pkg-config ];
 
-  nativeBuildInputs = [ pkg-config packr ];
+  buildInputs = [ bzip2 lz4 rocksdb snappy zeromq zlib ];
 
   buildFlagsArray = ''
     -ldflags=
@@ -45,17 +44,16 @@ buildGoModule rec {
   };
 
   overrideModAttrs = (_: {
-      postBuild = ''
+    postBuild = ''
       rm -r vendor/github.com/ethereum/go-ethereum
       cp -r --reflink=auto ${goethereum} vendor/github.com/ethereum/go-ethereum
-      '';
-    });
+    '';
+  });
 
-  preBuild = lib.optionalString stdenv.isDarwin ''
+  preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
     ulimit -n 8192
   '' + ''
-    export CGO_CFLAGS="-I${rocksdb}/include"
-    export CGO_LDFLAGS="-L${rocksdb}/lib -lrocksdb -lstdc++ -lm -lz -lbz2 -lsnappy -llz4"
+    export CGO_LDFLAGS="-L${stdenv.cc.cc.lib}/lib -lrocksdb -lz -lbz2 -lsnappy -llz4 -lm -lstdc++"
     packr clean && packr
   '';
 
@@ -67,11 +65,11 @@ buildGoModule rec {
     cp -r $src/static/css/ $out/share/
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "Trezor address/account balance backend";
     homepage = "https://github.com/trezor/blockbook";
     license = licenses.agpl3;
     maintainers = with maintainers; [ mmahut maintainers."1000101" ];
-    platforms = remove "aarch64-linux" platforms.unix;
+    platforms = platforms.unix;
   };
 }

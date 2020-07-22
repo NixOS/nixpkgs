@@ -164,6 +164,7 @@ mapAliases ({
   gnuradio-rds = gr-rds; # added 2019-05-27
   gnuradio-osmosdr = gr-osmosdr; # added 2019-05-27
   gnustep-make = gnustep.make; # added 2016-7-6
+  gnupg20 = throw "gnupg20 has been removed from nixpkgs as upstream dropped support on 2017-12-31";# added 2020-07-12
   go_1_12 = throw "go_1_12 has been removed"; # added 2020-04-26
   go-pup = pup; # added 2017-12-19
   gobjectIntrospection = gobject-introspection; # added 2018-12-02
