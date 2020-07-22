@@ -4,7 +4,7 @@
 , makeWrapper, fetchpatch
 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.03"
+if !stdenv.lib.versionAtLeast ocaml.version "4.06.1"
 then throw "ocsigenserver is not available for OCaml ${ocaml.version}"
 else
 
@@ -13,14 +13,14 @@ let mkpath = p: n:
 in
 
 stdenv.mkDerivation rec {
-  version = "2.15.0";
+  version = "2.16.0";
   pname = "ocsigenserver";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "ocsigenserver";
     rev = version;
-    sha256 = "15qdkxcbl9c1bbn0fh9awjw0hjn7r6awcn288a9vyxln7icdbifw";
+    sha256 = "0dd7zfk8dlajv0297dswaaqh96hjk2ppy8zb67jbkd26nimahk9y";
   };
 
   # unreleased fix for Makefile typos breaking compilation
