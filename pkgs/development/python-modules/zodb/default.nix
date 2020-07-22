@@ -62,6 +62,5 @@ buildPythonPackage rec {
       homepage = https://pypi.python.org/pypi/ZODB;
       license = licenses.zpl21;
       maintainers = with maintainers; [ goibhniu ];
-      broken = true;
     };
 }

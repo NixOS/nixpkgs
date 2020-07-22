@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/audacity/audacity/archive/Audacity-${version}.tar.gz";
-    sha256 = "0ddc03dbm4ixy877czmwd03fpjgr3y68bxfgb6n2q6cv4prp30ig";
+    sha256 = "0707fsnrl4vjalsi21w4blwgz024qhd0w8rdd5j5vpxf5lyk2rbk";
   };
 
   preConfigure = /* we prefer system-wide libs */ ''

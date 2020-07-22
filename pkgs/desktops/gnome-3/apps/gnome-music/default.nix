@@ -29,13 +29,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-music";
-  version = "3.34.4";
+  version = "3.34.6";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1l2jaf5jfdkqqpjxwahsjslb3sa2vlhjgpi1ib51is04ln729xb6";
+    sha256 = "1ilpz4qqhf6labwxs2f7cbdszkfckkr9bh2x6syfgb8qw8dccglm";
   };
 
   nativeBuildInputs = [

@@ -2,7 +2,7 @@
 , lib
 , fetchurl
 , makeWrapper
-, electron_5
+, electron_8
 , dpkg
 , gtk3
 , glib
@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "typora";
-  version = "0.9.73";
+  version = "0.9.89";
 
   src = fetchurl {
     url = "https://www.typora.io/linux/typora_${version}_amd64.deb";
-    sha256 = "1fgcb4bx5pw8ah5j30d38gw7qi1cmqarfhvgdns9f2n0d57bvvw3";
+    sha256 = "0gk8j13z1ymad34zzcy4vqwyjgd5khgyw5xjj9rbzm5v537kqmx6";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
-  unpackPhase = "dpkg-deb -x $src .";
+  # The deb contains setuid permission on `chrome-sandbox`, which will actually not get installed.
+  unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
 
   dontWrapGApps = true;
 
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper ${electron_5}/bin/electron $out/bin/typora \
+    makeWrapper ${electron_8}/bin/electron $out/bin/typora \
       --add-flags $out/share/typora \
       "''${gappsWrapperArgs[@]}" \
       ${lib.optionalString withPandoc ''--prefix PATH : "${lib.makeBinPath [ pandoc ]}"''} \

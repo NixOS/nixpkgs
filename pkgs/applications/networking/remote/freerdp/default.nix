@@ -17,13 +17,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "freerdp";
-  version = "2.1.0";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = version;
-    sha256 = "0905374k4x647052sr27m2hgjcavbxdl0xd8n02vm5xa6whz239j";
+    sha256 = "1yvi7zd0ic0rv7njd0wi9q1mfvz4d9qrx3i45dd6hcq465wg8dp7";
   };
 
   postPatch = ''

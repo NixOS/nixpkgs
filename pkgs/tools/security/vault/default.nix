@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "vault";
-  version = "1.3.2";
+  version = "1.3.6";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "17zymmm1r4yxwazn2qx2l01i7g91rn40h7hzgwf0pr6pwmdxvkzg";
+    sha256 = "0lnay66cgl3r7kmy9v59ss4jbzic2x5s5wd7srdyiyn2bkzq9k1n";
   };
 
   goPackagePath = "github.com/hashicorp/vault";

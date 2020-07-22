@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A version of dict that keeps keys in insertion resp. sorted order";
-    homepage = https://bitbucket.org/ruamel/ordereddict;
+    homepage = "https://sourceforge.net/projects/ruamel-ordereddict/";
     license = licenses.mit;
   };
 

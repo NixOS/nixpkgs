@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-nibbles";
-  version = "3.34.2";
+  version = "3.34.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-nibbles/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0sl54ns1b5cff6vrls6716xb73krgd1sp36k94gc2lza5laixyh0";
+    sha256 = "1rh4c39gbgr2m5gfmfphymmjipywh1pcxr648lgkddfbbp3r4g7a";
   };
 
   nativeBuildInputs = [

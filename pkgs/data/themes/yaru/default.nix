@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
 
   postPatch = "patchShebangs .";
 
+  postInstall = "ln -s $out/share/gnome-shell/theme/Yaru $out/share/themes/Yaru/gnome-shell";
+
   meta = with stdenv.lib; {
     description = "Ubuntu community theme 'yaru' - default Ubuntu theme since 18.10";
     homepage = https://github.com/ubuntu/yaru;
