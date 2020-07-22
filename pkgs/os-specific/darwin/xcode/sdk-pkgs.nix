@@ -12,7 +12,7 @@
 
 let
 
-minSdkVersion = "9.0";
+minSdkVersion = targetPlatform.minSdkVersion or "9.0";
 
 iosPlatformArch = { parsed, ... }: {
   armv7a  = "armv7";
@@ -37,6 +37,10 @@ rec {
     bintools = binutils-unwrapped;
     extraBuildCommands = ''
       echo "-arch ${iosPlatformArch targetPlatform}" >> $out/nix-support/libc-ldflags
+    '' + stdenv.lib.optionalString (sdk.platform == "iPhoneSimulator") ''
+      echo "-platform_version ios-sim ${minSdkVersion} ${sdk.version}" >> $out/nix-support/libc-ldflags
+    '' + stdenv.lib.optionalString (sdk.platform == "iPhoneOS") ''
+      echo "-platform_version ios ${minSdkVersion} ${sdk.version}" >> $out/nix-support/libc-ldflags
     '';
   };
 
