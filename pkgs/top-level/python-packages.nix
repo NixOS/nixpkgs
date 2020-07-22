@@ -766,6 +766,8 @@ in {
 
   foxdot = callPackage ../development/python-modules/foxdot { };
 
+  freetype-py = callPackage ../development/python-modules/freetype-py { };
+
   fsspec = callPackage ../development/python-modules/fsspec { };
 
   furl = callPackage ../development/python-modules/furl { };
@@ -885,6 +887,8 @@ in {
   ipympl = callPackage ../development/python-modules/ipympl { };
 
   itanium_demangler = callPackage ../development/python-modules/itanium_demangler { };
+
+  itemadapter = callPackage ../development/python-modules/itemadapter { };
 
   iterm2 = callPackage ../development/python-modules/iterm2 { };
 
@@ -5290,6 +5294,8 @@ in {
 
   pproxy = callPackage ../development/python-modules/pproxy { };
 
+  pq = callPackage ../development/python-modules/pq { };
+
   praw = if isPy3k then callPackage ../development/python-modules/praw { }
     else callPackage ../development/python-modules/praw/6.3.nix { };
 
@@ -6241,6 +6247,8 @@ in {
   virtual-display = callPackage ../development/python-modules/virtual-display { };
 
   virtualenv = callPackage ../development/python-modules/virtualenv { };
+
+  vispy = callPackage ../development/python-modules/vispy { };
 
   vsts = callPackage ../development/python-modules/vsts { };
 

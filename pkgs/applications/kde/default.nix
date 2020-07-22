@@ -74,7 +74,8 @@ let
       akregator = callPackage ./akregator.nix {};
       ark = callPackage ./ark {};
       baloo-widgets = callPackage ./baloo-widgets.nix {};
-      bovo = callPackage ./bovo.nix {};
+      bovo = callPackage ./bovo.nix {};      
+      bomber = callPackage ./bomber.nix {};
       calendarsupport = callPackage ./calendarsupport.nix {};
       dolphin = callPackage ./dolphin.nix {};
       dolphin-plugins = callPackage ./dolphin-plugins.nix {};

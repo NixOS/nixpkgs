@@ -27,7 +27,7 @@ let
 
 in stdenv.mkDerivation rec {
   inherit version;
-  name = "mongodb-${version}";
+  pname = "mongodb";
 
   src = fetchurl {
     url = "https://fastdl.mongodb.org/src/mongodb-src-r${version}.tar.gz";

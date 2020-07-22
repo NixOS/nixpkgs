@@ -1707,6 +1707,10 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  dijo = callPackage ../tools/misc/dijo {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
   ding = callPackage ../applications/misc/ding {
     aspellDicts_de = aspellDicts.de;
     aspellDicts_en = aspellDicts.en;
@@ -4146,6 +4150,8 @@ in
 
   hal-flash = callPackage ../os-specific/linux/hal-flash { };
 
+  hal-hardware-analyzer = libsForQt5.callPackage ../applications/science/electronics/hal-hardware-analyzer { };
+
   half = callPackage ../development/libraries/half { };
 
   halibut = callPackage ../tools/typesetting/halibut { };
@@ -5610,6 +5616,8 @@ in
 
   noise-repellent = callPackage ../applications/audio/noise-repellent { };
 
+  noisetorch = callPackage ../applications/audio/noisetorch { };
+
   notary = callPackage ../tools/security/notary { };
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
@@ -6445,6 +6453,8 @@ in
   rng-tools = callPackage ../tools/security/rng-tools { };
 
   rnnoise = callPackage ../development/libraries/rnnoise { };
+
+  rnnoise-plugin = callPackage ../development/libraries/rnnoise-plugin {};
 
   rnv = callPackage ../tools/text/xml/rnv { };
 
@@ -8996,6 +9006,10 @@ in
         inherit installjdk pluginSupport;
       });
 
+  oraclejdk11 = callPackage ../development/compilers/oraclejdk/jdk11-linux.nix { };
+
+  oraclejdk14 = callPackage ../development/compilers/oraclejdk/jdk14-linux.nix { };
+
   jasmin = callPackage ../development/compilers/jasmin { };
 
   java-service-wrapper = callPackage ../tools/system/java-service-wrapper { };
@@ -10149,7 +10163,7 @@ in
 
   inherit (callPackages ../development/tools/electron { })
     electron_3 electron_4 electron_5 electron_6 electron_7 electron_8 electron_9;
-  electron = electron_4;
+  electron = electron_9;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -19168,6 +19182,8 @@ in
 
   brave = callPackage ../applications/networking/browsers/brave { };
 
+  break-time = callPackage ../applications/misc/break-time { };
+
   breezy = with python3Packages; toPythonApplication breezy;
 
   notmuch-bower = callPackage ../applications/networking/mailreaders/notmuch-bower { };
@@ -19805,6 +19821,8 @@ in
 
   font-manager = callPackage ../applications/misc/font-manager { };
 
+  fontpreview = callPackage ../applications/misc/fontpreview { };
+
   foo-yc20 = callPackage ../applications/audio/foo-yc20 { };
 
   fossil = callPackage ../applications/version-management/fossil { };
@@ -20082,6 +20100,8 @@ in
   friture = libsForQt5.callPackage ../applications/audio/friture { };
 
   fte = callPackage ../applications/editors/fte { };
+
+  g933-utils = callPackage ../tools/misc/g933-utils { };
 
   game-music-emu = callPackage ../applications/audio/game-music-emu { };
 
@@ -20620,6 +20640,10 @@ in
     lcms = lcms2;
   };
 
+  inkscape_0 = callPackage ../applications/graphics/inkscape/0.x.nix {
+    lcms = lcms2;
+  };
+
   inspectrum = libsForQt5.callPackage ../applications/radio/inspectrum { };
 
   ion3 = callPackage ../applications/window-managers/ion-3 {
@@ -20643,6 +20667,8 @@ in
   irssi_fish = callPackage ../applications/networking/irc/irssi/fish { };
 
   ir.lv2 = callPackage ../applications/audio/ir.lv2 { };
+
+  istioctl = callPackage ../applications/networking/cluster/istioctl { };
 
   bip = callPackage ../applications/networking/irc/bip { };
 
@@ -20734,7 +20760,7 @@ in
       recurseIntoAttrs (makeOverridable mkApplications attrs);
 
   inherit (kdeApplications)
-    akonadi akregator ark bovo dolphin dragon elisa ffmpegthumbs filelight granatier gwenview k3b
+    akonadi akregator ark bomber bovo dolphin dragon elisa ffmpegthumbs filelight granatier gwenview k3b
     kaddressbook kapptemplate kate kcachegrind kcalc kcharselect kcolorchooser kdenlive kdf kdialog
     keditbookmarks kfind kget kgpg khelpcenter kig kleopatra kmail kmix kmplot kolourpaint kompare konsole yakuake
     kpkpass kitinerary kontact korganizer krdc krfb ksystemlog ktouch kwalletmanager marble minuet okular picmi spectacle;
@@ -21423,7 +21449,9 @@ in
 
   partio = callPackage ../development/libraries/partio {};
 
-  pc-ble-driver = callPackage ../development/libraries/pc-ble-driver {};
+  pc-ble-driver = callPackage ../development/libraries/pc-ble-driver {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   pbis-open = callPackage ../tools/security/pbis { };
 
@@ -22524,10 +22552,7 @@ in
 
   stp = callPackage ../applications/science/logic/stp { };
 
-  stretchly = callPackage ../applications/misc/stretchly {
-    # Error on launch w/electron_8
-    electron = electron_7;
-  };
+  stretchly = callPackage ../applications/misc/stretchly { };
 
   stumpish = callPackage ../applications/window-managers/stumpish {};
 
@@ -24062,7 +24087,10 @@ in
   frozen-bubble = callPackage ../games/frozen-bubble { };
 
   fsg = callPackage ../games/fsg {
-    wxGTK = wxGTK28.override { unicode = false; };
+    wxGTK = wxGTK28.override {
+      unicode = false;
+      gst-plugins-base = null;
+    };
   };
 
   galaxis = callPackage ../games/galaxis { };
@@ -26850,6 +26878,8 @@ in
   yaxg = callPackage ../tools/graphics/yaxg {};
 
   zap = callPackage ../tools/networking/zap { };
+
+  zigbee2mqtt = callPackage ../servers/zigbee2mqtt { };
 
   zopfli = callPackage ../tools/compression/zopfli { };
 
