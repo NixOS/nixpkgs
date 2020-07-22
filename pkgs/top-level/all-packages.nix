@@ -11598,7 +11598,13 @@ in
     ogre = ogre1_10;
   };
 
-  certbot = python3Packages.callPackage ../tools/admin/certbot { };
+  certbot = python3.pkgs.toPythonApplication python3.pkgs.certbot;
+
+  certbot-full = certbot.withPlugins (cp: with cp; [
+    certbot-dns-cloudflare
+    certbot-dns-rfc2136
+    certbot-dns-route53
+  ]);
 
   caf = callPackage ../development/libraries/caf {};
 

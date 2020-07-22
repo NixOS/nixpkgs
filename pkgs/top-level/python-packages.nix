@@ -585,6 +585,8 @@ in {
 
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
+  certbot = callPackage ../development/python-modules/certbot { };
+
   certbot-dns-cloudflare = callPackage ../development/python-modules/certbot-dns-cloudflare { };
 
   certbot-dns-rfc2136 = callPackage ../development/python-modules/certbot-dns-rfc2136 { };
@@ -1047,7 +1049,7 @@ in {
   nvchecker = callPackage ../development/python-modules/nvchecker { };
 
   numericalunits = callPackage ../development/python-modules/numericalunits { };
-  
+
   nunavut = callPackage ../development/python-modules/nunavut { };
 
   oath = callPackage ../development/python-modules/oath { };
@@ -1681,7 +1683,7 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
   };
 
-  pyuavcan = callPackage ../development/python-modules/pyuavcan { 
+  pyuavcan = callPackage ../development/python-modules/pyuavcan {
     # this version pinpoint to anold version is necessary due to a regression
     nunavut = self.nunavut.overridePythonAttrs ( old: rec {
       version = "0.2.3";
@@ -4495,7 +4497,7 @@ in {
   }));
 
   libkeepass = callPackage ../development/python-modules/libkeepass { };
-  
+
   libredwg = toPythonModule (pkgs.libredwg.override {
     enablePython = true;
     inherit (self) python libxml2;
@@ -4548,7 +4550,7 @@ in {
 
   locustio = callPackage ../development/python-modules/locustio { };
 
-  llvmlite = callPackage ../development/python-modules/llvmlite { 
+  llvmlite = callPackage ../development/python-modules/llvmlite {
     llvm = pkgs.llvm_9; # llvmlite always requires a specific version of llvm.
   };
 
@@ -6710,7 +6712,7 @@ in {
 
   zipp = if pythonOlder "3.6" then
     callPackage ../development/python-modules/zipp/1.nix { }
-  else 
+  else
     callPackage ../development/python-modules/zipp { };
 
   zope_broken = callPackage ../development/python-modules/zope_broken { };
