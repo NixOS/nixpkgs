@@ -71,7 +71,7 @@ let
     };
   };
 
-  redisConfig.production.url = "redis://localhost:6379/";
+  redisConfig.production.url = cfg.redisUrl;
 
   gitlabConfig = {
     # These are the default settings from config/gitlab.example.yml
@@ -309,6 +309,12 @@ in {
         type = types.attrs;
         default = {};
         description = "Extra configuration in config/database.yml.";
+      };
+
+      redisUrl = mkOption {
+        type = types.str;
+        default = "redis://localhost:6379/";
+        description = "Redis URL for all GitLab services except gitlab-shell";
       };
 
       extraGitlabRb = mkOption {
