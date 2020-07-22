@@ -859,12 +859,6 @@
     githubId = 18467667;
     name = "Alexander Bantyev";
   };
-  bandresen = {
-    email = "bandresen@gmail.com";
-    github = "bandresen";
-    githubId = 80325;
-    name = "Benjamin Andresen";
-  };
   baracoder = {
     email = "baracoder@googlemail.com";
     github = "baracoder";
@@ -948,6 +942,12 @@
     github = "bennofs";
     githubId = 3192959;
     name = "Benno Fünfstück";
+  };
+  bennyandresen = {
+    email = "b@lambda.icu";
+    github = "bennyandresen";
+    githubId = 80325;
+    name = "Benjamin Andresen";
   };
   benpye = {
     email = "ben@curlybracket.co.uk";
