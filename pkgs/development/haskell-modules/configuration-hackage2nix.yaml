@@ -9765,7 +9765,6 @@ broken-packages:
   - splines
   - split-morphism
   - splitter
-  - splot
   - Spock
   - Spock-api-ghcjs
   - Spock-api-server

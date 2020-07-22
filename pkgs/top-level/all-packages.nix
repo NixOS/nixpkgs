@@ -6870,6 +6870,8 @@ in
 
   speech-denoiser = callPackage ../applications/audio/speech-denoiser {};
 
+  splot = haskell.lib.justStaticExecutables haskellPackages.splot;
+
   squashfsTools = callPackage ../tools/filesystems/squashfs { };
 
   squashfs-tools-ng = callPackage ../tools/filesystems/squashfs-tools-ng { };

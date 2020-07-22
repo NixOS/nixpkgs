@@ -1405,4 +1405,9 @@ self: super: {
   # https://github.com/lehins/massiv/pull/104
   massiv = dontCheck super.massiv;
 
+  # Upstream PR: https://github.com/jkff/splot/pull/9
+  splot = appendPatch super.splot (pkgs.fetchpatch {
+    url = "https://github.com/jkff/splot/commit/a6710b05470d25cb5373481cf1cfc1febd686407.patch";
+    sha256 = "1c5ck2ibag2gcyag6rjivmlwdlp5k0dmr8nhk7wlkzq2vh7zgw63";
+  });
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
