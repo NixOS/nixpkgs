@@ -52,7 +52,7 @@
     <para>
       The proper installation of OpenCL drivers can be verified through
       the <command>clinfo</command> command of the <package>clinfo</package>
-      package. This command will report the number of hardware devides
+      package. This command will report the number of hardware devices
       that is found and give detailed information for each device:
     </para>
 
@@ -98,6 +98,95 @@ ROCR_EXT_DIR=`nix-build '&lt;nixpkgs&gt;' --no-out-link -A rocm-runtime-ext`/lib
 
 	<screen><prompt>$</prompt> clinfo | grep Image
   Image support      Yes</screen>
+      </para>
+    </section>
+  </section>
+
+  <section xml:id="sec-gpu-accel-vulkan">
+    <title>Vulkan</title>
+
+    <para>
+      <link xlink:href="https://en.wikipedia.org/wiki/Vulkan_(API)">Vulkan</link> is a
+      graphics and compute API for GPUs. It is used directly by games or indirectly though
+      compatibility layers like <link xlink:href="https://github.com/doitsujin/dxvk/wiki">DXVK</link>.
+    </para>
+
+    <para>
+     By default, if <xref linkend="opt-hardware.opengl.driSupport"/> is enabled,
+     <package>mesa</package> is installed and provides Vulkan for supported hardware.
+    </para>
+
+    <para>
+      Similar to OpenCL, Vulkan drivers are loaded through the <emphasis>Installable Client
+      Driver</emphasis> (ICD) mechanism. ICD files for Vulkan are JSON files that specify
+      the path to the driver library and the supported Vulkan version. All successfully
+      loaded drivers are exposed to the application as different GPUs.
+      In NixOS, there are two ways to make ICD files visible to Vulkan applications: an
+      environment variable and a module option.
+    </para>
+
+    <para>
+      The first option is through the <varname>VK_ICD_FILENAMES</varname>
+      environment variable. This variable can contain multiple JSON files, separated by
+      <literal>:</literal>. For example:
+
+      <screen><prompt>$</prompt> export \
+  VK_ICD_FILENAMES=`nix-build '&lt;nixpkgs&gt;' --no-out-link -A amdvlk`/share/vulkan/icd.d/amd_icd64.json</screen>
+    </para>
+
+    <para>
+      The second mechanism is to add the Vulkan driver package to
+      <xref linkend="opt-hardware.opengl.extraPackages"/>. This links the
+      ICD file under <filename>/run/opengl-driver</filename>, where it will
+      be visible to the ICD loader.
+    </para>
+
+    <para>
+      The proper installation of Vulkan drivers can be verified through
+      the <command>vulkaninfo</command> command of the <package>vulkan-tools</package>
+      package. This command will report the hardware devices and drivers found,
+      in this example output amdvlk and radv:
+    </para>
+
+    <screen><prompt>$</prompt> vulkaninfo | grep GPU
+                GPU id  : 0 (Unknown AMD GPU)
+                GPU id  : 1 (AMD RADV NAVI10 (LLVM 9.0.1))
+     ...
+GPU0:
+        deviceType     = PHYSICAL_DEVICE_TYPE_DISCRETE_GPU
+        deviceName     = Unknown AMD GPU
+GPU1:
+        deviceType     = PHYSICAL_DEVICE_TYPE_DISCRETE_GPU</screen>
+
+    <para>
+      A simple graphical application that uses Vulkan is <command>vkcube</command>
+      from the <package>vulkan-tools</package> package.
+    </para>
+
+    <section xml:id="sec-gpu-accel-vulkan-amd">
+      <title>AMD</title>
+
+      <para>
+	Modern AMD <link
+	xlink:href="https://en.wikipedia.org/wiki/Graphics_Core_Next">Graphics
+	Core Next</link> (GCN) GPUs are supported through either radv, which is
+	part of <package>mesa</package>, or the <package>amdvlk</package> package.
+	Adding the <package>amdvlk</package> package to
+	<xref linkend="opt-hardware.opengl.extraPackages"/> makes both drivers
+	available for applications and lets them choose. A specific driver can
+	be forced as follows:
+
+	<programlisting><xref linkend="opt-hardware.opengl.extraPackages"/> = [
+  <package>amdvlk</package>
+];
+
+# For amdvlk
+<xref linkend="opt-environment.variables"/>.VK_ICD_FILENAMES =
+   "/run/opengl-driver/share/vulkan/icd.d/amd_icd64.json";
+# For radv
+<xref linkend="opt-environment.variables"/>.VK_ICD_FILENAMES =
+  "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
+</programlisting>
       </para>
     </section>
   </section>
