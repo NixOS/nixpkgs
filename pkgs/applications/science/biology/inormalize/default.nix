@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libminc EBTKS ];
   propagatedBuildInputs = with perlPackages; [ perl GetoptTabular MNI-Perllib ];
 
-  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" "-DEBTKS_DIR=${EBTKS}/lib/" ];
+  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake" "-DEBTKS_DIR=${EBTKS}/lib/" ];
 
   postFixup = ''
     for p in $out/bin/*; do
