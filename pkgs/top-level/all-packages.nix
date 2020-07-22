@@ -9692,6 +9692,8 @@ in
 
   lxrandr = callPackage ../desktops/lxde/core/lxrandr { };
 
+  lxsession = callPackage ../desktops/lxde/core/lxsession { };
+
   kona = callPackage ../development/interpreters/kona {};
 
   lolcode = callPackage ../development/interpreters/lolcode { };
