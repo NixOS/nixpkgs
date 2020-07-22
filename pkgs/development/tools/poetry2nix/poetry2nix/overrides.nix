@@ -241,8 +241,7 @@ self: super:
   kiwisolver = super.kiwisolver.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [
-        # cppy is at the time of writing not in nixpkgs
-        (self.cppy or null)
+        self.cppy
       ];
     }
   );
