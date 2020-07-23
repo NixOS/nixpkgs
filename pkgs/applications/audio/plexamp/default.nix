@@ -24,7 +24,7 @@ in appimageTools.wrapType2 {
     ln -s $out/bin/${name} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/plexamp.desktop $out/share/applications/plexamp.desktop
     install -m 444 -D ${appimageContents}/plexamp.png \
-      $out/plexamp.png
+      $out/share/icons/hicolor/512x512/apps/plexamp.png
     substituteInPlace $out/share/applications/plexamp.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
