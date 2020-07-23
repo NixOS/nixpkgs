@@ -3579,6 +3579,8 @@ in {
 
   screeninfo = callPackage ../development/python-modules/screeninfo { };
 
+  simplestreams = callPackage ../development/python-modules/simplestreams { };
+
   ssdeep = callPackage ../development/python-modules/ssdeep { };
 
   ssdp = callPackage ../development/python-modules/ssdp { };
