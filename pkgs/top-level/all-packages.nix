@@ -5470,9 +5470,7 @@ in
 
   mirrorbits = callPackage ../servers/mirrorbits { };
 
-  mitmproxy = callPackage ../tools/networking/mitmproxy {
-    python3Packages = python37Packages;
-  };
+  mitmproxy = with python3Packages; toPythonApplication mitmproxy;
 
   mjpegtools = callPackage ../tools/video/mjpegtools { };
 
