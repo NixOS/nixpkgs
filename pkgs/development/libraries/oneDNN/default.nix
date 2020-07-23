@@ -24,6 +24,9 @@ stdenv.mkDerivation rec {
   preCheck = ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/src
     export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD/src
+  '' + lib.optionalString stdenv.isx86_64 ''
+    # Use baseline SIMD in case CPU features get misdetected.
+    export DNNL_MAX_CPU_ISA=SSE41
   '';
 
   # The cmake install gets tripped up and installs a nix tree into $out, in
