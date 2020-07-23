@@ -54,7 +54,7 @@ in rec {
     rev = "v${version}";
 
     # Just keep list empty, if current release haven't broken patchsets
-    disabledPatchsets = [ "xactengine-initial" ];
+    disabledPatchsets = [];
   };
 
   winetricks = fetchFromGitHub rec {
