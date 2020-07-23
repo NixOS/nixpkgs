@@ -26642,6 +26642,8 @@ in
     callPackage ../applications/networking/cluster/terraform-providers {}
   );
 
+  terraform-compliance = python3Packages.callPackage ../applications/networking/cluster/terraform-compliance {};
+
   terraform-docs = callPackage ../applications/networking/cluster/terraform-docs {};
 
   terraform-inventory = callPackage ../applications/networking/cluster/terraform-inventory {};

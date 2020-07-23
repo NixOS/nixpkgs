@@ -1504,6 +1504,8 @@ in {
 
   pyvoro = callPackage ../development/python-modules/pyvoro { };
 
+  radish-bdd = callPackage ../development/python-modules/radish-bdd { };
+
   relatorio = callPackage ../development/python-modules/relatorio { };
 
   reproject = callPackage ../development/python-modules/reproject { };
@@ -1642,6 +1644,8 @@ in {
   } else callPackage ../development/python-modules/tables/3.5.nix {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
+
+  tag-expressions = callPackage ../development/python-modules/tag-expressions { };
 
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
 
@@ -2092,6 +2096,8 @@ in {
 
   colorclass = callPackage ../development/python-modules/colorclass {};
 
+  colorful = callPackage ../development/python-modules/colorful {};
+
   colorlog = callPackage ../development/python-modules/colorlog { };
 
   colorspacious = callPackage ../development/python-modules/colorspacious { };
@@ -2541,6 +2547,8 @@ in {
   pyjks = callPackage ../development/python-modules/pyjks {};
 
   PyLD = callPackage ../development/python-modules/PyLD { };
+
+  pysingleton = callPackage ../development/python-modules/pysingleton { };
 
   python-jose = callPackage ../development/python-modules/python-jose {};
 
