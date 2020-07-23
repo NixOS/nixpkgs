@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+index 12c7735f..3f9f26af 100755 
+--- a/setup.py
++++ b/setup.py
+@@ -90,7 +90,7 @@ def get_cffi_modules():
+ 
+ setup(
+     cmdclass={'install': CheckCairoXcb},
+-    use_scm_version=True,
++    use_scm_version={'fallback_version':'@version@'},
+     cffi_modules=get_cffi_modules(),
+     install_requires=["cffi>=1.0.0"],
+ )
