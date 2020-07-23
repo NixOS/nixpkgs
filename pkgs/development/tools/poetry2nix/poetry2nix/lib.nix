@@ -154,7 +154,9 @@ let
     , pyProject
     }:
     let
-      buildSystem = lib.attrByPath [ "build-system" "build-backend" ] "" pyProject;
+      missingBuildBackendError = "No build-system.build-backend section in pyproject.toml. "
+        + "Add such a section as described in https://python-poetry.org/docs/pyproject/#poetry-and-pep-517";
+      buildSystem = lib.attrByPath [ "build-system" "build-backend" ] (throw missingBuildBackendError) pyProject;
       drvAttr = moduleName (builtins.elemAt (builtins.split "\\.|:" buildSystem) 0);
     in
     if buildSystem == "" then [ ] else (

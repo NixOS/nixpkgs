@@ -277,6 +277,7 @@ rec {
     openbsd = { execFormat = elf;     families = { inherit bsd; }; };
     solaris = { execFormat = elf;     families = { }; };
     wasi    = { execFormat = wasm;    families = { }; };
+    redox   = { execFormat = elf;     families = { }; };
     windows = { execFormat = pe;      families = { }; };
     ghcjs   = { execFormat = unknown; families = { }; };
     genode  = { execFormat = elf;     families = { }; };
@@ -390,6 +391,8 @@ rec {
         then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "windows";                    }
       else if (elemAt l 2 == "wasi")
         then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "wasi";                       }
+      else if (elemAt l 2 == "redox")
+        then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "redox";                      }
       else if hasPrefix "netbsd" (elemAt l 2)
         then { cpu = elemAt l 0; vendor = elemAt l 1;    kernel = elemAt l 2;                }
       else if (elem (elemAt l 2) ["eabi" "eabihf" "elf"])

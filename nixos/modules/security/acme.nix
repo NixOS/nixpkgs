@@ -23,16 +23,16 @@ let
         type = types.nullOr types.str;
         default = null;
         description = ''
-          ACME Directory Resource URI. Defaults to let's encrypt
+          ACME Directory Resource URI. Defaults to Let's Encrypt's
           production endpoint,
-          https://acme-v02.api.letsencrypt.org/directory, if unset.
+          <link xlink:href="https://acme-v02.api.letsencrypt.org/directory"/>, if unset.
         '';
       };
 
       domain = mkOption {
         type = types.str;
         default = name;
-        description = "Domain to fetch certificate for (defaults to the entry name)";
+        description = "Domain to fetch certificate for (defaults to the entry name).";
       };
 
       email = mkOption {
@@ -103,7 +103,7 @@ let
         description = ''
           Key type to use for private keys.
           For an up to date list of supported values check the --key-type option
-          at https://go-acme.github.io/lego/usage/cli/#usage.
+          at <link xlink:href="https://go-acme.github.io/lego/usage/cli/#usage"/>.
         '';
       };
 
@@ -113,7 +113,7 @@ let
         example = "route53";
         description = ''
           DNS Challenge provider. For a list of supported providers, see the "code"
-          field of the DNS providers listed at https://go-acme.github.io/lego/dns/.
+          field of the DNS providers listed at <link xlink:href="https://go-acme.github.io/lego/dns/"/>.
         '';
       };
 
@@ -123,7 +123,7 @@ let
           Path to an EnvironmentFile for the cert's service containing any required and
           optional environment variables for your selected dnsProvider.
           To find out what values you need to set, consult the documentation at
-          https://go-acme.github.io/lego/dns/ for the corresponding dnsProvider.
+          <link xlink:href="https://go-acme.github.io/lego/dns/"/> for the corresponding dnsProvider.
         '';
         example = "/var/src/secrets/example.org-route53-api-token";
       };
@@ -169,7 +169,7 @@ in
     (mkRemovedOptionModule [ "security" "acme" "production" ] ''
       Use security.acme.server to define your staging ACME server URL instead.
 
-      To use the let's encrypt staging server, use security.acme.server =
+      To use Let's Encrypt's staging server, use security.acme.server =
       "https://acme-staging-v02.api.letsencrypt.org/directory".
     ''
     )
@@ -207,9 +207,9 @@ in
         type = types.nullOr types.str;
         default = null;
         description = ''
-          ACME Directory Resource URI. Defaults to let's encrypt
+          ACME Directory Resource URI. Defaults to Let's Encrypt's
           production endpoint,
-          <literal>https://acme-v02.api.letsencrypt.org/directory</literal>, if unset.
+          <link xlink:href="https://acme-v02.api.letsencrypt.org/directory"/>, if unset.
         '';
       };
 
@@ -230,8 +230,8 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Accept the CA's terms of service. The default provier is Let's Encrypt,
-          you can find their ToS at https://letsencrypt.org/repository/
+          Accept the CA's terms of service. The default provider is Let's Encrypt,
+          you can find their ToS at <link xlink:href="https://letsencrypt.org/repository/"/>.
         '';
       };
 

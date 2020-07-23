@@ -5,13 +5,13 @@
 # https://github.com/oneapi-src/oneDNN#oneapi-deep-neural-network-library-onednn
 stdenv.mkDerivation rec {
   pname = "oneDNN";
-  version = "1.5";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "oneDNN";
     rev = "v${version}";
-    sha256 = "0diiy3g4wz5lnz5mdvka5p2nwmrpfldsz83sssr5yiir29m4lqap";
+    sha256 = "1l66gkidldjpznp8pb01wdgrmm0rmrbndv8lzidz8fp9hf473zgl";
   };
 
   outputs = [ "out" "dev" "doc" ];
@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
 
   # The test driver doesn't add an RPath to the build libdir
   preCheck = ''
-    export LD_LIBRARY_PATH=$PWD/src
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/src
+    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD/src
   '';
 
   # The cmake install gets tripped up and installs a nix tree into $out, in
@@ -33,10 +34,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "oneAPI Deep Neural Network Library (oneDNN)";
-    homepage = "https://01.org/dnnl";
+    homepage = "https://01.org/oneDNN";
     changelog = "https://github.com/oneapi-src/oneDNN/releases/tag/v${version}";
     license = licenses.asl20;
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    platforms = platforms.all;
     maintainers = with maintainers; [ alexarice bhipple ];
   };
 }
