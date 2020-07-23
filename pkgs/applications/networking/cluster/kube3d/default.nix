@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "kube3d";
@@ -20,6 +20,14 @@ buildGoModule rec {
       -w -s
       -X github.com/rancher/k3d/v3/version.Version=${version}
       -X github.com/rancher/k3d/v3/version.K3sVersion=v${k3sVersion}
+  '';
+
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = ''
+   for shell in bash zsh; do
+     $out/bin/k3d completion $shell > k3d.$shell
+     installShellCompletion k3d.$shell
+   done
   '';
 
   vendorSha256 = null;
