@@ -1,4 +1,4 @@
-{ stdenv, gnvim-unwrapped, neovim, makeWrapper }:
+{ stdenv, gnvim-unwrapped, neovim, makeWrapper, librsvg }:
 
 stdenv.mkDerivation {
   pname = "gnvim";
@@ -14,6 +14,7 @@ stdenv.mkDerivation {
   '' else ''
     makeWrapper '${gnvim-unwrapped}/bin/gnvim' "$out/bin/gnvim" \
       --prefix PATH : "${neovim}/bin" \
+      --set GDK_PIXBUF_MODULE_FILE "${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" \
       --set GNVIM_RUNTIME_PATH "${gnvim-unwrapped}/share/gnvim/runtime"
 
     mkdir -p "$out/share"
