@@ -46,6 +46,7 @@
 
 # Hardening
 , graphene-hardened-malloc
+# crashes with intel driver
 , useHardenedMalloc ? false
 
 # Whether to disable multiprocess support to work around crashing tabs
