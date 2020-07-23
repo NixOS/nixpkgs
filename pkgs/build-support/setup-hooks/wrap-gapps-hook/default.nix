@@ -12,9 +12,26 @@
 }:
 
 makeSetupHook {
-  deps = lib.optional (!stdenv.isDarwin) dconf.lib ++ [
+  deps = lib.optionals (!stdenv.isDarwin) [
+    # It is highly probable that a program will use GSettings,
+    # at minimum through GTK file chooser dialogue.
+    # Let’s add a GIO module for “dconf” GSettings backend
+    # to avoid falling back to “memory” backend. This is
+    # required for GSettings-based settings to be persisted.
+    # Unfortunately, it also requires the user to have dconf
+    # D-Bus service enabled globally (e.g. through a NixOS module).
+    dconf.lib
+  ] ++ [
+    # TODO: remove this, packages should depend on GTK explicitly.
     gtk3
+
+    # librsvg provides a module for gdk-pixbuf to allow rendering
+    # SVG icons. Most icon themes are SVG-based and so are some
+    # graphics in GTK (e.g. cross for closing window in window title bar)
+    # so it is pretty much required for applications using GTK.
     librsvg
+
+    # We use the wrapProgram function.
     makeWrapper
   ];
   substitutions = {
