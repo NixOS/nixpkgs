@@ -22820,6 +22820,10 @@ in
 
   twinkle = qt5.callPackage ../applications/networking/instant-messengers/twinkle { };
 
+  terminal-typeracer = callPackage ../applications/misc/terminal-typeracer {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   ueberzug = with python3Packages; toPythonApplication ueberzug;
 
   umurmur = callPackage ../applications/networking/umurmur { };

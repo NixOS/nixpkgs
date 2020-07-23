@@ -8846,7 +8846,7 @@
     name = "Yochai";
   };
   yoctocell = {
-    email = "yoctocell.code@keemail.me";
+    email = "public@yoctocell.xyz";
     github = "yoctocell";
     githubId = 40352765;
     name = "Yoctocell";
