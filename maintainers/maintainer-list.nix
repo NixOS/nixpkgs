@@ -6160,6 +6160,12 @@
     githubId = 20792;
     name = "Sebastian Galkin";
   };
+  parasrah = {
+    email = "nixos@parasrah.com";
+    github = "parasrah";
+    githubId = 14935550;
+    name = "Brad Pfannmuller";
+  };
   pashashocky = {
     email = "pashashocky@gmail.com";
     github = "pashashocky";
