@@ -496,7 +496,7 @@ in
 
     virtualisation.efiVars =
       mkOption {
-        default = "./${vmName}-efi-vars.fd";
+        default = "./${config.system.name}-efi-vars.fd";
         description =
           ''
             Path to nvram image containing UEFI variables.  The will be created

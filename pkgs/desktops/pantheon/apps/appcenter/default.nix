@@ -23,6 +23,8 @@
 , pkgconfig
 , python3
 , vala
+, polkit
+, libhandy
 , wrapGAppsHook
 }:
 
@@ -58,17 +60,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     appstream
-    elementary-icon-theme
     elementary-gtk-theme
+    elementary-icon-theme
     flatpak
     glib
     granite
     gtk3
     json-glib
     libgee
+    libhandy
     libsoup
     libxml2
     packagekit
+    polkit
   ];
 
   mesonFlags = [

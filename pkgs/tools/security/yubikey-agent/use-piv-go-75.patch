@@ -1,0 +1,24 @@
+From 56a465d463273b2a2a24cf668c4c33938b198b16 Mon Sep 17 00:00:00 2001
+From: Philip Potter <philip.g.potter@gmail.com>
+Date: Sun, 12 Jul 2020 16:54:57 +0100
+Subject: [PATCH] Pull in go-piv/piv-go#75
+
+---
+ go.mod | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/go.mod b/go.mod
+index d4d13c8..e24d53d 100644
+--- a/go.mod
++++ b/go.mod
+@@ -2,6 +2,7 @@ module filippo.io/yubikey-agent
+ 
+ go 1.14
+ 
++replace github.com/go-piv/piv-go => github.com/rawkode/piv-go v1.5.1-0.20200711221619-a4158f9b8204
+ require (
+ 	github.com/go-piv/piv-go v1.5.1-0.20200523071327-a3e5767e8b72
+ 	github.com/gopasspw/gopass v1.9.1
+-- 
+2.27.0
+

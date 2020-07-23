@@ -585,6 +585,8 @@ in {
 
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
+  certbot = callPackage ../development/python-modules/certbot { };
+
   certbot-dns-cloudflare = callPackage ../development/python-modules/certbot-dns-cloudflare { };
 
   certbot-dns-rfc2136 = callPackage ../development/python-modules/certbot-dns-rfc2136 { };
@@ -766,6 +768,8 @@ in {
 
   foxdot = callPackage ../development/python-modules/foxdot { };
 
+  freetype-py = callPackage ../development/python-modules/freetype-py { };
+
   fsspec = callPackage ../development/python-modules/fsspec { };
 
   furl = callPackage ../development/python-modules/furl { };
@@ -885,6 +889,8 @@ in {
   ipympl = callPackage ../development/python-modules/ipympl { };
 
   itanium_demangler = callPackage ../development/python-modules/itanium_demangler { };
+
+  itemadapter = callPackage ../development/python-modules/itemadapter { };
 
   iterm2 = callPackage ../development/python-modules/iterm2 { };
 
@@ -1043,7 +1049,7 @@ in {
   nvchecker = callPackage ../development/python-modules/nvchecker { };
 
   numericalunits = callPackage ../development/python-modules/numericalunits { };
-  
+
   nunavut = callPackage ../development/python-modules/nunavut { };
 
   oath = callPackage ../development/python-modules/oath { };
@@ -1498,6 +1504,8 @@ in {
 
   pyvoro = callPackage ../development/python-modules/pyvoro { };
 
+  radish-bdd = callPackage ../development/python-modules/radish-bdd { };
+
   relatorio = callPackage ../development/python-modules/relatorio { };
 
   reproject = callPackage ../development/python-modules/reproject { };
@@ -1637,6 +1645,8 @@ in {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
 
+  tag-expressions = callPackage ../development/python-modules/tag-expressions { };
+
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
 
   tesserocr = callPackage ../development/python-modules/tesserocr { };
@@ -1677,7 +1687,7 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
   };
 
-  pyuavcan = callPackage ../development/python-modules/pyuavcan { 
+  pyuavcan = callPackage ../development/python-modules/pyuavcan {
     # this version pinpoint to anold version is necessary due to a regression
     nunavut = self.nunavut.overridePythonAttrs ( old: rec {
       version = "0.2.3";
@@ -2066,6 +2076,10 @@ in {
 
   chevron = callPackage ../development/python-modules/chevron {};
 
+  ci-info = callPackage ../development/python-modules/ci-info { };
+
+  ci-py = callPackage ../development/python-modules/ci-py { };
+
   cli-helpers = callPackage ../development/python-modules/cli-helpers {};
 
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
@@ -2081,6 +2095,8 @@ in {
   coloredlogs = callPackage ../development/python-modules/coloredlogs { };
 
   colorclass = callPackage ../development/python-modules/colorclass {};
+
+  colorful = callPackage ../development/python-modules/colorful {};
 
   colorlog = callPackage ../development/python-modules/colorlog { };
 
@@ -2531,6 +2547,8 @@ in {
   pyjks = callPackage ../development/python-modules/pyjks {};
 
   PyLD = callPackage ../development/python-modules/PyLD { };
+
+  pysingleton = callPackage ../development/python-modules/pysingleton { };
 
   python-jose = callPackage ../development/python-modules/python-jose {};
 
@@ -3986,10 +4004,10 @@ in {
 
   folium = callPackage ../development/python-modules/folium { };
 
-  fontforge = toPythonModule (pkgs.fontforge.override {
+  fontforge = disabledIf (!isPy3k) (toPythonModule (pkgs.fontforge.override {
     withPython = true;
     inherit python;
-  });
+  }));
 
   fonttools = callPackage ../development/python-modules/fonttools { };
 
@@ -4491,7 +4509,7 @@ in {
   }));
 
   libkeepass = callPackage ../development/python-modules/libkeepass { };
-  
+
   libredwg = toPythonModule (pkgs.libredwg.override {
     enablePython = true;
     inherit (self) python libxml2;
@@ -4544,7 +4562,7 @@ in {
 
   locustio = callPackage ../development/python-modules/locustio { };
 
-  llvmlite = callPackage ../development/python-modules/llvmlite { 
+  llvmlite = callPackage ../development/python-modules/llvmlite {
     llvm = pkgs.llvm_9; # llvmlite always requires a specific version of llvm.
   };
 
@@ -5289,6 +5307,8 @@ in {
   ppft = callPackage ../development/python-modules/ppft { };
 
   pproxy = callPackage ../development/python-modules/pproxy { };
+
+  pq = callPackage ../development/python-modules/pq { };
 
   praw = if isPy3k then callPackage ../development/python-modules/praw { }
     else callPackage ../development/python-modules/praw/6.3.nix { };
@@ -6242,6 +6262,8 @@ in {
 
   virtualenv = callPackage ../development/python-modules/virtualenv { };
 
+  vispy = callPackage ../development/python-modules/vispy { };
+
   vsts = callPackage ../development/python-modules/vsts { };
 
   vsts-cd-manager = callPackage ../development/python-modules/vsts-cd-manager { };
@@ -6702,7 +6724,7 @@ in {
 
   zipp = if pythonOlder "3.6" then
     callPackage ../development/python-modules/zipp/1.nix { }
-  else 
+  else
     callPackage ../development/python-modules/zipp { };
 
   zope_broken = callPackage ../development/python-modules/zope_broken { };
