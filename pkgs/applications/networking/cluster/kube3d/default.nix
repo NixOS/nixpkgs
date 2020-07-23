@@ -18,7 +18,7 @@ buildGoModule rec {
   buildFlagsArray = ''
     -ldflags=
       -w -s
-      -X github.com/rancher/k3d/v3/version.Version=${version}
+      -X github.com/rancher/k3d/v3/version.Version=v${version}
       -X github.com/rancher/k3d/v3/version.K3sVersion=v${k3sVersion}
   '';
 
