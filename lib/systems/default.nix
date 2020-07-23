@@ -32,6 +32,7 @@ rec {
         /**/ if final.isDarwin              then "libSystem"
         else if final.isMinGW               then "msvcrt"
         else if final.isWasi                then "wasilibc"
+        else if final.isRedox               then "relibc"
         else if final.isMusl                then "musl"
         else if final.isUClibc              then "uclibc"
         else if final.isAndroid             then "bionic"
@@ -65,6 +66,7 @@ rec {
           freebsd = "FreeBSD";
           openbsd = "OpenBSD";
           wasi = "Wasi";
+          redox = "Redox";
           genode = "Genode";
         }.${final.parsed.kernel.name} or null;
 

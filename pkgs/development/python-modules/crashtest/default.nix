@@ -1,9 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchPypi, isPy27, pytest }:
+{ lib, buildPythonPackage, fetchFromGitHub, fetchPypi, pythonAtLeast, pytest }:
 
 buildPythonPackage rec {
   pname = "crashtest";
   version = "0.3.0";
-  disabled = isPy27;
+  disabled = !(pythonAtLeast "3.6");
 
   src = fetchPypi {
     inherit pname version;

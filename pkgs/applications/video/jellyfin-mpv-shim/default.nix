@@ -4,13 +4,13 @@
 
 buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";
-  version = "1.4.2";
+  version = "1.5.11";
 
   src = fetchFromGitHub {
     owner = "iwalton3";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1cnii5wj0pgqg3dqk5cm6slpbs3730x8ippps4cjbsxcsrmqjpx6";
+    sha256 = "14hm8yccdp7w1vdnvdzafk1byhaq1qsr33i4962s1nvm9lafxkr7";
     fetchSubmodules = true; # needed for display_mirror css file
   };
 
@@ -23,6 +23,12 @@ buildPythonApplication rec {
     export HOME=$TMPDIR
 
     rm jellyfin_mpv_shim/win_utils.py
+  '';
+
+  # disable the desktop client for now
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'jellyfin-mpv-desktop=jellyfin_mpv_shim.mpv_shim:main_desktop'," ""
   '';
 
   propagatedBuildInputs = [
@@ -42,7 +48,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/iwalton3/jellyfin-mpv-shim";
-    description = "Allows casting of videos to MPV via the jellyfin mobile and web app.";
+    description = "Allows casting of videos to MPV via the jellyfin mobile and web app";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jojosch ];
   };

@@ -758,6 +758,8 @@ let
 
     sqlexpr = callPackage ../development/ocaml-modules/sqlexpr { };
 
+    tsort = callPackage ../development/ocaml-modules/tsort { };
+
     tuntap = callPackage ../development/ocaml-modules/tuntap { };
 
     tyxml = callPackage ../development/ocaml-modules/tyxml { };

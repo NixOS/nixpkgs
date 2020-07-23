@@ -7532,6 +7532,11 @@ let
       url = "mirror://cpan/authors/id/C/CW/CWEST/File-Pid-1.01.tar.gz";
       sha256 = "bafeee8fdc96eb06306a0c58bbdb7209b6de45f850e75fdc6b16db576e05e422";
     };
+    patches = [(fetchpatch {
+      name = "missing-pidfile.patch";
+      url = "https://sources.debian.org/data/main/libf/libfile-pid-perl/1.01-2/debian/patches/missing-pidfile.patch";
+      sha256 = "1wvax2qdpfs9mgksnc12dhby9b9w19isp50dc55wd3d741ihh6sl";
+    })];
     propagatedBuildInputs = [ ClassAccessor ];
     meta = {
       license = stdenv.lib.licenses.free; # Same as Perl
@@ -9864,14 +9869,13 @@ let
     };
   };
 
-  # TODO: use CPAN version
   ImageExifTool = buildPerlPackage {
     pname = "Image-ExifTool";
-    version = "11.85";
+    version = "12.00";
 
     src = fetchurl {
-      url = "https://exiftool.org/Image-ExifTool-11.85.tar.gz";
-      sha256 = "15zqm0ly2b3paqg0ym44ib2mvh6k18a9q5rvdirwipqa127al2lb";
+      url = "mirror://cpan/authors/id/E/EX/EXIFTOOL/Image-ExifTool-12.00.tar.gz";
+      sha256 = "0nl5djf6hs6brnp7qnqvj3xwhj1qnjwcv35ih4yqp2mm9b4jqyfh";
     };
 
     nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
