@@ -17679,6 +17679,8 @@ in
 
   gotags = callPackage ../development/tools/gotags { };
 
+  go-task = callPackage ../development/tools/go-task { };
+
   golint = callPackage ../development/tools/golint { };
 
   golangci-lint = callPackage ../development/tools/golangci-lint { };
