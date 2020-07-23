@@ -627,6 +627,21 @@ in {
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      ( let
+          legacy = builtins.match "(.*):(.*)" cfg.listenAddress;
+        in {
+          assertion = legacy == null;
+          message = ''
+            Do not specify the port for Prometheus to listen on in the
+            listenAddress option; use the port option instead:
+              services.prometheus.listenAddress = ${builtins.elemAt legacy 0};
+              services.prometheus.port = ${builtins.elemAt legacy 1};
+          '';
+        }
+      )
+    ];
+
     users.groups.prometheus.gid = config.ids.gids.prometheus;
     users.users.prometheus = {
       description = "Prometheus daemon user";
