@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, requests, pytest }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, ci-info, ci-py, requests, pytest }:
 
 buildPythonPackage rec {
   version = "0.2.1";
@@ -7,10 +7,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bfb58f58e98f63eae20caffb8514fb68c572332aa6e773cf3fcbde9b408d88e7";
+    sha256 = "1rw8im09ppnb7z7p7rx658rp5ib8zca8byxg1kiflqwgx5c8zddz";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [ ci-info ci-py requests ];
 
   # all 2 of the tests both try to pull down from a url
   doCheck = false;
