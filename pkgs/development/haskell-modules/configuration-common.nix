@@ -1323,15 +1323,8 @@ self: super: {
     sha256 = "0v6kv1d4syjzgzc2s7a76c6k4vminlcq62n7jg3nn9xd00gwmmv7";
   });
 
-  # Picking fixed version constraint from upstream
-  # Issue: https://github.com/ghcjs/jsaddle/issues/115
   # Tests disabled because they assume to run in the whole jsaddle repo and not the hackage tarbal of jsaddle-warp.
-  jsaddle-warp = dontCheck (appendPatch super.jsaddle-warp (pkgs.fetchpatch {
-    url = "https://github.com/ghcjs/jsaddle/commit/86b166033186c1724d4d52eeaf0935f0f29fe1ca.patch";
-    sha256 = "0j4g3hcqrandlnzr9n9mixygg86accdyk2nyj9hh9g4p7mrcyb7j";
-    stripLen = 2;
-    extraPrefix = "";
-  }));
+  jsaddle-warp = dontCheck super.jsaddle-warp;
 
   # 2020-06-24: Jailbreaking because of restrictive test dep bounds
   # Upstream issue: https://github.com/kowainik/trial/issues/62
