@@ -29,14 +29,14 @@ let
 in
 buildPythonApplication rec {
   pname = "ocrmypdf";
-  version = "10.2.0";
+  version = "10.3.0";
   disabled = ! python3Packages.isPy3k;
 
   src = fetchFromGitHub {
     owner = "jbarlow83";
     repo = "OCRmyPDF";
     rev = "v${version}";
-    sha256 = "1dkxhy3bjl48948jj2k6d684sd76xw1q427qc4hmxncr0wxj0ljp";
+    sha256 = "0c6v7846lmkmbyfla07s35mpba4h09h0fx6pxqf0yvdjxmj46q8c";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -76,6 +76,8 @@ buildPythonApplication rec {
       src = ./liblept.patch;
       liblept = "${stdenv.lib.getLib leptonica}/lib/liblept${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
+    # https://github.com/jbarlow83/OCRmyPDF/pull/596
+    ./0001-Make-compatible-with-pdfminer.six-version-20200720.patch
   ];
 
   makeWrapperArgs = [ "--prefix PATH : ${stdenv.lib.makeBinPath [ ghostscript jbig2enc pngquant qpdf tesseract4 unpaper ]}" ];
