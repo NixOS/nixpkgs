@@ -88,12 +88,11 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isLinux [ dbus libselinux systemd ]
     ++ lib.optionals withX
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff libXft
-        gconf ]
+        gconf cairo ]
     ++ lib.optionals (withX || withNS) [ imagemagick librsvg ]
     ++ lib.optionals (stdenv.isLinux && withX) [ m17n_lib libotf ]
     ++ lib.optional (withX && withGTK2) gtk2-x11
     ++ lib.optionals (withX && withGTK3) [ gtk3-x11 gsettings-desktop-schemas ]
-    ++ lib.optional (stdenv.isDarwin && withX) cairo
     ++ lib.optionals (withX && withXwidgets) [ webkitgtk glib-networking ]
     ++ lib.optionals withNS [ AppKit GSS ImageIO ]
     ++ lib.optionals nativeComp [ libgccjit ]
