@@ -3,6 +3,7 @@
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
 , jansson, harfbuzz
+, libgccjit, targetPlatform, binutils, binutils-unwrapped, makeWrapper # native-comp params
 , systemd ? null
 , withX ? !stdenv.isDarwin
 , withNS ? stdenv.isDarwin
@@ -12,6 +13,7 @@
 , withCsrc ? true
 , srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
 , siteStart ? ./site-start.el
+, nativeComp ? false
 , toolkit ? (
   if withGTK2 then "gtk2"
   else if withGTK3 then "gtk3"
@@ -51,18 +53,37 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = lib.optionalString srcRepo ''
-    rm -fr .git
-  '';
+  postPatch = lib.concatStringsSep "\n" [
+    (lib.optionalString srcRepo ''
+      rm -fr .git
+    '')
+
+    # Make native compilation work both inside and outside of nix build
+    (lib.optionalString nativeComp (let
+      libPath = lib.concatStringsSep ":" [
+        "${lib.getLib libgccjit}/lib/gcc/${targetPlatform.config}/${libgccjit.version}"
+        "${lib.getLib stdenv.cc.cc}/lib"
+        "${lib.getLib stdenv.glibc}/lib"
+      ];
+    in ''
+      substituteInPlace lisp/emacs-lisp/comp.el --replace \
+        "(defcustom comp-async-env-modifier-form nil" \
+        "(defcustom comp-async-env-modifier-form '((setenv \"LIBRARY_PATH\" (string-join (seq-filter (lambda (v) (null (eq v nil))) (list (getenv \"LIBRARY_PATH\") \"${libPath}\")) \":\")))"
+
+    ''))
+
+    ""
+  ];
 
   CFLAGS = "-DMAC_OS_X_VERSION_MAX_ALLOWED=101200";
 
-  nativeBuildInputs = [ pkgconfig ]
+  LIBRARY_PATH = if nativeComp then "${lib.getLib stdenv.cc.libc}/lib" else "";
+
+  nativeBuildInputs = [ pkgconfig makeWrapper ]
     ++ lib.optionals srcRepo [ autoconf automake texinfo ]
     ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
 
   buildInputs =
-    [ ncurses gconf libxml2 gnutls alsaLib acl gpm gettext ]
     [ ncurses gconf libxml2 gnutls alsaLib acl gpm gettext jansson harfbuzz.dev ]
     ++ lib.optionals stdenv.isLinux [ dbus libselinux systemd ]
     ++ lib.optionals withX
@@ -74,7 +95,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (withX && withGTK3) [ gtk3-x11 gsettings-desktop-schemas ]
     ++ lib.optional (stdenv.isDarwin && withX) cairo
     ++ lib.optionals (withX && withXwidgets) [ webkitgtk glib-networking ]
-    ++ lib.optionals withNS [ AppKit GSS ImageIO ];
+    ++ lib.optionals withNS [ AppKit GSS ImageIO ]
+    ++ lib.optionals nativeComp [ libgccjit ]
+    ;
 
   hardeningDisable = [ "format" ];
 
@@ -90,7 +113,9 @@ stdenv.mkDerivation rec {
       then [ "--with-x-toolkit=${toolkit}" "--with-xft" ]
       else [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
              "--with-gif=no" "--with-tiff=no" ])
-    ++ lib.optional withXwidgets "--with-xwidgets";
+    ++ lib.optional withXwidgets "--with-xwidgets"
+    ++ lib.optional nativeComp "--with-nativecomp"
+    ;
 
   preConfigure = lib.optionalString srcRepo ''
     ./autogen.sh
@@ -108,6 +133,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp
     cp ${siteStart} $out/share/emacs/site-lisp/site-start.el
+
     $out/bin/emacs --batch -f batch-byte-compile $out/share/emacs/site-lisp/site-start.el
 
     rm -rf $out/var
@@ -125,16 +151,24 @@ stdenv.mkDerivation rec {
     mv nextstep/Emacs.app $out/Applications
   '';
 
-  postFixup =
-    let libPath = lib.makeLibraryPath [
-      libXcursor
-    ];
-    in lib.optionalString (stdenv.isLinux && withX && toolkit == "lucid") ''
+  postFixup = lib.concatStringsSep "\n" [
+
+    (lib.optionalString (stdenv.isLinux && withX && toolkit == "lucid") ''
       patchelf --set-rpath \
-        "$(patchelf --print-rpath "$out/bin/emacs"):${libPath}" \
+        "$(patchelf --print-rpath "$out/bin/emacs"):${lib.makeLibraryPath [ libXcursor ]}" \
         "$out/bin/emacs"
       patchelf --add-needed "libXcursor.so.1" "$out/bin/emacs"
-    '';
+    '')
+
+    (lib.optionalString nativeComp ''
+      wrapProgram $out/bin/emacs-* --prefix PATH : "${lib.makeBinPath [ binutils binutils-unwrapped ]}"
+    '')
+
+  ];
+
+  passthru = {
+    inherit nativeComp;
+  };
 
   meta = with stdenv.lib; {
     description = "The extensible, customizable GNU text editor";
