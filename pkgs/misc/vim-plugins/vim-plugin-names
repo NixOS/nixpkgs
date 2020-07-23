@@ -172,7 +172,7 @@ jeetsukumaran/vim-indentwise
 jeffkreeftmeijer/neovim-sensible
 jeffkreeftmeijer/vim-numbertoggle
 jelera/vim-javascript-syntax
-jgdavey/tslime.vim
+jgdavey/tslime.vim@main
 jhradilek/vim-docbk
 jhradilek/vim-snippets as vim-docbk-snippets
 jiangmiao/auto-pairs
