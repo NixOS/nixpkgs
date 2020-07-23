@@ -3657,6 +3657,8 @@ in {
 
   mistune = callPackage ../development/python-modules/mistune { };
 
+  mitmproxy = callPackage ../development/python-modules/mitmproxy { };
+
   mixpanel = callPackage ../development/python-modules/mixpanel { };
 
   mkl-service = callPackage ../development/python-modules/mkl-service { };
