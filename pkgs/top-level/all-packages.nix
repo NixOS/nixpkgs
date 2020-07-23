@@ -6385,6 +6385,8 @@ in
 
   recoll = callPackage ../applications/search/recoll { };
 
+  redoc-cli = nodePackages.redoc-cli;
+
   reflex = callPackage ../development/tools/reflex { };
 
   reiser4progs = callPackage ../tools/filesystems/reiser4progs { };

@@ -149,6 +149,7 @@
 , "pyright"
 , "react-native-cli"
 , "react-tools"
+, "redoc-cli"
 , "reveal.js"
 , "rollup"
 , { "rust-analyzer-build-deps": "../../misc/vscode-extensions/rust-analyzer/build-deps" }
