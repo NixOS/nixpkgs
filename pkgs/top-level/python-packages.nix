@@ -2072,6 +2072,10 @@ in {
 
   chevron = callPackage ../development/python-modules/chevron {};
 
+  ci-info = callPackage ../development/python-modules/ci-info { };
+
+  ci-py = callPackage ../development/python-modules/ci-py { };
+
   cli-helpers = callPackage ../development/python-modules/cli-helpers {};
 
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
