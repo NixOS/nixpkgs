@@ -10,9 +10,9 @@ makeInstalledTest {
     services.xserver.displayManager.gdm.enable = false;
     services.gnome3.core-utilities.enable = false;
     services.flatpak.enable = true;
-    environment.systemPackages = with pkgs; [ gnupg ostree python2 ];
+    environment.systemPackages = with pkgs; [ gnupg ostree python3 ];
     virtualisation.memorySize = 2047;
-    virtualisation.diskSize = 1024;
+    virtualisation.diskSize = 3072;
   };
 
   testRunnerFlags = "--timeout 3600";
