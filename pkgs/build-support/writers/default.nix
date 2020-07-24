@@ -27,11 +27,20 @@ rec {
       # arguments to the interpreter are allowed.
       if [[ -n "${toString pkgs.stdenvNoCC.isDarwin}" ]] && isScript $interpreter
       then
-        wrapperInterpreter=$(head -1 "$interpreter" | tail -c+3)
+        wrapperInterpreterLine=$(head -1 "$interpreter" | tail -c+3)
+        # Get first word from the line (note: xargs echo remove leading spaces)
+        wrapperInterpreter=$(echo "$wrapperInterpreterLine" | xargs echo | cut -d " " -f1)
+
+        if isScript $wrapperInterpreter
+        then
+          echo "error: passed interpreter ($interpreter) is a script which has another script ($wrapperInterpreter) as an interpreter, which is not supported."
+          exit 1
+        fi
+
         # This should work as long as wrapperInterpreter is a shell, which is
         # the case for programs wrapped with makeWrapper, like
         # python3.withPackages etc.
-        interpreterLine="$wrapperInterpreter $interpreter"
+        interpreterLine="$wrapperInterpreterLine $interpreter"
       else
         interpreterLine=$interpreter
       fi
