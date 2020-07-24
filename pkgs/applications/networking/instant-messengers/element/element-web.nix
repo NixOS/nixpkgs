@@ -8,7 +8,31 @@ let
     disable_guests = true; # disable automatic guest account registration at matrix.org
     piwik = false; # disable analytics
   };
-  configOverrides = writeText "element-config-overrides.json" (builtins.toJSON (noPhoningHome // conf));
+
+  opts = with lib;
+    let
+      removed = { "features" = [ "feature_irc_ui" "feature_state_counters" "feature_font_scaling" ]; };
+    in mapAttrs
+      (name: value: let
+        attrs = attrNames value;
+        handler = if all (o: !(elem o attrs)) (removed.${name} or [])
+          then id
+          else warn ''
+            Please note that the following feature-flags were removed in `element-web` 1.7 (formerly known
+            as `riot-web`) and are now available by default:
+
+            - ${concatStringsSep "- " (flatten (mapAttrsToList (
+              k: v: map (n: "${k}.${n}\n") v
+            ) removed))}
+
+            For further upgrade-instructions please read the changelog:
+
+              https://github.com/vector-im/riot-web/blob/develop/CHANGELOG.md#changes-in-171-2020-07-16
+          '';
+      in handler value)
+      (noPhoningHome // conf);
+
+  configOverrides = writeText "element-config-overrides.json" (builtins.toJSON opts);
 
 in stdenv.mkDerivation rec {
   pname = "element-web";
