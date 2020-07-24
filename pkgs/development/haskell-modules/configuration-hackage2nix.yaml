@@ -4355,7 +4355,6 @@ broken-packages:
   - dependent-hashmap
   - dependent-monoidal-map
   - dependent-state
-  - dependent-sum-aeson-orphans
   - depends
   - dephd
   - deptrack-core
