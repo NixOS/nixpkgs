@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , makeWrapper, makeDesktopItem, mkYarnPackage
-, electron_9, element-web
+, electron_8, element-web
 }:
 # Notes for maintainers:
 # * versions of `element-web` and `element-desktop` should be kept in sync.
@@ -15,7 +15,7 @@ let
     rev = "v${version}";
     sha256 = "0sl45mxgp0sngxnba8ilsghzgv6cv36ggah1k2204ggzby13blg6";
   };
-  electron = electron_9;
+  electron = electron_8;
 
 in mkYarnPackage rec {
   name = "element-desktop-${version}";
