@@ -31,10 +31,13 @@ assert withGTK3 -> !withGTK2 && gtk3-x11 != null;
 assert withXwidgets -> withGTK3 && webkitgtk != null;
 
 
-stdenv.mkDerivation rec {
-  name = "emacs-${version}${versionModifier}";
+let
   version = "26.3";
   versionModifier = "";
+  name = "emacs-${version}${versionModifier}";
+
+in stdenv.mkDerivation {
+  inherit name version;
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${name}.tar.xz";
