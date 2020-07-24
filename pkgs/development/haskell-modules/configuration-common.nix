@@ -1362,6 +1362,8 @@ self: super: {
       preCheck = ''
         export PATH=$PATH:dist/build/haskell-language-server
       '';
+      # The wrapper test does not work for now.
+      testTarget = "func-test";
 
       # test needs the git tool
       testToolDepends = old.testToolDepends
