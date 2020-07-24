@@ -18,17 +18,17 @@
 
     in
     {
-      lib = lib // {
+      lib = lib.extend (final: prev: {
         nixosSystem = { modules, ... } @ args:
           import ./nixos/lib/eval-config.nix (args // {
             modules = modules ++
               [ { system.nixos.versionSuffix =
-                    ".${lib.substring 0 8 (self.lastModifiedDate or self.lastModified)}.${self.shortRev or "dirty"}";
-                  system.nixos.revision = lib.mkIf (self ? rev) self.rev;
+                    ".${final.substring 0 8 (self.lastModifiedDate or self.lastModified)}.${self.shortRev or "dirty"}";
+                  system.nixos.revision = final.mkIf (self ? rev) self.rev;
                 }
               ];
           });
-      };
+      });
 
       checks.x86_64-linux.tarball = jobs.tarball;
 
