@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libndctl";
-  version = "68";
+  version = "69";
 
   src = fetchFromGitHub {
     owner  = "pmem";
     repo   = "ndctl";
     rev    = "v${version}";
-    sha256 = "0xmim7z4qp6x2ggndnbwd940c73pa1qlf3hxyn3qh5pyr69nh9y8";
+    sha256 = "1l7p0ycj27d4z07gf9qp796xpg16kfsg3rwx6plhilbhip1as4w7";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
