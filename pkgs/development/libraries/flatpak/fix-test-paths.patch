@@ -1,5 +1,5 @@
 diff --git a/app/flatpak-builtins-build-export.c b/app/flatpak-builtins-build-export.c
-index 5de89d62..bf6bdb52 100644
+index 43fd0563..4067bd36 100644
 --- a/app/flatpak-builtins-build-export.c
 +++ b/app/flatpak-builtins-build-export.c
 @@ -458,7 +458,7 @@ validate_desktop_file (GFile      *desktop_file,
@@ -12,10 +12,10 @@ index 5de89d62..bf6bdb52 100644
      {
        if (!g_error_matches (local_error, G_SPAWN_ERROR, G_SPAWN_ERROR_NOENT))
 diff --git a/tests/libtest.sh b/tests/libtest.sh
-index e64be49f..a9a53e12 100644
+index acb2095b..b361da16 100644
 --- a/tests/libtest.sh
 +++ b/tests/libtest.sh
-@@ -367,7 +367,7 @@ if [ -z "${FLATPAK_BWRAP:-}" ]; then
+@@ -431,7 +431,7 @@ if [ -z "${FLATPAK_BWRAP:-}" ]; then
      # running installed-tests: assume we know what we're doing
      _flatpak_bwrap_works=true
  elif ! "$FLATPAK_BWRAP" --unshare-ipc --unshare-net --unshare-pid \
@@ -24,7 +24,7 @@ index e64be49f..a9a53e12 100644
      _flatpak_bwrap_works=false
  else
      _flatpak_bwrap_works=true
-@@ -440,7 +440,7 @@ dbus-daemon --fork --config-file=session.conf --print-address=3 --print-pid=4 \
+@@ -504,7 +504,7 @@ dbus-daemon --fork --config-file=session.conf --print-address=3 --print-pid=4 \
  export DBUS_SESSION_BUS_ADDRESS="$(cat dbus-session-bus-address)"
  DBUS_SESSION_BUS_PID="$(cat dbus-session-bus-pid)"
  
@@ -33,7 +33,7 @@ index e64be49f..a9a53e12 100644
      assert_not_reached "Failed to start dbus-daemon"
  fi
  
-@@ -449,7 +449,7 @@ gdb_bt () {
+@@ -519,7 +519,7 @@ commit_to_path () {
  }
  
  cleanup () {
@@ -43,10 +43,10 @@ index e64be49f..a9a53e12 100644
      fusermount -u $XDG_RUNTIME_DIR/doc || :
      kill $(jobs -p) &> /dev/null || true
 diff --git a/tests/make-test-app.sh b/tests/make-test-app.sh
-index e51e21a6..7d39efb5 100755
+index 612f914f..4b890da2 100755
 --- a/tests/make-test-app.sh
 +++ b/tests/make-test-app.sh
-@@ -149,13 +149,13 @@ msgid "Hello world"
+@@ -151,13 +151,13 @@ msgid "Hello world"
  msgstr "Hallo Welt"
  EOF
  mkdir -p ${DIR}/files/de/share/de/LC_MESSAGES
@@ -63,10 +63,10 @@ index e51e21a6..7d39efb5 100755
  flatpak build-finish ${DIR}
  mkdir -p repos
 diff --git a/tests/make-test-runtime.sh b/tests/make-test-runtime.sh
-index 5d2c309b..cf61a3cf 100755
+index af289625..7db51c17 100755
 --- a/tests/make-test-runtime.sh
 +++ b/tests/make-test-runtime.sh
-@@ -25,9 +25,10 @@ EOF
+@@ -28,9 +28,10 @@ EOF
  
  # On Debian derivatives, /usr/sbin and /sbin aren't in ordinary users'
  # PATHs, but ldconfig is kept in /sbin
@@ -78,7 +78,7 @@ index 5d2c309b..cf61a3cf 100755
  mkdir -p ${DIR}/usr/bin
  mkdir -p ${DIR}/usr/lib
  ln -s ../lib ${DIR}/usr/lib64
-@@ -37,48 +38,24 @@ if test -f /sbin/ldconfig.real; then
+@@ -40,40 +41,17 @@ if test -f /sbin/ldconfig.real; then
  else
      cp `which ldconfig` ${DIR}/usr/bin
  fi
@@ -129,11 +129,18 @@ index 5d2c309b..cf61a3cf 100755
  done
  ln -s bash ${DIR}/usr/bin/sh
  
+@@ -84,11 +62,13 @@ echo "Hello world, from a runtime$EXTRA"
+ EOF
+ chmod a+x ${DIR}/usr/bin/runtime_hello.sh
+ 
 -# We copy the C.UTF8 locale and call it en_US. Its a bit of a lie, but
 -# the real en_US locale is often not available, because its in the
 -# local archive.
 -mkdir -p ${DIR}/usr/lib/locale/
 -cp -r /usr/lib/locale/C.* ${DIR}/usr/lib/locale/en_US
++# We do not copy C.UTF8 locale because it is in locale archive and
++# that is already copied with glibc.
++
 +mv ${DIR}/nix/store ${DIR}/usr/store # files outside /usr are not permitted, we will have to replace /nix/store with /usr/store
 +chmod -R u+w ${DIR} # nix store has read-only directories which would cause problems during clean-up, files need to be writable for sed
 +find ${DIR} -type f -print0 | xargs -0 sed -i 's~/nix/store/~/usr/store/~g' # replace hardcoded paths
@@ -142,10 +149,10 @@ index 5d2c309b..cf61a3cf 100755
  if [ x$COLLECTION_ID != x ]; then
      collection_args=--collection-id=${COLLECTION_ID}
 diff --git a/tests/testlibrary.c b/tests/testlibrary.c
-index 44ae28e3..76bf619f 100644
+index 509ce6cc..6a333c9c 100644
 --- a/tests/testlibrary.c
 +++ b/tests/testlibrary.c
-@@ -1343,7 +1343,7 @@ check_bwrap_support (void)
+@@ -1399,7 +1399,7 @@ check_bwrap_support (void)
      {
        gint exit_code = 0;
        char *argv[] = { (char *) bwrap, "--unshare-ipc", "--unshare-net",
