@@ -6334,6 +6334,12 @@
     githubId = 119460;
     name = "Perry Barnoy";
   };
+  pjjw = {
+    email = "peter@shortbus.org";
+    github = "pjjw";
+    githubId = 638;
+    name = "Peter Woodman";
+  };
   pjones = {
     email = "pjones@devalot.com";
     github = "pjones";
