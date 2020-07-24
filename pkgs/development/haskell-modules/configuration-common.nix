@@ -916,21 +916,10 @@ self: super: {
   # https://github.com/haskell-servant/servant-auth/issues/113
   servant-auth-client = dontCheck super.servant-auth-client;
 
-  # 2020-06-04: HACK: dontCheck - The test suite attempts to use the network.
-  # Should be solved when: https://github.com/dhall-lang/dhall-haskell/issues/1837
-  dhall = (generateOptparseApplicativeCompletion "dhall" (dontCheck super.dhall)).override { repline = self.repline_0_3_0_0; };
-  dhall_1_30_0 = dontCheck super.dhall_1_30_0;
-  repline_0_3_0_0 = super.repline_0_3_0_0.override { haskeline = self.haskeline_0_8_0_0; };
-  haskeline_0_8_0_0 = dontCheck super.haskeline_0_8_0_0;
-
-  dhall-json =
-    generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"]
-      super.dhall-json;
-
-  dhall-nix =
-    generateOptparseApplicativeCompletion "dhall-to-nix" (
-      super.dhall-nix
-  );
+  # Generate cli completions for dhall.
+  dhall = generateOptparseApplicativeCompletion "dhall" super.dhall;
+  dhall-json = generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] super.dhall-json;
+  dhall-nix = generateOptparseApplicativeCompletion "dhall-to-nix" (super.dhall-nix);
 
   # https://github.com/haskell-hvr/netrc/pull/2#issuecomment-469526558
   netrc = doJailbreak super.netrc;
