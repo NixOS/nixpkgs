@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "nix-build-uncached";
-  version = "0.1.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nix-build-uncached";
     rev = "v${version}";
-    sha256 = "0jkpg3ab56lg2kdms9w9ka9ba89py3ajksjsi1rd3iqi74zz2mmh";
+    sha256 = "106k4234gpi8mr0n0rfsgwk4z7v0b2gim0r5bhjvg2v566j67g02";
   };
 
   goPackagePath = "github.com/Mic92/nix-build-uncached";
