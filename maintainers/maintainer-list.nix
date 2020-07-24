@@ -1855,6 +1855,12 @@
     githubId = 245394;
     name = "Hannu Hartikainen";
   };
+  dandellion = {
+    email = "daniel@dodsorf.as";
+    github = "dali99";
+    githubId = 990767;
+    name = "Daniel Olsen";
+  };
   danderson = {
     email = "dave@natulte.net";
     github = "danderson";

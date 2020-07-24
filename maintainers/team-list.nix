@@ -77,6 +77,7 @@ with lib.maintainers; {
       mguentner
       ekleog
       ralith
+      dandellion
     ];
     scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
   };
