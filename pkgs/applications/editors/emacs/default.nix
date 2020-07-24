@@ -135,11 +135,13 @@ stdenv.mkDerivation rec {
 
     $out/bin/emacs --batch -f batch-byte-compile $out/share/emacs/site-lisp/site-start.el
 
+    siteVersionDir=`ls $out/share/emacs | grep -v site-lisp | head -n 1`
+
     rm -rf $out/var
-    rm -rf $out/share/emacs/${version}/site-lisp
+    rm -rf $siteVersionDir
   '' + lib.optionalString withCsrc ''
     for srcdir in src lisp lwlib ; do
-      dstdir=$out/share/emacs/${version}/$srcdir
+      dstdir=$siteVersionDir/$srcdir
       mkdir -p $dstdir
       find $srcdir -name "*.[chm]" -exec cp {} $dstdir \;
       cp $srcdir/TAGS $dstdir
