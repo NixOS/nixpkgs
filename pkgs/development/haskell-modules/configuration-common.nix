@@ -1237,14 +1237,6 @@ self: super: {
 
   # Requested version bump on upstream https://github.com/obsidiansystems/constraints-extras/issues/32
   constraints-extras = doJailbreak super.constraints-extras;
-  # 2020-06-22: NOTE: > 0.10.0.0 => rm dhall override: https://github.com/srid/rib/issues/161
-  rib = doJailbreak (super.rib.override {
-    dhall = self.dhall_1_30_0;
-  });
-  # Necessary for neuron 0.4.0
-  neuron = super.neuron.override {
-    dhall = self.dhall_1_30_0;
-  };
 
   # Necessary for stack
   # x509-validation test suite hangs: upstream https://github.com/vincenthz/hs-certificate/issues/120
@@ -1413,5 +1405,59 @@ self: super: {
     url = "https://github.com/obsidiansystems/dependent-sum-aeson-orphans/commit/5a369e433ad7e3eef54c7c3725d34270f6aa48cc.patch";
     sha256 = "1lzrcicvdg77hd8j2fg37z19amp5yna5xmw1fc06zi0j95csll4r";
   });
+
+  # Tests are broken because of missing files in hackage tarball.
+  # https://github.com/jgm/commonmark-hs/issues/55
+  commonmark-extensions = dontCheck super.commonmark-extensions;
+
+  # The overrides in the following lines all have the following causes:
+  # * neuron needs commonmark-pandoc
+  # * which needs a newer pandoc-types (>= 1.21)
+  # * which means we need a newer pandoc (>= 2.10)
+  # * which needs a newer hslua (1.1.2) and a newer jira-wiki-markup (1.3.2)
+  # Then we need to apply those overrides to all transitive dependencies
+  # All of this will be obsolete, when pandoc 2.10 hits stack lts.
+  commonmark-pandoc = super.commonmark-pandoc.override {
+    pandoc-types = self.pandoc-types_1_21;
+  };
+  reflex-dom-pandoc = super.reflex-dom-pandoc.override {
+    pandoc-types = self.pandoc-types_1_21;
+  };
+  pandoc_2_10_1 = super.pandoc_2_10_1.override {
+    pandoc-types = self.pandoc-types_1_21;
+    hslua = self.hslua_1_1_2;
+    texmath = self.texmath.override {
+      pandoc-types = self.pandoc-types_1_21;
+    };
+    tasty-lua = self.tasty-lua.override {
+      hslua = self.hslua_1_1_2;
+    };
+    hslua-module-text = self.hslua-module-text.override {
+      hslua = self.hslua_1_1_2;
+    };
+    hslua-module-system = self.hslua-module-system.override {
+      hslua = self.hslua_1_1_2;
+    };
+    jira-wiki-markup = self.jira-wiki-markup_1_3_2;
+  };
+
+  # Apply version-bump patch that is not contained in released version yet.
+  # Upstream PR: https://github.com/srid/neuron/pull/304
+  neuron = (appendPatch super.neuron (pkgs.fetchpatch {
+    url= "https://github.com/srid/neuron/commit/9ddcb7e9d63b8266d1372ef7c14c13b6b5277990.patch";
+    sha256 = "01f9v3jnl05fnpd624wv3a0j5prcbnf62ysa16fbc0vabw19zv1b";
+    excludes = [ "commonmark-hs/github.json" ];
+    stripLen = 2;
+    extraPrefix = "";
+  }))
+    # See comment about overrides above commonmark-pandoc
+    .override {
+    pandoc = self.pandoc_2_10_1;
+    pandoc-types = self.pandoc-types_1_21;
+    rib = super.rib.override {
+      pandoc = self.pandoc_2_10_1;
+      pandoc-types = self.pandoc-types_1_21;
+    };
+  };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
