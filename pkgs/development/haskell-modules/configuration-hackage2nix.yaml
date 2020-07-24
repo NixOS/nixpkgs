@@ -2675,7 +2675,6 @@ package-maintainers:
     - reflex-dom
     - ghcide
     - cabal-fmt
-    - neuron
     - shh
     - brittany
     - hlint
@@ -3215,6 +3214,7 @@ broken-packages:
   - aws-sns
   - axel
   - axiom
+  - azimuth-hs
   - azubi
   - azure-acs
   - azure-email
@@ -3498,6 +3498,8 @@ broken-packages:
   - bounded-array
   - bowntz
   - box
+  - box-csv
+  - box-socket
   - braid
   - brain-bleep
   - Bravo
@@ -6513,7 +6515,6 @@ broken-packages:
   - http-client-auth
   - http-client-lens
   - http-client-request-modifiers
-  - http-client-restricted
   - http-client-session
   - http-client-streams
   - http-conduit-browser
@@ -8016,6 +8017,7 @@ broken-packages:
   - neural
   - neural-network-blashs
   - neural-network-hmatrix
+  - neuron
   - newhope
   - newports
   - newsletter
@@ -8149,6 +8151,7 @@ broken-packages:
   - onama
   - ONC-RPC
   - oneormore
+  - online
   - online-csv
   - onpartitions
   - OnRmt
@@ -9026,6 +9029,7 @@ broken-packages:
   - relacion
   - relation
   - relational-postgresql8
+  - relational-query-postgresql-pure
   - relative-date
   - relevant-time
   - reload
@@ -9837,6 +9841,7 @@ broken-packages:
   - stackage-types
   - stackage-upload
   - stackage2nix
+  - stan
   - standalone-derive-topdown
   - standalone-haddock
   - starling
@@ -10010,6 +10015,7 @@ broken-packages:
   - symbolic-link
   - symengine
   - symengine-hs
+  - symmetry-operations-symbols
   - sync
   - sync-mht
   - syncthing-hs
@@ -10375,6 +10381,8 @@ broken-packages:
   - treemap-html-tools
   - TreeStructures
   - Treiber
+  - trek-app
+  - trek-db
   - tremulous-query
   - TrendGraph
   - trhsx
@@ -10828,6 +10836,7 @@ broken-packages:
   - welshy
   - werewolf
   - werewolf-slack
+  - what4
   - Wheb
   - wheb-mongo
   - wheb-redis
