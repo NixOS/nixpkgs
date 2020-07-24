@@ -29,6 +29,16 @@ let
     description = "Tor isolation options";
   };
 
+  tor-boot-script = pkgs.writeShellScript "torboot" (concatStrings (flip mapAttrsToList cfg.hiddenServices (n: v:
+    if v.keyPath == null then "" else ''
+      set -e
+      rm -rf "${torDirectory}/onion/${v.name}"
+      mkdir -p "${torDirectory}/onion/${v.name}"
+      cp "${v.keyPath}" "${torDirectory}/onion/${v.name}/hs_ed25519_secret_key"
+      chown -R ${toString config.ids.uids.tor}:${toString config.ids.gids.tor} "${torDirectory}/onion/${v.name}"
+      chmod 700 "${torDirectory}/onion/${v.name}"
+    ''))
+  );
 
   torRc = ''
     User tor
@@ -613,6 +623,15 @@ in
                '';
              };
 
+             keyPath = mkOption {
+               type = types.nullOr types.str;
+               description = ''
+                 Path to the private key to import for this tor hidden service.
+
+                 This will be copied to the ${torDirectory}/onion/${name}.
+               '';
+             };
+
              map = mkOption {
                default = [];
                description = "Port mapping for this hidden service.";
@@ -749,7 +768,10 @@ in
         serviceConfig =
           { Type         = "simple";
             # Translated from the upstream contrib/dist/tor.service.in
-            ExecStartPre = "${pkgs.tor}/bin/tor -f ${torRcFile} --verify-config";
+            ExecStartPre = [
+              tor-boot-script
+              "${pkgs.tor}/bin/tor -f ${torRcFile} --verify-config"
+            ];
             ExecStart    = "${pkgs.tor}/bin/tor -f ${torRcFile}";
             ExecReload   = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             KillSignal   = "SIGINT";
