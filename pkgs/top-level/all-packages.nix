@@ -4370,12 +4370,6 @@ in
     mpi = null;
   };
 
-  hdf5_1_8 = callPackage ../tools/misc/hdf5/1_8.nix {
-    gfortran = null;
-    szip = null;
-    mpi = null;
-  };
-
   hdf5-mpi = appendToName "mpi" (hdf5.override {
     szip = null;
     mpi = pkgs.openmpi;
