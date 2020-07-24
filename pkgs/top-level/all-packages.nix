@@ -5078,6 +5078,8 @@ in
     libwebsockets_4_0;
   libwebsockets = libwebsockets_3_2;
 
+  licensee = callPackage ../tools/package-management/licensee { };
+
   lidarr = callPackage ../servers/lidarr { };
 
   limesuite = callPackage ../applications/radio/limesuite { };
