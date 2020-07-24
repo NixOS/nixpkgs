@@ -29,7 +29,7 @@ rec {
       then
         wrapperInterpreter=$(head -1 "$interpreter" | tail -c+3)
         # This should work as long as wrapperInterpreter is a shell, which is
-        # the for programs wrapped with makeWrapper, like
+        # the case for programs wrapped with makeWrapper, like
         # python3.withPackages etc.
         interpreterLine="$wrapperInterpreter $interpreter"
       else
