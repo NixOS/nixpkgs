@@ -1,0 +1,24 @@
+diff --git a/dlls/crypt32/rootstore.c b/dlls/crypt32/rootstore.c
+index f795181..fb4926a 100644
+--- a/dlls/crypt32/rootstore.c
++++ b/dlls/crypt32/rootstore.c
+@@ -18,6 +18,7 @@
+ #include "config.h"
+ #include <stdarg.h>
+ #include <stdio.h>
++#include <stdlib.h> /* getenv */
+ #include <sys/types.h>
+ #ifdef HAVE_SYS_STAT_H
+ #include <sys/stat.h>
+@@ -916,6 +917,11 @@ static void read_trusted_roots_from_known_locations(HCERTSTORE store)
+ 
+         for (i = 0; !ret && i < ARRAY_SIZE(CRYPT_knownLocations); i++)
+             ret = import_certs_from_path(CRYPT_knownLocations[i], from, TRUE);
++
++        char *nix_cert_file = getenv("NIX_SSL_CERT_FILE");
++        if (nix_cert_file != NULL)
++            ret = import_certs_from_path(nix_cert_file, from, TRUE);
++
+         check_and_store_certs(from, store);
+     }
+     CertCloseStore(from, 0);

@@ -1,0 +1,19 @@
+diff --git a/tests/test_docs.py b/tests/test_docs.py
+index 7a41822..720ecf6 100644
+--- a/tests/test_docs.py
++++ b/tests/test_docs.py
+@@ -41,12 +41,10 @@ assert filenames
+ 
+ # HACK: hardcoded paths, venv should be irrelevant, etc.
+ # TODO: replaces the process with Python code
+-VENV_BIN = Path(__file__).parent.parent / 'venv/bin'
+-VENV_PYTHON = VENV_BIN / 'python'
+-VENV_RST2PSEUDOXML = VENV_BIN / 'rst2pseudoxml.py'
++VENV_PYTHON = 'python'
++VENV_RST2PSEUDOXML = 'rst2pseudoxml.py'
+ 
+ 
+-@pytest.mark.skipif(not os.path.exists(VENV_RST2PSEUDOXML), reason='docutils not installed')
+ @pytest.mark.parametrize('filename', filenames)
+ def test_rst_file_syntax(filename):
+     p = subprocess.Popen(

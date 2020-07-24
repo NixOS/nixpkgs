@@ -1,0 +1,13 @@
+diff -Naur -x '*~' ocamlgraph-1.8.1/Makefile.in ocamlgraph-1.8.1-new//Makefile.in
+--- ocamlgraph-1.8.1/Makefile.in	2011-10-17 09:57:03.000000000 -0430
++++ ocamlgraph-1.8.1-new//Makefile.in	2011-11-24 13:01:22.626004819 -0430
+@@ -16,8 +16,8 @@
+ ##########################################################################
+ 
+ # Where to install the binaries
+-DESTDIR	=
+ prefix	=@prefix@
++DESTDIR=$(prefix)
+ exec_prefix=@exec_prefix@
+ datarootdir=@datarootdir@
+ BINDIR	=$(DESTDIR)@bindir@

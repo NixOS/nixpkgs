@@ -1,0 +1,18 @@
+--- a/tests/playTests.sh
++++ b/tests/playTests.sh
+@@ -109,5 +109,2 @@ esac
+ case "$UNAME" in
+-  Darwin) MD5SUM="md5 -r" ;;
+-  FreeBSD) MD5SUM="gmd5sum" ;;
+-  OpenBSD) MD5SUM="md5" ;;
+   *) MD5SUM="md5sum" ;;
+@@ -116,5 +113,2 @@ esac
+ MTIME="stat -c %Y"
+-case "$UNAME" in
+-    Darwin | FreeBSD | OpenBSD) MTIME="stat -f %m" ;;
+-esac
+ 
+@@ -752,3 +746,2 @@ zstd -d --rm dirTestDict/*.zst -D tmpDictC  # note : use internal checksum by de
+ case "$UNAME" in
+-  Darwin) println "md5sum -c not supported on OS-X : test skipped" ;;  # not compatible with OS-X's md5
+   *) $MD5SUM -c tmph1 ;;

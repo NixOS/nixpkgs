@@ -1,0 +1,835 @@
+--- a/contrib/contrib.mak	2020-03-19 09:21:42.000000000 +0100
++++ b/contrib/contrib.mak	2020-05-14 13:41:03.202258445 +0200
+@@ -22,6 +22,10 @@
+ CONTRIB_MAK=$(CONTRIBDIR)$(D)contrib.mak $(TOP_MAKEFILES)
+ CONTRIBSRC=$(CONTRIBDIR)$(D)
+ 
++# Almost all device drivers depend on the following:
++CONTDEVH=$(gserrors_h) $(gx_h) $(gxdevice_h)
++CONTDEV=$(AK) $(ECHOGS_XE) $(GDEVH)
++
+ ###### --------------------------- Catalog -------------------------- ######
+ 
+ # The following drivers are user-contributed, and maintained (if at all) by
+@@ -185,19 +189,19 @@
+ 	$(DEVCC) $(DEVO_)gdevbjca.$(OBJ) $(C_) $(CONTRIBSRC)gdevbjca.c
+ 
+ $(DD)bjcmono.dev : $(bjc_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)bjcmono $(bjc_)
+ 
+ $(DD)bjcgray.dev : $(bjc_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)bjcgray $(bjc_)
+ 
+ $(DD)bjccmyk.dev : $(bjc_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)bjccmyk $(bjc_)
+ 
+ $(DD)bjccolor.dev : $(bjc_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)bjccolor $(bjc_)
+ 
+ 
+@@ -208,25 +212,25 @@
+ # Author: Uli Wortmann (uliw@erdw.ethz.ch), Martin Gerbershagen (ger@ulm.temic.de)
+ # Printer: HP 670
+ $(DD)cdj670.dev : $(cdeskjet8_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV2) $(DD)cdj670 $(cdeskjet8_)
+ 
+ # Author: Uli Wortmann (uliw@erdw.ethz.ch)
+ # Printer: HP 850
+ $(DD)cdj850.dev : $(cdeskjet8_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV2) $(DD)cdj850 $(cdeskjet8_)
+ 
+ # Author: Uli Wortmann (uliw@erdw.ethz.ch), Martin Gerbershagen (ger@ulm.temic.de)
+ # Printer: HP 890
+ $(DD)cdj890.dev : $(cdeskjet8_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV2) $(DD)cdj890 $(cdeskjet8_)
+ 
+ # Author: Uli Wortmann (uliw@erdw.ethz.ch), Martin Gerbershagen (ger@ulm.temic.de)
+ # Printer: HP 1600
+ $(DD)cdj1600.dev : $(cdeskjet8_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV2) $(DD)cdj1600 $(cdeskjet8_)
+ 
+ $(DEVOBJ)gdevcd8.$(OBJ) : $(CONTRIBSRC)gdevcd8.c $(PDEVH) $(math__h)\
+@@ -244,7 +248,8 @@
+ 
+ # Author: Matthew Gelhaus (mgelhaus@proaxis.com)
+ # Printer: HP 880c
+-$(DD)cdj880.dev : $(cdeskjet8_) $(DD)page.dev
++$(DD)cdj880.dev : $(cdeskjet8_) $(DD)page.dev $(CONTDEV) \
++                  $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV2) $(DD)cdj880 $(cdeskjet8_)
+ 
+ 
+@@ -255,7 +260,7 @@
+ # Author: Rene Harsch (rene@harsch.net)
+ # Printer: HP 970Cxi
+ $(DD)cdj970.dev : $(cdeskjet9_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV2) $(DD)cdj970 $(cdeskjet9_)
+ 
+ $(DEVOBJ)gdevdj9.$(OBJ) : $(CONTRIBSRC)gdevdj9.c $(PDEVH) $(math__h) $(string__h)\
+@@ -268,7 +273,7 @@
+ ### NOTE:  Same as chp2200 (some PJL and CRD changes).
+ 
+ $(DD)cdnj500.dev : $(cdeskjet8_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV2) $(DD)cdnj500 $(cdeskjet8_)
+ 
+ 
+@@ -277,7 +282,7 @@
+ ### NOTE:  Depends on the presence of the cdj850 section.
+ 
+ $(DD)chp2200.dev : $(cdeskjet8_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV2) $(DD)chp2200 $(cdeskjet8_)
+ 
+ 
+@@ -288,11 +293,11 @@
+ GDIMONO=$(DEVOBJ)gdevgdi.$(OBJ) $(HPPCL)
+ 
+ $(DD)gdi.dev : $(GDIMONO) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)gdi $(GDIMONO)
+ 
+ $(DD)samsunggdi.dev : $(GDIMONO) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)samsunggdi $(GDIMONO)
+ 
+ $(DEVOBJ)gdevgdi.$(OBJ) : $(CONTRIBSRC)gdevgdi.c $(PDEVH) $(gdevpcl_h) \
+@@ -306,17 +311,17 @@
+ 
+ hl1250_=$(DEVOBJ)gdevhl12.$(OBJ) $(HPDLJM)
+ $(DD)hl1250.dev : $(hl1250_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hl1250 $(hl1250_)
+ 
+ $(DD)hl1240.dev : $(hl1250_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hl1240 $(hl1250_)
+ 
+ # Author: Marek Michalkiewicz <marekm@linux.org.pl>
+ # Printer: Brother HL-1250 (may work with some other models too)
+ $(DEVOBJ)gdevhl12.$(OBJ) : $(CONTRIBSRC)gdevhl12.c $(PDEVH) $(gdevdljm_h) \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(DEVCC) $(DEVO_)gdevhl12.$(OBJ) $(C_) $(CONTRIBSRC)gdevhl12.c
+ 
+ 
+@@ -327,37 +332,37 @@
+ # Author: Ulrich Mueller (ulm@vsnhd1.cern.ch)
+ # Printer: DEC LN03
+ $(DD)ln03.dev : $(ln03_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)ln03 $(ln03_)
+ 
+ # Author: Nick Brown (nick.brown@coe.int)
+ # Printer: DEClaser 2100
+ $(DD)dl2100.dev : $(ln03_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)dl2100 $(ln03_)
+ 
+ # Author: Ian MacPhedran (macphed@dvinci.USask.CA)
+ # Printer: DEC LA50
+ $(DD)la50.dev : $(ln03_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                          $(CONTDEV)  $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)la50 $(ln03_)
+ 
+ # Author: Bruce Lowekamp (lowekamp@csugrad.cs.vt.edu)
+ # Printer: DEC LA70
+ $(DD)la70.dev : $(ln03_) $(DD)page.dev \
+-                         $(CONTRIB_MAK) $(MAKEDIRS)
++                         $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)la70 $(ln03_)
+ 
+ # Author: Ian MacPhedran (macphed@dvinci.USask.CA)
+ # Printer: DEC LA75
+ $(DD)la75.dev : $(ln03_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)la75 $(ln03_)
+ 
+ # Author: Andre' Beck (Andre_Beck@IRS.Inf.TU-Dresden.de)
+ # Printer: DEC LA75plus
+ $(DD)la75plus.dev : $(ln03_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)la75plus $(ln03_)
+ 
+ $(DEVOBJ)gdevln03.$(OBJ) : $(CONTRIBSRC)gdevln03.c $(PDEVH) \
+@@ -380,233 +385,233 @@
+ 	$(DEVCC) -DA4 $(DEVO_)gdevescv.$(OBJ) $(C_) $(escv_opts) $(ESCV_SRC)gdevescv.c
+ 
+ $(DD)alc1900.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)alc1900 $(escv_)
+ 
+ $(DD)alc2000.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)alc2000 $(escv_)
+ 
+ $(DD)alc4000.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)alc4000 $(escv_)
+ 
+ $(DD)alc4100.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)alc4100 $(escv_)
+ 
+ $(DD)alc8500.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)alc8500 $(escv_)
+ 
+ $(DD)alc8600.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)alc8600 $(escv_)
+ 
+ $(DD)alc9100.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)alc9100 $(escv_)
+ 
+ $(DD)lp3000c.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp3000c $(escv_)
+ 
+ $(DD)lp8000c.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp8000c $(escv_)
+ 
+ $(DD)lp8200c.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp8200c $(escv_)
+ 
+ $(DD)lp8300c.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp8300c $(escv_)
+ 
+ $(DD)lp8500c.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp8500c $(escv_)
+ 
+ $(DD)lp8800c.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp8800c $(escv_)
+ 
+ $(DD)lp9000c.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp9000c $(escv_)
+ 
+ $(DD)lp9200c.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp9200c $(escv_)
+ 
+ $(DD)lp9500c.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp9500c $(escv_)
+ 
+ $(DD)lp9800c.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp9800c $(escv_)
+ 
+ $(DD)lps6500.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lps6500 $(escv_)
+ 
+ $(DD)epl2050.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)epl2050 $(escv_)
+ 
+ $(DD)epl2050p.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)epl2050p $(escv_)
+ 
+ $(DD)epl2120.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)epl2120 $(escv_)
+ 
+ $(DD)epl2500.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)epl2500 $(escv_)
+ 
+ $(DD)epl2750.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)epl2750 $(escv_)
+ 
+ $(DD)epl5800.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)epl5800 $(escv_)
+ 
+ $(DD)epl5900.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)epl5900 $(escv_)
+ 
+ $(DD)epl6100.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)epl6100 $(escv_)
+ 
+ $(DD)epl6200.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)epl6200 $(escv_)
+ 
+ $(DD)lp1800.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp1800 $(escv_)
+ 
+ $(DD)lp1900.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp1900 $(escv_)
+ 
+ $(DD)lp2200.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp2200 $(escv_)
+ 
+ $(DD)lp2400.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp2400 $(escv_)
+ 
+ $(DD)lp2500.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp2500 $(escv_)
+ 
+ $(DD)lp7500.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp7500 $(escv_)
+ 
+ $(DD)lp7700.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp7700 $(escv_)
+ 
+ $(DD)lp7900.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                          $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp7900 $(escv_)
+ 
+ $(DD)lp8100.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp8100 $(escv_)
+ 
+ $(DD)lp8300f.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp8300f $(escv_)
+ 
+ $(DD)lp8400f.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp8400f $(escv_)
+ 
+ $(DD)lp8600.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp8600 $(escv_)
+ 
+ $(DD)lp8600f.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp8600f $(escv_)
+ 
+ $(DD)lp8700.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp8700 $(escv_)
+ 
+ $(DD)lp8900.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp8900 $(escv_)
+ 
+ $(DD)lp9000b.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp9000b $(escv_)
+ 
+ $(DD)lp9100.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp9100 $(escv_)
+ 
+ $(DD)lp9200b.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp9200b $(escv_)
+ 
+ $(DD)lp9300.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp9300 $(escv_)
+ 
+ $(DD)lp9400.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp9400 $(escv_)
+ 
+ $(DD)lp9600.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp9600 $(escv_)
+ 
+ $(DD)lp9600s.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp9600s $(escv_)
+ 
+ $(DD)lps4500.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lps4500 $(escv_)
+ 
+ $(DD)eplcolor.dev: $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)eplcolor $(escv_)
+ 
+ $(DD)eplmono.dev: $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)eplmono $(escv_)
+ 
+ # ------ The Lexmark 5700 and 7000 devices ------ #
+ 
+ lex7000_=$(DEVOBJ)gdevlx7.$(OBJ)
+ $(DD)lex7000.dev : $(lex7000_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lex7000 $(lex7000_)
+ 
+ lex5700_=$(DEVOBJ)gdevlx7.$(OBJ)
+ $(DD)lex5700.dev : $(lex5700_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lex5700 $(lex5700_)
+ 
+ lex3200_=$(DEVOBJ)gdevlx7.$(OBJ)
+ $(DD)lex3200.dev : $(lex3200_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lex3200 $(lex3200_)
+ 
+ lex2050_=$(DEVOBJ)gdevlx7.$(OBJ)
+ $(DD)lex2050.dev : $(lex2050_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lex2050 $(lex2050_)
+ 
+ $(DEVOBJ)gdevlx7.$(OBJ) : $(CONTRIBSRC)gdevlx7.c $(PDEVH) \
+@@ -623,7 +628,7 @@
+ 	$(DEVCC) $(DEVO_)gdevlx32.$(OBJ) $(C_) $(CONTRIBSRC)gdevlx32.c
+ 
+ $(DD)lxm3200.dev : $(lxm3200_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lxm3200 $(lxm3200_)
+ 
+ 
+@@ -649,13 +654,13 @@
+ 	$(DEVCC) $(DEVO_)gdevlips.$(OBJ) $(LIPS_OPT) $(C_) $(LIPS_SRC)gdevlips.c
+ 
+ $(DD)lips4.dev : $(lipsr_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lips4 $(lipsr_)
+ 
+ lipsv_=$(DEVOBJ)gdevl4v.$(OBJ) $(DEVOBJ)gdevlips.$(OBJ)
+ 
+ $(DD)lips4v.dev : $(ECHOGS_XE) $(lipsv_) $(DD)vector.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETDEV) $(DD)lips4v $(lipsv_)
+ 	$(ADDMOD) $(DD)lips4v -include $(GLD)vector
+ 
+@@ -668,11 +673,11 @@
+ ### --------------- Some extra devices: lips2p, bjc880j ---------------- ###
+ 
+ $(DD)lips2p.dev : $(lipsr_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lips2p $(lipsr_)
+ 
+ $(DD)bjc880j.dev : $(lipsr_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)bjc880j $(lipsr_)
+ 
+ 
+@@ -681,15 +686,15 @@
+ md2k_=$(DEVOBJ)gdevmd2k.$(OBJ)
+ 
+ $(DD)md2k.dev : $(md2k_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)md2k $(md2k_)
+ 
+ $(DD)md5k.dev : $(md2k_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)md5k $(md2k_)
+ 
+ $(DEVOBJ)gdevmd2k.$(OBJ) : $(CONTRIBSRC)gdevmd2k.c $(PDEVH) $(gsparam_h) \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(DEVCC) $(DEVO_)gdevmd2k.$(OBJ) $(C_) $(CONTRIBSRC)gdevmd2k.c
+  
+ 
+@@ -697,7 +702,7 @@
+ 
+ oki4w_=$(DEVOBJ)gdevop4w.$(OBJ)
+ $(DD)oki4w.dev : $(oki4w_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)oki4w $(oki4w_)
+ 
+ # Author: Ivan Schreter (ivan@shadow.sk)
+@@ -720,11 +725,11 @@
+ 	$(DEVCC) $(DEVO_)gdevopvp.$(OBJ) $(OPVP_OPT) $(C_) $(OPVP_SRC)gdevopvp.c
+ 
+ $(DD)opvp.dev : $(opvp_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)opvp $(opvp_)
+ 
+ $(DD)oprp.dev : $(opvp_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)oprp $(opvp_)
+ 
+ 
+@@ -901,78 +906,78 @@
+ 
+ # The generic pcl3 device with selectable subdevices
+ $(DD)pcl3.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)pcl3 $(pcl3_)
+ 
+ # Fixed devices for specific printers
+ $(DD)hpdjplus.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdjplus $(pcl3_)
+ $(DD)hpdjportable.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdjportable $(pcl3_)
+ $(DD)hpdj310.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdj310 $(pcl3_)
+ $(DD)hpdj320.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdj320 $(pcl3_)
+ $(DD)hpdj340.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdj340 $(pcl3_)
+ $(DD)hpdj400.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdj400 $(pcl3_)
+ $(DD)hpdj500.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdj500 $(pcl3_)
+ $(DD)hpdj500c.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdj500c $(pcl3_)
+ $(DD)hpdj510.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdj510 $(pcl3_)
+ $(DD)hpdj520.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdj520 $(pcl3_)
+ $(DD)hpdj540.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdj540 $(pcl3_)
+ $(DD)hpdj550c.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdj550c $(pcl3_)
+ $(DD)hpdj560c.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdj560c $(pcl3_)
+ $(DD)hpdj600.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdj600 $(pcl3_)
+ $(DD)hpdj660c.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdj660c $(pcl3_)
+ $(DD)hpdj670c.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdj670c $(pcl3_)
+ $(DD)hpdj680c.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdj680c $(pcl3_)
+ $(DD)hpdj690c.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdj690c $(pcl3_)
+ $(DD)hpdj850c.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdj850c $(pcl3_)
+ $(DD)hpdj855c.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdj855c $(pcl3_)
+ $(DD)hpdj870c.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdj870c $(pcl3_)
+ $(DD)hpdj890c.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdj890c $(pcl3_)
+ $(DD)hpdj1120c.dev : $(pcl3_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)hpdj1120c $(pcl3_)
+ 
+ #------------------------------------------------------------------------------
+@@ -1009,7 +1014,7 @@
+ 
+ xes_=$(DEVOBJ)gdevxes.$(OBJ)
+ $(DD)xes.dev : $(xes_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)xes $(xes_)
+ 
+ # Author: Peter Flass (flass@lbdrscs.bitnet)
+@@ -1029,16 +1034,16 @@
+ 
+ pr201_=$(DEVOBJ)gdevp201.$(OBJ) $(DEVOBJ)gdevprn.$(OBJ)
+ 
+-$(DD)pr201.dev : $(pr201_) $(CONTRIB_MAK) $(MAKEDIRS)
++$(DD)pr201.dev : $(pr201_) $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)pr201 $(pr201_)
+ 
+-$(DD)pr150.dev : $(pr201_) $(CONTRIB_MAK) $(MAKEDIRS)
++$(DD)pr150.dev : $(pr201_) $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)pr150 $(pr201_)
+ 
+-$(DD)pr1000.dev : $(pr201_) $(CONTRIB_MAK) $(MAKEDIRS)
++$(DD)pr1000.dev : $(pr201_) $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)pr1000 $(pr201_)
+ 
+-$(DD)pr1000_4.dev : $(pr201_) $(CONTRIB_MAK) $(MAKEDIRS)
++$(DD)pr1000_4.dev : $(pr201_) $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)pr1000_4 $(pr201_)
+ 
+ $(DEVOBJ)gdevp201.$(OBJ) : $(JAPSRC)gdevp201.c $(PDEVH) \
+@@ -1049,7 +1054,7 @@
+ 
+ jj100_=$(DEVOBJ)gdevj100.$(OBJ) $(DEVOBJ)gdevprn.$(OBJ)
+ 
+-$(DD)jj100.dev : $(jj100_) $(CONTRIB_MAK) $(MAKEDIRS)
++$(DD)jj100.dev : $(jj100_) $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)jj100 $(jj100_)
+ 
+ $(DEVOBJ)gdevj100.$(OBJ) : $(JAPSRC)gdevj100.c $(PDEVH) \
+@@ -1061,11 +1066,11 @@
+ bj10v_=$(DEVOBJ)gdev10v.$(OBJ) $(DEVOBJ)gdevprn.$(OBJ)
+ 
+ $(DD)bj10v.dev : $(bj10v_) \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)bj10v $(bj10v_)
+ 
+ $(DD)bj10vh.dev : $(bj10v_) \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)bj10vh $(bj10v_)
+ 
+ # Uncomment the following line if you are using MS-DOS on PC9801 series.
+@@ -1080,7 +1085,7 @@
+ dmprt_=$(DEVOBJ)gdevdmpr.$(OBJ) $(DEVOBJ)dviprlib.$(OBJ) $(DEVOBJ)gdevprn.$(OBJ)
+ 
+ $(DD)dmprt.dev : $(dmprt_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETDEV) $(DD)dmprt $(dmprt_)
+ 	$(ADDMOD) $(DD)dmprt -ps dmp_init
+ 
+@@ -1110,19 +1115,19 @@
+ 	$(DEVCC) -DA4 $(DEVO_)gdevmjc.$(OBJ) $(C_) $(JAPSRC)gdevmjc.c
+ 
+ $(DD)mj700v2c.dev : $(mj700v2c_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)mj700v2c $(mj700v2c_)
+ 
+ $(DD)mj500c.dev : $(mj700v2c_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)mj500c $(mj700v2c_)
+ 
+ $(DD)mj6000c.dev : $(mj700v2c_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)mj6000c $(mj700v2c_)
+ 
+ $(DD)mj8000c.dev : $(mj700v2c_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)mj8000c $(mj700v2c_)
+ 
+ ### ----------------- The Fujitsu FMPR printer device ----------------- ###
+@@ -1130,7 +1135,7 @@
+ fmpr_=$(DEVOBJ)gdevfmpr.$(OBJ) $(DEVOBJ)gdevprn.$(OBJ)
+ 
+ $(DD)fmpr.dev : $(fmpr_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)fmpr $(fmpr_)
+ 
+ $(DEVOBJ)gdevfmpr.$(OBJ) : $(JAPSRC)gdevfmpr.c $(PDEVH) \
+@@ -1142,7 +1147,7 @@
+ fmlbp_=$(DEVOBJ)gdevfmlbp.$(OBJ) $(DEVOBJ)gdevprn.$(OBJ)
+ 
+ $(DD)fmlbp.dev : $(fmlbp_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)fmlbp $(fmlbp_)
+ 
+ $(DEVOBJ)gdevfmlbp.$(OBJ) : $(JAPSRC)gdevfmlbp.c $(PDEVH) \
+@@ -1159,7 +1164,7 @@
+ ml6_=$(DEVOBJ)gdevml6.$(OBJ) $(DEVOBJ)gdevprn.$(OBJ)
+ 
+ $(DD)ml600.dev : $(ml6_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)ml600 $(ml6_)
+ 
+ $(DEVOBJ)gdevml6.$(OBJ) : $(JAPSRC)gdevml6.c $(PDEVH) \
+@@ -1172,11 +1177,11 @@
+ lbp3x0_=$(DEVOBJ)gdevlbp3.$(OBJ)
+ 
+ $(DD)lbp310.dev :$(lbp3x0_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lbp310 $(lbp3x0_)
+ 
+ $(DD)lbp320.dev :$(lbp3x0_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lbp320 $(lbp3x0_)
+ 
+ $(DEVOBJ)gdevlbp3.$(OBJ) : $(JAPSRC)gdevlbp3.c $(PDEVH)
+@@ -1191,7 +1196,7 @@
+ 	$(DEVCC) -DA4 $(DEVO_)gdevnpdl.$(OBJ) $(LIPS_OPT) $(C_) $(JAPSRC)gdevnpdl.c
+ 
+ $(DD)npdl.dev : $(npdl_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)npdl $(npdl_)
+ 
+ ### ------- EPSON ESC/Page printer device ----------------- ###
+@@ -1203,11 +1208,11 @@
+ 	$(DEVCC) -DA4 $(DEVO_)gdevespg.$(OBJ) $(LIPS_OPT) $(C_) $(JAPSRC)gdevespg.c
+ 
+ $(DD)escpage.dev : $(escpage_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)escpage $(escpage_)
+ 
+ $(DD)lp2000.dev : $(escpage_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)lp2000 $(escpage_)
+ 
+ ### --- The RICOH RPDL language printer device ------ ###
+@@ -1218,7 +1223,7 @@
+ 	$(DEVCC) $(DEVO_)gdevrpdl.$(OBJ) $(LIPS_OPT) $(C_) $(JAPSRC)gdevrpdl.c
+ 
+ $(DD)rpdl.dev : $(rpdl_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)rpdl $(rpdl_)
+ 
+ ### ---------- RICOH RPDL IV(600dpi) printer devices ---------- ###
+@@ -1240,15 +1245,15 @@
+ alps_=$(DEVOBJ)gdevalps.$(OBJ)
+ 
+ $(DD)md50Mono.dev : $(alps_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)md50Mono $(alps_)
+ 
+ $(DD)md50Eco.dev : $(alps_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)md50Eco $(alps_)
+ 
+ $(DD)md1xMono.dev : $(alps_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
+ 	$(SETPDEV) $(DD)md1xMono $(alps_)
+ 
+ $(DEVOBJ)gdevalps.$(OBJ) : $(JAPSRC)gdevalps.c $(PDEVH) \

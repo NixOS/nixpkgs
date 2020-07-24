@@ -1,0 +1,38 @@
+From: Robert Luberda <robert@debian.org>
+Date: Tue, 8 Mar 2011 21:12:23 +0100
+Subject: 0023 Exclusive options
+
+Make options -x and -b mutually exclusive
+---
+ ispell.c |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/ispell.c b/ispell.c
+index d130a0e..cd5802a 100644
+--- a/ispell.c
++++ b/ispell.c
+@@ -279,6 +279,7 @@ int main (argc, argv)
+     static char	outbuf[BUFSIZ];
+     int		argno;
+     int		arglen;
++    int		bflag = 0;
+ 
+     Cmd = *argv;
+ 
+@@ -728,12 +729,13 @@ int main (argc, argv)
+ 		nodictflag++;
+ 		break;
+ 	    case 'b':
+-		if (arglen > 2)
++		if (arglen > 2 || xflag == 1)
+ 		    usage ();
+ 		xflag = 0;		/* Keep a backup file */
++		bflag = 1;
+ 		break;
+ 	    case 'x':
+-		if (arglen > 2)
++		if (arglen > 2 || bflag == 1)
+ 		    usage ();
+ 		xflag = 1;		/* Don't keep a backup file */
+ 		break;
+-- 

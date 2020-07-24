@@ -1,0 +1,35 @@
+From: Helmut Grohne <>
+Subject: compile build tools with the build architecture compiler
+
+Patch-Source: https://github.com/openexr/openexr/issues/221
+
+Index: ilmbase-2.2.0/configure.ac
+===================================================================
+--- ilmbase-2.2.0.orig/configure.ac
++++ ilmbase-2.2.0/configure.ac
+@@ -28,6 +28,7 @@
+ AC_PROG_LN_S
+ AC_PROG_LIBTOOL
+ AC_PROG_MAKE_SET
++AX_PROG_CXX_FOR_BUILD
+ 
+ dnl
+ dnl PKGCONFIG preparations
+Index: ilmbase-2.2.0/Half/Makefile.am
+===================================================================
+--- ilmbase-2.2.0.orig/Half/Makefile.am
++++ ilmbase-2.2.0/Half/Makefile.am
+@@ -17,9 +17,11 @@
+ 
+ CLEANFILES = eLut eLut.h toFloat toFloat.h
+ 
+-eLut_SOURCES = eLut.cpp
++eLut$(EXEEXT): eLut.cpp
++	$(CXX_FOR_BUILD) $(CXXFLAGS_FOR_BUILD) $< -o $@
+ 
+-toFloat_SOURCES = toFloat.cpp
++toFloat$(EXEEXT): toFloat.cpp
++	$(CXX_FOR_BUILD) $(CXXFLAGS_FOR_BUILD) $< -o $@
+ 
+ eLut.h:	eLut
+ 	./eLut > eLut.h

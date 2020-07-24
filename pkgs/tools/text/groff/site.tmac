@@ -1,0 +1,16 @@
+.
+.if n \{\
+.  \" Character translations for non-keyboard
+.  \" characters - to make them searchable
+.  if '\*[.T]'utf8' \{\
+.    char \- \N'45'
+.    char - \N'45'
+.    char ' \N'39'
+.    char \' \N'39'
+.  \}
+.
+.  \" Shut off SGR by default (groff colors)
+.  \" Require GROFF_SGR envvar defined to turn it on
+.  if '\V[GROFF_SGR]'' \
+.    output x X tty: sgr 0
+.\}

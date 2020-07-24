@@ -1,0 +1,48 @@
+From the discussion in http://groups.google.com/group/taskjuggler-users/browse_thread/thread/f65a3efd4dcae2fc/a44c711a9d28ebee?show_docid=a44c711a9d28ebee
+
+From: Chris Schlaeger <cs@kde.org>
+Date: Sat, 27 Feb 2010 06:33:35 +0000 (+0100)
+Subject: Try to fix time zone check for glibc 2.11.
+X-Git-Url: http://www.taskjuggler.org/cgi-bin/gitweb.cgi?p=taskjuggler.git;a=commitdiff_plain;h=2382ed54f90c3c899badb3f56aaa2b3b5dba361e;hp=c666c5068312fec7db75e17d1c567d94127d1dda
+
+Try to fix time zone check for glibc 2.11.
+
+Reported-by: Lee <pFQh8RQn4fqB@dyweni.com>
+---
+
+diff --git a/taskjuggler/Utility.cpp b/taskjuggler/Utility.cpp
+index 5e2bf21..9b7fce2 100644
+--- a/taskjuggler/Utility.cpp
++++ b/taskjuggler/Utility.cpp
+@@ -206,16 +206,28 @@ setTimezone(const char* tZone)
+ 
+     /* To validate the tZone value we call tzset(). It will convert the zone
+      * into a three-letter acronym in case the tZone value is good. If not, it
+-     * will just copy the wrong value to tzname[0] (glibc < 2.5) or fall back
+-     * to UTC. */
++     * will
++     * - copy the wrong value to tzname[0] (glibc < 2.5)
++     * - or fall back to UTC (glibc >= 2.5 && < 2.11)
++     * - copy the part before the '/' to tzname[0] (glibc >= 2.11).
++     */
+     tzset();
++    char* region = new(char[strlen(tZone) + 1]);
++    region[0] = 0;
++    if (strchr(tZone, '/'))
++    {
++        strcpy(region, tZone);
++        *strchr(region, '/') = 0;
++    }
+     if (timezone2tz(tZone) == 0 &&
+-        (strcmp(tzname[0], tZone) == 0 ||
++        (strcmp(tzname[0], tZone) == 0 || strcmp(tzname[0], region) == 0 ||
+          (strcmp(tZone, "UTC") != 0 && strcmp(tzname[0], "UTC") == 0)))
+     {
+         UtilityError = QString(i18n("Illegal timezone '%1'")).arg(tZone);
++        delete region;
+         return false;
+     }
++    delete region;
+ 
+     if (!LtHashTab)
+         return true;

@@ -1,0 +1,33 @@
+--- ./modules/pam_exec/pam_exec.c.orig
++++ ./modules/pam_exec/pam_exec.c
+@@ -103,11 +103,14 @@
+   int optargc;
+   const char *logfile = NULL;
+   const char *authtok = NULL;
++  char authtok_buf[PAM_MAX_RESP_SIZE+1];
++
+   pid_t pid;
+   int fds[2];
+   int stdout_fds[2];
+   FILE *stdout_file = NULL;
+ 
++  memset(authtok_buf, 0, sizeof(authtok_buf));
+   if (argc < 1) {
+     pam_syslog (pamh, LOG_ERR,
+ 		"This module needs at least one argument");
+@@ -180,12 +183,12 @@
+ 	      if (resp)
+ 		{
+ 		  pam_set_item (pamh, PAM_AUTHTOK, resp);
+-		  authtok = strndupa (resp, PAM_MAX_RESP_SIZE);
++		  authtok = strncpy(authtok_buf, resp, sizeof(authtok_buf));
+ 		  _pam_drop (resp);
+ 		}
+ 	    }
+ 	  else
+-	    authtok = strndupa (void_pass, PAM_MAX_RESP_SIZE);
++	    authtok = strncpy(authtok_buf, void_pass, sizeof(authtok_buf));
+ 
+ 	  if (pipe(fds) != 0)
+ 	    {
+

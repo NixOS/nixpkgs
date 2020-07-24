@@ -1,0 +1,25 @@
+From e779a2b8d53e7e4721ce5ddb8e8b1caa753b66dd Mon Sep 17 00:00:00 2001
+From: Florian Friesdorf <flo@chaoflow.net>
+Date: Wed, 4 Jan 2012 23:32:19 +0100
+Subject: [PATCH] fix VSFile constructor
+
+---
+ src/vsfilesystem.h |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/src/vsfilesystem.h b/src/vsfilesystem.h
+index 4bb7a66..71bf9b9 100644
+--- a/src/vsfilesystem.h
++++ b/src/vsfilesystem.h
+@@ -291,7 +291,7 @@ namespace VSFileSystem
+ 			VSFile();
+ 			VSFile( const char * buffer, long size, VSFileType type=ZoneBuffer, VSFileMode=ReadOnly);
+ 			VSFile( const char * filename, VSFileType type=UnknownFile, VSFileMode=ReadOnly);
+-			VSFile( const string &filename, VSFileType type=UnknownFile) { VSFile::VSFile( filename.c_str(), type); }
++			VSFile( const string &filename, VSFileType type=UnknownFile) { VSFile( filename.c_str(), type); }
+   			~VSFile();
+ 
+ 			FILE *	GetFP() { return this->fp; } // This is still needed for special cases (when loading PNG files)
+-- 
+1.7.8
+

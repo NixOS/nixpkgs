@@ -1,0 +1,12 @@
+--- a/src/client/connection.rs	2020-02-04 12:48:43.845299096 +0100
++++ b/src/client/connection.rs	2020-02-04 12:50:00.140329310 +0100
+@@ -546,8 +546,8 @@
+                 &[msg::NEWKEYS],
+                 &mut session.0.write_buffer,
+             );
+-            session.0.kex = Some(Kex::NewKeys(newkeys));
+             newkeys.sent = true;
++            session.0.kex = Some(Kex::NewKeys(newkeys));
+         }
+         Ok(())
+     }

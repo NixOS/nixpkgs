@@ -1,0 +1,28 @@
+diff --git a/CMakeModules/build_clBLAS.cmake b/CMakeModules/build_clBLAS.cmake
+index 8de529e8..6361b613 100644
+--- a/CMakeModules/build_clBLAS.cmake
++++ b/CMakeModules/build_clBLAS.cmake
+@@ -14,8 +14,7 @@ find_package(OpenCL)
+ 
+ ExternalProject_Add(
+     clBLAS-ext
+-    GIT_REPOSITORY https://github.com/arrayfire/clBLAS.git
+-    GIT_TAG arrayfire-release
++    DOWNLOAD_COMMAND true
+     BUILD_BYPRODUCTS ${clBLAS_location}
+     PREFIX "${prefix}"
+     INSTALL_DIR "${prefix}"
+diff --git a/CMakeModules/build_clFFT.cmake b/CMakeModules/build_clFFT.cmake
+index 28be38a3..85e3915e 100644
+--- a/CMakeModules/build_clFFT.cmake
++++ b/CMakeModules/build_clFFT.cmake
+@@ -20,8 +20,7 @@ ENDIF()
+ 
+ ExternalProject_Add(
+     clFFT-ext
+-    GIT_REPOSITORY https://github.com/arrayfire/clFFT.git
+-    GIT_TAG arrayfire-release
++    DOWNLOAD_COMMAND true
+     PREFIX "${prefix}"
+     INSTALL_DIR "${prefix}"
+     UPDATE_COMMAND ""

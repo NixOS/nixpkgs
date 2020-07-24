@@ -1,0 +1,25 @@
+From d584b075d71c4486710c0bbed6d44038f2ff5075 Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@mailbox.org>
+Date: Mon, 27 Jan 2020 05:31:23 -0600
+Subject: [PATCH 2/2] xwayland
+
+---
+ xwl/xwayland.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/xwl/xwayland.cpp b/xwl/xwayland.cpp
+index 5f17d39..b4b69ba 100644
+--- a/xwl/xwayland.cpp
++++ b/xwl/xwayland.cpp
+@@ -145,7 +145,7 @@ void Xwayland::init()
+ 
+     m_xwaylandProcess = new Process(this);
+     m_xwaylandProcess->setProcessChannelMode(QProcess::ForwardedErrorChannel);
+-    m_xwaylandProcess->setProgram(QStringLiteral("Xwayland"));
++    m_xwaylandProcess->setProgram(QLatin1String(NIXPKGS_XWAYLAND));
+     QProcessEnvironment env = m_app->processStartupEnvironment();
+     env.insert("WAYLAND_SOCKET", QByteArray::number(wlfd));
+     env.insert("EGL_PLATFORM", QByteArrayLiteral("DRM"));
+-- 
+2.23.1
+

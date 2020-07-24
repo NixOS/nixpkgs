@@ -1,0 +1,5 @@
+minimize_overwrite
+url http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles.tar.gz
+redirect
+NEED_TO_CHOOSE_URL=
+version '.*[-_.]([0-9]{8}[.][^.]+)[.]tar[.].*' '\1'

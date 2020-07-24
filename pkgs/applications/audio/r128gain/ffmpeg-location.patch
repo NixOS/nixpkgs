@@ -1,0 +1,31 @@
+diff --git i/r128gain/__init__.py w/r128gain/__init__.py
+index 53fc3ef..f144e15 100755
+--- i/r128gain/__init__.py
++++ w/r128gain/__init__.py
+@@ -78,7 +78,7 @@ def get_ffmpeg_lib_versions(ffmpeg_path=None):
+   Example: 0x3040100 for FFmpeg 3.4.1
+   """
+   r = collections.OrderedDict()
+-  cmd = (ffmpeg_path or "ffmpeg", "-version")
++  cmd = (ffmpeg_path or "@ffmpeg@/bin/ffmpeg", "-version")
+   output = subprocess.run(cmd,
+                           check=True,
+                           stdout=subprocess.PIPE,
+@@ -156,7 +156,7 @@ def get_r128_loudness(audio_filepaths, *, calc_peak=True, enable_ffmpeg_threadin
+                                      os.devnull,
+                                      **additional_ffmpeg_args,
+                                      f="null"),
+-                       cmd=ffmpeg_path or "ffmpeg")
++                       cmd=ffmpeg_path or "@ffmpeg@/bin/ffmpeg")
+ 
+   # run
+   logger().debug(cmd_to_string(cmd))
+@@ -740,7 +740,7 @@ def cl_main():
+                           help="Maximum number of tracks to scan in parallel. If not specified, autodetect CPU count")
+   arg_parser.add_argument("-f",
+                           "--ffmpeg-path",
+-                          default=shutil.which("ffmpeg"),
++                          default="@ffmpeg@/bin/ffmpeg",
+                           help="""Full file path of ffmpeg executable (only needed if not in PATH).
+                                   If not specified, autodetect""")
+   arg_parser.add_argument("-d",

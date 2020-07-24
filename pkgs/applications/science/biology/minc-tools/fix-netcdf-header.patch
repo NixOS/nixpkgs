@@ -1,0 +1,12 @@
+diff --git a/progs/mincdump/mincdump.h b/progs/mincdump/mincdump.h
+index 14c95cd..117ab26 100644
+--- a/progs/mincdump/mincdump.h
++++ b/progs/mincdump/mincdump.h
+@@ -3,6 +3,7 @@
+  *   See netcdf/COPYRIGHT file for copying and redistribution conditions.
+  *   $Header: /private-cvsroot/minc/progs/mincdump/mincdump.h,v 1.1 2004-04-27 15:35:15 bert Exp $
+  *********************************************************************/
++#include <netcdf_meta.h>
+ 
+ 
+ /* error checking macro */

@@ -1,0 +1,40 @@
+# https://savannah.nongnu.org/bugs/?25360
+diff -Nura a/configure.ac b/configure.ac
+--- a/configure.ac	2009-01-19 21:50:57.000000000 +0100
++++ b/configure.ac	2009-01-19 21:53:21.000000000 +0100
+@@ -50,7 +50,7 @@
+ GETTEXT_PACKAGE=AC_PACKAGE_NAME
+ AC_SUBST(GETTEXT_PACKAGE)
+ 
+-IT_PROG_INTLTOOL
++IT_PROG_INTLTOOL([0.35.5])
+ AM_GLIB_GNU_GETTEXT
+ 
+ ##################################################
+diff -Nura a/po/LINGUAS b/po/LINGUAS
+--- a/po/LINGUAS	1970-01-01 01:00:00.000000000 +0100
++++ b/po/LINGUAS	2009-01-19 21:54:24.000000000 +0100
+@@ -0,0 +1,23 @@
++# please keep this list sorted alphabetically
++# http://live.gnome.org/GnomeGoals/PoLinguas
++#
++ca
++cs
++da
++de
++es
++eu
++fr
++hu
++it
++ko
++lt
++pl
++pt_BR
++ro
++ru
++sk
++sv
++nb
++nl
++zh_CN

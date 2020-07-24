@@ -1,0 +1,16 @@
+--- orig/setup.py
++++ new/setup.py
+@@ -27,10 +27,10 @@
+         'bin/fedpkg',
+         'bin/fedpkg-stage',
+     ],
+-    data_files=[(bash_completion_dir(), ['conf/bash-completion/fedpkg.bash']),
+-                ('/etc/rpkg', ['conf/etc/rpkg/fedpkg.conf',
++    data_files=[('share/bash-completion/completions', ['conf/bash-completion/fedpkg.bash']),
++                ('etc/rpkg', ['conf/etc/rpkg/fedpkg.conf',
+                                'conf/etc/rpkg/fedpkg-stage.conf']),
+-                ('/usr/share/zsh/site-functions', ['conf/zsh-completion/_fedpkg']),
++                ('share/zsh/site-functions', ['conf/zsh-completion/_fedpkg']),
+                 ],
+ 
+     tests_require=['nose', 'mock'],

@@ -1,0 +1,43 @@
+From cf05aae9685e5c6a46b4313e7bfce49edc6f51f9 Mon Sep 17 00:00:00 2001
+From: Mikle Kolyada <zlogene@gentoo.org>
+Date: Tue, 31 Dec 2019 11:29:30 +0300
+Subject: [PATCH] poppler-0.84 compat
+
+Upstream report: https://tug.org/pipermail/tex-k/2019-December/003096.html
+
+Signed-off-by: Mikle Kolyada <zlogene@gentoo.org>
+---
+ texk/web2c/pdftexdir/utils.c    | 1 -
+ texk/web2c/xetexdir/XeTeX_ext.c | 3 +++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/texk/web2c/pdftexdir/utils.c b/texk/web2c/pdftexdir/utils.c
+index c93a8781..6f866e76 100644
+--- a/texk/web2c/pdftexdir/utils.c
++++ b/texk/web2c/pdftexdir/utils.c
+@@ -33,7 +33,6 @@ with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #include "ptexlib.h"
+ #include <png.h>
+ #ifdef POPPLER_VERSION
+-#include <poppler-config.h>
+ #define xpdfVersion POPPLER_VERSION
+ #define xpdfString "poppler"
+ #else
+diff --git a/texk/web2c/xetexdir/XeTeX_ext.c b/texk/web2c/xetexdir/XeTeX_ext.c
+index 4968ee41..0aee4ee3 100644
+--- a/texk/web2c/xetexdir/XeTeX_ext.c
++++ b/texk/web2c/xetexdir/XeTeX_ext.c
+@@ -38,7 +38,10 @@ authorization from the copyright holders.
+ 
+ #include <w2c/config.h>
+ 
++#ifndef POPPLER_VERSION
+ #include <poppler-config.h>
++#endif
++
+ #include <png.h>
+ #include <zlib.h>
+ #include <graphite2/Font.h>
+-- 
+2.24.1
+

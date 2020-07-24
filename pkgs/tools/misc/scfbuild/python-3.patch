@@ -1,0 +1,46 @@
+--- a/bin/scfbuild
++++ b/bin/scfbuild
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python2
++#!/usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ 
+ from __future__ import (absolute_import, division, print_function,
+--- a/scfbuild/builder.py
++++ b/scfbuild/builder.py
+@@ -287,8 +287,8 @@ def _add_name_record(self, text, name_id, platform_id, plat_enc_id, lang_id):
+         # TODO: The installed version of fontTools doesn't have
+         # table__n_a_m_e.setName().
+         record = NameRecord()
+-        # PyYAML creates strings, force to Unicode
+-        record.string = unicode(text)
++        # PyYAML creates strings, which are unicode as of Python3
++        record.string = text
+         record.nameID = name_id
+         record.platformID = platform_id
+         record.platEncID = plat_enc_id
+--- a/scfbuild/fforge.py
++++ b/scfbuild/fforge.py
+@@ -84,7 +84,7 @@ def add_glyphs(font, svg_filepaths, conf):
+             u_ids = [int(u_id, 16) for u_id in filename.split("-")]
+             # Example: (0x1f441, 0x1f5e8)
+ 
+-            u_str = ''.join(map(unichr, u_ids))
++            u_str = ''.join(map(chr, u_ids))
+             # Example: "U\0001f441U\0001f5e8"
+ 
+             # Replace sequences with correct ZWJ/VS16 versions as needed
+--- a/scfbuild/main.py
++++ b/scfbuild/main.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python2
++#!/usr/bin/env python3
+ # -*- coding: utf-8 -*-
+ 
+ # SCFBuild is released under the GNU General Public License v3.
+index 0000000..99418b5
+--- /dev/null
++++ b/scfbuild/requirements.txt
+@@ -0,0 +1,2 @@
++fonttools>=3.41.2
++PyYAML>=5.1

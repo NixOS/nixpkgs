@@ -1,0 +1,10 @@
+From: Aaron Lindsay <aaron@aclindsay.com>
+
+--- a/libsearpc.pc.in	2013-01-10 01:35:24.000000000 -0500
++++ b/libsearpc.pc.in	2013-01-19 11:31:50.479301798 -0500
+@@ -1,4 +1,4 @@
+-prefix=(DESTDIR)@prefix@
++prefix=@prefix@
+ exec_prefix=@exec_prefix@
+ libdir=@libdir@
+ includedir=@includedir@

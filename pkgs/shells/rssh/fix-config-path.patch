@@ -1,0 +1,12 @@
+diff -Naur rssh-2.3.4/Makefile.in rssh-2.3.4-fixed/Makefile.in
+--- rssh-2.3.4/Makefile.in	2012-11-27 11:19:34.000000000 +1100
++++ rssh-2.3.4-fixed/Makefile.in	2015-11-11 21:13:58.516651742 +1100
+@@ -186,7 +186,7 @@
+ sysconfdir = @sysconfdir@
+ target_alias = @target_alias@
+ AUTOMAKE_OPTIONS = nostdinc
+-ourdefs = -DPATH_RSSH_CONFIG=\"@sysconfdir@/rssh.conf\" -DPATH_CHROOT_HELPER=\"@libexecdir@/rssh_chroot_helper\"
++ourdefs = -DPATH_RSSH_CONFIG=\"/etc/rssh.conf\" -DPATH_CHROOT_HELPER=\"@libexecdir@/rssh_chroot_helper\"
+ ourflags = @defcflags@ @static@ 
+ AM_CFLAGS = $(ourflags)
+ nodist_rssh_SOURCES = main.c pathnames.h config.h

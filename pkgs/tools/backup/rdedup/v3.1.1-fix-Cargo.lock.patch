@@ -1,0 +1,28 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 96be83a..fe07471 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -880,12 +880,12 @@ dependencies = [
+ 
+ [[package]]
+ name = "rdedup"
+-version = "3.1.0"
++version = "3.1.1"
+ dependencies = [
+  "clap 2.32.0 (registry+https://github.com/rust-lang/crates.io-index)",
+  "hex 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)",
+  "log 0.3.9 (registry+https://github.com/rust-lang/crates.io-index)",
+- "rdedup-lib 3.0.0",
++ "rdedup-lib 3.1.0",
+  "rpassword 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+  "slog 2.3.2 (registry+https://github.com/rust-lang/crates.io-index)",
+  "slog-async 2.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+@@ -900,7 +900,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ 
+ [[package]]
+ name = "rdedup-lib"
+-version = "3.0.0"
++version = "3.1.0"
+ dependencies = [
+  "backblaze-b2 0.1.8 (registry+https://github.com/rust-lang/crates.io-index)",
+  "base64 0.9.2 (registry+https://github.com/rust-lang/crates.io-index)",

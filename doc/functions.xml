@@ -1,0 +1,14 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xml:id="chap-functions">
+ <title>Functions reference</title>
+ <para>
+  The nixpkgs repository has several utility functions to manipulate Nix expressions.
+ </para>
+ <xi:include href="functions/library.xml" />
+ <xi:include href="functions/generators.xml" />
+ <xi:include href="functions/debug.xml" />
+ <xi:include href="functions/prefer-remote-fetch.xml" />
+ <xi:include href="functions/nix-gitignore.xml" />
+</chapter>

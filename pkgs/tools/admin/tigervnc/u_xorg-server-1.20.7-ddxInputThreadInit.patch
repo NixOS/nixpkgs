@@ -1,0 +1,21 @@
+Origin: https://build.opensuse.org/package/view_file/X11:XOrg/tigervnc/u_xorg-server-1.20.7-ddxInputThreadInit.patch
+diff -u -p -r tigervnc-1.10.0.old/unix/xserver/hw/vnc/xvnc.c tigervnc-1.10.0/unix/xserver/hw/vnc/xvnc.c
+--- tigervnc-1.10.0.old/unix/xserver/hw/vnc/xvnc.c	2020-01-15 11:19:19.486731848 +0000
++++ tigervnc-1.10.0/unix/xserver/hw/vnc/xvnc.c	2020-01-15 11:37:33.275445409 +0000
+@@ -295,6 +295,15 @@ void ddxBeforeReset(void)
+ }
+ #endif
+ 
++#if INPUTTHREAD
++/** This function is called in Xserver/os/inputthread.c when starting
++    the input thread. */
++void
++ddxInputThreadInit(void)
++{
++}
++#endif
++
+ void ddxUseMsg(void)
+ {
+     vncPrintBanner();
+

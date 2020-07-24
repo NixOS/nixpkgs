@@ -1,0 +1,159 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="sec-beam">
+ <title>BEAM Languages (Erlang, Elixir &amp; LFE)</title>
+
+ <section xml:id="beam-introduction">
+  <title>Introduction</title>
+
+  <para>
+   In this document and related Nix expressions, we use the term, <emphasis>BEAM</emphasis>, to describe the environment. BEAM is the name of the Erlang Virtual Machine and, as far as we're concerned, from a packaging perspective, all languages that run on the BEAM are interchangeable. That which varies, like the build system, is transparent to users of any given BEAM package, so we make no distinction.
+  </para>
+ </section>
+
+ <section xml:id="beam-structure">
+  <title>Structure</title>
+
+  <para>
+   All BEAM-related expressions are available via the top-level <literal>beam</literal> attribute, which includes:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     <literal>interpreters</literal>: a set of compilers running on the BEAM, including multiple Erlang/OTP versions (<literal>beam.interpreters.erlangR19</literal>, etc), Elixir (<literal>beam.interpreters.elixir</literal>) and LFE (<literal>beam.interpreters.lfe</literal>).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>packages</literal>: a set of package builders (Mix and rebar3), each compiled with a specific Erlang/OTP version, e.g. <literal>beam.packages.erlangR19</literal>.
+    </para>
+   </listitem>
+  </itemizedlist>
+
+  <para>
+   The default Erlang compiler, defined by <literal>beam.interpreters.erlang</literal>, is aliased as <literal>erlang</literal>. The default BEAM package set is defined by <literal>beam.packages.erlang</literal> and aliased at the top level as <literal>beamPackages</literal>.
+  </para>
+
+  <para>
+   To create a package builder built with a custom Erlang version, use the lambda, <literal>beam.packagesWith</literal>, which accepts an Erlang/OTP derivation and produces a package builder similar to <literal>beam.packages.erlang</literal>.
+  </para>
+
+  <para>
+   Many Erlang/OTP distributions available in <literal>beam.interpreters</literal> have versions with ODBC and/or Java enabled or without wx (no observer support). For example, there's <literal>beam.interpreters.erlangR22_odbc_javac</literal>, which corresponds to <literal>beam.interpreters.erlangR22</literal> and <literal>beam.interpreters.erlangR22_nox</literal>, which corresponds to <literal>beam.interpreters.erlangR22</literal>.
+  </para>
+ </section>
+
+ <section xml:id="build-tools">
+  <title>Build Tools</title>
+
+  <section xml:id="build-tools-rebar3">
+   <title>Rebar3</title>
+
+   <para>
+    We provide a version of Rebar3, under <literal>rebar3</literal>. We also provide a helper to fetch Rebar3 dependencies from a lockfile under <literal>fetchRebar3Deps</literal>.
+   </para>
+  </section>
+
+  <section xml:id="build-tools-other">
+   <title>Mix &amp; Erlang.mk</title>
+
+   <para>
+    Both Mix and Erlang.mk work exactly as expected. There is a bootstrap process that needs to be run for both, however, which is supported by the <literal>buildMix</literal> and <literal>buildErlangMk</literal> derivations, respectively.
+   </para>
+  </section>
+ </section>
+
+ <section xml:id="how-to-install-beam-packages">
+  <title>How to Install BEAM Packages</title>
+
+  <para>
+   BEAM builders are not registered at the top level, simply because they are not relevant to the vast majority of Nix users. 
+   To install any of those builders into your profile, refer to them by their attribute path <literal>beamPackages.rebar3</literal>:
+  </para>
+
+  <screen>
+  <prompt>$ </prompt>nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA beamPackages.rebar3
+  </screen>
+</section>
+
+ <section xml:id="packaging-beam-applications">
+  <title>Packaging BEAM Applications</title>
+
+  <section  xml:id="packaging-erlang-applications">
+   <title>Erlang Applications</title>
+
+   <section xml:id="rebar3-packages">
+    <title>Rebar3 Packages</title>
+
+    <para>
+     The Nix function, <literal>buildRebar3</literal>, defined in <literal>beam.packages.erlang.buildRebar3</literal> and aliased at the top level, can be used to build a derivation that understands how to build a Rebar3 project.
+    </para>
+
+    <para>
+     If a package needs to compile native code via Rebar3's port compilation mechanism, add <literal>compilePort = true;</literal> to the derivation.
+    </para>
+   </section>
+
+   <section xml:id="erlang-mk-packages">
+    <title>Erlang.mk Packages</title>
+
+    <para>
+     Erlang.mk functions similarly to Rebar3, except we use <literal>buildErlangMk</literal> instead of <literal>buildRebar3</literal>.
+    </para>
+
+   </section>
+
+   <section xml:id="mix-packages">
+    <title>Mix Packages</title>
+
+    <para>
+     Mix functions similarly to Rebar3, except we use <literal>buildMix</literal> instead of <literal>buildRebar3</literal>.
+    </para>
+
+    <para>
+     Alternatively, we can use <literal>buildHex</literal> as a shortcut:
+    </para>
+   </section>
+  </section>
+ </section>
+
+ <section xml:id="how-to-develop">
+  <title>How to Develop</title>
+
+  <section xml:id="creating-a-shell">
+   <title>Creating a Shell</title>
+
+  <para>
+    Usually, we need to create a <literal>shell.nix</literal> file and do our development inside of the environment specified therein. Just install your version of erlang and other interpreter, and then user your normal build tools.
+    As an example with elixir:
+  </para>
+
+<programlisting>
+{ pkgs ? import &quot;&lt;nixpkgs&quot;&gt; {} }:
+
+with pkgs;
+
+let
+
+  elixir = beam.packages.erlangR22.elixir_1_9;
+
+in
+mkShell {
+  buildInputs = [ elixir ];
+
+  ERL_INCLUDE_PATH="${erlang}/lib/erlang/usr/include";
+}
+</programlisting>
+
+   <section xml:id="building-in-a-shell">
+    <title>Building in a Shell (for Mix Projects)</title>
+
+    <para>
+     Using a <literal>shell.nix</literal> as described (see <xref
+      linkend="creating-a-shell"/>) should just work.
+    </para>
+   </section>
+  </section>
+ </section>
+</section>

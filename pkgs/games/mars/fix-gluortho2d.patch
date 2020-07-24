@@ -1,0 +1,113 @@
+From 33d5affabf8ff84f2c028b9303c6a9e83cc824ad Mon Sep 17 00:00:00 2001
+From: James Cowgill <james410@cowgill.org.uk>
+Date: Sat, 9 May 2015 01:54:14 +0100
+Subject: [PATCH] Remove dependency on GLU - fixes build with SFML 2.3
+
+---
+ premake4.lua           |  8 ++++----
+ src/Shaders/postFX.cpp |  2 +-
+ src/System/window.cpp  | 12 ++++++------
+ 3 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/premake4.lua b/premake4.lua
+index 023dddd..5af4495 100755
+--- a/premake4.lua
++++ b/premake4.lua
+@@ -11,11 +11,11 @@ project "mars"
+     defines { "NDEBUG" }
+     flags   { "Optimize" }
+     if os.get() == "windows" then
+-      links { "sfml-graphics", "sfml-audio", "sfml-system", "sfml-window", "glu32", "opengl32", "fribidi-0", "tag" }
++      links { "sfml-graphics", "sfml-audio", "sfml-system", "sfml-window", "opengl32", "fribidi-0", "tag" }
+     elseif os.get() == "macosx" then
+       links { "sfml-graphics.framework", "sfml-audio.framework", "sfml-system.framework", "sfml-window.framework", "opengl.framework", "fribidi", "tag" }
+     else
+-      links { "GLU", "sfml-graphics", "sfml-audio", "sfml-system", "sfml-window", "fribidi", "tag" }
++      links { "sfml-graphics", "sfml-audio", "sfml-system", "sfml-window", "fribidi", "tag" }
+       libdirs { "/usr/lib", "/usr/local/lib" }
+     end
+     
+@@ -23,10 +23,10 @@ project "mars"
+     defines { "_DEBUG", "DEBUG" }
+     flags   { "Symbols" }
+     if os.get() == "windows" then
+-      links { "sfml-graphics", "sfml-audio", "sfml-system", "sfml-window", "glu32", "opengl32", "fribidi-0", "tag" }
++      links { "sfml-graphics", "sfml-audio", "sfml-system", "sfml-window", "opengl32", "fribidi-0", "tag" }
+     elseif os.get() == "macosx" then
+       links { "sfml-graphics.framework", "sfml-audio.framework", "sfml-system.framework", "sfml-window.framework", "opengl.framework", "fribidi", "tag" }
+     else
+-      links { "GLU", "sfml-graphics", "sfml-audio", "sfml-system", "sfml-window", "fribidi", "tag" }
++      links { "sfml-graphics", "sfml-audio", "sfml-system", "sfml-window", "fribidi", "tag" }
+       libdirs { "/usr/lib", "/usr/local/lib" }
+     end
+diff --git a/src/Shaders/postFX.cpp b/src/Shaders/postFX.cpp
+index 987f411..f767a47 100644
+--- a/src/Shaders/postFX.cpp
++++ b/src/Shaders/postFX.cpp
+@@ -78,7 +78,7 @@ namespace postFX {
+             postFX_.loadFromFile(settings::C_dataPath + "shaders/bump.frag", sf::Shader::Fragment);
+             bumpMap_.create(SPACE_X_RESOLUTION*0.5f, SPACE_Y_RESOLUTION*0.5f);
+             glViewport(0,0,SPACE_X_RESOLUTION*0.5f,SPACE_Y_RESOLUTION*0.5f);
+-            gluOrtho2D(0, SPACE_X_RESOLUTION, SPACE_Y_RESOLUTION, 0);
++            glOrtho(0, SPACE_X_RESOLUTION, SPACE_Y_RESOLUTION, 0, -1, 1);
+             glEnable(GL_BLEND);
+             glMatrixMode(GL_MODELVIEW);
+             postFX_.setParameter("BumpMap", bumpMap_.getTexture());
+diff --git a/src/System/window.cpp b/src/System/window.cpp
+index e9a099a..8e12dcc 100644
+--- a/src/System/window.cpp
++++ b/src/System/window.cpp
+@@ -222,7 +222,7 @@ namespace window {
+         glLoadIdentity();
+ 
+         // Setup translation (according to left-upper corner)
+-        gluOrtho2D(0.f, SPACE_X_RESOLUTION, SPACE_Y_RESOLUTION, 0.f);
++        glOrtho(0.f, SPACE_X_RESOLUTION, SPACE_Y_RESOLUTION, 0.f, -1, 1);
+ 
+         // probably improves performance...
+         glDisable(GL_LIGHTING);
+@@ -247,7 +247,7 @@ namespace window {
+ 
+         glMatrixMode(GL_PROJECTION);
+         glLoadIdentity();
+-        gluOrtho2D(0.f, viewPort_.x_, viewPort_.y_, 0.f);
++        glOrtho(0.f, viewPort_.x_, viewPort_.y_, 0.f, -1, 1);
+         glMatrixMode(GL_MODELVIEW);
+         glLoadIdentity();
+ 
+@@ -255,7 +255,7 @@ namespace window {
+ 
+         glMatrixMode(GL_PROJECTION);
+         glLoadIdentity();
+-        gluOrtho2D(0.f, SPACE_X_RESOLUTION, SPACE_Y_RESOLUTION, 0.f);
++        glOrtho(0.f, SPACE_X_RESOLUTION, SPACE_Y_RESOLUTION, 0.f, -1, 1);
+         glMatrixMode(GL_MODELVIEW);
+         glLoadIdentity();
+     }
+@@ -270,7 +270,7 @@ namespace window {
+             glLoadIdentity();
+             setViewPort();
+ 
+-            gluOrtho2D(0.f, viewPort_.x_, viewPort_.y_, 0.f);
++            glOrtho(0.f, viewPort_.x_, viewPort_.y_, 0.f, -1, 1);
+ 
+             glMatrixMode(GL_MODELVIEW);
+             glLoadIdentity();
+@@ -284,7 +284,7 @@ namespace window {
+             glLoadIdentity();
+             setViewPort();
+ 
+-            gluOrtho2D(0.f, viewPort_.x_, viewPort_.y_, 0.f);
++            glOrtho(0.f, viewPort_.x_, viewPort_.y_, 0.f, -1, 1);
+ 
+             glMatrixMode(GL_MODELVIEW);
+             glLoadIdentity();
+@@ -294,7 +294,7 @@ namespace window {
+         else {
+             glMatrixMode(GL_PROJECTION);
+             glLoadIdentity();
+-            gluOrtho2D(0.f, viewPort_.x_, viewPort_.y_, 0.f);
++            glOrtho(0.f, viewPort_.x_, viewPort_.y_, 0.f, -1, 1);
+             glMatrixMode(GL_MODELVIEW);
+             glLoadIdentity();
+         }

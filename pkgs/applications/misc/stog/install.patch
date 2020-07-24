@@ -1,0 +1,18 @@
+diff --git a/src/Makefile b/src/Makefile
+index 736dd037..79a85b9c 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -431,11 +431,12 @@ install-lib:
+ install-share:
+ 
+ install-bin:
++	mkdir $(out)/bin
+ 	$(CP) $(MAIN) $(MAIN_BYTE) $(TMPL) $(TMPL_BYTE) \
+ 		$(SERVER) $(SERVER_BYTE) $(OCAML_SESSION) \
+ 	  $(MK_STOG) $(MK_STOG_BYTE) $(MK_STOG_OCAML) \
+ 	  $(LATEX2STOG) $(LATEX2STOG_BYTE) \
+-		`dirname \`which $(OCAMLC)\``/
++	  $(out)/bin
+ 
+ uninstall: uninstall-lib uninstall-share uninstall-bin
+ 
