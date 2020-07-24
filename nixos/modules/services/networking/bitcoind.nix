@@ -16,7 +16,7 @@ let
         '';
       };
       passwordHMAC = mkOption {
-        type = with types; uniq (strMatching "[0-9a-f]+\\$[0-9a-f]{64}");
+        type = types.uniq (types.strMatching "[0-9a-f]+\\$[0-9a-f]{64}");
         example = "f7efda5c189b999524f151318c0c86$d5b51b3beffbc02b724e5d095828e0bc8b2456e9ac8757ae3211a5d9b16a22ae";
         description = ''
           Password HMAC-SHA-256 for JSON-RPC connections. Must be a string of the
@@ -45,7 +45,7 @@ let
       };
 
       configFile = mkOption {
-        type = with types; nullOr path;
+        type = types.nullOr types.path;
         default = null;
         example = "/var/lib/${name}/bitcoin.conf";
         description = "The configuration file path to supply bitcoind.";
@@ -94,10 +94,8 @@ let
               bob.passwordHMAC = "b2dd077cb54591a2f3139e69a897ac$4e71f08d48b4347cf8eff3815c0e25ae2e9a4340474079f55705f40574f4ec99";
             }
           '';
-          type = with types; attrsOf (submodule rpcUserOpts);
-          description = ''
-            RPC user information for JSON-RPC connnections.
-          '';
+          type = types.attrsOf (types.submodule rpcUserOpts);
+          description = "RPC user information for JSON-RPC connnections.";
         };
       };
 
@@ -171,9 +169,9 @@ in
 
     assertions = flatten (mapAttrsToList (bitcoindName: cfg: [
     {
-      assertion = (cfg.prune != null) -> (cfg.prune == "disable" || cfg.prune == "manual") || (cfg.prune == 0 || cfg.prune == 1) || (cfg.prune >= 550);
+      assertion = (cfg.prune != null) -> (builtins.elem cfg.prune [ "disable" "manual" 0 1 ] || (builtins.isInt cfg.prune && cfg.prune >= 550));
       message = ''
-        If set, services.bitcoind.${bitcoindName}.prune has to be "disable", "manual", 0 , 1 or >= 550
+        If set, services.bitcoind.${bitcoindName}.prune has to be "disable", "manual", 0 , 1 or >= 550.
       '';
     }
     {
@@ -257,5 +255,7 @@ in
     )) eachBitcoind;
 
   };
+
+  meta.maintainers = with maintainers; [ maintainers."1000101" ];
 
 }
