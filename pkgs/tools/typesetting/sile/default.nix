@@ -3,8 +3,6 @@
 , fetchurl
 , makeWrapper
 , pkgconfig
-, autoconf
-, automake
 , harfbuzz
 , icu
 , poppler_utils
@@ -37,7 +35,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sile";
-  version = "0.10.8";
+  version = "0.10.9";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.xz";
