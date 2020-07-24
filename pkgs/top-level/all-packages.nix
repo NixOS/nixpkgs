@@ -23826,7 +23826,7 @@ in
 
   vimiv = callPackage ../applications/graphics/vimiv { };
 
-  macvim = callPackage ../applications/editors/vim/macvim.nix { stdenv = clangStdenv; };
+  macvim = callPackage ../applications/editors/vim/macvim-configurable.nix { stdenv = clangStdenv; };
 
   vimHugeX = vim_configurable;
 
