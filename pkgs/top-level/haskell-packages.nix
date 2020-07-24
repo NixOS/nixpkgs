@@ -5,7 +5,6 @@ let
   integerSimpleExcludes = [
     "ghc822Binary"
     "ghc865Binary"
-    "ghc844"
     "ghcjs"
     "ghcjs86"
     "integer-simple"
@@ -44,12 +43,6 @@ in {
 
     ghc865Binary = callPackage ../development/compilers/ghc/8.6.5-binary.nix { };
 
-    ghc844 = callPackage ../development/compilers/ghc/8.4.4.nix {
-      bootPkgs = packages.ghc822Binary;
-      sphinx = buildPackages.python3Packages.sphinx_1_7_9;
-      buildLlvmPackages = buildPackages.llvmPackages_5;
-      llvmPackages = pkgs.llvmPackages_5;
-    };
     ghc865 = callPackage ../development/compilers/ghc/8.6.5.nix {
       bootPkgs = packages.ghc822Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -63,6 +56,12 @@ in {
       llvmPackages = pkgs.llvmPackages_7;
     };
     ghc883 = callPackage ../development/compilers/ghc/8.8.3.nix {
+      bootPkgs = packages.ghc865Binary;
+      inherit (buildPackages.python3Packages) sphinx;
+      buildLlvmPackages = buildPackages.llvmPackages_7;
+      llvmPackages = pkgs.llvmPackages_7;
+    };
+    ghc884 = callPackage ../development/compilers/ghc/8.8.4.nix {
       bootPkgs = packages.ghc865Binary;
       inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_7;
@@ -118,11 +117,6 @@ in {
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
-    ghc844 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc844;
-      ghc = bh.compiler.ghc844;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.4.x.nix { };
-    };
     ghc865 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc865;
       ghc = bh.compiler.ghc865;
@@ -136,6 +130,11 @@ in {
     ghc883 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc883;
       ghc = bh.compiler.ghc883;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.8.x.nix { };
+    };
+    ghc884 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc884;
+      ghc = bh.compiler.ghc884;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.8.x.nix { };
     };
     ghc8101 = callPackage ../development/haskell-modules {

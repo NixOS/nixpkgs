@@ -69,7 +69,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1b5lb1h7pqfhmp54zzwha17ms20xvxai1dl7s6787m9asli4q406";
+      sha256 = "vwKcY7Yk+R0YkaXjJ7xKyQWGjySTUPox0xIaurbQZk0=";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -202,12 +202,18 @@ self: super: {
   # base bound
   digit = doJailbreak super.digit;
 
-  # 2020-06-05: HACK: does not passes own build suite - `dontCheck` We should
+  # 2020-06-05: HACK: does not pass own build suite - `dontCheck` We should
   # generate optparse-applicative completions for the hnix executable.  Sadly
   # building of the executable has been disabled for ghc < 8.10 in hnix.
   # Generating the completions should be activated again, once we default to
   # ghc 8.10.
-  hnix = dontCheck super.hnix;
+  hnix = dontCheck (super.hnix.override {
+    # The neat-interpolation package from stack is to old for hnix.
+    # https://github.com/haskell-nix/hnix/issues/676
+    # Once neat-interpolation >= 0.4 is in our stack release,
+    # (which should happen soon), we can remove this override
+    neat-interpolation = self.neat-interpolation_0_5_1_1;
+  });
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
@@ -910,21 +916,10 @@ self: super: {
   # https://github.com/haskell-servant/servant-auth/issues/113
   servant-auth-client = dontCheck super.servant-auth-client;
 
-  # 2020-06-04: HACK: dontCheck - The test suite attempts to use the network.
-  # Should be solved when: https://github.com/dhall-lang/dhall-haskell/issues/1837
-  dhall = (generateOptparseApplicativeCompletion "dhall" (dontCheck super.dhall)).override { repline = self.repline_0_3_0_0; };
-  dhall_1_30_0 = dontCheck super.dhall_1_30_0;
-  repline_0_3_0_0 = super.repline_0_3_0_0.override { haskeline = self.haskeline_0_8_0_0; };
-  haskeline_0_8_0_0 = dontCheck super.haskeline_0_8_0_0;
-
-  dhall-json =
-    generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"]
-      super.dhall-json;
-
-  dhall-nix =
-    generateOptparseApplicativeCompletion "dhall-to-nix" (
-      super.dhall-nix
-  );
+  # Generate cli completions for dhall.
+  dhall = generateOptparseApplicativeCompletion "dhall" super.dhall;
+  dhall-json = generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] super.dhall-json;
+  dhall-nix = generateOptparseApplicativeCompletion "dhall-to-nix" (super.dhall-nix);
 
   # https://github.com/haskell-hvr/netrc/pull/2#issuecomment-469526558
   netrc = doJailbreak super.netrc;
@@ -1231,14 +1226,6 @@ self: super: {
 
   # Requested version bump on upstream https://github.com/obsidiansystems/constraints-extras/issues/32
   constraints-extras = doJailbreak super.constraints-extras;
-  # 2020-06-22: NOTE: > 0.10.0.0 => rm dhall override: https://github.com/srid/rib/issues/161
-  rib = doJailbreak (super.rib.override {
-    dhall = self.dhall_1_30_0;
-  });
-  # Necessary for neuron 0.4.0
-  neuron = super.neuron.override {
-    dhall = self.dhall_1_30_0;
-  };
 
   # Necessary for stack
   # x509-validation test suite hangs: upstream https://github.com/vincenthz/hs-certificate/issues/120
@@ -1317,15 +1304,8 @@ self: super: {
     sha256 = "0v6kv1d4syjzgzc2s7a76c6k4vminlcq62n7jg3nn9xd00gwmmv7";
   });
 
-  # Picking fixed version constraint from upstream
-  # Issue: https://github.com/ghcjs/jsaddle/issues/115
   # Tests disabled because they assume to run in the whole jsaddle repo and not the hackage tarbal of jsaddle-warp.
-  jsaddle-warp = dontCheck (appendPatch super.jsaddle-warp (pkgs.fetchpatch {
-    url = "https://github.com/ghcjs/jsaddle/commit/86b166033186c1724d4d52eeaf0935f0f29fe1ca.patch";
-    sha256 = "0j4g3hcqrandlnzr9n9mixygg86accdyk2nyj9hh9g4p7mrcyb7j";
-    stripLen = 2;
-    extraPrefix = "";
-  }));
+  jsaddle-warp = dontCheck super.jsaddle-warp;
 
   # 2020-06-24: Jailbreaking because of restrictive test dep bounds
   # Upstream issue: https://github.com/kowainik/trial/issues/62
@@ -1352,15 +1332,18 @@ self: super: {
   # haskell-language-server uses its own fork of ghcide
   # Test disabled: it seems to freeze (is it just that it takes a long time ?)
   hls-ghcide =
-    dontCheck (
+    dontCheck ((
       overrideCabal super.hls-ghcide
         (old: {
           # The integration test run by lsp-test requires the executable to be in the PATH
           preCheck = ''
             export PATH=$PATH:dist/build/ghcide
           '';
-        })
-    );
+        })).override {
+          # we are faster than stack here
+          hie-bios = dontCheck self.hie-bios_0_6_1;
+          lsp-test = dontCheck self.lsp-test_0_11_0_2;
+        });
 
   haskell-language-server = (overrideCabal super.haskell-language-server
     (old: {
@@ -1368,6 +1351,8 @@ self: super: {
       preCheck = ''
         export PATH=$PATH:dist/build/haskell-language-server
       '';
+      # The wrapper test does not work for now.
+      testTarget = "func-test";
 
       # test needs the git tool
       testToolDepends = old.testToolDepends
@@ -1375,8 +1360,9 @@ self: super: {
     })).override {
       # use a fork of ghcide
       ghcide = self.hls-ghcide;
-      # use specific version
-      ormolu = super.ormolu_0_0_5_0;
+      # we are faster than stack here
+      hie-bios = dontCheck self.hie-bios_0_6_1;
+      lsp-test = dontCheck self.lsp-test_0_11_0_2;
     };
 
   # https://github.com/kowainik/policeman/issues/57
@@ -1390,5 +1376,79 @@ self: super: {
     doJailbreak super.gi-javascriptcore;
   gi-soup = doJailbreak super.gi-soup;
   gi-webkit2 = doJailbreak super.gi-webkit2;
+
+  # Missing -Iinclude parameter to doc-tests (pull has been accepted, so should be resolved when 0.5.3 released)
+  # https://github.com/lehins/massiv/pull/104
+  massiv = dontCheck super.massiv;
+
+  # Upstream PR: https://github.com/jkff/splot/pull/9
+  splot = appendPatch super.splot (pkgs.fetchpatch {
+    url = "https://github.com/jkff/splot/commit/a6710b05470d25cb5373481cf1cfc1febd686407.patch";
+    sha256 = "1c5ck2ibag2gcyag6rjivmlwdlp5k0dmr8nhk7wlkzq2vh7zgw63";
+  });
+
+  # The current LTS 15.x version has a bug in the test suite.
+  streaming-commons = self.streaming-commons_0_2_2_1;
+
+  # Version bumps have not been merged by upstream yet.
+  # https://github.com/obsidiansystems/dependent-sum-aeson-orphans/pull/5
+  dependent-sum-aeson-orphans = appendPatch super.dependent-sum-aeson-orphans (pkgs.fetchpatch {
+    url = "https://github.com/obsidiansystems/dependent-sum-aeson-orphans/commit/5a369e433ad7e3eef54c7c3725d34270f6aa48cc.patch";
+    sha256 = "1lzrcicvdg77hd8j2fg37z19amp5yna5xmw1fc06zi0j95csll4r";
+  });
+
+  # Tests are broken because of missing files in hackage tarball.
+  # https://github.com/jgm/commonmark-hs/issues/55
+  commonmark-extensions = dontCheck super.commonmark-extensions;
+
+  # The overrides in the following lines all have the following causes:
+  # * neuron needs commonmark-pandoc
+  # * which needs a newer pandoc-types (>= 1.21)
+  # * which means we need a newer pandoc (>= 2.10)
+  # * which needs a newer hslua (1.1.2) and a newer jira-wiki-markup (1.3.2)
+  # Then we need to apply those overrides to all transitive dependencies
+  # All of this will be obsolete, when pandoc 2.10 hits stack lts.
+  commonmark-pandoc = super.commonmark-pandoc.override {
+    pandoc-types = self.pandoc-types_1_21;
+  };
+  reflex-dom-pandoc = super.reflex-dom-pandoc.override {
+    pandoc-types = self.pandoc-types_1_21;
+  };
+  pandoc_2_10_1 = super.pandoc_2_10_1.override {
+    pandoc-types = self.pandoc-types_1_21;
+    hslua = self.hslua_1_1_2;
+    texmath = self.texmath.override {
+      pandoc-types = self.pandoc-types_1_21;
+    };
+    tasty-lua = self.tasty-lua.override {
+      hslua = self.hslua_1_1_2;
+    };
+    hslua-module-text = self.hslua-module-text.override {
+      hslua = self.hslua_1_1_2;
+    };
+    hslua-module-system = self.hslua-module-system.override {
+      hslua = self.hslua_1_1_2;
+    };
+    jira-wiki-markup = self.jira-wiki-markup_1_3_2;
+  };
+
+  # Apply version-bump patch that is not contained in released version yet.
+  # Upstream PR: https://github.com/srid/neuron/pull/304
+  neuron = (appendPatch super.neuron (pkgs.fetchpatch {
+    url= "https://github.com/srid/neuron/commit/9ddcb7e9d63b8266d1372ef7c14c13b6b5277990.patch";
+    sha256 = "01f9v3jnl05fnpd624wv3a0j5prcbnf62ysa16fbc0vabw19zv1b";
+    excludes = [ "commonmark-hs/github.json" ];
+    stripLen = 2;
+    extraPrefix = "";
+  }))
+    # See comment about overrides above commonmark-pandoc
+    .override {
+    pandoc = self.pandoc_2_10_1;
+    pandoc-types = self.pandoc-types_1_21;
+    rib = super.rib.override {
+      pandoc = self.pandoc_2_10_1;
+      pandoc-types = self.pandoc-types_1_21;
+    };
+  };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

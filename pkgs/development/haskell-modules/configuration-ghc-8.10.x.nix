@@ -67,6 +67,7 @@ self: super: {
   unliftio-core = doJailbreak super.unliftio-core;
 
   # Use the latest version to fix the build.
+  dhall = self.dhall_1_33_1;
   lens = self.lens_4_19_2;
   optics-core = self.optics-core_0_3;
   repline = self.repline_0_4_0_0;
@@ -86,6 +87,7 @@ self: super: {
   serialise = doJailbreak super.serialise;
   setlocale = doJailbreak super.setlocale;
   shellmet = doJailbreak super.shellmet;
+  shower = doJailbreak super.shower;
 
   # The shipped Setup.hs file is broken.
   csv = overrideCabal super.csv (drv: { preCompileBuildDriver = "rm Setup.hs"; });
