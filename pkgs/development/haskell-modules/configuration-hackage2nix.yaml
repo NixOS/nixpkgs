@@ -2560,6 +2560,8 @@ extra-packages:
   - generic-deriving == 1.10.5.*        # new versions don't compile with GHC 7.10.x
   - ghc-check == 0.3.0.1                # only version compatible with ghcide 0.2.0
   - ghc-tcplugins-extra ==0.3.2         # required for polysemy-plugin 0.2.5.0
+  - gi-gdk ==3.0.23                     # required for gi-vte-2.91.27
+  - gi-gtk ==3.0.35                     # required for gi-vte-2.91.27
   - gloss < 1.9.3                       # new versions don't compile with GHC 7.8.x
   - haddock == 2.22.*                   # required on GHC 8.0.x
   - haddock == 2.23.*                   # required on GHC < 8.10.x
@@ -10208,7 +10210,6 @@ broken-packages:
   - termbox-bindings
   - terminal-text
   - termination-combinators
-  - termonad
   - termplot
   - terntup
   - terrahs

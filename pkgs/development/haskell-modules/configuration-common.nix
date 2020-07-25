@@ -1451,4 +1451,18 @@ self: super: {
     };
   };
 
+  termonad = super.termonad.overrideScope (self: super: {
+      gi-atk = self.gi-atk_2_0_22;
+      gi-cairo = self.gi-cairo_1_0_24;
+      gi-gdk = self.gi-gdk_3_0_23;
+      gi-gdkpixbuf = self.gi-gdkpixbuf_2_0_24;
+      gi-gio = self.gi-gio_2_0_27;
+      gi-glib = self.gi-glib_2_0_24;
+      gi-gobject = self.gi-gobject_2_0_23;
+      gi-gtk = self.gi-gtk_3_0_35;
+      gi-pango = self.gi-pango_1_0_23;
+      haskell-gi = self.haskell-gi_0_24_2;
+      haskell-gi-base = addBuildDepend self.haskell-gi-base_0_24_1 pkgs.gobject-introspection;
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
