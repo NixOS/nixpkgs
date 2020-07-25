@@ -6,7 +6,7 @@ mkDerivation {
     homepage = "https://kde.org/applications/en/games/org/kde.kigo";
     description = "Kigo est une implémentation libre du jeu de Go";
     maintainers = with maintainers; [ freezeboy ];
-    licence = licences.gpl2Plus;
+    licence = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
   nativeBuildInputs = [
