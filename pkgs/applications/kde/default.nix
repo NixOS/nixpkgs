@@ -155,6 +155,7 @@ let
       kspaceduel = callPackage ./kspaceduel.nix {};
       ksudoku = callPackage ./ksudoku.nix {};
       ksystemlog = callPackage ./ksystemlog.nix {};
+      kteatime = callPackage ./kteatime.nix {};
       ktnef = callPackage ./ktnef.nix {};
       ktouch = callPackage ./ktouch.nix {};
       kwalletmanager = callPackage ./kwalletmanager.nix {};
