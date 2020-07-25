@@ -1,0 +1,15 @@
+diff --git a/test/conftest.py b/test/conftest.py
+index 9a913d5a..c0f70682 100644
+--- a/test/conftest.py
++++ b/test/conftest.py
+@@ -376,7 +376,9 @@ class Qtile:
+ 
+         def spawn():
+             nonlocal proc
+-            proc = subprocess.Popen(args, env={"DISPLAY": self.display})
++            env = dict(os.environ)
++            env.update({"DISPLAY": self.display})
++            proc = subprocess.Popen(args, env=env)
+ 
+         def failed():
+             if proc.poll() is not None:

@@ -1,13 +1,20 @@
-{ stdenv, fetchFromGitHub, python37Packages, glib, cairo, pango, pkgconfig, libxcb, xcbutilcursor }:
+{
+stdenv, fetchFromGitHub, python37Packages, glib, cairo, pango, pkgconfig, libxcb, xcbutilcursor,
+# for tests, see http://docs.qtile.org/en/v0.16.0/manual/hacking.html
+xvfb_run, xrandr, xcalc, xeyes, xclock
+}:
 
-let cairocffi-xcffib = python37Packages.cairocffi.override {
+let 
+  pypa = python37Packages;
+  cairocffi-xcffib = python37Packages.cairocffi.override {
     withXcffib = true;
   };
+  version = "0.16.0";
 in
 
-python37Packages.buildPythonApplication rec {
+pypa.buildPythonApplication {
   name = "qtile-${version}";
-  version = "0.16.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "qtile";
@@ -20,6 +27,7 @@ python37Packages.buildPythonApplication rec {
     ./0001-Substitution-vars-for-absolute-paths.patch
     ./0002-Restore-PATH-and-PYTHONPATH.patch
     ./0003-Restart-executable.patch
+    ./0004-Keep-env-in-test-process-spawner.patch #TODO attempt to upstream
   ];
 
   postPatch = ''
@@ -32,9 +40,39 @@ python37Packages.buildPythonApplication rec {
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib libxcb cairo pango python37Packages.xcffib ];
+  buildInputs = [ glib libxcb cairo pango pypa.xcffib ];
 
-  pythonPath = with python37Packages; [ xcffib cairocffi-xcffib setuptools setuptools_scm ]; 
+  pythonPath = with pypa; [ xcffib cairocffi-xcffib setuptools setuptools_scm ]; 
+
+  checkInputs = [ pypa.pytest xvfb_run xrandr xcalc xeyes xclock ];
+
+  preCheck = ''
+    HOME=$(mktemp -d) #tests need a home directory
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    # TODO This is taken from scripts/ffibuild but excluding the pulse component, which we dont build,
+    # I'm not sure why it doesn't seem to need to be run for the build phase?
+    echo "building pango"
+    python3 ./libqtile/pango_ffi_build.py
+    echo "building xcursors"
+    python3 ./libqtile/backend/x11/xcursors_ffi_build.py
+
+    xvfb-run -s '-screen 0 800x600x24' \
+      pytest -vv \
+        `#These fail during collection due to missing deps` \
+        --ignore=test/test_bar.py \
+        --ignore=test/test_fakescreen.py \
+        --ignore=test/test_images2.py
+
+    runHook postCheck
+  '';
+
+  postCheck = ''
+    HOME=/homeless-shelter
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/qtile \
@@ -42,8 +80,6 @@ python37Packages.buildPythonApplication rec {
       --run 'export QTILE_SAVED_PYTHONPATH=$PYTHONPATH' \
       --run 'export QTILE_SAVED_PATH=$PATH'
   '';
-
-  doCheck = false; # Requires X server #TODO this can be worked out with the existing NixOS testing infrastructure.
 
   meta = with stdenv.lib; {
     homepage = "http://www.qtile.org/";
