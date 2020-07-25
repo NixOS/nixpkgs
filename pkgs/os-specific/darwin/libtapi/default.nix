@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, python3 }:
+{ lib, stdenv, fetchFromGitHub, cmake, python3, ncurses }:
 
 stdenv.mkDerivation {
   name = "libtapi-1000.10.8";
@@ -12,6 +12,10 @@ stdenv.mkDerivation {
   sourceRoot = "source/src/llvm";
 
   nativeBuildInputs = [ cmake python3 ];
+
+  # ncurses is required here to avoid a reference to bootstrap-tools, which is
+  # not allowed for the stdenv.
+  buildInputs = [ ncurses ];
 
   cmakeFlags = [ "-DLLVM_INCLUDE_TESTS=OFF" ];
 
