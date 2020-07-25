@@ -130,6 +130,7 @@ let
       kio-extras = callPackage ./kio-extras.nix {};
       kldap = callPackage ./kldap.nix {};
       kleopatra = callPackage ./kleopatra.nix {};
+      klettres = callPackage ./klettres.nix {};
       kmag = callPackage ./kmag.nix {};
       kmahjongg = callPackage ./kmahjongg.nix {};
       kmail = callPackage ./kmail.nix {};
