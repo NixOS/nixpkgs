@@ -134,6 +134,7 @@ let
       kmime = callPackage ./kmime.nix {};
       kmix = callPackage ./kmix.nix {};
       kmplot = callPackage ./kmplot.nix {};
+      knavalbattle = callPackage ./knavalbattle.nix {};
       knotes = callPackage ./knotes.nix {};
       kolf = callPackage ./kolf.nix {};
       kolourpaint = callPackage ./kolourpaint.nix {};
