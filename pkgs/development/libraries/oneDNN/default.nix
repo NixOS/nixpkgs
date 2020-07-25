@@ -20,6 +20,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  cmakeFlags = [
+    # oneDNN compiles with -msse4.1 by default, but not all x86_64
+    # CPUs support SSE 4.1.
+    "-DDNNL_ARCH_OPT_FLAGS="
+  ];
+
   # The test driver doesn't add an RPath to the build libdir
   preCheck = ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/src
