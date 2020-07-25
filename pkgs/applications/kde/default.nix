@@ -120,6 +120,7 @@ let
       khelpcenter = callPackage ./khelpcenter.nix {};
       kidentitymanagement = callPackage ./kidentitymanagement.nix {};
       kig = callPackage ./kig.nix {};
+      killbots = callPackage ./killbots.nix {};
       kimap = callPackage ./kimap.nix {};
       kipi-plugins = callPackage ./kipi-plugins.nix {};
       kitinerary = callPackage ./kitinerary.nix {};
