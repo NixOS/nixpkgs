@@ -5535,6 +5535,8 @@ in
 
   ngrep = callPackage ../tools/networking/ngrep { };
 
+  neuron-notes = haskell.lib.justStaticExecutables (haskell.lib.generateOptparseApplicativeCompletion "neuron" haskellPackages.neuron);
+
   ngrok = ngrok-2;
 
   ngrok-2 = callPackage ../tools/networking/ngrok-2 { };
