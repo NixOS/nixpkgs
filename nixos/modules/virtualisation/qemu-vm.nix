@@ -264,7 +264,6 @@ in
 {
   imports = [
     ../profiles/qemu-guest.nix
-   ./docker-preloader.nix
   ];
 
   options = {
