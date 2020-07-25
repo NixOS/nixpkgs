@@ -83,6 +83,10 @@
     <option>--flake</option> <replaceable>flake-uri</replaceable>
    </arg>
 
+   <arg>
+    <option>--path-to-built-config</option> <replaceable>path-to-built-config</replaceable>
+   </arg>
+
    <sbr />
 
    <arg>
@@ -532,6 +536,17 @@
       <literal>nixosConfigurations.<replaceable>name</replaceable></literal>. If
       <replaceable>name</replaceable> is omitted, it default to the
       current host name.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>
+     <option>--path-to-built-config</option> <replaceable>path-to-built-config</replaceable>
+    </term>
+    <listitem>
+     <para>
+      Switch the NixOS system to the specified already built system config.
      </para>
     </listitem>
    </varlistentry>

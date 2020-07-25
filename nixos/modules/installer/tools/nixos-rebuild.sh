@@ -103,6 +103,10 @@ while [ "$#" -gt 0 ]; do
         flakeFlags=(--experimental-features 'nix-command flakes')
         shift 1
         ;;
+      --path-to-built-config)
+        pathToConfig="$1"
+        shift 1
+        ;;
       --recreate-lock-file|--no-update-lock-file|--no-write-lock-file|--no-registries|--commit-lock-file)
         lockFlags+=("$i")
         ;;
@@ -417,13 +421,14 @@ fi
 if [ -z "$rollback" ]; then
     echo "building the system configuration..." >&2
     if [ "$action" = switch -o "$action" = boot ]; then
-        if [[ -z $flake ]]; then
-            pathToConfig="$(nixBuild '<nixpkgs/nixos>' --no-out-link -A system "${extraBuildFlags[@]}")"
-        else
-            outLink=$tmpDir/result
-            nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.toplevel" \
-              "${extraBuildFlags[@]}" "${lockFlags[@]}" --out-link $outLink
-            pathToConfig="$(readlink -f $outLink)"
+        if [ -z "$pathToConfig" ]; then
+            if [[ -z $flake ]]; then
+                pathToConfig="$(nixBuild '<nixpkgs/nixos>' --no-out-link -A system "${extraBuildFlags[@]}")"
+            else
+                outLink=$tmpDir/result
+                nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.toplevel" \
+                  "${extraBuildFlags[@]}" "${lockFlags[@]}" --out-link $outLink
+                pathToConfig="$(readlink -f $outLink)"
         fi
         copyToTarget "$pathToConfig"
         targetHostCmd nix-env -p "$profile" --set "$pathToConfig"
