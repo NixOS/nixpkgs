@@ -27214,6 +27214,8 @@ in
     inherit (gnome2) libgnomeui;
   };
 
+  veusz = libsForQt5.callPackage ../applications/graphics/veusz { };
+
   vim = callPackage ../applications/editors/vim {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
