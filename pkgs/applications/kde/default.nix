@@ -126,6 +126,7 @@ let
       kidentitymanagement = callPackage ./kidentitymanagement.nix {};
       kig = callPackage ./kig.nix {};
       kigo = callPackage ./kigo.nix {};
+      killbots = callPackage ./killbots.nix {};
       kimap = callPackage ./kimap.nix {};
       kipi-plugins = callPackage ./kipi-plugins.nix {};
       kitinerary = callPackage ./kitinerary.nix {};
