@@ -13,6 +13,11 @@ buildGoPackage rec {
   };
   goDeps = ./deps.nix;
 
+  buildFlagsArray = ''
+    -ldflags=
+      -X ${goPackagePath}/version.Version=${version}
+  '';
+
   meta = with lib; {
     description = "General-purpose policy engine";
     homepage = "https://www.openpolicyagent.org";
