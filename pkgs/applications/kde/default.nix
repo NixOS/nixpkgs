@@ -92,6 +92,7 @@ let
       kaddressbook = callPackage ./kaddressbook.nix {};
       kalarm = callPackage ./kalarm.nix {};
       kalarmcal = callPackage ./kalarmcal.nix {};
+      kalzium = callPackage ./kalzium.nix {};
       kapptemplate = callPackage ./kapptemplate.nix { };
       kate = callPackage ./kate.nix {};
       katomic = callPackage ./katomic.nix {};

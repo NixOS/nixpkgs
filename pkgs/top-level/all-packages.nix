@@ -21052,7 +21052,7 @@ in
 
   inherit (kdeApplications)
     akonadi akregator ark bomber bovo dolphin dragon elisa ffmpegthumbs filelight granatier gwenview k3b
-    kaddressbook kapptemplate kate katomic kbounce kcachegrind kcalc kcharselect kcolorchooser kdenlive kdf kdialog
+    kaddressbook kalzium kapptemplate kate katomic kbounce kcachegrind kcalc kcharselect kcolorchooser kdenlive kdf kdialog
     keditbookmarks kfind kfloppy kget kgpg khelpcenter kig kigo kleopatra kmag kmail kmines kmix kmplot kolourpaint kompare konsole yakuake
     kpkpass kitinerary kontact korganizer krdc krfb ksquares ksystemlog ktouch kwalletmanager kwave marble minuet okular picmi spectacle;
 
