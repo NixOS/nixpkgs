@@ -2011,6 +2011,8 @@ in
 
   hr = callPackage ../applications/misc/hr { };
 
+  humioctl = callPackage ../applications/logging/humioctl {};
+
   hyx = callPackage ../tools/text/hyx { };
 
   icdiff = callPackage ../tools/text/icdiff {};
@@ -7345,7 +7347,7 @@ in
   uget = callPackage ../tools/networking/uget { };
 
   uget-integrator = callPackage ../tools/networking/uget-integrator { };
-  
+
   ugrep = callPackage ../tools/text/ugrep { };
 
   uif2iso = callPackage ../tools/cd-dvd/uif2iso { };
