@@ -2259,6 +2259,8 @@ in
 
   string-machine = callPackage ../applications/audio/string-machine { };
 
+  squeezer = callPackage ../applications/audio/squeezer { };
+
   bash-supergenpass = callPackage ../tools/security/bash-supergenpass { };
 
   sweep-visualizer = callPackage ../tools/misc/sweep-visualizer { };
