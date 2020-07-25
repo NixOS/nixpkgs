@@ -14842,11 +14842,28 @@ in
       inherit llvmPackages_5;
     });
 
+  qt515 = recurseIntoAttrs (makeOverridable
+    (import ../development/libraries/qt-5/5.15) {
+      inherit newScope;
+      inherit stdenv fetchurl fetchpatch fetchFromGitHub makeSetupHook makeWrapper;
+      inherit bison;
+      inherit cups;
+      inherit dconf;
+      inherit harfbuzz;
+      inherit libGL;
+      inherit perl;
+      inherit gtk3;
+      inherit (gst_all_1) gstreamer gst-plugins-base;
+      inherit llvmPackages_5;
+    });
+
   libsForQt514 = recurseIntoAttrs (lib.makeScope qt514.newScope mkLibsForQt5);
 
+  libsForQt515 = recurseIntoAttrs (lib.makeScope qt515.newScope mkLibsForQt5);
+
   # TODO bump to 5.14 on darwin once it's not broken; see #95199
-  qt5 =        if stdenv.hostPlatform.isDarwin then qt512 else qt514;
-  libsForQt5 = if stdenv.hostPlatform.isDarwin then libsForQt512 else libsForQt514;
+  qt5 =        if stdenv.hostPlatform.isDarwin then qt512 else qt515;
+  libsForQt5 = if stdenv.hostPlatform.isDarwin then libsForQt512 else libsForQt515;
 
   qt5ct = libsForQt5.callPackage ../tools/misc/qt5ct { };
 

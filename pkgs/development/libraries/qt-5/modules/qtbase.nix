@@ -295,7 +295,6 @@ stdenv.mkDerivation {
       "-make tools"
       ''-${lib.optionalString (!buildExamples) "no"}make examples''
       ''-${lib.optionalString (!buildTests) "no"}make tests''
-      "-v"
     ]
 
     ++ (
@@ -312,7 +311,6 @@ stdenv.mkDerivation {
         [
           "-${lib.optionalString (compareVersion "5.9.0" < 0) "no-"}rpath"
 
-          "-system-xcb"
           "-xcb"
           "-qpa xcb"
           "-L" "${libX11.out}/lib"
@@ -327,7 +325,6 @@ stdenv.mkDerivation {
           ''-${lib.optionalString (cups == null) "no-"}cups''
           "-dbus-linked"
           "-glib"
-          "-system-libjpeg"
           "-system-libpng"
         ]
         ++ lib.optional withGtk3 "-gtk"
