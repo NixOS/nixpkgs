@@ -22,7 +22,30 @@ rec {
       inherit interpreter;
       contentPath = content;
     }) ''
-      echo "#! $interpreter" > $out
+      # On darwin a script cannot be used as an interpreter in a shebang but
+      # there doesn't seem to be a limit to the size of shebang and multiple
+      # arguments to the interpreter are allowed.
+      if [[ -n "${toString pkgs.stdenvNoCC.isDarwin}" ]] && isScript $interpreter
+      then
+        wrapperInterpreterLine=$(head -1 "$interpreter" | tail -c+3)
+        # Get first word from the line (note: xargs echo remove leading spaces)
+        wrapperInterpreter=$(echo "$wrapperInterpreterLine" | xargs echo | cut -d " " -f1)
+
+        if isScript $wrapperInterpreter
+        then
+          echo "error: passed interpreter ($interpreter) is a script which has another script ($wrapperInterpreter) as an interpreter, which is not supported."
+          exit 1
+        fi
+
+        # This should work as long as wrapperInterpreter is a shell, which is
+        # the case for programs wrapped with makeWrapper, like
+        # python3.withPackages etc.
+        interpreterLine="$wrapperInterpreterLine $interpreter"
+      else
+        interpreterLine=$interpreter
+      fi
+
+      echo "#! $interpreterLine" > $out
       cat "$contentPath" >> $out
       ${optionalString (check != "") ''
         ${check} $out
