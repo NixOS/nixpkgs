@@ -136,6 +136,7 @@ let
       kmailtransport = callPackage ./kmailtransport.nix {};
       kmbox = callPackage ./kmbox.nix {};
       kmime = callPackage ./kmime.nix {};
+      kmines = callPackage ./kmines.nix {};
       kmix = callPackage ./kmix.nix {};
       kmplot = callPackage ./kmplot.nix {};
       knotes = callPackage ./knotes.nix {};
