@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, stdenv, pcre2, boost, zlib, lzham }:
+{ stdenv, lib, fetchFromGitHub, boost, bzip2, lzma, lz4, pcre2, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "ugrep";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "16nr7zq4l2si9pfckfinbqnv94hw51z2qcbygc9x81jbjlvg3003";
   };
 
-  buildInputs = [ pcre2 boost zlib lzham ];
+  buildInputs = [ boost bzip2 lzma lz4 pcre2 zlib ];
 
   meta = with stdenv.lib; {
     description = "Ultra fast grep with interactive query UI";
