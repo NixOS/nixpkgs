@@ -97,6 +97,7 @@ let
       kapptemplate = callPackage ./kapptemplate.nix { };
       kate = callPackage ./kate.nix {};
       katomic = callPackage ./katomic.nix {};
+      kblocks = callPackage ./kblocks.nix {};
       kbounce = callPackage ./kbounce.nix {};
       kbreakout = callPackage ./kbreakout.nix {};
       kcachegrind = callPackage ./kcachegrind.nix {};
