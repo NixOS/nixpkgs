@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, libmilter }:
+{ stdenv, fetchFromGitHub, autoreconfHook, libmilter, perl, perlPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "opendmarc";
@@ -13,15 +13,23 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "doc" ];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ perl ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper ];
 
   postPatch = ''
     substituteInPlace configure.ac --replace '	docs/Makefile' ""
+    patchShebangs contrib reports
   '';
 
   configureFlags = [
     "--with-milter=${libmilter}"
   ];
+
+  postFixup = ''
+    for b in $bin/bin/opendmarc-{expire,import,params,reports}; do
+      wrapProgram $b --set PERL5LIB ${perlPackages.makeFullPerlPath (with perlPackages; [ Switch DBI DBDmysql HTTPMessage ])}
+    done
+  '';
 
   meta = with stdenv.lib; {
     description = "A free open source software implementation of the DMARC specification";
