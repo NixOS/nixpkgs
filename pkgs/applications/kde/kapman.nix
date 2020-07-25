@@ -6,7 +6,7 @@ mkDerivation {
     homepage = "https://kde.org/applications/en/games/org.kde.kapman";
     description = "Kapman is a clone of the well known game Pac-Man";
     maintainers = with maintainers; [ freezeboy ];
-    licence = licences.gpl2Plus;
+    license = licences.gpl2Plus;
     platforms = platforms.linux;
   };
   nativeBuildInputs = [
