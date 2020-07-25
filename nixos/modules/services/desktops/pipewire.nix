@@ -9,6 +9,14 @@ let
                            && pkgs.stdenv.isx86_64
                            && pkgs.pkgsi686Linux.pipewire != null;
 
+  jack-libs = pkgs.runCommand "jack-libs" {} ''
+    mkdir -p "$out/lib"
+    ln -s "${pkgs.pipewire.lib}/lib/pipewire-0.3/jack" "$out/lib/pipewire"
+  '';
+  pulse-libs = pkgs.runCommand "pulse-libs" {} ''
+    mkdir -p "$out/lib"
+    ln -s "${pkgs.pipewire.lib}/lib/pipewire-0.3/pulse" "$out/lib/pipewire"
+  '';
 in {
 
   meta = {
@@ -45,13 +53,35 @@ in {
           '';
         };
       };
+
+      jack = {
+        enable = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            Enable transparent JACK audio emulation using LD_LIBRARY_PATH.
+          '';
+        };
+      };
+
+      pulse = {
+        enable = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            Enable transparent PulseAudio emulation using LD_LIBRARY_PATH.
+          '';
+        };
+      };
     };
   };
 
 
   ###### implementation
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.pipewire ];
+    environment.systemPackages = [ pkgs.pipewire ]
+                                 ++ lib.optional cfg.jack.enable jack-libs
+                                 ++ lib.optional cfg.pulse.enable pulse-libs;
 
     systemd.packages = [ pkgs.pipewire ];
 
@@ -74,5 +104,6 @@ in {
     environment.etc."alsa/conf.d/50-pipewire.conf" = mkIf cfg.alsa.enable {
       source = "${pkgs.pipewire}/share/alsa/alsa.conf.d/50-pipewire.conf";
     };
+    environment.sessionVariables.LD_LIBRARY_PATH = "/run/current-system/sw/lib/pipewire";
   };
 }
