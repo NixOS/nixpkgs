@@ -45,7 +45,7 @@ in
         type = types.path;
         default = "/var/lib/teleport/";
         description = ''
-          Directory to store Prometheus metrics data.
+          Directory to store Teleport Service data.
         '';
       };
       configText = mkOption {
