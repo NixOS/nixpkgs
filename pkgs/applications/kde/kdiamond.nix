@@ -6,7 +6,7 @@ mkDerivation {
     homepage = "https://kde.org/applications/en/games/org.kde.kdiamond";
     description = "KDiamond is a single player puzzle game";
     maintainers = with maintainers; [ freezeboy ];
-    licence = licences.gpl2Plus;
+    license = licences.gpl2Plus;
     platforms = platforms.linux;
   };
   nativeBuildInputs = [
