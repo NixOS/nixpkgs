@@ -22633,6 +22633,8 @@ in
     pythonBindings = true;
   });
 
+  sublime-music = callPackage ../applications/audio/sublime-music { };
+
   subunit = callPackage ../development/libraries/subunit { };
 
   surf = callPackage ../applications/networking/browsers/surf { gtk = gtk2; };

@@ -2158,6 +2158,8 @@ in {
 
   dataclasses = callPackage ../development/python-modules/dataclasses { };
 
+  dataclasses-json = callPackage ../development/python-modules/dataclasses-json { };
+
   debian = callPackage ../development/python-modules/debian {};
 
   defusedxml = callPackage ../development/python-modules/defusedxml {};
@@ -5908,6 +5910,8 @@ in {
   typing = callPackage ../development/python-modules/typing { };
 
   typing-extensions = callPackage ../development/python-modules/typing-extensions { };
+
+  typing-inspect = callPackage ../development/python-modules/typing-inspect { };
 
   typeguard = callPackage ../development/python-modules/typeguard { };
 
