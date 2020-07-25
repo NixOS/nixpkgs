@@ -136,6 +136,7 @@ let
       kmplot = callPackage ./kmplot.nix {};
       knotes = callPackage ./knotes.nix {};
       kolf = callPackage ./kolf.nix {};
+      kollision = callPackage ./kollision.nix {};
       kolourpaint = callPackage ./kolourpaint.nix {};
       kompare = callPackage ./kompare.nix {};
       konsole = callPackage ./konsole.nix {};
