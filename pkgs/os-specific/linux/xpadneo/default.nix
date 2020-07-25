@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "xpadneo";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "atar-axis";
@@ -13,6 +13,12 @@ stdenv.mkDerivation rec {
 
   setSourceRoot = ''
     export sourceRoot=$(pwd)/source/hid-xpadneo/src
+  '';
+
+  postPatch = ''
+    # Set kernel module version
+    substituteInPlace hid-xpadneo.c \
+      --subst-var-by DO_NOT_CHANGE ${version}
   '';
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
