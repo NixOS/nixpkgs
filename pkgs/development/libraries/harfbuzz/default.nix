@@ -1,4 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, freetype, cairo, libintl
+, gobject-introspection
 , icu, graphite2, harfbuzz # The icu variant uses and propagates the non-icu one.
 , ApplicationServices, CoreText
 , withCoreText ? false
@@ -36,10 +37,16 @@ stdenv.mkDerivation {
     # not auto-detected by default
     "--with-graphite2=${if withGraphite2 then "yes" else "no"}"
     "--with-icu=${if withIcu then "yes" else "no"}"
+    "--with-gobject=yes"
+    "--enable-introspection=yes"
   ]
     ++ stdenv.lib.optional withCoreText "--with-coretext=yes";
 
-  nativeBuildInputs = [ pkgconfig libintl ];
+  nativeBuildInputs = [
+    gobject-introspection
+    libintl
+    pkgconfig
+  ];
 
   buildInputs = [ glib freetype cairo ] # recommended by upstream
     ++ stdenv.lib.optionals withCoreText [ ApplicationServices CoreText ];
