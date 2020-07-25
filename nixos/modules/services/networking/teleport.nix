@@ -56,6 +56,7 @@ in
           teleport.yml.
         '';
       };
+    };
   };
 
     config = mkIf cfg.enable {
