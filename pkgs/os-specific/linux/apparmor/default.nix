@@ -39,6 +39,9 @@ let
   };
 
   prePatchCommon = ''
+    patch -p1 < ${gnumake43Patch}
+    chmod a+x ./common/list_capabilities.sh ./common/list_af_names.sh
+    patchShebangs ./common/list_capabilities.sh ./common/list_af_names.sh
     substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2man" "${buildPackages.perl}/bin/pod2man"
     substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2html" "${buildPackages.perl}/bin/pod2html"
     substituteInPlace ./common/Make.rules --replace "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
@@ -184,11 +187,7 @@ let
 
     buildInputs = [ libapparmor ];
 
-    prePatch = ''
-      patch -p1 < ${gnumake43Patch}
-      chmod a+x ./common/list_capabilities.sh ./common/list_af_names.sh
-      patchShebangs ./common/list_capabilities.sh ./common/list_af_names.sh
-    '' + prePatchCommon + ''
+    prePatch = prePatchCommon + ''
       substituteInPlace ./parser/Makefile --replace "/usr/bin/bison" "${bison}/bin/bison"
       substituteInPlace ./parser/Makefile --replace "/usr/bin/flex" "${flex}/bin/flex"
       substituteInPlace ./parser/Makefile --replace "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"

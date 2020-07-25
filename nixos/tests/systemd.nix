@@ -104,6 +104,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             re.search(r"^Filesystem state: *clean$", extinfo, re.MULTILINE) is not None
         ), ("File system was not cleanly unmounted: " + extinfo)
 
+    # Regression test for https://github.com/NixOS/nixpkgs/pull/91232
+    with subtest("setting transient hostnames works"):
+        machine.succeed("hostnamectl set-hostname --transient machine-transient")
+        machine.fail("hostnamectl set-hostname machine-all")
+
     with subtest("systemd-shutdown works"):
         machine.shutdown()
         machine.wait_for_unit("multi-user.target")

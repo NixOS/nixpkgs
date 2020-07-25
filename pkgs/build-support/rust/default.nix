@@ -74,6 +74,7 @@ let
   ccForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
   cxxForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
   releaseDir = "target/${rustTarget}/${buildType}";
+  tmpDir = "${releaseDir}-tmp";
 
   # Specify the stdenv's `diff` by abspath to ensure that the user's build
   # inputs do not cause us to find the wrong `diff`.
@@ -193,13 +194,15 @@ stdenv.mkDerivation (args // {
     # This needs to be done after postBuild: packages like `cargo` do a pushd/popd in
     # the pre/postBuild-hooks that need to be taken into account before gathering
     # all binaries to install.
-    bins=$(find $releaseDir \
+    mkdir -p $tmpDir
+    cp -r $releaseDir/* $tmpDir/
+    bins=$(find $tmpDir \
       -maxdepth 1 \
       -type f \
       -executable ! \( -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \))
   '';
 
-  installCheckPhase = args.checkPhase or (let
+  checkPhase = args.checkPhase or (let
     argstr = "${stdenv.lib.optionalString (checkType == "release") "--release"} --target ${rustTarget} --frozen";
   in ''
     ${stdenv.lib.optionalString (buildAndTestSubdir != null) "pushd ${buildAndTestSubdir}"}
@@ -214,13 +217,13 @@ stdenv.mkDerivation (args // {
 
   strictDeps = true;
 
-  inherit releaseDir;
+  inherit releaseDir tmpDir;
 
   installPhase = args.installPhase or ''
     runHook preInstall
 
     # rename the output dir to a architecture independent one
-    mapfile -t targets < <(find "$NIX_BUILD_TOP" -type d | grep '${releaseDir}$')
+    mapfile -t targets < <(find "$NIX_BUILD_TOP" -type d | grep '${tmpDir}$')
     for target in "''${targets[@]}"; do
       rm -rf "$target/../../${buildType}"
       ln -srf "$target" "$target/../../"
@@ -228,7 +231,7 @@ stdenv.mkDerivation (args // {
     mkdir -p $out/bin $out/lib
 
     xargs -r cp -t $out/bin <<< $bins
-    find $releaseDir \
+    find $tmpDir \
       -maxdepth 1 \
       -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \
       -print0 | xargs -r -0 cp -t $out/lib

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, binutils-unwrapped, scons, gnum4, p7zip, glibc_multi, mesa
+{ stdenv, fetchurl, binutils-unwrapped, sconsPackages, gnum4, p7zip, glibc_multi, mesa
 , xorg, libGLU, libGL, openal
 , lib, makeWrapper, makeDesktopItem }:
 
@@ -24,7 +24,7 @@ in stdenv.mkDerivation {
     sha256 = "17wdpip8zvm2njz0xrf7xcxl73hnsc6i83zj18kn8rnjkpy50dd6";
   };
   nativeBuildInputs = [
-    p7zip scons.py2 gnum4 makeWrapper
+    p7zip sconsPackages.scons_3_1_2 gnum4 makeWrapper
   ];
   buildInputs = [
     glibc_multi mesa.dev xorg.libX11.dev openal

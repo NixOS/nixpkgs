@@ -1,4 +1,4 @@
-{ config, stdenv, lib, callPackage, fetchurl }:
+{ config, stdenv, lib, callPackage, fetchurl, nss_3_44 }:
 
 let
   common = opts: callPackage (import ./common.nix opts) {};
@@ -7,10 +7,10 @@ in
 rec {
   firefox = common rec {
     pname = "firefox";
-    ffversion = "77.0.1";
+    ffversion = "78.0.1";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "ngLihC0YuclLJEV3iPEX+tRzDKIdBe+CCOuFxvWNo7DnX8royOvTj2m4YyWyZoTQ5UCbPTQYmP4otgfovZSe8g==";
+      sha512 = "mdO6masIpiZBvYi6kpYUTSnsOda04CUs2CL1LNf1Yad+rfY4ga4aFuLtfKqfgV5IcIIl86XeiC+0grd4irbCYg==";
     };
 
     patches = [
@@ -33,7 +33,7 @@ rec {
     };
   };
 
-  firefox-esr-68 = common rec {
+  firefox-esr-68 = (common rec {
     pname = "firefox-esr";
     ffversion = "68.10.0esr";
     src = fetchurl {
@@ -53,5 +53,11 @@ rec {
       versionSuffix = "esr";
       versionKey = "ffversion";
     };
+  }).override {
+    # Mozilla unfortunately doesn't support building with latest NSS anymore;
+    # instead they provide ESR releases for NSS:
+    # https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_Releases
+    nss = nss_3_44;
   };
+
 }
