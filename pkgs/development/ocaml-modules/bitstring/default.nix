@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "bitstring";
-  version = "3.0.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "xguerin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0r49qax7as48jgknzaq6p9rbpmrvnmlic713wzz5bj60j5h0396f";
+    sha256 = "1ys8xx174jf8v5sm0lbxvzhdlcs5p0fhy1gvf58gad2g4gvgpvxc";
   };
 
   buildInputs = [ ppx_tools_versioned ounit ];
