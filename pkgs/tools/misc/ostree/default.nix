@@ -2,7 +2,7 @@
 , fetchurl
 , fetchpatch
 , substituteAll
-, pkgconfig
+, pkg-config
 , gtk-doc
 , gobject-introspection
 , gjs
@@ -21,13 +21,15 @@
 , fuse
 , utillinuxMinimal
 , libselinux
+, libsodium
 , libarchive
 , libcap
 , bzip2
 , yacc
 , libxslt
-, docbook_xsl
+, docbook-xsl-nons
 , docbook_xml_dtd_42
+, openssl
 , python3
 }:
 
@@ -59,6 +61,7 @@ in stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-test-paths.patch;
       python3 = testPython.interpreter;
+      openssl = "${openssl}/bin/openssl";
     })
   ];
 
@@ -66,14 +69,14 @@ in stdenv.mkDerivation rec {
     autoconf
     automake
     libtool
-    pkgconfig
+    pkg-config
     gtk-doc
     gobject-introspection
     which
     makeWrapper
     yacc
     libxslt
-    docbook_xsl
+    docbook-xsl-nons
     docbook_xml_dtd_42
   ];
 
@@ -85,6 +88,7 @@ in stdenv.mkDerivation rec {
     gpgme
     fuse
     libselinux
+    libsodium
     libcap
     libarchive
     bzip2
@@ -96,22 +100,23 @@ in stdenv.mkDerivation rec {
     gjs
   ];
 
-  preConfigure = ''
-    env NOCONFIGURE=1 ./autogen.sh
-  '';
-
   enableParallelBuilding = true;
 
   configureFlags = [
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-systemdsystemgeneratordir=${placeholder "out"}/lib/systemd/system-generators"
     "--enable-installed-tests"
+    "--with-ed25519-libsodium"
   ];
 
   makeFlags = [
     "installed_testdir=${placeholder "installedTests"}/libexec/installed-tests/libostree"
     "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/libostree"
   ];
+
+  preConfigure = ''
+    env NOCONFIGURE=1 ./autogen.sh
+  '';
 
   postFixup = let
     typelibPath = stdenv.lib.makeSearchPath "/lib/girepository-1.0" [
