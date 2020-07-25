@@ -141,6 +141,7 @@ let
       kmines = callPackage ./kmines.nix {};
       kmix = callPackage ./kmix.nix {};
       kmplot = callPackage ./kmplot.nix {};
+      knetwalk = callPackage ./knetwalk.nix {};
       knotes = callPackage ./knotes.nix {};
       kolf = callPackage ./kolf.nix {};
       kolourpaint = callPackage ./kolourpaint.nix {};
