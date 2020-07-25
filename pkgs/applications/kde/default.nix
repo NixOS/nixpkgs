@@ -94,6 +94,7 @@ let
       kalarmcal = callPackage ./kalarmcal.nix {};
       kapptemplate = callPackage ./kapptemplate.nix { };
       kate = callPackage ./kate.nix {};
+      katomic = callPackage ./katomic.nix {};
       kbreakout = callPackage ./kbreakout.nix {};
       kcachegrind = callPackage ./kcachegrind.nix {};
       kcalc = callPackage ./kcalc.nix {};
