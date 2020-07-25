@@ -562,7 +562,7 @@ in {
           "sleep 1",
           "lvcreate --size 1G --name swap MyVolGroup",
           "sleep 1",
-          "lvcreate --size 2G --name nixos MyVolGroup",
+          "lvcreate --size 3G --name nixos MyVolGroup",
           "sleep 1",
           "mkswap -f /dev/MyVolGroup/swap -L swap",
           "swapon -L swap",
