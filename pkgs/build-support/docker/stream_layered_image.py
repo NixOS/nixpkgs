@@ -74,6 +74,13 @@ def archive_paths_to(obj, paths, mtime, add_nix, filter=None):
         ti.gname = "root"
         return filter(ti)
 
+    # User for /nix and /nix/store, giving owner full permissions and
+    # read/execute to everyone else. The latter is needed to allow the
+    # executables in /nix/store to be ran by non root users.
+    def set_nix_dir_mode(ti):
+        ti.mode = 0o755
+        return ti
+
     def dir(path):
         ti = tarfile.TarInfo(path)
         ti.type = tarfile.DIRTYPE
@@ -84,8 +91,8 @@ def archive_paths_to(obj, paths, mtime, add_nix, filter=None):
         # these directories first when building layer tarballs. But
         # we don't need them on the customisation layer.
         if add_nix:
-            tar.addfile(apply_filters(dir("/nix")))
-            tar.addfile(apply_filters(dir("/nix/store")))
+            tar.addfile(apply_filters(set_nix_dir_mode(dir("/nix"))))
+            tar.addfile(apply_filters(set_nix_dir_mode(dir("/nix/store"))))
 
         for path in paths:
             path = pathlib.Path(path)
