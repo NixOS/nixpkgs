@@ -162,6 +162,7 @@ let
       ksquares = callPackage ./ksquares.nix {};
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};
       kpkpass = callPackage ./kpkpass.nix {};
+      kreversi = callPackage ./kreversi.nix {};
       krdc = callPackage ./krdc.nix {};
       krfb = callPackage ./krfb.nix {};
       kruler = callPackage ./kruler.nix {};
