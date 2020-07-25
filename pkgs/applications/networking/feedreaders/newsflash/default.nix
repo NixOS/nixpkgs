@@ -7,6 +7,7 @@
 , ninja
 , pkg-config
 , wrapGAppsHook
+, glib-networking
 , gsettings-desktop-schemas
 , gtk3
 , libhandy
@@ -54,6 +55,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     gdk-pixbuf
     glib
+    glib-networking # TLS support for loading external content in webkitgtk WebView (eg. images)
     gsettings-desktop-schemas # used to get system default font in src/article_view/mod.rs
     gtk3
     libhandy
