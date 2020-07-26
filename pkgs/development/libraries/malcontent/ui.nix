@@ -3,6 +3,7 @@
 , ninja
 , pkg-config
 , gobject-introspection
+, itstool
 , wrapGAppsHook
 , glib
 , accountsservice
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
 
   inherit (malcontent) version src;
 
-  outputs = [ "bin" "out" "dev" ];
+  outputs = [ "out" "lib" "dev" ];
 
   patches = [
     # Allow installing installed tests to a separate output.
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gobject-introspection
+    itstool
     desktop-file-utils
     wrapGAppsHook
   ];
