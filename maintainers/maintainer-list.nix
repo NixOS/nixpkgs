@@ -4745,6 +4745,12 @@
     githubId = 1202012;
     name = "Ignat Loskutov";
   };
+  louisdk1 = {
+    email = "louis@louis.dk";
+    github = "louisdk1";
+    githubId = 4969294;
+    name = "Louis Tim Larsen";
+  };
   lovek323 = {
     email = "jason@oconal.id.au";
     github = "lovek323";
