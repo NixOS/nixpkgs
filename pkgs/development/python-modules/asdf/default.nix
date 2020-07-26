@@ -15,17 +15,17 @@
 
 buildPythonPackage rec {
   pname = "asdf";
-  version = "2.6.0";
+  version = "2.7.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ym9mmxjpnnlinly1rxfqj9rlyl2fv7dxc81f30n1b8n9pwc6jb5";
+    sha256 = "1l0miw9py311sgz0yr010b0mrznlmy6lb25ikrv3nrnv34gp8zb8";
   };
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace "semantic_version>=2.3.1,<=2.6.0" "semantic_version>=2.3.1" \
+      --replace "semantic_version>=2.3.1,<=2.7.0" "semantic_version>=2.3.1" \
       --replace "doctest_plus = enabled" ""
   '';
 
