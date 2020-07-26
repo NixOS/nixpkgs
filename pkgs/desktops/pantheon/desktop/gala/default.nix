@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , pantheon
 , pkgconfig
 , meson
@@ -69,6 +70,13 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
+    # https://github.com/elementary/gala/pull/869
+    # build failure in vala 0.48.7
+    # https://github.com/elementary/gala/pull/869#issuecomment-657147695
+    (fetchpatch {
+      url = "https://github.com/elementary/gala/commit/85d290c75eaa147b704ad34e6c67498071707ee8.patch";
+      sha256 = "19jkvmxidf453qfrxkvi35igxzfz2cm8srwkabvyn9wyd1yhiw0l";
+    })
     ./plugins-dir.patch
   ];
 
