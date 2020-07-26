@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   buildCommand = "exit 1";
 
-  buildInputs = [ wget ];
+  buildInputs = [ wget jq ];
 
   nativeBuildInputs = [
     (rWrapper.override {
