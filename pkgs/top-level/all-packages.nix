@@ -14258,6 +14258,8 @@ in
 
   opencolorio = callPackage ../development/libraries/opencolorio { };
 
+  opendmarc = callPackage ../development/libraries/opendmarc { };
+
   ois = callPackage ../development/libraries/ois {};
 
   openh264 = callPackage ../development/libraries/openh264 { };
