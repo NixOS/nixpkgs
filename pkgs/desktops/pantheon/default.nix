@@ -87,6 +87,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gala = callPackage ./desktop/gala {
     inherit (gnome3) gnome-desktop;
+    vala = pkgs.vala_0_46;
   };
 
   wingpanel = callPackage ./desktop/wingpanel { };
