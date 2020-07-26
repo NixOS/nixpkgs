@@ -1,5 +1,5 @@
 {
-stdenv, fetchFromGitHub, python37Packages, glib, cairo, pango, pkgconfig, libxcb, xcbutilcursor,
+stdenv, fetchFromGitHub, python37Packages, glib, cairo, pango, pkgconfig, libxcb, xcbutilcursor, librsvg,
 # for tests, see http://docs.qtile.org/en/v0.16.0/manual/hacking.html
 xvfb_run, xrandr, xcalc, xeyes, xclock
 }:
@@ -54,6 +54,7 @@ pypa.buildPythonApplication {
   checkPhase = ''
     runHook preCheck
 
+    #TODO convert to patch style?
     # TODO This is taken from scripts/ffibuild but excluding the pulse component, which we dont build,
     # I'm not sure why it doesn't seem to need to be run for the build phase?
     echo "building pango"
@@ -61,19 +62,14 @@ pypa.buildPythonApplication {
     echo "building xcursors"
     python3 ./libqtile/backend/x11/xcursors_ffi_build.py
 
-    xvfb-run -s '-screen 0 800x600x24' \
+      #TODO whats the correct way to set this var?
+      GDK_PIXBUF_MODULE_FILE="${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" \
+      xvfb-run -s '-screen 0 800x600x24' \
       pytest -vv --reruns 5 \
         `#These fail during collection due to missing deps` \
         --ignore=test/test_bar.py \
         --ignore=test/test_fakescreen.py \
         --ignore=test/test_images2.py \
-        `#all fail on svg` \
-        --deselect=test_images.py::test_get_cairo_surface \
-        --deselect=test/test_images.py::TestImg::test_init \
-        --deselect=test/test_images.py::TestImg::test_from_path \
-        --deselect=test/test_images.py::TestImg::test_pattern \
-        --deselect=test/test_images.py::TestImg::test_pattern_rotate \
-        --deselect=test/test_images.py::test_get_cairo_surface \
         `#other failures` \
         --deselect=test/test_qtile_cmd.py::test_qtile_cmd \
         --deselect=test/test_scratchpad.py::test_toggling \
