@@ -15531,7 +15531,6 @@ in
 
   zlog = callPackage ../development/libraries/zlog { };
 
-  zeromq3 = callPackage ../development/libraries/zeromq/3.x.nix {};
   zeromq4 = callPackage ../development/libraries/zeromq/4.x.nix {};
   zeromq = zeromq4;
 
@@ -15610,8 +15609,6 @@ in
   junit = callPackage ../development/libraries/java/junit { antBuild = releaseTools.antBuild; };
 
   junixsocket = callPackage ../development/libraries/java/junixsocket { };
-
-  jzmq = callPackage ../development/libraries/java/jzmq { };
 
   lombok = callPackage ../development/libraries/java/lombok { };
 
