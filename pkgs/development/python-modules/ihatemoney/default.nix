@@ -33,13 +33,13 @@
 
 buildPythonPackage rec {
   pname = "ihatemoney";
-  version = "4.1.4";
+  version = "4.1.5";
 
   src = fetchFromGitHub {
     owner = "spiral-project";
     repo = pname;
     rev = version;
-    sha256 = "1k9pgjvhvmr9wh15zrsxi14cg1fvj41lz2pq9lm03crlxv0frbcm";
+    sha256 = "07lkc0rhj6f4fka4m1vimycjxa452d8wlclknviqz2566gnb998n";
   };
 
   postPatch = ''
