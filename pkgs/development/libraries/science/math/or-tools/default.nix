@@ -1,20 +1,16 @@
 { stdenv, fetchFromGitHub, cmake, abseil-cpp, gflags, which
-, lsb-release, glog, protobuf3_11, cbc, zlib
+, lsb-release, glog, protobuf, cbc, zlib
 , ensureNewerSourcesForZipFilesHook, python, swig }:
 
-let
-  protobuf = protobuf3_11;
-  pythonProtobuf = python.pkgs.protobuf.override { inherit protobuf; };
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "or-tools";
-  version = "7.6";
+  version = "7.7";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "or-tools";
     rev = "v${version}";
-    sha256 = "0605q3y7vh7x7m9azrbkx44blq12zrab6v28b9wmpcn1lmykbw1b";
+    sha256 = "06ig9a1afmzgzcg817y0rdq49ahll0q9y7bhhg9d89x6zy959ypv";
   };
 
   # The original build system uses cmake which does things like pull
@@ -33,7 +29,7 @@ in stdenv.mkDerivation rec {
 
   makeFlags = [
     "prefix=${placeholder "out"}"
-    "PROTOBUF_PYTHON_DESC=${pythonProtobuf}/${python.sitePackages}/google/protobuf/descriptor_pb2.py"
+    "PROTOBUF_PYTHON_DESC=${python.pkgs.protobuf}/${python.sitePackages}/google/protobuf/descriptor_pb2.py"
   ];
   buildFlags = [ "cc" "pypi_archive" ];
 
@@ -54,7 +50,7 @@ in stdenv.mkDerivation rec {
   ];
   propagatedBuildInputs = [
     abseil-cpp gflags glog protobuf cbc
-    pythonProtobuf python.pkgs.six
+    python.pkgs.protobuf python.pkgs.six
   ];
 
   enableParallelBuilding = true;

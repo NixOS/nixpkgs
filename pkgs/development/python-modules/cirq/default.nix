@@ -10,7 +10,7 @@
 , networkx
 , numpy
 , pandas
-, pythonProtobuf  # pythonPackages.protobuf
+, protobuf
 , requests
 , scipy
 , sortedcontainers
@@ -28,15 +28,15 @@
 
 buildPythonPackage rec {
   pname = "cirq";
-  version = "0.8.0";
+  version = "0.8.2";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "cirq";
     rev = "v${version}";
-    sha256 = "01nnv7r595sp60wvp7750lfdjwdsi4q0r4lmaj6li09zsdw0r4b3";
+    sha256 = "0xs46s19idh8smf80zhgraxwh3lphcdbljdrhxwhi5xcc41dfsmf";
   };
 
   patches = [
@@ -48,14 +48,6 @@ buildPythonPackage rec {
     })
   ];
 
-  # Cirq locks protobuf==3.8.0, but tested working with default pythonPackages.protobuf (3.7). This avoids overrides/pythonPackages.protobuf conflicts
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "networkx~=2.4" "networkx" \
-      --replace "protobuf==3.8.0" "protobuf" \
-      --replace "freezegun~=0.3.15" "freezegun"
-  '';
-
   propagatedBuildInputs = [
     freezegun
     google_api_core
@@ -63,7 +55,7 @@ buildPythonPackage rec {
     matplotlib
     networkx
     pandas
-    pythonProtobuf
+    protobuf
     requests
     scipy
     sortedcontainers

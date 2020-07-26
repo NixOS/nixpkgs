@@ -2080,9 +2080,7 @@ in {
 
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
 
-  cirq = callPackage ../development/python-modules/cirq {
-    pythonProtobuf = self.protobuf;
-  };
+  cirq = callPackage ../development/python-modules/cirq { };
 
   citeproc-py = callPackage ../development/python-modules/citeproc-py { };
 
@@ -5322,7 +5320,7 @@ in {
   protobuf = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
     doCheck = !isPy3k;
-    protobuf = pkgs.protobuf3_8;
+    protobuf = pkgs.protobuf3_12;
   };
 
   psd-tools = callPackage ../development/python-modules/psd-tools { };
