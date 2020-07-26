@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
     ./tests-add-test-cases-for-import-without-uid.patch
     ./allow-import-of-previously-known-keys-even-without-UI.patch
     ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
+    # fix reproducibility issue
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/gnupg2/-/raw/debian/${version}-1/debian/patches/debian-packaging/avoid-regenerating-defsincdate-use-shipped-file.patch";
+      sha256 = "1vrw8imz1sl9yzqa0n2v0fbfxvq2fj3sk9bikgda4r1xqajqw812";
+    })
   ];
   postPatch = ''
     sed -i 's,hkps://hkps.pool.sks-keyservers.net,hkps://keys.openpgp.org,g' \
