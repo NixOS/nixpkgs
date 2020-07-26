@@ -1461,8 +1461,28 @@ self: super: {
       gi-gobject = self.gi-gobject_2_0_23;
       gi-gtk = self.gi-gtk_3_0_35;
       gi-pango = self.gi-pango_1_0_23;
-      haskell-gi = self.haskell-gi_0_24_2;
-      haskell-gi-base = addBuildDepend self.haskell-gi-base_0_24_1 pkgs.gobject-introspection;
+      haskell-gi-base =
+        let
+          patch = pkgs.fetchpatch {
+            url= "https://github.com/haskell-gi/haskell-gi/commit/1eccb3083bdc44f46f3c912718f4dcbd9bed3eb7.diff";
+            sha256 = "0k01i37jgkq89r78c3sl0kbbcis510fh28sd300llhc290zh520b";
+            excludes = [ "Data/GI/CodeGen/CodeGen.hs" "Data/GI/GIR/Object.hs" ];
+            stripLen = 2;
+            extraPrefix = "";
+          };
+        in
+        appendPatch (addBuildDepend super.haskell-gi-base_0_24_1 pkgs.gobject-introspection) patch;
+      haskell-gi =
+        let
+          patch = pkgs.fetchpatch {
+            url= "https://github.com/haskell-gi/haskell-gi/commit/1eccb3083bdc44f46f3c912718f4dcbd9bed3eb7.diff";
+            sha256 = "1mx5mn1k1hjkab65y7i48da0i17828bihb0mpz9a3yxbxwhlk95z";
+            excludes = [ "base/c/hsgclosure.c" "base/Data/GI/Base/BasicTypes.hsc" ];
+            stripLen = 1;
+            extraPrefix = "";
+          };
+        in
+        appendPatch super.haskell-gi_0_24_2 patch;
   });
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
