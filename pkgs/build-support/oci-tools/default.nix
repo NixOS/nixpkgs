@@ -7,6 +7,13 @@
     , os ? "linux"
     , arch ? "x86_64"
     , readonly ? false
+    , uid ? 0
+    , gid ? 0
+    , processEnv ? { }
+    , namespaces ? [ "pid" "network" "mount" "ipc" "uts" ]
+    , shm-size ? "65536k"
+    , extraConfig ? { }
+    , extraSetupCommands ? ""
     }:
     let
       sysMounts = {
@@ -27,7 +34,7 @@
         "/dev/shm" = {
           type = "tmpfs";
           source = "shm";
-          options = [ "nosuid" "noexec" "nodev" "mode=1777" "size=65536k" ];
+          options = [ "nosuid" "noexec" "nodev" "mode=1777" "size=${shm-size}" ];
         };
         "/dev/mqueue" = {
           type = "mqueue";
@@ -45,30 +52,34 @@
           options = [ "nosuid" "noexec" "nodev" "realatime" "ro" ];
         };
       };
-      config = writeText "config.json" (builtins.toJSON {
-        ociVersion = "1.0.0";
-        platform = {
-          inherit os arch;
-        };
+      configData = lib.recursiveUpdate
+        {
+          ociVersion = "1.0.0";
+          platform = {
+            inherit os arch;
+          };
 
-        linux = {
-          namespaces = map (type: { inherit type; }) [ "pid" "network" "mount" "ipc" "uts" ];
-        };
+          linux = {
+            namespaces = map (type: { inherit type; }) namespaces;
+          };
 
-        root = { path = "rootfs"; inherit readonly; };
+          root = { path = "rootfs"; inherit readonly; };
 
-        process = {
-          inherit args;
-          user = { uid = 0; gid = 0; };
-          cwd = "/";
-        };
+          process = {
+            inherit args;
+            user = { inherit uid gid; };
+            cwd = "/";
+            env = lib.mapAttrsToList (n: v: ''${n}=${v}'') processEnv;
+          };
 
-        mounts = lib.mapAttrsToList
-          (destination: { type, source, options ? null }: {
-            inherit destination type source options;
-          })
-          (sysMounts // mounts);
-      });
+          mounts = lib.mapAttrsToList
+            (destination: { type, source, options ? null }: {
+              inherit destination type source options;
+            })
+            (sysMounts // mounts);
+        }
+        extraConfig;
+      config = writeText "config.json" (builtins.toJSON configData);
     in
     runCommand "join"
       { } ''
@@ -76,5 +87,6 @@
       mkdir -p $out/rootfs/{dev,proc,sys}
       cp ${config} $out/config.json
       xargs tar c < ${writeReferencesToFile args} | tar -xC $out/rootfs/
+      ${extraSetupCommands}
     '';
 }
