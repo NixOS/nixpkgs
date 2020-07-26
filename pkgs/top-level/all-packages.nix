@@ -19836,6 +19836,10 @@ in
 
   FIL-plugins = callPackage ../applications/audio/FIL-plugins { };
 
+  finalfrontier = callPackage ../applications/science/machine-learning/finalfrontier {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   flacon = libsForQt5.callPackage ../applications/audio/flacon { };
 
   flexget = callPackage ../applications/networking/flexget { };
