@@ -9,5 +9,6 @@
   kak-fzf = pkgs.callPackage ./kak-fzf.nix { };
   kak-plumb = pkgs.callPackage ./kak-plumb.nix { };
   kak-powerline = pkgs.callPackage ./kak-powerline.nix { };
+  kak-prelude = pkgs.callPackage ./kak-prelude.nix { };
   kak-vertical-selection = pkgs.callPackage ./kak-vertical-selection.nix { };
 }
