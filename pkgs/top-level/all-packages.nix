@@ -3118,6 +3118,7 @@ in
   interception-tools = callPackage ../tools/inputmethods/interception-tools { };
   interception-tools-plugins = {
     caps2esc = callPackage ../tools/inputmethods/interception-tools/caps2esc.nix { };
+    dual-function-keys = callPackage ../tools/inputmethods/interception-tools/dual-function-keys.nix { };
   };
 
   age = callPackage ../tools/security/age { };
