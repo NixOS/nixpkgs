@@ -1458,7 +1458,16 @@ self: super: {
       gi-gdkpixbuf = self.gi-gdkpixbuf_2_0_24;
       gi-gio = self.gi-gio_2_0_27;
       gi-glib = self.gi-glib_2_0_24;
-      gi-gobject = self.gi-gobject_2_0_23;
+      gi-gobject =
+        let
+          patch = pkgs.fetchpatch {
+            url= "https://github.com/haskell-gi/haskell-gi/commit/a470a2662d1e854f29005b3ead983fec788b9840.diff";
+            sha256 = "09qvrn4qg8d63gix0cjyc6y1cr8vaps0wn1ic6wsddk7nvcwgr1w";
+            stripLen = 3;
+            extraPrefix = "";
+          };
+        in
+        appendPatch super.gi-gobject_2_0_23 patch;
       gi-gtk = self.gi-gtk_3_0_35;
       gi-pango = self.gi-pango_1_0_23;
       haskell-gi-base =
