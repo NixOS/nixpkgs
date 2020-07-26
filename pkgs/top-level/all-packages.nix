@@ -7189,12 +7189,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
-  tor = callPackage ../tools/security/tor {
-    # remove this, when libevent's openssl is upgraded to 1_1_0 or newer.
-    libevent = libevent.override {
-      sslSupport = false;
-    };
-  };
+  tor = callPackage ../tools/security/tor { };
 
   tor-arm = callPackage ../tools/security/tor/tor-arm.nix { };
 
