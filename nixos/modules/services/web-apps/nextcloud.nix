@@ -7,6 +7,7 @@ let
   fpm = config.services.phpfpm.pools.nextcloud;
 
   group = if cfg.nginx.enable then config.services.nginx.group else cfg.group;
+  serverUser = if cfg.nginx.enable then config.services.nginx.user else cfg.serverUser;
 
   phpPackage =
     let
@@ -35,8 +36,8 @@ let
     #! ${pkgs.runtimeShell}
     cd ${cfg.package}
     sudo=exec
-    if [[ "$USER" != ${cfg.user} ]]; then
-      sudo='exec /run/wrappers/bin/sudo -u ${cfg.user} --preserve-env=NEXTCLOUD_CONFIG_DIR --preserve-env=OC_PASS'
+    if [[ "$USER" != nextcloud ]]; then
+      sudo='exec /run/wrappers/bin/sudo -u nextcloud --preserve-env=NEXTCLOUD_CONFIG_DIR --preserve-env=OC_PASS'
     fi
     export NEXTCLOUD_CONFIG_DIR="${cfg.home}/config"
     $sudo \
@@ -73,18 +74,9 @@ in {
       description = "Which package to use for the Nextcloud instance.";
       relatedPackages = [ "nextcloud17" "nextcloud18" "nextcloud19" ];
     };
-    user = mkOption {
+    serverUser = mkOption {
       type = types.str;
-      default = "nextcloud";
-      description = "User of the nextcloud service";
-    };
-    group = mkOption {
-      type = with types; nullOr str;
-      description = ''
-        Set group for nextcloud related services.
-        This option cannot be used if <xref linkend="opt-services.nextcloud.nginx.enable"/> is set.
-        In this case <xref linkend="opt-services.nginx.group"/> is used instead.";
-      '';
+      description = "Must be set to the user of the webserver if nginx is not used.";
     };
 
     maxUploadSize = mkOption {
@@ -182,7 +174,7 @@ in {
       };
       dbuser = mkOption {
         type = types.nullOr types.str;
-        default = cfg.user;
+        default = "nextcloud";
         description = "Database user.";
       };
       dbpass = mkOption {
@@ -337,8 +329,11 @@ in {
             && !(acfg.adminpass != null && acfg.adminpassFile != null));
           message = "Please specify exactly one of adminpass or adminpassFile";
         }
-        { assertion = cfg.nginx.enable -> (group == config.services.nginx.group);
-          message = "Nextcloud group cannot be set if nginx is used";
+        { assertion = cfg.nginx.enable -> (cfg.serverUser == null);
+          message = "serverUser cannot be set if nginx is used";
+        }
+        { assertion = ! cfg.nginx.enable -> ( hasAttr cfg.serverUser config.users.users);
+          message = "configured serverUser '${cfg.serverUser}' doesn't exist";
         }
       ];
 
@@ -486,7 +481,7 @@ in {
           script = ''
             chmod og+x ${cfg.home}
             ln -sf ${cfg.package}/apps ${cfg.home}/
-            install -o ${cfg.user} -g ${group} -d ${cfg.home}/config ${cfg.home}/data ${cfg.home}/store-apps
+            install -o nextcloud -g nextcloud -d ${cfg.home}/config ${cfg.home}/data ${cfg.home}/store-apps
             ln -sf ${overrideConfig} ${cfg.home}/config/override.config.php
 
             # Do not install if already installed
@@ -500,25 +495,26 @@ in {
             ${occSetTrustedDomainsCmd}
           '';
           serviceConfig.Type = "oneshot";
+          serviceConfig.User = "nextcloud";
         };
         nextcloud-cron = {
           environment.NEXTCLOUD_CONFIG_DIR = "${cfg.home}/config";
           serviceConfig.Type = "oneshot";
-          serviceConfig.User = cfg.user;
+          serviceConfig.User = "nextcloud";
           serviceConfig.ExecStart = "${phpPackage}/bin/php -f ${cfg.package}/cron.php";
         };
         nextcloud-update-plugins = mkIf cfg.autoUpdateApps.enable {
           serviceConfig.Type = "oneshot";
           serviceConfig.ExecStart = "${occ}/bin/nextcloud-occ app:update --all";
-          serviceConfig.User = cfg.user;
+          serviceConfig.User = "nextcloud";
           startAt = cfg.autoUpdateApps.startAt;
         };
       };
 
       services.phpfpm = {
         pools.nextcloud = {
-          user = cfg.user;
-          inherit group;
+          user = "nextcloud";
+          group = "nextcloud";
           phpOptions = phpOptionsStr;
           phpPackage = phpPackage;
           phpEnv = {
@@ -526,18 +522,19 @@ in {
             PATH = "/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin";
           };
           settings = mapAttrs (name: mkDefault) {
-            "listen.owner" = cfg.user;
-            "listen.group" = group;
+            "listen.owner" = serverUser;
+            "listen.group" = config.users.users.${serverUser}.group;
           } // cfg.poolSettings;
           extraConfig = cfg.poolConfig;
         };
       };
 
-      users.extraUsers.${cfg.user} = {
+      users.users.nextcloud = {
         home = "${cfg.home}";
-        inherit group;
+        group = "nextcloud";
         createHome = true;
       };
+      users.groups.nextcloud.members = [ "nextcloud" "${serverUser}" ];
 
       environment.systemPackages = [ occ ];
     }
