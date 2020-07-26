@@ -67,7 +67,7 @@
           (destination: { type, source, options ? null }: {
             inherit destination type source options;
           })
-          sysMounts;
+          (sysMounts // mounts);
       });
     in
     runCommand "join"
