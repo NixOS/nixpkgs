@@ -41,7 +41,7 @@ in
     };
   };
 
-  config = {
+  config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     systemd.packages = [ cfg.package ];
 
@@ -51,11 +51,10 @@ in
       path = [ pkgs.pinentry.${pinentryFlavor} ];
     };
 
-    environment.extraInit = optionalString cfg.enable
-      ''
-        if [ -z "$SSH_AUTH_SOCK" -a -n "$XDG_RUNTIME_DIR" ]; then
-          export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/yubikey-agent/yubikey-agent.sock"
-        fi
-      '';
+    environment.extraInit = ''
+      if [ -z "$SSH_AUTH_SOCK" -a -n "$XDG_RUNTIME_DIR" ]; then
+        export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/yubikey-agent/yubikey-agent.sock"
+      fi
+    '';
   };
 }
