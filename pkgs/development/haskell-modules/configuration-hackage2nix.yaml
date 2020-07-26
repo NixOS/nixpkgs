@@ -2647,7 +2647,9 @@ package-maintainers:
     # - pipes-mongodb
     - streaming-wai
   kiwi:
+    - Unique
     - glirc
+    - matterhorn
     - mattermost-api
     - mattermost-api-qc
   psibi:
@@ -7590,7 +7592,6 @@ broken-packages:
   - matrix-market
   - matrix-sized
   - matsuri
-  - matterhorn
   - maude
   - maxent
   - maxent-learner-hw
@@ -10620,7 +10621,6 @@ broken-packages:
   - uniform-io
   - union
   - union-map
-  - Unique
   - uniqueid
   - uniquely-represented-sets
   - units-attoparsec
