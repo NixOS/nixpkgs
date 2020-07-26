@@ -11,6 +11,10 @@ buildPythonPackage rec {
     sha256 = "1rhpg0jb08v0gd7f19jjiwlcdnxpmqi1fhvw7r4s9avddi4kvx5k";
   };
 
+  patches = [
+    ./default_ca_bundle.patch
+  ];
+
   nativeBuildInputs = [ pytest ];
   propagatedBuildInputs = [ urllib3 idna chardet certifi ];
   # sadly, tests require networking
