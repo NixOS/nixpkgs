@@ -303,6 +303,22 @@ let
     };
   };
 
+  AltCryptRSABigInt = buildPerlPackage {
+    pname = "Alt-Crypt-RSA-BigInt";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DANAJ/Alt-Crypt-RSA-BigInt-0.06.tar.gz";
+      sha256 = "76f434cab36999cdf09811345bb39d6b7cbed7e085b02338328c7f46e08b38f3";
+    };
+    propagatedBuildInputs = [ ClassLoader ConvertASCIIArmour CryptBlowfish CryptCBC DataBuffer DigestMD2 MathBigIntGMP MathPrimeUtil MathPrimeUtilGMP SortVersions TieEncryptedHash ];
+    meta = {
+      homepage = "https://github.com/danaj/Alt-Crypt-RSA-BigInt";
+      description = "RSA public-key cryptosystem, using Math::BigInt";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   AnyEvent = buildPerlPackage {
     pname = "AnyEvent";
     version = "7.17";
@@ -3329,6 +3345,20 @@ let
      };
   };
 
+  ConvertASCIIArmour = buildPerlPackage {
+    pname = "Convert-ASCII-Armour";
+    version = "1.4";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/V/VI/VIPUL/Convert-ASCII-Armour-1.4.tar.gz";
+      sha256 = "97e8acb6eb2a2a91af7d6cf0d2dff6fa42aaf939fc7d6d1c6057a4f0df52c904";
+    };
+    meta = {
+      description = "Convert binary octets into ASCII armoured messages";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   ConvertASN1 = buildPerlPackage {
     pname = "Convert-ASN1";
     version = "0.27";
@@ -3640,6 +3670,20 @@ let
     };
   };
 
+  CryptCAST5_PP = buildPerlPackage {
+    pname = "Crypt-CAST5_PP";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BOBMATH/Crypt-CAST5_PP-1.04.tar.gz";
+      sha256 = "cba98a80403fb898a14c928f237f44816b4848641840ce2517363c2c071b5327";
+    };
+    meta = {
+      description = "CAST5 block cipher in pure Perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CryptCBC = buildPerlPackage {
     pname = "Crypt-CBC";
     version = "2.33";
@@ -3677,6 +3721,21 @@ let
     };
   };
 
+  CryptDES_EDE3 = buildPerlPackage {
+    pname = "Crypt-DES_EDE3";
+    version = "0.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BT/BTROTT/Crypt-DES_EDE3-0.01.tar.gz";
+      sha256 = "9cb2e04b625e9cc0833cd499f76fd12556583ececa782a9758a55e3f969748d6";
+    };
+    propagatedBuildInputs = [ CryptDES ];
+    meta = {
+      description = "Triple-DES EDE encryption/decryption";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CryptDH = buildPerlPackage {
     pname = "Crypt-DH";
     version = "0.07";
@@ -3697,6 +3756,21 @@ let
     buildInputs = [ pkgs.gmp DevelChecklib TestRequires ];
     NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
+  };
+
+  CryptDSA = buildPerlPackage {
+    pname = "Crypt-DSA";
+    version = "1.17";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AD/ADAMK/Crypt-DSA-1.17.tar.gz";
+      sha256 = "d1b8585f6bf746f76e5dc5da3641d325ed656bc2e5f344b54514b55c31009a03";
+    };
+    propagatedBuildInputs = [ DataBuffer DigestSHA1 FileWhich ];
+    meta = {
+      description = "DSA Signatures and Key Generation";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
   };
 
   CryptECB = buildPerlPackage {
@@ -3846,6 +3920,21 @@ let
     };
   };
 
+  CryptRIPEMD160 = buildPerlPackage {
+    pname = "Crypt-RIPEMD160";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TODDR/Crypt-RIPEMD160-0.06.tar.gz";
+      sha256 = "ea64a1e9eb42f3d79855a392e7cca6b86e8e0bcc9aabcc5efa5fa32415b67dba";
+    };
+    meta = {
+      homepage = "http://wiki.github.com/toddr/Crypt-RIPEMD160";
+      description = "Perl extension for the RIPEMD-160 Hash function";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CryptMySQL = buildPerlModule {
     pname = "Crypt-MySQL";
     version = "0.04";
@@ -3912,6 +4001,47 @@ let
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BJ/BJKUIT/Crypt-SmbHash-0.12.tar.gz";
       sha256 = "0dxivcqmabkhpz5xzph6rzl8fvq9xjy26b2ci77pv5gsmdzari38";
+    };
+  };
+
+  CryptTwofish = buildPerlPackage {
+    pname = "Crypt-Twofish";
+    version = "2.17";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AM/AMS/Crypt-Twofish-2.17.tar.gz";
+      sha256 = "eed502012f0c63927a1a32e3154071cc81175d1992a893ec41f183b6e3e5d758";
+    };
+    meta = {
+      description = "The Twofish Encryption Algorithm";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  CryptOpenPGP = buildPerlPackage {
+    pname = "Crypt-OpenPGP";
+    version = "1.12";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SR/SROMANOV/Crypt-OpenPGP-1.12.tar.gz";
+      sha256 = "e8a7ff2a993b76a69ad6dffdbe55755be5678b84e6ec494dcd9ab966f766f50e";
+    };
+    patches = [
+      # See https://github.com/NixOS/nixpkgs/pull/93599
+      ../development/perl-modules/crypt-openpgp-remove-impure-keygen-tests.patch
+    ];
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [ AltCryptRSABigInt CryptBlowfish CryptCAST5_PP CryptDES_EDE3 CryptDSA CryptIDEA CryptRIPEMD160 CryptRijndael CryptTwofish DataBuffer FileHomeDir LWP TermReadKey URI BytesRandomSecure ];
+
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/pgplet
+    '';
+
+    meta = {
+      homepage = "https://github.com/btrott/Crypt-OpenPGP";
+      description = "Pure-Perl OpenPGP implementation";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 
@@ -5598,6 +5728,20 @@ let
     };
   };
 
+  DataBuffer = buildPerlPackage {
+    pname = "Data-Buffer";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BT/BTROTT/Data-Buffer-0.04.tar.gz";
+      sha256 = "2b3d09b7bcf389fc116207b283bee250e348d44c9c63460bee67efab4dd21bb4";
+    };
+    meta = {
+      description = "Read/write buffer class";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   DBIxIntrospector = buildPerlPackage {
     pname = "DBIx-Introspector";
     version = "0.001005";
@@ -5803,6 +5947,20 @@ let
     meta = {
       description = "Perl extension for 32 bit Jenkins Hashing Algorithm";
       license = stdenv.lib.licenses.artistic2;
+    };
+  };
+
+  DigestMD2 = buildPerlPackage {
+    pname = "Digest-MD2";
+    version = "2.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GA/GAAS/Digest-MD2-2.04.tar.gz";
+      sha256 = "d0aabf4834c20ac411bea427c4a308b59a5fcaa327679ef5294c1d68ab71eed3";
+    };
+    meta = {
+      description = "Perl interface to the MD2 Algorithm";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 
@@ -11661,6 +11819,40 @@ let
     };
     propagatedBuildInputs = [ MathLibm constant-defer ];
     buildInputs = [ DataFloat MathBigIntLite NumberFraction ];
+  };
+
+  MathPrimeUtil = buildPerlPackage {
+    pname = "Math-Prime-Util";
+    version = "0.73";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DANAJ/Math-Prime-Util-0.73.tar.gz";
+      sha256 = "4afa6dd8cdb97499bd4eca6925861812c29d9f5a0f1ac27ad9d2d9c9b5602894";
+    };
+    propagatedBuildInputs = [ MathPrimeUtilGMP ];
+    meta = {
+      homepage = "https://github.com/danaj/Math-Prime-Util";
+      description = "Utilities related to prime numbers, including fast sieves and factoring";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  MathPrimeUtilGMP = buildPerlPackage {
+    pname = "Math-Prime-Util-GMP";
+    version = "0.52";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DANAJ/Math-Prime-Util-GMP-0.52.tar.gz";
+      sha256 = "2697c7fd5c7e35fdec7f50ed56a67be807a2f22657589e637dad3592744003be";
+    };
+    buildInputs = [ pkgs.gmp ];
+    NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
+    meta = {
+      homepage = "https://github.com/danaj/Math-Prime-Util-GMP";
+      description = "Utilities related to prime numbers, using GMP";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
   };
 
   MathRandom = buildPerlPackage {
@@ -20571,6 +20763,21 @@ let
     meta = {
       description = "Cycle through a list of values via a scalar";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TieEncryptedHash = buildPerlPackage {
+    pname = "Tie-EncryptedHash";
+    version = "1.24";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/V/VI/VIPUL/Tie-EncryptedHash-1.24.tar.gz";
+      sha256 = "aa9a083a231e4046170a5894644e3c59679c7dbd0aa2d1217dc85150df2c1e21";
+    };
+    propagatedBuildInputs = [ CryptBlowfish CryptCBC CryptDES ];
+    meta = {
+      description = "Hashes (and objects based on hashes) with encrypting fields";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 
