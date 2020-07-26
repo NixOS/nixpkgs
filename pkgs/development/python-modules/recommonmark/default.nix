@@ -35,5 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/rtfd/recommonmark";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fridh ];
+    broken = true; #broke until it works with sphinx 3
   };
 }
