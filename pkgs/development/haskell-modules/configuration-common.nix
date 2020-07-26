@@ -1458,6 +1458,11 @@ self: super: {
       gi-gdkpixbuf = self.gi-gdkpixbuf_2_0_24;
       gi-gio = self.gi-gio_2_0_27;
       gi-glib = self.gi-glib_2_0_24;
+      gi-harfbuzz = overrideCabal super.gi-harfbuzz (oldAttrs: {
+        postUnpack = (oldAttrs.postUnpack or "") + ''
+          substituteInPlace gi-harfbuzz-*/gi-harfbuzz.cabal --replace 'pkgconfig-depends: harfbuzz >= 1' 'pkgconfig-depends: harfbuzz >= 1, harfbuzz-gobject'
+        '';
+      });
       gi-gobject =
         let
           patch = pkgs.fetchpatch {
