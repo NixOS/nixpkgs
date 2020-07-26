@@ -1412,6 +1412,16 @@
     githubId = 30435868;
     name = "Okina Matara";
   };
+  Chili-Man = {
+    email = "dr.elhombrechile@gmail.com";
+    name = "Diego Rodriguez";
+    github = "Chili-Man";
+    githubId = 631802;
+    keys = [{
+      longkeyid = "rsa4096/0xE0EBAD78F0190BD9";
+      fingerprint = "099E 3F97 FA08 3D47 8C75  EBEC E0EB AD78 F019 0BD9";
+    }];
+  };
   chkno = {
     email = "chuck@intelligence.org";
     github = "chkno";
