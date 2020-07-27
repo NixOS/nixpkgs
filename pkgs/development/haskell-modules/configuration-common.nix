@@ -1451,4 +1451,7 @@ self: super: {
     };
   };
 
+  # Testsuite trying to run `which haskeline-examples-Test`
+  haskeline_0_8_0_0 = dontCheck super.haskeline_0_8_0_0;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
