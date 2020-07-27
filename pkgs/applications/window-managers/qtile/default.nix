@@ -1,7 +1,9 @@
 {
-stdenv, fetchFromGitHub, python37Packages, glib, cairo, pango, pkgconfig, libxcb, xcbutilcursor, librsvg,
+stdenv, fetchFromGitHub, substituteAll,
+# dependencies
+python37Packages, glib, cairo, pango, pkgconfig, libxcb, xcbutilcursor, librsvg,
 # for tests, see http://docs.qtile.org/en/v0.16.0/manual/hacking.html
-xvfb_run, xrandr, xcalc, xeyes, xclock
+xvfb_run, xrandr, xcalc, xeyes, xclock, xterm, imagemagick
 }:
 
 let 
@@ -24,76 +26,57 @@ pypa.buildPythonApplication {
   };
 
   patches = [
-    ./0001-Substitution-vars-for-absolute-paths.patch
+    (substituteAll {
+      src = ./0001-Substitution-vars-for-absolute-paths.patch;
+      glib = glib.out;
+      pango = pango.out;
+      inherit xcbutilcursor;
+      })
     ./0002-Restore-PATH-and-PYTHONPATH.patch
-    ./0003-Restart-executable.patch
-    ./0004-Keep-env-in-test-process-spawner.patch #TODO attempt to upstream
+    (substituteAll {
+      src = ./0003-Restart-executable.patch;
+      out = "$out";
+      })
+    ./0004-Keep-env-in-test-process-spawner.patch #TODO upstream this
   ];
-
-  postPatch = ''
-    substituteInPlace libqtile/core/manager.py --subst-var-by out $out
-    substituteInPlace libqtile/pangocffi.py --subst-var-by glib ${glib.out}
-    substituteInPlace libqtile/pangocffi.py --subst-var-by pango ${pango.out}
-    substituteInPlace libqtile/backend/x11/xcursors.py --subst-var-by xcb-cursor ${xcbutilcursor.out}
-  '';
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib libxcb cairo pango pypa.xcffib ];
+  buildInputs = [ glib libxcb cairo pango pypa.xcffib librsvg ]; # librsvg with the gdk-pixbuf hook provides GDK_PIXBUF_MODULE_FILE with svg support
 
   pythonPath = with pypa; [ xcffib cairocffi-xcffib setuptools setuptools_scm ]; 
 
-  checkInputs = [ pypa.pytest pypa.pytest-rerunfailures xvfb_run xrandr xcalc xeyes xclock ];
-
-  preCheck = ''
-    oldhome="$HOME"
-    HOME=$(mktemp -d) #tests need a home directory
-  '';
+  checkInputs = [ pypa.pytest pypa.pytest-rerunfailures xvfb_run xrandr xcalc xeyes xclock xterm pypa.psutil imagemagick ];
 
   checkPhase = ''
     runHook preCheck
 
-    #TODO convert to patch style?
-    # TODO This is taken from scripts/ffibuild but excluding the pulse component, which we dont build,
-    # I'm not sure why it doesn't seem to need to be run for the build phase?
+    oldhome="$HOME"
+    HOME=$(mktemp -d) #tests need a home directory
+
+    # This is taken from scripts/ffibuild but excluding the pulse component, which we dont build,
     echo "building pango"
     python3 ./libqtile/pango_ffi_build.py
     echo "building xcursors"
     python3 ./libqtile/backend/x11/xcursors_ffi_build.py
 
-      #TODO whats the correct way to set this var?
-      GDK_PIXBUF_MODULE_FILE="${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" \
-      xvfb-run -s '-screen 0 800x600x24' \
-      pytest -vv --reruns 5 \
-        `#These fail during collection due to missing deps` \
-        --ignore=test/test_bar.py \
-        --ignore=test/test_fakescreen.py \
-        --ignore=test/test_images2.py \
-        `#other failures` \
-        --deselect=test/test_qtile_cmd.py::test_qtile_cmd \
-        --deselect=test/test_scratchpad.py::test_toggling \
-        --deselect=test/test_scratchpad.py::test_kill \
-        --deselect=test/test_scratchpad.py::test_floating_toggle \
-        --deselect=test/test_scratchpad.py::test_focus_lost_hide \
-        --deselect=test/test_scratchpad.py::test_focus_cycle \
-        --deselect=test/widgets/test_battery.py::test_images_good \
-        --deselect=test/widgets/test_volume.py::test_images_good \
-        `#warnings` \
-        --deselect=test/widgets/test_misc.py::test_thermalsensor_regex_compatibility
- 
-    runHook postCheck
-  '';
+    patchShebangs /build/source/bin/*
+    #TODO figure out why tests fail nondeterministically, after fixing, pytest-rerunfailures will be unnecessary
+    # error: xcffib.ConnectionException: xcb connection errors because of socket, pipe and other stream errors.
+    xvfb-run -s '-screen 0 1024x768x24' pytest -vv --reruns 5
 
-  postCheck = ''
     HOME="$oldhome"
+
+    runHook postCheck
   '';
 
   postInstall = ''
     wrapProgram $out/bin/qtile \
-      --run 'export QTILE_WRAPPER=$0' \
-      --run 'export QTILE_SAVED_PYTHONPATH=$PYTHONPATH' \
-      --run 'export QTILE_SAVED_PATH=$PATH'
+      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
+      --set QTILE_WRAPPER '$0' \
+      --set QTILE_SAVED_PYTHONPATH '$PYTHONPATH' \
+      --set QTILE_SAVED_PATH '$PATH'
   '';
 
   meta = with stdenv.lib; {
