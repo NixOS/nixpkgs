@@ -100,6 +100,9 @@ in stdenv.mkDerivation (rec {
     ln -sv $PWD/lib $out
   '';
 
+  # mesa drivers use the build-id as a cache key
+  LDFLAGS = optionalString enableSharedLibraries "-Wl,--build-id=sha1";
+
   cmakeFlags = with stdenv; [
     "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
     "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
