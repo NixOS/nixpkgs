@@ -1454,4 +1454,11 @@ self: super: {
   # Testsuite trying to run `which haskeline-examples-Test`
   haskeline_0_8_0_0 = dontCheck super.haskeline_0_8_0_0;
 
+  # Requires repline 0.4 which is the default only for ghc8101, override for the rest
+  zre = super.zre.override {
+    repline = self.repline_0_4_0_0.override {
+      haskeline = self.haskeline_0_8_0_0;
+    };
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
