@@ -2,15 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gettext";
-  version = "0.20.1";
+  version = "0.21";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/${pname}-${version}.tar.gz";
-    sha256 = "0p3zwkk27wm2m2ccfqm57nj7vqkmfpn7ja1nf65zmhz8qqs5chb6";
+    sha256 = "04kbg1sx0ncfrsbr85ggjslqkzzb243fcw9nyh3rrv1a22ihszf7";
   };
   patches = [
     ./absolute-paths.diff
-    ./gettext.git-2336451ed68d91ff4b5ae1acbc1eca30e47a86a9.patch
   ]
   ++ lib.optional stdenv.isDarwin
       (fetchpatch {
