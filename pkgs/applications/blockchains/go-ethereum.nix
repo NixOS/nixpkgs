@@ -11,21 +11,8 @@ buildGoModule rec {
     sha256 = "175cy5cqkdhvh3kv2d0madybbz2sdbgxhm8xfb3ydbaf2hzihxmx";
   };
 
-  usb = fetchFromGitHub {
-    owner = "karalabe";
-    repo = "usb";
-    rev = "911d15fe12a9c411cf5d0dd5635231c759399bed";
-    sha256 = "0asd5fz2rhzkjmd8wjgmla5qmqyz4jaa6qf0n2ycia16jsck6wc2";
-  };
-
-  vendorSha256 = "0w2214fllw93xbrlxayhl014aqbjsc8zz7mpik7w5b26m60hn5kr";
-
-  overrideModAttrs = (_: {
-      postBuild = ''
-      cp -r --reflink=auto ${usb}/libusb vendor/github.com/karalabe/usb
-      cp -r --reflink=auto ${usb}/hidapi vendor/github.com/karalabe/usb
-      '';
-    });
+  modvendorCopy = true;
+  vendorSha256 = "0iwcdv6wvjbp84m5d2l3996wpklzik1dx4n70v2kd9fcsqcrgvvq";
 
   subPackages = [
     "cmd/abidump"
