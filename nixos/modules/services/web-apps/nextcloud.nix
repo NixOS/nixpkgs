@@ -458,7 +458,17 @@ in {
           script = ''
             chmod og+x ${cfg.home}
             ln -sf ${cfg.package}/apps ${cfg.home}/
-            install -o nextcloud -g nextcloud -d ${cfg.home}/config ${cfg.home}/data ${cfg.home}/store-apps
+
+            # create nextcloud directories.
+            # if the directories exist already with wrong permissions, we fix that
+            for dir in ${cfg.home}/config ${cfg.home}/data ${cfg.home}/store-apps; do
+              if [ ! -e $dir ]; then
+                install -o nextcloud -g nextcloud -d $dir
+              elif [ $(stat -c "%G" $dir) != "nextcloud" ]; then
+                chown -R nextcloud:nextcloud $dir
+              fi
+            done
+
             ln -sf ${overrideConfig} ${cfg.home}/config/override.config.php
 
             # Do not install if already installed
