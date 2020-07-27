@@ -13,25 +13,15 @@ buildGoModule rec {
 
   deleteVendor = true;
 
+  patches = [
+    ./gomod.patch
+  ];
+
   buildPhase = ''
     make -e build${lib.optionalString enableStatic "-static"}
   '';
 
-  lxd = fetchFromGitHub {
-    owner = "lxc";
-    repo = "lxd";
-    rev = "814c96fcec7478c9cac9582fead011b2dee0af5b";
-    sha256 = "03k2mwkfzgqmgzgxw46mymgkidbjlfv70pzw8hlyi18ag8jj4g5j";
-  };
-
-  overrideModAttrs = (_: {
-      postBuild = ''
-      rm -r vendor/github.com/lxc/lxd
-      cp -r --reflink=auto ${lxd} vendor/github.com/lxc/lxd
-      '';
-    });
-
-  vendorSha256 = "1nnz75mv27iwl5z7wa986gs8mhyn10452vini5x90yfx523bg589";
+  vendorSha256 = "1nkni9ikpc0wngh5v0qmlpn5s9v85lb2ih22f3h3lih7nc29yv87";
 
   installPhase = ''
     mkdir -p $out/bin
