@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "matcha-gtk-theme";
-  version = "2020-06-18";
+  version = "2020-07-27";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "1hgwlzyfxl8yw93r0vsnvi51a4k5bn5qw1axhldy5l928qhmd5x7";
+    sha256 = "09kzxd92zqissk0bk3aw06hsa05riq88xvwhlxfw2agig13cfrhw";
   };
 
   buildInputs = [ gdk-pixbuf librsvg ];
