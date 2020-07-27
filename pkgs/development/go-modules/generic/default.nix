@@ -1,4 +1,4 @@
-{ go, cacert, git, lib, removeReferencesTo, stdenv }:
+{ go, cacert, git, modvendor, lib, removeReferencesTo, stdenv }:
 
 { name ? "${args'.pname}-${args'.version}"
 , src
@@ -20,6 +20,8 @@
 , vendorSha256
 # Whether to delete the vendor folder supplied with the source.
 , deleteVendor ? false
+
+, modvendorCopy ? false
 
 , modSha256 ? null
 
@@ -88,6 +90,9 @@ let
         exit 10
       fi
       go mod vendor
+      if ${ lib.boolToString modvendorCopy }; then
+        ${modvendor}/bin/modvendor -copy="**/*.c **/*.cc **/*.cpp **/*.cxx **/*.h **/*.hh **/*.hpp **/*.hxx **/*.inc **/*.m **/*.proto **/*.s **/*.S **/*.swig **/*.swigcxx **/*.sx **/*.syso" -v
+      fi
       mkdir -p vendor
 
       runHook postBuild
