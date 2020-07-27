@@ -16,7 +16,7 @@ buildGoModule {
   meta = with lib; {
     homepage = "https://github.com/devture/matrix-corporal";
     description = "Reconciliator and gateway for a managed Matrix server";
-    maintainers = [ teams.matrix.members ];
+    maintainers = [ dandellion ];
     license = licenses.agpl3;
   };
 }

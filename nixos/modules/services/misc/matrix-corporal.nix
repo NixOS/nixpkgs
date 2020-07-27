@@ -1,10 +1,14 @@
 { lib, pkgs, config, ... }:
 let
   cfg = config.services.matrix-corporal;
+  matrix-corporal-config = pkgs.writeTextFile {
+    name = "matrix-corporal-config.json";
+    text = lib.generators.toJSON {} cfg.settings;
+  };
 in
 {
   options.services.matrix-corporal = {
-    enable = lib.mkEnableOption "Enable matrix-corporal";
+    enable = lib.mkEnableOption "matrix-corporal";
 
     package = lib.mkOption {
       type = lib.types.package;
@@ -12,6 +16,7 @@ in
     };
 
     settings = lib.mkOption {
+      type = lib.types.attrs;
       default = {};
       description = ''
         Configuration for matrix-corporal, see <link xlink:href="https://github.com/devture/matrix-corporal/blob/master/docs/configuration.md"/>
@@ -24,9 +29,8 @@ in
     systemd.services.matrix-corporal = {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        Type = "simple";
-        DynamicUser="yes";
-        ExecStart = "${cfg.package}/bin/matrix-corporal -c ${pkgs.writeTextFile {name = "matrix-corporal-config.json"; text = lib.generators.toJSON {} cfg.settings;}}";
+        DynamicUser = true;
+        ExecStart = "${cfg.package}/bin/matrix-corporal -c ${matrix-corporal-config}}";
       };
     };
   };
