@@ -7,7 +7,7 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
-  makeHostNameTest = hostName: domain:
+  makeHostNameTest = { hostName, domain, expectedDomain }:
     let
       fqdn = hostName + (optionalString (domain != null) ".${domain}");
     in
@@ -29,13 +29,11 @@ let
         testScript = ''
           start_all()
 
-          machine = ${hostName}
-
           machine.wait_for_unit("network-online.target")
 
           # The FQDN, domain name, and hostname detection should work as expected:
           assert "${fqdn}" == machine.succeed("hostname --fqdn").strip()
-          assert "${optionalString (domain != null) domain}" == machine.succeed("dnsdomainname").strip()
+          assert "${expectedDomain}" == machine.succeed("dnsdomainname").strip()
           assert (
               "${hostName}"
               == machine.succeed(
@@ -60,7 +58,21 @@ let
 
 in
 {
-  noExplicitDomain = makeHostNameTest "ahost" null;
+  fqdnHostname = makeHostNameTest {
+    hostName = "ahost.adomain";
+    domain = null;
+    expectedDomain = "adomain";
+  };
 
-  explicitDomain = makeHostNameTest "ahost" "adomain";
+  noExplicitDomain = makeHostNameTest {
+    hostName ="ahost";
+    domain = null;
+    expectedDomain = "";
+  };
+
+  explicitDomain = makeHostNameTest {
+    hostName ="ahost";
+    domain = "adomain";
+    expectedDomain = "adomain";
+  };
 }
