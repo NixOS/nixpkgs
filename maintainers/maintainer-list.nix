@@ -10299,6 +10299,12 @@
     githubId = 2212422;
     name = "uwap";
   };
+  V = {
+    name = "V";
+    email = "v@anomalous.eu";
+    github = "deviant";
+    githubId = 68829907;
+  };
   va1entin = {
     email = "github@valentinsblog.com";
     github = "va1entin";
