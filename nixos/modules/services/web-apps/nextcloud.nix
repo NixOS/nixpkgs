@@ -510,7 +510,7 @@ in {
           };
           settings = mapAttrs (name: mkDefault) {
             "listen.owner" = config.services.nginx.user;
-            "listen.group" = config.users.users.${config.services.nginx.user}.group;
+            "listen.group" = config.services.nginx.group;
           } // cfg.poolSettings;
           extraConfig = cfg.poolConfig;
         };
