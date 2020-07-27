@@ -4151,6 +4151,12 @@
     github = "karantan";
     githubId = 7062631;
   };
+  KarlJoad = {
+    email = "karl@hallsby.com";
+    github = "KarlJoad";
+    githubId = 34152449;
+    name = "Karl Hallsby";
+  };
   karolchmist = {
     email = "info+nix@chmist.com";
     name = "karolchmist";
