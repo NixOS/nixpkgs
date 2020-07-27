@@ -17,7 +17,30 @@ in
 
     settings = lib.mkOption {
       type = lib.types.attrs;
-      default = {};
+      default = {
+        Matrix = {
+          HomeserverApiEndpoint = "localhost:8008";
+          TimeoutMilliseconds = 45000;
+        };
+        Reconciliation = {
+          UserId = "@matrix-corporal:" + cfg.settings.matrix.HomeserverDomainName;
+          RetryIntervalMilliseconds = 30000;
+        };
+        HttpGateway = {
+          ListenAddress = "127.0.0.1:41080";
+        };
+        HttpApi = {
+          Enabled = true;
+          ListenAddress = "127.0.0.1:41081";
+        };
+        PolicyProvider = {
+          Type = "static_file";
+          Path = "/etc/matrix-corporal/policy.json";
+        };
+        Misc = {
+          Debug = true;
+        };
+      };
       description = ''
         Configuration for matrix-corporal, see <link xlink:href="https://github.com/devture/matrix-corporal/blob/master/docs/configuration.md"/>
         for supported values.
