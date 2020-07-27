@@ -9,11 +9,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sublime-music";
-  version = "0.11.0";
+  version = "0.11.7";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1rnjc8pjfaq67mq10gy939g77azc80lxf77s9nsaxds4q5j1yrl2";
+    sha256 = "1x6b02gw46gp6qcgv67j7k3gr1dpfczbyma6dxanag8pnpqrj8qi";
   };
 
   nativeBuildInputs = [
