@@ -539,6 +539,23 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
      to be used for every display-manager in NixOS.
     </para>
    </listitem>
+  <listitem>
+    <para>
+     The <literal>bitcoind</literal> module has changed to multi-instance, using submodules.
+     Therefore, it is now mandatory to name each instance, e.g.:
+<programlisting>
+services.bitcoind = {
+  enable = true;
+};
+</programlisting>
+     requires a name now:
+<programlisting>
+services.bitcoind."example-mainnet" = {
+  enable = true;
+};
+</programlisting>
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
