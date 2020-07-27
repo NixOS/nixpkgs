@@ -5904,7 +5904,6 @@ broken-packages:
   - hasql-dynamic-statements
   - hasql-generic
   - hasql-implicits
-  - hasql-migration
   - hasql-optparse-applicative
   - hasql-postgres
   - hasql-postgres-options
