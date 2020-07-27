@@ -2566,6 +2566,8 @@ in {
 
   mxnet = callPackage ../development/python-modules/mxnet { };
 
+  nplusone = callPackage ../development/python-modules/nplusone { };
+
   parsy = callPackage ../development/python-modules/parsy { };
 
   portalocker = callPackage ../development/python-modules/portalocker { };
