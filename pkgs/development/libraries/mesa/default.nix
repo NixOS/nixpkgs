@@ -57,7 +57,6 @@ stdenv.mkDerivation {
   patches = [
     ./missing-includes.patch # dev_t needs sys/stat.h, time_t needs time.h, etc.-- fixes build w/musl
     ./opencl-install-dir.patch
-    ./disk_cache-include-dri-driver-path-in-cache-key.patch
     ./link-radv-with-ld_args_build_id.patch
   ] # do not prefix user provided dri-drivers-path
     ++ lib.optional (lib.versionOlder version "19.0.0") (fetchpatch {
@@ -94,7 +93,6 @@ stdenv.mkDerivation {
     # https://gitlab.freedesktop.org/mesa/mesa/blob/master/docs/meson.html#L327
     "-Db_ndebug=true"
 
-    "-Ddisk-cache-key=${placeholder "drivers"}"
     "-Ddri-search-path=${libglvnd.driverLink}/lib/dri"
 
     "-Dplatforms=${concatStringsSep "," eglPlatforms}"
