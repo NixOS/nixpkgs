@@ -39,7 +39,7 @@ in
         };
         Misc = {
           Debug = true;
-        };
+        };
       };
       description = ''
         Configuration for matrix-corporal, see <link xlink:href="https://github.com/devture/matrix-corporal/blob/master/docs/configuration.md"/>
