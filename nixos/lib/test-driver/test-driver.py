@@ -216,7 +216,7 @@ class Machine:
             if cmd:
                 match = re.search("run-(.+)-vm$", cmd)
                 if match:
-                    self.name = match.group(1)
+                    self.name = match.group(1).replace(".", "_")
 
         self.script = args.get("startCommand", self.create_startcommand(args))
 
