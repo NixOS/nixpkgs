@@ -275,6 +275,7 @@ in
             proxy_set_header X-Forwarded-Proto $scheme;
             proxy_set_header X-Forwarded-Host $host;
             proxy_set_header X-Forwarded-Server $host;
+            proxy_set_header SCRIPT_NAME ${w.webLocation};
 
             proxy_pass http://unix:/run/moin/${name}/gunicorn.sock;
           '';
