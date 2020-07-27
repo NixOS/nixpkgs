@@ -7,11 +7,11 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mycli";
-  version = "1.21.1";
+  version = "1.22.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1q9p0yik9cpvpxjs048anvhicfcna84mpl7axv9bwgr48w40lqwg";
+    sha256 = "18qxxrpdksg3s73va7nkbkwi34kg9m1pls7w4fh5f4jk4p434zsf";
   };
 
   propagatedBuildInputs = [
@@ -24,13 +24,8 @@ buildPythonApplication rec {
     export HOME=.
     export LC_ALL="en_US.UTF-8"
 
-    py.test
-  '';
-
-  # TODO: remove with next release
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "prompt_toolkit>=2.0.6,<3.0.0" "prompt_toolkit"
+    py.test \
+      --ignore=mycli/packages/paramiko_stub/__init__.py
   '';
 
   meta = {
