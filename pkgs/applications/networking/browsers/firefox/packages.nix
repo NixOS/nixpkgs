@@ -33,6 +33,34 @@ rec {
     };
   };
 
+  firefox-esr-78 = common rec {
+    pname = "firefox-esr";
+    ffversion = "78.1.0esr";
+    src = fetchurl {
+      url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
+      sha512 = "223v796vjsvgs3yw442c8qbsbh43l1aniial05rl70hx44rh9sg108ripj8q83p5l9m0sp67x6ixd2xvifizv6461a1zra1rvbb1caa";
+    };
+
+    patches = [
+      ./no-buildconfig-ffx76.patch
+    ];
+
+    meta = {
+      description = "A web browser built from Firefox Extended Support Release source tree";
+      homepage = "http://www.mozilla.com/en-US/firefox/";
+      maintainers = with lib.maintainers; [ eelco andir ];
+      platforms = lib.platforms.unix;
+      badPlatforms = lib.platforms.darwin;
+      broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
+                                             # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
+      license = lib.licenses.mpl20;
+    };
+    updateScript = callPackage ./update.nix {
+      attrPath = "firefox-esr-78-unwrapped";
+      versionKey = "ffversion";
+    };
+  };
+
   firefox-esr-68 = (common rec {
     pname = "firefox-esr";
     ffversion = "68.10.0esr";
