@@ -11,20 +11,8 @@ buildGoModule rec {
     sha256 = "0y5gvdrdr6i9spdwsxvzs1bxs32icxpkqxnglp1bf4gglc580d87";
   };
 
-  hid = fetchFromGitHub {
-    owner = "karalabe";
-    repo = "hid";
-    rev = "9c14560f9ee858c43f40b5cd01392b167aacf4e8";
-    sha256 = "0xc7b8mwha64j7l2fr2g5zy8pz7cqi0vrxx60gii52b6ii31xncx";
-  };
-
-  vendorSha256 = "0f81nrg8v3xh2hcx7g77p3ahr4gyj042bwr1knf2phpahgz9n9rn";
-  overrideModAttrs = (_: {
-      postBuild = ''
-      cp -r --reflink=auto ${hid}/libusb vendor/github.com/karalabe/hid
-      cp -r --reflink=auto ${hid}/hidapi vendor/github.com/karalabe/hid
-      '';
-    });
+  modvendorCopy = true;
+  vendorSha256 = "1zq66dri85mjpw149jc00ngv8g8k5jag4gwjwqndw3x7n2c1p52s";
 
   subPackages = [ "." "cmd/saml2aws" ];
 
