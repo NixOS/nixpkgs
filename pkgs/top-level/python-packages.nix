@@ -2698,7 +2698,10 @@ in {
 
   gitdb2 = callPackage ../development/python-modules/gitdb2 { };
 
-  GitPython = callPackage ../development/python-modules/GitPython { };
+  GitPython = if isPy3k then
+                callPackage ../development/python-modules/GitPython { }
+              else
+                callPackage ../development/python-modules/GitPython/2.nix { };
 
   git-annex-adapter = callPackage ../development/python-modules/git-annex-adapter {
     inherit (pkgs.gitAndTools) git-annex;
@@ -3227,7 +3230,10 @@ in {
 
   validate-email = callPackage ../development/python-modules/validate-email { };
 
-  venusian = callPackage ../development/python-modules/venusian { };
+  venusian = if isPy27 then
+               callPackage ../development/python-modules/venusian/2.nix { }
+             else
+               callPackage ../development/python-modules/venusian { };
 
   chameleon = callPackage ../development/python-modules/chameleon { };
 
@@ -5676,7 +5682,10 @@ in {
 
   umemcache = callPackage ../development/python-modules/umemcache {};
 
-  uritools = callPackage ../development/python-modules/uritools { };
+  uritools = if isPy3k then
+               callPackage ../development/python-modules/uritools { }
+             else
+               callPackage ../development/python-modules/uritools/2.nix { };
 
   update_checker = callPackage ../development/python-modules/update_checker {};
 
@@ -5975,7 +5984,8 @@ in {
 
   sphinx_rtd_theme = callPackage ../development/python-modules/sphinx_rtd_theme { };
 
-  sphinxcontrib-blockdiag = callPackage ../development/python-modules/sphinxcontrib-blockdiag { };
+  sphinxcontrib-blockdiag = if isPy3k then callPackage ../development/python-modules/sphinxcontrib-blockdiag { }
+                            else callPackage ../development/python-modules/sphinxcontrib-blockdiag/1.nix { };
 
   sphinxcontrib-openapi = callPackage ../development/python-modules/sphinxcontrib-openapi { };
 
@@ -7038,3 +7048,4 @@ in {
 });
 
 in fix' (extends overrides packages)
+
