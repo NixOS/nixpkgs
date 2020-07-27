@@ -19,6 +19,8 @@
 , nspr_latest
 , nss_latest
 , sqlite_3_31_1
+, rustPackages_1_44
+, rust-cbindgen_latest
 
 ### optionals
 
@@ -51,10 +53,6 @@
 # macOS dependencies
 , xcbuild, CoreMedia, ExceptionHandling, Kerberos, AVFoundation, MediaToolbox
 , CoreLocation, Foundation, AddressBook, libobjc, cups, rsync
-
-# dependencies requires for stable backports
-
-, rust-cbindgen_latest
 
 ## other
 
@@ -103,6 +101,8 @@ nss_pkg = if lib.versionAtLeast ffversion "74" then nss_latest else nss;
 nspr_pkg = if lib.versionAtLeast ffversion "79" then nspr_latest else nspr;
 sqlite_pkg = if lib.versionAtLeast ffversion "74" then sqlite_3_31_1 else sqlite;
 rust-cbindgen_pkg = if lib.versionAtLeast ffversion "77" then rust-cbindgen_latest else rust-cbindgen;
+rustc_pkg = if lib.versionAtLeast ffversion "79" then rustPackages_1_44.rustc else rustc;
+cargo_pkg = if lib.versionAtLeast ffversion "79" then rustPackages_1_44.cargo else cargo;
 
 in
 
@@ -166,7 +166,7 @@ stdenv.mkDerivation ({
   nativeBuildInputs =
     [
       autoconf213
-      cargo
+      cargo_pkg
       gnused
       llvmPackages.llvm # llvm-objdump
       nodejs
@@ -175,7 +175,7 @@ stdenv.mkDerivation ({
       python2
       python3
       rust-cbindgen_pkg
-      rustc
+      rustc_pkg
       which
     ]
     ++ lib.optional gtk3Support wrapGAppsHook
