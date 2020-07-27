@@ -2726,6 +2726,8 @@ in {
 
   pytest-pep257 = callPackage ../development/python-modules/pytest-pep257 { };
 
+  pytest-pythonpath = callPackage ../development/python-modules/pytest-pythonpath { };
+
   pytest-raisesregexp = callPackage ../development/python-modules/pytest-raisesregexp { };
 
   pytest-random-order = callPackage ../development/python-modules/pytest-random-order { };
