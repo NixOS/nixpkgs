@@ -6,9 +6,6 @@ let
   cfg = config.services.nextcloud;
   fpm = config.services.phpfpm.pools.nextcloud;
 
-  group = if cfg.nginx.enable then config.services.nginx.group else cfg.group;
-  serverUser = if cfg.nginx.enable then config.services.nginx.user else cfg.serverUser;
-
   phpPackage =
     let
       base = pkgs.php74;
@@ -74,10 +71,6 @@ in {
       description = "Which package to use for the Nextcloud instance.";
       relatedPackages = [ "nextcloud17" "nextcloud18" "nextcloud19" ];
     };
-    serverUser = mkOption {
-      type = types.str;
-      description = "Must be set to the user of the webserver if nginx is not used.";
-    };
 
     maxUploadSize = mkOption {
       default = "512M";
@@ -95,16 +88,6 @@ in {
         The directory where the skeleton files are located. These files will be
         copied to the data directory of new users. Leave empty to not copy any
         skeleton files.
-      '';
-    };
-
-    nginx.enable = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Whether to enable nginx virtual host management.
-        Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
-        See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
       '';
     };
 
@@ -329,12 +312,6 @@ in {
             && !(acfg.adminpass != null && acfg.adminpassFile != null));
           message = "Please specify exactly one of adminpass or adminpassFile";
         }
-        { assertion = cfg.nginx.enable -> (cfg.serverUser == null);
-          message = "serverUser cannot be set if nginx is used";
-        }
-        { assertion = ! cfg.nginx.enable -> ( hasAttr cfg.serverUser config.users.users);
-          message = "configured serverUser '${cfg.serverUser}' doesn't exist";
-        }
       ];
 
       warnings = []
@@ -522,8 +499,8 @@ in {
             PATH = "/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin";
           };
           settings = mapAttrs (name: mkDefault) {
-            "listen.owner" = serverUser;
-            "listen.group" = config.users.users.${serverUser}.group;
+            "listen.owner" = config.services.nginx.user;
+            "listen.group" = config.users.users.${config.services.nginx.user}.group;
           } // cfg.poolSettings;
           extraConfig = cfg.poolConfig;
         };
@@ -534,117 +511,111 @@ in {
         group = "nextcloud";
         createHome = true;
       };
-      users.groups.nextcloud.members = [ "nextcloud" "${serverUser}" ];
+      users.groups.nextcloud.members = [ "nextcloud" config.services.nginx.user ];
 
       environment.systemPackages = [ occ ];
-    }
-
-    (mkIf cfg.nginx.enable {
-      services.nginx = {
-        enable = true;
-        virtualHosts = {
-          ${cfg.hostName} = {
-            root = cfg.package;
-            locations = {
-              "= /robots.txt" = {
-                priority = 100;
-                extraConfig = ''
-                  allow all;
-                  log_not_found off;
-                  access_log off;
-                '';
-              };
-              "/" = {
-                priority = 200;
-                extraConfig = "rewrite ^ /index.php;";
-              };
-              "~ ^/store-apps" = {
-                priority = 201;
-                extraConfig = "root ${cfg.home};";
-              };
-              "= /.well-known/carddav" = {
-                priority = 210;
-                extraConfig = "return 301 $scheme://$host/remote.php/dav;";
-              };
-              "= /.well-known/caldav" = {
-                priority = 210;
-                extraConfig = "return 301 $scheme://$host/remote.php/dav;";
-              };
-              "~ ^\\/(?:build|tests|config|lib|3rdparty|templates|data)\\/" = {
-                priority = 300;
-                extraConfig = "deny all;";
-              };
-              "~ ^\\/(?:\\.|autotest|occ|issue|indie|db_|console)" = {
-                priority = 300;
-                extraConfig = "deny all;";
-              };
-              "~ ^\\/(?:index|remote|public|cron|core/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|ocs-provider\\/.+|ocm-provider\\/.+)\\.php(?:$|\\/)" = {
-                priority = 500;
-                extraConfig = ''
-                  include ${config.services.nginx.package}/conf/fastcgi.conf;
-                  fastcgi_split_path_info ^(.+\.php)(\\/.*)$;
-                  try_files $fastcgi_script_name =404;
-                  fastcgi_param PATH_INFO $fastcgi_path_info;
-                  fastcgi_param HTTPS ${if cfg.https then "on" else "off"};
-                  fastcgi_param modHeadersAvailable true;
-                  fastcgi_param front_controller_active true;
-                  fastcgi_pass unix:${fpm.socket};
-                  fastcgi_intercept_errors on;
-                  fastcgi_request_buffering off;
-                  fastcgi_read_timeout 120s;
-                '';
-              };
-              "~ ^\\/(?:updater|ocs-provider|ocm-provider)(?:$|\\/)".extraConfig = ''
-                try_files $uri/ =404;
-                index index.php;
-              '';
-              "~ \\.(?:css|js|woff2?|svg|gif)$".extraConfig = ''
-                try_files $uri /index.php$request_uri;
-                add_header Cache-Control "public, max-age=15778463";
-                add_header X-Content-Type-Options nosniff;
-                add_header X-XSS-Protection "1; mode=block";
-                add_header X-Robots-Tag none;
-                add_header X-Download-Options noopen;
-                add_header X-Permitted-Cross-Domain-Policies none;
-                add_header X-Frame-Options sameorigin;
-                add_header Referrer-Policy no-referrer;
-                access_log off;
-              '';
-              "~ \\.(?:png|html|ttf|ico|jpg|jpeg|bcmap|mp4|webm)$".extraConfig = ''
-                try_files $uri /index.php$request_uri;
-                access_log off;
-              '';
-            };
+    
+      services.nginx.enable = true;
+      services.nginx.virtualHosts.${cfg.hostName} = {
+        root = cfg.package;
+        locations = {
+          "= /robots.txt" = {
+            priority = 100;
             extraConfig = ''
-              add_header X-Content-Type-Options nosniff;
-              add_header X-XSS-Protection "1; mode=block";
-              add_header X-Robots-Tag none;
-              add_header X-Download-Options noopen;
-              add_header X-Permitted-Cross-Domain-Policies none;
-              add_header X-Frame-Options sameorigin;
-              add_header Referrer-Policy no-referrer;
-              add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
-              error_page 403 /core/templates/403.php;
-              error_page 404 /core/templates/404.php;
-              client_max_body_size ${cfg.maxUploadSize};
-              fastcgi_buffers 64 4K;
-              fastcgi_hide_header X-Powered-By;
-              gzip on;
-              gzip_vary on;
-              gzip_comp_level 4;
-              gzip_min_length 256;
-              gzip_proxied expired no-cache no-store private no_last_modified no_etag auth;
-              gzip_types application/atom+xml application/javascript application/json application/ld+json application/manifest+json application/rss+xml application/vnd.geo+json application/vnd.ms-fontobject application/x-font-ttf application/x-web-app-manifest+json application/xhtml+xml application/xml font/opentype image/bmp image/svg+xml image/x-icon text/cache-manifest text/css text/plain text/vcard text/vnd.rim.location.xloc text/vtt text/x-component text/x-cross-domain-policy;
-
-              ${optionalString cfg.webfinger ''
-                rewrite ^/.well-known/host-meta /public.php?service=host-meta last;
-                rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json last;
-              ''}
+              allow all;
+              log_not_found off;
+              access_log off;
             '';
           };
+          "/" = {
+            priority = 200;
+            extraConfig = "rewrite ^ /index.php;";
+          };
+          "~ ^/store-apps" = {
+            priority = 201;
+            extraConfig = "root ${cfg.home};";
+          };
+          "= /.well-known/carddav" = {
+            priority = 210;
+            extraConfig = "return 301 $scheme://$host/remote.php/dav;";
+          };
+          "= /.well-known/caldav" = {
+            priority = 210;
+            extraConfig = "return 301 $scheme://$host/remote.php/dav;";
+          };
+          "~ ^\\/(?:build|tests|config|lib|3rdparty|templates|data)\\/" = {
+            priority = 300;
+            extraConfig = "deny all;";
+          };
+          "~ ^\\/(?:\\.|autotest|occ|issue|indie|db_|console)" = {
+            priority = 300;
+            extraConfig = "deny all;";
+          };
+          "~ ^\\/(?:index|remote|public|cron|core/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|ocs-provider\\/.+|ocm-provider\\/.+)\\.php(?:$|\\/)" = {
+            priority = 500;
+            extraConfig = ''
+              include ${config.services.nginx.package}/conf/fastcgi.conf;
+              fastcgi_split_path_info ^(.+\.php)(\\/.*)$;
+              try_files $fastcgi_script_name =404;
+              fastcgi_param PATH_INFO $fastcgi_path_info;
+              fastcgi_param HTTPS ${if cfg.https then "on" else "off"};
+              fastcgi_param modHeadersAvailable true;
+              fastcgi_param front_controller_active true;
+              fastcgi_pass unix:${fpm.socket};
+              fastcgi_intercept_errors on;
+              fastcgi_request_buffering off;
+              fastcgi_read_timeout 120s;
+            '';
+          };
+          "~ ^\\/(?:updater|ocs-provider|ocm-provider)(?:$|\\/)".extraConfig = ''
+            try_files $uri/ =404;
+            index index.php;
+          '';
+          "~ \\.(?:css|js|woff2?|svg|gif)$".extraConfig = ''
+            try_files $uri /index.php$request_uri;
+            add_header Cache-Control "public, max-age=15778463";
+            add_header X-Content-Type-Options nosniff;
+            add_header X-XSS-Protection "1; mode=block";
+            add_header X-Robots-Tag none;
+            add_header X-Download-Options noopen;
+            add_header X-Permitted-Cross-Domain-Policies none;
+            add_header X-Frame-Options sameorigin;
+            add_header Referrer-Policy no-referrer;
+            access_log off;
+          '';
+          "~ \\.(?:png|html|ttf|ico|jpg|jpeg|bcmap|mp4|webm)$".extraConfig = ''
+            try_files $uri /index.php$request_uri;
+            access_log off;
+          '';
         };
+        extraConfig = ''
+          add_header X-Content-Type-Options nosniff;
+          add_header X-XSS-Protection "1; mode=block";
+          add_header X-Robots-Tag none;
+          add_header X-Download-Options noopen;
+          add_header X-Permitted-Cross-Domain-Policies none;
+          add_header X-Frame-Options sameorigin;
+          add_header Referrer-Policy no-referrer;
+          add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
+          error_page 403 /core/templates/403.php;
+          error_page 404 /core/templates/404.php;
+          client_max_body_size ${cfg.maxUploadSize};
+          fastcgi_buffers 64 4K;
+          fastcgi_hide_header X-Powered-By;
+          gzip on;
+          gzip_vary on;
+          gzip_comp_level 4;
+          gzip_min_length 256;
+          gzip_proxied expired no-cache no-store private no_last_modified no_etag auth;
+          gzip_types application/atom+xml application/javascript application/json application/ld+json application/manifest+json application/rss+xml application/vnd.geo+json application/vnd.ms-fontobject application/x-font-ttf application/x-web-app-manifest+json application/xhtml+xml application/xml font/opentype image/bmp image/svg+xml image/x-icon text/cache-manifest text/css text/plain text/vcard text/vnd.rim.location.xloc text/vtt text/x-component text/x-cross-domain-policy;
+
+          ${optionalString cfg.webfinger ''
+            rewrite ^/.well-known/host-meta /public.php?service=host-meta last;
+            rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json last;
+          ''}
+        '';
       };
-    })
+    }
   ]);
 
   meta.doc = ./nextcloud.xml;
