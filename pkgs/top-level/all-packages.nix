@@ -5331,6 +5331,8 @@ in
 
   modsecurity_standalone = callPackage ../tools/security/modsecurity { };
 
+  modvendor = callPackage ../development/tools/modvendor { };
+
   molly-guard = callPackage ../os-specific/linux/molly-guard { };
 
   moneyplex = callPackage ../applications/office/moneyplex { };
@@ -7342,7 +7344,7 @@ in
   uget = callPackage ../tools/networking/uget { };
 
   uget-integrator = callPackage ../tools/networking/uget-integrator { };
-  
+
   ugrep = callPackage ../tools/text/ugrep { };
 
   uif2iso = callPackage ../tools/cd-dvd/uif2iso { };
