@@ -5,7 +5,7 @@
 # - The exact version can be specified through the `version` argument to
 #   the derivation; it defaults to the latest stable version.
 
-{ stdenv, fetchFromGitHub, writeText, pkgconfig
+{ stdenv, fetchFromGitHub, writeText, pkgconfig, gnumake42
 , ocamlPackages, ncurses
 , buildIde ? !(stdenv.isDarwin && stdenv.lib.versionAtLeast version "8.10")
 , glib, gnome3, wrapGAppsHook
@@ -107,7 +107,9 @@ self = stdenv.mkDerivation {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ]
+  ++ stdenv.lib.optional (!versionAtLeast "8.6") gnumake42
+  ;
   buildInputs = [ ncurses ocamlPackages.ocaml ocamlPackages.findlib ]
   ++ stdenv.lib.optional (!versionAtLeast "8.10") ocamlPackages.camlp5
   ++ [ ocamlPackages.num ]
