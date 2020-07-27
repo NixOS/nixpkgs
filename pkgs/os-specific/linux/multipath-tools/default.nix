@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteInPlace libmultipath/Makefile --replace /usr/include/libdevmapper.h ${lvm2}/include/libdevmapper.h
+    substituteInPlace libmultipath/Makefile --replace /usr/include/libdevmapper.h ${stdenv.lib.getDev lvm2}/include/libdevmapper.h
     sed -i -re '
       s,^( *#define +DEFAULT_MULTIPATHDIR\>).*,\1 "'"$out/lib/multipath"'",
     ' libmultipath/defaults.h
