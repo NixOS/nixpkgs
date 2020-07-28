@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "12q5al48mkjhgyk7z5wyklzzrdbcqhwxl79axa4gh9ld75prghbq";
   };
 
-  patches = [ ./fix-tpl-path.nix ];
+  patches = [ ./fix-tpl-path.patch ];
 
   buildInputs = [ libcap ];
 
