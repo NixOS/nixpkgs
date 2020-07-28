@@ -31,6 +31,14 @@ let
     CONFIG_FEATURE_UTMP n
     CONFIG_FEATURE_WTMP n
   '';
+
+  debianName = "busybox_1.30.1-5";
+  debianTarball = fetchTarball {
+    url = "http://deb.debian.org/debian/pool/main/b/busybox/${debianName}.debian.tar.xz";
+    sha256 = "03m4rvs2pd0hj0mdkdm3r4m1gh0bgwr0cvnqds297xnkfi5s01nx";
+  };
+  debianDispatcherScript = "${debianTarball}/tree/udhcpc/etc/udhcpc/default.script";
+  outDispatchPath = "$out/default.script";
 in
 
 stdenv.mkDerivation rec {
@@ -81,7 +89,7 @@ stdenv.mkDerivation rec {
     CONFIG_FEATURE_COPYBUF_KB 64
 
     # Set the path for the udhcpc script
-    CONFIG_UDHCPC_DEFAULT_SCRIPT "$out/share/default.script"
+    CONFIG_UDHCPC_DEFAULT_SCRIPT "${outDispatchPath}"
 
     ${extraConfig}
     CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cc.targetPrefix}"
@@ -98,9 +106,12 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    mkdir $out/share
-    substituteAll ${./default.script} $out/share/default.script
-    chmod +x $out/share/default.script
+    sed -e '
+    1 a busybox() { '$out'/bin/busybox "$@"; }\
+    logger() { '$out'/bin/logger "$@"; }\
+    ' ${debianDispatcherScript} > ${outDispatchPath}
+    chmod 555 ${outDispatchPath}
+    PATH=$out/bin patchShebangs ${outDispatchPath}
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
