@@ -21727,6 +21727,10 @@ in
     inherit (gnome2) libglade;
   };
 
+  obs-gstreamer = callPackage ../applications/video/obs-studio/obs-gstreamer.nix {
+    inherit (gst_all_1) gstreamer gst-plugins-base;
+  };
+
   obs-linuxbrowser = callPackage ../applications/video/obs-studio/linuxbrowser.nix { };
 
   obs-studio = libsForQt5.callPackage ../applications/video/obs-studio { };
