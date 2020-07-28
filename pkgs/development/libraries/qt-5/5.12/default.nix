@@ -20,6 +20,7 @@ top-level attribute to `top-level/all-packages.nix`.
   bison, cups ? null, harfbuzz, libGL, perl,
   gstreamer, gst-plugins-base, gtk3, dconf,
   llvmPackages_5,
+  nss_3_44,
 
   # options
   developerBuild ? false,
@@ -168,7 +169,11 @@ let
       qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix {};
       qtwayland = callPackage ../modules/qtwayland.nix {};
       qtwebchannel = callPackage ../modules/qtwebchannel.nix {};
-      qtwebengine = callPackage ../modules/qtwebengine.nix {};
+
+      qtwebengine = callPackage ../modules/qtwebengine.nix {
+        nss = nss_3_44;
+      };
+
       qtwebglplugin = callPackage ../modules/qtwebglplugin.nix {};
       qtwebkit = callPackage ../modules/qtwebkit.nix {};
       qtwebsockets = callPackage ../modules/qtwebsockets.nix {};
