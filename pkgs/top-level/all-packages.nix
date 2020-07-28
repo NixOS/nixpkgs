@@ -1338,6 +1338,8 @@ in
   };
   aria = aria2;
 
+  as-tree = callPackage ../tools/misc/as-tree { };
+
   asmfmt = callPackage ../development/tools/asmfmt { };
 
   aspcud = callPackage ../tools/misc/aspcud { };
