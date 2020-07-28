@@ -23836,6 +23836,8 @@ in
 
   xmacro = callPackage ../tools/X11/xmacro { };
 
+  xmenu = callPackage ../applications/misc/xmenu { };
+
   xmlcopyeditor = callPackage ../applications/editors/xmlcopyeditor { };
 
   xmp = callPackage ../applications/audio/xmp { };
