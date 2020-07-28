@@ -7,9 +7,9 @@ jobs:
     steps:
     - name: Wait for ofborg CI
       run: |
-        # wait for ~10min
-        set -x
-        for i in $(seq 120); do
+        # wait for ~30min...
+        # ..in future a better fix would be to make ofborg mark CI as pending right away.
+        for i in $(seq 260); do
           res=$(curl --silent \
             -H "Accept: application/vnd.github.antiope-preview+json" \
             -H "Authorization: token ${GITHUB_TOKEN}" \
