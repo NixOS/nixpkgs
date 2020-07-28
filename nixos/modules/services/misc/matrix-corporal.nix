@@ -96,7 +96,7 @@ in
             type = lib.types.str;
             default = "static_file";
           };
-        }
+        };
 
         options.Misc.Debug = lib.mkOption {
           type = lib.types.bool;
@@ -106,7 +106,6 @@ in
       };
     };
   };
-
   config = lib.mkIf cfg.enable {
     systemd.services.matrix-corporal = {
       wantedBy = [ "multi-user.target" ];
