@@ -26366,6 +26366,8 @@ in
 
   nixpkgs-fmt = callPackage ../tools/nix/nixpkgs-fmt { };
 
+  rnix-hashes = callPackage ../tools/nix/rnix-hashes { };
+
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };
   nixos-icons = callPackage ../data/misc/nixos-artwork/icons.nix { };
   nixos-grub2-theme = callPackage ../data/misc/nixos-artwork/grub2-theme.nix { };

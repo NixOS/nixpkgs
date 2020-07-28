@@ -6828,6 +6828,12 @@
     githubId = 2507744;
     name = "Roland Koebler";
   };
+  rizary = {
+    email = "andika@numtide.com";
+    github = "Rizary";
+    githubId = 7221768;
+    name = "Andika Demas Riyandi";
+  };
   rkrzr = {
     email = "ops+nixpkgs@channable.com";
     github = "rkrzr";
