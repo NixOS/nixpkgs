@@ -68,7 +68,7 @@ in
           ExecStart = "${pkgs.teleport}/bin/teleport start ${cmdlineArgs}" --pid-file=/run/teleport.pid;
           ExecReload = "/run/current-system/sw/bin/kill -HUP $MAINPID";
           PIDFile = "run/teleport.pid";
-          Restart  = "on-failure";
+          Restart = "on-failure";
           WorkingDirectory = ${cfg.dataDir};
         };
       };
