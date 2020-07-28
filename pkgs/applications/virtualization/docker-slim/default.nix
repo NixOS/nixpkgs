@@ -41,10 +41,5 @@ buildGoPackage rec {
     homepage = "https://dockersl.im/";
     license = licenses.asl20;
     maintainers = with maintainers; [ filalex77 marsam mbrgm ];
-    # internal/app/sensor/monitors/ptrace/monitor.go:151:16: undefined:
-    #     system.CallNumber
-    # internal/app/sensor/monitors/ptrace/monitor.go:161:15: undefined:
-    #     system.CallReturnValue
-    badPlatforms = [ "aarch64-linux" ];
   };
 }
