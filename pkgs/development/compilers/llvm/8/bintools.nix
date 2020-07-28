@@ -11,7 +11,6 @@ in runCommand "llvm-binutils-${version}" { preferLocalBuild = true; } ''
      ln -s $prog $out/bin/${prefix}$(basename $prog)
    done
    for prog in ${llvm}/bin/*; do
-     ln -s $prog $out/bin/${prefix}$(echo $(basename $prog) | sed -e "s|llvm-||")
      ln -sf $prog $out/bin/${prefix}$(basename $prog)
    done
    rm -f $out/bin/${prefix}cat
