@@ -22,6 +22,8 @@ jobs:
         done
         echo "Timeout!"
         exit 1
+      # ofborg is not checking forks.
+      if: github.repository_owner == 'NixOS'
       env:
         GITHUB_TOKEN: ${{ github.token }}
         COMMIT: ${{ github.event.pull_request.head.sha }}
