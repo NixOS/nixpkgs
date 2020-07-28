@@ -43,7 +43,7 @@ pypa.buildPythonApplication {
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib libxcb cairo pango pypa.xcffib librsvg ]; # librsvg with the gdk-pixbuf hook provides GDK_PIXBUF_MODULE_FILE with svg support
+  buildInputs = [ glib libxcb cairo pango pypa.xcffib librsvg ]; 
 
   pythonPath = with pypa; [ xcffib cairocffi-xcffib setuptools setuptools_scm ]; 
 
@@ -62,6 +62,7 @@ pypa.buildPythonApplication {
     python3 ./libqtile/backend/x11/xcursors_ffi_build.py
 
     patchShebangs /build/source/bin/*
+    export GDK_PIXBUF_MODULE_FILE="${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" #TODO is there a better way to do this?
     #TODO figure out why tests fail nondeterministically, after fixing, pytest-rerunfailures will be unnecessary
     # error: xcffib.ConnectionException: xcb connection errors because of socket, pipe and other stream errors.
     xvfb-run -s '-screen 0 1024x768x24' pytest -vv --reruns 5
