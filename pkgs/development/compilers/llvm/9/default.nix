@@ -42,10 +42,11 @@ let
       enablePolly = true;
     };
 
-    llvm-manpages = lowPrio (tools.llvm.override {
-      enableManpages = true;
-      python3 = pkgs.python3;  # don't use python-boot
-    });
+    # disabled until recommonmark supports sphinx 3
+    #llvm-manpages = lowPrio (tools.llvm.override {
+    #  enableManpages = true;
+    #  python3 = pkgs.python3;  # don't use python-boot
+    #});
 
     clang-manpages = lowPrio (tools.clang-unwrapped.override {
       enableManpages = true;
