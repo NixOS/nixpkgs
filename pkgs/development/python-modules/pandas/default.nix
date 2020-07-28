@@ -21,7 +21,6 @@
 , tables
 , xlwt
 , runtimeShell
-, isPy38
 , libcxx ? null
 }:
 
@@ -31,11 +30,11 @@ let
 
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "1.0.5";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "69c5d920a0b2a9838e677f78f4dde506b95ea8e4d30da25859db6469ded84fa8";
+    sha256 = "b39508562ad0bb3f384b0db24da7d68a2608b9ddc85b1d931ccaaa92d5e45273";
   };
 
   checkInputs = [ pytest glibcLocales moto hypothesis ];
@@ -68,14 +67,13 @@ in buildPythonPackage rec {
                 "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
   '';
 
-  # Parallel Cythonization is broken in Python 3.8 on Darwin. Fixed in the next
-  # release. https://github.com/pandas-dev/pandas/pull/30862
-  setupPyBuildFlags = optionals (!(isPy38 && isDarwin)) [
+  setupPyBuildFlags = [
     # As suggested by
     # https://pandas.pydata.org/pandas-docs/stable/development/contributing.html#creating-a-python-environment
     "--parallel=$NIX_BUILD_CORES"
   ];
 
+  NIX_CFLAGS_COMPILE = optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
 
   disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) ([
     # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
