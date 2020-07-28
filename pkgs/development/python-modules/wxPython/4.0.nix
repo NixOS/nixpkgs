@@ -29,8 +29,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pkgconfig which doxygen wxGTK ];
   buildInputs = [ ncurses wxGTK.gtk ];
 
-  hardeningDisable = [ "format" ];
-
   DOXYGEN = "${doxygen}/bin/doxygen";
 
   preConfigure = lib.optionalString (!stdenv.isDarwin) ''
