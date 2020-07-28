@@ -310,6 +310,7 @@ in
   simple = handleTest ./simple.nix {};
   slurm = handleTest ./slurm.nix {};
   smokeping = handleTest ./smokeping.nix {};
+  snapcast = handleTest ./snapcast.nix {};
   snapper = handleTest ./snapper.nix {};
   sogo = handleTest ./sogo.nix {};
   solr = handleTest ./solr.nix {};
