@@ -17,16 +17,6 @@ fi
 
 source @out@/nix-support/utils.bash
 
-# Flirting with a layer violation here.
-if [ -z "${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
-    source @bintools@/nix-support/add-flags.sh
-fi
-
-# Put this one second so libc ldflags take priority.
-if [ -z "${NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
-    source @out@/nix-support/add-flags.sh
-fi
-
 
 # Parse command line options and set several variables.
 # For instance, figure out if linker flags should be passed.
@@ -37,6 +27,7 @@ cc1=0
 # shellcheck disable=SC2193
 [[ "@prog@" = *++ ]] && isCpp=1 || isCpp=0
 cppInclude=1
+cInclude=1
 
 expandResponseParams "$@"
 declare -i n=0
@@ -63,6 +54,7 @@ while (( "$n" < "$nParams" )); do
     elif [ "$p" = -nostdlib ]; then
         isCpp=-1
     elif [ "$p" = -nostdinc ]; then
+        cInclude=0
         cppInclude=0
     elif [ "$p" = -nostdinc++ ]; then
         cppInclude=0
@@ -111,6 +103,15 @@ if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "$NIX_STORE" ]]; then
     params=(${rest+"${rest[@]}"})
 fi
 
+# Flirting with a layer violation here.
+if [ -z "${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
+    source @bintools@/nix-support/add-flags.sh
+fi
+
+# Put this one second so libc ldflags take priority.
+if [ -z "${NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
+    source @out@/nix-support/add-flags.sh
+fi
 
 # Clear march/mtune=native -- they bring impurity.
 if [ "$NIX_ENFORCE_NO_NATIVE_@suffixSalt@" = 1 ]; then
