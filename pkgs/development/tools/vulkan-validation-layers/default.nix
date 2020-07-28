@@ -1,23 +1,39 @@
 { stdenv, fetchFromGitHub, cmake, writeText, python3
-, vulkan-headers, vulkan-loader, glslang
+, vulkan-headers, vulkan-loader, glslang, spirv-headers
 , pkgconfig, xlibsWrapper, libxcb, libXrandr, wayland }:
 
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.2.131.2";
+  version = "1.2.141.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
     rev = "sdk-${version}";
-    sha256 = "1sz0388cr018ldx6ziplvk4v3zbg44pww77kv6kv5wxl69plwfcn";
+    sha256 = "1yfas7q122kx74nbjk3wxlyacysgncvlvq081a5dp238m88vkmbj";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake python3  ];
-  buildInputs = [ vulkan-headers vulkan-loader libxcb libXrandr wayland ];
+  nativeBuildInputs = [
+    pkgconfig
+    cmake
+    python3
+  ];
+
+  buildInputs = [
+    glslang
+    spirv-headers
+    vulkan-headers
+    vulkan-loader
+    libxcb
+    libXrandr
+    wayland
+  ];
+
   enableParallelBuilding = true;
 
-  cmakeFlags = [ "-DGLSLANG_INSTALL_DIR=${glslang}" ];
+  cmakeFlags = [
+    "-DGLSLANG_INSTALL_DIR=${glslang}"
+  ];
 
   # Help vulkan-loader find the validation layers
   setupHook = writeText "setup-hook" ''
