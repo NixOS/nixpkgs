@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
     description = "Tiny versions of common UNIX utilities in a single small executable";
     homepage = "https://busybox.net/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ TethysSvensson ];
     platforms = platforms.linux;
     priority = 10;
   };
