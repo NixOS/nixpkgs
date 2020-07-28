@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchgit, fetchpatch }:
+{ stdenv, lib, fetchgit, fetchpatch, makeWrapper, coreutils ? null }:
 
 stdenv.mkDerivation rec {
   pname = "datefudge";
@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
     rev = "debian/${version}";
     sha256 = "1nh433yx4y4djp0bs6aawqbwk7miq7fsbs9wpjlyh2k9dvil2lrm";
   };
+  nativeBuildInputs = lib.optional (coreutils != null) makeWrapper;
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -20,7 +21,11 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=$(out)" ];
 
-  postInstall = "chmod +x $out/lib/datefudge/datefudge.so";
+  postInstall = ''
+    chmod +x $out/lib/datefudge/datefudge.so
+  '' + lib.optionalString (coreutils != null) ''
+    wrapProgram $out/bin/datefudge --prefix PATH : ${coreutils}/bin
+  '';
 
   meta = with lib; {
     description = "Fake the system date";
