@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "http://hmmer.org/";
     license = licenses.gpl3;
     maintainers = [ maintainers.iimog ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = platforms.unix;
   };
 }
