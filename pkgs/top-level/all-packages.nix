@@ -18298,6 +18298,10 @@ in
 
   edukai = callPackage ../data/fonts/edukai { };
 
+  eduli = callPackage ../data/fonts/eduli { };
+
+  moeli = eduli;
+
   edusong = callPackage ../data/fonts/edusong { };
 
   elliptic_curves = callPackage ../data/misc/elliptic_curves { };
