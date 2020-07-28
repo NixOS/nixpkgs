@@ -13,12 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "0ddj5xcwrdb2qvrndvhv8j6swcqc8dvv5i00pqk35rfk5mrl4hwv";
   };
 
-  buildInputs = [ makeWrapper ];
+  preBuild = ''
+    substituteInPlace ./Makefile --replace /usr "$out"
+  '';
+
+  buildInputs = [ makeWrapper xsel clipnotify ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp clipdel clipmenu clipmenud $out/bin
-
     for bin in $out/bin/*; do
       wrapProgram "$bin" --prefix PATH : "${runtimePath}"
     done
