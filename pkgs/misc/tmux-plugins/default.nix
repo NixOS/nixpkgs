@@ -89,12 +89,12 @@ in rec {
 
   cpu = mkDerivation {
     pluginName = "cpu";
-    version = "unstable-2020-04-05";
+    version = "unstable-2020-07-25";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-cpu";
-      rev = "8858050756e1fc3c081d37894b441f05ea893a67";
-      sha256 = "1bydzrnd9y5y46hjr844p4ylx2dpijn6pv3w94yyvwbyswmirhff";
+      rev = "20120a38ade17057441482b43eb5390e6ea2c1c1";
+      sha256 = "1gdz2awyd9icvyiw2p40gwymh6ngjhb9mkiv63ix53snp9ii794i";
     };
   };
 
