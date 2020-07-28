@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libevent, openssl, zlib, torsocks
-, libseccomp, systemd, libcap, lzma, zstd, scrypt
+, libseccomp, systemd, libcap, lzma, zstd, scrypt, nixosTests
 
 # for update.nix
 , writeScript
@@ -54,19 +54,22 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/tor
   '';
 
-  passthru.updateScript = import ./update.nix {
-    inherit (stdenv) lib;
-    inherit
-      writeScript
-      common-updater-scripts
-      bash
-      coreutils
-      curl
-      gnupg
-      gnugrep
-      gnused
-      nix
-    ;
+  passthru = {
+    tests.tor = nixosTests.tor;
+    updateScript = import ./update.nix {
+      inherit (stdenv) lib;
+      inherit
+        writeScript
+        common-updater-scripts
+        bash
+        coreutils
+        curl
+        gnupg
+        gnugrep
+        gnused
+        nix
+      ;
+    };
   };
 
   meta = with stdenv.lib; {
