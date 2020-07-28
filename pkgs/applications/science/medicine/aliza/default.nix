@@ -3,11 +3,11 @@
 with stdenv.lib;
 stdenv.mkDerivation {
   pname = "aliza";
-  version = "1.48.10";
+  version = "1.98.31";
   src = fetchurl {
     # See https://www.aliza-dicom-viewer.com/download
-    url = "https://drive.google.com/uc?export=download&id=16WEScARaSrzJpJkyGuOUxDF95eUwGyET";
-    sha256 = "1ls16cwd0fmb5axxmy9lgf8cqrf7g7swm26f0gr2vqp4z9bw6qn3";
+    url = "https://drive.google.com/u/0/uc?id=1VPUi10jUm3SjylVokWNxkpzOsHyJTP6_&export=download";
+    sha256 = "0x2jr38s0rhl1jnsglay1vd1iyzlcwgi1njc5hb0m94xslrkqf9a";
     name = "aliza.rpm";
   };
 
