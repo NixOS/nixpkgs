@@ -8,7 +8,7 @@ let
     pname = "clang";
     inherit version;
 
-    src = fetch "clang" "08fbxa2a0kr3ni35ckppj0kyvlcyaywrhpqwcdrdy0z900mhcnw8";
+    src = fetch "clang" "091bvcny2lh32zy8f3m9viayyhb2zannrndni7325rl85cwgr6pr";
 
     unpackPhase = ''
       unpackFile $src
@@ -36,9 +36,6 @@ let
     ];
 
     patches = [
-      # 10.0.0 only, this should be present in 10.0.1
-      ./clang-extension-handling.patch
-
       ./purity.patch
       # https://reviews.llvm.org/D51899
       ./compiler-rt-baremetal.patch
