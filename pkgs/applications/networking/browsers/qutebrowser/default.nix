@@ -4,7 +4,7 @@
 , libxslt, gst_all_1 ? null
 , withPdfReader      ? true
 , withMediaPlayback  ? true
-, backend            ? "webkit"
+, backend            ? "webengine"
 }:
 
 assert withMediaPlayback -> gst_all_1 != null;
