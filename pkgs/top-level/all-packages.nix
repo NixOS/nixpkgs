@@ -1619,6 +1619,8 @@ in
 
   compsize = callPackage ../os-specific/linux/compsize { };
 
+  cot = with python3Packages; toPythonApplication cot;
+
   coturn = callPackage ../servers/coturn { };
 
   coursier = callPackage ../development/tools/coursier {};

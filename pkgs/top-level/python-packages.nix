@@ -627,6 +627,8 @@ in {
 
   convertdate = callPackage ../development/python-modules/convertdate { };
 
+  cot = callPackage ../development/python-modules/cot { };
+
   crc32c = callPackage ../development/python-modules/crc32c { };
 
   curio = callPackage ../development/python-modules/curio { };
