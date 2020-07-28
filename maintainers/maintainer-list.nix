@@ -1918,6 +1918,12 @@
     githubId = 14032;
     name = "Daniel Brockman";
   };
+  ddelabru = {
+    email = "ddelabru@redhat.com";
+    github = "ddelabru";
+    githubId = 39909293;
+    name = "Dominic Delabruere";
+  };
   dduan = {
     email = "daniel@duan.ca";
     github = "dduan";
