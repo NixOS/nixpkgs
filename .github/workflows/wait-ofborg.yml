@@ -19,6 +19,7 @@ jobs:
             exit 0
           fi
           sleep 5
+          echo "."
         done
         echo "Timeout!"
         exit 1
