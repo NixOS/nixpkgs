@@ -1713,6 +1713,8 @@ in {
 
   webapp2 = callPackage ../development/python-modules/webapp2 { };
 
+  webdavclient3 = callPackage ../development/python-modules/webdavclient3 { };
+
   wordcloud = callPackage ../development/python-modules/wordcloud { };
 
   wrf-python = callPackage ../development/python-modules/wrf-python { };
