@@ -11422,6 +11422,8 @@ in
 
   amdvlk = callPackage ../development/libraries/amdvlk {};
 
+  aml = callPackage ../development/libraries/aml { };
+
   amrnb = callPackage ../development/libraries/amrnb { };
 
   amrwb = callPackage ../development/libraries/amrwb { };
