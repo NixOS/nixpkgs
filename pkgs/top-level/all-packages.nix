@@ -23430,6 +23430,8 @@ in
   xautomation = callPackage ../tools/X11/xautomation { };
 
   xawtv = callPackage ../applications/video/xawtv { };
+  
+  xbattbar = callPackage ../applications/misc/xbattbar { };
 
   xbindkeys = callPackage ../tools/X11/xbindkeys { };
 
