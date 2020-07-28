@@ -27,7 +27,7 @@ let
       pkgs.writeText "teleport.yml" cfg.configText
     else generatedTeleportYml;
 
-  cmdlineArgs = "-c ${teleportYml}";
+  cmdlineArgs = "-c ${teleportYml} --pid-file=/run/teleport.pid";
 
 in
 
@@ -65,7 +65,7 @@ in
         after    = [ "network.target" ];
         serviceConfig = {
           Type = "simple";
-          ExecStart = "${pkgs.teleport}/bin/teleport start ${cmdlineArgs}" --pid-file=/run/teleport.pid;
+          ExecStart = "${pkgs.teleport}/bin/teleport start ${cmdlineArgs}";
           ExecReload = "/run/current-system/sw/bin/kill -HUP $MAINPID";
           PIDFile = "run/teleport.pid";
           Restart = "on-failure";
