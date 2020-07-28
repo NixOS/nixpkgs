@@ -9097,16 +9097,16 @@ in
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "SPIRV-Tools";
-        rev = "5c019b5923c1f6bf00a3ac28114ec4a7b1faa0e2";
-        sha256 = "17a0kiyb7zjsg7ws12diip84vds1ajl98ni9c2wria6ymcvbvsvz";
+        rev = "fd8e130510a6b002b28eee5885a9505040a9bdc9";
+        sha256 = "00b7xgyrcb2qq63pp3cnw5q1xqx2d9rfn65lai6n6r89s1vh3vg6";
       };
     });
     spirv-headers = spirv-headers.overrideAttrs (_: {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "SPIRV-Headers";
-        rev = "204cd131c42b90d129073719f2766293ce35c081";
-        sha256 = "1gp0mlbfccqnalaix97jxsa5i337xyzyr55wgssapy56p0q04wv2";
+        rev = "f8bf11a0253a32375c32cad92c841237b96696c0";
+        sha256 = "1znwjy02dl9rshqzl87rqsv9mfczw7gvwfhcirbl81idahgp4p6l";
       };
     });
   };
