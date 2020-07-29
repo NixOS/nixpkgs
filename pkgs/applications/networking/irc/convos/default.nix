@@ -6,13 +6,13 @@ with stdenv.lib;
 
 perlPackages.buildPerlPackage rec {
   pname = "convos";
-  version = "4.23";
+  version = "4.29";
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "Nordaaker";
     repo = pname;
     rev = version;
-    sha256 = "0py9dvqf67vhgdlx20jzwnh313ns1d29yiiqgijydyfj2lflyz12";
+    sha256 = "07m9lhwgqq77hi4n2zrya7n8apkjv8xi166bxa0n7pnlknlp74ar";
   };
 
   nativeBuildInputs = [ makeWrapper ]
@@ -38,16 +38,6 @@ perlPackages.buildPerlPackage rec {
     #
     substituteInPlace t/web-register-open-to-public.t \
       --replace '!127.0.0.1!' '!localhost!'
-
-    # Time-impurity in test, (fixed in master)
-    #
-    substituteInPlace t/web-load-user.t \
-      --replace '400' '410'
-
-    # Disk-space check fails on zfs, (fixed in master)
-    #
-    substituteInPlace t/web-admin.t \
-      --replace 'qr{/dev/}' 'qr{\w}'
 
     # Module::Install is a runtime dependency not covered by the tests, so we add
     # a test for it.
