@@ -539,21 +539,42 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
      to be used for every display-manager in NixOS.
     </para>
    </listitem>
-  <listitem>
+   <listitem>
     <para>
      The <literal>bitcoind</literal> module has changed to multi-instance, using submodules.
-     Therefore, it is now mandatory to name each instance, e.g.:
+     Therefore, it is now mandatory to name each instance.
+     To use this new multi-instance config with an existing bitcoind data directory and user, 
+     you have to adjust the original config, e.g.:
 <programlisting>
-services.bitcoind = {
-  enable = true;
-};
+  services.bitcoind = {
+    enable = true;
+    extraConfig = "...";
+    ...
+  };
 </programlisting>
-     requires a name now:
+     To something similar:
 <programlisting>
-services.bitcoind."example-mainnet" = {
-  enable = true;
-};
+  services.bitcoind.mainnet = {
+    enable = true;
+    dataDir = "/var/lib/bitcoind";
+    user = "bitcoin";
+    extraConfig = "...";
+    ...
+  };
 </programlisting>
+     The key settings are:
+     <itemizedlist>
+      <listitem>
+       <para>
+        <literal>dataDir</literal> - to continue using the same data directory.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        <literal>user</literal> - to continue using the same user so that bitcoind maintains access to its files.
+       </para>
+      </listitem>
+     </itemizedlist>
     </para>
    </listitem>
   </itemizedlist>
