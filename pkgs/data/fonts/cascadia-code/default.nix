@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cascadia-code";
-  version = "2005.15";
+  version = "2007.01";
 
   src = fetchzip {
-    url = "https://github.com/microsoft/cascadia-code/releases/download/v${version}/CascadiaCode_${version}.zip";
-    sha256 = "0wm8lqhgkz691w6ai6r45c7199p7bpr00rm8nz4ynafrb15fgm6v";
+    url = "https://github.com/microsoft/cascadia-code/releases/download/v${version}/CascadiaCode-${version}.zip";
+    sha256 = "0jqggqjqck0nkq301r217hv9k5xzcy6vqc4fqgdmh2d9divbja5m";
     stripRoot = false;
   };
 
