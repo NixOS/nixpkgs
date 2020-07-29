@@ -35,7 +35,6 @@ buildGoModule rec {
       contents.
     '';
     license = licenses.asl20;
-    platforms = platforms.all;
     maintainers = with maintainers; [ zaninime ];
   };
 }

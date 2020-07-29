@@ -24,7 +24,6 @@ buildGoModule rec {
     '';
     homepage = "https://overdodactyl.github.io/ShadowFox/";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = with maintainers; [ infinisil ];
   };
 }

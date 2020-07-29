@@ -25,6 +25,5 @@ buildGoModule rec {
     homepage = "https://github.com/Dreamacro/clash";
     license = licenses.gpl3;
     maintainers = with maintainers; [ contrun filalex77 ];
-    platforms = platforms.all;
   };
 }

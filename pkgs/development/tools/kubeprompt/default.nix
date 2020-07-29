@@ -27,6 +27,5 @@ buildGoModule rec {
     homepage = "https://github.com/jlesquembre/kubeprompt";
     license = licenses.epl20;
     maintainers = with maintainers; [ jlesquembre ];
-    platforms = platforms.all;
   };
 }
