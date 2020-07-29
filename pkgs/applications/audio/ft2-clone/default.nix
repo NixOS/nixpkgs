@@ -1,6 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , cmake
+, nixosTests
 , alsaLib
 , SDL2
 }:
@@ -18,6 +19,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 ] ++ stdenv.lib.optional stdenv.isLinux alsaLib;
+
+  passthru.tests = {
+    ft2-clone-starts = nixosTests.ft2-clone;
+  };
 
   meta = with stdenv.lib; {
     description = "A highly accurate clone of the classic Fasttracker II software for MS-DOS";
