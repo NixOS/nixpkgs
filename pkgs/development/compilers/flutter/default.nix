@@ -17,17 +17,17 @@ in {
   beta = mkFlutter rec {
     pname = "flutter-beta";
     channel = "beta";
-    version = "1.19.0-4.3.pre";
+    version = "1.20.0-7.2.pre";
     filename = "flutter_linux_${version}-${channel}.tar.xz";
-    sha256Hash = "1hlkvvcfy53g69qnqq29izh5c0ylmx4w9m5kb78x97yld6jzf37p";
+    sha256Hash = "0w89ig5vi4spa95mf08r4vvwni7bzzdlyhvr9sy1a35qmf7j9s6f";
     patches = getPatches ./patches/beta;
   };
   dev = mkFlutter rec {
     pname = "flutter-dev";
     channel = "dev";
-    version = "1.20.0-3.0.pre";
+    version = "1.21.0-1.0.pre";
     filename = "flutter_linux_${version}-${channel}.tar.xz";
-    sha256Hash = "0pi5xmg8b863l07fzx7m7pdzh9gmpfsgva1sahx8a6nxkqdpgc50";
+    sha256Hash = "14rx89jp6ivk3ai7iwbznkr5q445ndh8fppzbxg520kq10s2208r";
     patches = getPatches ./patches/beta;
   };
 }
