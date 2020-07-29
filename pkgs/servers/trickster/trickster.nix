@@ -22,6 +22,5 @@ buildGoPackage rec {
     homepage = "https://github.com/Comcast/trickster";
     license = licenses.asl20;
     maintainers = with maintainers; [ maintainers."1000101" ];
-    platforms = platforms.all;
   };
 }

@@ -25,7 +25,6 @@ buildGoPackage rec {
     description = "aws-vault like tool for Okta authentication";
     license = licenses.mit;
     maintainers = [maintainers.imalsogreg];
-    platforms = platforms.all;
     homepage = "https://github.com/segmentio/aws-okta";
     downloadPage = "https://github.com/segmentio/aws-okta";
   };

@@ -20,6 +20,5 @@ buildGoPackage {
     description = "Fast, powerful, yet easy to use template engine for Go";
     license = licenses.mit;
     maintainers = with maintainers; [ chiiruno ];
-    platforms = platforms.all;
   };
 }

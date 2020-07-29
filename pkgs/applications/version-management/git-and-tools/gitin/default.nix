@@ -26,7 +26,6 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     homepage = "https://github.com/isacikgoz/gitin";
     description = "Text-based user interface for git";
-    platforms = platforms.all;
     license = licenses.bsd3;
     maintainers = with maintainers; [ kimat ];
   };
