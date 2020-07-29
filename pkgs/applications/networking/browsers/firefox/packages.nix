@@ -1,11 +1,11 @@
-{ config, stdenv, lib, callPackage, fetchurl, nss_3_44 }:
+{ config, stdenv, lib, callPackage, fetchurl, nss_3_44, nss_latest }:
 
 let
   common = opts: callPackage (import ./common.nix opts) {};
 in
 
 rec {
-  firefox = common rec {
+  firefox = (common rec {
     pname = "firefox";
     ffversion = "78.0.1";
     src = fetchurl {
@@ -31,6 +31,8 @@ rec {
       attrPath = "firefox-unwrapped";
       versionKey = "ffversion";
     };
+  }).override {
+    nss = nss_latest;
   };
 
   firefox-esr-68 = (common rec {

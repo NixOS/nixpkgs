@@ -14152,7 +14152,8 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  nss = lowPrio (callPackage ../development/libraries/nss { });
+  nss = nss_3_44; # various packages had problems with 3.54: #93955
+  nss_latest = lowPrio (callPackage ../development/libraries/nss { });
   nss_3_44 = lowPrio (callPackage ../development/libraries/nss/3.44.nix { });
   nssTools = nss.tools;
 
@@ -18181,7 +18182,9 @@ in
 
   inherit (kdeFrameworks) breeze-icons;
 
-  cacert = callPackage ../data/misc/cacert { };
+  cacert = callPackage ../data/misc/cacert {
+    nss = nss_latest;
+  };
 
   caladea = callPackage ../data/fonts/caladea {};
 
