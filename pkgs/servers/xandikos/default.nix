@@ -28,7 +28,6 @@ python3Packages.buildPythonApplication rec {
     description = "Lightweight CalDAV/CardDAV server";
     homepage = "https://github.com/jelmer/xandikos";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers."0x4A6F" ];
+    maintainers = with maintainers; [ _0x4A6F ];
   };
 }
-

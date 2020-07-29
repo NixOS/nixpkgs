@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     description = "Experimental terminal mail client aiming for configurability and extensibility with sane defaults";
     homepage = "https://meli.delivery";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ maintainers."0x4A6F" matthiasbeyer erictapen ];
+    maintainers = with maintainers; [ _0x4A6F matthiasbeyer erictapen ];
     platforms = platforms.linux;
   };
 }
