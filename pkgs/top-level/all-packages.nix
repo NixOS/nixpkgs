@@ -2251,6 +2251,8 @@ in
 
   stagit = callPackage ../development/tools/stagit { };
 
+  stagit-gopher = callPackage ../development/tools/stagit-gopher { };
+
   statserial = callPackage ../tools/misc/statserial { };
 
   step-ca = callPackage ../tools/security/step-ca { };
