@@ -543,6 +543,12 @@
     githubId = 750786;
     name = "Justin Wood";
   };
+  anna328p = {
+    email = "anna328p@gmail.com";
+    github = "anna328p";
+    githubId = 9790772;
+    name = "Anna";
+  };
   anmonteiro = {
     email = "anmonteiro@gmail.com";
     github = "anmonteiro";
@@ -2073,12 +2079,6 @@
     github = "dkabot";
     githubId = 1316469;
     name = "Naomi Morse";
-  };
-  dkudriavtsev = {
-    email = "dkudriavtsev@gmail.com";
-    github = "dkudriavtsev";
-    githubId = 9790772;
-    name = "Dmitry Kudriavtsev";
   };
   dmalikov = {
     email = "malikov.d.y@gmail.com";
