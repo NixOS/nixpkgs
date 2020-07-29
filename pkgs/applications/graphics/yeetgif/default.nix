@@ -18,6 +18,5 @@ buildGoPackage rec {
     homepage = "https://github.com/sgreben/yeetgif";
     license = with licenses; [ mit asl20 cc-by-nc-sa-40 ];
     maintainers = with maintainers; [ ajs124 ];
-    platforms = platforms.all;
   };
 }

@@ -75,7 +75,6 @@ in buildGoPackage rec {
     '';
     homepage    = "https://www.datadoghq.com";
     license     = licenses.bsd3;
-    platforms   = platforms.all;
     maintainers = with maintainers; [ thoughtpolice domenkozar rvl ];
   };
 }

@@ -20,6 +20,5 @@ buildGoPackage {
     description = "Fast JSON serializer for golang";
     license = licenses.mit;
     maintainers = with maintainers; [ chiiruno ];
-    platforms = platforms.all;
   };
 }

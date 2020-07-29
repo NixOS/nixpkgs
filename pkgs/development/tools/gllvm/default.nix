@@ -18,6 +18,5 @@ buildGoPackage rec {
     description = "Whole Program LLVM: wllvm ported to go";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dtzWill ];
-    platforms = platforms.all;
   };
 }

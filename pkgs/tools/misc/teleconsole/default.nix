@@ -22,7 +22,6 @@ buildGoPackage rec {
     homepage = "https://www.teleconsole.com/";
     description = "Share your terminal session with people you trust";
     license = licenses.asl20;
-    platforms = platforms.all;
     # Builds for Aarch64 not possible in the current release due to
     # incompatibilities further up the dependency chain.
     # See:

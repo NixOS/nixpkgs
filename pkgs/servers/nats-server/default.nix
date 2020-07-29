@@ -20,6 +20,5 @@ buildGoPackage rec {
     license = licenses.asl20;
     maintainers = [ maintainers.swdunlop ];
     homepage = "https://nats.io/";
-    platforms = platforms.all;
   };
 }

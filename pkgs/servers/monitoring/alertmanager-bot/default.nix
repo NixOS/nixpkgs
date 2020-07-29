@@ -19,7 +19,6 @@ buildGoPackage rec {
     description = "Bot for Prometheus' Alertmanager";
     homepage = "https://github.com/metalmatze/alertmanager-bot";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = with maintainers; [ mmahut ];
   };
 }

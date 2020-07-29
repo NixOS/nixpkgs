@@ -45,7 +45,6 @@ buildGoPackage {
     description = "High performance anonymous realtime imageboard";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ chiiruno ];
-    platforms = platforms.all;
     broken = true; # Broken on Hydra since 2019-04-18:
     # https://hydra.nixos.org/build/98885902
   };
