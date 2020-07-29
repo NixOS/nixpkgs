@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, go-bindata }:
 
 buildGoModule rec {
   pname = "istioctl";
@@ -11,6 +11,13 @@ buildGoModule rec {
     sha256 = "0xga0vjr2nfbxwbawly8vg9vnpavxbmc1agg2a3cp1ncmzfrgpcx";
   };
   vendorSha256 = "15l9z2a8p46jvmkl0vvm6s196mlics0qgmpm3yq3bn6cqnybdsij";
+
+  nativeBuildInputs = [ go-bindata ];
+
+  preBuild = ''
+    patchShebangs operator/scripts
+    operator/scripts/create_assets_gen.sh
+  '';
 
   subPackages = [ "istioctl/cmd/istioctl" ];
 
