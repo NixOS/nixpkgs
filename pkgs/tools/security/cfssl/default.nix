@@ -1,19 +1,5 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, go-rice }:
 
-let
-  # Embed static files in the built-in webserver
-  rice = buildGoModule rec {
-    name = "rice";
-    src = fetchFromGitHub {
-      owner = "GeertJohan";
-      repo = "go.rice";
-      rev = "v1.0.0";
-      sha256 = "0m1pkqnx9glf3mlx5jdaby9yxccbl02jpjgpi4m7x1hb4s2gn6vx";
-    };
-    vendorSha256 = "0cb5phyl2zm1xnkhvisv0lzgknsi93yzmpayg30w7jc6z4icwnw7";
-    subPackages = [ "rice" ];
-  };
-in
 buildGoModule rec {
   pname = "cfssl";
   version = "1.4.1";
@@ -38,9 +24,11 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  nativeBuildInputs = [ go-rice ];
+
   preBuild = ''
     pushd cli/serve
-    ${rice}/bin/rice embed-go
+    rice embed-go
     popd
   '';
 

@@ -1911,6 +1911,8 @@ in
 
   gdrive = callPackage ../applications/networking/gdrive { };
 
+  go-rice = callPackage ../tools/misc/go.rice {};
+
   go-2fa = callPackage ../tools/security/2fa {};
 
   go-dependency-manager = callPackage ../development/tools/gdm { };
@@ -7344,7 +7346,7 @@ in
   uget = callPackage ../tools/networking/uget { };
 
   uget-integrator = callPackage ../tools/networking/uget-integrator { };
-  
+
   ugrep = callPackage ../tools/text/ugrep { };
 
   uif2iso = callPackage ../tools/cd-dvd/uif2iso { };
