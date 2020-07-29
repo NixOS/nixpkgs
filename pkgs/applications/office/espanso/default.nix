@@ -47,7 +47,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://espanso.org";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kimat ];
-    platforms = platforms.all;
 
     longDescription = ''
       Espanso detects when you type a keyword and replaces it while you're typing.

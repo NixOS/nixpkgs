@@ -31,6 +31,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/cloudflare/wrangler";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ filalex77 ];
-    platforms = platforms.all;
   };
 }

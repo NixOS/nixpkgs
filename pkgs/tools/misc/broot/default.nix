@@ -67,6 +67,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://dystroy.org/broot/";
     maintainers = with maintainers; [ danieldk ];
     license = with licenses; [ mit ];
-    platforms = platforms.all;
   };
 }

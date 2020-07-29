@@ -32,6 +32,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Edu4rdSHL/findomain";
     license = licenses.gpl3;
     maintainers = with maintainers; [ filalex77 ];
-    platforms = platforms.all;
   };
 }

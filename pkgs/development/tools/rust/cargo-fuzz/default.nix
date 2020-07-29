@@ -18,6 +18,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rust-fuzz/cargo-fuzz";
     license = with licenses; [ mit asl20 ];
     maintainers = [ maintainers.ekleog ];
-    platforms = platforms.all;
   };
 }

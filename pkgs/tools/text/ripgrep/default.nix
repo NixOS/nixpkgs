@@ -39,6 +39,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/BurntSushi/ripgrep";
     license = with licenses; [ unlicense /* or */ mit ];
     maintainers = with maintainers; [ tailhook globin ma27 zowoq ];
-    platforms = platforms.all;
   };
 }

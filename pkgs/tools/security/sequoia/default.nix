@@ -89,7 +89,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://sequoia-pgp.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ minijackson doronbehar ];
-    platforms = platforms.all;
     broken = stdenv.targetPlatform.isDarwin;
   };
 }

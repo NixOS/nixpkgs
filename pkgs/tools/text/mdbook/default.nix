@@ -20,6 +20,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rust-lang-nursery/mdbook";
     license = [ licenses.mpl20 ];
     maintainers = [ maintainers.havvy ];
-    platforms = platforms.all;
   };
 }

@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     description = "Terminal disk space navigator";
     homepage = "https://github.com/imsnif/diskonaut";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = with maintainers; [ evanjs ];
   };
 }

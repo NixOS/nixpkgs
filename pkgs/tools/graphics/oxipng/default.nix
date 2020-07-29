@@ -23,6 +23,5 @@ rustPlatform.buildRustPackage rec {
     description = "A multithreaded lossless PNG compression optimizer";
     license = licenses.mit;
     maintainers = with maintainers; [ dywedir ];
-    platforms = platforms.all;
   };
 }

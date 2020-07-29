@@ -36,6 +36,5 @@ rustPlatform.buildRustPackage rec {
     homepage    = "https://github.com/sharkdp/bat";
     license     = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ dywedir lilyball zowoq ];
-    platforms   = platforms.all;
   };
 }

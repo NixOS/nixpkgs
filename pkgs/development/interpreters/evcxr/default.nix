@@ -26,6 +26,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/google/evcxr";
     license = licenses.asl20;
     maintainers = with maintainers; [ protoben ma27 ];
-    platforms = platforms.all;
   };
 }
