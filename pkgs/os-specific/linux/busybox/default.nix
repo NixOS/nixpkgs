@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, fetchurl
+{ stdenv, lib, buildPackages, fetchurl, fetchzip
 , enableStatic ? false
 , enableMinimal ? false
 # Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
@@ -33,7 +33,7 @@ let
   '';
 
   debianName = "busybox_1.30.1-5";
-  debianTarball = fetchTarball {
+  debianTarball = fetchzip {
     url = "http://deb.debian.org/debian/pool/main/b/busybox/${debianName}.debian.tar.xz";
     sha256 = "03m4rvs2pd0hj0mdkdm3r4m1gh0bgwr0cvnqds297xnkfi5s01nx";
   };
