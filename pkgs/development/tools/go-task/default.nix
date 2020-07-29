@@ -29,7 +29,6 @@ buildGoModule rec {
     homepage = "https://taskfile.dev/";
     description = "A task runner / simpler Make alternative written in Go";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = with maintainers; [ parasrah ];
   };
 }

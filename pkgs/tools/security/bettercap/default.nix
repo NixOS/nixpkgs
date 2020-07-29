@@ -34,6 +34,5 @@ buildGoModule rec {
     homepage = "https://www.bettercap.org/";
     license = with licenses; gpl3;
     maintainers = with maintainers; [ y0no ];
-    platforms = platforms.all;
   };
 }

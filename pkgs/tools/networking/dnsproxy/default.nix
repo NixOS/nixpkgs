@@ -20,6 +20,5 @@ buildGoModule rec {
     homepage = "https://github.com/AdguardTeam/dnsproxy";
     license = licenses.gpl3;
     maintainers = with maintainers; [ contrun ];
-    platforms = platforms.all;
   };
 }

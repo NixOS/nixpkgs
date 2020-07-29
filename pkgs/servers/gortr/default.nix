@@ -19,6 +19,5 @@ buildGoModule rec {
     homepage = "https://github.com/cloudflare/gortr/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ petabyteboy ];
-    platforms = platforms.all;
   };
 }

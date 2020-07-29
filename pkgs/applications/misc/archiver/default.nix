@@ -23,6 +23,5 @@ buildGoModule rec {
     homepage = "https://github.com/mholt/archiver";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.all;
   };
 }
