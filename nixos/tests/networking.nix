@@ -32,14 +32,14 @@ let
       services.dhcpd4 = {
         enable = true;
         interfaces = map (n: "eth${toString n}") vlanIfs;
-        extraConfig = ''
-        '' + flip concatMapStrings vlanIfs (n: ''
+        extraConfig = flip concatMapStrings vlanIfs (n: ''
           subnet 192.168.${toString n}.0 netmask 255.255.255.0 {
             option routers 192.168.${toString n}.1;
+            range 192.168.${toString n}.2 192.168.${toString n}.254;
           }
         '')
         ;
-        machines = lib.flip map vlanIfs (vlan:
+        machines = flip map vlanIfs (vlan:
           {
             hostName = "client${toString vlan}";
             ethernetAddress = qemu-flags.qemuNicMac vlan 1;

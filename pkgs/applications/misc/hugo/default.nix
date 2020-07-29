@@ -1,16 +1,14 @@
-{ stdenv, buildGoModule, fetchFromGitHub, libsass }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "hugo";
-  version = "0.73.0";
-
-  buildInputs = [ libsass ];
+  version = "0.74.3";
 
   src = fetchFromGitHub {
     owner = "gohugoio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0qhv8kdv5k1xfk6106lxvsz7f92k7w6wk05ngz7qxbkb6zkcnshw";
+    sha256 = "0rikr4yrjvmrv8smvr8jdbcjqwf61y369wn875iywrj63pyr74r9";
   };
 
   golibsass = fetchFromGitHub {
@@ -27,7 +25,7 @@ buildGoModule rec {
       '';
     });
 
-  vendorSha256 = "07dkmrldsxw59v6r4avj1gr4hsaxybhb14qv61hc777qix2kq9v1";
+  vendorSha256 = "031k8bvca1pb1naw922vg5h95gnwp76dii1cjcs0b1qj93isdibk";
 
   buildFlags = [ "-tags" "extended" ];
 

@@ -32,6 +32,7 @@ in
   beanstalkd = handleTest ./beanstalkd.nix {};
   bees = handleTest ./bees.nix {};
   bind = handleTest ./bind.nix {};
+  bitcoind = handleTest ./bitcoind.nix {};
   bittorrent = handleTest ./bittorrent.nix {};
   blockbook-frontend = handleTest ./blockbook-frontend.nix {};
   buildkite-agents = handleTest ./buildkite-agents.nix {};
@@ -319,6 +320,7 @@ in
   sudo = handleTest ./sudo.nix {};
   switchTest = handleTest ./switch-test.nix {};
   sympa = handleTest ./sympa.nix {};
+  syncthing = handleTest ./syncthing.nix {};
   syncthing-init = handleTest ./syncthing-init.nix {};
   syncthing-relay = handleTest ./syncthing-relay.nix {};
   systemd = handleTest ./systemd.nix {};

@@ -6,13 +6,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libredwg";
-  version = "0.10.1";
+  version = "0.10.1.3707";
 
   src = fetchFromGitHub {
     owner = "LibreDWG";
     repo = pname;
     rev = version;
-    sha256 = "1zd721z2nriw1jlrh4y1fj59b0dnymhd4kwp8rqw16bs84gda37n";
+    sha256 = "009n96lx4ahf05ryvm09z0l9956vz94r8pliyb88j0jficl0pxkf";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config texinfo ] 

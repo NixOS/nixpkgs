@@ -1504,6 +1504,8 @@ in {
 
   pyvoro = callPackage ../development/python-modules/pyvoro { };
 
+  radish-bdd = callPackage ../development/python-modules/radish-bdd { };
+
   relatorio = callPackage ../development/python-modules/relatorio { };
 
   reproject = callPackage ../development/python-modules/reproject { };
@@ -1643,6 +1645,8 @@ in {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
 
+  tag-expressions = callPackage ../development/python-modules/tag-expressions { };
+
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
 
   tesserocr = callPackage ../development/python-modules/tesserocr { };
@@ -1708,6 +1712,8 @@ in {
   vidstab = callPackage ../development/python-modules/vidstab { };
 
   webapp2 = callPackage ../development/python-modules/webapp2 { };
+
+  webdavclient3 = callPackage ../development/python-modules/webdavclient3 { };
 
   wordcloud = callPackage ../development/python-modules/wordcloud { };
 
@@ -2090,6 +2096,8 @@ in {
 
   colorclass = callPackage ../development/python-modules/colorclass {};
 
+  colorful = callPackage ../development/python-modules/colorful {};
+
   colorlog = callPackage ../development/python-modules/colorlog { };
 
   colorspacious = callPackage ../development/python-modules/colorspacious { };
@@ -2149,6 +2157,8 @@ in {
   datadog = callPackage ../development/python-modules/datadog {};
 
   dataclasses = callPackage ../development/python-modules/dataclasses { };
+
+  dataclasses-json = callPackage ../development/python-modules/dataclasses-json { };
 
   debian = callPackage ../development/python-modules/debian {};
 
@@ -2308,6 +2318,8 @@ in {
   chart-studio = callPackage ../development/python-modules/chart-studio { };
 
   cheetah = callPackage ../development/python-modules/cheetah { };
+
+  cheetah3 = callPackage ../development/python-modules/cheetah3 { };
 
   cherrypy = if isPy3k then
     callPackage ../development/python-modules/cherrypy { }
@@ -2539,6 +2551,8 @@ in {
   pyjks = callPackage ../development/python-modules/pyjks {};
 
   PyLD = callPackage ../development/python-modules/PyLD { };
+
+  pysingleton = callPackage ../development/python-modules/pysingleton { };
 
   python-jose = callPackage ../development/python-modules/python-jose {};
 
@@ -5896,6 +5910,8 @@ in {
   typing = callPackage ../development/python-modules/typing { };
 
   typing-extensions = callPackage ../development/python-modules/typing-extensions { };
+
+  typing-inspect = callPackage ../development/python-modules/typing-inspect { };
 
   typeguard = callPackage ../development/python-modules/typeguard { };
 

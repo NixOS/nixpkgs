@@ -23,6 +23,9 @@
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
 
+  # aarch64 outputs otherwise exceed 2GB limit
+, enableProfiliedLibs ? !stdenv.targetPlatform.isAarch64
+
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
   enableShared ? !stdenv.targetPlatform.isWindows && !stdenv.targetPlatform.useiOSPrebuilt
@@ -128,6 +131,8 @@ stdenv.mkDerivation (rec {
     export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
+  '' + stdenv.lib.optionalString (!enableProfiliedLibs) ''
+    GhcLibWays = "v dyn"
   '' + stdenv.lib.optionalString targetPlatform.useAndroidPrebuilt ''
     sed -i -e '5i ,("armv7a-unknown-linux-androideabi", ("e-m:e-p:32:32-i64:64-v128:64:128-a:0:32-n32-S64", "cortex-a8", ""))' llvm-targets
   '' + stdenv.lib.optionalString targetPlatform.isMusl ''

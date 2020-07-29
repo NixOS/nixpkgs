@@ -2,8 +2,9 @@
 , mkDerivationWith, wrapQtAppsHook, wrapGAppsHook, qtbase, glib-networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
 , libxslt, gst_all_1 ? null
-, withPdfReader        ? true
-, withMediaPlayback    ? true
+, withPdfReader      ? true
+, withMediaPlayback  ? true
+, backend            ? "webengine"
 }:
 
 assert withMediaPlayback -> gst_all_1 != null;
@@ -18,6 +19,14 @@ let
     sha256 = "1fpxsw0hzahccyng08acvc7g0gk29j2x701p6w6fg1718mvcrm1q";
     stripRoot = false;
   };
+
+  backendPackage =
+   if backend == "webengine" then python3Packages.pyqtwebengine else
+   if backend == "webkit"    then python3Packages.pyqt5_with_qtwebkit else
+   throw ''
+     Unknown qutebrowser backend "${backend}".
+     Valid choices are qtwebengine (recommended) or qtwebkit.
+   '';
 
 in mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
@@ -46,16 +55,14 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    pyyaml pyqt5 pyqtwebengine jinja2 pygments
+    pyyaml backendPackage jinja2 pygments
     pypeg2 cssutils pyopengl attrs setuptools
     # scripts and userscripts libs
     tldextract beautifulsoup4
     pyreadability pykeepass stem
   ];
 
-  patches = [
-    ./fix-restart.patch
-  ];
+  patches = [ ./fix-restart.patch ];
 
   dontWrapGApps = true;
   dontWrapQtApps = true;
@@ -101,7 +108,8 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
   postFixup = ''
     wrapProgram $out/bin/qutebrowser \
       "''${gappsWrapperArgs[@]}" \
-      "''${qtWrapperArgs[@]}"
+      "''${qtWrapperArgs[@]}" \
+      --add-flags '--backend ${backend}'
   '';
 
   meta = with stdenv.lib; {

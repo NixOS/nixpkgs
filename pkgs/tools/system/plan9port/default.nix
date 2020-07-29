@@ -89,7 +89,7 @@ stdenv.mkDerivation {
     license = licenses.lpl-102;
     maintainers = with maintainers; [ AndersonTorres bbarker
                                       ftrvxmtrx kovirobi ];
-    platforms = remove "aarch64-linux" platforms.unix;
+    platforms = platforms.unix;
   };
 }
 # TODO: investigate the mouse chording support patch

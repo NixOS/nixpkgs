@@ -2119,6 +2119,8 @@ in
 
   mlarchive2maildir = callPackage ../applications/networking/mailreaders/mlarchive2maildir { };
 
+  molly-brown = callPackage ../servers/gemini/molly-brown { };
+
   monetdb = callPackage ../servers/sql/monetdb { };
 
   mons = callPackage ../tools/misc/mons {};
@@ -5074,6 +5076,8 @@ in
     libwebsockets_4_0;
   libwebsockets = libwebsockets_3_2;
 
+  licensee = callPackage ../tools/package-management/licensee { };
+
   lidarr = callPackage ../servers/lidarr { };
 
   limesuite = callPackage ../applications/radio/limesuite { };
@@ -5529,6 +5533,8 @@ in
 
   ngrep = callPackage ../tools/networking/ngrep { };
 
+  neuron-notes = haskell.lib.justStaticExecutables (haskell.lib.generateOptparseApplicativeCompletion "neuron" haskellPackages.neuron);
+
   ngrok = ngrok-2;
 
   ngrok-2 = callPackage ../tools/networking/ngrok-2 { };
@@ -5542,6 +5548,8 @@ in
   nomad = callPackage ../applications/networking/cluster/nomad { };
 
   notable = callPackage ../applications/misc/notable { };
+
+  nvchecker = with python3Packages; toPythonApplication nvchecker;
 
   miller = callPackage ../tools/text/miller { };
 
@@ -6111,7 +6119,10 @@ in
 
   podiff = callPackage ../tools/text/podiff { };
 
-  podman = callPackage ../applications/virtualization/podman/wrapper.nix { };
+  podman = if stdenv.isDarwin then
+    callPackage ../applications/virtualization/podman { }
+  else
+    callPackage ../applications/virtualization/podman/wrapper.nix { };
   podman-unwrapped = callPackage ../applications/virtualization/podman { };
 
   podman-compose = python3Packages.callPackage ../applications/virtualization/podman-compose {};
@@ -6382,6 +6393,8 @@ in
   recutils = callPackage ../tools/misc/recutils { };
 
   recoll = callPackage ../applications/search/recoll { };
+
+  redoc-cli = nodePackages.redoc-cli;
 
   reflex = callPackage ../development/tools/reflex { };
 
@@ -6866,6 +6879,8 @@ in
 
   speech-denoiser = callPackage ../applications/audio/speech-denoiser {};
 
+  splot = haskell.lib.justStaticExecutables haskellPackages.splot;
+
   squashfsTools = callPackage ../tools/filesystems/squashfs { };
 
   squashfs-tools-ng = callPackage ../tools/filesystems/squashfs-tools-ng { };
@@ -7176,12 +7191,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
-  tor = callPackage ../tools/security/tor {
-    # remove this, when libevent's openssl is upgraded to 1_1_0 or newer.
-    libevent = libevent.override {
-      sslSupport = false;
-    };
-  };
+  tor = callPackage ../tools/security/tor { };
 
   tor-arm = callPackage ../tools/security/tor/tor-arm.nix { };
 
@@ -7332,6 +7342,8 @@ in
   uget = callPackage ../tools/networking/uget { };
 
   uget-integrator = callPackage ../tools/networking/uget-integrator { };
+  
+  ugrep = callPackage ../tools/text/ugrep { };
 
   uif2iso = callPackage ../tools/cd-dvd/uif2iso { };
 
@@ -8358,7 +8370,7 @@ in
     else ../development/compilers/gcc/9);
   gcc = if (with stdenv.targetPlatform; isVc4 || libc == "relibc")
     then gcc6 else gcc9;
-  
+
   gcc-unwrapped = gcc.cc;
 
   gccStdenv = if stdenv.cc.isGNU then stdenv else stdenv.override {
@@ -8721,7 +8733,7 @@ in
 
   # Please update doc/languages-frameworks/haskell.section.md, “Our
   # current default compiler is”, if you bump this:
-  haskellPackages = dontRecurseIntoAttrs haskell.packages.ghc883;
+  haskellPackages = dontRecurseIntoAttrs haskell.packages.ghc884;
 
   inherit (haskellPackages) ghc;
 
@@ -9283,7 +9295,6 @@ in
   rocm-opencl-icd = callPackage ../development/libraries/rocm-opencl-icd { };
 
   rocm-opencl-runtime = callPackage ../development/libraries/rocm-opencl-runtime {
-    stdenv = overrideCC stdenv llvmPackages_rocm.clang;
     inherit (llvmPackages_rocm) clang clang-unwrapped lld llvm;
   };
 
@@ -10886,6 +10897,8 @@ in
 
   mkdocs = callPackage ../development/tools/documentation/mkdocs { };
 
+  mockgen = callPackage ../development/tools/mockgen { };
+
   modd = callPackage ../development/tools/modd { };
 
   msgpack-tools = callPackage ../development/tools/msgpack-tools { };
@@ -11408,6 +11421,8 @@ in
   allegro5 = callPackage ../development/libraries/allegro/5.nix {};
 
   amdvlk = callPackage ../development/libraries/amdvlk {};
+
+  aml = callPackage ../development/libraries/aml { };
 
   amrnb = callPackage ../development/libraries/amrnb { };
 
@@ -14241,6 +14256,8 @@ in
 
   opencolorio = callPackage ../development/libraries/opencolorio { };
 
+  opendmarc = callPackage ../development/libraries/opendmarc { };
+
   ois = callPackage ../development/libraries/ois {};
 
   openh264 = callPackage ../development/libraries/openh264 { };
@@ -14752,7 +14769,13 @@ in
 
   rubberband = callPackage ../development/libraries/rubberband { };
 
+  /* This package references ghc844, which we no longer have. Unfortunately, I
+     have been unable to mark it as "broken" in a way that the ofBorg bot
+     recognizes. Since I don't want to merge code into master that generates
+     evaluation errors, I have no other idea but to comment it out entirely.
+
   sad = callPackage ../applications/science/logic/sad { };
+   */
 
   safefile = callPackage ../development/libraries/safefile {};
 
@@ -15497,6 +15520,8 @@ in
 
   yubikey-personalization-gui = libsForQt5.callPackage ../tools/misc/yubikey-personalization-gui { };
 
+  yubikey-agent = callPackage ../tools/security/yubikey-agent { };
+
   zchunk = callPackage ../development/libraries/zchunk { };
 
   zeitgeist = callPackage ../development/libraries/zeitgeist { };
@@ -15507,7 +15532,6 @@ in
 
   zlog = callPackage ../development/libraries/zlog { };
 
-  zeromq3 = callPackage ../development/libraries/zeromq/3.x.nix {};
   zeromq4 = callPackage ../development/libraries/zeromq/4.x.nix {};
   zeromq = zeromq4;
 
@@ -15586,8 +15610,6 @@ in
   junit = callPackage ../development/libraries/java/junit { antBuild = releaseTools.antBuild; };
 
   junixsocket = callPackage ../development/libraries/java/junixsocket { };
-
-  jzmq = callPackage ../development/libraries/java/jzmq { };
 
   lombok = callPackage ../development/libraries/java/lombok { };
 
@@ -16286,6 +16308,13 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
+  mongodb-4_2 = callPackage ../servers/nosql/mongodb/v4_2.nix {
+    sasl = cyrus_sasl;
+    boost = boost169;
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+
   nginx-sso = callPackage ../servers/nginx-sso { };
 
   percona-server56 = callPackage ../servers/sql/percona/5.6.x.nix { };
@@ -16846,6 +16875,8 @@ in
   checksec = callPackage ../os-specific/linux/checksec { };
 
   cifs-utils = callPackage ../os-specific/linux/cifs-utils { };
+
+  cm-rgb = python3Packages.callPackage ../tools/system/cm-rgb { };
 
   cpustat = callPackage ../os-specific/linux/cpustat { };
 
@@ -17694,6 +17725,8 @@ in
 
   gotags = callPackage ../development/tools/gotags { };
 
+  go-task = callPackage ../development/tools/go-task { };
+
   golint = callPackage ../development/tools/golint { };
 
   golangci-lint = callPackage ../development/tools/golangci-lint { };
@@ -17765,6 +17798,8 @@ in
   pam_ldap = callPackage ../os-specific/linux/pam_ldap { };
 
   pam_mount = callPackage ../os-specific/linux/pam_mount { };
+
+  pam_p11 = callPackage ../os-specific/linux/pam_p11 { };
 
   pam_pgsql = callPackage ../os-specific/linux/pam_pgsql { };
 
@@ -19329,6 +19364,8 @@ in
 
   cloud-print-connector = callPackage ../servers/cloud-print-connector { };
 
+  cloud-hypervisor = callPackage ../applications/virtualization/cloud-hypervisor { };
+
   clp = callPackage ../applications/science/math/clp { };
 
   cmatrix = callPackage ../applications/misc/cmatrix { };
@@ -19795,6 +19832,10 @@ in
   fig2dev = callPackage ../applications/graphics/fig2dev { };
 
   FIL-plugins = callPackage ../applications/audio/FIL-plugins { };
+
+  finalfrontier = callPackage ../applications/science/machine-learning/finalfrontier {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   flacon = libsForQt5.callPackage ../applications/audio/flacon { };
 
@@ -22597,6 +22638,8 @@ in
     pythonBindings = true;
   });
 
+  sublime-music = callPackage ../applications/audio/sublime-music { };
+
   subunit = callPackage ../development/libraries/subunit { };
 
   surf = callPackage ../applications/networking/browsers/surf { gtk = gtk2; };
@@ -22616,7 +22659,8 @@ in
 
   symlinks = callPackage ../tools/system/symlinks { };
 
-  syncplay = python3.pkgs.callPackage ../applications/networking/syncplay { };
+  # this can be changed to python3 once pyside2 is updated to support the latest python version
+  syncplay = python37.pkgs.callPackage ../applications/networking/syncplay { };
 
   inherit (callPackages ../applications/networking/syncthing { })
     syncthing
@@ -26334,6 +26378,8 @@ in
 
   nix-top = callPackage ../tools/package-management/nix-top { };
 
+  nix-tree = haskell.lib.justStaticExecutables (haskellPackages.nix-tree);
+
   nix-universal-prefetch = callPackage ../tools/package-management/nix-universal-prefetch { };
 
   nix-repl = throw (
@@ -26353,6 +26399,8 @@ in
   nixfmt = haskell.lib.justStaticExecutables haskellPackages.nixfmt;
 
   nixpkgs-fmt = callPackage ../tools/nix/nixpkgs-fmt { };
+
+  rnix-hashes = callPackage ../tools/nix/rnix-hashes { };
 
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };
   nixos-icons = callPackage ../data/misc/nixos-artwork/icons.nix { };
@@ -26637,6 +26685,8 @@ in
   terraform-providers = recurseIntoAttrs (
     callPackage ../applications/networking/cluster/terraform-providers {}
   );
+
+  terraform-compliance = python3Packages.callPackage ../applications/networking/cluster/terraform-compliance {};
 
   terraform-docs = callPackage ../applications/networking/cluster/terraform-docs {};
 

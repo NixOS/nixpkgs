@@ -22,7 +22,7 @@ in {
 
   config = mkMerge [
     (mkIf (!config.boot.isContainer) {
-      environment.etc."tmpfiles.d/lvm2.conf".source = "${cfg.package}/lib/tmpfiles.d/lvm2.conf";
+      systemd.tmpfiles.packages = [ cfg.package.out ];
       environment.systemPackages = [ cfg.package ];
       systemd.packages = [ cfg.package ];
 

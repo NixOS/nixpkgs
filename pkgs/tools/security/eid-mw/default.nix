@@ -66,13 +66,6 @@ stdenv.mkDerivation rec {
 
       eid-viewer is also installed.
 
-      **TO FIX:** 
-      The procedure below did not work for me, I had to install the .so directly in firefox as instructed at
-      https://eid.belgium.be/en/log-eid#7507
-      and specify
-      /run/current-system/sw/lib/libbeidpkcs11.so
-      as the path to the module.
-
       This package only installs the libraries. To use eIDs in Firefox or
       Chromium, the eID Belgium add-on must be installed.
       This package only installs the libraries. To use eIDs in NSS-compatible
@@ -83,6 +76,11 @@ stdenv.mkDerivation rec {
       Before uninstalling this package, it is a very good idea to run
         ~$ eid-nssdb [--system] remove
       and remove all ~/.pki and/or /etc/pki directories no longer needed.
+
+      The above procedure doesn't seem to work in Firefox. You can override the
+      firefox wrapper to add this derivation to the PKCS#11 modules, like so:
+
+          firefox.override { pkcs11Modules = [ pkgs.eid-mw ]; }
     '';
     platforms = platforms.linux;
     maintainers = with maintainers; [ bfortz ];

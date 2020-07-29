@@ -2,12 +2,15 @@
 
 # build-tools
 , bootPkgs
-, autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4, sphinx
+, autoconf, automake, coreutils, fetchurl, perl, python3, m4, sphinx
 , bash
 
 , libiconv ? null, ncurses
 
-, useLLVM ? !stdenv.targetPlatform.isx86 || (stdenv.targetPlatform.isMusl && stdenv.hostPlatform != stdenv.targetPlatform) || stdenv.targetPlatform.isiOS
+, # GHC can be built with system libffi or a bundled one.
+  libffi ? null
+
+, useLLVM ? !stdenv.targetPlatform.isx86
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
@@ -20,6 +23,9 @@
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
 
+  # aarch64 outputs otherwise exceed 2GB limit
+, enableProfiliedLibs ? !stdenv.targetPlatform.isAarch64
+
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
   enableShared ? !stdenv.targetPlatform.isWindows && !stdenv.targetPlatform.useiOSPrebuilt
@@ -29,11 +35,12 @@
 
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
-  ghcFlavour ? stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) "perf-cross"
-, # Whether to backport https://phabricator.haskell.org/D4388 for
-  # deterministic profiling symbol names, at the cost of a slightly
-  # non-standard GHC API
-  deterministicProfiling ? false
+  ghcFlavour ? stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
+    (if useLLVM then "perf-cross" else "perf-cross-ncg")
+
+, # Whether to disable the large address space allocator
+  # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
+  disableLargeAddressSpace ? stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64
 }:
 
 assert !enableIntegerSimple -> gmp != null;
@@ -70,6 +77,7 @@ let
 
   # Splicer will pull out correct variations
   libDeps = platform: stdenv.lib.optional enableTerminfo ncurses
+    ++ [libffi]
     ++ stdenv.lib.optional (!enableIntegerSimple) gmp
     ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
 
@@ -85,38 +93,17 @@ let
 
 in
 stdenv.mkDerivation (rec {
-  version = "8.4.4";
+  version = "8.8.4";
   name = "${targetPrefix}ghc-${version}";
 
   src = fetchurl {
     url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
-    sha256 = "1ch4j2asg7pr52ai1hwzykxyj553wndg7wq93i47ql4fllspf48i";
+    sha256 = "0bgwbxxvdn56l91bp9p5d083gzcfdi6z8l8b17qzjpr3n8w5wl7h";
   };
 
   enableParallelBuilding = true;
 
   outputs = [ "out" "doc" ];
-
-  patches = [(fetchpatch {
-    url = "https://github.com/haskell/hsc2hs/commit/738f3666c878ee9e79c3d5e819ef8b3460288edf.diff";
-    sha256 = "0plzsbfaq6vb1023lsarrjglwgr9chld4q3m99rcfzx0yx5mibp3";
-    extraPrefix = "utils/hsc2hs/";
-    stripLen = 1;
-  }) (fetchpatch rec { # https://phabricator.haskell.org/D5123
-    url = "http://tarballs.nixos.org/sha256/${sha256}";
-    name = "D5123.diff";
-    sha256 = "0nhqwdamf2y4gbwqxcgjxs0kqx23w9gv5kj0zv6450dq19rji82n";
-  })] ++ stdenv.lib.optional deterministicProfiling
-    (fetchpatch rec {
-      url = "http://tarballs.nixos.org/sha256/${sha256}";
-      name = "D4388.diff";
-      sha256 = "0w6sdcvnqjlnlzpvnzw20b80v150ijjyjvs9548ildc1928j0w7s";
-    })
-    ++ stdenv.lib.optional stdenv.isDarwin ./backport-dylib-command-size-limit.patch
-    ++ stdenv.lib.optional (targetPlatform.isAarch32 || targetPlatform.isAarch64) (fetchpatch {
-      url = "https://github.com/ghc/ghc/commit/d8495549ba9d194815c2d0eaee6797fc7c00756a.diff";
-      sha256 = "1yjcma507c609bcim4rnxq0gaj2dg4d001jklmbpbqpzqzxkn5sz";
-    });
 
   postPatch = "patchShebangs .";
 
@@ -144,6 +131,8 @@ stdenv.mkDerivation (rec {
     export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
+  '' + stdenv.lib.optionalString (!enableProfiliedLibs) ''
+    GhcLibWays = "v dyn"
   '' + stdenv.lib.optionalString targetPlatform.useAndroidPrebuilt ''
     sed -i -e '5i ,("armv7a-unknown-linux-androideabi", ("e-m:e-p:32:32-i64:64-v128:64:128-a:0:32-n32-S64", "cortex-a8", ""))' llvm-targets
   '' + stdenv.lib.optionalString targetPlatform.isMusl ''
@@ -167,22 +156,28 @@ stdenv.mkDerivation (rec {
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
   configurePlatforms = [ "build" "host" ]
     ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
+  ] ++ stdenv.lib.optionals (libffi != null) [
+    "--with-system-libffi"
+    "--with-ffi-includes=${targetPackages.libffi.dev}/include"
+    "--with-ffi-libraries=${targetPackages.libffi.out}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform == hostPlatform && !enableIntegerSimple) [
-    "--with-gmp-includes=${targetPackages.gmp.dev}/include" "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
+    "--with-gmp-includes=${targetPackages.gmp.dev}/include"
+    "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
-    "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
+    "--with-iconv-includes=${libiconv}/include"
+    "--with-iconv-libraries=${libiconv}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [
     "--enable-bootstrap-with-devel-snapshot"
   ] ++ stdenv.lib.optionals useLdGold [
     "CFLAGS=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
-  ] ++ stdenv.lib.optionals (targetPlatform.isDarwin && targetPlatform.isAarch64) [
-    # fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
+  ] ++ stdenv.lib.optionals (disableLargeAddressSpace) [
     "--disable-large-address-space"
   ];
 
@@ -190,7 +185,7 @@ stdenv.mkDerivation (rec {
   strictDeps = true;
 
   # Don’t add -liconv to LDFLAGS automatically so that GHC will add it itself.
-  dontAddExtraLibs = true;
+	dontAddExtraLibs = true;
 
   nativeBuildInputs = [
     perl autoconf automake m4 python3 sphinx
@@ -211,10 +206,6 @@ stdenv.mkDerivation (rec {
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!targetPlatform.isDarwin) "--keep-file-symbols";
-
-  # See #63511 - the only unstripped file is the debug rts which isn't meant to
-  # be stripped.
-  dontStrip = true;
 
   checkTarget = "test";
 
@@ -239,7 +230,7 @@ stdenv.mkDerivation (rec {
     inherit enableShared;
 
     # Our Cabal compiler name
-    haskellCompilerName = "ghc-8.4.4";
+    haskellCompilerName = "ghc-${version}";
   };
 
   meta = {
