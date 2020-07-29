@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "Intuitive find & replace CLI (sed alternative)";
     homepage = "https://github.com/chmln/sd";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = with maintainers; [ amar1729 filalex77 ];
   };
 }

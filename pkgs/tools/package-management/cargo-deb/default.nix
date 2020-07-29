@@ -33,6 +33,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mmstick/cargo-deb";
     license = licenses.mit;
     maintainers = with maintainers; [ filalex77 ];
-    platforms = platforms.all;
   };
 }

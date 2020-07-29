@@ -17,6 +17,5 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/NerdyPepper/dijo";
     license = licenses.mit;
     maintainers = with maintainers; [ infinisil ];
-    platforms = platforms.all;
   };
 }

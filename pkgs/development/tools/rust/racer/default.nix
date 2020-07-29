@@ -45,6 +45,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/racer-rust/racer";
     license = licenses.mit;
     maintainers = with maintainers; [ jagajaga ma27 ];
-    platforms = platforms.all;
   };
 }

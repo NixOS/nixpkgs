@@ -22,6 +22,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dalance/amber";
     license = with licenses; [ mit ];
     maintainers = [ maintainers.bdesham ];
-    platforms = platforms.all;
   };
 }
