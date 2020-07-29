@@ -24,8 +24,6 @@ stdenv.mkDerivation {
   postPatch = let configFile = if isDerivation conf || builtins.isPath conf then conf else writeText "config.def.h" conf;
   in optionalString (conf!=null) "cp ${configFile} config.def.h";
 
-  buildPhase = " make ";
-
   meta = {
     homepage = "https://suckless.org/";
     description = "Dynamic window manager for X";
