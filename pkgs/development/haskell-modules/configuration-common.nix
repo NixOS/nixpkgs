@@ -463,6 +463,9 @@ self: super: {
   # https://github.com/byteverse/bytebuild/issues/19
   bytebuild = dontCheck super.bytebuild;
 
+  # https://github.com/andrewthad/haskell-ip/issues/67
+  ip = dontCheck super.ip;
+
   # https://github.com/ndmitchell/shake/issues/206
   # https://github.com/ndmitchell/shake/issues/267
   shake = overrideCabal super.shake (drv: { doCheck = !pkgs.stdenv.isDarwin && false; });
