@@ -5551,6 +5551,8 @@ in
 
   notable = callPackage ../applications/misc/notable { };
 
+  nvchecker = with python3Packages; toPythonApplication nvchecker;
+
   miller = callPackage ../tools/text/miller { };
 
   milu = callPackage ../applications/misc/milu { };
