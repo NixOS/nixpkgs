@@ -51,7 +51,8 @@ mkDerivation rec {
       --run "cd $out" \
       --set FONTCONFIG_FILE "${fontsConf}" \
       --prefix LD_LIBRARY_PATH ":" "${xorg.libXcursor}/lib" \
-      --prefix QT_XKB_CONFIG_ROOT ":" "${xorg.xkeyboardconfig}/share/X11/xkb"
+      --prefix QT_XKB_CONFIG_ROOT ":" "${xorg.xkeyboardconfig}/share/X11/xkb" \
+      --set RIPCORD_ALLOW_UPDATES 0
 
     runHook postInstall
   '';
