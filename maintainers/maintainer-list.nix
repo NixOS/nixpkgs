@@ -1224,6 +1224,12 @@
     githubId = 32319131;
     name = "Brett L";
   };
+  btwiusegentoo = {
+    name = "btwiusegentoo";
+    email = "66811008+btwiusegentoo@users.noreply.github.com";
+    github = "btwiusegentoo";
+    githubId = 66811008;
+  };
   buffet = {
     email = "niclas@countingsort.com";
     github = "buffet";
