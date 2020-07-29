@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , buildPythonPackage
 , isPy27
+, fetchpatch
 # Mitmproxy requirements
 , blinker
 , brotli
@@ -40,15 +41,24 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "5.1.1";
+  version = "5.2";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1lirlckpvd3c6s6q3p32w4k4yfna5mlgr1x9g39lhzzq0sdiz3lk";
+    sha256 = "0ja0aqnfmkvns5qmd51hmrvbw8dnccaks30gxgzgcjgy30rj4brq";
   };
+
+  patches = [
+    # Apply patch from upstream to make mitmproxy v5.2 compatible with urwid >v2.1.0
+    (fetchpatch {
+      name = "urwid-lt-2.1.0.patch";
+      url = "https://github.com/mitmproxy/mitmproxy/commit/ea9177217208fdf642ffc54f6b1f6507a199350c.patch";
+      sha256 = "1z5r8izg5nvay01ywl3xc6in1vjfi9f144j057p3k5rzfliv49gg";
+    })
+  ];
 
   postPatch = ''
     # remove dependency constraints
@@ -57,12 +67,9 @@ buildPythonPackage rec {
 
   doCheck = (!stdenv.isDarwin);
 
-  # examples.complex.xss_scanner doesn't import correctly with pytest5
   checkPhase = ''
     export HOME=$(mktemp -d)
-    export LC_CTYPE=en_US.UTF-8
-    pytest --ignore test/examples \
-      -k 'not test_find_unclaimed_URLs and not test_tcp'
+    pytest -k 'not test_get_version' # expects a Git repository
   '';
 
   propagatedBuildInputs = [
