@@ -38,6 +38,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rustwasm/wasm-pack";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = [ maintainers.dhkl ];
-    platforms = platforms.all;
   };
 }

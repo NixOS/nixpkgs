@@ -73,6 +73,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.rustup.rs/";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = [ maintainers.mic92 ];
-    platforms = platforms.all;
   };
 }

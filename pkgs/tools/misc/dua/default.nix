@@ -25,6 +25,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Byron/dua-cli";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ killercup ];
-    platforms = platforms.all;
   };
 }

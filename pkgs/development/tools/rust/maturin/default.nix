@@ -30,6 +30,5 @@ in rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/PyO3/maturin";
     license = licenses.mit;
     maintainers = [ maintainers.danieldk ];
-    platforms = platforms.all;
   };
 }

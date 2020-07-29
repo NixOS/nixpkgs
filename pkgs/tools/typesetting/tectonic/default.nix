@@ -27,6 +27,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://tectonic-typesetting.github.io/";
     license = with licenses; [ mit ];
     maintainers = [ maintainers.lluchs ];
-    platforms = platforms.all;
   };
 }

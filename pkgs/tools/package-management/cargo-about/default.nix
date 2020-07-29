@@ -17,6 +17,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/EmbarkStudios/cargo-about";
     license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ evanjs ];
-    platforms = platforms.all;
   };
 }

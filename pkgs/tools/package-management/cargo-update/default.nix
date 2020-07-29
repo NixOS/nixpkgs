@@ -32,6 +32,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nabijaczleweli/cargo-update";
     license = licenses.mit;
     maintainers = with maintainers; [ gerschtli filalex77 ];
-    platforms = platforms.all;
   };
 }
