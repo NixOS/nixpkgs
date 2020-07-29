@@ -460,6 +460,9 @@ self: super: {
   bytestring-strict-builder = dontCheck super.bytestring-strict-builder;
   bytestring-tree-builder = dontCheck super.bytestring-tree-builder;
 
+  # https://github.com/byteverse/bytebuild/issues/19
+  bytebuild = dontCheck super.bytebuild;
+
   # https://github.com/ndmitchell/shake/issues/206
   # https://github.com/ndmitchell/shake/issues/267
   shake = overrideCabal super.shake (drv: { doCheck = !pkgs.stdenv.isDarwin && false; });
