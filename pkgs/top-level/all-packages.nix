@@ -94,6 +94,8 @@ in
 
   genericUpdater = callPackage ../common-updater/generic-updater.nix { };
 
+  nix-update-script = callPackage ../common-updater/nix-update.nix { };
+
   ### Push NixOS tests inside the fixed point
 
   nixosTests = import ../../nixos/tests/all-tests.nix {
@@ -7344,7 +7346,7 @@ in
   uget = callPackage ../tools/networking/uget { };
 
   uget-integrator = callPackage ../tools/networking/uget-integrator { };
-  
+
   ugrep = callPackage ../tools/text/ugrep { };
 
   uif2iso = callPackage ../tools/cd-dvd/uif2iso { };

@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, ninja, qtbase, pantheon }:
+{ mkDerivation, lib, fetchFromGitHub, nix-update-script, cmake, ninja, qtbase, pantheon }:
 
 mkDerivation rec {
   pname = "adwaita-qt";
@@ -27,7 +27,7 @@ mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
