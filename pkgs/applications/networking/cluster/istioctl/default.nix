@@ -14,10 +14,21 @@ buildGoModule rec {
 
   nativeBuildInputs = [ go-bindata ];
 
+  # Bundle charts
   preBuild = ''
     patchShebangs operator/scripts
     operator/scripts/create_assets_gen.sh
   '';
+
+  # Bundle release metadata
+  buildFlagsArray = let
+    attrs = [
+      "istio.io/pkg/version.buildVersion=${version}"
+      "istio.io/pkg/version.buildStatus=Nix"
+      "istio.io/pkg/version.buildTag=${version}"
+      "istio.io/pkg/version.buildHub=docker.io/istio"
+    ];
+  in ["-ldflags=${lib.concatMapStringsSep " " (attr: "-X ${attr}") attrs}"];
 
   subPackages = [ "istioctl/cmd/istioctl" ];
 
