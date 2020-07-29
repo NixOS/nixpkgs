@@ -5206,9 +5206,7 @@ in
 
   mailhog = callPackage ../servers/mail/mailhog {};
 
-  mailnag = callPackage ../applications/networking/mailreaders/mailnag {
-    pythonPackages = python3Packages;
-  };
+  mailnag = callPackage ../applications/networking/mailreaders/mailnag { };
 
   mailsend = callPackage ../tools/networking/mailsend { };
 
