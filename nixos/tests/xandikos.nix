@@ -4,7 +4,7 @@ import ./make-test-python.nix (
     {
       name = "xandikos";
 
-      meta.maintainers = [ lib.maintainers."0x4A6F" ];
+      meta.maintainers = with lib.maintainers; [ _0x4A6F ];
 
       nodes = {
         xandikos_client = {};
