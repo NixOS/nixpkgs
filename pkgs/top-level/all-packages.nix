@@ -14757,6 +14757,8 @@ in
 
   rlog = callPackage ../development/libraries/rlog { };
 
+  rlottie = callPackage ../development/libraries/rlottie { };
+
   rocksdb = callPackage ../development/libraries/rocksdb { };
 
   rocksdb_lite = rocksdb.override { enableLite = true; };
