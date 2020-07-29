@@ -17,6 +17,5 @@ buildGoPackage rec {
     homepage = "https://github.com/cortesi/devd";
     license = licenses.mit;
     maintainers = with maintainers; [ brianhicks ];
-    platforms = platforms.all;
   };
 }

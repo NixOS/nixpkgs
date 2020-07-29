@@ -44,7 +44,6 @@ buildGoPackage rec {
     '';
     homepage = "https://github.com/stamblerre/gocode";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = with maintainers; [ kalbasit rvolosatovs ];
   };
 }

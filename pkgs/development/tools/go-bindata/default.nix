@@ -20,6 +20,5 @@ buildGoPackage {
     description = "A small utility which generates Go code from any file, useful for embedding binary data in a Go program";
     maintainers = with maintainers; [ cstrahan ];
     license = licenses.cc0;
-    platforms = platforms.all;
   };
 }

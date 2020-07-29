@@ -23,6 +23,5 @@ buildGoPackage rec {
     homepage = "https://www.openpolicyagent.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ lewo ];
-    platforms = platforms.all;
   };
 }

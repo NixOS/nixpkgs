@@ -25,7 +25,6 @@ buildGoPackage rec {
       pass-through to standard make.
       '';
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = [ maintainers.gabesoft ];
   };
 }

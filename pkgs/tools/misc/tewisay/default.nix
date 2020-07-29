@@ -31,6 +31,5 @@ buildGoPackage rec {
     description = "Cowsay replacement with unicode and partial ansi escape support";
     license = stdenv.lib.licenses.cc0;
     maintainers = [ stdenv.lib.maintainers.chiiruno ];
-    platforms = stdenv.lib.platforms.all;
   };
 }
