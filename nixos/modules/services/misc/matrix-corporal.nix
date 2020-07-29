@@ -35,7 +35,7 @@ in
           '';
         };
         options.Matrix.TimeoutMilliseconds = lib.mkOption {
-          type = lib.types.ints.positive;
+          type = lib.types.ints.unsigned;
           default = 45000;
           description = ''
             how long (in milliseconds) HTTP requests (from matrix-corporal to Matrix Synapse) are allowed to take before being timed out.
@@ -53,7 +53,7 @@ in
           '';
         };
         options.Reconciliation.RetryIntervalMilliseconds = lib.mkOption {
-          type = lib.types.ints.positive;
+          type = lib.types.ints.unsigned;
           default = 30000;
           description = ''
             How long (in milliseconds) to wait before retrying reconciliation, in case the previous reconciliation attempt failed (due to Matrix Synapse being down, etc.).
@@ -84,7 +84,7 @@ in
           description = "Whether the HTTP API is enabled or not";
         };
         options.HttpApi.TimeoutMilliseconds = lib.mkOption {
-          type = lib.types.int;
+          type = lib.types.ints.unsigned;
           default = 10000; # Seems good?
           description = "How long (in milliseconds) HTTP requests are allowed to take before being timed out.";
         };
@@ -97,62 +97,37 @@ in
           '';
         };
 
-        options.PolicyProvider = lib.mkOption {
-          type = lib.types.oneOf [
-            lib.types.submodule {
-              Type = lib.mkOption {
-                type = lib.types.addCheck lib.types.str (x: x == "static_file");
-                default = "static_file";
-                description = "Type of Policy Provider";
-              };
-              Path = lib.mkOption {
-                type = lib.types.path;
-                default = "/etc/matrix-corporal/policy.json";
-                description = "Path to policy file";
-              };
-            }
-            lib.types.submodule {
-              Type = lib.mkOption {
-                type = lib.types.addCheck lib.types.str (x: x == "http");
-                default = "http";
-                description = "Type of Policy Provider";
-              };
-              Uri = lib.mkOption {
-                type = lib.types.str;
-                description = "The URL from which matrix-corporal will fetch the policy (a GET request is made).";
-              };
-              CachePath = lib.mkOption {
-                type = lib.types.nullOr lib.types.path;
-                default = "/var/matrix-corporal/last-policy.json";
-                description = "A path to a local file, where matrix-corporal will store the last-fetched policy. It's important to store it locally to prevent downtime in case the policy provider is temporarily unavailable for some reason. Can be set to null to disable caching (not recommended).";
-              };
-              ReloadIntervalSeconds = lib.mkOption {
-                type = lib.types.nullOr lib.types.ints.positive;
-                default = 1800;
-                description = "An interval duration at which the policy provider will re-fetch the policy from the given URL. Can be set to 0 or null to disable reloading.";
-              };
-              TimeoutMilliseconds = lib.mkOption {
-                type = lib.types.nullOr lib.types.ints.positive;
-                default = 30000;
-                description = "how long (in milliseconds) HTTP requests (from matrix-corporal to the policy-serving Uri) are allowed to take before being timed out. Can be set to null to allow for unlimited waits (not recommended).";
-              };
-            }
-            lib.types.submodule {
-              Type = lib.mkOption {
-                type = lib.types.addCheck lib.types.str (x: x == "last_seen_store_policy");
-                default = "last_seen_store_policy";
-                description = "Type of Policy Provider";
-              };
-              CachePath = lib.mkOption {
-                type = lib.types.nullOr lib.types.path;
-                default = "/var/matrix-corporal/last-policy.json";
-                description = "A path to a local file, where matrix-corporal will store the last-fetched policy. It's important to store it locally to prevent downtime in case the policy provider is temporarily unavailable for some reason. Can be set to null to disable caching (not recommended).";
-              };
-            }
-          ];
-          default = {
-            Type = "static_file";
+        options.PolicyProvider = {
+          Type = lib.mkOption {
+            type = lib.types.strMatching "static_file|http|last_seen_store_policy";
+            default = "static_file";
           };
+          Path = lib.mkOption {
+            type = lib.types.path;
+            default = if cfg.settings.PolicyProvider.Type == "static_file" then "/etc/matrix-corporal/policy.json" else {};
+            description = "Path to policy file";
+          };
+          Uri = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = if cfg.settings.PolicyProvider.Type == "http" then "https://localhost/policy.json" else null;
+            description = "The URL from which matrix-corporal will fetch the policy (a GET request is made).";
+          };
+          CachePath = lib.mkOption {
+            type = lib.types.nullOr lib.types.path;
+            default = "/var/matrix-corporal/last-policy.json";
+            description = "A path to a local file, where matrix-corporal will store the last-fetched policy. It's important to store it locally to prevent downtime in case the policy provider is temporarily unavailable for some reason. Can be set to null to disable caching (not recommended).";
+          };
+          ReloadIntervalSeconds = lib.mkOption {
+            type = lib.types.nullOr lib.types.ints.positive;
+            default = 1800;
+            description = "An interval duration at which the policy provider will re-fetch the policy from the given URL. Can be set to 0 or null to disable reloading.";
+          };
+          TimeoutMilliseconds = lib.mkOption {
+            type = lib.types.nullOr lib.types.ints.positive;
+            default = 30000;
+            description = "how long (in milliseconds) HTTP requests (from matrix-corporal to the policy-serving Uri) are allowed to take before being timed out. Can be set to null to allow for unlimited waits (not recommended).";
+          };
+
         };
 
         options.Misc.Debug = lib.mkOption {
