@@ -354,6 +354,13 @@ in rec {
     attrs:
     let
       attrFun = if lib.isFunction attrs then attrs else (_: attrs);
-      overrideAttrs = f: mkDerivation (self: let super = attrFun self; in super // (f super));
+      overrideAttrs = f: mkDerivation (self:
+        let
+          super = attrFun self;
+          f' = f super;
+          feval = if lib.isFunction f'
+            then f self super # it's a new-style `self: super:` function
+            else f'; # it's an old-style `super:` function
+        in super // feval);
     in mkDerivation' (lib.fix attrFun) overrideAttrs;
 }
