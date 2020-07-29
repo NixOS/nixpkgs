@@ -71,7 +71,7 @@ in stdenv.mkDerivation {
     in ''
       substituteInPlace lisp/emacs-lisp/comp.el --replace \
         "(defcustom comp-async-env-modifier-form nil" \
-        "(defcustom comp-async-env-modifier-form '((setenv \"LIBRARY_PATH\" (string-join (seq-filter (lambda (v) (null (eq v nil))) (list (getenv \"LIBRARY_PATH\") \"${libPath}\")) \":\")))"
+        "(defcustom comp-async-env-modifier-form '(setenv \"LIBRARY_PATH\" (string-join (seq-filter (lambda (v) (null (eq v nil))) (list (getenv \"LIBRARY_PATH\") \"${libPath}\")) \":\"))"
 
     ''))
 
