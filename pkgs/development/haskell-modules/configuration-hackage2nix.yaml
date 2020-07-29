@@ -3562,7 +3562,6 @@ broken-packages:
   - byline
   - bytable
   - bytearray-parsing
-  - bytebuild
   - bytelog
   - bytestring-arbitrary
   - bytestring-builder-varword
