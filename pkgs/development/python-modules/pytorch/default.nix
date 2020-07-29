@@ -104,7 +104,7 @@ let
     "LD_LIBRARY_PATH=${cudaStub}\${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH ";
 
 in buildPythonPackage rec {
-  version = "1.5.1";
+  version = "1.6.0";
   pname = "pytorch";
   disabled = !isPy3k;
 
@@ -119,7 +119,7 @@ in buildPythonPackage rec {
     repo   = "pytorch";
     rev    = "v${version}";
     fetchSubmodules = true;
-    sha256 = "1xjbn4hi96m7xslv3p2jc6qcsng0fx3w1m6isqfah81piljf8wng";
+    sha256 = "14hhjsi6fnpaw9m1a3bhvdinsks6fhss6bbcrfk6jgns64abqdaz";
   };
 
   patches = lib.optionals stdenv.isAarch64 [
@@ -129,7 +129,7 @@ in buildPythonPackage rec {
     # Fix from:
     # https://github.com/pytorch/pytorch/pull/40584
     #
-    # This patch can be removed with the next major version (1.6.0).
+    # This patch can be removed with the next major version (1.7.0).
     (fetchpatch {
       name = "qnnpack-neon-fix.patch";
       url = "https://github.com/pytorch/pytorch/commit/7676682584d0caf9243bce74ea0a88711ec4a807.diff";
