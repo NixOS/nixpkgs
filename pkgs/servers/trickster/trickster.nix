@@ -21,6 +21,6 @@ buildGoPackage rec {
     description = "Reverse proxy cache for the Prometheus HTTP APIv1";
     homepage = "https://github.com/Comcast/trickster";
     license = licenses.asl20;
-    maintainers = with maintainers; [ maintainers."1000101" ];
+    maintainers = with maintainers; [ _1000101 ];
   };
 }

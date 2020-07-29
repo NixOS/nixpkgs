@@ -256,6 +256,6 @@ in
 
   };
 
-  meta.maintainers = with maintainers; [ maintainers."1000101" ];
+  meta.maintainers = with maintainers; [ _1000101 ];
 
 }
