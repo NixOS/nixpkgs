@@ -42,9 +42,9 @@ rec {
     { mkDerivation = args:
       if stdenv'.hostPlatform.isDarwin
       then throw "Cannot build fully static binaries on Darwin/macOS"
-      else stdenv'.mkDerivation (args // {
-        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
-        configureFlags = (args.configureFlags or []) ++ [
+      else (stdenv'.mkDerivation args).overrideAttrs (super: {
+        NIX_CFLAGS_LINK = toString (super.NIX_CFLAGS_LINK or "") + " -static";
+        configureFlags = (super.configureFlags or []) ++ [
             "--disable-shared" # brrr...
           ];
       });
@@ -54,14 +54,14 @@ rec {
   # Return a modified stdenv that builds static libraries instead of
   # shared libraries.
   makeStaticLibraries = stdenv: stdenv //
-    { mkDerivation = args: stdenv.mkDerivation (args // {
+    { mkDerivation = args: (stdenv.mkDerivation args).overrideAttrs (super: {
         dontDisableStatic = true;
-        configureFlags = (args.configureFlags or []) ++ [
+        configureFlags = (super.configureFlags or []) ++ [
           "--enable-static"
           "--disable-shared"
         ];
-        cmakeFlags = (args.cmakeFlags or []) ++ [ "-DBUILD_SHARED_LIBS:BOOL=OFF" ];
-        mesonFlags = (args.mesonFlags or []) ++ [ "-Ddefault_library=static" ];
+        cmakeFlags = (super.cmakeFlags or []) ++ [ "-DBUILD_SHARED_LIBS:BOOL=OFF" ];
+        mesonFlags = (super.mesonFlags or []) ++ [ "-Ddefault_library=static" ];
       });
     };
 
@@ -70,8 +70,8 @@ rec {
      consuming derivations
   */
   propagateBuildInputs = stdenv: stdenv //
-    { mkDerivation = args: stdenv.mkDerivation (args // {
-        propagatedBuildInputs = (args.propagatedBuildInputs or []) ++ (args.buildInputs or []);
+    { mkDerivation = args: (stdenv.mkDerivation args).overrideAttrs (super: {
+        propagatedBuildInputs = (super.propagatedBuildInputs or []) ++ (super.buildInputs or []);
         buildInputs = [];
       });
     };
@@ -87,7 +87,7 @@ rec {
            stdenv;
   */
   addAttrsToDerivation = extraAttrs: stdenv: stdenv //
-    { mkDerivation = args: stdenv.mkDerivation (args // extraAttrs); };
+    { mkDerivation = args: (stdenv.mkDerivation args).overrideAttrs (_: extraAttrs); };
 
 
   /* Return a modified stdenv that builds packages with GCC's coverage
@@ -181,17 +181,17 @@ rec {
      binaries have debug info, and compiler optimisations are
      disabled. */
   keepDebugInfo = stdenv: stdenv //
-    { mkDerivation = args: stdenv.mkDerivation (args // {
+    { mkDerivation = args: (stdenv.mkDerivation args).overrideAttrs (super: {
         dontStrip = true;
-        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -ggdb -Og";
+        NIX_CFLAGS_COMPILE = toString (super.NIX_CFLAGS_COMPILE or "") + " -ggdb -Og";
       });
     };
 
 
   /* Modify a stdenv so that it uses the Gold linker. */
   useGoldLinker = stdenv: stdenv //
-    { mkDerivation = args: stdenv.mkDerivation (args // {
-        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -fuse-ld=gold";
+    { mkDerivation = args: (stdenv.mkDerivation args).overrideAttrs (super: {
+        NIX_CFLAGS_LINK = toString (super.NIX_CFLAGS_LINK or "") + " -fuse-ld=gold";
       });
     };
 
@@ -201,8 +201,8 @@ rec {
 
      WARNING: this breaks purity! */
   impureUseNativeOptimizations = stdenv: stdenv //
-    { mkDerivation = args: stdenv.mkDerivation (args // {
-        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -march=native";
+    { mkDerivation = args: (stdenv.mkDerivation args).overrideAttrs (super: {
+        NIX_CFLAGS_COMPILE = toString (super.NIX_CFLAGS_COMPILE or "") + " -march=native";
         NIX_ENFORCE_NO_NATIVE = false;
 
         preferLocalBuild = true;
