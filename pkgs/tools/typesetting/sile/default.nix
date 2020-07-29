@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://sile-typesetter.org/";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ doronbehar ];
+    maintainers = with maintainers; [ doronbehar alerque ];
     license = licenses.mit;
   };
 }
