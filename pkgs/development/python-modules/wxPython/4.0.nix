@@ -48,7 +48,6 @@ buildPythonPackage rec {
 
   installPhase = ''
     ${python.interpreter} setup.py install --skip-build --prefix=$out
-    wrapPythonPrograms
   '';
 
   passthru = { inherit wxGTK; };
