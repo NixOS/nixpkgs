@@ -7,7 +7,7 @@ let
     # to build it. This is a bit confusing for cross compilation.
     inherit (stdenv) hostPlatform;
   };
-in rec {
+
   # `mkDerivation` wraps the builtin `derivation` function to
   # produce derivations that use this stdenv and its shell.
   #
@@ -18,7 +18,7 @@ in rec {
   #
   # * https://nixos.org/nix/manual/#ssec-derivation
   #   Explanation about derivations in general
-  mkDerivation =
+  mkDerivation' =
     {
 
     # These types of dependencies are all exhaustively documented in
@@ -90,6 +90,9 @@ in rec {
     , patches ? []
 
     , ... } @ attrs:
+    # overrideAttrs needs access to the pre-evaluation attrs arg if it's a fixed-point function.
+    # since our caller evaluates that for us, it gets to provide overrideAttrs too.
+    overrideAttrs:
 
     let
       # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
@@ -336,8 +339,7 @@ in rec {
       lib.extendDerivation
         validity.handled
         ({
-           overrideAttrs = f: mkDerivation (attrs // (f attrs));
-           inherit meta passthru;
+           inherit meta overrideAttrs passthru;
          } //
          # Pass through extra attributes that are not inputs, but
          # should be made available to Nix expressions using the
@@ -345,4 +347,13 @@ in rec {
          passthru)
         (derivation derivationArg);
 
+in rec {
+  # Allow `mkDerivation` to take either an attrset directly, or a fixed-point function that has a
+  # `self:` argument. The latter avoids the issues with using `rec { … }` and `overrideAttrs`.
+  mkDerivation =
+    attrs:
+    let
+      attrFun = if lib.isFunction attrs then attrs else (_: attrs);
+      overrideAttrs = f: mkDerivation (self: let super = attrFun self; in super // (f super));
+    in mkDerivation' (lib.fix attrFun) overrideAttrs;
 }
