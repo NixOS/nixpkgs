@@ -22,6 +22,5 @@ buildGoModule rec {
     homepage = "https://github.com/mdlayher/apcupsd_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ maintainers."1000101" mdlayher ];
-    platforms = platforms.all;
   };
 }

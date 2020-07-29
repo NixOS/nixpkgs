@@ -27,6 +27,5 @@ buildGoModule rec {
     homepage = "https://magefile.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ swdunlop ];
-    platforms = platforms.all;
   };
 }

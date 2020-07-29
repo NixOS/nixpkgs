@@ -23,6 +23,5 @@ buildGoModule {
     description = "A utility which vendors go code including c dependencies";
     maintainers = with maintainers; [ c00w ];
     license = licenses.mit;
-    platforms = platforms.all;
   };
 }

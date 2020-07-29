@@ -28,6 +28,5 @@ buildGoModule rec {
     homepage = "https://github.com/fatedier/frp";
     license = licenses.asl20;
     maintainers = with maintainers; [ filalex77 ];
-    platforms = platforms.all;
   };
 }

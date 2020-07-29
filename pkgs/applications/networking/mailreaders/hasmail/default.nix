@@ -38,6 +38,5 @@ buildGoModule rec {
     homepage = "https://github.com/jonhoo/hasmail";
     license = licenses.unlicense;
     maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.all;
   };
 }
