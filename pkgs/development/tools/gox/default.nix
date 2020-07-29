@@ -16,7 +16,6 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     homepage = "https://github.com/mitchellh/gox";
     description = "A dead simple, no frills Go cross compile tool";
-    platforms = platforms.all;
     license = licenses.mpl20;
   };
 }

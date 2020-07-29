@@ -17,6 +17,5 @@ buildGoPackage rec {
     description = "Compute various size metrics for a Git repository";
     license = licenses.mit;
     maintainers = with maintainers; [ matthewbauer ];
-    platforms = platforms.all;
   };
 }

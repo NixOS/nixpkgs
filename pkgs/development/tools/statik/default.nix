@@ -20,6 +20,5 @@ buildGoPackage {
     description = "Embed files into a Go executable ";
     license = licenses.asl20;
     maintainers = with maintainers; [ chiiruno ];
-    platforms = platforms.all;
   };
 }

@@ -17,6 +17,5 @@ buildGoPackage rec {
     homepage = "https://github.com/cortesi/modd";
     license = licenses.mit;
     maintainers = with maintainers; [ kierdavis ];
-    platforms = platforms.all;
   };
 }
