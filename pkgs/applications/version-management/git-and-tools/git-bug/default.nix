@@ -33,7 +33,6 @@ buildGoModule rec {
     description = "Distributed bug tracker embedded in Git";
     homepage = "https://github.com/MichaelMure/git-bug";
     license = licenses.gpl3;
-    platforms = platforms.all;
     maintainers = with maintainers; [ royneary ];
   };
 }

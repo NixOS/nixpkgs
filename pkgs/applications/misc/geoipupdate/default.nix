@@ -19,7 +19,6 @@ buildGoModule rec {
     description = "Automatic GeoIP database updater";
     homepage = "https://github.com/maxmind/geoipupdate";
     license = with licenses; [ asl20 ];
-    platforms = platforms.all;
     maintainers = with maintainers; [ das_j ];
   };
 }

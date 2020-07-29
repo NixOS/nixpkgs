@@ -25,7 +25,6 @@ buildGoModule rec {
     homepage = "https://github.com/candid82/joker";
     description = "A small Clojure interpreter and linter written in Go";
     license = licenses.epl10;
-    platforms = platforms.all;
     maintainers = with maintainers; [ andrestylianos ];
   };
 }
