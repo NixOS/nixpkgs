@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.3";
+  version = "0.8.4";
   name = "ocaml${ocaml.version}-astring-${version}";
 
   src = fetchurl {
     url = "https://erratique.ch/software/astring/releases/astring-${version}.tbz";
-    sha256 = "0ixjwc3plrljvj24za3l9gy0w30lsbggp8yh02lwrzw61ls4cri0";
+    sha256 = "0d46vj8fwlnfyd4qclfxf95gqa90anc9n889zr7f2vz2jpqp1xw0";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild topkg ];
