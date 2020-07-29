@@ -1,5 +1,6 @@
 { lib
 , fetchgit
+, nix-update-script
 , meson
 , ninja
 , pkgconfig
@@ -90,6 +91,13 @@ python3.pkgs.buildPythonApplication rec  {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
 
   meta = with lib; {
     changelog = "https://gitlab.gnome.org/World/lollypop/tags/${version}";

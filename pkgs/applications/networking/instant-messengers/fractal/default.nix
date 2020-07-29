@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitLab
+, nix-update-script
 , fetchpatch
 , meson
 , ninja
@@ -77,6 +78,12 @@ rustPlatform.buildRustPackage rec {
   buildPhase = null;
   checkPhase = null;
   installPhase = null;
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Matrix group messaging app";

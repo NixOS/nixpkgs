@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, nix-update-script
 , python3Packages
 , gdk-pixbuf
 , glib
@@ -102,6 +103,13 @@ python3Packages.buildPythonApplication rec {
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ wmctrl ]}")
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
 
   meta = with stdenv.lib; {
     description = "A fast application launcher for Linux, written in Python, using GTK";
