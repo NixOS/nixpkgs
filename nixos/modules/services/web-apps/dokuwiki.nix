@@ -2,7 +2,7 @@
 
 let
 
-  inherit (lib) mkEnableOption mkForce mkIf mkMerge mkOption optionalAttrs recursiveUpdate types;
+  inherit (lib) mkEnableOption mkForce mkIf mkMerge mkOption optionalAttrs recursiveUpdate types maintainers;
   inherit (lib) concatMapStringsSep flatten mapAttrs mapAttrs' mapAttrsToList nameValuePair concatMapStringSep;
 
   eachSite = config.services.dokuwiki;
@@ -385,4 +385,7 @@ in
       isSystemUser = true;
     };
   };
+
+  meta.maintainers = with maintainers; [ maintainers."1000101" ];
+
 }
