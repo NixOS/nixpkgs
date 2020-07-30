@@ -1,6 +1,7 @@
 { stdenv, buildPythonApplication, fetchFromGitHub
 , poetry, pygls, pyparsing
 , cmake, pytest, pytest-datadir
+, fetchpatch
 }:
 
 buildPythonApplication rec {
@@ -14,6 +15,12 @@ buildPythonApplication rec {
     rev = "v${version}";
     sha256 = "0vz7bjxkk0phjhz3h9kj6yr7wnk3g7lqmkqraa0kw12mzcfck837";
   };
+
+  # can be removed after v0.1.2
+  patches = stdenv.lib.optional stdenv.isDarwin (fetchpatch {
+    url = "https://github.com/regen100/cmake-language-server/pull/24.patch";
+    sha256 = "1id8wpmyc7djyqasb5g9z9i3jipcdb4sirn4cpx2v8xmdn9khdnz";
+  });
 
   postPatch = ''
     substituteInPlace pyproject.toml \
