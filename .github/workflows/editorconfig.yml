@@ -13,7 +13,7 @@ jobs:
     - uses: technote-space/get-diff-action@v2.0.2
     - name: editorconfig check
       env:
-        VERSION: "2.0.4"
+        VERSION: "2.1.0"
         OS: "linux"
         ARCH: "amd64"
       run: |
