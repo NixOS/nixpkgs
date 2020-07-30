@@ -1348,7 +1348,7 @@ self: super: {
         })).override {
           # we are faster than stack here
           hie-bios = dontCheck self.hie-bios_0_6_1;
-          lsp-test = dontCheck self.lsp-test_0_11_0_2;
+          lsp-test = dontCheck self.lsp-test_0_11_0_3;
         });
 
   haskell-language-server = (overrideCabal super.haskell-language-server
@@ -1368,7 +1368,7 @@ self: super: {
       ghcide = self.hls-ghcide;
       # we are faster than stack here
       hie-bios = dontCheck self.hie-bios_0_6_1;
-      lsp-test = dontCheck self.lsp-test_0_11_0_2;
+      lsp-test = dontCheck self.lsp-test_0_11_0_3;
     };
 
   # https://github.com/kowainik/policeman/issues/57
