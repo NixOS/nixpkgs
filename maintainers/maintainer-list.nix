@@ -9257,4 +9257,10 @@
     github = "deifactor";
     githubId = 30192992;
   };
+  koozz = {
+    name = "Jan van den Berg";
+    email = "264372+koozz@users.noreply.github.com";
+    github = "koozz";
+    githubId = 264372;
+  };
 }
