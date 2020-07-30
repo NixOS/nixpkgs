@@ -42,6 +42,12 @@ let
   ldPath = map (x: "/steamrt/${steam-runtime-wrapped.arch}/" + x) steam-runtime-wrapped.libs
            ++ lib.optionals (steam-runtime-wrapped-i686 != null) (map (x: "/steamrt/${steam-runtime-wrapped-i686.arch}/" + x) steam-runtime-wrapped-i686.libs);
 
+  # Zachtronics and a few other studios expect STEAM_LD_LIBRARY_PATH to be present
+  exportLDPath = ''
+    export LD_LIBRARY_PATH=/lib32:/lib64:${lib.concatStringsSep ":" ldPath}\''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
+    export STEAM_LD_LIBRARY_PATH="$STEAM_LD_LIBRARY_PATH''${STEAM_LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+  '';
+
   setupSh = writeScript "setup.sh" ''
     #!${runtimeShell}
   '';
@@ -54,6 +60,7 @@ let
       exit 0
     fi
     export LD_LIBRARY_PATH="$runtime_paths''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+    export STEAM_LD_LIBRARY_PATH="$STEAM_LD_LIBRARY_PATH''${STEAM_LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     exec "$@"
   '';
 
@@ -251,6 +258,7 @@ in buildFHSUserEnv rec {
     EOF
       fi
     fi
+    ${lib.optionalString (!nativeOnly) exportLDPath}
     exec steam "$@"
   '';
 
@@ -272,7 +280,7 @@ in buildFHSUserEnv rec {
         exit 1
       fi
       shift
-      ${lib.optionalString (!nativeOnly) "export LD_LIBRARY_PATH=/lib32:/lib64:${lib.concatStringsSep ":" ldPath}\${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"}
+      ${lib.optionalString (!nativeOnly) exportLDPath}
       exec -- "$run" "$@"
     '';
   };
