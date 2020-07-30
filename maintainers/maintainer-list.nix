@@ -8845,6 +8845,12 @@
     githubId = 1322201;
     name = "Yochai";
   };
+  yoctocell = {
+    email = "yoctocell.code@keemail.me";
+    github = "yoctocell";
+    githubId = 40352765;
+    name = "Yoctocell";
+  };
   yorickvp = {
     email = "yorickvanpelt@gmail.com";
     github = "yorickvp";
