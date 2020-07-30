@@ -130,6 +130,11 @@ systemd.services.mysql.serviceConfig.ReadWritePaths = [ "/var/data" ];
       This will make container tools like Podman work as non-root users out of the box.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       The various documented workarounds to use steam have been converted to a module. <varname>programs.steam.enable</varname> enables steam, controller support and the workarounds.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
