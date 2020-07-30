@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pkgconfig
 , meson
 , ninja
@@ -61,6 +62,10 @@ stdenv.mkDerivation rec {
   passthru = {
     tests = {
       installedTests = nixosTests.installed-tests.graphene;
+    };
+
+    updateScript = nix-update-script {
+      attrPath = pname;
     };
   };
 

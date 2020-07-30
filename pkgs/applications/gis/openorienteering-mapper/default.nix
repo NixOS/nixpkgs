@@ -56,6 +56,8 @@ mkDerivation rec {
     "-DLICENSING_PROVIDER:BOOL=OFF"
     "-DMapper_MANUAL_QTHELP:BOOL=OFF"
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    # Usually enabled on Darwin
+    "-DCMAKE_FIND_FRAMEWORK=never"
     # FindGDAL is broken and always finds /Library/Framework unless this is
     # specified
     "-DGDAL_INCLUDE_DIR=${gdal}/include"

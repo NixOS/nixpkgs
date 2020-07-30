@@ -78,6 +78,7 @@ in stdenv.mkDerivation rec {
       --target ${target} \
       -Dhost_arch=${host} \
       -Duse_system_zlib=1 \
+      --enable-libpkix \
       ${stdenv.lib.optionalString stdenv.isDarwin "--clang"} \
       ${stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-tests"}
 

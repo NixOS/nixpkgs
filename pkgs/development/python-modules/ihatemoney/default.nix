@@ -122,7 +122,6 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://ihatemoney.org";
     description = "A simple shared budget manager web application";
-    platforms = platforms.linux;
     license = licenses.beerware;
     maintainers = [ maintainers.symphorien ];
   };

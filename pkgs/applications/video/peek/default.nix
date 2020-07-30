@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , meson
 , ninja
 , gettext
@@ -67,6 +68,13 @@ stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : ${stdenv.lib.makeBinPath [ which ffmpeg_3 gifski ]})
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/phw/peek";
