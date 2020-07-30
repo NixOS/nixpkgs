@@ -16189,6 +16189,8 @@ in
 
   oauth2_proxy = callPackage ../servers/oauth2_proxy { };
 
+  openbgpd = callPackage ../servers/openbgpd { };
+
   openafs = callPackage ../servers/openafs/1.6 { tsmbac = null; ncurses = null; };
   openafs_1_8 = callPackage ../servers/openafs/1.8 { tsmbac = null; ncurses = null; };
 
