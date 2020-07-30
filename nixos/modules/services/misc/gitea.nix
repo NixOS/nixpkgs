@@ -448,8 +448,11 @@ in
         User = cfg.user;
         Group = "gitea";
         WorkingDirectory = cfg.stateDir;
-        ExecStart = "${gitea}/bin/gitea web";
+        ExecStart = "${gitea}/bin/gitea web --pid /run/gitea/gitea.pid";
         Restart = "always";
+        # Runtime directory and mode
+        RuntimeDirectory = "gitea";
+        RuntimeDirectoryMode = "0755";
 
         # Filesystem
         ProtectHome = true;
