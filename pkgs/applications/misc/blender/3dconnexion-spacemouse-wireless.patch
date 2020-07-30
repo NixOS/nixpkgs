@@ -1,0 +1,13 @@
+diff --git a/intern/ghost/intern/GHOST_NDOFManager.cpp b/intern/ghost/intern/GHOST_NDOFManager.cpp
+index dda78c0ac5b..be1c4c95185 100644
+--- a/intern/ghost/intern/GHOST_NDOFManager.cpp
++++ b/intern/ghost/intern/GHOST_NDOFManager.cpp
+@@ -239,7 +239,7 @@ bool GHOST_NDOFManager::setDevice(unsigned short vendor_id, unsigned short produ
+     case 0x256F:  // 3Dconnexion
+       switch (product_id) {
+         case 0xC62E:  // plugged in
+-        case 0xC62F:  // wireless
++        case 0xC62F: case 0xC652: // wireless
+           puts("ndof: using SpaceMouse Wireless");
+           m_deviceType = NDOF_SpaceMouseWireless;
+           m_buttonCount = 2;

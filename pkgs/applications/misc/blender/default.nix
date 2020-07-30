@@ -7,6 +7,7 @@
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? config.cudaSupport or false, cudatoolkit
 , colladaSupport ? true, opencollada
+, spacenavSupport ? true, libspnav
 , makeWrapper
 , pugixml, SDL, Cocoa, CoreGraphics, ForceFeedback, OpenAL, OpenGL
 }:
@@ -24,7 +25,8 @@ stdenv.mkDerivation rec {
     sha256 = "1kd74nzqvpcpsb4lghnjj9z3ps93lzqbhkv3lp5p79rqs8y64i23";
   };
 
-  patches = lib.optional stdenv.isDarwin ./darwin.patch;
+  patches = [ (lib.optional stdenv.isDarwin ./darwin.patch)
+              (lib.optional spacenavSupport ./3dconnexion-spacemouse-wireless.patch) ];
 
   nativeBuildInputs = [ cmake ] ++ optional cudaSupport addOpenGLRunpath;
   buildInputs =
@@ -48,7 +50,8 @@ stdenv.mkDerivation rec {
     ])
     ++ optional jackaudioSupport libjack2
     ++ optional cudaSupport cudatoolkit
-    ++ optional colladaSupport opencollada;
+    ++ optional colladaSupport opencollada
+    ++ optional spacenavSupport libspnav;
 
   postPatch =
     if stdenv.isDarwin then ''
