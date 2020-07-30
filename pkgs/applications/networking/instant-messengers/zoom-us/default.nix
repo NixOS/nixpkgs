@@ -6,7 +6,7 @@
 , qtquickcontrols2, qtscript, qtsvg , qttools, qtwayland, qtwebchannel
 , qtwebengine
 # Runtime
-, coreutils, libjpeg_turbo, faac, pciutils, procps, utillinux
+, coreutils, faac, pciutils, procps, utillinux
 , pulseaudioSupport ? true, libpulseaudio ? null
 }:
 
@@ -40,7 +40,7 @@ in mkDerivation {
   nativeBuildInputs = [ autoPatchelfHook ];
 
   buildInputs = [
-    dbus glib libGL libX11 libXfixes libuuid libxcb libjpeg_turbo faac qtbase
+    dbus glib libGL libX11 libXfixes libuuid libxcb faac qtbase
     qtdeclarative qtgraphicaleffects qtlocation qtquickcontrols qtquickcontrols2
     qtscript qtwebchannel qtwebengine qtimageformats qtsvg qttools qtwayland
   ];
@@ -70,7 +70,7 @@ in mkDerivation {
       cp -ar ${files} $out/share/zoom-us
 
       # TODO Patch this somehow; tries to dlopen './libturbojpeg.so' from cwd
-      ln -s $(readlink -e "${libjpeg_turbo.out}/lib/libturbojpeg.so") $out/share/zoom-us/libturbojpeg.so
+      cp libturbojpeg.so $out/share/zoom-us/libturbojpeg.so
 
       # Again, requires faac with a nonstandard filename.
       ln -s $(readlink -e "${faac}/lib/libfaac.so") $out/share/zoom-us/libfaac1.so
