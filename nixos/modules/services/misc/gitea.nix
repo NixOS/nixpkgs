@@ -162,6 +162,12 @@ in
             <manvolnum>7</manvolnum></citerefentry>.
           '';
         };
+
+        backupDir = mkOption {
+          type = types.str;
+          default = "${cfg.stateDir}/dump";
+          description = "Path to the dump files.";
+        };
       };
 
       appName = mkOption {
@@ -357,6 +363,9 @@ in
     };
 
     systemd.tmpfiles.rules = [
+      "d '${cfg.dump.backupDir}' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.dump.backupDir}' 0750 ${cfg.user} gitea - -"
+      "Z '${cfg.dump.backupDir}' - ${cfg.user} gitea - -"
       "d '${cfg.repositoryRoot}' 0750 ${cfg.user} gitea - -"
       "z '${cfg.repositoryRoot}' 0750 ${cfg.user} gitea - -"
       "Z '${cfg.repositoryRoot}' - ${cfg.user} gitea - -"
@@ -448,7 +457,7 @@ in
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
         ProtectControlGroups = true;
-        ReadWritePaths = [ cfg.repositoryRoot cfg.stateDir ];
+        ReadWritePaths = [ cfg.dump.backupDir cfg.repositoryRoot cfg.stateDir ];
         UMask = "0027";
         # Caps
         CapabilityBoundingSet = "";
@@ -513,7 +522,7 @@ in
          Type = "oneshot";
          User = cfg.user;
          ExecStart = "${gitea}/bin/gitea dump";
-         WorkingDirectory = cfg.stateDir;
+         WorkingDirectory = cfg.dump.backupDir;
        };
     };
 
