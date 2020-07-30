@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, scons, pkgconfig, SDL2, lua, fftwFloat,
-  zlib, bzip2, curl }:
+  zlib, bzip2, curl, darwin }:
 
+with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "the-powder-toy";
   version = "95.0";
@@ -13,7 +14,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ scons pkgconfig ];
-
+  
+  propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin 
+    [ (darwin.apple_sdk.frameworks.Cocoa) ];
+  
   buildInputs = [ SDL2 lua fftwFloat zlib bzip2 curl ];
 
   installPhase = ''
