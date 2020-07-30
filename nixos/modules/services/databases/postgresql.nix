@@ -16,12 +16,24 @@ let
     ''
       hba_file = '${pkgs.writeText "pg_hba.conf" cfg.authentication}'
       ident_file = '${pkgs.writeText "pg_ident.conf" cfg.identMap}'
-      log_destination = 'stderr'
       log_line_prefix = '${cfg.logLinePrefix}'
       listen_addresses = '${if cfg.enableTCPIP then "*" else "localhost"}'
       port = ${toString cfg.port}
+      ${if cfg.enableSystemLogging then logSys else logStdErr}
       ${cfg.extraConfig}
-    ''; 
+    '';
+
+  logStdErr = ''
+      log_destination = 'stderr'
+  '';
+
+  logSys = ''
+        log_connections = yes
+        log_statement = 'all'
+        logging_collector = yes
+        log_disconnections = yes
+        log_destination = 'syslog'
+  '';
 
   groupAccessAvailable = versionAtLeast postgresql.version "11.0";
 
@@ -177,6 +189,14 @@ in
         '';
       };
 
+      enableSystemLogging = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+            Will enable system logging and log all queries.
+            journalctl -fu postgresql.service
+        '';
+      };
       enableTCPIP = mkOption {
         type = types.bool;
         default = false;

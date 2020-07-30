@@ -32,6 +32,7 @@ let
         services.postgresql = {
           enable = true;
           package = postgresql-package;
+          enableSystemLogging = true; # makes sense for the test I suppose
         };
 
         services.postgresqlBackup = {
