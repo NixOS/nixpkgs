@@ -1,7 +1,7 @@
 { stdenv, fetchzip }:
 
 let
-  version = "3.2.2";
+  version = "3.3.1";
 in fetchzip {
   name = "iosevka-bin-${version}";
 
@@ -12,7 +12,7 @@ in fetchzip {
     unzip -j $downloadedFile \*.ttc -d $out/share/fonts/iosevka
   '';
 
-  sha256 = "11966fvqamlg88vlgs47fl3ambi48h0mjj4a758i5y8myb2hk6bd";
+  sha256 = "1hfccivk5f7i489s78yh2x96ic6rf5ncbsjqnrxqmfs9n1gjhfbj";
 
   meta = with stdenv.lib; {
     homepage = "https://be5invis.github.io/Iosevka/";
