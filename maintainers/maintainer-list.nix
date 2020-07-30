@@ -833,6 +833,12 @@
     githubId = 135230;
     name = "Aycan iRiCAN";
   };
+  artturin = {
+    email = "artturin@artturin.com";
+    github = "artturin";
+    githubId = 56650223;
+    name = "Artturi N";
+  };
   b4dm4n = {
     email = "fabianm88@gmail.com";
     github = "B4dM4n";
