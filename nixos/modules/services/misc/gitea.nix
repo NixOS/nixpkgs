@@ -357,12 +357,20 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      "d '${cfg.stateDir}' - ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}/conf' - ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}/custom' - ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}/custom/conf' - ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}/log' - ${cfg.user} gitea - -"
-      "d '${cfg.repositoryRoot}' - ${cfg.user} gitea - -"
+      "d '${cfg.repositoryRoot}' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.repositoryRoot}' 0750 ${cfg.user} gitea - -"
+      "Z '${cfg.repositoryRoot}' - ${cfg.user} gitea - -"
+      "d '${cfg.stateDir}' 0750 ${cfg.user} gitea - -"
+      "d '${cfg.stateDir}/conf' 0750 ${cfg.user} gitea - -"
+      "d '${cfg.stateDir}/custom' 0750 ${cfg.user} gitea - -"
+      "d '${cfg.stateDir}/custom/conf' 0750 ${cfg.user} gitea - -"
+      "d '${cfg.stateDir}/log' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.stateDir}' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.stateDir}/.ssh' 0700 ${cfg.user} gitea - -"
+      "z '${cfg.stateDir}/conf' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.stateDir}/custom' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.stateDir}/custom/conf' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.stateDir}/log' 0750 ${cfg.user} gitea - -"
       "Z '${cfg.stateDir}' - ${cfg.user} gitea - -"
 
       # If we have a folder or symlink with gitea locales, remove it
@@ -440,7 +448,8 @@ in
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
         ProtectControlGroups = true;
-        ReadWritePaths = cfg.stateDir;
+        ReadWritePaths = [ cfg.repositoryRoot cfg.stateDir ];
+        UMask = "0027";
         # Caps
         CapabilityBoundingSet = "";
         NoNewPrivileges = true;
