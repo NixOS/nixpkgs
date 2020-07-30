@@ -10995,6 +10995,8 @@ in
 
   pax-rs = callPackage ../development/tools/pax-rs { };
 
+  pebble-sdk = callPackage ../development/mobile/pebble-sdk { };
+
   peg = callPackage ../development/tools/parsing/peg { };
 
   pgcli = pkgs.python3Packages.pgcli;

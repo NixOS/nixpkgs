@@ -1,0 +1,10 @@
+--- a/pebble-tool/pebble_tool/sdk/emulator.py
++++ b/pebble-tool/pebble_tool/sdk/emulator.py
+@@ -304,7 +304,6 @@
+                                    "layouts.json")
+
+         command = [
+-            sys.executable,
+             phonesim_bin,
+             "--qemu", "localhost:{}".format(self.qemu_port),
+             "--port", str(self.pypkjs_port),
