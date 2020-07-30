@@ -2013,6 +2013,8 @@ in
 
   hr = callPackage ../applications/misc/hr { };
 
+  humioctl = callPackage ../applications/logging/humioctl {};
+
   hyx = callPackage ../tools/text/hyx { };
 
   icdiff = callPackage ../tools/text/icdiff {};
