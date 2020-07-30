@@ -23293,6 +23293,8 @@ in
 
   quilter = callPackage ../applications/editors/quilter { };
 
+  quisk = python38Packages.callPackage ../applications/radio/quisk { };
+
   quiterss = libsForQt514.callPackage ../applications/networking/newsreaders/quiterss {};
 
   falkon = libsForQt514.callPackage ../applications/networking/browsers/falkon { };
