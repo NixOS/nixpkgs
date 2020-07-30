@@ -19,6 +19,7 @@ let
       # Needed for operating system detection until
       # https://github.com/ValveSoftware/steam-for-linux/issues/5909 is resolved
       lsb-release
+      cacert
       # Errors in output without those
       pciutils
       python2
