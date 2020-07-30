@@ -1,5 +1,6 @@
 { stdenv
 , desktop-file-utils
+, nix-update-script
 , elementary-gtk-theme
 , elementary-icon-theme
 , fetchFromGitHub
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };

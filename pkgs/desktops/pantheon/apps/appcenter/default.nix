@@ -1,4 +1,5 @@
 { stdenv
+, nix-update-script
 , appstream
 , appstream-glib
 , dbus
@@ -30,17 +31,17 @@
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.4.0";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "04q2gp9yyqsg4jd53rivcmikw52psxijrzfy2vxzjsx8fccd48ra";
+    sha256 = "1bwkjxl4k49hvy88llif82hdancda9692vjwkw4bxy2cbz8444zx";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };

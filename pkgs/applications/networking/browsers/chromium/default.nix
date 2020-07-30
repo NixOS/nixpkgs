@@ -44,13 +44,22 @@ let
           sha256 = "00y2d35wvqmx9glaqhfb62wdgbfpwr77v0934nnvh9ks71vnsjqy";
         };
       });
-    } // lib.optionalAttrs (channel == "dev") {
+    } // lib.optionalAttrs (channel == "beta") {
       gnChromium = gn.overrideAttrs (oldAttrs: {
         version = "2020-05-19";
         src = fetchgit {
           url = "https://gn.googlesource.com/gn";
           rev = "d0a6f072070988e7b038496c4e7d6c562b649732";
           sha256 = "0197msabskgfbxvhzq73gc3wlr3n9cr4bzrhy5z5irbvy05lxk17";
+        };
+      });
+    } // lib.optionalAttrs (channel == "dev") {
+      gnChromium = gn.overrideAttrs (oldAttrs: {
+        version = "2020-07-20";
+        src = fetchgit {
+          url = "https://gn.googlesource.com/gn";
+          rev = "3028c6a426a4aaf6da91c4ebafe716ae370225fe";
+          sha256 = "0h3wf4152zdvrbb0jbj49q6814lfl3rcy5mj8b2pl9s0ahvkbc6q";
         };
       });
     });

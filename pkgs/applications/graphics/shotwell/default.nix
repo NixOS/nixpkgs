@@ -17,6 +17,7 @@
 , libgudev
 , libraw
 , glib
+, glib-networking
 , json-glib
 , gcr
 , libgee
@@ -77,6 +78,7 @@ stdenv.mkDerivation rec {
     libraw
     json-glib
     glib
+    glib-networking
     gdk-pixbuf
     librsvg
     librest

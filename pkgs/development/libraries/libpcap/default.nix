@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     ++ optionals withBluez [ bluez.dev pkgconfig ];
 
   # We need to force the autodetection because detection doesn't
-  # work in pure build enviroments.
+  # work in pure build environments.
   configureFlags = [
     ("--with-pcap=" + {
       linux = "linux";

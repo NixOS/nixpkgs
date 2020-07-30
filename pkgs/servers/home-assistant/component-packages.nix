@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.112.3";
+  version = "0.113.0";
   components = {
     "abode" = ps: with ps; [ ]; # missing inputs: abodepy
     "acer_projector" = ps: with ps; [ pyserial];
@@ -28,7 +28,7 @@
     "amcrest" = ps: with ps; [ ha-ffmpeg]; # missing inputs: amcrest
     "ampio" = ps: with ps; [ ]; # missing inputs: asmog
     "android_ip_webcam" = ps: with ps; [ ]; # missing inputs: pydroid-ipcam
-    "androidtv" = ps: with ps; [ ]; # missing inputs: adb-shell androidtv pure-python-adb
+    "androidtv" = ps: with ps; [ ]; # missing inputs: adb-shell[async] androidtv[async] pure-python-adb
     "anel_pwrctrl" = ps: with ps; [ ]; # missing inputs: anel_pwrctrl-homeassistant
     "anthemav" = ps: with ps; [ ]; # missing inputs: anthemav
     "apache_kafka" = ps: with ps; [ aiokafka];
@@ -90,6 +90,7 @@
     "bmp280" = ps: with ps; [ ]; # missing inputs: RPi.GPIO adafruit-circuitpython-bmp280
     "bmw_connected_drive" = ps: with ps; [ ]; # missing inputs: bimmer_connected
     "bom" = ps: with ps; [ ]; # missing inputs: bomradarloop
+    "bond" = ps: with ps; [ ]; # missing inputs: bond-home
     "braviatv" = ps: with ps; [ bravia-tv];
     "broadlink" = ps: with ps; [ broadlink];
     "brother" = ps: with ps; [ ]; # missing inputs: brother
@@ -160,6 +161,7 @@
     "device_sun_light_trigger" = ps: with ps; [ ];
     "device_tracker" = ps: with ps; [ ];
     "devolo_home_control" = ps: with ps; [ ]; # missing inputs: devolo-home-control-api
+    "dexcom" = ps: with ps; [ ]; # missing inputs: pydexcom
     "dht" = ps: with ps; [ ]; # missing inputs: Adafruit-DHT
     "dialogflow" = ps: with ps; [ aiohttp-cors];
     "digital_ocean" = ps: with ps; [ digital-ocean];
@@ -175,7 +177,7 @@
     "dnsip" = ps: with ps; [ aiodns];
     "dominos" = ps: with ps; [ aiohttp-cors]; # missing inputs: pizzapi
     "doods" = ps: with ps; [ pillow]; # missing inputs: pydoods
-    "doorbird" = ps: with ps; [ aiohttp-cors sqlalchemy]; # missing inputs: doorbirdpy home-assistant-frontend
+    "doorbird" = ps: with ps; [ aiohttp-cors]; # missing inputs: doorbirdpy
     "dovado" = ps: with ps; [ ]; # missing inputs: dovado
     "downloader" = ps: with ps; [ ];
     "dsmr" = ps: with ps; [ ]; # missing inputs: dsmr_parser
@@ -338,7 +340,7 @@
     "home_connect" = ps: with ps; [ aiohttp-cors]; # missing inputs: homeconnect
     "homeassistant" = ps: with ps; [ ];
     "homekit" = ps: with ps; [ HAP-python pyqrcode aiohttp-cors ha-ffmpeg zeroconf]; # missing inputs: PyTurboJPEG base36 fnvhash
-    "homekit_controller" = ps: with ps; [ ]; # missing inputs: aiohomekit[IP]
+    "homekit_controller" = ps: with ps; [ aiohttp-cors zeroconf]; # missing inputs: aiohomekit[IP]
     "homematic" = ps: with ps; [ pyhomematic];
     "homematicip_cloud" = ps: with ps; [ ]; # missing inputs: homematicip
     "homeworks" = ps: with ps; [ ]; # missing inputs: pyhomeworks
@@ -606,6 +608,7 @@
     "plum_lightpad" = ps: with ps; [ ]; # missing inputs: plumlightpad
     "pocketcasts" = ps: with ps; [ ]; # missing inputs: pocketcasts
     "point" = ps: with ps; [ aiohttp-cors]; # missing inputs: pypoint
+    "poolsense" = ps: with ps; [ ]; # missing inputs: poolsense
     "powerwall" = ps: with ps; [ ]; # missing inputs: tesla-powerwall
     "prezzibenzina" = ps: with ps; [ ]; # missing inputs: prezzibenzina-py
     "proliphix" = ps: with ps; [ ]; # missing inputs: proliphix
@@ -773,7 +776,7 @@
     "switchbot" = ps: with ps; [ ]; # missing inputs: PySwitchbot
     "switcher_kis" = ps: with ps; [ ]; # missing inputs: aioswitcher
     "switchmate" = ps: with ps; [ ]; # missing inputs: pySwitchmate
-    "syncthru" = ps: with ps; [ ]; # missing inputs: pysyncthru
+    "syncthru" = ps: with ps; [ ]; # missing inputs: pysyncthru url-normalize
     "synology" = ps: with ps; [ ]; # missing inputs: py-synology
     "synology_chat" = ps: with ps; [ ];
     "synology_dsm" = ps: with ps; [ ]; # missing inputs: python-synology

@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, isPy27
+, isPy27, pythonAtLeast
 , pylev, pastel, typing, enum34, crashtest }:
 
 buildPythonPackage rec {
@@ -12,8 +12,10 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    crashtest pylev pastel
-  ] ++ lib.optionals isPy27 [ typing enum34 ];
+    pylev pastel
+  ]
+    ++ lib.optionals (pythonAtLeast "3.6") [ crashtest ]
+    ++ lib.optionals isPy27 [ typing enum34 ];
 
   # The Pypi tarball doesn't include tests, and the GitHub source isn't
   # buildable until we bootstrap poetry, see

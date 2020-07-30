@@ -449,8 +449,6 @@ mapAliases ({
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rdmd = dtools;  # added 2017-08-19
   rhc = throw "deprecated in 2019-04-09: abandoned by upstream.";
-  riot-desktop = element-desktop; # added 2020-07-15
-  riot-web = element-web; # added 2020-07-15
   rng_tools = rng-tools; # added 2018-10-24
   robomongo = robo3t; #added 2017-09-28
   rssglx = rss-glx; #added 2015-03-25
@@ -678,6 +676,10 @@ mapAliases ({
 
   # added 2019-09-06
   zeroc_ice = pkgs.zeroc-ice;
+
+  # added 2020-06-22
+  zeromq3 = throw "zeromq3 has been deprecated by zeromq4.";
+  jzmq = throw "jzmq has been removed from nixpkgs, as it was unmaintained";
 } // (with ocaml-ng; { # added 2016-09-14
   ocaml_4_00_1 = ocamlPackages_4_00_1.ocaml;
   ocaml_4_01_0 = ocamlPackages_4_01_0.ocaml;
@@ -712,4 +714,8 @@ mapAliases ({
   sqldeveloper_18 = throw "sqldeveloper_18 is not maintained anymore!"; # added 2020-02-04
 
   gcc-snapshot = throw "Marked as broken for >2 years, additionally this 'snapshot' pointed to a fairly old one from gcc7.";
+
+  /* Cleanup before 21.03 */
+  riot-desktop = throw "riot-desktop is now element-desktop!";
+  riot-web = throw "riot-web is now element-web";
 })

@@ -12,6 +12,7 @@
 , rlp
 , shamir-mnemonic
 , trezor-udev-rules
+, installShellFiles
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,8 @@ buildPythonPackage rec {
     sha256 = "0ycmpwjv5xp25993divjhaq5j766zgcy22xx39xfc1pcvldq5g7n";
   };
 
+  nativeBuildInputs = [ installShellFiles ];
+
   propagatedBuildInputs = [ typing-extensions protobuf hidapi ecdsa mnemonic requests pyblake2 click construct libusb1 rlp shamir-mnemonic trezor-udev-rules ];
 
   checkInputs = [
@@ -36,6 +39,16 @@ buildPythonPackage rec {
     runHook preCheck
     pytest --pyargs tests --ignore tests/test_tx_api.py
     runHook postCheck
+  '';
+
+  postFixup = ''
+    mkdir completions
+    _TREZORCTL_COMPLETE=source_bash $out/bin/trezorctl > completions/trezorctl || true
+    _TREZORCTL_COMPLETE=source_zsh $out/bin/trezorctl > completions/_trezorctl || true
+    _TREZORCTL_COMPLETE=source_fish $out/bin/trezorctl > completions/trezorctl.fish || true
+    installShellCompletion --bash completions/trezorctl
+    installShellCompletion --zsh completions/_trezorctl
+    installShellCompletion --fish completions/trezorctl.fish
   '';
 
   meta = with lib; {

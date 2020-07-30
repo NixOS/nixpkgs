@@ -17,6 +17,8 @@ buildGoModule rec {
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
+  doCheck = true;
+
   meta = with lib; {
     homepage = "https://github.com/mvdan/sh";
     description = "A shell parser and formatter";

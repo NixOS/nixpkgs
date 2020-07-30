@@ -13,6 +13,6 @@ stdenv.mkDerivation rec {
     description = "IBM mainframe emulator";
     homepage = "http://www.hercules-390.eu";
     license = licenses.qpl;
-    maintainers = [ maintainers.dkudriavtsev ];
+    maintainers = [ maintainers.anna328p ];
   };
 }

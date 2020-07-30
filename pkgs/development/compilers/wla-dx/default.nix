@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wla-dx";
-  version = "9.8";
+  version = "9.11";
 
   src = fetchFromGitHub {
     owner = "vhelin";
     repo = "wla-dx";
     rev = "v${version}-fix";
-    sha256 = "1dsxhy19nif983lr20vxl099giwzgmzqyh7ass705hkphmwagcv6";
+    sha256 = "0sz1vqafl7ii3z1710sk0ilvczv8pb4b6lkmg9pr7hqj3kaxndii";
   };
 
   installPhase = ''

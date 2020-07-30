@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala, glib
+{ stdenv, fetchFromGitHub, nix-update-script, pantheon, meson, ninja, pkgconfig, vala, glib
 , libgee, granite, gexiv2, elementary-settings-daemon, gtk3, gnome-desktop
 , gala, wingpanel, plank, switchboard, gettext, bamf, fetchpatch }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };

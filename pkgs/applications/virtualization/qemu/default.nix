@@ -133,15 +133,18 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   postFixup = ''
-      # copy qemu-ga (guest agent) to separate output
-      mkdir -p $ga/bin
-      cp $out/bin/qemu-ga $ga/bin/
-    '' + optionalString gtkSupport ''
-      # wrap GTK Binaries
-      for f in $out/bin/qemu-system-*; do
-        wrapGApp $f
-      done
-    '';
+    # the .desktop is both invalid and pointless
+    rm $out/share/applications/qemu.desktop
+
+    # copy qemu-ga (guest agent) to separate output
+    mkdir -p $ga/bin
+    cp $out/bin/qemu-ga $ga/bin/
+  '' + optionalString gtkSupport ''
+    # wrap GTK Binaries
+    for f in $out/bin/qemu-system-*; do
+      wrapGApp $f
+    done
+  '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = ''

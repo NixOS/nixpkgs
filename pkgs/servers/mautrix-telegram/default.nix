@@ -1,15 +1,17 @@
-{ lib, python3, mautrix-telegram }:
+{ lib, python3, mautrix-telegram, fetchFromGitHub }:
 
 with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.8.1";
+  version = "0.8.2";
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1gz6d28dq3ykvr3wp85wkc05lbppdzf5j9i62pgx0blmx3jh0yrk";
+  src = fetchFromGitHub {
+    owner = "tulir";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0mhy9b933haz1bldkglvn81warjxdjdzgkviiv5k6fykghq473jf";
   };
 
   postPatch = ''
