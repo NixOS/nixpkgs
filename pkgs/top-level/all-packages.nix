@@ -27246,4 +27246,8 @@ in
   gpio-utils = callPackage ../os-specific/linux/kernel/gpio-utils.nix { };
 
   navidrome = callPackage ../servers/misc/navidrome {};
+
+  spacenavd = callPackage ../misc/spacenav/spacenavd.nix {};
+  libspnav = callPackage ../misc/spacenav/libspnav.nix {};
+  spnavcfg = callPackage ../misc/spacenav/spnavcfg.nix {};
 }
