@@ -206,6 +206,12 @@ in
         description = "HTTP listen port.";
       };
 
+      enableUnixSocket = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Configure Gitea to listen on a unix socket instead of the default TCP port.";
+      };
+
       cookieSecure = mkOption {
         type = types.bool;
         default = false;
@@ -306,14 +312,22 @@ in
         ROOT = cfg.repositoryRoot;
       };
 
-      server = {
-        DOMAIN = cfg.domain;
-        HTTP_ADDR = cfg.httpAddress;
-        HTTP_PORT = cfg.httpPort;
-        ROOT_URL = cfg.rootUrl;
-        STATIC_ROOT_PATH = cfg.staticRootPath;
-        LFS_JWT_SECRET = "#jwtsecret#";
-      };
+      server = mkMerge [
+        {
+          DOMAIN = cfg.domain;
+          STATIC_ROOT_PATH = cfg.staticRootPath;
+          LFS_JWT_SECRET = "#jwtsecret#";
+          ROOT_URL = cfg.rootUrl;
+        }
+        (mkIf cfg.enableUnixSocket {
+          PROTOCOL = "unix";
+          HTTP_ADDR = "/run/gitea/gitea.sock";
+        })
+        (mkIf (!cfg.enableUnixSocket) {
+          HTTP_ADDR = cfg.httpAddress;
+          HTTP_PORT = cfg.httpPort;
+        })
+      ];
 
       session = {
         COOKIE_NAME = "session";
