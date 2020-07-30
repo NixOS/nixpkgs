@@ -4769,6 +4769,12 @@
     githubId = 59375051;
     name = "Lucas Ransan";
   };
+  lucperkins = {
+    email = "lucperkins@gmail.com";
+    github = "lucperkins";
+    githubId = 1523104;
+    name = "Luc Perkins";
+  };
   lucus16 = {
     email = "lars.jellema@gmail.com";
     github = "Lucus16";
