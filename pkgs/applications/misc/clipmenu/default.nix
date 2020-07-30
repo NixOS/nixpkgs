@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
     substituteInPlace ./Makefile --replace /usr "$out"
   '';
 
-  buildInputs = [ makeWrapper xsel clipnotify ];
+  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ xsel clipnotify ];
 
   installPhase = ''
     for bin in $out/bin/*; do
