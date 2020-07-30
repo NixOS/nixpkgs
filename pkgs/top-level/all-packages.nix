@@ -16918,6 +16918,8 @@ in
 
   cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
 
+  cramfsprogs = callPackage ../os-specific/linux/cramfsprogs { };
+
   cramfsswap = callPackage ../os-specific/linux/cramfsswap { };
 
   crda = callPackage ../os-specific/linux/crda { };
