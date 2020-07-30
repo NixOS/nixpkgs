@@ -9970,4 +9970,10 @@
     githubId = 19290397;
     name = "Tunc Uzlu";
   };
+  pulsation = {
+    name = "Philippe Sam-Long";
+    email = "1838397+pulsation@users.noreply.github.com";
+    github = "pulsation";
+    githubId = 1838397;
+  };
 }
