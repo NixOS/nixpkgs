@@ -1338,6 +1338,18 @@ let
     meta.homepage = "https://github.com/vmchale/dhall-vim/";
   };
 
+  diagnostic-nvim = buildVimPluginFrom2Nix {
+    pname = "diagnostic-nvim";
+    version = "2020-07-25";
+    src = fetchFromGitHub {
+      owner = "nvim-lua";
+      repo = "diagnostic-nvim";
+      rev = "03670688e70fc65eff70abb3cefe1a086ee95bf8";
+      sha256 = "02nci7n9lpz1axpwzpv34r6720iycfh43n1910ryhm4f7cxs2x61";
+    };
+    meta.homepage = "https://github.com/nvim-lua/diagnostic-nvim/";
+  };
+
   direnv-vim = buildVimPluginFrom2Nix {
     pname = "direnv-vim";
     version = "2019-04-30";
