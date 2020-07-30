@@ -4,7 +4,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasm-bindgen-cli";
-  version = "0.2.65";
+  version = "0.2.67";
 
   src =
     let
@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
         owner = "rustwasm";
         repo = "wasm-bindgen";
         rev = version;
-        sha256 = "0qfz5x2hmfxz0kjc1biki0748d4qi8ws0b4bx9y2fs8dgbnppkzf";
+        sha256 = "0qx178aicbn59b150j5r78zya5n0yljvw4c4lhvg8x4cpfshjb5j";
       };
     in runCommand "source" { } ''
       cp -R ${tarball} $out
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security curl ];
   nativeBuildInputs = [ pkgconfig ];
 
-  cargoSha256 = "1rjf4f8hm4vqjcdhi7s5az8p5633dg425m8hh32kakq1ar06pfvj";
+  cargoSha256 = "0chpw6syqxn824cbkdjx1s26vmajx511gc4mp9y64vy7b7asba6x";
   cargoBuildFlags = [ "-p" pname ];
 
   meta = with lib; {
