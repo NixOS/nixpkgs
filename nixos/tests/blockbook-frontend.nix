@@ -8,7 +8,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     services.blockbook-frontend."test" = {
       enable = true;
     };
-    services.bitcoind = {
+    services.bitcoind.mainnet = {
       enable = true;
       rpc = {
         port = 8030;
