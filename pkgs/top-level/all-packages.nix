@@ -19099,6 +19099,8 @@ in
 
   azpainter = callPackage ../applications/graphics/azpainter { };
 
+  bambootracker = libsForQt5.callPackage ../applications/audio/bambootracker { };
+
   cadence =  qt5.callPackage ../applications/audio/cadence { };
 
   cheesecutter = callPackage ../applications/audio/cheesecutter { };
