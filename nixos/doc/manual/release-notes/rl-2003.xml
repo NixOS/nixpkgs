@@ -1086,6 +1086,12 @@ services.dnsmasq.servers = [ "127.0.0.1#43" ];
        to RocksDB. See also <link xlink:href="https://mariadb.com/kb/en/tokudb/">TokuDB</link>.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       Graylog introduced a change in the LDAP server certificate validation behaviour for version 3.3.3 which might break existing setups.
+       When updating Graylog from a version before 3.3.3 make sure to check the Graylog <link xlink:href="https://www.graylog.org/post/announcing-graylog-v3-3-3">release info</link> for information on how to avoid the issue.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
