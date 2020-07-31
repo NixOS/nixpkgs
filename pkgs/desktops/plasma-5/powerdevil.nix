@@ -27,5 +27,10 @@ mkDerivation {
       url = "https://invent.kde.org/plasma/powerdevil/-/commit/fcb26be2fb279e6ad3b7b814d26a5921d16201eb.patch";
       sha256 = "0gdyaa0nd1c1d6x2h0m933lascm8zm5sikd99wxmkf7hhaby6k2s";
     })
+    # This is a backport of
+    # https://invent.kde.org/plasma/powerdevil/-/commit/c7590f9065ec9547b7fabad77a548bbc0c693113.patch,
+    # which doesn't apply cleanly to 5.17.5.  It should make it into 5.20, so
+    # this patch can be removed when we upgrade to 5.20.
+    ./patches/0001-Add-a-logging-category-config-file.patch
   ];
 }
