@@ -1106,6 +1106,8 @@ in {
 
   pyperf = callPackage ../development/python-modules/pyperf { };
 
+  pyphotonfile = callPackage ../development/python-modules/pyphotonfile { };
+
   pefile = callPackage ../development/python-modules/pefile { };
 
   perfplot = callPackage ../development/python-modules/perfplot { };

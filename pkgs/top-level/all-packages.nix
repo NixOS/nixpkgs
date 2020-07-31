@@ -3068,6 +3068,8 @@ in
 
   doom-bcc = callPackage ../games/zdoom/bcc-git.nix { };
 
+  sl1-to-photon = python3Packages.callPackage ../applications/misc/sl1-to-photon { };
+
   slade = callPackage ../applications/misc/slade {
     wxGTK = wxGTK30;
   };
