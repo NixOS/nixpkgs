@@ -4,7 +4,7 @@
   efl = callPackage ./efl { };
 
   #### WINDOW MANAGER
-  enlightenment = callPackage ./enlightenment.nix { };
+  enlightenment = callPackage ./enlightenment { };
 
   #### APPLICATIONS
   econnman = callPackage ./econnman.nix { };
