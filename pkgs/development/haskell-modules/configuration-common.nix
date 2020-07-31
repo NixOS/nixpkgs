@@ -1393,9 +1393,6 @@ self: super: {
     sha256 = "1c5ck2ibag2gcyag6rjivmlwdlp5k0dmr8nhk7wlkzq2vh7zgw63";
   });
 
-  # The current LTS 15.x version has a bug in the test suite.
-  streaming-commons = self.streaming-commons_0_2_2_1;
-
   # Version bumps have not been merged by upstream yet.
   # https://github.com/obsidiansystems/dependent-sum-aeson-orphans/pull/5
   dependent-sum-aeson-orphans = appendPatch super.dependent-sum-aeson-orphans (pkgs.fetchpatch {
