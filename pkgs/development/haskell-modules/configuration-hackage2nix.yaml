@@ -1,6 +1,6 @@
 # pkgs/development/haskell-modules/configuration-hackage2nix.yaml
 
-compiler: ghc-8.8.3
+compiler: ghc-8.8.4
 
 core-packages:
   - array-0.5.4.0
