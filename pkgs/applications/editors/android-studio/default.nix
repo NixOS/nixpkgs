@@ -1,4 +1,4 @@
-{ callPackage, makeFontsConf, gnome2 }:
+{ callPackage, makeFontsConf, gnome2, buildFHSUserEnv }:
 
 let
   mkStudio = opts: callPackage (import ./common.nix opts) {
@@ -6,6 +6,7 @@ let
       fontDirectories = [];
     };
     inherit (gnome2) GConf gnome_vfs;
+    inherit buildFHSUserEnv;
   };
   stableVersion = {
     version = "4.0.1.0"; # "Android Studio 4.0.1"
