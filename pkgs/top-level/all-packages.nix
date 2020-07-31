@@ -9640,6 +9640,8 @@ in
 
   dhall-json = haskell.lib.justStaticExecutables haskellPackages.dhall-json;
 
+  dhall-lsp-server = haskell.lib.justStaticExecutables haskellPackages.dhall-lsp-server;
+
   dhall-text = haskell.lib.justStaticExecutables haskellPackages.dhall-text;
 
   dhallPackages = callPackages ./dhall-packages.nix { };
