@@ -19086,7 +19086,9 @@ in
   amsn = callPackage ../applications/networking/instant-messengers/amsn { };
 
   androidStudioPackages = recurseIntoAttrs
-    (callPackage ../applications/editors/android-studio { });
+    (callPackage ../applications/editors/android-studio {
+      buildFHSUserEnv = buildFHSUserEnvBubblewrap;
+    });
   android-studio = androidStudioPackages.stable;
 
   animbar = callPackage ../applications/graphics/animbar { };
