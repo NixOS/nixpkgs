@@ -18,8 +18,8 @@ buildPythonApplication rec {
 
   # can be removed after v0.1.2
   patches = stdenv.lib.optional stdenv.isDarwin (fetchpatch {
-    url = "https://github.com/regen100/cmake-language-server/pull/24.patch";
-    sha256 = "1id8wpmyc7djyqasb5g9z9i3jipcdb4sirn4cpx2v8xmdn9khdnz";
+    url = "https://github.com/regen100/cmake-language-server/commit/0ec120f39127f25898ab110b43819e3e9becb8a3.patch";
+    sha256 = "1xbmarvsvzd61fnlap4qscnijli2rw2iqr7cyyvar2jd87z6sfp0";
   });
 
   postPatch = ''
