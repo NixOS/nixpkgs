@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "suitesparse-graphblas";
-  version = "3.3.0";
+  version = "3.3.3";
 
   outputs = [ "out" "dev" ];
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "DrTimothyAldenDavis";
     repo = "GraphBLAS";
     rev = "v${version}";
-    sha256 = "1fin9741ild3dv7c9gk07kpizsnnx17ar9cv9lny8vl47pms940h";
+    sha256 = "1nmygb2yny0mdqp0mc6760gbxklq1jjm0c6s39qkdwzf3n9f8j7p";
   };
 
   nativeBuildInputs = [
