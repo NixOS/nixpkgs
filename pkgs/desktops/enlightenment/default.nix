@@ -10,5 +10,5 @@
   econnman = callPackage ./econnman { };
   terminology = callPackage ./terminology { };
   rage = callPackage ./rage { };
-  ephoto = callPackage ./ephoto.nix { };
+  ephoto = callPackage ./ephoto { };
 }
