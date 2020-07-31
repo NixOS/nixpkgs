@@ -502,7 +502,7 @@ in
 
     assertions = [
       {
-        assertion = (!config.nix.distributedBuilds) && config.nix.buildMachines != [];
+        assertion = config.nix.distributedBuilds || config.nix.buildMachines == [];
         message = "You must set `nix.distributedBuilds = true` to use nix.buildMachines";
       }
     ];
