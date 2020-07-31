@@ -14,6 +14,7 @@
 buildPythonPackage rec {
   pname = "statsmodels";
   version = "0.11.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
