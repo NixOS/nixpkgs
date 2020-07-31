@@ -467,27 +467,34 @@ in
         # Runtime directory and mode
         RuntimeDirectory = "gitea";
         RuntimeDirectoryMode = "0755";
-
-        # Filesystem
-        ProtectHome = true;
-        PrivateDevices = true;
-        ProtectKernelTunables = true;
-        ProtectKernelModules = true;
-        ProtectControlGroups = true;
+        # Access write directories
         ReadWritePaths = [ cfg.dump.backupDir cfg.repositoryRoot cfg.stateDir ];
         UMask = "0027";
-        # Caps
+        # Capabilities
         CapabilityBoundingSet = "";
+        # Security
         NoNewPrivileges = true;
-        # Misc.
-        LockPersonality = true;
-        RestrictRealtime = true;
-        PrivateMounts = true;
+        # Sandboxing
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
         PrivateUsers = true;
+        ProtectHostname = true;
+        ProtectClock = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+        RestrictAddressFamilies = [ "AF_UNIX AF_INET AF_INET6" ];
+        LockPersonality = true;
         MemoryDenyWriteExecute = true;
-        SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @raw-io @reboot @resources @setuid @swap";
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        PrivateMounts = true;
+        # System Call Filtering
         SystemCallArchitectures = "native";
-        RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
+        SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @raw-io @reboot @resources @setuid @swap";
       };
 
       environment = {
