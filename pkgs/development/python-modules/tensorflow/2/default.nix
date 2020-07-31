@@ -1,4 +1,4 @@
-{ stdenv, pkgs, bazel_0_29, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
+{ stdenv, pkgs, bazel_3_1, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
 , addOpenGLRunpath
 # Python deps
 , buildPythonPackage, isPy3k, isPy27, pythonOlder, pythonAtLeast, python
@@ -72,7 +72,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.1.0";
+  version = "2.3.0";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -97,40 +97,20 @@ let
 
   bazel-build = buildBazelPackage {
     name = "${pname}-${version}";
-    bazel = bazel_0_29;
+    bazel = bazel_3_1;
 
     src = fetchFromGitHub {
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      sha256 = "1g79xi8yl4sjia8ysk9b7xfzrz83zy28v5dlb2wzmcf0k5pmz60p";
+      sha256 = "1dd5fgyiazyfy7y2iv4v42qnap51fr6dzwb26inrsj7aaas06j71";
     };
 
     patches = [
-      # Work around https://github.com/tensorflow/tensorflow/issues/24752
-      ../no-saved-proto.patch
       # Fixes for NixOS jsoncpp
       ../system-jsoncpp.patch
 
-      (fetchpatch {
-        name = "backport-pr-18950.patch";
-        url = "https://github.com/tensorflow/tensorflow/commit/73640aaec2ab0234d9fff138e3c9833695570c0a.patch";
-        sha256 = "1n9ypbrx36fc1kc9cz5b3p9qhg15xxhq4nz6ap3hwqba535nakfz";
-      })
-
-      (fetchpatch {
-        # Don't try to fetch things that don't exist
-        name = "prune-missing-deps.patch";
-        url = "https://github.com/tensorflow/tensorflow/commit/b39b1ed24b4814db27d2f748dc85c10730ae851d.patch";
-        sha256 = "1skysz53nancvw1slij6s7flar2kv3gngnsq60ff4lap88kx5s6c";
-        excludes = [ "tensorflow/cc/saved_model/BUILD" ];
-      })
-
       ./lift-gast-restriction.patch
-
-      # cuda 10.2 does not have "-bin2c-path" option anymore
-      # https://github.com/tensorflow/tensorflow/issues/34429
-      ../cuda-10.2-no-bin2c-path.patch
     ];
 
     # On update, it can be useful to steal the changes from gentoo
@@ -197,9 +177,11 @@ let
       # "grpc"
       "hwloc"
       "icu"
-      "jpeg"
+      # TODO
+      #"jpeg"
       "jsoncpp_git"
-      "keras_applications_archive"
+      # TODO
+      #"keras_applications_archive"
       "lmdb"
       "nasm"
       # "nsync" # not packaged in nixpkgs
@@ -212,7 +194,8 @@ let
       "swig"
       "termcolor_archive"
       "wrapt"
-      "zlib_archive"
+      # TODO
+      #"zlib_archive"
     ];
 
     INCLUDEDIR = "${includes_joined}/include";
@@ -277,10 +260,6 @@ let
 
     hardeningDisable = [ "format" ];
 
-    bazelFlags = [
-      # temporary fixes to make the build work with bazel 0.27
-      "--incompatible_no_support_tools_in_action_inputs=false"
-    ];
     bazelBuildFlags = [
       "--config=opt" # optimize using the flags set in the configure phase
     ]
@@ -294,9 +273,10 @@ let
 
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
+      # TODO
         "1kqk1gx5g63kb2zdj392x6mnpbrmgqghrdv597aipn7s23xzj8pd"
       else
-        "1plpcm2ydpajsrxdvmmpfy7l0gfdir78hap72w4k7ddm6d3rm2fv";
+        "0qxn999haza01imif8lbflpm8zxyl2gfwwrv6fhvbgcxkcva7bv3";
     };
 
     buildAttrs = {
@@ -347,7 +327,7 @@ let
 
 in buildPythonPackage {
   inherit version pname;
-  disabled = isPy27 || (pythonAtLeast "3.8");
+  disabled = isPy27 || (pythonAtLeast "3.9");
 
   src = bazel-build.python;
 
