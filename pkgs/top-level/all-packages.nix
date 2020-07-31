@@ -26753,6 +26753,8 @@ in
   dart_stable = dart.override { version = "2.7.2"; };
   dart_dev = dart.override    { version = "2.9.0-4.0.dev"; };
 
+  buildDartPackage = callPackage ../build-support/dart { };
+
   httrack = callPackage ../tools/backup/httrack { };
 
   httraqt = libsForQt5.callPackage ../tools/backup/httrack/qt.nix { };
