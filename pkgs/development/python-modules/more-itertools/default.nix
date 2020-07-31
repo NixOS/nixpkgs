@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "more-itertools";
-  version = "8.3.0";
+  version = "8.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "558bb897a2232f5e4f8e2399089e35aecb746e1f9191b6584a151647e89267be";
+    sha256 = "68c70cc7167bdf5c7c9d8f6954a7837089c6a36bf565383919bb595efb8a17e5";
   };
 
   checkInputs = [ nose ];
