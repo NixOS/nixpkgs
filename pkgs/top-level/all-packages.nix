@@ -10387,6 +10387,8 @@ in
 
   cli11 = callPackage ../development/tools/misc/cli11 { };
 
+  dart-sass = callPackage ../development/tools/dart-sass { };
+
   dcadec = callPackage ../development/tools/dcadec { };
 
   dejagnu = callPackage ../development/tools/misc/dejagnu { };
