@@ -26,7 +26,7 @@ in rec {
     buildInputs = [nukeReferences cpio];
 
     buildCommand = ''
-      mkdir -p $out/bin $out/lib $out/lib/system
+      mkdir -p $out/bin $out/lib $out/lib/system $out/lib/darwin
 
       # We're not going to bundle the actual libSystem.dylib; instead we reconstruct it on
       # the other side. See the notes in stdenv/darwin/default.nix for more information.
@@ -84,6 +84,8 @@ in rec {
 
       cp -d ${llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
       cp -d ${llvmPackages.libcxxabi}/lib/libc++abi*.dylib $out/lib
+      cp -d ${llvmPackages.compiler-rt}/lib/darwin/libclang_rt* $out/lib/darwin
+      cp -d --preserve=links ${llvmPackages.compiler-rt}/lib/libclang_rt* $out/lib
       cp -d ${llvmPackages.llvm.lib}/lib/libLLVM.dylib $out/lib
       cp -d ${libffi}/lib/libffi*.dylib $out/lib
 
@@ -121,7 +123,7 @@ in rec {
         fi
       done
 
-      for i in $out/bin/* $out/lib/*.dylib $out/lib/clang/*/lib/darwin/*.dylib $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation; do
+      for i in $out/bin/* $out/lib/*.dylib $out/lib/darwin/*.dylib $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation; do
         if test -x "$i" -a ! -L "$i"; then
           echo "Adding rpath to $i"
           rpathify $i
@@ -130,7 +132,7 @@ in rec {
 
       nuke-refs $out/lib/*
       nuke-refs $out/lib/system/*
-      nuke-refs $out/lib/clang/*/lib/darwin/*
+      nuke-refs $out/lib/darwin/*
       nuke-refs $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
 
       mkdir $out/.pack
