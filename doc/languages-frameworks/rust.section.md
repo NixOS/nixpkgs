@@ -79,7 +79,7 @@ pkgs.rustPlatform.buildRustPackage {
 
 When using `buildRustPackage`, the `checkPhase` is enabled by default and runs
 `cargo test` on the package to build. To make sure that we don't compile the
-sources twice and to actually test the artifacts that will be used at runtime, 
+sources twice and to actually test the artifacts that will be used at runtime,
 the tests will be ran in the `release` mode by default.
 
 However, in some cases the test-suite of a package doesn't work properly in the
