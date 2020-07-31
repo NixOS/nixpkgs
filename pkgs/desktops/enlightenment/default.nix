@@ -1,7 +1,7 @@
 { callPackage, pkgs }:
 {
   #### CORE EFL
-  efl = callPackage ./efl.nix { };
+  efl = callPackage ./efl { };
 
   #### WINDOW MANAGER
   enlightenment = callPackage ./enlightenment.nix { };
