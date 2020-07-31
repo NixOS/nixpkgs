@@ -6,6 +6,8 @@ targets_=($targets)
 objects=($objects)
 symlinks=($symlinks)
 
+# Reference
+# https://willhaley.com/blog/custom-debian-live-environment/
 
 # Remove the initial slash from a path, since genisofs likes it that way.
 stripSlash() {
@@ -29,38 +31,112 @@ addPath() {
 
 stripSlash "$bootImage"; bootImage="$res"
 
+TMP=$(mktemp -d)
 
-if test -n "$bootable"; then
+mkdir -p append/boot/grub
+mkdir append/EFI
+touch append/boot/grub/device.map
+addPath "/" "$PWD/append"
 
-    # The -boot-info-table option modifies the $bootImage file, so
-    # find it in `contents' and make a copy of it (since the original
-    # is read-only in the Nix store...).
-    for ((i = 0; i < ${#targets_[@]}; i++)); do
-        stripSlash "${targets_[$i]}"
-        if test "$res" = "$bootImage"; then
-            echo "copying the boot image ${sources_[$i]}"
-            cp "${sources_[$i]}" boot.img
-            chmod u+w boot.img
-            sources_[$i]=boot.img
-        fi
-    done
+if test -n "$mbrBootable"; then
+  "$grubMbr/bin/grub-mkstandalone" \
+      --format=i386-pc \
+      --output="$TMP/core.img" \
+      --install-modules="linux normal iso9660 biosdisk memdisk search tar ls configfile part_gpt part_msdos" \
+      --modules="linux normal iso9660 biosdisk search" \
+      --locales="" \
+      --fonts="" \
+      "boot/grub/grub.cfg=$grubCfg"
 
-    isoBootFlags="-eltorito-boot ${bootImage}
-                  -eltorito-catalog .boot.cat
-                  -no-emul-boot -boot-load-size 4 -boot-info-table
-                  --sort-weight 1 /isolinux" # Make sure isolinux is near the beginning of the ISO
-fi
+  # TODO: fix this hack to REALLY skip fsprobe
+  "$grubMbr/bin/grub-install" \
+      --target=i386-pc \
+      --boot-directory=$PWD/append/boot \
+      --no-bootsector \
+      --skip-fs-probe \
+      "/dev/null" -v --force || true
 
-if test -n "$usbBootable"; then
-    usbBootFlags="-isohybrid-mbr ${isohybridMbrImage}"
+  cat \
+      "$grubMbr/lib/grub/i386-pc/cdboot.img" \
+      "$TMP/core.img" \
+  > "$TMP/bios.img"
+
+  addPath /boot/grub/bios.img "$TMP/bios.img"
+
+  isoBootFlags=" -eltorito-boot
+                    boot/grub/bios.img
+                    -no-emul-boot
+                    -boot-load-size 4
+                    -boot-info-table
+                    --eltorito-catalog boot/grub/boot.cat
+                --grub2-boot-info
+                --grub2-mbr $grubMbr/lib/grub/i386-pc/boot_hybrid.img"
 fi
 
 if test -n "$efiBootable"; then
-    efiBootFlags="-eltorito-alt-boot
-                  -e $efiBootImage
-                  -no-emul-boot
-                  -isohybrid-gpt-basdat"
+  "$grubEfi/bin/grub-mkstandalone" \
+      --format=x86_64-efi \
+      --output="$TMP/bootx64.efi" \
+      --locales="" \
+      --fonts="" \
+      "boot/grub/grub.cfg=$grubCfg"
+
+  # TODO: fix this hack to REALLY skip fsprobe
+  "$grubEfi/bin/grub-install" \
+      --target=x86_64-efi \
+      --efi-directory=$PWD/append/EFI \
+      --boot-directory=$PWD/append/boot \
+      --no-nvram \
+      --skip-fs-probe \
+      --removable \
+      -v --force || true
+
+  (pushd "$TMP" && \
+      dd if=/dev/zero of=efiboot.img bs=1M count=10 && \
+      mkfs.vfat efiboot.img && \
+      mmd -i efiboot.img efi efi/boot && \
+      mcopy -i efiboot.img ./bootx64.efi ::efi/boot/ \
+   && popd)
+
+   addPath /EFI/efiboot.img "$TMP/efiboot.img"
+
+   efiBootFlags=" -eltorito-alt-boot
+                      -e EFI/efiboot.img
+                      -no-emul-boot
+                  -append_partition 2 0xef $TMP/efiboot.img"
 fi
+
+# if test -n "$bootable"; then
+#
+#     # The -boot-info-table option modifies the $bootImage file, so
+#     # find it in `contents' and make a copy of it (since the original
+#     # is read-only in the Nix store...).
+#     for ((i = 0; i < ${#targets_[@]}; i++)); do
+#         stripSlash "${targets_[$i]}"
+#         if test "$res" = "$bootImage"; then
+#             echo "copying the boot image ${sources_[$i]}"
+#             cp "${sources_[$i]}" boot.img
+#             chmod u+w boot.img
+#             sources_[$i]=boot.img
+#         fi
+#     done
+#
+#     isoBootFlags="-eltorito-boot ${bootImage}
+#                   -eltorito-catalog .boot.cat
+#                   -no-emul-boot -boot-load-size 4 -boot-info-table
+#                   --sort-weight 1 /isolinux" # Make sure isolinux is near the beginning of the ISO
+# fi
+#
+# if test -n "$usbBootable"; then
+#     usbBootFlags="-isohybrid-mbr ${isohybridMbrImage}"
+# fi
+#
+# if test -n "$efiBootable"; then
+#     efiBootFlags="-eltorito-alt-boot
+#                   -e $efiBootImage
+#                   -no-emul-boot
+#                   -isohybrid-gpt-basdat"
+# fi
 
 touch pathlist
 
@@ -122,6 +198,15 @@ xorriso="xorriso
 "
 
 $xorriso -output $out/iso/$isoName
+
+#if test -n "$usbBootable"; then
+#    echo "Making image hybrid..."
+#    if test -n "$efiBootable"; then
+#        isohybrid --uefi $out/iso/$isoName
+#    else
+#        isohybrid $out/iso/$isoName
+#    fi
+#fi
 
 if test -n "$compressImage"; then
     echo "Compressing image..."
