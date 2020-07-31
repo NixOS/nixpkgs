@@ -10,13 +10,8 @@
 
 buildPythonPackage rec {
   pname = "ftfy";
-
   version = "5.8";
-  # ftfy v5 only supports python3. Since at the moment the only
-  # packages that use ftfy are spacy and textacy which both support
-  # python 2 and 3, they have pinned ftfy to the v4 branch.
-  # I propose to stick to v4 until another package requires v5.
-  # At that point we can make a ftfy_v4 package.
+
   disabled = !isPy3k;
 
   src = fetchPypi {
