@@ -61,7 +61,7 @@ if test "$noSysDirs" = "1"; then
         if [[ -e "${!curCC}/nix-support/orig-libc" ]]; then
             # Figure out what extra compiling flags to pass to the gcc compilers
             # being generated to make sure that they use our libc.
-            extraFlags=($(< "${!curCC}/nix-support/libc-cflags"))
+            extraFlags=($(< "${!curCC}/nix-support/libc-crt1-cflags") $(< "${!curCC}/nix-support/libc-cflags"))
 
             # The path to the Libc headers
             libc_devdir="$(< "${!curCC}/nix-support/orig-libc-dev")"
