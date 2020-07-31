@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, ninja, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
+{ mkDerivation, lib, fetchFromGitHub, fetchpatch, cmake, ninja, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
 , qwt, fcgi, python3Packages, libspatialindex, libspatialite, postgresql
 , txt2tags, openssl, libzip, hdf5, netcdf, exiv2
 , qtbase, qtwebkit, qtsensors, qca-qt5, qtkeychain, qscintilla, qtserialport, qtxmlpatterns
@@ -20,6 +20,16 @@ in mkDerivation rec {
     rev = "final-${lib.replaceStrings ["."] ["_"] version}";
     sha256 = "043jd81q8yps5z6sxmiizkfy0h4ni2y16lmvqnc1gb69nbnxgq71";
   };
+
+  patches = [
+    # backport fix for https://github.com/NixOS/nixpkgs/issues/37042
+    # This is in QGIS master, so will be removed as soon as it is is backported
+    # to the LTS branch.
+    (fetchpatch {
+      url = "https://github.com/qgis/QGIS/commit/3cdd03c7172476113308c3b5c89a7341b87f13c2.patch";
+      sha256 = "1bh3yihwrg8q4vbd5pn9z9am09zg4d962f5bah115h1pzp3fn7xy";
+    })
+  ];
 
   passthru = {
     inherit pythonBuildInputs;
