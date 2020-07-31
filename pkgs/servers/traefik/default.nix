@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "traefik";
-  version = "2.2.4";
+  version = "2.2.8";
 
   src = fetchFromGitHub {
     owner = "containous";
     repo = "traefik";
     rev = "v${version}";
-    sha256 = "1zxifwbrhxaj2pl6kwyk1ivr4in0wd0q01x9ynxzbf6w2yx4xkw2";
+    sha256 = "1p2qv8vrjxn5wg41ywxbpaghb8585xmkwr8ih5df4dbdjw2m3k1f";
   };
 
   vendorSha256 = "0kz7y64k07vlybzfjg6709fdy7krqlv1gkk01nvhs84sk8bnrcvn";
