@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation {
   pname = "input-fonts";
-  version = "2019-11-25"; # date of the download and checksum
+  version = "2020-07-24"; # date of the download and checksum
 
   src = requireFile {
     name = "Input-Font.zip";
     url = "https://input.fontbureau.com/download/";
-    sha256 = "10rax2a7vzidcs7kyfg5lv5bwp9i7kvjpdcsd10p0517syijkp3b";
+    sha256 = "1wacfy12ykgx33dvggcbivji6671vl5qnp4m8kpjipydffzaxqdr";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "15sdhqqqd4jgk80fw7ncx49avi9cxbdgyrvnrfya0066x4q4r6lv";
+  outputHash = "1dda1dw2p56v1yp2qdzq38y1nksxgvcss48n5gp019imxjkrkg94";
 
   meta = with stdenv.lib; {
     description = "Fonts for Code, from Font Bureau";
