@@ -194,18 +194,16 @@ in {
         client.succeed("ping -c5 192.168.1.2")
         client.succeed("ping -c5 192.168.2.3")
 
-    # Test whether SSH through a VRF IP is possible.
-    # (Note: this seems to be an issue on Linux 5.x, so I decided to add this to
-    # ensure that we catch this when updating the default kernel).
-    # with subtest("tcp traffic through vrf works"):
-    #     node1.wait_for_open_port(22)
-    #     client.succeed(
-    #         "cat ${snakeOilPrivateKey} > privkey.snakeoil"
-    #     )
-    #     client.succeed("chmod 600 privkey.snakeoil")
-    #     client.succeed(
-    #         "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil root@192.168.1.2 true"
-    #     )
+    # Test whether TCP through a VRF IP is possible.
+    with subtest("tcp traffic through vrf works"):
+        node1.wait_for_open_port(22)
+        client.succeed(
+            "cat ${snakeOilPrivateKey} > privkey.snakeoil"
+        )
+        client.succeed("chmod 600 privkey.snakeoil")
+        client.succeed(
+            "ulimit -l 2048; ip vrf exec vrf1 ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil root@192.168.1.2 true"
+        )
 
     # Only configured routes through the VRF from the main routing table should
     # work. Additional IPs are only reachable when binding to the vrf interface.
