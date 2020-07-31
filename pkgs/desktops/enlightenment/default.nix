@@ -9,6 +9,6 @@
   #### APPLICATIONS
   econnman = callPackage ./econnman { };
   terminology = callPackage ./terminology { };
-  rage = callPackage ./rage.nix { };
+  rage = callPackage ./rage { };
   ephoto = callPackage ./ephoto.nix { };
 }
