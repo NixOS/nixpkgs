@@ -2646,10 +2646,8 @@ package-maintainers:
     - streaming-wai
   kiwi:
     - glirc
-    - matterhorn
     - mattermost-api
     - mattermost-api-qc
-    - Unique
   psibi:
     - path-pieces
     - persistent
@@ -3557,9 +3555,11 @@ broken-packages:
   - buster
   - buster-gtk
   - buster-network
+  - bustle
   - butter
   - butterflies
   - bv-sized
+  - byline
   - bytable
   - bytearray-parsing
   - bytebuild
@@ -4668,6 +4668,7 @@ broken-packages:
   - elm-websocket
   - elynx
   - elynx-markov
+  - elynx-nexus
   - elynx-seq
   - elynx-tools
   - elynx-tree
@@ -6620,6 +6621,7 @@ broken-packages:
   - hw-json-simple-cursor
   - hw-json-standard-cursor
   - hw-kafka-avro
+  - hw-prim-bits
   - hw-rankselect
   - hw-simd
   - hw-succinct
@@ -6799,6 +6801,7 @@ broken-packages:
   - integer-pure
   - integreat
   - intel-aes
+  - intensional-datatys
   - interlude-l
   - InternedData
   - internetmarke
@@ -7341,7 +7344,15 @@ broken-packages:
   - lio-simple
   - lipsum-gen
   - liquid
+  - liquid-base
+  - liquid-bytestring
+  - liquid-containers
   - liquid-fixpoint
+  - liquid-ghc-prim
+  - liquid-parallel
+  - liquid-platform
+  - liquid-prelude
+  - liquid-vector
   - liquidhaskell
   - liquidhaskell-cabal
   - Liquorice
@@ -7581,6 +7592,7 @@ broken-packages:
   - matrix-market
   - matrix-sized
   - matsuri
+  - matterhorn
   - maude
   - maxent
   - maxent-learner-hw
@@ -7885,6 +7897,7 @@ broken-packages:
   - multibase
   - multifocal
   - multihash
+  - multihash-cryptonite
   - multihash-serialise
   - multilinear
   - multilinear-io
@@ -8605,6 +8618,7 @@ broken-packages:
   - polydata
   - polydata-core
   - polynomial
+  - polysemy-optics
   - polysemy-RandomFu
   - polysemy-webserver
   - polysemy-zoo
@@ -9980,6 +9994,7 @@ broken-packages:
   - streaming-png
   - streaming-process
   - streaming-sort
+  - streamly-archive
   - streamly-lmdb
   - streamproc
   - strelka
@@ -10408,6 +10423,7 @@ broken-packages:
   - trackit
   - traction
   - tracy
+  - trade-journal
   - traildb
   - trajectory
   - transactional-events
@@ -10488,6 +10504,7 @@ broken-packages:
   - turingMachine
   - turtle-options
   - tweak
+  - twee
   - tweet-hs
   - twentefp-eventloop-graphics
   - twentefp-eventloop-trees
@@ -10577,6 +10594,7 @@ broken-packages:
   - UMM
   - unagi-bloomfilter
   - unamb-custom
+  - unbeliever
   - unbound
   - unbound-generics
   - unbound-kind-generics
@@ -10600,6 +10618,7 @@ broken-packages:
   - uniform-io
   - union
   - union-map
+  - Unique
   - uniqueid
   - uniquely-represented-sets
   - units-attoparsec
@@ -10763,6 +10782,7 @@ broken-packages:
   - views
   - vigilance
   - Villefort
+  - vimeta
   - vimus
   - vintage-basic
   - vinyl-gl
