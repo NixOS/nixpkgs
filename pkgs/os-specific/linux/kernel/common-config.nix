@@ -91,6 +91,8 @@ let
     scheduler = {
       IOSCHED_CFQ = whenOlder "5.0" yes; # Removed in 5.0-RC1
       BLK_CGROUP  = yes; # required by CFQ"
+      BLK_CGROUP_IOLATENCY = whenAtLeast "4.19" yes;
+      BLK_CGROUP_IOCOST = whenAtLeast "5.4" yes;
       IOSCHED_DEADLINE = whenOlder "5.0" yes; # Removed in 5.0-RC1
       MQ_IOSCHED_DEADLINE = whenAtLeast "4.11" yes;
       BFQ_GROUP_IOSCHED = whenAtLeast "4.12" yes;
