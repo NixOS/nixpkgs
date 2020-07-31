@@ -72,7 +72,7 @@ pet = buildGoModule rec {
 
     When `null` is used as a value, rather than fetching the dependencies
     and vendoring them, we use the vendoring included within the source repo.
-    If you'd like to not have to update this field on dependency changes, 
+    If you'd like to not have to update this field on dependency changes,
     run `go mod vendor` in your source repo and set 'vendorSha256 = null;'
   </para>
  </section>
