@@ -11,6 +11,7 @@
  <xi:include href="bower.xml" />
  <xi:include href="coq.xml" />
  <xi:include href="crystal.section.xml" />
+ <xi:include href="dart.section.xml" />
  <xi:include href="emscripten.section.xml" />
  <xi:include href="gnome.xml" />
  <xi:include href="go.xml" />
