@@ -8022,6 +8022,12 @@
     githubId = 26417242;
     name = "Mikolaj Galkowski";
   };
+  TethysSvensson = {
+    email = "freaken@freaken.dk";
+    github = "TethysSvensson";
+    githubId = 4294434;
+    name = "Tethys Svensson";
+  };
   teto = {
     email = "mcoudron@hotmail.com";
     github = "teto";
