@@ -4,28 +4,6 @@ with lib;
 
 let
   cfg = config.networking.wireless;
-  configFile = if cfg.networks != {} || cfg.extraConfig != "" || cfg.userControlled.enable then pkgs.writeText "wpa_supplicant.conf" ''
-    ${optionalString cfg.userControlled.enable ''
-      ctrl_interface=DIR=/run/wpa_supplicant GROUP=${cfg.userControlled.group}
-      update_config=1''}
-    ${cfg.extraConfig}
-    ${concatStringsSep "\n" (mapAttrsToList (ssid: config: with config; let
-      key = if psk != null
-        then ''"${psk}"''
-        else pskRaw;
-      baseAuth = if key != null
-        then ''psk=${key}''
-        else ''key_mgmt=NONE'';
-    in ''
-      network={
-        ssid="${ssid}"
-        ${optionalString (priority != null) ''priority=${toString priority}''}
-        ${optionalString hidden "scan_ssid=1"}
-        ${if (auth != null) then auth else baseAuth}
-        ${extraConfig}
-      }
-    '') cfg.networks)}
-  '' else "/etc/wpa_supplicant.conf";
 in {
   options = {
     networking.wireless = {
@@ -202,6 +180,15 @@ in {
           for available options.
         '';
       };
+
+      configFile = mkOption {
+        type = types.path;
+        default = "/etc/wpa_supplicant.conf";
+        description = ''
+          Path to the wpa_supplicant configuration file. Only used if the
+          configuration is not defined through other options in this module.
+        '';
+      };
     };
   };
 
@@ -210,6 +197,29 @@ in {
       assertion = with cfg; count (x: x != null) [ psk pskRaw auth ] <= 1;
       message = ''options networking.wireless."${name}".{psk,pskRaw,auth} are mutually exclusive'';
     });
+
+    networking.wireless.configFile = mkIf (cfg.networks != {} || cfg.extraConfig != "" || cfg.userControlled.enable) (pkgs.writeText "wpa_supplicant.conf" ''
+      ${optionalString cfg.userControlled.enable ''
+        ctrl_interface=DIR=/run/wpa_supplicant GROUP=${cfg.userControlled.group}
+        update_config=1''}
+      ${cfg.extraConfig}
+      ${concatStringsSep "\n" (mapAttrsToList (ssid: config: with config; let
+        key = if psk != null
+          then ''"${psk}"''
+          else pskRaw;
+        baseAuth = if key != null
+          then ''psk=${key}''
+          else ''key_mgmt=NONE'';
+      in ''
+        network={
+          ssid="${ssid}"
+          ${optionalString (priority != null) ''priority=${toString priority}''}
+          ${optionalString hidden "scan_ssid=1"}
+          ${if (auth != null) then auth else baseAuth}
+          ${extraConfig}
+        }
+      '') cfg.networks)}
+    '');
 
     environment.systemPackages =  [ pkgs.wpa_supplicant ];
 
@@ -233,7 +243,7 @@ in {
       path = [ pkgs.wpa_supplicant ];
 
       script = ''
-        iface_args="-s -u -D${cfg.driver} -c ${configFile}"
+        iface_args="-s -u -D${cfg.driver} -c ${cfg.configFile}"
         ${if ifaces == [] then ''
           for i in $(cd /sys/class/net && echo *); do
             DEVTYPE=
