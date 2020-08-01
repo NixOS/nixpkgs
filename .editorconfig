@@ -43,6 +43,14 @@ indent_style = space
 # Disable file types or individual files
 # some of these files may be auto-generated and/or require significant changes
 
+[*.{c,h}]
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+
+[*.{key,ovpn}]
+insert_final_newline = unset
+end_of_line = unset
+
 [*.lock]
 indent_size = unset
 

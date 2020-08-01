@@ -1,15 +1,14 @@
 { stdenv, fetchFromGitHub, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.3";
+  version = "1.0.5";
   pname = "undmg";
 
   src = fetchFromGitHub {
     owner = "matthewbauer";
     repo = "undmg";
     rev = "v${version}";
-    sha256 = "1pxqw92h2w75d4jwiihwnkhnsfk09cddh3flgrqwh9r3ry14fgbb";
-    
+    sha256 = "0yz5fniaa5z33d8bdzgr263957r1c9l99237y2p8k0hdid207la1";
   };
 
   buildInputs = [ zlib bzip2 ];

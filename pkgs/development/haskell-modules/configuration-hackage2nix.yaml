@@ -1,6 +1,6 @@
 # pkgs/development/haskell-modules/configuration-hackage2nix.yaml
 
-compiler: ghc-8.8.3
+compiler: ghc-8.8.4
 
 core-packages:
   - array-0.5.4.0
@@ -72,7 +72,7 @@ default-package-overrides:
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
-  # LTS Haskell 16.6
+  # LTS Haskell 16.7
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -262,7 +262,7 @@ default-package-overrides:
   - attoparsec-path ==0.0.0.1
   - audacity ==0.0.2
   - aur ==7.0.3
-  - aura ==3.1.5
+  - aura ==3.1.6
   - authenticate ==1.3.5
   - authenticate-oauth ==1.6.0.1
   - auto ==0.4.3.1
@@ -430,7 +430,7 @@ default-package-overrides:
   - chimera ==0.3.1.0
   - chiphunk ==0.1.2.1
   - choice ==0.2.2
-  - chronologique ==0.3.1.1
+  - chronologique ==0.3.1.3
   - chronos ==1.1.1
   - chronos-bench ==0.2.0.2
   - chunked-data ==0.3.1
@@ -912,7 +912,7 @@ default-package-overrides:
   - ghc-syntax-highlighter ==0.0.6.0
   - ghc-tcplugins-extra ==0.4
   - ghc-typelits-extra ==0.4
-  - ghc-typelits-knownnat ==0.7.2
+  - ghc-typelits-knownnat ==0.7.3
   - ghc-typelits-natnormalise ==0.7.2
   - ghc-typelits-presburger ==0.3.0.1
   - ghost-buster ==0.1.1.0
@@ -1135,7 +1135,7 @@ default-package-overrides:
   - http-client-openssl ==0.3.1.0
   - http-client-overrides ==0.1.1.0
   - http-client-tls ==0.3.5.3
-  - http-common ==0.8.2.0
+  - http-common ==0.8.2.1
   - http-conduit ==2.3.7.3
   - http-date ==0.0.8
   - http-directory ==0.1.8
@@ -1338,7 +1338,7 @@ default-package-overrides:
   - libyaml ==0.1.2
   - LibZip ==1.0.1
   - life-sync ==1.1.1.0
-  - lifted-async ==0.10.1.1
+  - lifted-async ==0.10.1.2
   - lifted-base ==0.2.3.12
   - lift-generics ==0.1.3
   - line ==4.0.1
@@ -1397,6 +1397,7 @@ default-package-overrides:
   - matplotlib ==0.7.5
   - matrices ==0.5.0
   - matrix ==0.3.6.1
+  - matrix-as-xyz ==0.1.1.3
   - matrix-market-attoparsec ==0.1.1.3
   - matrix-static ==0.3
   - maximal-cliques ==0.1.1
@@ -1754,7 +1755,7 @@ default-package-overrides:
   - profunctors ==5.5.2
   - projectroot ==0.2.0.1
   - project-template ==0.2.1.0
-  - prometheus-client ==1.0.0.1
+  - prometheus-client ==1.0.1
   - promises ==0.3
   - prompt ==0.1.1.2
   - prospect ==0.1.0.0
@@ -2096,7 +2097,7 @@ default-package-overrides:
   - stratosphere ==0.53.0
   - streaming ==0.2.3.0
   - streaming-bytestring ==0.1.6
-  - streaming-commons ==0.2.2.0
+  - streaming-commons ==0.2.2.1
   - streamly ==0.7.2
   - streamly-bytestring ==0.1.2
   - streams ==3.3
@@ -2645,10 +2646,8 @@ package-maintainers:
     - streaming-wai
   kiwi:
     - glirc
-    - matterhorn
     - mattermost-api
     - mattermost-api-qc
-    - Unique
   psibi:
     - path-pieces
     - persistent
@@ -3556,12 +3555,13 @@ broken-packages:
   - buster
   - buster-gtk
   - buster-network
+  - bustle
   - butter
   - butterflies
   - bv-sized
+  - byline
   - bytable
   - bytearray-parsing
-  - bytebuild
   - bytelog
   - bytestring-arbitrary
   - bytestring-builder-varword
@@ -4667,6 +4667,7 @@ broken-packages:
   - elm-websocket
   - elynx
   - elynx-markov
+  - elynx-nexus
   - elynx-seq
   - elynx-tools
   - elynx-tree
@@ -5902,7 +5903,6 @@ broken-packages:
   - hasql-dynamic-statements
   - hasql-generic
   - hasql-implicits
-  - hasql-migration
   - hasql-optparse-applicative
   - hasql-postgres
   - hasql-postgres-options
@@ -6619,6 +6619,7 @@ broken-packages:
   - hw-json-simple-cursor
   - hw-json-standard-cursor
   - hw-kafka-avro
+  - hw-prim-bits
   - hw-rankselect
   - hw-simd
   - hw-succinct
@@ -6798,6 +6799,7 @@ broken-packages:
   - integer-pure
   - integreat
   - intel-aes
+  - intensional-datatys
   - interlude-l
   - InternedData
   - internetmarke
@@ -6827,7 +6829,6 @@ broken-packages:
   - iostring
   - iothread
   - iotransaction
-  - ip
   - ip2location
   - ip2proxy
   - ipatch
@@ -7340,7 +7341,15 @@ broken-packages:
   - lio-simple
   - lipsum-gen
   - liquid
+  - liquid-base
+  - liquid-bytestring
+  - liquid-containers
   - liquid-fixpoint
+  - liquid-ghc-prim
+  - liquid-parallel
+  - liquid-platform
+  - liquid-prelude
+  - liquid-vector
   - liquidhaskell
   - liquidhaskell-cabal
   - Liquorice
@@ -7580,6 +7589,7 @@ broken-packages:
   - matrix-market
   - matrix-sized
   - matsuri
+  - matterhorn
   - maude
   - maxent
   - maxent-learner-hw
@@ -7884,6 +7894,7 @@ broken-packages:
   - multibase
   - multifocal
   - multihash
+  - multihash-cryptonite
   - multihash-serialise
   - multilinear
   - multilinear-io
@@ -8604,6 +8615,7 @@ broken-packages:
   - polydata
   - polydata-core
   - polynomial
+  - polysemy-optics
   - polysemy-RandomFu
   - polysemy-webserver
   - polysemy-zoo
@@ -9979,6 +9991,7 @@ broken-packages:
   - streaming-png
   - streaming-process
   - streaming-sort
+  - streamly-archive
   - streamly-lmdb
   - streamproc
   - strelka
@@ -10407,6 +10420,7 @@ broken-packages:
   - trackit
   - traction
   - tracy
+  - trade-journal
   - traildb
   - trajectory
   - transactional-events
@@ -10487,6 +10501,7 @@ broken-packages:
   - turingMachine
   - turtle-options
   - tweak
+  - twee
   - tweet-hs
   - twentefp-eventloop-graphics
   - twentefp-eventloop-trees
@@ -10576,6 +10591,7 @@ broken-packages:
   - UMM
   - unagi-bloomfilter
   - unamb-custom
+  - unbeliever
   - unbound
   - unbound-generics
   - unbound-kind-generics
@@ -10599,6 +10615,7 @@ broken-packages:
   - uniform-io
   - union
   - union-map
+  - Unique
   - uniqueid
   - uniquely-represented-sets
   - units-attoparsec
@@ -10762,6 +10779,7 @@ broken-packages:
   - views
   - vigilance
   - Villefort
+  - vimeta
   - vimus
   - vintage-basic
   - vinyl-gl

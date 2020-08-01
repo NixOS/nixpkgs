@@ -23,7 +23,8 @@ buildGoModule rec {
     sha256 = "0da1kav5x2xcmwvdgfk1q70l1k0sqqj3njgx2xx885d40m6qbnrs";
   };
 
-  vendorSha256 = "1qjlvhizl8cy06cgf4phia70bgbm4lj57z5z2gyr8aglx98bnpdn";
+  runVend = true;
+  vendorSha256 = "0p7vyw61nwvmaz7gz2bdh9fi6wp62i2vnzw6iz2r8cims4sbz53b";
 
   nativeBuildInputs = [ packr pkg-config ];
 
@@ -35,20 +36,6 @@ buildGoModule rec {
        -X github.com/trezor/blockbook/common.gitcommit=${commit}
        -X github.com/trezor/blockbook/common.buildDate=unknown
   '';
-
-  goethereum = fetchFromGitHub {
-    owner = "ethereum";
-    repo = "go-ethereum";
-    rev = "v1.8.20";
-    sha256 = "0m2q1nz6f39pyr2rk6vflkwi4ykganzwr7wndpwr9rliw0x8jgi0";
-  };
-
-  overrideModAttrs = (_: {
-    postBuild = ''
-      rm -r vendor/github.com/ethereum/go-ethereum
-      cp -r --reflink=auto ${goethereum} vendor/github.com/ethereum/go-ethereum
-    '';
-  });
 
   preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
     ulimit -n 8192

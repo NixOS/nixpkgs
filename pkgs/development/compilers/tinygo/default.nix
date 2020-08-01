@@ -14,7 +14,7 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "0das5z5y2x1970yi9c4yssxvwrrjhdmsj495q0r5mb02amvc954v";
   };
- 
+
   overrideModAttrs = (_: {
       patches = [];
       preBuild = ''

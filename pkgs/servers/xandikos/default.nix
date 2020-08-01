@@ -5,13 +5,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xandikos";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "xandikos";
     rev = "v${version}";
-    sha256 = "1b75r3ipjmk48nvc99zib8gc8xpsb3m0ssg7k0am3zmryi7i19h7";
+    sha256 = "1x0bylmdizirvlcn6ryd43lffpmlq0cklj3jz956scmxgq4p6wby";
   };
 
   propagatedBuildInputs = with python3Packages; [
