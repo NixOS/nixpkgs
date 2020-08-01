@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libv4l, gd }:
 
 stdenv.mkDerivation rec {
-  name = "fswebcam-20140113";
+  name = "fswebcam-20200725";
 
   src = fetchurl {
     url = "https://www.sanslogic.co.uk/fswebcam/files/${name}.tar.gz";
-    sha256 = "3ee389f72a7737700d22e0c954720b1e3bbadc8a0daad6426c25489ba9dc3199";
+    sha256 = "1dazsrcaw9s30zz3jpxamk9lkff5dkmflp1s0jjjvdbwa0k6k6ii";
   };
 
   buildInputs =
