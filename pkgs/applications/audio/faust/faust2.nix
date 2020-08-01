@@ -5,7 +5,8 @@
 , pkgconfig
 , cmake
 , llvm
-, emscripten
+# TODO: put back when it builds again
+# , emscripten
 , openssl
 , libsndfile
 , libmicrohttpd
@@ -46,7 +47,7 @@ let
     inherit src;
 
     nativeBuildInputs = [ makeWrapper pkgconfig cmake vim which ];
-    buildInputs = [ llvm emscripten openssl libsndfile libmicrohttpd gnutls libtasn1 p11-kit ];
+    buildInputs = [ llvm /*emscripten*/ openssl libsndfile libmicrohttpd gnutls libtasn1 p11-kit ];
 
 
     passthru = {
