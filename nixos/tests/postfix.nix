@@ -11,7 +11,7 @@ import ./make-test-python.nix {
       enable = true;
       enableSubmission = true;
       enableSubmissions = true;
-      sslCACert = certs.ca.cert;
+      tlsTrustedAuthorities = certs.ca.cert;
       sslCert = certs.${domain}.cert;
       sslKey = certs.${domain}.key;
       submissionsOptions = {
