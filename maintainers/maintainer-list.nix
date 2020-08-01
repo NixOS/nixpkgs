@@ -8769,6 +8769,12 @@
     githubId = 43315;
     name = "William Roe";
   };
+  wkral = {
+    email = "william.kral@gmail.com";
+    github = "wkral";
+    githubId = 105114;
+    name = "William Kral";
+  };
   wmertens = {
     email = "Wout.Mertens@gmail.com";
     github = "wmertens";
