@@ -4380,6 +4380,8 @@ in
 
   inetutils = callPackage ../tools/networking/inetutils { };
 
+  inform6 = callPackage ../development/compilers/inform6 { };
+
   inform7 = callPackage ../development/compilers/inform7 { };
 
   infamousPlugins = callPackage ../applications/audio/infamousPlugins { };
