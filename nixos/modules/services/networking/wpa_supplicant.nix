@@ -243,22 +243,22 @@ in {
       path = [ pkgs.wpa_supplicant ];
 
       script = ''
-        iface_args="-s -u -D${cfg.driver} -c ${cfg.configFile}"
+        iface_args=(-s -u -D${escapeShellArg cfg.driver} -c ${escapeShellArg cfg.configFile})
         ${if ifaces == [] then ''
           for i in $(cd /sys/class/net && echo *); do
             DEVTYPE=
-            UEVENT_PATH=/sys/class/net/$i/uevent
+            UEVENT_PATH="/sys/class/net/$i/uevent"
             if [ -e "$UEVENT_PATH" ]; then
               source "$UEVENT_PATH"
-              if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
-                args+="''${args:+ -N} -i$i $iface_args"
+              if [ "$DEVTYPE" = wlan -o -e "/sys/class/net/$i/wireless" ]; then
+                args+=(''${args:+-N} -i"$i" "''${iface_args[@]}")
               fi
             fi
           done
         '' else ''
-          args="${concatMapStringsSep " -N " (i: "-i${i} $iface_args") ifaces}"
+          args=(${concatMapStringsSep " -N " (i: ''-i${escapeShellArg i} "''${iface_args[@]}"'') ifaces})
         ''}
-        exec wpa_supplicant $args
+        exec wpa_supplicant "''${args[@]}"
       '';
     };
 
