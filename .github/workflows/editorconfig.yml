@@ -2,6 +2,7 @@ name: actions
 
 on:
   pull_request:
+    types: [ opened, synchronize ]
     branches:
       - master
 

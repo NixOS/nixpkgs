@@ -1,6 +1,7 @@
 name: "Wait for ofborg"
 on:
   pull_request:
+    types: [ opened, synchronize ]
 jobs:
   tests:
     runs-on: ubuntu-latest
