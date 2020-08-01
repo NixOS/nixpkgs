@@ -27140,6 +27140,10 @@ in
 
   openfst = callPackage ../development/libraries/openfst {};
 
+  opengrm-ngram = callPackage ../development/libraries/opengrm-ngram {};
+
+  phonetisaurus = callPackage ../development/libraries/phonetisaurus {};
+
   duti = callPackage ../os-specific/darwin/duti {};
 
   dnstracer = callPackage ../tools/networking/dnstracer {
