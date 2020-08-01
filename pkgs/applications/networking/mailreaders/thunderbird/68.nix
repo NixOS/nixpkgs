@@ -1,3 +1,5 @@
+# This pakcage is keeped until Thunderbird 78 supports OpenPGP.
+# https://www.thunderbird.net/en-US/thunderbird/78.0.1/releasenotes/
 { autoconf213
 , bzip2
 , cargo
@@ -72,13 +74,13 @@ assert waylandSupport -> gtk3Support == true;
 
 stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "78.1.0";
+  version = "68.10.0";
 
   src = fetchurl {
     url =
       "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
     sha512 =
-      "2m1gqq11k5cql5f49mwrfjk06rm2r24lf9l0hrvj569gqxckyh8wdch3dn339x3yn5fhxqlw0l770p2ssr2kkllv3yy20qqzjqgfpgh";
+      "24jq4wxhk58403ax8jf6p82fyzf0vszz8am5d8jb6j559da3lp6wv4m5xqavvcf9i57rdivzrmqw9agr8mypfxs8zb908aln5iy7d4d";
   };
 
   nativeBuildInputs = [
@@ -148,7 +150,7 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    ./no-buildconfig.patch
+    ./no-buildconfig-68.patch
   ];
 
   postPatch = ''
@@ -206,12 +208,14 @@ stdenv.mkDerivation rec {
   in [
     "--enable-application=comm/mail"
 
+    "--with-system-bz2"
     "--with-system-icu"
     "--with-system-jpeg"
     "--with-system-libevent"
     "--with-system-nspr"
     "--with-system-nss"
     "--with-system-png" # needs APNG support
+    "--with-system-icu"
     "--with-system-zlib"
     "--with-system-webp"
     "--with-system-libvpx"
@@ -221,9 +225,12 @@ stdenv.mkDerivation rec {
     "--enable-default-toolkit=${toolkitValue}"
     "--enable-js-shell"
     "--enable-necko-wifi"
+    "--enable-startup-notification"
     "--enable-system-ffi"
     "--enable-system-pixman"
+    "--enable-system-sqlite"
 
+    "--disable-gconf"
     "--disable-tests"
     "--disable-updater"
     "--enable-jemalloc"
@@ -316,7 +323,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.updateScript = import ./../../browsers/firefox/update.nix {
-    attrPath = "thunderbird-78";
+    attrPath = "thunderbird";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
     inherit writeScript lib common-updater-scripts xidel coreutils gnused
       gnugrep curl runtimeShell;

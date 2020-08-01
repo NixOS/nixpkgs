@@ -1,3 +1,5 @@
+# This pakcage is keeped until Thunderbird 78 supports OpenPGP.
+# https://www.thunderbird.net/en-US/thunderbird/78.0.1/releasenotes/
 { stdenv, fetchurl, config, makeWrapper
 , alsaLib
 , at-spi2-atk
@@ -43,7 +45,7 @@
 }:
 
 # imports `version` and `sources`
-with (import ./release_sources.nix);
+with (import ./68_sources.nix);
 
 let
   arch = if stdenv.hostPlatform.system == "i686-linux"
@@ -70,7 +72,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/${version}/${source.arch}/${source.locale}/thunderbird-${version}.tar.bz2";
-    inherit (source) sha256;
+    inherit (source) sha512;
   };
 
   phases = "unpackPhase installPhase";
