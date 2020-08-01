@@ -292,34 +292,28 @@ in
 
         preStart =
           ''
-            # Cleanup the data directory.
             if ! test -e ${cfg.dataDir}/PG_VERSION; then
+              # Cleanup the data directory.
               rm -f ${cfg.dataDir}/*.conf
-            fi
-          '';
 
-        script =
-          ''
-            # Initialise the database.
-            if ! test -e ${cfg.dataDir}/PG_VERSION; then
+              # Initialise the database.
               initdb -U ${cfg.superUser} ${concatStringsSep " " cfg.initdbArgs}
+
               # See postStart!
               touch "${cfg.dataDir}/.first_startup"
             fi
+
             ln -sfn "${configFile}" "${cfg.dataDir}/postgresql.conf"
             ${optionalString (cfg.recoveryConfig != null) ''
               ln -sfn "${pkgs.writeText "recovery.conf" cfg.recoveryConfig}" \
                 "${cfg.dataDir}/recovery.conf"
             ''}
-
-            exec postgres
           '';
 
         serviceConfig = mkMerge [
           { ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             User = "postgres";
             Group = "postgres";
-            PermissionsStartOnly = true;
             RuntimeDirectory = "postgresql";
             Type = if versionAtLeast cfg.package.version "9.6"
                    then "notify"
@@ -333,41 +327,48 @@ in
             # Give Postgres a decent amount of time to clean up after
             # receiving systemd's SIGINT.
             TimeoutSec = 120;
+
+            ExecStart = "${postgresql}/bin/postgres";
+
+            # Wait for PostgreSQL to be ready to accept connections.
+            ExecStartPost =
+              let
+                setupScript = pkgs.writeScript "postgresql-setup" ''
+                  #!${pkgs.runtimeShell} -e
+
+                  PSQL="${pkgs.utillinux}/bin/runuser -u ${cfg.superUser} -- psql --port=${toString cfg.port}"
+
+                  while ! $PSQL -d postgres -c "" 2> /dev/null; do
+                      if ! kill -0 "$MAINPID"; then exit 1; fi
+                      sleep 0.1
+                  done
+
+                  if test -e "${cfg.dataDir}/.first_startup"; then
+                    ${optionalString (cfg.initialScript != null) ''
+                      $PSQL -f "${cfg.initialScript}" -d postgres
+                    ''}
+                    rm -f "${cfg.dataDir}/.first_startup"
+                  fi
+                '' + optionalString (cfg.ensureDatabases != []) ''
+                  ${concatMapStrings (database: ''
+                    $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database}"'
+                  '') cfg.ensureDatabases}
+                '' + ''
+                  ${concatMapStrings (user: ''
+                    $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc 'CREATE USER "${user.name}"'
+                    ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
+                      $PSQL -tAc 'GRANT ${permission} ON ${database} TO "${user.name}"'
+                    '') user.ensurePermissions)}
+                  '') cfg.ensureUsers}
+                '';
+              in
+                "+${setupScript}";
           }
           (mkIf (cfg.dataDir == "/var/lib/postgresql/${cfg.package.psqlSchema}") {
             StateDirectory = "postgresql postgresql/${cfg.package.psqlSchema}";
             StateDirectoryMode = if groupAccessAvailable then "0750" else "0700";
           })
         ];
-
-        # Wait for PostgreSQL to be ready to accept connections.
-        postStart =
-          ''
-            PSQL="${pkgs.utillinux}/bin/runuser -u ${cfg.superUser} -- psql --port=${toString cfg.port}"
-
-            while ! $PSQL -d postgres -c "" 2> /dev/null; do
-                if ! kill -0 "$MAINPID"; then exit 1; fi
-                sleep 0.1
-            done
-
-            if test -e "${cfg.dataDir}/.first_startup"; then
-              ${optionalString (cfg.initialScript != null) ''
-                $PSQL -f "${cfg.initialScript}" -d postgres
-              ''}
-              rm -f "${cfg.dataDir}/.first_startup"
-            fi
-          '' + optionalString (cfg.ensureDatabases != []) ''
-            ${concatMapStrings (database: ''
-              $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database}"'
-            '') cfg.ensureDatabases}
-          '' + ''
-            ${concatMapStrings (user: ''
-              $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc 'CREATE USER "${user.name}"'
-              ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
-                $PSQL -tAc 'GRANT ${permission} ON ${database} TO "${user.name}"'
-              '') user.ensurePermissions)}
-            '') cfg.ensureUsers}
-          '';
 
         unitConfig.RequiresMountsFor = "${cfg.dataDir}";
       };
