@@ -15379,6 +15379,8 @@ in
 
   wayland-protocols = callPackage ../development/libraries/wayland/protocols.nix { };
 
+  wayland-utils = callPackage ../tools/wayland/wayland-utils { };
+
   waylandpp = callPackage ../development/libraries/waylandpp { };
 
   wcslib = callPackage ../development/libraries/wcslib { };
