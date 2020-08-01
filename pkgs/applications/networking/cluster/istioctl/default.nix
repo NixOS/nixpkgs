@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "istioctl";
-  version = "1.6.5";
+  version = "1.6.6";
 
   src = fetchFromGitHub {
     owner = "istio";
     repo = "istio";
     rev = version;
-    sha256 = "0xga0vjr2nfbxwbawly8vg9vnpavxbmc1agg2a3cp1ncmzfrgpcx";
+    sha256 = "0njchcb58lxk0cixk2rz4qj7b0zpp6zf3i5dda43j4hfsb37mifj";
   };
-  vendorSha256 = "15l9z2a8p46jvmkl0vvm6s196mlics0qgmpm3yq3bn6cqnybdsij";
+  vendorSha256 = "0cc0lmjsxrn3f78k95wklf3yn5k7h8slwnwmssy1i1h0bkcg1bai";
 
   nativeBuildInputs = [ go-bindata ];
 
