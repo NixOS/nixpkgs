@@ -268,7 +268,7 @@
     "freebox" = ps: with ps; [ aiohttp-cors netdisco zeroconf]; # missing inputs: aiofreepybox
     "freedns" = ps: with ps; [ ];
     "fritz" = ps: with ps; [ fritzconnection];
-    "fritzbox" = ps: with ps; [ ]; # missing inputs: pyfritzhome
+    "fritzbox" = ps: with ps; [ pyfritzhome];
     "fritzbox_callmonitor" = ps: with ps; [ fritzconnection];
     "fritzbox_netmonitor" = ps: with ps; [ fritzconnection];
     "fronius" = ps: with ps; [ ]; # missing inputs: pyfronius
