@@ -7486,6 +7486,12 @@
     githubId = 2770647;
     name = "Simon Vandel Sillesen";
   };
+  siraben = {
+    email = "bensiraphob@gmail.com";
+    github = "siraben";
+    githubId = 8219659;
+    name = "Siraphob Phipathananunth";
+  };
   siriobalmelli = {
     email = "sirio@b-ad.ch";
     github = "siriobalmelli";
