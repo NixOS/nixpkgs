@@ -5543,6 +5543,8 @@ in {
 
   pyinotify = callPackage ../development/python-modules/pyinotify { };
 
+  pyipp = callPackage ../development/python-modules/pyipp { };
+
   pyjwt = callPackage ../development/python-modules/pyjwt { };
 
   pykickstart = callPackage ../development/python-modules/pykickstart { };
