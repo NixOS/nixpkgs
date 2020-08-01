@@ -4004,6 +4004,8 @@ in {
 
   jsonschema = callPackage ../development/python-modules/jsonschema { };
 
+  vcver = callPackage ../development/python-modules/vcver { };
+
   vcversioner = callPackage ../development/python-modules/vcversioner { };
 
   falcon = callPackage ../development/python-modules/falcon { };
