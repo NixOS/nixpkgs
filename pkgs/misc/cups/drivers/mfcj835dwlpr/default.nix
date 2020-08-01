@@ -1,24 +1,6 @@
 { stdenv, fetchurl, pkgsi686Linux, dpkg, makeWrapper, coreutils, gnused, gawk, file, cups, utillinux, xxd, runtimeShell
 , ghostscript, a2ps }:
 
-# Why:
-# The executable "brprintconf_mfcj835dw" binary is looking for "/opt/brother/Printers/%s/inf/br%sfunc" and "/opt/brother/Printers/%s/inf/br%src".
-# Whereby, %s is printf(3) string substitution for stdin's arg0 (the command's own filename) from the 10th char forwards, as a runtime dependency.
-# e.g. Say the filename is "0123456789ABCDE", the runtime will be looking for /opt/brother/Printers/ABCDE/inf/brABCDEfunc.
-# Presumably, the binary was designed to be deployed under the filename "printconf_mfcj835dw", whereby it will search for "/opt/brother/Printers/mfcj835dw/inf/brmfcj835dwfunc".
-# For NixOS, we want to change the string to the store path of brmfcj835dwfunc and brmfcj835dwrc but we're faced with two complications:
-# 1. Too little room to specify the nix store path. We can't even take advantage of %s by renaming the file to the store path hash since the variable is too short and can't contain the whole hash.
-# 2. The binary needs the directory it's running from to be r/w.
-# What:
-# As such, we strip the path and substitution altogether, leaving only "brmfcj835dwfunc" and "brmfcj835dwrc", while filling the leftovers with nulls.
-# Fully null terminating the cstrings is necessary to keep the array the same size and preventing overflows.
-# We then use a shell script to link and execute the binary, func and rc files in a temporary directory.
-# How:
-# In the package, we dump the raw binary as a string of search-able hex values using hexdump. We execute the substitution with sed. We then convert the hex values back to binary form using xxd.
-# We also write a shell script that invoked "mktemp -d" to produce a r/w temporary directory and link what we need in the temporary directory.
-# Result:
-# The user can run brprintconf_mfcj835dw in the shell.
-
 stdenv.mkDerivation rec {
   pname = "mfcj835dwlpr";
   version = "3.0.1-1";
@@ -59,8 +41,8 @@ stdenv.mkDerivation rec {
 
     #stripping the hardcoded path.
     ${utillinux}/bin/hexdump -ve '1/1 "%.2X"' $out/usr/bin/brprintconf_mfcj835dw | \
-    sed 's.2F6F70742F62726F746865722F5072696E746572732F25732F696E662F6272257366756E63.62726d66636a36353130647766756e63000000000000000000000000000000000000000000.' | \
-    sed 's.2F6F70742F62726F746865722F5072696E746572732F25732F696E662F627225737263.62726D66636A3635313064777263000000000000000000000000000000000000000000.' | \
+    sed 's.2F6F70742F62726F746865722F5072696E746572732F25732F696E662F6272257366756E63.62726D66636A383335647766756E6300000000000000000000000000000000000000000000.' | \
+    sed 's.2F6F70742F62726F746865722F5072696E746572732F25732F696E662F627225737263.62726D66636A3833356477726300000000000000000000000000000000000000000000.' | \
     ${xxd}/bin/xxd -r -p > $out/usr/bin/brprintconf_mfcj835dw_patched
     chmod +x $out/usr/bin/brprintconf_mfcj835dw_patched
     #executing from current dir. segfaults if it's not r\w.
