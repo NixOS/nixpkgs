@@ -18313,6 +18313,14 @@ in
 
   eb-garamond = callPackage ../data/fonts/eb-garamond { };
 
+  edukai = callPackage ../data/fonts/edukai { };
+
+  eduli = callPackage ../data/fonts/eduli { };
+
+  moeli = eduli;
+
+  edusong = callPackage ../data/fonts/edusong { };
+
   elliptic_curves = callPackage ../data/misc/elliptic_curves { };
 
   equilux-theme = callPackage ../data/themes/equilux-theme { };
