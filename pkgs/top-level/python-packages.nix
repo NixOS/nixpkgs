@@ -2562,6 +2562,8 @@ in {
 
   pysingleton = callPackage ../development/python-modules/pysingleton { };
 
+  python-didl-lite = callPackage ../development/python-modules/python-didl-lite { };
+
   python-jose = callPackage ../development/python-modules/python-jose {};
 
   python-json-logger = callPackage ../development/python-modules/python-json-logger { };
