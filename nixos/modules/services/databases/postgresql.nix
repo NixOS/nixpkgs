@@ -58,7 +58,10 @@ in
         defaultText = "/var/lib/postgresql/\${config.services.postgresql.package.psqlSchema}";
         example = "/var/lib/postgresql/11";
         description = ''
-          Data directory for PostgreSQL.
+          The data directory for PostgreSQL. If left as the default value
+          this directory will automatically be created before the PostgreSQL server starts, otherwise
+          the sysadmin is responsible for ensuring the directory exists with appropriate ownership
+          and permissions.
         '';
       };
 
@@ -289,13 +292,11 @@ in
 
         preStart =
           ''
-            # Create data directory.
+            # Cleanup the data directory.
             if ! test -e ${cfg.dataDir}/PG_VERSION; then
-              mkdir -m 0700 -p ${cfg.dataDir}
               rm -f ${cfg.dataDir}/*.conf
-              chown -R postgres:postgres ${cfg.dataDir}
             fi
-          ''; # */
+          '';
 
         script =
           ''
@@ -310,15 +311,11 @@ in
               ln -sfn "${pkgs.writeText "recovery.conf" cfg.recoveryConfig}" \
                 "${cfg.dataDir}/recovery.conf"
             ''}
-            ${optionalString (!groupAccessAvailable) ''
-              # postgresql pre 11.0 doesn't start if state directory mode is group accessible
-              chmod 0700 "${cfg.dataDir}"
-            ''}
 
             exec postgres
           '';
 
-        serviceConfig =
+        serviceConfig = mkMerge [
           { ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             User = "postgres";
             Group = "postgres";
@@ -336,7 +333,12 @@ in
             # Give Postgres a decent amount of time to clean up after
             # receiving systemd's SIGINT.
             TimeoutSec = 120;
-          };
+          }
+          (mkIf (cfg.dataDir == "/var/lib/postgresql/${cfg.package.psqlSchema}") {
+            StateDirectory = "postgresql postgresql/${cfg.package.psqlSchema}";
+            StateDirectoryMode = if groupAccessAvailable then "0750" else "0700";
+          })
+        ];
 
         # Wait for PostgreSQL to be ready to accept connections.
         postStart =
