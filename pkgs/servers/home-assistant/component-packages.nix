@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.113.0";
+  version = "0.113.3";
   components = {
     "abode" = ps: with ps; [ ]; # missing inputs: abodepy
     "acer_projector" = ps: with ps; [ pyserial];
@@ -664,7 +664,7 @@
     "rocketchat" = ps: with ps; [ ]; # missing inputs: rocketchat-API
     "roku" = ps: with ps; [ ]; # missing inputs: rokuecp
     "roomba" = ps: with ps; [ ]; # missing inputs: roombapy
-    "route53" = ps: with ps; [ boto3]; # missing inputs: ipify
+    "route53" = ps: with ps; [ boto3];
     "rova" = ps: with ps; [ ]; # missing inputs: rova
     "rpi_camera" = ps: with ps; [ ];
     "rpi_gpio" = ps: with ps; [ ]; # missing inputs: RPi.GPIO
