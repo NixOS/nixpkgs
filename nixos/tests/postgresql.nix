@@ -32,7 +32,13 @@ let
         services.postgresql = {
           enable = true;
           package = postgresql-package;
-          enableSystemLogging = true; # makes sense for the test I suppose
+          log = {
+            connections = true;
+            disconnections = true;
+            statement = "all";
+            collector = true;
+            destination = ["syslog"];
+          };
         };
 
         services.postgresqlBackup = {

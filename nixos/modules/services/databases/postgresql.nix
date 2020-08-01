@@ -19,22 +19,15 @@ let
       log_line_prefix = '${cfg.logLinePrefix}'
       listen_addresses = '${if cfg.enableTCPIP then "*" else "localhost"}'
       port = ${toString cfg.port}
-      ${if cfg.enableSystemLogging then logSys else logStdErr}
+      log_connections = ${pgBool cfg.log.connections}
+      log_statement = '${cfg.log.statement}'
+      logging_collector = ${pgBool cfg.log.collector}
+      log_disconnections = ${pgBool cfg.log.disconnections}
+      log_destination = '${builtins.concatStringsSep "," cfg.log.destination}'
       ${cfg.extraConfig}
     '';
 
-  logStdErr = ''
-      log_destination = 'stderr'
-  '';
-
-  logSys = ''
-        log_connections = yes
-        log_statement = 'all'
-        logging_collector = yes
-        log_disconnections = yes
-        log_destination = 'syslog'
-  '';
-
+  pgBool = option: if option then "yes" else "no";
   groupAccessAvailable = versionAtLeast postgresql.version "11.0";
 
 in
@@ -189,12 +182,56 @@ in
         '';
       };
 
-      enableSystemLogging = mkOption {
-        type = types.bool;
-        default = false;
+      log = mkOption {
+        type = types.submodule {
+          options = {
+            connections = mkOption {
+                type = types.bool;
+                default = false;
+                description = ''
+                     connections attempts made to the server.
+                '';
+            };
+            disconnections = mkOption {
+                type = types.bool;
+                default = false;
+                description = ''
+                     session terminations.
+                '';
+            };
+            statement = mkOption {
+                type = types.enum [ "none" "dll" "mod" "all" ];
+                default = "none";
+                description = ''
+                    Controls which SQL statements are ged.
+                '';
+            };
+            collector = mkOption {
+                type = types.bool;
+                default = false;
+                description = ''
+                   Enable the ging collector which is more robust
+                   then sys but uses files.
+                   ging collector will capture linking failure
+                   messages for example, and will never drop a message
+                   (at risk of freezing the system).
+                '';
+            };
+            destination = mkOption {
+                type = types.listOf(types.enum["stderr" "csvlog" "syslog" "eventlog"]);
+                default = ["stderr"];
+                description = ''
+                     where to send the log.
+                     csvlog needs to have the logging collector enabled.
+                     eventlog is for windows only (it's unlikely you run that).
+                '';
+            };
+          };
+        };
+        default = {};
         description = ''
-            Will enable system logging and log all queries.
-            journalctl -fu postgresql.service
+           Specify how to do logging.
+           For more info see: https://www.postgresql.org/docs/9.5/runtime-config-logging.html
         '';
       };
       enableTCPIP = mkOption {
