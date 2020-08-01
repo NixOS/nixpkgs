@@ -232,9 +232,12 @@ in
         '';
       };
 
+      # These values are merged with the ones defined externally, see:
+      # https://github.com/NixOS/nixpkgs/pull/10155
+      # https://github.com/NixOS/nixpkgs/pull/41745
       authorizedKeysFiles = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ".ssh/authorized_keys" ".ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
         description = "Files from which authorized keys are read.";
       };
 
@@ -463,12 +466,6 @@ in
         showMotd = true;
         unixAuth = cfg.passwordAuthentication;
       };
-
-    # These values are merged with the ones defined externally, see:
-    # https://github.com/NixOS/nixpkgs/pull/10155
-    # https://github.com/NixOS/nixpkgs/pull/41745
-    services.openssh.authorizedKeysFiles =
-      [ ".ssh/authorized_keys" ".ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
 
     services.openssh.extraConfig = mkOrder 0
       ''
