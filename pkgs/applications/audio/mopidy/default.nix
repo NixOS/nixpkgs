@@ -40,6 +40,8 @@ let
 
     mopidy-iris = callPackage ./iris.nix { };
 
+    mopidy-tunein = callPackage ./tunein.nix { };
+
   };
 
 in self
