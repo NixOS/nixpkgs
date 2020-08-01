@@ -11,24 +11,25 @@ let
     inherit (cfg) version;
     ubootEnabled = cfg.uboot.enable;
   };
-  extlinuxConfBuilder = pkgs.callPackage ../generic-extlinux-compatible/extlinux-conf-builder.nix { };
   raspberryPiBuilder = pkgs.callPackage ./raspberrypi-builder.nix { };
 
   builder = pkgs.writeScript "install-raspberrypi-bootloader.sh" (''
     #!${pkgs.runtimeShell}
     '${firmwareBuilder}' -d '${cfg.firmwareDir}' -c '${configTxt}'
   '' + (if cfg.uboot.enable then ''
-    '${extlinuxConfBuilder}' -g '${toString cfg.uboot.configurationLimit}' -t '${timeoutStr}' -c "$@"
+    ${config.boot.loader.generic-extlinux-compatible.installCmd} -c "$@"
   '' else ''
     '${raspberryPiBuilder}' -d '${cfg.firmwareDir}' -c "$@"
   ''));
-
-  timeoutStr = if blCfg.timeout == null then "-1" else toString blCfg.timeout;
 
   configTxt = pkgs.writeText "config.txt" cfg.firmwareConfig;
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "boot" "loader" "raspberryPi" "uboot" "configurationLimit" ] [ "boot" "loader" "generic-extlinux-compatible" "configurationLimit" ])
+  ];
+
   options = {
 
     boot.loader.raspberryPi = {
@@ -48,18 +49,7 @@ in
         description = lib.mdDoc "";
       };
 
-      uboot = {
-        enable = mkEnableOption "U-Boot as the bootloader for the Raspberry Pi";
-
-        configurationLimit = mkOption {
-          default = 20;
-          example = 10;
-          type = types.int;
-          description = lib.mdDoc ''
-            Maximum number of configurations in the boot menu.
-          '';
-        };
-      };
+      uboot.enable = mkEnableOption (lib.mdDoc "U-Boot as the bootloader for the Raspberry Pi");
 
       firmwareConfig = mkOption {
         type = types.lines;
@@ -99,8 +89,11 @@ in
       initramfs initrd followkernel
     ''));
 
-    system.build.installBootLoader = builder;
-    system.boot.loader.id = "raspberrypi";
+    boot.loader.generic-extlinux-compatible.enable = mkIf cfg.uboot.enable true;
+
+    # Override the generic-extlinux-compatible builder (if enabled) with our own
+    system.build.installBootLoader = mkForce builder;
+    system.boot.loader.id = mkForce "raspberrypi";
     system.boot.loader.kernelFile = pkgs.stdenv.hostPlatform.linux-kernel.target;
   };
 }

@@ -54,6 +54,18 @@ in
         '';
       };
 
+      installCmd = mkOption {
+        type = types.str;
+        readOnly = true;
+        internal = true;
+        description = lib.mdDoc ''
+          Contains the builder command used to install the bootloader, built for
+          the host architecture and honoring all options except the
+          `-c <path-to-default-configuration>` argument. Used to build other
+          bootloaders on top of this one.
+        '';
+      };
+
       populateCmd = mkOption {
         type = types.str;
         readOnly = true;
@@ -74,9 +86,12 @@ in
       + lib.optionalString (!cfg.useGenerationDeviceTree) " -r";
   in
     mkIf cfg.enable {
-      system.build.installBootLoader = "${builder} ${builderArgs} -c";
+      system.build.installBootLoader = "${cfg.installCmd} -c";
       system.boot.loader.id = "generic-extlinux-compatible";
 
-      boot.loader.generic-extlinux-compatible.populateCmd = "${populateBuilder} ${builderArgs}";
+      boot.loader.generic-extlinux-compatible = {
+        installCmd = "${builder} ${builderArgs}";
+        populateCmd = "${populateBuilder} ${builderArgs}";
+      };
     };
 }
