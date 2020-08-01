@@ -21031,7 +21031,6 @@ in
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
     };
-    nss = nss_3_44;
   };
 
   libreoffice-qt = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
