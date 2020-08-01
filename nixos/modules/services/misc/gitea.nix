@@ -170,6 +170,25 @@ in
         };
       };
 
+      ssh = {
+        enable = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Enable external SSH feature.";
+        };
+
+        clonePort = mkOption {
+          type = types.int;
+          default = 22;
+          example = 2222;
+          description = ''
+            SSH port displayed in clone URL.
+            The option is required to configure a service when the external visible port
+            differs from the local listening port i.e. if port forwarding is used.
+          '';
+        };
+      };
+
       appName = mkOption {
         type = types.str;
         default = "gitea: Gitea Service";
@@ -326,6 +345,13 @@ in
         (mkIf (!cfg.enableUnixSocket) {
           HTTP_ADDR = cfg.httpAddress;
           HTTP_PORT = cfg.httpPort;
+        })
+        (mkIf cfg.ssh.enable {
+          DISABLE_SSH = false;
+          SSH_PORT = cfg.ssh.clonePort;
+        })
+        (mkIf (!cfg.ssh.enable) {
+          DISABLE_SSH = true;
         })
       ];
 
