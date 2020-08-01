@@ -7180,6 +7180,12 @@
     githubId = 1153271;
     name = "Sander van der Burg";
   };
+  sarcasticadmin = {
+    email = "rob@sarcasticadmin.com";
+    github = "sarcasticadmin";
+    githubId = 30531572;
+    name = "Robert James Hernandez";
+  };
   sargon = {
     email = "danielehlers@mindeye.net";
     github = "sargon";
