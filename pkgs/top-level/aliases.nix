@@ -341,6 +341,7 @@ mapAliases ({
   otter-browser = throw "otter-browser has been removed from nixpkgs, as it was unmaintained"; # added 2020-02-02
   owncloudclient = owncloud-client;  # added 2016-08
   p11_kit = p11-kit; # added 2018-02-25
+  parity = openethereum; # added 2020-08-01
   parquet-cpp = arrow-cpp; # added 2018-09-08
   pass-otp = pass.withExtensions (ext: [ext.pass-otp]); # added 2018-05-04
   perlXMLParser = perlPackages.XMLParser; # added 2018-10-12
