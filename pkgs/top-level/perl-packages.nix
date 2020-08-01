@@ -3535,6 +3535,27 @@ let
     };
   };
 
+  CPANMini = buildPerlPackage {
+    pname = "CPAN-Mini";
+    version = "1.111016";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/CPAN-Mini-1.111016.tar.gz";
+      sha256 = "5a297afc3e367ad80811464d4eb7e4dd3caff8ba499cdd2b558f6279443a7657";
+    };
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+    propagatedBuildInputs = [ FileHomeDir LWP LWPProtocolHttps URI ];
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/minicpan
+    '';
+
+    meta = {
+      homepage = "https://github.com/rjbs/CPAN-Mini";
+      description = "Create a minimal mirror of CPAN";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CpanelJSONXS = buildPerlPackage {
     pname = "Cpanel-JSON-XS";
     version = "4.17";

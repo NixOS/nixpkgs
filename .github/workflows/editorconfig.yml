@@ -1,0 +1,22 @@
+name: actions
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  editorconfig:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: technote-space/get-diff-action@v2.0.2
+    - name: editorconfig check
+      env:
+        VERSION: "2.0.4"
+        OS: "linux"
+        ARCH: "amd64"
+      run: |
+        curl -sSf -O -L -C - https://github.com/editorconfig-checker/editorconfig-checker/releases/download/$VERSION/ec-$OS-$ARCH.tar.gz && \
+        tar xzf ec-$OS-$ARCH.tar.gz && \
+        ./bin/ec-$OS-$ARCH -disable-indentation ${{ env.GIT_DIFF }}

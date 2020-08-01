@@ -1106,6 +1106,8 @@ in {
 
   pyperf = callPackage ../development/python-modules/pyperf { };
 
+  pyphotonfile = callPackage ../development/python-modules/pyphotonfile { };
+
   pefile = callPackage ../development/python-modules/pefile { };
 
   perfplot = callPackage ../development/python-modules/perfplot { };
@@ -1956,6 +1958,8 @@ in {
   noise = callPackage ../development/python-modules/noise {};
 
   backcall = callPackage ../development/python-modules/backcall { };
+
+  backoff = callPackage ../development/python-modules/backoff { };
 
   backports_abc = callPackage ../development/python-modules/backports_abc { };
 
@@ -7672,6 +7676,8 @@ in {
   webrtcvad = callPackage ../development/python-modules/webrtcvad { };
 
   pykwalify = callPackage ../development/python-modules/pykwalify { };
+
+  west = callPackage ../development/python-modules/west { };
 
   wfuzz = callPackage ../development/python-modules/wfuzz { };
 

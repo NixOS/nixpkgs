@@ -79,6 +79,16 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker rmi ${examples.nix.imageName}",
         )
 
+    with subtest(
+        "Ensure (layered) nix store has correct permissions "
+        "and that the container starts when its process does not have uid 0"
+    ):
+        docker.succeed(
+            "docker load --input='${examples.bashLayeredWithUser}'",
+            "docker run -u somebody --rm ${examples.bashLayeredWithUser.imageName} ${pkgs.bash}/bin/bash -c 'test 555 == $(stat --format=%a /nix) && test 555 == $(stat --format=%a /nix/store)'",
+            "docker rmi ${examples.bashLayeredWithUser.imageName}",
+        )
+
     with subtest("The nix binary symlinks are intact"):
         docker.succeed(
             "docker load --input='${examples.nix}'",

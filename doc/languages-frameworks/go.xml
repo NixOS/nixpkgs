@@ -64,6 +64,11 @@ pet = buildGoModule rec {
       <varname>subPackages</varname> limits the builder from building child packages that have not been listed. If <varname>subPackages</varname> is not specified, all child packages will be built.
      </para>
     </callout>
+    <callout arearefs='ex-buildGoModule-3'>
+     <para>
+         <varname>runVend</varname> runs the vend command to generate the vendor directory. This is useful if your code depends on c code and go mod tidy does not include the needed sources to build.
+     </para>
+    </callout>
    </calloutlist>
   </para>
 
@@ -72,7 +77,7 @@ pet = buildGoModule rec {
 
     When `null` is used as a value, rather than fetching the dependencies
     and vendoring them, we use the vendoring included within the source repo.
-    If you'd like to not have to update this field on dependency changes, 
+    If you'd like to not have to update this field on dependency changes,
     run `go mod vendor` in your source repo and set 'vendorSha256 = null;'
   </para>
  </section>

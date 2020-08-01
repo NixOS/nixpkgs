@@ -20,14 +20,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.18.1";
+  version = "0.18.2";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "1g4mfgygyl143k0k6d3cb8b2l05ahiamlcqs1iqi66pc73cax4z6";
+    sha256 = "0x6h8g017mbpjkpkb1y8asyfdc48bgjzmj5gachsp5cf5jcqwir2";
   };
 
   buildInputs = [
@@ -85,9 +85,15 @@ buildPythonApplication rec {
 
   checkInputs = [ pillow ];
 
-  checkPhase = ''
-    ${python.interpreter} test.py
-  '';
+  checkPhase =
+    let buildBinPath =
+      if stdenv.isDarwin
+        then "kitty.app/Contents/MacOS"
+        else "linux-package/bin";
+    in
+    ''
+      env PATH="${buildBinPath}:$PATH" ${python.interpreter} test.py
+    '';
 
   installPhase = ''
     runHook preInstall

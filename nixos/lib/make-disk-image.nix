@@ -71,7 +71,7 @@ let format' = format; in let
     vdi   = "vdi";
     vpc   = "vhd";
     raw   = "img";
-  }.${format};
+  }.${format} or format;
 
   rootPartition = { # switch-case
     legacy = "1";

@@ -45,13 +45,7 @@
   <title>How to play</title>
 
   <para>
-   For 64-bit systems it's important to have
-<programlisting>hardware.opengl.driSupport32Bit = true;</programlisting>
-   in your <filename>/etc/nixos/configuration.nix</filename>. You'll also need
-<programlisting>hardware.pulseaudio.support32Bit = true;</programlisting>
-   if you are using PulseAudio - this will enable 32bit ALSA apps integration. To use the Steam controller or other Steam supported controllers such as the DualShock 4 or Nintendo Switch Pro, you need to add
-<programlisting>hardware.steam-hardware.enable = true;</programlisting>
-   to your configuration.
+   Use <programlisting>programs.steam.enable = true;</programlisting> if you want to add steam to systemPackages and also enable a few workarrounds aswell as Steam controller support or other Steam supported controllers such as the DualShock 4 or Nintendo Switch Pr.
   </para>
  </section>
 
