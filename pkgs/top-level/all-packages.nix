@@ -6812,6 +6812,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  sd-mux-ctrl = callPackage ../tools/misc/sd-mux-ctrl { };
+
   sd-switch = callPackage ../os-specific/linux/sd-switch { };
 
   sdate = callPackage ../tools/misc/sdate { };
