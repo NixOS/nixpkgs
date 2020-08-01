@@ -9031,6 +9031,11 @@
     githubId = 1319905;
     name = "Uma Zalakain";
   };
+  zandroidius = {
+    email = "abodoh.github@gmail.com";
+    github = "zandroidius";
+    name = "Alexander Bodoh";
+  };
   zaninime = {
     email = "francesco@zanini.me";
     github = "zaninime";
