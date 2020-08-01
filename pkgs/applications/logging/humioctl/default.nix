@@ -1,9 +1,9 @@
 { buildGoModule, fetchFromGitHub, installShellFiles, stdenv }:
 
 let
-  humioCtlVersion = "0.25.0";
-  sha256 = "1x8354m410nf9g167v0i1c77s5w2by7smdlyjwl89ixgdjw04ay3";
-  vendorSha256 = "14bysjgvahr56hvd8walym11hh721i1q2g503n8m68wdzrrym4qy";
+  humioCtlVersion = "0.26.0";
+  sha256 = "1j33hmvhkb546dbi2qd5hmpcv715yg9rnpxicc1mayr9f1i2aj2i";
+  vendorSha256 = "1l2wa4w43srfrkb4qrgiyzdb6bnaqvp9g3fnrln6bhrcw6jsgj4z";
 in buildGoModule {
     name = "humioctl-${humioCtlVersion}";
     pname = "humioctl";
@@ -23,7 +23,6 @@ in buildGoModule {
     nativeBuildInputs = [ installShellFiles ];
 
     postInstall = ''
-      mv $out/bin/cli $out/bin/humioctl
       $out/bin/humioctl completion bash > humioctl.bash
       $out/bin/humioctl completion zsh > humioctl.zsh
       installShellCompletion humioctl.{bash,zsh}
