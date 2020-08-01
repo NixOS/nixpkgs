@@ -3236,6 +3236,8 @@ in
 
   wallutils = callPackage ../tools/graphics/wallutils { };
 
+  wayland-utils = callPackage ../tools/wayland/wayland-utils { };
+
   wev = callPackage ../tools/misc/wev { };
 
   wl-clipboard = callPackage ../tools/misc/wl-clipboard { };
