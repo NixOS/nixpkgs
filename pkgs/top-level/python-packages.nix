@@ -549,6 +549,8 @@ in {
 
   deepdiff = callPackage ../development/python-modules/deepdiff { };
 
+  deepmerge = callPackage ../development/python-modules/deepmerge { };
+
   django-sesame = callPackage ../development/python-modules/django-sesame { };
 
   bravado-core = callPackage ../development/python-modules/bravado-core { };
