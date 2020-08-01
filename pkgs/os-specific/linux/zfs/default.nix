@@ -42,7 +42,7 @@ let
         inherit rev sha256;
       };
 
-      patches = [ ] ++ extraPatches;
+      patches = [ ./BACKPORT-Linux-5.8-compat-__vmalloc.patch ] ++ extraPatches;
 
       postPatch = optionalString buildKernel ''
         patchShebangs scripts
