@@ -618,6 +618,17 @@ services.dokuwiki."mywiki" = {
 </programlisting>
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The <xref linkend="opt-services.postgresql.dataDir"/> option is now set to <literal>"/var/lib/postgresql/${cfg.package.psqlSchema}"</literal> regardless of your
+      <xref linkend="opt-system.stateVersion"/>. Users with an existing postgresql install that have a <xref linkend="opt-system.stateVersion"/> of <literal>17.09</literal> or below
+      should double check what the value of their <xref linkend="opt-services.postgresql.dataDir"/> option is (<literal>/var/db/postgresql</literal>) and then explicitly
+      set this value to maintain compatibility:
+<programlisting>
+services.postgresql.dataDir = "/var/db/postgresql";
+</programlisting>
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

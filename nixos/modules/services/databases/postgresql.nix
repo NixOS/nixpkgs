@@ -21,7 +21,7 @@ let
       listen_addresses = '${if cfg.enableTCPIP then "*" else "localhost"}'
       port = ${toString cfg.port}
       ${cfg.extraConfig}
-    ''; 
+    '';
 
   groupAccessAvailable = versionAtLeast postgresql.version "11.0";
 
@@ -55,6 +55,7 @@ in
 
       dataDir = mkOption {
         type = types.path;
+        defaultText = "/var/lib/postgresql/\${config.services.postgresql.package.psqlSchema}";
         example = "/var/lib/postgresql/11";
         description = ''
           Data directory for PostgreSQL.
@@ -249,10 +250,7 @@ in
             else if versionAtLeast config.system.stateVersion "16.03" then pkgs.postgresql_9_5
             else throw "postgresql_9_4 was removed, please upgrade your postgresql version.");
 
-    services.postgresql.dataDir =
-      mkDefault (if versionAtLeast config.system.stateVersion "17.09"
-                  then "/var/lib/postgresql/${cfg.package.psqlSchema}"
-                  else "/var/db/postgresql");
+    services.postgresql.dataDir = mkDefault "/var/lib/postgresql/${cfg.package.psqlSchema}";
 
     services.postgresql.authentication = mkAfter
       ''
