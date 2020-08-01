@@ -1000,6 +1000,8 @@ in
 
   gams = callPackage ../tools/misc/gams (config.gams or {});
 
+  gem = callPackage ../applications/audio/pd-plugins/gem { };
+
   git-fire = callPackage ../tools/misc/git-fire { };
 
   git-repo-updater = python3Packages.callPackage ../development/tools/git-repo-updater { };
