@@ -25908,6 +25908,8 @@ in
 
   attract-mode = callPackage ../misc/emulators/attract-mode { };
 
+  autotiling = python3Packages.callPackage ../misc/autotiling { };
+
   beep = callPackage ../misc/beep { };
 
   bees = callPackage ../tools/filesystems/bees { };
