@@ -2,6 +2,7 @@
 , cython
 , eventlet
 , futures
+, iana-etc
 , geomet
 , libev
 , mock
@@ -30,6 +31,14 @@ buildPythonPackage rec {
   buildInputs = [ libev ];
   propagatedBuildInputs = [ six geomet ]
     ++ lib.optionals (pythonOlder "3.4") [ futures ];
+
+  # Make /etc/protocols accessible to fix socket.getprotobyname('tcp') in sandbox.
+  # Prevents `error: protocol not found`.
+  # See https://github.com/NixOS/nixpkgs/pull/91662#issuecomment-666727467.
+  preCheck = stdenv.lib.optionalString stdenv.isLinux ''
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols
+  '';
+  postCheck = "unset NIX_REDIRECTS";
 
   checkInputs = [ eventlet mock nose pytest pytz pyyaml sure scales gremlinpython gevent twisted ];
 
