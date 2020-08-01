@@ -2350,6 +2350,8 @@ in {
 
   click-completion = callPackage ../development/python-modules/click-completion {};
 
+  click-datetime = callPackage ../development/python-modules/click-datetime { };
+
   click-default-group = callPackage ../development/python-modules/click-default-group { };
 
   click-didyoumean = callPackage ../development/python-modules/click-didyoumean {};
