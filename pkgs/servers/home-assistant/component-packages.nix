@@ -824,7 +824,7 @@
     "torque" = ps: with ps; [ aiohttp-cors];
     "totalconnect" = ps: with ps; [ ]; # missing inputs: total_connect_client
     "touchline" = ps: with ps; [ ]; # missing inputs: pytouchline
-    "tplink" = ps: with ps; [ ]; # missing inputs: pyHS100
+    "tplink" = ps: with ps; [ pyhs100];
     "tplink_lte" = ps: with ps; [ ]; # missing inputs: tp-connected
     "traccar" = ps: with ps; [ aiohttp-cors stringcase]; # missing inputs: pytraccar
     "trackr" = ps: with ps; [ ]; # missing inputs: pytrackr
