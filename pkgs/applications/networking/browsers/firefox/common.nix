@@ -53,7 +53,7 @@
 
 # dependencies requires for stable backports
 
-, rust-cbindgen_0_14_1
+, rust-cbindgen_latest
 
 ## other
 
@@ -100,7 +100,7 @@ let
 
 nss_pkg = if lib.versionAtLeast ffversion "74" then nss_latest else nss;
 sqlite_pkg = if lib.versionAtLeast ffversion "74" then sqlite_3_31_1 else sqlite;
-rust-cbindgen_pkg = if lib.versionAtLeast ffversion "77" then rust-cbindgen_0_14_1 else rust-cbindgen;
+rust-cbindgen_pkg = if lib.versionAtLeast ffversion "77" then rust-cbindgen_latest else rust-cbindgen;
 
 in
 

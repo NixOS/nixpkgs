@@ -8883,7 +8883,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  rust-cbindgen_0_14_1 = callPackage ../development/tools/rust/cbindgen/0_14_1.nix {
+  rust-cbindgen_latest = callPackage ../development/tools/rust/cbindgen/0_14_3.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
