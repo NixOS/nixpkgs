@@ -212,7 +212,7 @@
     "emoncms_history" = ps: with ps; [ ];
     "emulated_hue" = ps: with ps; [ aiohttp-cors];
     "emulated_roku" = ps: with ps; [ ]; # missing inputs: emulated_roku
-    "enigma2" = ps: with ps; [ ]; # missing inputs: openwebifpy
+    "enigma2" = ps: with ps; [ openwebifpy];
     "enocean" = ps: with ps; [ ]; # missing inputs: enocean
     "enphase_envoy" = ps: with ps; [ ]; # missing inputs: envoy_reader
     "entur_public_transport" = ps: with ps; [ ]; # missing inputs: enturclient
