@@ -49,3 +49,11 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 + lib.optionalString (hostPlatform.isDarwin) ''
   export ac_cv_func_aligned_alloc=no
 ''
+
+# In order to properly install on macOS Catalina, strip(1) upon
+# installation must not remove external symbols, otherwise the install
+# step errors with "symbols referenced by indirect symbol table
+# entries that can't be stripped".
++ lib.optionalString (hostPlatform.isDarwin) ''
+  export STRIP='strip -x'
+''
