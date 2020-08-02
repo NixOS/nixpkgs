@@ -5,13 +5,13 @@
 let
   honggfuzz = stdenv.mkDerivation rec {
     pname = "honggfuzz";
-    version = "2.2";
+    version = "2.3.1";
 
     src = fetchFromGitHub {
       owner = "google";
       repo = pname;
       rev = "${version}";
-      sha256 = "0ycpx087mhv5s7w01chg2b6rfb3zgfpp9in0x73kpv7y4dcvg7gw";
+      sha256 = "0dcl5a5jykgfmnfj42vl7kah9k26wg38l2g6yfh5pssmlf0nax33";
     };
     enableParallelBuilding = true;
 
