@@ -23589,6 +23589,11 @@ in
 
   pybitmessage = callPackage ../applications/networking/instant-messengers/pybitmessage { };
 
+  pyspread-app = libsForQt5.callPackage ../applications/misc/pyspread-app/default.nix {
+    inherit python3;
+    inherit (python3Packages) pyspread;
+  };
+
   qbittorrent = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent { };
   qbittorrent-nox = qbittorrent.override {
     guiSupport = false;
