@@ -70466,10 +70466,10 @@ in
   mastodon-bot = nodeEnv.buildNodePackage {
     name = "mastodon-bot";
     packageName = "mastodon-bot";
-    version = "1.0.2";
+    version = "1.0.4";
     src = fetchurl {
-      url = "https://registry.npmjs.org/mastodon-bot/-/mastodon-bot-1.0.2.tgz";
-      sha512 = "vez108o65/wnYCRtkqkdqZTeY44rwPEezRZBZG7tZ8x9CCCni21ugu6s1LkEhEer2HVmWmLw/EGuCXS8ip45eQ==";
+      url = "https://registry.npmjs.org/mastodon-bot/-/mastodon-bot-1.0.4.tgz";
+      sha512 = "342c1f2dlr91k8w8i2nkm42pyfhq1ss0qhs8v9jl28i4bxzas47s61sxf1igpvahql37g70r1x9zxv1agw15c59m48x0cpp875yljl0";
     };
     dependencies = [
       sources."acorn-5.7.4"
