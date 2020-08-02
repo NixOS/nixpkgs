@@ -54,6 +54,9 @@ end_of_line = unset
 [*.lock]
 indent_size = unset
 
+[deps.nix]
+insert_final_newline = unset
+
 [gemset.nix]
 insert_final_newline = unset
 
