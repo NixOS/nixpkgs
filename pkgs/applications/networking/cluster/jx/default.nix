@@ -19,8 +19,10 @@ buildGoModule rec {
 
   buildFlagsArray = ''
     -ldflags=
+    -s -w
     -X github.com/jenkins-x/jx/pkg/version.Version=${version}
-    -X github.com/jenkins-x/jx/pkg/version.Revision=${version}
+    -X github.com/jenkins-x/jx/pkg/version.Revision=${src.rev}
+    -X github.com/jenkins-x/jx/pkg/version.GitTreeState=clean
   '';
 
   postInstall = ''
