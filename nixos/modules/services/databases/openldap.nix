@@ -1,20 +1,19 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.openldap;
   openldap = cfg.package;
 
   dataFile = pkgs.writeText "ldap-contents.ldif" cfg.declarativeContents;
-  configFile = pkgs.writeText "slapd.conf" ((optionalString cfg.defaultSchemas ''
-    include ${openldap.out}/etc/schema/core.schema
-    include ${openldap.out}/etc/schema/cosine.schema
-    include ${openldap.out}/etc/schema/inetorgperson.schema
-    include ${openldap.out}/etc/schema/nis.schema
+  configFile = pkgs.writeText "slapd.conf" ((optionalString (cfg.defaultSchemas != null && cfg.defaultSchemas) ''
+    include ${openldap}/etc/schema/core.schema
+    include ${openldap}/etc/schema/cosine.schema
+    include ${openldap}/etc/schema/inetorgperson.schema
+    include ${openldap}/etc/schema/nis.schema
   '') + ''
-    ${cfg.extraConfig}
+    pidfile /run/slapd/slapd.pid
+    ${if cfg.extraConfig != null then cfg.extraConfig else ""}
     database ${cfg.database}
     suffix ${cfg.suffix}
     rootdn ${cfg.rootdn}
@@ -24,20 +23,79 @@ let
       include ${cfg.rootpwFile}
     ''}
     directory ${cfg.dataDir}
-    ${cfg.extraDatabaseConfig}
+    ${if cfg.extraDatabaseConfig != null then cfg.extraDatabaseConfig else ""}
   '');
-  configOpts = if cfg.configDir == null then "-f ${configFile}"
-               else "-F ${cfg.configDir}";
-in
 
-{
+  configDir = if cfg.configDir != null then cfg.configDir else "/etc/openldap/slapd.d";
 
-  ###### interface
+  ldapValueType = let
+    singleLdapValueType = types.either types.str (types.submodule {
+      options = {
+        path = mkOption {
+          type = types.path;
+          description = ''
+            A path containing the LDAP attribute. This is included at run-time, so
+            is recommended for storing secrets.
+          '';
+        };
+      };
+    });
+  in types.either singleLdapValueType (types.listOf singleLdapValueType);
 
+  ldapAttrsType =
+    let
+      options = {
+        attrs = mkOption {
+          type = types.attrsOf ldapValueType;
+          default = {};
+          description = "Attributes of the parent entry.";
+        };
+        children = mkOption {
+          # Hide the child attributes, to avoid infinite recursion in e.g. documentation
+          # Actual Nix evaluation is lazy, so this is not an issue there
+          type = let
+            hiddenOptions = lib.mapAttrs (name: attr: attr // { visible = false; }) options;
+          in types.attrsOf (types.submodule { options = hiddenOptions; });
+          default = {};
+          description = "Child entries of the current entry, with recursively the same structure.";
+          example = lib.literalExample ''
+          {
+            "cn=schema" = {
+              # The attribute used in the DN must be defined
+              attrs = { cn = "schema"; };
+              children = {
+                # This entry's DN is expanded to "cn=foo,cn=schema"
+                "cn=foo" = { ... };
+              };
+              # These includes are inserted after "cn=schema", but before "cn=foo,cn=schema"
+              includes = [ ... ];
+            };
+          }
+        '';
+        };
+        includes = mkOption {
+          type = types.listOf types.path;
+          default = [];
+          description = ''
+          LDIF files to include after the parent's attributes but before its children.
+        '';
+        };
+      };
+    in types.submodule { inherit options; };
+
+  valueToLdif = attr: values: let
+    singleValueToLdif = value: if lib.isAttrs value then "${attr}:< file://${value.path}" else "${attr}: ${value}";
+  in if lib.isList values then map singleValueToLdif values else [ (singleValueToLdif values) ];
+
+  attrsToLdif = dn: { attrs, children, includes, ... }: [''
+    dn: ${dn}
+    ${lib.concatStringsSep "\n" (lib.flatten (lib.mapAttrsToList valueToLdif attrs))}
+  ''] ++ (map (path: "include: file://${path}\n") includes) ++ (
+    lib.flatten (lib.mapAttrsToList (name: value: attrsToLdif "${name},${dn}" value) children)
+  );
+in {
   options = {
-
     services.openldap = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -77,47 +135,91 @@ in
         example = [ "ldaps:///" ];
       };
 
+      settings = mkOption {
+        type = ldapAttrsType;
+        description = "Configuration for OpenLDAP, in OLC format";
+        example = lib.literalExample ''
+          {
+            attrs.olcLogLevel = [ "stats" ];
+            children = {
+              "cn=schema".includes = [
+                 "\${pkgs.openldap}/etc/schema/core.ldif"
+                 "\${pkgs.openldap}/etc/schema/cosine.ldif"
+                 "\${pkgs.openldap}/etc/schema/inetorgperson.ldif"
+              ];
+              "olcDatabase={-1}frontend" = {
+                attrs = {
+                  objectClass = "olcDatabaseConfig";
+                  olcDatabase = "{-1}frontend";
+                  olcAccess = [ "{0}to * by dn.exact=uidNumber=0+gidNumber=0,cn=peercred,cn=external,cn=auth manage stop by * none stop" ];
+                };
+              };
+              "olcDatabase={0}config" = {
+                attrs = {
+                  objectClass = "olcDatabaseConfig";
+                  olcDatabase = "{0}config";
+                  olcAccess = [ "{0}to * by * none break" ];
+                };
+              };
+              "olcDatabase={1}mdb" = {
+                attrs = {
+                  objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
+                  olcDatabase = "{1}mdb";
+                  olcDbDirectory = "/var/db/ldap";
+                  olcDbIndex = [
+                    "objectClass eq"
+                    "cn pres,eq"
+                    "uid pres,eq"
+                    "sn pres,eq,subany"
+                  ];
+                  olcSuffix = "dc=example,dc=com";
+                  olcAccess = [ "{0}to * by * read break" ];
+                };
+              };
+            };
+          };
+        '';
+      };
+
+      # These options are translated into settings
       dataDir = mkOption {
-        type = types.path;
+        type = types.nullOr types.path;
         default = "/var/db/openldap";
         description = "The database directory.";
       };
 
       defaultSchemas = mkOption {
-        type = types.bool;
+        type = types.nullOr types.bool;
         default = true;
+
         description = ''
           Include the default schemas core, cosine, inetorgperson and nis.
-          This setting will be ignored if configDir is set.
         '';
       };
 
       database = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         default = "mdb";
-        description = ''
-          Database type to use for the LDAP.
-          This setting will be ignored if configDir is set.
-        '';
+        description = "Backend to use for the first database.";
       };
 
       suffix = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
+        default = null;
         example = "dc=example,dc=org";
         description = ''
-          Specify the DN suffix of queries that will be passed to this backend
-          database.
-          This setting will be ignored if configDir is set.
+          Specify the DN suffix of queries that will be passed to the first
+          database database.
         '';
       };
 
       rootdn = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
+        default = null;
         example = "cn=admin,dc=example,dc=org";
         description = ''
           Specify the distinguished name that is not subject to access control
           or administrative limit restrictions for operations on this database.
-          This setting will be ignored if configDir is set.
         '';
       };
 
@@ -125,10 +227,9 @@ in
         type = types.nullOr types.str;
         default = null;
         description = ''
-          Password for the root user.
-          This setting will be ignored if configDir is set.
-          Using this option will store the root password in plain text in the
-          world-readable nix store. To avoid this the <literal>rootpwFile</literal> can be used.
+          Password for the root user.Using this option will store the root
+          password in plain text in the world-readable nix store. To avoid this
+          the <literal>rootpwFile</literal> can be used.
         '';
       };
 
@@ -137,25 +238,36 @@ in
         default = null;
         description = ''
           Password file for the root user.
-          The file should contain the string <literal>rootpw</literal> followed by the password.
-          e.g.: <literal>rootpw mysecurepassword</literal>
+
+          If the deprecated <literal>extraConfig</literal> or
+          <literal>extraDatabaseConfig</literal> options are set, this should
+          contain <literal>rootpw</literal> followed by the password
+          (e.g. <literal>rootpw thePasswordHere</literal>).
+
+          Otherwise the file should contain only the password (no trailing
+          newline or leading <literal>rootpw</literal>).
         '';
       };
 
       logLevel = mkOption {
-        type = types.str;
-        default = "0";
-        example = "acl trace";
-        description = "The log level selector of slapd.";
+        type = types.nullOr (types.listOf types.str);
+        default = null;
+        example = literalExample "[ \"acl\" \"trace\" ]";
+        description = "The log level.";
       };
 
+      # This option overrides settings
       configDir = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = "Use this optional config directory instead of using slapd.conf";
+        description = ''
+          Use this optional config directory instead of generating one from the
+          <literal>settings</literal> option.
+        '';
         example = "/var/db/slapd.d";
       };
 
+      # These options are deprecated
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -164,10 +276,10 @@ in
         ";
         example = literalExample ''
             '''
-            include ${openldap.out}/etc/schema/core.schema
-            include ${openldap.out}/etc/schema/cosine.schema
-            include ${openldap.out}/etc/schema/inetorgperson.schema
-            include ${openldap.out}/etc/schema/nis.schema
+            include ${openldap}/etc/schema/core.schema
+            include ${openldap}/etc/schema/cosine.schema
+            include ${openldap}/etc/schema/inetorgperson.schema
+            include ${openldap}/etc/schema/nis.schema
 
             database bdb
             suffix dc=example,dc=org
@@ -244,57 +356,156 @@ in
   };
 
   meta = {
-    maintainers = [ lib.maintainers.mic92 ];
+    maintainers = with lib.maintainters; [ mic92 kwohlfahrt ];
   };
 
-
-  ###### implementation
-
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = cfg.configDir != null || cfg.rootpwFile != null || cfg.rootpw != null;
-        message = "services.openldap: Unless configDir is set, either rootpw or rootpwFile must be set";
-      }
-    ];
+    warnings = let
+      deprecations = [
+        { old = "logLevel"; new = "attrs.olcLogLevel"; }
+        { old = "defaultSchemas";
+          new = "children.\"cn=schema\".includes";
+          newValue = "[\n    ${lib.concatStringsSep "\n    " [
+            "\${pkgs.openldap}/etc/schema/core.ldif"
+            "\${pkgs.openldap}/etc/schema/cosine.ldif"
+            "\${pkgs.openldap}/etc/schema/inetorgperson.ldif"
+            "\${pkgs.openldap}/etc/schema/nis.ldif"
+          ]}\n  ]"; }
+        { old = "database"; new = "children.\"cn={1}${cfg.database}\""; newValue = "{ }"; }
+        { old = "suffix"; new = "children.\"cn={1}${cfg.database}\".attrs.olcSuffix"; }
+        { old = "dataDir"; new = "children.\"cn={1}${cfg.database}\".attrs.olcDbDirectory"; }
+        { old = "rootdn"; new = "children.\"cn={1}${cfg.database}\".attrs.olcRootDN"; }
+        { old = "rootpw"; new = "children.\"cn={1}${cfg.database}\".attrs.olcRootPW"; }
+        { old = "rootpwFile";
+          new = "children.\"cn={1}${cfg.database}\".attrs.olcRootPW";
+          newValue = "{ path = \"${cfg.rootpwFile}\"; }";
+          note = "The file should contain only the password (without \"rootpw \" as before)"; }
+      ];
+    in (optional (cfg.extraConfig != "" || cfg.extraDatabaseConfig != "") ''
+      The options `extraConfig` and `extraDatabaseConfig` of `services.openldap`
+      are deprecated. This is due to the deprecation of `slapd.conf`
+      upstream. Please migrate to `services.openldap.settings`.
+
+      After deploying this configuration, you can run:
+        slapcat -F ${configDir} -n0 -H 'ldap:///???(!(objectClass=olcSchemaConfig))'
+      on the same host to print your current configuration in LDIF format,
+      which should be straightforward to convert into Nix settings.
+    '') ++ (flatten (map (args@{old, new, ...}: lib.optional ((lib.hasAttr old cfg) && (lib.getAttr old cfg) != null) ''
+      The attribute `services.openldap.${old}` is deprecated. Please set it to
+      `null` and use the following option instead:
+
+        services.openldap.settings.${new} = ${args.newValue or (
+          let oldValue = (getAttr old cfg);
+          in if (isList oldValue) then "[ ${concatStringsSep " " oldValue} ]" else oldValue
+        )}
+    '') deprecations)) ++ (optional (cfg.configDir != null && (versionOlder config.system.stateVersion "20.09")) ''
+      The attribute `services.openldap.settings` now exists, and may be more
+      useful than `services.openldap.configDir`. If you continue to use
+      `configDir`, ensure that `olcPidFile` is set to "/run/slapd/slapd.pid".
+
+      Set `system.stateVersion` to "20.09" or greater to silence this message.
+    '');
+
+    assertions = [{
+      assertion = !(cfg.rootpwFile != null && cfg.rootpw != null);
+      message = "services.openldap: at most one of rootpw or rootpwFile must be set";
+    }];
 
     environment.systemPackages = [ openldap ];
+
+    # Literal attributes must always be set (even if other top-level attributres are deprecated)
+    services.openldap.settings = {
+      attrs = {
+        objectClass = "olcGlobal";
+        cn = "config";
+        olcPidFile = "/run/slapd/slapd.pid";
+      } // (lib.optionalAttrs (cfg.logLevel != null) {
+        olcLogLevel = cfg.logLevel;
+      });
+      children = {
+        "cn=schema" = {
+          attrs = {
+            cn = "schema";
+            objectClass = "olcSchemaConfig";
+          };
+          includes = lib.optionals (cfg.defaultSchemas != null && cfg.defaultSchemas) [
+            "${openldap}/etc/schema/core.ldif"
+            "${openldap}/etc/schema/cosine.ldif"
+            "${openldap}/etc/schema/inetorgperson.ldif"
+            "${openldap}/etc/schema/nis.ldif"
+          ];
+        };
+      } // (lib.optionalAttrs (cfg.database != null) {
+        "olcDatabase={1}${cfg.database}".attrs = {
+          # objectClass is case-insensitive, so don't need to capitalize ${database}
+          objectClass = [ "olcdatabaseconfig" "olc${cfg.database}config" ];
+          olcDatabase = "{1}${cfg.database}";
+        } // (lib.optionalAttrs (cfg.suffix != null) {
+          olcSuffix = cfg.suffix;
+        }) // (lib.optionalAttrs (cfg.dataDir != null) {
+          olcDbDirectory = cfg.dataDir;
+        }) // (lib.optionalAttrs (cfg.rootdn != null) {
+          olcRootDN = cfg.rootdn; # TODO: Optional
+        }) // (lib.optionalAttrs (cfg.rootpw != null || cfg.rootpwFile != null) {
+          olcRootPW = (if cfg.rootpwFile != null then { path = cfg.rootpwFile; } else cfg.rootpw); # TODO: Optional
+        });
+      });
+    };
 
     systemd.services.openldap = {
       description = "LDAP server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      preStart = ''
+      preStart = let
+        dbSettings = lib.filterAttrs (name: value: lib.hasPrefix "olcDatabase=" name) cfg.settings.children;
+        dataDirs = lib.mapAttrsToList (name: value: value.attrs.olcDbDirectory) dbSettings;
+        settingsFile = pkgs.writeText "config.ldif" (lib.concatStringsSep "\n" (attrsToLdif "cn=config" cfg.settings));
+      in ''
         mkdir -p /run/slapd
         chown -R "${cfg.user}:${cfg.group}" /run/slapd
-        ${optionalString (cfg.declarativeContents != null) ''
-          rm -Rf "${cfg.dataDir}"
-        ''}
-        mkdir -p "${cfg.dataDir}"
-        ${optionalString (cfg.declarativeContents != null) ''
-          ${openldap.out}/bin/slapadd ${configOpts} -l ${dataFile}
-        ''}
-        chown -R "${cfg.user}:${cfg.group}" "${cfg.dataDir}"
 
-        ${openldap}/bin/slaptest ${configOpts}
+        mkdir -p '${configDir}' ${lib.escapeShellArgs dataDirs}
+        chown "${cfg.user}:${cfg.group}" '${configDir}' ${lib.escapeShellArgs dataDirs}
+
+        ${lib.optionalString (cfg.configDir == null) (
+          if (cfg.extraConfig != "" || cfg.extraDatabaseConfig != "") then ''
+            rm -Rf '${configDir}'/*
+            # -u disables config generation, so just ignore the return code
+            ${openldap}/bin/slaptest -f ${configFile} -F ${configDir} || true
+          '' else ''
+            rm -Rf '${configDir}'/*
+            ${openldap}/bin/slapadd -F ${configDir} -n0 -l ${settingsFile}
+          ''
+        )}
+        chown -R "${cfg.user}:${cfg.group}" '${configDir}'
+
+        ${optionalString (cfg.declarativeContents != null) ''
+          rm -Rf '${lib.head dataDirs}'/*
+          ${openldap}/bin/slapadd -F ${configDir} -n1 -l ${dataFile}
+          chown -R "${cfg.user}:${cfg.group}" ${lib.escapeShellArgs dataDirs}
+        ''}
+
+        ${openldap}/bin/slaptest -u -F ${configDir}
       '';
-      serviceConfig.ExecStart =
-        "${openldap.out}/libexec/slapd -d '${cfg.logLevel}' " +
-          "-u '${cfg.user}' -g '${cfg.group}' " +
-          "-h '${concatStringsSep " " cfg.urlList}' " +
-          "${configOpts}";
+      serviceConfig = {
+        ExecStart = lib.concatStringsSep " " [
+          "${openldap}/libexec/slapd"
+          "-u '${cfg.user}'"
+          "-g '${cfg.group}'"
+          "-h '${concatStringsSep " " cfg.urlList}'"
+          "-F ${configDir}"
+        ];
+        Type = "forking";
+        PIDFile = cfg.settings.attrs.olcPidFile;
+      };
     };
 
-    users.users.openldap =
-      { name = cfg.user;
-        group = cfg.group;
-        uid = config.ids.uids.openldap;
-      };
+    users.users = lib.optionalAttrs (cfg.user == "openldap") {
+      openldap = { group = cfg.group; };
+    };
 
-    users.groups.openldap =
-      { name = cfg.group;
-        gid = config.ids.gids.openldap;
-      };
-
+    users.groups = lib.optionalAttrs (cfg.group == "openldap") {
+      openldap = {};
+    };
   };
 }
