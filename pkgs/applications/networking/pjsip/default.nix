@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
   # We need the libgcc_s.so.1 loadable (for pthread_cancel to work)
   dontPatchELF = true;
 
+  # Most outputs retain reference to gcc - due to the samples at /share and due
+  # to $out/bin/pjsip. Splitting the outputs reduces closure for most usages of
+  # this derivation - as a library.
+  outputs = [ "out" "lib" "dev" ];
+
   meta = with stdenv.lib; {
     description = "A multimedia communication library written in C, implementing standard based protocols such as SIP, SDP, RTP, STUN, TURN, and ICE";
     homepage = "https://pjsip.org/";
