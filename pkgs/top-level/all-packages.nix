@@ -7152,6 +7152,8 @@ in
 
   timetable = callPackage ../applications/office/timetable { };
 
+  timezonemap = callPackage ../development/libraries/timezonemap { };
+
   tzupdate = callPackage ../applications/misc/tzupdate { };
 
   tinc = callPackage ../tools/networking/tinc { };
