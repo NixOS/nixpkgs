@@ -702,10 +702,10 @@ in rec {
 
   pt_PT = buildOfficialDict {
     language = "pt_PT";
-    version = "20070510-0";
+    version = "20190329-1-0";
     fullName = "Portuguese";
     filename = "aspell6";
-    sha256 = "1mnr994cwlag6shy8865ky99lymysiln07mbldcncahg90dagdxq";
+    sha256 = "0ld0d0ily4jqifjfsxfv4shbicz6ymm2gk56fq9gbzra1j4qnw75";
   };
 
   qu = buildOfficialDict {
