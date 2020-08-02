@@ -184,6 +184,17 @@ rec {
         merge = mergeEqualOption;
     };
 
+    fixedLengthString = n: lengthCheckedString n n;
+
+    lengthCheckedString = min: max: mkOptionType {
+      name = "str-with-min-${toString min}-and-max-${toString max}-chars";
+      description = if min == max
+        then "string with exactly ${toString min} chars."
+        else "string which must have at least ${toString min} and at most ${toString max} chars.";
+      inherit (types.str) merge;
+      check = x: isString x && stringLength x >= min && stringLength x <= max;
+    };
+
     str = mkOptionType {
       name = "str";
       description = "string";
