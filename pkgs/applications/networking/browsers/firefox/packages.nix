@@ -1,7 +1,7 @@
-{ config, stdenv, lib, callPackage, fetchurl, fetchpatch }:
+{ config, stdenv, lib, callPackage, fetchurl, fetchpatch, nodejs-13_x }:
 
 let
-  common = opts: callPackage (import ./common.nix opts) {};
+  common = opts: callPackage (import ./common.nix opts) { nodejs = nodejs-13_x; };
 in
 
 rec {
