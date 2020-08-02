@@ -16,7 +16,7 @@
 
 ### backorted packages
 
-, nss_3_52
+, nss_latest
 , sqlite_3_31_1
 
 ### optionals
@@ -98,7 +98,7 @@ let
 # backported dependencies where the versions on the stable release did not meet
 # Firefoxs requirements
 
-nss_pkg = if lib.versionAtLeast ffversion "74" then nss_3_52 else nss;
+nss_pkg = if lib.versionAtLeast ffversion "74" then nss_latest else nss;
 sqlite_pkg = if lib.versionAtLeast ffversion "74" then sqlite_3_31_1 else sqlite;
 rust-cbindgen_pkg = if lib.versionAtLeast ffversion "77" then rust-cbindgen_0_14_1 else rust-cbindgen;
 
