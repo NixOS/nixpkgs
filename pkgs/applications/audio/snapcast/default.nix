@@ -1,5 +1,6 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkgconfig
-, alsaLib, asio, avahi, boost170, flac, libogg, libvorbis, soxr }:
+, alsaLib, asio, avahi, boost170, flac, libogg, libvorbis, soxr
+, nixosTests }:
 
 let
 
@@ -56,6 +57,8 @@ stdenv.mkDerivation rec {
     install -d $out/share/doc/snapcast
     cp -r ../doc/* ../*.md $out/share/doc/snapcast
   '';
+
+  passthru.tests.snapcast = nixosTests.snapcast;
 
   meta = with lib; {
     description = "Synchronous multi-room audio player";
