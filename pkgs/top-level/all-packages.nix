@@ -2626,6 +2626,8 @@ in
 
   simdjson = callPackage ../development/libraries/simdjson { };
 
+  shipyard = callPackage ../tools/virtualization/shipyard { };
+
   simg2img = callPackage ../tools/filesystems/simg2img { };
 
   simplenes = callPackage ../misc/emulators/simplenes { };
