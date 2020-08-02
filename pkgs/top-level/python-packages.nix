@@ -1916,6 +1916,8 @@ in {
 
   async_generator = callPackage ../development/python-modules/async_generator { };
 
+  async-upnp-client = callPackage ../development/python-modules/async-upnp-client { };
+
   asn1ate = callPackage ../development/python-modules/asn1ate { };
 
   atlassian-python-api = callPackage ../development/python-modules/atlassian-python-api { };
