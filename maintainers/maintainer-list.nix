@@ -5181,6 +5181,12 @@
     githubId = 13689192;
     name = "Nguyễn Gia Phong";
   };
+  mcwitt = {
+    email = "mcwitt@gmail.com";
+    github = "mcwitt";
+    githubId = 319411;
+    name = "Matt Wittmann";
+  };
   mdaiter = {
     email = "mdaiter8121@gmail.com";
     github = "mdaiter";
