@@ -12049,6 +12049,11 @@ in
   } // (stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
       stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
     }));
+  icu67 = callPackage ../development/libraries/icu/67.nix ({
+    nativeBuildRoot = buildPackages.icu67.override { buildRootOnly = true; };
+  } // (stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
+      stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
+    }));
 
   icu = icu64;
 
@@ -13535,7 +13540,7 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  nss_3_52 = lowPrio (callPackage ../development/libraries/nss/3_52.nix { });
+  nss_latest = lowPrio (callPackage ../development/libraries/nss/latest.nix { });
   nss = lowPrio (callPackage ../development/libraries/nss { });
   nssTools = nss.tools;
 
@@ -19249,9 +19254,11 @@ in
 
   firefox-unwrapped = firefoxPackages.firefox;
   firefox-esr-68-unwrapped = firefoxPackages.firefox-esr-68;
+  firefox-esr-78-unwrapped = firefoxPackages.firefox-esr-78;
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-wayland = wrapFirefox firefox-unwrapped { gdkWayland = true; };
   firefox-esr-68 = wrapFirefox firefox-esr-68-unwrapped { };
+  firefox-esr-78 = wrapFirefox firefox-esr-78-unwrapped { };
   firefox-esr = firefox-esr-68;
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
