@@ -10,16 +10,17 @@
 
 let
   major = "11";
-  update = ".0.7";
-  build = "ga";
+  minor = "0";
+  update = "8";
+  build = "10";
 
   openjdk = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
-    version = "${major}${update}-${build}";
+    version = "${major}.${minor}.${update}+${build}";
 
     src = fetchurl {
       url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
-      sha256 = "14daacng9ndxf4kmvsn7nracwfiwwmw5rha8rkk3723pfk9g8q7p";
+      sha256 = "1sdncn1bk4h8xxfnmrl1125maqy6mc0v0y1dyifwsa04wasj9hbz";
     };
 
     nativeBuildInputs = [ pkgconfig autoconf ];
