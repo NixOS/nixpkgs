@@ -4,19 +4,19 @@
 , utillinux, qtbase ? null, qttools ? null
 , enableUpnp ? false
 , disableWallet ? false
-, disableDaemon ? false 
+, disableDaemon ? false
 , withGui ? false }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "pivx-${version}";
-  version = "4.1.1";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "PIVX-Project";
     repo= "PIVX";
     rev = "v${version}";
-    sha256 = "03ndk46h6093v8s18d5iffz48zhlshq7jrk6vgpjfs6z2iqgd2sy";
+    sha256 = "01gz3wj5cmxxhm9359dkb7m7ixfhkjvl1qkjj1q36azkzzr94093";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ] ++ optionals withGui [ wrapQtAppsHook ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
                     ++ optionals withGui [ "--with-gui=yes"
                                            "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
                                          ];
-  
+
   enableParallelBuilding = true;
   doChecks = true;
   postBuild = ''
