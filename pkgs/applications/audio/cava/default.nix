@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cava";
-  version = "0.7.1";
+  version = "0.7.2";
 
   buildInputs = [
     alsaLib
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "karlstav";
     repo = "cava";
     rev = version;
-    sha256 = "0p2g3xxl2n425bghs1qnff30jaj9cba94j2gbhgxmwaxhz26vbk7";
+    sha256 = "1chc08spjf5i17n8y48aqzdxsj8vvf0r2l62ldw2pqgw60dacvs1";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
