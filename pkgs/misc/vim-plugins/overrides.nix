@@ -462,6 +462,10 @@ self: super: {
     dependencies = [ self.fzfWrapper ];
   });
 
+  skim-vim = super.skim-vim.overrideAttrs(old: {
+    dependencies = [ self.skim ];
+  });
+
   sved = let
     # we put the script in its own derivation to benefit the magic of wrapGAppsHook
     svedbackend = stdenv.mkDerivation {
