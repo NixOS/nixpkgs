@@ -16,10 +16,10 @@ import ./make-test.nix ({ pkgs, ...} : {
           services.openssh.extraConfig = "PermitEmptyPasswords yes";
           users.extraUsers.root.password = "";
         };
-  };    
+  };
   testScript = ''
     startAll;
-    
+
     $docker->waitForUnit("sockets.target");
     $docker->succeed("docker run nix nix-store --version");
     $docker->succeed("docker run bash bash --version");
