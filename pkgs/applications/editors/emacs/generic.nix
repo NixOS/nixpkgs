@@ -70,7 +70,7 @@ in stdenv.mkDerivation {
       libPath = lib.concatStringsSep ":" [
         "${lib.getLib libgccjit}/lib/gcc/${targetPlatform.config}/${libgccjit.version}"
         "${lib.getLib stdenv.cc.cc}/lib"
-        "${lib.getLib stdenv.glibc}/lib"
+        "${lib.getLib stdenv.libc}/lib"
       ];
     in ''
       substituteInPlace lisp/emacs-lisp/comp.el --replace \
