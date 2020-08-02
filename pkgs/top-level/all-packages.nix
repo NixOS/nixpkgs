@@ -986,6 +986,8 @@ in
 
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
+  flips = callPackage ../tools/misc/flips { };
+
   genpass = callPackage ../tools/security/genpass { };
 
   genymotion = callPackage ../development/mobile/genymotion { };
