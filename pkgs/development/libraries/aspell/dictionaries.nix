@@ -694,10 +694,10 @@ in rec {
 
   pt_BR = buildOfficialDict {
     language = "pt_BR";
-    version = "20090702-0";
+    version = "20131030-12-0";
     fullName = "Brazilian Portuguese";
     filename = "aspell6";
-    sha256 = "1y09lx9zf2rnp55r16b2vgj953l3538z1vaqgflg9mdvm555bz3p";
+    sha256 = "1xqlpk21s93c6blkdnpk7l62q9fxjvzdv2x86chl8p2x1gdrj3gb";
   };
 
   pt_PT = buildOfficialDict {
