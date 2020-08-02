@@ -16,6 +16,7 @@
 
 ### backorted packages
 
+, nspr_latest
 , nss_latest
 , sqlite_3_31_1
 
@@ -99,6 +100,7 @@ let
 # Firefoxs requirements
 
 nss_pkg = if lib.versionAtLeast ffversion "74" then nss_latest else nss;
+nspr_pkg = if lib.versionAtLeast ffversion "79" then nspr_latest else nspr;
 sqlite_pkg = if lib.versionAtLeast ffversion "74" then sqlite_3_31_1 else sqlite;
 rust-cbindgen_pkg = if lib.versionAtLeast ffversion "77" then rust-cbindgen_latest else rust-cbindgen;
 
@@ -135,7 +137,7 @@ stdenv.mkDerivation ({
     # yasm can potentially be removed in future versions
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
     # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
-    nspr nss_pkg
+    nspr_pkg nss_pkg
   ]
   ++ lib.optionals (lib.versionOlder ffversion "75") [ libvpx sqlite ]
   ++ lib.optional  (lib.versionAtLeast ffversion "75.0") libvpx_1_8
@@ -307,7 +309,7 @@ stdenv.mkDerivation ({
     version = ffversion;
     isFirefox3Like = true;
     gtk = gtk2;
-    inherit nspr;
+    nspr = nspr_pkg;
     inherit ffmpegSupport;
     inherit gssSupport;
     inherit execdir;

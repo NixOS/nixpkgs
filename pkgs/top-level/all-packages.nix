@@ -13543,8 +13543,11 @@ in
   nspr = callPackage ../development/libraries/nspr {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
+  nspr_latest = lowPrio (callPackage ../development/libraries/nspr/latest.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  });
 
-  nss_latest = lowPrio (callPackage ../development/libraries/nss/latest.nix { });
+  nss_latest = lowPrio (callPackage ../development/libraries/nss/latest.nix { nspr = nspr_latest;});
   nss = lowPrio (callPackage ../development/libraries/nss { });
   nssTools = nss.tools;
 
