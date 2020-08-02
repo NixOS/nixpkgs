@@ -139,7 +139,7 @@ in
     boot.initrd.postMountCommands = mkIf cfg.flushBeforeStage2 ''
       for iface in $ifaces; do
         ip address flush "$iface"
-        ip link down "$iface"
+        ip link set "$iface" down
       done
     '';
 
