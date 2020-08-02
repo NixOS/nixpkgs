@@ -173,7 +173,7 @@
     "dlib_face_detect" = ps: with ps; [ face_recognition];
     "dlib_face_identify" = ps: with ps; [ face_recognition];
     "dlink" = ps: with ps; [ ]; # missing inputs: pyW215
-    "dlna_dmr" = ps: with ps; [ ]; # missing inputs: async-upnp-client
+    "dlna_dmr" = ps: with ps; [ async-upnp-client];
     "dnsip" = ps: with ps; [ aiodns];
     "dominos" = ps: with ps; [ aiohttp-cors]; # missing inputs: pizzapi
     "doods" = ps: with ps; [ pillow]; # missing inputs: pydoods
@@ -855,7 +855,7 @@
     "upc_connect" = ps: with ps; [ ]; # missing inputs: connect-box
     "upcloud" = ps: with ps; [ ]; # missing inputs: upcloud-api
     "updater" = ps: with ps; [ distro];
-    "upnp" = ps: with ps; [ ]; # missing inputs: async-upnp-client
+    "upnp" = ps: with ps; [ async-upnp-client];
     "uptime" = ps: with ps; [ ];
     "uptimerobot" = ps: with ps; [ ]; # missing inputs: pyuptimerobot
     "uscis" = ps: with ps; [ ]; # missing inputs: uscisstatus
