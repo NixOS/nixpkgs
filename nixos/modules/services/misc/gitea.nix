@@ -189,6 +189,20 @@ in
         };
       };
 
+      lfs = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Enables git-lfs support.";
+        };
+
+        contentDir = mkOption {
+          type = types.str;
+          default = "${cfg.stateDir}/data/lfs";
+          description = "Where to store LFS files.";
+        };
+      };
+
       appName = mkOption {
         type = types.str;
         default = "gitea: Gitea Service";
@@ -353,6 +367,11 @@ in
         (mkIf (!cfg.ssh.enable) {
           DISABLE_SSH = true;
         })
+        (mkIf cfg.lfs.enable {
+          LFS_START_SERVER = true;
+          LFS_CONTENT_PATH = cfg.lfs.contentDir;
+        })
+
       ];
 
       session = {
@@ -406,6 +425,9 @@ in
       "d '${cfg.dump.backupDir}' 0750 ${cfg.user} gitea - -"
       "z '${cfg.dump.backupDir}' 0750 ${cfg.user} gitea - -"
       "Z '${cfg.dump.backupDir}' - ${cfg.user} gitea - -"
+      "d '${cfg.lfs.contentDir}' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.lfs.contentDir}' 0750 ${cfg.user} gitea - -"
+      "Z '${cfg.lfs.contentDir}' - ${cfg.user} gitea - -"
       "d '${cfg.repositoryRoot}' 0750 ${cfg.user} gitea - -"
       "z '${cfg.repositoryRoot}' 0750 ${cfg.user} gitea - -"
       "Z '${cfg.repositoryRoot}' - ${cfg.user} gitea - -"
@@ -494,7 +516,7 @@ in
         RuntimeDirectory = "gitea";
         RuntimeDirectoryMode = "0755";
         # Access write directories
-        ReadWritePaths = [ cfg.dump.backupDir cfg.repositoryRoot cfg.stateDir ];
+        ReadWritePaths = [ cfg.dump.backupDir cfg.repositoryRoot cfg.stateDir cfg.lfs.contentDir ];
         UMask = "0027";
         # Capabilities
         CapabilityBoundingSet = "";
