@@ -6700,6 +6700,8 @@ in {
 
   vultr = callPackage ../development/python-modules/vultr { };
 
+  vulture = callPackage ../development/python-modules/vulture { };
+
   wadllib = callPackage ../development/python-modules/wadllib { };
 
   waitress = callPackage ../development/python-modules/waitress { };
