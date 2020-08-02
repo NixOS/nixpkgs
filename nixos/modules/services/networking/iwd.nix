@@ -44,8 +44,8 @@ let
     # Cannot use the SSID here: the hex-encode is done at build-time, not eval time
     # and several special chars in a file name would break `writeText`.
     file = pkgs.writeText "ssid" (generators.toINI {} ({
-      Settings.AutoConnect = cfg.autoConnect;
-      Settings.Hidden = cfg.hidden;
+      Settings.AutoConnect = boolToString cfg.autoConnect;
+      Settings.Hidden = boolToString cfg.hidden;
     } // (optionalAttrs (cfg.psk != null) {
       Security.PreSharedKey = cfg.psk;
     }) // (optionalAttrs (cfg.passphrase != null) {
@@ -58,8 +58,9 @@ in {
 
     interfaces = mkOption {
       type = types.nullOr (types.listOf types.str);
-      example = [ "wlp2s0" ];
-      apply = x: if x == null then x else concatStringsSep " " x;
+      example = literalExample ''
+        [ "wlp2s0" ]
+      '';
       default = null;
       description = ''
         List of interfaces to use.
@@ -68,11 +69,12 @@ in {
 
     networks = mkOption {
       default = {};
-      example = {
-        "karlsruhe.freifunk.net" = {};
-        "secured".passphrase = "12345678";
-        "network-with-psk".psk = "bf4c086e055e492373a0f59ff614f61fc2d597a56db94e17a165f9ef1d42c066";
-      };
+      example = literalExample ''
+        { "karlsruhe.freifunk.net" = {};
+          "secured".passphrase = "12345678";
+          "network-with-psk".psk = "bf4c086e055e492373a0f59ff614f61fc2d597a56db94e17a165f9ef1d42c066";
+        };
+      '';
 
       description = ''
         Declarative configuration of wifi networks for
@@ -108,7 +110,6 @@ in {
           autoConnect = mkOption {
             default = true;
             type = types.bool;
-            apply = boolToString;
             description = ''
               Disable automatic connection to the network.
             '';
@@ -117,7 +118,6 @@ in {
           hidden = mkOption {
             default = false;
             type = types.bool;
-            apply = boolToString;
             description = ''
               Used for hidden networks that don't respond to scans unless
               their SSID is explicitly specified.
@@ -154,10 +154,14 @@ in {
         local = encodeIfNeeded file content.extension;
       });
     in ''
+      # Remove all network-configs from `/var/lib/iwd` that are symlinks to a store-path,
+      # but aren't declared in `cfg.networks` (i.e. all networks that were "removed" from
+      # `cfg.networks`).
       find /var/lib/iwd -type l -lname '${builtins.storeDir}/*' ${optionalString (ssids != {}) ''
-        -not \( ${concatMapStringsSep " -o " ({ local, ... }: "-name '${baseNameOf local}*'") ssids} \) \
-      ''} \
-        | xargs -I {} rm -f {}
+        -not \( ${concatMapStringsSep " -o " ({ local, ... }:
+          "-name '${baseNameOf local}*'")
+        ssids} \) \
+      ''} -delete
 
       ${concatMapStrings ({ file, local }: ''
         ln -sf '${file}' "${local}"
@@ -166,7 +170,7 @@ in {
 
     systemd.services.iwd.serviceConfig.ExecStart = mkIf (cfg.interfaces != null) [
       ""
-      "${pkgs.iwd}/libexec/iwd -i ${cfg.interfaces}"
+      "${pkgs.iwd}/libexec/iwd -i ${concatStringsSep " -i " cfg.interfaces}"
     ];
 
     systemd.services.iwd.wantedBy = [ "multi-user.target" ];
