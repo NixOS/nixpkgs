@@ -2572,6 +2572,8 @@ in {
 
   pyhcl = callPackage ../development/python-modules/pyhcl { };
 
+  pyhs100 = callPackage ../development/python-modules/pyhs100 { };
+
   pytest = if isPy3k then self.pytest_5 else self.pytest_4;
 
   pytest_5 = callPackage ../development/python-modules/pytest {
