@@ -8,6 +8,7 @@
 , enableXen ? false, xen ? null
 , enableIscsi ? false, openiscsi
 , enableCeph ? false, ceph
+, enableHyperv ? false, openwsman
 }:
 
 with stdenv.lib;
@@ -46,6 +47,8 @@ in stdenv.mkDerivation rec {
     openiscsi
   ] ++ optionals enableCeph [
     ceph
+  ] ++ optionals enableHyperv [
+    openwsman
   ] ++ optionals stdenv.isDarwin [
     libiconv gmp
   ];
@@ -93,6 +96,8 @@ in stdenv.mkDerivation rec {
     "--with-storage-iscsi"
   ] ++ optionals enableCeph [
     "--with-storage-rbd"
+  ] ++ optionals enableHyperv [
+    "--with-hyperv"
   ] ++ optionals stdenv.isDarwin [
     "--with-init-script=none"
   ];
