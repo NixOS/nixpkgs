@@ -3943,6 +3943,8 @@ in {
 
   flask-restplus = callPackage ../development/python-modules/flask-restplus { };
 
+  flask-restx = callPackage ../development/python-modules/flask-restx { };
+
   flask-reverse-proxy-fix = callPackage ../development/python-modules/flask-reverse-proxy-fix { };
 
   flask_script = callPackage ../development/python-modules/flask-script { };
