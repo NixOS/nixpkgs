@@ -1,10 +1,8 @@
 { lib, pkgs, config, ... }:
 let
   cfg = config.services.matrix-corporal;
-  matrix-corporal-config = pkgs.writeTextFile {
-    name = "matrix-corporal-config.json";
-    text = lib.generators.toJSON {} cfg.settings;
-  };
+  format = pkgs.formats.json {};
+  matrix-corporal-config = format.generate "matrix-corporal-config.json" cfg.settings;
 in
 {
   options.services.matrix-corporal = {
@@ -18,7 +16,7 @@ in
     settings = lib.mkOption {
       default = {};
       type = lib.types.submodule {
-        config._module.fallbackType = with lib.types; attrsOf (oneOf [ str int bool ]);
+        config._module.fallbackType = format.type;
 
         options.Matrix.HomeserverDomainName = lib.mkOption {
           type = lib.types.str;
