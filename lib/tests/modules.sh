@@ -213,6 +213,8 @@ checkConfigError 'The option value .* in .* is not of type .*' \
 ## Freeform modules
 # Assigning without a declared option should work
 checkConfigOutput 24 config.value ./freeform-attrsOf.nix ./define-value-string.nix
+# No freeform assigments shouldn't make it error
+checkConfigOutput '{ }' config ./freeform-attrsOf.nix
 # but only if the type matches
 checkConfigError 'The option value .* in .* is not of type .*' config.value ./freeform-attrsOf.nix ./define-value-list.nix
 # and properties should be applied
