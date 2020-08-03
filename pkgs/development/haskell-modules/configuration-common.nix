@@ -564,18 +564,6 @@ self: super: {
   bustle = overrideCabal super.bustle (drv: {
     buildDepends = [ pkgs.libpcap ];
     buildTools = with pkgs.buildPackages; [ gettext perl help2man ];
-    patches = [
-      # fix build
-      # https://gitlab.freedesktop.org/bustle/bustle/merge_requests/14
-      (pkgs.fetchpatch {
-        url = "https://gitlab.freedesktop.org/bustle/bustle/commit/ee4b81cbc232d47ba9940f1987777b17452e71ff.patch";
-        sha256 = "0v9cvbmrma5jcqcg1narpm1549h0cg8mr6i00qxmq0x6hs04dnwa";
-      })
-      (pkgs.fetchpatch {
-        url = "https://gitlab.freedesktop.org/bustle/bustle/commit/aae6843f51f54679d440fb3813e61355dc8406b9.patch";
-        sha256 = "1a8hr38hd1gdkqhsy56hyl7njw8ci79iigr81aalkb7hn4ckvh2a";
-      })
-    ];
     postInstall = ''
       make install PREFIX=$out
     '';
