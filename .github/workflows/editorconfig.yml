@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
     - uses: technote-space/get-diff-action@v2.0.3
     - name: Checking EditorConfig
       env:
