@@ -23,7 +23,7 @@ stdenv.mkDerivation {
       LZFSE is a Lempel-Ziv style data compression algorithm using Finite State Entropy coding.
       It targets similar compression rates at higher compression and decompression speed compared to deflate using zlib.
     '';
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };
