@@ -45,6 +45,12 @@ let
   inherit (config.system) stateVersion;
 
 in {
+
+  imports = [
+    ( mkRemovedOptionModule [ "services" "nextcloud" "nginx" "enable" ]
+      "The nextcloud module dropped support for other webservers than nginx.")
+  ];
+
   options.services.nextcloud = {
     enable = mkEnableOption "nextcloud";
     hostName = mkOption {
@@ -465,7 +471,7 @@ in {
               if [ ! -e $dir ]; then
                 install -o nextcloud -g nextcloud -d $dir
               elif [ $(stat -c "%G" $dir) != "nextcloud" ]; then
-                chown -R nextcloud:nextcloud $dir
+                chgrp -R nextcloud $dir
               fi
             done
 
@@ -524,8 +530,8 @@ in {
       users.groups.nextcloud.members = [ "nextcloud" config.services.nginx.user ];
 
       environment.systemPackages = [ occ ];
-    
-      services.nginx.enable = true;
+
+      services.nginx.enable = mkDefault true;
       services.nginx.virtualHosts.${cfg.hostName} = {
         root = cfg.package;
         locations = {
