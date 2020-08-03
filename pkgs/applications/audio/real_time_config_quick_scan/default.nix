@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "realTimeConfigQuickScan";
-  version = "unstable-2020-08-03";
+  version = "unstable-2020-07-23";
 
   src = fetchFromGitHub {
     owner  = "raboof";
     repo   = pname;
-    rev    = "4b482db17f8d8567ba0abf33459ceb5f756f088c";
-    sha256 = "00l69gzwla9gjv5kpklgxlwnl48wnh8h6w0k8i69qr2cxigg4rhj";
+    rev    = "4697ba093d43d512b74a73b89531cb8c5adaa274";
+    sha256 = "16kanzp5i353x972zjkwgi3m8z90wc58613mlfzb0n01djdnm6k5";
   };
 
   buildInputs = [ perlPackages.perl makeWrapper ];
@@ -16,28 +16,35 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
-    mkdir -p $out/share/doc
+    mkdir -p $out/share/$pname
+    mkdir -p $out/share/doc/$pname
     # Install Script Files:
     # *.pm files
     for i in *.pm; do
-    install -Dm 755 "$i" "$out/share/$i"
+    install -Dm 755 "$i" "$out/share/$pname/$i"
     done
     # Install doc files:
-    install -D COPYING  "$out/share/doc/COPYING"
-    install -D README.md  "$out/share/doc/README.md"
+    install -D COPYING  "$out/share/doc/$pname/COPYING"
+    install -D README.md  "$out/share/doc/$pname/README.md"
     # Install Executable scripts:
     install -Dm 755 realTimeConfigQuickScan.pl "$out/bin/realTimeConfigQuickScan"
     install -Dm 755 QuickScan.pl "$out/bin/QuickScan"
-    wrapProgram $out/bin/realTimeConfigQuickScan \
-      --set PERL5LIB "$out/share"
-    wrapProgram $out/bin/QuickScan \
-      --set PERL5LIB "$out/share:${with perlPackages; makePerlPath [ Tk ]}"
+    runHook postInstall
   '';
+
+  postFixup = ''
+    wrapProgram $out/bin/realTimeConfigQuickScan \
+      --set PERL5LIB "$out/share/$pname"
+    wrapProgram $out/bin/QuickScan \
+      --set PERL5LIB "$out/share/$pname:${with perlPackages; makePerlPath [ Tk ]}"
+  '';
+
   meta = with stdenv.lib; {
     description = "Linux configuration checker for systems to be used for real-time audio";
     homepage = "https://github.com/raboof/realtimeconfigquickscan";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ magnetophon ];
     platforms = platforms.linux ;
   };
