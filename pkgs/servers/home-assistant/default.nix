@@ -82,6 +82,7 @@ in with py.pkgs; buildPythonApplication rec {
 
   patches = [
     ./relax-dependencies.patch
+    ./fix-flapping-chained-task-logging-test.patch
   ];
 
   inherit availableComponents;
