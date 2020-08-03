@@ -26377,6 +26377,8 @@ in
     icu = icu58;
   };
 
+  mamba = callPackage ../applications/audio/mamba{ };
+
   mame = libsForQt5.callPackage ../misc/emulators/mame {
     inherit (darwin.apple_sdk.frameworks) CoreAudioKit ForceFeedback;
   };
