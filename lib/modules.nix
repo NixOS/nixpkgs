@@ -104,7 +104,8 @@ rec {
                 file = def.file;
                 value = setAttrByPath def.prefix def.value;
               }) merged.unmatchedDefns;
-            in declaredConfig._module.freeformType.merge prefix defs;
+            in if defs == [] then {}
+            else declaredConfig._module.freeformType.merge prefix defs;
 
         in if declaredConfig._module.freeformType == null then declaredConfig
           # Because all definitions that had an associated option ended in
