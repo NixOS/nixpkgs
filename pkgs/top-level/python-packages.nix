@@ -1537,6 +1537,8 @@ in {
   sanic-auth = callPackage ../development/python-modules/sanic-auth { };
 
   sapi-python-client = callPackage ../development/python-modules/sapi-python-client { };
+  
+  sclack = callPackage ../development/python-modules/sclack { };
 
   seekpath = callPackage ../development/python-modules/seekpath { };
 
