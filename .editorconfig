@@ -66,6 +66,9 @@ insert_final_newline = unset
 [nixos/modules/services/networking/ircd-hybrid/*.{conf,in}]
 trim_trailing_whitespace = unset
 
+[nixos/tests/systemd-networkd-vrf.nix]
+trim_trailing_whitespace = unset
+
 [pkgs/applications/editors/emacs-modes/recipes-archive-melpa.json]
 indent_size = unset
 
