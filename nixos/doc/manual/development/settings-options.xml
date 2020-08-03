@@ -137,7 +137,7 @@ in {
       description = ''
         Configuration for foo, see
         &lt;link xlink:href="https://example.com/docs/foo"/&gt;
-        for supported values.
+        for supported settings.
       '';
     };
   };
@@ -167,13 +167,50 @@ in {
 
     # We know that the `user` attribute exists because we set a default value
     # for it above, allowing us to use it without worries here
-    users.users.${cfg.settings.user} = {}
+    users.users.${cfg.settings.user} = {};
 
     # ...
   };
 }
 </programlisting>
    </example>
+   <section xml:id="sec-settings-attrs-options">
+    <title>Option declarations for attributes</title>
+    <para>
+     Some <literal>settings</literal> attributes may deserve some extra care. They may need a different type, default or merging behavior, or they are essential options that should show their documentation in the manual. This can be done using <xref linkend='sec-freeform-modules'/>.
+     <example xml:id="ex-settings-typed-attrs">
+      <title>Declaring a type-checked <literal>settings</literal> attribute</title>
+      <para>
+       We extend above example using freeform modules to declare an option for the port, which will enforce it to be a valid integer and make it show up in the manual.
+      </para>
+<programlisting>
+settings = lib.mkOption {
+  type = lib.types.submodule {
+
+    freeformType = settingsFormat.type;
+
+    # Declare an option for the port such that the type is checked and this option
+    # is shown in the manual.
+    options.port = lib.mkOption {
+      type = lib.types.port;
+      default = 8080;
+      description = ''
+        Which port this service should listen on.
+      '';
+    };
+
+  };
+  default = {};
+  description = ''
+    Configuration for Foo, see
+    &lt;link xlink:href="https://example.com/docs/foo"/&gt;
+    for supported values.
+  '';
+};
+</programlisting>
+     </example>
+    </para>
+   </section>
  </section>
 
 </section>
