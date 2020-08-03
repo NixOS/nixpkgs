@@ -249,22 +249,19 @@ let
       nginx = mkOption {
         type = types.submodule (
           recursiveUpdate
-            (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
-            {
-              # Enable encryption by default,
-              options.forceSSL.default = true;
-              options.enableACME.default = true;
-            }
+            (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {}
         );
-        default = {forceSSL = true; enableACME = true;};
+        default = {};
         example = {
           serverAliases = [
             "wiki.\${config.networking.domain}"
           ];
-          enableACME = false;
+          # To enable encryption and let let's encrypt take care of certificate
+          forceSSL = true;
+          enableACME = true;
         };
         description = ''
-          With this option, you can customize the nginx virtualHost which already has sensible defaults for DokuWiki.
+          With this option, you can customize the nginx virtualHost settings.
         '';
       };
     };
@@ -276,7 +273,7 @@ in
     services.dokuwiki = mkOption {
       type = types.attrsOf (types.submodule siteOpts);
       default = {};
-      description = "Sepcification of one or more dokuwiki sites to service.";
+      description = "Sepcification of one or more dokuwiki sites to serve.";
     };
   };
 
