@@ -548,7 +548,7 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
     <para>
      The <literal>bitcoind</literal> module has changed to multi-instance, using submodules.
      Therefore, it is now mandatory to name each instance.
-     To use this new multi-instance config with an existing bitcoind data directory and user, 
+     To use this new multi-instance config with an existing bitcoind data directory and user,
      you have to adjust the original config, e.g.:
 <programlisting>
   services.bitcoind = {
