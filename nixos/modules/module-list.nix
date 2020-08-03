@@ -646,6 +646,8 @@
   ./services/networking/iperf3.nix
   ./services/networking/ircd-hybrid/default.nix
   ./services/networking/iwd.nix
+  ./services/networking/jicofo.nix
+  ./services/networking/jitsi-videobridge.nix
   ./services/networking/keepalived/default.nix
   ./services/networking/keybase.nix
   ./services/networking/kippo.nix
@@ -852,6 +854,7 @@
   ./services/web-apps/icingaweb2/module-monitoring.nix
   ./services/web-apps/ihatemoney
   ./services/web-apps/jirafeau.nix
+  ./services/web-apps/jitsi-meet.nix
   ./services/web-apps/limesurvey.nix
   ./services/web-apps/mattermost.nix
   ./services/web-apps/mediawiki.nix

@@ -162,6 +162,7 @@ in
   jellyfin = handleTest ./jellyfin.nix {};
   jenkins = handleTest ./jenkins.nix {};
   jirafeau = handleTest ./jirafeau.nix {};
+  jitsi-meet = handleTest ./jitsi-meet.nix {};
   k3s = handleTest ./k3s.nix {};
   kafka = handleTest ./kafka.nix {};
   keepalived = handleTest ./keepalived.nix {};
