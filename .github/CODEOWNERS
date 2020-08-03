@@ -10,6 +10,12 @@
 # This file
 /.github/CODEOWNERS @edolstra
 
+# GitHub actions
+/.github/workflows @Mic92 @zowoq
+
+# EditorConfig
+/.editorconfig @Mic92 @zowoq
+
 # Libraries
 /lib                        @edolstra @nbp @infinisil
 /lib/systems                @nbp @ericson2314 @matthewbauer

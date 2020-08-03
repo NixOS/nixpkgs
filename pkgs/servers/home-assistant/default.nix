@@ -72,7 +72,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.113.0";
+  hassVersion = "0.113.3";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -82,6 +82,7 @@ in with py.pkgs; buildPythonApplication rec {
 
   patches = [
     ./relax-dependencies.patch
+    ./fix-flapping-chained-task-logging-test.patch
   ];
 
   inherit availableComponents;
@@ -91,7 +92,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "1yb943wkiawh5p4mj5089qcsjfnwb91ga666qriz32bzpfgrzrna";
+    sha256 = "1lrllhafjawrghdp81lz1ffdqcj2q0x9ndp11nhi8s9fd8bb4c8j";
   };
 
   propagatedBuildInputs = [

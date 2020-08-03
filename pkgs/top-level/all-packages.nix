@@ -525,6 +525,9 @@ in
   #package writers
   writers = callPackage ../build-support/writers {};
 
+  # lib functions depending on pkgs
+  inherit (import ../pkgs-lib { inherit lib pkgs; }) formats;
+
   ### TOOLS
 
   _0x0 = callPackage ../tools/misc/0x0 { };
@@ -999,6 +1002,8 @@ in
   gammy = qt5.callPackage ../tools/misc/gammy { };
 
   gams = callPackage ../tools/misc/gams (config.gams or {});
+
+  gem = callPackage ../applications/audio/pd-plugins/gem { };
 
   git-fire = callPackage ../tools/misc/git-fire { };
 
@@ -3234,6 +3239,8 @@ in
 
   wallutils = callPackage ../tools/graphics/wallutils { };
 
+  wayland-utils = callPackage ../tools/wayland/wayland-utils { };
+
   wev = callPackage ../tools/misc/wev { };
 
   wl-clipboard = callPackage ../tools/misc/wl-clipboard { };
@@ -4379,6 +4386,8 @@ in
   industrializer = callPackage ../applications/audio/industrializer { };
 
   inetutils = callPackage ../tools/networking/inetutils { };
+
+  inform6 = callPackage ../development/compilers/inform6 { };
 
   inform7 = callPackage ../development/compilers/inform7 { };
 
@@ -7146,6 +7155,8 @@ in
 
   timetable = callPackage ../applications/office/timetable { };
 
+  timezonemap = callPackage ../development/libraries/timezonemap { };
+
   tzupdate = callPackage ../applications/misc/tzupdate { };
 
   tinc = callPackage ../tools/networking/tinc { };
@@ -9450,6 +9461,8 @@ in
   scala_2_13 = callPackage ../development/compilers/scala/2.13.nix { jre = jre8; };
   scala = scala_2_13;
 
+  scas = callPackage ../development/compilers/scas { };
+
   metal = callPackage ../development/libraries/metal { };
   metals = callPackage ../development/tools/metals { };
   scalafix = callPackage ../development/tools/scalafix { };
@@ -9612,6 +9625,7 @@ in
   ### DEVELOPMENT / INTERPRETERS
 
   acl2 = callPackage ../development/interpreters/acl2 { };
+  acl2-minimal = callPackage ../development/interpreters/acl2 { certifyBooks = false; };
 
   angelscript = callPackage ../development/interpreters/angelscript {};
 
@@ -16035,9 +16049,7 @@ in
 
   hiawatha = callPackage ../servers/http/hiawatha {};
 
-  home-assistant = callPackage ../servers/home-assistant {
-    python3 = python37;
-  };
+  home-assistant = callPackage ../servers/home-assistant { };
 
   home-assistant-cli = callPackage ../servers/home-assistant/cli.nix { };
 
@@ -18315,6 +18327,14 @@ in
 
   eb-garamond = callPackage ../data/fonts/eb-garamond { };
 
+  edukai = callPackage ../data/fonts/edukai { };
+
+  eduli = callPackage ../data/fonts/eduli { };
+
+  moeli = eduli;
+
+  edusong = callPackage ../data/fonts/edusong { };
+
   elliptic_curves = callPackage ../data/misc/elliptic_curves { };
 
   equilux-theme = callPackage ../data/themes/equilux-theme { };
@@ -19098,6 +19118,8 @@ in
   avocode = callPackage ../applications/graphics/avocode {};
 
   azpainter = callPackage ../applications/graphics/azpainter { };
+
+  bambootracker = libsForQt5.callPackage ../applications/audio/bambootracker { };
 
   cadence =  qt5.callPackage ../applications/audio/cadence { };
 
@@ -20073,10 +20095,12 @@ in
 
   firefox-unwrapped = firefoxPackages.firefox;
   firefox-esr-68-unwrapped = firefoxPackages.firefox-esr-68;
+  firefox-esr-78-unwrapped = firefoxPackages.firefox-esr-78;
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-wayland = wrapFirefox firefox-unwrapped { forceWayland = true; };
   firefox-esr-68 = wrapFirefox firefox-esr-68-unwrapped { };
-  firefox-esr = firefox-esr-68;
+  firefox-esr-78 = wrapFirefox firefox-esr-78-unwrapped { };
+  firefox-esr = firefox-esr-78;
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     channel = "release";
@@ -20831,7 +20855,7 @@ in
   inherit (kdeApplications)
     akonadi akregator ark bomber bovo dolphin dragon elisa ffmpegthumbs filelight granatier gwenview k3b
     kaddressbook kapptemplate kate kcachegrind kcalc kcharselect kcolorchooser kdenlive kdf kdialog
-    keditbookmarks kfind kget kgpg khelpcenter kig kleopatra kmail kmix kmplot kolourpaint kompare konsole yakuake
+    keditbookmarks kfind kfloppy kget kgpg khelpcenter kig kleopatra kmail kmix kmplot kolourpaint kompare konsole yakuake
     kpkpass kitinerary kontact korganizer krdc krfb ksystemlog ktouch kwalletmanager marble minuet okular picmi spectacle;
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
@@ -20974,6 +20998,8 @@ in
 
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
+  lazpaint = callPackage ../applications/graphics/lazpaint { };
+
   caps = callPackage ../applications/audio/caps { };
 
   lastfmsubmitd = callPackage ../applications/audio/lastfmsubmitd { };
@@ -21015,7 +21041,6 @@ in
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
     };
-    nss = nss_3_44;
   };
 
   libreoffice-qt = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
@@ -22805,16 +22830,26 @@ in
 
   thonny = callPackage ../applications/editors/thonny { };
 
-  thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
+  thunderbird-78 = callPackage ../applications/networking/mailreaders/thunderbird {
     inherit (rustPackages_1_44) cargo rustc;
     libpng = libpng_apng;
+    icu = icu67;
+    libvpx = libvpx_1_8;
     gtk3Support = true;
-    nss = nss_3_44; # 68.x won't build with newest nss anymore (like firefox-esr-68)
+  };
+
+  thunderbird = callPackage ../applications/networking/mailreaders/thunderbird/68.nix {
+    inherit (rustPackages_1_44) cargo rustc;
+    libpng = libpng_apng;
+    nss = nss_3_44;
+    gtk3Support = true;
   };
 
   thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
 
-  thunderbird-bin = callPackage ../applications/networking/mailreaders/thunderbird-bin { };
+  thunderbird-bin-78 = callPackage ../applications/networking/mailreaders/thunderbird-bin { };
+
+  thunderbird-bin = callPackage ../applications/networking/mailreaders/thunderbird-bin/68.nix { };
 
   ticpp = callPackage ../development/libraries/ticpp { };
 
@@ -25898,6 +25933,8 @@ in
 
   attract-mode = callPackage ../misc/emulators/attract-mode { };
 
+  autotiling = python3Packages.callPackage ../misc/autotiling { };
+
   beep = callPackage ../misc/beep { };
 
   bees = callPackage ../tools/filesystems/bees { };
@@ -27113,6 +27150,10 @@ in
   xtermcontrol = callPackage ../applications/misc/xtermcontrol {};
 
   openfst = callPackage ../development/libraries/openfst {};
+
+  opengrm-ngram = callPackage ../development/libraries/opengrm-ngram {};
+
+  phonetisaurus = callPackage ../development/libraries/phonetisaurus {};
 
   duti = callPackage ../os-specific/darwin/duti {};
 

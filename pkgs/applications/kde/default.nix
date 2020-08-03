@@ -74,7 +74,7 @@ let
       akregator = callPackage ./akregator.nix {};
       ark = callPackage ./ark {};
       baloo-widgets = callPackage ./baloo-widgets.nix {};
-      bovo = callPackage ./bovo.nix {};      
+      bovo = callPackage ./bovo.nix {};
       bomber = callPackage ./bomber.nix {};
       calendarsupport = callPackage ./calendarsupport.nix {};
       dolphin = callPackage ./dolphin.nix {};
@@ -113,6 +113,7 @@ let
       kdialog = callPackage ./kdialog.nix {};
       keditbookmarks = callPackage ./keditbookmarks.nix {};
       kfind = callPackage ./kfind.nix {};
+      kfloppy = callPackage ./kfloppy.nix {};
       kgeography = callPackage ./kgeography.nix {};
       kget = callPackage ./kget.nix {};
       kgpg = callPackage ./kgpg.nix {};

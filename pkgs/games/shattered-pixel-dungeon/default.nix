@@ -9,13 +9,13 @@
 
 let
   pname = "shattered-pixel-dungeon";
-  version = "0.8.1";
+  version = "0.8.1a";
 
   src = fetchFromGitHub {
     owner = "00-Evan";
     repo = "shattered-pixel-dungeon";
     rev = "v${version}";
-    sha256 = "1n459xdvqf974hs91xfq5fdj29s4w5w83dg3m2vp7gqmrmm2jykf";
+    sha256 = "0cfrcjvnn2j4p7zbz252qbn2jacgwhzaja8lqvif0x1vszyl41v7";
   };
 
   postPatch = ''

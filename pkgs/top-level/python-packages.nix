@@ -549,6 +549,8 @@ in {
 
   deepdiff = callPackage ../development/python-modules/deepdiff { };
 
+  deepmerge = callPackage ../development/python-modules/deepmerge { };
+
   django-sesame = callPackage ../development/python-modules/django-sesame { };
 
   bravado-core = callPackage ../development/python-modules/bravado-core { };
@@ -1914,6 +1916,8 @@ in {
 
   async_generator = callPackage ../development/python-modules/async_generator { };
 
+  async-upnp-client = callPackage ../development/python-modules/async-upnp-client { };
+
   asn1ate = callPackage ../development/python-modules/asn1ate { };
 
   atlassian-python-api = callPackage ../development/python-modules/atlassian-python-api { };
@@ -2502,6 +2506,8 @@ in {
 
   openidc-client = callPackage ../development/python-modules/openidc-client {};
 
+  openwebifpy = callPackage ../development/python-modules/openwebifpy {};
+
   optuna = callPackage ../development/python-modules/optuna { };
 
   idna = callPackage ../development/python-modules/idna { };
@@ -2559,6 +2565,8 @@ in {
   PyLD = callPackage ../development/python-modules/PyLD { };
 
   pysingleton = callPackage ../development/python-modules/pysingleton { };
+
+  python-didl-lite = callPackage ../development/python-modules/python-didl-lite { };
 
   python-jose = callPackage ../development/python-modules/python-jose {};
 
@@ -3845,6 +3853,8 @@ in {
 
   pyfribidi = callPackage ../development/python-modules/pyfribidi { };
 
+  pyfritzhome = callPackage ../development/python-modules/pyfritzhome { };
+
   pyftpdlib = callPackage ../development/python-modules/pyftpdlib { };
 
   filebrowser_safe = callPackage ../development/python-modules/filebrowser_safe { };
@@ -4001,6 +4011,8 @@ in {
   ConfigArgParse = callPackage ../development/python-modules/configargparse { };
 
   jsonschema = callPackage ../development/python-modules/jsonschema { };
+
+  vcver = callPackage ../development/python-modules/vcver { };
 
   vcversioner = callPackage ../development/python-modules/vcversioner { };
 
@@ -5537,6 +5549,8 @@ in {
 
   pyinotify = callPackage ../development/python-modules/pyinotify { };
 
+  pyipp = callPackage ../development/python-modules/pyipp { };
+
   pyjwt = callPackage ../development/python-modules/pyjwt { };
 
   pykickstart = callPackage ../development/python-modules/pykickstart { };
@@ -6700,6 +6714,8 @@ in {
 
   vultr = callPackage ../development/python-modules/vultr { };
 
+  vulture = callPackage ../development/python-modules/vulture { };
+
   wadllib = callPackage ../development/python-modules/wadllib { };
 
   waitress = callPackage ../development/python-modules/waitress { };
@@ -7678,6 +7694,8 @@ in {
   webrtcvad = callPackage ../development/python-modules/webrtcvad { };
 
   pykwalify = callPackage ../development/python-modules/pykwalify { };
+
+  west = callPackage ../development/python-modules/west { };
 
   wfuzz = callPackage ../development/python-modules/wfuzz { };
 

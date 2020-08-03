@@ -18,21 +18,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  doCheck = true;
-
-  cmakeFlags = [
-    # oneDNN compiles with -msse4.1 by default, but not all x86_64
-    # CPUs support SSE 4.1.
-    "-DDNNL_ARCH_OPT_FLAGS="
-  ];
+  # Tests fail on some Hydra builders, because they do not support SSE4.2.
+  doCheck = false;
 
   # The test driver doesn't add an RPath to the build libdir
   preCheck = ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/src
     export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD/src
-  '' + lib.optionalString stdenv.isx86_64 ''
-    # Use baseline SIMD in case CPU features get misdetected.
-    export DNNL_MAX_CPU_ISA=SSE41
   '';
 
   # The cmake install gets tripped up and installs a nix tree into $out, in

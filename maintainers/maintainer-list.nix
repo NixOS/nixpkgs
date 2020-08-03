@@ -833,6 +833,12 @@
     githubId = 135230;
     name = "Aycan iRiCAN";
   };
+  artturin = {
+    email = "artturin@artturin.com";
+    github = "artturin";
+    githubId = 56650223;
+    name = "Artturi N";
+  };
   b4dm4n = {
     email = "fabianm88@gmail.com";
     github = "B4dM4n";
@@ -1929,6 +1935,12 @@
     github = "dbrock";
     githubId = 14032;
     name = "Daniel Brockman";
+  };
+  ddelabru = {
+    email = "ddelabru@redhat.com";
+    github = "ddelabru";
+    githubId = 39909293;
+    name = "Dominic Delabruere";
   };
   dduan = {
     email = "daniel@duan.ca";
@@ -5181,6 +5193,12 @@
     githubId = 13689192;
     name = "Nguyễn Gia Phong";
   };
+  mcwitt = {
+    email = "mcwitt@gmail.com";
+    github = "mcwitt";
+    githubId = 319411;
+    name = "Matt Wittmann";
+  };
   mdaiter = {
     email = "mdaiter8121@gmail.com";
     github = "mdaiter";
@@ -7485,6 +7503,12 @@
     github = "simonvandel";
     githubId = 2770647;
     name = "Simon Vandel Sillesen";
+  };
+  siraben = {
+    email = "bensiraphob@gmail.com";
+    github = "siraben";
+    githubId = 8219659;
+    name = "Siraphob Phipathananunth";
   };
   siriobalmelli = {
     email = "sirio@b-ad.ch";
