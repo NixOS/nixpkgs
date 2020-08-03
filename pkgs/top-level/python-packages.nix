@@ -2225,6 +2225,8 @@ in {
 
   bsddb3 = callPackage ../development/python-modules/bsddb3 { };
 
+  bsdiff4 = callPackage ../development/python-modules/bsdiff4 { };
+
   bkcharts = callPackage ../development/python-modules/bkcharts { };
 
   bokeh = callPackage ../development/python-modules/bokeh { };
