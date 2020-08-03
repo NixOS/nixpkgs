@@ -1771,6 +1771,8 @@ in {
 
   altair = callPackage ../development/python-modules/altair { };
 
+  altair-transform = callPackage ../development/python-modules/altair-transform { };
+
   vega = callPackage ../development/python-modules/vega { };
 
   accupy = callPackage ../development/python-modules/accupy { };
