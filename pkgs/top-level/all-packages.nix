@@ -1035,6 +1035,8 @@ in
 
   gopacked = callPackage ../applications/misc/gopacked { };
 
+  goproxy = callPackage ../development/tools/goproxy { };
+
   gucci = callPackage ../tools/text/gucci { };
 
   grc = callPackage ../tools/misc/grc { };
