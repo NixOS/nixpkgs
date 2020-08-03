@@ -1,4 +1,4 @@
-{ go, cacert, git, lib, removeReferencesTo, stdenv, vend }:
+{ go, cacert, git, lib, removeReferencesTo, stdenv, vend, goproxy, fetchgit, fetchhg, fetchbzr, fetchFromGithub }:
 
 { name ? "${args'.pname}-${args'.version}"
 , src
@@ -23,6 +23,9 @@
 # Whether to run the vend tool to regenerate the vendor directory.
 # This is useful if any dependency contain C files.
 , runVend ? false
+
+# goDeps is a goDeps dependency file.
+, goDeps ? null
 
 , modSha256 ? null
 
@@ -53,7 +56,46 @@ let
 
   vendCommand = if runVend then "${vend}/bin/vend" else "false";
 
-  go-modules = if vendorSha256 != null then go.stdenv.mkDerivation (let modArgs = {
+  dep2src = goDep:
+    {
+      inherit (goDep) goPackagePath;
+      src = if goDep.fetch.type == "git" then
+        fetchgit {
+          inherit (goDep.fetch) url rev sha256;
+        }
+      else if goDep.fetch.type == "hg" then
+        fetchhg {
+          inherit (goDep.fetch) url rev sha256;
+        }
+      else if goDep.fetch.type == "bzr" then
+        fetchbzr {
+          inherit (goDep.fetch) url rev sha256;
+        }
+      else if goDep.fetch.type == "FromGitHub" then
+        fetchFromGitHub {
+          inherit (goDep.fetch) owner repo rev sha256;
+        }
+      else abort "Unrecognized package fetch type: ${goDep.fetch.type}";
+    };
+
+  importGodeps = { depsFile }:
+    map dep2src (import depsFile);
+
+  godeps = importGodeps { depsFile=goDeps; };
+
+  proxyCommand = if goDeps != null then "${goproxy}/bin/goproxy" else "false";
+
+  depCommand = lib.flip lib.concatMapStrings godeps ({ src, goPackagePath }: ''
+      echo ${goPackagePath}
+      mkdir tmp
+      (cd tmp; unpackFile "${src}")
+      mkdir -p "source/$(dirname "${goPackagePath}")"
+      chmod -R u+w tmp/*
+      mv tmp/* "source/${goPackagePath}"
+      rmdir tmp
+      '');
+
+  go-modules = if vendorSha256 != null || goDeps != null then go.stdenv.mkDerivation (let modArgs = {
 
     name = "${name}-go-modules";
 
@@ -86,6 +128,15 @@ let
 
       if [ ${deleteFlag} == "true" ]; then
         rm -rf vendor
+      fi
+
+      if [ ${proxyCommand} != "false" ]; then 
+        export GOSUMDB=off
+        rm -rf go.sum
+        mkdir source
+        ${depCommand}
+        ${proxyCommand} &
+        export "GOPROXY=http://localhost:8080"
       fi
 
       if [ -e vendor ]; then
@@ -252,6 +303,8 @@ let
   });
 in if disabled then
   throw "${package.name} not supported for go ${go.meta.branch}"
+else if goDeps != null && vendorSha256 != null then
+  throw "${package.name} has both goDeps and vendorSha256 set which is not supported"
 else if modSha256 != null then
   lib.warn "modSha256 is deprecated and will be removed in the next release (20.09), use vendorSha256 instead" (
     import ./old.nix { inherit go cacert git lib removeReferencesTo stdenv; } args')
