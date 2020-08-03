@@ -165,6 +165,8 @@ in
 
   clj-kondo = callPackage ../development/tools/clj-kondo { };
 
+  swm = callPackage ../development/tools/swm { };
+
   cmark = callPackage ../development/libraries/cmark { };
 
   cm256cc = callPackage ../development/libraries/cm256cc {  };
