@@ -17269,14 +17269,6 @@ in
     ];
   };
 
-  linux_5_6 = callPackage ../os-specific/linux/kernel/linux-5.6.nix {
-    kernelPatches = [
-      kernelPatches.bridge_stp_helper
-      kernelPatches.request_key_helper
-      kernelPatches.export_kernel_fpu_functions."5.3"
-    ];
-  };
-
   linux_5_7 = callPackage ../os-specific/linux/kernel/linux-5.7.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -17522,7 +17514,6 @@ in
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   linuxPackages_5_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_4);
-  linuxPackages_5_6 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_6);
   linuxPackages_5_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_7);
   linuxPackages_5_8 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_8);
 
