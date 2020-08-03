@@ -60,6 +60,9 @@ insert_final_newline = unset
 [gemset.nix]
 insert_final_newline = unset
 
+[node-packages.nix]
+insert_final_newline = unset
+
 [pkgs/applications/editors/emacs-modes/recipes-archive-melpa.json]
 indent_size = unset
 
