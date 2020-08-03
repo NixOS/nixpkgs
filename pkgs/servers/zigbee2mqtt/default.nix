@@ -1,4 +1,4 @@
-{ pkgs, stdenv, system, dataDir ? "/opt/zigbee2mqtt/data" }:
+{ pkgs, stdenv, system, dataDir ? "/opt/zigbee2mqtt/data", nixosTests }:
 let
   package = (import ./node.nix { inherit pkgs system; }).package;
 in
@@ -22,6 +22,8 @@ package.override rec {
     rev = version;
     sha256 = "0yv51rds28az5pqzgkprhrzwmky29l1mvqb73l7dbs8qlx8x1x52";
   };
+
+  passthru.tests.zigbee2mqtt = nixosTests.zigbee2mqtt;
 
   meta = with pkgs.stdenv.lib; {
     description = "Zigbee to MQTT bridge using zigbee-shepherd";
