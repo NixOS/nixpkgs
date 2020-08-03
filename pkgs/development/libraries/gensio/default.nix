@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gensio";
-  version = "2.0.5";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "cminyard";
     repo = "${pname}";
     rev = "v${version}";
-    sha256 = "1j6c6vmnip24pxafk29y312vif1xlryymv7aaxgqp9ca3s91nlrf";
+    sha256 = "0sdqv4j1jjjc2nxnd9h7r4w66bdjl5ksvfia4i4cjj7jfl0hhynl";
   };
 
   configureFlags = [
