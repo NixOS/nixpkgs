@@ -1,0 +1,33 @@
+From 1d54dafad9968465d995d195f683d8032a5194d1 Mon Sep 17 00:00:00 2001
+From: "J. Nick Koston" <nick@koston.org>
+Date: Sun, 2 Aug 2020 23:05:53 +0000
+Subject: [PATCH] Fix flapping chained task logging test
+
+Creating 20 tasks was taking less than 0.0001 seconds which caused
+the tests to fail.  Increase the number of test tasks by two orders
+of magnitude.
+---
+ tests/test_core.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/test_core.py b/tests/test_core.py
+index 12ed00fde2c9..167eda3f6cb4 100644
+--- a/tests/test_core.py
++++ b/tests/test_core.py
+@@ -1436,14 +1436,14 @@ async def test_chained_logging_hits_log_timeout(hass, caplog):
+     async def _task_chain_1():
+         nonlocal created
+         created += 1
+-        if created > 10:
++        if created > 1000:
+             return
+         hass.async_create_task(_task_chain_2())
+ 
+     async def _task_chain_2():
+         nonlocal created
+         created += 1
+-        if created > 10:
++        if created > 1000:
+             return
+         hass.async_create_task(_task_chain_1())
+ 
