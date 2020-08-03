@@ -1442,7 +1442,6 @@ in
   bs-platform = callPackage ../development/compilers/bs-platform {};
 
   c3d = callPackage ../applications/graphics/c3d {
-    stdenv = gcc8Stdenv;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
@@ -12797,7 +12796,9 @@ in
 
   isso = callPackage ../servers/isso { };
 
-  itk4 = callPackage ../development/libraries/itk/4.x.nix { stdenv = gcc8Stdenv; };
+  itk4 = callPackage ../development/libraries/itk/4.x.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   itk = callPackage ../development/libraries/itk {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -15000,7 +15001,6 @@ in
 
   simpleitk = callPackage ../development/libraries/simpleitk {
     lua = lua51Packages.lua;
-    stdenv = gcc8Stdenv;
   };
 
   sfml = callPackage ../development/libraries/sfml {
@@ -25190,9 +25190,7 @@ in
 
   alliance = callPackage ../applications/science/electronics/alliance { };
 
-  ants = callPackage ../applications/science/biology/ants {
-    stdenv = gcc8Stdenv;
-  };
+  ants = callPackage ../applications/science/biology/ants { };
 
   aragorn = callPackage ../applications/science/biology/aragorn { };
 
@@ -25246,7 +25244,7 @@ in
 
   est-sfs = callPackage ../applications/science/biology/est-sfs { };
 
-  ezminc = callPackage ../applications/science/biology/EZminc { stdenv = gcc8Stdenv; };
+  ezminc = callPackage ../applications/science/biology/EZminc { };
 
   exonerate = callPackage ../applications/science/biology/exonerate { };
 
