@@ -26199,8 +26199,9 @@ in
     kops_1_15
     kops_1_16
     kops_1_17
+    kops_1_18
     ;
-  kops = kops_1_17;
+  kops = kops_1_18;
 
   lguf-brightness = callPackage ../misc/lguf-brightness { };
 
