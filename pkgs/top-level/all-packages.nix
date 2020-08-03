@@ -20486,6 +20486,8 @@ in
 
   hactool = callPackage ../tools/compression/hactool { };
 
+  hdhomerun-config-gui = callPackage ../applications/video/hdhomerun-config-gui { };
+
   heimer = libsForQt5.callPackage ../applications/misc/heimer { };
 
   hello = callPackage ../applications/misc/hello { };
