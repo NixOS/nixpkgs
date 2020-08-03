@@ -8314,8 +8314,8 @@ in
       mkdir -p "$rsrc/lib"
       ln -s "${cc}/lib" "$rsrc/include"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
-    '' + stdenv.lib.optionalString (stdenv.targetPlatform.isLinux && cc ? gcc && !(stdenv.targetPlatform.useLLVM or false)) ''
-      echo "--gcc-toolchain=${cc.gcc}" >> $out/nix-support/cc-cflags
+    '' + stdenv.lib.optionalString (stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.useLLVM or false)) ''
+      echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
     '';
   };
 
@@ -9107,55 +9107,41 @@ in
 
   llvmPackages = recurseIntoAttrs llvmPackages_7;
 
-  llvmPackages_5 = callPackage ../development/compilers/llvm/5 ({
+  llvmPackages_5 = callPackage ../development/compilers/llvm/5 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_5.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_5.libraries;
-  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
-    stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
-  });
+  };
 
-  llvmPackages_6 = callPackage ../development/compilers/llvm/6 ({
+  llvmPackages_6 = callPackage ../development/compilers/llvm/6 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_6.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_6.libraries;
-  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
-    # with gcc-7 on i686: undefined reference to `__divmoddi4'
-    # Failing tests with gcc8.
-    stdenv = overrideCC stdenv (if stdenv.hostPlatform.isi686 then gcc6 else gcc7);
-  });
+  };
 
-  llvmPackages_7 = callPackage ../development/compilers/llvm/7 ({
+  llvmPackages_7 = callPackage ../development/compilers/llvm/7 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_7.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_7.libraries;
-  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
-    stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
-  });
+  };
 
-  llvmPackages_8 = callPackage ../development/compilers/llvm/8 ({
+  llvmPackages_8 = callPackage ../development/compilers/llvm/8 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_8.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_8.libraries;
-  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
-    stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
-  });
+  };
 
-  llvmPackages_9 = callPackage ../development/compilers/llvm/9 ({
+  llvmPackages_9 = callPackage ../development/compilers/llvm/9 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_9.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_9.libraries;
-  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
-    stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
-  });
+  };
 
-  llvmPackages_10 = callPackage ../development/compilers/llvm/10 ({
+  llvmPackages_10 = callPackage ../development/compilers/llvm/10 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_10.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_10.libraries;
-  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
-    stdenv = gcc7Stdenv;
-  });
+  };
 
   llvmPackages_latest = llvmPackages_10;
 
@@ -10490,6 +10476,17 @@ in
   libgcc = callPackage ../development/libraries/gcc/libgcc {
     stdenvNoLibs = gccStdenvNoLibs; # cannot be built with clang it seems
   };
+
+  # This is for e.g. LLVM libraries on linux.
+  gccForLibs =
+    # with gcc-7: undefined reference to `__divmoddi4'
+    if stdenv.targetPlatform.isi686
+      then gcc6.cc
+    else if stdenv.targetPlatform == stdenv.hostPlatform && targetPackages.stdenv.cc.isGNU
+	  # Can only do this is in the native case, otherwise we might get infinite
+	  # recursion if `targetPackages.stdenv.cc.cc` itself uses `gccForLibs`.
+      then targetPackages.stdenv.cc.cc
+    else gcc.cc;
 
   libstdcxx5 = callPackage ../development/libraries/gcc/libstdc++/5.nix { };
 
