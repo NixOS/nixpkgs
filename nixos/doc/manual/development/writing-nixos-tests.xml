@@ -216,12 +216,12 @@ start_all()
    </varlistentry>
    <varlistentry>
     <term>
-     <methodname>send_keys</methodname>
+     <methodname>send_key</methodname>
     </term>
     <listitem>
      <para>
       Simulate pressing keys on the virtual keyboard, e.g.,
-      <literal>send_keys("ctrl-alt-delete")</literal>.
+      <literal>send_key("ctrl-alt-delete")</literal>.
      </para>
     </listitem>
    </varlistentry>
@@ -232,7 +232,7 @@ start_all()
     <listitem>
      <para>
       Simulate typing a sequence of characters on the virtual keyboard, e.g.,
-      <literal>send_keys("foobar\n")</literal> will type the string
+      <literal>send_chars("foobar\n")</literal> will type the string
       <literal>foobar</literal> followed by the Enter key.
      </para>
     </listitem>
