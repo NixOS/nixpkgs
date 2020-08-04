@@ -1,28 +1,43 @@
-{ stdenv, fetchgit, pkgconfig
-, autoreconfHook, wrapGAppsHook
-, libgcrypt, libextractor, libxml2
-, gnome3, gnunet, gnutls, gtk3 }:
+{ stdenv, fetchurl
+, gnome3
+, gnunet
+, gnutls
+, gtk3
+, libextractor
+, libgcrypt
+, libxml2
+, pkg-config
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnunet-gtk";
-  version = "0.12.0";
+  inherit (gnunet) version;
 
-  src = fetchgit {
-    url = "https://git.gnunet.org/gnunet-gtk.git";
-    rev = "v${version}";
-    sha256 = "1ccasng1b4bj0kqhbfhiv0j1gnc4v2ka5f7wxvka3iwp90g7rax6";
+  src = fetchurl {
+    url = "mirror://gnu/gnunet/${pname}-${version}.tar.gz";
+    sha256 = "1zdzgq16h77w6ybwg3lqjsjr965np6iqvncqvkbj07glqd4wss0j";
   };
 
-  nativeBuildInputs= [ autoreconfHook wrapGAppsHook pkgconfig ];
-  buildInputs = [ libgcrypt libextractor libxml2 gnunet gnome3.glade gnutls gtk3 ];
+  nativeBuildInputs= [
+    pkg-config
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    gnome3.glade
+    gnunet
+    gnutls
+    gtk3
+    libextractor
+    libgcrypt
+    libxml2
+  ];
 
   patchPhase = "patchShebangs pixmaps/icon-theme-installer";
 
-  meta = with stdenv.lib; {
+  meta = gnunet.meta // {
     description = "GNUnet GTK User Interface";
     homepage = "https://git.gnunet.org/gnunet-gtk.git";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pstn ];
-    platforms = platforms.gnu ++ platforms.linux;
   };
 }
