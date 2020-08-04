@@ -1689,6 +1689,18 @@ let
     meta.homepage = "https://github.com/gregsexton/gitv/";
   };
 
+  golden-ratio = buildVimPluginFrom2Nix {
+    pname = "golden-ratio";
+    version = "2020-04-03";
+    src = fetchFromGitHub {
+      owner = "roman";
+      repo = "golden-ratio";
+      rev = "8313b6d6723c9e77ef1d3760af2cdd244e8db043";
+      sha256 = "03nm1wr0qsrirg4z4171f4nygnqgb6w06ldr6rbbz4a1f7j8j654";
+    };
+    meta.homepage = "https://github.com/roman/golden-ratio/";
+  };
+
   gotests-vim = buildVimPluginFrom2Nix {
     pname = "gotests-vim";
     version = "2019-04-10";
