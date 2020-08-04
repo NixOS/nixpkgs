@@ -14035,23 +14035,7 @@ in
     llvmPackages = llvmPackages_9;
     inherit (darwin.apple_sdk.frameworks) OpenGL;
     inherit (darwin.apple_sdk.libs) Xplugin;
-  }
-    # Temporary fix for .drivers that avoids causing lots of rebuilds; see #91145
-     // { drivers = (mesa.overrideAttrs (a: {
-            nativeBuildInputs = [
-              (patchelf.overrideAttrs (pa: {
-                src = fetchFromGitHub {
-                  owner = "NixOS";
-                  repo = "patchelf";
-                  rev = "61bc10176"; # current master; what matters is merge of #225
-                  sha256 = "0cy77mn77w3mn64ggp20f4ygnbxfjmddhjjhfwkva53lsirg6w93";
-                };
-                nativeBuildInputs = pa.nativeBuildInputs or [] ++ [ autoreconfHook ];
-              }))
-            ] ++ a.nativeBuildInputs or [];
-          })).drivers;
-        }
-    ;
+  };
 
   mesa_glu =  callPackage ../development/libraries/mesa-glu {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
