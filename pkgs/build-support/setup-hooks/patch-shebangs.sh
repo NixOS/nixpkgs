@@ -24,10 +24,10 @@ fixupOutputHooks+=(patchShebangsAuto)
 patchShebangs() {
     local pathName
 
-    if [ "$1" = "--host" ]; then
+    if [[ "$1" == "--host" ]]; then
         pathName=HOST_PATH
         shift
-    elif [ "$1" = "--build" ]; then
+    elif [[ "$1" == "--build" ]]; then
         pathName=PATH
         shift
     fi
@@ -41,7 +41,7 @@ patchShebangs() {
     local oldInterpreterLine
     local newInterpreterLine
 
-    if [ $# -eq 0 ]; then
+    if [[ $# -eq 0 ]]; then
         echo "No arguments supplied to patchShebangs" >&2
         return 0
     fi
@@ -53,8 +53,8 @@ patchShebangs() {
         read -r oldInterpreterLine < "$f"
         read -r oldPath arg0 args <<< "${oldInterpreterLine:3}"
 
-        if [ -z "$pathName" ]; then
-            if [ -n "$strictDeps" ] && [[ "$f" = "$NIX_STORE"* ]]; then
+        if [[ -z "$pathName" ]]; then
+            if [[ -n $strictDeps && $f == "$NIX_STORE"* ]]; then
                 pathName=HOST_PATH
             else
                 pathName=PATH
@@ -65,14 +65,14 @@ patchShebangs() {
             # Check for unsupported 'env' functionality:
             # - options: something starting with a '-'
             # - environment variables: foo=bar
-            if [[ "$arg0" == "-"* ]] || [[ "$arg0" == *"="* ]]; then
+            if [[ $arg0 == "-"* || $arg0 == *"="* ]]; then
                 echo "$f: unsupported interpreter directive \"$oldInterpreterLine\" (set dontPatchShebangs=1 and handle shebang patching yourself)" >&2
                 exit 1
             fi
 
             newPath="$(PATH="${!pathName}" command -v "$arg0" || true)"
         else
-            if [ "$oldPath" = "" ]; then
+            if [[ -z $oldPath ]]; then
                 # If no interpreter is specified linux will use /bin/sh. Set
                 # oldpath="/bin/sh" so that we get /nix/store/.../sh.
                 oldPath="/bin/sh"
@@ -87,8 +87,8 @@ patchShebangs() {
         newInterpreterLine="$newPath $args"
         newInterpreterLine=${newInterpreterLine%${newInterpreterLine##*[![:space:]]}}
 
-        if [ -n "$oldPath" -a "${oldPath:0:${#NIX_STORE}}" != "$NIX_STORE" ]; then
-            if [ -n "$newPath" -a "$newPath" != "$oldPath" ]; then
+        if [[ -n "$oldPath" && "${oldPath:0:${#NIX_STORE}}" != "$NIX_STORE" ]]; then
+            if [[ -n "$newPath" ]] && [[ "$newPath" != "$oldPath" ]]; then
                 echo "$f: interpreter directive changed from \"$oldInterpreterLine\" to \"$newInterpreterLine\""
                 # escape the escape chars so that sed doesn't interpret them
                 escapedInterpreterLine=${newInterpreterLine//\\/\\\\}
@@ -107,12 +107,12 @@ patchShebangs() {
 }
 
 patchShebangsAuto () {
-    if [ -z "${dontPatchShebangs-}" -a -e "$prefix" ]; then
+    if [[ -z "${dontPatchShebangs-}" && -e "$prefix" ]]; then
 
         # Dev output will end up being run on the build platform. An
         # example case of this is sdl2-config. Otherwise, we can just
         # use the runtime path (--host).
-        if [ "$output" != out ] && [ "$output" = "$outputDev" ]; then
+        if [[ "$output" != out && "$output" = "$outputDev" ]]; then
             patchShebangs --build "$prefix"
         else
             patchShebangs --host "$prefix"
