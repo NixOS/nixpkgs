@@ -5,7 +5,7 @@
   grantleetheme, karchive, kcodecs, kconfig, kconfigwidgets, kcontacts,
   kdepim-apps-libs, kiconthemes, kidentitymanagement, kio, kjobwidgets, kldap,
   kmailtransport, kmbox, kmime, kwindowsystem, libgravatar, libkdepim, libkleo,
-  pimcommon, qca-qt5, qtwebengine, qtwebkit, syntax-highlighting
+  pimcommon, qca-qt5, qtwebengine, syntax-highlighting
 }:
 
 mkDerivation {
@@ -18,7 +18,7 @@ mkDerivation {
   buildInputs = [
     akonadi-notes akonadi-search gpgme grantlee grantleetheme karchive kcodecs
     kconfig kconfigwidgets kdepim-apps-libs kiconthemes kio kjobwidgets kldap
-    kmailtransport kmbox kmime kwindowsystem libgravatar libkdepim qca-qt5 qtwebkit
+    kmailtransport kmbox kmime kwindowsystem libgravatar libkdepim qca-qt5
     syntax-highlighting
   ];
   propagatedBuildInputs = [

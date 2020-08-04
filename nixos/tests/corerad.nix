@@ -1,7 +1,7 @@
 import ./make-test-python.nix (
   {
     nodes = {
-      router = {config, pkgs, ...}: { 
+      router = {config, pkgs, ...}: {
         config = {
           # This machine simulates a router with IPv6 forwarding and a static IPv6 address.
           boot.kernel.sysctl = {

@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitLab
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -23,6 +24,18 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "1yhf9xyxdawbihsx89dpjlac800wrmpwx63rphad2nj225y9q40f";
   };
+
+  patches = [
+    # to work with latest glslang, remove on release >2.72.0
+    (fetchpatch {
+      url = "https://code.videolan.org/videolan/libplacebo/-/commit/523056828ab86c2f17ea65f432424d48b6fdd389.patch";
+      sha256 = "051vhd0l3yad1fzn5zayi08kqs9an9j8p7m63kgqyfv1ksnydpcs";
+    })
+    (fetchpatch {
+      url = "https://code.videolan.org/videolan/libplacebo/-/commit/82e3be1839379791b58e98eb049415b42888d5b0.patch";
+      sha256 = "0nklj9gfiwkbbj6wfm1ck33hphaxrvzb84c4h2nfj88bapnlm90l";
+    })
+  ];
 
   nativeBuildInputs = [
     meson

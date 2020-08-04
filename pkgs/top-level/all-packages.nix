@@ -523,6 +523,9 @@ in
   #package writers
   writers = callPackage ../build-support/writers {};
 
+  # lib functions depending on pkgs
+  inherit (import ../pkgs-lib { inherit lib pkgs; }) formats;
+
   ### TOOLS
 
   _0x0 = callPackage ../tools/misc/0x0 { };
@@ -1050,6 +1053,8 @@ in
 
   httperf = callPackage ../tools/networking/httperf { };
 
+  hwi = with python3Packages; toPythonApplication hwi;
+
   ili2c = callPackage ../tools/misc/ili2c { };
 
   imageworsener = callPackage ../tools/graphics/imageworsener { };
@@ -1361,6 +1366,8 @@ in
   bowtie2 = callPackage ../applications/science/biology/bowtie2 { };
 
   boxfs = callPackage ../tools/filesystems/boxfs { };
+
+  bpytop = callPackage ../tools/system/bpytop { };
 
   brasero-original = lowPrio (callPackage ../tools/cd-dvd/brasero { });
 
@@ -2068,6 +2075,8 @@ in
   loccount = callPackage ../development/tools/misc/loccount { };
 
   long-shebang = callPackage ../misc/long-shebang {};
+
+  lowdown = callPackage ../tools/typesetting/lowdown { };
 
   numatop = callPackage ../os-specific/linux/numatop { };
 
@@ -3233,6 +3242,8 @@ in
   utahfs = callPackage ../applications/networking/utahfs { };
 
   wallutils = callPackage ../tools/graphics/wallutils { };
+
+  wayland-utils = callPackage ../tools/wayland/wayland-utils { };
 
   wev = callPackage ../tools/misc/wev { };
 
@@ -5433,6 +5444,8 @@ in
 
   nat-traverse = callPackage ../tools/networking/nat-traverse { };
 
+  navi = callPackage ../applications/misc/navi { };
+
   navilu-font = callPackage ../data/fonts/navilu { stdenv = stdenvNoCC; };
 
   nawk = callPackage ../tools/text/nawk { };
@@ -5545,6 +5558,8 @@ in
 
   ndstool = callPackage ../tools/archivers/ndstool { };
 
+  nfs-ganesha = callPackage ../servers/nfs-ganesha { };
+
   ngrep = callPackage ../tools/networking/ngrep { };
 
   neuron-notes = haskell.lib.justStaticExecutables (haskell.lib.generateOptparseApplicativeCompletion "neuron" haskellPackages.neuron);
@@ -5652,6 +5667,8 @@ in
   ntfsprogs = pkgs.ntfs3g;
 
   ntfy = callPackage ../tools/misc/ntfy {};
+
+  ntirpc = callPackage ../development/libraries/ntirpc { };
 
   ntopng = callPackage ../tools/networking/ntopng { };
 
@@ -7144,6 +7161,8 @@ in
   timetrap = callPackage ../applications/office/timetrap { };
 
   timetable = callPackage ../applications/office/timetable { };
+
+  timezonemap = callPackage ../development/libraries/timezonemap { };
 
   tzupdate = callPackage ../applications/misc/tzupdate { };
 
@@ -9599,6 +9618,7 @@ in
   ### DEVELOPMENT / INTERPRETERS
 
   acl2 = callPackage ../development/interpreters/acl2 { };
+  acl2-minimal = callPackage ../development/interpreters/acl2 { certifyBooks = false; };
 
   angelscript = callPackage ../development/interpreters/angelscript {};
 
@@ -14018,7 +14038,17 @@ in
   }
     # Temporary fix for .drivers that avoids causing lots of rebuilds; see #91145
      // { drivers = (mesa.overrideAttrs (a: {
-            nativeBuildInputs = [ patchelf_0_9 ] ++ a.nativeBuildInputs or [];
+            nativeBuildInputs = [
+              (patchelf.overrideAttrs (pa: {
+                src = fetchFromGitHub {
+                  owner = "NixOS";
+                  repo = "patchelf";
+                  rev = "61bc10176"; # current master; what matters is merge of #225
+                  sha256 = "0cy77mn77w3mn64ggp20f4ygnbxfjmddhjjhfwkva53lsirg6w93";
+                };
+                nativeBuildInputs = pa.nativeBuildInputs or [] ++ [ autoreconfHook ];
+              }))
+            ] ++ a.nativeBuildInputs or [];
           })).drivers;
         }
     ;
@@ -16077,6 +16107,12 @@ in
 
   jetty = callPackage ../servers/http/jetty { };
 
+  jicofo = callPackage ../servers/jicofo { };
+
+  jitsi-meet = callPackage ../servers/web-apps/jitsi-meet { };
+
+  jitsi-videobridge = callPackage ../servers/jitsi-videobridge { };
+
   kapow = callPackage ../servers/kapow { };
 
   keycloak = callPackage ../servers/keycloak { };
@@ -17264,7 +17300,7 @@ in
     ];
   };
 
-  linux_5_6 = callPackage ../os-specific/linux/kernel/linux-5.6.nix {
+  linux_5_7 = callPackage ../os-specific/linux/kernel/linux-5.7.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
@@ -17272,7 +17308,7 @@ in
     ];
   };
 
-  linux_5_7 = callPackage ../os-specific/linux/kernel/linux-5.7.nix {
+  linux_5_8 = callPackage ../os-specific/linux/kernel/linux-5.8.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
@@ -17495,7 +17531,7 @@ in
 
   # Update this when adding the newest kernel major version!
   # And update linux_latest_for_hardened below if the patches are already available
-  linuxPackages_latest = linuxPackages_5_7;
+  linuxPackages_latest = linuxPackages_5_8;
   linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
@@ -17509,8 +17545,8 @@ in
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   linuxPackages_5_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_4);
-  linuxPackages_5_6 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_6);
   linuxPackages_5_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_7);
+  linuxPackages_5_8 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_8);
 
   # When adding to this list:
   # - Update linuxPackages_latest to the latest version
@@ -17548,7 +17584,7 @@ in
   # Hardened Linux
   hardenedLinuxPackagesFor = kernel': overrides:
     let # Note: We use this hack since the hardened patches can lag behind and we don't want to delay updates:
-      linux_latest_for_hardened = pkgs.linux_latest;
+      linux_latest_for_hardened = pkgs.linux_5_7;
       kernel = (if kernel' == pkgs.linux_latest then linux_latest_for_hardened else kernel').override overrides;
     in linuxPackagesFor (kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
@@ -20096,10 +20132,12 @@ in
 
   firefox-unwrapped = firefoxPackages.firefox;
   firefox-esr-68-unwrapped = firefoxPackages.firefox-esr-68;
+  firefox-esr-78-unwrapped = firefoxPackages.firefox-esr-78;
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-wayland = wrapFirefox firefox-unwrapped { forceWayland = true; };
   firefox-esr-68 = wrapFirefox firefox-esr-68-unwrapped { };
-  firefox-esr = firefox-esr-68;
+  firefox-esr-78 = wrapFirefox firefox-esr-78-unwrapped { };
+  firefox-esr = firefox-esr-78;
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     channel = "release";
@@ -20854,7 +20892,7 @@ in
   inherit (kdeApplications)
     akonadi akregator ark bomber bovo dolphin dragon elisa ffmpegthumbs filelight granatier gwenview k3b
     kaddressbook kapptemplate kate kcachegrind kcalc kcharselect kcolorchooser kdenlive kdf kdialog
-    keditbookmarks kfind kget kgpg khelpcenter kig kleopatra kmail kmix kmplot kolourpaint kompare konsole yakuake
+    keditbookmarks kfind kfloppy kget kgpg khelpcenter kig kleopatra kmail kmix kmplot kolourpaint kompare konsole yakuake
     kpkpass kitinerary kontact korganizer krdc krfb ksystemlog ktouch kwalletmanager marble minuet okular picmi spectacle;
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
@@ -20997,6 +21035,8 @@ in
 
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
+  lazpaint = callPackage ../applications/graphics/lazpaint { };
+
   caps = callPackage ../applications/audio/caps { };
 
   lastfmsubmitd = callPackage ../applications/audio/lastfmsubmitd { };
@@ -21038,7 +21078,6 @@ in
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
     };
-    nss = nss_3_44;
   };
 
   libreoffice-qt = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
@@ -27146,6 +27185,10 @@ in
   xtermcontrol = callPackage ../applications/misc/xtermcontrol {};
 
   openfst = callPackage ../development/libraries/openfst {};
+
+  opengrm-ngram = callPackage ../development/libraries/opengrm-ngram {};
+
+  phonetisaurus = callPackage ../development/libraries/phonetisaurus {};
 
   duti = callPackage ../os-specific/darwin/duti {};
 

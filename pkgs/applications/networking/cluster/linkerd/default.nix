@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, buildGoModule }:
 
 buildGoModule {
-  pname = "linkerd-unstablle";
+  pname = "linkerd-unstable";
   version = "2020-05-01";
 
   src = fetchFromGitHub {

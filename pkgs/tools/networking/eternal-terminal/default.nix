@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "eternal-terminal";
-  version = "6.0.7";
+  version = "6.0.9";
 
   src = fetchFromGitHub {
     owner = "MisterTea";
     repo = "EternalTerminal";
     rev = "et-v${version}";
-    sha256 = "03pdspggqxkmz95qb96pig5x0xw18hy9a7ivszydr32ry6kxxx1h";
+    sha256 = "16s5m9i9fx370ssqnqxi01isrs9p3k7w8a4kkcgr4lq99vxys915";
   };
 
   nativeBuildInputs = [ cmake ];

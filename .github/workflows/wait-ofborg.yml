@@ -7,9 +7,12 @@ jobs:
     steps:
     - name: Wait for ofborg CI
       run: |
-        # wait for ~30min...
+        # eval sometimes takes a bit longer on staging.
+        if [[ "$BASE_BRANCH" == "refs/heads/staging" ]]; then
+          COUNTDOWN=$((COUNTDOWN*2))
+        fi
         # ..in future a better fix would be to make ofborg mark CI as pending right away.
-        for i in $(seq 360); do
+        for i in $(seq "$COUNTDOWN"); do
           res=$(curl --silent \
             -H "Accept: application/vnd.github.antiope-preview+json" \
             -H "Authorization: token ${GITHUB_TOKEN}" \
@@ -26,6 +29,8 @@ jobs:
       # ofborg is not checking forks.
       if: github.repository_owner == 'NixOS'
       env:
+        BASE_BRANCH: ${{ github.base_ref }}
+        COUNTDOWN: 360 # wait for ~30min...
         GITHUB_TOKEN: ${{ github.token }}
         COMMIT: ${{ github.event.pull_request.head.sha }}
         OFBORG_APP_ID: 20500
