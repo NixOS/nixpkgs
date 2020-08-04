@@ -333,30 +333,19 @@ in
       };
 
       # Configuration for automatic login. Common for all DM.
-      autoLogin = mkOption {
-        type = types.submodule {
-          options = {
-            enable = mkOption {
-              type = types.bool;
-              default = cfg.displayManager.autoLogin.user != null;
-              description = ''
-                Automatically log in as <option>autoLogin.user</option>.
-              '';
-            };
-
-            user = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              description = ''
-                User to be used for the automatic login.
-              '';
-            };
-          };
-        };
-        
-        default = {};
+      autoLogin.enable = mkOption {
+        type = types.bool;
+        default = cfg.displayManager.autoLogin.user != null;
         description = ''
-          Auto login configuration attrset.
+          Automatically log in as <option>autoLogin.user</option>.
+        '';
+      };
+
+      autoLogin.user = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          User to be used for the automatic login.
         '';
       };
 
