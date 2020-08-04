@@ -2120,6 +2120,8 @@ in
 
   metabase = callPackage ../servers/metabase { };
 
+  mgit = callPackage ../development/tools/misc/mgit { };
+
   midicsv = callPackage ../tools/audio/midicsv { };
 
   mididings = callPackage ../tools/audio/mididings { };
