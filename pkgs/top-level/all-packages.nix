@@ -179,6 +179,8 @@ in
 
   cpu-x = callPackage ../applications/misc/cpu-x { };
 
+  cpupower-gui = callPackage ../applications/system/cpupower-gui { };
+
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
     inherit dhall-nix;
   };
