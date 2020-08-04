@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "h3";
-  version = "3.6.3";
+  version = "3.6.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7928303e39eb962cfbca38b35e289ddc5e04b0d3ef56532e1747a19450e13263";
+    sha256 = "416e35d736ef6ec9c1f73b9d4a9d5c696cc2a7561811f8bcfa08c8c4912f2289";
   };
 
   patches = [

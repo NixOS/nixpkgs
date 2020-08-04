@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-freezegun";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "060cdf192848e50a4a681a5e73f8b544c4ee5ebc1fab3cb7223a0097bac2f83f";
+    sha256 = "19c82d5633751bf3ec92caa481fb5cffaac1787bd485f0df6436fd6242176949";
   };
 
   propagatedBuildInputs = [

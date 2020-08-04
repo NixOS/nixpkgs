@@ -24,10 +24,10 @@ with stdenv.lib;
 
 buildPythonApplication rec {
   pname = "trytond";
-  version = "5.6.2";
+  version = "5.6.4";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0mlfl34zmmqrwip39mvhkk0h6dsljqwff2mk1ldahm253d4vzflp";
+    sha256 = "d89da52a9a0a9bcbbc316fc72eea8810bac64307d22c90ab2d70a4b0cd9b1a9c";
   };
 
   # Tells the tests which database to use
