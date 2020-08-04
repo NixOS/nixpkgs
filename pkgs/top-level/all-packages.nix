@@ -5556,6 +5556,8 @@ in
 
   ndstool = callPackage ../tools/archivers/ndstool { };
 
+  nfs-ganesha = callPackage ../servers/nfs-ganesha { };
+
   ngrep = callPackage ../tools/networking/ngrep { };
 
   neuron-notes = haskell.lib.justStaticExecutables (haskell.lib.generateOptparseApplicativeCompletion "neuron" haskellPackages.neuron);
@@ -5663,6 +5665,8 @@ in
   ntfsprogs = pkgs.ntfs3g;
 
   ntfy = callPackage ../tools/misc/ntfy {};
+
+  ntirpc = callPackage ../development/libraries/ntirpc { };
 
   ntopng = callPackage ../tools/networking/ntopng { };
 
