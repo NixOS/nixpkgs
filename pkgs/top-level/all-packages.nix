@@ -1367,6 +1367,8 @@ in
 
   boxfs = callPackage ../tools/filesystems/boxfs { };
 
+  bpytop = callPackage ../tools/system/bpytop { };
+
   brasero-original = lowPrio (callPackage ../tools/cd-dvd/brasero { });
 
   brasero = callPackage ../tools/cd-dvd/brasero/wrapper.nix { };
@@ -2073,6 +2075,8 @@ in
   loccount = callPackage ../development/tools/misc/loccount { };
 
   long-shebang = callPackage ../misc/long-shebang {};
+
+  lowdown = callPackage ../tools/typesetting/lowdown { };
 
   numatop = callPackage ../os-specific/linux/numatop { };
 
@@ -5554,6 +5558,8 @@ in
 
   ndstool = callPackage ../tools/archivers/ndstool { };
 
+  nfs-ganesha = callPackage ../servers/nfs-ganesha { };
+
   ngrep = callPackage ../tools/networking/ngrep { };
 
   neuron-notes = haskell.lib.justStaticExecutables (haskell.lib.generateOptparseApplicativeCompletion "neuron" haskellPackages.neuron);
@@ -5661,6 +5667,8 @@ in
   ntfsprogs = pkgs.ntfs3g;
 
   ntfy = callPackage ../tools/misc/ntfy {};
+
+  ntirpc = callPackage ../development/libraries/ntirpc { };
 
   ntopng = callPackage ../tools/networking/ntopng { };
 
@@ -14033,7 +14041,17 @@ in
   }
     # Temporary fix for .drivers that avoids causing lots of rebuilds; see #91145
      // { drivers = (mesa.overrideAttrs (a: {
-            nativeBuildInputs = [ patchelf_0_9 ] ++ a.nativeBuildInputs or [];
+            nativeBuildInputs = [
+              (patchelf.overrideAttrs (pa: {
+                src = fetchFromGitHub {
+                  owner = "NixOS";
+                  repo = "patchelf";
+                  rev = "61bc10176"; # current master; what matters is merge of #225
+                  sha256 = "0cy77mn77w3mn64ggp20f4ygnbxfjmddhjjhfwkva53lsirg6w93";
+                };
+                nativeBuildInputs = pa.nativeBuildInputs or [] ++ [ autoreconfHook ];
+              }))
+            ] ++ a.nativeBuildInputs or [];
           })).drivers;
         }
     ;
