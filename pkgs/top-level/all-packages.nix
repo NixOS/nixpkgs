@@ -1369,6 +1369,8 @@ in
 
   boxfs = callPackage ../tools/filesystems/boxfs { };
 
+  bpytop = callPackage ../tools/system/bpytop { };
+
   brasero-original = lowPrio (callPackage ../tools/cd-dvd/brasero { });
 
   brasero = callPackage ../tools/cd-dvd/brasero/wrapper.nix { };
