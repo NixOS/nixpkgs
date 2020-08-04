@@ -4368,9 +4368,9 @@
   };
   koozz = {
     name = "Jan van den Berg";
-    email = "264371+koozz@users.noreply.github.com";
+    email = "264372+koozz@users.noreply.github.com";
     github = "koozz";
-    githubId = 264371;
+    githubId = 264372;
   };
   koral = {
     email = "koral@mailoo.org";
