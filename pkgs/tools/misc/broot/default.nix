@@ -2,23 +2,28 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "0.13.6";
+  version = "0.19.3";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = pname;
     rev = "v${version}";
-    sha256 = "08d0zddqqymxj1qcp8c78r7mpii1piy6awaf135jxhzwi775sqqv";
+    sha256 = "0w03dqm9m2d41ldmjv529azpbp28jjmv21apwf6rlxh59wqgicgb";
   };
 
-  cargoSha256 = "1cxvx51zkmhszmgwsi0aj469xz98v5nk79zvqfyma27gsnh8jczr";
+  cargoSha256 = "1rmhlqq5a7rfsk4m0yzl9smq33xhb5ixw11knz96ih23a53yafsc";
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   postPatch = ''
-    substituteInPlace src/verb_store.rs --replace '"/bin/' '"${coreutils}/bin/'
+    substituteInPlace src/verb/builtin.rs --replace '"/bin/' '"${coreutils}/bin/'
+
+    # Fill the version stub in the man page. We can't fill the date
+    # stub reproducibly.
+    substitute man/page man/broot.1 \
+      --replace "#version" "${version}"
   '';
 
   postInstall = ''
@@ -28,6 +33,8 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --bash $OUT_DIR/{br,broot}.bash
     installShellCompletion --fish $OUT_DIR/{br,broot}.fish
     installShellCompletion --zsh $OUT_DIR/{_br,_broot}
+
+    installManPage man/broot.1
   '';
 
   meta = with stdenv.lib; {

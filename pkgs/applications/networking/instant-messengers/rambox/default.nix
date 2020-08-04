@@ -1,5 +1,5 @@
 { stdenv, fetchurl, xdg_utils, dpkg, makeWrapper, autoPatchelfHook
-, libXtst, libXScrnSaver, gtk3, nss, alsaLib, udev, libnotify
+, libXtst, libXScrnSaver, gtk3, nss, alsaLib, udev, libnotify, wrapGAppsHook
 }:
 
 let
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
     };
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
-  nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook ];
+  nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook wrapGAppsHook ];
   buildInputs = [ libXtst libXScrnSaver gtk3 nss alsaLib ];
   runtimeDependencies = [ udev.lib libnotify ];
 
@@ -35,8 +35,10 @@ in stdenv.mkDerivation rec {
       --replace Exec=/opt/Rambox/rambox Exec=rambox
   '';
 
-  postFixup = ''
-    wrapProgram $out/opt/Rambox/rambox --prefix PATH : ${xdg_utils}/bin
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : ${xdg_utils}/bin
+    )
   '';
 
   meta = with stdenv.lib; {

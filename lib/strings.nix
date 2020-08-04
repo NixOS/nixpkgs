@@ -612,6 +612,22 @@ rec {
   */
   fixedWidthNumber = width: n: fixedWidthString width "0" (toString n);
 
+  /* Convert a float to a string, but emit a warning when precision is lost
+     during the conversion
+
+     Example:
+       floatToString 0.000001
+       => "0.000001"
+       floatToString 0.0000001
+       => trace: warning: Imprecise conversion from float to string 0.000000
+          "0.000000"
+  */
+  floatToString = float: let
+    result = toString float;
+    precise = float == builtins.fromJSON result;
+  in if precise then result
+    else lib.warn "Imprecise conversion from float to string ${result}" result;
+
   /* Check whether a value can be coerced to a string */
   isCoercibleToString = x:
     builtins.elem (builtins.typeOf x) [ "path" "string" "null" "int" "float" "bool" ] ||

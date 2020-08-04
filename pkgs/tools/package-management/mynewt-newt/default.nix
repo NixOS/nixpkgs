@@ -22,7 +22,7 @@ buildGoModule rec {
     })
   ];
 
-  modSha256 = "068r8wa2pgd68jv50x0l1w8n96f97b3mgv7z6f85280ahgywaasq";
+  vendorSha256 = "1sh9mx3lc28fzvc1yrhz58rlbaac7aq1dqyvxwj98vld3kigpv1z";
 
   meta = with stdenv.lib; {
     homepage = "https://mynewt.apache.org/";

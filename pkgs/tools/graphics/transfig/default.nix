@@ -11,11 +11,11 @@ stdenv.mkDerivation {
   buildInputs = [ zlib libjpeg libpng ];
 
   patches = [
-    ./patch-fig2dev-dev-Imakefile
-    ./patch-fig2dev-Imakefile
-    ./patch-transfig-Imakefile
-    ./patch-fig2dev-fig2dev.h
-    ./patch-fig2dev-dev-gensvg.c
+    ./patch-fig2dev-dev-Imakefile.patch
+    ./patch-fig2dev-Imakefile.patch
+    ./patch-transfig-Imakefile.patch
+    ./patch-fig2dev-fig2dev.h.patch
+    ./patch-fig2dev-dev-gensvg.c.patch
   ];
 
   patchPhase = ''

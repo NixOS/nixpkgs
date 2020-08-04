@@ -2,16 +2,15 @@
 
 buildGoPackage rec {
   pname = "etcd";
-  version = "3.3.20";
+  version = "3.3.22";
 
-  # change to "go.etcd.io/etcd" for >= 3.4
   goPackagePath = "github.com/coreos/etcd";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
     repo = "etcd";
     rev = "v${version}";
-    sha256 = "1iqq12kkky3cl28k7fabqqyx1i0a2wmbkq0bs8yhiwywp076k08w";
+    sha256 = "1rd390qfx9k20j9gh1wp1g9ygc571f2kv1dg2wvqij3kwydhymcj";
   };
 
   buildPhase = ''
@@ -34,7 +33,7 @@ buildGoPackage rec {
     description = "Distributed reliable key-value store for the most critical data of a distributed system";
     license = licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = with maintainers; [ offline ];
+    maintainers = with maintainers; [ offline zowoq ];
     platforms = platforms.unix;
   };
 }

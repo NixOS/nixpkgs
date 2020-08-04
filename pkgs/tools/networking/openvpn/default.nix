@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig
+{ stdenv, fetchurl, fetchpatch, pkgconfig, makeWrapper
 , iproute, lzo, openssl, pam
 , useSystemd ? stdenv.isLinux, systemd ? null, utillinux ? null
 , pkcs11Support ? false, pkcs11helper ? null,
@@ -10,11 +10,10 @@ assert pkcs11Support -> (pkcs11helper != null);
 with stdenv.lib;
 
 let
-  # There is some fairly brittle string substitutions going on to replace paths,
-  # so please verify this script in case you are upgrading it
+  # Check if the script needs to have other binaries wrapped when changing this.
   update-resolved = fetchurl {
-    url = "https://raw.githubusercontent.com/jonathanio/update-systemd-resolved/v1.2.7/update-systemd-resolved";
-    sha256 = "12zfzh42apwbj7ks5kfxf3far7kaghlby4yapbhn00q8pbdlw7pq";
+    url = "https://raw.githubusercontent.com/jonathanio/update-systemd-resolved/v1.3.0/update-systemd-resolved";
+    sha256 = "021qzv1k0zxgv1rmyfpqj3zlzqr28xa7zff1n7vrbjk36ijylpsc";
   };
 
 in stdenv.mkDerivation rec {
@@ -26,7 +25,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1qpbllwlha7cffsd5dlddb8rl22g9rar5zflkz1wrcllhvfkl7v4";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
 
   buildInputs = [ lzo openssl ]
                   ++ optionals stdenv.isLinux [ pam iproute ]
@@ -45,16 +44,10 @@ in stdenv.mkDerivation rec {
     cp -r sample/sample-config-files/ $out/share/doc/openvpn/examples
     cp -r sample/sample-keys/ $out/share/doc/openvpn/examples
     cp -r sample/sample-scripts/ $out/share/doc/openvpn/examples
-
-    ${optionalString useSystemd ''
-      install -Dm755 ${update-resolved} $out/libexec/update-systemd-resolved
-
-      substituteInPlace $out/libexec/update-systemd-resolved \
-        --replace '/usr/bin/env bash' '${stdenv.shell} -e' \
-        --replace 'busctl call'       '${getBin systemd}/bin/busctl call' \
-        --replace '(ip '              '(${getBin iproute}/bin/ip ' \
-        --replace 'logger '           '${getBin utillinux}/bin/logger '
-    ''}
+  '' + optionalString useSystemd ''
+    install -Dm555 ${update-resolved} $out/libexec/update-systemd-resolved
+    wrapProgram $out/libexec/update-systemd-resolved \
+      --prefix PATH : ${makeBinPath [ stdenv.shell iproute systemd utillinux ]}
   '';
 
   enableParallelBuilding = true;

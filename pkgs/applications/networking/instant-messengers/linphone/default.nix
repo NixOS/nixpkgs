@@ -10,7 +10,7 @@
 , cyrus_sasl
 , fetchFromGitLab
 , fetchurl
-, ffmpeg
+, ffmpeg_3
 , gdk-pixbuf
 , glib
 , gnused
@@ -137,7 +137,7 @@ mkDerivation rec {
     bzrtp
     cairo
     cyrus_sasl
-    ffmpeg
+    ffmpeg_3
     gdk-pixbuf
     glib
     gtk2

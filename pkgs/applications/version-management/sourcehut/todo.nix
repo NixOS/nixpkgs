@@ -10,7 +10,7 @@ buildPythonPackage rec {
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/todo.sr.ht";
     rev = version;
-    sha256 = "nlTf7KV6vjqqVEXZ6OOZ5dAj1iHTDPYj4DnAD2hGp5c=";
+    sha256 = "15x78rl0zh1rw0izc36k47b27l75k7iyina5ajm3mgkslpndym4y";
   };
 
   patches = [

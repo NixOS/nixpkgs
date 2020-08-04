@@ -10,7 +10,7 @@
 , enableAcousticbrainz ? true
 , enableAcoustid       ? true
 , enableBadfiles       ? true, flac ? null, mp3val ? null
-, enableConvert        ? true, ffmpeg ? null
+, enableConvert        ? true, ffmpeg_3 ? null
 , enableDiscogs        ? true
 , enableEmbyupdate     ? true
 , enableFetchart       ? true
@@ -39,7 +39,7 @@ assert enableAbsubmit    -> essentia-extractor            != null;
 assert enableAcoustid    -> pythonPackages.pyacoustid     != null;
 assert enableBadfiles    -> flac != null && mp3val != null;
 assert enableCheck       -> flac != null && mp3val != null && liboggz != null;
-assert enableConvert     -> ffmpeg != null;
+assert enableConvert     -> ffmpeg_3 != null;
 assert enableDiscogs     -> pythonPackages.discogs_client != null;
 assert enableFetchart    -> pythonPackages.responses      != null;
 assert enableGmusic      -> pythonPackages.gmusicapi      != null;
@@ -146,7 +146,7 @@ in pythonPackages.buildPythonApplication rec {
               || enableAcousticbrainz)
                                     pythonPackages.requests
     ++ optional enableCheck         plugins.check
-    ++ optional enableConvert       ffmpeg
+    ++ optional enableConvert       ffmpeg_3
     ++ optional enableDiscogs       pythonPackages.discogs_client
     ++ optional enableGmusic        pythonPackages.gmusicapi
     ++ optional enableKeyfinder     keyfinder-cli
@@ -185,6 +185,11 @@ in pythonPackages.buildPythonApplication rec {
     ./replaygain-default-bs1770gain.patch
     ./keyfinder-default-bin.patch
     ./mutagen-1.43.patch
+    (fetchpatch {
+      # Fixes failing testcases around the werkzeug component; can dropped after 1.4.9
+      url = "https://github.com/beetbox/beets/commit/d43d54e21cde97f57f19486925ab56b419254cc8.patch";
+      sha256 = "13n2gzmcgfi0m2ycl2r1hpczgksplnkc3y6b66vg57rx5y8nnv5c";
+    })
   ];
 
   postPatch = ''
@@ -200,7 +205,7 @@ in pythonPackages.buildPythonApplication rec {
       s,"mp3val","${mp3val}/bin/mp3val",
     }' beetsplug/badfiles.py
   '' + optionalString enableConvert ''
-    sed -i -e 's,\(util\.command_output(\)\([^)]\+\)),\1[b"${ffmpeg.bin}/bin/ffmpeg" if args[0] == b"ffmpeg" else args[0]] + \2[1:]),' beetsplug/convert.py
+    sed -i -e 's,\(util\.command_output(\)\([^)]\+\)),\1[b"${ffmpeg_3.bin}/bin/ffmpeg" if args[0] == b"ffmpeg" else args[0]] + \2[1:]),' beetsplug/convert.py
   '' + optionalString enableReplaygain ''
     sed -i -re '
       s!^( *cmd *= *b?['\'''"])(bs1770gain['\'''"])!\1${bs1770gain}/bin/\2!

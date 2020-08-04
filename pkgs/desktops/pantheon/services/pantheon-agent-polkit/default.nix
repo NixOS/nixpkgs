@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , pkgconfig
 , meson
@@ -14,17 +15,17 @@
 
 stdenv.mkDerivation rec {
   pname = "pantheon-agent-polkit";
-  version = "1.0.1";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "137809mplrsff1isxwbwa2v2y9ixhwzm4khiijm4mmjchi75wpvx";
+    sha256 = "1kd6spwfwy5r2mrf7xh5l2wrazqia8vr4j3g27s97vn7fcg4pgb0";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };

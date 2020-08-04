@@ -4,17 +4,22 @@
 
 stdenv.mkDerivation rec {
   pname = "onnxruntime";
-  version = "1.2.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     rev = "v${version}";
-    sha256 = "1alhb7nvlxrr9yf757gs4hkzksbk3mxyv5zcmmpl82ibl65vh55k";
+    sha256 = "0rbk1jbfc447x2wybz2hsba6w1ij0fq21996l52cqv39898lvy9d";
     # TODO: use nix-versions of grpc, onnx, eigen, googletest, etc.
     # submodules increase src size and compile times significantly
     # not currently feasible due to how integrated cmake build is with git
     fetchSubmodules = true;
+    # Remove unicode file names which leads to different checksums on HFS+
+    # vs. other filesystems because of unicode normalisation.
+    postFetch = ''
+      rm -rf $out/winml/test/collateral/models/UnicodePath/
+    '';
   };
 
   # TODO: build server, and move .so's to lib output
@@ -36,8 +41,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-Donnxruntime_USE_OPENMP=ON"
     "-Donnxruntime_BUILD_SHARED_LIB=ON"
-    # flip back to ON next release
-    "-Donnxruntime_ENABLE_LTO=OFF" # https://github.com/microsoft/onnxruntime/issues/2828
+    "-Donnxruntime_ENABLE_LTO=ON"
   ];
 
   # ContribOpTest.StringNormalizerTest sets locale to en_US.UTF-8"

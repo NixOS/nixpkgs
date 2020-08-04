@@ -13,21 +13,21 @@
 let
 
   spec = fetchurl {
-    url = "https://raw.githubusercontent.com/linode/linode-api-docs/v4.63.1/openapi.yaml";
-    sha256 = "03ngzbq24zazfqmfd7xjmxixkcb9vv1jgamplsj633j7sjj708s0";
+    url = "https://raw.githubusercontent.com/linode/linode-api-docs/v4.67.0/openapi.yaml";
+    sha256 = "0vsblprkqlr9508x5rkm0wj6lc3w72xiwiqxia9asgr5k45hhfnr";
   };
 
 in
 
 buildPythonApplication rec {
   pname = "linode-cli";
-  version = "2.14.1";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "linode";
     repo = pname;
     rev = version;
-    sha256 = "1hpdmbzs182iag471yvq3kwd1san04a58sczzbmw6vjv2kswn1c2";
+    sha256 = "06iz9xjj6h1ry176558488fl9j18a5vf724zh4cxlcksdy72dnna";
   };
 
   patches = [

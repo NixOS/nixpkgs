@@ -3,6 +3,7 @@
 , libelfin
 , ncurses
 , python3
+, python3Packages
 , makeWrapper
 }:
 stdenv.mkDerivation rec {
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     ncurses
     makeWrapper
+    python3Packages.wrapPython
   ];
 
   buildInputs = [
@@ -42,9 +44,7 @@ stdenv.mkDerivation rec {
     # fix executable includes
     chmod -x $out/include/coz.h
 
-    # make sure that PYTHONPATH doesn't leak from the environment
-    wrapProgram $out/bin/coz \
-      --unset PYTHONPATH
+    wrapPythonPrograms
   '';
 
   meta = {

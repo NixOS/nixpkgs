@@ -43,7 +43,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     docker.fail("sudo -u noprivs docker ps")
     docker.succeed("docker stop sleeping")
 
-    # Must match version twice to ensure client and server versions are correct
-    docker.succeed('[ $(docker version | grep ${pkgs.docker.version} | wc -l) = "2" ]')
+    # Must match version 4 times to ensure client and server git commits and versions are correct
+    docker.succeed('[ $(docker version | grep ${pkgs.docker.version} | wc -l) = "4" ]')
   '';
 })

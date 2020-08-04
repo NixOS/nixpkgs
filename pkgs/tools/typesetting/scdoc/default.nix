@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "scdoc";
-  version = "1.10.1";
+  version = "1.11.0";
 
   src = fetchurl {
     url = "https://git.sr.ht/~sircmpwn/scdoc/archive/${version}.tar.gz";
-    sha256 = "13x7g1r56bshvfmlvapvz35ywnbgsh337kywb5kcv8nc6b3j3q40";
+    sha256 = "17cjh3lcfppyl2mzpanylla93gdgdv5spc8jldshvayzizhfghwa";
   };
 
   postPatch = ''
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
       C99.
     '';
     homepage = "https://git.sr.ht/~sircmpwn/scdoc";
+    changelog = "https://git.sr.ht/~sircmpwn/scdoc/refs/${version}";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];

@@ -4,7 +4,7 @@
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode
+, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode, dbus
 , enableXen ? false, xen ? null
 , enableIscsi ? false, openiscsi
 , enableCeph ? false, ceph
@@ -17,26 +17,26 @@ let
   buildFromTarball = stdenv.isDarwin;
 in stdenv.mkDerivation rec {
   pname = "libvirt";
-  version = "6.2.0";
+  version = "6.3.0";
 
   src =
     if buildFromTarball then
       fetchurl {
         url = "http://libvirt.org/sources/${pname}-${version}.tar.xz";
-        sha256 = "1c8grqf751blsgs15wx2p05wvankdrady6290vwc85v94cgqij5f";
+        sha256 = "1xcng497hs1gary3pz3fp590a4r1kqs4d0d8k5p370j0scw981kl";
       }
     else
       fetchgit {
         url = "git://libvirt.org/libvirt.git";
         rev = "v${version}";
-        sha256 = "1wyihi8bhwsck9b7f3b8yhlz145sjdyyj3ykjiszrqnp0y99xxy2";
+        sha256 = "129b3p72jlb40dsidak3nvpssv75xx2v99y63gzp5k074fp8y8x4";
         fetchSubmodules = true;
       };
 
   nativeBuildInputs = [ makeWrapper pkgconfig docutils ] ++ optionals (!buildFromTarball) [ autoreconfHook ];
   buildInputs = [
     libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
-    libxslt xhtml1 perlPackages.XMLXPath curl libpcap glib
+    libxslt xhtml1 perlPackages.XMLXPath curl libpcap glib dbus
   ] ++ optionals stdenv.isLinux [
     libpciaccess lvm2 utillinux systemd libnl numad zfs
     libapparmor libcap_ng numactl attr parted
@@ -65,6 +65,7 @@ in stdenv.mkDerivation rec {
   dontAddDisableDepTrack = true;
 
   configureFlags = [
+    "--with-runstatedir=/run" # TODO: remove when autoconf 1.70 is released
     "--localstatedir=/var"
     "--sysconfdir=/var/lib"
     "--with-libpcap"
@@ -74,6 +75,7 @@ in stdenv.mkDerivation rec {
     "--with-test"
     "--with-esx"
     "--with-remote"
+    "--with-polkit"
   ] ++ optionals stdenv.isLinux [
     "QEMU_BRIDGE_HELPER=/run/wrappers/bin/qemu-bridge-helper"
     "QEMU_PR_HELPER=/run/libvirt/nix-helpers/qemu-pr-helper"
@@ -96,6 +98,7 @@ in stdenv.mkDerivation rec {
   ];
 
   installFlags = [
+    "runstatedir=${placeholder "out"}/run"
     "localstatedir=$(TMPDIR)/var"
     "sysconfdir=$(out)/var/lib"
   ];

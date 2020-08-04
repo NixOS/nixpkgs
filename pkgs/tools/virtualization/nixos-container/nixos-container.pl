@@ -5,7 +5,7 @@ use POSIX;
 use File::Path;
 use File::Slurp;
 use Fcntl ':flock';
-use Getopt::Long qw(:config gnu_getopt);
+use Getopt::Long qw(:config gnu_getopt no_bundling);
 use Cwd 'abs_path';
 use Time::HiRes;
 
@@ -68,6 +68,22 @@ my $localAddress;
 my $flake;
 my $flakeAttr = "container";
 
+# Nix passthru flags.
+my @nixFlags;
+my @nixFlags2;
+
+sub copyNixFlags0 { push @nixFlags, "--$_[0]"; }
+sub copyNixFlags1 { push @nixFlags, "--$_[0]", $_[1]; }
+
+# Ugly hack to handle flags that take two arguments, like --option.
+sub copyNixFlags2 {
+    if (scalar(@nixFlags2) % 3 == 0) {
+        push @nixFlags2, "--$_[0]", $_[1];
+    } else {
+        push @nixFlags2, $_[1];
+    }
+}
+
 GetOptions(
     "help" => sub { showHelp() },
     "ensure-unique-name" => \$ensureUniqueName,
@@ -82,7 +98,21 @@ GetOptions(
     "host-address=s" => \$hostAddress,
     "local-address=s" => \$localAddress,
     "flake=s" => \$flake,
+    # Nix passthru options.
+    "log-format=s" => \&copyNixFlags1,
+    "option=s{2}" => \&copyNixFlags2,
+    "impure" => \&copyNixFlags0,
+    "update-input=s" => \&copyNixFlags1,
+    "override-input=s{2}" => \&copyNixFlags2,
+    "commit-lock-file" => \&copyNixFlags0,
+    "no-registries" => \&copyNixFlags0,
+    "no-update-lock-file" => \&copyNixFlags0,
+    "no-write-lock-file" => \&copyNixFlags0,
+    "no-allow-dirty" => \&copyNixFlags0,
+    "recreate-lock-file" => \&copyNixFlags0,
     ) or exit 1;
+
+push @nixFlags, @nixFlags2;
 
 if (defined $hostAddress and !defined $localAddress or defined $localAddress and !defined $hostAddress) {
     die "With --host-address set, --local-address is required as well!";
@@ -144,7 +174,7 @@ EOF
 }
 
 sub buildFlake {
-    system("nix", "build", "-o", "$systemPath.tmp", "--",
+    system("nix", "build", "-o", "$systemPath.tmp", @nixFlags, "--",
            "$flake#nixosConfigurations.\"$flakeAttr\".config.system.build.toplevel") == 0
         or die "$0: failed to build container from flake '$flake'\n";
     $systemPath = readlink("$systemPath.tmp") or die;
@@ -251,7 +281,7 @@ if ($action eq "create") {
 
         system("nix-env", "-p", "$profileDir/system",
                "-I", "nixos-config=$nixosConfigFile", "-f", "$nixenvF",
-               "--set", "-A", "system") == 0
+               "--set", "-A", "system", @nixFlags) == 0
             or do {
                 clearContainerState($profileDir, "$profileDir/$containerName", $root, $confFile);
                 die "$0: failed to build initial container configuration\n"
@@ -400,7 +430,7 @@ elsif ($action eq "update") {
         my $nixenvF = $nixosPath // "<nixpkgs/nixos>";
         system("nix-env", "-p", "$profileDir/system",
                "-I", "nixos-config=$nixosConfigFile", "-f", $nixenvF,
-               "--set", "-A", "system") == 0
+               "--set", "-A", "system", @nixFlags) == 0
             or die "$0: failed to build container configuration\n";
     }
 

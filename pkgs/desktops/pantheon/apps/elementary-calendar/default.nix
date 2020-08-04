@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , pkgconfig
 , meson
@@ -25,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-calendar";
-  version = "5.0.4";
+  version = "5.0.6";
 
   repoName = "calendar";
 
@@ -33,11 +34,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0ywk9w6d6nw7ir3f11xc13fr08ifvzpavq1c3x48kmmf69ywprdk";
+    sha256 = "0lmadk4yzf1kiiqshwqcxzcyia1haq1avv6pyzvsaywxhqwdsini";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };

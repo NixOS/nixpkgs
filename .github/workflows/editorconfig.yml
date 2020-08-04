@@ -1,0 +1,29 @@
+name: "Checking EditorConfig"
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - uses: technote-space/get-diff-action@v2.0.3
+    - name: fetch editorconfig-checker
+      env:
+        VERSION: "2.1.0"
+        OS: "linux"
+        ARCH: "amd64"
+        ECC_URL: "https://github.com/editorconfig-checker/editorconfig-checker/releases/download"
+      run: |
+        curl -sSf -O -L -C - $ECC_URL/$VERSION/ec-$OS-$ARCH.tar.gz && \
+        tar xzf ec-$OS-$ARCH.tar.gz && \
+        mv ./bin/ec-$OS-$ARCH ./bin/editorconfig-checker
+    - name: Checking EditorConfig
+      run: |
+        ./bin/editorconfig-checker -disable-indentation \
+        ${{ env.GIT_DIFF }}

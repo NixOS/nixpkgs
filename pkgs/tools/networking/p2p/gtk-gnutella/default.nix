@@ -19,13 +19,13 @@ stdenv.mkDerivation rec {
   pname = "gtk-gnutella";
   # NOTE: Please remove hardeningDisable on the next release, see:
   # https://sourceforge.net/p/gtk-gnutella/bugs/555/#5c19
-  version = "1.1.15";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "gtk-gnutella";
     repo = "gtk-gnutella";
     rev = "v${version}";
-    sha256 = "1g7w6ywwp2g4qdgmfqkrl1rldk1b4rx50yb7h75hh15mh6nr159r";
+    sha256 = "0j596dpajk68bkry0gmpqawsi61rphfciy4vji1dh890jyhkhdgy";
   };
 
   nativeBuildInputs = [

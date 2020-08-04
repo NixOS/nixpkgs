@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "minify";
-  version = "2.7.3";
+  version = "2.7.4";
 
   src = fetchFromGitHub {
     owner = "tdewolff";
     repo = pname;
     rev = "v${version}";
-    sha256 = "12jns7m9liyjg9wy8ynvji2d2g4k2z1ymp6k3610mivmvg159sy4";
+    sha256 = "06xzb681g4lfrpqa1rhpq5mm83vpik8qp6gjxqm2n21bfph88jm2";
   };
 
-  modSha256 = "09jk3mxf7n9wf1cgyiw9mhsr55fb12k399dmzhnib3vhd9xav15i";
+  vendorSha256 = "120d3nzk8cr5496cxp5p6ydlzw9mmpg7dllqhv1kpgwlbxmd8vr3";
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.Version=${version}" ];
 

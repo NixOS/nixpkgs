@@ -104,13 +104,14 @@ let
     "LD_LIBRARY_PATH=${cudaStub}\${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH ";
 
 in buildPythonPackage rec {
-  version = "1.4.1";
+  version = "1.6.0";
   pname = "pytorch";
   disabled = !isPy3k;
 
   outputs = [
     "out"   # output standard python package
-    "dev"   # output libtorch only
+    "dev"   # output libtorch headers
+    "lib"   # output libtorch libraries
   ];
 
   src = fetchFromGitHub {
@@ -118,8 +119,23 @@ in buildPythonPackage rec {
     repo   = "pytorch";
     rev    = "v${version}";
     fetchSubmodules = true;
-    sha256 = "1aa1il4f98pswfj20cv27yfb91l1jcq4515i7mvq7sh5647yzwms";
+    sha256 = "14hhjsi6fnpaw9m1a3bhvdinsks6fhss6bbcrfk6jgns64abqdaz";
   };
+
+  patches = lib.optionals stdenv.isAarch64 [
+    # GNU aarch64 assembler does not support 4s on neon mov:
+    # https://github.com/pytorch/pytorch/issues/33124
+    #
+    # Fix from:
+    # https://github.com/pytorch/pytorch/pull/40584
+    #
+    # This patch can be removed with the next major version (1.7.0).
+    (fetchpatch {
+      name = "qnnpack-neon-fix.patch";
+      url = "https://github.com/pytorch/pytorch/commit/7676682584d0caf9243bce74ea0a88711ec4a807.diff";
+      sha256 = "13spncaqlpsp8qk2850yly7xqwmhhfwznhmzkk8jgpslkbx75vgq";
+    })
+  ];
 
   preConfigure = lib.optionalString cudaSupport ''
     export TORCH_CUDA_ARCH_LIST="${lib.strings.concatStringsSep ";" final_cudaArchList}"
@@ -127,24 +143,6 @@ in buildPythonPackage rec {
   '' + lib.optionalString (cudaSupport && cudnn != null) ''
     export CUDNN_INCLUDE_DIR=${cudnn}/include
   '';
-
-  patches = [
-    # Prevents a race condition which would be introduced by pull 30333.
-    # See https://github.com/pytorch/pytorch/issues/32277
-    # Can be removed >1.5.0.
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/pytorch/pytorch/pull/30332.patch";
-      sha256 = "1v9dwbhz3rdxcx6sz8y8j9n3bj6nqs78b1r8yg89yc15n6l4cqx2";
-    })
-
-    # Fixes errors with gcc-9 compilation. Cherry-picked on advice from ezyang.
-    # See https://github.com/pytorch/pytorch/issues/32277
-    # Can be removed >1.5.0.
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/pytorch/pytorch/pull/30333.patch";
-      sha256 = "139413fl37h2fnil0cv99a67mqqnsh02k74b92by1qyr6pcfyg3q";
-    })
-  ];
 
   # Use pytorch's custom configurations
   dontUseCmakeConfigure = true;
@@ -242,9 +240,11 @@ in buildPythonPackage rec {
   ];
   postInstall = ''
     mkdir $dev
-    cp -r $out/${python.sitePackages}/torch/lib     $dev/lib
     cp -r $out/${python.sitePackages}/torch/include $dev/include
     cp -r $out/${python.sitePackages}/torch/share   $dev/share
+
+    mkdir $lib
+    cp -r $out/${python.sitePackages}/torch/lib     $lib/lib
   '';
 
   postFixup = stdenv.lib.optionalString stdenv.isDarwin ''

@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "0qg26vcqdhgy91p6wiv16dq73ay0fymran3d8ylca9264zwi2vxw";
   };
 
-  modSha256 = "1q755ipqsfpr41s5fxzmx50lwcdqc5a7akwx6mzn789w2z07x8lg";
+  vendorSha256 = "0ap1iwcapvvvmwgdc4zbsp8mglrhbswkdgm4dw8baw8qk0nlci6y";
 
   postInstall = ''
     rm $out/bin/plugin*

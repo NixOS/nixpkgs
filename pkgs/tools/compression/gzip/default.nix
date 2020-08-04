@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, xz }:
+{ stdenv
+, fetchurl
+, xz
+, writeText
+}:
 
 stdenv.mkDerivation rec {
   pname = "gzip";
@@ -24,6 +28,12 @@ stdenv.mkDerivation rec {
   preFixup = ''
     sed -i '1{;/#!\/bin\/sh/aPATH="'$out'/bin:$PATH"
     }' $out/bin/*
+  '';
+
+  # set GZIP env variable to "-n" to stop gzip from adding timestamps
+  # to archive headers: https://github.com/NixOS/nixpkgs/issues/86348
+  setupHook = writeText "setup-hook" ''
+    export GZIP="-n"
   '';
 
   meta = {

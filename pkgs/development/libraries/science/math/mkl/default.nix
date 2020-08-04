@@ -1,4 +1,12 @@
-{ stdenvNoCC, fetchurl, rpmextract, undmg, darwin, enableStatic ? false }:
+{ stdenvNoCC
+, fetchurl
+, rpmextract
+, undmg
+, darwin
+, validatePkgConfig
+, enableStatic ? false
+}:
+
 /*
   For details on using mkl as a blas provider for python packages such as numpy,
   numexpr, scipy, etc., see the Python section of the NixPkgs manual.
@@ -38,11 +46,11 @@ in stdenvNoCC.mkDerivation {
         sha256 = "0v86hrqg15mbc78m9qk8dbkaaq3mlwashgbf9n79kxpl1gilnah8";
       });
 
-  nativeBuildInputs = if stdenvNoCC.isDarwin
+  nativeBuildInputs = [ validatePkgConfig ] ++ (if stdenvNoCC.isDarwin
     then
       [ undmg darwin.cctools ]
     else
-      [ rpmextract ];
+      [ rpmextract ]);
 
   buildPhase = if stdenvNoCC.isDarwin then ''
     for f in Contents/Resources/pkg/*.tgz; do
@@ -77,6 +85,7 @@ in stdenvNoCC.mkDerivation {
       bn=$(basename $f)
       substituteInPlace $f \
         --replace "prefix=<INSTALLDIR>/mkl" "prefix=$out" \
+        --replace $\{MKLROOT} "$out" \
         --replace "lib/intel64_lin" "lib"
     done
 

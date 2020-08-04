@@ -1,0 +1,36 @@
+name: "Wait for ofborg"
+on:
+  pull_request:
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Wait for ofborg CI
+      run: |
+        # eval sometimes takes a bit longer on staging.
+        if [[ "$BASE_BRANCH" == "refs/heads/staging" ]]; then
+          COUNTDOWN=$((COUNTDOWN*2))
+        fi
+        # ..in future a better fix would be to make ofborg mark CI as pending right away.
+        for i in $(seq "$COUNTDOWN"); do
+          res=$(curl --silent \
+            -H "Accept: application/vnd.github.antiope-preview+json" \
+            -H "Authorization: token ${GITHUB_TOKEN}" \
+            "https://api.github.com/repos/NixOS/nixpkgs/commits/${COMMIT}/check-runs" | \
+            jq ".check_runs | map(.app) | map(.id) | contains([${OFBORG_APP_ID}])")
+          if [[ "$res" == "true" ]]; then
+            exit 0
+          fi
+          sleep 5
+          echo "."
+        done
+        echo "Timeout!"
+        exit 1
+      # ofborg is not checking forks.
+      if: github.repository_owner == 'NixOS'
+      env:
+        BASE_BRANCH: ${{ github.base_ref }}
+        COUNTDOWN: 360 # wait for ~30min...
+        GITHUB_TOKEN: ${{ github.token }}
+        COMMIT: ${{ github.event.pull_request.head.sha }}
+        OFBORG_APP_ID: 20500

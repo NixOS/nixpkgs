@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "1yr2jhidqvbwh1y08lpqaidwpr5yx3bhvznm5fc9pk64s7z5kq3h";
   };
 
-  modSha256 = "1mrfqhd0zb78rlqlj2ncb0srwjfl7rzhy2p9mwa82pgysvlp08gv";
+  vendorSha256 = "1ikrgl03r9zkn86kxkqi2kf540g3qzzz24i5wvh6g3d5q49nygl9";
 
   meta = with lib; {
     description = "Easily create & extract archives, and compress & decompress files of various formats";

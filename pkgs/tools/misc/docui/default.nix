@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "0jya0wdp8scjmsr44krdbbb8q4gplf44gsng1nyn12a6ldqzayxl";
   };
 
-  modSha256 = "1wyx05kk4f41mgvwnvfc9xk7vd3x96cbn5xb5ph7p443f70ydnak";
+  vendorSha256 = "1ggdczvv03lj0g6cq26vrk1rba6pk0805n85w9hkbjx9c4r3j577";
 
   meta = with stdenv.lib; {
     description = "TUI Client for Docker";

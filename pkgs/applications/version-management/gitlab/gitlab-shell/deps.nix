@@ -13,7 +13,7 @@
     goPackagePath = "cloud.google.com/go";
     fetch = {
       type = "git";
-      url = "https://code.googlesource.com/gocloud";
+      url = "https://github.com/googleapis/google-cloud-go";
       rev = "v0.26.0";
       sha256 = "149v3ci17g6wd2pm18mzcncq5qpl9hwdjnz3rlbn5rfidyn46la1";
     };
@@ -634,7 +634,7 @@
     goPackagePath = "google.golang.org/genproto";
     fetch = {
       type = "git";
-      url = "https://github.com/google/go-genproto";
+      url = "https://github.com/googleapis/go-genproto";
       rev = "bd91e49a0898";
       sha256 = "1f5q04h03q6fksbfkhz13ai5849rkkb8xrmmi7cxs4lzsi6ixkg8";
     };

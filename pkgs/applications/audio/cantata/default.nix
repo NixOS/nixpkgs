@@ -10,7 +10,7 @@
 
 , withTaglib ? true, taglib, taglib_extras
 , withHttpStream ? true, qtmultimedia
-, withReplaygain ? true, ffmpeg, speex, mpg123
+, withReplaygain ? true, ffmpeg_3, speex, mpg123
 , withMtp ? true, libmtp
 , withOnlineServices ? true
 , withDevices ? true, udisks2
@@ -50,7 +50,7 @@ in mkDerivation {
 
   buildInputs = [ qtbase qtsvg ]
     ++ lib.optionals withTaglib [ taglib taglib_extras ]
-    ++ lib.optionals withReplaygain [ ffmpeg speex mpg123 ]
+    ++ lib.optionals withReplaygain [ ffmpeg_3 speex mpg123 ]
     ++ lib.optional  withHttpStream qtmultimedia
     ++ lib.optional  withCdda cdparanoia
     ++ lib.optional  withCddb libcddb

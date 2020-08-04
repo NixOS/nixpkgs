@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "graphql-core";
-  version = "2.3.1";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "graphql-python";
     repo = pname;
     rev = "v${version}";
-    sha256 = "029jnwy6zbj4x7f3ffpn1gyx0w9ala9cj2g115g6aa7im3xd2jma";
+    sha256 = "0kvbj9dwpx8mjfj86kqx54dbz9k72ki147ssyj0ca2syvb8jm3wb";
   };
 
   propagatedBuildInputs = [

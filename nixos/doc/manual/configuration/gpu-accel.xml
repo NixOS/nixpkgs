@@ -1,0 +1,193 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-gpu-accel">
+  <title>GPU acceleration</title>
+
+  <para>
+    NixOS provides various APIs that benefit from GPU hardware
+    acceleration, such as VA-API and VDPAU for video playback; OpenGL and
+    Vulkan for 3D graphics; and OpenCL for general-purpose computing.
+    This chapter describes how to set up GPU hardware acceleration (as far
+    as this is not done automatically) and how to verify that hardware
+    acceleration is indeed used.
+  </para>
+
+  <para>
+    Most of the aforementioned APIs are agnostic with regards to which
+    display server is used. Consequently, these instructions should apply
+    both to the X Window System and Wayland compositors.
+  </para>
+
+  <section xml:id="sec-gpu-accel-opencl">
+    <title>OpenCL</title>
+
+    <para>
+      <link xlink:href="https://en.wikipedia.org/wiki/OpenCL">OpenCL</link> is a
+      general compute API. It is used by various applications such as
+      Blender and Darktable to accelerate certain operations.
+    </para>
+
+    <para>
+      OpenCL applications load drivers through the <emphasis>Installable Client
+      Driver</emphasis> (ICD) mechanism. In this mechanism, an ICD file
+      specifies the path to the OpenCL driver for a particular GPU family.
+      In NixOS, there are two ways to make ICD files visible to the ICD
+      loader. The first is through the <varname>OCL_ICD_VENDORS</varname>
+      environment variable. This variable can contain a directory which
+      is scanned by the ICL loader for ICD files. For example:
+
+      <screen><prompt>$</prompt> export \
+  OCL_ICD_VENDORS=`nix-build '&lt;nixpkgs&gt;' --no-out-link -A rocm-opencl-icd`/etc/OpenCL/vendors/</screen>
+    </para>
+
+    <para>
+      The second mechanism is to add the OpenCL driver package to
+      <xref linkend="opt-hardware.opengl.extraPackages"/>. This links the
+      ICD file under <filename>/run/opengl-driver</filename>, where it will
+      be visible to the ICD loader.
+    </para>
+
+    <para>
+      The proper installation of OpenCL drivers can be verified through
+      the <command>clinfo</command> command of the <package>clinfo</package>
+      package. This command will report the number of hardware devices
+      that is found and give detailed information for each device:
+    </para>
+
+    <screen><prompt>$</prompt> clinfo | head -n3
+Number of platforms  1
+Platform Name        AMD Accelerated Parallel Processing
+Platform Vendor      Advanced Micro Devices, Inc.</screen>
+
+    <section xml:id="sec-gpu-accel-opencl-amd">
+      <title>AMD</title>
+
+      <para>
+	Modern AMD <link
+	xlink:href="https://en.wikipedia.org/wiki/Graphics_Core_Next">Graphics
+	Core Next</link> (GCN) GPUs are supported through the
+	<package>rocm-opencl-icd</package> package. Adding this package to
+	<xref linkend="opt-hardware.opengl.extraPackages"/> enables OpenCL
+	support. However, OpenCL Image support is provided through the
+	non-free <package>rocm-runtime-ext</package> package. This package can
+	be added to the same configuration option, but requires that
+	<varname>allowUnfree</varname> option is is enabled for nixpkgs.  Full
+	OpenCL support on supported AMD GPUs is thus enabled as follows:
+
+	<programlisting><xref linkend="opt-hardware.opengl.extraPackages"/> = [
+  rocm-opencl-icd
+  rocm-runtime-ext
+];</programlisting>
+      </para>
+
+      <para>
+	It is also possible to use the OpenCL Image extension without a
+	system-wide installation of the <package>rocm-runtime-ext</package>
+	package by setting the <varname>ROCR_EXT_DIR</varname> environment
+	variable to the directory that contains the extension:
+
+	<screen><prompt>$</prompt> export \
+ROCR_EXT_DIR=`nix-build '&lt;nixpkgs&gt;' --no-out-link -A rocm-runtime-ext`/lib/rocm-runtime-ext</screen>
+      </para>
+
+      <para>
+	With either approach, you can verify that OpenCL Image support
+	is indeed working with the <command>clinfo</command> command:
+
+	<screen><prompt>$</prompt> clinfo | grep Image
+  Image support      Yes</screen>
+      </para>
+    </section>
+  </section>
+
+  <section xml:id="sec-gpu-accel-vulkan">
+    <title>Vulkan</title>
+
+    <para>
+      <link xlink:href="https://en.wikipedia.org/wiki/Vulkan_(API)">Vulkan</link> is a
+      graphics and compute API for GPUs. It is used directly by games or indirectly though
+      compatibility layers like <link xlink:href="https://github.com/doitsujin/dxvk/wiki">DXVK</link>.
+    </para>
+
+    <para>
+     By default, if <xref linkend="opt-hardware.opengl.driSupport"/> is enabled,
+     <package>mesa</package> is installed and provides Vulkan for supported hardware.
+    </para>
+
+    <para>
+      Similar to OpenCL, Vulkan drivers are loaded through the <emphasis>Installable Client
+      Driver</emphasis> (ICD) mechanism. ICD files for Vulkan are JSON files that specify
+      the path to the driver library and the supported Vulkan version. All successfully
+      loaded drivers are exposed to the application as different GPUs.
+      In NixOS, there are two ways to make ICD files visible to Vulkan applications: an
+      environment variable and a module option.
+    </para>
+
+    <para>
+      The first option is through the <varname>VK_ICD_FILENAMES</varname>
+      environment variable. This variable can contain multiple JSON files, separated by
+      <literal>:</literal>. For example:
+
+      <screen><prompt>$</prompt> export \
+  VK_ICD_FILENAMES=`nix-build '&lt;nixpkgs&gt;' --no-out-link -A amdvlk`/share/vulkan/icd.d/amd_icd64.json</screen>
+    </para>
+
+    <para>
+      The second mechanism is to add the Vulkan driver package to
+      <xref linkend="opt-hardware.opengl.extraPackages"/>. This links the
+      ICD file under <filename>/run/opengl-driver</filename>, where it will
+      be visible to the ICD loader.
+    </para>
+
+    <para>
+      The proper installation of Vulkan drivers can be verified through
+      the <command>vulkaninfo</command> command of the <package>vulkan-tools</package>
+      package. This command will report the hardware devices and drivers found,
+      in this example output amdvlk and radv:
+    </para>
+
+    <screen><prompt>$</prompt> vulkaninfo | grep GPU
+                GPU id  : 0 (Unknown AMD GPU)
+                GPU id  : 1 (AMD RADV NAVI10 (LLVM 9.0.1))
+     ...
+GPU0:
+        deviceType     = PHYSICAL_DEVICE_TYPE_DISCRETE_GPU
+        deviceName     = Unknown AMD GPU
+GPU1:
+        deviceType     = PHYSICAL_DEVICE_TYPE_DISCRETE_GPU</screen>
+
+    <para>
+      A simple graphical application that uses Vulkan is <command>vkcube</command>
+      from the <package>vulkan-tools</package> package.
+    </para>
+
+    <section xml:id="sec-gpu-accel-vulkan-amd">
+      <title>AMD</title>
+
+      <para>
+	Modern AMD <link
+	xlink:href="https://en.wikipedia.org/wiki/Graphics_Core_Next">Graphics
+	Core Next</link> (GCN) GPUs are supported through either radv, which is
+	part of <package>mesa</package>, or the <package>amdvlk</package> package.
+	Adding the <package>amdvlk</package> package to
+	<xref linkend="opt-hardware.opengl.extraPackages"/> makes both drivers
+	available for applications and lets them choose. A specific driver can
+	be forced as follows:
+
+	<programlisting><xref linkend="opt-hardware.opengl.extraPackages"/> = [
+  <package>amdvlk</package>
+];
+
+# For amdvlk
+<xref linkend="opt-environment.variables"/>.VK_ICD_FILENAMES =
+   "/run/opengl-driver/share/vulkan/icd.d/amd_icd64.json";
+# For radv
+<xref linkend="opt-environment.variables"/>.VK_ICD_FILENAMES =
+  "/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json";
+</programlisting>
+      </para>
+    </section>
+  </section>
+</chapter>

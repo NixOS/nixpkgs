@@ -164,6 +164,15 @@ rec {
   };
 
   #
+  # Redox
+  #
+
+  x86_64-unknown-redox = {
+    config = "x86_64-unknown-redox";
+    libc = "relibc";
+  };
+
+  #
   # Darwin
   #
 

@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   patches = [ ./pointer_int_comparison.patch ];
   patchFlags = [ "-p1" "--binary" ]; # patch has dos style eol
-      
+
   meta = with stdenv.lib; {
     description = "Open Street Map viewer";
     homepage = "https://sourceforge.net/projects/gosmore/";
@@ -33,5 +33,6 @@ stdenv.mkDerivation {
       raskin
     ];
     platforms = platforms.linux;
+    license = licenses.bsd2;
   };
 }

@@ -268,7 +268,8 @@ let
 
   mkSrcAttrs = srcCfg: with srcCfg; {
     enabled = onOff enable;
-    mbuffer = with mbuffer; if enable then "${pkgs.mbuffer}/bin/mbuffer"
+    # mbuffer is not referenced by its full path to accomodate non-NixOS systems or differing mbuffer versions between source and target
+    mbuffer = with mbuffer; if enable then "mbuffer"
         + optionalString (port != null) ":${toString port}" else "off";
     mbuffer_size = mbuffer.size;
     post_znap_cmd = nullOff postsnap;
@@ -357,6 +358,12 @@ in
         default = false;
       };
 
+      features.oracleMode = mkEnableOption ''
+        Destroy snapshots one by one instead of using one long argument list.
+        If source and destination are out of sync for a long time, you may have
+        so many snapshots to destroy that the argument gets is too long and the
+        command fails.
+      '';
       features.recvu = mkEnableOption ''
         recvu feature which uses <literal>-u</literal> on the receiving end to keep the destination
         filesystem unmounted.
@@ -458,5 +465,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ infinisil ];
+  meta.maintainers = with maintainers; [ infinisil SlothOfAnarchy ];
 }

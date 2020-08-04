@@ -1,20 +1,20 @@
 { stdenv, buildGoModule, fetchurl
 , go, ncurses, notmuch, scdoc
 , python3, perl, w3m, dante
+, fetchFromGitHub
 }:
 
-let
-  rev = "ea0df7bee433fedae5716906ea56141f92b9ce53";
-in buildGoModule rec {
+buildGoModule rec {
   pname = "aerc";
-  version = "unstable-2020-02-01";
+  version = "0.4.0";
 
   src = fetchurl {
-    url = "https://git.sr.ht/~sircmpwn/aerc/archive/${rev}.tar.gz";
-    sha256 = "1bx2fypw053v3bzalfgyi6a0s5fvv040z8jy4i63s7p53m8gmzs9";
+    url = "https://git.sr.ht/~sircmpwn/aerc/archive/${version}.tar.gz";
+    sha256 = "05qy14k9wmyhsg1hiv4njfx1zn1m9lz4d1p50kc36v7pq0n4csfk";
   };
 
-  modSha256 = "127xrah6xxrvc224g5dxn432sagrssx8v7phzapcsdajsnmagq6x";
+  runVend = true;
+  vendorSha256 = "0avdvbhv1jlisiicpi5vshz28a2p2fgnlrag9zngzglcrbhdd1rn";
 
   nativeBuildInputs = [
     scdoc
@@ -31,8 +31,6 @@ in buildGoModule rec {
 
   buildInputs = [ python3 notmuch ];
 
-  GOFLAGS="-tags=notmuch";
-
   buildPhase = "
     runHook preBuild
     # we use make instead of go build
@@ -41,7 +39,7 @@ in buildGoModule rec {
 
   installPhase = ''
     runHook preInstall
-    make PREFIX=$out install
+    make PREFIX=$out GOFLAGS="$GOFLAGS -tags=notmuch" install
     wrapPythonProgramsIn $out/share/aerc/filters "$out $pythonPath"
     runHook postInstall
   '';

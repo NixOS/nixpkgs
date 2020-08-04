@@ -73,8 +73,8 @@ in
     src = fetchFromGitHub {
       owner = "aperezdc";
       repo = "ngx-fancyindex";
-      rev = "v0.4.3";
-      sha256 = "12xdx6a76sfrq0yciylvyjlnvyczszpadn31jqya8c2dzdkyyx7f";
+      rev = "v0.4.4";
+      sha256 = "14xmzcl608pr7hb7wng6hpz7by51cfnxlszbka3zhp3kk86ljsi6";
     };
   };
 
@@ -140,6 +140,7 @@ in
       export LUAJIT_LIB="${pkgs.luajit}/lib"
       export LUAJIT_INC="${pkgs.luajit}/include/luajit-2.0"
     '';
+    allowMemoryWriteExecute = true;
   };
 
   lua-upstream = {
@@ -150,6 +151,7 @@ in
       sha256 = "1gqccg8airli3i9103zv1zfwbjm27h235qjabfbfqk503rjamkpk";
     };
     inputs = [ pkgs.luajit ];
+    allowMemoryWriteExecute = true;
   };
 
   modsecurity = {
@@ -246,6 +248,7 @@ in
     in {
       src = ngx_pagespeed;
       inputs = [ pkgs.zlib pkgs.libuuid ]; # psol deps
+      allowMemoryWriteExecute = true;
     };
 
   pam = {
@@ -410,7 +413,7 @@ in
       rev = "0.9.0";
       sha256 = "1b0v471mzbcys73pzr7gpvzzhff0cva0l5ff32cv7z1v9c0ypji7";
     };
-    inputs = [ pkgs.ffmpeg ];
+    inputs = [ pkgs.ffmpeg_3 ];
   };
 
   vts = {

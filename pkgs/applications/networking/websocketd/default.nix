@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "1qc4yi4kwy7bfi3fb17w58ff0i95yi6m4syldh8j79930syr5y8q";
   };
 
-  modSha256 = "18hamj557ln8k3vmvcrpvnydjr1dy7zi9490iacwdldw5vp870xs";
+  vendorSha256 = "05k31z4h3b327mh940zh52im4xfk7kf5phb8b7xp4l9bgckhz4lb";
 
   meta = with lib; {
     description = "Turn any program that uses STDIN/STDOUT into a WebSocket server";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, libX11, libuuid, xz, vtk }:
+{ stdenv, fetchurl, cmake, libX11, libuuid, xz, vtk_7 }:
 
 stdenv.mkDerivation rec {
   name = "itk-4.13.2";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ cmake xz ];
-  buildInputs = [ libX11 libuuid vtk ];
+  buildInputs = [ libX11 libuuid vtk_7 ];
 
   meta = {
     description = "Insight Segmentation and Registration Toolkit";

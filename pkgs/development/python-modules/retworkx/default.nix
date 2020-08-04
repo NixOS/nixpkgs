@@ -2,27 +2,30 @@
 , buildPythonPackage
 , pythonOlder
 , pythonAtLeast
-, isPy37
-, isPy38
+, python
 , fetchFromGitHub
 , fetchPypi
   # Check inputs
 , pytestCheckHook
 }:
-
 let
-  rx-version = "0.3.3";
-  wheel-args = if isPy37 then
-      { python = "cp37"; sha256 = "1gbz7sh9i4h41xs9c40lixfdigmvfykkgxgzwsrs8v0smx20dczy"; }
-    else if isPy38 then
-      { python = "cp38"; sha256 = "09xxgp4ac4q6mfkj6lsqqfrzz1cb02vxy7wlv0bq3z2hd0jcanxk"; }
-    else throw "python version & hash not included. Override attribute `wheel-args` with version & hash at https://pypi.org/project/retworkx";
+  rx-version = "0.3.4";
+
+  wheel-hashes = {
+    "3.7" = { python = "cp37"; sha256 = "1hfrdj8svkfdraa299gcj18a601l4zn646fkgq7m56brpagssf9l"; };
+    "3.8" = { python = "cp38"; sha256 = "0jm10ywaqr0b456pcp01pb7035nawlndfi998jv8p1a2f5xwjgiq"; };
+  };
+  lookup = set: key: default: if (builtins.hasAttr key set) then (builtins.getAttr key set) else default;
+  wheel-args = lookup
+    wheel-hashes
+    python.pythonVersion
+    (throw "retworkx python version & hash not included. Override attribute `wheel-args` with version & hash at https://pypi.org/project/retworkx");
 
   github-source = fetchFromGitHub {
     owner = "Qiskit";
     repo = "retworkx";
     rev = rx-version;
-    sha256 = "160w5vkzrl5rzcrdwhjq820i5lmc527m6hg0kxx0k6n2bz9qn26g";
+    sha256 = "0cd3x64y49q9a3jrkiknlfkiccxkxgl624x5pqk7gm34s1lnzl8h";
   };
 in
 buildPythonPackage rec {

@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "teams";
-  version = "1.3.00.5153";
+  version = "1.3.00.16851";
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/ms-teams/pool/main/t/teams/teams_${version}_amd64.deb";
-    sha256 = "13c7fmij0gcg6mrjjj2mhs21q7fzdssscwhihzyrmbmj64cd0a69";
+    sha256 = "1mp4xq224nwv2ckb5zd7iv3yvkg3gv6mk9dvx3f60jgain7qr0r3";
   };
 
   nativeBuildInputs = [ dpkg autoPatchelfHook wrapGAppsHook ];
@@ -56,9 +56,9 @@ stdenv.mkDerivation rec {
 
   # Includes runtimeDependencies in the RPATH of the included Node modules
   # so that dynamic loading works. We cannot use directly runtimeDependencies
-  # here, since the libraries from runtimeDependencies are not propagated 
+  # here, since the libraries from runtimeDependencies are not propagated
   # to the dynamically loadable node modules because of a condition in
-  # autoPatchElfHook since *.node modules have Type: DYN (Shared object file) 
+  # autoPatchElfHook since *.node modules have Type: DYN (Shared object file)
   # instead of EXEC or INTERP it expects.
   # Fixes: https://github.com/NixOS/nixpkgs/issues/85449
   postFixup = ''

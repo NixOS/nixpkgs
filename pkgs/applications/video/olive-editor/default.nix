@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, which, qmake, mkDerivation,
-  qtbase, qtmultimedia, frei0r, opencolorio, ffmpeg-full,
-  CoreFoundation  }:
+  qtmultimedia, wrapQtAppsHook, frei0r, opencolorio, ffmpeg-full,
+  CoreFoundation }:
 
 mkDerivation rec {
   pname = "olive-editor";
@@ -17,15 +17,14 @@ mkDerivation rec {
     pkgconfig
     which
     qmake
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     ffmpeg-full
     frei0r
     opencolorio
-    qtbase
     qtmultimedia
-    qtmultimedia.dev
   ] ++ stdenv.lib.optional stdenv.isDarwin CoreFoundation;
 
   meta = with stdenv.lib; {

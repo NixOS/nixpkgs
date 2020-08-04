@@ -199,6 +199,11 @@ python2Packages.buildPythonApplication {
     done
   '';
 
+  # There are some binaries there, which reference gcc-unwrapped otherwise.
+  stripDebugList = [
+    "share/hplip"
+  ];
+
   postFixup = ''
     substituteInPlace $out/etc/hp/hplip.conf --replace /usr $out
     # Patch udev rules:

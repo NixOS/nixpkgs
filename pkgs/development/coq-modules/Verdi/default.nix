@@ -3,9 +3,9 @@
 let param =
   if stdenv.lib.versionAtLeast coq.coq-version "8.7" then
   {
-      version = "20190202";
-      rev = "bc193be9ea8485add7646a0f72e2aa76a9c7e01f";
-      sha256 = "1adkwxnmc9qfah2bya0hpd2vzkmk1y212z4n7fcmvr1a85ykgd7z";
+      version = "20200131";
+      rev = "fdb4ede19d2150c254f0ebcfbed4fb9547a734b0";
+      sha256 = "1a2k19f9q5k5djbxplqmmpwck49kw3lrm3aax920h4yb40czkd8m";
   } else {
       version = "20181102";
       rev = "25b79cf1be5527ab8dc1b8314fcee93e76a2e564";
@@ -32,6 +32,6 @@ stdenv.mkDerivation {
   installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.6" "8.7" "8.8" "8.9" ];
+    compatibleCoqVersions = v: builtins.elem v [ "8.6" "8.7" "8.8" "8.9" "8.10" "8.11" ];
  };
 }

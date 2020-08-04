@@ -1,4 +1,4 @@
-{ config, stdenv, lib, fetchurl, boost, cmake, ffmpeg, gettext, glew
+{ config, stdenv, lib, fetchurl, boost, cmake, ffmpeg_3, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio2, openjpeg, python3Packages
@@ -17,18 +17,18 @@ let python = python3Packages.python; in
 
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "2.82a";
+  version = "2.83.3";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    sha256 = "18zbdgas6qf2kmvvlimxgnq7y9kj7hdxcgixrs6fj50x40q01q2d";
+    sha256 = "18m27abp4j3xv48dr6ddr2mqcvx2vkjffr487z90059yv9k0yh2p";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
 
   nativeBuildInputs = [ cmake ] ++ optional cudaSupport addOpenGLRunpath;
   buildInputs =
-    [ boost ffmpeg gettext glew ilmbase
+    [ boost ffmpeg_3 gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff
       opencolorio openexr openimagedenoise openimageio2 openjpeg python zlib fftw jemalloc
       alembic
@@ -57,6 +57,10 @@ stdenv.mkDerivation rec {
         --replace '${"$"}{LIBDIR}/python' \
                   '${python}'
       substituteInPlace build_files/cmake/platform/platform_apple.cmake \
+        --replace 'set(PYTHON_VERSION 3.7)' \
+                  'set(PYTHON_VERSION ${python.pythonVersion})' \
+        --replace '${"$"}{PYTHON_VERSION}m' \
+                  '${"$"}{PYTHON_VERSION}' \
         --replace '${"$"}{LIBDIR}/python' \
                   '${python}' \
         --replace '${"$"}{LIBDIR}/opencollada' \
@@ -86,9 +90,9 @@ stdenv.mkDerivation rec {
       "-DWITH_SDL=OFF"
       "-DWITH_OPENCOLORIO=ON"
       "-DWITH_OPENSUBDIV=ON"
-      "-DPYTHON_LIBRARY=${python.libPrefix}m"
+      "-DPYTHON_LIBRARY=${python.libPrefix}"
       "-DPYTHON_LIBPATH=${python}/lib"
-      "-DPYTHON_INCLUDE_DIR=${python}/include/${python.libPrefix}m"
+      "-DPYTHON_INCLUDE_DIR=${python}/include/${python.libPrefix}"
       "-DPYTHON_VERSION=${python.pythonVersion}"
       "-DWITH_PYTHON_INSTALL=OFF"
       "-DWITH_PYTHON_INSTALL_NUMPY=OFF"
@@ -142,6 +146,6 @@ stdenv.mkDerivation rec {
     # say: "We've decided to cancel the BL offering for an indefinite period."
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = with maintainers; [ goibhniu veprbl ];
   };
 }

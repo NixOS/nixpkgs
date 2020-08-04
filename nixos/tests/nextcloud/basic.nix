@@ -9,9 +9,26 @@ in {
 
   nodes = {
     # The only thing the client needs to do is download a file.
-    client = { ... }: {};
+    client = { ... }: {
+      services.davfs2.enable = true;
+      system.activationScripts.davfs2-secrets = ''
+        echo "http://nextcloud/remote.php/webdav/ ${adminuser} ${adminpass}" > /tmp/davfs2-secrets
+        chmod 600 /tmp/davfs2-secrets
+      '';
+      fileSystems = pkgs.lib.mkVMOverride {
+        "/mnt/dav" = {
+          device = "http://nextcloud/remote.php/webdav/";
+          fsType = "davfs";
+          options = let
+            davfs2Conf = (pkgs.writeText "davfs2.conf" "secrets /tmp/davfs2-secrets");
+          in [ "conf=${davfs2Conf}" "x-systemd.automount" "noauto"];
+        };
+      };
+    };
 
-    nextcloud = { config, pkgs, ... }: {
+    nextcloud = { config, pkgs, ... }: let
+      cfg = config;
+    in {
       networking.firewall.allowedTCPPorts = [ 80 ];
 
       services.nextcloud = {
@@ -27,6 +44,8 @@ in {
           startAt = "20:00";
         };
       };
+
+      environment.systemPackages = [ cfg.services.nextcloud.occ ];
     };
   };
 
@@ -52,6 +71,8 @@ in {
   in ''
     start_all()
     nextcloud.wait_for_unit("multi-user.target")
+    # This is just to ensure the nextcloud-occ program is working
+    nextcloud.succeed("nextcloud-occ status")
     nextcloud.succeed("curl -sSf http://nextcloud/login")
     nextcloud.succeed(
         "${withRcloneEnv} ${copySharedFile}"
@@ -60,5 +81,6 @@ in {
     client.succeed(
         "${withRcloneEnv} ${diffSharedFile}"
     )
+    assert "hi" in client.succeed("cat /mnt/dav/test-shared-file")
   '';
 })

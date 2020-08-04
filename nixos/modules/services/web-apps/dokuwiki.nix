@@ -321,7 +321,7 @@ in
       enable = true;
       virtualHosts = mapAttrs (hostName: cfg:  mkMerge [ cfg.nginx {
         root = mkForce "${pkg hostName cfg}/share/dokuwiki";
-        extraConfig = "fastcgi_param HTTPS on;";
+        extraConfig = lib.optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;";
 
         locations."~ /(conf/|bin/|inc/|install.php)" = {
           extraConfig = "deny all;";
@@ -359,7 +359,7 @@ in
               fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
               fastcgi_param REDIRECT_STATUS 200;
               fastcgi_pass unix:${config.services.phpfpm.pools."dokuwiki-${hostName}".socket};
-              fastcgi_param HTTPS on;
+              ${lib.optionalString (cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME) "fastcgi_param HTTPS on;"}
           '';
         };
       }]) eachSite;

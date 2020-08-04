@@ -65,5 +65,6 @@ stdenv.mkDerivation {
     description = "A bundle of X.509 certificates of public Certificate Authorities (CA)";
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz ];
+    license = licenses.mpl20;
   };
 }

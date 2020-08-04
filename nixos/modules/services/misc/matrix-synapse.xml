@@ -14,9 +14,9 @@
  <para>
   This chapter will show you how to set up your own, self-hosted Matrix
   homeserver using the Synapse reference homeserver, and how to serve your own
-  copy of the Riot web client. See the
+  copy of the Element web client. See the
   <link xlink:href="https://matrix.org/docs/projects/try-matrix-now.html">Try
-  Matrix Now!</link> overview page for links to Riot Apps for Android and iOS,
+  Matrix Now!</link> overview page for links to Element Apps for Android and iOS,
   desktop clients, as well as bridges to other networks and other projects
   around Matrix.
  </para>
@@ -84,7 +84,7 @@ in {
               "m.homeserver" =  { "base_url" = "https://${fqdn}"; };
               "m.identity_server" =  { "base_url" = "https://vector.im"; };
             };
-          # ACAO required to allow riot-web on any URL to request this json file
+          # ACAO required to allow element-web on any URL to request this json file
           in ''
             add_header Content-Type application/json;
             add_header Access-Control-Allow-Origin *;
@@ -98,7 +98,7 @@ in {
         <link linkend="opt-services.nginx.virtualHosts._name_.forceSSL">forceSSL</link> = true;
 
         # Or do a redirect instead of the 404, or whatever is appropriate for you.
-        # But do not put a Matrix Web client here! See the Riot Web section below.
+        # But do not put a Matrix Web client here! See the Element web section below.
         <link linkend="opt-services.nginx.virtualHosts._name_.locations._name_.extraConfig">locations."/".extraConfig</link> = ''
           return 404;
         '';
@@ -171,17 +171,19 @@ Success!
    option until a better solution for NixOS is in place.
   </para>
  </section>
- <section xml:id="module-services-matrix-riot-web">
-  <title>Riot Web Client</title>
+ <section xml:id="module-services-matrix-element-web">
+  <title>Element (formerly known as Riot) Web Client</title>
 
   <para>
-   <link xlink:href="https://github.com/vector-im/riot-web/">Riot Web</link> is
+   <link xlink:href="https://github.com/vector-im/riot-web/">Element Web</link> is
    the reference web client for Matrix and developed by the core team at
-   matrix.org. The following snippet can be optionally added to the code before
+   matrix.org. Element was formerly known as Riot.im, see the
+   <link xlink:href="https://element.io/blog/welcome-to-element/">Element introductory blog post</link>
+   for more information. The following snippet can be optionally added to the code before
    to complete the synapse installation with a web client served at
-   <code>https://riot.myhostname.example.org</code> and
-   <code>https://riot.example.org</code>. Alternatively, you can use the hosted
-   copy at <link xlink:href="https://riot.im/app">https://riot.im/app</link>,
+   <code>https://element.myhostname.example.org</code> and
+   <code>https://element.example.org</code>. Alternatively, you can use the hosted
+   copy at <link xlink:href="https://app.element.io/">https://app.element.io/</link>,
    or use other web clients or native client applications. Due to the
    <literal>/.well-known</literal> urls set up done above, many clients should
    fill in the required connection details automatically when you enter your
@@ -191,14 +193,14 @@ Success!
    featureset.
 <programlisting>
 {
-  services.nginx.virtualHosts."riot.${fqdn}" = {
+  services.nginx.virtualHosts."element.${fqdn}" = {
     <link linkend="opt-services.nginx.virtualHosts._name_.enableACME">enableACME</link> = true;
     <link linkend="opt-services.nginx.virtualHosts._name_.forceSSL">forceSSL</link> = true;
     <link linkend="opt-services.nginx.virtualHosts._name_.serverAliases">serverAliases</link> = [
-      "riot.${config.networking.domain}"
+      "element.${config.networking.domain}"
     ];
 
-    <link linkend="opt-services.nginx.virtualHosts._name_.root">root</link> = pkgs.riot-web.override {
+    <link linkend="opt-services.nginx.virtualHosts._name_.root">root</link> = pkgs.element-web.override {
       conf = {
         default_server_config."m.homeserver" = {
           "base_url" = "${config.networking.domain}";
@@ -212,13 +214,13 @@ Success!
   </para>
 
   <para>
-   Note that the Riot developers do not recommend running Riot and your Matrix
+   Note that the Element developers do not recommend running Element and your Matrix
    homeserver on the same fully-qualified domain name for security reasons. In
    the example, this means that you should not reuse the
-   <literal>myhostname.example.org</literal> virtualHost to also serve Riot,
+   <literal>myhostname.example.org</literal> virtualHost to also serve Element,
    but instead serve it on a different subdomain, like
-   <literal>riot.example.org</literal> in the example. See the
-   <link xlink:href="https://github.com/vector-im/riot-web#important-security-note">Riot
+   <literal>element.example.org</literal> in the example. See the
+   <link xlink:href="https://github.com/vector-im/riot-web#important-security-note">Element
    Important Security Notes</link> for more information on this subject.
   </para>
  </section>

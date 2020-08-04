@@ -18,7 +18,7 @@ let p2 = buildGoModule rec {
 
   subPackages = [ "packr2" ];
 
-  modSha256 = "1xxqyn78074jna0iri7sks6b2l4sdnn5sg57n09vrrf6kh39h2y9";
+  vendorSha256 = "12yq121b0bn8z12091fyqhhz421kgx4z1nskrkvbxlhyc47bwyrp";
 
   meta = with stdenv.lib; {
     description = "The simple and easy way to embed static files into Go binaries";
@@ -40,7 +40,7 @@ p1 = buildGoModule rec {
 
   subPackages = [ "packr" ];
 
-  modSha256 = "045qfdi82yhpghjd0cimxhas4nkj7g30n9qyvkrl9ck01sahx76f";
+  vendorSha256 = "0m3yj8ww4a16j56p8d8w0sdnyx0g2bkd8zg0l4d8vb72mvg5asga";
 
   meta = with lib; {
     description = "The simple and easy way to embed static files into Go binaries";

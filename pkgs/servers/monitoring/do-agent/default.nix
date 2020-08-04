@@ -16,7 +16,11 @@ buildGoModule rec {
       -X main.version=${version}
   '';
 
-  modSha256 = "164bwqg996097db399j7lar6gj9xpshjdmyapvzg7zh655xlkf3d";
+  vendorSha256 = null;
+
+  postInstall = ''
+    install -Dm444 -t $out/lib/systemd/system $src/packaging/etc/systemd/system/do-agent.service
+  '';
 
   meta = with lib; {
     description = "DigitalOcean droplet system metrics agent";

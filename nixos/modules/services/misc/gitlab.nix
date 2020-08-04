@@ -43,6 +43,9 @@ let
 
     [gitlab-shell]
     dir = "${cfg.packages.gitlab-shell}"
+    secret_file = "${cfg.statePath}/gitlab_shell_secret"
+    gitlab_url = "http+unix://${pathUrlQuote gitlabSocket}"
+    http_settings = { self_signed_cert = false }
 
     ${concatStringsSep "\n" (attrValues (mapAttrs (k: v: ''
     [[storage]]
@@ -68,7 +71,7 @@ let
     };
   };
 
-  redisConfig.production.url = "redis://localhost:6379/";
+  redisConfig.production.url = cfg.redisUrl;
 
   gitlabConfig = {
     # These are the default settings from config/gitlab.example.yml
@@ -129,7 +132,7 @@ let
     HOME = "${cfg.statePath}/home";
     UNICORN_PATH = "${cfg.statePath}/";
     GITLAB_PATH = "${cfg.packages.gitlab}/share/gitlab/";
-    SCHEMA = "${cfg.statePath}/db/schema.rb";
+    SCHEMA = "${cfg.statePath}/db/structure.sql";
     GITLAB_UPLOADS_PATH = "${cfg.statePath}/uploads";
     GITLAB_LOG_PATH = "${cfg.statePath}/log";
     GITLAB_REDIS_CONFIG_FILE = pkgs.writeText "redis.yml" (builtins.toJSON redisConfig);
@@ -306,6 +309,12 @@ in {
         type = types.attrs;
         default = {};
         description = "Extra configuration in config/database.yml.";
+      };
+
+      redisUrl = mkOption {
+        type = types.str;
+        default = "redis://localhost:6379/";
+        description = "Redis URL for all GitLab services except gitlab-shell";
       };
 
       extraGitlabRb = mkOption {
@@ -701,7 +710,7 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
-        ExecStart="${cfg.packages.gitlab.rubyEnv}/bin/sidekiq -C \"${cfg.packages.gitlab}/share/gitlab/config/sidekiq_queues.yml\" -e production -P ${cfg.statePath}/tmp/sidekiq.pid";
+        ExecStart="${cfg.packages.gitlab.rubyEnv}/bin/sidekiq -C \"${cfg.packages.gitlab}/share/gitlab/config/sidekiq_queues.yml\" -e production";
       };
     };
 

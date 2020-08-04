@@ -179,8 +179,8 @@ in stdenv.mkDerivation {
       # libdvdcss libdvdnav libdvdread
     ]
     ++ lib.optional x11Support [
-      libX11 xorgproto libXt libXmu libXext libXdmcp
-      libXinerama libXrandr libXtst libXfixes
+      libX11 xorgproto libXt libXmu libXext.dev libXdmcp
+      libXinerama libXrandr.dev libXtst libXfixes
     ]
     ++ lib.optional  dbusSupport     dbus
     ++ lib.optional joystickSupport cwiid

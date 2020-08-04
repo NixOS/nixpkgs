@@ -1,4 +1,4 @@
-From 4d304a321796db4de827aa39a149bea23d039214 Mon Sep 17 00:00:00 2001
+From b509dbd302a7933ae0002f44b99aac6a1fd5775b Mon Sep 17 00:00:00 2001
 From: Nikolay Amiantov <ab@fmap.me>
 Date: Tue, 11 Oct 2016 13:12:08 +0300
 Subject: [PATCH 09/18] Change /usr/share/zoneinfo to /etc/zoneinfo
@@ -79,7 +79,7 @@ index 901fbf0815..b57bdd8fbe 100644
          (void) mkdir_parents(etc_localtime, 0755);
          if (symlink(e, etc_localtime) < 0)
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index a97b1a4bc9..aed60439e3 100644
+index 4d3451ff3b..1adb91335c 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
 @@ -1657,8 +1657,8 @@ static int userns_mkdir(const char *root, const char *path, mode_t mode, uid_t u

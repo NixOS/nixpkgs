@@ -2,21 +2,26 @@
 
 buildGoModule rec {
   pname = "gobetween";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "yyyar";
     repo = "gobetween";
     rev = version;
-    sha256 = "f01593509ccece063acd47002c4fc52261fbbbcdbf14b088d813b7d8e38fcca8";
+    sha256 = "0bxf89l53sqan9qq23rwawjkcanv9p61sw56zjqhyx78f0bh0zbc";
   };
 
-  modSha256 =
-    "dd91838d20c99c73447590e43edd13c87755276f17ef3e53f24c5df3d0908f78";
+  deleteVendor = true;
+
+  patches = [
+    ./gomod.patch
+  ];
 
   buildPhase = ''
-    make build${lib.optionalString enableStatic "-static"}
+    make -e build${lib.optionalString enableStatic "-static"}
   '';
+
+  vendorSha256 = "1nkni9ikpc0wngh5v0qmlpn5s9v85lb2ih22f3h3lih7nc29yv87";
 
   installPhase = ''
     mkdir -p $out/bin

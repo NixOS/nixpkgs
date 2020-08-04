@@ -2,16 +2,17 @@
 
 buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.9.13";
+  version = "1.9.18";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1yqqflp73yvjy6bp05xd1nv5fc6p1nx7g4spbssxf3ws96pdh425";
+    sha256 = "0nkzwmrzk0m9662cr18h5i54v07mw8v3fh0csvqx8n50z5fcvb7b";
   };
 
-  modSha256 = "07xrw3fivfpbkg4mp8ghrj1bishfas82dbd780fymgs2h74iigf3";
+  runVend = true;
+  vendorSha256 = "1744df059bjksvih4653nnvb4kb1xvzdhypd0nnz36m1wrihqssv";
 
   subPackages = [
     "cmd/abidump"
@@ -39,6 +40,6 @@ buildGoModule rec {
     homepage = "https://geth.ethereum.org/";
     description = "Official golang implementation of the Ethereum protocol";
     license = with licenses; [ lgpl3 gpl3 ];
-    maintainers = with maintainers; [ adisbladis asymmetric lionello xrelkd ];
+    maintainers = with maintainers; [ adisbladis lionello xrelkd ];
   };
 }

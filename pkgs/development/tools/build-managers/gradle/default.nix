@@ -51,14 +51,24 @@ rec {
     };
   };
 
-  gradle_latest = gradle_5_6;
+  gradle_latest = gradle_6_5;
+
+  gradle_6_5 = gradleGen rec {
+    name = "gradle-6.5.1";
+    nativeVersion = "0.22-milestone-3";
+
+    src = fetchurl {
+      url = "https://services.gradle.org/distributions/${name}-bin.zip";
+      sha256 = "0jmmipjh4fbsn92zpifa5cqg5ws2a4ha0s4jzqhrg4zs542x79sh";
+    };
+  };
 
   gradle_5_6 = gradleGen rec {
     name = "gradle-5.6.4";
     nativeVersion = "0.18";
 
     src = fetchurl {
-      url = "http://services.gradle.org/distributions/${name}-bin.zip";
+      url = "https://services.gradle.org/distributions/${name}-bin.zip";
       sha256 = "1f3067073041bc44554d0efe5d402a33bc3d3c93cc39ab684f308586d732a80d";
     };
   };
@@ -68,7 +78,7 @@ rec {
     nativeVersion = "0.14";
 
     src = fetchurl {
-      url = "http://services.gradle.org/distributions/${name}-bin.zip";
+      url = "https://services.gradle.org/distributions/${name}-bin.zip";
       sha256 = "0vhqxnk0yj3q9jam5w4kpia70i4h0q4pjxxqwynh3qml0vrcn9l6";
     };
   };

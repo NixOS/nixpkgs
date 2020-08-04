@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "jellyfin-apiclient-python";
-  version = "1.4.0";
+  version = "1.5.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "iwalton3";
     repo = "jellyfin-apiclient-python";
     rev = "v${version}";
-    sha256 = "0b4ij19xjwn0wm5076fx8n4phjbsfx84x9qdrwm8c2r3ld8w7hk4";
+    sha256 = "1mzs4i9c4cf7pmymsyzs8x17hvjs8g9wr046l4f85rkzmz23v1rp";
   };
 
   propagatedBuildInputs = [ requests websocket_client ];

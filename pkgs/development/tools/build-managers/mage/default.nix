@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "mage";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "magefile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0lazf4r5ps1s04pvz608qaxbrbc6dv0j99n39iv42zwxxh0mbd0p";
+    sha256 = "0c77xgz2bz4j9sh9v7f49iqyamc4lvvldcmn6v50hk98s9193gbf";
   };
 
-  modSha256 = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
+  vendorSha256 = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
 
   buildFlagsArray = [
     "-ldflags="

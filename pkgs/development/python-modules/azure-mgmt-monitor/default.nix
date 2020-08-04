@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-monitor";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "170jyr1qzwhv5ihyrsg5d8qzjylqmg31dscd31jzi4i7bwqf3sb8";
+    sha256 = "0r3l55mhd00zx8sw13d7i9l7r214946s1y3wxcswxad7q5660zfm";
   };
 
   propagatedBuildInputs = [

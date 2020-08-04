@@ -1,37 +1,27 @@
 { python3Packages, fetchurl }:
 
 rec {
-  ansible = ansible_2_8;
+  ansible = ansible_2_9;
 
   ansible_2_9 = python3Packages.toPythonApplication python3Packages.ansible;
 
   ansible_2_8 = python3Packages.toPythonApplication (python3Packages.ansible.overridePythonAttrs (old: rec {
     pname = "ansible";
-    version = "2.8.11";
+    version = "2.8.13";
 
     src = fetchurl {
       url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
-      sha256 = "14f1m4jjkicadaz4d1dm8xhj53kdwksf0znmqzaz1fb0dj5slv0m";
+      sha256 = "09a0wa5l2vyy8n2hwvq9ikc77a9xm9k19rnkvcnnkbqwv1fl36zb";
     };
   }));
 
   ansible_2_7 = python3Packages.toPythonApplication (python3Packages.ansible.overridePythonAttrs (old: rec {
     pname = "ansible";
-    version = "2.7.17";
+    version = "2.7.18";
 
     src = fetchurl {
       url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
-      sha256 = "1k2cz4w3r3an37305f40vi93wqixapls9y6ggkf75nbs7z27knwz";
-    };
-  }));
-
-  ansible_2_6 = python3Packages.toPythonApplication (python3Packages.ansible.overridePythonAttrs (old: rec {
-    pname = "ansible";
-    version = "2.6.20";
-
-    src = fetchurl {
-      url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
-      sha256 = "02ra9q2mifyawn0719y78wrbqzik73aymlzwi90fq71jgyfvkkqn";
+      sha256 = "0sgshaaqyjq3i035yi5hivmrrwrq05hxrbjrv1w3hfzmvljn41d1";
     };
   }));
 }

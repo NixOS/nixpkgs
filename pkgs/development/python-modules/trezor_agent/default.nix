@@ -13,13 +13,13 @@
 , pinentry
 }:
 
-buildPythonPackage rec{
+buildPythonPackage rec {
   pname = "trezor_agent";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e82bf000c1178b1a7612f2a90487eb34c6234d2edb15dc8e310ad875d8298690";
+    sha256 = "139d917d6495bf290bcc21da457f84ccd2e74c78b4d59a649e0cdde4288cd20c";
   };
 
   propagatedBuildInputs = [ setuptools trezor libagent ecdsa ed25519 mnemonic keepkey semver wheel pinentry ];

@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "16kqz9yz98dasmj70jwf5py7jk558w96w0vgp3zf9xsqk3gzpzn5";
   };
 
+  postPatch = ''
+    substituteInPlace xargs/xargs.c --replace 'char default_cmd[] = "echo";' 'char default_cmd[] = "${coreutils}/bin/echo";'
+  '';
+
   patches = [
     ./no-install-statedir.patch
   ];

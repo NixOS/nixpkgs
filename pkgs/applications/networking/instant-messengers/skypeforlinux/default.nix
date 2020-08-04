@@ -7,7 +7,7 @@ let
 
   # Please keep the version x.y.0.z and do not update to x.y.76.z because the
   # source of the latter disappears much faster.
-  version = "8.59.0.77";
+  version = "8.62.0.85";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
@@ -65,7 +65,7 @@ let
           "https://mirror.cs.uchicago.edu/skype/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
           "https://web.archive.org/web/https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
         ];
-        sha256 = "1cnlwlp84942ywji3x60zvhijavazdxfym3rfzq3ysky28b6mn6i";
+        sha256 = "0qlm2hbshxgycczv227bbj2fbiw3b76rp24mh8amhq4xbscazl38";
       }
     else
       throw "Skype for linux is not supported on ${stdenv.hostPlatform.system}";

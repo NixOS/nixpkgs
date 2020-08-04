@@ -2,6 +2,7 @@
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , cvxpy
 , cython
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aer";
-  version = "0.5.0";
+  version = "0.5.2";
 
   disabled = pythonOlder "3.5";
 
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     repo = "qiskit-aer";
     rev = version;
     fetchSubmodules = true; # fetch muparserx and other required libraries
-    sha256 = "05lsirrdnnr5yqhwkgv08d9aib8xq4xpd6aq2pfqsi9qkii2fff1";
+    sha256 = "0vw6b69h8pvzxhaz3k8sg9ac792gz3kklfv0izs6ra83y1dfwhjz";
   };
 
   nativeBuildInputs = [
@@ -47,7 +48,7 @@ buildPythonPackage rec {
     pybind11
   ];
 
-  prePatch = ''
+  postPatch = ''
     # remove dependency on PyPi cmake package, which isn't in Nixpkgs
     substituteInPlace setup.py --replace "'cmake!=3.17,!=3.17.0'" ""
   '';
@@ -76,12 +77,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
   dontUseSetuptoolsCheck = true;  # Otherwise runs tests twice
+  disabledTests = [
+    # broken with cvxpy >= 1.1.0, see https://github.com/Qiskit/qiskit-aer/issues/779.
+    # TODO: Remove once resolved, probably next qiskit-aer version
+    "test_clifford"
+  ];
 
   preCheck = ''
     # Tests include a compiled "circuit" which is auto-built in $HOME
     export HOME=$(mktemp -d)
     # move tests b/c by default try to find (missing) cython-ized code in /build/source dir
-    cp -r test $HOME
+    cp -r $TMP/$sourceRoot/test $HOME
 
     # Add qiskit-aer compiled files to cython include search
     pushd $HOME

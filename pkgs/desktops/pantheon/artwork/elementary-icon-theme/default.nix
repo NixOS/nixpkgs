@@ -1,18 +1,19 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , meson
 , python3
 , ninja
 , hicolor-icon-theme
 , gtk3
-, inkscape
 , xorg
+, librsvg
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-icon-theme";
-  version = "5.2.0";
+  version = "5.3.1";
 
   repoName = "icons";
 
@@ -20,18 +21,18 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1irkjj8xfpgkl5p56xhqa3w2s98b8lav7d1lxxrabdi87cjv3n33";
+    sha256 = "0rs68cb39r9vq85pr8h3mgmyjpj8bkhkxr5cz4cn5947kf776wg9";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
 
   nativeBuildInputs = [
     gtk3
-    inkscape
+    librsvg
     meson
     ninja
     python3

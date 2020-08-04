@@ -36,9 +36,9 @@
 } @ args:
 
 let
-  version = "2.30";
+  version = "2.31";
   patchSuffix = "";
-  sha256 = "1bxqpg91d02qnaz837a5kamm0f43pr1il4r9pknygywsar713i72";
+  sha256 = "05zxkyz9bv3j9h0xyid1rhvh3klhsmrpkf3bcs6frvlgyr2gwilj";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
@@ -106,10 +106,10 @@ stdenv.mkDerivation ({
         url = "https://salsa.debian.org/glibc-team/glibc/raw/49767c9f7de4828220b691b29de0baf60d8a54ec/debian/patches/localedata/locale-C.diff";
         sha256 = "0irj60hs2i91ilwg5w7sqrxb695c93xg0ik7yhhq9irprd7fidn4";
       })
-    ]
-    ++ lib.optionals stdenv.isx86_64 [
+
       ./fix-x64-abi.patch
-      ./2.27-CVE-2019-19126.patch
+      ./2.30-cve-2020-1752.patch
+      ./2.31-cve-2020-10029.patch
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;

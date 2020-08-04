@@ -1,19 +1,60 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
-, Mako, packaging, pysocks, pygments, ROPGadget
-, capstone, paramiko, pip, psutil
-, pyelftools, pyserial, dateutil
-, requests, tox, unicorn, intervaltree, fetchpatch }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, Mako
+, packaging
+, pysocks
+, pygments
+, ROPGadget
+, capstone
+, paramiko
+, pip
+, psutil
+, pyelftools
+, pyserial
+, dateutil
+, requests
+, tox
+, unicorn
+, intervaltree
+, fetchpatch
+}:
 
 buildPythonPackage rec {
-  version = "4.0.0b0";
+  version = "4.2.1";
   pname = "pwntools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11f7x7rjad1nawn3r524lzxgz3nk89c6s3xycrscn3n86hh0zgid";
+    sha256 = "1fh7sq9wrcfvn44qryln9cyg99pilvyq9bp80758lgdd6ss6hdqd";
   };
 
-  propagatedBuildInputs = [ Mako packaging pysocks pygments ROPGadget capstone paramiko pip psutil pyelftools pyserial dateutil requests tox unicorn intervaltree ];
+  # Upstream has set an upper bound on unicorn because of https://github.com/Gallopsled/pwntools/issues/1538,
+  # but since that is a niche use case and it requires extra work to get unicorn 1.0.2rc3 to work we relax
+  # the bound here. Check if this is still necessary when updating!
+  postPatch = ''
+    sed -i 's/unicorn>=1.0.2rc1,<1.0.2rc4/unicorn>=1.0.2rc1/' setup.py
+  '';
+
+  propagatedBuildInputs = [
+    Mako
+    packaging
+    pysocks
+    pygments
+    ROPGadget
+    capstone
+    paramiko
+    pip
+    psutil
+    pyelftools
+    pyserial
+    dateutil
+    requests
+    tox
+    unicorn
+    intervaltree
+  ];
 
   doCheck = false; # no setuptools tests for the package
 

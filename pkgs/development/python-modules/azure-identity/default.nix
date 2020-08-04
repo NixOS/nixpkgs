@@ -38,6 +38,13 @@ buildPythonPackage rec {
     msrestazure
   ];
 
+  prePatch = ''
+    substituteInPlace setup.py \
+      --replace msal-extensions~=0.1.3 msal-extensions
+  '';
+
+  pythonImportsCheck = [ "azure.identity" ];
+
   # Requires checkout from mono-repo and a mock account:
   #   https://github.com/Azure/azure-sdk-for-python/blob/master/sdk/identity/tests.yml
   doCheck = false;

@@ -40,11 +40,6 @@ with super;
       { name = "CRYPTO"; dep = pkgs.openssl; }
       { name = "OPENSSL"; dep = pkgs.openssl; }
     ];
-
-    # https://github.com/wahern/cqueues/issues/227
-    NIX_CFLAGS_COMPILE = with pkgs.stdenv; lib.optionalString hostPlatform.isDarwin
-      "-DCLOCK_MONOTONIC -DCLOCK_REALTIME";
-
     disabled = luaOlder "5.1" || luaAtLeast "5.4";
     # Upstream rockspec is pointlessly broken into separate rockspecs, per Lua
     # version, which doesn't work well for us, so modify it
@@ -79,6 +74,17 @@ with super;
     nativeBuildInputs = [ pandoc ];
     makeFlags = [ "-C doc" "lua-http.html" "lua-http.3" ];
     */
+  });
+
+  ldbus = super.ldbus.override({
+    extraVariables = {
+      DBUS_DIR="${pkgs.dbus.lib}";
+      DBUS_ARCH_INCDIR="${pkgs.dbus.lib}/lib/dbus-1.0/include";
+      DBUS_INCDIR="${pkgs.dbus.dev}/include/dbus-1.0";
+    };
+    buildInputs = with pkgs; [
+      dbus
+    ];
   });
 
   ljsyscall = super.ljsyscall.override(rec {
@@ -143,6 +149,14 @@ with super;
     buildInputs = [
       pkgs.libiconv
     ];
+  });
+
+  lua-lsp = super.lua-lsp.override({
+    # until Alloyed/lua-lsp#28
+    postConfigure = ''
+      substituteInPlace ''${rockspecFilename} \
+        --replace '"lpeglabel ~> 1.5",' '"lpeglabel >= 1.5",'
+    '';
   });
 
   lua-zlib = super.lua-zlib.override({
@@ -294,11 +308,49 @@ with super;
     };
   });
 
+  lyaml = super.lyaml.override({
+    buildInputs = [
+      pkgs.libyaml
+    ];
+  });
+
+  mpack = super.mpack.override({
+    buildInputs = [ pkgs.libmpack ];
+    # the rockspec doesn't use the makefile so you may need to export more flags
+    USE_SYSTEM_LUA = "yes";
+    USE_SYSTEM_MPACK = "yes";
+  });
 
   rapidjson = super.rapidjson.override({
     preBuild = ''
       sed -i '/set(CMAKE_CXX_FLAGS/d' CMakeLists.txt
       sed -i '/set(CMAKE_C_FLAGS/d' CMakeLists.txt
     '';
+  });
+
+  readline = (super.readline.override ({
+    unpackCmd = ''
+      unzip "$curSrc"
+      tar xf *.tar.gz
+    '';
+    propagatedBuildInputs = super.readline.propagatedBuildInputs ++ [ pkgs.readline ];
+    extraVariables = rec {
+      READLINE_INCDIR = "${pkgs.readline.dev}/include";
+      HISTORY_INCDIR = READLINE_INCDIR;
+    };
+  })).overrideAttrs (old: {
+    # Without this, source root is wrongly set to ./readline-2.6/doc
+    setSourceRoot = ''
+      sourceRoot=./readline-2.6
+    '';
+  });
+
+  pulseaudio = super.pulseaudio.override({
+    buildInputs = [
+      pkgs.libpulseaudio
+    ];
+    nativeBuildInputs = [
+      pkgs.pulseaudio pkgs.pkgconfig
+    ];
   });
 }

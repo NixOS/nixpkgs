@@ -3,10 +3,8 @@
 , meson
 , ninja
 , pkgconfig
-, SDL
 , SDL2
 , alsaLib
-, avahi
 , bullet
 , check
 , curl
@@ -41,6 +39,7 @@
 , luajit
 , lz4
 , mesa
+, mint-x-icons
 , openjpeg
 , openssl
 , poppler
@@ -55,11 +54,11 @@
 
 stdenv.mkDerivation rec {
   pname = "efl";
-  version = "1.24.0";
+  version = "1.24.3";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1yhck2g4rwlzgnzqa4wjxw3lf6k6rd730hz4bwzajdjy7i26xfdk";
+    sha256 = "de95c6e673c170c1e21382918b122417c091c643e7dcaced89aa785529625c2a";
   };
 
   nativeBuildInputs = [
@@ -71,8 +70,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    SDL
-    avahi
     fontconfig
     freetype
     giflib
@@ -96,7 +93,7 @@ stdenv.mkDerivation rec {
     xorg.libXcursor
     xorg.xorgproto
     zlib
-    # still missing parent icon themes: Mint-X, RAVE-X, Faenza
+    # still missing parent icon themes: RAVE-X, Faenza
   ];
 
   propagatedBuildInputs = [
@@ -111,6 +108,7 @@ stdenv.mkDerivation rec {
     fribidi
     ghostscript
     harfbuzz
+    hicolor-icon-theme # for the icon theme
     jbig2dec
     libdrm
     libinput
@@ -121,9 +119,9 @@ stdenv.mkDerivation rec {
     libwebp
     libxkbcommon
     luajit
+    mint-x-icons # Mint-X is a parent icon theme of Enlightenment-X
     openjpeg
     poppler
-    python3Packages.dbus-python
     utillinux
     xorg.libXScrnSaver
     xorg.libXcomposite
@@ -132,13 +130,10 @@ stdenv.mkDerivation rec {
     xorg.libXfixes
     xorg.libXi
     xorg.libXinerama
-    xorg.libXp
     xorg.libXrandr
     xorg.libXrender
     xorg.libXtst
     xorg.libxcb
-    xorg.libxkbfile
-    xorg.xcbutilkeysyms
   ];
 
   dontDropIconThemeCache = true;
@@ -147,21 +142,23 @@ stdenv.mkDerivation rec {
     "--buildtype=release"
     "-D build-tests=false" # disable build tests, which are not working
     "-D drm=true"
-    "-D embedded-lz4=false"
     "-D ecore-imf-loaders-disabler=ibus,scim" # ibus is disalbed by default, scim is not availabe in nixpkgs
-    "-D evas-loaders-disabler=json"
+    "-D embedded-lz4=false"
     "-D fb=true"
-    "-D opengl=full"
+    "-D network-backend=connman"
     "-D sdl=true"
   ];
 
-  patches = [ ./efl-elua.patch ];
+  patches = [
+    ./efl-elua.patch
+    ./0002-efreet-more-stat-info-changes.patch
+  ];
 
   postPatch = ''
     patchShebangs src/lib/elementary/config_embed
 
     # fix destination of systemd unit and dbus service
-    substituteInPlace systemd-services/meson.build --replace "dep.get_pkgconfig_variable('systemduserunitdir')" "'$out/systemd/user'"
+    substituteInPlace systemd-services/meson.build --replace "sys_dep.get_pkgconfig_variable('systemduserunitdir')" "'$out/systemd/user'"
     substituteInPlace dbus-services/meson.build --replace "dep.get_pkgconfig_variable('session_bus_services_dir')" "'$out/share/dbus-1/services'"
   '';
 

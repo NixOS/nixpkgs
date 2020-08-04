@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "aioharmony";
-  version = "0.2.1";
+  version = "0.2.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8c8f6e3b776e4e7eba5a1d2ae739aac6a1dd558a7f15951c34ffe0ee28f7f538";
+    sha256 = "11mv52dwyccza09nbh2l7r9l3k06c5rzml3zinqbyznfxg3gaxi0";
   };
 
   disabled = !isPy3k;

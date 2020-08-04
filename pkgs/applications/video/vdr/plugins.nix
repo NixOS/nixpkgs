@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, vdr, alsaLib, fetchFromGitHub
-, libvdpau, libxcb, xcbutilwm, graphicsmagick, libav, pcre, xorgserver, ffmpeg
+, libvdpau, libxcb, xcbutilwm, graphicsmagick, libav, pcre, xorgserver, ffmpeg_3
 , libiconv, boost, libgcrypt, perl, utillinux, groff, libva, xorg, ncurses
 , callPackage
 }: let
@@ -52,7 +52,7 @@ in {
     name = "vdr-vaapidevice-0.7.0";
 
     buildInputs = [
-      vdr libxcb xcbutilwm ffmpeg
+      vdr libxcb xcbutilwm ffmpeg_3
       alsaLib
       libvdpau # vdpau
       libva # va-api

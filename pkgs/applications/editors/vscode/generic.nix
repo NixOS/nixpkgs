@@ -24,7 +24,7 @@ in
       desktopName = longName;
       comment = "Code Editing. Redefined.";
       genericName = "Text Editor";
-      exec = executableName;
+      exec = "${executableName} %U";
       icon = "code";
       startupNotify = "true";
       categories = "Utility;TextEditor;Development;IDE;";
@@ -77,8 +77,6 @@ in
       '' else ''
         mkdir -p $out/lib/vscode $out/bin
         cp -r ./* $out/lib/vscode
-
-        substituteInPlace $out/lib/vscode/bin/${executableName} --replace '"$CLI" "$@"' '"$CLI" "--skip-getting-started" "$@"'
 
         ln -s $out/lib/vscode/bin/${executableName} $out/bin
 

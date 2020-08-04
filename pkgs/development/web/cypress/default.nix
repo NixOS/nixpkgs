@@ -1,12 +1,12 @@
 { stdenv, fetchzip, autoPatchelfHook, xorg, gtk2, gnome2, gtk3, nss, alsaLib, udev, unzip, wrapGAppsHook }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "4.4.1";
+  version = "4.9.0";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/linux-x64/cypress.zip";
-    sha256 = "0da1y90a6i3fjhyrzwwn3pavzbqin9v5v7hx8halz6i7cf1halfi";
+    sha256 = "1lyhwy4rg6gdsj4590ya5v27lmyz6hnn4dhs51dq5i069rsw9qw4";
   };
 
   # don't remove runtime deps

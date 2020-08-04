@@ -14,7 +14,7 @@ buildGoModule rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ wireshark-cli ];
 
-  modSha256 = "0lp4gky76di7as78421p3lsirfr7mic3z204ildvj6gf6d15svpr";
+  vendorSha256 = "14apff3vcbndr30765lzi4qswakavb4396bjixxvpxv6i5c04dq7";
 
   postFixup = ''
     wrapProgram $out/bin/termshark --prefix PATH : ${stdenv.lib.makeBinPath [ wireshark-cli ]}

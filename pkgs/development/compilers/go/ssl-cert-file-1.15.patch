@@ -1,0 +1,76 @@
+diff --git a/src/crypto/x509/root_darwin_amd64.go b/src/crypto/x509/root_darwin_amd64.go
+index 8ad5a9607d..1d6091cf83 100644
+--- a/src/crypto/x509/root_darwin_amd64.go
++++ b/src/crypto/x509/root_darwin_amd64.go
+@@ -8,6 +8,7 @@ import (
+ 	"bytes"
+ 	"crypto/x509/internal/macOS"
+ 	"fmt"
++	"io/ioutil"
+ 	"os"
+ 	"strings"
+ )
+@@ -23,6 +24,14 @@ func (c *Certificate) systemVerify(opts *VerifyOptions) (chains [][]*Certificate
+ var loadSystemRootsWithCgo func() (*CertPool, error)
+ 
+ func loadSystemRoots() (*CertPool, error) {
++	if file := os.Getenv("NIX_SSL_CERT_FILE"); file != "" {
++		data, err := ioutil.ReadFile(file)
++		if err == nil {
++			roots := NewCertPool()
++			roots.AppendCertsFromPEM(data)
++			return roots, nil
++		}
++	}
+ 	var trustedRoots []*Certificate
+ 	untrustedRoots := make(map[string]bool)
+ 
+diff --git a/src/crypto/x509/root_darwin_arm64.go b/src/crypto/x509/root_darwin_arm64.go
+index 2fb079ba66..6a072f3e78 100644
+--- a/src/crypto/x509/root_darwin_arm64.go
++++ b/src/crypto/x509/root_darwin_arm64.go
+@@ -6,6 +6,11 @@
+ 
+ package x509
+ 
++import (
++	"io/ioutil"
++	"os"
++)
++
+ func (c *Certificate) systemVerify(opts *VerifyOptions) (chains [][]*Certificate, err error) {
+ 	return nil, nil
+ }
+@@ -14,6 +19,14 @@ func (c *Certificate) systemVerify(opts *VerifyOptions) (chains [][]*Certificate
+ var loadSystemRootsWithCgo func() (*CertPool, error)
+ 
+ func loadSystemRoots() (*CertPool, error) {
++	if file := os.Getenv("NIX_SSL_CERT_FILE"); file != "" {
++		data, err := ioutil.ReadFile(file)
++		if err == nil {
++			roots := NewCertPool()
++			roots.AppendCertsFromPEM(data)
++			return roots, nil
++		}
++	}
+ 	p := NewCertPool()
+ 	p.AppendCertsFromPEM([]byte(systemRootsPEM))
+ 	return p, nil
+diff --git a/src/crypto/x509/root_unix.go b/src/crypto/x509/root_unix.go
+index b48e618a65..195c1ff25a 100644
+--- a/src/crypto/x509/root_unix.go
++++ b/src/crypto/x509/root_unix.go
+@@ -42,6 +42,13 @@ func (c *Certificate) systemVerify(opts *VerifyOptions) (chains [][]*Certificate
+ 
+ func loadSystemRoots() (*CertPool, error) {
+ 	roots := NewCertPool()
++	if file := os.Getenv("NIX_SSL_CERT_FILE"); file != "" {
++		data, err := ioutil.ReadFile(file)
++		if err == nil {
++			roots.AppendCertsFromPEM(data)
++			return roots, nil
++		}
++	}
+ 
+ 	files := certFiles
+ 	if f := os.Getenv(certFileEnv); f != "" {

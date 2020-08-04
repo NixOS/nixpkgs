@@ -1,35 +1,40 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "dgraph";
-  version = "1.0.17";
-
-  goPackagePath = "github.com/dgraph-io/dgraph";
+  version = "20.03.4";
 
   src = fetchFromGitHub {
     owner = "dgraph-io";
     repo = "dgraph";
     rev = "v${version}";
-    sha256 = "05z1xwbd76q49zyqahh9krvq78dgkzr22qc6srr4djds0l7y6x5i";
+    sha256 = "1i098wimzwna62q4wp8ipx8qjrmhrdv48kklm1jdi2sfiz18c9sc";
   };
 
+  vendorSha256 = "0n442nsa2whwb22dl0cjxspl8dc00rqv29zivcw9liwdzara81bw";
+
+  nativeBuildInputs = [ installShellFiles ];
+
   # see licensing
-  buildFlags = [ "-tags oss" ];
-
-  goDeps = ./deps.nix;
-  subPackages = [ "dgraph"];
-
-  preBuild = ''
-    export buildFlagsArray="-ldflags=\
-      -X github.com/dgraph-io/dgraph/x.dgraphVersion=${version}"
+  buildPhase = ''
+    make oss BUILD_VERSION=${version}
   '';
 
-  meta = {
+  installPhase = ''
+    install dgraph/dgraph -Dt $out/bin
+
+    for shell in bash zsh; do
+      $out/bin/dgraph completion $shell > dgraph.$shell
+      installShellCompletion dgraph.$shell
+    done
+  '';
+
+  meta = with lib; {
     homepage = "https://dgraph.io/";
     description = "Fast, Distributed Graph DB";
-    maintainers = with stdenv.lib.maintainers; [ sigma ];
-    # Apache 2.0 because we use only build tag "oss"
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with maintainers; [ sigma ];
+    # Apache 2.0 because we use only build "oss"
+    license = licenses.asl20;
+    platforms = platforms.unix;
   };
 }

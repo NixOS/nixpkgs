@@ -1,27 +1,20 @@
-{ stdenv, fetchzip, wxGTK30, pkgconfig, file, gettext,
+{ stdenv, fetchzip, wxGTK31, pkgconfig, file, gettext,
   libvorbis, libmad, libjack2, lv2, lilv, serd, sord, sratom, suil, alsaLib, libsndfile, soxr, flac, lame,
-  expat, libid3tag, ffmpeg, soundtouch, /*, portaudio - given up fighting their portaudio.patch */
-  autoconf, automake, libtool
+  expat, libid3tag, ffmpeg_3, soundtouch, /*, portaudio - given up fighting their portaudio.patch */
+  pcre, vamp-plugin-sdk, portmidi, twolame, git,
+  cmake, libtool
   }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "2.3.3";
+  version = "2.4.2";
   pname = "audacity";
 
   src = fetchzip {
     url = "https://github.com/audacity/audacity/archive/Audacity-${version}.tar.gz";
-    sha256 = "0ddc03dbm4ixy877czmwd03fpjgr3y68bxfgb6n2q6cv4prp30ig";
+    sha256 = "0lklcvqkxrr2gkb9gh3422iadzl2rv9v0a8s76rwq43lj2im7546";
   };
-
-  preConfigure = /* we prefer system-wide libs */ ''
-    autoreconf -vi # use system libraries
-
-    # we will get a (possibly harmless) warning during configure without this
-    substituteInPlace configure \
-      --replace /usr/bin/file ${file}/bin/file
-  '';
 
   configureFlags = [
     "--with-libsamplerate"
@@ -43,11 +36,12 @@ stdenv.mkDerivation rec {
     "-lswscale"
   ];
 
-  nativeBuildInputs = [ pkgconfig autoconf automake libtool ];
+  nativeBuildInputs = [ pkgconfig cmake libtool git ];
   buildInputs = [
-    file gettext wxGTK30 expat alsaLib
-    libsndfile soxr libid3tag libjack2 lv2 lilv serd sord sratom suil wxGTK30.gtk
-    ffmpeg libmad lame libvorbis flac soundtouch
+    file gettext wxGTK31 expat alsaLib
+    libsndfile soxr libid3tag libjack2 lv2 lilv serd sord sratom suil wxGTK31.gtk
+    ffmpeg_3 libmad lame libvorbis flac soundtouch
+    pcre vamp-plugin-sdk portmidi twolame
   ]; #ToDo: detach sbsms
 
   enableParallelBuilding = true;
@@ -59,6 +53,7 @@ stdenv.mkDerivation rec {
     description = "Sound editor with graphical UI";
     homepage = "http://audacityteam.org/";
     license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ lheckemann ];
     platforms = intersectLists platforms.linux platforms.x86; # fails on ARM
   };
 }

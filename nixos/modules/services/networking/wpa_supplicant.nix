@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.networking.wireless;
-  configFile = if cfg.networks != {} then pkgs.writeText "wpa_supplicant.conf" ''
+  configFile = if cfg.networks != {} || cfg.extraConfig != "" || cfg.userControlled.enable then pkgs.writeText "wpa_supplicant.conf" ''
     ${optionalString cfg.userControlled.enable ''
       ctrl_interface=DIR=/run/wpa_supplicant GROUP=${cfg.userControlled.group}
       update_config=1''}
@@ -253,12 +253,12 @@ in {
     };
 
     powerManagement.resumeCommands = ''
-      ${config.systemd.package}/bin/systemctl try-restart wpa_supplicant
+      /run/current-system/systemd/bin/systemctl try-restart wpa_supplicant
     '';
 
     # Restart wpa_supplicant when a wlan device appears or disappears.
     services.udev.extraRules = ''
-      ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", RUN+="${config.systemd.package}/bin/systemctl try-restart wpa_supplicant.service"
+      ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", RUN+="/run/current-system/systemd/bin/systemctl try-restart wpa_supplicant.service"
     '';
   };
 

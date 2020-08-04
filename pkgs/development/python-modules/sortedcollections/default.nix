@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "sortedcollections";
-  version = "1.1.2";
+  version = "1.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12nkw69lnyvh9wy6rsd0ng4bcia81vkhj1rj1kj1k3vzppn0sgmr";
+    sha256 = "0sihzm5aqz7r3irh4jn6rzicb7lf81d27z7vl6kaslnhwcsizhsq";
   };
 
   propagatedBuildInputs = [ sortedcontainers ];

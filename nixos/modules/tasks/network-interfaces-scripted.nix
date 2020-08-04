@@ -54,7 +54,16 @@ let
     };
 
   normalConfig = {
-
+    systemd.network.links = let
+      createNetworkLink = i: nameValuePair "40-${i.name}" {
+        matchConfig.OriginalName = i.name;
+        linkConfig = optionalAttrs (i.macAddress != null) {
+          MACAddress = i.macAddress;
+        } // optionalAttrs (i.mtu != null) {
+          MTUBytes = toString i.mtu;
+        };
+      };
+    in listToAttrs (map createNetworkLink interfaces);
     systemd.services =
       let
 
@@ -164,7 +173,6 @@ let
           { description = "Address configuration of ${i.name}";
             wantedBy = [
               "network-setup.service"
-              "network-link-${i.name}.service"
               "network.target"
             ];
             # order before network-setup because the routes that are configured
@@ -182,6 +190,8 @@ let
               ''
                 state="/run/nixos/network/addresses/${i.name}"
                 mkdir -p $(dirname "$state")
+
+                ip link set "${i.name}" up
 
                 ${flip concatMapStrings ips (ip:
                   let
@@ -222,52 +232,24 @@ let
               '';
             preStop = ''
               state="/run/nixos/network/routes/${i.name}"
-              while read cidr; do
-                echo -n "deleting route $cidr... "
-                ip route del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
-              done < "$state"
-              rm -f "$state"
+              if [ -e "$state" ]; then
+                while read cidr; do
+                  echo -n "deleting route $cidr... "
+                  ip route del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
+                done < "$state"
+                rm -f "$state"
+              fi
 
               state="/run/nixos/network/addresses/${i.name}"
-              while read cidr; do
-                echo -n "deleting address $cidr... "
-                ip addr del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
-              done < "$state"
-              rm -f "$state"
+              if [ -e "$state" ]; then
+                while read cidr; do
+                  echo -n "deleting address $cidr... "
+                  ip addr del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
+                done < "$state"
+                rm -f "$state"
+              fi
             '';
           };
-
-        createNetworkLink = i:
-        let
-          deviceDependency = if (config.boot.isContainer || i.name == "lo")
-            then []
-            else [ (subsystemDevice i.name) ];
-        in
-        nameValuePair "network-link-${i.name}"
-        { description = "Link configuration of ${i.name}";
-          wantedBy = [ "network-interfaces.target" ];
-          before = [ "network-interfaces.target" ];
-          bindsTo = deviceDependency;
-          after = [ "network-pre.target" ] ++ deviceDependency;
-          path = [ pkgs.iproute ];
-          serviceConfig = {
-            Type = "oneshot";
-            RemainAfterExit = true;
-          };
-          script =
-            ''
-              echo "Configuring link..."
-            '' + optionalString (i.macAddress != null) ''
-              echo "setting MAC address to ${i.macAddress}..."
-              ip link set "${i.name}" address "${i.macAddress}"
-            '' + optionalString (i.mtu != null) ''
-              echo "setting MTU to ${toString i.mtu}..."
-              ip link set "${i.name}" mtu "${toString i.mtu}"
-            '' + ''
-              echo -n "bringing up interface... "
-              ip link set "${i.name}" up && echo "done" || (echo "failed"; exit 1)
-            '';
-        };
 
         createTunDevice = i: nameValuePair "${i.name}-netdev"
           { description = "Virtual Network Interface ${i.name}";
@@ -298,7 +280,7 @@ let
             bindsTo = deps ++ optional v.rstp "mstpd.service";
             partOf = [ "network-setup.service" ] ++ optional v.rstp "mstpd.service";
             after = [ "network-pre.target" ] ++ deps ++ optional v.rstp "mstpd.service"
-              ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
+              ++ map (i: "network-addresses-${i}.service") v.interfaces;
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
@@ -327,7 +309,7 @@ let
                   # if `libvirtd.service` is not running, do not use `virsh` which would try activate it via 'libvirtd.socket' and thus start it out-of-order.
                   # `libvirtd.service` will set up bridge interfaces when it will start normally.
                   #
-                  if ${pkgs.systemd}/bin/systemctl --quiet is-active 'libvirtd.service'; then
+                  if /run/current-system/systemd/bin/systemctl --quiet is-active 'libvirtd.service'; then
                     for uri in qemu:///system lxc:///; do
                       for dom in $(${pkgs.libvirt}/bin/virsh -c $uri list --name); do
                         ${pkgs.libvirt}/bin/virsh -c $uri dumpxml "$dom" | \
@@ -375,7 +357,7 @@ let
         createVswitchDevice = n: v: nameValuePair "${n}-netdev"
           (let
             deps = concatLists (map deviceDependency (attrNames (filterAttrs (_: config: config.type != "internal") v.interfaces)));
-            internalConfigs = concatMap (i: ["network-link-${i}.service" "network-addresses-${i}.service"]) (attrNames (filterAttrs (_: config: config.type == "internal") v.interfaces));
+            internalConfigs = map (i: "network-addresses-${i}.service") (attrNames (filterAttrs (_: config: config.type == "internal") v.interfaces));
             ofRules = pkgs.writeText "vswitch-${n}-openFlowRules" v.openFlowRules;
           in
           { description = "Open vSwitch Interface ${n}";
@@ -427,7 +409,7 @@ let
             bindsTo = deps;
             partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps
-              ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
+              ++ map (i: "network-addresses-${i}.service") v.interfaces;
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
@@ -540,7 +522,6 @@ let
           });
 
       in listToAttrs (
-           map createNetworkLink interfaces ++
            map configureAddrs interfaces ++
            map createTunDevice (filter (i: i.virtual) interfaces))
          // mapAttrs' createBridgeDevice cfg.bridges

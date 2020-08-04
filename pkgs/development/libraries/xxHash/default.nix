@@ -2,18 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "xxHash";
-  version = "0.7.3";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "Cyan4973";
     repo = "xxHash";
     rev = "v${version}";
-    sha256 = "0bin0jch6lbzl4f8y052a7azfgq2n7iwqihzgqmcccv5vq4vcx5a";
+    sha256 = "0hpbzdd6kfki5f61g103vp7pfczqkdj0js63avl0ss552jfb8h96";
   };
 
   outputs = [ "out" "dev" ];
 
-  makeFlags = [ "PREFIX=$(out)" "INCLUDEDIR=$(dev)/include" ];
+  makeFlags = [ "PREFIX=$(dev)" "EXEC_PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "Extremely fast hash algorithm";

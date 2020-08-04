@@ -36,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-terra";
-  version = "0.13.0";
+  version = "0.14.2";
 
   disabled = pythonOlder "3.5";
 
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    sha256 = "03fgqmyahgmkf5dbw19n9c1v8p4kmpk50wxhhc8435cclvs26x9j";
+    sha256 = "0p5wapjvy81pnks100xbb23kbs2wyys9ykyc8z4968wl487lq4g5";
   };
 
   nativeBuildInputs = [ cython ];
@@ -95,9 +95,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    "test_jupyter_jobs_pbars" # needs IBMQ provider package (qiskit-ibmq-provider), circular dependency
+    "test_random_clifford_valid"  # random test, fails at least once when testing locally.
   ];
-
   pytestFlagsArray = [
     "--ignore=test/randomized/test_transpiler_equivalence.py" # collection requires qiskit-aer, which would cause circular dependency
   ];

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pythonPackages }:
 
 stdenv.mkDerivation rec {
-    version = "2.3";
+    version = "2.4";
     pname = "weather";
 
     src = fetchurl {
         url = "http://fungi.yuggoth.org/weather/src/${pname}-${version}.tar.xz";
-        sha256 = "0inij30prqqcmzjwcmfzjjn0ya5klv18qmajgxipz1jr3lpqs546";
+        sha256 = "084f0am0s1h6y71wgja9acaaxp0mq6k74b6ad4b5wpk2znwv0rzz";
     };
 
     nativeBuildInputs = [ pythonPackages.wrapPython ];

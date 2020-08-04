@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
         url = "https://github.com/libjpeg-turbo/libjpeg-turbo/commit/a2291b252de1413a13db61b21863ae7aea0946f3.patch";
         sha256 = "0nc5vcch5h52gpi07h08zf8br58q8x81q2hv871hrn0dinb53vym";
       })
+
+      (fetchpatch {
+        name = "cve-2020-13790.patch";
+        url = "https://github.com/libjpeg-turbo/libjpeg-turbo/commit/3de15e0c344d.diff";
+        sha256 = "0hm5i6qir5w3zxb0xvqdh4jyvbfg7xnd28arhyfsaclfz9wdb0pb";
+      })
     ] ++
     stdenv.lib.optional (stdenv.hostPlatform.libc or null == "msvcrt")
       ./mingw-boolean.patch;

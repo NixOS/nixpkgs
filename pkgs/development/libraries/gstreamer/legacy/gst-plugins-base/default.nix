@@ -56,5 +56,7 @@ stdenv.mkDerivation rec {
     license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
+    # https://github.com/NixOS/nixpkgs/pull/91090#issuecomment-653753497
+    broken = true;
   };
 }

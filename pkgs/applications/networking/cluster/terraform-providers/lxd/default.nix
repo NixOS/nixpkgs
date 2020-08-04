@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "1k54021178zybh9dqly2ly8ji9x5rka8dn9xd6rv7gkcl5w3y6fv";
   };
 
-  modSha256 = "1h95ng9by3i3v15s1ws1fv86a47vglivn42xbffdy94s108g0908";
+  vendorSha256 = "1shdpl1zsbbpc3mfs0l65ykq2h15ggvqylaixcap4j4lfl7m9my0";
 
   postBuild = "mv ../go/bin/terraform-provider-lxd{,_v${version}}";
 

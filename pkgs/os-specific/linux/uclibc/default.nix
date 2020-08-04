@@ -48,7 +48,7 @@ let
     UCLIBC_HAS_FPU n
   '';
 
-  version = "1.0.33";
+  version = "1.0.34";
 in
 
 stdenv.mkDerivation {
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "https://downloads.uclibc-ng.org/releases/${version}/uClibc-ng-${version}.tar.bz2";
     # from "${url}.sha256";
-    sha256 = "0qy9xsqacrhhrxd16azm26pqb2ks6c43wbrlq3i8xmq2917kw3xi";
+    sha256 = "025z0072inw1ibnrlwckslp9iayl9c35ysf0h7jjrxlzslzp4yjg";
   };
 
   # 'ftw' needed to build acl, a coreutils dependency

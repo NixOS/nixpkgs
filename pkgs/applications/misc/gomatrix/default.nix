@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "1wq55rvpyz0gjn8kiwwj49awsmi86zy1fdjcphzgb7883xalgr2m";
   };
 
-  modSha256 = "13higizadnf4ypk8qn1b5s6mdg7n6l3indb43mjp1b4cfzjsyl91";
+  vendorSha256 = "1yw0gph4zfg8w4343882l6b9lggwyak2zz8ic1l1m2m44p3aq169";
 
   meta = with lib; {
     description = ''Displays "The Matrix" in a terminal'';

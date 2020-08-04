@@ -1,82 +1,70 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, alsaLib, bc,
-  bzip2, efl, gdbm, libXdmcp, libXrandr, libcap, libffi,
-  libpthreadstubs, libxcb, luajit, mesa, pam, pcre, xcbutilkeysyms,
-  xkeyboard_config,
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gettext
+, alsaLib
+, acpid
+, bc
+, ddcutil
+, efl
+, pam
+, xkeyboard_config
+, udisks2
 
-  bluetoothSupport ? true, bluez5,
-  pulseSupport ? !stdenv.isDarwin, libpulseaudio,
+, bluetoothSupport ? true, bluez5
+, pulseSupport ? !stdenv.isDarwin, libpulseaudio
 }:
 
 stdenv.mkDerivation rec {
   pname = "enlightenment";
-  version = "0.23.1";
+  version = "0.24.2";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0d1cyl07w9pvi2pf029kablazks2q9aislzl46b6fq5m1465jc75";
+    sha256 = "1wfz0rwwsx7c1mkswn4hc9xw1i6bsdirhxiycf7ha2vcipqy465y";
   };
 
   nativeBuildInputs = [
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
     alsaLib
-    bc  # for the Everything module calculator mode
-    bzip2
+    acpid # for systems with ACPI for lid events, AC/Battery plug in/out etc
+    bc # for the Everything module calculator mode
+    ddcutil # specifically libddcutil.so.2 for backlight control
     efl
-    gdbm
-    libXdmcp
-    libXrandr
-    libffi
-    libpthreadstubs
-    libxcb
-    luajit
-    mesa
     pam
-    pcre
-    xcbutilkeysyms
     xkeyboard_config
+    udisks2 # for removable storage mounting/unmounting
   ]
-  ++ stdenv.lib.optional stdenv.isLinux libcap
-  ++ stdenv.lib.optional bluetoothSupport bluez5
-  ++ stdenv.lib.optional pulseSupport libpulseaudio
+  ++ stdenv.lib.optional bluetoothSupport bluez5 # for bluetooth configuration and control
+  ++ stdenv.lib.optional pulseSupport libpulseaudio # for proper audio device control and redirection
   ;
 
   patches = [
-    # Some programs installed by enlightenment (to set the cpu frequency,
-    # for instance) need root ownership and setuid/setgid permissions, which
-    # are not allowed for files in /nix/store. Instead of allowing the
-    # installer to try to do this, the file $out/e-wrappers.nix is created,
-    # containing the needed configuration for wrapping those programs. It
-    # can be used in the enlightenment module. The idea is:
-    #
-    #  1) rename the original binary adding the extension .orig
-    #  2) wrap the renamed binary at /run/wrappers/bin/
-    #  3) create a new symbolic link using the original binary name (in the
-    #     original directory where enlightenment wants it) pointing to the
-    #     wrapper
-
-    ./enlightenment.suid-exes.patch
+    # Executables cannot be made setuid in nix store. They should be
+    # wrapped in the enlightenment service module, and the wrapped
+    # executables should be used instead.
+    ./0001-wrapped-setuid-executables.patch
+    ./0003-setuid-missing-path.patch
   ];
 
   postPatch = ''
-    # edge_cc is a binary provided by efl and cannot be found at the directory
-    # given by e_prefix_bin_get(), which is $out/bin
-
-    substituteInPlace src/bin/e_import_config_dialog.c \
-      --replace "e_prefix_bin_get()" "\"${efl}/bin\""
-
     substituteInPlace src/modules/everything/evry_plug_calc.c \
       --replace "ecore_exe_pipe_run(\"bc -l\"" "ecore_exe_pipe_run(\"${bc}/bin/bc -l\""
   '';
 
-  mesonFlags = [ "-Dsystemdunitdir=lib/systemd/user" ];
+  mesonFlags = [
+    "-D systemdunitdir=lib/systemd/user"
+  ];
 
-  enableParallelBuilding = true;
+  passthru.providedSessions = [ "enlightenment" ];
 
   meta = with stdenv.lib; {
     description = "The Compositing Window Manager and Desktop Shell";

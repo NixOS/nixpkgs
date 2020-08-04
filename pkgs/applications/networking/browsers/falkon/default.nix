@@ -2,7 +2,7 @@
 , cmake, extra-cmake-modules, pkgconfig, qmake
 , libpthreadstubs, libxcb, libXdmcp
 , qtsvg, qttools, qtwebengine, qtx11extras
-, qtwayland
+, qtwayland, wrapQtAppsHook
 , kwallet
 }:
 
@@ -30,7 +30,14 @@ mkDerivation rec {
     kwallet
   ] ++ lib.optionals stdenv.isLinux [ qtwayland ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig qmake qttools ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    pkgconfig
+    qmake
+    qttools
+    wrapQtAppsHook
+  ];
 
   enableParallelBuilding = true;
 

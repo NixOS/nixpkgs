@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   patches = stdenv.lib.optional stdenv.hostPlatform.isMusl
     (fetchpatch {
       name = "sysmalloc.patch";
-      url = "https://git.alpinelinux.org/cgit/aports/plain/community/tcsh/001-sysmalloc.patch?id=184585c046cdd56512f1a76e426dd799b368f8cf";
+      url = "https://git.alpinelinux.org/aports/plain/community/tcsh/001-sysmalloc.patch?id=184585c046cdd56512f1a76e426dd799b368f8cf";
       sha256 = "1qc6ydxhdfizsbkaxhpn3wib8sfphrw10xnnsxx2prvzg9g2zp67";
     });
 
