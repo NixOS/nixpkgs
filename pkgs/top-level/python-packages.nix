@@ -3603,6 +3603,8 @@ in {
 
   rotate-backups = callPackage ../tools/backup/rotate-backups { };
 
+  liblarch = callPackage ../development/python-modules/liblarch { };
+
   librosa = callPackage ../development/python-modules/librosa { };
 
   samplerate = callPackage ../development/python-modules/samplerate { };
