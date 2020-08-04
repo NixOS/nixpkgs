@@ -15,6 +15,8 @@ buildGoModule rec {
 
   vendorSha256 = "0a4bk2qry0isnrvl0adwikqn6imxwzlaq5j3nglb5rmwwq2cdz0r";
 
+  doCheck = false;
+
   subPackages = ["cmd/lncli" "cmd/lnd"];
 
   preBuild = let

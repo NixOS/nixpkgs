@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "06y1v0v1kkbd5vxa8h0qvasm9ibwwhz0v4x03k3nb5xlwn0x9jx8";
 
+  doCheck = false;
+
   postInstall = ''
     mv $out/bin/lokalise-cli-2-go $out/bin/lokalise2
   '';

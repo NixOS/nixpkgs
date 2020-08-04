@@ -20,6 +20,8 @@ buildGoModule rec {
   runVend = true;
   vendorSha256 = "0c2sayg49b2rq3fnrbf741b6zy8byhwxlnxkhf5160gzqn6jy2rw";
 
+  doCheck = false;
+
   buildFlagsArray = [ ''-ldflags=
     -w -s -X main.version=${version}
   '' ];

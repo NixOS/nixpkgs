@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "031ban30kx84r54fj9aq96pwkz9nqh4p9yzs4l8i1wqmy52rldvl";
 
+  doCheck = false;
+
   preBuild = ''
     go generate ./...
   '';

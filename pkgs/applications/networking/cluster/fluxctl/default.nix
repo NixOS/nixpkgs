@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0a5sv11pb2i6r0ffwaiqdhc0m7gz679yfmqw6ix9imk4ybhf4jp9";
 
+  doCheck = false;
+
   subPackages = [ "cmd/fluxctl" ];
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];

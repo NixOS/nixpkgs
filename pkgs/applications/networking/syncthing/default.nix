@@ -15,6 +15,8 @@ let
 
       vendorSha256 = "1gmdv0g0gymq6khrwvplw6yfp146kg5ar8vqdp5dlp0myxfzi22b";
 
+      doCheck = false;
+
       patches = [
         ./add-stcli-target.patch
       ];

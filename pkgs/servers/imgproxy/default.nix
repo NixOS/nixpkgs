@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1pvyr3lazza89njdl6q3h2nd0mkvjvbryyrfqv11kd3s52055ckz";
 
+  doCheck = false;
+
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ gobject-introspection vips ];

@@ -19,6 +19,8 @@ buildGoModule rec {
 
   vendorSha256 = "0hnpb1xp135z2qpn1b6xad59739hffhs8dfpr3n5drmrvajpn4xp";
 
+  doCheck = false;
+
   meta = with lib; {
     description = "A tool to clean out your AWS account";
     homepage = "https://github.com/cloudetc/awsweeper/";

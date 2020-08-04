@@ -15,6 +15,9 @@ buildGoModule rec {
   };
 
   vendorSha256 = "12iary7p5qsbl4xdhfd1wh92mvf2fiylnb3m1d3m7cdcn32rfimq";
+
+  doCheck = false;
+
   postInstall = "mv $out/bin/terraform-provider-keycloak{,_v${version}}";
 
   meta = with stdenv.lib; {

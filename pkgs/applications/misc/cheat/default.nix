@@ -23,6 +23,8 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "Create and view interactive cheatsheets on the command-line";
     maintainers = with maintainers; [ mic92 ];

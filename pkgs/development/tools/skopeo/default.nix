@@ -28,6 +28,8 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   nativeBuildInputs = [ pkg-config go-md2man installShellFiles makeWrapper ];
 
   buildInputs = [ gpgme ]

@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1xk3zw8w2fynww0z4d66nlclhjf52bk4cv3bh51yyd1mr808lip5";
 
+  doCheck = false;
+
   subPackages = [ "cmd/operator-sdk" ];
 
   buildInputs = [ go makeWrapper ];

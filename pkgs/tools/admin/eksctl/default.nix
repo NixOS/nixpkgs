@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1msid4857wsh4qp1f7nyrmpzjv3sklh49cl7a9c1a3qr9m99w4yb";
 
+  doCheck = false;
+
   subPackages = [ "cmd/eksctl" ];
 
   buildFlags = [ "-tags netgo" "-tags release" ];

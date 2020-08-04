@@ -17,6 +17,8 @@ buildGoModule rec {
 
   vendorSha256 = "0dg4f9g6895nv3c6d74ijl6hzsyn620ndspbcq7ynvb1z0hsg6iz";
 
+  doCheck = false;
+
   subPackages = [ "cmd/pistol" ];
 
   buildInputs = [

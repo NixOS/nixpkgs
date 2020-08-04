@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "097x3z1fhdl5s3ni2qzbqxqr60l6lqcrbikq20fs052dp287q0sp";
 
+  doCheck = false;
+
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
   excludedPackages = "test";

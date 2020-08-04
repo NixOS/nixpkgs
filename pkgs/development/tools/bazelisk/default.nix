@@ -15,6 +15,8 @@ buildGoModule rec {
 
   vendorSha256 = "1jgm6j04glvk7ib5yd0h04p9qxzl1ca100cv909kngx52jp61yxp";
 
+  doCheck = false;
+
   buildFlagsArray = [ "-ldflags=-s -w -X main.BazeliskVersion=${version}" ];
 
   meta = with stdenv.lib; {

@@ -16,6 +16,8 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   postInstall = ''
     mkdir -p $data/share/vale
     cp -r styles $data/share/vale

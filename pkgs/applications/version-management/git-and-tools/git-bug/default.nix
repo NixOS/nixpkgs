@@ -15,6 +15,8 @@ buildGoModule rec {
 
   vendorSha256 = "0c8b47lj4wl3s21lm0vx4z7hznylm8c4fb8b8gxm278kn3zys607";
 
+  doCheck = false;
+
   buildFlagsArray = ''
     -ldflags=
       -X ${goPackagePath}/commands.GitCommit=${rev}

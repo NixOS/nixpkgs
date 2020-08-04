@@ -14,6 +14,9 @@ buildGoModule rec {
   buildInputs = [ olm ];
 
   vendorSha256 = "05cqwprd1rcciw27wyz7lj1s3zmz2vq093vw1cx3kkjyf6lq8sk6";
+
+  doCheck = false;
+
   runVend = true;
 
   meta = with stdenv.lib; {

@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0cznb8glh36dwyyn1gx1ggkwa9zffrrxg52k78brnaczsl0rsmky";
 
+  doCheck = false;
+
   meta = {
     homepage = "https://github.com/sachaos/todoist";
     description = "Todoist CLI Client";

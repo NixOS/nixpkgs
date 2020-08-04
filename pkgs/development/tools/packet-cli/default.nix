@@ -17,6 +17,8 @@ buildGoModule rec {
     ln -s $out/bin/packet-cli $out/bin/packet
   '';
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "Official Packet CLI";
     homepage = "https://github.com/packethost/packet-cli";

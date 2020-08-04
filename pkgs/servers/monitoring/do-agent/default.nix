@@ -18,6 +18,8 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   postInstall = ''
     install -Dm444 -t $out/lib/systemd/system $src/packaging/etc/systemd/system/do-agent.service
   '';

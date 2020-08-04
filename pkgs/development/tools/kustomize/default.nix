@@ -26,6 +26,8 @@ buildGoModule rec {
   deleteVendor = true;
   vendorSha256 = "01ff3w4hwp4ynqhg8cplv0i2ixs811d2x2j6xbh1lslyyh3z3wc5";
 
+  doCheck = false;
+
   meta = with lib; {
     description = "Customization of kubernetes YAML configurations";
     longDescription = ''

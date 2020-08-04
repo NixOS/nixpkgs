@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "03aw6mcvp1vr01ppxy673jf5hdryd5032cxndlkaiwg005mxp1dy";
 
+  doCheck = false;
+
   subPackages = [ "." "cmd/dcrctl" "cmd/promptsecret" ];
 
   meta = {

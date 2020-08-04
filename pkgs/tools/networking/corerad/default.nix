@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1ra4yfplmgzxzs1nlbm0izg339fjnkfrw071y8w4m6q6wnzdhljb";
 
+  doCheck = false;
+
   # Since the tarball pulled from GitHub doesn't contain git tag information,
   # we fetch the expected tag's timestamp from a file in the root of the
   # repository.
