@@ -50,8 +50,8 @@ patchShebangs() {
     while IFS= read -r -d $'\0' f; do
         isScript "$f" || continue
 
-        oldInterpreterLine=$(head -1 "$f" | tail -c+3)
-        read -r oldPath arg0 args <<< "$oldInterpreterLine"
+        read -r oldInterpreterLine < "$f"
+        read -r oldPath arg0 args <<< "${oldInterpreterLine:3}"
 
         if [ -z "$pathName" ]; then
             if [ -n "$strictDeps" ] && [[ "$f" = "$NIX_STORE"* ]]; then
@@ -61,11 +61,11 @@ patchShebangs() {
             fi
         fi
 
-        if $(echo "$oldPath" | grep -q "/bin/env$"); then
+        if [[ "$oldPath" == *"/bin/env" ]]; then
             # Check for unsupported 'env' functionality:
             # - options: something starting with a '-'
             # - environment variables: foo=bar
-            if $(echo "$arg0" | grep -q -- "^-.*\|.*=.*"); then
+            if [[ "$arg0" == "-"* ]] || [[ "$arg0" == *"="* ]]; then
                 echo "$f: unsupported interpreter directive \"$oldInterpreterLine\" (set dontPatchShebangs=1 and handle shebang patching yourself)" >&2
                 exit 1
             fi
@@ -84,13 +84,15 @@ patchShebangs() {
         fi
 
         # Strip trailing whitespace introduced when no arguments are present
-        newInterpreterLine="$(echo "$newPath $args" | sed 's/[[:space:]]*$//')"
+        newInterpreterLine="$newPath $args"
+        newInterpreterLine=${newInterpreterLine%${newInterpreterLine##*[![:space:]]}}
 
         if [ -n "$oldPath" -a "${oldPath:0:${#NIX_STORE}}" != "$NIX_STORE" ]; then
             if [ -n "$newPath" -a "$newPath" != "$oldPath" ]; then
                 echo "$f: interpreter directive changed from \"$oldInterpreterLine\" to \"$newInterpreterLine\""
                 # escape the escape chars so that sed doesn't interpret them
-                escapedInterpreterLine=$(echo "$newInterpreterLine" | sed 's|\\|\\\\|g')
+                escapedInterpreterLine=${newInterpreterLine//\\/\\\\}
+
                 # Preserve times, see: https://github.com/NixOS/nixpkgs/pull/33281
                 timestamp=$(mktemp)
                 touch -r "$f" "$timestamp"
