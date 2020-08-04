@@ -3213,6 +3213,8 @@ in {
 
   itemloaders = callPackage ../development/python-modules/itemloaders { };
 
+  iterfzf = callPackage ../development/python-modules/iterfzf { };
+
   iterm2 = callPackage ../development/python-modules/iterm2 { };
 
   itsdangerous = callPackage ../development/python-modules/itsdangerous { };
