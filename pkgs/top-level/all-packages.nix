@@ -7796,6 +7796,10 @@ in
 
   wakelan = callPackage ../tools/networking/wakelan { };
 
+  wapm-cli = callPackage ../tools/package-management/wapm/cli {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   wavemon = callPackage ../tools/networking/wavemon { };
 
   wdfs = callPackage ../tools/filesystems/wdfs { };
