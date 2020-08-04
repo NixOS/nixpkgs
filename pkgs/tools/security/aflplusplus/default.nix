@@ -1,6 +1,6 @@
 { stdenv, stdenvNoCC, fetchFromGitHub, callPackage, makeWrapper
 , clang, llvm, gcc, which, libcgroup, python, perl, gmp
-, file, wine ? null, fetchpatch
+, file, wine ? null, fetchpatch, cmocka
 }:
 
 # wine fuzzing is only known to work for win32 binaries, and using a mixture of
@@ -17,13 +17,13 @@ let
   libtokencap = callPackage ./libtokencap.nix { inherit aflplusplus; };
   aflplusplus = stdenvNoCC.mkDerivation rec {
     pname = "aflplusplus";
-    version = "2.65c";
+    version = "2.66c";
 
     src = fetchFromGitHub {
       owner = "AFLplusplus";
       repo = "AFLplusplus";
       rev = version;
-      sha256 = "1np2a3kypb2m8nyv6qnij18yzn41pl8619jzydci40br4vxial9l";
+      sha256 = "0nsr61lmhwg0zn7kn98ifc20y9w19p857gl414c226cz4v0dl53g";
     };
     enableParallelBuilding = true;
 
@@ -33,6 +33,14 @@ let
     buildInputs = [ llvm python gmp ]
       ++ stdenv.lib.optional (wine != null) python.pkgs.wrapPython;
 
+    patches = [
+      (fetchpatch {
+        # patch that prevents an error during execution of the unit tests (unicornafl is tested while it's not built)
+        # see https://github.com/AFLplusplus/AFLplusplus/issues/487 for upstream discussion
+        url = "https://github.com/AFLplusplus/AFLplusplus/commit/cc74efa35e190d15533f99a5a99b698e772fbe81.patch";
+        sha256 = "174q51m094jil9pr8rjnkfrnf5p6lvmdmdnrnfgbhkv18bgr8p23";
+      })
+    ];
 
     postPatch = ''
       # Replace the CLANG_BIN variables with the correct path
@@ -55,7 +63,6 @@ let
     buildPhase = ''
       common="$makeFlags -j$NIX_BUILD_CORES"
       make all $common
-      make radamsa $common
       make -C gcc_plugin CC=${gcc}/bin/gcc CXX=${gcc}/bin/g++ $common
       make -C llvm_mode $common
       make -C qemu_mode/libcompcov $common
@@ -105,7 +112,7 @@ let
         wrapPythonProgramsIn $out/bin ${python.pkgs.pefile}
     '';
 
-    installCheckInputs = [ perl file ];
+    installCheckInputs = [ perl file python.pkgs.setuptools cmocka ];
     doInstallCheck = true;
     installCheckPhase = ''
       # replace references to tools in build directory with references to installed locations
@@ -113,6 +120,8 @@ let
         --replace '../libcompcov.so' '`$out/bin/get-afl-qemu-libcompcov-so`' \
         --replace '../libdislocator.so' '`$out/bin/get-libdislocator-so`' \
         --replace '../libtokencap.so' '`$out/bin/get-libtokencap-so`'
+      # replace all occurences of relative paths (e.g. ../afl-fuzz) with $out/bin/afl-fuzz
+      # only works for a single path up
       perl -pi -e 's|(?<!\.)(?<!-I)(\.\./)([^\s\/]+?)(?<!\.c)(?<!\.s?o)(?=\s)|\$out/bin/\2|g' test/test.sh
       cd test && ./test.sh
     '';
