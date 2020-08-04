@@ -20848,6 +20848,8 @@ in
 
   k3s = callPackage ../applications/networking/cluster/k3s {};
 
+  k8s-gen = callPackage ../applications/networking/cluster/k8s-gen { };
+
   k9copy = libsForQt5.callPackage ../applications/video/k9copy {};
 
   kail = callPackage ../tools/networking/kail {  };
