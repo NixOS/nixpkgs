@@ -41,14 +41,26 @@ let
         $extraInitArgs
       ${cfg.postInit}
     fi
-  '' + ''
-    borg create $extraArgs \
-      --compression ${cfg.compression} \
-      --exclude-from ${mkExcludeFile cfg} \
-      $extraCreateArgs \
-      "::$archiveName$archiveSuffix" \
-      ${escapeShellArgs cfg.paths}
-  '' + optionalString cfg.appendFailedSuffix ''
+  '' + (
+    if (cfg.paths == [ "-" ]) then
+      ''
+        ${cfg.backupCommand} | borg create $extraArgs \
+          --compression ${cfg.compression} \
+          --exclude-from ${mkExcludeFile cfg} \
+          $extraCreateArgs \
+          "::$archiveName$archiveSuffix" \
+          -
+      ''
+    else
+      ''
+        borg create $extraArgs \
+          --compression ${cfg.compression} \
+          --exclude-from ${mkExcludeFile cfg} \
+          $extraCreateArgs \
+          "::$archiveName$archiveSuffix" \
+          ${escapeShellArgs cfg.paths}
+      ''
+    ) + optionalString cfg.appendFailedSuffix ''
     borg rename $extraArgs \
       "::$archiveName$archiveSuffix" "$archiveName"
   '' + ''
@@ -241,6 +253,16 @@ in {
             type = with types; coercedTo str lib.singleton (listOf str);
             description = "Path(s) to back up.";
             example = "/home/user";
+          };
+
+          backupCommand = mkOption {
+            type = types.str;
+            description = ''
+              Backup the stdout of this program instead of filesystem paths.
+              You must set <option>paths</option> to <literal>-</literal>
+              to use this option.
+            '';
+            example = "/path/to/createZFSsend.sh";
           };
 
           repo = mkOption {
