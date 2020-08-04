@@ -12,9 +12,16 @@
 , Security
 }:
 
-(rustPlatform.buildRustPackage rec {
+let
+  # Run `eval $(nix-build -A lorri.updater)` after updating the revision!
+  version = "1.2";
+  gitRev = "43a260c221d5dac4a44fd82271736c8444474eec";
+  sha256 = "0g6zq27dpr8bdan5xrqchybpbqwnhhc7x8sxbfygigbqd3xv9i6n";
+  cargoSha256 = "1zmlp14v7av0znmjyy2aq83lc74503p6r0l11l9iw7s3xad8rda4";
+
+in (rustPlatform.buildRustPackage rec {
   pname = "lorri";
-  version = "1.1.1";
+  inherit version;
 
   meta = with stdenv.lib; {
     description = "Your project's nix-env";
@@ -26,13 +33,11 @@
   src = fetchFromGitHub {
     owner = "target";
     repo = pname;
-    # Run `eval $(nix-build -A lorri.updater)` after updating the revision!
-    # ALSO don’t forget to update the cargoSha256!
-    rev = "05ea21170a18800e83b3dcf1e3d347f83a9fa992";
-    sha256 = "1lgig5q1anmmmc1i1qnbx8rd8mqvm5csgnlaxlj4l4rxjmgiv06n";
+    rev = gitRev;
+    inherit sha256;
   };
 
-  cargoSha256 = "16asbpq47f3zcv4j9rzqx9v1317qz7xjr7dxd019vpr88zyk4fi1";
+  inherit cargoSha256;
   doCheck = false;
 
   BUILD_REV_COUNT = src.revCount or 1;
