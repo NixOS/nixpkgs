@@ -2076,6 +2076,8 @@ in
 
   long-shebang = callPackage ../misc/long-shebang {};
 
+  lowdown = callPackage ../tools/typesetting/lowdown { };
+
   numatop = callPackage ../os-specific/linux/numatop { };
 
   iio-sensor-proxy = callPackage ../os-specific/linux/iio-sensor-proxy { };
