@@ -41,7 +41,7 @@ let
   pname = "slack";
   version = {
     x86_64-darwin = "4.8.0";
-    x86_64-linux = "4.7.0";
+    x86_64-linux = "4.8.0";
   }.${system} or throwSystem;
 
   src = let
@@ -53,7 +53,7 @@ let
     };
     x86_64-linux = fetchurl {
       url = "${base}/linux_releases/slack-desktop-${version}-amd64.deb";
-      sha256 = "1nwyl70caaz9k0hccfpkjli0jjc6m9zbjb3nf4bwmykpbxbzr9w3";
+      sha256 = "0q8qpz5nwhps7y5gq1bl8hjw7vsk789srrv39hzc7jrl8f1bxzk0";
     };
   }.${system} or throwSystem;
 
