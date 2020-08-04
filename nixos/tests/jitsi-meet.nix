@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "jitsi-meet";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ mmilata ];
+  meta = with pkgs.stdenv.lib; {
+    maintainers = teams.jitsi.members;
   };
 
   nodes = {
