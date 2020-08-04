@@ -148,5 +148,5 @@ in
       mkDefault "${pkgs.jicofo}/etc/jitsi/jicofo/logging.properties-journal";
   };
 
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = lib.teams.jitsi.members;
 }
