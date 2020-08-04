@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     (cd ../tests/ && python3 runner.py)
   '';
 
-  # With cmake we have to enable samples or there won't be
+  # With CMake we have to enable samples or there won't be
   # a tests target. This removes them.
   postInstall = ''
     ( cd "$out/bin"
@@ -106,6 +106,14 @@ stdenv.mkDerivation rec {
       rm *
       mv .exiv2 exiv2
     )
+  '';
+
+  # Fix CMake export paths.
+  postFixup = ''
+    sed -i "$dev/lib/cmake/exiv2/exiv2Config.cmake" \
+        -e "/INTERFACE_INCLUDE_DIRECTORIES/ s@\''${_IMPORT_PREFIX}@$dev@" \
+        -e "/Compute the installation prefix/ a set(_IMPORT_PREFIX \"$out\")" \
+        -e "/^get_filename_component(_IMPORT_PREFIX/ d"
   '';
 
   enableParallelBuilding = true;

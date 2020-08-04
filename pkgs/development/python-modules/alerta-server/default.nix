@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "alerta-server";
-  version = "7.5.5";
+  version = "7.5.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f6d80654f063af45167c6b4f5f25a9015e728f3f600c5565ddb85964b8c9874b";
+    sha256 = "507abdb64c8b83c8ff0c21e39b03a21ccd7884ca3ce31afacea2d97e4d39f2e8";
   };
 
   propagatedBuildInputs = [ python-dateutil requests pymongo raven bcrypt flask pyjwt flask-cors psycopg2 pytz flask-compress jinja2 pyyaml];

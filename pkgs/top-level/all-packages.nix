@@ -1357,7 +1357,7 @@ in
 
   boringtun = callPackage ../tools/networking/boringtun { };
 
-  boomerang = libsForQt5.callPackage ../development/tools/boomerang { };
+  boomerang = libsForQt512.callPackage ../development/tools/boomerang { };
 
   boost-build = callPackage ../development/tools/boost-build { };
 
@@ -6298,7 +6298,7 @@ in
 
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
-  qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
+  qlcplus = libsForQt512.callPackage ../applications/misc/qlcplus { };
 
   qnial = callPackage ../development/interpreters/qnial { };
 
@@ -8333,8 +8333,8 @@ in
       mkdir -p "$rsrc/lib"
       ln -s "${cc}/lib" "$rsrc/include"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
-    '' + stdenv.lib.optionalString (stdenv.targetPlatform.isLinux && cc ? gcc && !(stdenv.targetPlatform.useLLVM or false)) ''
-      echo "--gcc-toolchain=${cc.gcc}" >> $out/nix-support/cc-cflags
+    '' + stdenv.lib.optionalString (stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.useLLVM or false)) ''
+      echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
     '';
   };
 
@@ -9126,55 +9126,41 @@ in
 
   llvmPackages = recurseIntoAttrs llvmPackages_7;
 
-  llvmPackages_5 = callPackage ../development/compilers/llvm/5 ({
+  llvmPackages_5 = callPackage ../development/compilers/llvm/5 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_5.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_5.libraries;
-  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
-    stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
-  });
+  };
 
-  llvmPackages_6 = callPackage ../development/compilers/llvm/6 ({
+  llvmPackages_6 = callPackage ../development/compilers/llvm/6 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_6.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_6.libraries;
-  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
-    # with gcc-7 on i686: undefined reference to `__divmoddi4'
-    # Failing tests with gcc8.
-    stdenv = overrideCC stdenv (if stdenv.hostPlatform.isi686 then gcc6 else gcc7);
-  });
+  };
 
-  llvmPackages_7 = callPackage ../development/compilers/llvm/7 ({
+  llvmPackages_7 = callPackage ../development/compilers/llvm/7 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_7.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_7.libraries;
-  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
-    stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
-  });
+  };
 
-  llvmPackages_8 = callPackage ../development/compilers/llvm/8 ({
+  llvmPackages_8 = callPackage ../development/compilers/llvm/8 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_8.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_8.libraries;
-  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
-    stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
-  });
+  };
 
-  llvmPackages_9 = callPackage ../development/compilers/llvm/9 ({
+  llvmPackages_9 = callPackage ../development/compilers/llvm/9 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_9.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_9.libraries;
-  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
-    stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
-  });
+  };
 
-  llvmPackages_10 = callPackage ../development/compilers/llvm/10 ({
+  llvmPackages_10 = callPackage ../development/compilers/llvm/10 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_10.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_10.libraries;
-  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
-    stdenv = gcc7Stdenv;
-  });
+  };
 
   llvmPackages_latest = llvmPackages_10;
 
@@ -10510,6 +10496,17 @@ in
   libgcc = callPackage ../development/libraries/gcc/libgcc {
     stdenvNoLibs = gccStdenvNoLibs; # cannot be built with clang it seems
   };
+
+  # This is for e.g. LLVM libraries on linux.
+  gccForLibs =
+    # with gcc-7: undefined reference to `__divmoddi4'
+    if stdenv.targetPlatform.isi686
+      then gcc6.cc
+    else if stdenv.targetPlatform == stdenv.hostPlatform && targetPackages.stdenv.cc.isGNU
+	  # Can only do this is in the native case, otherwise we might get infinite
+	  # recursion if `targetPackages.stdenv.cc.cc` itself uses `gccForLibs`.
+      then targetPackages.stdenv.cc.cc
+    else gcc.cc;
 
   libstdcxx5 = callPackage ../development/libraries/gcc/libstdc++/5.nix { };
 
@@ -14038,23 +14035,7 @@ in
     llvmPackages = llvmPackages_9;
     inherit (darwin.apple_sdk.frameworks) OpenGL;
     inherit (darwin.apple_sdk.libs) Xplugin;
-  }
-    # Temporary fix for .drivers that avoids causing lots of rebuilds; see #91145
-     // { drivers = (mesa.overrideAttrs (a: {
-            nativeBuildInputs = [
-              (patchelf.overrideAttrs (pa: {
-                src = fetchFromGitHub {
-                  owner = "NixOS";
-                  repo = "patchelf";
-                  rev = "61bc10176"; # current master; what matters is merge of #225
-                  sha256 = "0cy77mn77w3mn64ggp20f4ygnbxfjmddhjjhfwkva53lsirg6w93";
-                };
-                nativeBuildInputs = pa.nativeBuildInputs or [] ++ [ autoreconfHook ];
-              }))
-            ] ++ a.nativeBuildInputs or [];
-          })).drivers;
-        }
-    ;
+  };
 
   mesa_glu =  callPackage ../development/libraries/mesa-glu {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
@@ -14570,9 +14551,26 @@ in
 
   libsForQt512 = recurseIntoAttrs (lib.makeScope qt512.newScope mkLibsForQt5);
 
+  qt514 = recurseIntoAttrs (makeOverridable
+    (import ../development/libraries/qt-5/5.14) {
+      inherit newScope;
+      inherit stdenv fetchurl fetchpatch fetchFromGitHub makeSetupHook makeWrapper;
+      inherit bison;
+      inherit cups;
+      inherit dconf;
+      inherit harfbuzz;
+      inherit libGL;
+      inherit perl;
+      inherit gtk3;
+      inherit (gst_all_1) gstreamer gst-plugins-base;
+      inherit llvmPackages_5;
+    });
+
+  libsForQt514 = recurseIntoAttrs (lib.makeScope qt514.newScope mkLibsForQt5);
+
   # TODO bump to 5.12 on darwin once it's not broken
-  qt5 = qt512;
-  libsForQt5 = libsForQt512;
+  qt5 = qt514;
+  libsForQt5 = libsForQt514;
 
   qt5ct = libsForQt5.callPackage ../tools/misc/qt5ct { };
 
@@ -17966,7 +17964,7 @@ in
 
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
-  sdrangel = libsForQt5.callPackage ../applications/radio/sdrangel {  };
+  sdrangel = libsForQt512.callPackage ../applications/radio/sdrangel {  };
 
   sepolgen = callPackage ../os-specific/linux/sepolgen { };
 
@@ -27095,7 +27093,7 @@ in
     inherit pkgs;
   };
 
-  golden-cheetah = libsForQt5.callPackage ../applications/misc/golden-cheetah {};
+  golden-cheetah = libsForQt512.callPackage ../applications/misc/golden-cheetah {};
 
   linkchecker = callPackage ../tools/networking/linkchecker { };
 

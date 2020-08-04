@@ -15,14 +15,14 @@ in with lib.systems.doubles; lib.runTests {
   testall = mseteq all (linux ++ darwin ++ freebsd ++ openbsd ++ netbsd ++ illumos ++ wasi ++ windows ++ embedded ++ js ++ genode ++ redox);
 
   testarm = mseteq arm [ "armv5tel-linux" "armv6l-linux" "armv6l-none" "armv7a-linux" "armv7l-linux" "arm-none" "armv7a-darwin" ];
-  testi686 = mseteq i686 [ "i686-linux" "i686-freebsd" "i686-netbsd" "i686-openbsd" "i686-cygwin" "i686-windows" "i686-none" "i686-darwin" ];
+  testi686 = mseteq i686 [ "i686-linux" "i686-freebsd" "i686-genode" "i686-netbsd" "i686-openbsd" "i686-cygwin" "i686-windows" "i686-none" "i686-darwin" ];
   testmips = mseteq mips [ "mipsel-linux" ];
   testx86_64 = mseteq x86_64 [ "x86_64-linux" "x86_64-darwin" "x86_64-freebsd" "x86_64-genode" "x86_64-redox" "x86_64-openbsd" "x86_64-netbsd" "x86_64-cygwin" "x86_64-solaris" "x86_64-windows" "x86_64-none" ];
 
   testcygwin = mseteq cygwin [ "i686-cygwin" "x86_64-cygwin" ];
   testdarwin = mseteq darwin [ "x86_64-darwin" "i686-darwin" "aarch64-darwin" "armv7a-darwin" ];
   testfreebsd = mseteq freebsd [ "i686-freebsd" "x86_64-freebsd" ];
-  testgenode = mseteq genode [ "aarch64-genode" "x86_64-genode" ];
+  testgenode = mseteq genode [ "aarch64-genode" "i686-genode" "x86_64-genode" ];
   testredox = mseteq redox [ "x86_64-redox" ];
   testgnu = mseteq gnu (linux /* ++ kfreebsd ++ ... */);
   testillumos = mseteq illumos [ "x86_64-solaris" ];
