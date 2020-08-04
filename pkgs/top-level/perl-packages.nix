@@ -2166,7 +2166,7 @@ let
       ../development/perl-modules/CatalystXScriptServerStarman-fork-arg.patch
     ];
     buildInputs = [ TestWWWMechanizeCatalyst ];
-    propagatedBuildInputs = [ CatalystRuntime Starman ];
+    propagatedBuildInputs = [ CatalystRuntime Starman PodParser ];
     meta = {
       description = "Replace the development server with Starman";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -11103,10 +11103,10 @@ let
 
   LogHandler = buildPerlModule {
     pname = "Log-Handler";
-    version = "0.88";
+    version = "0.90";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BL/BLOONIX/Log-Handler-0.88.tar.gz";
-      sha256 = "45bf540ab2138ed3ff93afc205b0516dc75755b86acdcc5e75c41347833c293d";
+      url = "mirror://cpan/authors/id/B/BL/BLOONIX/Log-Handler-0.90.tar.gz";
+      sha256 = "0kgp3frz0y51j8kw67d6b4yyrrbh7syqraxchc7pfm442bkq0p1s";
     };
     propagatedBuildInputs = [ ParamsValidate ];
     meta = {
@@ -16231,7 +16231,7 @@ let
       url = "mirror://cpan/authors/id/R/RC/RCLAMP/Pod-Coverage-0.23.tar.gz";
       sha256 = "01xifj83dv492lxixijmg6va02rf3ydlxly0a9slmx22r6qa1drh";
     };
-    propagatedBuildInputs = [ DevelSymdump ];
+    propagatedBuildInputs = [ DevelSymdump PodParser ];
   };
 
   PodCoverageTrustPod = buildPerlPackage {
@@ -16345,6 +16345,7 @@ let
       url = "mirror://cpan/authors/id/T/TJ/TJENNESS/Pod-LaTeX-0.61.tar.gz";
       sha256 = "15a840ea1c8a76cd3c865fbbf2fec33b03615c0daa50f9c800c54e0cf0659d46";
     };
+    propagatedBuildInputs = [ PodParser ];
     meta = {
       homepage = "https://github.com/timj/perl-Pod-LaTeX/tree/master";
       description = "Convert Pod data to formatted Latex";
@@ -16413,6 +16414,7 @@ let
       url = "mirror://cpan/authors/id/R/RM/RMBARKER/Pod-Plainer-1.04.tar.gz";
       sha256 = "1bbfbf7d1d4871e5a83bab2137e22d089078206815190eb1d5c1260a3499456f";
     };
+    propagatedBuildInputs = [ PodParser ];
     meta = {
       description = "Perl extension for converting Pod to old-style Pod";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -16466,7 +16468,7 @@ let
       url = "mirror://cpan/authors/id/D/DO/DOLMEN/Pod-Spell-1.20.tar.gz";
       sha256 = "6383f7bfe22bc0d839a08057a0ce780698b046184aea935be4833d94986dd03c";
     };
-    propagatedBuildInputs = [ ClassTiny FileShareDir LinguaENInflect PathTiny ];
+    propagatedBuildInputs = [ ClassTiny FileShareDir LinguaENInflect PathTiny PodParser ];
     buildInputs = [ FileShareDirInstall TestDeep ];
   };
 
@@ -16521,6 +16523,7 @@ let
        url = "mirror://cpan/authors/id/N/NU/NUFFIN/Pod-Wrap-0.01.tar.gz";
        sha256 = "0qwb5hp26f85xnb3zivf8ccfdplabiyl5sd53c6wgdgvzzicpjjh";
      };
+     propagatedBuildInputs = [ PodParser ];
      meta = {
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
      };
@@ -19537,7 +19540,7 @@ let
       sha256 = "2bfe771173c38b69eeb089504e3f76511b8e45e6a9e6dac3e616e400ea67bcf0";
     };
     buildInputs = [ ModuleBuildTiny TestPod ];
-    propagatedBuildInputs = [ CaptureTiny Moose podlinkcheck ];
+    propagatedBuildInputs = [ CaptureTiny Moose podlinkcheck PodParser ];
     meta = {
       description = "Tests POD for invalid links";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];

@@ -287,7 +287,7 @@ stdenv.mkDerivation {
     + optionalString (libc != null) (''
       touch "$out/nix-support/libc-cflags"
       touch "$out/nix-support/libc-ldflags"
-      echo "-B${libc_lib}${libc.libdir or "/lib/"}" >> $out/nix-support/libc-cflags
+      echo "-B${libc_lib}${libc.libdir or "/lib/"}" >> $out/nix-support/libc-crt1-cflags
     '' + optionalString (!(cc.langD or false)) ''
       echo "-idirafter ${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
     '' + optionalString (isGNU && (!(cc.langD or false))) ''
@@ -429,7 +429,7 @@ stdenv.mkDerivation {
 
     + optionalString (libc != null && targetPlatform.isAvr) ''
       for isa in avr5 avr3 avr4 avr6 avr25 avr31 avr35 avr51 avrxmega2 avrxmega4 avrxmega5 avrxmega6 avrxmega7 tiny-stack; do
-        echo "-B${getLib libc}/avr/lib/$isa" >> $out/nix-support/libc-cflags
+        echo "-B${getLib libc}/avr/lib/$isa" >> $out/nix-support/libc-crt1-cflags
       done
     ''
 
