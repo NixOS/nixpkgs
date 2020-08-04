@@ -19,10 +19,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-    "HARDEN=1"
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     "ENABLE_DEDUPE=1"
     "STATIC_DEDUPE_H=1"
+  ] ++ stdenv.lib.optionals stdenv.cc.isGNU [
+    "HARDEN=1"
   ];
 
   enableParallelBuilding = true;
