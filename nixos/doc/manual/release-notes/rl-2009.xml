@@ -666,6 +666,11 @@ services.postgresql.dataDir = "/var/db/postgresql";
    </listitem>
    <listitem>
     <para>
+     <literal>buildGoModule</literal> <literal>doCheck</literal> now defaults to <literal>true</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      Packages built using <literal>buildRustPackage</literal> now use <literal>release</literal>
      mode for the <literal>checkPhase</literal> by default.
     </para>
