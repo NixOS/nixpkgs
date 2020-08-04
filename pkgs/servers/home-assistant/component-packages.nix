@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.113.0";
+  version = "0.113.3";
   components = {
     "abode" = ps: with ps; [ ]; # missing inputs: abodepy
     "acer_projector" = ps: with ps; [ pyserial];
@@ -173,7 +173,7 @@
     "dlib_face_detect" = ps: with ps; [ face_recognition];
     "dlib_face_identify" = ps: with ps; [ face_recognition];
     "dlink" = ps: with ps; [ ]; # missing inputs: pyW215
-    "dlna_dmr" = ps: with ps; [ ]; # missing inputs: async-upnp-client
+    "dlna_dmr" = ps: with ps; [ async-upnp-client];
     "dnsip" = ps: with ps; [ aiodns];
     "dominos" = ps: with ps; [ aiohttp-cors]; # missing inputs: pizzapi
     "doods" = ps: with ps; [ pillow]; # missing inputs: pydoods
@@ -212,7 +212,7 @@
     "emoncms_history" = ps: with ps; [ ];
     "emulated_hue" = ps: with ps; [ aiohttp-cors];
     "emulated_roku" = ps: with ps; [ ]; # missing inputs: emulated_roku
-    "enigma2" = ps: with ps; [ ]; # missing inputs: openwebifpy
+    "enigma2" = ps: with ps; [ openwebifpy];
     "enocean" = ps: with ps; [ ]; # missing inputs: enocean
     "enphase_envoy" = ps: with ps; [ ]; # missing inputs: envoy_reader
     "entur_public_transport" = ps: with ps; [ ]; # missing inputs: enturclient
@@ -268,7 +268,7 @@
     "freebox" = ps: with ps; [ aiohttp-cors netdisco zeroconf]; # missing inputs: aiofreepybox
     "freedns" = ps: with ps; [ ];
     "fritz" = ps: with ps; [ fritzconnection];
-    "fritzbox" = ps: with ps; [ ]; # missing inputs: pyfritzhome
+    "fritzbox" = ps: with ps; [ pyfritzhome];
     "fritzbox_callmonitor" = ps: with ps; [ fritzconnection];
     "fritzbox_netmonitor" = ps: with ps; [ fritzconnection];
     "fronius" = ps: with ps; [ ]; # missing inputs: pyfronius
@@ -386,7 +386,7 @@
     "iota" = ps: with ps; [ ]; # missing inputs: pyota
     "iperf3" = ps: with ps; [ ]; # missing inputs: iperf3
     "ipma" = ps: with ps; [ ]; # missing inputs: pyipma
-    "ipp" = ps: with ps; [ ]; # missing inputs: pyipp
+    "ipp" = ps: with ps; [ pyipp];
     "iqvia" = ps: with ps; [ numpy]; # missing inputs: pyiqvia
     "irish_rail_transport" = ps: with ps; [ ]; # missing inputs: pyirishrail
     "islamic_prayer_times" = ps: with ps; [ ]; # missing inputs: prayer_times_calculator
@@ -664,7 +664,7 @@
     "rocketchat" = ps: with ps; [ ]; # missing inputs: rocketchat-API
     "roku" = ps: with ps; [ ]; # missing inputs: rokuecp
     "roomba" = ps: with ps; [ ]; # missing inputs: roombapy
-    "route53" = ps: with ps; [ boto3]; # missing inputs: ipify
+    "route53" = ps: with ps; [ boto3];
     "rova" = ps: with ps; [ ]; # missing inputs: rova
     "rpi_camera" = ps: with ps; [ ];
     "rpi_gpio" = ps: with ps; [ ]; # missing inputs: RPi.GPIO
@@ -824,7 +824,7 @@
     "torque" = ps: with ps; [ aiohttp-cors];
     "totalconnect" = ps: with ps; [ ]; # missing inputs: total_connect_client
     "touchline" = ps: with ps; [ ]; # missing inputs: pytouchline
-    "tplink" = ps: with ps; [ ]; # missing inputs: pyHS100
+    "tplink" = ps: with ps; [ pyhs100];
     "tplink_lte" = ps: with ps; [ ]; # missing inputs: tp-connected
     "traccar" = ps: with ps; [ aiohttp-cors stringcase]; # missing inputs: pytraccar
     "trackr" = ps: with ps; [ ]; # missing inputs: pytrackr
@@ -855,7 +855,7 @@
     "upc_connect" = ps: with ps; [ ]; # missing inputs: connect-box
     "upcloud" = ps: with ps; [ ]; # missing inputs: upcloud-api
     "updater" = ps: with ps; [ distro];
-    "upnp" = ps: with ps; [ ]; # missing inputs: async-upnp-client
+    "upnp" = ps: with ps; [ async-upnp-client];
     "uptime" = ps: with ps; [ ];
     "uptimerobot" = ps: with ps; [ ]; # missing inputs: pyuptimerobot
     "uscis" = ps: with ps; [ ]; # missing inputs: uscisstatus

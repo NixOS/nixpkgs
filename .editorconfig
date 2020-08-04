@@ -54,11 +54,28 @@ end_of_line = unset
 [*.lock]
 indent_size = unset
 
+[deps.nix]
+insert_final_newline = unset
+
 [gemset.nix]
 insert_final_newline = unset
 
+[node-packages.nix]
+insert_final_newline = unset
+
+[nixos/modules/services/networking/ircd-hybrid/*.{conf,in}]
+trim_trailing_whitespace = unset
+
+[nixos/tests/systemd-networkd-vrf.nix]
+trim_trailing_whitespace = unset
+
 [pkgs/applications/editors/emacs-modes/recipes-archive-melpa.json]
 indent_size = unset
+
+[pkgs/build-support/dotnetenv/Wrapper/**.*]
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
 
 [pkgs/development/lisp-modules/quicklisp-to-nix.nix]
 indent_size = unset

@@ -7,11 +7,11 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mycli";
-  version = "1.22.1";
+  version = "1.22.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18qxxrpdksg3s73va7nkbkwi34kg9m1pls7w4fh5f4jk4p434zsf";
+    sha256 = "1lq2x95553vdmhw13cxcgsd2g2i32izhsb7hxd4m1iwf9b3msbpv";
   };
 
   propagatedBuildInputs = [

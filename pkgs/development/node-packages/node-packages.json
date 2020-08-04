@@ -194,6 +194,7 @@
 , "typescript-language-server"
 , "uglify-js"
 , "ungit"
+, "vim-language-server"
 , "vscode-css-languageserver-bin"
 , "vscode-html-languageserver-bin"
 , "vue-cli"

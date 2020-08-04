@@ -45,7 +45,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       node.start()
     ''
       + runMongoDBTest pkgs.mongodb-3_4
-      + runMongoDBTest pkgs.mongodb-3_6 
+      + runMongoDBTest pkgs.mongodb-3_6
       + runMongoDBTest pkgs.mongodb-4_0
       + runMongoDBTest pkgs.mongodb-4_2
       + ''

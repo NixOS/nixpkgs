@@ -1760,6 +1760,16 @@
     githubId = 490965;
     name = "Craig Swank";
   };
+  cust0dian = {
+    email = "serg@effectful.software";
+    github = "cust0dian";
+    githubId = 389387;
+    name = "Serg Nesterov";
+    keys = [{
+      longkeyid = "rsa4096/0x1512F6EB84AECC8C";
+      fingerprint = "6E7D BA30 DB5D BA60 693C  3BE3 1512 F6EB 84AE CC8C";
+    }];
+  };
   cwoac = {
     email = "oliver@codersoffortune.net";
     github = "cwoac";
@@ -5192,6 +5202,12 @@
     github = "McSinyx";
     githubId = 13689192;
     name = "Nguyễn Gia Phong";
+  };
+  mcwitt = {
+    email = "mcwitt@gmail.com";
+    github = "mcwitt";
+    githubId = 319411;
+    name = "Matt Wittmann";
   };
   mdaiter = {
     email = "mdaiter8121@gmail.com";

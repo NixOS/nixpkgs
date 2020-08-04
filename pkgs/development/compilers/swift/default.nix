@@ -260,8 +260,8 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
-    # gcc-6.4.0/include/c++/6.4.0/cstdlib:75:15: fatal error: 'stdlib.h' file not found
-    export NIX_CFLAGS_COMPILE="$(< $NIX_CC/nix-support/libcxx-cxxflags) $NIX_CFLAGS_COMPILE"
+    # explicitly include C++ headers to prevent errors where stdlib.h is not found from cstdlib
+    export NIX_CFLAGS_COMPILE="$(< ${clang}/nix-support/libcxx-cxxflags) $NIX_CFLAGS_COMPILE"
     # During the Swift build, a full local LLVM build is performed and the resulting clang is invoked.
     # This compiler is not using the Nix wrappers, so it needs some help to find things.
     export NIX_LDFLAGS_BEFORE="-rpath ${clang.cc.gcc.lib}/lib -L${clang.cc.gcc.lib}/lib $NIX_LDFLAGS_BEFORE"

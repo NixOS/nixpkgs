@@ -17,7 +17,7 @@
 , useTcmalloc ? true}:
 
 assert cudaSupport -> (
-  libGL_driver != null && 
+  libGL_driver != null &&
   cudatoolkit != null &&
   cudnn != null);
 
@@ -29,35 +29,20 @@ assert useTcmalloc -> (
   gperftools != null);
 
 let
-  env = if cudaSupport 
+  env = if cudaSupport
     then gcc8Stdenv
     else stdenv;
 
 in env.mkDerivation rec {
   pname = "katago";
-  version = "1.4.4";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "lightvector";
     repo = "katago";
-    rev = "v${version}";
-    sha256 = "14xs2bm8sky9cdsjdahjqs82q6blzcw05f5d9r1h171dm1hcx566";
+    rev = "${version}";
+    sha256 = "0ajdjdmlzwh7zwk5v0k9zzjawgkf7w30pzqp5bhcsdqz4svvyll2";
   };
-
-  # To workaround CMake 3.17.0's new buggy behavior wrt CUDA Compiler testing
-  # See the following tracking issues:
-  # KataGo:
-  #  - Issue #225: https://github.com/lightvector/KataGo/issues/225
-  #  - PR #227: https://github.com/lightvector/KataGo/pull/227
-  # CMake:
-  #  - Issue #20708: https://gitlab.kitware.com/cmake/cmake/-/issues/20708
-  patches = [
-    (fetchpatch {
-      name = "227.patch";
-      url = "https://patch-diff.githubusercontent.com/raw/lightvector/KataGo/pull/227.patch";
-      sha256 = "03f1vmdjhb79mpj95sijcwla8acy32clrjgrn4xqw5h90zdgj511";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
