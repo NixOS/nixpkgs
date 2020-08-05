@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , fetchFromGitHub
 , qtbase
 , qtmultimedia
@@ -25,8 +26,10 @@
 , mkDerivation
 , qtmacextras
 , qmake
+, spacenavSupport ? true , libspnav
 }:
 
+with lib;
 mkDerivation rec {
   pname = "openscad";
   version = "2019.05";
@@ -44,16 +47,22 @@ mkDerivation rec {
     eigen boost glew opencsg cgal mpfr gmp glib
     harfbuzz lib3mf libzip double-conversion freetype fontconfig
     qtbase qtmultimedia qscintilla
-  ] ++ stdenv.lib.optionals stdenv.isLinux [ libGLU libGL ]
-    ++ stdenv.lib.optional stdenv.isDarwin qtmacextras
+  ] ++ optionals stdenv.isLinux [ libGLU libGL ]
+    ++ optional stdenv.isDarwin qtmacextras
+    ++ optional spacenavSupport libspnav
   ;
 
-  qmakeFlags = [ "VERSION=${version}" ];
+  qmakeFlags = [ "VERSION=${version}" ] ++
+  optionals spacenavSupport [
+    "ENABLE_SPNAV=1"
+    "SPNAV_INCLUDEPATH=${libspnav}/include"
+    "SPNAV_LIBPATH=${libspnav}/lib"
+  ];
 
   # src/lexer.l:36:10: fatal error: parser.hxx: No such file or directory
   enableParallelBuilding = false; # true by default due to qmake
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = optionalString stdenv.isDarwin ''
     mkdir $out/Applications
     mv $out/bin/*.app $out/Applications
     rmdir $out/bin || true
@@ -80,8 +89,8 @@ mkDerivation rec {
       interested in creating computer-animated movies.
     '';
     homepage = "http://openscad.org/";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ bjornfor raskin gebner ];
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ bjornfor raskin gebner ];
   };
 }
