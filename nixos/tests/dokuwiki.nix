@@ -39,18 +39,10 @@ in {
     services.dokuwiki."site1.local" = {
       aclUse = false;
       superUser = "admin";
-      nginx = {
-        forceSSL = false;
-        enableACME = false;
-      };
     };
     services.dokuwiki."site2.local" = {
       aclUse = true;
       superUser = "admin";
-      nginx = {
-        forceSSL = false;
-        enableACME = false;
-      };
       templates = [ template-bootstrap3 ];
       plugins = [ plugin-icalevents ];
     };
