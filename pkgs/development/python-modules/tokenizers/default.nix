@@ -41,7 +41,15 @@ in rustPlatform.buildRustPackage rec {
     sha256 = "1bzvfffnjjskx8zlq1qsqfd47570my2wnbq4ip8i1hkz10q900qv";
   };
 
-  cargoSha256 = "0s5z3g1njb7wlyb32ba6xas4zc62c3zhmp1mrvghmaxpvljp6k7b";
+  # Update parking_lot to be compatible with recent Rust versions, that
+  # replace asm! by llvm_asm!:
+  #
+  # https://github.com/Amanieu/parking_lot/pull/223
+  #
+  # Remove once upstream updates this dependency.
+  cargoPatches = [ ./update-parking-lot.diff ];
+
+  cargoSha256 = "1n3nn5mjpviabx6gr9lcqykv9wrik68ypc0bjayvrn0fncga21zg";
 
   sourceRoot = "source/bindings/python";
 
