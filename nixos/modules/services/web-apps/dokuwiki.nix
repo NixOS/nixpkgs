@@ -95,7 +95,7 @@ let
 
       aclFile = mkOption {
         type = with types; nullOr str;
-        default = if (config.aclUse && config.acl == null) then "/var/lib/dokuwiki/${name}/users.auth.php" else null;
+        default = if (config.aclUse && config.acl == null) then "/var/lib/dokuwiki/${name}/acl.auth.php" else null;
         description = ''
           Location of the dokuwiki acl rules. Mutually exclusive with services.dokuwiki.acl
           Mutually exclusive with services.dokuwiki.acl which is preferred.
