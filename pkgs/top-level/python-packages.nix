@@ -900,6 +900,8 @@ in {
 
   itemadapter = callPackage ../development/python-modules/itemadapter { };
 
+  itemloaders = callPackage ../development/python-modules/itemloaders { };
+
   iterm2 = callPackage ../development/python-modules/iterm2 { };
 
   janus = callPackage ../development/python-modules/janus { };
