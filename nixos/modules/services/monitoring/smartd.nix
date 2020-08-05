@@ -135,7 +135,7 @@ in
             type = types.str;
             description = ''
               Sender of the notification messages.
-              Acts as the value of <literal>email</email> in the emails' <literal>From: ... <email></literal> field.
+              Acts as the value of <literal>email</literal> in the emails' <literal>From: ... </literal> field.
             '';
           };
 
