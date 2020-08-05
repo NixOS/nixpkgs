@@ -10,15 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "1nym0p2djws8ylkpr0kgpxfa6fxdlh46cmvz0gn5vd02jzgs0aww";
   };
   outputs = [ "out" "dev" ];
-  configureFlags = {
+  configureFlags = [
     # Prevent nauty from sniffing some cpu features. While those are very
     # widely available, it can lead to nasty bugs when they are not available:
     # https://groups.google.com/forum/#!topic/sage-packaging/Pe4SRDNYlhA
-    default        = [ "--disable-clz" "--disable-popcnt" ];
-    westmere       = [ "--disable-clz" ];
-    sandybridge    = [ "--disable-clz" ];
-    ivybridge      = [ "--disable-clz" ];
-  }.${stdenv.hostPlatform.platform.gcc.arch or "default"} or [];
+    "--${if stdenv.hostPlatform.sse4_2Support then "enable" else "disable"}-popcnt"
+    "--${if stdenv.hostPlatform.sse4_aSupport then "enable" else "disable"}-clz"
+  ];
   installPhase = ''
     mkdir -p "$out"/{bin,share/doc/nauty} "$dev"/{lib,include/nauty}
 
