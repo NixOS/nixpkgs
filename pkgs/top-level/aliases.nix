@@ -371,6 +371,8 @@ mapAliases ({
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rdmd = dtools;  # added 2017-08-19
   rhc = throw "deprecated in 2019-04-09: abandoned by upstream.";
+  riot-desktop = element-desktop; # added 2020-07-15
+  riot-web = element-web; # added 2020-07-15
   rng_tools = rng-tools; # added 2018-10-24
   robomongo = robo3t; #added 2017-09-28
   rssglx = rss-glx; #added 2015-03-25

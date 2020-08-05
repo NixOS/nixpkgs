@@ -64,10 +64,10 @@ in {
   enterprise-integrations = glPlugin rec {
     name = "graylog-enterprise-integrations-${version}";
     pluginName = "graylog-plugin-enterprise-integrations";
-    version = "3.3.1";
+    version = "3.3.3";
     src = fetchurl {
       url = "https://downloads.graylog.org/releases/graylog-enterprise-integrations/graylog-enterprise-integrations-plugins-${version}.tgz";
-      sha256 = "0la91f5hfakrp5d37q3r1z15zzya9vmwgp8gf5ifkh6fasa811ll";
+      sha256 = "14b8whgvx8lzil09gjjxhps5syw3slwbh3gswrgc9kh1sqmdhl85";
     };
     installPhase = ''
       mkdir -p $out/bin
@@ -96,10 +96,10 @@ in {
   integrations = glPlugin rec {
     name = "graylog-integrations-${version}";
     pluginName = "graylog-plugin-integrations";
-    version = "3.3.1";
+    version = "3.3.3";
     src = fetchurl {
       url = "https://downloads.graylog.org/releases/graylog-integrations/graylog-integrations-plugins-${version}.tgz";
-      sha256 = "1k90q50p4ly9d8fj0riyb1xw0bd6f8wm2xmkr71908j2v0jaskpq";
+      sha256 = "1zf97q8xm81z6q2s7c3nwvpl1m6pc6w7zjm4hmd7ds1br6pg4bdh";
     };
     installPhase = ''
       mkdir -p $out/bin
