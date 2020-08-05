@@ -2733,6 +2733,8 @@ in {
 
   dask = callPackage ../development/python-modules/dask { };
 
+  dask-gateway = callPackage ../development/python-modules/dask-gateway { };
+
   dask-glm = callPackage ../development/python-modules/dask-glm { };
 
   dask-image = callPackage ../development/python-modules/dask-image { };
