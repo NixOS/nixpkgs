@@ -14,13 +14,13 @@
 
 mkDerivation rec {
   pname = "MellowPlayer";
-  version = "3.6.4";
+  version = "3.6.5";
 
   src = fetchFromGitLab {
     owner = "ColinDuquesnoy";
     repo = "MellowPlayer";
     rev = version;
-    sha256 = "1ss7s3kal4vzhz7ld0yy2kvp1rk2w3i6fya0z3xd7nff9p31gqvw";
+    sha256 = "1fnfqyy52hnh9vwq4rcndcqwh0zsm1sd3vi4h5gzaj4zbniq5v2f";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
