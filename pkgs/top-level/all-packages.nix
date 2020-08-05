@@ -2682,6 +2682,10 @@ in
   skktools = callPackage ../tools/inputmethods/skk/skktools { };
   skk-dicts = callPackage ../tools/inputmethods/skk/skk-dicts { };
 
+  spacenavd = callPackage ../tools/inputmethods/spacenav/spacenavd.nix {};
+  libspnav = callPackage ../tools/inputmethods/spacenav/libspnav.nix {};
+  spnavcfg = callPackage ../tools/inputmethods/spacenav/spnavcfg.nix {};
+
   libkkc-data = callPackage ../data/misc/libkkc-data {
     inherit (pythonPackages) marisa;
   };
@@ -27246,8 +27250,4 @@ in
   gpio-utils = callPackage ../os-specific/linux/kernel/gpio-utils.nix { };
 
   navidrome = callPackage ../servers/misc/navidrome {};
-
-  spacenavd = callPackage ../misc/spacenav/spacenavd.nix {};
-  libspnav = callPackage ../misc/spacenav/libspnav.nix {};
-  spnavcfg = callPackage ../misc/spacenav/spnavcfg.nix {};
 }
