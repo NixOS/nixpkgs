@@ -123,6 +123,6 @@ buildPythonApplication rec {
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
     license = licenses.gpl3;
     platforms = platforms.darwin ++ platforms.linux;
-    maintainers = with maintainers; [ tex rvolosatovs ma27 ];
+    maintainers = with maintainers; [ tex rvolosatovs ];
   };
 }
