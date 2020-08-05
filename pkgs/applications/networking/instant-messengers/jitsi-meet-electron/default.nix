@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     description = "Jitsi Meet desktop application powered by Electron";
     homepage = "https://github.com/jitsi/jitsi-meet-electron";
     license = licenses.asl20;
-    maintainers = with maintainers; [ prusnak ];
+    maintainers = teams.jitsi.members;
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -2,8 +2,6 @@ name: "Checking EditorConfig"
 
 on:
   pull_request:
-    branches:
-      - master
 
 jobs:
   tests:

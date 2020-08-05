@@ -436,6 +436,7 @@ rhysd/vim-grammarous
 rhysd/vim-operator-surround
 rodjek/vim-puppet
 romainl/vim-cool
+roman/golden-ratio
 ron89/thesaurus_query.vim
 roxma/nvim-cm-racer
 roxma/nvim-completion-manager
@@ -527,6 +528,7 @@ tpope/vim-liquid
 tpope/vim-obsession
 tpope/vim-pathogen
 tpope/vim-projectionist
+tpope/vim-rails
 tpope/vim-repeat
 tpope/vim-rhubarb
 tpope/vim-rsi
