@@ -24,6 +24,8 @@
 , vulkan-loader
 , libpulseaudio
 , makeFontsConf
+, ofonoSupport ? true
+, nativeHspSupport ? true
 }:
 
 let
@@ -33,7 +35,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pipewire";
-  version = "0.3.7";
+  version = "0.3.9";
 
   outputs = [ "out" "lib" "dev" "doc" ];
 
@@ -42,8 +44,13 @@ stdenv.mkDerivation rec {
     owner = "pipewire";
     repo = "pipewire";
     rev = version;
-    sha256 = "04l66p0wj553gp2zf3vwwh6jbr1vkf6wrq4za9zlm9dn144am4j2";
+    sha256 = "0q781r32mnm3qy6xcdd2rnb8g50gdi7mi50zmdiq24s24sr8f8r9";
   };
+
+  patches = [
+    # Break up a dependency cycle between outputs.
+    ./alsa-profiles-use-libdir.patch
+  ];
 
   nativeBuildInputs = [
     doxygen
@@ -78,7 +85,9 @@ stdenv.mkDerivation rec {
     "-Ddocs=true"
     "-Dman=false" # we don't have xmltoman
     "-Dgstreamer=true"
-  ];
+    "-Dudevrulesdir=lib/udev/rules.d"
+  ] ++ stdenv.lib.optional nativeHspSupport "-Dbluez5-backend-native=true"
+  ++ stdenv.lib.optional ofonoSupport "-Dbluez5-backend-ofono=true";
 
   FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
 
