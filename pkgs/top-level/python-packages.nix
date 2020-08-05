@@ -2735,6 +2735,10 @@ in {
 
   dask-gateway = callPackage ../development/python-modules/dask-gateway { };
 
+  dask-gateway-server = callPackage ../development/python-modules/dask-gateway-server {
+    inherit (pkgs) go;
+  };
+
   dask-glm = callPackage ../development/python-modules/dask-glm { };
 
   dask-image = callPackage ../development/python-modules/dask-image { };
