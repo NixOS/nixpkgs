@@ -29,6 +29,12 @@ in
         description = "Enable Gitea Service.";
       };
 
+      sandbox = mkOption {
+        default = true;
+        type = types.bool;
+        description = "Whether to enable systemd sandboxing.";
+      };
+
       package = mkOption {
         default = pkgs.gitea;
         type = types.package;
@@ -426,34 +432,37 @@ in
         fi
       '';
 
-      serviceConfig = {
-        Type = "simple";
-        User = cfg.user;
-        Group = "gitea";
-        WorkingDirectory = cfg.stateDir;
-        ExecStart = "${gitea}/bin/gitea web";
-        Restart = "always";
-
-        # Filesystem
-        ProtectHome = true;
-        PrivateDevices = true;
-        ProtectKernelTunables = true;
-        ProtectKernelModules = true;
-        ProtectControlGroups = true;
-        ReadWritePaths = cfg.stateDir;
-        # Caps
-        CapabilityBoundingSet = "";
-        NoNewPrivileges = true;
-        # Misc.
-        LockPersonality = true;
-        RestrictRealtime = true;
-        PrivateMounts = true;
-        PrivateUsers = true;
-        MemoryDenyWriteExecute = true;
-        SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @raw-io @reboot @resources @setuid @swap";
-        SystemCallArchitectures = "native";
-        RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
-      };
+      serviceConfig = mkMerge [
+        {
+          Type = "simple";
+          User = cfg.user;
+          Group = "gitea";
+          WorkingDirectory = cfg.stateDir;
+          ExecStart = "${gitea}/bin/gitea web";
+          Restart = "always";
+        }
+        (mkIf cfg.sandbox {
+          # Filesystem
+          ProtectHome = true;
+          PrivateDevices = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          ReadWritePaths = cfg.stateDir;
+          # Caps
+          CapabilityBoundingSet = "";
+          NoNewPrivileges = true;
+          # Misc.
+          LockPersonality = true;
+          RestrictRealtime = true;
+          PrivateMounts = true;
+          PrivateUsers = true;
+          MemoryDenyWriteExecute = true;
+          SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @raw-io @reboot @resources @setuid @swap";
+          SystemCallArchitectures = "native";
+          RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
+        })
+      ];
 
       environment = {
         USER = cfg.user;
