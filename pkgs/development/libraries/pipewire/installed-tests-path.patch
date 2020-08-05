@@ -1,0 +1,15 @@
+diff --git a/meson.build b/meson.build
+index ffee41b4..b75921f9 100644
+--- a/meson.build
++++ b/meson.build
+@@ -318,8 +318,8 @@ alsa_dep = (get_option('pipewire-alsa')
+     ? dependency('alsa', version : '>=1.1.7')
+     : dependency('', required: false))
+ 
+-installed_tests_metadir = join_paths(pipewire_datadir, 'installed-tests', pipewire_name)
+-installed_tests_execdir = join_paths(pipewire_libexecdir, 'installed-tests', pipewire_name)
++installed_tests_metadir = join_paths('@installed_tests_dir@', 'share', 'installed-tests', pipewire_name)
++installed_tests_execdir = join_paths('@installed_tests_dir@', 'libexec', 'installed-tests', pipewire_name)
+ installed_tests_enabled = get_option('installed_tests')
+ installed_tests_template = files('template.test.in')
+ 

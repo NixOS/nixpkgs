@@ -24,6 +24,8 @@
 , vulkan-loader
 , libpulseaudio
 , makeFontsConf
+, callPackage
+, nixosTests
 , ofonoSupport ? true
 , nativeHspSupport ? true
 }:
@@ -37,7 +39,7 @@ stdenv.mkDerivation rec {
   pname = "pipewire";
   version = "0.3.9";
 
-  outputs = [ "out" "lib" "dev" "doc" ];
+  outputs = [ "out" "lib" "dev" "doc" "installedTests" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -50,7 +52,13 @@ stdenv.mkDerivation rec {
   patches = [
     # Break up a dependency cycle between outputs.
     ./alsa-profiles-use-libdir.patch
+    # Move installed tests into their own output.
+    ./installed-tests-path.patch
   ];
+
+  postPatch = ''
+    substituteInPlace meson.build --subst-var-by installed_tests_dir "$installedTests"
+  '';
 
   nativeBuildInputs = [
     doxygen
@@ -86,12 +94,30 @@ stdenv.mkDerivation rec {
     "-Dman=false" # we don't have xmltoman
     "-Dgstreamer=true"
     "-Dudevrulesdir=lib/udev/rules.d"
+    "-Dinstalled_tests=true"
   ] ++ stdenv.lib.optional nativeHspSupport "-Dbluez5-backend-native=true"
   ++ stdenv.lib.optional ofonoSupport "-Dbluez5-backend-ofono=true";
 
   FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
 
   doCheck = true;
+
+  passthru.tests = {
+    installedTests = nixosTests.installed-tests.pipewire;
+
+    # This ensures that all the paths used by the NixOS module are found.
+    test-paths = callPackage ./test-paths.nix {
+      paths-out = [
+        "share/alsa/alsa.conf.d/50-pipewire.conf"
+      ];
+      paths-lib = [
+        "lib/alsa-lib/libasound_module_pcm_pipewire.so"
+        "lib/pipewire-0.3/jack"
+        "lib/pipewire-0.3/pulse"
+        "share/alsa-card-profile/mixer"
+      ];
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Server and user space API to deal with multimedia pipelines";
