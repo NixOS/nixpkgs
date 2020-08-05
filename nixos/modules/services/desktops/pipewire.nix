@@ -87,6 +87,7 @@ in {
 
     systemd.user.sockets.pipewire.wantedBy = lib.mkIf cfg.socketActivation [ "sockets.target" ];
 
+    # If any paths are updated here they must also be updated in the package test.
     sound.extraConfig = mkIf cfg.alsa.enable ''
       pcm_type.pipewire {
         libs.native = ${pkgs.pipewire.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;
