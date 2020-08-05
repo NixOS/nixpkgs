@@ -49,7 +49,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-dock = callPackage ./apps/elementary-dock { };
 
-  elementary-files = callPackage ./apps/elementary-files { };
+  elementary-files = callPackage ./apps/elementary-files {
+    vala = vala_0_48;
+  };
 
   elementary-feedback = callPackage ./apps/elementary-feedback { };
 
@@ -199,6 +201,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   ### ALIASES
 
   inherit (pkgs) vala; # added 2019-10-10
+  inherit (pkgs) vala_0_48; #added for issue #94707
 
   cerbere = throw "Cerbere is now obsolete https://github.com/elementary/cerbere/releases/tag/2.5.1.";
 
