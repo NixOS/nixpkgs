@@ -2202,6 +2202,8 @@ in
 
   obinskit = callPackage ../applications/misc/obinskit {};
 
+  osm-cli = callPackage ../applications/networking/cluster/osm/cli {};
+
   pastel = callPackage ../applications/misc/pastel {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
