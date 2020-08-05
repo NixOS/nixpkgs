@@ -594,7 +594,7 @@ in
 
     nix.systemFeatures = mkDefault (
       [ "nixos-test" "benchmark" "big-parallel" "kvm" ] ++
-      optionals (pkgs.stdenv.isx86_64 && pkgs.hostPlatform.platform ? gcc.arch) (
+      optionals (pkgs.hostPlatform.platform ? gcc.arch) (
         # a x86_64 builder can run code for `platform.gcc.arch` and inferior architectures:
         [ "gccarch-${pkgs.hostPlatform.platform.gcc.arch}" ] ++ map (x: "gccarch-${x}") lib.systems.architectures.inferiors.${pkgs.hostPlatform.platform.gcc.arch}
       )
