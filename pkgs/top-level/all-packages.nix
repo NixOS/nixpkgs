@@ -10623,6 +10623,8 @@ in
 
   elfutils = callPackage ../development/tools/misc/elfutils { };
 
+  eliot-tree = callPackage ../development/tools/eliot-tree { };
+
   emma = callPackage ../development/tools/analysis/emma { };
 
   epm = callPackage ../development/tools/misc/epm { };
