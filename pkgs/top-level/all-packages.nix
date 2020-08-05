@@ -22401,6 +22401,8 @@ in
 
   udiskie = callPackage ../applications/misc/udiskie { };
 
+  sacc = callPackage ../applications/networking/gopher/sacc { };
+
   sakura = callPackage ../applications/misc/sakura { };
 
   sayonara = libsForQt5.callPackage ../applications/audio/sayonara { };
