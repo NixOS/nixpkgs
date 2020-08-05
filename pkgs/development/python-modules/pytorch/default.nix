@@ -135,6 +135,13 @@ in buildPythonPackage rec {
       url = "https://github.com/pytorch/pytorch/commit/7676682584d0caf9243bce74ea0a88711ec4a807.diff";
       sha256 = "13spncaqlpsp8qk2850yly7xqwmhhfwznhmzkk8jgpslkbx75vgq";
     })
+  ] ++ lib.optionals stdenv.isDarwin [
+    # pthreadpool added support for Grand Central Dispatch in April
+    # 2020. However, this relies on functionality (DISPATCH_APPLY_AUTO)
+    # that is available starting with macOS 10.13. However, our current
+    # base is 10.12. Until we upgrade, we can fall back on the older
+    # pthread support.
+    ./pthreadpool-disable-gcd.diff
   ];
 
   preConfigure = lib.optionalString cudaSupport ''
