@@ -135,6 +135,11 @@ systemd.services.mysql.serviceConfig.ReadWritePaths = [ "/var/data" ];
        The various documented workarounds to use steam have been converted to a module. <varname>programs.steam.enable</varname> enables steam, controller support and the workarounds.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       Support for built-in LCDs in various pieces of Logitech hardware (keyboards and USB speakers). <varname>hardware.logitech.lcd.enable</varname> enables support for all hardware supported by the g15daemon project.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
