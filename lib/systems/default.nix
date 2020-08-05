@@ -7,6 +7,7 @@ rec {
   inspect = import ./inspect.nix { inherit lib; };
   platforms = import ./platforms.nix { inherit lib; };
   examples = import ./examples.nix { inherit lib; };
+  architectures = import ./architectures.nix { inherit lib; };
 
   # Elaborate a `localSystem` or `crossSystem` so that it contains everything
   # necessary.
@@ -125,6 +126,7 @@ rec {
         else throw "Don't know how to run ${final.config} executables.";
 
     } // mapAttrs (n: v: v final.parsed) inspect.predicates
+      // mapAttrs (n: v: v final.platform.gcc.arch or "default") architectures.predicates
       // args;
   in assert final.useAndroidPrebuilt -> final.isAndroid;
      assert lib.foldl

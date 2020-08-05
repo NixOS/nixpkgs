@@ -72,6 +72,7 @@ let
         knm            = versionAtLeast ccVersion "8.0";
         # AMD
         znver1         = versionAtLeast ccVersion "6.0";
+        znver2         = versionAtLeast ccVersion "9.0";
       }.${arch} or true
     else if isClang then
       { # Intel
@@ -81,6 +82,7 @@ let
         knm            = versionAtLeast ccVersion "7.0";
         # AMD
         znver1         = versionAtLeast ccVersion "4.0";
+        znver2         = versionAtLeast ccVersion "9.0";
       }.${arch} or true
     else
       false;
