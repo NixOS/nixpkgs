@@ -227,8 +227,6 @@ stdenv.mkDerivation (rec {
 
   hardeningDisable = [ "format" ] ++ stdenv.lib.optional stdenv.targetPlatform.isMusl "pie";
 
-  dontStrip = false;
-
   postInstall = ''
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
@@ -258,8 +256,9 @@ stdenv.mkDerivation (rec {
     inherit (ghc.meta) license platforms;
   };
 
-} // stdenv.lib.optionalAttrs targetPlatform.useAndroidPrebuilt {
-  dontStrip = true;
+  dontStrip = (targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm);
+
+} // stdenv.lib.optionalAttrs targetPlatform.useAndroidPrebuilt{
   dontPatchELF = true;
   noAuditTmpdir = true;
 })
