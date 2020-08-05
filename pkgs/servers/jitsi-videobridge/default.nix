@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/jitsi/jitsi-videobridge";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = teams.jitsi.members;
     platforms = platforms.linux;
   };
 }

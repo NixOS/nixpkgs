@@ -135,6 +135,11 @@ systemd.services.mysql.serviceConfig.ReadWritePaths = [ "/var/data" ];
        The various documented workarounds to use steam have been converted to a module. <varname>programs.steam.enable</varname> enables steam, controller support and the workarounds.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       Support for built-in LCDs in various pieces of Logitech hardware (keyboards and USB speakers). <varname>hardware.logitech.lcd.enable</varname> enables support for all hardware supported by the g15daemon project.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -548,7 +553,7 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
     <para>
      The <literal>bitcoind</literal> module has changed to multi-instance, using submodules.
      Therefore, it is now mandatory to name each instance.
-     To use this new multi-instance config with an existing bitcoind data directory and user, 
+     To use this new multi-instance config with an existing bitcoind data directory and user,
      you have to adjust the original config, e.g.:
 <programlisting>
   services.bitcoind = {
@@ -586,6 +591,31 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
     <para>
       Graylog introduced a change in the LDAP server certificate validation behaviour for version 3.3.3 which might break existing setups.
       When updating Graylog from a version before 3.3.3 make sure to check the Graylog <link xlink:href="https://www.graylog.org/post/announcing-graylog-v3-3-3">release info</link> for information on how to avoid the issue.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>dokuwiki</literal> module has changed to multi-instance, using submodules.
+     Therefore, it is now mandatory to name each instance. Moreover, forcing SSL by default has been dropped, so
+     <literal>nginx.forceSSL</literal> and <literal>nginx.enableACME</literal> are no longer set to <literal>true</literal>.
+     To continue using your service with the original SSL settings, you have to adjust the original config, e.g.:
+<programlisting>
+services.dokuwiki = {
+  enable = true;
+  ...
+};
+</programlisting>
+     To something similar:
+<programlisting>
+services.dokuwiki."mywiki" = {
+  enable = true;
+  nginx = {
+    forceSSL = true;
+    enableACME = true;
+  };
+  ...
+};
+</programlisting>
     </para>
    </listitem>
   </itemizedlist>

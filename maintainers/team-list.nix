@@ -59,6 +59,16 @@ with lib.maintainers; {
     scope = "Maintain GNOME desktop environment and platform.";
   };
 
+  jitsi = {
+    members = [
+      mmilata
+      petabyteboy
+      prusnak
+      ryantm
+    ];
+    scope = "Maintain Jitsi.";
+  };
+
   matrix = {
     members = [
       ma27

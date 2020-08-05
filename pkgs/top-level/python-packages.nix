@@ -543,6 +543,8 @@ in {
 
   breezy = callPackage ../development/python-modules/breezy { };
 
+  brother = callPackage ../development/python-modules/brother { };
+
   build = callPackage ../development/python-modules/build { };
 
   ciso8601 = callPackage ../development/python-modules/ciso8601 { };
@@ -1420,6 +1422,10 @@ in {
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
+  pytest-tornasync = callPackage ../development/python-modules/pytest-tornasync { };
+
+  pytest-trio = callPackage ../development/python-modules/pytest-trio { };
+
   pytest-twisted = callPackage ../development/python-modules/pytest-twisted { };
 
   pytest-xprocess = callPackage ../development/python-modules/pytest-xprocess { };
@@ -1552,6 +1558,10 @@ in {
 
   tokenizers = disabledIf (!isPy3k)
     (toPythonModule (callPackage ../development/python-modules/tokenizers { }));
+
+  towncrier = callPackage ../development/python-modules/towncrier {
+    inherit (pkgs) git;
+  };
 
   transformers = callPackage ../development/python-modules/transformers { };
 
@@ -3604,6 +3614,8 @@ in {
   roman = callPackage ../development/python-modules/roman { };
 
   rotate-backups = callPackage ../tools/backup/rotate-backups { };
+
+  liblarch = callPackage ../development/python-modules/liblarch { };
 
   librosa = callPackage ../development/python-modules/librosa { };
 

@@ -93,7 +93,7 @@
     "bond" = ps: with ps; [ ]; # missing inputs: bond-home
     "braviatv" = ps: with ps; [ bravia-tv];
     "broadlink" = ps: with ps; [ broadlink];
-    "brother" = ps: with ps; [ ]; # missing inputs: brother
+    "brother" = ps: with ps; [ brother];
     "brottsplatskartan" = ps: with ps; [ ]; # missing inputs: brottsplatskartan
     "browser" = ps: with ps; [ ];
     "brunt" = ps: with ps; [ ]; # missing inputs: brunt

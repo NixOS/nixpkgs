@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/jitsi/jicofo";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = teams.jitsi.members;
     platforms = platforms.linux;
   };
 }
