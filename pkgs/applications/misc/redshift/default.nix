@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, gettext, intltool
+{ stdenv, fetchFromGitHub, fetchFromGitLab
+, autoconf, automake, gettext, intltool
 , libtool, pkgconfig, wrapGAppsHook, wrapPython, gobject-introspection
 , gtk3, python, pygobject3, pyxdg
 
@@ -18,10 +19,15 @@ let
     stdenv.mkDerivation rec {
       inherit pname version src meta;
 
-      patches = [
+      patches = stdenv.lib.optionals (pname != "gammastep") [
         # https://github.com/jonls/redshift/pull/575
         ./575.patch
       ];
+
+      postPatch = stdenv.lib.optionalString (pname == "gammastep") ''
+        substituteInPlace configure.ac \
+          --replace "[gammastep], [2.0]" "[gammastep], [${version}]"
+      '';
 
       nativeBuildInputs = [
         autoconf
@@ -62,10 +68,15 @@ let
 
       # the geoclue agent may inspect these paths and expect them to be
       # valid without having the correct $PATH set
-      postInstall = ''
+      postInstall = if (pname == "gammastep") then ''
+        substituteInPlace $out/share/applications/gammastep.desktop \
+          --replace 'Exec=gammastep' "Exec=$out/bin/gammastep"
+        substituteInPlace $out/share/applications/gammastep-indicator.desktop \
+          --replace 'Exec=gammastep-indicator' "Exec=$out/bin/gammastep-indicator"
+      '' else ''
         substituteInPlace $out/share/applications/redshift.desktop \
           --replace 'Exec=redshift' "Exec=$out/bin/redshift"
-        substituteInPlace $out/share/applications/redshift.desktop \
+        substituteInPlace $out/share/applications/redshift-gtk.desktop \
           --replace 'Exec=redshift-gtk' "Exec=$out/bin/redshift-gtk"
       '';
 
@@ -116,6 +127,26 @@ rec {
     meta = redshift.meta // {
       description = redshift.meta.description + "(with wlroots patches)";
       homepage = "https://github.com/minus7/redshift";
+    };
+  };
+
+  gammastep = mkRedshift rec {
+    pname = "gammastep";
+    version = "2.0.1";
+
+    src = fetchFromGitLab {
+      owner = "chinstrap";
+      repo = pname;
+      rev = "v${version}";
+      sha256 = "1ky4h892sg2mfbwwq5xv0vnjflsl2x3nsy5q456r1kyk1gwkj0rg";
+    };
+
+    meta = redshift.meta // {
+      name = "${pname}-${version}";
+      longDescription = "Gammastep"
+        + stdenv.lib.removePrefix "Redshift" redshift.meta.longDescription;
+      homepage = "https://gitlab.com/chinstrap/gammastep";
+      maintainers = [ stdenv.lib.maintainers.primeos ] ++ redshift.meta.maintainers;
     };
   };
 }
