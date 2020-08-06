@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper
+{ stdenv, fetchurl, makeWrapper, makeDesktopItem
 , alsaLib, libpulseaudio, libX11, libXcursor, libXinerama, libXrandr, libXi, libGL
 , libSM, libICE, libXext, factorio-utils
 , releaseType
@@ -44,6 +44,16 @@ let
 
     Note the ultimate "_" is replaced with "-" in the --name arg!
   '';
+
+  desktopItem = makeDesktopItem {
+    name = "factorio";
+    desktopName = "Factorio";
+    comment = "A game in which you build and maintain factories.";
+    exec = "factorio";
+    icon = "factorio";
+    type = "Application";
+    categories = "Game";
+  };
 
   branch = if experimental then "experimental" else "stable";
 
@@ -148,6 +158,11 @@ let
       patchelf \
         --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
         $out/bin/factorio
+
+      mkdir -p $out/share/icons/hicolor/{64x64,128x128}/apps
+      cp -a data/core/graphics/factorio-icon.png $out/share/icons/hicolor/64x64/apps/factorio.png
+      cp -a data/core/graphics/factorio-icon@2x.png $out/share/icons/hicolor/128x128/apps/factorio.png
+      ln -s ${desktopItem}/share/applications $out/share/
     '';
 
     meta = {
