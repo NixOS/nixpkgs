@@ -1098,6 +1098,8 @@ in
 
   gremlin-console = callPackage ../applications/misc/gremlin-console { };
 
+  grex = callPackage ../tools/misc/grex { };
+
   gcsfuse = callPackage ../tools/filesystems/gcsfuse { };
 
   glyr = callPackage ../tools/audio/glyr { };
