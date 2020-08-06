@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "theme-jade1";
-  version = "1.7";
+  version = "1.8";
 
   src = fetchFromGitHub {
     owner = "madmaxms";
     repo = "theme-jade-1";
     rev = "v${version}";
-    sha256 = "19vg95bf0ylmfhg0frs2k0k7c0wfn933h06wrklb9p5qy84hfig3";
+    sha256 = "1nvn2ghkdhilrsjpvl7r92aldvbs0nx0xc82jwrfaahi87dgfs8x";
   };
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
