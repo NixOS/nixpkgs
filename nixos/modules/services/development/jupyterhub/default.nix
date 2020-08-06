@@ -67,8 +67,8 @@ in {
         this is a python file.
       '';
       example = literalExample ''
-         c.SystemdSpawner.memory = "8G"
-         c.SystemdSpawner.cpus = "2"
+         c.SystemdSpawner.mem_limit = '8G'
+         c.SystemdSpawner.cpu_limit = 2.0
       '';
     };
 
