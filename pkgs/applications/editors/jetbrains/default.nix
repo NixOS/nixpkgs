@@ -224,7 +224,8 @@ let
         interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
         patchelf --set-interpreter "$interpreter" lib/ReSharperHost/linux-x64/mono/bin/mono-sgen
         rm -rf lib/ReSharperHost/linux-x64/dotnet
-        ln -s ${dotnet-sdk_3} lib/ReSharperHost/linux-x64/dotnet
+        mkdir -p lib/ReSharperHost/linux-x64/dotnet/
+        ln -s ${dotnet-sdk_3}/bin/dotnet lib/ReSharperHost/linux-x64/dotnet/dotnet
       '');
     });
 
