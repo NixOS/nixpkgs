@@ -11,7 +11,7 @@ jobs:
       with:
         fetch-depth: 0
     - uses: technote-space/get-diff-action@v2.0.3
-    - name: fetch editorconfig-checker
+    - name: Fetch editorconfig-checker
       env:
         VERSION: "2.1.0"
         OS: "linux"

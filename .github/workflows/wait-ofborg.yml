@@ -7,8 +7,9 @@ jobs:
     steps:
     - name: Wait for ofborg CI
       run: |
+        # Wait for ofborg ...
         # eval sometimes takes a bit longer on staging.
-        if [[ "$BASE_BRANCH" == "refs/heads/staging" ]]; then
+        if [[ "$BASE_BRANCH" == "staging" ]]; then
           COUNTDOWN=$((COUNTDOWN*2))
         fi
         # ..in future a better fix would be to make ofborg mark CI as pending right away.
