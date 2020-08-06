@@ -263,6 +263,7 @@
   ./services/continuous-integration/buildbot/worker.nix
   ./services/continuous-integration/buildkite-agents.nix
   ./services/continuous-integration/hail.nix
+  ./services/continuous-integration/hercules-ci-agent/default.nix
   ./services/continuous-integration/hydra/default.nix
   ./services/continuous-integration/gitlab-runner.nix
   ./services/continuous-integration/gocd-agent/default.nix
