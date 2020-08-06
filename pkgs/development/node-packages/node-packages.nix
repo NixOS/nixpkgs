@@ -7564,15 +7564,6 @@ let
         sha1 = "00f35b2d27ac91b1f0d3ef2084c98cf1d1f0adc3";
       };
     };
-    "aws-sdk-2.727.1" = {
-      name = "aws-sdk";
-      packageName = "aws-sdk";
-      version = "2.727.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.727.1.tgz";
-        sha512 = "K+XdN11os6hvI9DgWEK9m/fPKHuDDVZalFWPouwqSk0phEdDCJ/K8InHUFL9DMvE4bxyWRuqI9dzNfdmxX0sxQ==";
-      };
-    };
     "aws-sdk-2.728.0" = {
       name = "aws-sdk";
       packageName = "aws-sdk";
@@ -60152,7 +60143,7 @@ in
       sources."assert-plus-1.0.0"
       sources."async-2.6.3"
       sources."asynckit-0.4.0"
-      sources."aws-sdk-2.727.1"
+      sources."aws-sdk-2.728.0"
       sources."aws-sign2-0.7.0"
       sources."aws4-1.10.0"
       sources."base64-js-1.3.1"
@@ -61703,6 +61694,37 @@ in
     meta = {
       description = "A simple CLI tool for ensuring that a given node script runs continuously (i.e. forever)";
       homepage = "https://github.com/foreverjs/forever#readme";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  get-graphql-schema = nodeEnv.buildNodePackage {
+    name = "get-graphql-schema";
+    packageName = "get-graphql-schema";
+    version = "2.1.2";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/get-graphql-schema/-/get-graphql-schema-2.1.2.tgz";
+      sha512 = "1z5Hw91VrE3GrpCZE6lE8Dy+jz4kXWesLS7rCSjwOxf5BOcIedAZeTUJRIeIzmmR+PA9CKOkPTYFRJbdgUtrxA==";
+    };
+    dependencies = [
+      sources."ansi-styles-3.2.1"
+      sources."chalk-2.4.2"
+      sources."color-convert-1.9.3"
+      sources."color-name-1.1.3"
+      sources."escape-string-regexp-1.0.5"
+      sources."graphql-14.7.0"
+      sources."has-flag-3.0.0"
+      sources."iterall-1.3.0"
+      sources."minimist-1.2.5"
+      sources."node-fetch-2.6.0"
+      sources."supports-color-5.5.0"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Downloads the GraphQL Schema of an GraphQL endpoint URL";
+      homepage = "https://github.com/graphcool/get-graphql-schema#readme";
       license = "MIT";
     };
     production = true;
@@ -64618,24 +64640,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  ios-deploy = nodeEnv.buildNodePackage {
-    name = "ios-deploy";
-    packageName = "ios-deploy";
-    version = "1.11.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/ios-deploy/-/ios-deploy-1.11.0.tgz";
-      sha512 = "2E6MYY8lsos9iCJhVGGiyV7sGPJhjmgyaArR3nKFnliBxpJA0AGqsjgcHmzpClt3JuyQEHRMARLX0jItSOXPeQ==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "launch iOS apps iOS devices from the command line (Xcode 7)";
-      homepage = "https://github.com/ios-control/ios-deploy#readme";
-      license = "GPLv3";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   "iosevka-build-deps-../../data/fonts/iosevka" = nodeEnv.buildNodePackage {
     name = "iosevka-build-deps";
     packageName = "iosevka-build-deps";
@@ -65167,7 +65171,7 @@ in
       sources."async-mutex-0.1.4"
       sources."asynckit-0.4.0"
       sources."atob-2.1.2"
-      (sources."aws-sdk-2.727.1" // {
+      (sources."aws-sdk-2.728.0" // {
         dependencies = [
           sources."sax-1.2.1"
           sources."uuid-3.3.2"
@@ -84939,6 +84943,24 @@ in
     meta = {
       description = "Git made easy";
       homepage = "https://github.com/FredrikNoren/ungit#readme";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  vim-language-server = nodeEnv.buildNodePackage {
+    name = "vim-language-server";
+    packageName = "vim-language-server";
+    version = "2.1.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/vim-language-server/-/vim-language-server-2.1.0.tgz";
+      sha512 = "i0PTJh2XEPEUvRn78j1nxTlNVcTOKr4FLwIwhkjaC0ovGGViwnBgRd7StM0NS3UCvcVzLNy78Hu31S7RHkiHbw==";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "vim language server";
+      homepage = "https://github.com/iamcco/vim-language-server#readme";
       license = "MIT";
     };
     production = true;
