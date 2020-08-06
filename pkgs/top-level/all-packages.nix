@@ -8778,6 +8778,9 @@ in
     inherit (darwin) apple_sdk;
   };
 
+  rust_1_44 = callPackage ../development/compilers/rust/1_44.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
   rust_1_41_0 = callPackage ../development/compilers/rust/1_41_0.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
@@ -8786,6 +8789,7 @@ in
   };
   rust = rust_1_41_0;
 
+  rustPackages_1_44 = rust_1_44.packages.stable;
   rustPackages_1_41_0 = rust_1_41_0.packages.stable;
   rustPackages_1_38_0 = rust_1_38_0.packages.stable;
   rustPackages = rustPackages_1_41_0;
@@ -8879,7 +8883,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  rust-cbindgen_0_14_1 = callPackage ../development/tools/rust/cbindgen/0_14_1.nix {
+  rust-cbindgen_latest = callPackage ../development/tools/rust/cbindgen/0_14_3.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -13539,8 +13543,11 @@ in
   nspr = callPackage ../development/libraries/nspr {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
+  nspr_latest = lowPrio (callPackage ../development/libraries/nspr/latest.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  });
 
-  nss_latest = lowPrio (callPackage ../development/libraries/nss/latest.nix { });
+  nss_latest = lowPrio (callPackage ../development/libraries/nss/latest.nix { nspr = nspr_latest;});
   nss = lowPrio (callPackage ../development/libraries/nss { });
   nssTools = nss.tools;
 
@@ -21810,7 +21817,6 @@ in
 
   thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
     inherit (gnome2) libIDL;
-    inherit (rustPackages_1_38_0) cargo rustc;
     libpng = libpng_apng;
     gtk3Support = true;
   };
