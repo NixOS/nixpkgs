@@ -4481,6 +4481,10 @@ in {
 
   jupyterhub-ldapauthenticator = callPackage ../development/python-modules/jupyterhub-ldapauthenticator { };
 
+  jupyterhub-systemdspawner = callPackage ../development/python-modules/jupyterhub-systemdspawner {
+    inherit (pkgs) bash;
+  };
+
   kaggle = callPackage ../development/python-modules/kaggle { };
 
   keyring = if isPy3k then
