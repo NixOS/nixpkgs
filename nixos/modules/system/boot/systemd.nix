@@ -903,11 +903,9 @@ in
       )
       ]);
       passwd = (mkMerge [
-        [ "mymachines" ]
         (mkAfter [ "systemd" ])
       ]);
       group = (mkMerge [
-        [ "mymachines" ]
         (mkAfter [ "systemd" ])
       ]);
     };
