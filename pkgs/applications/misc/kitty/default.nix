@@ -136,6 +136,6 @@ buildPythonApplication rec {
     license = licenses.gpl3;
     changelog = "https://sw.kovidgoyal.net/kitty/changelog.html";
     platforms = platforms.darwin ++ platforms.linux;
-    maintainers = with maintainers; [ tex rvolosatovs ma27 Luflosi ];
+    maintainers = with maintainers; [ tex rvolosatovs Luflosi ];
   };
 }

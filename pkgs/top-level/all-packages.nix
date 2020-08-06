@@ -10620,6 +10620,8 @@ in
 
   elfutils = callPackage ../development/tools/misc/elfutils { };
 
+  eliot-tree = callPackage ../development/tools/eliot-tree { };
+
   emma = callPackage ../development/tools/analysis/emma { };
 
   epm = callPackage ../development/tools/misc/epm { };
@@ -18488,6 +18490,8 @@ in
 
   kochi-substitute-naga10 = callPackage ../data/fonts/kochi-substitute-naga10 {};
 
+  kopia = callPackage ../tools/backup/kopia { };
+
   lato = callPackage ../data/fonts/lato {};
 
   league-of-moveable-type = callPackage ../data/fonts/league-of-moveable-type {};
@@ -19892,6 +19896,10 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  finalfusion-utils = callPackage ../applications/science/machine-learning/finalfusion-utils {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   flacon = libsForQt5.callPackage ../applications/audio/flacon { };
 
   flexget = callPackage ../applications/networking/flexget { };
@@ -20345,7 +20353,7 @@ in
 
   gnunet_git = lowPrio (callPackage ../applications/networking/p2p/gnunet/git.nix { });
 
-  gnunet-gtk = callPackage ../applications/networking/p2p/gnunet-gtk { };
+  gnunet-gtk = callPackage ../applications/networking/p2p/gnunet/gtk.nix { };
 
   gocr = callPackage ../applications/graphics/gocr { };
 
@@ -21078,6 +21086,7 @@ in
   libreoffice-still = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
     libreoffice = callPackage ../applications/office/libreoffice
       (libreoffice-args // {
+        icu = icu64;
         variant = "still";
       });
   });
@@ -21097,12 +21106,7 @@ in
 
   linuxband = callPackage ../applications/audio/linuxband { };
 
-  ledger = callPackage ../applications/office/ledger {
-    # Boost >= 1.67 changed the name of boost python; ledger's cmake build needs
-    # an update to find it:
-    # https://www.boost.org/doc/libs/1_68_0/libs/python/doc/html/rn.html
-    boost = boost15x;
-  };
+  ledger = callPackage ../applications/office/ledger { };
 
   ledger-autosync = callPackage  ../applications/office/ledger-autosync { };
 
@@ -22394,6 +22398,8 @@ in
   udevil = callPackage ../applications/misc/udevil {};
 
   udiskie = callPackage ../applications/misc/udiskie { };
+
+  sacc = callPackage ../applications/networking/gopher/sacc { };
 
   sakura = callPackage ../applications/misc/sakura { };
 
@@ -25668,6 +25674,8 @@ in
   eagle = libsForQt5.callPackage ../applications/science/electronics/eagle/eagle.nix { };
 
   caneda = libsForQt5.callPackage ../applications/science/electronics/caneda { };
+
+  csxcad = callPackage ../applications/science/electronics/csxcad { };
 
   fparser = callPackage ../applications/science/electronics/fparser { };
 
