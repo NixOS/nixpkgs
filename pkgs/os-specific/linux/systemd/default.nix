@@ -17,22 +17,7 @@
 , withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 }:
 
-let gnupg-minimal = gnupg.override {
-  enableMinimal = true;
-  guiSupport = false;
-  pcsclite = null;
-  sqlite = null;
-  pinentry = null;
-  adns = null;
-  gnutls = null;
-  libusb1 = null;
-  openldap = null;
-  readline = null;
-  zlib = null;
-  bzip2 = null;
-};
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation {
   version = "246";
   pname = "systemd";
 
@@ -214,7 +199,7 @@ in stdenv.mkDerivation {
 
     # absolute paths to gpg & tar
     substituteInPlace src/import/pull-common.c \
-      --replace '"gpg"' '"${gnupg-minimal}/bin/gpg"'
+      --replace '"gpg"' '"${gnupg}/bin/gpg"'
     for file in src/import/{{export,import,pull}-tar,import-common}.c; do
       substituteInPlace $file \
         --replace '"tar"' '"${gnutar}/bin/tar"'

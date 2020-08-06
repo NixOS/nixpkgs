@@ -18246,8 +18246,25 @@ in
   sysstat = callPackage ../os-specific/linux/sysstat { };
 
   systemd = callPackage ../os-specific/linux/systemd {
-    utillinux = utillinuxMinimal; # break the cyclic dependency
+    # break some cyclic dependencies
+    utillinux = utillinuxMinimal;
+    # provide a super minimal gnupg used for systemd-machined
+    gnupg = callPackage ../tools/security/gnupg/22.nix {
+      enableMinimal = true;
+      guiSupport = false;
+      pcsclite = null;
+      sqlite = null;
+      pinentry = null;
+      adns = null;
+      gnutls = null;
+      libusb1 = null;
+      openldap = null;
+      readline = null;
+      zlib = null;
+      bzip2 = null;
+    };
   };
+
   udev = systemd; # TODO: move to aliases.nix
 
   systemd-wait = callPackage ../os-specific/linux/systemd-wait { };
