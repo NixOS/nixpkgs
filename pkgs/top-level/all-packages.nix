@@ -24597,6 +24597,8 @@ in
 
   service-wrapper = callPackage ../os-specific/linux/service-wrapper { };
 
+  sfrotz = callPackage ../games/sfrotz { };
+
   sgtpuzzles = callPackage (callPackage ../games/sgt-puzzles) { };
 
   shattered-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon { };
