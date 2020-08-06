@@ -9940,6 +9940,8 @@ in
   pipewire = callPackage ../development/libraries/pipewire {};
   pipewire_0_2 = callPackage ../development/libraries/pipewire/0.2.nix {};
 
+  pyenv = callPackage ../development/tools/pyenv {};
+
   pyradio = callPackage ../applications/radio/pyradio {};
 
   pyrex = pyrex095;
