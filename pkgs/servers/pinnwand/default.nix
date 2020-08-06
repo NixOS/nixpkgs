@@ -14,20 +14,15 @@ let
   };
 in with python.pkgs; buildPythonApplication rec {
   pname = "pinnwand";
-  version = "1.2.0";
+  version = "1.2.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "supakeen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "n5PH21QmU8YAb0WKXAKZR4wjfFTSSOtvlRq7yxRVZNE=";
+    sha256 = "1rk7rpyb4vmqxqqv8k9jpjmgakr3mn1iaqxyj34r74p1n5vfzimq";
   };
-
-  patches = [
-    # https://github.com/supakeen/pinnwand/issues/93
-    ./add-build-backend.patch
-  ];
 
   nativeBuildInputs = [
     poetry
