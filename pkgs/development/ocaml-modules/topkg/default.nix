@@ -22,11 +22,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-topkg-${version}";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchurl {
     url = "https://erratique.ch/software/topkg/releases/topkg-${version}.tbz";
-    sha256 = "1df61vw6v5bg2mys045682ggv058yqkqb67w7r2gz85crs04d5fw";
+    sha256 = "1h9lspfj94673iwhjbqvyq7jhnvpm3ij0y2l3iiyz6i716j321nh";
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];
