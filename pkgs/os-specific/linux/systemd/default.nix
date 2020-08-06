@@ -17,19 +17,24 @@
 , withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 }:
 
-stdenv.mkDerivation {
+let
   version = "246";
+in stdenv.mkDerivation {
+  inherit version;
   pname = "systemd";
 
-  # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
-  # Also fresh patches should be cherry-picked from that tree to our current one.
+  # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
+  # This has proven to be less error-prone than the previous systemd fork.
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd-stable";
-    rev = "ae366f3acbc1a45504e9875099b17a7e1a221d03";
+    rev = "v${version}";
     sha256 = "0zrkyxrh5rm45f2l1rnjyv229bcyzawfw7c63jqxwix75px60dyw";
   };
 
+  # If these need to be regenerated, `git am path/to/00*.patch` them into a
+  # systemd worktree, rebase to the more recent systemd version, and export the
+  # patches again via `git format-patch v${version}`.
   patches = [
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
