@@ -12,7 +12,8 @@ buildGoModule rec {
     owner = "tinygo-org";
     repo = "tinygo";
     rev = "v${version}";
-    sha256 = "0das5z5y2x1970yi9c4yssxvwrrjhdmsj495q0r5mb02amvc954v";
+    sha256 = "1shvqqyxhaffbwakh48ma3hwj39phw06ylqap53pwqcpv970czsm";
+    fetchSubmodules = true;
   };
 
   overrideModAttrs = (_: {
@@ -34,6 +35,7 @@ buildGoModule rec {
 
   postInstall = ''
     mkdir -p $out/share/tinygo
+    make gen-device
     cp -a lib src targets $out/share/tinygo
     wrapProgram $out/bin/tinygo --prefix "TINYGOROOT" : "$out/share/tinygo"
     ln -sf $out/bin $out/share/tinygo
