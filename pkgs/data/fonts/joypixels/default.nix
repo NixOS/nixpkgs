@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "6.0.0";
 
   src = fetchurl {
-    url = "https://cdn.joypixels.com/arch-linux/font/${version}/joypixels-android.ttf";
+    url = "https://cdn.joypixels.com/distributions/nix-os/font/${version}/joypixels-android.ttf";
     sha256 = "1vxqsqs93g4jyp01r47lrpcm0fmib2n1vysx32ksmfxmprimb75s";
   };
 
@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     description = "Emoji as a Service (formerly EmojiOne)";
     homepage = "https://www.joypixels.com/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ toonn jtojnar ];
   };
 }
