@@ -44,6 +44,7 @@ let
     "redis"
     "rspamd"
     "snmp"
+    "sql"
     "surfboard"
     "tor"
     "unifi"
@@ -216,6 +217,14 @@ in
       message = ''
         Please specify either 'services.prometheus.exporters.mail.configuration'
           or 'services.prometheus.exporters.mail.configFile'.
+      '';
+    } {
+      assertion = cfg.sql.enable -> (
+        (cfg.sql.configFile == null) != (cfg.sql.configuration == null)
+      );
+      message = ''
+        Please specify either 'services.prometheus.exporters.sql.configuration' or
+          'services.prometheus.exporters.sql.configFile'
       '';
     } ];
   }] ++ [(mkIf config.services.minio.enable {
