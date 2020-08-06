@@ -233,6 +233,11 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
     <para>
       There is a new <xref linkend="opt-security.doas.enable"/> module that provides <command>doas</command>, a lighter alternative to <command>sudo</command> with many of the same features.
     </para>
+  </listitem>
+  <listitem>
+    <para>
+      <link xlink:href="https://hercules-ci.com">Hercules CI</link> Agent is a specialized build agent for projects built with Nix. See the <link xlink:href="https://nixos.org/nixos/options.html#services.hercules-ci-agent">options</link> and <link xlink:href="https://docs.hercules-ci.com/hercules-ci/getting-started/#deploy-agent">setup</link>.
+    </para>
    </listitem>
   </itemizedlist>
 
