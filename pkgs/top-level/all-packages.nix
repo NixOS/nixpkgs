@@ -2458,6 +2458,8 @@ in
     inherit (python27Packages) pillow;
   };
 
+  blueberry = callPackage ../tools/bluetooth/blueberry { };
+
   blueman = callPackage ../tools/bluetooth/blueman { };
 
   bmrsa = callPackage ../tools/security/bmrsa/11.nix { };
