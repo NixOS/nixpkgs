@@ -9283,4 +9283,10 @@
     github = "fzakaria";
     githubId = 605070;
   };
+  stephenwithph = {
+    name = "stephenwithph";
+    email = "stephenwithph@users.noreply.github.com";
+    github = "stephenwithph";
+    githubId = 2990492;
+  };
 }
