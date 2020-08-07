@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub, substituteAll, callPackage, pkgconfig, cmake, vala, libxml2,
   glib, pcre, gtk2, gtk3, xorg, libxkbcommon, epoxy, at-spi2-core, dbus-glib, bamf,
-  xfce, libwnck3, libdbusmenu, gobject-introspection }:
+  xfce, libwnck3, libdbusmenu, gobject-introspection, harfbuzz }:
 
 stdenv.mkDerivation rec {
   pname = "xfce4-vala-panel-appmenu-plugin";
-  version = "0.7.3";
+  version = "0.7.3.2";
 
   src = fetchFromGitHub {
     owner = "rilian-la-te";
@@ -12,14 +12,14 @@ stdenv.mkDerivation rec {
     rev = version;
     fetchSubmodules = true;
 
-    sha256 = "06rykdr2c9rnzxwinwdynd73v9wf0gjkx6qfva7sx2n94ajsdnaw";
+    sha256 = "0xxn3zs60a9nfix8wrdp056wviq281cm1031hznzf1l38lp3wr5p";
   };
 
   nativeBuildInputs = [ pkgconfig cmake vala libxml2.bin ];
   buildInputs = [ (callPackage ./appmenu-gtk-module.nix {})
                   glib pcre gtk2 gtk3 xorg.libpthreadstubs xorg.libXdmcp libxkbcommon epoxy
                   at-spi2-core dbus-glib bamf xfce.xfce4panel_gtk3 xfce.libxfce4util xfce.xfconf
-                  libwnck3 libdbusmenu gobject-introspection ];
+                  libwnck3 libdbusmenu gobject-introspection harfbuzz ];
 
   patches = [
     (substituteAll {
@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
       bamf = bamf;
     })
   ];
+
+  configureFlags = [ "CPPFLAGS=-I${harfbuzz}/include/harfbuzz" ];
 
   cmakeFlags = [
       "-DENABLE_XFCE=ON"
@@ -49,8 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Global Menu applet for XFCE4";
-    license = licenses.lgpl3;
+    license = licenses.lgpl3Only;
     maintainers = with maintainers; [ jD91mZM2 ];
-    broken = true;
   };
 }
