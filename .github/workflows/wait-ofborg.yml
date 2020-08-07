@@ -31,7 +31,7 @@ jobs:
       if: github.repository_owner == 'NixOS'
       env:
         BASE_BRANCH: ${{ github.base_ref }}
-        COUNTDOWN: 360 # wait for ~30min...
+        COUNTDOWN: 540 # wait for ~45min...
         GITHUB_TOKEN: ${{ github.token }}
         COMMIT: ${{ github.event.pull_request.head.sha }}
         OFBORG_APP_ID: 20500
