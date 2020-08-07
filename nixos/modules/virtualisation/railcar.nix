@@ -46,7 +46,7 @@ let
         description = ''
           Mount options of the filesystem to be used.
 
-          Support optoions are listed in the mount(8) man page. Note that
+          Support options are listed in the mount(8) man page. Note that
           both filesystem-independent and filesystem-specific options
           are listed.
         '';
