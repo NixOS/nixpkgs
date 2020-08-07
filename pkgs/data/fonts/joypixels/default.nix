@@ -52,13 +52,14 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Emoji as a Service (formerly EmojiOne)";
-    homepage = "https://www.joypixels.com/";
+    description = "The finest emoji you can use legally (formerly EmojiOne)";
+    longDescription = ''
+      New for 2020! JoyPixels 6.0 includes 3,342 originally crafted icon
+      designs and is 100% Unicode 13 compatible. We offer the largest selection
+      of files ranging from png, svg, iconjar, sprites, and fonts.
+    '';
+    homepage = "https://www.joypixels.com/fonts";
     license = licenses.unfree;
     maintainers = with maintainers; [ toonn jtojnar ];
-    platforms = [
-      "x86_64-darwin"
-      "x86_64-linux"
-    ];
   };
 }
