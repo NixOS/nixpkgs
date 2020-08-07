@@ -29,9 +29,9 @@ let
         default = "none";
         description = ''
           The type of the filesystem to be mounted.
-          Linux: filesystem types supported by the kernel as listed in 
-          `/proc/filesystems` (e.g., "minix", "ext2", "ext3", "jfs", "xfs", 
-          "reiserfs", "msdos", "proc", "nfs", "iso9660"). For bind mounts 
+          Linux: filesystem types supported by the kernel as listed in
+          `/proc/filesystems` (e.g., "minix", "ext2", "ext3", "jfs", "xfs",
+          "reiserfs", "msdos", "proc", "nfs", "iso9660"). For bind mounts
           (when options include either bind or rbind), the type is a dummy,
           often "none" (not listed in /proc/filesystems).
         '';
@@ -45,9 +45,9 @@ let
         default = [ "bind" ];
         description = ''
           Mount options of the filesystem to be used.
-        
-          Support optoions are listed in the mount(8) man page. Note that 
-          both filesystem-independent and filesystem-specific options 
+
+          Support optoions are listed in the mount(8) man page. Note that
+          both filesystem-independent and filesystem-specific options
           are listed.
         '';
       };
