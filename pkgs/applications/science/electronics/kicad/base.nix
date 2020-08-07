@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   i18n = libraries.i18n;
 
   pname = "kicad-base";
-  version = "${versions.${baseName}.kicadVersion.version}";
+  version = "${builtins.substring 0 10 versions.${baseName}.kicadVersion.src.rev}";
 
   src = fetchFromGitLab (
     {
