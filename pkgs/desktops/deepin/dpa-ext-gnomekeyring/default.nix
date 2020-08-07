@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dpa-ext-gnomekeyring";
-  version = "5.0.1";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "168j42nwyw7vcgwc0fha2pjpwwlgir70fq1hns4ia1dkdqa1nhzw";
+    sha256 = "032m481sx8q25z10jbja7ix1x9z2a629c86lf9b5wx3q9jb00dkq";
   };
 
   nativeBuildInputs = [
