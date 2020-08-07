@@ -3299,6 +3299,8 @@ in {
 
   jupyter = callPackage ../development/python-modules/jupyter { };
 
+  jupyter-c-kernel = callPackage ../development/python-modules/jupyter-c-kernel { };
+
   jupyter_console = if pythonOlder "3.5" then
        callPackage ../development/python-modules/jupyter_console/5.nix { }
      else
