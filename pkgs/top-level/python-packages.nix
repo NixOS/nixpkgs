@@ -509,7 +509,9 @@ in {
 
   baselines = callPackage ../development/python-modules/baselines { };
 
-  bash_kernel = callPackage ../development/python-modules/bash_kernel { };
+  bash_kernel = callPackage ../development/python-modules/bash_kernel {
+    inherit (pkgs) bash;
+  };
 
   bashlex = callPackage ../development/python-modules/bashlex { };
 
