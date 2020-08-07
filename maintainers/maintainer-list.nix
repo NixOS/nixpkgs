@@ -1446,6 +1446,12 @@
       fingerprint = "099E 3F97 FA08 3D47 8C75  EBEC E0EB AD78 F019 0BD9";
     }];
   };
+  chiroptical = {
+    email = "chiroptical@gmail.com";
+    github = "chiroptical";
+    githubId = 3086255;
+    name = "Barry Moore II";
+  };
   chkno = {
     email = "chuck@intelligence.org";
     github = "chkno";
