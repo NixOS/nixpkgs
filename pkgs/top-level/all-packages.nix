@@ -7811,6 +7811,8 @@ in
     libpsl = null;
   };
 
+  wg-bond = callPackage ../applications/networking/wg-bond { };
+
   which = callPackage ../tools/system/which { };
 
   whsniff = callPackage ../applications/networking/sniffers/whsniff { };
