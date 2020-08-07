@@ -67,7 +67,7 @@ self: super: {
   unliftio-core = doJailbreak super.unliftio-core;
 
   # Use the latest version to fix the build.
-  dhall = self.dhall_1_33_1;
+  dhall = self.dhall_1_34_0;
   lens = self.lens_4_19_2;
   optics-core = self.optics-core_0_3;
   repline = self.repline_0_4_0_0;
