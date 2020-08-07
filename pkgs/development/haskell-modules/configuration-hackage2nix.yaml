@@ -72,7 +72,7 @@ default-package-overrides:
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
-  # LTS Haskell 16.7
+  # LTS Haskell 16.8
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -323,7 +323,7 @@ default-package-overrides:
   - bins ==0.1.2.0
   - bitarray ==0.0.1.1
   - bits ==0.5.2
-  - bitset-word8 ==0.1.1.1
+  - bitset-word8 ==0.1.1.2
   - bits-extra ==0.0.2.0
   - bitvec ==1.0.3.0
   - blake2 ==0.3.0
@@ -439,9 +439,9 @@ default-package-overrides:
   - cipher-des ==0.0.6
   - cipher-rc4 ==0.1.4
   - circle-packing ==0.1.0.6
-  - clash-ghc ==1.2.3
-  - clash-lib ==1.2.3
-  - clash-prelude ==1.2.3
+  - clash-ghc ==1.2.4
+  - clash-lib ==1.2.4
+  - clash-prelude ==1.2.4
   - classy-prelude ==1.5.0
   - classy-prelude-conduit ==1.5.0
   - classy-prelude-yesod ==1.5.0
@@ -518,9 +518,9 @@ default-package-overrides:
   - control-monad-omega ==0.3.2
   - convertible ==1.1.1.0
   - cookie ==0.4.5
-  - core-data ==0.2.1.5
-  - core-program ==0.2.4.2
-  - core-text ==0.2.3.3
+  - core-data ==0.2.1.7
+  - core-program ==0.2.4.4
+  - core-text ==0.2.3.5
   - countable ==1.0
   - cpio-conduit ==0.7.0
   - cpphs ==1.20.9.1
@@ -787,7 +787,7 @@ default-package-overrides:
   - file-path-th ==0.1.0.0
   - filepattern ==0.1.2
   - fileplow ==0.1.0.0
-  - filtrable ==0.1.3.0
+  - filtrable ==0.1.4.0
   - fin ==0.1.1
   - FindBin ==0.0.5
   - fingertree ==0.1.4.2
@@ -976,6 +976,7 @@ default-package-overrides:
   - hadoop-streaming ==0.2.0.3
   - hakyll ==4.13.4.0
   - half ==0.3
+  - hall-symbols ==0.1.0.6
   - hamtsolo ==1.0.3
   - HandsomeSoup ==0.4.2
   - hapistrano ==0.4.1.0
@@ -1046,7 +1047,7 @@ default-package-overrides:
   - hint ==0.9.0.3
   - hjsmin ==0.2.0.4
   - hkd-default ==1.1.0.0
-  - hkgr ==0.2.6
+  - hkgr ==0.2.6.1
   - hlibcpuid ==0.2.0
   - hlibgit2 ==0.18.0.16
   - hmatrix ==0.20.0.0
@@ -1144,7 +1145,7 @@ default-package-overrides:
   - http-link-header ==1.0.3.1
   - http-media ==0.8.0.0
   - http-reverse-proxy ==0.6.0
-  - http-streams ==0.8.7.1
+  - http-streams ==0.8.7.2
   - http-types ==0.12.3
   - human-readable-duration ==0.2.1.4
   - HUnit ==1.6.0.0
@@ -1511,7 +1512,7 @@ default-package-overrides:
   - MusicBrainz ==0.4.1
   - mustache ==2.3.1
   - mutable-containers ==0.3.4
-  - mwc-probability ==2.3.0
+  - mwc-probability ==2.3.1
   - mwc-random ==0.14.0.0
   - mx-state-codes ==1.0.0.0
   - mysql ==0.1.7
@@ -1732,11 +1733,11 @@ default-package-overrides:
   - pretty-class ==1.0.1.1
   - pretty-hex ==1.1
   - prettyprinter ==1.6.2
-  - prettyprinter-ansi-terminal ==1.1.1.2
+  - prettyprinter-ansi-terminal ==1.1.2
   - prettyprinter-compat-annotated-wl-pprint ==1
   - prettyprinter-compat-ansi-wl-pprint ==1.0.1
   - prettyprinter-compat-wl-pprint ==1.0.0.1
-  - prettyprinter-convert-ansi-wl-pprint ==1.1
+  - prettyprinter-convert-ansi-wl-pprint ==1.1.1
   - pretty-relative-time ==0.2.0.0
   - pretty-show ==1.10
   - pretty-simple ==3.2.3.0
@@ -1825,7 +1826,7 @@ default-package-overrides:
   - rawstring-qm ==0.2.3.0
   - raw-strings-qq ==1.1
   - rcu ==0.2.4
-  - rdf ==0.1.0.3
+  - rdf ==0.1.0.4
   - rdtsc ==1.3.0.1
   - re2 ==0.3
   - readable ==0.3.1
@@ -1914,7 +1915,7 @@ default-package-overrides:
   - salve ==1.0.10
   - sample-frame ==0.0.3
   - sample-frame-np ==0.0.4.1
-  - sampling ==0.3.4
+  - sampling ==0.3.5
   - say ==0.1.0.1
   - sbp ==2.6.3
   - scalpel ==0.6.2
@@ -2137,6 +2138,7 @@ default-package-overrides:
   - syb ==0.7.1
   - symbol ==0.2.4
   - symengine ==0.1.2.0
+  - symmetry-operations-symbols ==0.0.1.4
   - sysinfo ==0.1.1
   - system-argv0 ==0.1.1
   - systemd ==2.3.0
@@ -2231,10 +2233,10 @@ default-package-overrides:
   - th-nowq ==0.1.0.5
   - th-orphans ==0.13.10
   - th-printf ==0.7
-  - thread-hierarchy ==0.3.0.1
+  - thread-hierarchy ==0.3.0.2
   - thread-local-storage ==0.2
   - threads ==0.5.1.6
-  - thread-supervisor ==0.1.0.0
+  - thread-supervisor ==0.1.0.1
   - threepenny-gui ==0.9.0.0
   - th-reify-compat ==0.0.1.5
   - th-reify-many ==0.1.9
@@ -2426,9 +2428,9 @@ default-package-overrides:
   - wave ==0.2.0
   - wcwidth ==0.0.2
   - webdriver ==0.9.0.1
-  - webex-teams-api ==0.2.0.0
-  - webex-teams-conduit ==0.2.0.0
-  - webex-teams-pipes ==0.2.0.0
+  - webex-teams-api ==0.2.0.1
+  - webex-teams-conduit ==0.2.0.1
+  - webex-teams-pipes ==0.2.0.1
   - webrtc-vad ==0.1.0.3
   - websockets ==0.12.7.1
   - websockets-snap ==0.10.3.1
