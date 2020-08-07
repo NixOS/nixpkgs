@@ -183,8 +183,8 @@ in
     }
     ]) eachBitcoind);
 
-    environment.systemPackages = flatten (mapAttrsToList (bitcoindName: cfg: [ 
-      cfg.package 
+    environment.systemPackages = flatten (mapAttrsToList (bitcoindName: cfg: [
+      cfg.package
     ]) eachBitcoind);
 
     systemd.services = mapAttrs' (bitcoindName: cfg: (
