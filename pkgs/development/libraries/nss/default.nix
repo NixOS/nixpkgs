@@ -54,6 +54,11 @@ in stdenv.mkDerivation rec {
 
   patchFlags = [ "-p0" ];
 
+  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
+     substituteInPlace nss/coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
+     substituteInPlace nss/coreconf/config.gypi --replace "'DYLIB_INSTALL_NAME_BASE': '@executable_path'" "'DYLIB_INSTALL_NAME_BASE': '$out/lib'"
+   '';
+
   outputs = [ "out" "dev" "tools" ];
 
   preConfigure = "cd nss";

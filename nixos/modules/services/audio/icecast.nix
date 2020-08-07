@@ -23,7 +23,7 @@ let
       <listen-socket>
         <port>${toString cfg.listen.port}</port>
         <bind-address>${cfg.listen.address}</bind-address>
-      </listen-socket>   
+      </listen-socket>
 
       <security>
         <chroot>0</chroot>
@@ -70,7 +70,7 @@ in {
         description = "Base directory used for logging.";
         default = "/var/log/icecast";
       };
-      
+
       listen = {
         port = mkOption {
           type = types.int;

@@ -2180,6 +2180,16 @@
     githubId = 974130;
     name = "David Pätzel";
   };
+  dpausp = {
+    email = "dpausp@posteo.de";
+    github = "dpausp";
+    githubId = 1965950;
+    name = "Tobias Stenzel";
+    keys = [{
+      longkeyid = "rsa2048/0x78C7DD40DF23FB16";
+      fingerprint = "4749 0887 CF3B 85A1 6355  C671 78C7 DD40 DF23 FB16";
+    }];
+  };
   dpflug = {
     email = "david@pflug.email";
     github = "dpflug";

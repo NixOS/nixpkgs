@@ -328,6 +328,19 @@ let
         '';
       });
 
+      cryptography = super.cryptography.overridePythonAttrs(oldAttrs: rec {
+        version = "2.9.2";
+
+        src = super.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "0af25w5mkd6vwns3r6ai1w5ip9xp0ms9s261zzssbpadzdr05hx0";
+        };
+
+        # prevent cycle with cryptography-vectors
+        doCheck = false;
+      });
+
       knack = super.knack.overridePythonAttrs(oldAttrs: rec {
         version = "0.7.1";
 
