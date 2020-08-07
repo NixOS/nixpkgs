@@ -6089,6 +6089,8 @@ in
 
   pirate-get = callPackage ../tools/networking/pirate-get { };
 
+  pipr = callPackage ../applications/misc/pipr { };
+
   pipreqs = callPackage ../tools/misc/pipreqs { };
 
   pius = callPackage ../tools/security/pius { };
