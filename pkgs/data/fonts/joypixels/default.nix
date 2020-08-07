@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, acceptLicense ? false }:
 
 let inherit (stdenv.hostPlatform) system;
 
@@ -29,12 +29,35 @@ let inherit (stdenv.hostPlatform) system;
       x86_64-linux = "ttf";
     }.${system} or throwSystem;
 
+    joypixels-free-license = {
+      spdxId = "LicenseRef-JoyPixels-Free-6.0";
+      fullName = "JoyPixels Free License Agreement 6.0";
+      url = "https://cdn.joypixels.com/distributions/${systemTag}/license/free-license.pdf";
+    };
+    joypixels-license-appendix = {
+      spdxId = "LicenseRef-JoyPixels-NixOS-Appendix";
+      fullName = "JoyPixels ${capitalized} License Appendix";
+      url = "https://cdn.joypixels.com/distributions/${systemTag}/appendix/joypixels-license-appendix.pdf";
+    };
+
     sha256 = {
       x86_64-darwin = "043980g0dlp8vd4qkbx6298fwz8ns0iwbxm0f8czd9s7n2xm4npq";
       x86_64-linux = "1vxqsqs93g4jyp01r47lrpcm0fmib2n1vysx32ksmfxmprimb75s";
     }.${system} or throwSystem;
 
 in
+
+assert !acceptLicense -> throw ''
+  Use of the JoyPixels font requires acceptance of the license.
+    - ${joypixels-free-license.fullName} [1]
+    - ${joypixels-license-appendix.fullName} [2]
+
+  You can express acceptance by overriding acceptLicense:
+    (joypixels.override { acceptLicense = true; })
+
+  [1]: ${joypixels-free-license.url}
+  [2]: ${joypixels-license-appendix.url}
+'';
 
 stdenv.mkDerivation rec {
   pname = "joypixels";
@@ -59,7 +82,14 @@ stdenv.mkDerivation rec {
       of files ranging from png, svg, iconjar, sprites, and fonts.
     '';
     homepage = "https://www.joypixels.com/fonts";
-    license = licenses.unfree;
+    license = let free-license = joypixels-free-license;
+                  appendix = joypixels-license-appendix;
+      in {
+        spdxId = "LicenseRef-JoyPixels-Free-6.0-with-${capitalized}-Appendix";
+        fullName = "${free-license.fullName} with ${appendix.fullName}";
+        url = free-license.url;
+        appendixUrl = appendix.url;
+      };
     maintainers = with maintainers; [ toonn jtojnar ];
   };
 }
