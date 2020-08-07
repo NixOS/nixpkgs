@@ -5439,6 +5439,8 @@ in {
 
   babelgladeextractor = callPackage ../development/python-modules/babelgladeextractor { };
 
+  batchspawner = callPackage ../development/python-modules/batchspawner { };
+
   pybfd = callPackage ../development/python-modules/pybfd { };
 
   pybigwig = callPackage ../development/python-modules/pybigwig { };
