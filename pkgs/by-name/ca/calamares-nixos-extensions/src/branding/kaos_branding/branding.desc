@@ -15,7 +15,7 @@ strings:
     bootloaderEntryName: KaOS
     productUrl:          https://kaosx.us/
     supportUrl:          https://kaosx.us/docs/
-    knownIssuesUrl:      https://kaosx.us/pages/download/#known-issues-a-idknownissuesa
+    knownIssuesUrl:      https://kaosx.us/pages/download/#known-issues
     releaseNotesUrl:     https://kaosx.us/pages/release_notes
 
 images:
