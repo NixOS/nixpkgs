@@ -1,17 +1,20 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonPackages, pytest }:
+{ stdenv, buildPythonPackage, fetchPypi, pythonPackages, pytest, glibcLocales, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "urwid_readline";
-  version = "0.10";
+  version = "0.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0i7rwxhs686lgzgbwfvl2niw5yhzwjncx8ql7n0sdpk7n6sxq9xq";
+    sha256 = "1dgxd9gwh5nx93v6h3snvbagi0ykwm5jc768ifgd2h2rnza7dqr4";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook glibcLocales ];
 
   buildInputs = with pythonPackages; [ urwid ];
+
+  # tests need to be able to set locale
+  LC_ALL = "en_US.UTF-8";
 
   meta = with stdenv.lib; {
     description = "A textbox edit widget for urwid that supports readline shortcuts";

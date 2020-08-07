@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, glibcLocales }:
+{ stdenv, buildPythonPackage, fetchPypi, glibcLocales, pythonPackages, setuptools }:
 
 buildPythonPackage rec {
   pname = "urwid";
@@ -9,9 +9,11 @@ buildPythonPackage rec {
     sha256 = "09nmi2nmvpcmbh3w3fb0dn0c7yp7r20i5pfcr6q722xh6mp8cw3q";
   };
 
+  propagatedBuildInputs = [ setuptools ];
+
   # tests need to be able to set locale
   LC_ALL = "en_US.UTF-8";
-  checkInputs = [ glibcLocales ];
+  checkInputs = [ glibcLocales pythonPackages.tox ];
 
   meta = with stdenv.lib; {
     description = "A full-featured console (xterm et al.) user interface library";
