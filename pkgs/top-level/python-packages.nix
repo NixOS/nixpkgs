@@ -2870,6 +2870,8 @@ in {
 
   dockerpty = callPackage ../development/python-modules/dockerpty {};
 
+  dockerspawner = callPackage ../development/python-modules/dockerspawner {};
+
   docker_pycreds = callPackage ../development/python-modules/docker-pycreds {};
 
   docloud = callPackage ../development/python-modules/docloud { };
