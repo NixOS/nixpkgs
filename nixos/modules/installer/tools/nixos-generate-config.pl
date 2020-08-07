@@ -322,26 +322,24 @@ push @attrs, "services.xserver.videoDrivers = [ \"$videoDriver\" ];" if $videoDr
 # Generate the swapDevices option from the currently activated swap
 # devices.
 my @swaps = read_file("/proc/swaps", err_mode => 'carp');
+
+my @excludedSwapDevices = ();
+if (open my $fileExcludedSwaps, "<", "/etc/swapDevices-manually-configured") {
+    chomp(@excludedSwapDevices = <$fileExcludedSwaps>);
+    close $fileExcludedSwaps;
+    @excludedSwapDevices = map {findStableDevPath($_)} @excludedSwapDevices;
+}
+
 my @swapDevices;
 if (@swaps) {
     shift @swaps;
     foreach my $swap (@swaps) {
         my @fields = split ' ', $swap;
         my $swapFilename = $fields[0];
-        my $swapType = $fields[1];
         next unless -e $swapFilename;
         my $dev = findStableDevPath $swapFilename;
-        if ($swapType =~ "partition") {
-            # zram devices are more likely created by configuration.nix, so
-            # ignore them here
-            next if ($swapFilename =~ /^\/dev\/zram/);
-            push @swapDevices, "{ device = \"$dev\"; }";
-        } elsif ($swapType =~ "file") {
-            # swap *files* are more likely specified in configuration.nix, so
-            # ignore them here.
-        } else {
-            die "Unsupported swap type: $swapType\n";
-        }
+        next if (grep { $_ eq $dev } @excludedSwapDevices);
+        push @swapDevices, "{ autoDetected = true; device = \"$dev\"; }";
     }
 }
 

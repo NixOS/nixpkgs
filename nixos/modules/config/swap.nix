@@ -124,6 +124,12 @@ let
         internal = true;
       };
 
+      autoDetected = mkOption {
+        default = false;
+        type = types.bool;
+        internal = true;
+      };
+
     };
 
     config = rec {

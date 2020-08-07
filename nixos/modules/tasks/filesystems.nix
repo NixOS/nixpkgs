@@ -265,6 +265,13 @@ in
         )}
       '';
 
+    # Provide a list of manually configured swap devices to exclude from hardware-configuration.nix
+    environment.etc.swapDevices-manually-configured = {
+      text = concatMapStrings
+        (sw: "${sw.realDevice}\n")
+        (filter (sw: !sw.autoDetected) config.swapDevices);
+    };
+
     # Provide a target that pulls in all filesystems.
     systemd.targets.fs =
       { description = "All File Systems";
