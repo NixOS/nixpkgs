@@ -61,15 +61,12 @@ in (mkDrv rec {
   # of rasqal/rasqal.h
   NIX_CFLAGS_COMPILE = [
     "-I${librdf_rasqal}/include/rasqal"
-  ] ++ lib.optional stdenv.isx86_64 "-mno-fma";
+  ] ++ lib.optionals stdenv.isx86_64 [ "-mno-fma" "-mno-avx" ]
+  # https://bugs.documentfoundation.org/show_bug.cgi?id=78174#c10
+  ++ [ "-fno-visibility-inlines-hidden" ];
 
   patches = [
     ./xdg-open-brief.patch
-    (fetchpatch {
-      url = "https://git.pld-linux.org/gitweb.cgi?p=packages/libreoffice.git;a=blob_plain;f=poppler-0.86.patch;h=76b8356d5f22ef537a83b0f9b0debab591f152fe;hb=a2737a61353e305a9ee69640fb20d4582c218008";
-      name = "poppler-0.86.patch";
-      sha256 = "0q6k4l8imgp8ailcv0qx5l83afyw44hah24fi7gjrm9xgv5sbb8j";
-    })
   ];
 
   tarballPath = "external/tarballs";
