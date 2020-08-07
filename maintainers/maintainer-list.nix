@@ -2467,6 +2467,12 @@
     githubId = 97852;
     name = "Ellis Whitehead";
   };
+  elkowar = {
+    email = "thereal.elkowar@gmail.com";
+    github = "elkowar";
+    githubId = 5300871;
+    name = "Leon Kowarschick";
+  };
   elohmeier = {
     email = "elo-nixos@nerdworks.de";
     github = "elohmeier";
