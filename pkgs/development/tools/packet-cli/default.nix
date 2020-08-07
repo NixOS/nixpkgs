@@ -13,6 +13,10 @@ buildGoModule rec {
 
   vendorSha256 = "1h9p3hrr61hwkhkh4qbw0ld3hd5xi75qm8rwfrpz5z06jba1ll25";
 
+  postInstall = ''
+    ln -s $out/bin/packet-cli $out/bin/packet
+  '';
+
   meta = with stdenv.lib; {
     description = "Official Packet CLI";
     homepage = "https://github.com/packethost/packet-cli";
