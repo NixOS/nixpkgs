@@ -64,7 +64,7 @@ buildPythonPackage rec {
     # make the relative path for config.json absolute
     substituteInPlace app.py --replace "'./config.json'" "'$out/share/config.json'"
     cp config.json $out/share/
-    
+
     install -m755 app.py $out/bin/sclack
   '';
 
