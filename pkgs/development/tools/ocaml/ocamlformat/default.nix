@@ -29,7 +29,7 @@ with ocamlPackages; buildDunePackage rec {
   meta = {
     homepage = "https://github.com/ocaml-ppx/ocamlformat";
     description = "Auto-formatter for OCaml code";
-    maintainers = [ lib.maintainers.Zimmi48 ];
+    maintainers = [ lib.maintainers.Zimmi48 lib.maintainers.marsam ];
     license = lib.licenses.mit;
   };
 }
