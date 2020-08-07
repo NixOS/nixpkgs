@@ -20358,6 +20358,8 @@ in
 
   gopher = callPackage ../applications/networking/gopher/gopher { };
 
+  gophernotes = callPackage ../applications/editors/gophernotes { };
+
   goxel = callPackage ../applications/graphics/goxel { };
 
   gpa = callPackage ../applications/misc/gpa { };
