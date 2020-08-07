@@ -723,6 +723,37 @@ services.postgresql.dataDir = "/var/db/postgresql";
    </listitem>
    <listitem>
     <para>
+     The <literal>services.transmission</literal> module
+     was enhanced with the new options:
+     <xref linkend="opt-services.transmission.credentialsFile"/>,
+     <xref linkend="opt-services.transmission.openFirewall"/>,
+     and <xref linkend="opt-services.transmission.performanceNetParameters"/>.
+    </para>
+    <para>
+     <literal>transmission-daemon</literal> is now started with additional systemd sandbox/hardening options for better security.
+     Please <link xlink:href="https://github.com/NixOS/nixpkgs/issues">report</link>
+     any use case where this is not working well.
+     In particular, the <literal>RootDirectory</literal> option newly set
+     forbids uploading or downloading a torrent outside of the default directory
+     configured at <link linkend="opt-services.transmission.settings">settings.download-dir</link>.
+     If you really need Transmission to access other directories,
+     you must include those directories into the <literal>BindPaths</literal> of the service:
+<programlisting>
+systemd.services.transmission.serviceConfig.BindPaths = [ "/path/to/alternative/download-dir" ];
+</programlisting>
+    </para>
+    <para>
+     Also, connection to the RPC (Remote Procedure Call) of <literal>transmission-daemon</literal>
+     is now only available on the local network interface by default.
+     Use:
+<programlisting>
+services.transmission.settings.rpc-bind-address = "0.0.0.0";
+</programlisting>
+     to get the previous behavior of listening on all network interfaces.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      With this release <literal>systemd-networkd</literal> (when enabled through <xref linkend="opt-networking.useNetworkd"/>)
      has it's netlink socket created through a <literal>systemd.socket</literal> unit. This gives us control over
      socket buffer sizes and other parameters. For larger setups where networkd has to create a lot of (virtual)
