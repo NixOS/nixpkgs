@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchpatch, which}:
+{stdenv, fetchurl, fetchpatch, which, nixosTests}:
 let
   s = # Generated upstream information
   rec {
@@ -75,6 +75,8 @@ stdenv.mkDerivation {
   # At high parallelism, the build sometimes fails with:
   # bash: src/fsec-optimize/fsec-optimize: No such file or directory
   enableParallelBuilding = false;
+
+  passthru.tests = nixosTests.firejail;
 
   meta = {
     inherit (s) version;
