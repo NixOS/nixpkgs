@@ -955,6 +955,8 @@ in
 
   dpt-rp1-py = callPackage ../tools/misc/dpt-rp1-py { };
 
+  doona = callPackage ../tools/security/doona { };
+
   ecdsautils = callPackage ../tools/security/ecdsautils { };
 
   sedutil = callPackage ../tools/security/sedutil { };
@@ -1625,6 +1627,8 @@ in
   };
 
   compsize = callPackage ../os-specific/linux/compsize { };
+
+  cot = with python3Packages; toPythonApplication cot;
 
   coturn = callPackage ../servers/coturn { };
 
@@ -7398,6 +7402,8 @@ in
 
   untrunc = callPackage ../tools/video/untrunc { };
 
+  untrunc-anthwlock = callPackage ../tools/video/untrunc-anthwlock { };
+
   up = callPackage ../tools/misc/up { };
 
   upx = callPackage ../tools/compression/upx { };
@@ -11541,6 +11547,8 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreAudio AudioToolbox;
   };
 
+  ayatana-ido = callPackage ../development/libraries/ayatana-ido { };
+
   babl = callPackage ../development/libraries/babl { };
 
   backward-cpp = callPackage ../development/libraries/backward-cpp { };
@@ -12876,6 +12884,10 @@ in
   libappindicator-gtk3 = libappindicator.override { gtkVersion = "3"; };
   libappindicator = callPackage ../development/libraries/libappindicator { };
 
+  libayatana-appindicator-gtk2 = libayatana-appindicator.override { gtkVersion = "2"; };
+  libayatana-appindicator-gtk3 = libayatana-appindicator.override { gtkVersion = "3"; };
+  libayatana-appindicator = callPackage ../development/libraries/libayatana-appindicator { };
+
   libarchive = callPackage ../development/libraries/libarchive { };
 
   libasr = callPackage ../development/libraries/libasr { };
@@ -13315,6 +13327,10 @@ in
   libindicator-gtk2 = libindicator.override { gtkVersion = "2"; };
   libindicator-gtk3 = libindicator.override { gtkVersion = "3"; };
   libindicator = callPackage ../development/libraries/libindicator { };
+
+  libayatana-indicator-gtk2 = libayatana-indicator.override { gtkVersion = "2"; };
+  libayatana-indicator-gtk3 = libayatana-indicator.override { gtkVersion = "3"; };
+  libayatana-indicator = callPackage ../development/libraries/libayatana-indicator { };
 
   libinotify-kqueue = callPackage ../development/libraries/libinotify-kqueue { };
 
@@ -13897,9 +13913,7 @@ in
     python = python3;
   };
 
-  libxml2Python = let
-    libxml2 = python2Packages.libxml2;
-  in pkgs.buildEnv { # slightly hacky
+  libxml2Python = pkgs.buildEnv { # slightly hacky
     name = "libxml2+py-${res.libxml2.version}";
     paths = with libxml2; [ dev bin py ];
     inherit (libxml2) passthru;
@@ -16956,6 +16970,8 @@ in
   criu = callPackage ../os-specific/linux/criu { };
 
   cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
+
+  cramfsprogs = callPackage ../os-specific/linux/cramfsprogs { };
 
   cramfsswap = callPackage ../os-specific/linux/cramfsswap { };
 
@@ -24595,6 +24611,8 @@ in
 
   service-wrapper = callPackage ../os-specific/linux/service-wrapper { };
 
+  sfrotz = callPackage ../games/sfrotz { };
+
   sgtpuzzles = callPackage (callPackage ../games/sgt-puzzles) { };
 
   shattered-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon { };
@@ -24969,7 +24987,7 @@ in
     inherit (python3Packages) python pygobject3 pyxdg wrapPython;
     inherit (darwin.apple_sdk.frameworks) CoreLocation ApplicationServices Foundation Cocoa;
     geoclue = geoclue2;
-  }) redshift redshift-wlr;
+  }) redshift redshift-wlr gammastep;
 
   redshift-plasma-applet = libsForQt5.callPackage ../applications/misc/redshift-plasma-applet { };
 
@@ -25687,6 +25705,8 @@ in
 
   gtkwave = callPackage ../applications/science/electronics/gtkwave { };
 
+  hyp2mat = callPackage ../applications/science/electronics/hyp2mat { };
+
   fped = callPackage ../applications/science/electronics/fped { };
 
   # this is a wrapper for kicad.base and kicad.libraries
@@ -25941,7 +25961,7 @@ in
 
   android-file-transfer = libsForQt5.callPackage ../tools/filesystems/android-file-transfer { };
 
-  antimicro = libsForQt5.callPackage ../tools/misc/antimicro { };
+  antimicroX = libsForQt5.callPackage ../tools/misc/antimicroX { };
 
   atari800 = callPackage ../misc/emulators/atari800 { };
 

@@ -333,7 +333,7 @@ in
             # Wait for PostgreSQL to be ready to accept connections.
             ExecStartPost =
               let
-                setupScript = pkgs.writeScript "postgresql-setup" ''
+                setupScript = pkgs.writeScript "postgresql-setup" (''
                   #!${pkgs.runtimeShell} -e
 
                   PSQL="${pkgs.utillinux}/bin/runuser -u ${cfg.superUser} -- psql --port=${toString cfg.port}"
@@ -360,7 +360,7 @@ in
                       $PSQL -tAc 'GRANT ${permission} ON ${database} TO "${user.name}"'
                     '') user.ensurePermissions)}
                   '') cfg.ensureUsers}
-                '';
+                '');
               in
                 "+${setupScript}";
           }

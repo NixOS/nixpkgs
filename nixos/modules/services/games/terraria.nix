@@ -7,7 +7,7 @@ let
   worldSizeMap = { small = 1; medium = 2; large = 3; };
   valFlag = name: val: optionalString (val != null) "-${name} \"${escape ["\\" "\""] (toString val)}\"";
   boolFlag = name: val: optionalString val "-${name}";
-  flags = [ 
+  flags = [
     (valFlag "port" cfg.port)
     (valFlag "maxPlayers" cfg.maxPlayers)
     (valFlag "password" cfg.password)

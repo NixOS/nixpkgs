@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ stdenv, fetchurl, ncurses, pkg-config }:
 
 stdenv.mkDerivation rec {
   version = "6.5.0";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vd9vdxyxsccl64ilx542ya5vlw2bpg6gnkq1x8cfqy6vxvmx7dj";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ ncurses pkg-config ];
 
   makeFlags = stdenv.lib.optionals stdenv.isDarwin [ "-f" "makefile.macosx" ];
 
