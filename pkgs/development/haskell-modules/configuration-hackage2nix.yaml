@@ -3747,6 +3747,7 @@ broken-packages:
   - chart-histogram
   - Chart-simple
   - chart-svg
+  - chart-svg-various
   - chart-unit
   - chatter
   - chatty-text
@@ -7617,6 +7618,7 @@ broken-packages:
   - mDNSResponder-client
   - mdp
   - mealstrom
+  - mealy
   - MeanShift
   - Measure
   - mecab
@@ -8663,6 +8665,8 @@ broken-packages:
   - postgresql-simple-sop
   - postgresql-simple-typed
   - postgresql-syntax
+  - postgresql-tx-query
+  - postgresql-tx-squeal
   - postgresql-typed
   - postgresql-typed-lifted
   - postgrest-ws
@@ -9336,6 +9340,7 @@ broken-packages:
   - SCalendar
   - scalendar
   - scalp-webhooks
+  - scalpel-search
   - scan-vector-machine
   - scc
   - scenegraph
@@ -10166,6 +10171,7 @@ broken-packages:
   - taskell
   - TaskMonad
   - tasty-auto
+  - tasty-bdd
   - tasty-fail-fast
   - tasty-groundhog-converters
   - tasty-hedgehog-coverage
