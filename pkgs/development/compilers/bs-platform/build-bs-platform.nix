@@ -3,6 +3,7 @@
 
 { stdenv, fetchFromGitHub, ninja, runCommand, nodejs, python3,
   ocaml-version, version, src,
+  patches ? [],
   ocaml ? (import ./ocaml.nix {
     version = ocaml-version;
     inherit stdenv;
@@ -22,7 +23,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  inherit src version;
+  inherit src version patches;
   pname = "bs-platform";
 
   BS_RELEASE_BUILD = "true";
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ nodejs python3 custom-ninja ];
 
-  patchPhase = ''
+  prePatch = ''
     sed -i 's:./configure.py --bootstrap:python3 ./configure.py --bootstrap:' ./scripts/install.js
     mkdir -p ./native/${ocaml-version}/bin
     ln -sf ${ocaml}/bin/*  ./native/${ocaml-version}/bin
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     # This is an unfortunate name, but it's actually how to build a release
     # binary for BuckleScript
-    node scripts/install.js
+    npm run postinstall
   '';
 
   installPhase = ''
