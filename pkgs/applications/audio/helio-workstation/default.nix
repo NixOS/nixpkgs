@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "helio-workstation";
-  version = "2.2";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "helio-fm";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "16iwj4mjs1nm8dlk70q97svp3vkcgs7hdj9hfda9h67acn4a8vvk";
+    sha256 = "10pna4k43g648gapviykq2zk82iwy5rqff4lbfh5vzxqpg5v4ma6";
   };
 
   buildInputs = [
@@ -22,7 +22,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
 
-  preBuild = "cd Projects/LinuxMakefile";
+  preBuild = ''
+    cd Projects/LinuxMakefile
+    substituteInPlace Makefile --replace alsa "alsa jack"
+  '';
   buildFlags = [ "CONFIG=Release64" ];
 
   installPhase = ''
