@@ -719,6 +719,8 @@ in
 
   arduino = arduino-core.override { withGui = true; };
 
+  arduino-cli = callPackage ../development/arduino/arduino-cli { };
+
   arduino-core = callPackage ../development/arduino/arduino-core { };
 
   arduino-mk = callPackage ../development/arduino/arduino-mk {};
