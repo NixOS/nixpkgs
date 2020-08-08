@@ -25305,6 +25305,8 @@ in
 
   almonds = callPackage ../applications/science/math/almonds { };
 
+  amd-blis = callPackage ../development/libraries/science/math/amd-blis { };
+
   arpack = callPackage ../development/libraries/science/math/arpack { };
 
   blas = callPackage ../build-support/alternatives/blas { };
