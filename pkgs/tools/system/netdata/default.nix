@@ -70,8 +70,10 @@ in stdenv.mkDerivation rec {
       --replace 'ctypes.util.find_library("sensors")' '"${lm_sensors.out}/lib/libsensors${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
 
-  configureFlags = [ "--localstatedir=/var" "--sysconfdir=/etc" ]
-    ++ optional withCloud "--enable-cloud";
+  configureFlags = [
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+  ] ++ optional withCloud "--enable-cloud";
 
   postFixup = ''
     wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${openssl}/bin
