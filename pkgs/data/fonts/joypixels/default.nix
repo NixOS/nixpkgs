@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, acceptLicense ? false }:
+{ stdenv, fetchurl, config
+, acceptLicense ? config.joypixels.acceptLicense or false
+}:
 
 let inherit (stdenv.hostPlatform) system;
 
@@ -40,8 +42,9 @@ assert !acceptLicense -> throw ''
     - ${joypixels-free-license.fullName} [1]
     - ${joypixels-license-appendix.fullName} [2]
 
-  You can express acceptance by overriding acceptLicense:
-    (joypixels.override { acceptLicense = true; })
+  You can express acceptance by setting acceptLicense to true in your
+  configuration (configuration.nix or config.nix):
+    joypixels.acceptLicense = true;
 
   [1]: ${joypixels-free-license.url}
   [2]: ${joypixels-license-appendix.url}
