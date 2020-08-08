@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, fetchsvn
+{ mkDerivation, lib, fetchurl, fetchsvn, stdenv
 , pkgconfig, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook
 , qtbase, qtimageformats, gtk3, libsForQt5, enchant2, lz4, xxHash
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
@@ -62,6 +62,8 @@ mkDerivation rec {
     "-DTDESKTOP_USE_PACKAGED_TGVOIP=OFF"
     #"-DDESKTOP_APP_SPECIAL_TARGET=\"\"" # TODO: Error when set to "": Bad special target '""'
     "-DTDESKTOP_LAUNCHER_BASENAME=telegramdesktop" # Note: This is the default
+  ] ++ optionals stdenv.isLinux [ # TODO: Remove workaround once #94905 is resolved:
+    "-DCMAKE_OSX_ARCHITECTURES="
   ];
 
   # Note: The following packages could be packaged system-wide, but it's
