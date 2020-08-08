@@ -5380,7 +5380,9 @@ in {
   protobuf = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
     doCheck = !isPy3k;
-    protobuf = pkgs.protobuf3_12;
+    # If a protobuf upgrade causes many Python packages to fail, please pin it
+    # here to the previous version.
+    protobuf = pkgs.protobuf;
   };
 
   psd-tools = callPackage ../development/python-modules/psd-tools { };
