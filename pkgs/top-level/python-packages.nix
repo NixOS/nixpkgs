@@ -4965,6 +4965,10 @@ in {
 
   nitime = callPackage ../development/python-modules/nitime { };
 
+  nix-kernel = callPackage ../development/python-modules/nix-kernel {
+    inherit (pkgs) nix;
+  };
+
   nixpkgs = callPackage ../development/python-modules/nixpkgs { };
 
   nixpkgs-pytools = callPackage ../development/python-modules/nixpkgs-pytools { };
