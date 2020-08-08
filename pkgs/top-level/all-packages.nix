@@ -4383,6 +4383,8 @@ in
     packages = config.ihaskell.packages or (self: []);
   };
 
+  iruby = callPackage ../applications/editors/jupyter-kernels/iruby { };
+
   imapproxy = callPackage ../tools/networking/imapproxy {
     openssl = openssl_1_0_2;
   };
