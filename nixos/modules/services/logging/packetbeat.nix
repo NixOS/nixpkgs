@@ -45,12 +45,12 @@ in
       };
 
       stateDir = mkOption {
-        type = types.str;
-        default = "packetbeat";
+        type = types.path;
+        default = /var/lib/packetbeat;
         description = ''
-          Directory below <literal>/var/lib/</literal> to store packetbeat's
-          own logs and other data. This directory will be created automatically
-          using systemd's StateDirectory mechanism.
+          Directory to store packetbeat's own logs and other data.
+          This directory will be created automatically using systemd's 
+          StateDirectory mechanism.
         '';
       };
 
@@ -150,12 +150,6 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      {
-        assertion = !hasPrefix "/" cfg.stateDir;
-        message =
-          "The option services.packetbeat.stateDir shouldn't be an absolute directory." +
-          " It should be a directory relative to /var/lib/.";
-      }
       {
         assertion = cfg.configProtocols != "" || cfg.configFlows != "";
         message =
