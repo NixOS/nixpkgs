@@ -42,7 +42,7 @@
 */
 {
   "0x4A6F" = {
-    email = "0x4A6F@shackspace.de";
+    email = "mail-maintainer@0x4A6F.dev";
     name = "Joachim Ernst";
     github = "0x4A6F";
     githubId = 9675338;
