@@ -62,12 +62,16 @@
 , waylandSupport ? true
 , libxkbcommon, calendarSupport ? true
 
-, # If you want the resulting program to call itself "Thunderbird" instead
-# of "Earlybird" or whatever, enable this option.  However, those
-# binaries may not be distributed without permission from the
-# Mozilla Foundation, see
-# http://www.mozilla.org/foundation/trademarks/.
-enableOfficialBranding ? false
+# As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
+# https://github.com/NixOS/nixpkgs/issues/31843#issuecomment-346372756 we
+# have permission to use the official branding.
+#
+# For purposes of documentation the statement of @sylvestre:
+# > As the person who did part of the work described in the LWN article
+# > and release manager working for Mozilla, I can confirm the statement
+# > that I made in
+# > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=815006
+, enableOfficialBranding ? true
 }:
 
 assert waylandSupport -> gtk3Support == true;
