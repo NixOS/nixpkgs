@@ -77,7 +77,7 @@ cmakeConfigurePhase() {
         fi
         # The argument sometimes contains garbage or variable interpolation.
         # When that is the case, let’s fall back to the derivation name.
-        if [[ -z "$shareDocName" ]] || echo "$shareDocName" | grep -q '[^a-zA-Z0-9_-+]'; then
+        if [[ -z "$shareDocName" ]] || echo "$shareDocName" | grep -q '[^a-zA-Z0-9_+-]'; then
             if [[ -n "${pname-}" ]]; then
                 shareDocName="$pname"
             else
