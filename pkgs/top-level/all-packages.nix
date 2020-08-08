@@ -2170,6 +2170,8 @@ in
 
   mq-cli = callPackage ../tools/system/mq-cli { };
 
+  nextdns = callPackage ../applications/networking/nextdns { };
+
   nfdump = callPackage ../tools/networking/nfdump { };
 
   nfstrace = callPackage ../tools/networking/nfstrace { };
