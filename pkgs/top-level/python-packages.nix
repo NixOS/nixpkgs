@@ -858,6 +858,8 @@ in {
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
 
+  hdlparse = callPackage ../development/python-modules/hdlparse { };
+
   hiyapyco = callPackage ../development/python-modules/hiyapyco { };
 
   hocr-tools = callPackage ../development/python-modules/hocr-tools { };
