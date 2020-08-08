@@ -1,0 +1,17 @@
+ {a => b}/src/Application.vala | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+diff --git a/src/Application.vala b/src/Application.vala
+index 74f5cd2..7d7dbde 100644
+--- a/src/Application.vala
++++ b/src/Application.vala
+@@ -40,8 +40,8 @@ public class Ephemeral.Application : Gtk.Application {
+     public Gtk.IconSize icon_size = Gtk.IconSize.SMALL_TOOLBAR;
+ 
+     public bool ask_default_for_session = true;
+-    public bool warn_native_for_session = true;
+-    public bool warn_paid_for_session = true;
++    public bool warn_native_for_session = false;
++    public bool warn_paid_for_session = false;
+     public int64 last_external_open = int64.MIN;
+ 
+     private bool opening_link = false;

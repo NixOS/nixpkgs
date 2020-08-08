@@ -15,6 +15,7 @@
 , webkitgtk
 , wrapGAppsHook
 , glib-networking
+, disableInfobars ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -27,6 +28,11 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "1lzcwaczh601kwbx7fzg32nrzlg67asby7p86qy10qz86xf4g608";
   };
+
+  patches = stdenv.lib.optionalString disableInfobars [
+    ## Disable infobars regarding app not running on ElementaryOS and donation recommendation
+    ./disable_paid_and_native_infobars.patch
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -65,6 +71,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/cassidyjames/ephemeral";
     maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;
     platforms = platforms.linux;
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
   };
 }
