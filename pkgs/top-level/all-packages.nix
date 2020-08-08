@@ -22808,6 +22808,8 @@ in
 
   tambura = callPackage ../applications/audio/tambura { };
 
+  tanka = callPackage ../applications/networking/cluster/tanka { };
+
   teams = callPackage ../applications/networking/instant-messengers/teams { };
 
   teamspeak_client = libsForQt512.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
