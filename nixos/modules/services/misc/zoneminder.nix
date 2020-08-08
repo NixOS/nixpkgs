@@ -316,7 +316,7 @@ in {
           procps
           psmisc
         ];
-        after = [ "nginx.service" ] ++ lib.optional cfg.database.createLocally "mysql.service";
+        after = [ "nginx.service" ] ++ lib.optional cfg.database.createLocally "mysql.target";
         wantedBy = [ "multi-user.target" ];
         restartTriggers = [ defaultsFile configFile ];
         preStart = lib.optionalString useCustomDir ''

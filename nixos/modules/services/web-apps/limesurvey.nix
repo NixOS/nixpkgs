@@ -255,7 +255,7 @@ in
     systemd.services.limesurvey-init = {
       wantedBy = [ "multi-user.target" ];
       before = [ "phpfpm-limesurvey.service" ];
-      after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+      after = optional mysqlLocal "mysql.target" ++ optional pgsqlLocal "postgresql.service";
       environment.LIMESURVEY_CONFIG = limesurveyConfig;
       script = ''
         # update or install the database as required

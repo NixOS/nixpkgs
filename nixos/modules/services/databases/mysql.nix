@@ -18,6 +18,30 @@ let
     optionalString (cfg.extraOptions != null) "[mysqld]\n${cfg.extraOptions}"
   );
 
+  commonServiceConfig = {
+    # Capabilities
+    CapabilityBoundingSet = "";
+    # Security
+    NoNewPrivileges = true;
+    # Sandboxing
+    ProtectSystem = "strict";
+    ProtectHome = true;
+    PrivateTmp = true;
+    PrivateDevices = true;
+    ProtectHostname = true;
+    ProtectKernelTunables = true;
+    ProtectKernelModules = true;
+    ProtectControlGroups = true;
+    RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+    LockPersonality = true;
+    MemoryDenyWriteExecute = true;
+    RestrictRealtime = true;
+    RestrictSUIDSGID = true;
+    PrivateMounts = true;
+    # System Call Filtering
+    SystemCallArchitectures = "native";
+  };
+
 in
 
 {
@@ -338,13 +362,20 @@ in
       "z '${cfg.dataDir}' 0700 ${cfg.user} mysql - -"
     ];
 
+    systemd.targets.mysql = {
+      description = "MySQL target";
+      wantedBy = [ "multi-user.target" ];
+    };
+
     systemd.services.mysql = let
       hasNotify = (cfg.package == pkgs.mariadb);
     in {
         description = "MySQL Server";
 
         after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "mysql.target" ];
+        partOf = [ "mysql.target" ];
+
         restartTriggers = [ cfg.configFile ];
 
         unitConfig.RequiresMountsFor = "${cfg.dataDir}";
@@ -367,143 +398,144 @@ in
           fi
         '';
 
-        serviceConfig = {
-          Type = if hasNotify then "notify" else "simple";
-          Restart = "on-abort";
-          RestartSec = "5s";
-          # The last two environment variables are used for starting Galera clusters
-          ExecStart = "${mysql}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} $_WSREP_NEW_CLUSTER $_WSREP_START_POSITION";
-          ExecStartPost =
-            let
-              setupScript = pkgs.writeScript "mysql-setup" ''
-                #!${pkgs.runtimeShell} -e
+        serviceConfig = mkMerge [
+          commonServiceConfig
+          {
+            Type = if hasNotify then "notify" else "simple";
+            Restart = "on-abort";
+            RestartSec = "5s";
+            User = cfg.user;
+            Group = "mysql";
+            RuntimeDirectory = "mysqld";
+            RuntimeDirectoryMode = "0755";
+            # Access write directories
+            ReadWritePaths = [ cfg.dataDir ];
 
-                ${optionalString (!hasNotify) ''
-                  # Wait until the MySQL server is available for use
-                  count=0
-                  while [ ! -e /run/mysqld/mysqld.sock ]
-                  do
-                      if [ $count -eq 30 ]
-                      then
-                          echo "Tried 30 times, giving up..."
-                          exit 1
-                      fi
+            # The last two environment variables are used for starting Galera clusters
+            ExecStart = "${mysql}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} $_WSREP_NEW_CLUSTER $_WSREP_START_POSITION";
+            ExecStartPost =
+              let
+                setupScript = pkgs.writeScript "mysql-setup" ''
+                  #!${pkgs.runtimeShell} -e
 
-                      echo "MySQL daemon not yet started. Waiting for 1 second..."
-                      count=$((count++))
-                      sleep 1
-                  done
-                ''}
+                  ${optionalString (!hasNotify) ''
+                    # Wait until the MySQL server is available for use
+                    count=0
+                    while [ ! -e /run/mysqld/mysqld.sock ]
+                    do
+                        if [ $count -eq 30 ]
+                        then
+                            echo "Tried 30 times, giving up..."
+                            exit 1
+                        fi
 
-                if [ -f ${cfg.dataDir}/mysql_init ]
-                then
-                    ${concatMapStrings (database: ''
-                      # Create initial databases
-                      if ! test -e "${cfg.dataDir}/${database.name}"; then
-                          echo "Creating initial database: ${database.name}"
-                          ( echo 'create database `${database.name}`;'
+                        echo "MySQL daemon not yet started. Waiting for 1 second..."
+                        count=$((count++))
+                        sleep 1
+                    done
+                  ''}
 
-                            ${optionalString (database.schema != null) ''
-                            echo 'use `${database.name}`;'
+                  if [ -f ${cfg.dataDir}/mysql_init ]
+                  then
+                      ${concatMapStrings (database: ''
+                        # Create initial databases
+                        if ! test -e "${cfg.dataDir}/${database.name}"; then
+                            echo "Creating initial database: ${database.name}"
+                            ( echo 'create database `${database.name}`;'
 
-                            # TODO: this silently falls through if database.schema does not exist,
-                            # we should catch this somehow and exit, but can't do it here because we're in a subshell.
-                            if [ -f "${database.schema}" ]
-                            then
-                                cat ${database.schema}
-                            elif [ -d "${database.schema}" ]
-                            then
-                                cat ${database.schema}/mysql-databases/*.sql
-                            fi
-                            ''}
+                              ${optionalString (database.schema != null) ''
+                              echo 'use `${database.name}`;'
+
+                              # TODO: this silently falls through if database.schema does not exist,
+                              # we should catch this somehow and exit, but can't do it here because we're in a subshell.
+                              if [ -f "${database.schema}" ]
+                              then
+                                  cat ${database.schema}
+                              elif [ -d "${database.schema}" ]
+                              then
+                                  cat ${database.schema}/mysql-databases/*.sql
+                              fi
+                              ''}
+                            ) | ${mysql}/bin/mysql -u root -N
+                        fi
+                      '') cfg.initialDatabases}
+
+                      ${optionalString (cfg.replication.role == "master")
+                        ''
+                          # Set up the replication master
+
+                          ( echo "use mysql;"
+                            echo "CREATE USER '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}' IDENTIFIED WITH mysql_native_password;"
+                            echo "SET PASSWORD FOR '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}' = PASSWORD('${cfg.replication.masterPassword}');"
+                            echo "GRANT REPLICATION SLAVE ON *.* TO '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}';"
                           ) | ${mysql}/bin/mysql -u root -N
-                      fi
-                    '') cfg.initialDatabases}
+                        ''}
 
-                    ${optionalString (cfg.replication.role == "master")
-                      ''
-                        # Set up the replication master
+                      ${optionalString (cfg.replication.role == "slave")
+                        ''
+                          # Set up the replication slave
 
-                        ( echo "use mysql;"
-                          echo "CREATE USER '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}' IDENTIFIED WITH mysql_native_password;"
-                          echo "SET PASSWORD FOR '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}' = PASSWORD('${cfg.replication.masterPassword}');"
-                          echo "GRANT REPLICATION SLAVE ON *.* TO '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}';"
-                        ) | ${mysql}/bin/mysql -u root -N
-                      ''}
+                          ( echo "stop slave;"
+                            echo "change master to master_host='${cfg.replication.masterHost}', master_user='${cfg.replication.masterUser}', master_password='${cfg.replication.masterPassword}';"
+                            echo "start slave;"
+                          ) | ${mysql}/bin/mysql -u root -N
+                        ''}
 
-                    ${optionalString (cfg.replication.role == "slave")
-                      ''
-                        # Set up the replication slave
+                      ${optionalString (cfg.initialScript != null)
+                        ''
+                          # Execute initial script
+                          # using toString to avoid copying the file to nix store if given as path instead of string,
+                          # as it might contain credentials
+                          cat ${toString cfg.initialScript} | ${mysql}/bin/mysql -u root -N
+                        ''}
 
-                        ( echo "stop slave;"
-                          echo "change master to master_host='${cfg.replication.masterHost}', master_user='${cfg.replication.masterUser}', master_password='${cfg.replication.masterPassword}';"
-                          echo "start slave;"
-                        ) | ${mysql}/bin/mysql -u root -N
-                      ''}
-
-                    ${optionalString (cfg.initialScript != null)
-                      ''
-                        # Execute initial script
-                        # using toString to avoid copying the file to nix store if given as path instead of string,
-                        # as it might contain credentials
-                        cat ${toString cfg.initialScript} | ${mysql}/bin/mysql -u root -N
-                      ''}
-
-                    rm ${cfg.dataDir}/mysql_init
-                fi
-
-                ${optionalString (cfg.ensureDatabases != []) ''
-                  (
-                  ${concatMapStrings (database: ''
-                    echo "CREATE DATABASE IF NOT EXISTS \`${database}\`;"
-                  '') cfg.ensureDatabases}
-                  ) | ${mysql}/bin/mysql -u root -N
-                ''}
-
-                ${concatMapStrings (user:
-                  ''
-                    ( echo "CREATE USER IF NOT EXISTS '${user.name}'@'localhost' IDENTIFIED WITH ${if isMariaDB then "unix_socket" else "auth_socket"};"
-                      ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
-                        echo "GRANT ${permission} ON ${database} TO '${user.name}'@'localhost';"
-                      '') user.ensurePermissions)}
-                    ) | ${mysql}/bin/mysql -u root -N
-                  '') cfg.ensureUsers}
-              '';
-            in
-              # ensureDatbases & ensureUsers depends on this script being run as root
-              # when the user has secured their mysql install
-              "+${setupScript}";
-          # User and group
-          User = cfg.user;
-          Group = "mysql";
-          # Runtime directory and mode
-          RuntimeDirectory = "mysqld";
-          RuntimeDirectoryMode = "0755";
-          # Access write directories
-          ReadWritePaths = [ cfg.dataDir ];
-          # Capabilities
-          CapabilityBoundingSet = "";
-          # Security
-          NoNewPrivileges = true;
-          # Sandboxing
-          ProtectSystem = "strict";
-          ProtectHome = true;
-          PrivateTmp = true;
-          PrivateDevices = true;
-          ProtectHostname = true;
-          ProtectKernelTunables = true;
-          ProtectKernelModules = true;
-          ProtectControlGroups = true;
-          RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          PrivateMounts = true;
-          # System Call Filtering
-          SystemCallArchitectures = "native";
-        };
+                      rm ${cfg.dataDir}/mysql_init
+                  fi
+                '';
+              in
+                # ensureDatbases & ensureUsers depends on this script being run as root
+                # when the user has secured their mysql install
+                "+${setupScript}";
+          }
+        ];
       };
+
+    systemd.services.mysql-init = {
+      description = "MySQL database and user provisioning";
+
+      after = [ "mysql.service" ];
+      wantedBy = [ "mysql.target" ];
+      partOf = [ "mysql.target" ];
+
+      # ensureDatbases & ensureUsers depends on this script being run as root
+      # when the user has secured their mysql install
+      script = ''
+        ${optionalString (cfg.ensureDatabases != []) ''
+          (
+          ${concatMapStrings (database: ''
+            echo "CREATE DATABASE IF NOT EXISTS \`${database}\`;"
+          '') cfg.ensureDatabases}
+          ) | ${mysql}/bin/mysql -u root -N
+        ''}
+
+        ${concatMapStrings (user:
+          ''
+            ( echo "CREATE USER IF NOT EXISTS '${user.name}'@'localhost' IDENTIFIED WITH ${if isMariaDB then "unix_socket" else "auth_socket"};"
+              ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
+                echo "GRANT ${permission} ON ${database} TO '${user.name}'@'localhost';"
+              '') user.ensurePermissions)}
+            ) | ${mysql}/bin/mysql -u root -N
+          '') cfg.ensureUsers}
+      '';
+
+      serviceConfig = mkMerge [
+        commonServiceConfig
+        {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        }
+      ];
+    };
 
   };
 

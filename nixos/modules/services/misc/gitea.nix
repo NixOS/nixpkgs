@@ -372,7 +372,7 @@ in
 
     systemd.services.gitea = {
       description = "gitea";
-      after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
+      after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.target";
       wantedBy = [ "multi-user.target" ];
       path = [ gitea pkgs.gitAndTools.git ];
 

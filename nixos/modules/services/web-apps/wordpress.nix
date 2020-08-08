@@ -342,7 +342,7 @@ in
         nameValuePair "wordpress-init-${hostName}" {
           wantedBy = [ "multi-user.target" ];
           before = [ "phpfpm-wordpress-${hostName}.service" ];
-          after = optional cfg.database.createLocally "mysql.service";
+          after = optional cfg.database.createLocally "mysql.target";
           script = secretsScript (stateDir hostName);
 
           serviceConfig = {
