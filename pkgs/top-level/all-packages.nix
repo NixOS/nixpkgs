@@ -1906,6 +1906,8 @@ in
 
   fuzzel = callPackage ../applications/misc/fuzzel { };
 
+  qt-video-wlr = libsForQt5.callPackage ../applications/misc/qt-video-wlr { };
+
   fwup = callPackage ../tools/misc/fwup { };
 
   fx_cast_bridge = callPackage ../tools/misc/fx_cast { };
