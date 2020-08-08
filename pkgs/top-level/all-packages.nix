@@ -9469,8 +9469,7 @@ in
   sagittarius-scheme = callPackage ../development/compilers/sagittarius-scheme {};
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
-  sbcl_2_0_2 = callPackage ../development/compilers/sbcl {};
-  sbcl = callPackage ../development/compilers/sbcl/2.0.0.nix {};
+  sbcl = callPackage ../development/compilers/sbcl {};
 
   scala_2_10 = callPackage ../development/compilers/scala/2.10.nix { };
   scala_2_11 = callPackage ../development/compilers/scala/2.11.nix { };
