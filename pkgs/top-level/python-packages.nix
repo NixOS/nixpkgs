@@ -1705,6 +1705,8 @@ in {
 
   unifi = callPackage ../development/python-modules/unifi { };
 
+  uvcclient = callPackage ../development/python-modules/uvcclient { };
+
   uvloop = callPackage ../development/python-modules/uvloop {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
   };
