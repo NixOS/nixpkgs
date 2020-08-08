@@ -536,6 +536,10 @@ in
 
   _1password = callPackage ../applications/misc/1password { };
 
+  _1password-gui = callPackage ../tools/security/1password-gui {
+    electron = electron_9;
+  };
+
   _6tunnel = callPackage ../tools/networking/6tunnel { };
 
   _9pfs = callPackage ../tools/filesystems/9pfs { };
