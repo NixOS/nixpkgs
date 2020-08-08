@@ -2430,6 +2430,12 @@
     githubId = 1753498;
     name = "Dejan Lukan";
   };
+  elliottvillars = {
+    email = "elliottvillars@gmail.com";
+    github = "elliottvillars";
+    githubId = 48104179;
+    name = "Elliott Villars";
+  };
   eliasp = {
     email = "mail@eliasprobst.eu";
     github = "eliasp";
