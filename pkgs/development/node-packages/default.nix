@@ -60,6 +60,13 @@ let
       nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package self.pulp ];
     });
 
+    ijavascript = super.ijavascript.override (oldAttrs: {
+      preRebuild = ''
+        export NPM_CONFIG_ZMQ_EXTERNAL=true
+      '';
+      buildInputs = oldAttrs.buildInputs ++ [ self.node-gyp-build pkgs.zeromq ];
+    });
+
     node-inspector = super.node-inspector.override {
       buildInputs = [ self.node-pre-gyp ];
       meta.broken = since "10";
