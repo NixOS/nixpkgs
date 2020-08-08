@@ -15,7 +15,7 @@
 
 buildDunePackage rec {
   pname = "torch";
-  version = "0.9b";
+  version = "0.10";
 
   minimumOCamlVersion = "4.07";
 
@@ -23,7 +23,7 @@ buildDunePackage rec {
     owner = "LaurentMazare";
     repo   = "ocaml-${pname}";
     rev    = version;
-    sha256 = "1xn8zfs3viz80agckcpl9a4vjbq6j5g280i95jyy5s0zbcnajpnm";
+    sha256 = "1rqrv6hbical8chk0bl2nf60q6m4b5d1gab9fc5q03vkz2987f9b";
   };
 
   propagatedBuildInputs = [
