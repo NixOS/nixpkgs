@@ -14,8 +14,8 @@ buildPythonPackage rec {
 		homepage = https://kevinpt.github.io/hdlparse/;
 		description = "Hdlparse is a simple package implementing a rudimentary parser for VHDL and Verilog.";
 		license = licenses.mit;
-		maintainers = with maintainers; [
-			Necryotiks
+		maintainers = with maintainers; [	
+			elliottvillars
 		];
 	};
 }
