@@ -20969,6 +20969,8 @@ in
 
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
 
+  kmetronome = libsForQt5.callPackage ../applications/audio/kmetronome { };
+
   kmplayer = libsForQt5.callPackage ../applications/video/kmplayer { };
 
   kmymoney = libsForQt5.callPackage ../applications/office/kmymoney {
