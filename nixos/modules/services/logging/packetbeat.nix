@@ -49,7 +49,7 @@ in
         default = /var/lib/packetbeat;
         description = ''
           Directory to store packetbeat's own logs and other data.
-          This directory will be created automatically using systemd's 
+          This directory will be created automatically using systemd's
           StateDirectory mechanism.
         '';
       };
