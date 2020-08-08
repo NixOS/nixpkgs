@@ -861,7 +861,7 @@
     "uscis" = ps: with ps; [ ]; # missing inputs: uscisstatus
     "usgs_earthquakes_feed" = ps: with ps; [ ]; # missing inputs: geojson_client
     "utility_meter" = ps: with ps; [ ];
-    "uvc" = ps: with ps; [ ]; # missing inputs: uvcclient
+    "uvc" = ps: with ps; [ uvcclient];
     "vacuum" = ps: with ps; [ ];
     "vallox" = ps: with ps; [ ]; # missing inputs: vallox-websocket-api
     "vasttrafik" = ps: with ps; [ ]; # missing inputs: vtjp
