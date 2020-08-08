@@ -9,7 +9,7 @@
 , oceSupport ? false, opencascade
 , withOCCT ? true, opencascade-occt
 , ngspiceSupport ? true, libngspice
-, scriptingSupport ? false, swig, python3
+, scriptingSupport ? true, swig, python3
 , debug ? false, valgrind
 , with3d ? true
 , withI18n ? true
