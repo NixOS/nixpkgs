@@ -344,13 +344,4 @@ with super;
       sourceRoot=./readline-2.6
     '';
   });
-
-  pulseaudio = super.pulseaudio.override({
-    buildInputs = [
-      pkgs.libpulseaudio
-    ];
-    nativeBuildInputs = [
-      pkgs.pulseaudio pkgs.pkgconfig
-    ];
-  });
 }
