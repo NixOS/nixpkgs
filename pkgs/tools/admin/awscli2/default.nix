@@ -8,12 +8,12 @@ let
   py = python3.override {
     packageOverrides = self: super: {
       botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.0dev30";
+        version = "2.0.0dev40";
         src = fetchFromGitHub {
           owner = "boto";
           repo = "botocore";
-          rev = "7967b9c5fb027c9962e0876f0110425da88b88f2";
-          sha256 = "18yn5l1f4nr1pih392qkyidnj7z10bd2cv7yx4qrl7asxxraspr9";
+          rev = "6b3f96c5e985597053850f0c2761d503d4c18bfe";
+          sha256 = "1ffx86m3b592kj331800qbcz5f532z8kzf1wmd04i4bfiqvqn4h8";
         };
       });
       prompt_toolkit = super.prompt_toolkit.overridePythonAttrs (oldAttrs: rec {
@@ -29,19 +29,20 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.0.26"; # N.B: if you change this, change botocore to a matching version too
+  version = "2.0.36"; # N.B: if you change this, change botocore to a matching version too
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    hash = "sha256:1ysmr17gbcj6vs9ywzwgvd9caxwxgg9bnfvvkyks4fii34ji5qq8";
+    hash = "sha256:05c9lss7jg7bwaij1nxwg50grah68zamcixy8jiw3hpc1vdighql";
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace ",<0.16" ""
+    substituteInPlace setup.py --replace "cryptography>=2.8.0,<=2.9.0" "cryptography>=2.8.0"
+    substituteInPlace setup.py --replace "docutils>=0.10,<0.16" "docutils>=0.10"
+    substituteInPlace setup.py --replace "ruamel.yaml>=0.15.0,<0.16.0" "ruamel.yaml>=0.15.0"
     substituteInPlace setup.py --replace "wcwidth<0.2.0" "wcwidth"
-    substituteInPlace setup.py --replace "cryptography>=2.8.0,<=2.9.0" "cryptography>=2.8.0,<2.10"
   '';
 
   # No tests included
@@ -52,6 +53,7 @@ with py.pkgs; buildPythonApplication rec {
     botocore
     colorama
     cryptography
+    distro
     docutils
     groff
     less
