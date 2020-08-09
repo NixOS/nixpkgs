@@ -25307,6 +25307,8 @@ in
 
   amd-blis = callPackage ../development/libraries/science/math/amd-blis { };
 
+  amd-libflame = callPackage ../development/libraries/science/math/amd-libflame { };
+
   arpack = callPackage ../development/libraries/science/math/arpack { };
 
   blas = callPackage ../build-support/alternatives/blas { };
