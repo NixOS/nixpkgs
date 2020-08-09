@@ -926,6 +926,7 @@
   ./services/x11/gdk-pixbuf.nix
   ./services/x11/imwheel.nix
   ./services/x11/redshift.nix
+  ./services/x11/urserver.nix
   ./services/x11/urxvtd.nix
   ./services/x11/window-managers/awesome.nix
   ./services/x11/window-managers/default.nix
