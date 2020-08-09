@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "nomad";
-  version = "0.11.3";
+  version = "0.12.1";
   rev = "v${version}";
 
   goPackagePath = "github.com/hashicorp/nomad";
@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "hashicorp";
     repo = pname;
     inherit rev;
-    sha256 = "1p7g7x2gl77h1w7aip3xji3s530fj46gspargz4j3i6h4wkyvafb";
+    sha256 = "05q8k2kpbknjwxw893v7p50hgrdljfgx80h8bhnny8q7vrshn51s";
   };
 
   # ui:
@@ -21,15 +21,17 @@ buildGoPackage rec {
   # nonvidia:
   #  We disable Nvidia GPU scheduling on Linux, as it doesn't work there:
   #  Ref: https://github.com/hashicorp/nomad/issues/5535
-  preBuild = let
-    tags = ["ui"]
-      ++ stdenv.lib.optional stdenv.isLinux "nonvidia";
-    tagsString = stdenv.lib.concatStringsSep " " tags;
-  in ''
-    export buildFlagsArray=(
-      -tags="${tagsString}"
-    )
- '';
+  preBuild =
+    let
+      tags = [ "ui" ]
+        ++ stdenv.lib.optional stdenv.isLinux "nonvidia";
+      tagsString = stdenv.lib.concatStringsSep " " tags;
+    in
+    ''
+      export buildFlagsArray=(
+        -tags="${tagsString}"
+      )
+    '';
 
   meta = with stdenv.lib; {
     homepage = "https://www.nomadproject.io/";
