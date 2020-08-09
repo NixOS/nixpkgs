@@ -21817,6 +21817,9 @@ in
 
   thunderbird-78 = callPackage ../applications/networking/mailreaders/thunderbird {
     inherit (rustPackages_1_44) cargo rustc;
+    rust-cbindgen = rust-cbindgen_latest;
+    nodejs = nodejs-13_x;
+    nss = nss_latest;
     libpng = libpng_apng;
     icu = icu67;
     libvpx = libvpx_1_8;
