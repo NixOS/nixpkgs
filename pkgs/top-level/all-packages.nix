@@ -21815,7 +21815,7 @@ in
 
   thonny = callPackage ../applications/editors/thonny { };
 
-  thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
+  thunderbird = callPackage ../applications/networking/mailreaders/thunderbird/68.nix {
     inherit (gnome2) libIDL;
     libpng = libpng_apng;
     gtk3Support = true;
@@ -21823,7 +21823,7 @@ in
 
   thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
 
-  thunderbird-bin = callPackage ../applications/networking/mailreaders/thunderbird-bin {
+  thunderbird-bin = callPackage ../applications/networking/mailreaders/thunderbird-bin/68.nix {
     gconf = pkgs.gnome2.GConf;
     inherit (pkgs.gnome2) libgnome libgnomeui;
   };

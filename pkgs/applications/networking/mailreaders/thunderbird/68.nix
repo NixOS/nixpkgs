@@ -149,7 +149,7 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    ./no-buildconfig.patch
+    ./no-buildconfig-68.patch
   ];
 
   postPatch = ''

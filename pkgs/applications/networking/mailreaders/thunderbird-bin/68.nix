@@ -48,7 +48,7 @@
 }:
 
 # imports `version` and `sources`
-with (import ./release_sources.nix);
+with (import ./68_sources.nix);
 
 let
   arch = if stdenv.hostPlatform.system == "i686-linux"
