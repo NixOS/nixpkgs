@@ -1,6 +1,7 @@
 { stdenv
 , makeWrapper
 , fetchFromGitHub
+, nixosTests
 , gradle_5
 , perl
 , jre
@@ -65,6 +66,10 @@ in stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${libpulseaudio}/lib \
       --add-flags "-jar $out/share/shattered-pixel-dungeon.jar"
   '';
+
+  passthru.tests = {
+    shattered-pixel-dungeon-starts = nixosTests.shattered-pixel-dungeon;
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://shatteredpixel.com/";
