@@ -83,6 +83,12 @@ in
         description = "User account under which MySQL runs";
       };
 
+      group = mkOption {
+        type = types.str;
+        default = "mysql";
+        description = "Group under which MySQL runs.";
+      };
+
       dataDir = mkOption {
         type = types.path;
         example = "/var/lib/mysql";
@@ -343,13 +349,17 @@ in
       })
     ];
 
-    users.users.mysql = {
-      description = "MySQL server user";
-      group = "mysql";
-      uid = config.ids.uids.mysql;
+    users.users = optionalAttrs (cfg.user == "mysql") {
+      mysql = {
+        description = "MySQL server user";
+        group = cfg.group;
+        uid = config.ids.uids.mysql;
+      };
     };
 
-    users.groups.mysql.gid = config.ids.gids.mysql;
+    users.groups = optionalAttrs (cfg.group == "mysql") {
+      mysql.gid = config.ids.gids.mysql;
+    };
 
     environment.systemPackages = [ cfg.package ];
 
@@ -401,7 +411,7 @@ in
           Restart = "on-abort";
           RestartSec = "5s";
           User = cfg.user;
-          Group = "mysql";
+          Group = cfg.group;
           RuntimeDirectory = "mysqld";
           RuntimeDirectoryMode = "0755";
           # Access write directories
