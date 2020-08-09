@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "5.7.0";
+  version = "5.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03jykdi3dgf1cdal9bv4fq9zjvzj9l9bs99gi5ar81sdl5nc2pk8";
+    sha256 = "1svv985vmqsls35kmvp3vhh26nsgz229324s9k29awf6qgqhm6ch";
   };
 
   # arch doesn't report frequency is the same way
