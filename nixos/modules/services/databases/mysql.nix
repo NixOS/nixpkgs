@@ -44,7 +44,7 @@ in
 
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "mysql" "pidDir" ] "Don't wait for pidfiles, describe dependencies through systemd")
+    (mkRemovedOptionModule [ "services" "mysql" "pidDir" ] "Don't wait for pidfiles, describe dependencies through systemd.")
     (mkRemovedOptionModule [ "services" "mysql" "rootPassword" ] "Use socket authentication or set the password outside of the nix store.")
   ];
 
@@ -59,40 +59,50 @@ in
       package = mkOption {
         type = types.package;
         example = literalExample "pkgs.mysql";
-        description = "
+        description = ''
           Which MySQL derivation to use. MariaDB packages are supported too.
-        ";
+        '';
       };
 
       bind = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = literalExample "0.0.0.0";
-        description = "Address to bind to. The default is to bind to all addresses";
+        description = ''
+          Address to bind to. The default is to bind to all addresses.
+        '';
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 3306;
-        description = "Port of MySQL";
+        description = ''
+          Port of MySQL.
+        '';
       };
 
       user = mkOption {
         type = types.str;
         default = "mysql";
-        description = "User account under which MySQL runs";
+        description = ''
+          User account under which MySQL runs.
+        '';
       };
 
       group = mkOption {
         type = types.str;
         default = "mysql";
-        description = "Group under which MySQL runs.";
+        description = ''
+          Group under which MySQL runs.
+        '';
       };
 
       dataDir = mkOption {
         type = types.path;
         example = "/var/lib/mysql";
-        description = "Location where MySQL stores its table files";
+        description = ''
+          Location where MySQL stores its table files.
+        '';
       };
 
       configFile = mkOption {
@@ -199,7 +209,9 @@ in
       initialScript = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = "A file containing SQL statements to be executed on the first startup. Can be used for granting certain permissions on the database";
+        description = ''
+          A file containing SQL statements to be executed on the first startup. Can be used for granting certain permissions on the database.
+        '';
       };
 
       ensureDatabases = mkOption {
@@ -281,39 +293,53 @@ in
         role = mkOption {
           type = types.enum [ "master" "slave" "none" ];
           default = "none";
-          description = "Role of the MySQL server instance.";
+          description = ''
+            Role of the MySQL server instance.
+          '';
         };
 
         serverId = mkOption {
           type = types.int;
           default = 1;
-          description = "Id of the MySQL server instance. This number must be unique for each instance";
+          description = ''
+            Id of the MySQL server instance. This number must be unique for each instance.
+          '';
         };
 
         masterHost = mkOption {
           type = types.str;
-          description = "Hostname of the MySQL master server";
+          description = ''
+            Hostname of the MySQL master server.
+          '';
         };
 
         slaveHost = mkOption {
           type = types.str;
-          description = "Hostname of the MySQL slave server";
+          description = ''
+            Hostname of the MySQL slave server.
+          '';
         };
 
         masterUser = mkOption {
           type = types.str;
-          description = "Username of the MySQL replication user";
+          description = ''
+            Username of the MySQL replication user.
+          '';
         };
 
         masterPassword = mkOption {
           type = types.str;
-          description = "Password of the MySQL replication user";
+          description = ''
+            Password of the MySQL replication user.
+          '';
         };
 
         masterPort = mkOption {
-          type = types.int;
+          type = types.port;
           default = 3306;
-          description = "Port number on which the MySQL master server runs";
+          description = ''
+            Port number on which the MySQL master server runs.
+          '';
         };
       };
     };
@@ -384,7 +410,7 @@ in
 
       restartTriggers = [ cfg.configFile ];
 
-      unitConfig.RequiresMountsFor = "${cfg.dataDir}";
+      unitConfig.RequiresMountsFor = cfg.dataDir;
 
       path = [
         # Needed for the mysql_install_db command in the preStart script
