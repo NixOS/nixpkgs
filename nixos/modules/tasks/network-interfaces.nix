@@ -468,7 +468,7 @@ in
     };
 
     networking.search = mkOption {
-      default = [];
+      default = lib.optional (cfg.domain != null) cfg.domain;
       example = [ "example.com" "local.domain" ];
       type = types.listOf types.str;
       description = ''
