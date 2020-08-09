@@ -536,6 +536,10 @@ in
 
   _1password = callPackage ../applications/misc/1password { };
 
+  _1password-gui = callPackage ../tools/security/1password-gui {
+    electron = electron_9;
+  };
+
   _6tunnel = callPackage ../tools/networking/6tunnel { };
 
   _9pfs = callPackage ../tools/filesystems/9pfs { };
@@ -4383,6 +4387,8 @@ in
     packages = config.ihaskell.packages or (self: []);
   };
 
+  iruby = callPackage ../applications/editors/jupyter-kernels/iruby { };
+
   imapproxy = callPackage ../tools/networking/imapproxy {
     openssl = openssl_1_0_2;
   };
@@ -5134,6 +5140,8 @@ in
   logrotate = callPackage ../tools/system/logrotate { };
 
   logstalgia = callPackage ../tools/graphics/logstalgia {};
+
+  lokalise2-cli = callPackage ../tools/misc/lokalise2-cli { };
 
   loki = callPackage ../development/libraries/loki { };
 
@@ -25759,6 +25767,7 @@ in
 
   caffe = callPackage ../applications/science/math/caffe ({
     opencv3 = opencv3WithoutCuda; # Used only for image loading.
+    blas = openblas;
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
   } // (config.caffe or {}));
 
