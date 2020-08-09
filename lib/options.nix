@@ -69,6 +69,16 @@ rec {
     type = lib.types.bool;
   };
 
+  /* Like mkEnableOption but defaulting to true. */
+  mkEnabledOption =
+    # Name for the created option
+    name: mkOption {
+    default = true;
+    example = false;
+    description = "Whether to enable ${name}.";
+    type = lib.types.bool;
+  };
+
   /* This option accepts anything, but it does not produce any result.
 
      This is useful for sharing a module across different module sets
