@@ -77,6 +77,9 @@ end_of_line = unset
 insert_final_newline = unset
 trim_trailing_whitespace = unset
 
+[pkgs/build-support/upstream-updater/**]
+trim_trailing_whitespace = unset
+
 [pkgs/development/compilers/elm/registry.dat]
 end_of_line = unset
 insert_final_newline = unset
