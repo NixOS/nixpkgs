@@ -12,6 +12,7 @@ jobs:
         fetch-depth: 0
     - uses: technote-space/get-diff-action@v2.0.3
     - name: Fetch editorconfig-checker
+      if: env.GIT_DIFF
       env:
         VERSION: "2.1.0"
         OS: "linux"
@@ -22,6 +23,7 @@ jobs:
         tar xzf ec-$OS-$ARCH.tar.gz && \
         mv ./bin/ec-$OS-$ARCH ./bin/editorconfig-checker
     - name: Checking EditorConfig
+      if: env.GIT_DIFF
       run: |
         ./bin/editorconfig-checker -disable-indentation \
         ${{ env.GIT_DIFF }}
