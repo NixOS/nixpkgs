@@ -4,8 +4,6 @@
 
 let inherit (stdenv.hostPlatform) system;
 
-    throwSystem = throw "Unsupported system: ${system}";
-
     systemSpecific = {
       x86_64-darwin = rec {
         systemTag =  "nix-darwin";
@@ -14,14 +12,13 @@ let inherit (stdenv.hostPlatform) system;
         fontFile = "Apple%20Color%20Emoji.ttc";
         name = "joypixels-apple-color-emoji.ttc";
       };
-      x86_64-linux = rec {
+    }.${system} or rec {
         systemTag = "nix-os";
         capitalized = "NixOS";
         ext = "ttf";
         fontFile = "joypixels-android.ttf";
         name = fontFile;
       };
-    }.${system} or throwSystem;
 
     joypixels-free-license = with systemSpecific; {
       spdxId = "LicenseRef-JoyPixels-Free-6.0";
@@ -59,8 +56,7 @@ stdenv.mkDerivation rec {
     url = "https://cdn.joypixels.com/distributions/${systemTag}/font/${version}/${fontFile}";
     sha256 = {
       x86_64-darwin = "043980g0dlp8vd4qkbx6298fwz8ns0iwbxm0f8czd9s7n2xm4npq";
-      x86_64-linux = "1vxqsqs93g4jyp01r47lrpcm0fmib2n1vysx32ksmfxmprimb75s";
-    }.${system} or throwSystem;
+    }.${system} or "1vxqsqs93g4jyp01r47lrpcm0fmib2n1vysx32ksmfxmprimb75s";
   };
 
   dontUnpack = true;
