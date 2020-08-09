@@ -25428,6 +25428,8 @@ in
 
   symmetrica = callPackage ../applications/science/math/symmetrica {};
 
+  symbolator = callPackage ../tools/misc/symbolator { };
+
   sympow = callPackage ../development/libraries/science/math/sympow { };
 
   ipopt = callPackage ../development/libraries/science/math/ipopt { };
