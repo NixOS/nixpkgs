@@ -1,7 +1,7 @@
 { stdenv, fetchurl, substituteAll, pkgconfig, glib, itstool, libxml2, xorg
 , accountsservice, libX11, gnome3, systemd, autoreconfHook, dconf
 , gtk3, libcanberra-gtk3, pam, libtool, gobject-introspection, plymouth
-, librsvg, coreutils, xwayland, nixos-icons, fetchpatch }:
+, librsvg, coreutils, xwayland, nixos-icons, fetchpatch, keyutils }:
 
 let
 
@@ -19,11 +19,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gdm";
-  version = "3.34.1";
+  version = "3.36.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gdm/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1lyqvcwxhwxklbxn4xjswjzr6fhjix6h28mi9ypn34wdm9bzcpg8";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "10byz8jwqv1qpvjj8wd36vfb8pbh9g7pchsc1gbwplf0rchbdyrv";
   };
 
   # Only needed to make it build
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     glib accountsservice systemd
     gobject-introspection libX11 gtk3
     libcanberra-gtk3 pam plymouth librsvg
+    keyutils
   ];
 
   enableParallelBuilding = true;
