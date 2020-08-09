@@ -23,11 +23,9 @@ closure=
 for module in $rootModules; do
     echo "root module: $module"
     deps=$(modprobe --config no-config -d $kernel --set-version "$version" --show-depends "$module" \
-        | sed 's/^insmod //') \
+        | sed 's/^insmod //; /^builtin/d') \
         || if test -z "$allowMissing"; then exit 1; fi
-    if [[ "$deps" != builtin* ]]; then
-        closure="$closure $deps"
-    fi
+    closure="$closure $deps"
 done
 
 echo "closure:"
