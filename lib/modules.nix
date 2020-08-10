@@ -200,12 +200,16 @@ rec {
   /* Massage a module into canonical form, that is, a set consisting
      of ‘options’, ‘config’ and ‘imports’ attributes. */
   unifyModuleSyntax = file: key: m:
-    let addMeta = config: if m ? meta
-      then mkMerge [ config { meta = m.meta; } ]
-      else config;
+    let
+      addMeta = config: if m ? meta
+        then mkMerge [ config { meta = m.meta; } ]
+        else config;
+      addFreeformType = config: if m ? freeformType
+        then mkMerge [ config { _module.freeformType = m.freeformType; } ]
+        else config;
     in
     if m ? config || m ? options then
-      let badAttrs = removeAttrs m ["_file" "key" "disabledModules" "imports" "options" "config" "meta"]; in
+      let badAttrs = removeAttrs m ["_file" "key" "disabledModules" "imports" "options" "config" "meta" "freeformType"]; in
       if badAttrs != {} then
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. This is caused by introducing a top-level `config' or `options' attribute. Add configuration attributes immediately on the top level instead, or move all of them (namely: ${toString (attrNames badAttrs)}) into the explicit `config' attribute."
       else
@@ -214,7 +218,7 @@ rec {
           disabledModules = m.disabledModules or [];
           imports = m.imports or [];
           options = m.options or {};
-          config = addMeta (m.config or {});
+          config = addFreeformType (addMeta (m.config or {}));
         }
     else
       { _file = m._file or file;
@@ -222,7 +226,7 @@ rec {
         disabledModules = m.disabledModules or [];
         imports = m.require or [] ++ m.imports or [];
         options = {};
-        config = addMeta (removeAttrs m ["_file" "key" "disabledModules" "require" "imports"]);
+        config = addFreeformType (addMeta (removeAttrs m ["_file" "key" "disabledModules" "require" "imports" "freeformType"]));
       };
 
   applyIfFunction = key: f: args@{ config, options, lib, ... }: if isFunction f then
