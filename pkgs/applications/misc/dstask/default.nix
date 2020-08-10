@@ -18,6 +18,8 @@ buildGoModule rec {
   # and <https://github.com/NixOS/nixpkgs/blob/d4226e3a4b5fcf988027147164e86665d382bbfa/pkgs/development/go-modules/generic/default.nix#L18>
   vendorSha256 = null;
 
+  doCheck = false;
+
   # The ldflags reduce the executable size by stripping some debug stuff.
   # The other variables are set so that the output of dstask version shows the
   # git ref and the release version from github.

@@ -17,6 +17,8 @@ let
 
     vendorSha256 = "1qybym95a38az8lk8bqc53ngn08hijckajv8v2giifc4q7sb17d2";
 
+    doCheck = false;
+
     buildFlagsArray = [
       "-ldflags=-s -w -X github.com/arduino/arduino-cli/version.versionString=${version} -X github.com/arduino/arduino-cli/version.commit=unknown"
     ] ++ stdenv.lib.optionals stdenv.isLinux [ "-extldflags '-static'" ];

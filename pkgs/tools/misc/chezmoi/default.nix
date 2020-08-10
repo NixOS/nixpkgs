@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1gzg73lrx73rhb9yj6yakv95m8rz1rhjgqjl1a78c8nvaii27a9x";
 
+  doCheck = false;
+
   buildFlagsArray = [
     "-ldflags=-s -w -X main.version=${version} -X main.builtBy=nixpkgs"
   ];

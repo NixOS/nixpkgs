@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0pi661mb5vwj16wwxnyx9b0ic7gzby6qfs3y4w00agn6sn5nahx2";
 
+  doCheck = false;
+
   subPackages = [ "cmd/frpc" "cmd/frps" ];
 
   meta = with lib; {

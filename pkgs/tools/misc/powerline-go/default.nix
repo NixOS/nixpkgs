@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0dkgp9vlb76la0j439w0rb548qg5v8648zryk3rqgfhd4qywlk11";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "A Powerline like prompt for Bash, ZSH and Fish";
     license = licenses.gpl3;

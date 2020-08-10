@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0vvr167spwk7whqzdp5vd8sm0qwc5g3namm4iqw3vff2pifjgs40";
 
+  doCheck = false;
+
   subPackages = [ "cmd/swagger" ];
 
   buildFlagsArray = [ "-ldflags=-s -w -X github.com/go-swagger/go-swagger/cmd/swagger/commands.Version=${version} -X github.com/go-swagger/go-swagger/cmd/swagger/commands.Commit=${src.rev}" ];

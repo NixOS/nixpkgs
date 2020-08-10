@@ -15,6 +15,8 @@ buildGoModule rec {
 
   vendorSha256 = "06ar9ivry9b01609izjbl6hqgg0cy7aqd8n2cqpyq0g7my0l0lbj";
 
+  doCheck = false;
+
   buildFlags = [ "--tags" "release" ];
 
   meta = with stdenv.lib; {

@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0b8ggdpbyxx5n2myhchhlwmm5nndwpykp1ylnzdyw12mdskfvn9h";
 
+  doCheck = false;
+
   goPackagePath = "github.com/FiloSottile/mkcert";
   buildFlagsArray = ''
     -ldflags=

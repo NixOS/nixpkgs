@@ -14,6 +14,8 @@ buildGoModule rec {
   runVend = true;
   vendorSha256 = "1744df059bjksvih4653nnvb4kb1xvzdhypd0nnz36m1wrihqssv";
 
+  doCheck = false;
+
   subPackages = [
     "cmd/abidump"
     "cmd/abigen"

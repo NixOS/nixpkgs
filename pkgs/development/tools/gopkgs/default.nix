@@ -17,6 +17,8 @@ buildGoModule rec {
 
   vendorSha256 = "1pwsc488ldw039by8nqpni801zry7dnf0rx4hhd73xpv2w7s8n2r";
 
+  doCheck = false;
+
   meta = {
     description = "Tool to get list available Go packages.";
     homepage = "https://github.com/uudashr/gopkgs";

@@ -15,6 +15,8 @@ buildGoModule rec {
 
   vendorSha256 = "0c4g1zr0wl118g41hqri0vwvfin39yvgs214w3spw8ggjcj6bzph";
 
+  doCheck = false;
+
   buildFlagsArray = [''-ldflags=
     -X main.Version=v${version} -s -w
   ''];

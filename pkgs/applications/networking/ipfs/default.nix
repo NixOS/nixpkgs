@@ -26,6 +26,8 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   postInstall = ''
     install -D misc/systemd/ipfs.service $out/etc/systemd/system/ipfs.service
     install -D misc/systemd/ipfs-api.socket $out/etc/systemd/system/ipfs-api.socket

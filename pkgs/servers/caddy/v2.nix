@@ -15,6 +15,8 @@ buildGoModule rec {
 
   vendorSha256 = "0jzx00c2b8y7zwl73r2fh1826spcd15y39nfzr53s5lay3fvkybc";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     homepage = "https://caddyserver.com";
     description = "Fast, cross-platform HTTP/2 web server with automatic HTTPS";

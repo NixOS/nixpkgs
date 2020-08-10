@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "10na3jzvln353ygcvbhj4243yr83skw5zf3r2n8p6d7i83i86c8w";
 
+  doCheck = false;
+
   nativeBuildInputs = [ installShellFiles ];
 
   # TODO: Setting buildFlags probably isn't working properly. I've tried a few
