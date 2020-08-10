@@ -129,6 +129,9 @@ in {
     systemd.services."kresd@".serviceConfig = {
       ExecStart = "${package}/bin/kresd --noninteractive "
         + "-c ${package}/lib/knot-resolver/distro-preconfig.lua -c ${configFile}";
+      # Ensure /run/knot-resolver exists
+      RuntimeDirectory = "knot-resolver";
+      RuntimeDirectoryMode = "0770";
       # Ensure /var/lib/knot-resolver exists
       StateDirectory = "knot-resolver";
       StateDirectoryMode = "0770";
