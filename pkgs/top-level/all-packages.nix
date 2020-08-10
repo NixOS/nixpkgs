@@ -20182,6 +20182,8 @@ in
 
   moe =  callPackage ../applications/editors/moe { };
 
+  molotov = callPackage ../applications/video/molotov { };
+
   multibootusb = qt5.callPackage ../applications/misc/multibootusb {};
 
   praat = callPackage ../applications/audio/praat { };
