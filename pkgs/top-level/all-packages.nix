@@ -24345,6 +24345,8 @@ in
     };
   };
 
+  fslint = callPackage ../applications/misc/fslint {};
+
   galaxis = callPackage ../games/galaxis { };
 
   gambatte = callPackage ../games/gambatte { };
