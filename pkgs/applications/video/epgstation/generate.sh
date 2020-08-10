@@ -17,8 +17,14 @@ main() {
         > package.json
 
     # regenerate node packages to update the actual Nix package
-    cd ../../../development/node-packages \
+    pushd ../../../development/node-packages \
         && ./generate.sh
+    popd
+
+    # generate default streaming settings for EPGStation
+    pushd ../../../../nixos/modules/services/video/epgstation \
+        && cat "$(./generate)" > streaming.json
+    popd
 }
 
 jq() {
