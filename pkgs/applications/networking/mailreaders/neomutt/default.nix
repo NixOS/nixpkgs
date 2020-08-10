@@ -1,18 +1,18 @@
 { stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which, writeScript
 , ncurses, perl , cyrus_sasl, gss, gpgme, kerberos, libidn, libxml2, notmuch, openssl
 , lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, elinks, mailcap, runtimeShell, sqlite, zlib
-, glibcLocales
+, glibcLocales, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
-  version = "20200626";
+  version = "20200807";
   pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = version;
-    sha256 = "0r16fy02z61dbjdxc28yzj5i4f6r7aakh453gaqc8ilm1nsxhmnp";
+    sha256 = "0bj81bl54jx1c9fnyrplwvgvwq8l0ldqd58jjb4haw2rlzfj2a8s";
   };
 
   buildInputs = [
@@ -27,6 +27,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  patches = [
+    # fixes segfault on startup
+    (fetchpatch {
+      url = "https://github.com/neomutt/neomutt/commit/887428a38f845f9eaca80c3e05e0c2aedb137669.patch";
+      sha256 = "1yqpj0xaryxmsvj6hbfksy50i9alqxidifqf3daqgg4vypi8s9b9";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace contrib/smime_keys \
       --replace /usr/bin/openssl ${openssl}/bin/openssl
@@ -40,7 +48,7 @@ stdenv.mkDerivation rec {
 
     # allow neomutt to map attachments to their proper mime.types if specified wrongly
     # and use a far more comprehensive list than the one shipped with neomutt
-    substituteInPlace sendlib.c \
+    substituteInPlace send/sendlib.c \
       --replace /etc/mime.types ${mailcap}/etc/mime.types
   '';
 
