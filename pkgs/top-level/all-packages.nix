@@ -4776,6 +4776,8 @@ in
 
   lolcat = callPackage ../tools/misc/lolcat { };
 
+  lottieconverter = callPackage ../tools/misc/lottieconverter { };
+
   lsd = callPackage ../tools/misc/lsd { };
 
   lsdvd = callPackage ../tools/cd-dvd/lsdvd {};
@@ -14844,6 +14846,8 @@ in
   };
 
   rlog = callPackage ../development/libraries/rlog { };
+
+  rlottie = callPackage ../development/libraries/rlottie { };
 
   rocksdb = callPackage ../development/libraries/rocksdb { };
 
