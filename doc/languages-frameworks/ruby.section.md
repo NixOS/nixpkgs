@@ -6,11 +6,7 @@ date: 2019-05-23
 
 # Ruby
 
-## User Guide
-
-### Using Ruby
-
-#### Overview
+## Using Ruby
 
 Several versions of Ruby interpreters are available on Nix, as well as over 250 gems and many applications written in Ruby.
 The attribute `ruby` refers to the default Ruby interpreter, which is currently
@@ -37,7 +33,7 @@ Ruby in your environment will be able to find the gem and it can be used in your
 Ruby code (for example via `ruby` or `irb` executables) via `require "nokogiri"`
 as usual.
 
-#### Temporary Ruby environment with `nix-shell`
+### Temporary Ruby environment with `nix-shell`
 
 Rather than having a single Ruby environment shared by all Ruby
 development projects on a system, Nix allows you to create separate
@@ -64,7 +60,7 @@ Again, it's possible to launch the interpreter from the shell. The Ruby
 interpreter has the attribute `gems` which contains all Ruby gems for that
 specific interpreter.
 
-##### Load environment from `.nix` expression
+#### Load Ruby environment from `.nix` expression
 
 As explained in the Nix manual, `nix-shell` can also load an expression from a
 `.nix` file. Say we want to have Ruby 2.5, `nokogori`, and `pry`. Consider a
@@ -87,7 +83,7 @@ What's happening here?
    in the environment. Here, we select the packages `nokogiri` and `pry` from
    the package set.
 
-##### Execute command with `--run`
+#### Execute command with `--run`
 
 A convenient flag for `nix-shell` is `--run`. It executes a command in the
 `nix-shell`. We can e.g. directly open a `pry` REPL:
@@ -108,7 +104,7 @@ Or run a script using this environment:
 nix-shell -p "ruby.withPackages (ps: with ps; [ nokogiri pry ])" --run "ruby example.rb"
 ```
 
-##### Using `nix-shell` as shebang
+#### Using `nix-shell` as shebang
 
 In fact, for the last case, there is a more convenient method. You can add a
 [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) to your script
@@ -126,9 +122,9 @@ body = RestClient.get('http://example.com').body
 puts Nokogiri::HTML(body).at('h1').text
 ```
 
-### Developing with Ruby
+## Developing with Ruby
 
-#### Using an existing Gemfile
+### Using an existing Gemfile
 
 In most cases, you'll already have a `Gemfile.lock` listing all your dependencies.
 This can be used to generate a `gemset.nix` which is used to fetch the gems and
@@ -187,7 +183,7 @@ mkShell { buildInputs = [ gems (lowPrio gems.wrappedRuby) ]; }
 ```
 
 
-#### Gem-specific configurations and workarounds
+### Gem-specific configurations and workarounds
 
 In some cases, especially if the gem has native extensions, you might need to
 modify the way the gem is built.
@@ -276,7 +272,7 @@ Of course for this use-case one could also use overlays since the configuration
 for `pg` depends on the `postgresql` alias, but for demonstration purposes this
 has to suffice.
 
-#### Adding a gem to the default gemset
+### Adding a gem to the default gemset
 
 Now that you know how to get a working Ruby environment with Nix, it's time to
 go forward and start actually developing with Ruby.
@@ -297,7 +293,7 @@ To test that it works, you can then try using the gem with:
 NIX_PATH=nixpkgs=$PWD nix-shell -p "ruby.withPackages (ps: with ps; [ name-of-your-gem ])"
 ```
 
-#### Packaging applications
+### Packaging applications
 
 A common task is to add a ruby executable to nixpkgs, popular examples would be
 `chef`, `jekyll`, or `sass`. A good way to do that is to use the `bundlerApp`
@@ -334,7 +330,7 @@ bundlerApp {
 All that's left to do is to generate the corresponding `Gemfile.lock` and
 `gemset.nix` as described above in the `Using an existing Gemfile` section.
 
-##### Packaging executables that require wrapping
+#### Packaging executables that require wrapping
 
 Sometimes your app will depend on other executables at runtime, and tries to
 find it through the `PATH` environment variable.
