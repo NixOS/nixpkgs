@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
-  version = "0.7.2";
+  version = "0.8.0";
 
   disabled = pythonOlder "3.6";
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    sha256 = "11h1ca4v11pajzn1cxqhim1hfziqzj27xzakwln13g8zmiqx3csp";
+    sha256 = "0rrpwr4a82j69j5ibl2g0nw8wbpg201cfz6f234k2v6pj500x9nl";
   };
 
   propagatedBuildInputs = [
@@ -85,6 +85,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Qiskit provider for accessing the quantum devices and simulators at IBMQ";
     homepage = "https://github.com/Qiskit/qiskit-ibmq-provider";
+    changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };
