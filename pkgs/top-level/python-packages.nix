@@ -4903,6 +4903,8 @@ in {
 
   multiprocess = callPackage ../development/python-modules/multiprocess { };
 
+  multitasking = callPackage ../development/python-modules/multitasking { };
+
   munkres = callPackage ../development/python-modules/munkres { };
 
   musicbrainzngs = callPackage ../development/python-modules/musicbrainzngs { };
