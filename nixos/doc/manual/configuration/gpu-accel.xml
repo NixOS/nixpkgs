@@ -100,6 +100,35 @@ ROCR_EXT_DIR=`nix-build '&lt;nixpkgs&gt;' --no-out-link -A rocm-runtime-ext`/lib
   Image support      Yes</screen>
       </para>
     </section>
+
+    <section xml:id="sec-gpu-accel-opencl-intel">
+      <title>Intel</title>
+
+      <para>
+       <link
+         xlink:href="https://en.wikipedia.org/wiki/List_of_Intel_graphics_processing_units#Gen8">Intel
+       Gen8 and later GPUs</link> are supported by the Intel NEO OpenCL
+       runtime that is provided by the
+       <package>intel-compute-runtime</package> package. For Gen7 GPUs,
+       the deprecated Beignet runtime can be used, which is provided
+       by the <package>beignet</package> package. The proprietary Intel
+       OpenCL runtime, in the <package>intel-ocl</package> package, is
+       an alternative for Gen7 GPUs.
+      </para>
+
+      <para>
+       The <package>intel-compute-runtime</package>, <package>beignet</package>,
+       or <package>intel-ocl</package> package can be added to
+       <xref linkend="opt-hardware.opengl.extraPackages"/> to enable OpenCL
+       support. For example, for Gen8 and later GPUs, the following
+       configuration can be used:
+
+	      <programlisting><xref linkend="opt-hardware.opengl.extraPackages"/> = [
+  intel-compute-runtime
+];</programlisting>
+
+      </para>
+    </section>
   </section>
 
   <section xml:id="sec-gpu-accel-vulkan">
