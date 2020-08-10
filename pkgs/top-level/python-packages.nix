@@ -509,7 +509,9 @@ in {
 
   baselines = callPackage ../development/python-modules/baselines { };
 
-  bash_kernel = callPackage ../development/python-modules/bash_kernel { };
+  bash_kernel = callPackage ../development/python-modules/bash_kernel {
+    inherit (pkgs) bash;
+  };
 
   bashlex = callPackage ../development/python-modules/bashlex { };
 
@@ -3299,6 +3301,8 @@ in {
 
   jupyter = callPackage ../development/python-modules/jupyter { };
 
+  jupyter-c-kernel = callPackage ../development/python-modules/jupyter-c-kernel { };
+
   jupyter_console = if pythonOlder "3.5" then
        callPackage ../development/python-modules/jupyter_console/5.nix { }
      else
@@ -4480,6 +4484,10 @@ in {
   jupyterhub = callPackage ../development/python-modules/jupyterhub { };
 
   jupyterhub-ldapauthenticator = callPackage ../development/python-modules/jupyterhub-ldapauthenticator { };
+
+  jupyterhub-systemdspawner = callPackage ../development/python-modules/jupyterhub-systemdspawner {
+    inherit (pkgs) bash;
+  };
 
   kaggle = callPackage ../development/python-modules/kaggle { };
 

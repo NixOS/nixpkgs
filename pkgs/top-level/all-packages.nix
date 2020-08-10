@@ -1323,6 +1323,8 @@ in
 
   quaternion = libsForQt5.callPackage ../applications/networking/instant-messengers/quaternion { };
 
+  mirage-im = libsForQt5.callPackage ../applications/networking/instant-messengers/mirage {};
+
   tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
 
   libtensorflow-bin = callPackage ../development/libraries/science/math/tensorflow/bin.nix {
@@ -2273,6 +2275,8 @@ in
   shell-hist = callPackage ../tools/misc/shell-hist { };
 
   simg2img = callPackage ../tools/filesystems/simg2img { };
+
+  simplenes = callPackage ../misc/emulators/simplenes { };
 
   snipes = callPackage ../games/snipes { };
 
@@ -4775,6 +4779,8 @@ in
   logstash-contrib = callPackage ../tools/misc/logstash/contrib.nix { };
 
   lolcat = callPackage ../tools/misc/lolcat { };
+
+  lottieconverter = callPackage ../tools/misc/lottieconverter { };
 
   lsd = callPackage ../tools/misc/lsd { };
 
@@ -13938,7 +13944,9 @@ in
     python = python3;
   };
 
-  libxml2Python = pkgs.buildEnv { # slightly hacky
+  libxml2Python = let
+    libxml2 = python2Packages.libxml2;
+  in pkgs.buildEnv { # slightly hacky
     name = "libxml2+py-${res.libxml2.version}";
     paths = with libxml2; [ dev bin py ];
     inherit (libxml2) passthru;
@@ -14842,6 +14850,8 @@ in
   };
 
   rlog = callPackage ../development/libraries/rlog { };
+
+  rlottie = callPackage ../development/libraries/rlottie { };
 
   rocksdb = callPackage ../development/libraries/rocksdb { };
 
@@ -19999,6 +20009,8 @@ in
   gauche = callPackage ../development/interpreters/gauche { };
 
   gcal = callPackage ../applications/misc/gcal { };
+
+  gcstar = callPackage ../applications/misc/gcstar { };
 
   geany = callPackage ../applications/editors/geany { };
   geany-with-vte = callPackage ../applications/editors/geany/with-vte.nix { };
@@ -27320,6 +27332,8 @@ in
   dapper = callPackage ../development/tools/dapper { };
 
   kube3d =  callPackage ../applications/networking/cluster/kube3d {};
+
+  zfs-prune-snapshots = callPackage ../tools/backup/zfs-prune-snapshots {};
 
   zfs-replicate = python3Packages.callPackage ../tools/backup/zfs-replicate { };
 
