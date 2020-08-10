@@ -2,23 +2,41 @@
 , bignums ? null }:
 
 let params =
-  if stdenv.lib.versionAtLeast coq.coq-version "8.7" then {
-    version = "3.4.2";
-    uid = "38288";
-    sha256 = "00bgzbji0gkazwxhs4q8gz4ccqsa1y1r0m0ravr18ps2h8a8qva5";
-  } else {
+  let
+  v3_3 = {
     version = "3.3.0";
     uid = "37077";
     sha256 = "08fdcf3hbwqphglvwprvqzgkg0qbimpyhnqsgv3gac4y1ap0f903";
-  }
-; in
+  };
+  v3_4 = {
+    version = "3.4.2";
+    uid = "38288";
+    sha256 = "00bgzbji0gkazwxhs4q8gz4ccqsa1y1r0m0ravr18ps2h8a8qva5";
+  };
+  v4_0 = {
+    version = "4.0.0";
+    uid = "38339";
+    sha256 = "19sbrv7jnzyxji7irfslhr9ralc0q3gx20nymig5vqbn3vssmgpz";
+  };
+  in {
+    "8.5" = v3_3;
+    "8.6" = v3_3;
+    "8.7" = v3_4;
+    "8.8" = v4_0;
+    "8.9" = v4_0;
+    "8.10" = v4_0;
+    "8.11" = v4_0;
+    "8.12" = v4_0;
+  };
+  param = params."${coq.coq-version}";
+in
 
 stdenv.mkDerivation {
-  name = "coq${coq.coq-version}-interval-${params.version}";
+  name = "coq${coq.coq-version}-interval-${param.version}";
 
   src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/file/${params.uid}/interval-${params.version}.tar.gz";
-    inherit (params) sha256;
+    url = "https://gforge.inria.fr/frs/download.php/file/${param.uid}/interval-${param.version}.tar.gz";
+    inherit (param) sha256;
   };
 
   nativeBuildInputs = [ which ];
@@ -38,8 +56,7 @@ stdenv.mkDerivation {
   };
 
   passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" "8.8" "8.9" "8.10" "8.11" ];
+    compatibleCoqVersions = stdenv.lib.flip builtins.hasAttr params;
   };
-
 
 }
