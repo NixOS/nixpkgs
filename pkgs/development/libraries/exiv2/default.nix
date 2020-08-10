@@ -106,6 +106,10 @@ stdenv.mkDerivation rec {
       rm *
       mv .exiv2 exiv2
     )
+
+    # Tell cmake to look in the default output to find exiv2's .so and .a files
+    substituteInPlace $out/lib/cmake/exiv2/exiv2Config-release.cmake \
+          --replace "\''${_IMPORT_PREFIX}/lib/libexiv2" "$out/lib/libexiv2"
   '';
 
   enableParallelBuilding = true;
