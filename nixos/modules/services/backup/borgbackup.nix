@@ -256,7 +256,8 @@ in {
           };
 
           backupCommand = mkOption {
-            type = types.str;
+            type = with types; nullOr str;
+            default = null;
             description = ''
               Backup the stdout of this program instead of filesystem paths.
               You must set <option>paths</option> to <literal>-</literal>
