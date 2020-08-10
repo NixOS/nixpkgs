@@ -24429,7 +24429,9 @@ in
   namecoin  = callPackage ../applications/blockchains/namecoin.nix  { withGui = true; };
   namecoind = callPackage ../applications/blockchains/namecoin.nix { withGui = false; };
 
-  pivx = libsForQt514.callPackage ../applications/blockchains/pivx.nix { withGui = true; };
+  nbxplorer = callPackage ../applications/blockchains/nbxplorer { };
+
+  pivx = libsForQt5.callPackage ../applications/blockchains/pivx.nix { withGui = true; };
   pivxd = callPackage ../applications/blockchains/pivx.nix { withGui = false; };
 
   ethabi = callPackage ../applications/blockchains/ethabi.nix { };
