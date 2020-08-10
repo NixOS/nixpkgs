@@ -12,7 +12,8 @@ buildGoPackage rec {
   };
 
   goPackagePath = "github.com/exoscale/cli";
-  buildFlags = "-ldflags=-X=main.version=${version}";
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.commit=${src.rev}" ];
 
   # ensures only the cli binary is built and we don't clutter bin/ with submodules
   subPackages = [ "." ];
