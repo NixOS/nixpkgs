@@ -1,6 +1,6 @@
 { pkgs, modulesPath, ... }:
 
-let username = "azurenixosuser";
+let username = "freeswitch";
 in
 {
   imports = [
@@ -8,16 +8,21 @@ in
     "${modulesPath}/virtualisation/azure-image.nix"
   ];
 
-  ## NOTE: This is just an example of how to hard-code a user.
-  ## The normal Azure agent IS included and DOES provision a user based
-  ## on the information passed at VM creation time.
+  ## NOTE: This is just an  example of how to hard-code a
+  ##       user.
+  ##
+  ## The  normal Azure  agent  IS included  and
+  ## DOES  provision   a  user  based   on  the
+  ## information passed at VM creation time.
   users.users."${username}" = {
     isNormalUser = true;
     home = "/home/${username}";
-    description = "Azure NixOS Test User";
-    openssh.authorizedKeys.keys = [ (builtins.readFile ~/.ssh/id_ed25519.pub) ];
+    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+  # description = "Azure NixOS Test User";
+  # openssh.authorizedKeys.keys = [ (builtins.readFile ~/.ssh/id_ed25519.pub) ];
   };
-  nix.trustedUsers = [ username ];
+  # nix.trustedUsers = [ username ];
+  nix.trustedUsers = [ "@wheel" ];
 
   virtualisation.azureImage.diskSize = 2500;
 
@@ -29,6 +34,8 @@ in
   security.sudo.wheelNeedsPassword = false;
 
   environment.systemPackages = with pkgs; [
-    git file htop wget curl
+    git file htop wget curl vim freeswitch
   ];
+
+  services.freeswitch.enable = true;
 }
