@@ -77,6 +77,7 @@ let
       mkdir -p $out/lib
 
       mv build/*/images/jdk $out/lib/openjdk
+      mv build/*/support/src.zip $out/lib/src.zip
 
       # Remove some broken manpages.
       rm -rf $out/lib/openjdk/man/ja*
