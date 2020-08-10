@@ -41,26 +41,16 @@ let
         $extraInitArgs
       ${cfg.postInit}
     fi
-  '' + (
-    if (cfg.paths == [ "-" ]) then
-      ''
-        ${cfg.backupCommand} | borg create $extraArgs \
-          --compression ${cfg.compression} \
-          --exclude-from ${mkExcludeFile cfg} \
-          $extraCreateArgs \
-          "::$archiveName$archiveSuffix" \
-          -
-      ''
-    else
-      ''
-        borg create $extraArgs \
-          --compression ${cfg.compression} \
-          --exclude-from ${mkExcludeFile cfg} \
-          $extraCreateArgs \
-          "::$archiveName$archiveSuffix" \
-          ${escapeShellArgs cfg.paths}
-      ''
-    ) + optionalString cfg.appendFailedSuffix ''
+  '' + optionalString (cfg.backupCommand != null) ''
+    ${cfg.backupCommand} | \
+  '' + ''
+    borg create $extraArgs \
+      --compression ${cfg.compression} \
+      --exclude-from ${mkExcludeFile cfg} \
+      $extraCreateArgs \
+      "::$archiveName$archiveSuffix" \
+      ${escapeShellArgs cfg.paths}
+  '' + optionalString cfg.appendFailedSuffix ''
     borg rename $extraArgs \
       "::$archiveName$archiveSuffix" "$archiveName"
   '' + ''
