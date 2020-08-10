@@ -2,7 +2,10 @@
 , fetchFromGitHub
 , meson
 , ninja
-, pkgconfig
+, pkg-config
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
 , wayland
 , gtk3
 , gobject-introspection
@@ -12,6 +15,8 @@ stdenv.mkDerivation rec {
   pname = "gtk-layer-shell";
   version = "0.2.0";
 
+  outputs = [ "out" "dev" "devdoc" ];
+
   src = fetchFromGitHub {
     owner = "wmww";
     repo = "gtk-layer-shell";
@@ -20,15 +25,22 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
   ];
 
   buildInputs = [
-    wayland gtk3 gobject-introspection
+    wayland
+    gtk3
   ];
 
   mesonFlags = [
-    "-Dout=${placeholder "out"}"
+    "-Ddocs=true"
   ];
 
   meta = with stdenv.lib; {
