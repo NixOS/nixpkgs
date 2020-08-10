@@ -17,8 +17,6 @@ buildGoModule rec {
 
   doCheck = false;
 
-  goPackagePath = "github.com/b4b4r07/history";
-
   postInstall = ''
     install -d $out/share
     cp -r "$NIX_BUILD_TOP/source/misc/"* "$out/share"

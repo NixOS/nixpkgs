@@ -4,8 +4,6 @@ buildGoModule rec {
   pname = "iamy";
   version = "2.3.2";
 
-  goPackagePath = "github.com/99designs/iamy";
-
   src = fetchFromGitHub {
     owner = "99designs";
     repo = "iamy";

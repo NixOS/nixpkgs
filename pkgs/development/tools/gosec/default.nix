@@ -4,8 +4,6 @@ buildGoModule rec {
   pname = "gosec";
   version = "2.4.0";
 
-  goPackagePath = "github.com/securego/gosec";
-
   subPackages = [ "cmd/gosec" ];
 
   src = fetchFromGitHub {
