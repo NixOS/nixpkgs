@@ -14,6 +14,9 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   vendorSha256 = "13rc1afds5xg30faqz35haha4kxg73b5nvjirbrkc6kna0vhb54z";
+
+  doCheck = false;
+
   goPackagePath = "github.com/b4b4r07/history";
 
   postInstall = ''

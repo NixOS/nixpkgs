@@ -16,6 +16,8 @@ buildGoModule rec {
   };
   vendorSha256 = "09vnci9pp8zp7bvn8zj68wslz2nc54nhcd0ll31sqfjbp00215mj";
 
+  doCheck = false;
+
   preBuild = ''
     cat << EOF > caddy/main.go
     package main

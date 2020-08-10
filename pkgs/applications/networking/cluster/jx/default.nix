@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0l9djgvnrgdnw7nsf05yq7qpzzzm3gasgh9a7dyc16pp2kxvza6k";
 
+  doCheck = false;
+
   subPackages = [ "cmd/jx" ];
 
   nativeBuildInputs = [ installShellFiles ];

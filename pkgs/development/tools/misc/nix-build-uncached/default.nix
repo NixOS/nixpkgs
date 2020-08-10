@@ -14,6 +14,8 @@ buildGoModule rec {
   goPackagePath = "github.com/Mic92/nix-build-uncached";
   vendorSha256 = null;
 
+  doCheck = false;
+
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''

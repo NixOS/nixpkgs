@@ -12,6 +12,8 @@ buildGoModule rec {
 
   vendorSha256 = "0l6slaji9nh16jqp1nvib95h2db1xyjh6knk5hj2zaa1rks4b092";
 
+  doCheck = false;
+
   subPackages = [ "cmd/cue" ];
 
   buildFlagsArray = [

@@ -16,6 +16,8 @@ buildGoModule rec {
 
   vendorSha256 = "1ikrgl03r9zkn86kxkqi2kf540g3qzzz24i5wvh6g3d5q49nygl9";
 
+  doCheck = false;
+
   meta = with lib; {
     description = "Easily create & extract archives, and compress & decompress files of various formats";
     homepage = "https://github.com/mholt/archiver";

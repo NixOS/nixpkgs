@@ -408,6 +408,9 @@ in
         (this derives it from the machine-id that systemd generates) or
 
         <literal>head -c4 /dev/urandom | od -A none -t x4</literal>
+
+        The primary use case is to ensure when using ZFS that a pool isn't imported
+        accidentally on a wrong machine.
       '';
     };
 

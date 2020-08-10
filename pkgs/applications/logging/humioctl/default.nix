@@ -11,6 +11,8 @@ in buildGoModule {
 
     vendorSha256 = vendorSha256;
 
+    doCheck = false;
+
     src = fetchFromGitHub {
       owner = "humio";
       repo = "cli";

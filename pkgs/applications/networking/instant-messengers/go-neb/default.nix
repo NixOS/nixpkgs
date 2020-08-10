@@ -16,6 +16,8 @@ buildGoModule {
 
   vendorSha256 = "1k3980yf6zl00dkd1djwhm2f9nnffzrsbs3kq3alpw2gm0aln739";
 
+  doCheck = false;
+
   passthru.tests.go-neb = nixosTests.go-neb;
 
   meta = with lib; {

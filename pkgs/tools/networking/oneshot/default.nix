@@ -14,6 +14,8 @@ buildGoModule rec {
   goPackagePath = "github.com/raphaelreyna/oneshot";
   vendorSha256 = "0v53dsj0w959pmvk6v1i7rwlfd2y0vrghxlwkgidw0sf775qpgvy";
 
+  doCheck = false;
+
   subPackages = [ "." ];
 
   meta = with lib; {

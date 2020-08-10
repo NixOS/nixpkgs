@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1hjzpg3q4znvgzk0wbl8rq6cq877xxdsf950bcsks92cs8386847";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "Terminal multiplexer inspired by i3";
     homepage = "https://github.com/aaronjanse/3mux";

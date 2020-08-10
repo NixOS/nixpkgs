@@ -15,8 +15,6 @@ buildGoModule rec {
 
   buildInputs = [ brotli ];
 
-  doCheck = true;
-
   subPackages = [ "main/pg" ];
 
   buildFlagsArray = [ "-ldflags=-s -w -X github.com/wal-g/wal-g/cmd/pg.WalgVersion=${version} -X github.com/wal-g/wal-g/cmd/pg.GitRevision=${src.rev}" ];

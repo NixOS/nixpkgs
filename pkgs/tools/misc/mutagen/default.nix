@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0szs9yc49fyh55ra1wf8zj76kdah0x49d45cgivk3gqh2hl17j6l";
 
+  doCheck = false;
+
   subPackages = [ "cmd/mutagen" "cmd/mutagen-agent" ];
 
   meta = with lib; {

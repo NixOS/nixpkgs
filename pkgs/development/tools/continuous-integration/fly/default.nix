@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0a78cjfj909ic8wci8id2h5f6r34h90myk6z7m918n08vxv60jvw";
 
+  doCheck = false;
+
   subPackages = [ "fly" ];
 
   buildFlagsArray = ''

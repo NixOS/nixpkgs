@@ -20,6 +20,8 @@ let
 
   vendorSha256 = "06yfaj9k5n3jw8a142sscaqrvdw2lq51v884lp65wjdwy5c3jbba";
 
+  doCheck = false;
+
       buildFlagsArray = let
         versionPkg = "github.com/sensu/sensu-go/version";
       in ''

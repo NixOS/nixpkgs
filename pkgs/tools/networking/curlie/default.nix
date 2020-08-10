@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1mxgf004czf65a2mv99gfp27g98xhllmfcz4ynfv66nfkbfz6a8n";
 
+  doCheck = false;
+
   meta = with lib; {
     description = "Curlie is a frontend to curl that adds the ease of use of httpie, without compromising on features and performance";
     homepage = "https://curlie.io/";

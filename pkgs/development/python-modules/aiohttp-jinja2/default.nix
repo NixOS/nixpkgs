@@ -14,7 +14,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest pytest-aiohttp ];
 
   checkPhase = ''
-    py.test
+    pytest -W ignore::DeprecationWarning
   '';
 
   meta = with lib; {

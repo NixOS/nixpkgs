@@ -9,6 +9,8 @@ in buildGoModule rec {
 
   vendorSha256 = "1zzx5yy0pp0c8pias4sfxfvdzhhrff9f8j51qf6dkif99xwdq3hb";
 
+  doCheck = false;
+
   preBuild = ''
     buildFlagsArray+=("-ldflags" "-X main.version=${version}")
   '';

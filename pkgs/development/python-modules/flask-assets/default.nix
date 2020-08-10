@@ -11,6 +11,8 @@ buildPythonPackage rec {
 
   patchPhase = ''
     substituteInPlace tests/test_integration.py --replace 'static_path=' 'static_url_path='
+    substituteInPlace tests/test_integration.py --replace "static_folder = '/'" "static_folder = '/x'"
+    substituteInPlace tests/test_integration.py --replace "'/foo'" "'/x/foo'"
   '';
 
   propagatedBuildInputs = [ flask webassets flask_script nose ];

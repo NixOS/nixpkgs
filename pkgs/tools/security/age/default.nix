@@ -6,6 +6,8 @@ buildGoModule rec {
   goPackagePath = "github.com/FiloSottile/age";
   vendorSha256 = "0km7a2826j3fk2nrkmgc990chrkcfz006wfw14yilsa4p2hmfl7m";
 
+  doCheck = false;
+
   subPackages = [
     "cmd/age"
     "cmd/age-keygen"

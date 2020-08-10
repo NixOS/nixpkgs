@@ -12,6 +12,9 @@ buildGoModule rec {
   };
 
   vendorSha256 = "17xn6bdy942g6nx5xky41ixmd5kaz68chj3rb02ibpyraamx04nm";
+
+  doCheck = false;
+
   runVend = true;
 
   buildFlags = [ "-tags" "extended" ];

@@ -17,8 +17,6 @@ buildGoModule rec {
 
   excludedPackages = [ "kobotest" ];
 
-  doCheck = true;
-
   meta = with lib; {
     description = "EPUB to KEPUB converter";
     homepage = "https://pgaskin.net/kepubify";

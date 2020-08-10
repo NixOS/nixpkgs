@@ -536,6 +536,10 @@ in
 
   _1password = callPackage ../applications/misc/1password { };
 
+  _1password-gui = callPackage ../tools/security/1password-gui {
+    electron = electron_9;
+  };
+
   _6tunnel = callPackage ../tools/networking/6tunnel { };
 
   _9pfs = callPackage ../tools/filesystems/9pfs { };
@@ -718,6 +722,8 @@ in
   arcanist = callPackage ../development/tools/misc/arcanist {};
 
   arduino = arduino-core.override { withGui = true; };
+
+  arduino-cli = callPackage ../development/arduino/arduino-cli { };
 
   arduino-core = callPackage ../development/arduino/arduino-core { };
 
@@ -1906,6 +1912,8 @@ in
 
   fuzzel = callPackage ../applications/misc/fuzzel { };
 
+  qt-video-wlr = libsForQt5.callPackage ../applications/misc/qt-video-wlr { };
+
   fwup = callPackage ../tools/misc/fwup { };
 
   fx_cast_bridge = callPackage ../tools/misc/fx_cast { };
@@ -2167,6 +2175,8 @@ in
   mpd-mpris = callPackage ../tools/audio/mpd-mpris { };
 
   mq-cli = callPackage ../tools/system/mq-cli { };
+
+  nextdns = callPackage ../applications/networking/nextdns { };
 
   nfdump = callPackage ../tools/networking/nfdump { };
 
@@ -2920,6 +2930,8 @@ in
   dbench = callPackage ../development/tools/misc/dbench { };
 
   dclxvi = callPackage ../development/libraries/dclxvi { };
+
+  dconf2nix = callPackage ../development/tools/haskell/dconf2nix { };
 
   dcraw = callPackage ../tools/graphics/dcraw { };
 
@@ -4377,6 +4389,8 @@ in
     packages = config.ihaskell.packages or (self: []);
   };
 
+  iruby = callPackage ../applications/editors/jupyter-kernels/iruby { };
+
   imapproxy = callPackage ../tools/networking/imapproxy {
     openssl = openssl_1_0_2;
   };
@@ -5128,6 +5142,8 @@ in
   logrotate = callPackage ../tools/system/logrotate { };
 
   logstalgia = callPackage ../tools/graphics/logstalgia {};
+
+  lokalise2-cli = callPackage ../tools/misc/lokalise2-cli { };
 
   loki = callPackage ../development/libraries/loki { };
 
@@ -7816,6 +7832,8 @@ in
   wget = callPackage ../tools/networking/wget {
     libpsl = null;
   };
+
+  wg-bond = callPackage ../applications/networking/wg-bond { };
 
   which = callPackage ../tools/system/which { };
 
@@ -10621,6 +10639,8 @@ in
 
   eggdbus = callPackage ../development/tools/misc/eggdbus { };
 
+  effitask = callPackage ../applications/misc/effitask { };
+
   egypt = callPackage ../development/tools/analysis/egypt { };
 
   elfinfo = callPackage ../development/tools/misc/elfinfo { };
@@ -11549,6 +11569,8 @@ in
   aws-sdk-cpp = callPackage ../development/libraries/aws-sdk-cpp {
     inherit (darwin.apple_sdk.frameworks) CoreAudio AudioToolbox;
   };
+
+  ayatana-ido = callPackage ../development/libraries/ayatana-ido { };
 
   babl = callPackage ../development/libraries/babl { };
 
@@ -12885,6 +12907,10 @@ in
   libappindicator-gtk3 = libappindicator.override { gtkVersion = "3"; };
   libappindicator = callPackage ../development/libraries/libappindicator { };
 
+  libayatana-appindicator-gtk2 = libayatana-appindicator.override { gtkVersion = "2"; };
+  libayatana-appindicator-gtk3 = libayatana-appindicator.override { gtkVersion = "3"; };
+  libayatana-appindicator = callPackage ../development/libraries/libayatana-appindicator { };
+
   libarchive = callPackage ../development/libraries/libarchive { };
 
   libasr = callPackage ../development/libraries/libasr { };
@@ -13307,6 +13333,8 @@ in
 
   libhttpseverywhere = callPackage ../development/libraries/libhttpseverywhere { };
 
+  libhugetlbfs = callPackage ../development/libraries/libhugetlbfs { };
+
   libHX = callPackage ../development/libraries/libHX { };
 
   libibmad = callPackage ../development/libraries/libibmad { };
@@ -13324,6 +13352,10 @@ in
   libindicator-gtk2 = libindicator.override { gtkVersion = "2"; };
   libindicator-gtk3 = libindicator.override { gtkVersion = "3"; };
   libindicator = callPackage ../development/libraries/libindicator { };
+
+  libayatana-indicator-gtk2 = libayatana-indicator.override { gtkVersion = "2"; };
+  libayatana-indicator-gtk3 = libayatana-indicator.override { gtkVersion = "3"; };
+  libayatana-indicator = callPackage ../development/libraries/libayatana-indicator { };
 
   libinotify-kqueue = callPackage ../development/libraries/libinotify-kqueue { };
 
@@ -16747,6 +16779,8 @@ in
     unifiLTS
     unifiStable;
   unifi = unifiStable;
+
+  urserver = callPackage ../servers/urserver { };
 
   victoriametrics = callPackage ../servers/nosql/victoriametrics { };
 
@@ -20476,6 +20510,8 @@ in
 
   hactool = callPackage ../tools/compression/hactool { };
 
+  hdhomerun-config-gui = callPackage ../applications/video/hdhomerun-config-gui { };
+
   heimer = libsForQt5.callPackage ../applications/misc/heimer { };
 
   hello = callPackage ../applications/misc/hello { };
@@ -20952,6 +20988,8 @@ in
   kiwix = callPackage ../applications/misc/kiwix { };
 
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
+
+  kmetronome = libsForQt5.callPackage ../applications/audio/kmetronome { };
 
   kmplayer = libsForQt5.callPackage ../applications/video/kmplayer { };
 
@@ -22785,6 +22823,8 @@ in
   };
 
   tambura = callPackage ../applications/audio/tambura { };
+
+  tanka = callPackage ../applications/networking/cluster/tanka { };
 
   teams = callPackage ../applications/networking/instant-messengers/teams { };
 
@@ -25277,6 +25317,10 @@ in
 
   almonds = callPackage ../applications/science/math/almonds { };
 
+  amd-blis = callPackage ../development/libraries/science/math/amd-blis { };
+
+  amd-libflame = callPackage ../development/libraries/science/math/amd-libflame { };
+
   arpack = callPackage ../development/libraries/science/math/arpack { };
 
   blas = callPackage ../build-support/alternatives/blas { };
@@ -25729,6 +25773,7 @@ in
 
   caffe = callPackage ../applications/science/math/caffe ({
     opencv3 = opencv3WithoutCuda; # Used only for image loading.
+    blas = openblas;
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
   } // (config.caffe or {}));
 

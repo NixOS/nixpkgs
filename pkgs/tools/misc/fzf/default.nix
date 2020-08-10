@@ -29,8 +29,6 @@ buildGoModule rec {
     fi
   '';
 
-  doCheck = true;
-
   preInstall = ''
     mkdir -p $out/share/fish/{vendor_functions.d,vendor_conf.d}
     cp shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish

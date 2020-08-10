@@ -6,6 +6,8 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   goPackagePath = "github.com/fatih/gomodifytags";
 
   src = fetchFromGitHub {

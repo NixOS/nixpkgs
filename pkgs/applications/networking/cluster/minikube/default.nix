@@ -15,6 +15,8 @@ buildGoModule rec {
 
   vendorSha256 = "0smjj2sq09k1ai79lk74gi056hfls7qy8x08wkq2g24fxi06cr94";
 
+  doCheck = false;
+
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "minikube";
