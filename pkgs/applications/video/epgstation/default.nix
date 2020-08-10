@@ -42,6 +42,7 @@ nodePackages.epgstation.override (drv: {
     pushd $out/lib/node_modules/EPGStation
 
     npm run build
+    npm prune --production
 
     mv config/{enc.sh,enc.js} $out/libexec
     mv LICENSE Readme.md $out/share/doc/epgstation
