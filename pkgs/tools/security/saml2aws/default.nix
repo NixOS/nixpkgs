@@ -14,8 +14,6 @@ buildGoModule rec {
   runVend = true;
   vendorSha256 = "1w7vnpv36lhxpaljdhslbckkr7p81nzc91a0503wk8nrrc4ljsyy";
 
-  doCheck = false;
-
   subPackages = [ "." "cmd/saml2aws" ];
 
   buildFlagsArray = ''
