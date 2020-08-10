@@ -158,10 +158,10 @@ in {
     self = pypy27;
     sourceVersion = {
       major = "7";
-      minor = "1";
+      minor = "3";
       patch = "1";
     };
-    sha256 = "0yq6ln1ic476sasp8zs4mg5i9524l1p96qwanp486rr1yza1grlg";
+    sha256 = "08ckkhd0ix6j9873a7gr507c72d4cmnv5lwvprlljdca9i8p2dzs";
     pythonVersion = "2.7";
     db = db.override { dbmSupport = !stdenv.isDarwin; };
     python = python27;
@@ -174,10 +174,10 @@ in {
     self = pypy36;
     sourceVersion = {
       major = "7";
-      minor = "1";
+      minor = "3";
       patch = "1";
     };
-    sha256 = "1hqvnran7d2dzj5555n7q680dyzhmbklz04pvkxgb5j604v7kkx1";
+    sha256 = "10zsk8jby8j6visk5mzikpb1cidvz27qq4pfpa26jv53klic6b0c";
     pythonVersion = "3.6";
     db = db.override { dbmSupport = !stdenv.isDarwin; };
     python = python27;
