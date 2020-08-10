@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wob";
-  version = "0.9";
+  version = "0.10";
 
   src = fetchFromGitHub {
     owner = "francma";
     repo = pname;
     rev = version;
-    sha256 = "02skvaj1q05c2r9fx83dlq44aksbw2fhpiv529rd154lh3pf07bc";
+    sha256 = "0v7xm8zd9237v5j5h79pd0x6dkal5fgg1ly9knssjpv3hswwyv40";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config scdoc wayland ];
