@@ -45,7 +45,7 @@
 , gnused
 , gnugrep
 , gnupg
-, ffmpeg_3
+, ffmpeg
 , runtimeShell
 , mesa # firefox wants gbm for drm+dmabuf
 , systemLocale ? config.i18n.defaultLocale or "en-US"
@@ -130,7 +130,7 @@ stdenv.mkDerivation {
       libpulseaudio
       (lib.getDev libpulseaudio)
       systemd
-      ffmpeg_3
+      ffmpeg
     ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];
