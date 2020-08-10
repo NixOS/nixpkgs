@@ -184,6 +184,19 @@ self: super:
            The Nixpkgs attribute is <literal>mkl</literal>.
          </para>
        </listitem>
+       <listitem>
+         <para>
+           <link
+           xlink:href="https://developer.amd.com/amd-aocl/blas-library/">AMD
+           BLIS/LIBFLAME</link> (optimized for modern AMD x86_64 CPUs)
+         </para>
+         <para>
+          The AMD BLIS library, with attribute <literal>amd-blis</literal>,
+          provides a BLAS implementation. The complementary AMD LIBFLAME
+          library, with attribute <literal>amd-libflame</literal>, provides
+          a LAPACK implementation.
+         </para>
+       </listitem>
      </itemizedlist>
      <para>
        Introduced in <link
