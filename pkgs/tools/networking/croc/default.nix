@@ -13,8 +13,6 @@ buildGoModule rec {
 
   vendorSha256 = "0qfrc3c4fsg3w2zcpdr93ilknxhshcysvin029va154sq3zmggbn";
 
-  doCheck = false;
-
   subPackages = [ "." ];
 
   meta = with stdenv.lib; {
