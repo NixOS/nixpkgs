@@ -6,8 +6,6 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
-  doCheck = false;
-
   src = fetchFromGitHub {
     owner = "DNSCrypt";
     repo = "dnscrypt-proxy";
