@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "fluxctl";
@@ -13,9 +13,18 @@ buildGoModule rec {
 
   vendorSha256 = "00qm45vfz4afj8f9hikrlk96w0rdzxqq2azhzrnzfymyiwc6jk5c";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   subPackages = [ "cmd/fluxctl" ];
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+
+  postInstall = ''
+    for shell in bash fish zsh; do
+      $out/bin/fluxctl completion $shell > fluxctl.$shell
+      installShellCompletion fluxctl.$shell
+    done
+  '';
 
   meta = with stdenv.lib; {
     description = "CLI client for Flux, the GitOps Kubernetes operator";
