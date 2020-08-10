@@ -20927,6 +20927,8 @@ in
     lcms = lcms2;
   };
 
+  inkscape-with-extensions = callPackage ../applications/graphics/inkscape/with-extensions.nix { };
+
   inkscape_0 = callPackage ../applications/graphics/inkscape/0.x.nix {
     lcms = lcms2;
   };
