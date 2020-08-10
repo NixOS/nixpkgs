@@ -2,17 +2,17 @@
 , acceptLicense ? config.joypixels.acceptLicense or false
 }:
 
-let inherit (stdenv.hostPlatform) system;
+let inherit (stdenv.hostPlatform.parsed) kernel;
 
     systemSpecific = {
-      x86_64-darwin = rec {
+      darwin = rec {
         systemTag =  "nix-darwin";
         capitalized = systemTag;
         ext = "ttc";
         fontFile = "Apple%20Color%20Emoji.ttc";
         name = "joypixels-apple-color-emoji.ttc";
       };
-    }.${system} or rec {
+    }.${kernel.name} or rec {
         systemTag = "nix-os";
         capitalized = "NixOS";
         ext = "ttf";
@@ -55,8 +55,8 @@ stdenv.mkDerivation rec {
     inherit name;
     url = "https://cdn.joypixels.com/distributions/${systemTag}/font/${version}/${fontFile}";
     sha256 = {
-      x86_64-darwin = "043980g0dlp8vd4qkbx6298fwz8ns0iwbxm0f8czd9s7n2xm4npq";
-    }.${system} or "1vxqsqs93g4jyp01r47lrpcm0fmib2n1vysx32ksmfxmprimb75s";
+      darwin = "043980g0dlp8vd4qkbx6298fwz8ns0iwbxm0f8czd9s7n2xm4npq";
+    }.${kernel.name} or "1vxqsqs93g4jyp01r47lrpcm0fmib2n1vysx32ksmfxmprimb75s";
   };
 
   dontUnpack = true;
