@@ -1,6 +1,6 @@
-{ stdenv, buildGo114Package, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGo114Package rec {
+buildGoPackage rec {
   pname = "exoscale-cli";
   version = "1.16.0";
 
