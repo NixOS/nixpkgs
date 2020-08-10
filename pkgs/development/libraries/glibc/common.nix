@@ -41,9 +41,9 @@
 } @ args:
 
 let
-  version = "2.31";
+  version = "2.32";
   patchSuffix = "";
-  sha256 = "05zxkyz9bv3j9h0xyid1rhvh3klhsmrpkf3bcs6frvlgyr2gwilj";
+  sha256 = "0di848ibffrnwq7g2dvgqrnn4xqhj3h96csn69q4da51ymafl9qn";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
@@ -59,9 +59,6 @@ stdenv.mkDerivation ({
 
   patches =
     [
-      /* Have rpcgen(1) look for cpp(1) in $PATH.  */
-      ./rpcgen-path.patch
-
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
 
@@ -113,8 +110,6 @@ stdenv.mkDerivation ({
       })
 
       ./fix-x64-abi.patch
-      ./2.30-cve-2020-1752.patch
-      ./2.31-cve-2020-10029.patch
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
@@ -146,8 +141,6 @@ stdenv.mkDerivation ({
   configureFlags =
     [ "-C"
       "--enable-add-ons"
-      "--enable-obsolete-nsl"
-      "--enable-obsolete-rpc"
       "--sysconfdir=/etc"
       "--enable-stackguard-randomization"
       (lib.withFeatureAs withLinuxHeaders "headers" "${linuxHeaders}/include")
@@ -226,7 +219,7 @@ stdenv.mkDerivation ({
 
   doCheck = false; # fails
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.gnu.org/software/libc/";
     description = "The GNU C Library";
 
@@ -239,10 +232,10 @@ stdenv.mkDerivation ({
          most systems with the Linux kernel.
       '';
 
-    license = lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
 
-    maintainers = [ lib.maintainers.eelco ];
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ eelco ma27 ];
+    platforms = platforms.linux;
   } // meta;
 }
 
