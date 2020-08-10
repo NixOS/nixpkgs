@@ -3230,6 +3230,12 @@
     githubId = 6768842;
     name = "Joris Guyonvarch";
   };
+  gvolpe = {
+    email = "volpegabriel@gmail.com";
+    github = "gvolpe";
+    githubId = 443978;
+    name = "Gabriel Volpe";
+  };
   hakuch = {
     email = "hakuch@gmail.com";
     github = "hakuch";
