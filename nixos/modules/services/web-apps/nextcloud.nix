@@ -47,8 +47,18 @@ let
 in {
 
   imports = [
-    ( mkRemovedOptionModule [ "services" "nextcloud" "nginx" "enable" ]
-      "The nextcloud module dropped support for other webservers than nginx.")
+    (mkRemovedOptionModule [ "services" "nextcloud" "nginx" "enable" ] ''
+      The nextcloud module supports `nginx` as reverse-proxy by default and doesn't
+      support other reverse-proxies officially.
+
+      However it's possible to use an alternative reverse-proxy by
+
+        * disabling nginx
+        * setting `listen.owner` & `listen.group` in the phpfpm-pool to a different value
+
+      Further details about this can be found in the `Nextcloud`-section of the NixOS-manual
+      (which can be openend e.g. by running `nixos-help`).
+    '')
   ];
 
   options.services.nextcloud = {
