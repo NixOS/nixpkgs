@@ -27302,6 +27302,8 @@ in
 
   kube3d =  callPackage ../applications/networking/cluster/kube3d {};
 
+  zfs-prune-snapshots = callPackage ../tools/backup/zfs-prune-snapshots {};
+
   zfs-replicate = python3Packages.callPackage ../tools/backup/zfs-replicate { };
 
   runwayml = callPackage ../applications/graphics/runwayml {};
