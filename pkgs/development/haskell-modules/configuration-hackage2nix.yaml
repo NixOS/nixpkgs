@@ -4956,7 +4956,6 @@ broken-packages:
   - findhttp
   - fingertree-psqueue
   - fingertree-tf
-  - finitary
   - finitary-derive
   - finitary-optics
   - FiniteMap
