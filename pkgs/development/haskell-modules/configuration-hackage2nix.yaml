@@ -6818,7 +6818,6 @@ broken-packages:
   - introduction
   - introduction-test
   - intset
-  - invertible-grammar
   - invertible-hlist
   - invertible-syntax
   - io-capture
@@ -9522,7 +9521,6 @@ broken-packages:
   - setoid
   - setters
   - sexp
-  - sexp-grammar
   - sexpr-parser
   - sext
   - SFML
