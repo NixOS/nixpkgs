@@ -182,6 +182,13 @@ let
       + " without at least one public key";
   };
 
+  mkCommandAssertions = name: cfg: {
+    assertion = (cfg.backupCommand != null) -> (cfg.paths == [ "-" ]);
+    message = ''
+      borgbackup.jobs.${name}.paths must be set to [ "-" ] while specifying a backupCommand!
+    '';
+  };
+
   mkRemovableDeviceAssertions = name: cfg: {
     assertion = !(isLocalPath cfg.repo) -> !cfg.removableDevice;
     message = ''
@@ -671,6 +678,7 @@ in {
       assertions =
         mapAttrsToList mkPassAssertion jobs
         ++ mapAttrsToList mkKeysAssertion repos
+        ++ mapAttrsToList mkCommandAssertions jobs
         ++ mapAttrsToList mkRemovableDeviceAssertions jobs;
 
       system.activationScripts = mapAttrs' mkActivationScript jobs;
