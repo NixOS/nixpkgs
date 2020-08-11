@@ -1,19 +1,18 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, efl, pcre, mesa, makeWrapper }:
+{ stdenv, fetchurl, meson, ninja, pkg-config, efl, pcre, mesa }:
 
 stdenv.mkDerivation rec {
   pname = "terminology";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0pvn8mdzxlx7181xdha32fbr0w8xl7hsnb3hfxr5099g841v1xf6";
+    sha256 = "1fxqjf7g30ix4qxi6366rrax27s3maxq43z2vakwnhz4mp49m9h4";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
-    makeWrapper
+    pkg-config
   ];
 
   buildInputs = [
