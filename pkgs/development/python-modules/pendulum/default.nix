@@ -1,9 +1,17 @@
 { lib, fetchPypi, buildPythonPackage, pythonOlder
-, dateutil, pytzdata, typing }:
+, dateutil, pytzdata, typing
+, poetry-core
+}:
 
 buildPythonPackage rec {
   pname = "pendulum";
   version = "2.1.2";
+
+  format = "pyproject";
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   src = fetchPypi {
     inherit pname version;
