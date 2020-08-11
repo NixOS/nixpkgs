@@ -761,7 +761,7 @@ in
       serviceConfig.TimeoutSec = 60;
       script = ''
         if /run/current-system/systemd/bin/systemctl -q is-active nginx.service ; then
-          ${execCommand} -t && \
+          ${execCommand} -g "user ${cfg.user} ${cfg.group};" -t && \
             /run/current-system/systemd/bin/systemctl reload nginx.service
         fi
       '';
