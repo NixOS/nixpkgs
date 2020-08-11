@@ -4,11 +4,11 @@
 , swingSupport ? true }:
 
 let
-  version = "8.28.0.1";
-  openjdk = "8.0.163";
+  version = "8.48.0.53";
+  openjdk = "8.0.265";
 
-  sha256_linux = "1z8s3a948nvv92wybnhkyr27ipibcy45k0zv5h5gp37ynd91df45";
-  sha256_darwin = "0i0prjijsgg0yyycplpp9rlfl428126rqz7bb31pchrhi6jhk699";
+  sha256_linux = "ed32513524b32a83b3b388831c69d1884df5675bd5069c6d1485fd1a060be209";
+  sha256_darwin = "36f189bfbd0255195848835819377474ba9c1c868e3c204633c451c96e21f30a";
 
   platform = if stdenv.isDarwin then "macosx" else "linux";
   hash = if stdenv.isDarwin then sha256_darwin else sha256_linux;
@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
   pname = "zulu";
 
   src = fetchurl {
-    url = "https://cdn.azul.com/zulu/bin/zulu${version}-jdk${openjdk}-${platform}_x64.${extension}";
+    url = "https://cdn.azul.com/zulu/bin/zulu${version}-ca-jdk${openjdk}-${platform}_x64.${extension}";
     sha256 = hash;
   };
 
