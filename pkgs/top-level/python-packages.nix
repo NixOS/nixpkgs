@@ -1142,6 +1142,8 @@ in {
 
   poetry = callPackage ../development/python-modules/poetry { };
 
+  poetry-core = callPackage ../development/python-modules/poetry-core { };
+
   polyline = callPackage ../development/python-modules/polyline { };
 
   postorius = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/postorius.nix { });
