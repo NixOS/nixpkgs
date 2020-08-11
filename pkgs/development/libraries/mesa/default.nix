@@ -4,6 +4,7 @@
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau, python3Packages
 , libglvnd
+, patchelf, autoreconfHook, fetchFromGitHub
 , enableRadv ? true
 , galliumDrivers ? ["auto"]
 , driDrivers ? ["auto"]
@@ -126,6 +127,16 @@ stdenv.mkDerivation {
   depsBuildBuild = [ pkgconfig ];
 
   nativeBuildInputs = [
+    (patchelf.overrideAttrs (pa: {
+      src = fetchFromGitHub {
+        owner = "NixOS";
+        repo = "patchelf";
+        rev = "61bc10176"; # current master; what matters is merge of #225
+        sha256 = "0cy77mn77w3mn64ggp20f4ygnbxfjmddhjjhfwkva53lsirg6w93";
+      };
+      nativeBuildInputs = pa.nativeBuildInputs or [] ++ [ autoreconfHook ];
+    }))
+  ] ++ [
     pkgconfig meson ninja
     intltool bison flex file
     python3Packages.python python3Packages.Mako

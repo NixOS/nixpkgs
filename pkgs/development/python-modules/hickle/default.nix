@@ -18,11 +18,11 @@
 
 buildPythonPackage rec {
   pname   = "hickle";
-  version = "3.4.6";
+  version = "3.4.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "026r6yg3amsi8k8plzsbw5rnifym6sc17y011daqyvcpb7mfs94b";
+    sha256 = "09e73029dc6c122f483fca4313a27cc483534145961e4786e65d60895054d940";
   };
 
   postPatch = ''
