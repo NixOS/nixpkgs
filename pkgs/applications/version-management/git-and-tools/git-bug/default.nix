@@ -4,7 +4,6 @@ buildGoModule rec {
   pname = "git-bug";
   version = "0.7.1"; # the `rev` below pins the version of the source to get
   rev = "2d64b85db71a17ff3277bbbf7ac9d8e81f8e416c";
-  goPackagePath = "github.com/MichaelMure/git-bug";
 
   src = fetchFromGitHub {
     inherit rev;
@@ -19,9 +18,9 @@ buildGoModule rec {
 
   buildFlagsArray = ''
     -ldflags=
-      -X ${goPackagePath}/commands.GitCommit=${rev}
-      -X ${goPackagePath}/commands.GitLastTag=${version}
-      -X ${goPackagePath}/commands.GitExactTag=${version}
+      -X github.com/MichaelMure/git-bug/commands.GitCommit=${rev}
+      -X github.com/MichaelMure/git-bug/commands.GitLastTag=${version}
+      -X github.com/MichaelMure/git-bug/commands.GitExactTag=${version}
   '';
 
   postInstall = ''

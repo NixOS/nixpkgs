@@ -4,8 +4,6 @@ buildGoModule rec {
   pname = "telegraf";
   version = "1.15.2";
 
-  goPackagePath = "github.com/influxdata/telegraf";
-
   excludedPackages = "test";
 
   subPackages = [ "cmd/telegraf" ];
