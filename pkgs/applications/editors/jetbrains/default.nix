@@ -271,12 +271,12 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2020.1.2"; /* updated by script */
+    version = "2020.2"; /* updated by script */
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "0q5bnb0rmsgks7brrdpgah83s2ixa4pyhw8jvg9p2g48b582rmf7"; /* updated by script */
+      sha256 = "1j80k6r4nbr8abwkpx78sy3jzq3jsywn2k6g4mjx6h0adwxswymm"; /* updated by script */
     };
     wmClass = "jetbrains-clion";
     update-channel = "CLion RELEASE"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
@@ -284,12 +284,12 @@ in
 
   datagrip = buildDataGrip rec {
     name = "datagrip-${version}";
-    version = "2020.1.5"; /* updated by script */
+    version = "2020.2"; /* updated by script */
     description = "Your Swiss Army Knife for Databases and SQL";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
-      sha256 = "0605d772156lzlz5904px2spdijc92yz6rjvmpyg6vk5zv5k2wm9"; /* updated by script */
+      sha256 = "0d0m6v4lr6qhi79csdpcyiyd2hnhlsan9lpnjmhkdxd84i1dl15a"; /* updated by script */
     };
     wmClass = "jetbrains-datagrip";
     update-channel = "DataGrip RELEASE";
@@ -297,12 +297,12 @@ in
 
   goland = buildGoland rec {
     name = "goland-${version}";
-    version = "2020.1.4"; /* updated by script */
+    version = "2020.2.1"; /* updated by script */
     description = "Up and Coming Go IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "1wgcc1faqn0y9brxikh53s6ly7zvpdmpg7m5gvp5437isbllisbl"; /* updated by script */
+      sha256 = "15jd2yn4g3lya54ppcp8b0bvf2pp2khdvqba2g1aml16d5z8mkq6"; /* updated by script */
     };
     wmClass = "jetbrains-goland";
     update-channel = "GoLand RELEASE";
@@ -310,12 +310,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2020.1.3"; /* updated by script */
+    version = "2020.2"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "1aycsy2pg8nw5il8p2r6bhim9y47g5rfga63f0p435mpjmzpll0s"; /* updated by script */
+      sha256 = "0rymyyhgm42i487dhlxh78shyvq4hd56frgz7wrqf85hg2j5ha0y"; /* updated by script */
     };
     wmClass = "jetbrains-idea-ce";
     update-channel = "IntelliJ IDEA RELEASE";
@@ -323,12 +323,12 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2020.1.3"; /* updated by script */
+    version = "2020.2"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}-no-jbr.tar.gz";
-      sha256 = "188wkqcv67kizq4w6v4vg9jpr3qfgbg9x5jc77s4ki4nafkbfxas"; /* updated by script */
+      sha256 = "00mbf8asxjdnfciz6bl8b83kqknqdnars5w5w5w38rmza53pzxsi"; /* updated by script */
     };
     wmClass = "jetbrains-idea";
     update-channel = "IntelliJ IDEA RELEASE";
@@ -336,12 +336,12 @@ in
 
   mps = buildMps rec {
     name = "mps-${version}";
-    version = "2020.1.2"; /* updated by script */
+    version = "2020.1.3"; /* updated by script */
     description = "Create your own domain-specific language";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/mps/2020.1/MPS-${version}.tar.gz";
-      sha256 = "0ygk31l44bxcv64h6lnqxssmx5prcb5b5xdm3qxmrv7xz1qv59c1"; /* updated by script */
+      sha256 = "1ncvq834vn47pmh3q875hgqi4m7h3inljp89w3jwwhjn3g985ysz"; /* updated by script */
     };
     wmClass = "jetbrains-mps";
     update-channel = "MPS RELEASE";
@@ -349,12 +349,12 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2020.1.3"; /* updated by script */
+    version = "2020.2"; /* updated by script */
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "0cw2rx68rl6mrnizpb69ahz4hrh8blry70cv4rjnkw19d4x877m8"; /* updated by script */
+      sha256 = "1zxhb2w7nivnx8habcf5vii6bwzaihs5x8smy0zf8ngv3xwr6vjc"; /* updated by script */
     };
     wmClass = "jetbrains-phpstorm";
     update-channel = "PhpStorm RELEASE";
@@ -362,12 +362,12 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2020.1.3"; /* updated by script */
+    version = "2020.2"; /* updated by script */
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1290k17nihiih8ipxfqax1xlx320h1vkwbcc5hc50psvpsfgiall"; /* updated by script */
+      sha256 = "12pp3xp74dzgjrv2nz83dnqycb250kkgqlb3skjkdx9pabmfxck0"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm-ce";
     update-channel = "PyCharm RELEASE";
@@ -375,12 +375,12 @@ in
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2020.1.3"; /* updated by script */
+    version = "2020.2"; /* updated by script */
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1ag8jrfs38f0q11pyil4pvddi8lv46b0jxd3mcbmidn3p1z29f9x"; /* updated by script */
+      sha256 = "0xq0nba31yc7cm1lbgkmgfbr5kp5fq5k7j2n6kampm2hyx5fa0ak"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm";
     update-channel = "PyCharm RELEASE";
@@ -401,12 +401,12 @@ in
 
   ruby-mine = buildRubyMine rec {
     name = "ruby-mine-${version}";
-    version = "2020.1.3"; /* updated by script */
+    version = "2020.2"; /* updated by script */
     description = "The Most Intelligent Ruby and Rails IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
-      sha256 = "1z6z2c31aq29hzi1cifc77zz9vnw48h2jvw4w61lvgskcnzrw9vn"; /* updated by script */
+      sha256 = "1caxd5qcxwwrdy3ma87gnywr5czg3lam1n2gwbnc7hdxgfnvn3qz"; /* updated by script */
     };
     wmClass = "jetbrains-rubymine";
     update-channel = "RubyMine RELEASE";
@@ -414,12 +414,12 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "2020.1.3"; /* updated by script */
+    version = "2020.2"; /* updated by script */
     description = "Professional IDE for Web and JavaScript development";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "19zqac77fkw1czf86s39ggnd24r9ljr80gj422ch4fdkz4qy832q"; /* updated by script */
+      sha256 = "100j2q9hz0a50n3x3khk7hap7b496g6sx0y6q7n7vy2zayh5ibm5"; /* updated by script */
     };
     wmClass = "jetbrains-webstorm";
     update-channel = "WebStorm RELEASE";

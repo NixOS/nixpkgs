@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "amdvlk";
-  version = "2020.Q3.2";
+  version = "2020.Q3.3";
 
   src = fetchRepoProject {
     name = "${pname}-src";
     manifest = "https://github.com/GPUOpen-Drivers/AMDVLK.git";
     rev = "refs/tags/v-${version}";
-    sha256 = "1mki4lxy981g1rz9d6w18dv1hf3ldch5gld2vb7injn5ipp6z2y3";
+    sha256 = "0s5a294gzcz438gmafirk3czrjcahv3imsg41k3vk83x4dbdlhxv";
   };
 
   buildInputs = [
@@ -78,8 +78,9 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "AMD Open Source Driver For Vulkan";
     homepage = "https://github.com/GPUOpen-Drivers/AMDVLK";
+    changelog = "https://github.com/GPUOpen-Drivers/AMDVLK/releases/tag/v-${version}";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ Flakebi ];
+    maintainers = with maintainers; [ danieldk Flakebi ];
   };
 }
