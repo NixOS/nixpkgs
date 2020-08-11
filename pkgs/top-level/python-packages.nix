@@ -930,6 +930,8 @@ in {
 
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
 
+  kinparse = callPackage ../development/python-modules/kinparse { };
+
   labelbox = callPackage ../development/python-modules/labelbox { };
 
   lammps-cython = callPackage ../development/python-modules/lammps-cython {
