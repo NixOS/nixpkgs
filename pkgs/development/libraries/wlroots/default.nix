@@ -28,12 +28,6 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [ "-Dlogind-provider=systemd" ];
 
-  postInstall = ''
-    # Copy the library to $examples
-    mkdir -p $examples/lib
-    cp -P libwlroots* $examples/lib/
-  '';
-
   postFixup = ''
     # Install ALL example programs to $examples:
     # screencopy dmabuf-capture input-inhibitor layer-shell idle-inhibit idle
