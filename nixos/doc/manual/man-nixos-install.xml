@@ -46,6 +46,10 @@
    </arg>
 
    <arg>
+    <option>--flake</option> <replaceable>flake-uri</replaceable>
+   </arg>
+
+   <arg>
      <arg choice='plain'>
        <option>--channel</option>
      </arg>
@@ -196,6 +200,18 @@
       closure is typically obtained with a command such as <command>nix-build
       -I nixos-config=./configuration.nix '&lt;nixpkgs/nixos&gt;' -A system
       --no-out-link</command>
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <option>--flake</option> <replaceable>flake-uri</replaceable>#<replaceable>name</replaceable>
+    </term>
+    <listitem>
+     <para>
+      Build the NixOS system from the specified flake.
+      The flake must contain an output named
+      <literal>nixosConfigurations.<replaceable>name</replaceable></literal>.
      </para>
     </listitem>
    </varlistentry>

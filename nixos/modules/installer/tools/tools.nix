@@ -20,7 +20,7 @@ let
     name = "nixos-install";
     src = ./nixos-install.sh;
     nix = config.nix.package.out;
-    path = makeBinPath [ nixos-enter ];
+    path = makeBinPath [ pkgs.nixUnstable nixos-enter ];
   };
 
   nixos-rebuild =
