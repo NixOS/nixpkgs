@@ -1,6 +1,8 @@
 { fetchurl, stdenv, flex, bison, pkgconfig, libmnl, libnfnetlink
 , libnetfilter_conntrack, libnetfilter_queue, libnetfilter_cttimeout
-, libnetfilter_cthelper, systemd }:
+, libnetfilter_cthelper, systemd
+, libtirpc
+}:
 
 stdenv.mkDerivation rec {
   pname = "conntrack-tools";
@@ -13,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libmnl libnfnetlink libnetfilter_conntrack libnetfilter_queue
-    libnetfilter_cttimeout libnetfilter_cthelper systemd
+    libnetfilter_cttimeout libnetfilter_cthelper systemd libtirpc
   ];
   nativeBuildInputs = [ flex bison pkgconfig ];
 
