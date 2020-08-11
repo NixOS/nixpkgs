@@ -247,7 +247,8 @@ in rec {
             (/**/ if lib.isString cmakeFlags then [cmakeFlags]
              else if cmakeFlags == null      then []
              else                                     cmakeFlags)
-          ++ [ "-DCMAKE_SYSTEM_NAME=${lib.findFirst lib.isString "Generic" [ stdenv.hostPlatform.uname.system ]}" ]
+          ++ [ "-DCMAKE_SYSTEM_NAME=${lib.findFirst lib.isString "Generic" (
+               lib.optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"]
           ++ lib.optional (stdenv.hostPlatform.uname.processor != null) "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
           ++ lib.optional (stdenv.hostPlatform.uname.release != null) "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.release}"
           ++ lib.optional (stdenv.buildPlatform.uname.system != null) "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
