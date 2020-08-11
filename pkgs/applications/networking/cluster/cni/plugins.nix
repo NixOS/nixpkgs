@@ -15,9 +15,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildFlagsArray = [
-    "-ldflags=-X github.com/containernetworking/plugins/pkg/utils/buildversion.BuildVersion=${version}"
-  ];
+  preBuild = ''
+    export buildFlagsArray=(
+      "-ldflags=-X github.com/containernetworking/plugins/pkg/utils/buildversion.BuildVersion=v${version}"
+    )
+  '';
 
   subPackages = [
     "plugins/ipam/dhcp"
