@@ -14,6 +14,8 @@ buildGoModule rec {
   goPackagePath = "github.com/Dreamacro/clash";
   vendorSha256 = "0ap6wsx23s4q730s6d5cgc4ginh8zj5sd32k0za49fh50v8k8zbh";
 
+  doCheck = false;
+
   buildFlagsArray = [
     "-ldflags="
     "-X ${goPackagePath}/constant.Version=${version}"

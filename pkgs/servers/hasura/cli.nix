@@ -12,6 +12,8 @@ buildGoModule rec {
 
   vendorSha256 = "0a3mlkl00r680v8x3hy24ykggq5qm7k3101krlyfrb5y4karp75a";
 
+  doCheck = false;
+
   buildFlagsArray = [''-ldflags=
     -X github.com/hasura/graphql-engine/cli/version.BuildVersion=${version}
     -s

@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   subPackages = [ "cmd/kubeseal" ];
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.VERSION=${version}" ];

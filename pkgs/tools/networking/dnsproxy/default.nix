@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "Simple DNS proxy with DoH, DoT, and DNSCrypt support";
     homepage = "https://github.com/AdguardTeam/dnsproxy";

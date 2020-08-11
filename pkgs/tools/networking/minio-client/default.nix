@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0nfcxz47v5gl0wih59xarhz82nd8wy61c3ijvg2v08ipk29zivcc";
 
+  doCheck = false;
+
   subPackages = [ "." ];
 
   buildFlagsArray = [ "-ldflags=-s -w -X github.com/minio/mc/cmd.Version=${version}" ];

@@ -17,6 +17,8 @@ buildGoModule rec {
 
   vendorSha256 = "1f971n17h9bc0qcgs9ipiaw0x9807mz761fqm605br4ch1kp0897";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "A friendly and expressive command shell";
     longDescription = ''

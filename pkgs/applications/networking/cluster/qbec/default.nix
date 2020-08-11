@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "15hbjghi2ifylg7nr85qlk0alsy97h9zj6hf5w84m76dla2bcjf3";
 
+  doCheck = false;
+
   buildFlagsArray = ''
     -ldflags=
       -s -w

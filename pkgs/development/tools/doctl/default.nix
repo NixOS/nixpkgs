@@ -6,6 +6,8 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   subPackages = [ "cmd/doctl" ];
 
   buildFlagsArray = let t = "github.com/digitalocean/doctl"; in ''

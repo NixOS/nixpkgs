@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0l8xdnv2m6byd5dwvs3zgcj1lsci7ax4xvx178a8a78sgkqalvmq";
 
+  doCheck = false;
+
   postInstall = ''
     rm $out/bin/{mdtogo,formula}
   '';

@@ -1,7 +1,7 @@
 { lib, buildGoModule, minikube }:
 
 buildGoModule rec {
-  inherit (minikube) version src nativeBuildInputs buildInputs vendorSha256;
+  inherit (minikube) version src nativeBuildInputs buildInputs vendorSha256 doCheck;
 
   pname = "docker-machine-kvm2";
 

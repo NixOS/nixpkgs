@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1500vim2lmkkls758pwhlx3piqbw6ap0nnhdwz9pcxih4s4as2nk";
 
+  doCheck = false;
+
   outputs = [ "out" "man"];
   postInstall = ''
     install -D --mode=444 man/j.1 man/jump.1 -t $man/man/man1/

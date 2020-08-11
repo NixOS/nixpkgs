@@ -12,6 +12,9 @@ buildGoModule rec {
   };
 
   vendorSha256 = "02fnvy897cygmipc5snza556qihjwrp1lf9qi9f5dzarphd6d0pw";
+
+  doCheck = false;
+
   subPackages = [ "cmd/mtail" ];
 
   preBuild = ''

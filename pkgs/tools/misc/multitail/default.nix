@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "1vd9vdxyxsccl64ilx542ya5vlw2bpg6gnkq1x8cfqy6vxvmx7dj";
   };
 
-  buildInputs = [ ncurses pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ ncurses ];
 
   makeFlags = stdenv.lib.optionals stdenv.isDarwin [ "-f" "makefile.macosx" ];
 

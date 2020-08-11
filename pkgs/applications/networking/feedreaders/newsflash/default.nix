@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "newsflash";
-  version = "1.0.2";
+  version = "1.0.4";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
     rev = version;
-    sha256 = "17a8fd5rhs56qrqlfj9ckv45hwfcjhdb8j4cxlnvy7s770s225gd";
+    sha256 = "0x0ws3mhkvf1a8986c8mh2navvvmkkiwymn0smrybffsgqdd2jh1";
   };
 
-  cargoSha256 = "1p0m7la59fn9r2rr26q9mfd1nvyvxb630qiwj96x91p77xv1i30i";
+  cargoSha256 = "0rv2zrbarkkg56yg1w75lpdazgbik36yb70bzc6zqz1rmxinhqb0";
 
   patches = [
     ./no-post-install.patch
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage rec {
     # SVG support for gdk-pixbuf
     librsvg
   ] ++ (with gst_all_1; [
-    # Audio & video & support for webkitgtk WebView
+    # Audio & video support for webkitgtk WebView
     gstreamer
     gst-plugins-base
     gst-plugins-good

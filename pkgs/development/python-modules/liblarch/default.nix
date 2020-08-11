@@ -41,7 +41,7 @@ buildPythonPackage rec {
     description = "A python library built to easily handle data structure such are lists, trees and acyclic graphs";
     homepage = "https://github.com/getting-things-gnome/liblarch";
     downloadPage = "https://github.com/getting-things-gnome/liblarch/releases";
-    license = licenses.lgpl3Only;
+    license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ oyren ];
     platforms = platforms.linux;
   };

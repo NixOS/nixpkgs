@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1k84l97fw4s9jdwbka4p168m7l7wil0c4cpijis8ypj3g1xfrw90";
 
+  doCheck = false;
+
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
   postInstall = ''

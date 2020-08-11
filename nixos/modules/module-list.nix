@@ -331,6 +331,7 @@
   ./services/development/bloop.nix
   ./services/development/hoogle.nix
   ./services/development/jupyter/default.nix
+  ./services/development/jupyterhub/default.nix
   ./services/development/lorri.nix
   ./services/editors/emacs.nix
   ./services/editors/infinoted.nix
@@ -676,6 +677,7 @@
   ./services/networking/nat.nix
   ./services/networking/ndppd.nix
   ./services/networking/networkmanager.nix
+  ./services/networking/nextdns.nix
   ./services/networking/nftables.nix
   ./services/networking/ngircd.nix
   ./services/networking/nghttpx/default.nix
@@ -837,6 +839,7 @@
   ./services/ttys/gpm.nix
   ./services/ttys/kmscon.nix
   ./services/wayland/cage.nix
+  ./services/video/mirakurun.nix
   ./services/web-apps/atlassian/confluence.nix
   ./services/web-apps/atlassian/crowd.nix
   ./services/web-apps/atlassian/jira.nix
@@ -925,6 +928,7 @@
   ./services/x11/gdk-pixbuf.nix
   ./services/x11/imwheel.nix
   ./services/x11/redshift.nix
+  ./services/x11/urserver.nix
   ./services/x11/urxvtd.nix
   ./services/x11/window-managers/awesome.nix
   ./services/x11/window-managers/default.nix

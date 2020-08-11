@@ -10,6 +10,8 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   src = fetchFromGitHub {
     inherit rev;
     owner = "rogpeppe";

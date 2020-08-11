@@ -20,6 +20,8 @@ buildGoModule rec {
 
   vendorSha256 = "1hmqvcvlffd8cpqcnn2f9mnyiwdhw8k46sl2p6rk16yrj06la9mr";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "Kubernetes CLI To Manage Your Clusters In Style.";
     homepage = "https://github.com/derailed/k9s";

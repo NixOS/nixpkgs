@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "04mga3jc2c01daygjcn245mv30lc2ibax0mpb1wjk3s8lkl4cxcz";
 
+  doCheck = false;
+
   nativeBuildInputs = [ makeWrapper ];
 
   subPackages = [ "." ];

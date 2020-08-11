@@ -42,7 +42,7 @@
 */
 {
   "0x4A6F" = {
-    email = "0x4A6F@shackspace.de";
+    email = "mail-maintainer@0x4A6F.dev";
     name = "Joachim Ernst";
     github = "0x4A6F";
     githubId = 9675338;
@@ -1446,6 +1446,12 @@
       fingerprint = "099E 3F97 FA08 3D47 8C75  EBEC E0EB AD78 F019 0BD9";
     }];
   };
+  chiroptical = {
+    email = "chiroptical@gmail.com";
+    github = "chiroptical";
+    githubId = 3086255;
+    name = "Barry Moore II";
+  };
   chkno = {
     email = "chuck@intelligence.org";
     github = "chkno";
@@ -2424,6 +2430,12 @@
     githubId = 1753498;
     name = "Dejan Lukan";
   };
+  elliottvillars = {
+    email = "elliottvillars@gmail.com";
+    github = "elliottvillars";
+    githubId = 48104179;
+    name = "Elliott Villars";
+  };
   eliasp = {
     email = "mail@eliasprobst.eu";
     github = "eliasp";
@@ -3217,6 +3229,12 @@
     github = "guyonvarch";
     githubId = 6768842;
     name = "Joris Guyonvarch";
+  };
+  gvolpe = {
+    email = "volpegabriel@gmail.com";
+    github = "gvolpe";
+    githubId = 443978;
+    name = "Gabriel Volpe";
   };
   hakuch = {
     email = "hakuch@gmail.com";

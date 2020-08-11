@@ -23,6 +23,8 @@ buildGoModule rec {
 
   vendorSha256 = "1nkni9ikpc0wngh5v0qmlpn5s9v85lb2ih22f3h3lih7nc29yv87";
 
+  doCheck = false;
+
   installPhase = ''
     mkdir -p $out/bin
     cp bin/gobetween $out/bin

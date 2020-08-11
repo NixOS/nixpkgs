@@ -7,6 +7,8 @@ buildGoModule rec {
 
   vendorSha256 = "0idf11sr417lxcjryplgb87affr6lgzxazzlyvk0y40hp8zbhwsx";
 
+  doCheck = false;
+
   src = fetchFromGitHub {
     owner = "drone";
     repo = "drone";
