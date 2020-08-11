@@ -431,6 +431,8 @@ let
 
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
+    jwto = callPackage ../development/ocaml-modules/jwto { };
+
     kafka = callPackage ../development/ocaml-modules/kafka { };
 
     ke = callPackage ../development/ocaml-modules/ke { };
