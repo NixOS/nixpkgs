@@ -634,6 +634,11 @@ services.postgresql.dataDir = "/var/db/postgresql";
 </programlisting>
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The USBGuard module now removes options and instead hardcodes values for <literal>IPCAccessControlFiles</literal>, <literal>ruleFiles</literal>, and <literal>auditFilePath</literal>. Audit logs can be found in the journal.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
