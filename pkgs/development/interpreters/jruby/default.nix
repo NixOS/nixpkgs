@@ -2,15 +2,15 @@
 
 let
 # The version number here is whatever is reported by the RUBY_VERSION string
-rubyVersion = callPackage ../ruby/ruby-version.nix {} "2" "3" "3" "";
+rubyVersion = callPackage ../ruby/ruby-version.nix {} "2" "5" "7" "";
 jruby = stdenv.mkDerivation rec {
   pname = "jruby";
 
-  version = "9.2.12.0";
+  version = "9.2.13.0";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/jruby.org/downloads/${version}/jruby-bin-${version}.tar.gz";
-    sha256 = "013c1q1n525y9ghp369z1jayivm9bw8c1x0g5lz7479hqhj62zrh";
+    sha256 = "0n5glz6xm3skrfihzn3g5awdxpjsqn2k8k46gv449rk2l50w5a3k";
   };
 
   buildInputs = [ makeWrapper ];
@@ -46,11 +46,12 @@ jruby = stdenv.mkDerivation rec {
     libPath = "lib/${rubyEngine}/${rubyVersion.libDir}";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Ruby interpreter written in Java";
     homepage = "http://jruby.org/";
-    license = with stdenv.lib.licenses; [ cpl10 gpl2 lgpl21 ];
-    platforms = stdenv.lib.platforms.unix;
+    license = with licenses; [ cpl10 gpl2 lgpl21 ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.fzakaria ];
   };
 };
 in jruby.overrideAttrs (oldAttrs: {

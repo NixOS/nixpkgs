@@ -14,7 +14,7 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "0das5z5y2x1970yi9c4yssxvwrrjhdmsj495q0r5mb02amvc954v";
   };
- 
+
   overrideModAttrs = (_: {
       patches = [];
       preBuild = ''
@@ -27,6 +27,9 @@ buildGoModule rec {
   preBuild = "cp ${gomod} go.mod";
 
   vendorSha256 = "19194dlzpl6zzw2gqybma5pwip71rw8z937f104k6c158qzzgy62";
+
+  doCheck = false;
+
   enableParallelBuilding = true;
   subPackages = [ "." ];
   buildInputs = [ llvm clang-unwrapped makeWrapper ];

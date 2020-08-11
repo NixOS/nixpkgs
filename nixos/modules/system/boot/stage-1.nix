@@ -111,8 +111,8 @@ let
       copy_bin_and_libs ${pkgs.utillinux}/sbin/blkid
 
       # Copy dmsetup and lvm.
-      copy_bin_and_libs ${pkgs.lvm2}/sbin/dmsetup
-      copy_bin_and_libs ${pkgs.lvm2}/sbin/lvm
+      copy_bin_and_libs ${getBin pkgs.lvm2}/bin/dmsetup
+      copy_bin_and_libs ${getBin pkgs.lvm2}/bin/lvm
 
       # Add RAID mdadm tool.
       copy_bin_and_libs ${pkgs.mdadm}/sbin/mdadm
@@ -235,7 +235,7 @@ let
             --replace cdrom_id ${extraUtils}/bin/cdrom_id \
             --replace ${pkgs.coreutils}/bin/basename ${extraUtils}/bin/basename \
             --replace ${pkgs.utillinux}/bin/blkid ${extraUtils}/bin/blkid \
-            --replace ${pkgs.lvm2}/sbin ${extraUtils}/bin \
+            --replace ${getBin pkgs.lvm2}/bin ${extraUtils}/bin \
             --replace ${pkgs.mdadm}/sbin ${extraUtils}/sbin \
             --replace ${pkgs.bash}/bin/sh ${extraUtils}/bin/sh \
             --replace ${udev} ${extraUtils}
@@ -559,10 +559,12 @@ in
           default = false;
           type = types.bool;
           description = ''
-            If set, this file system will be mounted in the initial
-            ramdisk.  By default, this applies to the root file system
-            and to the file system containing
-            <filename>/nix/store</filename>.
+            If set, this file system will be mounted in the initial ramdisk.
+            Note that the file system will always be mounted in the initial
+            ramdisk if its mount point is one of the following:
+            ${concatStringsSep ", " (
+              forEach utils.pathsNeededForBoot (i: "<filename>${i}</filename>")
+            )}.
           '';
         };
       });

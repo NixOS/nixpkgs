@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, fetchsvn
+{ mkDerivation, lib, fetchurl, fetchsvn, stdenv
 , pkgconfig, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook
 , qtbase, qtimageformats, gtk3, libsForQt5, enchant2, lz4, xxHash
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
@@ -19,12 +19,12 @@ with lib;
 
 mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.1.13";
+  version = "2.2.0";
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "0mq3f7faxn1hfkhv5n37y5iajjnm38s2in631046m0q7c4w3lrfi";
+    sha256 = "1chikb02df4qqnickcmx96lcx481b14kmksjsp7h94g0d223ypq0";
   };
 
   postPatch = ''
@@ -62,6 +62,8 @@ mkDerivation rec {
     "-DTDESKTOP_USE_PACKAGED_TGVOIP=OFF"
     #"-DDESKTOP_APP_SPECIAL_TARGET=\"\"" # TODO: Error when set to "": Bad special target '""'
     "-DTDESKTOP_LAUNCHER_BASENAME=telegramdesktop" # Note: This is the default
+  ] ++ optionals stdenv.isLinux [ # TODO: Remove workaround once #94905 is resolved:
+    "-DCMAKE_OSX_ARCHITECTURES="
   ];
 
   # Note: The following packages could be packaged system-wide, but it's

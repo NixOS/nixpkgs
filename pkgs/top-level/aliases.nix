@@ -42,6 +42,7 @@ mapAliases ({
   aircrackng = aircrack-ng; # added 2016-01-14
   alienfx = throw "alienfx has been removed."; # added 2019-12-08
   ammonite-repl = ammonite; # added 2017-05-02
+  antimicro = throw "antimicro has been removed as it was broken, see antimicroX instead."; # added 2020-08-06
   arduino_core = arduino-core;  # added 2015-02-04
   asciidocFull = asciidoc-full;  # added 2014-06-22
   at_spi2_atk = at-spi2-atk; # added 2018-02-25
@@ -347,7 +348,6 @@ mapAliases ({
     with the following snippet:
     php74.override { embedSupport = true; apxs2Support = false; }
   ''; # added 2020-04-01
-  php72-embed = php-embed; # added 2020-04-01
   php73-embed = php-embed; # added 2020-04-01
   php74-embed = php-embed; # added 2020-04-01
 
@@ -358,7 +358,6 @@ mapAliases ({
   ''; # added 2020-04-01
   php74Packages-embed = phpPackages-embed;
   php73Packages-embed = phpPackages-embed;
-  php72Packages-embed = phpPackages-embed;
 
   php-unit = throw ''
     php*-unit has been dropped, you can build something similar with
@@ -372,7 +371,6 @@ mapAliases ({
       fpmSupport = false;
     }
   ''; # added 2020-04-01
-  php72-unit = php-unit; # added 2020-04-01
   php73-unit = php-unit; # added 2020-04-01
   php74-unit = php-unit; # added 2020-04-01
 
@@ -390,7 +388,6 @@ mapAliases ({
   ''; # added 2020-04-01
   php74Packages-unit = phpPackages-unit;
   php73Packages-unit = phpPackages-unit;
-  php72Packages-unit = phpPackages-unit;
 
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatex = pidgin-latex; # added 2018-01-08
@@ -449,8 +446,6 @@ mapAliases ({
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rdmd = dtools;  # added 2017-08-19
   rhc = throw "deprecated in 2019-04-09: abandoned by upstream.";
-  riot-desktop = element-desktop; # added 2020-07-15
-  riot-web = element-web; # added 2020-07-15
   rng_tools = rng-tools; # added 2018-10-24
   robomongo = robo3t; #added 2017-09-28
   rssglx = rss-glx; #added 2015-03-25
@@ -548,6 +543,7 @@ mapAliases ({
   surf-webkit2 = surf; # added 2017-04-02
   sup = throw "deprecated in 2019-09-10: abandoned by upstream";
   system_config_printer = system-config-printer;  # added 2016-01-03
+  systemd_with_lvm2 = throw "obsolete, enabled by default via the lvm module"; # added 2020-07-12
   systool = sysfsutils; # added 2018-04-25
   tahoelafs = tahoe-lafs; # added 2018-03-26
   tangogps = foxtrotgps; # added 2020-01-26
@@ -677,6 +673,10 @@ mapAliases ({
 
   # added 2019-09-06
   zeroc_ice = pkgs.zeroc-ice;
+
+  # added 2020-06-22
+  zeromq3 = throw "zeromq3 has been deprecated by zeromq4.";
+  jzmq = throw "jzmq has been removed from nixpkgs, as it was unmaintained";
 } // (with ocaml-ng; { # added 2016-09-14
   ocaml_4_00_1 = ocamlPackages_4_00_1.ocaml;
   ocaml_4_01_0 = ocamlPackages_4_01_0.ocaml;
@@ -711,4 +711,8 @@ mapAliases ({
   sqldeveloper_18 = throw "sqldeveloper_18 is not maintained anymore!"; # added 2020-02-04
 
   gcc-snapshot = throw "Marked as broken for >2 years, additionally this 'snapshot' pointed to a fairly old one from gcc7.";
+
+  /* Cleanup before 21.03 */
+  riot-desktop = throw "riot-desktop is now element-desktop!";
+  riot-web = throw "riot-web is now element-web";
 })

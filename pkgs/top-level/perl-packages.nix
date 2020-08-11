@@ -303,6 +303,22 @@ let
     };
   };
 
+  AltCryptRSABigInt = buildPerlPackage {
+    pname = "Alt-Crypt-RSA-BigInt";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DANAJ/Alt-Crypt-RSA-BigInt-0.06.tar.gz";
+      sha256 = "76f434cab36999cdf09811345bb39d6b7cbed7e085b02338328c7f46e08b38f3";
+    };
+    propagatedBuildInputs = [ ClassLoader ConvertASCIIArmour CryptBlowfish CryptCBC DataBuffer DigestMD2 MathBigIntGMP MathPrimeUtil MathPrimeUtilGMP SortVersions TieEncryptedHash ];
+    meta = {
+      homepage = "https://github.com/danaj/Alt-Crypt-RSA-BigInt";
+      description = "RSA public-key cryptosystem, using Math::BigInt";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   AnyEvent = buildPerlPackage {
     pname = "AnyEvent";
     version = "7.17";
@@ -2150,7 +2166,7 @@ let
       ../development/perl-modules/CatalystXScriptServerStarman-fork-arg.patch
     ];
     buildInputs = [ TestWWWMechanizeCatalyst ];
-    propagatedBuildInputs = [ CatalystRuntime Starman ];
+    propagatedBuildInputs = [ CatalystRuntime Starman PodParser ];
     meta = {
       description = "Replace the development server with Starman";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -2201,6 +2217,20 @@ let
       maintainers = [ maintainers.endgame ];
     };
   };
+
+  CDDBFile = buildPerlPackage {
+    pname = "CDDB-File";
+    version = "1.05";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/T/TM/TMTM/CDDB-File-1.05.tar.gz;
+      sha256 = "1jf7xhd4w9iwabhz2wajh6fid3nyvkid9q5gdhyff52w86f45rpb";
+    };
+    meta = {
+      description = "Parse a CDDB/freedb data file";
+      license = stdenv.lib.licenses.artistic1;
+    };
+  };
+
 
   CGI = buildPerlPackage {
     pname = "CGI";
@@ -3329,6 +3359,20 @@ let
      };
   };
 
+  ConvertASCIIArmour = buildPerlPackage {
+    pname = "Convert-ASCII-Armour";
+    version = "1.4";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/V/VI/VIPUL/Convert-ASCII-Armour-1.4.tar.gz";
+      sha256 = "97e8acb6eb2a2a91af7d6cf0d2dff6fa42aaf939fc7d6d1c6057a4f0df52c904";
+    };
+    meta = {
+      description = "Convert binary octets into ASCII armoured messages";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   ConvertASN1 = buildPerlPackage {
     pname = "Convert-ASN1";
     version = "0.27";
@@ -3505,6 +3549,27 @@ let
     };
   };
 
+  CPANMini = buildPerlPackage {
+    pname = "CPAN-Mini";
+    version = "1.111016";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/CPAN-Mini-1.111016.tar.gz";
+      sha256 = "5a297afc3e367ad80811464d4eb7e4dd3caff8ba499cdd2b558f6279443a7657";
+    };
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+    propagatedBuildInputs = [ FileHomeDir LWP LWPProtocolHttps URI ];
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/minicpan
+    '';
+
+    meta = {
+      homepage = "https://github.com/rjbs/CPAN-Mini";
+      description = "Create a minimal mirror of CPAN";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CpanelJSONXS = buildPerlPackage {
     pname = "Cpanel-JSON-XS";
     version = "4.17";
@@ -3640,6 +3705,20 @@ let
     };
   };
 
+  CryptCAST5_PP = buildPerlPackage {
+    pname = "Crypt-CAST5_PP";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BOBMATH/Crypt-CAST5_PP-1.04.tar.gz";
+      sha256 = "cba98a80403fb898a14c928f237f44816b4848641840ce2517363c2c071b5327";
+    };
+    meta = {
+      description = "CAST5 block cipher in pure Perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CryptCBC = buildPerlPackage {
     pname = "Crypt-CBC";
     version = "2.33";
@@ -3677,6 +3756,21 @@ let
     };
   };
 
+  CryptDES_EDE3 = buildPerlPackage {
+    pname = "Crypt-DES_EDE3";
+    version = "0.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BT/BTROTT/Crypt-DES_EDE3-0.01.tar.gz";
+      sha256 = "9cb2e04b625e9cc0833cd499f76fd12556583ececa782a9758a55e3f969748d6";
+    };
+    propagatedBuildInputs = [ CryptDES ];
+    meta = {
+      description = "Triple-DES EDE encryption/decryption";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CryptDH = buildPerlPackage {
     pname = "Crypt-DH";
     version = "0.07";
@@ -3697,6 +3791,21 @@ let
     buildInputs = [ pkgs.gmp DevelChecklib TestRequires ];
     NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
+  };
+
+  CryptDSA = buildPerlPackage {
+    pname = "Crypt-DSA";
+    version = "1.17";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AD/ADAMK/Crypt-DSA-1.17.tar.gz";
+      sha256 = "d1b8585f6bf746f76e5dc5da3641d325ed656bc2e5f344b54514b55c31009a03";
+    };
+    propagatedBuildInputs = [ DataBuffer DigestSHA1 FileWhich ];
+    meta = {
+      description = "DSA Signatures and Key Generation";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
   };
 
   CryptECB = buildPerlPackage {
@@ -3846,6 +3955,21 @@ let
     };
   };
 
+  CryptRIPEMD160 = buildPerlPackage {
+    pname = "Crypt-RIPEMD160";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TODDR/Crypt-RIPEMD160-0.06.tar.gz";
+      sha256 = "ea64a1e9eb42f3d79855a392e7cca6b86e8e0bcc9aabcc5efa5fa32415b67dba";
+    };
+    meta = {
+      homepage = "http://wiki.github.com/toddr/Crypt-RIPEMD160";
+      description = "Perl extension for the RIPEMD-160 Hash function";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CryptMySQL = buildPerlModule {
     pname = "Crypt-MySQL";
     version = "0.04";
@@ -3912,6 +4036,47 @@ let
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BJ/BJKUIT/Crypt-SmbHash-0.12.tar.gz";
       sha256 = "0dxivcqmabkhpz5xzph6rzl8fvq9xjy26b2ci77pv5gsmdzari38";
+    };
+  };
+
+  CryptTwofish = buildPerlPackage {
+    pname = "Crypt-Twofish";
+    version = "2.17";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AM/AMS/Crypt-Twofish-2.17.tar.gz";
+      sha256 = "eed502012f0c63927a1a32e3154071cc81175d1992a893ec41f183b6e3e5d758";
+    };
+    meta = {
+      description = "The Twofish Encryption Algorithm";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  CryptOpenPGP = buildPerlPackage {
+    pname = "Crypt-OpenPGP";
+    version = "1.12";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SR/SROMANOV/Crypt-OpenPGP-1.12.tar.gz";
+      sha256 = "e8a7ff2a993b76a69ad6dffdbe55755be5678b84e6ec494dcd9ab966f766f50e";
+    };
+    patches = [
+      # See https://github.com/NixOS/nixpkgs/pull/93599
+      ../development/perl-modules/crypt-openpgp-remove-impure-keygen-tests.patch
+    ];
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [ AltCryptRSABigInt CryptBlowfish CryptCAST5_PP CryptDES_EDE3 CryptDSA CryptIDEA CryptRIPEMD160 CryptRijndael CryptTwofish DataBuffer FileHomeDir LWP TermReadKey URI BytesRandomSecure ];
+
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/pgplet
+    '';
+
+    meta = {
+      homepage = "https://github.com/btrott/Crypt-OpenPGP";
+      description = "Pure-Perl OpenPGP implementation";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 
@@ -5598,6 +5763,20 @@ let
     };
   };
 
+  DataBuffer = buildPerlPackage {
+    pname = "Data-Buffer";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BT/BTROTT/Data-Buffer-0.04.tar.gz";
+      sha256 = "2b3d09b7bcf389fc116207b283bee250e348d44c9c63460bee67efab4dd21bb4";
+    };
+    meta = {
+      description = "Read/write buffer class";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   DBIxIntrospector = buildPerlPackage {
     pname = "DBIx-Introspector";
     version = "0.001005";
@@ -5803,6 +5982,20 @@ let
     meta = {
       description = "Perl extension for 32 bit Jenkins Hashing Algorithm";
       license = stdenv.lib.licenses.artistic2;
+    };
+  };
+
+  DigestMD2 = buildPerlPackage {
+    pname = "Digest-MD2";
+    version = "2.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GA/GAAS/Digest-MD2-2.04.tar.gz";
+      sha256 = "d0aabf4834c20ac411bea427c4a308b59a5fcaa327679ef5294c1d68ab71eed3";
+    };
+    meta = {
+      description = "Perl interface to the MD2 Algorithm";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 
@@ -7532,6 +7725,11 @@ let
       url = "mirror://cpan/authors/id/C/CW/CWEST/File-Pid-1.01.tar.gz";
       sha256 = "bafeee8fdc96eb06306a0c58bbdb7209b6de45f850e75fdc6b16db576e05e422";
     };
+    patches = [(fetchpatch {
+      name = "missing-pidfile.patch";
+      url = "https://sources.debian.org/data/main/libf/libfile-pid-perl/1.01-2/debian/patches/missing-pidfile.patch";
+      sha256 = "1wvax2qdpfs9mgksnc12dhby9b9w19isp50dc55wd3d741ihh6sl";
+    })];
     propagatedBuildInputs = [ ClassAccessor ];
     meta = {
       license = stdenv.lib.licenses.free; # Same as Perl
@@ -10919,10 +11117,10 @@ let
 
   LogHandler = buildPerlModule {
     pname = "Log-Handler";
-    version = "0.88";
+    version = "0.90";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BL/BLOONIX/Log-Handler-0.88.tar.gz";
-      sha256 = "45bf540ab2138ed3ff93afc205b0516dc75755b86acdcc5e75c41347833c293d";
+      url = "mirror://cpan/authors/id/B/BL/BLOONIX/Log-Handler-0.90.tar.gz";
+      sha256 = "0kgp3frz0y51j8kw67d6b4yyrrbh7syqraxchc7pfm442bkq0p1s";
     };
     propagatedBuildInputs = [ ParamsValidate ];
     meta = {
@@ -11656,6 +11854,40 @@ let
     };
     propagatedBuildInputs = [ MathLibm constant-defer ];
     buildInputs = [ DataFloat MathBigIntLite NumberFraction ];
+  };
+
+  MathPrimeUtil = buildPerlPackage {
+    pname = "Math-Prime-Util";
+    version = "0.73";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DANAJ/Math-Prime-Util-0.73.tar.gz";
+      sha256 = "4afa6dd8cdb97499bd4eca6925861812c29d9f5a0f1ac27ad9d2d9c9b5602894";
+    };
+    propagatedBuildInputs = [ MathPrimeUtilGMP ];
+    meta = {
+      homepage = "https://github.com/danaj/Math-Prime-Util";
+      description = "Utilities related to prime numbers, including fast sieves and factoring";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  MathPrimeUtilGMP = buildPerlPackage {
+    pname = "Math-Prime-Util-GMP";
+    version = "0.52";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DANAJ/Math-Prime-Util-GMP-0.52.tar.gz";
+      sha256 = "2697c7fd5c7e35fdec7f50ed56a67be807a2f22657589e637dad3592744003be";
+    };
+    buildInputs = [ pkgs.gmp ];
+    NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
+    meta = {
+      homepage = "https://github.com/danaj/Math-Prime-Util-GMP";
+      description = "Utilities related to prime numbers, using GMP";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
   };
 
   MathRandom = buildPerlPackage {
@@ -13674,6 +13906,41 @@ let
     };
   };
 
+  MP3Info = buildPerlPackage {
+    pname = "MP3-Info";
+    version = "1.26";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JM/JMERELO/MP3-Info-1.26.tar.gz;
+      sha256 = "1rwbrsdw6y6jgcjvrlji6fbcvwl4wlka3mkhlw12a7s2683k8qjp";
+    };
+    meta = {
+      description = "Manipulate / fetch info from MP3 audio files";
+      license = with stdenv.lib.licenses; [ artistic1 ];
+    };
+  };
+
+  MP3Tag = buildPerlPackage {
+    pname = "MP3-Tag";
+    version = "1.15";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/I/IL/ILYAZ/modules/MP3-Tag-1.15.zip;
+      sha256 = "1lanbwv97sfsb7h4vsg1v0dv3yghpz01nf3rzl4a9p3ycgs4ib5a";
+    };
+    buildInputs = [ pkgs.unzip ];
+    propagatedBuildInputs = [ CompressZlib ExtUtilsMakeMaker ];
+    postPatch = ''
+      substituteInPlace Makefile.PL --replace "'PL_FILES'" "#'PL_FILES'"
+    '';
+    postFixup = ''
+      perl data_pod.PL PERL5LIB:$PERL5LIB
+    '';
+    outputs = [ "out" ];
+    meta = {
+      description = "Module for reading tags of MP3 audio files";
+      license = with stdenv.lib.licenses; [ artistic1 ];
+    };
+  };
+
   Mouse = buildPerlModule {
     pname = "Mouse";
     version = "2.5.10";
@@ -14102,6 +14369,21 @@ let
     propagatedBuildInputs = [ NetFrame ];
     meta = {
       description = "Internet Protocol v6 layer object";
+      license = with stdenv.lib.licenses; [ artistic1 ];
+    };
+  };
+
+  NetFreeDB = buildPerlPackage {
+    pname = "Net-FreeDB";
+    version = "0.10";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DS/DSHULTZ/Net-FreeDB-0.10.tar.gz;
+      sha256 = "11dfi14qnzsnmr71cygir85zfj15n08b7d5g0i4cj5pb70if2hzp";
+    };
+    buildInputs = [ TestMost TestDeep TestWarn TestException TestDifferences ];
+    propagatedBuildInputs = [ CDDBFile Moo libnet ];
+    meta = {
+      description = "Perl interface to freedb server(s)";
       license = with stdenv.lib.licenses; [ artistic1 ];
     };
   };
@@ -14651,6 +14933,22 @@ let
     meta = {
       description = "Generate cryptographic signatures for objects";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  OggVorbisHeaderPurePerl = buildPerlPackage {
+    pname = "Ogg-Vorbis-Header-PurePerl";
+    version = "1.0";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DA/DANIEL/Ogg-Vorbis-Header-PurePerl-1.0.tar.gz;
+      sha256 = "0kjqswnwhp7yf7czvhggdyp2pgg5wa58b4jwpn8j3km7h2ll8pmy";
+    };
+    buildInputs = [ TestMore ];
+    # The testing mechanism is erorrneous upstream. See http://matrix.cpantesters.org/?dist=Ogg-Vorbis-Header-PurePerl+1.0
+    doCheck = false;
+    meta = {
+      description = "An object-oriented interface to Ogg Vorbis information and comment fields";
+      license = with stdenv.lib.licenses; [ artistic1 ];
     };
   };
 
@@ -16013,7 +16311,7 @@ let
       url = "mirror://cpan/authors/id/R/RC/RCLAMP/Pod-Coverage-0.23.tar.gz";
       sha256 = "01xifj83dv492lxixijmg6va02rf3ydlxly0a9slmx22r6qa1drh";
     };
-    propagatedBuildInputs = [ DevelSymdump ];
+    propagatedBuildInputs = [ DevelSymdump PodParser ];
   };
 
   PodCoverageTrustPod = buildPerlPackage {
@@ -16127,6 +16425,7 @@ let
       url = "mirror://cpan/authors/id/T/TJ/TJENNESS/Pod-LaTeX-0.61.tar.gz";
       sha256 = "15a840ea1c8a76cd3c865fbbf2fec33b03615c0daa50f9c800c54e0cf0659d46";
     };
+    propagatedBuildInputs = [ PodParser ];
     meta = {
       homepage = "https://github.com/timj/perl-Pod-LaTeX/tree/master";
       description = "Convert Pod data to formatted Latex";
@@ -16195,6 +16494,7 @@ let
       url = "mirror://cpan/authors/id/R/RM/RMBARKER/Pod-Plainer-1.04.tar.gz";
       sha256 = "1bbfbf7d1d4871e5a83bab2137e22d089078206815190eb1d5c1260a3499456f";
     };
+    propagatedBuildInputs = [ PodParser ];
     meta = {
       description = "Perl extension for converting Pod to old-style Pod";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -16248,7 +16548,7 @@ let
       url = "mirror://cpan/authors/id/D/DO/DOLMEN/Pod-Spell-1.20.tar.gz";
       sha256 = "6383f7bfe22bc0d839a08057a0ce780698b046184aea935be4833d94986dd03c";
     };
-    propagatedBuildInputs = [ ClassTiny FileShareDir LinguaENInflect PathTiny ];
+    propagatedBuildInputs = [ ClassTiny FileShareDir LinguaENInflect PathTiny PodParser ];
     buildInputs = [ FileShareDirInstall TestDeep ];
   };
 
@@ -16303,6 +16603,7 @@ let
        url = "mirror://cpan/authors/id/N/NU/NUFFIN/Pod-Wrap-0.01.tar.gz";
        sha256 = "0qwb5hp26f85xnb3zivf8ccfdplabiyl5sd53c6wgdgvzzicpjjh";
      };
+     propagatedBuildInputs = [ PodParser ];
      meta = {
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
      };
@@ -19319,7 +19620,7 @@ let
       sha256 = "2bfe771173c38b69eeb089504e3f76511b8e45e6a9e6dac3e616e400ea67bcf0";
     };
     buildInputs = [ ModuleBuildTiny TestPod ];
-    propagatedBuildInputs = [ CaptureTiny Moose podlinkcheck ];
+    propagatedBuildInputs = [ CaptureTiny Moose podlinkcheck PodParser ];
     meta = {
       description = "Tests POD for invalid links";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -20566,6 +20867,21 @@ let
     meta = {
       description = "Cycle through a list of values via a scalar";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TieEncryptedHash = buildPerlPackage {
+    pname = "Tie-EncryptedHash";
+    version = "1.24";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/V/VI/VIPUL/Tie-EncryptedHash-1.24.tar.gz";
+      sha256 = "aa9a083a231e4046170a5894644e3c59679c7dbd0aa2d1217dc85150df2c1e21";
+    };
+    propagatedBuildInputs = [ CryptBlowfish CryptCBC CryptDES ];
+    meta = {
+      description = "Hashes (and objects based on hashes) with encrypting fields";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 

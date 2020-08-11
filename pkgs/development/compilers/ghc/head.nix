@@ -20,9 +20,9 @@
   # build-time dependency too.
   buildLlvmPackages, llvmPackages
 
-, # If enabled, GHC will be built with the GPL-free but slower integer-simple
-  # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? !(stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) gmp.meta.platforms)
+, # If enabled, GHC will be built with the GPL-free but slightly slower native
+  # bignum backend instead of the faster but GPLed gmp backend.
+  enableNativeBignum ? !(stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) gmp.meta.platforms)
 , gmp
 
 , # If enabled, use -fPIC when compiling static libs.
@@ -35,7 +35,7 @@
 , # Whether to build terminfo.
   enableTerminfo ? !stdenv.targetPlatform.isWindows
 
-, version ? "8.11.20200505"
+, version ? "8.11.20200731"
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
   ghcFlavour ? stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
@@ -46,7 +46,7 @@
   disableLargeAddressSpace ? stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64
 }:
 
-assert !enableIntegerSimple -> gmp != null;
+assert !enableNativeBignum -> gmp != null;
 
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
@@ -64,7 +64,7 @@ let
     include mk/flavours/\$(BuildFlavour).mk
     endif
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
-    INTEGER_LIBRARY = ${if enableIntegerSimple then "integer-simple" else "integer-gmp"}
+    BIGNUM_BACKEND = ${if enableNativeBignum then "native" else "gmp"}
   '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
     Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
     CrossCompilePrefix = ${targetPrefix}
@@ -81,7 +81,7 @@ let
   # Splicer will pull out correct variations
   libDeps = platform: stdenv.lib.optional enableTerminfo ncurses
     ++ [libffi]
-    ++ stdenv.lib.optional (!enableIntegerSimple) gmp
+    ++ stdenv.lib.optional (!enableNativeBignum) gmp
     ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv
     ++ stdenv.lib.optional enableDwarf elfutils;
 
@@ -103,8 +103,8 @@ stdenv.mkDerivation (rec {
 
   src = fetchgit {
     url = "https://gitlab.haskell.org/ghc/ghc.git/";
-    rev = "40c71c2cf38b4e134d81b7184a4d5e02949ae70c";
-    sha256 = "04h9rcyzm9w3an1z00hjs062dp7dl19b8pkyxjsypr7a2i9dmvkb";
+    rev = "380638a33691ba43fdcd2e18bca636750e5f66f1";
+    sha256 = "029cgiyhddvwnx5zx31i0vgj13zsvzb8fna99zr6ifscz6x7rid1";
   };
 
   enableParallelBuilding = true;
@@ -173,7 +173,7 @@ stdenv.mkDerivation (rec {
     "--with-system-libffi"
     "--with-ffi-includes=${targetPackages.libffi.dev}/include"
     "--with-ffi-libraries=${targetPackages.libffi.out}/lib"
-  ] ++ stdenv.lib.optionals (targetPlatform == hostPlatform && !enableIntegerSimple) [
+  ] ++ stdenv.lib.optionals (targetPlatform == hostPlatform && !enableNativeBignum) [
     "--with-gmp-includes=${targetPackages.gmp.dev}/include"
     "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [

@@ -569,6 +569,8 @@ let
 
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
+    mustache =  callPackage ../development/ocaml-modules/mustache { };
+
     nocrypto =  callPackage ../development/ocaml-modules/nocrypto { };
 
     notty = callPackage ../development/ocaml-modules/notty { };
@@ -757,6 +759,8 @@ let
     spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };
 
     sqlexpr = callPackage ../development/ocaml-modules/sqlexpr { };
+
+    tsort = callPackage ../development/ocaml-modules/tsort { };
 
     tuntap = callPackage ../development/ocaml-modules/tuntap { };
 

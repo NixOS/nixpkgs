@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch
-, zlib, xz, python, gettext, ncurses, findXMLCatalogs
+, zlib, xz, libintl, python, gettext, ncurses, findXMLCatalogs
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 , icuSupport ? false, icu ? null
 , enableShared ? stdenv.hostPlatform.libc != "msvcrt"
@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional pythonSupport python
     ++ lib.optional (pythonSupport && python?isPy2 && python.isPy2) gettext
     ++ lib.optional (pythonSupport && python?isPy3 && python.isPy3) ncurses
+    ++ lib.optional (stdenv.isDarwin &&
+                     pythonSupport && python?isPy2 && python.isPy2) libintl
     # Libxml2 has an optional dependency on liblzma.  However, on impure
     # platforms, it may end up using that from /usr/lib, and thus lack a
     # RUNPATH for that, leading to undefined references for its users.

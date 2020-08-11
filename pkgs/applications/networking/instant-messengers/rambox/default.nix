@@ -35,8 +35,10 @@ in stdenv.mkDerivation rec {
       --replace Exec=/opt/Rambox/rambox Exec=rambox
   '';
 
-  postFixup = ''
-    wrapProgram $out/opt/Rambox/rambox --prefix PATH : ${xdg_utils}/bin
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : ${xdg_utils}/bin
+    )
   '';
 
   meta = with stdenv.lib; {

@@ -15,6 +15,8 @@ buildGoModule rec {
 
   vendorSha256 = "11rk7pma6dr6fsyz8hpjyr7nc2c7ichh5m7ds07m89gzk6ar55gb";
 
+  doCheck = false;
+
   buildInputs = [ olm ];
 
   postInstall = ''

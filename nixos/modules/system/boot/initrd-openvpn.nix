@@ -5,7 +5,7 @@ with lib;
 let
 
   cfg = config.boot.initrd.network.openvpn;
-  
+
 in
 
 {
@@ -16,17 +16,17 @@ in
       type = types.bool;
       default = false;
       description = ''
-        Starts an OpenVPN client during initrd boot. It can be used to e.g. 
-        remotely accessing the SSH service controlled by 
-        <option>boot.initrd.network.ssh</option> or other network services 
+        Starts an OpenVPN client during initrd boot. It can be used to e.g.
+        remotely accessing the SSH service controlled by
+        <option>boot.initrd.network.ssh</option> or other network services
         included. Service is killed when stage-1 boot is finished.
       '';
     };
-    
+
     boot.initrd.network.openvpn.configuration = mkOption {
       type = types.path; # Same type as boot.initrd.secrets
       description = ''
-        The configuration file for OpenVPN. 
+        The configuration file for OpenVPN.
 
         <warning>
           <para>
@@ -47,7 +47,7 @@ in
         message = "You should specify a configuration for initrd OpenVPN";
       }
     ];
-    
+
     # Add kernel modules needed for OpenVPN
     boot.initrd.kernelModules = [ "tun" "tap" ];
 
@@ -60,11 +60,11 @@ in
       cp -pv ${pkgs.glibc}/lib/libresolv.so.2 $out/lib
       cp -pv ${pkgs.glibc}/lib/libnss_dns.so.2 $out/lib
     '';
-    
+
     boot.initrd.secrets = {
       "/etc/initrd.ovpn" = cfg.configuration;
     };
-    
+
     # openvpn --version would exit with 1 instead of 0
     boot.initrd.extraUtilsCommandsTest = ''
       $out/bin/openvpn --show-gateway

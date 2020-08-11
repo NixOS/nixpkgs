@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, meson, ninja, pkgconfig
+{ stdenv, fetchgit, meson, ninja, pkgconfig, nix-update-script
 , python3, gtk3, libsecret, gst_all_1, webkitgtk
 , glib-networking, gtkspell3, hunspell, desktop-file-utils
 , gobject-introspection, wrapGAppsHook }:
@@ -56,6 +56,13 @@ python3.pkgs.buildPythonApplication rec {
     buildPythonPath "$out $propagatedBuildInputs"
     patchPythonScript "$out/libexec/eolie-sp"
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
 
   meta = with stdenv.lib; {
     description = "A new GNOME web browser";

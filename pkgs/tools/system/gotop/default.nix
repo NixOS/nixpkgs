@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1crphp41bfivfmfp3cl7pjca3ypds6mr3847msd4wvfq4g6imk55";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "A terminal based graphical activity monitor inspired by gtop and vtop";
     homepage = "https://github.com/xxxserxxx/gotop";

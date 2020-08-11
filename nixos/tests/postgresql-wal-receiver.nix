@@ -28,6 +28,10 @@ let
     meta.maintainers = with maintainers; [ pacien ];
 
     machine = { ... }: {
+      # Needed because this test uses a non-default 'services.postgresql.dataDir'.
+      systemd.tmpfiles.rules = [
+        "d /var/db/postgresql 0700 postgres postgres"
+      ];
       services.postgresql = {
         package = postgresqlPackage;
         enable = true;

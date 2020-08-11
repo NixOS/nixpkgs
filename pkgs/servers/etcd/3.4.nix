@@ -7,6 +7,9 @@ buildGoModule rec {
   #vendorSha256 = null; revert to `null` for > 3.4.10
 
   vendorSha256 = "1fhrycl8m8ddb7mwasbyfiwrl4d9lfdk7zd3mxb7ahkipdp2c94z";
+
+  doCheck = false;
+
   deleteVendor = true;
 
   src = fetchFromGitHub {

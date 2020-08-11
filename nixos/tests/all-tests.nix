@@ -32,6 +32,7 @@ in
   beanstalkd = handleTest ./beanstalkd.nix {};
   bees = handleTest ./bees.nix {};
   bind = handleTest ./bind.nix {};
+  bitcoind = handleTest ./bitcoind.nix {};
   bittorrent = handleTest ./bittorrent.nix {};
   blockbook-frontend = handleTest ./blockbook-frontend.nix {};
   buildkite-agents = handleTest ./buildkite-agents.nix {};
@@ -161,6 +162,7 @@ in
   jellyfin = handleTest ./jellyfin.nix {};
   jenkins = handleTest ./jenkins.nix {};
   jirafeau = handleTest ./jirafeau.nix {};
+  jitsi-meet = handleTest ./jitsi-meet.nix {};
   k3s = handleTest ./k3s.nix {};
   kafka = handleTest ./kafka.nix {};
   keepalived = handleTest ./keepalived.nix {};
@@ -284,6 +286,7 @@ in
   prosody = handleTest ./xmpp/prosody.nix {};
   prosodyMysql = handleTest ./xmpp/prosody-mysql.nix {};
   proxy = handleTest ./proxy.nix {};
+  pt2-clone = handleTest ./pt2-clone.nix {};
   qboot = handleTestOn ["x86_64-linux" "i686-linux"] ./qboot.nix {};
   quagga = handleTest ./quagga.nix {};
   quorum = handleTest ./quorum.nix {};
@@ -303,11 +306,13 @@ in
   sanoid = handleTest ./sanoid.nix {};
   sddm = handleTest ./sddm.nix {};
   service-runner = handleTest ./service-runner.nix {};
+  shattered-pixel-dungeon = handleTest ./shattered-pixel-dungeon.nix {};
   shiori = handleTest ./shiori.nix {};
   signal-desktop = handleTest ./signal-desktop.nix {};
   simple = handleTest ./simple.nix {};
   slurm = handleTest ./slurm.nix {};
   smokeping = handleTest ./smokeping.nix {};
+  snapcast = handleTest ./snapcast.nix {};
   snapper = handleTest ./snapper.nix {};
   sogo = handleTest ./sogo.nix {};
   solr = handleTest ./solr.nix {};
@@ -319,6 +324,7 @@ in
   sudo = handleTest ./sudo.nix {};
   switchTest = handleTest ./switch-test.nix {};
   sympa = handleTest ./sympa.nix {};
+  syncthing = handleTest ./syncthing.nix {};
   syncthing-init = handleTest ./syncthing-init.nix {};
   syncthing-relay = handleTest ./syncthing-relay.nix {};
   systemd = handleTest ./systemd.nix {};
@@ -366,6 +372,7 @@ in
   yabar = handleTest ./yabar.nix {};
   yggdrasil = handleTest ./yggdrasil.nix {};
   zfs = handleTest ./zfs.nix {};
+  zigbee2mqtt = handleTest ./zigbee2mqtt.nix {};
   zoneminder = handleTest ./zoneminder.nix {};
   zookeeper = handleTest ./zookeeper.nix {};
   zsh-history = handleTest ./zsh-history.nix {};

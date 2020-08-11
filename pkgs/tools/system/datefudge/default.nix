@@ -1,21 +1,14 @@
 { stdenv, fetchgit, fetchpatch }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "datefudge";
-  version = "1.23";
+  version = "1.24";
 
   src = fetchgit {
-    url = "https://salsa.debian.org/debian/datefudge.git";
-    rev = "090d3aace17640478f7f5119518b2f4196f62617";
-    sha256 = "0r9g8v9xnv60hq3j20wqy34kyig3sc2pisjxl4irn7jjx85f1spv";
+    url = "https://salsa.debian.org/debian/${pname}.git";
+    rev = "debian/${version}";
+    sha256 = "1nh433yx4y4djp0bs6aawqbwk7miq7fsbs9wpjlyh2k9dvil2lrm";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/datefudge/raw/master/f/datefudge_1.23-tz.patch";
-      sha256 = "19c2fvhm06wnp3059b0rnd7dqdchkan8iycjh8jk8y25j870zkvn";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace Makefile \

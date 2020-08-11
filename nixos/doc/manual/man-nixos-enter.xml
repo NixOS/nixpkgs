@@ -13,21 +13,21 @@
  </refnamediv>
  <refsynopsisdiv>
   <cmdsynopsis>
-   <command>nixos-enter</command> 
+   <command>nixos-enter</command>
    <arg>
     <arg choice='plain'>
      <option>--root</option>
     </arg>
      <replaceable>root</replaceable>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--system</option>
     </arg>
      <replaceable>system</replaceable>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>-c</option>
@@ -40,13 +40,13 @@
      <option>--silent</option>
     </arg>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--help</option>
     </arg>
    </arg>
-    
+
    <arg>
     <arg choice='plain'>
      <option>--</option>

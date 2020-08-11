@@ -93,11 +93,11 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.4.4";
+    version = "1.4.5";
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "03yn96kxs53vxcbza17y99rdhbjlybv44gkc90vaj6301grxahnp";
+      sha256 = "0hpqxwqbbqn440c2swpnc06z8dskisrli4ynsxrzzqyp0dan46xw";
     };
 
     # libfwupd goes to lib

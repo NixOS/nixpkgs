@@ -2,7 +2,7 @@
 , cmake, pkgconfig
 , boost, miniupnpc, openssl, unbound
 , zeromq, pcsclite, readline, libsodium, hidapi
-, pythonProtobuf, randomx, rapidjson, libusb-compat-0_1
+, protobuf, randomx, rapidjson, libusb-compat-0_1
 , CoreData, IOKit, PCSC
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     boost miniupnpc openssl unbound
     zeromq pcsclite readline
     libsodium hidapi randomx rapidjson
-    pythonProtobuf libusb-compat-0_1
+    protobuf libusb-compat-0_1
   ] ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit CoreData PCSC ];
 
   cmakeFlags = [

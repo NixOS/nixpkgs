@@ -1,8 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, boost, gmp, mpfr }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, gmp
+, mpfr
+}:
 
 stdenv.mkDerivation rec {
+  pname = "cgal";
   version = "5.0.2";
-  name = "cgal-" + version;
 
   src = fetchFromGitHub {
     owner = "CGAL";
@@ -15,6 +21,8 @@ stdenv.mkDerivation rec {
   #   there are also libCGAL_Qt{3,4} omitted ATM
   buildInputs = [ boost gmp mpfr ];
   nativeBuildInputs = [ cmake ];
+
+  patches = [ ./cgal_path.patch ];
 
   doCheck = false;
 

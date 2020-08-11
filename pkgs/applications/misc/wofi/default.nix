@@ -2,26 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "wofi";
-  version = "1.1.2";
+  version = "1.2.1";
 
   src = fetchhg {
     url = "https://hg.sr.ht/~scoopta/wofi";
     rev = "v${version}";
-    sha256 = "086j5wshawjbwdmmmldivfagc2rr7g5a2gk11l0snqqslm294xsn";
+    sha256 = "0hx61br19dlmc3lay23ww3n9ry06m7b6xrkjx7sk4vrg1422iq99";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja wrapGAppsHook installShellFiles ];
   buildInputs = [ wayland gtk3 ];
-
-  # Fixes icon bug on NixOS.
-  # Will need to be removed on next release
-  # see https://todo.sr.ht/~scoopta/wofi/54
-  patches = [
-    (fetchpatch {
-      url = "https://paste.sr.ht/blob/1cbddafac3806afb203940c029e78ce8390d8f49";
-      sha256 = "1n4jpmh66p7asjhj0z2s94ny91lmaq4hhh2356nj406vlqr15vbb";
-    })
-  ];
 
   postInstall = ''
     installManPage man/wofi*

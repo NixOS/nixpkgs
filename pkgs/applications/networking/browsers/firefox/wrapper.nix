@@ -27,6 +27,7 @@ let
     , nameSuffix ? ""
     , icon ? browserName
     , extraNativeMessagingHosts ? []
+    , pkcs11Modules ? []
     , forceWayland ? false
     , useGlvnd ? true
     , cfg ? config.${browserName} or {}
@@ -74,7 +75,8 @@ let
             ++ lib.optionals (cfg.enableQuakeLive or false)
             (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
             ++ lib.optional (enableAdobeFlash && (cfg.enableAdobeFlashDRM or false)) hal-flash
-            ++ lib.optional (config.pulseaudio or true) libpulseaudio;
+            ++ lib.optional (config.pulseaudio or true) libpulseaudio
+            ++ pkcs11Modules;
       gtk_modules = [ libcanberra-gtk2 ];
 
     in stdenv.mkDerivation {
@@ -152,6 +154,11 @@ let
         mkdir -p $out/lib/mozilla/native-messaging-hosts
         for ext in ${toString nativeMessagingHosts}; do
             ln -sLt $out/lib/mozilla/native-messaging-hosts $ext/lib/mozilla/native-messaging-hosts/*
+        done
+
+        mkdir -p $out/lib/mozilla/pkcs11-modules
+        for ext in ${toString pkcs11Modules}; do
+            ln -sLt $out/lib/mozilla/pkcs11-modules $ext/lib/mozilla/pkcs11-modules/*
         done
 
         # For manpages, in case the program supplies them

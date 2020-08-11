@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/OneOfOne/xxhash";
-      rev = "v1.2.3";
-      sha256 = "0hxyvv77ghja6vim210s7fa1n2zlvykvjak8s3k3nkj85h611kwb";
+      rev = "v1.2.7";
+      sha256 = "0fqknn2gnicsixm43czd2r6p99ckf9i1b63i11wsbi4lqggwrp0m";
     };
   }
   {
@@ -19,12 +19,12 @@
     };
   }
   {
-    goPackagePath = "github.com/cespare/xxhash";
+    goPackagePath = "github.com/cpuguy83/go-md2man";
     fetch = {
       type = "git";
-      url = "https://github.com/cespare/xxhash";
-      rev = "v1.1.0";
-      sha256 = "1qyzlcdcayavfazvi03izx83fvip8h36kis44zr2sg7xf6sx6l4x";
+      url = "https://github.com/cpuguy83/go-md2man";
+      rev = "v1.0.10";
+      sha256 = "1bqkf2bvy1dns9zd24k81mh2p1zxsx2nhq5cj8dz2vgkv1xkh60i";
     };
   }
   {
@@ -145,15 +145,6 @@
     };
   }
   {
-    goPackagePath = "github.com/mna/pigeon";
-    fetch = {
-      type = "git";
-      url = "https://github.com/mna/pigeon";
-      rev = "bb0192cfc2ae";
-      sha256 = "1yid3pm46hjszikbap2wbfh97vpnha0qncywlnm1mk1pzglfgdy9";
-    };
-  }
-  {
     goPackagePath = "github.com/olekukonko/tablewriter";
     fetch = {
       type = "git";
@@ -235,21 +226,21 @@
     };
   }
   {
+    goPackagePath = "github.com/russross/blackfriday";
+    fetch = {
+      type = "git";
+      url = "https://github.com/russross/blackfriday";
+      rev = "v1.5.2";
+      sha256 = "0jzbfzcywqcrnym4gxlz6nphmm1grg6wsl4f0r9x384rn83wkj7c";
+    };
+  }
+  {
     goPackagePath = "github.com/sirupsen/logrus";
     fetch = {
       type = "git";
       url = "https://github.com/sirupsen/logrus";
       rev = "v1.4.1";
       sha256 = "1m7ny9jkb98cxqhsp13xa5hnqh1s9f25x04q6arsala4zswsw33c";
-    };
-  }
-  {
-    goPackagePath = "github.com/spaolacci/murmur3";
-    fetch = {
-      type = "git";
-      url = "https://github.com/spaolacci/murmur3";
-      rev = "f09979ecbc72";
-      sha256 = "1lv3zyz3jy2d76bhvvs8svygx66606iygdvwy5cwc0p5z8yghq25";
     };
   }
   {
@@ -373,7 +364,7 @@
     goPackagePath = "google.golang.org/genproto";
     fetch = {
       type = "git";
-      url = "https://github.com/google/go-genproto";
+      url = "https://github.com/googleapis/go-genproto";
       rev = "11092d34479b";
       sha256 = "12qcrjq658zga5fj4n0wgm11pzpr3gafwg25cinl5qcq4p9cnl0r";
     };

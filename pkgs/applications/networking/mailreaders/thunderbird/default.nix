@@ -72,13 +72,13 @@ assert waylandSupport -> gtk3Support == true;
 
 stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "68.10.0";
+  version = "78.1.1";
 
   src = fetchurl {
     url =
       "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
     sha512 =
-      "24jq4wxhk58403ax8jf6p82fyzf0vszz8am5d8jb6j559da3lp6wv4m5xqavvcf9i57rdivzrmqw9agr8mypfxs8zb908aln5iy7d4d";
+      "1lf15zl3p8y1vxv4s04y088flkspf0r0c6j8gfrlfzla5ckfcsbad3zbygh6y73m35j882g7fbacby5a4hiw891zq2kji5dn3nbahyi";
   };
 
   nativeBuildInputs = [
@@ -175,7 +175,8 @@ stdenv.mkDerivation rec {
     # included we need to look in a few places.
     # TODO: generalize this process for other use-cases.
 
-    BINDGEN_CFLAGS="$(< ${stdenv.cc}/nix-support/libc-cflags) \
+    BINDGEN_CFLAGS="$(< ${stdenv.cc}/nix-support/libc-crt1-cflags) \
+      $(< ${stdenv.cc}/nix-support/libc-cflags) \
       $(< ${stdenv.cc}/nix-support/cc-cflags) \
       $(< ${stdenv.cc}/nix-support/libcxx-cxxflags) \
       ${
@@ -206,14 +207,12 @@ stdenv.mkDerivation rec {
   in [
     "--enable-application=comm/mail"
 
-    "--with-system-bz2"
     "--with-system-icu"
     "--with-system-jpeg"
     "--with-system-libevent"
     "--with-system-nspr"
     "--with-system-nss"
     "--with-system-png" # needs APNG support
-    "--with-system-icu"
     "--with-system-zlib"
     "--with-system-webp"
     "--with-system-libvpx"
@@ -223,12 +222,9 @@ stdenv.mkDerivation rec {
     "--enable-default-toolkit=${toolkitValue}"
     "--enable-js-shell"
     "--enable-necko-wifi"
-    "--enable-startup-notification"
     "--enable-system-ffi"
     "--enable-system-pixman"
-    "--enable-system-sqlite"
 
-    "--disable-gconf"
     "--disable-tests"
     "--disable-updater"
     "--enable-jemalloc"
@@ -321,7 +317,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.updateScript = import ./../../browsers/firefox/update.nix {
-    attrPath = "thunderbird";
+    attrPath = "thunderbird-78";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
     inherit writeScript lib common-updater-scripts xidel coreutils gnused
       gnugrep curl runtimeShell;

@@ -15,6 +15,8 @@ buildGoModule rec {
 
   vendorSha256 = "17znl3vkg73hnrfl697rw201nsd5sijgalnbkljk1b4m0a01zik1";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     homepage = "https://coredns.io";
     description = "A DNS server that runs middleware";

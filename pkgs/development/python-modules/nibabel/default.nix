@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
+, packaging
 , pytest
 , nose
 , numpy
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "1kir9g7kmy2qygyzczx8nj4b0sc6jjvqy0ssm39bxzqsr1vzzvxm";
   };
 
-  propagatedBuildInputs = [ numpy scipy h5py pydicom ];
+  propagatedBuildInputs = [ numpy scipy h5py packaging pydicom ];
 
   checkInputs = [ nose pytest ];
 

@@ -144,6 +144,8 @@ henrik/vim-indexed-search
 HerringtonDarkholme/yats.vim
 honza/vim-snippets
 hotwatermorning/auto-git-diff
+hrsh7th/vim-vsnip
+hrsh7th/vim-vsnip-integ
 hsanson/vim-android
 hsitz/VimOrganizer
 iamcco/coc-spell-checker
@@ -170,7 +172,7 @@ jeetsukumaran/vim-indentwise
 jeffkreeftmeijer/neovim-sensible
 jeffkreeftmeijer/vim-numbertoggle
 jelera/vim-javascript-syntax
-jgdavey/tslime.vim
+jgdavey/tslime.vim@main
 jhradilek/vim-docbk
 jhradilek/vim-snippets as vim-docbk-snippets
 jiangmiao/auto-pairs
@@ -227,6 +229,7 @@ konfekt/fastfold
 kristijanhusak/defx-git
 kristijanhusak/defx-icons
 kristijanhusak/deoplete-phpactor
+kristijanhusak/vim-dirvish-git
 kristijanhusak/vim-hybrid-material
 kshenoy/vim-signature
 lambdalisue/vim-gista
@@ -244,6 +247,7 @@ lilydjwg/colorizer
 liuchengxu/vim-which-key
 liuchengxu/vista.vim
 LnL7/vim-nix
+lotabout/skim.vim
 LucHermitte/lh-brackets
 LucHermitte/lh-vim-lib
 ludovicchabant/vim-gutentags
@@ -286,6 +290,7 @@ matze/vim-move
 maximbaz/lightline-ale
 MaxMEllon/vim-jsx-pretty
 mbbill/undotree
+mboughaba/i3config.vim
 megaannum/forms
 megaannum/self
 mengelbrecht/lightline-bufferline
@@ -384,6 +389,7 @@ ntpeters/vim-better-whitespace
 numirias/semshi
 nvie/vim-flake8
 nvim-lua/completion-nvim
+nvim-lua/diagnostic-nvim
 nvim-treesitter/completion-treesitter
 nvim-treesitter/nvim-treesitter
 octol/vim-cpp-enhanced-highlight
@@ -430,6 +436,7 @@ rhysd/vim-grammarous
 rhysd/vim-operator-surround
 rodjek/vim-puppet
 romainl/vim-cool
+roman/golden-ratio
 ron89/thesaurus_query.vim
 roxma/nvim-cm-racer
 roxma/nvim-completion-manager
@@ -521,6 +528,7 @@ tpope/vim-liquid
 tpope/vim-obsession
 tpope/vim-pathogen
 tpope/vim-projectionist
+tpope/vim-rails
 tpope/vim-repeat
 tpope/vim-rhubarb
 tpope/vim-rsi

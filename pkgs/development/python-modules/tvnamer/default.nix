@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "tvnamer";
-  version = "2.5";
+  version = "2.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "75e38454757c77060ad3782bd071682d6d316de86f9aec1c2042d236f93aec7b";
+    sha256 = "ba181a947dcfe20c860825b3580d2a6f1a896cf9b5fef093b8c3f00640581a1f";
   };
 
   checkInputs = [ pytest ];

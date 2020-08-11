@@ -8,6 +8,7 @@
 { name ? ""
 , stdenvNoCC
 , cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
+, gccForLibs ? null
 , zlib ? null
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? cc != null && cc ? man
@@ -262,11 +263,11 @@ stdenv.mkDerivation {
     ##
     ## GCC libs for non-GCC support
     ##
-    + optionalString (isClang && libcxx == null && cc ? gcc) ''
+    + optionalString (isClang && libcxx == null && !(stdenv.targetPlatform.useLLVM or false) && gccForLibs != null) ''
 
-      echo "-B${cc.gcc}/lib/gcc/${targetPlatform.config}/${cc.gcc.version}" >> $out/nix-support/cc-cflags
-      echo "-L${cc.gcc}/lib/gcc/${targetPlatform.config}/${cc.gcc.version}" >> $out/nix-support/cc-ldflags
-      echo "-L${cc.gcc.lib}/${targetPlatform.config}/lib" >> $out/nix-support/cc-ldflags
+      echo "-B${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-cflags
+      echo "-L${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-ldflags
+      echo "-L${gccForLibs.lib}/${targetPlatform.config}/lib" >> $out/nix-support/cc-ldflags
     ''
 
     ##
@@ -287,7 +288,7 @@ stdenv.mkDerivation {
     + optionalString (libc != null) (''
       touch "$out/nix-support/libc-cflags"
       touch "$out/nix-support/libc-ldflags"
-      echo "-B${libc_lib}${libc.libdir or "/lib/"}" >> $out/nix-support/libc-cflags
+      echo "-B${libc_lib}${libc.libdir or "/lib/"}" >> $out/nix-support/libc-crt1-cflags
     '' + optionalString (!(cc.langD or false)) ''
       echo "-idirafter ${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
     '' + optionalString (isGNU && (!(cc.langD or false))) ''
@@ -306,14 +307,15 @@ stdenv.mkDerivation {
 
     # We have a libc++ directly, we have one via "smuggled" GCC, or we have one
     # bundled with the C compiler because it is GCC
-    + optionalString (libcxx != null || cc.gcc.langCC or false || (isGNU && cc.langCC or false)) ''
+    + optionalString (libcxx != null || (isClang && !(stdenv.targetPlatform.useLLVM or false) && gccForLibs.langCC or false) || (isGNU && cc.langCC or false)) ''
       touch "$out/nix-support/libcxx-cxxflags"
       touch "$out/nix-support/libcxx-ldflags"
-    '' + optionalString (libcxx == null && cc ? gcc) ''
-      for dir in ${cc.gcc}/include/c++/*; do
+    ''
+    + optionalString (libcxx == null && (isClang && !(stdenv.targetPlatform.useLLVM or false) && gccForLibs.langCC or false)) ''
+      for dir in ${gccForLibs}/include/c++/*; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
       done
-      for dir in ${cc.gcc}/include/c++/*/${targetPlatform.config}; do
+      for dir in ${gccForLibs}/include/c++/*/${targetPlatform.config}; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
       done
     ''
@@ -429,7 +431,7 @@ stdenv.mkDerivation {
 
     + optionalString (libc != null && targetPlatform.isAvr) ''
       for isa in avr5 avr3 avr4 avr6 avr25 avr31 avr35 avr51 avrxmega2 avrxmega4 avrxmega5 avrxmega6 avrxmega7 tiny-stack; do
-        echo "-B${getLib libc}/avr/lib/$isa" >> $out/nix-support/libc-cflags
+        echo "-B${getLib libc}/avr/lib/$isa" >> $out/nix-support/libc-crt1-cflags
       done
     ''
 

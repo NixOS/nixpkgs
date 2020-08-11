@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , linkFarm
 , substituteAll
 , elementary-greeter
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
 

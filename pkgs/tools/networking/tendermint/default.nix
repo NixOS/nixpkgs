@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0i0n89lal99fqnzva51kp9f7wzqsfmncpshwxhq26kvykp7ji7sw";
 
+  doCheck = false;
+
   subPackages = [ "cmd/tendermint" ];
 
   buildFlagsArray = [ "-ldflags=-s -w -X github.com/tendermint/tendermint/version.GitCommit=${src.rev}" ];

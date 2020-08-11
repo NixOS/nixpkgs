@@ -10,6 +10,8 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   goPackagePath = "github.com/davidrjenni/reftools";
   excludedPackages = "\\(cmd/fillswitch/test-fixtures\\)";
 

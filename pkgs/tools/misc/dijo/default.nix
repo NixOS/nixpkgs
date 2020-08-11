@@ -1,5 +1,5 @@
 { stdenv, lib, rustPlatform, fetchFromGitHub, ncurses, CoreServices }:
-let version = "0.1.5"; in
+let version = "0.2.3"; in
 rustPlatform.buildRustPackage {
   pname = "dijo";
   inherit version;
@@ -8,9 +8,9 @@ rustPlatform.buildRustPackage {
     owner = "NerdyPepper";
     repo = "dijo";
     rev = "v${version}";
-    sha256 = "1ch320j2d66zn9mbs7xl0bkfcm2hpak6izk0yspz1gcji1l7grsc";
+    sha256 = "1lcvj0pri5v64zygkf2p24vr72y39agrq1r3kb8dfgz8yy3vcz0a";
   };
-  cargoSha256 = "1p6apz3wd4gqp0z24ygfw8nmpkh44d000jp6x7svqzmpphnmb0ji";
+  cargoSha256 = "0pm048xf8hkva8q8fjmhrdnk7h2im28ix7xy784xwkkdnilm4j7f";
 
   meta = with lib; {
     description = "Scriptable, curses-based, digital habit tracker.";

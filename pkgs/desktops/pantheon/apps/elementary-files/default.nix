@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , pkgconfig
 , meson
@@ -30,7 +31,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "4.4.3";
+  version = "4.4.4";
 
   repoName = "files";
 
@@ -40,11 +41,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "14i5icgpsy78mr7w6cav38p7shfk784b6nlxz9y72rbcxky036yc";
+    sha256 = "1hsh9kg30l90r2aqrrap1nfmgjf0la8mfd8h4xm6d7acailcnhmb";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };

@@ -72,6 +72,7 @@
 , {"fast-cli": "1.x"}
 , "fkill-cli"
 , "forever"
+, "get-graphql-schema"
 , "git-run"
 , "git-ssb"
 , "git-standup"
@@ -90,7 +91,6 @@
 , "indium"
 , "insect"
 , "ionic"
-, "ios-deploy"
 , { "iosevka-build-deps": "../../data/fonts/iosevka" }
 , "jake"
 , "javascript-typescript-langserver"
@@ -119,6 +119,7 @@
 , "mathjax"
 , "meat"
 , "meguca"
+, "mirakurun"
 , "mocha"
 , "multi-file-swagger"
 , "neovim"
@@ -149,6 +150,7 @@
 , "pyright"
 , "react-native-cli"
 , "react-tools"
+, "redoc-cli"
 , "reveal.js"
 , "rollup"
 , { "rust-analyzer-build-deps": "../../misc/vscode-extensions/rust-analyzer/build-deps" }
@@ -194,6 +196,7 @@
 , "typescript-language-server"
 , "uglify-js"
 , "ungit"
+, "vim-language-server"
 , "vscode-css-languageserver-bin"
 , "vscode-html-languageserver-bin"
 , "vue-cli"

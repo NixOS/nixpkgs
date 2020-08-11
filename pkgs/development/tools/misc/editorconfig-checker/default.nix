@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "132blcdw3lywxhqslkcpwwvkzl4cpbbkhb7ba8mrvfgl5kvfm1q0";
 
+  doCheck = false;
+
   nativeBuildInputs = [ installShellFiles ];
 
   buildFlagsArray = [ "-ldflags=-X main.version=${version}" ];

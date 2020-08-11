@@ -1,5 +1,6 @@
-{ lowPrio, newScope, pkgs, stdenv, cmake
+{ lowPrio, newScope, pkgs, stdenv, cmake, gccForLibs
 , libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith, wrapBintoolsWith
+, buildPackages
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 }:
@@ -24,8 +25,8 @@ let
       ln -s "${cc}/lib/clang/${release_version}/include" "$rsrc"
       ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
-    '' + stdenv.lib.optionalString (stdenv.targetPlatform.isLinux && tools.clang-unwrapped ? gcc && !(stdenv.targetPlatform.useLLVM or false)) ''
-      echo "--gcc-toolchain=${tools.clang-unwrapped.gcc}" >> $out/nix-support/cc-cflags
+    '' + stdenv.lib.optionalString (stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.useLLVM or false)) ''
+      echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
     '';
   in {
 
@@ -42,10 +43,11 @@ let
       enablePolly = true;
     };
 
-    llvm-manpages = lowPrio (tools.llvm.override {
-      enableManpages = true;
-      python3 = pkgs.python3;  # don't use python-boot
-    });
+    # disabled until recommonmark supports sphinx 3
+    #llvm-manpages = lowPrio (tools.llvm.override {
+    #  enableManpages = true;
+    #  python3 = pkgs.python3;  # don't use python-boot
+    #});
 
     clang-manpages = lowPrio (tools.clang-unwrapped.override {
       enableManpages = true;
@@ -58,7 +60,8 @@ let
 
     libstdcxxClang = wrapCCWith rec {
       cc = tools.clang-unwrapped;
-      libcxx = null; # libstdcxx is smuggled in with clang.gcc
+      # libstdcxx is taken from gcc in an ad-hoc way in cc-wrapper.
+      libcxx = null;
       extraPackages = [
         targetLlvmLibraries.compiler-rt
       ];

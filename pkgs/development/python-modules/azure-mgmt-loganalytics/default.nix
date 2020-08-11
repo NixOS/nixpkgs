@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-loganalytics";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "a1527fe8b1e8a47558bfa03bd6c587706d8fb9213142aea42da07397daa2d039";
+    sha256 = "18n2lqvrhq40gdqhlzzg8mc03571i02c7qq7jv771lc58rqpzysh";
   };
 
   propagatedBuildInputs = [

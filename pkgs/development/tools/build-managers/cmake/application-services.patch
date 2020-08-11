@@ -1,11 +1,8 @@
 diff --git a/Source/CMakeLists.txt b/Source/CMakeLists.txt
-index 8aff8f6..af1852d 100644
+index 1b6bb00d4c..487114daa8 100644
 --- a/Source/CMakeLists.txt
 +++ b/Source/CMakeLists.txt
-@@ -791,12 +791,11 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_SYSTEM_PROCESSOR MATCHES "sparc"
-   endif()
- endif()
- 
+@@ -893,7 +893,6 @@ endif()
  # On Apple we need CoreFoundation and CoreServices
  if(APPLE)
    target_link_libraries(CMakeLib "-framework CoreFoundation")
@@ -13,13 +10,11 @@ index 8aff8f6..af1852d 100644
  endif()
  
  if(WIN32 AND NOT UNIX)
-   # We need the rpcrt4 library on Windows.
-   # We need the crypt32 library on Windows for crypto/cert APIs.
 diff --git a/Source/cmGlobalXCodeGenerator.cxx b/Source/cmGlobalXCodeGenerator.cxx
-index e353a37..b06f842 100644
+index a5ce5d18f4..3d6838ce82 100644
 --- a/Source/cmGlobalXCodeGenerator.cxx
 +++ b/Source/cmGlobalXCodeGenerator.cxx
-@@ -35,11 +35,6 @@
+@@ -43,11 +43,6 @@
  
  struct cmLinkImplementation;
  
@@ -32,12 +27,12 @@ index e353a37..b06f842 100644
  #  include "cmXMLParser.h"
  
 diff --git a/Utilities/cmlibarchive/CMakeLists.txt b/Utilities/cmlibarchive/CMakeLists.txt
-index d7af6e2..d4808fc 100644
+index bfcaf30bb7..1da540aee5 100644
 --- a/Utilities/cmlibarchive/CMakeLists.txt
 +++ b/Utilities/cmlibarchive/CMakeLists.txt
-@@ -1662,11 +1662,6 @@ IF(MSVC)
-   ADD_DEFINITIONS(-D_CRT_SECURE_NO_DEPRECATE)
- ENDIF(MSVC)
+@@ -2007,11 +2007,6 @@ IF(ENABLE_TEST)
+ ENDIF(ENABLE_TEST)
+ ENDIF()
  
 -# We need CoreServices on Mac OS.
 -IF(APPLE)
@@ -45,16 +40,5 @@ index d7af6e2..d4808fc 100644
 -ENDIF(APPLE)
 -
  add_subdirectory(libarchive)
- 
- install(FILES COPYING DESTINATION ${CMAKE_DOC_DIR}/cmlibarchive)
-index e505bdd..f45557d 100644
---- a/Utilities/cmlibuv/src/unix/darwin-proctitle.c
-+++ b/Utilities/cmlibuv/src/unix/darwin-proctitle.c
-@@ -30,7 +30,6 @@
-
- #if !TARGET_OS_IPHONE
- # include <CoreFoundation/CoreFoundation.h>
--# include <ApplicationServices/ApplicationServices.h>
- #endif
-
- #define S(s) pCFStringCreateWithCString(NULL, (s), kCFStringEncodingUTF8)
+ IF(0) # CMake does not build libarchive's command-line tools.
+ add_subdirectory(cat)

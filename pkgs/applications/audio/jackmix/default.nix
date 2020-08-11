@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, scons, qt4, lash, libjack2, jack ? libjack2 }:
+{ stdenv, fetchurl, pkgconfig, sconsPackages, qt4, lash, libjack2, jack ? libjack2 }:
 
 stdenv.mkDerivation {
   name = "jackmix-0.5.2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   patches = [ ./no_error.patch ];
 
-  nativeBuildInputs = [ scons.py2 pkgconfig ];
+  nativeBuildInputs = [ sconsPackages.scons_3_1_2 pkgconfig ];
   buildInputs = [
     qt4
     lash

@@ -12,6 +12,8 @@ buildGoModule rec {
 
   vendorSha256 = "0smb83mq711b2pby57ijcllccn7y2l10zb4fbf779xibb2g09608";
 
+  doCheck = false;
+
   subPackages = [ "." ];
 
   nativeBuildInputs = [ installShellFiles ];

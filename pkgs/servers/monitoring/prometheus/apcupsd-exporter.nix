@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "09x8y8pmgfn897hvnk122ry460y12b8a7y5fafri5wn9vxab9r82";
 
+  doCheck = false;
+
   passthru.tests = { inherit (nixosTests.prometheus-exporters) apcupsd; };
 
   meta = with stdenv.lib; {

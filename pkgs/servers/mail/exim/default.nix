@@ -4,6 +4,7 @@
 , enableAuthDovecot ? false, dovecot
 , enablePAM ? false, pam
 , enableSPF ? true, libspf2
+, enableDMARC ? true, opendmarc
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals enableMySQL [ libmysqlclient zlib ]
     ++ stdenv.lib.optional enableAuthDovecot dovecot
     ++ stdenv.lib.optional enablePAM pam
-    ++ stdenv.lib.optional enableSPF libspf2;
+    ++ stdenv.lib.optional enableSPF libspf2
+    ++ stdenv.lib.optional enableDMARC opendmarc;
 
   preBuild = ''
     sed '
@@ -70,6 +72,10 @@ stdenv.mkDerivation rec {
       ${stdenv.lib.optionalString enableSPF ''
         s:^# \(SUPPORT_SPF\)=.*:\1=yes:
         s:^# \(LDFLAGS += -lspf2\):\1:
+      ''}
+      ${stdenv.lib.optionalString enableDMARC ''
+        s:^# \(SUPPORT_DMARC\)=.*:\1=yes:
+        s:^# \(LDFLAGS += -lopendmarc\):\1:
       ''}
       #/^\s*#.*/d
       #/^\s*$/d
