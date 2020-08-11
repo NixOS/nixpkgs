@@ -379,6 +379,16 @@ in rec {
       '';
     };
 
+    listenDatagrams = mkOption {
+      default = [];
+      type = types.listOf types.str;
+      example = [ "0.0.0.0:993" "/run/my-socket" ];
+      description = ''
+        For each item in this list, a <literal>ListenDatagram</literal>
+        option in the <literal>[Socket]</literal> section will be created.
+      '';
+    };
+
     socketConfig = mkOption {
       default = {};
       example = { ListenStream = "/run/my-socket"; };
