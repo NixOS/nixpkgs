@@ -5667,6 +5667,8 @@ in
 
   pandoc-imagine = python3Packages.callPackage ../tools/misc/pandoc-imagine { };
 
+  pandoc-plantuml-filter = python3Packages.callPackage ../tools/misc/pandoc-plantuml-filter { };
+
   pasystray = callPackage ../tools/audio/pasystray { };
 
   phash = callPackage ../development/libraries/phash { };
