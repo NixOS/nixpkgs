@@ -202,3 +202,8 @@
 
 # Blockchains
 /pkgs/applications/blockchains  @mmahut
+
+# Go
+/pkgs/development/compilers/go @kalbasit @Mic92 @zowoq
+/pkgs/development/go-modules   @kalbasit @Mic92 @zowoq
+/pkgs/development/go-packages  @kalbasit @Mic92 @zowoq
