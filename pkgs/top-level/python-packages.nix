@@ -5059,6 +5059,8 @@ in {
   numpy =
     if pythonOlder "3.5" then
       callPackage ../development/python-modules/numpy/1.16.nix { }
+    else if isPy35 then
+      callPackage ../development/python-modules/numpy/1.18.nix { }
     else
       callPackage ../development/python-modules/numpy { };
 
