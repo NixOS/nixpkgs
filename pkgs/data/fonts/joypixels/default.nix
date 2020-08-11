@@ -24,12 +24,14 @@ let inherit (stdenv.hostPlatform.parsed) kernel;
       spdxId = "LicenseRef-JoyPixels-Free-6.0";
       fullName = "JoyPixels Free License Agreement 6.0";
       url = "https://cdn.joypixels.com/distributions/${systemTag}/license/free-license.pdf";
+      free = false;
     };
 
     joypixels-license-appendix = with systemSpecific; {
       spdxId = "LicenseRef-JoyPixels-NixOS-Appendix";
       fullName = "JoyPixels ${capitalized} License Appendix";
       url = "https://cdn.joypixels.com/distributions/${systemTag}/appendix/joypixels-license-appendix.pdf";
+      free = false;
     };
 
 in
@@ -80,6 +82,7 @@ stdenv.mkDerivation rec {
         fullName = "${free-license.fullName} with ${appendix.fullName}";
         url = free-license.url;
         appendixUrl = appendix.url;
+        free = false;
       };
     maintainers = with maintainers; [ toonn jtojnar ];
   };
