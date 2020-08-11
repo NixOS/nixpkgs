@@ -536,6 +536,10 @@ in
 
   _1password = callPackage ../applications/misc/1password { };
 
+  _1password-gui = callPackage ../tools/security/1password-gui {
+    electron = electron_9;
+  };
+
   _6tunnel = callPackage ../tools/networking/6tunnel { };
 
   _9pfs = callPackage ../tools/filesystems/9pfs { };
@@ -718,6 +722,8 @@ in
   arcanist = callPackage ../development/tools/misc/arcanist {};
 
   arduino = arduino-core.override { withGui = true; };
+
+  arduino-cli = callPackage ../development/arduino/arduino-cli { };
 
   arduino-core = callPackage ../development/arduino/arduino-core { };
 
@@ -1317,6 +1323,8 @@ in
 
   quaternion = libsForQt5.callPackage ../applications/networking/instant-messengers/quaternion { };
 
+  mirage-im = libsForQt5.callPackage ../applications/networking/instant-messengers/mirage {};
+
   tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
 
   libtensorflow-bin = callPackage ../development/libraries/science/math/tensorflow/bin.nix {
@@ -1761,6 +1769,8 @@ in
 
   dokuwiki = callPackage ../servers/web-apps/dokuwiki { };
 
+  doppler = callPackage ../tools/security/doppler {};
+
   dosage = callPackage ../applications/graphics/dosage { };
 
   dozenal = callPackage ../applications/misc/dozenal { };
@@ -1905,6 +1915,8 @@ in
   fcft = callPackage ../development/libraries/fcft { };
 
   fuzzel = callPackage ../applications/misc/fuzzel { };
+
+  qt-video-wlr = libsForQt5.callPackage ../applications/misc/qt-video-wlr { };
 
   fwup = callPackage ../tools/misc/fwup { };
 
@@ -2168,6 +2180,8 @@ in
 
   mq-cli = callPackage ../tools/system/mq-cli { };
 
+  nextdns = callPackage ../applications/networking/nextdns { };
+
   nfdump = callPackage ../tools/networking/nfdump { };
 
   nfstrace = callPackage ../tools/networking/nfstrace { };
@@ -2254,6 +2268,8 @@ in
 
   remarkable-mouse = python3Packages.callPackage ../applications/misc/remarkable/remarkable-mouse { };
 
+  ryujinx = callPackage ../misc/emulators/ryujinx { };
+
   scour = with python3Packages; toPythonApplication scour;
 
   s2png = callPackage ../tools/graphics/s2png { };
@@ -2263,6 +2279,8 @@ in
   shell-hist = callPackage ../tools/misc/shell-hist { };
 
   simg2img = callPackage ../tools/filesystems/simg2img { };
+
+  simplenes = callPackage ../misc/emulators/simplenes { };
 
   snipes = callPackage ../games/snipes { };
 
@@ -2920,6 +2938,8 @@ in
   dbench = callPackage ../development/tools/misc/dbench { };
 
   dclxvi = callPackage ../development/libraries/dclxvi { };
+
+  dconf2nix = callPackage ../development/tools/haskell/dconf2nix { };
 
   dcraw = callPackage ../tools/graphics/dcraw { };
 
@@ -4377,6 +4397,8 @@ in
     packages = config.ihaskell.packages or (self: []);
   };
 
+  iruby = callPackage ../applications/editors/jupyter-kernels/iruby { };
+
   imapproxy = callPackage ../tools/networking/imapproxy {
     openssl = openssl_1_0_2;
   };
@@ -4762,6 +4784,8 @@ in
 
   lolcat = callPackage ../tools/misc/lolcat { };
 
+  lottieconverter = callPackage ../tools/misc/lottieconverter { };
+
   lsd = callPackage ../tools/misc/lsd { };
 
   lsdvd = callPackage ../tools/cd-dvd/lsdvd {};
@@ -5129,6 +5153,8 @@ in
 
   logstalgia = callPackage ../tools/graphics/logstalgia {};
 
+  lokalise2-cli = callPackage ../tools/misc/lokalise2-cli { };
+
   loki = callPackage ../development/libraries/loki { };
 
   longview = callPackage ../servers/monitoring/longview { };
@@ -5323,6 +5349,8 @@ in
   mir-qualia = callPackage ../tools/text/mir-qualia {
     pythonPackages = python3Packages;
   };
+
+  mirakurun = nodePackages.mirakurun;
 
   miredo = callPackage ../tools/networking/miredo { };
 
@@ -7817,6 +7845,8 @@ in
     libpsl = null;
   };
 
+  wg-bond = callPackage ../applications/networking/wg-bond { };
+
   which = callPackage ../tools/system/which { };
 
   whsniff = callPackage ../applications/networking/sniffers/whsniff { };
@@ -9828,18 +9858,16 @@ in
   php = php74;
 
   phpPackages = php74Packages;
-  php72Packages = recurseIntoAttrs php72.packages;
   php73Packages = recurseIntoAttrs php73.packages;
   php74Packages = recurseIntoAttrs php74.packages;
 
   phpExtensions = php74Extensions;
-  php72Extensions = recurseIntoAttrs php72.extensions;
   php73Extensions = recurseIntoAttrs php73.extensions;
   php74Extensions = recurseIntoAttrs php74.extensions;
 
   inherit (callPackage ../development/interpreters/php {
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
-  }) php74 php73 php72;
+  }) php74 php73;
 
   picoc = callPackage ../development/interpreters/picoc {};
 
@@ -10617,6 +10645,8 @@ in
   editorconfig-core-c = callPackage ../development/tools/misc/editorconfig-core-c { };
 
   eggdbus = callPackage ../development/tools/misc/eggdbus { };
+
+  effitask = callPackage ../applications/misc/effitask { };
 
   egypt = callPackage ../development/tools/analysis/egypt { };
 
@@ -11417,6 +11447,8 @@ in
   ycmd = callPackage ../development/tools/misc/ycmd {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
     python = python3;
+    # currently broken
+    rustracerd = null;
   };
 
   yodl = callPackage ../development/tools/misc/yodl { };
@@ -13310,6 +13342,8 @@ in
 
   libhttpseverywhere = callPackage ../development/libraries/libhttpseverywhere { };
 
+  libhugetlbfs = callPackage ../development/libraries/libhugetlbfs { };
+
   libHX = callPackage ../development/libraries/libHX { };
 
   libibmad = callPackage ../development/libraries/libibmad { };
@@ -13913,7 +13947,9 @@ in
     python = python3;
   };
 
-  libxml2Python = pkgs.buildEnv { # slightly hacky
+  libxml2Python = let
+    libxml2 = python2Packages.libxml2;
+  in pkgs.buildEnv { # slightly hacky
     name = "libxml2+py-${res.libxml2.version}";
     paths = with libxml2; [ dev bin py ];
     inherit (libxml2) passthru;
@@ -14818,6 +14854,8 @@ in
   };
 
   rlog = callPackage ../development/libraries/rlog { };
+
+  rlottie = callPackage ../development/libraries/rlottie { };
 
   rocksdb = callPackage ../development/libraries/rocksdb { };
 
@@ -16756,6 +16794,8 @@ in
     unifiStable;
   unifi = unifiStable;
 
+  urserver = callPackage ../servers/urserver { };
+
   victoriametrics = callPackage ../servers/nosql/victoriametrics { };
 
   virtlyst = libsForQt5.callPackage ../servers/web-apps/virtlyst { };
@@ -17097,6 +17137,8 @@ in
   i7z = qt5.callPackage ../os-specific/linux/i7z { };
 
   pcm = callPackage ../os-specific/linux/pcm { };
+
+  ifmetric = callPackage ../os-specific/linux/ifmetric {};
 
   ima-evm-utils = callPackage ../os-specific/linux/ima-evm-utils {
     openssl = openssl_1_0_2;
@@ -19974,6 +20016,8 @@ in
 
   gcal = callPackage ../applications/misc/gcal { };
 
+  gcstar = callPackage ../applications/misc/gcstar { };
+
   geany = callPackage ../applications/editors/geany { };
   geany-with-vte = callPackage ../applications/editors/geany/with-vte.nix { };
 
@@ -20484,6 +20528,8 @@ in
 
   hactool = callPackage ../tools/compression/hactool { };
 
+  hdhomerun-config-gui = callPackage ../applications/video/hdhomerun-config-gui { };
+
   heimer = libsForQt5.callPackage ../applications/misc/heimer { };
 
   hello = callPackage ../applications/misc/hello { };
@@ -20769,6 +20815,8 @@ in
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive { };
 
+  inkcut = libsForQt5.callPackage ../applications/misc/inkcut { };
+
   inkscape = callPackage ../applications/graphics/inkscape {
     lcms = lcms2;
   };
@@ -20960,6 +21008,8 @@ in
   kiwix = callPackage ../applications/misc/kiwix { };
 
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
+
+  kmetronome = libsForQt5.callPackage ../applications/audio/kmetronome { };
 
   kmplayer = libsForQt5.callPackage ../applications/video/kmplayer { };
 
@@ -22793,6 +22843,8 @@ in
   };
 
   tambura = callPackage ../applications/audio/tambura { };
+
+  tanka = callPackage ../applications/networking/cluster/tanka { };
 
   teams = callPackage ../applications/networking/instant-messengers/teams { };
 
@@ -25285,6 +25337,10 @@ in
 
   almonds = callPackage ../applications/science/math/almonds { };
 
+  amd-blis = callPackage ../development/libraries/science/math/amd-blis { };
+
+  amd-libflame = callPackage ../development/libraries/science/math/amd-libflame { };
+
   arpack = callPackage ../development/libraries/science/math/arpack { };
 
   blas = callPackage ../build-support/alternatives/blas { };
@@ -25682,6 +25738,8 @@ in
 
   adms = callPackage ../applications/science/electronics/adms { };
 
+  appcsxcad = libsForQt5.callPackage ../applications/science/electronics/appcsxcad { };
+
   # Since version 8 Eagle requires an Autodesk account and a subscription
   # in contrast to single payment for the charged editions.
   # This is the last version with the old model.
@@ -25726,6 +25784,8 @@ in
 
   pcb = callPackage ../applications/science/electronics/pcb { };
 
+  qcsxcad = libsForQt5.callPackage ../applications/science/electronics/qcsxcad { };
+
   qucs = callPackage ../applications/science/electronics/qucs { };
 
   xcircuit = callPackage ../applications/science/electronics/xcircuit { };
@@ -25737,6 +25797,7 @@ in
 
   caffe = callPackage ../applications/science/math/caffe ({
     opencv3 = opencv3WithoutCuda; # Used only for image loading.
+    blas = openblas;
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
   } // (config.caffe or {}));
 
@@ -27283,6 +27344,8 @@ in
   dapper = callPackage ../development/tools/dapper { };
 
   kube3d =  callPackage ../applications/networking/cluster/kube3d {};
+
+  zfs-prune-snapshots = callPackage ../tools/backup/zfs-prune-snapshots {};
 
   zfs-replicate = python3Packages.callPackage ../tools/backup/zfs-replicate { };
 

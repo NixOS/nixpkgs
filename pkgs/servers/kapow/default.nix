@@ -17,6 +17,8 @@ buildGoModule rec {
 
   vendorSha256 = "159s46rhg67mgglaxgddx3k8kssl0cqiq8yjdqgjhhxppf16r7dy";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     homepage = "https://github.com/BBVA/kapow";
     description = "Expose command-line tools over HTTP";

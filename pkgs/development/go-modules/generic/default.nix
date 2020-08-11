@@ -210,7 +210,7 @@ let
       runHook postBuild
     '';
 
-    doCheck = args.doCheck or false;
+    doCheck = args.doCheck or true;
     checkPhase = args.checkPhase or ''
       runHook preCheck
 

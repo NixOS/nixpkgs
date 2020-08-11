@@ -17,6 +17,9 @@ buildGoModule rec {
 
   goPackagePath = "tailscale.com";
   vendorSha256 = "0l9lzwwvshg9a2kmmq1cvvlaxncbas78a9hjhvjjar89rjr2k2sv";
+
+  doCheck = false;
+
   subPackages = [ "cmd/tailscale" "cmd/tailscaled" ];
 
   postInstall = ''

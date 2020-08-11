@@ -12,6 +12,8 @@ let
     goPackagePath = "git.sr.ht/~sircmpwn/builds.sr.ht/worker";
 
   vendorSha256 = "0prdlihcy5yz760llwyby747yy2981dn3gy401a48df7ndlfj6lp";
+
+  doCheck = false;
   };
 in buildPythonPackage rec {
   inherit version;

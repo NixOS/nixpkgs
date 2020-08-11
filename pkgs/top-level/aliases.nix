@@ -348,7 +348,6 @@ mapAliases ({
     with the following snippet:
     php74.override { embedSupport = true; apxs2Support = false; }
   ''; # added 2020-04-01
-  php72-embed = php-embed; # added 2020-04-01
   php73-embed = php-embed; # added 2020-04-01
   php74-embed = php-embed; # added 2020-04-01
 
@@ -359,7 +358,6 @@ mapAliases ({
   ''; # added 2020-04-01
   php74Packages-embed = phpPackages-embed;
   php73Packages-embed = phpPackages-embed;
-  php72Packages-embed = phpPackages-embed;
 
   php-unit = throw ''
     php*-unit has been dropped, you can build something similar with
@@ -373,7 +371,6 @@ mapAliases ({
       fpmSupport = false;
     }
   ''; # added 2020-04-01
-  php72-unit = php-unit; # added 2020-04-01
   php73-unit = php-unit; # added 2020-04-01
   php74-unit = php-unit; # added 2020-04-01
 
@@ -391,7 +388,6 @@ mapAliases ({
   ''; # added 2020-04-01
   php74Packages-unit = phpPackages-unit;
   php73Packages-unit = phpPackages-unit;
-  php72Packages-unit = phpPackages-unit;
 
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatex = pidgin-latex; # added 2018-01-08

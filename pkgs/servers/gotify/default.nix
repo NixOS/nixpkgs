@@ -23,6 +23,8 @@ buildGoModule rec {
 
   vendorSha256 = import ./vendor-sha.nix;
 
+  doCheck = false;
+
   postPatch = ''
     substituteInPlace app.go \
       --replace 'Version = "unknown"' 'Version = "${version}"'

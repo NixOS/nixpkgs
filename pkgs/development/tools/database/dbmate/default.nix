@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "00vp925vf9clk5bkw5fvj34id4v548rlssizh52z9psvdizj8q5p";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "Database migration tool";
     homepage = "https://github.com/amacneil/dbmate";

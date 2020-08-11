@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1pzkjh4n9ai8yqi98bkdhicjdr2l8j3fckl5n90c2gdcwqyxvgkf";
 
+  doCheck = false;
+
   subPackages = [ "cmd/kazel" ];
 
   meta = with lib; {

@@ -12,6 +12,9 @@ buildGoModule rec {
   };
 
   vendorSha256 = "11az7zgwzbcx4dknwqiwmdbrbkdzhpwzqnyk8vw9mkbda0xaif3k";
+
+  doCheck = false;
+
   subPackages = [ "." ];
 
   postConfigure = ''

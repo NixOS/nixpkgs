@@ -12,6 +12,8 @@ buildGoModule rec {
   };
   vendorSha256 = "0cc0lmjsxrn3f78k95wklf3yn5k7h8slwnwmssy1i1h0bkcg1bai";
 
+  doCheck = false;
+
   nativeBuildInputs = [ go-bindata installShellFiles ];
 
   # Bundle charts

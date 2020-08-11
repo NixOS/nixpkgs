@@ -4,6 +4,8 @@
 , mock
 , msrest
 , pytest
+, pytest-asyncio
+, pytest-trio
 , pytestCheckHook
 , requests
 , six
@@ -33,13 +35,16 @@ buildPythonPackage rec {
     mock
     msrest
     pytest
+    pytest-trio
+    pytest-asyncio
     pytestCheckHook
     trio
     typing-extensions
   ];
 
   pytestFlagsArray = [ "tests/" ];
-  disabledTests = [ "response" "request" "timeout" ];
+  # disable tests which touch network
+  disabledTests = [ "aiohttp" "multipart_send" "response" "request" "timeout" ];
 
   meta = with lib; {
     description = "Microsoft Azure Core Library for Python";

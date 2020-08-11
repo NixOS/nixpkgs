@@ -509,7 +509,9 @@ in {
 
   baselines = callPackage ../development/python-modules/baselines { };
 
-  bash_kernel = callPackage ../development/python-modules/bash_kernel { };
+  bash_kernel = callPackage ../development/python-modules/bash_kernel {
+    inherit (pkgs) bash;
+  };
 
   bashlex = callPackage ../development/python-modules/bashlex { };
 
@@ -546,6 +548,8 @@ in {
   brother = callPackage ../development/python-modules/brother { };
 
   build = callPackage ../development/python-modules/build { };
+
+  bytecode = callPackage ../development/python-modules/bytecode { };
 
   ciso8601 = callPackage ../development/python-modules/ciso8601 { };
 
@@ -858,6 +862,8 @@ in {
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
 
+  hdlparse = callPackage ../development/python-modules/hdlparse { };
+
   hiyapyco = callPackage ../development/python-modules/hiyapyco { };
 
   hocr-tools = callPackage ../development/python-modules/hocr-tools { };
@@ -923,6 +929,8 @@ in {
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
 
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
+
+  kinparse = callPackage ../development/python-modules/kinparse { };
 
   labelbox = callPackage ../development/python-modules/labelbox { };
 
@@ -1705,6 +1713,8 @@ in {
 
   unifi = callPackage ../development/python-modules/unifi { };
 
+  uvcclient = callPackage ../development/python-modules/uvcclient { };
+
   uvloop = callPackage ../development/python-modules/uvloop {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
   };
@@ -2460,13 +2470,23 @@ in {
 
   cryptacular = callPackage ../development/python-modules/cryptacular { };
 
-  cryptography = callPackage ../development/python-modules/cryptography { };
+  cryptography = if isPy27 then
+      callPackage ../development/python-modules/cryptography/2.9.nix { }
+    else
+      callPackage ../development/python-modules/cryptography { };
 
-  cryptography_vectors = callPackage ../development/python-modules/cryptography/vectors.nix { };
+  cryptography_vectors = if isPy27 then
+      callPackage ../development/python-modules/cryptography/vectors-2.9.nix { }
+    else
+      callPackage ../development/python-modules/cryptography/vectors.nix { };
 
   curtsies = callPackage ../development/python-modules/curtsies { };
 
   envs = callPackage ../development/python-modules/envs { };
+
+  enaml = callPackage ../development/python-modules/enaml { };
+
+  enamlx = callPackage ../development/python-modules/enamlx { };
 
   etelemetry = callPackage ../development/python-modules/etelemetry { };
 
@@ -2739,6 +2759,12 @@ in {
 
   dask = callPackage ../development/python-modules/dask { };
 
+  dask-gateway = callPackage ../development/python-modules/dask-gateway { };
+
+  dask-gateway-server = callPackage ../development/python-modules/dask-gateway-server {
+    inherit (pkgs) go;
+  };
+
   dask-glm = callPackage ../development/python-modules/dask-glm { };
 
   dask-image = callPackage ../development/python-modules/dask-image { };
@@ -2869,6 +2895,8 @@ in {
   docker-py = disabledIf isPy27 (callPackage ../development/python-modules/docker-py {});
 
   dockerpty = callPackage ../development/python-modules/dockerpty {};
+
+  dockerspawner = callPackage ../development/python-modules/dockerspawner {};
 
   docker_pycreds = callPackage ../development/python-modules/docker-pycreds {};
 
@@ -3280,6 +3308,8 @@ in {
   lightparam = callPackage ../development/python-modules/lightparam { };
 
   jupyter = callPackage ../development/python-modules/jupyter { };
+
+  jupyter-c-kernel = callPackage ../development/python-modules/jupyter-c-kernel { };
 
   jupyter_console = if pythonOlder "3.5" then
        callPackage ../development/python-modules/jupyter_console/5.nix { }
@@ -4457,9 +4487,15 @@ in {
     pkgs-docker = pkgs.docker;
   };
 
+  jupyter-telemetry = callPackage ../development/python-modules/jupyter-telemetry { };
+
   jupyterhub = callPackage ../development/python-modules/jupyterhub { };
 
   jupyterhub-ldapauthenticator = callPackage ../development/python-modules/jupyterhub-ldapauthenticator { };
+
+  jupyterhub-systemdspawner = callPackage ../development/python-modules/jupyterhub-systemdspawner {
+    inherit (pkgs) bash;
+  };
 
   kaggle = callPackage ../development/python-modules/kaggle { };
 
@@ -4953,6 +4989,10 @@ in {
 
   nitime = callPackage ../development/python-modules/nitime { };
 
+  nix-kernel = callPackage ../development/python-modules/nix-kernel {
+    inherit (pkgs) nix;
+  };
+
   nixpkgs = callPackage ../development/python-modules/nixpkgs { };
 
   nixpkgs-pytools = callPackage ../development/python-modules/nixpkgs-pytools { };
@@ -5376,7 +5416,9 @@ in {
   protobuf = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
     doCheck = !isPy3k;
-    protobuf = pkgs.protobuf3_12;
+    # If a protobuf upgrade causes many Python packages to fail, please pin it
+    # here to the previous version.
+    protobuf = pkgs.protobuf;
   };
 
   psd-tools = callPackage ../development/python-modules/psd-tools { };
@@ -5436,6 +5478,8 @@ in {
   Babel = callPackage ../development/python-modules/Babel { };
 
   babelgladeextractor = callPackage ../development/python-modules/babelgladeextractor { };
+
+  batchspawner = callPackage ../development/python-modules/batchspawner { };
 
   pybfd = callPackage ../development/python-modules/pybfd { };
 
@@ -5830,6 +5874,8 @@ in {
   qtconsole = callPackage ../development/python-modules/qtconsole { };
 
   qtpy = callPackage ../development/python-modules/qtpy { };
+
+  qreactor = callPackage ../development/python-modules/qreactor { };
 
   quantities = callPackage ../development/python-modules/quantities { };
 

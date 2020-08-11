@@ -32,6 +32,8 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     homepage = "https://github.com/rancher/k3d";
     description = "A helper to run k3s (Lightweight Kubernetes. 5 less than k8s) in a docker container";

@@ -16,6 +16,8 @@ buildGoModule rec {
 
   vendorSha256 = "1s8g0qqg3m6hdvc5v3s86l3ba5grmyhx0lf2ymi39k5dpcg8l19s";
 
+  doCheck = false;
+
   outputs = [ "out" "wordlists" ];
 
   postInstall = ''

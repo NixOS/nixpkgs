@@ -15,6 +15,8 @@ buildGoModule rec {
     subPackages = [ "cmd/dolt" "cmd/git-dolt" "cmd/git-dolt-smudge" ];
   vendorSha256 = "1pvf63cxwq4jj5gi2xalrsk2z1f7i53f0z6qc2p7aibwx9i1k9cz";
 
+  doCheck = false;
+
     meta = with lib; {
         description = "Relational database with version control and CLI a-la Git.";
         homepage = "https://github.com/liquidata-inc/dolt";

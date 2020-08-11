@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0q4byhvs1c1xm4qjvs2vyf98vdv121qn0z51arcf7k4ayrys5xcx";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "Automatic GeoIP database updater";
     homepage = "https://github.com/maxmind/geoipupdate";

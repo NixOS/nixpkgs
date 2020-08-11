@@ -13,6 +13,8 @@ buildGoModule rec {
   modRoot = "gopls";
   vendorSha256 = "175051d858lsdir2hj5qcimp6hakbi9grpws1ssvk3r2jna27x1z";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "Official language server for the Go language";
     homepage = "https://github.com/golang/tools/tree/master/gopls";

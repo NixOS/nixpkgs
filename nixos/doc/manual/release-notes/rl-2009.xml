@@ -44,6 +44,11 @@
    </listitem>
    <listitem>
     <para>
+     PHP 7.2 is no longer supported due to upstream not supporting this version for the entire lifecycle of the 20.09 release.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      Python 3 now defaults to Python 3.8 instead of 3.7.
     </para>
    </listitem>
@@ -662,6 +667,11 @@ services.postgresql.dataDir = "/var/db/postgresql";
    <listitem>
     <para>
       The default output of <literal>buildGoPackage</literal> is now <literal>$out</literal> instead of <literal>$bin</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>buildGoModule</literal> <literal>doCheck</literal> now defaults to <literal>true</literal>.
     </para>
    </listitem>
    <listitem>

@@ -118,7 +118,7 @@ in rec {
     version = "8.11.2";
   };
   coq_8_12 = callPackage ../applications/science/logic/coq {
-    version = "8.12+beta1";
+    version = "8.12.0";
   };
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;

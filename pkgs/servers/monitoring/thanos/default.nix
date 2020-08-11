@@ -12,6 +12,8 @@ buildGoModule rec {
 
   vendorSha256 = "0ixriy5i1qc8hnslmiyd3qfw1g14zlmcslqwn2a9fpk7h0hwinba";
 
+  doCheck = false;
+
   subPackages = "cmd/thanos";
 
   buildFlagsArray = let t = "github.com/prometheus/common/version"; in ''
