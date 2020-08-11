@@ -40,6 +40,18 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/broot \
       --set BR_INSTALL no
 
+    # Install shell function for bash.
+    $out/bin/broot --print-shell-function bash > br.bash
+    install -Dm0444 -t $out/etc/profile.d br.bash
+
+    # Install shell function for zsh.
+    $out/bin/broot --print-shell-function zsh > br.zsh
+    install -Dm0444 br.zsh $out/share/zsh/site-functions/br
+
+    # Install shell function for fish
+    $out/bin/broot --print-shell-function fish > br.fish
+    install -Dm0444 -t $out/share/fish/vendor_functions.d br.fish
+
     # install shell completion files
     OUT_DIR=$releaseDir/build/broot-*/out
 
