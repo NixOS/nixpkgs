@@ -5813,6 +5813,8 @@ in
 
   openjade = callPackage ../tools/text/sgml/openjade { };
 
+  openhantek6022 = libsForQt5.callPackage ../applications/science/electronics/openhantek6022 { };
+
   openimagedenoise = callPackage ../development/libraries/openimagedenoise { };
 
   openmvg = callPackage ../applications/science/misc/openmvg { };
