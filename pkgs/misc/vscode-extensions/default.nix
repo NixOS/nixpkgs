@@ -190,6 +190,19 @@ in
     };
   };
 
+  xaver.clang-format = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "clang-format";
+      publisher = "xaver";
+      version = "1.9.0";
+      sha256 = "abd0ef9176eff864f278c548c944032b8f4d8ec97d9ac6e7383d60c92e258c2f";
+    };
+    meta = with stdenv.lib; {
+      license = licenses.mit;
+      maintainers = [ maintainers.zeratax ];
+    };
+  };
+
   llvm-org.lldb-vscode = llvmPackages_8.lldb;
 
   WakaTime.vscode-wakatime = callPackage ./wakatime {};
