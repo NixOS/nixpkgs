@@ -9,7 +9,7 @@ in fetchzip {
 
   postFetch = ''
     mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttc -d $out/share/fonts/iosevka
+    unzip -j $downloadedFile \*.ttc -d $out/share/fonts/truetype
   '';
 
   sha256 = "1hfccivk5f7i489s78yh2x96ic6rf5ncbsjqnrxqmfs9n1gjhfbj";
