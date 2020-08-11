@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pytzdata";
-  version = "2019.3";
+  version = "2020.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fac06f7cdfa903188dc4848c655e4adaee67ee0f2fe08e7daf815cf2a761ee5e";
+    sha256 = "0h0md0ldhb8ghlwjslkzh3wcj4fxg3n43bj5sghqs2m06nri7yiy";
   };
 
   # No tests
