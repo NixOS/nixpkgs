@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     "--enable-symlinks"
     "--with-manpage-format=normal"
     "--disable-stripping"
+    "--with-termlib"
   ] ++ lib.optional unicode "--enable-widec"
     ++ lib.optional (!withCxx) "--without-cxx"
     ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
@@ -97,6 +98,14 @@ stdenv.mkDerivation rec {
     # symlink the full suffixed include directory
     ln -svf . $dev/include/ncurses$suffix
 
+    for dylibtype in so; do
+      if [ -e "$out/lib/libncurses$suffix.$dylibtype" ]; then
+        # Create linker script for -lncurses to pull in -ltinfo
+        rm $out/lib/libncurses$suffix.$dylibtype
+        echo "INPUT(libncurses$suffix.${abiVersion-extension} -ltinfo$suffix)" > $out/lib/libncurses$suffix.$dylibtype
+      fi
+    done
+
     for newsuffix in $suffixes ""; do
       # Create a non-abi versioned config util links
       ln -svf $cfg $dev/bin/ncurses$newsuffix-config
@@ -105,26 +114,20 @@ stdenv.mkDerivation rec {
       ln -svf . $dev/include/ncurses$newsuffix
 
       for library in $libs; do
-        for dylibtype in so dll dylib; do
+        for dylibtype in so; do
+          if [ -e "$out/lib/lib$library$suffix.$dylibtype" ]; then
+            echo "INPUT(-l$library$suffix)" > $out/lib/lib$library$newsuffix.$dylibtype
+          fi
+        done
+        for dylibtype in dll dylib; do
           if [ -e "$out/lib/lib''${library}$suffix.$dylibtype" ]; then
             ln -svf lib''${library}$suffix.$dylibtype $out/lib/lib$library$newsuffix.$dylibtype
             ln -svf lib''${library}$suffix.${abiVersion-extension} $out/lib/lib$library$newsuffix.${abiVersion-extension}
-            if [ "ncurses" = "$library" ]
-            then
-              # make libtinfo symlinks
-              ln -svf lib''${library}$suffix.$dylibtype $out/lib/libtinfo$newsuffix.$dylibtype
-              ln -svf lib''${library}$suffix.${abiVersion-extension} $out/lib/libtinfo$newsuffix.${abiVersion-extension}
-            fi
           fi
         done
         for statictype in a dll.a la; do
           if [ -e "$out/lib/lib''${library}$suffix.$statictype" ]; then
             ln -svf lib''${library}$suffix.$statictype $out/lib/lib$library$newsuffix.$statictype
-            if [ "ncurses" = "$library" ]
-            then
-              # make libtinfo symlinks
-              ln -svf lib''${library}$suffix.$statictype $out/lib/libtinfo$newsuffix.$statictype
-            fi
           fi
         done
         ln -svf ''${library}$suffix.pc $dev/lib/pkgconfig/$library$newsuffix.pc
