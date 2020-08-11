@@ -82,12 +82,11 @@ in
     services.xserver.windowManager = {
       session = [{
         name = "xmonad";
-        start = if (cfg.config != null) then ''
-          ${xmonadBin}
-          waitPID=$!
-        '' else ''
-          systemd-cat -t xmonad ${xmonad}/bin/xmonad &
-          waitPID=$!
+        start = let
+          xmonadCommand = if (cfg.config != null) then xmonadBin else "${xmonad}/bin/xmonad";
+        in ''
+           systemd-cat -t xmonad ${xmonadCommand} &
+           waitPID=$!
         '';
       }];
     };
