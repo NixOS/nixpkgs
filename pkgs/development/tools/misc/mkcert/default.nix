@@ -15,10 +15,8 @@ buildGoModule rec {
 
   doCheck = false;
 
-  goPackagePath = "github.com/FiloSottile/mkcert";
   buildFlagsArray = ''
-    -ldflags=
-      -X ${goPackagePath}/main.Version=${version}
+    -ldflags=-X main.Version=v${version}
   '';
 
   meta = with lib; {

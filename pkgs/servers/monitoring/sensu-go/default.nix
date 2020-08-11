@@ -7,8 +7,6 @@ let
       version = "5.21.0";
       shortRev = "3a1ac58"; # for internal version info
 
-      goPackagePath = "github.com/sensu/sensu-go";
-
       src = fetchFromGitHub {
         owner = "sensu";
         repo = "sensu-go";

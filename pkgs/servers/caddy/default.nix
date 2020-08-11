@@ -4,8 +4,6 @@ buildGoModule rec {
   pname = "caddy";
   version = "1.0.5";
 
-  goPackagePath = "github.com/caddyserver/caddy";
-
   subPackages = [ "caddy" ];
 
   src = fetchFromGitHub {

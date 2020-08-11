@@ -11,8 +11,6 @@ buildGoModule rec {
     sha256 = "125mw70jidbp436arhv77201jdp6mpgqa2dzmrpmk55f9bf29sg6";
   };
 
-  goPackagePath = "github.com/SrKomodo/shadowfox-updater";
-
   vendorSha256 = "06ar9ivry9b01609izjbl6hqgg0cy7aqd8n2cqpyq0g7my0l0lbj";
 
   doCheck = false;

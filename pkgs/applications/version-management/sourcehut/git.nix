@@ -9,41 +9,37 @@ let
   buildShell = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-shell";
-    goPackagePath = "git.sr.ht/~sircmpwn/git.sr.ht/gitsrht-shell";
 
-  vendorSha256 = "1zvbqn4r940mibn4h1cqz94gbr476scm281ps361n0rfqlimw8g5";
+    vendorSha256 = "1zvbqn4r940mibn4h1cqz94gbr476scm281ps361n0rfqlimw8g5";
 
-  doCheck = false;
+    doCheck = false;
   };
 
   buildDispatcher = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-dispatcher";
-    goPackagePath = "git.sr.ht/~sircmpwn/git.sr.ht/gitsrht-dispatch";
 
-  vendorSha256 = "1lzkf13m54pq0gnn3bcxc80nfg76hgck4l8q8jpaicrsiwgcyrd9";
+    vendorSha256 = "1lzkf13m54pq0gnn3bcxc80nfg76hgck4l8q8jpaicrsiwgcyrd9";
 
-  doCheck = false;
+    doCheck = false;
   };
 
   buildKeys = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-keys";
-    goPackagePath = "git.sr.ht/~sircmpwn/git.sr.ht/gitsrht-keys";
 
-  vendorSha256 = "16j7kpar318s4766pln8xn6d51xqblwig5n1jywhj0sl80qjl5cv";
+    vendorSha256 = "16j7kpar318s4766pln8xn6d51xqblwig5n1jywhj0sl80qjl5cv";
 
-  doCheck = false;
+    doCheck = false;
   };
 
   buildUpdateHook = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-update-hook";
-    goPackagePath = "git.sr.ht/~sircmpwn/git.sr.ht/gitsrht-update-hook";
 
-  vendorSha256 = "1rmv3p60g6w4h4v9wx99jkyx0q02snslyjrjy9n1flardjs01b63";
+    vendorSha256 = "1rmv3p60g6w4h4v9wx99jkyx0q02snslyjrjy9n1flardjs01b63";
 
-  doCheck = false;
+    doCheck = false;
   };
 in buildPythonPackage rec {
   inherit version;

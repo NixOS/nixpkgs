@@ -15,7 +15,6 @@ buildGoModule rec {
 
   CGO_ENABLED = 0;
 
-  goPackagePath = "tailscale.com";
   vendorSha256 = "0l9lzwwvshg9a2kmmq1cvvlaxncbas78a9hjhvjjar89rjr2k2sv";
 
   doCheck = false;

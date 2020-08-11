@@ -4,8 +4,6 @@ buildGoModule rec {
   pname = "coredns";
   version = "1.7.0";
 
-  goPackagePath = "github.com/coredns/coredns";
-
   src = fetchFromGitHub {
     owner = "coredns";
     repo = "coredns";

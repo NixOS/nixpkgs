@@ -17,7 +17,6 @@ buildGoModule rec {
 
   doCheck = false;
 
-  goPackagePath = "sigs.k8s.io/kind";
   subPackages = [ "." ];
 
   nativeBuildInputs = [ installShellFiles ];
