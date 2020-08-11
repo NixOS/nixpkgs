@@ -1,5 +1,5 @@
 { lib, fetchPypi, buildPythonPackage
-, lxml, pycryptodome, construct
+, lxml, pycryptodomex, construct
 , argon2_cffi, dateutil, future
 }:
 
@@ -12,8 +12,12 @@ buildPythonPackage rec {
     sha256 = "b3e07eb2dd3aeb1dfa1a2d2d17be77066ee560c1e770f1c72d7ea5608117d284";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py --replace "==" ">="
+  '';
+
   propagatedBuildInputs = [
-    lxml pycryptodome construct
+    lxml pycryptodomex construct
     argon2_cffi dateutil future
   ];
 
