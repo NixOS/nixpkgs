@@ -6034,14 +6034,24 @@ in {
 
   scipy = let
     scipy_ = callPackage ../development/python-modules/scipy { };
-    scipy_1_2 = scipy_.overridePythonAttrs(oldAttrs: rec {
-      version = "1.2.2";
-      src = oldAttrs.src.override {
-        inherit version;
-        sha256 = "a4331e0b8dab1ff75d2c67b5158a8bb9a83c799d7140094dda936d876c7cfbb1";
-      };
-    });
-  in if pythonOlder "3.5" then scipy_1_2 else scipy_;
+  in if isPy27 then
+      scipy_.overridePythonAttrs(oldAttrs: rec {
+        version = "1.2.2";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "a4331e0b8dab1ff75d2c67b5158a8bb9a83c799d7140094dda936d876c7cfbb1";
+        };
+      })
+    else if isPy35 then
+      scipy_.overridePythonAttrs(oldAttrs: rec {
+        version = "1.4.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "0ndw7zyxd2dj37775mc75zm4fcyiipnqxclc45mkpxy8lvrvpqfy";
+        };
+      })
+    else
+      scipy_;
 
   scipy_1_3 = self.scipy.overridePythonAttrs(oldAttrs: rec {
     version = "1.3.3";
