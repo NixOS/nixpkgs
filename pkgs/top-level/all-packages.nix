@@ -25784,9 +25784,7 @@ in
 
   pcb = callPackage ../applications/science/electronics/pcb { };
 
-  qcsxcad = libsForQt5.callPackage ../applications/science/electronics/qcsxcad {
-    inherit (qt5) wrapQtAppsHook qtbase;
-  };
+  qcsxcad = libsForQt5.callPackage ../applications/science/electronics/qcsxcad { };
 
   qucs = callPackage ../applications/science/electronics/qucs { };
 
