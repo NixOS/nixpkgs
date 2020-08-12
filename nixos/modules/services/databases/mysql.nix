@@ -59,6 +59,12 @@ in
         description = "User account under which MySQL runs";
       };
 
+      group = mkOption {
+        type = types.str;
+        default = "mysql";
+        description = "Group under which MySQL runs.";
+      };
+
       dataDir = mkOption {
         type = types.path;
         example = "/var/lib/mysql";
@@ -319,21 +325,25 @@ in
       })
     ];
 
-    users.users.mysql = {
-      description = "MySQL server user";
-      group = "mysql";
-      uid = config.ids.uids.mysql;
+    users.users = optionalAttrs (cfg.user == "mysql") {
+      mysql = {
+        description = "MySQL server user";
+        group = cfg.group;
+        uid = config.ids.uids.mysql;
+      };
     };
 
-    users.groups.mysql.gid = config.ids.gids.mysql;
+    users.groups = optionalAttrs (cfg.group == "mysql") {
+      mysql.gid = config.ids.gids.mysql;
+    };
 
     environment.systemPackages = [ cfg.package ];
 
     environment.etc."my.cnf".source = cfg.configFile;
 
     systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 ${cfg.user} mysql - -"
-      "z '${cfg.dataDir}' 0700 ${cfg.user} mysql - -"
+      "d '${cfg.dataDir}' 0700 '${cfg.user}' '${cfg.group}' - -"
+      "z '${cfg.dataDir}' 0700 '${cfg.user}' '${cfg.group}' - -"
     ];
 
     systemd.services.mysql = let
@@ -473,7 +483,7 @@ in
               "+${setupScript}";
           # User and group
           User = cfg.user;
-          Group = "mysql";
+          Group = cfg.group;
           # Runtime directory and mode
           RuntimeDirectory = "mysqld";
           RuntimeDirectoryMode = "0755";
