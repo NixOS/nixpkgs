@@ -89,7 +89,7 @@ let
       fi
 
       if [ -e vendor ]; then
-        echo "vendor folder exists, please set 'vendorSha256=null;' or 'deleteVendor=true;' in your expression"
+        echo "vendor folder exists, please set 'vendorSha256 = null;' in your expression"
         exit 10
       fi
 
