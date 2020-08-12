@@ -528,6 +528,46 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
    <listitem>
     <para>
      In the <literal>resilio</literal> module, <xref linkend="opt-services.resilio.httpListenAddr"/> has been changed to listen to <literal>[::1]</literal> instead of <literal>0.0.0.0</literal>.
+     </para>
+   </listitem>
+   <listitem>
+    <para>
+     Users of <link xlink:href="http://openafs.org">OpenAFS 1.6</link> must
+     upgrade their services to OpenAFS 1.8! In this release, the OpenAFS package
+     version 1.6.24 is marked broken but can be used during transition to
+     OpenAFS 1.8.x. Use the options
+     <option>services.openafsClient.packages.module</option>,
+     <option>services.openafsClient.packages.programs</option> and
+     <option>services.openafsServer.package</option> to select a different
+     OpenAFS package. OpenAFS 1.6 will be removed in the next release. The
+     package <literal>openafs</literal> and the service options will then
+     silently point to the OpenAFS 1.8 release.
+    </para>
+    <para>
+     See also the OpenAFS <link
+     xlink:href="http://docs.openafs.org/AdminGuide/index.html">Administrator
+     Guide</link> for instructions. Beware of the following when updating
+     servers:
+     <itemizedlist>
+      <listitem>
+       <para>
+       The storage format of the server key has changed and the key must be converted before running the new release.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+       When updating multiple database servers, turn off the database servers
+       from the highest IP down to the lowest with resting periods in
+       between. Start up in reverse order. Do not concurrently run database
+       servers working with different OpenAFS releases!
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+       Update servers first, then clients.
+       </para>
+      </listitem>
+     </itemizedlist>
     </para>
    </listitem>
    <listitem>
