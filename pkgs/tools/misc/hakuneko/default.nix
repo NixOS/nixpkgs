@@ -6,6 +6,7 @@
 , makeWrapper
 , udev
 , stdenv
+, lib
 , wrapGAppsHook
 }:
 let
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   runtimeDependencies = [
-    udev.lib
+    (lib.getLib udev)
   ];
 
   postFixup = ''
