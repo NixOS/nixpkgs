@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildEnv, makeWrapper
+{ stdenv, lib, fetchurl, buildEnv, makeWrapper
 , xorg, alsaLib, dbus, glib, gtk2, atk, pango, freetype, fontconfig
 , gdk-pixbuf, cairo, nss, nspr, gconf, expat, systemd, libcap
 , libnotify}:
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/share/nwjs/nw
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/share/nwjs/nwjc
 
-    ln -s ${systemd.lib}/lib/libudev.so $out/share/nwjs/libudev.so.0
+    ln -s ${lib.getLib systemd}/lib/libudev.so $out/share/nwjs/libudev.so.0
 
     patchelf --set-rpath "${nwEnv}/lib:${nwEnv}/lib64:${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ]}:$out/share/nwjs" $out/share/nwjs/nw
     patchelf --set-rpath "${nwEnv}/lib:${nwEnv}/lib64:$out/share/nwjs" $out/share/nwjs/nwjc
