@@ -19,6 +19,7 @@
 , cephSupport ? false, ceph
 , openGLSupport ? sdlSupport, mesa, epoxy, libdrm
 , virglSupport ? openGLSupport, virglrenderer
+, libiscsiSupport ? true, libiscsi
 , smbdSupport ? false, samba
 , tpmSupport ? true
 , hostCpuOnly ? false
@@ -72,6 +73,7 @@ stdenv.mkDerivation rec {
     ++ optionals cephSupport [ ceph ]
     ++ optionals openGLSupport [ mesa epoxy libdrm ]
     ++ optionals virglSupport [ virglrenderer ]
+    ++ optionals libiscsiSupport [ libiscsi ]
     ++ optionals smbdSupport [ samba ];
 
   enableParallelBuilding = true;
@@ -148,6 +150,7 @@ stdenv.mkDerivation rec {
     ++ optional openGLSupport "--enable-opengl"
     ++ optional virglSupport "--enable-virglrenderer"
     ++ optional tpmSupport "--enable-tpm"
+    ++ optional libiscsiSupport "--enable-libiscsi"
     ++ optional smbdSupport "--smbd=${samba}/bin/smbd";
 
   doCheck = false; # tries to access /dev
