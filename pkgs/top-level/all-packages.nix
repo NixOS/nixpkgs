@@ -5478,6 +5478,8 @@ in
 
   libircclient = callPackage ../development/libraries/libircclient { };
 
+  libiscsi = callPackage ../development/libraries/libiscsi { };
+
   libisds = callPackage ../development/libraries/libisds { };
 
   libite = callPackage ../development/libraries/libite { };
