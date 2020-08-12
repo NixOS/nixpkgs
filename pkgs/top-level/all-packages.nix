@@ -12066,8 +12066,6 @@ in
 
   cfitsio = callPackage ../development/libraries/cfitsio { };
 
-  fontconfig_210 = callPackage ../development/libraries/fontconfig/2.10.nix { };
-
   fontconfig = callPackage ../development/libraries/fontconfig { };
 
   fontconfig-penultimate = callPackage ../data/fonts/fontconfig-penultimate {};
