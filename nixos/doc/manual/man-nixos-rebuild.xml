@@ -122,6 +122,9 @@
     <option>--no-net</option>
    </arg>
    <arg>
+    <option>--impure</option>
+   </arg>
+   <arg>
     <group choice='req'>
      <arg choice='plain'><option>--verbose</option></arg>
      <arg choice='plain'><option>-v</option></arg>
@@ -597,6 +600,10 @@
    <option>--keep-failed</option> / <option>-K</option>,
    <option>--keep-going</option> / <option>-k</option> and <option>--verbose</option> /
    <option>-v</option>. See the Nix manual for details.
+
+   The following Nix flags that are support by the upcoming nix 2.4 version:
+   <option>-L</option>, <option>--refresh</option>, <option>--no-net</option>,
+   <option>--no-net</option>, <option>--impure</option>. See <command>nix --help</command> or <command>nix build --help</command> for details.
   </para>
  </refsection>
 
