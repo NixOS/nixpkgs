@@ -23,6 +23,11 @@ while [[ $# -gt 0 ]]; do
         shift # past argument
         shift # past value
         ;;
+	--patches)
+	PATCHES="$2"
+        shift # past argument
+        shift # past value
+        ;;
         *)    # unknown option
         POSITIONAL+=("$1")
         shift # past argument
@@ -31,11 +36,13 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ -z "$VERSION" || -n "$POSITIONAL" ]]; then
-    echo "Usage: update.sh [--url URL] --ver VERSION [--rev REVISION]"
+    echo "Usage: update.sh [--url URL] --ver VERSION [--rev REVISION] [--patches PATCHES]"
     echo "URL may be any path acceptable to 'git clone' and VERSION the"
     echo "semantic version number.  If VERSION is not a revision acceptable to"
     echo "'git checkout', you must provide one in REVISION.  If URL is not"
     echo "provided, it defaults to https://github.com/tootsuite/mastodon.git."
+    echo "PATCHES, if provided, should be one or more Nix expressions"
+    echo "separated by spaces."
     exit 1
 fi
 
@@ -75,16 +82,15 @@ echo "Creating source.nix"
 # yarn2nix and mkYarnPackage want the version to be present in
 # package.json. Mastodon itself does not include the version in
 # package.json but at least one fork (Soapbox) does.
-PATCHES=
 if [ $(jq .version $FETCHED_SOURCE_DIR/package.json) == "null" ]; then
     mkdir $WORK_DIR/a $WORK_DIR/b
     cp $FETCHED_SOURCE_DIR/package.json $WORK_DIR/a
     cd $WORK_DIR
-    jq ". + {version:$(cat $TARGET_DIR/version.nix)}" a/package.json > b/package.json
+    jq "{version:$(cat $TARGET_DIR/version.nix)} + ." a/package.json > b/package.json
     diff -Naur --label a/package.json --label b/package.json a b > $TARGET_DIR/version.patch || true
-    rm -rf a b
+    rm -rf a b tmp
     cd $TARGET_DIR
-    PATCHES=" ./version.patch "
+    PATCHES="$PATCHES ./version.patch "
 fi
 
 cat > source.nix << EOF

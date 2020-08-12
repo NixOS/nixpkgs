@@ -1,11 +1,9 @@
 diff -Naur --label a/package.json --label b/package.json a/package.json b/package.json
 --- a/package.json
 +++ b/package.json
-@@ -186,5 +186,6 @@
-     "sass-lint": "^1.13.1",
-     "webpack-dev-server": "^3.10.1",
-     "yargs": "^15.1.0"
--  }
-+  },
-+  "version": "3.1.2"
- }
+@@ -1,4 +1,5 @@
+ {
++  "version": "3.2.0",
+   "name": "@tootsuite/mastodon",
+   "license": "AGPL-3.0-or-later",
+   "engines": {
