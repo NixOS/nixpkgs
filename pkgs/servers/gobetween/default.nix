@@ -11,8 +11,6 @@ buildGoModule rec {
     sha256 = "0bxf89l53sqan9qq23rwawjkcanv9p61sw56zjqhyx78f0bh0zbc";
   };
 
-  deleteVendor = true;
-
   patches = [
     ./gomod.patch
   ];
@@ -22,8 +20,6 @@ buildGoModule rec {
   '';
 
   vendorSha256 = "1nkni9ikpc0wngh5v0qmlpn5s9v85lb2ih22f3h3lih7nc29yv87";
-
-  doCheck = false;
 
   installPhase = ''
     mkdir -p $out/bin
