@@ -12279,6 +12279,23 @@ let
     };
   };
 
+  MinionBackendSQLite = buildPerlModule {
+    pname = "Minion-Backend-SQLite";
+    version = "5.0.3";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Minion-Backend-SQLite-v5.0.3.tar.gz";
+      sha256 = "1ch92846cgr1s1y6nlicjxlq9r4qh1a3fig0jlr7ligzw05mxib4";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ Minion MojoSQLite ];
+    meta = {
+      homepage = "https://github.com/Grinnz/Minion-Backend-SQLite";
+      description = "SQLite backend for Minion job queue";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   MixinLinewise = buildPerlPackage {
     pname = "Mixin-Linewise";
     version = "0.108";
