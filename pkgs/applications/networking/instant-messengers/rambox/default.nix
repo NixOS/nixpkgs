@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xdg_utils, dpkg, makeWrapper, autoPatchelfHook
+{ stdenv, lib, fetchurl, xdg_utils, dpkg, makeWrapper, autoPatchelfHook
 , libXtst, libXScrnSaver, gtk3, nss, alsaLib, udev, libnotify, wrapGAppsHook
 }:
 
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook wrapGAppsHook ];
   buildInputs = [ libXtst libXScrnSaver gtk3 nss alsaLib ];
-  runtimeDependencies = [ udev.lib libnotify ];
+  runtimeDependencies = [ (lib.getLib udev) libnotify ];
 
   unpackPhase = "dpkg-deb -x $src .";
 
