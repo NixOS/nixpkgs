@@ -3,6 +3,7 @@
 , harfbuzz #substituting glyphs with opentype fonts
 , fribidi, m17n_lib #bidi and encoding
 , openssl, libssh2 #build-in ssh
+, fcitx, ibus, uim #IME
 }:
 
 stdenv.mkDerivation rec {
@@ -18,6 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libX11 gdk-pixbuf.dev cairo libXft gtk3 vte
     harfbuzz fribidi m17n_lib openssl libssh2
+    fcitx ibus uim
   ];
 
   #bad configure.ac and Makefile.in everywhere
