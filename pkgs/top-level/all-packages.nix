@@ -26501,6 +26501,8 @@ in
 
   nixdoc = callPackage ../tools/nix/nixdoc {};
 
+  nix-doc = callPackage ../tools/package-management/nix-doc { };
+
   nix-bundle = callPackage ../tools/package-management/nix-bundle { };
 
   nix-delegate = haskell.lib.justStaticExecutables haskellPackages.nix-delegate;
