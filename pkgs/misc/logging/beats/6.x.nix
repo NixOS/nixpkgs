@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, elk6Version, buildGoPackage, libpcap, systemd }:
+{ stdenv, lib, fetchFromGitHub, elk6Version, buildGoPackage, libpcap, systemd }:
 
 let beat = package : extraArgs : buildGoPackage (rec {
       name = "${package}-${version}";
@@ -46,7 +46,7 @@ in {
       journal entries from Linuxes with systemd.
     '';
     buildInputs = [ systemd.dev ];
-    postFixup = let libPath = stdenv.lib.makeLibraryPath [ systemd.lib ]; in ''
+    postFixup = let libPath = stdenv.lib.makeLibraryPath [ (lib.getLib systemd) ]; in ''
       patchelf --set-rpath ${libPath} "$out/bin/journalbeat"
     '';
   };
