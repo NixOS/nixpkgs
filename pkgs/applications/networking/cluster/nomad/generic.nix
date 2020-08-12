@@ -1,19 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, majorVersion ? "0.11" }:
-
-let
-  versionMap = {
-    "0.11" = {
-      version = "0.11.4";
-      sha256 = "1sykp9sji6f564s7bz0cvnr9w5x92n0l1r1djf1bl7jvv2mi1mcb";
-    };
-    "0.12" = {
-      version = "0.12.2";
-      sha256 = "1gc286ag6plk5kxw7jzr32cp3n5rwydj1z7rds1rfd0fyq7an404";
-    };
-  };
-in
-
-with versionMap.${majorVersion};
+{ stdenv, buildGoPackage, fetchFromGitHub, version, sha256 }:
 
 buildGoPackage rec {
   pname = "nomad";
