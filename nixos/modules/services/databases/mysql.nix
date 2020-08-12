@@ -6,12 +6,10 @@ let
 
   cfg = config.services.mysql;
 
-  mysql = cfg.package;
-
-  isMariaDB = lib.getName mysql == lib.getName pkgs.mariadb;
+  isMariaDB = lib.getName cfg.package == lib.getName pkgs.mariadb;
 
   mysqldOptions =
-    "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${mysql}";
+    "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${cfg.package}";
 
   settingsFile = pkgs.writeText "my.cnf" (
     generators.toINI { listsAsDuplicateKeys = true; } cfg.settings +
@@ -329,7 +327,7 @@ in
 
     users.groups.mysql.gid = config.ids.gids.mysql;
 
-    environment.systemPackages = [mysql];
+    environment.systemPackages = [ cfg.package ];
 
     environment.etc."my.cnf".source = cfg.configFile;
 
@@ -357,12 +355,12 @@ in
 
         preStart = if isMariaDB then ''
           if ! test -e ${cfg.dataDir}/mysql; then
-            ${mysql}/bin/mysql_install_db --defaults-file=/etc/my.cnf ${mysqldOptions}
+            ${cfg.package}/bin/mysql_install_db --defaults-file=/etc/my.cnf ${mysqldOptions}
             touch ${cfg.dataDir}/mysql_init
           fi
         '' else ''
           if ! test -e ${cfg.dataDir}/mysql; then
-            ${mysql}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} --initialize-insecure
+            ${cfg.package}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} --initialize-insecure
             touch ${cfg.dataDir}/mysql_init
           fi
         '';
@@ -372,7 +370,7 @@ in
           Restart = "on-abort";
           RestartSec = "5s";
           # The last two environment variables are used for starting Galera clusters
-          ExecStart = "${mysql}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} $_WSREP_NEW_CLUSTER $_WSREP_START_POSITION";
+          ExecStart = "${cfg.package}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} $_WSREP_NEW_CLUSTER $_WSREP_START_POSITION";
           ExecStartPost =
             let
               setupScript = pkgs.writeScript "mysql-setup" ''
@@ -416,7 +414,7 @@ in
                                 cat ${database.schema}/mysql-databases/*.sql
                             fi
                             ''}
-                          ) | ${mysql}/bin/mysql -u root -N
+                          ) | ${cfg.package}/bin/mysql -u root -N
                       fi
                     '') cfg.initialDatabases}
 
@@ -428,7 +426,7 @@ in
                           echo "CREATE USER '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}' IDENTIFIED WITH mysql_native_password;"
                           echo "SET PASSWORD FOR '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}' = PASSWORD('${cfg.replication.masterPassword}');"
                           echo "GRANT REPLICATION SLAVE ON *.* TO '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}';"
-                        ) | ${mysql}/bin/mysql -u root -N
+                        ) | ${cfg.package}/bin/mysql -u root -N
                       ''}
 
                     ${optionalString (cfg.replication.role == "slave")
@@ -438,7 +436,7 @@ in
                         ( echo "stop slave;"
                           echo "change master to master_host='${cfg.replication.masterHost}', master_user='${cfg.replication.masterUser}', master_password='${cfg.replication.masterPassword}';"
                           echo "start slave;"
-                        ) | ${mysql}/bin/mysql -u root -N
+                        ) | ${cfg.package}/bin/mysql -u root -N
                       ''}
 
                     ${optionalString (cfg.initialScript != null)
@@ -446,7 +444,7 @@ in
                         # Execute initial script
                         # using toString to avoid copying the file to nix store if given as path instead of string,
                         # as it might contain credentials
-                        cat ${toString cfg.initialScript} | ${mysql}/bin/mysql -u root -N
+                        cat ${toString cfg.initialScript} | ${cfg.package}/bin/mysql -u root -N
                       ''}
 
                     rm ${cfg.dataDir}/mysql_init
@@ -457,7 +455,7 @@ in
                   ${concatMapStrings (database: ''
                     echo "CREATE DATABASE IF NOT EXISTS \`${database}\`;"
                   '') cfg.ensureDatabases}
-                  ) | ${mysql}/bin/mysql -u root -N
+                  ) | ${cfg.package}/bin/mysql -u root -N
                 ''}
 
                 ${concatMapStrings (user:
@@ -466,7 +464,7 @@ in
                       ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
                         echo "GRANT ${permission} ON ${database} TO '${user.name}'@'localhost';"
                       '') user.ensurePermissions)}
-                    ) | ${mysql}/bin/mysql -u root -N
+                    ) | ${cfg.package}/bin/mysql -u root -N
                   '') cfg.ensureUsers}
               '';
             in
