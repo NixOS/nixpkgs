@@ -43,6 +43,9 @@ let
 
     [gitlab-shell]
     dir = "${cfg.packages.gitlab-shell}"
+    secret_file = "${cfg.statePath}/gitlab_shell_secret"
+    gitlab_url = "http+unix://${pathUrlQuote gitlabSocket}"
+    http_settings = { self_signed_cert = false }
 
     ${concatStringsSep "\n" (attrValues (mapAttrs (k: v: ''
     [[storage]]
