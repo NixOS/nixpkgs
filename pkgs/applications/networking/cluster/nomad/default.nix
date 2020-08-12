@@ -1,8 +1,23 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, majorVersion ? "0.11" }:
+
+let
+  versionMap = {
+    "0.11" = {
+      version = "0.11.4";
+      sha256 = "1sykp9sji6f564s7bz0cvnr9w5x92n0l1r1djf1bl7jvv2mi1mcb";
+    };
+    "0.12" = {
+      version = "0.12.2";
+      sha256 = "1gc286ag6plk5kxw7jzr32cp3n5rwydj1z7rds1rfd0fyq7an404";
+    };
+  };
+in
+
+with versionMap.${majorVersion};
 
 buildGoPackage rec {
   pname = "nomad";
-  version = "0.11.3";
+  inherit version;
   rev = "v${version}";
 
   goPackagePath = "github.com/hashicorp/nomad";
@@ -11,8 +26,7 @@ buildGoPackage rec {
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
-    inherit rev;
-    sha256 = "1p7g7x2gl77h1w7aip3xji3s530fj46gspargz4j3i6h4wkyvafb";
+    inherit rev sha256;
   };
 
   # ui:
