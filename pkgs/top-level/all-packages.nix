@@ -22278,6 +22278,8 @@ in
 
   inherit (python3Packages.callPackage ../applications/networking/onionshare { }) onionshare onionshare-gui;
 
+  openambit = qt5.callPackage ../applications/misc/openambit { };
+
   openbox = callPackage ../applications/window-managers/openbox { };
 
   openbox-menu = callPackage ../applications/misc/openbox-menu {
