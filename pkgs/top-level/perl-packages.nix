@@ -12263,6 +12263,22 @@ let
     };
   };
 
+  Minion = buildPerlPackage {
+    pname = "Minion";
+    version = "10.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SR/SRI/Minion-10.13.tar.gz";
+      sha256 = "0nxk147v22lvc461923yv8fypqpbsajamvcvnlidk8bb54r33afj";
+    };
+    propagatedBuildInputs = [ Mojolicious ];
+    meta = {
+      homepage = "https://github.com/mojolicious/minion";
+      description = "A high performance job queue for Perl";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   MixinLinewise = buildPerlPackage {
     pname = "Mixin-Linewise";
     version = "0.108";
