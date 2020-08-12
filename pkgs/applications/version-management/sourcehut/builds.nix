@@ -9,11 +9,10 @@ let
   buildWorker = src: buildGoModule {
     inherit src version;
     pname = "builds-sr-ht-worker";
-    goPackagePath = "git.sr.ht/~sircmpwn/builds.sr.ht/worker";
 
-  vendorSha256 = "0prdlihcy5yz760llwyby747yy2981dn3gy401a48df7ndlfj6lp";
+    vendorSha256 = "0prdlihcy5yz760llwyby747yy2981dn3gy401a48df7ndlfj6lp";
 
-  doCheck = false;
+    doCheck = false;
   };
 in buildPythonPackage rec {
   inherit version;

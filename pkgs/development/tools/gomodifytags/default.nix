@@ -8,8 +8,6 @@ buildGoModule rec {
 
   doCheck = false;
 
-  goPackagePath = "github.com/fatih/gomodifytags";
-
   src = fetchFromGitHub {
     owner = "fatih";
     repo = "gomodifytags";

@@ -1,7 +1,8 @@
 { stdenv, buildPythonPackage, fetchPypi
 , itsdangerous, hypothesis
-, pytest, requests
+, pytestCheckHook, requests
 , pytest-timeout
+, isPy3k
  }:
 
 buildPythonPackage rec {
@@ -14,11 +15,14 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ itsdangerous ];
-  checkInputs = [ pytest requests hypothesis pytest-timeout ];
+  checkInputs = [ pytestCheckHook requests hypothesis pytest-timeout ];
 
-  checkPhase = ''
-    pytest ${stdenv.lib.optionalString stdenv.isDarwin "-k 'not test_get_machine_id'"}
-  '';
+  disabledTests = stdenv.lib.optionals stdenv.isDarwin [
+    "test_get_machine_id"
+  ];
+
+  # Python 2 pytest fails with INTERNALERROR due to a deprecation warning.
+  doCheck = isPy3k;
 
   meta = with stdenv.lib; {
     homepage = "https://palletsprojects.com/p/werkzeug/";

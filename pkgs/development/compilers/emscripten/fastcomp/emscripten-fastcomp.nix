@@ -1,9 +1,7 @@
-{ emscriptenVersion, stdenv, fetchFromGitHub, cmake, python, gtest, ... }:
+{ emscriptenVersion, stdenv, fetchFromGitHub, cmake, python, gtest, gccForLibs, ... }:
 
 let
   rev = emscriptenVersion;
-  haveGcc = stdenv.cc.isGNU || stdenv.cc.cc ? gcc;
-  gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in
 stdenv.mkDerivation rec {
   name = "emscripten-fastcomp-${rev}";
@@ -35,16 +33,14 @@ stdenv.mkDerivation rec {
     #"-DLLVM_CONFIG=${llvm}/bin/llvm-config"
     "-DLLVM_BUILD_TESTS=ON"
     "-DCLANG_INCLUDE_TESTS=ON"
-  ] ++ (stdenv.lib.optional (stdenv.isLinux && haveGcc)
+  ] ++ (stdenv.lib.optional stdenv.isLinux
     # necessary for clang to find crtend.o
-    "-DGCC_INSTALL_PREFIX=${gcc}"
+    "-DGCC_INSTALL_PREFIX=${gccForLibs}"
   );
   enableParallelBuilding = true;
 
   passthru = {
     isClang = true;
-  } // stdenv.lib.optionalAttrs haveGcc {
-    inherit gcc;
   };
 
   meta = with stdenv.lib; {

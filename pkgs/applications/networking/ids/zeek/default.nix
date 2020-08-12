@@ -20,11 +20,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zeek";
-  version = "3.1.5";
+  version = "3.2.0";
 
   src = fetchurl {
     url = "https://download.zeek.org/zeek-${version}.tar.gz";
-    sha256 = "1rwrwdx0jf76pb11vpmv5z513ss9rrkgpjv1pa1vydf4gbafhi5r";
+    sha256 = "0ky4485z0gpaj1z75y7jr5bn9wr8x8w3v637aqq4v9a0a5iyagmg";
   };
 
   nativeBuildInputs = [ cmake flex bison file ];
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
     # Fix pybind c++17 build with Clang. See: https://github.com/pybind/pybind11/issues/1604
     (fetchpatch {
       url = "https://github.com/pybind/pybind11/commit/759221f5c56939f59d8f342a41f8e2d2cacbc8cf.patch";
-      sha256 = "0l8z7d7chq1awd8dnfarj4c40wx36hkhcan0702p5l89x73wqk54";
-      extraPrefix = "aux/broker/bindings/python/3rdparty/pybind11/";
+      sha256 = "17qznp8yavnv84fjsbghv3d59z6k6rx74j49w0izakmgw5a95w84";
+      extraPrefix = "auxil/broker/bindings/python/3rdparty/pybind11/";
       stripLen = 1;
     })
   ];

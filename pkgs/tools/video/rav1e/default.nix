@@ -1,4 +1,4 @@
-{ rustPlatform, fetchFromGitHub, lib, nasm }:
+{ rustPlatform, fetchFromGitHub, lib, nasm, cargo-c }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rav1e";
@@ -13,7 +13,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1xaincrmpicp0skf9788w5631x1hxvifvq06hh5ribdz79zclzx3";
 
-  nativeBuildInputs = [ nasm ];
+  nativeBuildInputs = [ nasm cargo-c ];
+
+  postBuild = ''
+    cargo cbuild --release --frozen --prefix=${placeholder "out"}
+  '';
+
+  postInstall = ''
+    cargo cinstall --release --frozen --prefix=${placeholder "out"}
+  '';
 
   meta = with lib; {
     description = "The fastest and safest AV1 encoder";

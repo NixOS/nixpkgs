@@ -549,6 +549,8 @@ in {
 
   build = callPackage ../development/python-modules/build { };
 
+  bytecode = callPackage ../development/python-modules/bytecode { };
+
   ciso8601 = callPackage ../development/python-modules/ciso8601 { };
 
   deepdiff = callPackage ../development/python-modules/deepdiff { };
@@ -928,6 +930,8 @@ in {
 
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
 
+  kinparse = callPackage ../development/python-modules/kinparse { };
+
   labelbox = callPackage ../development/python-modules/labelbox { };
 
   lammps-cython = callPackage ../development/python-modules/lammps-cython {
@@ -1137,6 +1141,8 @@ in {
   pims = callPackage ../development/python-modules/pims { };
 
   poetry = callPackage ../development/python-modules/poetry { };
+
+  poetry-core = callPackage ../development/python-modules/poetry-core { };
 
   polyline = callPackage ../development/python-modules/polyline { };
 
@@ -2479,6 +2485,10 @@ in {
   curtsies = callPackage ../development/python-modules/curtsies { };
 
   envs = callPackage ../development/python-modules/envs { };
+
+  enaml = callPackage ../development/python-modules/enaml { };
+
+  enamlx = callPackage ../development/python-modules/enamlx { };
 
   etelemetry = callPackage ../development/python-modules/etelemetry { };
 
@@ -4759,7 +4769,7 @@ in {
   mesa = callPackage ../development/python-modules/mesa { };
 
   meson = disabledIf (pythonOlder "3.5") (toPythonModule ((pkgs.meson.override {
-    python3Packages = self;
+    python3 = python;
   }).overrideAttrs(oldAttrs: {
      # We do not want the setup hook in Python packages
      # because the build is performed differently.
@@ -5866,6 +5876,8 @@ in {
   qtconsole = callPackage ../development/python-modules/qtconsole { };
 
   qtpy = callPackage ../development/python-modules/qtpy { };
+
+  qreactor = callPackage ../development/python-modules/qreactor { };
 
   quantities = callPackage ../development/python-modules/quantities { };
 

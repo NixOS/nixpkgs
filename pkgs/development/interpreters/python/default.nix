@@ -158,10 +158,10 @@ in {
     self = pypy27;
     sourceVersion = {
       major = "7";
-      minor = "1";
+      minor = "3";
       patch = "1";
     };
-    sha256 = "0yq6ln1ic476sasp8zs4mg5i9524l1p96qwanp486rr1yza1grlg";
+    sha256 = "08ckkhd0ix6j9873a7gr507c72d4cmnv5lwvprlljdca9i8p2dzs";
     pythonVersion = "2.7";
     db = db.override { dbmSupport = !stdenv.isDarwin; };
     python = python27;
@@ -174,10 +174,10 @@ in {
     self = pypy36;
     sourceVersion = {
       major = "7";
-      minor = "1";
+      minor = "3";
       patch = "1";
     };
-    sha256 = "1hqvnran7d2dzj5555n7q680dyzhmbklz04pvkxgb5j604v7kkx1";
+    sha256 = "10zsk8jby8j6visk5mzikpb1cidvz27qq4pfpa26jv53klic6b0c";
     pythonVersion = "3.6";
     db = db.override { dbmSupport = !stdenv.isDarwin; };
     python = python27;
@@ -191,13 +191,12 @@ in {
     self = pythonInterpreters.pypy27_prebuilt;
     sourceVersion = {
       major = "7";
-      minor = "1";
+      minor = "3";
       patch = "1";
     };
-    sha256 = "0rlx4x9xy9h989w6sy4h7lknm00956r30c5gjxwsvf8fhvq9xc3k"; # linux64
+    sha256 = "18xc5kwidj5hjwbr0w8v1nfpg5l4lk01z8cn804zfyyz8xjqhx5y"; # linux64
     pythonVersion = "2.7";
     inherit passthruFun;
-    ncurses = ncurses5;
   };
 
   pypy36_prebuilt = callPackage ./pypy/prebuilt.nix {
@@ -205,13 +204,12 @@ in {
     self = pythonInterpreters.pypy36_prebuilt;
     sourceVersion = {
       major = "7";
-      minor = "1";
+      minor = "3";
       patch = "1";
     };
-    sha256 = "1c1xx6dm1n4xvh1vd3rcvyyixm5jm9rvzisji1a5bc9l38xzc540"; # linux64
+    sha256 = "04nv0mkalaliphbjw7y0pmb372bxwjzwmcsqkf9kwsik99kg2z7n"; # linux64
     pythonVersion = "3.6";
     inherit passthruFun;
-    ncurses = ncurses5;
   };
 
   graalpython37 = callPackage ./graalpython/default.nix {

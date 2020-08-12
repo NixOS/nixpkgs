@@ -1367,7 +1367,7 @@ in
 
   boringtun = callPackage ../tools/networking/boringtun { };
 
-  boomerang = libsForQt5.callPackage ../development/tools/boomerang { };
+  boomerang = libsForQt512.callPackage ../development/tools/boomerang { };
 
   boost-build = callPackage ../development/tools/boost-build { };
 
@@ -1768,6 +1768,8 @@ in
   doitlive = callPackage ../tools/misc/doitlive { };
 
   dokuwiki = callPackage ../servers/web-apps/dokuwiki { };
+
+  doppler = callPackage ../tools/security/doppler {};
 
   dosage = callPackage ../applications/graphics/dosage { };
 
@@ -2265,6 +2267,8 @@ in
   rmapi = callPackage ../applications/misc/remarkable/rmapi { };
 
   remarkable-mouse = python3Packages.callPackage ../applications/misc/remarkable/remarkable-mouse { };
+
+  ryujinx = callPackage ../misc/emulators/ryujinx { };
 
   scour = with python3Packages; toPythonApplication scour;
 
@@ -5346,6 +5350,8 @@ in
     pythonPackages = python3Packages;
   };
 
+  mirakurun = nodePackages.mirakurun;
+
   miredo = callPackage ../tools/networking/miredo { };
 
   mirrorbits = callPackage ../servers/mirrorbits { };
@@ -5806,6 +5812,8 @@ in
   open-ecard = callPackage ../tools/security/open-ecard { };
 
   openjade = callPackage ../tools/text/sgml/openjade { };
+
+  openhantek6022 = libsForQt5.callPackage ../applications/science/electronics/openhantek6022 { };
 
   openimagedenoise = callPackage ../development/libraries/openimagedenoise { };
 
@@ -6326,7 +6334,7 @@ in
 
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
 
-  qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
+  qlcplus = libsForQt512.callPackage ../applications/misc/qlcplus { };
 
   qnial = callPackage ../development/interpreters/qnial { };
 
@@ -8365,8 +8373,8 @@ in
       mkdir -p "$rsrc/lib"
       ln -s "${cc}/lib" "$rsrc/include"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
-    '' + stdenv.lib.optionalString (stdenv.targetPlatform.isLinux && cc ? gcc && !(stdenv.targetPlatform.useLLVM or false)) ''
-      echo "--gcc-toolchain=${cc.gcc}" >> $out/nix-support/cc-cflags
+    '' + stdenv.lib.optionalString (stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.useLLVM or false)) ''
+      echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
     '';
   };
 
@@ -9158,55 +9166,41 @@ in
 
   llvmPackages = recurseIntoAttrs llvmPackages_7;
 
-  llvmPackages_5 = callPackage ../development/compilers/llvm/5 ({
+  llvmPackages_5 = callPackage ../development/compilers/llvm/5 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_5.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_5.libraries;
-  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
-    stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
-  });
+  };
 
-  llvmPackages_6 = callPackage ../development/compilers/llvm/6 ({
+  llvmPackages_6 = callPackage ../development/compilers/llvm/6 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_6.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_6.libraries;
-  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
-    # with gcc-7 on i686: undefined reference to `__divmoddi4'
-    # Failing tests with gcc8.
-    stdenv = overrideCC stdenv (if stdenv.hostPlatform.isi686 then gcc6 else gcc7);
-  });
+  };
 
-  llvmPackages_7 = callPackage ../development/compilers/llvm/7 ({
+  llvmPackages_7 = callPackage ../development/compilers/llvm/7 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_7.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_7.libraries;
-  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
-    stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
-  });
+  };
 
-  llvmPackages_8 = callPackage ../development/compilers/llvm/8 ({
+  llvmPackages_8 = callPackage ../development/compilers/llvm/8 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_8.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_8.libraries;
-  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
-    stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
-  });
+  };
 
-  llvmPackages_9 = callPackage ../development/compilers/llvm/9 ({
+  llvmPackages_9 = callPackage ../development/compilers/llvm/9 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_9.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_9.libraries;
-  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
-    stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
-  });
+  };
 
-  llvmPackages_10 = callPackage ../development/compilers/llvm/10 ({
+  llvmPackages_10 = callPackage ../development/compilers/llvm/10 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_10.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_10.libraries;
-  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
-    stdenv = gcc7Stdenv;
-  });
+  };
 
   llvmPackages_latest = llvmPackages_10;
 
@@ -9415,6 +9409,7 @@ in
   cargo-audit = callPackage ../tools/package-management/cargo-audit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-c = callPackage ../development/tools/rust/cargo-c { };
   cargo-deb = callPackage ../tools/package-management/cargo-deb {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -9866,18 +9861,16 @@ in
   php = php74;
 
   phpPackages = php74Packages;
-  php72Packages = recurseIntoAttrs php72.packages;
   php73Packages = recurseIntoAttrs php73.packages;
   php74Packages = recurseIntoAttrs php74.packages;
 
   phpExtensions = php74Extensions;
-  php72Extensions = recurseIntoAttrs php72.extensions;
   php73Extensions = recurseIntoAttrs php73.extensions;
   php74Extensions = recurseIntoAttrs php74.extensions;
 
   inherit (callPackage ../development/interpreters/php {
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
-  }) php74 php73 php72;
+  }) php74 php73;
 
   picoc = callPackage ../development/interpreters/picoc {};
 
@@ -10542,6 +10535,17 @@ in
   libgcc = callPackage ../development/libraries/gcc/libgcc {
     stdenvNoLibs = gccStdenvNoLibs; # cannot be built with clang it seems
   };
+
+  # This is for e.g. LLVM libraries on linux.
+  gccForLibs =
+    # with gcc-7: undefined reference to `__divmoddi4'
+    if stdenv.targetPlatform.isi686
+      then gcc6.cc
+    else if stdenv.targetPlatform == stdenv.hostPlatform && targetPackages.stdenv.cc.isGNU
+	  # Can only do this is in the native case, otherwise we might get infinite
+	  # recursion if `targetPackages.stdenv.cc.cc` itself uses `gccForLibs`.
+      then targetPackages.stdenv.cc.cc
+    else gcc.cc;
 
   libstdcxx5 = callPackage ../development/libraries/gcc/libstdc++/5.nix { };
 
@@ -11446,6 +11450,8 @@ in
   ycmd = callPackage ../development/tools/misc/ycmd {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
     python = python3;
+    # currently broken
+    rustracerd = null;
   };
 
   yodl = callPackage ../development/tools/misc/yodl { };
@@ -12059,8 +12065,6 @@ in
   fstrm = callPackage ../development/libraries/fstrm { };
 
   cfitsio = callPackage ../development/libraries/cfitsio { };
-
-  fontconfig_210 = callPackage ../development/libraries/fontconfig/2.10.nix { };
 
   fontconfig = callPackage ../development/libraries/fontconfig { };
 
@@ -14086,23 +14090,7 @@ in
     llvmPackages = llvmPackages_9;
     inherit (darwin.apple_sdk.frameworks) OpenGL;
     inherit (darwin.apple_sdk.libs) Xplugin;
-  }
-    # Temporary fix for .drivers that avoids causing lots of rebuilds; see #91145
-     // { drivers = (mesa.overrideAttrs (a: {
-            nativeBuildInputs = [
-              (patchelf.overrideAttrs (pa: {
-                src = fetchFromGitHub {
-                  owner = "NixOS";
-                  repo = "patchelf";
-                  rev = "61bc10176"; # current master; what matters is merge of #225
-                  sha256 = "0cy77mn77w3mn64ggp20f4ygnbxfjmddhjjhfwkva53lsirg6w93";
-                };
-                nativeBuildInputs = pa.nativeBuildInputs or [] ++ [ autoreconfHook ];
-              }))
-            ] ++ a.nativeBuildInputs or [];
-          })).drivers;
-        }
-    ;
+  };
 
   mesa_glu =  callPackage ../development/libraries/mesa-glu {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
@@ -14618,9 +14606,26 @@ in
 
   libsForQt512 = recurseIntoAttrs (lib.makeScope qt512.newScope mkLibsForQt5);
 
+  qt514 = recurseIntoAttrs (makeOverridable
+    (import ../development/libraries/qt-5/5.14) {
+      inherit newScope;
+      inherit stdenv fetchurl fetchpatch fetchFromGitHub makeSetupHook makeWrapper;
+      inherit bison;
+      inherit cups;
+      inherit dconf;
+      inherit harfbuzz;
+      inherit libGL;
+      inherit perl;
+      inherit gtk3;
+      inherit (gst_all_1) gstreamer gst-plugins-base;
+      inherit llvmPackages_5;
+    });
+
+  libsForQt514 = recurseIntoAttrs (lib.makeScope qt514.newScope mkLibsForQt5);
+
   # TODO bump to 5.12 on darwin once it's not broken
-  qt5 = qt512;
-  libsForQt5 = libsForQt512;
+  qt5 = qt514;
+  libsForQt5 = libsForQt514;
 
   qt5ct = libsForQt5.callPackage ../tools/misc/qt5ct { };
 
@@ -17134,6 +17139,8 @@ in
 
   pcm = callPackage ../os-specific/linux/pcm { };
 
+  ifmetric = callPackage ../os-specific/linux/ifmetric {};
+
   ima-evm-utils = callPackage ../os-specific/linux/ima-evm-utils {
     openssl = openssl_1_0_2;
   };
@@ -18011,7 +18018,7 @@ in
 
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
-  sdrangel = libsForQt5.callPackage ../applications/radio/sdrangel {  };
+  sdrangel = libsForQt512.callPackage ../applications/radio/sdrangel {  };
 
   sepolgen = callPackage ../os-specific/linux/sepolgen { };
 
@@ -20808,6 +20815,8 @@ in
 
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive { };
+
+  inkcut = libsForQt5.callPackage ../applications/misc/inkcut { };
 
   inkscape = callPackage ../applications/graphics/inkscape {
     lcms = lcms2;
@@ -25730,6 +25739,8 @@ in
 
   adms = callPackage ../applications/science/electronics/adms { };
 
+  appcsxcad = libsForQt5.callPackage ../applications/science/electronics/appcsxcad { };
+
   # Since version 8 Eagle requires an Autodesk account and a subscription
   # in contrast to single payment for the charged editions.
   # This is the last version with the old model.
@@ -25773,6 +25784,8 @@ in
   ngspice = callPackage ../applications/science/electronics/ngspice { };
 
   pcb = callPackage ../applications/science/electronics/pcb { };
+
+  qcsxcad = libsForQt5.callPackage ../applications/science/electronics/qcsxcad { };
 
   qucs = callPackage ../applications/science/electronics/qucs { };
 
@@ -27165,7 +27178,7 @@ in
     inherit pkgs;
   };
 
-  golden-cheetah = libsForQt5.callPackage ../applications/misc/golden-cheetah {};
+  golden-cheetah = libsForQt512.callPackage ../applications/misc/golden-cheetah {};
 
   linkchecker = callPackage ../tools/networking/linkchecker { };
 

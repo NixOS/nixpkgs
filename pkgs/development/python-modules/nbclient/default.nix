@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "nbclient";
-  version = "0.4.0";
+  version = "0.4.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1id6m2dllkjpbv2w0yazxhlkhdd9cac6lxv9csf053il9wq322lk";
+    sha256 = "31fdb4bd45ebcd98eeda01e2c38fb391eae8a8480bdddbebb6cfd088486948a7";
   };
 
   checkInputs = [ pytest xmltodict nbconvert ipywidgets ];
