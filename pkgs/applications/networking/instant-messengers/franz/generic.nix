@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , makeWrapper
 , wrapGAppsHook
 , autoPatchelfHook
@@ -64,7 +65,7 @@ stdenv.mkDerivation {
     expat
     stdenv.cc.cc
   ];
-  runtimeDependencies = [ udev.lib libnotify ];
+  runtimeDependencies = [ (lib.getLib udev) libnotify ];
 
   unpackPhase = "dpkg-deb -x $src .";
 
