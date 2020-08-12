@@ -65,7 +65,7 @@ in buildGoPackage rec {
 
     wrapProgram "$out/bin/agent" \
       --set PYTHONPATH "$out/${python.sitePackages}" \
-      --prefix LD_LIBRARY_PATH : ${systemd.lib}/lib
+      --prefix LD_LIBRARY_PATH : ${lib.getLib systemd}/lib
   '';
 
   meta = with stdenv.lib; {
