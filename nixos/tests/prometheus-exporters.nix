@@ -593,6 +593,19 @@ let
       '';
     };
 
+    unifi-poller = {
+      nodeName = "unifi_poller";
+      exporterConfig.enable = true;
+      exporterConfig.controllers = [ { } ];
+      exporterTest = ''
+        wait_for_unit("prometheus-unifi-poller-exporter.service")
+        wait_for_open_port(9130)
+        succeed(
+            "curl -sSf localhost:9130/metrics | grep -q 'unifipoller_build_info{.\\+} 1'"
+        )
+      '';
+    };
+
     varnish = {
       exporterConfig = {
         enable = true;
