@@ -4,13 +4,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "pure-prompt";
-  version = "1.12.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "sindresorhus";
     repo = "pure";
     rev = "v${version}";
-    sha256 = "1h04z7rxmca75sxdfjgmiyf1b5z2byfn6k4srls211l0wnva2r5y";
+    sha256 = "16q9v4c8lagp4vxm7qhagilqnwf1g4pbds56x5wfj4cwc0x2gclw";
   };
 
   installPhase = ''
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Pretty, minimal and fast ZSH prompt";
-    homepage = https://github.com/sindresorhus/pure;
+    homepage = "https://github.com/sindresorhus/pure";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ pacien pablovsky ];
