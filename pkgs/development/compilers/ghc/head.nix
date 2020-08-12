@@ -66,7 +66,7 @@ let
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
     BIGNUM_BACKEND = ${if enableNativeBignum then "native" else "gmp"}
   '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
-    Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
+    Stage1Only = ${if (targetPlatform.system == hostPlatform.system && !targetPlatform.isiOS) then "NO" else "YES"}
     CrossCompilePrefix = ${targetPrefix}
     HADDOCK_DOCS = NO
     BUILD_SPHINX_HTML = NO
