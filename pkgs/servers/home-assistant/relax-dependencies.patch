@@ -1,16 +1,7 @@
 diff --git a/setup.py b/setup.py
-index 7cf06942f3..b3dd1b3e1b 100755
+index 81f8727ed6..12200e0b9f 100755
 --- a/setup.py
 +++ b/setup.py
-@@ -32,7 +32,7 @@ PROJECT_URLS = {
- PACKAGES = find_packages(exclude=["tests", "tests.*"])
- 
- REQUIRES = [
--    "aiohttp==3.6.1",
-+    "aiohttp>=3.6.1",
-     "astral==1.10.1",
-     "async_timeout==3.0.1",
-     "attrs==19.3.0",
 @@ -43,13 +43,13 @@ REQUIRES = [
      "jinja2>=2.11.1",
      "PyJWT==1.7.1",
@@ -18,8 +9,7 @@ index 7cf06942f3..b3dd1b3e1b 100755
 -    "cryptography==2.9.2",
 +    "cryptography>=2.9.2",
      "pip>=8.0.3",
--    "python-slugify==4.0.0",
-+    "python-slugify>=4.0.0",
+     "python-slugify==4.0.1",
      "pytz>=2020.1",
      "pyyaml==5.3.1",
 -    "requests==2.24.0",
