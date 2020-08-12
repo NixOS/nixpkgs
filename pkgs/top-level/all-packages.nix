@@ -9856,6 +9856,8 @@ in
 
   ocropus = callPackage ../applications/misc/ocropus { };
 
+  osu = callPackage ../games/osu { };
+
   pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
 
   php = php74;
