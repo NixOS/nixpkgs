@@ -4,6 +4,7 @@
 , fribidi, m17n_lib #bidi and encoding
 , openssl, libssh2 #build-in ssh
 , fcitx, ibus, uim #IME
+, wrapGAppsHook #color picker in mlconfig
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "17h6j4nmbyvsx2shm8mqm7smzq9i7mbqxjw19c2m0rhf5yzqhr3k";
   };
 
-  nativeBuildInputs = [ pkgconfig autoconf ];
+  nativeBuildInputs = [ pkgconfig autoconf wrapGAppsHook ];
   buildInputs = [
     libX11 gdk-pixbuf.dev cairo libXft gtk3 vte
     harfbuzz fribidi m17n_lib openssl libssh2
