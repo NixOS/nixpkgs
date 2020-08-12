@@ -347,7 +347,7 @@ in
     ];
 
     systemd.services.mysql = let
-      hasNotify = (cfg.package == pkgs.mariadb);
+      hasNotify = isMariaDB;
     in {
         description = "MySQL Server";
 
