@@ -104,7 +104,7 @@ in stdenv.mkDerivation rec {
     # This is a little tricky. Without it the app starts then crashes. Then it
     # brings up the crash report, which also crashes. `strace -f` hints at a
     # missing libudev.so.0.
-    systemd.lib
+    (lib.getLib systemd)
   ];
 
   installPhase = ''
