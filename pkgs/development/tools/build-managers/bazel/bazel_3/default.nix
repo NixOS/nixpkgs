@@ -419,6 +419,12 @@ stdenv.mkDerivation rec {
 
       # add nix environment vars to .bazelrc
       cat >> .bazelrc <<EOF
+      # Limit the resources Bazel is allowed to use during the build to 1/2 the
+      # available RAM and 3/4 the available CPU cores. This should help avoid
+      # overwhelming the build machine.
+      build --local_ram_resources=HOST_RAM*.5
+      build --local_cpu_resources=HOST_CPUS*.75
+
       build --distdir=${distDir}
       fetch --distdir=${distDir}
       build --copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt="/g')"
