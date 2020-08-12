@@ -2,7 +2,6 @@
 , lib
 , buildPackages
 , cmake
-, libtool
 , openexr
 }:
 
@@ -16,7 +15,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ cmake libtool ];
+  nativeBuildInputs = [ cmake ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   # fails 1 out of 1 tests with
