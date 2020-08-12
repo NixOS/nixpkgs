@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2, glib, gdk-pixbuf, alsaLib, nss, nspr, gconf
+{ stdenv, lib, fetchurl, gtk2, glib, gdk-pixbuf, alsaLib, nss, nspr, gconf
 , cups, libgcrypt_1_5, systemd, dbus, libXdamage, expat }:
 with stdenv.lib;
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     rmdir $out/usr
     ln -sf $out/opt/brackets/brackets $out/bin/brackets
 
-    ln -s ${systemd.lib}/lib/libudev.so.1 $out/opt/brackets/lib/libudev.so.0
+    ln -s ${lib.getLib systemd}/lib/libudev.so.1 $out/opt/brackets/lib/libudev.so.0
 
     substituteInPlace $out/opt/brackets/brackets.desktop \
       --replace "Exec=/opt/brackets/brackets" "Exec=brackets"
