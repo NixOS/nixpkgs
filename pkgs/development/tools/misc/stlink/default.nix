@@ -9,25 +9,22 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "stlink";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
-    owner = "texane";
+    owner = "stlink-org";
     repo = "stlink";
     rev = "v${version}";
-    sha256 = "1mlkrxjxg538335g59hjb0zc739dx4mhbspb26z5gz3lf7d4xv6x";
+    sha256 = "03xypffpbp4imrczbxmq69vgkr7mbp0ps9dk815br5wwlz6vgygl";
   };
 
   buildInputs = [ libusb1' ];
   nativeBuildInputs = [ cmake ];
-  patchPhase = ''
-    sed -i 's@/etc/udev/rules.d@$ENV{out}/etc/udev/rules.d@' CMakeLists.txt
-    sed -i 's@/etc/modprobe.d@$ENV{out}/etc/modprobe.d@' CMakeLists.txt
-  '';
-  preInstall = ''
-    mkdir -p $out/etc/udev/rules.d
-    mkdir -p $out/etc/modprobe.d
-  '';
+
+  cmakeFlags = [
+    "-DSTLINK_MODPROBED_DIR=${placeholder "out"}/etc/modprobe.d"
+    "-DSTLINK_UDEV_RULES_DIR=${placeholder "out"}/lib/udev/rules.d"
+  ];
 
   meta = with lib; {
     description = "In-circuit debug and programming for ST-Link devices";
