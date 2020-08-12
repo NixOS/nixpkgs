@@ -27826,4 +27826,7 @@ in
   navidrome = callPackage ../servers/misc/navidrome {};
 
   zettlr = callPackage ../applications/misc/zettlr { };
+
+  unifi-poller = callPackage ../servers/monitoring/unifi-poller {};
+
 }
