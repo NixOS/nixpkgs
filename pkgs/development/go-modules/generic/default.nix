@@ -85,10 +85,15 @@ let
       runHook preBuild
 
       if [ ${deleteFlag} == "true" ]; then
-        rm -rf vendor
+        if [ ! -d vendor ]; then
+          echo "vendor folder does not exist, 'deleteVendor' is not needed"
+          exit 10
+        else
+          rm -rf vendor
+        fi
       fi
 
-      if [ -e vendor ]; then
+      if [ -d vendor ]; then
         echo "vendor folder exists, please set 'vendorSha256 = null;' in your expression"
         exit 10
       fi
