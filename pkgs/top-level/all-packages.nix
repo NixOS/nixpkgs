@@ -5609,8 +5609,8 @@ in
   noip = callPackage ../tools/networking/noip { };
 
   nomad = nomad_0_11;
-  nomad_0_11 = callPackage ../applications/networking/cluster/nomad { majorVersion = "0.11"; };
-  nomad_0_12 = callPackage ../applications/networking/cluster/nomad { majorVersion = "0.12"; };
+  nomad_0_11 = callPackage ../applications/networking/cluster/nomad/0.11.nix { };
+  nomad_0_12 = callPackage ../applications/networking/cluster/nomad/0.12.nix { };
 
   notable = callPackage ../applications/misc/notable { };
 
