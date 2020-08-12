@@ -30,7 +30,7 @@ buildPythonApplication rec {
     sed -i -e 's|"lsof"|"${lsof}/bin/lsof"|' blivet/formats/fs.py
     sed -i -r -e 's|"(u?mount)"|"${utillinux.bin}/bin/\1"|' blivet/util.py
     sed -i -e '/find_library/,/find_library/ {
-      c libudev = "${systemd.lib}/lib/libudev.so.1"
+      c libudev = "${stdenv.lib.getLib systemd}/lib/libudev.so.1"
     }' blivet/pyudev.py
   '';
 
