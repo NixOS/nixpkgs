@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , fetchurl
 , rpmextract
 , libnotify
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
         expat
         gdk-pixbuf
         dbus
-        udev.lib
+        (lib.getLib udev)
         freetype
         nspr
         glib
