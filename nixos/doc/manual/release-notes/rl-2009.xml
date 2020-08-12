@@ -114,6 +114,17 @@ systemd.services.mysql.serviceConfig.ProtectHome = lib.mkForce "read-only";
 systemd.services.mysql.serviceConfig.ReadWritePaths = [ "/var/data" ];
 </programlisting>
     </para>
+    <para>
+      The MySQL service no longer runs its <literal>systemd</literal> service startup script as <literal>root</literal> anymore. A dedicated non <literal>root</literal>
+      super user account is required for operation. This means users with an existing MySQL or MariaDB database server are required to run the following SQL statements
+      as a super admin user before upgrading:
+<programlisting>
+CREATE USER IF NOT EXISTS 'mysql'@'localhost' identified with unix_socket;
+GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
+</programlisting>
+      If you use MySQL instead of MariaDB please replace <literal>unix_socket</literal> with <literal>auth_socket</literal>. If you have changed the value of <xref linkend="opt-services.mysql.user"/>
+      from the default of <literal>mysql</literal> to a different user please change <literal>'mysql'@'localhost'</literal> to the corresponding user instead.
+    </para>
    </listitem>
    <listitem>
     <para>
