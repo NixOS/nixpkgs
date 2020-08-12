@@ -151,6 +151,8 @@ in with passthru; stdenv.mkDerivation {
   ];
 
   postPatch = ''
+    substituteInPlace Lib/subprocess.py \
+      --replace "'/bin/sh'" "'${bash}/bin/sh'"
   '' + optionalString (x11Support && (tix != null)) ''
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
