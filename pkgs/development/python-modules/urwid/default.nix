@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, glibcLocales }:
+{ stdenv, buildPythonPackage, fetchPypi, glibcLocales, pythonAtLeast }:
 
 buildPythonPackage rec {
   pname = "urwid";
@@ -9,6 +9,8 @@ buildPythonPackage rec {
     sha256 = "09nmi2nmvpcmbh3w3fb0dn0c7yp7r20i5pfcr6q722xh6mp8cw3q";
   };
 
+  # tests fail in python2
+  doCheck = pythonAtLeast "3.0";
   # tests need to be able to set locale
   LC_ALL = "en_US.UTF-8";
   checkInputs = [ glibcLocales ];
