@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     mv $out/include $dev/include
   '' + optionalString pythonBindings ''
     mkdir -p $python/lib
-    mv $out/lib/python* $python/lib/
+    mv $lib/lib/python* $python/lib/
     ln -sf $lib/lib/libz3${stdenv.hostPlatform.extensions.sharedLibrary} $python/${python.sitePackages}/z3/lib/libz3${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
 
