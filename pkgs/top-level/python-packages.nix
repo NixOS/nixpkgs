@@ -4424,8 +4424,6 @@ in {
 
   ipython = if isPy27 then
       callPackage ../development/python-modules/ipython/5.nix { }
-    else if isPy35 then
-      callPackage ../development/python-modules/ipython/7.9.nix { }
     else
       callPackage ../development/python-modules/ipython { };
 
