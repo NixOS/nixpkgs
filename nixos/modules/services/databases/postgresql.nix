@@ -225,14 +225,15 @@ in
           Contents of the <filename>recovery.conf</filename> file.
         '';
       };
+
       superUser = mkOption {
         type = types.str;
-        default= if versionAtLeast config.system.stateVersion "17.09" then "postgres" else "root";
+        default = "postgres";
         internal = true;
+        readOnly = true;
         description = ''
-          NixOS traditionally used 'root' as superuser, most other distros use 'postgres'.
-          From 17.09 we also try to follow this standard. Internal since changing this value
-          would lead to breakage while setting up databases.
+          PostgreSQL superuser account to use for various operations. Internal since changing
+          this value would lead to breakage while setting up databases.
         '';
         };
     };
@@ -336,7 +337,7 @@ in
                 setupScript = pkgs.writeScript "postgresql-setup" (''
                   #!${pkgs.runtimeShell} -e
 
-                  PSQL="${pkgs.utillinux}/bin/runuser -u ${cfg.superUser} -- psql --port=${toString cfg.port}"
+                  PSQL="psql --port=${toString cfg.port}"
 
                   while ! $PSQL -d postgres -c "" 2> /dev/null; do
                       if ! kill -0 "$MAINPID"; then exit 1; fi
@@ -362,7 +363,7 @@ in
                   '') cfg.ensureUsers}
                 '');
               in
-                "+${setupScript}";
+                "${setupScript}";
           }
           (mkIf (cfg.dataDir == "/var/lib/postgresql/${cfg.package.psqlSchema}") {
             StateDirectory = "postgresql postgresql/${cfg.package.psqlSchema}";

@@ -676,11 +676,19 @@ services.dokuwiki."mywiki" = {
    <listitem>
     <para>
       The <xref linkend="opt-services.postgresql.dataDir"/> option is now set to <literal>"/var/lib/postgresql/${cfg.package.psqlSchema}"</literal> regardless of your
-      <xref linkend="opt-system.stateVersion"/>. Users with an existing postgresql install that have a <xref linkend="opt-system.stateVersion"/> of <literal>17.09</literal> or below
+      <xref linkend="opt-system.stateVersion"/>. Users with an existing postgresql install that have a <xref linkend="opt-system.stateVersion"/> of <literal>17.03</literal> or below
       should double check what the value of their <xref linkend="opt-services.postgresql.dataDir"/> option is (<literal>/var/db/postgresql</literal>) and then explicitly
       set this value to maintain compatibility:
 <programlisting>
 services.postgresql.dataDir = "/var/db/postgresql";
+</programlisting>
+    </para>
+    <para>
+     The postgresql module now expects there to be a database super user account called <literal>postgres</literal> regardless of your <xref linkend="opt-system.stateVersion"/>. Users
+     with an existing postgresql install that have a <xref linkend="opt-system.stateVersion"/> of <literal>17.03</literal> or below should run the following SQL statements as a
+     database super admin user before upgrading:
+<programlisting>
+CREATE ROLE postgres LOGIN SUPERUSER;
 </programlisting>
     </para>
    </listitem>
