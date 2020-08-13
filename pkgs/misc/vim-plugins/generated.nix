@@ -3840,8 +3840,8 @@ let
     meta.homepage = "https://github.com/vhda/verilog_systemverilog.vim/";
   };
 
-  vim = buildVimPluginFrom2Nix {
-    pname = "vim";
+  dracula = buildVimPluginFrom2Nix {
+    pname = "dracula";
     version = "2020-07-19";
     src = fetchFromGitHub {
       owner = "dracula";
