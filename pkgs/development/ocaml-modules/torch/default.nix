@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildDunePackage
 , fetchFromGitHub
 , cmdliner
@@ -42,7 +43,7 @@ buildDunePackage rec {
 
   preBuild = ''export LIBTORCH=${pytorch.dev}/'';
 
-  doCheck = true;
+  doCheck = !stdenv.isAarch64;
   checkPhase = "dune runtest";
 
   meta = with lib; {
