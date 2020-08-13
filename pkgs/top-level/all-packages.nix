@@ -21337,6 +21337,8 @@ in
 
   meme = callPackage ../applications/graphics/meme { };
 
+  mcos-xfce-edition = callPackage ../data/themes/mcos-xfce-edition { };
+
   mendeley = libsForQt5.callPackage ../applications/office/mendeley {
     gconf = pkgs.gnome2.GConf;
   };
