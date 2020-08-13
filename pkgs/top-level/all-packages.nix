@@ -175,6 +175,9 @@ in
 
   colorz = callPackage ../tools/misc/colorz { };
 
+
+  colobot = callPackage ../games/colobot {  };
+
   comedilib = callPackage ../development/libraries/comedilib {  };
 
   cpu-x = callPackage ../applications/misc/cpu-x { };
