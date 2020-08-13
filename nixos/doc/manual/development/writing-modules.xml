@@ -183,4 +183,5 @@ in {
  <xi:include href="meta-attributes.xml" />
  <xi:include href="importing-modules.xml" />
  <xi:include href="replace-modules.xml" />
+ <xi:include href="settings-options.xml" />
 </chapter>

@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "rclone";
-  version = "1.51.0";
+  version = "1.52.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0z4kaq6wnj5dgl52g7f86phxlvnk5pbpda7prgh3hahpyhxj0z7d";
+    sha256 = "1bf3rhs4dcb8vkzs4a6pk5xrhnkhqsrbf4xrhcqf407r668gdav1";
   };
 
   goPackagePath = "github.com/rclone/rclone";
@@ -28,7 +28,7 @@ buildGoPackage rec {
     in
       ''
         installManPage $src/rclone.1
-        for shell in bash zsh; do
+        for shell in bash zsh fish; do
           ${rcloneBin}/bin/rclone genautocomplete $shell rclone.$shell
           installShellCompletion rclone.$shell
         done
@@ -38,7 +38,7 @@ buildGoPackage rec {
     description = "Command line program to sync files and directories to and from major cloud storage";
     homepage = "https://rclone.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ danielfullmer ];
+    maintainers = with maintainers; [ danielfullmer marsam ];
     platforms = platforms.all;
   };
 }

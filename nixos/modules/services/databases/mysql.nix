@@ -32,13 +32,7 @@ in
 
     services.mysql = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "
-          Whether to enable the MySQL server.
-        ";
-      };
+      enable = mkEnableOption "MySQL server";
 
       package = mkOption {
         type = types.package;
@@ -340,7 +334,8 @@ in
     environment.etc."my.cnf".source = cfg.configFile;
 
     systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 ${cfg.user} mysql -"
+      "d '${cfg.dataDir}' 0700 ${cfg.user} mysql - -"
+      "z '${cfg.dataDir}' 0700 ${cfg.user} mysql - -"
     ];
 
     systemd.services.mysql = let
@@ -363,21 +358,17 @@ in
         preStart = if isMariaDB then ''
           if ! test -e ${cfg.dataDir}/mysql; then
             ${mysql}/bin/mysql_install_db --defaults-file=/etc/my.cnf ${mysqldOptions}
-            touch /tmp/mysql_init
+            touch ${cfg.dataDir}/mysql_init
           fi
         '' else ''
           if ! test -e ${cfg.dataDir}/mysql; then
             ${mysql}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} --initialize-insecure
-            touch /tmp/mysql_init
+            touch ${cfg.dataDir}/mysql_init
           fi
         '';
 
         serviceConfig = {
-          User = cfg.user;
-          Group = "mysql";
           Type = if hasNotify then "notify" else "simple";
-          RuntimeDirectory = "mysqld";
-          RuntimeDirectoryMode = "0755";
           Restart = "on-abort";
           RestartSec = "5s";
           # The last two environment variables are used for starting Galera clusters
@@ -404,7 +395,7 @@ in
                   done
                 ''}
 
-                if [ -f /tmp/mysql_init ]
+                if [ -f ${cfg.dataDir}/mysql_init ]
                 then
                     ${concatMapStrings (database: ''
                       # Create initial databases
@@ -458,7 +449,7 @@ in
                         cat ${toString cfg.initialScript} | ${mysql}/bin/mysql -u root -N
                       ''}
 
-                    rm /tmp/mysql_init
+                    rm ${cfg.dataDir}/mysql_init
                 fi
 
                 ${optionalString (cfg.ensureDatabases != []) ''
@@ -482,6 +473,35 @@ in
               # ensureDatbases & ensureUsers depends on this script being run as root
               # when the user has secured their mysql install
               "+${setupScript}";
+          # User and group
+          User = cfg.user;
+          Group = "mysql";
+          # Runtime directory and mode
+          RuntimeDirectory = "mysqld";
+          RuntimeDirectoryMode = "0755";
+          # Access write directories
+          ReadWritePaths = [ cfg.dataDir ];
+          # Capabilities
+          CapabilityBoundingSet = "";
+          # Security
+          NoNewPrivileges = true;
+          # Sandboxing
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          PrivateTmp = true;
+          PrivateDevices = true;
+          ProtectHostname = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          PrivateMounts = true;
+          # System Call Filtering
+          SystemCallArchitectures = "native";
         };
       };
 

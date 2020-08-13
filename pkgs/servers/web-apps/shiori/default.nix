@@ -6,6 +6,8 @@ buildGoModule rec {
 
   vendorSha256 = "1ik5faysc880kz7nymvbmjj006l1fsqfy76036szwzg314v78643";
 
+  doCheck = false;
+
   src = fetchFromGitHub {
     owner = "go-shiori";
     repo = pname;

@@ -4,7 +4,6 @@
 , pkg-config
 , installShellFiles
 , openssl
-, cacert
 , Security
 }:
 
@@ -21,8 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0jvgcf493rmkrh85j0fkf8ffanva80syyxclzkvkrzvvwwj78b5l";
 
-  buildInputs = [ openssl cacert ]
-    ++ (stdenv.lib.optional stdenv.isDarwin Security);
+  buildInputs = if stdenv.isDarwin then [ Security ] else [ openssl ];
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
@@ -31,8 +29,6 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --fish --name tealdeer.fish fish_tealdeer
     installShellCompletion --zsh --name _tealdeer zsh_tealdeer
   '';
-
-  NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   # disable tests for now since one needs network
   # what is unavailable in sandbox build
@@ -44,6 +40,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dbrgn/tealdeer";
     maintainers = with maintainers; [ davidak ];
     license = with licenses; [ asl20 mit ];
-    platforms = platforms.all;
   };
 }

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, autoreconfHook
 , libarchive, perl, xorg, libdvdnav, libbluray
-, zlib, a52dec, libmad, faad2, ffmpeg, alsaLib
+, zlib, a52dec, libmad, faad2, ffmpeg_3, alsaLib
 , pkgconfig, dbus, fribidi, freefont_ttf, libebml, libmatroska
 , libvorbis, libtheora, speex, lua5, libgcrypt, libgpgerror, libupnp
 , libcaca, libpulseaudio, flac, schroedinger, libxml2, librsvg
@@ -25,18 +25,18 @@ assert (withQt5 -> qtbase != null && qtsvg != null && qtx11extras != null && wra
 
 stdenv.mkDerivation rec {
   pname = "vlc";
-  version = "3.0.8";
+  version = "3.0.11";
 
   src = fetchurl {
     url = "http://get.videolan.org/vlc/${version}/${pname}-${version}.tar.xz";
-    sha256 = "e0149ef4a20a19b9ecd87309c2d27787ee3f47dfd47c6639644bc1f6fd95bdf6";
+    sha256 = "06a9hfl60f6l0fs5c9ma5s8np8kscm4ala6m2pdfji9lyfna351y";
   };
 
   # VLC uses a *ton* of libraries for various pieces of functionality, many of
   # which are not included here for no other reason that nobody has mentioned
   # needing them
   buildInputs = [
-    zlib a52dec libmad faad2 ffmpeg alsaLib libdvdnav libdvdnav.libdvdread
+    zlib a52dec libmad faad2 ffmpeg_3 alsaLib libdvdnav libdvdnav.libdvdread
     libbluray dbus fribidi libvorbis libtheora speex lua5 libgcrypt libgpgerror
     libupnp libcaca libpulseaudio flac schroedinger libxml2 librsvg mpeg2dec
     systemd gnutls avahi libcddb SDL SDL_image libmtp unzip taglib libarchive

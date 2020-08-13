@@ -6,15 +6,15 @@ let main = ./main.go;
 in
 buildGoModule rec {
   pname = "tinygo";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
     rev = "v${version}";
-    sha256 = "0x59j56y704m2hfkg78illgw9f6czrx265x887jfd989lnxphyqa";
+    sha256 = "0das5z5y2x1970yi9c4yssxvwrrjhdmsj495q0r5mb02amvc954v";
   };
- 
+
   overrideModAttrs = (_: {
       patches = [];
       preBuild = ''
@@ -27,6 +27,9 @@ buildGoModule rec {
   preBuild = "cp ${gomod} go.mod";
 
   vendorSha256 = "19194dlzpl6zzw2gqybma5pwip71rw8z937f104k6c158qzzgy62";
+
+  doCheck = false;
+
   enableParallelBuilding = true;
   subPackages = [ "." ];
   buildInputs = [ llvm clang-unwrapped makeWrapper ];

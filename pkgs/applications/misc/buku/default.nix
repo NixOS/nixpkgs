@@ -1,14 +1,14 @@
 { stdenv, python3, fetchFromGitHub }:
 
 with python3.pkgs; buildPythonApplication rec {
-  version = "4.3";
+  version = "4.4";
   pname = "buku";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "1cq508ymak3g5fhi1n4bdiiqkc86s2l3k4dvzw842vv2x0441cac";
+    sha256 = "10r5f1n0vcxxmqqqsgmlvibwg1xffijrr2id6r140rgiyhprz556";
   };
 
   checkInputs = [
@@ -38,6 +38,7 @@ with python3.pkgs; buildPythonApplication rec {
     click
     html5lib
     vcrpy
+    toml
   ];
 
   postPatch = ''

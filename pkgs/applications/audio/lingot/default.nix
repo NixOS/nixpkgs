@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "cbjHe7mI6DhKDsv0yGHYOPe5hShKjhj3VTKrmBbGoA8=";
+    sha256 = "03x0qqb9iarjapvii3ja522vkxrqv1hwix6b1r53is48p5xwgf3i";
   };
 
   nativeBuildInputs = [

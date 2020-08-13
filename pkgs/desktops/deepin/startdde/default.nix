@@ -4,7 +4,6 @@
 , pkgconfig
 , alsaLib
 , coreutils
-, dbus-factory
 , dde-api
 , dde-daemon
 , dde-dock
@@ -53,7 +52,6 @@ buildGoPackage rec {
 
   nativeBuildInputs = [
     pkgconfig
-    dbus-factory
     jq
     wrapGAppsHook
     deepin.setupHook

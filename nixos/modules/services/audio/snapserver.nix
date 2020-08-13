@@ -31,27 +31,42 @@ let
     let
       os = val:
         optionalString (val != null) "${val}";
-      os' = prefixx: val:
-        optionalString (val != null) (prefixx + "${val}");
+      os' = prefix: val:
+        optionalString (val != null) (prefix + "${val}");
       flatten = key: value:
         "&${key}=${value}";
     in
-      "-s ${opt.type}://" + os opt.location + "?" + os' "name=" name
-        + concatStrings (mapAttrsToList flatten opt.query);
+      "--stream.stream=\"${opt.type}://" + os opt.location + "?" + os' "name=" name
+        + concatStrings (mapAttrsToList flatten opt.query) + "\"";
 
   optionalNull = val: ret:
     optional (val != null) ret;
 
   optionString = concatStringsSep " " (mapAttrsToList streamToOption cfg.streams
-             ++ ["-p ${toString cfg.port}"]
-             ++ ["--controlPort ${toString cfg.controlPort}"]
-             ++ optionalNull cfg.sampleFormat "--sampleFormat ${cfg.sampleFormat}"
-             ++ optionalNull cfg.codec "-c ${cfg.codec}"
-             ++ optionalNull cfg.streamBuffer "--streamBuffer ${cfg.streamBuffer}"
-             ++ optionalNull cfg.buffer "-b ${cfg.buffer}"
-             ++ optional cfg.sendToMuted "--sendToMuted");
+    # global options
+    ++ [ "--stream.bind_to_address ${cfg.listenAddress}" ]
+    ++ [ "--stream.port ${toString cfg.port}" ]
+    ++ optionalNull cfg.sampleFormat "--stream.sampleformat ${cfg.sampleFormat}"
+    ++ optionalNull cfg.codec "--stream.codec ${cfg.codec}"
+    ++ optionalNull cfg.streamBuffer "--stream.stream_buffer ${cfg.streamBuffer}"
+    ++ optionalNull cfg.buffer "--stream.buffer ${cfg.buffer}"
+    ++ optional cfg.sendToMuted "--stream.send_to_muted"
+    # tcp json rpc
+    ++ [ "--tcp.enabled ${toString cfg.tcp.enable}" ]
+    ++ optionals cfg.tcp.enable [
+      "--tcp.address ${cfg.tcp.listenAddress}"
+      "--tcp.port ${toString cfg.tcp.port}" ]
+     # http json rpc
+    ++ [ "--http.enabled ${toString cfg.http.enable}" ]
+    ++ optionals cfg.http.enable [
+      "--http.address ${cfg.http.listenAddress}"
+      "--http.port ${toString cfg.http.port}"
+    ] ++ optional (cfg.http.docRoot != null) "--http.doc_root \"${toString cfg.http.docRoot}\"");
 
 in {
+  imports = [
+    (mkRenamedOptionModule [ "services" "snapserver" "controlPort"] [ "services" "snapserver" "tcp" "port" ])
+  ];
 
   ###### interface
 
@@ -67,19 +82,20 @@ in {
         '';
       };
 
+      listenAddress = mkOption {
+        type = types.str;
+        default = "::";
+        example = "0.0.0.0";
+        description = ''
+          The address where snapclients can connect.
+        '';
+      };
+
       port = mkOption {
         type = types.port;
         default = 1704;
         description = ''
           The port that snapclients can connect to.
-        '';
-      };
-
-      controlPort = mkOption {
-        type = types.port;
-        default = 1705;
-        description = ''
-          The port for control connections (JSON-RPC).
         '';
       };
 
@@ -93,6 +109,90 @@ in {
 
       inherit sampleFormat;
       inherit codec;
+
+      streamBuffer = mkOption {
+        type = with types; nullOr int;
+        default = null;
+        description = ''
+          Stream read (input) buffer in ms.
+        '';
+        example = 20;
+      };
+
+      buffer = mkOption {
+        type = with types; nullOr int;
+        default = null;
+        description = ''
+          Network buffer in ms.
+        '';
+        example = 1000;
+      };
+
+      sendToMuted = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Send audio to muted clients.
+        '';
+      };
+
+      tcp.enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable the JSON-RPC via TCP.
+        '';
+      };
+
+      tcp.listenAddress = mkOption {
+        type = types.str;
+        default = "::";
+        example = "0.0.0.0";
+        description = ''
+          The address where the TCP JSON-RPC listens on.
+        '';
+      };
+
+      tcp.port = mkOption {
+        type = types.port;
+        default = 1705;
+        description = ''
+          The port where the TCP JSON-RPC listens on.
+        '';
+      };
+
+      http.enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable the JSON-RPC via HTTP.
+        '';
+      };
+
+      http.listenAddress = mkOption {
+        type = types.str;
+        default = "::";
+        example = "0.0.0.0";
+        description = ''
+          The address where the HTTP JSON-RPC listens on.
+        '';
+      };
+
+      http.port = mkOption {
+        type = types.port;
+        default = 1780;
+        description = ''
+          The port where the HTTP JSON-RPC listens on.
+        '';
+      };
+
+      http.docRoot = mkOption {
+        type = with types; nullOr path;
+        default = null;
+        description = ''
+          Path to serve from the HTTP servers root.
+        '';
+      };
 
       streams = mkOption {
         type = with types; attrsOf (submodule {
@@ -147,34 +247,7 @@ in {
           };
         '';
       };
-
-      streamBuffer = mkOption {
-        type = with types; nullOr int;
-        default = null;
-        description = ''
-          Stream read (input) buffer in ms.
-        '';
-        example = 20;
-      };
-
-      buffer = mkOption {
-        type = with types; nullOr int;
-        default = null;
-        description = ''
-          Network buffer in ms.
-        '';
-        example = 1000;
-      };
-
-      sendToMuted = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Send audio to muted clients.
-        '';
-      };
     };
-
   };
 
 
@@ -206,7 +279,10 @@ in {
       };
     };
 
-    networking.firewall.allowedTCPPorts = optionals cfg.openFirewall [ cfg.port cfg.controlPort ];
+    networking.firewall.allowedTCPPorts =
+      optionals cfg.openFirewall [ cfg.port ]
+      ++ optional cfg.tcp.enable cfg.tcp.port
+      ++ optional cfg.http.enable cfg.http.port;
   };
 
   meta = {

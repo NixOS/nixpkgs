@@ -305,18 +305,25 @@ in
   };
 
   mathematical = attrs: {
-    buildInputs = [
+    nativeBuildInputs = [
+      ruby
       cmake
       bison
       flex
-      glib
       pkgconfig
-      cairo
-      pango
-      gdk-pixbuf
-      libxml2
       python3
     ];
+
+    buildInputs = [
+      cairo
+      fribidi
+      gdk-pixbuf
+      glib
+      libxml2
+      pango
+    ];
+
+    strictDeps = true;
 
     # The ruby build script takes care of this
     dontUseCmakeConfigure = true;

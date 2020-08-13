@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, utillinux, keyutils, nss, nspr, python2, pam
+{ stdenv, fetchurl, pkgconfig, perl, utillinux, keyutils, nss, nspr, python2, pam, enablePython ? false
 , intltool, makeWrapper, coreutils, bash, gettext, cryptsetup, lvm2, rsync, which, lsof }:
 
 stdenv.mkDerivation rec {
@@ -33,8 +33,15 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ perl nss nspr python2 pam intltool makeWrapper ];
+  configureFlags = stdenv.lib.optionals (!enablePython) [ "--disable-pywrap" ];
+
+  nativeBuildInputs = [ pkgconfig ]
+  # if python2 support is requested, it is needed at builtime as well as runtime.
+  ++ stdenv.lib.optionals (enablePython) [ python2 ]
+  ;
+  buildInputs = [ perl nss nspr pam intltool makeWrapper ]
+  ++ stdenv.lib.optionals (enablePython) [ python2 ]
+  ;
   propagatedBuildInputs = [ coreutils gettext cryptsetup lvm2 rsync keyutils which ];
 
   postInstall = ''

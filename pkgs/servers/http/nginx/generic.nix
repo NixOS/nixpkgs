@@ -4,6 +4,7 @@
 , withDebug ? false
 , withStream ? true
 , withMail ? false
+, withPerl ? true
 , modules ? []
 , ...
 }:
@@ -87,7 +88,7 @@ stdenv.mkDerivation {
   ] ++ optionals withMail [
     "--with-mail"
     "--with-mail_ssl_module"
-  ] ++ optional (perl != null) [
+  ] ++ optionals withPerl [
     "--with-http_perl_module"
     "--with-perl=${perl}/bin/perl"
     "--with-perl_modules_path=lib/perl5"

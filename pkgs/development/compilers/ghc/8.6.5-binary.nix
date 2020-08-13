@@ -78,18 +78,6 @@ stdenv.mkDerivation rec {
       patchShebangs ghc-${version}/configure
     '' +
 
-    # Strip is harmful, see also below. It's important that this happens
-    # first. The GHC Cabal build system makes use of strip by default and
-    # has hardcoded paths to /usr/bin/strip in many places. We replace
-    # those below, making them point to our dummy script.
-    ''
-      mkdir "$TMP/bin"
-      for i in strip; do
-        echo '#! ${stdenv.shell}' > "$TMP/bin/$i"
-        chmod +x "$TMP/bin/$i"
-      done
-      PATH="$TMP/bin:$PATH"
-    '' +
     # We have to patch the GMP paths for the integer-gmp package.
     ''
       find . -name integer-gmp.buildinfo \
@@ -125,17 +113,13 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
     ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
-  # Stripping combined with patchelf breaks the executables (they die
-  # with a segfault or the kernel even refuses the execve). (NIXPKGS-85)
-  dontStrip = true;
-
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
   dontBuild = true;
 
   # On Linux, use patchelf to modify the executables so that they can
   # find editline/gmp.
-  preFixup = stdenv.lib.optionalString stdenv.isLinux ''
+  postFixup = stdenv.lib.optionalString stdenv.isLinux ''
     for p in $(find "$out" -type f -executable); do
       if isELF "$p"; then
         echo "Patchelfing $p"

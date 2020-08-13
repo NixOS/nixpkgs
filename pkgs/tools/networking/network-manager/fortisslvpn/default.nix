@@ -1,10 +1,24 @@
-{ stdenv, fetchurl, substituteAll, openfortivpn, intltool, pkgconfig, file, gtk3,
-networkmanager, ppp, libsecret, withGnome ? true, gnome3, fetchpatch, libnma }:
+{ stdenv
+, fetchurl
+, substituteAll
+, openfortivpn
+, gettext
+, pkg-config
+, file
+, glib
+, gtk3
+, networkmanager
+, ppp
+, libsecret
+, withGnome ? true
+, gnome3
+, fetchpatch
+, libnma
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "NetworkManager-fortisslvpn";
   version = "1.2.10";
-in stdenv.mkDerivation {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {
@@ -17,6 +31,7 @@ in stdenv.mkDerivation {
       src = ./fix-paths.patch;
       inherit openfortivpn;
     })
+
     # Don't use etc/dbus-1/system.d
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/NetworkManager-fortisslvpn/merge_requests/11.patch";
@@ -24,21 +39,34 @@ in stdenv.mkDerivation {
     })
   ];
 
-  buildInputs = [ openfortivpn networkmanager ppp ]
-    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret libnma ];
+  nativeBuildInputs = [
+    gettext
+    pkg-config
+    file
+  ];
 
-  nativeBuildInputs = [ intltool pkgconfig file ];
+  buildInputs = [
+    openfortivpn
+    networkmanager
+    ppp
+    glib
+  ] ++ stdenv.lib.optionals withGnome [
+    gtk3
+    libsecret
+    libnma
+  ];
 
   configureFlags = [
-    "--without-libnm-glib"
     "--with-gnome=${if withGnome then "yes" else "no"}"
     "--localstatedir=/var"
     "--enable-absolute-paths"
   ];
 
-  # the installer only create an empty directory in localstatedir, so
-  # we can drop it
-  installFlags = [ "localstatedir=." ];
+  installFlags = [
+    # the installer only creates an empty directory in localstatedir, so
+    # we can drop it
+    "localstatedir=."
+  ];
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -48,9 +76,8 @@ in stdenv.mkDerivation {
   };
 
   meta = with stdenv.lib; {
-    description = "NetworkManager's FortiSSL plugin";
+    description = "NetworkManager’s FortiSSL plugin";
     inherit (networkmanager.meta) maintainers platforms;
     license = licenses.gpl2;
   };
 }
-

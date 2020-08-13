@@ -792,7 +792,7 @@ users.users.me =
      The <option>services.xserver.displayManager.auto</option> module has been removed.
      It was only intended for use in internal NixOS tests, and gave the false impression
      of it being a special display manager when it's actually LightDM.
-     Please use the <xref linkend="opt-services.xserver.displayManager.lightdm.autoLogin"/> options instead,
+     Please use the <option>services.xserver.displayManager.lightdm.autoLogin</option> options instead,
      or any other display manager in NixOS as they all support auto-login. If you used this module specifically
      because it permitted root auto-login you can override the lightdm-autologin pam module like:
 <programlisting>

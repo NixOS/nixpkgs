@@ -1,9 +1,9 @@
 { stdenvNoCC
 , fetchurl
-, pkgconfig
 , rpmextract
 , undmg
 , darwin
+, validatePkgConfig
 , enableStatic ? false
 }:
 
@@ -19,8 +19,8 @@ let
   # Darwin is pinned to 2019.3 because the DMG does not unpack; see here for details:
   # https://github.com/matthewbauer/undmg/issues/4
   year = if stdenvNoCC.isDarwin then "2019" else "2020";
-  spot = if stdenvNoCC.isDarwin then "3" else "1";
-  rel = if stdenvNoCC.isDarwin then "199" else "217";
+  spot = if stdenvNoCC.isDarwin then "3" else "2";
+  rel = if stdenvNoCC.isDarwin then "199" else "254";
 
   rpm-ver = "${year}.${spot}-${rel}-${year}.${spot}-${rel}";
 
@@ -42,19 +42,15 @@ in stdenvNoCC.mkDerivation {
       })
     else
       (fetchurl {
-        url = "https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16533/l_mkl_${version}.tgz";
-        sha256 = "0v86hrqg15mbc78m9qk8dbkaaq3mlwashgbf9n79kxpl1gilnah8";
+        url = "https://registrationcenter-download.intel.com/akdlm/irc_nas/tec/16849/l_mkl_${version}.tgz";
+        sha256 = "08q2q5rary7fxlrk09kpw0vl7mkk2smmklib44a6qainmxks407d";
       });
 
-  nativeBuildInputs = if stdenvNoCC.isDarwin
+  nativeBuildInputs = [ validatePkgConfig ] ++ (if stdenvNoCC.isDarwin
     then
       [ undmg darwin.cctools ]
     else
-      [ rpmextract ];
-
-  installCheckInputs = [ pkgconfig ];
-
-  doInstallCheck = true;
+      [ rpmextract ]);
 
   buildPhase = if stdenvNoCC.isDarwin then ''
     for f in Contents/Resources/pkg/*.tgz; do
@@ -150,11 +146,6 @@ in stdenvNoCC.mkDerivation {
     install_name_tool -change @rpath/libiomp5.dylib $out/lib/libiomp5.dylib $out/lib/libmkl_intel_thread.dylib
     install_name_tool -change @rpath/libtbb.dylib $out/lib/libtbb.dylib $out/lib/libmkl_tbb_thread.dylib
     install_name_tool -change @rpath/libtbbmalloc.dylib $out/lib/libtbbmalloc.dylib $out/lib/libtbbmalloc_proxy.dylib
-  '';
-
-  # Validate pkgconfig files, since they break often on updates.
-  installCheckPhase = ''
-    pkg-config --validate $out/lib/pkgconfig/*.pc
   '';
 
   # Per license agreement, do not modify the binary

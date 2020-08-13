@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   pname = "liburing";
-  version = "0.6pre600_${builtins.substring 0 8 src.rev}";
+  version = "0.7";
 
   src = fetchgit {
     url    = "http://git.kernel.dk/${pname}";
-    rev    = "f2e1f3590f7bed3040bd1691676b50839f7d5c39";
-    sha256 = "0wg0pgcbilbb2wg08hsvd18q1m8vdk46b3piz7qb1pvgyq01idj2";
+    rev    = "liburing-${version}";
+    sha256 = "15z44l7y4c6s6dlf7v8lq4znlsjbja2r4ifbni0l8cdcnq0w3zh3";
   };
 
   separateDebugInfo = true;

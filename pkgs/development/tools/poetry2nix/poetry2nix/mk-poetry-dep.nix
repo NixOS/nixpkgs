@@ -17,6 +17,7 @@
 , sourceSpec
 , supportedExtensions ? lib.importJSON ./extensions.json
 , preferWheels ? false
+, __isBootstrap ? false  # Hack: Always add Poetry as a build input unless bootstrapping
 , ...
 }:
 
@@ -58,7 +59,7 @@ pythonPackages.callPackage
           binaryDist = selectWheel fileCandidates;
           sourceDist = builtins.filter isSdist fileCandidates;
           eggs = builtins.filter isEgg fileCandidates;
-          entries = ( if preferWheel then binaryDist ++ sourceDist else sourceDist ++ binaryDist) ++ eggs;
+          entries = (if preferWheel then binaryDist ++ sourceDist else sourceDist ++ binaryDist) ++ eggs;
           lockFileEntry = builtins.head entries;
           _isEgg = isEgg lockFileEntry;
         in
@@ -106,12 +107,14 @@ pythonPackages.callPackage
         baseBuildInputs
         ++ lib.optional (!isSource) (getManyLinuxDeps fileInfo.name).pkg
         ++ lib.optional isLocal buildSystemPkgs
+        ++ lib.optional (!__isBootstrap) [ pythonPackages.poetry ]
       );
 
       propagatedBuildInputs =
         let
           compat = isCompatible (poetryLib.getPythonVersion python);
-          deps = lib.filterAttrs (n: v: v)
+          deps = lib.filterAttrs
+            (n: v: v)
             (
               lib.mapAttrs
                 (
@@ -120,7 +123,8 @@ pythonPackages.callPackage
                       constraints = v.python or "";
                     in
                     compat constraints
-                ) dependencies
+                )
+                dependencies
             );
           depAttrs = lib.attrNames deps;
         in

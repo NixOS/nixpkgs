@@ -159,7 +159,7 @@ in
           type = types.bool;
           default = false;
           description = ''
-            Wheter to enable Tor control socket. Control socket is created
+            Whether to enable Tor control socket. Control socket is created
             in <literal>${torRunDirectory}/control</literal>
           '';
         };

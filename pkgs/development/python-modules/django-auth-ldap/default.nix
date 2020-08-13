@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "django-auth-ldap";
-  version = "2.1.1";
+  version = "2.2.0";
   disabled = isPy27;
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1j1fwinbkr4khn9i869r22jfdgw2kli0jqrz5shyd36jllsvrfzs";
+    sha256 = "11af1773b08613339d2c3a0cec1308a4d563518f17b1719c3759994d0b4d04bf";
   };
 
   propagatedBuildInputs = [ ldap django ]; 

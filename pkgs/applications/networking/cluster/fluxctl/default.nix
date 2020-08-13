@@ -1,21 +1,32 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "fluxctl";
-  version = "1.19.0";
+  version = "1.20.1";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = "flux";
     rev = version;
-    sha256 = "1w6ndp0nrpps6pkxnq38hikbnzwahi6j9gn8l0bxd0qkf7cjc5w0";
+    sha256 = "1l514rf7rg05prq9548ygj6z284sy85ddzrwiiqr74vz4kilg3vb";
   };
 
-  vendorSha256 = "0w5l1lkzx4frllflkbilj8qqwf54wkz7hin7q8xn1vflkv3lxcnp";
+  vendorSha256 = "00qm45vfz4afj8f9hikrlk96w0rdzxqq2azhzrnzfymyiwc6jk5c";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  doCheck = false;
 
   subPackages = [ "cmd/fluxctl" ];
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+
+  postInstall = ''
+    for shell in bash fish zsh; do
+      $out/bin/fluxctl completion $shell > fluxctl.$shell
+      installShellCompletion fluxctl.$shell
+    done
+  '';
 
   meta = with stdenv.lib; {
     description = "CLI client for Flux, the GitOps Kubernetes operator";

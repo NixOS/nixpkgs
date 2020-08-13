@@ -109,6 +109,20 @@ in rec {
     };
   };
 
+  fingers = mkDerivation rec {
+    pluginName = "fingers";
+    rtpFilePath = "tmux-fingers.tmux";
+    version = "1.0.1";
+    src = fetchFromGitHub {
+      owner = "Morantron";
+      repo = "tmux-fingers";
+      rev = version;
+      sha256 = "0gp37m3d0irrsih96qv2yalvr1wmf1n64589d4qzyzq16lzyjcr0";
+      fetchSubmodules = true;
+    };
+    dependencies = [ pkgs.gawk ];
+  };
+
   fpp = mkDerivation {
     pluginName = "fpp";
     version = "unstable-2016-03-08";

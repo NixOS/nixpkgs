@@ -108,6 +108,7 @@ releaseTools.sourceTarball {
     echo -n '}' >> tmp
     packages=$out/packages.json.br
     < tmp sed "s|$(pwd)/||g" | jq -c | brotli -9 > $packages
+    rm tmp
 
     echo "file json-br $packages" >> $out/nix-support/hydra-build-products
   '';

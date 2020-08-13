@@ -38,14 +38,14 @@ let
   mirror = "https://download.qt.io";
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; } // {
     # Community port of the now unmaintained upstream qtwebkit.
-    qtwebkit = {
+    qtwebkit = rec {
       src = fetchFromGitHub {
-        owner = "annulen";
-        repo = "webkit";
-        rev = "4ce8ebc4094512b9916bfa5984065e95ac97c9d8";
-        sha256 = "05h1xnxzbf7sp3plw5dndsvpf6iigh0bi4vlj4svx0hkf1giakjf";
+        owner = "qtwebkit";
+        repo = "qtwebkit";
+        rev = "qtwebkit-${version}";
+        sha256 = "11lc5sk10d9cyg8jqkbgkqiap72b9rax7hy61nm90zw9749y2yfg";
       };
-      version = "5.212-alpha-01-26-2018";
+      version = "5.212.0-alpha4";
     };
   };
 
@@ -67,6 +67,11 @@ let
         ./qtbase.patch.d/0010-qtbase-qtpluginpath.patch
         ./qtbase.patch.d/0011-qtbase-assert.patch
         ./qtbase.patch.d/0012-fix-header_module.patch
+
+        # Ensure -I${includedir} is added to Cflags in pkg-config files.
+        # See https://github.com/NixOS/nixpkgs/issues/52457
+        ./qtbase.patch.d/0014-qtbase-pkg-config.patch
+
         # https://bugreports.qt.io/browse/QTBUG-81715
         # remove after updating to qt > 5.12.7
         (fetchpatch {
@@ -153,6 +158,7 @@ let
       qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
       qtscript = callPackage ../modules/qtscript.nix {};
       qtsensors = callPackage ../modules/qtsensors.nix {};
+      qtserialbus = callPackage ../modules/qtserialbus.nix {};
       qtserialport = callPackage ../modules/qtserialport.nix {};
       qtspeech = callPackage ../modules/qtspeech.nix {};
       qtsvg = callPackage ../modules/qtsvg.nix {};

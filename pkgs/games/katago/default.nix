@@ -6,6 +6,7 @@
 , cmake
 , makeWrapper
 , fetchFromGitHub
+, fetchpatch
 , cudnn ? null
 , cudatoolkit ? null
 , libGL_driver ? null
@@ -16,7 +17,7 @@
 , useTcmalloc ? true}:
 
 assert cudaSupport -> (
-  libGL_driver != null && 
+  libGL_driver != null &&
   cudatoolkit != null &&
   cudnn != null);
 
@@ -28,19 +29,19 @@ assert useTcmalloc -> (
   gperftools != null);
 
 let
-  env = if cudaSupport 
+  env = if cudaSupport
     then gcc8Stdenv
     else stdenv;
 
 in env.mkDerivation rec {
   pname = "katago";
-  version = "1.3.5";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "lightvector";
     repo = "katago";
-    rev = "v${version}";
-    sha256 = "1625s3fh0xc2ldgyl6sjdjmpliyys7rzzkcys6h9x6k828g8n0lq";
+    rev = "${version}";
+    sha256 = "0ajdjdmlzwh7zwk5v0k9zzjawgkf7w30pzqp5bhcsdqz4svvyll2";
   };
 
   nativeBuildInputs = [

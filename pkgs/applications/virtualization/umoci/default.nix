@@ -1,25 +1,40 @@
-{ lib, fetchFromGitHub, buildGoPackage }:
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, go-md2man
+, installShellFiles
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "umoci";
-  version = "0.4.5";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
-    owner = "openSUSE";
+    owner = "opencontainers";
     repo = "umoci";
     rev = "v${version}";
-    sha256 = "1gzj4nnys73wajdwjn5jsskvnhzh8s2vmyl76ax8drpvw19bd5g3";
+    sha256 = "0jaar26l940yh77cs31c3zndiycp85m3fz4zivcibzi68g6n6yzg";
   };
 
-  goPackagePath = "github.com/openSUSE/umoci";
+  vendorSha256 = null;
+
+  doCheck = false;
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+
+  nativeBuildInputs = [ go-md2man installShellFiles ];
+
+  postInstall = ''
+    sed -i '/SHELL =/d' Makefile
+    make docs
+    installManPage doc/man/*.[1-9]
+  '';
 
   meta = with lib; {
     description = "umoci modifies Open Container images";
     homepage = "https://umo.ci";
     license = licenses.asl20;
     maintainers = with maintainers; [ zokrezyl ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

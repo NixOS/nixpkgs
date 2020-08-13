@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "4.1.2";
+  version = "4.1.4";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0qyisrs9xkzx4hbyin9nasvl10qk7jlxrmyasxycz4zwnvzfvxzf";
+    sha256 = "6946b2128afaf1b64e878a74d33f9abd60c91f75949b3d05f305b3c3f5fec1e2";
   };
 
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     comment = "Scientific Python Development Environment";
     desktopName = "Spyder";
     genericName = "Python IDE";
-    categories = "Application;Development;IDE;";
+    categories = "Development;IDE;";
   };
 
   postPatch = ''

@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "matterircd";
-  version = "0.18.2";
+  version = "0.19.4";
 
   src = fetchFromGitHub {
     owner = "42wim";
     repo = "matterircd";
     rev = "v${version}";
-    sha256 = "0g57g91v7208yynf758k9v73jdhz4fbc1v23p97rzrl97aq0rd5r";
+    sha256 = "1kwyk6gy4d4v2rzyr7vwvi8vm69rz1hdn0gkpan2kh1p63z77gbv";
   };
 
   goPackagePath = "github.com/42wim/matterircd";

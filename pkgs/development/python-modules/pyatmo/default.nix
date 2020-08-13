@@ -1,19 +1,21 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, oauthlib
 , requests
+, requests_oauthlib
 }:
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "3.1.0";
+  version = "3.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8fbcc3a88f8c51d190b697c80515e67530143de71f89cc6ecf99bbf2cbf3ef30";
+    sha256 = "9949338833a27b6c3251b52bf70b73aa99c43c56153541338cb63001afafdd1e";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [ oauthlib requests requests_oauthlib ];
 
   # Upstream provides no unit tests.
   doCheck = false;

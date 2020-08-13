@@ -4,8 +4,6 @@ buildGoModule rec {
   pname = "caddy";
   version = "1.0.5";
 
-  goPackagePath = "github.com/caddyserver/caddy";
-
   subPackages = [ "caddy" ];
 
   src = fetchFromGitHub {
@@ -15,6 +13,8 @@ buildGoModule rec {
     sha256 = "0jrhwmr6gggppskg5h450wybzkv17iq69dgw36hd1dp56q002i7g";
   };
   vendorSha256 = "09vnci9pp8zp7bvn8zj68wslz2nc54nhcd0ll31sqfjbp00215mj";
+
+  doCheck = false;
 
   preBuild = ''
     cat << EOF > caddy/main.go

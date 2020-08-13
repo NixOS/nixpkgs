@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchPypi, podman, pyyaml }:
+{ lib, buildPythonApplication, fetchPypi, pyyaml }:
 
 buildPythonApplication rec {
   version = "0.1.5";
@@ -9,13 +9,13 @@ buildPythonApplication rec {
     sha256 = "1sgbc889zq127qhxa9frhswa1mid19fs5qnyzfihx648y5i968pv";
   };
 
-  propagatedBuildInputs = [ pyyaml podman ];
+  propagatedBuildInputs = [ pyyaml ];
 
-  meta = with lib; {
+  meta = {
     description = "An implementation of docker-compose with podman backend";
     homepage = "https://github.com/containers/podman-compose";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sikmir ] ++ lib.teams.podman.members;
   };
 }

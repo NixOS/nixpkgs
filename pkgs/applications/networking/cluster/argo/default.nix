@@ -1,4 +1,4 @@
-{ lib, buildGoModule, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, buildGoPackage, fetchFromGitHub, installShellFiles }:
 
 let
   # Argo can package a static server in the CLI using the `staticfiles` go module.
@@ -19,24 +19,44 @@ let
 in
 buildGoModule rec {
   pname = "argo";
-  version = "2.6.1";
+  version = "2.9.5";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo";
     rev = "v${version}";
-    sha256 = "12wq79h4m8wlzf18r66965mbbjjb62kvnxdj50ra7nxa8jjxpsmf";
+    sha256 = "1x44mgvnbn47a33xnhnh9bxxvj1vsr32lvh9bq6w5hpmxb7qbq4f";
   };
 
-  vendorSha256 = "0dhzr62x2lzf3w0j2r496cr7jvkdcavfqaqr2xh972k3qqc9caky";
+  vendorSha256 = "1vqmzz76lcwwnw89n4lyg4jjf7wbdgn9sdzwsgrjwkj8ax7d48cv";
+
+  doCheck = false;
 
   subPackages = [ "cmd/argo" ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   preBuild = ''
     mkdir -p ui/dist/app
     echo "Built without static files" > ui/dist/app/index.html
 
     ${staticfiles}/bin/staticfiles -o server/static/files.go ui/dist/app
+  '';
+
+  buildFlagsArray = ''
+    -ldflags=
+      -s -w
+      -X github.com/argoproj/argo.version=${version}
+      -X github.com/argoproj/argo.gitCommit=${src.rev}
+      -X github.com/argoproj/argo.gitTreeState=clean
+      -X github.com/argoproj/argo.gitTag=${version}
+  '';
+
+  postInstall = ''
+    for shell in bash zsh; do
+      $out/bin/argo completion $shell > argo.$shell
+      installShellCompletion argo.$shell
+    done
   '';
 
   meta = with lib; {

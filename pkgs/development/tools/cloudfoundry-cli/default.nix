@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "cloudfoundry-cli";
-  version = "6.46.1";
+  version = "6.51.0";
 
   goPackagePath = "code.cloudfoundry.org/cli";
 
@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "cloudfoundry";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "0dqrkimwhw016icgyf4cyipzy6vdz5jgickm33xxd9018dh3ibwq";
+    sha256 = "189cqng7y12knqm4n1bfajbc2lx027rwb44wddmj5iya27i7fv8f";
   };
 
   nativeBuildInputs = [ installShellFiles ];

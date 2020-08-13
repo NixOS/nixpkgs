@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "squid";
-  version = "4.11";
+  version = "4.12";
 
   src = fetchurl {
     url = "http://www.squid-cache.org/Versions/v4/${pname}-${version}.tar.xz";
-    sha256 = "0z986kykx539wjqd7mr8y0abf3z6hz8byf8fmmbky9hh4ihlgnaf";
+    sha256 = "05z34ysy2zn7as11vd365xxhh36bm1ysiwcbr0i0f0nwng406apl";
   };
 
   nativeBuildInputs = [ pkgconfig ];

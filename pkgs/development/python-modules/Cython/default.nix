@@ -5,7 +5,7 @@
 , fetchpatch
 , python
 , glibcLocales
-, pkgconfig
+, pkg-config
 , gdb
 , numpy
 , ncurses
@@ -26,15 +26,15 @@ let
 
 in buildPythonPackage rec {
   pname = "Cython";
-  version = "0.29.14";
+  version = "0.29.21";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e4d6bb8703d0319eb04b7319b12ea41580df44fd84d83ccda13ea463c6801414";
+    sha256 = "1bcwpra7c6k30yvic3sw2v3rq2dr40ypc4zqif6kr52mpn4wnyp5";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
   ];
   checkInputs = [
     numpy ncurses

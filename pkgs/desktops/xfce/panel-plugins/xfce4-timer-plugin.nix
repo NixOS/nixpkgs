@@ -6,11 +6,11 @@ in
 
 stdenv.mkDerivation rec {
   pname  = "xfce4-timer-plugin";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "16vypwwjwfk7nn4n16rfgn0z78jqrmbgxmc1r46269lrwd1m6kif";
+    sha256 = "1qr4m3n2l3rvsizsr3h7fyfajszfalqm7rhvjx2yjj8r3f8x4ljb";
   };
 
   nativeBuildInputs = [

@@ -7,6 +7,8 @@ buildDunePackage rec {
 
   inherit (irmin) version src;
 
+  useDune2 = true;
+
   propagatedBuildInputs = [ index irmin ocaml_lwt ];
 
   checkInputs = lib.optionals doCheck [ alcotest-lwt irmin-test ];

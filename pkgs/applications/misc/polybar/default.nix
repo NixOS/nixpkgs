@@ -1,6 +1,7 @@
 { cairo, cmake, fetchFromGitHub, libXdmcp, libpthreadstubs, libxcb, pcre, pkgconfig
 , python3, stdenv, xcbproto, xcbutil, xcbutilcursor, xcbutilimage
 , xcbutilrenderutil, xcbutilwm, xcbutilxrm, makeWrapper
+, removeReferencesTo
 
 # optional packages-- override the variables ending in 'Support' to enable or
 # disable modules
@@ -74,6 +75,10 @@ stdenv.mkDerivation rec {
     '' else "";
 
     nativeBuildInputs = [
-      cmake pkgconfig
+      cmake pkgconfig removeReferencesTo
     ];
+
+    postFixup = ''
+        remove-references-to -t ${stdenv.cc} $out/bin/polybar
+    '';
 }

@@ -58,13 +58,13 @@ let
         sha512 = "fWbVyeAv35vf/dkkQaefASlJcEfpEvfRI23Mtn+/TBBry7+LYNuJMXJiovVY35pfyw2+trKh1Py5Asg9vrmaVg==";
       };
     };
-    "chainpad-server-4.0.5" = {
+    "chainpad-server-4.0.9" = {
       name = "chainpad-server";
       packageName = "chainpad-server";
-      version = "4.0.5";
+      version = "4.0.9";
       src = fetchurl {
-        url = "https://registry.npmjs.org/chainpad-server/-/chainpad-server-4.0.5.tgz";
-        sha512 = "vHOKQIyd7Jz3dspS6p3nmrFLNNByQJyHwlfZiAjnNykpKC6ncNamjBokT6+ZHE9MHHNWOPflv3sg3PMDyZohQw==";
+        url = "https://registry.npmjs.org/chainpad-server/-/chainpad-server-4.0.9.tgz";
+        sha512 = "8h1W41ktE05TM6LuXrklpW2TUxWeNyIDiRaQygKsXaA/7pyJxF7+AmPVS+xW0c31VkHjQDPiaMzPoxhcxXnIyA==";
       };
     };
     "content-disposition-0.5.2" = {
@@ -229,13 +229,13 @@ let
         sha512 = "+CEb+GDCM7tkOS2wdMKTn9vU7DgnKUTuDlehkNJKNSovdCOVxs14OfKCk4cvSaR3za4gj+OBdl9opPN9xrJ0zA==";
       };
     };
-    "graceful-fs-4.2.3" = {
+    "graceful-fs-4.2.4" = {
       name = "graceful-fs";
       packageName = "graceful-fs";
-      version = "4.2.3";
+      version = "4.2.4";
       src = fetchurl {
-        url = "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.3.tgz";
-        sha512 = "a30VEBm4PEdx1dRB7MFK7BejejvCvBronbLjht+sHuGYj8PHs7M/5Z+rt5lw551vZ7yfTCj4Vuyy3mSJytDWRQ==";
+        url = "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.4.tgz";
+        sha512 = "WjKPNJF79dtJAVniUlGGWHYGz2jWxT6VhN/4m1NdkbZ2nOsEF+cI1Edgql5zCRhs/VsQYRvrXctxktVXZUkixw==";
       };
     };
     "http-errors-1.6.3" = {
@@ -337,22 +337,22 @@ let
         sha512 = "KI1+qOZu5DcW6wayYHSzR/tXKCDC5Om4s1z2QJjDULzLcmf3DvzS7oluY4HCTrc+9FiKmWUgeNLg7W3uIQvxtQ==";
       };
     };
-    "mime-db-1.43.0" = {
+    "mime-db-1.44.0" = {
       name = "mime-db";
       packageName = "mime-db";
-      version = "1.43.0";
+      version = "1.44.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/mime-db/-/mime-db-1.43.0.tgz";
-        sha512 = "+5dsGEEovYbT8UY9yD7eE4XTc4UwJ1jBYlgaQQF38ENsKR3wj/8q8RFZrF9WIZpB2V1ArTVFUva8sAul1NzRzQ==";
+        url = "https://registry.npmjs.org/mime-db/-/mime-db-1.44.0.tgz";
+        sha512 = "/NOTfLrsPBVeH7YtFPgsVWveuL+4SjjYxaQ1xtM1KMFj7HdxlBlxeyNLzhyJVx7r4rZGJAZ/6lkKCitSc/Nmpg==";
       };
     };
-    "mime-types-2.1.26" = {
+    "mime-types-2.1.27" = {
       name = "mime-types";
       packageName = "mime-types";
-      version = "2.1.26";
+      version = "2.1.27";
       src = fetchurl {
-        url = "https://registry.npmjs.org/mime-types/-/mime-types-2.1.26.tgz";
-        sha512 = "01paPWYgLrkqAyrlDorC1uDwl2p3qZT7yl806vW7DvDoxwXi46jsjFbg+WdwotBIk6/MbEhO/dh5aZ5sNj/dWQ==";
+        url = "https://registry.npmjs.org/mime-types/-/mime-types-2.1.27.tgz";
+        sha512 = "JIhqnCasI9yD+SsmkquHBxTSEuZdQX5BuQnS2Vc7puQQQ+8yiP5AY5uWhpdv4YL4VM5c6iliiYWPgJ/nJQLp7w==";
       };
     };
     "ms-2.0.0" = {
@@ -581,6 +581,15 @@ let
         sha512 = "TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==";
       };
     };
+    "ulimit-0.0.2" = {
+      name = "ulimit";
+      packageName = "ulimit";
+      version = "0.0.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/ulimit/-/ulimit-0.0.2.tgz";
+        sha1 = "2b51f9dc8381ae4102636cec5eb338c2630588a0";
+      };
+    };
     "ultron-1.1.1" = {
       name = "ultron";
       packageName = "ultron";
@@ -638,14 +647,14 @@ let
   };
 in
 {
-  "cryptpad-git+https://github.com/xwiki-labs/cryptpad.git#3.13.0" = nodeEnv.buildNodePackage {
+  "cryptpad-git+https://github.com/xwiki-labs/cryptpad.git#3.20.1" = nodeEnv.buildNodePackage {
     name = "cryptpad";
     packageName = "cryptpad";
-    version = "3.13.0";
+    version = "3.20.1";
     src = fetchgit {
       url = "https://github.com/xwiki-labs/cryptpad.git";
-      rev = "6b657c47ceba50c85275981f45895341370d3d66";
-      sha256 = "d7b56930962fe5217d2051fb718954fd7aef96c9503e27d32148ea9b4a8dc098";
+      rev = "9bc27d7d0d50d17c345bd545a45341a05293c558";
+      sha256 = "4a1fc833b38b2097741500cef38c6b04f5b752c21736e95eb492c33012016332";
     };
     dependencies = [
       sources."accepts-1.3.7"
@@ -658,7 +667,7 @@ in
           sources."tweetnacl-git://github.com/dchest/tweetnacl-js.git#v0.12.2"
         ];
       })
-      sources."chainpad-server-4.0.5"
+      sources."chainpad-server-4.0.9"
       sources."content-disposition-0.5.2"
       sources."content-type-1.0.4"
       sources."cookie-0.3.1"
@@ -677,7 +686,7 @@ in
       sources."fs-extra-7.0.1"
       sources."gar-1.0.4"
       sources."get-folder-size-2.0.1"
-      sources."graceful-fs-4.2.3"
+      sources."graceful-fs-4.2.4"
       sources."http-errors-1.6.3"
       sources."iconv-lite-0.4.23"
       sources."inherits-2.0.3"
@@ -689,8 +698,8 @@ in
       sources."merge-descriptors-1.0.1"
       sources."methods-1.1.2"
       sources."mime-1.4.1"
-      sources."mime-db-1.43.0"
-      sources."mime-types-2.1.26"
+      sources."mime-db-1.44.0"
+      sources."mime-types-2.1.27"
       sources."ms-2.0.0"
       sources."negotiator-0.6.2"
       sources."netflux-websocket-0.1.20"
@@ -715,6 +724,7 @@ in
       sources."tiny-each-async-2.0.3"
       sources."tweetnacl-0.12.2"
       sources."type-is-1.6.18"
+      sources."ulimit-0.0.2"
       sources."ultron-1.1.1"
       sources."universalify-0.1.2"
       sources."unpipe-1.0.0"

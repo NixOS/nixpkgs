@@ -2,17 +2,17 @@
 
 buildGoModule rec {
   pname = "gomodifytags";
-  version = "1.4.0";
+  version = "1.6.0";
 
   vendorSha256 = null;
 
-  goPackagePath = "github.com/fatih/gomodifytags";
+  doCheck = false;
 
   src = fetchFromGitHub {
     owner = "fatih";
     repo = "gomodifytags";
     rev = "v${version}";
-    sha256 = "1436wjqs6n2jxlyzx38nm4ih6fr11bybivg3wy5nvzfs6cs59q63";
+    sha256 = "1wmzl5sk5mc46njzn86007sqyyv6han058ppiw536qyhk88rzazq";
   };
 
   meta = {

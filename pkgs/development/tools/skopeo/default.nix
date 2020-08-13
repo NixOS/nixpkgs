@@ -10,46 +10,38 @@
 , installShellFiles
 , makeWrapper
 , fuse-overlayfs
+, nixosTests
 }:
 
-let
-  version = "0.2.0";
+buildGoModule rec {
+  pname = "skopeo";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "containers";
     repo = "skopeo";
-    sha256 = "09zqzrw6f1s6kaknnj3hra3xz4nq6y86vmw5vk8p4f6g7cwakg1x";
+    sha256 = "0wkpw8fizxjpfypflp7rs1q128dg4hadwzdvn8k41h7f8cbcb39x";
   };
-
-  defaultPolicyFile = runCommand "skopeo-default-policy.json" {} "cp ${src}/default-policy.json $out";
-
-  vendorPath = "github.com/containers/skopeo/vendor/github.com/containers/image/v5";
-
-in
-buildGoModule {
-  pname = "skopeo";
-  inherit version;
-  inherit src;
 
   outputs = [ "out" "man" ];
 
   vendorSha256 = null;
 
-  excludedPackages = [ "integration" ];
+  doCheck = false;
 
   nativeBuildInputs = [ pkg-config go-md2man installShellFiles makeWrapper ];
 
   buildInputs = [ gpgme ]
   ++ stdenv.lib.optionals stdenv.isLinux [ lvm2 btrfs-progs ];
 
-  buildFlagsArray = ''
-    -ldflags=
-    -X ${vendorPath}/signature.systemDefaultPolicyPath=${defaultPolicyFile}
-    -X ${vendorPath}/internal/tmpdir.unixTempDirForBigFiles=/tmp
+  buildPhase = ''
+    patchShebangs .
+    make binary-local
   '';
 
-  postBuild = ''
+  installPhase = ''
+    make install-binary PREFIX=$out
     make install-docs MANINSTALLDIR="$man/share/man"
     installShellCompletion --bash completions/bash/skopeo
   '';
@@ -58,6 +50,8 @@ buildGoModule {
     wrapProgram $out/bin/skopeo \
       --prefix PATH : ${stdenv.lib.makeBinPath [ fuse-overlayfs ]}
   '';
+
+  passthru.tests.docker-tools = nixosTests.docker-tools;
 
   meta = with stdenv.lib; {
     description = "A command line utility for various operations on container images and image repositories";

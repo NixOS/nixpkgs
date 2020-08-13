@@ -13,10 +13,10 @@ buildGoModule rec {
 
   vendorSha256 = "0b8ggdpbyxx5n2myhchhlwmm5nndwpykp1ylnzdyw12mdskfvn9h";
 
-  goPackagePath = "github.com/FiloSottile/mkcert";
+  doCheck = false;
+
   buildFlagsArray = ''
-    -ldflags=
-      -X ${goPackagePath}/main.Version=${version}
+    -ldflags=-X main.Version=v${version}
   '';
 
   meta = with lib; {

@@ -13,6 +13,8 @@ self: super: {
 
     pg_bigm = super.callPackage ./ext/pg_bigm.nix { };
 
+    pg_ed25519 = super.callPackage ./ext/pg_ed25519.nix { };
+
     pg_repack = super.callPackage ./ext/pg_repack.nix { };
 
     pg_similarity = super.callPackage ./ext/pg_similarity.nix { };
@@ -38,6 +40,8 @@ self: super: {
     pgtap = super.callPackage ./ext/pgtap.nix { };
 
     pipelinedb = super.callPackage ./ext/pipelinedb.nix { };
+
+    smlar = super.callPackage ./ext/smlar.nix { };
 
     temporal_tables = super.callPackage ./ext/temporal_tables.nix { };
 

@@ -4,14 +4,14 @@
 , hacl_x25519, fiat-p256, hkdf, logs, alcotest }:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.07";
+  minimumOCamlVersion = "4.08";
 
-  version = "0.12.0";
+  version = "0.12.3";
   pname = "tls";
 
   src = fetchurl {
     url = "https://github.com/mirleft/ocaml-tls/releases/download/v${version}/tls-v${version}.tbz";
-    sha256 = "0fy38qmy7rcld1b4qzz4ycl1fr0v1wa7qd24125lpd6hly86fn57";
+    sha256 = "1kfkxsy0nkqi0gbsqn1ssh4x0xhy0p07ijclm42806rxlqr3x405";
   };
 
   useDune2 = true;

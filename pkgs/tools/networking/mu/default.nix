@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.4.5";
+  version = "1.4.12";
 
   src = fetchFromGitHub {
     owner  = "djcb";
     repo   = "mu";
     rev    = version;
-    sha256 = "18y672cqaicp30zymxr88spmzcn0x7rcv14nbdmd8hzp52rscpj7";
+    sha256 = "0xc36z5k9c70jg5f2878ya5w45gb2gfxrfljzhs9pafk955j8ir9";
   };
 
   postPatch = stdenv.lib.optionalString (batchSize != null) ''
@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
     description = "A collection of utilties for indexing and searching Maildirs";
     license = licenses.gpl3Plus;
     homepage = "https://www.djcbsoftware.nl/code/mu/";
+    changelog = "https://github.com/djcb/mu/releases/tag/${version}";
     maintainers = with maintainers; [ antono peterhoeg ];
     platforms = platforms.mesaPlatforms;
   };

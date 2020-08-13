@@ -1,16 +1,18 @@
 
 source $stdenv/setup
 
-mkdir -p ./$name $out/bin $out/share/$name $out/share/doc/$name/images
+unpackPhase
+cd $sourceRoot
 
-cd $name
-tar xf $src
 make 8086tiny
+
 if [ $bios ]; then
     cd bios_source
     nasm -f bin bios.asm -o bios
     cd ..
 fi
+
+mkdir -p $out/bin $out/share/$name $out/share/doc/$name/images
 
 install -m 755 8086tiny $out/bin
 install -m 644 fd.img $out/share/$name/8086tiny-floppy.img

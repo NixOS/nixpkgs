@@ -17,8 +17,8 @@ mkDerivation {
     knewstuff kwayland
   ];
   postPatch = ''
-    substituteInPlace desktop/org.kde.spectacle.desktop \
-      --replace "Exec=qdbus" "Exec=${lib.getBin qttools}/bin/qdbus"
+    substituteInPlace desktop/org.kde.spectacle.desktop.cmake \
+      --replace "Exec=@QtBinariesDir@/qdbus" "Exec=${lib.getBin qttools}/bin/qdbus"
   '';
   propagatedUserEnvPkgs = [ kipi-plugins libkipi ];
 }

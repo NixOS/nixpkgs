@@ -1,0 +1,26 @@
+From 00f3c6d1b771c11ecc08c3d8bd793a51d6e64166 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Sun, 26 Jul 2020 17:29:49 -0300
+Subject: [PATCH] link radv with ld_args_build_id
+
+This is needed for radv_device_get_cache_uuid to work correctly.
+---
+ src/amd/vulkan/meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/amd/vulkan/meson.build b/src/amd/vulkan/meson.build
+index efcf2dd6c89..590f286b8cb 100644
+--- a/src/amd/vulkan/meson.build
++++ b/src/amd/vulkan/meson.build
+@@ -173,7 +173,7 @@ libvulkan_radeon = shared_library(
+   ],
+   c_args : [c_vis_args, no_override_init_args, radv_flags],
+   cpp_args : [cpp_vis_args, radv_flags],
+-  link_args : [ld_args_bsymbolic, ld_args_gc_sections],
++  link_args : [ld_args_build_id, ld_args_bsymbolic, ld_args_gc_sections],
+   install : true,
+ )
+ 
+-- 
+2.27.0
+

@@ -28,12 +28,17 @@ let
   };
 in {
   nextcloud17 = generic {
-    version = "17.0.4";
-    sha256 = "0cj5mng0nmj3hz30pyz3g19kj3mkm5ca8si3sw3arv61dmw6c5g6";
+    version = "17.0.6";
+    sha256 = "0qq7lkgzsn1zakfym5bjqzpcisxmgfcdd927ddqlhddy3zvgxrxx";
   };
 
   nextcloud18 = generic {
-    version = "18.0.3";
-    sha256 = "0wpxa35zj81i541j3cjq6klsjwwc5slryzvjjl7zjc32004yfrvv";
+    version = "18.0.7";
+    sha256 = "0pka87ccrds17n6n5w5a80mc1s5yrf8d4mf6wsfaypwjbm3wfb2b";
+  };
+
+  nextcloud19 = generic {
+    version = "19.0.1";
+    sha256 = "0bavwvjjgx62i150wqh4gqavjva3mnhx6k3im79ib6ck1ph13wsf";
   };
 }

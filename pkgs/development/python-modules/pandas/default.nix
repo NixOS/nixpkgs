@@ -21,6 +21,7 @@
 , tables
 , xlwt
 , runtimeShell
+, isPy38
 , libcxx ? null
 }:
 
@@ -30,11 +31,11 @@ let
 
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "1.0.3";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11j5s6hz29yh3rwa2rjgric0knbhp9shphd4i7hx00xr5wr2xx1j";
+    sha256 = "b39508562ad0bb3f384b0db24da7d68a2608b9ddc85b1d931ccaaa92d5e45273";
   };
 
   checkInputs = [ pytest glibcLocales moto hypothesis ];
@@ -67,7 +68,9 @@ in buildPythonPackage rec {
                 "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
   '';
 
-  setupPyBuildFlags = [
+  # Parallel Cythonization is broken in Python 3.8 on Darwin. Fixed in the next
+  # release. https://github.com/pandas-dev/pandas/pull/30862
+  setupPyBuildFlags = optionals (!(isPy38 && isDarwin)) [
     # As suggested by
     # https://pandas.pydata.org/pandas-docs/stable/development/contributing.html#creating-a-python-environment
     "--parallel=$NIX_BUILD_CORES"
@@ -95,6 +98,9 @@ in buildPythonPackage rec {
     "order_without_freq"
     # tries to import from pandas.tests post install
     "util_in_top_level"
+    # Fails with 1.0.5
+    "test_constructor_list_frames"
+    "test_constructor_with_embedded_frames"
   ] ++ optionals isDarwin [
     "test_locale"
     "test_clipboard"

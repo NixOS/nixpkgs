@@ -1,4 +1,4 @@
-{ go, cacert, git, lib, removeReferencesTo, stdenv }:
+{ go, cacert, git, lib, removeReferencesTo, stdenv, vend }:
 
 { name ? "${args'.pname}-${args'.version}"
 , src
@@ -17,9 +17,12 @@
 #
 # if vendorSha256 is null, then we won't fetch any dependencies and
 # rely on the vendor folder within the source.
-, vendorSha256 ? null
+, vendorSha256
 # Whether to delete the vendor folder supplied with the source.
 , deleteVendor ? false
+# Whether to run the vend tool to regenerate the vendor directory.
+# This is useful if any dependency contain C files.
+, runVend ? false
 
 , modSha256 ? null
 
@@ -47,6 +50,8 @@ let
   removeExpr = refs: ''remove-references-to ${lib.concatMapStrings (ref: " -t ${ref}") refs}'';
 
   deleteFlag = if deleteVendor then "true" else "false";
+
+  vendCommand = if runVend then "${vend}/bin/vend" else "false";
 
   go-modules = if vendorSha256 != null then go.stdenv.mkDerivation (let modArgs = {
 
@@ -87,7 +92,13 @@ let
         echo "vendor folder exists, please set 'vendorSha256=null;' or 'deleteVendor=true;' in your expression"
         exit 10
       fi
-      go mod vendor
+
+      if [ ${vendCommand} != "false" ]; then
+        echo running vend to rewrite vendor folder
+        ${vendCommand}
+      else
+        go mod vendor
+      fi
       mkdir -p vendor
 
       runHook postBuild
@@ -127,7 +138,7 @@ let
       export GOSUMDB=off
       export GOPROXY=off
       cd "$modRoot"
-      if [ -n "${go-modules}" ]; then 
+      if [ -n "${go-modules}" ]; then
           rm -rf vendor
           ln -s ${go-modules} vendor
       fi
@@ -199,7 +210,7 @@ let
       runHook postBuild
     '';
 
-    doCheck = args.doCheck or false;
+    doCheck = args.doCheck or true;
     checkPhase = args.checkPhase or ''
       runHook preCheck
 

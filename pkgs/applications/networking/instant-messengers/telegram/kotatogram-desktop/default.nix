@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchFromGitHub, pkg-config, python3, cmake, ninja
-, qtbase, qtimageformats, libsForQt5, hunspell, xdg_utils, ffmpeg, openalSoft
+, qtbase, qtimageformats, libsForQt5, hunspell, xdg_utils, ffmpeg_3, openalSoft
 , lzma, lz4, xxHash, zlib, minizip, openssl, libtgvoip, microsoft_gsl, tl-expected
 , range-v3
 }:
@@ -21,7 +21,7 @@ mkDerivation rec {
   nativeBuildInputs = [ pkg-config python3 cmake ninja ];
 
   buildInputs = [
-    qtbase qtimageformats ffmpeg openalSoft lzma lz4 xxHash libsForQt5.libdbusmenu
+    qtbase qtimageformats ffmpeg_3 openalSoft lzma lz4 xxHash libsForQt5.libdbusmenu
     zlib minizip openssl hunspell libtgvoip microsoft_gsl tl-expected range-v3
   ];
 

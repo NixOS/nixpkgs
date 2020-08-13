@@ -22,5 +22,9 @@ let
     agda-prelude = callPackage ../development/libraries/agda/agda-prelude { };
 
     agda-categories = callPackage ../development/libraries/agda/agda-categories { };
+
+    cubical = callPackage ../development/libraries/agda/cubical { };
+
+    generic = callPackage ../development/libraries/agda/generic { };
   };
 in mkAgdaPackages Agda

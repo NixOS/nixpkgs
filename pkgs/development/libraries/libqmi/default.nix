@@ -1,22 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, glib, python3, libgudev, libmbim }:
+{ stdenv, fetchurl, pkg-config, gobject-introspection, glib, python3, libgudev, libmbim }:
 
 stdenv.mkDerivation rec {
   pname = "libqmi";
-  version = "1.24.10";
+  version = "1.26.0";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/libqmi/${pname}-${version}.tar.xz";
-    sha256 = "1rzxapr6hb18ccvqh5fizx7zk63l47bs0p3gizycz2ysnm1i44n2";
+    sha256 = "0h3fzmjlla7ib9wn4rv98bm40y2k28jcl29da4hjwyaqmvh2j13z";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
 
   configureFlags = [
     "--with-udev-base-dir=${placeholder "out"}/lib/udev"
+    "--enable-introspection"
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
+    gobject-introspection
     python3
   ];
 

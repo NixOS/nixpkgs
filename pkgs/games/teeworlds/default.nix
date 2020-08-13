@@ -1,5 +1,6 @@
 { fetchFromGitHub, stdenv, cmake, pkgconfig, python3, alsaLib
 , libX11, libGLU, SDL2, lua5_3, zlib, freetype, wavpack, icoutils
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -35,6 +36,8 @@ stdenv.mkDerivation rec {
     # Install menu item
     install -D $src/other/teeworlds.desktop $out/share/applications/teeworlds.desktop
   '';
+
+  passthru.tests.teeworlds = nixosTests.teeworlds;
 
   meta = {
     description = "Retro multiplayer shooter game";

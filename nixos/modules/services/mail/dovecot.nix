@@ -125,6 +125,8 @@ let
   mailboxConfig = mailbox: ''
     mailbox "${mailbox.name}" {
       auto = ${toString mailbox.auto}
+  '' + optionalString (mailbox.autoexpunge != null) ''
+    autoexpunge = ${mailbox.autoexpunge}
   '' + optionalString (mailbox.specialUse != null) ''
     special_use = \${toString mailbox.specialUse}
   '' + "}";
@@ -132,8 +134,9 @@ let
   mailboxes = { ... }: {
     options = {
       name = mkOption {
-        type = types.strMatching ''[^"]+'';
+        type = types.nullOr (types.strMatching ''[^"]+'');
         example = "Spam";
+        default = null;
         description = "The name of the mailbox.";
       };
       auto = mkOption {
@@ -147,6 +150,15 @@ let
         default = null;
         example = "Junk";
         description = "Null if no special use flag is set. Other than that every use flag mentioned in the RFC is valid.";
+      };
+      autoexpunge = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "60d";
+        description = ''
+          To automatically remove all email from the mailbox which is older than the
+          specified time.
+        '';
       };
     };
   };
@@ -323,9 +335,24 @@ in
     };
 
     mailboxes = mkOption {
-      type = types.listOf (types.submodule mailboxes);
-      default = [];
-      example = [ { name = "Spam"; specialUse = "Junk"; auto = "create"; } ];
+      type = with types; let m = submodule mailboxes; in either (listOf m) (attrsOf m);
+      default = {};
+      apply = x:
+        if isList x then warn "Declaring `services.dovecot2.mailboxes' as a list is deprecated and will break eval in 21.03!" x
+        else mapAttrsToList (name: value:
+          if value.name != null
+            then throw ''
+              When specifying dovecot2 mailboxes as attributes, declaring
+              a `name'-attribute is prohibited! The name ${value.name} should
+              be the attribute key!
+            ''
+          else value // { inherit name; }
+        ) x;
+      example = literalExample ''
+        {
+          Spam = { specialUse = "Junk"; auto = "create"; };
+        }
+      '';
       description = "Configure mailboxes and auto create or subscribe them.";
     };
 

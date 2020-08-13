@@ -44,6 +44,9 @@ buildPythonPackage rec {
     "--tb=native"
     # ignore code linting tests
     "--ignore=tests/test_sourcecode.py"
+    # Fails on Python 3.8
+    # https://salsa.debian.org/python-team/modules/uvloop/-/commit/302a7e8f5a2869e13d0550cd37e7a8f480e79869
+    "--ignore=tests/test_tcp.py"
   ];
 
   disabledTests = [
@@ -55,6 +58,9 @@ buildPythonPackage rec {
     export TEST_DIR=$(mktemp -d)
     cp -r tests $TEST_DIR
     pushd $TEST_DIR
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Some tests fail on Darwin
+    rm tests/test_[stu]*.py
   '';
   postCheck = ''
     popd

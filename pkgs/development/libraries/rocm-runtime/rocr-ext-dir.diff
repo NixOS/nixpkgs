@@ -1,0 +1,23 @@
+diff --git a/src/core/runtime/runtime.cpp b/src/core/runtime/runtime.cpp
+index dd6a15c..fb6de49 100644
+--- a/src/core/runtime/runtime.cpp
++++ b/src/core/runtime/runtime.cpp
+@@ -1358,7 +1358,17 @@ void Runtime::LoadExtensions() {
+                           core::HsaApiTable::HSA_EXT_FINALIZER_API_TABLE_ID);
+ 
+   // Update Hsa Api Table with handle of Image extension Apis
+-  extensions_.LoadImage(kImageLib[os_index(os::current_os)]);
++  //
++  // Use ROCR_EXT_DIR when it is non-empty. Otherwise, try to load the
++  // library from the OpenGL driver path.
++  std::string extDirVar = os::GetEnvVar("ROCR_EXT_DIR");
++  if (!extDirVar.empty()) {
++    extensions_.LoadImage(extDirVar + "/" + kImageLib[os_index(os::current_os)]);
++  } else {
++    std::string globalDriverDir("@rocrExtDir@");
++    extensions_.LoadImage(globalDriverDir + "/" + kImageLib[os_index(os::current_os)]);
++  }
++
+   hsa_api_table_.LinkExts(&extensions_.image_api,
+                           core::HsaApiTable::HSA_EXT_IMAGE_API_TABLE_ID);
+ }

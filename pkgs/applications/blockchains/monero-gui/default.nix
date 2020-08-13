@@ -4,7 +4,7 @@
 , qtmultimedia, qtxmlpatterns
 , qtquickcontrols, qtquickcontrols2
 , monero, unbound, readline, boost, libunwind
-, libsodium, pcsclite, zeromq, cppzmq
+, libsodium, pcsclite, zeromq, libgcrypt, libgpgerror
 , hidapi, libusb-compat-0_1, protobuf, randomx
 }:
 
@@ -12,13 +12,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.15.0.4";
+  version = "0.16.0.2";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "12m5fgnxkr11q2arx1m5ccpxqm5ljcvm6l547dwqn297zs5jim4z";
+    sha256 = "1b1m8vhs0hdh81ysm8s8vfwqskqsihylb51wz16kc98ba40r9gqg";
   };
 
   nativeBuildInputs = [ qmake pkgconfig wrapQtAppsHook ];
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
     qtbase qtdeclarative qtgraphicaleffects
     qtmultimedia qtquickcontrols qtquickcontrols2
     qtxmlpatterns
-    monero unbound readline
+    monero unbound readline libgcrypt libgpgerror
     boost libunwind libsodium pcsclite zeromq
-    cppzmq hidapi libusb-compat-0_1 protobuf randomx
+    hidapi libusb-compat-0_1 protobuf randomx
   ];
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=format-security" ];
@@ -52,6 +52,10 @@ stdenv.mkDerivation rec {
   preBuild = ''
     sed -i s#/opt/monero-wallet-gui##g Makefile
     make -C src/zxcvbn-c
+
+    # use nixpkgs monero sources
+    rmdir monero
+    ln -s "${monero.src}" monero
   '';
 
   desktopItem = makeDesktopItem {
@@ -60,7 +64,7 @@ stdenv.mkDerivation rec {
     icon = "monero";
     desktopName = "Monero";
     genericName = "Wallet";
-    categories  = "Application;Network;Utility;";
+    categories  = "Network;Utility;";
   };
 
   postInstall = ''

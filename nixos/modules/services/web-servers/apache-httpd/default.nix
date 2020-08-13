@@ -708,6 +708,7 @@ in
         wantedBy = [ "multi-user.target" ];
         wants = concatLists (map (hostOpts: [ "acme-${hostOpts.hostName}.service" "acme-selfsigned-${hostOpts.hostName}.service" ]) vhostsACME);
         after = [ "network.target" "fs.target" ] ++ map (hostOpts: "acme-selfsigned-${hostOpts.hostName}.service") vhostsACME;
+        before = map (hostOpts: "acme-${hostOpts.hostName}.service") vhostsACME;
 
         path = [ pkg pkgs.coreutils pkgs.gnugrep ];
 

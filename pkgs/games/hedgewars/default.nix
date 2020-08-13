@@ -1,4 +1,4 @@
-{ mkDerivation, SDL2_image, SDL2_ttf, SDL2_net, fpc, ghcWithPackages, ffmpeg, freeglut
+{ mkDerivation, SDL2_image, SDL2_ttf, SDL2_net, fpc, ghcWithPackages, ffmpeg_3, freeglut
 , lib, fetchurl, cmake, pkgconfig, lua5_1, SDL2, SDL2_mixer
 , zlib, libpng, libGL, libGLU, physfs
 , qtbase, qttools
@@ -27,7 +27,7 @@ mkDerivation rec {
   buildInputs = [
     SDL2_ttf SDL2_net SDL2 SDL2_mixer SDL2_image
     fpc lua5_1
-    ffmpeg freeglut physfs
+    ffmpeg_3 freeglut physfs
     qtbase
   ] ++ lib.optional withServer ghc;
 

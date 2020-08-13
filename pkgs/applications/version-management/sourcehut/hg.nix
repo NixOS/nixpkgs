@@ -9,7 +9,7 @@ buildPythonPackage rec {
   src = fetchhg {
     url = "https://hg.sr.ht/~sircmpwn/hg.sr.ht";
     rev = version;
-    sha256 = "kX0KZSEzYQ/hxL2vKh+mpaRuG16qbBKN2Xwp+e9pTxs=";
+    sha256 = "06sgd7pzjabwv66i4v5abqdnx955lqgjmbxxqkhhyq9k45jhlzci";
   };
 
   patches = [

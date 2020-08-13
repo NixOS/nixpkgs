@@ -30,11 +30,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.13.8";
+  version = "1.13.15";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "0d7cxffk72568h46srzswrxd0bsdip7amgkf499wzn6l6d3g0fxi";
+    sha256 = "0pfgixca3a0svblzivkia11q79l8bzai6yg64m1piy3c0iqk3d2z";
   };
 
   # perl is used for testing go vet
@@ -186,8 +186,11 @@ stdenv.mkDerivation rec {
 
     export PATH=$(pwd)/bin:$PATH
 
+    ${optionalString (stdenv.buildPlatform != stdenv.targetPlatform) ''
     # Independent from host/target, CC should produce code for the building system.
+    # We only set it when cross-compiling.
     export CC=${buildPackages.stdenv.cc}/bin/cc
+    ''}
     ulimit -a
   '';
 
@@ -229,8 +232,6 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  setupHook = ./setup-hook.sh;
-
   disallowedReferences = [ goBootstrap ];
 
   meta = with stdenv.lib; {
@@ -238,7 +239,7 @@ stdenv.mkDerivation rec {
     homepage = "http://golang.org/";
     description = "The Go Programming language";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ cstrahan orivej mic92 rvolosatovs kalbasit Frostman ];
+    maintainers = teams.golang.members;
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

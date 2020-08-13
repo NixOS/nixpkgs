@@ -1,0 +1,12 @@
+diff --git a/lib/appUtil/Makefile.am b/lib/appUtil/Makefile.am
+index a0d8e391..899cd4e9 100644
+--- a/lib/appUtil/Makefile.am
++++ b/lib/appUtil/Makefile.am
+@@ -21,4 +21,6 @@ libAppUtil_la_SOURCES =
+ libAppUtil_la_SOURCES += appUtil.c
+ libAppUtil_la_SOURCES += appUtilX11.c
+ 
+-AM_CFLAGS = @GTK_CPPFLAGS@
++AM_CFLAGS =
++AM_CFLAGS += @GTK_CPPFLAGS@
++AM_CFLAGS += @GDK_PIXBUF_XLIB2_CPPFLAGS@

@@ -6,7 +6,7 @@
 , qtquickcontrols
 , qtimageformats
 , qtxmlpatterns
-, ffmpeg
+, ffmpeg_3
 , guvcview
 , cmake
 , ninja
@@ -40,7 +40,7 @@ mkDerivation rec {
     v4l-utils
     libv4l
     pcre
-    ffmpeg
+    ffmpeg_3
     guvcview
     qwt
   ];

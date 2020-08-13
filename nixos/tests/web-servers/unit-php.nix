@@ -23,7 +23,10 @@ in {
               "user": "testuser",
               "group": "testgroup",
               "root": "${testdir}/www",
-              "index": "info.php"
+              "index": "info.php",
+              "options": {
+                "file": "${pkgs.unit.usedPhp74}/lib/php.ini"
+              }
             }
           }
         }
@@ -42,6 +45,13 @@ in {
   };
   testScript = ''
     machine.wait_for_unit("unit.service")
-    assert "PHP Version ${pkgs.php74.version}" in machine.succeed("curl -vvv -s http://127.0.0.1:9074/")
+
+    # Check so we get an evaluated PHP back
+    response = machine.succeed("curl -vvv -s http://127.0.0.1:9074/")
+    assert "PHP Version ${pkgs.unit.usedPhp74.version}" in response, "PHP version not detected"
+
+    # Check so we have database and some other extensions loaded
+    for ext in ["json", "opcache", "pdo_mysql", "pdo_pgsql", "pdo_sqlite"]:
+        assert ext in response, f"Missing {ext} extension"
   '';
 })

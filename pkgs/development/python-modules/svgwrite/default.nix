@@ -1,24 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pyparsing
+, isPy3k
+, pythonOlder
 , pytest
 }:
 
 buildPythonPackage rec {
   pname = "svgwrite";
-  version = "1.3.1";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "mozman";
     repo = "svgwrite";
     rev = "v${version}";
-    sha256 = "14wz0y118a5wwfzin6cirr9254p4y825lnrnackihdbpw22gcw11";
+    sha256 = "15xjz5b4dw1sg3a5k4wmzky4h5v1n937id8vl6hha1a2xj42z2s5";
   };
 
-  propagatedBuildInputs = [
-    pyparsing
-  ];
+  # svgwrite requires Python 3.6 or newer
+  disabled = pythonOlder "3.6";
 
   checkInputs = [
     pytest

@@ -38,7 +38,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Whether to enable the Siproxd SIP 
+          Whether to enable the Siproxd SIP
 	  proxy/masquerading daemon.
         '';
       };
@@ -111,7 +111,7 @@ in
         type = types.int;
         default = 300;
         description = ''
-          Timeout for an RTP stream. If for the specified 
+          Timeout for an RTP stream. If for the specified
           number of seconds no data is relayed on an active
           stream, it is considered dead and will be killed.
         '';
@@ -122,7 +122,7 @@ in
         default = 46;
         description = ''
           DSCP (differentiated services) value to be assigned
-          to RTP packets. Allows QOS aware routers to handle 
+          to RTP packets. Allows QOS aware routers to handle
           different types traffic with different priorities.
         '';
       };
@@ -132,7 +132,7 @@ in
         default = 0;
         description = ''
           DSCP (differentiated services) value to be assigned
-          to SIP packets. Allows QOS aware routers to handle 
+          to SIP packets. Allows QOS aware routers to handle
           different types traffic with different priorities.
         '';
       };

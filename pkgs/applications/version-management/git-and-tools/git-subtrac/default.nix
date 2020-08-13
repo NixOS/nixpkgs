@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "git-subtrac";
-  version = "0.02";
+  version = "0.03";
 
   src = fetchFromGitHub {
     owner = "apenwarr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1nj950r38sxzrgw69m1xphm7a4km2g29iw2897gfx4wx57jl957k";
+    sha256 = "1ky04h18vg1yl9lykbhkmf25qslg0z2qzziy8c7afmvzvvvhm2v5";
   };
 
   vendorSha256 = "1ccwbhzwys8sl3m2rs2lp70snzsi2a0ahnnq8kn15rrlvsv5qahf";
+
+  doCheck = false;
 
   meta = with lib; {
     description = "Keep the content for your git submodules all in one place: the parent repo";

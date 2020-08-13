@@ -43,5 +43,13 @@ import ./make-test-python.nix ({ pkgs, ...}: {
     assert "haproxy_process_pool_allocated_bytes" in machine.succeed(
         "curl -k http://localhost:80/metrics"
     )
+
+    with subtest("reload"):
+        machine.succeed("systemctl reload haproxy")
+        # wait some time to ensure the following request hits the reloaded haproxy
+        machine.sleep(5)
+        assert "We are all good!" in machine.succeed(
+            "curl -k http://localhost:80/index.txt"
+        )
   '';
 })

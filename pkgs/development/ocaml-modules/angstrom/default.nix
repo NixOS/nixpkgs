@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "angstrom";
-  version = "0.13.0";
+  version = "0.14.1";
 
   minimumOCamlVersion = "4.04";
 
@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner  = "inhabitedtype";
     repo   = pname;
     rev    = version;
-    sha256 = "0vzbwd8j34iv7n6gwqq2mf25q7rqpnpxnifb9ssxhq55p5dd1kp4";
+    sha256 = "1l69y0qspgi7kgrphyh7718hjb2sml1a9lljkp65bkqmmmi6ybly";
   };
 
   checkInputs = [ alcotest ];

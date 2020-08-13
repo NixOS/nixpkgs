@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "s-tui";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0r5yhlsi5xiy7ii1w4kqkaxz9069v5bbfwi3x3xnxhk51yjfgr8n";
+    sha256 = "1gqrb2xxii43j7kszy7kvv4f6hr8ac4p0m9q8i1xs5fhsqcx186i";
   };
 
   propagatedBuildInputs = with python3Packages; [

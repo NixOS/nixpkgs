@@ -11,7 +11,7 @@ mkDerivation rec {
     owner = "QMatrixClient";
     repo = "Quaternion";
     rev = "${version}";
-    sha256 = "sha256-2yEiILiitRPj2hCodUDM8UNVq8crb9nyX21ebuh5EEM=";
+    sha256 = "0hqhg7l6wpkdbzrdjvrbqymmahziri07ba0hvbii7dd2p0h248fv";
   };
 
   buildInputs = [

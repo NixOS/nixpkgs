@@ -1,9 +1,10 @@
-{ stdenv, lib, fetchurl, fetchpatch
+{ stdenv, lib, fetchurl, fetchpatch, buildPackages
 , pkgconfig, intltool, ninja, meson
 , file, flex, bison, expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau, python3Packages
 , libglvnd
+, patchelf, autoreconfHook, fetchFromGitHub
 , enableRadv ? true
 , galliumDrivers ? ["auto"]
 , driDrivers ? ["auto"]
@@ -11,6 +12,8 @@
 , eglPlatforms ? [ "x11" "surfaceless" ] ++ lib.optionals stdenv.isLinux [ "wayland" "drm" ]
 , OpenGL, Xplugin
 , withValgrind ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32, valgrind-light
+, enableGalliumNine ? stdenv.isLinux
+, enableOSMesa ? stdenv.isLinux
 }:
 
 /** Packaging design:
@@ -27,7 +30,9 @@
 with stdenv.lib;
 
 let
-  version = "20.0.2";
+  # Release calendar: https://www.mesa3d.org/release-calendar.html
+  # Release frequency: https://www.mesa3d.org/releasing.html#schedule
+  version = "20.1.4";
   branch  = versions.major version;
 in
 
@@ -37,12 +42,12 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     urls = [
+      "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
-      "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    sha256 = "0vz8k07d23qdwy67fnna9y0ynnni0m8lgswcmdm60l4mcv5z2m5a";
+    sha256 = "1zlrczmmkcy42w332rfmlicihlnrxmkrnkpb21sl98725cf2f038";
   };
 
   prePatch = "patchShebangs .";
@@ -54,6 +59,7 @@ stdenv.mkDerivation {
     ./missing-includes.patch # dev_t needs sys/stat.h, time_t needs time.h, etc.-- fixes build w/musl
     ./opencl-install-dir.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
+    ./link-radv-with-ld_args_build_id.patch
   ] # do not prefix user provided dri-drivers-path
     ++ lib.optional (lib.versionOlder version "19.0.0") (fetchpatch {
       url = "https://gitlab.freedesktop.org/mesa/mesa/commit/f6556ec7d126b31da37c08d7cb657250505e01a0.patch";
@@ -73,7 +79,13 @@ stdenv.mkDerivation {
       })
     ];
 
-  outputs = [ "out" "dev" "drivers" "osmesa" ];
+  postPatch = ''
+    substituteInPlace meson.build --replace \
+      "find_program('pkg-config')" \
+      "find_program('${buildPackages.pkg-config.targetPrefix}pkg-config')"
+  '';
+
+  outputs = [ "out" "dev" "drivers" ] ++ lib.optional enableOSMesa "osmesa";
 
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   mesonFlags = [
@@ -97,10 +109,10 @@ stdenv.mkDerivation {
     "-Domx-libs-path=${placeholder "drivers"}/lib/bellagio"
     "-Dva-libs-path=${placeholder "drivers"}/lib/dri"
     "-Dd3d-drivers-path=${placeholder "drivers"}/lib/d3d"
+    "-Dgallium-nine=${if enableGalliumNine then "true" else "false"}" # Direct3D in Wine
+    "-Dosmesa=${if enableOSMesa then "gallium" else "none"}" # used by wine
   ] ++ optionals stdenv.isLinux [
     "-Dglvnd=true"
-    "-Dosmesa=gallium" # used by wine
-    "-Dgallium-nine=true" # Direct3D in Wine
   ];
 
   buildInputs = with xorg; [
@@ -112,10 +124,24 @@ stdenv.mkDerivation {
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
     ++ lib.optional withValgrind valgrind-light;
 
+  depsBuildBuild = [ pkgconfig ];
+
   nativeBuildInputs = [
+    (patchelf.overrideAttrs (pa: {
+      src = fetchFromGitHub {
+        owner = "NixOS";
+        repo = "patchelf";
+        rev = "61bc10176"; # current master; what matters is merge of #225
+        sha256 = "0cy77mn77w3mn64ggp20f4ygnbxfjmddhjjhfwkva53lsirg6w93";
+      };
+      nativeBuildInputs = pa.nativeBuildInputs or [] ++ [ autoreconfHook ];
+    }))
+  ] ++ [
     pkgconfig meson ninja
     intltool bison flex file
     python3Packages.python python3Packages.Mako
+  ] ++ lib.optionals (elem "wayland" eglPlatforms) [
+    wayland # For wayland-scanner during the build
   ];
 
   propagatedBuildInputs = with xorg; [
@@ -132,17 +158,17 @@ stdenv.mkDerivation {
   '' + optionalString stdenv.isLinux ''
     mkdir -p $drivers/lib
 
-    # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM
-    mv -t $drivers/lib       \
-      $out/lib/libxatracker* \
-      $out/lib/libvulkan_*
+    if [ -n "$(shopt -s nullglob; echo "$out/lib/libxatracker"*)" -o -n "$(shopt -s nullglob; echo "$out/lib/libvulkan_"*)" ]; then
+      # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM
+      mv -t $drivers/lib       \
+        $out/lib/libxatracker* \
+        $out/lib/libvulkan_*
+    fi
 
-    # Move other drivers to a separate output
-    mv $out/lib/lib*_mesa* $drivers/lib
-
-    # move libOSMesa to $osmesa, as it's relatively big
-    mkdir -p $osmesa/lib
-    mv -t $osmesa/lib/ $out/lib/libOSMesa*
+    if [ -n "$(shopt -s nullglob; echo "$out"/lib/lib*_mesa*)" ]; then
+      # Move other drivers to a separate output
+      mv $out/lib/lib*_mesa* $drivers/lib
+    fi
 
     # move vendor files
     mv $out/share/ $drivers/
@@ -157,6 +183,10 @@ stdenv.mkDerivation {
     for js in $drivers/share/vulkan/icd.d/*.json; do
       substituteInPlace "$js" --replace "$out" "$drivers"
     done
+  '' + lib.optionalString enableOSMesa ''
+    # move libOSMesa to $osmesa, as it's relatively big
+    mkdir -p $osmesa/lib
+    mv -t $osmesa/lib/ $out/lib/libOSMesa*
   '';
 
   # TODO:
@@ -171,7 +201,9 @@ stdenv.mkDerivation {
 
     # Update search path used by pkg-config
     for pc in $dev/lib/pkgconfig/{d3d,dri,xatracker}.pc; do
-      substituteInPlace "$pc" --replace $out $drivers
+      if [ -f "$pc" ]; then
+        substituteInPlace "$pc" --replace $out $drivers
+      fi
     done
 
     # add RPATH so the drivers can find the moved libgallium and libdricore9
@@ -205,6 +237,6 @@ stdenv.mkDerivation {
     changelog = "https://www.mesa3d.org/relnotes/${version}.html";
     license = licenses.mit; # X11 variant, in most files
     platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ vcunat ];
+    maintainers = with maintainers; [ primeos vcunat ]; # Help is welcome :)
   };
 }

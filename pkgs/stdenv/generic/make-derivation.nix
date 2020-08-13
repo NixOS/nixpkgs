@@ -262,7 +262,7 @@ in rec {
               else if isx86_32  then "x86"
               else if isx86_64  then "x86_64"
               else platform.parsed.cpu.family + builtins.toString platform.parsed.cpu.bits;
-            crossFile = builtins.toFile "cross-file.conf" (''
+            crossFile = builtins.toFile "cross-file.conf" ''
               [properties]
               needs_exe_wrapper = true
 
@@ -271,13 +271,7 @@ in rec {
               cpu_family = '${cpuFamily stdenv.targetPlatform}'
               cpu = '${stdenv.targetPlatform.parsed.cpu.name}'
               endian = ${if stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
-            ''
-            # TODO should have target prefix too, issue #86077
-            + ''
-
-              [binaries]
-              pkgconfig = 'pkg-config'
-            '');
+            '';
           in [ "--cross-file=${crossFile}" ] ++ mesonFlags;
         } // lib.optionalAttrs (attrs.enableParallelBuilding or false) {
           enableParallelChecking = attrs.enableParallelChecking or true;

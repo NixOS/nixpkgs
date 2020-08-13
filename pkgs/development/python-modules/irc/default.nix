@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchPypi, isPy3k
 , six, jaraco_logging, jaraco_text, jaraco_stream, pytz, jaraco_itertools
 , setuptools_scm, jaraco_collections, importlib-metadata
 }:
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  buildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [
     six
     importlib-metadata
@@ -27,4 +27,11 @@ buildPythonPackage rec {
     jaraco_itertools
     jaraco_collections
   ];
+
+  meta = with lib; {
+    description = "IRC (Internet Relay Chat) protocol library for Python";
+    homepage = "https://github.com/jaraco/irc";
+    license = licenses.mit;
+    maintainers = [];
+  };
 }

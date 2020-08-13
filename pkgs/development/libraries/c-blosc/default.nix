@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "c-blosc";
-  version = "1.18.1";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "Blosc";
     repo = "c-blosc";
     rev = "v${version}";
-    sha256 = "1ywq8j70149859vvs19wgjq89d6xsvvmvm2n1dmkzpchxgrvnw70";
+    sha256 = "1rhv9na9cdp2j81a981s2y69c7m9apdiylf9j51dij0lm1m0ljdr";
   };
 
   buildInputs = [ cmake ];

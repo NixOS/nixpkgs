@@ -102,6 +102,8 @@ in
     systemd.services.plymouth-poweroff.wantedBy = [ "poweroff.target" ];
     systemd.services.plymouth-reboot.wantedBy = [ "reboot.target" ];
     systemd.services.plymouth-read-write.wantedBy = [ "sysinit.target" ];
+    systemd.services.systemd-ask-password-plymouth.wantedBy = ["multi-user.target"];
+    systemd.paths.systemd-ask-password-plymouth.wantedBy = ["multi-user.target"];
 
     boot.initrd.extraUtilsCommands = ''
       copy_bin_and_libs ${pkgs.plymouth}/bin/plymouthd
@@ -146,6 +148,7 @@ in
     # We use `mkAfter` to ensure that LUKS password prompt would be shown earlier than the splash screen.
     boot.initrd.preLVMCommands = mkAfter ''
       mkdir -p /etc/plymouth
+      mkdir -p /run/plymouth
       ln -s ${configFile} /etc/plymouth/plymouthd.conf
       ln -s $extraUtils/share/plymouth/plymouthd.defaults /etc/plymouth/plymouthd.defaults
       ln -s $extraUtils/share/plymouth/logo.png /etc/plymouth/logo.png

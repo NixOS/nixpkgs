@@ -14,6 +14,8 @@ buildGoModule rec {
 
   vendorSha256 = "1wcbn0ip596f2dp68y6jmxgv20l0dgrcxg5cwclkawigj05416zj";
 
+  doCheck = false;
+
   postPatch = ''
     # Because this Makefile will be installed to be used by the user, patch
     # variables to be valid by default

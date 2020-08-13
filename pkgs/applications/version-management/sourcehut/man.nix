@@ -9,7 +9,7 @@ buildPythonPackage rec {
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/man.sr.ht";
     rev = version;
-    sha256 = "CKXWVXr2P1D6Nz9/S5rOkuOi9piy66RreQv2RQ0KSfs=";
+    sha256 = "1ys9186lbxhbg5ms9sxjk3va5qwjrsd4nzrz6zx50gzng9axd988";
   };
 
   patches = [

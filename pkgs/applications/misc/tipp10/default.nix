@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "tipp10";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitLab {
-    owner = "a_a";
+    owner = "tipp10";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1mksga1zyqz1y2s524nkw86irg36zpjwz7ff87n2ygrlysczvnx1";
+    sha256 = "0fav5jlw6lw78iqrj7a65b8vd50hhyyaqyzmfrvyxirpsqhjk1v7";
   };
 
   nativeBuildInputs = [ cmake qttools ];

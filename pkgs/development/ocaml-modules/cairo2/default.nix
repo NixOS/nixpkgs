@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, buildDunePackage
+{ stdenv, lib, fetchurl, buildDunePackage, ocaml
 , pkgconfig, cairo
 }:
 
@@ -14,7 +14,9 @@ buildDunePackage rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cairo ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !(stdenv.isDarwin
+  # https://github.com/Chris00/ocaml-cairo/issues/19
+  || lib.versionAtLeast ocaml.version "4.10");
 
   meta = {
     homepage = "https://github.com/Chris00/ocaml-cairo";

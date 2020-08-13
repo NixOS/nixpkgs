@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, nixosTests }:
 
 buildGoModule rec {
   pname = "cni-plugins";
@@ -12,6 +12,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = null;
+
+  doCheck = false;
 
   buildFlagsArray = [
     "-ldflags=-X github.com/containernetworking/plugins/pkg/utils/buildversion.BuildVersion=${version}"
@@ -35,6 +37,8 @@ buildGoModule rec {
     "plugins/meta/sbr"
     "plugins/meta/tuning"
   ];
+
+  passthru.tests.podman = nixosTests.podman;
 
   meta = with lib; {
     description = "Some standard networking plugins, maintained by the CNI team";

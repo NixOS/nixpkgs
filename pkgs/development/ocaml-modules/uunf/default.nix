@@ -4,15 +4,15 @@ let
   webpage = "https://erratique.ch/software/${pname}";
 in
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.01";
+assert stdenv.lib.versionAtLeast ocaml.version "4.03";
 
 stdenv.mkDerivation rec {
   name = "ocaml-${pname}-${version}";
-  version = "12.0.0";
+  version = "13.0.0";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "031fxixp37hjv45mib87wxm865k82903w72x60hp6v36k7jn34a4";
+    sha256 = "1qci04nkp24kdls1z4s8kz5dzgky4nwd5r8345nwdrgwmxhw7ksm";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild topkg uutf cmdliner ];

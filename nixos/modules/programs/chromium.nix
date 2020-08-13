@@ -69,11 +69,24 @@ in
       extraOpts = mkOption {
         type = types.attrs;
         description = ''
-          Extra chromium policy options, see
-          <link xlink:href="https://www.chromium.org/administrators/policy-list-3">https://www.chromium.org/administrators/policy-list-3</link>
-          for a list of avalible options
+          Extra chromium policy options. A list of available policies
+          can be found in the Chrome Enterprise documentation:
+          <link xlink:href="https://cloud.google.com/docs/chrome-enterprise/policies/">https://cloud.google.com/docs/chrome-enterprise/policies/</link>
+          Make sure the selected policy is supported on Linux and your browser version.
         '';
         default = {};
+        example = literalExample ''
+          {
+            "BrowserSignin" = 0;
+            "SyncDisabled" = true;
+            "PasswordManagerEnabled" = false;
+            "SpellcheckEnabled" = true;
+            "SpellcheckLanguage" = [
+                                     "de"
+                                     "en-US"
+                                   ];
+          }
+        '';
       };
     };
   };

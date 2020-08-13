@@ -10,7 +10,7 @@ buildPythonPackage rec {
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/meta.sr.ht";
     rev = version;
-    sha256 = "p7WgnfOsX09YxJJclHwdIky/jYkTOxibbYmXwcmE2S4=";
+    sha256 = "0bnrhk4w35w9dndihfqki66vyk123my98p4jqic4ypxcyffs1dd7";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;

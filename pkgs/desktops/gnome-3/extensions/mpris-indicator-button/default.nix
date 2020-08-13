@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , gnome3
 }:
 
@@ -11,15 +12,24 @@ stdenv.mkDerivation rec {
     owner = "JasonLG1979";
     repo = "gnome-shell-extension-mpris-indicator-button";
     rev = "de54160e7d905b8c48c0fe30a437f7c51efc1aa3";
-    sha256 = "k/NLmDrlaOsMkwLye7YGQhaQvOMNfhCsDVh2F0qnuFg=";
+    sha256 = "0n5qlx51fxjq1nn10zhdwfy905j20sv7pwh2jc6fns757ac4pwwk";
   };
 
   uuid = "mprisindicatorbutton@JasonLG1979.github.io";
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
     cp -r ${uuid} $out/share/gnome-shell/extensions
+    runHook postInstall
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "gnomeExtensions.${pname}";
+    };
+  };
+
 
   meta = with stdenv.lib; {
     description = "A simple MPRIS indicator button for GNOME Shell";

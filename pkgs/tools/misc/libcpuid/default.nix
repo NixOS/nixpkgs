@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libcpuid";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "anrieff";
     repo = "libcpuid";
     rev = "v${version}";
-    sha256 = "03sya0fs76g86syl299lrn0vqjjcf8i0xd7fzaf42qhizbx03b88";
+    sha256 = "13v5x8gyka2v4kx52khwalb6ai328z7kk9jlipbbbys63p6nyddr";
   };
 
   patches = [

@@ -39,7 +39,7 @@ mkDerivationWith pythonPackages.buildPythonApplication rec {
     desktopName = "Blink";
     icon = "blink";
     genericName = "Instant Messaging";
-    categories = "Application;Internet;";
+    categories = "Internet;";
   };
 
   dontWrapQtApps = true;
