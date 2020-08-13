@@ -1386,6 +1386,38 @@ self: super: {
   # Testsuite trying to run `which haskeline-examples-Test`
   haskeline_0_8_1_0 = dontCheck super.haskeline_0_8_1_0;
 
+  # Tests for list-t, superbuffer, and stm-containers
+  # depend on HTF and it is broken, 2020-08-23
+  list-t = dontCheck super.list-t;
+  superbuffer = dontCheck super.superbuffer;
+  stm-containers = dontCheck super.stm-containers;
+
+  # Fails with "supports custom headers"
+  Spock-core = dontCheck super.Spock-core;
+
+  # Needed by Hasura  1.3.1
+  dependent-map_0_2_4_0 = super.dependent-map_0_2_4_0.override {
+    dependent-sum = self.dependent-sum_0_4;
+  };
+
+  # Hasura 1.3.1
+  # Because of ghc-heap-view, profiling needs to be disabled.
+  graphql-engine = disableLibraryProfiling( overrideCabal (super.graphql-engine.override {
+     immortal = self.immortal_0_2_2_1;
+     dependent-map = self.dependent-map_0_2_4_0;
+     dependent-sum = self.dependent-sum_0_4;
+     witherable = self.witherable_0_3_2;
+  }) (drv: {
+     # version in cabal file is invalid
+     version = "1.3.1-beta1";
+     # hasura needs VERSION env exported during build
+     preBuild = "export VERSION=1.3.1-beta1";
+  }));
+
+  graphql-parser = super.graphql-parser.override {
+     protolude = self.protolude_0_3_0;
+  };
+
   # Requires repline 0.4 which is the default only for ghc8101, override for the rest
   zre = super.zre.override {
     repline = self.repline_0_4_0_0.override {
