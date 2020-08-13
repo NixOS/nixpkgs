@@ -3490,8 +3490,6 @@ in {
 
   mailchimp = callPackage ../development/python-modules/mailchimp { };
 
-  maildir-deduplicate = callPackage ../development/python-modules/maildir-deduplicate { };
-
   mailman = callPackage ../servers/mail/mailman { };
 
   mailmanclient = callPackage ../development/python-modules/mailmanclient { };
