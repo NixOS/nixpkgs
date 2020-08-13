@@ -4039,8 +4039,6 @@ in {
     cudaSupport = pkgs.config.cudaSupport or false;
   };
 
-  pyro-ppl = callPackage ../development/python-modules/pyro-ppl {};
-
   opt-einsum = if isPy27 then
       callPackage ../development/python-modules/opt-einsum/2.nix {}
     else
