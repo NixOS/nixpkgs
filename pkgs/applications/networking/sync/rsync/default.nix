@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = ["--with-nobody-group=nogroup"];
 
+  passthru.tests = { inherit (nixosTests) rsyncd; };
+
   meta = base.meta // {
     description = "A fast incremental file transfer utility";
     maintainers = with stdenv.lib.maintainers; [ peti ehmry kampfschlaefer ];
