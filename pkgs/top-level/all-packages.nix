@@ -2431,8 +2431,6 @@ in
 
   assh = callPackage ../tools/networking/assh { };
 
-  asynk = callPackage ../tools/networking/asynk { };
-
   b2sum = callPackage ../tools/security/b2sum {
     inherit (llvmPackages) openmp;
   };
