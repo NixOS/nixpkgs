@@ -770,6 +770,8 @@ in {
 
   firetv = callPackage ../development/python-modules/firetv { };
 
+  fitipy = callPackage ../development/python-modules/fitipy { };
+
   flower = callPackage ../development/python-modules/flower { };
 
   flufl_bounce = callPackage ../development/python-modules/flufl/bounce.nix { };
@@ -1175,6 +1177,8 @@ in {
   Pmw = callPackage ../development/python-modules/Pmw { };
 
   py_stringmatching = callPackage ../development/python-modules/py_stringmatching { };
+
+  pyache = callPackage ../development/python-modules/pyache { };
 
   pyaes = callPackage ../development/python-modules/pyaes { };
 
@@ -1634,6 +1638,8 @@ in {
   });
 
   softlayer = callPackage ../development/python-modules/softlayer { };
+
+  sonopy = callPackage ../development/python-modules/sonopy { };
 
   sparse = callPackage ../development/python-modules/sparse { };
 
@@ -2568,6 +2574,8 @@ in {
 
   mxnet = callPackage ../development/python-modules/mxnet { };
 
+  mycroft-precise = callPackage ../development/python-modules/mycroft-precise { };
+
   parsy = callPackage ../development/python-modules/parsy { };
 
   portalocker = callPackage ../development/python-modules/portalocker { };
@@ -3468,6 +3476,8 @@ in {
   };
 
   poyo = callPackage ../development/python-modules/poyo { };
+
+  precise-runner = callPackage ../development/python-modules/precise-runner { };
 
   priority = callPackage ../development/python-modules/priority { };
 
@@ -5409,6 +5419,8 @@ in {
 
   prettytable = callPackage ../development/python-modules/prettytable { };
 
+  prettyparse = callPackage ../development/python-modules/prettyparse { };
+
   property-manager = callPackage ../development/python-modules/property-manager { };
 
   prompt_toolkit = let
@@ -6794,6 +6806,8 @@ in {
 
   waitress-django = callPackage ../development/python-modules/waitress-django { };
 
+  wavio = callPackage ../development/python-modules/wavio { };
+
   web = callPackage ../development/python-modules/web { };
 
   webob = callPackage ../development/python-modules/webob { };
@@ -6996,6 +7010,8 @@ in {
   flaskbabel = callPackage ../development/python-modules/flaskbabel { };
 
   speaklater = callPackage ../development/python-modules/speaklater { };
+
+  speechpy = callPackage ../development/python-modules/speechpy { };
 
   speedtest-cli = callPackage ../development/python-modules/speedtest-cli { };
 
