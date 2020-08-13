@@ -18667,6 +18667,8 @@ in
 
   luculent = callPackage ../data/fonts/luculent { };
 
+  luna-icons = callPackage ../data/icons/luna-icons { };
+
   maia-icon-theme = callPackage ../data/icons/maia-icon-theme { };
 
   mailcap = callPackage ../data/misc/mailcap { };
