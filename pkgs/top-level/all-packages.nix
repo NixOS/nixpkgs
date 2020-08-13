@@ -13636,6 +13636,8 @@ in
 
   libnih = callPackage ../development/libraries/libnih { };
 
+  libnifalcon = callPackage ../development/libraries/libnifalcon { };
+
   libnova = callPackage ../development/libraries/libnova { };
 
   libnxml = callPackage ../development/libraries/libnxml { };
