@@ -1155,6 +1155,7 @@ in
 
   androidndkPkgs = androidndkPkgs_18b;
   androidndkPkgs_18b = (callPackage ../development/androidndk-pkgs {})."18b";
+  androidndkPkgs_21 = (callPackage ../development/androidndk-pkgs {})."21";
 
   androidsdk_9_0 = androidenv.androidPkgs_9_0.androidsdk;
 
