@@ -699,8 +699,6 @@ in {
 
   ewmh = callPackage ../development/python-modules/ewmh { };
 
-  exchangelib = callPackage ../development/python-modules/exchangelib { };
-
   dcmstack = callPackage ../development/python-modules/dcmstack { };
 
   dbus-python = callPackage ../development/python-modules/dbus {
