@@ -13,10 +13,9 @@
 
 /** Font configuration scheme
  - ./config-compat.patch makes fontconfig try the following root configs, in order:
-    $FONTCONFIG_FILE, /etc/fonts/${configVersion}/fonts.conf, ${fontconfig.out}/etc/fonts/fonts.conf
+    $FONTCONFIG_FILE, /etc/fonts/${configVersion}/fonts.conf, /etc/fonts/fonts.conf
     This is done not to override config of pre-2.11 versions (which just blow up)
-    and still use *global* font configuration at NixOS,
-    falling back to upstream defaults on non-NixOS.
+    and still use *global* font configuration at both NixOS or non-NixOS.
  - NixOS creates /etc/fonts/${configVersion}/fonts.conf link to $out/etc/fonts/fonts.conf,
     and other modifications should go to /etc/fonts/${configVersion}/conf.d
  - See ./make-fonts-conf.xsl for config details.
@@ -112,20 +111,11 @@ stdenv.mkDerivation rec {
   postInstall = ''
     cd "$out/etc/fonts"
     xsltproc --stringparam fontDirectories "${dejavu_fonts.minimal}" \
-      --stringparam fontconfig "$out" \
       --stringparam fontconfigConfigVersion "${configVersion}" \
       --path $out/share/xml/fontconfig \
       ${./make-fonts-conf.xsl} $out/etc/fonts/fonts.conf \
       > fonts.conf.tmp
     mv fonts.conf.tmp $out/etc/fonts/fonts.conf
-
-    # Make it easier to remove user config in NixOS module.
-    mkdir -p $out/etc/fonts/conf.d.bak
-    mv $out/etc/fonts/conf.d/50-user.conf $out/etc/fonts/conf.d.bak
-
-    # update latest 51-local.conf path to look at the latest local.conf
-    substituteInPlace $out/etc/fonts/conf.d/51-local.conf \
-      --replace local.conf /etc/fonts/${configVersion}/local.conf
   '';
 
   passthru = {
