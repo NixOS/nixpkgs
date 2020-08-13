@@ -1,6 +1,6 @@
 /*
 
-Configuration files are linked to /etc/fonts/${pkgs.fontconfig.configVersion}/conf.d/
+Configuration files are linked to /etc/fonts/conf.d/
 
 This module generates a package containing configuration files and link it in /etc/fonts.
 
@@ -176,15 +176,16 @@ let
   confPkg = pkgs.runCommand "fontconfig-conf" {
     preferLocalBuild = true;
   } ''
-    dst=$out/etc/fonts/${pkg.configVersion}/conf.d
+    dst=$out/etc/fonts/conf.d
     mkdir -p $dst
 
     # fonts.conf
     ln -s ${pkg.out}/etc/fonts/fonts.conf \
           $dst/../fonts.conf
     # TODO: remove this legacy symlink once people stop using packages built before #95358 was merged
-    ln -s /etc/fonts/${pkg.configVersion}/fonts.conf \
-          $out/etc/fonts/fonts.conf
+    mkdir -p $out/etc/fonts/2.11
+    ln -s /etc/fonts/fonts.conf \
+          $out/etc/fonts/2.11/fonts.conf
 
     # fontconfig default config files
     ln -s ${pkg.out}/etc/fonts/conf.d/*.conf \
