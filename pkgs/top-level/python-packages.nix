@@ -5930,8 +5930,6 @@ in {
 
   queuelib = callPackage ../development/python-modules/queuelib { };
 
-  qutip = callPackage ../development/python-modules/qutip { };
-
   r2pipe = callPackage ../development/python-modules/r2pipe { };
 
   rabbitpy = callPackage ../development/python-modules/rabbitpy { };
