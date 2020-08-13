@@ -1,6 +1,6 @@
-#! @shell@
+#! @runtimeShell@
 
-if [ -x "@shell@" ]; then export SHELL="@shell@"; fi;
+if [ -x "@runtimeShell@" ]; then export SHELL="@runtimeShell@"; fi;
 
 set -e
 set -o pipefail
