@@ -1,6 +1,6 @@
-{ stdenv, python, fetchFromGitHub }:
+{ stdenv, python3, fetchFromGitHub }:
 
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "targetcli";
   version = "2.1.53";
 
@@ -11,7 +11,7 @@ python.pkgs.buildPythonApplication rec {
     sha256 = "1qrq7y5hnghzbxgrxgl153n8jlhw31kqjbr93jsvlvhz5b3ci750";
   };
 
-  propagatedBuildInputs = with python.pkgs; [ configshell rtslib ];
+  propagatedBuildInputs = with python3.pkgs; [ configshell rtslib ];
 
   postInstall = ''
     install -D targetcli.8 -t $out/share/man/man8/
