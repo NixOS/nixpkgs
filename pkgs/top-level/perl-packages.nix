@@ -4039,6 +4039,23 @@ let
     };
   };
 
+  CryptSodium = buildPerlPackage {
+    pname = "Crypt-Sodium";
+    version = "0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MG/MGREGORO/Crypt-Sodium-0.11.tar.gz";
+      sha256 = "0y3c24zv4iwnvlf9zwxambk8ddram54fm6l1m5yhbskc0nhp6z4h";
+    };
+    NIX_CFLAGS_COMPILE = "-I${pkgs.libsodium.dev}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.libsodium.out}/lib -lsodium";
+    meta = {
+      homepage = "https://metacpan.org/release/Crypt-Sodium";
+      description = "Perl bindings for libsodium (NaCL)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CryptTwofish = buildPerlPackage {
     pname = "Crypt-Twofish";
     version = "2.17";
