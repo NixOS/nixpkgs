@@ -1122,6 +1122,20 @@ in {
 
   pushover-complete = callPackage ../development/python-modules/pushover-complete { };
 
+  pulumi = callPackage ../development/python-modules/pulumi { };
+
+  pulumi-aws = callPackage ../development/python-modules/pulumi-aws { };
+
+  pulumi-azure = callPackage ../development/python-modules/pulumi-azure { };
+
+  pulumi-digitalocean = callPackage ../development/python-modules/pulumi-digitalocean { };
+
+  pulumi-gcp = callPackage ../development/python-modules/pulumi-gcp { };
+
+  pulumi-kubernetes = callPackage ../development/python-modules/pulumi-kubernetes { };
+
+  pulumi-random = callPackage ../development/python-modules/pulumi-random { };
+
   pyicloud = callPackage ../development/python-modules/pyicloud { };
 
   pyperf = callPackage ../development/python-modules/pyperf { };
