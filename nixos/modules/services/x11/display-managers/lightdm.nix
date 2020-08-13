@@ -253,7 +253,6 @@ in
       KeyringMode = "shared";
       KillMode = "mixed";
       StandardError = "inherit";
-      StandardOutput = "syslog";
     };
 
     environment.etc."lightdm/lightdm.conf".source = lightdmConf;
