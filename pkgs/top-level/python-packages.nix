@@ -1313,6 +1313,8 @@ in {
     inherit (pkgs) libusb1;
   };
 
+  pyln-client = callPackage ../development/python-modules/pyln-client { };
+
   pymatgen = callPackage ../development/python-modules/pymatgen { };
 
   pymatgen-lammps = callPackage ../development/python-modules/pymatgen-lammps { };
