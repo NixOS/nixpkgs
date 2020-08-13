@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, version, sha256 }:
 
 buildGoPackage rec {
   pname = "nomad";
-  version = "0.11.3";
+  inherit version;
   rev = "v${version}";
 
   goPackagePath = "github.com/hashicorp/nomad";
@@ -11,8 +11,7 @@ buildGoPackage rec {
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
-    inherit rev;
-    sha256 = "1p7g7x2gl77h1w7aip3xji3s530fj46gspargz4j3i6h4wkyvafb";
+    inherit rev sha256;
   };
 
   # ui:
