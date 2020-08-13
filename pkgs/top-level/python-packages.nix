@@ -5483,8 +5483,6 @@ in {
 
   batchspawner = callPackage ../development/python-modules/batchspawner { };
 
-  pybfd = callPackage ../development/python-modules/pybfd { };
-
   pybigwig = callPackage ../development/python-modules/pybigwig { };
 
   py2bit = callPackage ../development/python-modules/py2bit { };
