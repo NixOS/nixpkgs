@@ -18,9 +18,7 @@ deployAndroidPackage {
     substituteInPlace ./build/tools/make_standalone_toolchain.py \
       --replace '#!/bin/bash' '#!${pkgs.bash}/bin/bash'
 
-  '' + lib.optionalString (builtins.compareVersions (lib.getVersion package) "21" > 0) ''
-    patch -p1 \
-      --no-backup-if-mismatch < ${./make_standalone_toolchain.py_18.patch} || true
+    chmod -R +w .
     wrapProgram ./build/tools/make_standalone_toolchain.py --prefix PATH : "${runtime_paths}"
   '' + ''
 
