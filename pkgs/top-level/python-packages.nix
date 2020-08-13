@@ -6766,8 +6766,6 @@ in {
 
   traceback2 = callPackage ../development/python-modules/traceback2 { };
 
-  trackpy = callPackage ../development/python-modules/trackpy { };
-
   linecache2 = callPackage ../development/python-modules/linecache2 { };
 
   upass = callPackage ../development/python-modules/upass { };
