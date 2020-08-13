@@ -3242,8 +3242,6 @@ in {
 
   libarchive-c = callPackage ../development/python-modules/libarchive-c { inherit (pkgs) libarchive; };
 
-  libarchive = self.python-libarchive; # The latter is the name upstream uses
-
   libarcus = callPackage ../development/python-modules/libarcus { inherit (pkgs) protobuf; };
 
   libasyncns = callPackage ../development/python-modules/libasyncns { inherit (pkgs) libasyncns pkgconfig; };
@@ -5649,8 +5647,6 @@ in {
   python-ldap-test = callPackage ../development/python-modules/python-ldap-test { };
 
   python-Levenshtein = callPackage ../development/python-modules/python-levenshtein { };
-
-  python-libarchive = callPackage ../development/python-modules/python-libarchive { };
 
   python-logstash = callPackage ../development/python-modules/python-logstash { };
 
