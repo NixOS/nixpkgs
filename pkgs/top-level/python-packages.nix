@@ -2062,8 +2062,6 @@ in {
 
   caldav = callPackage ../development/python-modules/caldav { };
 
-  caldavclientlibrary-asynk = callPackage ../development/python-modules/caldavclientlibrary-asynk { };
-
   biopython = callPackage ../development/python-modules/biopython { };
 
   bedup = callPackage ../development/python-modules/bedup { };
@@ -5482,8 +5480,6 @@ in {
   babelgladeextractor = callPackage ../development/python-modules/babelgladeextractor { };
 
   batchspawner = callPackage ../development/python-modules/batchspawner { };
-
-  pybfd = callPackage ../development/python-modules/pybfd { };
 
   pybigwig = callPackage ../development/python-modules/pybigwig { };
 

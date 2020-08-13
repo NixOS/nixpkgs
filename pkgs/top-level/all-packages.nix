@@ -2431,8 +2431,6 @@ in
 
   assh = callPackage ../tools/networking/assh { };
 
-  asynk = callPackage ../tools/networking/asynk { };
-
   b2sum = callPackage ../tools/security/b2sum {
     inherit (llvmPackages) openmp;
   };
@@ -16533,6 +16531,8 @@ in
   tang = callPackage ../servers/tang {
     asciidoc = asciidoc-full;
   };
+
+  timescale-prometheus = callPackage ../servers/monitoring/timescale-prometheus { };
 
   timescaledb-parallel-copy = callPackage ../development/tools/database/timescaledb-parallel-copy { };
 
