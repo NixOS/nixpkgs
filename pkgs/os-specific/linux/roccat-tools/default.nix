@@ -1,5 +1,6 @@
 { stdenv, fetchurl, cmake, pkgconfig, gettext
 , dbus, dbus-glib, libgaminggear, libgudev, lua
+, harfbuzz
 }:
 
 stdenv.mkDerivation rec {
@@ -31,6 +32,8 @@ stdenv.mkDerivation rec {
     "-DWITH_LUA=${lua.luaversion}"
     "-DLIBDIR=lib"
   ];
+
+  NIX_CFLAGS_COMPILE = [ "-I${harfbuzz.dev}/include/harfbuzz" ];
 
   meta = {
     description = "Tools to configure ROCCAT devices";
