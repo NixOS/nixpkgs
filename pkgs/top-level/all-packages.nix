@@ -197,6 +197,8 @@ in
 
   ptags = callPackage ../development/tools/misc/ptags { };
 
+  pyp = callPackage ../development/tools/pyp { };
+
   demoit = callPackage ../servers/demoit { };
 
   deviceTree = callPackage ../os-specific/linux/device-tree {};

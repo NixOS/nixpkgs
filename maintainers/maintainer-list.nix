@@ -4241,6 +4241,12 @@
     githubId = 494012;
     name = "Kevin Cox";
   };
+  Kha = {
+    email = "sebasti@nullri.ch";
+    github = "Kha";
+    githubId = 109126;
+    name = "Sebastian Ullrich";
+  };
   khumba = {
     email = "bog@khumba.net";
     github = "khumba";
