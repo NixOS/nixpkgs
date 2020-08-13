@@ -6768,8 +6768,6 @@ in {
 
   sslyze = callPackage ../development/python-modules/sslyze { };
 
-  starfish = callPackage ../development/python-modules/starfish { };
-
   starlette = callPackage ../development/python-modules/starlette { };
 
   staticjinja = callPackage ../development/python-modules/staticjinja { };
