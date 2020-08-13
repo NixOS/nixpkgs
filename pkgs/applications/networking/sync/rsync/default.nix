@@ -1,7 +1,6 @@
 { stdenv, fetchurl, perl, libiconv, zlib, popt
-, enableACLs ? !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD), acl ? null
-, enableCopyDevicesPatch ? false
-}:
+, enableACLs ? !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD)
+, acl ? null, enableCopyDevicesPatch ? false, nixosTests }:
 
 assert enableACLs -> acl != null;
 
@@ -22,6 +21,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [perl];
 
   configureFlags = ["--with-nobody-group=nogroup"];
+
+  passthru.tests = { inherit (nixosTests) rsyncd; };
 
   meta = base.meta // {
     description = "A fast incremental file transfer utility";
