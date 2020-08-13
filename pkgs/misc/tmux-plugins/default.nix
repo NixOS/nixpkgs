@@ -111,6 +111,7 @@ in rec {
 
   fingers = mkDerivation rec {
     pluginName = "fingers";
+    rtpFilePath = "tmux-fingers.tmux";
     version = "1.0.1";
     src = fetchFromGitHub {
       owner = "Morantron";

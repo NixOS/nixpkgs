@@ -4,8 +4,6 @@ buildGoModule rec {
   pname = "gopkgs";
   version = "2.1.2";
 
-  goPackagePath = "github.com/uudashr/gopkgs";
-
   subPackages = [ "cmd/gopkgs" ];
 
   src = fetchFromGitHub {

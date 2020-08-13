@@ -138,6 +138,11 @@ mapAliases ({
     fontconfig-ultimate has been removed. The repository has been archived upstream and activity has ceased for several years.
     https://github.com/bohoomil/fontconfig-ultimate/issues/171.
   '';
+  # 2020-07-21
+  fontconfig_210 = throw ''
+    fontconfig 2.10.x hasn't had a release in years, is vulnerable to CVE-2016-5384
+    and has only been used for old fontconfig caches.
+  '';
   font-droid = throw "font-droid has been deprecated by noto-fonts"; # 2019-04-12
   foomatic_filters = foomatic-filters;  # 2016-08
   fuse_exfat = exfat;                   # 2015-09-11

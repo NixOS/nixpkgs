@@ -5608,7 +5608,9 @@ in
 
   noip = callPackage ../tools/networking/noip { };
 
-  nomad = callPackage ../applications/networking/cluster/nomad { };
+  nomad = nomad_0_11;
+  nomad_0_11 = callPackage ../applications/networking/cluster/nomad/0.11.nix { };
+  nomad_0_12 = callPackage ../applications/networking/cluster/nomad/0.12.nix { };
 
   notable = callPackage ../applications/misc/notable { };
 
@@ -5812,6 +5814,8 @@ in
   open-ecard = callPackage ../tools/security/open-ecard { };
 
   openjade = callPackage ../tools/text/sgml/openjade { };
+
+  openhantek6022 = libsForQt5.callPackage ../applications/science/electronics/openhantek6022 { };
 
   openimagedenoise = callPackage ../development/libraries/openimagedenoise { };
 
@@ -9407,6 +9411,7 @@ in
   cargo-audit = callPackage ../tools/package-management/cargo-audit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-c = callPackage ../development/tools/rust/cargo-c { };
   cargo-deb = callPackage ../tools/package-management/cargo-deb {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -12062,8 +12067,6 @@ in
   fstrm = callPackage ../development/libraries/fstrm { };
 
   cfitsio = callPackage ../development/libraries/cfitsio { };
-
-  fontconfig_210 = callPackage ../development/libraries/fontconfig/2.10.nix { };
 
   fontconfig = callPackage ../development/libraries/fontconfig { };
 
@@ -21462,6 +21465,7 @@ in
     mopidy-soundcloud
     mopidy-spotify
     mopidy-spotify-tunigo
+    mopidy-tunein
     mopidy-youtube;
 
   motif = callPackage ../development/libraries/motif { };

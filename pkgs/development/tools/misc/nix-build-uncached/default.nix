@@ -11,7 +11,6 @@ buildGoModule rec {
     sha256 = "106k4234gpi8mr0n0rfsgwk4z7v0b2gim0r5bhjvg2v566j67g02";
   };
 
-  goPackagePath = "github.com/Mic92/nix-build-uncached";
   vendorSha256 = null;
 
   doCheck = false;

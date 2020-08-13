@@ -354,6 +354,7 @@ let
           [Socket]
           ${attrsToSection def.socketConfig}
           ${concatStringsSep "\n" (map (s: "ListenStream=${s}") def.listenStreams)}
+          ${concatStringsSep "\n" (map (s: "ListenDatagram=${s}") def.listenDatagrams)}
         '';
     };
 

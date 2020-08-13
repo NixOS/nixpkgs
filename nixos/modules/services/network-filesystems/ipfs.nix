@@ -25,6 +25,15 @@ let
       then "/${lib.concatStringsSep "/" (lib.tail addr)}"
     else null; # not valid for listen stream, skip
 
+  multiaddrToListenDatagram = addrRaw: let
+      addr = splitMulitaddr addrRaw;
+      s = builtins.elemAt addr;
+    in if s 0 == "ip4" && s 2 == "udp"
+      then "${s 1}:${s 3}"
+    else if s 0 == "ip6" && s 2 == "udp"
+      then "[${s 1}]:${s 3}"
+    else null; # not valid for listen datagram, skip
+
 in {
 
   ###### interface
@@ -268,9 +277,14 @@ in {
 
     systemd.sockets.ipfs-gateway = {
       wantedBy = [ "sockets.target" ];
-      socketConfig.ListenStream = let
-          fromCfg = multiaddrToListenStream cfg.gatewayAddress;
-        in [ "" ] ++ lib.optional (fromCfg != null) fromCfg;
+      socketConfig = {
+        ListenStream = let
+            fromCfg = multiaddrToListenStream cfg.gatewayAddress;
+          in [ "" ] ++ lib.optional (fromCfg != null) fromCfg;
+        ListenDatagram = let
+            fromCfg = multiaddrToListenDatagram cfg.gatewayAddress;
+          in [ "" ] ++ lib.optional (fromCfg != null) fromCfg;
+      };
     };
 
     systemd.sockets.ipfs-api = {

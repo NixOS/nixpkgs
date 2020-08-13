@@ -5,7 +5,6 @@ in buildGoModule rec {
   inherit version;
   pname = "drone-cli";
   revision = "v${version}";
-  goPackagePath = "github.com/drone/drone-cli";
 
   vendorSha256 = "1ryh94cj37j8x6qwxr5ydyw6cnjppakg1w84sipm11d0vvv98bhi";
 
