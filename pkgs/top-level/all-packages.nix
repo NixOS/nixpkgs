@@ -21708,6 +21708,8 @@ in
     };
   };
 
+  shuriken = callPackage ../applications/audio/shuriken { inherit (qt5) qmake; };
+
   sky = callPackage ../applications/networking/instant-messengers/sky {};
 
   smplayer = libsForQt5.callPackage ../applications/video/smplayer { };
