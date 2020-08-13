@@ -155,6 +155,8 @@ int main(gint argc, gchar **argv) {
   else {
     int status;
 
+    fail_if(signal(SIGINT, SIG_IGN) == SIG_ERR);
+
     fail_if(waitpid(cpid, &status, 0) != cpid);
     fail_if(rmdir(prefix));
 
