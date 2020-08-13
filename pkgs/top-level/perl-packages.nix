@@ -12263,6 +12263,56 @@ let
     };
   };
 
+  Minion = buildPerlPackage {
+    pname = "Minion";
+    version = "10.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SR/SRI/Minion-10.13.tar.gz";
+      sha256 = "0nxk147v22lvc461923yv8fypqpbsajamvcvnlidk8bb54r33afj";
+    };
+    propagatedBuildInputs = [ Mojolicious ];
+    meta = {
+      homepage = "https://github.com/mojolicious/minion";
+      description = "A high performance job queue for Perl";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  MinionBackendSQLite = buildPerlModule {
+    pname = "Minion-Backend-SQLite";
+    version = "5.0.3";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Minion-Backend-SQLite-v5.0.3.tar.gz";
+      sha256 = "1ch92846cgr1s1y6nlicjxlq9r4qh1a3fig0jlr7ligzw05mxib4";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ Minion MojoSQLite ];
+    meta = {
+      homepage = "https://github.com/Grinnz/Minion-Backend-SQLite";
+      description = "SQLite backend for Minion job queue";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  MinionBackendmysql = buildPerlPackage {
+    pname = "Minion-Backend-mysql";
+    version = "0.21";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PR/PREACTION/Minion-Backend-mysql-0.21.tar.gz";
+      sha256 = "0dbq0pmyjcrmdjpsrkr1pxvzvdphn6mb6lk5yyyhm380prwrjahn";
+    };
+    buildInputs = [ Testmysqld ];
+    propagatedBuildInputs = [ Minion Mojomysql ];
+    meta = {
+      homepage = "https://github.com/preaction/Minion-Backend-mysql";
+      description = "MySQL backend for Minion job queue";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   MixinLinewise = buildPerlPackage {
     pname = "Mixin-Linewise";
     version = "0.108";
@@ -19490,6 +19540,23 @@ let
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
     buildInputs = [ TestDeep TestDifferences TestException TestWarn ];
+  };
+
+  Testmysqld = buildPerlModule {
+    pname = "Test-mysqld";
+    version = "1.0013";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SO/SONGMU/Test-mysqld-1.0013.tar.gz";
+      sha256 = "1vrybrh3is3xfwqdhxr1mvmmdyjhz9p0f6n8hasn7japj2h43bap";
+    };
+    buildInputs = [ pkgs.which ModuleBuildTiny TestSharedFork ];
+    propagatedBuildInputs = [ ClassAccessorLite DBDmysql FileCopyRecursive ];
+    meta = {
+      homepage = "https://github.com/kazuho/p5-test-mysqld";
+      description = "Mysqld runner for tests";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
   };
 
   TestNeeds = buildPerlPackage {

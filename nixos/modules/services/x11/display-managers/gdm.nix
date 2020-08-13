@@ -200,7 +200,6 @@ in
       KillMode = "mixed";
       IgnoreSIGPIPE = "no";
       BusName = "org.gnome.DisplayManager";
-      StandardOutput = "syslog";
       StandardError = "inherit";
       ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
       KeyringMode = "shared";
