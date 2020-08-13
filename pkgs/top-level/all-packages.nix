@@ -902,6 +902,8 @@ in
     withDriver = false;
   };
 
+  chroma = callPackage ../tools/text/chroma { };
+
   clair = callPackage ../tools/admin/clair { };
 
   cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
