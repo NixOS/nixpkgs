@@ -1,4 +1,4 @@
-#! @shell@
+#! @runtimeShell@
 
 case "$1" in
   -h|--help)
