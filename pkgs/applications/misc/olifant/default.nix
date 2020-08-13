@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "olifant";
-  version = "0.2.1-beta5";
+  version = "0.2.1-beta6";
 
   src = fetchFromGitHub {
     owner = "cleac";
     repo = pname;
     rev = version;
-    sha256 = "1fpyg3nii75vmsdhp8x4yvhi3npvp3xnbqmd0qcidn05mbsam68r";
+    sha256 = "sha256-3hnEa4Q1dH0R8Jp+Ew0+dH1PEm3F+56jYwqhJ+vll4M=";
   };
 
   nativeBuildInputs = [

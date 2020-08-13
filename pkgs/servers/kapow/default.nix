@@ -4,8 +4,6 @@ buildGoModule rec {
   pname = "kapow";
   version = "0.5.4";
 
-  goPackagePath = "github.com/BBVA/kapow";
-
   subPackages = [ "." ];
 
   src = fetchFromGitHub {

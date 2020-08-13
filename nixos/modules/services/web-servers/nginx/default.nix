@@ -704,7 +704,10 @@ in
       '';
       serviceConfig = {
         ExecStart = execCommand;
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        ExecReload = [
+          "${execCommand} -t"
+          "${pkgs.coreutils}/bin/kill -HUP $MAINPID"
+        ];
         Restart = "always";
         RestartSec = "10s";
         StartLimitInterval = "1min";
@@ -761,8 +764,7 @@ in
       serviceConfig.TimeoutSec = 60;
       script = ''
         if /run/current-system/systemd/bin/systemctl -q is-active nginx.service ; then
-          ${execCommand} -t && \
-            /run/current-system/systemd/bin/systemctl reload nginx.service
+          /run/current-system/systemd/bin/systemctl reload nginx.service
         fi
       '';
       serviceConfig.RemainAfterExit = true;

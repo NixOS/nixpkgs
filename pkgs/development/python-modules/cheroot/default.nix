@@ -8,6 +8,7 @@
 , pytest-mock
 , pytest-testmon
 , requests
+, requests-toolbelt
 , requests-unixsocket
 , setuptools_scm
 , setuptools-scm-git-archive
@@ -39,9 +40,14 @@ buildPythonPackage rec {
     pytest-mock
     pytest-testmon
     requests
+    requests-toolbelt
     requests-unixsocket
     trustme
   ];
+
+  # avoid attempting to use 3 packages not available on nixpkgs
+  # (jaraco.apt, jaraco.context, yg.lockfile)
+  pytestFlagsArray = [ "--ignore=cheroot/test/test_wsgi.py" ];
 
   # Disable doctest plugin because times out
   # Disable xdist (-n arg) because it's incompatible with testmon
