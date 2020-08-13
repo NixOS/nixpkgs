@@ -182,6 +182,9 @@ let
     # fonts.conf
     ln -s ${pkg.out}/etc/fonts/fonts.conf \
           $dst/../fonts.conf
+    # TODO: remove this legacy symlink once people stop using packages built before #95358 was merged
+    ln -s /etc/fonts/${pkg.configVersion}/fonts.conf \
+          $out/etc/fonts/fonts.conf
 
     # fontconfig default config files
     ln -s ${pkg.out}/etc/fonts/conf.d/*.conf \
