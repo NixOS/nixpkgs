@@ -7763,6 +7763,8 @@ in {
 
   stringcase = callPackage ../development/python-modules/stringcase { };
 
+  vcard = callPackage ../development/python-modules/vcard { };
+
   webrtcvad = callPackage ../development/python-modules/webrtcvad { };
 
   pykwalify = callPackage ../development/python-modules/pykwalify { };

@@ -26927,6 +26927,8 @@ in
 
   vbam = callPackage ../misc/emulators/vbam { };
 
+  vcard = with python3Packages; toPythonApplication vcard;
+
   vice = callPackage ../misc/emulators/vice {
     giflib = giflib_4_1;
   };
