@@ -145,8 +145,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
         output = machine.succeed("systemctl show | grep Watchdog")
         assert "RuntimeWatchdogUSec=30s" in output
-        assert "RebootWatchdogUSec=10m" in output
-        assert "KExecWatchdogUSec=5m" in output
+        assert "RebootWatchdogUSec=10min" in output
+        assert "KExecWatchdogUSec=5min" in output
 
     # Test systemd cryptsetup support
     with subtest("systemd successfully reads /etc/crypttab and unlocks volumes"):
