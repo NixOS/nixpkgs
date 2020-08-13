@@ -33,6 +33,9 @@ let
         example = "/mnt/usb";
         type = nonEmptyStr;
         description = "Location of the mounted the file system.";
+        # Removes trailing slash from mountPoint so that e.g. /nix/ becomes /nix
+        # See https://github.com/NixOS/nixpkgs/issues/78951
+        apply = path: if path == "/" then path else lib.removeSuffix "/" path;
       };
 
       device = mkOption {
