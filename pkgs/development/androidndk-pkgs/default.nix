@@ -2,9 +2,9 @@
 }:
 
 {
-  "18b" =
+  "21" =
     let
-      ndkVersion = "18.1.5063045";
+      ndkVersion = "21.0.6113669";
 
       buildAndroidComposition = buildPackages.buildPackages.androidenv.composeAndroidPackages {
         includeNDK = true;
@@ -28,6 +28,7 @@
       # these two really are the same.
       buildAndroidndk = buildAndroidComposition.ndk-bundle;
       androidndk = androidComposition.ndk-bundle;
-      targetAndroidndkPkgs = targetPackages.androidndkPkgs_18b;
+      targetAndroidndkPkgs = targetPackages.androidndkPkgs_21;
     };
+
 }
