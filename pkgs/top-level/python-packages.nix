@@ -4405,8 +4405,6 @@ in {
 
   pint = callPackage ../development/python-modules/pint { };
 
-  pip2nix = callPackage ../development/python-modules/pip2nix { };
-
   pip = callPackage ../development/python-modules/pip { };
 
   pipdate = callPackage ../development/python-modules/pipdate { };
