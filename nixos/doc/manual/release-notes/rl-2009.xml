@@ -672,6 +672,7 @@ services.dokuwiki."mywiki" = {
   ...
 };
 </programlisting>
+     The base package has also been upgraded to the 2020-07-29 "Hogfather" release. Plugins might be incompatible or require upgrading.
     </para>
    </listitem>
    <listitem>
