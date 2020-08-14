@@ -9402,6 +9402,7 @@ broken-packages:
   - secure-sockets
   - secureUDP
   - sednaDBXML
+  - seitz-symbol
   - selectors
   - SelectSequencesFromMSA
   - selenium
