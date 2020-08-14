@@ -13,15 +13,13 @@
 , gsettings-desktop-schemas
 , glib
 , gobject-introspection
+# Available plugins (can be overriden)
+, availablePlugins
 # Plugins to install
 , plugins ? [ "goa" ]
 }:
 
 let
-  availablePlugins = {
-    # More are listed here: https://github.com/pulb/mailnag/#desktop-integration
-    goa = callPackage ./goa-plugin.nix { };
-  };
   # Get the list of plugins the user wants
   userPlugins = lib.attrVals plugins availablePlugins;
   # goa plugin requires gio's gnome-online-accounts which requires making sure
