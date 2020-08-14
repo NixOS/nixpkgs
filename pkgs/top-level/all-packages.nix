@@ -5206,7 +5206,13 @@ in
 
   mailhog = callPackage ../servers/mail/mailhog {};
 
-  mailnag = callPackage ../applications/networking/mailreaders/mailnag { };
+  mailnag = callPackage ../applications/networking/mailreaders/mailnag {
+    availablePlugins = {
+      # More are listed here: https://github.com/pulb/mailnag/#desktop-integration
+      # Use the attributes here as arguments to `plugins` list
+      goa = callPackage ../applications/networking/mailreaders/mailnag/goa-plugin.nix { };
+    };
+  };
 
   mailsend = callPackage ../tools/networking/mailsend { };
 
