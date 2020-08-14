@@ -5318,6 +5318,7 @@ broken-packages:
   - ghclive
   - ghcprofview
   - ght
+  - gi-cairo-again
   - giak
   - Gifcurry
   - ginsu
