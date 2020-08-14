@@ -8,7 +8,7 @@ let
   addCheckDesc = desc: elemType: check: types.addCheck elemType check
     // { description = "${elemType.description} (with check: ${desc})"; };
   nonEmptyStr = addCheckDesc "non-empty" types.str
-    (x: x != "" && ! (all (c: c == " " || c == "\t") (stringToCharacters x)));
+    (s: (builtins.match ".*[^ \t]+.*" s) != null);
 
   fileSystems' = toposort fsBefore (attrValues config.fileSystems);
 
