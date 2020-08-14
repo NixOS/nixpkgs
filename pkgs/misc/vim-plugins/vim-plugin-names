@@ -104,6 +104,7 @@ fannheyward/coc-markdownlint
 fannheyward/coc-rust-analyzer
 farmergreg/vim-lastplace
 fatih/vim-go
+fcpg/vim-osc52
 FelikZ/ctrlp-py-matcher
 fenetikm/falcon
 fisadev/vim-isort
