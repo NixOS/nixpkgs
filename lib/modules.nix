@@ -115,8 +115,19 @@ rec {
 
       checkUnmatched =
         if config._module.check && config._module.freeformType == null && merged.unmatchedDefns != [] then
-          let firstDef = head merged.unmatchedDefns;
-          in throw "The option `${showOption (prefix ++ firstDef.prefix)}' defined in `${firstDef.file}' does not exist."
+          let
+            firstDef = head merged.unmatchedDefns;
+            baseMsg = "The option `${showOption (prefix ++ firstDef.prefix)}' defined in `${firstDef.file}' does not exist.";
+          in
+            if attrNames options == [ "_module" ]
+              then throw ''
+                ${baseMsg}
+
+                However there are no options defined in `${showOption prefix}'. Are you sure you've
+                declared your options properly? This can happen if you e.g. declared your options in `types.submodule'
+                under `config' rather than `options'.
+              ''
+            else throw baseMsg
         else null;
 
       result = builtins.seq checkUnmatched {
