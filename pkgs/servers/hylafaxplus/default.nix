@@ -30,8 +30,8 @@
 let
 
   name = "hylafaxplus-${version}";
-  version = "7.0.2";
-  sha256 = "17vym1gz5ppy3q6zbw2y4nkq1dspn31k12zcmva44fnw9diwvsfb";
+  version = "7.0.3";
+  sha256 = "139iwcwrn9i5lragxi33ilzah72w59wg4midfjjgx5cly3ah0iy4";
 
   configSite = substituteAll {
     name = "hylafaxplus-config.site";
