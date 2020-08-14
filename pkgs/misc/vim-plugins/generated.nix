@@ -6145,6 +6145,18 @@ let
     meta.homepage = "https://github.com/sheerun/vim-polyglot/";
   };
 
+  vim-poweryank = buildVimPluginFrom2Nix {
+    pname = "vim-poweryank";
+    version = "2017-08-13";
+    src = fetchFromGitHub {
+      owner = "haya14busa";
+      repo = "vim-poweryank";
+      rev = "48dff95dbd64423c96fdae5c18eaddb5b5fa3064";
+      sha256 = "016w6nn2qhra9v55sn6g6qf1pj8f072f22r97nzxy4958k7f114a";
+    };
+    meta.homepage = "https://github.com/haya14busa/vim-poweryank/";
+  };
+
   vim-prettyprint = buildVimPluginFrom2Nix {
     pname = "vim-prettyprint";
     version = "2016-07-16";
