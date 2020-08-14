@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
       can be consumed by other software.
     '';
     license     = licenses.lgpl21Plus;
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
  };
 }
