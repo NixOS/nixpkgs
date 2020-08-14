@@ -1,5 +1,5 @@
 { stdenv
-, fetchFromGitLab
+, fetchurl
 , pkgconfig
 , autoconf
 , automake
@@ -26,7 +26,8 @@
 , goocanvasmm2
 , evince
 , isocodes
-, gtksourceviewmm4
+, gtksourceview
+, gtksourceviewmm
 , postgresql
 , gobject-introspection
 , yelp-tools
@@ -48,16 +49,13 @@ let
   boost_python = boost.override { enablePython = true; inherit python; };
 in stdenv.mkDerivation rec {
   pname = "glom";
-  version = "unstable-2018-12-16";
+  version = "1.32.0";
 
   outputs = [ "out" "lib" "dev" "doc" "devdoc" ];
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = pname;
-    rev = "fa5ff04f209f35bf3e97bc1c3eb1d1138d6172ce";
-    sha256 = "145hnk96xa4v35i3a3mbf3fnx4nlk8cksc0qhm7nrh8cnnrbdfgn";
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1wcd4kd3crwqjv0jfp73jkyyf5ws8mvykg37kqxmcb58piz21gsk";
   };
 
   nativeBuildInputs = [
@@ -93,7 +91,8 @@ in stdenv.mkDerivation rec {
     evince
     isocodes
     python3.pkgs.pygobject3
-    gtksourceviewmm4
+    gtksourceview
+    gtksourceviewmm
     postgresql # for pg_config
   ];
 
