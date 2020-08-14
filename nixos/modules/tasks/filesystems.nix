@@ -7,8 +7,9 @@ let
 
   addCheckDesc = desc: elemType: check: types.addCheck elemType check
     // { description = "${elemType.description} (with check: ${desc})"; };
-  nonEmptyStr = addCheckDesc "non-empty" types.str
-    (x: x != "" && ! (all (c: c == " " || c == "\t") (stringToCharacters x)));
+
+  isNonEmpty = s: (builtins.match "[ \t\n]*" s) == null;
+  nonEmptyStr = addCheckDesc "non-empty" types.str isNonEmpty;
 
   fileSystems' = toposort fsBefore (attrValues config.fileSystems);
 
@@ -28,10 +29,10 @@ let
   coreFileSystemOpts = { name, config, ... }: {
 
     options = {
-
       mountPoint = mkOption {
         example = "/mnt/usb";
-        type = nonEmptyStr;
+        type = addCheckDesc "non-empty without trailing slash" types.str
+          (s: isNonEmpty s && (builtins.match ".+/" s) == null);
         description = "Location of the mounted the file system.";
       };
 
