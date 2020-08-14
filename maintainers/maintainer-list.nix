@@ -7928,6 +7928,12 @@
     githubId = 332289;
     name = "Rafał Łasocha";
   };
+  syberant = {
+    email = "sybrand@neuralcoding.com";
+    github = "syberant";
+    githubId = 20063502;
+    name = "Sybrand Aarnoutse";
+  };
   symphorien = {
     email = "symphorien_nixpkgs@xlumurb.eu";
     github = "symphorien";
