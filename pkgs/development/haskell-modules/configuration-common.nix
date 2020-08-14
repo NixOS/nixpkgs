@@ -1335,7 +1335,7 @@ self: super: {
           '';
         })).override {
           # we are faster than stack here
-          hie-bios = dontCheck self.hie-bios_0_6_1;
+          hie-bios = dontCheck self.hie-bios_0_6_2;
           lsp-test = dontCheck self.lsp-test_0_11_0_4;
         });
 
@@ -1355,7 +1355,7 @@ self: super: {
       # use a fork of ghcide
       ghcide = self.hls-ghcide;
       # we are faster than stack here
-      hie-bios = dontCheck self.hie-bios_0_6_1;
+      hie-bios = dontCheck self.hie-bios_0_6_2;
       lsp-test = dontCheck self.lsp-test_0_11_0_4;
     };
 
