@@ -2777,6 +2777,8 @@ in {
 
   dask-xgboost = callPackage ../development/python-modules/dask-xgboost { };
 
+  dask-yarn = callPackage ../development/python-modules/dask-yarn { };
+
   datrie = callPackage ../development/python-modules/datrie { };
 
   heapdict = callPackage ../development/python-modules/heapdict { };
