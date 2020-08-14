@@ -31,7 +31,8 @@ buildPythonPackage rec {
     "test_integration"
   ];
 
-  disabled = isPy3k; # Not yet compatible with latest Sphinx.
+  doCheck = !isPy3k; # Not yet compatible with latest Sphinx.
+  pythonImportsCheck = [ "recommonmark" ];
 
   meta = {
     description = "A docutils-compatibility bridge to CommonMark";
