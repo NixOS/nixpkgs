@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, brotli }:
+{ lib, buildGoModule, fetchFromGitHub, brotli }:
 
 buildGoModule rec {
   pname = "wal-g";
@@ -23,10 +23,10 @@ buildGoModule rec {
     mv $out/bin/pg $out/bin/wal-g
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/wal-g/wal-g";
-    license = stdenv.lib.licenses.asl20;
+    license = licenses.asl20;
     description = "An archival restoration tool for PostgreSQL";
-    maintainers = [ stdenv.lib.maintainers.ocharles ];
+    maintainers = with maintainers; [ ocharles marsam ];
   };
 }
