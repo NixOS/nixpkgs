@@ -6690,7 +6690,7 @@ in
     quazip = quazip_qt4;
   };
 
-  screenkey = python2Packages.callPackage ../applications/video/screenkey { };
+  screenkey = callPackage ../applications/video/screenkey { };
 
   quazip_qt4 = libsForQt5.quazip.override {
     qtbase = qt4;
