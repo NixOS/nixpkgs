@@ -158,11 +158,6 @@ let
       patchelf \
         --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
         $out/bin/factorio
-
-      mkdir -p $out/share/icons/hicolor/{64x64,128x128}/apps
-      cp -a data/core/graphics/factorio-icon.png $out/share/icons/hicolor/64x64/apps/factorio.png
-      cp -a data/core/graphics/factorio-icon@2x.png $out/share/icons/hicolor/128x128/apps/factorio.png
-      ln -s ${desktopItem}/share/applications $out/share/
     '';
 
     meta = {
@@ -239,6 +234,11 @@ let
         ${updateConfigSh}
         EOF
         ) $out/share/factorio/update-config.sh
+
+        mkdir -p $out/share/icons/hicolor/{64x64,128x128}/apps
+        cp -a data/core/graphics/factorio-icon.png $out/share/icons/hicolor/64x64/apps/factorio.png
+        cp -a data/core/graphics/factorio-icon@2x.png $out/share/icons/hicolor/128x128/apps/factorio.png
+        ln -s ${desktopItem}/share/applications $out/share/
       '';
     };
     alpha = demo // {
