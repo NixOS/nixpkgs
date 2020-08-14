@@ -163,6 +163,7 @@ mapAliases ({
   gnome-themes-standard = gnome-themes-extra; # added 2018-03-14
   gnome_doc_utils = gnome-doc-utils; # added 2018-02-25
   gnome_themes_standard = gnome-themes-standard; # added 2018-02-25
+  gnunet_git = throw "gnunet_git was removed due to gnunet becoming stable"; # added 2019-05-27
   gnuradio-nacl = gr-nacl; # added 2019-05-27
   gnuradio-gsm = gr-gsm; # added 2019-05-27
   gnuradio-ais = gr-ais; # added 2019-05-27
