@@ -2560,6 +2560,8 @@ extra-packages:
   - deepseq == 1.3.0.1                  # required to build Cabal with GHC 6.12.3
   - dhall == 1.29.0                     # required for spago 0.14.0.
   - doctemplates == 0.8                 # required by pandoc-2.9.x
+  - gi-gdk == 3.0.23                    # required for gi-pango 1.0.23
+  - gi-gtk == 3.0.35                    # required for gi-pango 1.0.23
   - generic-deriving == 1.10.5.*        # new versions don't compile with GHC 7.10.x
   - ghc-check == 0.3.0.1                # only version compatible with ghcide 0.2.0
   - ghc-tcplugins-extra ==0.3.2         # required for polysemy-plugin 0.2.5.0
@@ -5317,7 +5319,6 @@ broken-packages:
   - gi-gtkosxapplication
   - gi-gtksource
   - gi-handy
-  - gi-harfbuzz
   - gi-ibus
   - gi-notify
   - gi-ostree
