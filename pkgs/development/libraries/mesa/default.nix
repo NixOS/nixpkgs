@@ -60,7 +60,21 @@ stdenv.mkDerivation {
     ./opencl-install-dir.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
     ./link-radv-with-ld_args_build_id.patch
-  ] # do not prefix user provided dri-drivers-path
+  ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
+      # Fix `-Werror=int-conversion` pthread warnings on musl.
+      # TODO: Remove when https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/6121 is merged and available
+      (fetchpatch {
+        name = "nine_debug-Make-tid-more-type-correct";
+        # Patch adjusted for version `20.1`, before the big mesa dirs change
+        # `gallium: rename 'state tracker' to 'frontend'`.
+        # Patch for versions after that change is at
+        #     https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e3b4745ef16d0e833300ad67044.patch
+        url = "https://gitlab.freedesktop.org/nh2/mesa/commit/3385c49684375f1153a52ed7ccda3f5135268a41.patch";
+        sha256 = "1ci694sqjll44c9g2md4krhk6qlvq51r7ad5rnnfdnf3l8ys0i50";
+      })
+    ]
+    # do not prefix user provided dri-drivers-path
     ++ lib.optional (lib.versionOlder version "19.0.0") (fetchpatch {
       url = "https://gitlab.freedesktop.org/mesa/mesa/commit/f6556ec7d126b31da37c08d7cb657250505e01a0.patch";
       sha256 = "0z6phi8hbrbb32kkp1js7ggzviq7faz1ria36wi4jbc4in2392d9";

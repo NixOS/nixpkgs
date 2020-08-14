@@ -2,17 +2,17 @@ GEM
   remote: https://rubygems.org/
   specs:
     backports (3.18.1)
-    concurrent-ruby (1.1.6)
+    concurrent-ruby (1.1.7)
     crass (1.0.6)
     execjs (2.7.0)
     ffi (1.13.1)
     gemojione (4.3.3)
       json
     github-markup (3.0.4)
-    gollum (5.1)
+    gollum (5.1.1)
       gemojione (~> 4.1)
       gollum-lib (~> 5.0)
-      kramdown (~> 2.1.0)
+      kramdown (~> 2.3)
       kramdown-parser-gfm (~> 1.0.0)
       mustache (>= 0.99.5, < 1.0.0)
       octicons (~> 8.5)
@@ -38,7 +38,8 @@ GEM
       mime-types (>= 1.15)
       rugged (~> 0.99)
     json (2.3.1)
-    kramdown (2.1.0)
+    kramdown (2.3.0)
+      rexml
     kramdown-parser-gfm (1.0.1)
       kramdown (~> 2.0)
     loofah (2.6.0)
@@ -63,7 +64,7 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     rexml (3.2.4)
-    rouge (3.21.0)
+    rouge (3.22.0)
     rss (0.2.9)
       rexml
     ruby2_keywords (0.0.2)
