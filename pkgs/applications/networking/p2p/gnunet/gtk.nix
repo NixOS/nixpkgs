@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gnunet-gtk";
-  inherit (gnunet) version;
+  version = "0.13.1";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/${pname}-${version}.tar.gz";
