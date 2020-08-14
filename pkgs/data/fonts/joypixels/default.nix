@@ -13,7 +13,7 @@ let inherit (stdenv.hostPlatform.parsed) kernel;
         name = "joypixels-apple-color-emoji.ttc";
       };
     }.${kernel.name} or rec {
-        systemTag = "nix-os";
+        systemTag = "nixos";
         capitalized = "NixOS";
         ext = "ttf";
         fontFile = "joypixels-android.ttf";
