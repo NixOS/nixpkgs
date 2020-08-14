@@ -12,6 +12,8 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook colorama ];
 
+  pytestFlagsArray = stdenv.lib.optionals stdenv.isDarwin [ "--ignore=tests/test_multiprocessing.py" ];
+
   disabledTests = [ "test_time_rotation_reopening" "test_file_buffering" ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ "test_rotation_and_retention" "test_rotation_and_retention_timed_file" "test_renaming" "test_await_complete_inheritance" ];
 
