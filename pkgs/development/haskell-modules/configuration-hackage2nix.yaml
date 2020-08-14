@@ -2995,6 +2995,7 @@ broken-packages:
   - AMI
   - ampersand
   - amqp-conduit
+  - amqp-streamly
   - analyze
   - analyze-client
   - anansi-pandoc
@@ -3910,6 +3911,7 @@ broken-packages:
   - collections-api
   - collections-base-instances
   - colonnade
+  - Color
   - color-counter
   - colorless
   - colorless-http-client
@@ -4086,6 +4088,7 @@ broken-packages:
   - CoreDump
   - CoreErlang
   - CoreFoundation
+  - corenlp-parser
   - Coroutine
   - coroutine-enumerator
   - coroutine-iteratee
@@ -4166,6 +4169,12 @@ broken-packages:
   - crystalfontz
   - cse-ghc-plugin
   - csg
+  - csound-catalog
+  - csound-expression
+  - csound-expression-dynamic
+  - csound-expression-opcodes
+  - csound-expression-typed
+  - csound-sampler
   - CSPM-cspm
   - CSPM-FiringRules
   - CSPM-Frontend
@@ -4194,6 +4203,7 @@ broken-packages:
   - curve25519
   - curves
   - custom-prelude
+  - cut-the-crap
   - CV
   - cv-combinators
   - cypher
@@ -4244,6 +4254,7 @@ broken-packages:
   - data-filepath
   - data-fin
   - data-fin-simple
+  - data-fix-cse
   - data-flagset
   - data-forest
   - data-ivar
@@ -4398,6 +4409,7 @@ broken-packages:
   - dgim
   - dgs
   - dhall-check
+  - dhall-docs
   - dhall-fly
   - dhall-nix
   - dhall-text
@@ -4715,6 +4727,7 @@ broken-packages:
   - EnumMap
   - enummapmap
   - enummapset-th
+  - env-extra
   - env-parser
   - envstatus
   - epanet-haskell
@@ -5306,6 +5319,9 @@ broken-packages:
   - ghcprofview
   - ght
   - gi-cairo-again
+  - gi-dbusmenugtk3
+  - gi-gdk
+  - gi-gdkx11
   - gi-ggit
   - gi-girepository
   - gi-graphene
@@ -5316,12 +5332,17 @@ broken-packages:
   - gi-gstpbutils
   - gi-gsttag
   - gi-gstvideo
+  - gi-gtk
+  - gi-gtk-declarative
+  - gi-gtk-declarative-app-simple
+  - gi-gtk-hs
   - gi-gtkosxapplication
   - gi-gtksource
   - gi-handy
   - gi-ibus
   - gi-notify
   - gi-ostree
+  - gi-pango
   - gi-pangocairo
   - gi-poppler
   - gi-secret
@@ -5541,6 +5562,8 @@ broken-packages:
   - gtfs
   - gtfs-realtime
   - gtk-serialized-event
+  - gtk-sni-tray
+  - gtk-strut
   - gtk-toy
   - gtk2hs-hello
   - gtk2hs-rpn
@@ -6782,6 +6805,7 @@ broken-packages:
   - inilist
   - initialize
   - inject-function
+  - inline-asm
   - inline-java
   - inline-r
   - inserts
@@ -7572,6 +7596,9 @@ broken-packages:
   - marxup
   - masakazu-bot
   - MASMGen
+  - massiv
+  - massiv-io
+  - massiv-test
   - master-plan
   - matchable
   - matchable-th
@@ -8194,6 +8221,7 @@ broken-packages:
   - om-actor
   - om-elm
   - om-fail
+  - om-http-logging
   - omaketex
   - ombra
   - Omega
@@ -8490,6 +8518,7 @@ broken-packages:
   - pg-store
   - pg-transact
   - pgdl
+  - pgf2
   - pgsql-simple
   - pgstream
   - phasechange
@@ -8576,6 +8605,7 @@ broken-packages:
   - plat
   - platinum-parsing
   - PlayingCards
+  - plex
   - plist
   - plist-buddy
   - plocketed
@@ -9343,6 +9373,7 @@ broken-packages:
   - scgi
   - schedevr
   - schedule-planner
+  - scheduler
   - schedyield
   - schema
   - schemas
@@ -9999,6 +10030,8 @@ broken-packages:
   - streamproc
   - strelka
   - strict-data
+  - strict-lens
+  - strict-optics
   - strict-tuple-lens
   - StrictBench
   - StrictCheck
@@ -10077,6 +10110,7 @@ broken-packages:
   - swearjure
   - swf
   - swift-lda
+  - swiss-ephemeris
   - sws
   - syb-extras
   - syb-with-class-instances-text
@@ -10135,6 +10169,7 @@ broken-packages:
   - Tablify
   - tabloid
   - tabs
+  - taffybar
   - tag-bits
   - tag-stream
   - tagged-exception-core
@@ -10245,6 +10280,7 @@ broken-packages:
   - test-simple
   - testbench
   - testCom
+  - testcontainers
   - TestExplode
   - testloop
   - testpack
