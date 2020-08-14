@@ -1452,4 +1452,7 @@ self: super: {
     };
   };
 
+  # https://github.com/bos/statistics/issues/170
+  statistics = dontCheck super.statistics;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
