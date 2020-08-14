@@ -155,9 +155,9 @@ cassowary = buildLuarocksPackage {
   propagatedBuildInputs = [ lua penlight ];
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/simoncozens/cassowary.lua";
-    description = "The cassowary constraint solver.";
-    maintainers = with maintainers; [ marsam ];
+    homepage = "https://github.com/sile-typesetter/cassowary.lua";
+    description = "The cassowary constraint solver";
+    maintainers = with maintainers; [ marsam alerque ];
     license.fullName = "Apache 2";
   };
 };
