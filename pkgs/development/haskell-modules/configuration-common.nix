@@ -69,7 +69,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "vwKcY7Yk+R0YkaXjJ7xKyQWGjySTUPox0xIaurbQZk0=";
+      sha256 = "1d24080xh7gl197i0y5bkn3j94hvh8zqyg9gfcnx2qdlxfca1knb";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -1335,7 +1335,7 @@ self: super: {
           '';
         })).override {
           # we are faster than stack here
-          hie-bios = dontCheck self.hie-bios_0_6_1;
+          hie-bios = dontCheck self.hie-bios_0_6_2;
           lsp-test = dontCheck self.lsp-test_0_11_0_4;
         });
 
@@ -1355,21 +1355,35 @@ self: super: {
       # use a fork of ghcide
       ghcide = self.hls-ghcide;
       # we are faster than stack here
-      hie-bios = dontCheck self.hie-bios_0_6_1;
+      hie-bios = dontCheck self.hie-bios_0_6_2;
       lsp-test = dontCheck self.lsp-test_0_11_0_4;
     };
 
   # https://github.com/kowainik/policeman/issues/57
   policeman = doJailbreak super.policeman;
 
-  # 2020-06-29: These three packages have bumped their dependencies for haskell-gi and haskell-gi-base beyond stack-lts.
-  # Choosing a jailbreak, because a version override would rebuild most of the glibverse and the packages still build with the older version.
-  gi-javascriptcore =
-    # Remove these jailbreaks, when assert fails.
-    assert (pkgs.lib.versionOlder super.haskell-gi-base.version "0.24");
-    doJailbreak super.gi-javascriptcore;
-  gi-soup = doJailbreak super.gi-soup;
-  gi-webkit2 = doJailbreak super.gi-webkit2;
+  # 2020-08-14: gi-pango from stackage is to old for the C libs it links against in nixpkgs.
+  # That's why we need to bump a ton of dependency versions to unbreak them.
+  gi-pango = assert super.gi-pango.version == "1.0.22"; self.gi-pango_1_0_23;
+  haskell-gi-base = assert super.haskell-gi-base.version == "0.23.0"; addBuildDepends (self.haskell-gi-base_0_24_2) [ pkgs.gobject-introspection ];
+  haskell-gi = assert super.haskell-gi.version == "0.23.1"; self.haskell-gi_0_24_4;
+  gi-cairo = assert super.gi-cairo.version == "1.0.23"; self.gi-cairo_1_0_24;
+  gi-glib = assert super.gi-glib.version == "2.0.23"; self.gi-glib_2_0_24;
+  gi-gobject = assert super.gi-gobject.version == "2.0.22"; self.gi-gobject_2_0_24;
+  gi-atk = assert super.gi-atk.version == "2.0.21"; self.gi-atk_2_0_22;
+  gi-gio = assert super.gi-gio.version == "2.0.26"; self.gi-gio_2_0_27;
+  gi-gdk = assert super.gi-gdk.version == "3.0.22"; self.gi-gdk_3_0_23;
+  gi-gtk = assert super.gi-gtk.version == "3.0.33"; self.gi-gtk_3_0_35;
+  gi-gdkpixbuf = assert super.gi-gdkpixbuf.version == "2.0.23"; self.gi-gdkpixbuf_2_0_24;
+
+  # 2020-08-14: Needs some manual patching to be compatible with haskell-gi-base 0.24
+  # Created upstream PR @ https://github.com/ghcjs/jsaddle/pull/119
+  jsaddle-webkit2gtk = appendPatch super.jsaddle-webkit2gtk (pkgs.fetchpatch {
+    url = "https://github.com/ghcjs/jsaddle/compare/9727365...09f44aa.patch";
+    sha256 = "1bkwgmc04544haycb69fqsd97lg24jc7hc1yrin2sgr4l7hz04pf";
+    stripLen = 2;
+    extraPrefix = "";
+  });
 
   # Missing -Iinclude parameter to doc-tests (pull has been accepted, so should be resolved when 0.5.3 released)
   # https://github.com/lehins/massiv/pull/104
@@ -1451,5 +1465,8 @@ self: super: {
       haskeline = self.haskeline_0_8_0_0;
     };
   };
+
+  # https://github.com/bos/statistics/issues/170
+  statistics = dontCheck super.statistics;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
