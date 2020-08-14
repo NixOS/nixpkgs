@@ -24,18 +24,17 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dsqlite=enabled"
     "-Dmagic=enabled"
-    # "-Dseccomp=enabled"
     "-Dmanpages=enabled"
     "-Dconvert-icon=enabled"
     "-Dsynctex=enabled"
     # Make sure tests are enabled for doCheck
     "-Dtests=enabled"
-  ];
+  ] ++ optional (!stdenv.isLinux) "-Dseccomp=disabled";
 
   nativeBuildInputs = [
     meson ninja pkgconfig desktop-file-utils python3.pkgs.sphinx
-    gettext wrapGAppsHook libxml2 check
-  ] ++ optional stdenv.isLinux appstream-glib;
+    gettext wrapGAppsHook libxml2 check appstream-glib
+  ];
 
   buildInputs = [
     gtk girara libintl sqlite glib file librsvg
