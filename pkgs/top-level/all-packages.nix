@@ -2296,6 +2296,8 @@ in
 
   csvkit = callPackage ../tools/text/csvkit { };
 
+  inherit (ocamlPackages) csvtool;
+
   csv2latex = callPackage ../tools/misc/csv2latex { };
 
   csvs-to-sqlite = with python3Packages; toPythonApplication csvs-to-sqlite;
