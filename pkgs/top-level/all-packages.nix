@@ -24003,7 +24003,7 @@ in
 
   zcash = callPackage ../applications/blockchains/zcash { };
 
-  parity = callPackage ../applications/blockchains/parity { };
+  openethereum = callPackage ../applications/blockchains/openethereum { };
 
   parity-ui = callPackage ../applications/blockchains/parity-ui { };
 

@@ -9,17 +9,21 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "parity";
-  version = "3.0.0";
+  pname = "openethereum";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
-    owner = "paritytech";
-    repo = "parity-ethereum";
+    owner = "openethereum";
+    repo = "openethereum";
     rev = "v${version}";
-    sha256 = "124km8c2d7877yzd885wzlcl3gky15isx0z2l1qg1q3cqdsb5mjf";
+    sha256 = "08dkcrga1x18csh6pw6f54x5xwijppyjhg46cf4p452xc1l3a6ir";
   };
 
-  cargoSha256 = "0m4pms7agfyqk6gz6fwxdl8jmcyhphhzh3x4vykbi6186y7a8ihq";
+  cargoSha256 = "1xliragihwjfc5qmfm0ng519bw8a28m1w1yqcl9mpk8zywiybaah";
+
+  verifyCargoDeps = true;
+
+  cargoPatches = [ ./lock.patch ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
   nativeBuildInputs = [
@@ -38,7 +42,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Fast, light, robust Ethereum implementation";
-    homepage = "http://parity.io";
+    homepage = "http://parity.io/ethereum";
     license = licenses.gpl3;
     maintainers = with maintainers; [ akru xrelkd ];
     platforms = platforms.linux;
