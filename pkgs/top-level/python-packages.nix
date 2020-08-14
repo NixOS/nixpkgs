@@ -7530,6 +7530,8 @@ in {
     };
   };
 
+  wxPython_4_1 = callPackage ../development/python-modules/wxPython/4.1.nix { };
+
   wxPython = self.wxPython30;
 
   x11_hash = callPackage ../development/python-modules/x11_hash { };
