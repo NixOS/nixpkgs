@@ -4284,6 +4284,18 @@ let
     meta.homepage = "https://github.com/t9md/vim-choosewin/";
   };
 
+  vim-clang-format = buildVimPluginFrom2Nix {
+    pname = "vim-clang-format";
+    version = "2019-05-15";
+    src = fetchFromGitHub {
+      owner = "rhysd";
+      repo = "vim-clang-format";
+      rev = "95593b67723f23979cd7344ecfd049f2f917830f";
+      sha256 = "0n0k13k63l8n0ixs4zrhlz923apvdp2mldadxqlhmvsvncmlqmpn";
+    };
+    meta.homepage = "https://github.com/rhysd/vim-clang-format/";
+  };
+
   vim-clojure-highlight = buildVimPluginFrom2Nix {
     pname = "vim-clojure-highlight";
     version = "2015-07-05";
