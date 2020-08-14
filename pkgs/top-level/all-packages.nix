@@ -24010,8 +24010,6 @@ in
 
   masari = callPackage ../applications/blockchains/masari.nix { boost = boost165; };
 
-  mist = callPackage ../applications/blockchains/mist.nix { };
-
   nano-wallet = libsForQt5.callPackage ../applications/blockchains/nano-wallet { };
 
   namecoin  = callPackage ../applications/blockchains/namecoin.nix  { withGui = true; };

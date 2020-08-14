@@ -722,4 +722,12 @@ mapAliases ({
   /* Cleanup before 21.03 */
   riot-desktop = throw "riot-desktop is now element-desktop!";
   riot-web = throw "riot-web is now element-web";
+
+  # added 2020-08-14
+  mist = throw ''
+    Mist have been deprecated and not maintained anymore.
+
+    See the announcement (https://medium.com/@avsa/sunsetting-mist-da21c8e943d2) and
+    view the migration guide (https://medium.com/@omgwtfmarc/mist-migration-patterns-6bcf066ac383).
+  '';
 })
