@@ -19685,8 +19685,6 @@ in
 
   dr14_tmeter = callPackage ../applications/audio/dr14_tmeter { };
 
-  draftsight = callPackage ../applications/graphics/draftsight { };
-
   dragonfly-reverb = callPackage ../applications/audio/dragonfly-reverb { };
 
   drawing = callPackage ../applications/graphics/drawing { };
