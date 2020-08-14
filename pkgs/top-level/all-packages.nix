@@ -18210,6 +18210,8 @@ in
 
   ### DATA
 
+  buildFontPackage = callPackage ../data/fonts/generic { };
+
   _3270font = callPackage ../data/fonts/3270font { };
 
   adapta-backgrounds = callPackage ../data/misc/adapta-backgrounds { };
