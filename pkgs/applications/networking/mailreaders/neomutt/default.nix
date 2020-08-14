@@ -1,18 +1,18 @@
 { stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which, writeScript
 , ncurses, perl , cyrus_sasl, gss, gpgme, kerberos, libidn, libxml2, notmuch, openssl
 , lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, elinks, mailcap, runtimeShell, sqlite, zlib
-, glibcLocales, fetchpatch
+, glibcLocales
 }:
 
 stdenv.mkDerivation rec {
-  version = "20200807";
+  version = "20200814";
   pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = version;
-    sha256 = "0bj81bl54jx1c9fnyrplwvgvwq8l0ldqd58jjb4haw2rlzfj2a8s";
+    sha256 = "00i2xbadw7rq2b30yjla54m0df4jbh22g6phby41albw2wc2hn72";
   };
 
   buildInputs = [
@@ -26,14 +26,6 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
-
-  patches = [
-    # fixes segfault on startup
-    (fetchpatch {
-      url = "https://github.com/neomutt/neomutt/commit/887428a38f845f9eaca80c3e05e0c2aedb137669.patch";
-      sha256 = "1yqpj0xaryxmsvj6hbfksy50i9alqxidifqf3daqgg4vypi8s9b9";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace contrib/smime_keys \
