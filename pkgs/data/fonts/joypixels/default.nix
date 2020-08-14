@@ -42,7 +42,15 @@ assert !acceptLicense -> throw ''
     - ${joypixels-license-appendix.fullName} [2]
 
   You can express acceptance by setting acceptLicense to true in your
-  configuration (configuration.nix or config.nix):
+  configuration. Note that this is not a free license so it requires allowing
+  unfree licenses.
+
+  configuration.nix:
+    nixpkgs.config.allowUnfree = true;
+    nixpkgs.config.joypixels.acceptLicense = true;
+  
+  config.nix:
+    allowUnfree = true;
     joypixels.acceptLicense = true;
 
   [1]: ${joypixels-free-license.url}
