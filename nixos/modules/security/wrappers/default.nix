@@ -160,8 +160,11 @@ in
   config = {
 
     security.wrappers = {
+      # These are mount related wrappers that require the +s permission.
       fusermount.source = "${pkgs.fuse}/bin/fusermount";
       fusermount3.source = "${pkgs.fuse3}/bin/fusermount3";
+      mount.source = "${lib.getBin pkgs.utillinux}/bin/mount";
+      umount.source = "${lib.getBin pkgs.utillinux}/bin/umount";
     };
 
     boot.specialFileSystems.${parentWrapperDir} = {
