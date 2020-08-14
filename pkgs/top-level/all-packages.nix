@@ -20125,6 +20125,8 @@ in
 
   foo-yc20 = callPackage ../applications/audio/foo-yc20 { };
 
+  foot = callPackage ../applications/misc/foot { };
+
   fossil = callPackage ../applications/version-management/fossil { };
 
   freebayes = callPackage ../applications/science/biology/freebayes { };
