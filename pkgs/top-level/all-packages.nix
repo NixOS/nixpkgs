@@ -19082,6 +19082,8 @@ in
     patches = config."2bwm".patches or [];
   };
 
+  _3dslicerBinary = callPackage ../applications/misc/3dslicer-binary { };
+
   a2jmidid = callPackage ../applications/audio/a2jmidid { };
 
   aacgain = callPackage ../applications/audio/aacgain { };
