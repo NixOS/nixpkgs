@@ -5472,6 +5472,8 @@ in
 
   mycli = callPackage ../tools/admin/mycli { };
 
+  mycrypto = callPackage ../applications/blockchains/mycrypto { };
+
   mydumper = callPackage ../tools/backup/mydumper { };
 
   mysql2pgsql = callPackage ../tools/misc/mysql2pgsql { };
