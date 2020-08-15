@@ -1,18 +1,19 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, isPy3k
+, cheroot
 }:
 
 buildPythonPackage rec {
-  version = "0.51";
+  version = "0.61";
   pname = "web.py";
-  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b50343941360984d37270186453bb897d13630028a739394fedf38f9cde2fd07";
+    sha256 = "1fycbq5v16sdcp3yw9az68fqs63mxr3klmf70gkx6v08xcd0iaf7";
   };
+
+  propagatedBuildInputs = [ cheroot ];
 
   meta = with stdenv.lib; {
     description = "Makes web apps";
