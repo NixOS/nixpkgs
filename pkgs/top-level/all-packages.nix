@@ -16468,6 +16468,10 @@ in
 
   influxdb = callPackage ../servers/nosql/influxdb { };
 
+  mysql56 = callPackage ../servers/sql/mysql/5.6.x.nix {
+    stdenv = overrideCC stdenv gcc6;
+  };
+
   mysql57 = callPackage ../servers/sql/mysql/5.7.x.nix {
     inherit (darwin) cctools developer_cmds;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
