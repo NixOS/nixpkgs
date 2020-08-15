@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "simple markup - markdown like syntax";
     homepage = "https://github.com/Gottox/smu";
     license = licenses.mit;
-    maintainers = with maintainers; [ geistesk ];
+    maintainers = with maintainers; [ oxzi ];
   };
 }
 
