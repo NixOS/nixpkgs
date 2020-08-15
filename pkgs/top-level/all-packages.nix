@@ -5213,6 +5213,9 @@ in
       goa = callPackage ../applications/networking/mailreaders/mailnag/goa-plugin.nix { };
     };
   };
+  mailnagWithPlugins = mailnag.withPlugins(
+    builtins.attrValues mailnag.availablePlugins
+  );
 
   mailsend = callPackage ../tools/networking/mailsend { };
 
