@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   postInstall = ''
     ln -s $out/bin/wish* $out/bin/wish
     cp ../{unix,generic}/*.h $out/include
-    ln -s $out/lib/libtk${tcl.release}.so $out/lib/libtk.so
+    ln -s $out/lib/libtk${tcl.release}${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libtk${stdenv.hostPlatform.extensions.sharedLibrary}
   ''
   + stdenv.lib.optionalString (stdenv.isDarwin) ''
     cp ../macosx/*.h $out/include
