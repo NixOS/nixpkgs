@@ -1,8 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, nose }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, nose }:
 
 buildPythonPackage rec {
   pname = "yappi";
   version = "1.2.5";
+  disabled = isPy27; # invalid syntax
 
   src = fetchPypi {
     inherit pname version;
