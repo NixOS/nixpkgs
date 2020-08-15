@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "azure-datalake-store";
-  version = "0.0.48";
+  version = "0.0.49";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d27c335783d4add00b3a5f709341e4a8009857440209e15a739a9a96b52386f7";
+    sha256 = "3fcede6255cc9cd083d498c3a399b422f35f804c561bb369a7150ff1f2f07da9";
   };
 
   propagatedBuildInputs = [
