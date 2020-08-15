@@ -1,4 +1,12 @@
-{ stdenv, fetchFromGitHub, python, fixDarwinDylibNames }:
+{ stdenv, fetchFromGitHub, python, fixDarwinDylibNames
+, javaBindings ? false
+, pythonBindings ? true
+, jdk ? null
+}:
+
+assert javaBindings -> jdk != null;
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "z3";
@@ -11,22 +19,23 @@ stdenv.mkDerivation rec {
     sha256 = "0hprcdwhhyjigmhhk6514m71bnmvqci9r8gglrqilgx424r6ff7q";
   };
 
-  buildInputs = [ python fixDarwinDylibNames ];
+  buildInputs = [ python fixDarwinDylibNames ] ++ optional javaBindings jdk;
   propagatedBuildInputs = [ python.pkgs.setuptools ];
   enableParallelBuilding = true;
 
-  configurePhase = ''
-    ${python.interpreter} scripts/mk_make.py --prefix=$out --python --pypkgdir=$out/${python.sitePackages}
-    cd build
-  '';
+  configurePhase = concatStringsSep " " (
+    [ "${python.interpreter} scripts/mk_make.py --prefix=$out" ]
+    ++ optional javaBindings   "--java"
+    ++ optional pythonBindings "--python --pypkgdir=$out/${python.sitePackages}"
+  ) + "\n" + "cd build";
 
   postInstall = ''
-    mkdir -p $dev $lib $python/lib
-
-    mv $out/lib/python*  $python/lib/
-    mv $out/lib          $lib/lib
-    mv $out/include      $dev/include
-
+    mkdir -p $dev $lib
+    mv $out/lib     $lib/lib
+    mv $out/include $dev/include
+  '' + optionalString pythonBindings ''
+    mkdir -p $python/lib
+    mv $lib/lib/python* $python/lib/
     ln -sf $lib/lib/libz3${stdenv.hostPlatform.extensions.sharedLibrary} $python/${python.sitePackages}/z3/lib/libz3${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
 
