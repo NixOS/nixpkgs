@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "tllist";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchgit {
     url = "https://codeberg.org/dnkl/tllist.git";
     rev = "${version}";
-    sha256 = "0xifbbfg1kn281jybdc6ns5kzz0daha4hf47bd0yc0wcmvcfbgmp";
+    sha256 = "095wly66z9n2r6h318rackgl4g1w9l1vj96367ngcw7rpva9yppl";
   };
 
   nativeBuildInputs = [
