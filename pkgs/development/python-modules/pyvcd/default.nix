@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , setuptools_scm
 , six
 , pytest
@@ -9,6 +10,7 @@
 buildPythonPackage rec {
   version = "0.2.3";
   pname = "pyvcd";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
