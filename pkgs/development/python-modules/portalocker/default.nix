@@ -6,23 +6,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.7.0";
+  version = "2.0.0";
   pname = "portalocker";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1p32v16va780mjjdbyp3v702aqg5s618khlila7bdyynis1n84q9";
+    sha256 = "1r165ll4gnsbgvf9cgdkbg04526aqwllwa7hxlkl34dah7npwj0l";
   };
-
-  patches = [
-    # remove pytest-flakes from test dependencies
-    # merged into master, remove > 1.7.0 release
-    (fetchpatch {
-      url = "https://github.com/WoLpH/portalocker/commit/42e4c0a16bbc987c7e33b5cbc7676a63a164ceb5.patch";
-      sha256 = "01mlr41nhh7mh3qhqy5fhp3br4nps745iy4ns9fjcnm5xhabg5rr";
-      excludes = [ "pytest.ini" ];
-    })
-  ];
 
   checkInputs = [
     sphinx
