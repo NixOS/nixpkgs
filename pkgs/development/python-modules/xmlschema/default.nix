@@ -5,14 +5,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.2.2";
+  version = "1.2.3";
   pname = "xmlschema";
 
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "xmlschema";
     rev = "v${version}";
-    sha256 = "04rlcm5777cv7aw9mf0z1xrj8cn2rljfzs9i2za6sdk6h1ngpj3q";
+    sha256 = "1lasi84d5v66xpd40fbj3lqwc5hfh3izxrr2wbfdbj4a3m996zc9";
   };
 
   propagatedBuildInputs = [ elementpath ];
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "elementpath~=1.4.0" "elementpath~=1.4"
+      --replace "elementpath~=2.0.0" "elementpath~=2.0"
   '';
 
   # Ignore broken fixtures, and tests for files which don't exist.
