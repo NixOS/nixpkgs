@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , ecdsa
 , pysha3
 }:
@@ -8,6 +9,7 @@
 buildPythonPackage rec {
   pname = "bip_utils";
   version = "1.0.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
