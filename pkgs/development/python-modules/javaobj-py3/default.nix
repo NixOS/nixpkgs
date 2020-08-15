@@ -1,11 +1,13 @@
 { buildPythonPackage
 , fetchPypi
+, isPy27
 , lib
 }:
 
 buildPythonPackage rec {
   pname = "javaobj-py3";
   version = "0.4.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
