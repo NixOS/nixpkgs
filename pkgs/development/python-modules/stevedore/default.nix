@@ -1,8 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, pbr, setuptools, six }:
+{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, pbr, setuptools, six }:
 
 buildPythonPackage rec {
   pname = "stevedore";
   version = "2.0.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
