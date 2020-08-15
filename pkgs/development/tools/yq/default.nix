@@ -1,17 +1,38 @@
-{ lib, buildPythonApplication, fetchPypi, pyyaml, xmltodict, jq }:
+{ lib
+, buildPythonApplication
+, fetchPypi
+, argcomplete
+, pyyaml
+, xmltodict
+# Test inputs
+, coverage
+, flake8
+, jq
+, pytest
+, toml
+}:
 
 buildPythonApplication rec {
   pname = "yq";
-  version = "2.8.1";
+  version = "2.10.1";
 
-  propagatedBuildInputs = [ pyyaml xmltodict jq ];
+  propagatedBuildInputs = [ pyyaml xmltodict jq argcomplete ];
 
-  # ValueError: underlying buffer has been detached
-  doCheck = false;
+  doCheck = true;
+
+  checkInputs = [
+   pytest
+   coverage
+   flake8
+   jq
+   toml
+  ];
+
+  checkPhase = "pytest ./test/test.py";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "042p3s011635rbjax9wvwjdrb1kyzw38a6qn59b0j0k7krz6rlr4";
+    sha256 = "1h6nnkp53mm4spwy8nyxwvh9j6p4lxvf20j4bgjskhnhaw3jl9gn";
   };
 
   meta = with lib; {
