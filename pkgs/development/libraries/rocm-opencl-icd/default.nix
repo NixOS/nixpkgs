@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-opencl-icd";
-  version = "3.5.0";
+  version = rocm-opencl-runtime.version;
 
   dontUnpack = true;
 
