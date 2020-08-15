@@ -17,8 +17,10 @@ buildPythonPackage {
   };
 
   # Yoink the Z3 dependency name, because our Z3 package doesn't provide it.
+  # Change the dictionaries version from ==0.0.1 to be any version.
   postPatch = ''
     sed -i -e '/z3-solver/d' requirements.txt
+    sed -i -e '/dictionaries/c\dictionaries' requirements.txt
   '';
 
   # Tests are not correctly set up in the source tree.
