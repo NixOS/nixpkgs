@@ -101,6 +101,7 @@ in
   ferm = handleTest ./ferm.nix {};
   firefox = handleTest ./firefox.nix {};
   firefox-esr = handleTest ./firefox.nix { esr = true; };
+  firejail = handleTest ./firejail.nix {};
   firewall = handleTest ./firewall.nix {};
   fish = handleTest ./fish.nix {};
   flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
@@ -268,6 +269,7 @@ in
   pgjwt = handleTest ./pgjwt.nix {};
   pgmanage = handleTest ./pgmanage.nix {};
   php = handleTest ./php {};
+  pinnwand = handleTest ./pinnwand.nix {};
   plasma5 = handleTest ./plasma5.nix {};
   plotinus = handleTest ./plotinus.nix {};
   podman = handleTestOn ["x86_64-linux"] ./podman.nix {};

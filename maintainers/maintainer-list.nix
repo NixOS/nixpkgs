@@ -3954,6 +3954,12 @@
     githubId = 8735102;
     name = "John Ramsden";
   };
+  johntitor = {
+    email = "huyuumi.dev@gmail.com";
+    github = "JohnTitor";
+    githubId = 25030997;
+    name = "Yuki Okushi";
+  };
   jojosch = {
     name = "Johannes Schleifenbaum";
     email = "johannes@js-webcoding.de";
@@ -4660,6 +4666,12 @@
       longkeyid = "rsa4096/0xAE53B4C2E58EDD45";
       fingerprint = "7FE2 113A A08B 695A C8B8  DDE6 AE53 B4C2 E58E DD45";
     }];
+  };
+  lf- = {
+    email = "nix-maint@lfcode.ca";
+    github = "lf-";
+    githubId = 6652840;
+    name = "Jade";
   };
   lheckemann = {
     email = "git@sphalerite.org";

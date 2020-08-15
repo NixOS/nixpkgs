@@ -99,7 +99,7 @@ stdenv.mkDerivation (rec {
   name = "${targetPrefix}ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/ghc/8.10.1/ghc-${version}-src.tar.xz";
+    url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
     sha256 = "1xgdl6ig5jzli3bg054vfryfkg0y6wggf68g66c32sr67bw0ffsf";
   };
 
