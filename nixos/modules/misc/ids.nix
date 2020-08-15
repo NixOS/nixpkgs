@@ -198,7 +198,7 @@ in
       bosun = 161;
       kubernetes = 162;
       peerflix = 163;
-      chronos = 164;
+      #chronos = 164; # removed 2020-08-15
       gitlab = 165;
       tox-bootstrapd = 166;
       cadvisor = 167;
