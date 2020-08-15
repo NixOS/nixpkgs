@@ -4,7 +4,7 @@ buildPythonPackage rec {
   pname = "jq";
   version = "0.1.6";
 
-  srcs = fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "34bdf9f9e49e522e1790afc03f3584c6b57329215ea0567fb2157867d6d6f602";
   };
