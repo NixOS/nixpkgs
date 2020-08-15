@@ -5,6 +5,7 @@
 buildPythonPackage rec {
   pname = "python-igraph";
   version = "0.8.2";
+  disabled = !isPy3k; # fails to build
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ igraph ];
