@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/geistesk/et";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ geistesk ];
+    maintainers = with maintainers; [ oxzi ];
   };
 }

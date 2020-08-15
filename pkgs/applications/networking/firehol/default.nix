@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://firehol.org/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ geistesk ];
+    maintainers = with maintainers; [ oxzi ];
     platforms = platforms.linux;
   };
 }
