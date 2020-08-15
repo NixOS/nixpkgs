@@ -4742,8 +4742,6 @@ in {
 
   markdown-macros = callPackage ../development/python-modules/markdown-macros { };
 
-  mathics = callPackage ../development/python-modules/mathics { };
-
   matplotlib = let
     path = if isPy3k then ../development/python-modules/matplotlib/default.nix else
       ../development/python-modules/matplotlib/2.nix;
