@@ -285,6 +285,7 @@ mapAliases ({
   marathon = throw "marathon has been removed from nixpkgs, as it's unmaintained"; # added 2020-08-15
   mariadb-client = hiPrio mariadb.client; #added 2019.07.28
   matcha = throw "matcha was renamed to matcha-gtk-theme"; # added 2020-05-09
+  mathics = throw "mathics has been removed from nixpkgs, as it's unmaintained"; # added 2020-08-15
   matrique = spectral; # added 2020-01-27
   mbedtls_1_3 = throw "mbedtls_1_3 is end of life, see https://tls.mbed.org/kb/how-to/upgrade-2.0"; # added 2019-12-08
   mess = mame; # added 2019-10-30
