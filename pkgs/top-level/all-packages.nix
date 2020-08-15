@@ -14016,6 +14016,8 @@ in
 
   libyamlcpp = callPackage ../development/libraries/libyaml-cpp { };
 
+  rang = callPackage ../development/libraries/rang { };
+
   libyamlcpp_0_3 = pkgs.libyamlcpp.overrideAttrs (oldAttrs: {
     src = pkgs.fetchurl {
       url = "https://github.com/jbeder/yaml-cpp/archive/release-0.3.0.tar.gz";
@@ -25128,6 +25130,8 @@ in
   avogadro = callPackage ../applications/science/chemistry/avogadro {
     eigen = eigen2;
   };
+
+  d-seams = callPackage ../applications/science/chemistry/d-seams {};
 
   gwyddion = callPackage ../applications/science/chemistry/gwyddion {};
 
