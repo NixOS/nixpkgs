@@ -529,6 +529,7 @@ tpope/vim-liquid
 tpope/vim-obsession
 tpope/vim-pathogen
 tpope/vim-projectionist
+tpope/vim-ragtag
 tpope/vim-rails
 tpope/vim-repeat
 tpope/vim-rhubarb
