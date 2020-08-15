@@ -19500,8 +19500,6 @@ in
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or {});
 
-  chronos = callPackage ../applications/networking/cluster/chronos { };
-
   chromiumBeta = lowPrio (chromium.override { channel = "beta"; });
 
   chromiumDev = lowPrio (chromium.override { channel = "dev"; });
