@@ -1,12 +1,14 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , setuptools_scm
 }:
 
 buildPythonPackage rec {
   pname = "sorl-thumbnail";
   version = "12.6.3";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
