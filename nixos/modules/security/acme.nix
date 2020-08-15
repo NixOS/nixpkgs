@@ -366,8 +366,13 @@ in
                             cat key.pem fullchain.pem > full.pem
                           fi
 
-                          chmod ${fileMode} *.pem
-                          chown '${data.user}:${data.group}' *.pem
+                          if [[ $(chmod -c ${fileMode} *.pem) ]]; then
+                            KEY_CHANGED=yes
+                          fi
+                          if [[ $(chown -c '${data.user}:${data.group}' *.pem) ]]; then
+                            KEY_CHANGED=yes
+                          fi
+
 
                           if [ "$KEY_CHANGED" = "yes" ]; then
                             : # noop in case postRun is empty
