@@ -696,7 +696,6 @@ in {
       "L+ /run/gitlab/shell-config.yml - - - - ${pkgs.writeText "config.yml" (builtins.toJSON gitlabShellConfig)}"
 
       "L+ ${cfg.statePath}/config/unicorn.rb - - - - ${./defaultUnicornConfig.rb}"
-      "L+ ${cfg.statePath}/config/initializers/extra-gitlab.rb - - - - ${extraGitlabRb}"
     ];
 
     systemd.services.gitlab-sidekiq = {
@@ -816,6 +815,7 @@ in {
             rm -f ${cfg.statePath}/lib
             cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
             cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
+            ln -sf ${extraGitlabRb} ${cfg.statePath}/config/initializers/extra-gitlab.rb
 
             ${cfg.packages.gitlab-shell}/bin/install
 
