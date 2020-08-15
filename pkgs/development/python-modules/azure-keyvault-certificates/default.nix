@@ -3,6 +3,7 @@
 , fetchPypi
 , python
 , isPy3k
+, azure-common
 , azure-core
 , msrest
 , msrestazure
@@ -19,6 +20,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    azure-common
     azure-core
     msrest
     msrestazure
