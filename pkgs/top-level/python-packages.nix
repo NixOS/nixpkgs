@@ -2618,6 +2618,21 @@ in {
 
   pyhs100 = callPackage ../development/python-modules/pyhs100 { };
 
+  pyrealsense2 = toPythonModule (pkgs.librealsense.override {
+    enablePython = true;
+    pythonPackages = self;
+  });
+
+  pyrealsense2WithCuda = toPythonModule (pkgs.librealsenseWithCuda.override {
+    enablePython = true;
+    pythonPackages = self;
+  });
+
+  pyrealsense2WithoutCuda = toPythonModule (pkgs.librealsenseWithoutCuda.override {
+    enablePython = true;
+    pythonPackages = self;
+  });
+
   pytest = if isPy3k then self.pytest_5 else self.pytest_4;
 
   pytest_5 = callPackage ../development/python-modules/pytest {
@@ -3997,6 +4012,8 @@ in {
 
   flask-restplus = callPackage ../development/python-modules/flask-restplus { };
 
+  flask-restx = callPackage ../development/python-modules/flask-restx { };
+
   flask-reverse-proxy-fix = callPackage ../development/python-modules/flask-reverse-proxy-fix { };
 
   flask_script = callPackage ../development/python-modules/flask-script { };
@@ -4409,8 +4426,6 @@ in {
 
   ipython = if isPy27 then
       callPackage ../development/python-modules/ipython/5.nix { }
-    else if isPy35 then
-      callPackage ../development/python-modules/ipython/7.9.nix { }
     else
       callPackage ../development/python-modules/ipython { };
 

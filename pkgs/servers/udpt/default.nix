@@ -12,7 +12,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "1cmd80ndjxdmyfjpm1f04rwf64501nyi6wdsj7lxidgd1v92wy2c";
-  verifyCargoDeps = true;
 
   postInstall = ''
     install -D udpt.toml $out/share/udpt/udpt.toml

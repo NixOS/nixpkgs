@@ -640,8 +640,8 @@ and in this case the `python38` interpreter is automatically used.
 
 ### Interpreters
 
-Versions 2.7, 3.5, 3.6, 3.7 and 3.8 of the CPython interpreter are available as
-respectively `python27`, `python35`, `python36`, `python37` and `python38`. The
+Versions 2.7, 3.6, 3.7 and 3.8 of the CPython interpreter are available as
+respectively `python27`, `python36`, `python37` and `python38`. The
 aliases `python2` and `python3` correspond to respectively `python27` and
 `python38`. The default interpreter, `python`, maps to `python2`. The PyPy
 interpreters compatible with Python 2.7 and 3 are available as `pypy27` and
@@ -689,15 +689,16 @@ attribute set is created for each available Python interpreter. The available
 sets are
 
 * `pkgs.python27Packages`
-* `pkgs.python35Packages`
 * `pkgs.python36Packages`
 * `pkgs.python37Packages`
+* `pkgs.python38Packages`
+* `pkgs.python39Packages`
 * `pkgs.pypyPackages`
 
 and the aliases
 
 * `pkgs.python2Packages` pointing to `pkgs.python27Packages`
-* `pkgs.python3Packages` pointing to `pkgs.python37Packages`
+* `pkgs.python3Packages` pointing to `pkgs.python38Packages`
 * `pkgs.pythonPackages` pointing to `pkgs.python2Packages`
 
 #### `buildPythonPackage` function

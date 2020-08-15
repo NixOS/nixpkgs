@@ -110,6 +110,7 @@ mapAliases ({
   docbook_xml_xslt = docbook_xsl; # added 2018-04-25
   double_conversion = double-conversion; # 2017-11-22
   docker_compose = docker-compose; # 2018-11-10
+  draftsight = throw "draftsight has been removed, no longer available as freeware"; # added 2020-08-14
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
   emacsMelpa = emacs25Packages; # for backward compatibility
   emacsPackagesGen = emacsPackagesFor; # added 2018-08-18
@@ -341,6 +342,7 @@ mapAliases ({
   otter-browser = throw "otter-browser has been removed from nixpkgs, as it was unmaintained"; # added 2020-02-02
   owncloudclient = owncloud-client;  # added 2016-08
   p11_kit = p11-kit; # added 2018-02-25
+  parity = openethereum; # added 2020-08-01
   parquet-cpp = arrow-cpp; # added 2018-09-08
   pass-otp = pass.withExtensions (ext: [ext.pass-otp]); # added 2018-05-04
   perlXMLParser = perlPackages.XMLParser; # added 2018-10-12

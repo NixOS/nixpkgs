@@ -6917,6 +6917,8 @@ in
 
   stdman = callPackage ../data/documentation/stdman { };
 
+  steck = callPackage ../servers/pinnwand/steck.nix { };
+
   stenc = callPackage ../tools/backup/stenc { };
 
   stm32loader = with python3Packages; toPythonApplication stm32loader;
@@ -8900,13 +8902,6 @@ in
       inherit (darwin.apple_sdk.frameworks) Security;
     };
 
-  go_1_13 = callPackage ../development/compilers/go/1.13.nix ({
-    inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  } // lib.optionalAttrs stdenv.isAarch64 {
-    stdenv = gcc8Stdenv;
-    buildPackages = buildPackages // { stdenv = gcc8Stdenv; };
-  });
-
   go_1_14 = callPackage ../development/compilers/go/1.14.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   } // lib.optionalAttrs stdenv.isAarch64 {
@@ -9901,7 +9896,6 @@ in
   python2Full = python2.override{x11Support=true;};
   python27Full = python27.override{x11Support=true;};
   python3Full = python3.override{x11Support=true;};
-  python35Full = python35.override{x11Support=true;};
   python36Full = python36.override{x11Support=true;};
   python37Full = python37.override{x11Support=true;};
   python38Full = python38.override{x11Support=true;};
@@ -9913,11 +9907,10 @@ in
   python3Packages = python3.pkgs;
 
   pythonInterpreters = callPackage ./../development/interpreters/python {};
-  inherit (pythonInterpreters) python27 python35 python36 python37 python38 python39 python3Minimal pypy27 pypy36;
+  inherit (pythonInterpreters) python27 python36 python37 python38 python39 python3Minimal pypy27 pypy36;
 
   # Python package sets.
   python27Packages = lib.hiPrioSet (recurseIntoAttrs python27.pkgs);
-  python35Packages = python35.pkgs;
   python36Packages = python36.pkgs;
   python37Packages = recurseIntoAttrs python37.pkgs;
   python38Packages = recurseIntoAttrs python38.pkgs;
@@ -14623,9 +14616,9 @@ in
 
   libsForQt514 = recurseIntoAttrs (lib.makeScope qt514.newScope mkLibsForQt5);
 
-  # TODO bump to 5.12 on darwin once it's not broken
-  qt5 = qt514;
-  libsForQt5 = libsForQt514;
+  # TODO bump to 5.14 on darwin once it's not broken; see #95199
+  qt5 =        if stdenv.hostPlatform.isDarwin then qt512 else qt514;
+  libsForQt5 = if stdenv.hostPlatform.isDarwin then libsForQt512 else libsForQt514;
 
   qt5ct = libsForQt5.callPackage ../tools/misc/qt5ct { };
 
@@ -15749,9 +15742,6 @@ in
 
   ### DEVELOPMENT / GO MODULES
 
-  buildGo113Package = callPackage ../development/go-packages/generic {
-    go = buildPackages.go_1_13;
-  };
   buildGo114Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_14;
   };
@@ -15761,9 +15751,6 @@ in
 
   buildGoPackage = buildGo114Package;
 
-  buildGo113Module = callPackage ../development/go-modules/generic {
-    go = buildPackages.go_1_13;
-  };
   buildGo114Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_14;
   };
@@ -17711,6 +17698,14 @@ in
   libraw1394 = callPackage ../development/libraries/libraw1394 { };
 
   librealsense = callPackage ../development/libraries/librealsense { };
+
+  librealsenseWithCuda = callPackage ../development/libraries/librealsense {
+    cudaSupport = true;
+  };
+
+  librealsenseWithoutCuda = callPackage ../development/libraries/librealsense {
+    cudaSupport = false;
+  };
 
   libsass = callPackage ../development/libraries/libsass { };
 
@@ -19684,8 +19679,6 @@ in
   doodle = callPackage ../applications/search/doodle { };
 
   dr14_tmeter = callPackage ../applications/audio/dr14_tmeter { };
-
-  draftsight = callPackage ../applications/graphics/draftsight { };
 
   dragonfly-reverb = callPackage ../applications/audio/dragonfly-reverb { };
 
@@ -24004,7 +23997,7 @@ in
 
   zcash = callPackage ../applications/blockchains/zcash { };
 
-  parity = callPackage ../applications/blockchains/parity { };
+  openethereum = callPackage ../applications/blockchains/openethereum { };
 
   parity-ui = callPackage ../applications/blockchains/parity-ui { };
 
@@ -26501,6 +26494,8 @@ in
   nixui = callPackage ../tools/package-management/nixui { node_webkit = nwjs_0_12; };
 
   nixdoc = callPackage ../tools/nix/nixdoc {};
+
+  nix-doc = callPackage ../tools/package-management/nix-doc { };
 
   nix-bundle = callPackage ../tools/package-management/nix-bundle { };
 
