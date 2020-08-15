@@ -74,6 +74,6 @@ stdenv.mkDerivation {
     homepage = "https://openrct2.io/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ geistesk ];
+    maintainers = with maintainers; [ oxzi ];
   };
 }
