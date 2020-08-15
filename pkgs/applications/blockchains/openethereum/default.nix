@@ -21,8 +21,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1xliragihwjfc5qmfm0ng519bw8a28m1w1yqcl9mpk8zywiybaah";
 
-  verifyCargoDeps = true;
-
   cargoPatches = [ ./lock.patch ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
