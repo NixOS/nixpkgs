@@ -466,7 +466,6 @@
   ./services/misc/leaps.nix
   ./services/misc/lidarr.nix
   ./services/misc/mame.nix
-  ./services/misc/mathics.nix
   ./services/misc/matrix-appservice-discord.nix
   ./services/misc/matrix-synapse.nix
   ./services/misc/mautrix-telegram.nix
