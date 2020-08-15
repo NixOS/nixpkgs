@@ -41,6 +41,8 @@ in appimageTools.wrapType2 rec {
 
     mkdir -p $out/share
     cp -rt $out/share ${desktopItem}/share/applications ${appimageContents}/usr/share/icons
+    chmod -R +w $out/share
+    mv $out/share/icons/hicolor/{0x0,256x256}
   '';
 
   meta = with lib; {
