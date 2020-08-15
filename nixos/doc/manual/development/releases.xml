@@ -45,7 +45,7 @@
    </orderedlist>
 
 <programlisting>
-# git checkout -b release-19.09
+git checkout -b release-19.09
 </programlisting>
 
    <orderedlist>
@@ -82,7 +82,7 @@ git rev-list --count release-19.09
       </listitem>
      </itemizedlist>
 <programlisting>
-git diff release-19.03..release-19.09 nixos/modules/module-list.nix| grep ^+
+git diff release-19.03..release-19.09 nixos/modules/module-list.nix | grep ^+
 </programlisting>
      <itemizedlist>
       <listitem>
@@ -100,8 +100,8 @@ git diff release-19.03..release-19.09 nixos/modules/module-list.nix| grep ^+
    </orderedlist>
 
 <programlisting>
-# git tag --annotate --message="Release 19.09-beta" 19.09-beta
-# git push upstream 19.09-beta
+git tag --annotate --message="Release 19.09-beta" 19.09-beta
+git push upstream 19.09-beta
 </programlisting>
 
    <orderedlist>
@@ -113,7 +113,7 @@ git diff release-19.03..release-19.09 nixos/modules/module-list.nix| grep ^+
    </orderedlist>
 
 <programlisting>
-# echo -n "20.03" > .version
+echo -n "20.03" > .version
 </programlisting>
 
    <orderedlist>
@@ -211,8 +211,8 @@ git diff release-19.03..release-19.09 nixos/modules/module-list.nix| grep ^+
    </orderedlist>
 
 <programlisting>
-# git tag --annotate --message="Release 19.09" 19.09
-# git push upstream 19.09
+git tag --annotate --message="Release 19.09" 19.09
+git push upstream 19.09
 </programlisting>
 
    <orderedlist>
@@ -273,7 +273,7 @@ git diff release-19.03..release-19.09 nixos/modules/module-list.nix| grep ^+
    </itemizedlist>
 
 <programlisting>
-git shortlog -sn release-19.03..release-19.09
+git shortlog --summary --numbered release-19.03..release-19.09
 </programlisting>
 
    <para>
