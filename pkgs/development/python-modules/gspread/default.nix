@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , requests
+, google_auth
 }:
 
 buildPythonPackage rec {
@@ -19,6 +20,8 @@ buildPythonPackage rec {
     description = "Google Spreadsheets client library";
     homepage = "https://github.com/burnash/gspread";
     license = licenses.mit;
+    # missing multiple google libraries
+    broken = true; # 2020-08-15
   };
 
   # No tests included
