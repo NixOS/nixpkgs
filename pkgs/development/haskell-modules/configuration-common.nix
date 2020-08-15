@@ -1379,8 +1379,8 @@ self: super: {
   # 2020-08-14: Needs some manual patching to be compatible with haskell-gi-base 0.24
   # Created upstream PR @ https://github.com/ghcjs/jsaddle/pull/119
   jsaddle-webkit2gtk = appendPatch super.jsaddle-webkit2gtk (pkgs.fetchpatch {
-    url = "https://github.com/ghcjs/jsaddle/compare/9727365...09f44aa.patch";
-    sha256 = "1bkwgmc04544haycb69fqsd97lg24jc7hc1yrin2sgr4l7hz04pf";
+    url = "https://github.com/ghcjs/jsaddle/compare/9727365...f842748.patch";
+    sha256 = "07l4l999lmlx7sqxf7v4f70rmxhx9r0cjblkgc4n0y6jin4iv1cb";
     stripLen = 2;
     extraPrefix = "";
   });
