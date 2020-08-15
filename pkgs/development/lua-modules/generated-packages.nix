@@ -155,9 +155,9 @@ cassowary = buildLuarocksPackage {
   propagatedBuildInputs = [ lua penlight ];
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/simoncozens/cassowary.lua";
-    description = "The cassowary constraint solver.";
-    maintainers = with maintainers; [ marsam ];
+    homepage = "https://github.com/sile-typesetter/cassowary.lua";
+    description = "The cassowary constraint solver";
+    maintainers = with maintainers; [ marsam alerque ];
     license.fullName = "Apache 2";
   };
 };
@@ -1376,17 +1376,18 @@ nvim-client = buildLuarocksPackage {
 };
 penlight = buildLuarocksPackage {
   pname = "penlight";
-  version = "1.7.0-1";
+  version = "1.8.0-1";
 
   src = fetchurl {
-    url    = "mirror://luarocks/penlight-1.7.0-1.src.rock";
-    sha256 = "0rr56vc33b2knr5qmfdjrb1wk98lyp3zmlyzz6m15v2s1s5yxgah";
+    url    = "mirror://luarocks/penlight-1.8.0-1.src.rock";
+    sha256 = "05x00dgsa79wzq187ww6i8j0s74nh2c852awni7xfshxgihwhc42";
   };
   propagatedBuildInputs = [ luafilesystem ];
 
   meta = with stdenv.lib; {
     homepage = "http://tieske.github.io/Penlight";
     description = "Lua utility libraries loosely based on the Python standard libraries";
+    maintainers = with maintainers; [ alerque ];
     license.fullName = "MIT/X11";
   };
 };
