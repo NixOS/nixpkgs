@@ -1,6 +1,7 @@
 { buildPythonPackage
 , lib
 , fetchPypi
+, isPy27
 , ruamel_yaml
 , python-dateutil
 }:
@@ -8,6 +9,7 @@
 buildPythonPackage rec {
   version = "1.1.0";
   pname = "strictyaml";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
@@ -19,6 +21,7 @@ buildPythonPackage rec {
   # Library tested with external tool
   # https://hitchdev.com/approach/contributing-to-hitch-libraries/
   doCheck = false;
+  pythonImportsCheck = [ "strictyaml" ];
 
   meta = with lib; {
     description = "Strict, typed YAML parser";
