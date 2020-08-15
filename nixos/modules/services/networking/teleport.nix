@@ -13,6 +13,7 @@ let
   telConfig = {
     teleport = {
       nodename = cfg.nodename;
+      data_dir = cfg.dataDir;
       auth_token = cfg.auth_token;
       auth_servers = cfg.auth_servers;
       auth_service = cfg.auth_service;
@@ -45,53 +46,53 @@ let
       type = mkOption {
         type = types.str;
         default = "local";
-        description = "Set the authentication type for the Teleport Daemon.";
+        description = "Set the authentication type for the Teleport Auth Service.";
       };
       second_factor = mkOption {
         type = types.str;
         default = "otp";
-        description = "Set the authentication second factor type for the Teleport Daemon.";
+        description = "Set the authentication second factor type for the Teleport Auth Service.";
       };
     };
     listen_addr = mkOption {
       type = types.str;
       default = "0.0.0.0:3025";
-      description = "Set the address to listen on for the Teleport Daemon Auth Service.";
+      description = "Set the address to listen on for the Teleport Auth Service.";
     };
     public_addr = mkOption {
       type = types.str;
       default = "";
-      description = "Set the public address/dns entry to listen on for the Teleport Daemon Auth Service.";
+      description = "Set the public address/dns entry to listen on for the Teleport Auth Service.";
     };
     tokens = mkOption {
       type = types.listOf types.str;
       default = [ "" ];
-      description = "Set the tokens to authenticate nodes with for the Teleport Daemon.";
+      description = "Set the tokens to authenticate nodes with for the Teleport cluster.";
     };
     session_recording = mkOption {
       type = types.str;
       default = "node";
-      description = "Configure whether to enable session recording and for what node type for the Teleport Daemon.";
+      description = "Configure whether to enable session recording and for what node type for the Teleport cluster.";
     };
     client_idle_timeout = mkOption {
       type = types.str;
       default = "1hr";
-      description = "Set the client idle timeout before certs need to be reauthenticated for the Teleport Daemon.";
+      description = "Set the client idle timeout before certs need to be reauthenticated for the Teleport cluster.";
     };
     disconnect_expired_cert = mkOption {
       type = types.str;
       default = "yes";
-      description = "Set whether to disconnect a client when their cert expires for the Teleport Daemon.";
+      description = "Set whether to disconnect a client when their cert expires for the Teleport cluster.";
     };
     keep_alive_interval = mkOption {
       type = types.int;
       default = 15;
-      description = "Set the keep alive internal for the Teleport Daemon.";
+      description = "Set the keep alive internal for the Teleport cluster.";
     };
     keep_alive_count_max = mkOption {
       type = types.int;
       default = 3;
-      description = "Set the keep alive interval max count for the Teleport Daemon.";
+      description = "Set the keep alive interval max count for the Teleport cluster.";
     };
   };
   telTypes.ssh_service = {
