@@ -1,6 +1,15 @@
-{ lib, buildPythonApplication, fetchPypi
-, pyyaml, xmltodict, jq, argcomplete
-, pytest, coverage, flake8, toml
+{ lib
+, buildPythonApplication
+, fetchPypi
+, argcomplete
+, pyyaml
+, xmltodict
+# Test inputs
+, coverage
+, flake8
+, jq
+, pytest
+, toml
 }:
 
 buildPythonApplication rec {
@@ -19,9 +28,7 @@ buildPythonApplication rec {
    toml
   ];
 
-  checkPhase = ''
-    pytest ./test/test.py
-  '';
+  checkPhase = "pytest ./test/test.py";
 
   src = fetchPypi {
     inherit pname version;

@@ -11072,8 +11072,7 @@ in
 
   yq = callPackage ../development/tools/yq {
     inherit (python3Packages)
-    buildPythonApplication fetchPypi pyyaml xmltodict argcomplete pytest
-    coverage flake8 toml;
+    buildPythonApplication fetchPypi argcomplete pyyaml xmltodict pytest coverage flake8 toml;
   };
 
   yq-go = callPackage ../development/tools/yq-go { };
