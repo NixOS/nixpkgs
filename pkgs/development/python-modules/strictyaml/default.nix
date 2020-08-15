@@ -1,17 +1,19 @@
 { buildPythonPackage
 , lib
 , fetchPypi
+, isPy27
 , ruamel_yaml
 , python-dateutil
 }:
 
 buildPythonPackage rec {
-  version = "1.0.6";
+  version = "1.1.0";
   pname = "strictyaml";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dd687a32577e0b832619ce0552eac86d6afad5fa7b61ab041bb765881c6a1f36";
+    sha256 = "1jj20fwcpvqzp7rnzk3mc3xm94wz3gy3zi3787nj7c3syzadn1vb";
   };
 
   propagatedBuildInputs = [ ruamel_yaml python-dateutil ];
@@ -19,6 +21,7 @@ buildPythonPackage rec {
   # Library tested with external tool
   # https://hitchdev.com/approach/contributing-to-hitch-libraries/
   doCheck = false;
+  pythonImportsCheck = [ "strictyaml" ];
 
   meta = with lib; {
     description = "Strict, typed YAML parser";
