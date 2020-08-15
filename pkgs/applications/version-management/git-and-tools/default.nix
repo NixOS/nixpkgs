@@ -63,6 +63,8 @@ let
 
   git-annex-utils = callPackage ./git-annex-utils { };
 
+  git-brunch = pkgs.haskellPackages.git-brunch;
+
   git-appraise = callPackage ./git-appraise {};
 
   git-bug = callPackage ./git-bug { };
@@ -235,6 +237,7 @@ let
   # aliases
   darcsToGit = darcs-to-git;
   gitAnnex = git-annex;
+  gitBrunch = git-brunch;
   gitFastExport = git-fast-export;
   gitRemoteGcrypt = git-remote-gcrypt;
   svn_all_fast_export = svn-all-fast-export;
