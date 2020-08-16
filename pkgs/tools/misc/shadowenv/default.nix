@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security }:
+{ stdenv, fetchFromGitHub, rustPlatform, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowenv";
@@ -14,8 +14,6 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "1bjkwn57vm3in8lajhm7p9fjwyqhmkrb3fyq1k7lqjvrrh9jysb2";
 
   nativeBuildInputs = [ installShellFiles ];
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   postInstall = ''
     installManPage man/man1/shadowenv.1
