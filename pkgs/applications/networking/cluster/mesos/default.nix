@@ -1,6 +1,11 @@
 { stdenv, lib, makeWrapper, fetchurl, curl, sasl, openssh
-, unzip, gnutar, jdk, python, wrapPython
-, setuptools, boto, pythonProtobuf, apr, subversion, gzip
+, unzip, gnutar, jdk
+# Python deps
+, python, wrapPython
+# Python libraries
+, setuptools, boto, pythonProtobuf
+# Common deps
+, apr, subversion, gzip
 , leveldb, glog, perf, utillinux, libnl, iproute, openssl, libevent
 , ethtool, coreutils, which, iptables, maven
 , bash, autoreconfHook
@@ -25,7 +30,7 @@ let
   });
 
 in stdenv.mkDerivation rec {
-  version = "1.4.1";
+  version = "1.10.0";
   pname = "mesos";
 
   enableParallelBuilding = true;
@@ -33,7 +38,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://apache/mesos/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1c7l0rim9ija913gpppz2mcms08ywyqhlzbbspqsi7wwfdd7jwsr";
+    sha256 = "188jkvgykisgzcscv0c34x1zlk1sscp9ld2dvx5361grx6hyifgl";
   };
 
   patches = [
@@ -41,11 +46,20 @@ in stdenv.mkDerivation rec {
     # TODO: is this still needed?
     ./rb36610.patch
 
-    # see https://github.com/cstrahan/mesos/tree/nixos-${version}
+    # see https://github.com/ludovicc/mesos/tree/nixos-${version}
     ./nixos.patch
   ];
+
+  pythonEnv = python.withPackages (_:
+    [ # python deps needed during wheel build time (not runtime, see the buildPythonPackage part for that)
+      setuptools
+      boto
+      pythonProtobuf
+  ]);
+
   nativeBuildInputs = [
     autoreconfHook
+    pythonEnv
   ];
   buildInputs = [
     makeWrapper curl sasl
@@ -62,22 +76,17 @@ in stdenv.mkDerivation rec {
     pythonProtobuf
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-overflow -Wno-error=class-memaccess";
-
   preConfigure = ''
-    # https://issues.apache.org/jira/browse/MESOS-6616
-    configureFlagsArray+=(
-      "CXXFLAGS=-O2 -Wno-error=strict-aliasing"
-    )
-
-    substituteInPlace 3rdparty/stout/include/stout/jsonify.hpp \
-      --replace '<xlocale.h>' '<locale.h>'
     # Fix cases where makedev(),major(),minor() are referenced through
     # <sys/types.h> instead of <sys/sysmacros.h>
     sed 1i'#include <sys/sysmacros.h>' -i src/linux/fs.cpp
     sed 1i'#include <sys/sysmacros.h>' -i src/slave/containerizer/mesos/isolators/gpu/isolator.cpp
     substituteInPlace 3rdparty/stout/include/stout/os/posix/chown.hpp \
       --subst-var-by chown ${coreutils}/bin/chown
+
+    substituteInPlace configure.ac \
+      --replace "-lprotobuf" \
+                "${pythonProtobuf.protobuf}/lib/libprotobuf.a"
 
     substituteInPlace 3rdparty/stout/Makefile.am \
       --replace "-lprotobuf" \
@@ -88,6 +97,10 @@ in stdenv.mkDerivation rec {
 
     substituteInPlace 3rdparty/stout/include/stout/posix/os.hpp \
       --subst-var-by tar ${tarWithGzip}/bin/tar
+
+    substituteInPlace 3rdparty/libprocess/Makefile.am \
+      --replace "-lprotobuf" \
+                "${pythonProtobuf.protobuf}/lib/libprotobuf.a"
 
     substituteInPlace src/cli/mesos-scp \
       --subst-var-by scp ${openssh}/bin/scp
@@ -256,8 +269,7 @@ in stdenv.mkDerivation rec {
     homepage    = "http://mesos.apache.org";
     license     = licenses.asl20;
     description = "A cluster manager that provides efficient resource isolation and sharing across distributed applications, or frameworks";
-    maintainers = with maintainers; [ cstrahan offline ];
+    maintainers = with maintainers; [ ludovicc cstrahan offline ];
     platforms   = platforms.unix;
-    broken = true; # Broken since 2019-10-22 (https://hydra.nixos.org/build/115475123)
   };
 }

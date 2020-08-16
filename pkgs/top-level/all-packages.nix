@@ -9824,8 +9824,9 @@ in
 
   mesos = callPackage ../applications/networking/cluster/mesos {
     sasl = cyrus_sasl;
-    inherit (pythonPackages) python boto setuptools wrapPython;
-    pythonProtobuf = pythonPackages.protobuf.override { protobuf = protobuf3_6; };
+    inherit (python27Packages) boto setuptools wrapPython;
+    python = python27;
+    pythonProtobuf = python27Packages.protobuf.override { protobuf = protobuf3_6; };
     perf = linuxPackages.perf;
   };
 
