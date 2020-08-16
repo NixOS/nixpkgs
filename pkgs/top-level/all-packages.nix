@@ -23034,6 +23034,8 @@ in
     inherit (linuxPackages) x86_energy_perf_policy;
   };
 
+  tlsprofiler = with python3Packages; toPythonApplication tlsprofiler;
+
   tippecanoe = callPackage ../applications/misc/tippecanoe { };
 
   tmatrix = callPackage ../applications/misc/tmatrix { };

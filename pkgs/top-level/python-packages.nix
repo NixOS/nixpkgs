@@ -1701,6 +1701,8 @@ in {
 
   tenacity = callPackage ../development/python-modules/tenacity { };
 
+  tlsprofiler = callPackage ../development/python-modules/tlsprofiler { };
+
   tokenserver = callPackage ../development/python-modules/tokenserver {};
 
   toml = callPackage ../development/python-modules/toml { };
