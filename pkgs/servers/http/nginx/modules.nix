@@ -370,8 +370,8 @@ in
     src = fetchFromGitHub {
       owner = "yaoweibin";
       repo = "ngx_http_substitutions_filter_module";
-      rev = "bc58cb11844bc42735bbaef7085ea86ace46d05b";
-      sha256 = "1q5hr3sqys4f365gzjci549rn9ylhgj4xb29ril04zr5vkhzlnar";
+      rev = "b8a71eacc7f986ba091282ab8b1bbbc6ae1807e0";
+      sha256 = "027jxzx66q9a6ycn47imjh40xmnqr0z423lz0ds3w4rf1c2x130f";
     };
   };
 
