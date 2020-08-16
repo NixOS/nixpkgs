@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "atpublic";
-  version = "1.0";
+  version = "2.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0i3sbxkdlbb4560rrlmwwd5y4ps7k73lp4d8wnmd7ag9k426gjkx";
+    sha256 = "ebeb62b71a5c683a84c1b16bbf415708af5a46841b142b85ac3a22ec2d7613b0";
   };
 
   checkInputs = [
