@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, fetchFromGitHub, fetchpatch, fixDarwinDylibNames, autoconf, boost
 , brotli, cmake, flatbuffers, gflags, glog, gtest, lz4, perl
-, python3, rapidjson, snappy, thrift, which, zlib, zstd
+, python3, rapidjson, snappy, thrift, which, zlib, zstd, utf8proc
 , enableShared ? true }:
 
 let
@@ -10,15 +10,21 @@ let
     rev = "bcd9ebcf9204a346df47204fe21b85c8d0498816";
     sha256 = "0m16pqzbvxiaradq088q5ai6fwnz9srbap996397znwppvva479b";
   };
+  arrow-testing = fetchFromGitHub {
+    owner = "apache";
+    repo = "arrow-testing";
+    rev = "ef4ece6f1dddf6abb71ed429724adde330a4b78f";
+    sha256 = "0dbxzsy0dm76q7hlkrillra4zd26y3nyiqsn7q3wi6r1x048yclq";
+  };
 
 in stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "0.17.1";
+  version = "1.0.0";
 
   src = fetchurl {
     url =
       "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    sha256 = "18lyvbibfdw3w77cy5whbq7c6mshn5fg2bhvgw7v226a7cs1rifb";
+    sha256 = "0hzjrhr4brqpmy9f8fbj9p5a482ya8kjhkycz6maa0w2nkzbkpc6";
   };
 
   sourceRoot = "apache-arrow-${version}/cpp";
@@ -37,18 +43,18 @@ in stdenv.mkDerivation rec {
     ./darwin.patch
 
     # fix musl build
-    (fetchpatch {
-      url = "https://github.com/apache/arrow/commit/de4168786dfd8ab932f48801e0a7a6b8a370c19d.diff";
-      sha256 = "1nl4y1rwdl0gn67v7l05ibc4lwkn6x7fhwbmslmm08cqmwfjsx3y";
-      stripLen = 1;
-    })
+    #(fetchpatch {
+    #  url = "https://github.com/apache/arrow/commit/de4168786dfd8ab932f48801e0a7a6b8a370c19d.diff";
+    #  sha256 = "1nl4y1rwdl0gn67v7l05ibc4lwkn6x7fhwbmslmm08cqmwfjsx3y";
+    #  stripLen = 1;
+    #})
 
-    # fix build for "ZSTD_SOURCE=SYSTEM"
-    (fetchpatch {
-      url = "https://github.com/apache/arrow/commit/13cb3dbded1928d2e96574895bebaf9098a4796d.diff";
-      sha256 = "12z3ys47qp2x8f63lggiyj4xs2kmg804ri4xqysw5krbjz2hr6rb";
-      stripLen = 1;
-    })
+    ## fix build for "ZSTD_SOURCE=SYSTEM"
+    #(fetchpatch {
+    #  url = "https://github.com/apache/arrow/commit/13cb3dbded1928d2e96574895bebaf9098a4796d.diff";
+    #  sha256 = "12z3ys47qp2x8f63lggiyj4xs2kmg804ri4xqysw5krbjz2hr6rb";
+    #  stripLen = 1;
+    #})
   ] ++ lib.optionals (!enableShared) [
     # The shared jemalloc lib is unused and breaks in static mode due to missing -fpic.
     ./jemalloc-disable-shared.patch
@@ -70,6 +76,7 @@ in stdenv.mkDerivation rec {
     rapidjson
     snappy
     thrift
+    utf8proc
     zlib
     zstd
   ] ++ lib.optionals enableShared [
@@ -113,6 +120,7 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF";
 
   doInstallCheck = true;
+  ARROW_TEST_DATA = if doInstallCheck then "${arrow-testing}/data" else null;
   PARQUET_TEST_DATA =
     if doInstallCheck then "${parquet-testing}/data" else null;
   installCheckInputs = [ perl which ];
