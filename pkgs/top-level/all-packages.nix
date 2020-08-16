@@ -23250,6 +23250,8 @@ in
 
   vorbis-tools = callPackage ../applications/audio/vorbis-tools { };
 
+  vr-video-player = callPackage ../applications/video/vr-video-player { };
+
   vscode = callPackage ../applications/editors/vscode/vscode.nix { };
 
   vscode-with-extensions = callPackage ../applications/editors/vscode/with-extensions.nix {};
