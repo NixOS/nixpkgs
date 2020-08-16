@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, kernel, runtimeShell, autoModuleSignHook }:
+{ lib, stdenv, fetchurl, fetchpatch, kernel, runtimeShell }:
 
 let
   baseName = "bbswitch";
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ autoModuleSignHook ];
+  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
 

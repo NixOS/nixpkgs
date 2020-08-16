@@ -12,7 +12,7 @@
 , pkgconfig
 
 # Kernel dependencies
-, kernel ? null, autoModuleSignHook ? null
+, kernel ? null
 , enablePython ? true
 }:
 
@@ -90,7 +90,7 @@ let
       '';
 
       nativeBuildInputs = [ autoreconfHook269 nukeReferences ]
-        ++ optionals buildKernel (kernel.moduleBuildDependencies ++ [ perl autoModuleSignHook ])
+        ++ optionals buildKernel (kernel.moduleBuildDependencies ++ [ perl ])
         ++ optional buildUser pkgconfig;
       buildInputs = optionals buildUser [ zlib libuuid attr libtirpc ]
         ++ optional buildUser openssl

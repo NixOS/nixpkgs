@@ -32,6 +32,8 @@ in {
   # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
   # automatically extended with extra per-version and per-config values.
   randstructSeed ? "",
+  # Extra moduleBuildDependencies
+  extraModuleBuildDependencies ? [],
   # Use defaultMeta // extraMeta
   extraMeta ? {},
 
@@ -52,7 +54,8 @@ let
     hasAttr getAttr optional optionals optionalString optionalAttrs maintainers platforms;
 
   # Dependencies that are required to build kernel modules
-  moduleBuildDependencies = optional (stdenv.lib.versionAtLeast version "4.14") libelf;
+  moduleBuildDependencies = optional (stdenv.lib.versionAtLeast version "4.14") libelf
+    ++ extraModuleBuildDependencies;
 
   installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
     #!${stdenv.shell} -e

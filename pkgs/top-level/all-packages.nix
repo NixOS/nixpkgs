@@ -18840,13 +18840,6 @@ in
     inherit (kernel) isXen isZen isHardened isLibre;
     inherit (kernel) kernelOlder kernelAtLeast;
 
-    autoModuleSignHook = makeSetupHook
-      { substitutions =
-        { kernel = kernel.dev + "/lib/modules/${kernel.modDirVersion}/build";
-          hash = if (kernel.configfile.structuredConfig ? MODULE_SIG_HASH)
-            then kernel.configfile.structuredConfig.MODULE_SIG_HASH.freeform else ""; }; }
-      ../os-specific/linux/kernel/sign-module.sh;
-
     # Obsolete aliases (these packages do not depend on the kernel).
     inherit (pkgs) odp-dpdk pktgen; # added 2018-05
 
@@ -19031,7 +19024,7 @@ in
 
     inherit (callPackages ../os-specific/linux/zfs {
       configFile = "kernel";
-      inherit kernel autoModuleSignHook;
+      inherit kernel;
      }) zfsStable zfsUnstable;
 
      zfs = zfsStable;
