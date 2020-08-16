@@ -15,6 +15,11 @@ args@{
 , bazelBuildFlags ? []
 , bazelFetchFlags ? []
 , bazelTarget
+
+# fetchTarget defaults to bazelTarget, however fetchTarget might want to be
+# broader (even "//..."), so it can be shared between the build of multiple
+# targets.
+, fetchTarget ? null
 , buildAttrs
 , fetchAttrs
 
@@ -37,6 +42,9 @@ args@{
 # Debian-specific /usr/share/java paths, but doesn't in the configured build).
 , fetchConfigured ? false
 
+# If true, shebangs will be patched in the fetched files before they are put
+# into the output archive.  This is needed for sandboxed builds.
+, fixupFetch ? false
 , ...
 }:
 
@@ -50,7 +58,9 @@ in stdenv.mkDerivation (fBuildAttrs // {
 
   deps = stdenv.mkDerivation (fFetchAttrs // {
     name = "${name}-deps.tar.gz";
-    inherit bazelFlags bazelBuildFlags bazelFetchFlags bazelTarget;
+    inherit bazelFlags bazelBuildFlags bazelFetchFlags;
+
+    fetchTarget = if fetchTarget == null then bazelTarget else fetchTarget;
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -90,7 +100,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
         --loading_phase_threads=1 \
         $bazelFlags \
         $bazelFetchFlags \
-        $bazelTarget
+        $fetchTarget
 
       runHook postBuild
     '';
@@ -120,7 +130,10 @@ in stdenv.mkDerivation (fBuildAttrs // {
       find $bazelOut/external -maxdepth 1 -type l | while read symlink; do
         name="$(basename "$symlink")"
         rm "$symlink"
-        test -f "$bazelOut/external/@$name.marker" && rm "$bazelOut/external/@$name.marker"
+        if [ -f "$bazelOut/external/@$name.marker" ]
+        then
+          rm "$bazelOut/external/@$name.marker"
+        fi
       done
 
       # Patching symlinks to remove build directory reference
@@ -131,6 +144,8 @@ in stdenv.mkDerivation (fBuildAttrs // {
       done
 
       echo '${bazel.name}' > $bazelOut/external/.nix-bazel-version
+
+      ${if fixupFetch then "patchShebangs $bazelOut" else ""}
 
       (cd $bazelOut/ && tar czf $out --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner external/)
 
