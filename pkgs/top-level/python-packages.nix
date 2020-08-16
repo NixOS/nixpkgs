@@ -4358,6 +4358,8 @@ in {
   else
     self.hypothesis_4;
 
+  hypothesis-auto = callPackage ../development/python-modules/hypothesis-auto { };
+
   hydra-check = callPackage ../development/python-modules/hydra-check { };
 
   colored = callPackage ../development/python-modules/colored { };
