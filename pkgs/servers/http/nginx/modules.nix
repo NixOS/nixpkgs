@@ -307,8 +307,8 @@ in
     src = fetchFromGitHub {
       owner = "nginx-shib";
       repo = "nginx-http-shibboleth";
-      rev = "48b70d87bf7796d7813813a837e52b3a86e6f6f4";
-      sha256 = "0k8xcln5sf0m4r0m550dkhl07zhncp285dpysk6r4v6vqzqmhzdc";
+      rev = "5eadab80b2f5940d8873398bca000d93d3f0cf27";
+      sha256 = "1l0h3ic9mfsci89d0k5q3igkfpzq052ia25xj5hc8fq388yrhpap";
     };
   };
 
