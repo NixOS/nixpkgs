@@ -20387,6 +20387,8 @@ in
 
   gitolite = callPackage ../applications/version-management/gitolite { };
 
+  gitoxide = callPackage ../applications/version-management/gitoxide { };
+
   inherit (gnome3) gitg;
 
   gmrun = callPackage ../applications/misc/gmrun {};
