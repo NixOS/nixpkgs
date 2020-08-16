@@ -1,6 +1,6 @@
 --- a/mesonbuild/backend/backends.py
 +++ b/mesonbuild/backend/backends.py
-@@ -453,6 +453,21 @@ class Backend:
+@@ -456,6 +456,21 @@ class Backend:
                  args.extend(self.environment.coredata.get_external_link_args(target.for_machine, lang))
              except Exception:
                  pass
@@ -19,6 +19,6 @@
 +                    dirs.add(flag)
 +                next_is_path = False
 +
-         for arg in args:
-             if arg.startswith('-Wl,-rpath='):
-                 for dir in arg.replace('-Wl,-rpath=','').split(':'):
+         # Match rpath formats:
+         # -Wl,-rpath=
+         # -Wl,-rpath,
