@@ -4,6 +4,7 @@ let
 
   http_proxy_connect_module_generic = patchName: rec {
     src = fetchFromGitHub {
+      name = "http_proxy_connect_module_generic";
       owner = "chobits";
       repo = "ngx_http_proxy_connect_module";
       rev = "96ae4e06381f821218f368ad0ba964f87cbe0266";
@@ -22,6 +23,7 @@ in
 
   brotli = {
     src = let gitsrc = pkgs.fetchFromGitHub {
+      name = "brotli";
       owner = "google";
       repo = "ngx_brotli";
       rev = "25f86f0bac1101b6512135eac5f93c49c63609e3";
@@ -36,6 +38,7 @@ in
 
   cache-purge = {
     src = fetchFromGitHub {
+      name = "cache-purge";
       owner  = "nginx-modules";
       repo   = "ngx_cache_purge";
       rev    = "2.5.1";
@@ -45,6 +48,7 @@ in
 
   coolkit = {
     src = fetchFromGitHub {
+      name = "coolkit";
       owner  = "FRiCKLE";
       repo   = "ngx_coolkit";
       rev    = "0.2";
@@ -54,6 +58,7 @@ in
 
   dav = {
     src = fetchFromGitHub {
+      name = "dav";
       owner = "arut";
       repo = "nginx-dav-ext-module";
       rev = "v3.0.0";
@@ -64,6 +69,7 @@ in
 
   develkit = {
     src = fetchFromGitHub {
+      name = "develkit";
       owner = "vision5";
       repo = "ngx_devel_kit";
       rev = "v0.3.1";
@@ -73,6 +79,7 @@ in
 
   echo = {
     src = fetchFromGitHub {
+      name = "echo";
       owner = "openresty";
       repo = "echo-nginx-module";
       rev = "v0.62";
@@ -82,6 +89,7 @@ in
 
   fancyindex = {
     src = fetchFromGitHub {
+      name = "fancyindex";
       owner = "aperezdc";
       repo = "ngx-fancyindex";
       rev = "v0.4.4";
@@ -91,6 +99,7 @@ in
 
   fluentd = {
     src = fetchFromGitHub {
+      name = "fluentd";
       owner = "fluent";
       repo = "nginx-fluentd-module";
       rev = "8af234043059c857be27879bc547c141eafd5c13";
@@ -108,6 +117,7 @@ in
 
   ipscrub = {
     src = fetchFromGitHub {
+      name = "ipscrub";
       owner = "masonicboom";
       repo = "ipscrub";
       rev = "v1.0.1";
@@ -118,6 +128,7 @@ in
 
   limit-speed = {
     src = fetchFromGitHub {
+      name = "limit-speed";
       owner = "yaoweibin";
       repo = "nginx_limit_speed_module";
       rev = "f77ad4a56fbb134878e75827b40cf801990ed936";
@@ -127,6 +138,7 @@ in
 
   live ={
     src = fetchFromGitHub {
+      name = "live";
       owner = "arut";
       repo = "nginx-live-module";
       rev = "5e4a1e3a718e65e5206c24eba00d42b0d1c4b7dd";
@@ -136,6 +148,7 @@ in
 
   lua = {
     src = fetchFromGitHub {
+      name = "lua";
       owner = "openresty";
       repo = "lua-nginx-module";
       rev = "v0.10.15";
@@ -151,6 +164,7 @@ in
 
   lua-upstream = {
     src = fetchFromGitHub {
+      name = "lua-upstream";
       owner = "openresty";
       repo = "lua-upstream-nginx-module";
       rev = "v0.07";
@@ -170,6 +184,7 @@ in
 
   modsecurity-nginx = {
     src = fetchFromGitHub {
+      name = "modsecurity-nginx";
       owner = "SpiderLabs";
       repo = "ModSecurity-nginx";
       rev = "v1.0.1";
@@ -180,6 +195,7 @@ in
 
   moreheaders = {
     src = fetchFromGitHub {
+      name = "moreheaders";
       owner = "openresty";
       repo = "headers-more-nginx-module";
       rev = "v0.33";
@@ -189,6 +205,7 @@ in
 
   mpeg-ts ={
     src = fetchFromGitHub {
+      name = "mpeg-ts";
       owner = "arut";
       repo = "nginx-ts-module";
       rev = "v0.1.1";
@@ -198,6 +215,7 @@ in
 
   naxsi ={
     src = fetchFromGitHub {
+      name = "naxsi";
       owner = "nbs-system";
       repo = "naxsi";
       rev = "07a056ccd36bc3c5c40dc17991db226cb8cf6241";
@@ -207,6 +225,7 @@ in
 
   ngx_aws_auth = {
     src = fetchFromGitHub {
+      name = "ngx_aws_auth";
       owner = "anomalizer";
       repo = "ngx_aws_auth";
       rev = "2.1.1";
@@ -217,6 +236,7 @@ in
   opentracing = {
     src =
       let src' = fetchFromGitHub {
+        name = "opentracing";
         owner = "opentracing-contrib";
         repo = "nginx-opentracing";
         rev = "v0.9.0";
@@ -231,6 +251,7 @@ in
       version = pkgs.psol.version;
 
       moduleSrc = fetchFromGitHub {
+        name   = "pagespeed";
         owner  = "pagespeed";
         repo   = "ngx_pagespeed";
         rev    = "v${version}-stable";
@@ -259,6 +280,7 @@ in
 
   pam = {
     src = fetchFromGitHub {
+      name = "pam";
       owner = "stogh";
       repo = "ngx_http_auth_pam_module";
       rev = "v1.5.2";
@@ -269,6 +291,7 @@ in
 
   pinba = {
     src = fetchFromGitHub {
+      name = "pinba";
       owner = "tony2001";
       repo = "ngx_http_pinba_module";
       rev = "28131255d4797a7e2f82a6a35cf9fc03c4678fe6";
@@ -278,6 +301,7 @@ in
 
   push-stream ={
     src = fetchFromGitHub {
+      name = "push-stream";
       owner = "wandenberg";
       repo = "nginx-push-stream-module";
       rev = "1cdc01521ed44dc614ebb5c0d19141cf047e1f90";
@@ -287,6 +311,7 @@ in
 
   rtmp ={
     src = fetchFromGitHub {
+      name = "rtmp";
       owner = "arut";
       repo = "nginx-rtmp-module";
       rev = "v1.2.1";
@@ -296,6 +321,7 @@ in
 
   set-misc = {
     src = fetchFromGitHub {
+      name = "set-misc";
       owner = "openresty";
       repo = "set-misc-nginx-module";
       rev = "v0.32";
@@ -305,6 +331,7 @@ in
 
   shibboleth = {
     src = fetchFromGitHub {
+      name = "shibboleth";
       owner = "nginx-shib";
       repo = "nginx-http-shibboleth";
       rev = "5eadab80b2f5940d8873398bca000d93d3f0cf27";
@@ -314,6 +341,7 @@ in
 
   sla = {
     src = fetchFromGitHub {
+      name = "sla";
       owner = "goldenclone";
       repo = "nginx-sla";
       rev = "7778f0125974befbc83751d0e1cadb2dcea57601";
@@ -323,6 +351,7 @@ in
 
   slowfs-cache = {
     src = fetchFromGitHub {
+      name = "slowfs-cache";
       owner  = "FRiCKLE";
       repo   = "ngx_slowfs_cache";
       rev    = "1.10";
@@ -332,6 +361,7 @@ in
 
   sorted-querystring = {
     src = fetchFromGitHub {
+      name = "sorted-querystring";
       owner = "wandenberg";
       repo = "nginx-sorted-querystring-module";
       rev = "0.3";
@@ -341,6 +371,7 @@ in
 
   statsd = {
     src = fetchFromGitHub {
+      name = "statsd";
       owner = "harvesthq";
       repo = "nginx-statsd";
       rev = "b970e40467a624ba710c9a5106879a0554413d15";
@@ -350,6 +381,7 @@ in
 
   stream-sts = {
     src = fetchFromGitHub {
+      name = "stream-sts";
       owner = "vozlt";
       repo = "nginx-module-stream-sts";
       rev = "v0.1.1";
@@ -359,6 +391,7 @@ in
 
   sts = {
     src = fetchFromGitHub {
+      name = "sts";
       owner = "vozlt";
       repo = "nginx-module-sts";
       rev = "v0.1.1";
@@ -368,6 +401,7 @@ in
 
   subsFilter = {
     src = fetchFromGitHub {
+      name = "subsFilter";
       owner = "yaoweibin";
       repo = "ngx_http_substitutions_filter_module";
       rev = "b8a71eacc7f986ba091282ab8b1bbbc6ae1807e0";
@@ -377,6 +411,7 @@ in
 
   sysguard = {
     src = fetchFromGitHub {
+      name = "sysguard";
       owner = "vozlt";
       repo = "nginx-module-sysguard";
       rev = "e512897f5aba4f79ccaeeebb51138f1704a58608";
@@ -386,6 +421,7 @@ in
 
   upstream-check = {
     src = fetchFromGitHub {
+      name = "upstream-check";
       owner = "yaoweibin";
       repo = "nginx_upstream_check_module";
       rev = "e538034b6ad7992080d2403d6d3da56e4f7ac01e";
@@ -395,6 +431,7 @@ in
 
   upstream-tarantool = {
     src = fetchFromGitHub {
+      name = "upstream-tarantool";
       owner = "tarantool";
       repo = "nginx_upstream_module";
       rev = "v2.7.1";
@@ -405,6 +442,7 @@ in
 
   url = {
     src = fetchFromGitHub {
+      name = "url";
       owner = "vozlt";
       repo = "nginx-module-url";
       rev = "9299816ca6bc395625c3683fbd2aa7b916bfe91e";
@@ -414,6 +452,7 @@ in
 
   video-thumbextractor = {
     src = fetchFromGitHub {
+      name = "video-thumbextractor";
       owner = "wandenberg";
       repo = "nginx-video-thumbextractor-module";
       rev = "0.9.0";
@@ -424,6 +463,7 @@ in
 
   vts = {
     src = fetchFromGitHub {
+      name = "vts";
       owner = "vozlt";
       repo = "nginx-module-vts";
       rev = "v0.1.18";
