@@ -52,9 +52,9 @@ mkDerivation rec {
 
   cmakeFlags = [
     "-Ddisable_autoupdate=ON"
-    # TODO: Officiall API credentials for Nixpkgs
-    # (see: https://github.com/NixOS/nixpkgs/issues/55271):
-    "-DTDESKTOP_API_TEST=ON"
+    # We're allowed to used the API ID of the Snap package:
+    "-DTDESKTOP_API_ID=611335"
+    "-DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c"
     "-DDESKTOP_APP_USE_PACKAGED_RLOTTIE=OFF"
     "-DDESKTOP_APP_USE_PACKAGED_VARIANT=OFF"
     "-DDESKTOP_APP_USE_PACKAGED_GSL=OFF"
