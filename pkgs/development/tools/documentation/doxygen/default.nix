@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
 
-  name = "doxygen-1.8.18";
+  name = "doxygen-1.8.19";
 
   src = fetchurl {
     urls = [
       "mirror://sourceforge/doxygen/${name}.src.tar.gz" # faster, with https, etc.
       "http://doxygen.nl/files/${name}.src.tar.gz"
     ];
-    sha256 = "0mh6s1ri1fs5yb27m0avnjsbcxpchgb9aaprq4bd3lj6vjg3s5qq";
+    sha256 = "1lvqfw2yzba588c5ggl8yhw7aw4xkk44mrghsd9yqlajc48x25dc";
   };
 
   nativeBuildInputs = [

@@ -4,8 +4,6 @@ buildGoModule rec {
   pname = "kapow";
   version = "0.5.4";
 
-  goPackagePath = "github.com/BBVA/kapow";
-
   subPackages = [ "." ];
 
   src = fetchFromGitHub {
@@ -16,6 +14,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = "159s46rhg67mgglaxgddx3k8kssl0cqiq8yjdqgjhhxppf16r7dy";
+
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/BBVA/kapow";

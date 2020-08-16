@@ -42,6 +42,7 @@ mapAliases ({
   aircrackng = aircrack-ng; # added 2016-01-14
   alienfx = throw "alienfx has been removed."; # added 2019-12-08
   ammonite-repl = ammonite; # added 2017-05-02
+  antimicro = throw "antimicro has been removed as it was broken, see antimicroX instead."; # added 2020-08-06
   arduino_core = arduino-core;  # added 2015-02-04
   asciidocFull = asciidoc-full;  # added 2014-06-22
   at_spi2_atk = at-spi2-atk; # added 2018-02-25
@@ -109,6 +110,7 @@ mapAliases ({
   docbook_xml_xslt = docbook_xsl; # added 2018-04-25
   double_conversion = double-conversion; # 2017-11-22
   docker_compose = docker-compose; # 2018-11-10
+  draftsight = throw "draftsight has been removed, no longer available as freeware"; # added 2020-08-14
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
   emacsMelpa = emacs25Packages; # for backward compatibility
   emacsPackagesGen = emacsPackagesFor; # added 2018-08-18
@@ -136,6 +138,11 @@ mapAliases ({
   fontconfig-ultimate = throw ''
     fontconfig-ultimate has been removed. The repository has been archived upstream and activity has ceased for several years.
     https://github.com/bohoomil/fontconfig-ultimate/issues/171.
+  '';
+  # 2020-07-21
+  fontconfig_210 = throw ''
+    fontconfig 2.10.x hasn't had a release in years, is vulnerable to CVE-2016-5384
+    and has only been used for old fontconfig caches.
   '';
   font-droid = throw "font-droid has been deprecated by noto-fonts"; # 2019-04-12
   foomatic_filters = foomatic-filters;  # 2016-08
@@ -335,6 +342,7 @@ mapAliases ({
   otter-browser = throw "otter-browser has been removed from nixpkgs, as it was unmaintained"; # added 2020-02-02
   owncloudclient = owncloud-client;  # added 2016-08
   p11_kit = p11-kit; # added 2018-02-25
+  parity = openethereum; # added 2020-08-01
   parquet-cpp = arrow-cpp; # added 2018-09-08
   pass-otp = pass.withExtensions (ext: [ext.pass-otp]); # added 2018-05-04
   perlXMLParser = perlPackages.XMLParser; # added 2018-10-12
@@ -347,7 +355,6 @@ mapAliases ({
     with the following snippet:
     php74.override { embedSupport = true; apxs2Support = false; }
   ''; # added 2020-04-01
-  php72-embed = php-embed; # added 2020-04-01
   php73-embed = php-embed; # added 2020-04-01
   php74-embed = php-embed; # added 2020-04-01
 
@@ -358,7 +365,6 @@ mapAliases ({
   ''; # added 2020-04-01
   php74Packages-embed = phpPackages-embed;
   php73Packages-embed = phpPackages-embed;
-  php72Packages-embed = phpPackages-embed;
 
   php-unit = throw ''
     php*-unit has been dropped, you can build something similar with
@@ -372,7 +378,6 @@ mapAliases ({
       fpmSupport = false;
     }
   ''; # added 2020-04-01
-  php72-unit = php-unit; # added 2020-04-01
   php73-unit = php-unit; # added 2020-04-01
   php74-unit = php-unit; # added 2020-04-01
 
@@ -390,7 +395,6 @@ mapAliases ({
   ''; # added 2020-04-01
   php74Packages-unit = phpPackages-unit;
   php73Packages-unit = phpPackages-unit;
-  php72Packages-unit = phpPackages-unit;
 
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatex = pidgin-latex; # added 2018-01-08
@@ -546,6 +550,7 @@ mapAliases ({
   surf-webkit2 = surf; # added 2017-04-02
   sup = throw "deprecated in 2019-09-10: abandoned by upstream";
   system_config_printer = system-config-printer;  # added 2016-01-03
+  systemd-cryptsetup-generator = throw "systemd-cryptsetup-generator is now included in the systemd package"; # added 2020-07-12
   systemd_with_lvm2 = throw "obsolete, enabled by default via the lvm module"; # added 2020-07-12
   systool = sysfsutils; # added 2018-04-25
   tahoelafs = tahoe-lafs; # added 2018-03-26

@@ -159,6 +159,8 @@ in {
     node2.wait_for_unit("network.target")
     node3.wait_for_unit("network.target")
 
+    # NOTE: please keep in mind that the trailing whitespaces in the following strings
+    # are intentional as the output is compared against the raw `iproute2`-output.
     client_ipv4_table = """
     192.168.1.2 dev vrf1 proto static metric 100 
     192.168.2.3 dev vrf2 proto static metric 100

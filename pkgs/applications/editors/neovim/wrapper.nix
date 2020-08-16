@@ -116,11 +116,14 @@ let
   in
   symlinkJoin {
       name = "neovim-${stdenv.lib.getVersion neovim}";
+      # Remove the symlinks created by symlinkJoin which we need to perform
+      # extra actions upon
       postBuild = ''
-        # Remove the symlinks created by symlinkJoin which we need to perform
-        # extra actions upon
-        rm $out/share/applications/nvim.desktop $out/bin/nvim
+        rm $out/bin/nvim
         makeWrapper ${lib.escapeShellArgs initialMakeWrapperArgs} ${extraMakeWrapperArgs}
+      ''
+      + lib.optionalString stdenv.isLinux ''
+        rm $out/share/applications/nvim.desktop
         substitute ${neovim}/share/applications/nvim.desktop $out/share/applications/nvim.desktop \
           --replace 'TryExec=nvim' "TryExec=$out/bin/nvim" \
           --replace 'Name=Neovim' 'Name=WrappedNeovim'
@@ -135,7 +138,7 @@ let
         ln -s ${rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby
       ''
       + optionalString withNodeJs ''
-        ln -s ${nodePackages.neovim}/bin/neovim-node $out/bin/nvim-node
+        ln -s ${nodePackages.neovim}/bin/neovim-node-host $out/bin/nvim-node
       ''
       + optionalString vimAlias ''
         ln -s $out/bin/nvim $out/bin/vim

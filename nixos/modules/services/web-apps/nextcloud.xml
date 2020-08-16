@@ -29,7 +29,6 @@
   services.nextcloud = {
     <link linkend="opt-services.nextcloud.enable">enable</link> = true;
     <link linkend="opt-services.nextcloud.hostName">hostName</link> = "nextcloud.tld";
-    <link linkend="opt-services.nextcloud.nginx.enable">nginx.enable</link> = true;
     config = {
       <link linkend="opt-services.nextcloud.config.dbtype">dbtype</link> = "pgsql";
       <link linkend="opt-services.nextcloud.config.dbuser">dbuser</link> = "nextcloud";
@@ -61,9 +60,8 @@
   </para>
 
   <para>
-   The options <literal>hostName</literal> and <literal>nginx.enable</literal>
-   are used internally to configure an HTTP server using
-   <literal><link xlink:href="https://php-fpm.org/">PHP-FPM</link></literal>
+   The <literal>hostName</literal> option is used internally to configure an HTTP
+   server using <literal><link xlink:href="https://php-fpm.org/">PHP-FPM</link></literal>
    and <literal>nginx</literal>. The <literal>config</literal> attribute set is
    used by the imperative installer and all values are written to an additional file
    to ensure that changes can be applied by changing the module's options.

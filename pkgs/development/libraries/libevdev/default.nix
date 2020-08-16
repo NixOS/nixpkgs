@@ -2,21 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libevdev";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "17pb5375njb1r05xmk0r57a2j986ihglh2n5nqcylbag4rj8mqg7";
+    sha256 = "1jvsphdrs1i54ccjcn6ll26jy42am7h28lbsvwa6pmxgqm43qq7m";
   };
-
-  patches = [
-    # Fix libevdev-python tests on aarch64
-    # https://gitlab.freedesktop.org/libevdev/libevdev/merge_requests/63
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/libevdev/libevdev/commit/66113fe84f62bab3a672a336eb10b255d2aa5ce7.patch";
-      sha256 = "gZKr/P+/OqU69IGslP8CQlcGuyzA/ulcm+nGwHdis58=";
-    })
-  ];
 
   nativeBuildInputs = [ python3 ];
 

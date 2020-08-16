@@ -1,33 +1,29 @@
 { lib
-, python3Packages
+, python3
 , stdenv
 , writeTextDir
 , substituteAll
 , pkgsHostHost
+, fetchpatch
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "0.54.2";
+  version = "0.55.0";
 
-  src = python3Packages.fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0m84zb0q67vnxmd6ldz477w6yjdnk9c44xhlwh1g1pzqx3m6wwd7";
+    sha256 = "Chriv+KuFKxHWTU3+TKQ+3npt3XFW0xTwoK8PKN0WzU=";
   };
 
-  postFixup = ''
-    pushd $out/bin
-    # undo shell wrapper as meson tools are called with python
-    for i in *; do
-      mv ".$i-wrapped" "$i"
-    done
-    popd
-
-    # Do not propagate Python
-    rm $out/nix-support/propagated-build-inputs
-  '';
-
   patches = [
+    # Meson 0.55.0 incorrectly considers skipped tests as failures,
+    # which makes some packages like gjs fail to build.
+    (fetchpatch {
+      url = "https://github.com/mesonbuild/meson/commit/7db49db67d4aa7582cf46feb7157235e66aa95b1.diff";
+      sha256 = "1chq52sgk24afdlswssr8n8p6fa2wz8rjlxvkjhpqg1kg3qnqc9p";
+    })
+
     # Upstream insists on not allowing bindir and other dir options
     # outside of prefix for some reason:
     # https://github.com/mesonbuild/meson/issues/2561
@@ -55,6 +51,14 @@ python3Packages.buildPythonApplication rec {
       src = ./fix-rpath.patch;
       inherit (builtins) storeDir;
     })
+
+    # When Meson removes build_rpath from DT_RUNPATH entry, it just writes
+    # the shorter NUL-terminated new rpath over the old one to reduce
+    # the risk of potentially breaking the ELF files.
+    # But this can cause much bigger problem for Nix as it can produce
+    # cut-in-half-by-\0 store path references.
+    # Let’s just clear the whole rpath and hope for the best.
+    ./clear-old-rpath.patch
   ];
 
   setupHook = ./setup-hook.sh;
@@ -63,10 +67,26 @@ python3Packages.buildPythonApplication rec {
   # workaround until https://github.com/mesonbuild/meson/pull/6512 lands.
   depsHostHostPropagated = [ pkgsHostHost.stdenv.cc ];
 
+  pythonPath = [
+    python3.pkgs.setuptools # for pkg_resources
+  ];
+
   # 0.45 update enabled tests but they are failing
   doCheck = false;
   # checkInputs = [ ninja pkgconfig ];
   # checkPhase = "python ./run_project_tests.py";
+
+  postFixup = ''
+    pushd $out/bin
+    # undo shell wrapper as meson tools are called with python
+    for i in *; do
+      mv ".$i-wrapped" "$i"
+    done
+    popd
+
+    # Do not propagate Python
+    rm $out/nix-support/propagated-build-inputs
+  '';
 
   meta = with lib; {
     homepage = "https://mesonbuild.com";

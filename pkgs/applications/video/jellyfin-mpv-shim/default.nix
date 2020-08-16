@@ -1,18 +1,26 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, fetchurl
+{ stdenv, buildPythonApplication, fetchFromGitHub, callPackage
 , mpv, python-mpv-jsonipc, jellyfin-apiclient-python
 , pillow, tkinter, pystray, jinja2, pywebview }:
 
+let
+  shaderPack = callPackage ./shader-pack.nix {};
+in
 buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";
-  version = "1.5.11";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "iwalton3";
     repo = pname;
     rev = "v${version}";
-    sha256 = "14hm8yccdp7w1vdnvdzafk1byhaq1qsr33i4962s1nvm9lafxkr7";
+    sha256 = "0alrh5h3f8pq9mrq09jmpqa0yslxsjqwij6kwn24ggbwc10zkq75";
     fetchSubmodules = true; # needed for display_mirror css file
   };
+
+  patches = [
+    ./disable-desktop-client.patch
+    ./disable-update-check.patch
+  ];
 
   # override $HOME directory:
   #   error: [Errno 13] Permission denied: '/homeless-shelter'
@@ -25,10 +33,9 @@ buildPythonApplication rec {
     rm jellyfin_mpv_shim/win_utils.py
   '';
 
-  # disable the desktop client for now
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'jellyfin-mpv-desktop=jellyfin_mpv_shim.mpv_shim:main_desktop'," ""
+    # link the default shader pack
+    ln -s ${shaderPack} jellyfin_mpv_shim/default_shader_pack
   '';
 
   propagatedBuildInputs = [

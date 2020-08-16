@@ -18,7 +18,7 @@ let
     ${optionalString nm.enable ''
       {
       ${pkgs.coreutils}/bin/cat << EOF
-      From: smartd on ${host} <root>
+      From: smartd on ${host} <${nm.sender}>
       To: undisclosed-recipients:;
       Subject: SMART error on $SMARTD_DEVICESTRING: $SMARTD_FAILTYPE
 
@@ -127,6 +127,16 @@ in
             default = config.services.mail.sendmailSetuidWrapper != null;
             type = types.bool;
             description = "Whenever to send e-mail notifications.";
+          };
+
+          sender = mkOption {
+            default = "root";
+            example = "example@domain.tld";
+            type = types.str;
+            description = ''
+              Sender of the notification messages.
+              Acts as the value of <literal>email</literal> in the emails' <literal>From: ... </literal> field.
+            '';
           };
 
           recipient = mkOption {

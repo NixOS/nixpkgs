@@ -25,7 +25,7 @@ let
       "nss-lookup.target"
       "nss-user-lookup.target"
       "time-sync.target"
-      #"cryptsetup.target"
+      "cryptsetup.target"
       "sigpwr.target"
       "timers.target"
       "paths.target"
@@ -73,7 +73,7 @@ let
       "systemd-journald.service"
       "systemd-journal-flush.service"
       "systemd-journal-catalog-update.service"
-      "systemd-journald-audit.socket"
+      ] ++ (optional (!config.boot.isContainer) "systemd-journald-audit.socket") ++ [
       "systemd-journald-dev-log.socket"
       "syslog.socket"
 
@@ -101,7 +101,7 @@ let
       "dev-hugepages.mount"
       "dev-mqueue.mount"
       "sys-fs-fuse-connections.mount"
-      "sys-kernel-config.mount"
+      ] ++ (optional (!config.boot.isContainer) "sys-kernel-config.mount") ++ [
       "sys-kernel-debug.mount"
 
       # Maintaining state across reboots.
@@ -354,6 +354,7 @@ let
           [Socket]
           ${attrsToSection def.socketConfig}
           ${concatStringsSep "\n" (map (s: "ListenStream=${s}") def.listenStreams)}
+          ${concatStringsSep "\n" (map (s: "ListenDatagram=${s}") def.listenDatagrams)}
         '';
     };
 

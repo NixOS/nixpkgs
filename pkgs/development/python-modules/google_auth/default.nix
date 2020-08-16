@@ -17,11 +17,11 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "1.17.0";
+  version = "1.17.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2f35b33801a41e4115cd93ff0aeb152f383edc0e27277ae28be2dccf238611b9";
+    sha256 = "e634b649967d83c02dd386ecae9ce4a571528d59d51a4228757e45f5404a060b";
   };
 
   propagatedBuildInputs = [ six pyasn1-modules cachetools rsa setuptools ];

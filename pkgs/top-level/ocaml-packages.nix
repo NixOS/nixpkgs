@@ -569,6 +569,8 @@ let
 
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
+    mustache =  callPackage ../development/ocaml-modules/mustache { };
+
     nocrypto =  callPackage ../development/ocaml-modules/nocrypto { };
 
     notty = callPackage ../development/ocaml-modules/notty { };
@@ -845,6 +847,8 @@ let
     printbox = callPackage ../development/ocaml-modules/printbox { };
 
     process = callPackage ../development/ocaml-modules/process { };
+
+    prof_spacetime = callPackage ../development/ocaml-modules/prof_spacetime { };
 
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
 

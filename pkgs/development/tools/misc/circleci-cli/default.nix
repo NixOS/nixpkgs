@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0y35ps2pw9z7gi4z50byd1py87bf2jdvj7l7w2gxpppmhi83myc9";
 
+  doCheck = false;
+
   buildFlagsArray = [ "-ldflags=-s -w -X github.com/CircleCI-Public/circleci-cli/version.Version=${version}" ];
 
   preBuild = ''

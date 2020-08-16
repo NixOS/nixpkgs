@@ -5,8 +5,9 @@ let
   pgsql = config.services.postgresql;
   mysql = config.services.mysql;
 
-  inherit (lib) mkDefault mkEnableOption mkIf mkOption;
+  inherit (lib) mkDefault mkEnableOption mkIf mkMerge mkOption;
   inherit (lib) attrValues concatMapStringsSep literalExample optional optionalAttrs optionalString types;
+  inherit (lib.generators) toKeyValue;
 
   user = "zabbix";
   group = "zabbix";
@@ -19,24 +20,7 @@ let
     paths = attrValues cfg.modules;
   };
 
-  configFile = pkgs.writeText "zabbix_server.conf" ''
-    LogType = console
-    ListenIP = ${cfg.listen.ip}
-    ListenPort = ${toString cfg.listen.port}
-    # TODO: set to cfg.database.socket if database type is pgsql?
-    DBHost = ${optionalString (cfg.database.createLocally != true) cfg.database.host}
-    ${optionalString (cfg.database.createLocally != true) "DBPort = ${cfg.database.port}"}
-    DBName = ${cfg.database.name}
-    DBUser = ${cfg.database.user}
-    ${optionalString (cfg.database.passwordFile != null) "Include ${passwordFile}"}
-    ${optionalString (mysqlLocal && cfg.database.socket != null) "DBSocket = ${cfg.database.socket}"}
-    PidFile = ${runtimeDir}/zabbix_server.pid
-    SocketDir = ${runtimeDir}
-    FpingLocation = /run/wrappers/bin/fping
-    ${optionalString (cfg.modules != {}) "LoadModulePath = ${moduleEnv}/lib"}
-    ${concatMapStringsSep "\n" (name: "LoadModule = ${name}") (builtins.attrNames cfg.modules)}
-    ${cfg.extraConfig}
-  '';
+  configFile = pkgs.writeText "zabbix_server.conf" (toKeyValue { listsAsDuplicateKeys = true; } cfg.settings);
 
   mysqlLocal = cfg.database.createLocally && cfg.database.type == "mysql";
   pgsqlLocal = cfg.database.createLocally && cfg.database.type == "pgsql";
@@ -47,6 +31,7 @@ in
   imports = [
     (lib.mkRenamedOptionModule [ "services" "zabbixServer" "dbServer" ] [ "services" "zabbixServer" "database" "host" ])
     (lib.mkRemovedOptionModule [ "services" "zabbixServer" "dbPassword" ] "Use services.zabbixServer.database.passwordFile instead.")
+    (lib.mkRemovedOptionModule [ "services" "zabbixServer" "extraConfig" ] "Use services.zabbixServer.settings instead.")
   ];
 
   # interface
@@ -176,15 +161,19 @@ in
         '';
       };
 
-      # TODO: for bonus points migrate this to https://github.com/NixOS/rfcs/pull/42
-      extraConfig = mkOption {
-        default = "";
-        type = types.lines;
+      settings = mkOption {
+        type = with types; attrsOf (oneOf [ int str (listOf str) ]);
+        default = {};
         description = ''
-          Configuration that is injected verbatim into the configuration file. Refer to
+          Zabbix Server configuration. Refer to
           <link xlink:href="https://www.zabbix.com/documentation/current/manual/appendix/config/zabbix_server"/>
           for details on supported values.
         '';
+        example = {
+          CacheSize = "1G";
+          SSHKeyLocation = "/var/lib/zabbix/.ssh";
+          StartPingers = 32;
+        };
       };
 
     };
@@ -202,6 +191,26 @@ in
       { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
         message = "a password cannot be specified if services.zabbixServer.database.createLocally is set to true";
       }
+    ];
+
+    services.zabbixServer.settings = mkMerge [
+      {
+        LogType = "console";
+        ListenIP = cfg.listen.ip;
+        ListenPort = cfg.listen.port;
+        # TODO: set to cfg.database.socket if database type is pgsql?
+        DBHost = optionalString (cfg.database.createLocally != true) cfg.database.host;
+        DBName = cfg.database.name;
+        DBUser = cfg.database.user;
+        PidFile = "${runtimeDir}/zabbix_server.pid";
+        SocketDir = runtimeDir;
+        FpingLocation = "/run/wrappers/bin/fping";
+        LoadModule = builtins.attrNames cfg.modules;
+      }
+      (mkIf (cfg.database.createLocally != true) { DBPort = cfg.database.port; })
+      (mkIf (cfg.database.passwordFile != null) { Include = [ "${passwordFile}" ]; })
+      (mkIf (mysqlLocal && cfg.database.socket != null) { DBSocket = cfg.database.socket; })
+      (mkIf (cfg.modules != {}) { LoadModulePath = "${moduleEnv}/lib"; })
     ];
 
     networking.firewall = mkIf cfg.openFirewall {

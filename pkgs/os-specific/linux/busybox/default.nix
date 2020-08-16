@@ -42,6 +42,9 @@ let
 in
 
 stdenv.mkDerivation rec {
+  # TODO: When bumping this version, please validate whether the wget patch is present upstream
+  # and remove the patch if it is. The patch should be present upstream for all versions 1.32.0+.
+  # See NixOs/nixpkgs#94722 for context.
   name = "busybox-1.31.1";
 
   # Note to whoever is updating busybox: please verify that:
@@ -58,6 +61,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./busybox-in-store.patch
     ./0001-Fix-build-with-glibc-2.31.patch
+    ./0001-wget-implement-TLS-verification-with-ENABLE_FEATURE_.patch
   ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 
   postPatch = "patchShebangs .";

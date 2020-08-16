@@ -72,6 +72,7 @@
 , {"fast-cli": "1.x"}
 , "fkill-cli"
 , "forever"
+, "get-graphql-schema"
 , "git-run"
 , "git-ssb"
 , "git-standup"
@@ -118,6 +119,7 @@
 , "mathjax"
 , "meat"
 , "meguca"
+, "mirakurun"
 , "mocha"
 , "multi-file-swagger"
 , "neovim"
@@ -194,6 +196,7 @@
 , "typescript-language-server"
 , "uglify-js"
 , "ungit"
+, "vim-language-server"
 , "vscode-css-languageserver-bin"
 , "vscode-html-languageserver-bin"
 , "vue-cli"

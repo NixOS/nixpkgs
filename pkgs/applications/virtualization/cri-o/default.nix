@@ -23,6 +23,9 @@ buildGoModule rec {
     sha256 = "1csdbyypqwxkfc061pdv7nj52a52b9xxzb6qgxcznd82w7wgfb3g";
   };
   vendorSha256 = null;
+
+  doCheck = false;
+
   outputs = [ "out" "man" ];
   nativeBuildInputs = [ installShellFiles pkg-config ];
 

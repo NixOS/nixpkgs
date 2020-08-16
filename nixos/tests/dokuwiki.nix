@@ -39,18 +39,10 @@ in {
     services.dokuwiki."site1.local" = {
       aclUse = false;
       superUser = "admin";
-      nginx = {
-        forceSSL = false;
-        enableACME = false;
-      };
     };
     services.dokuwiki."site2.local" = {
-      aclUse = true;
+      usersFile = "/var/lib/dokuwiki/site2.local/users.auth.php";
       superUser = "admin";
-      nginx = {
-        forceSSL = false;
-        enableACME = false;
-      };
       templates = [ template-bootstrap3 ];
       plugins = [ plugin-icalevents ];
     };
@@ -70,6 +62,15 @@ in {
     machine.wait_for_open_port(80)
 
     machine.succeed("curl -sSfL http://site1.local/ | grep 'DokuWiki'")
+    machine.fail("curl -sSfL 'http://site1.local/doku.php?do=login' | grep 'Login'")
+
     machine.succeed("curl -sSfL http://site2.local/ | grep 'DokuWiki'")
+    machine.succeed("curl -sSfL 'http://site2.local/doku.php?do=login' | grep 'Login'")
+
+    machine.succeed(
+        "echo 'admin:$2y$10$ijdBQMzSVV20SrKtCna8gue36vnsbVm2wItAXvdm876sshI4uwy6S:Admin:admin@example.test:user' >> /var/lib/dokuwiki/site2.local/users.auth.php",
+        "curl -sSfL -d 'u=admin&p=password' --cookie-jar cjar 'http://site2.local/doku.php?do=login'",
+        "curl -sSfL --cookie cjar --cookie-jar cjar 'http://site2.local/doku.php?do=login' | grep 'Logged in as: <bdi>Admin</bdi>'",
+    )
   '';
 })

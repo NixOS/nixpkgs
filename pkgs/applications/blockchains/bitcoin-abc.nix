@@ -7,13 +7,13 @@ with stdenv.lib;
 mkDerivation rec {
 
   name = "bitcoin" + (toString (optional (!withGui) "d")) + "-abc-" + version;
-  version = "0.21.10";
+  version = "0.21.12";
 
   src = fetchFromGitHub {
     owner = "bitcoin-ABC";
     repo = "bitcoin-abc";
     rev = "v${version}";
-    sha256 = "1m210g6db8f09m66v75ia1fdd1dlvs1srgk2jhd3wqbvnmjqa77f";
+    sha256 = "1mad3aqfwrxi06135nf8hv13d67nilmxpx4dw5vjcy1zi3lljj1j";
   };
 
   patches = [ ./fix-bitcoin-qt-build.patch ];

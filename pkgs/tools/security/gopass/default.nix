@@ -22,6 +22,8 @@ buildGoModule rec {
 
   vendorSha256 = "1wn20bh7ma4pblsf6qnlbz5bx4p9apig3d1yz7cpsqv4z3w07baw";
 
+  doCheck = false;
+
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.commit=${src.rev}" ];
 
   wrapperPath = stdenv.lib.makeBinPath ([

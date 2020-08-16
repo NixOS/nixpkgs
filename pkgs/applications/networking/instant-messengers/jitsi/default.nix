@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     comment = "VoIP and Instant Messaging client";
     desktopName = "Jitsi";
     genericName = "Instant Messaging";
-    categories = "X-Internet;";
+    categories = "Chat";
   };
 
   libPath = lib.makeLibraryPath ([
@@ -66,6 +66,6 @@ stdenv.mkDerivation rec {
     description = "Open Source Video Calls and Chat";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [];
+    maintainers = teams.jitsi.members;
   };
 }

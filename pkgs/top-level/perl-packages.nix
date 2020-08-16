@@ -2166,7 +2166,7 @@ let
       ../development/perl-modules/CatalystXScriptServerStarman-fork-arg.patch
     ];
     buildInputs = [ TestWWWMechanizeCatalyst ];
-    propagatedBuildInputs = [ CatalystRuntime Starman ];
+    propagatedBuildInputs = [ CatalystRuntime Starman PodParser ];
     meta = {
       description = "Replace the development server with Starman";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -2217,6 +2217,20 @@ let
       maintainers = [ maintainers.endgame ];
     };
   };
+
+  CDDBFile = buildPerlPackage {
+    pname = "CDDB-File";
+    version = "1.05";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/T/TM/TMTM/CDDB-File-1.05.tar.gz;
+      sha256 = "1jf7xhd4w9iwabhz2wajh6fid3nyvkid9q5gdhyff52w86f45rpb";
+    };
+    meta = {
+      description = "Parse a CDDB/freedb data file";
+      license = stdenv.lib.licenses.artistic1;
+    };
+  };
+
 
   CGI = buildPerlPackage {
     pname = "CGI";
@@ -11103,10 +11117,10 @@ let
 
   LogHandler = buildPerlModule {
     pname = "Log-Handler";
-    version = "0.88";
+    version = "0.90";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BL/BLOONIX/Log-Handler-0.88.tar.gz";
-      sha256 = "45bf540ab2138ed3ff93afc205b0516dc75755b86acdcc5e75c41347833c293d";
+      url = "mirror://cpan/authors/id/B/BL/BLOONIX/Log-Handler-0.90.tar.gz";
+      sha256 = "0kgp3frz0y51j8kw67d6b4yyrrbh7syqraxchc7pfm442bkq0p1s";
     };
     propagatedBuildInputs = [ ParamsValidate ];
     meta = {
@@ -12246,6 +12260,56 @@ let
     meta = {
       description = "Definition of MIME types";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  Minion = buildPerlPackage {
+    pname = "Minion";
+    version = "10.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SR/SRI/Minion-10.13.tar.gz";
+      sha256 = "0nxk147v22lvc461923yv8fypqpbsajamvcvnlidk8bb54r33afj";
+    };
+    propagatedBuildInputs = [ Mojolicious ];
+    meta = {
+      homepage = "https://github.com/mojolicious/minion";
+      description = "A high performance job queue for Perl";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  MinionBackendSQLite = buildPerlModule {
+    pname = "Minion-Backend-SQLite";
+    version = "5.0.3";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Minion-Backend-SQLite-v5.0.3.tar.gz";
+      sha256 = "1ch92846cgr1s1y6nlicjxlq9r4qh1a3fig0jlr7ligzw05mxib4";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ Minion MojoSQLite ];
+    meta = {
+      homepage = "https://github.com/Grinnz/Minion-Backend-SQLite";
+      description = "SQLite backend for Minion job queue";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  MinionBackendmysql = buildPerlPackage {
+    pname = "Minion-Backend-mysql";
+    version = "0.21";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PR/PREACTION/Minion-Backend-mysql-0.21.tar.gz";
+      sha256 = "0dbq0pmyjcrmdjpsrkr1pxvzvdphn6mb6lk5yyyhm380prwrjahn";
+    };
+    buildInputs = [ Testmysqld ];
+    propagatedBuildInputs = [ Minion Mojomysql ];
+    meta = {
+      homepage = "https://github.com/preaction/Minion-Backend-mysql";
+      description = "MySQL backend for Minion job queue";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 
@@ -13892,6 +13956,41 @@ let
     };
   };
 
+  MP3Info = buildPerlPackage {
+    pname = "MP3-Info";
+    version = "1.26";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JM/JMERELO/MP3-Info-1.26.tar.gz;
+      sha256 = "1rwbrsdw6y6jgcjvrlji6fbcvwl4wlka3mkhlw12a7s2683k8qjp";
+    };
+    meta = {
+      description = "Manipulate / fetch info from MP3 audio files";
+      license = with stdenv.lib.licenses; [ artistic1 ];
+    };
+  };
+
+  MP3Tag = buildPerlPackage {
+    pname = "MP3-Tag";
+    version = "1.15";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/I/IL/ILYAZ/modules/MP3-Tag-1.15.zip;
+      sha256 = "1lanbwv97sfsb7h4vsg1v0dv3yghpz01nf3rzl4a9p3ycgs4ib5a";
+    };
+    buildInputs = [ pkgs.unzip ];
+    propagatedBuildInputs = [ CompressZlib ExtUtilsMakeMaker ];
+    postPatch = ''
+      substituteInPlace Makefile.PL --replace "'PL_FILES'" "#'PL_FILES'"
+    '';
+    postFixup = ''
+      perl data_pod.PL PERL5LIB:$PERL5LIB
+    '';
+    outputs = [ "out" ];
+    meta = {
+      description = "Module for reading tags of MP3 audio files";
+      license = with stdenv.lib.licenses; [ artistic1 ];
+    };
+  };
+
   Mouse = buildPerlModule {
     pname = "Mouse";
     version = "2.5.10";
@@ -14320,6 +14419,21 @@ let
     propagatedBuildInputs = [ NetFrame ];
     meta = {
       description = "Internet Protocol v6 layer object";
+      license = with stdenv.lib.licenses; [ artistic1 ];
+    };
+  };
+
+  NetFreeDB = buildPerlPackage {
+    pname = "Net-FreeDB";
+    version = "0.10";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DS/DSHULTZ/Net-FreeDB-0.10.tar.gz;
+      sha256 = "11dfi14qnzsnmr71cygir85zfj15n08b7d5g0i4cj5pb70if2hzp";
+    };
+    buildInputs = [ TestMost TestDeep TestWarn TestException TestDifferences ];
+    propagatedBuildInputs = [ CDDBFile Moo libnet ];
+    meta = {
+      description = "Perl interface to freedb server(s)";
       license = with stdenv.lib.licenses; [ artistic1 ];
     };
   };
@@ -14869,6 +14983,22 @@ let
     meta = {
       description = "Generate cryptographic signatures for objects";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  OggVorbisHeaderPurePerl = buildPerlPackage {
+    pname = "Ogg-Vorbis-Header-PurePerl";
+    version = "1.0";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DA/DANIEL/Ogg-Vorbis-Header-PurePerl-1.0.tar.gz;
+      sha256 = "0kjqswnwhp7yf7czvhggdyp2pgg5wa58b4jwpn8j3km7h2ll8pmy";
+    };
+    buildInputs = [ TestMore ];
+    # The testing mechanism is erorrneous upstream. See http://matrix.cpantesters.org/?dist=Ogg-Vorbis-Header-PurePerl+1.0
+    doCheck = false;
+    meta = {
+      description = "An object-oriented interface to Ogg Vorbis information and comment fields";
+      license = with stdenv.lib.licenses; [ artistic1 ];
     };
   };
 
@@ -16231,7 +16361,7 @@ let
       url = "mirror://cpan/authors/id/R/RC/RCLAMP/Pod-Coverage-0.23.tar.gz";
       sha256 = "01xifj83dv492lxixijmg6va02rf3ydlxly0a9slmx22r6qa1drh";
     };
-    propagatedBuildInputs = [ DevelSymdump ];
+    propagatedBuildInputs = [ DevelSymdump PodParser ];
   };
 
   PodCoverageTrustPod = buildPerlPackage {
@@ -16345,6 +16475,7 @@ let
       url = "mirror://cpan/authors/id/T/TJ/TJENNESS/Pod-LaTeX-0.61.tar.gz";
       sha256 = "15a840ea1c8a76cd3c865fbbf2fec33b03615c0daa50f9c800c54e0cf0659d46";
     };
+    propagatedBuildInputs = [ PodParser ];
     meta = {
       homepage = "https://github.com/timj/perl-Pod-LaTeX/tree/master";
       description = "Convert Pod data to formatted Latex";
@@ -16413,6 +16544,7 @@ let
       url = "mirror://cpan/authors/id/R/RM/RMBARKER/Pod-Plainer-1.04.tar.gz";
       sha256 = "1bbfbf7d1d4871e5a83bab2137e22d089078206815190eb1d5c1260a3499456f";
     };
+    propagatedBuildInputs = [ PodParser ];
     meta = {
       description = "Perl extension for converting Pod to old-style Pod";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -16466,7 +16598,7 @@ let
       url = "mirror://cpan/authors/id/D/DO/DOLMEN/Pod-Spell-1.20.tar.gz";
       sha256 = "6383f7bfe22bc0d839a08057a0ce780698b046184aea935be4833d94986dd03c";
     };
-    propagatedBuildInputs = [ ClassTiny FileShareDir LinguaENInflect PathTiny ];
+    propagatedBuildInputs = [ ClassTiny FileShareDir LinguaENInflect PathTiny PodParser ];
     buildInputs = [ FileShareDirInstall TestDeep ];
   };
 
@@ -16521,6 +16653,7 @@ let
        url = "mirror://cpan/authors/id/N/NU/NUFFIN/Pod-Wrap-0.01.tar.gz";
        sha256 = "0qwb5hp26f85xnb3zivf8ccfdplabiyl5sd53c6wgdgvzzicpjjh";
      };
+     propagatedBuildInputs = [ PodParser ];
      meta = {
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
      };
@@ -19409,6 +19542,23 @@ let
     buildInputs = [ TestDeep TestDifferences TestException TestWarn ];
   };
 
+  Testmysqld = buildPerlModule {
+    pname = "Test-mysqld";
+    version = "1.0013";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SO/SONGMU/Test-mysqld-1.0013.tar.gz";
+      sha256 = "1vrybrh3is3xfwqdhxr1mvmmdyjhz9p0f6n8hasn7japj2h43bap";
+    };
+    buildInputs = [ pkgs.which ModuleBuildTiny TestSharedFork ];
+    propagatedBuildInputs = [ ClassAccessorLite DBDmysql FileCopyRecursive ];
+    meta = {
+      homepage = "https://github.com/kazuho/p5-test-mysqld";
+      description = "Mysqld runner for tests";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   TestNeeds = buildPerlPackage {
     pname = "Test-Needs";
     version = "0.002006";
@@ -19537,7 +19687,7 @@ let
       sha256 = "2bfe771173c38b69eeb089504e3f76511b8e45e6a9e6dac3e616e400ea67bcf0";
     };
     buildInputs = [ ModuleBuildTiny TestPod ];
-    propagatedBuildInputs = [ CaptureTiny Moose podlinkcheck ];
+    propagatedBuildInputs = [ CaptureTiny Moose podlinkcheck PodParser ];
     meta = {
       description = "Tests POD for invalid links";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];

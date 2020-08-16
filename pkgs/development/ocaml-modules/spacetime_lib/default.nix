@@ -13,6 +13,10 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ owee ];
 
+  preConfigure = ''
+    bash ./configure.sh
+  '';
+
   meta = {
     description = "An OCaml library providing some simple operations for handling OCaml “spacetime” profiles";
     inherit (src.meta) homepage;

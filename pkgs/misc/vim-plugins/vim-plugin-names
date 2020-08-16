@@ -397,6 +397,7 @@ Olical/conjure
 OrangeT/vim-csharp
 osyo-manga/shabadou.vim
 osyo-manga/vim-anzu
+osyo-manga/vim-over
 osyo-manga/vim-textobj-multiblock
 osyo-manga/vim-watchdogs
 overcache/NeoSolarized
@@ -432,10 +433,12 @@ reedes/vim-pencil
 reedes/vim-wordy
 rhysd/committia.vim
 rhysd/git-messenger.vim
+rhysd/vim-clang-format
 rhysd/vim-grammarous
 rhysd/vim-operator-surround
 rodjek/vim-puppet
 romainl/vim-cool
+roman/golden-ratio
 ron89/thesaurus_query.vim
 roxma/nvim-cm-racer
 roxma/nvim-completion-manager
@@ -527,6 +530,8 @@ tpope/vim-liquid
 tpope/vim-obsession
 tpope/vim-pathogen
 tpope/vim-projectionist
+tpope/vim-ragtag
+tpope/vim-rails
 tpope/vim-repeat
 tpope/vim-rhubarb
 tpope/vim-rsi

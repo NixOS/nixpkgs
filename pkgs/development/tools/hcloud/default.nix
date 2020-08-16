@@ -4,8 +4,6 @@ buildGoModule rec {
   pname = "hcloud";
   version = "1.17.0";
 
-  goPackagePath = "github.com/hetznercloud/cli";
-
   src = fetchFromGitHub {
     owner = "hetznercloud";
     repo = "cli";
@@ -16,6 +14,8 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   vendorSha256 = "1m96j9cwqz2b67byf53qhgl3s0vfwaklj2pm8364qih0ilvifppj";
+
+  doCheck = false;
 
   buildFlagsArray = [ "-ldflags=-s -w -X github.com/hetznercloud/cli/cli.Version=${version}" ];
 

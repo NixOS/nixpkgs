@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0475y95qma5m346ng898n80xv2rxzndx89c9ygjcvjs513yzcba2";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     homepage = "https://github.com/mozilla/sops";
     description = "Mozilla sops (Secrets OPerationS) is an editor of encrypted files";

@@ -4,8 +4,9 @@ buildGoModule rec {
   pname = "matterbridge";
   version = "1.17.5";
 
-  goPackagePath = "github.com/42wim/matterbridge";
   vendorSha256 = null;
+
+  doCheck = false;
 
   src = fetchurl {
     url = "https://github.com/42wim/matterbridge/archive/v${version}.tar.gz";

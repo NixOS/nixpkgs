@@ -3,6 +3,7 @@
 , python
 , buildPythonPackage
 , gfortran
+, hypothesis
 , pytest
 , blas
 , lapack
@@ -35,13 +36,13 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.19.0";
+  version = "1.19.1";
   format = "pyproject.toml";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "76766cc80d6128750075378d3bb7812cf146415bd29b588616f72c943c00d598";
+    sha256 = "b8456987b637232602ceb4d663cb34106f7eb780e247d51a260b84760fd8f491";
   };
 
   nativeBuildInputs = [ gfortran pytest cython setuptoolsBuildHook ];
@@ -66,6 +67,8 @@ in buildPythonPackage rec {
   enableParallelBuilding = true;
 
   doCheck = !isPyPy; # numpy 1.16+ hits a bug in pypy's ctypes, using either numpy or pypy HEAD fixes this (https://github.com/numpy/numpy/issues/13807)
+
+  checkInputs = [ hypothesis ];
 
   checkPhase = ''
     runHook preCheck

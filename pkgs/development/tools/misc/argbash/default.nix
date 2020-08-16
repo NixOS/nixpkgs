@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   pname = "argbash";
 
-  version = "2.8.1";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "matejak";
     repo = "argbash";
     rev = "${version}";
-    sha256 = "0zara7v3pnwiwkpb0x0g37pxhmim4425q4gba712f6djj115r1mr";
+    sha256 = "1h6kw510r43b6d6rjhkhw4d67nc7grak4mgqs9ngjjv07qj3qfqc";
   };
 
   sourceRoot = "source/resources";

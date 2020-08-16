@@ -267,14 +267,6 @@ let
           };
         };
 
-  php72base = callPackage generic (_args // {
-    version = "7.2.32";
-    sha256 = "19wqbpvsd6c6iaad00h0m0xnx4r8fj56pwfhki2cw5xdfi10lp3i";
-
-    # https://bugs.php.net/bug.php?id=76826
-    extraPatches = lib.optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
-  });
-
   php73base = callPackage generic (_args // {
     version = "7.3.20";
     sha256 = "1pl9bjwvdva2yx4sh465z9cr4bnr8mvv008w71sy1kqsj6a7ivf6";
@@ -301,8 +293,7 @@ let
 
   php74 = php74base.withExtensions defaultPhpExtensions;
   php73 = php73base.withExtensions defaultPhpExtensionsWithHash;
-  php72 = php72base.withExtensions defaultPhpExtensionsWithHash;
 
 in {
-  inherit php72 php73 php74;
+  inherit php73 php74;
 }

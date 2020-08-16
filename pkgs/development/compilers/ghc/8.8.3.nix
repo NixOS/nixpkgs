@@ -23,15 +23,15 @@
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
 
+  # aarch64 outputs otherwise exceed 2GB limit
+, enableProfiledLibs ? !stdenv.targetPlatform.isAarch64
+
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
   enableShared ? !stdenv.targetPlatform.isWindows && !stdenv.targetPlatform.useiOSPrebuilt
 
 , # Whether to build terminfo.
   enableTerminfo ? !stdenv.targetPlatform.isWindows
-
-  # aarch64 outputs otherwise exceed 2GB limit
-, enableProfiliedLibs ? !stdenv.targetPlatform.isAarch64
 
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
@@ -70,7 +70,7 @@ let
     BUILD_SPHINX_PDF = NO
   '' + stdenv.lib.optionalString dontStrip ''
     STRIP_CMD = :
-  '' + stdenv.lib.optionalString (!enableProfiliedLibs) ''
+  '' + stdenv.lib.optionalString (!enableProfiledLibs) ''
     GhcLibWays = "v dyn"
   '' + stdenv.lib.optionalString enableRelocatedStaticLibs ''
     GhcLibHcOpts += -fPIC

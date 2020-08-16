@@ -4,6 +4,7 @@
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau, python3Packages
 , libglvnd
+, patchelf, autoreconfHook, fetchFromGitHub
 , enableRadv ? true
 , galliumDrivers ? ["auto"]
 , driDrivers ? ["auto"]
@@ -31,7 +32,7 @@ with stdenv.lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "20.1.3";
+  version = "20.1.5";
   branch  = versions.major version;
 in
 
@@ -46,7 +47,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "1w9b6sl82a3birmpgzn1xx6biggpvynr4hmyzxvj30pfdgabhwlq";
+    sha256 = "16y609zavqqhvxb55c06zwkg986qp6znvn7qjg4axw8bdqg8dhgs";
   };
 
   prePatch = "patchShebangs .";
@@ -58,7 +59,22 @@ stdenv.mkDerivation {
     ./missing-includes.patch # dev_t needs sys/stat.h, time_t needs time.h, etc.-- fixes build w/musl
     ./opencl-install-dir.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
-  ] # do not prefix user provided dri-drivers-path
+    ./link-radv-with-ld_args_build_id.patch
+  ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
+      # Fix `-Werror=int-conversion` pthread warnings on musl.
+      # TODO: Remove when https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/6121 is merged and available
+      (fetchpatch {
+        name = "nine_debug-Make-tid-more-type-correct";
+        # Patch adjusted for version `20.1`, before the big mesa dirs change
+        # `gallium: rename 'state tracker' to 'frontend'`.
+        # Patch for versions after that change is at
+        #     https://gitlab.freedesktop.org/mesa/mesa/commit/aebbf819df6d1e3b4745ef16d0e833300ad67044.patch
+        url = "https://gitlab.freedesktop.org/nh2/mesa/commit/3385c49684375f1153a52ed7ccda3f5135268a41.patch";
+        sha256 = "1ci694sqjll44c9g2md4krhk6qlvq51r7ad5rnnfdnf3l8ys0i50";
+      })
+    ]
+    # do not prefix user provided dri-drivers-path
     ++ lib.optional (lib.versionOlder version "19.0.0") (fetchpatch {
       url = "https://gitlab.freedesktop.org/mesa/mesa/commit/f6556ec7d126b31da37c08d7cb657250505e01a0.patch";
       sha256 = "0z6phi8hbrbb32kkp1js7ggzviq7faz1ria36wi4jbc4in2392d9";
@@ -81,6 +97,12 @@ stdenv.mkDerivation {
     substituteInPlace meson.build --replace \
       "find_program('pkg-config')" \
       "find_program('${buildPackages.pkg-config.targetPrefix}pkg-config')"
+
+    # The drirc.d directory cannot be installed to $drivers as that would cause a cyclic dependency:
+    substituteInPlace src/util/xmlconfig.c --replace \
+      'DATADIR "/drirc.d"' '"${placeholder "out"}/drirc.d"'
+    substituteInPlace src/util/meson.build --replace \
+      "get_option('datadir')" "'${placeholder "out"}'"
   '';
 
   outputs = [ "out" "dev" "drivers" ] ++ lib.optional enableOSMesa "osmesa";
@@ -88,6 +110,7 @@ stdenv.mkDerivation {
   # TODO: Figure out how to enable opencl without having a runtime dependency on clang
   mesonFlags = [
     "--sysconfdir=/etc"
+    "--datadir=${placeholder "drivers"}/share" # Vendor files
 
     # Don't build in debug mode
     # https://gitlab.freedesktop.org/mesa/mesa/blob/master/docs/meson.html#L327
@@ -125,6 +148,16 @@ stdenv.mkDerivation {
   depsBuildBuild = [ pkgconfig ];
 
   nativeBuildInputs = [
+    (patchelf.overrideAttrs (pa: {
+      src = fetchFromGitHub {
+        owner = "NixOS";
+        repo = "patchelf";
+        rev = "61bc10176"; # current master; what matters is merge of #225
+        sha256 = "0cy77mn77w3mn64ggp20f4ygnbxfjmddhjjhfwkva53lsirg6w93";
+      };
+      nativeBuildInputs = pa.nativeBuildInputs or [] ++ [ autoreconfHook ];
+    }))
+  ] ++ [
     pkgconfig meson ninja
     intltool bison flex file
     python3Packages.python python3Packages.Mako
@@ -157,9 +190,6 @@ stdenv.mkDerivation {
       # Move other drivers to a separate output
       mv $out/lib/lib*_mesa* $drivers/lib
     fi
-
-    # move vendor files
-    mv $out/share/ $drivers/
 
     # Update search path used by glvnd
     for js in $drivers/share/glvnd/egl_vendor.d/*.json; do

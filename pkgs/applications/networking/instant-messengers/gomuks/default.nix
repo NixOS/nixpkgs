@@ -4,8 +4,6 @@ buildGoModule rec {
   pname = "gomuks";
   version = "0.1.2";
 
-  goPackagePath = "maunium.net/go/gomuks";
-
   src = fetchFromGitHub {
     owner = "tulir";
     repo = pname;
@@ -14,6 +12,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = "11rk7pma6dr6fsyz8hpjyr7nc2c7ichh5m7ds07m89gzk6ar55gb";
+
+  doCheck = false;
 
   buildInputs = [ olm ];
 
