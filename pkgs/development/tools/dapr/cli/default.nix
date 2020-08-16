@@ -16,6 +16,8 @@ in buildGoModule {
     rev = "v${version}";
   };
 
+  doCheck = false;
+
   postInstall = ''
     mv $out/bin/cli $out/bin/dapr
   '';
