@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-texttospeech";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4ed3d9f17fa7b8d53dbc4992d976f72d845266786a81938444315e5a7b194b53";
+    sha256 = "cbbd397e72b6189668134f3c8e8c303198188334a4e6a5f77cc90c3220772f9e";
   };
 
   checkInputs = [ pytest mock ];
