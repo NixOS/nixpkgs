@@ -8737,6 +8737,14 @@
     githubId = 13259982;
     name = "Vanessa McHale";
   };
+
+  voidless = {
+    email = "julius.schmitt@yahoo.de";
+    github = "voidIess";
+    githubId = 45292658;
+    name = "Julius Schmitt";
+  };
+
   volhovm = {
     email = "volhovm.cs@gmail.com";
     github = "volhovm";
