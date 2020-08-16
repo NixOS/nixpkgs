@@ -60,6 +60,7 @@ buildPythonPackage rec {
     "test_argwhere_str"
     "test_count_nonzero_str"
     "rolling_methods"  # floating percision error ~0.1*10^8 small
+    "num_workers_config" # flaky
   ];
 
   meta = {
