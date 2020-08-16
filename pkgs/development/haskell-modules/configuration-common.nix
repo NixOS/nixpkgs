@@ -1323,23 +1323,6 @@ self: super: {
   # https://github.com/ennocramer/monad-dijkstra/issues/4
   monad-dijkstra = dontCheck (doJailbreak super.monad-dijkstra);
 
-  fourmolu = super.fourmolu.overrideScope (self: super: {
-    aeson = dontCheck self.aeson_1_5_2_0;
-  });
-  # Tests disabled because they access /home
-  haskell-language-server = (dontCheck super.haskell-language-server).overrideScope (self: super: {
-    # haskell-language-server uses its own fork of ghcide
-    # Test disabled: it seems to freeze (is it just that it takes a long time ?)
-    ghcide = dontCheck super.hls-ghcide;
-    # we are faster than stack here
-    hie-bios = dontCheck self.hie-bios_0_6_2;
-    lsp-test = dontCheck self.lsp-test_0_11_0_4;
-    # fourmolu can‘t compile with an older aeson
-    aeson = dontCheck super.aeson_1_5_2_0;
-    # brittany has an aeson upper bound of 1.5
-    brittany = doJailbreak super.brittany;
-  });
-
   # https://github.com/kowainik/policeman/issues/57
   policeman = doJailbreak super.policeman;
 
@@ -1450,4 +1433,24 @@ self: super: {
   # https://github.com/bos/statistics/issues/170
   statistics = dontCheck super.statistics;
 
-} // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
+  # INSERT NEW OVERRIDES ABOVE THIS LINE
+
+} // (let
+  hlsScopeOverride = self: super: {
+    # haskell-language-server uses its own fork of ghcide
+    # Test disabled: it seems to freeze (is it just that it takes a long time ?)
+    ghcide = dontCheck self.hls-ghcide;
+    # we are faster than stack here
+    hie-bios = dontCheck self.hie-bios_0_6_2;
+    lsp-test = dontCheck self.lsp-test_0_11_0_4;
+    # fourmolu can‘t compile with an older aeson
+    aeson = dontCheck super.aeson_1_5_2_0;
+    # brittany has an aeson upper bound of 1.5
+    brittany = doJailbreak super.brittany;
+  };
+in {
+  haskell-language-server = dontCheck (super.haskell-language-server.overrideScope hlsScopeOverride);
+  hls-ghcide = dontCheck (super.hls-ghcide.overrideScope hlsScopeOverride);
+  fourmolu = super.fourmolu.overrideScope hlsScopeOverride;
+}
+)  // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
