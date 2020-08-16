@@ -22,8 +22,8 @@ in
     src = let gitsrc = pkgs.fetchFromGitHub {
       owner = "google";
       repo = "ngx_brotli";
-      rev = "e505dce68acc190cc5a1e780a3b0275e39f160ca";
-      sha256 = "00j48lffki62y1nmjyy81iklw5nlyzvrjy3z04qch4fp3p57hwla";
+      rev = "25f86f0bac1101b6512135eac5f93c49c63609e3";
+      sha256 = "02hfvfa6milj40qc2ikpb9f95sxqvxk4hly3x74kqhysbdi06hhv";
     }; in pkgs.runCommandNoCC "ngx_brotli-src" {} ''
       cp -a ${gitsrc} $out
       substituteInPlace $out/filter/config \
