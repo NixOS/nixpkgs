@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "avro";
-  version = "1.9.2";
+  version = "1.10.0";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4487f0e91d0d44142bd08b3c6da57073b720c3effb02eeb4e2e822804964c56b";
+    sha256 = "bbf9f89fd20b4cf3156f10ec9fbce83579ece3e0403546c305957f9dac0d2f03";
   };
 
   nativeBuildInputs = [ pycodestyle ];
