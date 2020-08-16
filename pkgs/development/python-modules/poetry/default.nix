@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27, pythonOlder
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, pythonOlder, fetchpatch
 , cachecontrol
 , cachy
 , cleo
@@ -43,7 +43,7 @@ buildPythonPackage rec {
      --replace "requests-toolbelt = \"^0.8.0\"" "requests-toolbelt = \"^0.9.1\"" \
      --replace 'importlib-metadata = {version = "~1.1.3", python = "<3.8"}' \
        'importlib-metadata = {version = ">=1.3,<2", python = "<3.8"}' \
-     --replace "tomlkit = \"^0.5.11\"" "tomlkit = \"^0.6.0\"" \
+     --replace "tomlkit = \"^0.5.11\"" "tomlkit = \"<2\"" \
      --replace "cleo = \"^0.7.6\"" "cleo = \"^0.8.0\"" \
      --replace "version = \"^20.0.1\", python = \"^3.5\"" "version = \"^21.0.0\", python = \"^3.5\"" \
      --replace "clikit = \"^0.4.2\"" "clikit = \"^0.6.2\""
@@ -90,6 +90,8 @@ buildPythonPackage rec {
     "prereleases_if_they_are_compatible"
     # requires git history to work correctly
     "default_with_excluded_data"
+    # toml ordering has changed
+    "lock"
   ];
 
   meta = with lib; {
