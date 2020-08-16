@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy-citext";
-  version = "1.6.3";
+  version = "1.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d66e7d49826fec28a9ce69053fdf82d3a5ff397968c5bf38a0d83dcb4bf2303";
+    sha256 = "69ba00f5505f92a1455a94eefc6d3fcf72dda3691ab5398a0b4d0d8d85bd6aab";
   };
 
   propagatedBuildInputs = [
