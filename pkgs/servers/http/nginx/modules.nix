@@ -219,8 +219,8 @@ in
       let src' = fetchFromGitHub {
         owner = "opentracing-contrib";
         repo = "nginx-opentracing";
-        rev = "v0.7.0";
-        sha256 = "16jzxhhsyfjaxb50jy5py9ppscidfx1shvc29ihldp0zs6d8khma";
+        rev = "v0.9.0";
+        sha256 = "02rf1909grbhvs9mjxrv7pwgbf7b8rpjw7j8rpwxag2rgvlsic3g";
       };
       in "${src'}/opentracing";
     inputs = [ pkgs.opentracing-cpp ];
