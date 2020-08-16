@@ -34,40 +34,41 @@ let inherit (stdenv.hostPlatform.parsed) kernel;
       free = false;
     };
 
+    throwLicense = throw ''
+      Use of the JoyPixels font requires acceptance of the license.
+        - ${joypixels-free-license.fullName} [1]
+        - ${joypixels-license-appendix.fullName} [2]
+
+      You can express acceptance by setting acceptLicense to true in your
+      configuration. Note that this is not a free license so it requires allowing
+      unfree licenses.
+
+      configuration.nix:
+        nixpkgs.config.allowUnfree = true;
+        nixpkgs.config.joypixels.acceptLicense = true;
+      
+      config.nix:
+        allowUnfree = true;
+        joypixels.acceptLicense = true;
+
+      [1]: ${joypixels-free-license.url}
+      [2]: ${joypixels-license-appendix.url}
+    '';
+
 in
-
-assert !acceptLicense -> throw ''
-  Use of the JoyPixels font requires acceptance of the license.
-    - ${joypixels-free-license.fullName} [1]
-    - ${joypixels-license-appendix.fullName} [2]
-
-  You can express acceptance by setting acceptLicense to true in your
-  configuration. Note that this is not a free license so it requires allowing
-  unfree licenses.
-
-  configuration.nix:
-    nixpkgs.config.allowUnfree = true;
-    nixpkgs.config.joypixels.acceptLicense = true;
-  
-  config.nix:
-    allowUnfree = true;
-    joypixels.acceptLicense = true;
-
-  [1]: ${joypixels-free-license.url}
-  [2]: ${joypixels-license-appendix.url}
-'';
 
 stdenv.mkDerivation rec {
   pname = "joypixels";
   version = "6.0.0";
 
-  src = with systemSpecific; fetchurl {
-    inherit name;
-    url = "https://cdn.joypixels.com/distributions/${systemTag}/font/${version}/${fontFile}";
-    sha256 = {
-      darwin = "043980g0dlp8vd4qkbx6298fwz8ns0iwbxm0f8czd9s7n2xm4npq";
-    }.${kernel.name} or "1vxqsqs93g4jyp01r47lrpcm0fmib2n1vysx32ksmfxmprimb75s";
-  };
+  src = assert !acceptLicense -> throwLicense;
+    with systemSpecific; fetchurl {
+      inherit name;
+      url = "https://cdn.joypixels.com/distributions/${systemTag}/font/${version}/${fontFile}";
+      sha256 = {
+        darwin = "043980g0dlp8vd4qkbx6298fwz8ns0iwbxm0f8czd9s7n2xm4npq";
+      }.${kernel.name} or "1vxqsqs93g4jyp01r47lrpcm0fmib2n1vysx32ksmfxmprimb75s";
+    };
 
   dontUnpack = true;
 
@@ -85,7 +86,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.joypixels.com/fonts";
     license = let free-license = joypixels-free-license;
                   appendix = joypixels-license-appendix;
-      in {
+      in with systemSpecific; {
         spdxId = "LicenseRef-JoyPixels-Free-6.0-with-${capitalized}-Appendix";
         fullName = "${free-license.fullName} with ${appendix.fullName}";
         url = free-license.url;
