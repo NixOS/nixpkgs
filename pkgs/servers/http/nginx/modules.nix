@@ -64,8 +64,8 @@ in
     src = fetchFromGitHub {
       owner = "openresty";
       repo = "echo-nginx-module";
-      rev = "v0.61";
-      sha256 = "0brjhhphi94ms4gia7za0mfx0png4jbhvq6j0nzjwp537iyiy23k";
+      rev = "v0.62";
+      sha256 = "0kr1y094yw1a9fyrf4w73ikq18w5ys463wza9n7yfl77xdwirnvl";
     };
   };
 
