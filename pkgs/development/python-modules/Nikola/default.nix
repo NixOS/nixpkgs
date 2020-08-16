@@ -57,14 +57,11 @@ buildPythonPackage rec {
     sha256 = "2e5c8305ec4423b56af2223336c3309e5c9b8c96df0d6fde46d26cff4c5d6f1a";
   };
 
-  patchPhase = ''
-    # upstream added bound so that requires.io doesn't send mails about update
-    # nikola should work with markdown 3.0: https://github.com/getnikola/nikola/pull/3175#issue-220147596
-    sed -i 's/Markdown>.*/Markdown/' requirements.txt
-  '';
+  # Remove this patch when upgrading to Nikola>=8.1.0
+  patches = [ ./fix_markdown_test.patch ];
 
   checkPhase = ''
-    LANG="en_US.UTF-8" LC_ALL="en_US.UTF-8" py.test .
+    LANG="en_US.UTF-8" LC_ALL="en_US.UTF-8" py.test tests/
   '';
 
   meta = {

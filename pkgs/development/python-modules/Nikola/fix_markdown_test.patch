@@ -1,0 +1,25 @@
+From 226e8a726e85525fb22664d9d76f4fe1729cf51d Mon Sep 17 00:00:00 2001
+From: Chris Warrick <kwpolska@gmail.com>
+Date: Fri, 7 Feb 2020 18:00:04 +0100
+Subject: [PATCH] Update tests for Markdown==3.2 output change
+
+This minor change does not affect the appearance of Nikola's output.
+---
+ tests/test_compile_markdown.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/test_compile_markdown.py b/tests/test_compile_markdown.py
+index 4d0e3d89c..88ac290d0 100644
+--- a/tests/test_compile_markdown.py
++++ b/tests/test_compile_markdown.py
+@@ -31,8 +31,8 @@
+ <table class="codehilitetable"><tr><td class="linenos">\
+ <div class="linenodiv"><pre>1</pre></div>\
+ </td><td class="code"><pre class="code literal-block"><span></span>\
+-<span class="kn">from</span> <span class="nn">this</span>
+-</pre>
++<code><span class="kn">from</span> <span class="nn">this</span>
++</code></pre>
+ </td></tr></table>
+ """,
+             id="hilite",
