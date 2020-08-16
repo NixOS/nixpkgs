@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pyspark";
-  version = "2.4.6";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b4b319a3ffd187a3019f654ae1c8ac38048bcec2940f8cecdef829302d166feb";
+    sha256 = "8c6e5cc51d91eb8d43e81d0b7093292b5e144ac81445491d5f887d2cf4fe121f";
   };
 
   # pypandoc is broken with pandoc2, so we just lose docs.
