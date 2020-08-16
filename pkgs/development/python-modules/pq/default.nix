@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pq";
-  version = "1.8.1";
+  version = "1.8.2";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9e2c0195488263902ebc9da8df6c82bebe4ee32c79d9ecd0cdc2945afbf7ad32";
+    sha256 = "f54143844e73f4182532e68548dee447dd78dd00310a087e8cdee756d476a173";
   };
 
   # psycopg2cffi is compatible with psycopg2 and author states that
