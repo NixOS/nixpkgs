@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "docker";
-  version = "4.2.2";
+  version = "4.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0m4vgk2831yfdjy8vqyvvfnmwv270a44z358frdzb672wzfbmvi6";
+    sha256 = "431a268f2caf85aa30613f9642da274c62f6ee8bae7d70d968e01529f7d6af93";
   };
 
   nativeBuildInputs = lib.optional isPy27 mock;
