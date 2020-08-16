@@ -8,6 +8,7 @@
 , rust
 , rustc
 , windows
+, darwin
 }:
 
 { name ? "${args.pname}-${args.version}"
@@ -89,7 +90,9 @@ stdenv.mkDerivation (args // {
   patchRegistryDeps = ./patch-registry-deps;
 
   nativeBuildInputs = nativeBuildInputs ++ [ cacert git cargo rustc ];
-  buildInputs = buildInputs ++ stdenv.lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
+  buildInputs = buildInputs
+  ++ stdenv.lib.optional stdenv.hostPlatform.isMinGW windows.pthreads
+  ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 
   patches = cargoPatches ++ patches;
 
