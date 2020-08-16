@@ -41,14 +41,10 @@
      <para>
       From the master branch run:
      </para>
-    </listitem>
-   </orderedlist>
-
 <programlisting>
 git checkout -b release-19.09
 </programlisting>
-
-   <orderedlist>
+    </listitem>
     <listitem>
      <para>
       <link xlink:href="https://github.com/NixOS/nixpkgs/commit/10e61bf5be57736035ec7a804cb0bf3d083bf2cf#diff-9c798092bac0caeb5c52d509be0ca263R69">Bump the <literal>system.defaultChannel</literal> attribute in <literal>nixos/modules/misc/version.nix</literal></link>
@@ -79,12 +75,10 @@ git rev-list --count release-19.09
        <para>
         Get all new NixOS modules:
        </para>
-      </listitem>
-     </itemizedlist>
 <programlisting>
 git diff release-19.03..release-19.09 nixos/modules/module-list.nix | grep ^+
 </programlisting>
-     <itemizedlist>
+      </listitem>
       <listitem>
        <para>
         Note systemd, kernel, glibc, desktop environment, and Nix upgrades.
@@ -96,27 +90,19 @@ git diff release-19.03..release-19.09 nixos/modules/module-list.nix | grep ^+
      <para>
       Tag the release:
      </para>
-    </listitem>
-   </orderedlist>
-
 <programlisting>
 git tag --annotate --message="Release 19.09-beta" 19.09-beta
 git push upstream 19.09-beta
 </programlisting>
-
-   <orderedlist>
+    </listitem>
     <listitem>
      <para>
       <link xlink:href="https://github.com/NixOS/nixpkgs/commit/01268fda85b7eee4e462c873d8654f975067731f#diff-2bc0e46110b507d6d5a344264ef15adaR1">On the <literal>master</literal> branch, increment the <literal>.version</literal> file</link>
      </para>
-    </listitem>
-   </orderedlist>
-
 <programlisting>
 echo -n "20.03" > .version
 </programlisting>
-
-   <orderedlist>
+    </listitem>
     <listitem>
      <para>
       <link xlink:href="https://github.com/NixOS/nixpkgs/commit/01268fda85b7eee4e462c873d8654f975067731f#diff-03f3d41b68f62079c55001f1a1c55c1dR137">Update <literal>codeName</literal> in <literal>lib/trivial.nix</literal></link> This will be the name for the next release.
@@ -195,7 +181,7 @@ echo -n "20.03" > .version
    <orderedlist>
     <listitem>
      <para>
-      Update <quote>Chapter 4. Upgrading NixOS</quote> section of the manual to match new stable release version.
+      Update <xref linkend="sec-upgrading" /> section of the manual to match new stable release version.
      </para>
     </listitem>
     <listitem>
@@ -207,15 +193,11 @@ echo -n "20.03" > .version
      <para>
       Tag the final release
      </para>
-    </listitem>
-   </orderedlist>
-
 <programlisting>
 git tag --annotate --message="Release 19.09" 19.09
 git push upstream 19.09
 </programlisting>
-
-   <orderedlist>
+    </listitem>
     <listitem>
      <para>
       Update <link xlink:href="https://github.com/NixOS/nixos-homepage">nixos-homepage</link> for the release.
@@ -261,20 +243,27 @@ git push upstream 19.09
    </orderedlist>
 
    <para>
-    You should include the following information: - Number of commits for the release: <literal>bash git log release-19.03..release-19.09 --format=%an | wc -l</literal>
+    You should include the following information:
    </para>
 
    <itemizedlist>
     <listitem>
      <para>
+      Number of commits for the release:
+     </para>
+<programlisting>
+bash git log release-19.03..release-19.09 --format=%an | wc -l
+</programlisting>
+    </listitem>
+    <listitem>
+     <para>
       Commits by contributor:
      </para>
-    </listitem>
-   </itemizedlist>
-
 <programlisting>
 git shortlog --summary --numbered release-19.03..release-19.09
 </programlisting>
+    </listitem>
+   </itemizedlist>
 
    <para>
     Best to check how the previous post was formulated to see what needs to be included.
