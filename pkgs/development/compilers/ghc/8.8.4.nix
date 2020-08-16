@@ -55,7 +55,7 @@ let
     (targetPlatform != hostPlatform)
     "${targetPlatform.config}-";
 
-  buildMK = ''
+  buildMK = dontStrip: ''
     BuildFlavour = ${ghcFlavour}
     ifneq \"\$(BuildFlavour)\" \"\"
     include mk/flavours/\$(BuildFlavour).mk
@@ -68,6 +68,8 @@ let
     HADDOCK_DOCS = NO
     BUILD_SPHINX_HTML = NO
     BUILD_SPHINX_PDF = NO
+  '' + stdenv.lib.optionalString dontStrip ''
+    STRIP_CMD = :
   '' + stdenv.lib.optionalString (!enableProfiledLibs) ''
     GhcLibWays = "v dyn"
   '' + stdenv.lib.optionalString enableRelocatedStaticLibs ''
@@ -127,7 +129,7 @@ stdenv.mkDerivation (rec {
     export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
     export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
 
-    echo -n "${buildMK}" > mk/build.mk
+    echo -n "${buildMK dontStrip}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
@@ -240,8 +242,9 @@ stdenv.mkDerivation (rec {
     inherit (ghc.meta) license platforms;
   };
 
-} // stdenv.lib.optionalAttrs targetPlatform.useAndroidPrebuilt {
-  dontStrip = true;
+  dontStrip = (targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm);
+
+} // stdenv.lib.optionalAttrs targetPlatform.useAndroidPrebuilt{
   dontPatchELF = true;
   noAuditTmpdir = true;
 })
