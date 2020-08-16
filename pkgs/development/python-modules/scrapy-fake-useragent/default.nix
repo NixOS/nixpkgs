@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "scrapy-fake-useragent";
-  version = "1.2.0";
+  version = "1.4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02mayk804vdl15wjpx7jcjkc4zgrra4izf6iv00mcxq4fd4ck03l";
+    sha256 = "3b17e982e646918dc25080da0672812d07bfb7a92a58377c014c74e0182c665e";
   };
 
   propagatedBuildInputs = [ fake-useragent ];
