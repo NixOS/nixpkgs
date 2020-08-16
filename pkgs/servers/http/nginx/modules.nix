@@ -280,8 +280,8 @@ in
     src = fetchFromGitHub {
       owner = "wandenberg";
       repo = "nginx-push-stream-module";
-      rev = "0.5.4";
-      sha256 = "0izn7lqrp2zfl738aqa9i8c5lba97wkhcnqg8qbw3ipp5cysb2hr";
+      rev = "1cdc01521ed44dc614ebb5c0d19141cf047e1f90";
+      sha256 = "0ijka32b37dl07k2jl48db5a32ix43jaczrpjih84cvq8yph0jjr";
     };
   };
 
