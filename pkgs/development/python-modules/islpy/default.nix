@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "islpy";
-  version = "2019.1.2";
+  version = "2020.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "834b6b946f33d578d5c6b2f863dd93f7ecc4c0a2bf73407c96ef9f95b6b71bbf";
+    sha256 = "ee797e1284bffe897568f9cc1f063f1a6fac8d7b87596308b7467e9b870a90ef";
   };
 
   postConfigure = ''
