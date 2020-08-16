@@ -2540,6 +2540,7 @@ default-package-overrides:
 
 extra-packages:
   - aeson < 0.8                         # newer versions don't work with GHC 7.6.x or earlier
+  - aeson == 1.5.2.0                    # needed for fourmolu 0.1.0.0, but 1.5.3 is to new for our purpose
   - aeson-pretty < 0.8                  # required by elm compiler
   - Agda == 2.6.1                       # allows the agdaPackage set to be fixed to this version so that it won't break when another agda version is released.
   - ansi-terminal == 0.10.3             # required by cabal-plan, and policeman in ghc-8.8.x
@@ -5074,7 +5075,6 @@ broken-packages:
   - foscam-filename
   - foscam-sort
   - Foster
-  - fourmolu
   - fpco-api
   - fplll
   - fpnla-examples
@@ -9165,7 +9165,6 @@ broken-packages:
   - rethinkdb-client-driver
   - rethinkdb-model
   - rethinkdb-wereHamster
-  - retrie
   - retryer
   - reverse-geocoding
   - reversi

@@ -1323,41 +1323,22 @@ self: super: {
   # https://github.com/ennocramer/monad-dijkstra/issues/4
   monad-dijkstra = dontCheck (doJailbreak super.monad-dijkstra);
 
-  # haskell-language-server uses its own fork of ghcide
-  # Test disabled: it seems to freeze (is it just that it takes a long time ?)
-  hls-ghcide =
-    dontCheck ((
-      overrideCabal super.hls-ghcide
-        (old: {
-          # The integration test run by lsp-test requires the executable to be in the PATH
-          preCheck = ''
-            export PATH=$PATH:dist/build/ghcide
-          '';
-        })).override {
-          # we are faster than stack here
-          hie-bios = dontCheck self.hie-bios_0_6_2;
-          lsp-test = dontCheck self.lsp-test_0_11_0_4;
-        });
-
-  haskell-language-server = (overrideCabal super.haskell-language-server
-    (old: {
-      # The integration test run by lsp-test requires the executable to be in the PATH
-      preCheck = ''
-        export PATH=$PATH:dist/build/haskell-language-server
-      '';
-      # The wrapper test does not work for now.
-      testTarget = "func-test";
-
-      # test needs the git tool
-      testToolDepends = old.testToolDepends
-        ++ [ pkgs.git ];
-    })).override {
-      # use a fork of ghcide
-      ghcide = self.hls-ghcide;
-      # we are faster than stack here
-      hie-bios = dontCheck self.hie-bios_0_6_2;
-      lsp-test = dontCheck self.lsp-test_0_11_0_4;
-    };
+  fourmolu = super.fourmolu.overrideScope (self: super: {
+    aeson = dontCheck self.aeson_1_5_2_0;
+  });
+  # Tests disabled because they access /home
+  haskell-language-server = (dontCheck super.haskell-language-server).overrideScope (self: super: {
+    # haskell-language-server uses its own fork of ghcide
+    # Test disabled: it seems to freeze (is it just that it takes a long time ?)
+    ghcide = dontCheck super.hls-ghcide;
+    # we are faster than stack here
+    hie-bios = dontCheck self.hie-bios_0_6_2;
+    lsp-test = dontCheck self.lsp-test_0_11_0_4;
+    # fourmolu can‘t compile with an older aeson
+    aeson = dontCheck super.aeson_1_5_2_0;
+    # brittany has an aeson upper bound of 1.5
+    brittany = doJailbreak super.brittany;
+  });
 
   # https://github.com/kowainik/policeman/issues/57
   policeman = doJailbreak super.policeman;

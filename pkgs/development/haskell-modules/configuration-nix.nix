@@ -767,4 +767,8 @@ self: super: builtins.intersectAttrs super {
   postgresql-libpq-notify = dontCheck super.postgresql-libpq-notify;
   postgresql-pure = dontCheck super.postgresql-pure;
 
+  retrie = overrideCabal super.retrie (drv: {
+    testToolDepends = [ pkgs.git pkgs.mercurial ];
+  });
+
 }
