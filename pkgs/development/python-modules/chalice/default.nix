@@ -19,11 +19,11 @@
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.14.1";
+  version = "1.17.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "457e71fd84951574ccbe72d1389d9c89aaf5e69a552b01d1f1585faa63459c26";
+    sha256 = "b1ab4197628f4725ac50479aefe61698ea4a5d83ef88bb88978023cdf840a9a2";
   };
 
   checkInputs = [ watchdog pytest hypothesis mock ];
