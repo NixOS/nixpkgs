@@ -3835,6 +3835,12 @@
     githubId = 51518420;
     name = "jitwit";
   };
+  jjjollyjim = {
+    email = "jamie@kwiius.com";
+    github = "JJJollyjim";
+    githubId = 691552;
+    name = "Jamie McClymont";
+  };
   jk = {
     email = "hello+nixpkgs@j-k.io";
     github = "06kellyjac";
