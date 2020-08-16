@@ -1,4 +1,5 @@
 { stdenv, fetchurl, autoreconfHook
+, mailutils, inetutils
 , IOKit ? null , ApplicationServices ? null }:
 
 let
@@ -23,6 +24,10 @@ in stdenv.mkDerivation rec {
 
   patches = [ ./smartmontools.patch ];
   postPatch = "cp -v ${driverdb} drivedb.h";
+
+  configureFlags = [
+    "--with-scriptpath=${stdenv.lib.makeBinPath [ mailutils inetutils ]}"
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [] ++ stdenv.lib.optionals stdenv.isDarwin [IOKit ApplicationServices];
