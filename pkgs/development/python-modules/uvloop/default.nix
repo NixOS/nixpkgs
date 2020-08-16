@@ -6,6 +6,7 @@
 , libuv
 , psutil
 , isPy27
+, pythonAtLeast
 , CoreServices
 , ApplicationServices
 # Check Inputs
@@ -44,14 +45,11 @@ buildPythonPackage rec {
     "--tb=native"
     # ignore code linting tests
     "--ignore=tests/test_sourcecode.py"
-    # Fails on Python 3.8
-    # https://salsa.debian.org/python-team/modules/uvloop/-/commit/302a7e8f5a2869e13d0550cd37e7a8f480e79869
-    "--ignore=tests/test_tcp.py"
   ];
 
   disabledTests = [
     "test_sock_cancel_add_reader_race"  # asyncio version of test is supposed to be skipped but skip doesn't happen. uvloop version runs fine
-  ];
+  ] ++ lib.optionals (pythonAtLeast "3.8") [ "test_write_to_closed_transport" ];  # https://github.com/MagicStack/uvloop/issues/355
 
   # force using installed/compiled uvloop vs source by moving tests to temp dir
   preCheck = ''
