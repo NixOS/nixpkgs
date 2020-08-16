@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 let
   cfg = config.virtualisation.podman;
 
@@ -19,11 +19,6 @@ let
       basename=$(basename $f | sed s/podman/docker/g)
       ln -s $f $man/share/man/man1/$basename
     done
-  '';
-
-  # Copy configuration files to avoid having the entire sources in the system closure
-  copyFile = filePath: pkgs.runCommandNoCC (builtins.unsafeDiscardStringContext (builtins.baseNameOf filePath)) {} ''
-    cp ${filePath} $out
   '';
 
 in
@@ -88,7 +83,7 @@ in
     environment.systemPackages = [ cfg.package ]
       ++ lib.optional cfg.dockerCompat dockerCompat;
 
-    environment.etc."cni/net.d/87-podman-bridge.conflist".source = copyFile "${pkgs.podman-unwrapped.src}/cni/87-podman-bridge.conflist";
+    environment.etc."cni/net.d/87-podman-bridge.conflist".source = utils.copyFile "${pkgs.podman-unwrapped.src}/cni/87-podman-bridge.conflist";
 
     # Enable common /etc/containers configuration
     virtualisation.containers.enable = true;
