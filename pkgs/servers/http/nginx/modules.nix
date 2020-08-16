@@ -388,8 +388,8 @@ in
     src = fetchFromGitHub {
       owner = "yaoweibin";
       repo = "nginx_upstream_check_module";
-      rev = "007f76f7adbcbd6abd9352502af1a4ae463def85";
-      sha256 = "1qcg7c9rcl70wr1qf188shnn9s2f7cxnlw05s6scbvlgnf6ik6in";
+      rev = "e538034b6ad7992080d2403d6d3da56e4f7ac01e";
+      sha256 = "06y7k04072xzqyqyb08m0vaaizkp4rfwm0q7i735imbzw2rxb74l";
     };
   };
 
