@@ -19,12 +19,12 @@ with lib;
 
 mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.2.0";
+  version = "2.3.0";
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "1chikb02df4qqnickcmx96lcx481b14kmksjsp7h94g0d223ypq0";
+    sha256 = "0yga4p36jrc5m3d8q2y2g0505c2v540w5hgcscapl4xj9hyb21dw";
   };
 
   postPatch = ''
@@ -60,6 +60,7 @@ mkDerivation rec {
     "-DDESKTOP_APP_USE_PACKAGED_GSL=OFF"
     "-DTDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME=ON"
     "-DTDESKTOP_USE_PACKAGED_TGVOIP=OFF"
+    "-DDESKTOP_APP_DISABLE_WEBRTC_INTEGRATION=ON"
     #"-DDESKTOP_APP_SPECIAL_TARGET=\"\"" # TODO: Error when set to "": Bad special target '""'
     "-DTDESKTOP_LAUNCHER_BASENAME=telegramdesktop" # Note: This is the default
   ] ++ optionals stdenv.isLinux [ # TODO: Remove workaround once #94905 is resolved:
