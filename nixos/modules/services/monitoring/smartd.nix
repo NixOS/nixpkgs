@@ -239,11 +239,7 @@ in
 
     systemd.services.smartd = {
       description = "S.M.A.R.T. Daemon";
-
       wantedBy = [ "multi-user.target" ];
-
-      path = [ pkgs.nettools ]; # for hostname and dnsdomanname calls in smartd
-
       serviceConfig.ExecStart = "${pkgs.smartmontools}/sbin/smartd ${lib.concatStringsSep " " cfg.extraOptions} --no-fork --configfile=${smartdConf}";
     };
 
