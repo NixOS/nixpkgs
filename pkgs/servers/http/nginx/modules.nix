@@ -172,8 +172,8 @@ in
     src = fetchFromGitHub {
       owner = "SpiderLabs";
       repo = "ModSecurity-nginx";
-      rev = "v1.0.0";
-      sha256 = "0zzpdqhbdqqy8kjkszv0mrq6136ah9v3zwr1jbh312j8izmzdyi7";
+      rev = "v1.0.1";
+      sha256 = "0cbb3g3g4v6q5zc6an212ia5kjjad62bidnkm8b70i4qv1615pzf";
     };
     inputs = [ pkgs.curl pkgs.geoip pkgs.libmodsecurity pkgs.libxml2 pkgs.lmdb pkgs.yajl ];
   };
