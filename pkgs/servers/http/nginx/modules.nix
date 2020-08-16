@@ -341,7 +341,7 @@ in
 
   statsd = {
     src = fetchFromGitHub {
-      owner = "apcera";
+      owner = "harvesthq";
       repo = "nginx-statsd";
       rev = "b970e40467a624ba710c9a5106879a0554413d15";
       sha256 = "1x8j4i1i2ahrr7qvz03vkldgdjdxi6mx75mzkfizfcc8smr4salr";
