@@ -36,6 +36,7 @@ with lib;
       networkmanager-vpnc = super.networkmanager-vpnc.override { withGnome = false; };
       networkmanager-iodine = super.networkmanager-iodine.override { withGnome = false; };
       gobject-introspection = super.gobject-introspection.override { x11Support = false; };
+      qemu = super.qemu.override { gtkSupport = false; spiceSupport = false; sdlSupport = false; };
     }));
   };
 }
