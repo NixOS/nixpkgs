@@ -178,8 +178,6 @@ in
       type = types.nullOr types.attrs; # TODO utilize lib.systems.parsedPlatform
       default = null;
       example = { system = "aarch64-linux"; config = "aarch64-unknown-linux-gnu"; };
-      defaultText = literalExample
-        ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
       description = ''
         Specifies the platform for which NixOS should be
         built. Specify this only if it is different from
