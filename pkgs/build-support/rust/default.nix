@@ -181,7 +181,7 @@ stdenv.mkDerivation (args // {
       "CXX_${rust.toRustTarget stdenv.buildPlatform}"="${cxxForBuild}" \
       "CC_${rust.toRustTarget stdenv.hostPlatform}"="${ccForHost}" \
       "CXX_${rust.toRustTarget stdenv.hostPlatform}"="${cxxForHost}" \
-      cargo build \
+      cargo build -j $NIX_BUILD_CORES \
         ${stdenv.lib.optionalString (buildType == "release") "--release"} \
         --target ${rustTarget} \
         --frozen ${concatStringsSep " " cargoBuildFlags}
@@ -208,7 +208,7 @@ stdenv.mkDerivation (args // {
     ${stdenv.lib.optionalString (buildAndTestSubdir != null) "pushd ${buildAndTestSubdir}"}
     runHook preCheck
     echo "Running cargo test ${argstr} -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
-    cargo test ${argstr} -- ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
+    cargo test -j $NIX_BUILD_CORES ${argstr} -- --test-threads=$NIX_BUILD_CORES ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
     runHook postCheck
     ${stdenv.lib.optionalString (buildAndTestSubdir != null) "popd"}
   '');
