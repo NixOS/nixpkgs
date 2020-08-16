@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "bidict";
-  version = "0.19.0";
+  version = "0.20.0";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11wiis62kcw6g3n4gdj39fx1yrlq5vz3zx3kmb6g79mliyhn2x7g";
+    sha256 = "c1b1ce1c0f1e3457489672bc3a4db375a06f61ae7797a9eedf71ea788cea3870";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
