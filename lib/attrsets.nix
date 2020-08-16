@@ -488,6 +488,31 @@ rec {
   dontRecurseIntoAttrs =
     attrs: attrs // { recurseForDerivations = false; };
 
+  /* Heuristic that maps an 'app' or derivation to a binary path.
+
+     If 'pkg' is of type 'app', it outputs the 'program'
+
+     If 'pkg' is a derivation, it outputs the path to
+     '${drv}/bin/${drv.pname}' (simplified)
+
+     This copies the logic of `nix run` that lives in the nix src/nix/app.cc
+     file.
+
+     Example:
+       toApp pkgs.bash
+       => "/nix/store/vwcxfvl2p0rnw2w6lqa2ax0wbcahlsss-bash-interactive-4.4-p23/bin/bash"
+  */
+  toApp = pkg:
+    let
+      outPath = pkg.outPath;
+      name = pkg.name;
+      type = pkg.type;
+    in
+    if type == "app" then pkg.program
+    else if type == "derivation" then
+      "${outPath}/bin/${(builtins.parseDrvName name).name}"
+    else throw "unsupported type '${type}'";
+
   /*** deprecated stuff ***/
 
   zipWithNames = zipAttrsWithNames;
