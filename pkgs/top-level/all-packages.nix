@@ -997,7 +997,9 @@ in
 
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
-  genpass = callPackage ../tools/security/genpass { };
+  genpass = callPackage ../tools/security/genpass {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
 
   genymotion = callPackage ../development/mobile/genymotion { };
 
