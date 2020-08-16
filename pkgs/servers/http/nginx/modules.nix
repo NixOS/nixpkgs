@@ -200,8 +200,8 @@ in
     src = fetchFromGitHub {
       owner = "nbs-system";
       repo = "naxsi";
-      rev = "0.56";
-      sha256 = "12kn6wbl8xqc19fi05ffprqps4pplg4a6i1cf01xc0d6brx1fg8v";
+      rev = "07a056ccd36bc3c5c40dc17991db226cb8cf6241";
+      sha256 = "1kdqy7by6ha2pl9lkkjxh4qrwcsrj2alm8fl129831h5y5xy8qx2";
     } + "/naxsi_src";
   };
 
