@@ -1,8 +1,8 @@
 diff --git a/mesonbuild/scripts/depfixer.py b/mesonbuild/scripts/depfixer.py
-index 77ac03d66..d12f77592 100644
+index 4176b9a03..faaabf616 100644
 --- a/mesonbuild/scripts/depfixer.py
 +++ b/mesonbuild/scripts/depfixer.py
-@@ -337,6 +337,15 @@ class Elf(DataSizes):
+@@ -336,6 +336,15 @@ class Elf(DataSizes):
          if not new_rpath:
              self.remove_rpath_entry(entrynum)
          else:
