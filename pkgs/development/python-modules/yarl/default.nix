@@ -1,9 +1,12 @@
 { stdenv
+, lib
 , fetchPypi
 , buildPythonPackage
+, pythonOlder
 , multidict
 , pytestrunner
 , pytest
+, typing-extensions
 , idna
 }:
 
@@ -17,7 +20,10 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest pytestrunner ];
-  propagatedBuildInputs = [ multidict idna ];
+  propagatedBuildInputs = [ multidict idna ]
+    ++ lib.optionals (pythonOlder "3.8") [
+      typing-extensions
+    ];
 
   meta = with stdenv.lib; {
     description = "Yet another URL library";
