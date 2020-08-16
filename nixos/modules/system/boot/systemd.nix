@@ -81,10 +81,6 @@ let
       "systemd-coredump.socket"
       "systemd-coredump@.service"
 
-      # SysV init compatibility.
-      "systemd-initctl.socket"
-      "systemd-initctl.service"
-
       # Kernel module loading.
       "systemd-modules-load.service"
       "kmod-static-nodes.service"
