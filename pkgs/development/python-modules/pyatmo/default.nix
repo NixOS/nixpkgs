@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "3.3.1";
+  version = "4.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9949338833a27b6c3251b52bf70b73aa99c43c56153541338cb63001afafdd1e";
+    sha256 = "148713395d51a57f1f3102eacbb9286a859fc5c18c066238a961a1acf189b930";
   };
 
   propagatedBuildInputs = [ oauthlib requests requests_oauthlib ];
