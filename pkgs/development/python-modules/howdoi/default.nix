@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "howdoi";
-  version = "1.2.1";
+  version = "2.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3b322668606d29d8a841c3b28c0574851f512b55c33a7ceb982b6a98d82fa3e3";
+    sha256 = "ed8acb75779f598a831224f33fa991c51764872574a128e9b2f11b83fcace010";
   };
 
   propagatedBuildInputs = [ six requests-cache pygments pyquery cachelib appdirs ];
