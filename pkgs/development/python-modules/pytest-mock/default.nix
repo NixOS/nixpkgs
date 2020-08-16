@@ -27,8 +27,9 @@ buildPythonPackage rec {
     pytest
   ];
 
+  # ignore test which only works with pytest5 output structure
   checkPhase = ''
-    pytest
+    pytest -k 'not detailed_introspection_async'
   '';
 
   meta = with lib; {
