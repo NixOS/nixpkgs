@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     gtkspell3
     hunspell
     libsecret
-    webkitgtk
+    (webkitgtk.override {enableGLES = false;})
     glib
   ];
 
