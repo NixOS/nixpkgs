@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "eventlet";
-  version = "0.25.2";
+  version = "0.26.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4c8ab42c51bff55204fef43cff32616558bedbc7538d876bb6a96ce820c7f9ed";
+    sha256 = "4f4a43366b4cbd4a3f2f231816e5c3dae8ab316df9b7da11f0525e2800559f33";
   };
 
   checkInputs = [ nose ];
