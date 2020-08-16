@@ -1,12 +1,12 @@
 { lib, buildPythonPackage, fetchPypi, pytest }:
 
 buildPythonPackage rec {
-  version = "3.4";
+  version = "4.0.0";
   pname = "ftputil";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "374b01e174079e91babe2a462fbd6f6c00dbfbfa299dec04239ca4229fbf8762";
+    sha256 = "d494c47f24fd3f8fbe92d40d90e0902c0e04288f200688af2b16d6b46fe441e1";
   };
 
   checkInputs = [ pytest ];
