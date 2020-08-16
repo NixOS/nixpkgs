@@ -14366,6 +14366,8 @@ in
 
   openvdb = callPackage ../development/libraries/openvdb {};
 
+  openvr = callPackage ../development/libraries/openvr {};
+
   inherit (callPackages ../development/libraries/libressl { })
     libressl_3_0
     libressl_3_1;
