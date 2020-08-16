@@ -20,7 +20,7 @@ let
       ${pkgs.coreutils}/bin/cat << EOF
       From: smartd on ${host} <${nm.sender}>
       To: undisclosed-recipients:;
-      Subject: SMART error on $SMARTD_DEVICESTRING: $SMARTD_FAILTYPE
+      Subject: $SMARTD_SUBJECT
 
       $SMARTD_FULLMESSAGE
       EOF
