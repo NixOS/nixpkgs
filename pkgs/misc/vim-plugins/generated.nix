@@ -6553,6 +6553,18 @@ let
     meta.homepage = "https://github.com/t9md/vim-smalls/";
   };
 
+  vim-smoothie = buildVimPluginFrom2Nix {
+    pname = "vim-smoothie";
+    version = "2019-12-02";
+    src = fetchFromGitHub {
+      owner = "psliwka";
+      repo = "vim-smoothie";
+      rev = "d3de4fbd7a9331b3eb05fa632611ebd34882cc83";
+      sha256 = "1bsqnz02jaydr92mmcrdlva4zxs28zgxwgznr2bwk4wnn26i54p6";
+    };
+    meta.homepage = "https://github.com/psliwka/vim-smoothie/";
+  };
+
   vim-smt2 = buildVimPluginFrom2Nix {
     pname = "vim-smt2";
     version = "2018-05-20";
