@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 
-VERSION="2.6.1"
+VERSION="2.8.2"
 
 # Bash 3 compatible for Darwin
 plugins=(
     # https://github.com/pulumi/pulumi-aws/releases
-    "aws=2.13.0"
+    "aws=3.1.0"
     # https://github.com/pulumi/pulumi-gcp/releases
-    "gcp=3.13.0"
+    "gcp=3.18.0"
     # https://github.com/pulumi/pulumi-random/releases
     "random=2.2.0"
     # https://github.com/pulumi/pulumi-kubernetes/releases
-    "kubernetes=2.4.0"
+    "kubernetes=2.4.3"
     # https://github.com/pulumi/pulumi-postgresql/releases
-    "postgresql=2.2.2");
+    "postgresql=2.3.0");
 
 function genMainSrc() {
     local url="https://get.pulumi.com/releases/sdk/pulumi-v${VERSION}-$1-x64.tar.gz"
