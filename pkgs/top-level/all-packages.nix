@@ -9832,13 +9832,6 @@ in
 
   me_cleaner = pythonPackages.callPackage ../tools/misc/me_cleaner { };
 
-  mesos = callPackage ../applications/networking/cluster/mesos {
-    sasl = cyrus_sasl;
-    inherit (pythonPackages) python boto setuptools wrapPython;
-    pythonProtobuf = pythonPackages.protobuf.override { protobuf = protobuf3_6; };
-    perf = linuxPackages.perf;
-  };
-
   mesos-dns = callPackage ../servers/mesos-dns { };
 
   metamath = callPackage ../development/interpreters/metamath { };
@@ -19506,8 +19499,6 @@ in
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or {});
 
-  chronos = callPackage ../applications/networking/cluster/chronos { };
-
   chromiumBeta = lowPrio (chromium.override { channel = "beta"; });
 
   chromiumDev = lowPrio (chromium.override { channel = "dev"; });
@@ -21353,7 +21344,6 @@ in
 
   mapmap = libsForQt5.callPackage ../applications/video/mapmap { };
 
-  marathon = callPackage ../applications/networking/cluster/marathon { };
   marathonctl = callPackage ../tools/virtualization/marathonctl { } ;
 
   markdown-pp = callPackage ../tools/text/markdown-pp { };

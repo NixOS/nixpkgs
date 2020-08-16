@@ -472,8 +472,6 @@
   ./services/misc/mautrix-telegram.nix
   ./services/misc/mbpfan.nix
   ./services/misc/mediatomb.nix
-  ./services/misc/mesos-master.nix
-  ./services/misc/mesos-slave.nix
   ./services/misc/metabase.nix
   ./services/misc/mwlib.nix
   ./services/misc/nix-daemon.nix
@@ -786,10 +784,8 @@
   ./services/networking/znc/default.nix
   ./services/printing/cupsd.nix
   ./services/scheduling/atd.nix
-  ./services/scheduling/chronos.nix
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
-  ./services/scheduling/marathon.nix
   ./services/search/elasticsearch.nix
   ./services/search/elasticsearch-curator.nix
   ./services/search/hound.nix
