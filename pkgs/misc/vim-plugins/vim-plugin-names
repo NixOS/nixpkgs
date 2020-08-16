@@ -14,6 +14,7 @@ andreshazard/vim-logreview
 AndrewRadev/splitjoin.vim
 andsild/peskcolor.vim
 andviro/flake8-vim
+andymass/vim-matchup
 andys8/vim-elm-syntax
 antoinemadec/coc-fzf
 ap/vim-css-color
