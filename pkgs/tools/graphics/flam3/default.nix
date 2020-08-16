@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = "https://flam3.com/";
     maintainers = [ maintainers.nand0p ];
     platforms = platforms.linux;
-    license = licenses.cc-by-nc-sa-20;
+    license = licenses.gpl3Plus;
   };
 }
