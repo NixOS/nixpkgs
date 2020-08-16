@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.6.1";
+  version = "0.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f9wj1ggllwpjd9nh6nsrck7m4gbz29q6vqbrhbkc2kz6waqkgwc";
+    sha256 = "17d4fb4fbdfe1c762e421ce2caa6beddab8ef9a6e0e5c7ab7eb54c8d8654c61c";
   };
 
   nativeBuildInputs = [ pytestrunner];
