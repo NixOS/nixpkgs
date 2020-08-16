@@ -474,14 +474,14 @@ in {
             ${openldap}/bin/slaptest -f ${configFile} -F ${configDir} || true
           '' else ''
             rm -Rf '${configDir}'/*
-            ${openldap}/bin/slapadd -F ${configDir} -n0 -l ${settingsFile}
+            ${openldap}/bin/slapadd -F ${configDir} -bcn=config -l ${settingsFile}
           ''
         )}
         chown -R "${cfg.user}:${cfg.group}" '${configDir}'
 
         ${optionalString (cfg.declarativeContents != null) ''
           rm -Rf '${lib.head dataDirs}'/*
-          ${openldap}/bin/slapadd -F ${configDir} -n1 -l ${dataFile}
+          ${openldap}/bin/slapadd -F ${configDir} -b${cfg.suffix} -l ${dataFile}
           chown -R "${cfg.user}:${cfg.group}" ${lib.escapeShellArgs dataDirs}
         ''}
 
