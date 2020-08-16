@@ -55,7 +55,12 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
     systemd.services."serial-getty@hvc0".enable = false;
 
     # Only use a serial console, no TTY.
-    virtualisation.qemu.consoles = [ qemuSerialDevice ];
+    # NOTE: optionalAttrs
+    #       test-instrumentation.nix appears to be used without qemu-vm.nix, so
+    #       we avoid defining consoles if not possible.
+    # TODO: refactor such that test-instrumentation can import qemu-vm
+    #       or declare virtualisation.qemu.console option in a module that's always imported
+    virtualisation = lib.optionalAttrs (options ? virtualisation.qemu.consoles) { qemu.consoles = [ qemuSerialDevice ]; };
 
     boot.initrd.preDeviceCommands =
       ''
