@@ -13,6 +13,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ parso ];
 
+  # remove next bump, >=0.17.2, already fixed in master
+  prePatch = ''
+    substituteInPlace requirements.txt \
+      --replace "parso>=0.7.0,<0.8.0" "parso"
+  '';
+
   checkPhase = ''
     LC_ALL="en_US.UTF-8" py.test test
   '';
