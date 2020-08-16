@@ -29,6 +29,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ashleygwilliams/cargo-generate";
     license = licenses.asl20;
     maintainers = [ maintainers.turbomack ];
-    platforms = platforms.all;
   };
 }

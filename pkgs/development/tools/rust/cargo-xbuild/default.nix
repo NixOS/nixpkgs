@@ -18,6 +18,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rust-osdev/cargo-xbuild";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ johntitor xrelkd ];
-    platforms = platforms.all;
   };
 }

@@ -45,6 +45,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://starship.rs";
     license = licenses.isc;
     maintainers = with maintainers; [ bbigras davidtwco filalex77 Frostman marsam ];
-    platforms = platforms.all;
   };
 }

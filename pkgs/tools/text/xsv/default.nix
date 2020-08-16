@@ -20,6 +20,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/BurntSushi/xsv";
     license = with licenses; [ unlicense /* or */ mit ];
     maintainers = [ maintainers.jgertm ];
-    platforms = platforms.all;
   };
 }

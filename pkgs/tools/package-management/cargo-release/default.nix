@@ -21,6 +21,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/sunng87/cargo-release";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ gerschtli ];
-    platforms = platforms.all;
   };
 }

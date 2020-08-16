@@ -34,6 +34,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lunaryorn/mdcat";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ davidtwco ];
-    platforms = platforms.all;
   };
 }

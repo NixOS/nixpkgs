@@ -40,6 +40,5 @@ in rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dani-garcia/bitwarden_rs";
     license = licenses.gpl3;
     maintainers = with maintainers; [ msteen ];
-    platforms = platforms.all;
   };
 }
