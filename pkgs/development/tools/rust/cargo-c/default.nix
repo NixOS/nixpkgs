@@ -1,5 +1,6 @@
 { rustPlatform, stdenv, lib, fetchFromGitHub, fetchurl
 , pkg-config, openssl
+, CoreFoundation, libiconv, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,7 +31,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "1gwyszpcmss2d0lm5hvf3b48jy7b0fm7xizhrl3wd6rzw7pg06zd";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ]
+  ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation libiconv Security ];
 
   meta = with lib; {
     description = "A cargo subcommand to build and install C-ABI compatibile dynamic and static libraries";
