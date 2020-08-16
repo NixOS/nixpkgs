@@ -11,7 +11,7 @@
 , withGTK3 ? true, gtk3-x11 ? null, gsettings-desktop-schemas ? null
 , withXwidgets ? false, webkitgtk ? null, wrapGAppsHook ? null, glib-networking ? null
 , withCsrc ? true
-, srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
+, srcRepo ? false, autoreconfHook ? null, texinfo ? null
 , siteStart ? ./site-start.el
 , nativeComp ? false
 , toolkit ? (
@@ -56,6 +56,15 @@ in stdenv.mkDerivation {
       rm -fr .git
     '')
 
+    ''
+    substituteInPlace lisp/international/mule-cmds.el \
+      --replace /usr/share/locale ${gettext}/share/locale
+
+    for makefile_in in $(find . -name Makefile.in -print); do
+      substituteInPlace $makefile_in --replace /bin/pwd pwd
+    done
+    ''
+
     # Make native compilation work both inside and outside of nix build
     (lib.optionalString nativeComp (let
       libPath = lib.concatStringsSep ":" [
@@ -78,7 +87,7 @@ in stdenv.mkDerivation {
   LIBRARY_PATH = if nativeComp then "${lib.getLib stdenv.cc.libc}/lib" else "";
 
   nativeBuildInputs = [ pkgconfig makeWrapper ]
-    ++ lib.optionals srcRepo [ autoconf automake texinfo ]
+    ++ lib.optionals srcRepo [ autoreconfHook texinfo ]
     ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
 
   buildInputs =
@@ -113,17 +122,6 @@ in stdenv.mkDerivation {
     ++ lib.optional withXwidgets "--with-xwidgets"
     ++ lib.optional nativeComp "--with-nativecomp"
     ;
-
-  preConfigure = lib.optionalString srcRepo ''
-    ./autogen.sh
-  '' + ''
-    substituteInPlace lisp/international/mule-cmds.el \
-      --replace /usr/share/locale ${gettext}/share/locale
-
-    for makefile_in in $(find . -name Makefile.in -print); do
-        substituteInPlace $makefile_in --replace /bin/pwd pwd
-    done
-  '';
 
   installTargets = [ "tags" "install" ];
 
