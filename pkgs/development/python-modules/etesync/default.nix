@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "etesync";
-  version = "0.11.1";
+  version = "0.12.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0yads0s84z41hf003qk5i8222fi7096whzwfp48kf369gchp39kc";
+    sha256 = "f20f7e9922ee789c4b71379676ebfe656b675913fe524f2ee722e1b9ef4e5197";
   };
 
   propagatedBuildInputs = [
