@@ -53,10 +53,10 @@ in
 
   develkit = {
     src = fetchFromGitHub {
-      owner = "simpl";
+      owner = "vision5";
       repo = "ngx_devel_kit";
-      rev = "v0.3.1rc1";
-      sha256 = "00vqvpx67qra2hr85hkvj1dha4h7x7v9sblw7w1df11nq1gzsdbb";
+      rev = "v0.3.1";
+      sha256 = "1c5zfpvm0hrd9lp8rasmw79dnr2aabh0i6y11wzb783bp8m3p2sq";
     };
   };
 
