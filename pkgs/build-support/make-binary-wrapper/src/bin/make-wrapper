@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+
+import sys
+sitepackages = "@sitePackages@"
+sys.path.insert(0, sitepackages)
+import libwrapper.make_wrapper
+libwrapper.make_wrapper.main()
