@@ -20,6 +20,17 @@ in
 
 {
   fastcgi-cache-purge = throw "fastcgi-cache-purge was renamed to cache-purge";
+  ngx_aws_auth = throw "fastcgi-cache-purge was renamed to aws-auth";
+
+  aws-auth = {
+    src = fetchFromGitHub {
+      name = "aws-auth";
+      owner = "anomalizer";
+      repo = "ngx_aws_auth";
+      rev = "2.1.1";
+      sha256 = "10z67g40w7wpd13fwxyknkbg3p6hn61i4v8xw6lh27br29v1y6h9";
+    };
+  };
 
   brotli = {
     src = let gitsrc = pkgs.fetchFromGitHub {
@@ -221,16 +232,6 @@ in
       rev = "07a056ccd36bc3c5c40dc17991db226cb8cf6241";
       sha256 = "1kdqy7by6ha2pl9lkkjxh4qrwcsrj2alm8fl129831h5y5xy8qx2";
     } + "/naxsi_src";
-  };
-
-  ngx_aws_auth = {
-    src = fetchFromGitHub {
-      name = "ngx_aws_auth";
-      owner = "anomalizer";
-      repo = "ngx_aws_auth";
-      rev = "2.1.1";
-      sha256 = "10z67g40w7wpd13fwxyknkbg3p6hn61i4v8xw6lh27br29v1y6h9";
-    };
   };
 
   opentracing = {
