@@ -6,8 +6,8 @@ let
     src = fetchFromGitHub {
       owner = "chobits";
       repo = "ngx_http_proxy_connect_module";
-      rev = "002f8f9ef15562dc3691b977134518ad216d7a90";
-      sha256 = "163wg0xb7w5mwh6wrfarzcgaf6c7gb5qydgpi2wk35k551f7286s";
+      rev = "96ae4e06381f821218f368ad0ba964f87cbe0266";
+      sha256 = "1nc7z31i7x9dzp67kzgvs34hs6ps749y26wcpi3wf5mm63i803rh";
     };
 
     patches = [
@@ -98,8 +98,12 @@ in
     };
   };
 
-  http_proxy_connect_module_v16 = http_proxy_connect_module_generic "proxy_connect_rewrite_101504" // {
-    supports = with lib.versions; version: major version == "1" && minor version == "16";
+  http_proxy_connect_module_v18 = http_proxy_connect_module_generic "proxy_connect_rewrite_1018" // {
+    supports = with lib.versions; version: major version == "1" && minor version == "18";
+  };
+
+  http_proxy_connect_module_v19 = http_proxy_connect_module_generic "proxy_connect_rewrite_1018" // {
+    supports = with lib.versions; version: major version == "1" && minor version == "19";
   };
 
   ipscrub = {
