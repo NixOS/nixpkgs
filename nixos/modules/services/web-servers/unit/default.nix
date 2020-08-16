@@ -120,9 +120,12 @@ in {
         ProtectHome = true;
         PrivateTmp = true;
         PrivateDevices = true;
+        PrivateUsers = false;
         ProtectHostname = true;
+        ProtectClock = true;
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
+        ProtectKernelLogs = true;
         ProtectControlGroups = true;
         RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
         LockPersonality = true;
