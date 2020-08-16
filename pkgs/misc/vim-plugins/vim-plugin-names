@@ -420,6 +420,7 @@ powerman/vim-plugin-AnsiEsc
 PProvost/vim-ps1
 preservim/nerdcommenter
 preservim/nerdtree
+psliwka/vim-smoothie
 ptzz/lf.vim
 purescript-contrib/purescript-vim
 python-mode/python-mode
