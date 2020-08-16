@@ -9434,7 +9434,9 @@ in
   };
   cargo-tarpaulin = callPackage ../development/tools/analysis/cargo-tarpaulin { };
   cargo-tree = callPackage ../tools/package-management/cargo-tree { };
-  cargo-update = callPackage ../tools/package-management/cargo-update { };
+  cargo-update = callPackage ../tools/package-management/cargo-update {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   cargo-asm = callPackage ../development/tools/rust/cargo-asm {
     inherit (darwin.apple_sdk.frameworks) Security;
