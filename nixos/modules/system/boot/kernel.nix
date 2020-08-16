@@ -166,7 +166,7 @@ in
         symlinks because modprobe only supports one directory.
       '';
       # Convert the list of path to only one path.
-      apply = pkgs.aggregateModules;
+      apply = pkgs.aggregateModules config.boot.kernelPackages.autoModuleSignHook;
     };
 
     system.requiredKernelConfig = mkOption {
