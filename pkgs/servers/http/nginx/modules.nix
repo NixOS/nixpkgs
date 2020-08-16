@@ -18,6 +18,8 @@ let
 in
 
 {
+  fastcgi-cache-purge = throw "fastcgi-cache-purge was renamed to cache-purge";
+
   brotli = {
     src = let gitsrc = pkgs.fetchFromGitHub {
       owner = "google";
@@ -30,6 +32,15 @@ in
         --replace '$ngx_addon_dir/deps/brotli/c' ${lib.getDev pkgs.brotli}
     '';
     inputs = [ pkgs.brotli ];
+  };
+
+  cache-purge = {
+    src = fetchFromGitHub {
+      owner  = "nginx-modules";
+      repo   = "ngx_cache_purge";
+      rev    = "2.5.1";
+      sha256 = "0va4jz36mxj76nmq05n3fgnpdad30cslg7c10vnlhdmmic9vqncd";
+    };
   };
 
   coolkit = {
@@ -75,15 +86,6 @@ in
       repo = "ngx-fancyindex";
       rev = "v0.4.4";
       sha256 = "14xmzcl608pr7hb7wng6hpz7by51cfnxlszbka3zhp3kk86ljsi6";
-    };
-  };
-
-  fastcgi-cache-purge = {
-    src = fetchFromGitHub {
-      owner  = "nginx-modules";
-      repo   = "ngx_cache_purge";
-      rev    = "2.5";
-      sha256 = "1f4kxagzvz10vqbcjwi57wink6xw3s1h7wlrrlrlpkmhfbf9704y";
     };
   };
 
