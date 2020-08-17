@@ -8,6 +8,7 @@
 , futures
 , absl-py
 , google-auth-oauthlib
+, tensorboard-plugin-wit
 }:
 
 # tensorflow/tensorboard is built from a downloaded wheel, because
@@ -16,20 +17,18 @@
 
 buildPythonPackage rec {
   pname = "tensorflow-tensorboard";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "wheel";
 
-  src = fetchPypi ({
+  disabled = ! isPy3k; # Python 2 not supported any more in version 2.2
+
+  src = fetchPypi {
     pname = "tensorboard";
     inherit version;
     format = "wheel";
-  } // (if isPy3k then {
     python = "py3";
-    sha256 = "1wpjdzhjpcdkyaahzd4bl71k4l30z5c55280ndiwj32hw70lxrp6";
-  } else {
-    python = "py2";
-    sha256 = "1f805839xa36wxb7xac9fyxzaww92vw4d50vs6g61wnlr4byp00w";
-  }));
+    sha256 = "1vdsgmr9i0nshcg884bfhr4rz5vnf90y8jdxdjx1319dmmsvqsxv";
+  };
 
   propagatedBuildInputs = [
     numpy
@@ -39,6 +38,7 @@ buildPythonPackage rec {
     grpcio
     absl-py
     google-auth-oauthlib
+    tensorboard-plugin-wit
     # not declared in install_requires, but used at runtime
     # https://github.com/NixOS/nixpkgs/issues/73840
     wheel
