@@ -8,13 +8,13 @@ let
   internalVersionString = "idris2-0.2.0";
 in stdenv.mkDerivation rec {
   name = "idris2";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "idris-lang";
     repo = "Idris2";
     rev = "v${version}";
-    sha256 = "153z6zgb90kglw8rspk8ph5gh5nkplhi27mxai6yqbbjs2glx5d4";
+    sha256 = "044slgl2pwvj939kz3z92n6l182plc5fzng1n4z4k6bg11msqq14";
   };
 
   strictDeps = true;
