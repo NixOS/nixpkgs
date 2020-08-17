@@ -2756,7 +2756,11 @@ in {
 
   pytest-virtualenv = callPackage ../development/python-modules/pytest-virtualenv { };
 
-  pytest_xdist = callPackage ../development/python-modules/pytest-xdist { };
+  pytest_xdist = self.pytest_xdist_1;
+
+  pytest_xdist_1 = callPackage ../development/python-modules/pytest-xdist { };
+
+  pytest_xdist_2 = callPackage ../development/python-modules/pytest-xdist/2.nix { };
 
   pytest-localserver = callPackage ../development/python-modules/pytest-localserver { };
 
