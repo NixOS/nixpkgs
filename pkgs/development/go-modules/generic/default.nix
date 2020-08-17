@@ -26,9 +26,6 @@
 
 , modSha256 ? null
 
-# We want parallel builds by default
-, enableParallelBuilding ? true
-
 # Disabled flag
 , disabled ? false
 
@@ -192,9 +189,6 @@ let
         declare -p buildFlagsArray > $TMPDIR/buildFlagsArray
       else
         touch $TMPDIR/buildFlagsArray
-      fi
-      if [ -z "$enableParallelBuilding" ]; then
-          export NIX_BUILD_CORES=1
       fi
       for pkg in $(getGoDirs ""); do
         echo "Building subPackage $pkg"
