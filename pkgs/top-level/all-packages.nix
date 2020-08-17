@@ -20574,6 +20574,8 @@ in
 
   guvcview = libsForQt5.callPackage ../os-specific/linux/guvcview { };
 
+  gwc = callPackage ../applications/audio/gwc { };
+
   gxmessage = callPackage ../applications/misc/gxmessage { };
 
   gxmatcheq-lv2 = callPackage ../applications/audio/gxmatcheq-lv2 { };
