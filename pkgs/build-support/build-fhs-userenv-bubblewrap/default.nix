@@ -58,7 +58,7 @@ let
     exec ${run} "$@"
   '';
 
-  bwrap_cmd = { init_args ? "" }: ''
+  bwrapCmd = { initArgs ? "" }: ''
     blacklist="/nix /dev /proc /etc"
     ro_mounts=""
     for i in ${env}/*; do
@@ -98,17 +98,17 @@ let
       ${etcBindFlags} \
       $ro_mounts \
       $auto_mounts \
-      ${init runScript}/bin/${name}-init ${init_args}
+      ${init runScript}/bin/${name}-init ${initArgs}
   '';
 
-  bin = writeShellScriptBin name (bwrap_cmd { init_args = ''"$@"''; });
+  bin = writeShellScriptBin name (bwrapCmd { initArgs = ''"$@"''; });
 
 in runCommandLocal name {
   inherit meta;
 
   passthru = passthru // {
     env = runCommandLocal "${name}-shell-env" {
-      shellHook = bwrap_cmd {};
+      shellHook = bwrapCmd {};
     } ''
       echo >&2 ""
       echo >&2 "*** User chroot 'env' attributes are intended for interactive nix-shell sessions, not for building! ***"
