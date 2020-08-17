@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi
-, decorator, requests, simplejson, pillow
+{ lib, buildPythonPackage, fetchPypi, pythonOlder
+, decorator, requests, simplejson, pillow, typing
 , nose, mock, pytest, freezegun }:
 
 buildPythonPackage rec {
@@ -15,7 +15,8 @@ buildPythonPackage rec {
     find . -name '*.pyc' -exec rm {} \;
   '';
 
-  propagatedBuildInputs = [ decorator requests simplejson pillow ];
+  propagatedBuildInputs = [ decorator requests simplejson pillow ]
+    ++ lib.optionals (pythonOlder "3.5") [ typing ];
 
   checkInputs = [ nose mock pytest freezegun ];
   checkPhase = ''
