@@ -4,11 +4,13 @@
 
 # Uses scheme to bootstrap the build of idris2
 let
+  idris2name = "idris2";
+  idris2version = "0.2.1";
   includedLibs = [ "base" "contrib" "network" "prelude" ];
-  internalVersionString = "idris2-0.2.0";
+  internalVersionString = "${idris2name}-${idris2version}";
 in stdenv.mkDerivation rec {
-  name = "idris2";
-  version = "0.2.1";
+  name = idris2name;
+  version = idris2version;
 
   src = fetchFromGitHub {
     owner = "idris-lang";
@@ -36,8 +38,8 @@ in stdenv.mkDerivation rec {
   # TODO: Move this into its down derivation, such that this can be changes
   #       without having to recompile idris2 every time.
   postInstall = let
-    includedLibPaths = builtins.map (x: "$out/${internalVersionString}/" + x) includedLibs;
-    libPath = builtins.concatStringsSep ":" includedLibPaths;
+    packagePaths = builtins.map (l: "$out/${internalVersionString}/" + l) includedLibs;
+    additionalIdris2Paths = builtins.concatStringsSep ":" packagePaths;
   in ''
     # Remove existing idris2 wrapper that sets incorrect LD_LIBRARY_PATH
     rm $out/bin/idris2
@@ -49,18 +51,23 @@ in stdenv.mkDerivation rec {
     rmdir $out/bin/idris2_app
 
     # idris2 needs to find scheme at runtime to compile
-    # We also fix most Idris 2 paths to point to the out directory
-    # such that we can redefine PREFIX to point to the default user
-    # directory. That way, we are able to allow for --install
+    # idris2 installs packages with --install into the path given by PREFIX.
+    # Since PREFIX is in nix-store, it is immutable so --install does not work.
+    # If the user redefines PREFIX to be able to install packages, idris2 will
+    # not find the libraries and packages since all paths are relative to
+    # PREFIX by default.
+    # We explicitly make all paths to point to nix-store, such that they are
+    # independent of what IDRIS2_PREFIX is. This allows the user to redefine
+    # IDRIS2_PREFIX and use --install as expected.
     # TODO: Make support libraries their own derivation such that
     #       overriding LD_LIBRARY_PATH is unnecessary
     # TODO: Maybe set IDRIS2_PREFIX to the users home directory
     wrapProgram "$out/bin/idris2" \
       --set-default CHEZ "${chez}/bin/scheme" \
-      --set-default IDRIS2_LIBS "$out/${internalVersionString}/lib" \
-      --set-default IDRIS2_DATA "$out/${internalVersionString}/support" \
-      --set-default IDRIS2_PATH "${libPath}" \
-      --set LD_LIBRARY_PATH "$out/${internalVersionString}/lib"
+      --suffix IDRIS2_LIBS ':' "$out/${internalVersionString}/lib" \
+      --suffix IDRIS2_DATA ':' "$out/${internalVersionString}/support" \
+      --suffix IDRIS2_PATH ':' "${additionalIdris2Paths}" \
+      --suffix LD_LIBRARY_PATH ':' "$out/${internalVersionString}/lib"
   '';
 
   meta = {
@@ -71,3 +78,4 @@ in stdenv.mkDerivation rec {
     inherit (chez.meta) platforms;
   };
 }
+
