@@ -19347,6 +19347,8 @@ in
 
   bb =  callPackage ../applications/misc/bb { };
 
+  bchoppr = callPackage ../applications/audio/bchoppr { };
+
   berry = callPackage ../applications/window-managers/berry { };
 
   bevelbar = callPackage ../applications/window-managers/bevelbar { };
