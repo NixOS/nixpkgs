@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, idna }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, idna, typing }:
 
 buildPythonPackage rec {
   pname = "hyperlink";
@@ -9,9 +9,10 @@ buildPythonPackage rec {
     sha256 = "47fcc7cd339c6cb2444463ec3277bdcfe142c8b1daf2160bdd52248deec815af";
   };
 
-  propagatedBuildInputs = [ idna ];
+  propagatedBuildInputs = [ idna ]
+    ++ lib.optionals isPy27 [ typing ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A featureful, correct URL for Python";
     license = licenses.mit;
     platforms = platforms.all;
