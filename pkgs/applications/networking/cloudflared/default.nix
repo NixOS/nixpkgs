@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   buildFlagsArray = "-ldflags=-X main.Version=${version}";
 
   meta = with stdenv.lib; {

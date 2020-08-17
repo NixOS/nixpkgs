@@ -5,7 +5,6 @@ buildGoModule rec {
   version = "3.0.0";
   k3sVersion = "1.18.6-k3s1";
 
-  goPackagePath = "github.com/rancher/k3d";
   excludedPackages = ''tools'';
 
   src = fetchFromGitHub {
@@ -31,6 +30,8 @@ buildGoModule rec {
   '';
 
   vendorSha256 = null;
+
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/rancher/k3d";

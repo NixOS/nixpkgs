@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "jedi";
-  version = "0.17.1";
+  version = "0.17.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0qrgyn0znpib485hk0mi68wab6nhwqd3pyjxvp7jn6kijr7mszc0";
+    sha256 = "86ed7d9b750603e4ba582ea8edc678657fb4007894a12bcf6f4bb97892f31d20";
   };
 
   checkInputs = [ pytest glibcLocales tox pytestcov ];

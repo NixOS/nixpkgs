@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0q85is01cbgxflnqdvxc9w5iqdizgvsc44h8z21j712bm2w7blqq";
 
+  doCheck = false;
+
   # TODO: enable after https://github.com/pulumi/kubespy/issues/72 is addressed.
   # postInstall = ''
   # 	for shell in bash zsh; do

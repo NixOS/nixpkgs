@@ -6,6 +6,8 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   subPackages = [ "cmd/doctl" ];
 
   buildFlagsArray = let t = "github.com/digitalocean/doctl"; in ''
@@ -37,7 +39,6 @@ buildGoModule rec {
     description = "A command line tool for DigitalOcean services";
     homepage = "https://github.com/digitalocean/doctl";
     license = licenses.asl20;
-    platforms = platforms.all;
     maintainers = [ maintainers.siddharthist ];
   };
 }

@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "05vnysr5r3hbayss1pyifgp989kjw81h95iack8ady62k6ys5njl";
 
+  doCheck = false;
+
   meta = with lib; {
     description = "Helm Charts (k8s applications) as Code tool";
     homepage = "https://github.com/Praqma/helmsman";

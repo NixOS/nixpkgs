@@ -27,6 +27,8 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   outputs = [ "out" "man" ];
 
   nativeBuildInputs = [ pkg-config go-md2man installShellFiles ];

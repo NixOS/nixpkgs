@@ -13,12 +13,13 @@ buildGoModule rec {
 
   vendorSha256 = "077s13pcql5w2m6wzls1q06r7p501kazbwzxgfh6akwza15kb4is";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "A Go app that allows access to the ReMarkable Cloud API programmatically";
     homepage = "https://github.com/juruen/rmapi";
     changelog = "https://github.com/juruen/rmapi/blob/v${version}/CHANGELOG.md";
     license = licenses.agpl3;
     maintainers = [ maintainers.nickhu ];
-    platforms = platforms.all;
   };
 }

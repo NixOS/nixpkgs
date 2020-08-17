@@ -135,6 +135,13 @@ in buildPythonPackage rec {
       url = "https://github.com/pytorch/pytorch/commit/7676682584d0caf9243bce74ea0a88711ec4a807.diff";
       sha256 = "13spncaqlpsp8qk2850yly7xqwmhhfwznhmzkk8jgpslkbx75vgq";
     })
+  ] ++ lib.optionals stdenv.isDarwin [
+    # pthreadpool added support for Grand Central Dispatch in April
+    # 2020. However, this relies on functionality (DISPATCH_APPLY_AUTO)
+    # that is available starting with macOS 10.13. However, our current
+    # base is 10.12. Until we upgrade, we can fall back on the older
+    # pthread support.
+    ./pthreadpool-disable-gcd.diff
   ];
 
   preConfigure = lib.optionalString cudaSupport ''
@@ -248,27 +255,27 @@ in buildPythonPackage rec {
   '';
 
   postFixup = stdenv.lib.optionalString stdenv.isDarwin ''
-    for f in $(ls $dev/lib/*.dylib); do
-        install_name_tool -id $dev/lib/$(basename $f) $f || true
+    for f in $(ls $lib/lib/*.dylib); do
+        install_name_tool -id $lib/lib/$(basename $f) $f || true
     done
 
-    install_name_tool -change @rpath/libshm.dylib $dev/lib/libshm.dylib $dev/lib/libtorch_python.dylib
-    install_name_tool -change @rpath/libtorch.dylib $dev/lib/libtorch.dylib $dev/lib/libtorch_python.dylib
-    install_name_tool -change @rpath/libc10.dylib $dev/lib/libc10.dylib $dev/lib/libtorch_python.dylib
+    install_name_tool -change @rpath/libshm.dylib $lib/lib/libshm.dylib $lib/lib/libtorch_python.dylib
+    install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libtorch_python.dylib
+    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libtorch_python.dylib
 
-    install_name_tool -change @rpath/libc10.dylib $dev/lib/libc10.dylib $dev/lib/libtorch.dylib
+    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libtorch.dylib
 
-    install_name_tool -change @rpath/libtorch.dylib $dev/lib/libtorch.dylib $dev/lib/libcaffe2_observers.dylib
-    install_name_tool -change @rpath/libc10.dylib $dev/lib/libc10.dylib $dev/lib/libcaffe2_observers.dylib
+    install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libcaffe2_observers.dylib
+    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libcaffe2_observers.dylib
 
-    install_name_tool -change @rpath/libtorch.dylib $dev/lib/libtorch.dylib $dev/lib/libcaffe2_module_test_dynamic.dylib
-    install_name_tool -change @rpath/libc10.dylib $dev/lib/libc10.dylib $dev/lib/libcaffe2_module_test_dynamic.dylib
+    install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libcaffe2_module_test_dynamic.dylib
+    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libcaffe2_module_test_dynamic.dylib
 
-    install_name_tool -change @rpath/libtorch.dylib $dev/lib/libtorch.dylib $dev/lib/libcaffe2_detectron_ops.dylib
-    install_name_tool -change @rpath/libc10.dylib $dev/lib/libc10.dylib $dev/lib/libcaffe2_detectron_ops.dylib
+    install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libcaffe2_detectron_ops.dylib
+    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libcaffe2_detectron_ops.dylib
 
-    install_name_tool -change @rpath/libtorch.dylib $dev/lib/libtorch.dylib $dev/lib/libshm.dylib
-    install_name_tool -change @rpath/libc10.dylib $dev/lib/libc10.dylib $dev/lib/libshm.dylib
+    install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libshm.dylib
+    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libshm.dylib
   '';
 
 

@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , buildPackages
 , cmake
 , libtool
@@ -20,7 +21,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake libtool ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  patches = [ ./cross.patch ];
+  patches = [
+    ./cross.patch
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "glibc") [
+    openexr.non_glibc_fpstate_patch # see description of this patch in `openexr`
+  ];
 
   # fails 1 out of 1 tests with
   # "lt-ImathTest: testBoxAlgo.cpp:892: void {anonymous}::boxMatrixTransform(): Assertion `b21 == b2' failed"

@@ -140,8 +140,9 @@ let
 
     # Packages that don't fit the default model
     ansible = callPackage ./ansible {};
-    gandi = callPackage ./gandi {};
     elasticsearch = callPackage ./elasticsearch {};
+    gandi = callPackage ./gandi {};
+    keycloak = callPackage ./keycloak {};
     libvirt = callPackage ./libvirt {};
     lxd = callPackage ./lxd {};
     shell = callPackage ./shell {};

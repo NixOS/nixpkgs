@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, meson, pkgconfig, ninja, wrapGAppsHook
-, wayland, wlroots, gtkmm3, libinput, libsigcxx, jsoncpp, fmt, scdoc, spdlog, gtk-layer-shell
+, wayland, wlroots, gtkmm3, libsigcxx, jsoncpp, fmt, scdoc, spdlog, gtk-layer-shell
 , howard-hinnant-date, cmake
 , traySupport  ? true,  libdbusmenu-gtk3
 , pulseSupport ? false, libpulseaudio
@@ -11,13 +11,13 @@
 }:
   stdenv.mkDerivation rec {
     pname = "waybar";
-    version = "0.9.2";
+    version = "0.9.3";
 
     src = fetchFromGitHub {
       owner = "Alexays";
       repo = "Waybar";
       rev = version;
-      sha256 = "1gfxyjzwfqznyrpyr3322z3w844i1lh77kly4hcpy9y5gsfmlafy";
+      sha256 = "0ks719khhg2zwpyiwa2079i6962qcxpapm28hmr4ckpsp2n659ck";
     };
 
     nativeBuildInputs = [
@@ -32,7 +32,7 @@
     strictDeps = false;
 
     buildInputs = with stdenv.lib;
-      [ wayland wlroots gtkmm3 libinput libsigcxx jsoncpp fmt spdlog gtk-layer-shell howard-hinnant-date ]
+      [ wayland wlroots gtkmm3 libsigcxx jsoncpp fmt spdlog gtk-layer-shell howard-hinnant-date ]
       ++ optional  traySupport  libdbusmenu-gtk3
       ++ optional  pulseSupport libpulseaudio
       ++ optional  nlSupport    libnl

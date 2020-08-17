@@ -13,14 +13,17 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "osu-lazer";
-  version = "2020.801.0";
+  version = "2020.806.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    sha256 = "02klqc56fskc8r8p3z9d38r1i0rwgglfilb97pdqm1ph8jpr1c20";
+    sha256 = "BelmqcDnrGH84fTs6M0krwWz6SHn2hOm7y+PNEOOOZM=";
   };
+
+  patches = [ ./bypass-tamper-detection.patch ];
+  patchFlags = [ "--binary" "-p1" ];
 
   nativeBuildInputs = [ dotnet-sdk dotnetPackages.Nuget makeWrapper ];
 

@@ -60,25 +60,29 @@
 , waylandSupport ? true
 , libxkbcommon, calendarSupport ? true
 
-, # If you want the resulting program to call itself "Thunderbird" instead
-# of "Earlybird" or whatever, enable this option.  However, those
-# binaries may not be distributed without permission from the
-# Mozilla Foundation, see
-# http://www.mozilla.org/foundation/trademarks/.
-enableOfficialBranding ? false
+# As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
+# https://github.com/NixOS/nixpkgs/issues/31843#issuecomment-346372756 we
+# have permission to use the official branding.
+#
+# For purposes of documentation the statement of @sylvestre:
+# > As the person who did part of the work described in the LWN article
+# > and release manager working for Mozilla, I can confirm the statement
+# > that I made in
+# > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=815006
+, enableOfficialBranding ? true
 }:
 
 assert waylandSupport -> gtk3Support == true;
 
 stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "78.1.0";
+  version = "78.1.1";
 
   src = fetchurl {
     url =
       "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
     sha512 =
-      "2m1gqq11k5cql5f49mwrfjk06rm2r24lf9l0hrvj569gqxckyh8wdch3dn339x3yn5fhxqlw0l770p2ssr2kkllv3yy20qqzjqgfpgh";
+      "1lf15zl3p8y1vxv4s04y088flkspf0r0c6j8gfrlfzla5ckfcsbad3zbygh6y73m35j882g7fbacby5a4hiw891zq2kji5dn3nbahyi";
   };
 
   nativeBuildInputs = [

@@ -25,6 +25,5 @@ buildGoPackage {
     description = "High performance media tagger and organizer";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ chiiruno ];
-    platforms = platforms.all;
   };
 }

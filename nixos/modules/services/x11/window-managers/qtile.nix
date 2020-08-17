@@ -19,7 +19,7 @@ in
         waitPID=$!
       '';
     }];
-    
+
     environment.systemPackages = [ pkgs.qtile ];
   };
 }

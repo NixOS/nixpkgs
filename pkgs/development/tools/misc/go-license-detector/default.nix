@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0gan5l7vsq0hixxcymhhs8p07v92w60r0lhgvrr9a99nic12vmia";
 
+  doCheck = false;
+
   meta = with lib; {
     description = "Reliable project licenses detector";
     homepage = "https://github.com/src-d/go-license-detector";

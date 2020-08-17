@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "04nywhkil5xkipcibrp6vi63rfcvqgv7yxbxmmrhqys2cdxfvazv";
 
+  doCheck = false;
+
   subPackages = [ "." ];
 
   buildInputs = [ alsaLib ];

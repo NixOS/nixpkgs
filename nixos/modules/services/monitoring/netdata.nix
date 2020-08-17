@@ -133,16 +133,6 @@ in {
         }
       ];
 
-    systemd.tmpfiles.rules = [
-      "d /var/cache/netdata 0755 ${cfg.user} ${cfg.group} -"
-      "Z /var/cache/netdata - ${cfg.user} ${cfg.group} -"
-      "d /var/log/netdata 0755 ${cfg.user} ${cfg.group} -"
-      "Z /var/log/netdata - ${cfg.user} ${cfg.group} -"
-      "d /var/lib/netdata 0755 ${cfg.user} ${cfg.group} -"
-      "Z /var/lib/netdata - ${cfg.user} ${cfg.group} -"
-      "d /etc/netdata 0755 ${cfg.user} ${cfg.group} -"
-      "Z /etc/netdata - ${cfg.user} ${cfg.group} -"
-    ];
     systemd.services.netdata = {
       description = "Real time performance monitoring";
       after = [ "network.target" ];
@@ -158,11 +148,40 @@ in {
         # User and group
         User = cfg.user;
         Group = cfg.group;
-        # Runtime directory and mode
-        RuntimeDirectory = "netdata";
-        RuntimeDirectoryMode = "0755";
         # Performance
         LimitNOFILE = "30000";
+        # Runtime directory and mode
+        RuntimeDirectory = "netdata";
+        RuntimeDirectoryMode = "0750";
+        # State directory and mode
+        StateDirectory = "netdata";
+        StateDirectoryMode = "0750";
+        # Cache directory and mode
+        CacheDirectory = "netdata";
+        CacheDirectoryMode = "0750";
+        # Logs directory and mode
+        LogsDirectory = "netdata";
+        LogsDirectoryMode = "0750";
+        # Configuration directory and mode
+        ConfigurationDirectory = "netdata";
+        ConfigurationDirectoryMode = "0755";
+        # Capabilities
+        CapabilityBoundingSet = [
+          "CAP_DAC_OVERRIDE"      # is required for freeipmi and slabinfo plugins
+          "CAP_DAC_READ_SEARCH"   # is required for apps plugin
+          "CAP_FOWNER"            # is required for freeipmi plugin
+          "CAP_SETPCAP"           # is required for apps, perf and slabinfo plugins
+          "CAP_SYS_ADMIN"         # is required for perf plugin
+          "CAP_SYS_PTRACE"        # is required for apps plugin
+          "CAP_SYS_RESOURCE"      # is required for ebpf plugin
+          "CAP_NET_RAW"           # is required for fping app
+        ];
+        # Sandboxing
+        ProtectSystem = "full";
+        ProtectHome = "read-only";
+        PrivateTmp = true;
+        ProtectControlGroups = true;
+        PrivateMounts = true;
       };
     };
 

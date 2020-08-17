@@ -12,6 +12,9 @@ buildGoModule rec {
   };
 
   vendorSha256 = "14453iiya6algkympyvwm03qgjcwk79z8bbrij7qhnp52qfrbmrp";
+
+  doCheck = false;
+
   subPackages = [ "cmd/lego" ];
 
   buildFlagsArray = [

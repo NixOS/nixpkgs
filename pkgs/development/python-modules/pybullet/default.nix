@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pybullet";
-  version = "2.8.1";
+  version = "2.8.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "836d80660920f0696645738367b8c8359878387ba582adb8b37d59d60adedadd";
+    sha256 = "39fb2ae8ef99c7096295a368e232224b68bf209059c1977d7189c28ec833d043";
   };
 
   buildInputs = [

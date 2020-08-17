@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "3bq6sRKS5dq7WCPpKGm2q5gFajthR3zhrTFGve9zXhY=";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "Yet another Go REPL that works nicely.";
     homepage = "https://github.com/motemen/gore";

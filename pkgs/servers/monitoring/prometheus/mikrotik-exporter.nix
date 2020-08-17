@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0i5x4d3ra0s41knmybbg8gnjxgraxkid6y3gfkjwa65xcbp7hr7q";
 
+  doCheck = false;
+
   passthru.tests = { inherit (nixosTests.prometheus-exporters) mikrotik; };
 
   meta = with stdenv.lib; {

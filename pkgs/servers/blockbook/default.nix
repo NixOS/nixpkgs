@@ -26,6 +26,8 @@ buildGoModule rec {
   runVend = true;
   vendorSha256 = "0p7vyw61nwvmaz7gz2bdh9fi6wp62i2vnzw6iz2r8cims4sbz53b";
 
+  doCheck = false;
+
   nativeBuildInputs = [ packr pkg-config ];
 
   buildInputs = [ bzip2 lz4 rocksdb snappy zeromq zlib ];

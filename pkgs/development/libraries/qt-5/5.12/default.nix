@@ -38,14 +38,14 @@ let
   mirror = "https://download.qt.io";
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; } // {
     # Community port of the now unmaintained upstream qtwebkit.
-    qtwebkit = {
+    qtwebkit = rec {
       src = fetchFromGitHub {
-        owner = "annulen";
-        repo = "webkit";
-        rev = "4ce8ebc4094512b9916bfa5984065e95ac97c9d8";
-        sha256 = "05h1xnxzbf7sp3plw5dndsvpf6iigh0bi4vlj4svx0hkf1giakjf";
+        owner = "qtwebkit";
+        repo = "qtwebkit";
+        rev = "qtwebkit-${version}";
+        sha256 = "11lc5sk10d9cyg8jqkbgkqiap72b9rax7hy61nm90zw9749y2yfg";
       };
-      version = "5.212-alpha-01-26-2018";
+      version = "5.212.0-alpha4";
     };
   };
 

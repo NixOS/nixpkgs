@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0cxi01jxg89lsk91dv782746i8g9ksanx8igmgafq9vq25lld7yg";
 
+  doCheck = false;
+
   subPackages = [ "cmd/reviewdog" ];
 
   buildFlagsArray = [ "-ldflags=-s -w -X github.com/reviewdog/reviewdog/commands.Version=${version}" ];

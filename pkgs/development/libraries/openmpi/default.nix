@@ -13,7 +13,6 @@
 
 # Enable libfabric support (necessary for Omnipath networks) on x86_64 linux
 , fabricSupport ? stdenv.isLinux && stdenv.isx86_64
-
 }:
 
 assert !cudaSupport || cudatoolkit != null;
@@ -59,6 +58,7 @@ in stdenv.mkDerivation rec {
       "--with-libnl=${libnl.dev}"
       "--with-pmix=${pmix}"
       "--with-pmix-libdir=${pmix}/lib"
+      "--enable-mpi-cxx"
     ] ++ lib.optional enableSGE "--with-sge"
     ++ lib.optional enablePrefix "--enable-mpirun-prefix-by-default"
     # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build

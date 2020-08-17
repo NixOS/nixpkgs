@@ -26,6 +26,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rust-lang-nursery/rustfmt";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ globin basvandijk ];
-    platforms = platforms.all;
   };
 }

@@ -11,7 +11,7 @@
 , withGTK3 ? true, gtk3-x11 ? null, gsettings-desktop-schemas ? null
 , withXwidgets ? false, webkitgtk ? null, wrapGAppsHook ? null, glib-networking ? null
 , withCsrc ? true
-, srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
+, srcRepo ? false, autoreconfHook ? null, texinfo ? null
 , siteStart ? ./site-start.el
 , nativeComp ? false
 , toolkit ? (
@@ -32,7 +32,7 @@ assert withXwidgets -> withGTK3 && webkitgtk != null;
 
 
 let
-  version = "26.3";
+  version = "27.1";
   versionModifier = "";
   name = "emacs-${version}${versionModifier}";
 
@@ -41,7 +41,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${name}.tar.xz";
-    sha256 = "119ldpk7sgn9jlpyngv5y4z3i7bb8q3xp4p0qqi7i5nq39syd42d";
+    sha256 = "0h9f2wpmp6rb5rfwvqwv1ia1nw86h74p7hnz3vb3gjazj67i4k2a";
   };
 
   enableParallelBuilding = true;
@@ -49,17 +49,21 @@ in stdenv.mkDerivation {
   patches = [
     ./clean-env.patch
     ./tramp-detect-wrapped-gvfsd.patch
-    # unbreak macOS unexec
-    (fetchpatch {
-      url = "https://github.com/emacs-mirror/emacs/commit/888ffd960c06d56a409a7ff15b1d930d25c56089.patch";
-      sha256 = "08q3ygdigqwky70r47rcgzlkc5jy82xiq8am5kwwy891wlpl7frw";
-    })
   ];
 
   postPatch = lib.concatStringsSep "\n" [
     (lib.optionalString srcRepo ''
       rm -fr .git
     '')
+
+    ''
+    substituteInPlace lisp/international/mule-cmds.el \
+      --replace /usr/share/locale ${gettext}/share/locale
+
+    for makefile_in in $(find . -name Makefile.in -print); do
+      substituteInPlace $makefile_in --replace /bin/pwd pwd
+    done
+    ''
 
     # Make native compilation work both inside and outside of nix build
     (lib.optionalString nativeComp (let
@@ -83,7 +87,7 @@ in stdenv.mkDerivation {
   LIBRARY_PATH = if nativeComp then "${lib.getLib stdenv.cc.libc}/lib" else "";
 
   nativeBuildInputs = [ pkgconfig makeWrapper ]
-    ++ lib.optionals srcRepo [ autoconf automake texinfo ]
+    ++ lib.optionals srcRepo [ autoreconfHook texinfo ]
     ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
 
   buildInputs =
@@ -118,17 +122,6 @@ in stdenv.mkDerivation {
     ++ lib.optional withXwidgets "--with-xwidgets"
     ++ lib.optional nativeComp "--with-nativecomp"
     ;
-
-  preConfigure = lib.optionalString srcRepo ''
-    ./autogen.sh
-  '' + ''
-    substituteInPlace lisp/international/mule-cmds.el \
-      --replace /usr/share/locale ${gettext}/share/locale
-
-    for makefile_in in $(find . -name Makefile.in -print); do
-        substituteInPlace $makefile_in --replace /bin/pwd pwd
-    done
-  '';
 
   installTargets = [ "tags" "install" ];
 

@@ -5,11 +5,11 @@
 }:
 buildPythonPackage rec {
   pname = "twill";
-  version = "2.0";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "225e114da85555d50433a1e242ed4215fe613c30072d13fbe4c4aacf0ad53b0a";
+    sha256 = "85bc45bc34e3d4116123e3021c07d3a86b5e67be1ee01bc8062288eb83ae7799";
   };
 
   checkInputs = [ nose ];

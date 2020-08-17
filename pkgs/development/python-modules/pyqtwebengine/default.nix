@@ -18,6 +18,11 @@ in buildPythonPackage rec {
     sha256 = "0xdzhl07x3mzfnr5cf4d640168vxi7fyl0fz1pvpbgs0irl14237";
   };
 
+  patches = [
+    # source: https://www.riverbankcomputing.com/pipermail/pyqt/2020-June/042985.html
+    ./fix-build-with-qt-514.patch
+  ];
+
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [

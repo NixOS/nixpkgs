@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0x31n50vd8660z816as6kms5dkv87b0mhblccpkvd9cbvcv2n37a";
 
+  doCheck = false;
+
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''

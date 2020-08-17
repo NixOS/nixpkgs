@@ -23,6 +23,8 @@ buildGoModule rec {
 
   vendorSha256 = "0pplmqxrnc8qnr5708igx4dm7rb0hicvhg6lh5hj8zkx38nb19s0";
 
+  doCheck = false;
+
   postConfigure = ''
     # Make the builtin tools available here
     mkdir -p $out/bin

@@ -772,7 +772,7 @@ in
       };
 
       disco_items = {
-      ${ lib.concatStringsSep "\n" (builtins.map (x: ''{ "${x.url}", "${x.description}"};'') discoItems)} 
+      ${ lib.concatStringsSep "\n" (builtins.map (x: ''{ "${x.url}", "${x.description}"};'') discoItems)}
       };
 
       allow_registration = ${toLua cfg.allowRegistration}

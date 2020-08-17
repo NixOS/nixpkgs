@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub, poetry, nixosTests }:
 
 let
   python = python3.override {
@@ -14,12 +14,19 @@ let
   };
 in with python.pkgs; buildPythonApplication rec {
   pname = "pinnwand";
-  version = "1.1.2";
+  version = "1.2.1";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0iincxkfyyx85ggx9ilms2f8aq4lcbg3rkqgrr4wlsflzhljqd0p";
+  src = fetchFromGitHub {
+    owner = "supakeen";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1rk7rpyb4vmqxqqv8k9jpjmgakr3mn1iaqxyj34r74p1n5vfzimq";
   };
+
+  nativeBuildInputs = [
+    poetry
+  ];
 
   propagatedBuildInputs = [
     click
@@ -30,10 +37,13 @@ in with python.pkgs; buildPythonApplication rec {
     sqlalchemy
   ];
 
-  # tests are only available when fetching from GitHub, where they in turn don't have a setup.py :(
+  checkInputs = [ pytest ];
+
   checkPhase = ''
-    $out/bin/pinnwand --help > /dev/null
+    pytest
   '';
+
+  passthru.tests = nixosTests.pinnwand;
 
   meta = with lib; {
     homepage = "https://supakeen.com/project/pinnwand/";

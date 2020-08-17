@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage , fetchPypi, pythonOlder
-, pytest, jupyter_core, pandas, ipywidgets }:
+, pytest, jupyter_core, pandas, ipywidgets, jupyter, altair }:
 
 buildPythonPackage rec {
   pname = "vega";
@@ -12,7 +12,11 @@ buildPythonPackage rec {
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ jupyter_core pandas ipywidgets ];
+  propagatedBuildInputs = [ jupyter jupyter_core pandas ipywidgets ];
+
+  # currently, recommonmark is broken on python3
+  doCheck = false;
+  checkInputs = [ altair ];
 
   meta = with stdenv.lib; {
     description = "An IPython/Jupyter widget for Vega and Vega-Lite";

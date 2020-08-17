@@ -16,6 +16,8 @@ buildGoModule rec {
   runVend = true;
   vendorSha256 = "0avdvbhv1jlisiicpi5vshz28a2p2fgnlrag9zngzglcrbhdd1rn";
 
+  doCheck = false;
+
   nativeBuildInputs = [
     scdoc
     python3.pkgs.wrapPython

@@ -24,6 +24,8 @@ buildGoModule rec {
 
   vendorSha256 = "1sh9mx3lc28fzvc1yrhz58rlbaac7aq1dqyvxwj98vld3kigpv1z";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     homepage = "https://mynewt.apache.org/";
     description = "Build and package management tool for embedded development.";

@@ -12,6 +12,9 @@ buildGoModule rec {
   };
 
   vendorSha256 = "0kz7y64k07vlybzfjg6709fdy7krqlv1gkk01nvhs84sk8bnrcvn";
+
+  doCheck = false;
+
   subPackages = [ "cmd/traefik" ];
 
   nativeBuildInputs = [ go-bindata ];

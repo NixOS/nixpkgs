@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake rocm-cmake ];
 
-  buildInputs = [ clang rocm-comgr rocm-runtime rocm-thunk clang ];
+  buildInputs = [ clang rocm-comgr rocm-runtime rocm-thunk ];
 
   propagatedBuildInputs = [ libelf libglvnd libX11 ];
 
@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
       --replace 'set(ROCCLR_EXPORTS_FILE "''${CMAKE_CURRENT_BINARY_DIR}/amdrocclr_staticTargets.cmake")' \
         'set(ROCCLR_EXPORTS_FILE "''${CMAKE_INSTALL_LIBDIR}/cmake/amdrocclr_staticTargets.cmake")' \
       --replace 'set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ''${CMAKE_CURRENT_BINARY_DIR}/lib)' \
-        'set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ''${CMAKE_INSTALL_LIBDIR})'
+        'set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ''${CMAKE_INSTALL_LIBDIR})' \
+      --replace 'find_library( OpenCL REQUIRED' 'find_library( OpenCL'
     substituteInPlace device/comgrctx.cpp \
       --replace "libamd_comgr.so" "${rocm-comgr}/lib/libamd_comgr.so"
   '';

@@ -11,8 +11,9 @@ buildGoModule rec {
     sha256 = "14s5cl1g0rgqj7fj699xgz2kmkzym1zpckhv3h33ypsn4dq7gjh2";
   };
 
-  goPackagePath = "github.com/raphaelreyna/oneshot";
   vendorSha256 = "0v53dsj0w959pmvk6v1i7rwlfd2y0vrghxlwkgidw0sf775qpgvy";
+
+  doCheck = false;
 
   subPackages = [ "." ];
 
@@ -21,6 +22,5 @@ buildGoModule rec {
     homepage = "https://github.com/raphaelreyna/oneshot";
     license = licenses.mit;
     maintainers = with maintainers; [ edibopp ];
-    platforms = platforms.all;
   };
 }

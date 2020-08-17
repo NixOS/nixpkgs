@@ -47,6 +47,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/casey/just";
     license = licenses.cc0;
     maintainers = with maintainers; [ xrelkd ];
-    platforms = platforms.all;
   };
 }

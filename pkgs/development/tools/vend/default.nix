@@ -16,11 +16,12 @@ buildGoModule {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     homepage = "https://github.com/c00w/vend";
     description = "A utility which vendors go code including c dependencies";
     maintainers = with maintainers; [ c00w ];
     license = licenses.mit;
-    platforms = platforms.all;
   };
 }

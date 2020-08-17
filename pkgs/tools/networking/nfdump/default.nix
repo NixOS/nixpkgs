@@ -2,7 +2,7 @@
 , autoconf, automake, libtool, pkg-config
 , bzip2, libpcap, flex, yacc }:
 
-let version = "1.6.20"; in
+let version = "1.6.21"; in
 
 stdenv.mkDerivation {
   pname = "nfdump";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "phaag";
     repo = "nfdump";
     rev = "v${version}";
-    sha256 = "06pywhymb92l0kac9djjpvlwrn1c7bxs3wm5yzrlaf815175ar3c";
+    sha256 = "1ifxnpyzyn8nd6n44pjcw0rwck392nzj1gwa4zzqvvgzj477m6ha";
   };
 
   nativeBuildInputs = [ autoconf automake flex libtool pkg-config yacc ];

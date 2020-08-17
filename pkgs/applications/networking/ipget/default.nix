@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0vy21pdqk6q5fw7wlcv51myhh9y79n2qhvy61rmblwhxlrkh6sdv";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "Retrieve files over IPFS and save them locally";
     homepage = "https://ipfs.io/";

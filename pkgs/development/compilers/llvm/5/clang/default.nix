@@ -4,7 +4,6 @@
 }:
 
 let
-  gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
   self = stdenv.mkDerivation ({
     pname = "clang";
     inherit version;
@@ -78,8 +77,6 @@ let
     passthru = {
       isClang = true;
       inherit llvm;
-    } // stdenv.lib.optionalAttrs stdenv.isLinux {
-      inherit gcc;
     };
 
     meta = {

@@ -98,7 +98,7 @@ in
           ${pkgs.gollum}/bin/gollum \
             --port ${toString cfg.port} \
             --host ${cfg.address} \
-            --config ${builtins.toFile "gollum-config.rb" cfg.extraConfig} \
+            --config ${pkgs.writeText "gollum-config.rb" cfg.extraConfig} \
             --ref ${cfg.branch} \
             ${optionalString cfg.mathjax "--mathjax"} \
             ${optionalString cfg.emoji "--emoji"} \

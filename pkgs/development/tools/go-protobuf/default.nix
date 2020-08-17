@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "04w9vhkrwb2zfqk73xmhignjyvjqmz1j93slkqp7v8jj2dhyla54";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     homepage    = "https://github.com/golang/protobuf";
     description = " Go bindings for protocol buffer";

@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://wiki.gnome.org/Apps/GTG";
     downloadPage = "https://github.com/getting-things-gnome/gtg/releases";
-    license = licenses.gpl3Only;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ oyren ];
     platforms = platforms.linux;
   };

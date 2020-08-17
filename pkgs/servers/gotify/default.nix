@@ -23,6 +23,8 @@ buildGoModule rec {
 
   vendorSha256 = import ./vendor-sha.nix;
 
+  doCheck = false;
+
   postPatch = ''
     substituteInPlace app.go \
       --replace 'Version = "unknown"' 'Version = "${version}"'
@@ -55,7 +57,6 @@ buildGoModule rec {
     homepage = "https://gotify.net";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.all;
   };
 
 }

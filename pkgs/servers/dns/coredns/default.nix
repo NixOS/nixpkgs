@@ -4,8 +4,6 @@ buildGoModule rec {
   pname = "coredns";
   version = "1.7.0";
 
-  goPackagePath = "github.com/coredns/coredns";
-
   src = fetchFromGitHub {
     owner = "coredns";
     repo = "coredns";
@@ -14,6 +12,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = "17znl3vkg73hnrfl697rw201nsd5sijgalnbkljk1b4m0a01zik1";
+
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = "https://coredns.io";

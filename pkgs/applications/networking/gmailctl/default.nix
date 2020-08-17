@@ -16,6 +16,8 @@ buildGoModule rec {
 
   vendorSha256 = "0qp8n7z3vcsbc6safp7i18i0i3r4hy4nidzwl85i981sg12vcg6b";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "Declarative configuration for Gmail filters";
     homepage = "https://github.com/mbrt/gmailctl";

@@ -30,11 +30,11 @@ let
 in
 mkDerivation rec {
   pname = "calibre";
-  version = "4.19.0";
+  version = "4.22.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1kpj65spwr9m88vshsljpdrw5jy7bbpqgqcrvqb17abh7fnnrb4x";
+    sha256 = "0d0wmd3ijk8px1d662igal4lfmpyzynfzs6ms1bb9nf42mq2pxai";
   };
 
   patches = [

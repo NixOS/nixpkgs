@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "13z357ww4j5bmmy8ag6d6gd5b2dib8kby73q8317pqnqzaxrrbcj";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "CLI to render Go template text files";
     inherit (src.meta) homepage;

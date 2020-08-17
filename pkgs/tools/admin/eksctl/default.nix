@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1msid4857wsh4qp1f7nyrmpzjv3sklh49cl7a9c1a3qr9m99w4yb";
 
+  doCheck = false;
+
   subPackages = [ "cmd/eksctl" ];
 
   buildFlags = [ "-tags netgo" "-tags release" ];
@@ -34,7 +36,6 @@ buildGoModule rec {
     description = "A CLI for Amazon EKS";
     homepage = "https://github.com/weaveworks/eksctl";
     license = licenses.asl20;
-    platforms = platforms.all;
     maintainers = with maintainers; [ xrelkd ];
   };
 }

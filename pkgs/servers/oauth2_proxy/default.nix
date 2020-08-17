@@ -13,8 +13,6 @@ buildGoModule rec {
 
   vendorSha256 = "1hrk3h729kcc77fq44kiywmyzk5a78v7bm5d2yl76lfxxdcdric7";
 
-  doCheck = true;
-
   # Taken from https://github.com/oauth2-proxy/oauth2-proxy/blob/master/Makefile
   buildFlagsArray = ("-ldflags=-X main.VERSION=${version}");
 

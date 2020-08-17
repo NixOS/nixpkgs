@@ -374,7 +374,8 @@ let
           ) config.boot.initrd.secrets)
          }
 
-        (cd "$tmp" && find . | cpio -H newc -o) | gzip >>"$1"
+        (cd "$tmp" && find . -print0 | sort -z | cpio -o -H newc -R +0:+0 --reproducible --null) | \
+          ${config.boot.initrd.compressor} >> "$1"
       '';
 
 in

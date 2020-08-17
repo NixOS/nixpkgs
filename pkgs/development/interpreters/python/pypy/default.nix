@@ -34,7 +34,7 @@ in with passthru; stdenv.mkDerivation rec {
   inherit pname version;
 
   src = fetchurl {
-    url = "https://bitbucket.org/pypy/pypy/get/release-pypy${pythonVersion}-v${version}.tar.bz2";
+    url = "https://bitbucket.org/pypy/pypy/downloads/pypy${pythonVersion}-v${version}-src.tar.bz2";
     inherit sha256;
   };
 
@@ -74,13 +74,6 @@ in with passthru; stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace "lib-python/${if isPy3k then "3/tkinter/tix.py" else "2.7/lib-tk/Tix.py"}" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
-
-    # hint pypy to find nix ncurses
-    substituteInPlace pypy/module/_minimal_curses/fficurses.py \
-      --replace "/usr/include/ncurses/curses.h" "${ncurses.dev}/include/curses.h" \
-      --replace "ncurses/curses.h" "${ncurses.dev}/include/curses.h" \
-      --replace "ncurses/term.h" "${ncurses.dev}/include/term.h" \
-      --replace "libraries=['curses']" "libraries=['ncurses']"
 
     sed -i "s@libraries=\['sqlite3'\]\$@libraries=['sqlite3'], include_dirs=['${sqlite.dev}/include'], library_dirs=['${sqlite.out}/lib']@" lib_pypy/_sqlite3_build.py
   '';
@@ -137,7 +130,7 @@ in with passthru; stdenv.mkDerivation rec {
     ln -s $out/${executable}-c/${executable}-c $out/bin/${executable}
 
     # other packages expect to find stuff according to libPrefix
-    ln -s $out/${executable}/include $out/include/${libPrefix}
+    ln -s $out/${executable}-c/include $out/include/${libPrefix}
     ln -s $out/${executable}-c/lib-python/${if isPy3k then "3" else pythonVersion} $out/lib/${libPrefix}
 
     ${stdenv.lib.optionalString stdenv.isDarwin ''

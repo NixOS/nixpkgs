@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libunwind }:
+{ stdenv, fetchurl, fetchpatch, autoreconfHook, libunwind }:
 
 stdenv.mkDerivation rec {
   name = "gperftools-2.8";
@@ -8,8 +8,24 @@ stdenv.mkDerivation rec {
     sha256 = "0gjiplvday50x695pwjrysnvm5wfvg2b0gmqf6b4bdi8sv6yl394";
   };
 
+  patches = [
+    # Add the --disable-general-dynamic-tls configure option:
+    # https://bugzilla.redhat.com/show_bug.cgi?id=1483558
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/gperftools/raw/f62d87a34f56f64fb8eb86727e34fbc2d3f5294a/f/gperftools-2.7.90-disable-generic-dynamic-tls.patch";
+      sha256 = "02falhpaqkl27hl1dib4yvmhwsddmgbw0krb46w31fyf3awb2ydv";
+    })
+  ];
+
+  nativeBuildInputs = [ autoreconfHook ];
+
   # tcmalloc uses libunwind in a way that works correctly only on non-ARM linux
   buildInputs = stdenv.lib.optional (stdenv.isLinux && !(stdenv.isAarch64 || stdenv.isAarch32)) libunwind;
+
+  # Disable general dynamic TLS on AArch to support dlopen()'ing the library:
+  # https://bugzilla.redhat.com/show_bug.cgi?id=1483558
+  configureFlags = stdenv.lib.optional (stdenv.isAarch32 || stdenv.isAarch64)
+    "--disable-general-dynamic-tls";
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile.am --replace stdc++ c++

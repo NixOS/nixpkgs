@@ -5,11 +5,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "5.4";
+  version = "5.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/${pname}/${pname}/${name}/${name}.tar.gz";
-    sha256 = "19fd9r233wkjk8gdxn6qsjgfijiw67a48xhgbm2kq46bx80yf3pg";
+    sha256 = "18ksld775balh0yx2icj7fya9fvjkfgvwznvccdlmhi3zidg550h";
   };
 
   preConfigure = ''
@@ -31,6 +31,6 @@ in stdenv.mkDerivation rec {
     homepage = "http://bftpd.sf.net/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

@@ -23,7 +23,6 @@ buildGoPackage rec {
     '';
     homepage = "https://github.com/DrakeW/corgi";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = with maintainers; [ kalbasit ];
   };
 }

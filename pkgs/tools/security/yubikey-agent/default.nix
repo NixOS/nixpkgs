@@ -27,6 +27,8 @@ buildGoModule rec {
 
   vendorSha256 = "128mlsagj3im6h0p0ndhzk29ya47g19im9dldx3nmddf2jlccj2h";
 
+  doCheck = false;
+
   subPackages = [ "." ];
 
   # On macOS, there isn't a choice of pinentry program, so let's

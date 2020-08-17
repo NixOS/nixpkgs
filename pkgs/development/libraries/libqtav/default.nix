@@ -46,6 +46,6 @@ mkDerivation rec {
     homepage = "http://www.qtav.org/";
     maintainers = [ maintainers.jraygauthier ];
     platforms = platforms.linux;
+    broken = !(lib.versionOlder qtbase.version "5.13");
   };
 }
-

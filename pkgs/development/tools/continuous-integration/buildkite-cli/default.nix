@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0jxh3yhh0sdvaykhinxngpipk369hw8z1y3g2z4c1115m5rjp2bb";
 
+  doCheck = false;
+
   subPackages = [ "cmd/bk" ];
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.VERSION=${version}" ];

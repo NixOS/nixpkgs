@@ -23,7 +23,7 @@ in {
   ### Documentation
   # meta.doc = ./onedrive.xml;
 
-  ### Interface 
+  ### Interface
 
   options.services.onedrive = {
     enable = lib.mkOption {

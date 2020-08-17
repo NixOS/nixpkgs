@@ -19,6 +19,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/out-of-cheese-error/the-way";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ numkem ];
-    platforms = platforms.all;
   };
 }

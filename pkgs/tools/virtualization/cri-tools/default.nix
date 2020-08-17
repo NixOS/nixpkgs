@@ -17,6 +17,8 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   nativeBuildInputs = [ installShellFiles ];
 
   buildPhase = ''

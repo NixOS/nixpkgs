@@ -21,7 +21,6 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     homepage = "http://docs.phraseapp.com";
     description = "PhraseApp API v2 Command Line Client";
-    platforms = platforms.all;
     license = licenses.mit;
     maintainers = with maintainers; [ manveru ];
   };

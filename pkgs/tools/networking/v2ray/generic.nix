@@ -15,6 +15,8 @@ let
 
     inherit vendorSha256;
 
+    doCheck = false;
+
     buildPhase = ''
       runHook preBuild
 

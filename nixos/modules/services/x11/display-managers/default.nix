@@ -353,7 +353,7 @@ in
             };
           };
         };
-        
+
         default = {};
         description = ''
           Auto login configuration attrset.

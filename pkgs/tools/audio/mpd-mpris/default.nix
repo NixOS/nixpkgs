@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "108yjymp64iqx1b2wqjbkmbm2w199wq46g7hrmqhcziv6f4aqljp";
 
+  doCheck = false;
+
   subPackages = [ "cmd/${pname}" ];
 
   postInstall = ''

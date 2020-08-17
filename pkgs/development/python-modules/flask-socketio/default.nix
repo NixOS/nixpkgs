@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "Flask-SocketIO";
-  version = "4.3.0";
+  version = "4.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7f9b54ac9cd92e28a657c58f51943d97e76b988840c8795784e7b2bafb13103f";
+    sha256 = "36c1d5765010d1f4e4f05b4cc9c20c289d9dc70698c88d1addd0afcfedc5b062";
   };
 
   propagatedBuildInputs = [

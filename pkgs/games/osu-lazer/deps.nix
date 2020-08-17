@@ -586,8 +586,8 @@
   })
   (fetchNuGet {
     name = "ppy.osu.Framework";
-    version = "2020.730.1";
-    sha256 = "0hsrb01rhcpan00bwk9zxzgj1ghsgsmx36g7sd8rlygr3v5sfvmr";
+    version = "2020.806.0";
+    sha256 = "1d4aprz81xbhk5addl1n7jwj8xxny51s6nvpn37alld0x6n7k8nv";
   })
   (fetchNuGet {
     name = "ppy.osu.Framework.NativeLibs";

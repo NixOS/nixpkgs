@@ -24,6 +24,8 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   nativeBuildInputs = [ go-rice ];
 
   preBuild = ''

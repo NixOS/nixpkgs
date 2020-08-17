@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoModule, bash }:
+{ stdenv, fetchFromGitHub, buildGoModule, bash, fish, zsh }:
 
 buildGoModule rec {
   pname = "direnv";
@@ -27,6 +27,13 @@ buildGoModule rec {
     make install DESTDIR=$out
     mkdir -p $out/share/fish/vendor_conf.d
     echo "eval ($out/bin/direnv hook fish)" > $out/share/fish/vendor_conf.d/direnv.fish
+  '';
+
+  checkInputs = [ fish zsh ];
+
+  checkPhase = ''
+    export HOME=$(mktemp -d)
+    make test-go test-bash test-fish test-zsh
   '';
 
   meta = with stdenv.lib; {

@@ -30,6 +30,8 @@ buildGoModule rec {
 
   vendorSha256 = "1vqmzz76lcwwnw89n4lyg4jjf7wbdgn9sdzwsgrjwkj8ax7d48cv";
 
+  doCheck = false;
+
   subPackages = [ "cmd/argo" ];
 
   nativeBuildInputs = [ installShellFiles ];

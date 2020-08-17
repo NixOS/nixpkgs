@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   subPackages = [ "." ];
 
   meta = with lib; {

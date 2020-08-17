@@ -38,7 +38,7 @@ let
 
     "js-ghcjs"
 
-    "aarch64-genode" "x86_64-genode"
+    "aarch64-genode" "i686-genode" "x86_64-genode"
   ];
 
   allParsed = map parse.mkSystemFromString all;

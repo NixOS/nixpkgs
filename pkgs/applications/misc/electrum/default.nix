@@ -1,7 +1,12 @@
-{ stdenv, fetchurl, fetchFromGitHub, wrapQtAppsHook, python3, python3Packages, zbar, secp256k1
-, enableQt ? !stdenv.isDarwin
-
-
+{ stdenv
+, fetchurl
+, fetchFromGitHub
+, wrapQtAppsHook
+, python3
+, python3Packages
+, zbar
+, secp256k1
+, enableQt ? true
 # for updater.nix
 , writeScript
 , common-updater-scripts
@@ -15,7 +20,7 @@
 }:
 
 let
-  version = "3.3.8";
+  version = "4.0.2";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -31,7 +36,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "1di8ba77kgapcys0d7h5nx1qqakv3s60c6sp8skw8p69ramsl73c";
+    sha256 = "1xpkbard994n1gwl95b558x69k1m1m258bc220nxrajg1pywh90f";
 
     extraPostFetch = ''
       mv $out ./all
@@ -46,7 +51,7 @@ python3Packages.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "1g00cj1pmckd4xis8r032wmraiv3vd3zc803hnyxa2bnhj8z3bg2";
+    sha256 = "05ibrr6ysf6fncs1pimhxvyr7d659jwj2r2a9pdd3cmn1dxzy2w1";
   };
 
   postUnpack = ''
@@ -57,9 +62,11 @@ python3Packages.buildPythonApplication {
   nativeBuildInputs = stdenv.lib.optionals enableQt [ wrapQtAppsHook ];
 
   propagatedBuildInputs = with python3Packages; [
-    aiorpcx
     aiohttp
     aiohttp-socks
+    aiorpcx
+    attrs
+    bitstring
     dnspython
     ecdsa
     jsonrpclib-pelix
@@ -78,9 +85,6 @@ python3Packages.buildPythonApplication {
     keepkey
     trezor
     btchip
-
-    # TODO plugins
-    # amodem
   ] ++ stdenv.lib.optionals enableQt [ pyqt5 qdarkstyle ];
 
   preBuild = ''
@@ -90,7 +94,6 @@ python3Packages.buildPythonApplication {
   '' + (if enableQt then ''
     substituteInPlace ./electrum/qrscanner.py \
       --replace ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
-    sed -i 's/qdarkstyle<2.7/qdarkstyle<3.0/' contrib/requirements/requirements.txt
   '' else ''
     sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
   '');

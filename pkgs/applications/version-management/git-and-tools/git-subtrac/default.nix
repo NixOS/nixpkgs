@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1ccwbhzwys8sl3m2rs2lp70snzsi2a0ahnnq8kn15rrlvsv5qahf";
 
+  doCheck = false;
+
   meta = with lib; {
     description = "Keep the content for your git submodules all in one place: the parent repo";
     homepage = "https://github.com/apenwarr/git-subtrac";

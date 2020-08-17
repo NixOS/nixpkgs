@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
   # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "acd231e2b46f";
-    sha256 = "1b33lsxrrrvarknqz9xs7j7f19bzxxymmfdhch7k70x3yyiwmfsy";
+    rev = "2dcbc01c9931";
+    sha256 = "0ydhbvfp7vk5zqpsc54ihxz6y2gmzh0bcgyz0xidlxrmxzwcvvyh";
   };
 
   buildInputs = [

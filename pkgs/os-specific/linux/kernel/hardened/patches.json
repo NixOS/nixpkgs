@@ -1,22 +1,22 @@
 {
     "4.14": {
-        "name": "linux-hardened-4.14.190.a.patch",
-        "sha256": "0lk0y2nlld4av8xjcsrqla30bflvvkzjz007s47y9hwbdrbn23pp",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.14.190.a/linux-hardened-4.14.190.a.patch"
+        "name": "linux-hardened-4.14.193.a.patch",
+        "sha256": "0hxr4v6ph29p0916dh894aknna5qxszcpz5xrci81xla3i50vy9v",
+        "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.14.193.a/linux-hardened-4.14.193.a.patch"
     },
     "4.19": {
-        "name": "linux-hardened-4.19.135.a.patch",
-        "sha256": "1x8fl5imcy7ws3pvispv4g3x88dddb3ah57kib78kk5pqi4w20y8",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.19.135.a/linux-hardened-4.19.135.a.patch"
+        "name": "linux-hardened-4.19.139.a.patch",
+        "sha256": "02kzzzk09kiwimwmq437079kqrh4n76jc7a6q5y33wpvgpacdmc9",
+        "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.19.139.a/linux-hardened-4.19.139.a.patch"
     },
     "5.4": {
-        "name": "linux-hardened-5.4.54.a.patch",
-        "sha256": "16h3iiqf6z8v6bbymxrp36w15qil5lfr6y48vwh99dx1yyrgdyzp",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.4.54.a/linux-hardened-5.4.54.a.patch"
+        "name": "linux-hardened-5.4.58.a.patch",
+        "sha256": "0f2ll67skk78jxz7h8mxppq11giy2y0h2xw3pcp01dmnsci67vzj",
+        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.4.58.a/linux-hardened-5.4.58.a.patch"
     },
     "5.7": {
-        "name": "linux-hardened-5.7.11.a.patch",
-        "sha256": "0vamaqrcs8nq8pjgq86lrxq0cdkr5kp4vydp8z2sr27q7ninnrla",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.7.11.a/linux-hardened-5.7.11.a.patch"
+        "name": "linux-hardened-5.7.15.a.patch",
+        "sha256": "052zwbgx2jbby7cqab45hvbnqr6mbkz0i17hncj94jsy15ghp6ir",
+        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.7.15.a/linux-hardened-5.7.15.a.patch"
     }
 }

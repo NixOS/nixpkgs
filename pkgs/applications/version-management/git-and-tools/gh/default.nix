@@ -29,6 +29,10 @@ buildGoModule rec {
     done
   '';
 
+  checkPhase = ''
+    make test
+  '';
+
   meta = with lib; {
     description = "GitHub CLI tool";
     homepage = "https://cli.github.com/";

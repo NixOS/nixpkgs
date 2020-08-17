@@ -16,6 +16,8 @@ buildGoModule rec {
 
   vendorSha256 = "0nbbngsphklzhcmqafrw1im2l1vnfcma9sb4vskdpdrsadv5ss5r";
 
+  doCheck = false;
+
   meta = with lib; {
     description = "A collection of tools and libraries for working with Go code, including linters and static analysis";
     homepage = "https://staticcheck.io";

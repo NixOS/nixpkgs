@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.5.2";
+  version = "2.5.3";
 
   disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b95e31850f3af163c2283ed40432f053acbc8fc6eba6a069cb518d9dbf71848c";
+    sha256 = "7dd78437f2d8d019717dbf287772d0b2dbdfd13fc016aa7faa08d67bccc46adc";
   };
 
   nativeBuildInputs = [ pytestrunner ];

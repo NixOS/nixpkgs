@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1xn7c6y32vpanqvf1sfpw6bs73dbjniavjbf00j0vx83bfyklsr4";
 
+  doCheck = false;
+
   buildInputs = [ makeWrapper ];
 
   preBuild = ''

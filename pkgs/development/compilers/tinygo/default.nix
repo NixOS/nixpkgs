@@ -27,6 +27,9 @@ buildGoModule rec {
   preBuild = "cp ${gomod} go.mod";
 
   vendorSha256 = "19194dlzpl6zzw2gqybma5pwip71rw8z937f104k6c158qzzgy62";
+
+  doCheck = false;
+
   enableParallelBuilding = true;
   subPackages = [ "." ];
   buildInputs = [ llvm clang-unwrapped makeWrapper ];
@@ -44,6 +47,5 @@ buildGoModule rec {
     description = "Go compiler for small places";
     license = licenses.bsd3;
     maintainers = with maintainers; [ chiiruno ];
-    platforms = platforms.all;
   };
 }

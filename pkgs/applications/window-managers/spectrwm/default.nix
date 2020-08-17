@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "spectrwm";
-  version = "3.3.0";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "conformal";
     repo = "spectrwm";
-    rev = "SPECTRWM_3_3_0";
-    sha256 = "139mswlr0z5dbp5migm98qqg84syq0py1qladp3226xy6q3bnn08";
+    rev = "SPECTRWM_3_4_1";
+    sha256 = "0bf0d25yr0craksamczn2mdy6cjp27l88smihlw9bw4p6a2qhi41";
   };
 
   nativeBuildInputs = [ pkgconfig ];

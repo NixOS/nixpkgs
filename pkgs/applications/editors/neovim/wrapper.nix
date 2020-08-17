@@ -138,7 +138,7 @@ let
         ln -s ${rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby
       ''
       + optionalString withNodeJs ''
-        ln -s ${nodePackages.neovim}/bin/neovim-node $out/bin/nvim-node
+        ln -s ${nodePackages.neovim}/bin/neovim-node-host $out/bin/nvim-node
       ''
       + optionalString vimAlias ''
         ln -s $out/bin/nvim $out/bin/vim

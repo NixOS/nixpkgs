@@ -26,6 +26,7 @@ self: super: {
   filepath = null;
   ghc-boot = null;
   ghc-boot-th = null;
+  ghc-bignum = null;
   ghc-compact = null;
   ghc-heap = null;
   ghci = null;

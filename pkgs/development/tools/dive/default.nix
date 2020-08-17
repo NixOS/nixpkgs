@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0219q9zjc0i6fbdngqh0wjpmq8wj5bjiz5dls0c1aam0lh4vwkhc";
 
+  doCheck = false;
+
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = stdenv.lib.optionals stdenv.isLinux [ btrfs-progs gpgme lvm2 ];

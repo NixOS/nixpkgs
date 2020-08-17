@@ -21,6 +21,8 @@ buildGoModule rec {
 
   vendorSha256 = "0yfs1f18d8frbkrshsajzzbj4wh2azd89g2h35wm6wqknvlipwr0";
 
+  doCheck = false;
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libpcap libnfnetlink libnetfilter_queue libusb1 ];
 
@@ -32,6 +34,5 @@ buildGoModule rec {
     homepage = "https://www.bettercap.org/";
     license = with licenses; gpl3;
     maintainers = with maintainers; [ y0no ];
-    platforms = platforms.all;
   };
 }
