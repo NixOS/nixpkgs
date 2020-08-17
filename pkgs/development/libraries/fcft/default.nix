@@ -1,5 +1,5 @@
 { stdenv, lib, fetchgit, pkg-config, meson, ninja, scdoc
-,freetype, fontconfig, pixman, tllist }:
+,freetype, fontconfig, pixman, tllist, check }:
 
 stdenv.mkDerivation rec {
   pname = "fcft";
@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config meson ninja scdoc ];
   buildInputs = [ freetype fontconfig pixman tllist ];
+  checkInputs = [ check ];
+
+  mesonFlags = [ "--buildtype=release" ];
+
+  doCheck = true;
 
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/fcft";
