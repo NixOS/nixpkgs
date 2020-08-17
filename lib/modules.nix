@@ -115,8 +115,8 @@ rec {
 
       checkUnmatched =
         if config._module.check && config._module.freeformType == null && merged.unmatchedDefns != [] then
-          let inherit (head merged.unmatchedDefns) file prefix;
-          in throw "The option `${showOption prefix}' defined in `${file}' does not exist."
+          let firstDef = head merged.unmatchedDefns;
+          in throw "The option `${showOption (prefix ++ firstDef.prefix)}' defined in `${firstDef.file}' does not exist."
         else null;
 
       result = builtins.seq checkUnmatched {
