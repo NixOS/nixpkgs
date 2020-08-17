@@ -764,6 +764,8 @@ in {
 
   filemagic = callPackage ../development/python-modules/filemagic { };
 
+  finalfusion = callPackage ../development/python-modules/finalfusion { };
+
   fints = callPackage ../development/python-modules/fints { };
 
   fire = callPackage ../development/python-modules/fire { };
