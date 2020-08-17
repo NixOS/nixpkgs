@@ -6813,6 +6813,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  shadowsocks-v2ray-plugin = callPackage ../tools/networking/shadowsocks-v2ray-plugin { };
+
   sharutils = callPackage ../tools/archivers/sharutils { };
 
   shelldap = callPackage ../tools/misc/shelldap { };
