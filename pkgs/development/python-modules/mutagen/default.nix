@@ -3,6 +3,7 @@
 , fetchPypi
 , isPy27
 , fetchpatch
+, flake8
 , hypothesis
 , pycodestyle
 , pyflakes
@@ -24,7 +25,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ setuptools ];
   checkInputs = [
     pkgs.faad2 pkgs.flac pkgs.vorbis-tools pkgs.liboggz
-    pkgs.glibcLocales pycodestyle pyflakes pytest hypothesis
+    pkgs.glibcLocales pycodestyle pyflakes pytest hypothesis flake8
   ];
   LC_ALL = "en_US.UTF-8";
 
