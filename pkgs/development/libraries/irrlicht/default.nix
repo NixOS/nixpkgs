@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   src = common.src;
 
+  postPatch = ''
+    sed -ie '/sys\/sysctl.h/d' source/Irrlicht/COSOperator.cpp
+  '';
+
   preConfigure = ''
     cd source/Irrlicht
   '';
