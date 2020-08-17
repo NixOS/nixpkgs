@@ -1,0 +1,11 @@
+--- a/build/meson/run_test_env.sh
++++ b/build/meson/run_test_env.sh
+@@ -12,7 +12,7 @@ if [[ -n "${UI_TEST}" ]]; then
+   # as they simultaneously try to own the "org.gimp.GIMP.UI" D-Bus name
+ 
+   xvfb-run -d --server-args="-screen 0 1280x1024x24" \
+-    dbus-run-session -- "$@"
++    dbus-run-session --config-file=@session_conf@ -- "$@"
+ 
+ else
+   # Run the executable directly,
