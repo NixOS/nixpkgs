@@ -21163,6 +21163,8 @@ in
 
   libowfat = callPackage ../development/libraries/libowfat { };
 
+  liborigin = callPackage ../development/libraries/liborigin { };
+
   librecad = libsForQt5.callPackage ../applications/misc/librecad { };
 
   libreoffice = hiPrio libreoffice-still;
