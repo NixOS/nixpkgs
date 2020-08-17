@@ -1,9 +1,7 @@
-{ stdenvNoCC, kmod, modules, buildEnv, autoModuleSignHook, name ? "kernel-modules" }:
+{ stdenvNoCC, kmod, modules, buildEnv, name ? "kernel-modules" }:
 
 buildEnv {
   inherit name;
-
-  buildInputs = [ autoModuleSignHook ];
 
   paths = modules;
 
@@ -33,7 +31,5 @@ buildEnv {
           rm -f $out/lib/modules/$kernelVersion/modules.!(builtin*|order*)
           ${kmod}/bin/depmod -b $out -C $out/etc/depmod.d -a $kernelVersion
       fi
-
-      moduleSignPhase()
     '';
 }
