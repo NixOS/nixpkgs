@@ -1,0 +1,13 @@
+diff --git a/build/meson/run_test_env.sh b/build/meson/run_test_env.sh
+index a3fda14f00..71fbdcd00d 100644
+--- a/build/meson/run_test_env.sh
++++ b/build/meson/run_test_env.sh
+@@ -33,7 +33,7 @@ if [ -n "${UI_TEST}" ]; then
+     OPT="--auto-servernum"
+   fi
+   xvfb-run $OPT --server-args="-screen 0 1280x1024x24" \
+-    dbus-run-session -- "$@"
++    dbus-run-session --config-file="@session_conf@" -- "$@"
+ 
+ else
+   # Run the executable directly,
