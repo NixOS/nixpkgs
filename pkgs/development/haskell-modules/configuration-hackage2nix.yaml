@@ -10157,7 +10157,6 @@ broken-packages:
   - tart
   - task
   - task-distribution
-  - taskell
   - TaskMonad
   - tasty-auto
   - tasty-bdd
