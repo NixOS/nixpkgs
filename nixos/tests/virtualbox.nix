@@ -91,6 +91,8 @@ let
       (isYes "SERIAL_8250_CONSOLE")
       (isYes "SERIAL_8250")
     ];
+
+    networking.usePredictableInterfaceNames = false;
   };
 
   mkLog = logfile: tag: let
