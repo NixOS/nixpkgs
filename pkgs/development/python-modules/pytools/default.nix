@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , decorator
 , appdirs
 , six
@@ -11,6 +12,7 @@
 buildPythonPackage rec {
   pname = "pytools";
   version = "2020.4";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
