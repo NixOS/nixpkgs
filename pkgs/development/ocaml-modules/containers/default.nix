@@ -4,14 +4,14 @@
 }:
 
 buildDunePackage rec {
-  version = "2.7";
+  version = "3.0";
   pname = "containers";
 
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "ocaml-containers";
     rev = "v${version}";
-    sha256 = "1nsxfgn1g1vpqihb9gd6gsab0bcm70nf9z84cp441c8wsc57hi6a";
+    sha256 = "0c75d5csgc68qqbsdz4279nlin111zrjbg4d47k32ska28myvpqn";
   };
 
   buildInputs = [ iter ];
