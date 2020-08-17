@@ -6550,6 +6550,8 @@ in {
 
   stevedore = callPackage ../development/python-modules/stevedore {};
 
+  svglib = callPackage ../development/python-modules/svglib { };
+
   text-unidecode = callPackage ../development/python-modules/text-unidecode { };
 
   Theano = callPackage ../development/python-modules/Theano rec {
