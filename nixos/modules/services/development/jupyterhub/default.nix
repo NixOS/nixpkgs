@@ -15,7 +15,7 @@ let
   jupyterhubConfig = pkgs.writeText "jupyterhub_config.py" ''
     c.JupyterHub.bind_url = "http://${cfg.host}:${toString cfg.port}"
 
-    c.JupyterHub.authentication_class = "${cfg.authentication}"
+    c.JupyterHub.authenticator_class = "${cfg.authentication}"
     c.JupyterHub.spawner_class = "${cfg.spawner}"
 
     c.SystemdSpawner.default_url = '/lab'
