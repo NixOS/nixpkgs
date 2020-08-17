@@ -225,9 +225,7 @@ in
           # No confinement done of /nix/store here like in systemd-confinement.nix,
           # an AppArmor profile is provided to get a confinement based upon paths and rights.
           builtins.storeDir
-          "-/etc/hosts"
-          "-/etc/ld-nix.so.preload"
-          "-/etc/localtime"
+          "/etc"
           ] ++
           optional (cfg.settings.script-torrent-done-enabled &&
                     cfg.settings.script-torrent-done-filename != "")
