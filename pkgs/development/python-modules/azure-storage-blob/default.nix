@@ -2,23 +2,28 @@
 , buildPythonPackage
 , fetchPypi
 , azure-common
+, azure-core
 , azure-storage-common
+, msrest
 , isPy3k
 , futures
 }:
 
 buildPythonPackage rec {
   pname = "azure-storage-blob";
-  version = "2.1.0";
+  version = "12.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b90323aad60f207f9f90a0c4cf94c10acc313c20b39403398dfba51f25f7b454";
+    extension = "zip";
+    sha256 = "1s03daq5mxh9acbv8qpa55c2wmjvdf8jq071cwv65mrly8prp84n";
   };
 
   propagatedBuildInputs = [
     azure-common
+    azure-core
     azure-storage-common
+    msrest
   ] ++ lib.optional (!isPy3k) futures;
 
   # has no tests
