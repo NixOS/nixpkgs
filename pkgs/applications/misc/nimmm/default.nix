@@ -36,8 +36,6 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ nim ];
   buildInputs = [ termbox pcre ];
 
-  NIX_LDFLAGS = "-lpcre";
-
   buildPhase = ''
     export HOME=$TMPDIR;
     nim -p:${noise} -p:${nimbox} -p:${lscolors}/src c -d:release src/nimmm.nim

@@ -28,6 +28,10 @@ stdenv.mkDerivation rec {
     openssl pcre readline boehmgc sfml sqlite
   ];
 
+  patches = [ ./nixbuild.patch ];
+
+  postPatch = "echo define:nixbuild >> config/nim.cfg";
+
   buildPhase = ''
     runHook preBuild
 
