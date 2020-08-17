@@ -254,6 +254,12 @@
     githubId = 732652;
     name = "Andreas Herrmann";
   };
+  ahrzb = {
+    email = "ahrzb5@gmail.com";
+    github = "ahrzb";
+    githubId = 5220438;
+    name = "AmirHossein Roozbahani";
+  };
   ahuzik = {
     email = "ales.guzik@gmail.com";
     github = "alesguzik";
