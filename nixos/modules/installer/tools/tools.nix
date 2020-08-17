@@ -48,7 +48,7 @@ let
   nixos-option =
     if lib.versionAtLeast (lib.getVersion pkgs.nix) "2.4pre"
     then null
-    else pkgs.callPackage ./nixos-option { };
+    else pkgs.callPackage ./nixos-option { nix = config.nix.package; };
 
   nixos-version = makeProg {
     name = "nixos-version";
