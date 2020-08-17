@@ -3806,6 +3806,8 @@ in
 
   git-big-picture = callPackage ../applications/version-management/git-and-tools/git-big-picture { };
 
+  gitpert = callPackage ../applications/version-management/git-and-tools/gitpert { };
+
   git-crecord = callPackage ../applications/version-management/git-crecord { };
 
   git-lfs = lowPrio (callPackage ../applications/version-management/git-lfs { });
