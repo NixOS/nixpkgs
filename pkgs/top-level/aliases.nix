@@ -140,6 +140,10 @@ mapAliases ({
     fontconfig-ultimate has been removed. The repository has been archived upstream and activity has ceased for several years.
     https://github.com/bohoomil/fontconfig-ultimate/issues/171.
   '';
+  fontconfig-penultimate = throw ''
+    fontconfig-penultimate has been removed.
+    It was a fork of the abandoned fontconfig-ultimate.
+  '';
   # 2020-07-21
   fontconfig_210 = throw ''
     fontconfig 2.10.x hasn't had a release in years, is vulnerable to CVE-2016-5384
