@@ -131,6 +131,21 @@ in stdenv.mkDerivation rec {
     gegl
   ];
 
+  configureFlags = [
+    "--without-webkit" # old version is required
+    "--disable-check-update"
+    "--with-bug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
+    "--with-icc-directory=/run/current-system/sw/share/color/icc"
+    # fix libdir in pc files (${exec_prefix} needs to be passed verbatim)
+    "--libdir=\${exec_prefix}/lib"
+  ];
+
+  enableParallelBuilding = true;
+
+  # on Darwin,
+  # test-eevl.c:64:36: error: initializer element is not a compile-time constant
+  doCheck = !stdenv.isDarwin;
+
   # Check if librsvg was built with --disable-pixbuf-loader.
   PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvg}/${gdk-pixbuf.moduleDir}";
 
@@ -154,21 +169,6 @@ in stdenv.mkDerivation rec {
     # probably its a good idea to use the same gtk in plugins ?
     gtk = gtk2;
   };
-
-  configureFlags = [
-    "--without-webkit" # old version is required
-    "--disable-check-update"
-    "--with-bug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
-    "--with-icc-directory=/run/current-system/sw/share/color/icc"
-    # fix libdir in pc files (${exec_prefix} needs to be passed verbatim)
-    "--libdir=\${exec_prefix}/lib"
-  ];
-
-  # on Darwin,
-  # test-eevl.c:64:36: error: initializer element is not a compile-time constant
-  doCheck = !stdenv.isDarwin;
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "The GNU Image Manipulation Program";
