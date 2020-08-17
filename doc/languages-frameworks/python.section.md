@@ -543,9 +543,9 @@ Note also the line `doCheck = false;`, we explicitly disabled running the test-s
 It is highly encouraged to have testing as part of the package build. This
 helps to avoid situations where the package was able to build and install,
 but is not usable at runtime. Currently, all packages will use the `test`
-command provided by the setup.py. However, this is currently deprecated
-https://github.com/pypa/setuptools/pull/1878 and your package should provide
-it's own checkPhase.
+command provided by the setup.py (i.e. `python setup.py test`). However,
+this is currently deprecated https://github.com/pypa/setuptools/pull/1878
+and your package should provide its own checkPhase.
 
 *NOTE:* The `checkPhase` for python maps to the `installCheckPhase` on a
 normal derivation. This is due to many python packages not behaving well
@@ -632,7 +632,29 @@ Trying to concatenate the related strings to disable tests in a regular checkPha
 would be much harder to read. This also enables us to comment on why specific tests
 are disabled.
 
-#### Develop local package
+#### Using pythonImportsCheck
+
+Although unit tests are highly prefered to valid correctness of a package. Not
+all packages have test suites that can be ran easily, and some have none at all.
+To help ensure the package still works, `pythonImportsCheck` can attempt to import
+the listed modules.
+
+```
+  pythonImportsCheck = [ "requests" "urllib" ];
+```
+roughly translates to:
+```
+  postCheck = ''
+    PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
+    python -c "import requests; import urllib"
+  '';
+```
+However, this is done in it's own phase, and not dependent on whether `doCheck = true;`
+
+This can also be useful in verifying that the package doesn't assume commonly
+present packages (e.g. `setuptools`)
+
+### Develop local package
 
 As a Python developer you're likely aware of [development mode](http://setuptools.readthedocs.io/en/latest/setuptools.html#development-mode)
 (`python setup.py develop`); instead of installing the package this command
