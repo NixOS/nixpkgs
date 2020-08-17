@@ -24612,6 +24612,8 @@ in
 
   nxengine-evo = callPackage ../games/nxengine-evo { };
 
+  oci-seccomp-bpf-hook = callPackage ../applications/virtualization/oci-seccomp-bpf-hook { };
+
   odamex = callPackage ../games/odamex { };
 
   oilrush = callPackage ../games/oilrush { };
