@@ -8416,6 +8416,12 @@
     githubId = 207457;
     name = "Matthieu Chevrier";
   };
+  trepetti = {
+    email = "trepetti@cs.columbia.edu";
+    github = "trepetti";
+    githubId = 25440339;
+    name = "Tom Repetti";
+  };
   trevorj = {
     email = "nix@trevor.joynson.io";
     github = "akatrevorjay";
