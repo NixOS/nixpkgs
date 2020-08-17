@@ -6073,6 +6073,7 @@ in {
       sha256 = "02iqb7ws7fw5fd1a83hx705pzrw1imj7z0bphjsl4bfvw254xgv4";
     };
     doCheck = false;
+    disabled = !isPy3k;
   });
 
   scikitimage = callPackage ../development/python-modules/scikit-image { };
