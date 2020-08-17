@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "stevedore";
   version = "3.2.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
