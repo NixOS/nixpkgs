@@ -116,7 +116,7 @@ in stdenv.mkDerivation {
     (if withNS
       then [ "--disable-ns-self-contained" ]
     else if withX
-      then [ "--with-x-toolkit=${toolkit}" "--with-xft" ]
+      then [ "--with-x-toolkit=${toolkit}" "--with-xft" "--with-cairo" ]
       else [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
              "--with-gif=no" "--with-tiff=no" ])
     ++ lib.optional withXwidgets "--with-xwidgets"
