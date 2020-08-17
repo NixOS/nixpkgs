@@ -5944,6 +5944,8 @@ in {
 
   rdflib = callPackage ../development/python-modules/rdflib { };
 
+  rdflib-jsonld = callPackage ../development/python-modules/rdflib-jsonld { };
+
   isodate = callPackage ../development/python-modules/isodate { };
 
   owslib = callPackage ../development/python-modules/owslib { };
