@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, frozendict, simplejson, six
+, frozendict, simplejson, six, isPy27
 }:
 
 buildPythonPackage rec {
