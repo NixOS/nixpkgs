@@ -457,7 +457,7 @@ in
       environment.systemPackages    = [ pkgs.fontconfig ];
       environment.etc.fonts.source  = "${fontconfigEtc}/etc/fonts/";
     })
-    (mkIf (cfg.enable && !cfg.penultimate.enable) {
+    (mkIf cfg.enable {
       fonts.fontconfig.confPackages = [ confPkg ];
     })
   ];
