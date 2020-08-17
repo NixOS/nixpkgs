@@ -3675,6 +3675,10 @@ in
 
   freetds = callPackage ../development/libraries/freetds { };
 
+  freqtweak = callPackage ../applications/audio/freqtweak {
+    wxGTK = wxGTK31-gtk2;
+  };
+
   frescobaldi = python3Packages.callPackage ../misc/frescobaldi {};
 
   frostwire = callPackage ../applications/networking/p2p/frostwire { };
