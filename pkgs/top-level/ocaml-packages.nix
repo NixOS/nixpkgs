@@ -151,6 +151,8 @@ let
 
     containers = callPackage ../development/ocaml-modules/containers { };
 
+    containers-data = callPackage ../development/ocaml-modules/containers/data.nix { };
+
     cow = callPackage ../development/ocaml-modules/cow { };
 
     cpdf = callPackage ../development/ocaml-modules/cpdf { };
