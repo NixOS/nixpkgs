@@ -1,7 +1,7 @@
 { stdenv, fetchPypi, python, buildPythonPackage, isPy3k, pycairo, backports_functools_lru_cache
 , which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
 , freetype, libpng, pkgconfig, mock, pytz, pygobject3, gobject-introspection
-, pillow
+, certifi, pillow
 , enableGhostscript ? true, ghostscript ? null, gtk3
 , enableGtk3 ? false, cairo
 # darwin has its own "MacOSX" backend
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs =
     [ cycler dateutil numpy pyparsing tornado freetype kiwisolver
-      libpng mock pytz pillow ]
+      certifi libpng mock pytz pillow ]
     ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
     ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ]
     ++ stdenv.lib.optionals enableQt [ pyqt5 ];
