@@ -4846,6 +4846,8 @@ in {
   else
     callPackage ../development/python-modules/mock { };
 
+  mocket = callPackage ../development/python-modules/mocket { };
+
   mock-open = callPackage ../development/python-modules/mock-open { };
 
   mockito = callPackage ../development/python-modules/mockito { };
