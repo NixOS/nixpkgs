@@ -13,13 +13,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "osu-lazer";
-  version = "2020.806.0";
+  version = "2020.814.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    sha256 = "BelmqcDnrGH84fTs6M0krwWz6SHn2hOm7y+PNEOOOZM=";
+    sha256 = "1ksa95m9172bi36100fwwysmx3wm45kn5ismsi813g9lrmpln5jw";
   };
 
   patches = [ ./bypass-tamper-detection.patch ];
