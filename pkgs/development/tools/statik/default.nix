@@ -13,13 +13,10 @@ buildGoPackage {
     sha256 = "15wwgrprfq36pa13b9anp7097q1fqcad28hirvivybmc011p0fri";
   };
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     homepage = "https://github.com/rakyll/statik";
     description = "Embed files into a Go executable ";
     license = licenses.asl20;
     maintainers = with maintainers; [ chiiruno ];
-    platforms = platforms.all;
   };
 }

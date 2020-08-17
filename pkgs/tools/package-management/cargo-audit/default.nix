@@ -23,6 +23,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://rustsec.org";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ basvandijk ];
-    platforms = platforms.all;
   };
 }

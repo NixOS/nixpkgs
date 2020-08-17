@@ -30,6 +30,6 @@ buildPythonApplication rec {
     homepage = "https://tailordev.github.io/Watson/";
     description = "A wonderful CLI to track your time!";
     license = licenses.mit;
-    maintainers = with maintainers; [ mguentner nathyong geistesk ];
+    maintainers = with maintainers; [ mguentner nathyong oxzi ];
   };
 }

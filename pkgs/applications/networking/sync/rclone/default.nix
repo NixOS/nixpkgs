@@ -39,6 +39,5 @@ buildGoPackage rec {
     homepage = "https://rclone.org";
     license = licenses.mit;
     maintainers = with maintainers; [ danielfullmer marsam ];
-    platforms = platforms.all;
   };
 }

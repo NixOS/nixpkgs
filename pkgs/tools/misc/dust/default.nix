@@ -25,6 +25,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/bootandy/dust";
     license = licenses.asl20;
     maintainers = [ maintainers.infinisil ];
-    platforms = platforms.all;
   };
 }

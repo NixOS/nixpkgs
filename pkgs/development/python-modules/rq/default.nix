@@ -1,8 +1,9 @@
-{ stdenv, fetchPypi, buildPythonPackage, click, redis }:
+{ stdenv, fetchPypi, buildPythonPackage, isPy27, click, redis }:
 
 buildPythonPackage rec {
   pname = "rq";
   version = "1.4.3";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

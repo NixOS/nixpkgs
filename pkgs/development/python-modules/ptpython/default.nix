@@ -1,5 +1,5 @@
-{ stdenv, buildPythonPackage, fetchPypi, prompt_toolkit, appdirs, docopt, jedi
-, pygments, isPy3k }:
+{ stdenv, lib, buildPythonPackage, pythonOlder, fetchPypi, prompt_toolkit, appdirs, docopt, jedi
+, pygments, importlib-metadata, isPy3k }:
 
 buildPythonPackage rec {
   pname = "ptpython";
@@ -11,7 +11,8 @@ buildPythonPackage rec {
     sha256 = "9ac4e4047ca3a03133702a353a93cf56ca1ec1162bc7ecaff087a91c03e3827b";
   };
 
-  propagatedBuildInputs = [ appdirs prompt_toolkit docopt jedi pygments ];
+  propagatedBuildInputs = [ appdirs prompt_toolkit docopt jedi pygments ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # no tests to run
   doCheck = false;

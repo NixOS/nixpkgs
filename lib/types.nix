@@ -486,9 +486,15 @@ rec {
           else value
         ) defs;
 
+        freeformType = (evalModules {
+          inherit modules specialArgs;
+          args.name = "‹name›";
+        })._module.freeformType;
+
       in
       mkOptionType rec {
         name = "submodule";
+        description = freeformType.description or name;
         check = x: isAttrs x || isFunction x || path.check x;
         merge = loc: defs:
           (evalModules {

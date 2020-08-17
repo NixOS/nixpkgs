@@ -1,11 +1,13 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-htmlhelp";
   version = "1.0.3";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

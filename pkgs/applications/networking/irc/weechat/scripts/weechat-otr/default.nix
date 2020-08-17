@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://github.com/mmb/weechat-otr";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ geistesk ];
+    maintainers = with maintainers; [ oxzi ];
     description = "WeeChat script for Off-the-Record messaging";
   };
 }

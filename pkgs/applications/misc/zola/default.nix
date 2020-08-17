@@ -31,6 +31,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.getzola.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ dywedir ];
-    platforms = platforms.all;
   };
 }

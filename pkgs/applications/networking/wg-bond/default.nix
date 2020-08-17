@@ -25,6 +25,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://gitlab.com/cab404/wg-bond/-/releases#v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ cab404 ];
-    platforms = platforms.all;
   };
 }

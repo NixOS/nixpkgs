@@ -30,7 +30,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "osqp" ];
   checkInputs = [ pytestCheckHook ];
   dontUseSetuptoolsCheck = true;  # don't run checks twice
-  disabledTests = [ "mkl_" ];
+  disabledTests = [
+    "mkl_"
+    "update_matrices_tests" # broken w/ scipy >= 1.5.0. Remove next release. See https://github.com/oxfordcontrol/osqp-python/issues/44
+  ];
 
   meta = with lib; {
     description = "The Operator Splitting QP Solver";

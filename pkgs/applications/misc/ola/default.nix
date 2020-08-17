@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-python-libs" ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "A framework for controlling entertainment lighting equipment.";
     homepage = "https://www.openlighting.org/ola/";

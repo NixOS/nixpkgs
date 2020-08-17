@@ -39,7 +39,6 @@ buildGoModule rec {
     homepage = "https://github.com/slackhq/nebula";
     license = licenses.mit;
     maintainers = with maintainers; [ filalex77 ];
-    platforms = platforms.all;
   };
 
 }

@@ -39,6 +39,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lotabout/skim";
     license = licenses.mit;
     maintainers = with maintainers; [ dywedir ];
-    platforms = platforms.all;
   };
 }

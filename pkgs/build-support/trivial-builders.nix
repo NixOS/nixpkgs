@@ -240,6 +240,8 @@ rec {
    * This creates a single derivation that replicates the directory structure
    * of all the input paths.
    *
+   * BEWARE: it may not "work right" when the passed paths contain symlinks to directories.
+   *
    * Examples:
    * # adds symlinks of hello to current build.
    * symlinkJoin { name = "myhello"; paths = [ pkgs.hello ]; }

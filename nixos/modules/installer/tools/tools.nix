@@ -14,11 +14,13 @@ let
   nixos-build-vms = makeProg {
     name = "nixos-build-vms";
     src = ./nixos-build-vms/nixos-build-vms.sh;
+    inherit (pkgs) runtimeShell;
   };
 
   nixos-install = makeProg {
     name = "nixos-install";
     src = ./nixos-install.sh;
+    inherit (pkgs) runtimeShell;
     nix = config.nix.package.out;
     path = makeBinPath [ nixos-enter ];
   };
@@ -28,6 +30,7 @@ let
     makeProg {
       name = "nixos-rebuild";
       src = ./nixos-rebuild.sh;
+      inherit (pkgs) runtimeShell;
       nix = config.nix.package.out;
       nix_x86_64_linux = fallback.x86_64-linux;
       nix_i686_linux = fallback.i686-linux;
@@ -50,6 +53,7 @@ let
   nixos-version = makeProg {
     name = "nixos-version";
     src = ./nixos-version.sh;
+    inherit (pkgs) runtimeShell;
     inherit (config.system.nixos) version codeName revision;
     inherit (config.system) configurationRevision;
     json = builtins.toJSON ({
@@ -64,6 +68,7 @@ let
   nixos-enter = makeProg {
     name = "nixos-enter";
     src = ./nixos-enter.sh;
+    inherit (pkgs) runtimeShell;
   };
 
 in

@@ -24,6 +24,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/facebookincubator/fastmod";
     license = licenses.asl20;
     maintainers = with maintainers; [ jduan ];
-    platforms = platforms.all;
   };
 }
