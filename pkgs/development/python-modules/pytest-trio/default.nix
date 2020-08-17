@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, trio, async_generator, hypothesis, outcome, pytest, pytestcov }:
+, trio, python, async_generator, hypothesis, outcome, pytest }:
 
 buildPythonPackage rec {
   pname = "pytest-trio";
@@ -22,13 +22,17 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytest
-    pytestcov
     hypothesis
   ];
 
+  # broken with pytest 5 and 6
+  doCheck = false;
   checkPhase = ''
-    pytest
+    rm pytest.ini
+    PYTHONPATH=$PWD:$PYTHONPATH pytest
   '';
+
+  pythonImportsCheck = [ "pytest_trio" ];
 
   meta = with lib; {
     description = "Pytest plugin for trio";
