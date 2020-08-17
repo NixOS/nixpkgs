@@ -81,6 +81,7 @@ in stdenv.mkDerivation (rec {
     rm test/DebugInfo/X86/convert-debugloc.ll
     rm test/DebugInfo/X86/convert-inlined.ll
     rm test/DebugInfo/X86/convert-linked.ll
+    rm test/DebugInfo/X86/debug_addr.ll
     rm test/tools/dsymutil/X86/op-convert.test
   '' + optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
     # Seems to require certain floating point hardware (NEON?)
