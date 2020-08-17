@@ -7,9 +7,6 @@
 , preFixup ? ""
 , shellHook ? ""
 
-# We want parallel builds by default
-, enableParallelBuilding ? true
-
 # Disabled flag
 , disabled ? false
 
@@ -168,9 +165,6 @@ let
       else
         touch $TMPDIR/buildFlagsArray
       fi
-      if [ -z "$enableParallelBuilding" ]; then
-          export NIX_BUILD_CORES=1
-      fi
       for pkg in $(getGoDirs ""); do
         buildGoDir install "$pkg"
       done
@@ -232,8 +226,6 @@ let
     passthru = passthru //
       { inherit go; } //
       lib.optionalAttrs (goPackageAliases != []) { inherit goPackageAliases; };
-
-    enableParallelBuilding = enableParallelBuilding;
 
     meta = {
       # Add default meta information
