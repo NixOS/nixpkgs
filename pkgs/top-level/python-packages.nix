@@ -2633,9 +2633,15 @@ in {
     pythonPackages = self;
   });
 
+  # pytest>=6 is too new for most packages
   pytest = if isPy3k then self.pytest_5 else self.pytest_4;
 
-  pytest_5 = callPackage ../development/python-modules/pytest {
+  pytest_6 = callPackage ../development/python-modules/pytest {
+    # hypothesis tests require pytest that causes dependency cycle
+    hypothesis = self.hypothesis.override { doCheck = false; };
+  };
+
+  pytest_5 = callPackage ../development/python-modules/pytest/5.nix {
     # hypothesis tests require pytest that causes dependency cycle
     hypothesis = self.hypothesis.override { doCheck = false; };
   };
