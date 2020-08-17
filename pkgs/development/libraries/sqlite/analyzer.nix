@@ -6,11 +6,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite-analyzer";
-  version = "3.32.3";
+  version = "3.33.0";
 
   src = assert version == sqlite.version; fetchurl {
     url = "https://sqlite.org/2020/sqlite-src-${archiveVersion version}.zip";
-    sha256 = "1fgmslzf013ry3a7g2vms7zyg24gs53gfj308r6ki4inbn3g04lk";
+    sha256 = "1f09srlrmcab1sf8j2d89s2kvknlbxk7mbsiwpndw9mall27dgwh";
   };
 
   nativeBuildInputs = [ unzip ];
