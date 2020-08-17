@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   doCheck = pythonAtLeast "3";
   checkPhase = ''
-    py.test
+    py.test --ignore=kubernetes/dynamic/test_client.py
   '';
 
   src = fetchPypi {
