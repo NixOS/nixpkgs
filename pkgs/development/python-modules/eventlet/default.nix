@@ -28,6 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://pypi.python.org/pypi/eventlet/";
     description = "A concurrent networking library for Python";
+    license = licenses.mit;
   };
 
 }
