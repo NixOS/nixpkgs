@@ -99,14 +99,14 @@ let
   };
 
   # setup library paths only for the targeted architecture
-  setupLibDirs_target = ''
+  setupLibDirsTarget = ''
     # link content of targetPaths
     cp -rsHf ${staticUsrProfileTarget}/lib lib
     ln -s lib lib${if is64Bit then "64" else "32"}
   '';
 
   # setup /lib, /lib32 and /lib64
-  setupLibDirs_multi = ''
+  setupLibDirsMulti = ''
     mkdir -m0755 lib32
     mkdir -m0755 lib64
     ln -s lib64 lib
@@ -124,8 +124,8 @@ let
     ln -Ls ${staticUsrProfileTarget}/lib/32/ld-linux.so.2 lib/
   '';
 
-  setupLibDirs = if isTargetBuild then setupLibDirs_target
-                                  else setupLibDirs_multi;
+  setupLibDirs = if isTargetBuild then setupLibDirsTarget
+                                  else setupLibDirsMulti;
 
   # the target profile is the actual profile that will be used for the chroot
   setupTargetProfile = ''
