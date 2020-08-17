@@ -713,6 +713,8 @@ in {
 
   azure-synapse-spark = callPackage ../development/python-modules/azure-synapse-spark { };
 
+  b2sdk = callPackage ../development/python-modules/b2sdk { };
+
   Babel = callPackage ../development/python-modules/Babel { };
 
   babelfish = callPackage ../development/python-modules/babelfish { };
