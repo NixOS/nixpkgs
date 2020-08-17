@@ -687,6 +687,9 @@ mapAliases ({
   mumble_git = pkgs.mumble;
   murmur_git = pkgs.murmur;
 
+  # added 2020-08-17
+  zabbix44 = throw "Zabbix 4.4 is end of life, see https://www.zabbix.com/documentation/current/manual/installation/upgrade_notes_500 for details on upgrading to Zabbix 5.0.";
+
   # added 2019-09-06
   zeroc_ice = pkgs.zeroc-ice;
 
