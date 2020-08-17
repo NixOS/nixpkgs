@@ -21010,6 +21010,8 @@ in
 
   kanshi = callPackage ../tools/misc/kanshi { };
 
+  kapitonov-plugins-pack = callPackage ../applications/audio/kapitonov-plugins-pack { };
+
   kdeApplications =
     let
       mkApplications = import ../applications/kde;
