@@ -7,24 +7,14 @@ let
 
   fcBool = x: "<bool>" + (boolToString x) + "</bool>";
 
-  # back-supported fontconfig version and package
-  # version is used for font cache generation
-  supportVersion = "210";
-  supportPkg     = pkgs."fontconfig_${supportVersion}";
-
   # latest fontconfig version and package
   # version is used for configuration folder name, /etc/fonts/VERSION/
-  # note: format differs from supportVersion and can not be used with makeCacheConf
   latestVersion  = pkgs.fontconfig.configVersion;
   latestPkg      = pkgs.fontconfig;
-
-  # supported version fonts.conf
-  supportFontsConf = pkgs.makeFontsConf { fontconfig = supportPkg; fontDirectories = config.fonts.fonts; };
 
   # configuration file to read fontconfig cache
   # version dependent
   # priority 0
-  cacheConfSupport = makeCacheConf { version = supportVersion; };
   cacheConfLatest  = makeCacheConf {};
 
   # generate the font cache setting file for a fontconfig version
@@ -186,7 +176,6 @@ let
     mkdir -p $latest_folder
 
     # fonts.conf
-    ln -s ${supportFontsConf} $support_folder/../fonts.conf
     ln -s ${latestPkg.out}/etc/fonts/fonts.conf \
           $latest_folder/../fonts.conf
 
@@ -196,7 +185,6 @@ let
     ln -s ${pkgs.fontconfig-penultimate}/etc/fonts/conf.d/*.conf \
           $latest_folder
 
-    ln -s ${cacheConfSupport} $support_folder/00-nixos-cache.conf
     ln -s ${cacheConfLatest}  $latest_folder/00-nixos-cache.conf
 
     rm $support_folder/10-antialias.conf $latest_folder/10-antialias.conf
