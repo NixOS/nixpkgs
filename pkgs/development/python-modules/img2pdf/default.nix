@@ -1,4 +1,4 @@
-{ lib, pillow, fetchPypi, buildPythonPackage, isPy27 }:
+{ lib, pillow, fetchPypi, buildPythonPackage, isPy27, pikepdf }:
 
 buildPythonPackage rec {
   pname = "img2pdf";
@@ -11,6 +11,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    pikepdf
     pillow
   ];
 
