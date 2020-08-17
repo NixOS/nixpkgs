@@ -1,8 +1,9 @@
-{ buildPythonPackage, fetchPypi, lib }:
+{ buildPythonPackage, fetchPypi, lib, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "dnspython";
   version = "2.0.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
