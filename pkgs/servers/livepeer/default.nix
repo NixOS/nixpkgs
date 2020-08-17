@@ -20,8 +20,6 @@ buildGoPackage rec {
 
   buildInputs = [ ffmpeg_3 ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Official Go implementation of the Livepeer protocol";
     homepage = "https://livepeer.org";
