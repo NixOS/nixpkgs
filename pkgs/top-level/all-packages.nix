@@ -20999,6 +20999,8 @@ in
     keditbookmarks kfind kfloppy kget kgpg khelpcenter kig kleopatra kmail kmix kmplot kolourpaint kompare konsole yakuake
     kpkpass kitinerary kontact korganizer krdc krfb ksystemlog ktouch kwalletmanager marble minuet okular picmi spectacle;
 
+  labplot = libsForQt5.callPackage ../applications/science/misc/labplot { };
+
   cantor = libsForQt5.callPackage ../applications/science/math/cantor { };
 
   analitza = libsForQt5.callPackage ../development/libraries/science/math/analitza {};
