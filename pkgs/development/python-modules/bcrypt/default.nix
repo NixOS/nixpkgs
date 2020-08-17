@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, isPyPy, fetchPypi
+{ stdenv, buildPythonPackage, isPyPy, fetchPypi, pythonOlder
 , cffi, pycparser, mock, pytest, py, six }:
 
 with stdenv.lib;
@@ -6,6 +6,7 @@ with stdenv.lib;
 buildPythonPackage rec {
   version = "3.2.0";
   pname = "bcrypt";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
