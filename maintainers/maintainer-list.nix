@@ -26,6 +26,13 @@
 
     `handle == github` is strongly preferred whenever `github` is an acceptable attribute name and is short and convenient.
 
+    If `github` begins with a numeral, `handle` should be prefixed with an underscore.
+    ```nix
+    _1example = {
+      github = "1example";
+    };
+    ```
+
     Add PGP/GPG keys only if you actually use them to sign commits and/or mail.
 
     To get the required PGP/GPG values for a key run
