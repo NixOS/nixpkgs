@@ -3775,6 +3775,8 @@ in
 
   genimage = callPackage ../tools/filesystems/genimage { };
 
+  geonkick = callPackage ../applications/audio/geonkick {};
+
   gerrit = callPackage ../applications/version-management/gerrit { };
 
   geteltorito = callPackage ../tools/misc/geteltorito { };
@@ -14885,6 +14887,8 @@ in
   qgnomeplatform =  libsForQt5.callPackage ../development/libraries/qgnomeplatform { };
 
   randomx = callPackage ../development/libraries/randomx { };
+
+  redkite = callPackage ../development/libraries/redkite { };
 
   resolv_wrapper = callPackage ../development/libraries/resolv_wrapper { };
 
