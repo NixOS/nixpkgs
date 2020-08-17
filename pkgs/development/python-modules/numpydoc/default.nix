@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi, isPy27
 , jinja2
 , nose
 , pytest
@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "numpydoc";
   version = "1.1.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname;
