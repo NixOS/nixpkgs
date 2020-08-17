@@ -49,6 +49,5 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/rust-lang/rls/";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ symphorien ];
-    platforms = platforms.all;
   };
 }

@@ -35,6 +35,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/xiph/rav1e/releases/tag/v${version}";
     license = licenses.bsd2;
     maintainers = [ maintainers.primeos ];
-    platforms = platforms.all;
   };
 }

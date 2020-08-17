@@ -5396,6 +5396,23 @@ let
     };
   };
 
+  DBDMariaDB = buildPerlPackage {
+    pname = "DBD-MariaDB";
+    version = "1.21";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PA/PALI/DBD-MariaDB-1.21.tar.gz";
+      sha256 = "068l4ybja5mmy89lwgzl9c1xs37f4fgvf7j7n8k4f78dg8rjp5zm";
+    };
+    buildInputs = [ pkgs.mariadb-connector-c DevelChecklib TestDeep ];
+    propagatedBuildInputs = [ DBI ];
+    meta = {
+      homepage = "https://github.com/gooddata/DBD-MariaDB";
+      description = "MariaDB and MySQL driver for the Perl5 Database Interface (DBI)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   DBDmysql = buildPerlPackage {
     pname = "DBD-mysql";
     version = "4.050";

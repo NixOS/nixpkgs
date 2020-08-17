@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, makeDesktopItem
+{ stdenv, lib, fetchFromGitHub, writeScript, desktop-file-utils
 , pkgconfig, autoconf213, alsaLib, bzip2, cairo
 , dbus, dbus-glib, ffmpeg_3, file, fontconfig, freetype
 , gnome2, gnum4, gtk2, hunspell, libevent, libjpeg
@@ -16,35 +16,33 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "28.10.0";
+  version = "28.12.0";
 
-  src = fetchgit {
-    url = "https://github.com/MoonchildProductions/Pale-Moon.git";
+  src = fetchFromGitHub {
+    owner = "MoonchildProductions";
+    repo = "Pale-Moon";
     rev = "${version}_Release";
-    sha256 = "0c64vmrp46sbl1dgl9dq2vkmpgz9gvgd59dk02jqwyhx4lln1g2l";
+    sha256 = "1cc75972nhmxkkynkky1m2fijbf3qlzvpxsd98mxlx0b7h4d3l5l";
     fetchSubmodules = true;
   };
 
-  desktopItem = makeDesktopItem {
-    name = "palemoon";
-    exec = "palemoon %U";
-    icon = "palemoon";
-    desktopName = "Pale Moon";
-    genericName = "Web Browser";
-    categories = "Network;WebBrowser;";
-    mimeType = lib.concatStringsSep ";" [
-      "text/html"
-      "text/xml"
-      "application/xhtml+xml"
-      "application/vnd.mozilla.xul+xml"
-      "x-scheme-handler/http"
-      "x-scheme-handler/https"
-      "x-scheme-handler/ftp"
-    ];
-  };
+  passthru.updateScript = writeScript "update-${pname}" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts curl libxml2
+
+    set -eu -o pipefail
+
+    # Only release note announcement == finalized release
+    version="$(
+      curl -s 'http://www.palemoon.org/releasenotes.shtml' |
+      xmllint --html --xpath 'html/body/table/tbody/tr/td/h3/text()' - 2>/dev/null | head -n1 |
+      sed 's/v\(\S*\).*/\1/'
+    )"
+    update-source-version ${pname} "$version"
+  '';
 
   nativeBuildInputs = [
-    file gnum4 makeWrapper perl pkgconfig python2 wget which
+    desktop-file-utils file gnum4 makeWrapper perl pkgconfig python2 wget which
   ];
 
   buildInputs = [
@@ -106,7 +104,7 @@ in stdenv.mkDerivation rec {
 
     ac_add_options --prefix=$out
 
-    mk_add_options MOZ_MAKE_FLAGS="-j$NIX_BUILD_CORES"
+    mk_add_options MOZ_MAKE_FLAGS="-j${if enableParallelBuilding then "$NIX_BUILD_CORES" else "1"}"
     mk_add_options AUTOCONF=${autoconf213}/bin/autoconf
     '
   '';
@@ -116,14 +114,13 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     $src/mach install
 
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
+    desktop-file-install --dir=$out/share/applications \
+      $src/palemoon/branding/official/palemoon.desktop
 
-    for n in 16 22 24 32 48 256; do
+    for iconname in default{16,22,24,32,48,256} mozicon128; do
+      n=''${iconname//[^0-9]/}
       size=$n"x"$n
-      mkdir -p $out/share/icons/hicolor/$size/apps
-      cp $src/palemoon/branding/official/default$n.png \
-         $out/share/icons/hicolor/$size/apps/palemoon.png
+      install -Dm644 $src/palemoon/branding/official/$iconname.png $out/share/icons/hicolor/$size/apps/palemoon.png
     done
 
     wrapProgram $out/lib/palemoon-${version}/palemoon \

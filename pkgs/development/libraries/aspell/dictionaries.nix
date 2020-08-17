@@ -274,10 +274,10 @@ in rec {
 
   de = buildOfficialDict {
     language = "de";
-    version = "20030222-1";
+    version = "20161207-7-0";
     fullName = "German";
     filename = "aspell6";
-    sha256 = "01p92qj66cqb346gk7hjfynaap5sbcn85xz07kjfdq623ghr8v5s";
+    sha256 = "0wamclvp66xfmv5wff96v6gdlnfv4y8lx3f8wvxyzm5imwgms4n2";
   };
 
   de-alt = buildOfficialDict {

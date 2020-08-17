@@ -2566,6 +2566,8 @@ in {
 
   mxnet = callPackage ../development/python-modules/mxnet { };
 
+  nplusone = callPackage ../development/python-modules/nplusone { };
+
   parsy = callPackage ../development/python-modules/parsy { };
 
   portalocker = callPackage ../development/python-modules/portalocker { };
@@ -2731,6 +2733,8 @@ in {
   pytestpep8 = callPackage ../development/python-modules/pytest-pep8 { };
 
   pytest-pep257 = callPackage ../development/python-modules/pytest-pep257 { };
+
+  pytest-pythonpath = callPackage ../development/python-modules/pytest-pythonpath { };
 
   pytest-raisesregexp = callPackage ../development/python-modules/pytest-raisesregexp { };
 
@@ -4752,8 +4756,6 @@ in {
 
   markdown-macros = callPackage ../development/python-modules/markdown-macros { };
 
-  mathics = callPackage ../development/python-modules/mathics { };
-
   matplotlib = let
     path = if isPy3k then ../development/python-modules/matplotlib/default.nix else
       ../development/python-modules/matplotlib/2.nix;
@@ -6562,6 +6564,8 @@ in {
   sounddevice = callPackage ../development/python-modules/sounddevice { };
 
   stevedore = callPackage ../development/python-modules/stevedore {};
+
+  svglib = callPackage ../development/python-modules/svglib { };
 
   text-unidecode = callPackage ../development/python-modules/text-unidecode { };
 

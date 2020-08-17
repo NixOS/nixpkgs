@@ -18,6 +18,5 @@ buildGoPackage rec {
     homepage = "https://github.com/scaleway/scaleway-cli";
     license = licenses.mit;
     maintainers = with maintainers; [ nickhu ];
-    platforms = platforms.all;
   };
 }

@@ -100,9 +100,11 @@ enomsg/vim-haskellConcealPlus
 ensime/ensime-vim
 ervandew/supertab
 esneider/YUNOcommit.vim
+fannheyward/coc-markdownlint
 fannheyward/coc-rust-analyzer
 farmergreg/vim-lastplace
 fatih/vim-go
+fcpg/vim-osc52
 FelikZ/ctrlp-py-matcher
 fenetikm/falcon
 fisadev/vim-isort
@@ -138,6 +140,7 @@ haya14busa/incsearch-easymotion.vim
 haya14busa/incsearch.vim
 haya14busa/is.vim
 haya14busa/vim-asterisk
+haya14busa/vim-poweryank
 heavenshell/vim-jsdoc
 hecal3/vim-leader-guide
 henrik/vim-indexed-search
@@ -149,6 +152,7 @@ hrsh7th/vim-vsnip-integ
 hsanson/vim-android
 hsitz/VimOrganizer
 iamcco/coc-spell-checker
+iamcco/coc-vimlsp
 ianks/vim-tsx
 idris-hackers/idris-vim
 ihsanturk/neuron.vim
@@ -244,6 +248,7 @@ lervag/vimtex
 lfilho/cosco.vim
 lifepillar/vim-mucomplete
 lilydjwg/colorizer
+liuchengxu/vim-clap
 liuchengxu/vim-which-key
 liuchengxu/vista.vim
 LnL7/vim-nix
@@ -602,11 +607,13 @@ vimwiki/vimwiki
 vito-c/jq.vim
 vmchale/ats-vim
 vmchale/dhall-vim
+vn-ki/coc-clap
 voldikss/vim-floaterm
 VundleVim/Vundle.vim
 w0ng/vim-hybrid
 wakatime/vim-wakatime
 wannesm/wmgraphviz.vim
+weirongxu/coc-explorer
 wellle/targets.vim
 wellle/tmux-complete.vim
 will133/vim-dirdiff

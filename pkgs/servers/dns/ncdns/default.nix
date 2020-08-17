@@ -32,7 +32,6 @@ buildGoPackage rec {
     description = "Namecoin to DNS bridge daemon";
     homepage = "https://github.com/namecoin/ncdns";
     license = licenses.gpl3Plus;
-    platforms = platforms.all;
     maintainers = with maintainers; [ rnhmjoj ];
   };
 
