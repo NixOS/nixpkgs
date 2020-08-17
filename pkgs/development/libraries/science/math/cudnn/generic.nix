@@ -32,6 +32,13 @@ stdenv.mkDerivation {
     mkdir -p $out
     cp -a include $out/include
     cp -a lib64 $out/lib64
+
+    ${lib.optionalString (lib.versionAtLeast version "8") ''
+      # patchelf fails on libcudnn_cnn_infer due to it being too big.
+      # I'm hoping it's not needed for most programs.
+      # (https://github.com/NixOS/patchelf/issues/222)
+      rm -f $out/lib64/libcudnn_cnn_infer*
+    ''}
   '';
 
   # Set RUNPATH so that libcuda in /run/opengl-driver(-32)/lib can be found.
