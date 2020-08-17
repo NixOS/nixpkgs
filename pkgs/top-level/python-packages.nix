@@ -1384,6 +1384,8 @@ in {
     inherit (pkgs) cmake qt5 llvmPackages;
   });
 
+  seqnmf = callPackage ../development/python-modules/seqnmf { };
+
   simplefix = callPackage ../development/python-modules/simplefix { };
 
   pyscrypt = callPackage ../development/python-modules/pyscrypt { };
