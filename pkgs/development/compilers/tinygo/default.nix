@@ -30,7 +30,6 @@ buildGoModule rec {
 
   doCheck = false;
 
-  enableParallelBuilding = true;
   subPackages = [ "." ];
   buildInputs = [ llvm clang-unwrapped makeWrapper ];
   propagatedBuildInputs = [ lld avrgcc avrdude openocd gcc-arm-embedded ];
