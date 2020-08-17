@@ -21,6 +21,8 @@ self: super: {
 
     pgroonga = super.callPackage ./ext/pgroonga.nix { };
 
+    plpgsql_check = super.callPackage ./ext/plpgsql_check.nix { };
+
     plv8 = super.callPackage ./ext/plv8.nix {
         v8 = super.callPackage ../../../development/libraries/v8/plv8_6_x.nix {
             python = self.python2;
