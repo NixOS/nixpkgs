@@ -20688,6 +20688,8 @@ in
       '' + (drv.postInstall or "");
     });
 
+  sclack = with python3Packages; toPythonApplication sclack;
+
   slack = callPackage ../applications/networking/instant-messengers/slack { };
 
   slack-cli = callPackage ../tools/networking/slack-cli { };

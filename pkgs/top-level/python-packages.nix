@@ -1562,6 +1562,8 @@ in {
 
   sapi-python-client = callPackage ../development/python-modules/sapi-python-client { };
 
+  sclack = callPackage ../development/python-modules/sclack { };
+
   seekpath = callPackage ../development/python-modules/seekpath { };
 
   selectors2 = callPackage ../development/python-modules/selectors2 { };
@@ -6354,6 +6356,8 @@ in {
   urlgrabber = callPackage ../development/python-modules/urlgrabber {};
 
   urwid = callPackage ../development/python-modules/urwid {};
+
+  urwid_readline = callPackage ../development/python-modules/urwid_readline {};
 
   user-agents = callPackage ../development/python-modules/user-agents { };
 
