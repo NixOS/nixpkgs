@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "JPype1";
-  version = "0.7.5";
+  version = "1.0.2";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7bbd25453dc04704d77d854c80acb5537ecb18b9de8a5572e5f22649a2160aaf";
+    sha256 = "c751436350c105f403e382574d34a6ad73e4a677cb0ff5bc9a87581cc07094e1";
   };
 
   checkInputs = [

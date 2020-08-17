@@ -1,16 +1,17 @@
-{ lib, pillow, fetchPypi, buildPythonPackage, isPy27 }:
+{ lib, pillow, fetchPypi, buildPythonPackage, isPy27, pikepdf }:
 
 buildPythonPackage rec {
   pname = "img2pdf";
-  version = "0.3.6";
+  version = "0.4.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1yx0ljbg7phpix507wq584qvspp2jgax7flpp1148pxpc2d51mcc";
+    sha256 = "eaee690ab8403dd1a9cb4db10afee41dd3e6c7ed63bdace02a0121f9feadb0c9";
   };
 
   propagatedBuildInputs = [
+    pikepdf
     pillow
   ];
 

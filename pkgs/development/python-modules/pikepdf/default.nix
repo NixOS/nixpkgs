@@ -22,12 +22,12 @@
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "1.14.0";
+  version = "1.18.0";
   disabled = ! isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5b371c71b0da42d87371ed39973f07c7eb67d939ca5031f0c1637cfb3a2d79f5";
+    sha256 = "4d0840a5c16b535f9b6e56fb4421a43f88760e6cabcf7fd44bdd0436107b61dc";
   };
 
   buildInputs = [
