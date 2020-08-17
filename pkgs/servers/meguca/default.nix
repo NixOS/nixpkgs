@@ -16,7 +16,6 @@ buildGoPackage {
     fetchSubmodules = true;
   };
 
-  enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig cmake go-bindata ];
 
   buildInputs = [
