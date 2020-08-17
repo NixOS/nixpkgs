@@ -214,6 +214,8 @@ in stdenv.mkDerivation {
     done
   '';
 
+  # prefer high core count VMs for hydra
+  requireSystemFeatures = [ "big-parallel" ];
   inherit (chromium.browser) packageName;
   meta = chromium.browser.meta;
   passthru = {
