@@ -4,6 +4,7 @@
 , pythonOlder
 , icalendar
 , lxml
+, mock
 , nose
 , pytz
 , requests
@@ -23,6 +24,7 @@ buildPythonPackage rec {
     sha256 = "0m64maiqp3k8fsgkkvdx1dlfhkc70pqig4dclq6w8ajz82czrq83";
   };
 
+  nativeBuildInputs = lib.optionals (pythonOlder "3.5") [ mock ];
   propagatedBuildInputs = [ six requests vobject lxml ]
     ++ lib.optionals (pythonOlder "3.6") [ pytz tzlocal ];
 
