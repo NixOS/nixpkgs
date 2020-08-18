@@ -24,7 +24,8 @@ let
       instance-id: iid-local01
       local-hostname: "test"
       public-keys:
-          - "should be a key!"
+        ec2-keypair.us-east-1:
+          - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB5L7Xuh49VS5VQheFE7VDmXKH0BOnB1R0avAE91QgOB root@test
       EOF
       ${pkgs.cdrkit}/bin/genisoimage -volid cidata -joliet -rock -o $out/metadata.iso $out/iso
       '';
@@ -45,8 +46,6 @@ in makeTest {
       machine.wait_for_unit("cloud-init.service")
       machine.succeed("cat /tmp/cloudinit-write-file | grep -q 'cloudinit'")
 
-      machine.wait_until_succeeds(
-          "cat /root/.ssh/authorized_keys | grep -q 'should be a key!'"
-      )
+      machine.wait_until_succeeds("cat /root/.ssh/authorized_keys | grep -q root@test")
   '';
 }

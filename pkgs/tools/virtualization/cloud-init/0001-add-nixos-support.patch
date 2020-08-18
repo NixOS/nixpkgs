@@ -1,18 +1,36 @@
-diff -ruN cloud-init-0.7.6.orig/cloudinit/distros/__init__.py cloud-init-0.7.6/cloudinit/distros/__init__.py
---- cloud-init-0.7.6.orig/cloudinit/distros/__init__.py	2014-10-10 15:26:25.000000000 +0000
-+++ cloud-init-0.7.6/cloudinit/distros/__init__.py	2016-06-08 07:51:45.230357099 +0000
-@@ -43,6 +43,7 @@
+From 64a767136c16aad2b94b4d9a3268b0d4deba7272 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Tue, 18 Aug 2020 10:22:36 +0100
+Subject: [PATCH] add nixos support
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
+---
+ cloudinit/distros/__init__.py |   1 +
+ cloudinit/distros/nixos.py    | 103 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 104 insertions(+)
+ create mode 100644 cloudinit/distros/nixos.py
+
+diff --git a/cloudinit/distros/__init__.py b/cloudinit/distros/__init__.py
+index c7163e1c..c147e2b3 100755
+--- a/cloudinit/distros/__init__.py
++++ b/cloudinit/distros/__init__.py
+@@ -46,6 +46,7 @@ OSFAMILIES = {
      'freebsd': ['freebsd'],
-     'suse': ['sles'],
+     'suse': ['opensuse', 'sles'],
      'arch': ['arch'],
 +    'nixos': ['nixos'],
  }
  
  LOG = logging.getLogger(__name__)
-diff -ruN cloud-init-0.7.6.orig/cloudinit/distros/nixos.py cloud-init-0.7.6/cloudinit/distros/nixos.py
---- cloud-init-0.7.6.orig/cloudinit/distros/nixos.py	1970-01-01 00:00:00.000000000 +0000
-+++ cloud-init-0.7.6/cloudinit/distros/nixos.py	2016-06-08 07:50:58.602616595 +0000
-@@ -0,0 +1,98 @@
+diff --git a/cloudinit/distros/nixos.py b/cloudinit/distros/nixos.py
+new file mode 100644
+index 00000000..d53d2a61
+--- /dev/null
++++ b/cloudinit/distros/nixos.py
+@@ -0,0 +1,103 @@
 +# vi: ts=4 expandtab
 +#
 +#    Copyright (C) 2012 Canonical Ltd.
@@ -35,10 +53,13 @@ diff -ruN cloud-init-0.7.6.orig/cloudinit/distros/nixos.py cloud-init-0.7.6/clou
 +#    You should have received a copy of the GNU General Public License
 +#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 +
++import os
++
 +from cloudinit import distros
 +from cloudinit import helpers
 +from cloudinit import log as logging
 +from cloudinit import util
++from cloudinit import atomic_helper
 +
 +from cloudinit.distros.parsers.hostname import HostnameConf
 +
@@ -52,6 +73,8 @@ diff -ruN cloud-init-0.7.6.orig/cloudinit/distros/nixos.py cloud-init-0.7.6/clou
 +        # calls from repeatly happening (when they
 +        # should only happen say once per instance...)
 +        self._runner = helpers.Runners(paths)
++        self.usr_lib_exec = os.path.join(os.path.dirname(__file__),
++                                         "../../../../../libexec")
 +        self.osfamily = 'nixos'
 +
 +    def _select_hostname(self, hostname, fqdn):
@@ -72,7 +95,7 @@ diff -ruN cloud-init-0.7.6.orig/cloudinit/distros/nixos.py cloud-init-0.7.6/clou
 +        if not conf:
 +            conf = HostnameConf('')
 +        conf.set_hostname(your_hostname)
-+        util.write_file(out_fn, str(conf), 0644)
++        atomic_helper.write_file(out_fn, str(conf).encode("utf-8"))
 +
 +    def _read_system_hostname(self):
 +        sys_hostname = self._read_hostname(self.hostname_conf_fn)
@@ -111,3 +134,6 @@ diff -ruN cloud-init-0.7.6.orig/cloudinit/distros/nixos.py cloud-init-0.7.6/clou
 +
 +    def update_package_sources(self):
 +        raise NotImplementedError()
+-- 
+2.28.0
+
