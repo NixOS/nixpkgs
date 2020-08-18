@@ -23,6 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/timescale/timescale-prometheus";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = [ maintainers."0x4A6F" ];
+    maintainers = with maintainers; [ _0x4A6F ];
   };
 }

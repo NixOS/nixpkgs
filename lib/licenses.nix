@@ -85,6 +85,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     fullName = ''Beerware License'';
   };
 
+  blueOak100 = spdx {
+    spdxId = "BlueOak-1.0.0";
+    fullName = "Blue Oak Model License 1.0.0";
+  };
+
   bsd0 = spdx {
     spdxId = "0BSD";
     fullName = "BSD Zero Clause License";

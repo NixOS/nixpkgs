@@ -14,6 +14,7 @@ andreshazard/vim-logreview
 AndrewRadev/splitjoin.vim
 andsild/peskcolor.vim
 andviro/flake8-vim
+andymass/vim-matchup
 andys8/vim-elm-syntax
 antoinemadec/coc-fzf
 ap/vim-css-color
@@ -233,6 +234,7 @@ konfekt/fastfold
 kristijanhusak/defx-git
 kristijanhusak/defx-icons
 kristijanhusak/deoplete-phpactor
+kristijanhusak/vim-carbon-now-sh
 kristijanhusak/vim-dirvish-git
 kristijanhusak/vim-hybrid-material
 kshenoy/vim-signature
@@ -420,6 +422,7 @@ powerman/vim-plugin-AnsiEsc
 PProvost/vim-ps1
 preservim/nerdcommenter
 preservim/nerdtree
+psliwka/vim-smoothie
 ptzz/lf.vim
 purescript-contrib/purescript-vim
 python-mode/python-mode
