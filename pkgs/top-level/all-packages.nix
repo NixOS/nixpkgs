@@ -16822,6 +16822,8 @@ in
   tt-rss-plugin-auth-ldap = callPackage ../servers/tt-rss/plugin-auth-ldap { };
   tt-rss-theme-feedly = callPackage ../servers/tt-rss/theme-feedly { };
 
+  rss-bridge = callPackage ../servers/web-apps/rss-bridge { };
+
   searx = callPackage ../servers/web-apps/searx { };
 
   selfoss = callPackage ../servers/web-apps/selfoss { };

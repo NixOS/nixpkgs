@@ -865,6 +865,7 @@
   ./services/web-apps/moinmoin.nix
   ./services/web-apps/restya-board.nix
   ./services/web-apps/sogo.nix
+  ./services/web-apps/rss-bridge.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/trac.nix
   ./services/web-apps/trilium.nix
