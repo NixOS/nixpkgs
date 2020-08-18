@@ -7,11 +7,13 @@
 , importlib-metadata
 , requests
 , pytest
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pipdate";
   version = "0.5.2";
+  format = "pyproject";
   disabled = isPy27; # abandoned
 
   src = fetchPypi {
@@ -19,18 +21,14 @@ buildPythonPackage rec {
     sha256 = "507065231f2d50b6319d483432cba82aadad78be21b7a2969b5881ed8dee9ab4";
   };
 
+  nativeBuildInputs = [ wheel ];
+
   propagatedBuildInputs = [
     appdirs
     requests
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
-
-  # can be removed when https://github.com/nschloe/pipdate/pull/41 gets merged
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "importlib_metadata" "importlib_metadata; python_version < \"3.8\""
-  '';
 
   checkInputs = [
     pytest
