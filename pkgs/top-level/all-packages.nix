@@ -11415,6 +11415,8 @@ in
 
   uisp = callPackage ../development/tools/misc/uisp { };
 
+  ujprog = callPackage ../development/tools/misc/ujprog { };
+
   uncrustify = callPackage ../development/tools/misc/uncrustify { };
 
   universal-ctags = callPackage ../development/tools/misc/universal-ctags { };
