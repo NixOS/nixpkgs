@@ -1891,7 +1891,7 @@
     githubId = 4971975;
     name = "Janne Heß";
   };
-  "dasj19" = {
+  dasj19 = {
     email = "daniel@serbanescu.dk";
     github = "dasj19";
     githubId = 7589338;
@@ -8199,7 +8199,7 @@
     githubId = 8547242;
     name = "Stefan Rohrbacher";
   };
-  "thelegy" = {
+  thelegy = {
     email = "mail+nixos@0jb.de";
     github = "thelegy";
     githubId = 3105057;
