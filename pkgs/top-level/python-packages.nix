@@ -6801,6 +6801,8 @@ in {
 
   tensorboardx = callPackage ../development/python-modules/tensorboardx { };
 
+  tensorboard-plugin-wit = callPackage ../development/python-modules/tensorboard-plugin-wit { };
+
   tensorflow-bin_1 = callPackage ../development/python-modules/tensorflow/1/bin.nix {
     cudaSupport = pkgs.config.cudaSupport or false;
     inherit (pkgs.linuxPackages) nvidia_x11;
@@ -6838,6 +6840,8 @@ in {
   };
 
   tensorflow-build = self.tensorflow-build_1;
+
+
 
   tensorflow-estimator_1 = callPackage ../development/python-modules/tensorflow-estimator/1 { };
 
