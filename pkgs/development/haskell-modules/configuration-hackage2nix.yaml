@@ -2760,6 +2760,7 @@ dont-distribute-packages:
   - boolector
   - ccelerate-cuda
   - cplex-hs
+  - cuda # 2020-08-18 because of dependency nvidia-x11
   - cublas
   - cufft
   - cusolver
