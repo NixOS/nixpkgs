@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, curl, dmd, libevent, rsync }:
+{ stdenv, fetchFromGitHub, curl, dmd, rdmd, libevent, rsync }:
 
 stdenv.mkDerivation rec {
   pname = "dub";
-  version = "1.14.0";
+  version = "1.22.0";
 
   enableParallelBuilding = true;
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "dlang";
     repo = "dub";
     rev = "v${version}";
-    sha256 = "070kfkyrkr98y1hbhcf85842c0x7l95w1ambrkdgajpb6kcmpf84";
+    sha256 = "1d6fmk0zkyc6183706fvrf58hv5ly9pc7gdaq2l4kiz4gnfh7h5x";
   };
 
   postUnpack = ''
@@ -24,12 +24,11 @@ stdenv.mkDerivation rec {
           --replace "dub remove" "\"${dubvar}\" remove"
   '';
 
-  nativeBuildInputs = [ dmd libevent rsync ];
+  nativeBuildInputs = [ dmd rdmd libevent rsync ];
   buildInputs = [ curl ];
 
   buildPhase = ''
-    export DMD=${dmd.out}/bin/dmd
-    ./build.sh
+    ${rdmd.out}/bin/rdmd ./build.d
   '';
 
   doCheck = !stdenv.isDarwin;
@@ -45,10 +44,14 @@ stdenv.mkDerivation rec {
     rm test/timeout.sh
     rm test/issue674-concurrent-dub.sh
     rm test/issue672-upgrade-optional.sh
+    rm test/issue877-auto-fetch-package-on-run.sh
     rm test/issue1574-addcommand.sh
     rm test/issue1524-maven-upgrade-dependency-tree.sh
     rm test/issue1416-maven-repo-pkg-supplier.sh
     rm test/issue1037-better-dependency-messages.sh
+    rm test/issue1040-run-with-ver.sh
+    rm test/issue1180-local-cache-broken.sh
+    rm test/issue1773-lint.sh
     rm test/interactive-remove.sh
     rm test/fetchzip.sh
     rm test/feat663-search.sh
