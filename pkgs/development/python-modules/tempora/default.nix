@@ -1,6 +1,8 @@
 { lib, buildPythonPackage, fetchPypi
 , setuptools_scm, pytest, pytest-freezegun, freezegun, backports_unittest-mock
-, six, pytz, jaraco_functools, pythonOlder }:
+, six, pytz, jaraco_functools, pythonOlder
+, pytest-flake8, pytestcov, pytest-black, pytest-mypy
+}:
 
 buildPythonPackage rec {
   pname = "tempora";
@@ -15,14 +17,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  patches = [
-    ./0001-pytest-remove-flake8-black-coverage.patch
-  ];
-
   propagatedBuildInputs = [ six pytz jaraco_functools ];
 
   checkInputs = [
     pytest-freezegun pytest freezegun backports_unittest-mock
+    pytest-flake8 pytestcov pytest-black pytest-mypy
   ];
 
   checkPhase = ''
