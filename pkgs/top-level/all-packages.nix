@@ -154,8 +154,8 @@ in
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
   # TODO: eventually migrate everything to buildFHSUserEnvBubblewrap
-  buildFHSUserEnv = buildFHSUserEnvChrootenv;
-  buildFHSUserEnvChrootenv = callPackage ../build-support/build-fhs-userenv { };
+  buildFHSUserEnv = buildFHSUserEnvChroot;
+  buildFHSUserEnvChroot = callPackage ../build-support/build-fhs-userenv { };
   buildFHSUserEnvBubblewrap = callPackage ../build-support/build-fhs-userenv-bubblewrap { };
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
