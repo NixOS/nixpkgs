@@ -18,7 +18,7 @@ let
         maintainers = [ adisbladis ];
       };
 
-      machine = { pkgs, ... }: {
+      machine = { pkgs, lib, ... }: {
         virtualisation.emptyDiskImages = [ 4096 ];
         networking.hostId = "deadbeef";
         boot.kernelPackages = kernelPackage;
@@ -26,6 +26,24 @@ let
         boot.zfs.enableUnstable = enableUnstable;
 
         environment.systemPackages = [ pkgs.parted ];
+
+        # Setup regular fileSystems machinery to ensure forceImportAll can be
+        # tested via the regular service units.
+        fileSystems = lib.mkVMOverride {
+          "/forcepool" = {
+            device = "forcepool";
+            fsType = "zfs";
+            options = [ "noauto" ];
+          };
+        };
+
+        # forcepool doesn't exist at first boot, and we need to manually test
+        # the import after tweaking the hostId.
+        systemd.services.zfs-import-forcepool.wantedBy = lib.mkVMOverride [];
+        systemd.targets.zfs.wantedBy = lib.mkVMOverride [];
+        boot.zfs.forceImportAll = true;
+        # /dev/disk/by-id doesn't get populated in the NixOS test framework
+        boot.zfs.devNodes = "/dev/disk/by-uuid";
       };
 
       testScript = ''
@@ -57,6 +75,21 @@ let
             "zpool destroy rpool",
             "udevadm settle",
         )
+
+        with subtest("boot.zfs.forceImportAll works"):
+            machine.succeed(
+                "rm /etc/hostid",
+                "zgenhostid deadcafe",
+                "zpool create forcepool /dev/vdb1 -O mountpoint=legacy",
+            )
+            machine.shutdown()
+            machine.start()
+            machine.succeed("udevadm settle")
+            machine.fail("zpool import forcepool")
+            machine.succeed(
+                "systemctl start zfs-import-forcepool.service",
+                "mount -t zfs forcepool /tmp/mnt",
+            )
       '' + extraTest;
 
     };
