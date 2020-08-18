@@ -23,7 +23,7 @@ with lib;
       copy_bin_and_libs ${pkgs.utillinux}/sbin/sfdisk
       copy_bin_and_libs ${pkgs.utillinux}/sbin/lsblk
 
-      substitute "${pkgs.cloud-utils}/bin/.growpart-wrapped" "$out/bin/growpart" \
+      substitute "${pkgs.cloud-utils.guest}/bin/.growpart-wrapped" "$out/bin/growpart" \
         --replace "${pkgs.bash}/bin/sh" "/bin/sh" \
         --replace "awk" "gawk" \
         --replace "sed" "gnused"
