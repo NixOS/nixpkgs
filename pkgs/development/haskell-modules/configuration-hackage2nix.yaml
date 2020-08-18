@@ -2581,6 +2581,7 @@ extra-packages:
   - hoogle == 5.0.14                    # required by hie-hoogle
   - html-conduit ^>= 1.2                # pre-lts-11.x versions neeed by git-annex 6.20180227
   - http-conduit ^>= 2.2                # pre-lts-11.x versions neeed by git-annex 6.20180227
+  - hslua == 1.1.2                      # required for pandoc 2.10
   - inline-c < 0.6                      # required on GHC 8.0.x
   - inline-c-cpp < 0.2                  # required on GHC 8.0.x
   - lens-labels == 0.1.*                # required for proto-lens-descriptors
