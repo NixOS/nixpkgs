@@ -202,9 +202,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
      likekly to break with future versions of go. As a result
      <literal>buildGoModule</literal> switched from
      <literal>modSha256</literal> to the <literal>vendorSha256</literal>
-     attribute to pin fetched version data. <literal>buildGoModule</literal>
-     still accepts <literal>modSha256</literal> with a warning, but support will
-     be removed in the next release.
+     attribute to pin fetched version data.
     </para>
    </listitem>
    <listitem>
