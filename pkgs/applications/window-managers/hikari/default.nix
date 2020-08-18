@@ -12,7 +12,7 @@
 
 let
   pname = "hikari";
-  version = "2.1.1";
+  version = "2.1.2";
 in
 
 stdenv.mkDerivation {
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   src = fetchzip {
     url = "https://hikari.acmelabs.space/releases/${pname}-${version}.tar.gz";
-    sha256 = "0m9akxk5kwbdi04wch4xfaahl7h3k7c6a67yjmdzqxh3bqwa8igj";
+    sha256 = "1qzbwc8dgsvp5jb4faapcrg9npsl11gq8jvhbbk2h7hj52c5lgmv";
   };
 
   nativeBuildInputs = [ pkgconfig bmake ];
