@@ -23,6 +23,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ivanceras/svgbob";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
-    platforms = platforms.all;
   };
 }

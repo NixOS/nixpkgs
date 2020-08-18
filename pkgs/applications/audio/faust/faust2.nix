@@ -5,7 +5,8 @@
 , pkgconfig
 , cmake
 , llvm
-, emscripten
+# TODO: put back when it builds again
+# , emscripten
 , openssl
 , libsndfile
 , libmicrohttpd
@@ -20,13 +21,13 @@ with stdenv.lib.strings;
 
 let
 
-  version = "unstable-2020-06-08";
+  version = "unstable-2020-08-03";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
-    rev = "f0037e289987818b65d3f6fb1ad943aaad2a2b28";
-    sha256 = "0h08902rgx7rhzpng4h1qw8i2nzv50f79vrlbzdk5d35wa4zibh4";
+    rev = "b6045f4592384076d3b383d116e602a95a000eb3";
+    sha256 = "1wcpilwnkc7rrbv9gbkj5hb7kamkh8nrc3r4hbcvbz5ar2pfc6d5";
     fetchSubmodules = true;
   };
 
@@ -46,7 +47,7 @@ let
     inherit src;
 
     nativeBuildInputs = [ makeWrapper pkgconfig cmake vim which ];
-    buildInputs = [ llvm emscripten openssl libsndfile libmicrohttpd gnutls libtasn1 p11-kit ];
+    buildInputs = [ llvm /*emscripten*/ openssl libsndfile libmicrohttpd gnutls libtasn1 p11-kit ];
 
 
     passthru = {

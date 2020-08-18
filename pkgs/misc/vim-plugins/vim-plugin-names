@@ -14,6 +14,7 @@ andreshazard/vim-logreview
 AndrewRadev/splitjoin.vim
 andsild/peskcolor.vim
 andviro/flake8-vim
+andymass/vim-matchup
 andys8/vim-elm-syntax
 antoinemadec/coc-fzf
 ap/vim-css-color
@@ -100,9 +101,11 @@ enomsg/vim-haskellConcealPlus
 ensime/ensime-vim
 ervandew/supertab
 esneider/YUNOcommit.vim
+fannheyward/coc-markdownlint
 fannheyward/coc-rust-analyzer
 farmergreg/vim-lastplace
 fatih/vim-go
+fcpg/vim-osc52
 FelikZ/ctrlp-py-matcher
 fenetikm/falcon
 fisadev/vim-isort
@@ -138,6 +141,7 @@ haya14busa/incsearch-easymotion.vim
 haya14busa/incsearch.vim
 haya14busa/is.vim
 haya14busa/vim-asterisk
+haya14busa/vim-poweryank
 heavenshell/vim-jsdoc
 hecal3/vim-leader-guide
 henrik/vim-indexed-search
@@ -149,6 +153,7 @@ hrsh7th/vim-vsnip-integ
 hsanson/vim-android
 hsitz/VimOrganizer
 iamcco/coc-spell-checker
+iamcco/coc-vimlsp
 ianks/vim-tsx
 idris-hackers/idris-vim
 ihsanturk/neuron.vim
@@ -229,6 +234,7 @@ konfekt/fastfold
 kristijanhusak/defx-git
 kristijanhusak/defx-icons
 kristijanhusak/deoplete-phpactor
+kristijanhusak/vim-carbon-now-sh
 kristijanhusak/vim-dirvish-git
 kristijanhusak/vim-hybrid-material
 kshenoy/vim-signature
@@ -244,6 +250,7 @@ lervag/vimtex
 lfilho/cosco.vim
 lifepillar/vim-mucomplete
 lilydjwg/colorizer
+liuchengxu/vim-clap
 liuchengxu/vim-which-key
 liuchengxu/vista.vim
 LnL7/vim-nix
@@ -397,6 +404,7 @@ Olical/conjure
 OrangeT/vim-csharp
 osyo-manga/shabadou.vim
 osyo-manga/vim-anzu
+osyo-manga/vim-over
 osyo-manga/vim-textobj-multiblock
 osyo-manga/vim-watchdogs
 overcache/NeoSolarized
@@ -414,6 +422,7 @@ powerman/vim-plugin-AnsiEsc
 PProvost/vim-ps1
 preservim/nerdcommenter
 preservim/nerdtree
+psliwka/vim-smoothie
 ptzz/lf.vim
 purescript-contrib/purescript-vim
 python-mode/python-mode
@@ -432,6 +441,7 @@ reedes/vim-pencil
 reedes/vim-wordy
 rhysd/committia.vim
 rhysd/git-messenger.vim
+rhysd/vim-clang-format
 rhysd/vim-grammarous
 rhysd/vim-operator-surround
 rodjek/vim-puppet
@@ -528,6 +538,7 @@ tpope/vim-liquid
 tpope/vim-obsession
 tpope/vim-pathogen
 tpope/vim-projectionist
+tpope/vim-ragtag
 tpope/vim-rails
 tpope/vim-repeat
 tpope/vim-rhubarb
@@ -599,11 +610,13 @@ vimwiki/vimwiki
 vito-c/jq.vim
 vmchale/ats-vim
 vmchale/dhall-vim
+vn-ki/coc-clap
 voldikss/vim-floaterm
 VundleVim/Vundle.vim
 w0ng/vim-hybrid
 wakatime/vim-wakatime
 wannesm/wmgraphviz.vim
+weirongxu/coc-explorer
 wellle/targets.vim
 wellle/tmux-complete.vim
 will133/vim-dirdiff

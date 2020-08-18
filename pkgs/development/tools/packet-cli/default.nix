@@ -24,6 +24,5 @@ buildGoModule rec {
     homepage = "https://github.com/packethost/packet-cli";
     license = licenses.mit;
     maintainers = with maintainers; [ filalex77 ];
-    platforms = platforms.all;
   };
 }

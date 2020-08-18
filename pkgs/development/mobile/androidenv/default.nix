@@ -15,7 +15,7 @@ rec {
   };
 
   emulateApp = import ./emulate-app.nix {
-    inherit (pkgs) stdenv lib;
+    inherit (pkgs) stdenv lib runtimeShell;
     inherit composeAndroidPackages;
   };
 

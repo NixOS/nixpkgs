@@ -66,5 +66,7 @@ buildPythonPackage rec {
     description = "Open source platform for the machine learning lifecycle";
     license = licenses.asl20;
     maintainers = with maintainers; [ tbenst ];
+    # missing prometheus-flask-exporter, not packaged in nixpkgs
+    broken = true; # 2020-08-15
   };
 }

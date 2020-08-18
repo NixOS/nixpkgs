@@ -1,7 +1,6 @@
 [
   ./config/debug-info.nix
   ./config/fonts/fontconfig.nix
-  ./config/fonts/fontconfig-penultimate.nix
   ./config/fonts/fontdir.nix
   ./config/fonts/fonts.nix
   ./config/fonts/ghostscript.nix
@@ -466,14 +465,11 @@
   ./services/misc/leaps.nix
   ./services/misc/lidarr.nix
   ./services/misc/mame.nix
-  ./services/misc/mathics.nix
   ./services/misc/matrix-appservice-discord.nix
   ./services/misc/matrix-synapse.nix
   ./services/misc/mautrix-telegram.nix
   ./services/misc/mbpfan.nix
   ./services/misc/mediatomb.nix
-  ./services/misc/mesos-master.nix
-  ./services/misc/mesos-slave.nix
   ./services/misc/metabase.nix
   ./services/misc/mwlib.nix
   ./services/misc/nix-daemon.nix
@@ -489,6 +485,7 @@
   ./services/misc/parsoid.nix
   ./services/misc/plex.nix
   ./services/misc/tautulli.nix
+  ./services/misc/pinnwand.nix
   ./services/misc/pykms.nix
   ./services/misc/radarr.nix
   ./services/misc/redmine.nix
@@ -785,10 +782,8 @@
   ./services/networking/znc/default.nix
   ./services/printing/cupsd.nix
   ./services/scheduling/atd.nix
-  ./services/scheduling/chronos.nix
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
-  ./services/scheduling/marathon.nix
   ./services/search/elasticsearch.nix
   ./services/search/elasticsearch-curator.nix
   ./services/search/hound.nix
@@ -870,6 +865,7 @@
   ./services/web-apps/moinmoin.nix
   ./services/web-apps/restya-board.nix
   ./services/web-apps/sogo.nix
+  ./services/web-apps/rss-bridge.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/trac.nix
   ./services/web-apps/trilium.nix

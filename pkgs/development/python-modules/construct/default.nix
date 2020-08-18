@@ -18,6 +18,8 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook pytest-benchmark numpy arrow ruamel_yaml ];
 
+  disabledTests = stdenv.lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
+
   pytestFlagsArray = [ "--benchmark-disable" ];
 
   meta = with stdenv.lib; {

@@ -13,8 +13,6 @@ buildGoModule rec {
 
   vendorSha256 = "1xq1n583p0a3j78afprm2hk5f1hchdrx4vvphml95rv9786vjbcc";
 
-  doCheck = false;
-
   nativeBuildInputs = [ installShellFiles ];
 
   buildPhase = ''
@@ -29,6 +27,10 @@ buildGoModule rec {
       $out/bin/gh completion -s $shell > gh.$shell
       installShellCompletion gh.$shell
     done
+  '';
+
+  checkPhase = ''
+    make test
   '';
 
   meta = with lib; {

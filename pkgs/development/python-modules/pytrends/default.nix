@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , requests
 , lxml
 , pandas
@@ -9,6 +10,7 @@
 buildPythonPackage rec {
   pname = "pytrends";
   version = "4.7.3";
+  disabled = isPy27; # python2 pandas is too old
 
   src = fetchPypi {
     inherit pname version;

@@ -8,7 +8,7 @@
 , withPerldevel ? false, perldevel
 , withRuby_2_5 ? false, ruby_2_5
 , withRuby_2_6 ? true, ruby_2_6
-, withRuby_2_7 ? true, ruby_2_7
+, withRuby_2_7 ? false, ruby_2_7
 , withSSL ? true, openssl ? null
 , withIPv6 ? true
 , withDebug ? false
@@ -30,14 +30,14 @@ let
   php74-unit = php74.override phpConfig;
 
 in stdenv.mkDerivation rec {
-  version = "1.18.0";
+  version = "1.19.0";
   pname = "unit";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = "unit";
     rev = version;
-    sha256 = "0r2l3ra63qjjbpjzrmx75jp9fvz83yis4j3qxqdnmxm77psykwy8";
+    sha256 = "0k3q42q198sb0w6hyyymw92dbhz67axn6w6vnzr0d883xw3sva7k";
   };
 
   nativeBuildInputs = [ which ];

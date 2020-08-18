@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "0.19.4";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0k5vv7a141ka9qpay5xccqdcy8sj0v9ywhhcdfpgii6z0wrd7mvr";
+    sha256 = "0by4cln9ljaphqk5hz56mcavz9kc5s42zlxx33nf3idqrszfcarf";
   };
 
-  cargoSha256 = "18b4lh5x25mbhpffva8ygzm5ad00svm1c3r83vfw0l2f61m7vyjh";
+  cargoSha256 = "1i5zq310k8gv9877rcrvash3aw1cyf3g0741qnky71d565s3n910";
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
@@ -67,6 +67,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://dystroy.org/broot/";
     maintainers = with maintainers; [ danieldk ];
     license = with licenses; [ mit ];
-    platforms = platforms.all;
   };
 }

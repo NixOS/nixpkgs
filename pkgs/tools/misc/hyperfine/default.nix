@@ -31,6 +31,5 @@ rustPlatform.buildRustPackage rec {
     homepage    = "https://github.com/sharkdp/hyperfine";
     license     = with licenses; [ asl20 /* or */ mit ];
     maintainers = [ maintainers.thoughtpolice ];
-    platforms   = platforms.all;
   };
 }

@@ -9,6 +9,7 @@
 , readline
 , sqlite
 , tcl ? null, tk ? null, tix ? null, libX11 ? null, xorgproto ? null, x11Support ? false
+, bluez ? null, bluezSupport ? false
 , zlib
 , self
 , configd
@@ -45,6 +46,9 @@ assert x11Support -> tcl != null
                   && tk != null
                   && xorgproto != null
                   && libX11 != null;
+
+assert bluezSupport -> bluez != null;
+
 with stdenv.lib;
 
 let
@@ -73,6 +77,7 @@ let
   buildInputs = filter (p: p != null) ([
     zlib bzip2 expat lzma libffi gdbm sqlite readline ncurses openssl ]
     ++ optionals x11Support [ tcl tk libX11 xorgproto ]
+    ++ optionals (bluezSupport && stdenv.isLinux) [ bluez ]
     ++ optionals stdenv.isDarwin [ configd ]);
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);

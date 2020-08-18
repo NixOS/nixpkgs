@@ -36,7 +36,6 @@ buildGoModule rec {
     description = "A CLI for Amazon EKS";
     homepage = "https://github.com/weaveworks/eksctl";
     license = licenses.asl20;
-    platforms = platforms.all;
     maintainers = with maintainers; [ xrelkd ];
   };
 }

@@ -184,6 +184,8 @@ in {
 
   aioamqp = callPackage ../development/python-modules/aioamqp { };
 
+  aiojobs = callPackage ../development/python-modules/aiojobs { };
+
   aioredis = callPackage ../development/python-modules/aioredis { };
 
   aiorun = callPackage ../development/python-modules/aiorun { };
@@ -763,6 +765,8 @@ in {
   filterpy = callPackage ../development/python-modules/filterpy { };
 
   filemagic = callPackage ../development/python-modules/filemagic { };
+
+  finalfusion = callPackage ../development/python-modules/finalfusion { };
 
   fints = callPackage ../development/python-modules/fints { };
 
@@ -2050,10 +2054,12 @@ in {
 
   binwalk = callPackage ../development/python-modules/binwalk {
     pyqtgraph = null;
+    matplotlib = null;
   };
 
   binwalk-full = appendToName "full" (self.binwalk.override {
     pyqtgraph = self.pyqtgraph;
+    matplotlib = self.matplotlib;
   });
 
   bitmath = callPackage ../development/python-modules/bitmath { };
@@ -2566,6 +2572,8 @@ in {
 
   mxnet = callPackage ../development/python-modules/mxnet { };
 
+  nplusone = callPackage ../development/python-modules/nplusone { };
+
   parsy = callPackage ../development/python-modules/parsy { };
 
   portalocker = callPackage ../development/python-modules/portalocker { };
@@ -2617,6 +2625,21 @@ in {
   pyhcl = callPackage ../development/python-modules/pyhcl { };
 
   pyhs100 = callPackage ../development/python-modules/pyhs100 { };
+
+  pyrealsense2 = toPythonModule (pkgs.librealsense.override {
+    enablePython = true;
+    pythonPackages = self;
+  });
+
+  pyrealsense2WithCuda = toPythonModule (pkgs.librealsenseWithCuda.override {
+    enablePython = true;
+    pythonPackages = self;
+  });
+
+  pyrealsense2WithoutCuda = toPythonModule (pkgs.librealsenseWithoutCuda.override {
+    enablePython = true;
+    pythonPackages = self;
+  });
 
   pytest = if isPy3k then self.pytest_5 else self.pytest_4;
 
@@ -2710,6 +2733,8 @@ in {
   pytestpep8 = callPackage ../development/python-modules/pytest-pep8 { };
 
   pytest-pep257 = callPackage ../development/python-modules/pytest-pep257 { };
+
+  pytest-pythonpath = callPackage ../development/python-modules/pytest-pythonpath { };
 
   pytest-raisesregexp = callPackage ../development/python-modules/pytest-raisesregexp { };
 
@@ -3997,6 +4022,8 @@ in {
 
   flask-restplus = callPackage ../development/python-modules/flask-restplus { };
 
+  flask-restx = callPackage ../development/python-modules/flask-restx { };
+
   flask-reverse-proxy-fix = callPackage ../development/python-modules/flask-reverse-proxy-fix { };
 
   flask_script = callPackage ../development/python-modules/flask-script { };
@@ -4409,8 +4436,6 @@ in {
 
   ipython = if isPy27 then
       callPackage ../development/python-modules/ipython/5.nix { }
-    else if isPy35 then
-      callPackage ../development/python-modules/ipython/7.9.nix { }
     else
       callPackage ../development/python-modules/ipython { };
 
@@ -4722,8 +4747,6 @@ in {
   markdownsuperscript = callPackage ../development/python-modules/markdownsuperscript {};
 
   markdown-macros = callPackage ../development/python-modules/markdown-macros { };
-
-  mathics = callPackage ../development/python-modules/mathics { };
 
   matplotlib = let
     path = if isPy3k then ../development/python-modules/matplotlib/default.nix else
@@ -6532,6 +6555,8 @@ in {
   sounddevice = callPackage ../development/python-modules/sounddevice { };
 
   stevedore = callPackage ../development/python-modules/stevedore {};
+
+  svglib = callPackage ../development/python-modules/svglib { };
 
   text-unidecode = callPackage ../development/python-modules/text-unidecode { };
 

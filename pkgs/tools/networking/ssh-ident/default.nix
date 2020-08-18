@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, python }:
+{ stdenv, lib, fetchFromGitHub, python3, makeWrapper, openssh }:
 
 stdenv.mkDerivation {
   pname = "ssh-ident";
@@ -10,12 +10,12 @@ stdenv.mkDerivation {
     sha256 = "1jf19lz1gwn7cyp57j8d4zs5bq13iw3kw31m8nvr8h6sib2pf815";
   };
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [ python3 makeWrapper ];
   installPhase = ''
     mkdir -p $out/bin
     install -m 755 ssh-ident $out/bin/ssh-ident
     wrapProgram $out/bin/ssh-ident \
-      --prefix PATH : "${python}/bin/python"
+      --prefix PATH : ${lib.makeBinPath [ openssh  ]}
   '';
 
   meta = {

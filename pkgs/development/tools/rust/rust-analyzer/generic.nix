@@ -50,6 +50,5 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/rust-analyzer/rust-analyzer";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ oxalica ];
-    platforms = platforms.all;
   };
 }
