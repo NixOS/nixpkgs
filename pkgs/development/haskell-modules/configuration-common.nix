@@ -1383,23 +1383,11 @@ self: super: {
   reflex-dom-pandoc = super.reflex-dom-pandoc.override {
     pandoc-types = self.pandoc-types_1_21;
   };
-  pandoc_2_10_1 = super.pandoc_2_10_1.override {
+  pandoc_2_10_1 = super.pandoc_2_10_1.overrideScope (self: super: {
     pandoc-types = self.pandoc-types_1_21;
     hslua = self.hslua_1_1_2;
-    texmath = self.texmath.override {
-      pandoc-types = self.pandoc-types_1_21;
-    };
-    tasty-lua = self.tasty-lua.override {
-      hslua = self.hslua_1_1_2;
-    };
-    hslua-module-text = self.hslua-module-text.override {
-      hslua = self.hslua_1_1_2;
-    };
-    hslua-module-system = self.hslua-module-system.override {
-      hslua = self.hslua_1_1_2;
-    };
     jira-wiki-markup = self.jira-wiki-markup_1_3_2;
-  };
+  });
 
   # Apply version-bump patch that is not contained in released version yet.
   # Upstream PR: https://github.com/srid/neuron/pull/304
@@ -1411,14 +1399,10 @@ self: super: {
     extraPrefix = "";
   }))
     # See comment about overrides above commonmark-pandoc
-    .override {
+    .overrideScope (self: super: {
     pandoc = self.pandoc_2_10_1;
     pandoc-types = self.pandoc-types_1_21;
-    rib = super.rib.override {
-      pandoc = self.pandoc_2_10_1;
-      pandoc-types = self.pandoc-types_1_21;
-    };
-  };
+  });
 
   # Testsuite trying to run `which haskeline-examples-Test`
   haskeline_0_8_0_0 = dontCheck super.haskeline_0_8_0_0;
