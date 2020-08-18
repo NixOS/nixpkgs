@@ -134,6 +134,8 @@ in
 
   addOpenGLRunpath = callPackage ../build-support/add-opengl-runpath { };
 
+  alda = callPackage ../development/interpreters/alda { };
+
   ankisyncd = callPackage ../servers/ankisyncd { };
 
   avro-tools = callPackage ../development/tools/avro-tools { };
