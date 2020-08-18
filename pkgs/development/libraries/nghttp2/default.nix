@@ -27,11 +27,11 @@ let inherit (stdenv.lib) optional optionals optionalString; in
 
 stdenv.mkDerivation rec {
   pname = "nghttp2";
-  version = "1.40.0";
+  version = "1.41.0";
 
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "0kyrgd4s2pq51ps5z385kw1hn62m8qp7c4h6im0g4ibrf89qwxc2";
+    sha256 = "0h12wz72paxnj8l9vv2qfgfbmj20c6pz6xbilb7ns9zcwxwa0p34";
   };
 
   outputs = [ "bin" "out" "dev" "lib" ]
