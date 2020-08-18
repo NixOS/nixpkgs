@@ -27276,6 +27276,8 @@ in
 
   mynewt-newt = callPackage ../tools/package-management/mynewt-newt { };
 
+  nar-serve = callPackage ../tools/nix/nar-serve { };
+
   inherit (callPackage ../tools/package-management/nix {
       storeDir = config.nix.storeDir or "/nix/store";
       stateDir = config.nix.stateDir or "/nix/var";
