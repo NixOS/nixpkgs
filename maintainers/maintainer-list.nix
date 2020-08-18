@@ -9179,6 +9179,12 @@
     githubId = 1699155;
     name = "Steve Elliott";
   };
+  stephank = {
+    email = "nix@stephank.nl";
+    github = "stephank";
+    githubId = 89950;
+    name = "Stéphan Kochen";
+  };
   stephenmw = {
     email = "stephen@q5comm.com";
     github = "stephenmw";
