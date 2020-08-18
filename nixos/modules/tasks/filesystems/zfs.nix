@@ -507,6 +507,7 @@ in
               Type = "oneshot";
               RemainAfterExit = true;
             };
+            environment.ZFS_FORCE = optionalString cfgZfs.forceImportAll "-f";
             script = (importLib {
               # See comments at importLib definition.
               zpoolCmd="${packages.zfsUser}/sbin/zpool";
