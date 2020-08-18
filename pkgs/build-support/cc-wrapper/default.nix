@@ -308,11 +308,14 @@ stdenv.mkDerivation {
 
     # We have a libc++ directly, we have one via "smuggled" GCC, or we have one
     # bundled with the C compiler because it is GCC
-    + optionalString (libcxx != null || (isClang && !(stdenv.targetPlatform.useLLVM or false) && gccForLibs.langCC or false) || (isGNU && cc.langCC or false)) ''
+    + optionalString (libcxx != null
+                      || (isClang && !(stdenv.targetPlatform.useLLVM or false) && gccForLibs.langCC or false)
+                      || (isGNU && cc.langCC or false)) ''
       touch "$out/nix-support/libcxx-cxxflags"
       touch "$out/nix-support/libcxx-ldflags"
     ''
-    + optionalString (libcxx == null && (isClang && !(stdenv.targetPlatform.useLLVM or false) && gccForLibs.langCC or false)) ''
+    + optionalString (libcxx == null
+                      && (isClang && !(stdenv.targetPlatform.useLLVM or false) && gccForLibs.langCC or false)) ''
       for dir in ${gccForLibs}/include/c++/*; do
         echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
       done
