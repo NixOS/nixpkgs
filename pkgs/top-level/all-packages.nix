@@ -274,6 +274,8 @@ in
 
   etBook = callPackage ../data/fonts/et-book { };
 
+  fet-sh = callPackage ../tools/misc/fet-sh { };
+
   fetchbower = callPackage ../build-support/fetchbower {
     inherit (nodePackages) bower2nix;
   };
