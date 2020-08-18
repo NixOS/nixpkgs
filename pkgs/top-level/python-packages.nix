@@ -7178,6 +7178,8 @@ in {
 
   xcffib = callPackage ../development/python-modules/xcffib {};
 
+  xpybutil = callPackage ../development/python-modules/xpybutil {};
+
   pafy = callPackage ../development/python-modules/pafy { };
 
   suds = callPackage ../development/python-modules/suds { };
