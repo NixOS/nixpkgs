@@ -121,19 +121,3 @@ _addToPythonPath() {
         done
     fi
 }
-
-createBuildInputsPth() {
-    local category="$1"
-    local inputs="$2"
-    if [ foo"$inputs" != foo ]; then
-        for x in $inputs; do
-            if $(echo -n $x |grep -q python-recursive-pth-loader); then
-                continue
-            fi
-            if test -d "$x"/@sitePackages@; then
-                echo $x/@sitePackages@ \
-                    >> "$out"/@sitePackages@/${name}-nix-python-$category.pth
-            fi
-        done
-    fi
-}
