@@ -8,13 +8,13 @@
 
 mkDerivation rec {
   pname = "udisks2-qt5";
-  version = "5.0.3";
+  version = "5.0.4";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0c87ks9glwhk4m2s7kf7mb43q011yi6l3qjq2ammmfqwl8xal69a";
+    sha256 = "1d6qdcwp0n6f2ipn90n9m7biaims2kk1nljidw9h1myrqf3bfm4k";
   };
 
   nativeBuildInputs = [
