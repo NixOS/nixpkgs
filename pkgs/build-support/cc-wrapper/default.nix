@@ -331,6 +331,27 @@ stdenv.mkDerivation {
     '')
 
     ##
+    ## Tooling support
+    ##
+
+    # At runtime we need these flags to find libc / c++ stdlib headers with tools such as clangd.
+    # We can read those by accessing $NIX_CC in a nix-shell.
+    # Multiple paths should be seperated by colon.
+    # We don't need this for libc yet, but we should keep the option open and make it consistent with c++.
+    + optionalString (libc != null) ''
+      echo ${libc_dev}${libc.incdir or "/include"} > $out/nix-support/cpath
+    ''
+    # c++ includes come from gcc
+    + optionalString (gccForLibs.langCC or false) ''
+      echo "$(echo ${gccForLibs}/include/c++/*):$(echo ${gccForLibs}/include/c++/*/${targetPlatform.config})" \
+        > $out/nix-support/cxxpath
+    ''
+    # c++ includes come from clang
+    + optionalString (libcxx != null) ''
+      echo "${stdenv.lib.getDev libcxx}/include/c++/v1" > $out/nix-support/cxxpath
+    ''
+
+    ##
     ## Initial CFLAGS
     ##
 
