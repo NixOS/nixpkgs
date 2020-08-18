@@ -5904,6 +5904,7 @@ broken-packages:
   - hasql-queue
   - hasql-simple
   - hasql-th
+  - hasqly-mysql
   - hastache
   - hastache-aeson
   - haste
@@ -6766,7 +6767,6 @@ broken-packages:
   - inject-function
   - inline-asm
   - inline-java
-  - inline-r
   - inserts
   - inspector-wrecker
   - instana-haskell-trace-sdk
@@ -10078,6 +10078,7 @@ broken-packages:
   - sym
   - sym-plot
   - symantic
+  - symantic-atom
   - symantic-http-test
   - symantic-lib
   - symantic-xml
