@@ -7,10 +7,10 @@ rustPlatform.buildRustPackage rec {
     owner = "nix-community";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-rO30/B+mH/ZOEH8IF2fF4uHK7XQqyR4zIDueHnmNMHA=";
+    sha256 = "0w1himwix7iv40rixj9afknwmqg2qmkif23z217gc7x63zyg9vdc";
   };
 
-  cargoSha256 = "sha256-fP/8yDg+W7hiWGucbRr338y9PEDTb2bdq71JKE6M8OM=";
+  cargoSha256 = "1qzhii72hjdxmgfncvyk80ybvk6zywd6v73bb1ibhnry734grzvw";
 
   meta = with lib; {
     description = "Nix code formatter for nixpkgs";
