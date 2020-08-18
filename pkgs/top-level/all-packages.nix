@@ -3216,6 +3216,10 @@ in
 
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
+  mozwire = callPackage ../tools/networking/mozwire {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   rage = callPackage ../tools/security/rage {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
