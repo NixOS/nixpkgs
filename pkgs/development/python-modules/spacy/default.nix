@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, callPackage
 , fetchPypi
 , pythonOlder
 , pytest
@@ -63,6 +64,8 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "spacy" ];
+
+  passthru.tests = callPackage ./annotation-test {};
 
   meta = with lib; {
     description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
