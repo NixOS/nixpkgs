@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 buildcpath() {
   local path
@@ -13,8 +13,19 @@ buildcpath() {
   echo $path
 }
 
-export CPATH=${CPATH}${CPATH:+':'}$(buildcpath ${NIX_CFLAGS_COMPILE})
-export CPATH=${CPATH}${CPATH:+':'}@libc_includes@
-export CPLUS_INCLUDE_PATH=${CPATH}${CPATH:+':'}@libcpp_includes@
+setpaths() {
+  local nix_cpath=$(buildcpath ${NIX_CFLAGS_COMPILE})
+  export CPATH=${CPATH}${CPATH:+':'}${nix_cpath}
+
+  if [[ -f "$NIX_CC/nix-support/cpath" ]]; then
+    export CPATH=${CPATH}${CPATH:+':'}$(< "$NIX_CC/nix-support/cpath")
+  fi
+
+  if [[ -f "$NIX_CC/nix-support/cxxpath" ]]; then
+    export CPLUS_INCLUDE_PATH=${CPLUS_INCLUDE_PATH}${CPLUS_INCLUDE_PATH:+':'}$(< "$NIX_CC/nix-support/cxxpath")
+  fi
+}
+
+setpaths
 
 exec -a "$0" @clang@/bin/$(basename $0) "$@"
