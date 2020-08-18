@@ -1924,6 +1924,8 @@ in
 
   fuzzel = callPackage ../applications/misc/fuzzel { };
 
+  flashfocus = python3Packages.callPackage ../misc/flashfocus { };
+
   qt-video-wlr = libsForQt5.callPackage ../applications/misc/qt-video-wlr { };
 
   fwup = callPackage ../tools/misc/fwup { };
