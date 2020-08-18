@@ -107,6 +107,11 @@ stdenv.mkDerivation (rec {
 
   outputs = [ "out" "doc" ];
 
+  # https://gitlab.haskell.org/ghc/ghc/-/issues/18549 
+  patches = [ 
+    ./issue-18549.patch 
+  ];
+
   postPatch = "patchShebangs .";
 
   # GHC is a bit confused on its cross terminology.
