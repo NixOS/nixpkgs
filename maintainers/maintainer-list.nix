@@ -5206,6 +5206,12 @@
     githubId = 35892750;
     name = "Maxine Aubrey";
   };
+  maxxk = {
+    email = "maxim.krivchikov@gmail.com";
+    github = "maxxk";
+    githubId = 1191859;
+    name = "Maxim Krivchikov";
+  };
   mbakke = {
     email = "mbakke@fastmail.com";
     github = "mbakke";
