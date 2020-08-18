@@ -3820,6 +3820,8 @@ in {
 
   django-webpack-loader = callPackage ../development/python-modules/django-webpack-loader { };
 
+  django-widget-tweaks = callPackage ../development/python-modules/django-widget-tweaks { };
+
   django_tagging = callPackage ../development/python-modules/django_tagging { };
 
   django_classytags = callPackage ../development/python-modules/django_classytags { };
