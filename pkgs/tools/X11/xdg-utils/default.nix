@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub
+{ stdenv, fetchurl, fetchFromGitHub, fetchpatch
 , file, libxslt, docbook_xml_dtd_412, docbook_xsl, xmlto
 , w3m, gnugrep, gnused, coreutils, xset, perlPackages
 , mimiSupport ? false, gawk ? null }:
@@ -31,6 +31,14 @@ stdenv.mkDerivation rec {
 
   # just needed when built from git
   buildInputs = [ libxslt docbook_xml_dtd_412 docbook_xsl xmlto w3m ];
+
+  patches = [
+    # https://gitlab.freedesktop.org/xdg/xdg-utils/-/merge_requests/28
+    (fetchpatch { 
+      url = "https://gitlab.freedesktop.org/Mic92/xdg-utils/-/commit/1f199813e0eb0246f63b54e9e154970e609575af.patch";
+      sha256 = "0vk2av4mr4b5n9xg41f9ky494l3i0hxf87461pjz33qf1hnspavi";
+    })
+  ];
 
   postInstall = stdenv.lib.optionalString mimiSupport ''
     cp ${mimisrc}/xdg-open $out/bin/xdg-open
