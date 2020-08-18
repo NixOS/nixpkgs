@@ -1,11 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  pname = "gocode-gomod-unstable";
-  version = "2019-03-27";
-  rev = "81059208699789f992bb4a4a3fedd734e335468d";
-
-  goPackagePath = "github.com/stamblerre/gocode";
+buildGoModule rec {
+  pname = "gocode-gomod";
+  version = "1.0.0";
 
   # we must allow references to the original `go` package,
   # because `gocode` needs to dig into $GOROOT to provide completions for the
@@ -15,14 +12,11 @@ buildGoPackage rec {
   excludedPackages = ''internal/suggest/testdata'';
 
   src = fetchFromGitHub {
-    inherit rev;
-
     owner = "stamblerre";
     repo = "gocode";
-    sha256 = "0y5lc7sq3913mvvczwx8mq5l3l9yg34jzaw742q8jpd1jzqyza94";
+    rev = "v${version}";
+    sha256 = "YAOYrPPKgnjCErq8+iW0Le51clGBv0MJy2Nnn7UVo/s=";
   };
-
-  goDeps = ./deps.nix;
 
   postInstall = ''
     mv $out/bin/gocode $out/bin/gocode-gomod
