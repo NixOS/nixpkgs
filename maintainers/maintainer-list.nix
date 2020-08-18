@@ -5951,6 +5951,12 @@
     githubId = 1224006;
     name = "Roberto Abdelkader Martínez Pérez";
   };
+  nilsirl = {
+    email = "nils@nilsand.re";
+    github = "NilsIrl";
+    githubId = 26231126;
+    name = "Nils ANDRÉ-CHANG";
+  };
   ninjatrappeur = {
     email = "felix@alternativebit.fr";
     github = "ninjatrappeur";
