@@ -661,6 +661,25 @@ in
       pkg
     ];
 
+    services.logrotate = optionalAttrs (cfg.logFormat != "none") {
+      enable = mkDefault true;
+      paths.httpd = {
+        path = "${cfg.logDir}/*.log";
+        user = cfg.user;
+        group = cfg.group;
+        frequency = "daily";
+        keep = 28;
+        extraConfig = ''
+          sharedscripts
+          compress
+          delaycompress
+          postrotate
+            systemctl reload httpd.service > /dev/null 2>/dev/null || true
+          endscript
+        '';
+      };
+    };
+
     services.httpd.phpOptions =
       ''
         ; Needed for PHP's mail() function.
