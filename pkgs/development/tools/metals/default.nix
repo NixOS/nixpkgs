@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "metals";
-  version = "0.9.2";
+  version = "0.9.3";
 
   deps = stdenv.mkDerivation {
     name = "${pname}-deps-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "1gnf2p578nk1ygx3cc4mb7fa690c51nbdwvc2qz2805m4xg3x7zv";
+    outputHash     = "0mr0pxicka4qd0cn002g5r80dyg59164czyb0r7012l0q1xighz2";
   };
 
   nativeBuildInputs = [ makeWrapper ];
