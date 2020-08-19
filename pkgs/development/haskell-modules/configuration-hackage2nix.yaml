@@ -9711,7 +9711,6 @@ broken-packages:
   - snap-loader-static
   - snap-routes
   - snap-stream
-  - snap-templates
   - snap-testing
   - snap-utils
   - snap-web-routes
