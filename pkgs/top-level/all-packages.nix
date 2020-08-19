@@ -16816,6 +16816,8 @@ in
 
   slurm-spank-x11 = callPackage ../servers/computing/slurm-spank-x11 { };
 
+  statping = callPackage ../servers/monitoring/statping { };
+
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
 
   syncserver = callPackage ../servers/syncserver { };
