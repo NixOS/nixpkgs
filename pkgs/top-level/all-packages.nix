@@ -826,6 +826,8 @@ in
 
   boxes = callPackage ../tools/text/boxes { };
 
+  chamber = callPackage ../tools/admin/chamber {  };
+
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
   ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
