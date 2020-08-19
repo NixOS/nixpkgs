@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "wtf-peewee";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4ac1b457f3255ee2d72915267884a16e5fb502e1e7bb793f2f1301c926e3599a";
+    sha256 = "03qs6np5s9r0nmsryfzll29ajcqk27b18kcbgd9plf80ys3nb6kd";
   };
 
   propagatedBuildInputs = [
