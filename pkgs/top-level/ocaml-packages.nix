@@ -300,6 +300,8 @@ let
 
     gen = callPackage ../development/ocaml-modules/gen { };
 
+    genspio = callPackage ../development/ocaml-modules/genspio { };
+
     gmap = callPackage ../development/ocaml-modules/gmap { };
 
     gnuplot = callPackage ../development/ocaml-modules/gnuplot {
@@ -573,6 +575,8 @@ let
 
     nocrypto =  callPackage ../development/ocaml-modules/nocrypto { };
 
+    nonstd =  callPackage ../development/ocaml-modules/nonstd { };
+
     notty = callPackage ../development/ocaml-modules/notty { };
 
     npy = callPackage ../development/ocaml-modules/npy {
@@ -755,6 +759,8 @@ let
     };
 
     seq = callPackage ../development/ocaml-modules/seq { };
+
+    sosa = callPackage ../development/ocaml-modules/sosa { };
 
     spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };
 
