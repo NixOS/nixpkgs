@@ -57,8 +57,8 @@
     revision = "24-android-tv-x86";
     displayName = "Android TV Intel x86 Atom System Image";
     archives.all = fetchurl {
-      url = "https://dl.google.com/android/repository/sys-img/android-tv/x86-24_r20.zip";
-      sha1 = "0b8cd98dec9ebd04376ce4f6e270193ceae8acea";
+      url = "https://dl.google.com/android/repository/sys-img/android-tv/x86-24_r21.zip";
+      sha1 = "8df8e29723859a5b89febba02eaa33c39d69f261";
     };
   };
   "25".android-tv."x86" = {
@@ -67,8 +67,8 @@
     revision = "25-android-tv-x86";
     displayName = "Android TV Intel x86 Atom System Image";
     archives.all = fetchurl {
-      url = "https://dl.google.com/android/repository/sys-img/android-tv/x86-25_r14.zip";
-      sha1 = "1c88f11683375c059803c3a7be8e880cc23a6f9a";
+      url = "https://dl.google.com/android/repository/sys-img/android-tv/x86-25_r15.zip";
+      sha1 = "a6356bece5c50fc9c96d760718f4b44af324996f";
     };
   };
   "26".android-tv."x86" = {
@@ -77,8 +77,8 @@
     revision = "26-android-tv-x86";
     displayName = "Android TV Intel x86 Atom System Image";
     archives.all = fetchurl {
-      url = "https://dl.google.com/android/repository/sys-img/android-tv/x86-26_r12.zip";
-      sha1 = "d8b12e543925a0454403d2a854996a76410ec374";
+      url = "https://dl.google.com/android/repository/sys-img/android-tv/x86-26_r13.zip";
+      sha1 = "54eb031b6caf3f66c9674a8717d0aee57db5915a";
     };
   };
   "27".android-tv."x86" = {
@@ -87,8 +87,8 @@
     revision = "27-android-tv-x86";
     displayName = "Android TV Intel x86 Atom System Image";
     archives.all = fetchurl {
-      url = "https://dl.google.com/android/repository/sys-img/android-tv/x86-27_r07.zip";
-      sha1 = "5ed40e568c0d8d023c5b6c76634b22a477ed54aa";
+      url = "https://dl.google.com/android/repository/sys-img/android-tv/x86-27_r08.zip";
+      sha1 = "76af9dca128f38ab38f8adedd60a278920900f74";
     };
   };
   "28".android-tv."x86" = {
@@ -97,8 +97,8 @@
     revision = "28-android-tv-x86";
     displayName = "Android TV Intel x86 Atom System Image";
     archives.all = fetchurl {
-      url = "https://dl.google.com/android/repository/sys-img/android-tv/x86-28_r08.zip";
-      sha1 = "f5f8f296dfaca7945434992761c8d47d50257c21";
+      url = "https://dl.google.com/android/repository/sys-img/android-tv/x86-28_r09.zip";
+      sha1 = "7fbf783dedfab2c6dc6aada756854b19625bee66";
     };
   };
   "Q".android-tv."x86" = {

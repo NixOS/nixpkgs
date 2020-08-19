@@ -281,6 +281,28 @@
       sha1 = "ce03c42d80c0fc6dc47f6455dbee7aa275d02780";
     };
   };
+  "29".default."x86" = {
+    name = "system-image-29-default-x86";
+    path = "system-images/android-29/default/x86";
+    revision = "29-default-x86";
+    displayName = "Intel x86 Atom System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/android/x86-29_r07-windows.zip";
+      sha1 = "e0e6504734f601c28350528d39a4b17b3e0f82dc";
+    };
+  };
+  "29".default."x86" = {
+    name = "system-image-29-default-x86";
+    path = "system-images/android-29/default/x86";
+    revision = "29-default-x86";
+    displayName = "Intel x86 Atom System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/android/x86-29_r07-darwin.zip";
+      sha1 = "e0e6504734f601c28350528d39a4b17b3e0f82dc";
+      url = "https://dl.google.com/android/repository/sys-img/android/x86-29_r07-linux.zip";
+      sha1 = "e0e6504734f601c28350528d39a4b17b3e0f82dc";
+    };
+  };
   "21".default."x86_64" = {
     name = "system-image-21-default-x86_64";
     path = "system-images/android-21/default/x86_64";
@@ -359,6 +381,28 @@
     archives.all = fetchurl {
       url = "https://dl.google.com/android/repository/sys-img/android/x86_64-28_r04.zip";
       sha1 = "d47a85c8f4e9fd57df97814ad8884eeb0f3a0ef0";
+    };
+  };
+  "29".default."x86_64" = {
+    name = "system-image-29-default-x86_64";
+    path = "system-images/android-29/default/x86_64";
+    revision = "29-default-x86_64";
+    displayName = "Intel x86 Atom_64 System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/android/x86_64-29_r07-windows.zip";
+      sha1 = "c8e307b885a68f71b4889a70bffea729fc4ecbfa";
+    };
+  };
+  "29".default."x86_64" = {
+    name = "system-image-29-default-x86_64";
+    path = "system-images/android-29/default/x86_64";
+    revision = "29-default-x86_64";
+    displayName = "Intel x86 Atom_64 System Image";
+    archives.all = fetchurl {
+      url = "https://dl.google.com/android/repository/sys-img/android/x86_64-29_r07-darwin.zip";
+      sha1 = "c8e307b885a68f71b4889a70bffea729fc4ecbfa";
+      url = "https://dl.google.com/android/repository/sys-img/android/x86_64-29_r07-linux.zip";
+      sha1 = "c8e307b885a68f71b4889a70bffea729fc4ecbfa";
     };
   };
 }

@@ -369,44 +369,6 @@
   extras = {
     
 
-    "extras;android;gapid;1" = {
-      name = "extras-android-gapid-1";
-      path = "extras/android/gapid/1";
-      revision = "1.0.3";
-      displayName = "GPU Debugging tools";
-      archives = {
-      linux = fetchurl {
-          url = "https://dl.google.com/android/repository/gapid_r01_linux.zip";
-          sha1 = "7c9ef7544cf0aea030bcc29bd8e12c04fd53e653";
-        };
-      macosx = fetchurl {
-          url = "https://dl.google.com/android/repository/gapid_r01_osx.zip";
-          sha1 = "597eb271349d890566274861eba2770a84ee4c69";
-        };
-      
-      };
-    };
-    
-
-    "extras;android;gapid;3" = {
-      name = "extras-android-gapid-3";
-      path = "extras/android/gapid/3";
-      revision = "3.1.0";
-      displayName = "GPU Debugging tools";
-      archives = {
-      linux = fetchurl {
-          url = "https://dl.google.com/android/repository/gapid_2994895_linux.zip";
-          sha1 = "e40371ba191f617e4e79bc760d0ab2948ba8cf46";
-        };
-      macosx = fetchurl {
-          url = "https://dl.google.com/android/repository/gapid_2994895_osx.zip";
-          sha1 = "ad86a2350b7b9908300277bf03d41649659de384";
-        };
-      
-      };
-    };
-    
-
     "extras;android;m2repository" = {
       name = "extras-android-m2repository";
       path = "extras/android/m2repository";
@@ -426,7 +388,7 @@
     "extras;google;Android_Emulator_Hypervisor_Driver" = {
       name = "extras-google-Android_Emulator_Hypervisor_Driver";
       path = "extras/google/Android_Emulator_Hypervisor_Driver";
-      revision = "1.4.0";
+      revision = "1.5.0";
       displayName = "Android Emulator Hypervisor Driver for AMD Processors (installer)";
       archives = {
       
@@ -616,7 +578,7 @@
     "extras;google;usb_driver" = {
       name = "extras-google-usb_driver";
       path = "extras/google/usb_driver";
-      revision = "12";
+      revision = "13";
       displayName = "Google USB Driver";
       archives = {
       
