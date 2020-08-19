@@ -1947,6 +1947,8 @@ in
 
   go-dependency-manager = callPackage ../development/tools/gdm { };
 
+  go-dqlite = callPackage ../tools/admin/go-dqlite { };
+
   go-neb = callPackage ../applications/networking/instant-messengers/go-neb { };
 
   geckodriver = callPackage ../development/tools/geckodriver { };
