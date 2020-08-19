@@ -10712,6 +10712,9 @@ let
     };
     propagatedBuildInputs = [ shortenPerlShebang ArchiveZip DBFile FileWhich IOString ImageSize JSONXS LWP ParseRecDescent PodParser TextUnidecode XMLLibXSLT ];
     doCheck = false;  # epub test fails
+    postPatch = ''
+      patchSheBangs bin
+    '';
     postInstall = ''
       shortenPerlShebang $out/bin/latexml
       shortenPerlShebang $out/bin/latexmlc
