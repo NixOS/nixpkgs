@@ -3234,6 +3234,8 @@ in {
 
   itypes = callPackage ../development/python-modules/itypes { };
 
+  iniconfig = callPackage ../development/python-modules/iniconfig { };
+
   iniparse = callPackage ../development/python-modules/iniparse { };
 
   intreehooks = callPackage ../development/python-modules/intreehooks { };
