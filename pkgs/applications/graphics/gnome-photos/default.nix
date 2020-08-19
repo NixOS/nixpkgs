@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     };
 
     tests = {
-      installed-tests = nixosTests.gnome-photos;
+      installed-tests = nixosTests.installed-tests.gnome-photos;
     };
   };
 
