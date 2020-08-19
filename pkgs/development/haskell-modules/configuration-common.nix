@@ -315,6 +315,13 @@ self: super: {
     then dontCheck super.math-functions # "erf table" test fails on Darwin https://github.com/bos/math-functions/issues/63
     else super.math-functions;
   matplotlib = dontCheck super.matplotlib;
+
+  # Needs the latest version of vty and brick.
+  matterhorn = super.matterhorn.overrideScope (self: super: {
+    brick = self.brick_0_55;
+    vty = self.vty_5_30;
+  });
+
   memcache = dontCheck super.memcache;
   metrics = dontCheck super.metrics;
   milena = dontCheck super.milena;
