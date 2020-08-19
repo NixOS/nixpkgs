@@ -155,7 +155,10 @@ in
 
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
-  buildFHSUserEnv = callPackage ../build-support/build-fhs-userenv { };
+  # TODO: eventually migrate everything to buildFHSUserEnvBubblewrap
+  buildFHSUserEnv = buildFHSUserEnvChroot;
+  buildFHSUserEnvChroot = callPackage ../build-support/build-fhs-userenv { };
+  buildFHSUserEnvBubblewrap = callPackage ../build-support/build-fhs-userenv-bubblewrap { };
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
@@ -19197,7 +19200,9 @@ in
   amsn = callPackage ../applications/networking/instant-messengers/amsn { };
 
   androidStudioPackages = recurseIntoAttrs
-    (callPackage ../applications/editors/android-studio { });
+    (callPackage ../applications/editors/android-studio {
+      buildFHSUserEnv = buildFHSUserEnvBubblewrap;
+    });
   android-studio = androidStudioPackages.stable;
 
   animbar = callPackage ../applications/graphics/animbar { };
@@ -21343,7 +21348,9 @@ in
     inherit (gnome3) gnome-desktop libgnome-keyring;
     wine = wineWowPackages.staging;
   };
-  lutris = callPackage ../applications/misc/lutris/chrootenv.nix { };
+  lutris = callPackage ../applications/misc/lutris/fhsenv.nix {
+    buildFHSUserEnv = buildFHSUserEnvBubblewrap;
+  };
   lutris-free = lutris.override {
     steamSupport = false;
   };
@@ -24796,9 +24803,11 @@ in
 
   stockfish = callPackage ../games/stockfish { };
 
-  steamPackages = dontRecurseIntoAttrs (callPackage ../games/steam { });
+  steamPackages = dontRecurseIntoAttrs (callPackage ../games/steam {
+    buildFHSUserEnv = buildFHSUserEnvBubblewrap;
+  });
 
-  steam = steamPackages.steam-chrootenv;
+  steam = steamPackages.steam-fhsenv;
 
   steam-run = steam.run;
   steam-run-native = (steam.override {
