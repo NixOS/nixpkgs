@@ -1,3 +1,4 @@
+Remove about:buildconfig.  If used as-is, it would add unnecessary runtime dependencies.
 diff -ru -x '*~' a/docshell/base/nsAboutRedirector.cpp b/docshell/base/nsAboutRedirector.cpp
 --- a/docshell/base/nsAboutRedirector.cpp
 +++ b/docshell/base/nsAboutRedirector.cpp
