@@ -3371,6 +3371,10 @@ in {
 
   measurement = callPackage ../development/python-modules/measurement {};
 
+  mercurial = disabledIf (!isPy3k) (toPythonModule (pkgs.mercurial.override {
+    python3Packages = self;
+  }));
+
   midiutil = callPackage ../development/python-modules/midiutil {};
 
   mido = callPackage ../development/python-modules/mido { };
