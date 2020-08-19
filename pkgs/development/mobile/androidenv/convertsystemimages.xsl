@@ -64,7 +64,7 @@
     displayName = "</xsl:text><xsl:value-of select="display-name" /><xsl:text>";
     archives.all = fetchurl {</xsl:text>
     <xsl:for-each select="archives/archive"><xsl:text>
-      url = </xsl:text><xsl:call-template name="repository-url"/><xsl:text>;
+      url = "</xsl:text><xsl:call-template name="repository-url"/><xsl:text>";
       sha1 = "</xsl:text><xsl:value-of select="complete/checksum" /><xsl:text>";</xsl:text>
     </xsl:for-each><xsl:text>
     };
