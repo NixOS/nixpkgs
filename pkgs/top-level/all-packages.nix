@@ -9305,7 +9305,9 @@ in
 
   mosml = callPackage ../development/compilers/mosml { };
 
-  mozart2 = callPackage ../development/compilers/mozart { };
+  mozart2 = callPackage ../development/compilers/mozart {
+    emacs = emacs-nox;
+  };
 
   mozart2-binary = callPackage ../development/compilers/mozart/binary.nix { };
 
@@ -19876,11 +19878,31 @@ in
 
   elvis = callPackage ../applications/editors/elvis { };
 
-  emacs = emacs26;
-  emacsPackages = emacs26Packages;
-  emacs-nox = emacs26-nox;
+  emacs = emacs27;
+  emacsPackages = emacs27Packages;
+  emacs-nox = emacs27-nox;
+  emacsWithPackages = emacsPackages.emacsWithPackages;
 
-  emacs26 = callPackage ../applications/editors/emacs {
+  emacs27 = callPackage ../applications/editors/emacs/27.nix {
+    # use override to enable additional features
+    libXaw = xorg.libXaw;
+    Xaw3d = null;
+    gconf = null;
+    alsaLib = null;
+    imagemagick = null;
+    acl = null;
+    gpm = null;
+    inherit (darwin.apple_sdk.frameworks) AppKit GSS ImageIO;
+  };
+
+  emacs27-nox = lowPrio (appendToName "nox" (emacs27.override {
+    withX = false;
+    withNS = false;
+    withGTK2 = false;
+    withGTK3 = false;
+  }));
+
+  emacs26 = callPackage ../applications/editors/emacs/26.nix {
     # use override to enable additional features
     libXaw = xorg.libXaw;
     Xaw3d = null;
@@ -19895,24 +19917,6 @@ in
   emacs26-nox = lowPrio (appendToName "nox" (emacs26.override {
     withX = false;
     withNS = false;
-    withGTK2 = false;
-    withGTK3 = false;
-  }));
-
-  emacs25 = callPackage ../applications/editors/emacs/25.nix {
-    # use override to enable additional features
-    libXaw = xorg.libXaw;
-    Xaw3d = null;
-    gconf = null;
-    alsaLib = null;
-    imagemagick = null;
-    acl = null;
-    gpm = null;
-    inherit (darwin.apple_sdk.frameworks) AppKit GSS ImageIO;
-  };
-
-  emacs25-nox = lowPrio (appendToName "nox" (emacs25.override {
-    withX = false;
     withGTK2 = false;
     withGTK3 = false;
   }));
@@ -19948,12 +19952,10 @@ in
     };
   };
 
-  emacs25Packages = dontRecurseIntoAttrs (emacsPackagesFor emacs25);
   emacs26Packages = dontRecurseIntoAttrs (emacsPackagesFor emacs26);
-
-  emacs25WithPackages = emacs25Packages.emacsWithPackages;
+  emacs27Packages = dontRecurseIntoAttrs (emacsPackagesFor emacs27);
   emacs26WithPackages = emacs26Packages.emacsWithPackages;
-  emacsWithPackages = emacsPackages.emacsWithPackages;
+  emacs27WithPackages = emacs27Packages.emacsWithPackages;
 
   inherit (gnome3) empathy;
 
