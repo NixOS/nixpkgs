@@ -7455,7 +7455,7 @@ in {
 
   packet-python = callPackage ../development/python-modules/packet-python { };
 
-  pwntools = callPackage ../development/python-modules/pwntools { };
+  pwntools = callPackage ../development/python-modules/pwntools { debugger = pkgs.gdb; };
 
   ROPGadget = callPackage ../development/python-modules/ROPGadget { };
 

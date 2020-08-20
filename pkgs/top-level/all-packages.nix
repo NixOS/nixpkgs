@@ -26788,6 +26788,8 @@ in
 
   pyload = callPackage ../applications/networking/pyload {};
 
+  pwntools = with python3Packages; toPythonApplication pwntools;
+
   uae = callPackage ../misc/emulators/uae { };
 
   fsuae = callPackage ../misc/emulators/fs-uae { };
