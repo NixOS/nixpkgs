@@ -9,7 +9,6 @@
 , llvmPackages_5
 , gmp
 , emacs
-, emacs25-nox
 , jre_headless
 , tcl
 , tk
@@ -73,7 +72,7 @@ in stdenv.mkDerivation rec {
     llvmPackages_5.clang
     llvmPackages_5.clang-unwrapped
     gmp
-    emacs25-nox
+    emacs
     jre_headless
     tcl
     tk
