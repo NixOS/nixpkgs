@@ -1828,6 +1828,8 @@ in
 
   edac-utils = callPackage ../os-specific/linux/edac-utils { };
 
+  eddy = callPackage ../applications/graphics/eddy { };
+
   eggdrop = callPackage ../tools/networking/eggdrop { };
 
   eksctl = callPackage ../tools/admin/eksctl { };
