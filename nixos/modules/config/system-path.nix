@@ -33,14 +33,11 @@ let
       pkgs.ncurses
       pkgs.netcat
       config.programs.ssh.package
-      pkgs.perl
       pkgs.procps
-      pkgs.rsync
-      pkgs.strace
       pkgs.su
       pkgs.time
       pkgs.utillinux
-      pkgs.which # 88K size
+      pkgs.which
       pkgs.zstd
     ];
 
