@@ -905,6 +905,11 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
      Fontconfig 2.10.x was removed from Nixpkgs - it hasn't been used in any nixpkgs package anymore.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The packages <package>perl</package>, <package>rsync</package> and <package>strace</package> were removed from <option>systemPackages</option>. If you need them, install them again with <code><xref linkend="opt-environment.systemPackages"/> = with pkgs; [ perl rsync strace ];</code> in your <filename>configuration.nix</filename>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
