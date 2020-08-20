@@ -230,6 +230,8 @@ let
 
     dune-configurator = callPackage ../development/ocaml-modules/dune-configurator { };
 
+    dune-glob = callPackage ../development/ocaml-modules/dune-glob { };
+
     dune-private-libs = callPackage ../development/ocaml-modules/dune-private-libs { };
 
     dune-release = callPackage ../development/tools/ocaml/dune-release {
