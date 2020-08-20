@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib }:
+{ stdenv, fetchFromGitHub, which, ocaml, findlib }:
 
 if !stdenv.lib.versionAtLeast ocaml.version "4.02"
 then throw "camlpdf is not available for OCaml ${ocaml.version}"
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1z8h6bjzmlscr6h6kdvzj8kspifb4n9dg7zi54z1cv2qi03kr8dk";
   };
 
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ which ocaml findlib ];
 
   # Version number in META file is wrong
   patchPhase = ''
@@ -26,7 +26,9 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  createFindlibDestdir = true;
+  preInstall = ''
+    mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs
+  '';
 
   meta = with stdenv.lib; {
     description = "An OCaml library for reading, writing and modifying PDF files";
