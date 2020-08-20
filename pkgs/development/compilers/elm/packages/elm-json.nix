@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ];
 
   cargoSha256 = "0ylniriq073kpiykamkn9mxdaa6kyiza4pvf7gnfq2h1dvbqa6z7";
-  verifyCargoDeps = true;
 
   # Tests perform networking and therefore can't work in sandbox
   doCheck = false;
