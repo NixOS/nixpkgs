@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "tensorflow-estimator";
-  version = "2.2.0";
+  version = "2.3.0";
   format = "wheel";
 
   src = fetchPypi {
     pname = "tensorflow_estimator";
     inherit version format;
-    sha256 = "1hkx4k6927xn4qpwiba6wa56n0qqm7s23bymm377j9bz2bfsr7fh";
+    sha256 = "11n4sl9wfr00fv1i837b7a36ink86ggmlsgj7i06kcfc011h6pmp";
   };
 
   propagatedBuildInputs = [ mock numpy absl-py ];
