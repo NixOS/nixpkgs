@@ -8,12 +8,6 @@
 
 , pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
 , guile ? null
-, safePaths ? [
-   # $debugdir:$datadir/auto-load are whitelisted by default by GDB
-   "$debugdir" "$datadir/auto-load"
-   # targetPackages so we get the right libc when cross-compiling and using buildPackages.gdb
-   targetPackages.stdenv.cc.cc.lib
-  ]
 }:
 
 let
@@ -24,10 +18,7 @@ in
 assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
-  name =
-    stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
-                              (stdenv.targetPlatform.config + "-")
-    + basename;
+  name = basename;
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.xz";
@@ -62,8 +53,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
 
-  # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+  configurePlatforms = [ "build" "host" ];
 
   # GDB have to be built out of tree.
   preConfigure = ''
@@ -82,7 +72,6 @@ stdenv.mkDerivation rec {
     "--with-gmp=${gmp.dev}"
     "--with-mpfr=${mpfr.dev}"
     "--with-expat" "--with-libexpat-prefix=${expat.dev}"
-    "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
   ] ++ stdenv.lib.optional (!pythonSupport) "--without-python";
 
   postInstall =
