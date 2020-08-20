@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   pname = "gnome-shell";
   version = "3.38.0";
 
-  outputs = [ "out" "devdoc" ];
+  outputs = [ "out" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -168,7 +168,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
+    "-Dgtk_doc=false"
   ];
 
   postPatch = ''
