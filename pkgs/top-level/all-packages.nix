@@ -19878,11 +19878,11 @@ in
 
   elvis = callPackage ../applications/editors/elvis { };
 
-  emacs = emacs26;
-  emacsPackages = emacs26Packages;
-  emacs-nox = emacs26-nox;
+  emacs = emacs27;
+  emacsPackages = emacs27Packages;
+  emacs-nox = emacs27-nox;
 
-  emacs26 = callPackage ../applications/editors/emacs {
+  emacs27 = callPackage ../applications/editors/emacs {
     # use override to enable additional features
     libXaw = xorg.libXaw;
     Xaw3d = null;
@@ -19894,7 +19894,7 @@ in
     inherit (darwin.apple_sdk.frameworks) AppKit GSS ImageIO;
   };
 
-  emacs26-nox = lowPrio (appendToName "nox" (emacs26.override {
+  emacs27-nox = lowPrio (appendToName "nox" (emacs27.override {
     withX = false;
     withNS = false;
     withGTK2 = false;
@@ -19932,9 +19932,9 @@ in
     };
   };
 
-  emacs26Packages = dontRecurseIntoAttrs (emacsPackagesFor emacs26);
+  emacs27Packages = dontRecurseIntoAttrs (emacsPackagesFor emacs27);
 
-  emacs26WithPackages = emacs26Packages.emacsWithPackages;
+  emacs27WithPackages = emacs27Packages.emacsWithPackages;
   emacsWithPackages = emacsPackages.emacsWithPackages;
 
   inherit (gnome3) empathy;
