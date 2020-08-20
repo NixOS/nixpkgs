@@ -21054,7 +21054,7 @@ in
     akonadi akregator ark bomber bovo dolphin dragon elisa ffmpegthumbs filelight granatier gwenview k3b
     kaddressbook kapptemplate kate kcachegrind kcalc kcharselect kcolorchooser kdenlive kdf kdialog
     keditbookmarks kfind kfloppy kget kgpg khelpcenter kig kleopatra kmail kmix kmplot kolourpaint kompare konsole yakuake
-    kpkpass kitinerary kontact korganizer krdc krfb ksystemlog ktouch kwalletmanager marble minuet okular picmi spectacle;
+    kpkpass kitinerary kontact korganizer krdc krfb ksquares ksystemlog ktouch kwalletmanager marble minuet okular picmi spectacle;
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
 
