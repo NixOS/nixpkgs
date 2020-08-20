@@ -21049,10 +21049,13 @@ in
       recurseIntoAttrs (makeOverridable mkApplications attrs);
 
   inherit (kdeApplications)
-    akonadi akregator ark bomber bovo dolphin dragon elisa ffmpegthumbs filelight granatier gwenview k3b
-    kaddressbook kapptemplate kate kcachegrind kcalc kcharselect kcolorchooser kdenlive kdf kdialog
-    keditbookmarks kfind kfloppy kget kgpg khelpcenter kig kleopatra kmail kmix kmplot kolourpaint kompare konsole yakuake
-    kpkpass kitinerary kontact korganizer krdc krfb ksystemlog ktouch kwalletmanager marble minuet okular picmi spectacle;
+    akonadi akregator ark bomber bovo dolphin dragon elisa ffmpegthumbs
+    filelight granatier gwenview k3b kfloppy kaddressbook kapptemplate kate
+    kcachegrind kcalc kcharselect kcolorchooser kdenlive kdf kdialog
+    keditbookmarks kfind kget kgpg khelpcenter kig kitinerary kleopatra kmail
+    kmix kmplot kolourpaint kompare konsole kontact korganizer kpkpass krdc
+    krfb ksystemlog ktouch kwalletmanager lokalize marble minuet okular picmi
+    spectacle yakuake;
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
 
