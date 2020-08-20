@@ -1,3 +1,11 @@
+{
+  version
+  , sha256
+  , versionModifier ? ""
+  , pname ? "emacs"
+  , name ? "emacs-${version}${versionModifier}"
+  , patches ? [ ]
+}:
 { stdenv, lib, fetchurl, fetchpatch, ncurses, xlibsWrapper, libXaw, libXpm
 , Xaw3d, libXcursor,  pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
@@ -32,24 +40,16 @@ assert withXwidgets -> withGTK3 && webkitgtk != null;
 
 
 let
-  version = "27.1";
-  versionModifier = "";
-  name = "emacs-${version}${versionModifier}";
 
 in stdenv.mkDerivation {
-  inherit name version;
+  inherit pname version;
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${name}.tar.xz";
-    sha256 = "0h9f2wpmp6rb5rfwvqwv1ia1nw86h74p7hnz3vb3gjazj67i4k2a";
+    inherit sha256;
   };
 
   enableParallelBuilding = true;
-
-  patches = [
-    ./clean-env.patch
-    ./tramp-detect-wrapped-gvfsd.patch
-  ];
 
   postPatch = lib.concatStringsSep "\n" [
     (lib.optionalString srcRepo ''
