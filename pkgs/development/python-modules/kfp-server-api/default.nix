@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "kfp-server-api";
-  version = "0.5.0";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d1rm3azjhksh21ilifndlbkli4255w7flykyrsw317yswdg2cmn";
+    sha256 = "14h3na1a8ansdlf1gjhbhabh58y14vfpqn60cjr3744rbk7z6kg7";
   };
 
   propagatedBuildInputs = [ six urllib3 python-dateutil ];

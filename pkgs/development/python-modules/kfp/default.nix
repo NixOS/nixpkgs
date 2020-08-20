@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "kfp";
-  version = "0.5.1";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dnlh156gcwai2q9vfda91dpcn07d6lwmayal8xvpnm4j4hdr1gy";
+    sha256 = "184f90gajkljfw8i5f6spmz7ifzrb40z2dkgmwk0s3cij1bza9r9";
   };
 
   propagatedBuildInputs = [
