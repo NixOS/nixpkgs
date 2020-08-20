@@ -16097,6 +16097,8 @@ in
 
   dspam = callPackage ../servers/mail/dspam { };
 
+  dynomite = callPackage ../servers/dynomite { };
+
   engelsystem = callPackage ../servers/web-apps/engelsystem { };
 
   etcd = callPackage ../servers/etcd { };
