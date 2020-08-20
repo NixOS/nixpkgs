@@ -1,19 +1,21 @@
 { stdenv, lib, fetchurl, dpkg, patchelf, qt5, libXtst, libXext, libX11, mkDerivation, makeWrapper, libXScrnSaver }:
 
 let
+  version = "2.16.3.1";
   src =
     if stdenv.hostPlatform.system == "i686-linux" then fetchurl {
       name = "rescuetime-installer.deb";
-      url = "https://www.rescuetime.com/installers/rescuetime_current_i386.deb";
-      sha256 = "0mw8dh9z7pqan0yrhycmv39h5c1sc4mbw5l02cfnn17cy75xdiay";
+      url = "https://www.rescuetime.com/installers/rescuetime_${version}_i386.deb";
+      sha256 = "1374nmj6g6w24cv604kzac0v57gcl1pwpw0nxpr7kv2786x1aqg2";
     } else fetchurl {
       name = "rescuetime-installer.deb";
-      url = "https://www.rescuetime.com/installers/rescuetime_current_amd64.deb";
-      sha256 = "1a6pc8vi2ab721kzyhvg6bmw24dr85dgmx2m9j9vbf3jyr85fv10";
+      url = "https://www.rescuetime.com/installers/rescuetime_${version}_amd64.deb";
+      sha256 = "05qs6wbc3705z8w9c3n83m4j8xfmzm673lyh5j95x1ak5czkrphk";
     };
 in mkDerivation {
   # https://www.rescuetime.com/updates/linux_release_notes.html
-  name = "rescuetime-2.14.5.2";
+  inherit version;
+  pname = "rescuetime";
   inherit src;
   nativeBuildInputs = [ dpkg ];
   # avoid https://github.com/NixOS/patchelf/issues/99
