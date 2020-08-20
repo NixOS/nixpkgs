@@ -15943,6 +15943,16 @@ in
     packages = [];
   };
 
+  rstudioServerWrapper = libsForQt5.callPackage ../development/r-modules/wrapper-rstudio-server.nix {
+    recommendedPackages = with rPackages; [
+      boot class cluster codetools foreign KernSmooth lattice MASS
+      Matrix mgcv nlme nnet rpart spatial survival
+    ];
+    # Override this attribute to register additional libraries.
+    packages = [];
+  };
+    
+
   rPackages = dontRecurseIntoAttrs (callPackage ../development/r-modules {
     overrides = (config.rPackageOverrides or (p: {})) pkgs;
   });
@@ -22541,6 +22551,11 @@ in
   rsclock = callPackage ../applications/misc/rsclock { };
 
   rstudio = libsForQt5.callPackage ../applications/editors/rstudio {
+    boost = boost166;
+    llvmPackages = llvmPackages_7;
+  };
+
+  rstudio-server = libsForQt5.callPackage ../applications/editors/rstudio/server.nix {
     boost = boost166;
     llvmPackages = llvmPackages_7;
   };
