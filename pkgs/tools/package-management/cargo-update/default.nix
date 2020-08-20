@@ -2,11 +2,13 @@
 , rustPlatform
 , fetchFromGitHub
 , cmake
+, pkg-config
+, installShellFiles
+, ronn
 , curl
 , libgit2
 , libssh2
 , openssl
-, pkg-config
 , Security
 , zlib
 }:
@@ -25,9 +27,21 @@ rustPlatform.buildRustPackage rec {
   cargoPatches = [ ./0001-Generate-lockfile-for-cargo-update-v4.1.1.patch ];
   cargoSha256 = "1yaawp015gdnlfqkdmqsf95gszz0h5j1vpfjh763y7kk0bp7zswl";
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake installShellFiles pkg-config ronn ];
+
   buildInputs = [ libgit2 libssh2 openssl zlib ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ curl Security ];
+
+  postBuild = ''
+    # Man pages contain non-ASCII, so explicitly set encoding to UTF-8.
+    HOME=$TMPDIR \
+    RUBYOPT="-E utf-8:utf-8" \
+      ronn -r --organization="cargo-update developers" man/*.md
+  '';
+
+  postInstall = ''
+    installManPage man/*.1
+  '';
 
   meta = with stdenv.lib; {
     description = "A cargo subcommand for checking and applying updates to installed executables";
