@@ -2247,6 +2247,8 @@ in
 
   edac-utils = callPackage ../os-specific/linux/edac-utils { };
 
+  eddy = libsForQt5.callPackage ../applications/graphics/eddy {};
+
   eggdrop = callPackage ../tools/networking/eggdrop { };
 
   eksctl = callPackage ../tools/admin/eksctl { };
