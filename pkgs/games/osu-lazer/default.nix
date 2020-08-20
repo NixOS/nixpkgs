@@ -99,7 +99,11 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Rhythm is just a *click* away";
     homepage = "https://osu.ppy.sh";
-    license = with licenses; [ mit cc-by-nc-40 ];
+    license = with licenses; [
+      mit
+      cc-by-nc-40
+      unfreeRedistributable # osu-framework contains libbass.so in repository
+    ];
     maintainers = with maintainers; [ oxalica ];
     platforms = [ "x86_64-linux" ];
   };

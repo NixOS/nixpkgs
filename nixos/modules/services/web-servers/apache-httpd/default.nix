@@ -10,6 +10,12 @@ let
 
   pkg = cfg.package.out;
 
+  apachectl = pkgs.runCommand "apachectl" { meta.priority = -1; } ''
+    mkdir -p $out/bin
+    cp ${pkg}/bin/apachectl $out/bin/apachectl
+    sed -i $out/bin/apachectl -e 's|$HTTPD -t|$HTTPD -t -f ${httpdConf}|'
+  '';
+
   httpdConf = cfg.configFile;
 
   php = cfg.phpPackage.override { apacheHttpd = pkg; };
@@ -650,10 +656,10 @@ in
       postRun = "systemctl reload httpd.service";
     }) (filterAttrs (name: hostOpts: hostOpts.enableACME) cfg.virtualHosts);
 
-    environment.systemPackages = [ pkg ];
-
-    # required for "apachectl configtest"
-    environment.etc."httpd/httpd.conf".source = httpdConf;
+    environment.systemPackages = [
+      apachectl
+      pkg
+    ];
 
     services.httpd.phpOptions =
       ''

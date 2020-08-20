@@ -3371,6 +3371,10 @@ in {
 
   measurement = callPackage ../development/python-modules/measurement {};
 
+  mercurial = disabledIf (!isPy3k) (toPythonModule (pkgs.mercurial.override {
+    python3Packages = self;
+  }));
+
   midiutil = callPackage ../development/python-modules/midiutil {};
 
   mido = callPackage ../development/python-modules/mido { };
@@ -4848,6 +4852,8 @@ in {
   else
     callPackage ../development/python-modules/mock { };
 
+  mocket = callPackage ../development/python-modules/mocket { };
+
   mock-open = callPackage ../development/python-modules/mock-open { };
 
   mockito = callPackage ../development/python-modules/mockito { };
@@ -5949,6 +5955,8 @@ in {
   django-multiselectfield = callPackage ../development/python-modules/django-multiselectfield { };
 
   rdflib = callPackage ../development/python-modules/rdflib { };
+
+  rdflib-jsonld = callPackage ../development/python-modules/rdflib-jsonld { };
 
   isodate = callPackage ../development/python-modules/isodate { };
 
@@ -7160,6 +7168,8 @@ in {
   pluggy = callPackage ../development/python-modules/pluggy {};
 
   xcffib = callPackage ../development/python-modules/xcffib {};
+
+  xpybutil = callPackage ../development/python-modules/xpybutil {};
 
   pafy = callPackage ../development/python-modules/pafy { };
 

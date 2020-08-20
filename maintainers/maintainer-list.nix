@@ -4190,6 +4190,12 @@
     githubId = 87115;
     name = "Wael Nasreddine";
   };
+  kalekseev = {
+    email = "mail@kalekseev.com";
+    github = "kalekseev";
+    githubId = 367259;
+    name = "Konstantin Alekseev";
+  };
   kamadorueda = {
     name = "Kevin Amado";
     email = "kamadorueda@gmail.com";
@@ -4426,6 +4432,12 @@
     github = "k0ral";
     githubId = 524268;
     name = "Koral";
+  };
+  koslambrou = {
+    email = "koslambrou@gmail.com";
+    github = "koslambrou";
+    githubId = 2037002;
+    name = "Konstantinos";
   };
   kovirobi = {
     email = "kovirobi@gmail.com";
@@ -5956,6 +5968,12 @@
     github = "nilp0inter";
     githubId = 1224006;
     name = "Roberto Abdelkader Martínez Pérez";
+  };
+  nilsirl = {
+    email = "nils@nilsand.re";
+    github = "NilsIrl";
+    githubId = 26231126;
+    name = "Nils ANDRÉ-CHANG";
   };
   ninjatrappeur = {
     email = "felix@alternativebit.fr";
