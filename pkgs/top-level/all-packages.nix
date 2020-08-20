@@ -22956,6 +22956,8 @@ in
 
   tambura = callPackage ../applications/audio/tambura { };
 
+  tamgamp.lv2 = callPackage ../applications/audio/tamgamp.lv2 { };
+
   tanka = callPackage ../applications/networking/cluster/tanka { };
 
   teams = callPackage ../applications/networking/instant-messengers/teams { };
