@@ -9305,7 +9305,9 @@ in
 
   mosml = callPackage ../development/compilers/mosml { };
 
-  mozart2 = callPackage ../development/compilers/mozart { };
+  mozart2 = callPackage ../development/compilers/mozart {
+    emacs = emacs-nox;
+  };
 
   mozart2-binary = callPackage ../development/compilers/mozart/binary.nix { };
 
@@ -19899,24 +19901,6 @@ in
     withGTK3 = false;
   }));
 
-  emacs25 = callPackage ../applications/editors/emacs/25.nix {
-    # use override to enable additional features
-    libXaw = xorg.libXaw;
-    Xaw3d = null;
-    gconf = null;
-    alsaLib = null;
-    imagemagick = null;
-    acl = null;
-    gpm = null;
-    inherit (darwin.apple_sdk.frameworks) AppKit GSS ImageIO;
-  };
-
-  emacs25-nox = lowPrio (appendToName "nox" (emacs25.override {
-    withX = false;
-    withGTK2 = false;
-    withGTK3 = false;
-  }));
-
   emacsMacport = callPackage ../applications/editors/emacs/macport.nix {
     inherit (darwin.apple_sdk.frameworks)
       AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
@@ -19948,10 +19932,8 @@ in
     };
   };
 
-  emacs25Packages = dontRecurseIntoAttrs (emacsPackagesFor emacs25);
   emacs26Packages = dontRecurseIntoAttrs (emacsPackagesFor emacs26);
 
-  emacs25WithPackages = emacs25Packages.emacsWithPackages;
   emacs26WithPackages = emacs26Packages.emacsWithPackages;
   emacsWithPackages = emacsPackages.emacsWithPackages;
 
