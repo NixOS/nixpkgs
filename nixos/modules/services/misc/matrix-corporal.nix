@@ -16,7 +16,7 @@ in
     settings = lib.mkOption {
       default = {};
       type = lib.types.submodule {
-        config._module.fallbackType = format.type;
+        freeformType = format.type;
 
         options.Matrix.HomeserverDomainName = lib.mkOption {
           type = lib.types.str;
@@ -80,7 +80,7 @@ in
       Matrix.TimeoutMilliseconds = lib.mkDefault 45000;
       Reconciliation.RetryIntervalMilliseconds = lib.mkDefault 30000;
       HttpGateway.TimeoutMilliseconds = lib.mkDefault cfg.settings.Matrix.TimeoutMilliseconds;
-      HttpApi.TimeoutMilliseconds = lib.mkDefault 10000;
+      HttpApi.TimeoutMilliseconds = lib.mkDefault 15000;
     };
 
     systemd.services.matrix-corporal = {
