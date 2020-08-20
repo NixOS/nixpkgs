@@ -10745,6 +10745,8 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  fujprog = callPackage ../development/tools/misc/fujprog { };
+
   funnelweb = callPackage ../development/tools/literate-programming/funnelweb { };
 
   gede = libsForQt5.callPackage ../development/tools/misc/gede { };
