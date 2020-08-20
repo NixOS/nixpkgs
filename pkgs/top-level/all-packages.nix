@@ -5492,8 +5492,6 @@ in
   xnbd = callPackage ../tools/networking/xnbd { };
 
   nccl = callPackage ../development/libraries/science/math/nccl { };
-  nccl_cudatoolkit_9_0 = nccl.override { cudatoolkit = cudatoolkit_9_0; };
-  nccl_cudatoolkit_9 = nccl.override { cudatoolkit = cudatoolkit_9; };
   nccl_cudatoolkit_10 = nccl.override { cudatoolkit = cudatoolkit_10; };
   nccl_cudatoolkit_11 = nccl.override { cudatoolkit = cudatoolkit_11; };
 
