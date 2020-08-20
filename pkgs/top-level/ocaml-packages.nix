@@ -226,6 +226,8 @@ let
       then pkgs.dune_2
       else throw "dune_2 is not available for OCaml ${ocaml.version}";
 
+    dune-action-plugin = callPackage ../development/ocaml-modules/dune-action-plugin { };
+
     dune-build-info = callPackage ../development/ocaml-modules/dune-build-info { };
 
     dune-configurator = callPackage ../development/ocaml-modules/dune-configurator { };
