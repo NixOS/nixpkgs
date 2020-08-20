@@ -11039,6 +11039,10 @@ in
 
   mkcert = callPackage ../development/tools/misc/mkcert { };
 
+  mkrom = callPackage ../development/tools/misc/mkrom {
+    asciidoc = asciidoc-full;
+  };
+
   mkdocs = callPackage ../development/tools/documentation/mkdocs { };
 
   mockgen = callPackage ../development/tools/mockgen { };
