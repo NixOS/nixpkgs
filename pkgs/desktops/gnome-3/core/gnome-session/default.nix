@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-session";
-  version = "3.36.0";
+  version = "3.38.0";
 
   outputs = ["out" "sessions"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-session/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0ymvf1bap35348rpjqp63qwnwnnawdwi4snch95zc4n832w3hjym";
+    sha256 = "0rrxjk3vbqy3cdgnl7rw71dvcyrvhwq3m6s53dnkyjxsrnr0xk3v";
   };
 
   patches = [
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  mesonFlags = [ "-Dsystemd=true" ];
+  mesonFlags = [ "-Dsystemd=true" "-Dsystemd_session=default" ];
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext makeWrapper
