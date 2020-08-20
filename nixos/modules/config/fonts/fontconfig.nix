@@ -190,13 +190,6 @@ let
     ln -s ${pkg.out}/etc/fonts/conf.d/*.conf \
           $dst/
 
-    # update 51-local.conf path to look at local.conf
-    rm  $dst/51-local.conf
-
-    substitute ${pkg.out}/etc/fonts/conf.d/51-local.conf \
-               $dst/51-local.conf \
-               --replace local.conf /etc/fonts/${pkg.configVersion}/local.conf
-
     # 00-nixos-cache.conf
     ln -s ${cacheConf}  $dst/00-nixos-cache.conf
 
