@@ -8965,7 +8965,7 @@ in
     buildPackages = buildPackages // { stdenv = gcc8Stdenv; };
   });
 
-  go = go_1_14;
+  go = go_1_15;
 
   go-repo-root = callPackage ../development/tools/go-repo-root { };
 
@@ -15850,7 +15850,7 @@ in
     go = buildPackages.go_1_15;
   };
 
-  buildGoPackage = buildGo114Package;
+  buildGoPackage = buildGo115Package;
 
   buildGo114Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_14;
@@ -15859,7 +15859,7 @@ in
     go = buildPackages.go_1_15;
   };
 
-  buildGoModule = buildGo114Module;
+  buildGoModule = buildGo115Module;
 
   go2nix = callPackage ../development/tools/go2nix { };
 
