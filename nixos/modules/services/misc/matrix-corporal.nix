@@ -79,7 +79,7 @@ in
     services.matrix-corporal.settings = {
       Matrix.TimeoutMilliseconds = lib.mkDefault 45000;
       Reconciliation.RetryIntervalMilliseconds = lib.mkDefault 30000;
-      HttpGateway.TimeoutMilliseconds = lib.mkDefault cfg.settings.Matrix.TimeoutMilliseconds;
+      HttpGateway.TimeoutMilliseconds = 60000;
       HttpApi.TimeoutMilliseconds = lib.mkDefault 15000;
     };
 
