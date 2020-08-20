@@ -19882,7 +19882,7 @@ in
   emacsPackages = emacs27Packages;
   emacs-nox = emacs27-nox;
 
-  emacs27 = callPackage ../applications/editors/emacs {
+  emacs27 = callPackage ../applications/editors/emacs/27.nix {
     # use override to enable additional features
     libXaw = xorg.libXaw;
     Xaw3d = null;
