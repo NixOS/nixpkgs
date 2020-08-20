@@ -6938,6 +6938,8 @@ in
 
   solvespace = callPackage ../applications/graphics/solvespace { };
 
+  sommelier = callPackage ../tools/wayland/sommelier { };
+
   sonarr = callPackage ../servers/sonarr { };
 
   sonata = callPackage ../applications/audio/sonata { };
