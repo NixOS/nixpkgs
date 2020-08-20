@@ -16716,6 +16716,24 @@ let
     };
   };
 
+  Apprainbarf = buildPerlModule {
+    pname = "Apprainbarf";
+    version = "1.4";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SY/SYP/App-rainbarf-1.4.tar.gz";
+      sha256 = "4f139ad35faaf2de0623dc0bb1dd89fa5a431e548bfec87dee194cf0e25cc97d";
+    };
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/rainbarf
+    '';
+    meta = {
+      homepage = "https://github.com/creaktive/rainbarf";
+      description = "CPU/RAM/battery stats chart bar for tmux (and GNU screen)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus  ];
+    };
+  };
+
   Razor2ClientAgent = buildPerlPackage {
     pname = "Razor2-Client-Agent";
     version = "2.86";
