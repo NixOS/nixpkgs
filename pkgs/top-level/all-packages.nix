@@ -20754,6 +20754,8 @@ with pkgs;
     packages = [];
   };
 
+  rstudioServerWrapper = rstudioWrapper.override { rstudio = rstudio-server; };
+
   rPackages = dontRecurseIntoAttrs (callPackage ../development/r-modules {
     overrides = (config.rPackageOverrides or (_: {})) pkgs;
   });
@@ -28381,6 +28383,8 @@ with pkgs;
   rstudio = libsForQt5.callPackage ../applications/editors/rstudio {
     jdk = jdk8;
   };
+
+  rstudio-server = rstudio.override { server = true; };
 
   rsync = callPackage ../applications/networking/sync/rsync (config.rsync or {});
   rrsync = callPackage ../applications/networking/sync/rsync/rrsync.nix {};
