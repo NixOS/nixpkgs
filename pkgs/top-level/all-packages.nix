@@ -18267,6 +18267,8 @@ in
 
   v4l-utils = qt5.callPackage ../os-specific/linux/v4l-utils { };
 
+  valo = callPackage ../os-specific/linux/valo { };
+
   vndr = callPackage ../development/tools/vndr { };
 
   windows = callPackages ../os-specific/windows {};
