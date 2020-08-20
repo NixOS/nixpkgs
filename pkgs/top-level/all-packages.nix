@@ -19829,7 +19829,7 @@ in
   emacsPackages = emacs26Packages;
   emacs-nox = emacs26-nox;
 
-  emacs26 = callPackage ../applications/editors/emacs {
+  emacs26 = callPackage ../applications/editors/emacs/26.nix {
     # use override to enable additional features
     libXaw = xorg.libXaw;
     Xaw3d = null;
