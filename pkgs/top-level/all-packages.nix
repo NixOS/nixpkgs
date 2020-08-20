@@ -2483,6 +2483,8 @@ in
 
   bogofilter = callPackage ../tools/misc/bogofilter { };
 
+  bomutils = callPackage ../tools/archivers/bomutils { };
+
   bsdbuild = callPackage ../development/tools/misc/bsdbuild { };
 
   bsdiff = callPackage ../tools/compression/bsdiff { };
