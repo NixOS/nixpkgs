@@ -1,6 +1,6 @@
 { stdenv, fetchPypi, isPy27, python, buildPythonPackage
 , numpy, hdf5, cython, six, pkgconfig, unittest2, fetchpatch
-, mpi4py ? null, openssh }:
+, mpi4py ? null, openssh, pytest }:
 
 assert hdf5.mpiSupport -> mpi4py != null && hdf5.mpi == mpi4py.mpi;
 
@@ -10,19 +10,14 @@ let
   mpi = hdf5.mpi;
   mpiSupport = hdf5.mpiSupport;
 in buildPythonPackage rec {
-  version = "2.9.0";
+  version = "2.10.0";
   pname = "h5py";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9d41ca62daf36d6b6515ab8765e4c8c4388ee18e2a665701fef2b41563821002";
+    sha256 = "84412798925dc870ffd7107f045d7659e60f5d46d1c70c700375248bf6bf512d";
   };
-
-  patches = [ ( fetchpatch {
-    # Skip a test that probes an already fixed bug in HDF5 (upstream patch)
-    url = "https://github.com/h5py/h5py/commit/141eafa531c6c09a06efe6a694251a1eea84908d.patch";
-    sha256 = "0lmdn0gznr7gadx7qkxybl945fvwk6r0cc4lg3ylpf8ril1975h8";
-  })];
 
   configure_flags = "--hdf5=${hdf5}" + optionalString mpiSupport " --mpi";
 
@@ -36,7 +31,7 @@ in buildPythonPackage rec {
 
   preBuild = if mpiSupport then "export CC=${mpi}/bin/mpicc" else "";
 
-  checkInputs = optional isPy27 unittest2 ++ [ openssh ];
+  checkInputs = optional isPy27 unittest2 ++ [ pytest openssh ];
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ hdf5 cython ]
     ++ optional mpiSupport mpi;
