@@ -5940,6 +5940,8 @@ in
 
   osl = callPackage ../development/compilers/osl { };
 
+  osqp = callPackage ../development/libraries/science/math/osqp { };
+
   ossec = callPackage ../tools/security/ossec {};
 
   osslsigncode = callPackage ../development/tools/osslsigncode {};
