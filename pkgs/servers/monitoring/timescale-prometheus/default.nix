@@ -16,6 +16,8 @@ buildGoModule rec {
 
   vendorSha256 = "sha256:0y5rq2y48kf2z1z3a8ags6rqzfvjs54klk2679fk8x0yjamj5x04";
 
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/timescale/timescale-prometheus/pkg/version.Version=${version} -X github.com/timescale/timescale-prometheus/pkg/version.CommitHash=${src.rev}" ];
+
   doCheck = false;
 
   meta = with stdenv.lib; {
