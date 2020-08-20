@@ -1,8 +1,10 @@
 { stdenv
 , buildPythonPackage
+, debugger
 , fetchPypi
 , isPy3k
 , Mako
+, makeWrapper
 , packaging
 , pysocks
 , pygments
@@ -58,10 +60,15 @@ buildPythonPackage rec {
 
   doCheck = false; # no setuptools tests for the package
 
+  postFixup = ''
+    mkdir -p "$out/bin"
+    makeWrapper "${debugger}/bin/${stdenv.lib.strings.getName debugger}" "$out/bin/pwntools-gdb"
+  '';
+
   meta = with stdenv.lib; {
     homepage = "http://pwntools.com";
     description = "CTF framework and exploit development library";
     license = licenses.mit;
-    maintainers = with maintainers; [ bennofs kristoff3r ];
+    maintainers = with maintainers; [ bennofs kristoff3r pamplemousse ];
   };
 }
