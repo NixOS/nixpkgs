@@ -13,6 +13,28 @@ in
       default = pkgs.matrix-corporal;
     };
 
+    authSharedSecretFile = lib.mkOption {
+      type = lib.types.str;
+      description = "a shared secret between matrix-corporal and the Shared Secret Authenticator password provider Synapse module that you need to set up";
+    };
+    registrationSharedSecretFile = lib.mkOption {
+      type = lib.types.str;
+      description = "the secret for Matrix Synapse's /admin/register API. Can be found in Matrix Synapse's homeserver.yaml file under the configuration key: registration_shared_secret";
+      default = "";
+    };
+    authorizationBearerTokenFile = lib.mkOption {
+      type = lib.types.str;
+      description = "a shared secret between matrix-corporal and your other remote system that will use its API";
+      default = "";
+    };
+
+    policyProviderHTTPPullAuthorizationBearerTokenFile = lib.mkOption {
+      type = lib.types.str;
+      description = "The shared secret that matrix-corporal will send the request with (the GET request will be sent with a header of Authorization: Bearer SOME_SECRET";
+      default = "";
+    };
+
+
     settings = lib.mkOption {
       default = {};
       type = lib.types.submodule {
@@ -76,6 +98,14 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.settings.PolicyProvider.Type != "http" -> cfg.policyProviderHTTPPullAuthorizationBearerTokenFile == "";
+        message = "policyProviderHTTPPullAuthorizationBearerTokenFile should only be set if using the HTTP Pull PolicyProvider";
+      }
+    ];
+
+
     services.matrix-corporal.settings = {
       Matrix.TimeoutMilliseconds = lib.mkDefault 45000;
       Reconciliation.RetryIntervalMilliseconds = lib.mkDefault 30000;
@@ -87,7 +117,18 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         DynamicUser = true;
-        ExecStart = "${cfg.package}/bin/devture-matrix-corporal -config ${matrix-corporal-config}";
+        StateDirectory = "matrix-corporal";
+        PreStart = ''
+          cat ${matrix-corporal-config} | \
+          jq --arg authSharedSecretFile $(cat ${cfg.authSharedSecretFile}) '.Matrix += {AuthSharedSecret: $authSharedSecretFile}' | \
+          jq --arg registrationSharedSecretFile $(cat ${cfg.registrationSharedSecretFile}) '.Matrix += {RegistrationSharedSecret: $registrationSharedSecretFile}' | \
+          jq --arg authorizationBearerTokenFile $(cat ${cfg.authorizationBearerTokenFile}) '.Matrix += {AuthorizationBearerToken: $authorizationBearerTokenFile}' | \
+          jq --arg authorizationBearerTokenFile $(cat ${cfg.authorizationBearerTokenFile}) '.HttpApi += {AuthorizationBearerToken: $authorizationBearerTokenFile}' | \
+          jq --arg authorizationBearerTokenFile $(cat ${cfg.authorizationBearerTokenFile}) '.HttpApi += {AuthorizationBearerToken: $authorizationBearerTokenFile}' > /var/lib/matrix-corporal/config.json
+        '';
+
+
+        ExecStart = "${cfg.package}/bin/devture-matrix-corporal -config /var/lib/matrix-corporal/config.json";
       };
     };
   };
