@@ -1,8 +1,8 @@
-{ lib, buildGoModule, fetchurl, fetchFromGitHub }:
+{ lib, buildGoModule, fetchurl, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "grafana";
-  version = "7.0.4";
+  version = "7.1.3";
 
   excludedPackages = [ "release_publisher" ];
 
@@ -10,17 +10,15 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "16vdbxq9vhv71jjk689xx0nn3qr4s5ybzbp41dm09pppvxzibpg7";
+    sha256 = "1acvvqsgwfrkqmbgzdxfa8shwmx7c91agaqv3gsfgpqkqwp3pnmh";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    sha256 = "1362rwmpv1y32w5m1fd9vqffs32244f0h7d5jm5cigiq2l7ix7n2";
+    sha256 = "0c72xmazr3rgiccrqcy02w30159vsq9d78dkqf5c2yjqn8zzwf98";
   };
 
-  vendorSha256 = "00xvpxhnvxdf030978paywl794mlmgqzd94b64hh67946acnbjcl";
-
-  doCheck = false;
+  vendorSha256 = "11zi7a4mqi80m5z4zcrc6wnzhgk6xnmzisrk2v4vpmfp33s732lz";
 
   postPatch = ''
     substituteInPlace pkg/cmd/grafana-server/main.go \
@@ -32,6 +30,8 @@ buildGoModule rec {
     mkdir -p $out/share/grafana
     mv grafana-*/{public,conf,tools} $out/share/grafana/
   '';
+
+  passthru.tests = { inherit (nixosTests) grafana; };
 
   meta = with lib; {
     description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";
