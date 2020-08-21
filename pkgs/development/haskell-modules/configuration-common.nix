@@ -1436,10 +1436,10 @@ self: super: {
     doCheck = false;
   });
 
-  # tests rely on `Int` being 64-bit: https://github.com/hspec/hspec/issues/431
-  hspec-core = let hspec-core = super.hspec-core.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_14_1; }); in
-               if pkgs.stdenv.isi686 then dontCheck hspec-core else hspec-core;
-  QuickCheck_2_14_1 = super.QuickCheck_2_14_1.override { splitmix = dontCheck super.splitmix_0_1_0_1; };
+  # Tests rely on `Int` being 64-bit: https://github.com/hspec/hspec/issues/431.
+  # Also, we need QuickCheck-2.14.x to build the test suite, which isn't easy in LTS-16.x.
+  # So let's not go there any just disable the tests altogether.
+  hspec-core = dontCheck super.hspec-core;
 
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 
