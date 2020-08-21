@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/Z3Prover/z3";
     license     = stdenv.lib.licenses.mit;
     platforms   = stdenv.lib.platforms.x86_64;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    maintainers = with stdenv.lib.maintainers; [ thoughtpolice ttuegel ];
   };
 }
