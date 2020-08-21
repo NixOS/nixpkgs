@@ -736,6 +736,13 @@ CREATE ROLE postgres LOGIN SUPERUSER;
      The USBGuard module now removes options and instead hardcodes values for <literal>IPCAccessControlFiles</literal>, <literal>ruleFiles</literal>, and <literal>auditFilePath</literal>. Audit logs can be found in the journal.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The NixOS module system now evaluates option definitions more strictly, allowing it to detect a larger set of problems.
+     As a result, what previously evaluated may not do so anymore.
+     See <link xlink:href="https://github.com/NixOS/nixpkgs/pull/82743#issuecomment-674520472">the PR that changed this</link> for more info.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
