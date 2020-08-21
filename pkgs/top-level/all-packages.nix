@@ -21758,6 +21758,7 @@ in
 
   ostinato = callPackage ../applications/networking/ostinato { };
 
+  p4 = callPackage ../applications/version-management/p4 { };
   p4v = libsForQt5.callPackage ../applications/version-management/p4v { };
 
   partio = callPackage ../development/libraries/partio {};
