@@ -123,5 +123,6 @@ buildGoPackage rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
+    broken = true; # 2020-08-22 https://hydra.nixos.org/build/125354866/nixlog/2
   };
 }
