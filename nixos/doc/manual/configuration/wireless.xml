@@ -6,9 +6,8 @@
  <title>Wireless Networks</title>
 
  <para>
-  For a desktop installation using NetworkManager (e.g., GNOME), you just have
-  to make sure the user is in the <code>networkmanager</code> group and you can
-  skip the rest of this section on wireless networks.
+  For a desktop installation using NetworkManager (e.g., GNOME) please see the
+  <link linkend="sec-networkmanager">NetworkManager section</link>.
  </para>
 
  <para>

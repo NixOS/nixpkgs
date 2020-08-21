@@ -30,7 +30,7 @@ with lib;
     # Use less privileged nixos user
     users.users.nixos = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "networkmanager" "video" ];
+      extraGroups = [ "wheel" "video" ];
       # Allow the graphical user to login without password
       initialHashedPassword = "";
     };

@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--with-systemd-suspend-resume"
     "--with-systemd-journal"
+    "--with-polkit=permissive"
   ];
 
   preCheck = ''
