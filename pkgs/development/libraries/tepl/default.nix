@@ -1,28 +1,39 @@
-{ stdenv, fetchurl
-, amtk, gnome3, gtk3, gtksourceview4, libuchardet, libxml2, pkgconfig }:
-let
-  version = "4.4.0";
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, amtk
+, gnome3
+, gobject-introspection
+, gtk3
+, gtksourceview4
+, icu
+, pkg-config
+}:
+
+stdenv.mkDerivation rec {
   pname = "tepl";
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  version = "5.0.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0mm2z849hnni7597an05mrv0dckrxjngpf2xfa0g5s17i8x6gxp6";
+    sha256 = "0x2s0ks575b57jdqnp9r9miz40pm705n2dlj2k8bfj1hyl22kgf6";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    meson
+    ninja
+    gobject-introspection
+    pkg-config
   ];
 
   buildInputs = [
-    libxml2
+    icu
   ];
 
   propagatedBuildInputs = [
     amtk
     gtksourceview4
-    libuchardet
     gtk3
   ];
 
@@ -38,8 +49,8 @@ in stdenv.mkDerivation {
   meta = with stdenv.lib; {
     homepage = "https://wiki.gnome.org/Projects/Tepl";
     description = "Text editor product line";
-    maintainers = [ maintainers.manveru ];
-    license = licenses.lgpl21Plus;
+    maintainers = teams.gnome.members ++ [ maintainers.manveru ];
+    license = licenses.lgpl3Plus;
     platforms = platforms.linux;
   };
 }
