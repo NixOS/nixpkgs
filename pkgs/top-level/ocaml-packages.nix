@@ -1221,7 +1221,7 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_4_11 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.11.nix { });
 
-  ocamlPackages_latest = ocamlPackages_4_10;
+  ocamlPackages_latest = ocamlPackages_4_11;
 
   ocamlPackages = ocamlPackages_4_10;
 }
