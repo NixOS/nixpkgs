@@ -3747,6 +3747,7 @@ broken-packages:
   - cgen
   - cgi-utils
   - cgrep
+  - chainweb-mining-client
   - chalkboard
   - chalkboard-viewer
   - charade
