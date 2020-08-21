@@ -27002,6 +27002,8 @@ in
 
   tilt = callPackage ../applications/networking/cluster/tilt {};
 
+  timeular = callPackage ../applications/office/timeular {};
+
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
   tewi-font = callPackage ../data/fonts/tewi
