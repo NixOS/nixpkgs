@@ -137,7 +137,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
    </listitem>
    <listitem>
     <para>
-     <varname>services.postfix.sslCACert</varname> was replaced by <varname>services.postfix.tlsTrustedAuthorities</varname> which now defaults to system certifcate authorities.
+     <varname>services.postfix.sslCACert</varname> was replaced by <varname>services.postfix.tlsTrustedAuthorities</varname> which now defaults to system certificate authorities.
     </para>
    </listitem>
    <listitem>
@@ -238,7 +238,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
      in the source tree for downloaded modules instead of using go's <link
      xlink:href="https://golang.org/cmd/go/#hdr-Module_proxy_protocol">module
      proxy protocol</link>. This storage format is simpler and therefore less
-     likekly to break with future versions of go. As a result
+     likely to break with future versions of go. As a result
      <literal>buildGoModule</literal> switched from
      <literal>modSha256</literal> to the <literal>vendorSha256</literal>
      attribute to pin fetched version data.
@@ -250,7 +250,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
      <link xlink:href="https://grafana.com/docs/grafana/latest/guides/whats-new-in-v6-4/">deprecated in Grafana</link>
      and the <package>phantomjs</package> project is
      <link xlink:href="https://github.com/ariya/phantomjs/issues/15344#issue-302015362">currently unmaintained</link>.
-     It can still be enabled by providing <literal>phantomJsSupport = true</literal> to the package instanciation:
+     It can still be enabled by providing <literal>phantomJsSupport = true</literal> to the package instantiation:
 <programlisting>{
   services.grafana.package = pkgs.grafana.overrideAttrs (oldAttrs: rec {
     phantomJsSupport = false;
@@ -262,7 +262,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
     <para>
       The <link linkend="opt-services.supybot.enable">supybot</link> module now uses <literal>/var/lib/supybot</literal>
       as its default <link linkend="opt-services.supybot.stateDir">stateDir</link> path if <literal>stateVersion</literal>
-      is 20.09 or higher. It also enables number of
+      is 20.09 or higher. It also enables a number of
       <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.exec.html#Sandboxing">systemd sandboxing options</link>
       which may possibly interfere with some plugins. If this is the case you can disable the options through attributes in
       <option>systemd.services.supybot.serviceConfig</option>.
