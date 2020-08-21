@@ -17,6 +17,7 @@ in {
   };
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [ pkgs.tailscale ]; # for the CLI
     systemd.services.tailscale = {
       description = "Tailscale client daemon";
 
