@@ -4828,6 +4828,11 @@ in
 
   kippo = callPackage ../servers/kippo { };
 
+  kimg = callPackage ../development/tools/misc/kimg {
+    asciidoc = asciidoc-full;
+    imagemagick = imagemagick7Big;
+  };
+  
   kristall = libsForQt5.callPackage ../applications/networking/browsers/kristall { };
 
   kzipmix = pkgsi686Linux.callPackage ../tools/compression/kzipmix { };
