@@ -7637,6 +7637,8 @@ in {
 
   pure-pcapy3 = callPackage ../development/python-modules/pure-pcapy3 { };
 
+  cucumber-tag-expressions = callPackage ../development/python-modules/cucumber-tag-expressions { };
+
   behave = callPackage ../development/python-modules/behave { };
 
   bellows = callPackage ../development/python-modules/bellows { };
