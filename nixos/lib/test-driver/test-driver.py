@@ -424,15 +424,18 @@ class Machine:
                 output += out
         return output
 
-    def fail(self, *commands: str) -> None:
+    def fail(self, *commands: str) -> str:
         """Execute each command and check that it fails."""
+        output = ""
         for command in commands:
             with self.nested("must fail: {}".format(command)):
-                status, output = self.execute(command)
+                (status, out) = self.execute(command)
                 if status == 0:
                     raise Exception(
                         "command `{}` unexpectedly succeeded".format(command)
                     )
+                output += out
+        return output
 
     def wait_until_succeeds(self, command: str) -> str:
         """Wait until a command returns success and return its output.
