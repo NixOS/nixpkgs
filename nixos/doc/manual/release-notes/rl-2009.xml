@@ -190,6 +190,11 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
 </programlisting>
     </para>
    </listitem>
+   <listitem>
+     <para>
+      The NixOS module system now supports freeform modules as a mix between <literal>types.attrsOf</literal> and <literal>types.submodule</literal>. These allow you to explicitly declare a subset of options while still permitting definitions without an associated option. See <xref linkend='sec-freeform-modules'/> for how to use them.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
