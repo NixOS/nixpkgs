@@ -1,29 +1,56 @@
-{ stdenv, meson, fetchurl, python3
-, pkgconfig, gtk3, glib, adwaita-icon-theme
-, libpeas, gtksourceview4, gsettings-desktop-schemas
-, wrapGAppsHook, ninja, libsoup, tepl
-, gnome3, gspell, perl, itstool, desktop-file-utils
+{ stdenv
+, meson
+, fetchurl
+, python3
+, pkgconfig
+, gtk3
+, glib
+, adwaita-icon-theme
+, libpeas
+, gtksourceview4
+, gsettings-desktop-schemas
+, wrapGAppsHook
+, ninja
+, libsoup
+, tepl
+, gnome3
+, gspell
+, perl
+, itstool
+, desktop-file-utils
+, vala
 }:
 
 stdenv.mkDerivation rec {
   pname = "gedit";
-  version = "3.36.2";
+  version = "3.38.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gedit/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "15s1almlhjlgl3m8lxg6jpzln8jhgdxxjr635a3b7cf58d35b1v8";
+    sha256 = "1y2n3325qvfiaz526vdf7l5wbh5js25djkz3jmg6x3z5dn00dks6";
   };
 
   nativeBuildInputs = [
-    pkgconfig wrapGAppsHook meson ninja
-    python3 perl itstool desktop-file-utils
+    desktop-file-utils
+    itstool
+    meson
+    ninja
+    perl
+    pkgconfig
+    python3
+    vala
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    gtk3 glib
-    adwaita-icon-theme libsoup
-    libpeas gtksourceview4
-    gsettings-desktop-schemas gspell
+    adwaita-icon-theme
+    glib
+    gsettings-desktop-schemas
+    gspell
+    gtk3
+    gtksourceview4
+    libpeas
+    libsoup
     tepl
   ];
 
