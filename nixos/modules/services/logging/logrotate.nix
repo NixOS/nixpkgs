@@ -108,7 +108,7 @@ in
         default = {};
         description = ''
           Attribute set of paths to rotate. The order each block appears in the generated configuration file
-          can be controlled by the <link linkend="opt-services.logrotate._name_.priority">priority</link> option
+          can be controlled by the <link linkend="opt-services.logrotate.paths._name_.priority">priority</link> option
           using the same semantics as `lib.mkOrder`. Smaller values have a greater priority.
         '';
         example = literalExample ''
