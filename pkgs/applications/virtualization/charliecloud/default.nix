@@ -1,34 +1,30 @@
-{ stdenv, fetchFromGitHub, python }:
+{ stdenv, fetchFromGitHub, python, autoconf, automake, docker, buildah }:
 
 stdenv.mkDerivation rec {
 
-  version = "0.12";
+  version = "0.18";
   pname = "charliecloud";
 
   src = fetchFromGitHub {
     owner = "hpc";
     repo = "charliecloud";
     rev = "v${version}";
-    sha256 = "177rcf1klcxsp6x9cw75cmz3y2izgd1hvi1rb9vc6iz9qx1nmk3v";
+    sha256 = "0x2kvp95ld0yii93z9i0k9sknfx7jkgy4rkw9l369fl7f73ghsiq";
   };
 
-  buildInputs = [ python ];
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ python docker buildah ];
 
   preConfigure = ''
-    substituteInPlace Makefile --replace '/bin/bash' '${stdenv.shell}'
     patchShebangs test/
+    patchShebangs autogen.sh
+    ./autogen.sh
   '';
 
   makeFlags = [
     "PREFIX=$(out)"
     "LIBEXEC_DIR=lib/charliecloud"
   ];
-
-  postInstall = ''
-    mkdir -p $out/share/charliecloud
-    mv $out/lib/charliecloud/examples $out/share/charliecloud
-    mv $out/lib/charliecloud/test $out/share/charliecloud
-  '';
 
   meta = {
     description = "User-defined software stacks (UDSS) for high-performance computing (HPC) centers";
