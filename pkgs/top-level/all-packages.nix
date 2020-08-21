@@ -21053,7 +21053,7 @@ in
   inherit (kdeApplications)
     akonadi akregator ark bomber bovo dolphin dragon elisa ffmpegthumbs filelight granatier gwenview k3b
     kaddressbook kalzium kapptemplate kapman kate katomic kblackbox kblocks kbounce kcachegrind kcalc kcharselect kcolorchooser kdenlive kdf kdialog kdiamond
-    keditbookmarks kfind kfloppy kget kgpg khelpcenter kig kigo killbots kleopatra klettres klines kmag kmail kmines kmix kmplot knetwalk kolourpaint kompare konsole yakuake
+    keditbookmarks kfind kfloppy kget kgpg khelpcenter kig kigo killbots kleopatra klettres klines kmag kmail kmines kmix kmplot knavalbattle knetwalk kolourpaint kompare konsole yakuake
     kpkpass kitinerary kontact korganizer krdc kreversi krfb ksquares ksystemlog ktouch kturtle kwalletmanager kwave marble minuet okular picmi spectacle;
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
