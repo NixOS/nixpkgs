@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "utf8proc";
@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "1xlkazhdnja4lksn5c9nf4bln5gjqa35a8gwlam5r0728w0h83qq";
   };
 
-  makeFlags = [ "prefix=$(out)" ];
+  nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+  ];
 
   meta = with stdenv.lib; {
     description = "A clean C library for processing UTF-8 Unicode data";
