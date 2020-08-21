@@ -975,18 +975,24 @@ in
         message = ''
           Temporary addresses are only needed when IPv6 is enabled.
         '';
-      })) ++ [
-        {
-          assertion = cfg.useDHCP -> cfg.bridges == {};
+      })) ++ [(
+        let
+          bridgesWithUnsetDCHP = builtins.filter (br:
+            (!builtins.hasAttr br cfg.interfaces)
+            || cfg.interfaces.${br}.useDHCP == null
+          ) (builtins.attrNames cfg.bridges);
+        in {
+          assertion = cfg.useDHCP -> (length bridgesWithUnsetDCHP == 0);
           message = ''
-            There are the bridges [ ${builtins.toString (builtins.attrNames cfg.bridges)} ] configured while `networking.useDHCP` is enabled.
-            dhcpcd doesn't give IPv4 addresses to bridges by default anymore,
-            so you have to set `networking.useDHCP = false` and then whitelist
-            every interface you need DHCP on with
-            `networking.interfaces.<name?>.useDHCP = true`.
+            The bridges [ ${builtins.toString bridgesWithUnsetDCHP} ] have no explicit `useDHCP` option
+            set while `networking.useDHCP` is enabled.
+
+            dhcpcd changed its behaviour by not assigning IPv4 addresses to bridges by default anymore.
+            To ensure all bridges keep working as you intended, you must explitly set `useDHCP` like this:
+            `networking.interfaces.<bridgeName?>.useDHCP = true/false`.
           '';
         }
-      ] ++ [
+      )] ++ [
         {
           assertion = cfg.hostId == null || (stringLength cfg.hostId == 8 && isHexString cfg.hostId);
           message = "Invalid value given to the networking.hostId option.";
