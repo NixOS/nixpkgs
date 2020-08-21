@@ -8,7 +8,7 @@ let
     { callPackage, lib, stdenv, nixosTests, config, fetchurl, makeWrapper
     , symlinkJoin, writeText, autoconf, automake, bison, flex, libtool
     , pkgconfig, re2c, apacheHttpd, libargon2, libxml2, pcre, pcre2
-    , systemd, valgrind, xcbuild
+    , systemd, system-sendmail, valgrind, xcbuild
 
     , version
     , sha256
@@ -195,6 +195,10 @@ let
             ++ lib.optional systemdSupport "--with-fpm-systemd"
             ++ lib.optional valgrindSupport "--with-valgrind=${valgrind.dev}"
             ++ lib.optional ztsSupport "--enable-maintainer-zts"
+
+
+            # Sendmail
+            ++ [ "PROG_SENDMAIL=${system-sendmail}/bin/sendmail" ]
           ;
 
           hardeningDisable = [ "bindnow" ];
