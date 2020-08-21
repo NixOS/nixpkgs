@@ -1,5 +1,5 @@
 { stdenv, buildEnv, lib, fetchFromGitHub, cmake, writeScriptBin
-, perl, XMLLibXML, XMLLibXSLT, zlib
+, perl, XMLLibXML, XMLLibXSLT, zlib, ruby
 , enableStoneSense ? false,  allegro5, libGLU, libGL
 , enableTWBT ? true, twbt
 , SDL
@@ -139,6 +139,12 @@ let
 
     cmakeFlags = [ "-DDFHACK_BUILD_ARCH=${arch}" "-DDOWNLOAD_RUBY=OFF" ]
               ++ lib.optionals enableStoneSense [ "-DBUILD_STONESENSE=ON" "-DSTONESENSE_INTERNAL_SO=OFF" ];
+
+    # dfhack expects an unversioned libruby.so to be present in the hack
+    # subdirectory for ruby plugins to function.
+    postInstall = ''
+      ln -s ${ruby}/lib/libruby-*.so $out/hack/libruby.so
+    '';
 
     enableParallelBuilding = true;
   };
