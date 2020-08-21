@@ -60,15 +60,17 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
+  # Remove clinfo, which is already provided through the
+  # `clinfo` package.
+  postInstall = ''
+    rm -rf $out/bin
+  '';
+
   # Fix the ICD installation path for NixOS
   postPatch = ''
     substituteInPlace khronos/icd/loader/linux/icd_linux.c \
       --replace 'ICD_VENDOR_PATH' '"${addOpenGLRunpath.driverLink}/etc/OpenCL/vendors/"'
     echo 'add_dependencies(amdocl64 OpenCL)' >> amdocl/CMakeLists.txt
-  '';
-
-  preFixup = ''
-    patchelf --set-rpath "$out/lib" $out/bin/clinfo
   '';
 
   meta = with stdenv.lib; {
