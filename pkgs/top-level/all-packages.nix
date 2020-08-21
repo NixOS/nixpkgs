@@ -16958,11 +16958,11 @@ in
     server = server-pgsql;
   };
 
-  zabbix44 = recurseIntoAttrs (zabbixFor "v44");
+  zabbix50 = recurseIntoAttrs (zabbixFor "v50");
   zabbix40 = dontRecurseIntoAttrs (zabbixFor "v40");
   zabbix30 = dontRecurseIntoAttrs (zabbixFor "v30");
 
-  zabbix = zabbix44;
+  zabbix = zabbix50;
 
   zipkin = callPackage ../servers/monitoring/zipkin { };
 

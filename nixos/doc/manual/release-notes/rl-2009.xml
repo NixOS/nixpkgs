@@ -156,6 +156,40 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
        Support for built-in LCDs in various pieces of Logitech hardware (keyboards and USB speakers). <varname>hardware.logitech.lcd.enable</varname> enables support for all hardware supported by the g15daemon project.
      </para>
    </listitem>
+   <listitem>
+    <para>
+      Zabbix now defaults to 5.0, updated from 4.4. Please carefully read through
+      <link xlink:href="https://www.zabbix.com/documentation/current/manual/installation/upgrade/sources">the upgrade guide</link>
+      and apply any changes required. Be sure to take special note of the section on
+      <link xlink:href="https://www.zabbix.com/documentation/current/manual/installation/upgrade_notes_500#enabling_extended_range_of_numeric_float_values">enabling extended range of numeric (float) values</link>
+      as you will need to apply this database migration manually.
+    </para>
+    <para>
+      If you are using Zabbix Server with a MySQL or MariaDB database you should note that using a character set of <literal>utf8</literal> and a collate of <literal>utf8_bin</literal> has become mandatory with
+      this release. See the upstream <link xlink:href="https://support.zabbix.com/browse/ZBX-17357">issue</link> for further discussion. Before upgrading you should check the character set and collation used by
+      your database and ensure they are correct:
+<programlisting>
+  SELECT
+    default_character_set_name,
+    default_collation_name
+  FROM
+    information_schema.schemata
+  WHERE
+    schema_name = 'zabbix';
+</programlisting>
+      If these values are not correct you should take a backup of your database and convert the character set and collation as required. Here is an
+      <link xlink:href="https://www.zabbix.com/forum/zabbix-help/396573-reinstall-after-upgrade?p=396891#post396891">example</link> of how to do so, taken from
+      the Zabbix forums:
+<programlisting>
+  ALTER DATABASE `zabbix` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
+
+  -- the following will produce a list of SQL commands you should subsequently execute
+  SELECT CONCAT("ALTER TABLE ", TABLE_NAME," CONVERT TO CHARACTER SET utf8 COLLATE utf8_bin;") AS ExecuteTheString
+  FROM information_schema.`COLUMNS`
+  WHERE table_schema = "zabbix" AND COLLATION_NAME = "utf8_general_ci";
+</programlisting>
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
