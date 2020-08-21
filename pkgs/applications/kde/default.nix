@@ -149,6 +149,7 @@ let
       kmplot = callPackage ./kmplot.nix {};
       knavalbattle = callPackage ./knavalbattle.nix {};
       knetwalk = callPackage ./knetwalk.nix {};
+      knights = callPackage ./knights.nix {};
       knotes = callPackage ./knotes.nix {};
       kolf = callPackage ./kolf.nix {};
       kolourpaint = callPackage ./kolourpaint.nix {};
