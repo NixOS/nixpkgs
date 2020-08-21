@@ -1,29 +1,71 @@
-{ stdenv, fetchurl, meson, ninja, gettext, python3, pkgconfig, gnome3, gtk3
-, gobject-introspection, gdk-pixbuf, librsvg, libgweather
-, geoclue2, wrapGAppsHook, folks, libchamplain, gfbgraph, libsoup, gsettings-desktop-schemas
-, webkitgtk, gjs, libgee, geocode-glib, evolution-data-server, gnome-online-accounts }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, gettext
+, python3
+, pkgconfig
+, gnome3
+, gtk3
+, gobject-introspection
+, gdk-pixbuf
+, librsvg
+, libgweather
+, geoclue2
+, wrapGAppsHook
+, folks
+, libchamplain
+, gfbgraph
+, libsoup
+, gsettings-desktop-schemas
+, webkitgtk
+, gjs
+, libgee
+, libhandy
+, geocode-glib
+, evolution-data-server
+, gnome-online-accounts
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "gnome-maps";
-  version = "3.36.4";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.38.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1ila7li9yi4lyjc84a787qr33wr7ayppphxn451jzg410pfcamhz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "16bzv7qzwbd2av09k1pbhshmj984dkn6y7xzhc16316hxd086xam";
   };
 
   doCheck = true;
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext python3 wrapGAppsHook ];
+  nativeBuildInputs = [
+    gettext
+    meson
+    ninja
+    pkgconfig
+    python3
+    wrapGAppsHook
+  ];
+
   buildInputs = [
+    evolution-data-server
+    folks
+    gdk-pixbuf
+    geoclue2
+    geocode-glib
+    gfbgraph
+    gjs
+    gnome-online-accounts
+    gnome3.adwaita-icon-theme
     gobject-introspection
-    gtk3 geoclue2 gjs libgee folks gfbgraph
-    geocode-glib libchamplain libsoup
-    gdk-pixbuf librsvg libgweather
-    gsettings-desktop-schemas evolution-data-server
-    gnome-online-accounts gnome3.adwaita-icon-theme
+    gsettings-desktop-schemas
+    gtk3
+    libchamplain
+    libgee
+    libgweather
+    libhandy
+    librsvg
+    libsoup
     webkitgtk
   ];
 
