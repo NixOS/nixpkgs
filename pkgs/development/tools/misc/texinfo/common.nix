@@ -12,7 +12,7 @@
 # files.
 
 let
-  crossBuildTools = interactive && stdenv.hostPlatform != stdenv.buildPlatform;
+  crossBuildTools = stdenv.hostPlatform != stdenv.buildPlatform;
 in
 
 with stdenv.lib;
