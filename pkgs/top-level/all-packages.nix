@@ -26194,6 +26194,8 @@ in
 
   clinfo = callPackage ../tools/system/clinfo { };
 
+  clpeak = callPackage ../tools/misc/clpeak { };
+
   cups = callPackage ../misc/cups { };
 
   cups-filters = callPackage ../misc/cups/filters.nix { };
