@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgs }:
+{ stdenv, fetchurl, makeWrapper, coreutils, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "pipes";
@@ -9,11 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "09m4alb3clp3rhnqga5v6070p7n1gmnwp2ssqhq87nf2ipfpcaak";
   };
 
-  buildInputs = with pkgs; [ bash ];
+  buildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir $out -p
     make PREFIX=$out/ install
+
+    wrapProgram $out/bin/pipes.sh \
+      --set PATH "${stdenv.lib.makeBinPath [ coreutils ncurses ]}"
   '';
 
   meta = with stdenv.lib; {
