@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub }: stdenv.mkDerivation rec {
   pname = "tt-rss-theme-feedly";
-  version = "2.3.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "levito";
     repo = "tt-rss-feedly-theme";
     rev = "v${version}";
-    sha256 = "0rl5g664grx3m7yxa14rgnbvnlc3xnn44kzjji5layxww6jd8h2s";
+    sha256 = "sha256-wZ6Q4cxvJKot1TWE8tOVZeaaeBSXghmkYkOK9GjAnEM=";
   };
 
   dontBuild = true;
