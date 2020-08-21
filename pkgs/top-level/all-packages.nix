@@ -16370,6 +16370,8 @@ in
     asterisk asterisk-stable asterisk-lts
     asterisk_13 asterisk_15 asterisk_16;
 
+  asterisk-module-sccp = callPackage ../servers/asterisk/sccp { };
+
   sabnzbd = callPackage ../servers/sabnzbd { };
 
   bftpd = callPackage ../servers/ftp/bftpd {};
