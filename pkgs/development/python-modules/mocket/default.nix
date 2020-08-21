@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.8.7";
+  version = "3.8.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zj2p20blf4p071kcs86h2c9sc964x6sahff60gg7y4d2c0iq3rs";
+    sha256 = "0yqls2hqmfs6i4p2nb89j5icyrqwabalsmwfixfvbjir4fmgad2l";
   };
 
   patchPhase = ''
