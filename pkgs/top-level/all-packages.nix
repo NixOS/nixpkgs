@@ -935,6 +935,8 @@ in
 
   codespell = with python3Packages; toPythonApplication codespell;
 
+  coolreader = libsForQt5.callPackage ../applications/misc/coolreader {};
+
   cozy = callPackage ../applications/audio/cozy-audiobooks { };
 
   ctrtool = callPackage ../tools/archivers/ctrtool { };
