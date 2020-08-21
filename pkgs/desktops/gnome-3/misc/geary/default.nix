@@ -1,33 +1,98 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, vala, enchant2, wrapGAppsHook, meson, ninja
-, desktop-file-utils, gnome-online-accounts, gsettings-desktop-schemas, adwaita-icon-theme
-, libpeas, libsecret, gmime3, isocodes, libxml2, gettext, fetchpatch
-, sqlite, gcr, json-glib, itstool, libgee, gnome3, webkitgtk, python3
-, xvfb_run, dbus, shared-mime-info, libunwind, folks, glib-networking
-, gobject-introspection, gspell, appstream-glib, libytnef, libhandy }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, gtk3
+, vala
+, enchant2
+, wrapGAppsHook
+, meson
+, ninja
+, desktop-file-utils
+, gnome-online-accounts
+, gsettings-desktop-schemas
+, adwaita-icon-theme
+, libpeas
+, libsecret
+, gmime3
+, isocodes
+, libxml2
+, gettext
+, sqlite
+, gcr
+, json-glib
+, itstool
+, libgee
+, gnome3
+, webkitgtk
+, python3
+, xvfb_run
+, dbus
+, shared-mime-info
+, libunwind
+, folks
+, glib-networking
+, gobject-introspection
+, gspell
+, appstream-glib
+, libytnef
+, libhandy
+, glade
+, gsound
+}:
 
 stdenv.mkDerivation rec {
   pname = "geary";
-  version = "3.36.2";
+  version = "3.38.0.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "09l2lbcn3ar3scw6iylmdqi1lhpb408iqs6056d0wzx2l9nkmqis";
+    sha256 = "0xbhzjn6sp9qj0iqfgq4q25is3wgjz1c090i8y60azgi9hyjkh79";
   };
 
   nativeBuildInputs = [
-    desktop-file-utils gettext itstool libxml2 meson ninja
-    pkgconfig vala wrapGAppsHook python3 appstream-glib
+    appstream-glib
+    desktop-file-utils
+    gettext
     gobject-introspection
+    itstool
+    libxml2
+    meson
+    ninja
+    pkgconfig
+    python3
+    vala
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    adwaita-icon-theme enchant2 gcr gmime3 gnome-online-accounts
-    gsettings-desktop-schemas gtk3 isocodes json-glib libpeas
-    libgee libsecret sqlite webkitgtk glib-networking
-    libunwind folks gspell libytnef libhandy
+    adwaita-icon-theme
+    enchant2
+    folks
+    gcr
+    glade
+    glib-networking
+    gmime3
+    gnome-online-accounts
+    gsettings-desktop-schemas
+    gsound
+    gspell
+    gtk3
+    isocodes
+    json-glib
+    libgee
+    libhandy
+    libpeas
+    libsecret
+    libunwind
+    libytnef
+    sqlite
+    webkitgtk
   ];
 
-  checkInputs = [ xvfb_run dbus ];
+  checkInputs = [
+    dbus
+    xvfb_run
+  ];
 
   mesonFlags = [
     "-Dcontractor=true" # install the contractor file (Pantheon specific)
@@ -35,10 +100,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Longer timeout for client test.
-    (fetchpatch {
-      url = "https://salsa.debian.org/gnome-team/geary/raw/04be1e058a2e65075dd8cf8843d469ee45a9e09a/debian/patches/Bump-client-test-timeout-to-300s.patch";
-      sha256 = "1zvnq8bgla160531bjdra8hcg15mp8r1j1n53m1xfgm0ssnj5knx";
-    })
+    ./Bump-client-test-timeout-to-300s.patch
   ];
 
   # NOTE: Remove `build-auxyaml_to_json.py` when no longer needed, see:
