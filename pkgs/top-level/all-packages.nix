@@ -20624,7 +20624,9 @@ in
 
   gv = callPackage ../applications/misc/gv { };
 
-  gvisor = callPackage ../applications/virtualization/gvisor { };
+  gvisor = callPackage ../applications/virtualization/gvisor {
+    go = go_1_14;
+  };
 
   gvisor-containerd-shim = callPackage ../applications/virtualization/gvisor/containerd-shim.nix { };
 
