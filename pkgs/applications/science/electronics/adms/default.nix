@@ -2,14 +2,14 @@
   libxml2, perl, perlPackages, gd }:
 
 stdenv.mkDerivation rec {
-  version = "2.3.6";
+  version = "2.3.7";
   pname = "adms";
 
   src = fetchFromGitHub {
     owner = "Qucs";
     repo = "adms";
     rev = "release-${version}";
-    sha256 = "1pcwq5khzdq4x33lid9hq967gv78dr5i4f2sk8m8rwkfqb9vdzrg";
+    sha256 = "0i37c9k6q1iglmzp9736rrgsnx7sw8xn3djqbbjw29zsyl3pf62c";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
