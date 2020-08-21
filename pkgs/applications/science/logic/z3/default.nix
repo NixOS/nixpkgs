@@ -10,13 +10,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "z3";
-  version = "4.8.7";
+  version = "4.8.8";
 
   src = fetchFromGitHub {
     owner  = "Z3Prover";
     repo   = pname;
     rev    = "z3-${version}";
-    sha256 = "0hprcdwhhyjigmhhk6514m71bnmvqci9r8gglrqilgx424r6ff7q";
+    sha256 = "1rn538ghqwxq0v8i6578j8mflk6fyv0cp4hjfqynzvinjbps56da";
   };
 
   buildInputs = [ python fixDarwinDylibNames ] ++ optional javaBindings jdk;
