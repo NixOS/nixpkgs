@@ -1,5 +1,5 @@
 { stdenv, fetchurl, gtk3
-, pkgconfig, gnome3, dbus, xvfb_run }:
+, pkgconfig, gobject-introspection, gnome3, dbus, xvfb_run }:
 let
   version = "5.1.1";
   pname = "amtk";
@@ -14,6 +14,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [
     pkgconfig
     dbus
+    gobject-introspection
   ];
 
   buildInputs = [
