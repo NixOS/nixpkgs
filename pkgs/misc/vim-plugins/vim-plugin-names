@@ -83,7 +83,7 @@ digitaltoad/vim-pug
 direnv/direnv.vim
 dleonard0/pony-vim-syntax
 dmix/elvish.vim
-dracula/vim
+dracula/vim as dracula-vim
 drewtempelmeyer/palenight.vim
 drmingdrmer/xptemplate
 dylanaraps/wal.vim
