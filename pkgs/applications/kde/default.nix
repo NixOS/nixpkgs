@@ -116,6 +116,7 @@ let
       kdepim-apps-libs = callPackage ./kdepim-apps-libs {};
       kdf = callPackage ./kdf.nix {};
       kdialog = callPackage ./kdialog.nix {};
+      kdiamond = callPackage ./kdiamond.nix {};
       keditbookmarks = callPackage ./keditbookmarks.nix {};
       kfind = callPackage ./kfind.nix {};
       kfloppy = callPackage ./kfloppy.nix {};
