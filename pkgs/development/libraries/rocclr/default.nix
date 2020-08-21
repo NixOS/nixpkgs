@@ -10,24 +10,25 @@
 , libelf
 , libglvnd
 , libX11
+, numactl
 }:
 
 stdenv.mkDerivation rec {
   pname = "rocclr";
-  version = "3.5.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "ROCclr";
-    rev = "roc-${version}";
-    sha256 = "0j70lxpwrdrb1v4lbcyzk7kilw62ip4py9fj149d8k3x5x6wkji1";
+    rev = "rocm-${version}";
+    sha256 = "0sx4irbmjgs5bm8dc8jc9fl1jmfdnrp3ar14hdhrsmbani7gqah3";
   };
 
   nativeBuildInputs = [ cmake rocm-cmake ];
 
   buildInputs = [ clang rocm-comgr rocm-runtime rocm-thunk ];
 
-  propagatedBuildInputs = [ libelf libglvnd libX11 ];
+  propagatedBuildInputs = [ libelf libglvnd libX11 numactl ];
 
   prePatch = ''
     substituteInPlace CMakeLists.txt \
@@ -45,10 +46,9 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    mv $out/include/include/* $out/include
-    ln -s $out/include/compiler/lib/include/* $out/include/include
     ln -s $out/include/compiler/lib/include/* $out/include
-    sed "s|^\([[:space:]]*IMPORTED_LOCATION_RELEASE \).*|\1 \"$out/lib/libamdrocclr_static.a\"|" -i $out/lib/cmake/amdrocclr_staticTargets.cmake
+    substituteInPlace $out/lib/cmake/rocclr/ROCclrConfig.cmake \
+      --replace "/build/source/build" "$out"
   '';
 
   meta = with stdenv.lib; {
