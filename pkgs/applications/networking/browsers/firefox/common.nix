@@ -108,7 +108,7 @@ stdenv.mkDerivation ({
     dbus dbus-glib pango freetype fontconfig xorg.libXi xorg.libXcursor
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
     libnotify xorg.pixman yasm libGLU libGL
-    xorg.libXScrnSaver xorg.xorgproto
+    xorg.xorgproto
     xorg.libXext unzip makeWrapper
     libevent libstartup_notification /* cairo */
     libpng jemalloc glib
@@ -277,6 +277,7 @@ stdenv.mkDerivation ({
     patchelf --set-rpath "${lib.getLib libnotify
       }/lib:$(patchelf --print-rpath "$out"/lib/${binaryName}*/libxul.so)" \
         "$out"/lib/${binaryName}*/libxul.so
+    patchelf --add-needed ${xorg.libXScrnSaver.out}/lib/libXss.so $out/lib/${binaryName}/${binaryName}
   '';
 
   doInstallCheck = true;
