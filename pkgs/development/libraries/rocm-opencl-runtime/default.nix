@@ -5,7 +5,8 @@
 , rocm-cmake
 , clang
 , clang-unwrapped
-, libGLU
+, glew
+, libglvnd
 , libX11
 , lld
 , llvm
@@ -18,20 +19,15 @@
 , rocm-thunk
 }:
 
-let
-  version = "3.5.0";
-  tag = "roc-${version}";
-in stdenv.mkDerivation rec {
-  inherit version;
-
+stdenv.mkDerivation rec {
   pname = "rocm-opencl-runtime";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-OpenCL-Runtime";
-    rev = tag;
-    sha256 = "1wrr6mmn4gf6i0vxp4yqk0ny2wglvj1jfj50il8czjwy0cwmhykk";
-    name = "ROCm-OpenCL-Runtime-${tag}-src";
+    rev = "rocm-${version}";
+    sha256 = "15rz11a8qwvxmd0kkaikj04q1glfg9sgqqblcqp3iahr3by8z0wd";
   };
 
   nativeBuildInputs = [ cmake rocm-cmake ];
@@ -39,7 +35,8 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     clang
     clang-unwrapped
-    libGLU
+    glew
+    libglvnd
     libX11
     lld
     llvm
