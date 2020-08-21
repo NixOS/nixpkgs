@@ -12,8 +12,7 @@ buildDunePackage rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 ];
-  propagatedBuildInputs = [ cairo2 ];
+  propagatedBuildInputs = [ gtk3 cairo2 ];
 
   meta = {
     description = "OCaml interface to GTK 3";
