@@ -1,21 +1,38 @@
-{ stdenv, fetchurl
-, amtk, gnome3, gtk3, gtksourceview4, libuchardet, libxml2, pkgconfig }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, amtk
+, gnome3
+, gobject-introspection
+, gtk3
+, gtksourceview4
+, icu
+, libuchardet
+, libxml2
+, pkg-config
+}:
 let
-  version = "4.4.0";
+  version = "4.99.3";
   pname = "tepl";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0mm2z849hnni7597an05mrv0dckrxjngpf2xfa0g5s17i8x6gxp6";
+    sha256 = "0mribr59n2isf1is6n849g3xpwmxm71xj1npaap30m8cy0sfdbz4";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    meson
+    ninja
+    gobject-introspection
+    pkg-config
   ];
 
   buildInputs = [
+    icu
     libxml2
   ];
 
