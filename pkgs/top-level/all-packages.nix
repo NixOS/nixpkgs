@@ -900,6 +900,8 @@ in
 
   calls = callPackage ../applications/networking/calls { };
 
+  inherit (nodePackages) castnow;
+
   certigo = callPackage ../tools/admin/certigo { };
 
   catcli = python3Packages.callPackage ../tools/filesystems/catcli { };
@@ -2497,6 +2499,8 @@ in
   bmrsa = callPackage ../tools/security/bmrsa/11.nix { };
 
   bogofilter = callPackage ../tools/misc/bogofilter { };
+
+  bomutils = callPackage ../tools/archivers/bomutils { };
 
   bsdbuild = callPackage ../development/tools/misc/bsdbuild { };
 
@@ -9303,7 +9307,9 @@ in
 
   mosml = callPackage ../development/compilers/mosml { };
 
-  mozart2 = callPackage ../development/compilers/mozart { };
+  mozart2 = callPackage ../development/compilers/mozart {
+    emacs = emacs-nox;
+  };
 
   mozart2-binary = callPackage ../development/compilers/mozart/binary.nix { };
 
@@ -11506,6 +11512,8 @@ in
   xpwn = callPackage ../development/mobile/xpwn {};
 
   xxdiff = libsForQt5.callPackage ../development/tools/misc/xxdiff { };
+
+  xxe-pe = callPackage ../applications/editors/xxe-pe { };
 
   xxdiff-tip = xxdiff;
 
@@ -19864,7 +19872,7 @@ in
 
   electrum-dash = callPackage ../applications/misc/electrum/dash.nix { };
 
-  electrum-ltc = callPackage ../applications/misc/electrum/ltc.nix { };
+  electrum-ltc = libsForQt5.callPackage ../applications/misc/electrum/ltc.nix { };
 
   elementary-planner = callPackage ../applications/office/elementary-planner { };
 
@@ -19872,11 +19880,31 @@ in
 
   elvis = callPackage ../applications/editors/elvis { };
 
-  emacs = emacs26;
-  emacsPackages = emacs26Packages;
-  emacs-nox = emacs26-nox;
+  emacs = emacs27;
+  emacsPackages = emacs27Packages;
+  emacs-nox = emacs27-nox;
+  emacsWithPackages = emacsPackages.emacsWithPackages;
 
-  emacs26 = callPackage ../applications/editors/emacs {
+  emacs27 = callPackage ../applications/editors/emacs/27.nix {
+    # use override to enable additional features
+    libXaw = xorg.libXaw;
+    Xaw3d = null;
+    gconf = null;
+    alsaLib = null;
+    imagemagick = null;
+    acl = null;
+    gpm = null;
+    inherit (darwin.apple_sdk.frameworks) AppKit GSS ImageIO;
+  };
+
+  emacs27-nox = lowPrio (appendToName "nox" (emacs27.override {
+    withX = false;
+    withNS = false;
+    withGTK2 = false;
+    withGTK3 = false;
+  }));
+
+  emacs26 = callPackage ../applications/editors/emacs/26.nix {
     # use override to enable additional features
     libXaw = xorg.libXaw;
     Xaw3d = null;
@@ -19891,24 +19919,6 @@ in
   emacs26-nox = lowPrio (appendToName "nox" (emacs26.override {
     withX = false;
     withNS = false;
-    withGTK2 = false;
-    withGTK3 = false;
-  }));
-
-  emacs25 = callPackage ../applications/editors/emacs/25.nix {
-    # use override to enable additional features
-    libXaw = xorg.libXaw;
-    Xaw3d = null;
-    gconf = null;
-    alsaLib = null;
-    imagemagick = null;
-    acl = null;
-    gpm = null;
-    inherit (darwin.apple_sdk.frameworks) AppKit GSS ImageIO;
-  };
-
-  emacs25-nox = lowPrio (appendToName "nox" (emacs25.override {
-    withX = false;
     withGTK2 = false;
     withGTK3 = false;
   }));
@@ -19944,12 +19954,10 @@ in
     };
   };
 
-  emacs25Packages = dontRecurseIntoAttrs (emacsPackagesFor emacs25);
   emacs26Packages = dontRecurseIntoAttrs (emacsPackagesFor emacs26);
-
-  emacs25WithPackages = emacs25Packages.emacsWithPackages;
+  emacs27Packages = dontRecurseIntoAttrs (emacsPackagesFor emacs27);
   emacs26WithPackages = emacs26Packages.emacsWithPackages;
-  emacsWithPackages = emacsPackages.emacsWithPackages;
+  emacs27WithPackages = emacs27Packages.emacsWithPackages;
 
   inherit (gnome3) empathy;
 
@@ -21052,7 +21060,7 @@ in
     akonadi akregator ark bomber bovo dolphin dragon elisa ffmpegthumbs filelight granatier gwenview k3b
     kaddressbook kapptemplate kate kcachegrind kcalc kcharselect kcolorchooser kdenlive kdf kdialog
     keditbookmarks kfind kfloppy kget kgpg khelpcenter kig kleopatra kmail kmix kmplot kolourpaint kompare konsole yakuake
-    kpkpass kitinerary kontact korganizer krdc krfb ksystemlog ktouch kwalletmanager marble minuet okular picmi spectacle;
+    kpkpass kitinerary kontact korganizer krdc krfb ksquares ksystemlog ktouch kwalletmanager marble minuet okular picmi spectacle;
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
 
@@ -21285,6 +21293,8 @@ in
   ledger-autosync = callPackage  ../applications/office/ledger-autosync { };
 
   ledger-web = callPackage ../applications/office/ledger-web { };
+  
+  lightburn = libsForQt5.callPackage ../applications/graphics/lightburn { };
 
   lighthouse = callPackage ../applications/misc/lighthouse { };
 
@@ -21648,6 +21658,7 @@ in
     convert = callPackage ../applications/video/mpv/scripts/convert.nix {};
     mpris = callPackage ../applications/video/mpv/scripts/mpris.nix {};
     simple-mpv-webui = callPackage ../applications/video/mpv/scripts/simple-mpv-webui.nix {};
+    sponsorblock = callPackage ../applications/video/mpv/scripts/sponsorblock.nix {};
   };
 
   mrpeach = callPackage ../applications/audio/pd-plugins/mrpeach { };
@@ -23899,6 +23910,8 @@ in
 
   xmacro = callPackage ../tools/X11/xmacro { };
 
+  xmenu = callPackage ../applications/misc/xmenu { };
+
   xmlcopyeditor = callPackage ../applications/editors/xmlcopyeditor { };
 
   xmp = callPackage ../applications/audio/xmp { };
@@ -24598,6 +24611,8 @@ in
   nudoku = callPackage ../games/nudoku { };
 
   nxengine-evo = callPackage ../games/nxengine-evo { };
+
+  oci-seccomp-bpf-hook = callPackage ../applications/virtualization/oci-seccomp-bpf-hook { };
 
   odamex = callPackage ../games/odamex { };
 
@@ -26218,6 +26233,8 @@ in
 
   cups-brother-hl1110 = pkgsi686Linux.callPackage ../misc/cups/drivers/hl1110 { };
 
+  cups-brother-hl1210w = pkgsi686Linux.callPackage ../misc/cups/drivers/hl1210w { };
+
   cups-brother-hl3140cw = pkgsi686Linux.callPackage ../misc/cups/drivers/hl3140cw { };
 
   cups-brother-hll2340dw = pkgsi686Linux.callPackage  ../misc/cups/drivers/hll2340dw { };
@@ -26314,7 +26331,8 @@ in
   fuse-emulator = callPackage ../misc/emulators/fuse-emulator {};
 
   gajim = callPackage ../applications/networking/instant-messengers/gajim {
-    inherit (gst_all_1) gstreamer gst-plugins-base gst-libav gst-plugins-ugly;
+    inherit (gst_all_1) gstreamer gst-plugins-base gst-libav;
+    gst-plugins-good = gst_all_1.gst-plugins-good.override { gtkSupport = true; };
   };
 
   gammu = callPackage ../applications/misc/gammu { };

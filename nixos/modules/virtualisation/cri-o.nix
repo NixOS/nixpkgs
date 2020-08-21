@@ -85,7 +85,7 @@ in
 
     environment.etc."crictl.yaml".source = copyFile "${pkgs.cri-o-unwrapped.src}/crictl.yaml";
 
-    environment.etc."crio/crio.conf".text = ''
+    environment.etc."crio/crio.conf.d/00-default.conf".text = ''
       [crio]
       storage_driver = "${cfg.storageDriver}"
 
@@ -100,6 +100,7 @@ in
       cgroup_manager = "systemd"
       log_level = "${cfg.logLevel}"
       manage_ns_lifecycle = true
+      pinns_path = "${cfg.package}/bin/pinns"
 
       ${optionalString (cfg.runtime != null) ''
       default_runtime = "${cfg.runtime}"
