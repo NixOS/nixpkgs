@@ -14,14 +14,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ mkfontscale ];
 
   installPhase = ''
-    install -m 644 -D pcf/*.pcf -t "$out/share/fonts/misc"
+    install -m 644 -D otb/*.otb pcf/*.pcf -t "$out/share/fonts/misc"
     install -m 644 -D psf/*.psf -t "$out/share/consolefonts"
-    install -m 644 -D otb/*.otb -t "$otb/share/fonts/misc"
     mkfontdir "$out/share/fonts/misc"
-    mkfontdir "$otb/share/fonts/misc"
   '';
-
-  outputs = [ "out" "otb" ];
 
   meta = with stdenv.lib; {
     description = "Bitmapped programming font based on Tamsyn";

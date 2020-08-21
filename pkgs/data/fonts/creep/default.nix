@@ -20,13 +20,9 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    install -D -m644 creep.bdf "$out/share/fonts/misc/creep.bdf"
+    install -D -m644 creep.otb creep.bdf -t "$out/share/fonts/misc/"
     mkfontdir "$out/share/fonts/misc"
-    install -D -m644 creep.otb "$otb/share/fonts/misc/creep.otb"
-    mkfontdir "$otb/share/fonts/misc"
   '';
-
-  outputs = [ "out" "otb" ];
 
   meta = with stdenv.lib; {
     description = "A pretty sweet 4px wide pixel font";

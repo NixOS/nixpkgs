@@ -25,13 +25,9 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    install -D -m 644 -t "$out/share/fonts/misc" *.pcf.gz
-    install -D -m 644 -t "$otb/share/fonts/misc" *.otb
+    install -D -m 644 -t "$out/share/fonts/misc" *.otb *.pcf.gz
     mkfontdir "$out/share/fonts/misc"
-    mkfontdir "$otb/share/fonts/misc"
   '';
-
-  outputs = [ "out" "otb" ];
 
   meta = with stdenv.lib; {
     description = ''
