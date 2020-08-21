@@ -1452,9 +1452,9 @@ self: super: {
     # brittany has an aeson upper bound of 1.5
     brittany = doJailbreak super.brittany;
   };
-in {
-  haskell-language-server = dontCheck (super.haskell-language-server.overrideScope hlsScopeOverride);
-  hls-ghcide = dontCheck (super.hls-ghcide.overrideScope hlsScopeOverride);
-  fourmolu = super.fourmolu.overrideScope hlsScopeOverride;
-}
+  in {
+    haskell-language-server = dontCheck (super.haskell-language-server.overrideScope hlsScopeOverride);
+    hls-ghcide = dontCheck (super.hls-ghcide.overrideScope hlsScopeOverride);
+    fourmolu = super.fourmolu.overrideScope hlsScopeOverride;
+  }
 )  // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
