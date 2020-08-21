@@ -9354,7 +9354,9 @@ in
     inherit (llvmPackages_rocm) clang clang-unwrapped lld llvm;
   };
 
-  rocm-runtime = callPackage ../development/libraries/rocm-runtime { };
+  rocm-runtime = callPackage ../development/libraries/rocm-runtime {
+    inherit (llvmPackages_rocm) clang-unwrapped llvm;
+  };
 
   rocm-runtime-ext = callPackage ../development/libraries/rocm-runtime-ext { };
 
