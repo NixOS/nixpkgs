@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, writeText, runtimeShell, ncurses }:
+{ lib, buildGoModule, fetchFromGitHub, writeText, runtimeShell, ncurses, perl }:
 
 buildGoModule rec {
   pname = "fzf";
@@ -27,6 +27,13 @@ buildGoModule rec {
         echo "Failed to replace vim base_dir path with $out"
         exit 1
     fi
+
+    # Has a sneaky dependency on perl
+    # Include first args to make sure we're patching the right thing
+    substituteInPlace shell/key-bindings.zsh \
+      --replace " perl -ne " " ${perl}/bin/perl -ne "
+    substituteInPlace shell/key-bindings.bash \
+      --replace " perl -n " " ${perl}/bin/perl -n "
   '';
 
   preInstall = ''
