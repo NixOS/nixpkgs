@@ -5667,6 +5667,8 @@ in
 
   pandoc-imagine = python3Packages.callPackage ../tools/misc/pandoc-imagine { };
 
+  pandoc-plantuml-filter = python3Packages.callPackage ../tools/misc/pandoc-plantuml-filter { };
+
   pasystray = callPackage ../tools/audio/pasystray { };
 
   phash = callPackage ../development/libraries/phash { };
@@ -10260,9 +10262,9 @@ in
 
   inherit (callPackage ../tools/admin/ansible { })
     ansible
-    ansible_2_7
     ansible_2_8
-    ansible_2_9;
+    ansible_2_9
+    ansible_2_10;
 
   ansible-lint = with python3.pkgs; toPythonApplication ansible-lint;
 
@@ -10393,6 +10395,8 @@ in
   bazel-kazel = callPackage ../development/tools/bazel-kazel { };
 
   bazelisk = callPackage ../development/tools/bazelisk { };
+
+  rebazel = callPackage ../development/tools/rebazel { };
 
   buildBazelPackage = callPackage ../build-support/build-bazel-package { };
 
@@ -11044,6 +11048,10 @@ in
   mk = callPackage ../development/tools/build-managers/mk { };
 
   mkcert = callPackage ../development/tools/misc/mkcert { };
+
+  mkrom = callPackage ../development/tools/misc/mkrom {
+    asciidoc = asciidoc-full;
+  };
 
   mkdocs = callPackage ../development/tools/documentation/mkdocs { };
 
@@ -21366,7 +21374,7 @@ in
   luppp = callPackage ../applications/audio/luppp { };
 
   lutris-unwrapped = python3.pkgs.callPackage ../applications/misc/lutris {
-    inherit (gnome3) gnome-desktop libgnome-keyring;
+    inherit (gnome3) gnome-desktop;
     wine = wineWowPackages.staging;
   };
   lutris = callPackage ../applications/misc/lutris/fhsenv.nix {
@@ -21752,6 +21760,7 @@ in
 
   ostinato = callPackage ../applications/networking/ostinato { };
 
+  p4 = callPackage ../applications/version-management/p4 { };
   p4v = libsForQt5.callPackage ../applications/version-management/p4v { };
 
   partio = callPackage ../development/libraries/partio {};
@@ -25458,6 +25467,8 @@ in
 
   varscan = callPackage ../applications/science/biology/varscan { };
 
+  whisper = callPackage ../applications/science/biology/whisper { };
+
   hmmer = callPackage ../applications/science/biology/hmmer { };
 
   bwa = callPackage ../applications/science/biology/bwa { };
@@ -26812,6 +26823,8 @@ in
 
   py-wmi-client = callPackage ../tools/networking/py-wmi-client { };
 
+  rargs = callPackage ../tools/misc/rargs { };
+
   redprl = callPackage ../applications/science/logic/redprl { };
 
   renderizer = pkgs.callPackage ../development/tools/renderizer {};
@@ -27001,6 +27014,8 @@ in
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {};
 
   tilt = callPackage ../applications/networking/cluster/tilt {};
+
+  timeular = callPackage ../applications/office/timeular {};
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 

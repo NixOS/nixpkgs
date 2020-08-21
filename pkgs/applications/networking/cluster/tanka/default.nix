@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
 
 buildGoModule rec {
   pname = "tanka";
@@ -16,6 +16,13 @@ buildGoModule rec {
   doCheck = false;
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.Version=${version}" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    echo "complete -C $out/bin/tk tk" > tk.bash
+    installShellCompletion tk.bash
+  '';
 
   meta = with lib; {
     description = "Flexible, reusable and concise configuration for Kubernetes";

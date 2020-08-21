@@ -3824,6 +3824,8 @@ in {
 
   django-webpack-loader = callPackage ../development/python-modules/django-webpack-loader { };
 
+  django-widget-tweaks = callPackage ../development/python-modules/django-widget-tweaks { };
+
   django_tagging = callPackage ../development/python-modules/django_tagging { };
 
   django_classytags = callPackage ../development/python-modules/django_classytags { };
@@ -4082,6 +4084,8 @@ in {
   pytorchWithoutCuda = self.pytorch.override {
     cudaSupport = false;
   };
+
+  pytorch-lightning = callPackage ../development/python-modules/pytorch-lightning { };
 
   pytorch-metric-learning = callPackage ../development/python-modules/pytorch-metric-learning { };
 
@@ -7636,6 +7640,8 @@ in {
   pulp  = callPackage ../development/python-modules/pulp { };
 
   pure-pcapy3 = callPackage ../development/python-modules/pure-pcapy3 { };
+
+  cucumber-tag-expressions = callPackage ../development/python-modules/cucumber-tag-expressions { };
 
   behave = callPackage ../development/python-modules/behave { };
 
