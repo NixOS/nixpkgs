@@ -296,7 +296,6 @@ self: super: {
   hs2048 = dontCheck super.hs2048;
   hsbencher = dontCheck super.hsbencher;
   hsexif = dontCheck super.hsexif;
-  hspec-core = if pkgs.stdenv.isi686 then dontCheck super.hspec-core else super.hspec-core; # tests rely on `Int` being 64-bit; https://github.com/hspec/hspec/issues/431
   hspec-server = dontCheck super.hspec-server;
   HTF = dontCheck super.HTF;
   htsn = dontCheck super.htsn;
@@ -1436,6 +1435,11 @@ self: super: {
     # Remove when https://github.com/danfran/hcoord/issues/9 is closed.
     doCheck = false;
   });
+
+  # tests rely on `Int` being 64-bit: https://github.com/hspec/hspec/issues/431
+  hspec-core = let hspec-core = super.hspec-core.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_14_1; }); in
+               if pkgs.stdenv.isi686 then dontCheck hspec-core else hspec-core;
+  QuickCheck_2_14_1 = super.QuickCheck_2_14_1.override { splitmix = dontCheck super.splitmix_0_1_0_1; };
 
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 
