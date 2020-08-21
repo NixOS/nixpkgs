@@ -971,6 +971,40 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
       the previous behaviour using <literal>undervolt.useTimer</literal>.
     </para>
    </listitem>
+   <listitem>
+     <para>
+      Agda has been heavily reworked.
+      <itemizedlist>
+	<listitem>
+	  <para>
+	    <literal>agda.mkDerivation</literal> has been heavily changed and
+	    is now located at <package>agdaPackages.mkDerivation</package>.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    New top-level packages <package>agda</package> and
+	    <literal>agda.withPackages</literal> have been added, the second
+	    of which sets up agda with access to chosen libraries.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    All agda libraries now live under
+	    <literal>agdaPackages</literal>.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    Many broken libraries have been removed.
+	  </para>
+	</listitem>
+      </itemizedlist>
+      See the <link
+      xlink:href="https://nixos.org/nixpkgs/manual/#agda">new
+      documentation</link> for more information.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
