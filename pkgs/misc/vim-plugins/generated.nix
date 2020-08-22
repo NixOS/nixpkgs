@@ -5761,6 +5761,18 @@ let
     meta.homepage = "https://github.com/samoshkin/vim-mergetool/";
   };
 
+  vim-merginal = buildVimPluginFrom2Nix {
+    pname = "vim-merginal";
+    version = "2020-01-29";
+    src = fetchFromGitHub {
+      owner = "idanarye";
+      repo = "vim-merginal";
+      rev = "02ac69b0468b7aec437df48df07f939558e85c9a";
+      sha256 = "0m5lym56xzp1gnwb79vjmigfi6ar0iqbzaydv2r8c47jj7xyxiz6";
+    };
+    meta.homepage = "https://github.com/idanarye/vim-merginal/";
+  };
+
   vim-metamath = buildVimPluginFrom2Nix {
     pname = "vim-metamath";
     version = "2017-02-10";
