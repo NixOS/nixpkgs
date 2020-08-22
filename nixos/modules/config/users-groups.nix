@@ -463,7 +463,7 @@ in {
 
     users.users = mkOption {
       default = {};
-      type = with types; loaOf (submodule userOpts);
+      type = with types; attrsOf (submodule userOpts);
       example = {
         alice = {
           uid = 1234;
@@ -487,7 +487,7 @@ in {
         { students.gid = 1001;
           hackers = { };
         };
-      type = with types; loaOf (submodule groupOpts);
+      type = with types; attrsOf (submodule groupOpts);
       description = ''
         Additional groups to be created automatically by the system.
       '';

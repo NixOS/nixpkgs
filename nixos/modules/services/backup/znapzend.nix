@@ -220,7 +220,7 @@ let
       };
 
       destinations = mkOption {
-        type = loaOf (destType config);
+        type = attrsOf (destType config);
         description = "Additional destinations.";
         default = {};
         example = literalExample ''
@@ -328,7 +328,7 @@ in
       };
 
       zetup = mkOption {
-        type = loaOf srcType;
+        type = attrsOf srcType;
         description = "Znapzend configuration.";
         default = {};
         example = literalExample ''

@@ -361,7 +361,7 @@ in
     };
 
     users.users = mkOption {
-      type = with types; loaOf (submodule userOptions);
+      type = with types; attrsOf (submodule userOptions);
     };
 
   };

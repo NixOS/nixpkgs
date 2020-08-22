@@ -597,7 +597,7 @@ in
             ];
           }
         '';
-        type = types.loaOf (types.submodule ({name, ...}: {
+        type = types.attrsOf (types.submodule ({name, ...}: {
           options = {
 
              name = mkOption {
