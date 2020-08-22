@@ -1,5 +1,5 @@
 { clangStdenv, fetchFromGitHub, fetchurl, fetchpatch, gyp, which, ninja,
-  python, pkgconfig, protobuf, gtk2, zinnia, qt5, libxcb,
+  python, pkgconfig, protobuf, gtk2, zinnia, qt5, libxcb, tegaki-zinnia-japanese,
   fcitx, gettext }:
 let
   japanese_usage_dictionary = fetchFromGitHub {
@@ -57,7 +57,7 @@ in clangStdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
-    export GYP_DEFINES="document_dir=$out/share/doc/mozc use_libzinnia=1 use_libprotobuf=1 use_fcitx5=0"
+    export GYP_DEFINES="document_dir=$out/share/doc/mozc use_libzinnia=1 use_libprotobuf=1 use_fcitx5=0 zinnia_model_file=${tegaki-zinnia-japanese}/share/tegaki/models/zinnia/handwriting-ja.model"
     cd src && python build_mozc.py gyp --gypdir=${gyp}/bin --server_dir=$out/lib/mozc
   '';
 
