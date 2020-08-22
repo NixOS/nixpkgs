@@ -60,6 +60,8 @@ in {
         ExecReload="${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = "telegraf";
         Restart = "on-failure";
+        # for ping probes
+        AmbientCapabilities = [ "CAP_NET_RAW" ];
       };
     };
 
