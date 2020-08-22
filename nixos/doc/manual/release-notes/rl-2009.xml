@@ -743,6 +743,11 @@ CREATE ROLE postgres LOGIN SUPERUSER;
      See <link xlink:href="https://github.com/NixOS/nixpkgs/pull/82743#issuecomment-674520472">the PR that changed this</link> for more info.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <literal>makeInitrd</literal> helper package now seperates the <literal>compressor</literal> parameter from the arguments passed to the <literal>compressor</literal> (which will be properly escaped). So if you previously used e.g. <programlisting>makeInitrd { compressor = "xz --check=crc32 --lzma2=dict=512KiB"; }</programlisting>, replace this by: <programlisting>makeInitrd { compressor = "xz"; compressorArgs = [ "--check=crc32" "--lzma2=dict=512KiB" ]; }</programlisting> Similar changes were made to the compressor option of the <literal>boot.initrd</literal> module, which is no longer marked as internal.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
