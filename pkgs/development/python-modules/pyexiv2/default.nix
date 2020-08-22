@@ -1,28 +1,53 @@
-{ stdenv, buildPythonPackage, fetchurl, python, exiv2, scons, boost }:
+{ stdenv, isPy27, buildPythonPackage, fetchFromGitHub, python, exiv2, pybind11, pytest, psutil }:
 
 buildPythonPackage rec {
   pname = "pyexiv2";
-  version = "0.3.2";
-  format = "other";
+  version = "2.1.0";
+  disabled = isPy27;
 
-  src = fetchurl {
-    url = "https://launchpad.net/pyexiv2/0.3.x/0.3.2/+download/${pname}-${version}.tar.bz2";
-    sha256 = "09r1ga6kj5cnmrldpkqzvdhh7xi7aad9g4fbcr1gawgsd9y13g0a";
+  src = fetchFromGitHub {
+    owner = "LeoHsiao1";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1isgrd2d5hhqc6s7yr3mnhzyyf4gm31d3ryxf3wlr39bmn59b09i";
   };
 
+  buildInputs = [ python exiv2 pybind11 ];
+
+  checkInputs = [ pytest psutil ];
+
+  postPatch = ''
+    # Remove pre-compiled binaries from source.
+    find . "(" -name "*.so" -o -name "*.dll" -o -name "*.pyd" ")" -delete
+  '';
+
   preBuild = ''
-    sed -i -e "s@env = Environment()@env = Environment( ENV = os.environ )@" src/SConscript
+    PYTHON_VERSION="$(python -c "import platform; print(str().join(platform.python_version_tuple()[:2]))")"
+    PYBIND_INCLUDES="$(python -m pybind11 --includes)"
+    SOURCE_FILE="$src/pyexiv2/lib/exiv2api.cpp"
+    OUTPUT_FILE="./pyexiv2/lib/linux64-py$PYTHON_VERSION/exiv2api.so"
+
+    CXXFLAGS="-O3 -Wall -std=c++11 $PYBIND_INCLUDES"
+    LDFLAGS="-shared -fPIC -lexiv2"
+
+    # Compile native code portion. NOTE: there is no script/build file.
+    $CXX "$SOURCE_FILE" -o "$OUTPUT_FILE" $CXXFLAGS $LDFLAGS
+
+    # XXX: pyexiv2 needs libexiv2 in its own library directory.
+    ln -sf "${exiv2.out}/lib/libexiv2.so" "./pyexiv2/lib/libexiv2.so"
   '';
 
-  preInstall = ''
-    sed -i -e "s@    python_lib_path = get_python_lib(plat_specific=True)@    python_lib_path = \'/lib/python2.7/site-packages\'@" src/SConscript
+  checkPhase = ''
+    pushd pyexiv2/tests
+    pytest
+    popd
   '';
 
-  buildInputs = [ python exiv2 scons boost ];
-
-  meta = {
+  meta = with stdenv.lib; {
+    description = "Python bindings for exiv2, for reading/writing EXIF data.";
+    homepage = "https://github.com/LeoHsiao1/pyexiv2";
+    license = licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
-    # Likely needs an older boost which does not have `boost_pythonXY` but `boost_python`.
-    broken = true; # 2018-06-23
+    maintainers = with maintainers; [ jchw ];
   };
 }
