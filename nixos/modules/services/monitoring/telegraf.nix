@@ -26,6 +26,19 @@ in {
         type = types.package;
       };
 
+      environmentFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "/run/keys/telegraf.env";
+        description = ''
+          File to load as environment file. Environment variables
+          from this file will be interpolated into the config file
+          using envsubst with this syntax:
+          <literal>$ENVIRONMENT ''${VARIABLE}</literal>
+          This is useful to avoid putting secrets into the nix store.
+        '';
+      };
+
       extraConfig = mkOption {
         default = {};
         description = "Extra configuration options for telegraf";
@@ -51,15 +64,23 @@ in {
 
   ###### implementation
   config = mkIf config.services.telegraf.enable {
-    systemd.services.telegraf = {
+    systemd.services.telegraf = let
+      finalConfigFile = if config.services.telegraf.environmentFile == null
+                        then configFile
+                        else "/tmp/config.toml";
+    in {
       description = "Telegraf Agent";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
       serviceConfig = {
-        ExecStart=''${cfg.package}/bin/telegraf -config "${configFile}"'';
+        EnvironmentFile = config.services.telegraf.environmentFile;
+        ExecStartPre = lib.optional (config.services.telegraf.environmentFile != null)
+          ''${pkgs.envsubst}/bin/envsubst -o /tmp/config.toml -i "${configFile}"'';
+        ExecStart=''${cfg.package}/bin/telegraf -config ${finalConfigFile}'';
         ExecReload="${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = "telegraf";
         Restart = "on-failure";
+        PrivateTmp = true;
         # for ping probes
         AmbientCapabilities = [ "CAP_NET_RAW" ];
       };
