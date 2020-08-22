@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub
+{ stdenv, rustPlatform, fetchFromGitHub, nixosTests
 , pkgconfig, openssl
 , Security, CoreServices
 , dbBackend ? "sqlite", libmysqlclient, postgresql }:
@@ -34,6 +34,8 @@ in rustPlatform.buildRustPackage rec {
     cargo test ${featuresFlag} -- ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
     runHook postCheck
   '';
+
+  passthru.tests = nixosTests.bitwarden;
 
   meta = with stdenv.lib; {
     description = "Unofficial Bitwarden compatible server written in Rust";
