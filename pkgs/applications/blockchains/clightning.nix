@@ -4,11 +4,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "clightning";
-  version = "0.9.0";
+  version = "0.9.0-1";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    sha256 = "11ig5bqxvhx82gq9nl7c5iqaf3x8xbwfx7cf2318pyqdimz4r1v6";
+    sha256 = "01cwcrqysqsrf96bbbj0grm8j5m46a3acgwy0kzxdx05jdzld9sc";
   };
 
   enableParallelBuilding = true;
