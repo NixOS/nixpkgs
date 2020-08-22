@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     # https://github.com/Qalculate/qalculate-gtk/pull/178
     substituteInPlace configure.ac --replace 'libxml-2.0' 'libxml-2.0 gio-unix-2.0'
+
+    # https://github.com/Qalculate/qalculate-gtk/pull/179
+    echo searchprovider.o: gnome-search-provider2.c >>src/Makefile.am
   '';
 
   hardeningDisable = [ "format" ];
