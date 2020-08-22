@@ -14703,7 +14703,7 @@ in
     inherit (kdeFrameworks.override { libsForQt5 = self; })
       attica baloo bluez-qt kactivities kactivities-stats
       karchive kauth kbookmarks kcmutils kcalendarcore kcodecs kcompletion kconfig
-      kconfigwidgets kcoreaddons kcrash kdbusaddons kdeclarative kdelibs4support
+      kconfigwidgets kcoreaddons kcrash kdav kdbusaddons kdeclarative kdelibs4support
       kdesignerplugin kdnssd kemoticons kfilemetadata kglobalaccel kguiaddons
       khtml ki18n kiconthemes kidletime kimageformats kio kitemmodels kitemviews
       kjobwidgets kjs kjsembed kmediaplayer knewstuff knotifications
