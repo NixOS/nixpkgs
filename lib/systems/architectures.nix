@@ -43,13 +43,13 @@ rec {
     skylake-avx512 = [ "skylake"     ] ++ inferiors.skylake;
     # x86_64 AMD
     btver1         = [ ];
-    btver2         = [ ];
-    bdver1         = [ ];
-    bdver2         = [ ];
-    bdver3         = [ ];
-    bdver4         = [ ];
-    znver1         = [ ];
-    znver2         = [ ];
+    btver2         = [ ]; # TODO: fill this (need testing)
+    bdver1         = [ ]; # TODO: fill this (need testing)
+    bdver2         = [ ]; # TODO: fill this (need testing)
+    bdver3         = [ ]; # TODO: fill this (need testing)
+    bdver4         = [ ]; # TODO: fill this (need testing)
+    znver1         = [ ]; # TODO: fill this (need testing)
+    znver2         = [ ]; # TODO: fill this (need testing)
     # other
     armv5te        = [ ];
     armv6          = [ ];
