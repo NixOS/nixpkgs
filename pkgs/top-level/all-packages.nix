@@ -9170,6 +9170,8 @@ in
 
   jwasm =  callPackage ../development/compilers/jwasm { };
 
+  knightos-kcc = callPackage ../development/compilers/kcc { };
+
   kotlin = callPackage ../development/compilers/kotlin { };
 
   lazarus = callPackage ../development/compilers/fpc/lazarus.nix {
