@@ -25,62 +25,10 @@ let
     allowMissing = true;
   };
 
-
   # The initrd only has to mount `/` or any FS marked as necessary for
   # booting (such as the FS containing `/nix/store`, or an FS needed for
   # mounting `/`, like `/` on a loopback).
   fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
-
-  # A utility for enumerating the shared-library dependencies of a program
-  findLibs = pkgs.buildPackages.writeShellScriptBin "find-libs" ''
-    set -euo pipefail
-
-    declare -A seen
-    declare -a left
-
-    patchelf="${pkgs.buildPackages.patchelf}/bin/patchelf"
-
-    function add_needed {
-      rpath="$($patchelf --print-rpath $1)"
-      dir="$(dirname $1)"
-      for lib in $($patchelf --print-needed $1); do
-        left+=("$lib" "$rpath" "$dir")
-      done
-    }
-
-    add_needed $1
-
-    while [ ''${#left[@]} -ne 0 ]; do
-      next=''${left[0]}
-      rpath=''${left[1]}
-      ORIGIN=''${left[2]}
-      left=("''${left[@]:3}")
-      if [ -z ''${seen[$next]+x} ]; then
-        seen[$next]=1
-
-        # Ignore the dynamic linker which for some reason appears as a DT_NEEDED of glibc but isn't in glibc's RPATH.
-        case "$next" in
-          ld*.so.?) continue;;
-        esac
-
-        IFS=: read -ra paths <<< $rpath
-        res=
-        for path in "''${paths[@]}"; do
-          path=$(eval "echo $path")
-          if [ -f "$path/$next" ]; then
-              res="$path/$next"
-              echo "$res"
-              add_needed "$res"
-              break
-          fi
-        done
-        if [ -z "$res" ]; then
-          echo "Couldn't satisfy dependency $next" >&2
-          exit 1
-        fi
-      fi
-    done
-  '';
 
   # Some additional utilities needed in stage 1, like mount, lvm, fsck
   # etc.  We don't want to bring in all of those packages, so we just
@@ -160,7 +108,7 @@ let
       # Copy all of the needed libraries
       find $out/bin $out/lib -type f | while read BIN; do
         echo "Copying libs for executable $BIN"
-        for LIB in $(${findLibs}/bin/find-libs $BIN); do
+        for LIB in $(${pkgs.buildPackages.find-libs}/bin/find-libs $BIN); do
           TGT="$out/lib/$(basename $LIB)"
           if [ ! -f "$TGT" ]; then
             SRC="$(readlink -e $LIB)"
