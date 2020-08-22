@@ -5376,6 +5376,8 @@ with pkgs;
 
   mpris-scrobbler = callPackage ../tools/audio/mpris-scrobbler { };
 
+  mpd-touch-screen-gui = callPackage ../applications/audio/mpd-touch-screen-gui { };
+
   mq-cli = callPackage ../tools/system/mq-cli { };
 
   mrkd = with python3Packages; toPythonApplication mrkd;
