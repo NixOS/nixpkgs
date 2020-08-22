@@ -35,12 +35,12 @@ rec {
     # x86_64 Intel
     default        = [ ];
     westmere       = [ ];
-    sandybridge    = [ "westmere" ];
-    ivybridge      = [ "westmere" "sandybridge" ];
-    haswell        = [ "westmere" "sandybridge" "ivybridge" ];
-    broadwell      = [ "westmere" "sandybridge" "ivybridge" "haswell" ];
-    skylake        = [ "westmere" "sandybridge" "ivybridge" "haswell" "broadwell" ];
-    skylake-avx512 = [ "westmere" "sandybridge" "ivybridge" "haswell" "broadwell" "skylake" ];
+    sandybridge    = [ "westmere"    ] ++ inferiors.westmere;
+    ivybridge      = [ "sandybridge" ] ++ inferiors.sandybridge;
+    haswell        = [ "ivybridge"   ] ++ inferiors.ivybridge;
+    broadwell      = [ "haswell"     ] ++ inferiors.haswell;
+    skylake        = [ "broadwell"   ] ++ inferiors.broadwell;
+    skylake-avx512 = [ "skylake"     ] ++ inferiors.skylake;
     # x86_64 AMD
     btver1         = [ ];
     btver2         = [ ];
