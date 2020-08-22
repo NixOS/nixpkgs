@@ -7561,6 +7561,8 @@ in
 
   verilog = callPackage ../applications/science/electronics/verilog {};
 
+  vhd2vl = callPackage ../applications/science/electronics/vhd2vl { };
+
   video2midi = callPackage ../tools/audio/video2midi {
     pythonPackages = python3Packages;
   };
