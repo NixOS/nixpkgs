@@ -302,12 +302,11 @@ let
     '';
   };
 
-
   # The closure of the init script of boot stage 1 is what we put in
   # the initial RAM disk.
   initialRamdisk = pkgs.makeInitrd {
     name = "initrd-${kernel-name}";
-    inherit (config.boot.initrd) compressor prepend;
+    inherit (config.boot.initrd) compressor compressorArgs prepend;
 
     contents =
       [ { object = bootStage1;
@@ -333,7 +332,10 @@ let
 
   # Script to add secret files to the initrd at bootloader update time
   initialRamdiskSecretAppender =
-    pkgs.writeScriptBin "append-initrd-secrets"
+    let compressBin = lib.getBin pkgs.${config.boot.initrd.compressor};
+        compressExe = if config.boot.initrd.compressor == "cat" then "cat"
+          else "${compressBin}/bin/${config.boot.initrd.compressor}";
+    in pkgs.writeScriptBin "append-initrd-secrets"
       ''
         #!${pkgs.bash}/bin/bash -e
         function usage {
@@ -375,7 +377,7 @@ let
          }
 
         (cd "$tmp" && find . -print0 | sort -z | cpio -o -H newc -R +0:+0 --reproducible --null) | \
-          ${config.boot.initrd.compressor} >> "$1"
+          ${compressExe} ${lib.escapeShellArgs config.boot.initrd.compressorArgs} >> "$1"
       '';
 
 in
@@ -511,10 +513,17 @@ in
 
     boot.initrd.compressor = mkOption {
       internal = true;
-      default = "gzip -9n";
-      type = types.str;
+      default = "gzip";
+      type = types.enum [ "cat" "gzip" "bzip2" "xz" "lz4" "lzop" "zstd" ];
       description = "The compressor to use on the initrd image.";
       example = "xz";
+    };
+
+    boot.initrd.compressorArgs = mkOption {
+      internal = true;
+      default = [];
+      type = types.listOf types.str;
+      description = "Arguments to pass to the compressor for the initrd image.";
     };
 
     boot.initrd.secrets = mkOption
@@ -603,6 +612,8 @@ in
         '';
       }
     ];
+
+    boot.initrd.compressorArgs = mkIf (config.boot.initrd.compressor == "gzip") (mkDefault [ "-9n" ]);
 
     system.build =
       { inherit bootStage1 initialRamdisk initialRamdiskSecretAppender extraUtils; };

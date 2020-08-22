@@ -14,10 +14,13 @@
 
 { stdenvNoCC, perl, cpio, contents, ubootTools
 , name ? "initrd"
-, compressor ? "gzip -9n"
+, compressor ? "gzip"
+, compressorArgs ? []
+, buildPackages
 , prepend ? []
 , lib
 }:
+assert lib.elem compressor ["cat" "gzip" "bzip2" "xz" "lz4" "lzop" "zstd"];
 let
   # !!! Move this into a public lib function, it is probably useful for others
   toValidStoreName = x: with builtins;
@@ -31,7 +34,8 @@ in stdenvNoCC.mkDerivation rec {
   makeUInitrd = stdenvNoCC.hostPlatform.platform.kernelTarget == "uImage";
 
   nativeBuildInputs = [ perl cpio ]
-    ++ stdenvNoCC.lib.optional makeUInitrd ubootTools;
+    ++ stdenvNoCC.lib.optional makeUInitrd ubootTools
+    ++ lib.optionals (compressor != "cat") [ buildPackages.${compressor} ];
 
   # !!! should use XML.
   objects = map (x: x.object) contents;
@@ -48,5 +52,6 @@ in stdenvNoCC.mkDerivation rec {
       (lib.range 0 (lib.length contents - 1));
   pathsFromGraph = ./paths-from-graph.pl;
 
-  inherit compressor prepend;
+  compress = "${compressor} ${lib.escapeShellArgs compressorArgs}";
+  inherit prepend;
 }
