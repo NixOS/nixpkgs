@@ -195,6 +195,15 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
       The NixOS module system now supports freeform modules as a mix between <literal>types.attrsOf</literal> and <literal>types.submodule</literal>. These allow you to explicitly declare a subset of options while still permitting definitions without an associated option. See <xref linkend='sec-freeform-modules'/> for how to use them.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       The GRUB module gained support for basic password protection, which
+       allows to restrict non-default entries in the boot menu to one or more
+       users. The users and passwords are defined via the option
+       <option>boot.loader.grub.users</option>.
+       Note: Password support is only avaiable in GRUB version 2.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
