@@ -613,7 +613,6 @@ rec {
         if tp.name == "option set" || tp.name == "submodule" then
           throw "The option ${showOption loc} uses submodules without a wrapping type, in ${showFiles opt.declarations}."
         else if optionSetIn "attrsOf" then types.attrsOf (types.submodule options)
-        else if optionSetIn "loaOf"   then types.loaOf   (types.submodule options)
         else if optionSetIn "listOf"  then types.listOf  (types.submodule options)
         else if optionSetIn "nullOr"  then types.nullOr  (types.submodule options)
         else tp;

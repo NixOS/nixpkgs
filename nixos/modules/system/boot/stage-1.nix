@@ -558,7 +558,7 @@ in
       };
 
     fileSystems = mkOption {
-      type = with lib.types; loaOf (submodule {
+      type = with lib.types; attrsOf (submodule {
         options.neededForBoot = mkOption {
           default = false;
           type = types.bool;

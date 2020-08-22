@@ -41,7 +41,7 @@ let
         description = "Source for the in-container mount";
       };
       options = mkOption {
-        type = loaOf (str);
+        type = attrsOf (str);
         default = [ "bind" ];
         description = ''
           Mount options of the filesystem to be used.
@@ -61,7 +61,7 @@ in
     containers = mkOption {
       default = {};
       description = "Declarative container configuration";
-      type = with types; loaOf (submodule ({ name, config, ... }: {
+      type = with types; attrsOf (submodule ({ name, config, ... }: {
         options = {
           cmd = mkOption {
             type = types.lines;

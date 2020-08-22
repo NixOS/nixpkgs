@@ -387,17 +387,6 @@
    </varlistentry>
    <varlistentry>
     <term>
-     <varname>types.loaOf</varname> <replaceable>t</replaceable>
-    </term>
-    <listitem>
-     <para>
-      An attribute set or a list of <replaceable>t</replaceable> type. Multiple
-      definitions are merged according to the value.
-     </para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>
      <varname>types.nullOr</varname> <replaceable>t</replaceable>
     </term>
     <listitem>

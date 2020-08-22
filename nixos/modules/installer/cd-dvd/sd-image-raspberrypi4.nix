@@ -27,7 +27,7 @@
   };
 
   fileSystems."/boot/firmware" = {
-    # This effectively "renames" the loaOf entry set in sd-image.nix
+    # This effectively "renames" the attrsOf entry set in sd-image.nix
     mountPoint = "/boot";
     neededForBoot = true;
   };

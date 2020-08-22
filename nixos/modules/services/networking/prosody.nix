@@ -655,7 +655,7 @@ in
 
         description = "Define the virtual hosts";
 
-        type = with types; loaOf (submodule vHostOpts);
+        type = with types; attrsOf (submodule vHostOpts);
 
         example = {
           myhost = {
