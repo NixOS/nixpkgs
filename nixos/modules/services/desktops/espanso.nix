@@ -3,7 +3,7 @@
 with lib;
 let cfg = config.services.espanso;
 in {
-  meta = { maintainers = with stdenv.lib.maintainers; [ numkem ]; };
+  meta = { maintainers = with lib.maintainers; [ numkem ]; };
 
   options = {
     services.espanso = { enable = options.mkEnableOption "Espanso"; };
