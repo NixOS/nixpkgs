@@ -29,7 +29,7 @@ log() {
     echo "$@" >&2
 }
 
-if [ -z "$1" ]; then
+if [ "$#" -ne 1 ]; then
     log "Usage: ./upload-amazon-image.sh IMAGE_OUTPUT"
     exit 1
 fi
