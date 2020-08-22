@@ -308,7 +308,7 @@ let
   # the initial RAM disk.
   initialRamdisk = pkgs.makeInitrd {
     name = "initrd-${kernel-name}";
-    inherit (config.boot.initrd) compressor prepend;
+    inherit (config.boot.initrd) compressor compressorArgs prepend;
 
     contents =
       [ { object = bootStage1;
@@ -334,7 +334,9 @@ let
 
   # Script to add secret files to the initrd at bootloader update time
   initialRamdiskSecretAppender =
-    pkgs.writeScriptBin "append-initrd-secrets"
+    let
+      compressorExe = initialRamdisk.compressorExecutableFunction pkgs;
+    in pkgs.writeScriptBin "append-initrd-secrets"
       ''
         #!${pkgs.bash}/bin/bash -e
         function usage {
@@ -376,7 +378,7 @@ let
          }
 
         (cd "$tmp" && find . -print0 | sort -z | cpio -o -H newc -R +0:+0 --reproducible --null) | \
-          ${config.boot.initrd.compressor} >> "$1"
+          ${compressorExe} ${lib.escapeShellArgs initialRamdisk.compressorArgs} >> "$1"
       '';
 
 in
@@ -511,11 +513,24 @@ in
     };
 
     boot.initrd.compressor = mkOption {
-      internal = true;
-      default = "gzip -9n";
-      type = types.str;
-      description = "The compressor to use on the initrd image.";
+      default = "gzip";
+      type = types.unspecified; # We don't have a function type...
+      description = ''
+        The compressor to use on the initrd image. May be any of:
+
+         - A string representing a command available in stdenv, e.g. "xz";
+         - A function which, given the nixpkgs package set, returns the path to a compressor tool, e.g. pkgs: "''${pkgs.pigz}/bin/pigz"
+         - (not recommended, because it does not work when cross-compiling) the full path to a compressor tool, e.g. "''${pkgs.pigz}/bin/pigz"
+
+        The given program should read data from stdin and write it to stdout compressed.
+      '';
       example = "xz";
+    };
+
+    boot.initrd.compressorArgs = mkOption {
+      default = null;
+      type = types.nullOr (types.listOf types.str);
+      description = "Arguments to pass to the compressor for the initrd image, or null to use the compressor's defaults.";
     };
 
     boot.initrd.secrets = mkOption
