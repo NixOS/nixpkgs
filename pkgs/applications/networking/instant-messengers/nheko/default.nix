@@ -54,6 +54,11 @@ mkDerivation rec {
     qtquickcontrols2
     qtgraphicaleffects
   ] ++ lib.optional stdenv.isDarwin qtmacextras;
+  # Quick and dirty fix to https://github.com/NixOS/nixpkgs/issues/94952
+  # and/or: https://github.com/NixOS/nixpkgs/issues/94905
+  cmakeFlags = [
+    "-DCMAKE_OSX_ARCHITECTURES="
+  ];
 
   meta = with stdenv.lib; {
     description = "Desktop client for the Matrix protocol";
