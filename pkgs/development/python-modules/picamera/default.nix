@@ -2,10 +2,15 @@
 , buildPythonPackage
 , numpy
 , fetchPypi
+, fetchpatch
 }:
 let
   pname = "picamera";
   version = "1.13";
+  removeCustomInstallCommandPatch = fetchpatch {
+    url = "https://github.com/waveform80/picamera/commit/c145015837caf512cdef777894b8c203998c1359.patch";
+    sha256 = "0m9s3nrrqkalpywl8zjbcji1nbgf97c4biigil4v2gmpg4gc94b5";
+  };
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -16,7 +21,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    https://github.com/waveform80/picamera/commit/c145015837caf512cdef777894b8c203998c1359.patch
+    removeCustomInstallCommandPatch
   ];
   propagatedBuildInputs = [ numpy ];
 
