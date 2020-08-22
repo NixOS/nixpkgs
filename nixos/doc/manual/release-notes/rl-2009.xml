@@ -128,7 +128,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
    </listitem>
    <listitem>
     <para>
-      Two new option <link linkend="opt-documentation.man.generateCaches">documentation.man.generateCaches</link>
+      The new option <link linkend="opt-documentation.man.generateCaches">documentation.man.generateCaches</link>
       has been added to automatically generate the <literal>man-db</literal> caches, which are needed by utilities
       like <command>whatis</command> and <command>apropos</command>. The caches are generated during the build of
       the NixOS configuration: since this can be expensive when a large number of packages are installed, the
