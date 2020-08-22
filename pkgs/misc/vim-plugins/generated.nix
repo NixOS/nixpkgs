@@ -5713,6 +5713,18 @@ let
     meta.homepage = "https://github.com/lambdalisue/vim-manpager/";
   };
 
+  vim-markbar = buildVimPluginFrom2Nix {
+    pname = "vim-markbar";
+    version = "2020-05-10";
+    src = fetchFromGitHub {
+      owner = "Yilin-Yang";
+      repo = "vim-markbar";
+      rev = "39953e36f6b6f6711e7ae3b1c65053ee23a1d8dc";
+      sha256 = "1m1785chpik023nf4zcckr5vanzh7dcn5l7rc58hiqhdii7xamna";
+    };
+    meta.homepage = "https://github.com/Yilin-Yang/vim-markbar/";
+  };
+
   vim-markdown = buildVimPluginFrom2Nix {
     pname = "vim-markdown";
     version = "2020-07-14";
