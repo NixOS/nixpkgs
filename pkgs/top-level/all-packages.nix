@@ -8429,8 +8429,6 @@ in
     '';
   };
 
-  cryptol = haskell.lib.justStaticExecutables haskellPackages.cryptol;
-
   inherit (callPackages ../development/compilers/crystal {
     inherit (llvmPackages_10) stdenv clang llvm;
   })
