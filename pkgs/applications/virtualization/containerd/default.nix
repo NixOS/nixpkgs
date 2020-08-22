@@ -4,7 +4,7 @@ with lib;
 
 buildGoPackage rec {
   pname = "containerd";
-  version = "1.2.13";
+  version = "1.4.0";
   # git commit for the above version's tag
   commit = "7ad184331fa3e55e52b890ea95e65ba581ae3429";
 
@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "1rac3iak3jpz57yarxc72bxgxvravwrl0j6s6w2nxrmh2m3kxqzn";
+    sha256 = "1ajns679ck5yp6vmf39pyshzf8jijw5fcg5biixkj54jhj3bv1sq";
   };
 
   goPackagePath = "github.com/containerd/containerd";
