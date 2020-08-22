@@ -22,9 +22,9 @@ rec {
         else throw "Unknown QEMU serial device for system '${pkgs.stdenv.hostPlatform.system}'";
 
   qemuBinary = qemuPkg: {
-    x86_64-linux = "${qemuPkg}/bin/qemu-kvm -cpu host";
+    x86_64-linux = "${qemuPkg}/bin/qemu-kvm -cpu max";
     armv7l-linux = "${qemuPkg}/bin/qemu-system-arm -enable-kvm -machine virt -cpu host";
     aarch64-linux = "${qemuPkg}/bin/qemu-system-aarch64 -enable-kvm -machine virt,gic-version=host -cpu host";
-    x86_64-darwin = "${qemuPkg}/bin/qemu-kvm -cpu host";
+    x86_64-darwin = "${qemuPkg}/bin/qemu-kvm -cpu max";
   }.${pkgs.stdenv.hostPlatform.system} or "${qemuPkg}/bin/qemu-kvm";
 }
