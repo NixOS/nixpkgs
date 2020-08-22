@@ -3,6 +3,7 @@
 , numpy
 , fetchPypi
 , fetchpatch
+, raspberrypi-tools
 }:
 let
   pname = "picamera";
@@ -23,6 +24,8 @@ buildPythonPackage rec {
   patches = [
     removeCustomInstallCommandPatch
   ];
+
+  buildInputs = [ raspberrypi-tools ];
   propagatedBuildInputs = [ numpy ];
 
   meta = with lib; {
