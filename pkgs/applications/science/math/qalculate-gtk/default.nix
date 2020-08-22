@@ -2,17 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "qalculate-gtk";
-  version = "3.8.0a";
+  version = "3.12.1";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-gtk";
     rev = "v${version}";
-    sha256 = "0bjd61bbc5b2i09kz3ss01c0xmxrhmiv5wpbhhplkp3yhw2qrf3m";
+    sha256 = "0ylsxj9rn3dc1grn9w6jisci3ak0hxgbwzqp54azs3aj5cmvkfgg";
   };
 
   patchPhase = ''
-    substituteInPlace src/main.cc --replace 'getPackageDataDir().c_str()' \"$out/share\"
+    # https://github.com/Qalculate/qalculate-gtk/pull/178
+    substituteInPlace configure.ac --replace 'libxml-2.0' 'libxml-2.0 gio-unix-2.0'
   '';
 
   hardeningDisable = [ "format" ];
