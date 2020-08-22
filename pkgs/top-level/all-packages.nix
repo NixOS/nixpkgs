@@ -22556,6 +22556,9 @@ in
 
   ympd = callPackage ../applications/audio/ympd { };
 
+  # a somewhat more maintained fork of ympd
+  mympd = callPackage ../applications/audio/mympd { };
+
   nload = callPackage ../applications/networking/nload { };
 
   normalize = callPackage ../applications/audio/normalize { };
