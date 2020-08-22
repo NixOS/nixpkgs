@@ -1124,6 +1124,8 @@ in {
 
   pdfx = callPackage ../development/python-modules/pdfx { };
 
+  picamera = callPackage ../development/python-modules/picamera { };
+
   pushover-complete = callPackage ../development/python-modules/pushover-complete { };
 
   pyicloud = callPackage ../development/python-modules/pyicloud { };
