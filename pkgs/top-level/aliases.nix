@@ -87,6 +87,7 @@ mapAliases ({
   coprthr = throw "coprthr has been removed."; # added 2019-12-08
   corebird = throw "deprecated 2019-10-02: See https://www.patreon.com/posts/corebirds-future-18921328. Please use Cawbird as replacement.";
   coredumper = throw "coredumper has been removed: Abandoned by upstream."; # added 2019-11-16
+  cryptol = throw "cryptol was remove for prolonged broken build"; # added 2020-08-21
   cpp-gsl = microsoft_gsl; # added 2019-05-24
   cupsBjnp = cups-bjnp; # added 2016-01-02
   cups_filters = cups-filters; # added 2016-08
