@@ -7094,6 +7094,18 @@ let
     meta.homepage = "https://github.com/lumiliet/vim-twig/";
   };
 
+  vim-twiggy = buildVimPluginFrom2Nix {
+    pname = "vim-twiggy";
+    version = "2019-06-24";
+    src = fetchFromGitHub {
+      owner = "sodapopcan";
+      repo = "vim-twiggy";
+      rev = "962b181f402f05b66641308fe1b3538d5f863ab8";
+      sha256 = "0cqarsvdw9gr8pqp1gjy4rb6aaifjyb7iaaa2g8msr1ps0ihs3gd";
+    };
+    meta.homepage = "https://github.com/sodapopcan/vim-twiggy/";
+  };
+
   vim-unimpaired = buildVimPluginFrom2Nix {
     pname = "vim-unimpaired";
     version = "2020-04-26";
