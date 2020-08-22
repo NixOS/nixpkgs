@@ -23,7 +23,7 @@ in clangStdenv.mkDerivation rec {
     sha256 = "0w2dy2j9x5nc7x3g95j17r3m60vbfyn5j617h7js9xryv33yzpgx";
   };
 
-  nativeBuildInputs = [ gyp which ninja python pkgconfig ];
+  nativeBuildInputs = [ gyp which ninja python pkgconfig qt5.wrapQtAppsHook ];
   buildInputs = [ protobuf gtk2 zinnia qt5.qtbase libxcb fcitx gettext ];
 
   postUnpack = ''
@@ -78,6 +78,8 @@ in clangStdenv.mkDerivation rec {
 
     install -D -m 755 out_linux/Release/mozc_server     $out/lib/mozc/mozc_server
     install    -m 755 out_linux/Release/mozc_tool       $out/lib/mozc/mozc_tool
+
+    wrapQtApp $out/lib/mozc/mozc_tool
 
     install -D -m 755 out_linux/Release/fcitx-mozc.so   $out/lib/fcitx/fcitx-mozc.so
     install -D -m 644 unix/fcitx/fcitx-mozc.conf        $out/share/fcitx/addon/fcitx-mozc.conf
