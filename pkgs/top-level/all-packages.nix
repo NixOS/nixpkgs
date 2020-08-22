@@ -6898,6 +6898,8 @@ in
     conf = config.slstatus.conf or null;
   };
 
+  sm64ex = callPackage ../games/sm64ex { };
+
   smartdns = callPackage ../tools/networking/smartdns { };
 
   smartmontools = callPackage ../tools/system/smartmontools {
