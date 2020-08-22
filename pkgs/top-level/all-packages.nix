@@ -3076,6 +3076,8 @@ in
 
   evdevremapkeys = callPackage ../tools/inputmethods/evdevremapkeys { };
 
+  evscript = callPackage ../tools/inputmethods/evscript { };
+
   gebaar-libinput = callPackage ../tools/inputmethods/gebaar-libinput { };
 
   libpinyin = callPackage ../development/libraries/libpinyin { };
