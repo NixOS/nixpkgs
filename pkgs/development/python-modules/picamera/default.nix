@@ -15,6 +15,9 @@ buildPythonPackage rec {
     sha256 = "0l1y2qda7ighgm00c8cqajwscwmqac4svlsxm6k5bn7406m1a249";
   };
 
+  patches = [
+    https://github.com/waveform80/picamera/commit/c145015837caf512cdef777894b8c203998c1359.patch
+  ];
   propagatedBuildInputs = [ numpy ];
 
   meta = with lib; {
