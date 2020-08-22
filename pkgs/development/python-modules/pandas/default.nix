@@ -58,7 +58,9 @@ in buildPythonPackage rec {
     xlwt
   ];
 
-  hardeningDisable = optional isDarwin "strictoverflow";
+  # doesn't work with -Werror,-Wunused-command-line-argument
+  # https://github.com/NixOS/nixpkgs/issues/39687
+  hardeningDisable = optional stdenv.cc.isClang "strictoverflow";
 
   # For OSX, we need to add a dependency on libcxx, which provides
   # `complex.h` and other libraries that pandas depends on to build.
