@@ -23008,6 +23008,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  talentedhack = callPackage ../applications/audio/talentedhack { };
+
   tambura = callPackage ../applications/audio/tambura { };
 
   tamgamp.lv2 = callPackage ../applications/audio/tamgamp.lv2 { };
