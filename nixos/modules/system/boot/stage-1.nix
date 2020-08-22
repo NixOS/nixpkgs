@@ -512,7 +512,6 @@ in
     };
 
     boot.initrd.compressor = mkOption {
-      internal = true;
       default = "gzip";
       type = types.enum [ "cat" "gzip" "bzip2" "xz" "lz4" "lzop" "zstd" ];
       description = "The compressor to use on the initrd image.";
@@ -520,7 +519,6 @@ in
     };
 
     boot.initrd.compressorArgs = mkOption {
-      internal = true;
       default = [];
       type = types.listOf types.str;
       description = "Arguments to pass to the compressor for the initrd image.";
