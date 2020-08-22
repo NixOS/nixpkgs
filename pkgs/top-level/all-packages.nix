@@ -21418,6 +21418,8 @@ in
 
   lv2bm = callPackage ../applications/audio/lv2bm { };
 
+  lv2-cpp-tools = callPackage ../applications/audio/lv2-cpp-tools { };
+
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
   lyx = libsForQt5.callPackage ../applications/misc/lyx { };
@@ -23425,6 +23427,8 @@ in
   vlc_qt5 = vlc;
 
   vmpk = callPackage ../applications/audio/vmpk { };
+
+  vocproc = callPackage ../applications/audio/vocproc { };
 
   vnstat = callPackage ../applications/networking/vnstat { };
 
