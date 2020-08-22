@@ -8133,6 +8133,12 @@
     githubId = 863327;
     name = "Tyler Benster";
   };
+  tcbravo = {
+    email = "tomas.bravo@protonmail.ch";
+    github = "tcbravo";
+    githubId = 66133083;
+    name = "Tomas Bravo";
+  };
   tckmn = {
     email = "andy@tck.mn";
     github = "tckmn";
