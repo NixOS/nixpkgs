@@ -1095,6 +1095,16 @@ CREATE ROLE postgres LOGIN SUPERUSER;
      New option <xref linkend="opt-services.caddy.adapter"/> has been added.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <link linkend="opt-services.jellyfin.enable">jellyfin</link> module will use and stay on the Jellyfin version <literal>10.5.5</literal>
+     if <literal>stateVersion</literal> is lower than <literal>20.09</literal>. This is because significant changes were made to the database schema,
+     and it is highly recommended to backup your instance before upgrading. After making your backup, you can upgrade to the latest version either by
+     setting your <literal>stateVersion</literal> to <literal>20.09</literal> or higher, or set the <option>services.jellyfin.package</option> to
+     <literal>pkgs.jellyfin</literal>. If you do not wish to upgrade Jellyfin, but want to change your <literal>stateVersion</literal>, you can set
+     the value of <option>services.jellyfin.package</option> to <literal>pkgs.jellyfin_10_5</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
