@@ -59,17 +59,18 @@ rec {
     loongson2f     = [ ];
   };
 
-  predicates = {
-    sse3Support    = x: builtins.elem "sse3"   features.${x};
-    ssse3Support   = x: builtins.elem "ssse3"  features.${x};
-    sse4_1Support  = x: builtins.elem "sse4_1" features.${x};
-    sse4_2Support  = x: builtins.elem "sse4_2" features.${x};
-    sse4_aSupport  = x: builtins.elem "sse4a"  features.${x};
-    avxSupport     = x: builtins.elem "avx"    features.${x};
-    avx2Support    = x: builtins.elem "avx2"   features.${x};
-    avx512Support  = x: builtins.elem "avx512" features.${x};
-    aesSupport     = x: builtins.elem "aes"    features.${x};
-    fmaSupport     = x: builtins.elem "fma"    features.${x};
-    fma4Support    = x: builtins.elem "fma4"   features.${x};
+  predicates = rec {
+    featureSupport = feature: x: builtins.elem feature features.${x};
+    sse3Support    = featureSupport "sse3";
+    ssse3Support   = featureSupport "ssse3";
+    sse4_1Support  = featureSupport "sse4_1";
+    sse4_2Support  = featureSupport "sse4_2";
+    sse4_aSupport  = featureSupport "sse4a";
+    avxSupport     = featureSupport "avx";
+    avx2Support    = featureSupport "avx2";
+    avx512Support  = featureSupport "avx512";
+    aesSupport     = featureSupport "aes";
+    fmaSupport     = featureSupport "fma";
+    fma4Support    = featureSupport "fma4";
   };
 }
