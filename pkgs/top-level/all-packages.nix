@@ -9411,9 +9411,9 @@ in
     inherit (llvmPackages_rocm) clang clang-unwrapped lld llvm;
   };
 
-  rocm-runtime = callPackage ../development/libraries/rocm-runtime { };
-
-  rocm-runtime-ext = callPackage ../development/libraries/rocm-runtime-ext { };
+  rocm-runtime = callPackage ../development/libraries/rocm-runtime {
+    inherit (llvmPackages_rocm) clang-unwrapped llvm;
+  };
 
   # Python >= 3.8 still gives a bunch of warnings.
   rocm-smi = python37.pkgs.callPackage ../tools/system/rocm-smi { };
