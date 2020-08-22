@@ -1,5 +1,7 @@
 self: super: {
 
+    age = super.callPackage ./ext/age.nix { };
+
     periods = super.callPackage ./ext/periods.nix { };
 
     postgis = super.callPackage ./ext/postgis.nix {
