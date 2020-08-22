@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hyp2mat";
-  version = "0.0.17";
+  version = "0.0.18";
 
   src = fetchFromGitHub {
     owner = "koendv";
     repo = "hyp2mat";
     rev = "v${version}";
-    sha256 = "04bd2vrn8y1izir7pwl34a60cg2v05baqcrmpfdx5fvf33bbflaj";
+    sha256 = "03ibk51swxfl7pfrhcrfiffdi4mnf8kla0g1xj1lsrvrjwapfx03";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Import Hyperlynx Boardsim files to openEMS, an open source 3D full-wave electromagnetic field solver";
-    homepage = https://github.com/koendv/hyp2mat;
+    homepage = "https://github.com/koendv/hyp2mat";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ matthuszagh ];
     platforms = platforms.linux;
