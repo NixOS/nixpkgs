@@ -11258,6 +11258,8 @@ in
 
   remake = callPackage ../development/tools/build-managers/remake { };
 
+  replacement = callPackage ../development/tools/misc/replacement { };
+
   retdec = callPackage ../development/tools/analysis/retdec {
     stdenv = gcc8Stdenv;
   };
