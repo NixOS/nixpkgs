@@ -1560,6 +1560,8 @@ in {
 
   sabyenc = callPackage ../development/python-modules/sabyenc { };
 
+  sabyenc3 = callPackage ../development/python-modules/sabyenc3 { };
+
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };
 
   sanic-auth = callPackage ../development/python-modules/sanic-auth { };
