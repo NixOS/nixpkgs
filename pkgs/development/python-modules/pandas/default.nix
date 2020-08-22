@@ -58,6 +58,8 @@ in buildPythonPackage rec {
     xlwt
   ];
 
+  hardeningDisable = optional isDarwin "strictoverflow";
+
   # For OSX, we need to add a dependency on libcxx, which provides
   # `complex.h` and other libraries that pandas depends on to build.
   postPatch = optionalString isDarwin ''
