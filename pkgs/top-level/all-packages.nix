@@ -3969,6 +3969,8 @@ in
   gocryptfs = callPackage ../tools/filesystems/gocryptfs { };
 
   godot = callPackage ../development/tools/godot {};
+  
+  godot-headless = callPackage ../development/tools/godot/headless.nix { };
 
   goklp = callPackage ../tools/networking/goklp {};
 
