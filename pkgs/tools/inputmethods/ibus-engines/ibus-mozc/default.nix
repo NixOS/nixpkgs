@@ -21,7 +21,7 @@ in clangStdenv.mkDerivation rec {
     maintainers  = with maintainers; [ gebner ericsagnes ];
   };
 
-  nativeBuildInputs = [ which ninja python gyp pkgconfig ];
+  nativeBuildInputs = [ which ninja python gyp pkgconfig qt5.wrapQtAppsHook ];
   buildInputs = [ protobuf ibus gtk2 zinnia qt5.qtbase libxcb ];
 
   src = fetchFromGitHub {
@@ -70,6 +70,7 @@ in clangStdenv.mkDerivation rec {
 
     install -D -m 755 out_linux/Release/mozc_server $out/lib/mozc/mozc_server
     install    -m 755 out_linux/Release/mozc_tool   $out/lib/mozc/mozc_tool
+    wrapQtApp $out/lib/mozc/mozc_tool
 
     install -d        $out/share/doc/mozc
     install -m 644    data/installer/*.html         $out/share/doc/mozc/
