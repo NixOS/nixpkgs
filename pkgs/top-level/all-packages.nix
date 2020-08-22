@@ -24552,6 +24552,8 @@ in
 
   leela-zero = libsForQt5.callPackage ../games/leela-zero { };
 
+  legendary-gl = python38Packages.callPackage ../games/legendary-gl { };
+
   lgogdownloader = callPackage ../games/lgogdownloader { };
 
   liberal-crime-squad = callPackage ../games/liberal-crime-squad { };
