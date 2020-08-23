@@ -799,7 +799,7 @@ in {
           "btrfs subvol create /mnt/badpath/boot",
           "btrfs subvol create /mnt/nixos",
           "btrfs subvol set-default "
-          + "$(btrfs subvol list /mnt | grep 'nixos' | awk '{print \$2}') /mnt",
+          + "$(btrfs subvol list /mnt | grep 'nixos' | awk '{print $2}') /mnt",
           "umount /mnt",
           "mount -o defaults LABEL=root /mnt",
           "mkdir -p /mnt/badpath/boot",  # Help ensure the detection mechanism
