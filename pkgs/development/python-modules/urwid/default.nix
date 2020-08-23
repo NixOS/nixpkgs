@@ -14,6 +14,11 @@ buildPythonPackage rec {
   LC_ALL = "en_US.UTF-8";
   checkInputs = [ glibcLocales ];
 
+  # tests which assert on strings don't decode results correctly
+  doCheck = isPy3k;
+
+  pythonImportsCheck = [ "urwid" ];
+
   meta = with stdenv.lib; {
     description = "A full-featured console (xterm et al.) user interface library";
     homepage = "http://excess.org/urwid";
