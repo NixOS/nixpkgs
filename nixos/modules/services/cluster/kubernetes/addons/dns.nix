@@ -51,7 +51,7 @@ in {
     };
 
     coredns = mkOption {
-      description = "Docker image to seed for the CoreDNS container.";
+      description = "Container image used for the CoreDNS container.";
       type = types.attrs;
       default = {
         imageName = "coredns/coredns";
@@ -63,9 +63,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.kubernetes.kubelet.seedDockerImages =
-      singleton (pkgs.dockerTools.pullImage cfg.coredns);
-
     services.kubernetes.addonManager.bootstrapAddons = {
       coredns-cr = {
         apiVersion = "rbac.authorization.k8s.io/v1";
@@ -202,7 +199,7 @@ in {
                 {
                   args = [ "-conf" "/etc/coredns/Corefile" ];
                   image = with cfg.coredns; "${imageName}:${finalImageTag}";
-                  imagePullPolicy = "Never";
+                  imagePullPolicy = "Always";
                   livenessProbe = {
                     failureThreshold = 5;
                     httpGet = {

@@ -87,7 +87,7 @@ in {
 
         Master role will enable etcd, apiserver, scheduler, controller manager
         addon manager, flannel and proxy services.
-        Node role will enable flannel, docker, kubelet and proxy services.
+        Node role will enable flannel, cri-o, kubelet and proxy services.
       '';
       default = [];
       type = types.listOf (types.enum ["master" "node"]);
@@ -222,14 +222,8 @@ in {
     })
 
     (mkIf cfg.kubelet.enable {
-      virtualisation.docker = {
+      virtualisation.cri-o = {
         enable = mkDefault true;
-
-        # kubernetes needs access to logs
-        logDriver = mkDefault "json-file";
-
-        # iptables must be disabled for kubernetes
-        extraOptions = "--iptables=false --ip-masq=false";
       };
     })
 
@@ -269,7 +263,6 @@ in {
       users.users.kubernetes = {
         uid = config.ids.uids.kubernetes;
         description = "Kubernetes user";
-        extraGroups = [ "docker" ];
         group = "kubernetes";
         home = cfg.dataDir;
         createHome = true;

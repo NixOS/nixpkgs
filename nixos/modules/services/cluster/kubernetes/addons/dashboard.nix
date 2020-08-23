@@ -46,7 +46,7 @@ in {
     };
 
     image = mkOption {
-      description = "Docker image to seed for the kubernetes dashboard container.";
+      description = "Container image to be used the kubernetes dashboard.";
       type = types.attrs;
       default = {
         imageName = "k8s.gcr.io/kubernetes-dashboard-amd64";
@@ -58,8 +58,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.kubernetes.kubelet.seedDockerImages = [(pkgs.dockerTools.pullImage cfg.image)];
-
     services.kubernetes.addonManager.addons = {
       kubernetes-dashboard-deployment = {
         kind = "Deployment";

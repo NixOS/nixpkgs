@@ -7,24 +7,21 @@ let
   cfg = top.kubelet;
 
   cniConfig =
-    if cfg.cni.config != [] && cfg.cni.configDir != null then
+    if cfg.cni.config != [ ] && cfg.cni.configDir != null then
       throw "Verbatim CNI-config and CNI configDir cannot both be set."
     else if cfg.cni.configDir != null then
       cfg.cni.configDir
-    else
+    else if cfg.cni.config != [ ] then
       (pkgs.buildEnv {
         name = "kubernetes-cni-config";
-        paths = imap (i: entry:
-          pkgs.writeTextDir "${toString (10+i)}-${entry.type}.conf" (builtins.toJSON entry)
-        ) cfg.cni.config;
-      });
-
-  infraContainer = pkgs.dockerTools.buildImage {
-    name = "pause";
-    tag = "latest";
-    contents = top.package.pause;
-    config.Cmd = "/bin/pause";
-  };
+        paths = imap
+          (i: entry:
+            pkgs.writeTextDir "${toString (10 + i)}-${entry.type}.conf" (builtins.toJSON entry)
+          )
+          cfg.cni.config;
+        # fallback to CRI-O's default network dir if the user has not
+        # specified another one
+      }) else "/etc/cni/net.d";
 
   kubeconfig = top.lib.mkKubeConfig "kubelet" cfg.kubeconfig;
 
@@ -191,12 +188,6 @@ in
       type = int;
     };
 
-    seedDockerImages = mkOption {
-      description = "List of docker images to preload on system";
-      default = [];
-      type = listOf package;
-    };
-
     taints = mkOption {
       description = "Node taints (https://kubernetes.io/docs/concepts/configuration/assign-pod-node/).";
       default = {};
@@ -235,19 +226,22 @@ in
   ###### implementation
   config = mkMerge [
     (mkIf cfg.enable {
-      services.kubernetes.kubelet.seedDockerImages = [infraContainer];
-
       systemd.services.kubelet = {
         description = "Kubernetes Kubelet Service";
         wantedBy = [ "kubernetes.target" ];
-        after = [ "network.target" "docker.service" "kube-apiserver.service" ];
-        path = with pkgs; [ gitMinimal openssh docker utillinux iproute ethtool thin-provisioning-tools iptables socat ] ++ top.path;
+        after = [ "network.target" "cri-o.service" "kube-apiserver.service" ];
+        path = with pkgs; [
+          gitMinimal
+          openssh
+          utillinux
+          iproute
+          ethtool
+          thin-provisioning-tools
+          iptables
+          socat
+          config.virtualisation.cri-o.package
+        ] ++ top.path;
         preStart = ''
-          ${concatMapStrings (img: ''
-            echo "Seeding docker image: ${img}"
-            docker load <${img}
-          '') cfg.seedDockerImages}
-
           rm /opt/cni/bin/* || true
           ${concatMapStrings (package: ''
             echo "Linking cni package: ${package}"
@@ -283,7 +277,6 @@ in
               "--network-plugin=${cfg.networkPlugin}"} \
             ${optionalString (cfg.nodeIp != null)
               "--node-ip=${cfg.nodeIp}"} \
-            --pod-infra-container-image=pause \
             ${optionalString (cfg.manifests != {})
               "--pod-manifest-path=/etc/${manifestPath}"} \
             --port=${toString cfg.port} \
@@ -296,11 +289,16 @@ in
             ${optionalString (cfg.tlsKeyFile != null)
               "--tls-private-key-file=${cfg.tlsKeyFile}"} \
             ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
+            --container-runtime=remote \
+            --container-runtime-endpoint=/var/run/crio/crio.sock \
+            --cgroup-driver=systemd \
             ${cfg.extraOpts}
           '';
           WorkingDirectory = top.dataDir;
         };
       };
+
+      virtualisation.cri-o.networkDir = cniConfig;
 
       # Allways include cni plugins
       services.kubernetes.kubelet.cni.packages = [pkgs.cni-plugins];
