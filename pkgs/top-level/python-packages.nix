@@ -7824,6 +7824,8 @@ in {
 
   rxv     = callPackage ../development/python-modules/rxv     { };
 
+  userpath = callPackage ../development/python-modules/userpath { };
+
 });
 
 in fix' (extends overrides packages)
