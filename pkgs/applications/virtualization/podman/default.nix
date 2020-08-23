@@ -60,7 +60,7 @@ buildGoModule rec {
     MANDIR=$man/share/man make install.man-nobuild
   '';
 
-  passthru.tests.podman = nixosTests.podman;
+  passthru.tests = { inherit (nixosTests) podman; };
 
   meta = with stdenv.lib; {
     homepage = "https://podman.io/";
