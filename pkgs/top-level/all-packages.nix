@@ -16907,6 +16907,8 @@ in
   firebird = callPackage ../servers/firebird { icu = null; /*stdenv = gcc5Stdenv;*/ };
   firebirdSuper = firebird.override { icu = icu58; superServer = true; /*stdenv = gcc5Stdenv;*/ };
 
+  flarum = callPackage ../servers/web-apps/flarum { };
+
   frab = callPackage ../servers/web-apps/frab { };
 
   freeradius = callPackage ../servers/freeradius { };
