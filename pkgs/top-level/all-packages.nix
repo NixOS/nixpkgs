@@ -25199,6 +25199,8 @@ in
     plasma-workspace-wallpapers polkit-kde-agent powerdevil sddm-kcm
     systemsettings user-manager xdg-desktop-portal-kde;
 
+  plasma-applet-caffeine-plus = libsForQt5.callPackage ../desktops/plasma-5/addons/caffeine-plus.nix { };
+
   kwin-tiling = libsForQt5.callPackage ../desktops/plasma-5/kwin/scripts/tiling.nix { };
 
   krohnkite = libsForQt5.callPackage ../desktops/plasma-5/kwin/scripts/krohnkite.nix { };
