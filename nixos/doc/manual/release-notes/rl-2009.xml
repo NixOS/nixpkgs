@@ -748,8 +748,6 @@ CREATE ROLE postgres LOGIN SUPERUSER;
      For NixOS configuration options, the type <literal>loaOf</literal>, after
      its initial deprecation in release 20.03, has been removed. In NixOS and
      Nixpkgs options using this type have been converted to <literal>attrsOf</literal>.
-    </para>
-    <para>
      For more information on this change have look at these links:
      <link xlink:href="https://github.com/NixOS/nixpkgs/issues/1800">issue #1800</link>,
      <link xlink:href="https://github.com/NixOS/nixpkgs/pull/63103">PR #63103</link>.
