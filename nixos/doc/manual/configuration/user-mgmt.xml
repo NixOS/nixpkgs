@@ -11,11 +11,11 @@
   that a user account named <literal>alice</literal> shall exist:
 <programlisting>
 <xref linkend="opt-users.users"/>.alice = {
-  <link linkend="opt-users.users._name__.isNormalUser">isNormalUser</link> = true;
-  <link linkend="opt-users.users._name__.home">home</link> = "/home/alice";
-  <link linkend="opt-users.users._name__.description">description</link> = "Alice Foobar";
-  <link linkend="opt-users.users._name__.extraGroups">extraGroups</link> = [ "wheel" "networkmanager" ];
-  <link linkend="opt-users.users._name__.openssh.authorizedKeys.keys">openssh.authorizedKeys.keys</link> = [ "ssh-dss AAAAB3Nza... alice@foobar" ];
+  <link linkend="opt-users.users._name_.isNormalUser">isNormalUser</link> = true;
+  <link linkend="opt-users.users._name_.home">home</link> = "/home/alice";
+  <link linkend="opt-users.users._name_.description">description</link> = "Alice Foobar";
+  <link linkend="opt-users.users._name_.extraGroups">extraGroups</link> = [ "wheel" "networkmanager" ];
+  <link linkend="opt-users.users._name_.openssh.authorizedKeys.keys">openssh.authorizedKeys.keys</link> = [ "ssh-dss AAAAB3Nza... alice@foobar" ];
 };
 </programlisting>
   Note that <literal>alice</literal> is a member of the
@@ -36,7 +36,7 @@
   account will cease to exist. Also, imperative commands for managing users and
   groups, such as useradd, are no longer available. Passwords may still be
   assigned by setting the user's
-  <link linkend="opt-users.users._name__.hashedPassword">hashedPassword</link>
+  <link linkend="opt-users.users._name_.hashedPassword">hashedPassword</link>
   option. A hashed password can be generated using <command>mkpasswd -m
   sha-512</command> after installing the <literal>mkpasswd</literal> package.
  </para>
