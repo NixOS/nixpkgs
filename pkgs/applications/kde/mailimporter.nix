@@ -2,7 +2,7 @@
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
   akonadi, akonadi-mime, karchive, kcompletion, kconfig, kcoreaddons, ki18n,
-  kmime, kxmlgui, libkdepim
+  kmime, kxmlgui, libkdepim, pimcommon
 }:
 
 mkDerivation {
@@ -14,6 +14,6 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     akonadi akonadi-mime karchive kcompletion kconfig kcoreaddons ki18n kmime
-    kxmlgui libkdepim
+    kxmlgui libkdepim pimcommon
   ];
 }
