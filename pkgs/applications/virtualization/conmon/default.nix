@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  passthru.tests = { inherit (nixosTests) podman; };
+  passthru.tests = { inherit (nixosTests) cri-o podman; };
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/containers/conmon";
