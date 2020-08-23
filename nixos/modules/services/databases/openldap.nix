@@ -5,7 +5,6 @@ let
   cfg = config.services.openldap;
   openldap = cfg.package;
 
-  dataFile = pkgs.writeText "ldap-contents.ldif" cfg.declarativeContents;
   configFile = pkgs.writeText "slapd.conf" ((optionalString (cfg.defaultSchemas != null && cfg.defaultSchemas) ''
     include ${openldap}/etc/schema/core.schema
     include ${openldap}/etc/schema/cosine.schema
@@ -26,7 +25,7 @@ let
     ${if cfg.extraDatabaseConfig != null then cfg.extraDatabaseConfig else ""}
   '');
 
-  configDir = if cfg.configDir != null then cfg.configDir else "/etc/openldap/slapd.d";
+  configDir = lib.escapeShellArg (if cfg.configDir != null then cfg.configDir else "/etc/openldap/slapd.d");
 
   ldapValueType = let
     singleLdapValueType = types.either types.str (types.submodule {
@@ -209,7 +208,7 @@ in {
         example = "dc=example,dc=org";
         description = ''
           Specify the DN suffix of queries that will be passed to the first
-          database database.
+          backend database.
         '';
       };
 
@@ -292,10 +291,10 @@ in {
       };
 
       declarativeContents = mkOption {
-        type = with types; nullOr lines;
-        default = null;
+        type = with types; either lines (attrsOf lines);
+        default = {};
         description = ''
-          Declarative contents for the LDAP database, in LDIF format.
+          Declarative contents for the first LDAP database, in LDIF format.
 
           Note a few facts when using it. First, the database
           <emphasis>must</emphasis> be stored in the directory defined by
@@ -359,6 +358,10 @@ in {
     maintainers = with lib.maintainters; [ mic92 kwohlfahrt ];
   };
 
+  # TODO: Check that dataDir/declarativeContents/configDir all match
+  # - deprecate declarativeContents = ''...'';
+  # - no declarativeContents = ''...'' if dataDir == null;
+  # - no declarativeContents = { ... } if configDir != null
   config = mkIf cfg.enable {
     warnings = let
       deprecations = [
@@ -458,32 +461,45 @@ in {
       after = [ "network.target" ];
       preStart = let
         dbSettings = lib.filterAttrs (name: value: lib.hasPrefix "olcDatabase=" name) cfg.settings.children;
-        dataDirs = lib.mapAttrsToList (name: value: value.attrs.olcDbDirectory) dbSettings;
+        dataDirs = lib.mapAttrs' (name: value: lib.nameValuePair value.attrs.olcSuffix value.attrs.olcDbDirectory)
+          (lib.filterAttrs (_: value: value.attrs ? olcDbDirectory) dbSettings);
         settingsFile = pkgs.writeText "config.ldif" (lib.concatStringsSep "\n" (attrsToLdif "cn=config" cfg.settings));
       in ''
         mkdir -p /run/slapd
         chown -R "${cfg.user}:${cfg.group}" /run/slapd
 
-        mkdir -p '${configDir}' ${lib.escapeShellArgs dataDirs}
-        chown "${cfg.user}:${cfg.group}" '${configDir}' ${lib.escapeShellArgs dataDirs}
+        mkdir -p ${configDir} ${lib.escapeShellArgs (lib.attrValues dataDirs)}
+        chown "${cfg.user}:${cfg.group}" ${configDir} ${lib.escapeShellArgs (lib.attrValues dataDirs)}
 
         ${lib.optionalString (cfg.configDir == null) (
           if (cfg.extraConfig != "" || cfg.extraDatabaseConfig != "") then ''
-            rm -Rf '${configDir}'/*
+            rm -Rf ${configDir}/*
             # -u disables config generation, so just ignore the return code
             ${openldap}/bin/slaptest -f ${configFile} -F ${configDir} || true
           '' else ''
-            rm -Rf '${configDir}'/*
+            rm -Rf ${configDir}/*
             ${openldap}/bin/slapadd -F ${configDir} -bcn=config -l ${settingsFile}
           ''
         )}
-        chown -R "${cfg.user}:${cfg.group}" '${configDir}'
+        chown -R "${cfg.user}:${cfg.group}" ${configDir}
 
-        ${optionalString (cfg.declarativeContents != null) ''
-          rm -Rf '${lib.head dataDirs}'/*
-          ${openldap}/bin/slapadd -F ${configDir} -b${cfg.suffix} -l ${dataFile}
-          chown -R "${cfg.user}:${cfg.group}" ${lib.escapeShellArgs dataDirs}
-        ''}
+        ${if types.lines.check cfg.declarativeContents then (let
+          dataFile = pkgs.writeText "ldap-contents.ldif" cfg.declarativeContents;
+        in ''
+          rm -rf ${lib.escapeShellArg cfg.dataDir}/*
+          ${openldap}/bin/slapadd -F ${configDir} -l ${dataFile}
+          chown -R "${cfg.user}:${cfg.group}" ${lib.escapeShellArg cfg.dataDir}
+        '') else (let
+          dataFiles = lib.mapAttrs (dn: contents: pkgs.writeText "${dn}.ldif" contents) cfg.declarativeContents;
+        in ''
+          ${lib.concatStrings (lib.mapAttrsToList (dn: file: let
+            dataDir = lib.escapeShellArg (getAttr dn dataDirs);
+          in ''
+            rm -rf ${dataDir}/*
+            ${openldap}/bin/slapadd -F ${configDir} -b ${dn} -l ${file}
+            chown -R "${cfg.user}:${cfg.group}" ${dataDir}
+          '') dataFiles)}
+        '')}
 
         ${openldap}/bin/slaptest -u -F ${configDir}
       '';
