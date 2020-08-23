@@ -15563,9 +15563,7 @@ in
   wxGTK30 = wxGTK30-gtk2;
   wxGTK31 = wxGTK31-gtk2;
 
-  wxGTK28 = callPackage ../development/libraries/wxwidgets/2.8 {
-    inherit (gnome2) GConf;
-  };
+  wxGTK28 = callPackage ../development/libraries/wxwidgets/2.8 { };
 
   wxGTK29 = callPackage ../development/libraries/wxwidgets/2.9 {
     inherit (gnome2) GConf;
@@ -24400,7 +24398,6 @@ in
   fsg = callPackage ../games/fsg {
     wxGTK = wxGTK28.override {
       unicode = false;
-      gst-plugins-base = null;
     };
   };
 
