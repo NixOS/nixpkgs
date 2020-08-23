@@ -1486,8 +1486,10 @@ in
     '';
   });
 
-  caddy2 = callPackage ../servers/caddy/v2.nix { };
   caddy = callPackage ../servers/caddy {
+    buildGoModule = buildGo114Module;
+  };
+  caddy2 = callPackage ../servers/caddy/v2.nix {
     buildGoModule = buildGo114Module;
   };
   traefik = callPackage ../servers/traefik { };
