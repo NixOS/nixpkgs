@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fuse3 ];
 
-  passthru.tests.podman = nixosTests.podman;
+  passthru.tests = { inherit (nixosTests) podman; };
 
   meta = with stdenv.lib; {
     description = "FUSE implementation for overlayfs";
