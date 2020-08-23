@@ -9,7 +9,7 @@ let
       };
     };
 
-    # prevent make-test.nix to change IP
+    # prevent make-test-python.nix to change IP
     networking.interfaces = {
       eth1.ipv4.addresses = lib.mkOverride 0 [ ];
     };
