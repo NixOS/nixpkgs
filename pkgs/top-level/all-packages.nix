@@ -1486,8 +1486,10 @@ in
     '';
   });
 
-  caddy = callPackage ../servers/caddy { };
   caddy2 = callPackage ../servers/caddy/v2.nix { };
+  caddy = callPackage ../servers/caddy {
+    buildGoModule = buildGo114Module;
+  };
   traefik = callPackage ../servers/traefik { };
 
   calamares = libsForQt5.callPackage ../tools/misc/calamares {
