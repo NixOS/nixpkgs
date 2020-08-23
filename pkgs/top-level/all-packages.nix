@@ -5348,6 +5348,7 @@ in
   mailnagWithPlugins = mailnag.withPlugins(
     builtins.attrValues mailnag.availablePlugins
   );
+  bubblemail = callPackage ../applications/networking/mailreaders/bubblemail { };
 
   mailsend = callPackage ../tools/networking/mailsend { };
 
