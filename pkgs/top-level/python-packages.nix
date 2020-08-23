@@ -6752,6 +6752,8 @@ in {
 
   terminaltables = callPackage ../development/python-modules/terminaltables { };
 
+  test-tube = callPackage ../development/python-modules/test-tube { };
+
   testpath = callPackage ../development/python-modules/testpath { };
 
   testrepository = callPackage ../development/python-modules/testrepository { };
