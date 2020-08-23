@@ -1,7 +1,7 @@
 # A profile with most (vanilla) hardening options enabled by default,
 # potentially at the cost of features and performance.
 
-{ lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -26,6 +26,9 @@ with lib;
   security.allowSimultaneousMultithreading = mkDefault false;
 
   security.forcePageTableIsolation = mkDefault true;
+
+  # This is required by podman to run containers in rootless mode.
+  security.unprivilegedUsernsClone = mkDefault config.virtualisation.containers.enable;
 
   security.virtualisation.flushL1DataCache = mkDefault "always";
 
