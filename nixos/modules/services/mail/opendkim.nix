@@ -131,6 +131,7 @@ in {
         RuntimeDirectory = optional (cfg.socket == defaultSock) "opendkim";
         StateDirectory = "opendkim";
         StateDirectoryMode = "0700";
+        ReadWritePaths = [ cfg.keyPath ];
 
         AmbientCapabilities = [];
         CapabilityBoundingSet = [];
