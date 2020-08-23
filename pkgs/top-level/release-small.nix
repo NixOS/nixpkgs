@@ -38,7 +38,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   dhcp = linux;
   diffutils = all;
   e2fsprogs = linux;
-  emacs25 = linux;
+  emacs = linux;
   enscript = all;
   file = all;
   findutils = all;

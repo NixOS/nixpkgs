@@ -43,6 +43,7 @@
 , sqlite
 , enableGtk2Plugins ? false
 , gtk2 ? null
+, enableGLES ? true
 , gst-plugins-base
 , gst-plugins-bad
 , woff2
@@ -167,7 +168,7 @@ stdenv.mkDerivation rec {
     "-DUSE_ACCELERATE=0"
     "-DUSE_SYSTEM_MALLOC=ON"
   ] ++ optional (!enableGtk2Plugins) "-DENABLE_PLUGIN_PROCESS_GTK2=OFF"
-    ++ optional stdenv.isLinux "-DENABLE_GLES2=ON";
+    ++ optional (stdenv.isLinux && enableGLES) "-DENABLE_GLES2=ON";
 
   postPatch = ''
     patchShebangs .

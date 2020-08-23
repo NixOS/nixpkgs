@@ -72,7 +72,7 @@ default-package-overrides:
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
-  # LTS Haskell 16.9
+  # LTS Haskell 16.10
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -243,7 +243,7 @@ default-package-overrides:
   - asn1-encoding ==0.9.6
   - asn1-parse ==0.9.5
   - asn1-types ==0.3.4
-  - assert-failure ==0.1.2.3
+  - assert-failure ==0.1.2.4
   - assoc ==1.0.2
   - astro ==0.4.2.1
   - async ==2.2.2
@@ -262,7 +262,7 @@ default-package-overrides:
   - attoparsec-path ==0.0.0.1
   - audacity ==0.0.2
   - aur ==7.0.3
-  - aura ==3.1.6
+  - aura ==3.1.7
   - authenticate ==1.3.5
   - authenticate-oauth ==1.6.0.1
   - auto ==0.4.3.1
@@ -671,7 +671,7 @@ default-package-overrides:
   - doldol ==0.4.1.2
   - do-list ==1.0.1
   - do-notation ==0.1.0.2
-  - dotenv ==0.8.0.4
+  - dotenv ==0.8.0.6
   - dotgen ==0.4.3
   - dotnet-timespan ==0.0.1.0
   - double-conversion ==2.0.2.0
@@ -760,7 +760,7 @@ default-package-overrides:
   - extended-reals ==0.2.4.0
   - extensible-effects ==5.0.0.1
   - extensible-exceptions ==0.1.1.4
-  - extra ==1.7.4
+  - extra ==1.7.5
   - extractable-singleton ==0.0.1
   - extrapolate ==0.4.2
   - fail ==4.9.0.0
@@ -979,7 +979,7 @@ default-package-overrides:
   - hall-symbols ==0.1.0.6
   - hamtsolo ==1.0.3
   - HandsomeSoup ==0.4.2
-  - hapistrano ==0.4.1.0
+  - hapistrano ==0.4.1.2
   - happstack-server ==7.6.1
   - happy ==1.19.12
   - HasBigDecimal ==0.1.1
@@ -1007,7 +1007,7 @@ default-package-overrides:
   - haskoin-core ==0.13.4
   - haskoin-node ==0.13.0
   - hasql ==1.4.3
-  - hasql-optparse-applicative ==0.3.0.5
+  - hasql-optparse-applicative ==0.3.0.6
   - hasql-pool ==0.5.2
   - hasql-transaction ==1.0.0.1
   - hasty-hamiltonian ==1.3.3
@@ -1088,18 +1088,18 @@ default-package-overrides:
   - HSlippyMap ==3.0.1
   - hslogger ==1.3.1.0
   - hslua ==1.0.3.2
-  - hslua-aeson ==1.0.2
+  - hslua-aeson ==1.0.3
   - hslua-module-doclayout ==0.1.0
-  - hslua-module-system ==0.2.1
+  - hslua-module-system ==0.2.2
   - hslua-module-text ==0.2.1
   - HsOpenSSL ==0.11.4.18
   - hsp ==0.10.0
-  - hspec ==2.7.1
+  - hspec ==2.7.2
   - hspec-attoparsec ==0.1.0.2
   - hspec-checkers ==0.1.0.2
   - hspec-contrib ==0.5.1
-  - hspec-core ==2.7.1
-  - hspec-discover ==2.7.1
+  - hspec-core ==2.7.2
+  - hspec-discover ==2.7.2
   - hspec-expectations ==0.8.2
   - hspec-expectations-lifted ==0.10.0
   - hspec-expectations-pretty-diff ==0.7.2.5
@@ -1258,7 +1258,7 @@ default-package-overrides:
   - ix-shapable ==0.1.0
   - jack ==0.7.1.4
   - jira-wiki-markup ==1.1.4
-  - jose ==0.8.3
+  - jose ==0.8.3.1
   - jose-jwt ==0.8.0
   - js-dgtable ==0.5.2
   - js-flot ==0.8.3
@@ -1289,7 +1289,7 @@ default-package-overrides:
   - kmeans ==0.1.3
   - koofr-client ==1.0.0.3
   - krank ==0.2.2
-  - kubernetes-webhook-haskell ==0.2.0.2
+  - kubernetes-webhook-haskell ==0.2.0.3
   - l10n ==0.1.0.1
   - labels ==0.3.3
   - lackey ==1.0.13
@@ -1394,7 +1394,7 @@ default-package-overrides:
   - massiv-test ==0.1.3.1
   - mathexpr ==0.3.0.0
   - math-extras ==0.1.1.0
-  - math-functions ==0.3.4.0
+  - math-functions ==0.3.4.1
   - matplotlib ==0.7.5
   - matrices ==0.5.0
   - matrix ==0.3.6.1
@@ -1466,7 +1466,7 @@ default-package-overrides:
   - monad-extras ==0.6.0
   - monadic-arrays ==0.2.2
   - monad-journal ==0.8.1
-  - monad-logger ==0.3.34
+  - monad-logger ==0.3.35
   - monad-logger-json ==0.1.0.0
   - monad-logger-prefix ==0.1.11
   - monad-loops ==0.4.3
@@ -1589,7 +1589,7 @@ default-package-overrides:
   - OneTuple ==0.2.2.1
   - Only ==0.1
   - oo-prototypes ==0.1.0.0
-  - opaleye ==0.6.7005.0
+  - opaleye ==0.6.7006.1
   - OpenAL ==1.7.0.5
   - open-browser ==0.2.1.0
   - openexr-write ==0.1.0.2
@@ -1786,7 +1786,7 @@ default-package-overrides:
   - qchas ==1.1.0.1
   - qm-interpolated-string ==0.3.0.0
   - qrcode-core ==0.9.4
-  - qrcode-juicypixels ==0.8.1
+  - qrcode-juicypixels ==0.8.2
   - quadratic-irrational ==0.1.1
   - QuasiText ==0.1.2.6
   - QuickCheck ==2.13.2
@@ -1835,7 +1835,7 @@ default-package-overrides:
   - reanimate ==0.3.3.0
   - reanimate-svg ==0.9.8.0
   - rebase ==1.6.1
-  - record-dot-preprocessor ==0.2.5
+  - record-dot-preprocessor ==0.2.6
   - record-hasfield ==1.0
   - records-sop ==0.1.0.3
   - recursion-schemes ==5.1.3
@@ -2170,7 +2170,7 @@ default-package-overrides:
   - tasty-hunit ==0.10.0.2
   - tasty-kat ==0.0.3
   - tasty-leancheck ==0.0.1
-  - tasty-lua ==0.2.2
+  - tasty-lua ==0.2.3
   - tasty-program ==1.0.5
   - tasty-quickcheck ==0.10.1.1
   - tasty-rerun ==1.1.17
@@ -2294,7 +2294,7 @@ default-package-overrides:
   - tuples-homogenous-h98 ==0.1.1.0
   - tuple-sop ==0.3.1.0
   - tuple-th ==0.2.5
-  - turtle ==1.5.19
+  - turtle ==1.5.20
   - TypeCompose ==0.9.14
   - typed-process ==0.2.6.0
   - typed-uuid ==0.0.0.2
@@ -2408,7 +2408,7 @@ default-package-overrides:
   - void ==0.7.3
   - vty ==5.28.2
   - wai ==3.2.2.1
-  - wai-app-static ==3.1.7.1
+  - wai-app-static ==3.1.7.2
   - wai-conduit ==3.0.0.4
   - wai-cors ==0.2.7
   - wai-enforce-https ==0.0.2.1
@@ -2540,6 +2540,7 @@ default-package-overrides:
 
 extra-packages:
   - aeson < 0.8                         # newer versions don't work with GHC 7.6.x or earlier
+  - aeson == 1.5.2.0                    # needed for fourmolu 0.1.0.0, but 1.5.3 is to new for our purpose
   - aeson-pretty < 0.8                  # required by elm compiler
   - Agda == 2.6.1                       # allows the agdaPackage set to be fixed to this version so that it won't break when another agda version is released.
   - ansi-terminal == 0.10.3             # required by cabal-plan, and policeman in ghc-8.8.x
@@ -2580,6 +2581,7 @@ extra-packages:
   - hoogle == 5.0.14                    # required by hie-hoogle
   - html-conduit ^>= 1.2                # pre-lts-11.x versions neeed by git-annex 6.20180227
   - http-conduit ^>= 2.2                # pre-lts-11.x versions neeed by git-annex 6.20180227
+  - hslua == 1.1.2                      # required for pandoc 2.10
   - inline-c < 0.6                      # required on GHC 8.0.x
   - inline-c-cpp < 0.2                  # required on GHC 8.0.x
   - lens-labels == 0.1.*                # required for proto-lens-descriptors
@@ -2759,6 +2761,7 @@ dont-distribute-packages:
   - boolector
   - ccelerate-cuda
   - cplex-hs
+  - cuda # 2020-08-18 because of dependency nvidia-x11
   - cublas
   - cufft
   - cusolver
@@ -3744,6 +3747,7 @@ broken-packages:
   - cgen
   - cgi-utils
   - cgrep
+  - chainweb-mining-client
   - chalkboard
   - chalkboard-viewer
   - charade
@@ -5074,7 +5078,6 @@ broken-packages:
   - foscam-filename
   - foscam-sort
   - Foster
-  - fourmolu
   - fpco-api
   - fplll
   - fpnla-examples
@@ -5904,6 +5907,7 @@ broken-packages:
   - hasql-queue
   - hasql-simple
   - hasql-th
+  - hasqly-mysql
   - hastache
   - hastache-aeson
   - haste
@@ -5956,7 +5960,6 @@ broken-packages:
   - hcltest
   - hcoap
   - hcom
-  - hcoord
   - hcron
   - hCsound
   - hcube
@@ -6229,7 +6232,6 @@ broken-packages:
   - hobbes
   - hobbits
   - hocilib
-  - hocker
   - hodatime
   - HODE
   - hoe
@@ -6702,20 +6704,8 @@ broken-packages:
   - ignore
   - igraph
   - igrf
-  - ihaskell
-  - ihaskell-aeson
   - ihaskell-basic
-  - ihaskell-blaze
-  - ihaskell-charts
-  - ihaskell-diagrams
   - ihaskell-display
-  - ihaskell-gnuplot
-  - ihaskell-graphviz
-  - ihaskell-hatex
-  - ihaskell-hvega
-  - ihaskell-inline-r
-  - ihaskell-juicypixels
-  - ihaskell-magic
   - ihaskell-parsec
   - ihaskell-plot
   - ihaskell-rlangqq
@@ -6778,7 +6768,6 @@ broken-packages:
   - inject-function
   - inline-asm
   - inline-java
-  - inline-r
   - inserts
   - inspector-wrecker
   - instana-haskell-trace-sdk
@@ -9165,7 +9154,6 @@ broken-packages:
   - rethinkdb-client-driver
   - rethinkdb-model
   - rethinkdb-wereHamster
-  - retrie
   - retryer
   - reverse-geocoding
   - reversi
@@ -9724,7 +9712,6 @@ broken-packages:
   - snap-loader-static
   - snap-routes
   - snap-stream
-  - snap-templates
   - snap-testing
   - snap-utils
   - snap-web-routes
@@ -10091,6 +10078,7 @@ broken-packages:
   - sym
   - sym-plot
   - symantic
+  - symantic-atom
   - symantic-http-test
   - symantic-lib
   - symantic-xml
@@ -10170,7 +10158,6 @@ broken-packages:
   - tart
   - task
   - task-distribution
-  - taskell
   - TaskMonad
   - tasty-auto
   - tasty-bdd

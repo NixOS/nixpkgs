@@ -2,7 +2,7 @@
 
 let
   pname = "obsidian";
-  version = "0.7.3";
+  version = "0.8.2";
 in
 
 appimageTools.wrapType2 rec {
@@ -11,7 +11,7 @@ appimageTools.wrapType2 rec {
 
   src = fetchurl {
     url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/Obsidian-${version}.AppImage";
-    sha256 = "1qiag5szagalik72j8s2dmp7075g48jxgcdy0wgd02kfv90ai0y6";
+    sha256 = "04jgsd97ivdm84diiafwqxzc9vvga1gsr7xicmqhdq05ns3xsfyz";
   };
 
   profile = ''

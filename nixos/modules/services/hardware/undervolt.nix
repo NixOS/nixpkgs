@@ -103,6 +103,17 @@ in
         The temperature target on battery power in Celsius degrees.
       '';
     };
+
+    useTimer = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to set a timer that applies the undervolt settings every 30s.
+        This will cause spam in the journal but might be required for some
+        hardware under specific conditions.
+        Enable this if your undervolt settings don't hold.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -114,6 +125,11 @@ in
       path = [ pkgs.undervolt ];
 
       description = "Intel Undervolting Service";
+
+      # Apply undervolt on boot, nixos generation switch and resume
+      wantedBy = [ "multi-user.target" "post-resume.target" ];
+      after = [ "post-resume.target" ]; # Not sure why but it won't work without this
+
       serviceConfig = {
         Type = "oneshot";
         Restart = "no";
@@ -121,7 +137,7 @@ in
       };
     };
 
-    systemd.timers.undervolt = {
+    systemd.timers.undervolt = mkIf cfg.useTimer {
       description = "Undervolt timer to ensure voltage settings are always applied";
       partOf = [ "undervolt.service" ];
       wantedBy = [ "multi-user.target" ];

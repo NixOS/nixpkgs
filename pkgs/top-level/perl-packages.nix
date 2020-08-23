@@ -6463,6 +6463,21 @@ let
      };
   };
 
+  Dotenv = buildPerlPackage {
+    pname = "Dotenv";
+    version = "0.002";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BOOK/Dotenv-0.002.tar.gz";
+      sha256 = "04c7a7cc4511617d7a70c4ca410d10707dc496248cdad20240ae242223212454";
+    };
+    buildInputs = [ TestCPANMeta TestPod TestPodCoverage ];
+    propagatedBuildInputs = [ PathTiny PodParser ];
+    meta = {
+      description = "Support for C<dotenv> in Perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Dumbbench = buildPerlPackage {
     pname = "Dumbbench";
     version = "0.111";
@@ -16698,6 +16713,24 @@ let
       homepage = "https://github.com/kazeburo/POSIX-strftime-Compiler";
       description = "GNU C library compatible strftime for loggers and servers";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  Apprainbarf = buildPerlModule {
+    pname = "Apprainbarf";
+    version = "1.4";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SY/SYP/App-rainbarf-1.4.tar.gz";
+      sha256 = "4f139ad35faaf2de0623dc0bb1dd89fa5a431e548bfec87dee194cf0e25cc97d";
+    };
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/rainbarf
+    '';
+    meta = {
+      homepage = "https://github.com/creaktive/rainbarf";
+      description = "CPU/RAM/battery stats chart bar for tmux (and GNU screen)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus  ];
     };
   };
 

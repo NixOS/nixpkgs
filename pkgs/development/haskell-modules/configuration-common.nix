@@ -296,7 +296,6 @@ self: super: {
   hs2048 = dontCheck super.hs2048;
   hsbencher = dontCheck super.hsbencher;
   hsexif = dontCheck super.hsexif;
-  hspec-core = if pkgs.stdenv.isi686 then dontCheck super.hspec-core else super.hspec-core; # tests rely on `Int` being 64-bit; https://github.com/hspec/hspec/issues/431
   hspec-server = dontCheck super.hspec-server;
   HTF = dontCheck super.HTF;
   htsn = dontCheck super.htsn;
@@ -315,6 +314,13 @@ self: super: {
     then dontCheck super.math-functions # "erf table" test fails on Darwin https://github.com/bos/math-functions/issues/63
     else super.math-functions;
   matplotlib = dontCheck super.matplotlib;
+
+  # Needs the latest version of vty and brick.
+  matterhorn = super.matterhorn.overrideScope (self: super: {
+    brick = self.brick_0_55;
+    vty = self.vty_5_30;
+  });
+
   memcache = dontCheck super.memcache;
   metrics = dontCheck super.metrics;
   milena = dontCheck super.milena;
@@ -834,6 +840,7 @@ self: super: {
           then dontCheck
           else pkgs.lib.id;
     in doJailbreak (f super.servant-docs); # jailbreak tasty < 1.2 until servant-docs > 0.11.3 is on hackage.
+  snap-templates = doJailbreak super.snap-templates; # https://github.com/snapframework/snap-templates/issues/22
   swagger2 = if (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) then dontHaddock (dontCheck super.swagger2) else super.swagger2;
 
   # Copy hledger man pages from data directory into the proper place. This code
@@ -1323,42 +1330,6 @@ self: super: {
   # https://github.com/ennocramer/monad-dijkstra/issues/4
   monad-dijkstra = dontCheck (doJailbreak super.monad-dijkstra);
 
-  # haskell-language-server uses its own fork of ghcide
-  # Test disabled: it seems to freeze (is it just that it takes a long time ?)
-  hls-ghcide =
-    dontCheck ((
-      overrideCabal super.hls-ghcide
-        (old: {
-          # The integration test run by lsp-test requires the executable to be in the PATH
-          preCheck = ''
-            export PATH=$PATH:dist/build/ghcide
-          '';
-        })).override {
-          # we are faster than stack here
-          hie-bios = dontCheck self.hie-bios_0_6_2;
-          lsp-test = dontCheck self.lsp-test_0_11_0_4;
-        });
-
-  haskell-language-server = (overrideCabal super.haskell-language-server
-    (old: {
-      # The integration test run by lsp-test requires the executable to be in the PATH
-      preCheck = ''
-        export PATH=$PATH:dist/build/haskell-language-server
-      '';
-      # The wrapper test does not work for now.
-      testTarget = "func-test";
-
-      # test needs the git tool
-      testToolDepends = old.testToolDepends
-        ++ [ pkgs.git ];
-    })).override {
-      # use a fork of ghcide
-      ghcide = self.hls-ghcide;
-      # we are faster than stack here
-      hie-bios = dontCheck self.hie-bios_0_6_2;
-      lsp-test = dontCheck self.lsp-test_0_11_0_4;
-    };
-
   # https://github.com/kowainik/policeman/issues/57
   policeman = doJailbreak super.policeman;
 
@@ -1419,23 +1390,11 @@ self: super: {
   reflex-dom-pandoc = super.reflex-dom-pandoc.override {
     pandoc-types = self.pandoc-types_1_21;
   };
-  pandoc_2_10_1 = super.pandoc_2_10_1.override {
+  pandoc_2_10_1 = super.pandoc_2_10_1.overrideScope (self: super: {
     pandoc-types = self.pandoc-types_1_21;
     hslua = self.hslua_1_1_2;
-    texmath = self.texmath.override {
-      pandoc-types = self.pandoc-types_1_21;
-    };
-    tasty-lua = self.tasty-lua.override {
-      hslua = self.hslua_1_1_2;
-    };
-    hslua-module-text = self.hslua-module-text.override {
-      hslua = self.hslua_1_1_2;
-    };
-    hslua-module-system = self.hslua-module-system.override {
-      hslua = self.hslua_1_1_2;
-    };
     jira-wiki-markup = self.jira-wiki-markup_1_3_2;
-  };
+  });
 
   # Apply version-bump patch that is not contained in released version yet.
   # Upstream PR: https://github.com/srid/neuron/pull/304
@@ -1447,14 +1406,10 @@ self: super: {
     extraPrefix = "";
   }))
     # See comment about overrides above commonmark-pandoc
-    .override {
+    .overrideScope (self: super: {
     pandoc = self.pandoc_2_10_1;
     pandoc-types = self.pandoc-types_1_21;
-    rib = super.rib.override {
-      pandoc = self.pandoc_2_10_1;
-      pandoc-types = self.pandoc-types_1_21;
-    };
-  };
+  });
 
   # Testsuite trying to run `which haskeline-examples-Test`
   haskeline_0_8_0_0 = dontCheck super.haskeline_0_8_0_0;
@@ -1469,4 +1424,41 @@ self: super: {
   # https://github.com/bos/statistics/issues/170
   statistics = dontCheck super.statistics;
 
-} // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
+  hcoord = overrideCabal super.hcoord (drv: {
+    # Remove when https://github.com/danfran/hcoord/pull/8 is merged.
+    patches = [
+      (pkgs.fetchpatch {
+        url = "https://github.com/danfran/hcoord/pull/8/commits/762738b9e4284139f5c21f553667a9975bad688e.patch";
+        sha256 = "03r4jg9a6xh7w3jz3g4bs7ff35wa4rrmjgcggq51y0jc1sjqvhyz";
+      })
+    ];
+    # Remove when https://github.com/danfran/hcoord/issues/9 is closed.
+    doCheck = false;
+  });
+
+  # Tests rely on `Int` being 64-bit: https://github.com/hspec/hspec/issues/431.
+  # Also, we need QuickCheck-2.14.x to build the test suite, which isn't easy in LTS-16.x.
+  # So let's not go there any just disable the tests altogether.
+  hspec-core = dontCheck super.hspec-core;
+
+  # INSERT NEW OVERRIDES ABOVE THIS LINE
+
+} // (let
+  hlsScopeOverride = self: super: {
+    # haskell-language-server uses its own fork of ghcide
+    # Test disabled: it seems to freeze (is it just that it takes a long time ?)
+    ghcide = dontCheck self.hls-ghcide;
+    # we are faster than stack here
+    hie-bios = dontCheck self.hie-bios_0_6_2;
+    lsp-test = dontCheck self.lsp-test_0_11_0_4;
+    # fourmolu can‘t compile with an older aeson
+    aeson = dontCheck super.aeson_1_5_2_0;
+    # brittany has an aeson upper bound of 1.5
+    brittany = doJailbreak super.brittany;
+  };
+  in {
+    haskell-language-server = dontCheck (super.haskell-language-server.overrideScope hlsScopeOverride);
+    hls-ghcide = dontCheck (super.hls-ghcide.overrideScope hlsScopeOverride);
+    fourmolu = super.fourmolu.overrideScope hlsScopeOverride;
+  }
+)  // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
