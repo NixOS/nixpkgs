@@ -5,7 +5,7 @@
   akonadi, akonadi-calendar, akonadi-contacts, akonadi-mime, akonadi-notes,
   kalarmcal, kcalutils, kcontacts, kdav, kdelibs4support, kidentitymanagement,
   kimap, kmailtransport, kmbox, kmime, knotifications, knotifyconfig,
-  pimcommon, qtwebengine, libkgapi, qtnetworkauth, qtspeech, qtxmlpatterns,
+  pimcommon, qtwebengine, libkgapi, qca-qt5, qtnetworkauth, qtspeech, qtxmlpatterns,
 }:
 
 mkDerivation {
@@ -19,6 +19,6 @@ mkDerivation {
     akonadi akonadi-calendar akonadi-contacts akonadi-mime akonadi-notes
     kalarmcal kcalutils kcontacts kdav kdelibs4support kidentitymanagement kimap
     kmailtransport kmbox kmime knotifications knotifyconfig qtwebengine
-    pimcommon libkgapi qtnetworkauth qtspeech qtxmlpatterns
+    pimcommon libkgapi qca-qt5 qtnetworkauth qtspeech qtxmlpatterns
   ];
 }
