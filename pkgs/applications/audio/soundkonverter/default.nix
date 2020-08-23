@@ -1,6 +1,6 @@
 # currently needs to be installed into an environment and needs a `kbuildsycoca5` run afterwards for plugin discovery
 {
-  mkDerivation, fetchFromGitHub, lib, makeWrapper,
+  mkDerivation, fetchFromGitHub, fetchpatch, lib, makeWrapper,
   cmake, extra-cmake-modules, pkgconfig,
   libkcddb, kconfig, kconfigwidgets, ki18n, kdelibs4support, kio, solid, kwidgetsaddons, kxmlgui,
   qtbase, phonon, 
@@ -53,6 +53,15 @@ mkDerivation rec {
     rev = "v" + version;
     sha256 = "1g2khdsjmsi4zzynkq8chd11cbdhjzmi37r9jhpal0b730nq9x7l";
   };
+  patches = [
+    # already merged into master, so it can go during the next release
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/dfaust/soundkonverter/pull/87.patch";
+      sha256 = "sha256-XIpD4ZMTZVcu+F27OtpRy51H+uQgpd5l22IZ6XsD64w=";
+      name = "soundkonverter_taglib.patch";
+      stripLen = 1;
+    })
+  ];
   enableParallelBuilding = true;
   nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig kdelibs4support makeWrapper ];
   propagatedBuildInputs = [ libkcddb kconfig kconfigwidgets ki18n kdelibs4support kio solid kwidgetsaddons kxmlgui qtbase phonon];
