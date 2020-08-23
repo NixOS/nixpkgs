@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, glibcLocales }:
+{ stdenv, buildPythonPackage, isPy3k, fetchPypi, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "urwid";
@@ -12,6 +12,11 @@ buildPythonPackage rec {
   # tests need to be able to set locale
   LC_ALL = "en_US.UTF-8";
   checkInputs = [ glibcLocales ];
+
+  # tests which assert on strings don't decode results correctly
+  doCheck = isPy3k;
+
+  pythonImportsCheck = [ "urwid" ];
 
   meta = with stdenv.lib; {
     description = "A full-featured console (xterm et al.) user interface library";
