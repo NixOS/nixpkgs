@@ -108,6 +108,7 @@ in {
 
   boot-ec2-config = makeEc2Test {
     name         = "config-userdata";
+    meta.broken = true; # amazon-init wants to download from the internet while building the system
     inherit image;
     sshPublicKey = snakeOilPublicKey;
 
