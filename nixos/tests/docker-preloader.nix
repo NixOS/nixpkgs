@@ -2,6 +2,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   name = "docker-preloader";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ lewo ];
+    broken = true; # fails with "read-only file system" error
   };
 
   nodes = {
