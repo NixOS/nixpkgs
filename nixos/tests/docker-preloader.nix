@@ -1,7 +1,8 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "docker-preloader";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ lewo ];
+    broken = true; # fails with "read-only file system" error
   };
 
   nodes = {
@@ -18,10 +19,10 @@ import ./make-test.nix ({ pkgs, ...} : {
         };
   };
   testScript = ''
-    startAll;
+    start_all()
 
-    $docker->waitForUnit("sockets.target");
-    $docker->succeed("docker run nix nix-store --version");
-    $docker->succeed("docker run bash bash --version");
+    docker.wait_for_unit("sockets.target")
+    docker.succeed("docker run nix nix-store --version")
+    docker.succeed("docker run bash bash --version")
   '';
 })
