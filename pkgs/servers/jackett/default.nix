@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "jackett";
-  version = "0.16.175";
+  version = "0.16.1023";
 
   src = {
     x86_64-linux = fetchurl {
       url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.LinuxAMDx64.tar.gz";
-      sha512 = "269n84qc8sfrmnidgrjywanbqr65mhkmk24dlqfi17pi0l27wi4fc4qmnjj683xwprz5hqjsmkqf963pbx4k3jaz0rp0jnizan91wij";
+      sha512 = "11cqj0iwy389n8v2xc862flbi09pppl14zz90xa6h0pkrwinlba9gai36l0iafsa9blfb17a1ysidn3ny1ipy8frvp3xgd8lq7ypd4i";
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.LinuxARM64.tar.gz";
-      sha512 = "0dmyhprd2vi2z9q5g79psqgsc3w0zdac4s6k20rngi8jxm5jgphzrzcic4rgdijyryap99my619k447w701a08vh9sfcfk0fjg9pgwb";
+      sha512 = "1aw28mw07sngjjbazd6rzr03x45a6wljlfrqykqimlxm15khl4hj9hz11rcg0cp44fx4q7mb72r856mh5azlc0lrvh3i3sh4jgy3b6a";
     };
   }."${stdenv.targetPlatform.system}" or (throw "Missing hash for host system: ${stdenv.targetPlatform.system}");
 
