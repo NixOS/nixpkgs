@@ -921,7 +921,12 @@ self: super: {
   # Generate cli completions for dhall.
   dhall = generateOptparseApplicativeCompletion "dhall" super.dhall;
   dhall-json = generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] super.dhall-json;
-  dhall-nix = generateOptparseApplicativeCompletion "dhall-to-nix" (super.dhall-nix);
+  dhall-nix = generateOptparseApplicativeCompletion "dhall-to-nix" (
+    super.dhall-nix.overrideScope (self: super: {
+      dhall = super.dhall_1_34_0;
+      repline = self.repline_0_4_0_0;
+      haskeline = self.haskeline_0_8_0_0;
+    }));
 
   # https://github.com/haskell-hvr/netrc/pull/2#issuecomment-469526558
   netrc = doJailbreak super.netrc;
