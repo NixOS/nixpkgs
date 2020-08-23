@@ -23,6 +23,13 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       services.xserver.desktopManager.gnome3.enable = true;
       services.xserver.desktopManager.gnome3.debug = true;
 
+      environment.systemPackages = [
+        (pkgs.makeAutostartItem {
+          name = "org.gnome.Terminal";
+          package = pkgs.gnome3.gnome-terminal;
+        })
+      ];
+
       virtualisation.memorySize = 1024;
     };
 
@@ -65,9 +72,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
           )
 
       with subtest("Open Gnome Terminal"):
-          machine.succeed(
-              "${gnomeTerminalCommand}"
-          )
           # correct output should be (true, '"gnome-terminal-server"')
           machine.wait_until_succeeds(
               "${wmClass} | grep -q 'gnome-terminal-server'"
