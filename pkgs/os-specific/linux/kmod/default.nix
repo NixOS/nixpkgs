@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
     "--with-modulesdirs=${modulesDirs}"
   ] ++ lib.optional withStatic "--enable-static";
 
-  patches = [ ./module-dir.patch ]
+  patches = [ ./module-dir.patch ./no-name-field.patch ]
     ++ lib.optional stdenv.isDarwin ./darwin.patch
     ++ lib.optional withStatic ./enable-static.patch;
 
