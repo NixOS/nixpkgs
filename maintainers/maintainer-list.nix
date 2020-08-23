@@ -9438,4 +9438,10 @@
     github = "fzakaria";
     githubId = 605070;
   };
+  yevhenshymotiuk = {
+    name = "Yevhen Shymotiuk";
+    email = "yevhenshymotiuk@gmail.com";
+    github = "yevhenshymotiuk";
+    githubId = 44244245;
+  };
 }
