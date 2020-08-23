@@ -29,8 +29,15 @@ rec {
     }
     else legacy_390;
 
-  # No active beta right now
-  beta = stable;
+  beta = if stdenv.hostPlatform.system == "x86_64-linux"
+    then generic {
+      version = "440.66.14";
+      sha256_64bit = "0zqn552fya4wakjj6ql6xgkk39apn5sa01sdh58dyz05x7fpzdmv";
+      settingsSha256 = "15psxvd65wi6hmxmd2vvsp2v0m07axw613hb355nh15r1dpkr3ma";
+      persistencedSha256 = "13izz9p2kg9g38gf57g3s2sw7wshp1i9m5pzljh9v82c4c22x1fw";
+      url = https://developer.nvidia.com/vulkan-beta-4406614-linux;
+    }
+    else stable;
 
   # Last one supporting x86
   legacy_390 = generic {
