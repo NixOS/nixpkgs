@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  passthru.tests.podman = nixosTests.podman;
+  passthru.tests = { inherit (nixosTests) podman; };
 
   meta = with lib; {
     description = "A fast and lightweight fully featured OCI runtime and C library for running containers";
