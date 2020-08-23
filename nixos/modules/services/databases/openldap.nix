@@ -25,7 +25,7 @@ let
     ${if cfg.extraDatabaseConfig != null then cfg.extraDatabaseConfig else ""}
   '');
 
-  configDir = lib.escapeShellArg (if cfg.configDir != null then cfg.configDir else "/etc/openldap/slapd.d");
+  configDir = if cfg.configDir != null then cfg.configDir else "/etc/openldap/slapd.d";
 
   ldapValueType = let
     singleLdapValueType = types.either types.str (types.submodule {
@@ -249,7 +249,7 @@ in {
       };
 
       logLevel = mkOption {
-        type = types.nullOr (types.listOf types.str);
+        type = types.nullOr (types.coercedTo types.str (lib.splitString " ") (types.listOf types.str));
         default = null;
         example = literalExample "[ \"acl\" \"trace\" ]";
         description = "The log level.";
@@ -468,8 +468,8 @@ in {
         mkdir -p /run/slapd
         chown -R "${cfg.user}:${cfg.group}" /run/slapd
 
-        mkdir -p ${configDir} ${lib.escapeShellArgs (lib.attrValues dataDirs)}
-        chown "${cfg.user}:${cfg.group}" ${configDir} ${lib.escapeShellArgs (lib.attrValues dataDirs)}
+        mkdir -p ${lib.escapeShellArg configDir} ${lib.escapeShellArgs (lib.attrValues dataDirs)}
+        chown "${cfg.user}:${cfg.group}" ${lib.escapeShellArg configDir} ${lib.escapeShellArgs (lib.attrValues dataDirs)}
 
         ${lib.optionalString (cfg.configDir == null) (
           if (cfg.extraConfig != "" || cfg.extraDatabaseConfig != "") then ''
@@ -481,13 +481,13 @@ in {
             ${openldap}/bin/slapadd -F ${configDir} -bcn=config -l ${settingsFile}
           ''
         )}
-        chown -R "${cfg.user}:${cfg.group}" ${configDir}
+        chown -R "${cfg.user}:${cfg.group}" ${lib.escapeShellArg configDir}
 
         ${if types.lines.check cfg.declarativeContents then (let
           dataFile = pkgs.writeText "ldap-contents.ldif" cfg.declarativeContents;
         in ''
           rm -rf ${lib.escapeShellArg cfg.dataDir}/*
-          ${openldap}/bin/slapadd -F ${configDir} -l ${dataFile}
+          ${openldap}/bin/slapadd -F ${lib.escapeShellArg configDir} -l ${dataFile}
           chown -R "${cfg.user}:${cfg.group}" ${lib.escapeShellArg cfg.dataDir}
         '') else (let
           dataFiles = lib.mapAttrs (dn: contents: pkgs.writeText "${dn}.ldif" contents) cfg.declarativeContents;
@@ -496,28 +496,28 @@ in {
             dataDir = lib.escapeShellArg (getAttr dn dataDirs);
           in ''
             rm -rf ${dataDir}/*
-            ${openldap}/bin/slapadd -F ${configDir} -b ${dn} -l ${file}
+            ${openldap}/bin/slapadd -F ${lib.escapeShellArg configDir} -b ${dn} -l ${file}
             chown -R "${cfg.user}:${cfg.group}" ${dataDir}
           '') dataFiles)}
         '')}
 
-        ${openldap}/bin/slaptest -u -F ${configDir}
+        ${openldap}/bin/slaptest -u -F ${lib.escapeShellArg configDir}
       '';
       serviceConfig = {
-        ExecStart = lib.concatStringsSep " " [
-          "${openldap}/libexec/slapd"
-          "-u '${cfg.user}'"
-          "-g '${cfg.group}'"
-          "-h '${concatStringsSep " " cfg.urlList}'"
-          "-F ${configDir}"
-        ];
+        ExecStart = lib.escapeShellArgs ([
+          "${openldap}/libexec/slapd" "-u" cfg.user "-g" cfg.group "-F" configDir
+          "-h" (lib.concatStringsSep " " cfg.urlList)
+        ]);
         Type = "forking";
         PIDFile = cfg.settings.attrs.olcPidFile;
       };
     };
 
     users.users = lib.optionalAttrs (cfg.user == "openldap") {
-      openldap = { group = cfg.group; };
+      openldap = {
+        group = cfg.group;
+        isSystemUser = true;
+      };
     };
 
     users.groups = lib.optionalAttrs (cfg.group == "openldap") {
