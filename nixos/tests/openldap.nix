@@ -1,5 +1,5 @@
 { pkgs, system ? builtins.currentSystem, ... }: let
-  declarativeContents = ''
+  dbContents = ''
     dn: dc=example
     objectClass: domain
     dc: example
@@ -22,7 +22,6 @@ in {
 
     machine = { pkgs, ... }: {
       services.openldap = {
-        inherit declarativeContents;
         enable = true;
         defaultSchemas = null;
         dataDir = null;
@@ -49,6 +48,7 @@ in {
             };
           };
         };
+        declarativeContents."dc=example" = dbContents;
       };
     };
   };
@@ -60,11 +60,11 @@ in {
 
     machine = { pkgs, ... }: {
       services.openldap = {
-        inherit declarativeContents;
         enable = true;
         suffix = "dc=example";
         rootdn = "cn=root,dc=example";
         rootpw = "notapassword";
+        declarativeContents = dbContents;
       };
     };
   };
@@ -85,7 +85,7 @@ in {
     };
 
     testScript = let
-      contents = pkgs.writeText "data.ldif" declarativeContents;
+      contents = pkgs.writeText "data.ldif" dbContents;
       config = pkgs.writeText "config.ldif" ''
         dn: cn=config
         cn: config
@@ -129,7 +129,6 @@ in {
 
     machine = { pkgs, ... }: {
       services.openldap = {
-        inherit declarativeContents;
         enable = true;
         suffix = "dc=example";
         rootdn = "cn=root,dc=example";
@@ -140,6 +139,7 @@ in {
         extraDatabaseConfig = ''
           # No-op
         '';
+        declarativeContents = dbContents;
       };
     };
   };
