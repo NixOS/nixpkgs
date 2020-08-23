@@ -16835,7 +16835,7 @@ in
     enableMDNS = true;
     enableDomainController = true;
     enableRegedit = true;
-    enableCephFS = true;
+    enableCephFS = !pkgs.stdenv.hostPlatform.isAarch64;
     enableGlusterFS = true;
   });
 
