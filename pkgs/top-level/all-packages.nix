@@ -14608,6 +14608,8 @@ in
 
   libwpe = callPackage ../development/libraries/libwpe { };
 
+  libwpe-fdo = callPackage ../development/libraries/libwpe/fdo.nix { };
+
   libyaml = callPackage ../development/libraries/libyaml { };
 
   libyamlcpp = callPackage ../development/libraries/libyaml-cpp { };
