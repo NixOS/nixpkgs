@@ -8,7 +8,7 @@
 , intltool
 , pavucontrol
 , python3Packages
-, rfkill
+, utillinux
 , wrapGAppsHook
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     cinnamon.xapps
     gnome3.gnome-bluetooth
     python3Packages.python
-    rfkill
+    utillinux
   ];
 
   pythonPath = with python3Packages; [
@@ -68,8 +68,8 @@ stdenv.mkDerivation rec {
       --replace /usr/lib/blueberry $out/lib/blueberry \
       --replace /usr/share $out/share
     substituteInPlace $out/lib/blueberry/rfkillMagic.py \
-      --replace /usr/bin/rfkill ${rfkill}/bin/rfkill \
-      --replace /usr/sbin/rfkill ${rfkill}/bin/rfkill \
+      --replace /usr/bin/rfkill ${utillinux}/bin/rfkill \
+      --replace /usr/sbin/rfkill ${utillinux}/bin/rfkill \
       --replace /usr/lib/blueberry $out/lib/blueberry
     substituteInPlace $out/share/applications/blueberry.desktop \
       --replace Exec=blueberry Exec=$out/bin/blueberry
