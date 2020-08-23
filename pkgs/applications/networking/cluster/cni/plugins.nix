@@ -38,7 +38,7 @@ buildGoModule rec {
     "plugins/meta/tuning"
   ];
 
-  passthru.tests.podman = nixosTests.podman;
+  passthru.tests = { inherit (nixosTests) podman; };
 
   meta = with lib; {
     description = "Some standard networking plugins, maintained by the CNI team";
