@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, pythonAtLeast
+{ stdenv, lib, buildPythonPackage, pythonOlder, pythonAtLeast
 , fetchPypi
 , libmaxminddb
 , ipaddress
@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   version = "2.0.2";
   pname = "maxminddb";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

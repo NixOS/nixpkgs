@@ -5,16 +5,18 @@
 
 buildGoModule rec {
   pname = "timescale-prometheus";
-  version = "0.1.0-beta.1";
+  version = "0.1.0-beta.2";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = pname;
     rev = "${version}";
-    sha256 = "1q6xky4h9x4j2f0f6ajxwlnqq1pgd2n0z1ldrcifyamd90qkwcm5";
+    sha256 = "1rrr0qb27hh3kcmmxapr1j39dhfxf02vihpjf4b7zpwdf1mpvrbc";
   };
 
-  vendorSha256 = "sha256:1vp30y59w8mksqxy9ic37vj1jw4lbq24ahhb08a72rysylw94r57";
+  vendorSha256 = "sha256:0y5rq2y48kf2z1z3a8ags6rqzfvjs54klk2679fk8x0yjamj5x04";
+
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/timescale/timescale-prometheus/pkg/version.Version=${version} -X github.com/timescale/timescale-prometheus/pkg/version.CommitHash=${src.rev}" ];
 
   doCheck = false;
 
@@ -23,6 +25,6 @@ buildGoModule rec {
     homepage = "https://github.com/timescale/timescale-prometheus";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = [ maintainers."0x4A6F" ];
+    maintainers = with maintainers; [ _0x4A6F ];
   };
 }

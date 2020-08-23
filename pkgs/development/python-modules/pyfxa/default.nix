@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , requests, cryptography, pybrowserid, hawkauthlib, six
-, grequests, mock, responses, pytest }:
+, grequests, mock, responses, pytest, pyjwt }:
 
 buildPythonPackage rec {
   pname = "PyFxA";
@@ -17,15 +17,16 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    requests cryptography pybrowserid hawkauthlib six
+    pyjwt requests cryptography pybrowserid hawkauthlib six
   ];
 
   checkInputs = [
     grequests mock responses pytest
   ];
 
+  # test_oath is mostly network calls
   checkPhase = ''
-    pytest
+    pytest --ignore=fxa/tests/test_oauth.py
   '';
 
   meta = with lib; {

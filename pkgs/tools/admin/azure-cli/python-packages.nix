@@ -21,7 +21,10 @@ let
   });
 
   overrideAzureMgmtPackage = package: version: extension: sha256:
-    package.overrideAttrs(oldAttrs: rec {
+    # check to make sure overriding is even necessary
+    if version == package.version then
+      package
+    else package.overrideAttrs(oldAttrs: rec {
       inherit version;
 
       src = py.pkgs.fetchPypi {

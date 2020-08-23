@@ -11,6 +11,7 @@ let
   settingsDir = ".config/transmission-daemon";
   downloadsDir = "Downloads";
   incompleteDir = ".incomplete";
+  watchDir = "watchdir";
   # TODO: switch to configGen.json once RFC0042 is implemented
   settingsFile = pkgs.writeText "settings.json" (builtins.toJSON cfg.settings);
 in
@@ -35,6 +36,8 @@ in
             download-dir = "${cfg.home}/${downloadsDir}";
             incomplete-dir = "${cfg.home}/${incompleteDir}";
             incomplete-dir-enabled = true;
+            watch-dir = "${cfg.home}/${watchDir}";
+            watch-dir-enabled = false;
             message-level = 1;
             peer-port = 51413;
             peer-port-random-high = 65535;
@@ -161,6 +164,9 @@ in
       { assertion = types.path.check cfg.settings.incomplete-dir;
         message = "`services.transmission.settings.incomplete-dir' must be an absolute path.";
       }
+      { assertion = types.path.check cfg.settings.watch-dir;
+        message = "`services.transmission.settings.watch-dir' must be an absolute path.";
+      }
       { assertion = cfg.settings.script-torrent-done-filename == "" || types.path.check cfg.settings.script-torrent-done-filename;
         message = "`services.transmission.settings.script-torrent-done-filename' must be an absolute path.";
       }
@@ -220,14 +226,16 @@ in
             cfg.settings.download-dir
           ] ++
           optional cfg.settings.incomplete-dir-enabled
-            cfg.settings.incomplete-dir;
+            cfg.settings.incomplete-dir
+          ++
+          optional cfg.settings.watch-dir-enabled
+            cfg.settings.watch-dir
+          ;
         BindReadOnlyPaths = [
           # No confinement done of /nix/store here like in systemd-confinement.nix,
           # an AppArmor profile is provided to get a confinement based upon paths and rights.
           builtins.storeDir
-          "-/etc/hosts"
-          "-/etc/ld-nix.so.preload"
-          "-/etc/localtime"
+          "/etc"
           ] ++
           optional (cfg.settings.script-torrent-done-enabled &&
                     cfg.settings.script-torrent-done-filename != "")
@@ -410,10 +418,16 @@ in
           ${optionalString cfg.settings.incomplete-dir-enabled ''
             rw ${cfg.settings.incomplete-dir}/**,
           ''}
+          ${optionalString cfg.settings.watch-dir-enabled ''
+            rw ${cfg.settings.watch-dir}/**,
+          ''}
           profile dirs {
             rw ${cfg.settings.download-dir}/**,
             ${optionalString cfg.settings.incomplete-dir-enabled ''
               rw ${cfg.settings.incomplete-dir}/**,
+            ''}
+            ${optionalString cfg.settings.watch-dir-enabled ''
+              rw ${cfg.settings.watch-dir}/**,
             ''}
           }
 

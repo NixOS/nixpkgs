@@ -184,6 +184,8 @@ in {
 
   aioamqp = callPackage ../development/python-modules/aioamqp { };
 
+  aiojobs = callPackage ../development/python-modules/aiojobs { };
+
   aioredis = callPackage ../development/python-modules/aioredis { };
 
   aiorun = callPackage ../development/python-modules/aiorun { };
@@ -763,6 +765,8 @@ in {
   filterpy = callPackage ../development/python-modules/filterpy { };
 
   filemagic = callPackage ../development/python-modules/filemagic { };
+
+  finalfusion = callPackage ../development/python-modules/finalfusion { };
 
   fints = callPackage ../development/python-modules/fints { };
 
@@ -2050,10 +2054,12 @@ in {
 
   binwalk = callPackage ../development/python-modules/binwalk {
     pyqtgraph = null;
+    matplotlib = null;
   };
 
   binwalk-full = appendToName "full" (self.binwalk.override {
     pyqtgraph = self.pyqtgraph;
+    matplotlib = self.matplotlib;
   });
 
   bitmath = callPackage ../development/python-modules/bitmath { };
@@ -3377,6 +3383,10 @@ in {
 
   measurement = callPackage ../development/python-modules/measurement {};
 
+  mercurial = disabledIf (!isPy3k) (toPythonModule (pkgs.mercurial.override {
+    python3Packages = self;
+  }));
+
   midiutil = callPackage ../development/python-modules/midiutil {};
 
   mido = callPackage ../development/python-modules/mido { };
@@ -3826,6 +3836,8 @@ in {
 
   django-webpack-loader = callPackage ../development/python-modules/django-webpack-loader { };
 
+  django-widget-tweaks = callPackage ../development/python-modules/django-widget-tweaks { };
+
   django_tagging = callPackage ../development/python-modules/django_tagging { };
 
   django_classytags = callPackage ../development/python-modules/django_classytags { };
@@ -4084,6 +4096,8 @@ in {
   pytorchWithoutCuda = self.pytorch.override {
     cudaSupport = false;
   };
+
+  pytorch-lightning = callPackage ../development/python-modules/pytorch-lightning { };
 
   pytorch-metric-learning = callPackage ../development/python-modules/pytorch-metric-learning { };
 
@@ -4855,6 +4869,8 @@ in {
     callPackage ../development/python-modules/mock/2.nix { }
   else
     callPackage ../development/python-modules/mock { };
+
+  mocket = callPackage ../development/python-modules/mocket { };
 
   mock-open = callPackage ../development/python-modules/mock-open { };
 
@@ -5957,6 +5973,8 @@ in {
   django-multiselectfield = callPackage ../development/python-modules/django-multiselectfield { };
 
   rdflib = callPackage ../development/python-modules/rdflib { };
+
+  rdflib-jsonld = callPackage ../development/python-modules/rdflib-jsonld { };
 
   isodate = callPackage ../development/python-modules/isodate { };
 
@@ -7170,6 +7188,8 @@ in {
 
   xcffib = callPackage ../development/python-modules/xcffib {};
 
+  xpybutil = callPackage ../development/python-modules/xpybutil {};
+
   pafy = callPackage ../development/python-modules/pafy { };
 
   suds = callPackage ../development/python-modules/suds { };
@@ -7635,6 +7655,8 @@ in {
   pulp  = callPackage ../development/python-modules/pulp { };
 
   pure-pcapy3 = callPackage ../development/python-modules/pure-pcapy3 { };
+
+  cucumber-tag-expressions = callPackage ../development/python-modules/cucumber-tag-expressions { };
 
   behave = callPackage ../development/python-modules/behave { };
 

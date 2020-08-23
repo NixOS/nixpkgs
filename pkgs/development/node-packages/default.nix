@@ -150,6 +150,14 @@ let
       '';
     };
 
+    tsun = super.tsun.overrideAttrs (oldAttrs: {
+      buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper ];
+      postInstall = ''
+        wrapProgram "$out/bin/tsun" \
+        --prefix NODE_PATH : ${self.typescript}/lib/node_modules
+      '';
+    });
+
     stf = super.stf.override {
       meta.broken = since "10";
     };

@@ -53,11 +53,11 @@
        <varname>emacs</varname>
       </term>
       <term>
-       <varname>emacs25</varname>
+       <varname>emacs</varname>
       </term>
       <listitem>
        <para>
-        The latest stable version of Emacs 25 using the
+        The latest stable version of Emacs using the
         <link
                 xlink:href="http://www.gtk.org">GTK 2</link>
         widget toolkit.
@@ -66,11 +66,11 @@
      </varlistentry>
      <varlistentry>
       <term>
-       <varname>emacs25-nox</varname>
+       <varname>emacs-nox</varname>
       </term>
       <listitem>
        <para>
-        Emacs 25 built without any dependency on X11 libraries.
+        Emacs built without any dependency on X11 libraries.
        </para>
       </listitem>
      </varlistentry>
@@ -79,11 +79,11 @@
        <varname>emacsMacport</varname>
       </term>
       <term>
-       <varname>emacs25Macport</varname>
+       <varname>emacsMacport</varname>
       </term>
       <listitem>
        <para>
-        Emacs 25 with the "Mac port" patches, providing a more native look and
+        Emacs with the "Mac port" patches, providing a more native look and
         feel under macOS.
        </para>
       </listitem>

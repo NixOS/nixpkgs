@@ -1,5 +1,5 @@
 { clangStdenv, fetchFromGitHub, fetchurl, fetchpatch, gyp, which, ninja,
-  python, pkgconfig, protobuf, gtk2, zinnia, qt5, libxcb,
+  python, pkgconfig, protobuf, gtk2, zinnia, qt5, libxcb, tegaki-zinnia-japanese,
   fcitx, gettext }:
 let
   japanese_usage_dictionary = fetchFromGitHub {
@@ -23,7 +23,7 @@ in clangStdenv.mkDerivation rec {
     sha256 = "0w2dy2j9x5nc7x3g95j17r3m60vbfyn5j617h7js9xryv33yzpgx";
   };
 
-  nativeBuildInputs = [ gyp which ninja python pkgconfig ];
+  nativeBuildInputs = [ gyp which ninja python pkgconfig qt5.wrapQtAppsHook ];
   buildInputs = [ protobuf gtk2 zinnia qt5.qtbase libxcb fcitx gettext ];
 
   postUnpack = ''
@@ -57,7 +57,7 @@ in clangStdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
-    export GYP_DEFINES="document_dir=$out/share/doc/mozc use_libzinnia=1 use_libprotobuf=1 use_fcitx5=0"
+    export GYP_DEFINES="document_dir=$out/share/doc/mozc use_libzinnia=1 use_libprotobuf=1 use_fcitx5=0 zinnia_model_file=${tegaki-zinnia-japanese}/share/tegaki/models/zinnia/handwriting-ja.model"
     cd src && python build_mozc.py gyp --gypdir=${gyp}/bin --server_dir=$out/lib/mozc
   '';
 
@@ -78,6 +78,8 @@ in clangStdenv.mkDerivation rec {
 
     install -D -m 755 out_linux/Release/mozc_server     $out/lib/mozc/mozc_server
     install    -m 755 out_linux/Release/mozc_tool       $out/lib/mozc/mozc_tool
+
+    wrapQtApp $out/lib/mozc/mozc_tool
 
     install -D -m 755 out_linux/Release/fcitx-mozc.so   $out/lib/fcitx/fcitx-mozc.so
     install -D -m 644 unix/fcitx/fcitx-mozc.conf        $out/share/fcitx/addon/fcitx-mozc.conf

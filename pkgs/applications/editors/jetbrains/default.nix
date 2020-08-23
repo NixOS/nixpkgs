@@ -220,9 +220,6 @@ let
       };
     }) (attrs: {
       patchPhase = lib.optionalString (!stdenv.isDarwin) (attrs.patchPhase + ''
-        # Patch built-in mono for ReSharperHost to start successfully
-        interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
-        patchelf --set-interpreter "$interpreter" lib/ReSharperHost/linux-x64/mono/bin/mono-sgen
         rm -rf lib/ReSharperHost/linux-x64/dotnet
         mkdir -p lib/ReSharperHost/linux-x64/dotnet/
         ln -s ${dotnet-sdk_3}/bin/dotnet lib/ReSharperHost/linux-x64/dotnet/dotnet
@@ -388,12 +385,12 @@ in
 
   rider = buildRider rec {
     name = "rider-${version}";
-    version = "2020.1.4"; /* updated by script */
+    version = "2020.2"; /* updated by script */
     description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/rider/JetBrains.Rider-${version}.tar.gz";
-      sha256 = "0vicgwgsbllfw6fz4l82x4vbka3agf541576ix9akyvsskwbaxj9"; /* updated by script */
+      sha256 = "0fxgdxsrrl659lh45slikgck6jld90rd6nnj8gj3aixq0yp5pkix"; /* updated by script */
     };
     wmClass = "jetbrains-rider";
     update-channel = "Rider RELEASE";

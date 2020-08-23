@@ -1,5 +1,5 @@
 { clangStdenv, fetchFromGitHub, fetchpatch, which, ninja, python, gyp, pkgconfig
-, protobuf, ibus, gtk2, zinnia, qt5, libxcb }:
+, protobuf, ibus, gtk2, zinnia, qt5, libxcb, tegaki-zinnia-japanese }:
 
 let
   japanese_usage_dictionary = fetchFromGitHub {
@@ -21,7 +21,7 @@ in clangStdenv.mkDerivation rec {
     maintainers  = with maintainers; [ gebner ericsagnes ];
   };
 
-  nativeBuildInputs = [ which ninja python gyp pkgconfig ];
+  nativeBuildInputs = [ which ninja python gyp pkgconfig qt5.wrapQtAppsHook ];
   buildInputs = [ protobuf ibus gtk2 zinnia qt5.qtbase libxcb ];
 
   src = fetchFromGitHub {
@@ -50,7 +50,7 @@ in clangStdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
-    export GYP_DEFINES="document_dir=$out/share/doc/mozc use_libzinnia=1 use_libprotobuf=1 ibus_mozc_path=$out/lib/ibus-mozc/ibus-engine-mozc"
+    export GYP_DEFINES="document_dir=$out/share/doc/mozc use_libzinnia=1 use_libprotobuf=1 ibus_mozc_path=$out/lib/ibus-mozc/ibus-engine-mozc zinnia_model_file=${tegaki-zinnia-japanese}/share/tegaki/models/zinnia/handwriting-ja.model"
     cd src && python build_mozc.py gyp --gypdir=${gyp}/bin --server_dir=$out/lib/mozc
   '';
 
@@ -70,6 +70,7 @@ in clangStdenv.mkDerivation rec {
 
     install -D -m 755 out_linux/Release/mozc_server $out/lib/mozc/mozc_server
     install    -m 755 out_linux/Release/mozc_tool   $out/lib/mozc/mozc_tool
+    wrapQtApp $out/lib/mozc/mozc_tool
 
     install -d        $out/share/doc/mozc
     install -m 644    data/installer/*.html         $out/share/doc/mozc/

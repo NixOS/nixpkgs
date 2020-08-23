@@ -1,19 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, libusb1
-, qtbase, qttools, makeWrapper, qmake
-, withEspeak ? false, espeak ? null, qt5 }:
+{ stdenv, fetchurl, pkgconfig, cryptopp
+, libusb1, qtbase, qttools, makeWrapper
+, qmake, withEspeak ? false, espeak ? null
+, qt5 }:
 
 let inherit (stdenv.lib) getDev; in
 
 stdenv.mkDerivation  rec {
   pname = "rockbox-utility";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchurl {
     url = "https://download.rockbox.org/rbutil/source/RockboxUtility-v${version}-src.tar.bz2";
-    sha256 = "0k3ycga3b0jnj13whwiip2l0gx32l50pnbh7kfima87nq65aaa5w";
+    sha256 = "0zm9f01a810y7aq0nravbsl0vs9vargwvxnfl4iz9qsqygwlj69y";
   };
 
-  buildInputs = [ libusb1 qtbase qttools ]
+  buildInputs = [ cryptopp libusb1 qtbase qttools ]
     ++ stdenv.lib.optional withEspeak espeak;
   nativeBuildInputs = [ makeWrapper pkgconfig qmake qt5.wrapQtAppsHook ];
 
@@ -24,6 +25,7 @@ stdenv.mkDerivation  rec {
 
   preConfigure = ''
     cd rbutil/rbutilqt
+    lrelease rbutilqt.pro
   '';
 
   installPhase = ''

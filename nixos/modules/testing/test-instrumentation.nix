@@ -1,21 +1,12 @@
 # This module allows the test driver to connect to the virtual machine
 # via a root shell attached to port 514.
 
-{ config, lib, pkgs, ... }:
+{ options, config, lib, pkgs, ... }:
 
 with lib;
 with import ../../lib/qemu-flags.nix { inherit pkgs; };
 
 {
-
-  # This option is a dummy that if used in conjunction with
-  # modules/virtualisation/qemu-vm.nix gets merged with the same option defined
-  # there and only is declared here because some modules use
-  # test-instrumentation.nix but not qemu-vm.nix.
-  #
-  # One particular example are the boot tests where we want instrumentation
-  # within the images but not other stuff like setting up 9p filesystems.
-  options.virtualisation.qemu = { };
 
   config = {
 
