@@ -5344,6 +5344,8 @@ in {
 
   pip = callPackage ../development/python-modules/pip { };
 
+  pipx = callPackage ../development/python-modules/pipx { };
+
   pip-tools = callPackage ../development/python-modules/pip-tools {
     git = pkgs.gitMinimal;
     glibcLocales = pkgs.glibcLocales;
