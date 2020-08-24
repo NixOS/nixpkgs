@@ -68,6 +68,7 @@
   ./hardware/usb-wwan.nix
   ./hardware/onlykey.nix
   ./hardware/opentabletdriver.nix
+  ./hardware/sata.nix
   ./hardware/wooting.nix
   ./hardware/uinput.nix
   ./hardware/video/amdgpu.nix
