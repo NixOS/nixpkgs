@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, nixosTests }:
 
 buildGoModule rec {
   pname = "lego";
@@ -27,4 +27,6 @@ buildGoModule rec {
     homepage = "https://go-acme.github.io/lego/";
     maintainers = teams.acme.members;
   };
+
+  passthru.tests.lego = nixosTests.acme;
 }
