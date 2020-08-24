@@ -8559,6 +8559,12 @@
     githubId = 699403;
     name = "Tomas Vestelind";
   };
+  tviti = {
+    email = "tviti@hawaii.edu";
+    github = "tviti";
+    githubId = 2251912;
+    name = "Taylor Viti";
+  };
   tvorog = {
     email = "marszaripov@gmail.com";
     github = "tvorog";
