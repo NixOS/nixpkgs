@@ -28,7 +28,7 @@ let
 
     # TODO: Add a "dev" output containing the header files.
     outputs = [ "out" "man" "devdoc" ] ++
-      optional crossCompiling "dev";
+      optional crossCompiling "mini";
     setOutputFlags = false;
 
     disallowedReferences = [ stdenv.cc ];
@@ -144,13 +144,13 @@ let
           --replace "$man" /no-such-path
       '' + optionalString crossCompiling
       ''
-        mkdir -p $dev/lib/perl5/cross_perl/${version}
+        mkdir -p $mini/lib/perl5/cross_perl/${version}
         for dir in cnf/{stub,cpan}; do
-          cp -r $dir/* $dev/lib/perl5/cross_perl/${version}
+          cp -r $dir/* $mini/lib/perl5/cross_perl/${version}
         done
 
-        mkdir -p $dev/bin
-        install -m755 miniperl $dev/bin/perl
+        mkdir -p $mini/bin
+        install -m755 miniperl $mini/bin/perl
 
         export runtimeArch="$(ls $out/lib/perl5/site_perl/${version})"
         # wrapProgram should use a runtime-native SHELL by default, but
@@ -161,9 +161,9 @@ let
         # miniperl can't load the native modules there. However, it can
         # (and sometimes needs to) load and run some of the pure perl
         # code there, so we add it anyway. When needed, stubs can be put
-        # into $dev/lib/perl5/cross_perl/${version}.
-        wrapProgram $dev/bin/perl --prefix PERL5LIB : \
-          "$dev/lib/perl5/cross_perl/${version}:$out/lib/perl5/${version}:$out/lib/perl5/${version}/$runtimeArch"
+        # into $mini/lib/perl5/cross_perl/${version}.
+        wrapProgram $mini/bin/perl --prefix PERL5LIB : \
+          "$mini/lib/perl5/cross_perl/${version}:$out/lib/perl5/${version}:$out/lib/perl5/${version}/$runtimeArch"
       ''; # */
 
     meta = {
