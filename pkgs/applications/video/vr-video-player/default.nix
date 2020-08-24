@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp vr-video-player $out/bin/.vr-video-player
     cp -ar config $out
+
+    # Necessary because it will attempt to launch the SteamVR binary
     makeWrapper ${steam-run}/bin/steam-run $out/bin/vr-video-player \
       --add-flags $out/bin/.vr-video-player
 
