@@ -748,6 +748,8 @@ let
 
     posix-base = callPackage ../development/ocaml-modules/posix/base.nix { };
 
+    posix-socket = callPackage ../development/ocaml-modules/posix/socket.nix { };
+
     ppxfind = callPackage ../development/ocaml-modules/ppxfind { };
 
     ppxlib = callPackage ../development/ocaml-modules/ppxlib { };
