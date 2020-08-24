@@ -128,7 +128,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
    </listitem>
    <listitem>
     <para>
-      Two new option <link linkend="opt-documentation.man.generateCaches">documentation.man.generateCaches</link>
+      The new option <link linkend="opt-documentation.man.generateCaches">documentation.man.generateCaches</link>
       has been added to automatically generate the <literal>man-db</literal> caches, which are needed by utilities
       like <command>whatis</command> and <command>apropos</command>. The caches are generated during the build of
       the NixOS configuration: since this can be expensive when a large number of packages are installed, the
@@ -193,6 +193,15 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
    <listitem>
      <para>
       The NixOS module system now supports freeform modules as a mix between <literal>types.attrsOf</literal> and <literal>types.submodule</literal>. These allow you to explicitly declare a subset of options while still permitting definitions without an associated option. See <xref linkend='sec-freeform-modules'/> for how to use them.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       The GRUB module gained support for basic password protection, which
+       allows to restrict non-default entries in the boot menu to one or more
+       users. The users and passwords are defined via the option
+       <option>boot.loader.grub.users</option>.
+       Note: Password support is only avaiable in GRUB version 2.
      </para>
    </listitem>
   </itemizedlist>

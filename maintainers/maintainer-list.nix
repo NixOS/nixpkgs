@@ -472,6 +472,12 @@
     githubId = 858965;
     name = "Andrew Morsillo";
   };
+  andehen = {
+    email = "git@andehen.net";
+    github = "andehen";
+    githubId = 754494;
+    name = "Anders Asheim Hennum";
+  };
   andersk = {
     email = "andersk@mit.edu";
     github = "andersk";
@@ -3348,6 +3354,12 @@
     github = "mweinelt";
     githubId = 131599;
     name = "Martin Weinelt";
+  };
+  hh = {
+    email = "hh@m-labs.hk";
+    github = "HarryMakes";
+    githubId = 66358631;
+    name = "Harry Ho";
   };
   hhm = {
     email = "heehooman+nixpkgs@gmail.com";
@@ -8547,6 +8559,12 @@
     githubId = 699403;
     name = "Tomas Vestelind";
   };
+  tviti = {
+    email = "tviti@hawaii.edu";
+    github = "tviti";
+    githubId = 2251912;
+    name = "Taylor Viti";
+  };
   tvorog = {
     email = "marszaripov@gmail.com";
     github = "tvorog";
@@ -9437,5 +9455,11 @@
     email = "farid.m.zakaria@gmail.com";
     github = "fzakaria";
     githubId = 605070;
+  };
+  yevhenshymotiuk = {
+    name = "Yevhen Shymotiuk";
+    email = "yevhenshymotiuk@gmail.com";
+    github = "yevhenshymotiuk";
+    githubId = 44244245;
   };
 }
