@@ -19163,6 +19163,8 @@ in
 
   vegeta = callPackage ../tools/networking/vegeta { };
 
+  venta = callPackage ../data/themes/venta { };
+
   victor-mono = callPackage ../data/fonts/victor-mono { };
 
   vimix-gtk-themes = callPackage ../data/themes/vimix {};
