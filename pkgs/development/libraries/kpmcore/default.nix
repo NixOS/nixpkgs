@@ -3,11 +3,8 @@
 , libatasmart, parted
 , utillinux }:
 
-let
+stdenv.mkDerivation rec {
   pname = "kpmcore";
-
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   version = "3.3.0";
 
   src = fetchurl {
@@ -24,12 +21,14 @@ in stdenv.mkDerivation rec {
 
     utillinux # needs blkid (note that this is not provided by utillinux-compat)
   ];
+
   nativeBuildInputs = [ extra-cmake-modules ];
+
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     maintainers = with lib.maintainers; [ peterhoeg ];
-    # The build requires at least Qt 5.12:
-    broken = lib.versionOlder qtbase.version "5.12.0";
+    # The build requires at least Qt 5.14:
+    broken = lib.versionOlder qtbase.version "5.14";
   };
 }
