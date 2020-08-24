@@ -198,6 +198,7 @@
 /nixos/modules/virtualisation/containers.nix @NixOS/podman @zowoq
 /nixos/modules/virtualisation/cri-o.nix      @NixOS/podman @zowoq
 /nixos/modules/virtualisation/podman.nix     @NixOS/podman @zowoq
+/nixos/tests/cri-o.nix                       @NixOS/podman @zowoq
 /nixos/tests/podman.nix                      @NixOS/podman @zowoq
 
 # Blockchains
