@@ -64,7 +64,7 @@ core-packages:
 #
 # WARNING: This list is generated semiautomatically based on the most recent
 # LTS package set. If you want to add entries to it, you must do so before the
-# comment saying "# LTS Haskell x.y". Any changes after that commend will be
+# comment saying "# LTS Haskell x.y". Any changes after that comment will be
 # lost the next time `update-stackage.sh` runs.
 default-package-overrides:
   # This was only intended for ghc-7.0.4, and has very old deps, one hidden behind a flag
@@ -72,6 +72,7 @@ default-package-overrides:
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
+  - shelly ==1.8.1
   # LTS Haskell 16.10
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
