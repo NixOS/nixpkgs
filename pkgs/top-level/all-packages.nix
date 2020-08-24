@@ -12395,6 +12395,8 @@ in
 
   cointop = callPackage ../applications/misc/cointop { };
 
+  cog = callPackage ../development/web/cog { };
+
   ctl = callPackage ../development/libraries/ctl { };
 
   ctpp2 = callPackage ../development/libraries/ctpp2 { };
