@@ -5,6 +5,7 @@
 , makeDesktopItem
 , makeWrapper
 , stdenv
+, lib
 , udev
 , wrapGAppsHook
 }:
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
     cp "${desktopItem}/share/applications/"* "$out/share/applications"
   '';
 
-  runtimeDependencies = [ udev.lib ];
+  runtimeDependencies = [ (lib.getLib udev) ];
 
   postFixup = ''
     makeWrapper $out/opt/Termius/termius-app $out/bin/termius-app \
