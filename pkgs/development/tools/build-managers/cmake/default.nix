@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
           + lib.optionalString useNcurses "-cursesUI"
           + lib.optionalString withQt5 "-qt5UI"
           + lib.optionalString useQt4 "-qt4UI";
-  version = "3.18.1";
+  version = "3.18.2";
 
   src = fetchurl {
     url = "${meta.homepage}files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
     # compare with https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}-SHA-256.txt
-    sha256 = "0215srmc9l7ygwdpfms8yx0wbd96qgz2d58ykmdiarvysf5k7qy0";
+    sha256 = "0zhxsnxm5d8wdarz2gs3r41r1dfrnh35ki75fa684gaxfzy40kjx";
   };
 
   patches = [
@@ -36,12 +36,6 @@ stdenv.mkDerivation rec {
 
     # Derived from https://github.com/libuv/libuv/commit/1a5d4f08238dd532c3718e210078de1186a5920d
     ./libuv-application-services.patch
-
-    # TODO: Remove this patch for a regression once CMake 3.18.2 is out:
-    (fetchpatch { # PCH: Avoid Apple-specific architecture flags on other platforms
-      url = "https://gitlab.kitware.com/cmake/cmake/-/commit/70ce1ad64a04a244bb1c03753da0752c61fc3a37.patch";
-      sha256 = "0jcdgv48j0dd4nlhyy3j0s3h6bcbrq2yg1mdhpgfqrb2y3p91fky";
-    })
 
   ] ++ lib.optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
@@ -116,8 +110,17 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails
 
   meta = with lib; {
-    homepage = "http://www.cmake.org/";
+    homepage = "https://cmake.org/";
+    changelog = "https://cmake.org/cmake/help/v${lib.versions.majorMinor version}/"
+      + "release/${lib.versions.majorMinor version}.html";
     description = "Cross-Platform Makefile Generator";
+    longDescription = ''
+      CMake is an open-source, cross-platform family of tools designed to
+      build, test and package software. CMake is used to control the software
+      compilation process using simple platform and compiler independent
+      configuration files, and generate native makefiles and workspaces that
+      can be used in the compiler environment of your choice.
+    '';
     platforms = if useQt4 then qt4.meta.platforms else platforms.all;
     maintainers = with maintainers; [ ttuegel lnl7 ];
     license = licenses.bsd3;
