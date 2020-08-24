@@ -2873,6 +2873,12 @@
     githubId = 5918766;
     name = "Franz Thoma";
   };
+  fooker = {
+    email = "fooker@lab.sh";
+    github = "fooker";
+    githubId = 405105;
+    name = "Dustin Frisch";
+  };
   forkk = {
     email = "forkk@forkk.net";
     github = "forkk";
