@@ -13,9 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "0vgillrxc1knq591gjj99x2ws6q1xpm5dmfrhsxisngfpcnjr10v";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "man" ];
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ linuxHeaders ];
+
+  installTargets = [ "install" "install-man" ];
 
   doCheck = true;
   separateDebugInfo = true;
