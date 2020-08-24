@@ -59,7 +59,8 @@ pkgs.runCommand "acme-snakeoil-ca" {
     openssl genrsa -out snakeoil.key 4096
     openssl req -new -key snakeoil.key -out snakeoil.csr
     openssl x509 -req -in snakeoil.csr -sha256 -set_serial 666 \
-      -CA ca.pem -CAkey ca.key -out snakeoil.pem -days 36500
+      -CA ca.pem -CAkey ca.key -out snakeoil.pem -days 36500 \
+      -extfile "$OPENSSL_CONF" -extensions req_ext
     addpem snakeoil.key ${lib.escapeShellArg fqdn} key
     addpem snakeoil.pem ${lib.escapeShellArg fqdn} cert
   '') domains}
