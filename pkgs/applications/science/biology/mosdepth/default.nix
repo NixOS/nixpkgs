@@ -26,7 +26,8 @@ in stdenv.mkDerivation rec {
     sha256 = "01gm9gj2x2zs4yx6wk761fi1papi7qr3gp4ln1kkn8n2f9y9h849";
   };
 
-  buildInputs = [ nim htslib pcre ];
+  nativeBuildInputs = [ nim ];
+  buildInputs = [ htslib pcre ];
 
   buildPhase = ''
     HOME=$TMPDIR
