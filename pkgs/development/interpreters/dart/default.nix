@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, version ? "2.7.2" }:
+{ stdenv, fetchurl, unzip, version ? "2.10.4" }:
 
 let
 
@@ -28,53 +28,37 @@ let
       url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-linux-${aarch64}-release.zip";
       sha256 = "1p5bn04gr91chcszgmw5ng8mlzgwsrdr2v7k7ppwr1slkx97fsrh";
     };
-    "2.7.2-x86_64-darwin" = fetchurl {
+    "2.10.4-x86_64-darwin" = fetchurl {
       url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-macos-${x86_64}-release.zip";
-      sha256 = "111zl075qdk2zd4d4mmfkn30jmzsri9nq3nspnmc2l245gdq34jj";
+      sha256 = "1d18l8ja8dckzs2y0fxwdbwh06fxzlx0fyhabcgxsvh3xg9qxhj5";
     };
-    "2.7.2-x86_64-linux" = fetchurl {
+    "2.10.4-x86_64-linux" = fetchurl {
       url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-linux-${x86_64}-release.zip";
-      sha256 = "0vvsgda1smqdjn35yiq9pxx8f5haxb4hqnspcsfs6sn5c36k854v";
+      sha256 = "0pjqj2bsliq13q8b2mk2v07w4vzjqcmr984ygnwv5kx0dp5md7vq";
     };
-    "2.7.2-i686-linux" = fetchurl {
+    "2.10.4-i686-linux" = fetchurl {
       url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-linux-${i686}-release.zip";
-      sha256 = "0dj01d2wwrp3cc5x73vs6fzhs6db60gkbjlrw3w9j04wcx69i38m";
+      sha256 = "0fyqfikbd85jrckzvxvq7npb2l2kqzifg8pm2jy0ivr5lb1021r8";
     };
-    "2.7.2-aarch64-linux" = fetchurl {
+    "2.10.4-aarch64-linux" = fetchurl {
       url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-linux-${aarch64}-release.zip";
-      sha256 = "1p66fkdh1kv0ypmadmg67c3y3li3aaf1lahqh2g6r6qrzbh5da2p";
+      sha256 = "04743g0z8fcv757jlcrbf6v8m3f0fz5smjmv9n4a6fprfzj8bw0k";
     };
-    "2.10.0-x86_64-darwin" = fetchurl {
-      url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-macos-${x86_64}-release.zip";
-      sha256 = "1n4qgsax5wi7krgvvs0dy7fz39nlykiw8gr0gdacc85hgyhqg09j";
-    };
-    "2.10.0-x86_64-linux" = fetchurl {
-      url = "${base}/${stable_version}/release/${version}/sdk/dartsdk-linux-${x86_64}-release.zip";
-      sha256 = "0dncmsfbwcn3ygflhp83i6z4bvc02fbpaq1vzdzw8xdk3sbynchb";
-    };
-    "2.9.0-4.0.dev-x86_64-darwin" = fetchurl {
+    "2.12.0-223.0.dev-x86_64-darwin" = fetchurl {
       url = "${base}/${dev_version}/release/${version}/sdk/dartsdk-macos-${x86_64}-release.zip";
-      sha256 = "0gj91pbvqrxsvxaj742cllqha2z65867gggzq9hq5139vkkpfj9s";
+      sha256 = "04g41ybq4ldnzryzk0fp9cw0frm6s7ycc05f6b7yz864fvpjby3n";
     };
-    "2.9.0-4.0.dev-x86_64-linux" = fetchurl {
+    "2.12.0-223.0.dev-x86_64-linux" = fetchurl {
       url = "${base}/${dev_version}/release/${version}/sdk/dartsdk-linux-${x86_64}-release.zip";
-      sha256 = "16d9842fb3qbc0hy0zmimav9zndfkq96glgykj20xssc88qpjk2r";
+      sha256 = "1rr95d1hj0wxqwcvrkwy2dmhbi02lqz8d4k5sxwrhh3rzkd0l44q";
     };
-    "2.9.0-4.0.dev-i686-linux" = fetchurl {
+    "2.12.0-223.0.dev-i686-linux" = fetchurl {
       url = "${base}/${dev_version}/release/${version}/sdk/dartsdk-linux-${i686}-release.zip";
-      sha256 = "105wgyxmi491c7qw0z3zhn4lv52h80ngyz4ch9dyj0sq8nndz2rc";
+      sha256 = "0nxl3srlgwplypsh4yky4rxspk0paqj8jrz3kj0rx9y8cis564lz";
     };
-    "2.9.0-4.0.dev-aarch64-linux" = fetchurl {
+    "2.12.0-223.0.dev-aarch64-linux" = fetchurl {
       url = "${base}/${dev_version}/release/${version}/sdk/dartsdk-linux-${aarch64}-release.zip";
-      sha256 = "1x6mlmc4hccmx42k7srhma18faxpxvghjwqahna80508rdpljwgc";
-    };
-    "2.11.0-161.0.dev-x86_64-darwin" = fetchurl {
-      url = "${base}/${dev_version}/release/${version}/sdk/dartsdk-macos-${x86_64}-release.zip";
-      sha256 = "0mlwxp7jkkjafxkc4vqlgwl62y0hk1arhfrvc9hpm9dv98g3bdjj";
-    };
-    "2.11.0-161.0.dev-x86_64-linux" = fetchurl {
-      url = "${base}/${dev_version}/release/${version}/sdk/dartsdk-linux-${x86_64}-release.zip";
-      sha256 = "05difz4w2fyh2yq5p5pkrqk59jqljlxhc1i6lmy5kihh6z69r12i";
+      sha256 = "04zcc954ai4d2lr65m7cknkhh53yy4zrqsdqml7x20i5y8i5ybxa";
     };
   };
 
@@ -96,11 +80,8 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out
     cp -R * $out/
-    echo $libPath
     find $out/bin -executable -type f -exec patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) {} \;
   '';
-
-  libPath = makeLibraryPath [ stdenv.cc.cc ];
 
   dontStrip = true;
 
