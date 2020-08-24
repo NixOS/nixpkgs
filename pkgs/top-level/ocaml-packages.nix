@@ -746,6 +746,8 @@ let
 
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
 
+    posix-base = callPackage ../development/ocaml-modules/posix/base.nix { };
+
     ppxfind = callPackage ../development/ocaml-modules/ppxfind { };
 
     ppxlib = callPackage ../development/ocaml-modules/ppxlib { };
