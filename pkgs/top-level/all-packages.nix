@@ -3549,7 +3549,7 @@ in
 
   fdtools = callPackage ../tools/misc/fdtools { };
 
-  featherpad = callPackage ../applications/editors/featherpad {};
+  featherpad = qt5.callPackage ../applications/editors/featherpad {};
 
   feedreader = callPackage ../applications/networking/feedreaders/feedreader {};
 
