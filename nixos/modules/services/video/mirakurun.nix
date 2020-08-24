@@ -18,7 +18,8 @@ in
           type = with types; nullOr port;
           default = 40772;
           description = ''
-            Port to listen on. If null, it won't listen on any port.
+            Port to listen on. If <literal>null</literal>, it won't listen on
+            any port.
           '';
         };
 
@@ -27,6 +28,23 @@ in
           default = false;
           description = ''
             Open ports in the firewall for Mirakurun.
+
+            <warning>
+              <para>
+                Exposing Mirakurun to the open internet is generally advised
+                against. Only use it inside a trusted local network, or
+                consider putting it behind a VPN if you want remote access.
+              </para>
+            </warning>
+          '';
+        };
+
+        unixSocket = mkOption {
+          type = with types; nullOr path;
+          default = "/var/run/mirakurun/mirakurun.sock";
+          description = ''
+            Path to unix socket to listen on. If <literal>null</literal>, it
+            won't listen on any unix sockets.
           '';
         };
 
@@ -121,8 +139,8 @@ in
 
       services.mirakurun.serverSettings = {
         logLevel = mkDefault 2;
-        path = mkDefault "/var/run/mirakurun/mirakurun.sock";
-        port = mkIf (cfg.port != null) (mkDefault cfg.port);
+        path = mkIf (cfg.unixSocket != null) cfg.unixSocket;
+        port = mkIf (cfg.port != null) cfg.port;
       };
 
       systemd.tmpfiles.rules = [
