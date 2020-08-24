@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.pmacct.net/";
     license = licenses.gpl2;
-    maintainers = [ maintainers."0x4A6F" ];
+    maintainers = with maintainers; [ _0x4A6F ];
     platforms = platforms.unix;
   };
 }

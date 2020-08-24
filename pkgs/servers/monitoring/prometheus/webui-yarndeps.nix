@@ -4122,11 +4122,11 @@
       };
     }
     {
-      name = "elliptic___elliptic_6.5.2.tgz";
+      name = "elliptic___elliptic_6.5.3.tgz";
       path = fetchurl {
-        name = "elliptic___elliptic_6.5.2.tgz";
-        url  = "https://registry.yarnpkg.com/elliptic/-/elliptic-6.5.2.tgz";
-        sha1 = "05c5678d7173c049d8ca433552224a495d0e3762";
+        name = "elliptic___elliptic_6.5.3.tgz";
+        url  = "https://registry.yarnpkg.com/elliptic/-/elliptic-6.5.3.tgz";
+        sha1 = "cb59eb2efdaf73a0bd78ccd7015a62ad6e0f93d6";
       };
     }
     {
@@ -11698,11 +11698,11 @@
       };
     }
     {
-      name = "websocket_extensions___websocket_extensions_0.1.3.tgz";
+      name = "websocket_extensions___websocket_extensions_0.1.4.tgz";
       path = fetchurl {
-        name = "websocket_extensions___websocket_extensions_0.1.3.tgz";
-        url  = "https://registry.yarnpkg.com/websocket-extensions/-/websocket-extensions-0.1.3.tgz";
-        sha1 = "5d2ff22977003ec687a4b87073dfbbac146ccf29";
+        name = "websocket_extensions___websocket_extensions_0.1.4.tgz";
+        url  = "https://registry.yarnpkg.com/websocket-extensions/-/websocket-extensions-0.1.4.tgz";
+        sha1 = "7f8473bc839dfd87608adb95d7eb075211578a42";
       };
     }
     {

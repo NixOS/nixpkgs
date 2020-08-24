@@ -12,12 +12,13 @@
 , cramfsprogs
 , cramfsswap
 , lzma
+, matplotlib
 , nose
 , pycrypto
 , pyqtgraph ? null }:
 
 let
-  visualizationSupport = (pyqtgraph != null);
+  visualizationSupport = (pyqtgraph != null) && (matplotlib != null);
   version = "2.2.0";
 in
 buildPythonPackage {
@@ -32,7 +33,7 @@ buildPythonPackage {
   };
 
   propagatedBuildInputs = [ zlib xz ncompress gzip bzip2 gnutar p7zip cabextract cramfsswap cramfsprogs lzma pycrypto ]
-  ++ stdenv.lib.optional visualizationSupport pyqtgraph;
+  ++ stdenv.lib.optionals visualizationSupport [ matplotlib pyqtgraph ];
 
   # setup.py only installs version.py during install, not test
   postPatch = ''

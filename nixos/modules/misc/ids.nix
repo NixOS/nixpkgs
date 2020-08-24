@@ -198,7 +198,7 @@ in
       bosun = 161;
       kubernetes = 162;
       peerflix = 163;
-      chronos = 164;
+      #chronos = 164; # removed 2020-08-15
       gitlab = 165;
       tox-bootstrapd = 166;
       cadvisor = 167;
@@ -247,7 +247,7 @@ in
       bepasty = 215;
       # pumpio = 216; # unused, removed 2018-02-24
       nm-openvpn = 217;
-      mathics = 218;
+      # mathics = 218; # unused, removed 2020-08-15
       ejabberd = 219;
       postsrsd = 220;
       opendkim = 221;
@@ -321,7 +321,7 @@ in
       monetdb = 290;
       restic = 291;
       openvpn = 292;
-      meguca = 293;
+      # meguca = 293; # removed 2020-08-21
       yarn = 294;
       hdfs = 295;
       mapred = 296;
@@ -622,7 +622,7 @@ in
       monetdb = 290;
       restic = 291;
       openvpn = 292;
-      meguca = 293;
+      # meguca = 293; # removed 2020-08-21
       yarn = 294;
       hdfs = 295;
       mapred = 296;

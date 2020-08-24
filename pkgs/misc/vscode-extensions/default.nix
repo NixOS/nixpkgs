@@ -76,8 +76,8 @@ in
     mktplcRef = {
       name = "language-haskell";
       publisher = "justusadam";
-      version = "3.0.3";
-      sha256 = "1sg4g8h1gww4y67zix5f33v2gf121k2fcm6l1m7lygpkn40a8dsj";
+      version = "3.2.1";
+      sha256 = "0lxp8xz17ciy93nj4lzxqvz71vw1zdyamrnh2n792yair8890rr6";
     };
     meta = {
       license = stdenv.lib.licenses.bsd3;

@@ -151,6 +151,8 @@ let
 
     containers = callPackage ../development/ocaml-modules/containers { };
 
+    containers-data = callPackage ../development/ocaml-modules/containers/data.nix { };
+
     cow = callPackage ../development/ocaml-modules/cow { };
 
     cpdf = callPackage ../development/ocaml-modules/cpdf { };
@@ -218,15 +220,19 @@ let
     dune = callPackage ../development/tools/ocaml/dune { };
 
     dune_2 =
-      if lib.versionAtLeast ocaml.version "4.07"
+      if lib.versionAtLeast ocaml.version "4.08"
       then callPackage ../development/tools/ocaml/dune/2.nix { }
       else if lib.versionAtLeast ocaml.version "4.02"
       then pkgs.dune_2
       else throw "dune_2 is not available for OCaml ${ocaml.version}";
 
+    dune-action-plugin = callPackage ../development/ocaml-modules/dune-action-plugin { };
+
     dune-build-info = callPackage ../development/ocaml-modules/dune-build-info { };
 
     dune-configurator = callPackage ../development/ocaml-modules/dune-configurator { };
+
+    dune-glob = callPackage ../development/ocaml-modules/dune-glob { };
 
     dune-private-libs = callPackage ../development/ocaml-modules/dune-private-libs { };
 
@@ -300,6 +306,8 @@ let
 
     gen = callPackage ../development/ocaml-modules/gen { };
 
+    genspio = callPackage ../development/ocaml-modules/genspio { };
+
     gmap = callPackage ../development/ocaml-modules/gmap { };
 
     gnuplot = callPackage ../development/ocaml-modules/gnuplot {
@@ -309,6 +317,8 @@ let
     hacl_x25519 = callPackage ../development/ocaml-modules/hacl_x25519 { };
 
     herelib = callPackage ../development/ocaml-modules/herelib { };
+
+    hidapi = callPackage ../development/ocaml-modules/hidapi { };
 
     higlo = callPackage ../development/ocaml-modules/higlo { };
 
@@ -428,6 +438,8 @@ let
     js_of_ocaml-tyxml = callPackage ../development/tools/ocaml/js_of_ocaml/tyxml.nix {};
 
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
+
+    jwto = callPackage ../development/ocaml-modules/jwto { };
 
     kafka = callPackage ../development/ocaml-modules/kafka { };
 
@@ -572,6 +584,8 @@ let
     mustache =  callPackage ../development/ocaml-modules/mustache { };
 
     nocrypto =  callPackage ../development/ocaml-modules/nocrypto { };
+
+    nonstd =  callPackage ../development/ocaml-modules/nonstd { };
 
     notty = callPackage ../development/ocaml-modules/notty { };
 
@@ -755,6 +769,8 @@ let
     };
 
     seq = callPackage ../development/ocaml-modules/seq { };
+
+    sosa = callPackage ../development/ocaml-modules/sosa { };
 
     spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };
 

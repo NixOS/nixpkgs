@@ -14,8 +14,6 @@ buildGoPackage {
     sha256 = "1xxykjf5iyavm12gd6nx4j8x2mlzzn7x8vm0j5009lsir98qr5zn";
   };
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ pkgconfig go-bindata ];
 
   buildInputs = [ ffmpeg-full graphicsmagick quicktemplate easyjson ];

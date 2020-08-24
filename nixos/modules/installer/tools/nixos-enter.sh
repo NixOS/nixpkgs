@@ -1,4 +1,4 @@
-#! @shell@
+#! @runtimeShell@
 
 set -e
 

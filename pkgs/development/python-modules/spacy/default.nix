@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, callPackage
 , fetchPypi
 , pythonOlder
 , pytest
@@ -55,6 +56,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
+      --replace "blis>=0.4.0,<0.5.0" "blis>=0.4.0,<1.0" \
       --replace "catalogue>=0.0.7,<1.1.0" "catalogue>=0.0.7,<3.0" \
       --replace "plac>=0.9.6,<1.2.0" "plac>=0.9.6,<2.0" \
       --replace "srsly>=1.0.2,<1.1.0" "srsly>=1.0.2,<3.0" \
@@ -62,6 +64,8 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "spacy" ];
+
+  passthru.tests = callPackage ./annotation-test {};
 
   meta = with lib; {
     description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";

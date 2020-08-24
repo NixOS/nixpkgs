@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, installShellFiles }:
+{ stdenv, buildGoPackage, fetchFromGitHub, fetchurl, installShellFiles }:
 
 buildGoPackage rec {
   pname = "cloudfoundry-cli";
-  version = "6.51.0";
+  version = "7.0.1";
 
   goPackagePath = "code.cloudfoundry.org/cli";
 
@@ -12,7 +12,14 @@ buildGoPackage rec {
     owner = "cloudfoundry";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "189cqng7y12knqm4n1bfajbc2lx027rwb44wddmj5iya27i7fv8f";
+    sha256 = "0jh4x7xlijp1naak5qyc256zkzlrczl6g4iz94s8wx2zj7np0q5l";
+  };
+
+  # upstream have helpfully moved the bash completion script to a separate
+  # repo which receives no releases or even tags
+  bashCompletionScript = fetchurl {
+    url = "https://raw.githubusercontent.com/cloudfoundry/cli-ci/6087781a0e195465a35c79c8e968ae708c6f6351/ci/installers/completion/cf7";
+    sha256 = "1vhg9jcgaxcvvb4pqnhkf27b3qivs4d3w232j0gbh9393m3qxrvy";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -35,7 +42,7 @@ buildGoPackage rec {
 
   installPhase = ''
     install -Dm555 out/cf "$out/bin/cf"
-    installShellCompletion --bash "$src/ci/installers/completion/cf"
+    installShellCompletion --bash $bashCompletionScript
   '';
 
   meta = with stdenv.lib; {

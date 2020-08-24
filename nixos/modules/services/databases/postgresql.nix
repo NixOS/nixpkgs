@@ -225,14 +225,15 @@ in
           Contents of the <filename>recovery.conf</filename> file.
         '';
       };
+
       superUser = mkOption {
         type = types.str;
-        default= if versionAtLeast config.system.stateVersion "17.09" then "postgres" else "root";
+        default = "postgres";
         internal = true;
+        readOnly = true;
         description = ''
-          NixOS traditionally used 'root' as superuser, most other distros use 'postgres'.
-          From 17.09 we also try to follow this standard. Internal since changing this value
-          would lead to breakage while setting up databases.
+          PostgreSQL superuser account to use for various operations. Internal since changing
+          this value would lead to breakage while setting up databases.
         '';
         };
     };
@@ -310,6 +311,35 @@ in
             ''}
           '';
 
+        # Wait for PostgreSQL to be ready to accept connections.
+        postStart =
+          ''
+            PSQL="psql --port=${toString cfg.port}"
+
+            while ! $PSQL -d postgres -c "" 2> /dev/null; do
+                if ! kill -0 "$MAINPID"; then exit 1; fi
+                sleep 0.1
+            done
+
+            if test -e "${cfg.dataDir}/.first_startup"; then
+              ${optionalString (cfg.initialScript != null) ''
+                $PSQL -f "${cfg.initialScript}" -d postgres
+              ''}
+              rm -f "${cfg.dataDir}/.first_startup"
+            fi
+          '' + optionalString (cfg.ensureDatabases != []) ''
+            ${concatMapStrings (database: ''
+              $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database}"'
+            '') cfg.ensureDatabases}
+          '' + ''
+            ${concatMapStrings (user: ''
+              $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc 'CREATE USER "${user.name}"'
+              ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
+                $PSQL -tAc 'GRANT ${permission} ON ${database} TO "${user.name}"'
+              '') user.ensurePermissions)}
+            '') cfg.ensureUsers}
+          '';
+
         serviceConfig = mkMerge [
           { ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             User = "postgres";
@@ -329,40 +359,6 @@ in
             TimeoutSec = 120;
 
             ExecStart = "${postgresql}/bin/postgres";
-
-            # Wait for PostgreSQL to be ready to accept connections.
-            ExecStartPost =
-              let
-                setupScript = pkgs.writeScript "postgresql-setup" (''
-                  #!${pkgs.runtimeShell} -e
-
-                  PSQL="${pkgs.utillinux}/bin/runuser -u ${cfg.superUser} -- psql --port=${toString cfg.port}"
-
-                  while ! $PSQL -d postgres -c "" 2> /dev/null; do
-                      if ! kill -0 "$MAINPID"; then exit 1; fi
-                      sleep 0.1
-                  done
-
-                  if test -e "${cfg.dataDir}/.first_startup"; then
-                    ${optionalString (cfg.initialScript != null) ''
-                      $PSQL -f "${cfg.initialScript}" -d postgres
-                    ''}
-                    rm -f "${cfg.dataDir}/.first_startup"
-                  fi
-                '' + optionalString (cfg.ensureDatabases != []) ''
-                  ${concatMapStrings (database: ''
-                    $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database}"'
-                  '') cfg.ensureDatabases}
-                '' + ''
-                  ${concatMapStrings (user: ''
-                    $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc 'CREATE USER "${user.name}"'
-                    ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
-                      $PSQL -tAc 'GRANT ${permission} ON ${database} TO "${user.name}"'
-                    '') user.ensurePermissions)}
-                  '') cfg.ensureUsers}
-                '');
-              in
-                "+${setupScript}";
           }
           (mkIf (cfg.dataDir == "/var/lib/postgresql/${cfg.package.psqlSchema}") {
             StateDirectory = "postgresql postgresql/${cfg.package.psqlSchema}";

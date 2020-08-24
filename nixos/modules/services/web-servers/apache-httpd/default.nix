@@ -10,6 +10,12 @@ let
 
   pkg = cfg.package.out;
 
+  apachectl = pkgs.runCommand "apachectl" { meta.priority = -1; } ''
+    mkdir -p $out/bin
+    cp ${pkg}/bin/apachectl $out/bin/apachectl
+    sed -i $out/bin/apachectl -e 's|$HTTPD -t|$HTTPD -t -f ${httpdConf}|'
+  '';
+
   httpdConf = cfg.configFile;
 
   php = cfg.phpPackage.override { apacheHttpd = pkg; };
@@ -650,10 +656,29 @@ in
       postRun = "systemctl reload httpd.service";
     }) (filterAttrs (name: hostOpts: hostOpts.enableACME) cfg.virtualHosts);
 
-    environment.systemPackages = [ pkg ];
+    environment.systemPackages = [
+      apachectl
+      pkg
+    ];
 
-    # required for "apachectl configtest"
-    environment.etc."httpd/httpd.conf".source = httpdConf;
+    services.logrotate = optionalAttrs (cfg.logFormat != "none") {
+      enable = mkDefault true;
+      paths.httpd = {
+        path = "${cfg.logDir}/*.log";
+        user = cfg.user;
+        group = cfg.group;
+        frequency = "daily";
+        keep = 28;
+        extraConfig = ''
+          sharedscripts
+          compress
+          delaycompress
+          postrotate
+            systemctl reload httpd.service > /dev/null 2>/dev/null || true
+          endscript
+        '';
+      };
+    };
 
     services.httpd.phpOptions =
       ''

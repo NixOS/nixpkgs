@@ -47,8 +47,18 @@ let
 in {
 
   imports = [
-    ( mkRemovedOptionModule [ "services" "nextcloud" "nginx" "enable" ]
-      "The nextcloud module dropped support for other webservers than nginx.")
+    (mkRemovedOptionModule [ "services" "nextcloud" "nginx" "enable" ] ''
+      The nextcloud module supports `nginx` as reverse-proxy by default and doesn't
+      support other reverse-proxies officially.
+
+      However it's possible to use an alternative reverse-proxy by
+
+        * disabling nginx
+        * setting `listen.owner` & `listen.group` in the phpfpm-pool to a different value
+
+      Further details about this can be found in the `Nextcloud`-section of the NixOS-manual
+      (which can be openend e.g. by running `nixos-help`).
+    '')
   ];
 
   options.services.nextcloud = {
@@ -544,36 +554,40 @@ in {
             '';
           };
           "/" = {
-            priority = 200;
-            extraConfig = "rewrite ^ /index.php;";
+            priority = 900;
+            extraConfig = "try_files $uri $uri/ /index.php$request_uri;";
           };
           "~ ^/store-apps" = {
             priority = 201;
             extraConfig = "root ${cfg.home};";
           };
-          "= /.well-known/carddav" = {
+          "^~ /.well-known" = {
             priority = 210;
-            extraConfig = "return 301 $scheme://$host/remote.php/dav;";
+            extraConfig = ''
+              location = /.well-known/carddav {
+                return 301 $scheme://$host/remote.php/dav;
+              }
+              location = /.well-known/caldav {
+                return 301 $scheme://$host/remote.php/dav;
+              }
+              try_files $uri $uri/ =404;
+            '';
           };
-          "= /.well-known/caldav" = {
-            priority = 210;
-            extraConfig = "return 301 $scheme://$host/remote.php/dav;";
-          };
-          "~ ^\\/(?:build|tests|config|lib|3rdparty|templates|data)\\/" = {
-            priority = 300;
-            extraConfig = "deny all;";
-          };
-          "~ ^\\/(?:\\.|autotest|occ|issue|indie|db_|console)" = {
-            priority = 300;
-            extraConfig = "deny all;";
-          };
-          "~ ^\\/(?:index|remote|public|cron|core/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|ocs-provider\\/.+|ocm-provider\\/.+)\\.php(?:$|\\/)" = {
+          "~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/)".extraConfig = ''
+            return 404;
+          '';
+          "~ ^/(?:\\.|autotest|occ|issue|indie|db_|console)".extraConfig = ''
+            return 404;
+          '';
+          "~ \\.php(?:$|/)" = {
             priority = 500;
             extraConfig = ''
               include ${config.services.nginx.package}/conf/fastcgi.conf;
-              fastcgi_split_path_info ^(.+\.php)(\\/.*)$;
+              fastcgi_split_path_info ^(.+?\.php)(\\/.*)$;
+              set $path_info $fastcgi_path_info;
               try_files $fastcgi_script_name =404;
-              fastcgi_param PATH_INFO $fastcgi_path_info;
+              fastcgi_param PATH_INFO $path_info;
+              fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
               fastcgi_param HTTPS ${if cfg.https then "on" else "off"};
               fastcgi_param modHeadersAvailable true;
               fastcgi_param front_controller_active true;
@@ -583,28 +597,24 @@ in {
               fastcgi_read_timeout 120s;
             '';
           };
+          "~ \\.(?:css|js|svg|gif|map)$".extraConfig = ''
+            try_files $uri /index.php$request_uri;
+            expires 6M;
+            access_log off;
+          '';
+          "~ \\.woff2?$".extraConfig = ''
+            try_files $uri /index.php$request_uri;
+            expires 7d;
+            access_log off;
+          '';
           "~ ^\\/(?:updater|ocs-provider|ocm-provider)(?:$|\\/)".extraConfig = ''
             try_files $uri/ =404;
             index index.php;
           '';
-          "~ \\.(?:css|js|woff2?|svg|gif)$".extraConfig = ''
-            try_files $uri /index.php$request_uri;
-            add_header Cache-Control "public, max-age=15778463";
-            add_header X-Content-Type-Options nosniff;
-            add_header X-XSS-Protection "1; mode=block";
-            add_header X-Robots-Tag none;
-            add_header X-Download-Options noopen;
-            add_header X-Permitted-Cross-Domain-Policies none;
-            add_header X-Frame-Options sameorigin;
-            add_header Referrer-Policy no-referrer;
-            access_log off;
-          '';
-          "~ \\.(?:png|html|ttf|ico|jpg|jpeg|bcmap|mp4|webm)$".extraConfig = ''
-            try_files $uri /index.php$request_uri;
-            access_log off;
-          '';
         };
         extraConfig = ''
+          index index.php index.html /index.php$request_uri;
+          expires 1m;
           add_header X-Content-Type-Options nosniff;
           add_header X-XSS-Protection "1; mode=block";
           add_header X-Robots-Tag none;
@@ -613,8 +623,6 @@ in {
           add_header X-Frame-Options sameorigin;
           add_header Referrer-Policy no-referrer;
           add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
-          error_page 403 /core/templates/403.php;
-          error_page 404 /core/templates/404.php;
           client_max_body_size ${cfg.maxUploadSize};
           fastcgi_buffers 64 4K;
           fastcgi_hide_header X-Powered-By;

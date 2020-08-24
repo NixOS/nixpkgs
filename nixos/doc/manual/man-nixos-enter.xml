@@ -136,7 +136,7 @@
    <filename>/mnt</filename>:
   </para>
 <screen>
-# nixos-enter /mnt
+# nixos-enter --root /mnt
 </screen>
   <para>
    Run a shell command:

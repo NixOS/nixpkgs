@@ -24,8 +24,6 @@
 # This is useful if any dependency contain C files.
 , runVend ? false
 
-, modSha256 ? null
-
 # We want parallel builds by default
 , enableParallelBuilding ? true
 
@@ -257,8 +255,5 @@ let
   });
 in if disabled then
   throw "${package.name} not supported for go ${go.meta.branch}"
-else if modSha256 != null then
-  lib.warn "modSha256 is deprecated and will be removed in the next release (20.09), use vendorSha256 instead" (
-    import ./old.nix { inherit go cacert git lib removeReferencesTo stdenv; } args')
 else
   package

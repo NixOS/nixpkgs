@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     install -m 644 -D psf/*.psf -t "$fontDir"
 
     # install otb fonts
-    fontDir="$otb/share/fonts/X11/misc"
+    fontDir="$out/share/fonts/X11/misc"
     install -m 644 -D otb/*.otb -t "$fontDir"
     mkfontdir "$fontDir"
   '';
@@ -79,8 +79,6 @@ stdenv.mkDerivation rec {
     ./configure --prefix="$out"
     runHook postConfigure
   '';
-
-  outputs = [ "out" "otb" ];
 
   meta = with stdenv.lib; {
     description = "Monospace bitmap screen fonts for X11";

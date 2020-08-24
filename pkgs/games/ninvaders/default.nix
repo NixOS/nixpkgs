@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     description = "Space Invaders clone based on ncurses";
     homepage = "http://ninvaders.sourceforge.net/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ maintainers."1000101" ];
+    maintainers = with maintainers; [ _1000101 ];
     platforms = platforms.all;
   };
 }

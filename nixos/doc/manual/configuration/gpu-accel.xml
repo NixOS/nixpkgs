@@ -70,34 +70,11 @@ Platform Vendor      Advanced Micro Devices, Inc.</screen>
 	Core Next</link> (GCN) GPUs are supported through the
 	<package>rocm-opencl-icd</package> package. Adding this package to
 	<xref linkend="opt-hardware.opengl.extraPackages"/> enables OpenCL
-	support. However, OpenCL Image support is provided through the
-	non-free <package>rocm-runtime-ext</package> package. This package can
-	be added to the same configuration option, but requires that
-	<varname>allowUnfree</varname> option is is enabled for nixpkgs.  Full
-	OpenCL support on supported AMD GPUs is thus enabled as follows:
+	support:
 
 	<programlisting><xref linkend="opt-hardware.opengl.extraPackages"/> = [
   rocm-opencl-icd
-  rocm-runtime-ext
 ];</programlisting>
-      </para>
-
-      <para>
-	It is also possible to use the OpenCL Image extension without a
-	system-wide installation of the <package>rocm-runtime-ext</package>
-	package by setting the <varname>ROCR_EXT_DIR</varname> environment
-	variable to the directory that contains the extension:
-
-	<screen><prompt>$</prompt> export \
-ROCR_EXT_DIR=`nix-build '&lt;nixpkgs&gt;' --no-out-link -A rocm-runtime-ext`/lib/rocm-runtime-ext</screen>
-      </para>
-
-      <para>
-	With either approach, you can verify that OpenCL Image support
-	is indeed working with the <command>clinfo</command> command:
-
-	<screen><prompt>$</prompt> clinfo | grep Image
-  Image support      Yes</screen>
       </para>
     </section>
 

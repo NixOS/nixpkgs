@@ -51,15 +51,15 @@ rec {
     };
   };
 
-  gradle_latest = gradle_6_5;
+  gradle_latest = gradle_6_6;
 
-  gradle_6_5 = gradleGen rec {
-    name = "gradle-6.5.1";
-    nativeVersion = "0.22-milestone-3";
+  gradle_6_6 = gradleGen rec {
+    name = "gradle-6.6";
+    nativeVersion = "0.22-milestone-4";
 
     src = fetchurl {
       url = "https://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "0jmmipjh4fbsn92zpifa5cqg5ws2a4ha0s4jzqhrg4zs542x79sh";
+      sha256 = "09a0fnz6fn8yaxm3q3iwyjm3nnaz7k8i1xlpc7sm414py043by76";
     };
   };
 
