@@ -10,6 +10,7 @@
 , libselinux
 , lvm2
 , pkg-config
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -56,6 +57,8 @@ buildGoModule rec {
 
     installManPage docs/*.[1-9]
   '';
+
+  passthru.tests = { inherit (nixosTests) cri-o; };
 
   meta = with stdenv.lib; {
     homepage = "https://cri-o.io";
