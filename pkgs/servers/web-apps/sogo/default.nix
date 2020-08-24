@@ -18,8 +18,8 @@ with lib; gnustep.stdenv.mkDerivation rec {
   patches = [
     # TODO: take a closer look at other patches in https://sources.debian.org/patches/sogo/ and https://github.com/Skrupellos/sogo-patches
     (fetchpatch {
-      url = "https://sources.debian.org/data/main/s/sogo/4.3.0-1/debian/patches/0005-Remove-build-date.patch";
-      sha256 = "0lrh3bkfj3r0brahfkyb0g7zx7r2jjd5cxzjl43nqla0fs09wsh8";
+      url = "https://salsa.debian.org/debian/sogo/-/raw/120ac6390602c811908c7fcb212a79acbc7f7f28/debian/patches/0005-Remove-build-date.patch";
+      sha256 = "151i8504kwdlcirgd0pbif7cxnb1q6jsp5j7dbh9p6zw2xgwkp25";
     })
   ];
 
