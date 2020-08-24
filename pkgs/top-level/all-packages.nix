@@ -7629,6 +7629,8 @@ in
 
   vpnc = callPackage ../tools/networking/vpnc { };
 
+  vpn-slice = python3Packages.callPackage ../tools/networking/vpn-slice { };
+
   vp = callPackage ../applications/misc/vp {
     # Enable next line for console graphics. Note that
     # it requires `sixel` enabled terminals such as mlterm
