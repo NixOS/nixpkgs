@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "block-io";
-  version = "1.1.14";
+  version = "1.1.15";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b87b753fe8d2812c3534be025f85ed97d1a00e8fe49c03fe9ad09d71860d672d";
+    sha256 = "97ea037a67af72037cb08cec7e0a9f7866ecdfaa1a8c8ebcc0f4b9359a1516d7";
   };
 
   propagatedBuildInputs = [
