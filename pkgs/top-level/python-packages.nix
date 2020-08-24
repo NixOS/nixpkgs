@@ -5768,6 +5768,10 @@ in {
 
   pypdf2 = callPackage ../development/python-modules/pypdf2 { };
 
+  pypdftk = callPackage ../development/python-modules/pypdftk {
+    inherit (pkgs) pdftk;
+  };
+
   pyopengl = callPackage ../development/python-modules/pyopengl { };
 
   pyopenssl = callPackage ../development/python-modules/pyopenssl { };
