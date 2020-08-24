@@ -94,12 +94,4 @@ self: super: {
 
   # Only 0.6 is compatible with ghc 8.6 https://hackage.haskell.org/package/apply-refact/changelog
   apply-refact = super.apply-refact_0_6_0_0;
-
-  # ghcjs 8.6.x relies on shelly < 1.9.0 (default is 1.9.0 in current package set, adding 1.8.1).
-  shelly_1_8_1 = super.callCabal2nix "shelly" (pkgs.fetchFromGitHub {
-    owner = "gregwebs";
-    repo = "Shelly.hs";
-    rev = "d0a185c7dee96820fc3652e7603d81a28276d76c";
-    sha256 = "173msjlq6yxpvd3900ajmd8znyg9kfg5csbxbiz4m7hvxkg8kbkn";
-  }) {};
 }
