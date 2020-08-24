@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gshhg-gmt";
+  pname = "gshhg-gmt";
   version = "2.3.7";
   src = fetchurl {
     url = "ftp://ftp.soest.hawaii.edu/gmt/gshhg-gmt-${version}.tar.gz";
