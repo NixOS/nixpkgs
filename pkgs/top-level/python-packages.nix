@@ -6928,6 +6928,8 @@ in {
 
   zope_interface = callPackage ../development/python-modules/zope_interface { };
 
+  zopfli = callPackage ../development/python-modules/zopfli { };
+
   hgsvn = callPackage ../development/python-modules/hgsvn { };
 
   cliapp = callPackage ../development/python-modules/cliapp { };
