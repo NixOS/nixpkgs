@@ -16,6 +16,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ click distro ];
 
+  # test suite is difficult to emulate in sandbox due to shell manipulation
   doCheck = false;
 
   pythonImportsCheck = [ "click" "userpath" ];
