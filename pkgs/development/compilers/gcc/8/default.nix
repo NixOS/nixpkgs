@@ -1,4 +1,4 @@
-{ stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
+{ stdenv, targetPackages, fetchurl, fetchFromGitHub, fetchpatch, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
 , langObjCpp ? stdenv.targetPlatform.isDarwin
@@ -9,6 +9,7 @@
 , enableShared ? true
 , enableLTO ? true
 , texinfo ? null
+, flex
 , perl ? null # optional, for texi2pod (then pod2man)
 , gmp, mpfr, libmpc, gettext, which
 , libelf                      # optional, for link-time optimizations (LTO)
@@ -44,7 +45,9 @@ with stdenv.lib;
 with builtins;
 
 let majorVersion = "8";
-    version = "${majorVersion}.4.0";
+    version = if targetPlatform.isXtensa
+              then "${majorVersion}.2.0"
+              else "${majorVersion}.4.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -63,6 +66,13 @@ let majorVersion = "8";
         sha256 = "1in5kvcknlpi9z1vvjw6jfmwy8k12zvbqlqfnq84qpm99r0rh00a";
       });
 
+    xtensa-overlays = fetchFromGitHub {
+      owner = "espressif";
+      repo = "xtensa-overlays";
+      rev = "e9af7626c8a550eb6a422fa5e7903ee912c90539";
+      sha256 = "14s3jrngj15xdryg6gggrbl1826x6j86ckmnf447ixzmnf39b404";
+    };
+
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
     stageNameAddon = if crossStageStatic then "stage-static" else "stage-final";
@@ -76,7 +86,12 @@ stdenv.mkDerivation ({
 
   builder = ../builder.sh;
 
-  src = fetchurl {
+  src = if stdenv.targetPlatform.isXtensa then fetchFromGitHub {
+    owner = "espressif";
+    repo = "gcc";
+    rev = "b7c6240f76bcc1ec56ecab3d2a085f49acbbbe01";
+    sha256 = "1jz8gfq6kgsa9xql5aqlcwkhdhyi2g5mw8hyvrs8b772r2vbnx44";
+  } else fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
     sha256 = "1m1d3gfix56w4aq8myazzfffkl8bqcrx4jhhapnjf7qfs596w2p3";
   };
@@ -137,14 +152,19 @@ stdenv.mkDerivation ({
 	        makeFlagsArray+=(
 	           'LIMITS_H_TEST=false'
 	        )
-	      '';
+	      ''
+      + stdenv.lib.optionalString targetPlatform.isXtensa ''
+          cp -r ${xtensa-overlays}/xtensa_esp32/gcc/* .
+        '';
 
   inherit noSysDirs staticCompiler crossStageStatic
     libcCross crossMingw;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ texinfo which gettext ]
-    ++ (optional (perl != null) perl);
+    ++ (optional (perl != null) perl)
+    ++ (optional (stdenv.targetPlatform.isXtensa) flex)
+    ;
 
   # For building runtime libs
   depsBuildTarget =

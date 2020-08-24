@@ -35,6 +35,7 @@ let
     "msp430-none"
     "riscv64-none" "riscv32-none"
     "vc4-none"
+    "xtensa-none"
 
     "js-ghcjs"
 

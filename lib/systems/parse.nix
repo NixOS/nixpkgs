@@ -114,6 +114,8 @@ rec {
 
     vc4      = { bits = 32; significantByte = littleEndian; family = "vc4"; };
 
+    xtensa   = { bits = 32; significantByte = littleEndian; family = "xtensa"; };
+
     js       = { bits = 32; significantByte = littleEndian; family = "js"; };
   };
 
@@ -287,6 +289,7 @@ rec {
     watchos = kernels.ios;
     tvos = kernels.ios;
     win32 = kernels.windows;
+    esp32 = kernels.none;
   };
 
   ################################################################################

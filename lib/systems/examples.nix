@@ -124,6 +124,12 @@ rec {
     platform = {};
   };
 
+  esp32 = {
+    config = "xtensa-esp32-elf";
+    libc = "newlib";
+    platform = {};
+  };
+
   arm-embedded = {
     config = "arm-none-eabi";
     libc = "newlib";

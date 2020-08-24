@@ -33,6 +33,12 @@ let
     rev = "708acc851880dbeda1dd18aca4fd0a95b2573b36";
     sha256 = "1kdrz6fki55lm15rwwamn74fnqpy0zlafsida2zymk76n3656c63";
   };
+  xtensa-overlays = fetchFromGitHub {
+    owner = "espressif";
+    repo = "xtensa-overlays";
+    rev = "e9af7626c8a550eb6a422fa5e7903ee912c90539";
+    sha256 = "14s3jrngj15xdryg6gggrbl1826x6j86ckmnf447ixzmnf39b404";
+  };
   # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
   normal-src = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
     url = "mirror://gnu/binutils/${basename}-${version}.tar.bz2";
@@ -104,6 +110,8 @@ stdenv.mkDerivation {
     for i in binutils/Makefile.in gas/Makefile.in ld/Makefile.in gold/Makefile.in; do
         sed -i "$i" -e 's|ln |ln -s |'
     done
+  '' + lib.optionalString stdenv.targetPlatform.isXtensa ''
+    cp -r ${xtensa-overlays}/xtensa_esp32/binutils/* .
   '';
 
   # As binutils takes part in the stdenv building, we don't want references
