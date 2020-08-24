@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "3mux";
-  version = "0.3.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "aaronjanse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "164jylifkdfsi3r6vmlp5afgly73fqfbad7lbr58wmy21l9x5rcj";
+    sha256 = "0kgbqxw92ffvq8aws0rljarzsfxs8hdi8k37zx964fvigcdhrqba";
   };
 
-  vendorSha256 = "0dc1c0z3xkfpwmwb3hafsv7qa6lc7bzz78by5w20rxrrk4r87gic";
+  vendorSha256 = "1pyik8d1syjvwvkp7i94z1jmflw01wqpafmn1hsnbn034z4ygimd";
 
   meta = with stdenv.lib; {
     description = "Terminal multiplexer inspired by i3";
