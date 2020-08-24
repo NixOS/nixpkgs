@@ -972,6 +972,9 @@ self: super: {
     # Generate shell completions
     generateOptparseApplicativeCompletion "purs" dontHaddockPurescript;
 
+  # Generate shell completion for spago
+  spago = generateOptparseApplicativeCompletion "spago" super.spago;
+
   # 2020-06-05: HACK: Package can not pass test suite,
   # Upstream Report: https://github.com/kcsongor/generic-lens/issues/83
   generic-lens = dontCheck super.generic-lens;
