@@ -6811,6 +6811,8 @@ in {
 
   unicodecsv = callPackage ../development/python-modules/unicodecsv { };
 
+  unicodedata2 = callPackage ../development/python-modules/unicodedata2 { };
+
   unicode-slugify = callPackage ../development/python-modules/unicode-slugify { };
 
   unidiff = callPackage ../development/python-modules/unidiff { };
