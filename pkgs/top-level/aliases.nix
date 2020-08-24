@@ -562,6 +562,7 @@ mapAliases ({
   sup = throw "deprecated in 2019-09-10: abandoned by upstream";
   swfdec = throw "swfdec has been removed as broken and unmaintained."; # added 2020-08-23
   system_config_printer = system-config-printer;  # added 2016-01-03
+  systemd-cryptsetup-generator = throw "systemd-cryptsetup-generator is now included in the systemd package"; # added 2020-07-12
   systemd_with_lvm2 = throw "obsolete, enabled by default via the lvm module"; # added 2020-07-12
   systool = sysfsutils; # added 2018-04-25
   tahoelafs = tahoe-lafs; # added 2018-03-26
