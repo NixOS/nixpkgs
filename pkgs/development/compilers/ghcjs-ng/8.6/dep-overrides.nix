@@ -1,4 +1,4 @@
-{ lib, haskellLib, fetchFromGitHub }:
+{ haskellLib }:
 
 let inherit (haskellLib) doJailbreak dontHaddock dontCheck;
 in self: super: {
