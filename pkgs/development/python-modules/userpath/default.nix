@@ -3,9 +3,6 @@
 , fetchPypi
 , click
 , distro
-, tox
-, pytest
-, coverage
 }:
 
 buildPythonPackage rec {
@@ -19,15 +16,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ click distro ];
 
-  checkInputs = [ tox pytest coverage ];
-
-  # We should skip tox dependencies installation to run tests but
-  # tox doesn't have such an option yet (https://github.com/tox-dev/tox/issues/410)
   doCheck = false;
 
-  checkPhase = ''
-    tox
-  '';
+  pythonImportsCheck = [ "click" "userpath" ];
 
   meta = with lib; {
     description = "Cross-platform tool for adding locations to the user PATH";
