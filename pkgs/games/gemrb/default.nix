@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gemrb";
-  version = "0.8.6";
+  version = "0.8.7";
 
   src = fetchFromGitHub {
     owner  = "gemrb";
     repo   = "gemrb";
     rev    = "v${version}";
-    sha256 = "0vsr3fsqmv9b7s5l0cwhpq2pf7ah2wvgmcn9y8asj6w8hprp17d4";
+    sha256 = "14j9mhrbi4gnrbv25nlsvcxzkylijzrnwbqqnrg7pr452lb3srpb";
   };
 
   # TODO: make libpng, libvorbis, sdl_mixer, freetype, vlc, glew (and other gl reqs) optional
