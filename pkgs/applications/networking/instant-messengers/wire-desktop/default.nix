@@ -10,6 +10,7 @@
 , wrapGAppsHook
 , cpio
 , xar
+, libdbusmenu
 }:
 
 let
@@ -109,6 +110,7 @@ let
 
     runtimeDependencies = [
       (lib.getLib udev)
+      libdbusmenu
     ];
 
     postFixup = ''
