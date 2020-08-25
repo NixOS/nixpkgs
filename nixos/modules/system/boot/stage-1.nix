@@ -158,15 +158,23 @@ let
       cp -pv ${pkgs.stdenv.cc.libc.out}/lib/ld*.so.? $out/lib
 
       # Copy all of the needed libraries
-      find $out/bin $out/lib -type f | while read BIN; do
-        echo "Copying libs for executable $BIN"
-        for LIB in $(${findLibs}/bin/find-libs $BIN); do
+      ensureDeps() {
+        echo "Copying libs for executable $1"
+        for LIB in $(${findLibs}/bin/find-libs "$1"); do
           TGT="$out/lib/$(basename $LIB)"
           if [ ! -f "$TGT" ]; then
             SRC="$(readlink -e $LIB)"
             cp -pdv "$SRC" "$TGT"
+            ensureDeps "$TGT" # otherwise the find might skip deeper dependencies?
           fi
         done
+      }
+      # Hack: unfortunately we have two lvm2 versions in closure and they require
+      # different dependencies, so let's give precedence to the more featureful one.
+      # Note that the order of scanning is impure, depending on /nix/store filesystem.
+      ensureDeps "$out/bin/dmsetup"
+      find "$out/bin" "$out/lib" -type f | while read BIN; do
+        ensureDeps "$BIN"
       done
 
       # Strip binaries further than normal.
@@ -195,8 +203,8 @@ let
       $out/bin/mount --help 2>&1 | grep -q "BusyBox"
       $out/bin/blkid -V 2>&1 | grep -q 'libblkid'
       $out/bin/udevadm --version
-      $out/bin/dmsetup --version 2>&1 | tee -a log | grep -q "version:"
-      LVM_SYSTEM_DIR=$out $out/bin/lvm version 2>&1 | tee -a log | grep -q "LVM"
+      $out/bin/dmsetup --version 2>&1 | tee -a /dev/stderr log | grep -q "version:"
+      LVM_SYSTEM_DIR=$out $out/bin/lvm version 2>&1 | tee -a /dev/stderr log | grep -q "LVM"
       $out/bin/mdadm --version
 
       ${config.boot.initrd.extraUtilsCommandsTest}
