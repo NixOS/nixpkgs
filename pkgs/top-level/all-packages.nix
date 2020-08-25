@@ -24635,6 +24635,10 @@ in
     cudatoolkit = cudatoolkit_10_2;
   };
 
+  katagoCPU = katago.override {
+    gpuEnabled = false;
+  };
+
   klavaro = callPackage ../games/klavaro {};
 
   kobodeluxe = callPackage ../games/kobodeluxe { };
