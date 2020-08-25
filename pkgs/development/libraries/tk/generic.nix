@@ -32,9 +32,10 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optional enableAqua "--enable-aqua";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = lib.optional enableAqua (with darwin.apple_sdk.frameworks; [ Cocoa ]);
 
-  propagatedBuildInputs = [ tcl libXft ];
+  propagatedBuildInputs = [
+    tcl libXft
+  ] ++ lib.optional enableAqua (with darwin.apple_sdk.frameworks; [ Cocoa ]);
 
   doCheck = false; # fails. can't find itself
 
