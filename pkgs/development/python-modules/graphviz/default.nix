@@ -30,9 +30,9 @@ buildPythonPackage rec {
     })
   ];
 
-  # Fontconfig error: Cannot load default config file 
-  FONTCONFIG_FILE = makeFontsConf { 
-    fontDirectories = [ freefont_ttf ]; 
+  # Fontconfig error: Cannot load default config file
+  FONTCONFIG_FILE = makeFontsConf {
+    fontDirectories = [ freefont_ttf ];
   };
 
   checkInputs = [ mock pytest pytest-mock pytestcov ];

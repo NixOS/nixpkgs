@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "mask-rcnn";
   version = "2.1";
-  
+
   src = fetchFromGitHub {
     owner = "matterport";
     repo = "Mask_RCNN";
@@ -49,4 +49,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ rakesh4g ];
   };
 }
-
