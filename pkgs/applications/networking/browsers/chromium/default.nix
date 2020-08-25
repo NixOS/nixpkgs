@@ -28,7 +28,7 @@ let
 
   callPackage = newScope chromium;
 
-  chromium = {
+  chromium = rec {
     inherit stdenv llvmPackages;
 
     upstream-info = (callPackage ./update.nix {}).getChannel channel;
@@ -37,15 +37,6 @@ let
       inherit gnome gnomeSupport gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport useOzone;
       # TODO: Remove after we can update gn for the stable channel (backward incompatible changes):
       gnChromium = gn.overrideAttrs (oldAttrs: {
-        version = "2020-03-23";
-        src = fetchgit {
-          url = "https://gn.googlesource.com/gn";
-          rev = "5ed3c9cc67b090d5e311e4bd2aba072173e82db9";
-          sha256 = "00y2d35wvqmx9glaqhfb62wdgbfpwr77v0934nnvh9ks71vnsjqy";
-        };
-      });
-    } // lib.optionalAttrs (channel == "beta") {
-      gnChromium = gn.overrideAttrs (oldAttrs: {
         version = "2020-05-19";
         src = fetchgit {
           url = "https://gn.googlesource.com/gn";
@@ -53,7 +44,7 @@ let
           sha256 = "0197msabskgfbxvhzq73gc3wlr3n9cr4bzrhy5z5irbvy05lxk17";
         };
       });
-    } // lib.optionalAttrs (channel == "dev") {
+    } // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "86") {
       gnChromium = gn.overrideAttrs (oldAttrs: {
         version = "2020-07-20";
         src = fetchgit {
