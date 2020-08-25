@@ -1331,7 +1331,7 @@ self: super: {
   monad-dijkstra = dontCheck (doJailbreak super.monad-dijkstra);
 
   libsodium = overrideCabal super.libsodium (drv: {
-    libraryToolDepends = drv.libraryToolDepends or [self.c2hs];
+    libraryToolDepends = (drv.libraryToolDepends or []) ++ [self.c2hs];
   });
 
   # https://github.com/kowainik/policeman/issues/57
