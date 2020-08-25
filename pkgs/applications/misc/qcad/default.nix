@@ -11,13 +11,13 @@
 
 mkDerivationWith stdenv.mkDerivation rec {
   pname = "qcad";
-  version = "3.24.3.10";
+  version = "3.25.0.0";
 
   src = fetchFromGitHub {
     owner = "qcad";
     repo = "qcad";
     rev = "v${version}";
-    sha256 = "0izyn4y1ffq1mgxs5dymkrqih6n6v9ifrcpyk1z2vyhbm5xx4qsa";
+    sha256 = "07qph2645m1wi9yi04ixdvx8dli03q1vimj3laqdmnpipi54lljc";
   };
 
   patches = [
@@ -25,11 +25,13 @@ mkDerivationWith stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    mkdir src/3rdparty/qt-labs-qtscriptgenerator-${qt5.qtbase.version}
-    cp \
-      src/3rdparty/qt-labs-qtscriptgenerator-5.12.3/qt-labs-qtscriptgenerator-5.12.3.pro \
-      src/3rdparty/qt-labs-qtscriptgenerator-${qt5.qtbase.version}/qt-labs-qtscriptgenerator-${qt5.qtbase.version}.pro
-  '';
+    if ! [ -d src/3rdparty/qt-labs-qtscriptgenerator-${qt5.qtbase.version} ]; then
+      mkdir src/3rdparty/qt-labs-qtscriptgenerator-${qt5.qtbase.version}
+      cp \
+        src/3rdparty/qt-labs-qtscriptgenerator-5.14.0/qt-labs-qtscriptgenerator-5.14.0.pro \
+        src/3rdparty/qt-labs-qtscriptgenerator-${qt5.qtbase.version}/qt-labs-qtscriptgenerator-${qt5.qtbase.version}.pro
+    fi
+ '';
 
   qmakeFlags = [
     "MUPARSER_DIR=${muparser}"
