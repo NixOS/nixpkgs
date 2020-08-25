@@ -6115,6 +6115,8 @@ in {
 
   ripser = callPackage ../development/python-modules/ripser { };
 
+  rising = callPackage ../development/python-modules/rising { };
+
   rivet = disabledIf (!isPy3k) (toPythonModule (pkgs.rivet.override { python3 = python; }));
 
   rjsmin = callPackage ../development/python-modules/rjsmin { };
