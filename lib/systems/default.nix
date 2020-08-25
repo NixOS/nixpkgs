@@ -76,6 +76,7 @@ rec {
          # uname -r
          release = null;
       };
+      isStatic = final.isWasm || final.isRedox;
 
       kernelArch =
         if final.isAarch32 then "arm"
