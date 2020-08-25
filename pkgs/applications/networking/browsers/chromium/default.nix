@@ -1,4 +1,4 @@
-{ newScope, config, stdenv, llvmPackages_9, llvmPackages_10
+{ newScope, config, stdenv, llvmPackages_10, llvmPackages_11
 , makeWrapper, ed, gnugrep, coreutils
 , glib, gtk3, gnome3, gsettings-desktop-schemas, gn, fetchgit
 , libva ? null
@@ -45,6 +45,7 @@ let
         };
       });
     } // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "86") {
+      llvmPackages = llvmPackages_11;
       gnChromium = gn.overrideAttrs (oldAttrs: {
         version = "2020-07-20";
         src = fetchgit {
