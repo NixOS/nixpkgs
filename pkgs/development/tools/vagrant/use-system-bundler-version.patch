@@ -1,8 +1,8 @@
-diff --git i/lib/vagrant/bundler.rb w/lib/vagrant/bundler.rb
-index 301e40e37..e361ab510 100644
---- i/lib/vagrant/bundler.rb
-+++ w/lib/vagrant/bundler.rb
-@@ -217,7 +217,7 @@ module Vagrant
+diff --git a/lib/vagrant/bundler.rb b/lib/vagrant/bundler.rb
+index 336ac1e05..1bfd84c0d 100644
+--- a/lib/vagrant/bundler.rb
++++ b/lib/vagrant/bundler.rb
+@@ -470,7 +470,7 @@ module Vagrant
        source_list = {}
        system_plugins = plugins.map do |plugin_name, plugin_info|
          plugin_name if plugin_info["system"]
