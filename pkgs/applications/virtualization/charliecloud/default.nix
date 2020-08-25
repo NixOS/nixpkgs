@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python, autoconf, automake, docker, buildah }:
+{ stdenv, fetchFromGitHub, python3, python3Packages, docker, autoreconfHook, coreutils, makeWrapper, gnused, gnutar, gzip, findutils, sudo, nixosTests }:
 
 stdenv.mkDerivation rec {
 
@@ -12,19 +12,37 @@ stdenv.mkDerivation rec {
     sha256 = "0x2kvp95ld0yii93z9i0k9sknfx7jkgy4rkw9l369fl7f73ghsiq";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ python docker buildah ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper ];
+  buildInputs = [
+    docker
+    (python3.withPackages (ps: [ ps.lark-parser ps.requests ]))
+  ];
+
+  configureFlags = let
+    pythonEnv = python3.withPackages (ps: [ ps.lark-parser ps.requests ]);
+  in [
+    "--with-python=${pythonEnv}/bin/python3"
+  ];
 
   preConfigure = ''
     patchShebangs test/
-    patchShebangs autogen.sh
-    ./autogen.sh
+    substituteInPlace configure.ac --replace "/usr/bin/env" "${coreutils}/bin/env"
   '';
 
   makeFlags = [
     "PREFIX=$(out)"
     "LIBEXEC_DIR=lib/charliecloud"
   ];
+
+  # Charliecloud calls some external system tools.
+  # Here we wrap those deps so they are resolved inside nixpkgs.
+  postInstall = ''
+    for file in $out/bin/* ; do \
+      wrapProgram $file --prefix PATH : ${stdenv.lib.makeBinPath [ coreutils docker gnused gnutar gzip findutils sudo ]}
+    done
+  '';
+
+  passthru.tests.charliecloud = nixosTests.charliecloud;
 
   meta = {
     description = "User-defined software stacks (UDSS) for high-performance computing (HPC) centers";
