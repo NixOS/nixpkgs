@@ -1,17 +1,13 @@
 #! /somewhere/python3
-from contextlib import contextmanager
-from typing import Tuple, Any, Callable, Dict, Iterator, Optional, List
-import queue
-import io
-import _thread
 import argparse
 import atexit
 import base64
+import io
+import logging
 import os
 import pathlib
-import logging
-import ptpython.repl
 import pty
+import queue
 import re
 import shlex
 import shutil
@@ -19,7 +15,12 @@ import socket
 import subprocess
 import sys
 import tempfile
+import _thread
 import time
+from contextlib import contextmanager
+from typing import Any, Callable, Dict, Iterator, List, Optional, Tuple
+
+import ptpython.repl
 
 CHAR_TO_KEY = {
     "A": "shift-a",
