@@ -43,6 +43,7 @@ in
 {
   imports = [
     (mkRemovedOptionModule [ "services" "redmine" "extraConfig" ] "Use services.redmine.settings instead.")
+    (mkRemovedOptionModule [ "services" "redmine" "database" "password" ] "Use services.redmine.database.passwordFile instead.")
   ];
 
   # interface
@@ -177,16 +178,6 @@ in
           description = "Database user.";
         };
 
-        password = mkOption {
-          type = types.str;
-          default = "";
-          description = ''
-            The password corresponding to <option>database.user</option>.
-            Warning: this is stored in cleartext in the Nix store!
-            Use <option>database.passwordFile</option> instead.
-          '';
-        };
-
         passwordFile = mkOption {
           type = types.nullOr types.path;
           default = null;
@@ -221,8 +212,8 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.database.passwordFile != null || cfg.database.password != "" || cfg.database.socket != null;
-        message = "one of services.redmine.database.socket, services.redmine.database.passwordFile, or services.redmine.database.password must be set";
+      { assertion = cfg.database.passwordFile != null || cfg.database.socket != null;
+        message = "one of services.redmine.database.socket or services.redmine.database.passwordFile must be set";
       }
       { assertion = cfg.database.createLocally -> cfg.database.user == cfg.user;
         message = "services.redmine.database.user must be set to ${cfg.user} if services.redmine.database.createLocally is set true";
@@ -346,7 +337,7 @@ in
 
 
         # handle database.passwordFile & permissions
-        DBPASS=$(head -n1 ${cfg.database.passwordFile})
+        DBPASS=${optionalString (cfg.database.passwordFile != null) "$(head -n1 ${cfg.database.passwordFile})"}
         cp -f ${databaseYml} "${cfg.stateDir}/config/database.yml"
         sed -e "s,#dbpass#,$DBPASS,g" -i "${cfg.stateDir}/config/database.yml"
         chmod 440 "${cfg.stateDir}/config/database.yml"
@@ -386,17 +377,6 @@ in
     users.groups = optionalAttrs (cfg.group == "redmine") {
       redmine.gid = config.ids.gids.redmine;
     };
-
-    warnings = optional (cfg.database.password != "")
-      ''config.services.redmine.database.password will be stored as plaintext
-      in the Nix store. Use database.passwordFile instead.'';
-
-    # Create database passwordFile default when password is configured.
-    services.redmine.database.passwordFile =
-      (mkDefault (toString (pkgs.writeTextFile {
-        name = "redmine-database-password";
-        text = cfg.database.password;
-      })));
 
   };
 
