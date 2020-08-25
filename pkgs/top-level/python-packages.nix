@@ -4140,6 +4140,8 @@ in {
     inherit python;
   }));
 
+  fontpens = callPackage ../development/python-modules/fontpens { };
+
   fonttools = callPackage ../development/python-modules/fonttools { };
 
   foolscap = callPackage ../development/python-modules/foolscap { };
