@@ -5095,6 +5095,8 @@ in {
     else
       callPackage ../development/python-modules/numpy { };
 
+  numpy_1_18_5 = callPackage ../development/python-modules/numpy/1.18.5.nix { }
+
   numpydoc = callPackage ../development/python-modules/numpydoc { };
 
   numpy-stl = callPackage ../development/python-modules/numpy-stl { };
@@ -7344,6 +7346,7 @@ in {
     cudnn = pkgs.cudnn_cudatoolkit_10;
     nccl = pkgs.nccl_cudatoolkit_10;
     openssl = pkgs.openssl_1_1;
+    numpy = numpy_1_18_5;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
   };
 
