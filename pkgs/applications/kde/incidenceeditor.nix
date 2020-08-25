@@ -2,7 +2,7 @@
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
   akonadi, akonadi-mime, calendarsupport, eventviews, kdepim-apps-libs,
-  kdiagram, kldap, kmime, qtbase,
+  kdiagram, kldap, kmime, pimcommon, qtbase
 }:
 
 mkDerivation {
@@ -14,7 +14,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     akonadi akonadi-mime calendarsupport eventviews kdepim-apps-libs kdiagram
-    kldap kmime qtbase
+    kldap kmime pimcommon qtbase
   ];
   outputs = [ "out" "dev" ];
 }
