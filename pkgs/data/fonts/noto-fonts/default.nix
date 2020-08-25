@@ -177,7 +177,7 @@ in
 
     meta = with stdenv.lib; {
       description = "Noto Emoji with extended Blob support";
-      homepage = https://github.com/C1710/blobmoji;
+      homepage = "https://github.com/C1710/blobmoji";
       license = with licenses; [ ofl asl20 ];
       platforms = platforms.all;
       maintainers = with maintainers; [ rileyinman ];
