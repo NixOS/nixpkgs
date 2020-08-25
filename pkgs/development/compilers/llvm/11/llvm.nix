@@ -18,7 +18,7 @@
   || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
   || stdenv.isAarch32 # broken for the armv7l builder
 )
-, enablePolly ? true
+, enablePolly ? false
 }:
 
 let
@@ -32,8 +32,8 @@ in stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
-  src = fetch pname "1wydhbp9kyjp5y0rc627imxgkgqiv3dfirbqil9dgpnbaw5y7n65";
-  polly_src = fetch "polly" "0nm2d8niz47yjsa3r17v3p13b70igkd338ib8191znr1dfw0pyyj";
+  src = fetch pname "11nym1bycy2ynr3z9frifbhqf82jjby2jk4xni6kx9zdqxjfz7q3";
+  polly_src = fetch "polly" "1zq14njfmxgyncy8lwwm72l4338m3q3hwl5gnl4732cc1daaxvyh";
 
   unpackPhase = ''
     unpackFile $src
@@ -81,7 +81,6 @@ in stdenv.mkDerivation (rec {
     rm test/DebugInfo/X86/convert-debugloc.ll
     rm test/DebugInfo/X86/convert-inlined.ll
     rm test/DebugInfo/X86/convert-linked.ll
-    rm test/DebugInfo/X86/debug_addr.ll
     rm test/tools/dsymutil/X86/op-convert.test
   '' + optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
     # Seems to require certain floating point hardware (NEON?)

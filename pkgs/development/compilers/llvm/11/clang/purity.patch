@@ -11,20 +11,18 @@ diff --git a/lib/Driver/ToolChains/Gnu.cpp b/lib/Driver/ToolChains/Gnu.cpp
 index fe3c0191bb..c6a482bece 100644
 --- a/lib/Driver/ToolChains/Gnu.cpp
 +++ b/lib/Driver/ToolChains/Gnu.cpp
-@@ -494,13 +494,6 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
+@@ -487,12 +487,6 @@ void tools::gnutools::Linker::ConstructJob(Compilation &C, const JobAction &JA,
    if (!IsStatic) {
      if (Args.hasArg(options::OPT_rdynamic))
        CmdArgs.push_back("-export-dynamic");
 -
 -    if (!Args.hasArg(options::OPT_shared) && !IsStaticPIE) {
--      const std::string Loader =
--          D.DyldPrefix + ToolChain.getDynamicLinker(Args);
 -      CmdArgs.push_back("-dynamic-linker");
--      CmdArgs.push_back(Args.MakeArgString(Loader));
+-      CmdArgs.push_back(Args.MakeArgString(Twine(D.DyldPrefix) +
+-                                           ToolChain.getDynamicLinker(Args)));
 -    }
    }
  
    CmdArgs.push_back("-o");
 -- 
 2.11.0
-
