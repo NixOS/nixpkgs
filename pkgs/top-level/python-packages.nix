@@ -4146,6 +4146,8 @@ in {
 
   fontmath = callPackage ../development/python-modules/fontmath { };
 
+  fontparts = callPackage ../development/python-modules/fontparts { };
+
   fonttools = callPackage ../development/python-modules/fonttools { };
 
   foolscap = callPackage ../development/python-modules/foolscap { };
