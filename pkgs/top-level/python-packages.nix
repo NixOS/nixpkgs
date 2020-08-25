@@ -4946,6 +4946,8 @@ in {
     else
       callPackage ../development/python-modules/mutagen { };
 
+  mutatormath = callPackage ../development/python-modules/mutatormath { };
+
   muttils = callPackage ../development/python-modules/muttils { };
 
   mygpoclient = callPackage ../development/python-modules/mygpoclient { };
