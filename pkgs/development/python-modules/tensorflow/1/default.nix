@@ -347,7 +347,10 @@ let
       platforms = with platforms; linux ++ darwin;
       # The py2 build fails due to some issue importing protobuf. Possibly related to the fix in
       # https://github.com/akesandgren/easybuild-easyblocks/commit/1f2e517ddfd1b00a342c6abb55aef3fd93671a2b
-      broken = !(xlaSupport -> cudaSupport) || !isPy3k;
+      # broken = !(xlaSupport -> cudaSupport) || !isPy3k;
+
+      # Marked as broken on 2020-08-25. Will be removed.
+      broken = true;
     };
   };
 
