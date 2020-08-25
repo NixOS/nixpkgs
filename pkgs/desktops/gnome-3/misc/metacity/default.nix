@@ -5,6 +5,7 @@
 , gnome3
 , gsettings-desktop-schemas
 , gtk3
+, xorg
 , libcanberra-gtk3
 , libgtop
 , libstartup_notification
@@ -12,17 +13,16 @@
 , pkgconfig
 , substituteAll
 , wrapGAppsHook
-, zenity }:
+, zenity
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "metacity";
-  version = "3.36.1";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.37.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "08xkq5i6czvms0ygbj7ywzl70q1l0z44nfh6b43q8rmjwa9pdw0i";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "09m102lpy68730y8y7vjyaw3cavlbdbiyix6s0kgna23bbcz7ml0";
   };
 
   patches = [
@@ -40,6 +40,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    xorg.libXres
     glib
     gsettings-desktop-schemas
     gtk3
