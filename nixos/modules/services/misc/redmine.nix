@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkDefault mkEnableOption mkIf mkOption mkRemovedOptionModule types;
+  inherit (lib) mkBefore mkDefault mkEnableOption mkIf mkOption mkRemovedOptionModule types;
   inherit (lib) concatStringsSep literalExample mapAttrsToList;
   inherit (lib) optional optionalAttrs optionalString;
 
@@ -21,13 +21,7 @@ let
   '';
 
   configurationYml = format.generate "configuration.yml" cfg.settings;
-
-  additionalEnvironment = pkgs.writeText "additional_environment.rb" ''
-    config.logger = Logger.new("${cfg.stateDir}/log/production.log", 14, 1048576)
-    config.logger.level = Logger::INFO
-
-    ${cfg.extraEnv}
-  '';
+  additionalEnvironment = pkgs.writeText "additional_environment.rb" cfg.extraEnv;
 
   unpackTheme = unpack "theme";
   unpackPlugin = unpack "plugin";
@@ -251,6 +245,11 @@ in
         scm_darcs_command = "${pkgs.darcs}/bin/darcs";
       };
     };
+
+    services.redmine.extraEnv = mkBefore ''
+      config.logger = Logger.new("${cfg.stateDir}/log/production.log", 14, 1048576)
+      config.logger.level = Logger::INFO
+    '';
 
     services.mysql = mkIf mysqlLocal {
       enable = true;
