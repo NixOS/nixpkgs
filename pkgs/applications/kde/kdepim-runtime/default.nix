@@ -1,5 +1,5 @@
 {
-  mkDerivation, copyPathsToStore, lib, kdepimTeam,
+  mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
   shared-mime-info,
   akonadi, akonadi-calendar, akonadi-contacts, akonadi-mime, akonadi-notes,
