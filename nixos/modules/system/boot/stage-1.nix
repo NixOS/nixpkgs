@@ -36,7 +36,7 @@ let
     set -euo pipefail
 
     declare -A seen
-    declare -a left
+    left=()
 
     patchelf="${pkgs.buildPackages.patchelf}/bin/patchelf"
 
@@ -48,7 +48,7 @@ let
       done
     }
 
-    add_needed $1
+    add_needed "$1"
 
     while [ ''${#left[@]} -ne 0 ]; do
       next=''${left[0]}
