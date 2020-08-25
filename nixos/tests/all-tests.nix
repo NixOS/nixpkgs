@@ -48,6 +48,7 @@ in
   ceph-multi-node = handleTestOn ["x86_64-linux"] ./ceph-multi-node.nix {};
   certmgr = handleTest ./certmgr.nix {};
   cfssl = handleTestOn ["x86_64-linux"] ./cfssl.nix {};
+  charliecloud = handleTest ./charliecloud.nix {};
   chromium = (handleTestOn ["x86_64-linux"] ./chromium.nix {}).stable or {};
   cjdns = handleTest ./cjdns.nix {};
   clickhouse = handleTest ./clickhouse.nix {};
