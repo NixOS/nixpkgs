@@ -80,14 +80,14 @@ buildPythonPackage rec {
     cp ${opensslLegacyStatic.out}/lib/libssl.a \
       ${opensslLegacyStatic.out}/lib/libcrypto.a \
       deps/openssl-OpenSSL_1_0_2e/
-    ln -s ${opensslLegacyStatic.out.dev}/include deps/openssl-OpenSSL_1_0_2e/include 
+    ln -s ${opensslLegacyStatic.out.dev}/include deps/openssl-OpenSSL_1_0_2e/include
     ln -s ${opensslLegacyStatic.bin}/bin deps/openssl-OpenSSL_1_0_2e/apps
 
     mkdir -p deps/openssl-OpenSSL_1_1_1/
     cp ${opensslStatic.out}/lib/libssl.a \
       ${opensslStatic.out}/lib/libcrypto.a \
       deps/openssl-OpenSSL_1_1_1/
-    ln -s ${opensslStatic.out.dev}/include deps/openssl-OpenSSL_1_1_1/include 
+    ln -s ${opensslStatic.out.dev}/include deps/openssl-OpenSSL_1_1_1/include
     ln -s ${opensslStatic.bin}/bin deps/openssl-OpenSSL_1_1_1/apps
 
     mkdir -p deps/zlib-1.2.11/

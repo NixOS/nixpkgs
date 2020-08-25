@@ -14,9 +14,9 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "247800260cd38160c362d211dcaf4ed0f7816afb5efe56544748b21d6ad6d17f";
   };
-  
+
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
-  
+
   nativeBuildInputs = [
     cppy
   ];

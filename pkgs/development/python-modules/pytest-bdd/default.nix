@@ -29,7 +29,7 @@ buildPythonPackage rec {
   checkPhase = ''
     pytest
   '';
-  
+
   meta = with stdenv.lib; {
     description = "BDD library for the py.test runner";
     homepage = "https://github.com/pytest-dev/pytest-bdd";

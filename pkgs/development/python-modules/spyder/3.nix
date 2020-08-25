@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    jedi pycodestyle psutil pyflakes rope pylint keyring numpydoc 
+    jedi pycodestyle psutil pyflakes rope pylint keyring numpydoc
     qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels_0_5
     pygments qtpy pyzmq chardet pyqtwebengine
   ];

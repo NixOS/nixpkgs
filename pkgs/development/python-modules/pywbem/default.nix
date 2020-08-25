@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
     # Wants `wbemcli` in PATH
     rm testsuite/test_wbemcli.py
-    
+
     # Disables tests that use testfixtures which is currently broken by nonbuilding zope_component
     rm testsuite/{test_logging,test_recorder,test_wbemconnection_mock}.*
   '';

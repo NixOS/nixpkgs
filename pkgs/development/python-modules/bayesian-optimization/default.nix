@@ -22,7 +22,7 @@ buildPythonPackage rec {
     scikitlearn
     scipy
   ];
-  
+
   checkInputs = [ pytest ];
   checkPhase = ''
     pytest tests

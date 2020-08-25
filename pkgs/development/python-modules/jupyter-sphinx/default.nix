@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Jupyter Sphinx Extensions";
     homepage = "https://github.com/jupyter/jupyter-sphinx/";
     license = licenses.bsd3;
-  };    
+  };
 
 }

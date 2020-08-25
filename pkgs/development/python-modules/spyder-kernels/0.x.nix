@@ -1,4 +1,4 @@
-{ 
+{
   lib
   , buildPythonPackage
   , fetchFromGitHub
@@ -6,7 +6,7 @@
   , ipykernel
   , wurlitzer
   , jupyter_client
-  , pyzmq 
+  , pyzmq
   , numpy
   , pandas
   , scipy

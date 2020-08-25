@@ -23,11 +23,11 @@ buildPythonPackage rec {
 
   # No tests in archive
   doCheck = false;
-  
+
   checkInputs = [ flake8 nose2 mock ];
-  
+
   propagatedBuildInputs = [ requests pyjwt  ];
- 
+
   meta = with lib; {
     description = "A convenient Pythonic interface to Globus REST APIs, including the Transfer API and the Globus Auth API.";
     homepage =  "https://github.com/globus/globus-sdk-python";

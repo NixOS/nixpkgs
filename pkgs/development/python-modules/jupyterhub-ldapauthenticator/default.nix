@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   # No tests implemented
   doCheck = false;
-   
+
   propagatedBuildInputs = [ jupyterhub ldap3 ];
 
   meta = with lib; {

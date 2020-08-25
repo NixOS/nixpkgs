@@ -15,7 +15,7 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "1inak3y2win58zbzykfzy6xp00f276sqsz69h2nfsd93mpr74wf6";
   };
-  
+
   nativeBuildInputs = [ poetry ];
 
   preBuild = ''

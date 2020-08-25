@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   preConfigure = ''
       export CUDA_PATH=${cudatoolkit}
-  ''; 
+  '';
 
   propagatedBuildInputs = [
     cudatoolkit

@@ -17,16 +17,16 @@
 buildPythonPackage rec {
   pname = "atlassian-python-api";
   version = "1.16.0";
-  
+
   src = fetchPypi {
     inherit pname version;
     sha256 = "1sp036192vdl5nqifcswg2j838vf8i9k8bfd0w4qh1vz4f0pjz7y";
   };
-  
+
   checkInputs = [ pytestrunner pytest ];
-  
+
   propagatedBuildInputs = [ oauthlib requests requests_oauthlib six ];
-  
+
   meta = with lib; {
     description = "Python Atlassian REST API Wrapper";
     homepage = "https://github.com/atlassian-api/atlassian-python-api";
@@ -34,4 +34,3 @@ buildPythonPackage rec {
     maintainers = [ maintainers.arnoldfarkas ];
   };
 }
-
