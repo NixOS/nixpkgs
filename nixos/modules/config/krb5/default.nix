@@ -113,7 +113,10 @@ in {
           {
             "ATHENA.MIT.EDU" = {
               admin_server = "athena.mit.edu";
-              kdc = "athena.mit.edu";
+              kdc = [
+                "athena01.mit.edu"
+                "athena02.mit.edu"
+              ];
             };
           };
         '';
