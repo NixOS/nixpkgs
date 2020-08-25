@@ -18,19 +18,18 @@
 , pkgconfig
 , polkit
 , systemd
-, wrapGAppsHook }:
+, wrapGAppsHook
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "gnome-panel";
-  version = "3.36.2";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.37.1";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0z0f64rgcwkv48kfd1ifzjvnmg3c386hwi9cj11mr5198rah0p4p";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    hash = "sha256-HVmP1okz52AY8vsRanhxy8ADPB8Qm/v+CKHstWBn0VI=";
   };
 
   # make .desktop Exec absolute
