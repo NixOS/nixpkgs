@@ -11,17 +11,20 @@
 , gobject-introspection
 , libxml2
 , gtk3
+, gtksourceview4
 , gtk-vnc
 , freerdp
 , libvirt
 , spice-gtk
 , python3
+, appstream-glib
 , spice-protocol
+, libhandy_0
 , libsoup
 , libosinfo
 , systemd
-, tracker
-, tracker-miners
+, tracker_2
+, tracker-miners-2
 , vala
 , libcap
 , yajl
@@ -51,16 +54,17 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-boxes";
-  version = "3.36.6";
+  version = "3.38.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0c3cw90xqqcpacc2z06ljs0gg8saxizfgjzg9alhpwgz3gl4c5pg";
+    sha256 = "12x38780j52bv46q2i6468va1zww28mmy83rasbl3y8sqagmjsv9";
   };
 
   doCheck = true;
 
   nativeBuildInputs = [
+    appstream-glib # for appstream-util
     desktop-file-utils
     gettext
     gobject-introspection
@@ -89,12 +93,14 @@ stdenv.mkDerivation rec {
     gnome3.adwaita-icon-theme
     gtk-vnc
     gtk3
+    gtksourceview4
     json-glib
     libapparmor
     libarchive
     libcap
     libcap_ng
     libgudev
+    libhandy_0
     libosinfo
     librsvg
     libsecret
@@ -107,8 +113,8 @@ stdenv.mkDerivation rec {
     spice-gtk
     spice-protocol
     systemd
-    tracker
-    tracker-miners
+    tracker_2
+    tracker-miners-2
     vte
     webkitgtk
     xen
