@@ -11,7 +11,7 @@ buildPythonPackage {
   pname = "pyphotonfile";
   inherit version;
   propagatedBuildInputs = [ pillow numpy ];
-  
+
   src = fetchFromGitHub {
     owner = "fookatchu";
     repo = "pyphotonfile";
