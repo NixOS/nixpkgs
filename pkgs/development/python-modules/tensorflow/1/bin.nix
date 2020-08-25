@@ -116,6 +116,9 @@ in buildPythonPackage {
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     # Python 2.7 build uses different string encoding.
     # See https://github.com/NixOS/nixpkgs/pull/37044#issuecomment-373452253
-    broken = stdenv.isDarwin && !isPy3k;
+    # broken = stdenv.isDarwin && !isPy3k;
+
+    # Marked as broken on 2020-08-25. Will be removed.
+    broken = true;
   };
 }
