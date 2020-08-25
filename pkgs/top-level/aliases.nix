@@ -467,9 +467,11 @@ mapAliases ({
   robomongo = robo3t; #added 2017-09-28
   rocm-runtime-ext = throw "rocm-runtime-ext has been removed, since its functionality was added to rocm-runtime"; #added 2020-08-21
   rssglx = rss-glx; #added 2015-03-25
+  rssh = throw "rssh has been removed from nixpkgs: no upstream releases since 2012, several known CVEs"; # added 2020-08-25
   recordmydesktop = throw "recordmydesktop has been removed from nixpkgs, as it's unmaintained and uses deprecated libraries"; # added 2019-12-10
   gtk-recordmydesktop = throw "gtk-recordmydesktop has been removed from nixpkgs, as it's unmaintained and uses deprecated libraries"; # added 2019-12-10
   qt-recordmydesktop = throw "qt-recordmydesktop has been removed from nixpkgs, as it's abandoned and uses deprecated libraries"; # added 2019-12-10
+  rfkill = throw "rfkill has been removed, as it's included in util-linux"; # added 2020-08-23
   rkt = throw "rkt was archived by upstream"; # added 2020-05-16
   ruby_2_0_0 = throw "deprecated 2018-0213: use a newer version of ruby";
   ruby_2_1_0 = throw "deprecated 2018-0213: use a newer version of ruby";

@@ -180,6 +180,8 @@ in
 
   colorz = callPackage ../tools/misc/colorz { };
 
+  colorpicker = callPackage ../tools/misc/colorpicker { };
+
   comedilib = callPackage ../development/libraries/comedilib {  };
 
   cpu-x = callPackage ../applications/misc/cpu-x { };
@@ -3984,7 +3986,7 @@ in
   gocryptfs = callPackage ../tools/filesystems/gocryptfs { };
 
   godot = callPackage ../development/tools/godot {};
-  
+
   godot-headless = callPackage ../development/tools/godot/headless.nix { };
 
   godot-server = callPackage ../development/tools/godot/server.nix { };
@@ -7629,6 +7631,8 @@ in
 
   vpnc = callPackage ../tools/networking/vpnc { };
 
+  vpn-slice = python3Packages.callPackage ../tools/networking/vpn-slice { };
+
   vp = callPackage ../applications/misc/vp {
     # Enable next line for console graphics. Note that
     # it requires `sixel` enabled terminals such as mlterm
@@ -8257,8 +8261,6 @@ in
 
   tcsh = callPackage ../shells/tcsh { };
 
-  rssh = callPackage ../shells/rssh { };
-
   rush = callPackage ../shells/rush { };
 
   xonsh = callPackage ../shells/xonsh { };
@@ -8467,6 +8469,8 @@ in
       echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
     '';
   };
+
+  copper = callPackage ../development/compilers/copper {};
 
   inherit (callPackages ../development/compilers/crystal {
     inherit (llvmPackages_10) stdenv clang llvm;
@@ -11449,6 +11453,8 @@ in
 
   terraform-lsp = callPackage ../development/tools/misc/terraform-lsp { };
   terraform-ls = callPackage ../development/tools/misc/terraform-ls { };
+
+  terraformer = callPackage ../development/tools/misc/terraformer { };
 
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo4 = texinfo413;
@@ -16833,7 +16839,7 @@ in
     enableMDNS = true;
     enableDomainController = true;
     enableRegedit = true;
-    enableCephFS = true;
+    enableCephFS = !pkgs.stdenv.hostPlatform.isAarch64;
     enableGlusterFS = true;
   });
 
@@ -17991,6 +17997,8 @@ in
 
   iferr = callPackage ../development/tools/iferr { };
 
+  ginkgo = callPackage ../development/tools/ginkgo { };
+
   go-bindata = callPackage ../development/tools/go-bindata { };
 
   go-bindata-assetfs = callPackage ../development/tools/go-bindata-assetfs { };
@@ -18173,8 +18181,6 @@ in
   raspberrypi-tools = callPackage ../os-specific/linux/firmware/raspberrypi/tools.nix {};
 
   regionset = callPackage ../os-specific/linux/regionset { };
-
-  rfkill = callPackage ../os-specific/linux/rfkill { };
 
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
 
@@ -20901,6 +20907,8 @@ in
   i3lock-color = callPackage ../applications/window-managers/i3/lock-color.nix { };
 
   i3lock-fancy = callPackage ../applications/window-managers/i3/lock-fancy.nix { };
+
+  i3lock-fancy-rapid = callPackage ../applications/window-managers/i3/lock-fancy-rapid.nix { };
 
   i3lock-pixeled = callPackage ../misc/screensavers/i3lock-pixeled { };
 
