@@ -25829,6 +25829,8 @@ in
 
   csxcad = callPackage ../applications/science/electronics/csxcad { };
 
+  flatcam = callPackage ../applications/science/electronics/flatcam { };
+
   fparser = callPackage ../applications/science/electronics/fparser { };
 
   geda = callPackage ../applications/science/electronics/geda {
