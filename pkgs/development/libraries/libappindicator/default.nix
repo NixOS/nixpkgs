@@ -1,32 +1,41 @@
 # TODO: Resolve the issues with the Mono bindings.
 
 { stdenv, fetchurl, fetchpatch, lib
-, pkgconfig, autoreconfHook
+, pkg-config, autoreconfHook, automake111x, gtk-doc
 , glib, dbus-glib, gtkVersion ? "3"
-, gtk2 ? null, libindicator-gtk2 ? null, libdbusmenu-gtk2 ? null
-, gtk3 ? null, libindicator-gtk3 ? null, libdbusmenu-gtk3 ? null
+, gtk2 ? null, libindicator-gtk2 ? null, libdbusmenu-gtk2 ? null, gnome2
+, gtk3 ? null, libindicator-gtk3 ? null, libdbusmenu-gtk3 ? null, gnome3
 , vala, gobject-introspection
 , monoSupport ? false, mono ? null, gtk-sharp-2_0 ? null
  }:
 
 with lib;
 
-
 stdenv.mkDerivation rec {
   name = let postfix = if gtkVersion == "2" && monoSupport then "sharp" else "gtk${gtkVersion}";
           in "libappindicator-${postfix}-${version}";
-  version = "${versionMajor}.${versionMinor}";
-  versionMajor = "12.10";
-  versionMinor = "0";
+  # pulled from tag, matched formatting with repology
+  version = "12.10.1.201020200706.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "${meta.homepage}/${versionMajor}/${version}/+download/libappindicator-${version}.tar.gz";
-    sha256 = "17xlqd60v0zllrxp8bgq3k5a1jkj0svkqn8rzllcyjh8k0gpr46m";
+    name = "libappindicator-${version}.tar.gz";
+    url = "https://bazaar.launchpad.net/~indicator-applet-developers/libappindicator/trunk/tarball/298";
+    sha256 = "0l9x2dcmsgp43j4rv5brx4vv2vpz34by8lbl3wp97sircniqkbl6";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook vala gobject-introspection ];
+  sourceRoot = "~indicator-applet-developers/libappindicator/trunk";
+
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    vala
+    gobject-introspection
+    gtk-doc
+  ] ++ (if gtkVersion == "2"
+    then [ gnome2.gnome-common automake111x ]
+    else [ gnome3.gnome-common ]);
 
   propagatedBuildInputs =
     if gtkVersion == "2"
@@ -39,14 +48,9 @@ stdenv.mkDerivation rec {
     then [ libindicator-gtk2 ] ++ optionals monoSupport [ mono gtk-sharp-2_0 ]
     else [ libindicator-gtk3 ]);
 
-  patches = [
-    # Remove python2 from libappindicator.
-    (fetchpatch {
-      name = "no-python.patch";
-      url = "https://src.fedoraproject.org/rpms/libappindicator/raw/8508f7a52437679fd95a79b4630373f08315f189/f/nopython.patch";
-      sha256 = "18b1xzvwsbhhfpbzf5zragij4g79pa04y1dk6v5ci1wsjvii725s";
-    })
-  ];
+  preAutoreconf = ''
+    gnome-autogen.sh --enable-gtk-doc ''${configureFlags[@]}
+  '';
 
   configureFlags = [
     "CFLAGS=-Wno-error"
