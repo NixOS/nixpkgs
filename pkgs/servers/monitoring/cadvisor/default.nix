@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "cadvisor";
-  version = "0.36.0";
+  version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "cadvisor";
     rev = "v${version}";
-    sha256 = "12hk2l82i7hawzbvj6imcfwn6v8pcfv0dbjfn259yi4b0jrlx6l8";
+    sha256 = "15njzwvsl7jc2hgxlpsksmn7md3bqpavzaskfdlmzxnxp3biw3cj";
   };
 
   goPackagePath = "github.com/google/cadvisor";
