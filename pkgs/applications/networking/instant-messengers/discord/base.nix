@@ -1,4 +1,4 @@
-{ pname, version, src, binaryName, desktopName
+{ pname, version, src, binaryName, desktopName, buildFHSUserEnvBubblewrap
 , autoPatchelfHook, fetchurl, makeDesktopItem, stdenv, wrapGAppsHook
 , alsaLib, at-spi2-atk, at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig
 , freetype, gdk-pixbuf, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid
@@ -8,73 +8,91 @@
 }:
 
 let
-  inherit binaryName;
-in stdenv.mkDerivation rec {
-  inherit pname version src;
+  discord-unwrapped = stdenv.mkDerivation rec {
+    inherit pname version src;
 
-  nativeBuildInputs = [
-    alsaLib
-    autoPatchelfHook
-    cups
-    libdrm
-    libuuid
-    libX11
-    libXScrnSaver
-    libXtst
-    libxcb
-    mesa.drivers
-    nss
-    wrapGAppsHook
-  ];
+    nativeBuildInputs = [
+      alsaLib
+      autoPatchelfHook
+      cups
+      libdrm
+      libuuid
+      libX11
+      libXScrnSaver
+      libXtst
+      libxcb
+      mesa.drivers
+      nss
+      wrapGAppsHook
+    ];
 
-  dontWrapGApps = true;
+    dontWrapGApps = true;
 
-  libPath = stdenv.lib.makeLibraryPath [
-    libcxx systemd libpulseaudio
-    stdenv.cc.cc alsaLib atk at-spi2-atk at-spi2-core cairo cups dbus expat fontconfig freetype
-    gdk-pixbuf glib gtk3 libnotify libX11 libXcomposite libuuid
-    libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
-    libXtst nspr nss libxcb pango systemd libXScrnSaver
-    libappindicator-gtk3
-   ];
+    libPath = stdenv.lib.makeLibraryPath [
+      libcxx systemd libpulseaudio
+      stdenv.cc.cc alsaLib atk at-spi2-atk at-spi2-core cairo cups dbus expat fontconfig freetype
+      gdk-pixbuf glib gtk3 libnotify libX11 libXcomposite libuuid
+      libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
+      libXtst nspr nss libxcb pango systemd libXScrnSaver
+      libappindicator-gtk3
+     ];
 
-  installPhase = ''
-    mkdir -p $out/{bin,opt/${binaryName},share/pixmaps}
-    mv * $out/opt/${binaryName}
+    installPhase = ''
+      mkdir -p $out/{bin,opt/${binaryName},share/pixmaps}
+      mv * $out/opt/${binaryName}
 
-    chmod +x $out/opt/${binaryName}/${binaryName}
-    patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
-        $out/opt/${binaryName}/${binaryName}
+      chmod +x $out/opt/${binaryName}/${binaryName}
+      patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
+          $out/opt/${binaryName}/${binaryName}
 
-    wrapProgram $out/opt/${binaryName}/${binaryName} \
-        "''${gappsWrapperArgs[@]}" \
-        --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-        --prefix LD_LIBRARY_PATH : ${libPath}
+      wrapProgram $out/opt/${binaryName}/${binaryName} \
+          "''${gappsWrapperArgs[@]}" \
+          --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+          --prefix LD_LIBRARY_PATH : ${libPath}
 
-    ln -s $out/opt/${binaryName}/${binaryName} $out/bin/
-    ln -s $out/opt/${binaryName}/discord.png $out/share/pixmaps/${pname}.png
+      ln -s $out/opt/${binaryName}/${binaryName} $out/bin/
+      ln -s $out/opt/${binaryName}/discord.png $out/share/pixmaps/${pname}.png
 
-    ln -s "${desktopItem}/share/applications" $out/share/
+      ln -s "${desktopItem}/share/applications" $out/share/
+    '';
+
+    desktopItem = makeDesktopItem {
+      name = pname;
+      exec = binaryName;
+      icon = pname;
+      inherit desktopName;
+      genericName = meta.description;
+      categories = "Network;InstantMessaging;";
+      mimeType = "x-scheme-handler/discord";
+    };
+
+    meta = with stdenv.lib; {
+      description = "All-in-one cross-platform voice and text chat for gamers";
+      homepage = "https://discordapp.com/";
+      downloadPage = "https://discordapp.com/download";
+      license = licenses.unfree;
+      maintainers = with maintainers; [ ldesgoui MP2E tadeokondrak jonringer ];
+      platforms = [ "x86_64-linux" ];
+    };
+  };
+in buildFHSUserEnvBubblewrap {
+  # also determines the "binary" name
+  name = binaryName;
+
+  # discord started hardcoding /usr/bin/wget into the executable
+  targetPkgs = pkgs: [ discord-unwrapped ]
+    ++ (with pkgs;[
+      wget
+    ]);
+
+  passthru = {
+    updateScript = ./update-discord.sh;
+    unwrapped = discord-unwrapped;
+  };
+
+  extraInstallCommands = ''
+    ln -s ${discord-unwrapped}/share $out/share
   '';
 
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = binaryName;
-    icon = pname;
-    inherit desktopName;
-    genericName = meta.description;
-    categories = "Network;InstantMessaging;";
-    mimeType = "x-scheme-handler/discord";
-  };
-
-  passthru.updateScript = ./update-discord.sh;
-
-  meta = with stdenv.lib; {
-    description = "All-in-one cross-platform voice and text chat for gamers";
-    homepage = "https://discordapp.com/";
-    downloadPage = "https://discordapp.com/download";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ ldesgoui MP2E tadeokondrak ];
-    platforms = [ "x86_64-linux" ];
-  };
+  runScript = binaryName;
 }
