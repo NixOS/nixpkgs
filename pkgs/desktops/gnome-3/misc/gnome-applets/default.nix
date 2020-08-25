@@ -1,10 +1,9 @@
 { stdenv
 , fetchurl
-, intltool
+, gettext
 , itstool
 , libxml2
-, libxslt
-, pkgconfig
+, pkg-config
 , gnome-panel
 , gtk3
 , glib
@@ -17,28 +16,25 @@
 , adwaita-icon-theme
 , libgweather
 , gucharmap
-, tracker
+, tracker_2
 , polkit
 , gnome3
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "gnome-applets";
-  version = "3.36.4";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.37.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1cd7y2air9cjznqmnynadbsayvq4dpsi39avnz46vv0bavx1aiwz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0l1mc9ymjg0bgk92a08zd85hx1vaqrzdj0dwzmna20rp51vf0l4a";
   };
 
   nativeBuildInputs = [
-    intltool
+    gettext
     itstool
-    pkgconfig
+    pkg-config
     libxml2
-    libxslt
   ];
 
   buildInputs = [
@@ -53,7 +49,7 @@ in stdenv.mkDerivation rec {
     adwaita-icon-theme
     libgweather
     gucharmap
-    tracker
+    tracker_2
     polkit
     wirelesstools
     linuxPackages.cpupower
@@ -63,9 +59,8 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  configureFlags = [
-    "--with-libpanel-applet-dir=${placeholder "out"}/share/gnome-panel/applets"
-  ];
+  # Don't try to install modules to gnome panel's directory, as it's read only
+  PKG_CONFIG_LIBGNOME_PANEL_MODULESDIR = "${placeholder "out"}/lib/gnome-panel/modules";
 
   passthru = {
     updateScript = gnome3.updateScript {
