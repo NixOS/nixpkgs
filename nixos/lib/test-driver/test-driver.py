@@ -320,6 +320,9 @@ class Machine:
                 + "'{}' but it is in state ‘{}’".format(require_state, state)
             )
 
+    def log(self, message: str) -> None:
+        self.logger.info(message)
+
     def execute(self, command: str) -> Tuple[int, str]:
         self.connect()
 
