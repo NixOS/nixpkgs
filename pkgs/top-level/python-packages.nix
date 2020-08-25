@@ -1725,6 +1725,8 @@ in {
 
   ufonormalizer = callPackage ../development/python-modules/ufonormalizer { };
 
+  ufoprocessor = callPackage ../development/python-modules/ufoprocessor { };
+
   unifi = callPackage ../development/python-modules/unifi { };
 
   uvcclient = callPackage ../development/python-modules/uvcclient { };
