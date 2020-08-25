@@ -368,11 +368,11 @@ in
           # NOTE: https://github.com/NixOS/nixpkgs/pull/93457
           # will remove the need for these by fixing <abstractions/base>
           r ${etc."hosts".source},
-          r /etc/ld-nix.so.preload,
-          ${lib.optionalString (builtins.hasAttr "ld-nix.so.preload" etc) ''
-            r ${etc."ld-nix.so.preload".source},
+          r /etc/ld-nix.${pkgs.glibc.src.outputHash}.so.preload,
+          ${lib.optionalString (builtins.hasAttr "ld-nix.${pkgs.glibc.src.outputHash}.so.preload" etc) ''
+            r ${etc."ld-nix.${pkgs.glibc.src.outputHash}.so.preload".source},
             ${concatMapStrings (p: optionalString (p != "") ("mr ${p},\n"))
-              (splitString "\n" config.environment.etc."ld-nix.so.preload".text)}
+              (splitString "\n" config.environment.etc."ld-nix.${pkgs.glibc.src.outputHash}.so.preload".text)}
           ''}
           r ${etc."ssl/certs/ca-certificates.crt".source},
           r ${pkgs.tzdata}/share/zoneinfo/**,

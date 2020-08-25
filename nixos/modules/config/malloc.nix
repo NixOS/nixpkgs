@@ -84,7 +84,9 @@ in
   };
 
   config = mkIf (cfg.provider != "libc") {
-    environment.etc."ld-nix.so.preload".text = ''
+    # See comment in pkgs/development/libraries/glibc/common.nix
+    # for an explanation about the name of this file.
+    environment.etc."ld-nix.${pkgs.glibc.src.outputHash}.so.preload".text = ''
       ${providerLibPath}
     '';
   };
