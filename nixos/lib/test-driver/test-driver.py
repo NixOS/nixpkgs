@@ -922,7 +922,8 @@ def subtest(name: str) -> Iterator[None]:
     return False
 
 
-if __name__ == "__main__":
+def main() -> None:
+    global machines
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument(
         "-K",
@@ -944,7 +945,8 @@ if __name__ == "__main__":
         if not cli_args.keep_vm_state:
             machine.cleanup_statedir()
     machine_eval = [
-        "{0} = machines[{1}]".format(m.name, idx) for idx, m in enumerate(machines)
+        "global {0}; {0} = machines[{1}]".format(m.name, idx)
+        for idx, m in enumerate(machines)
     ]
     exec("\n".join(machine_eval))
 
@@ -964,3 +966,7 @@ if __name__ == "__main__":
     run_tests()
     toc = time.time()
     print("test script finished in {:.2f}s".format(toc - tic))
+
+
+if __name__ == "__main__":
+    main()
