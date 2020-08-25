@@ -22790,6 +22790,8 @@ in
 
   waybar = callPackage ../applications/misc/waybar {};
 
+  wbg = callPackage ../applications/misc/wbg { };
+
   hikari = callPackage ../applications/window-managers/hikari { };
 
   i3 = callPackage ../applications/window-managers/i3 {
