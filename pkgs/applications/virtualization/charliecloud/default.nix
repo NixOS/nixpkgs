@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0x2kvp95ld0yii93z9i0k9sknfx7jkgy4rkw9l369fl7f73ghsiq";
   };
 
-  nativeBuildInputs = [ autoconf automake ];
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ python docker buildah ];
 
   preConfigure = ''
