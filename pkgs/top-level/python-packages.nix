@@ -158,6 +158,8 @@ in {
 
   aenum = callPackage ../development/python-modules/aenum { };
 
+  afdko = callPackage ../development/python-modules/afdko { };
+
   affinity = callPackage ../development/python-modules/affinity { };
 
   agate = callPackage ../development/python-modules/agate { };
