@@ -8,7 +8,7 @@ let
     pname = "clang";
     inherit version;
 
-    src = fetch "clang" "091bvcny2lh32zy8f3m9viayyhb2zannrndni7325rl85cwgr6pr";
+    src = fetch "clang" "0jfgxn0xck73zgv3kral27ccynchfwiqg6b4r1r39wzfzm8drb0f";
 
     unpackPhase = ''
       unpackFile $src
@@ -27,7 +27,6 @@ let
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++14"
       "-DCLANGD_BUILD_XPC=OFF"
-      "-DLLVM_ENABLE_RTTI=ON"
     ] ++ stdenv.lib.optionals enableManpages [
       "-DCLANG_INCLUDE_DOCS=ON"
       "-DLLVM_ENABLE_SPHINX=ON"
@@ -39,7 +38,6 @@ let
     patches = [
       ./purity.patch
       # https://reviews.llvm.org/D51899
-      ./compiler-rt-baremetal.patch
     ];
 
     postPatch = ''
@@ -87,6 +85,8 @@ let
     passthru = {
       isClang = true;
       inherit llvm;
+    } // stdenv.lib.optionalAttrs (stdenv.targetPlatform.isLinux || (stdenv.cc.isGNU && stdenv.cc.cc ? gcc)) {
+      gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
     };
 
     meta = {
