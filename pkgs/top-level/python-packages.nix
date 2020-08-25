@@ -3349,6 +3349,8 @@ in {
 
   jupyterlab = callPackage ../development/python-modules/jupyterlab {};
 
+  jupyterlab-git = callPackage ../development/python-modules/jupyterlab-git {};
+
   jupyter-sphinx = callPackage ../development/python-modules/jupyter-sphinx { };
 
   jupytext = callPackage ../development/python-modules/jupytext { };
