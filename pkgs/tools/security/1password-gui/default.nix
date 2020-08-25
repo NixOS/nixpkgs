@@ -51,6 +51,8 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath runtimeLibs}"
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with stdenv.lib; {
     description = "Multi-platform password manager";
     longDescription = ''
