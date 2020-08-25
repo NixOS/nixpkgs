@@ -1,22 +1,43 @@
-{ stdenv, fetchurl, pkgconfig, glib, gtk3, libgee, gettext, vala, gnome3
-, libintl, meson, ninja }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, glib
+, gtk3
+, libgee
+, gettext
+, vala
+, gnome3
+, libintl
+, meson
+, ninja
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "libgnome-games-support";
-  version = "1.6.1";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "1.8.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1gq8p38k92lsr6dbav6pgmw0adnzzhcs06jqdkr37p145vv6ls7v";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1pdk9hc30xdlv0ba24f7pvcr2d5370zykrmpws7hgmjgl4wfbpdb";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext vala ];
-  buildInputs = [ libintl ];
+  nativeBuildInputs = [
+    gettext
+    meson
+    ninja
+    pkgconfig
+    vala
+  ];
+
+  buildInputs = [
+    libintl
+  ];
+
   propagatedBuildInputs = [
     # Required by libgnome-games-support-1.pc
-    glib gtk3 libgee
+    glib
+    gtk3
+    libgee
   ];
 
   passthru = {
