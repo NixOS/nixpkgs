@@ -22,6 +22,7 @@
 , pygobject3
 , pyyaml
 , requests
+, keyring
 
 # commands that lutris needs
 , xrandr
@@ -71,13 +72,13 @@ let
 
 in buildPythonApplication rec {
   pname = "lutris-original";
-  version = "0.5.6";
+  version = "0.5.7.1";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
     rev = "v${version}";
-    sha256 = "1f78qhyy8xqdg0rhxcwkap1bmg5mfxhb8qw1vbpxr6g62ajpwksa";
+    sha256 = "12ispwkbbm5aq263n3bdjmjfkpwplizacnqs2c0wnag4zj4kpm29";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -95,7 +96,7 @@ in buildPythonApplication rec {
   ] ++ gstDeps;
 
   propagatedBuildInputs = [
-    evdev distro pyyaml pygobject3 requests pillow dbus-python
+    evdev distro pyyaml pygobject3 requests pillow dbus-python keyring
   ];
 
   # avoid double wrapping
