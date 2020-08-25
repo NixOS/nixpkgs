@@ -2,7 +2,7 @@
 , fetchpatch
 , fetchurl
 , pkgconfig
-, utillinux
+, utillinuxMinimal
 , libuuid
 , thin-provisioning-tools, libaio
 , enableCmdlib ? false
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ udev libuuid thin-provisioning-tools libaio ];
+  buildInputs = [ udev libuuid thin-provisioning-tools libaio utillinuxMinimal ];
 
   configureFlags = [
     "--disable-readline"
