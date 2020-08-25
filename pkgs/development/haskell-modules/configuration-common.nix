@@ -1449,7 +1449,7 @@ self: super: {
     # Test disabled: it seems to freeze (is it just that it takes a long time ?)
     ghcide = dontCheck self.hls-ghcide;
     # we are faster than stack here
-    hie-bios = dontCheck self.hie-bios_0_6_2;
+    hie-bios = dontCheck self.hie-bios_0_6_3;
     lsp-test = dontCheck self.lsp-test_0_11_0_4;
     # fourmolu can‘t compile with an older aeson
     aeson = dontCheck super.aeson_1_5_2_0;
