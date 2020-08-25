@@ -689,14 +689,15 @@ rec {
             "/prefix/nix-profiles-library-paths.patch"
             "/prefix/compose-search-path.patch" ]
   */
-  readPathsFromFile = rootPath: file:
-    let
-      lines = lib.splitString "\n" (builtins.readFile file);
-      removeComments = lib.filter (line: line != "" && !(lib.hasPrefix "#" line));
-      relativePaths = removeComments lines;
-      absolutePaths = builtins.map (path: rootPath + "/${path}") relativePaths;
-    in
-      absolutePaths;
+  readPathsFromFile = lib.warn "lib.readPathsFromFile is deprecated, use a list instead"
+    (rootPath: file:
+      let
+        lines = lib.splitString "\n" (builtins.readFile file);
+        removeComments = lib.filter (line: line != "" && !(lib.hasPrefix "#" line));
+        relativePaths = removeComments lines;
+        absolutePaths = builtins.map (path: rootPath + "/${path}") relativePaths;
+      in
+        absolutePaths);
 
   /* Read the contents of a file removing the trailing \n
 
