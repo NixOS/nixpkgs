@@ -1,12 +1,12 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkDefault mkEnableOption mkIf mkOption types;
+  inherit (lib) mkDefault mkEnableOption mkIf mkOption mkRemovedOptionModule types;
   inherit (lib) concatStringsSep literalExample mapAttrsToList;
-  inherit (lib) optional optionalAttrs optionalString singleton versionAtLeast;
+  inherit (lib) optional optionalAttrs optionalString;
 
   cfg = config.services.redmine;
-
+  format = pkgs.formats.yaml {};
   bundle = "${cfg.package}/share/redmine/bin/bundle";
 
   databaseYml = pkgs.writeText "database.yml" ''
@@ -20,17 +20,7 @@ let
       ${optionalString (cfg.database.type == "mysql2" && cfg.database.socket != null) "socket: ${cfg.database.socket}"}
   '';
 
-  configurationYml = pkgs.writeText "configuration.yml" ''
-    default:
-      scm_subversion_command: ${pkgs.subversion}/bin/svn
-      scm_mercurial_command: ${pkgs.mercurial}/bin/hg
-      scm_git_command: ${pkgs.gitAndTools.git}/bin/git
-      scm_cvs_command: ${pkgs.cvs}/bin/cvs
-      scm_bazaar_command: ${pkgs.breezy}/bin/bzr
-      scm_darcs_command: ${pkgs.darcs}/bin/darcs
-
-    ${cfg.extraConfig}
-  '';
+  configurationYml = format.generate "configuration.yml" cfg.settings;
 
   additionalEnvironment = pkgs.writeText "additional_environment.rb" ''
     config.logger = Logger.new("${cfg.stateDir}/log/production.log", 14, 1048576)
@@ -56,8 +46,12 @@ let
   pgsqlLocal = cfg.database.createLocally && cfg.database.type == "postgresql";
 
 in
-
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "redmine" "extraConfig" ] "Use services.redmine.settings instead.")
+  ];
+
+  # interface
   options = {
     services.redmine = {
       enable = mkEnableOption "Redmine";
@@ -93,21 +87,24 @@ in
         description = "The state directory, logs and plugins are stored here.";
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
-        default = "";
+      settings = mkOption {
+        type = format.type;
+        default = {};
         description = ''
-          Extra configuration in configuration.yml.
-
-          See <link xlink:href="https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration"/>
+          Redmine configuration (<filename>configuration.yml</filename>). Refer to
+          <link xlink:href="https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration"/>
           for details.
         '';
         example = literalExample ''
-          email_delivery:
-            delivery_method: smtp
-            smtp_settings:
-              address: mail.example.com
-              port: 25
+          {
+            email_delivery = {
+              delivery_method = "smtp";
+              smtp_settings = {
+                address = "mail.example.com";
+                port = 25;
+              };
+            };
+          }
         '';
       };
 
@@ -226,6 +223,7 @@ in
     };
   };
 
+  # implementation
   config = mkIf cfg.enable {
 
     assertions = [
@@ -242,6 +240,17 @@ in
         message = "services.redmine.database.host must be set to localhost if services.redmine.database.createLocally is set to true";
       }
     ];
+
+    services.redmine.settings = {
+      production = {
+        scm_subversion_command = "${pkgs.subversion}/bin/svn";
+        scm_mercurial_command = "${pkgs.mercurial}/bin/hg";
+        scm_git_command = "${pkgs.gitAndTools.git}/bin/git";
+        scm_cvs_command = "${pkgs.cvs}/bin/cvs";
+        scm_bazaar_command = "${pkgs.breezy}/bin/bzr";
+        scm_darcs_command = "${pkgs.darcs}/bin/darcs";
+      };
+    };
 
     services.mysql = mkIf mysqlLocal {
       enable = true;
