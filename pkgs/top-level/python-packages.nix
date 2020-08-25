@@ -1723,6 +1723,8 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) CFNetwork Security;
   };
 
+  ufonormalizer = callPackage ../development/python-modules/ufonormalizer { };
+
   unifi = callPackage ../development/python-modules/unifi { };
 
   uvcclient = callPackage ../development/python-modules/uvcclient { };
