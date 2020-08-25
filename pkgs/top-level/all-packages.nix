@@ -25148,6 +25148,8 @@ in
     tk = tk-8_5;
   };
 
+  xcowsay = callPackage ../games/xcowsay { };
+
   xjump = callPackage ../games/xjump { };
   # TODO: the corresponding nix file is missing
   # xracer = callPackage ../games/xracer { };
