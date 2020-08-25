@@ -5095,7 +5095,7 @@ in {
     else
       callPackage ../development/python-modules/numpy { };
 
-  numpy_1_18_5 = callPackage ../development/python-modules/numpy/1.18.5.nix { }
+  numpy_1_18_5 = callPackage ../development/python-modules/numpy/1.18.5.nix { };
 
   numpydoc = callPackage ../development/python-modules/numpydoc { };
 
