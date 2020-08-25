@@ -23136,6 +23136,8 @@ in
 
   terminus = callPackage ../applications/misc/terminus { };
 
+  tty-solitaire = callPackage ../applications/misc/tty-solitaire { };
+
   lxterminal = callPackage ../applications/misc/lxterminal { };
 
   aminal = callPackage ../applications/misc/aminal {
