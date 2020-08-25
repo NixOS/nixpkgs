@@ -2210,6 +2210,8 @@ in {
 
   debian = callPackage ../development/python-modules/debian {};
 
+  defcon = callPackage ../development/python-modules/defcon { };
+
   defusedxml = callPackage ../development/python-modules/defusedxml {};
 
   dodgy = callPackage ../development/python-modules/dodgy { };
