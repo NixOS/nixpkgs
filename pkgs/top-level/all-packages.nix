@@ -18871,6 +18871,8 @@ in
 
   hetzner-kube = callPackage ../applications/networking/cluster/hetzner-kube { };
 
+  hotel = callPackage ../applications/networking/cluster/hotel { };
+
   hicolor-icon-theme = callPackage ../data/icons/hicolor-icon-theme { };
 
   hanazono = callPackage ../data/fonts/hanazono { };
