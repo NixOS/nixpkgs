@@ -1,7 +1,6 @@
 {
   mkDerivation,
   lib,
-  copyPathsToStore,
   extra-cmake-modules,
   plymouth,
   nixos-icons,
@@ -28,7 +27,9 @@ mkDerivation {
   name = "breeze-plymouth";
   nativeBuildInputs = [ extra-cmake-modules ] ++ lib.optionals (logoFile != null) [ imagemagick netpbm perl ];
   buildInputs = [ plymouth ];
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [
+    ./install-paths.patch
+  ];
   cmakeFlags = []
     ++ lib.optional (osName      != null) "-DDISTRO_NAME=${osName}"
     ++ lib.optional (osVersion   != null) "-DDISTRO_VERSION=${osVersion}"
