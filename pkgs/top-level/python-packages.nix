@@ -4140,6 +4140,8 @@ in {
 
   fontpens = callPackage ../development/python-modules/fontpens { };
 
+  fontmath = callPackage ../development/python-modules/fontmath { };
+
   fonttools = callPackage ../development/python-modules/fonttools { };
 
   foolscap = callPackage ../development/python-modules/foolscap { };
