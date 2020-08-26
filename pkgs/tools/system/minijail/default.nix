@@ -11,12 +11,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "minijail";
-  version = "14";
+  version = "16";
 
   src = fetchFromGitiles {
     url = "https://android.googlesource.com/platform/external/minijail";
     rev = "linux-v${version}";
-    sha256 = "00dq854n4zg3ca2b46f90k15n32zn2sgabi76mnq2w985k9v977n";
+    sha256 = "0pxazds3w12c30msq6bxs4a9cbds0dkj6n3ca0i1wqvgz864yrgs";
   };
 
   nativeBuildInputs =
