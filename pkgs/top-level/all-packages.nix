@@ -5600,6 +5600,8 @@ in
 
   ncftp = callPackage ../tools/networking/ncftp { };
 
+  ncgopher = callPackage ../applications/networking/ncgopher { };
+
   ncompress = callPackage ../tools/compression/ncompress { };
 
   ndisc6 = callPackage ../tools/networking/ndisc6 { };
