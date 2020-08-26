@@ -15533,7 +15533,9 @@ in
 
   vcg = callPackage ../development/libraries/vcg { };
 
-  vid-stab = callPackage ../development/libraries/vid-stab { };
+  vid-stab = callPackage ../development/libraries/vid-stab {
+    inherit (llvmPackages) openmp;
+  };
 
   vigra = callPackage ../development/libraries/vigra { };
 
