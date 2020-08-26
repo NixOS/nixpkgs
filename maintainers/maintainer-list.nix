@@ -2717,6 +2717,12 @@
     githubId = 857308;
     name = "Joe Hermaszewski";
   };
+  extends = {
+    email = "sharosari@gmail.com";
+    github = "ImExtends";
+    githubId = 55919390;
+    name = "Vincent VILLIAUMEY";
+  };
   eyjhb = {
     email = "eyjhbb@gmail.com";
     github = "eyJhb";
