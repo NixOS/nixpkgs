@@ -249,6 +249,7 @@ lepture/vim-jinja
 lervag/vimtex
 lfilho/cosco.vim
 lifepillar/vim-mucomplete
+lighttiger2505/deoplete-vim-lsp
 lilydjwg/colorizer
 liuchengxu/vim-clap
 liuchengxu/vim-which-key
