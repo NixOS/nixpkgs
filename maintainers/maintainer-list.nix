@@ -9490,4 +9490,10 @@
       fingerprint = "F1C5 760E 45B9 9A44 72E9  6BFB D65C 9AFB 4C22 4DA3";
     }];
   };
+  j0hax = {
+      name = "Johannes Arnold";
+      email = "johannes.arnold@stud.uni-hannover.de";
+      github = "j0hax";
+      githubId = 3802620;
+    };
 }
