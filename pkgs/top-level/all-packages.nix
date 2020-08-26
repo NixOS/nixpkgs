@@ -25950,6 +25950,8 @@ in
 
   xineUI = callPackage ../applications/video/xine-ui { };
 
+  xlsxgrep = callPackage ../applications/search/xlsxgrep { };
+
   xmind = callPackage ../applications/misc/xmind { };
 
   xneur = callPackage ../applications/misc/xneur {
