@@ -308,6 +308,7 @@ let
             docbook_xsl_ns
             libxml2.bin
             libxslt.bin
+            (lvm2.override { udev = null; })
             nixos-artwork.wallpapers.simple-dark-gray-bottom
             ntp
             perlPackages.ListCompare
