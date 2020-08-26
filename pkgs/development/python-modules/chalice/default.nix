@@ -5,16 +5,18 @@
 , botocore
 , click
 , enum-compat
+, hypothesis
 , jmespath
+, mock
+, mypy-extensions
 , pip
+, pytest
+, pyyaml
 , setuptools
 , six
 , typing
-, wheel
 , watchdog
-, pytest
-, hypothesis
-, mock
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -33,7 +35,9 @@ buildPythonPackage rec {
     click
     enum-compat
     jmespath
+    mypy-extensions
     pip
+    pyyaml
     setuptools
     six
     wheel
