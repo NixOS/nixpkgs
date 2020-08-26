@@ -1386,6 +1386,18 @@ let
     meta.homepage = "https://github.com/Shougo/deoplete.nvim/";
   };
 
+  devdocs-vim = buildVimPluginFrom2Nix {
+    pname = "devdocs-vim";
+    version = "2018-08-27";
+    src = fetchFromGitHub {
+      owner = "rhysd";
+      repo = "devdocs.vim";
+      rev = "1c91c619874f11f2062f80e6ca4b49456f21ae91";
+      sha256 = "1nxww2mjabl2g2wchxc4h3a58j64acls24zb5jmfi71b8sai8a9b";
+    };
+    meta.homepage = "https://github.com/rhysd/devdocs.vim/";
+  };
+
   dhall-vim = buildVimPluginFrom2Nix {
     pname = "dhall-vim";
     version = "2020-08-19";
