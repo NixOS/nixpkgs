@@ -5665,6 +5665,18 @@ let
     meta.homepage = "https://github.com/natebosch/vim-lsc/";
   };
 
+  vim-lsp = buildVimPluginFrom2Nix {
+    pname = "vim-lsp";
+    version = "2020-08-24";
+    src = fetchFromGitHub {
+      owner = "prabirshrestha";
+      repo = "vim-lsp";
+      rev = "69dc272277da464242bf729eb3b57ad79c5a0aed";
+      sha256 = "0vxkfwdsfsfc91vjhdfbph2287hhr14jr5kzyblk5f1aldgr8901";
+    };
+    meta.homepage = "https://github.com/prabirshrestha/vim-lsp/";
+  };
+
   vim-maktaba = buildVimPluginFrom2Nix {
     pname = "vim-maktaba";
     version = "2020-08-06";
