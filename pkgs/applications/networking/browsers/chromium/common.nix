@@ -162,7 +162,7 @@ let
       #
       # ++ optionals (channel == "dev") [ ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" ) ]
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
-    ] ++ optionals (useVaapi) [ # Improvements for the VA-API build:
+    ] ++ optionals (useVaapi && versionRange "68" "86") [ # Improvements for the VA-API build:
       ./patches/enable-vdpau-support-for-nvidia.patch # https://aur.archlinux.org/cgit/aur.git/tree/vdpau-support.patch?h=chromium-vaapi
       ./patches/enable-video-acceleration-on-linux.patch # Can be controlled at runtime (i.e. without rebuilding Chromium)
     ];
