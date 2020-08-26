@@ -146,8 +146,9 @@ let
       ++ optional pulseSupport libpulseaudio
       ++ optionals useOzone [ libdrm wayland mesa_drivers libxkbcommon ];
 
-    patches = [
+    patches = optionals (versionRange "68" "86") [
       ./patches/nix_plugin_paths_68.patch
+    ] ++ [
       ./patches/remove-webp-include-69.patch
       ./patches/no-build-timestamps.patch
       ./patches/widevine-79.patch
