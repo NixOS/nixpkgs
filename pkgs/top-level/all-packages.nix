@@ -25674,6 +25674,8 @@ in
 
   snpeff = callPackage ../applications/science/biology/snpeff { };
 
+  somafm-cli = callPackage ../tools/misc/somafm-cli/default.nix { };
+
   somatic-sniper = callPackage ../applications/science/biology/somatic-sniper { };
 
   sortmerna = callPackage ../applications/science/biology/sortmerna { };
