@@ -64,7 +64,7 @@ core-packages:
 #
 # WARNING: This list is generated semiautomatically based on the most recent
 # LTS package set. If you want to add entries to it, you must do so before the
-# comment saying "# LTS Haskell x.y". Any changes after that commend will be
+# comment saying "# LTS Haskell x.y". Any changes after that comment will be
 # lost the next time `update-stackage.sh` runs.
 default-package-overrides:
   # This was only intended for ghc-7.0.4, and has very old deps, one hidden behind a flag
@@ -2604,6 +2604,7 @@ extra-packages:
   - resourcet ==1.1.*                   # pre-lts-11.x versions neeed by git-annex 6.20180227
   - seqid < 0.2                         # newer versions depend on transformers 0.4.x which we cannot provide in GHC 7.8.x
   - seqid-streams < 0.2                 # newer versions depend on transformers 0.4.x which we cannot provide in GHC 7.8.x
+  - shelly ==1.8.1                      # ghcjs depends on shelly < 1.9
   - split < 0.2                         # newer versions don't work with GHC 6.12.3
   - tar < 0.4.2.0                       # later versions don't work with GHC < 7.6.x
   - transformers == 0.4.3.*             # the latest version isn't supported by mtl yet
