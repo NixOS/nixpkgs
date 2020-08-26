@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "A Usenet/BitTorrent movie downloader";
     homepage = "https://radarr.video/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ edwtjo ];
+    maintainers = with maintainers; [ edwtjo purcell ];
     platforms = platforms.all;
   };
 }
