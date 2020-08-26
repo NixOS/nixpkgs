@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.2.2";
+  version = "4.11.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "66bb3dfe7efe5972b0145339c063ffaf9539e973f7ff8791df84366eafc65804";
+    sha256 = "7fe5937206099ef284055b8c94798782e0993a740eed87f0dd262ed9870788aa";
     extension = "zip";
   };
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = https://github.com/fonttools/fonttools;
+    homepage = "https://github.com/fonttools/fonttools";
     description = "A library to manipulate font files from Python";
     license = lib.licenses.mit;
   };

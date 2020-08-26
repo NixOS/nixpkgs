@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitLab, autoreconfHook, pkgconfig, parallel
-, sassc, inkscape, libxml2, glib, gdk-pixbuf, librsvg, gtk-engine-murrine
+, sassc, inkscape_0, libxml2, glib, gdk-pixbuf, librsvg, gtk-engine-murrine
 , cinnamonSupport ? true
 , gnomeFlashbackSupport ? true
 , gnomeShellSupport ? true
@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "plata-theme";
-  version = "0.9.3";
+  version = "0.9.8";
 
   src = fetchFromGitLab {
     owner = "tista500";
     repo = "plata-theme";
     rev = version;
-    sha256 = "183kas7b5vxm6l2m5c4yh8cnq05sfa82afcp9h6cfj2rh2iv6kqy";
+    sha256 = "1sqmydvx36f6r4snw22s2q4dvcyg30jd7kg7dibpzqn3njfkkfag";
   };
 
   preferLocalBuild = true;
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     pkgconfig
     parallel
     sassc
-    inkscape
+    inkscape_0
     libxml2
     glib.dev
   ]

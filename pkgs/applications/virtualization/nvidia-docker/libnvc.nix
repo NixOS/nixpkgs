@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, libelf, libcap, libseccomp }:
+{ stdenv, lib, fetchFromGitHub, pkgconfig, libelf, libcap, libseccomp }:
 
 with lib; let
 
@@ -13,13 +13,13 @@ with lib; let
 
 in stdenv.mkDerivation rec {
   pname = "libnvidia-container";
-  version = "1.0.0";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "libnvidia-container";
     rev = "v${version}";
-    sha256 = "1ws6mfsbgxhzlb5w1r8qqg2arvxkr21n59i4cqsyz3h5jsqsflbw";
+    sha256 = "1pnpc9knwh8d1zqb28zc3spkjc00w0z10vd3jna8ksvpl35jl7w3";
   };
 
   # locations of nvidia-driver libraries are not resolved via ldconfig which
@@ -42,10 +42,12 @@ in stdenv.mkDerivation rec {
     touch deps/src/nvidia-modprobe-${modp-ver}/.download_stamp
   '';
 
+  nativeBuildInputs = [ pkgconfig ];
+
   buildInputs = [ libelf libcap libseccomp ];
 
   meta = {
-    homepage = https://github.com/NVIDIA/libnvidia-container;
+    homepage = "https://github.com/NVIDIA/libnvidia-container";
     description = "NVIDIA container runtime library";
     license = licenses.bsd3;
     platforms = platforms.linux;

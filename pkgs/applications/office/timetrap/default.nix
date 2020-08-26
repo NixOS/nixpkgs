@@ -9,7 +9,7 @@ bundlerApp {
 
   meta = with lib; {
     description = "A simple command line time tracker written in ruby";
-    homepage    = https://github.com/samg/timetrap;
+    homepage    = "https://github.com/samg/timetrap";
     license     = licenses.mit;
     maintainers = with maintainers; [ jerith666 manveru nicknovitski ];
     platforms   = platforms.unix;

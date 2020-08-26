@@ -21,13 +21,13 @@ let
   };
 in stdenv.mkDerivation {
   pname = "OpenJK";
-  version = "2019-11-29";
+  version = "2020-07-03";
 
   src = fetchFromGitHub {
     owner = "JACoders";
     repo = "OpenJK";
-    rev = "eed60925ad1b0d513d3747264f3bf98615fa4b2a";
-    sha256 = "0b33cr540vz7w7dlagqf3yldmyx9y2pri20j44pd8fxapq4krrmb";
+    rev = "0a336ce4dffe6505e3f754b59732402a1db95752";
+    sha256 = "1xagbz42hi3ivs208mnay2dbgh90pmwwbar2p1yfhj3zl3cghcs8";
   };
 
   dontAddPrefix = true;
@@ -56,7 +56,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "An open-source engine for Star Wars Jedi Academy game";
-    homepage = https://github.com/JACoders/OpenJK;
+    homepage = "https://github.com/JACoders/OpenJK";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ gnidorah ];

@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-sound-output-device-chooser";
-  version = "25";
+  version = "28";
 
   src = fetchFromGitHub {
     owner = "kgshank";
     repo = "gse-sound-output-device-chooser";
     rev = version;
-    sha256 = "16xaa4r01575ix9lrvww8n6pird8r3ml1j037b3sm6dfrf8kvzxs";
+    sha256 = "1vmf8mgb52x7my3sidaw8kh26d5niadn18bgrl6bjcakmj5x8q16";
   };
 
   patches = [
@@ -28,8 +28,10 @@ stdenv.mkDerivation rec {
 
   uuid = "sound-output-device-chooser@kgshank.net";
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
     cp -r ${uuid} $out/share/gnome-shell/extensions
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {

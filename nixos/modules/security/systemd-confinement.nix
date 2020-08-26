@@ -160,6 +160,11 @@ in {
               + " the 'users.users' option instead as this combination is"
               + " currently not supported.";
     }
+    { assertion = !cfg.serviceConfig.ProtectSystem or false;
+      message = "${whatOpt "ProtectSystem"}. ProtectSystem is not compatible"
+              + " with service confinement as it fails to remount /usr within"
+              + " our chroot. Please disable the option.";
+    }
   ]) config.systemd.services);
 
   config.systemd.packages = lib.concatLists (lib.mapAttrsToList (name: cfg: let

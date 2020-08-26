@@ -18,7 +18,7 @@ python3Packages.buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Data extractor for PDF invoices";
-    homepage = https://github.com/invoice-x/invoice2data;
+    homepage = "https://github.com/invoice-x/invoice2data";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

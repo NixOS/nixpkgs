@@ -36,6 +36,17 @@ let
         '';
       };
 
+      p11Auth = mkOption {
+        default = config.security.pam.p11.enable;
+        type = types.bool;
+        description = ''
+          If set, keys listed in
+          <filename>~/.ssh/authorized_keys</filename> and
+          <filename>~/.eid/authorized_certificates</filename>
+          can be used to log in with the associated PKCS#11 tokens.
+        '';
+      };
+
       u2fAuth = mkOption {
         default = config.security.pam.u2f.enable;
         type = types.bool;
@@ -54,7 +65,7 @@ let
         description = ''
           If set, users listed in
           <filename>~/.yubico/authorized_yubikeys</filename>
-          are able to log in with the asociated Yubikey tokens.
+          are able to log in with the associated Yubikey tokens.
         '';
       };
 
@@ -219,6 +230,14 @@ let
         '';
       };
 
+      nodelay = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Wheather the delay after typing a wrong password should be disabled.
+        '';
+      };
+
       requireWheel = mkOption {
         default = false;
         type = types.bool;
@@ -344,6 +363,8 @@ let
               "auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=~/.ssh/authorized_keys:~/.ssh/authorized_keys2:/etc/ssh/authorized_keys.d/%u"}
           ${optionalString cfg.fprintAuth
               "auth sufficient ${pkgs.fprintd}/lib/security/pam_fprintd.so"}
+          ${let p11 = config.security.pam.p11; in optionalString cfg.p11Auth
+              "auth ${p11.control} ${pkgs.pam_p11}/lib/security/pam_p11.so ${pkgs.opensc}/lib/opensc-pkcs11.so"}
           ${let u2f = config.security.pam.u2f; in optionalString cfg.u2fAuth
               "auth ${u2f.control} ${pkgs.pam_u2f}/lib/security/pam_u2f.so ${optionalString u2f.debug "debug"} ${optionalString (u2f.authFile != null) "authfile=${u2f.authFile}"} ${optionalString u2f.interactive "interactive"} ${optionalString u2f.cue "cue"}"}
           ${optionalString cfg.usbAuth
@@ -366,7 +387,7 @@ let
             || cfg.enableGnomeKeyring
             || cfg.googleAuthenticator.enable
             || cfg.duoSecurity.enable)) ''
-              auth required pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth
+              auth required pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} ${optionalString cfg.nodelay "nodelay"} likeauth
               ${optionalString config.security.pam.enableEcryptfs
                 "auth optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
               ${optionalString cfg.pamMount
@@ -382,7 +403,7 @@ let
                 "auth required ${pkgs.duo-unix}/lib/security/pam_duo.so"}
             '') + ''
           ${optionalString cfg.unixAuth
-              "auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth try_first_pass"}
+              "auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} ${optionalString cfg.nodelay "nodelay"} likeauth try_first_pass"}
           ${optionalString cfg.otpwAuth
               "auth sufficient ${pkgs.otpw}/lib/security/pam_otpw.so"}
           ${optionalString use_ldap
@@ -428,6 +449,8 @@ let
               "session required ${pkgs.pam}/lib/security/pam_lastlog.so silent"}
           ${optionalString config.security.pam.enableEcryptfs
               "session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
+          ${optionalString cfg.pamMount
+              "session optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
           ${optionalString use_ldap
               "session optional ${pam_ldap}/lib/security/pam_ldap.so"}
           ${optionalString config.services.sssd.enable
@@ -444,8 +467,6 @@ let
               "session required ${pkgs.pam}/lib/security/pam_limits.so conf=${makeLimitsConf cfg.limits}"}
           ${optionalString (cfg.showMotd && config.users.motd != null)
               "session optional ${pkgs.pam}/lib/security/pam_motd.so motd=${motd}"}
-          ${optionalString cfg.pamMount
-              "session optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
           ${optionalString (cfg.enableAppArmor && config.security.apparmor.enable)
               "session optional ${pkgs.apparmor-pam}/lib/security/pam_apparmor.so order=user,group,default debug"}
           ${optionalString (cfg.enableKwallet)
@@ -545,6 +566,7 @@ in
     };
 
     security.pam.enableSSHAgentAuth = mkOption {
+      type = types.bool;
       default = false;
       description =
         ''
@@ -555,11 +577,39 @@ in
         '';
     };
 
-    security.pam.enableOTPW = mkOption {
-      default = false;
-      description = ''
-        Enable the OTPW (one-time password) PAM module.
-      '';
+    security.pam.enableOTPW = mkEnableOption "the OTPW (one-time password) PAM module";
+
+    security.pam.p11 = {
+      enable = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Enables P11 PAM (<literal>pam_p11</literal>) module.
+
+          If set, users can log in with SSH keys and PKCS#11 tokens.
+
+          More information can be found <link
+          xlink:href="https://github.com/OpenSC/pam_p11">here</link>.
+        '';
+      };
+
+      control = mkOption {
+        default = "sufficient";
+        type = types.enum [ "required" "requisite" "sufficient" "optional" ];
+        description = ''
+          This option sets pam "control".
+          If you want to have multi factor authentication, use "required".
+          If you want to use the PKCS#11 device instead of the regular password,
+          use "sufficient".
+
+          Read
+          <citerefentry>
+            <refentrytitle>pam.conf</refentrytitle>
+            <manvolnum>5</manvolnum>
+          </citerefentry>
+          for better understanding of this option.
+        '';
+      };
     };
 
     security.pam.u2f = {
@@ -719,12 +769,7 @@ in
       };
     };
 
-    security.pam.enableEcryptfs = mkOption {
-      default = false;
-      description = ''
-        Enable eCryptfs PAM module (mounting ecryptfs home directory on login).
-      '';
-    };
+    security.pam.enableEcryptfs = mkEnableOption "eCryptfs PAM module (mounting ecryptfs home directory on login)";
 
     users.motd = mkOption {
       default = null;
@@ -748,6 +793,7 @@ in
       ++ optionals config.krb5.enable [pam_krb5 pam_ccreds]
       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
       ++ optionals config.security.pam.oath.enable [ pkgs.oathToolkit ]
+      ++ optionals config.security.pam.p11.enable [ pkgs.pam_p11 ]
       ++ optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
 
     boot.supportedFilesystems = optionals config.security.pam.enableEcryptfs [ "ecryptfs" ];

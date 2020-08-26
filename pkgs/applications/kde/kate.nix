@@ -14,6 +14,16 @@ mkDerivation {
     maintainers = [ lib.maintainers.ttuegel ];
   };
 
+  # InitialPreference values are too high and end up making kate &
+  # kwrite defaults for anything considered text/plain. Resetting to
+  # 1, which is the default.
+  postPatch = ''
+    substituteInPlace kate/data/org.kde.kate.desktop \
+      --replace InitialPreference=9 InitialPreference=1
+    substituteInPlace kwrite/data/org.kde.kwrite.desktop \
+      --replace InitialPreference=8 InitialPreference=1
+  '';
+
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     libgit2

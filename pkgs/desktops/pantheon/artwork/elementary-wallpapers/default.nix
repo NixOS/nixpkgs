@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , meson
 , ninja
@@ -26,14 +27,14 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
 
   meta = with stdenv.lib; {
     description = "Collection of wallpapers for elementary";
-    homepage = https://github.com/elementary/wallpapers;
+    homepage = "https://github.com/elementary/wallpapers";
     license = licenses.publicDomain;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, z3, ocamlPackages, makeWrapper }:
+{ stdenv, fetchFromGitHub, z3, ocamlPackages, makeWrapper, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "fstar";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0wix7l229afkn6c6sk4nwkfq0nznsiqdkds4ixi2yyf72immwmmb";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   buildInputs = with ocamlPackages; [
     z3 ocaml findlib batteries menhir stdint
@@ -33,11 +33,14 @@ stdenv.mkDerivation rec {
   installFlags = [ "-C" "src/ocaml-output" ];
   postInstall = ''
     wrapProgram $out/bin/fstar.exe --prefix PATH ":" "${z3}/bin"
+    installShellCompletion --bash .completion/bash/fstar.exe.bash
+    installShellCompletion --fish .completion/fish/fstar.exe.fish
+    installShellCompletion --zsh --name _fstar.exe .completion/zsh/__fstar.exe
   '';
 
   meta = with stdenv.lib; {
     description = "ML-like functional programming language aimed at program verification";
-    homepage = https://www.fstar-lang.org;
+    homepage = "https://www.fstar-lang.org";
     license = licenses.asl20;
     platforms = with platforms; darwin ++ linux;
     maintainers = with maintainers; [ gebner ];

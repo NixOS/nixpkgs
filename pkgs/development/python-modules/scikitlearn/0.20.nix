@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A set of python modules for machine learning and data mining";
-    homepage = http://scikit-learn.org;
+    homepage = "https://scikit-learn.org";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };

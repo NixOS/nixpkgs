@@ -75,7 +75,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A modern audio book player for Linux using GTK 3";
-    homepage = https://cozy.geigi.de/;
+    homepage = "https://cozy.geigi.de/";
     maintainers = [ maintainers.makefu ];
     license = licenses.gpl3;
   };

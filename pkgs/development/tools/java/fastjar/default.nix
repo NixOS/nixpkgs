@@ -23,7 +23,7 @@ let version = "0.98"; in
         the stock `jar' program running without a JIT.
       '';
 
-      homepage = https://savannah.nongnu.org/projects/fastjar/;
+      homepage = "https://savannah.nongnu.org/projects/fastjar/";
 
       license = stdenv.lib.licenses.gpl2Plus;
       platforms = stdenv.lib.platforms.linux;

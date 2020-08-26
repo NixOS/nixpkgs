@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , meson
 , ninja
@@ -26,14 +27,14 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
 
   meta = with stdenv.lib; {
     description = "A set of system sounds for elementary";
-    homepage = https://github.com/elementary/sound-theme;
+    homepage = "https://github.com/elementary/sound-theme";
     license = licenses.unlicense;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       network to transport commands and perform I/Os multiplexing. It doesn't
       require any specific software on the nodes thanks to a self-propagation
       algorithm.'';
-    homepage = http://taktuk.gforge.inria.fr/;
+    homepage = "http://taktuk.gforge.inria.fr/";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.bzizou ];
     platforms = stdenv.lib.platforms.linux;

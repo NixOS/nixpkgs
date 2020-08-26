@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   rev = "7999e72aecc3c5bc4019d43dc4697f49678cc3b4";
 
   src = fetchurl {
-    url = https://downloads.factorcode.org/releases/0.98/factor-src-0.98.zip;
+    url = "https://downloads.factorcode.org/releases/0.98/factor-src-0.98.zip";
     sha256 = "01ip9mbnar4sv60d2wcwfz62qaamdvbykxw3gbhzqa25z36vi3ri";
   };
 
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://factorcode.org;
+    homepage = "https://factorcode.org";
     license = licenses.bsd2;
     description = "A concatenative, stack-based programming language";
 

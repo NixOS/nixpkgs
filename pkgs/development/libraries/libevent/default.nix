@@ -6,11 +6,11 @@ assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
   pname = "libevent";
-  version = "2.1.11";
+  version = "2.1.12";
 
   src = fetchurl {
     url = "https://github.com/libevent/libevent/releases/download/release-${version}-stable/libevent-${version}-stable.tar.gz";
-    sha256 = "0g988zqm45sj1hlhhz4il5z4dpi5dl74hzjwzl4md37a09iaqnx6";
+    sha256 = "1fq30imk8zd26x8066di3kpc5zyfc5z6frr3zll685zcx4dxxrlj";
   };
 
   # libevent_openssl is moved into its own output, so that openssl isn't present
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       and then add or remove events dynamically without having to change
       the event loop.
     '';
-    homepage = http://libevent.org/;
+    homepage = "http://libevent.org/";
     license = licenses.bsd3;
     platforms = platforms.all;
   };

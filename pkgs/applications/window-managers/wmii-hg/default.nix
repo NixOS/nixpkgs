@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   pname = "wmii";
 
   src = fetchurl {
-    url = https://storage.googleapis.com/google-code-archive-source/v2/code.google.com/wmii/source-archive.zip;
+    url = "https://storage.googleapis.com/google-code-archive-source/v2/code.google.com/wmii/source-archive.zip";
     sha256 = "1wmkq14zvmfrmydl8752xz852cy7agrx3qp4fy2cc5asb2r9abaz";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "WMII_HGVERSION=hg${rev}" ];
 
   meta = {
-    homepage = https://suckless.org/; # https://wmii.suckless.org/ does not exist anymore
+    homepage = "https://suckless.org/"; # https://wmii.suckless.org/ does not exist anymore
     description = "A small window manager controlled by a 9P filesystem";
     maintainers = with stdenv.lib.maintainers; [ kovirobi ];
     license = stdenv.lib.licenses.mit;

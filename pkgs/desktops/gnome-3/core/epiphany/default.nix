@@ -30,15 +30,16 @@
 , json-glib
 , libdazzle
 , libhandy
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "epiphany";
-  version = "3.34.4";
+  version = "3.36.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/epiphany/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "13ar3s40cds1rplwbzx0fzigf120w0rydiv05r3k6zpc0zy91qb0";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1gs2a94fzpciv58rljgbirsc2kqgiaiyc2yg6ff50nlgb2qpb2jq";
   };
 
   # Tests need an X display
@@ -56,6 +57,8 @@ stdenv.mkDerivation rec {
     pkgconfig
     python3
     wrapGAppsHook
+    buildPackages.glib
+    buildPackages.gtk3
   ];
 
   buildInputs = [
@@ -99,9 +102,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Epiphany;
+    homepage = "https://wiki.gnome.org/Apps/Epiphany";
     description = "WebKit based web browser for GNOME";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

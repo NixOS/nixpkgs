@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Browser source plugin for obs-studio based on Chromium Embedded Framework";
-    homepage = https://github.com/bazukas/obs-linuxbrowser;
+    homepage = "https://github.com/bazukas/obs-linuxbrowser";
     maintainers = with maintainers; [ puffnfresh ];
     license = licenses.gpl2;
     platforms = with platforms; linux;

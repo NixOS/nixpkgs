@@ -1,6 +1,7 @@
 { stdenv, fetchurl, libxml2, gnutls, libxslt, pkgconfig, libgcrypt, libtool
-, openssl, nss, makeWrapper }:
+, openssl, nss, lib, runCommandCC, writeText }:
 
+lib.fix (self:
 let
   version = "1.2.28";
 in
@@ -13,9 +14,16 @@ stdenv.mkDerivation {
     sha256 = "1m12caglhyx08g8lh2sl3nkldlpryzdx2d572q73y3m33s0w9vhk";
   };
 
+  patches = [
+    ./lt_dladdsearchdir.patch
+  ];
+  postPatch = ''
+    substituteAllInPlace src/dl.c
+  '';
+
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ libxml2 gnutls libxslt libgcrypt libtool openssl nss ];
 
@@ -34,16 +42,35 @@ stdenv.mkDerivation {
     moveToOutput "lib/xmlsec1Conf.sh" "$dev"
   '';
 
-  postFixup = ''
-    wrapProgram "$out/bin/xmlsec1" --prefix LD_LIBRARY_PATH ":" "$out/lib"
+  passthru.tests.libxmlsec1-crypto = runCommandCC "libxmlsec1-crypto-test"
+    {
+      nativeBuildInputs = [ pkgconfig ];
+      buildInputs = [ self libxml2 libxslt libtool ];
+    } ''
+    $CC $(pkg-config --cflags --libs xmlsec1) -o crypto-test ${writeText "crypto-test.c" ''
+      #include <xmlsec/xmlsec.h>
+      #include <xmlsec/crypto.h>
+
+      int main(int argc, char **argv) {
+        return xmlSecInit() ||
+          xmlSecCryptoDLLoadLibrary(argc > 1 ? argv[1] : 0) ||
+          xmlSecCryptoInit();
+      }
+    ''}
+
+    for crypto in "" gcrypt gnutls nss openssl; do
+      ./crypto-test $crypto
+    done
+    touch $out
   '';
 
   meta = {
-    homepage = http://www.aleksey.com/xmlsec;
-    downloadPage = https://www.aleksey.com/xmlsec/download.html;
+    homepage = "http://www.aleksey.com/xmlsec";
+    downloadPage = "https://www.aleksey.com/xmlsec/download.html";
     description = "XML Security Library in C based on libxml2";
     license = stdenv.lib.licenses.mit;
     platforms = with stdenv.lib.platforms; linux ++ darwin;
     updateWalker = true;
   };
 }
+)

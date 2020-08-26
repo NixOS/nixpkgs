@@ -11,11 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook gtk3 ];
 
-  buildInputs = [ mate.mate-icon-theme ];
-
-  propagatedBuildInputs = [
-    hicolor-icon-theme
-  ];
+  propagatedBuildInputs = [ mate.mate-icon-theme hicolor-icon-theme ];
 
   dontDropIconThemeCache = true;
 

@@ -8,24 +8,26 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "trellis";
-  version = "2020.02.04";
+  version = "2020.07.27";
+
   # git describe --tags
   realVersion = with stdenv.lib; with builtins;
-    "1.0-130-g${substring 0 7 (elemAt srcs 0).rev}";
+    "1.0-182-g${substring 0 7 (elemAt srcs 0).rev}";
 
   srcs = [
     (fetchFromGitHub {
        owner  = "SymbiFlow";
        repo   = "prjtrellis";
-       rev    = "4e4b95c8e03583d48d76d1229f9c7825e2ee5be1";
-       sha256 = "02kg48393bjiys56r62b4ks2xvfarw9phi5bips2xsnj9c99pmg0";
+       rev    = "8c0a6382e11b160ed88d17af8493c12a897617ed";
+       sha256 = "1g0ppjfw8dq5cg5kl2p1p87grb0i88apaim4f5b6wj4sfqz8iln8";
        name   = "trellis";
      })
+
     (fetchFromGitHub {
       owner  = "SymbiFlow";
       repo   = "prjtrellis-db";
-      rev    = "717478b757a702bbc7e3e11a5fbecee2a64f7922";
-      sha256 = "0q4j8qz3m2hissn2a82ck542cx62bp4f0wwzl3g22yv59i13yg83";
+      rev    = "c137076fdd8bfca3d2bf9cdacda9983dbbec599a";
+      sha256 = "1br0vw8wwcn2qhs8kxkis5xqlr2nw7r3mf1qwjp8xckd6fa1wlcw";
       name   = "trellis-database";
     })
   ];
@@ -55,7 +57,7 @@ stdenv.mkDerivation rec {
       to provide sufficient information to develop a free and
       open Verilog to bitstream toolchain for these devices.
     '';
-    homepage    = https://github.com/SymbiFlow/prjtrellis;
+    homepage    = "https://github.com/SymbiFlow/prjtrellis";
     license     = stdenv.lib.licenses.isc;
     maintainers = with maintainers; [ q3k thoughtpolice emily ];
     platforms   = stdenv.lib.platforms.all;

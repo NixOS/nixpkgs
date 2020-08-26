@@ -1,14 +1,14 @@
 { stdenv, fetchurl
 , amtk, gnome3, gtk3, gtksourceview4, libuchardet, libxml2, pkgconfig }:
 let
-  version = "4.3.1";
+  version = "4.4.0";
   pname = "tepl";
 in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "08y6vss29b65pqzv708cyqmbszgxsqqgw7g0vh6f1389ayi2lvs0";
+    sha256 = "0mm2z849hnni7597an05mrv0dckrxjngpf2xfa0g5s17i8x6gxp6";
   };
 
   nativeBuildInputs = [
@@ -16,8 +16,11 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    amtk
     libxml2
+  ];
+
+  propagatedBuildInputs = [
+    amtk
     gtksourceview4
     libuchardet
     gtk3
@@ -33,7 +36,7 @@ in stdenv.mkDerivation {
   passthru.updateScript = gnome3.updateScript { packageName = pname; };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/Tepl;
+    homepage = "https://wiki.gnome.org/Projects/Tepl";
     description = "Text editor product line";
     maintainers = [ maintainers.manveru ];
     license = licenses.lgpl21Plus;

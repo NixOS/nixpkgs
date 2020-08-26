@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "texworks";
-  version = "0.6.4";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "TeXworks";
     repo = "texworks";
     rev = "release-${version}";
-    sha256 = "0d7f23c6c1wj4aii4h5w9piv01qfb69zrd79dvxwydrk99i8gnl4";
+    sha256 = "1lw1p4iyzxypvjhnav11g6rwf6gx7kyzwy2iprvv8zzpqcdkjp2z";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

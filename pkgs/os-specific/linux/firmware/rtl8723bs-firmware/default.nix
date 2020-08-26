@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Firmware for RealTek 8723bs";
-    homepage = https://github.com/hadess/rtl8723bs;
+    homepage = "https://github.com/hadess/rtl8723bs";
     license = licenses.unfreeRedistributableFirmware;
     maintainers = with maintainers; [ elitak ];
     platforms = with platforms; linux;

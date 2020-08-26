@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, which, pkgconfig, mono, gtk-sharp-2_0 }:
+{ stdenv, fetchFromGitHub, autoconf, automake, which, pkgconfig, mono, glib, gtk-sharp-2_0 }:
 
 stdenv.mkDerivation rec {
   pname = "gio-sharp";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig autoconf automake which ];
-  buildInputs = [ mono gtk-sharp-2_0 ];
+  buildInputs = [ mono glib gtk-sharp-2_0 ];
 
   dontStrip = true;
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GIO API bindings";
-    homepage = https://github.com/mono/gio-sharp;
+    homepage = "https://github.com/mono/gio-sharp";
     license = licenses.mit;
     platforms = platforms.linux;
   };

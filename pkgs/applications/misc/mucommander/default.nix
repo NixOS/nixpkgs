@@ -77,7 +77,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.mucommander.com/;
+    homepage = "http://www.mucommander.com/";
     description = "Cross-platform file manager";
     license = licenses.gpl3;
     maintainers = with maintainers; [ volth ];

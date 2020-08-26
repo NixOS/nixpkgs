@@ -12,21 +12,13 @@ let
   ]);
 in
 stdenv.mkDerivation rec {
-  name = "dnsmasq-2.80";
+  name = "dnsmasq-2.82";
 
   src = fetchurl {
     url = "http://www.thekelleys.org.uk/dnsmasq/${name}.tar.xz";
-    sha256 = "1fv3g8vikj3sn37x1j6qsywn09w1jipvlv34j3q5qrljbrwa5ayd";
+    sha256 = "0cn1xd1s6xs78jmrmwjnh9m6w3q38pk6dyqy2phvasqiyd33cll4";
   };
 
-  patches = [
-    # Fix build with nettle 3.5
-    (fetchpatch {
-      name = "nettle-3.5.patch";
-      url = "thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=patch;h=ab73a746a0d6fcac2e682c5548eeb87fb9c9c82e";
-      sha256 = "1hnixij3jp1p6zc3bx2dr92yyf9jp1ahhl9hiiq7bkbhbrw6mbic";
-    })
-  ];
   postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
     sed '1i#include <linux/sockios.h>' -i src/dhcp.c
   '';
@@ -79,7 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An integrated DNS, DHCP and TFTP server for small networks";
-    homepage = http://www.thekelleys.org.uk/dnsmasq/doc.html;
+    homepage = "http://www.thekelleys.org.uk/dnsmasq/doc.html";
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ eelco fpletz globin ];

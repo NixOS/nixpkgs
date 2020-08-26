@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "libstroke-0.5.1";
 
   src = fetchurl {
-    url = https://web.archive.org/web/20161204100704/http://etla.net/libstroke/libstroke-0.5.1.tar.gz;
+    url = "https://web.archive.org/web/20161204100704/http://etla.net/libstroke/libstroke-0.5.1.tar.gz";
     sha256 = "0bbpqzsqh9zrc6cg62f6vp1p4dzvv37blsd0gdlzdskgwvyzba8d";
   };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Libstroke, a library for simple gesture recognition";
-    homepage = https://web.archive.org/web/20161204100704/http://etla.net/libstroke/;
+    homepage = "https://web.archive.org/web/20161204100704/http://etla.net/libstroke/";
     license = stdenv.lib.licenses.gpl2;
 
     longDescription =

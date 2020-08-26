@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libevent, openssl, zlib, torsocks
-, libseccomp, systemd, libcap, lzma, zstd, scrypt
+, libseccomp, systemd, libcap, lzma, zstd, scrypt, nixosTests
 
 # for update.nix
 , writeScript
@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tor";
-  version = "0.4.2.6";
+  version = "0.4.3.6";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
-    sha256 = "1i766s211nrbjvwvkd2375mjsbbc28yrg46564rbx6w46cj10005";
+    sha256 = "0qmcrkjip0ywq77232m73pjwqiaj0q2klwklqlpbw575shvhcbba";
   };
 
   outputs = [ "out" "geoip" ];
@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
     stdenv.lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
 
   patches = [ ./disable-monotonic-timer-tests.patch ];
+
+  # cross compiles correctly but needs the following
+  configureFlags = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    "--disable-tool-name-check";
 
   NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
@@ -50,24 +54,27 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/tor
   '';
 
-  passthru.updateScript = import ./update.nix {
-    inherit (stdenv) lib;
-    inherit
-      writeScript
-      common-updater-scripts
-      bash
-      coreutils
-      curl
-      gnupg
-      gnugrep
-      gnused
-      nix
-    ;
+  passthru = {
+    tests.tor = nixosTests.tor;
+    updateScript = import ./update.nix {
+      inherit (stdenv) lib;
+      inherit
+        writeScript
+        common-updater-scripts
+        bash
+        coreutils
+        curl
+        gnupg
+        gnugrep
+        gnused
+        nix
+      ;
+    };
   };
 
   meta = with stdenv.lib; {
-    homepage = https://www.torproject.org/;
-    repositories.git = https://git.torproject.org/git/tor;
+    homepage = "https://www.torproject.org/";
+    repositories.git = "https://git.torproject.org/git/tor";
     description = "Anonymizing overlay network";
 
     longDescription = ''

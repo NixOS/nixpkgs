@@ -1,13 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap
-, curl, kmod, gnupg, gnutar, xz, pam, acl, libuuid, m4, utillinux, libffi
+{ stdenv, lib, fetchFromGitHub, pkgconfig, intltool, gperf, libcap
+, curl, kmod, gnupg, gnutar, xz, pam, acl, libuuid, m4, e2fsprogs, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
-, audit, lz4, bzip2, libmicrohttpd, pcre2
+, audit, lz4, bzip2, pcre2
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
 , iptables, gnu-efi, bashInteractive
 , gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 , ninja, meson, python3Packages, glibcLocales
 , patchelf
+, substituteAll
 , getent
+, cryptsetup, lvm2
 , buildPackages
 , perl
 , withSelinux ? false, libselinux
@@ -23,24 +25,57 @@ let gnupg-minimal = gnupg.override {
   pinentry = null;
   adns = null;
   gnutls = null;
-  libusb = null;
+  libusb1 = null;
   openldap = null;
   readline = null;
   zlib = null;
   bzip2 = null;
 };
+
 in stdenv.mkDerivation {
-  version = "243.7";
+  version = "245.7";
   pname = "systemd";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
   # Also fresh patches should be cherry-picked from that tree to our current one.
   src = fetchFromGitHub {
-    owner = "nixos";
-    repo = "systemd";
-    rev = "e7d881488292fc8bdf96acd12767eca1bd65adae";
-    sha256 = "0haj3iff3y13pm4w5dbqj1drp5wryqfad58jbbmnb6zdgis56h8f";
+    owner = "systemd";
+    repo = "systemd-stable";
+    rev = "1e6233ed07f7af08550fffa7a885cac1ac67a2c3";
+    sha256 = "1hd5kc3mm7mg4i7hhi82wg4cpg4fpi2k6hzjq9sv07pkn2lw390w";
   };
+
+  patches = [
+    ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
+    ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
+    ./0003-Fix-NixOS-containers.patch
+    ./0004-Look-for-fsck-in-the-right-place.patch
+    ./0005-Add-some-NixOS-specific-unit-directories.patch
+    ./0006-Get-rid-of-a-useless-message-in-user-sessions.patch
+    ./0007-hostnamed-localed-timedated-disable-methods-that-cha.patch
+    ./0008-Fix-hwdb-paths.patch
+    ./0009-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
+    ./0010-localectl-use-etc-X11-xkb-for-list-x11.patch
+    ./0011-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
+    ./0012-Install-default-configuration-into-out-share-factory.patch
+    ./0013-inherit-systemd-environment-when-calling-generators.patch
+    ./0014-add-rootprefix-to-lookup-dir-paths.patch
+    ./0015-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
+    ./0016-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+    ./0017-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
+    ./0018-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
+    substituteInPlace src/boot/efi/meson.build \
+      --replace \
+      "find_program('ld'" \
+      "find_program('${stdenv.cc.bintools.targetPrefix}ld'" \
+      --replace \
+      "find_program('objcopy'" \
+      "find_program('${stdenv.cc.bintools.targetPrefix}objcopy'"
+  '';
 
   outputs = [ "out" "lib" "man" "dev" ];
 
@@ -56,8 +91,8 @@ in stdenv.mkDerivation {
     ];
   buildInputs =
     [ linuxHeaders libcap curl.dev kmod xz pam acl
-      /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
-      libmicrohttpd pcre2 ] ++
+      cryptsetup libuuid glib libgcrypt libgpgerror libidn2
+      pcre2 ] ++
       stdenv.lib.optional withKexectools kexectools ++
       stdenv.lib.optional withLibseccomp libseccomp ++
     [ libffi audit lz4 bzip2 libapparmor
@@ -83,8 +118,11 @@ in stdenv.mkDerivation {
     "-Dtests=false"
     "-Dimportd=true"
     "-Dlz4=true"
+    "-Dhomed=false"
     "-Dhostnamed=true"
     "-Dnetworkd=true"
+    "-Dportabled=false"
+    "-Dremote=false"
     "-Dsysusers=false"
     "-Dtimedated=true"
     "-Dtimesyncd=true"
@@ -140,12 +178,28 @@ in stdenv.mkDerivation {
     export LC_ALL="en_US.UTF-8";
     # FIXME: patch this in systemd properly (and send upstream).
     # already fixed in f00929ad622c978f8ad83590a15a765b4beecac9: (u)mount
-    for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/shutdown/shutdown.c src/nspawn/nspawn.c src/shared/generator.c units/systemd-logind.service.in units/systemd-nspawn@.service.in; do
+    for i in \
+      src/core/mount.c \
+      src/core/swap.c \
+      src/cryptsetup/cryptsetup-generator.c \
+      src/fsck/fsck.c \
+      src/journal/cat.c \
+      src/nspawn/nspawn.c \
+      src/remount-fs/remount-fs.c \
+      src/shared/generator.c \
+      src/shutdown/shutdown.c \
+      units/emergency.service.in \
+      units/rescue.service.in \
+      units/systemd-logind.service.in \
+      units/systemd-nspawn@.service.in; \
+    do
       test -e $i
       substituteInPlace $i \
         --replace /usr/bin/getent ${getent}/bin/getent \
+        --replace /sbin/mkswap ${lib.getBin utillinux}/sbin/mkswap \
         --replace /sbin/swapon ${lib.getBin utillinux}/sbin/swapon \
         --replace /sbin/swapoff ${lib.getBin utillinux}/sbin/swapoff \
+        --replace /sbin/mke2fs ${lib.getBin e2fsprogs}/sbin/mke2fs \
         --replace /sbin/fsck ${lib.getBin utillinux}/sbin/fsck \
         --replace /bin/echo ${coreutils}/bin/echo \
         --replace /bin/cat ${coreutils}/bin/cat \
@@ -194,6 +248,11 @@ in stdenv.mkDerivation {
   ];
 
   doCheck = false; # fails a bunch of tests
+
+  # trigger the test -n "$DESTDIR" || mutate in upstreams build system
+  preInstall = ''
+    export DESTDIR=/
+  '';
 
   postInstall = ''
     # sysinit.target: Don't depend on
@@ -263,6 +322,6 @@ in stdenv.mkDerivation {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     priority = 10;
-    maintainers = with maintainers; [ andir eelco flokli mic92 ];
+    maintainers = with maintainers; [ andir eelco flokli ];
   };
 }

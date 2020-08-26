@@ -41,11 +41,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gvfs";
-  version = "1.42.2";
+  version = "1.44.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0jgrbid8a61hgh05wl8c4f4638x7dffd5vip02jmladxfdszjymm";
+    sha256 = "0ipv0jgzim6glsgizmfjkx0m3gd1l9lr242m0jj6cdmhs52k5vsh";
   };
 
   postPatch = ''
@@ -126,6 +126,6 @@ stdenv.mkDerivation rec {
     description = "Virtual Filesystem support library" + optionalString gnomeSupport " (full GNOME support)";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ] ++ gnome3.maintainers;
+    maintainers = [ maintainers.lethalman ] ++ teams.gnome.members;
   };
 }

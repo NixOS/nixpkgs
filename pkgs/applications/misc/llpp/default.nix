@@ -5,12 +5,12 @@ assert lib.versionAtLeast (lib.getVersion ocaml) "4.07";
 
 stdenv.mkDerivation rec {
   pname = "llpp";
-  version = "31";
+  version = "32";
 
   src = fetchgit {
     url = "git://repo.or.cz/llpp.git";
     rev = "v${version}";
-    sha256 = "14ibsm1zzxfidjajcj30b5m9in10q3817izahsjvkmryrvvn6qsg";
+    sha256 = "1h1zysm5cz8laq8li49djl6929cnrjlflag9hw0c1dcr4zaxk32y";
     fetchSubmodules = false;
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://repo.or.cz/w/llpp.git;
+    homepage = "https://repo.or.cz/w/llpp.git";
     description = "A MuPDF based PDF pager written in OCaml";
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub enzime ];

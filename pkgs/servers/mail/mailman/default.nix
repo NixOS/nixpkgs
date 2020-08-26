@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, alembic, aiosmtpd, dnspython
+{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, isPy3k, alembic, aiosmtpd, dnspython
 , flufl_bounce, flufl_i18n, flufl_lock, lazr_config, lazr_delegates, passlib
 , requests, zope_configuration, click, falcon, importlib-resources
 , zope_component, lynx, postfix, authheaders, gunicorn
@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "mailman";
-  version = "3.3.0";
+  version = "3.3.1";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1qph9i93ndahfxi3bb2sd0kjm2c0pkh844ai6zacfmvihl1k3pvy";
+    sha256 = "0idfiv48jjgc0jq4731094ddhraqq8bxnwmjk6sg5ask0jss9kxq";
   };
 
   propagatedBuildInputs = [
@@ -20,7 +20,19 @@ buildPythonPackage rec {
     zope_component authheaders gunicorn
   ];
 
-  patchPhase = ''
+  patches = [
+    (fetchpatch {
+      url = https://gitlab.com/mailman/mailman/-/commit/4b206e2a5267a0e17f345fd7b2d957122ba57566.patch;
+      sha256 = "06axmrn74p81wvcki36c7gfj5fp5q15zxz2yl3lrvijic7hbs4n2";
+    })
+    (fetchpatch {
+      url = https://gitlab.com/mailman/mailman/-/commit/9613154f3c04fa2383fbf017031ef263c291418d.patch;
+      sha256 = "0vyw87s857vfxbf7kihwb6w094xyxmxbi1bpdqi3ybjamjycp55r";
+    })
+    ./log-stderr.patch
+  ];
+
+  postPatch = ''
     substituteInPlace src/mailman/config/postfix.cfg \
       --replace /usr/sbin/postmap ${postfix}/bin/postmap
     substituteInPlace src/mailman/config/schema.cfg \
@@ -37,7 +49,7 @@ buildPythonPackage rec {
   dontWrapPythonPrograms = true;
 
   meta = {
-    homepage = https://www.gnu.org/software/mailman/;
+    homepage = "https://www.gnu.org/software/mailman/";
     description = "Free software for managing electronic mail discussion and newsletter lists";
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [ peti ];

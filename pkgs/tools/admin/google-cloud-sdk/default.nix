@@ -21,20 +21,18 @@ let
   sources = name: system: {
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "0hg4823dlnf9ahqh9dr05wsi6cdxn9mbwhg65jng3d2aws3ski6r";
+      sha256 = "1l2r9pgyzih7xgrr2ygm0mcl97kyp1wfvybwhbn1i0kbb72nagk1";
     };
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "00ziqr60q1la716c9cy3hjpyq3hiw3m75d4wry6prn5655jw4ph6";
+      sha256 = "1qbkdfa7dzysp7crv9ph476hbabl3qiszs067f20dadqssqs1v4r";
     };
   }.${system};
 
-  strip = if stdenv.isDarwin then "strip -x" else "strip";
-
 in stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
-  version = "281.0.0";
+  version = "306.0.0";
 
   src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 
@@ -93,9 +91,6 @@ in stdenv.mkDerivation rec {
       jq -c . $path > $path.min
       mv $path.min $path
     done
-
-    # strip the Cython gRPC library
-    ${strip} $out/google-cloud-sdk/lib/third_party/grpc/_cython/cygrpc.so
   '';
 
   meta = with stdenv.lib; {

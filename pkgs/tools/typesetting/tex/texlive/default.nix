@@ -1,6 +1,6 @@
 /* TeX Live user docs
   - source: ../../../../../doc/languages-frameworks/texlive.xml
-  - current html: http://nixos.org/nixpkgs/manual/#sec-language-texlive
+  - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
 , callPackage, ghostscriptX, harfbuzz, poppler_min
@@ -99,8 +99,11 @@ let
       urls = args.urls or (if args ? url then [ args.url ] else
         lib.concatMap
           (up: [
-            "${up}/${urlName}.r${toString revision}.tar.xz"
-            "${up}/${urlName}.tar.xz" # TODO To be removed for telive 2020
+            # Only ~11% of packages in texlive 2019 have revisions, so
+            # the number of requests is nearly doubled if we lookup
+            # the name with revision
+            # "${up}/${urlName}.r${toString revision}.tar.xz"
+            "${up}/${urlName}.tar.xz" # TODO To be removed for texlive 2020?
           ])
           urlPrefixes);
 
@@ -111,8 +114,8 @@ let
       # (https://tug.org/historic/).
       urlPrefixes = args.urlPrefixes or [
         # tlnet-final snapshot
-        http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/archive
-        ftp://tug.org/texlive/historic/2019/tlnet-final/archive
+        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/archive"
+        "ftp://tug.org/texlive/historic/2019/tlnet-final/archive"
 
         # Daily snapshots hosted by one of the texlive release managers
         #https://texlive.info/tlnet-archive/2019/10/19/tlnet/archive
@@ -175,7 +178,7 @@ in
             description = "TeX Live environment for ${pname}";
             platforms = lib.platforms.all;
             hydraPlatforms = lib.optionals
-              (lib.elem pname ["scheme-small" "scheme-basic"]) platforms;
+              (!lib.elem pname ["scheme-infraonly"]) platforms;
             maintainers = with lib.maintainers;  [ veprbl ];
           }
           (combine {

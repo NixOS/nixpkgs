@@ -6,13 +6,13 @@
 stdenv.mkDerivation rec {
 
   pname = "i3ipc-glib";
-  version = "0.6.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "acrisci";
     repo = "i3ipc-glib";
     rev = "v${version}";
-    sha256 = "1gmk1zjafrn6jh4j7r0wkwrpwvf9drl1lcw8vya23i1f4zbk0wh4";
+    sha256 = "01fzvrbnzcwx0vxw29igfpza9zwzp2s7msmzb92v01z0rz0y5m0p";
   };
 
   nativeBuildInputs = [ autoreconfHook which pkgconfig ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A C interface library to i3wm";
-    homepage = https://github.com/acrisci/i3ipc-glib;
+    homepage = "https://github.com/acrisci/i3ipc-glib";
     maintainers = with maintainers; [teto];
     license = licenses.gpl3;
     platforms = platforms.linux;

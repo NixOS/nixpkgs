@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , fetchpatch
 , cmake
 , gdk-pixbuf
@@ -61,15 +62,15 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
 
   meta = with stdenv.lib; {
     description = "Create simple and beautiful presentations";
-    homepage = https://github.com/Philip-Scott/Spice-up;
-    maintainers = with maintainers; [ samdroid-apps kjuvi ] ++ pantheon.maintainers;
+    homepage = "https://github.com/Philip-Scott/Spice-up";
+    maintainers = with maintainers; [ samdroid-apps xiorcale ] ++ pantheon.maintainers;
     platforms = platforms.linux;
     # The COPYING file has GPLv3; some files have GPLv2+ and some have GPLv3+
     license = licenses.gpl3Plus;

@@ -1,23 +1,26 @@
 { stdenv, buildPythonPackage, fetchPypi
 , requests, six
-, backports_unittest-mock, pytest, pytestrunner }:
+, backports_unittest-mock, pytestCheckHook, pytestrunner }:
 
 buildPythonPackage rec {
   pname = "sseclient";
-  version = "0.0.24";
+  version = "0.0.26";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b4c5119b9381cb6ddaf3236f3f7e1437a14e488d1ed61336873a839788481b0";
+    sha256 = "33f45ab71bb6369025d6a1014e15f12774f7ea25b7e80eeb00bd73668d5fefad";
   };
 
   propagatedBuildInputs = [ requests six ];
 
-  checkInputs = [ backports_unittest-mock pytest pytestrunner ];
+  checkInputs = [ backports_unittest-mock pytestCheckHook pytestrunner ];
+
+  # tries to open connection to wikipedia
+  disabledTests = [ "event_stream" ];
 
   meta = with stdenv.lib; {
     description = "Client library for reading Server Sent Event streams";
-    homepage = https://github.com/btubbs/sseclient;
+    homepage = "https://github.com/btubbs/sseclient";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };

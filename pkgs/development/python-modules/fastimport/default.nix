@@ -14,7 +14,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://launchpad.net/python-fastimport;
+    homepage = "https://launchpad.net/python-fastimport";
     description = "VCS fastimport/fastexport parser";
     maintainers = with maintainers; [ koral ];
     license = licenses.gpl2Plus;

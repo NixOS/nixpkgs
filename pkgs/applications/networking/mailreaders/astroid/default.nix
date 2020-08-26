@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://astroidmail.github.io/;
+    homepage = "https://astroidmail.github.io/";
     description = "GTK frontend to the notmuch mail system";
     maintainers = with maintainers; [ bdimcheff SuprDewd ];
     license = licenses.gpl3Plus;

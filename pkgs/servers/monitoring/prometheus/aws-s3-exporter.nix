@@ -22,6 +22,5 @@ buildGoPackage rec {
     homepage = "https://github.com/ribbybibby/s3_exporter";
     license = licenses.asl20;
     maintainers = [ maintainers.mmahut ];
-    platforms = platforms.all;
   };
 }

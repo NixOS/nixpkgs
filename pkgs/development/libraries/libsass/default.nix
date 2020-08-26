@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libsass";
-  version = "3.6.1";
+  version = "3.6.4";
 
   src = fetchFromGitHub {
     owner = "sass";
     repo = pname;
     rev = version;
-    sha256 = "1599j2lbsygy3883x9si7rbad1pkjhl6y72aimaapcv90ga5kxkm";
+    sha256 = "074kvacdan85h4qrvsk97575ys9xgkc044gplz3m6vn4a8pcl2rn";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     extraPostFetch = ''
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A C/C++ implementation of a Sass compiler";
-    homepage = https://github.com/sass/libsass;
+    homepage = "https://github.com/sass/libsass";
     license = licenses.mit;
     maintainers = with maintainers; [ codyopel offline ];
     platforms = platforms.unix;

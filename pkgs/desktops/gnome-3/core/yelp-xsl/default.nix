@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "yelp-xsl";
-  version = "3.34.2";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/yelp-xsl/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1bdpgkzawhqmw52l6zx8czzg1ndfgcf1p44m2bxjdpqkc4afcgqc";
+    sha256 = "1hsfj3q3a3kca0cf9i02xlq2qd4vy12qsjb89hh4r6mp6c11rrag";
   };
 
   nativeBuildInputs = [
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Yelp;
+    homepage = "https://wiki.gnome.org/Apps/Yelp";
     description = "Yelp's universal stylesheets for Mallard and DocBook";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = [licenses.gpl2 licenses.lgpl2];
     platforms = platforms.linux;
   };

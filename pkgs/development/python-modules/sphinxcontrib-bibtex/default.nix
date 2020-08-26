@@ -1,10 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k
 , oset, pybtex, pybtex-docutils, sphinx
 }:
 
 buildPythonPackage rec {
   version = "1.0.0";
   pname = "sphinxcontrib-bibtex";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;

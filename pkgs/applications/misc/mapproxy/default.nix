@@ -11,7 +11,7 @@ let
         owner = "pyproj4";
         repo = "pyproj";
         rev = "v${version}rel";
-        sha256 = "sha256:18v4h7jx4mcc0x2xy8y7dfjq9bzsyxs8hdb6v67cabvlz2njziqy";
+        sha256 = "18v4h7jx4mcc0x2xy8y7dfjq9bzsyxs8hdb6v67cabvlz2njziqy";
       };
       nativeBuildInputs = with python.pkgs; [ cython ];
       patches = [ ];
@@ -57,7 +57,7 @@ buildPythonApplication rec {
   doCheck = false;
   meta = with lib; {
   description = "MapProxy is an open source proxy for geospatial data";
-  homepage = https://mapproxy.org/;
+  homepage = "https://mapproxy.org/";
   license = licenses.asl20;
   maintainers = with maintainers; [ rakesh4g ];
   };

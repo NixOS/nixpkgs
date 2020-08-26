@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://voxelands.com/;
+    homepage = "http://voxelands.com/";
     description = "Infinite-world block sandbox game based on Minetest";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

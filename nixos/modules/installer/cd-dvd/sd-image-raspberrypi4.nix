@@ -18,11 +18,18 @@
 
   sdImage = {
     firmwareSize = 128;
+    firmwarePartitionName = "NIXOS_BOOT";
     # This is a hack to avoid replicating config.txt from boot.loader.raspberryPi
     populateFirmwareCommands =
       "${config.system.build.installBootLoader} ${config.system.build.toplevel} -d ./firmware";
     # As the boot process is done entirely in the firmware partition.
     populateRootCommands = "";
+  };
+
+  fileSystems."/boot/firmware" = {
+    # This effectively "renames" the loaOf entry set in sd-image.nix
+    mountPoint = "/boot";
+    neededForBoot = true;
   };
 
   # the installation media is also the installation target,

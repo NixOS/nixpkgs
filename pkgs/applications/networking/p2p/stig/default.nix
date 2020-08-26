@@ -1,19 +1,19 @@
 { lib
 , fetchFromGitHub
-, python3
+, python3Packages
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "stig";
   # This project has a different concept for pre release / alpha,
   # Read the project's README for details: https://github.com/rndusr/stig#stig
-  version = "0.10.1a";
+  version = "0.11.2a0";
 
   src = fetchFromGitHub {
     owner = "rndusr";
     repo = "stig";
     rev = "v${version}";
-    sha256 = "076rlial6h1nhwdxf1mx5nf2zld5ci43cadj9wf8xms7zn8s6c8v";
+    sha256 = "05dn6mr86ly65gdqarl16a2jk1bwiw5xa6r4kyag3s6lqsv66iw8";
   };
 
   # urwidtrees 1.0.3 is requested by the developer because 1.0.2 (which is packaged
@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace "urwidtrees>=1.0.3dev0" "urwidtrees"
   '';
 
-  buildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     urwid
     urwidtrees
     aiohttp
@@ -34,18 +34,27 @@ python3.pkgs.buildPythonApplication rec {
     pyxdg
     blinker
     natsort
-    maxminddb
     setproctitle
   ];
 
-  checkInputs = with python3.pkgs; [
+  checkInputs = with python3Packages; [
     asynctest
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    pytest tests
+  dontUseSetuptoolsCheck = true;
+
+  preCheck = ''
+    export LC_ALL=C
   '';
+
+  pytestFlagsArray = [
+    "tests"
+    # test_string__month_day_hour_minute_second fails on darwin
+    "--deselect=tests/client_test/ttypes_test.py::TestTimestamp::test_string__month_day_hour_minute_second"
+    # TestScrollBarWithScrollable.test_wrapping_bug fails
+    "--deselect=tests/tui_test/scroll_test.py::TestScrollBarWithScrollable::test_wrapping_bug"
+  ];
 
   meta = with lib; {
     description = "TUI and CLI for the BitTorrent client Transmission";

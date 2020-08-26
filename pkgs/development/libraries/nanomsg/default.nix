@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "01ddfzjlkf2dgijrmm3j3j8irccsnbgfvjcnwslsfaxnrmrq5s64";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
     description= "Socket library that provides several common communication patterns";
-    homepage = https://nanomsg.org/;
+    homepage = "https://nanomsg.org/";
     license = licenses.mit;
     platforms = platforms.unix;
   };

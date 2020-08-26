@@ -6,7 +6,7 @@
 
 let
   python = python3Packages.python;
-  version = "1.9";
+  version = "1.10.1";
 in
   stdenv.mkDerivation {
     pname = "autorandr";
@@ -34,7 +34,7 @@ in
           SYSTEMD_UNIT_DIR=/lib/systemd/system \
           UDEV_RULES_DIR=/etc/udev/rules.d
         substituteInPlace $out/etc/udev/rules.d/40-monitor-hotplug.rules \
-          --replace /bin/systemctl "${systemd}/bin/systemctl"
+          --replace /bin/systemctl "/run/current-system/systemd/bin/systemctl"
       '' else ''
         make install TARGETS='pmutils' DESTDIR=$out \
           PM_SLEEPHOOKS_DIR=/lib/pm-utils/sleep.d
@@ -49,11 +49,11 @@ in
       owner = "phillipberndt";
       repo = "autorandr";
       rev = version;
-      sha256 = "1bb0l7fcm5lcx9y02zdxv7pfdqf4v4gsc5br3v1x9gzjvqj64l7n";
+      sha256 = "0msw9b1hdy3gbq9w5d04mfizhyirz1c648x84mlcbzl8salm7vpg";
     };
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/phillipberndt/autorandr/;
+      homepage = "https://github.com/phillipberndt/autorandr/";
       description = "Automatically select a display configuration based on connected devices";
       license = licenses.gpl3Plus;
       maintainers = with maintainers; [ coroa globin ];

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "IPFS C++ API client library";
-    homepage = https://github.com/vasild/cpp-ipfs-api;
+    homepage = "https://github.com/vasild/cpp-ipfs-api";
     license = licenses.mit;
     platforms = platforms.all;
   };

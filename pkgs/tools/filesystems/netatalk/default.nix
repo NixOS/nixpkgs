@@ -3,7 +3,7 @@
 , ed, glibc, libevent
 }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   name = "netatalk-3.1.12";
 
   src = fetchurl {
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec{
 
   meta = {
     description = "Apple Filing Protocol Server";
-    homepage = http://netatalk.sourceforge.net/;
+    homepage = "http://netatalk.sourceforge.net/";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ jcumming ];

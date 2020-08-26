@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       as specifed in RFC 5804. Historically, this was MANAGESIEVE as
       implemented by timsieved in Cyrus IMAP.
     '';
-    homepage = https://github.com/philpennock/sieve-connect;
+    homepage = "https://github.com/philpennock/sieve-connect";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ das_j ];

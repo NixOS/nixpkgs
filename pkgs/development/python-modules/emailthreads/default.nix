@@ -21,7 +21,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/emersion/python-emailthreads;
+    homepage = "https://github.com/emersion/python-emailthreads";
     description = "Python library to parse and format email threads";
     license = licenses.mit;
     maintainers = with maintainers; [ eadwu ];

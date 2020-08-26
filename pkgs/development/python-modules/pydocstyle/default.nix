@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pydocstyle";
-  version = "4.0.1";
+  version = "5.0.2";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
     rev = version;
-    sha256 = "1sr8d2fsfpam4f14v4als6g2v6s3n9h138vxlwhd6slb3ll14y4l";
+    sha256 = "03z8miyppm2xncrc9yjilwl7z5c5cpv51zha580v64p8sb2l0j7j";
   };
 
   propagatedBuildInputs = [ snowballstemmer ];
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python docstring style checker";
-    homepage = https://github.com/PyCQA/pydocstyle/;
+    homepage = "https://github.com/PyCQA/pydocstyle/";
     license = licenses.mit;
     maintainers = with maintainers; [ dzabraev ];
   };

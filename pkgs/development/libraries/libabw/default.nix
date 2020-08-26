@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost doxygen gperf librevenge libxml2 perl ];
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.documentfoundation.org/DLP/Libraries/libabw;
+    homepage = "https://wiki.documentfoundation.org/DLP/Libraries/libabw";
     description = "Library parsing abiword documents";
     platforms = platforms.unix;
     license = licenses.mpl20;

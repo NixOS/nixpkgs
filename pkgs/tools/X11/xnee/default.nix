@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl3Plus;
 
-    homepage = https://www.gnu.org/software/xnee/;
+    homepage = "https://www.gnu.org/software/xnee/";
 
     maintainers = with stdenv.lib.maintainers; [ ];
     platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice

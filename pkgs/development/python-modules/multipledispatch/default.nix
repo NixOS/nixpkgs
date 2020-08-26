@@ -19,7 +19,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
 
   meta = {
-    homepage = https://github.com/mrocklin/multipledispatch/;
+    homepage = "https://github.com/mrocklin/multipledispatch/";
     description = "A relatively sane approach to multiple dispatch in Python";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];

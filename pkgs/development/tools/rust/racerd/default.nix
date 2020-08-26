@@ -32,14 +32,14 @@ rustPlatform.buildRustPackage rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -p target/release/racerd $out/bin/
+    cp -p $releaseDir/racerd $out/bin/
     wrapProgram $out/bin/racerd --set-default RUST_SRC_PATH "$RUST_SRC_PATH"
   '';
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "JSON/HTTP Server based on racer for adding Rust support to editors and IDEs";
     homepage = "https://github.com/jwilm/racerd";
     license = licenses.asl20;
-    platforms = platforms.all;
   };
 }

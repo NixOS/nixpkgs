@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
 
   pname = "lasso";
-  version = "2.6.0";
+  version = "2.6.1";
 
   src = fetchurl {
     url = "https://dev.entrouvert.org/lasso/lasso-${version}.tar.gz";
-    sha256 = "1kqagm63a4mv5sw5qc3y0qlky7r9qg5lccq0c3cnfr0n4mxgysql";
+    sha256 = "1pniisy4z9cshf6lvlz28kfa3qnwnhldb2rvkjxzc0l84g7dpa7q";
 
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://lasso.entrouvert.org/;
+    homepage = "https://lasso.entrouvert.org/";
     description = "Liberty Alliance Single Sign-On library";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

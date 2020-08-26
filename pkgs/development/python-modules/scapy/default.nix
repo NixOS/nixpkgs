@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Powerful interactive network packet manipulation program";
-    homepage = https://scapy.net/;
+    homepage = "https://scapy.net/";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos bjornfor ];

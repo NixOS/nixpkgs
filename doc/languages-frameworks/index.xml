@@ -5,6 +5,7 @@
  <para>
   The <link linkend="chap-stdenv">standard build environment</link> makes it easy to build typical Autotools-based packages with very little code. Any other kind of package can be accomodated by overriding the appropriate phases of <literal>stdenv</literal>. However, there are specialised functions in Nixpkgs to easily build packages for other programming languages, such as Perl or Haskell. These are described in this chapter.
  </para>
+ <xi:include href="agda.section.xml" />
  <xi:include href="android.section.xml" />
  <xi:include href="beam.xml" />
  <xi:include href="bower.xml" />
@@ -17,10 +18,11 @@
  <xi:include href="idris.section.xml" />
  <xi:include href="ios.section.xml" />
  <xi:include href="java.xml" />
- <xi:include href="lua.xml" />
+ <xi:include href="lua.section.xml" />
  <xi:include href="node.section.xml" />
  <xi:include href="ocaml.xml" />
  <xi:include href="perl.xml" />
+ <xi:include href="php.section.xml" />
  <xi:include href="python.section.xml" />
  <xi:include href="qt.xml" />
  <xi:include href="r.section.xml" />

@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://henning.makholm.net/software;
+    homepage = "http://henning.makholm.net/software";
     description = "Command-line tools for converting Gimp XCF files";
     longDescription = ''
       A set of fast command-line tools for extracting information from

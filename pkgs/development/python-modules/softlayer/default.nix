@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, isPy27
 , ptable
 , click
 , requests
@@ -17,6 +18,7 @@
 buildPythonPackage rec {
   pname = "softlayer-python";
   version = "5.8.4";
+  disabled = isPy27;
 
   propagatedBuildInputs = [ ptable click requests prompt_toolkit pygments urllib3 ];
 
@@ -35,7 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A set of Python libraries that assist in calling the SoftLayer API.";
-    homepage = https://github.com/softlayer/softlayer-python;
+    homepage = "https://github.com/softlayer/softlayer-python";
     license = licenses.mit;
   };
 }

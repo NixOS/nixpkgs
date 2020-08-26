@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "lightweight way of building RPMs, and sabotaging them";
-    homepage = https://pagure.io/rpmfluff;
+    homepage = "https://pagure.io/rpmfluff";
     license = licenses.gpl2;
     maintainers = with maintainers; [ disassembler ];
   };

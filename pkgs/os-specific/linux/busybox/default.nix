@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, fetchurl
+{ stdenv, lib, buildPackages, fetchurl, fetchzip
 , enableStatic ? false
 , enableMinimal ? false
 # Allow forcing musl without switching stdenv itself, e.g. for our bootstrapping:
@@ -31,9 +31,20 @@ let
     CONFIG_FEATURE_UTMP n
     CONFIG_FEATURE_WTMP n
   '';
+
+  debianName = "busybox_1.30.1-5";
+  debianTarball = fetchzip {
+    url = "http://deb.debian.org/debian/pool/main/b/busybox/${debianName}.debian.tar.xz";
+    sha256 = "03m4rvs2pd0hj0mdkdm3r4m1gh0bgwr0cvnqds297xnkfi5s01nx";
+  };
+  debianDispatcherScript = "${debianTarball}/tree/udhcpc/etc/udhcpc/default.script";
+  outDispatchPath = "$out/default.script";
 in
 
 stdenv.mkDerivation rec {
+  # TODO: When bumping this version, please validate whether the wget patch is present upstream
+  # and remove the patch if it is. The patch should be present upstream for all versions 1.32.0+.
+  # See NixOs/nixpkgs#94722 for context.
   name = "busybox-1.31.1";
 
   # Note to whoever is updating busybox: please verify that:
@@ -49,6 +60,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./busybox-in-store.patch
+    ./0001-Fix-build-with-glibc-2.31.patch
+    ./0001-wget-implement-TLS-verification-with-ENABLE_FEATURE_.patch
   ] ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 
   postPatch = "patchShebangs .";
@@ -80,6 +93,9 @@ stdenv.mkDerivation rec {
     # Bump from 4KB, much faster I/O
     CONFIG_FEATURE_COPYBUF_KB 64
 
+    # Set the path for the udhcpc script
+    CONFIG_UDHCPC_DEFAULT_SCRIPT "${outDispatchPath}"
+
     ${extraConfig}
     CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cc.targetPrefix}"
     ${libcConfig}
@@ -94,6 +110,15 @@ stdenv.mkDerivation rec {
     makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
   '';
 
+  postInstall = ''
+    sed -e '
+    1 a busybox() { '$out'/bin/busybox "$@"; }\
+    logger() { '$out'/bin/logger "$@"; }\
+    ' ${debianDispatcherScript} > ${outDispatchPath}
+    chmod 555 ${outDispatchPath}
+    PATH=$out/bin patchShebangs ${outDispatchPath}
+  '';
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   buildInputs = lib.optionals (enableStatic && !useMusl && stdenv.cc.libc ? static) [ stdenv.cc.libc stdenv.cc.libc.static ];
@@ -104,9 +129,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tiny versions of common UNIX utilities in a single small executable";
-    homepage = https://busybox.net/;
+    homepage = "https://busybox.net/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ TethysSvensson ];
     platforms = platforms.linux;
     priority = 10;
   };

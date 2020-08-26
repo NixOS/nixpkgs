@@ -1,38 +1,32 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, gnum4, pkgconfig, python2
+{ stdenv, fetchFromGitHub, autoreconfHook, gnum4, pkg-config, python3
 , intel-gpu-tools, libdrm, libva, libX11, libGL, wayland, libXext
 , enableHybridCodec ? false, vaapi-intel-hybrid
 }:
 
 stdenv.mkDerivation rec {
   pname = "intel-vaapi-driver";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "intel-vaapi-driver";
     rev    = version;
-    sha256 = "019w0hvjc9l85yqhy01z2bvvljq208nkb43ai2v377l02krgcrbl";
+    sha256 = "1cidki3av9wnkgwi7fklxbg3bh6kysf8w3fk2qadjr05a92mx3zp";
   };
 
-  patchPhase = ''
-    patchShebangs ./src/shaders/gpp.py
-  '';
-
-  preConfigure = ''
-    sed -i -e "s,LIBVA_DRIVERS_PATH=.*,LIBVA_DRIVERS_PATH=$out/lib/dri," configure
-  '';
+  # Set the correct install path:
+  LIBVA_DRIVERS_PATH = "${placeholder "out"}/lib/dri";
 
   postInstall = stdenv.lib.optionalString enableHybridCodec ''
     ln -s ${vaapi-intel-hybrid}/lib/dri/* $out/lib/dri/
   '';
 
   configureFlags = [
-    "--enable-drm"
     "--enable-x11"
     "--enable-wayland"
   ] ++ stdenv.lib.optional enableHybridCodec "--enable-hybrid-codec";
 
-  nativeBuildInputs = [ autoreconfHook gnum4 pkgconfig python2 ];
+  nativeBuildInputs = [ autoreconfHook gnum4 pkg-config python3 ];
 
   buildInputs = [ intel-gpu-tools libdrm libva libX11 libXext libGL wayland ]
     ++ stdenv.lib.optional enableHybridCodec vaapi-intel-hybrid;
@@ -40,10 +34,20 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://01.org/linuxmedia;
+    homepage = "https://01.org/linuxmedia";
     license = licenses.mit;
-    description = "Intel driver for the VAAPI library";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    description = "VA-API user mode driver for Intel GEN Graphics family";
+    longDescription = ''
+      This VA-API video driver backend provides a bridge to the GEN GPUs through
+      the packaging of buffers and commands to be sent to the i915 driver for
+      exercising both hardware and shader functionality for video decode,
+      encode, and processing.
+      VA-API is an open-source library and API specification, which provides
+      access to graphics hardware acceleration capabilities for video
+      processing. It consists of a main library and driver-specific acceleration
+      backends for each supported hardware vendor.
+    '';
+    platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers = with maintainers; [ primeos ];
   };
 }

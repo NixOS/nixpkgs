@@ -281,3 +281,58 @@ foreach my $u (values %usersOut) {
 }
 
 updateFile("/etc/shadow", \@shadowNew, 0600);
+
+# Rewrite /etc/subuid & /etc/subgid to include default container mappings
+
+my $subUidMapFile = "/var/lib/nixos/auto-subuid-map";
+my $subUidMap = -e $subUidMapFile ? decode_json(read_file($subUidMapFile)) : {};
+
+my (%subUidsUsed, %subUidsPrevUsed);
+
+$subUidsPrevUsed{$_} = 1 foreach values %{$subUidMap};
+
+sub allocSubUid {
+    my ($name, @rest) = @_;
+
+    # TODO: No upper bounds?
+    my ($min, $max, $up) = (100000, 100000 * 100, 1);
+    my $prevId = $subUidMap->{$name};
+    if (defined $prevId && !defined $subUidsUsed{$prevId}) {
+        $subUidsUsed{$prevId} = 1;
+        return $prevId;
+    }
+
+    my $id = allocId(\%subUidsUsed, \%subUidsPrevUsed, $min, $max, $up, sub { my ($uid) = @_; getpwuid($uid) });
+    my $offset = $id - 100000;
+    my $count = $offset * 65536;
+    my $subordinate = 100000 + $count;
+    return $subordinate;
+}
+
+my @subGids;
+my @subUids;
+foreach my $u (values %usersOut) {
+    my $name = $u->{name};
+
+    foreach my $range (@{$u->{subUidRanges}}) {
+        my $value = join(":", ($name, $range->{startUid}, $range->{count}));
+        push @subUids, $value;
+    }
+
+    foreach my $range (@{$u->{subGidRanges}}) {
+        my $value = join(":", ($name, $range->{startGid}, $range->{count}));
+        push @subGids, $value;
+    }
+
+    if($u->{isNormalUser}) {
+        my $subordinate = allocSubUid($name);
+        $subUidMap->{$name} = $subordinate;
+        my $value = join(":", ($name, $subordinate, 65536));
+        push @subUids, $value;
+        push @subGids, $value;
+    }
+}
+
+updateFile("/etc/subuid", join("\n", @subUids) . "\n");
+updateFile("/etc/subgid", join("\n", @subGids) . "\n");
+updateFile($subUidMapFile, encode_json($subUidMap) . "\n");

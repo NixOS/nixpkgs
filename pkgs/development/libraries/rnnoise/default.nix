@@ -18,7 +18,7 @@ stdenv.mkDerivation (rec {
   '';
 
   meta = with lib; {
-    homepage = https://people.xiph.org/~jm/demo/rnnoise/;
+    homepage = "https://people.xiph.org/~jm/demo/rnnoise/";
     description = "Recurrent neural network for audio noise reduction";
     license = licenses.bsd3;
     maintainers = [ maintainers.nh2 ];

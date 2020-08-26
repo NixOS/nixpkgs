@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   };
 
   preConfigure = ''
-      export PKG_CONFIG=${pkgconfig}/bin/pkg-config
+      export PKG_CONFIG=${pkgconfig}/bin/${pkgconfig.targetPrefix}pkg-config
       export LIBXML2_CFLAGS="-I ${libxml2.dev}/include/libxml2"
       export LIBXML2_LIBS="-L${libxml2.out}/lib -lxml2"
   '';
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   
   meta = with stdenv.lib; {
     description = "OpenConnect client extended to support Palo Alto Networks' GlobalProtect VPN";
-    homepage = https://github.com/dlenski/openconnect/;
+    homepage = "https://github.com/dlenski/openconnect/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ chessai ];
     platforms = platforms.linux;

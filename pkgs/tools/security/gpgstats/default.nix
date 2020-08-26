@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
     GPGstats calculates statistics on the keys in your key-ring.
     '';
-    homepage = http://www.vanheusden.com/gpgstats/;
+    homepage = "http://www.vanheusden.com/gpgstats/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ davidak ];
     platforms = platforms.unix;

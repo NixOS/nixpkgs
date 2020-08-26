@@ -1,11 +1,12 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , fetchpatch
 , pantheon
 , meson
 , ninja
 , pkgconfig
-, vala
+, vala_0_46
 , libgee
 , granite
 , gtk3
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkgconfig
-    vala
+    vala_0_46
   ];
 
   buildInputs = [
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Switchboard Online Accounts Plug";
-    homepage = https://github.com/elementary/switchboard-plug-onlineaccounts;
+    homepage = "https://github.com/elementary/switchboard-plug-onlineaccounts";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

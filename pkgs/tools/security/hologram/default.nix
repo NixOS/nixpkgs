@@ -20,10 +20,9 @@ buildGoPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/AdRoll/hologram/;
+    homepage = "https://github.com/AdRoll/hologram/";
     description = "Easy, painless AWS credentials on developer laptops.";
     maintainers = with maintainers; [ nand0p ];
-    platforms = platforms.all;
     license = licenses.asl20;
   };
 }

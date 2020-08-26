@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Portable ANSI style Forth written in ANSI C";
-    homepage = http://www.softsynth.com/pforth/;
+    homepage = "http://www.softsynth.com/pforth/";
     license = stdenv.lib.licenses.publicDomain;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ yrashk ];

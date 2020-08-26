@@ -36,8 +36,9 @@ stdenv.mkDerivation rec {
       with instant transactions.  It allows you to keep your finances
       private as you make transactions without waits, similar to cash.
     '';
-    homepage = https://www.dash.org;
+    homepage = "https://www.dash.org";
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
+    license = licenses.mit;
   };
 }

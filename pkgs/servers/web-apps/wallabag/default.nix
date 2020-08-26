@@ -13,7 +13,15 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" ];
 
-  patches = [ ./wallabag-data.patch ]; # exposes $WALLABAG_DATA
+  patches = [
+    ./wallabag-data.patch # exposes $WALLABAG_DATA
+    (fetchurl {
+      # Fixes "Uncaught RuntimeException: Setting "piwik_enabled" couldn't be found."; https://github.com/wallabag/wallabag/issues/3662
+      # Remove >= 2.4.0
+      url = "https://github.com/wallabag/wallabag/pull/3868.patch";
+      sha256 = "0pfxsv8ncaxkjkybim3v3iswmfv1vbjlzmvj50nn9blvjwc9gxjg";
+    })
+  ];
 
   dontBuild = true;
 
@@ -31,7 +39,7 @@ stdenv.mkDerivation rec {
       After a package upgrade, empty the `var/cache` folder.
     '';
     license = licenses.mit;
-    homepage = http://wallabag.org;
+    homepage = "http://wallabag.org";
     maintainers = with maintainers; [ schneefux ];
     platforms = platforms.all;
   };

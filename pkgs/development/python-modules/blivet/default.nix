@@ -1,11 +1,8 @@
 { stdenv, fetchFromGitHub, buildPythonPackage, pykickstart, pyparted, pyblock
-, pyudev, six, libselinux, cryptsetup, multipath-tools, lsof, utillinux
+, pyudev, six, libselinux, multipath-tools, lsof, utillinux
 }:
 
-let
-  pyenable = { enablePython = true; };
-  cryptsetupWithPython = cryptsetup.override pyenable;
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "blivet";
   version = "0.67";
 
@@ -30,14 +27,14 @@ in buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    pykickstart pyparted pyblock pyudev libselinux cryptsetupWithPython
+    pykickstart pyparted pyblock pyudev libselinux
     six
   ];
 
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://fedoraproject.org/wiki/Blivet;
+    homepage = "https://fedoraproject.org/wiki/Blivet";
     description = "Module for management of a system's storage configuration";
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     platforms = platforms.linux;

@@ -1,5 +1,6 @@
 { stdenv, fetchurl, cmake, pkgconfig, gettext
 , dbus, dbus-glib, libgaminggear, libgudev, lua
+, harfbuzz
 }:
 
 stdenv.mkDerivation rec {
@@ -32,9 +33,11 @@ stdenv.mkDerivation rec {
     "-DLIBDIR=lib"
   ];
 
+  NIX_CFLAGS_COMPILE = [ "-I${harfbuzz.dev}/include/harfbuzz" ];
+
   meta = {
     description = "Tools to configure ROCCAT devices";
-    homepage = http://roccat.sourceforge.net/;
+    homepage = "http://roccat.sourceforge.net/";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2Plus;
   };

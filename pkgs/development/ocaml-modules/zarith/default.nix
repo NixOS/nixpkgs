@@ -7,11 +7,11 @@ let source =
   if stdenv.lib.versionAtLeast ocaml.version "4.02"
   then {
     version = "1.9";
-    url = https://github.com/ocaml/Zarith/archive/release-1.9.tar.gz;
+    url = "https://github.com/ocaml/Zarith/archive/release-1.9.tar.gz";
     sha256 = "1xrqcaj5gp52xp4ybpnblw8ciwlgrr0zi7rg7hnk8x83isjkpmwx";
   } else {
     version = "1.3";
-    url = http://forge.ocamlcore.org/frs/download.php/1471/zarith-1.3.tgz;
+    url = "http://forge.ocamlcore.org/frs/download.php/1471/zarith-1.3.tgz";
     sha256 = "1mx3nxcn5h33qhx4gbg0hgvvydwlwdvdhqcnvfwnmf9jy3b8frll";
   };
 in

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fontconfig, libjpeg, libcap, freetype, fribidi, pkgconfig
-, gettext, systemd, perl, lib
+, gettext, systemd, perl, lib, fetchpatch
 , enableSystemd ? true
 , enableBidi ? true
 }: stdenv.mkDerivation rec {
@@ -11,6 +11,11 @@
     url = "ftp://ftp.tvdr.de/vdr/${pname}-${version}.tar.bz2";
     sha256 = "1p51b14aqzncx3xpfg0rjplc48pg7520035i5p6r5zzkqhszihr5";
   };
+
+  patches = [
+    # Derived from http://git.tvdr.de/?p=vdr.git;a=commit;h=930c2cd2eb8947413e88404fa94c66e4e1db5ad6
+    ./glibc2.31-compat.patch
+  ];
 
   enableParallelBuilding = true;
 
@@ -46,7 +51,7 @@
   outputs = [ "out" "dev" "man" ];
 
   meta = with lib; {
-    homepage = http://www.tvdr.de/;
+    homepage = "http://www.tvdr.de/";
     description = "Video Disc Recorder";
     maintainers = [ maintainers.ck3d ];
     platforms = [ "i686-linux" "x86_64-linux" ];

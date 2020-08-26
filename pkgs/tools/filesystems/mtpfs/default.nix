@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/cjd/mtpfs;
+    homepage = "https://github.com/cjd/mtpfs";
     description = "FUSE Filesystem providing access to MTP devices";
     platforms = platforms.all;
     license = licenses.gpl3;

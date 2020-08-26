@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "btrfs-progs";
-  version = "5.4.1";
+  version = "5.7";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "0scxg9p6z0wss92gmv5a8yxdmr8x449kb5v3bfnvs26n92r7zq7k";
+    sha256 = "0p6ycbr8sw5bq3mj84gh9rvh5sk8sjr2l9hb9dhm4j41ij5h8bsw";
   };
 
   nativeBuildInputs = [
@@ -20,10 +20,6 @@ stdenv.mkDerivation rec {
 
   # for python cross-compiling
   _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
-  # The i686 case is a quick hack; I don't know what's wrong.
-  postConfigure = stdenv.lib.optionalString (!stdenv.isi686) ''
-    export LDSHARED="$LD -shared"
-  '';
 
   # gcc bug with -O1 on ARM with gcc 4.8
   # This should be fine on all platforms so apply universally
@@ -37,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Utilities for the btrfs filesystem";
-    homepage = https://btrfs.wiki.kernel.org/;
+    homepage = "https://btrfs.wiki.kernel.org/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Simple, stupid and slow HNCP daemon";
-    homepage = https://www.irif.univ-paris-diderot.fr/~jch/software/homenet/shncpd.html;
+    homepage = "https://www.irif.univ-paris-diderot.fr/~jch/software/homenet/shncpd.html";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.fpletz ];

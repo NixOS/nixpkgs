@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Infinitely extensible web-browser (with Lisp development files using WebKitGTK platform port)";
-    homepage = https://next.atlas.engineer;
+    homepage = "https://next.atlas.engineer";
     license = licenses.bsd3;
     maintainers = [ maintainers.lewo ];
     platforms = [ "x86_64-linux" ];

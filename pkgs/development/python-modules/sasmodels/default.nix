@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "sasmodels";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "SasView";
     repo = "sasmodels";
     rev = "v${version}";
-    sha256 = "0k4334nxf1n6gwb9m57sqcchmlssglfd116mpl72glmmdc451d5j";
+    sha256 = "1qvh7q0fkls5r8r9mrph6igcvv8x3qsslqsc5jf1n20alcs5zjrl";
   };
 
   buildInputs = [ opencl-headers ];
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Library of small angle scattering models";
-    homepage = http://sasview.org;
+    homepage = "http://sasview.org";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ rprospero ];
   };

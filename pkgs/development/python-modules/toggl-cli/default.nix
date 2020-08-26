@@ -1,13 +1,26 @@
-{ stdenv, buildPythonPackage, fetchPypi, twine, pbr, click, click-completion, validate-email,
-pendulum, ptable, requests, inquirer, pythonOlder, pytest, pytestcov, pytest-mock, faker, factory_boy,
-setuptools }:
+{ stdenv, buildPythonPackage, fetchPypi, pythonAtLeast, pythonOlder
+, click
+, click-completion
+, factory_boy
+, faker
+, inquirer
+, pbr
+, pendulum
+, ptable
+, pytest
+, pytestcov
+, pytest-mock
+, requests
+, setuptools
+, twine
+, validate-email
+}:
 
 
 buildPythonPackage rec {
   pname = "toggl-cli";
   version = "2.1.0";
-
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.5" || pythonAtLeast "3.8";
 
   src = fetchPypi {
     pname = "togglCli";
@@ -19,6 +32,7 @@ buildPythonPackage rec {
    substituteInPlace requirements.txt \
      --replace "pendulum==2.0.4" "pendulum>=2.0.4" \
      --replace "click-completion==0.5.0" "click-completion>=0.5.0" \
+     --replace "click==7.0" "click>=7.0" \
      --replace "pbr==5.1.2" "pbr>=5.1.2" \
      --replace "inquirer==2.5.1" "inquirer>=2.5.1"
   '';

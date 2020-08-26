@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , pytest
 , pytestcov
 }:
@@ -8,6 +9,7 @@
 buildPythonPackage rec {
   pname = "venusian";
   version = "3.0.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
@@ -22,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A library for deferring decorator actions";
-    homepage = https://pylonsproject.org/;
+    homepage = "https://pylonsproject.org/";
     license = licenses.bsd0;
     maintainers = with maintainers; [ domenkozar ];
   };

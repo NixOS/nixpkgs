@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A C library for reading and writing files containing sampled sound";
-    homepage    = http://www.mega-nerd.com/libsndfile/;
+    homepage    = "http://www.mega-nerd.com/libsndfile/";
     license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;

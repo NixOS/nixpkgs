@@ -21,7 +21,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "A simple CLI templating tool written in golang";
-    homepage = https://github.com/noqcks/gucci;
+    homepage = "https://github.com/noqcks/gucci";
     license = licenses.mit;
     maintainers = [ maintainers.braydenjw ];
     platforms = platforms.unix;

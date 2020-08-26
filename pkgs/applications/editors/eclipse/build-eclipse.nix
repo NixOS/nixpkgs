@@ -1,5 +1,5 @@
 { stdenv, makeDesktopItem, freetype, fontconfig, libX11, libXrender
-, zlib, jdk, glib, gtk3, libXtst, gsettings-desktop-schemas, webkitgtk
+, zlib, jdk, glib, gtk, libXtst, gsettings-desktop-schemas, webkitgtk
 , makeWrapper, ... }:
 
 { name, src ? builtins.getAttr stdenv.hostPlatform.system sources, sources ? null, description }:
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
     comment = "Integrated Development Environment";
     desktopName = "Eclipse IDE";
     genericName = "Integrated Development Environment";
-    categories = "Application;Development;";
+    categories = "Development;";
   };
 
   buildInputs = [
-    fontconfig freetype glib gsettings-desktop-schemas gtk3 jdk libX11
+    fontconfig freetype glib gsettings-desktop-schemas gtk jdk libX11
     libXrender libXtst makeWrapper zlib
   ] ++ stdenv.lib.optional (webkitgtk != null) webkitgtk;
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper $out/eclipse/eclipse $out/bin/eclipse \
       --prefix PATH : ${jdk}/bin \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath ([ glib gtk3 libXtst ] ++ stdenv.lib.optional (webkitgtk != null) webkitgtk)} \
+      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath ([ glib gtk libXtst ] ++ stdenv.lib.optional (webkitgtk != null) webkitgtk)} \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
       --add-flags "-configuration \$HOME/.eclipse/''${productId}_$productVersion/configuration"
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ''; # */
 
   meta = {
-    homepage = http://www.eclipse.org/;
+    homepage = "http://www.eclipse.org/";
     inherit description;
     platforms = [ "x86_64-linux" ];
   };

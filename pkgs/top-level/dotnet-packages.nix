@@ -4,6 +4,7 @@
 , fetchurl
 , fetchFromGitHub
 , fetchNuGet
+, glib
 , pkgconfig
 , mono
 , fsharp
@@ -544,6 +545,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     buildInputs = [
       fsharp
+      glib
       dotnetPackages.FSharpCompilerService
       dotnetPackages.NewtonsoftJson
       dotnetPackages.NDeskOptions
@@ -558,7 +560,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
         FSharp.Compiler.Service project. It is intended to be used as a backend
         service for rich editing or 'intellisense' features for editors.
         '';
-      homepage = https://github.com/fsharp/FSharp.AutoComplete;
+      homepage = "https://github.com/fsharp/FSharp.AutoComplete";
       license = stdenv.lib.licenses.asl20;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -607,13 +609,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     fileProvidedTypes = fetchurl {
       name = "ProvidedTypes.fs";
-      url = https://raw.githubusercontent.com/fsprojects/FSharp.TypeProviders.StarterPack/877014bfa6244ac382642e113d7cd6c9bc27bc6d/src/ProvidedTypes.fs;
+      url = "https://raw.githubusercontent.com/fsprojects/FSharp.TypeProviders.StarterPack/877014bfa6244ac382642e113d7cd6c9bc27bc6d/src/ProvidedTypes.fs";
       sha256 = "1lb056v1xld1rfx6a8p8i2jz8i6qa2r2823n5izsf1qg1qgf2980";
     };
 
     fileDebugProvidedTypes = fetchurl {
       name = "DebugProvidedTypes.fs";
-      url = https://raw.githubusercontent.com/fsprojects/FSharp.TypeProviders.StarterPack/877014bfa6244ac382642e113d7cd6c9bc27bc6d/src/DebugProvidedTypes.fs;
+      url = "https://raw.githubusercontent.com/fsprojects/FSharp.TypeProviders.StarterPack/877014bfa6244ac382642e113d7cd6c9bc27bc6d/src/DebugProvidedTypes.fs";
       sha256 = "1whyrf2jv6fs7kgysn2086v15ggjsd54g1xfs398mp46m0nxp91f";
     };
 
@@ -709,7 +711,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = with stdenv.lib; {
       description = "A tool to help visualize git revisions and branches";
-      homepage = https://github.com/crc8/GitVersionTree;
+      homepage = "https://github.com/crc8/GitVersionTree";
       license = licenses.gpl2;
       maintainers = with maintainers; [ obadz ];
       platforms = platforms.all;
@@ -733,7 +735,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "Math.NET Numerics is an opensource numerical library for .Net, Silverlight and Mono";
-      homepage = https://numerics.mathdotnet.com/;
+      homepage = "https://numerics.mathdotnet.com/";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -763,7 +765,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "A generic framework for creating extensible applications";
-      homepage = https://www.mono-project.com/Mono.Addins;
+      homepage = "https://www.mono-project.com/Mono.Addins";
       longDescription = ''
         A generic framework for creating extensible applications,
         and for creating libraries which extend those applications.
@@ -854,7 +856,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "A callback-based program option parser for C#";
-      homepage = http://www.ndesk.org/Options;
+      homepage = "http://www.ndesk.org/Options";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -949,7 +951,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "A declarative CLI argument/XML configuration parser for F# applications";
-      homepage = https://nessos.github.io/UnionArgParser/;
+      homepage = "https://nessos.github.io/UnionArgParser/";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;

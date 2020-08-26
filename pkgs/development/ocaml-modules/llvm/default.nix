@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ llvm ];
 
   patches = [ (fetchpatch {
-    url = https://raw.githubusercontent.com/ocaml/opam-repository/2bdc193f5a9305ea93bf0f0dfc1fbc327c8b9306/packages/llvm/llvm.7.0.0/files/fix-shared.patch;
+    url = "https://raw.githubusercontent.com/ocaml/opam-repository/2bdc193f5a9305ea93bf0f0dfc1fbc327c8b9306/packages/llvm/llvm.7.0.0/files/fix-shared.patch";
     sha256 = "1p98j3b1vrryfn1xa7i50m6mmm4dyw5ldafq6kyh9sfmdihz4zsx";
   })];
 

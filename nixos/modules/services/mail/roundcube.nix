@@ -7,6 +7,7 @@ let
   fpm = config.services.phpfpm.pools.roundcube;
   localDB = cfg.database.host == "localhost";
   user = cfg.database.username;
+  phpWithPspell = pkgs.php.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
 in
 {
   options.services.roundcube = {
@@ -85,6 +86,27 @@ in
       '';
     };
 
+    dicts = mkOption {
+      type = types.listOf types.package;
+      default = [];
+      example = literalExample "with pkgs.aspellDicts; [ en fr de ]";
+      description = ''
+        List of aspell dictionnaries for spell checking. If empty, spell checking is disabled.
+      '';
+    };
+
+    maxAttachmentSize = mkOption {
+      type = types.int;
+      default = 18;
+      description = ''
+        The maximum attachment size in MB.
+
+        Note: Since roundcube only uses 70% of max upload values configured in php
+        30% is added automatically to <xref linkend="opt-services.roundcube.maxAttachmentSize"/>.
+      '';
+      apply = configuredMaxAttachmentSize: "${toString (configuredMaxAttachmentSize * 1.3)}M";
+    };
+
     extraConfig = mkOption {
       type = types.lines;
       default = "";
@@ -105,10 +127,15 @@ in
       $config = array();
       $config['db_dsnw'] = 'pgsql://${cfg.database.username}${lib.optionalString (!localDB) ":' . $password . '"}@${if localDB then "unix(/run/postgresql)" else cfg.database.host}/${cfg.database.dbname}';
       $config['log_driver'] = 'syslog';
-      $config['max_message_size'] = '25M';
+      $config['max_message_size'] =  '${cfg.maxAttachmentSize}';
       $config['plugins'] = [${concatMapStringsSep "," (p: "'${p}'") cfg.plugins}];
       $config['des_key'] = file_get_contents('/var/lib/roundcube/des_key');
       $config['mime_types'] = '${pkgs.nginx}/conf/mime.types';
+      $config['enable_spellcheck'] = ${if cfg.dicts == [] then "false" else "true"};
+      # by default, spellchecking uses a third-party cloud services
+      $config['spellcheck_engine'] = 'pspell';
+      $config['spellcheck_languages'] = array(${lib.concatMapStringsSep ", " (dict: let p = builtins.parseDrvName dict.shortName; in "'${p.name}' => '${dict.fullName}'") cfg.dicts});
+
       ${cfg.extraConfig}
     '';
 
@@ -157,8 +184,8 @@ in
       phpOptions = ''
         error_log = 'stderr'
         log_errors = on
-        post_max_size = 25M
-        upload_max_filesize = 25M
+        post_max_size = ${cfg.maxAttachmentSize}
+        upload_max_filesize = ${cfg.maxAttachmentSize}
       '';
       settings = mapAttrs (name: mkDefault) {
         "listen.owner" = "nginx";
@@ -172,6 +199,8 @@ in
         "pm.max_requests" = 500;
         "catch_workers_output" = true;
       };
+      phpPackage = phpWithPspell;
+      phpEnv.ASPELL_CONF = "dict-dir ${pkgs.aspellWithDicts (_: cfg.dicts)}/lib/aspell";
     };
     systemd.services.phpfpm-roundcube.after = [ "roundcube-setup.service" ];
 
@@ -199,7 +228,7 @@ in
             ${psql} <<< 'TRUNCATE TABLE session;'
           fi
 
-          ${pkgs.php}/bin/php ${cfg.package}/bin/update.sh
+          ${phpWithPspell}/bin/php ${cfg.package}/bin/update.sh
         '';
         serviceConfig = {
           Type = "oneshot";

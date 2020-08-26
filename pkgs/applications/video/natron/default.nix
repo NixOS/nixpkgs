@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, qt4, pkgconfig, boost, expat, cairo, python2Packages,
   cmake, flex, bison, pango, librsvg, librevenge, libxml2, libcdr, libzip,
-  poppler, imagemagick, openexr, ffmpeg, opencolorio, openimageio,
+  poppler, imagemagick, openexr, ffmpeg_3, opencolorio, openimageio,
   qmake4Hook, libpng, libGL, lndir }:
 
 let
@@ -35,15 +35,15 @@ let
       '';
     };
   lodepngcpp = fetchurl {
-    url = https://raw.githubusercontent.com/lvandeve/lodepng/a70c086077c0eaecbae3845e4da4424de5f43361/lodepng.cpp;
+    url = "https://raw.githubusercontent.com/lvandeve/lodepng/a70c086077c0eaecbae3845e4da4424de5f43361/lodepng.cpp";
     sha256 = "1dxkkr4jbmvlwfr7m16i1mgcj1pqxg9s1a7y3aavs9rrk0ki8ys2";
   };
   lodepngh = fetchurl {
-    url = https://raw.githubusercontent.com/lvandeve/lodepng/a70c086077c0eaecbae3845e4da4424de5f43361/lodepng.h;
+    url = "https://raw.githubusercontent.com/lvandeve/lodepng/a70c086077c0eaecbae3845e4da4424de5f43361/lodepng.h";
     sha256 = "14drdikd0vws3wwpyqq7zzm5z3kg98svv4q4w0hr45q6zh6hs0bq";
   };
   CImgh = fetchurl {
-    url = https://raw.githubusercontent.com/dtschump/CImg/572c12d82b2f59ece21be8f52645c38f1dd407e6/CImg.h;
+    url = "https://raw.githubusercontent.com/dtschump/CImg/572c12d82b2f59ece21be8f52645c38f1dd407e6/CImg.h";
     sha256 = "0n4qfxj8j6rmj4svf68gg2pzg8d1pb74bnphidnf8i2paj6lwniz";
   };
   plugins = map buildPlugin [
@@ -68,7 +68,7 @@ let
       sha256 = "0s196i9fkgr9iw92c94mxgs1lkxbhynkf83vmsgrldflmf0xjky7";
       nativeBuildInputs = [ pkgconfig ];
       buildInputs = [
-        libpng ffmpeg openexr opencolorio openimageio boost libGL
+        libpng ffmpeg_3 openexr opencolorio openimageio boost libGL
         seexpr
       ];
     })
@@ -120,7 +120,7 @@ stdenv.mkDerivation {
       Node-graph based, open-source compositing software. Similar in
       functionalities to Adobe After Effects and Nuke by The Foundry.
     '';
-    homepage = https://natron.fr/;
+    homepage = "https://natron.fr/";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ maintainers.puffnfresh ];
     platforms = platforms.linux;

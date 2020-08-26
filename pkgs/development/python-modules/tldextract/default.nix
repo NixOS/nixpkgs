@@ -16,7 +16,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest responses ];
 
   meta = {
-    homepage = https://github.com/john-kurkowski/tldextract;
+    homepage = "https://github.com/john-kurkowski/tldextract";
     description = "Accurately separate the TLD from the registered domain and subdomains of a URL, using the Public Suffix List.";
     license = lib.licenses.bsd3;
   };

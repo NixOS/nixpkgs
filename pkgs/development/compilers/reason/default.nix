@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-reason-${version}";
-  version = "3.5.4";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "reason";
-    rev = "e3287476e5c3f0cbcd9dc7ab18d290f81f4afa0c";
-    sha256 = "02p5d1x6lr7jp9mvgvsas3nnq3a97chxp5q6rl07n5qm61d5b4dl";
+    rev = "2860cc274b1b5b76a71d0e5190bf67a133d6f809";
+    sha256 = "05wcg0gfln85spjfgsij818h2sp4y6s8bvdcwmzv0r8jblr8402b";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://reasonml.github.io/;
+    homepage = "https://reasonml.github.io/";
     description = "Facebook's friendly syntax to OCaml";
     license = licenses.mit;
     inherit (ocaml.meta) platforms;

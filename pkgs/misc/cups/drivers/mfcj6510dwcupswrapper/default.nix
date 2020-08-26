@@ -55,11 +55,11 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.brother.com/;
+    homepage = "http://www.brother.com/";
     description = "Brother MFC-J6510DW CUPS wrapper driver";
     license = with licenses; gpl2;
     platforms = with platforms; linux;
-    downloadPage = http://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj6510dw_all&os=128;
+    downloadPage = "http://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj6510dw_all&os=128";
     maintainers = with maintainers; [ ramkromberg ];
   };
 }

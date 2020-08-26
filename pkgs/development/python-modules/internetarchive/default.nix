@@ -1,22 +1,37 @@
-{ buildPythonPackage, fetchFromGitHub, pytest, six, clint, pyyaml, docopt
-, requests, jsonpatch, args, schema, responses, backports_csv, isPy3k
-, lib, glibcLocales, setuptools }:
+{ buildPythonPackage
+, fetchFromGitHub
+, pytest
+, six
+, tqdm
+, pyyaml
+, docopt
+, requests
+, jsonpatch
+, args
+, schema
+, responses
+, backports_csv
+, isPy3k
+, lib
+, glibcLocales
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "1.9.0";
+  version = "1.9.4";
 
   # Can't use pypi, data files for tests missing
   src = fetchFromGitHub {
     owner = "jjjake";
     repo = "internetarchive";
     rev = "v${version}";
-    sha256 = "1h344c04ipzld4s7xk8d84f80samjjlgzvv3y8zsv0n1c895gymb";
+    sha256 = "10xlblj21hanahsmw6lfggbrbpw08pdmvdgds1p58l8xd4fazli8";
   };
 
   propagatedBuildInputs = [
     six
-    clint
+    tqdm
     pyyaml
     docopt
     requests
@@ -24,8 +39,7 @@ buildPythonPackage rec {
     args
     schema
     setuptools
-    backports_csv
-  ];
+  ] ++ lib.optionals (!isPy3k) [ backports_csv ];
 
   checkInputs = [ pytest responses glibcLocales ];
 
@@ -37,8 +51,9 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A python wrapper for the various Internet Archive APIs";
-    homepage = https://github.com/jjjake/internetarchive;
+    description = "A Python and Command-Line Interface to Archive.org";
+    homepage = "https://github.com/jjjake/internetarchive";
     license = licenses.agpl3;
+    maintainers = [ maintainers.marsam ];
   };
 }

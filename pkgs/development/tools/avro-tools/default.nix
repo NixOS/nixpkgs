@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage    = https://avro.apache.org/;
+    homepage    = "https://avro.apache.org/";
     description = "Avro command-line tools and utilities";
     license     = lib.licenses.asl20;
     maintainers = [ lib.maintainers.nequissimus ];

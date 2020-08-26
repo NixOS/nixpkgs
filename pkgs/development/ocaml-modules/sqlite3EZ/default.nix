@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   name = "ocaml-sqlite3EZ-0.1.0";
 
   src = fetchurl {
-    url = https://github.com/mlin/ocaml-sqlite3EZ/archive/v0.1.0.tar.gz;
+    url = "https://github.com/mlin/ocaml-sqlite3EZ/archive/v0.1.0.tar.gz";
     sha256 = "8ed2c5d5914a65cbd95589ef11bfb8b38a020eb850cdd49b8adce7ee3a563748";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/mlin/ocaml-sqlite3EZ;
+    homepage = "https://github.com/mlin/ocaml-sqlite3EZ";
     description = "A thin wrapper for sqlite3-ocaml with a simplified interface";
     license = licenses.mit;
     maintainers = [ maintainers.vbgl ];

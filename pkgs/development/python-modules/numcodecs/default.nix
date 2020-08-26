@@ -5,7 +5,7 @@
 , cython
 , numpy
 , msgpack
-, pytest
+, pytestCheckHook
 , python
 , gcc8
 }:
@@ -31,15 +31,23 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    pytest $out/${python.sitePackages}/numcodecs -k "not test_backwards_compatibility"
-  '';
+  pytestFlagsArray = [
+    "$out/${python.sitePackages}/numcodecs"
+  ];
+
+  disabledTests = [
+    "test_backwards_compatibility"
+
+    "test_encode_decode"
+    "test_legacy_codec_broken"
+    "test_bytes"
+  ];
 
   meta = with lib;{
-    homepage = https://github.com/alimanfoo/numcodecs;
+    homepage = "https://github.com/alimanfoo/numcodecs";
     license = licenses.mit;
     description = "Buffer compression and transformation codecs for use in data storage and communication applications";
     maintainers = [ maintainers.costrouc ];

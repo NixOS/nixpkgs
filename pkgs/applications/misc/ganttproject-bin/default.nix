@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       desktopName = "GanttProject";
       genericName = "Shedule and manage projects";
       comment = meta.description;
-      categories = "Office;Application;";
+      categories = "Office;";
     };
 
     javaOptions = [
@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Project scheduling and management";
-    homepage = https://www.ganttproject.biz/;
-    downloadPage = https://www.ganttproject.biz/download;
+    homepage = "https://www.ganttproject.biz/";
+    downloadPage = "https://www.ganttproject.biz/download";
     # GanttProject itself is GPL3+. All bundled libraries are declared
     # ‘GPL3-compatible’. See ${downloadPage} for detailed information.
     license = licenses.gpl3Plus;

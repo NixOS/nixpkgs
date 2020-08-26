@@ -12,7 +12,7 @@ with lib;
 
     services.malcontent = {
 
-      enable = mkEnableOption "Malcontent";
+      enable = mkEnableOption "Malcontent, parental control support for applications";
 
     };
 
@@ -23,9 +23,17 @@ with lib;
 
   config = mkIf config.services.malcontent.enable {
 
-    environment.systemPackages = [ pkgs.malcontent ];
+    environment.systemPackages = with pkgs; [
+      malcontent
+      malcontent-ui
+    ];
 
-    services.dbus.packages = [ pkgs.malcontent ];
+    services.dbus.packages = [
+      # D-Bus services are in `out`, not the default `bin` output that would be picked up by `makeDbusConf`.
+      pkgs.malcontent.out
+    ];
+
+    services.accounts-daemon.enable = true;
 
   };
 

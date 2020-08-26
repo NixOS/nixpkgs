@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "csvs-to-sqlite";
-  version = "1.0";
+  version = "1.1";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = pname;
     rev = version;
-    sha256 = "0n80y9a6qhbhhbz64jdpscx0nha9jn9nygp9nkgszmw04ri5j5hm";
+    sha256 = "1xi9d8l1sf9vixzvqpz8lvhl6yqmz9x5659nvpsxinl317qzmc8m";
   };
 
   postPatch = ''
@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Convert CSV files into a SQLite database";
-    homepage = https://github.com/simonw/csvs-to-sqlite;
+    homepage = "https://github.com/simonw/csvs-to-sqlite";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

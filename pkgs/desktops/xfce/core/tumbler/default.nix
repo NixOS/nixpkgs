@@ -14,9 +14,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "tumbler";
-  version = "0.2.7";
+  version = "0.2.9";
 
-  sha256 = "14ql3fcxyz81qr9s0vcwh6j2ks5fl8jf9scwnkilv5jy0ii9l0ry";
+  sha256 = "0b3mli40msv35qn67c1m9rn5bigj6ls10l08qk7fa3fwvzl49hmw";
 
   buildInputs = [
     ffmpegthumbnailer

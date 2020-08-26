@@ -20,7 +20,7 @@ stdenv.mkDerivation (rec {
   pname = "lldb";
   inherit version;
 
-  src = fetch pname "06qzh13cr20wrd5925698yq696bhl68zbvm7kjxp7c2rx5swxmg8";
+  src = fetch pname "051p5b04y6z3g730rmc2n2v71lipbw7k69riww3a6sl74myfiaq7";
 
   patches = [ ./lldb-procfs.patch ];
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation (rec {
 
   meta = with stdenv.lib; {
     description = "A next-generation high-performance debugger";
-    homepage = http://lldb.llvm.org;
+    homepage = "https://lldb.llvm.org";
     license = licenses.ncsa;
     platforms = platforms.all;
   };

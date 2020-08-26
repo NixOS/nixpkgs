@@ -12,16 +12,16 @@
  }:
 
 let
-  inherit (python2.pkgs) buildPythonApplication wxPython numpy;
-in buildPythonApplication {
+  inherit (python2.pkgs) buildPythonApplication wxPython numpy dbus-python;
+in buildPythonApplication rec {
   pname = "displaycal";
-  version = "3.5.0.0";
+  version = "3.8.9.3";
 
   enableParallelBuilding = true;
 
   src = fetchurl {
-    url = mirror://sourceforge/project/dispcalgui/release/3.5.0.0/DisplayCAL-3.5.0.0.tar.gz;
-    sha256 = "1j496sv8pbhby5hkkbp07k6bs3f7mb1l3dijmn2iga3kmix0fn5q";
+    url = "mirror://sourceforge/project/dispcalgui/release/${version}/DisplayCAL-${version}.tar.gz";
+    sha256 = "1sivi4q7sqsrc95qg5gh37bsm2761md4mpl89hflzwk6kyyxyd3w";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +34,7 @@ in buildPythonApplication {
     argyllcms
     wxPython
     numpy
+    dbus-python
   ];
 
   nativeBuildInputs = [
@@ -42,7 +43,8 @@ in buildPythonApplication {
 
   preConfigure = ''
     mkdir dist
-    cp {misc,dist}/DisplayCAL.appdata.xml
+    cp {misc,dist}/net.displaycal.DisplayCAL.appdata.xml
+    touch dist/copyright
     mkdir -p $out
     ln -s $out/share/DisplayCAL $out/Resources
   '';
@@ -62,7 +64,7 @@ in buildPythonApplication {
 
   meta = {
     description = "Display Calibration and Characterization powered by Argyll CMS";
-    homepage = https://displaycal.net/;
+    homepage = "https://displaycal.net/";
     license = stdenv.lib.licenses.gpl3;
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = stdenv.lib.platforms.linux;

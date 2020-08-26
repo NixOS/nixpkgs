@@ -26,10 +26,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # Don't run the native `strip' when cross-compiling.  This breaks at least
-  # with `.a' files for MinGW.
-  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
-
   meta = with stdenv.lib; {
     description = "GNU Libtool, a generic library support script";
     longDescription = ''
@@ -41,7 +37,7 @@ stdenv.mkDerivation rec {
       your Makefile, Makefile.in, or Makefile.am.  See the
       documentation for details.
     '';
-    homepage = https://www.gnu.org/software/libtool/;
+    homepage = "https://www.gnu.org/software/libtool/";
     license = licenses.gpl2Plus;
     maintainers = [ ];
     platforms = platforms.unix;

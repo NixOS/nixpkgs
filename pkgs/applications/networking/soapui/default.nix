@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The Most Advanced REST & SOAP Testing Tool in the World";
-    homepage = https://www.soapui.org/;
+    homepage = "https://www.soapui.org/";
     license = "SoapUI End User License Agreement";
     maintainers = with maintainers; [ gerschtli ];
     platforms = platforms.all;

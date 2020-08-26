@@ -13,7 +13,7 @@ let
       sha256 = "0rc862lx3y6sw87r1v5xjmqqpysyr1x6yqhycqmcdrwz0j3wykrr";
     };
     logo = fetchurl {
-      url = https://raw.githubusercontent.com/ecsec/open-ecard/1.2.3/gui/graphics/src/main/ext/oec_logo_bg-transparent.svg;
+      url = "https://raw.githubusercontent.com/ecsec/open-ecard/1.2.3/gui/graphics/src/main/ext/oec_logo_bg-transparent.svg";
       sha256 = "0rpmyv10vjx2yfpm03mqliygcww8af2wnrnrppmsazdplksaxkhs";
     };
   };
@@ -56,7 +56,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Client side implementation of the eCard-API-Framework (BSI
       TR-03112) and related international standards, such as ISO/IEC 24727";
-    homepage = https://www.openecard.org/;
+    homepage = "https://www.openecard.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ sephalon ];
     platforms = platforms.linux;

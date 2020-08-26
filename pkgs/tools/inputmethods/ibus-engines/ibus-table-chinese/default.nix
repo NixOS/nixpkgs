@@ -56,7 +56,7 @@ in stdenv.mkDerivation {
   meta = with stdenv.lib; {
     isIbusEngine = true;
     description  = "Chinese tables for IBus-Table";
-    homepage     = https://github.com/definite/ibus-table-chinese;
+    homepage     = "https://github.com/definite/ibus-table-chinese";
     license      = licenses.gpl3;
     platforms    = platforms.linux;
     maintainers  = with maintainers; [ pneumaticat ];

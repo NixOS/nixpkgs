@@ -132,39 +132,6 @@ with self; {
     };
   };
 
-  pulseaudio = buildLuaPackage rec {
-    pname = "pulseaudio";
-    version = "0.2";
-    name = "pulseaudio-${version}";
-
-    src = fetchFromGitHub {
-      owner = "doronbehar";
-      repo = "lua-pulseaudio";
-      rev = "v${version}";
-      sha256 = "140y1m6k798c4w7xfl0zb0a4ffjz6i1722bgkdcdg8g76hr5r8ys";
-    };
-    disabled = (luaOlder "5.1") || (luaAtLeast "5.5");
-    buildInputs = [ pkgs.libpulseaudio ];
-    propagatedBuildInputs = [ lua ];
-    nativeBuildInputs = [ pkgs.pulseaudio pkgconfig ];
-
-    makeFlags = [
-      "INST_LIBDIR=${placeholder "out"}/lib/lua/${lua.luaversion}"
-      "INST_LUADIR=${placeholder "out"}/share/lua/${lua.luaversion}"
-      "LUA_BINDIR=${placeholder "out"}/bin"
-    ];
-    preBuild = ''
-      mkdir -p ${placeholder "out"}/lib/lua/${lua.luaversion}
-    '';
-
-    meta = with stdenv.lib; {
-      homepage = "https://github.com/doronbehar/lua-pulseaudio";
-      description = "Libpulse Lua bindings";
-      maintainers = with maintainers; [ doronbehar ];
-      license = licenses.lgpl21;
-    };
-  };
-
   vicious = toLuaModule(stdenv.mkDerivation rec {
     pname = "vicious";
     version = "2.3.1";
@@ -186,7 +153,7 @@ with self; {
 
     meta = with stdenv.lib; {
       description = "A modular widget library for the awesome window manager";
-      homepage    = https://github.com/Mic92/vicious;
+      homepage    = "https://github.com/Mic92/vicious";
       license     = licenses.gpl2;
       maintainers = with maintainers; [ makefu mic92 ];
       platforms   = platforms.linux;

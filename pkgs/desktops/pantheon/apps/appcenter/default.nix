@@ -1,4 +1,5 @@
 { stdenv
+, nix-update-script
 , appstream
 , appstream-glib
 , dbus
@@ -23,22 +24,24 @@
 , pkgconfig
 , python3
 , vala
+, polkit
+, libhandy
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.2.2";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0aqslkig7vs95z719mp3xrl1zp65ypp2lq9aikvsis6nssadn2cd";
+    sha256 = "1bwkjxl4k49hvy88llif82hdancda9692vjwkw4bxy2cbz8444zx";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -58,17 +61,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     appstream
-    elementary-icon-theme
     elementary-gtk-theme
+    elementary-icon-theme
     flatpak
     glib
     granite
     gtk3
     json-glib
     libgee
+    libhandy
     libsoup
     libxml2
     packagekit
+    polkit
   ];
 
   mesonFlags = [
@@ -83,7 +88,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/elementary/appcenter;
+    homepage = "https://github.com/elementary/appcenter";
     description = "An open, pay-what-you-want app store for indie developers, designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

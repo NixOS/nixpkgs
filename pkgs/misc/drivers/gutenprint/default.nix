@@ -2,7 +2,7 @@
 { stdenv, lib, fetchurl, makeWrapper, pkgconfig
 , ijs, zlib
 , gimp2Support ? false, gimp
-, cupsSupport ? true, cups, libusb, perl
+, cupsSupport ? true, cups, libusb-compat-0_1, perl
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ ijs zlib ]
     ++ lib.optionals gimp2Support [ gimp.gtk gimp ]
-    ++ lib.optionals cupsSupport [ cups libusb perl ];
+    ++ lib.optionals cupsSupport [ cups libusb-compat-0_1 perl ];
 
   configureFlags = lib.optionals cupsSupport [
     "--disable-static-genppd" # should be harmless on NixOS
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Ghostscript and cups printer drivers";
-    homepage = https://sourceforge.net/projects/gimp-print/;
+    homepage = "https://sourceforge.net/projects/gimp-print/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     isGutenprint = true;

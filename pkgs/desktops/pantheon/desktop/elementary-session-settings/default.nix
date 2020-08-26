@@ -1,6 +1,9 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , substituteAll
+, desktop-file-utils
+, pkg-config
 , writeScript
 , pantheon
 , gnome-keyring
@@ -15,7 +18,6 @@
 , writeText
 , meson
 , ninja
-, git
 }:
 
 let
@@ -68,42 +70,42 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "elementary-session-settings";
-  version = "5.0.3";
+  pname = "elementary-session-settings-unstable";
+  version = "2020-06-11";
 
   repoName = "session-settings";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = repoName;
-    rev = version;
-    sha256 = "1vrjm7bklkfv0dyafm312v4hxzy6lb7p1ny4ijkn48kr719gc71k";
+    rev = "130c9ae221913032ed18bcf6d21e3dcdba3c4209";
+    sha256 = "0bzg9vbq0ssnxgcb2vxpx6x9zv8ngkm9r3ki5q83m9al9919n0pr";
   };
 
-  postPatch = ''
-    ${git}/bin/git apply --verbose ${./meson.patch}
-  '';
-
   nativeBuildInputs = [
+    desktop-file-utils
     meson
     ninja
+    pkg-config
+  ];
+
+  buildInputs = [
+    pantheon.elementary-settings-daemon
+    gnome-keyring
+    onboard
+    orca
   ];
 
   mesonFlags = [
-    "-Ddefaults-list=false"
-    "-Dpatched-gsd-autostarts=false"
-    "-Dpatched-ubuntu-autostarts=false"
+    "-Dmimeapps-list=false"
     "-Dfallback-session=GNOME"
+    "-Ddetect-program-prefixes=true"
+    "--sysconfdir=${placeholder "out"}/etc"
   ];
 
   postInstall = ''
     mkdir -p $out/share/applications
     cp -av ${./pantheon-mimeapps.list} $out/share/applications/pantheon-mimeapps.list
-
-    mkdir -p $out/etc/xdg/autostart
-    for package in ${gnome-keyring} ${orca} ${onboard} ${at-spi2-core}; do
-      cp -av $package/etc/xdg/autostart/* $out/etc/xdg/autostart
-    done
 
     cp "${dockitemAutostart}" $out/etc/xdg/autostart/default-elementary-dockitems.desktop
 
@@ -116,26 +118,21 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/xsessions/pantheon.desktop \
       --replace "gnome-session --session=pantheon" "$out/libexec/pantheon" \
       --replace "wingpanel" "${wingpanel}/bin/wingpanel"
-
-    for f in $out/etc/xdg/autostart/*; do mv "$f" "''${f%.desktop}-pantheon.desktop"; done
-
-    for autostart in $(grep -rl "OnlyShowIn=GNOME;" $out/etc/xdg/autostart)
-    do
-      echo "Patching OnlyShowIn to Pantheon in: $autostart"
-      sed -i "s,OnlyShowIn=GNOME;,OnlyShowIn=Pantheon;," $autostart
-    done
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
-    providedSessions = [ "pantheon" ];
+
+    providedSessions = [
+      "pantheon"
+    ];
   };
 
   meta = with stdenv.lib; {
     description = "Session settings for elementary";
-    homepage = https://github.com/elementary/session-settings;
+    homepage = "https://github.com/elementary/session-settings";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A tiny script to issue and renew TLS certs from Let's Encrypt";
-    homepage = https://github.com/diafygi/acme-tiny;
+    homepage = "https://github.com/diafygi/acme-tiny";
     license = licenses.mit;
   };
 }

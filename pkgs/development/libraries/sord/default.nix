@@ -10,13 +10,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig python3 wafHook ];
-  buildInputs = [ serd pcre ];
+  buildInputs = [ pcre ];
+  propagatedBuildInputs = [ serd ];
 
   meta = with stdenv.lib; {
-    homepage = http://drobilla.net/software/sord;
+    homepage = "http://drobilla.net/software/sord";
     description = "A lightweight C library for storing RDF data in memory";
     license = licenses.mit;
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

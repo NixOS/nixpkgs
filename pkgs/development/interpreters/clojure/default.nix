@@ -1,34 +1,38 @@
-{ stdenv, fetchurl, jdk11, rlwrap, makeWrapper }:
+{ stdenv, fetchurl, installShellFiles, jdk11, rlwrap, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "clojure";
-  version = "1.10.1.507";
+  version = "1.10.1.645";
 
   src = fetchurl {
     url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
-    sha256 = "1k0jwa3481g3mkalwlb9gkcz9aq9zjpwmzckv823fr2d8djp41cc";
+    sha256 = "1z6a9an8ls992y4japmzdxay7c5d2z9s2q1xl4g615r23jwpcsf9";
   };
 
-  patches = [ ./TDEPS-150.patch ];
-
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   installPhase =
     let
       binPath = stdenv.lib.makeBinPath [ rlwrap jdk11 ];
     in
-      ''
-        mkdir -p $out/libexec
-        cp clojure-tools-${version}.jar $out/libexec
-        cp example-deps.edn $out
-        cp deps.edn $out
+    ''
+      mkdir -p $out/libexec
+      cp clojure-tools-${version}.jar $out/libexec
+      cp example-deps.edn $out
+      cp deps.edn $out
+      cp clj_exec.clj $out
 
-        substituteInPlace clojure --replace PREFIX $out
+      substituteInPlace clojure --replace PREFIX $out
 
-        install -Dt $out/bin clj clojure
-        wrapProgram $out/bin/clj --prefix PATH : $out/bin:${binPath}
-        wrapProgram $out/bin/clojure --prefix PATH : $out/bin:${binPath}
-      '';
+      install -Dt $out/bin clj clojure
+      wrapProgram $out/bin/clj --prefix PATH : $out/bin:${binPath}
+      wrapProgram $out/bin/clojure --prefix PATH : $out/bin:${binPath}
+
+      installManPage clj.1 clojure.1
+    '';
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -39,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
   meta = with stdenv.lib; {
     description = "A Lisp dialect for the JVM";
-    homepage = https://clojure.org/;
+    homepage = "https://clojure.org/";
     license = licenses.epl10;
     longDescription = ''
       Clojure is a dynamic programming language that targets the Java

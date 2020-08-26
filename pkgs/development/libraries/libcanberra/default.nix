@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "0001-gtk-Don-t-assume-all-GdkDisplays-are-GdkX11Displays-.patch";
-      url = http://git.0pointer.net/libcanberra.git/patch/?id=c0620e432650e81062c1967cc669829dbd29b310;
+      url = "http://git.0pointer.net/libcanberra.git/patch/?id=c0620e432650e81062c1967cc669829dbd29b310";
       sha256 = "0rc7zwn39yxzxp37qh329g7375r5ywcqcaak8ryd0dgvg8m5hcx9";
     })
   ];
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       portable.
     '';
 
-    homepage = http://0pointer.de/lennart/projects/libcanberra/;
+    homepage = "http://0pointer.de/lennart/projects/libcanberra/";
 
     license = stdenv.lib.licenses.lgpl2Plus;
 

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" "MANPREFIX=$(out)/share/man" ];
 
   meta = {
-    homepage = https://github.com/uobikiemukot/yaft;
+    homepage = "https://github.com/uobikiemukot/yaft";
     description = "Yet another framebuffer terminal";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];

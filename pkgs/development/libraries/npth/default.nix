@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       compatible to GNU Pth.  Experience with a Windows Pth emulation showed
       that this is a solid way to provide a co-routine based framework.
     '';
-    homepage = http://www.gnupg.org;
+    homepage = "http://www.gnupg.org";
     license = licenses.lgpl3;
     platforms = platforms.all;
   };

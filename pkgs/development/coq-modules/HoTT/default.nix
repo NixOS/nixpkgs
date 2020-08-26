@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://homotopytypetheory.org/;
+    homepage = "http://homotopytypetheory.org/";
     description = "Homotopy type theory";
     maintainers = with maintainers; [ siddharthist ];
     platforms = coq.meta.platforms;

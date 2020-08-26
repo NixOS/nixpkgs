@@ -1,45 +1,47 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig
-, libXext, libdrm, libXfixes, wayland, libffi, libX11
-, libGL, mesa
+{ stdenv, lib, fetchFromGitHub, fetchpatch, meson, pkg-config, ninja, wayland
+, libdrm
 , minimal ? false, libva-minimal
+, libX11, libXext, libXfixes, libffi, libGL
+, mesa
 }:
 
 stdenv.mkDerivation rec {
   name = "libva-${lib.optionalString minimal "minimal-"}${version}";
-  version = "2.6.1";
+  version = "2.8.0"; # Also update the hash for libva-utils!
 
   # update libva-utils and vaapiIntel as well
   src = fetchFromGitHub {
-    owner  = "01org";
+    owner  = "intel";
     repo   = "libva";
     rev    = version;
-    sha256 = "1x34kf38p5rf52bf54ljr9f7knnbilm7kbszqnfk3lzsqrfc7r2g";
+    sha256 = "190cq173jzp5rkrczi8gzbwa0y3xk253v4wd205a5ilfngm7srns";
   };
 
   outputs = [ "dev" "out" ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ meson pkg-config ninja wayland ];
 
   buildInputs = [ libdrm ]
     ++ lib.optionals (!minimal) [ libva-minimal libX11 libXext libXfixes wayland libffi libGL ];
   # TODO: share libs between minimal and !minimal - perhaps just symlink them
 
-  enableParallelBuilding = true;
-
-  configureFlags = [
-    # Add FHS paths for non-NixOS applications.
-    "--with-drivers-path=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri"
-  ] ++ lib.optionals (!minimal) [ "--enable-glx" ];
-
-  installFlags = [
-    "dummy_drv_video_ladir=$(out)/lib/dri"
+  mesonFlags = [
+    # Add FHS paths for non-NixOS applications:
+    "-Ddriverdir=${mesa.drivers.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri"
   ];
 
   meta = with stdenv.lib; {
-    description = "VAAPI library: Video Acceleration API";
-    homepage = http://www.freedesktop.org/wiki/Software/vaapi;
+    description = "An implementation for VA-API (Video Acceleration API)";
+    longDescription = ''
+      VA-API is an open-source library and API specification, which provides
+      access to graphics hardware acceleration capabilities for video
+      processing. It consists of a main library (this package) and
+      driver-specific acceleration backends for each supported hardware vendor.
+    '';
+    homepage = "https://01.org/linuxmedia/vaapi";
+    changelog = "https://raw.githubusercontent.com/intel/libva/${version}/NEWS";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ primeos ];
     platforms = platforms.unix;
   };
 }

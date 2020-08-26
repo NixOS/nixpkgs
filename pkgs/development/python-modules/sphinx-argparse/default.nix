@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A sphinx extension that automatically documents argparse commands and options";
-    homepage = https://github.com/ribozz/sphinx-argparse;
+    homepage = "https://github.com/ribozz/sphinx-argparse";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ clacke ];
   };

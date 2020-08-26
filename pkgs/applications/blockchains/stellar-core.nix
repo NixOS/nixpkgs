@@ -39,7 +39,7 @@ in stdenv.mkDerivation {
       instances of stellar-core on the network. Optionally, stellar-core can
       store historical records of the ledger and participate in consensus.
     '';
-    homepage = https://www.stellar.org/;
+    homepage = "https://www.stellar.org/";
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ chris-martin ];
     license = licenses.asl20;

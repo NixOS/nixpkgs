@@ -1,54 +1,16 @@
 { config, lib, pkgs, ... }:
 with lib;
 let
+  keysPath = "/var/lib/yggdrasil/keys.json";
+
   cfg = config.services.yggdrasil;
-  configProvided = (cfg.config != {});
-  configAsFile = (if configProvided then
-                   toString (pkgs.writeTextFile {
-                     name = "yggdrasil-conf";
-                     text = builtins.toJSON cfg.config;
-                   })
-                   else null);
-  configFileProvided = (cfg.configFile != null);
-  generateConfig = (
-    if configProvided && configFileProvided then
-      "${pkgs.jq}/bin/jq -s add ${configAsFile} ${cfg.configFile}"
-    else if configProvided then
-      "cat ${configAsFile}"
-    else if configFileProvided then
-      "cat ${cfg.configFile}"
-    else
-      "${cfg.package}/bin/yggdrasil -genconf"
-  );
+  configProvided = cfg.config != { };
+  configFileProvided = cfg.configFile != null;
 
 in {
   options = with types; {
     services.yggdrasil = {
       enable = mkEnableOption "the yggdrasil system service";
-
-      configFile = mkOption {
-        type =  nullOr str;
-        default = null;
-        example = "/run/keys/yggdrasil.conf";
-        description = ''
-          A file which contains JSON configuration for yggdrasil.
-
-          You do not have to supply a complete configuration, as
-          yggdrasil will use default values for anything which is
-          omitted.  If the encryption and signing keys are omitted,
-          yggdrasil will generate new ones each time the service is
-          started, resulting in a random IPv6 address on the yggdrasil
-          network each time.
-
-          If both this option and <option>config</option> are
-          supplied, they will be combined, with values from
-          <option>config</option> taking precedence.
-
-          You can use the command <code>nix-shell -p yggdrasil --run
-          "yggdrasil -genconf -json"</code> to generate a default
-          JSON configuration.
-        '';
-      };
 
       config = mkOption {
         type = attrs;
@@ -66,21 +28,43 @@ in {
           Configuration for yggdrasil, as a Nix attribute set.
 
           Warning: this is stored in the WORLD-READABLE Nix store!
-          Therefore, it is not appropriate for private keys.  If you
-          do not specify the keys, yggdrasil will generate a new set
-          each time the service is started, creating a random IPv6
-          address on the yggdrasil network each time.
+          Therefore, it is not appropriate for private keys. If you
+          wish to specify the keys, use <option>configFile</option>.
 
-          If you wish to specify the keys, use
-          <option>configFile</option>.  If both
-          <option>configFile</option> and <option>config</option> are
-          supplied, they will be combined, with values from
-          <option>config</option> taking precedence.
+          If the <option>persistentKeys</option> is enabled then the
+          keys that are generated during activation will override
+          those in <option>config</option> or
+          <option>configFile</option>.
+
+          If no keys are specified then ephemeral keys are generated
+          and the Yggdrasil interface will have a random IPv6 address
+          each time the service is started, this is the default.
+
+          If both <option>configFile</option> and <option>config</option>
+          are supplied, they will be combined, with values from
+          <option>configFile</option> taking precedence.
 
           You can use the command <code>nix-shell -p yggdrasil --run
           "yggdrasil -genconf"</code> to generate default
           configuration values with documentation.
         '';
+      };
+
+      configFile = mkOption {
+        type = nullOr path;
+        default = null;
+        example = "/run/keys/yggdrasil.conf";
+        description = ''
+          A file which contains JSON configuration for yggdrasil.
+          See the <option>config</option> option for more information.
+        '';
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "root";
+        example = "wheel";
+        description = "Group to grant acces to the Yggdrasil control socket.";
       };
 
       openMulticastPort = mkOption {
@@ -118,36 +102,64 @@ in {
         defaultText = "pkgs.yggdrasil";
         description = "Yggdrasil package to use.";
       };
+
+      persistentKeys = mkEnableOption ''
+        If enabled then keys will be generated once and Yggdrasil
+        will retain the same IPv6 address when the service is
+        restarted. Keys are stored at ${keysPath}.
+      '';
+
     };
   };
 
-  config = mkIf cfg.enable {
-    assertions = [
-      { assertion = config.networking.enableIPv6;
-        message = "networking.enableIPv6 must be true for yggdrasil to work";
-      }
-    ];
+  config = mkIf cfg.enable (let binYggdrasil = cfg.package + "/bin/yggdrasil";
+  in {
+    assertions = [{
+      assertion = config.networking.enableIPv6;
+      message = "networking.enableIPv6 must be true for yggdrasil to work";
+    }];
+
+    system.activationScripts.yggdrasil = mkIf cfg.persistentKeys ''
+      if [ ! -e ${keysPath} ]
+      then
+        mkdir -p ${builtins.dirOf keysPath}
+        ${binYggdrasil} -genconf -json \
+          | ${pkgs.jq}/bin/jq \
+              'to_entries|map(select(.key|endswith("Key")))|from_entries' \
+          > ${keysPath}
+        chmod 600 ${keysPath}
+      fi
+    '';
 
     systemd.services.yggdrasil = {
       description = "Yggdrasil Network Service";
-      path = [ cfg.package ] ++ optional (configProvided && configFileProvided) pkgs.jq;
       bindsTo = [ "network-online.target" ];
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      preStart = ''
-        ${generateConfig} | yggdrasil -normaliseconf -useconf > /run/yggdrasil/yggdrasil.conf
-      '';
+      preStart =
+        (if configProvided || configFileProvided || cfg.persistentKeys then
+          "echo "
+
+          + (lib.optionalString configProvided
+            "'${builtins.toJSON cfg.config}'")
+          + (lib.optionalString configFileProvided "$(cat ${cfg.configFile})")
+          + (lib.optionalString cfg.persistentKeys "$(cat ${keysPath})")
+          + " | ${pkgs.jq}/bin/jq -s add | ${binYggdrasil} -normaliseconf -useconf"
+        else
+          "${binYggdrasil} -genconf") + " > /run/yggdrasil/yggdrasil.conf";
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/yggdrasil -useconffile /run/yggdrasil/yggdrasil.conf";
+        ExecStart =
+          "${binYggdrasil} -useconffile /run/yggdrasil/yggdrasil.conf";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "always";
 
+        Group = cfg.group;
         RuntimeDirectory = "yggdrasil";
-        RuntimeDirectoryMode = "0700";
-        BindReadOnlyPaths = mkIf configFileProvided
-          [ "${cfg.configFile}" ];
+        RuntimeDirectoryMode = "0750";
+        BindReadOnlyPaths = lib.optional configFileProvided cfg.configFile
+          ++ lib.optional cfg.persistentKeys keysPath;
 
         # TODO: as of yggdrasil 0.3.8 and systemd 243, yggdrasil fails
         # to set up the network adapter when DynamicUser is set.  See
@@ -182,6 +194,9 @@ in {
 
     # Make yggdrasilctl available on the command line.
     environment.systemPackages = [ cfg.package ];
+  });
+  meta = {
+    doc = ./yggdrasil.xml;
+    maintainers = with lib.maintainers; [ gazally ehmry ];
   };
-  meta.maintainers = with lib.maintainers; [ gazally ];
 }

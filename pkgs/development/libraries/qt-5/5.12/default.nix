@@ -38,14 +38,14 @@ let
   mirror = "https://download.qt.io";
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; } // {
     # Community port of the now unmaintained upstream qtwebkit.
-    qtwebkit = {
+    qtwebkit = rec {
       src = fetchFromGitHub {
-        owner = "annulen";
-        repo = "webkit";
-        rev = "4ce8ebc4094512b9916bfa5984065e95ac97c9d8";
-        sha256 = "05h1xnxzbf7sp3plw5dndsvpf6iigh0bi4vlj4svx0hkf1giakjf";
+        owner = "qtwebkit";
+        repo = "qtwebkit";
+        rev = "qtwebkit-${version}";
+        sha256 = "11lc5sk10d9cyg8jqkbgkqiap72b9rax7hy61nm90zw9749y2yfg";
       };
-      version = "5.212-alpha-01-26-2018";
+      version = "5.212.0-alpha4";
     };
   };
 
@@ -67,12 +67,22 @@ let
         ./qtbase.patch.d/0010-qtbase-qtpluginpath.patch
         ./qtbase.patch.d/0011-qtbase-assert.patch
         ./qtbase.patch.d/0012-fix-header_module.patch
+
+        # Ensure -I${includedir} is added to Cflags in pkg-config files.
+        # See https://github.com/NixOS/nixpkgs/issues/52457
+        ./qtbase.patch.d/0014-qtbase-pkg-config.patch
+
         # https://bugreports.qt.io/browse/QTBUG-81715
         # remove after updating to qt > 5.12.7
         (fetchpatch {
           name = "fix-qt5_make_output_file-cmake-macro.patch";
           url = "https://code.qt.io/cgit/qt/qtbase.git/patch/?id=8a3fde00bf53d99e9e4853e8ab97b0e1bcf74915";
           sha256 = "1gpcbdpyazdxnmldvhsf3pfwr2gjvi08x3j6rxf543rq01bp6cpx";
+        })
+        (fetchpatch {
+          name = "QTBUG-78937.patch";
+          url = "https://code.qt.io/cgit/qt/qtbase.git/patch/?id=67a9c600ad14ee44501a6df3509daa8234b97606";
+          sha256 = "1jiky1w9j8rka78r4q0yabb8w2l5j6csdjysynz7gs1ry4xjfdxd";
         })
       ];
     qtdeclarative = [ ./qtdeclarative.patch ];
@@ -87,8 +97,10 @@ let
         url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qtbug-77037-workaround.patch?h=packages/qt5-webengine&id=fc77d6b3d5ec74e421b58f199efceb2593cbf951";
         sha256 = "1gv733qfdn9746nbqqxzyjx4ijjqkkb7zb71nxax49nna5bri3am";
       })
-    ]
-      ++ optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
+    ] ++ optionals stdenv.isDarwin [
+      ./qtwebengine-darwin-no-platform-check.patch
+      ./qtwebengine-darwin-fix-failed-static-assertion.patch
+    ];
     qtwebkit = [ ./qtwebkit.patch ]
       ++ optionals stdenv.isDarwin [
         ./qtwebkit-darwin-no-readline.patch
@@ -134,6 +146,7 @@ let
       qtconnectivity = callPackage ../modules/qtconnectivity.nix {};
       qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
       qtdoc = callPackage ../modules/qtdoc.nix {};
+      qtgamepad = callPackage ../modules/qtgamepad.nix {};
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
       qtlocation = callPackage ../modules/qtlocation.nix {};
@@ -147,9 +160,11 @@ let
       qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
       qtscript = callPackage ../modules/qtscript.nix {};
       qtsensors = callPackage ../modules/qtsensors.nix {};
+      qtserialbus = callPackage ../modules/qtserialbus.nix {};
       qtserialport = callPackage ../modules/qtserialport.nix {};
       qtspeech = callPackage ../modules/qtspeech.nix {};
       qtsvg = callPackage ../modules/qtsvg.nix {};
+      qtscxml = callPackage ../modules/qtscxml.nix {};
       qttools = callPackage ../modules/qttools.nix {};
       qttranslations = callPackage ../modules/qttranslations.nix {};
       qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix {};
@@ -165,7 +180,7 @@ let
 
       env = callPackage ../qt-env.nix {};
       full = env "qt-full-${qtbase.version}" ([
-        qtcharts qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
+        qtcharts qtconnectivity qtdeclarative qtdoc qtgamepad qtgraphicaleffects
         qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
         qtscript qtsensors qtserialport qtsvg qttools qttranslations
         qtvirtualkeyboard qtwebchannel qtwebengine qtwebkit qtwebsockets

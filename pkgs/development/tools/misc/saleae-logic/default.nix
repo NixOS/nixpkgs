@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     comment = "Software for Saleae logic analyzers";
     desktopName = "Saleae Logic";
     genericName = "Logic analyzer";
-    categories = "Application;Development";
+    categories = "Development";
   };
 
   buildInputs = [ unzip ];
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Software for Saleae logic analyzers";
-    homepage = https://www.saleae.com/;
+    homepage = "https://www.saleae.com/";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

@@ -7,6 +7,7 @@ let
     SigningPrivateKey = "fe3add8da35316c05f6d90d3ca79bd2801e6ccab6d37e5339fef4152589398abe2c43349083bc1e998e4ec4535b4c6a8f44ca9a5a8e07336561267253b2be5f4";
   };
   bobIp6 = "201:ebbd:bde9:f138:c302:4afa:1fb6:a19a";
+  bobPrefix = "301:ebbd:bde9:f138";
   bobConfig = {
     InterfacePeers = {
       eth1 = [ "tcp://192.168.1.200:12345" ];
@@ -18,6 +19,7 @@ let
     SigningPublicKey = "de111da0ec781e45bf6c63ecb45a78c24d7d4655abfaeea83b26c36eb5c0fd5b";
     SigningPrivateKey = "2a6c21550f3fca0331df50668ffab66b6dce8237bcd5728e571e8033b363e247de111da0ec781e45bf6c63ecb45a78c24d7d4655abfaeea83b26c36eb5c0fd5b";
   };
+  danIp6 = bobPrefix + "::2";
 
 in import ./make-test-python.nix ({ pkgs, ...} : {
   name = "yggdrasil";
@@ -69,6 +71,41 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
                          text = builtins.toJSON bobConfig;
                        });
         };
+
+        boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
+
+        networking = {
+          bridges.br0.interfaces = [ ];
+          interfaces.br0 = {
+            ipv6.addresses = [{
+              address = bobPrefix + "::1";
+              prefixLength = 64;
+            }];
+          };
+        };
+
+        # dan is a node inside a container running on bob's host.
+        containers.dan = {
+          autoStart = true;
+          privateNetwork = true;
+          hostBridge = "br0";
+          config = { config, pkgs, ... }: {
+            networking.interfaces.eth0.ipv6 = {
+              addresses = [{
+                address = bobPrefix + "::2";
+                prefixLength = 64;
+              }];
+              routes = [{
+                address = "200::";
+                prefixLength = 7;
+                via = bobPrefix + "::1";
+              }];
+            };
+            services.httpd.enable = true;
+            services.httpd.adminAddr = "foo@example.org";
+            networking.firewall.allowedTCPPorts = [ 80 ];
+          };
+        };
       };
 
     # Carol only does local peering.  Carol's yggdrasil config is all Nix.
@@ -85,6 +122,7 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
             MulticastInterfaces = [ "eth1" ];
             LinkLocalTCPPort = 43210;
           };
+          persistentKeys = true;
         };
       };
     };
@@ -99,7 +137,7 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
 
       bob.start()
       carol.start()
-      bob.wait_for_unit("yggdrasil.service")
+      bob.wait_for_unit("default.target")
       carol.wait_for_unit("yggdrasil.service")
 
       ip_addr_show = "ip -o -6 addr show dev ygg0 scope global"
@@ -116,10 +154,13 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
 
       carol.succeed("ping -c 1 ${aliceIp6}")
       carol.succeed("ping -c 1 ${bobIp6}")
+      carol.succeed("ping -c 1 ${bobPrefix}::1")
+      carol.succeed("ping -c 8 ${danIp6}")
 
       carol.fail("journalctl -u dhcpcd | grep ygg0")
 
       alice.wait_for_unit("httpd.service")
       carol.succeed("curl --fail -g http://[${aliceIp6}]")
+      carol.succeed("curl --fail -g http://[${danIp6}]")
     '';
 })

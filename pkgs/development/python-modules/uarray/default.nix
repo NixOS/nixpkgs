@@ -17,11 +17,11 @@
 
 buildPythonPackage rec {
   pname = "uarray";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0j2pin54pwm1vdgza8irxcjb2za7h41c0ils04afssdn59cixslx";
+    sha256 = "fa63ae7034833a99bc1628d3cd5501d4d00f2e6437b6cbe73f710dcf212a6bea";
   };
 
   doCheck = false; # currently has circular dependency module import, remove when bumping to >0.5.1
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Universal array library";
-    homepage = https://github.com/Quansight-Labs/uarray;
+    homepage = "https://github.com/Quansight-Labs/uarray";
     license = licenses.bsd0;
     maintainers = [ maintainers.costrouc ];
   };

@@ -36,7 +36,7 @@ stdenv.mkDerivation {
       parallel or distributed applications.
     '';
 
-    homepage = http://vite.gforge.inria.fr/;
+    homepage = "http://vite.gforge.inria.fr/";
     license = stdenv.lib.licenses.cecill20;
     maintainers = with stdenv.lib.maintainers; [ ];
     platforms = stdenv.lib.platforms.linux;

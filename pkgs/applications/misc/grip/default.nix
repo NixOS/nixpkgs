@@ -2,11 +2,11 @@
 , curl, cdparanoia, libid3tag, ncurses, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "grip-4.1.0";
+  name = "grip-4.1.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/grip/${name}.tar.gz";
-    sha256 = "0iy7bcyrxm7zyrxah06qyxdshkgq6yqkadlw211j2qzld38a79j5";
+    sha256 = "1sbjgawb7qrinixybwi0adk7mpdfb565gkffp5gxxsw8fqd068fs";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "GTK-based audio CD player/ripper";
-    homepage = http://nostatic.org/grip;
+    homepage = "http://nostatic.org/grip";
     license = stdenv.lib.licenses.gpl2;
 
     maintainers = with stdenv.lib.maintainers; [ marcweber peti ];

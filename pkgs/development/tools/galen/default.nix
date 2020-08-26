@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://galenframework.com;
+    homepage = "http://galenframework.com";
     description = "Automated layout testing for websites";
     license = licenses.asl20;
     maintainers = [ ];

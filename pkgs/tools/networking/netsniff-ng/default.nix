@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "netsniff-ng";
-  version = "0.6.6";
+  version = "0.6.7";
 
   # Upstream recommends and supports git
   src = fetchFromGitHub {
     repo = pname;
     owner = pname;
     rev = "v${version}";
-    sha256 = "0spp8dl4i5xcqfbqxxcpdf3gwcmyf4ywl1dd79w6gzbr07p894p5";
+    sha256 = "1jvihq30cwlpjqwny0lcrciysn40wscq6xik3s9b81nw2s7wiyqr";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper bison flex ];
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       to user space and vice versa. The toolkit can be used for network
       development and analysis, debugging, auditing or network reconnaissance.
     '';
-    homepage = http://netsniff-ng.org/;
+    homepage = "http://netsniff-ng.org/";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

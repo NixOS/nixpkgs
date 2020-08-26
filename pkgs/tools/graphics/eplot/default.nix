@@ -39,7 +39,7 @@ stdenv.mkDerivation {
       This package also includes the complementary 'ec' tool (say "extract
       column").
     '';
-    homepage = http://liris.cnrs.fr/christian.wolf/software/eplot/;
+    homepage = "http://liris.cnrs.fr/christian.wolf/software/eplot/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];

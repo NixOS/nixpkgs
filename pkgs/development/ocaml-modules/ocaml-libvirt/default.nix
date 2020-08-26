@@ -23,13 +23,13 @@ stdenv.mkDerivation rec {
     autoconf
   '';
 
-  buildPhase = if stdenv.cc.isClang then "make all opt CPPFLAGS=-Wno-error" else "make all opt";
+  buildPhase = "make all opt CPPFLAGS=-Wno-error";
 
   installPhase = "make install-opt";
 
   meta = with stdenv.lib; {
     description = "OCaml bindings for libvirt";
-    homepage = https://libvirt.org/ocaml/;
+    homepage = "https://libvirt.org/ocaml/";
     license = licenses.gpl2;
     maintainers = [ maintainers.volth ];
     platforms = ocaml.meta.platforms or [];

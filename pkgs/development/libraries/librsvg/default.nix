@@ -1,22 +1,25 @@
-{ lib, stdenv, fetchurl, pkgconfig, glib, gdk-pixbuf, pango, cairo, libxml2, libgsf
-, bzip2, libcroco, libintl, darwin, rustc, cargo, gnome3
+{ lib, stdenv, fetchurl, pkgconfig, glib, gdk-pixbuf, pango, cairo, libxml2
+, bzip2, libintl, darwin, rustc, cargo, gnome3
 , vala, gobject-introspection }:
 
 let
   pname = "librsvg";
-  version = "2.46.4";
+  version = "2.48.8";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0afc82nsxc6kw136xid4vcq9kmq4rmgzzk8bh2pvln2cnvirwnxl";
+    sha256 = "14i6xzghcidv64cyd3g0wdjbl82rph737yxn9s3x29nzpcjs707l";
   };
 
   outputs = [ "out" "dev" "installedTests" ];
 
-  buildInputs = [ libxml2 libgsf bzip2 libcroco pango libintl ];
+  buildInputs = [ libxml2 bzip2 pango libintl ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.libobjc ];
+
+  NIX_LDFLAGS = if stdenv.isDarwin then "-lobjc" else null;
 
   propagatedBuildInputs = [ glib gdk-pixbuf cairo ];
 
@@ -77,9 +80,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A small library to render SVG images to Cairo surfaces";
-    homepage = https://wiki.gnome.org/Projects/LibRsvg;
+    homepage = "https://wiki.gnome.org/Projects/LibRsvg";
     license = licenses.lgpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

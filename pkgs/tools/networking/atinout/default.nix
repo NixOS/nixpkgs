@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://atinout.sourceforge.net;
+    homepage = "http://atinout.sourceforge.net";
     description = "Tool for talking to modems";
     platforms = platforms.unix;
     license = licenses.gpl3;

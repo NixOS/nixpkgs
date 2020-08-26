@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Should assertions in Python as clear and readable as possible";
-    homepage = http://www.should-dsl.info/;
+    homepage = "http://www.should-dsl.info/";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];
   };

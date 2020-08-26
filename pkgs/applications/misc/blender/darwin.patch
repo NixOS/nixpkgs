@@ -9,7 +9,7 @@ diff a/build_files/cmake/platform/platform_apple.cmake b/build_files/cmake/platf
  endif()
  
  if(WITH_OPENAL)
-@@ -79,7 +78,7 @@ endif()
+@@ -86,7 +85,7 @@ endif()
  if(WITH_CODEC_SNDFILE)
    set(LIBSNDFILE ${LIBDIR}/sndfile)
    set(LIBSNDFILE_INCLUDE_DIRS ${LIBSNDFILE}/include)
@@ -18,7 +18,7 @@ diff a/build_files/cmake/platform/platform_apple.cmake b/build_files/cmake/platf
    set(LIBSNDFILE_LIBPATH ${LIBSNDFILE}/lib ${LIBDIR}/ffmpeg/lib)  # TODO, deprecate
  endif()
  
-@@ -90,7 +89,7 @@ if(WITH_PYTHON)
+@@ -97,7 +96,7 @@ if(WITH_PYTHON)
      # normally cached but not since we include them with blender
      set(PYTHON_INCLUDE_DIR "${LIBDIR}/python/include/python${PYTHON_VERSION}m")
      set(PYTHON_EXECUTABLE "${LIBDIR}/python/bin/python${PYTHON_VERSION}m")
@@ -27,7 +27,7 @@ diff a/build_files/cmake/platform/platform_apple.cmake b/build_files/cmake/platf
      set(PYTHON_LIBPATH "${LIBDIR}/python/lib/python${PYTHON_VERSION}")
      # set(PYTHON_LINKFLAGS "-u _PyMac_Error")  # won't  build with this enabled
    else()
-@@ -155,10 +154,7 @@ if(WITH_CODEC_FFMPEG)
+@@ -162,10 +161,7 @@ if(WITH_CODEC_FFMPEG)
    set(FFMPEG_INCLUDE_DIRS ${FFMPEG}/include)
    set(FFMPEG_LIBRARIES
      avcodec avdevice avformat avutil
@@ -39,7 +39,7 @@ diff a/build_files/cmake/platform/platform_apple.cmake b/build_files/cmake/platf
    set(FFMPEG_LIBPATH ${FFMPEG}/lib)
  endif()
  
-@@ -199,14 +195,14 @@ if(WITH_OPENCOLLADA)
+@@ -206,14 +202,14 @@ if(WITH_OPENCOLLADA)
    set(OPENCOLLADA ${LIBDIR}/opencollada)
  
    set(OPENCOLLADA_INCLUDE_DIRS
@@ -60,16 +60,7 @@ diff a/build_files/cmake/platform/platform_apple.cmake b/build_files/cmake/platf
    set(OPENCOLLADA_LIBRARIES
      OpenCOLLADASaxFrameworkLoader
      -lOpenCOLLADAFramework
-@@ -215,7 +211,7 @@ if(WITH_OPENCOLLADA)
-     -lMathMLSolver
-     -lGeneratedSaxParser
-     -lbuffer -lftoa -lUTF
--    ${OPENCOLLADA_LIBPATH}/libxml2.a
-+    xml2
-   )
-   # PCRE is bundled with openCollada
-   # set(PCRE ${LIBDIR}/pcre)
-@@ -276,14 +272,13 @@ if(WITH_BOOST)
+@@ -277,14 +273,13 @@ if(WITH_BOOST)
  endif()
  
  if(WITH_INTERNATIONAL OR WITH_CODEC_FFMPEG)
@@ -85,7 +76,7 @@ diff a/build_files/cmake/platform/platform_apple.cmake b/build_files/cmake/platf
      ${PNG_LIBRARIES}
      ${JPEG_LIBRARIES}
      ${TIFF_LIBRARY}
-@@ -306,7 +301,7 @@ endif()
+@@ -307,7 +302,7 @@ endif()
  if(WITH_OPENCOLORIO)
    set(OPENCOLORIO ${LIBDIR}/opencolorio)
    set(OPENCOLORIO_INCLUDE_DIRS ${OPENCOLORIO}/include)

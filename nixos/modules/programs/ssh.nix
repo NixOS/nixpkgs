@@ -61,12 +61,9 @@ in
         '';
       };
 
-      # Allow DSA keys for now. (These were deprecated in OpenSSH 7.0.)
       pubkeyAcceptedKeyTypes = mkOption {
         type = types.listOf types.str;
-        default = [
-          "+ssh-dss"
-        ];
+        default = [];
         example = [ "ssh-ed25519" "ssh-rsa" ];
         description = ''
           Specifies the key types that will be used for public key authentication.
@@ -75,9 +72,7 @@ in
 
       hostKeyAlgorithms = mkOption {
         type = types.listOf types.str;
-        default = [
-          "+ssh-dss"
-        ];
+        default = [];
         example = [ "ssh-ed25519" "ssh-rsa" ];
         description = ''
           Specifies the host key algorithms that the client wants to use in order of preference.
@@ -199,6 +194,33 @@ in
         '';
       };
 
+      kexAlgorithms = mkOption {
+        type = types.nullOr (types.listOf types.str);
+        default = null;
+        example = [ "curve25519-sha256@libssh.org" "diffie-hellman-group-exchange-sha256" ];
+        description = ''
+          Specifies the available KEX (Key Exchange) algorithms.
+        '';
+      };
+
+      ciphers = mkOption {
+        type = types.nullOr (types.listOf types.str);
+        default = null;
+        example = [ "chacha20-poly1305@openssh.com" "aes256-gcm@openssh.com" ];
+        description = ''
+          Specifies the ciphers allowed and their order of preference.
+        '';
+      };
+
+      macs = mkOption {
+        type = types.nullOr (types.listOf types.str);
+        default = null;
+        example = [ "hmac-sha2-512-etm@openssh.com" "hmac-sha1" ];
+        description = ''
+          Specifies the MAC (message authentication code) algorithms in order of preference. The MAC algorithm is used
+          for data integrity protection.
+        '';
+      };
     };
 
   };
@@ -237,6 +259,9 @@ in
 
         ${optionalString (cfg.pubkeyAcceptedKeyTypes != []) "PubkeyAcceptedKeyTypes ${concatStringsSep "," cfg.pubkeyAcceptedKeyTypes}"}
         ${optionalString (cfg.hostKeyAlgorithms != []) "HostKeyAlgorithms ${concatStringsSep "," cfg.hostKeyAlgorithms}"}
+        ${optionalString (cfg.kexAlgorithms != null) "KexAlgorithms ${concatStringsSep "," cfg.kexAlgorithms}"}
+        ${optionalString (cfg.ciphers != null) "Ciphers ${concatStringsSep "," cfg.ciphers}"}
+        ${optionalString (cfg.macs != null) "MACs ${concatStringsSep "," cfg.macs}"}
       '';
 
     environment.etc."ssh/ssh_known_hosts".text = knownHostsText;

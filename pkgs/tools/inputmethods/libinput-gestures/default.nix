@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/bulletmark/libinput-gestures;
+    homepage = "https://github.com/bulletmark/libinput-gestures";
     description = "Gesture mapper for libinput";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

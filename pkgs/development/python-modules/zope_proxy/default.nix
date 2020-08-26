@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "zope.proxy";
-  version = "4.3.3";
+  version = "4.3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dac4279aa05055d3897ab5e5ee5a7b39db121f91df65a530f8b1ac7f9bd93119";
+    sha256 = "a66a0d94e5b081d5d695e66d6667e91e74d79e273eee95c1747717ba9cb70792";
   };
 
   propagatedBuildInputs = [ zope_interface ];
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/zopefoundation/zope.proxy;
+    homepage = "https://github.com/zopefoundation/zope.proxy";
     description = "Generic Transparent Proxies";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];

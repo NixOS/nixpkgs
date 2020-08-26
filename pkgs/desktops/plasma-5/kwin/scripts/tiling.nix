@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "kwin-tiling";
-  version = "2.2";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "kwin-scripts";
     repo = "kwin-tiling";
     rev = "v${version}";
-    sha256 = "1sx64xv7g9yh3j26zxxrbndv79xam9jq0vs00fczgfv2n0m7j7bl";
+    sha256 = "095slpvipy0zcmbn0l7mdnl9g74jaafkr2gqi09b0by5fkvnbh37";
   };
 
   # This is technically not needed, but we might as well clean up

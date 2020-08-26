@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Assertion library for Python";
-    homepage = http://heynemann.github.io/preggy/;
+    homepage = "http://heynemann.github.io/preggy/";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];
   };

@@ -1,8 +1,10 @@
-{ stdenv, lib, fetchurl, autoPatchelfHook, dpkg, wrapGAppsHook
+{ stdenv, lib, fetchurl, autoPatchelfHook, dpkg, wrapGAppsHook, nixosTests
 , gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib
-, cups, expat, systemd, libnotify, libuuid, at-spi2-core, libappindicator-gtk3
+, cups, expat, libuuid, at-spi2-core, libappindicator-gtk3
+# Runtime dependencies:
+, systemd, libnotify, libdbusmenu
 # Unfortunately this also overwrites the UI language (not just the spell
 # checking language!):
 , hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
@@ -23,7 +25,7 @@ let
       else "");
 in stdenv.mkDerivation rec {
   pname = "signal-desktop";
-  version = "1.32.1"; # Please backport all updates to the stable channel.
+  version = "1.34.5"; # Please backport all updates to the stable channel.
   # All releases have a limited lifetime and "expire" 90 days after the release.
   # When releases "expire" the application becomes unusable until an update is
   # applied. The expiration date for the current release can be extracted with:
@@ -33,7 +35,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "0sfzz1z57l20prj2s8hdl8ip1hrlzb5fqnccqcfd101a6mjnp9i9";
+    sha256 = "1s8nksrkfivsf9r460ifxsf8l7bnc1zix5yj39kvnx0mbync8lg1";
   };
 
   nativeBuildInputs = [
@@ -81,6 +83,7 @@ in stdenv.mkDerivation rec {
   runtimeDependencies = [
     systemd.lib
     libnotify
+    libdbusmenu
   ];
 
   unpackPhase = "dpkg-deb -x $src .";
@@ -120,6 +123,9 @@ in stdenv.mkDerivation rec {
 
     autoPatchelf --no-recurse -- $out/lib/Signal/
   '';
+
+  # Tests if the application launches and waits for "Link your phone to Signal Desktop":
+  passthru.tests.application-launch = nixosTests.signal-desktop;
 
   meta = {
     description = "Private, simple, and secure messenger";

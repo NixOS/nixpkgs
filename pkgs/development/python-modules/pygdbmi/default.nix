@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , gdb
@@ -19,6 +20,9 @@ buildPythonPackage rec {
 
   checkInputs = [ gdb ];
 
+  # tests require gcc for some reason
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   postPatch = ''
     # tries to execute flake8,
     # which is likely to break on flake8 updates
@@ -27,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Parse gdb machine interface output with Python";
-    homepage = https://github.com/cs01/pygdbmi;
+    homepage = "https://github.com/cs01/pygdbmi";
     license = licenses.mit;
     maintainers = [ maintainers.mic92 ];
   };

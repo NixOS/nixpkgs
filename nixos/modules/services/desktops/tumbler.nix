@@ -18,6 +18,10 @@ in
       "")
   ];
 
+  meta = {
+    maintainers = with maintainers; [ worldofpeace ];
+  };
+
   ###### interface
 
   options = {

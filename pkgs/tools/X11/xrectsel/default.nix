@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Print the geometry of a rectangular screen region";
-    homepage = https://github.com/lolilolicon/xrectsel;
+    homepage = "https://github.com/lolilolicon/xrectsel";
     license = licenses.gpl3;
     maintainers = [ maintainers.guyonvarch ];
     platforms = platforms.linux;

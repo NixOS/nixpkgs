@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "numpydoc";
-  version = "0.9.2";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname;
     inherit version;
-    sha256 = "9140669e6b915f42c6ce7fef704483ba9b0aaa9ac8e425ea89c76fe40478f642";
+    sha256 = "e481c0799dfda208b6a2c2cb28757fa6b6cbc4d6e43722173697996cf556df7f";
   };
 
   checkInputs = [ nose pytest ];

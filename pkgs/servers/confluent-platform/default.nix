@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.confluent.io/;
+    homepage = "https://www.confluent.io/";
     description = "Confluent event streaming platform based on Apache Kafka";
     license = licenses.asl20;
     maintainers = [ maintainers.offline ];

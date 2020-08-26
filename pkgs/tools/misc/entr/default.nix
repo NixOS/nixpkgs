@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "entr";
-  version = "4.4";
+  version = "4.6";
 
   src = fetchurl {
     url = "http://entrproject.org/code/${pname}-${version}.tar.gz";
-    sha256 = "1x2hyc8vc5dz6k7b3291vxz36wllhinvqrb0d8zx9bv0ydj6qmjl";
+    sha256 = "0vcflgagna2gdlpjsd6748c73j2829xlhm276mi838zl1n121phn";
   };
 
   postPatch = ''
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = http://entrproject.org/;
+    homepage = "http://entrproject.org/";
     description = "Run arbitrary commands when files change";
     license = licenses.isc;
     platforms = platforms.all;

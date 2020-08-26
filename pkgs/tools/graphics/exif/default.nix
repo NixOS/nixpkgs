@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libexif popt libintl ];
 
   meta = with stdenv.lib; {
-    homepage = https://libexif.github.io;
+    homepage = "https://libexif.github.io";
     description = "A utility to read and manipulate EXIF data in digital photographs";
     platforms = platforms.unix;
     license = licenses.lgpl21;

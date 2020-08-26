@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A scikit offering extra ode/dae solvers, as an extension to what is available in scipy";
-    homepage = https://github.com/bmcage/odes;
+    homepage = "https://github.com/bmcage/odes";
     license = licenses.bsd3;
     maintainers = with maintainers; [ flokli idontgetoutmuch ];
     platforms = [ "aarch64-linux" "x86_64-linux" "x86_64-darwin" ];

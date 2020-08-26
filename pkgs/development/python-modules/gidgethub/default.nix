@@ -11,22 +11,26 @@
 , tornado
 , aiohttp
 , uritemplate
+, pyjwt
 }:
 
 buildPythonPackage rec {
   pname = "gidgethub";
-  version = "3.2.0";
+  version = "4.1.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8f4b69063a256994d38243cc0eba4e1453017b5b8b04a173216d02d47ffc3989";
+    sha256 = "cfabfa696d422ee91eaf1e3f01ea75e576721233cc3ea8badc7d86c30061df8e";
   };
 
   nativeBuildInputs = [ setuptools pytestrunner ];
   checkInputs = [ pytest pytest-asyncio twisted treq tornado aiohttp ];
-  propagatedBuildInputs = [ uritemplate ];
+  propagatedBuildInputs = [
+    uritemplate
+    pyjwt
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -38,7 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An async GitHub API library";
-    homepage = https://github.com/brettcannon/gidgethub;
+    homepage = "https://github.com/brettcannon/gidgethub";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

@@ -44,7 +44,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.uberent.com/pa/;
+    homepage = "http://www.uberent.com/pa/";
     description = "Next-generation RTS that takes the genre to a planetary scale";
     license = stdenv.lib.licenses.unfree;
     platforms = platforms.linux;

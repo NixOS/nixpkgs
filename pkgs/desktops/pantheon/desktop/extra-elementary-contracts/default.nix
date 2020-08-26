@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Extra contractor files for elementary";
-    homepage = https://github.com/worldofpeace/extra-elementary-contracts;
+    homepage = "https://github.com/worldofpeace/extra-elementary-contracts";
     license = licenses.gpl2;
     maintainers = with maintainers; [ worldofpeace ];
     platforms = platforms.linux;

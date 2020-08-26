@@ -56,7 +56,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "facetimehd firmware";
-    homepage = https://support.apple.com/kb/DL1877;
+    homepage = "https://support.apple.com/kb/DL1877";
     license = licenses.unfree;
     maintainers = with maintainers; [ womfoo grahamc ];
     platforms = [ "i686-linux" "x86_64-linux" ];

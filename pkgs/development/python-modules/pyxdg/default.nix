@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 }:
 
 buildPythonPackage rec {
@@ -15,8 +16,16 @@ buildPythonPackage rec {
   # error: invalid command 'test'
   doCheck = false;
 
+  patches = [ 
+    # see: https://gitlab.freedesktop.org/xdg/pyxdg/-/merge_requests/5 
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/xdg/pyxdg/-/commit/78405aaa34463db2c6f33ca28ae2293dd3bb1e91.patch";
+      sha256 = "17cjax546rkqv5kvwczjqjdd6vmlvcxjanz0296dlfq23j2wbx63";
+    })
+  ];
+
   meta = with stdenv.lib; {
-    homepage = http://freedesktop.org/wiki/Software/pyxdg;
+    homepage = "http://freedesktop.org/wiki/Software/pyxdg";
     description = "Contains implementations of freedesktop.org standards";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ domenkozar ];

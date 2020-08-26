@@ -7,5 +7,6 @@
     "elm-test",
     "elm-upgrade",
     "elm-verify-examples",
-    "elm-xref"
+    "elm-xref",
+    "create-elm-app"
 ]

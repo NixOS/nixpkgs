@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   installPhase = "true";
   
   meta = {
-    homepage = http://www.lsi.com/;
+    homepage = "http://www.lsi.com/";
     description = "LSI Logic Fusion MPT command line management tool";
     license = stdenv.lib.licenses.unfree;
   };

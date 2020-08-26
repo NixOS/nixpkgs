@@ -13,14 +13,14 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "signing-party";
-  version = "2.10";
+  version = "2.11";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "signing-party-team";
     repo = "signing-party";
     rev = "v${version}";
-    sha256 = "0lq8nmwjmysry0n4jg6vb7bh0lagbyb9pa11ii3s41p1mhzchf2r";
+    sha256 = "1aig5ssabzbk4mih7xd04vgr931bw0flbi8dz902wlr610gyv5s5";
   };
 
   # TODO: Get this patch upstream...
@@ -87,6 +87,8 @@ in stdenv.mkDerivation rec {
     install -D -m444 gpgparticipants/gpgparticipants.1 $out/share/man/man1/gpgparticipants.1;
     install -D -m555 gpgparticipants/gpgparticipants-prefill $out/bin/gpgparticipants-prefill;
     install -D -m444 gpgparticipants/gpgparticipants-prefill.1 $out/share/man/man1/gpgparticipants-prefill.1;
+    install -D -m555 gpgparticipants/gpgparticipants-filter $out/bin/gpgparticipants-filter;
+    install -D -m444 gpgparticipants/gpgparticipants-filter.1 $out/share/man/man1/gpgparticipants-filter.1;
 
     # gpgwrap: a passphrase wrapper
     install -D -m555 gpgwrap/bin/gpgwrap $out/bin/gpgwrap;
@@ -153,6 +155,9 @@ in stdenv.mkDerivation rec {
 
 #    wrapProgram $out/bin/gpgparticipants-prefill
 
+    wrapProgram $out/bin/gpgparticipants-filter --prefix PATH ":" \
+      "${stdenv.lib.makeBinPath [ gnupg ]}"
+
     wrapProgram $out/bin/gpgsigs --set PERL5LIB \
       ${perlPackages.makePerlPath GnuPGInterfaceRuntimeDependencies} \
       --prefix PATH ":" \
@@ -192,7 +197,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://salsa.debian.org/signing-party-team/signing-party;
+    homepage = "https://salsa.debian.org/signing-party-team/signing-party";
     description = "A collection of several projects relating to OpenPGP";
     longDescription = ''
       This is a collection of several projects relating to OpenPGP.

@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Access HMI, AIA and MDI data with Python";
-    homepage = https://github.com/sunpy/drms;
+    homepage = "https://github.com/sunpy/drms";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

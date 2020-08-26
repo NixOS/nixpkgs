@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, curl, libevent, libiconv, libxml2, openssl, pcre, zlib
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, curl, libevent, libiconv, libxml2, openssl, pcre, zlib
 , jabberSupport ? true, iksemel
 , ldapSupport ? true, openldap
 , odbcSupport ? true, unixODBC
@@ -21,11 +21,11 @@ in
       inherit version;
 
       src = fetchurl {
-        url = "mirror://sourceforge/zabbix/ZABBIX%20Latest%20Stable/${version}/zabbix-${version}.tar.gz";
+        url = "https://cdn.zabbix.com/zabbix/sources/stable/${stdenv.lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
         inherit sha256;
       };
 
-      nativeBuildInputs = [ pkgconfig ];
+      nativeBuildInputs = [ autoreconfHook pkgconfig ];
       buildInputs = [
         curl
         libevent
@@ -63,6 +63,13 @@ in
 
       prePatch = ''
         find database -name data.sql -exec sed -i 's|/usr/bin/||g' {} +
+      '';
+
+      preAutoreconf = ''
+        for i in $(find . -type f -name "*.m4"); do
+          substituteInPlace $i \
+            --replace 'test -x "$PKG_CONFIG"' 'type -P "$PKG_CONFIG" >/dev/null'
+        done
       '';
 
       postInstall = ''

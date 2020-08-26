@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Sample Rate Converter for audio";
-    homepage = http://sox.sourceforge.net/;
+    homepage = "http://sox.sourceforge.net/";
     maintainers = [ lib.maintainers.marcweber ];
     license = if enableAMR then lib.licenses.unfree else lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

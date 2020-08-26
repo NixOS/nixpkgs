@@ -30,6 +30,13 @@ args@{
 , removeRulesCC ? true
 , removeLocalConfigCc ? true
 , removeLocal ? true
+
+# Use build --nobuild instead of fetch. This allows fetching the dependencies
+# required for the build as configured, rather than fetching all the dependencies
+# which may not work in some situations (e.g. Java code which ends up relying on
+# Debian-specific /usr/share/java paths, but doesn't in the configured build).
+, fetchConfigured ? false
+
 , ...
 }:
 
@@ -42,8 +49,10 @@ in stdenv.mkDerivation (fBuildAttrs // {
   inherit name bazelFlags bazelBuildFlags bazelFetchFlags bazelTarget;
 
   deps = stdenv.mkDerivation (fFetchAttrs // {
-    name = "${name}-deps";
+    name = "${name}-deps.tar.gz";
     inherit bazelFlags bazelBuildFlags bazelFetchFlags bazelTarget;
+
+    impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
     nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [] ++ [ bazel ];
 
@@ -77,7 +86,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
       bazel \
         --output_base="$bazelOut" \
         --output_user_root="$bazelUserRoot" \
-        fetch \
+        ${if fetchConfigured then "build --nobuild" else "fetch"} \
         --loading_phase_threads=1 \
         $bazelFlags \
         $bazelFetchFlags \
@@ -110,7 +119,8 @@ in stdenv.mkDerivation (fBuildAttrs // {
       # platforms -> NIX_BUILD_TOP/tmp/install/35282f5123611afa742331368e9ae529/_embedded_binaries/platforms
       find $bazelOut/external -maxdepth 1 -type l | while read symlink; do
         name="$(basename "$symlink")"
-        rm "$symlink" "$bazelOut/external/@$name.marker"
+        rm "$symlink"
+        test -f "$bazelOut/external/@$name.marker" && rm "$bazelOut/external/@$name.marker"
       done
 
       # Patching symlinks to remove build directory reference
@@ -120,9 +130,9 @@ in stdenv.mkDerivation (fBuildAttrs // {
         ln -sf "$new_target" "$symlink"
       done
 
-      cp -r $bazelOut/external $out
+      echo '${bazel.name}' > $bazelOut/external/.nix-bazel-version
 
-      echo '${bazel.name}' > $out/.nix-bazel-version
+      (cd $bazelOut/ && tar czf $out --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner external/)
 
       runHook postInstall
     '';
@@ -130,7 +140,6 @@ in stdenv.mkDerivation (fBuildAttrs // {
     dontFixup = true;
     allowedRequisites = [];
 
-    outputHashMode = "recursive";
     outputHashAlgo = "sha256";
     outputHash = fetchAttrs.sha256;
   });
@@ -146,14 +155,15 @@ in stdenv.mkDerivation (fBuildAttrs // {
   preConfigure = ''
     mkdir -p "$bazelOut"
 
-    test "${bazel.name}" = "$(<$deps/.nix-bazel-version)" || {
+    (cd $bazelOut && tar xfz $deps)
+
+    test "${bazel.name}" = "$(<$bazelOut/external/.nix-bazel-version)" || {
       echo "fixed output derivation was built for a different bazel version" >&2
-      echo "     got: $(<$deps/.nix-bazel-version)" >&2
+      echo "     got: $(<$bazelOut/external/.nix-bazel-version)" >&2
       echo "expected: ${bazel.name}" >&2
       exit 1
     }
 
-    cp -r $deps $bazelOut/external
     chmod -R +w $bazelOut
     find $bazelOut -type l | while read symlink; do
       ln -sf $(readlink "$symlink" | sed "s,NIX_BUILD_TOP,$NIX_BUILD_TOP,") "$symlink"
@@ -181,9 +191,9 @@ in stdenv.mkDerivation (fBuildAttrs // {
     done
     linkopts=()
     host_linkopts=()
-    for flag in $NIX_LD_FLAGS; do
-      linkopts+=( "--linkopt=$flag" )
-      host_linkopts+=( "--host_linkopt=$flag" )
+    for flag in $NIX_LDFLAGS; do
+      linkopts+=( "--linkopt=-Wl,$flag" )
+      host_linkopts+=( "--host_linkopt=-Wl,$flag" )
     done
 
     BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \

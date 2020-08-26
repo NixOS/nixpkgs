@@ -15,7 +15,7 @@ in fetchzip {
   sha256 = "0xxyx0nkapviqaqmf3b610nq17k20afirvc72l32pfspsbxz8ybq";
 
   meta = with lib; {
-    homepage = https://github.com/i-tu/Hasklig;
+    homepage = "https://github.com/i-tu/Hasklig";
     description = "A font with ligatures for Haskell code based off Source Code Pro";
     license = licenses.ofl;
     platforms = platforms.all;

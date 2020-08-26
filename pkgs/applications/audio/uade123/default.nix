@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Plays old Amiga tunes through UAE emulation and cloned m68k-assembler Eagleplayer API";
-    homepage = http://zakalwe.fi/uade/;
+    homepage = "http://zakalwe.fi/uade/";
     license = licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.gnidorah ];
     platforms = stdenv.lib.platforms.unix;

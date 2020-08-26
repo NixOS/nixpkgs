@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "nbsmoke";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "070e999db3902a0c62a94d76de8fb98da21eaee22d9e90eb42f1636c87e1b805";
+    sha256 = "06as8vh17m0nkp3fpkp42m990a5zjfl2iaa17da99ksh7886mjpc";
   };
 
   propagatedBuildInputs = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Basic notebook checks and linting";
-    homepage = https://github.com/pyviz/nbsmoke;
+    homepage = "https://github.com/pyviz/nbsmoke";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

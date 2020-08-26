@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "exiftags-1.01";
 
   src = fetchurl {
-    url = https://johnst.org/sw/exiftags/exiftags-1.01.tar.gz;
+    url = "https://johnst.org/sw/exiftags/exiftags-1.01.tar.gz";
     sha256 = "194ifl6hybx2a5x8jhlh9i56k3qfc6p2l72z0ii1b7v0bzg48myr";
   };
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://johnst.org/sw/exiftags/;
+    homepage = "http://johnst.org/sw/exiftags/";
     description = "Displays EXIF data from JPEG files";
     license = stdenv.lib.licenses.free;
     maintainers = with stdenv.lib.maintainers; [viric];

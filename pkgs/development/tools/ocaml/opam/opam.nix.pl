@@ -123,7 +123,7 @@ print <<'EOF';
   meta = with stdenv.lib; {
     description = "A package manager for OCaml";
     homepage = "https://opam.ocaml.org/";
-    maintainers = [ maintainers.henrytill ];
+    maintainers = [ maintainers.henrytill maintainers.marsam ];
     platforms = platforms.all;
   };
 }

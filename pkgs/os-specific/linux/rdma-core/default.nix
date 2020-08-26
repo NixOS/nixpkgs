@@ -4,7 +4,7 @@
 } :
 
 let
-  version = "27.0";
+  version = "30.0";
 
 in stdenv.mkDerivation {
   pname = "rdma-core";
@@ -14,7 +14,7 @@ in stdenv.mkDerivation {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${version}";
-    sha256 = "04mhcrcmbwxcjhswlkhnr6m5nl2389jgjv6aqhd4v0x555cwnfvw";
+    sha256 = "1czfh6s0qz2cv2k7ha7nr9qiwcrj5lvwqnvyrvsds463m8ndpg12";
   };
 
   nativeBuildInputs = [ cmake pkgconfig pandoc docutils makeWrapper ];
@@ -26,11 +26,6 @@ in stdenv.mkDerivation {
   ];
 
   postPatch = ''
-    substituteInPlace providers/rxe/rxe_cfg.in \
-      --replace ethtool "${ethtool}/bin/ethtool" \
-      --replace 'ip addr' "${iproute}/bin/ip addr" \
-      --replace 'ip link' "${iproute}/bin/ip link"
-
     substituteInPlace srp_daemon/srp_daemon.sh.in \
       --replace /bin/rm rm
   '';
@@ -50,7 +45,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "RDMA Core Userspace Libraries and Daemons";
-    homepage = https://github.com/linux-rdma/rdma-core;
+    homepage = "https://github.com/linux-rdma/rdma-core";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ markuskowa ];

@@ -161,6 +161,10 @@ in
   i686-embedded = mapTestOnCross lib.systems.examples.i686-embedded embedded;
   x86_64-embedded = mapTestOnCross lib.systems.examples.x86_64-embedded embedded;
 
+  # we test `embedded` instead of `linuxCommon` because very few packages
+  # successfully cross-compile to Redox so far
+  x86_64-redox = mapTestOnCross lib.systems.examples.x86_64-unknown-redox embedded;
+
   /* Cross-built bootstrap tools for every supported platform */
   bootstrapTools = let
     tools = import ../stdenv/linux/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };

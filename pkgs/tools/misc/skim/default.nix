@@ -2,20 +2,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "skim";
-  version = "0.8.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "lotabout";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0b0x389khdqyzdb6mwbf31wdfn8xila756hb11l555iwipl271ci";
+    sha256 = "0paxrf03rqzahbpr4gnsj62vl09vcxvw248n9wzhjq14dqlwcr9w";
   };
 
   outputs = [ "out" "vim" ];
 
-  cargoSha256 = "0xcsj8wprp9r6s7r2d2fnbicrc5pfnnx1gxyrq2qkj3rwr1q8ndg";
+  cargoSha256 = "0rxxdad60fpwkb4wx5407ihd89wqpf2ldcnp7nsx17xh4brp1l9r";
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/skim.vim
   '';
 
@@ -39,6 +39,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lotabout/skim";
     license = licenses.mit;
     maintainers = with maintainers; [ dywedir ];
-    platforms = platforms.all;
   };
 }

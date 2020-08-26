@@ -7,8 +7,8 @@ with skawarePackages;
 
 buildPackage {
   pname = "execline";
-  version = "2.5.3.0";
-  sha256 = "0czdrv9m8mnx94nf28dafij6z03k4mbhbs6hccfaardfd5l5q805";
+  version = "2.6.1.0";
+  sha256 = "0mj565xml3hvw27finydms0s9abbbpgbr29vnr8gwi7zjzq7ck52";
 
   description = "A small scripting language, to be used in place of a shell in non-interactive scripts";
 
@@ -35,15 +35,21 @@ buildPackage {
     mv examples $doc/share/doc/execline/examples
 
     mv $bin/bin/execlineb $bin/bin/.execlineb-wrapped
-    cc \
+
+    # A wrapper around execlineb, which provides all execline
+    # tools on `execlineb`’s PATH.
+    # It is implemented as a C script, because on non-Linux,
+    # nested shebang lines are not supported.
+    # The -lskarnet has to come at the end to support static builds.
+    $CC \
       -O \
       -Wall -Wpedantic \
       -D "EXECLINEB_PATH()=\"$bin/bin/.execlineb-wrapped\"" \
       -D "EXECLINE_BIN_PATH()=\"$bin/bin\"" \
       -I "${skalibs.dev}/include" \
       -L "${skalibs.lib}/lib" \
-      -lskarnet \
       -o "$bin/bin/execlineb" \
-      ${./execlineb-wrapper.c}
+      ${./execlineb-wrapper.c} \
+      -lskarnet
   '';
 }

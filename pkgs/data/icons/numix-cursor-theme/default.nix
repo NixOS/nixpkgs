@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, inkscape, xcursorgen }:
+{ stdenv, fetchFromGitHub, inkscape_0, xcursorgen }:
 
 stdenv.mkDerivation rec {
   version = "1.1";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0p8h48wsy3z5dz9vdnp01fpn6q8ky0h74l5qgixlip557bsa1spi";
   };
 
-  nativeBuildInputs = [ inkscape xcursorgen ];
+  nativeBuildInputs = [ inkscape_0 xcursorgen ];
 
   buildPhase = ''
     patchShebangs .
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Numix cursor theme";
-    homepage = https://numixproject.github.io;
+    homepage = "https://numixproject.github.io";
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ offline ];

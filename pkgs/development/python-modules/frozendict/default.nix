@@ -13,7 +13,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/slezica/python-frozendict;
+    homepage = "https://github.com/slezica/python-frozendict";
     description = "An immutable dictionary";
     license = licenses.mit;
   };

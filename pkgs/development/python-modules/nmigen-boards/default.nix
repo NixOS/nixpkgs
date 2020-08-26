@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Board and connector definitions for nMigen";
-    homepage = https://github.com/nmigen/nmigen-boards;
+    homepage = "https://github.com/nmigen/nmigen-boards";
     license = licenses.bsd2;
     maintainers = with maintainers; [ emily ];
   };

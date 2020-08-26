@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
-    homepage = https://bitbucket.org/mpyne/game-music-emu/wiki/Home;
+    homepage = "https://bitbucket.org/mpyne/game-music-emu/wiki/Home";
     description = "A collection of video game music file emulators";
     license = licenses.lgpl21Plus;
     platforms = platforms.all;

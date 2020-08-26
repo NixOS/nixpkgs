@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A BitTorrent library used by KTorrent";
-    homepage    = https://www.kde.org/applications/internet/ktorrent/;
+    homepage    = "https://www.kde.org/applications/internet/ktorrent/";
     maintainers = with maintainers; [ eelco ];
     platforms   = platforms.linux;
   };

@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "SSHLibrary is a Robot Framework test library for SSH and SFTP";
-    homepage = https://github.com/robotframework/SSHLibrary;
+    homepage = "https://github.com/robotframework/SSHLibrary";
     license = licenses.asl20;
   };
 

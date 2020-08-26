@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A complete, cross-platform solution to record, convert and stream audio and video, extended to support console graphics";
-    homepage = http://www.ffmpeg.org/;
+    homepage = "http://www.ffmpeg.org/";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ vrthra ];

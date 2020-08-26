@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages, ffmpeg, zlib, libjpeg }:
+{ stdenv, fetchFromGitHub, python3Packages, ffmpeg_3, zlib, libjpeg }:
 
 python3Packages.buildPythonApplication {
   pname = "gif-for-cli";
@@ -12,13 +12,13 @@ python3Packages.buildPythonApplication {
   };
 
   checkInputs = [ python3Packages.coverage ];
-  buildInputs = [ ffmpeg zlib libjpeg ];
+  buildInputs = [ ffmpeg_3 zlib libjpeg ];
   propagatedBuildInputs = with python3Packages; [ pillow requests x256 ];
 
   meta = with stdenv.lib; {
     description = "Render gifs as ASCII art in your cli";
     longDescription = "Takes in a GIF, short video, or a query to the Tenor GIF API and converts it to animated ASCII art.";
-    homepage = https://github.com/google/gif-for-cli;
+    homepage = "https://github.com/google/gif-for-cli";
     license = licenses.asl20;
     maintainers = with maintainers; [ Scriptkiddi ];
   };

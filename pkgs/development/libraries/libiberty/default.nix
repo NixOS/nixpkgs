@@ -3,7 +3,8 @@
 let inherit (buildPackages.buildPackages) gcc; in
 
 stdenv.mkDerivation {
-  name = "libiberty-${gcc.cc.version}";
+  pname = "libiberty";
+  version = "${gcc.cc.version}";
 
   inherit (gcc.cc) src;
 
@@ -19,7 +20,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://gcc.gnu.org/;
+    homepage = "https://gcc.gnu.org/";
     license = licenses.lgpl2;
     description = "Collection of subroutines used by various GNU programs";
     maintainers = with maintainers; [ abbradar ericson2314 ];

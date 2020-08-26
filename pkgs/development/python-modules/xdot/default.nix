@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "xdot.py is an interactive viewer for graphs written in Graphviz's dot";
-    homepage = https://github.com/jrfonseca/xdot.py;
+    homepage = "https://github.com/jrfonseca/xdot.py";
     license = licenses.lgpl3Plus;
   };
 }

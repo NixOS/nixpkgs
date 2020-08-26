@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-repo";
-  version = "2.4.1";
+  version = "2.8";
 
   src = fetchFromGitHub {
     owner = "android";
     repo = "tools_repo";
     rev = "v${version}";
-    sha256 = "0khg1731927gvin73dcbw1657kbfq4k7agla5rpzqcnwkk5agzg3";
+    sha256 = "00sahddplisg55zpjz4v4sc7zqbh3apx36xv77g55nabwz7han8d";
   };
 
   patches = [ ./import-ssl-module.patch ];
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       parts of the development workflow. Repo is not meant to replace Git, only
       to make it easier to work with Git.
     '';
-    homepage = https://android.googlesource.com/tools/repo;
+    homepage = "https://android.googlesource.com/tools/repo";
     license = licenses.asl20;
     maintainers = [ maintainers.primeos ];
     platforms = platforms.unix;

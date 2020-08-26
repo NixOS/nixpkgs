@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig
+{ stdenv, lib, fetchurl, pkgconfig, fetchpatch
 , bzip2, curl, expat, libarchive, xz, zlib, libuv, rhash
 , buildPackages
 # darwin attributes
@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
           + lib.optionalString useNcurses "-cursesUI"
           + lib.optionalString withQt5 "-qt5UI"
           + lib.optionalString useQt4 "-qt4UI";
-  version = "3.16.5";
+  version = "3.18.1";
 
   src = fetchurl {
     url = "${meta.homepage}files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
     # compare with https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}-SHA-256.txt
-    sha256 = "1z4bb8z6b4dvq5hrvajrf1hyybqay3xybyimf71w1jgcp180nxjz";
+    sha256 = "0215srmc9l7ygwdpfms8yx0wbd96qgz2d58ykmdiarvysf5k7qy0";
   };
 
   patches = [
@@ -36,6 +36,12 @@ stdenv.mkDerivation rec {
 
     # Derived from https://github.com/libuv/libuv/commit/1a5d4f08238dd532c3718e210078de1186a5920d
     ./libuv-application-services.patch
+
+    # TODO: Remove this patch for a regression once CMake 3.18.2 is out:
+    (fetchpatch { # PCH: Avoid Apple-specific architecture flags on other platforms
+      url = "https://gitlab.kitware.com/cmake/cmake/-/commit/70ce1ad64a04a244bb1c03753da0752c61fc3a37.patch";
+      sha256 = "0jcdgv48j0dd4nlhyy3j0s3h6bcbrq2yg1mdhpgfqrb2y3p91fky";
+    })
 
   ] ++ lib.optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
@@ -63,14 +69,21 @@ stdenv.mkDerivation rec {
       --subst-var-by libc_lib ${lib.getLib stdenv.cc.libc}
     substituteInPlace Modules/FindCxxTest.cmake \
       --replace "$""{PYTHON_EXECUTABLE}" ${stdenv.shell}
-    # BUILD_CC and BUILD_CXX are used to bootstrap cmake
-    configureFlags="--parallel=''${NIX_BUILD_CORES:-1} CC=$BUILD_CC CXX=$BUILD_CXX $configureFlags"
+  ''
+  # CC_FOR_BUILD and CXX_FOR_BUILD are used to bootstrap cmake
+  + ''
+    configureFlags="--parallel=''${NIX_BUILD_CORES:-1} CC=$CC_FOR_BUILD CXX=$CXX_FOR_BUILD $configureFlags"
   '';
 
   configureFlags = [
     "--docdir=share/doc/${pname}${version}"
   ] ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
     ++ lib.optional (useQt4 || withQt5) "--qt-gui"
+    # Workaround https://gitlab.kitware.com/cmake/cmake/-/issues/20568
+    ++ lib.optionals stdenv.hostPlatform.is32bit [
+      "CFLAGS=-D_FILE_OFFSET_BITS=64"
+      "CXXFLAGS=-D_FILE_OFFSET_BITS=64"
+    ]
     ++ [
     "--"
     # We should set the proper `CMAKE_SYSTEM_NAME`.

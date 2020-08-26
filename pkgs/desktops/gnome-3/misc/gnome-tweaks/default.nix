@@ -45,9 +45,9 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/action/show/Apps/GnomeTweakTool;
+    homepage = "https://wiki.gnome.org/action/show/Apps/GnomeTweakTool";
     description = "A tool to customize advanced GNOME 3 options";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

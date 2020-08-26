@@ -17,7 +17,7 @@ buildGoPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/DarthSim/;
+    homepage = "https://github.com/DarthSim/";
     description = "Process manager for Procfile-based applications";
     license = with licenses; [ mit ];
     maintainers = [ maintainers.sveitser ];

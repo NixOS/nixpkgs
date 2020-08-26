@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Grammalecte is an open source grammar checker for the French language";
-    homepage = https://grammalecte.net;
+    homepage = "https://grammalecte.net";
     license = with lib.licenses; [ gpl3 ];
     maintainers = with lib.maintainers; [ apeyroux ];
   };

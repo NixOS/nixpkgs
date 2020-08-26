@@ -6,17 +6,17 @@
 
 buildPythonPackage rec {
   pname = "zope.filerepresentation";
-  version = "4.2.0";
+  version = "5.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c9bff2b2492b2fe716ee54538441a98d6145d1de87dd921eaa44ac834fbb63b6";
+    sha256 = "3fbca4730c871d8e37b9730763c42b69ba44117cf6d0848014495bb301cae2d6";
   };
 
   propagatedBuildInputs = [ zope_schema ];
 
   meta = with stdenv.lib; {
-    homepage = https://zopefilerepresentation.readthedocs.io/;
+    homepage = "https://zopefilerepresentation.readthedocs.io/";
     description = "File-system Representation Interfaces";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];

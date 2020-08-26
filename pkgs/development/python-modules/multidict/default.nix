@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "multidict";
-  version = "4.7.4";
+  version = "4.7.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d7d428488c67b09b26928950a395e41cc72bb9c3d5abfe9f0521940ee4f796d4";
+    sha256 = "fbb77a75e529021e7c4a8d4e823d88ef4d23674a202be4f5addffc72cbb91430";
   };
 
   checkInputs = [ pytest pytestrunner pytestcov ];
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Multidict implementation";
-    homepage = https://github.com/aio-libs/multidict/;
+    homepage = "https://github.com/aio-libs/multidict/";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];
   };

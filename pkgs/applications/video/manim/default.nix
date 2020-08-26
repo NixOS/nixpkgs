@@ -1,5 +1,5 @@
 { lib, buildPythonApplication, fetchFromGitHub, pythonOlder, file, fetchpatch
-, cairo, ffmpeg, sox, xdg_utils, texlive
+, cairo, ffmpeg_3, sox, xdg_utils, texlive
 , colour, numpy, pillow, progressbar, scipy, tqdm, opencv , pycairo, pydub
 , pbr, fetchPypi
 }:
@@ -28,14 +28,14 @@ buildPythonApplication rec {
     pycairo
     pydub
 
-    cairo sox ffmpeg xdg_utils
+    cairo sox ffmpeg_3 xdg_utils
   ];
 
   # Test with texlive to see whether it works but don't propagate
   # because it's huge and optional
   # TODO: Use smaller TexLive distribution
   #       Doesn't need everything but it's hard to figure out what it needs
-  checkInputs = [ cairo sox ffmpeg xdg_utils texlive.combined.scheme-full ];
+  checkInputs = [ cairo sox ffmpeg_3 xdg_utils texlive.combined.scheme-full ];
 
   # Simple test and complex test with LaTeX
   checkPhase = ''
@@ -57,7 +57,7 @@ buildPythonApplication rec {
       create precise animations programmatically, as seen in the videos of
       3Blue1Brown on YouTube.
     '';
-    homepage = https://github.com/3b1b/manim;
+    homepage = "https://github.com/3b1b/manim";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ johnazoidberg ];
   };

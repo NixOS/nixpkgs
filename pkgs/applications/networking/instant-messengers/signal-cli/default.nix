@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "signal-cli";
-  version = "0.6.5";
+  version = "0.6.8";
 
   # Building from source would be preferred, but is much more involved.
   src = fetchurl {
     url = "https://github.com/AsamK/signal-cli/releases/download/v${version}/signal-cli-${version}.tar.gz";
-    sha256 = "082kq8kadxbwzf31fmlq4in714id2irk0hhqsl53vsl3wmv45zvv";
+    sha256 = "0gcyj8r7156zn5zzfnabf0mw3kcaq7v29vsjb6mdvj8cjjm05dvd";
   };
 
   buildInputs = lib.optionals stdenv.isLinux [ libmatthew_java dbus dbus_java ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/AsamK/signal-cli;
+    homepage = "https://github.com/AsamK/signal-cli";
     description = "Command-line and dbus interface for communicating with the Signal messaging service";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ivan erictapen ];

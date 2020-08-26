@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , meson
 , ninja
@@ -10,6 +11,7 @@
 , polkit
 , accountsservice
 , python3
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -26,12 +28,24 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
 
   patches = [
+    # Use new notifications
+    (fetchpatch {
+      url = "https://github.com/elementary/default-settings/commit/0658bb75b9f49f58b35746d05fb6c4b811f125e9.patch";
+      sha256 = "0wa7iq0vfp2av5v23w94a5844ddj4g48d4wk3yrp745dyrimg739";
+    })
+
+    # Fix media key syntax
+    (fetchpatch {
+      url = "https://github.com/elementary/default-settings/commit/332aefe1883be5dfe90920e165c39e331a53b2ea.patch";
+      sha256 = "0ypcaga55pw58l30srq3ga1mhz2w6hkwanv41jjr6g3ia9jvq69n";
+    })
+
     # https://github.com/elementary/default-settings/pull/119
     ./0001-Build-with-Meson.patch
   ];
@@ -49,7 +63,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "--sysconfdir=${placeholder "out"}/etc"
-    "-Ddefault-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray}/share/artwork/gnome/nix-wallpaper-simple-dark-gray.png"
+    "-Ddefault-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}"
     "-Dplank-dockitems=false"
   ];
 
@@ -70,8 +84,10 @@ stdenv.mkDerivation rec {
     cp -avr ${./launchers} $out/etc/skel/.config/plank/dock1/launchers
 
     # Whitelist wingpanel indicators to be used in the greeter
-    # TODO: is this needed or installed upstream?
-    install -D ${./io.elementary.greeter.whitelist} $out/etc/wingpanel.d/io.elementary.greeter.whitelist
+    # hhttps://github.com/elementary/greeter/blob/fc19752f147c62767cd2097c0c0c0fcce41e5873/debian/io.elementary.greeter.whitelist
+    # wingpanel 2.3.2 renamed this to .allowed to .forbidden
+    # https://github.com/elementary/wingpanel/pull/326
+    install -D ${./io.elementary.greeter.allowed} $out/etc/wingpanel.d/io.elementary.greeter.allowed
   '';
 
   postFixup = ''
@@ -84,7 +100,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Default settings and configuration files for elementary";
-    homepage = https://github.com/elementary/default-settings;
+    homepage = "https://github.com/elementary/default-settings";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "prefix=$(out)" "tgz" ];
 
   meta = with stdenv.lib; {
-    homepage = https://qqwing.com;
+    homepage = "https://qqwing.com";
     description = "Sudoku generating and solving software";
     license = licenses.gpl2;
     platforms = platforms.linux;

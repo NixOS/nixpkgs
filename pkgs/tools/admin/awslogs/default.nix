@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/jorgebastida/awslogs;
+    homepage = "https://github.com/jorgebastida/awslogs";
     description = "AWS CloudWatch logs for Humans";
     maintainers = with maintainers; [ dbrock ];
     license = licenses.bsd3;

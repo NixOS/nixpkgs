@@ -82,7 +82,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Scalable Python framework for cluster administration";
-    homepage = https://cea-hpc.github.io/clustershell;
+    homepage = "https://cea-hpc.github.io/clustershell";
     license = licenses.lgpl21;
     maintainers = [ maintainers.alexvorobiev ];
   };

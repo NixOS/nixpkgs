@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A replacement for Terminal and the successor to iTerm";
-    homepage = https://www.iterm2.com/;
+    homepage = "https://www.iterm2.com/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ tricktron ];
     platforms = platforms.darwin;

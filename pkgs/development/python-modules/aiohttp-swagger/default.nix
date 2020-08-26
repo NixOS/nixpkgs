@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Swagger API Documentation builder for aiohttp";
-    homepage = https://github.com/cr0hn/aiohttp-swagger;
+    homepage = "https://github.com/cr0hn/aiohttp-swagger";
     license = licenses.mit;
     maintainers = with maintainers; [ elohmeier ];
   };

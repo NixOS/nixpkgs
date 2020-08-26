@@ -9,17 +9,6 @@
  #include "pipe/p_compiler.h"
  #include "pipe/p_state.h"
  
---- ./src/gallium/state_trackers/nine/threadpool.h.orig	2015-05-07 14:10:53.443337212 +0200
-+++ ./src/gallium/state_trackers/nine/threadpool.h	2015-05-07 14:11:04.210307653 +0200
-@@ -24,6 +24,8 @@
- #ifndef _THREADPOOL_H_
- #define _THREADPOOL_H_
- 
-+#include <pthread.h>
-+
- #define MAXTHREADS 1
- 
- struct threadpool {
 --- ./src/util/rand_xor.c.orig	2017-06-20 00:38:57.199474067 +0200
 +++ ./src/util/rand_xor.c	2017-06-20 00:40:31.351279557 +0200
 @@ -23,7 +23,9 @@

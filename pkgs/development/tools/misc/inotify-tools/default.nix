@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/rvoicilas/inotify-tools/wiki;
+    homepage = "https://github.com/rvoicilas/inotify-tools/wiki";
     license = licenses.gpl2;
     maintainers = with maintainers; [ marcweber pSub ];
     platforms = platforms.linux;

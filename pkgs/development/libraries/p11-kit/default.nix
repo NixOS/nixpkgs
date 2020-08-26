@@ -26,14 +26,16 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "--without-trust-paths"
-  ]; # TODO: store trust anchors in a directory common to Nix and NixOS
+    "--with-trust-paths=/etc/ssl/certs/ca-certificates.crt"
+  ];
 
   enableParallelBuilding = true;
 
   doCheck = !stdenv.isDarwin;
 
-  installFlags = [ "exampledir=\${out}/etc/pkcs11" ];
+  installFlags = [
+    "exampledir=${placeholder "out"}/etc/pkcs11"
+  ];
 
   meta = with stdenv.lib; {
     description = "Library for loading and sharing PKCS#11 modules";
@@ -42,7 +44,7 @@ stdenv.mkDerivation rec {
       Provides a standard configuration setup for installing
       PKCS#11 modules in such a way that they're discoverable.
     '';
-    homepage = https://p11-glue.github.io/p11-glue/p11-kit.html;
+    homepage = "https://p11-glue.github.io/p11-glue/p11-kit.html";
     platforms = platforms.all;
     license = licenses.bsd3;
   };

@@ -51,7 +51,7 @@ in
           Whether or not to enable SSL (https) support.
         '';
       };
-        
+
       certDirectory = mkOption {
         type = types.nullOr types.path;
         default = null;

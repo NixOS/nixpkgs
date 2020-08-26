@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , pkgconfig
 , meson
@@ -30,7 +31,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "4.4.1";
+  version = "4.4.4";
 
   repoName = "files";
 
@@ -40,11 +41,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0s874qnqbx20vyp2z2rhz3z8py0dm21v26xc0h6hyc2gfz4s3jcg";
+    sha256 = "1hsh9kg30l90r2aqrrap1nfmgjf0la8mfd8h4xm6d7acailcnhmb";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -93,7 +94,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "File browser designed for elementary OS";
-    homepage = https://github.com/elementary/files;
+    homepage = "https://github.com/elementary/files";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

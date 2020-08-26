@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Library for passing menu structures across DBus";
-    homepage = https://launchpad.net/dbusmenu;
+    homepage = "https://launchpad.net/dbusmenu";
     license = with licenses; [ gpl3 lgpl21 lgpl3 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];

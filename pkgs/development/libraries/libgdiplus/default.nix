@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgdiplus";
-  version = "6.0.4";
+  version = "6.0.5";
 
   src = fetchFromGitHub {
     owner = "mono";
     repo = "libgdiplus";
     rev = version;
-    sha256 = "1pf3yhwq9qk0w3yv9bb8qlwwqkffg7xb4sgc8yqdnn6pa56i3vmn";
+    sha256 = "1387lgph5r17viv3rkf5hbksdn435njzmra7s17q0nzk2mkkm68c";
   };
 
   NIX_LDFLAGS = "-lgif";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   configureFlags = stdenv.lib.optional stdenv.cc.isClang "--host=${stdenv.hostPlatform.system}";
+
+  enableParallelBuilding = true;
 
   buildInputs =
     [ glib cairo fontconfig libtiff giflib
@@ -39,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Mono library that provides a GDI+-compatible API on non-Windows operating systems";
-    homepage = https://www.mono-project.com/docs/gui/libgdiplus/;
+    homepage = "https://www.mono-project.com/docs/gui/libgdiplus/";
     platforms = platforms.unix;
     license = licenses.mit;
   };

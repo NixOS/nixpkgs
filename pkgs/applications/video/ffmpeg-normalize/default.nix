@@ -1,20 +1,20 @@
 { lib
 , buildPythonApplication
 , fetchPypi
-, ffmpeg
+, ffmpeg_3
 , tqdm
 }:
 
 buildPythonApplication rec {
   pname = "ffmpeg-normalize";
-  version = "1.15.7";
+  version = "1.19.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0161939f864e973b11d50170c657baf3e1433147f46c74a74ed5025a822e9a2d";
+    sha256 = "18dpck9grnr3wgbjvdh4mjlx0zfwcxpy4rnpmc39in0yk3w7li2x";
   };
 
-  propagatedBuildInputs = [ ffmpeg tqdm ];
+  propagatedBuildInputs = [ ffmpeg_3 tqdm ];
 
   checkPhase = ''
     $out/bin/ffmpeg-normalize --help > /dev/null

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.ctan.org/tex-archive/web/tie;
+    homepage = "https://www.ctan.org/tex-archive/web/tie";
     description = "Allow multiple web change files";
     platforms = with platforms; unix;
     maintainers = with maintainers; [ vrthra ];

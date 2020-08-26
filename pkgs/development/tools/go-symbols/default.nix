@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   meta = {
     description = "A utility for extracting a JSON representation of the package symbols from a go source tree.";
-    homepage = https://github.com/acroca/go-symbols;
+    homepage = "https://github.com/acroca/go-symbols";
     maintainers = with stdenv.lib.maintainers; [ vdemeester ];
     license = stdenv.lib.licenses.mit;
   };

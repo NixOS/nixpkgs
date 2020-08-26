@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C++ client library for the CMIS interface";
-    homepage = https://sourceforge.net/projects/libcmis/;
+    homepage = "https://sourceforge.net/projects/libcmis/";
     license = licenses.gpl2;
     platforms = platforms.unix;
   };

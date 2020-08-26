@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "This is a factored out version of unparse found in the Python source distribution";
-    homepage = https://github.com/simonpercivall/astunparse;
+    homepage = "https://github.com/simonpercivall/astunparse";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jyp ];
   };

@@ -37,10 +37,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A GTK-based Usenet newsreader good at both text and binaries";
-    homepage = http://pan.rebelbase.com/;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://pan.rebelbase.com/";
+    maintainers = [ maintainers.eelco ];
+    platforms = platforms.linux;
+    license = with licenses; [ gpl2 fdl11 ];
   };
 }

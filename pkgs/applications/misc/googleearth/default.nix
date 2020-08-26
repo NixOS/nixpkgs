@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A world sphere viewer";
-    homepage = http://earth.google.com;
+    homepage = "http://earth.google.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ markus1189 ];
     platforms = platforms.linux;

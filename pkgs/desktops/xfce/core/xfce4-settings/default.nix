@@ -5,9 +5,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-settings";
-  version = "4.14.0";
+  version = "4.14.3";
 
-  sha256 = "13gmxd4sfgd6wky7s03bar58w9vl4i6jv2wncd6iajww791y5akn";
+  sha256 = "1zzngdj7mp2r6rcs8gvda1218zlz5gpnc6gsp20z32l69psp3yld";
 
   postPatch = ''
     for f in $(find . -name \*.c); do

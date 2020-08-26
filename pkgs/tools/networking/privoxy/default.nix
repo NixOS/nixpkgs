@@ -1,6 +1,6 @@
 { stdenv, fetchurl, autoreconfHook, zlib, pcre, w3m, man }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
 
   pname = "privoxy";
   version = "3.0.28";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec{
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.privoxy.org/;
+    homepage = "https://www.privoxy.org/";
     description = "Non-caching web proxy with advanced filtering capabilities";
     license = licenses.gpl2;
     platforms = platforms.all;

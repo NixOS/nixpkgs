@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Parser for VCalendar and ICalendar files, usable from the command line";
-    homepage = https://waynemorrison.com/software/;
+    homepage = "https://waynemorrison.com/software/";
     license = licenses.asl20;
     maintainers = with maintainers; [ peterhoeg ];
   };

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       It can also be used in the xUnit testing style.
     '';
     maintainers = with maintainers; [ willibutz ];
-    homepage = https://pgtap.org;
+    homepage = "https://pgtap.org";
     inherit (postgresql.meta) platforms;
     license = licenses.mit;
   };

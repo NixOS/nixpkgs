@@ -3,18 +3,18 @@
 
 buildPythonPackage rec {
   pname = "adal";
-  version = "1.2.2";
+  version = "1.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5a7f1e037c6290c6d7609cab33a9e5e988c2fbec5c51d1c4c649ee3faff37eaf";
+    sha256 = "7a15d22b1ee7ce1be92441199958748982feba6b7dec35fbf60f9b607bad1bc0";
   };
 
   propagatedBuildInputs =  [ requests pyjwt dateutil ];
 
   meta = with stdenv.lib; {
     description = "Library to make it easy for python application to authenticate to Azure Active Directory (AAD) in order to access AAD protected web resources";
-    homepage = https://github.com/AzureAD/azure-activedirectory-library-for-python;
+    homepage = "https://github.com/AzureAD/azure-activedirectory-library-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ phreedom ];
   };

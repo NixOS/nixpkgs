@@ -1,0 +1,38 @@
+From ddc2c4faeec36675654a2f8f04c3011b807fdf79 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maciej=20Kr=C3=BCger?= <mkg20001@gmail.com>
+Date: Sun, 22 Mar 2020 07:36:25 +0100
+Subject: [PATCH] Add dbus_glib dependency
+
+---
+ cinnamon-session/meson.build | 2 +-
+ meson.build                  | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/cinnamon-session/meson.build b/cinnamon-session/meson.build
+index ee8916f..9dd9283 100644
+--- a/cinnamon-session/meson.build
++++ b/cinnamon-session/meson.build
+@@ -74,7 +74,7 @@ executable('cinnamon-session',
+     xext,
+     xrender,
+     xtest,
+-    # elogind,
++    dbus_glib,
+   ],
+   link_with: [
+     libegg,
+diff --git a/meson.build b/meson.build
+index 231a448..db306dc 100644
+--- a/meson.build
++++ b/meson.build
+@@ -48,6 +48,7 @@ else
+   gconf     = dependency('', required: false)
+ endif
+ conf.set('HAVE_GCONF', gconf.found())
++dbus_glib = dependency('dbus-glib-1')
+ 
+ 
+ gio_unix    = dependency('gio-unix-2.0',      required: false)
+-- 
+2.25.1
+

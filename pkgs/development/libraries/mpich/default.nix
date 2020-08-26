@@ -44,9 +44,9 @@ stdenv.mkDerivation  rec {
       the Message Passing Interface (MPI) standard, both version 1 and
       version 2.
     '';
-    homepage = http://www.mcs.anl.gov/mpi/mpich2/;
+    homepage = "http://www.mcs.anl.gov/mpi/mpich2/";
     license = {
-      url = http://git.mpich.org/mpich.git/blob/a385d6d0d55e83c3709ae851967ce613e892cd21:/COPYRIGHT;
+      url = "http://git.mpich.org/mpich.git/blob/a385d6d0d55e83c3709ae851967ce613e892cd21:/COPYRIGHT";
       fullName = "MPICH license (permissive)";
     };
     maintainers = [ maintainers.markuskowa ];

@@ -1,22 +1,60 @@
-{ lib, buildPythonPackage, fetchPypi, wheel, setuptools, packaging
-, cmake, ninja, cython, codecov, coverage, six, virtualenv, pathpy
-, pytest, pytestcov, pytest-virtualenv, pytest-mock, pytestrunner
-, requests, flake8 }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, distro
+, packaging
+, setuptools
+, wheel
+# Test Inputs
+, cmake
+, codecov
+, coverage
+, cython
+, flake8
+, ninja
+, pathpy
+, pytest
+, pytestcov
+, pytest-mock
+, pytestrunner
+, pytest-virtualenv
+, requests
+, six
+, virtualenv
+}:
 
 buildPythonPackage rec {
   pname = "scikit-build";
-  version = "0.10.0";
+  version = "0.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7342017cc82dd6178e3b19377389b8a8d1f8b429d9cdb315cfb1094e34a0f526";
+    sha256 = "0p4smkl2rbpl00m5va5qa8hp2hqb3284p2cs6k8zlmi4kgbdyh6s";
   };
 
-  propagatedBuildInputs = [ wheel setuptools packaging ];
-  checkInputs = [ 
-    cmake ninja cython codecov coverage six pathpy
-    pytest pytestcov pytest-mock pytest-virtualenv pytestrunner
-    requests flake8
+  propagatedBuildInputs = [
+    distro
+    packaging
+    setuptools
+    wheel
+  ];
+  checkInputs = [
+    cmake
+    codecov
+    coverage
+    cython
+    flake8
+    ninja
+    pathpy
+    pytest
+    pytestcov
+    pytest-mock
+    pytestrunner
+    pytest-virtualenv
+    requests
+    six
+    virtualenv
   ];
 
   dontUseCmakeConfigure = true;
@@ -28,6 +66,7 @@ buildPythonPackage rec {
     "test_fortran_compiler" # passes if gfortran is available
     "test_install_command" # tries to alter out path
     "test_test_command" # tries to alter out path
+    "test_setup" # tries to install using distutils
   ]);
 
   checkPhase = ''
@@ -35,9 +74,9 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = http://scikit-build.org/;
     description = "Improved build system generator for CPython C/C++/Fortran/Cython extensions";
+    homepage = "http://scikit-build.org/";
     license = with licenses; [ mit bsd2 ]; # BSD due to reuses of PyNE code
-    maintainers = [ maintainers.FlorianFranzen ];
+    maintainers = with maintainers; [ FlorianFranzen ];
   };
 }

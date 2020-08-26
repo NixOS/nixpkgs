@@ -24,10 +24,10 @@ buildGoPackage rec {
 
   postInstall = ''
     # Fix binary name
-    mv $bin/bin/{agent,buildkite-agent}
+    mv $out/bin/{agent,buildkite-agent}
 
     # These are runtime dependencies
-    wrapProgram $bin/bin/buildkite-agent \
+    wrapProgram $out/bin/buildkite-agent \
       --prefix PATH : '${stdenv.lib.makeBinPath [ openssh git coreutils gnused gnugrep ]}'
   '';
 
@@ -40,7 +40,7 @@ buildGoPackage rec {
       build jobs, reporting back the status code and output log of the job,
       and uploading the job's artifacts.
     '';
-    homepage = https://buildkite.com/docs/agent;
+    homepage = "https://buildkite.com/docs/agent";
     license = licenses.mit;
     maintainers = with maintainers; [ pawelpacana zimbatm rvl ];
     platforms = platforms.unix;

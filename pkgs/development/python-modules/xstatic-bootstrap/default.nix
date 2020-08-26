@@ -16,7 +16,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib;{
-    homepage = https://getbootstrap.com;
+    homepage = "https://getbootstrap.com";
     description = "Bootstrap packaged static files for python";
     license = licenses.mit;
     maintainers = with maintainers; [ makefu ];

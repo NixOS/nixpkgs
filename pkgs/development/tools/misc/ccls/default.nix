@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ccls";
-  version = "0.20190823.5";
+  version = "0.20190823.6";
 
   src = fetchFromGitHub {
     owner = "MaskRay";
     repo = "ccls";
     rev = version;
-    sha256 = "0b2pkpzn576b92zcxpwchpkyw2fww6s69818rx4g9z34kzm35zy5";
+    sha256 = "11h5nwk4qqshf3i8yr4bxpnvmidrhkzd0zxhf1xqv8cv6r08k47f";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A c/c++ language server powered by clang";
-    homepage    = https://github.com/MaskRay/ccls;
+    homepage    = "https://github.com/MaskRay/ccls";
     license     = licenses.asl20;
     platforms   = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ mic92 tobim ];

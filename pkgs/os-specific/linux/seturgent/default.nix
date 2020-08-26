@@ -21,7 +21,7 @@ stdenv.mkDerivation {
       platforms = stdenv.lib.platforms.linux;
       description = "Set an application's urgency hint (or not)";
       maintainers = [ stdenv.lib.maintainers.yarr ];
-      homepage = https://github.com/hiltjo/seturgent;
+      homepage = "https://github.com/hiltjo/seturgent";
       license = stdenv.lib.licenses.mit;
   };
 }

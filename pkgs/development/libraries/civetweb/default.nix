@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256:1drnid6gs97cp9zpvsxz42yfj8djmgx98fg9p2993x9mpi547vzv";
+    sha256 = "1drnid6gs97cp9zpvsxz42yfj8djmgx98fg9p2993x9mpi547vzv";
   };
 
   makeFlags = [
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Embedded C/C++ web server";
-    homepage = https://github.com/civetweb/civetweb;
+    homepage = "https://github.com/civetweb/civetweb";
     license = [ stdenv.lib.licenses.mit ];
   };
 }

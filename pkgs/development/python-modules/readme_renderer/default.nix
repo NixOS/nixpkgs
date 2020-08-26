@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "readme_renderer";
-  version = "24.0";
+  version = "26.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0br0562lnvj339f1nwz4nfl4ay49rw05xkqacigzf9wz4mdza5mv";
+    sha256 = "cbe9db71defedd2428a1589cdc545f9bd98e59297449f69d721ef8f1cfced68d";
   };
 
   checkInputs = [ pytest mock ];
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "readme_renderer is a library for rendering readme descriptions for Warehouse";
-    homepage = https://github.com/pypa/readme_renderer;
+    homepage = "https://github.com/pypa/readme_renderer";
     license = lib.licenses.asl20;
   };
 }

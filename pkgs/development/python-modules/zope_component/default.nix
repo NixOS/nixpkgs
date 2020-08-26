@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "zope.component";
-  version = "4.6";
+  version = "4.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ec2afc5bbe611dcace98bb39822c122d44743d635dafc7315b9aef25097db9e6";
+    sha256 = "91628918218b3e6f6323de2a7b845e09ddc5cae131c034896c051b084bba3c92";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/zopefoundation/zope.component;
+    homepage = "https://github.com/zopefoundation/zope.component";
     description = "Zope Component Architecture";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];

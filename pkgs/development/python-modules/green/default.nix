@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "green";
-  version = "3.0.0";
+  version = "3.1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17cfgq0s02p5cjrsvcicqxiq6kflahjsd9pm03f054x7lpvqi5cv";
+    sha256 = "65f87e4c0d2aca63eb32b01c78233e6f920a58ebabc4f85dd9d8f1c6a92a5184";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python test runner";
-    homepage = https://github.com/CleanCut/green;
+    homepage = "https://github.com/CleanCut/green";
     license = licenses.mit;
   };
 }

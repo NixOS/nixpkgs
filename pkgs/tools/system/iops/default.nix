@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       Iops lets you measure how many I/O operations per second a storage device can perform.
       Usefull for determing e.g. the best RAID-setting of your storage device.
     '';
-    homepage = http://www.vanheusden.com/iops/;
+    homepage = "http://www.vanheusden.com/iops/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ davidak ];
     platforms = platforms.linux; # build problems on Darwin

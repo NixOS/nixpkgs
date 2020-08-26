@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     longDescription = ''
       nDPI is a library for deep-packet inspection based on OpenDPI.
     '';
-    homepage = https://www.ntop.org/products/deep-packet-inspection/ndpi/;
+    homepage = "https://www.ntop.org/products/deep-packet-inspection/ndpi/";
     license = with licenses; lgpl3;
     maintainers = with maintainers; [ takikawa ];
     platforms = with platforms; unix;

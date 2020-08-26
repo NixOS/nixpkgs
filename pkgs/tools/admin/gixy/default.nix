@@ -35,7 +35,7 @@ python.pkgs.buildPythonApplication rec {
       Gixy is a tool to analyze Nginx configuration.
       The main goal of Gixy is to prevent security misconfiguration and automate flaw detection.
     '';
-    homepage = https://github.com/yandex/gixy;
+    homepage = "https://github.com/yandex/gixy";
     license = licenses.mpl20;
     maintainers = [ maintainers.willibutz ];
     platforms = platforms.linux;

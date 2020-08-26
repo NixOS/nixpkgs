@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, fetchurl, substituteAll, cmake, makeWrapper, pkgconfig
-, curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mysql, pcre, perl, perlPackages
+, curl, ffmpeg_3, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mysql, pcre, perl, perlPackages
 , polkit, utillinuxMinimal, x264, zlib
-, coreutils, procps, psmisc }:
+, coreutils, procps, psmisc, nixosTests }:
 
 # NOTES:
 #
@@ -78,13 +78,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "zoneminder";
-  version = "1.34.3";
+  version = "1.34.16";
 
   src = fetchFromGitHub {
     owner  = "ZoneMinder";
     repo   = "zoneminder";
     rev    = version;
-    sha256 = "0jp7950v36gxxzkwdp5i0312s26czhfsl5ixdxfzn21cx31hhlg0";
+    sha256 = "azQbm8EkbypBf2NjplDVCb6duEC476hhKDA0EGqxxWE=";
   };
 
   patches = [
@@ -138,7 +138,7 @@ in stdenv.mkDerivation rec {
 
     for f in includes/Event.php views/image.php ; do
       substituteInPlace web/$f \
-        --replace "'ffmpeg " "'${ffmpeg}/bin/ffmpeg "
+        --replace "'ffmpeg " "'${ffmpeg_3}/bin/ffmpeg "
     done
 
     substituteInPlace web/includes/functions.php \
@@ -147,7 +147,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    curl ffmpeg glib libjpeg libselinux libsepol mp4v2 libmysqlclient mysql.client pcre perl polkit x264 zlib
+    curl ffmpeg_3 glib libjpeg libselinux libsepol mp4v2 libmysqlclient mysql.client pcre perl polkit x264 zlib
     utillinuxMinimal # for libmount
   ] ++ (with perlPackages; [
     # build-time dependencies
@@ -170,13 +170,12 @@ in stdenv.mkDerivation rec {
     "-DZM_CONFIG_DIR=${placeholder "out"}/etc/zoneminder"
     "-DZM_WEB_USER=${user}"
     "-DZM_WEB_GROUP=${user}"
-
-    # Workaround issue in CMakeLists.txt where ZM_CGIDIR set to ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBEXECDIR}/zoneminder/cgi-bin
-    # But CMAKE_INSTALL_LIBEXECDIR is already an absolute path from cmake setup-hook
-    "-DZM_CGIDIR=${placeholder "out"}/libexec/zoneminder/cgi-bin"
   ];
 
-  passthru = { inherit dirName; };
+  passthru = {
+    inherit dirName;
+    tests = nixosTests.zoneminder;
+  };
 
   postInstall = ''
     PERL5LIB="$PERL5LIB''${PERL5LIB:+:}$out/${perl.libPrefix}"
@@ -201,7 +200,7 @@ in stdenv.mkDerivation rec {
     description = "Video surveillance software system";
     homepage = "https://zoneminder.com";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

@@ -45,7 +45,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A simple wrapper for running Winetricks commands for Proton-enabled games";
-    homepage = https://github.com/Matoking/protontricks;
+    homepage = "https://github.com/Matoking/protontricks";
     license = licenses.gpl3;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ metadark ];

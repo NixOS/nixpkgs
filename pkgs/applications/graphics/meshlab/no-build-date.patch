@@ -1,0 +1,10 @@
+--- a/src/meshlab/mainwindow_RunTime.cpp
++++ b/src/meshlab/mainwindow_RunTime.cpp
+@@ -3312 +3312 @@ void MainWindow::about()
+-    temp.labelMLName->setText(MeshLabApplication::completeName(MeshLabApplication::HW_ARCHITECTURE(QSysInfo::WordSize))+"   (built on "+__DATE__+")");
++    temp.labelMLName->setText(MeshLabApplication::completeName(MeshLabApplication::HW_ARCHITECTURE(QSysInfo::WordSize)));
+--- a/src/meshlabplugins/filter_plymc/plymc_main.cpp
++++ b/src/meshlabplugins/filter_plymc/plymc_main.cpp
+@@ -121 +121 @@ int main(int argc, char *argv[])
+-  printf(   "\n                  PlyMC "_PLYMC_VER" ("__DATE__")\n"
++  printf(   "\n                  PlyMC "_PLYMC_VER"\n"

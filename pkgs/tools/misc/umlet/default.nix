@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
       UMLet runs stand-alone or as Eclipse plug-in on Windows, macOS and
       Linux.
     '';
-    homepage = http://www.umlet.com;
+    homepage = "http://www.umlet.com";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ geistesk ];
+    maintainers = with maintainers; [ oxzi ];
     platforms = platforms.all;
   };
 }

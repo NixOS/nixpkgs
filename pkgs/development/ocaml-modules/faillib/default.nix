@@ -20,7 +20,7 @@ buildOcaml rec {
   checkPhase = "make test";
 
   meta = with stdenv.lib; {
-    homepage = https://ocaml.janestreet.com/;
+    homepage = "https://ocaml.janestreet.com/";
     description = "Library for dealing with failure in OCaml";
     license = licenses.asl20;
     maintainers = [ maintainers.maurer ];

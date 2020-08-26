@@ -30,7 +30,7 @@ in python2Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python2Packages; [ pywbem ];
 
   meta = with stdenv.lib; {
-    homepage = https://www.claudiokuenzler.com/nagios-plugins/;
+    homepage = "https://www.claudiokuenzler.com/nagios-plugins/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
   };

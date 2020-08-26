@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, unzip, sqlite, makeWrapper, dotnetCorePackages, ffmpeg,
-  fontconfig, freetype }:
+  fontconfig, freetype, nixosTests }:
 
 let
   os = if stdenv.isDarwin then "osx" else "linux";
@@ -18,12 +18,12 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "jellyfin";
-  version = "10.5.0";
+  version = "10.6.3";
 
   # Impossible to build anything offline with dotnet
   src = fetchurl {
-    url = "https://github.com/jellyfin/jellyfin/releases/download/v${version}/jellyfin_${version}_portable.tar.gz";
-    sha256 = "1r6ljl535f8jchm5zvrwfl4aqjk5bg7sqbwr03yyjxgriqgf36lp";
+    url = "https://repo.jellyfin.org/releases/server/portable/stable/combined/jellyfin_${version}.tar.gz";
+    sha256 = "bqGIXS+T82jGMObMPMyYSjzQ+qZnACW4Q7WpV948crc=";
   };
 
   buildInputs = [
@@ -41,7 +41,6 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     install -dm 755 "$out/opt/jellyfin"
     cp -r * "$out/opt/jellyfin"
-
     makeWrapper "${dotnetCorePackages.aspnetcore_3_1}/bin/dotnet" $out/bin/jellyfin \
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
         sqlite fontconfig freetype stdenv.cc.cc.lib
@@ -49,10 +48,14 @@ in stdenv.mkDerivation rec {
       --add-flags "$out/opt/jellyfin/jellyfin.dll --ffmpeg ${ffmpeg}/bin/ffmpeg"
   '';
 
+  passthru.tests = {
+    smoke-test = nixosTests.jellyfin;
+  };
+
   meta =  with stdenv.lib; {
     description = "The Free Software Media System";
-    homepage = https://jellyfin.github.io/;
+    homepage = "https://jellyfin.org/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ nyanloutre minijackson ];
+    maintainers = with maintainers; [ nyanloutre minijackson purcell ];
   };
 }

@@ -43,7 +43,7 @@ let
     chmod a+x "$launch_script"
     echo "#! ${stdenv.shell}" >> "$launch_script"
     echo "source '$config_script'" >> "$launch_script"
-    echo "test -n \"\$NIX_LISP_LD_LIBRARY_PATH\" export LD_LIBRARY_PATH=\"\$NIX_LISP_LD_LIBRARY_PATH\''${LD_LIBRARY_PATH:+:}\$LD_LIBRARY_PATH\"" >> "$launch_script"
+    echo "test -n \"\$NIX_LISP_LD_LIBRARY_PATH\" && export LD_LIBRARY_PATH=\"\$NIX_LISP_LD_LIBRARY_PATH\''${LD_LIBRARY_PATH:+:}\$LD_LIBRARY_PATH\"" >> "$launch_script"
     echo '"${clwrapper}/bin/common-lisp.sh" "$@"' >> "$launch_script"
   '';
   moveAsdFiles = ''

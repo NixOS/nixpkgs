@@ -6,16 +6,17 @@
 , freetype, tcl, zlib
 }:
 
-stdenv.mkDerivation {
+with stdenv.lib;
+stdenv.mkDerivation rec {
 
   pname = "openmsx";
-  version = "git-2017-11-02";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "openMSX";
     repo = "openMSX";
-    rev = "eeb74206ae347a3b17e9b99f91f2b4682c5db22c";
-    sha256 = "170amj7k6wjhwx6psbplqljvckvhxxbv3aw72jrdxl1fb8zlnq3s";
+    rev = "RELEASE_0_15_0";
+    sha256 = "1lv5kdw0812mkf7k20z2djzk0pbs792xq2mibbnz9rfjf02whi7l";
     fetchSubmodules = true;
   };
 
@@ -35,14 +36,15 @@ stdenv.mkDerivation {
   # for providing support to Nixpkgs :)
   TCL_CONFIG="${tcl}/lib/";
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "A MSX emulator";
     longDescription = ''
       OpenMSX is an emulator for the MSX home computer system. Its goal is
       to emulate all aspects of the MSX with 100% accuracy.
     '';
-    homepage = https://openmsx.org;
+    homepage = "https://openmsx.org";
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
+    license = with licenses; [ bsd2 boost gpl2 ];
   };
 }

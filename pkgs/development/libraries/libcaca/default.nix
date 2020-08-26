@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://libcaca.zoy.org/;
+    homepage = "http://libcaca.zoy.org/";
     description = "A graphics library that outputs text instead of pixels";
     license = stdenv.lib.licenses.wtfpl;
     platforms = stdenv.lib.platforms.unix;

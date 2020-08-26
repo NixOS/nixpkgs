@@ -1,27 +1,31 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , pytest
 , pylint
 , six
 , pytestrunner
+, toml
 }:
 
 buildPythonPackage rec {
   pname = "pytest-pylint";
-  version = "0.14.1";
+  version = "0.17.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1v6jqxbvzaw6v3xxwd689agy01k0j06q5c3q8gn2f3jlkrvylf4c";
+    sha256 = "b0c177d63f6e3f5b82fa2720a6570dd2ecff1616c26ed6d02d0cbf75fd98ddf9";
   };
 
-  buildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytestrunner ];
 
   propagatedBuildInputs = [
     pytest
     pylint
     six
+    toml
   ];
 
   # tests not included with release
@@ -29,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "pytest plugin to check source code with pylint";
-    homepage = https://github.com/carsongee/pytest-pylint;
+    homepage = "https://github.com/carsongee/pytest-pylint";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

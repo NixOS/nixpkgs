@@ -3,6 +3,14 @@
 lib.makeScope pkgs.newScope (self: with self; {
   #### NixOS support
 
+  updateScript = pkgs.genericUpdater;
+
+  gitLister = url:
+    "${pkgs.common-updater-scripts}/bin/list-git-tags ${url}";
+
+  archiveLister = category: name:
+    "${pkgs.common-updater-scripts}/bin/list-archive-two-level-versions https://archive.xfce.org/src/${category}/${name}";
+
   mkXfceDerivation = callPackage ./mkXfceDerivation.nix { };
 
   automakeAddFlags = pkgs.makeSetupHook { } ./automakeAddFlags.sh;
@@ -80,9 +88,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfdashboard = callPackage ./applications/xfdashboard {};
 
-  # TODO: this repo is inactive for many years. Remove?
-  xfce4-volumed = callPackage ./applications/xfce4-volumed { };
-
   xfce4-volumed-pulse = callPackage ./applications/xfce4-volumed-pulse { };
 
   xfce4-notifyd = callPackage ./applications/xfce4-notifyd { };
@@ -108,8 +113,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   xfce4-cpugraph-plugin = callPackage ./panel-plugins/xfce4-cpugraph-plugin.nix { };
 
   xfce4-datetime-plugin = callPackage ./panel-plugins/xfce4-datetime-plugin { };
-
-  xfce4-dict-plugin = callPackage ./panel-plugins/xfce4-dict-plugin.nix { };
 
   xfce4-dockbarx-plugin = callPackage ./panel-plugins/xfce4-dockbarx-plugin.nix { };
 
@@ -169,7 +172,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   xfce4notifyd = xfce4-notifyd;
   xfce4taskmanager = xfce4-taskmanager;
   xfce4terminal = xfce4-terminal;
-  xfce4volumed = xfce4-volumed;
   xfce4volumed_pulse = xfce4-volumed-pulse;
   xfce4icontheme = xfce4-icon-theme;
   xfwm4themes = xfwm4-themes;
@@ -179,7 +181,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   xfce4_cpufreq_plugin = xfce4-cpufreq-plugin;
   xfce4_cpugraph_plugin = xfce4-cpugraph-plugin;
   xfce4_datetime_plugin = xfce4-datetime-plugin;
-  xfce4_dict_plugin = xfce4-dict-plugin;
   xfce4_dockbarx_plugin = xfce4-dockbarx-plugin;
   xfce4_embed_plugin = xfce4-embed-plugin;
   xfce4_eyes_plugin = xfce4-eyes-plugin;
@@ -203,6 +204,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4-mixer = throw "deprecated 2019-08-18: obsoleted by xfce4-pulseaudio-plugin"; # added 2019-08-18
   gtk-xfce-engine = throw "deprecated 2019-09-17: Xfce 4.14 deprecated gtk-xfce-engine"; # added 2019-09-17
+  xfce4-dict-plugin = throw "deprecated 2020-04-19: xfce4-dict-plugin is now part of xfce4-dict."; # added 2020-04-19
 
   # added 2019-11-04
   libxfce4ui_gtk3 = libxfce4ui;

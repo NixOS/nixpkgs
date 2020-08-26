@@ -18,7 +18,7 @@ build-idris-package  {
 
   meta = {
     description = "Idris proofs for extensional equalities";
-    homepage = https://github.com/danilkolikov/setoids;
+    homepage = "https://github.com/danilkolikov/setoids";
     maintainers = [ lib.maintainers.brainrape ];
   };
 }

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       UnRTF converts documents in Rich Text Format to other
       formats, including HTML, LaTeX, and RTF itself.
     '';
-    homepage = https://www.gnu.org/software/unrtf/;
+    homepage = "https://www.gnu.org/software/unrtf/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ joachifm ];
     platforms = platforms.unix;

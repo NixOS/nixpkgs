@@ -14,7 +14,7 @@ pythonPackages.buildPythonApplication {
   };
 
   meta = {
-    homepage = https://github.com/madjar/nixbang;
+    homepage = "https://github.com/madjar/nixbang";
     description = "A special shebang to run scripts in a nix-shell";
     maintainers = [ lib.maintainers.madjar ];
     platforms = lib.platforms.all;

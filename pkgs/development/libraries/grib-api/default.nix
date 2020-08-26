@@ -2,7 +2,7 @@
   cmake, netcdf, gfortran, libpng, openjpeg,
   enablePython ? false, pythonPackages }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "grib-api";
   version = "1.28.0";
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec{
 
 
   meta = with stdenv.lib; {
-    homepage = https://software.ecmwf.int/wiki/display/GRIB/Home;
+    homepage = "https://software.ecmwf.int/wiki/display/GRIB/Home";
     license = licenses.asl20;
     platforms = with platforms; linux ++ darwin;
     description = "ECMWF Library for the GRIB file format -- DEPRECATED";

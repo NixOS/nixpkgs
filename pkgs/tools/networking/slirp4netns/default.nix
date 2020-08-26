@@ -1,27 +1,38 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib, libcap, libseccomp }:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, glib
+, libcap
+, libseccomp
+, libslirp
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "slirp4netns";
-  version = "0.4.4";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "rootless-containers";
     repo = "slirp4netns";
     rev = "v${version}";
-    sha256 = "1932q80s6187k4fsvgia5iwc9lqsdkxzqqwpw1ksy0mx8wzmwbih";
+    sha256 = "13hlljkqss9abjpwaa5gcn6qnax0ws03zzh45c4rv1if7rwk6nbl";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
-  buildInputs = [ libcap libseccomp glib ];
+  buildInputs = [ glib libcap libseccomp libslirp ];
 
   enableParallelBuilding = true;
+
+  passthru.tests = { inherit (nixosTests) podman; };
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/rootless-containers/slirp4netns";
     description = "User-mode networking for unprivileged network namespaces";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ orivej saschagrunert ];
+    maintainers = with maintainers; [ orivej ] ++ teams.podman.members;
     platforms = platforms.linux;
   };
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pshs";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "mgorny";
     repo = "pshs";
     rev = "v${version}";
-    sha256 = "04l03myh99npl78y8nss053gnc7k8q60vdbdpml19sshmwaw3fgi";
+    sha256 = "1j8j4r0vsmp6226q6jdgf9bzhx3qk7vdliwaw7f8kcsrkndkg6p4";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Pretty small HTTP server - a command-line tool to share files";
-    homepage = https://github.com/mgorny/pshs;
+    homepage = "https://github.com/mgorny/pshs";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.linux;
   };

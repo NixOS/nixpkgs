@@ -20,7 +20,7 @@ fetchurl {
   sha256 = "0pwm20f38lcbfkdqkpa2ydpc9kvmdg0ifc4h2dmipsnwbcb5rfwm";
 
   meta = with lib; {
-    homepage = http://pecita.eu/police-en.php;
+    homepage = "http://pecita.eu/police-en.php";
     description = "Handwritten font with connected glyphs";
     license = licenses.ofl;
     platforms = platforms.all;

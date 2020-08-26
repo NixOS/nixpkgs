@@ -20,10 +20,9 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://github.com/tom5760/usermount;
+    homepage = "https://github.com/tom5760/usermount";
     description = "A simple tool to automatically mount removable drives using UDisks2 and D-Bus";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };
 }

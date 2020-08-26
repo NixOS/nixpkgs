@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Django app that makes registration and authentication easy";
-    homepage = https://github.com/Tivix/django-rest-auth;
+    homepage = "https://github.com/Tivix/django-rest-auth";
     license = licenses.mit;
     maintainers = [ maintainers.ivegotasthma ];
   };

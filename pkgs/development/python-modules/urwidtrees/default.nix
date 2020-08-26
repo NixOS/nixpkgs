@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Tree widgets for urwid";
-    homepage = https://github.com/pazz/urwidtrees;
+    homepage = "https://github.com/pazz/urwidtrees";
     license = licenses.gpl3;
   };
 

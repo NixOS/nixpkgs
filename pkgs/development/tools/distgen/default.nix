@@ -2,11 +2,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "distgen";
-  version = "1.4";
+  version = "1.5";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "13k940xgpci754gmmnhz3j5rfvlg9hdh21j4yjh8dlr6g88qjc1x";
+    sha256 = "08f9rw5irgv0gw7jizk5f9csn0yhrdnb84k40px1zbypsylvr5c5";
   };
 
   checkInputs = with python3.pkgs; [

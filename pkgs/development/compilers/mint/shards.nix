@@ -2,26 +2,26 @@
   admiral = {
     owner = "jwaldrip";
     repo = "admiral.cr";
-    rev = "v1.7.3";
-    sha256 = "0b98qjy43wsrc08am7lkhcdsxc7gplf9hcmbvd4p3dw4g107rk91";
+    rev = "v1.9.0";
+    sha256 = "0y8gsh1qz42bc9jawcrn0i49mzzfvf8znmivd8lybapf0f53fblz";
   };
   ameba = {
-    owner = "veelenga";
+    owner = "crystal-ameba";
     repo = "ameba";
-    rev = "v0.10.1";
-    sha256 = "0dcw7px7g0c5pxpdlirhirqzhcc7gdwdfiwb9kgm4x1k74ghjgxq";
+    rev = "v0.12.0";
+    sha256 = "0g68yijbm2j4ig536fwq49d1z7x2iv9kp4g3gjklf5zn1sbqhm12";
   };
   baked_file_system = {
     owner = "schovi";
     repo = "baked_file_system";
-    rev = "v0.9.7";
-    sha256 = "1fi6zag1a6h4xwrfizy01dls3hhraqw0cmpwj7rjv1qcddjgig5z";
+    rev = "v0.9.8";
+    sha256 = "12l375jllg1lxvfh610dz0a39p803xw6q9fxlmnc6hy55i0gm0y3";
   };
   diff = {
     owner = "MakeNowJust";
     repo = "crystal-diff";
-    rev = "51962dc36f9bbb1b926d557f7cb8993a6c73cc63";
-    sha256 = "1nwnsxm8srfw8jg0yfi2v19x6j3dadx62hq0xpxra40qcqz9dbnp";
+    rev = "v1.1.0";
+    sha256 = "1q5q2d5mp1r8c6k5v4755sb3b6awiz85d1j280djzhbd0pggk3z7";
   };
   dotenv = {
     owner = "gdotdesign";
@@ -32,14 +32,14 @@
   exception_page = {
     owner = "crystal-loot";
     repo = "exception_page";
-    rev = "v0.1.2";
-    sha256 = "0j5ishhyriq9p339yaawrmawl9wgmp1paniq30a8d6a0568h3avq";
+    rev = "v0.1.4";
+    sha256 = "0bsp2m89sl0bg9d5szbs1nxyk7yk58rkk24aibr39hhb5zi70pqi";
   };
   kemal = {
     owner = "kemalcr";
     repo = "kemal";
-    rev = "v0.25.1";
-    sha256 = "1334i905xj6vlmp8acyybwwlaxsgmf90b59da7brzpnf28wci782";
+    rev = "v0.26.1";
+    sha256 = "169pwkjmk7x6j8i0rf5rpyk1y0hl7jaf9h6yrq4ha2ag9yq9i8fr";
   };
   kilt = {
     owner = "jeromegn";

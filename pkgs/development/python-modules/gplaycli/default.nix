@@ -18,7 +18,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ libffi pyasn1 clint ndg-httpsclient protobuf requests args gpapi pyaxmlparser ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/matlink/gplaycli;
+    homepage = "https://github.com/matlink/gplaycli";
     description = "Google Play Downloader via Command line";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ ];

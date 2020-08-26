@@ -10,18 +10,18 @@
 
 buildPythonPackage rec {
   pname = "Flask-Babel";
-  version = "0.12.2";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "316ad183e42003f3922957fa643d0a1e8e34a0f0301a88c3a8f605bc37ba5c86";
+    sha256 = "0gmb165vkwv5v7dxsxa2i3zhafns0fh938m2zdcrv4d8z5l099yn";
   };
 
   propagatedBuildInputs = [ flask jinja2 speaklater Babel pytz ];
 
   meta = with stdenv.lib; {
     description = "Adds i18n/l10n support to Flask applications";
-    homepage = https://github.com/mitsuhiko/flask-babel;
+    homepage = "https://github.com/mitsuhiko/flask-babel";
     license = licenses.bsd0;
     maintainers = with maintainers; [ matejc ];
   };

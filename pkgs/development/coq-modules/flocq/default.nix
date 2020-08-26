@@ -2,11 +2,11 @@
 
 let params =
   if stdenv.lib.versionAtLeast coq.coq-version "8.7" then {
-    version = "3.2.0";
-    sha256 = "15bi36x7zj0glsb3s2gwqd4wswhfzh36rbp7imbyff53a7nna95l";
+    version = "3.3.1";
+    sha256 = "0k1nfgiszmai5dihhpfa5mgq9rwigl0n38dw10jn79x89xbdpyh5";
   } else {
     version = "2.6.1";
-    sha256 = "1y4czkfrd8p37vwv198nns4hz1brfv71na17pxsidwpxy7qnyfw1";
+    sha256 = "0q5a038ww5dn72yvwn5298d3ridkcngb1dik8hdyr3xh7gr5qibj";
   }
 ; in
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ]);
 
   buildPhase = ''
-    ${bash}/bin/bash autogen.sh
+    ${bash}/bin/bash autogen.sh || autoconf
     ${bash}/bin/bash configure --libdir=$out/lib/coq/${coq.coq-version}/user-contrib/Flocq
     ./remake
   '';
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://flocq.gforge.inria.fr/;
+    homepage = "http://flocq.gforge.inria.fr/";
     description = "A floating-point formalization for the Coq system";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ jwiegley ];
@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" "8.8" "8.9" "8.10" ];
+    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" "8.8" "8.9" "8.10" "8.11" "8.12" ];
   };
 }

@@ -68,12 +68,7 @@ in
 
     services.bind = {
 
-      enable = mkOption {
-        default = false;
-        description = "
-          Whether to enable BIND domain name server.
-        ";
-      };
+      enable = mkEnableOption "BIND domain name server";
 
       cacheNetworks = mkOption {
         default = ["127.0.0.0/24"];

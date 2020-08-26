@@ -4,13 +4,13 @@
 , gobjectSupport ? true, glib
 , xcbSupport ? x11Support, libxcb, xcbutil # no longer experimental since 1.12
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
-, glSupport ? config.cairo.gl or (libGLSupported && stdenv.isLinux)
+, glSupport ? x11Support && config.cairo.gl or (libGLSupported && stdenv.isLinux)
 , libGL ? null # libGLU libGL is no longer a big dependency
 , pdfSupport ? true
 , darwin
 }:
 
-assert glSupport -> libGL != null;
+assert glSupport -> x11Support && libGL != null;
 
 let
   version = "1.16.0";
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
     ++ optional glSupport libGL
     ; # TODO: maybe liblzo but what would it be for here?
 
-  configureFlags = if stdenv.isDarwin then [
+  configureFlags = (if stdenv.isDarwin then [
     "--disable-dependency-tracking"
     "--enable-quartz"
     "--enable-quartz-font"
@@ -71,7 +71,7 @@ in stdenv.mkDerivation rec {
     ++ optional xcbSupport "--enable-xcb"
     ++ optional glSupport "--enable-gl"
     ++ optional pdfSupport "--enable-pdf"
-  );
+  )) ++ optional (!x11Support) "--disable-xlib";
 
   preConfigure =
   # On FreeBSD, `-ldl' doesn't exist.
@@ -112,7 +112,7 @@ in stdenv.mkDerivation rec {
       when available (e.g., through the X Render Extension).
     '';
 
-    homepage = http://cairographics.org/;
+    homepage = "http://cairographics.org/";
 
     license = with licenses; [ lgpl2Plus mpl10 ];
 

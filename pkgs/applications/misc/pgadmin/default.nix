@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "PostgreSQL administration GUI tool";
-    homepage = https://www.pgadmin.org;
+    homepage = "https://www.pgadmin.org";
     license = licenses.gpl2;
     maintainers = with maintainers; [ domenkozar wmertens ];
     platforms = platforms.unix;
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       exec = "pgadmin3";
       icon = "pgAdmin3";
       type = "Application";
-      categories = "Application;Development;";
+      categories = "Development;";
       mimeType = "text/html";
     };
   in ''

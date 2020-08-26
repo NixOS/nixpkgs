@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   pname = "qbs";
 
-  version = "1.15.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "qbs";
     repo = "qbs";
     rev = "v${version}";
-    sha256 = "0hq2lx5w5lsiy9c69bcps4wyn2sa9s88hj0bq95p93sfiwq6mxlr";
+    sha256 = "1kg11s3figpkvgd85p0zk416s57gnvlzrz1isbc2lv13adidf041";
   };
 
   nativeBuildInputs = [ qmake ];

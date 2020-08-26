@@ -6,6 +6,7 @@
 , speechdSupport ? false, speechd ? null
 , pulseSupport ? false, libpulseaudio ? null
 , iceSupport ? false, zeroc-ice ? null
+, nixosTests
 }:
 
 assert jackSupport -> libjack2 != null;
@@ -62,6 +63,8 @@ let
     '';
 
     enableParallelBuilding = true;
+
+    passthru.tests.connectivity = nixosTests.mumble;
 
     meta = {
       description = "Low-latency, high quality voice chat software";
@@ -125,14 +128,14 @@ let
   } source;
 
   source = rec {
-    version = "1.3.0";
+    version = "1.3.2";
 
     # Needs submodules
     src = fetchFromGitHub {
       owner = "mumble-voip";
       repo = "mumble";
       rev = version;
-      sha256 = "0g5ri84gg0x3crhpxlzawf9s9l4hdna6aqw6qbdpx1hjlf5k6g8k";
+      sha256 = "1ljn7h7dr9iyhvq7rdh0prl7hzn9d2hhnxv0ni6dha6f7d9qbfy6";
       fetchSubmodules = true;
     };
   };

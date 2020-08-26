@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ tcl ];
 
   meta = {
-    homepage = https://sourceforge.net/projects/tcllib/;
+    homepage = "https://sourceforge.net/projects/tcllib/";
     description = "Tcl-only library of standard routines for Tcl";
     license = stdenv.lib.licenses.tcltk;
     platforms = stdenv.lib.platforms.unix;

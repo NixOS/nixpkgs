@@ -1,23 +1,26 @@
-{ lib, stdenv, fetchurl, gtest, pkgconfig, doxygen, graphviz }:
+{ lib, stdenv, fetchurl, fetchpatch, cmake, gtest }:
 
 stdenv.mkDerivation rec {
   pname = "uriparser";
-  version = "0.9.1";
+  version = "0.9.4";
 
   # Release tarball differs from source tarball
   src = fetchurl {
     url = "https://github.com/uriparser/uriparser/releases/download/${pname}-${version}/${pname}-${version}.tar.bz2";
-    sha256 = "1gisi7h8hd6mswbiaaa3s25bnb77xf37pzrmjy63rcdpwcyqy93m";
+    sha256 = "0yzqp1j6sglyrmwcasgn7zlwg841p3nbxy0h78ngq20lc7jspkdp";
   };
 
-  nativeBuildInputs = [ pkgconfig doxygen graphviz ];
-  buildInputs = lib.optional doCheck gtest;
-  configureFlags = lib.optional (!doCheck) "--disable-tests";
+  nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = [
+    "-DURIPARSER_BUILD_DOCS=OFF"
+  ];
+
+  checkInputs = [ gtest ];
   doCheck = stdenv.targetPlatform.system == stdenv.hostPlatform.system;
 
   meta = with stdenv.lib; {
-    homepage = https://uriparser.github.io/;
+    homepage = "https://uriparser.github.io/";
     description = "Strictly RFC 3986 compliant URI parsing library";
     longDescription = ''
       uriparser is a strictly RFC 3986 compliant URI parsing and handling library written in C.

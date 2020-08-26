@@ -64,7 +64,7 @@ in {
     extraConfig = mkOption {
       default = {};
       type = types.attrsOf types.str;
-      description = "Skydns attribute set of extra config options passed as environemnt variables.";
+      description = "Skydns attribute set of extra config options passed as environment variables.";
     };
   };
 
@@ -83,7 +83,7 @@ in {
         SKYDNS_NAMESERVERS = concatStringsSep "," cfg.nameservers;
       };
       serviceConfig = {
-        ExecStart = "${cfg.package.bin}/bin/skydns";
+        ExecStart = "${cfg.package}/bin/skydns";
       };
     };
 

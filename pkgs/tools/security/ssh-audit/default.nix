@@ -1,53 +1,44 @@
-{ fetchFromGitHub, python3Packages, stdenv }:
+{ lib, fetchFromGitHub, python3Packages }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "ssh-audit";
-  version = "1.7.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
-    owner = "arthepsy";
+    owner = "jtesta";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "0akrychkdym9f6830ysq787c9nc0bkyqvy4h72498lyghwvwc2ms";
+    rev = "v${version}";
+    sha256 = "1z1h9nsgfaxdnkr9dvc0yzc23b3wz436rg2fycg2glwjhhal8az7";
   };
 
-  checkInputs = [
-    python3Packages.pytest
-    python3Packages.pytestcov
+  postPatch = ''
+    cp ./README.md pypi/sshaudit/
+    cp ./ssh-audit.py pypi/sshaudit/sshaudit.py
+    mv pypi/* .
+    ls -lah
+  '';
+
+  checkInputs = with python3Packages; [
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    py.test --cov-report= --cov=ssh-audit -v test
-  '';
+  disabledTests = [
+    "test_resolve_error"
+    "test_resolve_hostname_without_records"
+    "test_resolve_ipv4"
+    "test_resolve_ipv6"
+    "test_resolve_ipv46_both"
+    "test_resolve_ipv46_order"
+    "test_invalid_host"
+    "test_invalid_port"
+    "test_not_connected_socket"
+    "test_ssh2_server_simple"
+  ];
 
-  postPatch = ''
-    printf %s "$setupPy" > setup.py
-    mkdir scripts
-    cp ssh-audit.py scripts/ssh-audit
-    mkdir ssh_audit
-    cp ssh-audit.py ssh_audit/__init__.py
-  '';
-
-  setupPy = /* py */ ''
-    from distutils.core import setup
-    setup(
-      author='arthepsy',
-      description='${meta.description}',
-      license='${meta.license.spdxId}',
-      name='${pname}',
-      packages=['ssh_audit'],
-      scripts=['scripts/ssh-audit'],
-      url='${meta.homepage}',
-      version='${version}',
-    )
-  '';
-
-  meta = {
+  meta = with lib; {
     description = "Tool for ssh server auditing";
-    homepage = "https://github.com/arthepsy/ssh-audit";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [
-      stdenv.lib.maintainers.tv
-    ];
+    homepage = "https://github.com/jtesta/ssh-audit";
+    license = licenses.mit;
+    maintainers = with maintainers; [ tv ];
   };
 }

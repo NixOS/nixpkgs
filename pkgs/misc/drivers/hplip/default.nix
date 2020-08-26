@@ -4,6 +4,8 @@
 , dbus, file, ghostscript, usbutils
 , net-snmp, openssl, perl, nettools
 , bash, coreutils, utillinux
+# To remove references to gcc-unwrapped
+, removeReferencesTo, qt5
 , withQt5 ? true
 , withPlugin ? false
 , withStaticPPDInstall ? false
@@ -12,16 +14,16 @@
 let
 
   name = "hplip-${version}";
-  version = "3.19.12";
+  version = "3.20.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "0mdj0sqgfxjqa550adiw1gn4z9n6wcvn55slivgf0ndn5x89iwxp";
+    sha256 = "004bbd78487b7803cdcf2a96b00de938797227068c4de43ee7ad7d174c4e475a";
   };
 
   plugin = fetchurl {
     url = "https://developers.hp.com/sites/default/files/${name}-plugin.run";
-    sha256 = "1fn8h1a5znjqjh071ifjdywr0xswc14286gwy6h9vvlh8hzrz347";
+    sha256 = "ff3dedda3158be64b985efbf636890ddda5b271ae1f1fbd788219e1344a9c2e7";
   };
 
   hplipState = substituteAll {
@@ -65,12 +67,15 @@ python3Packages.buildPythonApplication {
     zlib
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkgconfig
+    removeReferencesTo
+  ] ++ stdenv.lib.optional withQt5 qt5.wrapQtAppsHook;
 
   pythonPath = with python3Packages; [
     dbus
     pillow
-    pygobject2
+    pygobject3
     reportlab
     usbutils
     sip
@@ -216,12 +221,22 @@ python3Packages.buildPythonApplication {
       --replace /usr/bin/nohup "" \
       --replace {,${utillinux}/bin/}logger \
       --replace {/usr,$out}/bin
+    remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/lib/*.so)
+  '' + stdenv.lib.optionalString withQt5 ''
+    for f in $out/bin/hp-*;do
+      wrapQtApp $f
+    done
   '';
+
+  # There are some binaries there, which reference gcc-unwrapped otherwise.
+  stripDebugList = [
+    "share/hplip" "lib/cups/backend" "lib/cups/filter" python3Packages.python.sitePackages "lib/sane"
+  ];
 
   meta = with stdenv.lib; {
     description = "Print, scan and fax HP drivers for Linux";
-    homepage = https://developers.hp.com/hp-linux-imaging-and-printing;
-    downloadPage = https://sourceforge.net/projects/hplip/files/hplip/;
+    homepage = "https://developers.hp.com/hp-linux-imaging-and-printing";
+    downloadPage = "https://sourceforge.net/projects/hplip/files/hplip/";
     license = if withPlugin
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];

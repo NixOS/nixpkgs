@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "1.7.0";
+  version = "1.8.1";
 
 in stdenv.mkDerivation {
   name = "ucx-${version}";
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
     owner = "openucx";
     repo = "ucx";
     rev = "v${version}";
-    sha256 = "149p8s7jrg7pbbq0hw0qm8va119bsl19q4scgk94vjqliyc1s33h";
+    sha256 = "0yfnx4shgydkp447kipavjzgl6z58jan6l7znhdi8ry4zbgk568a";
   };
 
   nativeBuildInputs = [ autoreconfHook doxygen ];
@@ -31,7 +31,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Unified Communication X library";
-    homepage = http://www.openucx.org;
+    homepage = "http://www.openucx.org";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = [ maintainers.markuskowa ];

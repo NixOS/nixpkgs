@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://jdebp.eu./Softwares/redo/;
+    homepage = "https://jdebp.eu./Softwares/redo/";
     description = "A system for building target files from source files";
     license = stdenv.lib.licenses.bsd2;
     maintainers = [ stdenv.lib.maintainers.vrthra ];

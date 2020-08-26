@@ -32,6 +32,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     license = with licenses; [ gpl2 ufl ];
-    homepage = https://github.com/fluxer/warmux;
+    homepage = "https://github.com/fluxer/warmux";
   };
 }

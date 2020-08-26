@@ -5,11 +5,11 @@ assert stdenv.isLinux -> libcap != null;
 
 stdenv.mkDerivation rec {
   pname = "chrony";
-  version = "3.5";
+  version = "3.5.1";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/chrony/${pname}-${version}.tar.gz";
-    sha256 = "1d9r2dhslll4kzdmxrj0qfgwq1b30d4l3s5cwr8yr93029dpj0jf";
+    sha256 = "19ywl8a3lb2id7lcna5hp2g4pjnfwdc9ihr0fk6i9m45vdq2za0v";
   };
 
   patches = [
@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Sets your computer's clock from time servers on the Net";
-    homepage = https://chrony.tuxfamily.org/;
-    repositories.git = git://git.tuxfamily.org/gitroot/chrony/chrony.git;
+    homepage = "https://chrony.tuxfamily.org/";
+    repositories.git = "git://git.tuxfamily.org/gitroot/chrony/chrony.git";
     license = licenses.gpl2;
     platforms = with platforms; linux ++ freebsd ++ openbsd;
     maintainers = with maintainers; [ fpletz thoughtpolice ];

@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "simple and sensible display of images";
-    homepage = https://github.com/freeman-lab/showit;
+    homepage = "https://github.com/freeman-lab/showit";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

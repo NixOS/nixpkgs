@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Stand alone tray";
-    homepage = http://stalonetray.sourceforge.net;
+    homepage = "http://stalonetray.sourceforge.net";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ raskin ];

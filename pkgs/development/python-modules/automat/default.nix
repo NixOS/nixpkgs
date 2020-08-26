@@ -2,12 +2,12 @@
   m2r, setuptools_scm, six, attrs }:
 
 buildPythonPackage rec {
-  version = "0.8.0";
+  version = "20.2.0";
   pname = "Automat";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "269a09dfb063a3b078983f4976d83f0a0d3e6e7aaf8e27d8df1095e09dc4a484";
+    sha256 = "7979803c74610e11ef0c0d68a2942b152df52da55336e0c9d58daf1831cbdf33";
   };
 
   buildInputs = [ m2r setuptools_scm ];
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/glyph/Automat;
+    homepage = "https://github.com/glyph/Automat";
     description = "Self-service finite-state machines for the programmer on the go";
     license = licenses.mit;
     maintainers = [ ];

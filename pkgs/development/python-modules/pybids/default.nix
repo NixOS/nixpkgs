@@ -15,12 +15,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.10.0";
+  version = "0.12.0";
   pname = "pybids";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b37ba89eb7407bbfdf8e26e1230b6ef452da3d986df5eed21aab96be61b6e844";
+    sha256 = "0flvrb61hfyjjgdz07dlm8m9pqwb8qrx027zfrwa9d5nw1az7g28";
   };
 
   propagatedBuildInputs = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python tools for querying and manipulating BIDS datasets";
-    homepage = https://github.com/bids-standard/pybids;
+    homepage = "https://github.com/bids-standard/pybids";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };

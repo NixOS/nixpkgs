@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C++ Reflection Library";
-    homepage = https://www.rttr.org;
+    homepage = "https://www.rttr.org";
     license = licenses.mit;
     platforms = platforms.unix;
   };

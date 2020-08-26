@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     name = "jabref";
     desktopName = "JabRef";
     genericName = "Bibliography manager";
-    categories = "Application;Office;";
+    categories = "Office;";
     icon = "jabref";
     exec = "jabref";
   };
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open source bibliography reference manager";
-    homepage = https://www.jabref.org;
+    homepage = "https://www.jabref.org";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = [ maintainers.gebner ];

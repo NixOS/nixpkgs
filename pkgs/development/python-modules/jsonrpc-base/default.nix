@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A JSON-RPC client library base interface";
-    homepage = https://github.com/armills/jsonrpc-base;
+    homepage = "https://github.com/armills/jsonrpc-base";
     license = licenses.bsd3;
     maintainers = with maintainers; [ peterhoeg ];
   };

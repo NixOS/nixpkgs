@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , meson
 , ninja
@@ -15,17 +16,17 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-mouse-touchpad";
-  version = "2.4.0";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1ls5jxzmd7cmbv8h67q6mcmfrfksgwjndqd6r9gxivsz2lcji3x7";
+    sha256 = "0jfykvdpjlymnks8mhlv9957ybq7srqqq23isjvh0jvc2r3cd7sq";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Switchboard Mouse & Touchpad Plug";
-    homepage = https://github.com/elementary/switchboard-plug-mouse-touchpad;
+    homepage = "https://github.com/elementary/switchboard-plug-mouse-touchpad";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

@@ -1,28 +1,20 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, uutf, lwt }:
+{ lib, buildDunePackage, fetchzip, uutf }:
 
-stdenv.mkDerivation rec {
+buildDunePackage rec {
   pname = "markup";
-  version = "0.7.5";
-  name = "ocaml${ocaml.version}-${pname}-${version}";
+  version = "0.8.2";
 
   src = fetchzip {
     url = "https://github.com/aantron/markup.ml/archive/${version}.tar.gz";
-    sha256 = "09qm73m6c6wjh51w61vnfsnis37m28cf1r6hnkr3bbg903ahwbp5";
+    sha256 = "13zcrwzjmifniv3bvjbkd2ah8wwa3ld75bxh1d8hrzdvfxzh9szn";
     };
-
-  buildInputs = [ ocaml findlib ocamlbuild lwt ];
-
-  installPhase = "make ocamlfind-install";
 
   propagatedBuildInputs = [ uutf ];
 
-  createFindlibDestdir = true;
-
-  meta = with stdenv.lib; {
-    homepage = https://github.com/aantron/markup.ml/;
+  meta = with lib; {
+    homepage = "https://github.com/aantron/markup.ml/";
     description = "A pair of best-effort parsers implementing the HTML5 and XML specifications";
-    license = licenses.bsd2;
-    platforms = ocaml.meta.platforms or [];
+    license = licenses.mit;
     maintainers = with maintainers; [
       gal_bolle
       ];

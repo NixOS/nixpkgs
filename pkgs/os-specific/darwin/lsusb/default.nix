@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://github.com/jlhonora/lsusb;
+    homepage = "https://github.com/jlhonora/lsusb";
     description = "lsusb command for Mac OS X";
     platforms = stdenv.lib.platforms.darwin;
     license = stdenv.lib.licenses.mit;

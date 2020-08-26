@@ -1,4 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, freetype, cairo, libintl
+, gobject-introspection
 , icu, graphite2, harfbuzz # The icu variant uses and propagates the non-icu one.
 , ApplicationServices, CoreText
 , withCoreText ? false
@@ -8,7 +9,7 @@
 }:
 
 let
-  version = "2.6.4";
+  version = "2.6.7";
   inherit (stdenv.lib) optional optionals optionalString;
 in
 
@@ -17,7 +18,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-${version}.tar.xz";
-    sha256 = "04iwq13w6zkdhljmsxrzgg4fyh04qnwfn57rgrl9kmijc7cvh4wl";
+    sha256 = "065jg6s8xix45s4msj0l2r0iycw5yyyjdylripv7pyfzdk883r29";
   };
 
   postPatch = ''
@@ -36,10 +37,16 @@ stdenv.mkDerivation {
     # not auto-detected by default
     "--with-graphite2=${if withGraphite2 then "yes" else "no"}"
     "--with-icu=${if withIcu then "yes" else "no"}"
+    "--with-gobject=yes"
+    "--enable-introspection=yes"
   ]
     ++ stdenv.lib.optional withCoreText "--with-coretext=yes";
 
-  nativeBuildInputs = [ pkgconfig libintl ];
+  nativeBuildInputs = [
+    gobject-introspection
+    libintl
+    pkgconfig
+  ];
 
   buildInputs = [ glib freetype cairo ] # recommended by upstream
     ++ stdenv.lib.optionals withCoreText [ ApplicationServices CoreText ];
@@ -64,7 +71,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "An OpenType text shaping engine";
-    homepage = http://www.freedesktop.org/wiki/Software/HarfBuzz;
+    homepage = "http://www.freedesktop.org/wiki/Software/HarfBuzz";
     downloadPage = "https://www.freedesktop.org/software/harfbuzz/release/";
     maintainers = [ maintainers.eelco ];
     license = licenses.mit;

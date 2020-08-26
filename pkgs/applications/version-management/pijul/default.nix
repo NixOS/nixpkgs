@@ -57,9 +57,8 @@ in rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "A distributed version control system";
-    homepage = https://pijul.org;
+    homepage = "https://pijul.org";
     license = with licenses; [ gpl2Plus ];
     maintainers = [ maintainers.gal_bolle ];
-    platforms = platforms.all;
   };
 }

@@ -1,15 +1,27 @@
-{ stdenv, lib, fetchurl, fetchpatch, fetchFromGitHub, bc, bison, dtc, flex
-, openssl, swig, meson-tools, armTrustedFirmwareAllwinner
-, armTrustedFirmwareRK3328, armTrustedFirmwareRK3399
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, fetchFromGitHub
+, bc
+, bison
+, dtc
+, flex
+, openssl
+, swig
+, meson-tools
+, armTrustedFirmwareAllwinner
+, armTrustedFirmwareRK3328
+, armTrustedFirmwareRK3399
 , armTrustedFirmwareS905
 , buildPackages
 }:
 
 let
-  defaultVersion = "2020.01";
+  defaultVersion = "2020.07";
   defaultSrc = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    sha256 = "1w9ml4jl15q6ixpdqzspxjnl7d3rgxd7f99ms1xv5c8869h3qida";
+    sha256 = "0sjzy262x93aaqd6z24ziaq19xjjjk5f577ivf768vmvwsgbzxf1";
   };
   buildUBoot = {
     version ? null
@@ -80,7 +92,7 @@ let
     dontStrip = true;
 
     meta = with lib; {
-      homepage = http://www.denx.de/wiki/U-Boot/;
+      homepage = "http://www.denx.de/wiki/U-Boot/";
       description = "Boot loader for embedded systems";
       license = licenses.gpl2;
       maintainers = with maintainers; [ dezgeg samueldr lopsided98 ];
@@ -336,6 +348,13 @@ in {
     extraMeta.platforms = ["aarch64-linux"];
     BL31="${armTrustedFirmwareRK3399}/bl31.elf";
     filesToInstall = [ "u-boot.itb" "idbloader.img"];
+  };
+
+  ubootROCPCRK3399 = buildUBoot {
+    defconfig = "roc-pc-rk3399_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = [ "spl/u-boot-spl.bin" "u-boot.itb" "idbloader.img"];
+    BL31 = "${armTrustedFirmwareRK3399}/bl31.elf";
   };
 
   ubootSheevaplug = buildUBoot {

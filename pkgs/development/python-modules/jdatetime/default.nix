@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Jalali datetime binding for python";
-    homepage = https://pypi.python.org/pypi/jdatetime;
+    homepage = "https://pypi.python.org/pypi/jdatetime";
     license = licenses.psfl;
   };
 }

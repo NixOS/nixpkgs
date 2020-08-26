@@ -1,4 +1,8 @@
-{ stdenv, fetchFromGitHub, deepin-wallpapers, deepin }:
+{ stdenv
+, fetchFromGitHub
+, deepin-wallpapers
+, deepin
+}:
 
 stdenv.mkDerivation rec {
   pname = "deepin-desktop-base";
@@ -11,9 +15,13 @@ stdenv.mkDerivation rec {
     sha256 = "0rs7bjy35k5gc5nbba1cijhdz16zny30lgmcf2ckx1pkdszk2vra";
   };
 
-  nativeBuildInputs = [ deepin.setupHook ];
+  nativeBuildInputs = [
+    deepin.setupHook
+  ];
 
-  buildInputs = [ deepin-wallpapers ];
+  buildInputs = [
+    deepin-wallpapers
+  ];
 
   # TODO: Fedora recommended dependencies:
   #   deepin-wallpapers
@@ -40,7 +48,7 @@ stdenv.mkDerivation rec {
     ln -s ../lib/deepin/desktop-version $out/etc/deepin-version
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Base assets and definitions for Deepin Desktop Environment";
@@ -52,7 +60,7 @@ stdenv.mkDerivation rec {
       - login screen background image
       - language information
     '';
-    homepage = https://github.com/linuxdeepin/deepin-desktop-base;
+    homepage = "https://github.com/linuxdeepin/deepin-desktop-base";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

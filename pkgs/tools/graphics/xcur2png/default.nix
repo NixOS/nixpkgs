@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/eworm-de/xcur2png/releases;
+    homepage = "https://github.com/eworm-de/xcur2png/releases";
     description = "Convert X cursors to PNG images";
     license = licenses.gpl3;
     platforms = platforms.unix;

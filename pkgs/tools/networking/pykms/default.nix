@@ -44,16 +44,14 @@ in buildPythonApplication rec {
 
   propagatedBuildInputs = [ systemd pytz tzlocal ];
 
+  # Fix https://github.com/SystemRage/py-kms/issues/64 :
+  patches = [ ./log-to-current-directory-by-default.patch ];
+
   postPatch = ''
     siteDir=$out/${python3.sitePackages}
 
     substituteInPlace pykms_DB2Dict.py \
       --replace "'KmsDataBase.xml'" "'$siteDir/KmsDataBase.xml'"
-
-    # we are logging to journal
-    sed -i pykms_Misc.py \
-      -e '6ifrom systemd import journal' \
-      -e 's/log_obj.addHandler(log_handler)/log_obj.addHandler(journal.JournalHandler())/'
   '';
 
   format = "other";

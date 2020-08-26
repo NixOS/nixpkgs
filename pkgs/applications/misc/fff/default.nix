@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Fucking Fast File-Manager";
-    homepage = https://github.com/dylanaraps/fff;
+    homepage = "https://github.com/dylanaraps/fff";
     license = licenses.mit;
     maintainers = [ maintainers.tadeokondrak ];
     platforms = platforms.all;

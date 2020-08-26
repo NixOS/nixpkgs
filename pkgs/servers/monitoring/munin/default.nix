@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.51";
+  version = "2.0.64";
   pname = "munin";
 
   src = fetchFromGitHub {
     owner = "munin-monitoring";
     repo = "munin";
     rev = version;
-    sha256 = "1r018lbk1dncg6v3ai7wvnk1qr4ddsjc5g605dq086z0l0xg7ras";
+    sha256 = "00gvvy7s2h1kxdxss7n63ir87fn66kq48lp94ackdyj49526maz4";
   };
 
   buildInputs = [
@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
       interface. Munin can help analyze resource trends and 'what just happened
       to kill our performance?' problems.
     '';
-    homepage = http://munin-monitoring.org/;
+    homepage = "http://munin-monitoring.org/";
     license = licenses.gpl2;
     maintainers = [ maintainers.domenkozar maintainers.bjornfor ];
     platforms = platforms.linux;

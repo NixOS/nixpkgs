@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pytest Plugin to disable socket calls during tests";
-    homepage = https://github.com/miketheman/pytest-socket;
+    homepage = "https://github.com/miketheman/pytest-socket";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

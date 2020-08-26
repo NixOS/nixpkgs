@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ (fetchpatch {
-    url = https://github.com/alavrik/piqi-ocaml/commit/336e8fdb84e77f4105e9bbb5ab545b8729101308.patch;
+    url = "https://github.com/alavrik/piqi-ocaml/commit/336e8fdb84e77f4105e9bbb5ab545b8729101308.patch";
     sha256 = "071s4xjyr6xx95v6az2lbl2igc87n7z5jqnnbhfq2pidrxakd0la";
   })];
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   installPhase = "DESTDIR=$out make install";
 
   meta = with stdenv.lib; {
-    homepage = http://piqi.org;
+    homepage = "http://piqi.org";
     description = "Universal schema language and a collection of tools built around it. These are the ocaml bindings";
     license = licenses.asl20;
     maintainers = [ maintainers.maurer ];

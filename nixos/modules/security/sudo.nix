@@ -173,7 +173,9 @@ in
 
   config = mkIf cfg.enable {
 
-    security.sudo.extraRules = [
+    # We `mkOrder 600` so that the default rule shows up first, but there is
+    # still enough room for a user to `mkBefore` it.
+    security.sudo.extraRules = mkOrder 600 [
       { groups = [ "wheel" ];
         commands = [ { command = "ALL"; options = (if cfg.wheelNeedsPassword then [ "SETENV" ] else [ "NOPASSWD" "SETENV" ]); } ];
       }

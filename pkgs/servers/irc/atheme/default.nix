@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A set of services for IRC networks";
-    homepage = https://atheme.github.io/;
+    homepage = "https://atheme.github.io/";
     license = licenses.isc;
     platforms = platforms.unix;
     maintainers = with maintainers; [ leo60228 ];

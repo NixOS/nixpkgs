@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl, electron, makeDesktopItem, makeWrapper, nodePackages, autoPatchelfHook}:
+{ lib, stdenv, fetchurl, electron_4, makeDesktopItem, makeWrapper, nodePackages, autoPatchelfHook}:
 
+let
+  electron = electron_4;
+in
 stdenv.mkDerivation rec {
   pname = "teleprompter";
   version = "2.3.4";

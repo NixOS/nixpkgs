@@ -18,9 +18,8 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "sift is a fast and powerful alternative to grep";
-    homepage = https://sift-tool.org;
+    homepage = "https://sift-tool.org";
     maintainers = [ maintainers.carlsverre ];
     license = licenses.gpl3;
-    platforms = platforms.all;
   };
 }

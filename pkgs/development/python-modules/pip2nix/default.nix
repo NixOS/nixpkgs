@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Generate Nix expressions for Python packages";
-    homepage = https://github.com/johbo/pip2nix;
+    homepage = "https://github.com/johbo/pip2nix";
     license = licenses.gpl3;
   };
 

@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
       to be executed by the shell. There are no built-in commands, CLEX is an
       add-on to your favorite shell.
     '';
-    homepage = http://www.clex.sk;
+    homepage = "http://www.clex.sk";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }

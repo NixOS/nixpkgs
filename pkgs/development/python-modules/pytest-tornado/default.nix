@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-tornado";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ncaq7icijls6qh66kv19w3i9av2wnmaycfr4yadyybajr8yvffz";
+    sha256 = "1cgisd7lb9q2hf55558cbn5jfhv65vsgk46ykgidzf9kqcq1kymr";
   };
 
   # package has no tests
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A py.test plugin providing fixtures and markers to simplify testing of asynchronous tornado applications.";
-    homepage =  https://github.com/eugeniy/pytest-tornado;
+    homepage =  "https://github.com/eugeniy/pytest-tornado";
     license = licenses.asl20;
     maintainers = with maintainers; [ ixxie ];
   };

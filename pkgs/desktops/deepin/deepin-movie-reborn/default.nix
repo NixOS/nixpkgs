@@ -1,6 +1,22 @@
-{ stdenv, mkDerivation, fetchFromGitHub, fetchpatch, cmake, pkgconfig, qttools, qtx11extras,
-  dtkcore, dtkwidget, ffmpeg, ffmpegthumbnailer, mpv, pulseaudio,
-  libdvdnav, libdvdread, xorg, deepin }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkgconfig
+, qttools
+, qtx11extras
+, dtkcore
+, dtkwidget
+, ffmpeg_3
+, ffmpegthumbnailer
+, mpv
+, pulseaudio
+, libdvdnav
+, libdvdread
+, xorg
+, deepin
+}:
 
 mkDerivation rec {
   pname = "deepin-movie-reborn";
@@ -25,7 +41,7 @@ mkDerivation rec {
   buildInputs = [
     dtkcore
     dtkwidget
-    ffmpeg
+    ffmpeg_3
     ffmpegthumbnailer
     libdvdnav
     libdvdread
@@ -48,7 +64,6 @@ mkDerivation rec {
 
   NIX_LDFLAGS = "-ldvdnav";
 
-
   postPatch = ''
     searchHardCodedPaths  # debugging
 
@@ -58,11 +73,11 @@ mkDerivation rec {
       --replace "Exec=deepin-movie" "Exec=$out/bin/deepin-movie"
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Deepin movie player";
-    homepage = https://github.com/linuxdeepin/deepin-movie-reborn;
+    homepage = "https://github.com/linuxdeepin/deepin-movie-reborn";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

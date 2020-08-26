@@ -8,13 +8,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "freewheeling";
-  version = "0.6.5";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "free-wheeling";
     repo = "freewheeling";
     rev = "v${version}";
-    sha256 = "1gjii2kndffj9iqici4vb9zrkrdqj1hs9q43x7jv48wv9872z78r";
+    sha256 = "1xff5whr02cixihgd257dc70hnyf22j3zamvhsvg4lp7zq9l2in4";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook libtool ];
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
         software, released under the GNU GPL license.
     '' ;
 
-    homepage = http://freewheeling.sourceforge.net;
+    homepage = "http://freewheeling.sourceforge.net";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.sepi ];
     platforms = stdenv.lib.platforms.linux;

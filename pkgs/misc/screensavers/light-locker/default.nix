@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , meson
 , ninja
 , pkgconfig
@@ -65,13 +66,13 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/the-cavalry/light-locker;
+    homepage = "https://github.com/the-cavalry/light-locker";
     description = "A simple session-locker for LightDM";
     longDescription = ''
       A simple locker (forked from gnome-screensaver) that aims to

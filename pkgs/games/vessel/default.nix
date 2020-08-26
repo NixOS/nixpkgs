@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       causing. Vessel is a game about a man with the power to bring ordinary matter
       to life, and all the consequences that ensue.
     '';
-    homepage = http://www.strangeloopgames.com;
+    homepage = "http://www.strangeloopgames.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ jcumming ];
   };

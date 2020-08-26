@@ -17,7 +17,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://www.stringtemplate.org/;
+    homepage = "https://www.stringtemplate.org/";
     description = "Text Templating Library";
     platforms = stdenv.lib.platforms.linux;
   };

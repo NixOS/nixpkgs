@@ -9,6 +9,7 @@
 , pkgconfig
 , dotnetbuildhelpers
 , clang
+, glib
 , mono
 }:
 
@@ -63,6 +64,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
+    glib
     mono
     psutil # needed for memory leak tests
   ];
@@ -84,7 +86,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = ".Net and Mono integration for Python";
-    homepage = https://pythonnet.github.io;
+    homepage = "https://pythonnet.github.io";
     license = licenses.mit;
     maintainers = with maintainers; [ jraygauthier ];
     broken = true;

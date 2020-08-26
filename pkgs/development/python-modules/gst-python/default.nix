@@ -1,52 +1,58 @@
-{ buildPythonPackage, fetchurl, meson, ninja, stdenv, pkgconfig, python, pygobject3
-, gobject-introspection, gst-plugins-base, isPy3k
+{ buildPythonPackage
+, fetchurl
+, meson
+, ninja
+, stdenv
+, pkgconfig
+, python
+, pygobject3
+, gobject-introspection
+, gst-plugins-base
+, isPy3k
+, fetchpatch
 }:
 
-let
+buildPythonPackage rec {
   pname = "gst-python";
-  version = "1.14.4";
-  name = "${pname}-${version}";
-in buildPythonPackage rec {
-  inherit pname version;
+  version = "1.16.2";
+
   format = "other";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    urls = [
-      "${meta.homepage}/src/gst-python/${name}.tar.xz"
-      "mirror://gentoo/distfiles/${name}.tar.xz"
-      ];
-    sha256 = "06ssx19fs6pg4d32p9ph9w4f0xwmxaw2dxfj17rqkn5njd7v5zfh";
+    url = "${meta.homepage}/src/gst-python/${pname}-${version}.tar.xz";
+    sha256 = "1a48ca66izmm8hnp608jv5isg3jxb0vlfmhns0bg9nbkilag7390";
   };
 
-  patches = [
-    # Meson build does not support Python 2 at the moment
-    # https://bugzilla.gnome.org/show_bug.cgi?id=796092
-    (fetchurl {
-      name = "0002-meson-use-new-python-module.patch";
-      url = https://bugzilla.gnome.org/attachment.cgi?id=371989;
-      sha256 = "1k46nvw175c1wvkqnx783i9d4w9vn431spcl48jb3y224jj3va08";
-    })
-    # Fixes `from gi.repository import Gst` when gst-python's site-package is in
-    # PYTHONPATH
-    (fetchurl {
-      url = https://gitlab.freedesktop.org/gstreamer/gst-python/commit/d64bbc1e0c3c948c148f505cc5f856ce56732880.diff;
-      sha256 = "1n9pxmcl1x491mp47avpcw2a6n71lm0haz6mfas168prkgsk8q3r";
-    })
-    # Fixes python2 build from the above changes
-    (fetchurl {
-      url = https://gitlab.freedesktop.org/gstreamer/gst-python/commit/f79ac2d1434d7ba9717f3e943cfdc76e121eb5dd.diff;
-      sha256 = "17a164b0v36g0kwiqdlkjx6g0pjhcs6ilizck7iky8bgjnmiypm1";
-    })
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    python
+    gobject-introspection
+    gst-plugins-base
   ];
 
-  # TODO: First python_dep in meson.build needs to be removed
-  postPatch = ''
-    substituteInPlace meson.build --replace python3 python${if isPy3k then "3" else "2"}
-  '';
+  propagatedBuildInputs = [
+    gst-plugins-base
+    pygobject3
+  ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig python gobject-introspection gst-plugins-base ];
+  patches = stdenv.lib.optionals stdenv.isDarwin [
+    # Fix configure python lib detection in macOS. Remove with the next release
+    (fetchpatch {
+      url = "https://github.com/GStreamer/gst-python/commit/f98c206bdf01529f8ea395a719b10baf2bdf717f.patch";
+      sha256 = "04n4zrnfivgr7iaqw4sjlbd882s8halc2bbbhfxqf0sg2lqwmrxg";
+    })
+  ] ++ [
+    # Fix linking against Python 3.8
+    # https://gitlab.freedesktop.org/gstreamer/gst-python/merge_requests/30
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/gstreamer/gst-python/commit/22f28155d86e27c4134de4ed2861264003fcfd23.patch";
+      sha256 = "Y70qVguHUBmmRVMFBKAP0d6anBQw5W0TKyu2bAwxbQg=";
+    })
+  ];
 
   mesonFlags = [
     "-Dpython=python${if isPy3k then "3" else "2"}"
@@ -59,10 +65,8 @@ in buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/issues/47390
   installCheckPhase = "meson test --print-errorlogs";
 
-  propagatedBuildInputs = [ gst-plugins-base pygobject3 ];
-
   meta = {
-    homepage = https://gstreamer.freedesktop.org;
+    homepage = "https://gstreamer.freedesktop.org";
 
     description = "Python bindings for GStreamer";
 

@@ -6,14 +6,14 @@ if stdenv.lib.versionOlder django.version "2.0"
 then throw "django-raster requires Django >= 2.0. Consider overiding the python package set to use django_2."
 else
 buildPythonPackage rec {
-  version = "0.7";
+  version = "0.8";
   pname = "django-raster";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d23089d56f5f435c01a001af6f8ff7905636f87085b13035b4c5b3ace203d98a";
+    sha256 = "9417d8a17930dffee4719f79a38c6ab5d20ac7145d4edf88df0abcb5a360de51";
   };
 
   # Tests require a postgresql + postgis server
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Basic raster data integration for Django";
-    homepage = https://github.com/geodesign/django-raster;
+    homepage = "https://github.com/geodesign/django-raster";
     license = licenses.mit;
   };
 }

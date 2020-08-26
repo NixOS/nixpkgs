@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/Changaco/python-libarchive-c;
+    homepage = "https://github.com/Changaco/python-libarchive-c";
     description = "Python interface to libarchive";
     license = licenses.cc0;
   };

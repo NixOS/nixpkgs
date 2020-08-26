@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Send copies of (UDP) datagrams to multiple receivers";
-    homepage = https://github.com/sleinen/samplicator/;
+    homepage = "https://github.com/sleinen/samplicator/";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;
   };

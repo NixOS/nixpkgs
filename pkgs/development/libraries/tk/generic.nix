@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   postInstall = ''
     ln -s $out/bin/wish* $out/bin/wish
     cp ../{unix,generic}/*.h $out/include
-    ln -s $out/lib/libtk${tcl.release}.so $out/lib/libtk.so
+    ln -s $out/lib/libtk${tcl.release}${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libtk${stdenv.hostPlatform.extensions.sharedLibrary}
   ''
   + stdenv.lib.optionalString (stdenv.isDarwin) ''
     cp ../macosx/*.h $out/include
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A widget toolkit that provides a library of basic elements for building a GUI in many different programming languages";
-    homepage = https://www.tcl.tk/;
+    homepage = "https://www.tcl.tk/";
     license = licenses.tcltk;
     platforms = platforms.all;
     maintainers = with maintainers; [ lovek323 vrthra ];

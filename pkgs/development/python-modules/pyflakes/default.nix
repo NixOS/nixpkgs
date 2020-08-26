@@ -2,17 +2,17 @@
 
 buildPythonPackage rec {
   pname = "pyflakes";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d976835886f8c5b31d47970ed689944a0262b5f3afa00a5a7b4dc81e5449f8a2";
+    sha256 = "35b2d75ee967ea93b55750aa9edbbf72813e06a66ba54438df2cfac9e3c27fc8";
   };
 
   checkInputs = [ unittest2 ];
 
   meta = with stdenv.lib; {
-    homepage = https://launchpad.net/pyflakes;
+    homepage = "https://launchpad.net/pyflakes";
     description = "A simple program which checks Python source files for errors";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://steghide.sourceforge.net/;
+    homepage = "http://steghide.sourceforge.net/";
     description = "Steganography program that is able to hide data in various kinds of image- and audio-files";
     license = licenses.gpl2;
     platforms = platforms.linux;

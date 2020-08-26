@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Infinitely extensible web-browser (user interface only)";
-    homepage = https://next.atlas.engineer;
+    homepage = "https://next.atlas.engineer";
     license = licenses.bsd3;
     maintainers = [ maintainers.lewo ];
     platforms = [ "x86_64-linux" ];

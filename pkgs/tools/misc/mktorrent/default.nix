@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl ];
 
   meta = {
-    homepage = http://mktorrent.sourceforge.net/;
+    homepage = "http://mktorrent.sourceforge.net/";
     license = stdenv.lib.licenses.gpl2Plus;
     description = "Command line utility to create BitTorrent metainfo files";
     maintainers = with stdenv.lib.maintainers; [Profpatsch];

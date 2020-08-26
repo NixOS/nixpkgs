@@ -5,7 +5,7 @@
 , libsodium
 , cffi
 , six
-, hypothesis
+, hypothesis_4
 }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "0c6100edd16fefd1557da078c7a31e7b7d7a52ce39fdca2bec29d4f7b6e7600c";
   };
 
-  checkInputs = [ pytest hypothesis ];
+  checkInputs = [ pytest hypothesis_4 ];
   buildInputs = [ libsodium ];
   propagatedBuildInputs = [ cffi six ];
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     maintainers = with maintainers; [ va1entin ];
     description = "Python binding to the Networking and Cryptography (NaCl) library";
-    homepage = https://github.com/pyca/pynacl/;
+    homepage = "https://github.com/pyca/pynacl/";
     license = licenses.asl20;
   };
 }

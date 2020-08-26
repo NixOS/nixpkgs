@@ -18,6 +18,7 @@
 , gtk3
 , libpulseaudio
 , libuuid
+, libdrm
 , libX11
 , libXcomposite
 , libXcursor
@@ -29,6 +30,7 @@
 , libXrender
 , libXScrnSaver
 , libXtst
+, mesa
 , nspr
 , nss
 , pango
@@ -56,6 +58,7 @@ rpath = lib.makeLibraryPath [
   glib
   gnome2.GConf
   gtk3
+  libdrm
   libpulseaudio
   libX11
   libXScrnSaver
@@ -69,6 +72,7 @@ rpath = lib.makeLibraryPath [
   libXrender
   libXtst
   libuuid
+  mesa
   nspr
   nss
   pango
@@ -82,11 +86,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.5.112";
+  version = "1.12.112";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "0am7qr09pvy6v720rngfxilh4yalxzp7vcq2yndcz6726wnhw9zx";
+    sha256 = "0nvxmz1wrr6cfyhbnrfjsy9szbjmvjl6080pgkp25xa8rcql5gmb";
   };
 
   dontConfigure = true;

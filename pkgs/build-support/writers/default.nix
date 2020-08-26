@@ -22,7 +22,30 @@ rec {
       inherit interpreter;
       contentPath = content;
     }) ''
-      echo "#! $interpreter" > $out
+      # On darwin a script cannot be used as an interpreter in a shebang but
+      # there doesn't seem to be a limit to the size of shebang and multiple
+      # arguments to the interpreter are allowed.
+      if [[ -n "${toString pkgs.stdenvNoCC.isDarwin}" ]] && isScript $interpreter
+      then
+        wrapperInterpreterLine=$(head -1 "$interpreter" | tail -c+3)
+        # Get first word from the line (note: xargs echo remove leading spaces)
+        wrapperInterpreter=$(echo "$wrapperInterpreterLine" | xargs echo | cut -d " " -f1)
+
+        if isScript $wrapperInterpreter
+        then
+          echo "error: passed interpreter ($interpreter) is a script which has another script ($wrapperInterpreter) as an interpreter, which is not supported."
+          exit 1
+        fi
+
+        # This should work as long as wrapperInterpreter is a shell, which is
+        # the case for programs wrapped with makeWrapper, like
+        # python3.withPackages etc.
+        interpreterLine="$wrapperInterpreterLine $interpreter"
+      else
+        interpreterLine=$interpreter
+      fi
+
+      echo "#! $interpreterLine" > $out
       cat "$contentPath" >> $out
       ${optionalString (check != "") ''
         ${check} $out
@@ -227,6 +250,24 @@ rec {
   writePerlBin = name:
     writePerl "/bin/${name}";
 
+  # makePythonWriter takes python and compatible pythonPackages and produces python script writer,
+  # which validates the script with flake8 at build time. If any libraries are specified,
+  # python.withPackages is used as interpreter, otherwise the "bare" python is used.
+  makePythonWriter = python: pythonPackages: name: { libraries ? [], flakeIgnore ? [] }:
+  let
+    ignoreAttribute = optionalString (flakeIgnore != []) "--ignore ${concatMapStringsSep "," escapeShellArg flakeIgnore}";
+  in
+  makeScriptWriter {
+    interpreter =
+      if libraries == []
+      then "${python}/bin/python"
+      else "${python.withPackages (ps: libraries)}/bin/python"
+    ;
+    check = writeDash "python2check.sh" ''
+      exec ${pythonPackages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"
+    '';
+  } name;
+
   # writePython2 takes a name an attributeset with libraries and some python2 sourcecode and
   # returns an executable
   #
@@ -239,17 +280,7 @@ rec {
   #
   #   print Test.a
   # ''
-  writePython2 = name: { libraries ? [], flakeIgnore ? [] }:
-  let
-    py = pkgs.python2.withPackages (ps: libraries);
-    ignoreAttribute = optionalString (flakeIgnore != []) "--ignore ${concatMapStringsSep "," escapeShellArg flakeIgnore}";
-  in
-  makeScriptWriter {
-    interpreter = "${py}/bin/python";
-    check = writeDash "python2check.sh" ''
-      exec ${pkgs.python2Packages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"
-    '';
-  } name;
+  writePython2 = makePythonWriter pkgs.python2 pkgs.python2Packages;
 
   # writePython2Bin takes the same arguments as writePython2 but outputs a directory (like writeScriptBin)
   writePython2Bin = name:
@@ -267,17 +298,7 @@ rec {
   #   """)
   #   print(y[0]['test'])
   # ''
-  writePython3 = name: { libraries ? [], flakeIgnore ? [] }:
-  let
-    py = pkgs.python3.withPackages (ps: libraries);
-    ignoreAttribute = optionalString (flakeIgnore != []) "--ignore ${concatMapStringsSep "," escapeShellArg flakeIgnore}";
-  in
-  makeScriptWriter {
-    interpreter = "${py}/bin/python";
-    check = writeDash "python3check.sh" ''
-      exec ${pkgs.python3Packages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"
-    '';
-  } name;
+  writePython3 = makePythonWriter pkgs.python3 pkgs.python3Packages;
 
   # writePython3Bin takes the same arguments as writePython3 but outputs a directory (like writeScriptBin)
   writePython3Bin = name:

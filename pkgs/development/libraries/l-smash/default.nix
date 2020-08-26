@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ which ];
 
   meta = with stdenv.lib; {
-    homepage = http://l-smash.github.io/l-smash/;
+    homepage = "http://l-smash.github.io/l-smash/";
     description = "MP4 container utilities";
     license = licenses.isc;
     maintainers = with maintainers; [ tadeokondrak ];

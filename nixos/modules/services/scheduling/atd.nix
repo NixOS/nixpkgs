@@ -67,8 +67,6 @@ in
 
     systemd.services.atd = {
       description = "Job Execution Daemon (atd)";
-      after = [ "systemd-udev-settle.service" ];
-      wants = [ "systemd-udev-settle.service" ];
       wantedBy = [ "multi-user.target" ];
 
       path = [ at ];

@@ -225,7 +225,7 @@ in {
           Restart = "always";
           RestartSec = 2;
         };
-        restartTriggers = [ datadogPkg ] ++ attrNames etcfiles;
+        restartTriggers = [ datadogPkg ] ++  map (x: x.source) (attrValues etcfiles);
       } attrs;
     in {
       datadog-agent = makeService {

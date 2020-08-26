@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   pname = "adoptopenjdk-icedtea-web";
 
-  version = "1.8.3";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "AdoptOpenJDK";
     repo = "IcedTea-Web";
     rev = "icedtea-web-${version}";
-    sha256 = "0bm5k11i2vgb54ch1bawsmjbwnqnp04saadwm2f2mggmmdc6b1qq";
+    sha256 = "0pxijw9v5k4j840jczglx9qyfd57df390g5jdaz3qafblfg0k10n";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig bc ];
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       programming language and an implementation of Java Web Start, originally
       based on the NetX project.
     '';
-    homepage = https://github.com/adoptopenjdk/icedtea-web;
+    homepage = "https://github.com/adoptopenjdk/icedtea-web";
     platforms = stdenv.lib.platforms.linux;
   };
 }

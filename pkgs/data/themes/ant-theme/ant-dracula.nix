@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
     gtk-engine-murrine
   ];
 
-  dontBuild = true;
-
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/themes/${themeName}
@@ -25,10 +23,6 @@ stdenv.mkDerivation rec {
     rm -r $out/share/themes/${themeName}/{Art,LICENSE,README.md,gtk-2.0/render-assets.sh}
     runHook postInstall
   '';
-
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "1a9mkxfb0zixx8s05h15lhnnzygh2qzc8k2q10i0khx90bf72x14";
 
   meta = with stdenv.lib; {
     description = "Dracula variant of the Ant theme";

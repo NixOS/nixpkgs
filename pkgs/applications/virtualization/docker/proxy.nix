@@ -16,13 +16,13 @@ buildGoPackage rec {
   goDeps = null;
 
   installPhase = ''
-    install -m755 -D ./go/bin/proxy $bin/bin/docker-proxy
+    install -m755 -D ./go/bin/proxy $out/bin/docker-proxy
   '';
 
   meta = with stdenv.lib; {
     description = "Docker proxy binary to forward traffic between host and containers";
     license = licenses.asl20;
-    homepage = https://github.com/docker/libnetwork;
+    homepage = "https://github.com/docker/libnetwork";
     maintainers = with maintainers; [vdemeester];
     platforms = platforms.linux;
   };

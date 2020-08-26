@@ -3,14 +3,14 @@
 #TODO: tests
 
 stdenv.mkDerivation rec {
-	pname = "faudio";
-  version = "20.03";
+  pname = "faudio";
+  version = "20.08";
 
   src = fetchFromGitHub {
     owner = "FNA-XNA";
     repo = "FAudio";
     rev = version;
-    sha256 = "0wlbh1py9074896fxa8lcfvjj3l943zz8wjl2rn7g21xf0ar9kyv";
+    sha256 = "1fs0h5wl0ndix61mz7h59c15kpqikrk7nn1rc7m2a44jiw8mzdnx";
   };
 
 	nativeBuildInputs = [cmake];

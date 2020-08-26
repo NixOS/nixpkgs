@@ -6,14 +6,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mudlet";
-  version = "4.3";
+  version = "4.9.1";
 
   src = fetchFromGitHub {
     owner = "Mudlet";
     repo = "Mudlet";
     rev = "Mudlet-${version}";
     fetchSubmodules = true;
-    sha256 = "0qqdmivfwf9jmv5yx90z1fj99nlhnq762lfw6bcxgv74y4l4b4c0";
+    sha256 = "0i022qcmlq4xwl2yh4xd5qdc0ag52605qmqqz6bim0h8f3dp8cx1";
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook git qttools which ];
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Crossplatform mud client";
-    homepage = http://mudlet.org/;
+    homepage = "http://mudlet.org/";
     maintainers = [ maintainers.wyvie maintainers.pstn ];
     platforms = platforms.linux;
     license = licenses.gpl2;

@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   pname = "poco";
 
-  version = "1.9.4";
+  version = "1.10.1";
 
   src = fetchurl {
     url = "https://pocoproject.org/releases/${pname}-${version}/${pname}-${version}-all.tar.gz";
-    sha256 = "0xzxi3r4v2076kcxhj7b1achma2lqy01spshxq8sfh0jn5bz4d7b";
+    sha256 = "1jilzh0h6ik5lr167nax7q6nrpzxl99p11pkl202ig06pgh32nbz";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -24,9 +24,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://pocoproject.org/;
+    homepage = "https://pocoproject.org/";
     description = "Cross-platform C++ libraries with a network/internet focus";
     license = licenses.boost;
     maintainers = with maintainers; [ orivej ];
+    platforms = platforms.unix;
   };
 }

@@ -14,13 +14,13 @@ with stdenv.lib;
 
 buildPythonPackage rec {
   pname = "GooCalendar";
-  version = "0.7.0";
+  version = "0.7.1";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14m05pi1vwl7i8iv1wvc0r3450dlivsh85f4cyny08l869cr9lf1";
+    sha256 = "1ccvw1w7xinl574h16hqs6dh3fkpm5n1jrqwjqz3ignxvli5sr38";
   };
 
   nativeBuildInputs = [

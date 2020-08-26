@@ -16,8 +16,8 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python module to generate ATOM feeds, RSS feeds and Podcasts.";
-    downloadPage = https://github.com/lkiesow/python-feedgen/releases;
-    homepage = https://github.com/lkiesow/python-feedgen;
+    downloadPage = "https://github.com/lkiesow/python-feedgen/releases";
+    homepage = "https://github.com/lkiesow/python-feedgen";
     license = with licenses; [ bsd2 lgpl3 ];
     maintainers = with maintainers; [ casey ];
   };

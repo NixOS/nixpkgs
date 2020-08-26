@@ -1,7 +1,6 @@
 { lib
 , pythonPackages
 , qscintilla
-, lndir
 , qtbase
 }:
 with pythonPackages;
@@ -11,8 +10,9 @@ buildPythonPackage {
   src = qscintilla.src;
   format = "other";
 
-  nativeBuildInputs = [ lndir sip qtbase ];
-  buildInputs = [ qscintilla pyqt5 ];
+  nativeBuildInputs = [ sip qtbase ];
+  buildInputs = [ qscintilla ];
+  propagatedBuildInputs = [ pyqt5 ];
 
   postPatch = ''
     substituteInPlace Python/configure.py \
@@ -22,9 +22,9 @@ buildPythonPackage {
   '';
 
   preConfigure = ''
-    mkdir -p $out
-    lndir ${pyqt5} $out
-    rm -rf "$out/nix-support"
+    # configure.py will look for this folder
+    mkdir -p $out/share/sip/PyQt5
+
     cd Python
     substituteInPlace configure.py \
       --replace "qmake = {'CONFIG': 'qscintilla2'}" "qmake = {'CONFIG': 'qscintilla2', 'QT': 'widgets printsupport'}"
@@ -45,6 +45,6 @@ buildPythonPackage {
     description = "A Python binding to QScintilla, Qt based text editing control";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ lsix ];
-    homepage = https://www.riverbankcomputing.com/software/qscintilla/;
+    homepage = "https://www.riverbankcomputing.com/software/qscintilla/";
   };
 }

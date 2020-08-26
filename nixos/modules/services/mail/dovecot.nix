@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ options, config, lib, pkgs, ... }:
 
 with lib;
 
@@ -83,11 +83,11 @@ let
     )
 
     (
-      optionalString (cfg.mailboxes != []) ''
+      optionalString (cfg.mailboxes != {}) ''
         protocol imap {
           namespace inbox {
             inbox=yes
-            ${concatStringsSep "\n" (map mailboxConfig cfg.mailboxes)}
+            ${concatStringsSep "\n" (map mailboxConfig (attrValues cfg.mailboxes))}
           }
         }
       ''
@@ -125,15 +125,19 @@ let
   mailboxConfig = mailbox: ''
     mailbox "${mailbox.name}" {
       auto = ${toString mailbox.auto}
+  '' + optionalString (mailbox.autoexpunge != null) ''
+    autoexpunge = ${mailbox.autoexpunge}
   '' + optionalString (mailbox.specialUse != null) ''
     special_use = \${toString mailbox.specialUse}
   '' + "}";
 
-  mailboxes = { ... }: {
+  mailboxes = { name, ... }: {
     options = {
       name = mkOption {
         type = types.strMatching ''[^"]+'';
         example = "Spam";
+        default = name;
+        readOnly = true;
         description = "The name of the mailbox.";
       };
       auto = mkOption {
@@ -147,6 +151,15 @@ let
         default = null;
         example = "Junk";
         description = "Null if no special use flag is set. Other than that every use flag mentioned in the RFC is valid.";
+      };
+      autoexpunge = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "60d";
+        description = ''
+          To automatically remove all email from the mailbox which is older than the
+          specified time.
+        '';
       };
     };
   };
@@ -323,9 +336,16 @@ in
     };
 
     mailboxes = mkOption {
-      type = types.listOf (types.submodule mailboxes);
-      default = [];
-      example = [ { name = "Spam"; specialUse = "Junk"; auto = "create"; } ];
+      type = with types; coercedTo
+        (listOf unspecified)
+        (list: listToAttrs (map (entry: { name = entry.name; value = removeAttrs entry ["name"]; }) list))
+        (attrsOf (submodule mailboxes));
+      default = {};
+      example = literalExample ''
+        {
+          Spam = { specialUse = "Junk"; auto = "create"; };
+        }
+      '';
       description = "Configure mailboxes and auto create or subscribe them.";
     };
 
@@ -407,7 +427,7 @@ in
 
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      restartTriggers = [ cfg.configFile ];
+      restartTriggers = [ cfg.configFile modulesDir ];
 
       serviceConfig = {
         ExecStart = "${dovecotPkg}/sbin/dovecot -F";
@@ -443,6 +463,10 @@ in
     };
 
     environment.systemPackages = [ dovecotPkg ];
+
+    warnings = mkIf (any isList options.services.dovecot2.mailboxes.definitions) [
+      "Declaring `services.dovecot2.mailboxes' as a list is deprecated and will break eval in 21.03! See the release notes for more info for migration."
+    ];
 
     assertions = [
       {

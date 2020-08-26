@@ -1,0 +1,13 @@
+diff --git a/config.go b/config.go
+index de16249..fb91ec0 100644
+--- a/config.go
++++ b/config.go
+@@ -20,7 +20,7 @@ const configFile = "config.toml"
+ 
+ func initializeConfigIfNot() {
+ 	log.Println("Checking if config needs to be initialized")
+-	conf := config{Threshold: 95, DisplayMonitorSources: false, EnableUpdates: true}
++	conf := config{Threshold: 95, DisplayMonitorSources: false, EnableUpdates: false}
+ 	configdir := configDir()
+ 	ok, err := exists(configdir)
+ 	if err != nil {

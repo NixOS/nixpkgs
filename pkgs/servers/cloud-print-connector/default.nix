@@ -54,7 +54,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Share printers from your Windows, Linux, FreeBSD or macOS computer with ChromeOS and Android devices, using the Cloud Print Connector";
-    homepage = https://github.com/google/cloud-print-connector;
+    homepage = "https://github.com/google/cloud-print-connector";
     license = licenses.bsd3;
     maintainers = with maintainers; [ hodapp ];
     # TODO: Fix broken build on macOS.  The GitHub presently lists the

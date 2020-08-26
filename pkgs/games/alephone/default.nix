@@ -90,10 +90,9 @@ in self // {
           --add-flags $out/data/$pname
       '';
 
-      meta = with stdenv.lib;
-        {
-          maintainers = with maintainers; [ ehmry ];
-          inherit (alephone.meta) platforms;
-        } // meta;
-    } // extraArgs);
+      meta = alephone.meta // {
+        license = stdenv.lib.licenses.free;
+        hydraPlatforms = [ ];
+      } // meta;
+    });
 }

@@ -7,7 +7,7 @@ bundlerEnv {
 
   meta = with lib; {
     description = "Process manager for applications with multiple components";
-    homepage = https://github.com/ddollar/foreman;
+    homepage = "https://github.com/ddollar/foreman";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
     platforms = ruby.meta.platforms;

@@ -6,30 +6,26 @@
 , astropy
 , astropy-healpix
 , astropy-helpers
+, extension-helpers
 , scipy
 , pytest
 , pytest-astropy
+, setuptools_scm
 , cython
 }:
 
 buildPythonPackage rec {
   pname = "reproject";
-  version = "0.6";
+  version = "0.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "484fde86d70d972d703038f138d7c2966ddf51171a6e79bd84e82ea270e27af3";
+    sha256 = "1jsc3ad518vyys5987fr1achq8qvnz8rm80zp5an9qxlwr4zmh4m";
   };
 
   propagatedBuildInputs = [ numpy astropy astropy-healpix astropy-helpers scipy ];
 
-  nativeBuildInputs = [ astropy-helpers cython ];
-
-  # Fix tests
-  patches = [ (fetchpatch {
-    url = "https://github.com/astropy/reproject/pull/218/commits/4661e075137424813ed77f1ebcbc251fee1b8467.patch";
-    sha256 = "13g3h824pqn2lgypzg1b87vkd44y7m302lhw3kh4rfww1dkzhm9v";
-  }) ];
+  nativeBuildInputs = [ astropy-helpers cython extension-helpers setuptools_scm ];
 
   # Disable automatic update of the astropy-helper module
   postPatch = ''
@@ -46,7 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Reproject astronomical images";
-    homepage = https://reproject.readthedocs.io;
+    homepage = "https://reproject.readthedocs.io";
     license = licenses.bsd3;
     maintainers = [ maintainers.smaret ];
   };

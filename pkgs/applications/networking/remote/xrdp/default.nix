@@ -96,7 +96,7 @@ let
 
     meta = with stdenv.lib; {
       description = "An open source RDP server";
-      homepage = https://github.com/neutrinolabs/xrdp;
+      homepage = "https://github.com/neutrinolabs/xrdp";
       license = licenses.asl20;
       maintainers = [ maintainers.volth ];
       platforms = platforms.linux;

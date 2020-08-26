@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, apr, scons, openssl, aprutil, zlib, kerberos
+{ stdenv, fetchurl, apr, sconsPackages, openssl, aprutil, zlib, kerberos
 , pkgconfig, libiconv }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1k47gbgpp52049andr28y28nbwh9m36bbb0g8p0aka3pqlhjv72l";
   };
 
-  nativeBuildInputs = [ pkgconfig scons ];
+  nativeBuildInputs = [ pkgconfig sconsPackages.scons_3_1_2 ];
   buildInputs = [ apr openssl aprutil zlib libiconv ]
     ++ stdenv.lib.optional (!stdenv.isCygwin) kerberos;
 

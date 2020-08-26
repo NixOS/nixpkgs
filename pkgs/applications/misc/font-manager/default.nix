@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "font-manager";
-  version = "0.7.7";
+  version = "0.7.8";
 
   src = fetchFromGitHub {
     owner = "FontManager";
     repo = "master";
     rev = version;
-    sha256 = "1bzqvspplp1zj0n0869jqbc60wgbjhf0vdrn5bj8dfawxynh8s5f";
+    sha256 = "0s1l30y55l45rrqd9lygvp2gzrqw25rmjgnnja6s5rzs79gc668c";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://fontmanager.github.io/;
+    homepage = "https://fontmanager.github.io/";
     description = "Simple font management for GTK desktop environments";
     longDescription = ''
       Font Manager is intended to provide a way for average users to

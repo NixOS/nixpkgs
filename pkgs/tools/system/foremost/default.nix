@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       look at the data structures of a given file format allowing for a more
       reliable and faster recovery.
     '';
-    homepage = http://foremost.sourceforge.net/;
+    homepage = "http://foremost.sourceforge.net/";
     license = licenses.publicDomain;
     platforms = platforms.linux;
   };

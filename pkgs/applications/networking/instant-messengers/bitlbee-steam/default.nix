@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ bitlbee autoconf automake libtool glib libgcrypt ];
+  buildInputs = [ bitlbee autoconf automake libtool libgcrypt ];
 
   preConfigure = ''
     export BITLBEE_PLUGINDIR=$out/lib/bitlbee
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Steam protocol plugin for BitlBee";
 
-    homepage = https://github.com/jgeboski/bitlbee-steam;
+    homepage = "https://github.com/jgeboski/bitlbee-steam";
     license = licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
   };

@@ -5,7 +5,7 @@
 }:
 stdenv.mkDerivation rec {
   baseName = "pixz";
-  version = "1.0.6";
+  version = "1.0.7";
   name = "${baseName}-${version}";
 
   nativeBuildInputs = [ pkgconfig ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "vasi";
     repo = baseName;
     rev = "v${version}";
-    sha256 = "0q61wqg2yxrgd4nc7256mf7izp92is29ll3rax1cxr6fj9jrd8b7";
+    sha256 = "163axxs22w7pghr786hda22mnlpvmi50hzhfr9axwyyjl9n41qs2";
   };
   preConfigure = ''
     ./autogen.sh

@@ -37,7 +37,7 @@ stdenv.mkDerivation {
           than the iterative scaling techniques used in almost every
           other maxent package out there.  '';
 
-    homepage = http://www.umiacs.umd.edu/~hal/megam;
+    homepage = "http://www.umiacs.umd.edu/~hal/megam";
 
     license = "non-commercial";
 

@@ -12,7 +12,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ beautifulsoup4 ];
 
   meta = with stdenv.lib; {
-    homepage = https://micawber.readthedocs.io/en/latest/;
+    homepage = "https://micawber.readthedocs.io/en/latest/";
     description = "A small library for extracting rich content from urls";
     license = licenses.mit;
     longDescription = ''

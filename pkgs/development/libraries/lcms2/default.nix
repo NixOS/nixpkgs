@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libtiff, libjpeg, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "lcms2-2.9";
+  name = "lcms2-2.11";
 
   src = fetchurl {
     url = "mirror://sourceforge/lcms/${name}.tar.gz";
-    sha256 = "083xisy6z01zhm7p7rgk4bx9d6zlr8l20qkfv1g29ylnhgwzvij8";
+    sha256 = "0bkpf315925lhmd9i4mzjnkq5dh255r1lms0c0vzzkfpwk4bjjfw";
   };
 
   outputs = [ "bin" "dev" "out" ];
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Color management engine";
-    homepage = http://www.littlecms.com/;
+    homepage = "http://www.littlecms.com/";
     license = licenses.mit;
     platforms = platforms.all;
   };

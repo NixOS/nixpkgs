@@ -24,7 +24,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/giampaolo/pyftpdlib/;
+    homepage = "https://github.com/giampaolo/pyftpdlib/";
     description = "Very fast asynchronous FTP server library";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

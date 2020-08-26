@@ -43,13 +43,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evince";
-  version = "3.34.2";
+  version = "3.36.7";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "05q6v9lssd21623mnj2p49clj9v9csw9kay7n4nklki025grbh1w";
+    sha256 = "0clg9fhgjyj23mmcmw7dp512wzgv5m18fppn05qf1frz7r11mmk5";
   };
 
   postPatch = ''
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Evince;
+    homepage = "https://wiki.gnome.org/Apps/Evince";
     description = "GNOME's document viewer";
 
     longDescription = ''
@@ -128,6 +128,6 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = gnome3.maintainers ++ [ maintainers.vcunat ];
+    maintainers = teams.gnome.members;
   };
 }

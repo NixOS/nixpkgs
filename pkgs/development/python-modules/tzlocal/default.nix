@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "tzlocal";
-  version = "2.0.0";
+  version = "2.1";
 
   propagatedBuildInputs = [ pytz ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "949b9dd5ba4be17190a80c0268167d7e6c92c62b30026cf9764caf3e308e5590";
+    sha256 = "643c97c5294aedc737780a49d9df30889321cbe1204eac2c2ec6134035a92e44";
   };
 
   # test fail (timezone test fail)
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Tzinfo object for the local timezone";
-    homepage = https://github.com/regebro/tzlocal;
+    homepage = "https://github.com/regebro/tzlocal";
     license = licenses.cddl;
   };
 }

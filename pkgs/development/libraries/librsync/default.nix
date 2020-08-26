@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "librsync";
-  version = "2.2.1";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "librsync";
     repo = "librsync";
     rev = "v${version}";
-    sha256 = "08wdlxsa9zg2pyasz1lwg70d5psi4amv81v4yxwffx67ndzb9yp5";
+    sha256 = "131cd4asmpm4nskidzgiy8xibbnpibvvbq857a0pcky77min5g4z";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
   meta = with stdenv.lib; {
-    homepage = http://librsync.sourceforge.net/;
+    homepage = "http://librsync.sourceforge.net/";
     license = licenses.lgpl2Plus;
     description = "Implementation of the rsync remote-delta algorithm";
     platforms = platforms.unix;

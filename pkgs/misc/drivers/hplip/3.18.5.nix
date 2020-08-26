@@ -199,6 +199,11 @@ python2Packages.buildPythonApplication {
     done
   '';
 
+  # There are some binaries there, which reference gcc-unwrapped otherwise.
+  stripDebugList = [
+    "share/hplip"
+  ];
+
   postFixup = ''
     substituteInPlace $out/etc/hp/hplip.conf --replace /usr $out
     # Patch udev rules:
@@ -213,8 +218,8 @@ python2Packages.buildPythonApplication {
 
   meta = with stdenv.lib; {
     description = "Print, scan and fax HP drivers for Linux";
-    homepage = https://developers.hp.com/hp-linux-imaging-and-printing;
-    downloadPage = https://sourceforge.net/projects/hplip/files/hplip/;
+    homepage = "https://developers.hp.com/hp-linux-imaging-and-printing";
+    downloadPage = "https://sourceforge.net/projects/hplip/files/hplip/";
     license = if withPlugin
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];

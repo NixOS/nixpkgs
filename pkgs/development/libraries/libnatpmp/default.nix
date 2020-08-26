@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "INSTALLPREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = http://miniupnp.free.fr/libnatpmp.html;
+    homepage = "http://miniupnp.free.fr/libnatpmp.html";
     description = "NAT-PMP client";
     license = licenses.bsd3;
     maintainers = with maintainers; [ orivej ];

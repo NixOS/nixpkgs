@@ -1,6 +1,7 @@
 { stdenv, lib, zlib, glib, alsaLib, dbus, gtk3, atk, pango, freetype, fontconfig
 , libgnome-keyring3, gdk-pixbuf, cairo, cups, expat, libgpgerror, nspr
 , gconf, nss, xorg, libcap, systemd, libnotify, libsecret, libuuid, at-spi2-atk
+, at-spi2-core
 }:
 
 let
@@ -10,7 +11,7 @@ let
     xorg.libXrender xorg.libX11 xorg.libXext xorg.libXdamage xorg.libXtst
     xorg.libXcomposite xorg.libXi xorg.libXfixes xorg.libXrandr
     xorg.libXcursor xorg.libxkbfile xorg.libXScrnSaver libcap systemd libnotify
-    xorg.libxcb libsecret libuuid at-spi2-atk
+    xorg.libxcb libsecret libuuid at-spi2-atk at-spi2-core
   ];
 
   libPathNative = lib.makeLibraryPath packages;

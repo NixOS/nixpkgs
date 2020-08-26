@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://www.videolan.org/developers/libdvdcss.html;
+    homepage = "http://www.videolan.org/developers/libdvdcss.html";
     description = "A library for decrypting DVDs";
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;

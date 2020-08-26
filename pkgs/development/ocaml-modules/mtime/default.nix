@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Monotonic wall-clock time for OCaml";
-    homepage = https://erratique.ch/software/mtime;
+    homepage = "https://erratique.ch/software/mtime";
     inherit (ocaml.meta) platforms;
     maintainers = [ maintainers.vbgl ];
     license = licenses.bsd3;

@@ -1,31 +1,39 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, bash }:
+{ stdenv, fetchFromGitHub, buildGoModule, bash, fish, zsh }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "direnv";
-  version = "2.21.2";
-  goPackagePath = "github.com/direnv/direnv";
+  version = "2.21.3";
+
+  vendorSha256 = null;
 
   src = fetchFromGitHub {
     owner = "direnv";
     repo = "direnv";
     rev = "v${version}";
-    sha256 = "0afpxx8pwa1zb66l79af57drzjaazn2rp6306w4pxvqfh0zi2bri";
+    sha256 = "1adi6ld9g4zgz0f6q0kkzrywclqrmikyp7yh22zm9lfdvd5hs8wp";
   };
 
-  postConfigure = ''
-    cd $NIX_BUILD_TOP/go/src/$goPackagePath
+  # we have no bash at the moment for windows
+  BASH_PATH =
+    stdenv.lib.optionalString (!stdenv.hostPlatform.isWindows)
+    "${bash}/bin/bash";
+
+  # replace the build phase to use the GNUMakefile instead
+  buildPhase = ''
+    make BASH_PATH=$BASH_PATH
   '';
 
-  # we have no bash at the moment for windows
-  makeFlags = stdenv.lib.optional (!stdenv.hostPlatform.isWindows) [
-    "BASH_PATH=${bash}/bin/bash"
-  ];
-
   installPhase = ''
-    mkdir -p $out
-    make install DESTDIR=$bin
-    mkdir -p $bin/share/fish/vendor_conf.d
-    echo "eval ($bin/bin/direnv hook fish)" > $bin/share/fish/vendor_conf.d/direnv.fish
+    make install DESTDIR=$out
+    mkdir -p $out/share/fish/vendor_conf.d
+    echo "eval ($out/bin/direnv hook fish)" > $out/share/fish/vendor_conf.d/direnv.fish
+  '';
+
+  checkInputs = [ fish zsh ];
+
+  checkPhase = ''
+    export HOME=$(mktemp -d)
+    make test-go test-bash test-fish test-zsh
   '';
 
   meta = with stdenv.lib; {
@@ -41,7 +49,7 @@ buildGoPackage rec {
       In short, this little tool allows you to have project-specific
       environment variables.
     '';
-    homepage = https://direnv.net;
+    homepage = "https://direnv.net";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
   };

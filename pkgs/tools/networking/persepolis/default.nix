@@ -6,22 +6,24 @@
 , pyqt5
 , requests
 , setproctitle
+, setuptools
 , sound-theme-freedesktop
+, wrapQtAppsHook
 , youtube-dl
 }:
 
 buildPythonApplication rec {
   pname = "persepolis";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "persepolisdm";
     repo = "persepolis";
     rev = version;
-    sha256 = "0xngk8wgj5k27mh3bcrf2wwzqr8a3g0d4pc5i5vcavnnaj03j44m";
+    sha256 = "1rh7q432ynbysapsd075nif975ync71icpb71x2mb4j8jx1vzs45";
   };
 
-  # see: https://github.com/persepolisdm/persepolis/blob/3.1.0/setup.py#L130
+  # see: https://github.com/persepolisdm/persepolis/blob/3.2.0/setup.py#L130
   doCheck = false;
 
   preBuild=''
@@ -36,10 +38,17 @@ buildPythonApplication rec {
   postInstall = ''
      mkdir -p $out/share/applications
      cp $src/xdg/com.github.persepolisdm.persepolis.desktop $out/share/applications
-     wrapProgram $out/bin/persepolis --prefix PATH : "${lib.makeBinPath [aria libnotify ]}"
   '';
 
-  buildInputs = [ makeWrapper ];
+  # prevent double wrapping
+  dontWrapQtApps = true;
+  nativeBuildInputs = [ wrapQtAppsHook ];
+
+  # feed args to wrapPythonApp
+  makeWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath [aria libnotify ]}"
+    ''''${qtWrapperArgs[@]}''
+  ];
 
   propagatedBuildInputs = [
     pulseaudio
@@ -47,13 +56,14 @@ buildPythonApplication rec {
     pyqt5
     requests
     setproctitle
+    setuptools
     sound-theme-freedesktop
     youtube-dl
   ];
 
   meta = with stdenv.lib; {
     description = "Persepolis Download Manager is a GUI for aria2.";
-    homepage = https://persepolisdm.github.io/;
+    homepage = "https://persepolisdm.github.io/";
     license = licenses.gpl3;
     maintainers = [ maintainers.linarcx ];
   };

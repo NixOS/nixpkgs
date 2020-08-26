@@ -2,16 +2,19 @@
 
 buildGoModule rec {
   pname = "saml2aws";
-  version = "2.24.0";
+  version = "2.26.2";
 
   src = fetchFromGitHub {
     owner = "Versent";
     repo = "saml2aws";
     rev = "v${version}";
-    sha256 = "15zxi64s1hgpm3rxk0m7z5363jc7h80g91bfx8vg7nw680lday4w";
+    sha256 = "0y5gvdrdr6i9spdwsxvzs1bxs32icxpkqxnglp1bf4gglc580d87";
   };
 
-  modSha256 = "0qxf2i06spjig3ynixh3xmbxpghh222jhfqcg71i4i79x4ycp5wx";
+  runVend = true;
+  vendorSha256 = "1kzihyx44sx6php4z58fzy6c3g0y713939yzxpgk3n03snn2x8sf";
+
+  doCheck = false;
 
   subPackages = [ "." "cmd/saml2aws" ];
 

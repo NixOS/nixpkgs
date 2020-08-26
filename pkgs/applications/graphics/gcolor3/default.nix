@@ -34,7 +34,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A simple color chooser written in GTK3";
-    homepage = https://www.hjdskes.nl/projects/gcolor3/;
+    homepage = "https://www.hjdskes.nl/projects/gcolor3/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;

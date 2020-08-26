@@ -14,14 +14,16 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook pytestcov ];
   propagatedBuildInputs = [ flake8 click pyyaml six ];
 
-  disabledTests = lib.optionals isPy36 [
+  # test_cli asserts on exact quoting style of output
+  disabledTests = [
     "test_cli"
+  ] ++ lib.optionals isPy36 [
     "test_choice_default"
   ];
 
   meta = with stdenv.lib; {
     description = "Click command line utilities";
-    homepage = https://github.com/hjacobs/python-clickclick/;
+    homepage = "https://github.com/hjacobs/python-clickclick/";
     license = licenses.asl20;
     maintainers = with maintainers; [ elohmeier ];
   };

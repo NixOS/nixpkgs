@@ -1,16 +1,18 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , pytest
 }:
 
 buildPythonPackage rec {
   pname = "JPype1";
-  version = "0.7.1";
+  version = "0.7.5";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c16d01cde9c2c955d76d45675e64b06c3255784d49cea4147024e99a01fbbb18";
+    sha256 = "7bbd25453dc04704d77d854c80acb5537ecb18b9de8a5572e5f22649a2160aaf";
   };
 
   checkInputs = [
@@ -22,7 +24,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://github.com/originell/jpype/;
+    homepage = "https://github.com/originell/jpype/";
     license = licenses.asl20;
     description = "A Python to Java bridge";
   };

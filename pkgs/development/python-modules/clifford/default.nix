@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "clifford";
-  version = "1.2.0";
+  version = "1.3.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b27fdec70574ac928c91fe333a70ece153d75cd0499cce09acea5980ae349bee";
+    sha256 = "ade11b20d0631dfc9c2f18ce0149f1e61e4baf114108b27cfd68e5c1619ecc0c";
   };
 
   propagatedBuildInputs = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Numerical Geometric Algebra Module";
-    homepage = https://clifford.readthedocs.io;
+    homepage = "https://clifford.readthedocs.io";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

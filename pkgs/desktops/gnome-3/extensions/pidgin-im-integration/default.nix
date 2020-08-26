@@ -15,14 +15,18 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     share_dir="$prefix/share"
     extensions_dir="$share_dir/gnome-shell/extensions/pidgin@muffinmad"
     mkdir -p "$extensions_dir"
     mv *.js metadata.json dbus.xml schemas locale "$extensions_dir"
+    runHook postInstall
   '';
 
+  uuid = "pidgin@muffinmad";
+
   meta = with stdenv.lib; {
-    homepage = https://github.com/muffinmad/pidgin-im-gnome-shell-extension;
+    homepage = "https://github.com/muffinmad/pidgin-im-gnome-shell-extension";
     description = "Make Pidgin IM conversations appear in the Gnome Shell message tray";
     license = licenses.gpl2;
     platforms = platforms.linux;

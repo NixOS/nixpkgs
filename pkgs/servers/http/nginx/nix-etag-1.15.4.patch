@@ -2,38 +2,35 @@ This patch makes it possible to serve static content from Nix store paths, by
 using the hash of the store path for the ETag header.
 
 diff --git a/src/http/ngx_http_core_module.c b/src/http/ngx_http_core_module.c
-index cb49ef74..f88dc77c 100644
+index cb49ef74..7b456993 100644
 --- a/src/http/ngx_http_core_module.c
 +++ b/src/http/ngx_http_core_module.c
-@@ -1583,6 +1583,7 @@ ngx_http_set_etag(ngx_http_request_t *r)
+@@ -1583,6 +1583,8 @@ ngx_http_set_etag(ngx_http_request_t *r)
  {
      ngx_table_elt_t           *etag;
      ngx_http_core_loc_conf_t  *clcf;
 +    u_char                    *real, *ptr1, *ptr2;
++    ngx_err_t                 err;
  
      clcf = ngx_http_get_module_loc_conf(r, ngx_http_core_module);
  
-@@ -1598,16 +1599,62 @@ ngx_http_set_etag(ngx_http_request_t *r)
+@@ -1598,16 +1600,60 @@ ngx_http_set_etag(ngx_http_request_t *r)
      etag->hash = 1;
      ngx_str_set(&etag->key, "ETag");
  
 -    etag->value.data = ngx_pnalloc(r->pool, NGX_OFF_T_LEN + NGX_TIME_T_LEN + 3);
 -    if (etag->value.data == NULL) {
+-        etag->hash = 0;
+-        return NGX_ERROR;
++    err = ngx_errno;
 +    real = ngx_realpath(clcf->root.data, NULL);
++    ngx_set_errno(err);
 +
-+    if (real == NULL) {
-         etag->hash = 0;
-         return NGX_ERROR;
-     }
- 
--    etag->value.len = ngx_sprintf(etag->value.data, "\"%xT-%xO\"",
--                                  r->headers_out.last_modified_time,
--                                  r->headers_out.content_length_n)
--                      - etag->value.data;
 +    #define NIX_STORE_DIR "@nixStoreDir@"
 +    #define NIX_STORE_LEN @nixStoreDirLen@
 +
 +    if (r->headers_out.last_modified_time == 1
++        && real != NULL
 +        && !ngx_strncmp(real, NIX_STORE_DIR, NIX_STORE_LEN)
 +        && real[NIX_STORE_LEN] == '/'
 +        && real[NIX_STORE_LEN + 1] != '\0')
@@ -76,8 +73,12 @@ index cb49ef74..f88dc77c 100644
 +                                      r->headers_out.last_modified_time,
 +                                      r->headers_out.content_length_n)
 +                          - etag->value.data;
-+    }
-+
+     }
+ 
+-    etag->value.len = ngx_sprintf(etag->value.data, "\"%xT-%xO\"",
+-                                  r->headers_out.last_modified_time,
+-                                  r->headers_out.content_length_n)
+-                      - etag->value.data;
 +    ngx_free(real);
  
      r->headers_out.etag = etag;

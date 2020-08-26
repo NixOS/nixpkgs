@@ -2,20 +2,19 @@
 
 buildGoPackage rec {
   pname = "tegola";
-  version = "0.8.1";
-  rev = "8b2675a63624ad1d69a8d2c84a6a3f3933e25ca1";
+  version = "0.11.2";
 
   goPackagePath = "github.com/go-spatial/tegola";
 
   src = fetchFromGitHub {
     owner = "go-spatial";
-    repo = "tegola";
-    inherit rev;
-    sha256 = "1f70vsrj3i1d0kg76a8s741nps71hrglgyyrz2xm6a8b31w833pi";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0xrjs0py08q9i31rl0cxi6idncrrgqwcspqks3c5vd9i65yqc6fv";
   };
 
   meta = with stdenv.lib; {
-    homepage = https://www.tegola.io/;
+    homepage = "https://www.tegola.io/";
     description = "Mapbox Vector Tile server";
     maintainers = with maintainers; [ ingenieroariel ];
     platforms = platforms.unix;

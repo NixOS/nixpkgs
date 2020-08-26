@@ -31,6 +31,7 @@
 , xvfbwrapper
 , pytestcov
 , codecov
+, sphinx
 # other dependencies
 , which
 , bash
@@ -49,17 +50,21 @@ in
 
 buildPythonPackage rec {
   pname = "nipype";
-  version = "1.3.1";
+  version = "1.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bb190964b568d64b04b73d2aa7eae31061fdbc3051d8c27bb34b1632db07ec71";
+    sha256 = "8c837eafdaa68e85d911aca20c8a2cd9210e4fffabbcbc5bd2eb6e26f8553da9";
   };
 
   postPatch = ''
     substituteInPlace nipype/interfaces/base/tests/test_core.py \
       --replace "/usr/bin/env bash" "${bash}/bin/bash"
   '';
+
+  nativeBuildInputs = [
+    sphinx
+  ];
 
   propagatedBuildInputs = [
     click
@@ -102,15 +107,14 @@ buildPythonPackage rec {
   doCheck = !stdenv.isDarwin;
   # ignore tests which incorrect fail to detect xvfb
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" pytest -v nipype -k 'not display'
+    LC_ALL="en_US.UTF-8" pytest nipype/tests -k 'not display'
   '';
+  pythonImportsCheck = [ "nipype" ];
 
   meta = with stdenv.lib; {
-    homepage = https://nipy.org/nipype/;
+    homepage = "https://nipy.org/nipype/";
     description = "Neuroimaging in Python: Pipelines and Interfaces";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ashgillman ];
-    # tests hang, blocking reviews of other packages
-    broken = isPy38;
   };
 }

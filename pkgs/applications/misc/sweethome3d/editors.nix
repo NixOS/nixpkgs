@@ -20,7 +20,7 @@ let
       name = pname;
       comment =  description;
       genericName = "Computer Aided (Interior) Design";
-      categories = "Application;Graphics;2DGraphics;3DGraphics;";
+      categories = "Graphics;2DGraphics;3DGraphics;";
     };
 
     buildInputs = [ ant jre jdk makeWrapper gtk3 gsettings-desktop-schemas ];
@@ -47,7 +47,7 @@ let
     dontStrip = true;
 
     meta = {
-      homepage = http://www.sweethome3d.com/index.jsp;
+      homepage = "http://www.sweethome3d.com/index.jsp";
       inherit description;
       inherit license;
       maintainers = [ stdenv.lib.maintainers.edwtjo ];

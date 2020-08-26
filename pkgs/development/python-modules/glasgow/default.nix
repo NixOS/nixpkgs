@@ -18,15 +18,15 @@
 
 buildPythonPackage rec {
   pname = "glasgow";
-  version = "unstable-2020-02-08";
+  version = "unstable-2020-06-29";
   # python software/setup.py --version
   realVersion = "0.1.dev1352+g${lib.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
     owner = "GlasgowEmbedded";
     repo = "glasgow";
-    rev = "2a8bfc981b90ba5d86c310911dbd6ffe71acd498";
-    sha256 = "01v5269bv09ggvmq6lqyhr5am51hzmwya1p5n62h84b7rdwd8q9m";
+    rev = "f885790d7927b893e631c33744622d6ebc18b5e3";
+    sha256 = "sha256-fSorSEa5K09aPEOk4XPWOFRxYl1KGVy29jOBqIvs2hk=";
   };
 
   nativeBuildInputs = [ setuptools_scm sdcc ];
@@ -68,7 +68,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Software for Glasgow, a digital interface multitool";
-    homepage = https://github.com/GlasgowEmbedded/Glasgow;
+    homepage = "https://github.com/GlasgowEmbedded/Glasgow";
     license = licenses.bsd0;
     maintainers = with maintainers; [ emily ];
   };

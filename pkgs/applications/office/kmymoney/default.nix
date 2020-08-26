@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "kmymoney";
-  version = "5.0.8";
+  version = "5.1.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/kmymoney/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "1h6l01a08f1xgk4dfpndl7rmgbp9npm58qi760jwl2gggprwwsxc";
+    sha256 = "0l8kywq77yaf1bqgdqswrai9ws6a2l11drg0wgyi7f8js7qnif9d";
   };
 
   # Hidden dependency that wasn't included in CMakeLists.txt:
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Personal finance manager for KDE";
-    homepage = https://kmymoney.org/;
+    homepage = "https://kmymoney.org/";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };

@@ -1,5 +1,5 @@
 { stdenv, fetchurl,
-  bison, re2c, scons,
+  bison, re2c, sconsPackages,
   libcxx
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     sha256 = "16k4pkwyr2mh5w8j91vhxh9aff7f4y31npwf09w6f8q63fxvpy41";
   };
 
-  buildInputs = [ bison re2c scons ];
+  buildInputs = [ bison re2c sconsPackages.scons_3_1_2 ];
 
   patches = [
     ./gringo-4.5.4-cmath.patch
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Converts input programs with first-order variables to equivalent ground programs";
-    homepage = http://potassco.sourceforge.net/;
+    homepage = "http://potassco.sourceforge.net/";
     platforms = platforms.all;
     maintainers = [ maintainers.hakuch ];
     license = licenses.gpl3Plus;

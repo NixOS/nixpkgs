@@ -1,20 +1,20 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala, glib
+{ stdenv, fetchFromGitHub, nix-update-script, pantheon, meson, ninja, pkgconfig, vala, glib
 , libgee, granite, gexiv2, elementary-settings-daemon, gtk3, gnome-desktop
 , gala, wingpanel, plank, switchboard, gettext, bamf, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-pantheon-shell";
-  version = "2.8.2";
+  version = "2.8.4";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0l4js2gqvn8lmky5b3jjqw6mzxcv9i2gjqr1vka0z40px6vfzf0z";
+    sha256 = "1nnsv745inbdqk3xnbcaqmj87vr3kzh5hazbh8v3ib33cpi7wy88";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -42,13 +42,9 @@ stdenv.mkDerivation rec {
     switchboard
   ];
 
-  patches = [
-    ./backgrounds.patch # Having https://github.com/elementary/switchboard-plug-pantheon-shell/issues/166 would make this patch uneeded
-  ];
-
   meta = with stdenv.lib; {
     description = "Switchboard Desktop Plug";
-    homepage = https://github.com/elementary/switchboard-plug-pantheon-shell;
+    homepage = "https://github.com/elementary/switchboard-plug-pantheon-shell";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

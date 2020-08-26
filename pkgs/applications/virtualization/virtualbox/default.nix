@@ -3,6 +3,9 @@
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
 , qttools, qtsvg, qtwayland, pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
 , alsaLib, curl, libvpx, nettools, dbus, substituteAll, fetchpatch
+# If open-watcom-bin is not passed, VirtualBox will fall back to use
+# the shipped alternative sources (assembly).
+, open-watcom-bin ? null
 , makeself, perl
 , javaBindings ? true, jdk ? null # Almost doesn't affect closure size
 , pythonBindings ? false, python3 ? null
@@ -11,7 +14,6 @@
 , enableHardening ? false
 , headless ? false
 , enable32bitGuests ? true
-, patchelfUnstable # needed until 0.10 is released
 }:
 
 with stdenv.lib;
@@ -19,10 +21,9 @@ with stdenv.lib;
 let
   python = python3;
   buildType = "release";
-  # Remember to change the extpackRev and version in extpack.nix and
-  # guest-additions/default.nix as well.
-  main = "59f8f5774473f593e3eb5940e2a337e0674bcd9854164b2578fd43f896260c99";
-  version = "6.1.4";
+  # Use maintainers/scripts/update.nix to update the version and all related hashes or
+  # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
+  version = "6.1.10";
 
   iasl' = iasl.overrideAttrs (old: rec {
     inherit (old) pname;
@@ -39,12 +40,12 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = main;
+    sha256 = "37d8b30c0be82a50c858f3fc70cde967882239b6212bb32e138d3615b423c477";
   };
 
   outputs = [ "out" "modsrc" ];
 
-  nativeBuildInputs = [ pkgconfig which docbook_xsl docbook_xml_dtd_43 patchelfUnstable ]
+  nativeBuildInputs = [ pkgconfig which docbook_xsl docbook_xml_dtd_43 ]
     ++ optional (!headless) wrapQtAppsHook;
 
   # Wrap manually because we wrap just a small number of executables.
@@ -108,6 +109,10 @@ in stdenv.mkDerivation {
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
       src/VBox/HostDrivers/adpctl/VBoxNetAdpCtl.cpp
+  '' + optionalString headless ''
+    # Fix compile error in version 6.1.6
+    substituteInPlace src/VBox/HostServices/SharedClipboard/VBoxSharedClipboardSvc-x11-stubs.cpp \
+      --replace PSHCLFORMATDATA PSHCLFORMATS
   '';
 
   # first line: ugly hack, and it isn't yet clear why it's a problem
@@ -145,6 +150,7 @@ in stdenv.mkDerivation {
       ${optionalString (!pulseSupport) "--disable-pulse"} \
       ${optionalString (!enableHardening) "--disable-hardening"} \
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
+      ${optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
       --disable-kmods
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib.dev}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
         -i AutoConfig.kmk
@@ -216,12 +222,13 @@ in stdenv.mkDerivation {
   passthru = {
     inherit version;       # for guest additions
     inherit extensionPack; # for inclusion in profile to prevent gc
+    updateScript = ./update.sh;
   };
 
   meta = {
     description = "PC emulator";
     license = licenses.gpl2;
-    homepage = https://www.virtualbox.org/;
+    homepage = "https://www.virtualbox.org/";
     maintainers = with maintainers; [ sander ];
     platforms = [ "x86_64-linux" ];
   };

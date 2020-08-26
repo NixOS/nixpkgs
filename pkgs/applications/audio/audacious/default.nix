@@ -1,39 +1,40 @@
-{ stdenv, fetchurl, pkgconfig, wrapGAppsHook, gettext, glib, gtk3
-, libmowgli, dbus-glib, libxml2, xorg, gnome3, alsaLib
-, libpulseaudio, libjack2, fluidsynth, libmad, libogg, libvorbis
-, libcdio, libcddb, flac, ffmpeg, mpg123, libcue, libmms, libbs2b
-, libsndfile, libmodplug, libsamplerate, soxr, lirc, curl, wavpack
-, neon, faad2, lame, libnotify, libsidplayfp
+{
+  mkDerivation, lib, fetchurl, fetchpatch,
+  gettext, pkgconfig,
+  qtbase,
+  alsaLib, curl, faad2, ffmpeg, flac, fluidsynth, gdk-pixbuf, lame, libbs2b,
+  libcddb, libcdio, libcdio-paranoia, libcue, libjack2, libmad, libmms, libmodplug,
+  libmowgli, libnotify, libogg, libpulseaudio, libsamplerate, libsidplayfp,
+  libsndfile, libvorbis, libxml2, lirc, mpg123, neon, qtmultimedia, soxr,
+  wavpack, openmpt123
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "audacious";
-  version = "3.9";
+  version = "4.0.5";
 
   src = fetchurl {
-    url = "https://distfiles.audacious-media-player.org/audacious-${version}-gtk3.tar.bz2";
-    sha256 = "0dc7fg0v2l2j4h9cz1baz7rf4n0a5jgk09qvsj806sh6jp7w6ipm";
+    url = "http://distfiles.audacious-media-player.org/audacious-${version}.tar.bz2";
+    sha256 = "028zjgz0p7ys15lk2a30m5zcv9xrx3ga50wjsh4m4zxilgkakbji";
   };
-
   pluginsSrc = fetchurl {
-    url = "http://distfiles.audacious-media-player.org/audacious-plugins-${version}-gtk3.tar.bz2";
-    sha256 = "1gck37c5pnzxdhrnb1g75b5hi31s2dc952wifxns45pkdlayrmra";
+    url = "http://distfiles.audacious-media-player.org/audacious-plugins-${version}.tar.bz2";
+    sha256 = "0ny5w1agr9jaz5w3wyyxf1ygmzmd1sivaf97lcm4z4w6529520lz";
   };
 
-  nativeBuildInputs = [
-    pkgconfig wrapGAppsHook
-  ];
+  nativeBuildInputs = [ gettext pkgconfig ];
 
   buildInputs = [
-    gettext glib gtk3 libmowgli dbus-glib libxml2
-    xorg.libXcomposite gnome3.adwaita-icon-theme alsaLib libjack2
-    libpulseaudio fluidsynth libmad libogg libvorbis libcdio
-    libcddb flac ffmpeg mpg123 libcue libmms libbs2b libsndfile
-    libmodplug libsamplerate soxr lirc curl wavpack neon faad2
-    lame libnotify libsidplayfp
-  ];
+    # Core dependencies
+    qtbase
 
-  configureFlags = [ "--enable-statusicon" ];
+    # Plugin dependencies
+    alsaLib curl faad2 ffmpeg flac fluidsynth gdk-pixbuf lame libbs2b libcddb
+    libcdio libcdio-paranoia libcue libjack2 libmad libmms libmodplug libmowgli
+    libnotify libogg libpulseaudio libsamplerate libsidplayfp libsndfile
+    libvorbis libxml2 lirc mpg123 neon qtmultimedia soxr wavpack
+    openmpt123
+  ];
 
   # Here we build both audacious and audacious-plugins in one
   # derivations, since they really expect to be in the same prefix.
@@ -44,10 +45,8 @@ stdenv.mkDerivation rec {
       source $stdenv/setup
       genericBuild
     )
-
     # Then build the plugins.
     (
-      dontWrapGApps=true
       nativeBuildInputs="$out $nativeBuildInputs" # to find audacious
       source $stdenv/setup
       rm -rfv audacious-*
@@ -56,12 +55,10 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Audio player";
-    homepage = https://audacious-media-player.org/;
-    maintainers = with maintainers; [ eelco ramkromberg ];
+    homepage = "https://audacious-media-player.org/";
+    maintainers = with maintainers; [ eelco ramkromberg ttuegel ];
     platforms = with platforms; linux;
     license = with licenses; [
       bsd2 bsd3 #https://github.com/audacious-media-player/audacious/blob/master/COPYING

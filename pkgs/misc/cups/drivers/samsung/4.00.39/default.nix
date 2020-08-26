@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Samsung's Linux printing drivers; includes binaries without source code";
-    homepage = http://www.samsung.com/;
+    homepage = "http://www.samsung.com/";
     license = licenses.unfree;
     platforms = platforms.linux;
     broken = true;   # libscmssc.so and libmfp.so can't find their library dependencies at run-time

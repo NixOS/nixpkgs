@@ -3,21 +3,24 @@
 , harfbuzz #substituting glyphs with opentype fonts
 , fribidi, m17n_lib #bidi and encoding
 , openssl, libssh2 #build-in ssh
+, fcitx, ibus, uim #IME
+, wrapGAppsHook #color picker in mlconfig
 }:
 
 stdenv.mkDerivation rec {
   pname = "mlterm";
-  version = "3.8.9";
+  version = "3.9.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/mlterm/01release/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "1iy7wq953gcnygr1d04h5ddvhpmy8l575n5is2w0rj3ck31ihpqd";
+    sha256 = "17h6j4nmbyvsx2shm8mqm7smzq9i7mbqxjw19c2m0rhf5yzqhr3k";
   };
 
-  nativeBuildInputs = [ pkgconfig autoconf ];
+  nativeBuildInputs = [ pkgconfig autoconf wrapGAppsHook ];
   buildInputs = [
     libX11 gdk-pixbuf.dev cairo libXft gtk3 vte
     harfbuzz fribidi m17n_lib openssl libssh2
+    fcitx ibus uim
   ];
 
   #bad configure.ac and Makefile.in everywhere
@@ -85,7 +88,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Multi Lingual TERMinal emulator on X11";
-    homepage = http://mlterm.sourceforge.net/;
+    homepage = "http://mlterm.sourceforge.net/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ vrthra ramkromberg ];
     platforms = with platforms; linux;

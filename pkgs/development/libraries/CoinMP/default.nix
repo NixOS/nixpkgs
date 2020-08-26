@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
-    homepage = https://projects.coin-or.org/CoinMP/;
+    homepage = "https://projects.coin-or.org/CoinMP/";
     description = "COIN-OR lightweight API for COIN-OR libraries CLP, CBC, and CGL";
     platforms = platforms.unix;
     license = licenses.epl10;

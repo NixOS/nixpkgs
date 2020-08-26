@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       roms. DeSmuME is also able to emulate nearly all of the
       commercial nds rom titles which other DS Emulators aren't.
     '';
-    homepage = http://www.desmume.com ;
+    homepage = "http://www.desmume.com";
     license = licenses.gpl1Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

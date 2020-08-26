@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Active Directory administration utility for Unix";
-    homepage = https://gp2x.org/adtool;
+    homepage = "https://gp2x.org/adtool";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
   };

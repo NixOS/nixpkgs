@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ dbus dbus-glib gtk3 gobject-introspection gtk-doc docbook_xml_dtd_45 docbook_xsl libxslt libxml2 ];
 
   meta = {
-    homepage = https://wiki.gnome.org/Attic/LibUnique;
+    homepage = "https://wiki.gnome.org/Attic/LibUnique";
     description = "A library for writing single instance applications";
     license = licenses.lgpl21;
     maintainers = [ maintainers.AndersonTorres ];

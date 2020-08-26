@@ -12,7 +12,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ flask markdown ];
 
   meta = with lib; {
-    homepage = https://github.com/miracle2k/flask-assets;
+    homepage = "https://github.com/miracle2k/flask-assets";
     description = "Browsable web APIs for Flask";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ];

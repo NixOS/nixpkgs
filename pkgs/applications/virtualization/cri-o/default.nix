@@ -1,63 +1,73 @@
-{ flavor ? ""
-, stdenv
+{ stdenv
 , btrfs-progs
-, buildGoPackage
+, buildGoModule
 , fetchFromGitHub
-, git
 , glibc
 , gpgme
+, installShellFiles
 , libapparmor
-, libassuan
-, libgpgerror
 , libseccomp
 , libselinux
 , lvm2
-, pkgconfig
-, which
+, pkg-config
+, nixosTests
 }:
 
-let
-  buildTags = "apparmor seccomp selinux containers_image_ostree_stub";
-in buildGoPackage rec {
-  project = "cri-o";
-  version = "1.17.0";
-  name = "${project}-${version}${flavor}";
-
-  goPackagePath = "github.com/${project}/${project}";
+buildGoModule rec {
+  pname = "cri-o";
+  version = "1.18.3";
 
   src = fetchFromGitHub {
     owner = "cri-o";
     repo = "cri-o";
     rev = "v${version}";
-    sha256 = "0xjmylf0ww23qqcg7kw008px6608r4qq6q57pfqis0661kp6f24j";
+    sha256 = "1csdbyypqwxkfc061pdv7nj52a52b9xxzb6qgxcznd82w7wgfb3g";
   };
+  vendorSha256 = null;
 
-  outputs = [ "bin" "out" ];
-  nativeBuildInputs = [ git pkgconfig which ];
-  buildInputs = [ btrfs-progs gpgme libapparmor libassuan libgpgerror
-                 libseccomp libselinux lvm2 ]
-                ++ stdenv.lib.optionals (glibc != null) [ glibc glibc.static ];
+  doCheck = false;
 
+  outputs = [ "out" "man" ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
+
+  buildInputs = [
+    btrfs-progs
+    gpgme
+    libapparmor
+    libseccomp
+    libselinux
+    lvm2
+  ] ++ stdenv.lib.optionals (glibc != null) [ glibc glibc.static ];
+
+  BUILDTAGS = "apparmor seccomp selinux containers_image_openpgp containers_image_ostree_stub";
   buildPhase = ''
-    pushd go/src/${goPackagePath}
+    patchShebangs .
 
-    make BUILDTAGS='${buildTags}' \
-      bin/crio \
-      bin/crio-status \
-      bin/pinns
+    sed -i '/version.buildDate/d' Makefile
+
+    make binaries docs BUILDTAGS="$BUILDTAGS"
   '';
+
   installPhase = ''
-    install -Dm755 bin/crio $bin/bin/crio${flavor}
-    install -Dm755 bin/crio-status $bin/bin/crio-status${flavor}
-    install -Dm755 bin/pinns $bin/bin/pinns${flavor}
+    install -Dm755 bin/* -t $out/bin
+
+    for shell in bash fish zsh; do
+      installShellCompletion --$shell completions/$shell/*
+    done
+
+    installManPage docs/*.[1-9]
   '';
+
+  passthru.tests = { inherit (nixosTests) cri-o; };
 
   meta = with stdenv.lib; {
-    homepage = https://cri-o.io;
-    description = ''Open Container Initiative-based implementation of the
-                    Kubernetes Container Runtime Interface'';
+    homepage = "https://cri-o.io";
+    description = ''
+      Open Container Initiative-based implementation of the
+      Kubernetes Container Runtime Interface
+    '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ saschagrunert ];
+    maintainers = with maintainers; [ ] ++ teams.podman.members;
     platforms = platforms.linux;
   };
 }

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A set of utilities for hard drive data rescue";
-    homepage = https://sourceforge.net/projects/ddrutility/;
+    homepage = "https://sourceforge.net/projects/ddrutility/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ orivej ];

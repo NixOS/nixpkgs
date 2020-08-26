@@ -1,7 +1,9 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , pkgconfig
+, fetchpatch
 , meson
 , ninja
 , vala
@@ -9,22 +11,31 @@
 , granite
 , wingpanel
 , libgee
-, libwnck3
+, elementary-notifications
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-notifications";
-  version = "2.1.3";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1lx023z7xxlgwh0br48fw5w7xw673p2sqxwl1gz9f54xx7rv81py";
+    sha256 = "0qp13iaf2956ss4d6w6vwnzdvb7izqmyh6xrdii7j8gxxwjd4lxm";
   };
 
+  patches = [
+    # Fix do not disturb on NixOS
+    # https://github.com/elementary/wingpanel-indicator-notifications/pull/110
+    (fetchpatch {
+      url = "https://github.com/elementary/wingpanel-indicator-notifications/commit/02b1e226c0262c1535fdf2b4f1daba6be9084f67.patch";
+      sha256 = "1a5phygygndr28yx8yp0lyk0wxypc5656dpidw1z8x1yd6xysqhy";
+    })
+  ];
+
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -37,16 +48,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    elementary-notifications
     granite
     gtk3
     libgee
-    libwnck3
     wingpanel
   ];
 
   meta = with stdenv.lib; {
     description = "Notifications Indicator for Wingpanel";
-    homepage = https://github.com/elementary/wingpanel-indicator-notifications;
+    homepage = "https://github.com/elementary/wingpanel-indicator-notifications";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

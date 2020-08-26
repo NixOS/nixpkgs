@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Ab-Initio Molecular Dynamics Potential Development";
-    homepage = https://gitlab.com/costrouc/dftfit;
+    homepage = "https://gitlab.com/costrouc/dftfit";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ costrouc ];
   };

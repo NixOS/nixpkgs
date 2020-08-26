@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , fetchpatch
 , vala
 , pkgconfig
@@ -51,14 +52,14 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
 
   meta = with stdenv.lib; {
     description = "Insert emoji anywhere, even in non-native apps - designed for elementary OS";
-    homepage = https://github.com/cassidyjames/ideogram;
+    homepage = "https://github.com/cassidyjames/ideogram";
     license = licenses.gpl2Plus;
     maintainers = pantheon.maintainers;
     platforms = platforms.linux;

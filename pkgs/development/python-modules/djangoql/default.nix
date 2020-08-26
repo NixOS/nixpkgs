@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Advanced search language for Django";
-    homepage = https://github.com/ivelum/djangoql;
+    homepage = "https://github.com/ivelum/djangoql";
     license = licenses.mit;
     maintainers = with maintainers; [ earvstedt ];
   };

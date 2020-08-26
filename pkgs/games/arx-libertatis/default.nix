@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, zlib, boost
 , openal, glm, freetype, libGLU, SDL2, epoxy
-, dejavu_fonts, inkscape, optipng, imagemagick
+, dejavu_fonts, inkscape_0, optipng, imagemagick
 , withCrashReporter ? !stdenv.isDarwin
 ,   qtbase ? null
 ,   wrapQtAppsHook ? null
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    cmake inkscape imagemagick optipng
+    cmake inkscape_0 imagemagick optipng
   ] ++ optionals withCrashReporter [ wrapQtAppsHook ];
 
   buildInputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
       first-person role-playing game / dungeon crawler
       developed by Arkane Studios.
     '';
-    homepage = https://arx-libertatis.org/;
+    homepage = "https://arx-libertatis.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ rnhmjoj ];
     platforms = platforms.linux;

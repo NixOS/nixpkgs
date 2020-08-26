@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-arc-menu";
-  version = "33";
+  version = "47";
 
   src = fetchFromGitLab {
-    owner = "LinxGem33";
+    owner = "arcmenu-team";
     repo = "Arc-Menu";
     rev = "v${version}-Stable";
-    sha256 = "0ncb19jlwy2y9jcj8g6cdbasdv6n7hm96qv9l251z6qgrmg28x4z";
+    sha256 = "1hhjxdm1sm9pddhkkxx532hqqiv9ghvqgn9xszg1jwhj29380fv6";
   };
 
   patches = [
@@ -22,12 +22,14 @@ stdenv.mkDerivation rec {
     glib gettext
   ];
 
-  makeFlags = [ "INSTALL_BASE=${placeholder "out"}/share/gnome-shell/extensions" ];
+  makeFlags = [ "INSTALLBASE=${placeholder "out"}/share/gnome-shell/extensions" ];
+
+  uuid = "arc-menu@linxgem33.com";
 
   meta = with stdenv.lib; {
     description = "Gnome shell extension designed to replace the standard menu found in Gnome 3";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dkabot ];
-    homepage = https://gitlab.com/LinxGem33/Arc-Menu;
+    homepage = "https://gitlab.com/LinxGem33/Arc-Menu";
   };
 }

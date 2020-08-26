@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pyomo: Python Optimization Modeling Objects";
-    homepage = http://pyomo.org;
+    homepage = "http://pyomo.org";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

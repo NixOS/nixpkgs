@@ -2,21 +2,22 @@
 
 buildGoModule rec {
   pname = "clash";
-  version = "0.18.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "Dreamacro";
     repo = pname;
     rev = "v${version}";
-    sha256 = "150zpjchldm1632z6gkydgqhx2a612lpwf5lqngd2if99nas54kk";
+    sha256 = "0cbbih035h40hhl7ykmyh9q9nzdqq1p8hmvzd4358cigz1gjc3j2";
   };
 
-  goPackagePath = "github.com/Dreamacro/clash";
-  modSha256 = "02bki2iq99lc9iq1mjf9rbxwspalrj7hjlk1h384w3d4s4x4fyxy";
+  vendorSha256 = "0s7mhbjfpfmzqf48d7k0d416m39x6fh5ds4q3xnvhcfx5kmdymq6";
+
+  doCheck = false;
 
   buildFlagsArray = [
     "-ldflags="
-    "-X ${goPackagePath}/constant.Version=${version}"
+    "-X github.com/Dreamacro/clash/constant.Version=${version}"
   ];
 
   meta = with stdenv.lib; {
@@ -24,6 +25,5 @@ buildGoModule rec {
     homepage = "https://github.com/Dreamacro/clash";
     license = licenses.gpl3;
     maintainers = with maintainers; [ contrun filalex77 ];
-    platforms = platforms.all;
   };
 }

@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tali";
-  version = "3.32.1";
+  version = "3.36.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/tali/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0na7sswfh63wj44aibcnqdsbb24yfngcwgi07lv8rky6rry0kqgz";
+    sha256 = "12h6783m4634zzprlk31j0dmvgzrfjklhl0z49fdwcziw5bszr3c";
   };
 
   passthru = {
@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Tali;
+    homepage = "https://wiki.gnome.org/Apps/Tali";
     description = "Sort of poker with dice and less money";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

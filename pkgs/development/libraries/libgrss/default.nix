@@ -32,9 +32,9 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Glib abstaction to handle feeds in RSS, Atom and other formats";
-    homepage = https://wiki.gnome.org/Projects/Libgrss;
+    homepage = "https://wiki.gnome.org/Projects/Libgrss";
     license = licenses.lgpl3Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

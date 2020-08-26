@@ -1,4 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, flake8, pycodestyle, pytestrunner, pytest }:
+{ lib, fetchPypi, buildPythonPackage, pythonOlder
+, flake8
+, importlib-metadata
+, pycodestyle
+, pytestrunner
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "flake8-debugger";
@@ -11,7 +17,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pytestrunner ];
 
-  propagatedBuildInputs = [ flake8 pycodestyle ];
+  propagatedBuildInputs = [ flake8 pycodestyle ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   checkInputs = [ pytest ];
 
@@ -20,7 +27,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://github.com/jbkahn/flake8-debugger;
+    homepage = "https://github.com/jbkahn/flake8-debugger";
     description = "ipdb/pdb statement checker plugin for flake8";
     maintainers = with lib.maintainers; [ johbo ];
     license = lib.licenses.mit;

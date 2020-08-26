@@ -8,17 +8,17 @@ use Time::HiRes qw(clock_gettime CLOCK_MONOTONIC);
 
 sub new {
     my ($class) = @_;
-    
+
     my $logFile = defined $ENV{LOGFILE} ? "$ENV{LOGFILE}" : "/dev/null";
     my $log = new XML::Writer(OUTPUT => new IO::File(">$logFile"));
-    
+
     my $self = {
         log => $log,
         logQueue => Thread::Queue->new()
     };
-    
+
     $self->{log}->startTag("logfile");
-    
+
     bless $self, $class;
     return $self;
 }

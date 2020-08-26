@@ -1,36 +1,61 @@
-{ stdenv, fetchurl, meson, ninja, python3, vala, libxslt, pkgconfig, glib, bash-completion, dbus, gnome3
-, libxml2, gtk-doc, docbook_xsl, docbook_xml_dtd_42, fetchpatch }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, meson
+, ninja
+, python3
+, vala
+, libxslt
+, pkg-config
+, glib
+, bash-completion
+, dbus
+, gnome3
+, libxml2
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_42
+}:
 
-let
-  pname = "dconf";
-in
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "0.34.0";
-
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0lnsl85cp2vpzgp8pkf6l6yd2i3lp02jdvga1icfa78j2smr8fll";
-  };
-
-  patches = [
-    # Fix build with Meson 0.52
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/dconf/commit/cc32667c5d7d9ff95e65cc21f59905d8f9218394.patch";
-      sha256 = "02gfadn34bg818a7vb3crhsiahskiflcvx9l6iqwf1v269q93mr8";
-    })
-  ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py tests/test-dconf.py
-    patchShebangs meson_post_install.py
-    patchShebangs tests/test-dconf.py
-  '';
+  pname = "dconf";
+  version = "0.36.0";
 
   outputs = [ "out" "lib" "dev" "devdoc" ];
 
-  nativeBuildInputs = [ meson ninja vala pkgconfig python3 libxslt libxml2 gtk-doc docbook_xsl docbook_xml_dtd_42 ];
-  buildInputs = [ glib bash-completion dbus ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0bfs069pjv6lhp7xrzmrhz3876ay2ryqxzc6mlva1hhz34ibprlz";
+  };
+
+  patches = [
+    # Fix bash-completion installation
+    # https://gitlab.gnome.org/GNOME/dconf/merge_requests/58
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/dconf/commit/b3c9423c6151f3c28e526083ea2f04987a780fdf.patch";
+      sha256 = "0kdapiw3zq041jhzsx90kk08vqfgzr6vy2k541iav984d0m0zcnf";
+    })
+  ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    vala
+    pkg-config
+    python3
+    libxslt
+    libxml2
+    glib
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_42
+  ];
+
+  buildInputs = [
+    glib
+    bash-completion
+    dbus
+  ];
 
   mesonFlags = [
     "--sysconfdir=/etc"
@@ -39,17 +64,22 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isAarch32 && !stdenv.isAarch64 && !stdenv.isDarwin;
 
+  postPatch = ''
+    chmod +x meson_post_install.py tests/test-dconf.py
+    patchShebangs meson_post_install.py
+    patchShebangs tests/test-dconf.py
+  '';
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
-      attrPath = "gnome3.${pname}";
     };
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/dconf;
+    homepage = "https://wiki.gnome.org/Projects/dconf";
     license = licenses.lgpl21Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = gnome3.maintainers;
+    platforms = platforms.unix;
+    maintainers = teams.gnome.members;
   };
 }

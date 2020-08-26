@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "A GNU/Linux keylogger that works!";
     license = licenses.gpl3;
-    homepage = https://github.com/kernc/logkeys;
+    homepage = "https://github.com/kernc/logkeys";
     maintainers = with maintainers; [mikoim offline];
     platforms = platforms.linux;
   };

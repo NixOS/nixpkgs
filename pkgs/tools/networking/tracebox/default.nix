@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.tracebox.org/;
+    homepage = "http://www.tracebox.org/";
     description = "A middlebox detection tool";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ maintainers.lethalman ];

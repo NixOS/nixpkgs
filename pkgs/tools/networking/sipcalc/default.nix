@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Advanced console ip subnet calculator";
-    homepage = http://www.routemeister.net/projects/sipcalc/;
+    homepage = "http://www.routemeister.net/projects/sipcalc/";
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = [ maintainers.globin ];

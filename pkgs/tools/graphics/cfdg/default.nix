@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, libpng, bison, flex, ffmpeg, icu }:
+{ stdenv, fetchFromGitHub, libpng, bison, flex, ffmpeg_3, icu }:
 
 stdenv.mkDerivation rec {
   pname = "cfdg";
-  version = "3.2_2";
+  version = "3.3";
   src = fetchFromGitHub {
     owner = "MtnViewJohn";
     repo = "context-free";
     rev = "Version${version}";
-    sha256 = "14v1gya7h0p9dj16hw87wpmjfddmkz537w3kjvaribgxxp0gzyz5";
+    sha256 = "13m8npccacmgxbs4il45zw53dskjh53ngv2nxahwqw8shjrws4mh";
   };
 
-  buildInputs = [ libpng bison flex ffmpeg icu ];
+  buildInputs = [ libpng bison flex ffmpeg_3 icu ];
 
   postPatch = ''
     sed -e "/YY_NO_UNISTD/a#include <stdio.h>" -i src-common/cfdg.l

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.thregr.org/~wavexx/software/facedetect/;
+    homepage = "https://www.thregr.org/~wavexx/software/facedetect/";
     description = "A simple face detector for batch processing";
     license = licenses.gpl2Plus;
     platforms = platforms.all;

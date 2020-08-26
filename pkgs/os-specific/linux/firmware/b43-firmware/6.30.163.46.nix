@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Firmware for cards supported by the b43 kernel module";
-    homepage = http://wireless.kernel.org/en/users/Drivers/b43;
-    downloadPage = http://www.lwfinger.com/b43-firmware;
+    homepage = "http://wireless.kernel.org/en/users/Drivers/b43";
+    downloadPage = "http://www.lwfinger.com/b43-firmware";
     license = licenses.unfree;
   };
 }

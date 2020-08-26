@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Control LimitlessLED products";
-    homepage = https://github.com/happyleavesaoc/python-limitlessled/;
+    homepage = "https://github.com/happyleavesaoc/python-limitlessled/";
     license = licenses.mit;
     maintainers = with maintainers; [ sephalon ];
   };

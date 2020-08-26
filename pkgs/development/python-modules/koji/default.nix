@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "An RPM-based build system";
-    homepage = https://pagure.io/koji;
+    homepage = "https://pagure.io/koji";
     license = stdenv.lib.licenses.lgpl21;
     platforms = stdenv.lib.platforms.unix;
   };

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library for displaying messages";
-    homepage = https://shh.thathost.com/pub-unix/;
+    homepage = "https://shh.thathost.com/pub-unix/";
     license = licenses.artistic1;
     platforms = platforms.linux;
   };

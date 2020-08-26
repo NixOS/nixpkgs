@@ -4,18 +4,18 @@
 
 stdenv.mkDerivation rec {
   pname = "todoist-electron";
-  version = "1.19";
+  version = "1.23.0";
 
   src = fetchurl {
-    url = "https://github.com/KryDos/todoist-linux/releases/download/${version}/Todoist_${version}.0_amd64.deb";
-    sha256 = "1w0l7k7wmbhwzv71cffsir0q7zg9m0617fmyvd4a01b6flpxrpfx";
+    url = "https://github.com/KryDos/todoist-linux/releases/download/${version}/Todoist_${version}_amd64.deb";
+    sha256 = "1yxa0fdc3fnffny6jf1hm7545792pw7828mc27il17l4kn346g98";
   };
 
   desktopItem = makeDesktopItem {
     name = "Todoist";
     exec = "todoist";
     desktopName = "Todoist";
-    categories = "Utility;Productivity";
+    categories = "Utility";
   };
 
   nativeBuildInputs = [ makeWrapper dpkg ];

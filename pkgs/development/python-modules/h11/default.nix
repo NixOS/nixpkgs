@@ -12,7 +12,7 @@ buildPythonPackage rec {
   patches = [
     # pytest5 compatability
     (fetchpatch {
-      url = https://github.com/python-hyper/h11/commit/241e220493a511a5f5a5d472cb88d72661a92ab1.patch;
+      url = "https://github.com/python-hyper/h11/commit/241e220493a511a5f5a5d472cb88d72661a92ab1.patch";
       sha256 = "1s3ipf9s41m1lksws3xv3j133q7jnjdqvmgk4sfnm8q7li2dww39";
     })
   ];

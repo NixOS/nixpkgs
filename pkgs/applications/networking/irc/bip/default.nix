@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An IRC proxy (bouncer)";
-    homepage = http://bip.milkypond.org/;
+    homepage = "http://bip.milkypond.org/";
     license = stdenv.lib.licenses.gpl2;
     downloadPage = "https://projects.duckcorp.org/projects/bip/files";
     platforms = stdenv.lib.platforms.linux;

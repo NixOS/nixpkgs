@@ -1,17 +1,18 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, autoreconfHook, ncurses, pcre2 }:
 
 stdenv.mkDerivation rec {
   pname = "fdupes";
-  version = "1.6.1";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "adrianlopezroche";
     repo  = "fdupes";
     rev   = "v${version}";
-    sha256 = "19b6vqblddaw8ccw4sn0qsqzbswlhrz8ia6n4m3hymvcxn8skpz9";
+    sha256 = "1c5hv7vkfxsii1qafhsynzp9zkwim47xkpk27sy64qdsjnhysdak";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ ncurses pcre2 ];
 
   meta = with stdenv.lib; {
     description = "Identifies duplicate files residing within specified directories";
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
       Such files are found by comparing file sizes and MD5 signatures,
       followed by a byte-by-byte comparison.
     '';
-    homepage = https://github.com/adrianlopezroche/fdupes;
+    homepage = "https://github.com/adrianlopezroche/fdupes";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.maggesi ];

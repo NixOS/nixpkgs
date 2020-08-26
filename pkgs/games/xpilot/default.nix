@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   ];
   meta = with stdenv.lib; {
     description = "A multiplayer X11 space combat game";
-    homepage = http://xpilot.sf.net/;
+    homepage = "http://xpilot.sf.net/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

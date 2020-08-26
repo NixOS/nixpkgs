@@ -1,23 +1,25 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "dnscrypt-proxy2";
-  version = "2.0.39";
+  version = "2.0.44";
 
-  goPackagePath = "github.com/jedisct1/dnscrypt-proxy";
+  vendorSha256 = null;
+
+  doCheck = false;
 
   src = fetchFromGitHub {
-    owner = "jedisct1";
+    owner = "DNSCrypt";
     repo = "dnscrypt-proxy";
     rev = version;
-    sha256 = "0fvnp2brmqkwn04v01k53f9djk9ywa1cg26m2frhv4lj0581430y";
+    sha256 = "08bg60j5z349blj5sip1f8f793q12ix3zmqkayym5nf69s1pfm7l";
   };
 
   meta = with stdenv.lib; {
     description = "A tool that provides secure DNS resolution";
 
     license = licenses.isc;
-    homepage = https://dnscrypt.info/;
+    homepage = "https://dnscrypt.info/";
     maintainers = with maintainers; [ atemu waynr ];
     platforms = with platforms; unix;
   };

@@ -16,7 +16,7 @@ in fetchzip rec {
   sha256 = "1qwfsyp51grr56jcnkkmnrnl3r20pmhp9zh9g88kp64m026cah6n";
 
   meta = with lib; {
-    homepage = https://github.com/akryukov/oldstand;
+    homepage = "https://github.com/akryukov/oldstand";
     description = "An attempt to revive a specific type of Modern style of serif typefaces";
     maintainers = with maintainers; [ raskin rycee ];
     license = licenses.ofl;

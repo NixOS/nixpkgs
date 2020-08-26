@@ -20,7 +20,7 @@ mkDerivation {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = https://github.com/ludios/qolibri;
+    homepage = "https://github.com/ludios/qolibri";
     description = "EPWING reader for viewing Japanese dictionaries";
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];

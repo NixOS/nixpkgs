@@ -3,15 +3,17 @@
 , fetchPypi
 , pytest
 , virtual-display
+, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "pytest-xvfb";
-  version = "1.2.0";
+  version = "2.0.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a7544ca8d0c7c40db4b40d7a417a7b071c68d6ef6bdf9700872d7a167302f979";
+    sha256 = "1kyq5rg27dsnj7dc6x9y7r8vwf8rc88y2ppnnw6r96alw0nn9fn4";
   };
 
   propagatedBuildInputs = [

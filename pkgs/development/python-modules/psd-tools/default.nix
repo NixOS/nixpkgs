@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "psd-tools";
-  version = "1.8.35";
+  version = "1.9.15";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "379211cf98ebafbe129088a5c92f575e1ccd7987c40bad9520c209e51008df00";
+    sha256 = "23b545d91c784fcaf27fbf4c69abe21ac1ea10d25b5b8c61dcd8f0e03ccff786";
   };
 
   propagatedBuildInputs = [
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python package for reading Adobe Photoshop PSD files";
-    homepage = https://github.com/kmike/psd-tools;
+    homepage = "https://github.com/kmike/psd-tools";
     license = lib.licenses.mit;
     broken = true; # missing packbits from nixpkgs
   };

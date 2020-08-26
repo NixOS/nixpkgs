@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   name = "unzip-6.0";
 
   src = fetchurl {
-    url = mirror://sourceforge/infozip/unzip60.tar.gz;
+    url = "mirror://sourceforge/infozip/unzip60.tar.gz";
     sha256 = "0dxx11knh3nk95p2gg2ak777dd11pr7jx5das2g49l262scrcv83";
   };
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    homepage = http://www.info-zip.org;
+    homepage = "http://www.info-zip.org";
     description = "An extraction utility for archives compressed in .zip format";
     license = stdenv.lib.licenses.free; # http://www.info-zip.org/license.html
     platforms = stdenv.lib.platforms.all;

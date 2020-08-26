@@ -12,15 +12,17 @@
 , jsonschema
 , pathlib2
 , setuptools
+, junit-xml
+, networkx
 }:
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "0.26.2";
+  version = "0.33.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5449313b5f176024bd5fd6ebe69ce986a2d9b8a9d6a147b2d442c8d9fa99a6c5";
+    sha256 = "b74bb89a3d0da4a744179b07bc186b9fbc4800f929bf635bb6246e80fb91a953";
   };
 
   propagatedBuildInputs = [
@@ -32,6 +34,8 @@ buildPythonPackage rec {
     jsonschema
     pathlib2
     setuptools
+    junit-xml
+    networkx
   ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata importlib-resources ];
 
   # No tests included in archive
@@ -39,7 +43,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Checks cloudformation for practices and behaviour that could potentially be improved";
-    homepage = https://github.com/aws-cloudformation/cfn-python-lint;
+    homepage = "https://github.com/aws-cloudformation/cfn-python-lint";
     license = licenses.mit;
   };
 }

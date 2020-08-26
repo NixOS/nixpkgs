@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   cmakeFlags = [ "-DCMAKE_MODULE_PATH=${sfml}/share/SFML/cmake/Modules/" ];
 
   meta = with stdenv.lib; {
-    homepage = https://www.sfml-dev.org/;
+    homepage = "https://www.sfml-dev.org/";
     description = "Simple and fast multimedia library";
     longDescription = ''
       SFML is a simple, fast, cross-platform and object-oriented multimedia API.

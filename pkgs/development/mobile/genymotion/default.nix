@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
       pre-configured Android (x86 with OpenGL hardware acceleration) images,
       suitable for application testing.
      '';
-    homepage = https://www.genymotion.com/;
+    homepage = "https://www.genymotion.com/";
     license = stdenv.lib.licenses.unfree;
     platforms = ["x86_64-linux"];
     maintainers = [ stdenv.lib.maintainers.puffnfresh ];

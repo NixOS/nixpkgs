@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://bach.dynet.com/crip/;
+    homepage = "http://bach.dynet.com/crip/";
     description = "Terminal-based ripper/encoder/tagger tool for creating Ogg Vorbis/FLAC files";
     license = stdenv.lib.licenses.gpl1;
     platforms = stdenv.lib.platforms.linux;

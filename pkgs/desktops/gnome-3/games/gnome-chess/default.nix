@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-chess";
-  version = "3.34.0";
+  version = "3.36.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-chess/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1n1vjg6xhwppmddrmqmkk6b3jkgphshp06rjbv5h3270k520a135";
+    sha256 = "165bk8s3nngyqbikggspj4rff5nxxfkfcmgzjb4grmsrgbqwk5di";
   };
 
   nativeBuildInputs = [ meson ninja vala pkgconfig gettext itstool libxml2 python3 wrapGAppsHook gobject-introspection ];
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Chess;
+    homepage = "https://wiki.gnome.org/Apps/Chess";
     description = "Play the classic two-player boardgame of chess";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

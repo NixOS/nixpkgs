@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "docker-credential-gcr";
-  version = "1.4.3";
+  version = "2.0.2";
 
   goPackagePath = "github.com/GoogleCloudPlatform/docker-credential-gcr";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "GoogleCloudPlatform";
     repo = "docker-credential-gcr";
     rev = "v${version}";
-    sha256 = "1xb88xjyyrdmjcgfv7fqdkv1ip3dpzsdif5vm7vkqvn83s5wj5df";
+    sha256 = "0m7jx669yf27z2g9gw9vwncpwldrcb3ldlf1xhvbwbijnc2jk866";
   };
 
   meta = with stdenv.lib; {
@@ -20,7 +20,7 @@ buildGoPackage rec {
       helper. It allows for Docker clients v1.11+ to easily make
       authenticated requests to GCR's repositories (gcr.io, eu.gcr.io, etc.).
     '';
-    homepage = https://github.com/GoogleCloudPlatform/docker-credential-gcr;
+    homepage = "https://github.com/GoogleCloudPlatform/docker-credential-gcr";
     license = licenses.asl20;
     maintainers = with maintainers; [ suvash ];
   };

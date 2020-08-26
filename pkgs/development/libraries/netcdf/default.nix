@@ -3,6 +3,7 @@
 , hdf5
 , m4
 , curl # for DAP
+, removeReferencesTo
 }:
 
 let
@@ -10,11 +11,11 @@ let
   mpi = hdf5.mpi;
 in stdenv.mkDerivation rec {
   pname = "netcdf";
-  version = "4.7.3";
+  version = "4.7.4";
 
   src = fetchurl {
     url = "https://www.unidata.ucar.edu/downloads/netcdf/ftp/${pname}-c-${version}.tar.gz";
-    sha256 = "12s4w2s96p51hlsa81lw92w56rdx8i3mk21pz2ydwcamw579z34f";
+    sha256 = "1a2fpp15a2rl1m50gcvvzd9y6bavl6vjf9zzf63sz5gdmq06yiqf";
   };
 
   postPatch = ''
@@ -26,7 +27,7 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ m4 ];
+  nativeBuildInputs = [ m4 removeReferencesTo ];
   buildInputs = [ hdf5 curl mpi ];
 
   passthru = {
@@ -42,14 +43,20 @@ in stdenv.mkDerivation rec {
   ]
   ++ (stdenv.lib.optionals mpiSupport [ "--enable-parallel-tests" "CC=${mpi}/bin/mpicc" ]);
 
+  disallowedReferences = [ stdenv.cc ];
+
+  postFixup = ''
+    remove-references-to -t ${stdenv.cc} "$(readlink -f $out/lib/libnetcdf.settings)"
+  '';
+
   doCheck = !mpiSupport;
 
   meta = {
       description = "Libraries for the Unidata network Common Data Format";
       platforms = stdenv.lib.platforms.unix;
-      homepage = https://www.unidata.ucar.edu/software/netcdf/;
+      homepage = "https://www.unidata.ucar.edu/software/netcdf/";
       license = {
-        url = https://www.unidata.ucar.edu/software/netcdf/docs/copyright.html;
+        url = "https://www.unidata.ucar.edu/software/netcdf/docs/copyright.html";
       };
   };
 }

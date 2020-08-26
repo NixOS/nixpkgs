@@ -4,13 +4,13 @@
 , curl, sqlite, openssl
 , libuuid, openh264, libv4l, libxkbfile, libXv, zlib, libXmu
 , libXtst, libXdamage, pam, libXfixes, libXrender, libjpeg_original
-, ffmpeg
+, ffmpeg_3
 }:
  let
    # Sky is linked to the libjpeg 8 version and checks for the version number in the code.
    libjpeg_original_fix = libjpeg_original.overrideAttrs (oldAttrs: {
     src = fetchurl{
-      url = https://www.ijg.org/files/jpegsrc.v8d.tar.gz;
+      url = "https://www.ijg.org/files/jpegsrc.v8d.tar.gz";
       sha256 = "1cz0dy05mgxqdgjf52p54yxpyy95rgl30cnazdrfmw7hfca9n0h0";
     };
   });
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     file
     qt5.qtbase
     SDL
-    ffmpeg
+    ffmpeg_3
     sqlite
     openssl
     openh264
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Lync & Skype for business on linux
     '';
-    homepage = https://tel.red/;
+    homepage = "https://tel.red/";
     license = licenses.unfree;
     maintainers = [ maintainers.Scriptkiddi ];
     platforms = platforms.unix;

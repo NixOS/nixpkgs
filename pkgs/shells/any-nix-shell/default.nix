@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "fish and zsh support for nix-shell";
     license = licenses.mit;
-    homepage = https://github.com/haslersn/any-nix-shell;
+    homepage = "https://github.com/haslersn/any-nix-shell";
     maintainers = with maintainers; [ haslersn ];
   };
 }

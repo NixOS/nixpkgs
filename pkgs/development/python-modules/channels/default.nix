@@ -18,6 +18,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Brings event-driven capabilities to Django with a channel system";
     license = licenses.bsd3;
-    homepage = https://github.com/django/channels;
+    homepage = "https://github.com/django/channels";
   };
 }

@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "postorius";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wrm0hda7ym9qaygxirqaaii66ndmgyy7gx8wqdg07pfx14zcyja";
+    sha256 = "08jn23gblbkfl09qlykbpsmp39mmach3sl69h1j5cd5kkx839rwa";
   };
 
   propagatedBuildInputs = [ django-mailman3 readme_renderer ];
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://www.gnu.org/software/mailman/;
+    homepage = "https://www.gnu.org/software/mailman/";
     description = "Web-based user interface for managing GNU Mailman";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ globin peti ];

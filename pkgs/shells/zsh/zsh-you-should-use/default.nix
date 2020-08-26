@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zsh-you-should-use";
-  version = "1.7.0";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "MichaelAquilina";
     repo = pname;
     rev = version;
-    sha256 = "1gcxm08ragwrh242ahlq3bpfg5yma2cshwdlj8nrwnd4qwrsflgq";
+    sha256 = "1dz48rd66priqhxx7byndqhbmlwxi1nfw8ik25k0z5k7k754brgy";
   };
 
   dontBuild = true;
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/MichaelAquilina/zsh-you-should-use;
+    homepage = "https://github.com/MichaelAquilina/zsh-you-should-use";
     license = licenses.gpl3;
     description = "ZSH plugin that reminds you to use existing aliases for commands you just typed";
     maintainers = with maintainers; [ ma27 ];

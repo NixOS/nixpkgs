@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "LDAP authentication plugin for OpenVPN";
-    homepage = https://github.com/threerings/openvpn-auth-ldap;
+    homepage = "https://github.com/threerings/openvpn-auth-ldap";
     license = [
       licenses.asl20
       licenses.bsd3

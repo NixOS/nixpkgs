@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clight";
-  version = "4.0";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "FedeDP";
     repo = "Clight";
     rev = version;
-    sha256 = "101fp9kwmfmfffpdvv41wf96kdjw0b16xk49g43w32a5wlr74zrq";
+    sha256 = "1j7va217g1k8lxl3lly13js8myf0shjc6knalq8q6lakc6j1mkxx";
   };
 
   # bash-completion.pc completionsdir=${bash-completion.out}
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A C daemon that turns your webcam into a light sensor";
-    homepage = https://github.com/FedeDP/Clight;
+    homepage = "https://github.com/FedeDP/Clight";
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [

@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "High quality TLS certs while you wait, for the discerning tester";
-    homepage = https://github.com/python-trio/trustme;
+    homepage = "https://github.com/python-trio/trustme";
     license = with lib.licenses; [ mit asl20 ];
     maintainers = with lib.maintainers; [ catern ];
   };

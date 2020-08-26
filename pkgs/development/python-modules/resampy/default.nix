@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/bmcfee/resampy;
+    homepage = "https://github.com/bmcfee/resampy";
     description = "Efficient signal resampling";
     license = licenses.isc;
   };

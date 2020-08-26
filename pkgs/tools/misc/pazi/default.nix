@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "An autojump \"zap to directory\" helper";
-    homepage = https://github.com/euank/pazi;
+    homepage = "https://github.com/euank/pazi";
     license = licenses.gpl3;
     maintainers = with maintainers; [ bbigras ];
   };

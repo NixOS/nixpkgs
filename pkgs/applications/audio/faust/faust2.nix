@@ -5,7 +5,8 @@
 , pkgconfig
 , cmake
 , llvm
-, emscripten
+# TODO: put back when it builds again
+# , emscripten
 , openssl
 , libsndfile
 , libmicrohttpd
@@ -20,19 +21,19 @@ with stdenv.lib.strings;
 
 let
 
-  version = "2.20.2";
+  version = "unstable-2020-08-03";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
-    rev = version;
-    sha256 = "08hv8gyj6c83128z3si92r1ka5ckf9sdpn5jdnlhrqyzja4mrxsy";
+    rev = "b6045f4592384076d3b383d116e602a95a000eb3";
+    sha256 = "1wcpilwnkc7rrbv9gbkj5hb7kamkh8nrc3r4hbcvbz5ar2pfc6d5";
     fetchSubmodules = true;
   };
 
   meta = with stdenv.lib; {
-    homepage = http://faust.grame.fr/;
-    downloadPage = https://sourceforge.net/projects/faudiostream/files/;
+    homepage = "http://faust.grame.fr/";
+    downloadPage = "https://github.com/grame-cncm/faust/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ magnetophon pmahoney ];
@@ -46,7 +47,7 @@ let
     inherit src;
 
     nativeBuildInputs = [ makeWrapper pkgconfig cmake vim which ];
-    buildInputs = [ llvm emscripten openssl libsndfile libmicrohttpd gnutls libtasn1 p11-kit ];
+    buildInputs = [ llvm /*emscripten*/ openssl libsndfile libmicrohttpd gnutls libtasn1 p11-kit ];
 
 
     passthru = {

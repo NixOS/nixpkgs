@@ -12,7 +12,7 @@ buildPythonPackage rec {
   docheck = false; # No tests in archive
 
   meta = {
-    homepage = https://github.com/makinacorpus/easydict;
+    homepage = "https://github.com/makinacorpus/easydict";
     license = with stdenv.lib; licenses.lgpl3;
     description = "Access dict values as attributes (works recursively)";
   };

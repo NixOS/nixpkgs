@@ -2,24 +2,25 @@
 
 buildGoModule rec {
   pname = "git-bug";
-  version = "0.7.0";
-  rev = "71580c41a931a1ad2c04682e0fd701661b716c95";
-  goPackagePath = "github.com/MichaelMure/git-bug";
+  version = "0.7.1"; # the `rev` below pins the version of the source to get
+  rev = "2d64b85db71a17ff3277bbbf7ac9d8e81f8e416c";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "MichaelMure";
     repo = "git-bug";
-    sha256 = "0mhqvcwa6y3hrrv88vbp22k7swzr8xw6ipm80gdpx85yp8j2wdkh";
+    sha256 = "01ab3mlwh5g1vr3x85fppflg18gb8ip9mjfsp2b5rfigd9lxyyns";
   };
 
-  modSha256 = "1cfn49cijiarzzczrpd28x1k7ib98xyzlvn3zghwk2ngfgiah3ld";
+  vendorSha256 = "0c8b47lj4wl3s21lm0vx4z7hznylm8c4fb8b8gxm278kn3zys607";
+
+  doCheck = false;
 
   buildFlagsArray = ''
-    -ldflags= 
-      -X ${goPackagePath}/commands.GitCommit=${rev}
-      -X ${goPackagePath}/commands.GitLastTag=${version}
-      -X ${goPackagePath}/commands.GitExactTag=${version}
+    -ldflags=
+      -X github.com/MichaelMure/git-bug/commands.GitCommit=${rev}
+      -X github.com/MichaelMure/git-bug/commands.GitLastTag=${version}
+      -X github.com/MichaelMure/git-bug/commands.GitExactTag=${version}
   '';
 
   postInstall = ''
@@ -30,9 +31,8 @@ buildGoModule rec {
 
   meta = with stdenv.lib; {
     description = "Distributed bug tracker embedded in Git";
-    homepage = https://github.com/MichaelMure/git-bug;
+    homepage = "https://github.com/MichaelMure/git-bug";
     license = licenses.gpl3;
-    platforms = platforms.all;
     maintainers = with maintainers; [ royneary ];
   };
 }

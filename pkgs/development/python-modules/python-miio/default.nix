@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "python-miio";
-  version = "0.4.8";
+  version = "0.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19423b3386b23d2e0fc94a8f6a358bcfbb44eed05376e33fd434d26d168bd18c";
+    sha256 = "3be5275b569844dfa267c80a1e23dc0957411dd501cae0ed3cccf43467031ceb";
   };
 
   checkInputs = [ pytest ];
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python library for interfacing with Xiaomi smart appliances";
-    homepage = https://github.com/rytilahti/python-miio;
+    homepage = "https://github.com/rytilahti/python-miio";
     license = licenses.gpl3;
     maintainers = with maintainers; [ flyfloh ];
   };

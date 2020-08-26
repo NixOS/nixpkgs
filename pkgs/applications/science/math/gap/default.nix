@@ -3,7 +3,7 @@
 , fetchurl
 , fetchpatch
 , makeWrapper
-, m4
+, readline
 , gmp
 # one of
 # - "minimal" (~400M):
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   version = "4.10.2";
 
   src = fetchurl {
-    url = "https://www.gap-system.org/pub/gap/gap-${lib.versions.major version}.${lib.versions.minor version}/tar.bz2/gap-${version}.tar.bz2";
+    url = "https://files.gap-system.org/gap-${lib.versions.major version}.${lib.versions.minor version}/tar.bz2/gap-${version}.tar.bz2";
     sha256 = "0cp6ddk0469zzv1m1vair6gm27ic6c5m77ri8rn0znq3gaps6x94";
   };
 
@@ -73,10 +73,8 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  configureFlags = [ "--with-gmp=system" ];
-
   buildInputs = [
-    m4
+    readline
     gmp
   ];
 
@@ -91,14 +89,31 @@ stdenv.mkDerivation rec {
       url = "https://github.com/gap-system/gap/commit/3361c172e6c5ff3bb3f01ba9d6f1dd4ad42cea80.patch";
       sha256 = "1kwp9qnfvmlbpf1c3rs6j5m2jz22rj7a4hb5x1gj9vkpiyn5pdyj";
     })
+
+    # Fix for locale specific tests causing issues. Already upstream.
+    # Backport of https://github.com/gap-system/gap/pull/4022
+    # WHEN REMOVING: also remove the`rm tst/testinstall/strings.tst` line in
+    # `postPatch` below. That line is necessary since the patch is not intended
+    # for gap 4.10.
+    (fetchpatch {
+      name = "remove-locale-specific-tests.patch";
+      url = "https://github.com/gap-system/gap/commit/c18b0c4215b5212a2cc4f305e2d5b94ba716bee8.patch";
+      excludes = ["tst/testinstall/stringobj.tst"];
+      sha256 = "1mz5b4mbw2jdd1ypp5s0dy6pp0jsvwsxr2dm4kbkls20r1r192sc";
+    })
   ];
+
+  postPatch = ''
+    # File not covered by the remove-locale-specific-tests.patch patch above.
+    rm tst/testinstall/strings.tst
+  '';
 
   # "teststandard" is a superset of testinstall. It takes ~1h instead of ~1min.
   # tests are run twice, once with all packages loaded and once without
   # checkTarget = "teststandard";
 
   doInstallCheck = true;
-  installCheckTarget = "testinstall";
+  installCheckTarget = "check";
 
   preInstallCheck = ''
     # gap tests check that the home directory exists
@@ -117,16 +132,6 @@ stdenv.mkDerivation rec {
       "TESTGAP=gap --quitonbreak -b -m 100m -o 1g -q -x 80 -r -A"
       "TESTGAPauto=gap --quitonbreak -b -m 100m -o 1g -q -x 80 -r"
     )
-  '';
-
-  postCheck = ''
-    # The testsuite doesn't exit with a non-zero exit code on failure.
-    # It leaves its logs in dev/log however.
-
-    # grep for error messages
-    if grep ^##### dev/log/*; then
-        exit 1
-    fi
   '';
 
   postBuild = ''
@@ -170,11 +175,11 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.all;
     broken = stdenv.isDarwin;
-    # keeping all packages increases the package size considerably, wchich
-    # is why a local build is preferable in that situation. The timeframe
-    # is reasonable and that way the binary cache doesn't get overloaded.
+    # keeping all packages increases the package size considerably, which is
+    # why a local build is preferable in that situation. The timeframe is
+    # reasonable and that way the binary cache doesn't get overloaded.
     hydraPlatforms = lib.optionals (!keepAllPackages) meta.platforms;
     license = licenses.gpl2;
-    homepage = http://gap-system.org/;
+    homepage = "https://www.gap-system.org";
   };
 }

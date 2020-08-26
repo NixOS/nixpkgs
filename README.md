@@ -34,6 +34,7 @@ the main ones:
 
 * [Nix](https://github.com/NixOS/nix) - the purely functional package manager
 * [NixOps](https://github.com/NixOS/nixops) - the tool to remotely deploy NixOS machines
+* [nixos-hardware](https://github.com/NixOS/nixos-hardware) - NixOS profiles to optimize settings for different hardware
 * [Nix RFCs](https://github.com/NixOS/rfcs) - the formal process for making substantial changes to the community
 * [NixOS homepage](https://github.com/NixOS/nixos-homepage) - the [NixOS.org](https://nixos.org) website
 * [hydra](https://github.com/NixOS/hydra) - our continuous integration system
@@ -45,9 +46,9 @@ Nixpkgs and NixOS are built and tested by our continuous integration
 system, [Hydra](https://hydra.nixos.org/).
 
 * [Continuous package builds for unstable/master](https://hydra.nixos.org/jobset/nixos/trunk-combined)
-* [Continuous package builds for the NixOS 19.09 release](https://hydra.nixos.org/jobset/nixos/release-19.09)
+* [Continuous package builds for the NixOS 20.03 release](https://hydra.nixos.org/jobset/nixos/release-20.03)
 * [Tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)
-* [Tests for the NixOS 19.09 release](https://hydra.nixos.org/job/nixos/release-19.09/tested#tabs-constituents)
+* [Tests for the NixOS 20.03 release](https://hydra.nixos.org/job/nixos/release-20.03/tested#tabs-constituents)
 
 Artifacts successfully built with Hydra are published to cache at
 https://cache.nixos.org/. When successful build and test criteria are

@@ -37,6 +37,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./fix_pkgconfig_includedir.patch
+
+    # Fix build with bash-completion 2.10
+    # https://gitlab.freedesktop.org/gstreamer/gstreamer/merge_requests/436
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/commit/dd2ec3681e2d38e13e01477efa36e851650690fb.patch";
+      sha256 = "07hwf67vndsibm1khvs4rfq30sbs9fss8k5vs502xc0kccbi1ih8";
+    })
   ];
 
   nativeBuildInputs = [
@@ -48,6 +55,7 @@ stdenv.mkDerivation rec {
     flex
     python3
     makeWrapper
+    glib
     gobject-introspection
     bash-completion
 
@@ -57,7 +65,9 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = [
+    bash-completion
+  ] ++ lib.optionals stdenv.isLinux [
     libcap
     libunwind
     elfutils
@@ -89,7 +99,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for prog in "$dev/bin/"*; do
         # We can't use --suffix here due to quoting so we craft the export command by hand
-        wrapProgram "$prog" --run "export GST_PLUGIN_SYSTEM_PATH=\$GST_PLUGIN_SYSTEM_PATH"$\{GST_PLUGIN_SYSTEM_PATH:+:\}"\$(unset _tmp; for profile in \$NIX_PROFILES; do _tmp="\$profile/lib/gstreamer-1.0''$\{_tmp:+:\}\$_tmp"; done; printf "\$_tmp")"
+        wrapProgram "$prog" --run 'export GST_PLUGIN_SYSTEM_PATH=$GST_PLUGIN_SYSTEM_PATH''${GST_PLUGIN_SYSTEM_PATH:+:}$(unset _tmp; for profile in $NIX_PROFILES; do _tmp="$profile/lib/gstreamer-1.0''${_tmp:+:}$_tmp"; done; printf '%s' "$_tmp")'
     done
   '';
 

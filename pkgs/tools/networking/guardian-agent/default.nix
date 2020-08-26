@@ -23,14 +23,14 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   postInstall = ''
-    mkdir -p $bin/bin $out/share/doc/${pname}
-    cp -v ./go/src/github.com/StanfordSNR/${pname}/scripts/* $bin/bin/
+    mkdir -p $out/bin $out/share/doc/${pname}
+    cp -v ./go/src/github.com/StanfordSNR/${pname}/scripts/* $out/bin/
     cp -vr ./go/src/github.com/StanfordSNR/${pname}/{AUTHORS,doc,LICENSE,README.md} $out/share/doc/guardian-agent
   '';
 
   postFixup = ''
-		wrapProgram $bin/bin/sga-guard \
-			--prefix PATH : "$bin/bin" \
+		wrapProgram $out/bin/sga-guard \
+			--prefix PATH : "$out/bin" \
 			--prefix PATH : "${autossh}/bin"
   '';
 

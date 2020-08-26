@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A sophisticated software modeler";
-    homepage = http://staruml.io/;
+    homepage = "http://staruml.io/";
     license = licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" ];
   };

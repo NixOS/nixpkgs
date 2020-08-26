@@ -30,14 +30,12 @@
 , zita-convolver
 , zam-plugins
 , rubberband
-, mda_lv2
 , lsp-plugins
 }:
 
 let
   lv2Plugins = [
     calf # limiter, compressor exciter, bass enhancer and others
-    mda_lv2 # loudness
     lsp-plugins # delay
   ];
   ladspaPlugins = [
@@ -46,13 +44,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "pulseeffects";
-  version = "4.7.1";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
     rev = "v${version}";
-    sha256 = "1r1hk5zp2cgrwyqkvp8kg2dkbihdyx3ydzhmirkwya8jag9pwadd";
+    sha256 = "9dQNYWBx8iAifRTZr2FRlYv4keZt5Cfahwi/w01duFg=";
   };
 
   nativeBuildInputs = [
@@ -99,9 +97,14 @@ in stdenv.mkDerivation rec {
     )
   '';
 
+  # Meson is no longer able to pick up Boost automatically.
+  # https://github.com/NixOS/nixpkgs/issues/86131
+  BOOST_INCLUDEDIR = "${stdenv.lib.getDev boost}/include";
+  BOOST_LIBRARYDIR = "${stdenv.lib.getLib boost}/lib";
+
   meta = with stdenv.lib; {
     description = "Limiter, compressor, reverberation, equalizer and auto volume effects for Pulseaudio applications";
-    homepage = https://github.com/wwmm/pulseeffects;
+    homepage = "https://github.com/wwmm/pulseeffects";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;

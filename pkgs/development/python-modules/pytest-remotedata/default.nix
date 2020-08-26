@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pytest plugin for controlling remote data access";
-    homepage = https://astropy.org;
+    homepage = "https://astropy.org";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

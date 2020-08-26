@@ -1,15 +1,28 @@
-{ stdenv, lib, fetchFromGitHub, python3, aircrack-ng, wireshark-cli, reaverwps-t6x, cowpatty, hashcat, hcxtools, which }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, python3, wirelesstools
+, aircrack-ng, wireshark-cli, reaverwps-t6x, cowpatty, hashcat, hcxtools
+, hcxdumptool, pyrit, which }:
 
 python3.pkgs.buildPythonApplication rec {
-  version = "2.2.5";
+  version = "2.5.5";
   pname = "wifite2";
 
   src = fetchFromGitHub {
-    owner = "derv82";
+    owner = "kimocoder";
     repo = "wifite2";
     rev = version;
-    sha256 = "1hfy90wf2bjg0z8rbs8cfhhvz78pzg2c6nj0zksal42mb6b5cjdp";
+    sha256 = "0rh54gj471dn8442imxwasjrrwzsx4m40nylkw3y6p8rbjmb92h4";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://salsa.debian.org/pkg-security-team/wifite/raw/debian/${version}-1/debian/patches/Disable-aircrack-failing-test.patch";
+      sha256 = "04qql8w27c1lqk59ghkr1n6r08jwdrb1dcam5k88szkk2bxv8yx1";
+    })
+    (fetchpatch {
+      url = "https://salsa.debian.org/pkg-security-team/wifite/raw/debian/${version}-1/debian/patches/Disable-two-failing-tests.patch";
+      sha256 = "1sixcqz1kbkhxf38yq55pwycm54adjx22bq46dfnl44mg69nx356";
+    })
+  ];
 
   propagatedBuildInputs = [
     aircrack-ng
@@ -18,6 +31,9 @@ python3.pkgs.buildPythonApplication rec {
     cowpatty
     hashcat
     hcxtools
+    hcxdumptool
+    wirelesstools
+    pyrit
     which
   ];
 
@@ -27,14 +43,14 @@ python3.pkgs.buildPythonApplication rec {
     mv ${sitePackagesDir}/wifite/__main__.py ${sitePackagesDir}/wifite/wifite.py
   '';
 
-  # which is not found
-  doCheck = false;
+  checkInputs = propagatedBuildInputs;
+  checkPhase = "python -m unittest discover tests -v";
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/derv82/wifite2";
     description = "Rewrite of the popular wireless network auditor, wifite";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lassulus ];
+    maintainers = with maintainers; [ lassulus danielfullmer ];
   };
 }

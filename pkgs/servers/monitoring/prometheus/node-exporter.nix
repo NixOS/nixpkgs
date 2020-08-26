@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, nixosTests }:
 
 buildGoPackage rec {
   pname = "node_exporter";
-  version = "0.18.1";
+  version = "1.0.1";
   rev = "v${version}";
 
   goPackagePath = "github.com/prometheus/node_exporter";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "prometheus";
     repo = "node_exporter";
-    sha256 = "0s3sp1gj86p7npxl38hkgs6ymd3wjjmc5hydyg1b5wh0x3yvpx07";
+    sha256 = "1r0xx81r9v019fl0iv078yl21ndhb356y7s7zx171zi02k7a4p2l";
   };
 
   # FIXME: tests fail due to read-only nix store
@@ -23,11 +23,13 @@ buildGoPackage rec {
         -X ${goPackagePath}/vendor/github.com/prometheus/common/version.Revision=${rev}
   '';
 
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) node; };
+
   meta = with stdenv.lib; {
     description = "Prometheus exporter for machine metrics";
-    homepage = https://github.com/prometheus/node_exporter;
+    homepage = "https://github.com/prometheus/node_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley fpletz globin ];
+    maintainers = with maintainers; [ benley fpletz globin Frostman ];
     platforms = platforms.unix;
   };
 }

@@ -1,5 +1,5 @@
 { lib, fetchurl, buildPythonPackage
-, zip, ffmpeg_4, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
+, zip, ffmpeg, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
 # Pandoc is required to build the package's man page. Release tarballs contain a
 # formatted man page already, though, it will still be installed. We keep the
 # manpage argument in place in case someone wants to use this derivation to
@@ -10,7 +10,7 @@
 , rtmpSupport ? true
 , phantomjsSupport ? false
 , hlsEncryptedSupport ? true
-, makeWrapper }:
+, installShellFiles, makeWrapper }:
 
 buildPythonPackage rec {
 
@@ -18,14 +18,14 @@ buildPythonPackage rec {
   # The websites youtube-dl deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2020.03.08";
+  version = "2020.07.28";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1xbka14wnalcqkhibfcqw8f5bw1m9b1f44719yifv1jk0614q4bn";
+    sha256 = "1if7xyi7g9rpni1jbs7gv5m12s34qdb15dpfbbjn8120h16y7cqz";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
   buildInputs = [ zip ] ++ lib.optional generateManPage pandoc;
   propagatedBuildInputs = lib.optional hlsEncryptedSupport pycryptodome;
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   makeWrapperArgs = let
       packagesToBinPath =
         [ atomicparsley ]
-        ++ lib.optional ffmpegSupport ffmpeg_4
+        ++ lib.optional ffmpegSupport ffmpeg
         ++ lib.optional rtmpSupport rtmpdump
         ++ lib.optional phantomjsSupport phantomjs2;
     in [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
@@ -46,8 +46,7 @@ buildPythonPackage rec {
   ];
 
   postInstall = ''
-    mkdir -p $out/share/zsh/site-functions
-    cp youtube-dl.zsh $out/share/zsh/site-functions/_youtube-dl
+    installShellCompletion youtube-dl.zsh
   '';
 
   # Requires network

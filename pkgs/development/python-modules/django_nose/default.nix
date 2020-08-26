@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Provides all the goodness of nose in your Django tests";
-    homepage = https://github.com/django-nose/django-nose;
+    homepage = "https://github.com/django-nose/django-nose";
     license = licenses.bsd3;
   };
 

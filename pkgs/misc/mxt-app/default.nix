@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, libtool }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   version="1.28";
   pname = "mxt-app";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec{
 
   meta = with stdenv.lib; {
     description = "Command line utility for Atmel maXTouch devices";
-    homepage = https://github.com/atmel-maxtouch/mxt-app;
+    homepage = "https://github.com/atmel-maxtouch/mxt-app";
     license = licenses.bsd2;
     maintainers = [ maintainers.colemickens ];
     platforms = platforms.linux;

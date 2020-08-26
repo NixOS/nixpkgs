@@ -3,7 +3,8 @@
 , perl
 , buildPythonPackage
 , arb
-, openblasCompat
+, blas
+, lapack
 , brial
 , cliquer
 , cypari2
@@ -51,6 +52,8 @@
 , gmpy2
 , pplpy
 }:
+
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 # This is the core sage python package. Everything else is just wrappers gluing
 # stuff together. It is not very useful on its own though, since it will not
@@ -103,7 +106,8 @@ buildPythonPackage rec {
     m4rie
     mpfi
     ntl
-    openblasCompat
+    blas
+    lapack
     pari
     planarity
     ppl

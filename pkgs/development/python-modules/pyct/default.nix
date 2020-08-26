@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Cli for python common tasks for users";
-    homepage = https://github.com/pyviz/pyct;
+    homepage = "https://github.com/pyviz/pyct";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

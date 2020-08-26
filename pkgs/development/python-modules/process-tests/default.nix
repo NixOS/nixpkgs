@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "process-tests";
-  version = "2.0.2";
+  version = "2.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7ae24a680cc7c44e7687e3723e6e64597a28223ad664989999efe10dd38c2431";
+    sha256 = "15yrgr1hb7i0fq31dh6k8hmc3jnk6yn5nh4xh3gmszk9vag5zrqk";
   };
 
   # No tests
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Tools for testing processes";
     license = licenses.bsd2;
-    homepage = https://github.com/ionelmc/python-process-tests;
+    homepage = "https://github.com/ionelmc/python-process-tests";
   };
 
 }

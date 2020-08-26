@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Unit conversion tool";
-    homepage = https://www.gnu.org/software/units/;
+    homepage = "https://www.gnu.org/software/units/";
     license = [ licenses.gpl3Plus ];
     platforms = platforms.all;
     maintainers = [ maintainers.vrthra ];

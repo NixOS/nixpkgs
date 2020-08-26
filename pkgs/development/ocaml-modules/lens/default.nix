@@ -1,4 +1,8 @@
-{ lib, fetchzip, ppx_deriving, ppxfind, buildDunePackage }:
+{ lib, ocaml, fetchzip, ppx_deriving, ppxfind, buildDunePackage }:
+
+if lib.versionAtLeast ocaml.version "4.10"
+then throw "lens is not available for OCaml ${ocaml.version}"
+else
 
 buildDunePackage rec {
   pname = "lens";
@@ -13,7 +17,7 @@ buildDunePackage rec {
   buildInputs = [ ppx_deriving ppxfind ];
 
   meta = with lib; {
-    homepage = https://github.com/pdonadeo/ocaml-lens;
+    homepage = "https://github.com/pdonadeo/ocaml-lens";
     description = "Functional lenses";
     license = licenses.bsd3;
     maintainers = with maintainers; [

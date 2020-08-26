@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "property-manager";
-  version = "2.3.1";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = "xolox";
     repo = "python-property-manager";
     rev = version;
-    sha256 = "0s4nwipxd8c2vp4rd8mxrj8wbycniz5ki5n177d0dbrnll5amcz0";
+    sha256 = "1v7hjm7qxpgk92i477fjhpcnjgp072xgr8jrgmbrxfbsv4cvl486";
   };
 
   propagatedBuildInputs = [ coloredlogs humanfriendly verboselogs ];
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Useful property variants for Python programming";
-    homepage = https://github.com/xolox/python-property-manager;
+    homepage = "https://github.com/xolox/python-property-manager";
     license = licenses.mit;
     maintainers = with maintainers; [ eyjhb ];
   };

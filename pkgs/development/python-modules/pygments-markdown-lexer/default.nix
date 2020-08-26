@@ -19,7 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/jhermann/pygments-markdown-lexer;
+    homepage = "https://github.com/jhermann/pygments-markdown-lexer";
     description = "Pygments Markdown Lexer – A Markdown lexer for Pygments to highlight Markdown code snippets";
     license = licenses.asl20;
   };

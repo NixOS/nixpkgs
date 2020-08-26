@@ -1,5 +1,7 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
+, fetchpatch
 , pantheon
 , pkgconfig
 , meson
@@ -15,12 +17,13 @@
 , libgee
 , elementary-icon-theme
 , appstream
+, pcre2
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-terminal";
-  version = "5.5.1";
+  version = "5.5.2";
 
   repoName = "terminal";
 
@@ -28,11 +31,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1b8fzs9s7djhwp02l3fwjpwxylklpbnw7x46mv7c8ksbp0m75iyj";
+    sha256 = "119iwmzbpkj4nmxinqfsh73lx23g8gbl6ha6wc4mc4fq9hpnc9c2";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -55,6 +58,7 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     libnotify
+    pcre2
     vte
   ];
 
@@ -72,7 +76,7 @@ stdenv.mkDerivation rec {
       A super lightweight, beautiful, and simple terminal. Comes with sane defaults, browser-class tabs, sudo paste protection,
       smart copy/paste, and little to no configuration.
     '';
-    homepage = https://github.com/elementary/terminal;
+    homepage = "https://github.com/elementary/terminal";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

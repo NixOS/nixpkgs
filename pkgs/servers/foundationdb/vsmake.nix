@@ -141,7 +141,7 @@ let
 
         meta = with gcc6Stdenv.lib; {
           description = "Open source, distributed, transactional key-value store";
-          homepage    = https://www.foundationdb.org;
+          homepage    = "https://www.foundationdb.org";
           license     = licenses.asl20;
           platforms   = [ "x86_64-linux" ];
           maintainers = with maintainers; [ thoughtpolice ];

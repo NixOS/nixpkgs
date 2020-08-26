@@ -1,10 +1,10 @@
 import ./jdk-linux-base.nix {
   productVersion = "8";
-  patchVersion = "241";
-  sha256.i686-linux = "1niiwifby8zqvsh0ccdf3n21vlqfvvms223dc3kw2c2rksch3yg4";
-  sha256.x86_64-linux = "1jz8d6663jspxgw8yxxx5ca6jaa3g67dbbi5d83pdxjmg1kk57a1";
-  sha256.armv7l-linux = "1pjzyi1qd4nzfwvh0z5fpwga7j8mksiv5h8wzirv2ccdyy4wqw24";
-  sha256.aarch64-linux = "1zliv4a0ygrsdpq36b89yl7jf7kidmxqbnp1sk2661y471x02p9l";
+  patchVersion = "261";
+  sha256.i686-linux = "1bl12hd5i53m8d4j8rwkk3bavmzw0ndr88ch5lf5syi7vs5pfjpm";
+  sha256.x86_64-linux = "0d7a92csz8ws5h0pzqmrxq3sz286s57vw0dqq3ciwsqz14df012s";
+  sha256.armv7l-linux = "13dih7zyfgj90bkhnfxhpm88d9kqqrj6w5rzpidmxrjwrsnlndp9";
+  sha256.aarch64-linux = "0zzhs4pcnjss2561b8zrrnacpkb8p49ca0lpdw7hzgsjjj1y146n";
   jceName = "jce_policy-8.zip";
-  sha256JCE = "0n8b6b8qmwb14lllk2lk1q1ahd3za9fnjigz5xn65mpg48whl0pk";
+  sha256JCE = "19n5wadargg3v8x76r7ayag6p2xz1bwhrgdzjs9f4i6fvxz9jr4w";
 }

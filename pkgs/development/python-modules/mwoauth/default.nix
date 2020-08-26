@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A library designed to provide a simple means to performing an OAuth handshake with a MediaWiki installation with the OAuth Extension installed.";
-    homepage =  https://github.com/mediawiki-utilities/python-mwoauth;
+    homepage =  "https://github.com/mediawiki-utilities/python-mwoauth";
     license = licenses.mit;
     maintainers = with maintainers; [ ixxie ];
   };

@@ -19,6 +19,7 @@ in
   options = {
 
     services.radvd.enable = mkOption {
+      type = types.bool;
       default = false;
       description =
         ''

@@ -2,7 +2,7 @@
 
 let
   #xhtml2pdf specifically requires version "1.0b10" of html5lib
-  html5 = html5lib.overrideAttrs( oldAttrs: rec{
+  html5 = html5lib.overrideAttrs( oldAttrs: rec {
     name = "${oldAttrs.pname}-${version}";
     version = "1.0b10";
     src = oldAttrs.src.override {
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A pdf converter for the ReportLab Toolkit";
-    homepage = https://github.com/xhtml2pdf/xhtml2pdf;
+    homepage = "https://github.com/xhtml2pdf/xhtml2pdf";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rprospero ];
   };

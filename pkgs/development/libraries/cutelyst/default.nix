@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cutelyst";
-  version = "2.9.0";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "cutelyst";
     repo = "cutelyst";
     rev = "v${version}";
-    sha256 = "13h2sj131s31qdzdwa3hx7ildmvlk8mv9s0j99kvx1ijaq49z79f";
+    sha256 = "1c4cjzx6jkqlblcfc7pkx66py43576y6rky19j7rjiap724q2yk9";
   };
 
   nativeBuildInputs = [ cmake pkgconfig wrapQtAppsHook ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C++ Web Framework built on top of Qt";
-    homepage = https://cutelyst.org/;
+    homepage = "https://cutelyst.org/";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ fpletz ];
   };

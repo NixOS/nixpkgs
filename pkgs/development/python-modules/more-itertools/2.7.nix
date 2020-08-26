@@ -24,7 +24,7 @@ buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.is32bit;
 
   meta = {
-    homepage = https://more-itertools.readthedocs.org;
+    homepage = "https://more-itertools.readthedocs.org";
     description = "Expansion of the itertools module";
     license = lib.licenses.mit;
   };

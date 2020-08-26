@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Autogenerate Colander schemas based on SQLAlchemy models";
-    homepage = https://github.com/stefanofontanelli/ColanderAlchemy;
+    homepage = "https://github.com/stefanofontanelli/ColanderAlchemy";
     license = licenses.mit;
     # ColanderAlchemy's tests currently fail with colander >1.6.0
     # (see https://github.com/stefanofontanelli/ColanderAlchemy/issues/107)

@@ -1,30 +1,28 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pylatexenc";
-  version = "2.1";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "phfaist";
-    repo = pname;
+    repo = "pylatexenc";
     rev = "v${version}";
-    sha256 = "0wnl00y5dl56aw9j4y21kqapraaravbycwfxdmjsbgl11nk4llx9";
+    sha256 = "1hpcwbknfah3mky2m4asw15b9qdvv4k5ni0js764n1jpi83m1zgk";
   };
 
   pythonImportsCheck = [ "pylatexenc" ];
-  checkInputs = [ pytest ];
-  checkPhase = ''
-    pytest
-  '';
+  dontUseSetuptoolsCheck = true;
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Simple LaTeX parser providing latex-to-unicode and unicode-to-latex conversion";
     homepage = "https://pylatexenc.readthedocs.io";
-    downloadPage = "https;//www.github.com/phfaist/pylatexenc";
+    downloadPage = "https://www.github.com/phfaist/pylatexenc/releases";
     license = licenses.mit;
     maintainers = with maintainers; [ drewrisinger ];
   };

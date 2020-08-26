@@ -12,7 +12,7 @@ buildOcaml rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/herelib;
+    homepage = "https://github.com/janestreet/herelib";
     description = "Syntax extension for inserting the current location";
     license = stdenv.lib.licenses.asl20;
     maintainers = [ maintainers.ericbmerritt ];

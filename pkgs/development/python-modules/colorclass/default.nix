@@ -13,7 +13,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/Robpol86/colorclass;
+    homepage = "https://github.com/Robpol86/colorclass";
     license = licenses.mit;
     description = "Automatic support for console colors";
   };

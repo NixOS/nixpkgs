@@ -25,7 +25,7 @@ buildPythonPackage rec {
       gifsicle = "${pkgs.gifsicle}/bin/gifsicle";
       exiftool = "${pkgs.exiftool}/bin/exiftool";
       jpegtran = "${pkgs.libjpeg}/bin/jpegtran";
-      ffmpeg = "${pkgs.ffmpeg}/bin/ffmpeg";
+      ffmpeg = "${pkgs.ffmpeg_3}/bin/ffmpeg";
     })
   ];
 
@@ -83,7 +83,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A smart imaging service";
-    homepage = https://github.com/thumbor/thumbor/wiki;
+    homepage = "https://github.com/thumbor/thumbor/wiki";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

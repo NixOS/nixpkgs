@@ -1,25 +1,35 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , gnome3
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-mpris-indicator-button-unstable";
-  version = "2019-09-29";
+  version = "2020-03-21";
 
   src = fetchFromGitHub {
     owner = "JasonLG1979";
     repo = "gnome-shell-extension-mpris-indicator-button";
-    rev = "6cdc28a8bde98f25618b27ee48280996e2b4a0f8";
-    sha256 = "1n3sh3phpa75y3vpc09wnzhis0m92zli1m46amzsdbvmk6gkifif";
+    rev = "de54160e7d905b8c48c0fe30a437f7c51efc1aa3";
+    sha256 = "0n5qlx51fxjq1nn10zhdwfy905j20sv7pwh2jc6fns757ac4pwwk";
   };
 
   uuid = "mprisindicatorbutton@JasonLG1979.github.io";
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
     cp -r ${uuid} $out/share/gnome-shell/extensions
+    runHook postInstall
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "gnomeExtensions.${pname}";
+    };
+  };
+
 
   meta = with stdenv.lib; {
     description = "A simple MPRIS indicator button for GNOME Shell";

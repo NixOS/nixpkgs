@@ -12,7 +12,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pycurl six ];
 
   meta = with stdenv.lib; {
-    homepage = http://urlgrabber.baseurl.org;
+    homepage = "http://urlgrabber.baseurl.org";
     license = licenses.lgpl2Plus;
     description = "Python module for downloading files";
     maintainers = with maintainers; [ qknight ];

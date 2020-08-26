@@ -10,9 +10,9 @@ bundlerApp {
 
   meta = with lib; {
     description = "Prettified LS";
-    homepage    = https://github.com/athityakumar/colorls;
+    homepage    = "https://github.com/athityakumar/colorls";
     license     = with licenses; mit;
-    maintainers = with maintainers; [ lukebfox nicknovitski ];
+    maintainers = with maintainers; [ lukebfox nicknovitski cbley ];
     platforms   = ruby.meta.platforms;
   };
 }

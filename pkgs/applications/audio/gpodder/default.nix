@@ -5,14 +5,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gpodder";
-  version = "3.10.13";
+  version = "3.10.16";
   format = "other";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "1h542syaxsx1hslfzlk3fx1nbp190zjw35kigw7a1kx1jwvfwapg";
+    sha256 = "0pbpaasd7kj6y25nm45y1qyb9sxd4570f7g6zkfcpf6pa3nx7qkq";
   };
 
   patches = [
@@ -73,7 +73,7 @@ python3Packages.buildPythonApplication rec {
       gPodder downloads and manages free audio and video content (podcasts)
       for you. Listen directly on your computer or on your mobile devices.
     '';
-    homepage = http://gpodder.org/;
+    homepage = "http://gpodder.org/";
     license = licenses.gpl3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ skeidel mic92 ];

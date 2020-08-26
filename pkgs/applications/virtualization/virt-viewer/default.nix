@@ -11,12 +11,12 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   baseName = "virt-viewer";
-  version = "8.0";
+  version = "9.0";
   name = "${baseName}-${version}";
 
   src = fetchurl {
     url = "http://virt-manager.org/download/sources/${baseName}/${name}.tar.gz";
-    sha256 = "1vdnjmhrva7r1n9nv09j8gc12hy0j9j5l4rka4hh0jbsbpnmiwyw";
+    sha256 = "09a83mzyn3b4nd7wpa659g1zf1fjbzb79rk968bz6k5xl21k7d4i";
   };
 
   nativeBuildInputs = [ pkgconfig intltool shared-mime-info wrapGAppsHook glib ];

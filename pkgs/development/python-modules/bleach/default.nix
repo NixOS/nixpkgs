@@ -6,23 +6,20 @@
 , six
 , html5lib
 , setuptools
+, packaging
 }:
 
 buildPythonPackage rec {
   pname = "bleach";
-  version = "3.1.0";
+  version = "3.1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3fdf7f77adcf649c9911387df51254b813185e32b2c6619f690b593a617e19fa";
+    sha256 = "3c4c520fdb9db59ef139915a5db79f8b51bc2a7257ea0389f30c846883430a4b";
   };
 
   checkInputs = [ pytest pytestrunner ];
-  propagatedBuildInputs = [ six html5lib setuptools ];
-
-  postPatch = ''
-    substituteInPlace setup.py --replace ",<3dev" ""
-  '';
+  propagatedBuildInputs = [ packaging six html5lib setuptools ];
 
   # Disable network tests
   checkPhase = ''
@@ -42,8 +39,8 @@ buildPythonPackage rec {
       to do lots of things, you're probably outside the use cases. Either
       trust those users, or don't.
     '';
-    homepage = https://github.com/mozilla/bleach;
-    downloadPage = https://github.com/mozilla/bleach/releases;
+    homepage = "https://github.com/mozilla/bleach";
+    downloadPage = "https://github.com/mozilla/bleach/releases";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ prikhi ];
   };

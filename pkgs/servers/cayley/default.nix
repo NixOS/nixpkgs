@@ -19,9 +19,9 @@ buildGoPackage rec {
     -ldflags=
       -X=main.Version=${version}
   '';
-  
+
   meta = {
-    homepage = https://cayley.io/;
+    homepage = "https://cayley.io/";
     description = "A graph database inspired by Freebase and Knowledge Graph";
     maintainers = with stdenv.lib.maintainers; [ sigma ];
     license = stdenv.lib.licenses.asl20;

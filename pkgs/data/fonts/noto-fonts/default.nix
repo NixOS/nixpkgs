@@ -2,6 +2,7 @@
 , stdenvNoCC
 , lib
 , fetchFromGitHub
+, fetchurl
 , fetchzip
 , optipng
 , cairo
@@ -40,7 +41,7 @@ let
 
       meta = with lib; {
         description = "Beautiful and free fonts for many languages";
-        homepage = https://www.google.com/get/noto/;
+        homepage = "https://www.google.com/get/noto/";
         longDescription =
         ''
           When text is rendered by a computer, sometimes characters are
@@ -89,7 +90,7 @@ in
 
     meta = with lib; {
       description = "Beautiful and free fonts for CJK languages";
-      homepage = https://www.google.com/get/noto/help/cjk/;
+      homepage = "https://www.google.com/get/noto/help/cjk/";
       longDescription =
       ''
         Noto Sans CJK is a sans serif typeface designed as an intermediate style
@@ -140,10 +141,34 @@ in
     meta = with lib; {
       inherit version;
       description = "Color and Black-and-White emoji fonts";
-      homepage = https://github.com/googlei18n/noto-emoji;
+      homepage = "https://github.com/googlei18n/noto-emoji";
       license = with licenses; [ ofl asl20 ];
       platforms = platforms.all;
       maintainers = with maintainers; [ mathnerd314 ];
+    };
+  };
+
+  noto-fonts-emoji-blob-bin = stdenv.mkDerivation rec {
+    pname = "noto-fonts-emoji-blob-bin";
+    version = "2019-06-14-Emoji-12";
+
+    src = fetchurl {
+      url = "https://github.com/C1710/blobmoji/releases/download/v${version}/Blobmoji.ttf";
+      sha256 = "0snvymglmvpnfgsriw2cnnqm0f4llav0jvzir6mpd17mqqhhabbh";
+    };
+
+    dontUnpack = true;
+
+    installPhase = ''
+      install -D $src $out/share/fonts/blobmoji/Blobmoji.ttf
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Noto Emoji with extended Blob support";
+      homepage = https://github.com/C1710/blobmoji;
+      license = with licenses; [ ofl asl20 ];
+      platforms = platforms.all;
+      maintainers = with maintainers; [ rileyinman ];
     };
   };
 }

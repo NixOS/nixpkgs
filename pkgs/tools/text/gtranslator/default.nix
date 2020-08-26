@@ -13,6 +13,7 @@
 , json-glib
 , gspell
 , glib
+, libdazzle
 , gtk3
 , gtksourceview4
 , gnome3
@@ -21,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gtranslator";
-  version = "3.34.0";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "05zvpx330h9k7b12p07bhcy47vq66260fmiph2b6h97xpl15rwmj";
+    sha256 = "1lxd2nkji4jk8g2xmyc1a1r3ww710ddk91zh9psmx8xlb4xivaid";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     libxml2
     glib
     gtk3
+    libdazzle
     gtksourceview4
     libgda
     libsoup
@@ -64,7 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GNOME translation making program";
-    homepage = https://wiki.gnome.org/Apps/Gtranslator;
+    homepage = "https://wiki.gnome.org/Apps/Gtranslator";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;

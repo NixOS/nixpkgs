@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://tinkerpop.apache.org/;
+    homepage = "https://tinkerpop.apache.org/";
     description = "Console of the Apache TinkerPop graph computing framework";
     license = licenses.asl20;
     maintainers = [ maintainers.lewo ];

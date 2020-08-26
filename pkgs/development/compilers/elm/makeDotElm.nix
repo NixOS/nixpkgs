@@ -11,6 +11,14 @@ ver: deps:
                    inherit (info) sha256;
                  };
 
+                 configurePhase = ''
+                   true
+                 '';
+
+                 buildPhase = ''
+                   true
+                 '';
+
                  installPhase = ''
                    mkdir -p $out
                    cp -r * $out

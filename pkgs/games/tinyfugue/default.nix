@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     ++ optional sslSupport openssl;
 
   meta = {
-    homepage = http://tinyfugue.sourceforge.net/;
+    homepage = "http://tinyfugue.sourceforge.net/";
     description = "A terminal UI, screen-oriented MUD client";
     longDescription = ''
       TinyFugue, aka "tf", is a flexible, screen-oriented MUD client, for use

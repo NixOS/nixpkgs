@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   CFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
 
   meta = {
-    homepage = http://brain-dump.org/projects/abduco;
+    homepage = "http://brain-dump.org/projects/abduco";
     license = licenses.isc;
     description = "Allows programs to be run independently from its controlling terminal";
     maintainers = with maintainers; [ pSub ];

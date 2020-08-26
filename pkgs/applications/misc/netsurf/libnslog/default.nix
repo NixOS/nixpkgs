@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.netsurf-browser.org/;
+    homepage = "http://www.netsurf-browser.org/";
     description = "NetSurf Parametric Logging Library";
     license = licenses.mit;
     maintainers = [ maintainers.samueldr ];

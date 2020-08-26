@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A quick-and-dirty, literate-programming-style documentation generator for / in POSIX shell";
-    homepage = https://rtomayko.github.io/shocco/;
+    homepage = "https://rtomayko.github.io/shocco/";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ dotlambda ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, glib, gtk-engine-murrine, gtk_engines, inkscape, optipng, sassc, which }:
+{ stdenv, fetchFromGitHub, fetchurl, glib, gtk-engine-murrine, gtk_engines, inkscape_0, optipng, sassc, which }:
 
 stdenv.mkDerivation rec {
   pname = "mojave-gtk-theme";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source";
 
-  nativeBuildInputs = [ glib inkscape optipng sassc which ];
+  nativeBuildInputs = [ glib inkscape_0 optipng sassc which ];
 
   buildInputs = [ gtk_engines ];
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
              src/assets/xfwm4/render-assets.sh
     do
       substituteInPlace $f \
-        --replace /usr/bin/inkscape ${inkscape}/bin/inkscape \
+        --replace /usr/bin/inkscape ${inkscape_0}/bin/inkscape \
         --replace /usr/bin/optipng ${optipng}/bin/optipng
     done
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Mac OSX Mojave like theme for GTK based desktop environments";
-    homepage = https://github.com/vinceliuice/Mojave-gtk-theme;
+    homepage = "https://github.com/vinceliuice/Mojave-gtk-theme";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

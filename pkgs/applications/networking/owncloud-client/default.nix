@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mkDerivation, cmake, pkgconfig, qtbase, qtkeychain, sqlite }:
+{ lib, stdenv, fetchurl, mkDerivation, cmake, pkgconfig, qtbase, qtkeychain, sqlite, libsecret }:
 
 mkDerivation rec {
   pname = "owncloud-client";
@@ -12,6 +12,10 @@ mkDerivation rec {
   nativeBuildInputs = [ pkgconfig cmake ];
   buildInputs = [ qtbase qtkeychain sqlite ];
 
+  qtWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}"
+  ];
+
   cmakeFlags = [
     "-UCMAKE_INSTALL_LIBDIR"
     "-DNO_SHIBBOLETH=1"
@@ -21,7 +25,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Synchronise your ownCloud with your computer using this desktop client";
-    homepage = https://owncloud.org;
+    homepage = "https://owncloud.org";
     maintainers = [ maintainers.qknight ];
     platforms = platforms.unix;
     license = licenses.gpl2Plus;

@@ -18,7 +18,14 @@ giDiscoverSelf() {
     fi
 }
 
-preFixupHooks+=(giDiscoverSelf)
+# gappsWrapperArgsHook expects GI_TYPELIB_PATH variable to be set by this.
+# Until we have dependency mechanism in generic builder, we need to use this ugly hack.
+if [[ " ${preFixupPhases:-} " =~ " gappsWrapperArgsHook " ]]; then
+    preFixupPhases+=" "
+    preFixupPhases="${preFixupPhases/ gappsWrapperArgsHook / giDiscoverSelf gappsWrapperArgsHook }"
+else
+    preFixupPhases+=" giDiscoverSelf"
+fi
 
 _multioutMoveGlibGir() {
   moveToOutput share/gir-1.0 "${!outputDev}"

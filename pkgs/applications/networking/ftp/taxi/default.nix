@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, python3, vala
+{ stdenv, fetchFromGitHub, nix-update-script, pantheon, pkgconfig, meson, ninja, python3, vala
 , gtk3, libgee, libsoup, libsecret, gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -36,14 +36,14 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
 
   meta = with stdenv.lib; {
     description = "The FTP Client that drives you anywhere";
-    homepage    = https://github.com/Alecaddd/taxi;
+    homepage    = "https://github.com/Alecaddd/taxi";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ worldofpeace ];
     platforms   = platforms.linux;

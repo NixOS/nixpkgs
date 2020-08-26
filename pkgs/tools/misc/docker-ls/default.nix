@@ -21,7 +21,7 @@ buildGoPackage rec {
       with tags.
     '';
 
-    homepage = https://github.com/mayflower/docker-ls;
+    homepage = "https://github.com/mayflower/docker-ls";
     maintainers = with maintainers; [ ma27 ];
     platforms = docker.meta.platforms;
     license = licenses.mit;

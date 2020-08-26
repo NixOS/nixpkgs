@@ -22,12 +22,12 @@ index 610bc35..13e0713 100644
 \ No newline at end of file
 +endforeach
 diff --git a/meson_options.txt b/meson_options.txt
-index 06329d4..72aa505 100644
+index d516c70..583cb94 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -9,3 +9,9 @@ option(
-   type: 'string',
-   description: 'directory for PAM modules'
+@@ -4,6 +4,12 @@ option(
+   value: false,
+   description: 'enable installed tests'
  )
 +option(
 +  'installed_test_prefix',
@@ -35,6 +35,9 @@ index 06329d4..72aa505 100644
 +  value: '',
 +  description: 'Prefix for installed tests'
 +)
+ option(
+   'pamlibdir',
+   type: 'string',
 diff --git a/pam/tests/meson.build b/pam/tests/meson.build
 index 0560dcb..a74dab2 100644
 --- a/pam/tests/meson.build

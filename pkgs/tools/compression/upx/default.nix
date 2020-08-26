@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://upx.github.io/;
+    homepage = "https://upx.github.io/";
     description = "The Ultimate Packer for eXecutables";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

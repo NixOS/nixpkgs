@@ -17,7 +17,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "File synchronization on top of ipfs with git like interface and FUSE filesystem";
-    homepage = https://github.com/sahib/brig;
+    homepage = "https://github.com/sahib/brig";
     license = licenses.agpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ offline ];

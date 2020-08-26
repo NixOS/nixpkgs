@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, cmake, pkgconfig, qtbase, qt5, libGLU, libGL
+{ mkDerivation, stdenv, fetchurl, cmake, pkgconfig, qtbase, qt5, libGLU, libGL
 , freeglut ? null, openal ? null, SDL2 ? null }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "yabause";
   version = "0.9.15";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An open-source Sega Saturn emulator";
-    homepage = https://yabause.org/;
+    homepage = "https://yabause.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;

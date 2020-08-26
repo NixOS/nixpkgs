@@ -47,6 +47,7 @@ let
             Path to the unix socket file on which to accept FastCGI requests.
             <note><para>This option is read-only and managed by NixOS.</para></note>
           '';
+          example = "${runtimeDir}/<name>.sock";
         };
 
         listen = mkOption {
@@ -208,14 +209,14 @@ in {
              user = "php";
              group = "php";
              phpPackage = pkgs.php;
-             settings = '''
+             settings = {
                "pm" = "dynamic";
                "pm.max_children" = 75;
                "pm.start_servers" = 10;
                "pm.min_spare_servers" = 5;
                "pm.max_spare_servers" = 20;
                "pm.max_requests" = 500;
-             ''';
+             };
            }
          }'';
         description = ''

@@ -21,15 +21,27 @@ let
     };
 
     "8.9" = {
-      version = "1.2";
-      rev = "v1.2-8.9";
-      sha256 = "1q3wvicr43bgy7xn1diwh4j43mnrhprrc2xd22qlbz9cl6bhf8bj";
+      version = "1.2.1";
+      rev = "v1.2.1-8.9";
+      sha256 = "0d8ddj6nc6p0k25cd8fs17cq427zhzbc3v9pk2wd2fnvk70nlfij";
     };
 
     "8.10" = {
-      version = "1.2";
-      rev = "v1.2-8.10";
-      sha256 = "1v5kx0xzxzsbs5r4w08rm1lrmjjggnd3ap0sd1my88ds17jzyasd";
+      version = "1.2.1";
+      rev = "v1.2.1-8.10-2";
+      sha256 = "0j3z4l5nrbyi9zbbyqkc6kassjanwld2188mwmrbqspaypm2ys68";
+    };
+
+    "8.11" = {
+      version = "1.2.3";
+      rev = "v1.2.3-8.11";
+      sha256 = "1srxz1rws8jsh7402g2x2vcqgjbbsr64dxxj5d2zs48pmhb20csf";
+    };
+
+    "8.12" = {
+      version = "1.2.3";
+      rev = "v1.2.3-8.12";
+      sha256 = "1y0jkvzyz5ssv5vby41p1i8zs7nsdc8g3pzyq73ih9jz8h252643";
     };
   };
   param = params.${coq.coq-version};
@@ -54,7 +66,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   meta = with stdenv.lib; {
-    homepage = https://mattam82.github.io/Coq-Equations/;
+    homepage = "https://mattam82.github.io/Coq-Equations/";
     description = "A plugin for Coq to add dependent pattern-matching";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;

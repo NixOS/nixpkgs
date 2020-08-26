@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "asciidoctorj";
-  version = "2.2.0";
+  version = "2.4.0";
 
   src = fetchzip {
     url = "http://dl.bintray.com/asciidoctor/maven/org/asciidoctor/${pname}/${version}/${pname}-${version}-bin.zip";
-    sha256 = "0akxzfibfa8msnardvyy9hkj2z6sqn7pnwphz6avixdcclg6yxa5";
+    sha256 = "1bp26x5mhbl25s9djlq6yani1vaqrgbi5mjljhwhj97iapwsd0yb";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       structure of a parsed AsciiDoc document from Java and other JVM 
       languages.
     '';
-    homepage = https://asciidoctor.org/docs/asciidoctorj/;
+    homepage = "https://asciidoctor.org/docs/asciidoctorj/";
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ moaxcp ];

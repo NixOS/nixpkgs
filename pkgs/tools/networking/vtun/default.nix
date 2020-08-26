@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchpatch { url = http://sources.debian.net/data/main/v/vtun/3.0.3-2.2/debian/patches/08-gcc5-inline.patch;
+    (fetchpatch { url = "http://sources.debian.net/data/main/v/vtun/3.0.3-2.2/debian/patches/08-gcc5-inline.patch";
                  sha256 = "18sys97v2hx6vac5zp3ld7sa6kz4izv3g9dnkm0lflbaxhym2vs1";
                 })
   ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
       description = "Virtual Tunnels over TCP/IP with traffic shaping, compression and encryption";
-      homepage = http://vtun.sourceforge.net/;
+      homepage = "http://vtun.sourceforge.net/";
       license = licenses.gpl2;
       platforms = platforms.linux;
       maintainers = with maintainers; [ pSub ];

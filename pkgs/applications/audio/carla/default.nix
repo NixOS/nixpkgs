@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, alsaLib, file, fluidsynth, ffmpeg, jack2,
+{ stdenv, fetchFromGitHub, alsaLib, file, fluidsynth, ffmpeg_3, jack2,
   liblo, libpulseaudio, libsndfile, pkgconfig, python3Packages,
   which, withFrontend ? true,
   withQt ? true, qtbase ? null, wrapQtAppsHook ? null,
@@ -15,13 +15,13 @@ assert withGtk3 -> gtk3 != null;
 
 stdenv.mkDerivation rec {
   pname = "carla";
-  version = "2.0.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "falkTX";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0fqgncqlr86n38yy7pa118mswfacmfczj7w9xx6c6k0jav3wk29k";
+    sha256 = "0c3y4a6cgi4bv1mg57i3qn5ia6pqjqlaylvkapj6bmpsw71ig22g";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ] ++ optional withFrontend pyqt5;
 
   buildInputs = [
-    file liblo alsaLib fluidsynth ffmpeg jack2 libpulseaudio libsndfile
+    file liblo alsaLib fluidsynth ffmpeg_3 jack2 libpulseaudio libsndfile
   ] ++ pythonPath
     ++ optional withQt qtbase
     ++ optional withGtk2 gtk2
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://kxstudio.sf.net/carla;
+    homepage = "http://kxstudio.sf.net/carla";
     description = "An audio plugin host";
     longDescription = ''
       It currently supports LADSPA (including LRDF), DSSI, LV2, VST2/3

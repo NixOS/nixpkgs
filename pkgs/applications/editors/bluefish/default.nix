@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "bluefish-2.2.10";
+  name = "bluefish-2.2.11";
 
   src = fetchurl {
     url = "mirror://sourceforge/bluefish/${name}.tar.bz2";
-    sha256 = "1ciygj79q6i3ga5x1j8aivc05nh6rhhnm7hrq8q8xd9vd4ms3v5g";
+    sha256 = "1zy2ppdg3nq9iy3zgfhnw93bq5zbbhyampf7bk3grpfvq5zqfk25";
   };
 
   nativeBuildInputs = [ intltool pkgconfig wrapGAppsHook ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A powerful editor targeted towards programmers and webdevelopers";
-    homepage = http://bluefish.openoffice.nl/;
+    homepage = "http://bluefish.openoffice.nl/";
     license = licenses.gpl3Plus;
     maintainers = [maintainers.vbgl];
     platforms = platforms.all;

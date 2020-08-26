@@ -56,7 +56,7 @@ stdenv.mkDerivation {
       and refine existing subtitle. This program also shows sound waves, which
       makes it easier to synchronise subtitles to voices.
       '';
-    homepage = http://kitone.github.io/subtitleeditor/;
+    homepage = "http://kitone.github.io/subtitleeditor/";
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.plcplc ];

@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-extlib-1.7.6";
 
   src = fetchurl {
-    url = http://ygrek.org.ua/p/release/ocaml-extlib/extlib-1.7.6.tar.gz;
+    url = "http://ygrek.org.ua/p/release/ocaml-extlib/extlib-1.7.6.tar.gz";
     sha256 = "0wfs20v1yj5apdbj7214wdsr17ayh0qqq7ihidndvc8nmmwfa1dz";
   };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   installPhase   = "make ${if minimal then "minimal=1" else ""} install";
 
   meta = {
-    homepage = https://github.com/ygrek/ocaml-extlib;
+    homepage = "https://github.com/ygrek/ocaml-extlib";
     description = "Enhancements to the OCaml Standard Library modules";
     license = stdenv.lib.licenses.lgpl21;
     platforms = ocaml.meta.platforms or [];

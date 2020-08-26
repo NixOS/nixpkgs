@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "VirtualBox client with remote management";
-    homepage = http://remotebox.knobgoblin.org.uk/;
+    homepage = "http://remotebox.knobgoblin.org.uk/";
     license = licenses.gpl2Plus;
     longDescription = ''
       VirtualBox is traditionally considered to be a virtualization solution

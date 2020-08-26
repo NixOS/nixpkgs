@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python bindings for FUSE";
-    homepage = https://github.com/libfuse/python-fuse;
+    homepage = "https://github.com/libfuse/python-fuse";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ psyanticy ];
   };

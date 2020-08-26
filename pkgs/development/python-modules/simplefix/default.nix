@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Simple FIX Protocol implementation for Python";
-    homepage = https://github.com/da4089/simplefix;
+    homepage = "https://github.com/da4089/simplefix";
     license = licenses.mit;
     maintainers = with maintainers; [ catern ];
   };

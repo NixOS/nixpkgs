@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ which autoconf automake ]; # autogen.sh which is using gnome-common tends to require which
 
   meta = with stdenv.lib; {
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

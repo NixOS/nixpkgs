@@ -1,5 +1,5 @@
-{ stdenv, lib, buildEnv, buildGoPackage, fetchFromGitHub, makeWrapper
-, runCommand, writeText, terraform-providers }:
+{ stdenv, lib, buildEnv, buildGoPackage, fetchFromGitHub, makeWrapper, coreutils
+, runCommand, writeText, terraform-providers, fetchpatch }:
 
 let
   goPackagePath = "github.com/hashicorp/terraform";
@@ -18,9 +18,15 @@ let
         inherit sha256;
       };
 
+      postPatch = ''
+        # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
+        substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
+          --replace "/bin/stty" "${coreutils}/bin/stty"
+      '';
+
       postInstall = ''
         # remove all plugins, they are part of the main binary now
-        for i in $bin/bin/*; do
+        for i in $out/bin/*; do
           if [[ $(basename $i) != terraform ]]; then
             rm "$i"
           fi
@@ -42,6 +48,7 @@ let
           kalbasit
           marsam
           babariviere
+          Chili-Man
         ];
       };
     } // attrs');
@@ -82,7 +89,7 @@ let
 
             buildCommand = ''
               mkdir -p $out/bin/
-              makeWrapper "${terraform.bin}/bin/terraform" "$out/bin/terraform" \
+              makeWrapper "${terraform}/bin/terraform" "$out/bin/terraform" \
                 --set NIX_TERRAFORM_PLUGIN_DIR "${
                   buildEnv {
                     name = "tf-plugin-env";
@@ -112,8 +119,21 @@ in rec {
   terraform_0_11-full = terraform_0_11.full;
 
   terraform_0_12 = pluggable (generic {
-    version = "0.12.24";
-    sha256 = "1rjihp6qcaizp2nnv4z20kpmjnqcw95pq5rnhq381a3pdzr0cd0z";
+    version = "0.12.29";
+    sha256 = "18i7vkvnvfybwzhww8d84cyh93xfbwswcnwfrgvcny1qwm8rsaj8";
+    patches = [
+        ./provider-path.patch
+        (fetchpatch {
+            name = "fix-mac-mojave-crashes.patch";
+            url = "https://github.com/hashicorp/terraform/commit/cd65b28da051174a13ac76e54b7bb95d3051255c.patch";
+            sha256 = "1k70kk4hli72x8gza6fy3vpckdm3sf881w61fmssrah3hgmfmbrs";
+        }) ];
+    passthru = { inherit plugins; };
+  });
+
+  terraform_0_13 = pluggable (generic {
+    version = "0.13.0";
+    sha256 = "0kangddd99ix50w67hi0pwa9js9c0hjxqvrc0lxaa6msjvjsxyyq";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });

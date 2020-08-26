@@ -91,7 +91,7 @@ in
       };
 
       algorithm = mkOption {
-        default = "lzo";
+        default = "zstd";
         example = "lz4";
         type = with types; either (enum [ "lzo" "lz4" "zstd" ]) str;
         description = ''

@@ -18,15 +18,12 @@ in {
 , configureFlags
   # mostly for moving and deleting files from the build directory
   # : lines
-, postInstall ? ""
-  # : lines
-, postFixup ? ""
+, postInstall
   # : list Maintainer
 , maintainers ? []
-  # : attrs
-, meta ? {}
-, ...
-} @ args:
+
+
+}:
 
 let
 
@@ -53,17 +50,24 @@ let
     "README.*"
   ];
 
-in stdenv.mkDerivation ({
+in stdenv.mkDerivation {
+  inherit pname version;
+
   src = fetchurl {
     url = "https://skarnet.org/software/${pname}/${pname}-${version}.tar.gz";
     inherit sha256;
   };
+
+  inherit outputs;
 
   dontDisableStatic = true;
   enableParallelBuilding = true;
 
   configureFlags = configureFlags ++ [
     "--enable-absolute-paths"
+    # We assume every nix-based cross target has urandom.
+    # This might not hold for e.g. BSD.
+    "--with-sysdep-devurandom=yes"
     (if stdenv.isDarwin
       then "--disable-shared"
       else "--enable-shared")
@@ -83,11 +87,13 @@ in stdenv.mkDerivation ({
        noiseFiles = commonNoiseFiles;
        docFiles = commonMetaFiles;
      }} $doc/share/doc/${pname}
-  '' + postInstall;
+
+    ${postInstall}
+  '';
 
   postFixup = ''
     ${cleanPackaging.checkForRemainingFiles}
-  '' + postFixup;
+  '';
 
   meta = {
     homepage = "https://skarnet.org/software/${pname}/";
@@ -95,9 +101,6 @@ in stdenv.mkDerivation ({
     license = stdenv.lib.licenses.isc;
     maintainers = with lib.maintainers;
       [ pmahoney Profpatsch ] ++ maintainers;
-  } // meta;
+  };
 
-} // builtins.removeAttrs args [
-  "sha256" "configureFlags" "postInstall" "postFixup"
-  "meta" "description" "platforms"  "maintainers"
-])
+}

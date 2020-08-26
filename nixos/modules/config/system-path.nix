@@ -8,8 +8,7 @@ with lib;
 let
 
   requiredPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
-    [ config.nix.package
-      pkgs.acl
+    [ pkgs.acl
       pkgs.attr
       pkgs.bashInteractive # bash with ncurses support
       pkgs.bzip2
@@ -33,16 +32,13 @@ let
       pkgs.nano
       pkgs.ncurses
       pkgs.netcat
-      pkgs.nix-info
       config.programs.ssh.package
-      pkgs.perl
       pkgs.procps
-      pkgs.rsync
-      pkgs.strace
       pkgs.su
       pkgs.time
       pkgs.utillinux
-      pkgs.which # 88K size
+      pkgs.which
+      pkgs.zstd
     ];
 
 in

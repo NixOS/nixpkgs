@@ -43,15 +43,12 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  linkCxxAbi = stdenv.isLinux;
-
-  setupHooks = [
-    ../../../../../build-support/setup-hooks/role.bash
-    ./setup-hook.sh
-  ];
+  passthru = {
+    isLLVM = true;
+  };
 
   meta = {
-    homepage = http://libcxx.llvm.org/;
+    homepage = "https://libcxx.llvm.org/";
     description = "A new implementation of the C++ standard library, targeting C++11";
     license = with stdenv.lib.licenses; [ ncsa mit ];
     platforms = stdenv.lib.platforms.all;

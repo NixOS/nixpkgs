@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with pkgs; [
-    python3Packages.numpy flac vorbis-tools ffmpeg faad2 lame
+    python3Packages.numpy flac vorbis-tools ffmpeg_3 faad2 lame
   ];
 
   # There are no tests
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   meta = with stdenv.lib; {
     description = "Compute the DR14 of a given audio file according to the procedure described by the Pleasurize Music Foundation";
     license = licenses.gpl3Plus;
-    homepage = http://dr14tmeter.sourceforge.net/;
+    homepage = "http://dr14tmeter.sourceforge.net/";
     maintainers = [ maintainers.adisbladis ];
   };
 }

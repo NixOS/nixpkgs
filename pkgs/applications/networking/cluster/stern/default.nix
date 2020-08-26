@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, buildPackages, buildGoPackage, fetchFromGitHub, installShellFiles }:
 
 let isCrossBuild = stdenv.hostPlatform != stdenv.buildPlatform; in
 
@@ -17,13 +17,15 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
+  nativeBuildInputs = [ installShellFiles ];
+
   postInstall =
-    let stern = if isCrossBuild then buildPackages.stern else "$bin"; in
+    let stern = if isCrossBuild then buildPackages.stern else "$out"; in
     ''
-      mkdir -p $bin/share/bash-completion/completions
-      ${stern}/bin/stern --completion bash > $bin/share/bash-completion/completions/stern
-      mkdir -p $bin/share/zsh/site-functions
-      ${stern}/bin/stern --completion zsh > $bin/share/zsh/site-functions/_stern
+      for shell in bash zsh; do
+        ${stern}/bin/stern --completion $shell > stern.$shell
+        installShellCompletion stern.$shell
+      done
     '';
 
   meta = with lib; {

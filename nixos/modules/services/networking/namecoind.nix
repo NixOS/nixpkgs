@@ -89,7 +89,7 @@ in
       };
 
       rpc.password = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         default = null;
         description = ''
           Password for RPC connections.
@@ -148,11 +148,6 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-
-    services.dnschain.extraConfig = ''
-      [namecoin]
-      config = ${configFile}
-    '';
 
     users.users.namecoin = {
       uid  = config.ids.uids.namecoin;

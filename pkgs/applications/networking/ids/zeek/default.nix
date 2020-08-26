@@ -1,24 +1,50 @@
-{stdenv, fetchurl, cmake, flex, bison, openssl, libpcap, zlib, file, curl
-, libmaxminddb, gperftools, python, swig, rocksdb }:
+{ stdenv
+, fetchurl
+, cmake
+, flex
+, bison
+, openssl
+, libpcap
+, zlib
+, file
+, curl
+, libmaxminddb
+, gperftools
+, python
+, swig
+, gettext
+, fetchpatch
+}:
 let
   preConfigure = (import ./script.nix);
 in
 stdenv.mkDerivation rec {
   pname = "zeek";
-  version = "3.0.3";
+  version = "3.2.0";
 
   src = fetchurl {
-    url = "https://old.zeek.org/downloads/zeek-${version}.tar.gz";
-    sha256 = "0xlw5v83qbgy23wdcddmvan2pid28mw745g4fc1z5r18kp67i8a2";
+    url = "https://download.zeek.org/zeek-${version}.tar.gz";
+    sha256 = "0ky4485z0gpaj1z75y7jr5bn9wr8x8w3v637aqq4v9a0a5iyagmg";
   };
 
   nativeBuildInputs = [ cmake flex bison file ];
-  buildInputs = [ openssl libpcap zlib curl libmaxminddb gperftools python swig rocksdb ];
+  buildInputs = [ openssl libpcap zlib curl libmaxminddb gperftools python swig ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ gettext ];
 
   #see issue https://github.com/zeek/zeek/issues/804 to modify hardlinking duplicate files.
   inherit preConfigure;
-  
+
   enableParallelBuilding = true;
+
+  patches = stdenv.lib.optionals stdenv.cc.isClang [
+    # Fix pybind c++17 build with Clang. See: https://github.com/pybind/pybind11/issues/1604
+    (fetchpatch {
+      url = "https://github.com/pybind/pybind11/commit/759221f5c56939f59d8f342a41f8e2d2cacbc8cf.patch";
+      sha256 = "17qznp8yavnv84fjsbghv3d59z6k6rx74j49w0izakmgw5a95w84";
+      extraPrefix = "auxil/broker/bindings/python/3rdparty/pybind11/";
+      stripLen = 1;
+    })
+  ];
 
   cmakeFlags = [
     "-DPY_MOD_INSTALL_DIR=${placeholder "out"}/${python.sitePackages}"

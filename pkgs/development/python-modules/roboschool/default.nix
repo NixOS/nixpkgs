@@ -70,7 +70,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Open-source software for robot simulation, integrated with OpenAI Gym";
-    homepage = https://github.com/openai/roboschool;
+    homepage = "https://github.com/openai/roboschool";
     license = licenses.mit;
     maintainers = with maintainers; [ timokau ];
   };

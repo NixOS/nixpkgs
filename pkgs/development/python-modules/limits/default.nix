@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "1.4.1";
+  version = "1.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c071295307c447f85aaa3c3ab3ce058e29d67010f4fabf278a8e163916e4deab";
+    sha256 = "f0c3319f032c4bfad68438ed1325c0fac86dac64582c7c25cddc87a0b658fa20";
   };
 
   propagatedBuildInputs = [ six ];
@@ -16,6 +16,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Rate limiting utilities";
     license = licenses.mit;
-    homepage = https://limits.readthedocs.org/;
+    homepage = "https://limits.readthedocs.org/";
   };
 }

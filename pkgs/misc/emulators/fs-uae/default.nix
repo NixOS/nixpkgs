@@ -5,11 +5,11 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   pname = "fs-uae";
-  version = "3.0.2";
+  version = "3.0.5";
 
   src = fetchurl {
     url = "https://fs-uae.net/stable/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1awakxs3rlbm0bxpi37cbavi5fpb89wszksyw62as4nz3qsdrpjf";
+    sha256 = "1qwzhp34wy7bnd3c0plv11rg9fs5m92rh3ffnr9pn6ng0cpc8vpj";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       create customized Amigas.
     '';
     license = licenses.gpl2Plus;
-    homepage = https://fs-uae.net;
+    homepage = "https://fs-uae.net";
     maintainers = with stdenv.lib; [ maintainers.AndersonTorres ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };

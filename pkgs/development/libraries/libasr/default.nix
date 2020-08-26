@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libevent openssl ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/OpenSMTPD/libasr;
+    homepage = "https://github.com/OpenSMTPD/libasr";
     description = "Free, simple and portable asynchronous resolver library";
     license = licenses.isc;
     maintainers = [ maintainers.koral ];

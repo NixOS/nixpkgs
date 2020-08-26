@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
     comment = "Platform independend Python debugger";
     desktopName = "Winpdb";
     genericName = "Python Debugger";
-    categories = "Application;Development;Debugger;";
+    categories = "Development;Debugger;";
   };
 
   # Don't call gnome-terminal with "--disable-factory" flag, which is
@@ -43,7 +43,7 @@ pythonPackages.buildPythonApplication rec {
       multiple threads, namespace modification, embedded debugging, encrypted
       communication and is up to 20 times faster than pdb.
     '';
-    homepage = http://winpdb.org/;
+    homepage = "http://winpdb.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];

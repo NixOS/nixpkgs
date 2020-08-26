@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   name = "libqb-0.17.2";
 
   src = fetchurl {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec{
   nativeBuildInputs = [ pkgconfig ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/clusterlabs/libqb;
+    homepage = "https://github.com/clusterlabs/libqb";
     description = "A library providing high performance logging, tracing, ipc, and poll";
     license = licenses.lgpl21;
     platforms = platforms.unix;

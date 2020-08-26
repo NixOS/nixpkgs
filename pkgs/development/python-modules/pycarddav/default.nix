@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Command-line interface carddav client";
-    homepage = http://lostpackets.de/pycarddav;
+    homepage = "http://lostpackets.de/pycarddav";
     license = licenses.mit;
   };
 

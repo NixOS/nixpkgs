@@ -1,6 +1,6 @@
 { stdenv, fetchurl, alsaLib, bzip2, cairo, dpkg, freetype, gdk-pixbuf
 , wrapGAppsHook, gtk2, gtk3, harfbuzz, jdk, lib, xorg
-, libbsd, libjack2, libpng, ffmpeg
+, libbsd, libjack2, libpng, ffmpeg_3
 , libxkbcommon
 , makeWrapper, pixman, autoPatchelfHook
 , xdg_utils, zenity, zlib }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   binPath = lib.makeBinPath [
-    xdg_utils zenity ffmpeg
+    xdg_utils zenity ffmpeg_3
   ];
 
   installPhase = ''
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
       production, performance and DJing, with a focus on flexible
       editing tools and a super-fast workflow.
     '';
-    homepage = https://www.bitwig.com/;
+    homepage = "https://www.bitwig.com/";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ michalrus mrVanDalo ];

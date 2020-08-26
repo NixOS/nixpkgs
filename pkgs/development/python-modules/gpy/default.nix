@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Gaussian process framework in Python";
-    homepage = https://sheffieldml.github.io/GPy;
+    homepage = "https://sheffieldml.github.io/GPy";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
   };

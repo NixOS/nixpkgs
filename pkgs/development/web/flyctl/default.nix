@@ -2,25 +2,26 @@
 
 buildGoModule rec {
   pname = "flyctl";
-  version = "0.0.102";
+  version = "0.0.137";
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "flyctl";
     rev = "v${version}";
-    sha256 = "181j248i8j9g7kz5krg0bkbxkvmcwpz2vlknii5q3dy7yhgg19h3";
+    sha256 = "0zlcfmraf5v1crfkgxjgdjshkasyngmq1jqh7kzy3csm0p1a4sxx";
   };
 
   preBuild = ''
     go generate ./...
   '';
 
-  preFixup = ''
-    rm $out/bin/doc
-    rm $out/bin/helpgen
-  '';
+  subPackages = [ "." ];
 
-  modSha256 = "1mqkc7hnavvpbqar9f1d2vnm47p4car9abnk2ikyf27jr5glwmsd";
+  vendorSha256 = "1gxz9pp4zl8q7pmwg9z261fjrjfr658k1sn5nq1xzz51wrlzg9ag";
+
+  doCheck = false;
+
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/superfly/flyctl/flyctl.Version=${version} -X github.com/superfly/flyctl/flyctl.Commit=${src.rev} -X github.com/superfly/flyctl/flyctl.BuildDate=1970-01-01T00:00:00+0000 -X github.com/superfly/flyctl/flyctl.Environment=production" ];
 
   meta = with lib; {
     description = "Command line tools for fly.io services";
@@ -29,4 +30,3 @@ buildGoModule rec {
     maintainers = with maintainers; [ aaronjanse ];
   };
 }
-

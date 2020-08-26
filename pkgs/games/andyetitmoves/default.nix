@@ -66,7 +66,7 @@ stdenv.mkDerivation {
       And Yet It Moves is an award-winning physics-based platform game in which players rotate the game world at will to solve challenging puzzles. Tilting the world turns walls into floors, slides into platforms, and stacks of rocks into dangerous hazards.
     '';
 
-    homepage = http://www.andyetitmoves.net/;
+    homepage = "http://www.andyetitmoves.net/";
 
     license = stdenv.lib.licenses.unfree;
 

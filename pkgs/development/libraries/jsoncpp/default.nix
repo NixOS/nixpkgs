@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python, fetchpatch }:
+{ stdenv, fetchFromGitHub, cmake, python, validatePkgConfig, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "jsoncpp";
@@ -28,10 +28,16 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH="`pwd`/src/lib_json''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
   '';
 
-  nativeBuildInputs = [ cmake python ];
+  nativeBuildInputs = [ cmake python validatePkgConfig ];
 
-  # fix inverted sense in isAnyCharRequiredQuoting on aarch64. See: https://github.com/open-source-parsers/jsoncpp/pull/1120
-  patches = stdenv.lib.optionals stdenv.isAarch64 [
+  patches = [
+    # Fix generation of pkg-config file (https://github.com/open-source-parsers/jsoncpp/pull/1199)
+    (fetchpatch {
+      url = "https://github.com/open-source-parsers/jsoncpp/commit/b05a21342a646a986b11c28ba6b19665756d21d2.patch";
+      sha256 = "0dn4cvvkcp9mnxbzyaqb49z6bv5yqsx1wlf1lyki1n2rni2hn63p";
+    })
+  ] ++ stdenv.lib.optionals (stdenv.isAarch64 || stdenv.isAarch32) [
+    # fix inverted sense in isAnyCharRequiredQuoting on arm. See: https://github.com/open-source-parsers/jsoncpp/pull/1120
     (fetchpatch {
       url = "https://github.com/open-source-parsers/jsoncpp/commit/9093358efae9e5981aa60013487fc7215f040a59.patch";
       sha256 = "1wiqp70sck2md14sfc0zdkblqk9750cl55ykf9d6b9vs1ifzzzq5";
@@ -46,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     inherit version;
-    homepage = https://github.com/open-source-parsers/jsoncpp;
+    homepage = "https://github.com/open-source-parsers/jsoncpp";
     description = "A C++ library for interacting with JSON.";
     maintainers = with maintainers; [ ttuegel cpages nand0p ];
     license = licenses.mit;

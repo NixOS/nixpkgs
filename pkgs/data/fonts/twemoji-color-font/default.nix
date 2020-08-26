@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, inkscape, imagemagick, potrace, svgo, scfbuild }:
+{ stdenv, fetchFromGitHub, inkscape_0, imagemagick, potrace, svgo, scfbuild }:
 
 stdenv.mkDerivation rec {
   pname = "twemoji-color-font";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "00pbgqpkq21wl8fs0q1xp49xb10m48b9sz8cdc58flkd2vqfssw2";
   };
 
-  nativeBuildInputs = [ inkscape imagemagick potrace svgo scfbuild ];
+  nativeBuildInputs = [ inkscape_0 imagemagick potrace svgo scfbuild ];
   # silence inkscape errors about non-writable home
   preBuild = "export HOME=\"$NIX_BUILD_ROOT\"";
   makeFlags = [ "SCFBUILD=${scfbuild}/bin/scfbuild" ];

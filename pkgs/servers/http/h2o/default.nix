@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Optimized HTTP/1 and HTTP/2 server";
-    homepage    = https://h2o.examp1e.net;
+    homepage    = "https://h2o.examp1e.net";
     license     = licenses.mit;
     maintainers = with maintainers; [ thoughtpolice ];
     platforms   = platforms.linux;

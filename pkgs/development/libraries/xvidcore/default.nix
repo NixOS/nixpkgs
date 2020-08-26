@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "MPEG-4 video codec for PC";
-    homepage    = https://www.xvid.com/;
+    homepage    = "https://www.xvid.com/";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ codyopel lovek323 ];
     platforms   = platforms.all;

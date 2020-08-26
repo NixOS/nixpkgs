@@ -8,11 +8,11 @@ assert odbcSupport -> unixODBC != null;
 
 stdenv.mkDerivation rec {
   pname = "freetds";
-  version = "1.1.6";
+  version = "1.1.42";
 
   src = fetchurl {
     url    = "https://www.freetds.org/files/stable/${pname}-${version}.tar.bz2";
-    sha256 = "18rry59npbhxpzjb0l3ib7zlnlzj43srb5adcm65wyklklsh0gn2";
+    sha256 = "02phnk88zv4f8byx954784w8mh33knsslwvj266jfyrmxz6hxxxg";
   };
 
   buildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Libraries to natively talk to Microsoft SQL Server and Sybase databases";
-    homepage    = https://www.freetds.org;
+    homepage    = "https://www.freetds.org";
     license     = licenses.lgpl2;
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.all;

@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   version = "v1.5";
 
   src = fetchurl {
-    url = mirror://sourceforge/structuresynth/StructureSynth-Source-v1.5.0.zip;
+    url = "mirror://sourceforge/structuresynth/StructureSynth-Source-v1.5.0.zip";
     sha256 = "1kiammx46719az6jzrav8yrwz82nk4m72ybj0kpbnvp9wfl3swbb";
   };
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Application for generating 3D structures by specifying a design grammar";
-    homepage = http://structuresynth.sourceforge.net;
+    homepage = "http://structuresynth.sourceforge.net";
     maintainers = with maintainers; [ hodapp ];
     license = licenses.gpl3;
     platforms = platforms.linux;

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       is to generate the Escape key when Left Control is pressed and
       released on its own.
     '';
-    homepage = https://github.com/alols/xcape;
+    homepage = "https://github.com/alols/xcape";
     license = licenses.gpl3 ;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

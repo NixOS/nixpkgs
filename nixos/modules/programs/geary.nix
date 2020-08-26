@@ -6,6 +6,10 @@ let
   cfg = config.programs.geary;
 
 in {
+  meta = {
+    maintainers = teams.gnome.members;
+  };
+
   options = {
     programs.geary.enable = mkEnableOption "Geary, a Mail client for GNOME 3";
   };

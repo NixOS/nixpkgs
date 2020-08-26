@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A free, open source, turn-based space empire and galactic conquest (4X) computer game";
-    homepage = http://www.freeorion.org;
+    homepage = "http://www.freeorion.org";
     license = with licenses; [ gpl2 cc-by-sa-30 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ tex ];

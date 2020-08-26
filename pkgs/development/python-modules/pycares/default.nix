@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pycares";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "663c000625725d3a63466a674df4ee7f62bf8ca1ae8a0b87a6411eb811e0e794";
+    sha256 = "18dfd4fd300f570d6c4536c1d987b7b7673b2a9d14346592c5d6ed716df0d104";
   };
 
   buildInputs = [ c-ares ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/saghul/pycares;
+    homepage = "https://github.com/saghul/pycares";
     description = "Interface for c-ares";
     license = licenses.mit;
   };

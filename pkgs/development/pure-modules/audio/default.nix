@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A digital audio interface for the Pure programming language";
-    homepage = http://puredocs.bitbucket.org/pure-audio.html;
+    homepage = "http://puredocs.bitbucket.org/pure-audio.html";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ asppsa ];

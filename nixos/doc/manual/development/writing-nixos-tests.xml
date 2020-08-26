@@ -216,12 +216,12 @@ start_all()
    </varlistentry>
    <varlistentry>
     <term>
-     <methodname>send_keys</methodname>
+     <methodname>send_key</methodname>
     </term>
     <listitem>
      <para>
       Simulate pressing keys on the virtual keyboard, e.g.,
-      <literal>send_keys("ctrl-alt-delete")</literal>.
+      <literal>send_key("ctrl-alt-delete")</literal>.
      </para>
     </listitem>
    </varlistentry>
@@ -232,7 +232,7 @@ start_all()
     <listitem>
      <para>
       Simulate typing a sequence of characters on the virtual keyboard, e.g.,
-      <literal>send_keys("foobar\n")</literal> will type the string
+      <literal>send_chars("foobar\n")</literal> will type the string
       <literal>foobar</literal> followed by the Enter key.
      </para>
     </listitem>
@@ -362,6 +362,18 @@ start_all()
    </varlistentry>
    <varlistentry>
     <term>
+     <methodname>wait_for_console_text</methodname>
+    </term>
+    <listitem>
+     <para>
+      Wait until the supplied regular expressions match a line of the serial
+      console output. This method is useful when OCR is not possibile or
+      accurate enough.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
      <methodname>wait_for_window</methodname>
     </term>
     <listitem>
@@ -373,12 +385,12 @@ start_all()
    </varlistentry>
    <varlistentry>
     <term>
-     <methodname>copy_file_from_host</methodname>
+     <methodname>copy_from_host</methodname>
     </term>
     <listitem>
      <para>
       Copies a file from host to machine, e.g.,
-      <literal>copy_file_from_host("myfile", "/etc/my/important/file")</literal>.
+      <literal>copy_from_host("myfile", "/etc/my/important/file")</literal>.
      </para>
      <para>
       The first argument is the file on the host. The file needs to be

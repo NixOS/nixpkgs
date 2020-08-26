@@ -23,6 +23,7 @@
 , werkzeug
 , xmltodict
 , parameterized
+, idna
 }:
 
 buildPythonPackage rec {
@@ -39,6 +40,14 @@ buildPythonPackage rec {
       --replace "jsondiff==1.1.2" "jsondiff~=1.1"
     sed -i '/datetime/d' setup.py # should be taken care of by std library
   '';
+
+  patches = [
+    # loosen idna upper limit
+    (fetchpatch {
+      url = "https://github.com/spulec/moto/commit/649b497f71cce95a6474a3ff6f3c9c3339efb68f.patch";
+      sha256 = "03qdybzlskgbdadmlcg6ayxfp821b5iaa8q2542cwkcq7msqbbqc";
+    })
+  ];
 
   propagatedBuildInputs = [
     aws-xray-sdk
@@ -60,6 +69,7 @@ buildPythonPackage rec {
     sshpubkeys
     werkzeug
     xmltodict
+    idna
   ] ++ lib.optionals isPy27 [ backports_tempfile ];
 
   checkInputs = [ boto3 freezegun nose sure parameterized ];
@@ -85,7 +95,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Allows your tests to easily mock out AWS Services";
-    homepage = https://github.com/spulec/moto;
+    homepage = "https://github.com/spulec/moto";
     license = licenses.asl20;
     maintainers = [ ];
   };

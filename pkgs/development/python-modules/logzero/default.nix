@@ -15,7 +15,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/metachris/logzero;
+    homepage = "https://github.com/metachris/logzero";
     description = "Robust and effective logging for Python 2 and 3";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];

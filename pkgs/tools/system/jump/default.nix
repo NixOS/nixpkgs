@@ -11,7 +11,9 @@ buildGoModule rec {
     sha256 = "0mph3bqfjnw3yf0a6ml3ccmkr1shviwvvq4d04ky4gppfy6z51jy";
   };
 
-  modSha256 = "1fzsm85c31vkdw80kijxmjhk8jyhjz8b21npgks2qrnizhm6iaf8";
+  vendorSha256 = "1500vim2lmkkls758pwhlx3piqbw6ap0nnhdwz9pcxih4s4as2nk";
+
+  doCheck = false;
 
   outputs = [ "out" "man"];
   postInstall = ''
@@ -32,9 +34,8 @@ buildGoModule rec {
       navigational habits by keeping track of the directories you visit. It
       strives to give you the best directory for the shortest search term.
     '';
-    homepage = https://github.com/gsamokovarov/jump;
+    homepage = "https://github.com/gsamokovarov/jump";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = with maintainers; [ sondr3 ];
   };
 }

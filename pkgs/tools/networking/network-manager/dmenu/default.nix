@@ -4,13 +4,13 @@
 let inherit (python3Packages) python pygobject3;
 in stdenv.mkDerivation rec {
   pname = "networkmanager_dmenu";
-  version = "1.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = "networkmanager-dmenu";
-    rev = "v${version}";
-    sha256 = "1z6151z7c4jv5k2i50zr7ld4k3m07dgpmss9f3hsav95cv55dcnb";
+    rev = "${version}";
+    sha256 = "1msk4zkm4042av61rgbwc62i62vnv9py93fm1bczmw0b1f54qpmk";
   };
 
   buildInputs = [ glib python pygobject3 gobject-introspection networkmanager python3Packages.wrapPython ];
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description  = "Small script to manage NetworkManager connections with dmenu instead of nm-applet";
-    homepage     = https://github.com/firecat53/networkmanager-dmenu;
+    homepage     = "https://github.com/firecat53/networkmanager-dmenu";
     license      = stdenv.lib.licenses.mit;
     maintainers  = [ stdenv.lib.maintainers.jensbin ];
     platforms    = stdenv.lib.platforms.all;

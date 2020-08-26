@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Frame Streams implementation in C";
-    homepage = https://github.com/farsightsec/fstrm;
+    homepage = "https://github.com/farsightsec/fstrm";
     license = licenses.asl20;
     platforms = platforms.unix;
   };

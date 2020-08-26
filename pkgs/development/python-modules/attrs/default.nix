@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python attributes without boilerplate";
-    homepage = https://github.com/hynek/attrs;
+    homepage = "https://github.com/hynek/attrs";
     license = licenses.mit;
   };
 }

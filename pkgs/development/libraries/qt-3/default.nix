@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   setupHook = ./setup-hook.sh;
 
   src = fetchurl {
-    url = http://download.qt.io/archive/qt/3/qt-x11-free-3.3.8.tar.bz2;
+    url = "http://download.qt.io/archive/qt/3/qt-x11-free-3.3.8.tar.bz2";
     sha256 = "0jd4g3bwkgk2s4flbmgisyihm7cam964gzb3pawjlkhas01zghz8";
   };
 

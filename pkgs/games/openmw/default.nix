@@ -1,4 +1,4 @@
-{ stdenv, mkDerivationWith, fetchFromGitHub, qtbase, openscenegraph, mygui, bullet, ffmpeg
+{ stdenv, mkDerivationWith, fetchFromGitHub, qtbase, openscenegraph, mygui, bullet, ffmpeg_3
 , boost, cmake, SDL2, unshield, openal, libXt, pkgconfig }:
 
 let
@@ -6,25 +6,25 @@ let
     src = fetchFromGitHub {
       owner = "OpenMW";
       repo = "osg";
-      rev = "2b4c8e37268e595b82da4b9aadd5507852569b87";
-      sha256 = "0admnllxic6dcpic0h100927yw766ab55dix002vvdx36i6994jb";
+      rev = "1556cd7966ebc1c80b6626988d2b25fb43a744cf";
+      sha256 = "0d74hijzmj82nx3jkv5qmr3pkgvplra0b8fbjx1y3vmzxamb0axd";
     };
   });
 in mkDerivationWith stdenv.mkDerivation rec {
-  version = "0.45.0";
+  version = "0.46.0";
   pname = "openmw";
 
   src = fetchFromGitHub {
     owner = "OpenMW";
     repo = "openmw";
     rev = "${pname}-${version}";
-    sha256 = "1r87zrsnza2v9brksh809zzqj6zhk5xj15qs8iq11v1bscm2a2j4";
+    sha256 = "0rm32zsmxvr6b0jjihfj543skhicbw5kg6shjx312clhlm035w2x";
   };
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake boost ffmpeg bullet mygui openscenegraph_ SDL2 unshield openal libXt qtbase ];
+  buildInputs = [ cmake boost ffmpeg_3 bullet mygui openscenegraph_ SDL2 unshield openal libXt qtbase ];
 
   cmakeFlags = [
     "-DDESIRED_QT_VERSION:INT=5"
@@ -32,7 +32,7 @@ in mkDerivationWith stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An unofficial open source engine reimplementation of the game Morrowind";
-    homepage = http://openmw.org;
+    homepage = "http://openmw.org";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

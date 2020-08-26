@@ -89,7 +89,7 @@ nixpkgs https://nixos.org/channels/nixpkgs-unstable</screen>
     NixOS partition. They are installed by default on NixOS, but you don't have
     NixOS yet..
    </para>
-<screen><prompt>$ </prompt>nix-env -iE "_: with import &lt;nixpkgs/nixos&gt; { configuration = {}; }; with config.system.build; [ nixos-generate-config nixos-install nixos-enter manual.manpages ]"</screen>
+<screen><prompt>$ </prompt>nix-env -f '&lt;nixpkgs/nixos&gt;' --arg configuration {} -iA config.system.build.{nixos-generate-config,nixos-install,nixos-enter,manual.manpages}</screen>
   </listitem>
   <listitem>
    <note>

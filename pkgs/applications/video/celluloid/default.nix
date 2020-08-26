@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , meson
 , ninja
 , python3
@@ -16,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "celluloid";
-  version = "0.18";
+  version = "0.19";
 
   src = fetchFromGitHub {
     owner = "celluloid-player";
     repo = "celluloid";
     rev = "v${version}";
-    sha256 = "1j8z75y98liirr41rlcn89cshvp1xp71cspcclm6wx455i7q2cg1";
+    sha256 = "1jdmwljckajqb3ys8azd1nyy49nvq9kb2knrrqdcfnvzq0m5lpqr";
   };
 
   nativeBuildInputs = [
@@ -48,6 +49,12 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Simple GTK frontend for the mpv video player";

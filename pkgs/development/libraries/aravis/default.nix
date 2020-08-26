@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gtk-doc, intltool
-, audit, glib, libusb, libxml2
+, audit, glib, libusb1, libxml2
 , wrapGAppsHook
 , gstreamer ? null
 , gst-plugins-base ? null
@@ -53,7 +53,7 @@ in
 
     buildInputs =
       [ glib libxml2 ]
-      ++ stdenv.lib.optional enableUsb libusb
+      ++ stdenv.lib.optional enableUsb libusb1
       ++ stdenv.lib.optional enablePacketSocket audit
       ++ stdenv.lib.optionals (enableViewer || enableGstPlugin) [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad ]
       ++ stdenv.lib.optionals (enableViewer) [ libnotify gtk3 gnome3.adwaita-icon-theme ];

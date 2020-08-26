@@ -25,7 +25,7 @@ buildRustPackage rec {
 
   meta = with lib; {
     description = "A developer friendly, language agnostic configuration management tool for server systems";
-    homepage = https://intecture.io;
+    homepage = "https://intecture.io";
     license = licenses.mpl20;
     maintainers = [ maintainers.rushmorem ];
   };

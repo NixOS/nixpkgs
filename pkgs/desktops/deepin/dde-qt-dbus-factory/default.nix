@@ -1,4 +1,9 @@
-{ stdenv, fetchFromGitHub, qmake, python3, deepin }:
+{ stdenv
+, fetchFromGitHub
+, qmake
+, python3
+, deepin
+}:
 
 stdenv.mkDerivation rec {
   pname = "dde-qt-dbus-factory";
@@ -26,11 +31,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Qt DBus interface library for Deepin software";
-    homepage = https://github.com/linuxdeepin/dde-qt-dbus-factory;
+    homepage = "https://github.com/linuxdeepin/dde-qt-dbus-factory";
     license = with licenses; [ gpl3Plus lgpl2Plus ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

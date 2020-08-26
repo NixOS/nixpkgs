@@ -1,35 +1,31 @@
-{ stdenv, fetchurl, alsaLib, cmake, libGLU, libGL, makeWrapper, qt4 }:
+{ stdenv, fetchFromGitHub, cmake, pkg-config, qttools
+, alsaLib, ftgl, libGLU, libjack2, qtbase, rtmidi
+}:
 
-stdenv.mkDerivation  {
+stdenv.mkDerivation rec {
   pname = "pianobooster";
-  version = "0.6.4b";
+  version = "0.7.2b";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/pianobooster/pianobooster-src-0.6.4b.tar.gz";
-    sha256 = "1xwyap0288xcl0ihjv52vv4ijsjl0yq67scc509aia4plmlm6l35";
+  src = fetchFromGitHub {
+    owner = "captnfab";
+    repo = "PianoBooster";
+    rev = "v${version}";
+    sha256 = "03xcdnlpsij22ca3i6xj19yqzn3q2ch0d32r73v0c96nm04gvhjj";
   };
 
-  patches = [
-    ./pianobooster-0.6.4b-cmake.patch
-    ./pianobooster-0.6.4b-cmake-gcc4.7.patch
+  nativeBuildInputs = [ cmake pkg-config qttools ];
+
+  buildInputs = [ alsaLib ftgl libGLU libjack2 qtbase rtmidi ];
+
+  cmakeFlags = [
+    "-DOpenGL_GL_PREFERENCE=GLVND"
   ];
-
-  preConfigure = "cd src";
-
-  buildInputs = [ alsaLib cmake makeWrapper libGLU libGL qt4 ];
-  NIX_LDFLAGS = "-lGL -lpthread";
-
-  postInstall = ''
-    wrapProgram $out/bin/pianobooster \
-      --prefix LD_LIBRARY_PATH : ${libGL}/lib \
-      --prefix LD_LIBRARY_PATH : ${libGLU}/lib
-  '';
 
   meta = with stdenv.lib; {
     description = "A MIDI file player that teaches you how to play the piano";
-    homepage = http://pianobooster.sourceforge.net;
-    license = licenses.gpl3;
+    homepage = "https://github.com/captnfab/PianoBooster";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = with maintainers; [ goibhniu orivej ];
   };
 }

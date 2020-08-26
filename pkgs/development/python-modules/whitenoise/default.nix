@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "whitenoise";
-  version = "5.0.1";
+  version = "5.1.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f9137f74bd95fa54329ace88d8dc695fbe895369a632e35f7a136e003e41d73";
+    sha256 = "60154b976a13901414a25b0273a841145f77eb34a141f9ae032a0ace3e4d5b27";
   };
 
   # No tests
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Radically simplified static file serving for WSGI applications";
-    homepage = http://whitenoise.evans.io/;
+    homepage = "http://whitenoise.evans.io/";
     license = licenses.mit;
   };
 }

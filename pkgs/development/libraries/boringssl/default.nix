@@ -3,24 +3,23 @@
 # reference: https://boringssl.googlesource.com/boringssl/+/2661/BUILDING.md
 stdenv.mkDerivation {
   pname = "boringssl";
-  version = "2017-02-23";
+  version = "2019-12-04";
 
   src = fetchgit {
     url    = "https://boringssl.googlesource.com/boringssl";
-    rev    = "be2ee342d3781ddb954f91f8a7e660c6f59e87e5";
-    sha256 = "022zq7wlkhrg6al7drr3555lam3zw5bb10ylf9mznp83s854f975";
+    rev    = "243b5cc9e33979ae2afa79eaa4e4c8d59db161d4";
+    sha256 = "1ak27dln0zqy2vj4llqsb99g03sk0sg25wlp09b58cymrh3gccvl";
   };
 
-  buildInputs = [ cmake perl go ];
+  nativeBuildInputs = [ cmake perl go ];
   enableParallelBuilding = true;
-  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   makeFlags = [ "GOCACHE=$(TMPDIR)/go-cache" ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/include $out/lib
+    mkdir -p $bin/bin $out/include $out/lib
 
-    mv tool/bssl $out/bin
+    mv tool/bssl $bin/bin
 
     mv ssl/libssl.a           $out/lib
     mv crypto/libcrypto.a     $out/lib
@@ -28,6 +27,8 @@ stdenv.mkDerivation {
 
     mv ../include/openssl $out/include
   '';
+
+  outputs = [ "out" "bin" ];
 
   meta = with stdenv.lib; {
     description = "Free TLS/SSL implementation";

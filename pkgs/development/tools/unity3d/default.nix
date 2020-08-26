@@ -4,7 +4,7 @@
 , cairo, dbus, expat, zlib, libpng12, nodejs, gnutar, gcc, gcc_32bit
 , libX11, libXcursor, libXdamage, libXfixes, libXrender, libXi
 , libXcomposite, libXext, libXrandr, libXtst, libSM, libICE, libxcb, chromium
-, libpqxx
+, libpqxx, libselinux, pciutils, libpulseaudio
 }:
 
 let
@@ -15,6 +15,8 @@ let
     libX11 libXcursor libXdamage libXfixes libXrender libXi
     libXcomposite libXext libXrandr libXtst libSM libICE libxcb
     libpqxx gtk3
+
+    libselinux pciutils libpulseaudio
   ];
   libPath32 = lib.makeLibraryPath [ gcc_32bit.cc ];
   binPath = lib.makeBinPath [ nodejs gnutar ];
@@ -56,6 +58,7 @@ in stdenv.mkDerivation {
 
     mkdir -p $out/bin
     makeWrapper $unitydir/Unity $out/bin/unity-editor \
+      --prefix LD_LIBRARY_PATH : "${libPath64}" \
       --prefix LD_PRELOAD : "$unitydir/libunity-nosuid.so" \
       --prefix PATH : "${binPath}"
   '';
@@ -127,7 +130,7 @@ in stdenv.mkDerivation {
   dontPatchELF = true;
 
   meta = with stdenv.lib; {
-    homepage = https://unity3d.com/;
+    homepage = "https://unity3d.com/";
     description = "Game development tool";
     longDescription = ''
       Popular development platform for creating 2D and 3D multiplatform games

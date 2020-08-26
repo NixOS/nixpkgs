@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Run an X application scaled via xpra";
-    homepage = https://github.com/kaueraal/run_scaled;
+    homepage = "https://github.com/kaueraal/run_scaled";
     maintainers = [ maintainers.snaar ];
     license = licenses.bsd3;
     platforms = platforms.unix;

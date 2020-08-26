@@ -16,7 +16,7 @@ fetchzip {
   '';
 
   meta = with lib; {
-    homepage = http://velvetyne.fr/fonts/hyper-scrypt/;
+    homepage = "http://velvetyne.fr/fonts/hyper-scrypt/";
     description = "A modern stencil typeface inspired by stained glass technique";
     longDescription = ''
       The Hyper Scrypt typeface was designed for the Hyper Chapelle

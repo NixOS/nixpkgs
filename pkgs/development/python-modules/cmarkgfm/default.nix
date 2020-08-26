@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Minimal bindings to GitHub's fork of cmark";
-    homepage = https://github.com/jonparrott/cmarkgfm;
+    homepage = "https://github.com/jonparrott/cmarkgfm";
     license = licenses.mit;
   };
 }

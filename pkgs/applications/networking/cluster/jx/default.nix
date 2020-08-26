@@ -1,34 +1,42 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
 
 buildGoModule rec {
-  name = "jx";
-  version = "1.3.967";
+  pname = "jx";
+  version = "2.1.127";
 
   src = fetchFromGitHub {
     owner = "jenkins-x";
     repo = "jx";
     rev = "v${version}";
-    sha256 = "0a25m7sz134kch21bg6l86kvwl4cg6babqf57kqidq6kid1zgdaq";
+    sha256 = "01dfpnqgbrn8b6h2irq080xdm76b4jx6sd80f8x4zmyaz6hf5vlv";
   };
 
-  patches = [
-    # https://github.com/jenkins-x/jx/pull/3321
-    ./3321-fix-location-of-thrift.patch
-  ];
+  vendorSha256 = "0la92a8720l8my5r4wsbgv74y6m19ikmm0wv3l4m4w5gjyplfsxb";
 
-  modSha256 = "0ljf0c0c3pc12nmhdbrwflcaj6hs8igzjw5hi6fyhi6n9cy87vac";
+  doCheck = false;
 
   subPackages = [ "cmd/jx" ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   buildFlagsArray = ''
     -ldflags=
+    -s -w
     -X github.com/jenkins-x/jx/pkg/version.Version=${version}
-    -X github.com/jenkins-x/jx/pkg/version.Revision=${version}
+    -X github.com/jenkins-x/jx/pkg/version.Revision=${src.rev}
+    -X github.com/jenkins-x/jx/pkg/version.GitTreeState=clean
+  '';
+
+  postInstall = ''
+    for shell in bash zsh; do
+      $out/bin/jx completion $shell > jx.$shell
+      installShellCompletion jx.$shell
+    done
   '';
 
   meta = with lib; {
     description = "JX is a command line tool for installing and using Jenkins X.";
-    homepage = https://jenkins-x.io;
+    homepage = "https://jenkins-x.io";
     longDescription = ''
       Jenkins X provides automated CI+CD for Kubernetes with Preview
       Environments on Pull Requests using Jenkins, Knative Build, Prow,

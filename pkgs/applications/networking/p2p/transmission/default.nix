@@ -1,47 +1,78 @@
-{ stdenv, fetchurl, pkgconfig, intltool, file, wrapGAppsHook
-, openssl, curl, libevent, inotify-tools, systemd, zlib
-, enableGTK3 ? false, gtk3
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, openssl
+, curl
+, libevent
+, inotify-tools
+, systemd
+, zlib
+, pcre
+  # Build options
+, enableGTK3 ? false
+, gnome3
+, xorg
+, wrapGAppsHook
+, enableQt ? false
+, qt5
 , enableSystemd ? stdenv.isLinux
 , enableDaemon ? true
 , enableCli ? true
 }:
 
-let inherit (stdenv.lib) optional optionals optionalString; in
+let
+  version = "3.00";
 
-stdenv.mkDerivation rec {
-  name = "transmission-" + optionalString enableGTK3 "gtk-" + version;
-  version = "2.94";
+in stdenv.mkDerivation {
+  pname = "transmission";
+  inherit version;
 
-  src = fetchurl {
-    url = "https://github.com/transmission/transmission-releases/raw/master/transmission-2.94.tar.xz";
-    sha256 = "0zbbj7rlm6m7vb64x68a64cwmijhsrwx9l63hbwqs7zr9742qi1m";
+  src = fetchFromGitHub {
+    owner = "transmission";
+    repo = "transmission";
+    rev = version;
+    sha256 = "0ccg0km54f700x9p0jsnncnwvfnxfnxf7kcm7pcx1cj0vw78924z";
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig ]
-    ++ optionals enableGTK3 [ wrapGAppsHook ];
-  buildInputs = [ intltool file openssl curl libevent zlib ]
-    ++ optionals enableGTK3 [ gtk3 ]
-    ++ optionals enableSystemd [ systemd ]
-    ++ optionals stdenv.isLinux [ inotify-tools ];
+  cmakeFlags =
+    let
+      mkFlag = opt: if opt then "ON" else "OFF";
+    in
+    [
+      "-DENABLE_MAC=OFF" # requires xcodebuild
+      "-DENABLE_GTK=${mkFlag enableGTK3}"
+      "-DENABLE_QT=${mkFlag enableQt}"
+      "-DENABLE_DAEMON=${mkFlag enableDaemon}"
+      "-DENABLE_CLI=${mkFlag enableCli}"
+    ];
 
-  postPatch = ''
-    substituteInPlace ./configure \
-      --replace "libsystemd-daemon" "libsystemd" \
-      --replace "/usr/bin/file"     "${file}/bin/file" \
-      --replace "test ! -d /Developer/SDKs/MacOSX10.5.sdk" "false"
-  '';
+  nativeBuildInputs = [
+    pkgconfig
+    cmake
+  ]
+  ++ lib.optionals enableGTK3 [ wrapGAppsHook ]
+  ++ lib.optionals enableQt [ qt5.wrapQtAppsHook ]
+  ;
 
-  configureFlags = [
-      ("--enable-cli=" + (if enableCli then "yes" else "no"))
-      ("--enable-daemon=" + (if enableDaemon then "yes" else "no"))
-      "--disable-mac" # requires xcodebuild
-    ]
-    ++ optional enableSystemd "--with-systemd-daemon"
-    ++ optional enableGTK3 "--with-gtk";
+  buildInputs = [
+    openssl
+    curl
+    libevent
+    zlib
+    pcre
+  ]
+  ++ lib.optionals enableQt [ qt5.qttools qt5.qtbase ]
+  ++ lib.optionals enableGTK3 [ gnome3.gtk xorg.libpthreadstubs ]
+  ++ lib.optionals enableSystemd [ systemd ]
+  ++ lib.optionals stdenv.isLinux [ inotify-tools ]
+  ;
 
-  NIX_LDFLAGS = optionalString stdenv.isDarwin "-framework CoreFoundation";
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "A fast, easy and free BitTorrent client";
     longDescription = ''
       Transmission is a BitTorrent client which features a simple interface
@@ -54,10 +85,10 @@ stdenv.mkDerivation rec {
         * Bluetack (PeerGuardian) blocklists with automatic updates
         * Full encryption, DHT, and PEX support
     '';
-    homepage = http://www.transmissionbt.com/;
-    license = licenses.gpl2; # parts are under MIT
-    maintainers = with maintainers; [ astsmtl vcunat wizeman ];
-    platforms = platforms.unix;
+    homepage = "http://www.transmissionbt.com/";
+    license = lib.licenses.gpl2; # parts are under MIT
+    maintainers = with lib.maintainers; [ astsmtl vcunat wizeman ];
+    platforms = lib.platforms.unix;
   };
-}
 
+}

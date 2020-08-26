@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.gnu.org/software/bash/;
+    homepage = "https://www.gnu.org/software/bash/";
     description =
       "GNU Bourne-Again Shell, the de facto standard shell on Linux" +
         (if interactive then " (for interactive use)" else "");

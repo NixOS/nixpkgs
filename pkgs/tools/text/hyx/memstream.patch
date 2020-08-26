@@ -1,0 +1,31 @@
+diff -Naur hyx-2020.06.09.org/Makefile hyx-2020.06.09/Makefile
+--- hyx-2020.06.09.org/Makefile	2020-06-09 15:19:50.000000000 +0300
++++ hyx-2020.06.09/Makefile	2020-07-22 11:46:40.000000000 +0300
+@@ -1,6 +1,6 @@
+ 
+ all: CFLAGS ?= -O2 -Wl,-s \
+-               -Wl,-z,relro,-z,now -fpic -pie -D_FORTIFY_SOURCE=2 -fstack-protector-all
++               -D_FORTIFY_SOURCE=2 -fstack-protector-all
+ all: CFLAGS += -std=c99 -pedantic -Wall -Wextra -DNDEBUG
+ all: hyx
+ 
+@@ -13,7 +13,7 @@
+ hyx: *.h *.c
+ 	$(CC) \
+ 		$(CFLAGS) \
+-		hyx.c common.c blob.c history.c view.c input.c \
++		hyx.c common.c blob.c history.c view.c input.c memstream.c \
+ 		-o hyx
+ 
+ clean:
+diff -Naur hyx-2020.06.09.org/view.c hyx-2020.06.09/view.c
+--- hyx-2020.06.09.org/view.c	2020-06-09 15:19:50.000000000 +0300
++++ hyx-2020.06.09/view.c	2020-07-22 11:49:09.000000000 +0300
+@@ -4,6 +4,7 @@
+ #include "view.h"
+ #include "input.h"
+ #include "ansi.h"
++#include "memstream.h"
+ 
+ #include <stdlib.h>
+ #include <stdio.h>

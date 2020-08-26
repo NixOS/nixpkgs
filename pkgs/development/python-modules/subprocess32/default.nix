@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = https://pypi.python.org/pypi/subprocess32;
+    homepage = "https://pypi.python.org/pypi/subprocess32";
     description = "Backport of the subprocess module from Python 3.2.5 for use on 2.x";
     maintainers = with lib.maintainers; [ ];
   };

@@ -17,10 +17,7 @@ in
 
     services.felix = {
 
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable the Apache Felix OSGi service";
-      };
+      enable = mkEnableOption "the Apache Felix OSGi service";
 
       bundles = mkOption {
         type = types.listOf types.package;

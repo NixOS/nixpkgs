@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Bayesian haplotype-based polymorphism discovery and genotyping";
     license     = licenses.mit;
-    homepage    = https://github.com/ekg/freebayes;
+    homepage    = "https://github.com/ekg/freebayes";
     maintainers = with maintainers; [ jdagilliland ];
     platforms = [ "x86_64-linux" ];
   };

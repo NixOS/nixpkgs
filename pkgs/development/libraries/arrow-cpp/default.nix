@@ -1,26 +1,32 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, fetchpatch, fixDarwinDylibNames, autoconf, boost
-, brotli, cmake, flatbuffers, gflags, glog, gtest, lz4, perl
-, python, rapidjson, snappy, thrift, which, zlib, zstd
+{ stdenv, lib, fetchurl, fetchFromGitHub, fetchpatch, fixDarwinDylibNames
+, autoconf, boost, brotli, cmake, flatbuffers, gflags, glog, gtest, lz4
+, perl, python3, rapidjson, snappy, thrift, utf8proc, which, zlib, zstd
 , enableShared ? true }:
 
 let
+  arrow-testing = fetchFromGitHub {
+    owner = "apache";
+    repo = "arrow-testing";
+    rev = "f552c4dcd2ae3d14048abd20919748cce5276ade";
+    sha256 = "1smaidk5k2q6xdav7qp74ak34vvwv5qyfqw0szi573awsrsrahr8";
+  };
+
   parquet-testing = fetchFromGitHub {
     owner = "apache";
     repo = "parquet-testing";
-    rev = "46c9e977f58f6c5ef1b81f782f3746b3656e5a8c";
-    sha256 = "1z2s6zh58nf484s0yraw7b1aqgx66dn2wzp1bzv9ndq03msklwly";
+    rev = "bcd9ebcf9204a346df47204fe21b85c8d0498816";
+    sha256 = "0m16pqzbvxiaradq088q5ai6fwnz9srbap996397znwppvva479b";
   };
 
 in stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "0.16.0";
+  version = "1.0.0";
 
   src = fetchurl {
     url =
       "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    sha256 = "1xdp1yni9i1cpml326s78qql1g832m800h7zjlqmk89983g94696";
+    sha256 = "0hzjrhr4brqpmy9f8fbj9p5a482ya8kjhkycz6maa0w2nkzbkpc6";
   };
-
   sourceRoot = "apache-arrow-${version}/cpp";
 
   ARROW_JEMALLOC_URL = fetchurl {
@@ -28,24 +34,35 @@ in stdenv.mkDerivation rec {
     # ./cpp/cmake_modules/ThirdpartyToolchain.cmake
     # ./cpp/thirdparty/versions.txt
     url =
-      "https://github.com/jemalloc/jemalloc/releases/download/5.2.0/jemalloc-5.2.0.tar.bz2";
-    sha256 = "1d73a5c5qdrwck0fa5pxz0myizaf3s9alsvhiqwrjahdlr29zgkl";
+      "https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2";
+    sha256 = "1xl7z0vwbn5iycg7amka9jd6hxd8nmfk7nahi4p9w2bnw9f0wcrl";
+  };
+
+  ARROW_MIMALLOC_URL = fetchurl {
+    # From
+    # ./cpp/cmake_modules/ThirdpartyToolchain.cmake
+    # ./cpp/thirdparty/versions.txt
+    url =
+      "https://github.com/microsoft/mimalloc/archive/v1.6.3.tar.gz";
+    sha256 = "0pia8b4acv1w8qzcpc9i1a2fasnn3rmp996k0l87p2di0lbls0w5";
   };
 
   patches = [
     # patch to fix python-test
     ./darwin.patch
-    # Adjust CMake target names to make -DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON work.
-    # Remove this when updating to the next version.
+    # Properly exported static targets. Remove at the next version bump.
     (fetchpatch {
-      name = "arrow-use-upstream-cmake-target-names.patch";
-      url = "https://github.com/apache/arrow/commit/396861b38d2f4e805db7c2ecd2c96fff0ca2678b.patch";
-      sha256 = "0ki7nx858374anvwyi4szz5hgnnzv4fghdd05c38bzry9rfljgb1";
+      url = "https://github.com/apache/arrow/commit/b040600b39a4f803b704934252665f9440dd1276.patch";
+      sha256 = "1mvw29ybcsz77zprmsk41blxmrj8ywayg7ghf6xkkf98907ws8m8";
+      includes = [ "*.cmake" ];
       stripLen = 1;
     })
-  ] ++ lib.optionals (!enableShared) [
-    # The shared jemalloc lib is unused and breaks in static mode due to missing -fpic.
-    ./jemalloc-disable-shared.patch
+    (fetchpatch {
+      url = "https://github.com/apache/arrow/commit/81d3f2657b17436d6d5a6af9aaf6f36c3f5e4ac9.patch";
+      sha256 = "18fmzr5f79hvx2qpyfgvvl98p4zgzfxrmrd1d2basp0w0da1ciqs";
+      includes = [ "*CMakeLists.txt" "*.cmake" "*.cmake.in" ];
+      stripLen = 1;
+    })
   ];
 
   nativeBuildInputs = [
@@ -64,22 +81,26 @@ in stdenv.mkDerivation rec {
     rapidjson
     snappy
     thrift
+    utf8proc
     zlib
     zstd
-    python.pkgs.python
-    python.pkgs.numpy
+  ] ++ lib.optionals enableShared [
+    python3.pkgs.python
+    python3.pkgs.numpy
   ];
 
   preConfigure = ''
-    substituteInPlace cmake_modules/FindLz4.cmake --replace CMAKE_STATIC_LIBRARY CMAKE_SHARED_LIBRARY
-
     patchShebangs build-support/
   '';
 
   cmakeFlags = [
     "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON"
+    "-DARROW_BUILD_SHARED=${if enableShared then "ON" else "OFF"}"
+    "-DARROW_BUILD_STATIC=${if enableShared then "OFF" else "ON"}"
     "-DARROW_BUILD_TESTS=ON"
+    "-DARROW_VERBOSE_THIRDPARTY_BUILD=ON"
     "-DARROW_DEPENDENCY_SOURCE=SYSTEM"
+    "-DARROW_DEPENDENCY_USE_SHARED=${if enableShared then "ON" else "OFF"}"
     "-DARROW_PLASMA=ON"
     # Disable Python for static mode because openblas is currently broken there.
     "-DARROW_PYTHON=${if enableShared then "ON" else "OFF"}"
@@ -87,26 +108,23 @@ in stdenv.mkDerivation rec {
     "-DARROW_WITH_BROTLI=ON"
     "-DARROW_WITH_LZ4=ON"
     "-DARROW_WITH_SNAPPY=ON"
+    "-DARROW_WITH_UTF8PROC=ON"
     "-DARROW_WITH_ZLIB=ON"
     "-DARROW_WITH_ZSTD=ON"
+    "-DARROW_MIMALLOC=ON"
     # Parquet options:
     "-DARROW_PARQUET=ON"
     "-DPARQUET_BUILD_EXECUTABLES=ON"
-    "-DTHRIFT_COMPILER=${thrift}/bin/thrift"
-    "-DTHRIFT_VERSION=${thrift.version}"
   ] ++ lib.optionals (!enableShared) [
-    "-DARROW_BUILD_SHARED=OFF"
-    "-DARROW_BOOST_USE_SHARED=OFF"
-    "-DARROW_GFLAGS_USE_SHARED=OFF"
-    "-DARROW_PROTOBUF_USE_SHARED=OFF"
     "-DARROW_TEST_LINKAGE=static"
-    "-DOPENSSL_USE_STATIC_LIBS=ON"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DCMAKE_SKIP_BUILD_RPATH=OFF" # needed for tests
     "-DCMAKE_INSTALL_RPATH=@loader_path/../lib" # needed for tools executables
   ] ++ lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF";
 
   doInstallCheck = true;
+  ARROW_TEST_DATA =
+    if doInstallCheck then "${arrow-testing}/data" else null;
   PARQUET_TEST_DATA =
     if doInstallCheck then "${parquet-testing}/data" else null;
   installCheckInputs = [ perl which ];

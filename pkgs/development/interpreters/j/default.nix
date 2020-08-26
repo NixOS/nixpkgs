@@ -1,14 +1,17 @@
-{ stdenv, fetchFromGitHub, readline, libedit, bc }:
+{ stdenv, fetchFromGitHub, readline, libedit, bc
+, avxSupport ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "j";
-  version = "807";
-  jtype = "release";
+  version = "901";
+  jtype = "release-e";
   src = fetchFromGitHub {
     owner = "jsoftware";
     repo = "jsource";
     rev = "j${version}-${jtype}";
-    sha256 = "1qciw2yg9x996zglvj2461qby038x89xcmfb3qyrh3myn8m1nq2n";
+    sha256 = "13ky37rrl6mc66fckrdnrw64gmvq1qlv6skzd513lab4d0wigshw";
+    name = "jsource";
   };
 
   buildInputs = [ readline libedit bc ];
@@ -18,6 +21,9 @@ stdenv.mkDerivation rec {
     if stdenv.isLinux then "linux" else
     if stdenv.isDarwin then "darwin" else
     "unknown";
+  variant = if stdenv.isx86_64 && avxSupport then "avx" else "";
+
+  j64x="j${bits}${variant}";
 
   doCheck = true;
 
@@ -26,57 +32,33 @@ stdenv.mkDerivation rec {
     export HOME=$TMPDIR
     export JLIB=$SOURCE_DIR/jlibrary
 
-    export jbld=$HOME/bld
-    export jplatform=${platform}
-    export jmake=$SOURCE_DIR/make
-    export jgit=$SOURCE_DIR
-    export JBIN=$jbld/j${bits}/bin
-    mkdir -p $JBIN
-
     echo $OUT_DIR
 
-    cd make
+    cd make2
 
     patchShebangs .
-    sed -i jvars.sh -e "
-      s@~/git/jsource@$SOURCE_DIR@;
-      s@~/jbld@$HOME@;
-      "
-
     sed -i $JLIB/bin/profile.ijs -e "s@'/usr/share/j/.*'@'$out/share/j'@;"
 
-    # For future versions, watch
-    # https://github.com/jsoftware/jsource/pull/4
-    cp ./jvars.sh $HOME
+    j64x="${j64x}" ./build_all.sh
 
-    echo '
-      #define jversion   "${version}"
-      #define jplatform  "${platform}"
-      #define jtype      "${jtype}"         // release,beta,...
-      #define jlicense   "GPL3"
-      #define jbuilder   "nixpkgs"  // website or email
-      ' > ../jsrc/jversion.h
-
-    ./build_jconsole.sh j${bits}
-    ./build_libj.sh j${bits}
+    cp $SOURCE_DIR/bin/${platform}/j${bits}*/* "$JLIB/bin"
   '';
 
   checkPhase = ''
-    echo 'i. 5' | $JBIN/jconsole | fgrep "0 1 2 3 4"
+
+    echo 'i. 5' | $JLIB/bin/jconsole | fgrep "0 1 2 3 4"
 
     # Now run the real tests
     cd $SOURCE_DIR/test
     for f in *.ijs
     do
       echo $f
-      $JBIN/jconsole < $f > /dev/null || echo FAIL && echo PASS
+      $JLIB/bin/jconsole < $f > /dev/null || echo FAIL && echo PASS
     done
   '';
 
   installPhase = ''
     mkdir -p "$out"
-    cp -r $JBIN "$out/bin"
-    rm $out/bin/*.txt # Remove logs from the bin folder
 
     mkdir -p "$out/share/j"
     cp -r $JLIB/{addons,system} "$out/share/j"
@@ -88,6 +70,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin synthetica ];
     platforms = with platforms; linux ++ darwin;
     license = licenses.gpl3Plus;
-    homepage = http://jsoftware.com/;
+    homepage = "http://jsoftware.com/";
   };
 }

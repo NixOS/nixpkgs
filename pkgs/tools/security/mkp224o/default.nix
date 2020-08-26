@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mkp224o";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "cathugger";
     repo = "mkp224o";
     rev = "v${version}";
-    sha256 = "0b7xs4gnyfhdkwl8wkb6mazas88ybnlbxck59p4n2mnlndvd8kb7";
+    sha256 = "0b2cn96wg4l8jkkqqp8l2295xlmm2jc8nrw6rdqb5g0zkpfmrxbb";
   };
 
   buildCommand =
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Vanity address generator for tor onion v3 (ed25519) hidden services";
-    homepage = http://cathug2kyi4ilneggumrenayhuhsvrgn6qv2y47bgeet42iivkpynqad.onion/;
+    homepage = "http://cathug2kyi4ilneggumrenayhuhsvrgn6qv2y47bgeet42iivkpynqad.onion/";
     license = licenses.cc0;
     platforms = platforms.linux;
     maintainers = with maintainers; [ volth ];

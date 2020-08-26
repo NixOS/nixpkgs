@@ -2,15 +2,16 @@
 , buildPythonPackage
 , fetchPypi
 , ptyprocess
+, isPy3k
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (rec {
   pname = "pexpect";
-  version = "4.7.0";
+  version = "4.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9e2c1fd0e6ee3a49b28f95d4b33bc389c89b20af6a1255906e90ff1262ce62eb";
+    sha256 = "fc65a43959d153d0114afe13997d439c22823a27cefceb5ff35c2178c6784c0c";
   };
 
   # Wants to run pythonin a subprocess
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ ptyprocess ];
 
   meta = with lib; {
-    homepage = http://www.noah.org/wiki/Pexpect;
+    homepage = "http://www.noah.org/wiki/Pexpect";
     description = "Automate interactive console applications such as ssh, ftp, etc";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
@@ -40,4 +41,8 @@ buildPythonPackage rec {
       any platform that supports the standard Python pty module.
     '';
   };
-}
+# TODO: move into main set, this was to avoid a rebuild
+} // lib.optionalAttrs (!isPy3k ) {
+  # syntax error in _async module, likely intended only for Python 3.
+  dontUsePythonRecompileBytecode = !isPy3k;
+})

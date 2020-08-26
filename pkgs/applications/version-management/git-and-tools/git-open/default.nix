@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-open";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "paulirish";
     repo = "git-open";
     rev = "v${version}";
-    sha256 = "0lprzrjsqrg83gixfaiw26achgd8l7s56jknsjss4p7y0w1fxm05";
+    sha256 = "11n46bngvca5wbdbfcxzjhjbfdbad7sgf7h9gf956cb1q8swsdm0";
   };
 
   buildInputs = [ makeWrapper ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/paulirish/git-open;
+    homepage = "https://github.com/paulirish/git-open";
     description = "Open the GitHub page or website for a repository in your browser";
     license = licenses.mit;
     platforms = platforms.all;

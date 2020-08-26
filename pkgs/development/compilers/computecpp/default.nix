@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "computecpp";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchzip {
     url = "https://computecpp.codeplay.com/downloads/computecpp-ce/${version}/ubuntu-16.04-64bit.tar.gz";
-    sha256 = "191kwvzxfg1sbaq6aw6f84chi7bhsibb2a63zsyz3gz8m0c0syr5";
+    sha256 = "1q6gqjpzz4a260gsd6mm1iv4z8ar3vxaypmgdwl8pb4i7kg6ykaz";
     stripRoot = true;
   };
 
@@ -37,14 +37,12 @@ stdenv.mkDerivation rec {
 
   passthru = {
     isClang = true;
-  } // stdenv.lib.optionalAttrs (stdenv.targetPlatform.isLinux || (stdenv.cc.isGNU && stdenv.cc.cc ? gcc)) {
-    gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
   };
 
   meta = with stdenv.lib; {
     description =
       "Accelerate Complex C++ Applications on Heterogeneous Compute Systems using Open Standards";
-    homepage = https://www.codeplay.com/products/computesuite/computecpp;
+    homepage = "https://www.codeplay.com/products/computesuite/computecpp";
     license = licenses.unfree;
     maintainers = with maintainers; [ davidtwco ];
     platforms = [ "x86_64-linux" ];

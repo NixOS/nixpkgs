@@ -22,7 +22,7 @@ let
 
   mergeFalseByDefault = locs: defs:
     if defs == [] then abort "This case should never happen."
-    else if any (x: x == false) defs then false
+    else if any (x: x == false) (getValues defs) then false
     else true;
 
   kernelItem = types.submodule {
@@ -54,7 +54,8 @@ let
         type = types.bool // { merge = mergeFalseByDefault; };
         default = false;
         description = ''
-          Wether option should generate a failure when unused.
+          Whether option should generate a failure when unused.
+          Upon merging values, mandatory wins over optional.
         '';
       };
     };
@@ -121,7 +122,7 @@ in
       type = types.attrsOf kernelItem;
       example = literalExample '' with lib.kernel; {
         "9P_NET" = yes;
-        USB = optional yes;
+        USB = option yes;
         MMC_BLOCK_MINORS = freeform "32";
       }'';
       description = ''

@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = https://github.com/mischief/9pfs;
+    homepage = "https://github.com/mischief/9pfs";
     description = "FUSE-based client of the 9P network filesystem protocol";
     maintainers = [ lib.maintainers.eelco ];
     platforms = lib.platforms.linux;

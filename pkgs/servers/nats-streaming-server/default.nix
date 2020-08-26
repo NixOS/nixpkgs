@@ -18,7 +18,6 @@ buildGoPackage rec {
     description = "NATS Streaming System Server";
     license = licenses.asl20;
     maintainers = [ maintainers.swdunlop ];
-    homepage = https://nats.io/;
-    platforms = platforms.all;
+    homepage = "https://nats.io/";
   };
 }

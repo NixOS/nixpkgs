@@ -4,22 +4,23 @@
 , ninja
 , sassc
 , gtk3
-, inkscape
+, inkscape_0
 , optipng
 , gtk-engine-murrine
 , gdk-pixbuf
 , librsvg
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "pop-gtk-theme";
-  version = "2020-02-10";
+  version = "2020-06-30";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "gtk-theme";
-    rev = "ed888e9dd5de142cb899e362beedaf694594cc7e";
-    sha256 = "0ryr1jx9pzij6pkv7sam07f90w5lbrzx0fj5vdxl94612mh76aad";
+    rev = "8c31be9f9257375bf7a049069cb4ecbac7d281a1";
+    sha256 = "16dxxazpllcxlbiblynqq4b65wfn9k1jab8dl69l819v73z303ky";
   };
 
   nativeBuildInputs = [
@@ -27,8 +28,9 @@ stdenv.mkDerivation rec {
     ninja
     sassc
     gtk3
-    inkscape
+    inkscape_0
     optipng
+    python3
   ];
 
   buildInputs = [
@@ -41,14 +43,14 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    for file in $(find -name render-\*.sh); do
-      patchShebangs "$file"
+    patchShebangs .
 
+    for file in $(find -name render-\*.sh); do
       substituteInPlace "$file" \
         --replace 'INKSCAPE="/usr/bin/inkscape"' \
-                  'INKSCAPE="inkscape"' \
+                  'INKSCAPE="${inkscape_0}/bin/inkscape"' \
         --replace 'OPTIPNG="/usr/bin/optipng"' \
-                  'OPTIPNG="optipng"'
+                  'OPTIPNG="${optipng}/bin/optipng"'
     done
   '';
 

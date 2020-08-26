@@ -13,16 +13,21 @@
 , networkx
 , streamz
 , colorcet
+, pythonImportsCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "hvplot";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "408a7756b980df148d1f2fd59cd690ad4870d7e3c3c5e46c6b5c2e71fc6a097c";
+    sha256 = "8fcf2f251bd9d4b0390d9c272c992aa75e11174829e416a22de8fba38acc1ce9";
   };
+
+  nativeBuildInputs = [
+    pythonImportsCheckHook
+  ];
 
   checkInputs = [ pytest parameterized nbsmoke flake8 coveralls xarray networkx streamz ];
   propagatedBuildInputs = [
@@ -39,9 +44,13 @@ buildPythonPackage rec {
   # many tests require a network connection
   doCheck = false;
 
+  pythonImportsCheck = [
+    "hvplot.pandas"
+  ];
+
   meta = with lib; {
     description = "A high-level plotting API for the PyData ecosystem built on HoloViews";
-    homepage = https://hvplot.pyviz.org;
+    homepage = "https://hvplot.pyviz.org";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

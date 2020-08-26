@@ -1,11 +1,12 @@
 { stdenv, fetchurl, openssl, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "iperf-3.7";
+  pname = "iperf";
+  version = "3.8.1";
 
   src = fetchurl {
-    url = "https://downloads.es.net/pub/iperf/${name}.tar.gz";
-    sha256 = "033is7b5grfbiil98jxlz4ixp9shm44x6hy8flpsyz1i4h108inq";
+    url = "https://downloads.es.net/pub/iperf/iperf-${version}.tar.gz";
+    sha256 = "15pdgnan9krf3dijan9in73ir8rcmhk3iw8085d732is4zrq1c75";
   };
 
   buildInputs = [ openssl ];
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://software.es.net/iperf/;
+    homepage = "http://software.es.net/iperf/";
     description = "Tool to measure IP bandwidth using UDP or TCP";
     platforms = platforms.unix;
     license = licenses.bsd3;

@@ -73,8 +73,8 @@ rec {
        lconcat [ "a" "b" "c" ]
        => "zabc"
        # different types
-       lstrange = foldl (str: int: str + toString (int + 1)) ""
-       strange [ 1 2 3 4 ]
+       lstrange = foldl (str: int: str + toString (int + 1)) "a"
+       lstrange [ 1 2 3 4 ]
        => "a2345"
   */
   foldl = op: nul: list:

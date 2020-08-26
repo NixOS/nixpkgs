@@ -22,7 +22,7 @@ build-idris-package  {
 
   meta = {
     description = "SDL-idris framework for Idris";
-    homepage = https://github.com/edwinb/SDL-idris;
+    homepage = "https://github.com/edwinb/SDL-idris";
     maintainers = [ lib.maintainers.brainrape ];
     # Can't find file sdlrun.o
     broken = true;

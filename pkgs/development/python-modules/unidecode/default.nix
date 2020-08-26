@@ -14,7 +14,7 @@ buildPythonPackage rec {
   buildInputs = [ glibcLocales ];
 
   meta = with stdenv.lib; {
-    homepage = https://pypi.python.org/pypi/Unidecode/;
+    homepage = "https://pypi.python.org/pypi/Unidecode/";
     description = "ASCII transliterations of Unicode text";
     license = licenses.gpl2;
     maintainers = with maintainers; [ domenkozar ];

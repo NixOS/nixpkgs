@@ -1,20 +1,29 @@
-{ stdenv, fetchurl, coreutils, utillinux,
-  which, gnused, gnugrep,
-  groff, man-db, getent, libiconv, pcre2,
-  gettext, ncurses, python3,
-  cmake
-  , fetchpatch
+{ stdenv
+, lib
+, fetchurl
+, coreutils
+, utillinux
+, which
+, gnused
+, gnugrep
+, groff
+, gawk
+, man-db
+, getent
+, libiconv
+, pcre2
+, gettext
+, ncurses
+, python3
+, cmake
 
-  , writeText
-
-  , useOperatingSystemEtc ? true
-
+, runCommand
+, writeText
+, nixosTests
+, useOperatingSystemEtc ? true
 }:
-
-with stdenv.lib;
-
 let
-  etcConfigAppendixText = ''
+  etcConfigAppendix = writeText "config.fish.appendix" ''
     ############### ↓ Nix hook for sourcing /etc/fish/config.fish ↓ ###############
     #                                                                             #
     # Origin:
@@ -46,7 +55,7 @@ let
     ############### ↑ Nix hook for sourcing /etc/fish/config.fish ↑ ###############
   '';
 
-  fishPreInitHooks = ''
+  fishPreInitHooks = writeText "__fish_build_paths_suffix.fish" ''
     # source nixos environment
     # note that this is required:
     #   1. For all shells, not just login shells (mosh needs this as do some other command-line utilities)
@@ -71,59 +80,69 @@ let
 
       # additional profiles are expected in order of precedence, which means the reverse of the
       # NIX_PROFILES variable (same as config.environment.profiles)
-      set -l __nix_profile_paths (echo $NIX_PROFILES | ${coreutils}/bin/tr ' ' '\n')[-1..1]
+      set -l __nix_profile_paths (string split ' ' $NIX_PROFILES)[-1..1]
 
-      set __extra_completionsdir \
+      set -p __extra_completionsdir \
         $__nix_profile_paths"/etc/fish/completions" \
-        $__nix_profile_paths"/share/fish/vendor_completions.d" \
-        $__extra_completionsdir
-      set __extra_functionsdir \
+        $__nix_profile_paths"/share/fish/vendor_completions.d"
+      set -p __extra_functionsdir \
         $__nix_profile_paths"/etc/fish/functions" \
-        $__nix_profile_paths"/share/fish/vendor_functions.d" \
-        $__extra_functionsdir
-      set __extra_confdir \
+        $__nix_profile_paths"/share/fish/vendor_functions.d"
+      set -p __extra_confdir \
         $__nix_profile_paths"/etc/fish/conf.d" \
-        $__nix_profile_paths"/share/fish/vendor_conf.d" \
-        $__extra_confdir
+        $__nix_profile_paths"/share/fish/vendor_conf.d"
     end
   '';
 
   fish = stdenv.mkDerivation rec {
     pname = "fish";
-    version = "3.1.0";
-
-    etcConfigAppendix = builtins.toFile "etc-config.appendix.fish" etcConfigAppendixText;
+    version = "3.1.2";
 
     src = fetchurl {
-      # There are differences between the release tarball and the tarball github packages from the tag
-      # Hence we cannot use fetchFromGithub
+      # There are differences between the release tarball and the tarball GitHub
+      # packages from the tag. Specifically, it comes with a file containing its
+      # version, which is used in `build_tools/git_version_gen.sh` to determine
+      # the shell's actual version (and what it displays when running `fish
+      # --version`), as well as the local documentation for all builtins (and
+      # maybe other things).
       url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.gz";
-      sha256 = "0s2356mlx7fp9kgqgw91lm5ds2i9iq9hq071fbqmcp3875l1xnz5";
+      sha256 = "1vblmb3x2k2cb0db5jdyflppnlqsm7i6jjaidyhmvaaw7ch2gffm";
     };
 
-    nativeBuildInputs = [ cmake ];
-    buildInputs = [ ncurses libiconv pcre2 ];
+    # We don't have access to the codesign executable, so we patch this out.
+    # For more information, see: https://github.com/fish-shell/fish-shell/issues/6952
+    patches = lib.optional stdenv.isDarwin ./dont-codesign-on-mac.diff;
+
+    nativeBuildInputs = [
+      cmake
+    ];
+
+    buildInputs = [
+      ncurses
+      libiconv
+      pcre2
+    ];
+
+    cmakeFlags = [
+      "-DCMAKE_INSTALL_DOCDIR=${placeholder "out"}/share/doc/fish"
+    ];
 
     preConfigure = ''
       patchShebangs ./build_tools/git_version_gen.sh
     '';
 
-    patches = [
-      # Fixes compilation on old Apple SDKs
-      (fetchpatch {
-        url = "https://github.com/fish-shell/fish-shell/commit/10385d422b3e2a823faebfdaf13edd0e7f48a27f.patch";
-        sha256 = "0hj13kyjf5wr9j5afd4mfylcr7mz68ilbncbcf307drk1lv1lvrn";
-      })
-    ];
-
     # Required binaries during execution
     # Python: Autocompletion generated from manpages and config editing
     propagatedBuildInputs = [
-      coreutils gnugrep gnused
-      python3 groff gettext
-    ] ++ optional (!stdenv.isDarwin) man-db;
+      coreutils
+      gnugrep
+      gnused
+      python3
+      groff
+      gettext
+    ] ++ lib.optional (!stdenv.isDarwin) man-db;
 
-    postInstall = ''
+    postInstall = with lib; ''
       sed -r "s|command grep|command ${gnugrep}/bin/grep|" \
           -i "$out/share/fish/functions/grep.fish"
       sed -i "s|which |${which}/bin/which |"               \
@@ -147,6 +166,16 @@ let
           -i $out/share/fish/functions/{__fish_config_interactive.fish,fish_config.fish,fish_update_completions.fish}
       sed -i "s|/usr/local/sbin /sbin /usr/sbin||"         \
              $out/share/fish/completions/{sudo.fish,doas.fish}
+      sed -e "s| awk | ${gawk}/bin/awk |"                  \
+          -i $out/share/fish/functions/{__fish_print_packages.fish,__fish_print_addresses.fish,__fish_describe_command.fish,__fish_complete_man.fish,__fish_complete_convert_options.fish} \
+             $out/share/fish/completions/{cwebp,adb,ezjail-admin,grunt,helm,heroku,lsusb,make,p4,psql,rmmod,vim-addons}.fish
+
+      cat > $out/share/fish/functions/__fish_anypython.fish <<EOF
+      function __fish_anypython
+          echo ${python3.interpreter}
+          return 0
+      end
+      EOF
 
     '' + optionalString stdenv.isLinux ''
       sed -e "s| ul| ${utillinux}/bin/ul|" \
@@ -162,53 +191,58 @@ let
       sed -i "s|command manpath|command ${man-db}/bin/manpath|"     \
               "$out/share/fish/functions/man.fish"
     '' + optionalString useOperatingSystemEtc ''
-      tee -a $out/etc/fish/config.fish < ${(writeText "config.fish.appendix" etcConfigAppendixText)}
+      tee -a $out/etc/fish/config.fish < ${etcConfigAppendix}
     '' + ''
-      tee -a $out/share/fish/__fish_build_paths.fish < ${(writeText "__fish_build_paths_suffix.fish" fishPreInitHooks)}
+      tee -a $out/share/fish/__fish_build_paths.fish < ${fishPreInitHooks}
     '';
 
     enableParallelBuilding = true;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Smart and user-friendly command line shell";
-      homepage = http://fishshell.com/;
+      homepage = "http://fishshell.com/";
       license = licenses.gpl2;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ocharles cole-h ];
     };
 
     passthru = {
       shellPath = "/bin/fish";
+      tests = {
+        nixos = nixosTests.fish;
+
+        # Test the fish_config tool by checking the generated splash page.
+        # Since the webserver requires a port to run, it is not started.
+        fishConfig =
+          let fishScript = writeText "test.fish" ''
+            set -x __fish_bin_dir ${fish}/bin
+            echo $__fish_bin_dir
+            cp -r ${fish}/share/fish/tools/web_config/* .
+            chmod -R +w *
+
+            # if we don't set `delete=False`, the file will get cleaned up
+            # automatically (leading the test to fail because there's no
+            # tempfile to check)
+            sed -e "s@, mode='w'@, mode='w', delete=False@" -i webconfig.py
+
+            # we delete everything after the fileurl is assigned
+            sed -e '/fileurl =/q' -i webconfig.py
+            echo "print(fileurl)" >> webconfig.py
+
+            # and check whether the message appears on the page
+            cat (${python3}/bin/python ./webconfig.py \
+              | tail -n1 | sed -ne 's|.*\(/build/.*\)|\1|p' \
+            ) | grep 'a href="http://localhost.*Start the Fish Web config'
+
+            # cannot test the http server because it needs a localhost port
+          '';
+          in
+          runCommand "test-web-config" { } ''
+            HOME=$(mktemp -d)
+            ${fish}/bin/fish ${fishScript} && touch $out
+          '';
+      };
     };
   };
-
-  tests = {
-
-    # Test the fish_config tool by checking the generated splash page.
-    # Since the webserver requires a port to run, it is not started.
-    fishConfig =
-      let fishScript = writeText "test.fish" ''
-        set -x __fish_bin_dir ${fish}/bin
-        echo $__fish_bin_dir
-        cp -r ${fish}/share/fish/tools/web_config/* .
-        chmod -R +w *
-        # we delete everything after the fileurl is assigned
-        sed -e '/fileurl =/q' -i webconfig.py
-        echo "print(fileurl)" >> webconfig.py
-        # and check whether the message appears on the page
-        cat (${python3}/bin/python ./webconfig.py \
-          | tail -n1 | sed -ne 's|.*\(/tmp/.*\)|\1|p' \
-        ) | grep 'a href="http://localhost.*Start the Fish Web config'
-
-        # cannot test the http server because it needs a localhost port
-      '';
-      in ''
-        HOME=$(mktemp -d)
-        ${fish}/bin/fish ${fishScript}
-      '';
-  };
-
-  # FIXME(Profpatsch) replace withTests stub
-  withTests = flip const;
-
-in withTests tests fish
+in
+fish

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "prefix=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/lvc/abi-dumper;
+    homepage = "https://github.com/lvc/abi-dumper";
     description = "Dump ABI of an ELF object containing DWARF debug info";
     license = licenses.lgpl21;
     maintainers = [ maintainers.bhipple ];

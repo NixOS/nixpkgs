@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-iotcentral";
-  version = "2.0.0";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1fql0j28d2r6slgabb7b438gdga513iskqh4al6c7dsmj1yzdzwa";
+    sha256 = "c175f6642be514ad0efd3dc03d09e50d923596fd9e634381793dcc46bb8a57c7";
   };
 
   propagatedBuildInputs = [

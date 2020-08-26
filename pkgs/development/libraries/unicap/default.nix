@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libusb, libraw1394, dcraw, intltool, perl, v4l-utils }:
+{ stdenv, fetchurl, libusb-compat-0_1, libraw1394, dcraw, intltool, perl, v4l-utils }:
 
 stdenv.mkDerivation rec {
   pname = "libunicap";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "05zcnnm4dfc6idihfi0fq5xka6x86zi89wip2ca19yz768sd33s9";
   };
 
-  buildInputs = [ libusb libraw1394 dcraw intltool perl v4l-utils ];
+  buildInputs = [ libusb-compat-0_1 libraw1394 dcraw intltool perl v4l-utils ];
 
   patches = [
     # Debian has a patch that fixes the build.
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Universal video capture API";
-    homepage = http://www.unicap-imaging.org/;
+    homepage = "http://www.unicap-imaging.org/";
     maintainers = [ maintainers.raskin ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

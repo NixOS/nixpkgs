@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "foolscap";
-  version = "0.13.2";
+  version = "20.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8498c7e9eaecb5b19be74b18d55c2086440be08de29f2bb507f9b505757467ff";
+    sha256 = "0rbw9makjmawkcxnkkngybj3n14s0dnzn9gkqqq2krcm514kmlb9";
   };
 
   propagatedBuildInputs = [ mock twisted pyopenssl service-identity ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://foolscap.lothar.com/;
+    homepage = "http://foolscap.lothar.com/";
     description = "Foolscap, an RPC protocol for Python that follows the distributed object-capability model";
     longDescription = ''
       "Foolscap" is the name for the next-generation RPC protocol,

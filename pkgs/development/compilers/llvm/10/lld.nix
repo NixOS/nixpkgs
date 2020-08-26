@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   pname = "lld";
   inherit version;
 
-  src = fetch pname "1w9c9xmzbdnkwgal612hqz2lxj9jgqpfzxr2rllcspmf6v7arvf4";
+  src = fetch pname "0ynzi35r4fckvp6842alpd43qr810j3728yfslc66fk2mbh4j52r";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ llvm libxml2 ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "The LLVM Linker";
-    homepage    = http://lld.llvm.org/;
+    homepage    = "https://lld.llvm.org/";
     license     = stdenv.lib.licenses.ncsa;
     platforms   = stdenv.lib.platforms.all;
   };

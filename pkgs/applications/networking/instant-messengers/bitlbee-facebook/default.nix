@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig ];
 
-  buildInputs = [ bitlbee glib json-glib ];
+  buildInputs = [ bitlbee json-glib ];
 
   preConfigure = ''
     export BITLBEE_PLUGINDIR=$out/lib/bitlbee
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "The Facebook protocol plugin for bitlbee";
 
-    homepage = https://github.com/bitlbee/bitlbee-facebook;
+    homepage = "https://github.com/bitlbee/bitlbee-facebook";
     license = licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
   };

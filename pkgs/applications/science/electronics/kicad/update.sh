@@ -1,6 +1,8 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p coreutils git nix curl
 
+set -e
+
 # this script will generate versions.nix in the right location
 # this should contain the versions' revs and hashes
 # the stable revs are stored only for ease of skipping
@@ -50,12 +52,11 @@ for arg in "$@"; do
 done
 
 here="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-now=$(date --iso-8601)
+now=$(date --iso-8601 --utc)
 
 file="${here}/versions.nix"
 # just in case this runs in parallel
-rand="$(head -c 3 /dev/urandom | base64)"
-tmp="${here}/,versions.nix.${rand}"
+tmp="${here}/,versions.nix.${RANDOM}"
 
 # libraries currently on github, move to $gitlab/libraries planned
 libs=( symbols templates footprints packages3d )
@@ -112,16 +113,16 @@ for version in "${all_versions[@]}"; do
 
     echo "Checking src" >&2
     src_rev="$(${get_rev} "${gitlab}"/code/kicad.git "${version}" | cut -f1)"
-    ret="$(grep -sm 1 "\"${pname}\"" -A 4 "${file}" | grep -sm 1 "${src_rev}")"
+    has_rev="$(grep -sm 1 "\"${pname}\"" -A 4 "${file}" | grep -sm 1 "${src_rev}" || true)"
     has_hash="$(grep -sm 1 "\"${pname}\"" -A 5 "${file}" | grep -sm 1 "sha256")"
-    if [[ -n ${ret} && -n ${has_hash} && -z ${clean} ]]; then
+    if [[ -n ${has_rev} && -n ${has_hash} && -z ${clean} ]]; then
       echo "Reusing old ${pname}.src.sha256, already latest .rev" >&2
       grep -sm 1 "\"${pname}\"" -A 5 "${file}" | grep -sm 1 "rev" -A 1
     else
           printf "%8srev =\t\t\t\"%s\";\n" "" "${src_rev}"
           printf "%8ssha256 =\t\t\"%s\";\n" \
             "" "$(${prefetch} "${gitlab_pre}${src_rev}")"
-          (( count++ ))
+          count=$((count+1))
     fi
         printf "%6s};\n" ""
       printf "%4s};\n" ""
@@ -132,25 +133,25 @@ for version in "${all_versions[@]}"; do
 
         echo "Checking i18n" >&2
         i18n_rev="$(${get_rev} "${i18n}" "${version}" | cut -f1)"
-        ret="$(grep -sm 1 "\"${pname}\"" -A 11 "${file}" | grep -sm 1 "${i18n_rev}")"
+        has_rev="$(grep -sm 1 "\"${pname}\"" -A 11 "${file}" | grep -sm 1 "${i18n_rev}" || true)"
         has_hash="$(grep -sm 1 "\"${pname}\"" -A 12 "${file}" | grep -sm 1 "i18n.sha256")"
-        if [[ -n ${ret} && -n ${has_hash} && -z ${clean} ]]; then
+        if [[ -n ${has_rev} && -n ${has_hash} && -z ${clean} ]]; then
           echo "Reusing old kicad-i18n-${today}.src.sha256, already latest .rev" >&2
           grep -sm 1 "\"${pname}\"" -A 12 "${file}" | grep -sm 1 "i18n" -A 1
         else
           printf "%8si18n.rev =\t\t\"%s\";\n" "" "${i18n_rev}"
           printf "%8si18n.sha256 =\t\t\"%s\";\n" "" \
             "$(${prefetch} "${i18n_pre}${i18n_rev}")"
-          (( count++ ))
+          count=$((count+1))
         fi
 
           for lib in "${libs[@]}"; do
             echo "Checking ${lib}" >&2
             url="${github}-${lib}.git"
             lib_rev="$(${get_rev} "${url}" "${version}" | cut -f1)"
-            ret="$(grep -sm 1 "\"${pname}\"" -A 19 "${file}" | grep -sm 1 "${lib_rev}" -A 1)"
+            has_rev="$(grep -sm 1 "\"${pname}\"" -A 19 "${file}" | grep -sm 1 "${lib_rev}" || true)"
             has_hash="$(grep -sm 1 "\"${pname}\"" -A 20 "${file}" | grep -sm 1 "${lib}.sha256")"
-            if [[ -n ${ret} && -n ${has_hash} && -z ${clean} ]]; then
+            if [[ -n ${has_rev} && -n ${has_hash} && -z ${clean} ]]; then
               echo "Reusing old kicad-${lib}-${today}.src.sha256, already latest .rev" >&2
               grep -sm 1 "\"${pname}\"" -A 20 "${file}" | grep -sm 1 "${lib}" -A 1
             else
@@ -161,7 +162,7 @@ for version in "${all_versions[@]}"; do
               printf "\"%s\";\n" "${lib_rev}"
               printf "%8s%s.sha256 =\t\"%s\";\n" "" \
               "${lib}" "$(${prefetch} "${github}-${lib}/archive/${lib_rev}.tar.gz")"
-              (( count++ ))
+              count=$((count+1))
             fi
           done
         printf "%6s};\n" ""
@@ -174,6 +175,11 @@ for version in "${all_versions[@]}"; do
 done 
 printf "}\n"
 } > "${tmp}"
+
+if grep '""' "${tmp}"; then
+	echo "empty value detected, out of space?" >&2
+	exit "1"
+fi
 
 mv "${tmp}" "${file}"
 

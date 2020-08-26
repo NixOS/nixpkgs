@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     # fix AppStream validation
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gnome-dictionary/commit/1c94d612030ef87c6e26a01a490470b71c39e341.patch";
-      sha256 = "sha256:0cbswmhs9mks3gsc0iy4wnidsa8sfzzf4s1kgvb80qwffgxz5m8b";
+      sha256 = "0cbswmhs9mks3gsc0iy4wnidsa8sfzzf4s1kgvb80qwffgxz5m8b";
     })
   ];
 
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Dictionary;
+    homepage = "https://wiki.gnome.org/Apps/Dictionary";
     description = "Dictionary is the GNOME application to look up definitions";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

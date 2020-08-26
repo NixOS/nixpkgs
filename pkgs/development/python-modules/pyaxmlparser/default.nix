@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python3 Parser for Android XML file and get Application Name without using Androguard";
-    homepage = https://github.com/appknox/pyaxmlparser;
+    homepage = "https://github.com/appknox/pyaxmlparser";
     # Files from Androguard are licensed ASL 2.0
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ ma27 ];

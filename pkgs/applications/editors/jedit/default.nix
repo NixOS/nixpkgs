@@ -3,11 +3,11 @@
 let
   version = "5.2.0";
   bcpg = fetchurl {
-    url = http://central.maven.org/maven2/org/bouncycastle/bcpg-jdk16/1.46/bcpg-jdk16-1.46.jar;
+    url = "mirror://maven/org/bouncycastle/bcpg-jdk16/1.46/bcpg-jdk16-1.46.jar";
     sha256 = "16xhmwks4l65m5x150nd23y5lyppha9sa5fj65rzhxw66gbli82d";
   };
   jsr305 = fetchurl {
-    url = http://central.maven.org/maven2/com/google/code/findbugs/jsr305/2.0.0/jsr305-2.0.0.jar;
+    url = "mirror://maven/com/google/code/findbugs/jsr305/2.0.0/jsr305-2.0.0.jar";
     sha256 = "0s74pv8qjc42c7q8nbc0c3b1hgx0bmk3b8vbk1z80p4bbgx56zqy";
   };
 in
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Mature programmer's text editor (Java based)";
-    homepage = http://www.jedit.org;
+    homepage = "http://www.jedit.org";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = [ maintainers.vbgl ];

@@ -89,7 +89,7 @@ let
 
       bundle exec rake gettext:po_to_json RAILS_ENV=production NODE_ENV=production
       bundle exec rake rake:assets:precompile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake webpack:compile RAILS_ENV=production NODE_ENV=production NODE_OPTIONS="--max_old_space_size=2048"
+      bundle exec rake webpack:compile RAILS_ENV=production NODE_ENV=production NODE_OPTIONS="--max_old_space_size=3072"
       bundle exec rake gitlab:assets:fix_urls RAILS_ENV=production NODE_ENV=production
 
       runHook postBuild
@@ -174,7 +174,7 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    homepage = http://www.gitlab.com/;
+    homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz globin krav talyz ];
   } // (if gitlabEnterprise then

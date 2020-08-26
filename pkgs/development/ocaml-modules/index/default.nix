@@ -1,17 +1,18 @@
-{ lib, fetchurl, buildDunePackage, fmt, logs }:
+{ lib, fetchurl, buildDunePackage, fmt, logs, mtime, stdlib-shims }:
 
 buildDunePackage rec {
   pname = "index";
-  version = "1.0.1";
+  version = "1.2.1";
 
   minimumOCamlVersion = "4.07";
 
   src = fetchurl {
     url = "https://github.com/mirage/index/releases/download/${version}/index-${version}.tbz";
-    sha256 = "1006wr3g21s4j2vsd73gphhkrh1fy4swh6gqvlsa9c6q7vz9wbvz";
+    sha256 = "1a9b6rsazrjy07syxl9ix5002i95mlvx5vk7nl2x9cs6s0zw906d";
   };
 
-  propagatedBuildInputs = [ fmt logs ];
+  buildInputs = [ stdlib-shims ];
+  propagatedBuildInputs = [ fmt logs mtime ];
 
   meta = {
     homepage = "https://github.com/mirage/index";

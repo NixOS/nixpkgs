@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Portable library for reading files that contain x-y data from powder diffraction, spectroscopy and other experimental methods";
     license = licenses.lgpl21;
-    homepage = http://xylib.sourceforge.net/;
+    homepage = "http://xylib.sourceforge.net/";
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];
   };

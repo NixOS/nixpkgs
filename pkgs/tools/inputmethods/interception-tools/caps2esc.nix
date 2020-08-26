@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, cmake }:
+{ stdenv, fetchFromGitLab, cmake }:
 
-let
-  version = "0.1.0";
-  pname = "interception-tools-caps2esc";
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+stdenv.mkDerivation rec {
+  pname = "caps2esc";
+  version = "0.1.3";
 
-  src = fetchurl {
-    url = "https://gitlab.com/interception/linux/plugins/caps2esc/repository/v${version}/archive.tar.gz";
-    sha256 = "1fdxqp54gwsrm2c63168l256nfwdk4mvgr7nlwdv62wd3l7zzrg8";
+  src = fetchFromGitLab {
+    owner = "interception/linux/plugins";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "10xv56vh5h3lxyii3ni166ddv1sz2pylrjmdwxhb4gd2p5zgl1ji";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
     homepage = "https://gitlab.com/interception/linux/plugins/caps2esc";

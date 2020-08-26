@@ -12,7 +12,7 @@ bundlerApp {
 
   meta = with lib; {
     description = "Oxidized is a network device configuration backup tool. It's a RANCID replacement!";
-    homepage    = https://github.com/ytti/oxidized;
+    homepage    = "https://github.com/ytti/oxidized";
     license     = licenses.asl20;
     maintainers = with maintainers; [ willibutz nicknovitski ];
     platforms   = platforms.linux;

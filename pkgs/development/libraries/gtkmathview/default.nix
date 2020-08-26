@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   patches = [ ./gcc-4.3-build-fixes.patch ./gcc-4.4-build-fixes.patch ];
 
   meta = {
-    homepage = http://helm.cs.unibo.it/mml-widget/;
+    homepage = "http://helm.cs.unibo.it/mml-widget/";
     description = "C++ rendering engine for MathML documents";
     license = stdenv.lib.licenses.lgpl3Plus;
     maintainers = [ stdenv.lib.maintainers.roconnor ];

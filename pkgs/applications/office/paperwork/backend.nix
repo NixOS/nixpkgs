@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Backend part of Paperwork (Python API, no UI)";
-    homepage = https://openpaper.work/;
+    homepage = "https://openpaper.work/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ aszlig symphorien ];
   };

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, zlib, kmod, which }:
 
 stdenv.mkDerivation rec {
-  name = "pciutils-3.6.4"; # with release-date database
+  name = "pciutils-3.7.0"; # with release-date database
 
   src = fetchurl {
     url = "mirror://kernel/software/utils/pciutils/${name}.tar.xz";
-    sha256 = "0mb0f2phdcmp4kfiqsszn2k6nlln0w160ffzrjjv4bbfjwrgfzzn";
+    sha256 = "1ss0rnfsx8gvqjxaji4mvbhf9xyih4cadmgadbwwv8mnx1xvjh4x";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   postInstall = "rm $out/sbin/update-pciids $out/man/man8/update-pciids.8";
 
   meta = with stdenv.lib; {
-    homepage = http://mj.ucw.cz/pciutils.html;
+    homepage = "http://mj.ucw.cz/pciutils.html";
     description = "A collection of programs for inspecting and manipulating configuration of PCI devices";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

@@ -20,8 +20,8 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python interface for libuv";
-    homepage = https://github.com/saghul/pyuv;
-    repositories.git = git://github.com/saghul/pyuv.git;
+    homepage = "https://github.com/saghul/pyuv";
+    repositories.git = "git://github.com/saghul/pyuv.git";
     license = licenses.mit;
   };
 

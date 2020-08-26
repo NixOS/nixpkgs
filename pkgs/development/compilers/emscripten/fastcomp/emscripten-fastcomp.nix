@@ -1,8 +1,7 @@
-{ emscriptenVersion, stdenv, fetchFromGitHub, cmake, python, gtest, ... }:
+{ emscriptenVersion, stdenv, fetchFromGitHub, cmake, python, gtest, gccForLibs, ... }:
 
 let
   rev = emscriptenVersion;
-  gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in
 stdenv.mkDerivation rec {
   name = "emscripten-fastcomp-${rev}";
@@ -36,17 +35,16 @@ stdenv.mkDerivation rec {
     "-DCLANG_INCLUDE_TESTS=ON"
   ] ++ (stdenv.lib.optional stdenv.isLinux
     # necessary for clang to find crtend.o
-    "-DGCC_INSTALL_PREFIX=${gcc}"
+    "-DGCC_INSTALL_PREFIX=${gccForLibs}"
   );
   enableParallelBuilding = true;
 
   passthru = {
     isClang = true;
-    inherit gcc;
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/emscripten-core/emscripten-fastcomp;
+    homepage = "https://github.com/emscripten-core/emscripten-fastcomp";
     description = "Emscripten LLVM";
     platforms = platforms.all;
     maintainers = with maintainers; [ qknight matthewbauer ];

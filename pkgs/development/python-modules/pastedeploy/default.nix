@@ -6,12 +6,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.0.1";
+  version = "2.1.0";
   pname = "PasteDeploy";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d423fb9d51fdcf853aa4ff43ac7ec469b643ea19590f67488122d6d0d772350a";
+    sha256 = "e7559878b6e92023041484be9bcb6d767cf4492fc3de7257a5dae76a7cc11a9b";
   };
 
   buildInputs = [ pytestrunner ];
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Load, configure, and compose WSGI applications and servers";
-    homepage = http://pythonpaste.org/deploy/;
+    homepage = "http://pythonpaste.org/deploy/";
     license = licenses.mit;
   };
 

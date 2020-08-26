@@ -25,11 +25,11 @@ assert !withQT -> default != "qt5";
 
 stdenv.mkDerivation rec {
   pname = "avidemux";
-  version = "2.7.4";
+  version = "2.7.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/avidemux/avidemux/${version}/avidemux_${version}.tar.gz";
-    sha256 = "1acdb3m37vdzzbm8mwyibcn8msi7birb5v30qfi7jli5r00src3x";
+    sha256 = "1kwkn976ppahrcr74bnv6sqx75pzl9y21m1mvr5ksi1m6lgp924s";
   };
 
   patches = [
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://fixounet.free.fr/avidemux/;
+    homepage = "http://fixounet.free.fr/avidemux/";
     description = "Free video editor designed for simple video editing tasks";
     maintainers = with maintainers; [ abbradar ma27 ];
     # "CPU not supported" errors on AArch64

@@ -3,49 +3,49 @@
 {
   "kicad" = {
     kicadVersion = {
-      version =			"5.1.5";
+      version =			"5.1.6";
       src = {
-        rev =			"52549c5d09cbfb0e807fcbcb07819bc9f7861544";
-        sha256 =		"15h3rwisjss3fdc9bam9n2wq94slhacc3fbg14bnzf4n5agsnv5b";
+        rev =			"c6e7f7de7df655fd59b57823499efc443009de6b";
+        sha256 =		"1pa3z0h0679jmgxlzc833h6q85b5paxdp69kf2h93vkaryj58622";
       };
     };
     libVersion = {
-      version =			"5.1.5";
+      version =			"5.1.6";
       libSources = {
-        i18n.rev =		"5122cbec6563fb7c8d6f960a639ac470353af91b";
-        i18n.sha256 =		"1rfpifl8vky1gba2angizlb2n7mwmsiai3r6ip6qma60wdj8sbd3";
-        symbols.rev =		"dd122ec170b49e032179511c9d263126f52f4020";
-        symbols.sha256 =	"048b07ffsaav1ssrchw2p870lvb4rsyb5vnniy670k7q9p16qq6h";
-        templates.rev =		"94761f10d06582b33cd55ea2149d72f269f65580";
-        templates.sha256 =	"0cs3bm3zb5ngw5ldn0lzw5bvqm4kvcidyrn76438alffwiz2b15g";
-        footprints.rev =	"e076f8f271f8db96d5fec45616b7554caebb7ef7";
-        footprints.sha256 =	"1c4whgn14qhz4yqkl46w13p6rpv1k0hsc9s9h9368fxfcz9knb2j";
-        packages3d.rev =	"8d233cdcb109aa1c3b8ba4c934ee31f6a3b6e1f4";
-        packages3d.sha256 =	"0cff2ms1bsw530kqb1fr1m2pjixyxzwa81mxgac3qpbcf8fnpvaz";
+        i18n.rev =		"5ad171ce5c8d90f4740517c2adecb310d8be51bd";
+        i18n.sha256 =		"0qryi8xjm23ka363zfl7bbga0v5c31fr3d4nyxp3m168vkv9zhha";
+        symbols.rev =		"5150eaa2a7d15cfc6bb1459c527c4ebaa66d7708";
+        symbols.sha256 =	"12w3rdy085drlikkpb27n9ni7cyg9l0pqy7hnr86cxjcw3l5wcx6";
+        templates.rev =		"9213d439f757e6049b7e54f3ea08272a0d0f44a9";
+        templates.sha256 =	"1hppcsrkn4dk6ggby6ckh0q65qxkywrbyxa4lwpaf7pxjyv498xg";
+        footprints.rev =	"a61b4e49762fb355f654e65a1c7db1aaf7bb2332";
+        footprints.sha256 =	"1kmf91a5mmvj9izrv40mkaw1w36yjgn8daczd9rq2wlmd0rdp1zx";
+        packages3d.rev =	"150ff1caf0b01dc04c84f4f966f4f88fedfa8f8c";
+        packages3d.sha256 =	"0b9jglf77fy0n0r8xs4yqkv6zvipyfvp0z5dnqlzp32csy5aqpi1";
       };
     };
   };
   "kicad-unstable" = {
     kicadVersion = {
-      version =			"2020-02-10";
+      version =			"2020-08-22";
       src = {
-        rev =			"1190e60dd426d246661e478db3287f266ec6cda2";
-        sha256 =		"0cgfad07j69cks97llj4hf3kga0d5qf728s89xwxrzcwm06k62bi";
+        rev =			"a2341f0f335b0abb9fc8cb86d19cbe6f9b38fade";
+        sha256 =		"0167yb39f800xarq3khn7sbdkgcx9j2ayhy8c7lhhks6kh7459g0";
       };
     };
     libVersion = {
-      version =			"2020-02-10";
+      version =			"2020-08-22";
       libSources = {
-        i18n.rev =		"26786c4ca804bad7eb072f1ef381f00b5a2ff3ee";
-        i18n.sha256 =		"0iqr1xfw4s677afjy9bn5y41z4isp327f9y90wypkxiwwq3dfkfl";
-        symbols.rev =		"35b7da2d211d7cc036b37ad7f5e40ef03faa1bc7";
-        symbols.sha256 =	"0wbfw1swbfvfp47cn48pxpqlygjs3xh568ydrrs51v3w102x8y64";
-        templates.rev =		"0c0490897f803ab8b7c3dad438b7eb1f80e0417c";
-        templates.sha256 =	"0cs3bm3zb5ngw5ldn0lzw5bvqm4kvcidyrn76438alffwiz2b15g";
-        footprints.rev =	"9357b6f09312966c57fec9f66a516941d79c3038";
-        footprints.sha256 =	"0cgah1q0h012ffwfl220k7qb6hgbs0i91spq2j4v3lgpfr4g638d";
-        packages3d.rev =	"de368eb739abe41dfc3163e0e370477e857f9cc1";
-        packages3d.sha256 =	"0b3p5v8g24h6l7q3sbqz7ns0gnrf9l89glj86m5ybhizvls9vrrs";
+        i18n.rev =		"cbbb1efd940094bf0c3168280698b2b059a8c509";
+        i18n.sha256 =		"1q4jakn6m8smnr2mg7jgb520nrb6fag9mdvlcpx3smp3qbxka818";
+        symbols.rev =		"9ca6a5348cdeb88e699582d4ed051ff7303b44d3";
+        symbols.sha256 =	"13w6pb34rhz96rnar25z7kiscy6q1fm8l39hq1bpb8g9yn86ssz4";
+        templates.rev =		"ae16953b81055855bcede4a33305413599d86a15";
+        templates.sha256 =	"1pkv90p3liy3bj4nklxsvpzh9m56p0k5ldr22armvgqfaqaadx9v";
+        footprints.rev =	"f94c2d5d619d16033f69a555b449f59604d97865";
+        footprints.sha256 =	"1g71sk77jvqaf9xvgq6dkyvd9pij2lb4n0bn0dqnwddhwam935db";
+        packages3d.rev =	"f699b0e3c13fe75618086913e39279c85da14cc7";
+        packages3d.sha256 =	"0m5rb5axa946v729z35ga84in76y4zpk32qzi0hwqx957zy72hs9";
       };
     };
   };

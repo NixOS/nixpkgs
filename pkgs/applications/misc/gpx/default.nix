@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Gcode to x3g conversion postprocessor";
-    homepage = https://github.com/markwal/GPX/;
+    homepage = "https://github.com/markwal/GPX/";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.leo60228 ];

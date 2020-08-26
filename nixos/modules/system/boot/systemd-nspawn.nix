@@ -113,17 +113,17 @@ in {
   config =
     let
       units = mapAttrs' (n: v: let nspawnFile = "${n}.nspawn"; in nameValuePair nspawnFile (instanceToUnit nspawnFile v)) cfg;
-    in 
+    in
       mkMerge [
-        (mkIf (cfg != {}) { 
-          environment.etc."systemd/nspawn".source = mkIf (cfg != {}) (generateUnits "nspawn" units [] []);
+        (mkIf (cfg != {}) {
+          environment.etc."systemd/nspawn".source = mkIf (cfg != {}) (generateUnits' false "nspawn" units [] []);
         })
         {
           systemd.targets.multi-user.wants = [ "machines.target" ];
 
           # Workaround for https://github.com/NixOS/nixpkgs/pull/67232#issuecomment-531315437 and https://github.com/systemd/systemd/issues/13622
           # Once systemd fixes this upstream, we can re-enable -U
-          systemd.services."systemd-nspawn@".serviceConfig.ExecStart = [ 
+          systemd.services."systemd-nspawn@".serviceConfig.ExecStart = [
             ""  # deliberately empty. signals systemd to override the ExecStart
             # Only difference between upstream is that we do not pass the -U flag
             "${config.systemd.package}/bin/systemd-nspawn --quiet --keep-unit --boot --link-journal=try-guest --network-veth --settings=override --machine=%i"

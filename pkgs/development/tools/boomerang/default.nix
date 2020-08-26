@@ -17,7 +17,7 @@ mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = https://github.com/BoomerangDecompiler/boomerang;
+    homepage = "https://github.com/BoomerangDecompiler/boomerang";
     license = licenses.bsd3;
     description = "A general, open source, retargetable decompiler";
     maintainers = with maintainers; [ dtzWill ];

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Collection of open-source libraries for high level network programming";
-    homepage    = https://cpp-netlib.org;
+    homepage    = "https://cpp-netlib.org";
     license     = licenses.boost;
     platforms   = platforms.all;
   };

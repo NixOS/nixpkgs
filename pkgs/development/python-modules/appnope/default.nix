@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Disable App Nap on macOS";
-    homepage    = https://pypi.python.org/pypi/appnope;
+    homepage    = "https://pypi.python.org/pypi/appnope";
     platforms   = lib.platforms.darwin;
     license     = lib.licenses.bsd3;
   };

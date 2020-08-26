@@ -23,7 +23,7 @@ in fetchFromGitLab {
       Open Sans is a humanist sans serif typeface designed by Steve Matteson,
       Type Director of Ascender Corp.
     '';
-    homepage = https://www.opensans.com;
+    homepage = "https://www.opensans.com";
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = [ maintainers.worldofpeace ];

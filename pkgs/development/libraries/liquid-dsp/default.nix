@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = {
-    homepage = https://liquidsdr.org/;
+    homepage = "https://liquidsdr.org/";
     description = "Digital signal processing library for software-defined radios";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;

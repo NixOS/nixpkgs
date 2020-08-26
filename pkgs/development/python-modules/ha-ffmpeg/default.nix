@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi, isPy3k
-, ffmpeg, async-timeout }:
+, ffmpeg_3, async-timeout }:
 
 buildPythonPackage rec {
   pname = "ha-ffmpeg";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "230f2fa990c9caaff1c67c2227b64756062248083849651a9bec7d599e519a42";
   };
 
-  buildInputs = [ ffmpeg ];
+  buildInputs = [ ffmpeg_3 ];
 
   propagatedBuildInputs = [ async-timeout ];
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/pvizeli/ha-ffmpeg;
+    homepage = "https://github.com/pvizeli/ha-ffmpeg";
     description = "Library for home-assistant to handle ffmpeg";
     license = licenses.bsd3;
     maintainers = with maintainers; [ peterhoeg ];

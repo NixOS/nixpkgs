@@ -2,16 +2,14 @@
 
 stdenv.mkDerivation {
   pname = "raspberrypi-tools";
-  version = "2018-10-03";
+  version = "2020-05-28";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "userland";
-    rev = "de4a7f2e3c391e2d3bc76af31864270e7802d9ac";
-    sha256 = "0w96xa98ngdk9m6wv185w8waa7wm2hkn2bhxz52zd477hchzrxlg";
+    rev = "f97b1af1b3e653f9da2c1a3643479bfd469e3b74";
+    sha256 = "1r7n05rv96hqjq0rn0qzchmfqs0j7vh3p8jalgh66s6l0vms5mwy";
   };
-
-  patches = [ ./tools-dont-install-sysv-init-scripts.patch ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
@@ -23,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Userland tools for the Raspberry Pi board";
-    homepage = https://github.com/raspberrypi/userland;
+    homepage = "https://github.com/raspberrypi/userland";
     license = licenses.bsd3;
     platforms = [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ dezgeg tavyc ];

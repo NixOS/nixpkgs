@@ -14,8 +14,10 @@ stdenv.mkDerivation rec {
   uuid = "icon-hider@kalnitsky.org";
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
     cp -r ${uuid} $out/share/gnome-shell/extensions
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ jonafato ];
     platforms = gnome3.gnome-shell.meta.platforms;
-    homepage = https://github.com/ikalnytskyi/gnome-shell-extension-icon-hider;
+    homepage = "https://github.com/ikalnytskyi/gnome-shell-extension-icon-hider";
     broken = versionAtLeast gnome3.gnome-shell.version "3.32"; # Doesn't support 3.34
   };
 }

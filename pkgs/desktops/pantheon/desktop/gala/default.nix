@@ -1,5 +1,7 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
+, fetchpatch
 , pantheon
 , pkgconfig
 , meson
@@ -26,17 +28,17 @@
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "3.2.0";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1vf55ls3h20zpf0yxb206cijq8nkf89z2lmhccb4i1g2zajd31ix";
+    sha256 = "1qd8ynn04rzkki68w4x3ryq6fhlbi6mk359rx86a8ni084fsprh4";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -69,7 +71,15 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
+    # https://github.com/elementary/gala/pull/869
+    # build failure in vala 0.48.7
+    # https://github.com/elementary/gala/pull/869#issuecomment-657147695
+    (fetchpatch {
+      url = "https://github.com/elementary/gala/commit/85d290c75eaa147b704ad34e6c67498071707ee8.patch";
+      sha256 = "19jkvmxidf453qfrxkvi35igxzfz2cm8srwkabvyn9wyd1yhiw0l";
+    })
     ./plugins-dir.patch
+    ./use-new-notifications-default.patch
   ];
 
   postPatch = ''
@@ -79,7 +89,7 @@ stdenv.mkDerivation rec {
 
   meta =  with stdenv.lib; {
     description = "A window & compositing manager based on mutter and designed by elementary for use with Pantheon";
-    homepage = https://github.com/elementary/gala;
+    homepage = "https://github.com/elementary/gala";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

@@ -3,7 +3,7 @@
 , xorg, alsaLib, dbus, glib, gtk3, atk, pango, freetype, fontconfig
 , gdk-pixbuf, cairo, nss, nspr, gconf, expat, systemd, libcap
 , libnotify
-, ffmpeg, libxcb, cups
+, ffmpeg_3, libxcb, cups
 , sqlite, udev
 , libuuid
 , sdk ? false
@@ -22,7 +22,7 @@ let
       xorg.libXScrnSaver cups
       libcap libnotify
       # libnw-specific (not chromium dependencies)
-      ffmpeg libxcb
+      ffmpeg_3 libxcb
       # chromium runtime deps (dlopen’d)
       sqlite udev
       libuuid
@@ -87,7 +87,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An app runtime based on Chromium and node.js";
-    homepage = https://nwjs.io/;
+    homepage = "https://nwjs.io/";
     platforms = ["i686-linux" "x86_64-linux"];
     maintainers = [ maintainers.offline ];
     license = licenses.bsd3;

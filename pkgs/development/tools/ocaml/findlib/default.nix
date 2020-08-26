@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://projects.camlcity.org/projects/findlib.html;
+    homepage = "http://projects.camlcity.org/projects/findlib.html";
     description = "O'Caml library manager";
     license = stdenv.lib.licenses.mit;
     platforms = ocaml.meta.platforms or [];

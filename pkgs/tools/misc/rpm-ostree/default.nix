@@ -32,7 +32,7 @@
 , python
 , json_c
 , zchunk
-, libmodulemd_1
+, libmodulemd
 , utillinux
 , sqlite
 , cppunit
@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rpm-ostree";
-  version = "2020.1";
+  version = "2020.2";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "https://github.com/coreos/${pname}/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "1xgfppq4fqqvg3cs327bckjpiz6rrn3bbbhg3q5p4j2bzsq89xiz";
+    sha256 = "nuEBEVFqr9J+Nf98GZkvNNYOtpMUjKzYrzCc1T2cR3A=";
   };
 
   nativeBuildInputs = [
@@ -83,11 +83,13 @@ stdenv.mkDerivation rec {
     pcre
     check
     python
-    # libdnf
+
+    # libdnf # vendored unstable branch
+    # required by vendored libdnf
     json_c
     zchunk
-    libmodulemd_1
-    utillinux
+    libmodulemd
+    utillinux # for smartcols.pc
     sqlite
     cppunit
   ];

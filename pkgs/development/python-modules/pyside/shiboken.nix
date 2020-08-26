@@ -32,7 +32,7 @@ buildPythonPackage rec {
   meta = {
     description = "Plugin (front-end) for pyside-generatorrunner, that generates bindings for C++ libraries using CPython source code";
     license = lib.licenses.gpl2;
-    homepage = http://www.pyside.org/docs/shiboken/;
+    homepage = "http://www.pyside.org/docs/shiboken/";
     maintainers = [ ];
     platforms = lib.platforms.all;
   };

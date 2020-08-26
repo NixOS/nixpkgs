@@ -16,7 +16,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    homepage = https://relatorio.tryton.org/;
+    homepage = "https://relatorio.tryton.org/";
     description = "A templating library able to output odt and pdf files";
     maintainers = with lib.maintainers; [ johbo ];
     license = lib.licenses.gpl3;

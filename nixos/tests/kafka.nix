@@ -77,7 +77,7 @@ let
           + "--from-beginning --max-messages 1"
       )
     '');
-  }) {});
+  }) { inherit system; });
 
 in with pkgs; {
   kafka_0_9  = makeKafkaTest "kafka_0_9"  apacheKafka_0_9;

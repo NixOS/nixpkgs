@@ -3,9 +3,9 @@
 let param =
   if stdenv.lib.versionAtLeast coq.coq-version "8.8"
   then {
-    version = "3.0.3";
-    uid = "38105";
-    sha256 = "0y52lqx1jphv6fwf0d702vzprxmfmxggnh1hy3fznxyl4isfpg4j";
+    version = "3.1.0";
+    uid = "38287";
+    sha256 = "07436wkvnq9jyf7wyhp77bpl157s3qhba1ay5xrkxdi26qdf3h14";
   } else {
     version = "3.0.2";
     uid = "37523";
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   installPhase = "./remake install";
 
   meta = {
-    homepage = http://coquelicot.saclay.inria.fr/;
+    homepage = "http://coquelicot.saclay.inria.fr/";
     description = "A Coq library for Reals";
     license = stdenv.lib.licenses.lgpl3;
     maintainers = [ stdenv.lib.maintainers.vbgl ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   };
 
   passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" "8.8" "8.9" "8.10" ];
+    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" "8.8" "8.9" "8.10" "8.11" "8.12" ];
   };
 
 }

@@ -4,16 +4,15 @@
 
 stdenv.mkDerivation rec {
   pname = "graphicsmagick";
-  version = "1.3.32";
+  version = "1.3.35";
 
   src = fetchurl {
     url = "mirror://sourceforge/graphicsmagick/GraphicsMagick-${version}.tar.xz";
-    sha256 = "1qclp9i31idpcbbqswmnq2q11lmv0a7cvdb1y72xcky8sshaahmq";
+    sha256 = "0l024l4hawm9s3jqrgi2j0lxgm61dqh8sgkj1017ma7y11hqv2hq";
   };
 
   patches = [
     ./disable-popen.patch
-    ./1.3.32-darwin-png-strlcat-fix.patch
   ];
 
   configureFlags = [
@@ -35,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.graphicsmagick.org;
+    homepage = "http://www.graphicsmagick.org";
     description = "Swiss army knife of image processing";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.all;

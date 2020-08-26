@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   passthru = { inherit dbus glib; };
 
   meta = {
-    homepage = https://dbus.freedesktop.org;
+    homepage = "https://dbus.freedesktop.org";
     license = with stdenv.lib.licenses; [ afl21 gpl2 ];
     description = "Obsolete glib bindings for D-Bus lightweight IPC mechanism";
     maintainers = [ ];

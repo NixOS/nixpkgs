@@ -67,7 +67,7 @@ let
     inherit (trivial) id const pipe concat or and bitAnd bitOr bitXor
       bitNot boolToString mergeAttrs flip mapNullable inNixShell min max
       importJSON warn info showWarnings nixpkgsVersion version mod compare
-      splitByAndCompare functionArgs setFunctionArgs isFunction;
+      splitByAndCompare functionArgs setFunctionArgs isFunction toHexString toBaseDigits;
     inherit (fixedPoints) fix fix' converge extends composeExtensions
       makeExtensible makeExtensibleWithCustomName;
     inherit (attrsets) attrByPath hasAttrByPath setAttrByPath
@@ -77,7 +77,7 @@ let
       genAttrs isDerivation toDerivation optionalAttrs
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil
       recursiveUpdate matchAttrs overrideExisting getOutput getBin
-      getLib getDev chooseDevOutputs zipWithNames zip
+      getLib getDev getMan chooseDevOutputs zipWithNames zip
       recurseIntoAttrs dontRecurseIntoAttrs;
     inherit (lists) singleton forEach foldr fold foldl foldl' imap0 imap1
       concatMap flatten remove findSingle findFirst any all count
@@ -141,7 +141,7 @@ let
       mergeAttrsWithFunc mergeAttrsConcatenateValues
       mergeAttrsNoOverride mergeAttrByFunc mergeAttrsByFuncDefaults
       mergeAttrsByFuncDefaultsClean mergeAttrBy
-      fakeSha256 fakeSha512
+      fakeHash fakeSha256 fakeSha512
       nixType imap;
     inherit (versions)
       splitVersion;

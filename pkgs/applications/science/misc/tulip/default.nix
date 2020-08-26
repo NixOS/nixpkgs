@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
          data that can be tailored to the problems he or she is addressing.
       '';
 
-    homepage = http://tulip.labri.fr/;
+    homepage = "http://tulip.labri.fr/";
 
     license = stdenv.lib.licenses.gpl3Plus;
 

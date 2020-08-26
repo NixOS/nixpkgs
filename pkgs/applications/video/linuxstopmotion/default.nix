@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Create stop-motion animation movies";
-    homepage = http://linuxstopmotion.org/;
+    homepage = "http://linuxstopmotion.org/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

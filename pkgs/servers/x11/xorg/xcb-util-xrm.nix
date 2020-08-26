@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "XCB utility functions for the X resource manager";
-    homepage = https://github.com/Airblader/xcb-util-xrm;
+    homepage = "https://github.com/Airblader/xcb-util-xrm";
     license = licenses.mit; # X11 variant
     platforms = with platforms; unix;
   };

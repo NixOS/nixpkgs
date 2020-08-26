@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Mycroft's TTS engine, based on CMU's Flite (Festival Lite)";
-    homepage = https://mimic.mycroft.ai/;
+    homepage = "https://mimic.mycroft.ai/";
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.noneucat ];

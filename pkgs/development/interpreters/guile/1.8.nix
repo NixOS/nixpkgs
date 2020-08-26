@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Embeddable Scheme implementation";
-    homepage    = https://www.gnu.org/software/guile/;
+    homepage    = "https://www.gnu.org/software/guile/";
     license     = stdenv.lib.licenses.lgpl2Plus;
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms   = stdenv.lib.platforms.unix;

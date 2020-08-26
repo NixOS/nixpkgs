@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "jeepney";
-  version = "0.4.1";
+  version = "0.4.3";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13806f91a96e9b2623fd2a81b950d763ee471454aafd9eb6d75dbe7afce428fb";
+    sha256 = "3479b861cc2b6407de5188695fa1a8d57e5072d7059322469b62628869b8e36e";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://gitlab.com/takluyver/jeepney;
+    homepage = "https://gitlab.com/takluyver/jeepney";
     description = "Pure Python DBus interface";
     license = licenses.mit;
   };

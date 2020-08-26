@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "greybird";
-  version = "3.22.11";
+  version = "3.22.12";
 
   src = fetchFromGitHub {
     owner = "shimmerproject";
     repo = pname;
     rev = "v${version}";
-    sha256 = "00x7dcjldph9k0nmvc8hyh3k4lhbmwk791rywd89ry6jivrx40pc";
+    sha256 = "1j66ddvl3pmwh2v8ajm8r5g5nbsr7r262ff1qn2nf3i0gy8b3lq8";
   };
 
   nativeBuildInputs = [

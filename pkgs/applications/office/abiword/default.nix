@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Word processing program, similar to Microsoft Word";
-    homepage = https://www.abisource.com/;
+    homepage = "https://www.abisource.com/";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ylwghst sna ];

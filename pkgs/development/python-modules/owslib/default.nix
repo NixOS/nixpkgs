@@ -1,15 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, dateutil, requests, pytz, pyproj , pytest } :
+{ lib, buildPythonPackage, fetchPypi, dateutil, requests, pytz, pyproj , pytest, pyyaml } :
 buildPythonPackage rec {
   pname = "OWSLib";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0rdhymayyc6w1izlv1bf2wgx2dfxbp4k1vll5s1364isw60rjj8x";
+    sha256 = "334988857b260c8cdf1f6698d07eab61839c51acb52ee10eed1275439200a40e";
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ dateutil pyproj pytz requests ];
+  propagatedBuildInputs = [ dateutil pyproj pytz requests pyyaml ];
 
   # 'tests' dir not included in pypy distribution archive.
   doCheck = false;
@@ -17,6 +17,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "client for Open Geospatial Consortium web service interface standards";
     license = licenses.bsd3;
-    homepage = https://www.osgeo.org/projects/owslib/;
+    homepage = "https://www.osgeo.org/projects/owslib/";
   };
 }

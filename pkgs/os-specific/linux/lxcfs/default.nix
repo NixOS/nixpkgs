@@ -1,19 +1,21 @@
 { config, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, help2man, fuse
+, utillinux, makeWrapper
 , enableDebugBuild ? config.lxcfs.enableDebugBuild or false }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "lxcfs-4.0.0";
+  pname = "lxcfs";
+  version = "4.0.5";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
-    rev = name;
-    sha256 = "0p9fl7zya65wsxg2vabdc0jrhw6mdz081cacd7np4zrppv16v6dx";
+    rev = "lxcfs-${version}";
+    sha256 = "12mk9hgqzzh1874389lrpvldlp87qxxa1sxzk5zr0d0n1857am5y";
   };
 
   nativeBuildInputs = [ pkgconfig help2man autoreconfHook ];
-  buildInputs = [ fuse ];
+  buildInputs = [ fuse makeWrapper ];
 
   preConfigure = stdenv.lib.optionalString enableDebugBuild ''
     sed -i 's,#AM_CFLAGS += -DDEBUG,AM_CFLAGS += -DDEBUG,' Makefile.am
@@ -27,14 +29,21 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "SYSTEMD_UNIT_DIR=\${out}/lib/systemd" ];
 
+  postInstall = ''
+    # `mount` hook requires access to the `mount` command from `utillinux`:
+    wrapProgram "$out/share/lxcfs/lxc.mount.hook" \
+      --prefix PATH : "${utillinux}/bin"
+  '';
+
   postFixup = ''
     # liblxcfs.so is reloaded with dlopen()
     patchelf --set-rpath "$(patchelf --print-rpath "$out/bin/lxcfs"):$out/lib" "$out/bin/lxcfs"
   '';
 
   meta = {
-    homepage = "https://linuxcontainers.org/lxcfs";
     description = "FUSE filesystem for LXC";
+    homepage = "https://linuxcontainers.org/lxcfs";
+    changelog = "https://linuxcontainers.org/lxcfs/news/";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mic92 fpletz ];

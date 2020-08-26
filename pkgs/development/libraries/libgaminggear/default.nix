@@ -1,5 +1,6 @@
 { stdenv, fetchurl, cmake, pkgconfig, gettext
 , gtk2, libcanberra, libnotify, pcre, sqlite, xorg
+, harfbuzz
 }:
 
 stdenv.mkDerivation rec {
@@ -27,13 +28,16 @@ stdenv.mkDerivation rec {
     "-DINSTALL_LIBDIR=lib"
   ];
 
+  # https://sourceforge.net/p/libgaminggear/discussion/general/thread/b43a776b3a/
+  NIX_CFLAGS_COMPILE = [ "-I${harfbuzz.dev}/include/harfbuzz" ];
+
   postFixup = ''
     moveToOutput bin "$bin"
   '';
 
   meta = {
     description = "Provides functionality for gaming input devices";
-    homepage = https://sourceforge.net/projects/libgaminggear/;
+    homepage = "https://sourceforge.net/projects/libgaminggear/";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2Plus;
   };

@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "cupy";
-  version = "7.0.0";
+  version = "7.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7230b25052b2b9074cc338b44338b4bd43575a48ad7b9c2ce7f36d7e0d117012";
+    sha256 = "243254a1607e19ca55191c4cca4c0f2b143e1d5914e2a1bc9e3f715e7ccafc41";
   };
 
   checkInputs = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A NumPy-compatible matrix library accelerated by CUDA";
-    homepage = https://cupy.chainer.org/;
+    homepage = "https://cupy.chainer.org/";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ hyphon81 ];

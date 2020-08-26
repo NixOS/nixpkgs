@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open source, physically-based global illumination rendering engine";
-    homepage = https://appleseedhq.net/;
+    homepage = "https://appleseedhq.net/";
     maintainers = with maintainers; [ hodapp ];
     license = licenses.mit;
     platforms = platforms.linux;

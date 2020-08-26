@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
-  version = "1.30.0";
+  version = "1.32.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5d1b1d4461518a6023d56dab62fb63670d6f7537f23e2708459a557329accf48";
+    sha256 = "1d4166dcac69adb38eeaedb88c8fada8588348258a3492ab49ba9161f2971129";
   };
 
   nativeBuildInputs = [ setuptools_scm pytest ];
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "py.test xdist plugin for distributed testing and loop-on-failing modes";
-    homepage = https://github.com/pytest-dev/pytest-xdist;
+    homepage = "https://github.com/pytest-dev/pytest-xdist";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

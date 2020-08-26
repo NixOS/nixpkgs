@@ -3,11 +3,11 @@ lzma, curl, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "pacman";
-  version = "5.2.1";
+  version = "5.2.2";
 
   src = fetchurl {
     url = "https://sources.archlinux.org/other/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "04pkb8qvkldrayfns8cx4fljl4lyys1dqvlf7b5kkl2z4q3w8c0r";
+    sha256 = "1829jcc300fxidr3cahx5kpnxkpg500daqgn2782hg5m5ygil85v";
   };
 
   enableParallelBuilding = true;
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A simple library-based package manager";
-    homepage = https://www.archlinux.org/pacman/;
+    homepage = "https://www.archlinux.org/pacman/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mt-caret ];

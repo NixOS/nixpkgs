@@ -26,10 +26,13 @@ stdenv.mkDerivation rec {
     "DATA_ROOT_DIR_PURPLE=${placeholder "out"}/share"
   ];
 
+  buildFlags = [ "CC=cc" ]; # fix build on darwin
+
   meta = with stdenv.lib; {
-    homepage = https://github.com/matrix-org/purple-matrix;
+    homepage = "https://github.com/matrix-org/purple-matrix";
     description = "Matrix support for Pidgin / libpurple";
     license = licenses.gpl2;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ symphorien ];
   };
 }

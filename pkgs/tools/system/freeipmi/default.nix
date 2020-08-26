@@ -1,12 +1,12 @@
 { fetchurl, stdenv, libgcrypt, readline, libgpgerror }:
 
 stdenv.mkDerivation rec {
-  version = "1.6.4";
+  version = "1.6.5";
   pname = "freeipmi";
 
   src = fetchurl {
     url = "mirror://gnu/freeipmi/${pname}-${version}.tar.gz";
-    sha256 = "0g0s4iwx0ng4rv7hp5cc3kkx4drahsc89981gwjblf04lfavppv5";
+    sha256 = "1ncf1s84752xaq07h36wrxa5ww1167s2bizkww0igxv8djyddwk1";
   };
 
   buildInputs = [ libgcrypt readline libgpgerror ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
          info.
       '';
 
-    homepage = https://www.gnu.org/software/freeipmi/;
+    homepage = "https://www.gnu.org/software/freeipmi/";
     downloadPage = "https://www.gnu.org/software/freeipmi/download.html";
 
     license = stdenv.lib.licenses.gpl3Plus;

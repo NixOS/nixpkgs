@@ -1,9 +1,33 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, dbus, dde-daemon,
-  dde-qt-dbus-factory, deepin, deepin-desktop-schemas,
-  deepin-gettext-tools, deepin-icon-theme, deepin-wallpapers, dtkcore,
-  dtkwidget, gnugrep, gsettings-qt, lightdm_qt,
-  onboard, qtsvg, qttools, qtx11extras, setxkbmap, utillinux, which,
-  xkeyboard_config, xorg, xrandr, wrapGAppsHook }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, qmake
+, dbus
+, dde-daemon
+, dde-qt-dbus-factory
+, deepin
+, deepin-desktop-schemas
+, deepin-gettext-tools
+, deepin-icon-theme
+, deepin-wallpapers
+, dtkcore
+, dtkwidget
+, gnugrep
+, gsettings-qt
+, lightdm_qt
+, onboard
+, qtsvg
+, qttools
+, qtx11extras
+, setxkbmap
+, utillinux
+, which
+, xkeyboard_config
+, xorg
+, xrandr
+, wrapGAppsHook
+}:
 
 mkDerivation rec {
   pname = "dde-session-ui";
@@ -121,11 +145,11 @@ mkDerivation rec {
     searchHardCodedPaths $out  # debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Deepin desktop-environment - Session UI module";
-    homepage = https://github.com/linuxdeepin/dde-session-ui;
+    homepage = "https://github.com/linuxdeepin/dde-session-ui";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

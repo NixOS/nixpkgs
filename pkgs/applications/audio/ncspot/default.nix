@@ -2,26 +2,28 @@
 , withALSA ? true, alsaLib ? null
 , withPulseAudio ? false, libpulseaudio ? null
 , withPortAudio ? false, portaudio ? null
+, withMPRIS ? false, dbus ? null
 }:
 
 let
   features = [ "cursive/pancurses-backend" ]
     ++ lib.optional withALSA "alsa_backend"
     ++ lib.optional withPulseAudio "pulseaudio_backend"
-    ++ lib.optional withPortAudio "portaudio_backend";
+    ++ lib.optional withPortAudio "portaudio_backend"
+    ++ lib.optional withMPRIS "mpris";
 in
 rustPlatform.buildRustPackage rec {
   pname = "ncspot";
-  version = "0.1.2";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "hrkfdn";
     repo = "ncspot";
     rev = "v${version}";
-    sha256 = "10jp2yh8jlvdwh297658q9fi3i62vwsbd9fbwjsir7s1c9bgdy8k";
+    sha256 = "1yx0fc24bgh1x6fdwznc1hqvjq0j7i0zvws3bsyijzs7q48jm0z7";
   };
 
-  cargoSha256 = "0081wc3xw11hivz0nwy4my3y4a53ch857bq989dr0pm9p2pirvj1";
+  cargoSha256 = "0bh2shg80xbs2cw10dabrdxkvhf2csk5h9wmmk5z87q6w25paz1f";
 
   cargoBuildFlags = [ "--no-default-features" "--features" "${lib.concatStringsSep "," features}" ];
 
@@ -30,7 +32,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ ncurses openssl ]
     ++ lib.optional withALSA alsaLib
     ++ lib.optional withPulseAudio libpulseaudio
-    ++ lib.optional withPortAudio portaudio;
+    ++ lib.optional withPortAudio portaudio
+    ++ lib.optional withMPRIS dbus;
 
   doCheck = false;
 

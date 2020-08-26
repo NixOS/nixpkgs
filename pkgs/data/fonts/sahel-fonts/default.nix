@@ -17,7 +17,7 @@ in fetchFromGitHub {
   sha256 = "0vj8ydv50rjanb0favd7rh4r9rv5fl39vqwvzkpgfdcdawn0xjm7";
 
   meta = with lib; {
-    homepage = https://github.com/rastikerdar/sahel-font;
+    homepage = "https://github.com/rastikerdar/sahel-font";
     description = "A Persian (farsi) Font - فونت (قلم) فارسی ساحل";
     license = licenses.ofl;
     platforms = platforms.all;

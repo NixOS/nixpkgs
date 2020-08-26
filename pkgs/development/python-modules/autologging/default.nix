@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://ninthtest.info/python-autologging/;
+    homepage = "http://ninthtest.info/python-autologging/";
     description = "Easier logging and tracing for Python classes";
     license = licenses.mit;
     maintainers = with maintainers; [ twey ];

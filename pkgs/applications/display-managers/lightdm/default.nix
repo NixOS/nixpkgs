@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , substituteAll
 , plymouth
 , pam
@@ -127,8 +128,15 @@ stdenv.mkDerivation rec {
     rm -rf $out/etc/apparmor.d $out/etc/init $out/etc/pam.d
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
+
   meta = {
-    homepage = https://github.com/CanonicalLtd/lightdm;
+    homepage = "https://github.com/CanonicalLtd/lightdm";
     description = "A cross-desktop display manager";
     platforms = platforms.linux;
     license = licenses.gpl3;

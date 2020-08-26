@@ -1,12 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, mock }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy27, pytest, mock }:
 
 buildPythonPackage rec {
   pname = "cloudpickle";
-  version = "1.2.2";
+  version = "1.4.1";
+  disabled = isPy27; # abandoned upstream
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "922401d7140e133253ff5fab4faa4a1166416066453a783b00b507dca93f8859";
+    sha256 = "0b6258a20a143603d53b037a20983016d4e978f554ec4f36b3d0895b947099ae";
   };
 
   buildInputs = [ pytest mock ];
@@ -21,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Extended pickling support for Python objects";
-    homepage = https://github.com/cloudpipe/cloudpickle;
+    homepage = "https://github.com/cloudpipe/cloudpickle";
     license = with licenses; [ bsd3 ];
   };
 }

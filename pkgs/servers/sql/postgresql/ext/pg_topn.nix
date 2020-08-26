@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Efficient querying of 'top values' for PostgreSQL";
-    homepage    = https://github.com/citusdata/postgresql-topn;
+    homepage    = "https://github.com/citusdata/postgresql-topn";
     maintainers = with maintainers; [ thoughtpolice ];
     platforms   = postgresql.meta.platforms;
     license     = licenses.agpl3;

@@ -19,7 +19,7 @@ buildPythonApplication rec {
       at once.
     '';
     maintainers = [ maintainers.astsmtl ];
-    homepage = http://guichaz.free.fr/polysh/;
+    homepage = "http://guichaz.free.fr/polysh/";
     license = licenses.gpl2;
   };
 }

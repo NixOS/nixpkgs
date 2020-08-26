@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Switch your X keyboard layouts from the command line";
-    homepage = https://github.com/ierton/xkb-switch;
+    homepage = "https://github.com/ierton/xkb-switch";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ smironov ];
     platforms = platforms.linux;

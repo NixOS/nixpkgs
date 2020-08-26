@@ -15,7 +15,7 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   meta = {
-    homepage = https://savannah.nongnu.org/projects/mimms/;
+    homepage = "https://savannah.nongnu.org/projects/mimms/";
     license = stdenv.lib.licenses.gpl3;
     description = "An mms (e.g. mms://) stream downloader";
 

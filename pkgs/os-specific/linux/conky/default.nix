@@ -68,13 +68,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "conky";
-  version = "1.11.5";
+  version = "1.11.6";
 
   src = fetchFromGitHub {
     owner = "brndnmtthws";
     repo = "conky";
     rev = "v${version}";
-    sha256 = "1a75ss48mn9pknrxy33dh5rdgm67a5kpddsyqfhlcn1761kfzzyp";
+    sha256 = "0y2g66fjqp2hdk0y1h4ijxhnv34j16gizvxpmbigwh4n6zijcm6v";
   };
 
   postPatch = ''
@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
-    homepage = http://conky.sourceforge.net/;
+    homepage = "http://conky.sourceforge.net/";
     description = "Advanced, highly configurable system monitor based on torsmo";
     maintainers = [ maintainers.guibert ];
     license = licenses.gpl3Plus;

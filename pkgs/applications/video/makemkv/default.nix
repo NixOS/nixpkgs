@@ -1,23 +1,23 @@
 { stdenv, mkDerivation, fetchurl, autoPatchelfHook
-, ffmpeg, openssl, qtbase, zlib, pkgconfig
+, ffmpeg_3, openssl, qtbase, zlib, pkgconfig
 }:
 
 let
-  version = "1.14.7";
+  version = "1.15.2";
   # Using two URLs as the first one will break as soon as a new version is released
   src_bin = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-bin-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-bin-${version}.tar.gz"
     ];
-    sha256 = "19j62vyk8havv38lh35108f7jmrqiqzikl3aqlsncxxa69m6fv5n";
+    sha256 = "1dbips0qllbwhak44c50nlwn8n3kx8i6773cal5zl3dv4v2nf6ql";
   };
   src_oss = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-oss-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-oss-${version}.tar.gz"
     ];
-    sha256 = "1w6b4cvhfg1dv2claam0l6slhjqzy0n2lvwk1ggkh4c561qbfp59";
+    sha256 = "1wnhzlz5fw6qwh82hjcpimg60xb3a9a54zb6gcjhqr9zdly2zphy";
   };
 in mkDerivation {
   pname = "makemkv";
@@ -29,7 +29,7 @@ in mkDerivation {
 
   nativeBuildInputs = [ autoPatchelfHook pkgconfig ];
 
-  buildInputs = [ ffmpeg openssl qtbase zlib ];
+  buildInputs = [ ffmpeg_3 openssl qtbase zlib ];
 
   installPhase = ''
     runHook preInstall
@@ -53,8 +53,8 @@ in mkDerivation {
       expiration date.
     '';
     license = licenses.unfree;
-    homepage = http://makemkv.com;
+    homepage = "http://makemkv.com";
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.titanous ];
+    maintainers = with maintainers; [ danieldk titanous ];
   };
 }

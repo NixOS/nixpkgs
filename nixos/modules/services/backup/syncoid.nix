@@ -138,7 +138,11 @@ in {
           };
         }));
         default = {};
-        example."pool/test".target = "root@target:pool/test";
+        example = literalExample ''
+          {
+            "pool/test".target = "root@target:pool/test";
+          }
+        '';
         description = "Syncoid commands to run.";
       };
     };

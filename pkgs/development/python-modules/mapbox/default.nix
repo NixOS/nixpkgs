@@ -27,7 +27,7 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook responses ];
 
   meta = with lib; {
-    homepage = https://github.com/mapbox/mapbox-sdk-py;
+    homepage = "https://github.com/mapbox/mapbox-sdk-py";
     license = licenses.mit;
     description = "Mapbox SDK for Python";
     longDescription = "Low-level client API for Mapbox web services.";

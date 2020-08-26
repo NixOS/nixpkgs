@@ -3,21 +3,21 @@
 , qca-qt5, qjson, qtquickcontrols2, qtscript, qtwebengine
 , karchive, kcmutils, kconfig, kdnssd, kguiaddons, kinit, kirigami2, knewstuff, knotifyconfig, ktexteditor, kwindowsystem
 , fftw, phonon, plasma-framework, threadweaver
-, curl, ffmpeg, gdk-pixbuf, libaio, libmtp, loudmouth, lzo, lz4, mysql57, pcre, snappy, taglib, taglib_extras
+, curl, ffmpeg_3, gdk-pixbuf, libaio, liblastfm, libmtp, loudmouth, lzo, lz4, mysql57, pcre, snappy, taglib, taglib_extras
 }:
 
 mkDerivation rec {
-  pname = "amarok";
-  version = "2.9.0-20190824";
+  pname = "amarok-unstable";
+  version = "2020-06-12";
 
   src = fetchgit {
     # master has the Qt5 version as of April 2018 but a formal release has not
     # yet been made so change this back to the proper upstream when such a
     # release is out
-    url    = git://anongit.kde.org/amarok.git;
+    url    = "https://invent.kde.org/multimedia/amarok.git";
     # url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    rev    = "457fbda25a85a102bfda92aa7137e7ef5e4c8b00";
-    sha256 = "1ig2mg8pqany6m2zplkrvldcv4ibxwsypnyv5igm7nz7ax82cd5j";
+    rev    = "fece39b0e81db310b6a6e08f93d83b0d498cd02b";
+    sha256 = "12casnq6w5yp2jlvnr466pjpkn0vriry8jzfq2qkjl564y0vhy9x";
   };
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
@@ -26,7 +26,7 @@ mkDerivation rec {
     qca-qt5 qjson qtquickcontrols2 qtscript qtwebengine
     karchive kcmutils kconfig kdnssd kguiaddons kinit kirigami2 knewstuff knotifyconfig ktexteditor kwindowsystem
     phonon plasma-framework threadweaver
-    curl fftw ffmpeg gdk-pixbuf libaio libmtp loudmouth lz4 lzo mysql57.server mysql57.server.static
+    curl fftw ffmpeg_3 gdk-pixbuf libaio liblastfm libmtp loudmouth lz4 lzo mysql57.server mysql57.server.static
     pcre snappy taglib taglib_extras
   ];
 

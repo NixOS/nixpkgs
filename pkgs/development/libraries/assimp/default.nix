@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library to import various 3D model formats";
-    homepage = http://assimp.sourceforge.net/;
+    homepage = "http://assimp.sourceforge.net/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ehmry ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

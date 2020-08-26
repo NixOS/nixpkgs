@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A rule-based tokenizer for natural language";
-    homepage    = https://languagemachines.github.io/ucto/;
+    homepage    = "https://languagemachines.github.io/ucto/";
     license     = licenses.gpl3;
     platforms   = platforms.all;
     maintainers = with maintainers; [ roberth ];

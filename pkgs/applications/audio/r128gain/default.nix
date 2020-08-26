@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , substituteAll
-, ffmpeg
+, ffmpeg_3
 , python3Packages
 , sox
 }:
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     (
       substituteAll {
         src = ./ffmpeg-location.patch;
-        inherit ffmpeg;
+        ffmpeg = ffmpeg_3;
       }
     )
   ];

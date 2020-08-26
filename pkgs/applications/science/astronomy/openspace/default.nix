@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
 
       WARNING: This build is not very usable for now.
     '';
-    homepage  = https://www.openspaceproject.com/;
+    homepage  = "https://www.openspaceproject.com/";
     license   = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
     broken = true; # fails to build

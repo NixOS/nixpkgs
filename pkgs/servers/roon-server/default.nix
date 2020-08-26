@@ -1,65 +1,68 @@
-{ alsaLib, alsaUtils, cifs-utils, fetchurl, ffmpeg, libav, mono, stdenv }:
-
-with stdenv.lib;
-stdenv.mkDerivation rec {
+{ alsaLib
+, alsaUtils
+, autoPatchelfHook
+, cifs-utils
+, fetchurl
+, ffmpeg
+, freetype
+, lib
+, makeWrapper
+, stdenv
+, zlib
+}: stdenv.mkDerivation rec {
   name = "roon-server";
-  version = "100600401";
+  version = "100700571";
 
   src = fetchurl {
     url = "http://download.roonlabs.com/updates/stable/RoonServer_linuxx64_${version}.tar.bz2";
-    sha256 = "121mmdh35q4bpgsqhcps6a6q1f4ld9v4hq9gp181bf2n779pk8sh";
+    sha256 = "191vlzf10ypkk1prp6x2rszlmsihdwpd3wvgf2jg6ckwyxy2hc6k";
   };
+
+  buildInputs = [
+    alsaLib
+    alsaUtils
+    cifs-utils
+    ffmpeg
+    freetype
+    zlib
+  ];
+
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 
   installPhase = ''
     runHook preInstall
-
-    # Check script
-    sed -i '3i PATH=$PATH:${makeBinPath [ cifs-utils ffmpeg libav ]}' check.sh
-    sed -i '/check_ulimit$/d' check.sh
-
-    # Start script
-    sed -i '3i PATH=$PATH:${makeBinPath [ alsaUtils cifs-utils ffmpeg libav ]}' start.sh
-
-    # Debug logging
-    sed -i '/--debug--gc=sgen --server/exec "$HARDLINK" --debug --gc=sgen --server "$SCRIPT.exe" "$@" -storagetrace -watchertrace' Appliance/RoonAppliance
-
-    # Binaries
-    sed -i '/# boost ulimit/,+2 d' Appliance/RAATServer
-    sed -i '/# boost ulimit/,+2 d' Appliance/RoonAppliance
-    sed -i '/# boost ulimit/,+2 d' Server/RoonServer
-    sed -i '/ln -sf/ d' Appliance/RAATServer
-    sed -i '/ln -sf/ d' Appliance/RoonAppliance
-    sed -i '/ln -sf/ d' Server/RoonServer
-    mkdir -p $out/opt
-    mv * $out/opt
-    ln -sf $out/opt/RoonMono/bin/mono-sgen $out/opt/RoonMono/bin/RoonServer
-    ln -sf $out/opt/RoonMono/bin/mono-sgen $out/opt/RoonMono/bin/RoonAppliance
-    ln -sf $out/opt/RoonMono/bin/mono-sgen $out/opt/RoonMono/bin/RAATServer
-
+    mkdir -p $out
+    mv * $out
     runHook postInstall
   '';
 
-  preFixup = ''
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${alsaLib}/lib" \
-      $out/opt/RoonMono/bin/mono-sgen
+  postFixup =
+    let
+      linkFix = bin: ''
+        sed -i '/ulimit/d' ${bin}
+        sed -i '/ln -sf/d' ${bin}
+        ln -sf $out/RoonMono/bin/mono-sgen $out/RoonMono/bin/${builtins.baseNameOf bin}
+      '';
+      wrapFix = bin: ''
+        wrapProgram ${bin} --prefix PATH : ${lib.makeBinPath [ alsaUtils cifs-utils ffmpeg ]}
+      '';
+    in
+    ''
+      ${linkFix "$out/Appliance/RAATServer"}
+      ${linkFix "$out/Appliance/RoonAppliance"}
+      ${linkFix "$out/Server/RoonServer"}
 
-    # Checkers
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${alsaLib}/lib" \
-      $out/opt/Appliance/check_alsa
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      $out/opt/Appliance/check_bincompat
-  '';
+      sed -i '/which avconv/c\    WHICH_AVCONV=1' $out/check.sh
+      sed -i '/^check_ulimit/d' $out/check.sh
+      ${wrapFix "$out/check.sh"}
+      ${wrapFix "$out/start.sh"}
+    '';
 
-  meta = {
+  meta = with lib; {
     description = "The music player for music lovers.";
-    homepage    = https://roonlabs.com;
-    license     = licenses.unfree;
-    maintainers = with maintainers; [ steell ];
-    platforms   = platforms.linux;
+    homepage = "https://roonlabs.com";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ lovesegfault steell ];
+    platforms = platforms.linux;
   };
 }

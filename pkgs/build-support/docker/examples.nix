@@ -69,6 +69,12 @@ rec {
     tag = "latest";
     contents = pkgs.nginx;
 
+    extraCommands = ''
+      # nginx still tries to read this directory even if error_log
+      # directive is specifying another file :/
+      mkdir -p var/log/nginx
+      mkdir -p var/cache/nginx
+    '';
     runAsRoot = ''
       #!${pkgs.stdenv.shell}
       ${shadowSetup}
@@ -115,6 +121,7 @@ rec {
       # the image env variable NIX_PAGER.
       pkgs.coreutils
       pkgs.nix
+      pkgs.bash
     ];
     config = {
       Env = [
@@ -231,14 +238,41 @@ rec {
     '';
   };
 
-  # 14. Create another layered image, for comparing layers with image 10.
+  # 14. Environment variable inheritance.
+  # Child image should inherit parents environment variables,
+  # optionally overriding them.
+  environmentVariables = let
+    parent = pkgs.dockerTools.buildImage {
+      name = "parent";
+      tag = "latest";
+      config = {
+        Env = [
+          "FROM_PARENT=true"
+          "LAST_LAYER=parent"
+        ];
+      };
+    };
+  in pkgs.dockerTools.buildImage {
+    name = "child";
+    fromImage = parent;
+    tag = "latest";
+    contents = [ pkgs.coreutils ];
+    config = {
+      Env = [
+        "FROM_CHILD=true"
+        "LAST_LAYER=child"
+      ];
+    };
+  };
+
+  # 15. Create another layered image, for comparing layers with image 10.
   another-layered-image = pkgs.dockerTools.buildLayeredImage {
     name = "another-layered-image";
     tag = "latest";
     config.Cmd = [ "${pkgs.hello}/bin/hello" ];
   };
 
-  # 15. Create a layered image with only 2 layers
+  # 16. Create a layered image with only 2 layers
   two-layered-image = pkgs.dockerTools.buildLayeredImage {
     name = "two-layered-image";
     tag = "latest";
@@ -247,7 +281,7 @@ rec {
     maxLayers = 2;
   };
 
-  # 16. Create a layered image with more packages than max layers.
+  # 17. Create a layered image with more packages than max layers.
   # coreutils and hello are part of the same layer
   bulk-layer = pkgs.dockerTools.buildLayeredImage {
     name = "bulk-layer";
@@ -258,7 +292,7 @@ rec {
     maxLayers = 2;
   };
 
-  # 17. Create a "layered" image without nix store layers. This is not
+  # 18. Create a "layered" image without nix store layers. This is not
   # recommended, but can be useful for base images in rare cases.
   no-store-paths = pkgs.dockerTools.buildLayeredImage {
     name = "no-store-paths";
@@ -280,4 +314,108 @@ rec {
       )
     ];
   };
+
+  nixLayered = pkgs.dockerTools.buildLayeredImageWithNixDb {
+    name = "nix-layered";
+    tag = "latest";
+    contents = [
+      # nix-store uses cat program to display results as specified by
+      # the image env variable NIX_PAGER.
+      pkgs.coreutils
+      pkgs.nix
+      pkgs.bash
+    ];
+    config = {
+      Env = [
+        "NIX_PAGER=cat"
+        # A user is required by nix
+        # https://github.com/NixOS/nix/blob/9348f9291e5d9e4ba3c4347ea1b235640f54fd79/src/libutil/util.cc#L478
+        "USER=nobody"
+      ];
+    };
+  };
+
+  # 19. Support files in the store on buildLayeredImage
+  # See: https://github.com/NixOS/nixpkgs/pull/91084#issuecomment-653496223
+  filesInStore = pkgs.dockerTools.buildLayeredImageWithNixDb {
+    name = "file-in-store";
+    tag = "latest";
+    contents = [
+      pkgs.coreutils
+      pkgs.nix
+      (pkgs.writeScriptBin "myscript" ''
+        #!${pkgs.runtimeShell}
+        cat ${pkgs.writeText "somefile" "some data"}
+      '')
+    ];
+    config = {
+      Cmd = [ "myscript" ];
+      # For some reason 'nix-store --verify' requires this environment variable
+      Env = [ "USER=root" ];
+    };
+  };
+
+  # 20. Ensure that setting created to now results in a date which
+  # isn't the epoch + 1 for layered images.
+  unstableDateLayered = pkgs.dockerTools.buildLayeredImage {
+    name = "unstable-date-layered";
+    tag = "latest";
+    contents = [ pkgs.coreutils ];
+    created = "now";
+  };
+
+  # buildImage without explicit tag
+  bashNoTag = pkgs.dockerTools.buildImage {
+    name = "bash-no-tag";
+    contents = pkgs.bashInteractive;
+  };
+
+  # buildLayeredImage without explicit tag
+  bashNoTagLayered = pkgs.dockerTools.buildLayeredImage {
+    name = "bash-no-tag-layered";
+    contents = pkgs.bashInteractive;
+  };
+
+  # buildImage without explicit tag
+  bashNoTagStreamLayered = pkgs.dockerTools.streamLayeredImage {
+    name = "bash-no-tag-stream-layered";
+    contents = pkgs.bashInteractive;
+  };
+
+  # buildLayeredImage with non-root user
+  bashLayeredWithUser =
+  let
+    nonRootShadowSetup = { user, uid, gid ? uid }: with pkgs; [
+      (
+      writeTextDir "etc/shadow" ''
+        root:!x:::::::
+        ${user}:!:::::::
+      ''
+      )
+      (
+      writeTextDir "etc/passwd" ''
+        root:x:0:0::/root:${runtimeShell}
+        ${user}:x:${toString uid}:${toString gid}::/home/${user}:
+      ''
+      )
+      (
+      writeTextDir "etc/group" ''
+        root:x:0:
+        ${user}:x:${toString gid}:
+      ''
+      )
+      (
+      writeTextDir "etc/gshadow" ''
+        root:x::
+        ${user}:x::
+      ''
+      )
+    ];
+  in
+    pkgs.dockerTools.buildLayeredImage {
+      name = "bash-layered-with-user";
+      tag = "latest";
+      contents = [ pkgs.bash pkgs.coreutils (nonRootShadowSetup { uid = 999; user = "somebody"; }) ];
+    };
+
 }

@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "ephem";
-  version = "3.7.7.0";
+  version = "3.7.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dj4kk325b01s7q1zkwpm9rrzl7n1jf7fr92wcajjhc5kx14hwb0";
+    sha256 = "36b51a8dc7cfdeb456dd6b8ab811accab8341b2d562ee3c6f4c86f6d3dbb984e";
   };
 
   patchFlags = [ "-p0" ];
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Compute positions of the planets and stars";
-    homepage = https://pypi.python.org/pypi/ephem/;
+    homepage = "https://pypi.python.org/pypi/ephem/";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ chrisrosset ];
   };

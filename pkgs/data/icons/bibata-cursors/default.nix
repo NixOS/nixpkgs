@@ -1,4 +1,4 @@
-{ stdenvNoCC, fetchFromGitHub, gnome-themes-extra, inkscape, xcursorgen, python3 }:
+{ stdenvNoCC, fetchFromGitHub, gnome-themes-extra, inkscape_0, xcursorgen, python3 }:
 
 let
   py = python3.withPackages(ps: [ ps.pillow ]);
@@ -25,7 +25,7 @@ in stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs  = [
     gnome-themes-extra
-    inkscape
+    inkscape_0
     xcursorgen
     py
   ];
@@ -43,7 +43,7 @@ in stdenvNoCC.mkDerivation rec {
 
   meta = with stdenvNoCC.lib; {
     description = "Material Based Cursor";
-    homepage = https://github.com/KaizIqbal/Bibata_Cursor;
+    homepage = "https://github.com/KaizIqbal/Bibata_Cursor";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ rawkode ];

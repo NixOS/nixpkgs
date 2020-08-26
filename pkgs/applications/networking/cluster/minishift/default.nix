@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "1.34.0";
+  version = "1.34.2";
 
   # Update these on version bumps according to Makefile
   centOsIsoVersion = "v1.15.0";
@@ -18,7 +18,7 @@ in buildGoPackage rec {
     owner = "minishift";
     repo = "minishift";
     rev = "v${version}";
-    sha256 = "0nc1g4lmz5ww6rjyyanp9vq4sj6fvi9zf9qjc4lpsmapddhjkdy7";
+    sha256 = "1xzjzmjs2ijg7zzw53v02lgrg1j82jd7ljcn6lprg01hhvfrwgg7";
   };
 
   nativeBuildInputs = [ pkgconfig go-bindata makeWrapper ];
@@ -48,7 +48,7 @@ in buildGoPackage rec {
   '';
 
   postInstall = ''
-    wrapProgram "$bin/bin/minishift" \
+    wrapProgram "$out/bin/minishift" \
       --prefix PATH ':' '${lib.makeBinPath [ docker-machine-kvm openshift ]}'
   '';
 
@@ -59,7 +59,7 @@ in buildGoPackage rec {
       a single-node OpenShift cluster inside a VM. You can try out OpenShift
       or develop with it, day-to-day, on your local host.
     '';
-    homepage = https://github.com/minishift/minishift;
+    homepage = "https://github.com/minishift/minishift";
     maintainers = with maintainers; [ fpletz vdemeester ];
     platforms = platforms.linux;
     license = licenses.asl20;

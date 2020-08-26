@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, cmake, gdal, libgeotiff, libtiff, LASzip, fixDarwinDylibNames }:
+{ stdenv, fetchurl, boost, cmake, gdal, libgeotiff, libtiff, LASzip2, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   name = "libLAS-1.8.1";
@@ -9,13 +9,15 @@ stdenv.mkDerivation rec {
     sha256 = "0xjfxb3ydvr2258ji3spzyf81g9caap19ql2pk91wiivqsc4mnws";
   };
 
-  buildInputs = [ boost cmake gdal libgeotiff libtiff LASzip ]
+  buildInputs = [ boost cmake gdal libgeotiff libtiff LASzip2 ]
                 ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   cmakeFlags = [
     "-DGDAL_CONFIG=${gdal}/bin/gdal-config"
     "-DWITH_LASZIP=ON"
-    "-DLASZIP_INCLUDE_DIR=${LASzip}/include"
+    # libLAS is currently not compatible with LASzip 3,
+    # see https://github.com/libLAS/libLAS/issues/144.
+    "-DLASZIP_INCLUDE_DIR=${LASzip2}/include"
     "-DCMAKE_EXE_LINKER_FLAGS=-pthread"
   ];
 
@@ -25,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "LAS 1.0/1.1/1.2 ASPRS LiDAR data translation toolset";
-    homepage = https://liblas.org;
+    homepage = "https://liblas.org";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.michelk ];

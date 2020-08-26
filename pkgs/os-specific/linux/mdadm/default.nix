@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Programs for managing RAID arrays under Linux";
-    homepage = http://neil.brown.name/blog/mdadm;
+    homepage = "http://neil.brown.name/blog/mdadm";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ekleog ];
     platforms = platforms.linux;

@@ -1,29 +1,30 @@
-{ stdenv, fetchurl, qt4, qwt6_qt4, libGLU, libGL, glew, gdal_1_11, cgal
-, proj, boost, cmake, python2, doxygen, graphviz, gmp }:
+{ stdenv, fetchurl, qt4, qwt6_qt4, libGLU, libGL, glew, gdal, cgal
+, proj, boost, cmake, python2, doxygen, graphviz, gmp, mpfr }:
 
 stdenv.mkDerivation rec {
   pname = "gplates";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/gplates/${pname}-${version}-unixsrc.tar.bz2";
-    sha256 = "02scnjj5nlc2d2c8lbx0xvj8gg1bgkjliv3wxsx564c55a9x69qw";
+    sha256 = "1jrcv498vpcs8xklhbsgg12yfa90f96p2mwq6x5sjnrlpf8mh50b";
   };
 
-  patches = [
-    ./boostfix.patch
+  buildInputs = [
+    qt4 qwt6_qt4 libGLU libGL glew gdal cgal proj cmake python2
+    doxygen graphviz gmp mpfr
+    (boost.override {
+      enablePython = true;
+      python = python2;
+    })
   ];
 
-  buildInputs = [
-    qt4 qwt6_qt4 libGLU libGL glew gdal_1_11 cgal proj boost cmake python2
-    doxygen graphviz gmp
-  ];
+  NIX_CFLAGS_LINK="-ldl -lpthread -lutil";
 
   meta = with stdenv.lib; {
     description = "Desktop software for the interactive visualisation of plate-tectonics";
-    homepage = https://www.gplates.org;
+    homepage = "https://www.gplates.org";
     license = licenses.gpl2;
     platforms = platforms.all;
-    broken = true;
   };
 }

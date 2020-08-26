@@ -11,6 +11,7 @@
 , numpy
 , pandas
 , panel
+, pyarrow
 , python-snappy
 , requests
 , ruamel_yaml
@@ -22,16 +23,16 @@
 
 buildPythonPackage rec {
   pname = "intake";
-  version = "0.5.4";
+  version = "0.6.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "81c3bdadbb81ec10c923b89e118c229d977a584ccbe27466f8fde41c0c274c3f";
+    sha256 = "0c284abeb74927a7366dcab6cefc010c4d050365b8af61c37326a2473a490a4e";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pyarrow pytest ];
   propagatedBuildInputs = [
     appdirs
     dask
@@ -63,7 +64,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Data load and catalog system";
-    homepage = https://github.com/ContinuumIO/intake;
+    homepage = "https://github.com/ContinuumIO/intake";
     license = licenses.bsd2;
     maintainers = [ maintainers.costrouc ];
   };

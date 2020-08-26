@@ -1,25 +1,37 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, installShellFiles }:
 
-buildGoPackage  rec {
+buildGoPackage rec {
   pname = "micro";
-  version = "1.4.1";
+  version = "2.0.5";
 
   goPackagePath = "github.com/zyedidia/micro";
 
   src = fetchFromGitHub {
     owner = "zyedidia";
-    repo = "micro";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0m9p6smb5grdazsgr3m1x4rry9ihhlgl9ildhvfp53czrifbx0m5";
+    sha256 = "12fyyax1mr0n82s5yhmk90iyyzbh32rppkkpj37c25pal73czdhc";
     fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [ installShellFiles ];
+
   subPackages = [ "cmd/micro" ];
 
-  buildFlagsArray = [ "-ldflags=" "-X main.Version=${version}" ];
+  buildFlagsArray = let t = "${goPackagePath}/internal/util"; in ''
+    -ldflags=
+      -X ${t}.Version=${version}
+      -X ${t}.CommitHash=${src.rev}
+  '';
+
+  goDeps = ./deps.nix;
+
+  postInstall = ''
+    installManPage $src/assets/packaging/micro.1
+  '';
 
   meta = with stdenv.lib; {
-    homepage = https://micro-editor.github.io;
+    homepage = "https://micro-editor.github.io";
     description = "Modern and intuitive terminal-based text editor";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];

@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     description = "SDL TrueType library";
     platforms = platforms.unix;
     license = licenses.zlib;
-    homepage = https://www.libsdl.org/projects/SDL_ttf/;
+    homepage = "https://www.libsdl.org/projects/SDL_ttf/";
   };
 }

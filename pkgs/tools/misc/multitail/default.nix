@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ stdenv, fetchurl, ncurses, pkg-config }:
 
 stdenv.mkDerivation rec {
   version = "6.5.0";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "https://www.vanheusden.com/multitail/${pname}-${version}.tgz";
     sha256 = "1vd9vdxyxsccl64ilx542ya5vlw2bpg6gnkq1x8cfqy6vxvmx7dj";
   };
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ ncurses ];
 
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.vanheusden.com/multitail/;
+    homepage = "http://www.vanheusden.com/multitail/";
     description = "tail on Steroids";
     maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
     platforms = stdenv.lib.platforms.unix;

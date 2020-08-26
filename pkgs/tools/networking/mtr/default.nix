@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   patches = [
     # https://github.com/traviscross/mtr/pull/315
     (fetchpatch {
-      url = https://github.com/traviscross/mtr/pull/315.patch?full_index=1;
+      url = "https://github.com/traviscross/mtr/pull/315.patch?full_index=1";
       sha256 = "18qcsj9058snc2qhq6v6gdbqhz021gi5fgw9h7vfczv45gf0qasa";
     })
   ];

@@ -3,18 +3,6 @@
 
 with lib; let
 
-  glibc-ldconf = glibc.overrideAttrs (oldAttrs: {
-    # ldconfig needs help reading libraries that have been patchelf-ed, as the
-    # .dynstr section is no longer in the first LOAD segment. See also
-    # https://sourceware.org/bugzilla/show_bug.cgi?id=23964 and
-    # https://github.com/NixOS/patchelf/issues/44
-    patches = oldAttrs.patches ++ [ (fetchpatch {
-      name = "ldconfig-patchelf.patch";
-      url = "https://sourceware.org/bugzilla/attachment.cgi?id=11444";
-      sha256 = "0nzzmq7pli37iyjrgcmvcy92piiwjybpw245ds7q43pbgdm7lc3s";
-    })];
-  });
-
   libnvidia-container = callPackage ./libnvc.nix { };
 
   nvidia-container-runtime = fetchFromGitHub {
@@ -72,11 +60,11 @@ in stdenv.mkDerivation rec {
     wrapProgram $out/bin/nvidia-container-cli \
       --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:/run/opengl-driver-32/lib
     cp ${./config.toml} $out/etc/config.toml
-    substituteInPlace $out/etc/config.toml --subst-var-by glibcbin ${lib.getBin glibc-ldconf}
+    substituteInPlace $out/etc/config.toml --subst-var-by glibcbin ${lib.getBin glibc}
   '';
 
   meta = {
-    homepage = https://github.com/NVIDIA/nvidia-docker;
+    homepage = "https://github.com/NVIDIA/nvidia-docker";
     description = "NVIDIA container runtime for Docker";
     license = licenses.bsd3;
     platforms = platforms.linux;

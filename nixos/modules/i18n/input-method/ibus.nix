@@ -64,7 +64,7 @@ in
     # Without dconf enabled it is impossible to use IBus
     programs.dconf.enable = true;
 
-    programs.dconf.profiles.ibus = "${ibusPackage}/etc/dconf/profile/ibus";
+    programs.dconf.packages = [ ibusPackage ];
 
     services.dbus.packages = [
       ibusAutostart
@@ -75,5 +75,9 @@ in
       QT_IM_MODULE = "ibus";
       XMODIFIERS = "@im=ibus";
     };
+
+    xdg.portal.extraPortals = mkIf config.xdg.portal.enable [
+      ibusPackage
+    ];
   };
 }

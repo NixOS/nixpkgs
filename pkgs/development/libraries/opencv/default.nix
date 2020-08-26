@@ -7,7 +7,7 @@
 , enableTIFF ? true, libtiff
 , enableEXR ? (!stdenv.isDarwin), openexr, ilmbase
 , enableJPEG2K ? false, jasper  # disable jasper by default (many CVE)
-, enableFfmpeg ? false, ffmpeg
+, enableFfmpeg ? false, ffmpeg_3
 , enableGStreamer ? false, gst_all_1
 , enableEigen ? true, eigen
 , Cocoa, QTKit
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableTIFF libtiff
     ++ lib.optionals enableEXR [ openexr ilmbase ]
     ++ lib.optional enableJPEG2K jasper
-    ++ lib.optional enableFfmpeg ffmpeg
+    ++ lib.optional enableFfmpeg ffmpeg_3
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
     ++ lib.optionals stdenv.isDarwin [ Cocoa QTKit ]
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
-    homepage = https://opencv.org/;
+    homepage = "https://opencv.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;

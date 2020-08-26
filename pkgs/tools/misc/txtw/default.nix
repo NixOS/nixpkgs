@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Compute text widths";
-    homepage = https://github.com/baskerville/txtw;
+    homepage = "https://github.com/baskerville/txtw";
     maintainers = with maintainers; [ lihop ];
     license = licenses.unlicense;
     platforms = platforms.linux;

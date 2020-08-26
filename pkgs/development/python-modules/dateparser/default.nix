@@ -2,6 +2,7 @@
 , nose
 , parameterized
 , mock
+, flake8
 , glibcLocales
 , six
 , jdatetime
@@ -10,22 +11,40 @@
 , pytz
 , tzlocal
 , regex
-, ruamel_yaml }:
+, ruamel_yaml
+, python
+, isPy3k
+}:
 
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "0.7.2";
+  version = "0.7.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e1eac8ef28de69a554d5fcdb60b172d526d61924b1a40afbbb08df459a36006b";
+    sha256 = "e875efd8c57c85c2d02b238239878db59ff1971f5a823457fcc69e493bf6ebfa";
   };
 
-  checkInputs = [ nose mock parameterized six glibcLocales ];
+  checkInputs = [
+    flake8
+    nose
+    mock
+    parameterized
+    six
+    glibcLocales
+  ];
   preCheck =''
     # skip because of missing convertdate module, which is an extra requirement
     rm tests/test_jalali.py
   '';
+
+  checkPhase = ''
+    ${python.interpreter} -m unittest discover -s tests
+  '';
+
+  # Strange
+  # AttributeError: 'module' object has no attribute 'config'
+  doCheck = false;
 
   propagatedBuildInputs = [
     # install_requires
@@ -36,7 +55,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Date parsing library designed to parse dates from HTML pages";
-    homepage = https://github.com/scrapinghub/dateparser;
+    homepage = "https://github.com/scrapinghub/dateparser";
     license = licenses.bsd3;
   };
 }

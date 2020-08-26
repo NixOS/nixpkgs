@@ -1,0 +1,53 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index e566ed25..a661a963 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -689,7 +689,7 @@ dependencies = [
+  "serde",
+  "serde_derive",
+  "serde_json",
+- "vfio-bindings 0.2.0 (git+https://github.com/rust-vmm/vfio-bindings)",
++ "vfio-bindings",
+  "vfio-ioctls",
+  "vm-allocator",
+  "vm-device",
+@@ -1346,17 +1346,12 @@ checksum = "f1bddf1187be692e79c5ffeab891132dfb0f236ed36a43c7ed39f1165ee20191"
+ [[package]]
+ name = "vfio-bindings"
+ version = "0.2.0"
+-source = "git+https://github.com/rust-vmm/vfio-bindings#f08cbcbf4041c981441d9c036c49ebad5098ed1c"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "4a21f546f2bda37f5a8cfb138c87f95b8e34d2d78d6a7a92ba3785f4e08604a7"
+ dependencies = [
+  "vmm-sys-util",
+ ]
+ 
+-[[package]]
+-name = "vfio-bindings"
+-version = "0.2.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "4a21f546f2bda37f5a8cfb138c87f95b8e34d2d78d6a7a92ba3785f4e08604a7"
+-
+ [[package]]
+ name = "vfio-ioctls"
+ version = "0.1.0"
+@@ -1366,7 +1361,7 @@ dependencies = [
+  "kvm-bindings",
+  "kvm-ioctls",
+  "log 0.4.8",
+- "vfio-bindings 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
++ "vfio-bindings",
+  "vm-memory",
+  "vmm-sys-util",
+ ]
+diff --git a/pci/Cargo.toml b/pci/Cargo.toml
+index 9c6955c7..4ecf8e6b 100644
+--- a/pci/Cargo.toml
++++ b/pci/Cargo.toml
+@@ -23,5 +23,5 @@ vm-memory = "0.2.1"
+ vm-migration = { path = "../vm-migration" }
+ 
+ [dependencies.vfio-bindings]
+-git = "https://github.com/rust-vmm/vfio-bindings"
++version = "0.2.0"
+ features = ["fam-wrappers"]

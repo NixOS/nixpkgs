@@ -15,7 +15,7 @@ fetchzip {
 
   meta = with lib; {
     description = "Anka/Coder Condensed font";
-    homepage = https://code.google.com/archive/p/anka-coder-fonts;
+    homepage = "https://code.google.com/archive/p/anka-coder-fonts";
     license = licenses.ofl;
     maintainers = with maintainers; [ dtzWill ];
     platforms = platforms.all;

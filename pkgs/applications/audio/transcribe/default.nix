@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       has many transcription-specific features not found on
       conventional music players.
     '';
-    homepage = https://www.seventhstring.com/xscribe/;
+    homepage = "https://www.seventhstring.com/xscribe/";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ michalrus ];

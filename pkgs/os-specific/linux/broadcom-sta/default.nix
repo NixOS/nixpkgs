@@ -35,6 +35,8 @@ stdenv.mkDerivation {
     ./linux-4.12.patch
     ./linux-4.15.patch
     ./linux-5.1.patch
+    # source: https://salsa.debian.org/Herrie82-guest/broadcom-sta/-/commit/247307926e5540ad574a17c062c8da76990d056f
+    ./linux-5.6.patch
     ./null-pointer-fix.patch
     ./gcc.patch
   ];
@@ -57,7 +59,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Kernel module driver for some Broadcom's wireless cards";
-    homepage = http://www.broadcom.com/support/802.11/linux_sta.php;
+    homepage = "http://www.broadcom.com/support/802.11/linux_sta.php";
     license = stdenv.lib.licenses.unfreeRedistributable;
     maintainers = with stdenv.lib.maintainers; [ phreedom ];
     platforms = stdenv.lib.platforms.linux;

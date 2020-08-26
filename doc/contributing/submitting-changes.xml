@@ -407,23 +407,47 @@ Additional information.
   <section xml:id="submitting-changes-stable-release-branches">
    <title>Stable release branches</title>
 
-   <itemizedlist>
+   <para>
+    For cherry-picking a commit to a stable release branch (<quote>backporting</quote>), use <literal>git cherry-pick -x &lt;original commit&gt;</literal> so that the original commit id is included in the commit.
+   </para>
+
+   <para>
+    Add a reason for the backport by using <literal>git cherry-pick -xe &lt;original commit&gt;</literal> instead when it is not obvious from the original commit message. It is not needed when it’s a minor version update that includes security and bug fixes but don’t add new features or when the commit fixes an otherwise broken package.
+   </para>
+
+   <para>
+    Here is an example of a cherry-picked commit message with good reason description:
+   </para>
+
+<screen>
+zfs: Keep trying root import until it works
+
+Works around #11003.
+
+(cherry picked from commit 98b213a11041af39b39473906b595290e2a4e2f9)
+
+Reason: several people cannot boot with ZFS on NVMe
+</screen>
+
+   <para>
+    Other examples of reasons are:
+   </para>
+
+   <itemizedlist spacing="compact">
     <listitem>
      <para>
-      If you're cherry-picking a commit to a stable release branch (“backporting”), always use <command>git cherry-pick -xe</command> and ensure the message contains a clear description about why this needs to be included in the stable branch.
+      Previously the build would fail due to, e.g., <literal>getaddrinfo</literal> not being defined
      </para>
+    </listitem>
+    <listitem>
      <para>
-      An example of a cherry-picked commit would look like this:
+      The previous download links were all broken
      </para>
-<screen>
-nixos: Refactor the world.
-
-The original commit message describing the reason why the world was torn apart.
-
-(cherry picked from commit abcdef)
-Reason: I just had a gut feeling that this would also be wanted by people from
-the stone age.
-</screen>
+    </listitem>
+    <listitem>
+     <para>
+      Crash when starting on some X11 systems
+     </para>
     </listitem>
    </itemizedlist>
   </section>

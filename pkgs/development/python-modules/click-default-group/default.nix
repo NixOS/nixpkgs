@@ -17,7 +17,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
 
   meta = with lib; {
-    homepage = https://github.com/click-contrib/click-default-group;
+    homepage = "https://github.com/click-contrib/click-default-group";
     description = "Group to invoke a command without explicit subcommand name";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jakewaksbaum ];

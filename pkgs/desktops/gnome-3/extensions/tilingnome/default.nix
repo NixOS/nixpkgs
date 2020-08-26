@@ -14,12 +14,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ glib ];
 
   buildPhase = ''
+    runHook preBuild
     glib-compile-schemas .
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions/${uuid}
     cp -r * $out/share/gnome-shell/extensions/${uuid}/
+    runHook postInstall
   '';
 
   uuid = "tilingnome@rliang.github.com";
@@ -28,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Tiling window management for GNOME Shell";
     license = licenses.gpl2;
     maintainers = with maintainers; [ benley ];
-    homepage = https://github.com/rliang/gnome-shell-extension-tilingnome;
+    homepage = "https://github.com/rliang/gnome-shell-extension-tilingnome";
     platforms = gnome3.gnome-shell.meta.platforms;
   };
 }

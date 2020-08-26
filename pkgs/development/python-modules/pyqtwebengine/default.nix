@@ -1,4 +1,4 @@
-{ lib, fetchurl, pythonPackages, pkgconfig
+{ lib, pythonPackages, pkgconfig
 , qmake, qtbase, qtsvg, qtwebengine
 , wrapQtAppsHook
 }:
@@ -9,14 +9,19 @@ let
   inherit (pyqt5) sip;
 
 in buildPythonPackage rec {
-  pname = "pyqtwebengine";
-  version = "5.12.1";
+  pname = "PyQtWebEngine";
+  version = "5.15.0";
   format = "other";
 
-  src = fetchurl {
-    url = "https://www.riverbankcomputing.com/static/Downloads/PyQtWebEngine/${version}/PyQtWebEngine_gpl-${version}.tar.gz";
-    sha256 = "0wylkd7fh2g27y3710rpxmj9wx0wpi3z7qbv6khiddm15rkh81w6";
+  src = pythonPackages.fetchPypi {
+    inherit pname version;
+    sha256 = "0xdzhl07x3mzfnr5cf4d640168vxi7fyl0fz1pvpbgs0irl14237";
   };
+
+  patches = [
+    # source: https://www.riverbankcomputing.com/pipermail/pyqt/2020-June/042985.html
+    ./fix-build-with-qt-514.patch
+  ];
 
   outputs = [ "out" "dev" ];
 
@@ -86,7 +91,7 @@ in buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python bindings for Qt5";
-    homepage    = http://www.riverbankcomputing.co.uk;
+    homepage    = "http://www.riverbankcomputing.co.uk";
     license     = licenses.gpl3;
     platforms   = platforms.mesaPlatforms;
   };

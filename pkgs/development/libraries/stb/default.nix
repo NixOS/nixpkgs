@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Single-file public domain libraries for C/C++";
-    homepage = https://github.com/nothings/stb;
+    homepage = "https://github.com/nothings/stb";
     license = licenses.publicDomain;
     platforms = platforms.all;
     maintainers = with maintainers; [ jfrankenau ];

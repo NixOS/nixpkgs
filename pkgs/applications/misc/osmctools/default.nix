@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Command line tools for transforming Open Street Map files";
     homepage = [
-      https://wiki.openstreetmap.org/wiki/osmconvert
-      https://wiki.openstreetmap.org/wiki/osmfilter
-      https://wiki.openstreetmap.org/wiki/osmupdate
+      "https://wiki.openstreetmap.org/wiki/osmconvert"
+      "https://wiki.openstreetmap.org/wiki/osmfilter"
+      "https://wiki.openstreetmap.org/wiki/osmupdate"
     ];
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;

@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "vis";
-  version  = "0.5";
+  version  = "0.6";
 
   src = fetchFromGitHub {
     rev = "v${version}";
-    sha256 = "1vhq6hprkgj90iwl5vl3pxs3xwc01mx8yhi6c1phzry5agqqp8jb";
+    sha256 = "1zjm89cn3rfq8fxpwp66khy53s6vqlmw6q103qyyvix8ydzxdmsh";
     repo = "vis";
     owner = "martanne";
   };
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A vim like editor";
-    homepage = https://github.com/martanne/vis;
+    homepage = "https://github.com/martanne/vis";
     license = licenses.isc;
     maintainers = with maintainers; [ vrthra ramkromberg ];
     platforms = platforms.unix;

@@ -86,7 +86,7 @@ let
       ];
 
       meta = with stdenv.lib; {
-        homepage    = https://github.com/intel/opencl-clang/;
+        homepage    = "https://github.com/intel/opencl-clang/";
         description = "A clang wrapper library with an OpenCL-oriented API and the ability to compile OpenCL C kernels to SPIR-V modules";
         license     = licenses.ncsa;
         platforms   = platforms.all;

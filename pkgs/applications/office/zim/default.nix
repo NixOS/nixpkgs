@@ -9,11 +9,11 @@
 
 python3Packages.buildPythonApplication rec {
   name = "zim-${version}";
-  version = "0.72.1";
+  version = "0.73.1";
 
   src = fetchurl {
     url = "https://zim-wiki.org/downloads/${name}.tar.gz";
-    sha256 = "0a9h97rmp7if74p3i028cllzf9p9468psbqwcvm9009ga253dr1l";
+    sha256 = "13vhwsgv6mscgixypc0ixkgj0y7cpcm7z7wn1vmdrwp7kn8m3xgx";
   };
 
   buildInputs = [ gtk3 gobject-introspection wrapGAppsHook gnome3.adwaita-icon-theme ];
@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A desktop wiki";
-    homepage = http://zim-wiki.org;
+    homepage = "http://zim-wiki.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
     broken = stdenv.isDarwin; # https://github.com/NixOS/nixpkgs/pull/52658#issuecomment-449565790

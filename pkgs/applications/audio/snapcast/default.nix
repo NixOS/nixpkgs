@@ -1,5 +1,6 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkgconfig
-, alsaLib, asio, avahi, flac, libogg, libvorbis }:
+, alsaLib, asio, avahi, boost170, flac, libogg, libvorbis, soxr
+, nixosTests }:
 
 let
 
@@ -33,21 +34,21 @@ in
 
 stdenv.mkDerivation rec {
   pname = "snapcast";
-  version = "0.15.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner  = "badaix";
     repo   = "snapcast";
     rev    = "v${version}";
-    sha256 = "11rnpy6w3wm240qgmkp74k5w8wh5b7hzfx05qrnh6l7ng7m25ky2";
+    sha256 = "152ic8hlyawcmj9pykb33xc6yx7il6yb9ilmsy6m9nlh40m8yxls";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig boost170.dev ];
   # snapcast also supports building against tremor but as we have libogg, that's
   # not needed
   buildInputs = [
     alsaLib asio avahi flac libogg libvorbis
-    aixlog popl
+    aixlog popl soxr
   ];
 
   # Upstream systemd unit files are pretty awful, so we provide our own in a
@@ -57,9 +58,11 @@ stdenv.mkDerivation rec {
     cp -r ../doc/* ../*.md $out/share/doc/snapcast
   '';
 
+  passthru.tests.snapcast = nixosTests.snapcast;
+
   meta = with lib; {
     description = "Synchronous multi-room audio player";
-    homepage = https://github.com/badaix/snapcast;
+    homepage = "https://github.com/badaix/snapcast";
     maintainers = with maintainers; [ fpletz ];
     license = licenses.gpl3;
   };

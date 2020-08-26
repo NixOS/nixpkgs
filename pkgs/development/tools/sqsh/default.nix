@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
       by Sybase.
     '';
     license = licenses.gpl2;
-    homepage = https://sourceforge.net/projects/sqsh/;
+    homepage = "https://sourceforge.net/projects/sqsh/";
     platforms = platforms.all;
   };
 }

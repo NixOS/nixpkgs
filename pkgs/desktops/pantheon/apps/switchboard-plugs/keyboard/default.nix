@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , fetchpatch
 , substituteAll
@@ -19,17 +20,17 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-keyboard";
-  version = "2.3.5";
+  version = "2.3.6";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "17iijb7imxw5zv7vkrbc1vsp87k900yqgyv7ycz1gw37xb4klsyp";
+    sha256 = "08zpw7ygrqmwwznvxkf4xbrgwbjkbwc95sw1ikikg3143ql9qclp";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -51,23 +52,9 @@ stdenv.mkDerivation rec {
     switchboard
   ];
 
-  patches = [
-    (substituteAll {
-      src = ./xkb.patch;
-      config = "${xorg.xkeyboardconfig}/share/X11/xkb/rules/evdev.xml";
-    })
-    # Fix build with latest vala.
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-keyboard/commit/28fa960f607f0b1d67f2864965a079bdfc23e3a8.patch";
-      sha256 = "0121qcg8n7gkz7gpwrxc1cx0nnypj02zy2jmp3cks5r9sc0yi0hw";
-    })
-  ];
-
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
-
   meta = with stdenv.lib; {
     description = "Switchboard Keyboard Plug";
-    homepage = https://github.com/elementary/switchboard-plug-keyboard;
+    homepage = "https://github.com/elementary/switchboard-plug-keyboard";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

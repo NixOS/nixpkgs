@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ingydotnet/git-subrepo;
+    homepage = "https://github.com/ingydotnet/git-subrepo";
     description = "Git submodule alternative";
     license = licenses.mit;
     platforms = platforms.unix ++ platforms.darwin;

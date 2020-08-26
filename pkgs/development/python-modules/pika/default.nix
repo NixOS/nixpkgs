@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Pure-Python implementation of the AMQP 0-9-1 protocol";
-    homepage = https://pika.readthedocs.org;
+    homepage = "https://pika.readthedocs.org";
     license = licenses.bsd3;
   };
 

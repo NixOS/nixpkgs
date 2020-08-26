@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "topgrade";
-  version = "4.2.0";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "r-darwish";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02rcgz1sklll0gpxjwb7y3jc6flzr4492qp72blra6a26qpb7vxp";
+    sha256 = "1adx029cq30g0qnrvdq2di8bpadzdxrpbsqchxfsda8zg6cprh1j";
   };
 
-  cargoSha256 = "1kd4q2ddm5byf62xj923n140k9x89yf9yswwgsnvkbpvrnpl4mwj";
+  cargoSha256 = "0jpjn6sb8bkwnq7np487hb8bkm6rv84mihmqwy3ymgdzlqcng6sk";
 
   buildInputs = lib.optional stdenv.isDarwin Foundation;
 
@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     description = "Upgrade all the things";
     homepage = "https://github.com/r-darwish/topgrade";
     license = licenses.gpl3;
-    platforms = platforms.all;
     maintainers = with maintainers; [ filalex77 hugoreeves ];
   };
 }

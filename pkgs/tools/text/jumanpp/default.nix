@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       plausibility of word sequences by using a recurrent neural network
       language model (RNNLM).
     '';
-    homepage = http://nlp.ist.i.kyoto-u.ac.jp/index.php?JUMAN++;
+    homepage = "http://nlp.ist.i.kyoto-u.ac.jp/index.php?JUMAN++";
     license = licenses.asl20;
     maintainers = with maintainers; [ mt-caret ];
     platforms = platforms.all;

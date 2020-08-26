@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "ipympl";
-  version = "0.3.3";
+  version = "0.5.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0m5sh2ha9hlgigc5xxsy7nd0gdadx797h1i66i9z616p0r43gx7d";
+    sha256 = "0cjsabsbn02vpf3yl0x9xdqgf4f707mbnz2hp2bn6zp9qnyyirx5";
   };
 
   propagatedBuildInputs = [ ipywidgets matplotlib ];
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Matplotlib Jupyter Extension";
-    homepage = https://github.com/matplotlib/jupyter-matplotlib;
+    homepage = "https://github.com/matplotlib/jupyter-matplotlib";
     maintainers = with maintainers; [ jluttine ];
     license = licenses.bsd3;
   };

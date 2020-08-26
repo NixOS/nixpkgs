@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://e2fsprogs.sourceforge.net/;
+    homepage = "http://e2fsprogs.sourceforge.net/";
     description = "Tools for creating and checking ext2/ext3/ext4 filesystems";
     license = licenses.gpl2;
     platforms = platforms.unix;

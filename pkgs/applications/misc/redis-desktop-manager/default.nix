@@ -75,7 +75,7 @@ EOF
 
   meta = with lib; {
     description = "Cross-platform open source Redis DB management tool";
-    homepage = https://redisdesktop.com/;
+    homepage = "https://redisdesktop.com/";
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

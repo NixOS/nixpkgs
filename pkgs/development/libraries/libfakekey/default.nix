@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "X virtual keyboard library";
-    homepage = https://www.yoctoproject.org/tools-resources/projects/matchbox;
+    homepage = "https://www.yoctoproject.org/tools-resources/projects/matchbox";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

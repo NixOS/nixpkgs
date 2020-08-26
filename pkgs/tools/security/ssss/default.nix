@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "ssss-0.5";
 
   src = fetchurl {
-    url = http://point-at-infinity.org/ssss/ssss-0.5.tar.gz;
+    url = "http://point-at-infinity.org/ssss/ssss-0.5.tar.gz";
     sha256 = "15grn2fp1x8p92kxkwbmsx8rz16g93y9grl3hfqbh1jn21ama5jx";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Shamir Secret Sharing Scheme";
-    homepage = http://point-at-infinity.org/ssss/;
+    homepage = "http://point-at-infinity.org/ssss/";
     platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.gpl2;
   };

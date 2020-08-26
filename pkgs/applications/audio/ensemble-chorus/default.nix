@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/jpcima/ensemble-chorus;
+    homepage = "https://github.com/jpcima/ensemble-chorus";
     description = "Digital model of electronic string ensemble chorus";
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;

@@ -9,8 +9,8 @@ buildGoPackage rec {
   subPackages = [ "client" ];
 
   postInstall = ''
-    if [ -f "$bin/bin/client" ]; then
-      mv "$bin/bin/client" "$bin/bin/deis"
+    if [ -f "$out/bin/client" ]; then
+      mv "$out/bin/client" "$out/bin/deis"
     fi
   '';
 
@@ -26,7 +26,7 @@ buildGoPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://deis.io;
+    homepage = "https://deis.io";
     description = "A command line utility used to interact with the Deis open source PaaS.";
     license = licenses.asl20;
     platforms = platforms.unix;

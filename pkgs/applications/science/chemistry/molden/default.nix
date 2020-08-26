@@ -1,12 +1,12 @@
 { stdenv, fetchurl, which, gfortran, libGLU, xorg } :
 
 stdenv.mkDerivation rec {
-  version = "6.2";
+  version = "6.3";
   pname = "molden";
 
   src = fetchurl {
     url = "ftp://ftp.cmbi.ru.nl/pub/molgraph/molden/molden${version}.tar.gz";
-    sha256 = "01m5p7v5pz1fi77var50sp1bzlvdckwr6kn4wanvic2jmvgp9q5n";
+    sha256 = "02qi16pz2wffn3cc47dpjqhfafzwfmb79waw4nnhfyir8a4h3cq1";
   };
 
   nativeBuildInputs = [ which ];
@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
      description = "Display and manipulate molecular structures";
-     homepage = http://www.cmbi.ru.nl/molden/;
+     homepage = "http://www.cmbi.ru.nl/molden/";
      license = {
        fullName = "Free for academic/non-profit use";
-       url = http://www.cmbi.ru.nl/molden/CopyRight.html;
+       url = "http://www.cmbi.ru.nl/molden/CopyRight.html";
        free = false;
      };
      platforms = platforms.linux;

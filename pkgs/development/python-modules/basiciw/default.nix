@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Get info about wireless interfaces using libiw";
-    homepage = https://github.com/enkore/basiciw;
+    homepage = "https://github.com/enkore/basiciw";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2;
   };

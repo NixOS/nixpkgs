@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Command-line copy/paste utilities for Wayland";
-    homepage = https://github.com/bugaevc/wl-clipboard;
+    homepage = "https://github.com/bugaevc/wl-clipboard";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dywedir ];
     platforms = platforms.linux;

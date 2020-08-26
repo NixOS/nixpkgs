@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   
   meta = with stdenv.lib; {
     description = "Fast, reliable protein-coding gene prediction for prokaryotic genomes";
-    homepage = https://github.com/hyattpd/Prodigal;
+    homepage = "https://github.com/hyattpd/Prodigal";
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ luispedro ];

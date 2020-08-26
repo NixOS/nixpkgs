@@ -1,18 +1,34 @@
-{ stdenv, fetchurl, wafHook, pkgconfig, readline, libxslt
-, docbook_xsl, docbook_xml_dtd_42
+{ stdenv
+, fetchurl
+, pkg-config
+, wafHook
+, python3
+, readline
+, libxslt
+, docbook-xsl-nons
+, docbook_xml_dtd_45
 }:
 
 stdenv.mkDerivation rec {
-  name = "tdb-1.3.18";
+  pname = "tdb";
+  version = "1.4.3";
 
   src = fetchurl {
-    url = "mirror://samba/tdb/${name}.tar.gz";
-    sha256 = "1drnsdh1w0px35r0y7l7g59yvyr67mvcsdrli4wab0mwi07b8mn1";
+    url = "mirror://samba/tdb/${pname}-${version}.tar.gz";
+    sha256 = "06waz0k50c7v3chd08mzp2rv7w4k4q9isbxx3vhlfpx1vy9q61f8";
   };
 
-  nativeBuildInputs = [ pkgconfig wafHook ];
+  nativeBuildInputs = [
+    pkg-config
+    wafHook
+    libxslt
+    docbook-xsl-nons
+    docbook_xml_dtd_45
+  ];
+
   buildInputs = [
-    readline libxslt docbook_xsl docbook_xml_dtd_42
+    python3
+    readline # required to build python
   ];
 
   wafPath = "buildtools/bin/waf";
@@ -30,7 +46,7 @@ stdenv.mkDerivation rec {
       and uses locking internally to keep writers from trampling on each
       other. TDB is also extremely small.
     '';
-    homepage = https://tdb.samba.org/;
+    homepage = "https://tdb.samba.org/";
     license = licenses.lgpl3Plus;
     platforms = platforms.all;
   };

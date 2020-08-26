@@ -26,7 +26,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ionrock/cachecontrol;
+    homepage = "https://github.com/ionrock/cachecontrol";
     description = "Httplib2 caching for requests";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];

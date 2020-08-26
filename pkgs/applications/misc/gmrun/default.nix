@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       ./gmrun-0.9.2-xdg.patch
     ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Gnome Completion-Run Utility";
     longDescription = ''
       A simple program which provides a "run program" window, featuring a bash-like TAB completion.
@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
       Also, supports CTRL-R / CTRL-S / "!" for searching through history.
       Running commands in a terminal with CTRL-Enter. URL handlers.
     '';
-    homepage = https://sourceforge.net/projects/gmrun/;
-    license = "GPL";
+    homepage = "https://sourceforge.net/projects/gmrun/";
+    license = licenses.gpl2;
     maintainers = [];
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
   };
 }

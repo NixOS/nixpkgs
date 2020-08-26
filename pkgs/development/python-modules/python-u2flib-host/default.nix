@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python based U2F host library";
-    homepage = https://github.com/Yubico/python-u2flib-host;
+    homepage = "https://github.com/Yubico/python-u2flib-host";
     license = licenses.bsd2;
     maintainers = with maintainers; [ jluttine ];
   };

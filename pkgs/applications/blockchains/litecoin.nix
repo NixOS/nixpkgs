@@ -13,13 +13,13 @@ with stdenv.lib;
 mkDerivation rec {
 
   name = "litecoin" + (toString (optional (!withGui) "d")) + "-" + version;
-  version = "0.17.1";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "litecoin-project";
     repo = "litecoin";
     rev = "v${version}";
-    sha256 = "08a0ghs4aa9m3qv3ppydyshfibykdwxk07i1vcqvg0ycqisdpb7y";
+    sha256 = "11753zhyx1kmrlljc6kbjwrcb06dfcrsqvmw3iaki9a132qk6l5c";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
@@ -46,7 +46,7 @@ mkDerivation rec {
       the regular computers and GPUs most people already have.
       The Litecoin network is scheduled to produce 84 million currency units.
     '';
-    homepage = https://litecoin.org/;
+    homepage = "https://litecoin.org/";
     platforms = platforms.unix;
     license = licenses.mit;
     broken = stdenv.isDarwin;

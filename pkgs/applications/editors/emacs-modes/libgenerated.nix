@@ -25,10 +25,12 @@ let
         }
       ) {};
       git = self.callPackage ({ fetchgit }:
-        fetchgit {
+        (fetchgit {
           rev = commit;
           inherit sha256 url;
-        }
+        }).overrideAttrs(_: {
+          GIT_SSL_NO_VERIFY = true;
+        })
       ) {};
       bitbucket = self.callPackage ({ fetchhg }:
         fetchhg {
@@ -61,8 +63,9 @@ in {
         pname = builtins.replaceStrings [ "@" ] [ "at" ] ename;
         broken = ! isNull error;
       in
-      lib.nameValuePair ename (if hasSource then (
-        self.callPackage ({ melpaBuild, fetchurl, ... }@pkgargs:
+      if hasSource then
+        lib.nameValuePair ename (
+          self.callPackage ({ melpaBuild, fetchurl, ... }@pkgargs:
           melpaBuild {
             inherit pname;
             ename = ename;
@@ -85,6 +88,8 @@ in {
             };
           }
         ) {}
-      ) else null);
+      )
+    else
+      null;
 
 }

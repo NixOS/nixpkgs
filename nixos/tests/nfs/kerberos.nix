@@ -3,7 +3,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... }:
 with lib;
 
 let
-  krb5 = 
+  krb5 =
     { enable = true;
       domain_realm."nfs.test"   = "NFS.TEST";
       libdefaults.default_realm = "NFS.TEST";
@@ -31,7 +31,7 @@ in
 
 {
   name = "nfsv4-with-kerberos";
- 
+
   nodes = {
     client = { lib, ... }:
       { inherit krb5 users;

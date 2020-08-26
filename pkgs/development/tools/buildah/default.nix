@@ -1,36 +1,53 @@
-{ stdenv, buildGoPackage, fetchFromGitHub
-, gpgme, libgpgerror, lvm2, btrfs-progs, pkg-config, libselinux, libseccomp
+{ stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, gpgme
+, lvm2
+, btrfs-progs
+, libapparmor
+, libselinux
+, libseccomp
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "buildah";
-  version = "1.14.3";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
-    owner  = "containers";
-    repo   = "buildah";
-    rev    = "v${version}";
-    sha256 = "1qghlba8396gj9dfih8hg249gzwx0gpw9cysdw2vh8z52jhi5sx9";
+    owner = "containers";
+    repo = "buildah";
+    rev = "v${version}";
+    sha256 = "15pnyi6gay287vkcrgsirsyyps3ya2lsih1ljkcsqdxzr596mcv3";
   };
 
-  outputs = [ "bin" "man" "out" ];
+  outputs = [ "out" "man" ];
 
-  goPackagePath = "github.com/containers/buildah";
-  excludedPackages = [ "tests" ];
+  vendorSha256 = null;
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gpgme libgpgerror lvm2 btrfs-progs libselinux libseccomp ];
+  doCheck = false;
 
-  patches = [ ./disable-go-module-mode.patch ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
+
+  buildInputs = [
+    btrfs-progs
+    gpgme
+    libapparmor
+    libseccomp
+    libselinux
+    lvm2
+  ];
 
   buildPhase = ''
-    pushd go/src/${goPackagePath}
+    patchShebangs .
     make GIT_COMMIT="unknown"
-    install -Dm755 buildah $bin/bin/buildah
-    install -Dm444 contrib/completions/bash/buildah $bin/share/bash-completion/completions/buildah
+    make -C docs
   '';
 
-  postBuild = ''
+  installPhase = ''
+    install -Dm755 buildah $out/bin/buildah
+    installShellCompletion --bash contrib/completions/bash/buildah
     make -C docs install PREFIX="$man"
   '';
 
@@ -39,6 +56,7 @@ buildGoPackage rec {
     homepage = "https://buildah.io/";
     changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Profpatsch vdemeester saschagrunert ];
+    maintainers = with maintainers; [ Profpatsch ] ++ teams.podman.members;
+    platforms = platforms.linux;
   };
 }

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gdl libchamplain gnome3.adwaita-icon-theme libxml2 ];
 
   meta = with stdenv.lib; {
-    homepage = https://blog.sarine.nl/tag/gpxviewer/;
+    homepage = "https://blog.sarine.nl/tag/gpxviewer/";
     description = "Simple tool to visualize tracks and waypoints stored in a gpx file";
     platforms = with platforms; linux;
     license = licenses.gpl2Plus;

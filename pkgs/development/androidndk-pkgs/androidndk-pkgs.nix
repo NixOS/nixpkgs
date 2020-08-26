@@ -82,7 +82,10 @@ rec {
   };
 
   clang = wrapCCWith {
-    cc = binaries;
+    cc = binaries // {
+      # for packages expecting libcompiler-rt, etc. to come from here (stdenv.cc.cc.lib)
+      lib = targetAndroidndkPkgs.libraries;
+    };
     bintools = binutils;
     libc = targetAndroidndkPkgs.libraries;
     extraBuildCommands = ''

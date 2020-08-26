@@ -1,30 +1,40 @@
-{ stdenv, fetchFromGitHub, glib, readline
-, bison, flex, pkgconfig, autoreconfHook
-, txt2man, which }:
+{ stdenv, lib, fetchFromGitHub, glib, readline
+, bison, flex, pkgconfig, autoreconfHook, libxslt, makeWrapper
+, txt2man, which
+# withUi currently doesn't work. It compiles but fails to run.
+, withUi ? false, gtk2, gnome2
+}:
 
-let version = "0.7.1";
-in stdenv.mkDerivation {
+let
+  uiDeps = [ gtk2 ] ++ (with gnome2; [ GConf libglade libgnomeui gnome-doc-utils ]);
+
+in
+stdenv.mkDerivation rec {
   pname = "mdbtools";
-  inherit version;
+  version = "0.8.2";
 
   src = fetchFromGitHub {
-    owner = "brianb";
+    owner = "cyberemissary";
     repo = "mdbtools";
     rev = version;
-    sha256 = "0gwcpp9y09xhs21g7my2fs8ncb8i6ahlyixcx8jd3q97jbzj441l";
+    sha256 = "12rhf6rgnws6br5dn1l2j7i77q9p4l6ryga10jpax01vvzhr26qc";
   };
 
-  nativeBuildInputs = [ pkgconfig bison flex autoreconfHook txt2man which ];
-  buildInputs = [ glib readline ];
+  configureFlags = [ "--disable-scrollkeeper" ];
 
-  preConfigure = ''
-    sed -e 's@static \(GHashTable [*]mdb_backends;\)@\1@' -i src/libmdb/backend.c
-  '';
+  nativeBuildInputs = [
+    pkgconfig bison flex autoreconfHook txt2man which
+  ] ++ lib.optional withUi libxslt;
 
-  meta = with stdenv.lib; {
+  buildInputs = [ glib readline ] ++ lib.optionals withUi uiDeps;
+
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = ".mdb (MS Access) format tools";
-    homepage = http://mdbtools.sourceforge.net;
-    platforms = platforms.unix;
     license = with licenses; [ gpl2 lgpl2 ];
+    maintainers = with maintainers; [ ];
+    platforms = platforms.unix;
+    inherit (src.meta) homepage;
   };
 }

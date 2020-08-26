@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "credstash";
-  version = "1.16.2";
+  version = "1.17.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1l3g76dm9csmx0z8s7zd75wfzw9dcyvrq0a81gfzwxk0c0w8c79r";
+    sha256 = "6c04e8734ef556ab459018da142dd0b244093ef176b3be5583e582e9a797a120";
   };
 
   # The install phase puts an executable and a copy of the library it imports in
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A utility for managing secrets in the cloud using AWS KMS and DynamoDB";
-    homepage = https://github.com/LuminalOSS/credstash;
+    homepage = "https://github.com/LuminalOSS/credstash";
     license = licenses.asl20;
   };
 }

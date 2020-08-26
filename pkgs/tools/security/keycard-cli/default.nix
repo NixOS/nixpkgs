@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "keycard-cli";
-  version = "0.0.12";
+  version = "0.4.0";
 
   goPackagePath = "github.com/status-im/keycard-cli";
   subPackages = [ "." ];
@@ -14,7 +14,7 @@ buildGoPackage rec {
     owner = "status-im";
     repo = pname;
     rev = version;
-    sha256 = "1jnbaq57i6i9bad1hcvd28mxfqq6v8rv806c6l74vlb79ff4v1wb";
+    sha256 = "0917vl5lw8wgvyn5l8q6xa8bqh342fibaa38syr8hmz8b09qkh38";
   };
 
   buildFlagsArray = [

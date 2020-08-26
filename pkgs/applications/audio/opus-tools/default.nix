@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Tools to work with opus encoded audio streams";
-    homepage = http://www.opus-codec.org/;
+    homepage = "http://www.opus-codec.org/";
     license = stdenv.lib.licenses.bsd2;
     maintainers = with stdenv.lib.maintainers; [ ];
     platforms = with stdenv.lib.platforms; unix;

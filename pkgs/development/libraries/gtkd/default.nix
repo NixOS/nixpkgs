@@ -117,7 +117,7 @@ in stdenv.mkDerivation rec {
 
   makeFlags  = [
     "prefix=${placeholder "out"}"
-    "PKG_CONFIG=${pkgconfig}/bin/pkg-config"
+    "PKG_CONFIG=${pkgconfig}/bin/${pkgconfig.targetPrefix}pkg-config"
   ];
 
   # The .pc files does not declare an `includedir=`, so the multiple
@@ -131,7 +131,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "D binding and OO wrapper for GTK";
-    homepage = https://gtkd.org;
+    homepage = "https://gtkd.org";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
   };

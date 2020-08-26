@@ -21,7 +21,7 @@ let
       '';
 
     meta = {
-      homepage = https://tomcat.apache.org/;
+      homepage = "https://tomcat.apache.org/";
       description = "An implementation of the Java Servlet and JavaServer Pages technologies";
       platforms = with lib.platforms; all;
       maintainers = with lib.maintainers; [ danbst ];

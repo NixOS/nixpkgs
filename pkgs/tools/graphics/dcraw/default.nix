@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://www.dechifro.org/dcraw/;
+    homepage = "https://www.dechifro.org/dcraw/";
     description = "Decoder for many camera raw picture formats";
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.unix; # Once had cygwin problems

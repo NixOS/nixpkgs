@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "py";
-  version = "1.8.1";
+  version = "1.8.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5e27081401262157467ad6e7f851b7aa402c5852dbcb3dae06768434de5752aa";
+    sha256 = "f3b3a4c36512a4c4f024041ab51866f11761cc169670204b235f6b20523d4e6b";
   };
 
   # Circular dependency on pytest
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Library with cross-python path, ini-parsing, io, code, log facilities";
-    homepage = https://pylib.readthedocs.org/;
+    homepage = "https://pylib.readthedocs.org/";
     license = licenses.mit;
   };
 }

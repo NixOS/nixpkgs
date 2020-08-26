@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   name = "crawl-${version}${lib.optionalString tileMode "-tiles"}";
-  version = "0.24.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "crawl";
     repo = "crawl";
     rev = version;
-    sha256 = "1cdjd33z04gj70manavihc3lj9ckpmd75n09vvyw01z41s33fzs0";
+    sha256 = "0swcl8cxz64yw8dl9macz8ar1ccwrkwz89j7s1f60inb5jlxifqm";
   };
 
   # Patch hard-coded paths and remove force library builds
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open-source, single-player, role-playing roguelike game";
-    homepage = http://crawl.develz.org/;
+    homepage = "http://crawl.develz.org/";
     longDescription = ''
       Dungeon Crawl: Stone Soup, an open-source, single-player, role-playing
       roguelike game of exploration and treasure-hunting in dungeons filled

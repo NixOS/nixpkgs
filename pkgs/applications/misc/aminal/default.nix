@@ -11,7 +11,7 @@
 
 buildGoPackage rec {
   pname = "aminal";
-  version = "0.8.6";
+  version = "0.9.0";
 
   goPackagePath = "github.com/liamg/aminal";
 
@@ -30,7 +30,7 @@ buildGoPackage rec {
     owner = "liamg";
     repo = "aminal";
     rev = "v${version}";
-    sha256 = "0qhjdckj2kr0vza6qssd9z8dfrsif1qxb1mal1d4wgdsy12lrmwl";
+    sha256 = "0syv9md7blnl6i19zf8s1xjx5vfz6s755fxyg2ply0qc1pwhsj8n";
   };
 
   preBuild = ''
@@ -61,7 +61,7 @@ buildGoPackage rec {
       - Built-in patched fonts for powerline
       - Retina display support
     '';
-    homepage = https://github.com/liamg/aminal;
+    homepage = "https://github.com/liamg/aminal";
     license = licenses.gpl3;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;

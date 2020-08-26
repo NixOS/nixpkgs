@@ -1,18 +1,16 @@
 { stdenv
 , fetchFromGitLab
+, fetchpatch
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gobject-introspection
 , wrapGAppsHook
 , glib
 , coreutils
 , accountsservice
 , dbus
-, flatpak
-, gtk3
 , pam
-, desktop-file-utils
 , polkit
 , glib-testing
 , python3
@@ -21,41 +19,37 @@
 
 stdenv.mkDerivation rec {
   pname = "malcontent";
-  version = "0.6.0";
+  version = "0.8.0";
 
-  outputs = [ "bin" "out" "dev" "man" "installedTests" ];
+  outputs = [ "bin" "out" "lib" "pam" "dev" "man" "installedTests" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "pwithnall";
     repo = pname;
     rev = version;
-    sha256 = "COh6N3CmLIcxx6tW4jcP0m6TZv0Z1YJUM/nlG0RzYHQ=";
+    sha256 = "Y9HzysChzzmKW5PuCLm9AZ4oaBLMpB0I5NyZUOYFzm4=";
   };
 
   patches = [
     # Allow installing installed tests to a separate output.
     ./installed-tests-path.patch
 
-    # This is unnecessary and breaks when submodules are not available.
-    # https://gitlab.freedesktop.org/pwithnall/malcontent/merge_requests/3
-    ./use-system-dependencies.patch
+    # Do not build things that are part of malcontent-ui package
+    ./better-separation.patch
   ];
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gobject-introspection
-    desktop-file-utils
     wrapGAppsHook
   ];
 
   buildInputs = [
     accountsservice
     dbus
-    flatpak
-    gtk3
     pam
     polkit
     glib-testing
@@ -71,6 +65,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dinstalled_tests=true"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    "-Dpamlibdir=${placeholder "pam"}/lib/security"
+    "-Dui=disabled"
   ];
 
   postPatch = ''
@@ -81,6 +77,13 @@ stdenv.mkDerivation rec {
       --replace "/bin/false" "${coreutils}/bin/false"
   '';
 
+  postInstall = ''
+    # `giDiscoverSelf` only picks up paths in `out` output.
+    # This needs to be in `postInstall` so that it runs before
+    # `gappsWrapperArgsHook` that runs as one of `preFixupPhases`.
+    addToSearchPath GI_TYPELIB_PATH "$lib/lib/girepository-1.0"
+  '';
+
   passthru = {
     tests = {
       installedTests = nixosTests.installed-tests.malcontent;
@@ -88,6 +91,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
+    # We need to install Polkit & AccountsService data files in `out`
+    # but `buildEnv` only uses `bin` when both `bin` and `out` are present.
+    outputsToInstall = [ "bin" "out" "man" ];
+
     description = "Parental controls library";
     homepage = "https://gitlab.freedesktop.org/pwithnall/malcontent";
     license = licenses.lgpl21Plus;

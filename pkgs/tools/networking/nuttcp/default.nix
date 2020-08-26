@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       and loss percentage (for UDP transfers).
     '';
     license = licenses.gpl2;
-    homepage = http://nuttcp.net/;
+    homepage = "http://nuttcp.net/";
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };

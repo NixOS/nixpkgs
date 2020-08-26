@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "C++ API to manipulate netcdf files";
-    homepage = https://www.unidata.ucar.edu/software/netcdf/;
+    homepage = "https://www.unidata.ucar.edu/software/netcdf/";
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.unix;
   };

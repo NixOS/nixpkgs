@@ -4,23 +4,24 @@
 
 buildGoModule rec {
   pname = "fscrypt";
-  version = "0.2.6";
+  version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fscrypt";
     rev = "v${version}";
-    sha256 = "15pwhz4267kwhkv532k6wgjqfzawawdrrk6vnl017ys5s9ln51a8";
+    sha256 = "020hhdarbn3bwlc2j2g89868v8nfx8562z1a778ihpvvsa4ykr31";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace 'TAG_VERSION := $(shell git describe --tags)' "" \
-      --replace '$(shell date)' '$(shell date --date="@0")' \
       --replace "/usr/local" "$out"
   '';
 
-  modSha256 = "110b647q6ljsg5gwlciqv4cddxmk332nahcrpidrpsiqs2yjv1md";
+  vendorSha256 = "0yak221mlyfacvlsaq9g3xiyk94n94vqgkbaji8d21pi8hhr38m6";
+
+  doCheck = false;
 
   nativeBuildInputs = [ gnum4 ];
   buildInputs = [ pam ];
@@ -46,6 +47,7 @@ buildGoModule rec {
       directories.
     '';
     inherit (src.meta) homepage;
+    changelog = "https://github.com/google/fscrypt/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

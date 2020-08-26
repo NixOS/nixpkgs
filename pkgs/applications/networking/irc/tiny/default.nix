@@ -6,6 +6,7 @@
 , pkg-config
 , dbus
 , openssl
+, Foundation
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   RUSTC_BOOTSTRAP = 1;
 
   nativeBuildInputs = lib.optional stdenv.isLinux pkg-config;
-  buildInputs = lib.optionals stdenv.isLinux [ dbus openssl ];
+  buildInputs = lib.optionals stdenv.isLinux [ dbus openssl ] ++ lib.optional stdenv.isDarwin Foundation;
 
   meta = with lib; {
     description = "A console IRC client";

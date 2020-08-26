@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
     # Cargo-culted from Arch, returns “out of pty's” without it
     (fetchurl {
       name = "fix_use_ptmx_on_arch.patch";
-      url = https://git.archlinux.org/svntogit/community.git/plain/trunk/fix_use_ptmx_on_arch.patch?h=packages/zssh&id=0a7c92543f9309856d02e31196f06d7c3eaa8b67;
+      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/fix_use_ptmx_on_arch.patch?h=packages/zssh&id=0a7c92543f9309856d02e31196f06d7c3eaa8b67";
       sha256 = "12daw9wpy58ql882zww945wk9cg2adwp8qsr5rvazx0xq0qawgbr";
     })
   ];
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "SSH and Telnet client with ZMODEM file transfer capability";
-    homepage = http://zssh.sourceforge.net/;
+    homepage = "http://zssh.sourceforge.net/";
     license = stdenv.lib.licenses.gpl2;
     maintainers = deepin.deepin-terminal.meta.maintainers; # required by deepin-terminal
     platforms = stdenv.lib.platforms.linux;

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "amber-theme";
-  version = "3.34-2";
+  version = "3.36-1";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0809l4r1qrzs9z04kcs1j962dpsvgpwpksnxs09md5722mynn65l";
+    sha256 = "0dn81ca3kyfz4ql15kl5108gw309cc0c1inmwlch1nq5dslmfjji";
   };
 
   nativeBuildInputs = [ meson ninja sassc ];

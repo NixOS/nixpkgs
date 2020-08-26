@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     It supports both video4linux 1 and 2 drivers,
     so it should work on a very large number of devices.
     '';
-    homepage = http://wxcam.sourceforge.net/;
+    homepage = "http://wxcam.sourceforge.net/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

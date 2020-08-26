@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://github.com/rebar/rebar;
+    homepage = "https://github.com/rebar/rebar";
     description = "Erlang build tool that makes it easy to compile and test Erlang applications, port drivers and releases";
 
     longDescription = ''
@@ -36,7 +36,6 @@ stdenv.mkDerivation {
       '';
 
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.the-kenny ];
     license = stdenv.lib.licenses.asl20;
   };
 }

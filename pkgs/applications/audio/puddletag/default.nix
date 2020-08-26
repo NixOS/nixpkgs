@@ -29,7 +29,7 @@ python2Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "An audio tag editor similar to the Windows program, Mp3tag";
-    homepage    = https://docs.puddletag.net;
+    homepage    = "https://docs.puddletag.net";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.linux;

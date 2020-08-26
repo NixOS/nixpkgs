@@ -1,6 +1,6 @@
 { stdenv, callPackage, fetchFromGitHub
 , cmake, kodiPlain, libcec_platform, tinyxml, rapidxml
-, steam, libusb, pcre-cpp, jsoncpp, libhdhomerun, zlib
+, steam, udev, libusb1, jsoncpp, libhdhomerun, zlib
 , python2Packages, expat, glib, nspr, nss, openssl
 , libssh, libarchive, lzma, bzip2, lz4, lzo }:
 
@@ -109,7 +109,7 @@ let self = rec {
     };
 
     meta = {
-      homepage = https://forum.kodi.tv/showthread.php?tid=85724;
+      homepage = "https://forum.kodi.tv/showthread.php?tid=85724";
       description = "A program launcher for Kodi";
       longDescription = ''
         Advanced Launcher allows you to start any Linux, Windows and
@@ -139,7 +139,7 @@ let self = rec {
     };
 
     meta = {
-      homepage = https://forum.kodi.tv/showthread.php?tid=287826;
+      homepage = "https://forum.kodi.tv/showthread.php?tid=287826";
       description = "A program launcher for Kodi";
       longDescription = ''
         Advanced Emulator Launcher is a multi-emulator front-end for Kodi
@@ -200,7 +200,7 @@ let self = rec {
       sha256 = "1dvff24fbas25k5kvca4ssks9l1g5rfa3hl8lqxczkaqi3pp41j5";
     };
     meta = {
-      homepage = https://forum.kodi.tv/showthread.php?tid=258159;
+      homepage = "https://forum.kodi.tv/showthread.php?tid=258159";
       description = "A ROM launcher for Kodi that uses HyperSpin assets.";
       maintainers = with maintainers; [ edwtjo ];
     };
@@ -236,8 +236,7 @@ let self = rec {
       maintainers = with maintainers; [ edwtjo ];
     };
 
-    extraBuildInputs = [ libusb pcre-cpp ];
-
+    extraBuildInputs = [ udev ];
   };
 
   simpleplugin = mkKodiPlugin rec {
@@ -274,7 +273,7 @@ let self = rec {
     };
 
     meta = {
-      homepage = https://forum.kodi.tv/showthread.php?tid=67110;
+      homepage = "https://forum.kodi.tv/showthread.php?tid=67110";
       description = "Watch content from SVT Play";
       longDescription = ''
         With this addon you can stream content from SVT Play
@@ -300,7 +299,7 @@ let self = rec {
       sha256 = "1hbd8fdvn7xkr9csz1g9wah78nhnq1rkazl4zwa31y70830k3279";
     };
 
-    extraBuildInputs = [ libusb ];
+    extraBuildInputs = [ libusb1 ];
 
     meta = {
       description = "Binary addon for steam controller.";
@@ -326,7 +325,7 @@ let self = rec {
     propagatedBuildInputs = [ steam ];
 
     meta = {
-      homepage = https://forum.kodi.tv/showthread.php?tid=157499;
+      homepage = "https://forum.kodi.tv/showthread.php?tid=157499";
       description = "Launch Steam in Big Picture Mode from Kodi";
       longDescription = ''
         This add-on will close/minimise Kodi, launch Steam in Big
@@ -353,7 +352,7 @@ let self = rec {
     };
 
     meta = {
-      homepage = https://forum.kodi.tv/showthread.php?tid=187421;
+      homepage = "https://forum.kodi.tv/showthread.php?tid=187421";
       description = "A comic book reader";
       maintainers = with maintainers; [ edwtjo ];
     };
@@ -373,7 +372,7 @@ let self = rec {
     };
 
     meta = {
-      homepage = https://github.com/kodi-pvr/pvr.hts;
+      homepage = "https://github.com/kodi-pvr/pvr.hts";
       description = "Kodi's Tvheadend HTSP client addon";
       platforms = platforms.all;
       maintainers = with maintainers; [ cpages ];
@@ -395,7 +394,7 @@ let self = rec {
     };
 
     meta = {
-      homepage = https://github.com/kodi-pvr/pvr.hdhomerun;
+      homepage = "https://github.com/kodi-pvr/pvr.hdhomerun";
       description = "Kodi's HDHomeRun PVR client addon";
       platforms = platforms.all;
       maintainers = with maintainers; [ titanous ];
@@ -419,7 +418,7 @@ let self = rec {
     };
 
     meta = {
-      homepage = https://github.com/kodi-pvr/pvr.iptvsimple;
+      homepage = "https://github.com/kodi-pvr/pvr.iptvsimple";
       description = "Kodi's IPTV Simple client addon";
       platforms = platforms.all;
       maintainers = with maintainers; [ ];
@@ -443,7 +442,7 @@ let self = rec {
     };
 
     meta = {
-      homepage = https://github.com/osmc/skin.osmc;
+      homepage = "https://github.com/osmc/skin.osmc";
       description = "The default skin for OSMC";
       platforms = platforms.all;
       maintainers = with maintainers; [ worldofpeace ];
@@ -500,7 +499,7 @@ let self = rec {
     '';
 
     meta = {
-      homepage = https://github.com/peak3d/inputstream.adaptive;
+      homepage = "https://github.com/peak3d/inputstream.adaptive";
       description = "Kodi inputstream addon for several manifest types";
       platforms = platforms.all;
       maintainers = with maintainers; [ sephalon ];
@@ -509,14 +508,14 @@ let self = rec {
 
   vfs-sftp = mkKodiABIPlugin rec {
     namespace = "vfs.sftp";
-    version = "1.0.5";
+    version = "1.0.6";
     plugin = namespace;
 
     src = fetchFromGitHub {
       owner = "xbmc";
       repo = namespace;
       rev = "${version}-${rel}";
-      sha256 = "10l2rwim574012vzjrkr0b153gk5q81fq48p47mijk294l7g100d";
+      sha256 = "044kkzcpzvbyih4vys33r4hqw38xa82snmvl4qj1r80wnszc8af1";
     };
 
     meta = with stdenv.lib; {
@@ -531,14 +530,14 @@ let self = rec {
 
   vfs-libarchive = mkKodiABIPlugin rec {
     namespace = "vfs.libarchive";
-    version = "1.0.5";
+    version = "1.0.7";
     plugin = namespace;
 
     src = fetchFromGitHub {
       owner = "xbmc";
       repo = namespace;
       rev = "${version}-${rel}";
-      sha256 = "0l1f1fijflr1ia30r0dcz1x2zn35c4lxy30az1cqxdf8nipza0b8";
+      sha256 = "01qhv095h5j67ispm4iw18pd3kl7a0mnjkgm92al9qqiyif8lzgh";
     };
 
     meta = with stdenv.lib; {

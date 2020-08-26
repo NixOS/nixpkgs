@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python client for Consul (https://www.consul.io/)";
-    homepage = https://github.com/cablehead/python-consul;
+    homepage = "https://github.com/cablehead/python-consul";
     license = licenses.mit;
     maintainers = with maintainers; [ desiderius ];
   };

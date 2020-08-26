@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    homepage = https://github.com/byllyfish/precis_i18n;
+    homepage = "https://github.com/byllyfish/precis_i18n";
     description = "Internationalized usernames and passwords";
     license = lib.licenses.mit;
   };

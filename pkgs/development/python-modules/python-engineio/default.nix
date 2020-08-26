@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "python-engineio";
-  version = "3.10.0";
+  version = "3.13.0";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-engineio";
     rev = "v${version}";
-    sha256 = "1495r55177c38wq88pb28l50dfd4213iyxwq1k5rmsgp66vww09s";
+    sha256 = "1fgfrgcvjg3fyza5lhl1l9cfq073xrwwhh3xs178csrjz4s8s378";
   };
 
   propagatedBuildInputs = [
@@ -45,9 +45,8 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Engine.IO server";
-    homepage = https://github.com/miguelgrinberg/python-engineio/;
+    homepage = "https://github.com/miguelgrinberg/python-engineio/";
     license = licenses.mit;
-    platforms = platforms.linux;
     maintainers = [ maintainers.mic92 ];
   };
 }

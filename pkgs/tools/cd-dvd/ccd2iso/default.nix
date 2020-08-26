@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "CloneCD to ISO converter";
-    homepage = https://sourceforge.net/projects/ccd2iso/;
+    homepage = "https://sourceforge.net/projects/ccd2iso/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ yegortimoshenko ];
     platforms = platforms.unix;

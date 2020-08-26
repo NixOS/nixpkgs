@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Transit Relay server for Magic-Wormhole";
-    homepage = https://github.com/warner/magic-wormhole-transit-relay;
+    homepage = "https://github.com/warner/magic-wormhole-transit-relay";
     license = licenses.mit;
   };
 }

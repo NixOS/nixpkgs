@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   pname = "libc++";
   inherit version;
 
-  src = fetch "libcxx" "1cjxiby8nq95g02rgx08iy86pswpi66b9wmxqjiyga1s92nb19j0";
+  src = fetch "libcxx" "0v78bfr6h2zifvdqnj2wlfk4pvxzrqn3hg1v6lqk3y12bx9p9xny";
 
   postUnpack = ''
     unpackFile ${libcxxabi.src}
@@ -39,15 +39,12 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  linkCxxAbi = stdenv.isLinux;
-
-  setupHooks = [
-    ../../../../../build-support/setup-hooks/role.bash
-    ./setup-hook.sh
-  ];
+  passthru = {
+    isLLVM = true;
+  };
 
   meta = {
-    homepage = http://libcxx.llvm.org/;
+    homepage = "https://libcxx.llvm.org/";
     description = "A new implementation of the C++ standard library, targeting C++11";
     license = with stdenv.lib.licenses; [ ncsa mit ];
     platforms = stdenv.lib.platforms.all;

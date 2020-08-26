@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://bukkit.org/threads/admin-rcon-mcrcon-remote-connection-client-for-minecraft-servers.70910/;
+    homepage = "https://bukkit.org/threads/admin-rcon-mcrcon-remote-connection-client-for-minecraft-servers.70910/";
     description = "Minecraft console client with Bukkit coloring support.";
     longDescription = ''
       Mcrcon is a powerful Minecraft RCON terminal client with Bukkit coloring support.

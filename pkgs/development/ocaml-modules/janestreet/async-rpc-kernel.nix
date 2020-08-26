@@ -10,7 +10,7 @@ buildOcamlJane {
     sexplib typerep variantslib ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/janestreet/async_rpc_kernel;
+    homepage = "https://github.com/janestreet/async_rpc_kernel";
     description = "Platform-independent core of Async RPC library";
     license = licenses.asl20;
     maintainers = [ maintainers.maurer ];

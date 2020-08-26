@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ stdenv, fetchurl, fetchpatch, enableStatic ? true, enableShared ? true }:
 
 stdenv.mkDerivation rec {
   pname = "libexecinfo";
@@ -12,35 +12,42 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "10-execinfo.patch";
-      url = https://git.alpinelinux.org/cgit/aports/plain/main/libexecinfo/10-execinfo.patch?id=730cdcef6901750f4029d4c3b8639ce02ee3ead1;
+      url = "https://git.alpinelinux.org/aports/plain/main/libexecinfo/10-execinfo.patch?id=730cdcef6901750f4029d4c3b8639ce02ee3ead1";
       sha256 = "0lnphrad4vspyljnvmm62dyxj98vgp3wabj4w3vfzfph7j8piw7g";
     })
     (fetchpatch {
       name = "20-define-gnu-source.patch";
-      url = https://git.alpinelinux.org/cgit/aports/plain/main/libexecinfo/20-define-gnu-source.patch?id=730cdcef6901750f4029d4c3b8639ce02ee3ead1;
+      url = "https://git.alpinelinux.org/aports/plain/main/libexecinfo/20-define-gnu-source.patch?id=730cdcef6901750f4029d4c3b8639ce02ee3ead1";
       sha256 = "1mp8mc639b0h2s69m5z6s2h3q3n1zl298j9j0plzj7f979j76302";
     })
     (fetchpatch {
       name = "30-linux-makefile.patch";
-      url = https://git.alpinelinux.org/cgit/aports/plain/main/libexecinfo/30-linux-makefile.patch?id=730cdcef6901750f4029d4c3b8639ce02ee3ead1;
+      url = "https://git.alpinelinux.org/aports/plain/main/libexecinfo/30-linux-makefile.patch?id=730cdcef6901750f4029d4c3b8639ce02ee3ead1";
       sha256 = "1jwjz22z5cjy5h2bfghn62yl9ar8jiqhdvbwrcfavv17ihbhwcaf";
     })
   ];
 
   makeFlags = [ "CC:=$(CC)" "AR:=$(AR)" ];
 
+  buildFlags =
+      stdenv.lib.optional enableStatic "static"
+   ++ stdenv.lib.optional enableShared "dynamic";
+
   patchFlags = [ "-p0" ];
 
   installPhase = ''
     install -Dm644 execinfo.h stacktraverse.h -t $out/include
-    install -Dm755 libexecinfo.{a,so.1} -t $out/lib
+  '' + stdenv.lib.optionalString enableShared ''
+    install -Dm755 libexecinfo.so.1 -t $out/lib
     ln -s $out/lib/libexecinfo.so{.1,}
+  '' + stdenv.lib.optionalString enableStatic ''
+    install -Dm755 libexecinfo.a -t $out/lib
   '';
 
   meta = with stdenv.lib; {
     description = "Quick-n-dirty BSD licensed clone of the GNU libc backtrace facility";
     license = licenses.bsd2;
-    homepage = https://www.freshports.org/devel/libexecinfo;
+    homepage = "https://www.freshports.org/devel/libexecinfo";
     maintainers = with maintainers; [ dtzWill ];
   };
 }

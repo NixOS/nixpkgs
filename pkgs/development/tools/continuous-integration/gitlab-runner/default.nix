@@ -1,22 +1,23 @@
 { lib, buildGoPackage, fetchFromGitLab, fetchurl }:
 
 let
-  version = "12.8.0";
+  version = "13.3.0";
   # Gitlab runner embeds some docker images these are prebuilt for arm and x86_64
   docker_x86_64 = fetchurl {
     url = "https://gitlab-runner-downloads.s3.amazonaws.com/v${version}/helper-images/prebuilt-x86_64.tar.xz";
-    sha256 = "02k9nzfqlsd78dan522qynbz2i2ggvf960968vmg0wdg6rjv19z2";
+    sha256 = "0pi33mgcmw1n5myyczg1nx1s8rqx6b4vr7s09jsjd6z81irhc87c";
   };
 
   docker_arm = fetchurl {
     url = "https://gitlab-runner-downloads.s3.amazonaws.com/v${version}/helper-images/prebuilt-arm.tar.xz";
-    sha256 = "098g6948w8skbz9z5212ndsxvf3k12aijy0v2a7c86r0zhlga52x";
+    sha256 = "071bsfnkasdj7lfidfhwcklycan2zpyalqia3rmbwd93m5rwqgrd";
   };
 in
 buildGoPackage rec {
   inherit version;
   pname = "gitlab-runner";
   goPackagePath = "gitlab.com/gitlab-org/gitlab-runner";
+  subPackages = [ "." ];
   commonPackagePath = "${goPackagePath}/common";
   buildFlagsArray = ''
     -ldflags=
@@ -29,22 +30,21 @@ buildGoPackage rec {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     rev = "v${version}";
-    sha256 = "17cs7bs3dxkj6r7hip6kv7cj7g5lq9x1g3gcl2kjj8djxzkhfc4m";
+    sha256 = "0idbj8jmycrh61bvkzjl5xffhvv9jnjqv9q0ivl457sn2jii9bhi";
   };
 
   patches = [ ./fix-shell-path.patch ];
 
   postInstall = ''
-    touch $bin/bin/hello
-    install -d $bin/bin/helper-images
-    ln -sf ${docker_x86_64} $bin/bin/helper-images/prebuilt-x86_64.tar.xz
-    ln -sf ${docker_arm} $bin/bin/helper-images/prebuilt-arm.tar.xz
+    install -d $out/bin/helper-images
+    ln -sf ${docker_x86_64} $out/bin/helper-images/prebuilt-x86_64.tar.xz
+    ln -sf ${docker_arm} $out/bin/helper-images/prebuilt-arm.tar.xz
   '';
 
   meta = with lib; {
     description = "GitLab Runner the continuous integration executor of GitLab";
     license = licenses.mit;
-    homepage = https://about.gitlab.com/gitlab-ci/;
+    homepage = "https://about.gitlab.com/gitlab-ci/";
     platforms = platforms.unix ++ platforms.darwin;
     maintainers = with maintainers; [ bachp zimbatm globin ];
   };

@@ -20,7 +20,7 @@ in antBuild {
   ];
 
   meta = {
-    homepage = http://www.junit.org/;
+    homepage = "http://www.junit.org/";
     description = "A framework for repeatable tests in Java";
     license = stdenv.lib.licenses.epl10;
     broken = true;

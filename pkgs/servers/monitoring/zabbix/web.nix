@@ -6,7 +6,7 @@ import ./versions.nix ({ version, sha256 }:
     inherit version;
 
     src = fetchurl {
-      url = "mirror://sourceforge/zabbix/ZABBIX%20Latest%20Stable/${version}/zabbix-${version}.tar.gz";
+      url = "https://cdn.zabbix.com/zabbix/sources/stable/${stdenv.lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
       inherit sha256;
     };
 
@@ -18,7 +18,7 @@ import ./versions.nix ({ version, sha256 }:
 
     installPhase = ''
       mkdir -p $out/share/zabbix/
-      cp -a frontends/php/. $out/share/zabbix/
+      cp -a ${if stdenv.lib.versionAtLeast version "5.0.0" then "ui/." else "frontends/php/."} $out/share/zabbix/
       cp ${phpConfig} $out/share/zabbix/conf/zabbix.conf.php
     '';
 

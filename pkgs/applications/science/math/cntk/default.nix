@@ -1,11 +1,12 @@
 { lib, stdenv, fetchgit, fetchFromGitHub, cmake
-, openblas, opencv3, libzip, boost, protobuf, openmpi
+, openblas, blas, lapack, opencv3, libzip, boost, protobuf, openmpi
 , onebitSGDSupport ? false
 , cudaSupport ? false, addOpenGLRunpath, cudatoolkit, nvidia_x11
 , cudnnSupport ? cudaSupport, cudnn
 }:
 
 assert cudnnSupport -> cudaSupport;
+assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
 let
   # Old specific version required for CNTK.
@@ -95,7 +96,7 @@ in stdenv.mkDerivation rec {
     # Newer cub is included with cudatoolkit now and it breaks the build.
     # https://github.com/Microsoft/CNTK/issues/3191
     broken = cudaSupport;
-    homepage = https://github.com/Microsoft/CNTK;
+    homepage = "https://github.com/Microsoft/CNTK";
     description = "An open source deep-learning toolkit";
     license = if onebitSGDSupport then licenses.unfreeRedistributable else licenses.mit;
     platforms = [ "x86_64-linux" ];

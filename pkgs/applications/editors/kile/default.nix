@@ -54,7 +54,7 @@ mkDerivation rec {
 
   meta = {
     description = "Kile is a user friendly TeX/LaTeX authoring tool for the KDE desktop environment";
-    homepage = https://www.kde.org/applications/office/kile/;
+    homepage = "https://www.kde.org/applications/office/kile/";
     maintainers = with lib.maintainers; [ fridh ];
     license = lib.licenses.gpl2Plus;
   };

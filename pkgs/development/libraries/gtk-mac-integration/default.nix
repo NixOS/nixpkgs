@@ -1,13 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkgconfig, glib, gtk-doc, gtk, gobject-introspection }:
+{ stdenv, fetchFromGitLab, autoreconfHook, pkgconfig, glib, gtk-doc, gtk, gobject-introspection }:
 
-stdenv.mkDerivation {
-  name = "gtk-mac-integration-2.0.8";
+stdenv.mkDerivation rec {
+  pname = "gtk-mac-integration";
+  version = "2.1.3";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
     owner = "GNOME";
-    repo = "gtk-mac-integration";
-    rev = "79e708870cdeea24ecdb036c77b4630104ae1776";
-    sha256 = "1fbhnvj0rqc3089ypvgnpkp6ad2rr37v5qk38008dgamb9h7f3qs";
+    repo = pname;
+    rev = "${pname}-${version}";
+    sha256 = "1w0agv4r0daklv5d2f3l0c10krravjq8bj9hsdsrpka48dbnqmap";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig gtk-doc gobject-introspection ];
@@ -18,14 +20,11 @@ stdenv.mkDerivation {
     gtkdocize
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "Provides integration for GTK applications into the Mac desktop";
-
     license = licenses.lgpl21;
-
-    homepage = https://wiki.gnome.org/Projects/GTK/OSX/Integration;
-
-    maintainers = [ maintainers.matthewbauer ];
+    homepage = "https://wiki.gnome.org/Projects/GTK/OSX/Integration";
+    maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.darwin;
   };
 }

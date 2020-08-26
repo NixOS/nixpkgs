@@ -23,12 +23,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
-  version = "20.0";
-  slang   = "Calcium";
+  version = "21.1";
+  slang   = "Scandium";
 
   src = fetchurl {
     url    = "http://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    sha256 = "03dvn162djylj2skmk6vv75gh87mm4s5cspkzcrlm5x0rlla2yqn";
+    sha256 = "0qq0d08dzr0dmdjysiimdqmwlzgnn932vp5kf8lfn3nl45ai09dy";
   };
 
   preConfigure = lib.optionalString stdenv.cc.isClang "configureFlagsArray=(\"--with-cpp=clang -E -C\")";
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An extensible and collaborative platform dedicated to source-code analysis of C software";
-    homepage    = http://frama-c.com/;
+    homepage    = "http://frama-c.com/";
     license     = stdenv.lib.licenses.lgpl21;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice amiddelk ];
     platforms   = stdenv.lib.platforms.unix;

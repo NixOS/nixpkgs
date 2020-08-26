@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "A CLI front-end to a running salt-api system";
-    homepage = https://github.com/saltstack/pepper;
+    homepage = "https://github.com/saltstack/pepper";
     maintainers = [ maintainers.pierrer ];
     license = licenses.asl20;
   };

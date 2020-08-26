@@ -36,7 +36,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://django-configurations.readthedocs.io/;
+    homepage = "https://django-configurations.readthedocs.io/";
     description = "A helper for organizing Django settings";
     license = licenses.bsd0;
     maintainers = [ maintainers.costrouc ];

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib dbus dbus-glib ];
 
   meta = with stdenv.lib; {
-    homepage = https://hal.freedesktop.org/releases/;
+    homepage = "https://hal.freedesktop.org/releases/";
     description = "D-Bus bindings for GObject";
     platforms = platforms.linux;
     license = licenses.lgpl2;

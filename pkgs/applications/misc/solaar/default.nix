@@ -3,12 +3,12 @@
 # adding this to services.udev.packages on NixOS
 python3Packages.buildPythonApplication rec {
   pname = "solaar";
-  version = "1.0.1";
+  version = "1.0.2";
   src = fetchFromGitHub {
     owner = "pwr-Solaar";
     repo = "Solaar";
     rev = "${version}";
-    sha256 = "1ni3aimpl9vyhwzi61mvm8arkii52cmb6bzjma9cnkjyx328pkid";
+    sha256 = "0k5z9dap6rawiafkg1x7zjx51ala7wra6j6lvc2nn0y8r79yp7a9";
   };
 
   propagatedBuildInputs = with python3Packages; [ gobject-introspection gtk3 pygobject3 pyudev ];
@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
       To be able to use it, make sure you have access to /dev/hidraw* files.
     '';
     license = licenses.gpl2;
-    homepage = https://pwr-solaar.github.io/Solaar/;
+    homepage = "https://pwr-solaar.github.io/Solaar/";
     platforms = platforms.linux;
     maintainers = with maintainers; [ spinus ysndr ];
   };

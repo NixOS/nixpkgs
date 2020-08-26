@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "SVG and MathML rendering library";
 
-    homepage = https://wiki.gnome.org/Projects/Lasem;
+    homepage = "https://wiki.gnome.org/Projects/Lasem";
     license = stdenv.lib.licenses.gpl2Plus;
 
     platforms = stdenv.lib.platforms.unix;

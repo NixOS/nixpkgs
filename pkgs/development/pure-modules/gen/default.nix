@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Pure interface generator";
-    homepage = http://puredocs.bitbucket.org/pure-gen.html;
+    homepage = "http://puredocs.bitbucket.org/pure-gen.html";
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.linux;
     hydraPlatforms = [];

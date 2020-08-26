@@ -32,7 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python parser for bash";
     license = licenses.gpl3;
-    homepage = https://github.com/idank/bashlex;
+    homepage = "https://github.com/idank/bashlex";
     maintainers = with maintainers; [ multun ];
   };
 }

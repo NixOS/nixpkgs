@@ -63,17 +63,14 @@ rec {
   #             https://nixos.org/nix/manual/#builtin-filterSource
   #
   #   name:     Optional name to use as part of the store path.
-  #             This defaults `src.name` or otherwise `baseNameOf src`.
-  #             We recommend setting `name` whenever `src` is syntactically `./.`.
-  #             Otherwise, you depend on `./.`'s name in the parent directory,
-  #             which can cause inconsistent names, defeating caching.
+  #             This defaults to `src.name` or otherwise `"source"`.
   #
   cleanSourceWith = { filter ? _path: _type: true, src, name ? null }:
     let
       isFiltered = src ? _isLibCleanSourceWith;
       origSrc = if isFiltered then src.origSrc else src;
       filter' = if isFiltered then name: type: filter name type && src.filter name type else filter;
-      name' = if name != null then name else if isFiltered then src.name else baseNameOf src;
+      name' = if name != null then name else if isFiltered then src.name else "source";
     in {
       inherit origSrc;
       filter = filter';
@@ -148,10 +145,14 @@ rec {
            # packed-refs file, so we have to grep through it:
            then
              let fileContent = readFile packedRefsName;
-                 matchRef    = match (".*\n([^\n ]*) " + file + "\n.*") fileContent;
-             in if  matchRef == null
+                 matchRef = builtins.match "([a-z0-9]+) ${file}";
+                 isRef = s: builtins.isString s && (matchRef s) != null;
+                 # there is a bug in libstdc++ leading to stackoverflow for long strings:
+                 # https://github.com/NixOS/nix/issues/2147#issuecomment-659868795
+                 refs = builtins.filter isRef (builtins.split "\n" fileContent);
+             in if refs == []
                 then throw ("Could not find " + file + " in " + packedRefsName)
-                else lib.head matchRef
+                else lib.head (matchRef (lib.head refs))
 
            else throw ("Not a .git directory: " + path);
     in readCommitFromFile "HEAD";

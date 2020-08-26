@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A tiny web auditor with strong opinions";
-    homepage = https://github.com/trailofbits/twa;
+    homepage = "https://github.com/trailofbits/twa";
     license = licenses.mit;
     maintainers = with maintainers; [ avaq ];
     platforms = platforms.unix;

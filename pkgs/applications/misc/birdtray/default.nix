@@ -7,32 +7,38 @@
   , qtbase
   , qttools
   , qtx11extras
-  , sqlite
+  , qttranslations
 }:
 
 mkDerivation rec {
   pname = "birdtray";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "gyunaev";
     repo = pname;
-    rev = "RELEASE_${version}";
-    sha256 = "0wj2lq5bz1p0cf6yj43v3ifxschcrh5amwx30wqw2m4bb8syzjw1";
+    rev = version;
+    sha256 = "15l8drdmamq1dpqpj0h9ajj2r5vcs23cx421drvhfgs6bqlzd1hl";
   };
+
+  patches = [
+    # See https://github.com/NixOS/nixpkgs/issues/86054
+    ./fix-qttranslations-path.diff
+  ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [
-    qtbase qtx11extras sqlite
+    qtbase qttools qtx11extras
   ];
 
-  installPhase = ''
-    install -Dm755 birdtray $out/bin/birdtray
+  postPatch = ''
+    substituteInPlace src/birdtrayapp.cpp \
+      --subst-var-by qttranslations ${qttranslations}
   '';
 
   meta = with lib; {
     description = "Mail system tray notification icon for Thunderbird";
-    homepage = https://github.com/gyunaev/birdtray;
+    homepage = "https://github.com/gyunaev/birdtray";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ Flakebi ];
     platforms = platforms.linux;

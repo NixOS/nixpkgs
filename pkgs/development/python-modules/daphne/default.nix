@@ -1,10 +1,10 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, fetchpatch
+{ stdenv, buildPythonPackage, isPy3k, fetchFromGitHub
 , asgiref, autobahn, twisted, pytestrunner
-, hypothesis, pytest, pytest-asyncio
+, hypothesis, pytest, pytest-asyncio, service-identity, pyopenssl
 }:
 buildPythonPackage rec {
   pname = "daphne";
-  version = "2.3.0";
+  version = "2.5.0";
 
   disabled = !isPy3k;
 
@@ -12,20 +12,12 @@ buildPythonPackage rec {
     owner = "django";
     repo = pname;
     rev = version;
-    sha256 = "020afrvbnid13gkgjpqznl025zpynisa96kybmf8q7m3wp1iq1nl";
+    sha256 = "0qkhmblj3a5s3z65cgz46xsvq1b6x4m3kr6aljjnxnv7hcwib02n";
   };
-
-  patches = [
-    # Fix compatibility with Hypothesis 4. See: https://github.com/django/daphne/pull/261
-    (fetchpatch {
-      url = "https://github.com/django/daphne/commit/2df5096c5b63a791c209e12198ad89c998869efd.patch";
-      sha256 = "0046krzcn02mihqmsjd80kk5h5flv44nqxpapa17g6dvq3jnb97n";
-    })
-  ];
 
   nativeBuildInputs = [ pytestrunner ];
 
-  propagatedBuildInputs = [ asgiref autobahn twisted ];
+  propagatedBuildInputs = [ asgiref autobahn twisted service-identity pyopenssl ];
 
   checkInputs = [ hypothesis pytest pytest-asyncio ];
 
@@ -38,6 +30,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Django ASGI (HTTP/WebSocket) server";
     license = licenses.bsd3;
-    homepage = https://github.com/django/daphne;
+    homepage = "https://github.com/django/daphne";
   };
 }

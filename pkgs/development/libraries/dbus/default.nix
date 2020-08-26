@@ -20,11 +20,11 @@ assert enableSystemd -> systemd != null;
 
 stdenv.mkDerivation rec {
   pname = "dbus";
-  version = "1.12.16";
+  version = "1.12.20";
 
   src = fetchurl {
     url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
-    sha256 = "107ckxaff1cv4q6kmfdi2fb1nlsv03312a7kf6lb4biglhpjv8jl";
+    sha256 = "1zp5gpx61v1cpqf2zwb1cidhp9xylvw49d3zydkxqk6b1qa20xpp";
   };
 
   patches = lib.optional stdenv.isSunOS ./implement-getgrouplist.patch;
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple interprocess messaging system";
-    homepage = http://www.freedesktop.org/wiki/Software/dbus/;
+    homepage = "http://www.freedesktop.org/wiki/Software/dbus/";
     license = licenses.gpl2Plus; # most is also under AFL-2.1
     maintainers = with maintainers; [ worldofpeace ];
     platforms = platforms.unix;

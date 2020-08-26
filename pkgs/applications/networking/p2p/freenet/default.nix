@@ -2,7 +2,7 @@
 
 let
   freenet_ext = fetchurl {
-    url = https://downloads.freenetproject.org/latest/freenet-ext.jar;
+    url = "https://downloads.freenetproject.org/latest/freenet-ext.jar";
     sha256 = "17ypljdvazgx2z6hhswny1lxfrknysz3x6igx8vl3xgdpvbb7wij";
   };
 
@@ -12,7 +12,7 @@ let
     sha256 = "0abmhg2h44g8c5p7skzqwfxj8xwcjh9vs84mc0hr78k1am0633jk";
   };
   seednodes = fetchurl {
-    url = https://downloads.freenetproject.org/alpha/opennet/seednodes.fref;
+    url = "https://downloads.freenetproject.org/alpha/opennet/seednodes.fref";
     sha256 = "08awwr8n80b4cdzzb3y8hf2fzkr1f2ly4nlq779d6pvi5jymqdvv";
   };
   version = "build01475";
@@ -72,7 +72,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "Decentralised and censorship-resistant network";
-    homepage = https://freenetproject.org/;
+    homepage = "https://freenetproject.org/";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.doublec ];
     platforms = with stdenv.lib.platforms; linux;

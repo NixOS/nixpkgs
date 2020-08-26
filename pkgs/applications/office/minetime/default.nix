@@ -41,7 +41,7 @@ appimageTools.wrapAppImage rec {
 
   meta = with lib; {
     description = "Modern, intuitive and smart calendar application";
-    homepage = https://minetime.ai;
+    homepage = "https://minetime.ai";
     license = licenses.unfree;
     # Should be cross-platform, but for now we just grab the appimage
     platforms = [ "x86_64-linux" ];

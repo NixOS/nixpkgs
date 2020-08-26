@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openwsman";
-  version = "2.6.11";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner  = "Openwsman";
     repo   = "openwsman";
     rev    = "v${version}";
-    sha256 = "0s8xdxrxnh1l0v41n5cw89b89rrlqlxn1yj14sw224230y8m70ka";
+    sha256 = "19dj38jyzhhhvk863cikcwk5awzlq3337pxmsaqqm4wrcygrkfmx";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description  = "Openwsman server implementation and client API with bindings";
-    downloadPage = https://github.com/Openwsman/openwsman/releases;
-    homepage     = https://openwsman.github.io;
+    downloadPage = "https://github.com/Openwsman/openwsman/releases";
+    homepage     = "https://openwsman.github.io";
     license      = licenses.bsd3;
     maintainers  = with maintainers; [ deepfire ];
     platforms    = platforms.linux; # PAM is not available on Darwin

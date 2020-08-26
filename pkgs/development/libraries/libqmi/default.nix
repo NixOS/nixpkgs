@@ -1,22 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, glib, python3, libgudev, libmbim }:
+{ stdenv, fetchurl, pkg-config, gobject-introspection, glib, python3, libgudev, libmbim }:
 
 stdenv.mkDerivation rec {
   pname = "libqmi";
-  version = "1.24.6";
+  version = "1.26.2";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/libqmi/${pname}-${version}.tar.xz";
-    sha256 = "1jfq8jdjc9z5c0g7m377svdlniwkr4k9hs7s8fsb5rvdq5xja98k";
+    sha256 = "00vvvfq74awg6mk0si1cdv79f6z6wqx11h47nl78a1h7zsr6fd0k";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
 
   configureFlags = [
     "--with-udev-base-dir=${placeholder "out"}/lib/udev"
+    "--enable-introspection"
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
+    gobject-introspection
     python3
   ];
 
@@ -25,6 +27,8 @@ stdenv.mkDerivation rec {
     libgudev
     libmbim
   ];
+
+  enableParallelBuilding = true;
 
   doCheck = true;
 

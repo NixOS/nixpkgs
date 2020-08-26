@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Receives StatsD-style metrics and exports them to Prometheus";
-    homepage = https://github.com/prometheus/statsd_exporter;
+    homepage = "https://github.com/prometheus/statsd_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley ivan ];
     platforms = platforms.unix;

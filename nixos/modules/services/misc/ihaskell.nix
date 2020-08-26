@@ -15,6 +15,7 @@ in
   options = {
     services.ihaskell = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = "Autostart an IHaskell notebook service.";
       };

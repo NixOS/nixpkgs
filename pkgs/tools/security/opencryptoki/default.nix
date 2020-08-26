@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "PKCS#11 implementation for Linux";
-    homepage    = https://github.com/opencryptoki/opencryptoki;
+    homepage    = "https://github.com/opencryptoki/opencryptoki";
     license     = licenses.cpl10;
     maintainers = [ maintainers.tstrobel ];
     platforms   = platforms.unix;

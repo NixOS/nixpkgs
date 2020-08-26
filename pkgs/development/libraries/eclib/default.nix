@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     inherit version;
     description = ''Elliptic curve tools'';
-    homepage = https://github.com/JohnCremona/eclib;
+    homepage = "https://github.com/JohnCremona/eclib";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin timokau ];
     platforms = platforms.all;

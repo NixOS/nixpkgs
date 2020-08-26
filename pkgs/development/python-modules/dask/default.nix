@@ -3,7 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fsspec
-, pytest
+, pytestCheckHook
 , pythonOlder
 , cloudpickle
 , numpy
@@ -11,11 +11,12 @@
 , dill
 , pandas
 , partd
+, pytest_xdist
 }:
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2.10.1";
+  version = "2.22.0";
 
   disabled = pythonOlder "3.5";
 
@@ -23,12 +24,17 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "035mr7385yf5ng5wf60qxr80529h8dsla5hymkyg68dxhkd0jvbr";
+    sha256 = "08nvxj81cz9x92dh2gbmm4imkr8cfljfi2hxkballv2ygwcbzg8g";
   };
 
   checkInputs = [
-    pytest
+    pytestCheckHook
+    pytest_xdist # takes >10mins to run single-threaded
   ];
+
+  pytestFlagsArray = [ "-n $NIX_BUILD_CORES" ];
+
+  dontUseSetuptoolsCheck = true;
 
   propagatedBuildInputs = [
     bokeh
@@ -50,13 +56,16 @@ buildPythonPackage rec {
       --replace "cmdclass=versioneer.get_cmdclass()," ""
   '';
 
-  checkPhase = ''
-    pytest
-  '';
+  disabledTests = [
+    "test_argwhere_str"
+    "test_count_nonzero_str"
+    "rolling_methods"  # floating percision error ~0.1*10^8 small
+    "num_workers_config" # flaky
+  ];
 
   meta = {
     description = "Minimal task scheduling abstraction";
-    homepage = https://github.com/ContinuumIO/dask/;
+    homepage = "https://github.com/ContinuumIO/dask/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

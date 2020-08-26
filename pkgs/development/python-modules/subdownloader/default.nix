@@ -59,7 +59,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Tool for automatic download/upload subtitles for videofiles using fast hashing";
-    homepage = http://www.subdownloader.net;
+    homepage = "https://www.subdownloader.net";
     license = licenses.gpl3;
   };
 

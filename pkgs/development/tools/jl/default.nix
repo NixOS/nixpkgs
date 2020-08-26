@@ -15,7 +15,7 @@ mkDerivation rec {
   patches = [
     # MonadFail compatibility patch. Should be removed with the next release
     (fetchpatch {
-      url = https://github.com/chrisdone/jl/commit/6d40308811cbc22a96b47ebe69ec308b4e9fd356.patch;
+      url = "https://github.com/chrisdone/jl/commit/6d40308811cbc22a96b47ebe69ec308b4e9fd356.patch";
       sha256 = "1pg92ffkg8kim5r8rz8js6fjqyjisg1266sf7p9jyxjgsskwpa4g";
     })
   ];
@@ -33,5 +33,5 @@ mkDerivation rec {
   license = stdenv.lib.licenses.bsd3;
   description = "Functional sed for JSON";
   maintainers = with stdenv.lib.maintainers; [ fgaz ];
-  homepage = https://github.com/chrisdone/jl;
+  homepage = "https://github.com/chrisdone/jl";
 }

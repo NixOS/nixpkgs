@@ -3,13 +3,13 @@ pycairo, cairo, which, ncurses, meson, ninja, isPy3k, gnome3 }:
 
 buildPythonPackage rec {
   pname = "pygobject";
-  version = "3.34.0";
+  version = "3.36.1";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "06i7ynnbvgpz0gw09zsjbvhgcp5qz4yzdifw27qjwdazg2mckql7";
+    sha256 = "0b9CgC0c7BE7Wtqg579/N0W0RSHcIWNYjSdtXNYdcY8=";
   };
 
   outputs = [ "out" "dev" ];
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://pygobject.readthedocs.io/;
+    homepage = "https://pygobject.readthedocs.io/";
     description = "Python bindings for Glib";
     license = licenses.gpl2;
     maintainers = with maintainers; [ jtojnar ];

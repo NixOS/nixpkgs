@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , cmake
 , ninja
 , vala
@@ -7,6 +8,7 @@
 , pantheon
 , gtk3
 , glib
+, glib-networking
 , libxml2
 , webkitgtk
 , clutter-gtk
@@ -56,10 +58,11 @@ stdenv.mkDerivation rec {
     pantheon.granite
     sqlite
     webkitgtk
+    glib-networking
   ];
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
@@ -70,7 +73,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Vocal is a powerful, fast, and intuitive application that helps users find new podcasts, manage their libraries, and enjoy the best that indepedent audio and video publishing has to offer. Vocal features full support for both episode downloading and streaming, native system integration, iTunes store search and top 100 charts (with international results support), iTunes link parsing, OPML importing and exporting, and so much more. Plus, it has great smart features like automatically keeping your library clean from old files, and the ability to set custom skip intervals.
     '';
-    homepage = https://github.com/needle-and-thread/vocal;
+    homepage = "https://github.com/needle-and-thread/vocal";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ worldofpeace ];
     platforms = platforms.linux;

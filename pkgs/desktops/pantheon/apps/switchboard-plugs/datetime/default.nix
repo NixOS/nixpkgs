@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , meson
 , ninja
@@ -16,17 +17,17 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-datetime";
-  version = "2.1.6";
+  version = "2.1.9";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "09734c3qc0296zf14rdhl4p6ppga015rz9hhsvlcc3nvyw7kdqkc";
+    sha256 = "1kkd75kp24zq84wfmc00brqxximfsi4sqyx8a7rbl7zaspf182xa";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -46,18 +47,9 @@ stdenv.mkDerivation rec {
     switchboard
   ];
 
-  patches = [
-    (substituteAll {
-      src = ./timezone.patch;
-      tzdata = "${tzdata}/share/zoneinfo/zone.tab";
-    })
-  ];
-
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
-
   meta = with stdenv.lib; {
     description = "Switchboard Date & Time Plug";
-    homepage = https://github.com/elementary/switchboard-plug-datetime;
+    homepage = "https://github.com/elementary/switchboard-plug-datetime";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "MDP";
-  version = "3.5";
+  version = "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0aw1zxmyvx6gfmmnixbqmdaah28jl7rmqkzhxv53091asc23iw9k";
+    sha256 = "ac52a652ccbaed1857ff1209862f03bf9b06d093b12606fb410787da3aa65a0e";
   };
 
   checkInputs = [ pytest ];
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Library for building complex data processing software by combining widely used machine learning algorithms";
-    homepage = http://mdp-toolkit.sourceforge.net;
+    homepage = "http://mdp-toolkit.sourceforge.net";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nico202 ];
   };

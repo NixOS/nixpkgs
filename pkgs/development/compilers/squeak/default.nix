@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
       capabilities. It also includes a customisable framework for creating
       dynamic HTTP servers and interactively extensible Web sites.
     '';
-    homepage = http://squeakvm.org/;
-    downloadPage = http://squeakvm.org/unix/index.html;
+    homepage = "http://squeakvm.org/";
+    downloadPage = "http://squeakvm.org/unix/index.html";
     license = with licenses; [ asl20 mit ];
     platforms = platforms.linux;
   };

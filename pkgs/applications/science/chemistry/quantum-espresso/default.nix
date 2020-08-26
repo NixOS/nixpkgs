@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, gfortran, fftw, openblas
+, gfortran, fftw, blas, lapack
 , mpi ? null
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     patchShebangs configure
   '';
 
-  buildInputs = [ fftw openblas gfortran ]
+  buildInputs = [ fftw blas lapack gfortran ]
     ++ (stdenv.lib.optionals (mpi != null) [ mpi ]);
 
 configureFlags = if (mpi != null) then [ "LD=${mpi}/bin/mpif90" ] else [ "LD=${gfortran}/bin/gfortran" ];

@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = https://mrob.com/pub/ries/;
+    homepage = "https://mrob.com/pub/ries/";
     description = "Tool to produce a list of equations that approximately solve to a given number";
     platforms = platforms.all;
     maintainers = with maintainers; [ symphorien ];

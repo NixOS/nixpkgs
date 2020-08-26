@@ -1,18 +1,18 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, autoreconfHook,
   fuse, libmspack, openssl, pam, xercesc, icu, libdnet, procps,
   libX11, libXext, libXinerama, libXi, libXrender, libXrandr, libXtst,
-  pkgconfig, glib, gtk3, gtkmm3, iproute, dbus, systemd, which,
+  pkgconfig, glib, gdk-pixbuf-xlib, gtk3, gtkmm3, iproute, dbus, systemd, which,
   withX ? true }:
 
 stdenv.mkDerivation rec {
   pname = "open-vm-tools";
-  version = "11.0.5";
+  version = "11.1.0";
 
   src = fetchFromGitHub {
     owner  = "vmware";
     repo   = "open-vm-tools";
     rev    = "stable-${version}";
-    sha256 = "0idh8dqwb1df2di689090k9x1iap35jk3wg8yb1g70byichmscqb";
+    sha256 = "1wyiz8j5b22ajrr1fh9cn55lsgd5g13q0i8wvk2a0yw0vaw1883s";
   };
 
   sourceRoot = "${src.name}/open-vm-tools";
@@ -21,9 +21,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook makeWrapper pkgconfig ];
   buildInputs = [ fuse glib icu libdnet libmspack openssl pam procps xercesc ]
-      ++ lib.optionals withX [ gtk3 gtkmm3 libX11 libXext libXinerama libXi libXrender libXrandr libXtst ];
+      ++ lib.optionals withX [ gdk-pixbuf-xlib gtk3 gtkmm3 libX11 libXext libXinerama libXi libXrender libXrandr libXtst ];
 
-  patches = [ ./recognize_nixos.patch ];
+  patches = [
+    ./recognize_nixos.patch
+    ./find_gdk_pixbuf_xlib.patch #See https://github.com/vmware/open-vm-tools/pull/438
+  ];
+
   postPatch = ''
      # Build bugfix for 10.1.0, stolen from Arch PKGBUILD
      mkdir -p common-agent/etc/config
@@ -31,6 +35,7 @@ stdenv.mkDerivation rec {
 
      sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' Makefile.am
      sed -i 's,^confdir = ,confdir = ''${prefix},' scripts/Makefile.am
+     sed -i 's,usr/bin,''${prefix}/usr/bin,' scripts/Makefile.am
      sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' services/vmtoolsd/Makefile.am
      sed -i 's,$(PAM_PREFIX),''${prefix}/$(PAM_PREFIX),' services/vmtoolsd/Makefile.am
      sed -i 's,$(UDEVRULESDIR),''${prefix}/$(UDEVRULESDIR),' udev/Makefile.am
@@ -63,7 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/vmware/open-vm-tools;
+    homepage = "https://github.com/vmware/open-vm-tools";
     description = "Set of tools for VMWare guests to improve host-guest interaction";
     longDescription = ''
       A set of services and modules that enable several features in VMware products for

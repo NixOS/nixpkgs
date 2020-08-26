@@ -23,7 +23,7 @@ in stdenv.mkDerivation {
 
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/pothosware/SoapyBladeRF;
+    homepage = "https://github.com/pothosware/SoapyBladeRF";
     description = "SoapySDR plugin for BladeRF devices";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ markuskowa ];

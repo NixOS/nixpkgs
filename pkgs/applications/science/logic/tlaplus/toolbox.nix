@@ -13,7 +13,7 @@ let
     comment = "IDE for TLA+";
     desktopName = name;
     genericName = comment;
-    categories = "Application;Development";
+    categories = "Development";
     extraEntries = ''
       StartupWMClass=TLA+ Toolbox
     '';
@@ -66,7 +66,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://research.microsoft.com/en-us/um/people/lamport/tla/toolbox.html;
+    homepage = "http://research.microsoft.com/en-us/um/people/lamport/tla/toolbox.html";
     description = "IDE for the TLA+ tools";
     longDescription = ''
       Integrated development environment for the TLA+ tools, based on Eclipse. You can use it

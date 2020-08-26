@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, fetchpatch, libiconv }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, libiconv, ruby ? null }:
 
 stdenv.mkDerivation rec {
   pname = "mblaze";
   version = "0.5.1";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = [ ruby ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   src = fetchFromGitHub {
     owner = "chneukirchen";
@@ -24,10 +24,12 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     install -Dm644 -t $out/share/zsh/site-functions contrib/_mblaze
+  '' + lib.optionalString (ruby != null) ''
+    install -Dt $out/bin contrib/msuck contrib/mblow
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/chneukirchen/mblaze;
+  meta = with lib; {
+    homepage = "https://github.com/chneukirchen/mblaze";
     description = "Unix utilities to deal with Maildir";
     license = licenses.cc0;
     platforms = platforms.all;

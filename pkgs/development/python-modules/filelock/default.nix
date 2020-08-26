@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/benediktschmitt/py-filelock;
+    homepage = "https://github.com/benediktschmitt/py-filelock";
     description = "A platform independent file lock for Python";
     license = licenses.unlicense;
     maintainers = with maintainers; [ hyphon81 ];

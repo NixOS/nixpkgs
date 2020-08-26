@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/TiZ-EX1/xfce4-namebar-plugin;
+    homepage = "https://github.com/TiZ-EX1/xfce4-namebar-plugin";
     description = "A plugins which integrates titlebar and window controls into the xfce4-panel";
     license = licenses.mit;
     platforms = platforms.linux;

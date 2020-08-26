@@ -1,14 +1,15 @@
 { stdenv, fetchurl, makeWrapper
 , fpc, gtk2, glib, pango, atk, gdk-pixbuf
 , libXi, xorgproto, libX11, libXext
+, gdb, gnumake, binutils
 }:
 stdenv.mkDerivation rec {
   pname = "lazarus";
-  version = "1.8.4";
+  version = "2.0.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/lazarus/Lazarus%20Zip%20_%20GZip/Lazarus%20${version}/lazarus-${version}.tar.gz";
-    sha256 = "1s8hdip973fc1lynklddl0mvg2jd2lzkfk8hzb8jlchs6jn0362s";
+    sha256 = "1iciqydb0miqdrh89aj59gy7kfcwikkycqssq9djcqsw1ql3gc4h";
   };
 
   buildInputs = [
@@ -34,13 +35,17 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/startlazarus --prefix NIX_LDFLAGS ' ' "'$NIX_LDFLAGS'" \
-      --prefix LCL_PLATFORM ' ' "'$LCL_PLATFORM'"
+    wrapProgram $out/bin/startlazarus --prefix NIX_LDFLAGS ' ' \
+      "$(echo "$NIX_LDFLAGS" | sed -re 's/-rpath [^ ]+//g')" \
+      --prefix NIX_LDFLAGS_${binutils.suffixSalt} ' ' \
+      "$(echo "$NIX_LDFLAGS" | sed -re 's/-rpath [^ ]+//g')" \
+      --prefix LCL_PLATFORM ' ' "$LCL_PLATFORM" \
+      --prefix PATH ':' "${fpc}/bin:${gdb}/bin:${gnumake}/bin:${binutils}/bin"
   '';
 
   meta = with stdenv.lib; {
     description = "Lazarus graphical IDE for FreePascal language";
-    homepage = http://www.lazarus.freepascal.org;
+    homepage = "http://www.lazarus.freepascal.org";
     license = licenses.gpl2Plus ;
     platforms = platforms.linux;
     maintainers = [ maintainers.raskin ];

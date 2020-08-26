@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Create bootable USB disks from Windows ISO images";
-    homepage = https://github.com/slacka/WoeUSB;
+    homepage = "https://github.com/slacka/WoeUSB";
     license = licenses.gpl3;
     maintainers = with maintainers; [ bjornfor gnidorah ];
     platforms = platforms.linux;

@@ -7,6 +7,9 @@
 , dbus, gtk2, gtk3, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
 , kerberos, libdrm, mesa
 
+# Command line programs
+, coreutils
+
 # command line arguments which are always set e.g "--disable-gpu"
 , commandLineArgs ? ""
 
@@ -58,7 +61,7 @@ let
     liberation_ttf curl utillinux xdg_utils wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap at-spi2-atk at-spi2-core
-    kerberos libdrm mesa
+    kerberos libdrm mesa coreutils
   ] ++ optional pulseSupport libpulseaudio
     ++ [ gtk ];
 
@@ -102,17 +105,27 @@ in stdenv.mkDerivation {
     cp -a opt/* $out/share
     cp -a usr/share/* $out/share
 
+    # To fix --use-gl=egl:
+    test -e $out/share/google/$appname/libEGL.so
+    ln -s libEGL.so $out/share/google/$appname/libEGL.so.1
+    test -e $out/share/google/$appname/libGLESv2.so
+    ln -s libGLESv2.so $out/share/google/$appname/libGLESv2.so.2
+
     substituteInPlace $out/share/applications/google-$appname.desktop \
       --replace /usr/bin/google-chrome-$dist $exe
     substituteInPlace $out/share/gnome-control-center/default-apps/google-$appname.xml \
       --replace /opt/google/$appname/google-$appname $exe
     substituteInPlace $out/share/menu/google-$appname.menu \
       --replace /opt $out/share \
-      --replace $out/share/google/chrome/google-$appname $exe
+      --replace $out/share/google/$appname/google-$appname $exe
 
-    for icon_file in $out/share/google/chrome*/product_logo_*[0-9].png; do
+    for icon_file in $out/share/google/chrome*/product_logo_[0-9]*.png; do
       num_and_suffix="''${icon_file##*logo_}"
-      icon_size="''${num_and_suffix%.*}"
+      if [ $dist = "stable" ]; then
+        icon_size="''${num_and_suffix%.*}"
+      else
+        icon_size="''${num_and_suffix%_*}"
+      fi
       logo_output_prefix="$out/share/icons/hicolor"
       logo_output_path="$logo_output_prefix/''${icon_size}x''${icon_size}/apps"
       mkdir -p "$logo_output_path"
@@ -133,7 +146,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "A freeware web browser developed by Google";
-    homepage = https://www.google.com/chrome/browser/;
+    homepage = "https://www.google.com/chrome/browser/";
     license = licenses.unfree;
     maintainers = [ maintainers.msteen ];
     platforms = [ "x86_64-linux" ];

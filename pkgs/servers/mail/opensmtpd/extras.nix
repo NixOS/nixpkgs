@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "opensmtpd-extras";
-  version = "6.4.0";
+  version = "6.7.1";
 
   src = fetchurl {
     url = "https://www.opensmtpd.org/archives/${pname}-${version}.tar.gz";
-    sha256 = "09k25l7zy5ch3fk6qphni2h0rxdp8wacmfag1whi608dgimrhrnb";
+    sha256 = "1b1mx71bvmv92lbm08wr2p60g3qhikvv3n15zsr6dcwbk9aqahzq";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
       " -L${libmysqlclient}/lib/mysql";
 
   meta = with stdenv.lib; {
-    homepage = https://www.opensmtpd.org/;
+    homepage = "https://www.opensmtpd.org/";
     description = "Extra plugins for the OpenSMTPD mail server";
     license = licenses.isc;
     platforms = platforms.linux;

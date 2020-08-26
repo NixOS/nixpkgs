@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/LuRsT/hr;
+    homepage = "https://github.com/LuRsT/hr";
     description = "A horizontal bar for your terminal";
     license = licenses.mit;
     maintainers = [ maintainers.matthiasbeyer ];

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib;
     { description = "Bookmarks for the command line";
-      homepage    = https://github.com/fasseg/crumbs;
+      homepage    = "https://github.com/fasseg/crumbs";
       license     = licenses.wtfpl;
       platforms   = platforms.all;
       maintainers = with maintainers; [ thesola10 ];

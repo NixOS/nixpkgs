@@ -14,7 +14,7 @@
     <para>
      <emphasis>Stable channels</emphasis>, such as
      <literal
-    xlink:href="https://nixos.org/channels/nixos-19.09">nixos-19.09</literal>.
+    xlink:href="https://nixos.org/channels/nixos-20.03">nixos-20.03</literal>.
      These only get conservative bug fixes and package upgrades. For instance,
      a channel update may cause the Linux kernel on your system to be upgraded
      from 4.19.34 to 4.19.38 (a minor bug fix), but not from
@@ -38,7 +38,7 @@
     <para>
      <emphasis>Small channels</emphasis>, such as
      <literal
-    xlink:href="https://nixos.org/channels/nixos-19.09-small">nixos-19.09-small</literal>
+    xlink:href="https://nixos.org/channels/nixos-20.03-small">nixos-20.03-small</literal>
      or
      <literal
     xlink:href="https://nixos.org/channels/nixos-unstable-small">nixos-unstable-small</literal>.
@@ -63,8 +63,8 @@
  <para>
   When you first install NixOS, you’re automatically subscribed to the NixOS
   channel that corresponds to your installation source. For instance, if you
-  installed from a 19.09 ISO, you will be subscribed to the
-  <literal>nixos-19.09</literal> channel. To see which NixOS channel you’re
+  installed from a 20.03 ISO, you will be subscribed to the
+  <literal>nixos-20.03</literal> channel. To see which NixOS channel you’re
   subscribed to, run the following as root:
 <screen>
 # nix-channel --list | grep nixos
@@ -75,13 +75,13 @@ nixos https://nixos.org/channels/nixos-unstable
 # nix-channel --add https://nixos.org/channels/<replaceable>channel-name</replaceable> nixos
 </screen>
   (Be sure to include the <literal>nixos</literal> parameter at the end.) For
-  instance, to use the NixOS 19.09 stable channel:
+  instance, to use the NixOS 20.03 stable channel:
 <screen>
-# nix-channel --add https://nixos.org/channels/nixos-19.09 nixos
+# nix-channel --add https://nixos.org/channels/nixos-20.03 nixos
 </screen>
   If you have a server, you may want to use the “small” channel instead:
 <screen>
-# nix-channel --add https://nixos.org/channels/nixos-19.09-small nixos
+# nix-channel --add https://nixos.org/channels/nixos-20.03-small nixos
 </screen>
   And if you want to live on the bleeding edge:
 <screen>
@@ -132,7 +132,7 @@ nixos https://nixos.org/channels/nixos-unstable
    kernel, initrd or kernel modules.
    You can also specify a channel explicitly, e.g.
 <programlisting>
-<xref linkend="opt-system.autoUpgrade.channel"/> = https://nixos.org/channels/nixos-19.09;
+<xref linkend="opt-system.autoUpgrade.channel"/> = https://nixos.org/channels/nixos-20.03;
 </programlisting>
   </para>
  </section>

@@ -1,30 +1,36 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, autoreconfHook, openssl, db53, boost
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, cmake, openssl, db53, boost
 , zlib, miniupnpc, qtbase ? null , qttools ? null, utillinux, protobuf, qrencode, libevent
-, withGui }:
+, withGui, python3, jemalloc, zeromq4 }:
 
 with stdenv.lib;
 
 mkDerivation rec {
 
   name = "bitcoin" + (toString (optional (!withGui) "d")) + "-abc-" + version;
-  version = "0.21.1";
+  version = "0.21.13";
 
   src = fetchFromGitHub {
     owner = "bitcoin-ABC";
     repo = "bitcoin-abc";
     rev = "v${version}";
-    sha256 = "1aswgmzqk3vhxhp5k0m0awk22lf5ayaqg2cmlqy12jvfmpka9lrj";
+    sha256 = "1x8xcdi1vcskggk9bqkwr3ah4vi9b7sj2h8hf7spac6dvz8lmzav";
   };
 
   patches = [ ./fix-bitcoin-qt-build.patch ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ openssl db53 boost zlib
+  nativeBuildInputs = [ pkgconfig cmake ];
+  buildInputs = [ openssl db53 boost zlib python3 jemalloc zeromq4
                   miniupnpc utillinux protobuf libevent ]
                   ++ optionals withGui [ qtbase qttools qrencode ];
 
-  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
-                     ++ optionals withGui [ "--with-gui=qt5" ];
+  cmakeFlags = optionals (!withGui) [
+    "-DBUILD_BITCOIN_QT=OFF"
+  ];
+
+  # many of the generated scripts lack execute permissions
+  postConfigure = ''
+    find ./. -type f -iname "*.sh" -exec chmod +x {} \;
+  '';
 
   enableParallelBuilding = true;
 

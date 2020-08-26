@@ -5,11 +5,11 @@
 , mpir
 , mpfr
 , ntl
-, openblas ? null
+, openblas ? null, blas, lapack
 , withBlas ? true
 }:
 
-assert withBlas -> openblas != null;
+assert withBlas -> openblas != null && blas.implementation == "openblas" && lapack.implementation == "openblas";
 
 stdenv.mkDerivation rec {
   pname = "flint";
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.unix;
-    homepage = http://www.flintlib.org/;
+    homepage = "http://www.flintlib.org/";
     downloadPage = "http://www.flintlib.org/downloads.html";
     updateWalker = true;
   };

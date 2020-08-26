@@ -16,7 +16,7 @@ buildDunePackage rec {
 
   meta = {
     description = "Mininal OCaml library providing hexadecimal converters";
-    homepage = https://github.com/mirage/ocaml-hex;
+    homepage = "https://github.com/mirage/ocaml-hex";
     license = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };

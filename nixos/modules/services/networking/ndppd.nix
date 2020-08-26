@@ -43,7 +43,7 @@ let
       timeout = mkOption {
         type = types.int;
         description = ''
-          Controls how long to wait for a Neighbor Advertisment Message before 
+          Controls how long to wait for a Neighbor Advertisment Message before
           invalidating the entry, in milliseconds.
         '';
         default = 500;
@@ -51,7 +51,7 @@ let
       ttl = mkOption {
         type = types.int;
         description = ''
-          Controls how long a valid or invalid entry remains in the cache, in 
+          Controls how long a valid or invalid entry remains in the cache, in
           milliseconds.
         '';
         default = 30000;
@@ -142,7 +142,11 @@ in {
         messages, and respond to them according to a set of rules.
       '';
       default = {};
-      example = { eth0.rules."1111::/64" = {}; };
+      example = literalExample ''
+        {
+          eth0.rules."1111::/64" = {};
+        }
+      '';
     };
   };
 

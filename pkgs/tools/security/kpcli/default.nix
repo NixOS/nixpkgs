@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, perl, perlPackages }:
 
 stdenv.mkDerivation rec {
-  version = "3.3";
+  version = "3.4";
   pname = "kpcli";
 
   src = fetchurl {
     url = "mirror://sourceforge/kpcli/${pname}-${version}.pl";
-    sha256 = "1z6dy70d3ag16vgzzafcnxb8gap3wahfmy4vd22fpgbrdd6riph4";
+    sha256 = "0s46cni16ph93havmkrlai3k13mdppyca1s2bqm751a6rirmsgj0";
   };
 
   buildInputs = [ makeWrapper perl ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       Use this program to access and manage your KeePass 1.x or 2.x databases from a Unix-like command line.
     '';
     license = licenses.artistic1;
-    homepage = http://kpcli.sourceforge.net;
+    homepage = "http://kpcli.sourceforge.net";
     platforms = platforms.all;
     maintainers = [ maintainers.j-keck ];
   };

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jo";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner  = "jpmens";
     repo = "jo";
     rev = version;
-    sha256 ="11miqg0i83drwkn66b4333vhfdw62al11dyfgp30alg6pcab3icl";
+    sha256 ="1jnv3g38vaa66m83hqibyki31ii81xfpvjw6wgdv18ci3iwvsz3v";
   };
 
   enableParallelBuilding = true;
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A small utility to create JSON objects";
-    homepage = https://github.com/jpmens/jo;
+    homepage = "https://github.com/jpmens/jo";
     license = licenses.gpl2Plus;
     maintainers = [maintainers.markus1189];
     platforms = platforms.all;

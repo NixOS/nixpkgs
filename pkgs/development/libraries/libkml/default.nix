@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Reference implementation of OGC KML 2.2";
-    homepage = https://github.com/libkml/libkml;
+    homepage = "https://github.com/libkml/libkml";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc ];
     platforms = platforms.all;

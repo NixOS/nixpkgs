@@ -19,7 +19,7 @@ import ./make-test-python.nix {
         '';
       };
 
-      nesting.clone = lib.singleton {
+      specialisation.pass-checks.configuration = {
         services.nginx.virtualHosts.server = {
           root = lib.mkForce (pkgs.runCommandLocal "testdir2" {} ''
             mkdir "$out"
@@ -70,7 +70,7 @@ import ./make-test-python.nix {
 
   testScript = { nodes, ... }: let
     inherit (nodes.server.config.system.build) toplevel;
-    newSystem = "${toplevel}/fine-tune/child-1";
+    newSystem = "${toplevel}/specialisation/pass-checks";
   in ''
     start_all()
 

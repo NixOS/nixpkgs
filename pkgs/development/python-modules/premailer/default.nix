@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "premailer";
-  version = "3.6.1";
+  version = "3.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08pshx7a110k4ll20x0xhpvyn3kkipkrbgxjjn7ncdxs54ihdhgw";
+    sha256 = "5eec9603e84cee583a390de69c75192e50d76e38ef0292b027bd64923766aca7";
   };
 
   buildInputs = [ mock nose ];
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Turns CSS blocks into style attributes ";
-    homepage = https://github.com/peterbe/premailer;
+    homepage = "https://github.com/peterbe/premailer";
     license = lib.licenses.bsd3;
   };
 }

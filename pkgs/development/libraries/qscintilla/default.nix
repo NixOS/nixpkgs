@@ -5,12 +5,6 @@
 }:
 
 let
-  # Fix Xcode 8 compilation problem
-  xcodePatch = fetchurl {
-    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/a651d71/qscintilla2/xcode-8.patch";
-    sha256 = "1a88309fdfd421f4458550b710a562c622d72d6e6fdd697107e4a43161d69bc9";
-  };
-
   pname = "qscintilla-qt${if withQt5 then "5" else "4"}";
   version = "2.11.2";
 
@@ -32,8 +26,7 @@ in stdenv.mkDerivation rec {
     ++ (if withQt5 then [ qmake ] else [ qmake4Hook ])
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  patches = (lib.optional (stdenv.isDarwin && withQt5) xcodePatch) ++
-            (lib.optional (!withQt5) ./fix-qt4-build.patch );
+  patches = lib.optional (!withQt5) ./fix-qt4-build.patch;
 
   # Make sure that libqscintilla2.so is available in $out/lib since it is expected
   # by some packages such as sqlitebrowser
@@ -69,7 +62,7 @@ in stdenv.mkDerivation rec {
       proportional fonts, bold and italics, multiple foreground and
       background colours and multiple fonts.
     '';
-    homepage = https://www.riverbankcomputing.com/software/qscintilla/intro;
+    homepage = "https://www.riverbankcomputing.com/software/qscintilla/intro";
     license = with licenses; [ gpl2 gpl3 ]; # and commercial
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;

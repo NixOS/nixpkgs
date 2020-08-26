@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       of programming languages and other logical systems which manipulate
       objects with binding.
     '';
-    homepage = http://abella-prover.org/;
+    homepage = "http://abella-prover.org/";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ bcdarwin ciil ];
     platforms = stdenv.lib.platforms.unix;

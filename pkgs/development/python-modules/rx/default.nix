@@ -1,15 +1,16 @@
-{ lib, fetchFromGitHub, buildPythonPackage, nose }:
+{ lib, fetchFromGitHub, buildPythonPackage, pythonOlder, nose }:
 
 buildPythonPackage rec {
   pname = "rx";
-  version = "1.6.1";
+  version = "3.1.0";
+  disabled = pythonOlder "3.6";
 
   # There are no tests on the pypi source
   src = fetchFromGitHub {
     owner = "ReactiveX";
     repo = "rxpy";
-    rev = version;
-    sha256 = "14bca67a26clzcf2abz2yb8g9lfxffjs2l236dp966sp0lfbpsn5";
+    rev = "v${version}";
+    sha256 = "0rcwa8001il9p7s096b9gc5yld8cyxvrsmwh1gpc9b87j172z6ax";
   };
 
   checkInputs = [ nose ];
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://github.com/ReactiveX/RxPY;
+    homepage = "https://github.com/ReactiveX/RxPY";
     description = "Reactive Extensions for Python";
     maintainers = with lib.maintainers; [ thanegill ];
     license = lib.licenses.asl20;

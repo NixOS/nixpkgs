@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-tasks";
-  version = "1.3.0";
+  version = "1.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "221388d1dd4bf21ba46ead499bbb3dfba9151b852c4fdca70935ba36e5c3631a";
+    sha256 = "d751b97c1e84980a1646702d3fc1b45bab3284bc3388181f1dc9ba3d204b5a39";
   };
 
   checkInputs = [ pytest mock ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Cloud Tasks API API client library";
-    homepage = https://github.com/GoogleCloudPlatform/google-cloud-python;
+    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

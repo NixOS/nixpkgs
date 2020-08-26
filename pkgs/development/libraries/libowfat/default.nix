@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A GPL reimplementation of libdjb";
-    homepage = https://www.fefe.de/libowfat/;
+    homepage = "https://www.fefe.de/libowfat/";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

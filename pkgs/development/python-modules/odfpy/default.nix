@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python API and tools to manipulate OpenDocument files";
-    homepage = https://github.com/eea/odfpy;
+    homepage = "https://github.com/eea/odfpy";
     license = lib.licenses.asl20;
   };
 }

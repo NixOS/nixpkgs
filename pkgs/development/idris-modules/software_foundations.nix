@@ -18,7 +18,7 @@ build-idris-package  {
 
   meta = {
     description = "Code for Software Foundations in Idris";
-    homepage = https://github.com/idris-hackers/software-foundations;
+    homepage = "https://github.com/idris-hackers/software-foundations";
     maintainers = [ lib.maintainers.brainrape ];
   };
 }

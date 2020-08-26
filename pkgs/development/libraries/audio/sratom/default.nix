@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ lv2 serd sord ];
 
   meta = with stdenv.lib; {
-    homepage = http://drobilla.net/software/sratom;
+    homepage = "http://drobilla.net/software/sratom";
     description = "A library for serialising LV2 atoms to/from RDF";
     license = licenses.mit;
     maintainers = [ maintainers.goibhniu ];

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg;
+    homepage = "http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg";
     description = "Medical image registration software";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = [ "x86_64-linux" ];

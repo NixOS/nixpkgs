@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Setuptools plugin for the Darcs version control system";
-    homepage = http://allmydata.org/trac/setuptools_darcs;
+    homepage = "http://allmydata.org/trac/setuptools_darcs";
     license = licenses.bsd0;
   };
 }

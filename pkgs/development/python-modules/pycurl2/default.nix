@@ -25,7 +25,7 @@ buildPythonPackage {
   buildInputs = [ simplejson unittest2 nose ];
 
   meta = with lib; {
-    homepage = https://pypi.python.org/pypi/pycurl2;
+    homepage = "https://pypi.python.org/pypi/pycurl2";
     description = "A fork from original PycURL library that no maintained from 7.19.0";
     license = licenses.mit;
     platforms = platforms.linux;

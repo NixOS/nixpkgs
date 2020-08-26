@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "grim";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "14gqilgd27c4j2wn7fla72yj8syx0542rsanh61syikrv0hxgkvy";
+    sha256 = "0fjmjq0ws9rlblkcqxxw2lv7zvvyi618jqzlnz5z9zb477jwdfib";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Grab images from a Wayland compositor";
-    homepage = https://github.com/emersion/grim;
+    homepage = "https://github.com/emersion/grim";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ buffet ];

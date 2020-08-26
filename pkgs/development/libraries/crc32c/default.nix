@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isAarch64 "-march=armv8-a+crc";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/google/crc32c;
+    homepage = "https://github.com/google/crc32c";
     description = "CRC32C implementation with support for CPU-specific acceleration instructions";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ andir ];

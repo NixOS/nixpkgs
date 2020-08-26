@@ -23,7 +23,7 @@ for ((i = 0; i < ${#targets_[@]}; i++)); do
         done
 
     else
-        
+
         mkdir -p $out/etc/$(dirname $target)
         if ! [ -e $out/etc/$target ]; then
             ln -s $source $out/etc/$target
@@ -34,13 +34,12 @@ for ((i = 0; i < ${#targets_[@]}; i++)); do
                 exit 1
             fi
         fi
-        
+
         if test "${modes_[$i]}" != symlink; then
             echo "${modes_[$i]}"  > $out/etc/$target.mode
             echo "${users_[$i]}"  > $out/etc/$target.uid
             echo "${groups_[$i]}" > $out/etc/$target.gid
         fi
-        
+
     fi
 done
-

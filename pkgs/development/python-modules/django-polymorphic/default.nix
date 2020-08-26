@@ -20,7 +20,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = https://github.com/django-polymorphic/django-polymorphic;
+    homepage = "https://github.com/django-polymorphic/django-polymorphic";
     description = "Improved Django model inheritance with automatic downcasting";
     license = stdenv.lib.licenses.bsd3;
   };

@@ -43,11 +43,11 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution";
-  version = "3.34.4";
+  version = "3.36.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "136vpaq94ymyn8pf3a3z1w45xlk1xbvwjdnzasq0d7iwbac0jwks";
+    sha256 = "1hpjd5d3z52xcjcc1hg5z8ypnx2y6ml9snyrlpflg9bx16yhxm1x";
   };
 
   nativeBuildInputs = [
@@ -125,9 +125,9 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_LIBEDATASERVERUI_1_2_UIMODULEDIR = "${placeholder "out"}/lib/evolution-data-server/ui-modules";
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Evolution;
+    homepage = "https://wiki.gnome.org/Apps/Evolution";
     description = "Personal information management application that provides integrated mail, calendaring and address book functionality";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
   };

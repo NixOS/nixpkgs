@@ -14,7 +14,7 @@ buildPythonPackage {
   doCheck = false; # Tries to import radicale, circular dependency
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/Unrud/RadicaleInfCloud/;
+    homepage = "https://github.com/Unrud/RadicaleInfCloud/";
     description = "Integrate InfCloud into Radicale's web interface";
     license = with licenses; [ agpl3 gpl3 ];
     platforms = platforms.all;

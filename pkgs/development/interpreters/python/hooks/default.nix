@@ -1,5 +1,6 @@
 # Hooks for building Python packages.
 { python
+, lib
 , callPackage
 , makeSetupHook
 , disabledIf
@@ -88,6 +89,24 @@ in rec {
         inherit pythonCheckInterpreter;
       };
     } ./python-imports-check-hook.sh) {};
+
+  pythonNamespacesHook = callPackage ({}:
+    makeSetupHook {
+      name = "python-namespaces-hook.sh";
+      substitutions = {
+        inherit pythonSitePackages;
+      };
+    } ./python-namespaces-hook.sh) {};
+
+  pythonRecompileBytecodeHook = callPackage ({ }:
+    makeSetupHook {
+      name = "python-recompile-bytecode-hook";
+      substitutions = {
+        inherit pythonInterpreter pythonSitePackages;
+        compileArgs = lib.concatStringsSep " " (["-q" "-f" "-i -"] ++ lib.optionals isPy3k ["-j $NIX_BUILD_CORES"]);
+        bytecodeName = if isPy3k then "__pycache__" else "*.pyc";
+      };
+    } ./python-recompile-bytecode-hook.sh ) {};
 
   pythonRemoveBinBytecodeHook = callPackage ({ }:
     makeSetupHook {

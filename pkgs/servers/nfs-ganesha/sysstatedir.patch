@@ -1,0 +1,15 @@
+diff --git a/src/include/config-h.in.cmake b/src/include/config-h.in.cmake
+index 51697310b..2b5f91075 100644
+--- a/src/include/config-h.in.cmake
++++ b/src/include/config-h.in.cmake
+@@ -72,8 +72,8 @@
+ #define NFS_GANESHA 1
+ 
+ #define GANESHA_CONFIG_PATH "@SYSCONFDIR@/ganesha/ganesha.conf"
+-#define GANESHA_PIDFILE_PATH "@SYSSTATEDIR@/run/ganesha.pid"
+-#define NFS_V4_RECOV_ROOT "@SYSSTATEDIR@/lib/nfs/ganesha"
++#define GANESHA_PIDFILE_PATH "/run/ganesha.pid"
++#define NFS_V4_RECOV_ROOT "/var/lib/nfs/ganesha"
+ /**
+  * @brief Default value for krb5_param.ccache_dir
+  */

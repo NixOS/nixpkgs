@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://sarrazip.com/dev/verbiste.html;
+    homepage = "http://sarrazip.com/dev/verbiste.html";
     description = "French and Italian verb conjugator";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

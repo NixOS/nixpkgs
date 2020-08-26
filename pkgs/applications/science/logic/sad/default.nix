@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   };
   buildInputs = [ haskell.compiler.ghc844 spass ];
   patches = [
-    ./patch
+    ./patch.patch
     # Since the LTS 12.0 update, <> is an operator in Prelude, colliding with
     # the <> operator with a different meaning defined by this package
     ./monoid.patch
@@ -33,7 +33,8 @@ stdenv.mkDerivation {
       '';
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ stdenv.lib.maintainers.schmitthenner ];
-    homepage = http://nevidal.org/sad.en.html;
+    homepage = "http://nevidal.org/sad.en.html";
     platforms = stdenv.lib.platforms.linux;
+    broken = true;  # ghc-8.4.4 is gone from Nixpkgs
   };
 }

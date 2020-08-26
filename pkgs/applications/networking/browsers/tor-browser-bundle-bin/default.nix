@@ -28,8 +28,8 @@
 , apulse
 
 # Media support (implies audio support)
-, mediaSupport ? false
-, ffmpeg
+, mediaSupport ? true
+, ffmpeg_3
 
 , gmp
 
@@ -46,7 +46,8 @@
 
 # Hardening
 , graphene-hardened-malloc
-, useHardenedMalloc ? graphene-hardened-malloc != null && builtins.elem stdenv.system graphene-hardened-malloc.meta.platforms
+# crashes with intel driver
+, useHardenedMalloc ? false
 
 # Whether to disable multiprocess support to work around crashing tabs
 # TODO: fix the underlying problem instead of this terrible work-around
@@ -83,26 +84,26 @@ let
   ]
   ++ optionals pulseaudioSupport [ libpulseaudio ]
   ++ optionals mediaSupport [
-    ffmpeg
+    ffmpeg_3
   ];
 
   # Library search path for the fte transport
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "9.0.6";
+  version = "9.5.3";
 
   lang = "en-US";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
-      sha256 = "1vk1pww8zmpjd5snyfz0if9v17g140ymlp6navxp28snzlffahss";
+      sha256 = "1kqvr0sag94xdkq85k426qq1hz2b52m315yz51w6hvc87d8332b4";
     };
 
     i686-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
-      sha256 = "0bhikdilfz31iilgb48mayy9f4lilycq24pqsrq7w3dqdjg4v55v";
+      sha256 = "179g00xw964d6x11wvzs84r7d6rcczx7ganqrxrs499yklscc46b";
     };
   };
 in
@@ -401,8 +402,9 @@ stdenv.mkDerivation rec {
       the `/nix/store`.
     '';
     homepage = "https://www.torproject.org/";
+    changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
     platforms = attrNames srcs;
-    maintainers = with maintainers; [ offline matejc doublec thoughtpolice joachifm hax404 cap ];
+    maintainers = with maintainers; [ offline matejc doublec thoughtpolice joachifm hax404 cap KarlJoad ];
     hydraPlatforms = [];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain

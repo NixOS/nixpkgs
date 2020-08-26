@@ -13,7 +13,7 @@ in fetchzip rec {
 
   meta = with stdenv.lib; {
     description = "A database of common mappings of file extensions to MIME types";
-    homepage = https://packages.gentoo.org/packages/app-misc/mime-types;
+    homepage = "https://packages.gentoo.org/packages/app-misc/mime-types";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.all;

@@ -315,7 +315,7 @@
        switch</command>), because the hardware and boot loader configuration in
        the VM are different. The boot loader is installed on an automatically
        generated virtual disk containing a <filename>/boot</filename>
-       partition, which is mounted read-only in the VM.
+       partition.
       </para>
      </listitem>
     </varlistentry>

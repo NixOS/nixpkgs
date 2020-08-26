@@ -30,7 +30,7 @@ stdenv.mkDerivation {
       with a retro alien theme, while adding tons of original ideas to
       make the game quite unique.
     '';
-    homepage = http://red.planetarena.org;
+    homepage = "http://red.planetarena.org";
     # Engine is under GPLv2, everything else is under
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ astsmtl ];

@@ -1,4 +1,8 @@
-{ stdenv, fetchFromGitHub, dde-api, deepin }:
+{ stdenv
+, fetchFromGitHub
+, dde-api
+, deepin
+}:
 
 stdenv.mkDerivation rec {
   pname = "deepin-wallpapers";
@@ -11,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "09cfnxbpms98ibqbi4xd51181q3az5n8rmndcdr9w12kyzniz7xv";
   };
 
-  nativeBuildInputs = [ dde-api deepin.setupHook ];
+  nativeBuildInputs = [
+    dde-api
+    deepin.setupHook
+  ];
 
   postPatch = ''
     searchHardCodedPaths # debugging
@@ -33,11 +40,11 @@ stdenv.mkDerivation rec {
       $out/var/cache/image-blur/$(echo -n $out/share/backgrounds/deepin/desktop.jpg | md5sum | cut -d " " -f 1).jpg
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "Wallpapers for Deepin Desktop Environment";
-    homepage = https://github.com/linuxdeepin/deepin-wallpapers;
+    homepage = "https://github.com/linuxdeepin/deepin-wallpapers";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

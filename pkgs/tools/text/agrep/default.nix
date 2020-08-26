@@ -21,10 +21,12 @@ stdenv.mkDerivation {
     install -Dm 444 docs/* -t "$out/doc"
   '';
 
-  meta = {
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
+  meta = with stdenv.lib; {
     description = "Approximate grep for fast fuzzy string searching";
-    homepage = https://www.tgries.de/agrep/;
-    license = stdenv.lib.licenses.isc;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://www.tgries.de/agrep/";
+    license = licenses.isc;
+    platforms = with platforms; linux ++ darwin;
   };
 }

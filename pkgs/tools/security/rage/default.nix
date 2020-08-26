@@ -1,19 +1,31 @@
-{ stdenv, rustPlatform, fetchFromGitHub, Security }:
+{ stdenv, rustPlatform, fetchFromGitHub, installShellFiles, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rage";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "str4d";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1lfp9vyrk8880j7p5i73zja9dglvl1lvvh7286rwd1a9gbcj6grb";
+    sha256 = "1wwndzy4xxbar9r67z8g7pp0s1xsxk5xaarh4h6hc0kh411zglrq";
   };
 
-  cargoSha256 = "0jjzxzdlflzvy39zi8vwx53xiv66v90idllsfvhj9p9lhc5ssi24";
+  cargoSha256 = "08njl8irkqkfxj54pz4sx3l9aqb40h10wxb82zza52pqd4zapgn6";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
+  postBuild = ''
+    cargo run --example generate-docs
+    cargo run --example generate-completions
+  '';
+
+  postInstall = ''
+    installManPage target/manpages/*
+    installShellCompletion target/completions/*.{bash,fish,zsh}
+  '';
 
   meta = with stdenv.lib; {
     description = "A simple, secure and modern encryption tool with small explicit keys, no config options, and UNIX-style composability";

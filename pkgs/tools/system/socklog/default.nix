@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "System and kernel logging services";
-    homepage = http://smarden.org/socklog/;
+    homepage = "http://smarden.org/socklog/";
     license = licenses.publicDomain;
     platforms = platforms.unix;
     maintainers = [ maintainers.joachifm ];

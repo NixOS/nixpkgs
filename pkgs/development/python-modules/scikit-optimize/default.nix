@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Sequential model-based optimization toolbox";
-    homepage = https://scikit-optimize.github.io/;
+    homepage = "https://scikit-optimize.github.io/";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

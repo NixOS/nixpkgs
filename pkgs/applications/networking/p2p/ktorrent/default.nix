@@ -26,7 +26,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "KDE integrated BtTorrent client";
-    homepage    = https://www.kde.org/applications/internet/ktorrent/;
+    homepage    = "https://www.kde.org/applications/internet/ktorrent/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ eelco ];
     platforms   = platforms.linux;

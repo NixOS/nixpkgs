@@ -4,7 +4,8 @@ let
 
   runCommand' = runLocal: stdenv: name: env: buildCommand:
     stdenv.mkDerivation ({
-      inherit name buildCommand;
+      name = lib.strings.sanitizeDerivationName name;
+      inherit buildCommand;
       passAsFile = [ "buildCommand" ];
     }
     // (lib.optionalAttrs runLocal {
@@ -238,6 +239,8 @@ rec {
    *
    * This creates a single derivation that replicates the directory structure
    * of all the input paths.
+   *
+   * BEWARE: it may not "work right" when the passed paths contain symlinks to directories.
    *
    * Examples:
    * # adds symlinks of hello to current build.

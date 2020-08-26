@@ -1,8 +1,11 @@
 { lib, buildPythonPackage, fetchPypi, isPy27
 , aiodns
 , aiohttp
+, mock
 , msrest
 , pytest
+, pytest-asyncio
+, pytest-trio
 , pytestCheckHook
 , requests
 , six
@@ -11,14 +14,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.2.2";
+  version = "1.8.0";
   pname = "azure-core";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "0bz4m6kmqymxlxf9qk6jw8v895d13rsggbgsjpsbvi9px6w15nwb";
+    sha256 = "c89bbdcdc13ad45fe57d775ed87b15baf6d0b039a1ecd0a1bc91d2f713cb1f08";
   };
 
   propagatedBuildInputs = [
@@ -29,15 +32,19 @@ buildPythonPackage rec {
   checkInputs = [
     aiodns
     aiohttp
+    mock
     msrest
     pytest
+    pytest-trio
+    pytest-asyncio
     pytestCheckHook
     trio
     typing-extensions
   ];
 
   pytestFlagsArray = [ "tests/" ];
-  disabledTests = [ "response" "request" "timeout" ];
+  # disable tests which touch network
+  disabledTests = [ "aiohttp" "multipart_send" "response" "request" "timeout" ];
 
   meta = with lib; {
     description = "Microsoft Azure Core Library for Python";

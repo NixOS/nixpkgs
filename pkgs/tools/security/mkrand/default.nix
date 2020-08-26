@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A Digital Random Bit Generator";
     longDescription = "MKRAND is a utility for generating random information.";
-    homepage = https://github.com/mknight-tag/MKRAND/;
+    homepage = "https://github.com/mknight-tag/MKRAND/";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.all;
   };

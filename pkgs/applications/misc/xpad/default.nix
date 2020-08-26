@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A sticky note application for jotting down things to remember";
-    homepage = https://launchpad.net/xpad;
+    homepage = "https://launchpad.net/xpad";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ michalrus ];

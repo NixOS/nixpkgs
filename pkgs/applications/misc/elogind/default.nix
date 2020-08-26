@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = https://github.com/elogind/elogind;
+    homepage = "https://github.com/elogind/elogind";
     description = ''The systemd project's "logind", extracted to a standalone package'';
     platforms = platforms.linux; # probably more
     license = licenses.lgpl21Plus;

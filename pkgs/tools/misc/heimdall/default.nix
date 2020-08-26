@@ -42,7 +42,7 @@ mkDerivation {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage    = http://www.glassechidna.com.au/products/heimdall/;
+    homepage    = "http://www.glassechidna.com.au/products/heimdall/";
     description = "A cross-platform tool suite to flash firmware onto Samsung Galaxy S devices";
     license     = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];

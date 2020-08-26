@@ -49,6 +49,10 @@ in buildEnv {
 
   ignoreCollisions = false;
   paths = pkgList.nonbin;
+  pathsToLink = [
+    "/"
+    "/tex/generic/config" # make it a real directory for scheme-infraonly
+  ];
 
   buildInputs = [ makeWrapper ] ++ pkgList.extraInputs;
 
@@ -153,7 +157,8 @@ in buildEnv {
       rm "$link"
       makeWrapper "$target" "$link" \
         --prefix PATH : "$out/bin:${perl}/bin" \
-        --prefix PERL5LIB : "$PERL5LIB"
+        --prefix PERL5LIB : "$PERL5LIB" \
+        --set-default TEXMFCNF "$TEXMFCNF"
 
       # avoid using non-nix shebang in $target by calling interpreter
       if [[ "$(head -c 2 "$target")" = "#!" ]]; then

@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, boost, cmake, ffmpeg, freeglut, glib,
+{ stdenv, fetchsvn, boost, cmake, ffmpeg_3, freeglut, glib,
   gtk2, libjpeg, libpng, libpthreadstubs, libvorbis, libXau, libXdmcp,
   libXmu, libGLU, libGL, openal, pixman, pkgconfig, python27, SDL }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ boost cmake ffmpeg freeglut glib gtk2 libjpeg libpng
+    [ boost cmake ffmpeg_3 freeglut glib gtk2 libjpeg libpng
       libpthreadstubs libvorbis libXau libXdmcp libXmu libGLU libGL openal
       pixman pkgconfig python27 SDL ];
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://privateer.sourceforge.net/;
+    homepage = "http://privateer.sourceforge.net/";
     description = "Adventure space flight simulation computer game";
     license = licenses.gpl2Plus; # and a special license for art data
     # https://sourceforge.net/p/privateer/code/HEAD/tree/privgold/trunk/data/art-license.txt

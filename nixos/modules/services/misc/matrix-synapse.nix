@@ -9,6 +9,9 @@ let
   logConfigFile = pkgs.writeText "log_config.yaml" cfg.logConfig;
   mkResource = r: ''{names: ${builtins.toJSON r.names}, compress: ${boolToString r.compress}}'';
   mkListener = l: ''{port: ${toString l.port}, bind_address: "${l.bind_address}", type: ${l.type}, tls: ${boolToString l.tls}, x_forwarded: ${boolToString l.x_forwarded}, resources: [${concatStringsSep "," (map mkResource l.resources)}]}'';
+  pluginsEnv = cfg.package.python.buildEnv.override {
+    extraLibs = cfg.plugins;
+  };
   configFile = pkgs.writeText "homeserver.yaml" ''
 ${optionalString (cfg.tls_certificate_path != null) ''
 tls_certificate_path: "${cfg.tls_certificate_path}"
@@ -31,7 +34,6 @@ bind_host: "${cfg.bind_host}"
 ''}
 server_name: "${cfg.server_name}"
 pid_file: "/run/matrix-synapse.pid"
-web_client: ${boolToString cfg.web_client}
 ${optionalString (cfg.public_baseurl != null) ''
 public_baseurl: "${cfg.public_baseurl}"
 ''}
@@ -126,6 +128,14 @@ in {
           Overridable attribute of the matrix synapse server package to use.
         '';
       };
+      plugins = mkOption {
+        type = types.listOf types.package;
+        default = [ ];
+        defaultText = "with config.services.matrix-synapse.package.plugins [ matrix-synapse-ldap3 matrix-synapse-pam ]";
+        description = ''
+          List of additional Matrix plugins to make available.
+        '';
+      };
       no_tls = mkOption {
         type = types.bool;
         default = false;
@@ -200,13 +210,6 @@ in {
           This is used by remote servers to connect to this server,
           e.g. matrix.org, localhost:8080, etc.
           This is also the last part of your UserID.
-        '';
-      };
-      web_client = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to serve a web client from the HTTP/HTTPS root resource.
         '';
       };
       public_baseurl = mkOption {
@@ -672,7 +675,7 @@ in {
       }
     ];
 
-    users.users.matrix-synapse = { 
+    users.users.matrix-synapse = {
         group = "matrix-synapse";
         home = cfg.dataDir;
         createHome = true;
@@ -694,6 +697,7 @@ in {
           --keys-directory ${cfg.dataDir} \
           --generate-keys
       '';
+      environment.PYTHONPATH = makeSearchPathOutput "lib" cfg.package.python.sitePackages [ pluginsEnv ];
       serviceConfig = {
         Type = "notify";
         User = "matrix-synapse";
@@ -719,8 +723,10 @@ in {
       Database configuration must be done manually. An exemplary setup is demonstrated in
       <nixpkgs/nixos/tests/matrix-synapse.nix>
     '')
+    (mkRemovedOptionModule [ "services" "matrix-synapse" "web_client" ] "")
   ];
 
   meta.doc = ./matrix-synapse.xml;
+  meta.maintainers = teams.matrix.members;
 
 }

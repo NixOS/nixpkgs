@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "slither-analyzer";
-  version = "0.6.9";
+  version = "0.6.12";
 
   disabled = pythonOlder "3.6";
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fb057eb7f5416ac76b6ab03bb5c20c39cb7b97c7689ce1e7244c9088bd28f513";
+    sha256 = "9773cf48754341d03bb2e65c07897fc9c00a8727487ab2820ed89eb85f546506";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,7 +33,7 @@ buildPythonPackage rec {
       runs a suite of vulnerability detectors, prints visual information about
       contract details, and provides an API to easily write custom analyses.
     '';
-    homepage = https://github.com/trailofbits/slither;
+    homepage = "https://github.com/trailofbits/slither";
     license = licenses.agpl3;
     maintainers = [ maintainers.asymmetric ];
   };

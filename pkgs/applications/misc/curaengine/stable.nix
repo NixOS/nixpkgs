@@ -22,9 +22,8 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Engine for processing 3D models into 3D printing instructions";
-    homepage = https://github.com/Ultimaker/CuraEngine;
+    homepage = "https://github.com/Ultimaker/CuraEngine";
     license = licenses.agpl3;
     platforms = platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };
 }

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A userspace utility for testing the memory subsystem for faults";
-    homepage = http://pyropus.ca/software/memtester/;
+    homepage = "http://pyropus.ca/software/memtester/";
     license = licenses.gpl2;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.unix;

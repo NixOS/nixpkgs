@@ -1,5 +1,6 @@
 { stdenv
 , abc-verifier
+, bash
 , bison
 , fetchFromGitHub
 , flex
@@ -15,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname   = "yosys";
-  version = "2020.03.16";
+  version = "2020.08.22";
 
   src = fetchFromGitHub {
     owner  = "YosysHQ";
     repo   = "yosys";
-    rev    = "ed4fa19ba2812c286562baf26bbbcb49afad83bc";
-    sha256 = "1sza5ng0q8dy6p4hks9b2db129xjcid9n6l8aglf2cj5ks82k5nv";
+    rev    = "12132b6850747aec99715fdfa3184fe3ebefa015";
+    sha256 = "1v6x1y2f3r8vi7pnkgx374rrv02xgmg9yg23f61n7d1v2rd6y5cc";
   };
 
   enableParallelBuilding = true;
@@ -38,6 +39,8 @@ stdenv.mkDerivation rec {
       --replace 'LD = gcc' 'LD = $(CXX)' \
       --replace 'ABCMKARGS = CC="$(CXX)" CXX="$(CXX)"' 'ABCMKARGS =' \
       --replace 'echo UNKNOWN' 'echo ${builtins.substring 0 10 src.rev}'
+    substituteInPlace ./misc/yosys-config.in \
+      --replace '/bin/bash' '${bash}/bin/bash'
     patchShebangs tests
   '';
 

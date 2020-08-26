@@ -1,10 +1,10 @@
-{ mkDerivation, lib, fetchpatch, fetchFromGitHub, cmake, boost, ceres-solver, eigen,
+{ mkDerivation, lib, fetchpatch, fetchFromGitHub, cmake, boost17x, ceres-solver, eigen,
   freeimage, glog, libGLU, glew, qtbase,
   cudaSupport ? false, cudatoolkit ? null }:
 
 assert !cudaSupport || cudatoolkit != null;
 
-let boost_static = boost.override { enableStatic = true; };
+let boost_static = boost17x.override { enableStatic = true; };
 in
 mkDerivation rec {
   version = "3.5";
@@ -36,7 +36,7 @@ mkDerivation rec {
        COLMAP is a general-purpose Structure-from-Motion (SfM) and Multi-View Stereo (MVS) pipeline
        with a graphical and command-line interface.
     '';
-    homepage = https://colmap.github.io/index.html;
+    homepage = "https://colmap.github.io/index.html";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lebastr ];

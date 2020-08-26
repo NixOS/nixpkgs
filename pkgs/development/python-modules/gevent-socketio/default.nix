@@ -21,7 +21,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ gevent ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/abourget/gevent-socketio;
+    homepage = "https://github.com/abourget/gevent-socketio";
     description = "SocketIO server based on the Gevent pywsgi server, a Python network library";
     license = licenses.bsd0;
   };

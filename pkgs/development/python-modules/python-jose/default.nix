@@ -1,37 +1,37 @@
 { stdenv, buildPythonPackage, fetchFromGitHub
 , future, six, ecdsa, rsa
-, pycrypto, pytest, pytestcov, pytestrunner, cryptography
+, pycrypto, pytestcov, pytestrunner, cryptography
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "python-jose";
-  version = "3.0.1";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "mpdavis";
     repo = "python-jose";
     rev = version;
-    sha256 = "1ahq4m86z504bnlk9z473r7r3dprg5m39900rld797hbczdhqa4f";
+    sha256 = "1gnn0zy03pywj65ammy3sd07knzhjv8n5jhx1ir9bikgra9v0iqh";
   };
 
   checkInputs = [
     pycrypto
-    pytest
+    pytestCheckHook
     pytestcov
     pytestrunner
     cryptography # optional dependency, but needed in tests
   ];
-  checkPhase = ''
-    py.test
-  '';
 
-  # https://github.com/mpdavis/python-jose/issues/149
-  PYTEST_ADDOPTS = "-k 'not test_invalid_claims_json and not test_invalid_claims'";
+  disabledTests = [
+    # https://github.com/mpdavis/python-jose/issues/176
+    "test_key_too_short"
+  ];
 
   propagatedBuildInputs = [ future six ecdsa rsa ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/mpdavis/python-jose;
+    homepage = "https://github.com/mpdavis/python-jose";
     description = "A JOSE implementation in Python";
     license = licenses.mit;
     maintainers = [ maintainers.jhhuh ];

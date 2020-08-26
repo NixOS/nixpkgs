@@ -3,11 +3,11 @@
 buildPythonPackage rec {
 
   pname = "schema";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c9dc8f4624e287c7d1435f8fd758f6a0aabbb7eff442db9192cd46f0e2b6d959";
+    sha256 = "b536f2375b49fdf56f36279addae98bd86a8afbd58b3c32ce363c464bed5fc1c";
   };
 
   preConfigure = ''
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Library for validating Python data structures";
-    homepage = https://github.com/keleshev/schema;
+    homepage = "https://github.com/keleshev/schema";
     license = licenses.mit;
     maintainers = [ maintainers.tobim ];
   };

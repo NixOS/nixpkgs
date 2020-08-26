@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, nixosTests }:
 
 buildGoPackage rec {
   pname = "fritzbox-exporter";
@@ -16,9 +16,11 @@ buildGoPackage rec {
 
   goDeps = ./fritzbox-exporter-deps.nix;
 
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) fritzbox; };
+
   meta = with stdenv.lib; {
     description = "Prometheus Exporter for FRITZ!Box (TR64 and UPnP)";
-    homepage = https://github.com/ndecker/fritzbox_exporter;
+    homepage = "https://github.com/ndecker/fritzbox_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ bachp flokli ];
     platforms = platforms.unix;

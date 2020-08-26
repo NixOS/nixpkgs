@@ -11,6 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "f6cef88969300a6564498557eeea1d8da58acceae238077852ff261a2cb1d815";
   };
 
+  patches = [
+    # Fix build with glibc >= 2.28
+    # https://github.com/NixOS/nixpkgs/issues/86403
+    ./pyblock-sysmacros.h.patch
+  ];
+
   postPatch = ''
     sed -i -e 's|/usr/include/python|${python}/include/python|' \
            -e 's/-Werror *//' -e 's|/usr/|'"$out"'/|' Makefile

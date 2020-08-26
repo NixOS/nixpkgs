@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       encryption password can safely commit changes to the repository's
       non-encrypted files.
     '';
-    homepage = https://github.com/elasticdog/transcrypt;
+    homepage = "https://github.com/elasticdog/transcrypt";
     license = licenses.mit;
     maintainers = [ maintainers.elasticdog ];
     platforms = platforms.all;

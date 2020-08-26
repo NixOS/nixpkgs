@@ -1,4 +1,4 @@
-{ stdenvNoCC, fetchFromGitHub, gnome-themes-extra, inkscape, xcursorgen }:
+{ stdenvNoCC, fetchFromGitHub, gnome-themes-extra, inkscape_0, xcursorgen }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "bibata-cursors-translucent";
@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs  = [
     gnome-themes-extra
-    inkscape
+    inkscape_0
     xcursorgen
   ];
 
@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with stdenvNoCC.lib; {
     description = "Translucent Varient of the Material Based Cursor";
-    homepage = https://github.com/Silicasandwhich/Bibata_Cursor_Translucent;
+    homepage = "https://github.com/Silicasandwhich/Bibata_Cursor_Translucent";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ dtzWill ];

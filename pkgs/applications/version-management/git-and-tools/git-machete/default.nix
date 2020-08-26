@@ -4,11 +4,11 @@
 
 buildPythonApplication rec {
   pname = "git-machete";
-  version = "2.13.5";
+  version = "2.15.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ll5l1f3vcib9a8qsqm8bfzz4g4q1dnr389x7x26kl13n6a50wib";
+    sha256 = "0kpfi1w1jnn7v7mny71jil3sc9mm08lz47l9v3hzgs5z3ham98jb";
   };
 
   nativeBuildInputs = [ installShellFiles pbr ];
@@ -24,8 +24,8 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/VirtusLab/git-machete;
-    description = "Git repository organizer and rebase workflow automation tool";
+    homepage = "https://github.com/VirtusLab/git-machete";
+    description = "Git repository organizer and rebase/merge workflow automation tool";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.blitz ];

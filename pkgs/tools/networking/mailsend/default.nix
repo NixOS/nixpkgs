@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   patches = [
     (fetchurl {
-      url = https://github.com/muquit/mailsend/commit/960df6d7a11eef90128dc2ae660866b27f0e4336.patch;
+      url = "https://github.com/muquit/mailsend/commit/960df6d7a11eef90128dc2ae660866b27f0e4336.patch";
       sha256 = "0vz373zcfl19inflybfjwshcq06rvhx0i5g0f4b021cxfhyb1sm0";
     })
   ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.bsd3 ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = https://github.com/muquit/mailsend;
+    homepage = "https://github.com/muquit/mailsend";
     downloadPage = "https://github.com/muquit/mailsend/releases";
   };
 }

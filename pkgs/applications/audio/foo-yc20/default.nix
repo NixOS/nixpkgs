@@ -18,12 +18,12 @@ stdenv.mkDerivation {
   # remove lv2 until https://github.com/sampov2/foo-yc20/issues/6 is resolved
   postInstallFixup = "rm -rf $out/lib/lv2";
 
-  meta = {
+  meta = with stdenv.lib; {
     broken = true; # see: https://github.com/sampov2/foo-yc20/issues/7
     description = "A Faust implementation of a 1969 designed Yamaha combo organ, the YC-20";
-    homepage = https://github.com/sampov2/foo-yc20;
-    license     = "BSD";
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://github.com/sampov2/foo-yc20";
+    license     = with licenses; [ bsd3 lgpl21 mpl11 ] ;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
   };
 }

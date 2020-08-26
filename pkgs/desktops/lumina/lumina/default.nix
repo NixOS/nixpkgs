@@ -1,28 +1,29 @@
-{ stdenv,
-  fetchFromGitHub,
-  desktop-file-utils,
-  fluxbox,
-  numlockx,
-  qmake,
-  qtbase,
-  qtmultimedia,
-  qtsvg,
-  qttools,
-  qtx11extras,
-  xorg,
-  xscreensaver,
-  wrapGAppsHook
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, fluxbox
+, libarchive
+, numlockx
+, qmake
+, qtbase
+, qtmultimedia
+, qtsvg
+, qttools
+, qtx11extras
+, xorg
+, xscreensaver
+, wrapGAppsHook
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "lumina";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "lumina-desktop";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0rj2gzifr98db7i82cg3hg7l5yfik810pjpawg6n54qbzq987z25";
+    sha256 = "0bvs12c9pkc6fnkfcr7rrxc8jfbzbslch4nlfjrzwi203fcv4avw";
   };
 
   nativeBuildInputs = [
@@ -32,19 +33,19 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    xorg.libxcb
+    fluxbox # window manager for Lumina DE
+    libarchive # make `bsdtar` available for lumina-archiver
+    numlockx # required for changing state of numlock at login
+    qtbase
+    qtmultimedia
+    qtsvg
+    qtx11extras
     xorg.libXcursor
     xorg.libXdamage
-    xorg.xcbutilwm
+    xorg.libxcb
     xorg.xcbutilimage
-    qtbase
-    qtsvg
-    qtmultimedia
-    qtx11extras
-    fluxbox
+    xorg.xcbutilwm
     xscreensaver
-    desktop-file-utils
-    numlockx
   ];
 
   patches = [
@@ -66,6 +67,15 @@ stdenv.mkDerivation rec {
     # Fix location of fluxbox styles
     substituteInPlace src-qt5/core-utils/lumina-config/pages/page_fluxbox_settings.cpp \
       --replace 'LOS::AppPrefix()+"share/fluxbox' "\"${fluxbox}/share/fluxbox"
+
+    # Add full path of bsdtar to lumina-archiver
+    substituteInPlace src-qt5/desktop-utils/lumina-archiver/TarBackend.cpp \
+      --replace '"bsdtar"' '"${stdenv.lib.getBin libarchive}/bin/bsdtar"'
+
+    # Fix desktop files
+    for i in $(grep -lir 'OnlyShowIn=Lumina' src-qt5); do
+      substituteInPlace $i --replace 'OnlyShowIn=Lumina' 'OnlyShowIn=X-Lumina'
+    done
   '';
 
   qmakeFlags = [
@@ -74,6 +84,8 @@ stdenv.mkDerivation rec {
     "LRELEASE=${stdenv.lib.getDev qttools}/bin/lrelease"
   ];
 
+  passthru.providedSessions = [ "Lumina-DE" ];
+
   meta = with stdenv.lib; {
     description = "A lightweight, portable desktop environment";
     longDescription = ''
@@ -81,7 +93,7 @@ stdenv.mkDerivation rec {
       that is designed for use on any Unix-like operating system. It
       is based on QT5.
     '';
-    homepage = https://lumina-desktop.org;
+    homepage = "https://lumina-desktop.org";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

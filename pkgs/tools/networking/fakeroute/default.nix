@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
       Makes your machine appear to be anywhere on the internet
       to any host running a (UDP) unix traceroute
     '';
-    homepage = https://moxie.org/software/fakeroute/;
+    homepage = "https://moxie.org/software/fakeroute/";
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

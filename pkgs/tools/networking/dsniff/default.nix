@@ -14,7 +14,7 @@ let
   };
   pcap = symlinkJoin {
     inherit (libpcap) name;
-    paths = [ libpcap ];
+    paths = [ (libpcap.overrideAttrs(old: { dontDisableStatic = true; })) ];
     postBuild = ''
       cp -rs $out/include/pcap $out/include/net
       # prevent references to libpcap
@@ -73,7 +73,7 @@ in stdenv.mkDerivation {
     longDescription = ''
       dsniff, filesnarf, mailsnarf, msgsnarf, urlsnarf, and webspy passively monitor a network for interesting data (passwords, e-mail, files, etc.). arpspoof, dnsspoof, and macof facilitate the interception of network traffic normally unavailable to an attacker (e.g, due to layer-2 switching). sshmitm and webmitm implement active monkey-in-the-middle attacks against redirected SSH and HTTPS sessions by exploiting weak bindings in ad-hoc PKI.
     '';
-    homepage = https://www.monkey.org/~dugsong/dsniff/;
+    homepage = "https://www.monkey.org/~dugsong/dsniff/";
     license = licenses.bsd3;
     maintainers = [ maintainers.symphorien ];
     # bsd and solaris should work as well

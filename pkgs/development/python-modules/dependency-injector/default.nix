@@ -9,11 +9,11 @@ in
 
 buildPythonPackage rec {
   pname = "dependency-injector";
-  version = "3.14.12";
+  version = "3.15.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c0b593d30a9dcafd71459075fac14ccf52fcefa2094d5062dfc2e174c469dc03";
+    sha256 = "fcca1464f567d902983bff507b9e2e3fda0f932ee009e36f74ed5b8c348d17f4";
   };
 
   propagatedBuildInputs = [ six ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Dependency injection microframework for Python";
-    homepage = https://github.com/ets-labs/python-dependency-injector;
+    homepage = "https://github.com/ets-labs/python-dependency-injector";
     license = licenses.bsd3;
     maintainers = with maintainers; [ gerschtli ];
   };

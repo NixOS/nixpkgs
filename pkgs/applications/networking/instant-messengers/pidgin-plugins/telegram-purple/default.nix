@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/majn/telegram-purple;
+    homepage = "https://github.com/majn/telegram-purple";
     description = "Telegram for Pidgin / libpurple";
     license = licenses.gpl2;
     maintainers = [ maintainers.jagajaga ];

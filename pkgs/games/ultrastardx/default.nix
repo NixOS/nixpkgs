@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
     rev = "3df142590f29db1505cc58746af9f8cf7cb4a6a5";
-    sha256 = "EpwGKK9B8seF7gRwo3kCeSzFQQW1p8rP4HXeu8/LoyA=";
+    sha256 = "0853rg7vppkmw37wm9xm0m0wab3r09ws6w04xs2wgwj1mwl0d70j";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = with stdenv.lib; {
-    homepage = http://ultrastardx.sourceforge.net/;
+    homepage = "http://ultrastardx.sourceforge.net/";
     description = "Free and open source karaoke game";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ Profpatsch ];

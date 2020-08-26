@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Tool to convert Xfig files to other formats";
-    homepage = http://mcj.sourceforge.net/;
+    homepage = "http://mcj.sourceforge.net/";
     license = licenses.xfig;
     platforms = platforms.linux;
   };

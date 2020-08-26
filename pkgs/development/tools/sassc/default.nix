@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A front-end for libsass";
-    homepage = https://github.com/sass/sassc/;
+    homepage = "https://github.com/sass/sassc/";
     license = licenses.mit;
     maintainers = with maintainers; [ codyopel pjones ];
     platforms = platforms.unix;

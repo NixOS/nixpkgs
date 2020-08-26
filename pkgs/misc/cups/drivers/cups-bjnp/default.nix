@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
   preConfigure = ''configureFlags="--with-cupsbackenddir=$out/lib/cups/backend"'';
 
   buildInputs = [cups];
-  NIX_CFLAGS_COMPILE = [ "-include stdio.h" "-Wno-error=stringop-truncation" ];
+  NIX_CFLAGS_COMPILE = [
+    "-include stdio.h"
+    "-Wno-error=stringop-truncation"
+    "-Wno-error=deprecated-declarations"
+  ];
 
   meta = {
     description = "CUPS back-end for Canon printers";
@@ -20,7 +24,7 @@ stdenv.mkDerivation rec {
       BJNP protocol. This back-end allows Cups to print over the network to a
       Canon printer. The design is based on reverse engineering of the protocol.
     '';
-    homepage = http://cups-bjnp.sourceforge.net;
+    homepage = "http://cups-bjnp.sourceforge.net";
     platforms = stdenv.lib.platforms.linux;
   };
 }

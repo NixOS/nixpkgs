@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Tracker music player for the terminal";
-    homepage = http://mikmod.shlomifish.org/;
+    homepage = "http://mikmod.shlomifish.org/";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ ];
     platforms = with stdenv.lib.platforms; linux;

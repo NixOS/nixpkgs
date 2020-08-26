@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "apache-libcloud";
-  version = "2.7.0";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "29ee7d13b9b12d1335e752a489c01eed0c270940147f418cfff89ab66faf1305";
+    sha256 = "1b28j265kvibgxrgxx0gwfm6cmv252c8ph1j2vb0cpms8ph5if5v";
   };
 
   checkInputs = [ mock pytest pytestrunner requests-mock ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A unified interface to many cloud providers";
-    homepage = http://incubator.apache.org/libcloud/;
+    homepage = "http://incubator.apache.org/libcloud/";
     license = licenses.asl20;
   };
 

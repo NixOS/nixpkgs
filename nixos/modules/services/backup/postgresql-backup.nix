@@ -44,12 +44,7 @@ in {
 
   options = {
     services.postgresqlBackup = {
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable PostgreSQL dumps.
-        '';
-      };
+      enable = mkEnableOption "PostgreSQL dumps";
 
       startAt = mkOption {
         default = "*-*-* 01:15:00";

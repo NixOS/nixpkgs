@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchhg {
-    url = http://foicica.com/hg/textadept;
+    url = "http://foicica.com/hg/textadept";
     rev = "textadept_${version}";
     sha256 = "0fai8xqddkkprmbf0cf8wwgv7ccfdb1iyim30nppm2m16whkc8fl";
   };
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An extensible text editor based on Scintilla with Lua scripting";
-    homepage = http://foicica.com/textadept;
+    homepage = "http://foicica.com/textadept";
     license = licenses.mit;
     maintainers = with maintainers; [ raskin mirrexagon ];
     platforms = platforms.linux;

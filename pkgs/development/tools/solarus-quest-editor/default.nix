@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "solarus-quest-editor";
-  version = "1.6.2";
+  version = "1.6.4";
 
   src = fetchFromGitLab {
     owner = "solarus-games";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0dq94iw9ldl4p83dqcwjs5ilpkvz5jgdk8rbls8pf8b7afpg36rz";
+    sha256 = "1qbc2j9kalk7xqk9j27s7wnm5zawiyjs47xqkqphw683idmzmjzn";
   };
   
   buildInputs = [ cmake luajit SDL2
@@ -26,7 +26,7 @@ mkDerivation rec {
       Many full-fledged games have been writen for the engine.
       Games can be created easily using the editor.
     '';
-    homepage = http://www.solarus-games.org;
+    homepage = "http://www.solarus-games.org";
     license = licenses.gpl3;
     maintainers = [ maintainers.Nate-Devv ];
     platforms = platforms.linux;

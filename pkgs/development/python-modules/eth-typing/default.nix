@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Common type annotations for Ethereum Python packages";
-    homepage = https://github.com/ethereum/eth-typing;
+    homepage = "https://github.com/ethereum/eth-typing";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
   };

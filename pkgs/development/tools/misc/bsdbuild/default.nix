@@ -48,7 +48,7 @@ EOF
   ];
 
   meta = {
-    homepage = http://bsdbuild.hypertriton.com;
+    homepage = "http://bsdbuild.hypertriton.com";
     description = "A cross-platform build system.";
 
     longDescription = ''

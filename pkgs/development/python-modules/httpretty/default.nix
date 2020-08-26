@@ -12,11 +12,14 @@
 , nose-randomly
 , six
 , mock
+, eventlet
+, pytest
+, freezegun
 }:
 
 buildPythonPackage rec {
   pname = "httpretty";
-  version = "0.9.7";
+  version = "1.0.2";
 
   # drop this for version > 0.9.7
   # Flaky tests: https://github.com/gabrielfalcao/HTTPretty/pull/394
@@ -24,15 +27,19 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "66216f26b9d2c52e81808f3e674a6fb65d4bf719721394a1a9be926177e55fbe";
+    sha256 = "24a6fd2fe1c76e94801b74db8f52c0fb42718dc4a199a861b305b1a492b9d868";
   };
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ nose sure coverage mock rednose
+  checkInputs = [ nose sure coverage mock rednose pytest
     # Following not declared in setup.py
-    nose-randomly requests tornado httplib2 nose-exclude
+    nose-randomly requests tornado httplib2 nose-exclude freezegun
   ];
+
+  checkPhase = ''
+    nosetests tests/unit # functional tests cause trouble requiring /etc/protocol
+  '';
 
   __darwinAllowLocalNetworking = true;
 

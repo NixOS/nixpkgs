@@ -1,25 +1,19 @@
-{ lib
-, stdenv
+{ stdenv
 , fetchurl
 , gcc-unwrapped
 , dpkg
 , polkit
+, utillinux
 , bash
 , nodePackages
-, electron_3
-, gtk3
-, wrapGAppsHook
+, makeWrapper
+, electron_7
 }:
 
 let
-  libPath = lib.makeLibraryPath [
-    # for libstdc++.so.6
-    gcc-unwrapped.lib
-  ];
-
   sha256 = {
-    "x86_64-linux" = "0zb9j34dz7ybjix018bm8g0b6kilw9300q4ahcm22p0ggg528dh7";
-    "i686-linux" = "0wsv4mvwrvsaz1pwiqs94b3854h5l8ff2dbb1ybxmvwjbfrkdcqc";
+    "x86_64-linux" = "1yvqi86bw0kym401zwknhwq9041fxg047sbj3aydnfcqf11vrrmk";
+    "i686-linux" = "12lghzhsl16h3jvzm3vw4hrly32fz99z6rdmybl8viralrxy8mb8";
   }."${stdenv.system}";
 
   arch = {
@@ -27,25 +21,23 @@ let
     "i686-linux" = "i386";
   }."${stdenv.system}";
 
-in stdenv.mkDerivation rec {
+  electron = electron_7;
+
+in
+
+stdenv.mkDerivation rec {
   pname = "etcher";
-  version = "1.5.60";
+  version = "1.5.86";
 
   src = fetchurl {
     url = "https://github.com/balena-io/etcher/releases/download/v${version}/balena-etcher-electron_${version}_${arch}.deb";
     inherit sha256;
   };
 
-  buildInputs = [
-    gtk3
-  ];
-
-  nativeBuildInputs = [
-    wrapGAppsHook
-  ];
-
   dontBuild = true;
   dontConfigure = true;
+
+  nativeBuildInputs = [ makeWrapper ];
 
   unpackPhase = ''
     ${dpkg}/bin/dpkg-deb -x $src .
@@ -55,33 +47,33 @@ in stdenv.mkDerivation rec {
   # along with some other paths
   patchPhase = ''
     ${nodePackages.asar}/bin/asar extract opt/balenaEtcher/resources/app.asar tmp
-    # Use Nix(OS) paths
+    # use Nix(OS) paths
     sed -i "s|/usr/bin/pkexec|/usr/bin/pkexec', '/run/wrappers/bin/pkexec|" tmp/node_modules/sudo-prompt/index.js
     sed -i 's|/bin/bash|${bash}/bin/bash|' tmp/node_modules/sudo-prompt/index.js
-    sed -i "s|process.resourcesPath|'$out/opt/balenaEtcher/resources/'|" tmp/generated/gui.js
+    sed -i "s|'lsblk'|'${utillinux}/bin/lsblk'|" tmp/node_modules/drivelist/js/lsblk/index.js
+    sed -i "s|process.resourcesPath|'$out/share/${pname}/resources/'|" tmp/generated/gui.js
     ${nodePackages.asar}/bin/asar pack tmp opt/balenaEtcher/resources/app.asar
     rm -rf tmp
-    # Fix up .desktop file
-    substituteInPlace usr/share/applications/balena-etcher-electron.desktop \
-      --replace "/opt/balenaEtcher/balena-etcher-electron" "$out/bin/balena-etcher-electron"
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp -r opt $out/
-    cp -r usr/share $out/
+    runHook preInstall
 
-    # We'll use our Nixpkgs electron_3 instead
-    rm $out/opt/balenaEtcher/balena-etcher-electron
+    mkdir -p $out/bin $out/share/${pname}
 
-    ln -s ${electron_3}/bin/electron $out/bin/balena-etcher-electron
+    cp -a usr/share/* $out/share
+    cp -a opt/balenaEtcher/{locales,resources} $out/share/${pname}
+
+    substituteInPlace $out/share/applications/balena-etcher-electron.desktop \
+      --replace 'Exec=/opt/balenaEtcher/balena-etcher-electron' 'Exec=${pname}'
+
+    runHook postInstall
   '';
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --add-flags $out/opt/balenaEtcher/resources/app.asar
-      --prefix LD_LIBRARY_PATH : ${libPath}
-    )
+  postFixup = ''
+    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
+      --add-flags $out/share/${pname}/resources/app.asar \
+      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ gcc-unwrapped.lib ]}"
   '';
 
   meta = with stdenv.lib; {

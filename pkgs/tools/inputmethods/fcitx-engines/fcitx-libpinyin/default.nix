@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     isFcitxEngine = true;
     description  = "Fcitx Wrapper for libpinyin, Library to deal with pinyin";
-    homepage     = https://github.com/fcitx/fcitx-libpinyin;
+    homepage     = "https://github.com/fcitx/fcitx-libpinyin";
     license      = licenses.gpl3Plus;
     maintainers = with maintainers; [ ericsagnes ];
     platforms    = platforms.linux;

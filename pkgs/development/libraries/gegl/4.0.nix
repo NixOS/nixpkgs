@@ -35,20 +35,15 @@
 
 stdenv.mkDerivation rec {
   pname = "gegl";
-  version = "0.4.22";
+  version = "0.4.26";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/gegl/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0q9cckf90fb82qc5d496fjz459f1xw4j4p3rff1f57yivx0yr20q";
+    sha256 = "097427icgpgvcx40019b3dm8m84cchz79pixzpz648drs8p1wdqg";
   };
-
-  patches = [
-    # Remove gegl:simple / backend-file test that times out frequently
-    ./patches/no-simple-backend-file-test.patch
-  ];
 
   nativeBuildInputs = [
     pkgconfig
@@ -116,7 +111,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Graph-based image processing framework";
-    homepage = http://www.gegl.org;
+    homepage = "http://www.gegl.org";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;

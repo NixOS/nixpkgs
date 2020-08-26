@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-mock";
-  version = "1.13.0";
+  version = "3.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e24a911ec96773022ebcc7030059b57cd3480b56d4f5d19b7c370ec635e6aed5";
+    sha256 = "636e792f7dd9e2c80657e174c04bf7aa92672350090736d82e97e92ce8f68737";
   };
 
   propagatedBuildInputs = lib.optional (!isPy3k) mock;
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Thin-wrapper around the mock package for easier use with py.test.";
-    homepage    = https://github.com/pytest-dev/pytest-mock;
+    homepage    = "https://github.com/pytest-dev/pytest-mock";
     license     = licenses.mit;
     maintainers = with maintainers; [ nand0p ];
   };

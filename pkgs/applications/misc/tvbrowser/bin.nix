@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Electronic TV Program Guide";
-    homepage = https://www.tvbrowser.org/;
+    homepage = "https://www.tvbrowser.org/";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jfrankenau ];

@@ -22,13 +22,13 @@ let
   ]);
 in buildPythonPackage {
   pname = "weechat-matrix";
-  version = "unstable-2020-01-21";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "poljar";
     repo = "weechat-matrix";
-    rev = "46640df3e0bfb058e97d8abe723bb88fdf4e5177";
-    sha256 = "1j3l43j741csfxsp1nsc74y6wj2wm86c45iraf167g6p0sdzcq8z";
+    rev = "65a5db7291439b6132e35e8cc09ed901614fabf6";
+    sha256 = "0m3k5vrv5ab1aw1mjd0r8d71anwqzvncvv9v5zx9xp1i188sdm8x";
   };
 
   propagatedBuildInputs = [
@@ -53,11 +53,9 @@ in buildPythonPackage {
     mkdir -p $out/share $out/bin
     cp $src/main.py $out/share/matrix.py
 
-    cp \
-      $src/contrib/matrix_upload \
-      $src/contrib/matrix_decrypt \
-      $src/contrib/matrix_sso_helper \
-      $out/bin/
+    cp $src/contrib/matrix_upload.py $out/bin/matrix_upload
+    cp $src/contrib/matrix_decrypt.py $out/bin/matrix_decrypt
+    cp $src/contrib/matrix_sso_helper.py $out/bin/matrix_sso_helper
     substituteInPlace $out/bin/matrix_upload \
       --replace '/usr/bin/env -S python3' '${scriptPython}/bin/python'
     substituteInPlace $out/bin/matrix_sso_helper \

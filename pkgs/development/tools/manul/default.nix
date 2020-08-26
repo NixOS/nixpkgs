@@ -17,7 +17,7 @@ buildGoPackage {
 
   meta = with stdenv.lib; {
     description = "The madness vendoring utility for Golang programs";
-    homepage = https://github.com/kovetskiy/manul;
+    homepage = "https://github.com/kovetskiy/manul";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = [ maintainers.mic92 ];

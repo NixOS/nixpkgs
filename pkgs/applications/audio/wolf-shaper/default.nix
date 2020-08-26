@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://pdesaulniers.github.io/wolf-shaper/;
+    homepage = "https://pdesaulniers.github.io/wolf-shaper/";
     description = "Waveshaper plugin with spline-based graph editor";
     license = licenses.gpl3;
     maintainers = [ maintainers.magnetophon ];

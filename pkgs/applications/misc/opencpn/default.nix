@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.kragniz ];
     platforms = [ "x86_64-linux" ];
     license = stdenv.lib.licenses.gpl2;
-    homepage = https://opencpn.org/;
+    homepage = "https://opencpn.org/";
   };
 }

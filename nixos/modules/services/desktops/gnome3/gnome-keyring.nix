@@ -6,6 +6,10 @@ with lib;
 
 {
 
+  meta = {
+    maintainers = teams.gnome.members;
+  };
+
   ###### interface
 
   options = {
@@ -34,6 +38,8 @@ with lib;
     environment.systemPackages = [ pkgs.gnome3.gnome-keyring ];
 
     services.dbus.packages = [ pkgs.gnome3.gnome-keyring pkgs.gcr ];
+
+    xdg.portal.extraPortals = [ pkgs.gnome3.gnome-keyring ];
 
     security.pam.services.login.enableGnomeKeyring = true;
 

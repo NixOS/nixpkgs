@@ -18,11 +18,15 @@ let
     ''}
     state_file          "${cfg.dataDir}/state"
     sticker_file        "${cfg.dataDir}/sticker.sql"
-    user                "${cfg.user}"
-    group               "${cfg.group}"
 
     ${optionalString (cfg.network.listenAddress != "any") ''bind_to_address "${cfg.network.listenAddress}"''}
     ${optionalString (cfg.network.port != 6600)  ''port "${toString cfg.network.port}"''}
+    ${optionalString (cfg.fluidsynth) ''
+      decoder {
+              plugin "fluidsynth"
+              soundfont "${pkgs.soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2"
+      }
+    ''}
 
     ${cfg.extraConfig}
   '';
@@ -133,6 +137,14 @@ in {
         description = ''
           The path to MPD's database. If set to <literal>null</literal> the
           parameter is omitted from the configuration.
+        '';
+      };
+
+      fluidsynth = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If set, add fluidsynth soundfont and configure the plugin.
         '';
       };
     };

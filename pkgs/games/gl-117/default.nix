@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An air combat simulator";
-    homepage = https://sourceforge.net/projects/gl-117;
+    homepage = "https://sourceforge.net/projects/gl-117";
     maintainers = with maintainers; [ raskin ];
     license = licenses.gpl2;
     platforms = platforms.linux;

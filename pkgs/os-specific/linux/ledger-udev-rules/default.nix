@@ -24,6 +24,6 @@ stdenv.mkDerivation {
     license = licenses.asl20;
     maintainers = with maintainers; [ asymmetric ];
     platforms = platforms.linux;
-    homepage = https://github.com/LedgerHQ/udev-rules;
+    homepage = "https://github.com/LedgerHQ/udev-rules";
   };
 }

@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
       Repetitive Strain Injury (RSI). The program frequently alerts you to
       take micro-pauses, rest breaks and restricts you to your daily limit.
     '';
-    homepage = http://www.workrave.org/;
-    downloadPage = https://github.com/rcaelers/workrave/releases;
+    homepage = "http://www.workrave.org/";
+    downloadPage = "https://github.com/rcaelers/workrave/releases";
     license = licenses.gpl3;
     maintainers = with maintainers; [ prikhi ];
     platforms = platforms.linux;

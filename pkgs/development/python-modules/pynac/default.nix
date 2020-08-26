@@ -13,7 +13,7 @@ buildPythonPackage {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/se-esss-litterbox/Pynac;
+    homepage = "https://github.com/se-esss-litterbox/Pynac";
     description = "A Python wrapper around the Dynac charged particle simulator";
     license = licenses.gpl3;
   };

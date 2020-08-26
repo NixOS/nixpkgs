@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, buildFHSUserEnv, makeDesktopItem, makeWrapper, atomEnv, libuuid, at-spi2-atk, icu, openssl, zlib }:
 	let
 		pname = "sidequest";
-		version = "0.8.7";
+		version = "0.10.11";
 
 		desktopItem = makeDesktopItem rec {
 			name = "SideQuest";
@@ -16,7 +16,7 @@
 
 			src = fetchurl {
 				url = "https://github.com/the-expanse/SideQuest/releases/download/v${version}/SideQuest-${version}.tar.xz";
-				sha256 = "1hbr6ml689zq4k3mzmn2xcn4r4dy717rgq3lgm32pzwgy5w92i2j";
+				sha256 = "0fw952kdh1gn00y6sx2ag0rnb2paxq9ikg4bzgmbj7rrd1c6l2k9";
 			};
 
 			buildInputs = [ makeWrapper ];

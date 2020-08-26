@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iso-codes";
-  version = "4.4";
+  version = "4.5.0";
 
   src = fetchurl {
     url = "https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/${pname}-${version}/${pname}-${pname}-${version}.tar.bz2";
-    sha256 = "02x0wcz783ammkdrmrh31wsmww481xbkbz70vf766ivbnn5sfxn6";
+    sha256 = "17nnyx07q8vbyqsxbvp4m5s2nrc4fxl3dvgbgmkqww2wl4x1fv9y";
   };
 
   patchPhase = ''
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gettext python3 ];
 
   meta = with stdenv.lib; {
-    homepage = https://salsa.debian.org/iso-codes-team/iso-codes;
+    homepage = "https://salsa.debian.org/iso-codes-team/iso-codes";
     description = "Various ISO codes packaged as XML files";
     license = licenses.lgpl21;
     platforms = platforms.all;

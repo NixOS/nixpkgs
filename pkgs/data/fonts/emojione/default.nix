@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, inkscape, imagemagick, potrace, svgo, scfbuild }:
+{ stdenv, fetchFromGitHub, inkscape_0, imagemagick, potrace, svgo, scfbuild }:
 
 stdenv.mkDerivation rec {
   pname = "emojione";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     export HOME="$NIX_BUILD_ROOT"
   '';
 
-  nativeBuildInputs = [ inkscape imagemagick potrace svgo scfbuild ];
+  nativeBuildInputs = [ inkscape_0 imagemagick potrace svgo scfbuild ];
 
   enableParallelBuilding = true;
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open source emoji set";
-    homepage = http://emojione.com/;
+    homepage = "http://emojione.com/";
     license = licenses.cc-by-40;
     maintainers = with maintainers; [ abbradar ];
   };

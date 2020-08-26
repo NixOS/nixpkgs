@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Slicer for 3D printers built by Dagoma";
-    homepage = https://dagoma.fr/cura-by-dagoma.html;
+    homepage = "https://dagoma.fr/cura-by-dagoma.html";
     license = licenses.agpl3;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ tiramiseb ];

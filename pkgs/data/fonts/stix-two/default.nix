@@ -19,7 +19,7 @@ in fetchFromGitHub {
   sha256 = "1ah8s0cb67yv4ll8zfs01mdh9m5i2lbkrfbmkhi1xdid6pxsk32x";
 
   meta = with stdenv.lib; {
-    homepage = http://www.stixfonts.org/;
+    homepage = "http://www.stixfonts.org/";
     description = "Fonts for Scientific and Technical Information eXchange";
     license = licenses.ofl;
     platforms = platforms.all;

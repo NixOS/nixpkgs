@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A mpc-like control interface for mpv";
-    homepage = https://github.com/wildefyr/mpvc;
+    homepage = "https://github.com/wildefyr/mpvc";
     license = licenses.mit;
     maintainers = [ maintainers.neeasade ];
     platforms = platforms.linux;

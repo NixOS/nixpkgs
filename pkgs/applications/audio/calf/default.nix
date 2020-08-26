@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://calf-studio-gear.org;
+    homepage = "http://calf-studio-gear.org";
     description = "A set of high quality open source audio plugins for musicians";
     license = licenses.lgpl2;
     maintainers = [ maintainers.goibhniu ];

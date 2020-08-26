@@ -1,9 +1,25 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, attrs, hypothesis, py
-, setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
-, atomicwrites, mock, writeText, pathlib2, wcwidth, packaging, isPyPy, python
+{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
+, atomicwrites
+, attrs
+, funcsigs
+, hypothesis
+, mock
+, more-itertools
+, packaging
+, pathlib2
+, pluggy
+, py
+, pygments
+, python
+, setuptools
+, setuptools_scm
+, six
+, wcwidth
+, writeText
 }:
+
 buildPythonPackage rec {
-  version = "5.3.5";
+  version = "5.4.3";
   pname = "pytest";
 
   disabled = !isPy3k;
@@ -15,10 +31,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d5fe9189a148acc3c3eb2ac8e1ac0742cb7618c084f3d228baaec0c254b318d";
+    sha256 = "7979331bfcba207414f5e1263b5a0f8f521d0f457318836a7355531ed1a4c7d8";
   };
 
-  checkInputs = [ hypothesis mock ];
+  checkInputs = [ hypothesis pygments ];
   nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites wcwidth packaging ]
     ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
@@ -45,7 +61,7 @@ buildPythonPackage rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://docs.pytest.org;
+    homepage = "https://docs.pytest.org";
     description = "Framework for writing tests";
     maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
     license = licenses.mit;

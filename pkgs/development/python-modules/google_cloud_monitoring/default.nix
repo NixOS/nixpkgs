@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-monitoring";
-  version = "0.34.0";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "75370af645dd815c234561e7b356fa5d99b0ee6448c0e5d013455c72af961d0b";
+    sha256 = "2feee2cc56b60ed1316175af0974668041c6480803542d3711e4365882dc79cd";
   };
 
   checkInputs = [ pytest mock ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Stackdriver Monitoring API client library";
-    homepage = https://github.com/GoogleCloudPlatform/google-cloud-python;
+    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

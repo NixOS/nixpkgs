@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       The executable requires the PC/SC daemon running for correct execution.
       If you run NixOS, it can be enabled with `services.pcscd.enable = true;`.
     '';
-    homepage = https://github.com/martinpaljak/GlobalPlatformPro;
+    homepage = "https://github.com/martinpaljak/GlobalPlatformPro";
     license = with licenses; [ lgpl3 ];
     maintainers = with maintainers; [ ekleog ];
     platforms = platforms.all;

@@ -1,33 +1,37 @@
-{ stdenv, python3Packages, fetchurl, makeWrapper
-, coreutils, iptables, nettools, openssh, procps }:
+{ stdenv
+, python3Packages
+, makeWrapper
+, coreutils
+, iptables
+, nettools
+, openssh
+, procps
+}:
 
 python3Packages.buildPythonApplication rec {
-  name = "sshuttle-${version}";
-  version = "0.78.5";
+  pname = "sshuttle";
+  version = "1.0.3";
 
-  src = fetchurl {
-    sha256 = "0vp13xwrhx4m6zgsyzvai84lkq9mzkaw47j58dk0ll95kaymk2x8";
-    url = "mirror://pypi/s/sshuttle/${name}.tar.gz";
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "0fff1c88669a20bb6a4e7331960673a3a02a2e04ff163e4c9299496646edcf61";
   };
 
   patches = [ ./sudo.patch ];
 
   nativeBuildInputs = [ makeWrapper python3Packages.setuptools_scm ];
-  buildInputs =
-    [ coreutils openssh procps nettools ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ iptables ];
 
   checkInputs = with python3Packages; [ mock pytest pytestcov pytestrunner flake8 ];
 
-  postInstall = let
-    mapPath = f: x: stdenv.lib.concatStringsSep ":" (map f x);
-  in ''
-  wrapProgram $out/bin/sshuttle \
-    --prefix PATH : "${mapPath (x: "${x}/bin") buildInputs}" \
+  runtimeDeps = [ coreutils openssh procps ] ++ stdenv.lib.optionals stdenv.isLinux [ iptables nettools ];
+
+  postInstall = ''
+    wrapProgram $out/bin/sshuttle \
+      --prefix PATH : "${stdenv.lib.makeBinPath runtimeDeps}" \
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/sshuttle/sshuttle/;
+    homepage = "https://github.com/sshuttle/sshuttle/";
     description = "Transparent proxy server that works as a poor man's VPN";
     longDescription = ''
       Forward connections over SSH, without requiring administrator access to the

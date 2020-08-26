@@ -299,5 +299,5 @@ in
     ])));
   };
 
-  meta.maintainers = with lib.maintainers; [ b42 ];
+  meta.maintainers = with lib.maintainers; [ mmilata ];
 }

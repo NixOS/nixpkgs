@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   buildInputs = [ curl ];
 
   meta = {
-    homepage = https://www.autistici.org/bakunin/libnxml/;
+    homepage = "https://www.autistici.org/bakunin/libnxml/";
     description = "C library for parsing, writing and creating XML 1.0 and 1.1 files or streams";
     license = stdenv.lib.licenses.lgpl2;
 

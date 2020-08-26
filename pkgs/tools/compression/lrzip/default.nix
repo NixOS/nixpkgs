@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib lzo bzip2 nasm perl ];
 
   meta = {
-    homepage = http://ck.kolivas.org/apps/lrzip/;
+    homepage = "http://ck.kolivas.org/apps/lrzip/";
     description = "The CK LRZIP compression program (LZMA + RZIP)";
     license = stdenv.lib.licenses.gpl2Plus;
     inherit version;

@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "OpenGL (ES) 2.0 benchmark";
-    homepage = https://github.com/glmark2/glmark2;
+    homepage = "https://github.com/glmark2/glmark2";
     license = licenses.gpl3Plus;
     longDescription = ''
       glmark2 is a benchmark for OpenGL (ES) 2.0. It uses only the subset of

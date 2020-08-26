@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "0yaahaiawkjk020hvsb8pndbrk8k10wxkfba1irp12a4sj6rywcs";
   };
 
+  patches = [
+    # fix build with json-c 0.14 https://github.com/zmap/zmap/pull/609
+    ./cmake-json-0.14-fix.patch
+  ];
+
   cmakeFlags = [ "-DRESPECT_INSTALL_PREFIX_CONFIG=ON" ];
   dontUseCmakeBuildDir = true;
 
@@ -22,7 +27,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" ];
 
   meta = with stdenv.lib; {
-    homepage = https://zmap.io/;
+    homepage = "https://zmap.io/";
     license = licenses.asl20;
     description = "Fast single packet network scanner designed for Internet-wide network surveys";
     maintainers = with maintainers; [ ma27 ];

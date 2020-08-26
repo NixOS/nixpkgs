@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
          code. Its is written in plain C and can be used in C++ code.
        '';
 
-    homepage = https://sourceforge.net/projects/sdlgfx/;
+    homepage = "https://sourceforge.net/projects/sdlgfx/";
     license = licenses.zlib;
 
     maintainers = with maintainers; [ bjg ];

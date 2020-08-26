@@ -22,15 +22,16 @@
 , p11-kit
 , openssh
 , gsettings-desktop-schemas
+, libhandy
 }:
 
 stdenv.mkDerivation rec {
   pname = "seahorse";
-  version = "3.34.1";
+  version = "3.36.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "19c2zylwgycb5q9hal8rmflc2sywc5c2grpsfsq3rf37i9lfwynw";
+    sha256 = "16wmxxppgcgfj8zkagcny5af1c81x32ysm9d6j9f2k7bmik21ss5";
   };
 
   doCheck = true;
@@ -60,6 +61,7 @@ stdenv.mkDerivation rec {
     openssh
     openldap
     libpwquality
+    libhandy
   ];
 
   postPatch = ''
@@ -74,9 +76,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Seahorse;
+    homepage = "https://wiki.gnome.org/Apps/Seahorse";
     description = "Application for managing encryption keys and passwords in the GnomeKeyring";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

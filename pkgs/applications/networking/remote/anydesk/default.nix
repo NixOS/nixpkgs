@@ -5,8 +5,8 @@
 
 let
   sha256 = {
-    x86_64-linux = "1ry21zw5ghba4xjx8dvimlpprgap7n8j9lqhjsciahbvc16vx5ks";
-    i386-linux   = "0vjxbg5hwkqkh600rr75xviwy848r1xw9mxwf6bb6l8b0isvlsgg";
+    x86_64-linux = "19c6blkkqpyjf330v16mdmsh7q6x087p6gw5ag8r2mc6jwq5ixlx";
+    i386-linux   = "0dwc7v4p1dz51444zwn0kds23yi87r4h2d3isfj9xwkn90pxb7in";
   }.${stdenv.hostPlatform.system} or (throw "system ${stdenv.hostPlatform.system} not supported");
 
   arch = {
@@ -22,13 +22,13 @@ let
     icon = "anydesk";
     desktopName = "AnyDesk";
     genericName = description;
-    categories = "Application;Network;";
+    categories = "Network;";
     startupNotify = "false";
   };
 
 in stdenv.mkDerivation rec {
   pname = "anydesk";
-  version = "5.5.4";
+  version = "6.0.0";
 
   src = fetchurl {
     urls = [

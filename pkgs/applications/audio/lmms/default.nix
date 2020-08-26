@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "lmms";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "LMMS";
     repo = "lmms";
     rev = "v${version}";
-    sha256 = "08k2nfj0rw9mahr7pr90n79wviqmjmflrgcljc6y3x30v84wbp26";
+    sha256 = "006hwv1pbh3y5whsxkjk20hsbgwkzr4dawz43afq1gil69y7xpda";
     fetchSubmodules = true;
   };
 
@@ -41,7 +41,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "DAW similar to FL Studio (music production software)";
-    homepage = https://lmms.io;
+    homepage = "https://lmms.io";
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ goibhniu yegortimoshenko ];

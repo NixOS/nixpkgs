@@ -28,7 +28,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Makes impress.js presentations from reStructuredText";
-    homepage = https://github.com/regebro/hovercraft;
+    homepage = "https://github.com/regebro/hovercraft";
     license = licenses.mit;
     maintainers = with maintainers; [ goibhniu makefu ];
   };

@@ -14,8 +14,10 @@ stdenv.mkDerivation rec {
   uuid = "battery_status@milliburn.github.com";
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
     cp -r ${uuid} $out/share/gnome-shell/extensions/
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
@@ -23,6 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     broken = true; # not compatable with latest GNOME
     maintainers = with maintainers; [ jonafato ];
-    homepage = https://github.com/milliburn/gnome-shell-extension-battery_status;
+    homepage = "https://github.com/milliburn/gnome-shell-extension-battery_status";
   };
 }

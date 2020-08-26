@@ -51,7 +51,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Particle-tracking toolkit";
-    homepage = https://github.com/soft-matter/trackpy;
+    homepage = "https://github.com/soft-matter/trackpy";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
     broken = true; # not compatible with latest pandas

@@ -18,7 +18,7 @@ in {
       };
 
       host = mkOption {
-        description = "Remote host where snapshots should be sent.";
+        description = "Remote host where snapshots should be sent. <literal>lz4</literal> is expected to be installed on this host.";
         example = "example.com";
         type = types.str;
       };

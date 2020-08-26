@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library of safe, high-performance concurrent data structures";
-    homepage    = http://concurrencykit.org;
+    homepage    = "http://concurrencykit.org";
     license     = licenses.bsd2;
     platforms   = platforms.unix;
     maintainers = [ maintainers.thoughtpolice ];

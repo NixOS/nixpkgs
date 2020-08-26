@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
     license = licenses.free;
-    downloadPage = http://tangramgames.dk/games/sienna;
+    downloadPage = "http://tangramgames.dk/games/sienna";
   };
 
 }

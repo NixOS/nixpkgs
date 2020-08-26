@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lsp-plugins";
-  version = "1.1.13";
+  version = "1.1.24";
 
   src = fetchFromGitHub {
     owner = "sadko4u";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "00mhrr873kgcnqy3q0yi1r5zacfcvz7fqpzsmfhw5d095jm970al";
+    sha256 = "0rzgzkg6wvhjcf664i16nz4v30drgv80s34bhdflcjzx2x7ix5zk";
   };
 
   nativeBuildInputs = [ pkgconfig php makeWrapper ];
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=${placeholder ''out''}"
+    "ETC_PATH=$(out)/etc"
   ];
 
   NIX_CFLAGS_COMPILE = "-DLSP_NO_EXPERIMENTAL";
@@ -139,7 +140,7 @@ stdenv.mkDerivation rec {
         - Delay Compensator Stereo - Verzögerungsausgleicher Stereo
         - Delay Compensator x2 Stereo - Verzögerungsausgleicher x2 Stereo
       '';
-      homepage = https://lsp-plug.in;
+      homepage = "https://lsp-plug.in";
       maintainers = with maintainers; [ magnetophon ];
       license = licenses.gpl2;
       platforms = platforms.linux;

@@ -1,16 +1,19 @@
-{ stdenv, fetchbzr, pkgconfig
+{ stdenv, fetchFromGitLab, pkgconfig
 , qmake, qtbase, qtdeclarative, wrapQtAppsHook
 , glib, gobject-introspection
+, genericUpdater, common-updater-scripts
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gsettings-qt";
-  version = "0.1.20170824";
+  version = "0.2";
 
-  src = fetchbzr {
-    url = http://bazaar.launchpad.net/~system-settings-touch/gsettings-qt/trunk;
-    rev = "85";
-    sha256 = "1kcw0fgdyndx9c0dyha11wkj0gi05spdc1adf1609mrinbb4rnyi";
+  src = fetchFromGitLab {
+    group = "ubports";
+    owner = "core";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "14l8xphw4jd9ckqba13cyxq0i362x8lfsd0zlfawwi2z1q1vqm92";
   };
 
   nativeBuildInputs = [
@@ -52,9 +55,15 @@ stdenv.mkDerivation {
     done
   '';
 
+  passthru.updateScript = genericUpdater {
+    inherit pname version;
+    rev-prefix = "v";
+    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+  };
+
   meta = with stdenv.lib; {
-    description = "Qt/QML bindings for GSettings";
-    homepage = https://launchpad.net/gsettings-qt;
+    description = "Library to access GSettings from Qt";
+    homepage = "https://gitlab.com/ubports/core/gsettings-qt";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

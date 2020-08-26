@@ -32,7 +32,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A command line interface and FUSE filesystem for Amazon Cloud Drive";
-    homepage = https://github.com/yadayada/acd_cli;
+    homepage = "https://github.com/yadayada/acd_cli";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ edwtjo ];

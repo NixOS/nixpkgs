@@ -12,7 +12,7 @@ let
 
     meta = with stdenv.lib; {
       description = "The KeePassRPC plugin that needs to be installed inside KeePass in order for Kee to be able to connect your browser to your passwords";
-      homepage    = https://github.com/kee-org/keepassrpc;
+      homepage    = "https://github.com/kee-org/keepassrpc";
       platforms   = [ "x86_64-linux" ];
       license     = licenses.gpl2;
       maintainers = with maintainers; [ mjanczyk svsdep mgregoire ];

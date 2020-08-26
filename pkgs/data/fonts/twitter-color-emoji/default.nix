@@ -1,4 +1,4 @@
-# Based upon https://src.fedoraproject.org/rpms/twitter-twemoji-fonts/tree/454acad50ba584d9602ccd4238fc5e585abc15c9
+# Based upon https://src.fedoraproject.org/rpms/twitter-twemoji-fonts
 # The main difference is that we use “Twitter Color Emoji” name (which is recognized by upstream fontconfig)
 
 { stdenv
@@ -15,14 +15,14 @@
 }:
 
 let
-  version = "12.1.2";
+  version = "12.1.5";
 
   twemojiSrc = fetchFromGitHub {
     name = "twemoji";
     owner = "twitter";
     repo = "twemoji";
     rev = "v${version}";
-    sha256 = "0vzmlp83vnk4njcfkn03jcc1vkg2rf12zf5kj3p3a373xr4ds1zn";
+    sha256 = "0acinlv2l3s1jga2i9wh16mvgkxw4ipzgvjx8c80zd104lpdpgd9";
   };
 
 in
@@ -54,10 +54,10 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # ImageMagick -> GrahphicsMagick
+    # ImageMagick -> GraphicsMagick
     (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/twitter-twemoji-fonts/raw/3bc176c10ced2824fe03da5ff561e22a36bf8ccd/f/noto-emoji-use-gm.patch";
-      sha256 = "0yfmfzaaiq5163c06172g4r734aysiqyv1s28siv642vqzsqh4i2";
+      url = "https://src.fedoraproject.org/rpms/twitter-twemoji-fonts/raw/07778605d50696f6aa929020e82611a01d254c90/f/noto-emoji-use-gm.patch";
+      sha256 = "06vg16z79s5adyjy8r3mr8fd391b1hi4xkqvbzkmnjwaai7p08lk";
     })
   ];
 
@@ -114,7 +114,9 @@ stdenv.mkDerivation rec {
     # In twemoji source
     ## Artwork is Creative Commons Attribution 4.0 International
     ## Non-artwork is MIT
+    # In Fedora twitter-twemoji-fonts source
+    ## spec files are MIT: https://fedoraproject.org/wiki/Licensing:Main#License_of_Fedora_SPEC_Files
     license = with licenses; [ asl20 ofl cc-by-40 mit ];
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ jtojnar emily ];
   };
 }

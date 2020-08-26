@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, perl, texinfo, yasm
+{ stdenv, ffmpeg, addOpenGLRunpath, fetchurl, fetchpatch, pkgconfig, perl, texinfo, yasm
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
  */
@@ -82,6 +82,7 @@
 #, libnut ? null # NUT (de)muxer, native (de)muser exists
 , libogg ? null # Ogg container used by vorbis & theora
 , libopus ? null # Opus de/encoder
+, librsvg ? null # SVG protocol
 , libssh ? null # SFTP protocol
 , libtheora ? null # Theora encoder
 , libv4l ? null # Video 4 Linux support
@@ -117,6 +118,7 @@
 #, shine ? null # Fixed-point MP3 encoder
 , soxr ? null # Resampling via soxr
 , speex ? null # Speex de/encoder
+, srt ? null # Secure Reliable Transport (SRT) protocol
 #, twolame ? null # MP2 encoder
 #, utvideo ? null # Ut Video de/encoder
 , vid-stab ? null # Video stabilization
@@ -239,14 +241,7 @@ assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   pname = "ffmpeg-full";
-  version = "4.2.2";
-
-  src = fetchurl {
-    url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "176jn1lcdf0gk7sa5l2mv0faqp5dsqdhx1gqcrgymqhfmdal4xfb";
-  };
-
-  patches = [ ./prefer-libdav1d-over-libaom.patch ];
+  inherit (ffmpeg) src version;
 
   prePatch = ''
     patchShebangs .
@@ -360,6 +355,8 @@ stdenv.mkDerivation rec {
     (enableFeature (libmysofa != null) "libmysofa")
     #(enableFeature (libnut != null) "libnut")
     (enableFeature (libopus != null) "libopus")
+    (enableFeature (librsvg != null) "librsvg")
+    (enableFeature (srt != null) "libsrt")
     (enableFeature (libssh != null) "libssh")
     (enableFeature (libtheora != null) "libtheora")
     (enableFeature (if isLinux then libv4l != null else false) "libv4l2")
@@ -416,14 +413,14 @@ stdenv.mkDerivation rec {
     "--enable-cross-compile"
   ];
 
-  nativeBuildInputs = [ perl pkgconfig texinfo yasm ];
+  nativeBuildInputs = [ addOpenGLRunpath perl pkgconfig texinfo yasm ];
 
   buildInputs = [
     bzip2 celt dav1d fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
     libjack2 ladspaH lame libaom libass libbluray libbs2b libcaca libdc1394 libmodplug libmysofa
-    libogg libopus libssh libtheora libvdpau libvorbis libvpx libwebp libX11
+    libogg libopus librsvg libssh libtheora libvdpau libvorbis libvpx libwebp libX11
     libxcb libXv libXext lzma openal openjpeg libpulseaudio rtmpdump opencore-amr
-    samba SDL2 soxr speex vid-stab vo-amrwbenc wavpack x264 x265 xavs xvidcore
+    samba SDL2 soxr speex srt vid-stab vo-amrwbenc wavpack x264 x265 xavs xvidcore
     zeromq4 zlib
   ] ++ optionals openglExtlib [ libGL libGLU ]
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
@@ -444,11 +441,18 @@ stdenv.mkDerivation rec {
     cp -a tools/qt-faststart $out/bin/
   '';
 
+  postFixup = optionalString stdenv.isLinux ''
+    # Set RUNPATH so that libnvcuvid and libcuda in /run/opengl-driver(-32)/lib can be found.
+    # See the explanation in addOpenGLRunpath.
+    addOpenGLRunpath $out/lib/libavcodec.so
+    addOpenGLRunpath $out/lib/libavutil.so
+  '';
+
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
-    homepage = https://www.ffmpeg.org/;
+    homepage = "https://www.ffmpeg.org/";
     longDescription = ''
       FFmpeg is the leading multimedia framework, able to decode, encode, transcode,
       mux, demux, stream, filter and play pretty much anything that humans and machines

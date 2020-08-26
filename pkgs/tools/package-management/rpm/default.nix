@@ -1,15 +1,15 @@
-{ stdenv
+{ stdenv, lib
 , pkgconfig, autoreconfHook
 , fetchurl, cpio, zlib, bzip2, file, elfutils, libbfd, libarchive, nspr, nss, popt, db, xz, python, lua
 }:
 
 stdenv.mkDerivation rec {
   pname = "rpm";
-  version = "4.14.2.1";
+  version = "4.15.1";
 
   src = fetchurl {
-    url = "http://ftp.rpm.org/releases/rpm-4.14.x/rpm-${version}.tar.bz2";
-    sha256 = "1nmck2fq9h85fgs3zhh6w1avlw5y16cbz5khd459ry3jfd5w4f8i";
+    url = "http://ftp.rpm.org/releases/rpm-${lib.versions.majorMinor version}.x/rpm-${version}.tar.bz2";
+    sha256 = "0c6jwail90fhha3bpx70w4a2i8ycxwvnx6zwxm121l8wc3wlbvyx";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.rpm.org/;
+    homepage = "http://www.rpm.org/";
     license = licenses.gpl2;
     description = "The RPM Package Manager";
     maintainers = with maintainers; [ copumpkin ];

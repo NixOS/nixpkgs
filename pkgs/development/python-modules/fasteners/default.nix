@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A python package that provides useful locks";
-    homepage = https://github.com/harlowja/fasteners;
+    homepage = "https://github.com/harlowja/fasteners";
     license = licenses.asl20;
   };
 

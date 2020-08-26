@@ -22,6 +22,8 @@ let
 
     "wasm64-wasi" "wasm32-wasi"
 
+    "x86_64-redox"
+
     "powerpc64le-linux"
 
     "riscv32-linux" "riscv64-linux"
@@ -35,6 +37,8 @@ let
     "vc4-none"
 
     "js-ghcjs"
+
+    "aarch64-genode" "i686-genode" "x86_64-genode"
   ];
 
   allParsed = map parse.mkSystemFromString all;
@@ -67,7 +71,9 @@ in {
   openbsd = filterDoubles predicates.isOpenBSD;
   unix    = filterDoubles predicates.isUnix;
   wasi    = filterDoubles predicates.isWasi;
+  redox   = filterDoubles predicates.isRedox;
   windows = filterDoubles predicates.isWindows;
+  genode  = filterDoubles predicates.isGenode;
 
   embedded = filterDoubles predicates.isNone;
 

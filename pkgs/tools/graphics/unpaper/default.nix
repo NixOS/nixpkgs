@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libav libxslt ];
 
   meta = with stdenv.lib; {
-    homepage = https://www.flameeyes.eu/projects/unpaper;
+    homepage = "https://www.flameeyes.eu/projects/unpaper";
     description = "Post-processing tool for scanned sheets of paper";
     license = licenses.gpl2;
     platforms = platforms.all;

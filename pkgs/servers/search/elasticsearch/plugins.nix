@@ -41,7 +41,7 @@ in {
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with stdenv.lib; {
-      homepage = https://github.com/elastic/elasticsearch/tree/master/plugins/analysis-icu;
+      homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/analysis-icu";
       description = "The ICU Analysis plugin integrates the Lucene ICU module into elasticsearch";
       license = licenses.asl20;
     };
@@ -58,8 +58,25 @@ in {
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
-      homepage = https://github.com/vhyza/elasticsearch-analysis-lemmagen;
+      homepage = "https://github.com/vhyza/elasticsearch-analysis-lemmagen";
       description = "LemmaGen Analysis plugin provides jLemmaGen lemmatizer as Elasticsearch token filter";
+      license = licenses.asl20;
+    };
+  };
+
+  analysis-phonetic = esPlugin rec {
+    pluginName = "analysis-phonetic";
+    version = esVersion;
+    src = fetchurl {
+      url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
+      sha256 =
+        if version == "7.5.1" then "0znmbdf99bli4kvyb3vxr5x48yb6n64nl38gpa63iqsv3nlbi0hp"
+        else if version == "6.8.3" then "0ggdhf7w50bxsffmcznrjy14b578fps0f8arg3v54qvj94v9jc37"
+        else throw "unsupported version ${version} for plugin ${pluginName}";
+    };
+    meta = with lib; {
+      homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/analysis-phonetic";
+      description = "The Phonetic Analysis plugin integrates phonetic token filter analysis with elasticsearch";
       license = licenses.asl20;
     };
   };
@@ -75,7 +92,7 @@ in {
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
-      homepage = https://github.com/elastic/elasticsearch/tree/master/plugins/discovery-ec2;
+      homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/discovery-ec2";
       description = "The EC2 discovery plugin uses the AWS API for unicast discovery.";
       license = licenses.asl20;
     };
@@ -92,7 +109,7 @@ in {
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
-      homepage = https://github.com/elastic/elasticsearch/tree/master/plugins/ingest-attachment;
+      homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/ingest-attachment";
       description = "Ingest processor that uses Apache Tika to extract contents";
       license = licenses.asl20;
     };
@@ -109,7 +126,7 @@ in {
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
-      homepage = https://github.com/elastic/elasticsearch/tree/master/plugins/repository-s3;
+      homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/repository-s3";
       description = "The S3 repository plugin adds support for using AWS S3 as a repository for Snapshot/Restore.";
       license = licenses.asl20;
     };
@@ -126,7 +143,7 @@ in {
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
-      homepage = https://github.com/elastic/elasticsearch/tree/master/plugins/repository-gcs;
+      homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/repository-gcs";
       description = "The GCS repository plugin adds support for using Google Cloud Storage as a repository for Snapshot/Restore.";
       license = licenses.asl20;
     };
@@ -149,7 +166,7 @@ in {
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
-      homepage = https://search-guard.com;
+      homepage = "https://search-guard.com";
       description = "Elasticsearch plugin that offers encryption, authentication, and authorisation. ";
       license = licenses.asl20;
     };

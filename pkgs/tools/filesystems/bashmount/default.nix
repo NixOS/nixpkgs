@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bashmount";
-  version = "3.2.0";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "jamielinux";
     repo = "bashmount";
     rev = version;
-    sha256 = "0rki4s0jgz6vkywc6hcx9qa551r5bnjs7sw0rdh93k64l32kh644";
+    sha256 = "0pqjaib0qiwjq0ral5yjz4iq8hpaj9mqkhlihgfz0xigcn9lxwpf";
   };
 
   installPhase = ''
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/jamielinux/bashmount;
+    homepage = "https://github.com/jamielinux/bashmount";
     description = "A menu-driven bash script for the management of removable media with udisks";
     maintainers = [ maintainers.koral ];
     license = licenses.gpl2;

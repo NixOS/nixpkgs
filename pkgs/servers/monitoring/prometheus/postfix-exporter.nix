@@ -1,5 +1,5 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, systemd, makeWrapper
-, withSystemdSupport ? true }:
+{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, nixosTests
+, systemd, withSystemdSupport ? true }:
 
 with stdenv.lib;
 
@@ -43,9 +43,11 @@ buildGoPackage rec {
   ];
 
   postInstall = optionalString withSystemdSupport ''
-    wrapProgram $bin/bin/postfix_exporter \
+    wrapProgram $out/bin/postfix_exporter \
       --prefix LD_LIBRARY_PATH : "${systemd.lib}/lib"
   '';
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) postfix; };
 
   meta = {
     inherit (src.meta) homepage;

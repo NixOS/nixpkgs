@@ -4,20 +4,21 @@
 , pytest
 , sh
 , typing
+, mock
 }:
 
 buildPythonPackage rec {
   pname = "python-dotenv";
-  version = "0.10.5";
+  version = "0.14.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1p6xk0f1yj1s4n8wjs9m8xqilc5bcwvfzsy9nv5lrmkhr78bym7j";
+    sha256 = "0gf3r4xvqk9ai1k3ka8c4dlblqhs7286zbd1b20adn953fdcj44c";
   };
 
   propagatedBuildInputs = [ click ] ++ lib.optionals isPy27 [ typing ];
 
-  checkInputs = [ ipython pytest sh ];
+  checkInputs = [ ipython mock pytest sh ];
 
   # cli tests are impure
   checkPhase = ''
@@ -26,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Add .env support to your django/flask apps in development and deployments";
-    homepage = https://github.com/theskumar/python-dotenv;
+    homepage = "https://github.com/theskumar/python-dotenv";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ earvstedt ];
   };

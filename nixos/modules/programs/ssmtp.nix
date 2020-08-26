@@ -14,8 +14,18 @@ in
 {
 
   imports = [
-    (mkRenamedOptionModule [ "networking" "defaultMailServer" ] [ "services" "ssmtp" ])
-    (mkRenamedOptionModule [ "services" "ssmtp" "directDelivery" ] [ "services" "ssmtp" "enable" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "directDelivery" ] [ "services" "ssmtp" "enable" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "hostName" ] [ "services" "ssmtp" "hostName" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "domain" ] [ "services" "ssmtp" "domain" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "root" ] [ "services" "ssmtp" "root" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "useTLS" ] [ "services" "ssmtp" "useTLS" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "useSTARTTLS" ] [ "services" "ssmtp" "useSTARTTLS" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "authUser" ] [ "services" "ssmtp" "authUser" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "authPassFile" ] [ "services" "ssmtp" "authPassFile" ])
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" "setSendmail" ] [ "services" "ssmtp" "setSendmail" ])
+
+    (mkRemovedOptionModule [ "networking" "defaultMailServer" "authPass" ] "authPass has been removed since it leaks the clear-text password into the world-readable store. Use authPassFile instead and make sure it's not a store path")
+    (mkRemovedOptionModule [ "services" "ssmtp" "authPass" ] "authPass has been removed since it leaks the clear-text password into the world-readable store. Use authPassFile instead and make sure it's not a store path")
   ];
 
   options = {
@@ -34,6 +44,21 @@ in
           set the option
           <option>services.ssmtp.hostName</option> to the
           host name of your preferred mail server.
+        '';
+      };
+
+      settings = mkOption {
+        type = with types; attrsOf (oneOf [ bool str ]);
+        default = {};
+        description = ''
+          <citerefentry><refentrytitle>ssmtp</refentrytitle><manvolnum>5</manvolnum></citerefentry> configuration. Refer
+          to <link xlink:href="https://linux.die.net/man/5/ssmtp.conf"/> for details on supported values.
+        '';
+        example = literalExample ''
+          {
+            Debug = true;
+            FromLineOverride = false;
+          }
         '';
       };
 
@@ -93,18 +118,6 @@ in
         '';
       };
 
-      authPass = mkOption {
-        type = types.str;
-        default = "";
-        example = "correctHorseBatteryStaple";
-        description = ''
-          Password used for SMTP auth. (STORED PLAIN TEXT, WORLD-READABLE IN NIX STORE)
-
-          It's recommended to use <option>authPassFile</option>
-          which takes precedence over <option>authPass</option>.
-        '';
-      };
-
       authPassFile = mkOption {
         type = types.nullOr types.str;
         default = null;
@@ -113,11 +126,6 @@ in
           Path to a file that contains the password used for SMTP auth. The file
           should not contain a trailing newline, if the password does not contain one.
           This file should be readable by the users that need to execute ssmtp.
-
-          <option>authPassFile</option> takes precedence over <option>authPass</option>.
-
-          Warning: when <option>authPass</option> is non-empty <option>authPassFile</option>
-          defaults to a file in the WORLD-READABLE Nix store containing that password.
         '';
       };
 
@@ -134,25 +142,28 @@ in
 
   config = mkIf cfg.enable {
 
-    services.ssmtp.authPassFile = mkIf (cfg.authPass != "")
-      (mkDefault (toString (pkgs.writeTextFile {
-        name = "ssmtp-authpass";
-        text = cfg.authPass;
-      })));
+    services.ssmtp.settings = mkMerge [
+      ({
+        MailHub = cfg.hostName;
+        FromLineOverride = mkDefault true;
+        UseTLS = cfg.useTLS;
+        UseSTARTTLS = cfg.useSTARTTLS;
+      })
+      (mkIf (cfg.root != "") { root = cfg.root; })
+      (mkIf (cfg.domain != "") { rewriteDomain = cfg.domain; })
+      (mkIf (cfg.authUser != "") { AuthUser = cfg.authUser; })
+      (mkIf (cfg.authPassFile != null) { AuthPassFile = cfg.authPassFile; })
+    ];
 
-    environment.etc."ssmtp/ssmtp.conf".text =
-      let yesNo = yes : if yes then "YES" else "NO"; in
-      ''
-        MailHub=${cfg.hostName}
-        FromLineOverride=YES
-        ${optionalString (cfg.root   != "") "root=${cfg.root}"}
-        ${optionalString (cfg.domain != "") "rewriteDomain=${cfg.domain}"}
-        UseTLS=${yesNo cfg.useTLS}
-        UseSTARTTLS=${yesNo cfg.useSTARTTLS}
-        #Debug=YES
-        ${optionalString (cfg.authUser != "")       "AuthUser=${cfg.authUser}"}
-        ${optionalString (cfg.authPassFile != null) "AuthPassFile=${cfg.authPassFile}"}
-      '';
+    environment.etc."ssmtp/ssmtp.conf".source =
+      let
+        toStr = value:
+          if value == true then "YES"
+          else if value == false then "NO"
+          else builtins.toString value
+        ;
+      in
+        pkgs.writeText "ssmtp.conf" (concatStringsSep "\n" (mapAttrsToList (key: value: "${key}=${toStr value}") cfg.settings));
 
     environment.systemPackages = [pkgs.ssmtp];
 

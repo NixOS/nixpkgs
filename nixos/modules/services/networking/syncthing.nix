@@ -169,12 +169,14 @@ in {
           description = ''
             folders which should be shared by syncthing.
           '';
-          example = {
-            "/home/user/sync" = {
-              id = "syncme";
-              devices = [ "bigbox" ];
-            };
-          };
+          example = literalExample ''
+            {
+              "/home/user/sync" = {
+                id = "syncme";
+                devices = [ "bigbox" ];
+              };
+            }
+          '';
           type = types.attrsOf (types.submodule ({ name, ... }: {
             options = {
 

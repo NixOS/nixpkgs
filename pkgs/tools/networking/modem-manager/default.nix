@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   pname = "modem-manager";
-  version = "1.12.6";
+  version = "1.12.10";
 
   package = "ModemManager";
   src = fetchurl {
     url = "https://www.freedesktop.org/software/${package}/${package}-${version}.tar.xz";
-    sha256 = "0k32rjh06p3q9yq054gxya6c7n39bilhi4s23p2hb02iwlz3bcrf";
+    sha256 = "1apq9camys2gaw6y6ic1ld20cncfwpmxnzvh4j5zkbbjpf5hbcxj";
   };
 
   nativeBuildInputs = [ vala gobject-introspection gettext pkgconfig ];
@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
   preCheck = ''
     export G_TEST_DBUS_DAEMON="${dbus.daemon}/bin/dbus-daemon"
   '';
+
+  enableParallelBuilding = true;
 
   doCheck = true;
 

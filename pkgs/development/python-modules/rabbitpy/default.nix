@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A pure python, thread-safe, minimalistic and pythonic RabbitMQ client library";
-    homepage = https://pypi.python.org/pypi/rabbitpy;
+    homepage = "https://pypi.python.org/pypi/rabbitpy";
     license = licenses.bsd3;
   };
 

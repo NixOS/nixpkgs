@@ -11,7 +11,6 @@ let
 
   # TL;DR
   # * Add your plugin to ./vim-plugin-names
-  # * sort -udf ./vim-plugin-names > sorted && mv sorted vim-plugin-names
   # * run ./update.py
   #
   # If additional modifications to the build process are required,

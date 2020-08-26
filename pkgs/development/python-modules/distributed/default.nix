@@ -3,7 +3,6 @@
 , fetchPypi
 , pytest
 , pytest-repeat
-, pytest-faulthandler
 , pytest-timeout
 , mock
 , joblib
@@ -28,15 +27,15 @@
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2.9.1";
+  version = "2.18.0";
 
   # get full repository need conftest.py to run tests
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d37a5c5be992f3b16db24b54d2801cbe370990fbc63089c6e7ef40d6f03cf5dd";
+    sha256 = "902f098fb7558f035333804a5aeba2fb26a2a715388808205a17cbb2e02e0558";
   };
 
-  checkInputs = [ pytest pytest-repeat pytest-faulthandler pytest-timeout mock joblib ];
+  checkInputs = [ pytest pytest-repeat pytest-timeout mock joblib ];
   propagatedBuildInputs = [
       click cloudpickle dask msgpack psutil six
       sortedcontainers tblib toolz tornado zict pyyaml mpi4py bokeh
@@ -54,7 +53,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Distributed computation in Python.";
-    homepage = https://distributed.readthedocs.io/en/latest/;
+    homepage = "https://distributed.readthedocs.io/en/latest/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.x86; # fails on aarch64
     maintainers = with lib.maintainers; [ teh costrouc ];

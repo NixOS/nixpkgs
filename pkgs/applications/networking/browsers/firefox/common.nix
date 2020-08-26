@@ -2,12 +2,13 @@
 , src, unpackPhase ? null, patches ? []
 , extraNativeBuildInputs ? [], extraConfigureFlags ? [], extraMakeFlags ? [] }:
 
-{ lib, stdenv, pkgconfig, pango, perl, python2, python3, zip, libIDL
+{ lib, stdenv, pkgconfig, pango, perl, python2, python3, zip
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU, libGL, sqlite, unzip, makeWrapper
-, hunspell, libXdamage, libevent, libstartup_notification, libvpx
-, icu, libpng, jemalloc, glib
+, hunspell, libXdamage, libevent, libstartup_notification
+, libvpx, libvpx_1_8
+, icu, icu67, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , debugBuild ? false
@@ -50,7 +51,7 @@
 # https://github.com/NixOS/nixpkgs/issues/31843#issuecomment-346372756 we
 # have permission to use the official firefox branding.
 #
-# Fur purposes of documentation the statement of @sylvestre:
+# For purposes of documentation the statement of @sylvestre:
 # > As the person who did part of the work described in the LWN article
 # > and release manager working for Mozilla, I can confirm the statement
 # > that I made in
@@ -103,14 +104,14 @@ stdenv.mkDerivation ({
   patchFlags = [ "-p1" "-l" ];
 
   buildInputs = [
-    gtk2 perl zip libIDL libjpeg zlib bzip2
+    gtk2 perl zip libjpeg zlib bzip2
     dbus dbus-glib pango freetype fontconfig xorg.libXi xorg.libXcursor
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
     libnotify xorg.pixman yasm libGLU libGL
-    xorg.libXScrnSaver xorg.xorgproto
-    xorg.libXext sqlite unzip makeWrapper
-    libevent libstartup_notification libvpx /* cairo */
-    icu libpng jemalloc glib
+    xorg.xorgproto
+    xorg.libXext unzip makeWrapper
+    libevent libstartup_notification /* cairo */
+    libpng jemalloc glib
     nasm
     # >= 66 requires nasm for the AV1 lib dav1d
     # yasm can potentially be removed in future versions
@@ -118,7 +119,10 @@ stdenv.mkDerivation ({
     # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
     nspr nss
   ]
-
+  ++ lib.optionals (lib.versionOlder ffversion "75") [ libvpx sqlite ]
+  ++ lib.optional  (lib.versionAtLeast ffversion "75.0") libvpx_1_8
+  ++ lib.optional  (lib.versionOlder ffversion "78") icu
+  ++ lib.optional  (lib.versionAtLeast ffversion "78.0") icu67
   ++ lib.optional  alsaSupport alsaLib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gtk3Support gtk3
@@ -136,7 +140,6 @@ stdenv.mkDerivation ({
     "-Wno-error=format-security");
 
   postPatch = ''
-    substituteInPlace third_party/prio/prio/rand.c --replace 'nspr/prinit.h' 'prinit.h'
     rm -rf obj-x86_64-pc-linux-gnu
   '';
 
@@ -174,11 +177,12 @@ stdenv.mkDerivation ({
     # included we need to look in a few places.
     # TODO: generalize this process for other use-cases.
 
-    BINDGEN_CFLAGS="$(< ${stdenv.cc}/nix-support/libc-cflags) \
+    BINDGEN_CFLAGS="$(< ${stdenv.cc}/nix-support/libc-crt1-cflags) \
+      $(< ${stdenv.cc}/nix-support/libc-cflags) \
       $(< ${stdenv.cc}/nix-support/cc-cflags) \
-      ${stdenv.cc.default_cxx_stdlib_compile} \
+      $(< ${stdenv.cc}/nix-support/libcxx-cxxflags) \
       ${lib.optionalString stdenv.cc.isClang "-idirafter ${stdenv.cc.cc}/lib/clang/${lib.getVersion stdenv.cc.cc}/include"} \
-      ${lib.optionalString stdenv.cc.isGNU "-isystem ${stdenv.cc.cc}/include/c++/${lib.getVersion stdenv.cc.cc} -isystem ${stdenv.cc.cc}/include/c++/${lib.getVersion stdenv.cc.cc}/$(cc -dumpmachine)"} \
+      ${lib.optionalString stdenv.cc.isGNU "-isystem ${stdenv.cc.cc}/include/c++/${lib.getVersion stdenv.cc.cc} -isystem ${stdenv.cc.cc}/include/c++/${lib.getVersion stdenv.cc.cc}/${stdenv.hostPlatform.config}"} \
       $NIX_CFLAGS_COMPILE"
 
     echo "ac_add_options BINDGEN_CFLAGS='$BINDGEN_CFLAGS'" >> $MOZCONFIG
@@ -199,28 +203,29 @@ stdenv.mkDerivation ({
     "--enable-application=browser"
     "--with-system-jpeg"
     "--with-system-zlib"
-    "--with-system-bz2"
     "--with-system-libevent"
     "--with-system-libvpx"
     "--with-system-png" # needs APNG support
     "--with-system-icu"
     "--enable-system-ffi"
     "--enable-system-pixman"
-    "--enable-system-sqlite"
     #"--enable-system-cairo"
-    "--enable-startup-notification"
-    #"--enable-content-sandbox" # TODO: probably enable after 54
     "--disable-tests"
     "--disable-necko-wifi" # maybe we want to enable this at some point
     "--disable-updater"
     "--enable-jemalloc"
-    "--disable-gconf"
     "--enable-default-toolkit=${default-toolkit}"
     "--with-libclang-path=${llvmPackages.libclang}/lib"
     "--with-clang-path=${llvmPackages.clang}/bin/clang"
     "--with-system-nspr"
     "--with-system-nss"
   ]
+  ++ lib.optionals (lib.versionOlder ffversion "78") [
+    "--with-system-bz2"
+    "--enable-startup-notification"
+    "--disable-gconf"
+  ]
+  ++ lib.optional (lib.versionOlder ffversion "75") "--enable-system-sqlite"
   ++ lib.optional (stdenv.isDarwin) "--disable-xcode-checks"
   ++ lib.optionals (lib.versionOlder ffversion "69") [
     "--enable-webrender=build"
@@ -272,6 +277,7 @@ stdenv.mkDerivation ({
     patchelf --set-rpath "${lib.getLib libnotify
       }/lib:$(patchelf --print-rpath "$out"/lib/${binaryName}*/libxul.so)" \
         "$out"/lib/${binaryName}*/libxul.so
+    patchelf --add-needed ${xorg.libXScrnSaver.out}/lib/libXss.so $out/lib/${binaryName}/${binaryName}
   '';
 
   doInstallCheck = true;

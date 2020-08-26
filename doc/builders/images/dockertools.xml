@@ -166,7 +166,7 @@ hello        latest   de2bf4786de6   About a minute ago   25.2MB
   <title>buildLayeredImage</title>
 
   <para>
-   Create a Docker image with many of the store paths being on their own layer to improve sharing between images.
+   Create a Docker image with many of the store paths being on their own layer to improve sharing between images. The image is realized into the Nix store as a gzipped tarball. Depending on the intended usage, many users might prefer to use <function>streamLayeredImage</function> instead, which this function uses internally.
   </para>
 
   <variablelist>
@@ -325,6 +325,27 @@ pkgs.dockerTools.buildLayeredImage {
     Docker's Layers are not inherently ordered, they are content-addressable and are not explicitly layered until they are composed in to an Image.
    </para>
   </section>
+ </section>
+
+ <section xml:id="ssec-pkgs-dockerTools-streamLayeredImage">
+  <title>streamLayeredImage</title>
+
+  <para>
+   Builds a script which, when run, will stream an uncompressed tarball of a Docker image to stdout. The arguments to this function are as for <function>buildLayeredImage</function>. This method of constructing an image does not realize the image into the Nix store, so it saves on IO and disk/cache space, particularly with large images.
+  </para>
+
+  <para>
+    The image produced by running the output script can be piped directly into <command>docker load</command>, to load it into the local docker daemon:
+    <screen><![CDATA[
+$(nix-build) | docker load
+    ]]></screen>
+  </para>
+  <para>
+    Alternatively, the image be piped via <command>gzip</command> into <command>skopeo</command>, e.g. to copy it into a registry:
+    <screen><![CDATA[
+$(nix-build) | gzip --fast | skopeo copy docker-archive:/dev/stdin docker://some_docker_registry/myimage:tag
+    ]]></screen>
+  </para>
  </section>
 
  <section xml:id="ssec-pkgs-dockerTools-fetchFromRegistry">

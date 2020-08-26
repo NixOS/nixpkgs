@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A lightweight volume control that sits in your systray";
-    homepage = http://softwarebakery.com/maato/volumeicon.html;
+    homepage = "http://softwarebakery.com/maato/volumeicon.html";
     platforms = pkgs.lib.platforms.linux;
     maintainers = with maintainers; [ bobvanderlinden ];
     license = pkgs.lib.licenses.gpl3;

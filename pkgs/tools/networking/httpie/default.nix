@@ -1,21 +1,30 @@
-{ stdenv, fetchFromGitHub, python3Packages, docutils, }:
+{ stdenv, fetchFromGitHub, python3Packages, docutils, fetchpatch }:
 
 python3Packages.buildPythonApplication rec {
   pname = "httpie";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "jakubroztocil";
     repo = "httpie";
     rev = version;
-    sha256 = "0d0rsn5i973l9y0ws3xmnzaw4jwxdlryyjbasnlddph5mvkf7dq0";
+    sha256 = "0caazv24jr0844c4mdx77vzwwi5m869n10wa42cydb08ppx1xxj6";
   };
 
   outputs = [ "out" "doc" "man" ];
 
   propagatedBuildInputs = with python3Packages; [ pygments requests setuptools ];
   dontUseSetuptoolsCheck = true;
-  patches = [ ./strip-venv.patch ];
+  patches = [
+    ./strip-venv.patch
+
+    # Fix `test_ciphers_none_can_be_selected`
+    # TODO: remove on next release
+    (fetchpatch {
+      url = "https://github.com/jakubroztocil/httpie/commit/49e71d252f54871a6bc49cb1cba103d385a543b8.patch";
+      sha256 = "13b2faf50gimj7f17dlx4gmd8ph8ipgihpzfqbvmfjlbf1v95fsj";
+    })
+  ];
 
   checkInputs = with python3Packages; [
     mock
@@ -87,7 +96,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "A command line HTTP client whose goal is to make CLI human-friendly";
-    homepage = https://httpie.org/;
+    homepage = "https://httpie.org/";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ antono relrod schneefux ];
   };

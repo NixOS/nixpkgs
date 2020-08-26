@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , fetchpatch
 , meson
 , ninja
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
@@ -73,7 +74,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Personal finance manager for elementary OS";
     homepage = "https://github.com/cjfloss/envelope";
-    maintainers = with maintainers; [ kjuvi ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
   };

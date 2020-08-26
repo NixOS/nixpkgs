@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, patchelfUnstable }:
+{ stdenv, fetchurl }:
 
 with stdenv.lib;
 
@@ -24,8 +24,6 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = optionals stdenv.isLinux [ patchelfUnstable ];
-
   unpackPhase = "cp $src ngrok";
 
   buildPhase = "chmod a+x ngrok";
@@ -41,7 +39,7 @@ stdenv.mkDerivation {
     longDescription = ''
       Allows you to expose a web server running on your local machine to the internet.
     '';
-    homepage = https://ngrok.com/;
+    homepage = "https://ngrok.com/";
     license = licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
     maintainers = [ maintainers.bobvanderlinden ];

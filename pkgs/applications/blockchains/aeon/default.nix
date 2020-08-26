@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Private, secure, untraceable currency";
-    homepage = http://www.aeon.cash/;
+    homepage = "http://www.aeon.cash/";
     license = licenses.bsd3;
     maintainers = [ maintainers.aij ];
     platforms = [ "x86_64-linux" ];

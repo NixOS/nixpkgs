@@ -61,9 +61,10 @@ stdenv.mkDerivation {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    homepage = https://curl.haxx.se/docs/caextract.html;
+    homepage = "https://curl.haxx.se/docs/caextract.html";
     description = "A bundle of X.509 certificates of public Certificate Authorities (CA)";
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz ];
+    license = licenses.mpl20;
   };
 }

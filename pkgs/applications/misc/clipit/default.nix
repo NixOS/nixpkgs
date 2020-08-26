@@ -1,21 +1,35 @@
-{ fetchurl, stdenv, intltool, pkgconfig, gtk2, xdotool }:
+{ fetchFromGitHub, fetchpatch, stdenv
+, autoreconfHook, intltool, pkgconfig
+, gtk3, xdotool, which, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "clipit";
-  version = "1.4.2";
+  version = "1.4.5";
 
-  src = fetchurl {
-    url = "https://github.com/downloads/shantzu/ClipIt/${pname}-${version}.tar.gz";
-    sha256 = "0jrwn8qfgb15rwspdp1p8hb1nc0ngmpvgr87d4k3lhlvqg2cfqva";
+  src = fetchFromGitHub {
+    owner = "CristianHenzel";
+    repo = "ClipIt";
+    rev = "45e2ea386d04dbfc411ea370299502450d589d0c";
+    sha256 = "0byqz9hanwmdc7i55xszdby2iqrk93lws7hmjda2kv17g34apwl7";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool gtk2 xdotool ];
+  preConfigure = ''
+    intltoolize --copy --force --automake
+  '';
+
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook autoreconfHook intltool ];
+  configureFlags = [ "--with-gtk3" ];
+  buildInputs = [ gtk3 ];
+
+  gappsWrapperArgs = [
+    "--prefix" "PATH" ":" "${stdenv.lib.makeBinPath [ xdotool which ]}"
+  ];
 
   meta = with stdenv.lib; {
     description = "Lightweight GTK Clipboard Manager";
-    homepage    = "http://clipit.rspwn.com";
+    inherit (src.meta) homepage;
     license     = licenses.gpl3;
     platforms   = platforms.linux;
+    maintainers = with maintainers; [ kamilchm ];
   };
 }

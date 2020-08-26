@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "File system and storage benchmark that can generate both micro and macro workloads";
-    homepage = https://sourceforge.net/projects/filebench/;
+    homepage = "https://sourceforge.net/projects/filebench/";
     license = licenses.cddl;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;

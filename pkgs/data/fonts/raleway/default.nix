@@ -34,7 +34,7 @@ in fetchFromGitHub {
       It also has a sister display family, Raleway Dots.
     '';
 
-    homepage = https://github.com/impallari/Raleway;
+    homepage = "https://github.com/impallari/Raleway";
     license = lib.licenses.ofl;
 
     maintainers = with lib.maintainers; [ Profpatsch ];

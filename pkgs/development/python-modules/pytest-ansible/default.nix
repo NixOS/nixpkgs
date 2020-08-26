@@ -34,7 +34,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/jlaska/pytest-ansible;
+    homepage = "https://github.com/jlaska/pytest-ansible";
     description = "Plugin for py.test to simplify calling ansible modules from tests or fixtures";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

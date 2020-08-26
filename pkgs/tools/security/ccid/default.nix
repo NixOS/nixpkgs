@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ccid";
-  version = "1.4.31";
+  version = "1.4.33";
 
   src = fetchurl {
     url = "https://ccid.apdu.fr/files/${pname}-${version}.tar.bz2";
-    sha256 = "1xz8ikr6vk73w3xnwb931yq8lqc1zrj8c3v34n6h63irwjvdfj3b";
+    sha256 = "0974h2v9wq0j0ajw3c7yckaw8wqcppb2npfhfhmv9phijy9xlmjj";
   };
 
   postPatch = ''
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "ccid drivers for pcsclite";
-    homepage = https://ccid.apdu.fr/;
+    homepage = "https://ccid.apdu.fr/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

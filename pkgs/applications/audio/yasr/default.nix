@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./10_fix_openpty_forkpty_declarations
-    ./20_maxpathlen
-    ./30_conf
-    ./40_dectalk_extended_chars
+    ./10_fix_openpty_forkpty_declarations.patch
+    ./20_maxpathlen.patch
+    ./30_conf.patch
+    ./40_dectalk_extended_chars.patch
   ]; # taken from the debian yasr package
 
   meta = {
-    homepage = http://yasr.sourceforge.net;
+    homepage = "http://yasr.sourceforge.net";
     description = "A general-purpose console screen reader";
     longDescription = "Yasr is a general-purpose console screen reader for GNU/Linux and other Unix-like operating systems.";
     platforms = stdenv.lib.platforms.linux;

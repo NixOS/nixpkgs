@@ -1,29 +1,47 @@
-{ stdenv, fetchurl, pkgconfig, glib, libX11, libXext, libXinerama }:
+{ stdenv, fetchurl, cmake, pkgconfig, glib, libX11, libXext, libXinerama, libXrandr
+, withDoc ? stdenv.buildPlatform == stdenv.targetPlatform, asciidoc ? null }:
+
+# Doc generation is disabled by default when cross compiling because asciidoc
+# does not cross compile for now
+
+assert withDoc -> asciidoc != null;
 
 stdenv.mkDerivation rec {
-  name = "herbstluftwm-0.7.2";
+  pname = "herbstluftwm";
+  version = "0.8.3";
 
   src = fetchurl {
-    url = "https://herbstluftwm.org/tarballs/${name}.tar.gz";
-    sha256 = "1kc18aj9j3nfz6fj4qxg9s3gg4jvn6kzi3ii24hfm0vqdpy17xnz";
+    url = "https://herbstluftwm.org/tarballs/herbstluftwm-${version}.tar.gz";
+    sha256 = "1qmb4pjf2f6g0dvcg11cw9njwmxblhqzd70ai8qnlgqw1iz3nkm1";
   };
 
-  patchPhase = ''
-    substituteInPlace config.mk \
-      --replace "/usr/local" "$out" \
-      --replace "/etc" "$out/etc" \
-      --replace "/zsh/functions/Completion/X" "/zsh/site-functions" \
-      --replace "/usr/share" "\$(PREFIX)/share"
-  '';
+  outputs = [
+    "out"
+  ] ++ stdenv.lib.optionals withDoc [
+    "doc"
+    "man"
+  ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib libX11 libXext libXinerama ];
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_SYSCONF_PREFIX=${placeholder "out"}/etc"
+  ] ++ stdenv.lib.optional (!withDoc) "-DWITH_DOCUMENTATION=OFF";
+
+  nativeBuildInputs = [
+    cmake
+    pkgconfig
+  ] ++ stdenv.lib.optional withDoc asciidoc;
+
+  buildInputs = [
+    libX11
+    libXext
+    libXinerama
+    libXrandr
+  ];
 
   meta = {
     description = "A manual tiling window manager for X";
-    homepage = http://herbstluftwm.org/;
+    homepage = "https://herbstluftwm.org/";
     license = stdenv.lib.licenses.bsd2;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };
 }

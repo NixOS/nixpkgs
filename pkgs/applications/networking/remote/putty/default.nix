@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.73";
+  version = "0.74";
   pname = "putty";
 
   src = fetchurl {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
       "https://the.earth.li/~sgtatham/putty/${version}/${pname}-${version}.tar.gz"
       "ftp://ftp.wayne.edu/putty/putty-website-mirror/${version}/${pname}-${version}.tar.gz"
     ];
-    sha256 = "076z34jpik2dmlwxicvf1djjgnahcqv12rjhmb9yq6ml7x0bbc1x";
+    sha256 = "0zc43g8ycyf712cdrja4k8ih5s3agw1k0nq0jkifdn8xwn4d7mfx";
   };
 
   # glib-2.62 deprecations
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       platforms, along with an xterm terminal emulator.
       It is written and maintained primarily by Simon Tatham.
     '';
-    homepage = https://www.chiark.greenend.org.uk/~sgtatham/putty/;
+    homepage = "https://www.chiark.greenend.org.uk/~sgtatham/putty/";
     license = licenses.mit;
     platforms = platforms.unix ++ platforms.windows;
   };

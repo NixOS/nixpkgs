@@ -17,7 +17,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/robfig/glock;
+    homepage = "https://github.com/robfig/glock";
     description = "A command-line tool to lock Go dependencies to specific revisions";
     license = licenses.mit;
     maintainers = [ maintainers.rushmorem ];

@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Go language server protocol server";
-    homepage = https://github.com/sourcegraph/go-langserver;
+    homepage = "https://github.com/sourcegraph/go-langserver";
     license = licenses.mit;
     maintainers = with maintainers; [ johnchildren ];
     platforms = platforms.unix;

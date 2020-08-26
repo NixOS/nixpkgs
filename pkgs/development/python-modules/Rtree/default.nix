@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "R-Tree spatial index for Python GIS";
-    homepage = https://toblerity.org/rtree/;
+    homepage = "https://toblerity.org/rtree/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ bgamari ];
   };

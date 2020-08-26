@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dataproc";
-  version = "0.6.1";
+  version = "0.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "302bc448e77f1de958ba7413fb85819eda911043f219d8fc030a356848bc6f31";
+    sha256 = "1ff15c9a06fd7b0402a2549142146f951ca92ebcf5f70f4c96dc9b9397d5279d";
   };
 
   checkInputs = [ pytest mock ];
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Google Cloud Dataproc API client library";
-    homepage = https://github.com/GoogleCloudPlatform/google-cloud-python;
+    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

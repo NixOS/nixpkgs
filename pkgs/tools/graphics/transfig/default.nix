@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "transfig-3.2.4";
   src = fetchurl {
-    url = ftp://ftp.tex.ac.uk/pub/archive/graphics/transfig/transfig.3.2.4.tar.gz;
+    url = "ftp://ftp.tex.ac.uk/pub/archive/graphics/transfig/transfig.3.2.4.tar.gz";
     sha256 = "0429snhp5acbz61pvblwlrwv8nxr6gf12p37f9xxwrkqv4ir7dd4";
   };
 
@@ -11,11 +11,11 @@ stdenv.mkDerivation {
   buildInputs = [ zlib libjpeg libpng ];
 
   patches = [
-    ./patch-fig2dev-dev-Imakefile
-    ./patch-fig2dev-Imakefile
-    ./patch-transfig-Imakefile
-    ./patch-fig2dev-fig2dev.h
-    ./patch-fig2dev-dev-gensvg.c
+    ./patch-fig2dev-dev-Imakefile.patch
+    ./patch-fig2dev-Imakefile.patch
+    ./patch-transfig-Imakefile.patch
+    ./patch-fig2dev-fig2dev.h.patch
+    ./patch-fig2dev-dev-gensvg.c.patch
   ];
 
   patchPhase = ''

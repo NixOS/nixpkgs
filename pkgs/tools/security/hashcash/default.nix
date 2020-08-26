@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   
   meta = with stdenv.lib; {
     description = "Proof-of-work algorithm used as spam and denial-of-service counter measure";
-    homepage = http://hashcash.org;
+    homepage = "http://hashcash.org";
     license = licenses.gpl2;
     maintainers = with maintainers; [ kisonecat ];
   };

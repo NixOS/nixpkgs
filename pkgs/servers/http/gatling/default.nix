@@ -25,9 +25,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A high performance web server";
-    homepage = http://www.fefe.de/gatling/;
+    homepage = "http://www.fefe.de/gatling/";
     license = stdenv.lib.licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.the-kenny ];
   };
 }

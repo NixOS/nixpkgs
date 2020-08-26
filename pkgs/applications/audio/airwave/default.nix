@@ -83,7 +83,7 @@ multiStdenv.mkDerivation {
       protocol to correctly embed the plugin editor into the host
       window.
     '';
-    homepage = https://github.com/phantom-code/airwave;
+    homepage = "https://github.com/phantom-code/airwave";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ michalrus ];

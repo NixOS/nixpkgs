@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Yubico PAM module";
-    homepage = https://developers.yubico.com/yubico-pam;
+    homepage = "https://developers.yubico.com/yubico-pam";
     license = licenses.bsd2;
     maintainers = with maintainers; [ dtzWill ];
   };

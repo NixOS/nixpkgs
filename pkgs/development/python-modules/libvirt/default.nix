@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "libvirt";
-  version = "5.4.0";
+  version = "6.3.0";
 
   src = assert version == libvirt.version; fetchgit {
-    url = git://libvirt.org/libvirt-python.git;
+    url = "git://libvirt.org/libvirt-python.git";
     rev = "v${version}";
-    sha256 = "0ja35z90i3m7vsjfpzfm7awkmja3h0150376i5pzmf2q8vp61fi5";
+    sha256 = "088cksq59jxkkzbvmwl8jw9v2k3zibwksl7j57yb51bxaa2sa1cx";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.libvirt.org/;
+    homepage = "http://www.libvirt.org/";
     description = "libvirt Python bindings";
     license = licenses.lgpl2;
     maintainers = [ maintainers.fpletz ];

@@ -5,20 +5,21 @@
 , numpy
 , pandas
 , python
+, setuptools
 , isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c72d160c970725201f769e80fb91cbad68d6ebf21d68fcc371385a6c950459c3";
+    sha256 = "1js3xr3fl9bwid8hl3w2pnigqzjd2rvkncald5x1x5fg7wjy8pb6";
   };
 
   checkInputs = [ pytest ];
-  propagatedBuildInputs = [numpy pandas];
+  propagatedBuildInputs = [ numpy pandas setuptools ];
 
   checkPhase = ''
     pytest $out/${python.sitePackages}
@@ -31,7 +32,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "N-D labeled arrays and datasets in Python";
-    homepage = https://github.com/pydata/xarray;
+    homepage = "https://github.com/pydata/xarray";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fridh ];
   };

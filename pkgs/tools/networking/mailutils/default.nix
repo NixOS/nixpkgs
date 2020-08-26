@@ -112,9 +112,9 @@ stdenv.mkDerivation rec {
 
     maintainers = with maintainers; [ orivej vrthra ];
 
-    homepage = https://www.gnu.org/software/mailutils/;
+    homepage = "https://www.gnu.org/software/mailutils/";
 
     # Some of the dependencies fail to build on {cyg,dar}win.
-    platforms = platforms.gnu ++ platforms.linux;
+    platforms = platforms.gnu ++ platforms.unix;
   };
 }

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www2.cs.tum.edu/projects/cup/;
+    homepage = "http://www2.cs.tum.edu/projects/cup/";
     description = "LALR parser generator for Java";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.all;

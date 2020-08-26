@@ -5,7 +5,7 @@
 fetchzip {
   name = "vista-fonts-chs-1";
 
-  url = http://download.microsoft.com/download/d/6/e/d6e2ff26-5821-4f35-a18b-78c963b1535d/VistaFont_CHS.EXE;
+  url = "http://download.microsoft.com/download/d/6/e/d6e2ff26-5821-4f35-a18b-78c963b1535d/VistaFont_CHS.EXE";
 
   postFetch = ''
     ${buildPackages.cabextract}/bin/cabextract --lowercase --filter '*.TTF' $downloadedFile
@@ -24,7 +24,7 @@ fetchzip {
 
   meta = {
     description = "TrueType fonts from Microsoft Windows Vista For Simplified Chinese (Microsoft YaHei)";
-    homepage = https://www.microsoft.com/typography/fonts/family.aspx?FID=350;
+    homepage = "https://www.microsoft.com/typography/fonts/family.aspx?FID=350";
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.ChengCat ];
 

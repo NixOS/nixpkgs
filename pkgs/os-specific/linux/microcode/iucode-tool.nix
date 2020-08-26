@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Intel® 64 and IA-32 processor microcode tool";
-    homepage = https://gitlab.com/iucode-tool/iucode-tool;
+    homepage = "https://gitlab.com/iucode-tool/iucode-tool";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = [ "x86_64-linux" "i686-linux" ];

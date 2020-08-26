@@ -36,6 +36,8 @@ let
 
         "0.46" = ./disable-graphviz-0.46.1.patch;
 
+        "0.48" = ./disable-graphviz-0.46.1.patch;
+
       }.${lib.versions.majorMinor version} or (throw "no graphviz patch for this version of vala");
 
     disableGraphviz = lib.versionAtLeast version "0.38" && !withGraphviz;
@@ -92,7 +94,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Compiler for GObject type system";
-      homepage = https://wiki.gnome.org/Projects/Vala;
+      homepage = "https://wiki.gnome.org/Projects/Vala";
       license = licenses.lgpl21Plus;
       platforms = platforms.unix;
       maintainers = with maintainers; [ antono jtojnar lethalman peterhoeg worldofpeace ];
@@ -120,5 +122,10 @@ in rec {
     sha256 = "07fv895sp9wq74b20qig7hic0r4ynrr5pfaqba02r44xb794fy0s";
   };
 
-  vala = vala_0_46;
+  vala_0_48 = generic {
+    version = "0.48.7";
+    sha256 = "0lswkb7gj0chas9n3l3dbrm9l71hs77adhvm2v600id2ipi37pi8";
+  };
+
+  vala = vala_0_48;
 }

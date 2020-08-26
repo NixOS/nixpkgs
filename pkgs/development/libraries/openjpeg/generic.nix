@@ -76,7 +76,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Open-source JPEG 2000 codec written in C language";
-    homepage = http://www.openjpeg.org/;
+    homepage = "http://www.openjpeg.org/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ codyopel ];
     platforms = platforms.all;

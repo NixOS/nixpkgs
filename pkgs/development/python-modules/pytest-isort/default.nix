@@ -1,17 +1,18 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, isort }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, mock, pytest, isort }:
 
 buildPythonPackage rec {
   pname = "pytest-isort";
-  version = "0.3.1";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4bfee60dad1870b51700d55a85f5ceda766bd9d3d2878c1bbabee80e61b1be1a";
+    sha256 = "01j0sx8yxd7sbmvwky68mvnwrxxs5bjkvi61043jzff1ga92kg9h";
   };
 
   propagatedBuildInputs = [ isort ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest ]
+    ++ lib.optionals isPy27 [ mock ];
 
   checkPhase = ''
     py.test -vs --cache-clear
@@ -19,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pytest plugin to perform isort checks (import ordering)";
-    homepage = https://github.com/moccu/pytest-isort/;
+    homepage = "https://github.com/moccu/pytest-isort/";
     license = licenses.bsd3;
   };
 }

@@ -14,7 +14,7 @@ in fetchzip {
   sha256 = "1b1ys28hyjcl4qwbnsyi6527nj01g3d6id9jl23fv6f8fjm4ph0f";
 
   meta = with lib; {
-    homepage = https://github.com/mozilla/zilla-slab;
+    homepage = "https://github.com/mozilla/zilla-slab";
     description = "Zilla Slab fonts";
     longDescription = ''
       Zilla Slab is Mozilla's core typeface, used

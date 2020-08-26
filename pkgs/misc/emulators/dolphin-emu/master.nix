@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, makeDesktopItem, pkgconfig, cmake
-, wrapQtAppsHook, qtbase, bluez, ffmpeg, libao, libGLU, libGL, pcre, gettext
-, libXrandr, libusb, lzo, libpthreadstubs, libXext, libXxf86vm, libXinerama
+, wrapQtAppsHook, qtbase, bluez, ffmpeg_3, libao, libGLU, libGL, pcre, gettext
+, libXrandr, libusb1, lzo, libpthreadstubs, libXext, libXxf86vm, libXinerama
 , libSM, libXdmcp, readline, openal, udev, libevdev, portaudio, curl, alsaLib
 , miniupnpc, enet, mbedtls, soundtouch, sfml
 , vulkan-loader ? null, libpulseaudio ? null
@@ -21,13 +21,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0-11608";
+  version = "5.0-11824";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "69ee15e5ef369d51681540e6714f02554e3bd8a6";
-    sha256 = "1svi9mnddhjcv64xh3y9l68k3rix7wimq8b0mqf5hp7qrda07lx8";
+    rev = "1b97f081b8eff9012132a4124537968bdb0e03e0";
+    sha256 = "1v96hcn34040vjsw83k8p0r0nb8rrdcz80h4ngirxzm36b3l7w6m";
   };
 
   enableParallelBuilding = true;
@@ -35,9 +35,9 @@ in stdenv.mkDerivation rec {
   ++ lib.optional stdenv.isLinux wrapQtAppsHook;
 
   buildInputs = [
-    curl ffmpeg libao libGLU libGL pcre gettext libpthreadstubs libpulseaudio
+    curl ffmpeg_3 libao libGLU libGL pcre gettext libpthreadstubs libpulseaudio
     libXrandr libXext libXxf86vm libXinerama libSM readline openal libXdmcp lzo
-    portaudio libusb libpng hidapi miniupnpc enet mbedtls soundtouch sfml
+    portaudio libusb1 libpng hidapi miniupnpc enet mbedtls soundtouch sfml
     qtbase
   ] ++ lib.optionals stdenv.isLinux [
     bluez udev libevdev alsaLib vulkan-loader

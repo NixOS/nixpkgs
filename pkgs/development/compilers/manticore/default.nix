@@ -50,6 +50,6 @@ in stdenv.mkDerivation {
       parallel array comprehensions.  
     '';
 
-    homepage = http://manticore.cs.uchicago.edu/;
+    homepage = "http://manticore.cs.uchicago.edu/";
   };
 }

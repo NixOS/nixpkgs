@@ -31,8 +31,9 @@ in stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://packages.ubuntu.com/source/zesty/kmod;
+    homepage = "https://packages.ubuntu.com/source/zesty/kmod";
     description = "Linux kernel module blacklists from Ubuntu";
     platforms = platforms.linux;
+    license = with licenses; [ gpl2Plus lgpl21Plus ];
   };
 }

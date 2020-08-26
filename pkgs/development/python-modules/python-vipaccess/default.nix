@@ -1,7 +1,6 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, lxml
 , oath
 , pycryptodome
 , requests
@@ -10,15 +9,14 @@
 
 buildPythonPackage rec {
   pname = "python-vipaccess";
-  version = "0.10.3";
+  version = "0.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1m6b7qipiaj6pz86kjhyq5m5jxxijpk58gpsdkj5bn0wjl6x1pg2";
+    sha256 = "f148d4534e3a4dda9050a6a038868594c1216ea2413f2144ca6697e0e20c9cad";
   };
 
   propagatedBuildInputs = [
-    lxml
     oath
     pycryptodome
     requests

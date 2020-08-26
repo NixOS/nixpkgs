@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "django-silk";
-  version = "3.0.4";
+  version = "4.0.1";
 
   # pypi tarball doesn't include test project
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-silk";
     rev = version;
-    sha256 = "10542yvbchcy8hik2hw3jclb4ic89mxkw0sykag4bw9sv43xv7vx";
+    sha256 = "0yy9rzxvwlp2xvnw76r9hnqajlp417snam92xpb6ay0hxwslwqyb";
   };
   # "test_time_taken" tests aren't suitable for reproducible execution, but django's
   # test runner doesn't have an easy way to ignore tests - so instead prevent it from picking
@@ -38,6 +38,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace project/tests/test_silky_profiler.py \
       --replace "def test_time_taken" "def _test_time_taken"
+    substituteInPlace setup.py \
+      --replace 'use_scm_version=True' 'version="${version}"'
   '';
 
   buildInputs = [ mock ];
@@ -54,7 +56,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Silky smooth profiling for the Django Framework";
-    homepage = https://github.com/mtford90/silk;
+    homepage = "https://github.com/jazzband/django-silk";
     license = licenses.mit;
     maintainers = with maintainers; [ ris ];
   };

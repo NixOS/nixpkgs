@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "parfive";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15dc8466922c8fb1f814d3f7c3f3656191ac17b38fd7cc3350b9bf726e144ebb";
+    sha256 = "faa60c34dfbd080f011c1af0587f932874dcdf602d0336227d540899dbc41b50";
   };
 
   buildInputs = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A HTTP and FTP parallel file downloader";
-    homepage = https://parfive.readthedocs.io/;
+    homepage = "https://parfive.readthedocs.io/";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

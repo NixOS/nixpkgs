@@ -1,7 +1,8 @@
 { wrapGAppsHook
 , glib
 , lib
-, symlinkJoin
+, stdenv
+, xorg
 , switchboard
 , switchboardPlugs
 , plugs
@@ -14,26 +15,45 @@ let
     if plugs == null then switchboardPlugs
     else plugs ++ (lib.optionals useDefaultPlugs switchboardPlugs);
 in
-symlinkJoin {
+stdenv.mkDerivation rec {
   name = "${switchboard.name}-with-plugs";
+
+  src = null;
 
   paths = [
     switchboard
   ] ++ selectedPlugs;
 
-  buildInputs = [
-    wrapGAppsHook
+  passAsFile = [ "paths" ];
+
+  nativeBuildInputs = [
     glib
-  ] ++ (lib.forEach selectedPlugs (x: x.buildInputs))
+    wrapGAppsHook
+  ];
+
+  buildInputs = lib.forEach selectedPlugs (x: x.buildInputs)
     ++ selectedPlugs;
 
-  postBuild = ''
-    make_glib_find_gsettings_schemas
+  dontUnpack = true;
+  dontConfigure = true;
+  dontBuild = true;
 
-    gappsWrapperArgs+=(--set SWITCHBOARD_PLUGS_PATH "$out/lib/switchboard")
+  preferLocalBuild = true;
+  allowSubstitutes = false;
 
-    wrapGAppsHook
+  installPhase = ''
+    mkdir -p $out
+    for i in $(cat $pathsPath); do
+      ${xorg.lndir}/bin/lndir -silent $i $out
+    done
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --set SWITCHBOARD_PLUGS_PATH "$out/lib/switchboard"
+    )
   '';
 
   inherit (switchboard) meta;
 }
+

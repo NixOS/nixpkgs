@@ -45,7 +45,7 @@ in buildPythonPackage {
 
   meta = with lib; {
     description = "Parallel optimisation for Python";
-    homepage = https://esa.github.io/pagmo2/;
+    homepage = "https://esa.github.io/pagmo2/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.costrouc ];
   };

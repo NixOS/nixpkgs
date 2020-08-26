@@ -1,28 +1,23 @@
-{ stdenv, fetchurl, cmake, gfortran, cudatoolkit, libpthreadstubs, liblapack
-, mklSupport ? false, mkl ? null
-}:
-
-assert !mklSupport || mkl != null;
+{ stdenv, fetchurl, cmake, gfortran, ninja, cudatoolkit, libpthreadstubs, lapack, blas }:
 
 with stdenv.lib;
 
-let version = "2.5.0";
+let version = "2.5.3";
 
 in stdenv.mkDerivation {
   pname = "magma";
   inherit version;
   src = fetchurl {
     url = "https://icl.cs.utk.edu/projectsfiles/magma/downloads/magma-${version}.tar.gz";
-    sha256 = "0czspk93cv1fy37zyrrc9k306q4yzfxkhy1y4lj937dx8rz5rm2g";
+    sha256 = "1xjy3irdx0w1zyhvn4x47zni5fwsh6z97xd4yqldz8zrm5lx40n6";
     name = "magma-${version}.tar.gz";
   };
 
-  buildInputs = [ gfortran cudatoolkit libpthreadstubs cmake ]
-    ++ (if mklSupport then [ mkl ] else [ liblapack ]);
+  nativeBuildInputs = [ gfortran cmake ninja ];
+
+  buildInputs = [ cudatoolkit libpthreadstubs lapack blas ];
 
   doCheck = false;
-
-  MKLROOT = optionalString mklSupport mkl;
 
   preConfigure = ''
     export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
@@ -39,7 +34,7 @@ in stdenv.mkDerivation {
     mkdir -p $out/lib/pkgconfig
     cp -a ../include/*.h $out/include
     #cp -a sparse-iter/include/*.h $out/include
-    cp -a lib/*.a $out/lib
+    cp -a lib/*.so $out/lib
     cat ../lib/pkgconfig/magma.pc.in                   | \
     sed -e s:@INSTALL_PREFIX@:"$out":          | \
     sed -e s:@CFLAGS@:"-I$out/include":    | \
@@ -51,7 +46,7 @@ in stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Matrix Algebra on GPU and Multicore Architectures";
     license = licenses.bsd3;
-    homepage = http://icl.cs.utk.edu/magma/index.html;
+    homepage = "http://icl.cs.utk.edu/magma/index.html";
     platforms = platforms.unix;
     maintainers = with maintainers; [ tbenst ];
   };

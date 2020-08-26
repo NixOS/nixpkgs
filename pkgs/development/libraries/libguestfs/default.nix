@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, autoreconfHook, makeWrapper
 , ncurses, cpio, gperf, cdrkit, flex, bison, qemu, pcre, augeas, libxml2
-, acl, libcap, libcap_ng, libconfig, systemd, fuse, yajl, libvirt, hivex
+, acl, libcap, libcap_ng, libconfig, systemd, fuse, yajl, libvirt, hivex, db
 , gmp, readline, file, numactl, xen, libapparmor, jansson
 , getopt, perlPackages, ocamlPackages
 , appliance ? null
@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses cpio gperf jansson
     cdrkit flex bison qemu pcre augeas libxml2 acl libcap libcap_ng libconfig
-    systemd fuse yajl libvirt gmp readline file hivex
+    systemd fuse yajl libvirt gmp readline file hivex db
     numactl xen libapparmor getopt perlPackages.ModuleBuild
   ] ++ (with perlPackages; [ perl libintl_perl GetoptLong SysVirt ])
-    ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml_libvirt ocaml_gettext ounit ])
+    ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml_libvirt gettext-stub ounit ])
     ++ stdenv.lib.optional javaSupport jdk;
 
   prePatch = ''

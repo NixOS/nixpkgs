@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "The video game rating system";
-    homepage = https://trueskill.org;
+    homepage = "https://trueskill.org";
     license = licenses.bsd3;
     maintainers = with maintainers; [
       eadwu

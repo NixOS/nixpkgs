@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Port of the asyncio project to Python 2.7";
-    homepage = https://github.com/vstinner/trollius;
+    homepage = "https://github.com/vstinner/trollius";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

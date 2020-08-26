@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, pythonOlder, fetchFromGitHub, async-timeout, pytest, pytest-asyncio }:
 buildPythonPackage rec {
-  version = "3.2.5";
+  version = "3.2.10";
   pname = "asgiref";
 
   disabled = pythonOlder "3.5";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = pname;
     rev = version;
-    sha256 = "040g2cghpskp427xiw9jv7c0lfj1sk5fc01dds8pi7grkk0br357";
+    sha256 = "1sj4yy2injaskwfi5pkb542jl8s6ljijnyra81gpw0pgd3d0bgxv";
   };
 
   propagatedBuildInputs = [ async-timeout ];

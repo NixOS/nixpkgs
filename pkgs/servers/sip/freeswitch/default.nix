@@ -3,18 +3,17 @@
 , openssl, perl, sqlite, libjpeg, speex, pcre
 , ldns, libedit, yasm, which, libsndfile, libtiff
 
-, curl, lua, libmysqlclient, postgresql, libopus, libctb, gsmlib
+, callPackage
 
 , SystemConfiguration
 
 , modules ? null
+, nixosTests
 }:
 
 let
 
-availableModules = import ./modules.nix {
-  inherit curl lua libmysqlclient postgresql libopus libctb gsmlib;
-};
+availableModules = callPackage ./modules.nix { };
 
 # the default list from v1.8.7, except with applications/mod_signalwire also disabled
 defaultModules = mods: with mods; [
@@ -89,17 +88,25 @@ in
 
 stdenv.mkDerivation rec {
   pname = "freeswitch";
-  version = "1.10.2";
+  version = "1.10.3";
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fmrm51zgrasjbmhs0pzb1lyca3ddx0wd35shvxnkjnifi8qd1h7";
+    sha256 = "0rp4sxqxd2wsb5iyv0mh11l16zxvh7rbgfg0vcgns823gvh8lqai";
   };
   postPatch = ''
     patchShebangs     libs/libvpx/build/make/rtcd.pl
     substituteInPlace libs/libvpx/build/make/configure.sh \
       --replace AS=\''${AS} AS=yasm
+
+    # Disable advertisement banners
+    for f in src/include/cc.h libs/esl/src/include/cc.h; do
+      {
+        echo 'const char *cc = "";'
+        echo 'const char *cc_s = "";'
+      } > $f
+    done
   '';
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
@@ -129,9 +136,11 @@ stdenv.mkDerivation rec {
     cp -r conf $out/share/freeswitch/
   '';
 
+  passthru.tests.freeswitch = nixosTests.freeswitch;
+
   meta = {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";
-    homepage = https://freeswitch.org/;
+    homepage = "https://freeswitch.org/";
     license = stdenv.lib.licenses.mpl11;
     maintainers = with stdenv.lib.maintainers; [ misuzu ];
     platforms = with stdenv.lib.platforms; unix;

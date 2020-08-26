@@ -64,7 +64,7 @@ buildBazelPackage rec {
       sed -e '/^FILE:@bazel_gazelle_go_repository_tools.*/d' -i $bazelOut/external/\@*.marker
     '';
 
-    sha256 = "141kw2zpr612xdcrg6x9kslg4d5b3fbpzx0vgp3lqwdihfj3sc1l";
+    sha256 = "1m7fmb03lirffxx04ck73bn5zwaji7zdwhlqq8s1c6pgp755d3vi";
   };
 
   buildAttrs = {
@@ -81,7 +81,7 @@ buildBazelPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/buchgr/bazel-remote;
+    homepage = "https://github.com/buchgr/bazel-remote";
     description = "A remote HTTP/1.1 cache for Bazel.";
     license = licenses.asl20;
     maintainers = [ maintainers.uri-canva ];

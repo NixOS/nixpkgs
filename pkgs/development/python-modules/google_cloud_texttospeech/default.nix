@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-texttospeech";
-  version = "0.5.0";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "75562a8db2b0268f57c64e448d697fe82c0ffa889f09be8cbc6ba5369c9a0c59";
+    sha256 = "4ed3d9f17fa7b8d53dbc4992d976f72d845266786a81938444315e5a7b194b53";
   };
 
   checkInputs = [ pytest mock ];
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Google Cloud Text-to-Speech API client library";
-    homepage = https://github.com/GoogleCloudPlatform/google-cloud-python;
+    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

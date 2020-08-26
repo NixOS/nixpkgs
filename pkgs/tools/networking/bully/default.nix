@@ -1,33 +1,32 @@
-{ stdenv, fetchFromGitHub, openssl, libpcap }:
+{ stdenv, fetchFromGitHub, libpcap }:
 
 stdenv.mkDerivation rec {
-
   pname = "bully";
-  version = "1.1";
+  version = "1.4-00";
 
   src = fetchFromGitHub {
-    sha256 = "1qvbbf72ryd85bp4v62fk93ag2sn25rj7kipgagbv22hnq8yl3zd";
-    rev = version;
+    owner = "kimocoder";
     repo = "bully";
-    owner = "aanarchyy";
+    rev = version;
+    sha256 = "1n2754a5z44g414a0hj3cmi9q5lwnzyvmvzskrj2nci8c8m2kgnf";
   };
-  buildInputs = [ openssl libpcap ];
 
-  buildPhase = ''
-    cd src
-    make
-  '';
+  buildInputs = [ libpcap ];
+
+  enableParallelBuilding = true;
+
+  sourceRoot = "./source/src";
 
   installPhase = ''
-    mkdir -p $out/bin
-    mv bully $out/bin
+    install -Dm555 -t $out/bin bully
+    install -Dm444 -t $out/share/doc/${pname} ../*.md
   '';
 
   meta = with stdenv.lib; {
     description = "Retrieve WPA/WPA2 passphrase from a WPS enabled access point";
-    homepage = https://github.com/aanarchyy/bully;
-    maintainers = with maintainers; [ edwtjo ];
+    homepage = "https://github.com/kimocoder/bully";
     license = licenses.gpl3;
+    maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.linux;
   };
 }

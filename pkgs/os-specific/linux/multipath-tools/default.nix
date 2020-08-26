@@ -10,15 +10,20 @@ stdenv.mkDerivation rec {
     sha256 = "1mgjylklh1cx8px8ffgl12kyc0ln3445vbabd2sy8chq31rpiiq8";
   };
 
+  patches = [
+    # fix build with json-c 0.14 https://www.redhat.com/archives/dm-devel/2020-May/msg00261.html
+    ./json-c-0.14.patch
+  ];
+
   postPatch = ''
-    substituteInPlace libmultipath/Makefile --replace /usr/include/libdevmapper.h ${lvm2}/include/libdevmapper.h
+    substituteInPlace libmultipath/Makefile --replace /usr/include/libdevmapper.h ${stdenv.lib.getDev lvm2}/include/libdevmapper.h
     sed -i -re '
       s,^( *#define +DEFAULT_MULTIPATHDIR\>).*,\1 "'"$out/lib/multipath"'",
     ' libmultipath/defaults.h
     sed -i -e 's,\$(DESTDIR)/\(usr/\)\?,$(prefix)/,g' \
       kpartx/Makefile libmpathpersist/Makefile
-    sed -i -e "s,GZIP = .*, GZIP = gzip -9n -c," \
-      Makefile.inc
+    sed -i -e "s,GZIP,GZ," \
+      $(find * -name Makefile\*)
   '';
 
   nativeBuildInputs = [ gzip pkgconfig perl ];
@@ -35,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tools for the Linux multipathing driver";
-    homepage = http://christophe.varoqui.free.fr/;
+    homepage = "http://christophe.varoqui.free.fr/";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

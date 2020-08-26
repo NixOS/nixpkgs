@@ -28,6 +28,16 @@ stdenv.mkDerivation rec {
       url = "https://github.com/rhboot/efivar/commit/c3c553db85ff10890209d0fe48fb4856ad68e4e0.patch";
       sha256 = "0lc38npydp069nlcga25wzzm204ww9l6mpjfn6wmhdfhn0pgjwky";
     })
+    (fetchurl {
+      name = "remove_unused_variable.patch";
+      url = "https://github.com/rhboot/efivar/commit/fdb803402fb32fa6d020bac57a40c7efe4aabb7d.patch";
+      sha256 = "1xhy8v8ff9lyxb830n9hci2fbh7rfps6rwsqrjh4lw7316gwllsd";
+    })
+    (fetchurl {
+      name = "check_string_termination.patch";
+      url = "https://github.com/rhboot/efivar/commit/4e04afc2df9bbc26e5ab524b53a6f4f1e61d7c9e.patch";
+      sha256 = "1ajj11wwsvamfspq4naanvw08h63gr0g71q0dfbrrywrhc0jlmdw";
+    })
   ];
   # We have no LTO here since commit 22284b07.
   postPatch = if stdenv.isi686 then "sed '/^OPTIMIZE /s/-flto//' -i Make.defaults" else null;

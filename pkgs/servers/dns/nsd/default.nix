@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libevent, openssl
+{ stdenv, fetchurl, libevent, openssl, nixosTests
 , bind8Stats       ? false
 , checking         ? false
 , ipv6             ? true
@@ -11,16 +11,16 @@
 , rrtypes          ? false
 , zoneStats        ? false
 
-, configFile ? "etc/nsd/nsd.conf"
+, configFile ? "/etc/nsd/nsd.conf"
 }:
 
 stdenv.mkDerivation rec {
   pname = "nsd";
-  version = "4.3.0";
+  version = "4.3.2";
 
   src = fetchurl {
     url = "https://www.nlnetlabs.nl/downloads/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "15qy25210j9nq2i3pm8rwphnc6b5gq83js10078fvw9hbmjps03s";
+    sha256 = "0ac3mbn5z4nc18782m9aswdpi2m9f4665vidw0ciyigdh0pywp2v";
   };
 
   prePatch = ''
@@ -51,6 +51,10 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     sed 's@$(INSTALL_DATA) nsd.conf.sample $(DESTDIR)$(nsdconfigfile).sample@@g' -i Makefile.in
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) nsd;
+  };
 
   meta = with stdenv.lib; {
     homepage = "http://www.nlnetlabs.nl";

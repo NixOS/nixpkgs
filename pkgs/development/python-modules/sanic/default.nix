@@ -9,11 +9,9 @@
 , ujson
 , pytest
 , gunicorn
-, pytestcov
 , aiohttp
 , beautifulsoup4
 , pytest-sanic
-, pytest-sugar
 , pytest-benchmark
 
 # required just httpcore / requests-async
@@ -100,11 +98,9 @@ buildPythonPackage rec {
   checkInputs = [
     pytest
     gunicorn
-    pytestcov
     aiohttp
     beautifulsoup4
     pytest-sanic
-    pytest-sugar
     pytest-benchmark
     uvicorn
   ];
@@ -132,7 +128,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A microframework based on uvloop, httptools, and learnings of flask";
-    homepage = http://github.com/channelcat/sanic/;
+    homepage = "http://github.com/channelcat/sanic/";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

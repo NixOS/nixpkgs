@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = http://www.ivarch.com/programs/pv;
+    homepage = "http://www.ivarch.com/programs/pv";
     description = "Tool for monitoring the progress of data through a pipeline";
     license = stdenv.lib.licenses.artistic2;
     maintainers = with stdenv.lib.maintainers; [ ];

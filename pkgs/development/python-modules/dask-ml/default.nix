@@ -20,13 +20,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.2.0";
+  version = "1.5.0";
   pname = "dask-ml";
   disabled = pythonOlder "3.6"; # >= 3.6
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ppg8licvkxz1af2q87cxms2p6ss2r5d4fdkbcivph56r0v0ci2k";
+    sha256 = "8a9879b7d1642ed8cd48115d81f92a246eb7ffeadc42748053c5339a56f569b4";
   };
 
   propagatedBuildInputs = [
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/dask/dask-ml;
+    homepage = "https://github.com/dask/dask-ml";
     description = "Scalable Machine Learn with Dask";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];

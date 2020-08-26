@@ -13,6 +13,6 @@ trivialBuild rec {
     description = "Major mode for editing .pod-files";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ qyliss ];
-    platform = platforms.all;
+    platforms = platforms.all;
   };
 }

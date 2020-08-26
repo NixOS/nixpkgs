@@ -16,7 +16,7 @@ in fetchFromGitHub {
   sha256 = "0c57232462cv1jrfn0m2bl7jzcfkacirrdd2qimrc8iqhkz0ajfz";
 
   meta = with lib; {
-    homepage = https://github.com/font-store/BehdadFont;
+    homepage = "https://github.com/font-store/BehdadFont";
     description = "A Persian/Arabic Open Source Font";
     license = licenses.ofl;
     platforms = platforms.all;

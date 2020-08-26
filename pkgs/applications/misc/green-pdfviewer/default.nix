@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/schandinat/green/;
+    homepage = "https://github.com/schandinat/green/";
     description = "Viewer for PDF files, uses SDL and libpoppler";
 
     platforms = platforms.unix;

@@ -90,7 +90,7 @@ in {
         default = [];
         description = ''
           Additional cadvisor options.
-          
+
           See <link xlink:href='https://github.com/google/cadvisor/blob/master/docs/runtime_options.md'/> for available options.
         '';
       };

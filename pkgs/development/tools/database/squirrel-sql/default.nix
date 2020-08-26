@@ -5,14 +5,14 @@
 , drivers ? []
 }:
 let
-  version = "4.0.0";
+  version = "4.1.0";
 in stdenv.mkDerivation rec {
   pname = "squirrel-sql";
   inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/project/squirrel-sql/1-stable/${version}-plainzip/squirrelsql-${version}-standard.zip";
-    sha256 = "06njdp2248zxm7zlcpyawx1s7j6hffp5a9mwam3cb53gsmzcz126";
+    sha256 = "0ni7cva0acrin5bkcfkiiv28sf58dzz7xsbl3y4536hmph0g68k6";
   };
 
   nativeBuildInputs = [ makeWrapper unzip ];
@@ -71,7 +71,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Universal SQL Client";
-    homepage = http://squirrel-sql.sourceforge.net/;
+    homepage = "http://squirrel-sql.sourceforge.net/";
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = with maintainers; [ khumba ];

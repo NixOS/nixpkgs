@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Rison encoder/decoder";
-    homepage = https://github.com/betodealmeida/python-rison;
+    homepage = "https://github.com/betodealmeida/python-rison";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

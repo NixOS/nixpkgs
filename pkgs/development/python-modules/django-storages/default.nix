@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Collection of custom storage backends for Django";
-    homepage = https://django-storages.readthedocs.io;
+    homepage = "https://django-storages.readthedocs.io";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mmai ];
   };

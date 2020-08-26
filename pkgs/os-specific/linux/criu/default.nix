@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "criu";
-  version = "3.13";
+  version = "3.14";
 
   src = fetchurl {
     url    = "https://download.openvz.org/criu/${pname}-${version}.tar.bz2";
-    sha256 = "1yn9ix9lqvqvjrs3a3g6g1wqfniyf9n7giy0mr3jvijmrcm7y0pa";
+    sha256 = "1jrr3v99g18gc0hriz0avq6ccdvyya0j6wwz888sdsc4icc30gzn";
   };
 
   enableParallelBuilding = true;
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Userspace checkpoint/restore for Linux";
-    homepage    = https://criu.org;
+    homepage    = "https://criu.org";
     license     = licenses.gpl2;
     platforms   = [ "x86_64-linux" ];
     maintainers = [ maintainers.thoughtpolice ];

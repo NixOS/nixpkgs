@@ -124,7 +124,7 @@ in {
                   <literal>"iponly"</literal>: specifies no authentication. ACLs authorization is used.
                 </para></listitem>
                 <listitem><para>
-                  <literal>"strong"</literal>: authentication by username/password. If user is not registered his access is denied regardless of ACLs.
+                  <literal>"strong"</literal>: authentication by username/password. If user is not registered their access is denied regardless of ACLs.
                 </para></listitem>
               </itemizedlist>
 
@@ -334,10 +334,12 @@ in {
           nsrecord = mkOption {
             type = types.attrsOf types.str;
             default = { };
-            example = {
-              "files.local" = "192.168.1.12";
-              "site.local" = "192.168.1.43";
-            };
+            example = literalExample ''
+              {
+                "files.local" = "192.168.1.12";
+                "site.local" = "192.168.1.43";
+              }
+            '';
             description = "Adds static nsrecords.";
           };
         };

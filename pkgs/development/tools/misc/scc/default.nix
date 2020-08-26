@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "scc";
-  version = "2.11.0";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "boyter";
     repo = "scc";
     rev = "v${version}";
-    sha256 = "1wk6s9ga9rkywgqys960s6fz4agwzh3ac2l6cpcr7kca4379s28k";
+    sha256 = "0hbcq5qn97kr9d4q9m2p1mj3ijn8zmwycrs5bgf1kfiwr09wg2yh";
   };
 
   goPackagePath = "github.com/boyter/scc";

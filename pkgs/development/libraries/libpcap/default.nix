@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, flex, bison }:
+{ stdenv, fetchurl, flex, bison, bluez, pkgconfig, withBluez ? false }:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "libpcap";
@@ -9,27 +11,31 @@ stdenv.mkDerivation rec {
     sha256 = "153h1378diqyc27jjgz6gg5nxmb4ddk006d9xg69nqavgiikflk3";
   };
 
-  nativeBuildInputs = [ flex bison ];
+  nativeBuildInputs = [ flex bison ]
+    ++ optionals withBluez [ bluez.dev pkgconfig ];
 
   # We need to force the autodetection because detection doesn't
-  # work in pure build enviroments.
+  # work in pure build environments.
   configureFlags = [
     ("--with-pcap=" + {
       linux = "linux";
       darwin = "bpf";
     }.${stdenv.hostPlatform.parsed.kernel.name})
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
-    "ac_cv_linux_vers=2"
-  ];
+  ] ++ optionals (stdenv.hostPlatform == stdenv.buildPlatform)
+    [ "ac_cv_linux_vers=2" ];
 
-  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
-
-  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  prePatch = optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace " -arch i386" ""
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.tcpdump.org;
+  postInstall = ''
+    if [ "$dontDisableStatic" -ne "1" ]; then
+      rm -f $out/lib/libpcap.a
+    fi
+  '';
+
+  meta = {
+    homepage = "https://www.tcpdump.org";
     description = "Packet Capture Library";
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz ];

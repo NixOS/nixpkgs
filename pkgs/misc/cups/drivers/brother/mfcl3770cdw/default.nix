@@ -47,7 +47,7 @@ in rec {
 
     meta = {
       description = "Brother ${lib.strings.toUpper model} driver";
-      homepage = http://www.brother.com/;
+      homepage = "http://www.brother.com/";
       license = stdenv.lib.licenses.unfree;
       platforms = [ "x86_64-linux" "i686-linux" ];
       maintainers = [ stdenv.lib.maintainers.steveej ];
@@ -79,7 +79,7 @@ in rec {
 
     meta = {
       description = "Brother ${lib.strings.toUpper model} CUPS wrapper driver";
-      homepage = http://www.brother.com/;
+      homepage = "http://www.brother.com/";
       license = stdenv.lib.licenses.gpl2;
       platforms = [ "x86_64-linux" "i686-linux" ];
       maintainers = [ stdenv.lib.maintainers.steveej ];

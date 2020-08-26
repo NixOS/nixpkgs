@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tiling window manager with focus follows mouse for OSX";
-    homepage = https://github.com/koekeishiya/kwm;
-    downloadPage = https://github.com/koekeishiya/kwm/releases;
+    homepage = "https://github.com/koekeishiya/kwm";
+    downloadPage = "https://github.com/koekeishiya/kwm/releases";
     platforms = platforms.darwin;
     maintainers = with maintainers; [ lnl7 ];
     license = licenses.mit;

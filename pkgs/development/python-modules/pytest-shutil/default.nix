@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A goodie-bag of unix shell and environment tools for py.test";
-    homepage = https://github.com/manahl/pytest-plugins;
+    homepage = "https://github.com/manahl/pytest-plugins";
     maintainers = with maintainers; [ ryansydnor ];
     license = licenses.mit;
   };

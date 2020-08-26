@@ -13,11 +13,11 @@ buildPythonPackage rec {
   # Some patches from https://github.com/rspivak/slimit/pull/65
   patches = lib.optionals isPy3k [
     (fetchpatch {
-      url = https://github.com/lelit/slimit/commit/a61e12d88cc123c4b7af2abef21d06fd182e561a.patch;
+      url = "https://github.com/lelit/slimit/commit/a61e12d88cc123c4b7af2abef21d06fd182e561a.patch";
       sha256 = "0lbhvkgn4l8g9fwvb81rfwjx7hsaq2pid8a5gczdk1ba65wfvdq5";
     })
     (fetchpatch {
-      url = https://github.com/lelit/slimit/commit/e8331659fb89e8a4613c5e4e338c877fead9c551.patch;
+      url = "https://github.com/lelit/slimit/commit/e8331659fb89e8a4613c5e4e338c877fead9c551.patch";
       sha256 = "1hv4ysn09c9bfd5bxhhrp51hsi81hdidmx0y7zcrjjiich9ayrni";
     })
   ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "JavaScript minifier";
-    homepage = https://slimit.readthedocs.org/;
+    homepage = "https://slimit.readthedocs.org/";
     license = licenses.mit;
   };
 }

@@ -10,9 +10,15 @@ let
 
   pkg = cfg.package.out;
 
+  apachectl = pkgs.runCommand "apachectl" { meta.priority = -1; } ''
+    mkdir -p $out/bin
+    cp ${pkg}/bin/apachectl $out/bin/apachectl
+    sed -i $out/bin/apachectl -e 's|$HTTPD -t|$HTTPD -t -f ${httpdConf}|'
+  '';
+
   httpdConf = cfg.configFile;
 
-  php = cfg.phpPackage.override { apacheHttpd = pkg.dev; /* otherwise it only gets .out */ };
+  php = cfg.phpPackage.override { apacheHttpd = pkg; };
 
   phpMajorVersion = lib.versions.major (lib.getVersion php);
 
@@ -41,9 +47,9 @@ let
       "mime" "autoindex" "negotiation" "dir"
       "alias" "rewrite"
       "unixd" "slotmem_shm" "socache_shmcb"
-      "mpm_${cfg.multiProcessingModule}"
+      "mpm_${cfg.mpm}"
     ]
-    ++ (if cfg.multiProcessingModule == "prefork" then [ "cgi" ] else [ "cgid" ])
+    ++ (if cfg.mpm == "prefork" then [ "cgi" ] else [ "cgid" ])
     ++ optional enableHttp2 "http2"
     ++ optional enableSSL "ssl"
     ++ optional enableUserDir "userdir"
@@ -264,7 +270,7 @@ let
 
     PidFile ${runtimeDir}/httpd.pid
 
-    ${optionalString (cfg.multiProcessingModule != "prefork") ''
+    ${optionalString (cfg.mpm != "prefork") ''
       # mod_cgid requires this.
       ScriptSock ${runtimeDir}/cgisock
     ''}
@@ -338,6 +344,7 @@ let
     }
     ''
       cat ${php}/etc/php.ini > $out
+      cat ${php.phpIni} > $out
       echo "$options" >> $out
     '';
 
@@ -349,6 +356,7 @@ in
   imports = [
     (mkRemovedOptionModule [ "services" "httpd" "extraSubservices" ] "Most existing subservices have been ported to the NixOS module system. Please update your configuration accordingly.")
     (mkRemovedOptionModule [ "services" "httpd" "stateDir" ] "The httpd module now uses /run/httpd as a runtime directory.")
+    (mkRenamedOptionModule [ "services" "httpd" "multiProcessingModule" ] [ "services" "httpd" "mpm" ])
 
     # virtualHosts options
     (mkRemovedOptionModule [ "services" "httpd" "documentRoot" ] "Please define a virtual host using `services.httpd.virtualHosts`.")
@@ -453,7 +461,13 @@ in
         type = types.str;
         default = "wwwrun";
         description = ''
-          User account under which httpd runs.
+          User account under which httpd children processes run.
+
+          If you require the main httpd process to run as
+          <literal>root</literal> add the following configuration:
+          <programlisting>
+          systemd.services.httpd.serviceConfig.User = lib.mkForce "root";
+          </programlisting>
         '';
       };
 
@@ -461,7 +475,7 @@ in
         type = types.str;
         default = "wwwrun";
         description = ''
-          Group under which httpd runs.
+          Group under which httpd children processes run.
         '';
       };
 
@@ -538,20 +552,19 @@ in
         '';
       };
 
-      multiProcessingModule = mkOption {
+      mpm = mkOption {
         type = types.enum [ "event" "prefork" "worker" ];
-        default = "prefork";
+        default = "event";
         example = "worker";
         description =
           ''
             Multi-processing module to be used by Apache. Available
-            modules are <literal>prefork</literal> (the default;
-            handles each request in a separate child process),
-            <literal>worker</literal> (hybrid approach that starts a
-            number of child processes each running a number of
-            threads) and <literal>event</literal> (a recent variant of
-            <literal>worker</literal> that handles persistent
-            connections more efficiently).
+            modules are <literal>prefork</literal> (handles each
+            request in a separate child process), <literal>worker</literal>
+            (hybrid approach that starts a number of child processes
+            each running a number of threads) and <literal>event</literal>
+            (the default; a recent variant of <literal>worker</literal>
+            that handles persistent connections more efficiently).
           '';
       };
 
@@ -643,15 +656,34 @@ in
       postRun = "systemctl reload httpd.service";
     }) (filterAttrs (name: hostOpts: hostOpts.enableACME) cfg.virtualHosts);
 
-    environment.systemPackages = [ pkg ];
+    environment.systemPackages = [
+      apachectl
+      pkg
+    ];
 
-    # required for "apachectl configtest"
-    environment.etc."httpd/httpd.conf".source = httpdConf;
+    services.logrotate = optionalAttrs (cfg.logFormat != "none") {
+      enable = mkDefault true;
+      paths.httpd = {
+        path = "${cfg.logDir}/*.log";
+        user = cfg.user;
+        group = cfg.group;
+        frequency = "daily";
+        keep = 28;
+        extraConfig = ''
+          sharedscripts
+          compress
+          delaycompress
+          postrotate
+            systemctl reload httpd.service > /dev/null 2>/dev/null || true
+          endscript
+        '';
+      };
+    };
 
     services.httpd.phpOptions =
       ''
         ; Needed for PHP's mail() function.
-        sendmail_path = sendmail -t -i
+        sendmail_path = ${pkgs.system-sendmail}/bin/sendmail -t -i
 
         ; Don't advertise PHP
         expose_php = off
@@ -701,10 +733,9 @@ in
         wantedBy = [ "multi-user.target" ];
         wants = concatLists (map (hostOpts: [ "acme-${hostOpts.hostName}.service" "acme-selfsigned-${hostOpts.hostName}.service" ]) vhostsACME);
         after = [ "network.target" "fs.target" ] ++ map (hostOpts: "acme-selfsigned-${hostOpts.hostName}.service") vhostsACME;
+        before = map (hostOpts: "acme-${hostOpts.hostName}.service") vhostsACME;
 
-        path =
-          [ pkg pkgs.coreutils pkgs.gnugrep ]
-          ++ optional cfg.enablePHP pkgs.system-sendmail; # Needed for PHP's mail() function.
+        path = [ pkg pkgs.coreutils pkgs.gnugrep ];
 
         environment =
           optionalAttrs cfg.enablePHP { PHPRC = phpIni; }
@@ -724,7 +755,7 @@ in
           ExecStart = "@${pkg}/bin/httpd httpd -f ${httpdConf}";
           ExecStop = "${pkg}/bin/httpd -f ${httpdConf} -k graceful-stop";
           ExecReload = "${pkg}/bin/httpd -f ${httpdConf} -k graceful";
-          User = "root";
+          User = cfg.user;
           Group = cfg.group;
           Type = "forking";
           PIDFile = "${runtimeDir}/httpd.pid";
@@ -732,6 +763,7 @@ in
           RestartSec = "5s";
           RuntimeDirectory = "httpd httpd/runtime";
           RuntimeDirectoryMode = "0750";
+          AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         };
       };
 

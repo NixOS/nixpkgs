@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   patches = [ ./ptrdiff.patch ];
 
   meta = with stdenv.lib; {
-    homepage = http://htmlcxx.sourceforge.net/;
+    homepage = "http://htmlcxx.sourceforge.net/";
     description = "A simple non-validating css1 and html parser for C++";
     license = licenses.lgpl2;
     platforms = platforms.linux;

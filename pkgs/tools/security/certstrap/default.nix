@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "certstrap";
-  version = "1.1.1";
+  version = "1.2.0";
 
   goPackagePath = "github.com/square/certstrap";
 
@@ -10,13 +10,12 @@ buildGoPackage rec {
     owner = "square";
     repo = "certstrap";
     rev = "v${version}";
-    sha256 = "0j7gi2nzykny7i0gjax9vixw72l9jcm4wnwxgm72hh1pji0ysa8n";
+    sha256 = "1ymchnn7c9g3pq7rw4lrwsd6z3wfjx90g7qgrw6r5hssl77mnscj";
   };
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
     description = "Tools to bootstrap CAs, certificate requests, and signed certificates";
-    platforms = platforms.all;
     license = licenses.asl20;
     maintainers = with maintainers; [ volth ];
   };

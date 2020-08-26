@@ -28,7 +28,7 @@ pythonPackages.buildPythonApplication {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/linuxerwang/pdf-quench;
+    homepage = "https://github.com/linuxerwang/pdf-quench";
     description = "A visual tool for cropping pdf files";
     platforms = platforms.linux;
     license = licenses.gpl2;

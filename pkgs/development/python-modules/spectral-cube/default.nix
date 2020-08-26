@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
+, aplpy
 , astropy
 , radio_beam
 , pytest
@@ -24,7 +25,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ astropy-helpers ];
 
-  checkInputs = [ pytest pytest-astropy ];
+  checkInputs = [ aplpy pytest pytest-astropy ];
 
   # Disable automatic update of the astropy-helper module
   postPatch = ''
@@ -39,7 +40,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Library for reading and analyzing astrophysical spectral data cubes";
-    homepage = http://radio-astro-tools.github.io;
+    homepage = "http://radio-astro-tools.github.io";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ smaret ];

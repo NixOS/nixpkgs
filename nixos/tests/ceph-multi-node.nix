@@ -183,15 +183,15 @@ let
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
 
     monA.succeed(
-        "ceph osd pool create multi-node-test 100 100",
+        "ceph osd pool create multi-node-test 32 32",
         "ceph osd pool ls | grep 'multi-node-test'",
         "ceph osd pool rename multi-node-test multi-node-other-test",
         "ceph osd pool ls | grep 'multi-node-other-test'",
     )
-    monA.wait_until_succeeds("ceph -s | grep '1 pools, 100 pgs'")
+    monA.wait_until_succeeds("ceph -s | grep '2 pools, 33 pgs'")
     monA.succeed("ceph osd pool set multi-node-other-test size 2")
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
-    monA.wait_until_succeeds("ceph -s | grep '100 active+clean'")
+    monA.wait_until_succeeds("ceph -s | grep '33 active+clean'")
     monA.fail(
         "ceph osd pool ls | grep 'multi-node-test'",
         "ceph osd pool delete multi-node-other-test multi-node-other-test --yes-i-really-really-mean-it",

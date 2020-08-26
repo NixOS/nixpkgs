@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python library to use Shapely or GeoJSON objects as matplotlib paths";
-    homepage = https://bitbucket.org/sgillies/descartes/;
+    homepage = "https://bitbucket.org/sgillies/descartes/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp ];
   };

@@ -19,6 +19,6 @@ buildDunePackage rec {
   meta = {
     description = "Code coverage for OCaml";
     license = stdenv.lib.licenses.mpl20;
-    homepage = https://github.com/aantron/bisect_ppx;
+    homepage = "https://github.com/aantron/bisect_ppx";
   };
 }

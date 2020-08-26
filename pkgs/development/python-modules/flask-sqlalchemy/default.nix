@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Flask-SQLAlchemy";
-  version = "2.4.1";
+  version = "2.4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6974785d913666587949f7c2946f7001e4fa2cb2d19f4e69ead02e4b8f50b33d";
+    sha256 = "1rgsj49gnx361hnb3vn6c1h17497qh22yc3r70l1r6w0mw71bixz";
   };
 
   propagatedBuildInputs = [ flask sqlalchemy ];
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "SQLAlchemy extension for Flask";
-    homepage = http://flask-sqlalchemy.pocoo.org/;
+    homepage = "http://flask-sqlalchemy.pocoo.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ gerschtli ];
   };

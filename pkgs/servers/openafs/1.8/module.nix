@@ -1,7 +1,9 @@
 { stdenv, fetchurl, which, autoconf, automake, flex, yacc
 , kernel, glibc, perl, libtool_2, kerberos, fetchpatch }:
 
-with (import ./srcs.nix { inherit fetchurl; });
+with (import ./srcs.nix {
+  inherit fetchurl;
+});
 
 let
   modDestDir = "$out/lib/modules/${kernel.modDirVersion}/extra/openafs";
@@ -50,7 +52,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Open AFS client kernel module";
-    homepage = https://www.openafs.org;
+    homepage = "https://www.openafs.org";
     license = licenses.ipl10;
     platforms = platforms.linux;
     maintainers = [ maintainers.maggesi maintainers.spacefrogg ];

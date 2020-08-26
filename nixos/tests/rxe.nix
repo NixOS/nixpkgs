@@ -28,7 +28,7 @@ in {
     # Test if rxe interface comes up
     server.wait_for_unit("default.target")
     server.succeed("systemctl status rxe.service")
-    server.succeed("ibv_devices | grep rxe0")
+    server.succeed("ibv_devices | grep rxe_eth1")
 
     client.wait_for_unit("default.target")
 

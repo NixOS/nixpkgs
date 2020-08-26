@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake mpd_clientlib openssl ];
 
   meta = {
-    homepage = https://www.ympd.org;
+    homepage = "https://www.ympd.org";
     description = "Standalone MPD Web GUI written in C, utilizing Websockets and Bootstrap/JS";
     maintainers = [ stdenv.lib.maintainers.siddharthist ];
     platforms = stdenv.lib.platforms.unix;

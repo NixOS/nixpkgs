@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, neon, libusb, openssl, udev, avahi, freeipmi
+{ stdenv, fetchurl, pkgconfig, neon, libusb-compat-0_1, openssl, udev, avahi, freeipmi
 , libtool, makeWrapper, autoreconfHook, fetchpatch
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ neon libusb openssl udev avahi freeipmi ];
+  buildInputs = [ neon libusb-compat-0_1 openssl udev avahi freeipmi ];
 
   nativeBuildInputs = [ autoreconfHook libtool pkgconfig makeWrapper ];
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/nut-scanner --prefix LD_LIBRARY_PATH : \
-      "$out/lib:${neon}/lib:${libusb.out}/lib:${avahi}/lib:${freeipmi}/lib"
+      "$out/lib:${neon}/lib:${libusb-compat-0_1.out}/lib:${avahi}/lib:${freeipmi}/lib"
   '';
 
   meta = with stdenv.lib; {
@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
       interface for monitoring and administering UPS, PDU and SCD hardware.
       It uses a layered approach to connect all of the parts.
     '';
-    homepage = https://networkupstools.org/;
-    repositories.git = https://github.com/networkupstools/nut.git;
+    homepage = "https://networkupstools.org/";
+    repositories.git = "https://github.com/networkupstools/nut.git";
     platforms = platforms.linux;
     maintainers = [ maintainers.pierron ];
     license = with licenses; [ gpl1Plus gpl2Plus gpl3Plus ];

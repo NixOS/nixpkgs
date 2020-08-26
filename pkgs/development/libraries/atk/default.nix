@@ -4,7 +4,7 @@
 
 let
   pname = "atk";
-  version = "2.34.1";
+  version = "2.36.0";
 in
 
 stdenv.mkDerivation rec {
@@ -12,14 +12,14 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1jwp16r6p5z66k4b2v8zlzhyshhwlmyi27ippkrgqr8jsary7w6l";
+    sha256 = "1217cmmykjgkkim0zr1lv5j13733m4w5vipmy4ivw0ll6rz28xpv";
   };
 
   outputs = [ "out" "dev" ];
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext gobject-introspection ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext gobject-introspection glib ];
 
   propagatedBuildInputs = [
     # Required by atk.pc
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       control running applications.
     '';
 
-    homepage = http://library.gnome.org/devel/atk/;
+    homepage = "http://library.gnome.org/devel/atk/";
 
     license = stdenv.lib.licenses.lgpl2Plus;
 

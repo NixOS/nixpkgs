@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Very simple, yet secure VPN software";
-    homepage = http://wiki.ucis.nl/QuickTun;
+    homepage = "http://wiki.ucis.nl/QuickTun";
     maintainers = [ maintainers.fpletz ];
     platforms = platforms.unix;
     license = licenses.bsd2;

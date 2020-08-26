@@ -4,7 +4,7 @@
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
 , guiSupport ? true, enableMinimal ? false
-, adns ? null , bzip2 ? null , gnutls ? null , libusb ? null , openldap ? null
+, adns ? null , bzip2 ? null , gnutls ? null , libusb1 ? null , openldap ? null
 , pcsclite ? null , pinentry ? null , readline ? null , sqlite ? null , zlib ?
 null
 }:
@@ -16,18 +16,18 @@ assert guiSupport -> pinentry != null && enableMinimal == false;
 stdenv.mkDerivation rec {
   pname = "gnupg";
 
-  version = "2.2.19";
+  version = "2.2.21";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    sha256 = "1h6yx6sdpz3lf9gdppgxqcf73baynr8gflmh43286fkgw3058994";
+    sha256 = "1v3nirp9m7yxjkkcdixibckl379pdyr3mdx8b1k379szzdw35s31";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkgconfig texinfo ];
   buildInputs = [
     libgcrypt libassuan libksba libiconv npth gettext
-    readline libusb gnutls adns openldap zlib bzip2 sqlite
+    readline libusb1 gnutls adns openldap zlib bzip2 sqlite
   ];
 
   patches = [
@@ -38,8 +38,10 @@ stdenv.mkDerivation rec {
     ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
   ];
   postPatch = ''
-    sed -i 's,hkps://hkps.pool.sks-keyservers.net,hkps://keys.openpgp.org,g' \
-        configure doc/dirmngr.texi doc/gnupg.info-1
+    sed -i 's,hkps://hkps.pool.sks-keyservers.net,hkps://keys.openpgp.org,g' configure doc/dirmngr.texi doc/gnupg.info-1
+    # Fix broken SOURCE_DATE_EPOCH usage - remove on the next upstream update
+    sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.am
+    sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.in
   '' + stdenv.lib.optionalString ( stdenv.isLinux && pcsclite != null) ''
     sed -i 's,"libpcsclite\.so[^"]*","${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   ''; #" fix Emacs syntax highlighting :-(
@@ -72,7 +74,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://gnupg.org;
+    homepage = "https://gnupg.org";
     description = "Modern (2.1) release of the GNU Privacy Guard, a GPL OpenPGP implementation";
     license = licenses.gpl3Plus;
     longDescription = ''

@@ -14,13 +14,12 @@ buildGoPackage rec {
   };
 
   goDeps = ./deps.nix;
-  
+
   meta = {
     description = "A pair programming tool and library written in Golang";
-    homepage = https://github.com/jeffail/leaps/;
+    homepage = "https://github.com/jeffail/leaps/";
     license = "MIT";
     maintainers = with stdenv.lib.maintainers; [ qknight ];
     platforms = stdenv.lib.platforms.unix;
   };
 }
-

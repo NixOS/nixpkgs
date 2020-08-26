@@ -18,12 +18,7 @@ in
 
     services.memcached = {
 
-      enable = mkOption {
-        default = false;
-        description = "
-          Whether to enable Memcached.
-        ";
-      };
+      enable = mkEnableOption "Memcached";
 
       user = mkOption {
         default = "memcached";

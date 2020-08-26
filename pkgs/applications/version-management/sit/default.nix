@@ -24,10 +24,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Serverless Information Tracker";
-    homepage = https://sit.fyi/;
+    homepage = "https://sit.fyi/";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ dywedir yrashk ];
-    platforms = platforms.all;
     # Upstream has not had a release in several years, and dependencies no
     # longer compile with the latest Rust compiler.
     broken = true;

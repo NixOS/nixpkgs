@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , substituteAll
 , meson
@@ -22,11 +23,12 @@
 , wingpanel
 , zeitgeist
 , bc
+, libhandy
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-applications-menu";
-  version = "2.5.0";
+  version = "2.7.1";
 
   repoName = "applications-menu";
 
@@ -34,11 +36,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1zry9xvcljsn5fnl8qs21x7q8rpwv0sxvp2dmnx3ddqnvj4q2m7d";
+    sha256 = "0wsfvyp0z6c612nl348dr6sar0qghhfcgkzcx3108x8v743v7rim";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -60,6 +62,7 @@ stdenv.mkDerivation rec {
     gtk3
     json-glib
     libgee
+    libhandy
     libsoup
     libunity
     plank
@@ -86,7 +89,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Lightweight and stylish app launcher for Pantheon";
-    homepage = https://github.com/elementary/applications-menu;
+    homepage = "https://github.com/elementary/applications-menu";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

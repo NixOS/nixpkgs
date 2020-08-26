@@ -5,13 +5,13 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "gcalcli";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner  = "insanum";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0746vmhfclkpkqnyaidxid2z20mlv86hv0pjxy1qglrja91vkd72";
+    sha256 = "0s5fhcmz3n0dwh3vkqr4aigi59q43v03ch5jhh6v75149icwr0df";
   };
 
   postPatch = lib.optionalString stdenv.isLinux ''
@@ -30,7 +30,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "CLI for Google Calendar";
-    homepage = https://github.com/insanum/gcalcli;
+    homepage = "https://github.com/insanum/gcalcli";
     license = licenses.mit;
     maintainers = with maintainers; [ nocoolnametom ];
     inherit version;

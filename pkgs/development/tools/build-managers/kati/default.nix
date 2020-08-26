@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "An experimental GNU make clone";
-    homepage = https://github.com/google/kati;
+    homepage = "https://github.com/google/kati";
     platforms = platforms.all;
     license = licenses.asl20;
     maintainers = with maintainers; [ danielfullmer ];

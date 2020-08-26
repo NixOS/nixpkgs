@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Makefile for Arduino sketches";
-    homepage = https://github.com/sudar/Arduino-Makefile;
+    homepage = "https://github.com/sudar/Arduino-Makefile";
     license = stdenv.lib.licenses.lgpl21;
     maintainers = [ stdenv.lib.maintainers.eyjhb ];
     platforms = stdenv.lib.platforms.unix;

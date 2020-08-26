@@ -1,13 +1,28 @@
-{ stdenv, buildPythonPackage, fetchPypi, pygments, greenlet, curtsies, urwid, requests, mock }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, curtsies
+, greenlet
+, mock
+, pygments
+, requests
+, substituteAll
+, urwid
+, which }:
 
 buildPythonPackage rec {
   pname = "bpython";
-  version = "0.18";
+  version = "0.19";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "56cc20dbe568c98c81de4990fddf5862c0d8d3ab0ad1cf7057988abc5f7686c2";
+    sha256 = "1764ikgj24jjq46s50apwkydqvy5a13adb2nbszk8kbci6df0v27";
   };
+
+  patches = [ (substituteAll {
+    src = ./clipboard-make-which-substitutable.patch;
+    which = "${which}/bin/which";
+  })];
 
   propagatedBuildInputs = [ curtsies greenlet pygments requests urwid ];
 

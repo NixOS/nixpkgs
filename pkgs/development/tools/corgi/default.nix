@@ -21,9 +21,8 @@ buildGoPackage rec {
     longDescription = ''
       Corgi is a command-line tool that helps with your repetitive command usages by organizing them into reusable snippet.
     '';
-    homepage = https://github.com/DrakeW/corgi;
+    homepage = "https://github.com/DrakeW/corgi";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = with maintainers; [ kalbasit ];
   };
 }

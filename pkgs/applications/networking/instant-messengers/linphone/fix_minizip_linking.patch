@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3ee77441..18ea5c27 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -517,7 +517,7 @@ else()
+             target_link_libraries(${TARGET_NAME} "${MINIZIP_OUTPUT_DIR}/${CMAKE_INSTALL_LIBDIR}/libminizip.dylib")
+             execute_process(COMMAND install_name_tool -id "@executable_path/../Frameworks/libminizip.dylib" "${MINIZIP_OUTPUT_DIR}/${CMAKE_INSTALL_LIBDIR}/libminizip.dylib")
+         elseif(NOT WIN32)
+-            target_link_libraries(${TARGET_NAME} "${MINIZIP_OUTPUT_DIR}/${CMAKE_INSTALL_LIBDIR}/libminizip.so")
++            target_link_libraries(${TARGET_NAME} "minizip")
+         endif()
+     endif()#If (LinphoneCxx_FOUND AND Minizip_FOUND)
+ endif()#If (LinphoneCxx_FOUND)

@@ -2,7 +2,7 @@
 stdenv.mkDerivation {
   name = "ocamlscript-2.0.3";
   src = fetchurl {
-    url = http://mjambon.com/releases/ocamlscript/ocamlscript-2.0.3.tar.gz;
+    url = "http://mjambon.com/releases/ocamlscript/ocamlscript-2.0.3.tar.gz";
     sha256 = "1v1i24gijxwris8w4hi95r9swld6dm7jbry0zp72767a3g5ivlrd";
   };
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = with stdenv.lib; {
-    homepage = http://martin.jambon.free.fr/ocamlscript.html;
+    homepage = "http://martin.jambon.free.fr/ocamlscript.html";
     license = licenses.boost;
     platforms = ocaml.meta.platforms or [];
     description = "Natively-compiled OCaml scripts";

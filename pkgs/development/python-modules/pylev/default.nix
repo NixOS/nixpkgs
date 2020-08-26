@@ -16,7 +16,7 @@ buildPythonPackage {
   };
 
   meta = with lib; {
-    homepage = https://github.com/toastdriven/pylev;
+    homepage = "https://github.com/toastdriven/pylev";
     description = "A pure Python Levenshtein implementation that's not freaking GPL'd";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jakewaksbaum ];

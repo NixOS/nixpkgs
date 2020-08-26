@@ -1,8 +1,10 @@
 { stdenv, fetchFromGitLab, cmake, gfortran, perl
-, openblas, hdf5-cpp, python3, texlive
+, openblas, blas, lapack, hdf5-cpp, python3, texlive
 , armadillo, openmpi, globalarrays, openssh
 , makeWrapper, fetchpatch
 } :
+
+assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
 let
   version = "19.11";
@@ -74,7 +76,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Advanced quantum chemistry software package";
-    homepage = https://gitlab.com/Molcas/OpenMolcas;
+    homepage = "https://gitlab.com/Molcas/OpenMolcas";
     maintainers = [ maintainers.markuskowa ];
     license = licenses.lgpl21;
     platforms = platforms.linux;

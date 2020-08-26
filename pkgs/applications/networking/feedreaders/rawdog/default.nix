@@ -14,7 +14,7 @@ python2Packages.buildPythonApplication rec {
   namePrefix = "";
 
   meta = with stdenv.lib; {
-    homepage = https://offog.org/code/rawdog/;
+    homepage = "https://offog.org/code/rawdog/";
     description = "RSS Aggregator Without Delusions Of Grandeur";
     license = licenses.gpl2;
     platforms = platforms.unix;

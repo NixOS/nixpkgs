@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "cpp-hocon";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
-    sha256 = "0ar7q3rp46m01wvfa289bxnk9xma3ydc67by7i4nrpz8vamvhwc3";
+    sha256 = "0b24anpwkmvbsn5klnr58vxksw00ci9pjhwzx7a61kplyhsaiydw";
     rev = version;
     repo = "cpp-hocon";
     owner = "puppetlabs";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=catch-value";
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   nativeBuildInputs = [ cmake ];
 
@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
-    description = " A C++ port of the Typesafe Config library";
+    description = "A C++ port of the Typesafe Config library";
     license = licenses.asl20;
     maintainers = [ maintainers.womfoo ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 
 }

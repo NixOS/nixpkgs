@@ -18,7 +18,7 @@ mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.linuxsampler.org;
+    homepage = "http://www.linuxsampler.org";
     description = "Graphical frontend to LinuxSampler";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];

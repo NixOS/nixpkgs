@@ -23,7 +23,7 @@
 , docbook_xsl
 , docbook_xml_dtd_42
 , gobject-introspection
-, inkscape
+, inkscape_0
 , poppler_utils
 , desktop-file-utils
 , wrapGAppsHook
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     python3
 
     # building getting started
-    inkscape
+    inkscape_0
     poppler_utils
   ];
 
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://wiki.gnome.org/Apps/Documents";
     description = "Document manager application designed to work with GNOME 3";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

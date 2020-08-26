@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/torvalds/linux/tree/master/tools/usb/usbip;
+    homepage = "https://github.com/torvalds/linux/tree/master/tools/usb/usbip";
     description = "allows to pass USB device from server to client over the network";
     license = licenses.gpl2;
     platforms = platforms.linux;

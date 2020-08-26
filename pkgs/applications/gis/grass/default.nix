@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, flex, bison, pkgconfig, zlib, libtiff, libpng, fftw
-, cairo, readline, ffmpeg, makeWrapper, wxGTK30, netcdf, blas
+, cairo, readline, ffmpeg_3, makeWrapper, wxGTK30, netcdf, blas
 , proj, gdal, geos, sqlite, postgresql, libmysqlclient, python2Packages, libLAS, proj-datumgrid
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite cairo proj
-  readline ffmpeg makeWrapper wxGTK30 netcdf geos postgresql libmysqlclient blas
+  readline ffmpeg_3 makeWrapper wxGTK30 netcdf geos postgresql libmysqlclient blas
   libLAS proj-datumgrid ]
     ++ (with python2Packages; [ python dateutil wxPython30 numpy ]);
 
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = https://grass.osgeo.org/;
+    homepage = "https://grass.osgeo.org/";
     description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.all;

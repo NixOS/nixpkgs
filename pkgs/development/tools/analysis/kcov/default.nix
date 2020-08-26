@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       applications.
     '';
 
-    homepage = http://simonkagstrom.github.io/kcov/index.html;
+    homepage = "http://simonkagstrom.github.io/kcov/index.html";
     license = licenses.gpl2;
 
     maintainers = with maintainers; [ gal_bolle ekleog ];

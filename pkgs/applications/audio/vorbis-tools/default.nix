@@ -10,7 +10,7 @@ in
 stdenv.mkDerivation {
   name = "vorbis-tools-1.4.0";
   src = fetchurl {
-    url = http://downloads.xiph.org/releases/vorbis/vorbis-tools-1.4.0.tar.gz;
+    url = "http://downloads.xiph.org/releases/vorbis/vorbis-tools-1.4.0.tar.gz";
     sha256 = "1g12bnh5ah08v529y72kfdz5lhvy75iaz7f9jskyby23m9dkk2d3";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
       A set of command-line tools to manipulate Ogg Vorbis audio
       files, notably the `ogg123' player and the `oggenc' encoder.
     '';
-    homepage = https://xiph.org/vorbis/;
+    homepage = "https://xiph.org/vorbis/";
     license = licenses.gpl2;
     platforms = platforms.all;
   };

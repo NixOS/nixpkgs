@@ -9,7 +9,7 @@ bundlerApp {
 
   meta = with lib; {
     description = "A javascript, websockets-powered dashboard for Riemann";
-    homepage = https://github.com/riemann/riemann-dash;
+    homepage = "https://github.com/riemann/riemann-dash";
     license = licenses.mit;
     maintainers = with maintainers; [ manveru nicknovitski ];
     platforms = platforms.unix;

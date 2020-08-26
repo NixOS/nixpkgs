@@ -7,13 +7,13 @@ in
 
 python37Packages.buildPythonApplication rec {
   name = "qtile-${version}";
-  version = "0.13.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
     rev = "v${version}";
-    sha256 = "1lyclnn8hs6wl4w9v5b4hh2q0pvmsn7cyibpskhbpw0cgv7bvi90";
+    sha256 = "1klv1k9847nyx71sfrhqyl1k51k2w8phqnp2bns4dvbqii7q125l";
   };
 
   patches = [
@@ -23,16 +23,18 @@ python37Packages.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace libqtile/manager.py --subst-var-by out $out
+    substituteInPlace libqtile/core/manager.py --subst-var-by out $out
     substituteInPlace libqtile/pangocffi.py --subst-var-by glib ${glib.out}
     substituteInPlace libqtile/pangocffi.py --subst-var-by pango ${pango.out}
-    substituteInPlace libqtile/xcursors.py --subst-var-by xcb-cursor ${xcbutilcursor.out}
+    substituteInPlace libqtile/backend/x11/xcursors.py --subst-var-by xcb-cursor ${xcbutilcursor.out}
   '';
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ glib libxcb cairo pango python37Packages.xcffib ];
 
-  pythonPath = with python37Packages; [ xcffib cairocffi-xcffib setuptools ];
+  pythonPath = with python37Packages; [ xcffib cairocffi-xcffib setuptools setuptools_scm ]; 
 
   postInstall = ''
     wrapProgram $out/bin/qtile \
@@ -41,10 +43,10 @@ python37Packages.buildPythonApplication rec {
       --run 'export QTILE_SAVED_PATH=$PATH'
   '';
 
-  doCheck = false; # Requires X server.
+  doCheck = false; # Requires X server #TODO this can be worked out with the existing NixOS testing infrastructure.
 
   meta = with stdenv.lib; {
-    homepage = http://www.qtile.org/;
+    homepage = "http://www.qtile.org/";
     license = licenses.mit;
     description = "A small, flexible, scriptable tiling window manager written in Python";
     platforms = platforms.linux;

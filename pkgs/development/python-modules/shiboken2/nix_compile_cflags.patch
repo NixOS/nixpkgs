@@ -1,6 +1,6 @@
---- pyside-setup-everywhere-src-5.12.3/sources/shiboken2/ApiExtractor/clangparser/compilersupport.cpp~	2019-06-15 10:31:04.712949189 +0200
-+++ pyside-setup-everywhere-src-5.12.3/sources/shiboken2/ApiExtractor/clangparser/compilersupport.cpp	2019-06-15 11:52:52.894987343 +0200
-@@ -317,15 +317,15 @@
+--- pyside-setup-everywhere-src-5.12.6/sources/shiboken2/ApiExtractor/clangparser/compilersupport.cpp~	2020-07-08 14:37:13.022476435 -0700
++++ pyside-setup-everywhere-src-5.12.6/sources/shiboken2/ApiExtractor/clangparser/compilersupport.cpp	2020-07-08 14:37:18.271484269 -0700
+@@ -330,17 +330,15 @@
      }
  #endif // NEED_CLANG_BUILTIN_INCLUDES
  
@@ -9,10 +9,12 @@
 -    // A fix for this has been added to Clang 5.0, so, the code can be removed
 -    // once Clang 5.0 is the minimum version.
 -    if (needsGppInternalHeaders()) {
--        const HeaderPaths gppPaths = gppInternalIncludePaths(QStringLiteral("g++"));
+-        const HeaderPaths gppPaths = gppInternalIncludePaths(compilerFromCMake(QStringLiteral("g++")));
 -        for (const HeaderPath &h : gppPaths) {
--            if (h.path.contains("c++"))
+-            if (h.path.contains("c++")
+-                || h.path.contains("sysroot")) { // centOS
 -                headerPaths.append(h);
+-            }
 +    const HeaderPaths gppPaths = gppInternalIncludePaths(QStringLiteral("g++"));
 +    for (const HeaderPath &h : gppPaths) {
 +        // PySide2 requires that Qt headers are not -isystem
@@ -25,3 +27,4 @@
          }
      }
  #else
+

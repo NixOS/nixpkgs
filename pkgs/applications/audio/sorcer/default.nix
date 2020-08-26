@@ -14,13 +14,19 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ boost cairomm cmake libsndfile lv2 ntk python ];
 
+  postPatch = ''
+     # Fix build with lv2 1.18: https://github.com/brummer10/guitarix/commit/c0334c72
+     find . -type f -exec fgrep -q LV2UI_Descriptor {} \; \
+       -exec sed -i {} -e 's/const struct _\?LV2UI_Descriptor/const LV2UI_Descriptor/' \;
+   '';
+
   installPhase = ''
     make install
     cp -a ../presets/* "$out/lib/lv2"
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://openavproductions.com/sorcer/;
+    homepage = "http://openavproductions.com/sorcer/";
     description = "A wavetable LV2 plugin synth, targeted at the electronic / dubstep genre";
     license = licenses.gpl3;
     maintainers = [ maintainers.magnetophon ];

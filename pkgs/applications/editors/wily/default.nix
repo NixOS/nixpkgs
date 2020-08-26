@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An emulation of ACME";
-    homepage = http://wily.sourceforge.net;
+    homepage = "http://wily.sourceforge.net";
     license = licenses.artistic1;
     maintainers = [ maintainers.vrthra ];
     platforms = platforms.unix;

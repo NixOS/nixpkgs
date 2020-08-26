@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Multiclass confusion matrix library";
-    homepage = https://pycm.ir;
+    homepage = "https://pycm.ir";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

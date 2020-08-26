@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "sqlparse";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wxqrm9fpn4phz6rqm7kfd1wwkwzx376gs27nnalwx12q0lwlgbw";
+    sha256 = "e162203737712307dfe78860cc56c8da8a852ab2ee33750e33aeadf38d12c548";
   };
 
   checkInputs = [ pytest ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     longDescription = ''
       Provides support for parsing, splitting and formatting SQL statements.
     '';
-    homepage = https://github.com/andialbrecht/sqlparse;
+    homepage = "https://github.com/andialbrecht/sqlparse";
     license = licenses.bsd3;
   };
 

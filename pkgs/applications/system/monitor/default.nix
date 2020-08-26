@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , meson
 , ninja
 , vala
@@ -18,13 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "monitor";
-  version = "0.6.2";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "stsdc";
     repo = "monitor";
     rev = version;
-    sha256 = "0cqzxlzdbij26qgbbngqx6njcpcymkgvm29b7ipldgkssxp1mkkg";
+    sha256 = "111g2f3y5lmz91m755jz0x8yx5cx9ym484gch8wcv80dmr7ilb1y";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
@@ -54,15 +56,20 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
 
   meta = with stdenv.lib; {
     description = "Manage processes and monitor system resources";
+    longDescription = ''
+      Manage processes and monitor system resources.
+      To use the wingpanel indicator in this application, see the Pantheon
+      section in the NixOS manual.
+    '';
     homepage = "https://github.com/stsdc/monitor";
-    maintainers = with maintainers; [ kjuvi ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;
     platforms = platforms.linux;
     license = licenses.gpl3;
   };

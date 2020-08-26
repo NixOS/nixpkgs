@@ -1,4 +1,4 @@
-{ coreutils, fetchFromGitHub, libcaca, makeWrapper, python, openssl, qrencode, stdenv, yubikey-manager }:
+{ coreutils, fetchFromGitHub, file, libcaca, makeWrapper, python, openssl, qrencode, stdenv, yubikey-manager }:
 
 stdenv.mkDerivation rec {
   pname = "gen-oath-safe";
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     let
       path = stdenv.lib.makeBinPath [
         coreutils
+        file
         libcaca.bin
         openssl.bin
         python
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
         --prefix PATH : ${path}
     '';
   meta = with stdenv.lib; {
-    homepage = https://github.com/mcepl/gen-oath-safe;
+    homepage = "https://github.com/mcepl/gen-oath-safe";
     description = "Script for generating HOTP/TOTP keys (and QR code)";
     platforms =  platforms.unix;
     license = licenses.mit;

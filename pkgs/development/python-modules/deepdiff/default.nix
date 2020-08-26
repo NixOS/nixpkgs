@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "4.0.9";
+  version = "4.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5e2343398e90538edaa59c0c99207e996a3a834fdc878c666376f632a760c35a";
+    sha256 = "91360be1d9d93b1d9c13ae9c5048fa83d9cff17a88eb30afaa0d7ff2d0fee17d";
   };
 
   # # Extra packages (may not be necessary)

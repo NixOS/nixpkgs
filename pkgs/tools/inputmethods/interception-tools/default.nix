@@ -2,14 +2,14 @@
   libevdev, udev }:
 
 let
-  version = "0.1.1";
+  version = "0.2.1";
   baseName = "interception-tools";
 in stdenv.mkDerivation {
   name = "${baseName}-${version}";
 
   src = fetchurl {
     url = "https://gitlab.com/interception/linux/tools/repository/v${version}/archive.tar.gz";
-    sha256 = "14g4pphvylqdb922va322z1pbp12ap753hcf7zf9sii1ikvif83j";
+    sha256 = "0lqz89wsf9r5xdgflincysxg4l8fpgg5z8zczhhrg9s5787srfzi";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

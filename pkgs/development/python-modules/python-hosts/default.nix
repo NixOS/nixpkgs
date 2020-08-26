@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "python-hosts";
-  version = "0.4.7";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0jdpihj8ajn6pqqa9viw0043l5wvbzgk81rnyk2134iyzhg06z80";
+    sha256 = "850998704ba9025ce4c8ffd45dc4fbea2b5e30247bf3b574872ac5df90426b4d";
   };
 
   # win_inet_pton is required for windows support
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A library for managing a hosts file. It enables adding and removing entries, or importing them from a file or URL";
-    homepage = https://github.com/jonhadfield/python-hosts;
+    homepage = "https://github.com/jonhadfield/python-hosts";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

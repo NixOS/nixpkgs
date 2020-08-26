@@ -1,18 +1,35 @@
-{ stdenv, fetchFromGitHub, writeText, makeWrapper
+{ stdenv
+, fetchFromGitHub
+, makeWrapper
+, writeText
 # Dependencies documented @ https://gnuradio.org/doc/doxygen/build_guide.html
 # => core dependencies
-, cmake, pkgconfig, git, boost, cppunit, fftw
+, cmake
+, pkgconfig
+, git
+, boost
+, cppunit
+, fftw
 # => python wrappers
 # May be able to upgrade to swig3
-, python, swig2, numpy, scipy, matplotlib
+, python
+, swig2
+, numpy
+, scipy
+, matplotlib
 # => grc - the gnu radio companion
-, Mako, cheetah, pygtk # Note: GR is migrating to Mako. Cheetah should be removed for GR3.8
+, Mako
+, cheetah
+, pygtk # Note: GR is migrating to Mako. Cheetah should be removed for GR3.8
 # => gr-wavelet: collection of wavelet blocks
 , gsl
 # => gr-qtgui: the Qt-based GUI
-, qt4, qwt, pyqt4
+, qt4
+, qwt
+, pyqt4
 # => gr-wxgui: the Wx-based GUI
-, wxPython, lxml
+, wxPython
+, lxml
 # => gr-audio: audio subsystems (system/OS dependent)
 , alsaLib   # linux   'audio-alsa'
 , CoreAudio # darwin  'audio-osx'
@@ -21,33 +38,57 @@
 # => gr-video-sdl: PAL and NTSC display
 , SDL
 # Other
-, libusb1, orc, pyopengl
+, libusb1
+, orc
+, pyopengl
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnuradio";
-  version = "3.7.13.4";
+  version = "3.7.14.0";
 
   src = fetchFromGitHub {
     owner = "gnuradio";
     repo = "gnuradio";
     rev = "v${version}";
-    sha256 = "0ybfn2zfr9lc1bi3c794l4bzpj8y6vas9c4rbcj4nqlx0zf3p8fn";
+    sha256 = "1nh4f9dmygprlbqybd3j1byg9fsr6065n140mvc4b0v8qqygmhrc";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    cmake pkgconfig git makeWrapper cppunit orc
+    cmake
+    pkgconfig
+    git
+    makeWrapper
+    cppunit
+    orc
   ];
 
   buildInputs = [
-    boost fftw python swig2 lxml qt4
-    qwt SDL libusb1 uhd gsl
+    boost
+    fftw
+    python
+    swig2
+    lxml
+    qt4
+    qwt
+    SDL
+    libusb1
+    uhd
+    gsl
   ] ++ stdenv.lib.optionals stdenv.isLinux  [ alsaLib   ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreAudio ];
 
   propagatedBuildInputs = [
-    Mako cheetah numpy scipy matplotlib pyqt4 pygtk wxPython pyopengl
+    Mako
+    cheetah
+    numpy
+    scipy
+    matplotlib
+    pyqt4
+    pygtk
+    wxPython
+    pyopengl
   ];
 
   NIX_LDFLAGS = "-lpthread";
@@ -116,7 +157,7 @@ stdenv.mkDerivation rec {
       environments to support both wireless communications research and
       real-world radio systems.
     '';
-    homepage = https://www.gnuradio.org;
+    homepage = "https://www.gnuradio.org";
     license = licenses.gpl3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor fpletz ];

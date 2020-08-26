@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin rycee ];
     platforms = with platforms; linux ++ freebsd;
     license = licenses.free; #TODO BSD on Gentoo, looks like MIT
-    downloadPage = http://www.jwz.org/xdaliclock/;
+    downloadPage = "http://www.jwz.org/xdaliclock/";
   };
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nuspell";
-  version = "3.0.0";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "nuspell";
     repo = "nuspell";
     rev = "v${version}";
-    sha256 = "1cyvvf5f92a777qgh00ja43z43j5nhc9dw5l3wvw9j6j9bqc4i8p";
+    sha256 = "0wbb6dwmzlsyy224y0liis0azgzwbjdvcyzc31pw1aw6vbp36na6";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ronn ];
@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     description = "Free and open source C++ spell checking library";
     homepage = "https://nuspell.github.io/";
     maintainers = with maintainers; [ fpletz ];
+    license = licenses.gpl3;
   };
 }

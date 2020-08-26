@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Abstraction layer for PyQt5/PyQt4/PySide2/PySide";
-    homepage = https://github.com/spyder-ide/qtpy;
+    homepage = "https://github.com/spyder-ide/qtpy";
     license = licenses.mit;
   };
 }

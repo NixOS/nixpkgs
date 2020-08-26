@@ -19,7 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/rholder/retrying;
+    homepage = "https://github.com/rholder/retrying";
     description = "General-purpose retrying library";
     license = licenses.asl20;
   };

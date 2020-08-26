@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Utilities for consistent command line tools";
-    homepage = https://github.com/rca/cmdline;
+    homepage = "https://github.com/rca/cmdline";
     license = licenses.asl20;
   };
 }

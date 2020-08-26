@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rtmpdump, php, pythonPackages, ffmpeg }:
+{ stdenv, fetchFromGitHub, rtmpdump, php, pythonPackages, ffmpeg_3 }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "yle-dl";
@@ -12,7 +12,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with pythonPackages; [
-    lxml pyamf pycrypto requests future ffmpeg setuptools
+    lxml pyamf pycrypto requests future ffmpeg_3 setuptools
   ];
   pythonPath = [ rtmpdump php ];
 
@@ -21,7 +21,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Downloads videos from Yle (Finnish Broadcasting Company) servers";
-    homepage = https://aajanki.github.io/yle-dl/;
+    homepage = "https://aajanki.github.io/yle-dl/";
     license = licenses.gpl3;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Collection of SWF manipulation and creation utilities";
-    homepage = http://www.swftools.org/about.html;
+    homepage = "http://www.swftools.org/about.html";
     license = licenses.gpl2;
     maintainers = [ maintainers.koral ];
     platforms = stdenv.lib.platforms.unix;

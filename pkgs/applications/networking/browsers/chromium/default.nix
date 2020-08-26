@@ -1,39 +1,60 @@
-{ newScope, config, stdenv, llvmPackages_9, llvmPackages_10
-, makeWrapper, ed
-, glib, gtk3, gnome3, gsettings-desktop-schemas
+{ newScope, config, stdenv, llvmPackages_10, llvmPackages_11
+, makeWrapper, ed, gnugrep, coreutils
+, glib, gtk3, gnome3, gsettings-desktop-schemas, gn, fetchgit
 , libva ? null
-, gcc, nspr, nss, patchelfUnstable, runCommand
+, pipewire_0_2
+, gcc, nspr, nss, runCommand
 , lib
 
 # package customization
+# Note: enable* flags should not require full rebuilds (i.e. only affect the wrapper)
 , channel ? "stable"
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false
 , proprietaryCodecs ? true
 , enablePepperFlash ? false
 , enableWideVine ? false
-, useVaapi ? false # test video on radeon, before enabling this
+, useVaapi ? false # Deprecated, use enableVaapi instead!
+, enableVaapi ? false # Disabled by default due to unofficial support and issues on radeon
+, useOzone ? false
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , commandLineArgs ? ""
 }:
 
 let
-  llvmPackages = if channel == "dev"
-    then llvmPackages_10
-    else llvmPackages_9;
+  llvmPackages = llvmPackages_10;
   stdenv = llvmPackages.stdenv;
 
   callPackage = newScope chromium;
 
-  chromium = {
+  chromium = rec {
     inherit stdenv llvmPackages;
 
     upstream-info = (callPackage ./update.nix {}).getChannel channel;
 
-    mkChromiumDerivation = callPackage ./common.nix {
-      inherit gnome gnomeSupport gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport useVaapi;
-    };
+    mkChromiumDerivation = callPackage ./common.nix ({
+      inherit gnome gnomeSupport gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport useOzone;
+      # TODO: Remove after we can update gn for the stable channel (backward incompatible changes):
+      gnChromium = gn.overrideAttrs (oldAttrs: {
+        version = "2020-05-19";
+        src = fetchgit {
+          url = "https://gn.googlesource.com/gn";
+          rev = "d0a6f072070988e7b038496c4e7d6c562b649732";
+          sha256 = "0197msabskgfbxvhzq73gc3wlr3n9cr4bzrhy5z5irbvy05lxk17";
+        };
+      });
+    } // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "86") {
+      llvmPackages = llvmPackages_11;
+      gnChromium = gn.overrideAttrs (oldAttrs: {
+        version = "2020-07-20";
+        src = fetchgit {
+          url = "https://gn.googlesource.com/gn";
+          rev = "3028c6a426a4aaf6da91c4ebafe716ae370225fe";
+          sha256 = "0h3wf4152zdvrbb0jbj49q6814lfl3rcy5mj8b2pl9s0ahvkbc6q";
+        };
+      });
+    });
 
     browser = callPackage ./browser.nix { inherit channel enableWideVine; };
 
@@ -48,8 +69,6 @@ let
 
     # The .deb file for Google Chrome
     src = upstream-info.binary;
-
-    nativeBuildInputs = [ patchelfUnstable ];
 
     phases = [ "unpackPhase" "patchPhase" "installPhase" "checkPhase" ];
 
@@ -115,6 +134,14 @@ let
         cp -a ${widevineCdm}/WidevineCdm $out/libexec/chromium/
       ''
     else browser;
+
+  optionalVaapiFlags = if useVaapi # TODO: Remove after 20.09:
+    then throw ''
+      Chromium's useVaapi was replaced by enableVaapi and you don't need to pass
+      "--ignore-gpu-blacklist" anymore (also no rebuilds are required anymore).
+    '' else lib.optionalString
+      (!enableVaapi)
+      "--add-flags --disable-accelerated-video-decode --add-flags --disable-accelerated-video-encode";
 in stdenv.mkDerivation {
   name = "chromium${suffix}-${version}";
   inherit version;
@@ -134,15 +161,14 @@ in stdenv.mkDerivation {
   buildCommand = let
     browserBinary = "${chromiumWV}/libexec/chromium/chromium";
     getWrapperFlags = plugin: "$(< \"${plugin}/nix-support/wrapper-flags\")";
-    libPath = stdenv.lib.makeLibraryPath ([]
-      ++ stdenv.lib.optional useVaapi libva
-    );
+    libPath = stdenv.lib.makeLibraryPath [ libva pipewire_0_2 ];
 
   in with stdenv.lib; ''
     mkdir -p "$out/bin"
 
     eval makeWrapper "${browserBinary}" "$out/bin/chromium" \
       --add-flags ${escapeShellArg (escapeShellArg commandLineArgs)} \
+      ${optionalVaapiFlags} \
       ${concatMapStringsSep " " getWrapperFlags chromium.plugins.enabled}
 
     ed -v -s "$out/bin/chromium" << EOF
@@ -162,7 +188,7 @@ in stdenv.mkDerivation {
   '' + ''
 
     # libredirect causes chromium to deadlock on startup
-    export LD_PRELOAD="\$(echo -n "\$LD_PRELOAD" | tr ':' '\n' | grep -v /lib/libredirect\\\\.so$ | tr '\n' ':')"
+    export LD_PRELOAD="\$(echo -n "\$LD_PRELOAD" | ${coreutils}/bin/tr ':' '\n' | ${gnugrep}/bin/grep -v /lib/libredirect\\\\.so$ | ${coreutils}/bin/tr '\n' ':')"
 
     export XDG_DATA_DIRS=$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH\''${XDG_DATA_DIRS:+:}\$XDG_DATA_DIRS
 

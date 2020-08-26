@@ -5,6 +5,7 @@
 , thunar
 , cmake
 , ninja
+, xfce
 }:
 
 stdenv.mkDerivation rec {
@@ -30,6 +31,12 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = xfce.updateScript {
+    inherit pname version;
+    attrPath = "xfce.thunar-dropbox-plugin";
+    versionLister = xfce.gitLister src.meta.homepage;
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/Jeinzi/thunar-dropbox";

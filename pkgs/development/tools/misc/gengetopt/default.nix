@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
          fills a struct
       '';
 
-    homepage = https://www.gnu.org/software/gengetopt/;
+    homepage = "https://www.gnu.org/software/gengetopt/";
 
     license = stdenv.lib.licenses.gpl3Plus;
 

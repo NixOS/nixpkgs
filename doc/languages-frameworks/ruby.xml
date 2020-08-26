@@ -32,7 +32,7 @@ bundlerEnv rec {
 
   meta = with lib; {
     description = "A monitoring framework that aims to be simple, malleable, and scalable";
-    homepage    = http://sensuapp.org/;
+    homepage    = "http://sensuapp.org/";
     license     = with licenses; mit;
     maintainers = with maintainers; [ theuni ];
     platforms   = platforms.unix;
@@ -69,7 +69,7 @@ bundlerApp {
 
   meta = with lib; {
     description = "Tool and libraries for maintaining Ruby gems.";
-    homepage    = https://github.com/nyarly/corundum;
+    homepage    = "https://github.com/nyarly/corundum";
     license     = licenses.mit;
     maintainers = [ maintainers.nyarly ];
     platforms   = platforms.unix;

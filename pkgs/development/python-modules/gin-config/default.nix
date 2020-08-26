@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "gin-config";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6305325d5afe470fa5a7130883035e51950478b317750205a1532e5413d4ba4c";
+    sha256 = "6a83b7639ae76c276c0380d71d583f151b327a7c37978add314180ec1280a6cc";
 
   };
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   doCheck= false;
 
   meta = with lib; {
-    homepage = https://github.com/google/gin-config;
+    homepage = "https://github.com/google/gin-config";
     description = "Gin provides a lightweight configuration framework for Python, based on dependency injection.";
     license = licenses.asl20;
     maintainers = with maintainers; [ jethro ];

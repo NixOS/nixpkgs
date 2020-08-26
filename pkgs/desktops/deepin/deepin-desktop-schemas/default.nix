@@ -1,5 +1,14 @@
-{ stdenv, fetchFromGitHub, python3, dconf, glib, deepin-gtk-theme,
-  deepin-icon-theme, deepin-sound-theme, deepin-wallpapers, deepin }:
+{ stdenv
+, fetchFromGitHub
+, python3
+, dconf
+, glib
+, deepin-gtk-theme
+, deepin-icon-theme
+, deepin-sound-theme
+, deepin-wallpapers
+, deepin
+}:
 
 stdenv.mkDerivation rec {
   pname = "deepin-desktop-schemas";
@@ -46,7 +55,9 @@ stdenv.mkDerivation rec {
     #   /usr/share/desktop-directories
   '';
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
 
   doCheck = true;
   checkTarget = "test";
@@ -56,11 +67,11 @@ stdenv.mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { inherit pname version src; };
 
   meta = with stdenv.lib; {
     description = "GSettings deepin desktop-wide schemas";
-    homepage = https://github.com/linuxdeepin/deepin-desktop-schemas;
+    homepage = "https://github.com/linuxdeepin/deepin-desktop-schemas";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

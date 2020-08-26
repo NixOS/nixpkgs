@@ -27,11 +27,11 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "libinput";
-  version = "1.15.2";
+  version = "1.16.1";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/libinput/${pname}-${version}.tar.xz";
-    sha256 = "0ivpb4sghl80cs7jg3xrs53kckif6wy81cny3a8mry94nszky74p";
+    sha256 = "e6fRru3RUWi7IdF+nmKKocJ5V5Y6Qjo/6jk4pQF1hTk=";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -45,12 +45,25 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkgconfig meson ninja ]
-    ++ optionals documentationSupport [ doxygen graphviz sphinx-build ]
-    ++ optionals testsSupport [ valgrind ];
+    ++ optionals documentationSupport [ doxygen graphviz sphinx-build ];
 
-  buildInputs = [ libevdev mtdev libwacom (python3.withPackages (pkgs: with pkgs; [ evdev ])) ]
-    ++ optionals eventGUISupport [ cairo glib gtk3 ]
-    ++ optionals testsSupport [ check ];
+  buildInputs = [
+    libevdev
+    mtdev
+    libwacom
+    (python3.withPackages (pp: with pp; [
+      pp.libevdev # already in scope
+      pyudev
+      pyyaml
+      setuptools
+    ]))
+  ]
+    ++ optionals eventGUISupport [ cairo glib gtk3 ];
+
+  checkInputs = [
+    check
+    valgrind
+  ];
 
   propagatedBuildInputs = [ udev ];
 
@@ -60,13 +73,14 @@ stdenv.mkDerivation rec {
     patchShebangs tools/helper-copy-and-exec-from-tmp.sh
     patchShebangs test/symbols-leak-test
     patchShebangs test/check-leftover-udev-rules.sh
+    patchShebangs test/helper-copy-and-exec-from-tmp.sh
   '';
 
   doCheck = testsSupport && stdenv.hostPlatform == stdenv.buildPlatform;
 
   meta = {
     description = "Handles input devices in Wayland compositors and provides a generic X.Org input driver";
-    homepage    = http://www.freedesktop.org/wiki/Software/libinput;
+    homepage    = "http://www.freedesktop.org/wiki/Software/libinput";
     license     = licenses.mit;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ codyopel ];

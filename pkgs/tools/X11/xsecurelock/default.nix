@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
 , libX11, libXcomposite, libXft, libXmu, libXrandr, libXext, libXScrnSaver
-, pam, apacheHttpd, imagemagick, pamtester, xscreensaver, xset }:
+, pam, apacheHttpd, pamtester, xscreensaver }:
 
 stdenv.mkDerivation rec {
   pname = "xsecurelock";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     libX11 libXcomposite libXft libXmu libXrandr libXext libXScrnSaver
-    pam apacheHttpd imagemagick pamtester
+    pam apacheHttpd pamtester
   ];
 
   configureFlags = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "X11 screen lock utility with security in mind";
-    homepage = https://github.com/google/xsecurelock;
+    homepage = "https://github.com/google/xsecurelock";
     license = licenses.asl20;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.unix;

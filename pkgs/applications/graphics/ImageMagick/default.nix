@@ -13,8 +13,8 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "6.9.10-71";
-    sha256 = "0c69xmr8k8c4dplgzxydm30s2dr8biq71x07hc15bw196nsx3srr";
+    version = "6.9.11-14";
+    sha256 = "0x51vf48g75cfp0mbwf3ckmlwa6v00592xx3gvrqzjzx7vlayjyg";
     patches = [];
   }
     # Freeze version on mingw so we don't need to port the patch too often.
@@ -85,9 +85,9 @@ stdenv.mkDerivation {
     moveToOutput "lib/ImageMagick-*/config-Q16" "$dev" # includes configure params
     for file in "$dev"/bin/*-config; do
       substituteInPlace "$file" --replace "${pkgconfig}/bin/pkg-config -config" \
-        ${pkgconfig}/bin/pkg-config
+        ${pkgconfig}/bin/${pkgconfig.targetPrefix}pkg-config
       substituteInPlace "$file" --replace ${pkgconfig}/bin/pkg-config \
-        "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '${pkgconfig}/bin/pkg-config'"
+        "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '${pkgconfig}/bin/${pkgconfig.targetPrefix}pkg-config'"
     done
   '' + lib.optionalString (ghostscript != null) ''
     for la in $out/lib/*.la; do
@@ -96,10 +96,9 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.imagemagick.org/;
+    homepage = "http://www.imagemagick.org/";
     description = "A software suite to create, edit, compose, or convert bitmap images";
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ the-kenny ];
     license = licenses.asl20;
   };
 }

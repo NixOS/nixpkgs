@@ -5,11 +5,11 @@
 }:
 buildPythonPackage rec {
   pname = "plac";
-  version = "1.1.3";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "398cb947c60c4c25e275e1f1dadf027e7096858fb260b8ece3b33bcff90d985f";
+    sha256 = "ca03587234e5bdd2a3fa96f19a04a01ebb5b0cd66d48ecb5a54d42bc9b287320";
   };
 
   checkPhase = ''
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Parsing the Command Line the Easy Way";
-    homepage = https://github.com/micheles/plac;
+    homepage = "https://github.com/micheles/plac";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ sdll ];
     };

@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "osmo";
-  version = "0.4.2";
+  version = "0.4.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/osmo-pim/${pname}-${version}.tar.gz";
-    sha256 = "1gjd4w9jckfpqr9n0bw0w25h3qhfyzw1xvilh3hqdadfinwyal2v";
+    sha256 = "19h3dnjgqbawnvgnycyp4n5b6mjsp5zghn3b69b6f3xa3fyi32qy";
   };
 
   nativeBuildInputs = [ pkgconfig gettext wrapGAppsHook ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A handy personal organizer";
-    homepage = http://clayo.org/osmo/;
+    homepage = "http://clayo.org/osmo/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];

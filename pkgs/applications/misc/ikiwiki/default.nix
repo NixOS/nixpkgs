@@ -2,7 +2,7 @@
 , gitSupport ? false, git ? null
 , docutilsSupport ? false, python ? null, docutils ? null
 , monotoneSupport ? false, monotone ? null
-, bazaarSupport ? false, bazaar ? null
+, bazaarSupport ? false, breezy ? null
 , cvsSupport ? false, cvs ? null, cvsps ? null
 , subversionSupport ? false, subversion ? null
 , mercurialSupport ? false, mercurial ? null
@@ -12,7 +12,7 @@
 assert docutilsSupport -> (python != null && docutils != null);
 assert gitSupport -> (git != null);
 assert monotoneSupport -> (monotone != null);
-assert bazaarSupport -> (bazaar != null);
+assert bazaarSupport -> (breezy != null);
 assert cvsSupport -> (cvs != null && cvsps != null && perlPackages.Filechdir != null);
 assert subversionSupport -> (subversion != null);
 assert mercurialSupport -> (mercurial != null);
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     ++ lib.optionals docutilsSupport [python docutils]
     ++ lib.optionals gitSupport [git]
     ++ lib.optionals monotoneSupport [monotone]
-    ++ lib.optionals bazaarSupport [bazaar]
+    ++ lib.optionals bazaarSupport [breezy]
     ++ lib.optionals cvsSupport [cvs cvsps perlPackages.Filechdir]
     ++ lib.optionals subversionSupport [subversion]
     ++ lib.optionals mercurialSupport [mercurial];
@@ -64,7 +64,7 @@ stdenv.mkDerivation {
       wrapProgram $a --suffix PERL5LIB : $PERL5LIB --prefix PATH : ${perlPackages.perl}/bin:$out/bin \
       ${lib.optionalString gitSupport ''--prefix PATH : ${git}/bin \''}
       ${lib.optionalString monotoneSupport ''--prefix PATH : ${monotone}/bin \''}
-      ${lib.optionalString bazaarSupport ''--prefix PATH : ${bazaar}/bin \''}
+      ${lib.optionalString bazaarSupport ''--prefix PATH : ${breezy}/bin \''}
       ${lib.optionalString cvsSupport ''--prefix PATH : ${cvs}/bin \''}
       ${lib.optionalString cvsSupport ''--prefix PATH : ${cvsps}/bin \''}
       ${lib.optionalString subversionSupport ''--prefix PATH : ${subversion.out}/bin \''}
@@ -83,7 +83,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Wiki compiler, storing pages and history in a RCS";
-    homepage = http://ikiwiki.info/;
+    homepage = "http://ikiwiki.info/";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.peti ];

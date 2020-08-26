@@ -1,177 +1,41 @@
-{ GConf
-, alsaLib
-, at-spi2-atk
-, at-spi2-core
-, atk
-, buildFHSUserEnv
-, cairo
+{ stdenv, lib, fetchurl, makeWrapper, wrapGAppsHook, electron_7
 , common-updater-scripts
-, coreutils
-, cups
-, dbus
-, expat
-, fetchurl
-, fontconfig
-, gdk-pixbuf
-, glib
-, gtk2
-, gtk3
-, lib
-, libX11
-, libXScrnSaver
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXfixes
-, libXi
-, libXrandr
-, libXrender
-, libXtst
-, libappindicator
-, libdrm
-, libnotify
-, libpciaccess
-, libpng12
-, libuuid
-, libxcb
-, nspr
-, nss
-, pango
-, pciutils
-, pulseaudio
-, runtimeShell
-, stdenv
-, udev
-, wrapGAppsHook
-, writeScript
-, file
+, writeShellScript
 }:
 
 let
-  libs = [
-    GConf
-    alsaLib
-    at-spi2-atk
-    at-spi2-core
-    atk
-    cairo
-    cups
-    dbus
-    expat
-    fontconfig
-    gdk-pixbuf
-    glib
-    gtk2
-    gtk3
-    libX11
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
-    libappindicator
-    libdrm
-    libnotify
-    libpciaccess
-    libpng12
-    libuuid
-    libxcb
-    nspr
-    nss
-    pango
-    pciutils
-    pulseaudio
-    stdenv.cc.cc.lib
-    udev
-  ];
-
-  libPath = lib.makeLibraryPath libs;
-
-  stretchly =
-    stdenv.mkDerivation rec {
-      pname = "stretchly";
-      version = "0.21.0";
-
-      src = fetchurl {
-        url = "https://github.com/hovancik/stretchly/releases/download/v${version}/stretchly-${version}.tar.xz";
-        sha256 = "1gyyr22xq8s4miiacs8wqhp7lxnwvkvlwhngnq8671l62s6iyjzl";
-      };
-
-      nativeBuildInputs = [
-        wrapGAppsHook
-        coreutils
-      ];
-
-      buildInputs = libs;
-
-      dontPatchELF = true;
-      dontBuild = true;
-      dontConfigure = true;
-
-      installPhase = ''
-        mkdir -p $out/bin $out/lib/stretchly
-        cp -r ./* $out/lib/stretchly/
-        ln -s $out/lib/stretchly/stretchly $out/bin/
-      '';
-
-      preFixup = ''
-        patchelf --set-rpath "${libPath}" $out/lib/stretchly/libffmpeg.so
-        patchelf --set-rpath "${libPath}" $out/lib/stretchly/libEGL.so
-        patchelf --set-rpath "${libPath}" $out/lib/stretchly/libGLESv2.so
-        patchelf --set-rpath "${libPath}" $out/lib/stretchly/swiftshader/libEGL.so
-        patchelf --set-rpath "${libPath}" $out/lib/stretchly/swiftshader/libGLESv2.so
-
-        patchelf \
-          --set-rpath "$out/lib/stretchly:${libPath}" \
-          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          $out/lib/stretchly/stretchly
-
-        patchelf \
-          --set-rpath "$out/lib/stretchly:${libPath}" \
-          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          $out/lib/stretchly/chrome-sandbox
-      '';
-
-      meta = with stdenv.lib; {
-        description = "A break time reminder app";
-        longDescription = ''
-          stretchly is a cross-platform electron app that reminds you to take
-          breaks when working on your computer. By default, it runs in your tray
-          and displays a reminder window containing an idea for a microbreak for 20
-          seconds every 10 minutes. Every 30 minutes, it displays a window
-          containing an idea for a longer 5 minute break.
-        '';
-        homepage = https://hovancik.net/stretchly;
-        downloadPage = https://hovancik.net/stretchly/downloads/;
-        license = licenses.bsd2;
-        maintainers = with maintainers; [ cdepillabout ];
-        platforms = platforms.linux;
-      };
-    };
-
+  electron = electron_7;
 in
+stdenv.mkDerivation rec {
+  pname = "stretchly";
+  version = "0.21.1";
 
-buildFHSUserEnv {
-  inherit (stretchly) meta;
+  src = fetchurl {
+    url = "https://github.com/hovancik/stretchly/releases/download/v${version}/stretchly-${version}.tar.xz";
+    sha256 = "0776pywyqylwd33m85l4wdr89x0q9xkrjgliag10fp1bswz844lf";
+  };
 
-  name = "stretchly";
-
-  targetPkgs = pkgs: [
-     stretchly
+  nativeBuildInputs = [
+    wrapGAppsHook
   ];
 
-  runScript = "stretchly";
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin $out/share/${pname}/
+    mv resources/app.asar $out/share/${pname}/
+
+    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
+      --add-flags $out/share/${pname}/app.asar \
+      "''${gappsWrapperArgs[@]}" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
+
+    runHook postInstall
+  '';
+
 
   passthru = {
-    updateScript = writeScript "update-stretchly" ''
-      #!${runtimeShell}
-
+    updateScript = writeShellScript "update-stretchly" ''
       set -eu -o pipefail
 
       # get the latest release version
@@ -179,9 +43,23 @@ buildFHSUserEnv {
 
       echo "updating to $latest_version..."
 
-      ${common-updater-scripts}/bin/update-source-version stretchly.passthru.stretchlyWrapped "$latest_version"
+      ${common-updater-scripts}/bin/update-source-version stretchly "$latest_version"
     '';
+  };
 
-    stretchlyWrapped = stretchly;
+  meta = with stdenv.lib; {
+    description = "A break time reminder app";
+    longDescription = ''
+      stretchly is a cross-platform electron app that reminds you to take
+      breaks when working on your computer. By default, it runs in your tray
+      and displays a reminder window containing an idea for a microbreak for 20
+      seconds every 10 minutes. Every 30 minutes, it displays a window
+      containing an idea for a longer 5 minute break.
+    '';
+    homepage = "https://hovancik.net/stretchly";
+    downloadPage = "https://hovancik.net/stretchly/downloads/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ cdepillabout ];
+    platforms = platforms.linux;
   };
 }

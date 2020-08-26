@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "4.0";
+  version = "4.0.1.post1";
 
   disabled = !isPy3k; # according to setup.py
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "404200e0baa84de09ac563ad9ccab3817e9b9669d0025cee74a8752f4bc2771b";
+    sha256 = "1da4xj793ldck29aajyb514wpz330cml26f3gdp45jj531n4lc2w";
   };
 
   nativeBuildInputs = [ astropy-helpers ];
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Astronomy/Astrophysics library for Python";
-    homepage = https://www.astropy.org;
+    homepage = "https://www.astropy.org";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ kentjames ];

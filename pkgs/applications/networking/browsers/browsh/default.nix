@@ -26,7 +26,7 @@ in buildGoPackage rec {
     sha256 = "0gvf5k1gm81xxg7ha309kgfkgl5357dli0fbc4z01rmfgbl0rfa0";
   };
 
-  buildInputs = [ go-bindata ];
+  nativeBuildInputs = [ go-bindata ];
 
   # embed the web extension in a go file and place it where it's supposed to
   # be. See
@@ -53,7 +53,7 @@ in buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "A fully-modern text-based browser, rendering to TTY and browsers";
-    homepage = https://www.brow.sh/;
+    homepage = "https://www.brow.sh/";
     maintainers = [ maintainers.kalbasit ];
     license = stdenv.lib.licenses.lgpl21;
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;

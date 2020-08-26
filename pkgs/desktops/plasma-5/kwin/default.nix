@@ -11,11 +11,10 @@
   kcoreaddons, kcrash, kdeclarative, kdecoration, kglobalaccel, ki18n,
   kiconthemes, kidletime, kinit, kio, knewstuff, knotifications, kpackage,
   kscreenlocker, kservice, kwayland, kwidgetsaddons, kwindowsystem, kxmlgui,
-  plasma-framework, qtsensors, libcap, libdrm
+  plasma-framework, qtsensors, libcap, libdrm, mesa
 }:
 
 # TODO (ttuegel): investigate qmlplugindump failure
-# TODO (ttuegel): investigate gbm dependency
 
 mkDerivation {
   name = "kwin";
@@ -30,7 +29,7 @@ mkDerivation {
     kcoreaddons kcrash kdeclarative kdecoration kglobalaccel ki18n kiconthemes
     kidletime kinit kio knewstuff knotifications kpackage kscreenlocker kservice
     kwayland kwidgetsaddons kwindowsystem kxmlgui plasma-framework
-    libcap libdrm
+    libcap libdrm mesa
   ];
   outputs = [ "bin" "dev" "out" ];
   patches = [

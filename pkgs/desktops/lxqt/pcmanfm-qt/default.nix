@@ -1,15 +1,27 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, lxqt, qtbase, qttools,
-  qtx11extras, libfm-qt, menu-cache, lxmenu-data }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, lxqt
+, qtbase
+, qttools
+, qtx11extras
+, libfm-qt
+, menu-cache
+, lxmenu-data
+, lxqtUpdateScript
+}:
 
 mkDerivation rec {
   pname = "pcmanfm-qt";
-  version = "0.14.1";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1zchxlbyiifing94mqwh45pp7z3ihldknqiaz0kanq1cnma1jj6k";
+    sha256 = "12rzcv5n4s299c8787islkn4xcjb9bbrj12mxcd5ii91jq39aii4";
   };
 
   nativeBuildInputs = [
@@ -28,9 +40,15 @@ mkDerivation rec {
     lxmenu-data
   ];
 
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+
+  postPatch = ''
+    substituteInPlace config/pcmanfm-qt/lxqt/settings.conf.in --replace @LXQT_SHARE_DIR@ /run/current-system/sw/share/lxqt
+  '';
+
   meta = with lib; {
     description = "File manager and desktop icon manager (Qt port of PCManFM and libfm)";
-    homepage = https://github.com/lxqt/pcmanfm-qt;
+    homepage = "https://github.com/lxqt/pcmanfm-qt";
     license = licenses.gpl2;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

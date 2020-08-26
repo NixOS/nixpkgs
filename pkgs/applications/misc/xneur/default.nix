@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Utility for switching between keyboard layouts";
-    homepage = https://xneur.ru;
+    homepage = "https://xneur.ru";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

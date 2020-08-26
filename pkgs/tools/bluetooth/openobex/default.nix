@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, bluez, libusb, cmake }:
+{ stdenv, fetchurl, pkgconfig, bluez, libusb-compat-0_1, cmake }:
    
 stdenv.mkDerivation rec {
   name = "openobex-1.7.2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig cmake ];
-  buildInputs = [ bluez libusb ];
+  buildInputs = [ bluez libusb-compat-0_1 ];
 
   configureFlags = [ "--enable-apps" ];
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage = http://dev.zuckschwerdt.org/openobex/;
+    homepage = "http://dev.zuckschwerdt.org/openobex/";
     description = "An open source implementation of the Object Exchange (OBEX) protocol";
     platforms = platforms.linux;
     license = licenses.lgpl2Plus;

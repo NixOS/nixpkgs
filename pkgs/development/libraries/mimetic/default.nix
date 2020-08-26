@@ -11,9 +11,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cutee ];
 
+  patches = stdenv.lib.optional stdenv.isAarch64 ./narrowing.patch;
+
   meta = with stdenv.lib; {
     description = "MIME handling library";
-    homepage    = http://www.codesink.org/mimetic_mime_library.html;
+    homepage    = "http://www.codesink.org/mimetic_mime_library.html";
     license     = licenses.mit;
     maintainers = with maintainers; [ leenaars];
     platforms = platforms.linux;

@@ -9,14 +9,10 @@ with lib;
 
     services.openfire = {
 
-      enable = mkOption {
-        default = false;
-        description = "
-          Whether to enable OpenFire XMPP server.
-        ";
-      };
+      enable = mkEnableOption "OpenFire XMPP server";
 
       usePostgreSQL = mkOption {
+        type = types.bool;
         default = true;
         description = "
           Whether you use PostgreSQL service for your storage back-end.

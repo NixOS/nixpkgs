@@ -25,7 +25,7 @@ in python3Packages.buildPythonApplication {
   checkPhase = "py.test";
 
   meta = with stdenv.lib; {
-    homepage = https://pydoit.org/;
+    homepage = "https://pydoit.org/";
     description = "A task management & automation tool";
     license = licenses.mit;
     longDescription = ''

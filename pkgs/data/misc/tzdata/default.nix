@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   setupHook = ./tzdata-setup-hook.sh;
 
   meta = with stdenv.lib; {
-    homepage = http://www.iana.org/time-zones;
+    homepage = "http://www.iana.org/time-zones";
     description = "Database of current and historical time zones";
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz ];

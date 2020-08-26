@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Logs and progress bars manager for Python";
-    homepage = https://github.com/Edinburgh-Genome-Foundry/Proglog;
+    homepage = "https://github.com/Edinburgh-Genome-Foundry/Proglog";
     license = licenses.mit;
   };
 }

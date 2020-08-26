@@ -1,4 +1,4 @@
-{ lib, fetchurl, pythonPackages, pkgconfig
+{ lib, pythonPackages, pkgconfig
 , dbus
 , qmake, lndir
 , qtbase
@@ -29,13 +29,13 @@ let
   });
 
 in buildPythonPackage rec {
-  pname = "pyqt";
-  version = "5.13.0";
+  pname = "PyQt5";
+  version = "5.14.2";
   format = "other";
 
-  src = fetchurl {
-    url = "https://www.riverbankcomputing.com/static/Downloads/PyQt5/${version}/PyQt5_gpl-${version}.tar.gz";
-    sha256 = "1ydgdz28f1v17qqz3skyv26k5l0w63fr4dncc5xm49jr2gjzznqc";
+  src = pythonPackages.fetchPypi {
+    inherit pname version;
+    sha256 = "1c4y4qi1l540gd125ikj0al00k5pg65kmqaixcfbzslrsrphq8xx";
   };
 
   outputs = [ "out" "dev" ];
@@ -80,6 +80,9 @@ in buildPythonPackage rec {
 
   passthru = {
     inherit sip;
+    multimediaEnabled = withMultimedia;
+    webKitEnabled = withWebKit;
+    WebSocketsEnabled = withWebSockets;
   };
 
   configurePhase = ''
@@ -138,7 +141,7 @@ in buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python bindings for Qt5";
-    homepage    = http://www.riverbankcomputing.co.uk;
+    homepage    = "http://www.riverbankcomputing.co.uk";
     license     = licenses.gpl3;
     platforms   = platforms.mesaPlatforms;
     maintainers = with maintainers; [ sander ];

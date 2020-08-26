@@ -2,17 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "strace";
-  version = "5.5";
+  version = "5.8";
 
   src = fetchurl {
     url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1zrhpzjlgfwfl8dd53llswmmharm5rbi0zch7lln5sjris69an4z";
+    sha256 = "1abs3svkg9985f4jrxx34sj1dcpsf95vv1a0g01c777zgygncjnz";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];
 
-  buildInputs = stdenv.lib.optional libunwind.supportsHost libunwind; # support -k
+  buildInputs = [ perl.out ] ++ stdenv.lib.optional libunwind.supportsHost libunwind; # support -k
+
+  postPatch = "patchShebangs --host strace-graph";
 
   configureFlags = stdenv.lib.optional (!stdenv.hostPlatform.isx86) "--enable-mpers=check";
 

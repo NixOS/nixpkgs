@@ -32,7 +32,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://gitlab.com/pycqa/flake8-polyfill;
+    homepage = "https://gitlab.com/pycqa/flake8-polyfill";
     description = "Polyfill package for Flake8 plugins";
     license = licenses.mit;
     maintainers = with maintainers; [ eadwu ];

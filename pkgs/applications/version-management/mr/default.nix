@@ -30,7 +30,7 @@ stdenv.mkDerivation {
       bzr, darcs, fossil and veracity repositories, and support for
       other version control systems can easily be added.
     '';
-    homepage = http://myrepos.branchable.com/;
+    homepage = "http://myrepos.branchable.com/";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ antono henrytill ];

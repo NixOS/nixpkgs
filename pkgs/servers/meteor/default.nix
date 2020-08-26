@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, zlib, patchelf, runtimeShell }:
 
 let
-  version = "1.8.2";
+  version = "1.10.2";
 in
 
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   pname = "meteor";
   src = fetchurl {
     url = "https://static-meteor.netdna-ssl.com/packages-bootstrap/${version}/meteor-bootstrap-os.linux.x86_64.tar.gz";
-    sha256 = "1pydmwx1yjbw54qfq7ndw2l3i3v302bvasvf71x4y9572r2p99mp";
+    sha256 = "17s1n92nznasaaprvxg289a1fcizq2nj51xqw7akgw5f77q19vmw";
   };
 
   #dontStrip = true;
@@ -82,7 +82,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Complete open source platform for building web and mobile apps in pure JavaScript";
-    homepage = http://www.meteor.com;
+    homepage = "http://www.meteor.com";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ cstrahan ];

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Finds differences in translations between two PO files, or revisions";
-    homepage = http://puszcza.gnu.org.ua/software/podiff;
+    homepage = "http://puszcza.gnu.org.ua/software/podiff";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

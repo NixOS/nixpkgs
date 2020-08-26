@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pyowm";
-  version = "2.10.0";
+  version = "3.0.0";
 
   disabled = pythonOlder "3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8fd41a18536f4d6c432bc6d9ea69994efb1ea9b43688cf19523659b6f4d86cf7";
+    sha256 = "f06ac5f2356f0964f088b1f840a6d382499054bd18539ffb1e7c84f29c2c39b6";
   };
 
   propagatedBuildInputs = [ requests geojson ];
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A Python wrapper around the OpenWeatherMap web API";
-    homepage = https://pyowm.readthedocs.io/;
+    homepage = "https://pyowm.readthedocs.io/";
     license = licenses.mit;
   };
 }

@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
        For compatibility with programs using old UNIX dbm function, the
        package also provides traditional dbm and ndbm interfaces.
       '';
-    homepage = https://www.gnu.org/software/gdbm/;
+    homepage = "https://www.gnu.org/software/gdbm/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.vrthra ];

@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   PKG_CONFIG_PURPLE_DATADIR = "${placeholder "out"}/share";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/EionRobb/purple-discord;
+    homepage = "https://github.com/EionRobb/purple-discord";
     description = "Discord plugin for Pidgin";
     license = licenses.gpl3;
     platforms = platforms.linux;

@@ -1,4 +1,5 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool, autoreconfHook
+, installShellFiles
 , libcxxabi, libuuid
 , libobjc ? null, maloader ? null
 , enableTapiSupport ? true, libtapi
@@ -28,9 +29,9 @@ let
       sha256 = "0h8b1my0wf1jyjq63wbiqkl2clgxsf87f6i4fjhqs431fzlq8sac";
     };
 
-    outputs = [ "out" "dev" ];
+    outputs = [ "out" "dev" "man" ];
 
-    nativeBuildInputs = [ autoconf automake libtool autoreconfHook ];
+    nativeBuildInputs = [ autoconf automake libtool autoreconfHook installShellFiles ];
     buildInputs = [ libuuid ]
       ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ]
       ++ stdenv.lib.optional enableTapiSupport libtapi;
@@ -88,6 +89,8 @@ let
       pushd include
       make DSTROOT=$out/include RC_OS=common install
       popd
+
+      installManPage ar/ar.{1,5}
     '';
 
     passthru = {
@@ -96,7 +99,7 @@ let
 
     meta = {
       broken = !stdenv.targetPlatform.isDarwin; # Only supports darwin targets
-      homepage = http://www.opensource.apple.com/source/cctools/;
+      homepage = "http://www.opensource.apple.com/source/cctools/";
       description = "MacOS Compiler Tools (cross-platform port)";
       license = stdenv.lib.licenses.apsl20;
       maintainers = with stdenv.lib.maintainers; [ matthewbauer ];

@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib,
+  mkDerivation, lib, fetchpatch,
   extra-cmake-modules, karchive, kio, libkexiv2, libkdcraw
 }:
 

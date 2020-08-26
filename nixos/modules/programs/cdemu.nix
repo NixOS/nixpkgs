@@ -8,6 +8,7 @@ in {
   options = {
     programs.cdemu = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           <command>cdemu</command> for members of

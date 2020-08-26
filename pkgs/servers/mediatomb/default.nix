@@ -1,5 +1,5 @@
 { stdenv, fetchgit
-, sqlite, expat, mp4v2, flac, spidermonkey, taglib, libexif, curl, ffmpeg, file
+, sqlite, expat, mp4v2, flac, spidermonkey, taglib, libexif, curl, ffmpeg_3, file
 , pkgconfig, autoreconfHook }:
 
 stdenv.mkDerivation rec {
@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "1mimslr4q6mky865y6561rr64cbn4gf0qc2dhgb31hxp4rc1kmzd";
   };
 
-  buildInputs = [ sqlite expat spidermonkey taglib libexif curl ffmpeg file mp4v2 flac
+  buildInputs = [ sqlite expat spidermonkey taglib libexif curl ffmpeg_3 file mp4v2 flac
                   pkgconfig autoreconfHook ];
 
   meta = with stdenv.lib; {
-    homepage = http://mediatomb.cc;
-    repositories.git = git://mediatomb.git.sourceforge.net/gitroot/mediatomb/mediatomb;
+    homepage = "http://mediatomb.cc";
+    repositories.git = "git://mediatomb.git.sourceforge.net/gitroot/mediatomb/mediatomb";
     description = "UPnP MediaServer with a web user interface";
     license = licenses.gpl2;
     maintainers = [ maintainers.phreedom ];

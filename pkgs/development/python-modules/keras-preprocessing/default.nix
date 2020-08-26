@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Keras_Preprocessing";
-  version = "1.1.0";
+  version = "1.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1r98nm4k1svsqjyaqkfk23i31bl1kcfcyp7094yyj3c43phfp3as";
+    sha256 = "add82567c50c8bc648c14195bf544a5ce7c1f76761536956c3d2978970179ef3";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Easy data preprocessing and data augmentation for deep learning models";
-    homepage = https://github.com/keras-team/keras-preprocessing;
+    homepage = "https://github.com/keras-team/keras-preprocessing";
     license = licenses.mit;
   };
 }

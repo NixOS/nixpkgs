@@ -88,6 +88,7 @@ in
       };
 
       useTLS = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           If enabled, use TLS (encryption) over an LDAP (port 389)
@@ -109,6 +110,7 @@ in
 
       daemon = {
         enable = mkOption {
+          type = types.bool;
           default = false;
           description = ''
             Whether to let the nslcd daemon (nss-pam-ldapd) handle the
@@ -241,6 +243,10 @@ in
     system.nssModules = singleton (
       if cfg.daemon.enable then nss_pam_ldapd else nss_ldap
     );
+
+    system.nssDatabases.group = optional cfg.nsswitch "ldap";
+    system.nssDatabases.passwd = optional cfg.nsswitch "ldap";
+    system.nssDatabases.shadow = optional cfg.nsswitch "ldap";
 
     users = mkIf cfg.daemon.enable {
       groups.nslcd = {

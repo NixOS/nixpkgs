@@ -3,8 +3,8 @@
 let
 
   major = "2020";
-  minor = "02";
-  patch = "18";
+  minor = "08";
+  patch = "07";
 
   version = "${major}.${minor}.${patch}";
 
@@ -16,7 +16,7 @@ let
       owner = "daid";
       repo = "SeriousProton";
       rev = "EE-${version}";
-      sha256 = "1cq32jm3p40h5mipb64i9b1kcid27bpc8g6j4k0v69cfqkjpha5c";
+      sha256 = "1mfizhmwh6xgb5n34l3wrbxm21f7gsvsyacsmnxw9rkz0ya7ch30";
     };
 
     nativeBuildInputs = [ cmake ];
@@ -24,7 +24,7 @@ let
 
     meta = with lib; {
       description = "C++ game engine coded on top of SFML used for EmptyEpsilon";
-      homepage = https://github.com/daid/SeriousProton;
+      homepage = "https://github.com/daid/SeriousProton";
       license = licenses.mit;
       maintainers = with maintainers; [ fpletz ];
       platforms = platforms.linux;
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     owner = "daid";
     repo = "EmptyEpsilon";
     rev = "EE-${version}";
-    sha256 = "1hl3mbg6pw2r7ri042vm86pb2xv77jvh6pag1z96bxvx791zcnwk";
+    sha256 = "0p41wx9yk09xjmfkjpdgi3b2999ps2am3xqwd866q11f6ci7viv5";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Open source bridge simulator based on Artemis";
-    homepage = https://daid.github.io/EmptyEpsilon/;
+    homepage = "https://daid.github.io/EmptyEpsilon/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fpletz lheckemann ma27 ];
     platforms = platforms.linux;

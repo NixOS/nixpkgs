@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Client, protocol, and server for running Java programs from the command line without incurring the JVM startup overhead";
-    homepage = http://www.martiansoftware.com/nailgun/;
+    homepage = "http://www.martiansoftware.com/nailgun/";
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ volth ];

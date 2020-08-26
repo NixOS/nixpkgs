@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A (h)top like like task monitor for NVIDIA GPUs";
-    homepage = https://github.com/Syllo/nvtop;
+    homepage = "https://github.com/Syllo/nvtop";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ willibutz ];

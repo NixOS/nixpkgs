@@ -32,11 +32,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nautilus";
-  version = "3.34.2";
+  version = "3.36.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "19zqwq4qyyncc5wq3xls0f7rsavnw741k336p2h7kx35p4kf41mv";
+    sha256 = "1y0fsd7j48v4qkc051cg41mz7jycgw4vd4g37lw682p7n5xgrjmn";
   };
 
   nativeBuildInputs = [
@@ -99,9 +99,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The file manager for GNOME";
-    homepage = https://wiki.gnome.org/Apps/Files;
+    homepage = "https://wiki.gnome.org/Apps/Files";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

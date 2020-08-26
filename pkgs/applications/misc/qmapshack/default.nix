@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "qmapshack";
-  version = "1.14.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "Maproom";
     repo = pname;
     rev = "V_${version}";
-    sha256 = "07c2hrq9sn456w7l3gdr599rmjfv2k6mh159zza7p1py8r7ywksa";
+    sha256 = "157bssrbwcc1w58b0v60jb3wrjf2ig4z6z6crjnpvflkqj5p8vwy";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -29,8 +29,12 @@ mkDerivation rec {
     "${src}/FindQuaZip5.patch"
   ];
 
+  qtWrapperArgs = [
+    "--suffix PATH : ${lib.makeBinPath [ gdal routino ]}"
+  ];
+
   meta = with lib; {
-    homepage = https://github.com/Maproom/qmapshack;
+    homepage = "https://github.com/Maproom/qmapshack";
     description = "Consumer grade GIS software";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dotlambda sikmir ];

@@ -70,7 +70,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = https://perf.wiki.kernel.org/;
+    homepage = "https://perf.wiki.kernel.org/";
     description = "Linux tools to profile with performance counters";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;

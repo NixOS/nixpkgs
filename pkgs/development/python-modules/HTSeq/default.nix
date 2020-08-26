@@ -1,12 +1,12 @@
 { stdenv, buildPythonPackage, fetchPypi, cython, numpy, pysam, matplotlib
 }:
 buildPythonPackage rec {
-  version = "0.11.2";
+  version = "0.12.4";
   pname = "HTSeq";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "65c4c13968506c7df92e97124df96fdd041c4476c12a548d67350ba8b436bcfc";
+    sha256 = "e3980bb4f12899442b4fa6f24f0ba149090f71cedb1eaf7128249afe4eb921ff";
   };
 
   buildInputs = [ cython numpy pysam ];

@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = stdenv.lib.licenses.gpl3Plus;
-    homepage = https://mdsteele.games/azimuth/index.html;
+    homepage = "https://mdsteele.games/azimuth/index.html";
     maintainers = with stdenv.lib.maintainers; [ marius851000 ];
     platforms = stdenv.lib.platforms.linux;
   };

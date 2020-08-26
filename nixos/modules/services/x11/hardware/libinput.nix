@@ -184,7 +184,11 @@ in {
         ''
           Option "DragLockButtons" "L1 B1 L2 B2"
         '';
-        description = "Additional options for libinput touchpad driver.";
+        description = ''
+          Additional options for libinput touchpad driver. See
+          <citerefentry><refentrytitle>libinput</refentrytitle><manvolnum>4</manvolnum></citerefentry>
+          for available options.";
+        '';
       };
 
     };

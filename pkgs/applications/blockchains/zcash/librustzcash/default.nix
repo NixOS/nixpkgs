@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   installPhase = ''
     mkdir -p $out/lib
-    cp target/release/librustzcash.a $out/lib/
+    cp $releaseDir/librustzcash.a $out/lib/
     mkdir -p $out/include
     cp librustzcash/include/librustzcash.h $out/include/
   '';

@@ -47,7 +47,7 @@ let
 
       meta = with stdenv.lib; {
         description = "Web Debugging Proxy";
-        homepage = https://www.charlesproxy.com/;
+        homepage = "https://www.charlesproxy.com/";
         maintainers = [ maintainers.kalbasit ];
         license = stdenv.lib.licenses.unfree;
         platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;

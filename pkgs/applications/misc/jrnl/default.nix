@@ -22,7 +22,7 @@ buildPythonApplication rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://maebert.github.io/jrnl/;
+    homepage = "http://maebert.github.io/jrnl/";
     description = "A simple command line journal application that stores your journal in a plain text file";
     license = licenses.mit;
     maintainers = with maintainers; [ zalakain ];

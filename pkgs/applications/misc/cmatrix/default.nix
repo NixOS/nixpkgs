@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       CMatrix simulates the display from "The Matrix" and is based
       on the screensaver from the movie's website.
     '';
-    homepage = https://github.com/abishekvashok/cmatrix;
+    homepage = "https://github.com/abishekvashok/cmatrix";
     platforms = ncurses.meta.platforms;
     maintainers = [ maintainers.AndersonTorres ];
   };

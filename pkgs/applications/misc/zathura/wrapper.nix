@@ -8,6 +8,8 @@ in symlinkJoin {
 
   paths = with zathura_core; [ man dev out ];
 
+  inherit plugins;
+
   buildInputs = [ makeWrapper ];
 
   postBuild = ''
@@ -17,7 +19,7 @@ in symlinkJoin {
   '';
 
   meta = with lib; {
-    homepage = https://git.pwmt.org/pwmt/zathura/;
+    homepage = "https://git.pwmt.org/pwmt/zathura/";
     description = "A highly customizable and functional PDF viewer";
     longDescription = ''
       Zathura is a highly customizable and functional PDF viewer based on the

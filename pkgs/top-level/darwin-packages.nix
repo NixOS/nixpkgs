@@ -86,4 +86,6 @@ in
 
   libtapi = callPackage ../os-specific/darwin/libtapi {};
 
+  ios-deploy = callPackage ../os-specific/darwin/ios-deploy {};
+
 })

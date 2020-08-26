@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Fuse FS to mount a digital camera";
-    homepage = http://www.gphoto.org/;
+    homepage = "http://www.gphoto.org/";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
     license = with licenses; [ lgpl2 gpl2 ];

@@ -1,11 +1,11 @@
 {stdenv, fetchurl, jre} :
 
 stdenv.mkDerivation rec {
-  name = "jflex-1.8.1";
+  name = "jflex-1.8.2";
 
   src = fetchurl {
     url = "http://jflex.de/release/${name}.tar.gz";
-    sha256 = "0hspw4z1i7wc1dnnyh4xx6ka7891nsw4hc66bf45510gjks6779x";
+    sha256 = "1ar7g6zb2xjgnws3j4cqcp86jplhc9av8cpcjdmxw08x6igd5q51";
   };
 
   sourceRoot = name;

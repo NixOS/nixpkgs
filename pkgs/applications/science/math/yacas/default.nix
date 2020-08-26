@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yacas";
-  version = "1.8.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "grzegorzmazur";
     repo = "yacas";
     rev = "v${version}";
-    sha256 = "0fwd98dwq6g0md3yhgyl30i377593b8rw6gsvffzvs11g3aqf1ga";
+    sha256 = "0dqgqvsb6ggr8jb3ngf0jwfkn6xwj2knhmvqyzx3amc74yd3ckqx";
   };
 
   hardeningDisable = [ "format" ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Easy to use, general purpose Computer Algebra System";
-    homepage = http://www.yacas.org/;
+    homepage = "http://www.yacas.org/";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;

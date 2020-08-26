@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Create and update Microsoft Word .docx files";
-    homepage = https://python-docx.readthedocs.io/en/latest/;
+    homepage = "https://python-docx.readthedocs.io/en/latest/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.alexchapman ];
   };

@@ -17,7 +17,7 @@ in
     sha256 = "1jy9vpcprpd1k48p20wh6jhyn909ibia8lr5i747p41l0s8a7lqy";
 
     meta = with lib; {
-      homepage = https://software.sil.org/andika;
+      homepage = "https://software.sil.org/andika";
       description = "A family designed especially for literacy use taking into account the needs of beginning readers";
       longDescription = ''
       Andika is a sans serif, Unicode-compliant font designed especially for literacy use, taking into account the needs of beginning readers. The focus is on clear, easy-to-perceive letterforms that will not be readily confused with one another.

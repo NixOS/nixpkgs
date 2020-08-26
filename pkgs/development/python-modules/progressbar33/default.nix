@@ -13,7 +13,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://pypi.python.org/pypi/progressbar33;
+    homepage = "https://pypi.python.org/pypi/progressbar33";
     description = "Text progressbar library for python";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ twey ];

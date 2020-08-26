@@ -2,24 +2,24 @@
 
 stdenv.mkDerivation rec {
   pname = "facter";
-  version = "3.14.8";
+  version = "3.14.12";
 
   src = fetchFromGitHub {
-    sha256 = "1rq28sg1yqyx2xpbhb8hj18ar5pva2rwz7v3ylg8kq112cnlngyh";
+    sha256 = "1n0m2w133bpbbpc1imp89xlinmny7xaz1w87cs18p1lnk2w043lc";
     rev = version;
     repo = pname;
     owner = "puppetlabs";
   };
 
-  CXXFLAGS = "-fpermissive -Wno-error=catch-value";
-  NIX_LDFLAGS = "-lblkid";
+  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isGNU "-fpermissive -Wno-error=catch-value";
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lblkid";
 
   cmakeFlags = [
-    "-DFACTER_RUBY=${ruby}/lib/libruby.so"
+    "-DFACTER_RUBY=${ruby}/lib/libruby${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DRUBY_LIB_INSTALL=${placeholder "out"}/lib/ruby"
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-copy";
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost cpp-hocon curl leatherman libwhereami libyamlcpp openssl ruby utillinux ];
@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     description = "A system inventory tool";
     license = licenses.asl20;
     maintainers = [ maintainers.womfoo ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

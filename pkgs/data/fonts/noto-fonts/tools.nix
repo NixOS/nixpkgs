@@ -16,7 +16,7 @@ buildPythonPackage rec {
   patches = lib.optionals isPy3k [
     # Additional Python 3 compat https://github.com/googlefonts/nototools/pull/497
     (fetchpatch {
-      url = https://github.com/googlefonts/nototools/commit/ded1f311b3260f015b5c5b80f05f7185392c4eff.patch;
+      url = "https://github.com/googlefonts/nototools/commit/ded1f311b3260f015b5c5b80f05f7185392c4eff.patch";
       sha256 = "0bn0rlbddxicw0h1dnl0cibgj6xjalja2qcm563y7kk3z5cdwhgq";
     })
   ];
@@ -43,6 +43,6 @@ buildPythonPackage rec {
   meta = {
     description = "Noto fonts support tools and scripts plus web site generation";
     license = lib.licenses.asl20;
-    homepage = https://github.com/googlefonts/nototools;
+    homepage = "https://github.com/googlefonts/nototools";
   };
 }

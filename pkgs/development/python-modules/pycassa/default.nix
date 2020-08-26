@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A python client library for Apache Cassandra";
-    homepage = https://github.com/pycassa/pycassa;
+    homepage = "https://github.com/pycassa/pycassa";
     license = stdenv.lib.licenses.mit;
   };
 }

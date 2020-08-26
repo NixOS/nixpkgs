@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A library for analyzing ELF files and DWARF debugging information";
-    homepage = https://github.com/eliben/pyelftools;
+    homepage = "https://github.com/eliben/pyelftools";
     license = licenses.publicDomain;
     maintainers = [ maintainers.igsha ];
   };

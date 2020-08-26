@@ -1,13 +1,14 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "drat-trim-2017-08-31";
+  pname = "drat-trim-unstable";
+  version = "2020-06-05";
 
   src = fetchFromGitHub {
     owner = "marijnheule";
     repo = "drat-trim";
-    rev = "37ac8f874826ffa3500a00698910e137498defac";
-    sha256 = "1m9q47dfnvdli1z3kb1jvvbm0dgaw725k1aw6h9w00bggqb91bqh";
+    rev = "9afad0f7156a1e9c6ce19dce5d72cf1cb9a3ef27";
+    sha256 = "1zq585igfaknwqbvv2cji744016zxadbvr0ifr5l6yq13m0vvn3b";
   };
 
   postPatch = ''
@@ -15,7 +16,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    install -Dt $out/bin drat-trim
+    install -Dt $out/bin drat-trim lrat-check
   '';
 
   meta = with stdenv.lib; {
@@ -31,8 +32,12 @@ stdenv.mkDerivation {
       annual SAT Competition in recent years, in order to check
       competing SAT solvers' work when they claim that a SAT instance
       is unsatisfiable.
+
+      This package also contains the related tool LRAT-check, which checks a
+      proof format called LRAT which extends DRAT with hint statements to speed
+      up the checking process.
     '';
-    homepage = https://www.cs.utexas.edu/~marijn/drat-trim/;
+    homepage = "https://www.cs.utexas.edu/~marijn/drat-trim/";
     license = licenses.mit;
     maintainers = with maintainers; [ kini ];
     platforms = platforms.all;

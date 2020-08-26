@@ -34,6 +34,8 @@ let
     "commands/test_test.py::test_local_env"
     "test_builder.py::test_build_flags"
     "test_builder.py::test_build_unflags"
+    "test_builder.py::test_debug_default_build_flags"
+    "test_builder.py::test_debug_custom_build_flags"
     "test_misc.py::test_api_cache"
     "test_misc.py::test_ping_internet_ips"
     "test_misc.py::test_platformio_cli"
@@ -49,14 +51,14 @@ let
 
 in buildPythonApplication rec {
   pname = "platformio";
-  version = "4.1.0";
+  version = "4.3.4";
 
   # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
   src = fetchFromGitHub {
     owner = "platformio";
     repo = "platformio-core";
     rev = "v${version}";
-    sha256 = "10v9jw1zjfqr3wl6kills3cfp0ky7xbm1gc3z0n57wrqbc6cmz95";
+    sha256 = "0vf2j79319ypr4yrdmx84853igkb188sjfvlxgw06rlsvsm3kacq";
   };
 
   propagatedBuildInputs =  [
@@ -79,12 +81,8 @@ in buildPythonApplication rec {
 
   patches = [
     ./fix-searchpath.patch
-    (fetchpatch {
-      url = "https://github.com/platformio/platformio-core/commit/442a7e357636522e844d95375c246644b21a7802.patch";
-      sha256 = "0a3kj3k02237gr2yk30gpwc6vm04dsd1wxldj4dsbzs4a9yyi70m";
-      excludes = ["HISTORY.rst"];
-    })
     ./use-local-spdx-license-list.patch
+    ./missing-udev-rules-nixos.patch
   ];
 
   postPatch = ''
@@ -95,7 +93,7 @@ in buildPythonApplication rec {
   meta = with stdenv.lib; {
     broken = stdenv.isAarch64;
     description = "An open source ecosystem for IoT development";
-    homepage = http://platformio.org;
+    homepage = "http://platformio.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ mog makefu ];
   };

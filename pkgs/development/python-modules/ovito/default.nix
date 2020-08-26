@@ -23,11 +23,12 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Scientific visualization and analysis software for atomistic simulation data";
-    homepage = https://www.ovito.org;
+    homepage = "https://www.ovito.org";
     license = licenses.gpl3;
     maintainers = [ maintainers.costrouc ];
     # ensures not built on hydra
     # https://github.com/NixOS/nixpkgs/pull/46846#issuecomment-436388048
     hydraPlatforms = [ ];
+    broken = true; # cmake unable to find Qt5Core and other dependencies
   };
 }

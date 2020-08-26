@@ -3,8 +3,9 @@
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
 , libmng, which, libGLU, openssl, dbus, cups, pkgconfig
 , libtiff, glib, icu, libmysqlclient, postgresql, sqlite, perl, coreutils, libXi
-, buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst-plugins-base
-, buildWebkit ? (stdenv.isLinux || stdenv.isDarwin)
+, buildMultimedia ? false # ancient gstreamer is broken
+, alsaLib, gstreamer, gst-plugins-base
+, buildWebkit ? false
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , flashplayerFix ? false, gdk-pixbuf
 , gtkStyle ? stdenv.hostPlatform == stdenv.buildPlatform, gtk2
@@ -237,7 +238,7 @@ stdenv.mkDerivation rec {
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
   meta = {
-    homepage    = http://qt-project.org/;
+    homepage    = "http://qt-project.org/";
     description = "A cross-platform application framework for C++";
     license     = lib.licenses.lgpl21Plus; # or gpl3
     maintainers = with lib.maintainers; [ orivej lovek323 phreedom sander ];

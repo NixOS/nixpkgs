@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "guanlisheng";
     repo = "wxsqliteplus";
     rev = "v${version}";
-    sha1 = "yr9ysviv4hbrxn900z1wz8j32frimvx1";
+    sha256 = "0mgfq813pli56mar7pdxlhwjf5k10j196rs3jd0nc8b6dkzkzlnf";
   };
 
   buildInputs = [ wxGTK wxsqlite3 sqlite ];
@@ -24,12 +24,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp wxsqliteplus $out/bin/
+    install -D wxsqliteplus $out/bin/wxsqliteplus
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://guanlisheng.com/;
+    homepage = "https://github.com/guanlisheng/wxsqliteplus";
     description = "A simple SQLite database browser built with wxWidgets";
     platforms = platforms.unix;
     maintainers = with maintainers; [ vrthra ];

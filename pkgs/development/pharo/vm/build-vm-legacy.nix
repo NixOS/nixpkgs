@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
       Please fill bug reports on http://bugs.pharo.org under the 'Ubuntu
       packaging (ppa:pharo/stable)' project.
     '';
-    homepage = http://pharo.org;
+    homepage = "http://pharo.org";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.lukego ];
     # Pharo VM sources are packaged separately for darwin (OS X)

@@ -22,9 +22,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "The Forth implementation of the GNU project";
-    homepage = https://www.gnu.org/software/gforth/;
+    homepage = "https://www.gnu.org/software/gforth/";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };
 }

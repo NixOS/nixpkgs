@@ -1,30 +1,24 @@
-{ mkDerivation, lib, fetchurl, cmake, alsaLib, udev, qtbase, qtsvg, qttools }:
+{ mkDerivation, lib, fetchFromGitLab, cmake, alsaLib, udev, qtbase, qtsvg, qttools }:
 
-let
-  version = "0.21.0";
-in
-
-mkDerivation {
+mkDerivation rec {
   pname = "qastools";
-  inherit version;
+  version = "0.22.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/qastools/${version}/qastools_${version}.tar.bz2";
-    sha256 = "1zl9cn5h43n63yp3z1an87xvw554k9hlcz75ddb30lvpcczkmwrh";
+  src = fetchFromGitLab {
+    owner = "sebholt";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0px4fcn8dagivq5fyi5gy84yj86f6x0lk805mc4ry58d0wsbn68v";
   };
 
-  buildInputs = [
-    alsaLib udev qtbase qtsvg qttools
-  ];
   nativeBuildInputs = [ cmake ];
-
-  cmakeFlags = [
-    "-DALSA_INCLUDE=${alsaLib.dev}/include/alsa/version.h"
-  ];
+  buildInputs = [ alsaLib udev qtbase qtsvg qttools ];
 
   meta = with lib; {
     description = "Collection of desktop applications for ALSA configuration";
-    license = licenses.gpl3;
+    homepage = "https://gitlab.com/sebholt/qastools";
+    license = licenses.mit;
+    maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;
   };
 }

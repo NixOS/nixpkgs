@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/liuq/QuadProgpp;
+    homepage = "https://github.com/liuq/QuadProgpp";
     license = licenses.mit;
     description = ''
       A C++ library for Quadratic Programming which implements the

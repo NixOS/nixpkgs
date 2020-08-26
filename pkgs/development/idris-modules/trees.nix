@@ -19,7 +19,7 @@ build-idris-package  {
 
   meta = {
     description = "Trees in Idris";
-    homepage = https://github.com/clayrat/idris-trees;
+    homepage = "https://github.com/clayrat/idris-trees";
     maintainers = [ lib.maintainers.brainrape ];
   };
 }

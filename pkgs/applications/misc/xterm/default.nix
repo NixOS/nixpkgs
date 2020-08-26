@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "xterm-351";
+  name = "xterm-353";
 
   src = fetchurl {
     urls = [
      "ftp://ftp.invisible-island.net/xterm/${name}.tgz"
      "https://invisible-mirror.net/archives/xterm/${name}.tgz"
    ];
-    sha256 = "05kf586my4irrzz2bxgmwjdvynyrg9ybhvfqmx29g70w4888l2kn";
+    sha256 = "0s5pkfn4r8iy09s1q1y78zhnr9f3sm6wgbqir7azaqggkppd68g5";
   };
 
   buildInputs =
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl
     (fetchpatch {
       name = "posix-ptys.patch";
-      url = "https://git.alpinelinux.org/cgit/aports/plain/community/xterm/posix-ptys.patch?id=3aa532e77875fa1db18c7fcb938b16647031bcc1";
+      url = "https://git.alpinelinux.org/aports/plain/community/xterm/posix-ptys.patch?id=3aa532e77875fa1db18c7fcb938b16647031bcc1";
       sha256 = "0czgnsxkkmkrk1idw69qxbprh0jb4sw3c24zpnqq2v76jkl7zvlr";
     });
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://invisible-island.net/xterm;
+    homepage = "https://invisible-island.net/xterm";
     license = with stdenv.lib.licenses; [ mit ];
     maintainers = with stdenv.lib.maintainers; [vrthra];
     platforms = with stdenv.lib.platforms; linux ++ darwin;

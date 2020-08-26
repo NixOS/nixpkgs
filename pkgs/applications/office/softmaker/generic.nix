@@ -17,8 +17,11 @@ let
     inherit makeDesktopItem pname suiteName;
   };
   shortEdition = builtins.substring 2 2 edition;
-in stdenv.mkDerivation rec {
-  inherit pname version edition shortEdition src;
+in stdenv.mkDerivation {
+  inherit pname src;
+
+  version = "${edition}.${version}";
+
   nativeBuildInputs = [
     autoPatchelfHook
     makeWrapper

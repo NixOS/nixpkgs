@@ -36,9 +36,8 @@ buildRustPackage rec {
       * Should i use this crate?
       * How mature is it?
     '';
-    homepage = https://github.com/peterheesterman/chit;
+    homepage = "https://github.com/peterheesterman/chit";
     license = licenses.mit;
     maintainers = [ maintainers.lilyball ];
-    platforms = platforms.all;
   };
 }

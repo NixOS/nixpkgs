@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchurl, alsaLib, ffmpeg, libjack2, libX11, libXext, qtx11extras
+{ stdenv, mkDerivation, fetchurl, alsaLib, ffmpeg_3, libjack2, libX11, libXext, qtx11extras
 , libXfixes, libGLU, libGL, pkgconfig, libpulseaudio, qtbase, cmake, ninja
 }:
 
@@ -25,13 +25,13 @@ mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig cmake ninja ];
   buildInputs = [
-    alsaLib ffmpeg libjack2 libX11 libXext libXfixes libGLU libGL
+    alsaLib ffmpeg_3 libjack2 libX11 libXext libXfixes libGLU libGL
     libpulseaudio qtbase qtx11extras
   ];
 
   meta = with stdenv.lib; {
     description = "A screen recorder for Linux";
-    homepage = https://www.maartenbaert.be/simplescreenrecorder;
+    homepage = "https://www.maartenbaert.be/simplescreenrecorder";
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.goibhniu ];

@@ -15,7 +15,7 @@ buildGoPackage {
 
   meta = {
     description = "A file system based matrix client";
-    homepage = https://gitlab.com/meutraa/mm;
+    homepage = "https://gitlab.com/meutraa/mm";
     license = stdenv.lib.licenses.isc;
   };
 }

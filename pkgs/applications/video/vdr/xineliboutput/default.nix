@@ -1,20 +1,25 @@
 { stdenv, fetchurl, lib, vdr
 , libav, libcap, libvdpau
-, xineLib, libjpeg, libextractor, mesa, libGLU
+, xineLib, libjpeg, libextractor, libglvnd, libGLU
 , libX11, libXext, libXrender, libXrandr
 , makeWrapper
 }: let
-  name = "vdr-xineliboutput-2.1.0";
-
   makeXinePluginPath = l: lib.concatStringsSep ":" (map (p: "${p}/lib/xine/plugins") l);
 
-  self =  stdenv.mkDerivation {
-    inherit name;
+  self =  stdenv.mkDerivation rec {
+    pname = "vdr-xineliboutput";
+    version = "2.2.0";
 
     src = fetchurl {
-      url = "mirror://sourceforge/project/xineliboutput/xineliboutput/${name}/${name}.tgz";
-      sha256 = "1phrxpaz8li7z0qy241spawalhcmwkv5hh3gdijbv4h7mm899yba";
+      url = "mirror://sourceforge/project/xineliboutput/xineliboutput/${pname}-${version}/${pname}-${version}.tgz";
+      sha256 = "0a24hs5nr7ncf51c5agyfn1xrvb4p70y3i0s6dlyyd9bwbfjldns";
     };
+
+    postPatch = ''
+      # pkg-config is called with opengl, which do not contain needed glx symbols
+      substituteInPlace configure \
+        --replace "X11  opengl" "X11  gl"
+    '';
 
     # configure don't accept argument --prefix
     dontAddPrefix = true;
@@ -40,13 +45,13 @@
       libcap
       libextractor
       libjpeg
+      libglvnd
       libGLU
       libvdpau
       libXext
       libXrandr
       libXrender
       libX11
-      mesa
       vdr
       xineLib
     ];

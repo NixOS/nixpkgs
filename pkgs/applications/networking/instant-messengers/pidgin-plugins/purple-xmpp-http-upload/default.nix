@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/Junker/purple-xmpp-http-upload;
+    homepage = "https://github.com/Junker/purple-xmpp-http-upload";
     description = "HTTP File Upload plugin for libpurple (XMPP Protocol XEP-0363)";
     license = licenses.gpl3;
     platforms = platforms.linux;

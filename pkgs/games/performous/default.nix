@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "08j0qhr65l7qnd5vxl4l07523qpvdwi31h4vzl3lfiinx1zcgr4x";
   };
 
+  patches = [ ./performous-cmake.patch ];
+
   nativeBuildInputs = [ cmake pkgconfig gettext ];
 
   buildInputs = [

@@ -5,7 +5,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "lexicon";
-  version = "3.3.17";
+  version = "3.3.27";
 
   propagatedBuildInputs = with python3Packages; [ requests tldextract future cryptography pyyaml boto3 zeep xmltodict beautifulsoup4 dnspython pynamecheap softlayer transip localzone ];
 
@@ -19,12 +19,12 @@ python3Packages.buildPythonApplication rec {
     owner = "AnalogJ";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1wrsw759am6yp2m9b34iv82m371df3ssp2vhdjr18ys3xk7dvj89";
+    sha256 = "0i6grrpdwh7axhnsabb0pfjhpd3prc9ji1afivi7q3c0krgvncmc";
   };
 
   meta = with lib; {
     description = "Manipulate DNS records on various DNS providers in a standardized way.";
-    homepage = https://github.com/AnalogJ/lexicon;
+    homepage = "https://github.com/AnalogJ/lexicon";
     maintainers = with maintainers; [ flyfloh ];
     license = licenses.mit;
   };

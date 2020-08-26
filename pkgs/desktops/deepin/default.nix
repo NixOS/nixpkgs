@@ -1,12 +1,17 @@
 { pkgs, makeScope, libsForQt5 }:
-
 let
   packages = self: with self; {
     setupHook = ./setup-hook.sh;
 
-    updateScript = callPackage ./update.nix { };
+    # Update script tailored to deepin packages from git repository
+    updateScript = { pname, version, src }:
+      pkgs.genericUpdater {
+        inherit pname version;
+        attrPath = "deepin.${pname}";
+        versionLister = "${pkgs.common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+        ignoredVersions = "^2014(\\.|rc)|^v[0-9]+";
+      };
 
-    dbus-factory = callPackage ./dbus-factory { };
     dde-api = callPackage ./dde-api { };
     dde-calendar = callPackage ./dde-calendar { };
     dde-control-center = callPackage ./dde-control-center { };
@@ -30,7 +35,6 @@ let
     deepin-image-viewer = callPackage ./deepin-image-viewer { };
     deepin-menu = callPackage ./deepin-menu { };
     deepin-movie-reborn = callPackage ./deepin-movie-reborn { };
-    deepin-screenshot = callPackage ./deepin-screenshot { };
     deepin-shortcut-viewer = callPackage ./deepin-shortcut-viewer { };
     deepin-sound-theme = callPackage ./deepin-sound-theme { };
     deepin-terminal = callPackage ./deepin-terminal {
@@ -44,16 +48,15 @@ let
     dtkwidget = callPackage ./dtkwidget { };
     dtkwm = callPackage ./dtkwm { };
     go-dbus-factory = callPackage ./go-dbus-factory { };
-    go-dbus-generator = callPackage ./go-dbus-generator { };
     go-gir-generator = callPackage ./go-gir-generator { };
     go-lib = callPackage ./go-lib { };
     qcef = callPackage ./qcef { };
-    qt5dxcb-plugin = callPackage ./qt5dxcb-plugin { };
     qt5integration = callPackage ./qt5integration { };
+    qt5platform-plugins = callPackage ./qt5platform-plugins { };
     startdde = callPackage ./startdde { };
     udisks2-qt5 = callPackage ./udisks2-qt5 { };
 
   };
 
 in
-  makeScope libsForQt5.newScope packages
+makeScope libsForQt5.newScope packages

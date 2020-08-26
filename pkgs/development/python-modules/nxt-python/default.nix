@@ -27,7 +27,7 @@ buildPythonPackage {
 
   meta = with stdenv.lib; {
     description = "Python driver/interface for Lego Mindstorms NXT robot";
-    homepage = https://github.com/Eelviny/nxt-python;
+    homepage = "https://github.com/Eelviny/nxt-python";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ leenaars ];

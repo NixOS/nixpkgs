@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/UNINETT/mod_auth_mellon;
+    homepage = "https://github.com/UNINETT/mod_auth_mellon";
     description = "An Apache module with a simple SAML 2.0 service provider";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

@@ -17,6 +17,7 @@
 , libgudev
 , libraw
 , glib
+, glib-networking
 , json-glib
 , gcr
 , libgee
@@ -39,11 +40,11 @@
 
 stdenv.mkDerivation rec {
   pname = "shotwell";
-  version = "0.31.0";
+  version = "0.31.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1pwq953wl7h9cvw7rvlr6pcbq9w28kkr7ddb8x2si81ngp0imwyx";
+    sha256 = "0mbgrad4d4snffw2z3rkhwqq1bkxdgy52pblx99vjadvpgspb034";
   };
 
   nativeBuildInputs = [
@@ -77,6 +78,7 @@ stdenv.mkDerivation rec {
     libraw
     json-glib
     glib
+    glib-networking
     gdk-pixbuf
     librsvg
     librest
@@ -100,7 +102,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Popular photo organizer for the GNOME desktop";
-    homepage = https://wiki.gnome.org/Apps/Shotwell;
+    homepage = "https://wiki.gnome.org/Apps/Shotwell";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [domenkozar];
     platforms = platforms.linux;

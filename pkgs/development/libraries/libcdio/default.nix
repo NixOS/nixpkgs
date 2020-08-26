@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libcddb ncurses help2man ]
+  nativeBuildInputs = [ pkgconfig help2man ];
+  buildInputs = [ libcddb ncurses ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Carbon IOKit ];
 
   doCheck = !stdenv.isDarwin;
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       ISO-9660 filesystems (libiso9660), as well as utility
       programs such as an audio CD player and an extractor.
     '';
-    homepage = https://www.gnu.org/software/libcdio/;
+    homepage = "https://www.gnu.org/software/libcdio/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
   };

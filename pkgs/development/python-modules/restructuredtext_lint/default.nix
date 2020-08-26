@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "restructuredtext_lint";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "97b3da356d5b3a8514d8f1f9098febd8b41463bed6a1d9f126cf0a048b6fd908";
+    sha256 = "470e53b64817211a42805c3a104d2216f6f5834b22fe7adb637d1de4d6501fb8";
   };
 
   checkInputs = [ nose testtools ];
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "reStructuredText linter";
-    homepage = https://github.com/twolfson/restructuredtext-lint;
+    homepage = "https://github.com/twolfson/restructuredtext-lint";
     license = lib.licenses.unlicense;
   };
 }

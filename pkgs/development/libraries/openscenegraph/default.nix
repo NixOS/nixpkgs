@@ -11,7 +11,7 @@
   curlSupport ? true, curl,
   colladaSupport ? false, opencollada,
   opencascadeSupport ? false, opencascade,
-  ffmpegSupport ? false, ffmpeg,
+  ffmpegSupport ? false, ffmpeg_3,
   nvttSupport ? false, nvidia-texture-tools,
   freetypeSupport ? true, freetype,
   svgSupport ? false, librsvg,
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional curlSupport curl
     ++ lib.optional colladaSupport opencollada
     ++ lib.optional opencascadeSupport opencascade
-    ++ lib.optional ffmpegSupport ffmpeg
+    ++ lib.optional ffmpegSupport ffmpeg_3
     ++ lib.optional nvttSupport nvidia-texture-tools
     ++ lib.optional freetypeSupport freetype
     ++ lib.optional svgSupport librsvg
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A 3D graphics toolkit";
-    homepage = http://www.openscenegraph.org/;
+    homepage = "http://www.openscenegraph.org/";
     maintainers = with maintainers; [ aanderse raskin ];
     platforms = platforms.linux;
     license = "OpenSceneGraph Public License - free LGPL-based license";

@@ -1,17 +1,23 @@
-{ stdenv, fetchFromGitHub, pythonPackages, mopidy }:
+{ stdenv, python3Packages, mopidy }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "mopidy-youtube";
-  version = "2.0.2";
+  version = "3.1";
 
-  src = fetchFromGitHub {
-    owner = "mopidy";
-    repo = "mopidy-youtube";
-    rev = "v${version}";
-    sha256 = "06r3ikyg2ch5n7fbn3sgj04hk6icpfpk1r856qch41995k3bbfg7";
+  src = python3Packages.fetchPypi {
+    inherit version;
+    pname = "Mopidy-YouTube";
+    sha256 = "1bn3nxianbal9f81z9wf2cxi893hndvrz2zdqvh1zpxrhs0cr038";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ mopidy pafy ];
+  patchPhase = "sed s/bs4/beautifulsoup4/ -i setup.cfg";
+
+  propagatedBuildInputs = [
+    mopidy
+    python3Packages.beautifulsoup4
+    python3Packages.cachetools
+    python3Packages.youtube-dl
+  ];
 
   doCheck = false;
 

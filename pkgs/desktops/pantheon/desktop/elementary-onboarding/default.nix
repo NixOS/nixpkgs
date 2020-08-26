@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , fetchpatch
 , pkgconfig
@@ -20,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-onboarding";
-  version = "1.1.0";
+  version = "1.2.1";
 
   repoName = "onboarding";
 
@@ -28,11 +29,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "17fw95qg7j0mvam90jrvr77hw2ipxb2lkw0xxql1lzwvdx1h0r2k";
+    sha256 = "1cq9smvrnzc12gp6rzcdxc3x0sbgcch246r5m2c7m2561mfg1d5l";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -64,7 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Onboarding app for new users designed for elementary OS";
-    homepage = https://github.com/elementary/onboarding;
+    homepage = "https://github.com/elementary/onboarding";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

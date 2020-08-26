@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://developer.nvidia.com/cg-toolkit;
+    homepage = "https://developer.nvidia.com/cg-toolkit";
     license = lib.licenses.unfreeRedistributable;
   };
 }

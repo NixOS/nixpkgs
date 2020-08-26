@@ -2,8 +2,8 @@
 
 let
   goPackagePath = "github.com/github/gh-ost";
-  version = "1.0.47";
-  sha256 = "0yyhkqis4j2cl6w2drrjxdy5j8x9zp4j89gsny6w4ql8gm5qgvvk";
+  version = "1.0.49";
+  sha256 = "0mncjhmv25wnhgjkn9gwkz2gzh0v6954w47ql7fs2iqr9al111dq";
 
 in
 buildGoPackage ({
@@ -20,7 +20,7 @@ buildGoPackage ({
 
     meta = with stdenv.lib; {
       description = "Triggerless online schema migration solution for MySQL";
-      homepage = https://github.com/github/gh-ost;
+      homepage = "https://github.com/github/gh-ost";
       license = licenses.mit;
     };
 })

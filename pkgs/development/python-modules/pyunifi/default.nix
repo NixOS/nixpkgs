@@ -3,18 +3,18 @@
 
 buildPythonPackage rec {
   pname = "pyunifi";
-  version = "2.19.0";
+  version = "2.20.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f022eb2135b88a9d391f4553fac1bf90f3808d660fd0058203f6f9e57214626b";
+    sha256 = "b52d1b0d87365fcfed8572b5dbd8d675bffece4ab3484bf083863f278c727d3d";
   };
 
   propagatedBuildInputs = [ requests ];
 
   meta = with stdenv.lib; {
     description = "API towards Ubiquity Networks UniFi controller";
-    homepage = https://github.com/finish06/unifi-api;
+    homepage = "https://github.com/finish06/unifi-api";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };

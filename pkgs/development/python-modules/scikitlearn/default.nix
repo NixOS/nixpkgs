@@ -8,17 +8,18 @@
 , cython
 , joblib
 , llvmPackages
+, threadpoolctl
 }:
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "0.21.3";
+  version = "0.23.1";
   # UnboundLocalError: local variable 'message' referenced before assignment
   disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eb9b8ebf59eddd8b96366428238ab27d05a19e89c5516ce294abc35cea75d003";
+    sha256 = "e3fec1c8831f8f93ad85581ca29ca1bb88e2da377fb097cf8322aa89c21bc9b8";
   };
 
   buildInputs = [
@@ -38,17 +39,9 @@ buildPythonPackage rec {
     scipy
     numpy.blas
     joblib
+    threadpoolctl
   ];
   checkInputs = [ pytest ];
-
-  patches = [
-    # Fixes tests by changing threshold of a test-case that broke
-    # with numpy versions >= 1.17. This should be removed for versions > 0.21.2.
-	( fetchpatch {
-	  url = "https://github.com/scikit-learn/scikit-learn/commit/b730befc821caec5b984d9ff3aa7bc4bd7f4d9bb.patch";
-	  sha256 = "0z36m05mv6d494qwq0688rgwa7c4bbnm5s2rcjlrp29fwn3fy1bv";
-	})
-  ];
 
   LC_ALL="en_US.UTF-8";
 
@@ -61,7 +54,13 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A set of python modules for machine learning and data mining";
-    homepage = http://scikit-learn.org;
+    changelog = let
+      major = versions.major version;
+      minor = versions.minor version;
+      dashVer = replaceChars ["."] ["-"] version;
+    in
+      "https://scikit-learn.org/stable/whats_new/v${major}.${minor}.html#version-${dashVer}";
+    homepage = "https://scikit-learn.org";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };

@@ -7,15 +7,15 @@
 , prettyprinter, process, QuickCheck, retry, rio, rio-orphans, safe
 , semver-range, stdenv, stm, tar, template-haskell, temporary, text
 , time, transformers, turtle, unliftio, unordered-containers
-, vector, versions, zlib
+, vector, versions, with-utf8, zlib
 }:
 mkDerivation {
   pname = "spago";
-  version = "0.14.0";
+  version = "0.16.0";
   src = fetchgit {
     url = "https://github.com/purescript/spago.git";
-    sha256 = "12i1430prqspy73nwfxc17zf51yprhrxxcnhw4rks6jhkgwxf4a4";
-    rev = "7a99343e4876a465600eaa64b0697a9f0b2a49a9";
+    sha256 = "0z4s0z14n1v9wajs7mj2b295rrrw24gdca79drzlv6x1y6dj7sxh";
+    rev = "71b093cdf5e48ded645303281ab4a3ea5b730f5d";
     fetchSubmodules = true;
   };
   isLibrary = true;
@@ -25,17 +25,13 @@ mkDerivation {
     bytestring Cabal containers dhall directory either exceptions
     file-embed filepath foldl fsnotify github Glob http-client
     http-conduit lens-family-core megaparsec mtl network-uri
-    open-browser prettyprinter process retry rio rio-orphans safe
-    semver-range stm tar template-haskell temporary text time
-    transformers turtle unliftio unordered-containers vector versions
-    zlib
+    open-browser optparse-applicative prettyprinter process retry rio
+    rio-orphans safe semver-range stm tar template-haskell temporary
+    text time transformers turtle unliftio unordered-containers vector
+    versions with-utf8 zlib
   ];
   libraryToolDepends = [ hpack ];
-  executableHaskellDepends = [
-    aeson-pretty async-pool base bytestring containers dhall filepath
-    github lens-family-core megaparsec optparse-applicative process
-    retry stm temporary text time turtle vector
-  ];
+  executableHaskellDepends = [ base text turtle with-utf8 ];
   testHaskellDepends = [
     base containers directory extra hspec hspec-megaparsec megaparsec
     process QuickCheck temporary text turtle versions

@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "alerta-server";
-  version = "7.4.1";
+  version = "7.5.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a6f7740c97f2ae552a4b50bfb709596eabb01bf73715685c9b93ea9fec1821f3";
+    sha256 = "507abdb64c8b83c8ff0c21e39b03a21ccd7884ca3ce31afacea2d97e4d39f2e8";
   };
 
   propagatedBuildInputs = [ python-dateutil requests pymongo raven bcrypt flask pyjwt flask-cors psycopg2 pytz flask-compress jinja2 pyyaml];
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.5";
 
   meta = with stdenv.lib; {
-    homepage = https://alerta.io;
+    homepage = "https://alerta.io";
     description = "Alerta Monitoring System server";
     license = licenses.asl20;
   };

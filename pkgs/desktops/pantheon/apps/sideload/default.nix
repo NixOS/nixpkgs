@@ -1,5 +1,6 @@
 { stdenv
 , desktop-file-utils
+, nix-update-script
 , elementary-gtk-theme
 , elementary-icon-theme
 , fetchFromGitHub
@@ -21,17 +22,17 @@
 
 stdenv.mkDerivation rec {
   pname = "sideload";
-  version = "1.0.1";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0camg34skiisfbf9s9awfkdkq72s9jhl4ipmax7dqr33n8a86hic";
+    sha256 = "0mlc3nm2navzxm8k1rwpbw4w6mv30lmhqybm8jqxd4v8x7my73vq";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -64,7 +65,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/elementary/sideload;
+    homepage = "https://github.com/elementary/sideload";
     description = "Flatpak installer, designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

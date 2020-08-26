@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     xset()  { ${xset}/bin/xset      "$@"; }\
     perl()  { PERL5LIB=${perlPath} ${perlPackages.perl}/bin/perl "$@"; }\
     mimetype() { ${perlPackages.FileMimeInfo}/bin/mimetype "$@"; }\
+    PATH=$PATH:'"$out"'/bin\
     &#' -i "$out"/bin/*
 
     substituteInPlace $out/bin/xdg-open \
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.freedesktop.org/wiki/Software/xdg-utils/;
+    homepage = "https://www.freedesktop.org/wiki/Software/xdg-utils/";
     description = "A set of command line tools that assist applications with a variety of desktop integration tasks";
     license = if mimiSupport then licenses.gpl2 else licenses.free;
     maintainers = [ maintainers.eelco ];

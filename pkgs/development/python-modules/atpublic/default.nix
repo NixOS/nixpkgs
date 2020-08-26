@@ -20,7 +20,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://public.readthedocs.io/en/latest/;
+    homepage = "https://public.readthedocs.io/en/latest/";
     description = "A decorator and function which populates a module's __all__ and globals";
     longDescription = ''
       This is a very simple decorator and function which populates a module's

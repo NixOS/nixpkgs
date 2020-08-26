@@ -2,20 +2,19 @@
 
 buildGoPackage rec {
   pname = "morph";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "dbcdk";
     repo = "morph";
     rev = "v${version}";
-    sha256 = "1y6clzi8sfnrv4an26b44r24nnxds1kj9aw3lmjbgxl9yrxxsj1k";
+    sha256 = "064ccvvq4yk17jy5jvi1nxfp5ajvnvn2k4zvh9v0n3ragcl3rd20";
   };
 
   goPackagePath = "github.com/dbcdk/morph";
   goDeps = ./deps.nix;
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ go-bindata ];
+  nativeBuildInputs = [ makeWrapper go-bindata ];
 
   buildFlagsArray = ''
     -ldflags=
@@ -23,17 +22,17 @@ buildGoPackage rec {
     main.version=${version}
   '';
 
-  prePatch = ''
+  postPatch = ''
     go-bindata -pkg assets -o assets/assets.go data/
   '';
 
   postInstall = ''
     mkdir -p $lib
-    cp -v $src/data/*.nix $lib
-    wrapProgram $bin/bin/morph --prefix PATH : ${lib.makeBinPath [ openssh ]};
+    cp -v go/src/$goPackagePath/data/*.nix $lib
+    wrapProgram $out/bin/morph --prefix PATH : ${lib.makeBinPath [ openssh ]};
   '';
 
-  outputs = [ "out" "bin" "lib" ];
+  outputs = [ "out" "lib" ];
 
   meta = with lib; {
     description = "Morph is a NixOS host manager written in Golang.";

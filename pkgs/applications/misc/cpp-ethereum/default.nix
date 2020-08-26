@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Ethereum C++ client";
-    homepage = https://github.com/ethereum/cpp-ethereum;
+    homepage = "https://github.com/ethereum/cpp-ethereum";
     license = licenses.gpl3;
     maintainers = with maintainers; [ artuuge ];
     platforms = platforms.linux;

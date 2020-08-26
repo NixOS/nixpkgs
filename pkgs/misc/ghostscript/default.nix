@@ -10,8 +10,8 @@ assert cupsSupport -> cups != null;
 
 let
   version = "9.${ver_min}";
-  ver_min = "50";
-  sha512 = "3p46kzn6kh7z4qqnqydmmvdlgzy5730z3yyvyxv6i4yb22mgihzrwqmhmvfn3b7lypwf6fdkkndarzv7ly3zndqpyvg89x436sms7iw";
+  ver_min = "52";
+  sha512 = "1ksm3v4nw8acc4j817n44l1c65ijk0mr3mp4kryy17jz41bmzzql5d8vr40h59n9dmf8b2wmnbq45bj3an1zrpfagavlf0i9s436jjc";
 
   fonts = stdenv.mkDerivation {
     name = "ghostscript-fonts";
@@ -45,13 +45,16 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    (fetchpatch {
+      name = "CVE-2020-15900.patch";
+      url = "https://github.com/ArtifexSoftware/ghostpdl/commit/5d499272b95a6b890a1397e11d20937de000d31b.patch";
+      sha256 = "1nnnrn8q33x7nc8227ygc60f3mj4bjzrhj40sxp6dah58rb5x5jz";
+    })
     ./urw-font-files.patch
     ./doc-no-ref.diff
-    (fetchpatch {
-      name = "CVE-2019-14869.patch";
-      url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=485904772c5f0aa1140032746e5a0abfc40f4cef";
-      sha256 = "0z5gnvgpp0dlzgvpw9a1yan7qyycv3mf88l93fvb1kyay893rshp";
-    })
+    # rebased version of upstream http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=1b4c3669a20c,
+    # Remove on update to version > 9.52
+    ./0001-Bug-702364-Fix-missing-echogs-dependencies.patch
   ];
 
   outputs = [ "out" "man" "doc" ];
@@ -101,9 +104,6 @@ stdenv.mkDerivation rec {
 
     cp -r Resource "$out/share/ghostscript/${version}"
 
-    mkdir -p "$doc/share/doc/ghostscript"
-    mv "$doc/share/doc/${version}" "$doc/share/doc/ghostscript/"
-
     ln -s "${fonts}" "$out/share/ghostscript/fonts"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     for file in $out/lib/*.dylib* ; do
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
   passthru = { inherit version; };
 
   meta = {
-    homepage = https://www.ghostscript.com/;
+    homepage = "https://www.ghostscript.com/";
     description = "PostScript interpreter (mainline version)";
 
     longDescription = ''

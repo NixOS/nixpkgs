@@ -1,28 +1,26 @@
 { stdenv
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , pytest
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pytest-check";
-  version = "0.3.5";
+  version = "0.3.9";
 
-  src = fetchFromGitHub {
-    owner = "okken";
-    repo = "pytest-check";
-    rev = version;
-    sha256 = "11wb4f4sp4cr5mzqdakrbycwgfr2p1sx1l91fa6525wnfvgc0qy3";
+  src = fetchPypi {
+    pname = "pytest_check";
+    inherit version;
+    sha256 = "0asrrz0fgk6wqffsz1ffd6z9xyw314fwh5bwjzcq75w8w1g4ass9";
   };
 
-  buildInputs = [ pytest ];
-
-  checkInputs = [ pytest pytestCheckHook ];
+  propagatedBuildInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with stdenv.lib; {
     description = "pytest plugin allowing multiple failures per test";
-    homepage = https://github.com/okken/pytest-check;
+    homepage = "https://github.com/okken/pytest-check";
     license = licenses.mit;
     maintainers = [ maintainers.flokli ];
   };

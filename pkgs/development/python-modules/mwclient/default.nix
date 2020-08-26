@@ -4,14 +4,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.10.0";
+  version = "0.10.1";
   pname = "mwclient";
 
   src = fetchFromGitHub {
     owner = "mwclient";
     repo = "mwclient";
     rev = "v${version}";
-    sha256 = "1c3q6lwmb05yqywc4ya98ca7hsl15niili8rccl4n1yqp77c103v";
+    sha256 = "120snnsh9n5svfwkyj1w9jrxf99jnqm0jk282yypd3lpyca1l9hj";
   };
 
   checkInputs = [ pytest pytestpep8 pytestcache pytestcov responses mock ];
@@ -25,6 +25,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Python client library to the MediaWiki API";
     license = licenses.mit;
-    homepage = https://github.com/mwclient/mwclient;
+    homepage = "https://github.com/mwclient/mwclient";
   };
 }

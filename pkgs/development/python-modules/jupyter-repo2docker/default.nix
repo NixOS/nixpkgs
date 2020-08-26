@@ -12,13 +12,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.10.0";
+  version = "0.11.0";
   pname = "jupyter-repo2docker";
   disabled = !(pythonAtLeast "3.4");
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7965262913be6be60e64c8016f5f3d4bf93701f2787209215859d73b2adbc05a";
+    sha256 = "7fc2edf0cda1e46f2e7553bfb84a47e6d141b8dac393268ef01ee3504ca6ad94";
   };
 
   propagatedBuildInputs = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = https://repo2docker.readthedocs.io/en/latest/;
+    homepage = "https://repo2docker.readthedocs.io/en/latest/";
     description = "Repo2docker: Turn code repositories into Jupyter enabled Docker Images";
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.costrouc ];

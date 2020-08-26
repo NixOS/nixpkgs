@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/yahoojapan/NGT;
+    homepage = "https://github.com/yahoojapan/NGT";
     description = "Nearest Neighbor Search with Neighborhood Graph and Tree for High-dimensional Data";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.asl20;

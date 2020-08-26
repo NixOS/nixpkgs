@@ -14,9 +14,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ] ++ optional doCheck check;
 
-  buildInputs = [ gnutls glib libotr python ]
+  buildInputs = [ gnutls libotr python ]
     ++ optional enableLibPurple pidgin
     ++ optional enablePam pam;
+
+  propagatedBuildInputs = [ glib ];
 
   configureFlags = [
     "--otr=1"
@@ -57,7 +59,7 @@ stdenv.mkDerivation rec {
       Messenger, AIM and ICQ.
     '';
 
-    homepage = https://www.bitlbee.org/;
+    homepage = "https://www.bitlbee.org/";
     license = licenses.gpl2Plus;
 
     maintainers = with maintainers; [ pSub ];

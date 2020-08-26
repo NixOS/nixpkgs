@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences, coreutils
+{ stdenv, fetchFromGitHub, fetchpatch
+, autoreconfHook, utillinux, nukeReferences, coreutils
 , perl, buildPackages
 , configFile ? "all"
 
@@ -11,6 +12,7 @@
 
 # Kernel dependencies
 , kernel ? null
+, enablePython ? true
 }:
 
 with stdenv.lib;
@@ -40,7 +42,7 @@ let
         inherit rev sha256;
       };
 
-      patches = extraPatches;
+      patches = [ ./BACKPORT-Linux-5.8-compat-__vmalloc.patch ] ++ extraPatches;
 
       postPatch = optionalString buildKernel ''
         patchShebangs scripts
@@ -51,7 +53,12 @@ let
       '' + optionalString buildUser ''
         substituteInPlace ./lib/libzfs/libzfs_mount.c --replace "/bin/umount"             "${utillinux}/bin/umount" \
                                                       --replace "/bin/mount"              "${utillinux}/bin/mount"
-        substituteInPlace ./lib/libshare/nfs.c        --replace "/usr/sbin/exportfs"      "${nfs-utils}/bin/exportfs"
+        substituteInPlace ./lib/libshare/nfs.c        --replace "/usr/sbin/exportfs"      "${
+          # We don't *need* python support, but we set it like this to minimize closure size:
+          # If it's disabled by default, no need to enable it, even if we have python enabled
+          # And if it's enabled by default, only change that if we explicitly disable python to remove python from the closure
+          nfs-utils.override (old: { enablePython = old.enablePython or true && enablePython; })
+        }/bin/exportfs"
         substituteInPlace ./config/user-systemd.m4    --replace "/usr/lib/modules-load.d" "$out/etc/modules-load.d"
         substituteInPlace ./config/zfs-build.m4       --replace "\$sysconfdir/init.d"     "$out/etc/init.d"
         substituteInPlace ./etc/zfs/Makefile.am       --replace "\$(sysconfdir)"          "$out/etc"
@@ -86,7 +93,8 @@ let
       nativeBuildInputs = [ autoreconfHook nukeReferences ]
         ++ optionals buildKernel (kernel.moduleBuildDependencies ++ [ perl ]);
       buildInputs = optionals buildUser [ zlib libuuid attr ]
-        ++ optionals (buildUser) [ openssl python3 ]
+        ++ optional buildUser openssl
+        ++ optional (buildUser && enablePython) python3
         ++ optional stdenv.hostPlatform.isMusl libtirpc;
 
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
@@ -96,7 +104,7 @@ let
 
       configureFlags = [
         "--with-config=${configFile}"
-        (withFeatureAs buildUser "python" python3.interpreter)
+        (withFeatureAs (buildUser && enablePython) "python" python3.interpreter)
       ] ++ optionals buildUser [
         "--with-dracutdir=$(out)/lib/dracut"
         "--with-udevdir=$(out)/lib/udev"
@@ -164,7 +172,7 @@ let
           Copy-On-Write filesystem with data integrity detection and repair,
           snapshotting, cloning, block devices, deduplication, and more.
         '';
-        homepage = https://zfsonlinux.org/;
+        homepage = "https://zfsonlinux.org/";
         license = licenses.cddl;
         platforms = platforms.linux;
         maintainers = with maintainers; [ jcumming wizeman fpletz globin ];
@@ -179,9 +187,9 @@ in {
     # incompatibleKernelVersion = "4.20";
 
     # this package should point to the latest release.
-    version = "0.8.3";
+    version = "0.8.4";
 
-    sha256 = "0viql8rnqr32diapkpdsrwm6xj8vw5vi4dk2x2m7s7g0q2zdkahw";
+    sha256 = "1hl4n900d24gl4vd65qdzq4m62b7bpvckldazcbd1xqcn8xhi6wp";
   };
 
   zfsUnstable = common {
@@ -189,9 +197,9 @@ in {
     # incompatibleKernelVersion = "4.19";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "0.8.3";
+    version = "0.8.4";
 
-    sha256 = "0viql8rnqr32diapkpdsrwm6xj8vw5vi4dk2x2m7s7g0q2zdkahw";
+    sha256 = "1hl4n900d24gl4vd65qdzq4m62b7bpvckldazcbd1xqcn8xhi6wp";
     isUnstable = true;
   };
 }

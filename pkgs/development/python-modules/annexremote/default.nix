@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Helper module to easily develop git-annex remotes";
-    homepage = https://github.com/Lykos153/AnnexRemote;
+    homepage = "https://github.com/Lykos153/AnnexRemote";
     license = licenses.gpl3;
     maintainers = with maintainers; [ montag451 ];
   };

@@ -1,7 +1,7 @@
 { SDL2
 , cmake
 , fetchFromGitHub
-, ffmpeg
+, ffmpeg_3
 , glew
 , lib
 , libzip
@@ -16,14 +16,14 @@
 
 mkDerivation rec {
   pname = "ppsspp";
-  version = "1.9.3";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "hrydgard";
     repo = "ppsspp";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "17sym0vk72lzbh9a1501mhw98c78x1gq7k1fpy69nvvb119j37wa";
+    sha256 = "0ivi0dcfxwa4nz19amki80qacnjhqr42f0ihyby1scxafl3nq55c";
   };
 
   postPatch = ''
@@ -37,7 +37,7 @@ mkDerivation rec {
 
   buildInputs = [
     SDL2
-    ffmpeg
+    ffmpeg_3
     glew
     libzip
     qtbase

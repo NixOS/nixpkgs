@@ -1,6 +1,9 @@
 { llvmPackages, lib, fetchFromGitHub, cmake
-, libpng, libjpeg, mesa, eigen, openblas
+, libpng, libjpeg, mesa, eigen
+, openblas, blas, lapack
 }:
+
+assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
 let
   version = "2019_08_27";

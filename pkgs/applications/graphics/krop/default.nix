@@ -2,21 +2,23 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "krop";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "arminstraub";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0b1zqpks4vzq7sfhf7r9qrshr77f1ncj18x7d0fa3g29rxa42dcr";
+    sha256 = "1ygzc7vlwszqmsd3v1dsqp1dpsn6inx7g8gck63alvf88dbn8m3s";
   };
 
   propagatedBuildInputs = with python3Packages; [
     pyqt5
     pypdf2
     poppler-qt5
-    libsForQt5.poppler
     ghostscript
+  ];
+  buildInputs = [
+    libsForQt5.poppler
   ];
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
@@ -24,11 +26,15 @@ python3Packages.buildPythonApplication rec {
    "\${qtWrapperArgs[@]}"
   ];
 
+  postInstall = ''
+    install -m666 -Dt $out/share/applications krop.desktop
+  '';
+
   # Disable checks because of interference with older Qt versions // xcb
   doCheck = false;
 
   meta = {
-    homepage = http://arminstraub.com/software/krop;
+    homepage = "http://arminstraub.com/software/krop";
     description = "Graphical tool to crop the pages of PDF files";
     longDescription = ''
     Krop is a tool that allows you to optimise your PDF files, and remove

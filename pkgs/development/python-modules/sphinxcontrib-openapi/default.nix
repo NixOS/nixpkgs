@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-openapi";
-  version = "0.5.0";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2a5883456c0caba0dad90f07968c75a50d5fc425a3aa06d1c538472ddf8c7e22";
+    sha256 = "1c1bd10d7653912c59a42f727c62cbb7b75f7905ddd9ccc477ebfd1bc69f0cf3";
   };
 
   propagatedBuildInputs = [setuptools_scm pyyaml jsonschema sphinxcontrib_httpdomain];
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/ikalnytskyi/sphinxcontrib-openapi;
+    homepage = "https://github.com/ikalnytskyi/sphinxcontrib-openapi";
     description = "OpenAPI (fka Swagger) spec renderer for Sphinx";
     license = licenses.bsd0;
   };

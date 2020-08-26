@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "quadrapassel";
-  version = "3.34.1";
+  version = "3.36.05";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/quadrapassel/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1qh6hx90lqag2hby94jc68xnz4i6b2a253x4yp6xz025fpacv6mk";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "04abxmimh5npw8rhz1sfi6wxilgc6i1wka9mlnfwp8v1p1cb00cv";
   };
 
   nativeBuildInputs = [
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Classic falling-block game, Tetris";
-    homepage = https://wiki.gnome.org/Apps/Quadrapassel;
+    homepage = "https://wiki.gnome.org/Apps/Quadrapassel";
     license = licenses.gpl2;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

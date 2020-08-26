@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Provides an interface to libffi which enables you to call C functions from Pure and vice versa";
-    homepage = http://puredocs.bitbucket.org/pure-ffi.html;
+    homepage = "http://puredocs.bitbucket.org/pure-ffi.html";
     license = stdenv.lib.licenses.lgpl3Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ asppsa ];

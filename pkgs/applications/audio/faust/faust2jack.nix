@@ -2,7 +2,7 @@
 , gtk2
 , jack2Full
 , alsaLib
-, opencv
+, opencv2
 , libsndfile
 }:
 
@@ -12,7 +12,6 @@ faust.wrapWithBuildEnv {
 
   scripts = [
     "faust2jack"
-    "faust2jackinternal"
     "faust2jackconsole"
   ];
 
@@ -20,7 +19,7 @@ faust.wrapWithBuildEnv {
     gtk2
     jack2Full
     alsaLib
-    opencv
+    opencv2
     libsndfile
   ];
 

@@ -2,6 +2,7 @@
 , pkgconfig
 , python3
 , fetchhg
+, fetchpatch
 , gtk3
 , glib
 , gdbm
@@ -20,10 +21,18 @@ stdenv.mkDerivation rec {
   version = "0.0.19.1";
 
   src = fetchhg {
-    url = https://linuxonly@bitbucket.org/linuxonly/modem-manager-gui;
+    url = "https://linuxonly@bitbucket.org/linuxonly/modem-manager-gui";
     rev = "version ${version}";
     sha256 = "11iibh36567814h2bz41sa1072b86p1l13xyj670pwkh9k8kw8fd";
   };
+
+  patches = [
+    # Fix docs build
+    (fetchpatch {
+      url = "https://bitbucket.org/linuxonly/modem-manager-gui/commits/68fb09c12413b7de9b7477cbf4241c3527568325/raw";
+      sha256 = "033nrlhjlk0zvadv5g9n2id53ajagswf77mda0ixnrskyi7wiig7";
+    })
+  ];
 
   nativeBuildInputs = [
     pkgconfig
@@ -55,7 +64,7 @@ stdenv.mkDerivation rec {
       functions. You can check balance of your SIM card, send or receive SMS
       messages, control mobile traffic consumption and more.
     '';
-    homepage = https://linuxonly.ru/page/modem-manager-gui;
+    homepage = "https://linuxonly.ru/page/modem-manager-gui";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ahuzik ];
     platforms = platforms.linux;

@@ -32,10 +32,6 @@ stdenv.mkDerivation rec {
     ]
     ++ upstreamPatches;
 
-  # Don't run the native `strip' when cross-compiling.
-  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
-  bash_cv_func_sigsetjmp = if stdenv.isCygwin then "missing" else null;
-
   meta = with stdenv.lib; {
     description = "Library for interactive line editing";
 
@@ -54,7 +50,7 @@ stdenv.mkDerivation rec {
       desire its capabilities.
     '';
 
-    homepage = https://savannah.gnu.org/projects/readline/;
+    homepage = "https://savannah.gnu.org/projects/readline/";
 
     license = licenses.gpl3Plus;
 

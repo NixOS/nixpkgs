@@ -26,7 +26,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://www.reviewboard.org/docs/rbtools/dev/;
+    homepage = "https://www.reviewboard.org/docs/rbtools/dev/";
     description = "RBTools is a set of command line tools for working with Review Board and RBCommons";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, python3, sass, glib, gdk-pixbuf, libxml2,
-  inkscape, optipng, gtk-engine-murrine
+  inkscape_0, optipng, gtk-engine-murrine
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1kda0lyqi3cxh163fbj8yyi6jj6pf0y980k4s0cmyi3hkh4cqyd5";
   };
 
-  nativeBuildInputs = [ python3 sass glib gdk-pixbuf libxml2 inkscape optipng ];
+  nativeBuildInputs = [ python3 sass glib gdk-pixbuf libxml2 inkscape_0 optipng ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
     substituteInPlace Makefile --replace '$(DESTDIR)'/usr $out
     substituteInPlace scripts/render-assets.sh \
-      --replace /usr/bin/inkscape ${inkscape}/bin/inkscape \
+      --replace /usr/bin/inkscape ${inkscape_0}/bin/inkscape \
       --replace /usr/bin/optipng ${optipng}/bin/optipng
   '';
 
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
       and icons to use the solarized theme with a solarized green accent color.
       This theme supports both the dark and light theme, just as Numix proper.
     '';
-    homepage = https://github.com/Ferdi265/numix-solarized-gtk-theme;
-    downloadPage = https://github.com/Ferdi265/numix-solarized-gtk-theme/releases;
+    homepage = "https://github.com/Ferdi265/numix-solarized-gtk-theme";
+    downloadPage = "https://github.com/Ferdi265/numix-solarized-gtk-theme/releases";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.offline ];

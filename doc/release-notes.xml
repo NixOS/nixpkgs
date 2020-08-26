@@ -190,7 +190,7 @@ preConfigure = "configureFlagsArray=(\"CFLAGS=-O0 -g\")";</programlisting>
       The function <function>fetchurl</function> now has support for two different kinds of mirroring of files. First, it has support for <emphasis>content-addressable mirrors</emphasis>. For example, given the <function>fetchurl</function> call
 <programlisting>
 fetchurl {
-  url = http://releases.mozilla.org/<replaceable>...</replaceable>/firefox-2.0.0.6-source.tar.bz2;
+  url = "http://releases.mozilla.org/<replaceable>...</replaceable>/firefox-2.0.0.6-source.tar.bz2";
   sha1 = "eb72f55e4a8bf08e8c6ef227c0ade3d068ba1082";
 }</programlisting>
       <function>fetchurl</function> will first try to download this file from <link
@@ -286,7 +286,7 @@ export NIX_MIRRORS_sourceforge=http://osdn.dl.sourceforge.net/sourceforge/</prog
   <note>
    <para>
     This release of Nixpkgs requires <link
-xlink:href='http://nixos.org/releases/nix/nix-0.10/'>Nix 0.10</link> or higher.
+xlink:href='https://nixos.org/releases/nix/nix-0.10/'>Nix 0.10</link> or higher.
    </para>
   </note>
 
@@ -436,7 +436,7 @@ stdenv.mkDerivation {
    <listitem>
     <para>
      Distribution files have been moved to <link
-  xlink:href="http://nixos.org/" />.
+  xlink:href="https://nixos.org/" />.
     </para>
    </listitem>
    <listitem>

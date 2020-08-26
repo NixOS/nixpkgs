@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Atomic Tanks ballistics game";
-    homepage = http://atanks.sourceforge.net/;
+    homepage = "http://atanks.sourceforge.net/";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
     license = licenses.gpl2;

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Realtek 8814AU USB WiFi driver";
-    homepage = https://github.com/zebulon2/rtl8814au;
+    homepage = "https://github.com/zebulon2/rtl8814au";
     license = licenses.gpl2;
     maintainers = [ maintainers.lassulus ];
     platforms = [ "x86_64-linux" "i686-linux" ];

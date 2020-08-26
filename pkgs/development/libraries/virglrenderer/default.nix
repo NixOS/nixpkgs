@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "virglrenderer";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/virgl/virglrenderer/-/archive/virglrenderer-${version}/virglrenderer-virglrenderer-${version}.tar.bz2";
-    sha256 = "0ac39mplmy6lmcd6cljmfsrfby7m6ac3dzvmnn5pv200drl415l4";
+    sha256 = "07vfzg99wq92yg2phza9jc0zvps34yy9gc8v4hibqchdl77fmspx";
   };
 
   buildInputs = [ libGLU epoxy libX11 libdrm mesa ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A virtual 3D GPU library that allows a qemu guest to use the host GPU for accelerated 3D rendering";
-    homepage = https://virgil3d.github.io/;
+    homepage = "https://virgil3d.github.io/";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.xeji ];

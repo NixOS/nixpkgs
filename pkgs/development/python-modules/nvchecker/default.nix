@@ -1,26 +1,23 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, pytest, setuptools, structlog, pytest-asyncio, flaky, tornado, pycurl, pytest-httpbin }:
+{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, pytestCheckHook, setuptools, structlog, pytest-asyncio, flaky, tornado, pycurl, aiohttp, pytest-httpbin }:
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "1.5";
+  version = "1.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0973f7c3ea5ad65fb19837e8915882a9f2c2f21f5c2589005478697391fea2fd";
+    sha256 = "01be0e5587d346ad783b4b2dc45bd8eefe477081b33fff18cc2fdea58c2a38ef";
   };
 
-  propagatedBuildInputs = [ setuptools structlog tornado pycurl ];
-  checkInputs = [ pytest pytest-asyncio flaky pytest-httpbin ];
-
-  # disable `test_ubuntupkg` because it requires network
-  checkPhase = ''
-    py.test -m "not needs_net" --ignore=tests/test_ubuntupkg.py
-  '';
+  propagatedBuildInputs = [ setuptools structlog tornado pycurl aiohttp ];
+  checkInputs = [ pytestCheckHook pytest-asyncio flaky pytest-httpbin ];
 
   disabled = pythonOlder "3.5";
 
+  pytestFlagsArray = [ "-m 'not needs_net'" ];
+
   meta = with stdenv.lib; {
-    homepage = https://github.com/lilydjwg/nvchecker;
+    homepage = "https://github.com/lilydjwg/nvchecker";
     description = "New version checker for software";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam ];

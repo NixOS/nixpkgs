@@ -1,19 +1,19 @@
 { stdenv, fetchFromGitLab
-, meson, ninja, pkgconfig, scdoc
+, meson, ninja, pkg-config, scdoc
 , wayland, wayland-protocols, openssh
-, mesa, lz4, zstd, ffmpeg_4, libva
+, mesa, lz4, zstd, ffmpeg, libva
 }:
 
 stdenv.mkDerivation rec {
   pname = "waypipe-unstable";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mstoeckl";
     repo = "waypipe";
     rev = "v${version}";
-    sha256 = "13kp5snkksli0sj5ldkgybcs1s865f0qdak2w8796xvy8dg9jda8";
+    sha256 = "0bkmibask7gfnwkn3fg3l6zaabp95n1zsdnz3dwng8j80a0kakyy";
   };
 
   postPatch = ''
@@ -21,17 +21,13 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/ssh" "${openssh}/bin/ssh"
   '';
 
-  nativeBuildInputs = [ meson ninja pkgconfig scdoc ];
+  nativeBuildInputs = [ meson ninja pkg-config scdoc ];
 
   buildInputs = [
     wayland wayland-protocols
     # Optional dependencies:
-    mesa lz4 zstd ffmpeg_4 libva
+    mesa lz4 zstd ffmpeg libva
   ];
-
-  enableParallelBuilding = true;
-
-  mesonFlags = [ "-Dwerror=false" ]; # TODO: Report warnings upstream
 
   meta = with stdenv.lib; {
     description = "A network proxy for Wayland clients (applications)";
@@ -40,7 +36,8 @@ stdenv.mkDerivation rec {
       serializes changes to shared memory buffers over a single socket. This
       makes application forwarding similar to ssh -X feasible.
     '';
-    homepage = https://mstoeckl.com/notes/gsoc/blog.html;
+    homepage = "https://mstoeckl.com/notes/gsoc/blog.html";
+    changelog = "https://gitlab.freedesktop.org/mstoeckl/waypipe/-/releases#v${version}";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

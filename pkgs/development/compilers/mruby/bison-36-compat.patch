@@ -1,0 +1,59 @@
+From acab088fd6af0b2ef2df1396aeb93bfc2e020fa5 Mon Sep 17 00:00:00 2001
+From: "Yukihiro \"Matz\" Matsumoto" <matz@ruby.or.jp>
+Date: Mon, 27 Apr 2020 18:52:43 +0900
+Subject: [PATCH 1/2] Updating `parse.y for recent `bison` (retry).
+
+---
+ mrbgems/mruby-compiler/core/parse.y | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mrbgems/mruby-compiler/core/parse.y b/mrbgems/mruby-compiler/core/parse.y
+index 6a1faf4e..2a4f740e 100644
+--- a/mrbgems/mruby-compiler/core/parse.y
++++ b/mrbgems/mruby-compiler/core/parse.y
+@@ -1323,7 +1323,7 @@ heredoc_end(parser_state *p)
+ 
+ %}
+ 
+-%pure-parser
++%define api.pure
+ %parse-param {parser_state *p}
+ %lex-param {parser_state *p}
+ 
+-- 
+2.27.0
+
+From 3cc682d943b29e84928a847a23f411ddbace74b7 Mon Sep 17 00:00:00 2001
+From: "Yukihiro \"Matz\" Matsumoto" <matz@ruby.or.jp>
+Date: Fri, 15 May 2020 12:30:13 +0900
+Subject: [PATCH 2/2] Remove `YYERROR_VERBOSE` which no longer supported since
+ `bison 3.6`.
+
+Instead we added `%define parse.error verbose`.
+---
+ mrbgems/mruby-compiler/core/parse.y | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mrbgems/mruby-compiler/core/parse.y b/mrbgems/mruby-compiler/core/parse.y
+index 2a4f740e..eee6a5e5 100644
+--- a/mrbgems/mruby-compiler/core/parse.y
++++ b/mrbgems/mruby-compiler/core/parse.y
+@@ -9,7 +9,6 @@
+ #ifdef PARSER_DEBUG
+ # define YYDEBUG 1
+ #endif
+-#define YYERROR_VERBOSE 1
+ #define YYSTACK_USE_ALLOCA 1
+ 
+ #include <ctype.h>
+@@ -1323,6 +1322,7 @@ heredoc_end(parser_state *p)
+ 
+ %}
+ 
++%define parse.error verbose
+ %define api.pure
+ %parse-param {parser_state *p}
+ %lex-param {parser_state *p}
+-- 
+2.27.0
+

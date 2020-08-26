@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Light-weight Python Computational Pipeline Management";
-    homepage = http://www.ruffus.org.uk;
+    homepage = "http://www.ruffus.org.uk";
     license = licenses.mit;
     maintainers = [ maintainers.kiwi ];
   };

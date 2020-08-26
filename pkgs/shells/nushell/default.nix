@@ -10,21 +10,20 @@
 , AppKit
 , Security
 , withStableFeatures ? true
-, withTestBinaries ? true
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
-  version = "0.11.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "06w1118cxr5x3l7cq2wc092xvsfkgga8b6kz1gcmhwq0gf7fqirz";
+    sha256 = "100r26dx57wdzdpf6lgsgw0py33k3nsx73pa1qjcipwv00a106sr";
   };
 
-  cargoSha256 = "1bpb4p4j7lwb70qjsssbr878mfalil4xh8r954aaa2rlcf97fmb7";
+  cargoSha256 = "0ch79zsnqb5n9r7jq6figpmqp2cs2p9a3m7fg3sd04m797ki9chr";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optionals (withStableFeatures && stdenv.isLinux) [ python3 ];
@@ -36,16 +35,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = lib.optional withStableFeatures "--features stable";
 
-  cargoTestFlags = lib.optional withTestBinaries "--features test-bins";
-
   preCheck = ''
     export HOME=$TMPDIR
   '';
 
   checkPhase = ''
     runHook preCheck
-    echo "Running cargo cargo test ${lib.strings.concatStringsSep " " cargoTestFlags} -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
-    cargo test ${lib.strings.concatStringsSep " " cargoTestFlags} -- ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
+    echo "Running cargo test"
+    cargo test
     runHook postCheck
   '';
 
@@ -53,7 +50,7 @@ rustPlatform.buildRustPackage rec {
     description = "A modern shell written in Rust";
     homepage = "https://www.nushell.sh/";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 marsam ];
+    maintainers = with maintainers; [ filalex77 johntitor marsam ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
   };
 

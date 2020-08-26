@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, lua5_3, pkgconfig, python
+{ stdenv, fetchFromGitHub, autoreconfHook, lua5_3, pkgconfig, python3
 , zlib, bzip2, curl, lzma, gettext, libiconv
 , sdlClient ? true, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, freetype, fluidsynth
 , gtkClient ? false, gtk3
@@ -12,19 +12,19 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "freeciv";
-  version = "2.6.0";
+  version = "2.6.2";
 
   src = fetchFromGitHub {
     owner = "freeciv";
     repo = "freeciv";
     rev = "R${builtins.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "1b3q5k9wpv7z24svz01ybw8d8wlzkkdr6ia5hgp6cxk6vq67n67s";
+    sha256 = "023slffi06j52amrnmd8n12rmf778cngxx6xg4hbsgckj2nyfmg9";
   };
 
   postPatch = ''
     for f in {common,utility}/*.py; do
       substituteInPlace $f \
-        --replace '/usr/bin/env python' ${python.interpreter}
+        --replace '/usr/bin/env python3' ${python3.interpreter}
     done
   '';
 
@@ -59,7 +59,7 @@ in stdenv.mkDerivation rec {
       to the space age...
     '';
 
-    homepage = http://www.freeciv.org; # http only
+    homepage = "http://www.freeciv.org"; # http only
     license = licenses.gpl2;
 
     maintainers = with maintainers; [ pierron ];

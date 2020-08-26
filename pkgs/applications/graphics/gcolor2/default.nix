@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Simple GTK 2 color selector";
-    homepage = http://gcolor2.sourceforge.net/;
+    homepage = "http://gcolor2.sourceforge.net/";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ notthemessiah ];
     platforms = with stdenv.lib.platforms; unix;

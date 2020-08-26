@@ -6,21 +6,21 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.2.0";
+  version = "2.2.2";
   pname = "simpleparse";
   disabled = isPy3k || isPyPy;
 
   src = fetchPypi {
     pname = "SimpleParse";
     inherit version;
-    sha256 = "18ccdc249bb550717af796af04a7d50aef523368901f64036a48eee5daca149d";
+    sha256 = "010szm4mbqgfdksa2n4l9avj617rb0gkwrryc70mfjmyww0bd1m6";
   };
 
   doCheck = false;  # weird error
 
   meta = with stdenv.lib; {
     description = "A Parser Generator for Python";
-    homepage = https://pypi.python.org/pypi/SimpleParse;
+    homepage = "https://pypi.python.org/pypi/SimpleParse";
     license = licenses.bsd0;
   };
 

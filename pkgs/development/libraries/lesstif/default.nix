@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An open source clone of the Motif widget set";
-    homepage = http://lesstif.sourceforge.net;
+    homepage = "http://lesstif.sourceforge.net";
     platforms = platforms.unix;
     license = with licenses; [ gpl2 lgpl2 ];
   };

@@ -1,21 +1,21 @@
 { stdenv, buildPythonApplication, fetchFromGitHub, fetchpatch, isPyPy, lib
 , future, psutil, setuptools
 # Optional dependencies:
-, bottle, batinfo, pysnmp
+, bottle, pysnmp
 , hddtemp
 , netifaces # IP module
 }:
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "3.1.4";
+  version = "3.1.5";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
     rev = "v${version}";
-    sha256 = "1lr186rc3fvldy2m2yx1hxzdlxll93pjabs01sxz48kkpsvbiydi";
+    sha256 = "0l91nvlwyabxlsy5p533dqnc68mmvykfsrcsnxylcpjjl1nzy931";
   };
 
   # Some tests fail in the sandbox (they e.g. require access to /sys/class/power_supply):
@@ -35,7 +35,6 @@ buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
-    batinfo
     bottle
     future
     netifaces

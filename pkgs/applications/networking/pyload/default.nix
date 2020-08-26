@@ -52,7 +52,7 @@ in pythonPackages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Free and open source downloader for 1-click-hosting sites";
-    homepage = https://github.com/pyload/pyload;
+    homepage = "https://github.com/pyload/pyload";
     license = licenses.gpl3;
     maintainers = [ maintainers.mahe ];
     platforms = platforms.all;

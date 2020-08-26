@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ fuse obexftp bluez ];
 
   meta = with stdenv.lib; {
-    homepage = http://dev.zuckschwerdt.org/openobex/wiki/ObexFs;
+    homepage = "http://dev.zuckschwerdt.org/openobex/wiki/ObexFs";
     description = "A tool to mount OBEX-based devices (such as Bluetooth phones)";
     platforms = platforms.linux;
     license = licenses.lgpl2Plus;

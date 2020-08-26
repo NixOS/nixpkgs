@@ -1,10 +1,8 @@
 { stdenv
 , fetchurl
-
 , dbus
 , gettext
 , gnutls
-, gtk2
 , libfilezilla
 , libidn
 , nettle
@@ -12,18 +10,24 @@
 , pugixml
 , sqlite
 , tinyxml
-, wxGTK30
+, wxGTK30-gtk3
 , xdg_utils
 }:
 
 stdenv.mkDerivation rec {
   pname = "filezilla";
-  version = "3.46.3";
+  version = "3.49.1";
 
   src = fetchurl {
     url = "https://download.filezilla-project.org/client/FileZilla_${version}_src.tar.bz2";
-    sha256 = "15bkg9qs07h4pzkxba1gymp8f264dk0zrzd9brx48fcwm7qbzigi";
+    sha256 = "1dmkwpc0vy7058bh9a10ida0k64rxggap8ysl5xx3457y468rk2f";
   };
+
+  # https://www.linuxquestions.org/questions/slackware-14/trouble-building-filezilla-3-47-2-1-current-4175671182/#post6099769
+  postPatch = ''
+    sed -i src/interface/Mainfrm.h \
+      -e '/^#define/a #include <list>'
+  '';
 
   configureFlags = [
     "--disable-manualupdatecheck"
@@ -31,18 +35,19 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkgconfig ];
+
   buildInputs = [
     dbus
     gettext
     gnutls
-    gtk2
     libfilezilla
     libidn
     nettle
     pugixml
     sqlite
     tinyxml
-    wxGTK30
+    wxGTK30-gtk3
+    wxGTK30-gtk3.gtk
     xdg_utils
   ];
 

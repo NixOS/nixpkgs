@@ -41,7 +41,7 @@ let
       # so grab the work-around from
       # https://src.fedoraproject.org/rpms/java-openjdk/pull-request/24
       (fetchurl {
-        url = https://src.fedoraproject.org/rpms/java-openjdk/raw/06c001c7d87f2e9fe4fedeef2d993bcd5d7afa2a/f/rh1673833-remove_removal_of_wformat_during_test_compilation.patch;
+        url = "https://src.fedoraproject.org/rpms/java-openjdk/raw/06c001c7d87f2e9fe4fedeef2d993bcd5d7afa2a/f/rh1673833-remove_removal_of_wformat_during_test_compilation.patch";
         sha256 = "082lmc30x64x583vqq00c8y0wqih3y4r0mp1c4bqq36l22qv6b6r";
       })
     ] ++ lib.optionals (!headless && enableGnome2) [
@@ -55,6 +55,7 @@ let
 
     configureFlags = [
       "--with-boot-jdk=${openjdk11.home}"
+      "--with-version-pre="
       "--enable-unlimited-crypto"
       "--with-native-debug-symbols=internal"
       "--with-libjpeg=system"
@@ -114,7 +115,7 @@ let
       # Set JAVA_HOME automatically.
       mkdir -p $out/nix-support
       cat <<EOF > $out/nix-support/setup-hook
-      if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out/lib/openjdk; fi
+      if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out/lib/openjdk; fi
       EOF
     '';
 
@@ -140,7 +141,7 @@ let
     disallowedReferences = [ openjdk11 ];
 
     meta = with stdenv.lib; {
-      homepage = http://openjdk.java.net/;
+      homepage = "http://openjdk.java.net/";
       license = licenses.gpl2;
       description = "The open-source Java Development Kit";
       maintainers = with maintainers; [ edwtjo ];

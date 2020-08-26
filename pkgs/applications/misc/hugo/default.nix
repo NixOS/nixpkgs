@@ -2,18 +2,20 @@
 
 buildGoModule rec {
   pname = "hugo";
-  version = "0.68.0";
-
-  goPackagePath = "github.com/gohugoio/hugo";
+  version = "0.74.3";
 
   src = fetchFromGitHub {
     owner = "gohugoio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1jdk4mwflxm7n076x4gbqb362z4qriszq8fkc0sjsvd05z613ry6";
+    sha256 = "0rikr4yrjvmrv8smvr8jdbcjqwf61y369wn875iywrj63pyr74r9";
   };
 
-  modSha256 = "04vzm65kbj9905z4cf5yh6yc6g3b0pd5vc00lrxw84pwgqgc0ykb";
+  vendorSha256 = "17xn6bdy942g6nx5xky41ixmd5kaz68chj3rb02ibpyraamx04nm";
+
+  doCheck = false;
+
+  runVend = true;
 
   buildFlags = [ "-tags" "extended" ];
 

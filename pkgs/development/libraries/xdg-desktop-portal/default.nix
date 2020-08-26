@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal";
-  version = "1.6.0";
+  version = "1.7.2";
 
   outputs = [ "out" "installedTests" ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "flatpak";
     repo = pname;
     rev = version;
-    sha256 = "0fbsfpilwbv7j6cimsmmz6g0r96bw0ziwyk9z4zg2rd1mfkmmp9a";
+    sha256 = "0rkwpsmbn3d3spkzc2zsd50l2r8pp4la390zcpsawaav8w7ql7xm";
   };
 
   patches = [
@@ -60,10 +60,6 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     json-glib
   ];
-
-  # Seems to get stuck after "PASS: test-portals 39 /portal/inhibit/monitor"
-  # TODO: investigate!
-  doCheck = false;
 
   configureFlags = [
     "--enable-installed-tests"

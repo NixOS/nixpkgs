@@ -28,7 +28,7 @@ in stdenv.mkDerivation {
     '';
     license = licenses.gpl2;
     platforms = platforms.linux;
-    homepage = http://gpredict.oz9aec.net/;
+    homepage = "http://gpredict.oz9aec.net/";
     maintainers = [ maintainers.markuskowa maintainers.cmcdragonkai ];
   };
 }

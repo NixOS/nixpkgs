@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Keychain management tool";
-    homepage = https://www.funtoo.org/Keychain;
+    homepage = "https://www.funtoo.org/Keychain";
     license = stdenv.lib.licenses.gpl2;
     # other platforms are untested (AFAIK)
     platforms =

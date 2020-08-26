@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   version = "01.07.00.033";
   src = fetchurl {
     name = "clickshare-csc1-${version}.zip";
-    url = https://www.barco.com/services/website/de/TdeFiles/Download?FileNumber=R33050020&TdeType=3&MajorVersion=01&MinorVersion=07&PatchVersion=00&BuildVersion=033;
+    url = "https://www.barco.com/services/website/de/TdeFiles/Download?FileNumber=R33050020&TdeType=3&MajorVersion=01&MinorVersion=07&PatchVersion=00&BuildVersion=033";
     sha256 = "0h4jqidqvk4xkaky5bizi7ilz4qzl2mh68401j21y3djnzx09br3";
   };
 
@@ -106,8 +106,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://www.barco.com/de/support/clickshare-csc-1/drivers;
-    downloadPage = https://www.barco.com/de/Support/software/R33050020;
+    homepage = "https://www.barco.com/de/support/clickshare-csc-1/drivers";
+    downloadPage = "https://www.barco.com/de/Support/software/R33050020";
     platforms = [ "i686-linux" "x86_64-linux" ];
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.yarny ];

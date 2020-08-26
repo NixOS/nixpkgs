@@ -92,13 +92,14 @@ in
 
       maxJobs = mkOption {
         type = types.either types.int (types.enum ["auto"]);
-        default = 1;
+        default = "auto";
         example = 64;
         description = ''
-          This option defines the maximum number of jobs that Nix will try
-          to build in parallel.  The default is 1.  You should generally
-          set it to the total number of logical cores in your system (e.g., 16
-          for two CPUs with 4 cores each and hyper-threading).
+          This option defines the maximum number of jobs that Nix will try to
+          build in parallel. The default is auto, which means it will use all
+          available logical cores. It is recommend to set it to the total
+          number of logical cores in your system (e.g., 16 for two CPUs with 4
+          cores each and hyper-threading).
         '';
       };
 
@@ -192,50 +193,111 @@ in
       };
 
       buildMachines = mkOption {
-        type = types.listOf types.attrs;
+        type = types.listOf (types.submodule ({
+          options = {
+            hostName = mkOption {
+              type = types.str;
+              example = "nixbuilder.example.org";
+              description = ''
+                The hostname of the build machine.
+              '';
+            };
+            system = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              example = "x86_64-linux";
+              description = ''
+                The system type the build machine can execute derivations on.
+                Either this attribute or <varname>systems</varname> must be
+                present, where <varname>system</varname> takes precedence if
+                both are set.
+              '';
+            };
+            systems = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "x86_64-linux" "aarch64-linux" ];
+              description = ''
+                The system types the build machine can execute derivations on.
+                Either this attribute or <varname>system</varname> must be
+                present, where <varname>system</varname> takes precedence if
+                both are set.
+              '';
+            };
+            sshUser = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              example = "builder";
+              description = ''
+                The username to log in as on the remote host. This user must be
+                able to log in and run nix commands non-interactively. It must
+                also be privileged to build derivations, so must be included in
+                <option>nix.trustedUsers</option>.
+              '';
+            };
+            sshKey = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              example = "/root/.ssh/id_buildhost_builduser";
+              description = ''
+                The path to the SSH private key with which to authenticate on
+                the build machine. The private key must not have a passphrase.
+                If null, the building user (root on NixOS machines) must have an
+                appropriate ssh configuration to log in non-interactively.
+
+                Note that for security reasons, this path must point to a file
+                in the local filesystem, *not* to the nix store.
+              '';
+            };
+            maxJobs = mkOption {
+              type = types.int;
+              default = 1;
+              description = ''
+                The number of concurrent jobs the build machine supports. The
+                build machine will enforce its own limits, but this allows hydra
+                to schedule better since there is no work-stealing between build
+                machines.
+              '';
+            };
+            speedFactor = mkOption {
+              type = types.int;
+              default = 1;
+              description = ''
+                The relative speed of this builder. This is an arbitrary integer
+                that indicates the speed of this builder, relative to other
+                builders. Higher is faster.
+              '';
+            };
+            mandatoryFeatures = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "big-parallel" ];
+              description = ''
+                A list of features mandatory for this builder. The builder will
+                be ignored for derivations that don't require all features in
+                this list. All mandatory features are automatically included in
+                <varname>supportedFeatures</varname>.
+              '';
+            };
+            supportedFeatures = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "kvm" "big-parallel" ];
+              description = ''
+                A list of features supported by this builder. The builder will
+                be ignored for derivations that require features not in this
+                list.
+              '';
+            };
+          };
+        }));
         default = [];
-        example = literalExample ''
-          [ { hostName = "voila.labs.cs.uu.nl";
-              sshUser = "nix";
-              sshKey = "/root/.ssh/id_buildfarm";
-              system = "powerpc-darwin";
-              maxJobs = 1;
-            }
-            { hostName = "linux64.example.org";
-              sshUser = "buildfarm";
-              sshKey = "/root/.ssh/id_buildfarm";
-              system = "x86_64-linux";
-              maxJobs = 2;
-              speedFactor = 2;
-              supportedFeatures = [ "kvm" ];
-              mandatoryFeatures = [ "perf" ];
-            }
-          ]
-        '';
         description = ''
-          This option lists the machines to be used if distributed
-          builds are enabled (see
-          <option>nix.distributedBuilds</option>).  Nix will perform
-          derivations on those machines via SSH by copying the inputs
-          to the Nix store on the remote machine, starting the build,
-          then copying the output back to the local Nix store.  Each
-          element of the list should be an attribute set containing
-          the machine's host name (<varname>hostname</varname>), the
-          user name to be used for the SSH connection
-          (<varname>sshUser</varname>), the Nix system type
-          (<varname>system</varname>, e.g.,
-          <literal>"i686-linux"</literal>), the maximum number of
-          jobs to be run in parallel on that machine
-          (<varname>maxJobs</varname>), the path to the SSH private
-          key to be used to connect (<varname>sshKey</varname>), a
-          list of supported features of the machine
-          (<varname>supportedFeatures</varname>) and a list of
-          mandatory features of the machine
-          (<varname>mandatoryFeatures</varname>). The SSH private key
-          should not have a passphrase, and the corresponding public
-          key should be added to
-          <filename>~<replaceable>sshUser</replaceable>/authorized_keys</filename>
-          on the remote machine.
+          This option lists the machines to be used if distributed builds are
+          enabled (see <option>nix.distributedBuilds</option>).
+          Nix will perform derivations on those machines via SSH by copying the
+          inputs to the Nix store on the remote machine, starting the build,
+          then copying the output back to the local Nix store.
         '';
       };
 
@@ -282,7 +344,7 @@ in
       trustedBinaryCaches = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        example = [ http://hydra.nixos.org/ ];
+        example = [ "https://hydra.nixos.org/" ];
         description = ''
           List of binary cache URLs that non-root users can use (in
           addition to those specified using
@@ -376,6 +438,59 @@ in
           If enabled (the default), checks that Nix can parse the generated nix.conf.
         '';
       };
+
+      registry = mkOption {
+        type = types.attrsOf (types.submodule (
+          let
+            inputAttrs = types.attrsOf (types.oneOf [types.str types.int types.bool types.package]);
+          in
+          { config, name, ... }:
+          { options = {
+              from = mkOption {
+                type = inputAttrs;
+                example = { type = "indirect"; id = "nixpkgs"; };
+                description = "The flake reference to be rewritten.";
+              };
+              to = mkOption {
+                type = inputAttrs;
+                example = { type = "github"; owner = "my-org"; repo = "my-nixpkgs"; };
+                description = "The flake reference to which <option>from></option> is to be rewritten.";
+              };
+              flake = mkOption {
+                type = types.unspecified;
+                default = null;
+                example = literalExample "nixpkgs";
+                description = ''
+                  The flake input to which <option>from></option> is to be rewritten.
+                '';
+              };
+              exact = mkOption {
+                type = types.bool;
+                default = true;
+                description = ''
+                  Whether the <option>from</option> reference needs to match exactly. If set,
+                  a <option>from</option> reference like <literal>nixpkgs</literal> does not
+                  match with a reference like <literal>nixpkgs/nixos-20.03</literal>.
+                '';
+              };
+            };
+            config = {
+              from = mkDefault { type = "indirect"; id = name; };
+              to = mkIf (config.flake != null)
+                ({ type = "path";
+                   path = config.flake.outPath;
+                 } // lib.filterAttrs
+                   (n: v: n == "lastModified" || n == "rev" || n == "revCount" || n == "narHash")
+                   config.flake);
+            };
+          }
+        ));
+        default = {};
+        description = ''
+          A system-wide flake registry.
+        '';
+      };
+
     };
 
   };
@@ -385,10 +500,28 @@ in
 
   config = {
 
+    assertions = [
+      {
+        assertion = config.nix.distributedBuilds || config.nix.buildMachines == [];
+        message = "You must set `nix.distributedBuilds = true` to use nix.buildMachines";
+      }
+    ];
+
     nix.binaryCachePublicKeys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
     nix.binaryCaches = [ "https://cache.nixos.org/" ];
 
+    environment.systemPackages =
+      [ nix
+        pkgs.nix-info
+      ]
+      ++ optional (config.programs.bash.enableCompletion && !versionAtLeast nixVersion "2.4pre") pkgs.nix-bash-completions;
+
     environment.etc."nix/nix.conf".source = nixConf;
+
+    environment.etc."nix/registry.json".text = builtins.toJSON {
+      version = 2;
+      flakes = mapAttrsToList (n: v: { inherit (v) from to exact; }) cfg.registry;
+    };
 
     # List of machines for distributed Nix builds in the format
     # expected by build-remote.pl.
@@ -396,14 +529,14 @@ in
       { enable = cfg.buildMachines != [];
         text =
           concatMapStrings (machine:
-            "${if machine ? sshUser then "${machine.sshUser}@" else ""}${machine.hostName} "
-            + machine.system or (concatStringsSep "," machine.systems)
-            + " ${machine.sshKey or "-"} ${toString machine.maxJobs or 1} "
-            + toString (machine.speedFactor or 1)
+            "${if machine.sshUser != null then "${machine.sshUser}@" else ""}${machine.hostName} "
+            + (if machine.system != null then machine.system else concatStringsSep "," machine.systems)
+            + " ${if machine.sshKey != null then machine.sshKey else "-"} ${toString machine.maxJobs} "
+            + toString (machine.speedFactor)
             + " "
-            + concatStringsSep "," (machine.mandatoryFeatures or [] ++ machine.supportedFeatures or [])
+            + concatStringsSep "," (machine.mandatoryFeatures ++ machine.supportedFeatures)
             + " "
-            + concatStringsSep "," machine.mandatoryFeatures or []
+            + concatStringsSep "," machine.mandatoryFeatures
             + "\n"
           ) cfg.buildMachines;
       };
@@ -451,8 +584,7 @@ in
 
     system.activationScripts.nix = stringAfter [ "etc" "users" ]
       ''
-        # Create directories in /nix.
-        ${nix}/bin/nix ping-store --no-net
+        install -m 0755 -d /nix/var/nix/{gcroots,profiles}/per-user
 
         # Subscribe the root user to the NixOS channel by default.
         if [ ! -e "/root/.nix-channels" ]; then

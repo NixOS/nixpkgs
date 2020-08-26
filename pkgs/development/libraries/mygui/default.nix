@@ -5,13 +5,13 @@ let
   renderSystem = if withOgre then "3" else "4";
 in stdenv.mkDerivation rec {
   pname = "mygui";
-  version = "3.2.2";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "MyGUI";
     repo = "mygui";
     rev = "MyGUI${version}";
-    sha256 = "1wk7jmwm55rhlqqcyvqsxdmwvl70bysl9azh4kd9n57qlmgk3zmw";
+    sha256 = "0a4zi8w18pjj813n7kmxldl1d9r1jp0iyhkw7pbqgl8f7qaq994w";
   };
 
   enableParallelBuilding = true;
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   cmakeFlags = [ "-DMYGUI_BUILD_TOOLS=OFF" "-DMYGUI_BUILD_DEMOS=OFF" "-DMYGUI_RENDERSYSTEM=${renderSystem}" ];
 
   meta = with stdenv.lib; {
-    homepage = http://mygui.info/;
+    homepage = "http://mygui.info/";
     description = "Library for creating GUIs for games and 3D applications";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;

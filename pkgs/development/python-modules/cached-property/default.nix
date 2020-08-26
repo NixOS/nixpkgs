@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A decorator for caching properties in classes";
-    homepage = https://github.com/pydanny/cached-property;
+    homepage = "https://github.com/pydanny/cached-property";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ericsagnes ];

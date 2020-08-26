@@ -37,10 +37,10 @@ let
      chmod -R a+w $out/share/gsettings-schemas/nixos-gsettings-overrides
      cat - > $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/nixos-defaults.gschema.override <<- EOF
        [org.gnome.desktop.background]
-       picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray}/share/artwork/gnome/nix-wallpaper-simple-dark-gray.png'
+       picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}'
 
        [org.gnome.desktop.screensaver]
-       picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom}/share/artwork/gnome/nix-wallpaper-simple-dark-gray_bottom.png'
+       picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath}'
 
        [org.gnome.shell]
        favorite-apps=[ 'org.gnome.Epiphany.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop' ]
@@ -57,6 +57,10 @@ in
 
 {
 
+  meta = {
+    maintainers = teams.gnome.members;
+  };
+
   options = {
 
     services.gnome3 = {
@@ -68,6 +72,7 @@ in
 
     services.xserver.desktopManager.gnome3 = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = "Enable Gnome 3 desktop manager.";
       };
@@ -180,7 +185,7 @@ in
               wmCommand = "${pkgs.gnome3.metacity}/bin/metacity";
             } ++ cfg.flashback.customSessions);
 
-      security.pam.services.gnome-screensaver = {
+      security.pam.services.gnome-flashback = {
         enableGnomeKeyring = true;
       };
 
@@ -191,9 +196,10 @@ in
           inherit (wm) wmName;
         }) cfg.flashback.customSessions);
 
-      services.dbus.packages = [
-        pkgs.gnome3.gnome-screensaver
-      ];
+        # gnome-panel needs these for menu applet
+        environment.sessionVariables.XDG_DATA_DIRS = [ "${pkgs.gnome3.gnome-flashback}/share" ];
+        # TODO: switch to sessionVariables (resolve conflict)
+        environment.variables.XDG_CONFIG_DIRS = [ "${pkgs.gnome3.gnome-flashback}/etc/xdg" ];
     })
 
     (mkIf serviceCfg.core-os-services.enable {
@@ -252,7 +258,6 @@ in
       systemd.packages = with pkgs.gnome3; [
         gnome-session
         gnome-shell
-        vino
       ];
 
       services.avahi.enable = mkDefault true;
@@ -304,7 +309,7 @@ in
         environment = mkForce {};
       };
 
-      # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-32/elements/core/meta-gnome-core-shell.bst
+      # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-36/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages = with pkgs.gnome3; [
         adwaita-icon-theme
         gnome-backgrounds
@@ -315,6 +320,8 @@ in
         gnome-shell
         gnome-shell-extensions
         gnome-themes-extra
+        pkgs.nixos-artwork.wallpapers.simple-dark-gray
+        pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom
         pkgs.gnome-user-docs
         pkgs.orca
         pkgs.glib # for gsettings
@@ -323,11 +330,10 @@ in
         pkgs.hicolor-icon-theme
         pkgs.shared-mime-info # for update-mime-database
         pkgs.xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
-        vino
       ];
     })
 
-    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-32/elements/core/meta-gnome-core-utilities.bst
+    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-36/elements/core/meta-gnome-core-utilities.bst
     (mkIf serviceCfg.core-utilities.enable {
       environment.systemPackages = (with pkgs.gnome3; removePackagesByName [
         baobab

@@ -44,10 +44,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Portable ASS/SSA subtitle renderer";
-    homepage    = https://github.com/libass/libass;
+    homepage    = "https://github.com/libass/libass";
     license     = licenses.isc;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ codyopel ];
-    repositories.git = git://github.com/libass/libass.git;
+    repositories.git = "git://github.com/libass/libass.git";
   };
 }

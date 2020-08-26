@@ -19,7 +19,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "Find in Go repeated strings that could be replaced by a constant";
-    homepage = https://github.com/jgautheron/goconst;
+    homepage = "https://github.com/jgautheron/goconst";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;

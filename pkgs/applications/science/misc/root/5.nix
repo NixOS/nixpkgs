@@ -1,30 +1,24 @@
 { stdenv, fetchurl, fetchpatch, cmake, pcre, pkgconfig, python2
-, libX11, libXpm, libXft, libXext, libGLU, libGL, zlib, libxml2, lzma, gsl_1
+, libX11, libXpm, libXft, libXext, libGLU, libGL, zlib, libxml2, lz4, lzma, gsl_1, xxHash
 , Cocoa, OpenGL, noSplash ? false }:
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "5.34.36";
+  version = "5.34.38";
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    sha256 = "1kbx1jxc0i5xfghpybk8927a0wamxyayij9c74zlqm0595gqx1pw";
+    sha256 = "1ln448lszw4d6jmbdphkr2plwxxlhmjkla48vmmq750xc1lxlfrc";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake pcre python2 zlib libxml2 lzma gsl_1 ]
+  buildInputs = [ cmake pcre python2 zlib libxml2 lz4 lzma gsl_1 xxHash ]
     ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
     ++ stdenv.lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
     ;
 
   patches = [
     ./sw_vers_root5.patch
-
-    (fetchpatch {
-      name = "enable_new_gcc.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/enable_new_gcc.patch?h=root5&id=91c50876081a0af36f84ec4f0f9dba869107fa4f";
-      sha256 = "1rnp0xlw0yqi7mjs4w145njd79i8kkir1qik7zwicdik9axf8ygm";
-    })
 
     # prevents rootcint from looking in /usr/includes and such
     ./purify_include_paths_root5.patch
@@ -88,9 +82,10 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = with stdenv.lib; {
-    homepage = https://root.cern.ch/;
+    homepage = "https://root.cern.ch/";
     description = "A data analysis framework";
     platforms = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
+    license = licenses.lgpl21;
   };
 }

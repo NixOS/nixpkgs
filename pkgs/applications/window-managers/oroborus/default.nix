@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A really minimalistic X window manager";
-    homepage = https://www.oroborus.org/;
+    homepage = "https://www.oroborus.org/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

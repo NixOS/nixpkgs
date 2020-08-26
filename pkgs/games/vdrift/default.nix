@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchsvn, pkgconfig, scons, libGLU, libGL, SDL2, SDL2_image
+{ stdenv, fetchFromGitHub, fetchsvn, pkgconfig, sconsPackages, libGLU, libGL, SDL2, SDL2_image
 , libvorbis, bullet, curl, gettext, writeTextFile
 
 , data ? fetchsvn {
@@ -20,8 +20,8 @@ let
       sha256 = "001wq3c4n9wzxqfpq40b1jcl16sxbqv2zbkpy9rq2wf9h417q6hg";
     };
 
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ scons libGLU libGL SDL2 SDL2_image libvorbis bullet curl gettext ];
+    nativeBuildInputs = [ pkgconfig sconsPackages.scons_3_1_2 ];
+    buildInputs = [ libGLU libGL SDL2 SDL2_image libvorbis bullet curl gettext ];
 
     patches = [ ./0001-Ignore-missing-data-for-installation.patch ];
 
@@ -34,7 +34,7 @@ let
 
     meta = {
       description = "Car racing game";
-      homepage = http://vdrift.net/;
+      homepage = "http://vdrift.net/";
       license = stdenv.lib.licenses.gpl2Plus;
       maintainers = with stdenv.lib.maintainers; [viric];
       platforms = stdenv.lib.platforms.linux;

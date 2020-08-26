@@ -25,9 +25,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "INSTALLBASE=$(out)/share/gnome-shell/extensions" ];
 
+  uuid = "no-title-bar@franglais125.gmail.com";
+
   meta = with stdenv.lib; {
     description = "Integrates maximized windows with the top panel";
-    homepage = https://github.com/franglais125/no-title-bar;
+    homepage = "https://github.com/franglais125/no-title-bar";
     license = licenses.gpl2;
     broken = true; # https://github.com/franglais125/no-title-bar/issues/114
     maintainers = with maintainers; [ jonafato svsdep ];

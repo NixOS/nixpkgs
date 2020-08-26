@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = https://neverball.org/;
+    homepage = "https://neverball.org/";
     description = "Tilt the floor to roll a ball";
     license = "GPL";
     maintainers = with stdenv.lib.maintainers; [viric];

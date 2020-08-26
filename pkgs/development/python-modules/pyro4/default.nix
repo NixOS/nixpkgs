@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "Pyro4";
-  version = "4.77";
+  version = "4.80";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2bfe12a22f396474b0e57c898c7e2c561a8f850bf2055d8cf0f7119f0c7a523f";
+    sha256 = "46847ca703de3f483fbd0b2d22622f36eff03e6ef7ec7704d4ecaa3964cb2220";
   };
 
   propagatedBuildInputs = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Distributed object middleware for Python (RPC)";
-    homepage = https://github.com/irmen/Pyro4;
+    homepage = "https://github.com/irmen/Pyro4";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
     };

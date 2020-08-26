@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost165, pkgconfig, python35
+{ stdenv, fetchFromGitHub, cmake, boost165, pkgconfig, python36
 , tbb, openimageio, libjpeg, libpng, zlib, libtiff, ilmbase
 , freetype, openexr, libXdmcp, libxkbcommon, epoxy, at-spi2-core
 , dbus, doxygen, qt5, c-blosc, libGLU, gnome3, dconf, gtk3, pcre
@@ -7,28 +7,34 @@
 , withOpenCL ? true , opencl-headers, ocl-icd, opencl-clhpp
 }:
 
-let boost_static = boost165.override {
-      python = python35;
+let
+      python = python36;
+
+      boost_static = boost165.override {
+      inherit python;
       enableStatic = true;
       enablePython = true;
     };
 
+    version = "2.0";
+    sha256 = "15nn39ybsfjf3cw3xgkbarvxn4a9ymfd579ankm7yjxkw5gcif38";
+
 in stdenv.mkDerivation {
   pname = "luxcorerender";
-  version = "2.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "LuxCoreRender";
     repo = "LuxCore";
-    rev = "luxcorerender_v2.0";
-    sha256 = "15nn39ybsfjf3cw3xgkbarvxn4a9ymfd579ankm7yjxkw5gcif38";
+    rev = "luxcorerender_v${version}";
+    inherit sha256;
   };
 
   buildInputs =
    [ embree2 pkgconfig cmake zlib boost_static libjpeg
      libtiff libpng ilmbase freetype openexr openimageio
      tbb qt5.full c-blosc libGLU pcre bison
-     flex libX11 libpthreadstubs python35 libXdmcp libxkbcommon
+     flex libX11 libpthreadstubs python libXdmcp libxkbcommon
      epoxy at-spi2-core dbus doxygen
      # needed for GSETTINGS_SCHEMAS_PATH
      gsettings-desktop-schemas glib gtk3
@@ -43,15 +49,15 @@ in stdenv.mkDerivation {
     "-DOpenEXR_IlmThread_INCLUDE_DIR=${ilmbase.dev}/include/OpenEXR"
     "-DOpenEXR_Imath_INCLUDE_DIR=${openexr.dev}/include/OpenEXR"
     "-DOpenEXR_half_INCLUDE_DIR=${ilmbase.dev}/include"
-    "-DPYTHON_LIBRARY=${python35}/lib/libpython3.so"
-    "-DPYTHON_INCLUDE_DIR=${python35}/include/python3.5"
+    "-DPYTHON_LIBRARY=${python}/lib/libpython3.so"
+    "-DPYTHON_INCLUDE_DIR=${python}/include/python${python.pythonVersion}"
     "-DEMBREE_INCLUDE_PATH=${embree2}/include"
     "-DEMBREE_LIBRARY=${embree2}/lib/libembree.so"
     "-DBoost_PYTHON_LIBRARY_RELEASE=${boost_static}/lib/libboost_python3-mt.so"
   ] ++ stdenv.lib.optional withOpenCL
        "-DOPENCL_INCLUDE_DIR=${opencl-headers}/include";
   preConfigure = ''
-    NIX_CFLAGS_COMPILE+=" -isystem ${python35}/include/python3.5"
+    NIX_CFLAGS_COMPILE+=" -isystem ${python}/include/python${python.pythonVersion}"
     NIX_LDFLAGS+=" -lpython3"
   '';
 
@@ -71,7 +77,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Open source, physically based, unbiased rendering engine";
-    homepage = https://luxcorerender.org/;
+    homepage = "https://luxcorerender.org/";
     maintainers = with maintainers; [ hodapp ];
     license = licenses.asl20;
     platforms = platforms.linux;

@@ -8,11 +8,13 @@
 , pygdbmi
 , pygments
 , gevent
+, gevent-websocket
+, eventlet
 , }:
 
 buildPythonApplication rec {
   pname = "gdbgui";
-  version = "0.13.1.1";
+  version = "0.13.2.1";
 
   buildInputs = [ gdb ];
   propagatedBuildInputs = [
@@ -22,11 +24,13 @@ buildPythonApplication rec {
     pygdbmi
     pygments
     gevent
+    gevent-websocket
+    eventlet
   ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ypxgkxwb443ndyrmsa7zx2hn0d9b3s7n2w49ngfghd3l8k0yvi2";
+    sha256 = "0zn5wi47m8pn4amx574ryyhqvhynipxzyxbx0878ap6g36vh6l1h";
   };
 
   postPatch = ''
@@ -45,6 +49,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A browser-based frontend for GDB";
+    homepage = "https://www.gdbgui.com/";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ yrashk ];

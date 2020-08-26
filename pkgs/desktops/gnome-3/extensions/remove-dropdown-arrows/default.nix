@@ -18,15 +18,17 @@ stdenv.mkDerivation rec {
 
   uuid = "remove-dropdown-arrows@mpdeimos.com";
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions/${uuid}
     cp extension.js $out/share/gnome-shell/extensions/${uuid}
     cp metadata.json $out/share/gnome-shell/extensions/${uuid}
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
     description = "Remove dropdown arrows from GNOME Shell Menus";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jonafato ];
-    homepage = https://github.com/mpdeimos/gnome-shell-remove-dropdown-arrows;
+    homepage = "https://github.com/mpdeimos/gnome-shell-remove-dropdown-arrows";
   };
 }

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake libGLU xlibsWrapper ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/cginternals/glbinding/;
+    homepage = "https://github.com/cginternals/glbinding/";
     description = "A C++ binding for the OpenGL API, generated using the gl.xml specification";
     license = licenses.mit;
     maintainers = [ maintainers.mt-caret ];

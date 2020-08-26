@@ -535,7 +535,7 @@ in {
         ${optionalString cfg.provision.enable ''
           export GF_PATHS_PROVISIONING=${provisionConfDir};
         ''}
-        exec ${cfg.package.bin}/bin/grafana-server -homepath ${cfg.dataDir}
+        exec ${cfg.package}/bin/grafana-server -homepath ${cfg.dataDir}
       '';
       serviceConfig = {
         WorkingDirectory = cfg.dataDir;

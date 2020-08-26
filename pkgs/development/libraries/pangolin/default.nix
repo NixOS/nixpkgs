@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkgconfig, doxygen, libGL, glew
-, xorg , ffmpeg, python3 , libjpeg, libpng, libtiff, eigen
+, xorg , ffmpeg_3, python3 , libjpeg, libpng, libtiff, eigen
 , Carbon ? null, Cocoa ? null
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     libGL 
     glew 
     xorg.libX11 
-    ffmpeg 
+    ffmpeg_3 
     python3 
     libjpeg 
     libpng 
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
       integration, and has a flexible real-time plotter for visualising
       graphical data.
     '';
-    homepage = https://github.com/stevenlovegrove/Pangolin;
+    homepage = "https://github.com/stevenlovegrove/Pangolin";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.expipiplus1 ];
     platforms = stdenv.lib.platforms.all;

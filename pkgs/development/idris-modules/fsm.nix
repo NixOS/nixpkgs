@@ -15,7 +15,7 @@ build-idris-package  {
 
   meta = {
     description = "Comonads for Idris";
-    homepage = https://github.com/ctford/flying-spaghetti-monster;
+    homepage = "https://github.com/ctford/flying-spaghetti-monster";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
   };

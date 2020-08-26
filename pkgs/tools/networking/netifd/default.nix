@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation {
   pname = "netifd";
-  version = "unstable-2020-01-18";
+  version = "unstable-2020-07-11";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/netifd.git";
-    rev = "1321c1bd8fe921986c4eb39c3783ddd827b79543";
-    sha256 = "178pckyf1cydi6zzr4bmhksv8vyaks91zv9lqqd2z5nkmccl6vf3";
+    rev = "3d9bd73e8c2d8a1f78effbe92dd2495bbd2552c4";
+    sha256 = "085sx1gsigbi1jr19l387rc5p6ja1np6q2gb84khjd4pyiqwk840";
   };
 
   buildInputs = [ libnl libubox uci ubus json_c ];

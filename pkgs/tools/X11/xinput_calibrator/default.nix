@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ xorgproto libXi autoconf automake libtool m4 xlibsWrapper ];
 
   meta = {
-    homepage = https://github.com/tias/xinput_calibrator;
+    homepage = "https://github.com/tias/xinput_calibrator";
     description = "A generic touchscreen calibration program for X.Org";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.flosse ];

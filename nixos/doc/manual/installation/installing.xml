@@ -24,8 +24,7 @@
   </para>
 
   <para>
-   The NixOS manual is available on virtual console 8 (press Alt+F8 to access)
-   or by running <command>nixos-help</command>.
+   The NixOS manual is available by running <command>nixos-help</command>.
   </para>
 
   <para>
@@ -40,6 +39,11 @@
    terminal, you can use <command>loadkeys</command> to switch to your
    preferred keyboard layout. (We even provide neo2 via <command>loadkeys de
    neo</command>!)
+  </para>
+
+  <para>
+   If the text is too small to be legible, try <command>setfont ter-v32n</command>
+   to increase the font size.
   </para>
 
   <section xml:id="sec-installation-booting-networking">
@@ -142,7 +146,7 @@
        partition. It uses the initially reserved 512MiB at the start of the
        disk.
 <screen language="commands"><prompt># </prompt>parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
-<prompt># </prompt>parted /dev/sda -- set 3 boot on</screen>
+<prompt># </prompt>parted /dev/sda -- set 3 esp on</screen>
       </para>
      </listitem>
     </orderedlist>
@@ -509,7 +513,7 @@ Retype new UNIX password: ***</screen>
 <prompt># </prompt>parted /dev/sda -- mkpart primary 512MiB -8GiB
 <prompt># </prompt>parted /dev/sda -- mkpart primary linux-swap -8GiB 100%
 <prompt># </prompt>parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
-<prompt># </prompt>parted /dev/sda -- set 3 boot on</screen>
+<prompt># </prompt>parted /dev/sda -- set 3 esp on</screen>
   </example>
 
   <example xml:id="ex-install-sequence">

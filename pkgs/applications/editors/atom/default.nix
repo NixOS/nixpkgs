@@ -3,14 +3,14 @@
 let
   versions = {
     atom = {
-      version = "1.42.0";
-      sha256 = "1ira528nwxi30jfwyivlac3wkkqb9d2z4jhxwq5m7mnpm5yli6jy";
+      version = "1.48.0";
+      sha256 = "1693bxbylf6jhld9bdcr5pigk36wqlbj89praldpz9s96yxig9s1";
     };
 
     atom-beta = {
-      version = "1.43.0";
+      version = "1.49.0";
       beta = 0;
-      sha256 = "06if3w5hx7njmyal0012zawn8f5af1z4bjcbzj2c0gd15nlsgm95";
+      sha256 = "1fr6m4a7shdj3wpn6g4n95cqpkkg2x9srwjf7bqxv9f3d5jb1y33";
     };
   };
 
@@ -35,23 +35,30 @@ let
       gtk3  # Fix error: GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
     ];
 
+    dontBuild = true;
+    dontConfigure = true;
+
+    unpackPhase = ''
+      ar p $src data.tar.xz | tar xJ ./usr/
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      mv usr/bin usr/share $out
+      rm -rf $out/share/lintian
+
+      runHook postInstall
+    '';
+
     preFixup = ''
       gappsWrapperArgs+=(
-        --prefix "PATH" : "${gvfs}/bin" \
+        --prefix "PATH" : "${gvfs}/bin"
       )
     '';
 
-    buildCommand = ''
-      mkdir -p $out/usr/
-      ar p $src data.tar.xz | tar -C $out -xJ ./usr
-      sed -i -e "s|Exec=.*$|Exec=$out/bin/${pname}|" $out/usr/share/applications/${pname}.desktop
-      mv $out/usr/* $out/
-      rm -r $out/share/lintian
-      rm -r $out/usr/
-      sed -i "s/${pname})/.${pname}-wrapped)/" $out/bin/${pname}
-
-      fixupPhase
-
+    postFixup = ''
       share=$out/share/${pname}
 
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
@@ -70,11 +77,13 @@ let
       ln -s ${pkgs.git}/bin/git $dugite/git/libexec/git-core/git
 
       find $share -name "*.node" -exec patchelf --set-rpath "${atomEnv.libPath}:$share" {} \;
+
+      sed -i -e "s|Exec=.*$|Exec=$out/bin/${pname}|" $out/share/applications/${pname}.desktop
     '';
 
     meta = with stdenv.lib; {
       description = "A hackable text editor for the 21st Century";
-      homepage = https://atom.io/;
+      homepage = "https://atom.io/";
       license = licenses.mit;
       maintainers = with maintainers; [ offline nequissimus ysndr ];
       platforms = platforms.x86_64;

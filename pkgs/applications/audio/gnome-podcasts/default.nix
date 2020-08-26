@@ -9,7 +9,6 @@
 , rustc
 , python3
 , pkgconfig
-, gnome3
 , glib
 , libhandy
 , gtk3
@@ -21,7 +20,7 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  version = "0.4.7";
+  version = "0.4.8";
   pname = "gnome-podcasts";
 
   src = fetchFromGitLab {
@@ -29,10 +28,10 @@ rustPlatform.buildRustPackage rec {
     owner = "World";
     repo = "podcasts";
     rev = version;
-    sha256 = "0vy5i77bv8c22ldhrnr4z6kx22zqnb1lg3s7y8673bqjgd7dppi0";
+    sha256 = "0y2332zjq7vf1v38wzwz98fs19vpzy9kl7y0xbdzqr303l59hjb1";
   };
 
-  cargoSha256 = "1dlbdxsf9p2jzrsclm43k95y8m3zcd41qd9ajg1ii3fpnahi58kd";
+  cargoSha256 = "1jbii9k4bkrivdk1ffr6556q1sgk9j4jbzwnn8vbxmksyl1x328q";
 
   nativeBuildInputs = [
     meson
@@ -43,6 +42,7 @@ rustPlatform.buildRustPackage rec {
     rustc
     python3
     wrapGAppsHook
+    glib
   ];
 
   buildInputs = [
@@ -73,9 +73,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Listen to your favorite podcasts";
-    homepage = https://wiki.gnome.org/Apps/Podcasts;
+    homepage = "https://wiki.gnome.org/Apps/Podcasts";
     license = licenses.gpl3;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

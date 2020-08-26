@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A simple wrapper around fribidi";
-    homepage = https://github.com/pediapress/pyfribidi;
+    homepage = "https://github.com/pediapress/pyfribidi";
     license = stdenv.lib.licenses.gpl2;
   };
 

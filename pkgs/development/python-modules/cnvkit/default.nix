@@ -6,6 +6,7 @@
 , biopython
 , numpy
 , scipy
+, scikitlearn
 , pandas
 , matplotlib
 , reportlab
@@ -18,17 +19,18 @@
 
 buildPythonPackage rec {
   pname = "CNVkit";
-  version = "0.9.6";
+  version = "0.9.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hj8c98s538i0hg5mrz4bw4v07qmcl51rhxq611rj2nglnc9r25y";
+    sha256 = "d68adc0121e17c61a3aa28c0a9ba6526510a5a0df0f0a6eb1818bab71b7e927a";
   };
 
   propagatedBuildInputs = [
     biopython
     numpy
     scipy
+    scikitlearn
     pandas
     matplotlib
     reportlab
@@ -43,6 +45,8 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "pandas >= 0.20.1, < 0.25.0" "pandas"
   '';
+
+  pythonImportsCheck = [ "cnvlib" ];
 
   meta = with lib; {
     homepage = "https://cnvkit.readthedocs.io";

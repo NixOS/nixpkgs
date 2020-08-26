@@ -19,18 +19,29 @@ in {
         base = mkOption {
           default = "${config.boot.kernelPackages.kernel}/dtbs";
           defaultText = "\${config.boot.kernelPackages.kernel}/dtbs";
-          example = literalExample "pkgs.deviceTree_rpi";
+          example = literalExample "pkgs.device-tree_rpi";
           type = types.path;
           description = ''
-            The package containing the base device-tree (.dtb) to boot. Contains
+            The path containing the base device-tree (.dtb) to boot. Contains
             device trees bundled with the Linux kernel by default.
+          '';
+        };
+
+        name = mkOption {
+          default = null;
+          example = "some-dtb.dtb";
+          type = types.nullOr types.str;
+          description = ''
+            The name of an explicit dtb to be loaded, relative to the dtb base.
+            Useful in extlinux scenarios if the bootloader doesn't pick the
+            right .dtb file from FDTDIR.
           '';
         };
 
         overlays = mkOption {
           default = [];
           example = literalExample
-            "[\"\${pkgs.deviceTree_rpi.overlays}/w1-gpio.dtbo\"]";
+            "[\"\${pkgs.device-tree_rpi.overlays}/w1-gpio.dtbo\"]";
           type = types.listOf types.path;
           description = ''
             A path containing device tree overlays (.dtbo) to be applied to all

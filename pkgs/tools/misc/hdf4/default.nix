@@ -84,10 +84,11 @@ stdenv.mkDerivation rec {
     moveToOutput bin "$bin"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Data model, library, and file format for storing and managing data";
-    homepage = https://support.hdfgroup.org/products/hdf4/;
-    maintainers = with stdenv.lib.maintainers; [ knedlsepp ];
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "https://support.hdfgroup.org/products/hdf4/";
+    maintainers = with maintainers; [ knedlsepp ];
+    platforms = platforms.unix;
+    license = licenses.bsdOriginal;
   };
 }

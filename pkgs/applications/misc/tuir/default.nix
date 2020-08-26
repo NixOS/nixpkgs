@@ -3,13 +3,13 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "tuir";
-  version = "1.28.3";
+  version = "1.29.0";
 
   src = fetchFromGitLab {
     owner = "ajak";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0nhpbb0vdngwb0fhlimjgm3wq2s67m4rb3vv920zyllnmfplk0lk";
+    sha256 = "1fqp6bvq8kzdsf3nna4mn1phdcixpx76bya43xrivxjbzsfl59ib";
   };
 
   # Tests try to access network

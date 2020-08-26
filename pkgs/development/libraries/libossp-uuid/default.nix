@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   patches = [ ./shtool.patch ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.ossp.org/pkg/lib/uuid/;
+    homepage = "http://www.ossp.org/pkg/lib/uuid/";
     description = "OSSP uuid ISO-C and C++ shared library";
     longDescription =
       ''

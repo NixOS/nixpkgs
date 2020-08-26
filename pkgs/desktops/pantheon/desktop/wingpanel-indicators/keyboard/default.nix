@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , pkgconfig
 , meson
@@ -17,17 +18,17 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-keyboard";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0jc12xfaj3micpjssxc7m6hzssvyq26ln5az05x5f1j6v8lccbyn";
+    sha256 = "0q32qc6jh5w0i1ixkl59pys8r3hxmbig8854q7sxi07vlk9g3i7y";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -45,21 +46,19 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     wingpanel
+    xorg.xkeyboardconfig
   ];
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      libgnomekbd_path = "${libgnomekbd}/bin/";
-      config = "${xorg.xkeyboardconfig}/share/X11/xkb/rules/evdev.xml";
+      gkbd_keyboard_display = "${libgnomekbd}/bin/gkbd-keyboard-display";
     })
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder "out"}/lib/wingpanel";
-
   meta = with stdenv.lib; {
     description = "Keyboard Indicator for Wingpanel";
-    homepage = https://github.com/elementary/wingpanel-indicator-keyboard;
+    homepage = "https://github.com/elementary/wingpanel-indicator-keyboard";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

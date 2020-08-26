@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, pkgconfig, cmake, python, ffmpeg, phonon, automoc4
+, pkgconfig, cmake, python, ffmpeg_3, phonon, automoc4
 , chromaprint, docbook_xml_dtd_45, docbook_xsl, libxslt
 , id3lib, taglib, mp4v2, flac, libogg, libvorbis
 , zlib, readline , qtbase, qttools, qtmultimedia, qtquickcontrols
@@ -9,16 +9,16 @@
 stdenv.mkDerivation rec {
 
   pname = "kid3";
-  version = "3.8.2";
+  version = "3.8.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/kid3/kid3/${version}/${pname}-${version}.tar.gz";
-    sha256 = "051y77swpi9isx275gwzl4fn3igd2dmixbszv9m3h0h9lqhcjrvr";
+    sha256 = "0i0c4bmsm36jj1v535kil47ig0ig70ykrzcw2f56spr25xns06ka";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook ];
   buildInputs = with stdenv.lib;
-  [ pkgconfig cmake python ffmpeg phonon automoc4
+  [ pkgconfig cmake python ffmpeg_3 phonon automoc4
     chromaprint docbook_xml_dtd_45 docbook_xsl libxslt
     id3lib taglib mp4v2 flac libogg libvorbis zlib readline
     qtbase qttools qtmultimedia qtquickcontrols ];
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       - Edit synchronized lyrics and event timing codes, import and
         export LRC files
     '';
-    homepage = http://kid3.sourceforge.net/;
+    homepage = "http://kid3.sourceforge.net/";
     license = licenses.lgpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

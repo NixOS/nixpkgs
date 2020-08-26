@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Small, fast and powerful console music player for Linux and *BSD";
-    homepage = https://cmus.github.io/;
+    homepage = "https://cmus.github.io/";
     license = licenses.gpl2;
     maintainers = [ maintainers.oxij ];
     platforms = platforms.linux ++ platforms.darwin;

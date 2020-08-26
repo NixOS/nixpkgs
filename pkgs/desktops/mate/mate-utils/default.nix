@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, itstool, glib, gtk3, libxml2, libgtop, libcanberra-gtk3, inkscape, udisks2, mate, hicolor-icon-theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, gettext, itstool, glib, gtk3, libxml2, libgtop, libcanberra-gtk3, inkscape_0, udisks2, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "mate-utils";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     pkgconfig
     gettext
     itstool
-    inkscape
+    inkscape_0
     wrapGAppsHook
   ];
 

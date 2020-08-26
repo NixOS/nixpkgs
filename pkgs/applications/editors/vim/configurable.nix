@@ -1,5 +1,3 @@
-# TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
-# but I have gvim with python support now :) - Marc
 { source ? "default", callPackage, stdenv, ncurses, pkgconfig, gettext
 , writeText, config, glib, gtk2-x11, gtk3-x11, lua, python, perl, tcl, ruby
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
@@ -14,7 +12,7 @@
 
 , features          ? "huge" # One of tiny, small, normal, big or huge
 , wrapPythonDrv     ? false
-, guiSupport        ? config.vim.gui or "gtk3"
+, guiSupport        ? config.vim.gui or (if stdenv.isDarwin then "gtk2" else "gtk3")
 , luaSupport        ? config.vim.lua or true
 , perlSupport       ? config.vim.perl or false      # Perl interpreter
 , pythonSupport     ? config.vim.python or true     # Python interpreter
@@ -104,6 +102,8 @@ in stdenv.mkDerivation rec {
   ++ stdenv.lib.optionals luaSupport [
     "--with-lua-prefix=${lua}"
     "--enable-luainterp"
+  ] ++ stdenv.lib.optional lua.pkgs.isLuaJIT [
+    "--with-luajit"
   ]
   ++ stdenv.lib.optionals pythonSupport [
     "--enable-python${if isPython3 then "3" else ""}interp=yes"
@@ -154,7 +154,12 @@ in stdenv.mkDerivation rec {
   '' + stdenv.lib.optionalString stdenv.isLinux ''
     patchelf --set-rpath \
       "$(patchelf --print-rpath $out/bin/vim):${stdenv.lib.makeLibraryPath buildInputs}" \
-      "$out"/bin/{vim,gvim}
+      "$out"/bin/vim
+    if [[ -e "$out"/bin/gvim ]]; then
+      patchelf --set-rpath \
+        "$(patchelf --print-rpath $out/bin/vim):${stdenv.lib.makeLibraryPath buildInputs}" \
+        "$out"/bin/gvim
+    fi
 
     ln -sfn '${nixosRuntimepath}' "$out"/share/vim/vimrc
   '' + stdenv.lib.optionalString wrapPythonDrv ''

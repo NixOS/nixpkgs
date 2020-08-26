@@ -35,12 +35,7 @@ in
 
     services.babeld = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to run the babeld network routing daemon.
-        '';
-      };
+      enable = mkEnableOption "the babeld network routing daemon";
 
       interfaceDefaults = mkOption {
         default = null;

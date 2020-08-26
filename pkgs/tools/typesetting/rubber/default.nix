@@ -1,11 +1,11 @@
 { fetchurl, stdenv, python3Packages, texinfo }:
 
 python3Packages.buildPythonApplication rec {
-  name = "rubber-${version}";
+  pname = "rubber";
   version = "1.5.1";
 
   src = fetchurl {
-    url = "https://launchpad.net/rubber/trunk/${version}/+download/${name}.tar.gz";
+    url = "https://launchpad.net/rubber/trunk/${version}/+download/${pname}-${version}.tar.gz";
     sha256 = "178dmrp0mza5gqjiqgk6dqs0c10s0c517pk6k9pjbam86vf47a1p";
   };
 
@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
       of pdfLaTeX to produce PDF documents.
     '';
     license = licenses.gpl2Plus;
-    homepage = https://launchpad.net/rubber;
+    homepage = "https://launchpad.net/rubber";
     maintainers = with maintainers; [ ttuegel peterhoeg ];
     platforms = platforms.unix;
   };

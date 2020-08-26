@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Graphical program for editing, playing and recording sound files";
-    homepage = https://github.com/magnush/mhwaveedit;
+    homepage = "https://github.com/magnush/mhwaveedit";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "02pihqb1lb76a0xbfwjzs1cd6ay3ldfxsm8dvsbl6qs3vkjxax56";
   };
 
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+  patchPhase = stdenv.lib.optionalString stdenv.cc.isClang ''
     substituteInPlace Makefile --replace "-fno-guess-branch-probability" ""
   '';
 
@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2 ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.unix;
-    homepage = http://home.math.au.dk/jensen/software/gfan/gfan.html;
+    homepage = "http://home.math.au.dk/jensen/software/gfan/gfan.html";
   };
 }

@@ -5,7 +5,7 @@ let
   # Digital recordings of the music on an original Roland MT-32.  So
   # we don't need actual MIDI playback capability.
   audio = fetchurl {
-    url = mirror://sourceforge/exult/exult_audio.zip;
+    url = "mirror://sourceforge/exult/exult_audio.zip";
     sha256 = "0s5wvgy9qja06v38g0qwzpaw76ff96vzd6gb1i3lb9k4hvx0xqbj";
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     ''; # */
 
   meta = {
-    homepage = http://exult.sourceforge.net/;
+    homepage = "http://exult.sourceforge.net/";
     description = "A reimplementation of the Ultima VII game engine";
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.unix;

@@ -32,7 +32,7 @@ buildPythonPackage rec {
       with it should run fine on both Unix and Windows systems. Also ships
       with a nice interactive Python shell (called ptpython) built on top.
     '';
-    homepage = https://github.com/jonathanslenders/python-prompt-toolkit;
+    homepage = "https://github.com/jonathanslenders/python-prompt-toolkit";
     license = lib.licenses.bsd3;
   };
 }

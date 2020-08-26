@@ -2,22 +2,23 @@
 , cmake
 , fetchurl
 , python
-, openblas
+, blas
+, lapack
 , gfortran
 , lapackSupport ? true }:
 
-let openblas32 = openblas.override { blas64 = false; };
+assert (!blas.isILP64) && (!lapack.isILP64);
 
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "sundials";
-  version = "5.1.0";
+  version = "5.3.0";
 
-  buildInputs = [ python ] ++ stdenv.lib.optionals (lapackSupport) [ gfortran openblas32 ];
+  buildInputs = [ python ] ++ stdenv.lib.optionals (lapackSupport) [ gfortran blas lapack ];
   nativeBuildInputs = [ cmake ];
 
   src = fetchurl {
     url = "https://computation.llnl.gov/projects/${pname}/download/${pname}-${version}.tar.gz";
-    sha256 = "08cvzmbr2qc09ayq4f5j07lw97hl06q4dl26vh4kh822mm7x28pv";
+    sha256 = "19xwi7pz35s2nqgldm6r0jl2k0bs36zhbpnmmzc56s1n3bhzgpw8";
   };
 
   patches = [
@@ -33,7 +34,7 @@ in stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals (lapackSupport) [
     "-DSUNDIALS_INDEX_TYPE=int32_t"
     "-DLAPACK_ENABLE=ON"
-    "-DLAPACK_LIBRARIES=${openblas32}/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DLAPACK_LIBRARIES=${lapack}/lib/liblapack${stdenv.hostPlatform.extensions.sharedLibrary}"
   ];
 
   doCheck = true;
@@ -41,7 +42,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Suite of nonlinear differential/algebraic equation solvers";
-    homepage    = https://computation.llnl.gov/projects/sundials;
+    homepage    = "https://computation.llnl.gov/projects/sundials";
     platforms   = platforms.all;
     maintainers = with maintainers; [ flokli idontgetoutmuch ];
     license     = licenses.bsd3;

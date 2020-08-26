@@ -1,0 +1,38 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    addressable (2.7.0)
+      public_suffix (>= 2.0.2, < 5.0)
+    dotenv (2.7.6)
+    faraday (1.0.1)
+      multipart-post (>= 1.2, < 3)
+    licensee (9.14.0)
+      dotenv (~> 2.0)
+      octokit (~> 4.17)
+      reverse_markdown (~> 1.0)
+      rugged (~> 0.24)
+      thor (>= 0.19, < 2.0)
+    mini_portile2 (2.4.0)
+    multipart-post (2.1.1)
+    nokogiri (1.10.10)
+      mini_portile2 (~> 2.4.0)
+    octokit (4.18.0)
+      faraday (>= 0.9)
+      sawyer (~> 0.8.0, >= 0.5.3)
+    public_suffix (4.0.5)
+    reverse_markdown (1.4.0)
+      nokogiri
+    rugged (0.99.0)
+    sawyer (0.8.2)
+      addressable (>= 2.3.5)
+      faraday (> 0.8, < 2.0)
+    thor (1.0.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  licensee
+
+BUNDLED WITH
+   2.1.4
