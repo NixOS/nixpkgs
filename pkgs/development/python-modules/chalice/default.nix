@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , attrs
 , botocore
 , click
@@ -21,11 +22,11 @@
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.17.0";
+  version = "1.18.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b1ab4197628f4725ac50479aefe61698ea4a5d83ef88bb88978023cdf840a9a2";
+    sha256 = "0zb4xk9b553pnfzh8s909cixfdplqnc3nda0fjwjrryi2nxjxd6a";
   };
 
   checkInputs = [ watchdog pytest hypothesis mock ];
@@ -41,6 +42,7 @@ buildPythonPackage rec {
     setuptools
     six
     wheel
+  ] ++ lib.optionals (pythonOlder "3.5") [
     typing
   ];
 
