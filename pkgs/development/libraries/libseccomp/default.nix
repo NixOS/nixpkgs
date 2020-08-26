@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     badPlatforms = [
       "alpha-linux"
+      "riscv32-linux"
       "sparc-linux"
       "sparc64-linux"
     ];
