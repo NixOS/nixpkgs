@@ -4416,7 +4416,6 @@ broken-packages:
   - dhall-check
   - dhall-docs
   - dhall-fly
-  - dhall-nix
   - dhall-text
   - dhall-to-cabal
   - dhall-yaml
