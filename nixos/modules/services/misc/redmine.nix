@@ -39,6 +39,19 @@ let
     ${cfg.extraEnv}
   '';
 
+  configRu = pkgs.writeText "config.ru" ''
+    # This file is used by Rack-based servers to start the application.
+
+    require '${cfg.stateDir}/config/environment'
+    Redmine::Utils::relative_url_root = '${cfg.prefix}'
+    ${optionalString (cfg.server == "webrick" && !cfg.serverAccessLog) ''
+      WEBrick::Config::HTTP[:AccessLog] = [ ]
+    ''}
+    map '${cfg.prefix}' do
+      run Rails.application
+    end
+  '';
+
   unpackTheme = unpack "theme";
   unpackPlugin = unpack "plugin";
   unpack = id: (name: source:
@@ -58,6 +71,10 @@ let
 in
 
 {
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "redmine" "port" ] [ "services" "redmine" "listen" "port" ])
+  ];
+
   options = {
     services.redmine = {
       enable = mkEnableOption "Redmine";
@@ -81,10 +98,37 @@ in
         description = "Group under which Redmine is ran.";
       };
 
-      port = mkOption {
-        type = types.int;
-        default = 3000;
-        description = "Port on which Redmine is ran.";
+      server = mkOption {
+        type = types.enum [ "webrick" "puma" ];
+        default = "webrick";
+        description = "Ruby HTTP server which runs Redmine.";
+      };
+
+      listen = {
+        address = mkOption {
+          type = types.str;
+          default = "0.0.0.0";
+          example = "127.0.0.1";
+          description = "Address on which the Redmine HTTP server listens.";
+        };
+
+        port = mkOption {
+          type = types.int;
+          default = 3000;
+          description = "Port on which the Redmine HTTP server listens.";
+        };
+      };
+
+      prefix = mkOption {
+        type = types.str;
+        default = "/";
+        description = "URL prefix where Redmine is served.";
+      };
+
+      serverAccessLog = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Enable HTTP server access log (written to system journal).";
       };
 
       stateDir = mkOption {
@@ -360,9 +404,18 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
+        SyslogIdentifier = "redmine";
         TimeoutSec = "300";
         WorkingDirectory = "${cfg.package}/share/redmine";
-        ExecStart="${bundle} exec rails server webrick -e production -p ${toString cfg.port} -P '${cfg.stateDir}/redmine.pid'";
+      } // optionalAttrs (cfg.server == "webrick") {
+        ExecStart="${bundle} exec rails server webrick -e production"
+                  + " -b '${cfg.listen.address}' -p ${toString cfg.listen.port}"
+                  + " -c '${configRu}' -P '${cfg.stateDir}/redmine.pid'";
+      } // optionalAttrs (cfg.server == "puma") {
+        ExecStart="${bundle} exec puma -e production"
+                  + " -b 'tcp://${cfg.listen.address}:${toString cfg.listen.port}'"
+                  + (optionalString cfg.serverAccessLog " -v")
+                  + " '${configRu}'";
       };
 
     };
