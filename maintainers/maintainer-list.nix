@@ -8882,6 +8882,12 @@
     githubId = 1771332;
     name = "László Vaskó";
   };
+  vladmaraev = {
+    email = "vladislav.maraev@gu.se";
+    github = "vladmaraev";
+    githubId = 920783;
+    name = "Vladislav Maraev";
+  };
   vlstill = {
     email = "xstill@fi.muni.cz";
     github = "vlstill";
