@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, nix, makeWrapper }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper }:
 
 buildGoModule rec {
   pname = "nix-build-uncached";
@@ -16,11 +16,6 @@ buildGoModule rec {
   doCheck = false;
 
   nativeBuildInputs = [ makeWrapper ];
-
-  postInstall = ''
-    wrapProgram $out/bin/nix-build-uncached \
-      --prefix PATH ":" ${lib.makeBinPath [ nix ]}
-  '';
 
   meta = with lib; {
     description = "A CI friendly wrapper around nix-build";
