@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "API Support for your favorite torrent trackers.";
     homepage = "https://github.com/Jackett/Jackett/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ edwtjo nyanloutre ];
+    maintainers = with maintainers; [ edwtjo nyanloutre purcell ];
     platforms = platforms.all;
   };
 }

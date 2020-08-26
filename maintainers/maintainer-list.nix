@@ -6749,6 +6749,12 @@
     githubId = 37715;
     name = "Brian McKenna";
   };
+  purcell = {
+    email = "steve@sanityinc.com";
+    github = "purcell";
+    githubId =	5636;
+    name = "Steve Purcell";
+  };
   puzzlewolf = {
     email = "nixos@nora.pink";
     github = "puzzlewolf";
