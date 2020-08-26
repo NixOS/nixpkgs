@@ -9135,6 +9135,7 @@ in
   openjdk_headless = openjdk8_headless;
 
   jdk8 = openjdk8;
+  jdk8_headless = openjdk8_headless;
   jre8 = openjdk8.jre;
   jre8_headless = openjdk8_headless.jre;
 
@@ -10408,7 +10409,7 @@ in
   bazel_0_26 = callPackage ../development/tools/build-managers/bazel/bazel_0_26 {
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
-    buildJdk = jdk8;
+    buildJdk = jdk8_headless;
     buildJdkName = "jdk8";
     runJdk = jdk11_headless;
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
@@ -10417,7 +10418,7 @@ in
   bazel_0_29 = callPackage ../development/tools/build-managers/bazel/bazel_0_29 {
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
-    buildJdk = jdk8;
+    buildJdk = jdk8_headless;
     buildJdkName = "jdk8";
     runJdk = jdk11_headless;
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
@@ -10427,7 +10428,7 @@ in
   bazel_1 = callPackage ../development/tools/build-managers/bazel/bazel_1 {
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
-    buildJdk = jdk8;
+    buildJdk = jdk8_headless;
     buildJdkName = "jdk8";
     runJdk = jdk11_headless;
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
@@ -10437,7 +10438,7 @@ in
   bazel_3 = callPackage ../development/tools/build-managers/bazel/bazel_3 {
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
-    buildJdk = jdk8;
+    buildJdk = jdk8_headless;
     buildJdkName = "jdk8";
     runJdk = jdk11_headless;
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
