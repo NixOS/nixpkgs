@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.9.19";
+  version = "1.9.20";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "08wf7qklk31dky2z0l2j9vbyr8721gkvy4dsc60afwrwihwd8lrp";
+    sha256 = "031cbl8yqw5g5yrm5h1x8s5ckdw2xkym46009l579zvafn2vcnj7";
   };
 
   runVend = true;
@@ -42,6 +42,6 @@ buildGoModule rec {
     homepage = "https://geth.ethereum.org/";
     description = "Official golang implementation of the Ethereum protocol";
     license = with licenses; [ lgpl3 gpl3 ];
-    maintainers = with maintainers; [ adisbladis lionello xrelkd ];
+    maintainers = with maintainers; [ adisbladis lionello xrelkd RaghavSood ];
   };
 }
