@@ -74,7 +74,7 @@ let
       throw "Non-EFI boot methods are only supported on i686 / x86_64"
     else ''
       def assemble_qemu_flags():
-          flags = "-cpu host"
+          flags = "-cpu host,-vmx"
           ${if system == "x86_64-linux"
             then ''flags += " -m 768"''
             else ''flags += " -m 512 -enable-kvm -machine virt,gic-version=host"''
