@@ -10219,7 +10219,6 @@ broken-packages:
   - termbox-bindings
   - terminal-text
   - termination-combinators
-  - termonad
   - termplot
   - terntup
   - terrahs
