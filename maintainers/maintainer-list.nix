@@ -9480,4 +9480,14 @@
     github = "yevhenshymotiuk";
     githubId = 44244245;
   };
+  hmenke = {
+    name = "Henri Menke";
+    email = "henri@henrimenke.de";
+    github = "hmenke";
+    githubId = 1903556;
+    keys = [{
+      longkeyid = "rsa4096/0xD65C9AFB4C224DA3";
+      fingerprint = "F1C5 760E 45B9 9A44 72E9  6BFB D65C 9AFB 4C22 4DA3";
+    }];
+  };
 }
