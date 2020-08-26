@@ -2915,7 +2915,9 @@ in
     cudatoolkit_10
     cudatoolkit_10_0
     cudatoolkit_10_1
-    cudatoolkit_10_2;
+    cudatoolkit_10_2
+    cudatoolkit_11
+    cudatoolkit_11_0;
 
   cudatoolkit = cudatoolkit_10;
 
@@ -2932,7 +2934,9 @@ in
     cudnn_cudatoolkit_10
     cudnn_cudatoolkit_10_0
     cudnn_cudatoolkit_10_1
-    cudnn_cudatoolkit_10_2;
+    cudnn_cudatoolkit_10_2
+    cudnn_cudatoolkit_11
+    cudnn_cudatoolkit_11_0;
 
   cudnn = cudnn_cudatoolkit_10;
 
@@ -5566,9 +5570,8 @@ in
   xnbd = callPackage ../tools/networking/xnbd { };
 
   nccl = callPackage ../development/libraries/science/math/nccl { };
-  nccl_cudatoolkit_9_0 = nccl.override { cudatoolkit = cudatoolkit_9_0; };
-  nccl_cudatoolkit_9 = nccl.override { cudatoolkit = cudatoolkit_9; };
   nccl_cudatoolkit_10 = nccl.override { cudatoolkit = cudatoolkit_10; };
+  nccl_cudatoolkit_11 = nccl.override { cudatoolkit = cudatoolkit_11; };
 
   ndjbdns = callPackage ../tools/networking/ndjbdns { };
 
