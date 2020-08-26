@@ -4917,6 +4917,8 @@ in {
 
   multiprocess = callPackage ../development/python-modules/multiprocess { };
 
+  multitasking = callPackage ../development/python-modules/multitasking { };
+
   munkres = callPackage ../development/python-modules/munkres { };
 
   musicbrainzngs = callPackage ../development/python-modules/musicbrainzngs { };
@@ -5950,7 +5952,8 @@ in {
 
   readchar = callPackage ../development/python-modules/readchar { };
 
-  retworkx = callPackage ../development/python-modules/retworkx { };
+  retworkx = disabledIf (pythonOlder "3.5")
+    (toPythonModule (callPackage ../development/python-modules/retworkx { } ));
 
   rivet = disabledIf (!isPy3k) (toPythonModule (pkgs.rivet.override {
     python3 = python;
@@ -7745,6 +7748,8 @@ in {
   x256 = callPackage ../development/python-modules/x256 { };
 
   yattag = callPackage ../development/python-modules/yattag { };
+
+  yfinance = callPackage ../development/python-modules/yfinance { };
 
   xenomapper = disabledIf (!isPy3k) (callPackage ../applications/science/biology/xenomapper { });
 

@@ -970,6 +970,8 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
    </listitem>
    <listitem>
     <para>
+     Nginx module <literal>nginxModules.fastcgi-cache-purge</literal> renamed to official name <literal>nginxModules.cache-purge</literal>.
+     Nginx module <literal>nginxModules.ngx_aws_auth</literal> renamed to official name <literal>nginxModules.aws-auth</literal>.
       The packages <package>perl</package>, <package>rsync</package> and <package>strace</package> were removed from <option>systemPackages</option>. If you need them, install them again with <code><xref linkend="opt-environment.systemPackages"/> = with pkgs; [ perl rsync strace ];</code> in your <filename>configuration.nix</filename>.
     </para>
    </listitem>

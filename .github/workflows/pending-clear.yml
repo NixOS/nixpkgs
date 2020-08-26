@@ -1,0 +1,35 @@
+name: "clear pending status"
+
+on:
+  check_suite:
+    types: [ completed ]
+
+jobs:
+  action:
+    runs-on: ubuntu-latest
+    steps:
+    - name: clear pending status
+      if: github.repository_owner == 'NixOS' && github.event.check_suite.app.name == 'OfBorg'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GSU_VERSION: "0.5.0"
+        GSU_HASH: "49df54dc0ed5eaa037400b66be8114bd62fa0af51ed36565f6203dc312711cc6"
+        GSU_URL: "https://github.com/cloudposse/github-status-updater/releases/download"
+      run: |
+        curl -sSf -O -L -C - \
+        "$GSU_URL/$GSU_VERSION/github-status-updater_linux_amd64" && \
+        if [ "$(shasum -a 256 github-status-updater_linux_amd64 | cut -c1-64)" != "$GSU_HASH" ]; then
+          echo "checksum mismatch"
+          exit 1
+        fi
+        chmod +x github-status-updater_linux_amd64 && \
+        ./github-status-updater_linux_amd64 \
+          -action update_state \
+          -token "$GITHUB_TOKEN" \
+          -owner NixOS \
+          -repo nixpkgs \
+          -state success \
+          -context "Wait for ofborg" \
+          -description " " \
+          -url " " \
+          -ref "${{ github.event.check_suite.head_sha }}"

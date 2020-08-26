@@ -3733,6 +3733,12 @@
     }];
     name = "Jiri Daněk";
   };
+  jdbaldry = {
+    email = "jack.baldry@grafana.com";
+    github = "jdbaldry";
+    githubId = 4599384;
+    name = "Jack Baldry";
+  };
   jdehaas = {
     email = "qqlq@nullptr.club";
     github = "jeroendehaas";
@@ -6742,6 +6748,12 @@
     github = "puffnfresh";
     githubId = 37715;
     name = "Brian McKenna";
+  };
+  purcell = {
+    email = "steve@sanityinc.com";
+    github = "purcell";
+    githubId =	5636;
+    name = "Steve Purcell";
   };
   puzzlewolf = {
     email = "nixos@nora.pink";

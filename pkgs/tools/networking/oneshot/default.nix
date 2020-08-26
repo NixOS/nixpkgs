@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "oneshot";
-  version = "1.1.3";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "raphaelreyna";
     repo = "oneshot";
     rev = "v${version}";
-    sha256 = "14s5cl1g0rgqj7fj699xgz2kmkzym1zpckhv3h33ypsn4dq7gjh2";
+    sha256 = "11xmvqj7md970rjhkg1zj2w6yqpw6cj83aw37a82sfdn90kyhg9d";
   };
 
-  vendorSha256 = "0v53dsj0w959pmvk6v1i7rwlfd2y0vrghxlwkgidw0sf775qpgvy";
+  vendorSha256 = "1cxr96yrrmz37r542mc5376jll9lqjqm18k8761h9jqfbzmh9rkp";
 
   doCheck = false;
 

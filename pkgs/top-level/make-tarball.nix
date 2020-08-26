@@ -40,7 +40,6 @@ releaseTools.sourceTarball {
   checkPhase = ''
     set -o pipefail
 
-    export NIX_DB_DIR=$TMPDIR
     export NIX_STATE_DIR=$TMPDIR
     export NIX_PATH=nixpkgs=$TMPDIR/barf.nix
     opts=(--option build-users-group "")

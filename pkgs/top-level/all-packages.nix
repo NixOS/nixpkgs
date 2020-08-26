@@ -180,6 +180,8 @@ in
 
   colorz = callPackage ../tools/misc/colorz { };
 
+  colorpicker = callPackage ../tools/misc/colorpicker { };
+
   comedilib = callPackage ../development/libraries/comedilib {  };
 
   cpu-x = callPackage ../applications/misc/cpu-x { };
@@ -3984,7 +3986,7 @@ in
   gocryptfs = callPackage ../tools/filesystems/gocryptfs { };
 
   godot = callPackage ../development/tools/godot {};
-  
+
   godot-headless = callPackage ../development/tools/godot/headless.nix { };
 
   godot-server = callPackage ../development/tools/godot/server.nix { };
@@ -7629,6 +7631,8 @@ in
 
   vpnc = callPackage ../tools/networking/vpnc { };
 
+  vpn-slice = python3Packages.callPackage ../tools/networking/vpn-slice { };
+
   vp = callPackage ../applications/misc/vp {
     # Enable next line for console graphics. Note that
     # it requires `sixel` enabled terminals such as mlterm
@@ -8257,8 +8261,6 @@ in
 
   tcsh = callPackage ../shells/tcsh { };
 
-  rssh = callPackage ../shells/rssh { };
-
   rush = callPackage ../shells/rush { };
 
   xonsh = callPackage ../shells/xonsh { };
@@ -8412,6 +8414,7 @@ in
     };
   };
 
+  clang_11 = llvmPackages_11.clang;
   clang_10 = llvmPackages_10.clang;
   clang_9  = llvmPackages_9.clang;
   clang_8  = llvmPackages_8.clang;
@@ -8467,6 +8470,8 @@ in
       echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
     '';
   };
+
+  copper = callPackage ../development/compilers/copper {};
 
   inherit (callPackages ../development/compilers/crystal {
     inherit (llvmPackages_10) stdenv clang llvm;
@@ -9226,6 +9231,7 @@ in
   lld_8 = llvmPackages_8.lld;
   lld_9 = llvmPackages_9.lld;
   lld_10 = llvmPackages_10.lld;
+  lld_11 = llvmPackages_11.lld;
 
   lldb = llvmPackages.lldb;
   lldb_5 = llvmPackages_5.lldb;
@@ -9234,10 +9240,12 @@ in
   lldb_8 = llvmPackages_8.lldb;
   lldb_9 = llvmPackages_9.lldb;
   lldb_10 = llvmPackages_10.lldb;
+  lldb_11 = llvmPackages_11.lldb;
 
   llvm = llvmPackages.llvm;
   llvm-manpages = llvmPackages.llvm-manpages;
 
+  llvm_11 = llvmPackages_11.llvm;
   llvm_10 = llvmPackages_10.llvm;
   llvm_9  = llvmPackages_9.llvm;
   llvm_8  = llvmPackages_8.llvm;
@@ -9282,6 +9290,14 @@ in
     buildLlvmTools = buildPackages.llvmPackages_10.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_10.libraries;
   };
+
+  llvmPackages_11 = callPackage ../development/compilers/llvm/11 ({
+    inherit (stdenvAdapters) overrideCC;
+    buildLlvmTools = buildPackages.llvmPackages_11.tools;
+    targetLlvmLibraries = targetPackages.llvmPackages_11.libraries;
+  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
+    stdenv = gcc7Stdenv;
+  });
 
   llvmPackages_latest = llvmPackages_10;
 
@@ -11449,6 +11465,8 @@ in
 
   terraform-lsp = callPackage ../development/tools/misc/terraform-lsp { };
   terraform-ls = callPackage ../development/tools/misc/terraform-ls { };
+
+  terraformer = callPackage ../development/tools/misc/terraformer { };
 
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo4 = texinfo413;
@@ -14299,6 +14317,8 @@ in
     inherit (darwin.stubs) setfile;
   };
 
+  muparserx = callPackage ../development/libraries/muparserx { };
+
   mutest = callPackage ../development/libraries/mutest { };
 
   mygpoclient = pythonPackages.mygpoclient;
@@ -15514,7 +15534,9 @@ in
 
   vcg = callPackage ../development/libraries/vcg { };
 
-  vid-stab = callPackage ../development/libraries/vid-stab { };
+  vid-stab = callPackage ../development/libraries/vid-stab {
+    inherit (llvmPackages) openmp;
+  };
 
   vigra = callPackage ../development/libraries/vigra { };
 
@@ -16833,7 +16855,7 @@ in
     enableMDNS = true;
     enableDomainController = true;
     enableRegedit = true;
-    enableCephFS = true;
+    enableCephFS = !pkgs.stdenv.hostPlatform.isAarch64;
     enableGlusterFS = true;
   });
 
@@ -17991,6 +18013,8 @@ in
 
   iferr = callPackage ../development/tools/iferr { };
 
+  ginkgo = callPackage ../development/tools/ginkgo { };
+
   go-bindata = callPackage ../development/tools/go-bindata { };
 
   go-bindata-assetfs = callPackage ../development/tools/go-bindata-assetfs { };
@@ -18173,8 +18197,6 @@ in
   raspberrypi-tools = callPackage ../os-specific/linux/firmware/raspberrypi/tools.nix {};
 
   regionset = callPackage ../os-specific/linux/regionset { };
-
-  rfkill = callPackage ../os-specific/linux/rfkill { };
 
   rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
 
@@ -20919,6 +20941,8 @@ in
 
   i3lock-fancy = callPackage ../applications/window-managers/i3/lock-fancy.nix { };
 
+  i3lock-fancy-rapid = callPackage ../applications/window-managers/i3/lock-fancy-rapid.nix { };
+
   i3lock-pixeled = callPackage ../misc/screensavers/i3lock-pixeled { };
 
   betterlockscreen = callPackage ../misc/screensavers/betterlockscreen {
@@ -22145,6 +22169,10 @@ in
   openscad = libsForQt5.callPackage ../applications/graphics/openscad {};
 
   opentimestamps-client = python3Packages.callPackage ../tools/misc/opentimestamps-client {};
+
+  opentoonz = (qt5.overrideScope' (_: _: {
+    libtiff = callPackage ../applications/graphics/opentoonz/libtiff.nix { };
+  })).callPackage ../applications/graphics/opentoonz { };
 
   opentx = libsForQt5.callPackage ../applications/misc/opentx { };
 
@@ -23420,6 +23448,8 @@ in
     inherit (lua52Packages) lpeg;
   };
 
+  viw = callPackage ../applications/editors/viw { };
+
   virt-viewer = callPackage ../applications/virtualization/virt-viewer { };
 
   virt-top = callPackage ../applications/virtualization/virt-top { };
@@ -24635,6 +24665,10 @@ in
     cudatoolkit = cudatoolkit_10_2;
   };
 
+  katagoCPU = katago.override {
+    gpuEnabled = false;
+  };
+
   klavaro = callPackage ../games/klavaro {};
 
   kobodeluxe = callPackage ../games/kobodeluxe { };
@@ -25143,6 +25177,8 @@ in
     tcl = tcl-8_5;
     tk = tk-8_5;
   };
+
+  xcowsay = callPackage ../games/xcowsay { };
 
   xjump = callPackage ../games/xjump { };
   # TODO: the corresponding nix file is missing
@@ -26495,9 +26531,7 @@ in
 
   hatari = callPackage ../misc/emulators/hatari { };
 
-  helm = callPackage ../applications/audio/helm {
-    stdenv = gcc8Stdenv;
-  };
+  helm = callPackage ../applications/audio/helm { };
 
   helmfile = callPackage ../applications/networking/cluster/helmfile { };
 

@@ -20,7 +20,7 @@
 , librsvg
 , poppler
 , pulseaudio
-, rfkill
+, utillinux
 , xcur2png
 }:
 
@@ -49,7 +49,7 @@ buildGoPackage rec {
     blur-effect # run (is it really needed?)
     coreutils   # run (is it really needed?)
     fontconfig  # run (is it really needed?)
-    rfkill      # run
+    utillinux   # run
     xcur2png    # run
     grub2       # run (is it really needed?)
   ];
