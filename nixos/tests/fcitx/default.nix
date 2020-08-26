@@ -3,18 +3,6 @@ import ../make-test-python.nix (
     pkgs, ...
   }: 
     # copy_from_host works only for store paths
-    let 
-      fcitx_profile_file_host = pkgs.writeTextFile { 
-        name = "fcitx_profile";
-        text = builtins.readFile ./profile;
-      };
-      
-      fcitx_config_file_host = pkgs.writeTextFile { 
-        name = "fcitx_config";
-        text = builtins.readFile ./config;
-      };
-    in
-
     rec {
         name = "fcitx";
         machine = 
@@ -77,11 +65,11 @@ import ../make-test-python.nix (
             # Point and click would be expensive,
             # So configure using files
             machine.copy_from_host(
-                "${fcitx_profile_file_host}",
+                "${./profile}",
                 "${fcitx_confdir}/profile",
             )
             machine.copy_from_host(
-                "${fcitx_config_file_host}",
+                "${./config}",
                 "${fcitx_confdir}/config",
             )
 
