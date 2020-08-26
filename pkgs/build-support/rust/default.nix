@@ -7,6 +7,7 @@
 , git
 , rust
 , rustc
+, update-rust-crates
 , windows
 }:
 
@@ -239,7 +240,11 @@ stdenv.mkDerivation (args // {
     runHook postInstall
   '';
 
-  passthru = { inherit cargoDeps; } // (args.passthru or {});
+  passthru = let
+    updatePassthru = if args ? pname then {
+      updateScript = [ update-rust-crates args.pname ];
+    } else {};
+  in { inherit cargoDeps; } // updatePassthru // (args.passthru or {});
 
   meta = {
     # default to Rust's platforms

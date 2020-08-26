@@ -1,0 +1,15 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p common-updater-scripts curl jq
+
+set -euf -o pipefail
+
+echo "args: '$@'"
+
+if [ $# -ne 1 ]; then
+   echo "Usage: $0 CRATE"
+   exit 1
+fi
+
+version="$(curl https://crates.io/api/v1/crates/$1 | jq -r '.crate.newest_version')"
+
+update-source-version $1 "$version"

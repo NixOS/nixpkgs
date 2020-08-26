@@ -96,6 +96,8 @@ in
 
   nix-update-script = callPackage ../common-updater/nix-update.nix { };
 
+  update-rust-crates = ../../maintainers/scripts/update-rust-crates;
+
   ### Push NixOS tests inside the fixed point
 
   nixosTests = import ../../nixos/tests/all-tests.nix {
