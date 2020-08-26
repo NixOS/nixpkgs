@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, fetchurl, bash, jre }:
 let
   mcVersion = "1.16.2";
   buildNum = "141";
@@ -13,22 +13,23 @@ in stdenv.mkDerivation {
   preferLocalBuild = true;
 
   dontUnpack = true;
-  installPhase = ''
-    mkdir -p $out/bin
-    cp ${jar} $out/papermc.jar
-    cat > $out/bin/minecraft-server << EOF
-    #!/bin/sh
-    exec ${jre}/bin/java \$@ -jar $out/papermc.jar nogui
-    EOF
-    chmod +x $out/bin/minecraft-server
+  dontConfigure = true;
+
+  buildPhase = ''
+    cat > minecraft-server << EOF
+    #!${bash}/bin/sh
+    exec ${jre}/bin/java \$@ -jar $out/share/papermc/papermc.jar nogui
   '';
 
-  phases = "installPhase";
+  installPhase = ''
+    install -Dm444 ${jar} $out/share/papermc/papermc.jar
+    install -Dm555 -t $out/bin minecraft-server
+  '';
 
   meta = {
     description = "High-performance Minecraft Server";
     homepage    = "https://papermc.io/";
-    license     = stdenv.lib.licenses.gpl3;
+    license     = stdenv.lib.licenses.gpl3Only;
     platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ aaronjanse ];
   };
