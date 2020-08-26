@@ -1852,6 +1852,8 @@ in
 
   eksctl = callPackage ../tools/admin/eksctl { };
 
+  electronplayer = callPackage ../applications/video/electronplayer/electronplayer.nix { };
+
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix { };
 
   element-web = callPackage ../applications/networking/instant-messengers/element/element-web.nix {
