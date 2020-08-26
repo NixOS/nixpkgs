@@ -21,7 +21,13 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ libsoup pkgconfig meson ninja ];
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [ "out" "dev" "lib" "udev" ];
+
+  # We need to do this pre-configure otherwise the data/ folder disappears.
+  preConfigurePhases = ["udevInstallPhase"];
+  udevInstallPhase = ''
+    install -vDt $udev/lib/udev/rules.d/ data/*-spice-webdavd.rules
+  '';
 
   meta = with stdenv.lib; {
     description = "WebDav server implementation and library using libsoup";
