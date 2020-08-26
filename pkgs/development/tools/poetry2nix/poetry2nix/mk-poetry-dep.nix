@@ -47,10 +47,16 @@ pythonPackages.callPackage
       isGit = isSource && source.type == "git";
       isLocal = isSource && source.type == "directory";
       localDepPath = toPath source.url;
-      pyProject = poetryLib.readTOML (localDepPath + "/pyproject.toml");
-      buildSystemPkgs = poetryLib.getBuildSystemPkgs {
-        inherit pythonPackages pyProject;
-      };
+
+      buildSystemPkgs =
+        let
+          pyProjectPath = localDepPath + "/pyproject.toml";
+          pyProject = poetryLib.readTOML pyProjectPath;
+        in
+        if builtins.pathExists pyProjectPath then poetryLib.getBuildSystemPkgs {
+          inherit pythonPackages pyProject;
+        } else [ ];
+
       fileInfo =
         let
           isBdist = f: lib.strings.hasSuffix "whl" f.file;

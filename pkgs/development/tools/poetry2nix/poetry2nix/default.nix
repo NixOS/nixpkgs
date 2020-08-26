@@ -24,7 +24,7 @@ in
 lib.makeScope pkgs.newScope (self: {
 
   # Poetry2nix version
-  version = "1.11.0";
+  version = "1.12.0";
 
   /*
      Returns an attrset { python, poetryPackages, pyProject, poetryLock } for the given pyproject/lockfile.
@@ -114,7 +114,7 @@ lib.makeScope pkgs.newScope (self: {
 
                   __toPluginAble = toPluginAble self;
 
-                  inherit (hooks) pipBuildHook removePathDependenciesHook poetry2nixFixupHook;
+                  inherit (hooks) pipBuildHook removePathDependenciesHook poetry2nixFixupHook wheelUnpackHook;
                 }
             )
             # Null out any filtered packages, we don't want python.pkgs from nixpkgs
@@ -159,13 +159,28 @@ lib.makeScope pkgs.newScope (self: {
         }
       );
 
+      inherit (py) pyProject;
+
+      # Add executables from tool.poetry.scripts
+      scripts = pyProject.tool.poetry.scripts or { };
+      hasScripts = scripts != { };
+      scriptsPackage = import ./shell-scripts.nix {
+        inherit scripts lib;
+        inherit (py) python;
+      };
+
+      hasEditable = editablePackageSources != { };
       editablePackage = import ./editable.nix {
         inherit pkgs lib poetryLib editablePackageSources;
         inherit (py) pyProject python;
       };
 
     in
-    py.python.withPackages (_: py.poetryPackages ++ lib.optional (editablePackageSources != { }) editablePackage);
+    py.python.withPackages (
+      _: py.poetryPackages
+        ++ lib.optional hasEditable editablePackage
+        ++ lib.optional hasScripts scriptsPackage
+    );
 
   /* Creates a Python application from pyproject.toml and poetry.lock
 
