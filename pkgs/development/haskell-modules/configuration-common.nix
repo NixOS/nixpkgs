@@ -1444,6 +1444,12 @@ self: super: {
   # So let's not go there any just disable the tests altogether.
   hspec-core = dontCheck super.hspec-core;
 
+  # Missing a file required for tests in 0.4, fixed in 0.4.1
+  # Also use correct dependency
+  autoapply = dontCheck (super.autoapply.override {
+    th-desugar = self.th-desugar_1_11;
+  });
+
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 
 } // (let
