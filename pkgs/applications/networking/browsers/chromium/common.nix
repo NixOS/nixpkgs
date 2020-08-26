@@ -167,7 +167,13 @@ let
       ./patches/enable-video-acceleration-on-linux.patch # Can be controlled at runtime (i.e. without rebuilding Chromium)
     ];
 
-    postPatch = ''
+    postPatch = optionalString (!versionRange "0" "86") ''
+      # Required for patchShebangs (unsupported interpreter directive, basename: invalid option -- '*', etc.):
+      substituteInPlace native_client/SConstruct \
+        --replace "#! -*- python -*-" ""
+      substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
+        --replace "/usr/bin/env -S make -f" "/usr/bin/make -f"
+    '' + ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
       substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \
         --replace \
