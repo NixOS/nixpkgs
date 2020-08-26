@@ -1,9 +1,12 @@
 { lib, fetchurl, unzip }:
 
-{ crateName
+{ crateName ? args.pname
+, pname ? null
 , version
 , sha256
 , ... } @ args:
+
+assert pname == null || pname == crateName;
 
 lib.overrideDerivation (fetchurl ({
 
@@ -30,6 +33,6 @@ lib.overrideDerivation (fetchurl ({
       fi
       mv "$unpackDir/$fn" "$out"
     '';
-} // removeAttrs args [ "crateName" "version" ]))
+} // removeAttrs args [ "crateName" "pname" "version" ]))
 # Hackety-hack: we actually need unzip hooks, too
 (x: {nativeBuildInputs = x.nativeBuildInputs++ [unzip];})
