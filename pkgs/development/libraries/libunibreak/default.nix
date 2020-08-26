@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "4.3";
 
   src = let
-      rev_version = stdenv.lib.replaceStrings ["-"] ["_"] version;
+      rev_version = stdenv.lib.replaceStrings ["."] ["_"] version;
   in fetchFromGitHub {
     owner = "adah1972";
     repo = pname;
