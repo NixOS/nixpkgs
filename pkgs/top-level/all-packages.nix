@@ -24642,13 +24642,13 @@ in
   katago = callPackage ../games/katago { };
 
   katagoWithCuda = katago.override {
-    cudaSupport = true;
+    enableCuda = true;
     cudnn = cudnn_cudatoolkit_10_2;
     cudatoolkit = cudatoolkit_10_2;
   };
 
   katagoCPU = katago.override {
-    gpuEnabled = false;
+    enableGPU = false;
   };
 
   klavaro = callPackage ../games/klavaro {};
