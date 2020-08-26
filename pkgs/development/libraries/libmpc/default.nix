@@ -8,7 +8,7 @@
 # files.
 
 let
-  version = "1.1.0";
+  version = "1.2.0";
 in
 stdenv.mkDerivation {
   pname = "libmpc";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://gnu/mpc/mpc-${version}.tar.gz";
-    sha256 = "0biwnhjm3rx3hc0rfpvyniky4lpzsvdcwhmcn7f0h4iw2hwcb1b9";
+    sha256 = "19pxx3gwhwl588v496g3aylhcw91z1dk1d5x3a8ik71sancjs3z9";
   };
 
   buildInputs = [ gmp mpfr ];
