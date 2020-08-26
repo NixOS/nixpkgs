@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
-  configureFlags = stdenv.lib.optional withJson "--json";
+  configureFlags = [ "--disable-internal-sqlite" ]
+    ++ stdenv.lib.optional withJson "--json";
 
   preCheck = ''
     export TCLLIBPATH="${tcllib}/lib/tcllib${tcllib.version}"
