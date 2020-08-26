@@ -22150,6 +22150,10 @@ in
 
   opentimestamps-client = python3Packages.callPackage ../tools/misc/opentimestamps-client {};
 
+  opentoonz = (qt5.overrideScope' (_: _: {
+    libtiff = callPackage ../applications/graphics/opentoonz/libtiff.nix { };
+  })).callPackage ../applications/graphics/opentoonz { };
+
   opentx = libsForQt5.callPackage ../applications/misc/opentx { };
 
   opera = callPackage ../applications/networking/browsers/opera {};
