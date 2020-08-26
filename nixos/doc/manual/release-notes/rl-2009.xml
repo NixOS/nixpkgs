@@ -204,6 +204,16 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
        Note: Password support is only avaiable in GRUB version 2.
      </para>
    </listitem>
+   <listitem>
+     <para>
+       Following its deprecation in 20.03, the Perl NixOS test driver has been removed.
+       All remaining tests have been ported to the Python test framework.
+       Code outside nixpkgs using <filename>make-test.nix</filename> or
+       <filename>testing.nix</filename> needs to be ported to
+       <filename>make-test-python.nix</filename> and
+       <filename>testing-python.nix</filename> respectively.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
