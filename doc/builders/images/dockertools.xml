@@ -12,7 +12,7 @@
   <title>buildImage</title>
 
   <para>
-   This function is analogous to the <command>docker build</command> command, in that it can be used to build a Docker-compatible repository tarball containing a single image with one or multiple layers. As such, the result is suitable for being loaded into the local image store with <command>docker load ./result</command> or even directly into an image registry (e.g. using <command>skopeo</command>).
+   This function is analogous to the <command>docker build</command> command, in that it can be used to build a Docker-compatible repository tarball containing a single image with one or multiple layers. As such, the <emphasis>result</emphasis> is suitable for being loaded into the local image store with <command>docker load ./result</command> or even directly into an image registry (e.g. using <command>skopeo</command>).
   </para>
 
   <para>
