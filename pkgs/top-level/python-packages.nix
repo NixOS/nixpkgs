@@ -4544,6 +4544,8 @@ in {
 
   jupyterhub-ldapauthenticator = callPackage ../development/python-modules/jupyterhub-ldapauthenticator { };
 
+  jupyterhub-tmpauthenticator = callPackage ../development/python-modules/jupyterhub-tmpauthenticator { };
+
   jupyterhub-systemdspawner = callPackage ../development/python-modules/jupyterhub-systemdspawner {
     inherit (pkgs) bash;
   };
