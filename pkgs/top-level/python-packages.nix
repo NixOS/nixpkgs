@@ -4693,6 +4693,8 @@ in {
     inherit (pkgs) fuse pkgconfig; # use "real" fuse and pkgconfig, not the python modules
   };
 
+  lml = callPackage ../development/python-modules/lml { };
+
   locustio = callPackage ../development/python-modules/locustio { };
 
   llvmlite = callPackage ../development/python-modules/llvmlite {
