@@ -925,7 +925,7 @@ self: super: {
     super.dhall-nix.overrideScope (self: super: {
       dhall = super.dhall_1_34_0;
       repline = self.repline_0_4_0_0;
-      haskeline = self.haskeline_0_8_0_0;
+      haskeline = self.haskeline_0_8_1_0;
     }));
 
   # https://github.com/haskell-hvr/netrc/pull/2#issuecomment-469526558
@@ -1421,12 +1421,12 @@ self: super: {
   });
 
   # Testsuite trying to run `which haskeline-examples-Test`
-  haskeline_0_8_0_0 = dontCheck super.haskeline_0_8_0_0;
+  haskeline_0_8_1_0 = dontCheck super.haskeline_0_8_1_0;
 
   # Requires repline 0.4 which is the default only for ghc8101, override for the rest
   zre = super.zre.override {
     repline = self.repline_0_4_0_0.override {
-      haskeline = self.haskeline_0_8_0_0;
+      haskeline = self.haskeline_0_8_1_0;
     };
   };
 
