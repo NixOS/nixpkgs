@@ -19,11 +19,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "12r4vgrg2bkr3p61yxcsg02kppg84vn956l0v1vb08i94rxzc8zk";
-  verifyCargoDeps = true;
-  
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    (lib.getDev ncurses6)
+    ncurses6
     openssl
     sqlite
   ];
