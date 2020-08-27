@@ -141,6 +141,14 @@ stdenv.mkDerivation ({
 
   postPatch = ''
     rm -rf obj-x86_64-pc-linux-gnu
+  '' + lib.optionalString (lib.versionAtLeast ffversion "80") ''
+    substituteInPlace dom/system/IOUtils.h \
+      --replace '#include "nspr/prio.h"'          '#include "prio.h"'
+
+    substituteInPlace dom/system/IOUtils.cpp \
+      --replace '#include "nspr/prio.h"'          '#include "prio.h"' \
+      --replace '#include "nspr/private/pprio.h"' '#include "private/pprio.h"' \
+      --replace '#include "nspr/prtypes.h"'       '#include "prtypes.h"'
   '';
 
   nativeBuildInputs =
