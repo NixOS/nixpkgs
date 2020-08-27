@@ -1447,7 +1447,7 @@ self: super: {
 
   # Tests rely on `Int` being 64-bit: https://github.com/hspec/hspec/issues/431.
   # Also, we need QuickCheck-2.14.x to build the test suite, which isn't easy in LTS-16.x.
-  # So let's not go there any just disable the tests altogether.
+  # So let's not go there and just disable the tests altogether.
   hspec-core = dontCheck super.hspec-core;
 
   # github.com/ucsd-progsys/liquidhaskell/issues/1729
@@ -1460,10 +1460,10 @@ self: super: {
   hlsScopeOverride = self: super: {
     # haskell-language-server uses its own fork of ghcide
     # Test disabled: it seems to freeze (is it just that it takes a long time ?)
-    ghcide = dontCheck self.hls-ghcide;
+    ghcide = dontCheck super.hls-ghcide;
     # we are faster than stack here
-    hie-bios = dontCheck self.hie-bios_0_6_3;
-    lsp-test = dontCheck self.lsp-test_0_11_0_4;
+    hie-bios = dontCheck super.hie-bios_0_6_3;
+    lsp-test = dontCheck super.lsp-test_0_11_0_4;
     # fourmolu can‘t compile with an older aeson
     aeson = dontCheck super.aeson_1_5_2_0;
     # brittany has an aeson upper bound of 1.5
