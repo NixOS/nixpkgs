@@ -4056,7 +4056,7 @@ in
 
   grub2 = grub2_full;
 
-  grub2_full = callPackage ../tools/misc/grub/2.0x.nix { };
+  grub2_full = callPackage ../tools/misc/grub/2.0x.nix { python = python3; };
 
   grub2_efi = grub2.override {
     efiSupport = true;
