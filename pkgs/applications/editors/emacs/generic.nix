@@ -67,18 +67,18 @@ in stdenv.mkDerivation {
 
     # Make native compilation work both inside and outside of nix build
     (lib.optionalString nativeComp (let
-      libPath = lib.concatStringsSep ":" [
-        "${lib.getLib libgccjit}/lib/gcc/${targetPlatform.config}/${libgccjit.version}"
-        "${lib.getLib stdenv.cc.cc}/lib"
-        "${lib.getLib stdenv.libc}/lib"
-      ];
+      libPath = (lib.concatStringsSep " "
+        (builtins.map (x: ''\"-L${x}\"'') [
+          "${lib.getLib libgccjit}/lib"
+          "${lib.getLib libgccjit}/lib/gcc/${targetPlatform.config}/${libgccjit.version}"
+          "${lib.getLib stdenv.cc.cc}/lib"
+          "${lib.getLib stdenv.libc}/lib"
+        ]));
     in ''
       substituteInPlace lisp/emacs-lisp/comp.el --replace \
-        "(defcustom comp-async-env-modifier-form nil" \
-        "(defcustom comp-async-env-modifier-form '((setenv \"LIBRARY_PATH\" (string-join (seq-filter (lambda (v) (null (eq v nil))) (list (getenv \"LIBRARY_PATH\") \"${libPath}\")) \":\")))"
-
+        "(defcustom comp-native-driver-options nil" \
+        "(defcustom comp-native-driver-options '(${libPath})"
     ''))
-
     ""
   ];
 
