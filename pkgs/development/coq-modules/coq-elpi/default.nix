@@ -2,14 +2,14 @@
 
 let params = {
   "8.11" = rec {
-    version = "1.5.0";
+    version = "1.6.0_8.11";
     rev = "v${version}";
-    sha256 = "0dlw869j6ib58i8fhbr7x3hq2cy088arihhfanv8i08djqml6g8x";
+    sha256 = "0ahxjnzmd7kl3gl38kyjqzkfgllncr2ybnw8bvgrc6iddgga7bpq";
   };
   "8.12" = rec {
-    version = "1.5.1";
+    version = "1.6.0";
     rev = "v${version}";
-    sha256 = "1znjc8c8rivsawmz5bgm9ddl69p62p2pwxphvpap1gfmi5cp8lwi";
+    sha256 = "0kf99i43mlf750fr7fric764mm495a53mg5kahnbp6zcjcxxrm0b";
   };
 };
   param = params.${coq.coq-version};
