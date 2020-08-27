@@ -11,7 +11,7 @@
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
 , jansson, harfbuzz
-, libgccjit, targetPlatform, binutils, binutils-unwrapped, makeWrapper # native-comp params
+, libgccjit, targetPlatform, binutils, clang ? null, binutils-unwrapped, makeWrapper # native-comp params
 , systemd ? null
 , withX ? !stdenv.isDarwin
 , withNS ? stdenv.isDarwin
@@ -158,7 +158,7 @@ in stdenv.mkDerivation {
     '')
 
     (lib.optionalString nativeComp ''
-      wrapProgram $out/bin/emacs-* --prefix PATH : "${lib.makeBinPath [ binutils binutils-unwrapped ]}"
+      wrapProgram $out/bin/emacs-* --prefix PATH : "${lib.makeBinPath [ clang.bintools binutils binutils-unwrapped ]}"
     '')
 
   ];
