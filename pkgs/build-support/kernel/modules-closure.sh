@@ -78,7 +78,7 @@ for module in $(cat closure); do
     #
     # For now, the workaround is just to filter out the extraneous lines out
     # of its output.
-    for i in $(modinfo -F firmware $module | grep -v '^name:'); do
+    for i in $(modinfo -b $kernel --set-version "$version" -F firmware $module | grep -v '^name:'); do
         mkdir -p "$out/lib/firmware/$(dirname "$i")"
         echo "firmware for $module: $i"
         cp "$firmware/lib/firmware/$i" "$out/lib/firmware/$i" 2>/dev/null || if test -z "$allowMissing"; then exit 1; fi
