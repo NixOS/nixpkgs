@@ -8,7 +8,7 @@
 , gtkspell3
 , ofono
 , itstool
-, libappindicator-gtk3
+, libayatana-appindicator-gtk3
 , perlPackages
 , glibcLocales
 , meson
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     gdbm
     gtkspell3
     ofono
-    libappindicator-gtk3
+    libayatana-appindicator-gtk3
   ];
 
   postPatch = ''
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://linuxonly.ru/page/modem-manager-gui";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ahuzik ];
+    maintainers = with maintainers; [ ahuzik galagora ];
     platforms = platforms.linux;
   };
 }
