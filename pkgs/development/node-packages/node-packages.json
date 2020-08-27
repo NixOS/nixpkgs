@@ -122,6 +122,7 @@
 , "mocha"
 , "multi-file-swagger"
 , "neovim"
+, "netlify-cli"
 , "nijs"
 , "node-gyp"
 , "node-gyp-build"
