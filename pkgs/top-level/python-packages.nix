@@ -3593,6 +3593,8 @@ in {
 
   mercurial = disabledIf (!isPy3k) (toPythonModule (pkgs.mercurial.override { python3Packages = self; }));
 
+  mergedeep = callPackage ../development/python-modules/mergedeep { };
+
   merkletools = callPackage ../development/python-modules/merkletools { };
 
   mesa = callPackage ../development/python-modules/mesa { };
