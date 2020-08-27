@@ -3361,6 +3361,8 @@ in {
 
   jupyterlab = callPackage ../development/python-modules/jupyterlab {};
 
+  jupyterlab-git = callPackage ../development/python-modules/jupyterlab-git {};
+
   jupyter-sphinx = callPackage ../development/python-modules/jupyter-sphinx { };
 
   jupytext = callPackage ../development/python-modules/jupytext { };
@@ -5359,6 +5361,8 @@ in {
   piexif = callPackage ../development/python-modules/piexif { };
 
   pip = callPackage ../development/python-modules/pip { };
+
+  pipx = callPackage ../development/python-modules/pipx { };
 
   pip-tools = callPackage ../development/python-modules/pip-tools {
     git = pkgs.gitMinimal;
@@ -7481,7 +7485,7 @@ in {
 
   packet-python = callPackage ../development/python-modules/packet-python { };
 
-  pwntools = callPackage ../development/python-modules/pwntools { };
+  pwntools = callPackage ../development/python-modules/pwntools { debugger = pkgs.gdb; };
 
   ROPGadget = callPackage ../development/python-modules/ROPGadget { };
 

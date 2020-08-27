@@ -172,7 +172,7 @@ in {
           };
 
           database = mkOption {
-            type = types.str;
+            type = types.nullOr types.str;
             default = null;
             description = "Database name to store sms data";
           };
