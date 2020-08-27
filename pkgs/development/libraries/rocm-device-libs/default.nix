@@ -5,23 +5,22 @@
 , clang-unwrapped
 , lld
 , llvm
-, rocm-runtime
 }:
 
 stdenv.mkDerivation rec {
   pname = "rocm-device-libs";
-  version = "3.5.1";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-Device-Libs";
     rev = "rocm-${version}";
-    sha256 = "180bx05l293hrhzk2ymx41j5lhskysywvx33igbbsngzailwsc22";
+    sha256 = "1sg7wzj2mi5vhba53cp52gnya7c799f0p325ig262vi70r7mr7n2";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ clang lld llvm rocm-runtime ];
+  buildInputs = [ clang lld llvm ];
 
   cmakeBuildType = "Release";
 

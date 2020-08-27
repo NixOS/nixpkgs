@@ -4,11 +4,11 @@
 }:
 buildPythonPackage rec {
   pname = "django-guardian";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8cacf49ebcc1e545f0a8997971eec0fe109f5ed31fc2a569a7bf5615453696e2";
+    sha256 = "ed2de26e4defb800919c5749fb1bbe370d72829fbd72895b6cf4f7f1a7607e1b";
   };
 
   checkInputs = [ pytest pytestrunner pytest-django django_environ mock ];

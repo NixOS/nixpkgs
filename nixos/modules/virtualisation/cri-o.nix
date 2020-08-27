@@ -110,6 +110,7 @@ in
     '';
 
     environment.etc."cni/net.d/10-crio-bridge.conf".source = copyFile "${pkgs.cri-o-unwrapped.src}/contrib/cni/10-crio-bridge.conf";
+    environment.etc."cni/net.d/99-loopback.conf".source = copyFile "${pkgs.cri-o-unwrapped.src}/contrib/cni/99-loopback.conf";
 
     # Enable common /etc/containers configuration
     virtualisation.containers.enable = true;

@@ -46,7 +46,7 @@ let
   cmdlineArgs = cfg.extraFlags ++ [
     "--storage.tsdb.path=${workingDir}/data/"
     "--config.file=${prometheusYml}"
-    "--web.listen-address=${cfg.listenAddress}"
+    "--web.listen-address=${cfg.listenAddress}:${builtins.toString cfg.port}"
     "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
     "--alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
   ] ++
@@ -489,9 +489,17 @@ in {
       '';
     };
 
+    port = mkOption {
+      type = types.port;
+      default = 9090;
+      description = ''
+        Port to listen on.
+      '';
+    };
+
     listenAddress = mkOption {
       type = types.str;
-      default = "0.0.0.0:9090";
+      default = "0.0.0.0";
       description = ''
         Address to listen on for the web interface, API, and telemetry.
       '';
@@ -619,6 +627,21 @@ in {
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      ( let
+          legacy = builtins.match "(.*):(.*)" cfg.listenAddress;
+        in {
+          assertion = legacy == null;
+          message = ''
+            Do not specify the port for Prometheus to listen on in the
+            listenAddress option; use the port option instead:
+              services.prometheus.listenAddress = ${builtins.elemAt legacy 0};
+              services.prometheus.port = ${builtins.elemAt legacy 1};
+          '';
+        }
+      )
+    ];
+
     users.groups.prometheus.gid = config.ids.gids.prometheus;
     users.users.prometheus = {
       description = "Prometheus daemon user";

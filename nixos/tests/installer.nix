@@ -74,7 +74,7 @@ let
       throw "Non-EFI boot methods are only supported on i686 / x86_64"
     else ''
       def assemble_qemu_flags():
-          flags = "-cpu host"
+          flags = "-cpu max"
           ${if system == "x86_64-linux"
             then ''flags += " -m 768"''
             else ''flags += " -m 512 -enable-kvm -machine virt,gic-version=host"''
@@ -317,6 +317,7 @@ let
             texinfo
             unionfs-fuse
             xorg.lndir
+            (lvm2.override { udev = null; }) # for initrd (extra-utils)
 
             # add curl so that rather than seeing the test attempt to download
             # curl's tarball, we see what it's trying to download
@@ -799,7 +800,7 @@ in {
           "btrfs subvol create /mnt/badpath/boot",
           "btrfs subvol create /mnt/nixos",
           "btrfs subvol set-default "
-          + "$(btrfs subvol list /mnt | grep 'nixos' | awk '{print \$2}') /mnt",
+          + "$(btrfs subvol list /mnt | grep 'nixos' | awk '{print $2}') /mnt",
           "umount /mnt",
           "mount -o defaults LABEL=root /mnt",
           "mkdir -p /mnt/badpath/boot",  # Help ensure the detection mechanism
