@@ -1,14 +1,14 @@
 { lib, fetchzip }:
 
 let
-  version = "2.001";
+  version = "2.002";
 in
 fetchzip {
   name = "JetBrainsMono-${version}";
 
-  url = "https://github.com/JetBrains/JetBrainsMono/releases/download/v${version}/JetBrains.Mono.${version}.zip";
+  url = "https://github.com/JetBrains/JetBrainsMono/releases/download/v${version}/JetBrainsMono-${version}.zip";
 
-  sha256 = "06rh8dssq6qzgb9rri3an2ka24j47c0i8yhgq81yyg471spc39h1";
+  sha256 = "018lhxi9m8aprls6cnpndzdg5snijwzm22m2pxxi6zcqxrcxh8vb";
 
   postFetch = ''
     mkdir -p $out/share/fonts
@@ -21,7 +21,7 @@ fetchzip {
   meta = with lib; {
     description = "A typeface made for developers";
     homepage = "https://jetbrains.com/mono/";
-    license = licenses.asl20;
+    license = licenses.ofl;
     maintainers = [ maintainers.marsam ];
     platforms = platforms.all;
   };
