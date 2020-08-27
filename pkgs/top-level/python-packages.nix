@@ -2683,6 +2683,8 @@ in {
 
   httpbin = callPackage ../development/python-modules/httpbin { };
 
+  httpcore = callPackage ../development/python-modules/httpcore { };
+
   http-ece = callPackage ../development/python-modules/http-ece { };
 
   httplib2 = callPackage ../development/python-modules/httplib2 { };
