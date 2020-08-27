@@ -5580,6 +5580,8 @@ in {
 
   pyexcel-io = callPackage ../development/python-modules/pyexcel-io { };
 
+  pyexcel-xls = callPackage ../development/python-modules/pyexcel-xls { };
+
   pyexcelerator = callPackage ../development/python-modules/pyexcelerator { };
 
   pyext = callPackage ../development/python-modules/pyext { };
