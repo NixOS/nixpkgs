@@ -8,12 +8,12 @@
 stdenv.mkDerivation rec {
   pname = "rabbitmq-server";
 
-  version = "3.8.5";
+  version = "3.8.7";
 
   # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
     url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "014pfgfj90scas40lf0yjx14vhx5l5zbi3by2nnb704lg8w2n456";
+    sha256 = "1p476jbvn4j8bijy72pcvha7gshcp5c01iaqz5vrg399b2iz21zn";
   };
 
   buildInputs =
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://www.rabbitmq.com/";
     description = "An implementation of the AMQP messaging protocol";
-    license = stdenv.lib.licenses.mpl11;
+    license = stdenv.lib.licenses.mpl20;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ Profpatsch ];
   };
