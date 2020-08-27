@@ -11065,6 +11065,8 @@ in
 
   lazygit = callPackage ../development/tools/lazygit { };
 
+  laminar = callPackage ../development/tools/continuous-integration/laminar { };
+
   Literate = callPackage ../development/tools/literate-programming/Literate {};
 
   lcov = callPackage ../development/tools/analysis/lcov { };
