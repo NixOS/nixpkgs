@@ -9,11 +9,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "palp";
-  version = "2.11";
+  version = "2.12";
 
   src = fetchurl {
     url = "http://hep.itp.tuwien.ac.at/~kreuzer/CY/palp/palp-${version}.tar.gz";
-    sha256 = "00jpm73fw9jjq58z6rysr1mwv489j6rpfqqlhm9ab0dln4kyhh05";
+    sha256 = "09pnkah4ysxlr2safjhnhq7zzfpp98ycb3099axk7js9flqxjypl";
   };
 
   hardeningDisable = [
