@@ -1462,7 +1462,7 @@ self: super: {
     # Test disabled: it seems to freeze (is it just that it takes a long time ?)
     ghcide = dontCheck super.hls-ghcide;
     # we are faster than stack here
-    hie-bios = dontCheck super.hie-bios_0_6_3;
+    hie-bios = dontCheck super.hie-bios_0_7_0;
     lsp-test = dontCheck super.lsp-test_0_11_0_4;
     # fourmolu can‘t compile with an older aeson
     aeson = dontCheck super.aeson_1_5_2_0;
@@ -1470,7 +1470,8 @@ self: super: {
     brittany = doJailbreak super.brittany;
   };
   in {
-    haskell-language-server = dontCheck (super.haskell-language-server.overrideScope hlsScopeOverride);
+    # jailbreaking for hie-bios 0.7.0 (upstream PR: https://github.com/haskell/haskell-language-server/pull/357)
+    haskell-language-server = dontCheck (doJailbreak (super.haskell-language-server.overrideScope hlsScopeOverride));
     hls-ghcide = dontCheck (super.hls-ghcide.overrideScope hlsScopeOverride);
     fourmolu = super.fourmolu.overrideScope hlsScopeOverride;
   }
