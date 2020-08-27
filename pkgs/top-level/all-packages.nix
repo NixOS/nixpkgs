@@ -19719,7 +19719,7 @@ in
 
   catimg = callPackage ../tools/misc/catimg { };
 
-  catt = python3Packages.callPackage ../applications/video/catt { };
+  catt = callPackage ../applications/video/catt { };
 
   cava = callPackage ../applications/audio/cava { };
 
