@@ -1,38 +1,39 @@
 diff --git a/graphviz/backend.py b/graphviz/backend.py
-index 704017b..fe4aefe 100644
+index 6f4cc0c..bc4781e 100644
 --- a/graphviz/backend.py
 +++ b/graphviz/backend.py
-@@ -114,7 +114,7 @@ def command(engine, format, filepath=None, renderer=None, formatter=None):
-     suffix = '.'.join(reversed(format_arg))
-     format_arg = ':'.join(format_arg)
+@@ -122,7 +122,7 @@ def command(engine, format_, filepath=None, renderer=None, formatter=None):
+         raise ValueError('unknown formatter: %r' % formatter)
  
--    cmd = [engine, '-T%s' % format_arg]
-+    cmd = [os.path.join('@graphviz@/bin', engine), '-T%s' % format_arg]
-     rendered = None
-     if filepath is not None:
-         cmd.extend(['-O', filepath])
-@@ -217,7 +217,7 @@ def version():
+     output_format = [f for f in (format_, renderer, formatter) if f is not None]
+-    cmd = [engine, '-T%s' % ':'.join(output_format)]
++    cmd = [os.path.join('@graphviz@/bin', engine), '-T%s' % ':'.join(output_format)]
+ 
+     if filepath is None:
+         rendered = None
+@@ -255,7 +255,7 @@ def version():
          subprocess.CalledProcessError: If the exit status is non-zero.
          RuntimmeError: If the output cannot be parsed into a version number.
      """
 -    cmd = ['dot', '-V']
 +    cmd = ['@graphviz@/bin/dot', '-V']
-     out, _ = run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
- 
-     info = out.decode('ascii')
+     out, _ = run(cmd, check=True, encoding='ascii',
+                  stdout=subprocess.PIPE,
+                  stderr=subprocess.STDOUT)
 diff --git a/tests/test_backend.py b/tests/test_backend.py
-index 7ec12f7..2e8550d 100644
+index 9f307f5..e43bf5b 100644
 --- a/tests/test_backend.py
 +++ b/tests/test_backend.py
-@@ -47,6 +47,7 @@ def test_render_formatter_unknown():
-         render('dot', 'ps', 'nonfilepath', 'ps', '')
+@@ -50,7 +50,7 @@ def test_run_encoding_mocked(mocker, Popen, input=u'sp\xe4m', encoding='utf-8'):
+         m.decode.assert_called_once_with(encoding)
  
  
+-@pytest.exe
 +@pytest.mark.skip(reason='empty $PATH has no effect')
  @pytest.mark.usefixtures('empty_path')
- def test_render_missing_executable():
-     with pytest.raises(ExecutableNotFound, match=r'execute'):
-@@ -85,7 +86,7 @@ def test_render_mocked(capsys, mocker, Popen, quiet):
+ @pytest.mark.parametrize('func, args', [
+     (render, ['dot', 'pdf', 'nonfilepath']),
+@@ -143,7 +143,7 @@ def test_render_mocked(capsys, mocker, Popen, quiet):  # noqa: N803
  
      assert render('dot', 'pdf', 'nonfilepath', quiet=quiet) == 'nonfilepath.pdf'
  
@@ -40,25 +41,17 @@ index 7ec12f7..2e8550d 100644
 +    Popen.assert_called_once_with(['@graphviz@/bin/dot', '-Tpdf', '-O', 'nonfilepath'],
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE,
-                                   startupinfo=mocker.ANY)
-@@ -94,6 +95,7 @@ def test_render_mocked(capsys, mocker, Popen, quiet):
-     assert capsys.readouterr() == ('', '' if quiet else 'stderr')
- 
- 
-+@pytest.mark.skip(reason='empty $PATH has no effect')
- @pytest.mark.usefixtures('empty_path')
- def test_pipe_missing_executable():
-     with pytest.raises(ExecutableNotFound, match=r'execute'):
-@@ -143,7 +145,7 @@ def test_pipe_pipe_invalid_data_mocked(mocker, py2, Popen, quiet):  # noqa: N803
-     assert e.value.returncode is mocker.sentinel.returncode
+                                   cwd=None, startupinfo=mocker.ANY)
+@@ -201,7 +201,7 @@ def test_pipe_pipe_invalid_data_mocked(mocker, py2, Popen, quiet):  # noqa: N803
      assert e.value.stdout is mocker.sentinel.out
-     assert e.value.stderr is err
+     e.value.stdout = mocker.sentinel.new_stdout
+     assert e.value.stdout is mocker.sentinel.new_stdout
 -    Popen.assert_called_once_with(['dot', '-Tpng'],
 +    Popen.assert_called_once_with(['@graphviz@/bin/dot', '-Tpng'],
                                    stdin=subprocess.PIPE,
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE,
-@@ -166,7 +168,7 @@ def test_pipe_mocked(capsys, mocker, Popen, quiet):  # noqa: N803
+@@ -224,7 +224,7 @@ def test_pipe_mocked(capsys, mocker, Popen, quiet):  # noqa: N803
  
      assert pipe('dot', 'png', b'nongraph', quiet=quiet) is mocker.sentinel.out
  
@@ -67,16 +60,8 @@ index 7ec12f7..2e8550d 100644
                                    stdin=subprocess.PIPE,
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE,
-@@ -176,6 +178,7 @@ def test_pipe_mocked(capsys, mocker, Popen, quiet):  # noqa: N803
-     assert capsys.readouterr() == ('', '' if quiet else 'stderr')
- 
- 
-+@pytest.mark.skip(reason='empty $PATH has no effect')
- @pytest.mark.usefixtures('empty_path')
- def test_version_missing_executable():
-     with pytest.raises(ExecutableNotFound, match=r'execute'):
-@@ -196,7 +199,7 @@ def test_version_parsefail_mocked(mocker, Popen):
-     with pytest.raises(RuntimeError):
+@@ -250,7 +250,7 @@ def test_version_parsefail_mocked(mocker, Popen):  # noqa: N803
+     with pytest.raises(RuntimeError, match=r'nonversioninfo'):
          version()
  
 -    Popen.assert_called_once_with(['dot', '-V'],
@@ -84,9 +69,9 @@ index 7ec12f7..2e8550d 100644
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.STDOUT,
                                    startupinfo=mocker.ANY)
-@@ -211,7 +214,7 @@ def test_version_mocked(mocker, Popen):
+@@ -269,7 +269,7 @@ def test_version_mocked(mocker, Popen, stdout, expected):  # noqa: N803
  
-     assert version() == (1, 2, 3)
+     assert version() == expected
  
 -    Popen.assert_called_once_with(['dot', '-V'],
 +    Popen.assert_called_once_with(['@graphviz@/bin/dot', '-V'],
