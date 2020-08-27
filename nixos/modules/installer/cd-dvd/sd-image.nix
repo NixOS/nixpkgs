@@ -108,6 +108,15 @@ in
       '';
     };
 
+    postBuildCommands = mkOption {
+      example = literalExample "'' dd if=\${pkgs.myBootLoader}/SPL of=$img bs=1024 seek=1 conv=notrunc ''";
+      default = "";
+      description = ''
+        Shell commands to run after the image is built.
+        Can be used for boards requiring to dd u-boot SPL before actual partitions.
+      '';
+    };
+
     compressImage = mkOption {
       type = types.bool;
       default = true;
@@ -197,6 +206,9 @@ in
         # Verify the FAT partition before copying it.
         fsck.vfat -vn firmware_part.img
         dd conv=notrunc if=firmware_part.img of=$img seek=$START count=$SECTORS
+
+        ${config.sdImage.postBuildCommands}
+
         if test -n "$compressImage"; then
             zstd -T$NIX_BUILD_CORES --rm $img
         fi
