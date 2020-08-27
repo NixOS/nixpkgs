@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "tegola";
-  version = "0.11.2";
+  version = "0.12.0";
 
   goPackagePath = "github.com/go-spatial/tegola";
 
@@ -10,8 +10,10 @@ buildGoPackage rec {
     owner = "go-spatial";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0xrjs0py08q9i31rl0cxi6idncrrgqwcspqks3c5vd9i65yqc6fv";
+    sha256 = "1bm791cis6bqgvhkk6n03kdxh0y9fdkhsx4rgmv7pm3zzdd7b17r";
   };
+
+  buildFlagsArray = [ "-ldflags=-s -w -X ${goPackagePath}/cmd/tegola/cmd.Version=${version}" ];
 
   meta = with stdenv.lib; {
     homepage = "https://www.tegola.io/";
