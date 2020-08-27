@@ -3816,6 +3816,8 @@ in
 
   garmintools = callPackage ../development/libraries/garmintools {};
 
+  gatsby-cli = nodePackages.gatsby-cli;
+
   gauge = callPackage ../development/tools/gauge { };
 
   gawk = callPackage ../tools/text/gawk {
@@ -4583,7 +4585,7 @@ in
 
   isync = callPackage ../tools/networking/isync { };
 
-  itm-tools = callPackage ../development/tools/misc/itm-tools { };  
+  itm-tools = callPackage ../development/tools/misc/itm-tools { };
 
   ix = callPackage ../tools/misc/ix { };
 
@@ -27516,7 +27518,7 @@ in
   sequeler = callPackage ../applications/misc/sequeler { };
 
   sequelpro = callPackage ../applications/misc/sequelpro {};
-  
+
   snowsql = callPackage ../applications/misc/snowsql {};
 
   sidequest = callPackage ../applications/misc/sidequest {};

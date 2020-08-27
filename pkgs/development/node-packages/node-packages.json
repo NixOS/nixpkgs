@@ -72,6 +72,7 @@
 , {"fast-cli": "1.x"}
 , "fkill-cli"
 , "forever"
+, "gatsby-cli"
 , "get-graphql-schema"
 , "git-run"
 , "git-ssb"
