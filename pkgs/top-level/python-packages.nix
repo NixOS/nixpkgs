@@ -5582,6 +5582,8 @@ in {
 
   pyexcel-xls = callPackage ../development/python-modules/pyexcel-xls { };
 
+  pyexcel-ods = callPackage ../development/python-modules/pyexcel-ods { };
+
   pyexcelerator = callPackage ../development/python-modules/pyexcelerator { };
 
   pyext = callPackage ../development/python-modules/pyext { };
