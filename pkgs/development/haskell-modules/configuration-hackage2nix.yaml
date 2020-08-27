@@ -3960,8 +3960,10 @@ broken-packages:
   - complexity
   - compose-trans
   - composite-aeson
+  - composite-aeson-path
   - composite-aeson-refined
   - composite-base
+  - composite-binary
   - composite-ekg
   - composite-opaleye
   - composite-swagger
