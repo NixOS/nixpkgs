@@ -7851,6 +7851,8 @@ in {
   rxv     = callPackage ../development/python-modules/rxv     { };
 
   userpath = callPackage ../development/python-modules/userpath { };
+  
+  pooch = callPackage ../development/python-modules/pooch {};
 
 });
 
