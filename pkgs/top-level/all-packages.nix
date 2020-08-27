@@ -579,7 +579,10 @@ in
 
   acpica-tools = callPackage ../tools/system/acpica-tools { };
 
-  act = callPackage ../development/tools/misc/act {};
+  act = callPackage ../development/tools/misc/act {
+    # go 1.15 cannot connect to docker-for-mac https://github.com/docker/for-mac/issues/4855
+    buildGoModule = if stdenv.isDarwin then buildGo114Module else buildGoModule;
+  };
 
   actdiag = with python3.pkgs; toPythonApplication actdiag;
 
