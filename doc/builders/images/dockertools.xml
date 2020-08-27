@@ -12,7 +12,7 @@
   <title>buildImage</title>
 
   <para>
-   This function is analogous to the <command>docker build</command> command, in that it can be used to build a Docker-compatible repository tarball containing a single image with one or multiple layers. As such, the result is suitable for being loaded in Docker with <command>docker load</command>.
+   This function is analogous to the <command>docker build</command> command, in that it can be used to build a Docker-compatible repository tarball containing a single image with one or multiple layers. As such, the <literal>*.tar.gz</literal> file of the <i>result</i> is suitable for being loaded into the (local) registry with <command>docker load</command>.
   </para>
 
   <para>
