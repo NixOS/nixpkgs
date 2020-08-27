@@ -25,9 +25,7 @@ buildPythonPackage rec {
   # cpu_times is flakey on darwin
   checkPhase = ''
     pytest $out/${python.sitePackages}/psutil/tests/test_system.py \
-      -k 'not user \
-          and not disk_io_counters and not sensors_battery \
-          and not cpu_times'
+      -k 'not user and not disk_io_counters and not sensors_battery and not cpu_times'
   '';
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.IOKit ];

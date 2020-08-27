@@ -1,8 +1,9 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchPypi, glibcLocales }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, isPy27, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "urwid";
   version = "2.1.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

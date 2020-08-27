@@ -3495,7 +3495,7 @@ in
 
   f2fs-tools = callPackage ../tools/filesystems/f2fs-tools { };
 
-  Fabric = python2Packages.Fabric;
+  Fabric = with python3Packages; toPythonApplication Fabric;
 
   fail2ban = callPackage ../tools/security/fail2ban { };
 
@@ -14672,8 +14672,9 @@ in
     python = python37;
   };
 
-  protobuf = protobuf3_12;
+  protobuf = protobuf3_13;
 
+  protobuf3_13 = callPackage ../development/libraries/protobuf/3.13.nix { };
   protobuf3_12 = callPackage ../development/libraries/protobuf/3.12.nix { };
   protobuf3_11 = callPackage ../development/libraries/protobuf/3.11.nix { };
   protobuf3_10 = callPackage ../development/libraries/protobuf/3.10.nix { };

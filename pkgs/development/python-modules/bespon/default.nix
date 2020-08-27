@@ -4,12 +4,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.4.0";
+  version = "0.5.0";
   pname = "BespON";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4acfa3f918d416654beccd4db69290f498edb78bf39941287dcbc068b9a7ce2f";
+    sha256 = "a75cd7e62746fb0fef9b98aa157a44f9ed2ef63e952f7ae4ec5b3c2892669187";
   };
 
   propagatedBuildInputs = [ ];
