@@ -27,14 +27,6 @@ stdenv.mkDerivation rec {
     sha256 = "1pjx4rbsxa7gcs628yjkwb0zqrm5xq8pkmp0cfk4flfk1ryflmgr";
   };
 
-  patches = [
-    # Fix docs build
-    (fetchpatch {
-      url = "https://bitbucket.org/linuxonly/modem-manager-gui/commits/68fb09c12413b7de9b7477cbf4241c3527568325/raw";
-      sha256 = "033nrlhjlk0zvadv5g9n2id53ajagswf77mda0ixnrskyi7wiig7";
-    })
-  ];
-
   nativeBuildInputs = [
     pkgconfig
     python3
