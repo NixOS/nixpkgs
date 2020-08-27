@@ -1450,6 +1450,10 @@ self: super: {
   # So let's not go there any just disable the tests altogether.
   hspec-core = dontCheck super.hspec-core;
 
+  # github.com/ucsd-progsys/liquidhaskell/issues/1729
+  liquidhaskell = super.liquidhaskell.override { Diff = self.Diff_0_3_4; };
+  Diff_0_3_4 = dontCheck super.Diff_0_3_4;
+
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 
 } // (let
