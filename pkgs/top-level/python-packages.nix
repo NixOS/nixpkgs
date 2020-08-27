@@ -5576,6 +5576,8 @@ in {
 
   pyenchant = callPackage ../development/python-modules/pyenchant { enchant2 = pkgs.enchant2; };
 
+  pyexcel-io = callPackage ../development/python-modules/pyexcel-io { };
+
   pyexcelerator = callPackage ../development/python-modules/pyexcelerator { };
 
   pyext = callPackage ../development/python-modules/pyext { };
