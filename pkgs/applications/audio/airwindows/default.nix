@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "airwindows-${version}";
-  version = "2020-05-25";
+  version = "2020-08-24";
 
   src = fetchFromGitHub {
     owner = "airwindows";
     repo = "airwindows";
-    rev = "897c0830e603a950e838a3753f89334bdf56bb71";
-    sha256 = "1mh7c176fdl5y5ixkgzj2j2b7qifp3lgnxmbn6b7bvg3sv5wsxg3";
+    rev = "3022096e8c0e82abdefbc7cae240dd8d0cac5147";
+    sha256 = "1pvnzl486630qhdc6qjgddglgq89lxjh2kgnyl4q2ia9mn36iisx";
   };
 
   vst-sdk = stdenv.mkDerivation rec {
