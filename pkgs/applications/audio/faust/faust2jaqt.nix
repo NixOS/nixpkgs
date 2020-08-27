@@ -3,6 +3,7 @@
 , opencv2
 , qt4
 , libsndfile
+, alsaLib
 , which
 }:
 
@@ -20,6 +21,7 @@ faust.wrapWithBuildEnv {
     opencv2
     qt4
     libsndfile
+    alsaLib
     which
   ];
 
