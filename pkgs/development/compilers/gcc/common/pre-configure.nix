@@ -2,6 +2,7 @@
 , gnatboot ? null
 , langAda ? false
 , langJava ? false
+, langJit ? false
 , langGo }:
 
 assert langJava -> lib.versionOlder version "7";
@@ -50,10 +51,10 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
   export ac_cv_func_aligned_alloc=no
 ''
 
-# In order to properly install on macOS Catalina, strip(1) upon
-# installation must not remove external symbols, otherwise the install
-# step errors with "symbols referenced by indirect symbol table
-# entries that can't be stripped".
-+ lib.optionalString (hostPlatform.isDarwin) ''
+# In order to properly install libgccjit on macOS Catalina, strip(1)
+# upon installation must not remove external symbols, otherwise the
+# install step errors with "symbols referenced by indirect symbol
+# table entries that can't be stripped".
++ lib.optionalString (hostPlatform.isDarwin && langJit) ''
   export STRIP='strip -x'
 ''
