@@ -8,7 +8,7 @@
   darwin, libiconv,
 
   dbus, fontconfig, freetype, glib, harfbuzz, icu, libX11, libXcomposite,
-  libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng, libtiff,
+  libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng,
   libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre16, pcre2, sqlite, udev,
   xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm,
   zlib,
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
       harfbuzz icu
 
       # Image formats
-      libjpeg libpng libtiff
+      libjpeg libpng
       (if compareVersion "5.9.0" < 0 then pcre16 else pcre2)
     ]
     ++ (

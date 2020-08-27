@@ -17,34 +17,24 @@
 , withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 }:
 
-let gnupg-minimal = gnupg.override {
-  enableMinimal = true;
-  guiSupport = false;
-  pcsclite = null;
-  sqlite = null;
-  pinentry = null;
-  adns = null;
-  gnutls = null;
-  libusb1 = null;
-  openldap = null;
-  readline = null;
-  zlib = null;
-  bzip2 = null;
-};
-
+let
+  version = "246";
 in stdenv.mkDerivation {
-  version = "245.7";
+  inherit version;
   pname = "systemd";
 
-  # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
-  # Also fresh patches should be cherry-picked from that tree to our current one.
+  # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
+  # This has proven to be less error-prone than the previous systemd fork.
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd-stable";
-    rev = "1e6233ed07f7af08550fffa7a885cac1ac67a2c3";
-    sha256 = "1hd5kc3mm7mg4i7hhi82wg4cpg4fpi2k6hzjq9sv07pkn2lw390w";
+    rev = "v${version}";
+    sha256 = "0zrkyxrh5rm45f2l1rnjyv229bcyzawfw7c63jqxwix75px60dyw";
   };
 
+  # If these need to be regenerated, `git am path/to/00*.patch` them into a
+  # systemd worktree, rebase to the more recent systemd version, and export the
+  # patches again via `git format-patch v${version}`.
   patches = [
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
@@ -77,7 +67,7 @@ in stdenv.mkDerivation {
       "find_program('${stdenv.cc.bintools.targetPrefix}objcopy'"
   '';
 
-  outputs = [ "out" "lib" "man" "dev" ];
+  outputs = [ "out" "man" "dev" ];
 
   nativeBuildInputs =
     [ pkgconfig intltool gperf libxslt gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
@@ -107,7 +97,6 @@ in stdenv.mkDerivation {
     "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
     "-Dpamconfdir=${placeholder "out"}/etc/pam.d"
     "-Drootprefix=${placeholder "out"}"
-    "-Drootlibdir=${placeholder "lib"}/lib"
     "-Dpkgconfiglibdir=${placeholder "dev"}/lib/pkgconfig"
     "-Dpkgconfigdatadir=${placeholder "dev"}/share/pkgconfig"
     "-Dloadkeys-path=${kbd}/bin/loadkeys"
@@ -215,7 +204,7 @@ in stdenv.mkDerivation {
 
     # absolute paths to gpg & tar
     substituteInPlace src/import/pull-common.c \
-      --replace '"gpg"' '"${gnupg-minimal}/bin/gpg"'
+      --replace '"gpg"' '"${gnupg}/bin/gpg"'
     for file in src/import/{{export,import,pull}-tar,import-common}.c; do
       substituteInPlace $file \
         --replace '"tar"' '"${gnutar}/bin/tar"'
@@ -276,37 +265,9 @@ in stdenv.mkDerivation {
 
     # "kernel-install" shouldn't be used on NixOS.
     find $out -name "*kernel-install*" -exec rm {} \;
-
-    # Keep only libudev and libsystemd in the lib output.
-    mkdir -p $out/lib
-    mv $lib/lib/security $lib/lib/libnss* $out/lib/
   ''; # */
 
   enableParallelBuilding = true;
-
-  # On aarch64 we "leak" a reference to $out/lib/systemd/catalog in the lib
-  # output. The result of that is a dependency cycle between $out and $lib.
-  # Thus nix (rightfully) marks the build as failed. That reference originates
-  # from an array of strings (catalog_file_dirs) in systemd
-  # (src/src/journal/catalog.{c,h}).  The only consumer (as of v242) of the
-  # symbol is the main function of journalctl.  Still libsystemd.so contains
-  # the VALUE but not the symbol.  Systemd seems to be properly using function
-  # & data sections together with the linker flags to garbage collect unused
-  # sections (-Wl,--gc-sections).  For unknown reasons those flags do not
-  # eliminate the unused string constants, in this case on aarch64-linux. The
-  # hacky way is to just remove the reference after we finished compiling.
-  # Since it can not be used (there is no symbol to actually refer to it) there
-  # should not be any harm.  It is a bit odd and I really do not like starting
-  # these kind of hacks but there doesn't seem to be a straight forward way at
-  # this point in time.
-  # The reference will be replaced by the same reference the usual nukeRefs
-  # tooling uses.  The standard tooling can not / should not be uesd since it
-  # is a bit too excessive and could potentially do us some (more) harm.
-  postFixup = ''
-    nukedRef=$(echo $out | sed -e "s,$NIX_STORE/[^-]*-\(.*\),$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-\1,")
-    cat $lib/lib/libsystemd.so | perl -pe "s|$out/lib/systemd/catalog|$nukedRef/lib/systemd/catalog|" > $lib/lib/libsystemd.so.tmp
-    mv $lib/lib/libsystemd.so.tmp $(readlink -f $lib/lib/libsystemd.so)
-  '';
 
   # The interface version prevents NixOS from switching to an
   # incompatible systemd at runtime.  (Switching across reboots is
