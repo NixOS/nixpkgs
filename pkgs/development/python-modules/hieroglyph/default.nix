@@ -1,8 +1,9 @@
-{ stdenv, fetchPypi, buildPythonPackage, sphinx }:
+{ stdenv, fetchPypi, buildPythonPackage, isPy27, sphinx }:
 
 buildPythonPackage rec {
   pname = "hieroglyph";
   version = "2.1.0";
+  disabled = isPy27; # python2 compatible sphinx is too low
 
   src = fetchPypi {
     inherit pname version;

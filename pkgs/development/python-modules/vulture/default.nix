@@ -1,8 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, coverage, pytest, pytestcov }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy27, coverage, pytest, pytestcov }:
 
 buildPythonPackage rec {
   pname = "vulture";
   version = "2.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

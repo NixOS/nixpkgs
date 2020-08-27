@@ -579,7 +579,10 @@ in
 
   acpica-tools = callPackage ../tools/system/acpica-tools { };
 
-  act = callPackage ../development/tools/misc/act {};
+  act = callPackage ../development/tools/misc/act {
+    # go 1.15 cannot connect to docker-for-mac https://github.com/docker/for-mac/issues/4855
+    buildGoModule = if stdenv.isDarwin then buildGo114Module else buildGoModule;
+  };
 
   actdiag = with python3.pkgs; toPythonApplication actdiag;
 
@@ -5620,6 +5623,8 @@ in
   nethogs = callPackage ../tools/networking/nethogs { };
 
   netkittftp = callPackage ../tools/networking/netkit/tftp { };
+
+  netlify-cli = nodePackages.netlify-cli;
 
   netpbm = callPackage ../tools/graphics/netpbm { };
 
@@ -11044,6 +11049,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  kpack = callPackage ../development/tools/misc/kpack { };
+
   kustomize = callPackage ../development/tools/kustomize { };
 
   ktlint = callPackage ../development/tools/ktlint { };
@@ -13094,7 +13101,7 @@ in
   libaudclient = callPackage ../development/libraries/libaudclient { };
 
   libav = libav_11; # branch 11 is API-compatible with branch 10
-  libav_all = callPackage ../development/libraries/libav { };
+  libav_all = callPackages ../development/libraries/libav { };
   inherit (libav_all) libav_0_8 libav_11 libav_12;
 
   libavc1394 = callPackage ../development/libraries/libavc1394 { };

@@ -3,6 +3,7 @@
 , fetchPypi
 , xorg
 , cffi
+, nose
 , six
 }:
 
@@ -21,6 +22,10 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [ cffi six ];
+
+  checkInputs = [ nose ];
+
+  pythonImportsCheck = [ "xcffib" ];
 
   meta = with stdenv.lib; {
     description = "A drop in replacement for xpyb, an XCB python binding";
