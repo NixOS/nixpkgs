@@ -372,8 +372,37 @@ let
         fi
     '';
 
+  # Derivations built with `buildNodePackage` can already be overriden with `override`, `overrideAttrs`, and `overrideDerivation`.
+  # This function introduces `overrideNodeAttrs` and it overrides the call to `buildNodePackage`.
+  #
+  # THIS FUNCTION IS TEMPORARY until we have a better mechanism in place:
+  # https://github.com/NixOS/nixpkgs/pull/96509#issuecomment-682381592
+  # YOU SHOULD NOT USE IT UNLESS YOU ACCEPT THAT.
+  makeOverridableNodePackage = f: origArgs:
+    let
+      ff = f origArgs;
+      overrideWith = newArgs: origArgs // (
+        let args = if stdenv.lib.isFunction newArgs then newArgs origArgs else newArgs;
+        in
+          assert stdenv.lib.assertMsg (args.__acceptOverrideNodeAttrsCanBeDroppedAnytime or false) ''
+            overrideNodeAttrs is temporary function that will be removed once a better mechanism exists.
+            Pass it `__acceptOverrideNodeAttrsCanBeDroppedAnytime = true;` to aknowledge the fact.
+          '';
+          builtins.removeAttrs args [ "__acceptOverrideNodeAttrsCanBeDroppedAnytime" ]
+      );
+    in
+      if builtins.isAttrs ff then (ff // {
+        overrideNodeAttrs = newArgs: makeOverridableNodePackage f (overrideWith newArgs);
+      })
+      else if builtins.isFunction ff then {
+        overrideNodeAttrs = newArgs: makeOverridableNodePackage f (overrideWith newArgs);
+        __functor = self: ff;
+      }
+      else ff;
+
+
   # Builds and composes an NPM package including all its dependencies
-  buildNodePackage =
+  buildNodePackage = makeOverridableNodePackage (
     { name
     , packageName
     , version
@@ -443,7 +472,7 @@ let
         # Run post install hook, if provided
         runHook postInstall
       '';
-    } // extraArgs);
+    } // extraArgs));
 
   # Builds a development shell
   buildNodeShell =
