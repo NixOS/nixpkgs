@@ -377,6 +377,8 @@ in {
   else
     callPackage ../development/python-modules/ase { };
 
+  asgi-csrf = callPackage ../development/python-modules/asgi-csrf { };
+
   asgiref = callPackage ../development/python-modules/asgiref { };
 
   asn1ate = callPackage ../development/python-modules/asn1ate { };
