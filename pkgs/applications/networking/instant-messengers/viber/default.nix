@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation {
   pname = "viber";
-  version = "7.0.0.1035";
+  version = "13.5.0.64";
 
   src = fetchurl {
     url = "https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
-    sha256 = "06mp2wvqx4y6rd5gs2mh442qcykjrrvwnkhlpx0lara331i2p0lj";
+    sha256 = "0rs26x0lycavybn6k1hbb5kzms0zzcmxlrmi4g8k7vyafj6s8dqh";
   };
 
   buildInputs = [ dpkg makeWrapper ];
