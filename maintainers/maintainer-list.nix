@@ -9488,6 +9488,12 @@
     github = "fzakaria";
     githubId = 605070;
   };
+  nagisa = {
+    name = "Simonas Kazlauskas";
+    email = "nixpkgs@kazlauskas.me";
+    github = "nagisa";
+    githubId = 679122;
+  };
   yevhenshymotiuk = {
     name = "Yevhen Shymotiuk";
     email = "yevhenshymotiuk@gmail.com";

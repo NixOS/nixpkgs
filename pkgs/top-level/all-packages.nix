@@ -2269,6 +2269,8 @@ in
 
   obinskit = callPackage ../applications/misc/obinskit {};
 
+  odafileconverter = libsForQt5.callPackage ../applications/graphics/odafileconverter {};
+
   pastel = callPackage ../applications/misc/pastel {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
