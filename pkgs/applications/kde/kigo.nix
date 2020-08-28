@@ -3,8 +3,8 @@
 mkDerivation {
   name = "kigo";
   meta = with lib; {
-    homepage = "https://kde.org/applications/en/games/org/kde.kigo";
-    description = "Kigo est une implémentation libre du jeu de Go";
+    homepage = "https://kde.org/applications/en/games/org.kde.kigo";
+    description = "An open-source implementation of the popular Go game";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
