@@ -375,6 +375,7 @@ self: super: {
   tickle = dontCheck super.tickle;
   tpdb = dontCheck super.tpdb;
   translatable-intset = dontCheck super.translatable-intset;
+  trifecta = if pkgs.stdenv.hostPlatform.isAarch64 then dontCheck super.trifecta else super.trifecta; # affected by this bug https://gitlab.haskell.org/ghc/ghc/-/issues/15275#note_295461
   ua-parser = dontCheck super.ua-parser;
   unagi-chan = dontCheck super.unagi-chan;
   wai-logger = dontCheck super.wai-logger;
@@ -920,7 +921,12 @@ self: super: {
   # Generate cli completions for dhall.
   dhall = generateOptparseApplicativeCompletion "dhall" super.dhall;
   dhall-json = generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] super.dhall-json;
-  dhall-nix = generateOptparseApplicativeCompletion "dhall-to-nix" (super.dhall-nix);
+  dhall-nix = generateOptparseApplicativeCompletion "dhall-to-nix" (
+    super.dhall-nix.overrideScope (self: super: {
+      dhall = super.dhall_1_34_0;
+      repline = self.repline_0_4_0_0;
+      haskeline = self.haskeline_0_8_1_0;
+    }));
 
   # https://github.com/haskell-hvr/netrc/pull/2#issuecomment-469526558
   netrc = doJailbreak super.netrc;
@@ -1155,13 +1161,6 @@ self: super: {
   # 2020-06-22: NOTE: QuickCheck upstreamed https://github.com/phadej/binary-instances/issues/7
   binary-instances = dontCheck super.binary-instances;
 
-  # Disabling the test suite lets the build succeed on older CPUs
-  # that are unable to run the generated library because they
-  # lack support for AES-NI, like some of our Hydra build slaves
-  # do. See https://github.com/NixOS/nixpkgs/issues/81915 for
-  # details.
-  cryptonite = dontCheck super.cryptonite;
-
   # The test suite depends on an impure cabal-install installation in
   # $HOME, which we don't have in our build sandbox.
   cabal-install-parsers = dontCheck super.cabal-install-parsers;
@@ -1333,6 +1332,12 @@ self: super: {
   # https://github.com/ennocramer/monad-dijkstra/issues/4
   monad-dijkstra = dontCheck (doJailbreak super.monad-dijkstra);
 
+  # Fixed upstream but not released to Hackage yet:
+  # https://github.com/k0001/hs-libsodium/issues/2
+  libsodium = overrideCabal super.libsodium (drv: {
+    libraryToolDepends = (drv.libraryToolDepends or []) ++ [self.c2hs];
+  });
+
   # https://github.com/kowainik/policeman/issues/57
   policeman = doJailbreak super.policeman;
 
@@ -1415,12 +1420,12 @@ self: super: {
   });
 
   # Testsuite trying to run `which haskeline-examples-Test`
-  haskeline_0_8_0_0 = dontCheck super.haskeline_0_8_0_0;
+  haskeline_0_8_1_0 = dontCheck super.haskeline_0_8_1_0;
 
   # Requires repline 0.4 which is the default only for ghc8101, override for the rest
   zre = super.zre.override {
     repline = self.repline_0_4_0_0.override {
-      haskeline = self.haskeline_0_8_0_0;
+      haskeline = self.haskeline_0_8_1_0;
     };
   };
 
@@ -1441,8 +1446,16 @@ self: super: {
 
   # Tests rely on `Int` being 64-bit: https://github.com/hspec/hspec/issues/431.
   # Also, we need QuickCheck-2.14.x to build the test suite, which isn't easy in LTS-16.x.
-  # So let's not go there any just disable the tests altogether.
+  # So let's not go there and just disable the tests altogether.
   hspec-core = dontCheck super.hspec-core;
+
+  # github.com/ucsd-progsys/liquidhaskell/issues/1729
+  liquidhaskell = super.liquidhaskell.override { Diff = self.Diff_0_3_4; };
+  Diff_0_3_4 = dontCheck super.Diff_0_3_4;
+
+  # We want the latest version of cryptonite. This is a first step towards
+  # resolving https://github.com/NixOS/nixpkgs/issues/81915.
+  cryptonite = self.cryptonite_0_27;
 
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 
@@ -1450,17 +1463,18 @@ self: super: {
   hlsScopeOverride = self: super: {
     # haskell-language-server uses its own fork of ghcide
     # Test disabled: it seems to freeze (is it just that it takes a long time ?)
-    ghcide = dontCheck self.hls-ghcide;
+    ghcide = dontCheck super.hls-ghcide;
     # we are faster than stack here
-    hie-bios = dontCheck self.hie-bios_0_6_2;
-    lsp-test = dontCheck self.lsp-test_0_11_0_4;
+    hie-bios = dontCheck super.hie-bios_0_7_0;
+    lsp-test = dontCheck super.lsp-test_0_11_0_4;
     # fourmolu can‘t compile with an older aeson
     aeson = dontCheck super.aeson_1_5_2_0;
     # brittany has an aeson upper bound of 1.5
     brittany = doJailbreak super.brittany;
   };
   in {
-    haskell-language-server = dontCheck (super.haskell-language-server.overrideScope hlsScopeOverride);
+    # jailbreaking for hie-bios 0.7.0 (upstream PR: https://github.com/haskell/haskell-language-server/pull/357)
+    haskell-language-server = dontCheck (doJailbreak (super.haskell-language-server.overrideScope hlsScopeOverride));
     hls-ghcide = dontCheck (super.hls-ghcide.overrideScope hlsScopeOverride);
     fourmolu = super.fourmolu.overrideScope hlsScopeOverride;
   }
