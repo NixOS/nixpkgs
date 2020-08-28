@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "lib" "dev" "man" ];
+  dontDisableStatic = true;
 
   buildInputs = [ getopt makeWrapper gperf ];
 
