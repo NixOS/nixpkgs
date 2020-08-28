@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pipx";
-  version = "0.15.5.0";
+  version = "0.15.5.1";
 
   disabled = pythonOlder "3.6";
 
@@ -19,17 +19,10 @@ buildPythonPackage rec {
     owner = "pipxproject";
     repo = pname;
     rev = version;
-    sha256 = "13z032i8r9f6d09hssvyjpxjacb4wgms5bh2i37da2ili9bh72m6";
+    sha256 = "0lq8dfkq4ji11r4k5csqzyv0757fbxiax6ixn94f9747zrikssf6";
   };
 
   propagatedBuildInputs = [ userpath argcomplete packaging ];
-
-  # avoid inconclusive venv assertion, see https://github.com/pipxproject/pipx/pull/477
-  # remove after PR is merged
-  postPatch = ''
-    substituteInPlace tests/helpers.py \
-      --replace 'assert getattr(sys, "base_prefix", sys.prefix) != sys.prefix, "Tests require venv"' ""
-  '';
 
   checkInputs = [ pytestCheckHook ];
 
