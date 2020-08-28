@@ -67,10 +67,6 @@ buildGoPackage rec {
     runHook postInstall
   '';
 
-  postFixup = ''
-    find $out/libexec/ -type f -executable -exec remove-references-to -t ${go} '{}' + || true
-  '';
-
   meta = with stdenv.lib; {
     homepage = "http://www.sylabs.io/";
     description = "Application containers for linux";
