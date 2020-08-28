@@ -191,8 +191,10 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    # EFL applications depend on libcurl, which is linked at runtime by hand in code (it is dlopened)
+    # Some libraries are linked at runtime by hand in code (they are dlopened)
     patchelf --add-needed ${curl.out}/lib/libcurl.so $out/lib/libecore_con.so
+    patchelf --add-needed ${libpulseaudio}/lib/libpulse.so $out/lib/libecore_audio.so
+    patchelf --add-needed ${libsndfile.out}/lib/libsndfile.so $out/lib/libecore_audio.so
   '';
 
   meta = {
