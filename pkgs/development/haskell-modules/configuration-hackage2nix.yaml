@@ -7295,7 +7295,6 @@ broken-packages:
   - libraft
   - librandomorg
   - librato
-  - libsodium
   - libssh2
   - libssh2-conduit
   - libsystemd-daemon
