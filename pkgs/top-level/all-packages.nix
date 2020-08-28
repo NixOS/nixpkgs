@@ -17813,6 +17813,8 @@ in
 
     system76 = callPackage ../os-specific/linux/system76 { };
 
+    system76-acpi = callPackage ../os-specific/linux/system76-acpi { };
+
     tmon = callPackage ../os-specific/linux/tmon { };
 
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
