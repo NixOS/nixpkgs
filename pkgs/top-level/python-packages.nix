@@ -3704,6 +3704,8 @@ in {
 
   samsungctl = callPackage ../development/python-modules/samsungctl { };
 
+  samsungtvws = callPackage ../development/python-modules/samsungtvws { };
+
   screeninfo = callPackage ../development/python-modules/screeninfo { };
 
   ssdeep = callPackage ../development/python-modules/ssdeep { };
