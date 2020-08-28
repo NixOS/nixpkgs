@@ -207,6 +207,7 @@ junegunn/gv.vim
 junegunn/limelight.vim
 junegunn/seoul256.vim
 junegunn/vader.vim
+junegunn/vim-after-object
 junegunn/vim-easy-align
 junegunn/vim-github-dashboard
 junegunn/vim-peekaboo

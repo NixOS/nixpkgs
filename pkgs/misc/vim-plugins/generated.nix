@@ -4176,6 +4176,18 @@ let
     meta.homepage = "https://github.com/MarcWeber/vim-addon-xdebug/";
   };
 
+  vim-after-object = buildVimPluginFrom2Nix {
+    pname = "vim-after-object";
+    version = "2018-09-17";
+    src = fetchFromGitHub {
+      owner = "junegunn";
+      repo = "vim-after-object";
+      rev = "7f52106df8a05e9bc1c53960c31a55f77e303903";
+      sha256 = "13726m0c73n5pw9gil4ahbg71ibklrwkw9yvbr6qxxvn6qyijpdy";
+    };
+    meta.homepage = "https://github.com/junegunn/vim-after-object/";
+  };
+
   vim-airline = buildVimPluginFrom2Nix {
     pname = "vim-airline";
     version = "2020-08-25";
