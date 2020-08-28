@@ -1,63 +1,66 @@
-{ emscriptenVersion, stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler
-, jre, binaryen, enableWasm ? true ,  cmake
+{ stdenv, fetchFromGitHub, python3, nodejs, closurecompiler
+, jre, binaryen
+, llvmPackages_11
+, symlinkJoin, makeWrapper
 }:
 
-let
-  rev = emscriptenVersion;
-  appdir = "share/emscripten";
-  binaryenVersioned = binaryen.override { emscriptenRev = rev; };
-in
+stdenv.mkDerivation rec {
+  pname = "emscripten";
+  # 2.0.1 requires unreleased binaryen version (as of 2020-08-28)
+  version = "2.0.0";
 
-stdenv.mkDerivation {
-  name = "emscripten-${rev}";
+  llvmEnv = symlinkJoin {
+    name = "emscripten-llvm-${version}";
+    paths = with llvmPackages_11; [ clang-unwrapped lld llvm ];
+  };
 
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    sha256 = "1j3f0hpy05qskaiyv75l7wv4n0nzxhrh9b296zchx3f6f9h2rghq";
-    inherit rev;
+    sha256 = "1ihr1v8dlq5xq97i59n7s1hhz5pkafi6556ppgzjmmhiiraz2mkh";
+    rev = version;
   };
 
-  buildInputs = [ nodejs cmake python ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ nodejs python3 ];
 
-  buildCommand = ''
-    mkdir -p $out/${appdir}
-    cp -r $src/* $out/${appdir}
-    chmod -R +w $out/${appdir}
-    grep -rl '^#!/usr.*python' $out/${appdir} | xargs sed -i -s 's@^#!/usr.*python.*@#!${python}/bin/python@'
-    sed -i -e "s,EM_CONFIG = '~/.emscripten',EM_CONFIG = '$out/${appdir}/config'," $out/${appdir}/tools/shared.py
-    sed -i -e 's,^.*did not see a source tree above the LLVM.*$,      return True,' $out/${appdir}/tools/shared.py
-    sed -i -e 's,def check_sanity(force=False):,def check_sanity(force=False):\n  return,' $out/${appdir}/tools/shared.py
+  outputs = [ "out" "appdir" ];
+
+  buildPhase = ''
+    patchShebangs .
     # fixes cmake support
-    sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" $out/${appdir}/emcc.py
-    mkdir $out/bin
-    ln -s $out/${appdir}/{em++,em-config,emar,embuilder.py,emcc,emcmake,emconfigure,emlink.py,emmake,emranlib,emrun,emscons} $out/bin
+    sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py
 
-    echo "EMSCRIPTEN_ROOT = '$out/${appdir}'" > $out/${appdir}/config
-    echo "LLVM_ROOT = '${emscriptenfastcomp}/bin'" >> $out/${appdir}/config
-    echo "PYTHON = '${python}/bin/python'" >> $out/${appdir}/config
-    echo "NODE_JS = '${nodejs}/bin/node'" >> $out/${appdir}/config
-    echo "JS_ENGINES = [NODE_JS]" >> $out/${appdir}/config
-    echo "COMPILER_ENGINE = NODE_JS" >> $out/${appdir}/config
-    echo "CLOSURE_COMPILER = '${closurecompiler}/share/java/closure-compiler-v${closurecompiler.version}.jar'" >> $out/${appdir}/config
-    echo "JAVA = '${jre}/bin/java'" >> $out/${appdir}/config
+    echo "EMSCRIPTEN_ROOT = '$appdir'" > .emscripten
+    echo "LLVM_ROOT = '${llvmEnv}/bin'" >> .emscripten
+    echo "NODE_JS = '${nodejs}/bin/node'" >> .emscripten
+    echo "JS_ENGINES = [NODE_JS]" >> .emscripten
+    echo "COMPILER_ENGINE = NODE_JS" >> .emscripten
+    echo "CLOSURE_COMPILER = '${closurecompiler}/share/java/closure-compiler-v${closurecompiler.version}.jar'" >> .emscripten
+    echo "JAVA = '${jre}/bin/java'" >> .emscripten
     # to make the test(s) below work
-    echo "SPIDERMONKEY_ENGINE = []" >> $out/${appdir}/config
-  ''
-  + stdenv.lib.optionalString enableWasm ''
-    echo "BINARYEN_ROOT = '${binaryenVersioned}'" >> $out/share/emscripten/config
-  ''
-  +
-  ''
-    echo "--------------- running test -----------------"
-    # quick hack to get the test working
-    HOME=$TMPDIR
-    cp $out/${appdir}/config $HOME/.emscripten
-    export PATH=$PATH:$out/bin
+    echo "SPIDERMONKEY_ENGINE = []" >> .emscripten
+    echo "BINARYEN_ROOT = '${binaryen}'" >> .emscripten
+  '';
 
-    #export EMCC_DEBUG=2  
-    ${python}/bin/python $src/tests/runner.py test_hello_world
-    echo "--------------- /running test -----------------"
+  installPhase = ''
+    rm -rf cache
+    cp -r . $appdir
+    chmod -R +w $appdir
+
+    mkdir -p $out/bin
+    for b in em++ em-config emar embuilder.py emcc emcmake emconfigure emlink.py emmake emranlib emrun emscons; do
+      makeWrapper $appdir/$b $out/bin/$b \
+        --set PYTHON ${python3}/bin/python
+    done
+  '';
+
+  doCheck = true;
+  checkPhase = ''
+    #export EMCC_DEBUG=2
+    export PYTHON=${python3}/bin/python
+    export HOME=$TMPDIR
+    python tests/runner.py test_hello_world
   '';
 
   meta = with stdenv.lib; {
