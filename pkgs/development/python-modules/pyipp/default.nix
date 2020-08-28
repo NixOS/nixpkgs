@@ -4,14 +4,14 @@
 
 buildPythonPackage rec {
   pname = "pyipp";
-  version = "0.10.1";
+  version = "0.11.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
    owner = "ctalkington";
    repo = "python-ipp";
    rev = version;
-   sha256 = "0y9mkrx66f4m77jzfgdgmvlqismvimb6hm61j2va7zapm8dyabvr";
+   sha256 = "0ar3mkyfa9qi3av3885bvacpwlxh420if9ymdj8i4x06ymzc213d";
   };
 
   propagatedBuildInputs = [
