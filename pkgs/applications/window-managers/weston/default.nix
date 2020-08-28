@@ -10,11 +10,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "weston";
-  version = "8.0.92";
+  version = "8.0.93";
 
   src = fetchurl {
     url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "0780bzpi2xfcmzkghnalrkczlcmd2ncjvn0k8f0bml7p9z07dpy9";
+    sha256 = "17b70mg02d9ds1nxs8qrm5zks64rsy82bq203bhdv8s9gjwhqxjj";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config wayland ];
