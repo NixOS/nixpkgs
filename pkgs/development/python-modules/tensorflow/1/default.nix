@@ -41,6 +41,24 @@ assert mklSupport -> mkl != null;
 
 let
   withTensorboard = pythonOlder "3.6";
+  py = python.override {
+    packageOverrides = self: super: {
+      numpy = super.numpy.overridePythonAttrs (oldAttrs: rec {
+          pname = "numpy";
+          version = "1.18.5";
+          src = oldAttrs.src.override {
+            inherit pname version;
+            extension = "zip";
+            sha256 = "34e96e9dae65c4839bd80012023aadd6ee2ccb73ce7fdf3074c62f301e63120b";
+          };
+        });
+        py-multihash = super.py-multihash.overridePythonAttrs (attrs: {
+          postPatch = ''
+            substituteInPlace setup.py --replace "'base58>=1.0.2,<2.0'," "'base58',"
+          '';
+        });
+      };
+    };
 
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-merged";
@@ -78,7 +96,7 @@ let
 
   pythonEnv = python.withPackages (_:
     [ # python deps needed during wheel build time (not runtime, see the buildPythonPackage part for that)
-      numpy
+      py.pkgs.numpy
       keras-preprocessing
       protobuf
       wrapt
@@ -375,7 +393,7 @@ in buildPythonPackage {
     google-pasta
     keras-applications
     keras-preprocessing
-    numpy
+    py.pkgs.numpy
     six
     protobuf
     tensorflow-estimator_1
@@ -413,7 +431,7 @@ in buildPythonPackage {
     sess.run(hello)
 
     # Fit a simple model to random data
-    import numpy as np
+    import py.pkgs.numpy as np
     np.random.seed(0)
     tf.random.set_random_seed(0)
     model = tf.keras.models.Sequential([
