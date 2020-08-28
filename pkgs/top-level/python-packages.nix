@@ -7613,6 +7613,8 @@ in {
 
   ftfy = callPackage ../development/python-modules/ftfy { };
 
+  mmh3 = callPackage ../development/python-modules/mmh3 { };
+
   murmurhash = callPackage ../development/python-modules/murmurhash { };
 
   pkuseg = callPackage ../development/python-modules/pkuseg { };
