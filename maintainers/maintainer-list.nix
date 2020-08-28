@@ -9624,6 +9624,12 @@
     githubId = 1069303;
     name = "Kim Simmons";
   };
+  zopieux = {
+    email = "zopieux@gmail.com";
+    github = "zopieux";
+    githubId = 81353;
+    name = "Alexandre Macabies";
+  };
   zowoq = {
     email = "59103226+zowoq@users.noreply.github.com";
     github = "zowoq";
