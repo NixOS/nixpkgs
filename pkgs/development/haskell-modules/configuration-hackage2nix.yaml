@@ -3963,7 +3963,6 @@ broken-packages:
   - composite-aeson
   - composite-aeson-path
   - composite-aeson-refined
-  - composite-base
   - composite-binary
   - composite-ekg
   - composite-opaleye
