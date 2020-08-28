@@ -773,7 +773,8 @@ class Machine:
         retry(window_is_visible)
 
     def sleep(self, secs: int) -> None:
-        time.sleep(secs)
+        # We want to sleep in *guest* time, not *host* time.
+        self.succeed(f"sleep {secs}")
 
     def forward_port(self, host_port: int = 8080, guest_port: int = 80) -> None:
         """Forward a TCP port on the host to a TCP port on the guest.
