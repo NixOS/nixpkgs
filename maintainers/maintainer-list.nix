@@ -1242,6 +1242,12 @@
     githubId = 32319131;
     name = "Brett L";
   };
+  buckley310 = {
+    email = "sean.bck@gmail.com";
+    github = "buckley310";
+    githubId = 2379774;
+    name = "Sean Buckley";
+  };
   buffet = {
     email = "niclas@countingsort.com";
     github = "buffet";

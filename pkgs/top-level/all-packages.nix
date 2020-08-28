@@ -23974,6 +23974,8 @@ in
 
   vmpk = callPackage ../applications/audio/vmpk { };
 
+  vmware-horizon-client = callPackage ../applications/networking/remote/vmware-horizon-client { };
+
   vocproc = callPackage ../applications/audio/vocproc { };
 
   vnstat = callPackage ../applications/networking/vnstat { };
