@@ -2758,17 +2758,26 @@ dont-distribute-packages:
   - accelerate-examples
   - accelerate-fft
   - accelerate-fourier-benchmark
+  - accelerate-io-array
+  - accelerate-io-bmp
+  - accelerate-io-bytestring
+  - accelerate-io-cereal
+  - accelerate-io-JuicyPixels
+  - accelerate-io-repa
+  - accelerate-io-vector
   - accelerate-llvm-ptx
   - bindings-yices
   - boolector
   - ccelerate-cuda
+  - containers-accelerate
   - cplex-hs
-  - cuda # 2020-08-18 because of dependency nvidia-x11
   - cublas
+  - cuda # 2020-08-18 because of dependency nvidia-x11
   - cufft
   - cusolver
   - cusparse
   - gloss-raster-accelerate
+  - hashable-accelerate
   - libnvvm
   - matlab
   - nvvm
