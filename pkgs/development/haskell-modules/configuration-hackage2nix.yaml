@@ -3672,6 +3672,7 @@ broken-packages:
   - cap
   - Capabilities
   - capability
+  - capataz
   - capnp
   - capped-list
   - capri
@@ -4295,6 +4296,7 @@ broken-packages:
   - data-transform
   - data-type
   - data-util
+  - data-validation
   - data-variant
   - database-id-groundhog
   - database-study
@@ -4765,6 +4767,9 @@ broken-packages:
   - EsounD
   - espial
   - ess
+  - essence-of-live-coding-gloss-example
+  - essence-of-live-coding-pulse-example
+  - essence-of-live-coding-warp
   - estimators
   - EstProgress
   - estreps
@@ -5324,6 +5329,23 @@ broken-packages:
   - ghcprofview
   - ght
   - gi-cairo-again
+  - gi-cairo-connector
+  - gi-cairo-render
+  - gi-dbusmenu
+  - gi-dbusmenugtk3
+  - gi-gdkx11
+  - gi-graphene
+  - gi-gsk
+  - gi-gstpbutils
+  - gi-gsttag
+  - gi-gtk-declarative
+  - gi-gtk-declarative-app-simple
+  - gi-gtk-hs
+  - gi-gtkosxapplication
+  - gi-handy
+  - gi-poppler
+  - gi-wnck
+  - gi-xlib
   - giak
   - Gifcurry
   - ginsu
@@ -5404,6 +5426,7 @@ broken-packages:
   - gloss-sodium
   - glpk-headers
   - glpk-hs
+  - gltf-codec
   - glue
   - GLUtil
   - gmap
@@ -5795,6 +5818,7 @@ broken-packages:
   - haskell-src-exts-prisms
   - haskell-src-exts-qq
   - haskell-src-exts-sc
+  - haskell-src-match
   - haskell-src-meta-mwotton
   - haskell-stack-trace-plugin
   - haskell-token-utils
@@ -5878,6 +5902,7 @@ broken-packages:
   - haskore-supercollider
   - haskore-synthesizer
   - HaskRel
+  - haskseg
   - hasktorch
   - hasktorch-codegen
   - hasktorch-ffi-th
@@ -6961,6 +6986,7 @@ broken-packages:
   - jsonsql
   - jsontsv
   - jsonxlsx
+  - jsop
   - jspath
   - juandelacosa
   - judge
@@ -7062,6 +7088,7 @@ broken-packages:
   - ks-test
   - KSP
   - ktx
+  - ktx-codec
   - kubernetes-client
   - kubernetes-client-core
   - kuifje
@@ -7250,6 +7277,7 @@ broken-packages:
   - libconfig
   - libcspm
   - libexpect
+  - libfuse3
   - libGenI
   - libhbb
   - libinfluxdb
@@ -7394,6 +7422,7 @@ broken-packages:
   - log4hs
   - logentries
   - logger
+  - logging-effect
   - logging-effect-extra
   - logging-effect-extra-file
   - logging-effect-extra-handler
@@ -7466,6 +7495,7 @@ broken-packages:
   - lye
   - Lykah
   - lz4-conduit
+  - lz4-frame-conduit
   - lzma-enumerator
   - lzma-streams
   - lzo
@@ -7682,6 +7712,7 @@ broken-packages:
   - ministg
   - minst-idx
   - mios
+  - MIP
   - mirror-tweet
   - misfortune
   - miso-action-logger
@@ -7724,6 +7755,7 @@ broken-packages:
   - monad-atom
   - monad-atom-simple
   - monad-branch
+  - monad-classes-logging
   - monad-exception
   - monad-finally
   - monad-fork
@@ -7913,6 +7945,7 @@ broken-packages:
   - mvc
   - mvc-updates
   - mvclient
+  - mwc-probability-transition
   - mwc-random-accelerate
   - mxnet
   - mxnet-dataiter
@@ -8596,6 +8629,7 @@ broken-packages:
   - polydata
   - polydata-core
   - polynomial
+  - polysemy-http
   - polysemy-optics
   - polysemy-RandomFu
   - polysemy-webserver
@@ -8693,6 +8727,7 @@ broken-packages:
   - pretty-ghci
   - pretty-ncols
   - prettyprinter-graphviz
+  - prettyprinter-lucid
   - prettyprinter-vty
   - preview
   - prim
@@ -9248,6 +9283,7 @@ broken-packages:
   - ruler
   - ruler-core
   - rungekutta
+  - runhs
   - runmany
   - runtime-arbitrary
   - rvar
@@ -9521,6 +9557,7 @@ broken-packages:
   - shadower
   - shake-bindist
   - shake-cabal-build
+  - shake-dhall
   - shake-extras
   - shake-minify
   - shake-pack
@@ -9796,6 +9833,7 @@ broken-packages:
   - spanout
   - sparkle
   - sparrow
+  - spars
   - sparse
   - sparse-lin-alg
   - sparsebit
@@ -10036,6 +10074,7 @@ broken-packages:
   - superconstraints
   - superevent
   - supermonad
+  - supernova
   - supero
   - supervisor
   - supervisors
@@ -10646,6 +10685,7 @@ broken-packages:
   - uri-parse
   - uri-template
   - uri-templater
+  - url-bytes
   - url-decoders
   - url-generic
   - URLb
