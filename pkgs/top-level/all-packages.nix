@@ -4269,6 +4269,8 @@ in
 
   hasmail = callPackage ../applications/networking/mailreaders/hasmail { };
 
+  haste-client = callPackage ../tools/misc/haste-client { };
+
   hal-flash = callPackage ../os-specific/linux/hal-flash { };
 
   hal-hardware-analyzer = libsForQt5.callPackage ../applications/science/electronics/hal-hardware-analyzer { };
