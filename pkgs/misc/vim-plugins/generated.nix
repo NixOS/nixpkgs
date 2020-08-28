@@ -3406,6 +3406,18 @@ let
     meta.homepage = "https://github.com/vim-scripts/ShowMultiBase/";
   };
 
+  sideways-vim = buildVimPluginFrom2Nix {
+    pname = "sideways-vim";
+    version = "2020-08-24";
+    src = fetchFromGitHub {
+      owner = "AndrewRadev";
+      repo = "sideways.vim";
+      rev = "b6e819e5d54efc3d160695499769cedca98b4f29";
+      sha256 = "1ma4fin1dhxgz6bs4b6fk9gbdmnl89smpsdb2akj23pg2rslfysv";
+    };
+    meta.homepage = "https://github.com/AndrewRadev/sideways.vim/";
+  };
+
   SimpylFold = buildVimPluginFrom2Nix {
     pname = "SimpylFold";
     version = "2017-06-13";
