@@ -985,6 +985,10 @@ in
 
   dpt-rp1-py = callPackage ../tools/misc/dpt-rp1-py { };
 
+  dot-http = callPackage ../development/tools/dot-http {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   doona = callPackage ../tools/security/doona { };
 
   ecdsautils = callPackage ../tools/security/ecdsautils { };
