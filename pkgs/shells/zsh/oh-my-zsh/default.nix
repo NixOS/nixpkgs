@@ -1,7 +1,7 @@
 # This script was inspired by the ArchLinux User Repository package:
 #
 #   https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=oh-my-zsh-git
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation rec {
   version = "2020-08-28";
@@ -13,6 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "0f2f1k6s28lgxpjdgl4s7jisw6dgva9mcsqlsq0wg6041p246nai";
   };
 
+  patches = [(fetchpatch {
+    # TODO: remove once https://github.com/ohmyzsh/ohmyzsh/pull/9210 is merged
+    name = "0001-pygmalion-use-pure-zsh-instead-of-perl.patch";
+    url = "https://github.com/flokli/ohmyzsh/commit/299b48ce422957c0f5ca06cd5ccade55e0a08d87.patch";
+    sha256 = "1cxj3c9bbcqd8zj9fccn117n2rzhx6krzbl4db059g2vsycadwmi";
+  })];
 
   installPhase = ''
     outdir=$out/share/oh-my-zsh
