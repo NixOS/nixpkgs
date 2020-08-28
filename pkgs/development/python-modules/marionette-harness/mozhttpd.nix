@@ -13,7 +13,7 @@ buildPythonPackage rec {
     sha256 = "10y1cr933ajx9ni701ayb7r361pak9wrzr7pdpyx81kkbjddq7qa";
   };
 
-  propagatedBuildInputs = [ moznetwork ]; 
+  propagatedBuildInputs = [ moznetwork ];
 
   meta = {
     description = "Webserver for Mozilla testing";

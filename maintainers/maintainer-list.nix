@@ -2717,6 +2717,12 @@
     githubId = 857308;
     name = "Joe Hermaszewski";
   };
+  extends = {
+    email = "sharosari@gmail.com";
+    github = "ImExtends";
+    githubId = 55919390;
+    name = "Vincent VILLIAUMEY";
+  };
   eyjhb = {
     email = "eyjhbb@gmail.com";
     github = "eyJhb";
@@ -3388,10 +3394,14 @@
     name = "Hlodver Sigurdsson";
   };
   hugoreeves = {
-    email = "hugolreeves@gmail.com";
+    email = "hugo@hugoreeves.com";
     github = "hugoreeves";
     githubId = 20039091;
     name = "Hugo Reeves";
+    keys = [{
+      longkeyid = "rsa4096/0x49FA39F8A7F735F9";
+      fingerprint = "78C2 E81C 828A 420B 269A  EBC1 49FA 39F8 A7F7 35F9";
+    }];
   };
   hodapp = {
     email = "hodapp87@gmail.com";
@@ -6749,6 +6759,12 @@
     githubId = 37715;
     name = "Brian McKenna";
   };
+  purcell = {
+    email = "steve@sanityinc.com";
+    github = "purcell";
+    githubId =	5636;
+    name = "Steve Purcell";
+  };
   puzzlewolf = {
     email = "nixos@nora.pink";
     github = "puzzlewolf";
@@ -8786,6 +8802,16 @@
       fingerprint = "B3C0 DA1A C18B 82E8 CA8B  B1D1 4F62 CD07 CE64 796A";
     }];
   };
+  vincentbernat = {
+    email = "vincent@bernat.ch";
+    github = "vincentbernat";
+    githubId = 631446;
+    name = "Vincent Bernat";
+    keys = [{
+      longkeyid = "rsa4096/0x95A42FE8353525F9";
+      fingerprint = "AEF2 3487 66F3 71C6 89A7  3600 95A4 2FE8 3535 25F9";
+    }];
+  };
   vinymeuh = {
     email = "vinymeuh@gmail.com";
     github = "vinymeuh";
@@ -9467,5 +9493,15 @@
     email = "yevhenshymotiuk@gmail.com";
     github = "yevhenshymotiuk";
     githubId = 44244245;
+  };
+  hmenke = {
+    name = "Henri Menke";
+    email = "henri@henrimenke.de";
+    github = "hmenke";
+    githubId = 1903556;
+    keys = [{
+      longkeyid = "rsa4096/0xD65C9AFB4C224DA3";
+      fingerprint = "F1C5 760E 45B9 9A44 72E9  6BFB D65C 9AFB 4C22 4DA3";
+    }];
   };
 }

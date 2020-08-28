@@ -1,4 +1,4 @@
-{ stdenv, go, buildGoModule, fetchgit }:
+{ stdenv, buildGoModule, fetchgit }:
 
 buildGoModule rec {
   pname = "gopls";

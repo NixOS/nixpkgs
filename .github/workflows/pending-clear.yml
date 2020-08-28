@@ -12,19 +12,10 @@ jobs:
       if: github.repository_owner == 'NixOS' && github.event.check_suite.app.name == 'OfBorg'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GSU_VERSION: "0.5.0"
-        GSU_URL: "https://github.com/cloudposse/github-status-updater/releases/download"
       run: |
-        curl -sSf -O -L -C - \
-        "$GSU_URL/$GSU_VERSION/github-status-updater_linux_amd64" && \
-        chmod +x github-status-updater_linux_amd64 && \
-        ./github-status-updater_linux_amd64 \
-          -action update_state \
-          -token "$GITHUB_TOKEN" \
-          -owner NixOS \
-          -repo nixpkgs \
-          -state success \
-          -context "Wait for ofborg" \
-          -description " " \
-          -url " " \
-          -ref "${{ github.event.check_suite.head_sha }}"
+        curl \
+          -X POST \
+          -H "Accept: application/vnd.github.v3+json" \
+          -H "Authorization: token $GITHUB_TOKEN" \
+          -d '{"state": "success", "target_url": " ", "description": " ", "context": "Wait for ofborg"}' \
+          "https://api.github.com/repos/NixOS/nixpkgs/statuses/${{ github.event.check_suite.head_sha }}"

@@ -8,12 +8,13 @@
 
 buildPythonPackage rec {
   pname = "bip_utils";
-  version = "1.0.5";
+  version = "1.4.0";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e8397a315c2f656ccf37ff1c43f5e0d496a10ea692c614fdf9bae1a3d5de3558";
+    sha256 = "582022ab5c1ff35d0179a22a39c90b7e4e71e4641d59b2a3e81d60df741d1e3c";
   };
 
   propagatedBuildInputs = [ ecdsa pysha3 ];

@@ -2,14 +2,14 @@
 
 buildGoPackage rec {
   pname = "open-policy-agent";
-  version = "0.22.0";
+  version = "0.23.2";
 
   goPackagePath = "github.com/open-policy-agent/opa";
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
     rev = "v${version}";
-    sha256 = "1kndiiqf6b4j8zhv0ypjr9dfjgck25qiqa2bb0pmpm3j9460zzjs";
+    sha256 = "18hpanfrzg6xnq1g0yws6g0lw4y191pnrqphccv13j6kqk3k10ps";
   };
   goDeps = ./deps.nix;
 

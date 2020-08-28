@@ -579,7 +579,10 @@ in
 
   acpica-tools = callPackage ../tools/system/acpica-tools { };
 
-  act = callPackage ../development/tools/misc/act {};
+  act = callPackage ../development/tools/misc/act {
+    # go 1.15 cannot connect to docker-for-mac https://github.com/docker/for-mac/issues/4855
+    buildGoModule = if stdenv.isDarwin then buildGo114Module else buildGoModule;
+  };
 
   actdiag = with python3.pkgs; toPythonApplication actdiag;
 
@@ -1852,6 +1855,8 @@ in
 
   eksctl = callPackage ../tools/admin/eksctl { };
 
+  electronplayer = callPackage ../applications/video/electronplayer/electronplayer.nix { };
+
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix { };
 
   element-web = callPackage ../applications/networking/instant-messengers/element/element-web.nix {
@@ -2823,6 +2828,12 @@ in
 
   biosdevname = callPackage ../tools/networking/biosdevname { };
 
+  code-browser-qt = libsForQt5.callPackage ../applications/editors/code-browser { withQt = true;
+                                                                                };
+  code-browser-gtk = callPackage ../applications/editors/code-browser { withGtk = true;
+                                                                        qtbase = qt5.qtbase;
+                                                                      };
+
   c14 = callPackage ../applications/networking/c14 { };
 
   certstrap = callPackage ../tools/security/certstrap { };
@@ -2913,7 +2924,9 @@ in
     cudatoolkit_10
     cudatoolkit_10_0
     cudatoolkit_10_1
-    cudatoolkit_10_2;
+    cudatoolkit_10_2
+    cudatoolkit_11
+    cudatoolkit_11_0;
 
   cudatoolkit = cudatoolkit_10;
 
@@ -2930,7 +2943,9 @@ in
     cudnn_cudatoolkit_10
     cudnn_cudatoolkit_10_0
     cudnn_cudatoolkit_10_1
-    cudnn_cudatoolkit_10_2;
+    cudnn_cudatoolkit_10_2
+    cudnn_cudatoolkit_11
+    cudnn_cudatoolkit_11_0;
 
   cudnn = cudnn_cudatoolkit_10;
 
@@ -3177,6 +3192,8 @@ in
   dtach = callPackage ../tools/misc/dtach { };
 
   dtc = callPackage ../development/compilers/dtc { };
+
+  dt-schema = python3Packages.callPackage ../development/tools/dt-schema { };
 
   dub = callPackage ../development/tools/build-managers/dub { };
 
@@ -3484,7 +3501,7 @@ in
 
   f2fs-tools = callPackage ../tools/filesystems/f2fs-tools { };
 
-  Fabric = python2Packages.Fabric;
+  Fabric = with python3Packages; toPythonApplication Fabric;
 
   fail2ban = callPackage ../tools/security/fail2ban { };
 
@@ -3551,7 +3568,7 @@ in
 
   fdtools = callPackage ../tools/misc/fdtools { };
 
-  featherpad = callPackage ../applications/editors/featherpad {};
+  featherpad = qt5.callPackage ../applications/editors/featherpad {};
 
   feedreader = callPackage ../applications/networking/feedreaders/feedreader {};
 
@@ -4734,6 +4751,8 @@ in
   kibana = kibana6;
   kibana-oss = kibana6-oss;
 
+  kibi = callPackage ../applications/editors/kibi { };
+
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
   klick = callPackage ../applications/audio/klick { };
@@ -5562,9 +5581,8 @@ in
   xnbd = callPackage ../tools/networking/xnbd { };
 
   nccl = callPackage ../development/libraries/science/math/nccl { };
-  nccl_cudatoolkit_9_0 = nccl.override { cudatoolkit = cudatoolkit_9_0; };
-  nccl_cudatoolkit_9 = nccl.override { cudatoolkit = cudatoolkit_9; };
   nccl_cudatoolkit_10 = nccl.override { cudatoolkit = cudatoolkit_10; };
+  nccl_cudatoolkit_11 = nccl.override { cudatoolkit = cudatoolkit_11; };
 
   ndjbdns = callPackage ../tools/networking/ndjbdns { };
 
@@ -5598,6 +5616,8 @@ in
 
   ncftp = callPackage ../tools/networking/ncftp { };
 
+  ncgopher = callPackage ../applications/networking/ncgopher { };
+
   ncompress = callPackage ../tools/compression/ncompress { };
 
   ndisc6 = callPackage ../tools/networking/ndisc6 { };
@@ -5613,6 +5633,8 @@ in
   nethogs = callPackage ../tools/networking/nethogs { };
 
   netkittftp = callPackage ../tools/networking/netkit/tftp { };
+
+  netlify-cli = nodePackages.netlify-cli;
 
   netpbm = callPackage ../tools/graphics/netpbm { };
 
@@ -8261,8 +8283,6 @@ in
 
   tcsh = callPackage ../shells/tcsh { };
 
-  rssh = callPackage ../shells/rssh { };
-
   rush = callPackage ../shells/rush { };
 
   xonsh = callPackage ../shells/xonsh { };
@@ -8416,6 +8436,7 @@ in
     };
   };
 
+  clang_11 = llvmPackages_11.clang;
   clang_10 = llvmPackages_10.clang;
   clang_9  = llvmPackages_9.clang;
   clang_8  = llvmPackages_8.clang;
@@ -9232,6 +9253,7 @@ in
   lld_8 = llvmPackages_8.lld;
   lld_9 = llvmPackages_9.lld;
   lld_10 = llvmPackages_10.lld;
+  lld_11 = llvmPackages_11.lld;
 
   lldb = llvmPackages.lldb;
   lldb_5 = llvmPackages_5.lldb;
@@ -9240,10 +9262,12 @@ in
   lldb_8 = llvmPackages_8.lldb;
   lldb_9 = llvmPackages_9.lldb;
   lldb_10 = llvmPackages_10.lldb;
+  lldb_11 = llvmPackages_11.lldb;
 
   llvm = llvmPackages.llvm;
   llvm-manpages = llvmPackages.llvm-manpages;
 
+  llvm_11 = llvmPackages_11.llvm;
   llvm_10 = llvmPackages_10.llvm;
   llvm_9  = llvmPackages_9.llvm;
   llvm_8  = llvmPackages_8.llvm;
@@ -9288,6 +9312,14 @@ in
     buildLlvmTools = buildPackages.llvmPackages_10.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_10.libraries;
   };
+
+  llvmPackages_11 = callPackage ../development/compilers/llvm/11 ({
+    inherit (stdenvAdapters) overrideCC;
+    buildLlvmTools = buildPackages.llvmPackages_11.tools;
+    targetLlvmLibraries = targetPackages.llvmPackages_11.libraries;
+  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
+    stdenv = gcc7Stdenv;
+  });
 
   llvmPackages_latest = llvmPackages_10;
 
@@ -11027,6 +11059,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  kpack = callPackage ../development/tools/misc/kpack { };
+
   kustomize = callPackage ../development/tools/kustomize { };
 
   ktlint = callPackage ../development/tools/ktlint { };
@@ -11034,6 +11068,8 @@ in
   kythe = callPackage ../development/tools/kythe { };
 
   lazygit = callPackage ../development/tools/lazygit { };
+
+  laminar = callPackage ../development/tools/continuous-integration/laminar { };
 
   Literate = callPackage ../development/tools/literate-programming/Literate {};
 
@@ -13077,7 +13113,7 @@ in
   libaudclient = callPackage ../development/libraries/libaudclient { };
 
   libav = libav_11; # branch 11 is API-compatible with branch 10
-  libav_all = callPackage ../development/libraries/libav { };
+  libav_all = callPackages ../development/libraries/libav { };
   inherit (libav_all) libav_0_8 libav_11 libav_12;
 
   libavc1394 = callPackage ../development/libraries/libavc1394 { };
@@ -14307,6 +14343,8 @@ in
     inherit (darwin.stubs) setfile;
   };
 
+  muparserx = callPackage ../development/libraries/muparserx { };
+
   mutest = callPackage ../development/libraries/mutest { };
 
   mygpoclient = pythonPackages.mygpoclient;
@@ -14646,8 +14684,9 @@ in
     python = python37;
   };
 
-  protobuf = protobuf3_12;
+  protobuf = protobuf3_13;
 
+  protobuf3_13 = callPackage ../development/libraries/protobuf/3.13.nix { };
   protobuf3_12 = callPackage ../development/libraries/protobuf/3.12.nix { };
   protobuf3_11 = callPackage ../development/libraries/protobuf/3.11.nix { };
   protobuf3_10 = callPackage ../development/libraries/protobuf/3.10.nix { };
@@ -15521,7 +15560,9 @@ in
 
   vcg = callPackage ../development/libraries/vcg { };
 
-  vid-stab = callPackage ../development/libraries/vid-stab { };
+  vid-stab = callPackage ../development/libraries/vid-stab {
+    inherit (llvmPackages) openmp;
+  };
 
   vigra = callPackage ../development/libraries/vigra { };
 
@@ -17998,6 +18039,8 @@ in
 
   iferr = callPackage ../development/tools/iferr { };
 
+  ginkgo = callPackage ../development/tools/ginkgo { };
+
   go-bindata = callPackage ../development/tools/go-bindata { };
 
   go-bindata-assetfs = callPackage ../development/tools/go-bindata-assetfs { };
@@ -19513,6 +19556,8 @@ in
   bgpdump = callPackage ../tools/networking/bgpdump { };
 
   bgpq3 = callPackage ../tools/networking/bgpq3 { };
+
+  bgpq4 = callPackage ../tools/networking/bgpq4 { };
 
   blackbox = callPackage ../applications/version-management/blackbox { };
 
@@ -21660,6 +21705,8 @@ in
 
   moonlight-embedded = callPackage ../applications/misc/moonlight-embedded { };
 
+  mooSpace = callPackage ../applications/audio/mooSpace { };
+
   mop = callPackage ../applications/misc/mop { };
 
   mopidyPackages = callPackages ../applications/audio/mopidy/default.nix {
@@ -22133,6 +22180,10 @@ in
   openscad = libsForQt5.callPackage ../applications/graphics/openscad {};
 
   opentimestamps-client = python3Packages.callPackage ../tools/misc/opentimestamps-client {};
+
+  opentoonz = (qt5.overrideScope' (_: _: {
+    libtiff = callPackage ../applications/graphics/opentoonz/libtiff.nix { };
+  })).callPackage ../applications/graphics/opentoonz { };
 
   opentx = libsForQt5.callPackage ../applications/misc/opentx { };
 
@@ -23124,6 +23175,8 @@ in
 
   terminus = callPackage ../applications/misc/terminus { };
 
+  tty-solitaire = callPackage ../applications/misc/tty-solitaire { };
+
   lxterminal = callPackage ../applications/misc/lxterminal { };
 
   aminal = callPackage ../applications/misc/aminal {
@@ -23272,6 +23325,8 @@ in
 
   treesheets = callPackage ../applications/office/treesheets { wxGTK = wxGTK31; };
 
+  tremc = callPackage ../applications/networking/p2p/tremc { };
+
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
   trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita {
@@ -23407,6 +23462,8 @@ in
   vis = callPackage ../applications/editors/vis {
     inherit (lua52Packages) lpeg;
   };
+
+  viw = callPackage ../applications/editors/viw { };
 
   virt-viewer = callPackage ../applications/virtualization/virt-viewer { };
 
@@ -24623,6 +24680,10 @@ in
     cudatoolkit = cudatoolkit_10_2;
   };
 
+  katagoCPU = katago.override {
+    gpuEnabled = false;
+  };
+
   klavaro = callPackage ../games/klavaro {};
 
   kobodeluxe = callPackage ../games/kobodeluxe { };
@@ -25131,6 +25192,8 @@ in
     tcl = tcl-8_5;
     tk = tk-8_5;
   };
+
+  xcowsay = callPackage ../games/xcowsay { };
 
   xjump = callPackage ../games/xjump { };
   # TODO: the corresponding nix file is missing
@@ -26481,9 +26544,7 @@ in
 
   hatari = callPackage ../misc/emulators/hatari { };
 
-  helm = callPackage ../applications/audio/helm {
-    stdenv = gcc8Stdenv;
-  };
+  helm = callPackage ../applications/audio/helm { };
 
   helmfile = callPackage ../applications/networking/cluster/helmfile { };
 
@@ -26917,6 +26978,8 @@ in
   pykms = callPackage ../tools/networking/pykms { };
 
   pyload = callPackage ../applications/networking/pyload {};
+
+  pwntools = with python3Packages; toPythonApplication pwntools;
 
   uae = callPackage ../misc/emulators/uae { };
 

@@ -2,7 +2,9 @@
 , gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib
-, cups, expat, systemd, libnotify, libuuid, at-spi2-core, libappindicator-gtk3
+, cups, expat, libuuid, at-spi2-core, libappindicator-gtk3
+# Runtime dependencies:
+, systemd, libnotify, libdbusmenu
 # Unfortunately this also overwrites the UI language (not just the spell
 # checking language!):
 , hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
@@ -81,6 +83,7 @@ in stdenv.mkDerivation rec {
   runtimeDependencies = [
     systemd.lib
     libnotify
+    libdbusmenu
   ];
 
   unpackPhase = "dpkg-deb -x $src .";

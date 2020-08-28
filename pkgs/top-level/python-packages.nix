@@ -2643,9 +2643,15 @@ in {
     pythonPackages = self;
   });
 
+  # pytest>=6 is too new for most packages
   pytest = if isPy3k then self.pytest_5 else self.pytest_4;
 
-  pytest_5 = callPackage ../development/python-modules/pytest {
+  pytest_6 = callPackage ../development/python-modules/pytest {
+    # hypothesis tests require pytest that causes dependency cycle
+    hypothesis = self.hypothesis.override { doCheck = false; };
+  };
+
+  pytest_5 = callPackage ../development/python-modules/pytest/5.nix {
     # hypothesis tests require pytest that causes dependency cycle
     hypothesis = self.hypothesis.override { doCheck = false; };
   };
@@ -2762,7 +2768,11 @@ in {
 
   pytest-virtualenv = callPackage ../development/python-modules/pytest-virtualenv { };
 
-  pytest_xdist = callPackage ../development/python-modules/pytest-xdist { };
+  pytest_xdist = self.pytest_xdist_1;
+
+  pytest_xdist_1 = callPackage ../development/python-modules/pytest-xdist { };
+
+  pytest_xdist_2 = callPackage ../development/python-modules/pytest-xdist/2.nix { };
 
   pytest-localserver = callPackage ../development/python-modules/pytest-localserver { };
 
@@ -3236,6 +3246,8 @@ in {
 
   itypes = callPackage ../development/python-modules/itypes { };
 
+  iniconfig = callPackage ../development/python-modules/iniconfig { };
+
   iniparse = callPackage ../development/python-modules/iniparse { };
 
   intreehooks = callPackage ../development/python-modules/intreehooks { };
@@ -3348,6 +3360,8 @@ in {
   jupyterlab_server = callPackage ../development/python-modules/jupyterlab_server { };
 
   jupyterlab = callPackage ../development/python-modules/jupyterlab {};
+
+  jupyterlab-git = callPackage ../development/python-modules/jupyterlab-git {};
 
   jupyter-sphinx = callPackage ../development/python-modules/jupyter-sphinx { };
 
@@ -4376,6 +4390,8 @@ in {
   else
     self.hypothesis_4;
 
+  hypothesis-auto = callPackage ../development/python-modules/hypothesis-auto { };
+
   hydra-check = callPackage ../development/python-modules/hydra-check { };
 
   colored = callPackage ../development/python-modules/colored { };
@@ -4903,6 +4919,8 @@ in {
 
   multiprocess = callPackage ../development/python-modules/multiprocess { };
 
+  multitasking = callPackage ../development/python-modules/multitasking { };
+
   munkres = callPackage ../development/python-modules/munkres { };
 
   musicbrainzngs = callPackage ../development/python-modules/musicbrainzngs { };
@@ -5345,6 +5363,8 @@ in {
   piexif = callPackage ../development/python-modules/piexif { };
 
   pip = callPackage ../development/python-modules/pip { };
+
+  pipx = callPackage ../development/python-modules/pipx { };
 
   pip-tools = callPackage ../development/python-modules/pip-tools {
     git = pkgs.gitMinimal;
@@ -5938,7 +5958,8 @@ in {
 
   readchar = callPackage ../development/python-modules/readchar { };
 
-  retworkx = callPackage ../development/python-modules/retworkx { };
+  retworkx = disabledIf (pythonOlder "3.5")
+    (toPythonModule (callPackage ../development/python-modules/retworkx { } ));
 
   rivet = disabledIf (!isPy3k) (toPythonModule (pkgs.rivet.override {
     python3 = python;
@@ -6083,6 +6104,7 @@ in {
       sha256 = "02iqb7ws7fw5fd1a83hx705pzrw1imj7z0bphjsl4bfvw254xgv4";
     };
     doCheck = false;
+    disabled = !isPy3k;
   });
 
   scikitimage = callPackage ../development/python-modules/scikit-image { };
@@ -7466,7 +7488,7 @@ in {
 
   packet-python = callPackage ../development/python-modules/packet-python { };
 
-  pwntools = callPackage ../development/python-modules/pwntools { };
+  pwntools = callPackage ../development/python-modules/pwntools { debugger = pkgs.gdb; };
 
   ROPGadget = callPackage ../development/python-modules/ROPGadget { };
 
@@ -7734,6 +7756,8 @@ in {
 
   yattag = callPackage ../development/python-modules/yattag { };
 
+  yfinance = callPackage ../development/python-modules/yfinance { };
+
   xenomapper = disabledIf (!isPy3k) (callPackage ../applications/science/biology/xenomapper { });
 
   z3 = (toPythonModule (pkgs.z3.override {
@@ -7830,6 +7854,8 @@ in {
   rxv     = callPackage ../development/python-modules/rxv     { };
 
   userpath = callPackage ../development/python-modules/userpath { };
+  
+  pooch = callPackage ../development/python-modules/pooch {};
 
 });
 

@@ -307,6 +307,7 @@ in
   sanoid = handleTest ./sanoid.nix {};
   sddm = handleTest ./sddm.nix {};
   service-runner = handleTest ./service-runner.nix {};
+  shadowsocks = handleTest ./shadowsocks.nix {};
   shattered-pixel-dungeon = handleTest ./shattered-pixel-dungeon.nix {};
   shiori = handleTest ./shiori.nix {};
   signal-desktop = handleTest ./signal-desktop.nix {};
@@ -321,6 +322,7 @@ in
   spike = handleTest ./spike.nix {};
   sonarr = handleTest ./sonarr.nix {};
   sslh = handleTest ./sslh.nix {};
+  sssd = handleTestOn ["x86_64-linux"] ./sssd.nix {};
   strongswan-swanctl = handleTest ./strongswan-swanctl.nix {};
   sudo = handleTest ./sudo.nix {};
   switchTest = handleTest ./switch-test.nix {};

@@ -3,16 +3,17 @@
 , fetchPypi
 , xorg
 , cffi
+, nose
 , six
 }:
 
 buildPythonPackage rec {
-  version = "0.9.0";
+  version = "0.10.1";
   pname = "xcffib";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1r03yvxwbimh8ngfrbd436f9r535vvj6m1b3zfgz9kl76c8yn5ic";
+    sha256 = "cab1630a51076b11819c97e6da461ddd4cb21bdf65c071d1c57a846c9b129c12";
   };
 
   patchPhase = ''
@@ -21,6 +22,10 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [ cffi six ];
+
+  checkInputs = [ nose ];
+
+  pythonImportsCheck = [ "xcffib" ];
 
   meta = with stdenv.lib; {
     description = "A drop in replacement for xpyb, an XCB python binding";
