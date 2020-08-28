@@ -1,4 +1,4 @@
-{ stdenv, gnvim-unwrapped, neovim, makeWrapper }:
+{ stdenv, gnvim-unwrapped, neovim, makeWrapper, wrapGAppsHook, librsvg, gdk_pixbuf }:
 
 stdenv.mkDerivation {
   pname = "gnvim";
@@ -12,9 +12,11 @@ stdenv.mkDerivation {
       --prefix PATH : "${neovim}/bin" \
       --set GNVIM_RUNTIME_PATH "${gnvim-unwrapped}/share/gnvim/runtime"
   '' else ''
+
     makeWrapper '${gnvim-unwrapped}/bin/gnvim' "$out/bin/gnvim" \
       --prefix PATH : "${neovim}/bin" \
-      --set GNVIM_RUNTIME_PATH "${gnvim-unwrapped}/share/gnvim/runtime"
+      --set GNVIM_RUNTIME_PATH "${gnvim-unwrapped}/share/gnvim/runtime" \
+      ''${gappsWrapperArgs[@]}
 
     mkdir -p "$out/share"
     ln -s '${gnvim-unwrapped}/share/icons' "$out/share/icons"
@@ -30,8 +32,13 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
+  # prevent double wrapping
+  dontWrapGApps = true;
+  # With strictDeps, wrapGAppsHook & co. do not pick up the dependencies correctly.
+  strictDeps = false;
   nativeBuildInputs = [
     makeWrapper
+    wrapGAppsHook
   ];
 
   passthru.unwrapped = gnvim-unwrapped;
