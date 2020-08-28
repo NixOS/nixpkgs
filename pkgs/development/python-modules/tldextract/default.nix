@@ -1,10 +1,18 @@
-{ lib, fetchPypi, buildPythonPackage
-, requests, requests-file, idna, pytest
+{ lib
+, fetchPypi
+, buildPythonPackage
+, setuptools_scm
+, requests
+, requests-file
+, idna
+, pytest-mock
+, pytest-pylint
+, pytestCheckHook
 , responses
 }:
 
 buildPythonPackage rec {
-  pname   = "tldextract";
+  pname = "tldextract";
   version = "2.2.3";
 
   src = fetchPypi {
@@ -12,8 +20,21 @@ buildPythonPackage rec {
     sha256 = "ab0e38977a129c72729476d5f8c85a8e1f8e49e9202e1db8dca76e95da7be9a8";
   };
 
-  propagatedBuildInputs = [ requests requests-file idna ];
-  checkInputs = [ pytest responses ];
+  nativeBuildInputs = [ setuptools_scm ];
+
+  propagatedBuildInputs = [ idna requests requests-file ];
+
+  checkInputs = [ pytestCheckHook pytest-pylint pytest-mock responses ];
+
+  # Disable test that require network access.
+  disabledTests = [
+    "test_log_snapshot_diff"
+  ];
+
+  # Avoid ImportMismatchError.
+  preCheck = ''
+    cd tests
+  '';
 
   meta = {
     homepage = "https://github.com/john-kurkowski/tldextract";
