@@ -180,7 +180,7 @@ rec {
     '';
 
     preFixup = ''
-      find $out -type f -exec remove-references-to -t ${go} -t ${stdenv.cc.cc} '{}' +
+      find $out -type f -exec remove-references-to -t ${stdenv.cc.cc} '{}' +
     '' + optionalString (stdenv.isLinux) ''
       find $out -type f -exec remove-references-to -t ${stdenv.glibc.dev} '{}' +
     '';
