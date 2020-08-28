@@ -703,6 +703,8 @@ in {
 
   exchangelib = callPackage ../development/python-modules/exchangelib { };
 
+  expiringdict = callPackage ../development/python-modules/expiringdict { };
+
   dcmstack = callPackage ../development/python-modules/dcmstack { };
 
   dbus-python = callPackage ../development/python-modules/dbus {
@@ -2133,6 +2135,8 @@ in {
   cirq = callPackage ../development/python-modules/cirq { };
 
   citeproc-py = callPackage ../development/python-modules/citeproc-py { };
+
+  collective_checkdocs = callPackage ../development/python-modules/collective_checkdocs { };
 
   colorcet = callPackage ../development/python-modules/colorcet { };
 
@@ -6528,6 +6532,8 @@ in {
   else
     callPackage ../development/python-modules/rsa/4_0.nix { };
 
+  rstcheck = callPackage ../development/python-modules/rstcheck { };
+
   squaremap = callPackage ../development/python-modules/squaremap { };
 
   ruamel_base = callPackage ../development/python-modules/ruamel_base { };
@@ -7210,6 +7216,8 @@ in {
   mailcap-fix = callPackage ../development/python-modules/mailcap-fix { };
 
   maildir-deduplicate = callPackage ../development/python-modules/maildir-deduplicate { };
+
+  mailsuite = callPackage ../development/python-modules/mailsuite { };
 
   d2to1 = callPackage ../development/python-modules/d2to1 { };
 

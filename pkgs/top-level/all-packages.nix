@@ -11226,6 +11226,8 @@ in
 
   parinfer-rust = callPackage ../development/tools/parinfer-rust {};
 
+  parsedmarc = python3Packages.callPackage ../tools/misc/parsedmarc { };
+
   parse-cli-bin = callPackage ../development/tools/parse-cli-bin { };
 
   patchelf = callPackage ../development/tools/misc/patchelf { };
