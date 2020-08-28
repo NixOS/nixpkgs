@@ -1435,6 +1435,7 @@ self: super: {
   pandoc-citeproc = self.pandoc-citeproc_0_17_0_2;
   pandoc-plot = self.pandoc-plot_0_9_2_0;
   pandoc-types = self.pandoc-types_1_21;
+  rfc5051 = self.rfc5051_0_2;
 
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 
