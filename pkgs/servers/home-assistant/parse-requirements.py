@@ -177,9 +177,10 @@ def main() -> None:
         f.write("  components = {\n")
         for component, deps in build_inputs.items():
             available, missing = deps
-            f.write(f'    "{component}" = ps: with ps; [ ')
-            f.write(" ".join(available))
-            f.write("];")
+            f.write(f'    "{component}" = ps: with ps; [')
+            if available:
+                f.write(" " + " ".join(available))
+            f.write(" ];")
             if len(missing) > 0:
                 f.write(f" # missing inputs: {' '.join(missing)}")
             f.write("\n")
