@@ -1161,13 +1161,6 @@ self: super: {
   # 2020-06-22: NOTE: QuickCheck upstreamed https://github.com/phadej/binary-instances/issues/7
   binary-instances = dontCheck super.binary-instances;
 
-  # Disabling the test suite lets the build succeed on older CPUs
-  # that are unable to run the generated library because they
-  # lack support for AES-NI, like some of our Hydra build slaves
-  # do. See https://github.com/NixOS/nixpkgs/issues/81915 for
-  # details.
-  cryptonite = dontCheck super.cryptonite;
-
   # The test suite depends on an impure cabal-install installation in
   # $HOME, which we don't have in our build sandbox.
   cabal-install-parsers = dontCheck super.cabal-install-parsers;
@@ -1453,6 +1446,10 @@ self: super: {
   # github.com/ucsd-progsys/liquidhaskell/issues/1729
   liquidhaskell = super.liquidhaskell.override { Diff = self.Diff_0_3_4; };
   Diff_0_3_4 = dontCheck super.Diff_0_3_4;
+
+  # We want the latest version of cryptonite. This is a first step towards
+  # resolving https://github.com/NixOS/nixpkgs/issues/81915.
+  cryptonite = self.cryptonite_0_27;
 
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 
