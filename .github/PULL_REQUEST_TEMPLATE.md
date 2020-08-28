@@ -20,6 +20,7 @@ Reviewing guidelines: https://hydra.nixos.org/job/nixpkgs/trunk/manual/latest/do
    - [ ] NixOS
    - [ ] macOS
    - [ ] other Linux distributions
+   - [ ] [cross-platform](https://nixos.org/nixpkgs/manual/#chap-cross) (eg. via `nix-build . -A pkgsCross.raspberryPi.<pkgName>`)
 - [ ] Tested via one or more NixOS test(s) if existing and applicable for the change (look inside [nixos/tests](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests))
 - [ ] Tested compilation of all pkgs that depend on this change using `nix-shell -p nixpkgs-review --run "nixpkgs-review wip"`
 - [ ] Tested execution of all binary files (usually in `./result/bin/`)
