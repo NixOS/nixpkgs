@@ -1,6 +1,7 @@
 { stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkgconfig
 , CoreFoundation, IOKit, libossp_uuid
 , curl, libcap,  libuuid, lm_sensors, zlib, fetchpatch
+, nixosTests
 , withCups ? false, cups
 , withDBengine ? true, libuv, lz4, judy
 , withIpmi ? (!stdenv.isDarwin), freeipmi
@@ -70,6 +71,8 @@ in stdenv.mkDerivation rec {
   postFixup = ''
     rm -r $out/sbin
   '';
+
+  passthru.tests.netdata = nixosTests.netdata;
 
   meta = {
     description = "Real-time performance monitoring tool";
