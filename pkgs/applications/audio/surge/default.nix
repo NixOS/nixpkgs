@@ -1,22 +1,22 @@
 { stdenv, fetchFromGitHub, premake5, pkgconfig, cmake
 ,cairo, libxkbcommon, libxcb, xcb-util-cursor, xcbutilkeysyms, ncurses, which, getopt
-,python, gnome3, lato }:
+,python, gnome3, lato, pcre, libpthreadstubs, libXdmcp, xcbutilrenderutil, xcbutilimage, libsndfile }:
 
 stdenv.mkDerivation rec {
   pname = "surge";
-  version = "1.6.6";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "surge-synthesizer";
     repo = pname;
     rev = "release_${version}";
-    sha256 = "0al021f516ybhnp3lhqx8i6c6hpfaw3gqfwwxx3lx3hh4b8kjfjw";
+    sha256 = "1jhk8iaqh89dnci4446b47315v2lc8gclraygk8m9jl20zpjxl0l";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ premake5 pkgconfig cmake ncurses which getopt python ];
 
-  buildInputs = [  cairo libxkbcommon libxcb xcb-util-cursor xcbutilkeysyms gnome3.zenity lato ];
+  buildInputs = [  cairo libxkbcommon libxcb xcb-util-cursor xcbutilkeysyms gnome3.zenity lato pcre libpthreadstubs libXdmcp xcbutilrenderutil xcbutilimage libsndfile ];
 
   buildFlags = [ "config=release_x64" ];
 
@@ -29,16 +29,15 @@ stdenv.mkDerivation rec {
     substituteInPlace src/common/gui/PopupEditorDialog.cpp --replace zenity ${gnome3.zenity}/bin/zenity
   '';
 
-  configurePhase = ''
-      ./build-linux.sh premake
-      python scripts/linux/emit-vector-piggy.py .
-    '';
+  buildPhase = ''
+    ./build-linux.sh build;
+  '';
 
   installPhase = ''
     mkdir -p $out/lib/lv2
-    cp -r target/lv2/Release/Surge.lv2/ $out/lib/lv2
-    mkdir -p $out/lib/vst
-    cp target/vst3/Release/Surge.so $out/lib/vst
+    cp -r buildlin/surge_products/Surge.lv2/ $out/lib/lv2
+    mkdir -p $out/lib/vst3
+    cp -r buildlin/surge_products/Surge.vst3/ $out/lib/vst3
     mkdir -p $out/share/surge
     cp -r resources/data/* $out/share/surge/
   '';
@@ -46,7 +45,7 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckPhase = ''
     ./build-linux.sh build -p headless
-    ./target/headless/Release/Surge/Surge-Headless
+    ./buildlin/surge-headless
   '';
 
   meta = with stdenv.lib; {
