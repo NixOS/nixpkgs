@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose ];
-   
+
   propagatedBuildInputs = [ numpy six ];
 
   meta = with lib; {

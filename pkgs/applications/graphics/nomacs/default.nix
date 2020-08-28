@@ -18,13 +18,13 @@
 
 mkDerivation rec {
   pname = "nomacs";
-  version = "3.17.2045";
+  version = "3.17.2206";
 
   src = fetchFromGitHub {
     owner = "nomacs";
     repo = "nomacs";
     rev = version;
-    sha256 = "1lchdmmw2sg0xbpcnsk3sxh120xpcv1lh2khf4h5zzdlccbklq7l";
+    sha256 = "1bq7bv4p7w67172y893lvpk90d6fgdpnylynbj2kn8m2hs6khya4";
   };
 
   enableParallelBuilding = true;
