@@ -17811,6 +17811,8 @@ in
 
     systemtap = callPackage ../development/tools/profiling/systemtap { };
 
+    system76 = callPackage ../os-specific/linux/system76 { };
+
     tmon = callPackage ../os-specific/linux/tmon { };
 
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
