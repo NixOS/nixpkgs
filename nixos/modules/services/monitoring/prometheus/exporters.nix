@@ -42,6 +42,7 @@ let
     "postgres"
     "redis"
     "rspamd"
+    "rtl_433"
     "snmp"
     "surfboard"
     "tor"
@@ -226,6 +227,8 @@ in
     services.prometheus.exporters.minio.minioAccessSecret = mkDefault config.services.minio.secretKey;
   })] ++ [(mkIf config.services.rspamd.enable {
     services.prometheus.exporters.rspamd.url = mkDefault "http://localhost:11334/stat";
+  })] ++ [(mkIf config.services.prometheus.exporters.rtl_433.enable {
+    hardware.rtl-sdr.enable = mkDefault true;
   })] ++ [(mkIf config.services.nginx.enable {
     systemd.services.prometheus-nginx-exporter.after = [ "nginx.service" ];
     systemd.services.prometheus-nginx-exporter.requires = [ "nginx.service" ];
