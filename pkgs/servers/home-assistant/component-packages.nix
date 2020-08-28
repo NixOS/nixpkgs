@@ -683,7 +683,7 @@
     "safe_mode" = ps: with ps; [ aiohttp-cors hass-nabucasa]; # missing inputs: home-assistant-frontend
     "saj" = ps: with ps; [ ]; # missing inputs: pysaj
     "salt" = ps: with ps; [ ]; # missing inputs: saltbox
-    "samsungtv" = ps: with ps; [ ]; # missing inputs: samsungctl[websocket] samsungtvws[websocket]
+    "samsungtv" = ps: with ps; [ samsungctl samsungtvws];
     "satel_integra" = ps: with ps; [ ]; # missing inputs: satel_integra
     "scene" = ps: with ps; [ ];
     "schluter" = ps: with ps; [ ]; # missing inputs: py-schluter
