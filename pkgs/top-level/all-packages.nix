@@ -6712,6 +6712,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  rustscan = callPackage ../tools/security/rustscan { };
+
   rw = callPackage ../tools/misc/rw { };
 
   rxp = callPackage ../tools/text/xml/rxp { };
