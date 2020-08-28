@@ -3369,13 +3369,7 @@ in
 
   cholmod-extra = callPackage ../development/libraries/science/math/cholmod-extra { };
 
-  emscriptenVersion = "1.39.1";
-
   emscripten = callPackage ../development/compilers/emscripten { };
-
-  emscriptenfastcompPackages = dontRecurseIntoAttrs (callPackage ../development/compilers/emscripten/fastcomp { });
-
-  emscriptenfastcomp = emscriptenfastcompPackages.emscriptenfastcomp;
 
   emscriptenPackages = recurseIntoAttrs (callPackage ./emscripten-packages.nix { });
 
@@ -4583,7 +4577,7 @@ in
 
   isync = callPackage ../tools/networking/isync { };
 
-  itm-tools = callPackage ../development/tools/misc/itm-tools { };  
+  itm-tools = callPackage ../development/tools/misc/itm-tools { };
 
   ix = callPackage ../tools/misc/ix { };
 
@@ -4888,7 +4882,7 @@ in
     asciidoc = asciidoc-full;
     imagemagick = imagemagick7Big;
   };
-  
+
   kristall = libsForQt5.callPackage ../applications/networking/browsers/kristall { };
 
   kzipmix = pkgsi686Linux.callPackage ../tools/compression/kzipmix { };
@@ -20980,7 +20974,7 @@ in
   i3-wk-switch = callPackage ../applications/window-managers/i3/wk-switch.nix { };
 
   windowchef = callPackage ../applications/window-managers/windowchef/default.nix { };
-  
+
   wmfocus = callPackage ../applications/window-managers/i3/wmfocus.nix { };
 
   wmfs = callPackage ../applications/window-managers/wmfs/default.nix { };
@@ -27533,7 +27527,7 @@ in
   sequeler = callPackage ../applications/misc/sequeler { };
 
   sequelpro = callPackage ../applications/misc/sequelpro {};
-  
+
   snowsql = callPackage ../applications/misc/snowsql {};
 
   sidequest = callPackage ../applications/misc/sidequest {};
