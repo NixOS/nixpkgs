@@ -119,10 +119,4 @@ self: super: {
       executableHaskellDepends = drv.executableToolDepends or [] ++ [ self.repline ];
     }));
 
-  # We want the latest version of Pandoc.
-  pandoc = self.pandoc_2_10_1;
-  pandoc-citeproc = self.pandoc-citeproc_0_17_0_2;
-  pandoc-plot = self.pandoc-plot_0_9_2_0;
-  pandoc-types = self.pandoc-types_1_21;
-
 }

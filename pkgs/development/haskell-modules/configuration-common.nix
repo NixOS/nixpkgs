@@ -1017,11 +1017,6 @@ self: super: {
     })];
   });
 
-  # 2020-06-05: HACK: In Nixpkgs currently this is
-  # old pandoc version 2.7.4 to current 2.9.2.1,
-  # test suite failures: https://github.com/jgm/pandoc/issues/5582
-  pandoc = dontCheck super.pandoc;
-
   # Fix build with attr-2.4.48 (see #53716)
   xattr = appendPatch super.xattr ./patches/xattr-fix-build.patch;
 
@@ -1385,38 +1380,14 @@ self: super: {
   # https://github.com/jgm/commonmark-hs/issues/55
   commonmark-extensions = dontCheck super.commonmark-extensions;
 
-  # The overrides in the following lines all have the following causes:
-  # * neuron needs commonmark-pandoc
-  # * which needs a newer pandoc-types (>= 1.21)
-  # * which means we need a newer pandoc (>= 2.10)
-  # * which needs a newer hslua (1.1.2) and a newer jira-wiki-markup (1.3.2)
-  # Then we need to apply those overrides to all transitive dependencies
-  # All of this will be obsolete, when pandoc 2.10 hits stack lts.
-  commonmark-pandoc = super.commonmark-pandoc.override {
-    pandoc-types = self.pandoc-types_1_21;
-  };
-  reflex-dom-pandoc = super.reflex-dom-pandoc.override {
-    pandoc-types = self.pandoc-types_1_21;
-  };
-  pandoc_2_10_1 = super.pandoc_2_10_1.overrideScope (self: super: {
-    pandoc-types = self.pandoc-types_1_21;
-    hslua = self.hslua_1_1_2;
-    jira-wiki-markup = self.jira-wiki-markup_1_3_2;
-  });
-
   # Apply version-bump patch that is not contained in released version yet.
   # Upstream PR: https://github.com/srid/neuron/pull/304
-  neuron = (appendPatch super.neuron (pkgs.fetchpatch {
+  neuron = appendPatch super.neuron (pkgs.fetchpatch {
     url= "https://github.com/srid/neuron/commit/9ddcb7e9d63b8266d1372ef7c14c13b6b5277990.patch";
     sha256 = "01f9v3jnl05fnpd624wv3a0j5prcbnf62ysa16fbc0vabw19zv1b";
     excludes = [ "commonmark-hs/github.json" ];
     stripLen = 2;
     extraPrefix = "";
-  }))
-    # See comment about overrides above commonmark-pandoc
-    .overrideScope (self: super: {
-    pandoc = self.pandoc_2_10_1;
-    pandoc-types = self.pandoc-types_1_21;
   });
 
   # Testsuite trying to run `which haskeline-examples-Test`
@@ -1456,6 +1427,14 @@ self: super: {
   # We want the latest version of cryptonite. This is a first step towards
   # resolving https://github.com/NixOS/nixpkgs/issues/81915.
   cryptonite = self.cryptonite_0_27;
+
+  # We want the latest version of Pandoc.
+  hslua = self.hslua_1_1_2;
+  jira-wiki-markup = self.jira-wiki-markup_1_3_2;
+  pandoc = self.pandoc_2_10_1;
+  pandoc-citeproc = self.pandoc-citeproc_0_17_0_2;
+  pandoc-plot = self.pandoc-plot_0_9_2_0;
+  pandoc-types = self.pandoc-types_1_21;
 
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 
