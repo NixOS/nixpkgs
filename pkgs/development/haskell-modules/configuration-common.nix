@@ -1330,6 +1330,8 @@ self: super: {
   # https://github.com/ennocramer/monad-dijkstra/issues/4
   monad-dijkstra = dontCheck (doJailbreak super.monad-dijkstra);
 
+  # Fixed upstream but not released to Hackage yet:
+  # https://github.com/k0001/hs-libsodium/issues/2
   libsodium = overrideCabal super.libsodium (drv: {
     libraryToolDepends = (drv.libraryToolDepends or []) ++ [self.c2hs];
   });
