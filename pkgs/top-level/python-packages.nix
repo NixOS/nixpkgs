@@ -3702,6 +3702,8 @@ in {
 
   samplerate = callPackage ../development/python-modules/samplerate { };
 
+  samsungctl = callPackage ../development/python-modules/samsungctl { };
+
   screeninfo = callPackage ../development/python-modules/screeninfo { };
 
   ssdeep = callPackage ../development/python-modules/ssdeep { };
