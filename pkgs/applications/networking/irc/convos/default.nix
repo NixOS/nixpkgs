@@ -6,13 +6,13 @@ with stdenv.lib;
 
 perlPackages.buildPerlPackage rec {
   pname = "convos";
-  version = "4.29";
+  version = "4.33";
 
   src = fetchFromGitHub {
     owner = "Nordaaker";
     repo = pname;
     rev = version;
-    sha256 = "07m9lhwgqq77hi4n2zrya7n8apkjv8xi166bxa0n7pnlknlp74ar";
+    sha256 = "0mxq4jpjk4vvhi5lqslj614dvk84iq12rsdyykxr8h9cnjjs57im";
   };
 
   nativeBuildInputs = [ makeWrapper ]
@@ -33,6 +33,10 @@ perlPackages.buildPerlPackage rec {
   '';
 
   preCheck = ''
+    # Remove online test
+    #
+    rm t/web-pwa.t
+
     # A test fails since gethostbyaddr(127.0.0.1) fails to resolve to localhost in
     # the sandbox, we replace the this out from a substitution expression
     #

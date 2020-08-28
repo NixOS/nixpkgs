@@ -4,6 +4,7 @@
 , alsaLib
 , opencv2
 , libsndfile
+, which
 }:
 
 faust.wrapWithBuildEnv {
@@ -21,6 +22,7 @@ faust.wrapWithBuildEnv {
     alsaLib
     opencv2
     libsndfile
+    which
   ];
 
 }

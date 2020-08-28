@@ -3,7 +3,7 @@
 buildPythonPackage rec {
   pname = "loguru";
   version = "0.5.1";
-  
+
   disabled = isPy27;
   src = fetchPypi {
     inherit pname version;

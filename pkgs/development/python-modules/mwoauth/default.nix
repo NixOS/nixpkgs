@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   # package has no tests
   doCheck = false;
-  
+
   propagatedBuildInputs = [ six pyjwt requests oauthlib requests_oauthlib ];
 
   meta = with lib; {

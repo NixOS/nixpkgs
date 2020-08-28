@@ -88,4 +88,8 @@ in
 
   ios-deploy = callPackage ../os-specific/darwin/ios-deploy {};
 
+  discrete-scroll = callPackage ../os-specific/darwin/discrete-scroll {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
+
 })
