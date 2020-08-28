@@ -79,6 +79,8 @@ rec {
     , name ? "unnamed"
     # Skip linting (mainly intended for faster dev cycles)
     , skipLint ? false
+    # Skip linting without displaying a warning (do not use for tests in Nixpkgs)
+    , skipLintSilently ? false
     , ...
     } @ t:
 
@@ -117,7 +119,9 @@ rec {
       # Generate convenience wrappers for running the test driver
       # interactively with the specified network, and for starting the
       # VMs from the command line.
-      driver = let warn = if skipLint then lib.warn "Linting is disabled!" else lib.id; in warn (runCommand testDriverName
+      driver = let
+        warn = if skipLint && !skipLintSilently then lib.warn "Linting is disabled!" else lib.id;
+      in warn (runCommand testDriverName
         { buildInputs = [ makeWrapper];
           testScript = testScript';
           preferLocalBuild = true;
@@ -127,7 +131,7 @@ rec {
           mkdir -p $out/bin
 
           echo -n "$testScript" > $out/test-script
-          ${lib.optionalString (!skipLint) ''
+          ${lib.optionalString (!(skipLint || skipLintSilently)) ''
             ${python3Packages.black}/bin/black --check --diff $out/test-script
           ''}
 
