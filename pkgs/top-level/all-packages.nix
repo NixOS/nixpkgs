@@ -2573,6 +2573,8 @@ in
 
   bzip2 = callPackage ../tools/compression/bzip2 { };
 
+  bzip2_1_1 = callPackage ../tools/compression/bzip2/1_1.nix { };
+
   cabextract = callPackage ../tools/archivers/cabextract { };
 
   cadaver = callPackage ../tools/networking/cadaver {
