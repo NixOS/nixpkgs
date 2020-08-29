@@ -152,6 +152,7 @@ in
   icingaweb2 = handleTest ./icingaweb2.nix {};
   iftop = handleTest ./iftop.nix {};
   ihatemoney = handleTest ./ihatemoney.nix {};
+  improut = handleTest ./improut.nix {};
   incron = handleTest ./incron.nix {};
   influxdb = handleTest ./influxdb.nix {};
   initrd-network-ssh = handleTest ./initrd-network-ssh {};
