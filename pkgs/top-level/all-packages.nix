@@ -21907,6 +21907,8 @@ in
 
   nixos-shell = callPackage ../tools/virtualization/nixos-shell {};
 
+  noaa-apt = callPackage ../applications/radio/noaa-apt { };
+
   node-problem-detector = callPackage ../applications/networking/cluster/node-problem-detector { };
 
   ninjas2 = callPackage ../applications/audio/ninjas2 {};
