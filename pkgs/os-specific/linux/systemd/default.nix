@@ -9,7 +9,6 @@
 , patchelf
 , substituteAll
 , getent
-, cryptsetup, lvm2
 , buildPackages
 , perl
 , withSelinux ? false, libselinux
@@ -31,7 +30,6 @@ let gnupg-minimal = gnupg.override {
   zlib = null;
   bzip2 = null;
 };
-
 in stdenv.mkDerivation {
   version = "245.7";
   pname = "systemd";
@@ -91,7 +89,7 @@ in stdenv.mkDerivation {
     ];
   buildInputs =
     [ linuxHeaders libcap curl.dev kmod xz pam acl
-      cryptsetup libuuid glib libgcrypt libgpgerror libidn2
+      /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
       pcre2 ] ++
       stdenv.lib.optional withKexectools kexectools ++
       stdenv.lib.optional withLibseccomp libseccomp ++
