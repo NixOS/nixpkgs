@@ -6993,7 +6993,9 @@ in {
 
   carbon = callPackage ../development/python-modules/carbon { };
 
-  ujson = callPackage ../development/python-modules/ujson { };
+  ujson = if isPy27
+    then callPackage ../development/python-modules/ujson/2.nix { }
+    else callPackage ../development/python-modules/ujson { };
 
   unidecode = callPackage ../development/python-modules/unidecode {};
 
@@ -7853,7 +7855,7 @@ in {
   rxv     = callPackage ../development/python-modules/rxv     { };
 
   userpath = callPackage ../development/python-modules/userpath { };
-  
+
   pooch = callPackage ../development/python-modules/pooch {};
 
 });
