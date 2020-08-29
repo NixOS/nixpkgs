@@ -22,7 +22,7 @@ let
       inherit system;
       pkgs = import ./.. { inherit system; };
       callTest = t: {
-        ${system} = hydraJob t.test;
+        ${system} = hydraJob (t.test.videos or t.test);
       };
     };
   allTests =

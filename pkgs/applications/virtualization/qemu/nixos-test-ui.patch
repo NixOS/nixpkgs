@@ -1,0 +1,105 @@
+diff --git a/qapi/ui.json b/qapi/ui.json
+index 9d6721037f..718db40fc7 100644
+--- a/qapi/ui.json
++++ b/qapi/ui.json
+@@ -1136,7 +1136,7 @@
+ #
+ ##
+ { 'enum'    : 'DisplayType',
+-  'data'    : [ 'default', 'none', 'gtk', 'sdl',
++  'data'    : [ 'default', 'none', 'gtk', 'sdl', 'nixos-test',
+                 'egl-headless', 'curses', 'cocoa',
+                 'spice-app'] }
+ 
+@@ -1158,6 +1158,7 @@
+ { 'union'   : 'DisplayOptions',
+   'base'    : { 'type'           : 'DisplayType',
+                 '*full-screen'   : 'bool',
++                '*capture-file'  : 'str',
+                 '*window-close'  : 'bool',
+                 '*show-cursor'   : 'bool',
+                 '*gl'            : 'DisplayGLMode' },
+diff --git a/qemu-options.hx b/qemu-options.hx
+index 708583b4ce..1599e36902 100644
+--- a/qemu-options.hx
++++ b/qemu-options.hx
+@@ -1735,6 +1735,7 @@ DEF("display", HAS_ARG, QEMU_OPTION_display,
+ #if defined(CONFIG_OPENGL)
+     "-display egl-headless[,rendernode=<file>]\n"
+ #endif
++    "-display nixos-test=<filename>\n"
+     "-display none\n"
+     "                select display backend type\n"
+     "                The default display is equivalent to\n                "
+@@ -1796,6 +1797,10 @@ SRST
+         Start QEMU as a Spice server and launch the default Spice client
+         application. The Spice server will redirect the serial consoles
+         and QEMU monitors. (Since 4.0)
++
++    ``nixos-test``
++        Write raw video frames into the given filename instead of displaying
++        anything.
+ ERST
+ 
+ DEF("nographic", 0, QEMU_OPTION_nographic,
+@@ -2223,6 +2228,15 @@ SRST
+         valid audiodev.
+ ERST
+ 
++DEF("nixos-test", HAS_ARG, QEMU_OPTION_nixos_test,
++    "-nixos-test <filename>  shorthand for -display nixos-test=<filename>\n",
++    QEMU_ARCH_ALL)
++SRST
++``-nixos-test filename``
++    Instead of displaying anything, capture all the output as raw video frames
++    into the file name given by ``filename``.
++ERST
++
+ ARCHHEADING(, QEMU_ARCH_I386)
+ 
+ ARCHHEADING(i386 target only:, QEMU_ARCH_I386)
+diff --git a/softmmu/vl.c b/softmmu/vl.c
+index 4eb9d1f7fd..5a3596a0d9 100644
+--- a/softmmu/vl.c
++++ b/softmmu/vl.c
+@@ -1966,6 +1966,15 @@ static void parse_display(const char *p)
+             error_report("VNC requires a display argument vnc=<display>");
+             exit(1);
+         }
++    } else if (strstart(p, "nixos-test", &opts)) {
++        dpy.type = DISPLAY_TYPE_NIXOS_TEST;
++        if (*opts == '=') {
++            dpy.capture_file = opts + 1;
++        } else {
++            error_report("the nixos-test option requires a filename argument"
++                         " nixos-test=<filename>");
++            exit(1);
++        }
+     } else {
+         parse_display_qapi(p);
+     }
+@@ -3430,6 +3439,10 @@ void qemu_init(int argc, char **argv, char **envp)
+                 error_report("SDL support is disabled");
+                 exit(1);
+ #endif
++            case QEMU_OPTION_nixos_test:
++                dpy.type = DISPLAY_TYPE_NIXOS_TEST;
++                dpy.capture_file = optarg;
++                break;
+             case QEMU_OPTION_pidfile:
+                 pid_file = optarg;
+                 break;
+diff --git a/ui/Makefile.objs b/ui/Makefile.objs
+index 504b196479..d397253a11 100644
+--- a/ui/Makefile.objs
++++ b/ui/Makefile.objs
+@@ -48,6 +48,9 @@ x_keymap.o-cflags := $(X11_CFLAGS)
+ x_keymap.o-libs := $(X11_LIBS)
+ endif
+ 
++common-obj-y += nixos-test.mo
++nixos-test.mo-objs := nixos-test.o
++
+ common-obj-$(CONFIG_CURSES) += curses.mo
+ curses.mo-objs := curses.o
+ curses.mo-cflags := $(CURSES_CFLAGS) $(ICONV_CFLAGS)

@@ -86,7 +86,7 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
     # Panic if an error occurs in stage 1 (rather than waiting for
     # user intervention).
     boot.kernelParams =
-      [ "console=${qemuSerialDevice}" "panic=1" "boot.panic_on_fail" ];
+      [ "console=tty0" "console=${qemuSerialDevice}" "panic=1" "boot.panic_on_fail" ];
 
     # `xwininfo' is used by the test driver to query open windows.
     environment.systemPackages = [ pkgs.xorg.xwininfo ];

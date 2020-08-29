@@ -653,6 +653,17 @@ class Machine:
         shell_path = os.path.join(self.state_dir, "shell")
         self.shell_socket = create_socket(shell_path)
 
+        capture_file = os.path.join(
+            os.environ.get("out", os.getcwd()), f"{self.name}.video"
+        )
+
+        capture_options = []
+        if "DISPLAY" not in os.environ:
+            if "DISABLE_VIDCAPTURE" in os.environ:
+                capture_options.append("-nographic")
+            else:
+                capture_options.append(f"-nixos-test {shlex.quote(capture_file)}")
+
         qemu_options = (
             " ".join(
                 [
@@ -662,8 +673,9 @@ class Machine:
                     "-device virtio-serial",
                     "-device virtconsole,chardev=shell",
                     "-device virtio-rng-pci",
-                    "-serial stdio" if "DISPLAY" in os.environ else "-nographic",
+                    "-serial stdio",
                 ]
+                + capture_options
             )
             + " "
             + os.environ.get("QEMU_OPTS", "")
@@ -886,7 +898,7 @@ def main() -> None:
             if machine.pid is None:
                 continue
             logger.info(f"killing {machine.name} (pid {machine.pid})")
-            machine.process.kill()
+            machine.process.terminate()
         for _, _, process, _ in vde_sockets:
             process.terminate()
 
