@@ -3,6 +3,7 @@
 , fetchPypi
 , pythonOlder
 , importlib-metadata
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -17,6 +18,8 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ importlib-metadata ];
+
+  checkInputs = [ pytestCheckHook ];
 
   meta = with stdenv.lib; {
     description = "Tiny library for adding function or object registries";
