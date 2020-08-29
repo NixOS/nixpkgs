@@ -1,5 +1,5 @@
 { stdenv, runCommand, fetchzip, fetchurl, fetchpatch, fetchFromGitHub
-, cmake, pkgconfig, zlib, libpng
+, cmake, pkgconfig, zlib, libpng, makeWrapper
 , enableGSL ? true, gsl
 , enableGhostScript ? true, ghostscript
 , enableMuPDF ? true, mupdf
@@ -71,7 +71,7 @@ in stdenv.mkDerivation rec {
       --replace "<djvu.h>" "<libdjvu/ddjvuapi.h>"
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
 
   buildInputs =
   let
@@ -157,6 +157,10 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     install -D -m 755 k2pdfopt $out/bin/k2pdfopt
+  '';
+
+  preFixup = optionalString enableTesseract ''
+    wrapProgram $out/bin/k2pdfopt --set-default TESSDATA_PREFIX ${tesseract4}/share/tessdata
   '';
 
   meta = with stdenv.lib; {
