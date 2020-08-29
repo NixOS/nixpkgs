@@ -14,7 +14,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "renoise";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 		          "https://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_Linux.tar.gz"
 		          "https://web.archive.org/web/https://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_Linux.tar.gz"
 		      ];
-		      sha256 = "0dhcidgnjzd4abw0xw1waj9mazp03nbvjcr2xx09l8gnfrkvny46";
+		      sha256 = "1v249kmyidx55kppk3sry7yg6hl1a91ixhnwz36h4y134fs7bkrl";
 		    }
         else
         	releasePath
