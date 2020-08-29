@@ -67,7 +67,7 @@ python3Packages.buildPythonApplication {
     aiorpcx
     attrs
     bitstring
-    dnspython
+    dnspython1
     ecdsa
     jsonrpclib-pelix
     matplotlib
