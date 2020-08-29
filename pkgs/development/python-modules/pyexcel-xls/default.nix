@@ -5,15 +5,17 @@
 , xlrd
 , xlwt
 , nose
+, pyexcel
+, mock
 }:
 
 buildPythonPackage rec {
   pname = "pyexcel-xls";
-  version = "0.5.8";
+  version = "0.5.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "LTPrS9ja37jHO1zMaiONZbORTomnVTsfObk5exfL5AI=";
+    sha256 = "1Wyt6gpmBoRFaXbZgFJVTTu+KnivxfmpHIaR9iZghVU=";
   };
 
   propagatedBuildInputs = [
@@ -22,11 +24,13 @@ buildPythonPackage rec {
     xlwt
   ];
 
-  # Tests are not included in the archive.
-  # https://github.com/pyexcel/pyexcel-xls/issues/35
-  doCheck = false;
+  checkInputs = [
+    nose
+    pyexcel
+    mock
+  ];
 
-  pythonImportsCheck = [ "pyexcel_xls" ];
+  checkPhase = "nosetests";
 
   meta = {
     description = "A wrapper library to read, manipulate and write data in xls using xlrd and xlwt";
