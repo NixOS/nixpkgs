@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , cython
 , numpy
 , scipy
@@ -12,6 +13,7 @@
 buildPythonPackage rec {
   pname = "ripser";
   version = "0.5.4";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
