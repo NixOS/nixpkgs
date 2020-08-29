@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "timelib";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "49142233bdb5971d64a41e05a1f80a408a02be0dc7d9f8c99e7bdd0613ba81cb";
+    sha256 = "6ac9f79b09b63bbc07db88525c1f62de1f6d50b0fd9937a0cb05e3d38ce0af45";
   };
 
   meta = with stdenv.lib; {
