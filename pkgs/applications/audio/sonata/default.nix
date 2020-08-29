@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gettext, intltool, wrapGAppsHook
+{ stdenv, fetchFromGitHub, wrapGAppsHook, gettext
 , python3Packages, gnome3, gtk3, gsettings-desktop-schemas, gobject-introspection }:
 
 let
@@ -16,12 +16,15 @@ in buildPythonApplication rec {
 
   disabled = !isPy3k;
 
-  nativeBuildInputs = [ pkgconfig gettext ];
+  nativeBuildInputs = [ wrapGAppsHook gettext ];
   buildInputs = [
-    intltool wrapGAppsHook
     gnome3.adwaita-icon-theme
     gsettings-desktop-schemas
   ];
+
+  # Otherwise the setup hook for gsettings-desktop-schemas is not run:
+  # https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
 
   postPatch = ''
     # Remove "Local MPD" tab which is not suitable for NixOS.
