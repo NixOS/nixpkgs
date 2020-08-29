@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage rec {
     description = "Faster Nmap Scanning with Rust";
     homepage = "https://github.com/RustScan/RustScan";
     license = licenses.gpl3Only;
+    platforms = platforms.all;
     maintainers = [ maintainers.SuperSandro2000 ];
   };
 }
