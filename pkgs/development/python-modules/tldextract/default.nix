@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage
+{ lib, fetchPypi, buildPythonPackage, setuptools_scm
 , requests, requests-file, idna, pytest
 , responses
 }:
@@ -14,6 +14,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests requests-file idna ];
   checkInputs = [ pytest responses ];
+  nativeBuildInputs = [ setuptools_scm ];
 
   meta = {
     homepage = "https://github.com/john-kurkowski/tldextract";
