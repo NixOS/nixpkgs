@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, autoPatchelfHook, xorg, gtk2, gnome2, gtk3, nss, alsaLib, udev, unzip, wrapGAppsHook }:
+{ stdenv, lib, fetchzip, autoPatchelfHook, xorg, gtk2, gnome2, gtk3, nss, alsaLib, udev, unzip, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "cypress";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     nss gtk2 alsaLib gnome2.GConf gtk3 unzip
   ];
 
-  runtimeDependencies = [ udev.lib ];
+  runtimeDependencies = [ (lib.getLib udev) ];
 
   installPhase = ''
     mkdir -p $out/bin $out/opt/cypress

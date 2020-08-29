@@ -1,4 +1,4 @@
-{ stdenv, llvmPackages, gnChromium, ninja, which, nodejs, fetchpatch, gnutar
+{ stdenv, lib, llvmPackages, gnChromium, ninja, which, nodejs, fetchpatch, gnutar
 
 # default dependencies
 , bzip2, flac, speex, libopus
@@ -197,7 +197,7 @@ let
       sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg_utils}/bin/xdg-@' \
         chrome/browser/shell_integration_linux.cc
 
-      sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${systemd.lib}/lib/\1!' \
+      sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
         device/udev_linux/udev?_loader.cc
 
       sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \

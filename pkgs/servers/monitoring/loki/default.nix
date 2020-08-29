@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, systemd }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, makeWrapper, systemd }:
 
 buildGoPackage rec {
   version = "1.6.0";
@@ -25,7 +25,7 @@ buildGoPackage rec {
 
   preFixup = stdenv.lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/promtail \
-      --prefix LD_LIBRARY_PATH : "${systemd.lib}/lib"
+      --prefix LD_LIBRARY_PATH : "${lib.getLib systemd}/lib"
   '';
 
   meta = with stdenv.lib; {

@@ -81,7 +81,7 @@ in stdenv.mkDerivation rec {
   ];
 
   runtimeDependencies = [
-    systemd.lib
+    (lib.getLib systemd)
     libnotify
     libdbusmenu
   ];

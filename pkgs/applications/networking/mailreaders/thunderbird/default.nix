@@ -301,7 +301,7 @@ stdenv.mkDerivation rec {
   # package a Thunderbird >=71.0 since XUL shouldn't be anymore (in use)?
   postFixup = ''
     local xul="$out/lib/thunderbird/libxul.so"
-    patchelf --set-rpath "${libnotify}/lib:${systemd.lib}/lib:$(patchelf --print-rpath $xul)" $xul
+    patchelf --set-rpath "${libnotify}/lib:${lib.getLib systemd}/lib:$(patchelf --print-rpath $xul)" $xul
   '';
 
   doInstallCheck = true;
