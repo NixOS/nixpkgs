@@ -26552,6 +26552,8 @@ in
 
   foomatic-filters = callPackage ../misc/drivers/foomatic-filters {};
 
+  ffuf = callPackage ../tools/security/ffuf {};
+
   fuse-emulator = callPackage ../misc/emulators/fuse-emulator {};
 
   gajim = callPackage ../applications/networking/instant-messengers/gajim {
