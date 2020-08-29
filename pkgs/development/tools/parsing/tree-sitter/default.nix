@@ -65,7 +65,6 @@ in rustPlatform.buildRustPackage {
   # minifying the JavaScript; passing it allows us to side-step more Node
   # JS dependencies for installation.
   preBuild = ''
-    HOME=/tmp
     bash ./script/build-wasm --debug
   '';
 

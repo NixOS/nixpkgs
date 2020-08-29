@@ -37,18 +37,25 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     patchShebangs .
+
     # fixes cmake support
     sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py
+
+    # disables cache in user home, use installation directory instead
+    sed -i '/^def/!s/root_is_writable()/True/' tools/shared.py
+    sed -i "/^def check_sanity/a\\  return" tools/shared.py
+
+    # required for wasm2c
+    ln -s ${nodeModules}/node_modules .
 
     echo "EMSCRIPTEN_ROOT = '$appdir'" > .emscripten
     echo "LLVM_ROOT = '${llvmEnv}/bin'" >> .emscripten
     echo "NODE_JS = '${nodejs}/bin/node'" >> .emscripten
     echo "JS_ENGINES = [NODE_JS]" >> .emscripten
-    echo "COMPILER_ENGINE = NODE_JS" >> .emscripten
-    echo "CLOSURE_COMPILER = '${closurecompiler}/share/java/closure-compiler-v${closurecompiler.version}.jar'" >> .emscripten
+    echo "CLOSURE_COMPILER = ['${closurecompiler}/bin/closure-compiler']" >> .emscripten
     echo "JAVA = '${jre}/bin/java'" >> .emscripten
     # to make the test(s) below work
-    echo "SPIDERMONKEY_ENGINE = []" >> .emscripten
+    # echo "SPIDERMONKEY_ENGINE = []" >> .emscripten
     echo "BINARYEN_ROOT = '${binaryen}'" >> .emscripten
   '';
 
@@ -61,16 +68,21 @@ stdenv.mkDerivation rec {
     for b in em++ em-config emar embuilder.py emcc emcmake emconfigure emlink.py emmake emranlib emrun emscons; do
       makeWrapper $appdir/$b $out/bin/$b \
         --set NODE_PATH ${nodeModules}/node_modules \
+        --set EM_EXCLUSIVE_CACHE_ACCESS 1 \
         --set PYTHON ${python3}/bin/python
     done
-  '';
 
-  doCheck = true;
-  checkPhase = ''
-    #export EMCC_DEBUG=2
+    # precompile libc in all four variants:
+    # wasm, wasm-pic, wasm-lto, wasm-lto-pic
     export PYTHON=${python3}/bin/python
-    export HOME=$TMPDIR
-    python tests/runner.py test_hello_world
+    export NODE_PATH=${nodeModules}/node_modules
+    pushd $appdir
+    for lto in wasm2 wasmlto2; do
+      for pic in test_hello_world test_relocatable_void_function; do
+        python tests/runner.py $lto.$pic
+      done
+    done
+    popd
   '';
 
   meta = with stdenv.lib; {
