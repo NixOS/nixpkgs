@@ -6939,7 +6939,11 @@ in {
   else
     callPackage ../development/python-modules/tornado/5.nix { };
 
+  # Used by circus and grab-site, 2020-08-29
   tornado_4 = callPackage ../development/python-modules/tornado/4.nix { };
+
+  # Used by luigi, 2020-08-29
+  tornado_5 = callPackage ../development/python-modules/tornado/5.nix { };
 
   tokenlib = callPackage ../development/python-modules/tokenlib { };
 
