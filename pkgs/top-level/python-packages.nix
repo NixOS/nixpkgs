@@ -2894,9 +2894,7 @@ in {
   # Alias that we should deprecate
   dateutil = self.python-dateutil;
 
-  debugpy = callPackage ../development/python-modules/debugpy {
-    django = if isPy27 then self.django_1_11 else self.django;
-  };
+  debugpy = callPackage ../development/python-modules/debugpy { };
 
   decorator = callPackage ../development/python-modules/decorator { };
 
@@ -3755,10 +3753,6 @@ in {
   django = self.django_lts;
 
   django_lts = self.django_2_2;
-
-  django_1_11 = callPackage ../development/python-modules/django/1_11.nix {
-    gdal = self.gdal;
-  };
 
   django_2_2 = callPackage ../development/python-modules/django/2_2.nix { };
 
