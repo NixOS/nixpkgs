@@ -4956,7 +4956,7 @@ in
     # or xterm -ti 340
     ui = "sixel";
 
-    uilib = if ui == "gtk" then "gtk" else "framebuffer";
+    uilib = if ui == "gtk" then "gtk3" else "framebuffer";
 
     SDL = if ui == "gtk" then null else if ui == "sixel" then SDL_sixel else SDL;
 
