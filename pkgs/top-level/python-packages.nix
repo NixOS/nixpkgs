@@ -7946,4 +7946,18 @@ in {
 
 });
 
-in fix' (extends overrides packages)
+  # Require normalized attribute names as these are predictable.
+  # https://www.python.org/dev/peps/pep-0503/#normalized-names
+  # Packages starting with a number we require to have a underscore as prefix.
+  # Variants that represent a different version are allowed, but should be avoided.
+  # Variants that have been build differently, or e.g. include plugins, are not allowed
+  # and should be moved to the passthru. It is not possible to distinguish such
+  # variants from invalid attribute names.
+  isNormalized = name: (builtins.match "^([_])?(([a-z0-9])+(-([a-z0-9])+)*)(_[0-9]+)*$" name) != null;
+  #isNormalized = name: name == requiredName name;
+  # TODO: replace multiple runs of a character with a single dash. Its rare though.
+  requiredName = name: replaceStrings ["_" "."] ["-" "-"] (toLower name);
+  # Normalize only Python packages.
+  normalizedNames = name: value: if !(value?requiredPythonModules) then value else if isNormalized name then value else throw "The attribute '${name}' should be normalized to '${requiredName name}'";
+
+in mapAttrs normalizedNames (fix' (extends overrides packages))
