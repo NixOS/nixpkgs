@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.packetbeat;
-  format = pkgs.formats.yaml;
+  format = pkgs.formats.yaml {};
 in
 {
   options = {
@@ -22,18 +22,6 @@ in
         '';
       };
 
-      name = mkOption {
-        type = types.str;
-        default = "packetbeat";
-        description = "Name of the beat";
-      };
-
-      tags = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = "Tags to place on the shipped log messages";
-      };
-
       stateDir = mkOption {
         type = types.path;
         default = "/var/lib/packetbeat";
@@ -46,96 +34,202 @@ in
       };
 
       settings = mkOption {
-        type = format.type;
-        default = {
-          packetbeat.interfaces.device = "any";
-          setup = {
-            template = {
-              settings = {
-                index.number_of_shards = 1;
+        type = types.submodule {
+          options = {
+            freeformType = format.type;
+            name = mkOption {
+              type = types.str;
+              default = "packetbeat";
+              description = "Name of the beat";
+            };
+
+            tags = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              description = "Tags to place on the shipped log messages";
+            };
+
+            packetbeat = {
+              interfaces = mkOption {
+                type = with types; attrsOf (oneOf [ bool str ]);
+                description = ''
+                  Configuration of what interfaces packetbeat should monitor and how. See
+                  <link xlink:href='https://www.elastic.co/guide/en/beats/packetbeat/current/configuration-interfaces.html'/>
+                  for all available configuration options.
+                '';
+              };
+              flows = mkOption {
+                type = with types; attrsOf (oneOf [ bool str ]);
+                description = ''
+                  Configuration of how packetbeat should handle flows. See
+                  <link xlink:href='https://www.elastic.co/guide/en/beats/packetbeat/current/configuration-flows.html'/>
+                  for all available configuration options.
+                '';
+              };
+
+              protocols = mkOption {
+                type = with types; attrsOf (oneOf [ bool (listOf port) (listOf str) ]);
+                description = ''
+                  Configuration of what protocols packetbeat should gather info about.
+                  See <link xlink:href='https://www.elastic.co/guide/en/beats/packetbeat/current/configuration-protocols.html'/>
+                  for the configuration options available.
+                '';
               };
             };
-            kibana = {
-              host = "localhost:5601";
+            output = mkOption {
+              type = with types; attrsOf (oneOf [ bool str (attrsOf str) (linesOf str) ]);
+              description = ''
+                Configuration of where packetbeat should send the information its gathered.
+                See <link xlink:href='https://www.elastic.co/guide/en/beats/packetbeat/current/configuring-output.html'/>
+                for the configuration options available.
+              '';
+            };
+
+            setup = mkOption {
+              type = with types; attrsOf (oneOf [ bool str (attrsOf str) ]);
+              description = ''
+                Configures where the kibana endpoint is for setting up dashboards and
+                whether packetbeat should setup ILM and index templates in elasticsearch.
+              '';
+            };
+
+            fields = mkOption {
+              type = with types; attrsOf str;
+              description = ''
+                Extra fields that packetbeat should add to the top-level of the objects it
+                sends to its output.
+              '';
+            };
+
+            processors = mkOption {
+              type = with types; listOf (oneOf [ str (listOf str) (attrsOf str) ]);
+              description = ''
+                Configuration of what enrichment and/or filtering processors packetbeat
+                should gather information from before sending it to the output.
+                See <link xlink:href='https://www.elastic.co/guide/en/beats/packetbeat/current/filtering-and-enhancing-data.html'/>
+                for the configuration options available.
+              '';
             };
           };
+        };
+        default = {};
+        description = ''
+          Any other configuration options you want to add.
+        '';
+        example = ''
           output = {
             elasticsearch = {
               hosts = [ "localhost:9200" ];
             };
           };
-          processors = [
-            ''
+          setup = {
+            template = {
+              settings = {
+                index.number_of_shards =  1;
+              };
+            };
+            kibana = {
+              host =  "localhost:5601";
+            };
+          };
+          processors =  [
+            '''
               if.contains.tags: forwarded
               then:
                 - drop_fields:
                   fields: [host]
               else:
                 - add_host_metadata: ~
-            ''
+            '''
             "add_cloud_metadata: ~"
             "add_docker_metadata: ~"
           ];
-        };
-        description = ''
-          Any other configuration options you want to add.
-        '';
-        # example = move the example which was in extraConfig here
-      };
-
-      flows = mkOption {
-        type = with types; attrsOf (either (bool str (listOf str)));
-        default = {
-          timeout = "30s";
-          period = "10s";
-        };
-        description = ''
-          Configuration of how packetbeat should handle flows. See
-          <link xlink:href='https://www.elastic.co/guide/en/beats/packetbeat/current/configuration-flows.html'/>
-          for all available configuration options.
-          Note: This will be put under the packetbeat.flows directive,
-          so no need to add it in this set.
         '';
       };
-
-      protocols = mkOption {
-        type = with types; attrsOf (either (bool (listOf port)));
-        default = {
-          icmp = true;
-          amqp = [ 5672 ];
-          cassandra = [ 9042 ];
-          dhcpv4 = [ 67 68 ];
-          dns = [ 53 ];
-          http = [ 80 8080 8000 5000 8002 ];
-          memcache = [ 11211 ];
-          mysql = [ 3306 3307 ];
-          pgsql = [ 5432 ];
-          redis = [ 6379 ];
-          thrift = [ 9090 ];
-          mongodb = [ 27017 ];
-          nfs = [ 2049 ];
-          tls = [ 443 993 995 5223 8443 8883 9243 ];
-        };
-        description = ''
-          Configuration of what protocols packetbeat should gather info about.
-          See <link xlink:href='https://www.elastic.co/guide/en/beats/packetbeat/current/configuration-protocols.html'/>
-          for the configuration options available.
-          Note: This will be put under the packetbeat.protocols directive,
-          so no need to add it in this set.
-        '';
-      };
-
     };
   };
 
   config = mkIf cfg.enable {
     services.packetbeat.settings = {
-      name = cfg.name;
-      tags = cfg.tags;
       packetbeat = {
-        flows = cfg.flows;
-        protocols = cfg.protocols;
+        interfaces.device = mkDefault "any";
+        flows = {
+          timeout = mkDefault "30s";
+          period = mkDefault "10s";
+        };
+        protocols = mapAttrs (name: mkDefault) {
+          icmp = {
+            enabled = true;
+          };
+          amqp = {
+            ports = [ 5672 ];
+          };
+          cassandra = {
+            ports = [ 9042 ];
+          };
+          dhcpv4 = {
+            ports = [ 67 68 ];
+          };
+          dns = {
+            ports = [ 53 ];
+          };
+          http = {
+            ports = [ 80 8080 8000 5000 8002 ];
+          };
+          memcache = {
+            ports = [ 11211 ];
+          };
+          mysql = {
+            ports = [ 3306 3307 ];
+          };
+          pgsql = {
+            ports = [ 5432 ];
+          };
+          redis = {
+            ports = [ 6379 ];
+          };
+          thrift = {
+            ports = [ 9090 ];
+          };
+          mongodb = {
+            ports = [ 27017 ];
+          };
+          nfs = {
+            ports = [ 2049 ];
+          };
+          tls = {
+            ports = [ 443 993 995 5223 8443 8883 9243 ];
+          };
+        };
+
       };
+      output = {
+        elasticsearch = {
+          hosts = mkDefault [ "localhost:9200" ];
+        };
+      };
+      setup = {
+        template = {
+          settings = {
+            index.number_of_shards = mkDefault 1;
+          };
+        };
+        kibana = {
+          host = mkDefault "localhost:5601";
+        };
+      };
+      processors = mkDefault [
+        ''
+          if.contains.tags: forwarded
+          then:
+            - drop_fields:
+              fields: [host]
+          else:
+            - add_host_metadata: ~
+        ''
+        "add_cloud_metadata: ~"
+        "add_docker_metadata: ~"
+      ];
     };
 
     systemd.services.packetbeat = {
