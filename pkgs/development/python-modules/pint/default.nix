@@ -1,10 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
 , pythonOlder
-, funcsigs
 , setuptools_scm
+, importlib-metadata
+, packaging
 # Check Inputs
 , pytestCheckHook
 , numpy
@@ -24,9 +24,10 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  propagatedBuildInputs = [
-    setuptools_scm
-  ] ++ lib.optional isPy27 funcsigs;
+  nativeBuildInputs = [ setuptools_scm ];
+  
+  propagatedBuildInputs = [ packaging ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # Test suite explicitly requires pytest
   checkInputs = [
