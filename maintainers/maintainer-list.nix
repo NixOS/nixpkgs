@@ -7995,6 +7995,12 @@
     githubId = 65870;
     name = "Сухарик";
   };
+  SuperSandro2000 = {
+    email = "sandro.jaeckel@gmail.com";
+    github = "SuperSandro2000";
+    githubId = 7258858;
+    name = "Sandro Jäckel";
+  };
   SuprDewd = {
     email = "suprdewd@gmail.com";
     github = "SuprDewd";
