@@ -1,8 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, coloredlogs, property-manager, fasteners, pytest, mock, virtualenv }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, coloredlogs, property-manager, fasteners, pytest, mock, virtualenv }:
 
 buildPythonPackage rec {
   pname = "executor";
   version = "21.3";
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "xolox";
