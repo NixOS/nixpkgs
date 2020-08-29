@@ -22,6 +22,7 @@ let
       forward-zone:
         name: .
     '' +
+    optionalString (cfg.forwardOverTLS) "    forward-tls-upstream: yes\n" +
     concatMapStringsSep "\n" (x: "    forward-addr: ${x}") cfg.forwardAddresses;
 
   rootTrustAnchorFile = "${stateDir}/root.key";
@@ -29,15 +30,20 @@ let
   trustAnchor = optionalString cfg.enableRootTrustAnchor
     "auto-trust-anchor-file: ${rootTrustAnchorFile}";
 
+  includeFile = optionalString (cfg.includeFile != "")
+    "include: \"${cfg.includeFile}\"";
+
   confFile = pkgs.writeText "unbound.conf" ''
     server:
       directory: "${stateDir}"
       username: unbound
       chroot: "${stateDir}"
       pidfile: ""
+      tls-cert-bundle: "ca-bundle.crt"
       ${interfaces}
       ${access}
       ${trustAnchor}
+      ${includeFile}
     ${cfg.extraConfig}
     ${forward}
   '';
@@ -94,6 +100,17 @@ in
         '';
       };
 
+      forwardOverTLS = mkOption {
+        default = false;
+        type = types.bool;
+        description = "Whether to forward DNS queries over TLS";
+      };
+
+      includeFile = mkOption {
+        type = types.path;
+        default = "";
+        description = "Include configuration from file";
+      };
     };
   };
 
@@ -120,6 +137,7 @@ in
       preStart = ''
         mkdir -m 0755 -p ${stateDir}/dev/
         cp ${confFile} ${stateDir}/unbound.conf
+        cp ${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt ${stateDir}/
         ${optionalString cfg.enableRootTrustAnchor ''
           ${cfg.package}/bin/unbound-anchor -a ${rootTrustAnchorFile} || echo "Root anchor updated!"
           chown unbound ${stateDir} ${rootTrustAnchorFile}
