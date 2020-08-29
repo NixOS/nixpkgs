@@ -11,23 +11,23 @@ let
       then cfg.package
       else cfg.package.withPackages (_: cfg.extraPlugins);
 
+  toStr = value:
+    if true == value then "yes"
+    else if false == value then "no"
+    else if isString value then "'${lib.replaceStrings ["'"] ["''"] value}'"
+    else toString value;
+
   # The main PostgreSQL configuration file.
-  configFile = pkgs.writeText "postgresql.conf"
-    ''
-      hba_file = '${pkgs.writeText "pg_hba.conf" cfg.authentication}'
-      ident_file = '${pkgs.writeText "pg_ident.conf" cfg.identMap}'
-      log_destination = 'stderr'
-      log_line_prefix = '${cfg.logLinePrefix}'
-      listen_addresses = '${if cfg.enableTCPIP then "*" else "localhost"}'
-      port = ${toString cfg.port}
-      ${cfg.extraConfig}
-    '';
+  configFile = pkgs.writeText "postgresql.conf" (concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") cfg.settings));
 
   groupAccessAvailable = versionAtLeast postgresql.version "11.0";
 
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "postgresql" "extraConfig" ] "Use services.postgresql.settings instead.")
+  ];
 
   ###### interface
 
@@ -212,10 +212,28 @@ in
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
-        default = "";
-        description = "Additional text to be appended to <filename>postgresql.conf</filename>.";
+      settings = mkOption {
+        type = with types; attrsOf (oneOf [ bool float int str ]);
+        default = {};
+        description = ''
+          PostgreSQL configuration. Refer to
+          <link xlink:href="https://www.postgresql.org/docs/11/config-setting.html#CONFIG-SETTING-CONFIGURATION-FILE"/>
+          for an overview of <literal>postgresql.conf</literal>.
+
+          <note><para>
+            String values will automatically be enclosed in single quotes. Single quotes will be
+            escaped with two single quotes as described by the upstream documentation linked above.
+          </para></note>
+        '';
+        example = literalExample ''
+          {
+            log_connections = true;
+            log_statement = "all";
+            logging_collector = true
+            log_disconnections = true
+            log_destination = lib.mkForce "syslog";
+          }
+        '';
       };
 
       recoveryConfig = mkOption {
@@ -244,6 +262,16 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+
+    services.postgresql.settings =
+      {
+        hba_file = "${pkgs.writeText "pg_hba.conf" cfg.authentication}";
+        ident_file = "${pkgs.writeText "pg_ident.conf" cfg.identMap}";
+        log_destination = "stderr";
+        log_line_prefix = cfg.logLinePrefix;
+        listen_addresses = if cfg.enableTCPIP then "*" else "localhost";
+        port = cfg.port;
+      };
 
     services.postgresql.package =
       # Note: when changing the default, make it conditional on

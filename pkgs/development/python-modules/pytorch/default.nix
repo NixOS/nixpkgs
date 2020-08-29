@@ -4,7 +4,7 @@
   openMPISupport ? false, openmpi ? null,
   buildDocs ? false,
   cudaArchList ? null,
-  numpy, pyyaml, cffi, click, typing, cmake, oneDNN, hypothesis, numactl, psutil,
+  numpy, pyyaml, cffi, click, typing, cmake, hypothesis, numactl, psutil,
   linkFarm, symlinkJoin,
 
   # virtual pkg that consistently instantiates blas across nixpkgs
@@ -159,9 +159,9 @@ in buildPythonPackage rec {
 
   USE_MKL = blas.implementation == "mkl";
 
-  # Unlike MKL, MKLDNN is FOSS, so we enable support for it by default. Note
-  # that this was renamed to dnnl and then renamed again to oneDNN upstream, but
-  # pytorch still calls it by the old name mkldnn.
+  # Unlike MKL, oneDNN (née MKLDNN) is FOSS, so we enable support for
+  # it by default. PyTorch currently uses its own vendored version
+  # of oneDNN through Intel iDeep.
   USE_MKLDNN = mklDnnSupport;
   USE_MKLDNN_CBLAS = mklDnnSupport;
 
@@ -210,7 +210,7 @@ in buildPythonPackage rec {
     ninja
   ] ++ lib.optionals cudaSupport [ cudatoolkit_joined ];
 
-  buildInputs = [ blas blas.provider oneDNN ]
+  buildInputs = [ blas blas.provider ]
     ++ lib.optionals cudaSupport [ cudnn magma nccl ]
     ++ lib.optionals stdenv.isLinux [ numactl ];
 

@@ -2879,6 +2879,12 @@
     githubId = 5918766;
     name = "Franz Thoma";
   };
+  fooker = {
+    email = "fooker@lab.sh";
+    github = "fooker";
+    githubId = 405105;
+    name = "Dustin Frisch";
+  };
   forkk = {
     email = "forkk@forkk.net";
     github = "forkk";
@@ -7994,6 +8000,12 @@
     github = "suhr";
     githubId = 65870;
     name = "Сухарик";
+  };
+  SuperSandro2000 = {
+    email = "sandro.jaeckel@gmail.com";
+    github = "SuperSandro2000";
+    githubId = 7258858;
+    name = "Sandro Jäckel";
   };
   SuprDewd = {
     email = "suprdewd@gmail.com";

@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   ] ++ (with python3Packages; [
     configobj
     requests
-    tornado_4
+    tornado
   ]);
 
   # no tests implemented

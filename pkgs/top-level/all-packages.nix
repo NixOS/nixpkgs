@@ -3372,13 +3372,7 @@ in
 
   cholmod-extra = callPackage ../development/libraries/science/math/cholmod-extra { };
 
-  emscriptenVersion = "1.39.1";
-
   emscripten = callPackage ../development/compilers/emscripten { };
-
-  emscriptenfastcompPackages = dontRecurseIntoAttrs (callPackage ../development/compilers/emscripten/fastcomp { });
-
-  emscriptenfastcomp = emscriptenfastcompPackages.emscriptenfastcomp;
 
   emscriptenPackages = recurseIntoAttrs (callPackage ./emscripten-packages.nix { });
 
@@ -4586,7 +4580,7 @@ in
 
   isync = callPackage ../tools/networking/isync { };
 
-  itm-tools = callPackage ../development/tools/misc/itm-tools { };  
+  itm-tools = callPackage ../development/tools/misc/itm-tools { };
 
   ix = callPackage ../tools/misc/ix { };
 
@@ -4891,7 +4885,7 @@ in
     asciidoc = asciidoc-full;
     imagemagick = imagemagick7Big;
   };
-  
+
   kristall = libsForQt5.callPackage ../applications/networking/browsers/kristall { };
 
   kzipmix = pkgsi686Linux.callPackage ../tools/compression/kzipmix { };
@@ -6712,6 +6706,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  rustscan = callPackage ../tools/security/rustscan { };
+
   rw = callPackage ../tools/misc/rw { };
 
   rxp = callPackage ../tools/text/xml/rxp { };
@@ -8123,6 +8119,7 @@ in
   inherit (yarn2nix-moretea)
     yarn2nix
     mkYarnPackage
+    mkYarnModules
     fixup_yarn_lock;
 
   yasr = callPackage ../applications/audio/yasr { };
@@ -9575,7 +9572,9 @@ in
   cargo-deny = callPackage ../development/tools/rust/cargo-deny {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-embed = callPackage ../development/tools/rust/cargo-embed { };
   cargo-expand = callPackage ../development/tools/rust/cargo-expand { };
+  cargo-flash = callPackage ../development/tools/rust/cargo-flash { };
   cargo-fund = callPackage ../development/tools/rust/cargo-fund {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -12527,9 +12526,7 @@ in
 
   gperftools = callPackage ../development/libraries/gperftools { };
 
-  grab-site = callPackage ../tools/backup/grab-site {
-    python3Packages = python37Packages;
-  };
+  grab-site = callPackage ../tools/backup/grab-site { };
 
   grib-api = callPackage ../development/libraries/grib-api { };
 
@@ -21004,7 +21001,7 @@ in
   i3-wk-switch = callPackage ../applications/window-managers/i3/wk-switch.nix { };
 
   windowchef = callPackage ../applications/window-managers/windowchef/default.nix { };
-  
+
   wmfocus = callPackage ../applications/window-managers/i3/wmfocus.nix { };
 
   wmfs = callPackage ../applications/window-managers/wmfs/default.nix { };
@@ -21937,6 +21934,8 @@ in
   };
 
   nixos-shell = callPackage ../tools/virtualization/nixos-shell {};
+
+  noaa-apt = callPackage ../applications/radio/noaa-apt { };
 
   node-problem-detector = callPackage ../applications/networking/cluster/node-problem-detector { };
 
@@ -26012,6 +26011,7 @@ in
   lean2 = callPackage ../applications/science/logic/lean2 {};
   lean3 = lean;
   elan = callPackage ../applications/science/logic/elan {};
+  mathlibtools = with python3Packages; toPythonApplication mathlibtools;
 
   leo2 = callPackage ../applications/science/logic/leo2 {
      ocaml = ocaml-ng.ocamlPackages_4_01_0.ocaml;};
@@ -27587,7 +27587,7 @@ in
   sequeler = callPackage ../applications/misc/sequeler { };
 
   sequelpro = callPackage ../applications/misc/sequelpro {};
-  
+
   snowsql = callPackage ../applications/misc/snowsql {};
 
   sidequest = callPackage ../applications/misc/sidequest {};

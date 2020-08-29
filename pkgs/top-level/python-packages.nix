@@ -992,6 +992,8 @@ in {
 
   matchpy = callPackage ../development/python-modules/matchpy { };
 
+  mathlibtools = callPackage ../development/python-modules/mathlibtools {};
+
   maxminddb = callPackage ../development/python-modules/maxminddb { };
 
   mininet-python = (toPythonModule (pkgs.mininet.override{ inherit python; })).py;
@@ -1163,6 +1165,8 @@ in {
   pulsectl = callPackage ../development/python-modules/pulsectl { };
 
   pure-python-adb-homeassistant = callPackage ../development/python-modules/pure-python-adb-homeassistant { };
+
+  pure-eval = callPackage ../development/python-modules/pure-eval {};
 
   purl = callPackage ../development/python-modules/purl { };
 
@@ -2894,9 +2898,7 @@ in {
   # Alias that we should deprecate
   dateutil = self.python-dateutil;
 
-  debugpy = callPackage ../development/python-modules/debugpy {
-    django = if isPy27 then self.django_1_11 else self.django;
-  };
+  debugpy = callPackage ../development/python-modules/debugpy { };
 
   decorator = callPackage ../development/python-modules/decorator { };
 
@@ -3755,10 +3757,6 @@ in {
   django = self.django_lts;
 
   django_lts = self.django_2_2;
-
-  django_1_11 = callPackage ../development/python-modules/django/1_11.nix {
-    gdal = self.gdal;
-  };
 
   django_2_2 = callPackage ../development/python-modules/django/2_2.nix { };
 
@@ -6939,7 +6937,11 @@ in {
   else
     callPackage ../development/python-modules/tornado/5.nix { };
 
+  # Used by circus and grab-site, 2020-08-29
   tornado_4 = callPackage ../development/python-modules/tornado/4.nix { };
+
+  # Used by luigi, 2020-08-29
+  tornado_5 = callPackage ../development/python-modules/tornado/5.nix { };
 
   tokenlib = callPackage ../development/python-modules/tokenlib { };
 

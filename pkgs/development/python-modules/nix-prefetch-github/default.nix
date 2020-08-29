@@ -15,16 +15,12 @@
 
 buildPythonPackage rec {
   pname = "nix-prefetch-github";
-  version = "2.4";
+  version = "3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PVB/cL0NVB5pHxRMjg8TLatvIvHjfCvaRWBanVHYT+E=";
+    sha256 = "sha256-EN+EbVXUaf+id5UsK4EBm/9k9FYaH79g08kblvW60XA=";
   };
-
-  # The tests for this package require nix and network access.  That's
-  # why we cannot execute them inside the building process.
-  doCheck = false;
 
   propagatedBuildInputs = [
     attrs
@@ -34,6 +30,9 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [ pytestCheckHook pytest-black pytestcov pytest-isort git ];
+  checkPhase = ''
+    pytest -m 'not network'
+  '';
 
   # latest version of isort will cause tests to fail
   # ignore tests which are impure
