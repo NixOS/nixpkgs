@@ -2571,7 +2571,10 @@ in
     inherit (llvmPackages) openmp;
   };
 
-  bzip2 = callPackage ../tools/compression/bzip2 { };
+  bzip2 = if stdenv.isDarwin then
+      callPackage ../tools/compression/bzip2/1.0.6.nix { }
+    else
+      callPackage ../tools/compression/bzip2 { };
 
   cabextract = callPackage ../tools/archivers/cabextract { };
 
