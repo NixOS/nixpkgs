@@ -992,6 +992,8 @@ in {
 
   matchpy = callPackage ../development/python-modules/matchpy { };
 
+  mathlibtools = callPackage ../development/python-modules/mathlibtools {};
+
   maxminddb = callPackage ../development/python-modules/maxminddb { };
 
   mininet-python = (toPythonModule (pkgs.mininet.override{ inherit python; })).py;
