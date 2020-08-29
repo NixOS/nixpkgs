@@ -61,13 +61,7 @@ stdenv.mkDerivation rec {
   ++ optional (uilib == "gtk2") gtk2
   ;
 
-  preConfigure = ''
-    cat <<EOF > Makefile.conf
-    override NETSURF_GTK_RES_PATH  := $out/share/netsurf/
-    override NETSURF_GTK_MAJOR := ${if uilib == "gtk3" then "3" else "2"}
-    override NETSURF_USE_GRESOURCE := YES
-    EOF
-  '';
+  patches = [ ./0001-Fix-GTK-2-icons-since-commit-11aa6821.patch ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
