@@ -18,7 +18,7 @@ let generateNodeConf = { lib, pkgs, config, privk, pubk, peerId, nodeId, ...}: {
             wireguardConfig = {
               PrivateKeyFile = "/run/wg_priv";
               ListenPort = 51820;
-              FwMark = 42;
+              FirewallMark = 42;
             };
             wireguardPeers = [ {wireguardPeerConfig={
               Endpoint = "192.168.1.${peerId}:51820";
