@@ -21898,7 +21898,7 @@ in
 
   loxodo = callPackage ../applications/misc/loxodo { };
 
-  lsd2dsl = libsForQt514.callPackage ../applications/misc/lsd2dsl { };
+  lsd2dsl = libsForQt5.callPackage ../applications/misc/lsd2dsl { };
 
   lrzsz = callPackage ../tools/misc/lrzsz { };
 
