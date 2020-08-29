@@ -6,6 +6,7 @@ let
     let files = builtins.attrNames (builtins.readDir dir);
     in map (f: dir + ("/" + f)) files;
 in {
+  mkFlutter = mkFlutter;
   stable = mkFlutter rec {
     pname = "flutter";
     channel = "stable";

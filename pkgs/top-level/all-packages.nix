@@ -1183,6 +1183,7 @@ in
 
   androidndkPkgs = androidndkPkgs_18b;
   androidndkPkgs_18b = (callPackage ../development/androidndk-pkgs {})."18b";
+  androidndkPkgs_21 = (callPackage ../development/androidndk-pkgs {})."21";
 
   androidsdk_9_0 = androidenv.androidPkgs_9_0.androidsdk;
 
@@ -2267,6 +2268,8 @@ in
   optar = callPackage ../tools/graphics/optar {};
 
   obinskit = callPackage ../applications/misc/obinskit {};
+
+  odafileconverter = libsForQt5.callPackage ../applications/graphics/odafileconverter {};
 
   pastel = callPackage ../applications/misc/pastel {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -4884,6 +4887,11 @@ in
 
   kippo = callPackage ../servers/kippo { };
 
+  kimg = callPackage ../development/tools/misc/kimg {
+    asciidoc = asciidoc-full;
+    imagemagick = imagemagick7Big;
+  };
+  
   kristall = libsForQt5.callPackage ../applications/networking/browsers/kristall { };
 
   kzipmix = pkgsi686Linux.callPackage ../tools/compression/kzipmix { };
@@ -6803,6 +6811,8 @@ in
   sd = callPackage ../tools/text/sd {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  sd-mux-ctrl = callPackage ../tools/misc/sd-mux-ctrl { };
 
   sd-switch = callPackage ../os-specific/linux/sd-switch { };
 
@@ -9233,6 +9243,8 @@ in
   julia = julia_1;
 
   jwasm =  callPackage ../development/compilers/jwasm { };
+
+  knightos-kcc = callPackage ../development/compilers/kcc { };
 
   kotlin = callPackage ../development/compilers/kotlin { };
 
@@ -15674,6 +15686,8 @@ in
     wt3
     wt4;
 
+  wxformbuilder = callPackage ../development/tools/wxformbuilder { };
+
   wxGTK = wxGTK28;
 
   wxGTK30 = wxGTK30-gtk2;
@@ -20346,6 +20360,8 @@ in
 
   gopher = callPackage ../applications/networking/gopher/gopher { };
 
+  gophernotes = callPackage ../applications/editors/gophernotes { };
+
   goxel = callPackage ../applications/graphics/goxel { };
 
   gpa = callPackage ../applications/misc/gpa { };
@@ -20987,6 +21003,8 @@ in
 
   i3-wk-switch = callPackage ../applications/window-managers/i3/wk-switch.nix { };
 
+  windowchef = callPackage ../applications/window-managers/windowchef/default.nix { };
+  
   wmfocus = callPackage ../applications/window-managers/i3/wmfocus.nix { };
 
   wmfs = callPackage ../applications/window-managers/wmfs/default.nix { };
@@ -23344,6 +23362,8 @@ in
 
   treesheets = callPackage ../applications/office/treesheets { wxGTK = wxGTK31; };
 
+  tremc = callPackage ../applications/networking/p2p/tremc { };
+
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
   trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita {
@@ -24692,13 +24712,13 @@ in
   katago = callPackage ../games/katago { };
 
   katagoWithCuda = katago.override {
-    cudaSupport = true;
+    enableCuda = true;
     cudnn = cudnn_cudatoolkit_10_2;
     cudatoolkit = cudatoolkit_10_2;
   };
 
   katagoCPU = katago.override {
-    gpuEnabled = false;
+    enableGPU = false;
   };
 
   klavaro = callPackage ../games/klavaro {};
