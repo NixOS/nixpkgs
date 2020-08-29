@@ -1,6 +1,5 @@
-{ stdenv, fetchurl
+{ stdenv, lib, fetchurl
 , linkStatic ? (stdenv.hostPlatform.system == "i686-cygwin")
-, autoreconfHook
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -10,37 +9,34 @@
 
 stdenv.mkDerivation rec {
   pname = "bzip2";
-  version = "1.0.6.0.1";
+  version = "1.0.8";
 
-  /* We use versions patched to use autotools style properly,
-      saving lots of trouble. */
   src = fetchurl {
-    urls = map
-      (prefix: prefix + "/people/sbrabec/bzip2/tarballs/${pname}-${version}.tar.gz")
-      [
-        "http://ftp.uni-kl.de/pub/linux/suse"
-        "ftp://ftp.hs.uni-hamburg.de/pub/mirrors/suse"
-        "ftp://ftp.mplayerhq.hu/pub/linux/suse"
-        "http://ftp.suse.com/pub" # the original patched version but slow
-      ];
-    sha256 = "0b5b5p8c7bslc6fslcr1nj9136412v3qcvbg6yxi9argq9g72v8c";
+    url = "https://sourceware.org/pub/bzip2/${pname}-${version}.tar.gz";
+    sha256 = "0s92986cv0p692icqlw1j42y9nld8zd83qwhzbqd61p1dqbh6nmb";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  outputs = [ "bin" "dev" "out" "man" ] ++ lib.optionals linkStatic [ "static" ];
 
-  patches = [
-    ./CVE-2016-3189.patch
-    ./cve-2019-12900.patch
-  ];
-
-  postPatch = ''
-    sed -i -e '/<sys\\stat\.h>/s|\\|/|' bzip2.c
+  buildPhase = ''
+    cc=${cc:-$CC}
+    make CC=cc
+    make CC=cc -f Makefile-libbz2_so
   '';
 
-  outputs = [ "bin" "dev" "out" "man" ];
+  installFlags = [ "PREFIX=$(out)" ];
 
-  configureFlags =
-    stdenv.lib.optionals linkStatic [ "--enable-static" "--disable-shared" ];
+  postInstall = ''
+    moveToOutput bin $bin
+    ln -s libbz2.so.1.0 libbz2.so.1
+    ln -s libbz2.so.1   libbz2.so
+    mv libbz2.so* $out/lib
+  '' + (if linkStatic  then ''
+    mkdir -p $static/lib
+    mv $out/lib/libz2.a $static/lib/libz2.a
+  '' else ''
+    rm $out/lib/libbz2.a
+  '');
 
   enableParallelBuilding = true;
 
