@@ -72,7 +72,7 @@ in stdenv.mkDerivation {
           "${lib.getLib libgccjit}/lib"
           "${lib.getLib libgccjit}/lib/gcc/${targetPlatform.config}/${libgccjit.version}"
           "${lib.getLib stdenv.cc.cc}/lib"
-          "${lib.getLib stdenv.libc}/lib"
+          "${lib.getLib stdenv.cc.libc}/lib"
         ]));
     in ''
       substituteInPlace lisp/emacs-lisp/comp.el --replace \
