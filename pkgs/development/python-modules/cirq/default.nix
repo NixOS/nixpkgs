@@ -48,6 +48,11 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "protobuf~=3.12.0" "protobuf~=3.12"
+  '';
+
   propagatedBuildInputs = [
     freezegun
     google_api_core
