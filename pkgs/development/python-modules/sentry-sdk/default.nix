@@ -19,6 +19,9 @@
 , urllib3
 , trytond
 , werkzeug
+, executing
+, pure-eval
+, asttokens
 }:
 
 buildPythonPackage rec {
@@ -30,7 +33,8 @@ buildPythonPackage rec {
     sha256 = "e12eb1c2c01cd9e9cfe70608dbda4ef451f37ef0b7cbb92e5d43f87c341d6334";
   };
 
-  checkInputs = [ django flask tornado bottle rq falcon sqlalchemy werkzeug trytond ]
+  checkInputs = [ django flask tornado bottle rq falcon sqlalchemy werkzeug trytond
+    executing pure-eval asttokens ]
   ++ stdenv.lib.optionals isPy3k [ celery pyramid sanic aiohttp ];
 
   propagatedBuildInputs = [ urllib3 certifi ];
