@@ -16339,6 +16339,8 @@ in
 
   imgproxy = callPackage ../servers/imgproxy { };
 
+  improut = callPackage ../servers/improut { };
+
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
   jboss = callPackage ../servers/http/jboss { };
