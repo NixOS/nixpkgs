@@ -1164,6 +1164,8 @@ in {
 
   pure-python-adb-homeassistant = callPackage ../development/python-modules/pure-python-adb-homeassistant { };
 
+  pure-eval = callPackage ../development/python-modules/pure-eval {};
+
   purl = callPackage ../development/python-modules/purl { };
 
   pyclipper = callPackage ../development/python-modules/pyclipper { };
