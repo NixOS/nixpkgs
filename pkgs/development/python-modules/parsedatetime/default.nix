@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , pytest
 , pytestrunner
 , future
@@ -9,6 +10,7 @@
 buildPythonPackage rec {
   pname = "parsedatetime";
   version = "2.6";
+  disabled = isPy27; # no longer compatible with icu package
 
   src = fetchPypi {
     inherit pname version;
