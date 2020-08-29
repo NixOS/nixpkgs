@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "django-nose";
-  version = "1.4.6";
+  version = "1.4.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01wah0ci5xdpiikash68x6lprxlvnkxg72ly9kjrc9lklq34m4sq";
+    sha256 = "a4885cd002d65fd2de96e2bb2563ef477c3fbe207009360c015fca5c3b5561b7";
   };
 
   # vast dependency list
