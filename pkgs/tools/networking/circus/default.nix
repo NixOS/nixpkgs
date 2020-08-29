@@ -4,11 +4,11 @@ let
   python = python3.override {
     self = python;
     packageOverrides = self: super: {
-      tornado = tornado_4;
+      tornado = super.tornado_4;
     };
   };
 
-  inherit (python.pkgs) buildPythonApplication fetchPypi iowait psutil pyzmq tornado_4 mock six;
+  inherit (python.pkgs) buildPythonApplication fetchPypi iowait psutil pyzmq tornado mock six;
 in
 
 buildPythonApplication rec {
