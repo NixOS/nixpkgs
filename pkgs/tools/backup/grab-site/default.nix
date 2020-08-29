@@ -1,6 +1,14 @@
-{ stdenv, python3Packages, fetchFromGitHub }:
+{ stdenv, python37, fetchFromGitHub }:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python37.override {
+    self = python;
+    packageOverrides = self: super: {
+      tornado = super.tornado_4;
+    };
+  };
+
+in with python.pkgs; buildPythonApplication rec {
   version = "2.1.19";
   name = "grab-site-${version}";
 
@@ -11,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1v1hnhv5knzdl0kj3574ccwlh171vcb7faddp095ycdmiiybalk4";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     click ludios_wpull manhole lmdb autobahn fb-re2 websockets cchardet
   ];
 
