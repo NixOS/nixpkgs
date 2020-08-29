@@ -2922,8 +2922,9 @@ in {
 
   dnslib = callPackage ../development/python-modules/dnslib { };
 
+  dnspython1 = callPackage ../development/python-modules/dnspython/1.nix { };
   dnspython = callPackage ../development/python-modules/dnspython { };
-  dns = self.dnspython; # Alias for compatibility, 2017-12-10
+  dns = self.dnspython1; # Alias for compatibility, 2017-12-10
 
   docker = callPackage ../development/python-modules/docker {};
 
