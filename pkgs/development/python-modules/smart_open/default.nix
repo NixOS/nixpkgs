@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , boto
 , boto3
 , bz2file
@@ -13,6 +14,7 @@
 buildPythonPackage rec {
   pname = "smart_open";
   version = "2.1.1";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
