@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "inflection";
-  version = "0.5.0";
+  version = "0.5.1";
   disabled = isPy27;
 
   src = fetchPypi {
    inherit pname version;
-   sha256 = "f576e85132d34f5bf7df5183c2c6f94cfb32e528f53065345cf71329ba0b8924";
+   sha256 = "1a29730d366e996aaacffb2f1f1cb9593dc38e2ddd30c91250c6dde09ea9b417";
   };
 
   checkInputs = [ pytest ];
