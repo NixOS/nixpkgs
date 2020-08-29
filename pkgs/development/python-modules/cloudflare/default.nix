@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, beautifulsoup4
 , requests
 , future
 , pyyaml
@@ -17,6 +18,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    beautifulsoup4
     requests
     future
     pyyaml
