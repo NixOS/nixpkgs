@@ -61,6 +61,10 @@ stdenv.mkDerivation rec {
     sed -i "s|^EMXX =.*|EMXX='$out/bin/em++'|" tools/shared.py
     sed -i "s|^EMAR =.*|EMAR='$out/bin/emar'|" tools/shared.py
     sed -i "s|^EMRANLIB =.*|EMRANLIB='$out/bin/emranlib'|" tools/shared.py
+
+    # The tests use the C compiler to compile generated C code,
+    # use the wrapped compiler
+    sed -i 's/shared.CLANG_CC/"cc"/' tests/runner.py
   '';
 
   installPhase = ''
@@ -77,16 +81,23 @@ stdenv.mkDerivation rec {
         --set PYTHON ${python3}/bin/python
     done
 
-    # precompile libc in all four variants:
-    # wasm, wasm-pic, wasm-lto, wasm-lto-pic
+    # precompile libc (etc.) in all variants:
+    pushd $TMPDIR
+    echo 'int main() { return 42; }' >test.c
+    for LTO in -flto ""; do
+      # wasm2c doesn't work with PIC
+      $out/bin/emcc -s WASM2C -s STANDALONE_WASM $LTO test.c
+
+      for RELOCATABLE in "" "-s RELOCATABLE"; do
+        $out/bin/emcc $RELOCATABLE $LTO test.c
+      done
+    done
+    popd
+
     export PYTHON=${python3}/bin/python
     export NODE_PATH=${nodeModules}/node_modules
     pushd $appdir
-    for lto in wasm2 wasmlto2; do
-      for pic in test_hello_world test_relocatable_void_function; do
-        python tests/runner.py $lto.$pic
-      done
-    done
+    python tests/runner.py test_hello_world
     popd
   '';
 
