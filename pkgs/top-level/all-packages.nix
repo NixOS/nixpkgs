@@ -10725,6 +10725,8 @@ in
 
   cli11 = callPackage ../development/tools/misc/cli11 { };
 
+  concourse-bin = callPackage ../development/tools/continuous-integration/concourse-bin { };
+
   dcadec = callPackage ../development/tools/dcadec { };
 
   dejagnu = callPackage ../development/tools/misc/dejagnu { };
