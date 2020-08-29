@@ -20,11 +20,13 @@ buildPythonPackage rec {
     cython
   ];
 
+  propagatedBuildInputs = [
+    numpy
+  ];
+
 
   checkInputs = [
-    cython
     hypothesis
-    numpy
     pytest
   ];
 
