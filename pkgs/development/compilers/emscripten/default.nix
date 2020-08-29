@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   nodeModules = mkYarnModules {
     name = "emscripten-node-modules-${version}";
     inherit pname version;
+    # it is vitally important the the package.json has name and version fields
     packageJSON = ./package.json;
     yarnLock = ./yarn.lock;
     yarnNix = ./yarn.nix;
