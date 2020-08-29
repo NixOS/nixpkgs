@@ -8112,6 +8112,7 @@ in
   inherit (yarn2nix-moretea)
     yarn2nix
     mkYarnPackage
+    mkYarnModules
     fixup_yarn_lock;
 
   yasr = callPackage ../applications/audio/yasr { };
