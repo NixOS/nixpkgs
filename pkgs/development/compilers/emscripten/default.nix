@@ -7,8 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  # 2.0.1 requires unreleased binaryen version (as of 2020-08-28)
-  version = "2.0.0";
+  version = "2.0.1";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    sha256 = "1ihr1v8dlq5xq97i59n7s1hhz5pkafi6556ppgzjmmhiiraz2mkh";
+    sha256 = "06dsd819qjv4n2ihrz1mpn5aigmbv0gpkm7iw06wrqx30nzphnpk";
     rev = version;
   };
 
