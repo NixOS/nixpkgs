@@ -291,7 +291,7 @@ if [ "$action" = edit ]; then
         if [[ -d $NIXOS_CONFIG ]]; then
             NIXOS_CONFIG=$NIXOS_CONFIG/default.nix
         fi
-        exec "${EDITOR:-nano}" "$NIXOS_CONFIG"
+        exec ${EDITOR:-nano} "$NIXOS_CONFIG"
     else
         exec nix edit "${lockFlags[@]}" -- "$flake#$flakeAttr"
     fi
