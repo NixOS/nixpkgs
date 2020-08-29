@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools_scm
+, m2r
 , pyyaml
 , jsonschema
 , sphinxcontrib_httpdomain
@@ -16,7 +17,8 @@ buildPythonPackage rec {
     sha256 = "1c1bd10d7653912c59a42f727c62cbb7b75f7905ddd9ccc477ebfd1bc69f0cf3";
   };
 
-  propagatedBuildInputs = [setuptools_scm pyyaml jsonschema sphinxcontrib_httpdomain];
+  nativeBuildInputs = [ setuptools_scm ];
+  propagatedBuildInputs = [ pyyaml jsonschema m2r sphinxcontrib_httpdomain ];
 
   doCheck = false;
 
