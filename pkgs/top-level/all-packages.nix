@@ -26579,6 +26579,8 @@ in
 
   gobuster = callPackage ../tools/security/gobuster { };
 
+  gospider = callPackage ../tools/security/gospider { };
+
   guetzli = callPackage ../applications/graphics/guetzli { };
 
   gummi = callPackage ../applications/misc/gummi { };
