@@ -16,10 +16,10 @@ let platformLdLibraryPath = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
 in
 stdenv.mkDerivation rec {
   pname = "sagittarius-scheme";
-  version = "0.9.6";
+  version = "0.9.7";
   src = fetchurl {
     url = "https://bitbucket.org/ktakashi/${pname}/downloads/sagittarius-${version}.tar.gz";
-    sha256 = "03nvvvfd4gdlvq244zpnikxxajp6w8jj3ymw4bcq83x7zilb2imr";
+    sha256 = "18pjj6f5qvixv5hbl1k4d3jqfcmi9qyx0gz0cjwrzpxa8brpwld8";
   };
   preBuild = ''
            # since we lack rpath during build, need to explicitly add build path
