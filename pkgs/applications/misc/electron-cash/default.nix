@@ -37,6 +37,7 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace contrib/requirements/requirements.txt \
+      --replace "protobuf<3.9" "protobuf" \
       --replace "qdarkstyle==2.6.8" "qdarkstyle<3"
 
     substituteInPlace setup.py \
