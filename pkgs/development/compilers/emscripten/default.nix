@@ -33,8 +33,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ nodejs python3 ];
 
-  outputs = [ "out" "appdir" ];
-
   buildPhase = ''
     patchShebangs .
 
@@ -57,10 +55,17 @@ stdenv.mkDerivation rec {
     # to make the test(s) below work
     # echo "SPIDERMONKEY_ENGINE = []" >> .emscripten
     echo "BINARYEN_ROOT = '${binaryen}'" >> .emscripten
+
+    # make emconfigure/emcmake use the correct (wrapped) binaries
+    sed -i "s|^EMCC =.*|EMCC='$out/bin/emcc'|" tools/shared.py
+    sed -i "s|^EMXX =.*|EMXX='$out/bin/em++'|" tools/shared.py
+    sed -i "s|^EMAR =.*|EMAR='$out/bin/emar'|" tools/shared.py
+    sed -i "s|^EMRANLIB =.*|EMRANLIB='$out/bin/emranlib'|" tools/shared.py
   '';
 
   installPhase = ''
-    rm -rf cache
+    appdir=$out/share/emscripten
+    mkdir -p $appdir
     cp -r . $appdir
     chmod -R +w $appdir
 
