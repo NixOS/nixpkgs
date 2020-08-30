@@ -87,7 +87,8 @@ let
         package = mkOption {
           type = types.package;
           default = pkgs.wordpress;
-          description = "Which WordPress package to use.";
+          example = literalExample "pkgs.wordpress-core";
+          description = "Which WordPress package to use. Use pkgs.wordpress-core for a version without the default plugins and theme.";
         };
 
         uploadsDir = mkOption {
