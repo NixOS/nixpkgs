@@ -34,8 +34,8 @@ let
     User tor
     DataDirectory ${torDirectory}
     ${optionalString cfg.enableGeoIP ''
-      GeoIPFile ${pkgs.tor.geoip}/share/tor/geoip
-      GeoIPv6File ${pkgs.tor.geoip}/share/tor/geoip6
+      GeoIPFile ${cfg.package.geoip}/share/tor/geoip
+      GeoIPv6File ${cfg.package.geoip}/share/tor/geoip6
     ''}
 
     ${optint "ControlPort" cfg.controlPort}
@@ -120,6 +120,16 @@ in
         description = ''
           Enable the Tor daemon. By default, the daemon is run without
           relay, exit, bridge or client connectivity.
+        '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.tor;
+        defaultText = "pkgs.tor";
+        example = literalExample "pkgs.tor";
+        description = ''
+          Tor package to use
         '';
       };
 
@@ -749,8 +759,8 @@ in
         serviceConfig =
           { Type         = "simple";
             # Translated from the upstream contrib/dist/tor.service.in
-            ExecStartPre = "${pkgs.tor}/bin/tor -f ${torRcFile} --verify-config";
-            ExecStart    = "${pkgs.tor}/bin/tor -f ${torRcFile}";
+            ExecStartPre = "${cfg.package}/bin/tor -f ${torRcFile} --verify-config";
+            ExecStart    = "${cfg.package}/bin/tor -f ${torRcFile}";
             ExecReload   = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             KillSignal   = "SIGINT";
             TimeoutSec   = 30;
@@ -773,7 +783,7 @@ in
           };
       };
 
-    environment.systemPackages = [ pkgs.tor ];
+    environment.systemPackages = [ cfg.package ];
 
     services.privoxy = mkIf (cfg.client.enable && cfg.client.privoxy.enable) {
       enable = true;
