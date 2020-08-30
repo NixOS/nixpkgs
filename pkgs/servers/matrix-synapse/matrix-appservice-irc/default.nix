@@ -24,4 +24,6 @@ ourNodePackages."${packageName}".override {
     homepage = "https://github.com/matrix-org/matrix-appservice-irc";
     license = licenses.asl20;
   };
+
+  passthru.tests.matrix-appservice-irc = nixosTests.matrix-appservice-irc;
 }
