@@ -691,6 +691,74 @@ lua-messagepack = buildLuarocksPackage {
     license.fullName = "MIT/X11";
   };
 };
+lua-resty-http = buildLuarocksPackage {
+  pname = "lua-resty-http";
+  version = "0.15-0";
+
+  src = fetchurl {
+    url    = mirror://luarocks/lua-resty-http-0.15-0.src.rock;
+    sha256 = "1121abcz9y8kis2wdg7i1m75y8lplk3k49v02y804bywbl2km4fz";
+  };
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/ledgetech/lua-resty-http";
+    description = "Lua HTTP client cosocket driver for OpenResty / ngx_lua.";
+    license.fullName = "2-clause BSD";
+  };
+};
+lua-resty-jwt = buildLuarocksPackage {
+  pname = "lua-resty-jwt";
+  version = "0.2.2-0";
+
+  src = fetchurl {
+    url    = mirror://luarocks/lua-resty-jwt-0.2.2-0.src.rock;
+    sha256 = "1a4wwiwcjwgr59g2940a2h0i6n1c7xjy2px5bls3x5br4shwhswa";
+  };
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/cdbattags/lua-resty-jwt";
+    description = "JWT for ngx_lua and LuaJIT.";
+    license.fullName = "Apache License Version 2";
+  };
+};
+lua-resty-openidc = buildLuarocksPackage {
+  pname = "lua-resty-openidc";
+  version = "1.7.2-1";
+
+  src = fetchurl {
+    url    = mirror://luarocks/lua-resty-openidc-1.7.2-1.src.rock;
+    sha256 = "01mya69r4fncfrpqh5pn2acg18q3slds8zm976qgkjby0pzwzzw7";
+  };
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua lua-resty-http lua-resty-session lua-resty-jwt ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/zmartzone/lua-resty-openidc";
+    description = "A library for NGINX implementing the OpenID Connect Relying Party (RP) and the OAuth 2.0 Resource Server (RS) functionality";
+    license.fullName = "Apache 2.0";
+  };
+};
+lua-resty-session = buildLuarocksPackage {
+  pname = "lua-resty-session";
+  version = "3.6-1";
+
+  src = fetchurl {
+    url    = mirror://luarocks/lua-resty-session-3.6-1.src.rock;
+    sha256 = "1r5626x247d1vi5bzqfk11bl4d5c39h1iqj6mgndnwpnz43cag5i";
+  };
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/bungle/lua-resty-session";
+    description = "Session Library for OpenResty – Flexible and Secure";
+    license.fullName = "BSD";
+  };
+};
 lua-term = buildLuarocksPackage {
   pname = "lua-term";
   version = "0.7-1";
