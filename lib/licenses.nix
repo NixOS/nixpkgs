@@ -439,7 +439,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   databricks = {
     fullName = "Databricks Proprietary License";
     url = "https://pypi.org/project/databricks-connect";
-
+    free = false;
   };
 
   issl = {

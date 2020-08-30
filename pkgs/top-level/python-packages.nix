@@ -1412,6 +1412,8 @@ in {
 
   databricks-cli = callPackage ../development/python-modules/databricks-cli { };
 
+  databricks-connect = callPackage ../development/python-modules/databricks-connect { inherit (pkgs) jdk; };
+
   dataclasses = callPackage ../development/python-modules/dataclasses { };
 
   dataclasses-json = callPackage ../development/python-modules/dataclasses-json { };
