@@ -5,14 +5,16 @@ with lib;
 let
 
   x11Fonts = pkgs.runCommand "X11-fonts" { preferLocalBuild = true; } ''
+    font_formats=('ttf' 'otf' 'pcf' 'pfa' 'pfb' 'bdf')
     mkdir -p "$out/share/X11-fonts"
-    find ${toString config.fonts.fonts} \
-      \( -name fonts.dir -o -name '*.ttf' -o -name '*.otf' \) \
-      -exec ln -sf -t "$out/share/X11-fonts" '{}' \;
+    for fmt in "''${font_formats[@]}"; do
+      find ${toString config.fonts.fonts} \
+        \( -name '*.'$fmt -o -name '*.'$fmt'.gz' \) \
+        -exec ln -sf -t "$out/share/X11-fonts" '{}' \;
+    done
     cd "$out/share/X11-fonts"
-    rm -f fonts.dir fonts.scale fonts.alias
-    ${pkgs.xorg.mkfontdir}/bin/mkfontdir
     ${pkgs.xorg.mkfontscale}/bin/mkfontscale
+    ${pkgs.xorg.mkfontdir}/bin/mkfontdir
     cat $(find ${pkgs.xorg.fontalias}/ -name fonts.alias) >fonts.alias
   '';
 
