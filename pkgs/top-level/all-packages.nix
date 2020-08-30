@@ -36195,6 +36195,8 @@ with pkgs;
 
   wordpress = callPackage ../servers/web-apps/wordpress { };
 
+  wordpress-core = callPackage ../servers/web-apps/wordpress/wordpress-core.nix { };
+
   wprecon = callPackage ../tools/security/wprecon { };
 
   wraith = callPackage ../applications/networking/irc/wraith { };
