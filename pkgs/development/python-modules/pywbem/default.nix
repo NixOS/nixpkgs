@@ -5,14 +5,14 @@
 
 buildPythonPackage rec {
   pname = "pywbem";
-  version = "1.0.1";
+  version = "1.0.2";
 
   # Support added in master https://github.com/pywbem/pywbem/commit/b2f2f1a151a30355bbc6652dca69a7b30bfe941e awaiting release
   disabled = isPy37;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2e738c9eb92591307f4f4d674b1e073bf12192604904e3c4028fde1aa338138c";
+    sha256 = "66d8ec82d30f2b95d8b4bd51659429066c2879d3f46292561f5fdbc7fed10f3d";
   };
 
   propagatedBuildInputs = [
