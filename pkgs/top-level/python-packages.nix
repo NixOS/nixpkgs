@@ -7547,6 +7547,8 @@ in {
 
   ydiff = callPackage ../development/python-modules/ydiff { };
 
+  yeelight = callPackage ../development/python-modules/yeelight { };
+
   yenc = callPackage ../development/python-modules/yenc { };
 
   yfinance = callPackage ../development/python-modules/yfinance { };
