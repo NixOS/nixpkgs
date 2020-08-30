@@ -18888,6 +18888,8 @@ in
 
   marwaita = callPackage ../data/themes/marwaita { };
 
+  marwaita-manjaro = callPackage ../data/themes/marwaita-manjaro { };
+
   matcha-gtk-theme = callPackage ../data/themes/matcha { };
 
   materia-theme = callPackage ../data/themes/materia-theme { };
