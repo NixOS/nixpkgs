@@ -795,7 +795,7 @@ in
         Type = "oneshot";
         TimeoutSec = 60;
         ExecCondition = "/run/current-system/systemd/bin/systemctl -q is-active httpd.service";
-        ExecStartPre = "${pkg}/bin/apachectl configtest";
+        ExecStartPre = "${pkg}/bin/httpd -f ${httpdConf} -t";
         ExecStart = "/run/current-system/systemd/bin/systemctl reload httpd.service";
       };
     };
