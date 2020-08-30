@@ -15,7 +15,7 @@ buildPythonPackage rec {
   checkPhase = "pytest tests";
 
   meta = with lib; {
-    description = "";
+    description = "Backport and updates for the unicodedata module";
     homepage = "http://github.com/mikekap/unicodedata2";
     license = licenses.asl20;
     maintainers = [ maintainers.sternenseemann ];
