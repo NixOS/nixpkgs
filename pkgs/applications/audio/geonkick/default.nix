@@ -2,20 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "geonkick";
-  version = "2.3.3";
+  version = "2.3.7";
 
   src = fetchFromGitLab {
     owner = "iurie-sw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0h1abb6q2bmi01a3v37adkc4zc03j47jpvffz8p2lpp33xhljghs";
+    sha256 = "1wdcbwiyy6i5agq5lffkyilyc8mv1cc4mp9h0nybn240vb2flqc2";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ redkite libsndfile rapidjson libjack2 lv2 libX11 cairo ];
 
-  cmakeFlags = [ "-DGKICK_REDKITE_SDK_PATH=${redkite}" ];
+  # https://github.com/iurie-sw/geonkick/issues/120
+  cmakeFlags = [ "-DGKICK_REDKITE_SDK_PATH=${redkite}" "-DCMAKE_INSTALL_LIBDIR=lib" ];
 
   meta = {
     homepage = "https://gitlab.com/iurie-sw/geonkick";
