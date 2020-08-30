@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bashcards";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "rpearce";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zbijbcm9lrqwiax37li0jjqcaxf469wh5d423frain56z1qknxl";
+    sha256 = "1rpqrh0022sbrjvd55a0jvpdqhhka5msf8dsz6adbbmxy3xzgdid";
   };
 
   dontBuild = true;
