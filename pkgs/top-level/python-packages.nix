@@ -4088,6 +4088,10 @@ in {
     cudaSupport = pkgs.config.cudaSupport or false;
   };
 
+  pytorch-bin = callPackage ../development/python-modules/pytorch/bin.nix {
+    inherit (pkgs.linuxPackages) nvidia_x11;
+  };
+
   pyro-ppl = callPackage ../development/python-modules/pyro-ppl {};
 
   opt-einsum = if isPy27 then
