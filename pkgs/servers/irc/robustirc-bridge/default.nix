@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "robustirc-bridge";
@@ -16,6 +16,8 @@ buildGoModule rec {
   postInstall = ''
     install -D robustirc-bridge.1 $out/share/man/man1/robustirc-bridge.1
   '';
+
+  passthru.tests.robustirc-bridge = nixosTests.robustirc-bridge;
 
   meta = with stdenv.lib; {
     description = "Bridge to robustirc.net-IRC-Network";
