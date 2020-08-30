@@ -50,10 +50,6 @@ self: super:
     hardeningDisable = [ "format" ];
   });
 
-  fontbhttf = super.fontbhttf.overrideAttrs (attrs: {
-    meta = attrs.meta // { license = lib.licenses.unfreeRedistributable; };
-  });
-
   fontmiscmisc = super.fontmiscmisc.overrideAttrs (attrs: {
     postInstall =
       ''
@@ -870,3 +866,41 @@ self: super:
   });
 
 }
+
+# mark some packages as unfree
+// (
+  let
+    # unfree but redistributable
+    redist = [
+      "fontadobeutopiatype1"
+      "fontadobeutopia100dpi"
+      "fontadobeutopia75dpi"
+      "fontbhtype1"
+      "fontibmtype1"
+      "fontbhttf"
+      "fontbh100dpi"
+      "fontbh75dpi"
+    ];
+
+    # unfree, possibly not redistributable
+    unfree = [
+      # no license, just a copyright notice
+      "fontbhlucidatypewriter100dpi"
+      "fontbhlucidatypewriter75dpi"
+      "fontdaewoomisc"
+
+      # unclear license, "permission to use"?
+      "fontjismisc"
+    ];
+
+    setLicense = license: name:
+      super.${name}.overrideAttrs (attrs: {
+        meta = attrs.meta // { inherit license; };
+      });
+    mapNamesToAttrs = f: names: with lib;
+      listToAttrs (zipListsWith nameValuePair names (map f names));
+
+  in
+    mapNamesToAttrs (setLicense lib.licenses.unfreeRedistributable) redist //
+    mapNamesToAttrs (setLicense lib.licenses.unfree) unfree
+)
