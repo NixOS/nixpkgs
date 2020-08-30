@@ -60,7 +60,7 @@ insert_final_newline = unset
 [gemset.nix]
 insert_final_newline = unset
 
-[node-packages.nix]
+[node-{composition,packages}.nix]
 insert_final_newline = unset
 
 [nixos/modules/services/networking/ircd-hybrid/*.{conf,in}]
