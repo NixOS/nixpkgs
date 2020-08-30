@@ -17,6 +17,8 @@ ourNodePackages."${packageName}".override {
       --add-flags "$out/lib/node_modules/matrix-appservice-irc/app.js"
   '';
 
+  passthru.tests.matrix-appservice-irc = nixosTests.matrix-appservice-irc;
+
   meta = with lib; {
     description = "Node.js IRC bridge for Matrix";
     maintainers = with maintainers; [ piegames ];
