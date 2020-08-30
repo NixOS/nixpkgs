@@ -284,6 +284,8 @@ let
 
     farfadet = callPackage ../development/ocaml-modules/farfadet { };
 
+    fdkaac = callPackage ../development/ocaml-modules/fdkaac { };
+
     fiat-p256 = callPackage ../development/ocaml-modules/fiat-p256 { };
 
     fieldslib_p4 = callPackage ../development/ocaml-modules/fieldslib { };
