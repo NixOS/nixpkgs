@@ -235,7 +235,7 @@ let
     '';
 
     preFixup = (args.preFixup or "") + ''
-      find $out/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
+      find $out/{bin,libexec,lib} -type f 2>/dev/null | xargs -r ${removeExpr removeReferences} || true
     '';
 
     strictDeps = true;

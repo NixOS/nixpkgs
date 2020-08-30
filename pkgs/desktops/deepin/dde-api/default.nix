@@ -108,7 +108,6 @@ buildGoPackage rec {
   installPhase = ''
     make install PREFIX="$out" SYSTEMD_LIB_DIR="$out/lib" -C go/src/${goPackagePath}
     mv $out/share/gocode $out/share/go
-    remove-references-to -t ${go} $out/lib/deepin-api/*
   '';
 
   postFixup = ''
