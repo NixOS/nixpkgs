@@ -16813,6 +16813,8 @@ in
 
   labelImg = callPackage ../applications/science/machine-learning/labelimg { };
 
+  mackerel-agent = callPackage ../servers/monitoring/mackerel-agent { };
+
   mailman = callPackage ../servers/mail/mailman/wrapped.nix { };
 
   mailman-rss = callPackage ../development/python-modules/mailman-rss { };
