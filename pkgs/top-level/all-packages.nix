@@ -6992,6 +6992,10 @@ in
 
   snort = callPackage ../applications/networking/ids/snort { };
 
+  so = callPackage ../development/tools/so {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   soapui = callPackage ../applications/networking/soapui { };
 
   sshguard = callPackage ../tools/security/sshguard {};
