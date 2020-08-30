@@ -5360,6 +5360,8 @@ in {
 
   pysqlite = callPackage ../development/python-modules/pysqlite { };
 
+  pysqueezebox = callPackage ../development/python-modules/pysqueezebox { };
+
   pysrim = callPackage ../development/python-modules/pysrim { };
 
   pysrt = callPackage ../development/python-modules/pysrt { };

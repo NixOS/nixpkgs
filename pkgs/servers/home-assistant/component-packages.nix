@@ -755,7 +755,7 @@
     "spotcrime" = ps: with ps; [ ]; # missing inputs: spotcrime
     "spotify" = ps: with ps; [ aiohttp-cors spotipy ];
     "sql" = ps: with ps; [ sqlalchemy ];
-    "squeezebox" = ps: with ps; [ ]; # missing inputs: pysqueezebox
+    "squeezebox" = ps: with ps; [ pysqueezebox ];
     "ssdp" = ps: with ps; [ aiohttp-cors defusedxml netdisco zeroconf ];
     "starline" = ps: with ps; [ ]; # missing inputs: starline
     "starlingbank" = ps: with ps; [ ]; # missing inputs: starlingbank
