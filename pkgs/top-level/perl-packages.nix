@@ -11,8 +11,8 @@
 , perl, overrides, buildPerl, shortenPerlShebang
 }:
 
-# cpan2nix assumes that perl-packages.nix will be used only with perl 5.28.3 or above
-assert stdenv.lib.versionAtLeast perl.version "5.28.3";
+# cpan2nix assumes that perl-packages.nix will be used only with perl 5.30.3 or above
+assert stdenv.lib.versionAtLeast perl.version "5.30.3";
 let
   inherit (stdenv.lib) maintainers;
   self = _self // (overrides pkgs);
