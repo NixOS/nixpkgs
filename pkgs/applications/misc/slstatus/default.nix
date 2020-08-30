@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "0kayyhpmppybhwndxgabw48wsk9v8x9xdb05xrly9szkw3jbvgw4";
   };
 
-  configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
-  preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
-
   inherit patches;
 
+  configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
+  postPatch = optionalString (conf!=null) "cp ${configFile} config.def.h";
+  
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libX11 ];
 
