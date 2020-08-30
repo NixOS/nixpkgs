@@ -490,6 +490,7 @@
   ./services/misc/lidarr.nix
   ./services/misc/mame.nix
   ./services/misc/matrix-appservice-discord.nix
+  ./services/misc/matrix-appservice-irc.nix
   ./services/misc/matrix-synapse.nix
   ./services/misc/mautrix-telegram.nix
   ./services/misc/mbpfan.nix
