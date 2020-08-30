@@ -1,7 +1,7 @@
 { abiCompat ? null,
   stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages,
   automake, autoconf, gettext, libiconv, libtool, intltool,
-  freetype, tradcpp, fontconfig, meson, ninja, ed,
+  freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
   mcpp, epoxy, openssl, pkgconfig, llvm_6, python3,
@@ -848,4 +848,25 @@ self: super:
         --set XAPPLRESDIR ${placeholder "out"}/share/X11/app-defaults
     '';
   });
+
+  # convert Type1 vector fonts to OpenType fonts
+  fontbitstreamtype1 = super.fontbitstreamtype1.overrideAttrs (attrs: {
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ fontforge ];
+
+    postBuild = ''
+      # convert Postscript (Type 1) font to otf
+      for i in $(find -type f -name '*.pfa' -o -name '*.pfb'); do
+          name=$(basename $i | cut -d. -f1)
+          fontforge -lang=ff -c "Open(\"$i\"); Generate(\"$name.otf\")"
+      done
+    '';
+
+    postInstall = ''
+      # install the otf fonts
+      fontDir="$out/lib/X11/fonts/misc/"
+      install -D -m 644 -t "$fontDir" *.otf
+      mkfontscale "$fontDir"
+    '';
+  });
+
 }
