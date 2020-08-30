@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) wordpress;
   };
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     homepage = "https://wordpress.org";
     description = "WordPress is open source software you can use to create a beautiful website, blog, or app";
