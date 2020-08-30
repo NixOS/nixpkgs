@@ -13,6 +13,7 @@ let
   metadataFetcher = import ./ec2-metadata-fetcher.nix {
     targetRoot = "$targetRoot/";
     wgetExtraOptions = "-q";
+    useImdsToken = true;
   };
 in
 
