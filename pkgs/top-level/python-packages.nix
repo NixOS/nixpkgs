@@ -5708,6 +5708,8 @@ in {
 
   pyqtgraph = callPackage ../development/python-modules/pyqtgraph { };
 
+  pysqueezebox = callPackage ../development/python-modules/pysqueezebox { };
+
   PyStemmer = callPackage ../development/python-modules/pystemmer {};
 
   # Missing expression?
