@@ -1,0 +1,48 @@
+[[package]]
+category = "main"
+description = "Tools to manipulate font files"
+name = "fonttools"
+optional = false
+python-versions = ">=3.6"
+version = "4.14.0"
+
+[package.extras]
+all = ["fs (>=2.2.0,<3)", "lxml (>=4.0,<5)", "zopfli (>=0.1.4)", "lz4 (>=1.7.4.2)", "matplotlib", "sympy", "brotli (>=1.0.1)", "scipy", "brotlipy (>=0.7.0)", "munkres", "unicodedata2 (>=13.0.0)", "xattr"]
+graphite = ["lz4 (>=1.7.4.2)"]
+interpolatable = ["scipy", "munkres"]
+lxml = ["lxml (>=4.0,<5)"]
+plot = ["matplotlib"]
+symfont = ["sympy"]
+type1 = ["xattr"]
+ufo = ["fs (>=2.2.0,<3)"]
+unicode = ["unicodedata2 (>=13.0.0)"]
+woff = ["zopfli (>=0.1.4)", "brotli (>=1.0.1)", "brotlipy (>=0.7.0)"]
+
+[[package]]
+category = "main"
+description = "Noto font tools"
+name = "notofonttools"
+optional = false
+python-versions = ">=3.7"
+version = "0.2.11"
+
+[package.dependencies]
+fontTools = "*"
+
+[package.extras]
+shapediff = ["booleanoperations", "defcon", "pillow"]
+
+[metadata]
+content-hash = "2773d30b50571394428d2f7c11e873b5e69ec16ad934ebf1b68cdddefd5bcdaf"
+lock-version = "1.0"
+python-versions = "^3.8"
+
+[metadata.files]
+fonttools = [
+    {file = "fonttools-4.14.0-py3-none-any.whl", hash = "sha256:78a061adbc58ea2e7a6428866aca5f47e119920848fda3cc195e6e843263d390"},
+    {file = "fonttools-4.14.0.zip", hash = "sha256:65744b52eee9da4e6ece77e0f8be1f79ab75f30d0b161ce667e9e2e2ed00b0d1"},
+]
+notofonttools = [
+    {file = "notofonttools-0.2.11-py3-none-any.whl", hash = "sha256:a05ffb34df8600eb02f0df8a013429f4ca02393d138ca256fec78515d7e32d75"},
+    {file = "notofonttools-0.2.11.tar.gz", hash = "sha256:d6cf474d6a2859353901a1600165ed59e188667d4178e746bf37107b138955ac"},
+]

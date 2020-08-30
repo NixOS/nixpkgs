@@ -12,6 +12,7 @@
 , which
 , imagemagick
 , zopfli
+, poetry2nix
 }:
 
 let
@@ -112,8 +113,9 @@ in
 
   noto-fonts-emoji = let
     version = "unstable-2020-08-20";
-    emojiPythonEnv =
-      python3.withPackages (p: with p; [ fonttools nototools ]);
+    emojiPythonEnv = poetry2nix.mkPoetryEnv {
+      projectDir = ./.;
+    };
   in stdenv.mkDerivation {
     pname = "noto-fonts-emoji";
     inherit version;

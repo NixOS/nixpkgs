@@ -1,0 +1,11 @@
+[tool.poetry]
+name = "noto-emoji"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+notofonttools = ">=0.2.4"
+fonttools = "^4.14.0"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
