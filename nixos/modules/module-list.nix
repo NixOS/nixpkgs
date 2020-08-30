@@ -542,6 +542,7 @@
   ./services/monitoring/kapacitor.nix
   ./services/monitoring/loki.nix
   ./services/monitoring/longview.nix
+  ./services/monitoring/mackerel-agent.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
