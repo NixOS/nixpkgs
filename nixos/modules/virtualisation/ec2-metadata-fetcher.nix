@@ -23,23 +23,9 @@ in
 
   ${if useImdsToken then fetchImdsToken else ""}
 
-  if ! [ -e "$metaDir/ami-manifest-path" ]; then
-    $wgetCmd -O "$metaDir/ami-manifest-path" $imds/meta-data/ami-manifest-path
-  fi
-
-  if ! [ -e "$metaDir/user-data" ]; then
-    $wgetCmd -O "$metaDir/user-data" $imds/user-data && chmod 600 "$metaDir/user-data"
-  fi
-
-  if ! [ -e "$metaDir/hostname" ]; then
-    $wgetCmd -O "$metaDir/hostname" $imds/meta-data/hostname
-  fi
-
-  if ! [ -e "$metaDir/public-ipv4" ]; then
-    $wgetCmd -O "$metaDir/public-ipv4" $imds/meta-data/public-ipv4
-  fi
-
-  if ! [ -e "$metaDir/public-keys-0-openssh-key" ]; then
-    $wgetCmd -O "$metaDir/public-keys-0-openssh-key" $imds/meta-data/public-keys/0/openssh-key
-  fi
+  $wgetCmd -O "$metaDir/ami-manifest-path" $imds/meta-data/ami-manifest-path
+  $wgetCmd -O "$metaDir/user-data" $imds/user-data && chmod 600 "$metaDir/user-data"
+  $wgetCmd -O "$metaDir/hostname" $imds/meta-data/hostname
+  $wgetCmd -O "$metaDir/public-ipv4" $imds/meta-data/public-ipv4
+  $wgetCmd -O "$metaDir/public-keys-0-openssh-key" $imds/meta-data/public-keys/0/openssh-key
 ''
