@@ -5,6 +5,7 @@ let
 
   plat = {
     x86_64-linux = "linux-x64";
+    aarch64-linux = "linux-arm64";
     x86_64-darwin = "darwin";
   }.${system};
 
@@ -13,10 +14,12 @@ let
   sha256 = {
     x86_64-linux = "0hn4pqmabz3qf3bbqnn1fz7fcgzdkp2lwr2yzgmx8hhh3cff8bnb";
     x86_64-darwin = "1x3wx0d99ihyya0n89qclc3jlhh0m72hs8hj7l0h3z6zmh6q2vzv";
+    aarch64-linux = "1cdg49gcz41mabh9hfmv2dz2ixjslsizcx3hxzcaw75in60h7swy";
   }.${system};
 
   sourceRoot = {
     x86_64-linux = ".";
+    aarch64-linux = ".";
     x86_64-darwin = "";
   }.${system};
 in
@@ -55,6 +58,6 @@ in
       downloadPage = "https://github.com/VSCodium/vscodium/releases";
       license = licenses.mit;
       maintainers = with maintainers; [ synthetica turion ];
-      platforms = [ "x86_64-linux" "x86_64-darwin" ];
+      platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
     };
   }
