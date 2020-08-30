@@ -31,11 +31,10 @@ rec {
 
   beta = if stdenv.hostPlatform.system == "x86_64-linux"
     then generic {
-      version = "440.66.14";
-      sha256_64bit = "0zqn552fya4wakjj6ql6xgkk39apn5sa01sdh58dyz05x7fpzdmv";
-      settingsSha256 = "15psxvd65wi6hmxmd2vvsp2v0m07axw613hb355nh15r1dpkr3ma";
-      persistencedSha256 = "13izz9p2kg9g38gf57g3s2sw7wshp1i9m5pzljh9v82c4c22x1fw";
-      url = https://developer.nvidia.com/vulkan-beta-4406614-linux;
+      version = "450.51";
+      sha256_64bit = "17pam9737jx9vvczma5rafa0rihprccmfz84clb1y4nhbay5alf2";
+      settingsSha256 = "09hc1mjh7s94hy37rslxrxr30kx9a4yfnkmv35wn86b2p9zk3w6n";
+      persistencedSha256 = "0jmri8kj6gffqn8pm8nijhq2airvgid11vj2ffc037l7z4w0s6ar";
     }
     else stable;
 
