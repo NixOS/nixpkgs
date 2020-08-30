@@ -6889,6 +6889,8 @@ in {
 
   yappi = callPackage ../development/python-modules/yappi { };
 
+  yeelight = callPackage ../development/python-modules/yeelight { };
+
   zbase32 = callPackage ../development/python-modules/zbase32 { };
 
   zdaemon = callPackage ../development/python-modules/zdaemon { };

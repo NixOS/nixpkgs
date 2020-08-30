@@ -931,7 +931,7 @@
     "yamaha_musiccast" = ps: with ps; [ ]; # missing inputs: pymusiccast
     "yandex_transport" = ps: with ps; [ ]; # missing inputs: aioymaps
     "yandextts" = ps: with ps; [ ];
-    "yeelight" = ps: with ps; [ aiohttp-cors netdisco zeroconf ]; # missing inputs: yeelight
+    "yeelight" = ps: with ps; [ aiohttp-cors netdisco yeelight zeroconf ];
     "yeelightsunflower" = ps: with ps; [ ]; # missing inputs: yeelightsunflower
     "yessssms" = ps: with ps; [ ]; # missing inputs: YesssSMS
     "yi" = ps: with ps; [ aioftp ha-ffmpeg ];
