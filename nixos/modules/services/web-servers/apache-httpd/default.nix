@@ -647,14 +647,15 @@ in
       wwwrun.gid = config.ids.gids.wwwrun;
     };
 
-    security.acme.certs = mapAttrs (name: hostOpts: {
-      user = cfg.user;
-      group = mkDefault cfg.group;
-      email = if hostOpts.adminAddr != null then hostOpts.adminAddr else cfg.adminAddr;
-      webroot = hostOpts.acmeRoot;
-      extraDomains = genAttrs hostOpts.serverAliases (alias: null);
-      postRun = "systemctl reload httpd.service";
-    }) (filterAttrs (name: hostOpts: hostOpts.enableACME) cfg.virtualHosts);
+    security.acme.certs = mapAttrs' (name: hostOpts: (
+      nameValuePair hostOpts.hostName {
+        user = cfg.user;
+        group = mkDefault cfg.group;
+        email = if hostOpts.adminAddr != null then hostOpts.adminAddr else cfg.adminAddr;
+        webroot = hostOpts.acmeRoot;
+        extraDomains = genAttrs hostOpts.serverAliases (alias: null);
+        postRun = "systemctl reload httpd.service";
+      })) (filterAttrs (name: hostOpts: hostOpts.enableACME) cfg.virtualHosts);
 
     environment.systemPackages = [
       apachectl
