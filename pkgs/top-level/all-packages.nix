@@ -15784,14 +15784,14 @@ in
   ### DEVELOPMENT / PERL MODULES
 
   perlInterpreters = callPackages ../development/interpreters/perl {};
-  inherit (perlInterpreters) perl528 perl530 perldevel;
+  inherit (perlInterpreters) perl530 perl532 perldevel;
 
-  perl528Packages = recurseIntoAttrs perl528.pkgs;
   perl530Packages = recurseIntoAttrs perl530.pkgs;
+  perl532Packages = recurseIntoAttrs perl532.pkgs;
   perldevelPackages = perldevel.pkgs;
 
-  perl = perl530;
-  perlPackages = perl530Packages;
+  perl = perl532;
+  perlPackages = perl532Packages;
 
   ack = perlPackages.ack;
 
