@@ -985,6 +985,10 @@ in
 
   dpt-rp1-py = callPackage ../tools/misc/dpt-rp1-py { };
 
+  dot-http = callPackage ../development/tools/dot-http {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   doona = callPackage ../tools/security/doona { };
 
   ecdsautils = callPackage ../tools/security/ecdsautils { };
@@ -20738,6 +20742,8 @@ in
 
   gollum = callPackage ../applications/misc/gollum { };
 
+  gonic = callPackage ../servers/gonic { };
+
   googleearth = callPackage ../applications/misc/googleearth { };
 
   google-chrome = callPackage ../applications/networking/browsers/google-chrome { gconf = gnome2.GConf; };
@@ -25643,6 +25649,8 @@ in
   };
 
   snpeff = callPackage ../applications/science/biology/snpeff { };
+
+  somafm-cli = callPackage ../tools/misc/somafm-cli/default.nix { };
 
   somatic-sniper = callPackage ../applications/science/biology/somatic-sniper { };
 

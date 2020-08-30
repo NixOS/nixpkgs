@@ -3704,6 +3704,10 @@ in {
 
   samplerate = callPackage ../development/python-modules/samplerate { };
 
+  samsungctl = callPackage ../development/python-modules/samsungctl { };
+
+  samsungtvws = callPackage ../development/python-modules/samsungtvws { };
+
   screeninfo = callPackage ../development/python-modules/screeninfo { };
 
   ssdeep = callPackage ../development/python-modules/ssdeep { };
@@ -4693,6 +4697,8 @@ in {
     inherit (pkgs) fuse pkgconfig; # use "real" fuse and pkgconfig, not the python modules
   };
 
+  lml = callPackage ../development/python-modules/lml { };
+
   locustio = callPackage ../development/python-modules/locustio { };
 
   llvmlite = callPackage ../development/python-modules/llvmlite {
@@ -5573,6 +5579,14 @@ in {
   pyelftools = callPackage ../development/python-modules/pyelftools { };
 
   pyenchant = callPackage ../development/python-modules/pyenchant { enchant2 = pkgs.enchant2; };
+
+  pyexcel = callPackage ../development/python-modules/pyexcel { };
+
+  pyexcel-io = callPackage ../development/python-modules/pyexcel-io { };
+
+  pyexcel-xls = callPackage ../development/python-modules/pyexcel-xls { };
+
+  pyexcel-ods = callPackage ../development/python-modules/pyexcel-ods { };
 
   pyexcelerator = callPackage ../development/python-modules/pyexcelerator { };
 
@@ -7618,6 +7632,8 @@ in {
   cymem = callPackage ../development/python-modules/cymem { };
 
   ftfy = callPackage ../development/python-modules/ftfy { };
+
+  mmh3 = callPackage ../development/python-modules/mmh3 { };
 
   murmurhash = callPackage ../development/python-modules/murmurhash { };
 
