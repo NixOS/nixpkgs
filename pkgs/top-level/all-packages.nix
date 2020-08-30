@@ -15786,6 +15786,8 @@ in
 
   spice-up = callPackage ../applications/office/spice-up { };
 
+  spicetify-cli = callPackage ../applications/misc/spicetify-cli { };
+
   spirv-cross = callPackage ../tools/graphics/spirv-cross { };
 
   sratom = callPackage ../development/libraries/audio/sratom { };
