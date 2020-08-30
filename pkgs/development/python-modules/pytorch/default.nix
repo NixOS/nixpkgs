@@ -104,8 +104,10 @@ let
     "LD_LIBRARY_PATH=${cudaStub}\${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH ";
 
 in buildPythonPackage rec {
-  version = "1.6.0";
   pname = "pytorch";
+  # Don't forget to update pytorch-bin to the same version.
+  version = "1.6.0";
+
   disabled = !isPy3k;
 
   outputs = [
