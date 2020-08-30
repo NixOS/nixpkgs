@@ -17590,6 +17590,14 @@ in
     ];
   };
 
+  linux-rt_5_6 = callPackage ../os-specific/linux/kernel/linux-rt-5.6.nix {
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.request_key_helper
+      kernelPatches.export_kernel_fpu_functions."5.3"
+    ];
+  };
+
   linux_5_7 = callPackage ../os-specific/linux/kernel/linux-5.7.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -17836,6 +17844,10 @@ in
   linuxPackages-rt_5_4 = linuxPackagesFor pkgs.linux-rt_5_4;
   linuxPackages-rt = linuxPackages-rt_5_4;
   linux-rt = linuxPackages-rt.kernel;
+  linuxPackages-rt_5_6 = linuxPackagesFor pkgs.linux-rt_5_6;
+  linuxPackages-rt_latest = linuxPackages-rt_5_6;
+  linux-rt_latest = linuxPackages-rt_latest.kernel;
+
   linuxPackages_mptcp = linuxPackagesFor pkgs.linux_mptcp;
   linuxPackages_rpi1 = linuxPackagesFor pkgs.linux_rpi1;
   linuxPackages_rpi2 = linuxPackagesFor pkgs.linux_rpi2;
