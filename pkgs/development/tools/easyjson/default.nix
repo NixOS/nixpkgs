@@ -4,7 +4,6 @@ buildGoPackage {
   pname = "easyjson";
   version = "unstable-2019-06-26";
   goPackagePath = "github.com/mailru/easyjson";
-  goDeps = ./deps.nix;
 
   src = fetchFromGitHub {
     owner = "mailru";
