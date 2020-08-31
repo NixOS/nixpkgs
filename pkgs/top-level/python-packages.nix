@@ -876,6 +876,13 @@ in {
 
   boolean-py = callPackage ../development/python-modules/boolean-py { };
 
+  # Build boost for this specific Python version
+  # TODO: use separate output for libboost_python.so
+  boost = toPythonModule (pkgs.boost.override {
+    inherit (self) python numpy;
+    enablePython = true;
+  });
+
   boto3 = callPackage ../development/python-modules/boto3 { };
 
   boto = callPackage ../development/python-modules/boto { };
