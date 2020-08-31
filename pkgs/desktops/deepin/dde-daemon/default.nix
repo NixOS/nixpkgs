@@ -134,7 +134,6 @@ buildGoPackage rec {
 
   installPhase = ''
     make install PREFIX="$out" -C go/src/${goPackagePath}
-    remove-references-to -t ${go} $out/lib/deepin-daemon/*
     searchHardCodedPaths $out
   '';
 

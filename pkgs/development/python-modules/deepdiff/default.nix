@@ -3,6 +3,7 @@
 , fetchPypi
 , mock
 , jsonpickle
+, mmh3
 , ordered-set
 , numpy
 , pytestCheckHook
@@ -24,14 +25,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # skipped tests require murmur module
-    "test_prep_str_murmur3_64bit"
-    "test_prep_str_murmur3_128bit"
-  ];
-
   propagatedBuildInputs = [
     jsonpickle
+    mmh3
     ordered-set
   ];
 

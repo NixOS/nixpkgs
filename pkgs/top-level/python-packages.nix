@@ -158,6 +158,8 @@ in {
 
   aenum = callPackage ../development/python-modules/aenum { };
 
+  afdko = callPackage ../development/python-modules/afdko { };
+
   affinity = callPackage ../development/python-modules/affinity { };
 
   agate = callPackage ../development/python-modules/agate { };
@@ -992,6 +994,8 @@ in {
 
   matchpy = callPackage ../development/python-modules/matchpy { };
 
+  mathlibtools = callPackage ../development/python-modules/mathlibtools {};
+
   maxminddb = callPackage ../development/python-modules/maxminddb { };
 
   mininet-python = (toPythonModule (pkgs.mininet.override{ inherit python; })).py;
@@ -1163,6 +1167,8 @@ in {
   pulsectl = callPackage ../development/python-modules/pulsectl { };
 
   pure-python-adb-homeassistant = callPackage ../development/python-modules/pure-python-adb-homeassistant { };
+
+  pure-eval = callPackage ../development/python-modules/pure-eval {};
 
   purl = callPackage ../development/python-modules/purl { };
 
@@ -1719,6 +1725,10 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) CFNetwork Security;
   };
 
+  ufonormalizer = callPackage ../development/python-modules/ufonormalizer { };
+
+  ufoprocessor = callPackage ../development/python-modules/ufoprocessor { };
+
   unifi = callPackage ../development/python-modules/unifi { };
 
   uvcclient = callPackage ../development/python-modules/uvcclient { };
@@ -2087,6 +2097,8 @@ in {
 
   boltztrap2 = callPackage ../development/python-modules/boltztrap2 { };
 
+  booleanoperations = callPackage ../development/python-modules/booleanoperations { };
+
   boolean-py = callPackage ../development/python-modules/boolean-py { };
 
   bumps = callPackage ../development/python-modules/bumps {};
@@ -2205,6 +2217,8 @@ in {
   dataclasses-json = callPackage ../development/python-modules/dataclasses-json { };
 
   debian = callPackage ../development/python-modules/debian {};
+
+  defcon = callPackage ../development/python-modules/defcon { };
 
   defusedxml = callPackage ../development/python-modules/defusedxml {};
 
@@ -2746,6 +2760,8 @@ in {
 
   pytest-raisesregexp = callPackage ../development/python-modules/pytest-raisesregexp { };
 
+  pytest-randomly = callPackage ../development/python-modules/pytest-randomly { };
+
   pytest-random-order = callPackage ../development/python-modules/pytest-random-order { };
 
   pytest-repeat = callPackage ../development/python-modules/pytest-repeat { };
@@ -2894,9 +2910,7 @@ in {
   # Alias that we should deprecate
   dateutil = self.python-dateutil;
 
-  debugpy = callPackage ../development/python-modules/debugpy {
-    django = if isPy27 then self.django_1_11 else self.django;
-  };
+  debugpy = callPackage ../development/python-modules/debugpy { };
 
   decorator = callPackage ../development/python-modules/decorator { };
 
@@ -3702,6 +3716,10 @@ in {
 
   samplerate = callPackage ../development/python-modules/samplerate { };
 
+  samsungctl = callPackage ../development/python-modules/samsungctl { };
+
+  samsungtvws = callPackage ../development/python-modules/samsungtvws { };
+
   screeninfo = callPackage ../development/python-modules/screeninfo { };
 
   ssdeep = callPackage ../development/python-modules/ssdeep { };
@@ -3755,10 +3773,6 @@ in {
   django = self.django_lts;
 
   django_lts = self.django_2_2;
-
-  django_1_11 = callPackage ../development/python-modules/django/1_11.nix {
-    gdal = self.gdal;
-  };
 
   django_2_2 = callPackage ../development/python-modules/django/2_2.nix { };
 
@@ -4086,6 +4100,10 @@ in {
     cudaSupport = pkgs.config.cudaSupport or false;
   };
 
+  pytorch-bin = callPackage ../development/python-modules/pytorch/bin.nix {
+    inherit (pkgs.linuxPackages) nvidia_x11;
+  };
+
   pyro-ppl = callPackage ../development/python-modules/pyro-ppl {};
 
   opt-einsum = if isPy27 then
@@ -4135,6 +4153,12 @@ in {
     withPython = true;
     inherit python;
   }));
+
+  fontpens = callPackage ../development/python-modules/fontpens { };
+
+  fontmath = callPackage ../development/python-modules/fontmath { };
+
+  fontparts = callPackage ../development/python-modules/fontparts { };
 
   fonttools = callPackage ../development/python-modules/fonttools { };
 
@@ -4544,6 +4568,8 @@ in {
 
   jupyterhub-ldapauthenticator = callPackage ../development/python-modules/jupyterhub-ldapauthenticator { };
 
+  jupyterhub-tmpauthenticator = callPackage ../development/python-modules/jupyterhub-tmpauthenticator { };
+
   jupyterhub-systemdspawner = callPackage ../development/python-modules/jupyterhub-systemdspawner {
     inherit (pkgs) bash;
   };
@@ -4692,6 +4718,8 @@ in {
   llfuse = callPackage ../development/python-modules/llfuse {
     inherit (pkgs) fuse pkgconfig; # use "real" fuse and pkgconfig, not the python modules
   };
+
+  lml = callPackage ../development/python-modules/lml { };
 
   locustio = callPackage ../development/python-modules/locustio { };
 
@@ -4931,6 +4959,8 @@ in {
       callPackage ../development/python-modules/mutagen/1.43.nix { }
     else
       callPackage ../development/python-modules/mutagen { };
+
+  mutatormath = callPackage ../development/python-modules/mutatormath { };
 
   muttils = callPackage ../development/python-modules/muttils { };
 
@@ -5476,6 +5506,8 @@ in {
     protobuf = pkgs.protobuf;
   };
 
+  psautohint = callPackage ../development/python-modules/psautohint { };
+
   psd-tools = callPackage ../development/python-modules/psd-tools { };
 
   psutil = callPackage ../development/python-modules/psutil { };
@@ -5573,6 +5605,14 @@ in {
   pyelftools = callPackage ../development/python-modules/pyelftools { };
 
   pyenchant = callPackage ../development/python-modules/pyenchant { enchant2 = pkgs.enchant2; };
+
+  pyexcel = callPackage ../development/python-modules/pyexcel { };
+
+  pyexcel-io = callPackage ../development/python-modules/pyexcel-io { };
+
+  pyexcel-xls = callPackage ../development/python-modules/pyexcel-xls { };
+
+  pyexcel-ods = callPackage ../development/python-modules/pyexcel-ods { };
 
   pyexcelerator = callPackage ../development/python-modules/pyexcelerator { };
 
@@ -6809,6 +6849,8 @@ in {
 
   unicodecsv = callPackage ../development/python-modules/unicodecsv { };
 
+  unicodedata2 = callPackage ../development/python-modules/unicodedata2 { };
+
   unicode-slugify = callPackage ../development/python-modules/unicode-slugify { };
 
   unidiff = callPackage ../development/python-modules/unidiff { };
@@ -6926,6 +6968,8 @@ in {
 
   zope_interface = callPackage ../development/python-modules/zope_interface { };
 
+  zopfli = callPackage ../development/python-modules/zopfli { };
+
   hgsvn = callPackage ../development/python-modules/hgsvn { };
 
   cliapp = callPackage ../development/python-modules/cliapp { };
@@ -6937,7 +6981,11 @@ in {
   else
     callPackage ../development/python-modules/tornado/5.nix { };
 
+  # Used by circus and grab-site, 2020-08-29
   tornado_4 = callPackage ../development/python-modules/tornado/4.nix { };
+
+  # Used by luigi, 2020-08-29
+  tornado_5 = callPackage ../development/python-modules/tornado/5.nix { };
 
   tokenlib = callPackage ../development/python-modules/tokenlib { };
 
@@ -6991,7 +7039,9 @@ in {
 
   carbon = callPackage ../development/python-modules/carbon { };
 
-  ujson = callPackage ../development/python-modules/ujson { };
+  ujson = if isPy27
+    then callPackage ../development/python-modules/ujson/2.nix { }
+    else callPackage ../development/python-modules/ujson { };
 
   unidecode = callPackage ../development/python-modules/unidecode {};
 
@@ -7613,6 +7663,8 @@ in {
 
   ftfy = callPackage ../development/python-modules/ftfy { };
 
+  mmh3 = callPackage ../development/python-modules/mmh3 { };
+
   murmurhash = callPackage ../development/python-modules/murmurhash { };
 
   pkuseg = callPackage ../development/python-modules/pkuseg { };
@@ -7851,7 +7903,7 @@ in {
   rxv     = callPackage ../development/python-modules/rxv     { };
 
   userpath = callPackage ../development/python-modules/userpath { };
-  
+
   pooch = callPackage ../development/python-modules/pooch {};
 
 });

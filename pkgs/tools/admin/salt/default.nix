@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     pyyaml
     pyzmq
     requests
-    tornado_4
+    tornado
   ] ++ extraInputs;
 
   patches = [ ./fix-libcrypto-loading.patch ];

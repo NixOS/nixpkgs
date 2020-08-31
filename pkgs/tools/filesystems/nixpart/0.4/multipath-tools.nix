@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
       substituteInPlace kpartx/kpartx.rules --replace /sbin/kpartx $out/sbin/kpartx
       substituteInPlace kpartx/kpartx_id --replace /sbin/dmsetup ${lvm2}/sbin/dmsetup
 
-      substituteInPlace libmultipath/defaults.h --replace /lib/udev/scsi_id ${systemd.lib}/lib/udev/scsi_id
-      substituteInPlace libmultipath/hwtable.c --replace /lib/udev/scsi_id ${systemd.lib}/lib/udev/scsi_id
+      substituteInPlace libmultipath/defaults.h --replace /lib/udev/scsi_id ${stdenv.lib.getLib systemd}/lib/udev/scsi_id
+      substituteInPlace libmultipath/hwtable.c --replace /lib/udev/scsi_id ${stdenv.lib.getLib systemd}/lib/udev/scsi_id
 
       sed -i -re '
          s,^( *#define +DEFAULT_MULTIPATHDIR\>).*,\1 "'"$out/lib/multipath"'",

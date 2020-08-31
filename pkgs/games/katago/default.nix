@@ -14,42 +14,43 @@
 , ocl-icd ? null
 , gperftools ? null
 , eigen ? null
-, gpuEnabled ? true
-, useAVX2 ? false
-, cudaSupport ? false
-, useTcmalloc ? true}:
+, enableAVX2 ? false
+, enableBigBoards ? false
+, enableCuda ? false
+, enableGPU ? true
+, enableTcmalloc ? true}:
 
-assert !gpuEnabled -> (
+assert !enableGPU -> (
   eigen != null &&
-  !cudaSupport);
+  !enableCuda);
 
-assert cudaSupport -> (
+assert enableCuda -> (
   libGL_driver != null &&
   cudatoolkit != null &&
   cudnn != null);
 
-assert !cudaSupport -> (
-  !gpuEnabled || (
+assert !enableCuda -> (
+  !enableGPU || (
     opencl-headers != null &&
     ocl-icd != null));
 
-assert useTcmalloc -> (
+assert enableTcmalloc -> (
   gperftools != null);
 
 let
-  env = if cudaSupport
+  env = if enableCuda
     then gcc8Stdenv
     else stdenv;
 
 in env.mkDerivation rec {
   pname = "katago";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "lightvector";
     repo = "katago";
     rev = "v${version}";
-    sha256 = "1r84ws2rj7j8085v1cqffy9rg65rzrhk6z8jbxivqxsmsgs2zs48";
+    sha256 = "030ff9prnvpadgcb4x4hx6b6ggg10bwqcj8vd8nwrdz9sjq67yf7";
   };
 
   nativeBuildInputs = [
@@ -60,42 +61,44 @@ in env.mkDerivation rec {
   buildInputs = [
     libzip
     boost
-  ] ++ lib.optionals (!gpuEnabled) [
+  ] ++ lib.optionals (!enableGPU) [
     eigen
-  ] ++ lib.optionals (gpuEnabled && cudaSupport) [
+  ] ++ lib.optionals (enableGPU && enableCuda) [
     cudnn
     libGL_driver
-  ] ++ lib.optionals (gpuEnabled && !cudaSupport) [
+  ] ++ lib.optionals (enableGPU && !enableCuda) [
     opencl-headers
     ocl-icd
-  ] ++ lib.optionals useTcmalloc [
+  ] ++ lib.optionals enableTcmalloc [
     gperftools
   ];
 
   cmakeFlags = [
     "-DNO_GIT_REVISION=ON"
-  ] ++ lib.optionals (!gpuEnabled) [
+  ] ++ lib.optionals (!enableGPU) [
     "-DUSE_BACKEND=EIGEN"
-  ] ++ lib.optionals useAVX2 [
+  ] ++ lib.optionals enableAVX2 [
     "-DUSE_AVX2=ON"
-  ] ++ lib.optionals (gpuEnabled && cudaSupport) [
+  ] ++ lib.optionals (enableGPU && enableCuda) [
     "-DUSE_BACKEND=CUDA"
-  ] ++ lib.optionals (gpuEnabled && !cudaSupport) [
+  ] ++ lib.optionals (enableGPU && !enableCuda) [
     "-DUSE_BACKEND=OPENCL"
-  ] ++ lib.optionals useTcmalloc [
+  ] ++ lib.optionals enableTcmalloc [
     "-DUSE_TCMALLOC=ON"
+  ] ++ lib.optionals enableBigBoards [
+    "-DUSE_BIGGER_BOARDS_EXPENSIVE=ON"
   ];
 
   preConfigure = ''
     cd cpp/
-  '' + lib.optionalString cudaSupport ''
+  '' + lib.optionalString enableCuda ''
     export CUDA_PATH="${cudatoolkit}"
     export EXTRA_LDFLAGS="-L/run/opengl-driver/lib"
   '';
 
   installPhase = ''
     mkdir -p $out/bin; cp katago $out/bin;
-  '' + lib.optionalString cudaSupport ''
+  '' + lib.optionalString enableCuda ''
     wrapProgram $out/bin/katago \
       --prefix LD_LIBRARY_PATH : "/run/opengl-driver/lib"
   '';

@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     openssl'
     pango
     speex
-    systemd.lib
+    (lib.getLib systemd)
     stdenv.cc.cc
     xorg.libXaw
     xorg.libXmu

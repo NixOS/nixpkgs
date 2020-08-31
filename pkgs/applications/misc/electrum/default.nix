@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , wrapQtAppsHook
 , python3
-, python3Packages
 , zbar
 , secp256k1
 , enableQt ? true
@@ -21,6 +20,20 @@
 
 let
   version = "4.0.2";
+
+  # electrum is not compatible with dnspython 2.0.0 yet
+  # use the latest 1.x release instead
+  py = python3.override {
+    packageOverrides = self: super: {
+      dnspython = super.dnspython.overridePythonAttrs (oldAttrs: rec {
+        version = "1.16.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "36c5e8e38d4369a08b6780b7f27d790a292b2b08eea01607865bf0936c558e01";
+        };
+      });
+    };
+  };
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -45,7 +58,7 @@ let
   };
 in
 
-python3Packages.buildPythonApplication {
+py.pkgs.buildPythonApplication {
   pname = "electrum";
   inherit version;
 
@@ -61,7 +74,7 @@ python3Packages.buildPythonApplication {
 
   nativeBuildInputs = stdenv.lib.optionals enableQt [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with py.pkgs; [
     aiohttp
     aiohttp-socks
     aiorpcx
@@ -116,7 +129,7 @@ python3Packages.buildPythonApplication {
     wrapQtApp $out/bin/electrum
   '';
 
-  checkInputs = with python3Packages; [ pytest ];
+  checkInputs = with py.pkgs; [ pytest ];
 
   checkPhase = ''
     py.test electrum/tests

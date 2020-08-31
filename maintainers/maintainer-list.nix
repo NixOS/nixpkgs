@@ -2879,6 +2879,12 @@
     githubId = 5918766;
     name = "Franz Thoma";
   };
+  fooker = {
+    email = "fooker@lab.sh";
+    github = "fooker";
+    githubId = 405105;
+    name = "Dustin Frisch";
+  };
   forkk = {
     email = "forkk@forkk.net";
     github = "forkk";
@@ -7355,6 +7361,12 @@
     githubId = 1153271;
     name = "Sander van der Burg";
   };
+  sarcasticadmin = {
+    email = "rob@sarcasticadmin.com";
+    github = "sarcasticadmin";
+    githubId = 30531572;
+    name = "Robert James Hernandez";
+  };
   sargon = {
     email = "danielehlers@mindeye.net";
     github = "sargon";
@@ -7988,6 +8000,12 @@
     github = "suhr";
     githubId = 65870;
     name = "Сухарик";
+  };
+  SuperSandro2000 = {
+    email = "sandro.jaeckel@gmail.com";
+    github = "SuperSandro2000";
+    githubId = 7258858;
+    name = "Sandro Jäckel";
   };
   SuprDewd = {
     email = "suprdewd@gmail.com";
@@ -9487,6 +9505,12 @@
     email = "farid.m.zakaria@gmail.com";
     github = "fzakaria";
     githubId = 605070;
+  };
+  nagisa = {
+    name = "Simonas Kazlauskas";
+    email = "nixpkgs@kazlauskas.me";
+    github = "nagisa";
+    githubId = 679122;
   };
   yevhenshymotiuk = {
     name = "Yevhen Shymotiuk";

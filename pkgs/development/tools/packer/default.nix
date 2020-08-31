@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 buildGoPackage rec {
   pname = "packer";
-  version = "1.6.1";
+  version = "1.6.2";
 
   goPackagePath = "github.com/hashicorp/packer";
 
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "hashicorp";
     repo = "packer";
     rev = "v${version}";
-    sha256 = "0jm8950rk0cdf84z0yxm8ic3pm353cgmxr1akn6kq1bwg2w0vsrq";
+    sha256 = "104jw2jcshzds74d7m4yqn6mbk7lgps6qnqmp6h395b1mdyjhink";
   };
 
   meta = with stdenv.lib; {
