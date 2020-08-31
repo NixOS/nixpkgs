@@ -563,6 +563,8 @@ in {
 
   django-sesame = callPackage ../development/python-modules/django-sesame { };
 
+  django-user-agents = callPackage ../development/python-modules/django-user-agents { };
+
   bravado-core = callPackage ../development/python-modules/bravado-core { };
 
   breathe = callPackage ../development/python-modules/breathe { };
