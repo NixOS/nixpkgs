@@ -12,6 +12,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ openssl ];
+
+  # The mbuffer configure scripts fails to recognize the correct
+  # objdump binary during cross-building for foreign platforms.
+  # The correct objdump is exposed via the environment variable
+  # $OBJDUMP, which should be used in such cases.
+  preConfigure = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    substituteInPlace configure --replace "OBJDUMP=$ac_cv_path_OBJDUMP" 'OBJDUMP=''${OBJDUMP}'
+  '';
   doCheck = true;
 
   meta = {
