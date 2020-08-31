@@ -43,6 +43,12 @@ in
         '';
       };
 
+    ociSeccompBpfHook.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable the OCI seccomp BPF hook";
+    };
+
     containersConf = mkOption {
       default = {};
       description = "containers.conf configuration";
@@ -116,6 +122,12 @@ in
       [network]
       cni_plugin_dirs = ["${pkgs.cni-plugins}/bin/"]
 
+      ${lib.optionalString (cfg.ociSeccompBpfHook.enable == true) ''
+      [engine]
+      hooks_dir = [
+        "${config.boot.kernelPackages.oci-seccomp-bpf-hook}",
+      ]
+      ''}
     '' + cfg.containersConf.extraConfig;
 
     environment.etc."containers/registries.conf".source = toTOML "registries.conf" {
