@@ -20,6 +20,7 @@ buildGoPackage rec {
   # git checkout <version>
   # dep init
   # dep2nix
+  deleteVendor = true;
   goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
