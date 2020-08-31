@@ -3750,12 +3750,13 @@ in {
 
   crayons = callPackage ../development/python-modules/crayons{ };
 
-  django = self.django_lts;
+  # Should always point to an LTS version.
+  django = self.django_2;
 
-  django_lts = self.django_2_2;
+  # Current LTS
+  django_2 = callPackage ../development/python-modules/django/2.nix { };
 
-  django_2_2 = callPackage ../development/python-modules/django/2_2.nix { };
-
+  # Current latest
   django_3 = callPackage ../development/python-modules/django/3.nix { };
 
   django-allauth = callPackage ../development/python-modules/django-allauth { };
