@@ -167,6 +167,11 @@ let
         # Needs a different set of modules than po/make-images.
         inherit installedTestsPython;
       })
+
+      (fetchpatch {
+        url = "https://github.com/fwupd/fwupd/commit/3e82beeddac31292c50229e59e2404865edee5ad.patch";
+        sha256 = "17p9r8qddqkrnhy9bvp9207afh5fcl1whn79nqcp57b4q4c17zgk";
+      })
     ];
 
     postPatch = ''
