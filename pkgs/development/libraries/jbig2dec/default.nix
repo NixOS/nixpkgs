@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     patchShebangs test_jbig2dec.py
   '';
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   checkInputs = [ python3 ];
   doCheck = true;
