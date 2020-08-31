@@ -27376,6 +27376,8 @@ in
 
   webfs = callPackage ../servers/http/webfs { };
 
+  webkit2-sharp = callPackage ../development/libraries/webkit2-sharp {  };
+
   websocketd = callPackage ../applications/networking/websocketd { };
 
   wikicurses = callPackage ../applications/misc/wikicurses {
