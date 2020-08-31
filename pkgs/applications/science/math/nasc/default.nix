@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    pdateScript = nix-update-script {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
