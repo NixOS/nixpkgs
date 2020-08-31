@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "timescale-prometheus";
-  version = "0.1.0-beta.2";
+  version = "0.1.0-beta.4";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = pname;
     rev = "${version}";
-    sha256 = "1rrr0qb27hh3kcmmxapr1j39dhfxf02vihpjf4b7zpwdf1mpvrbc";
+    sha256 = "1q9zjxxjxa5kkhlsh69bvgns3kzf23z84jjzg294qb7y7xypym5q";
   };
 
   vendorSha256 = "sha256:0y5rq2y48kf2z1z3a8ags6rqzfvjs54klk2679fk8x0yjamj5x04";
