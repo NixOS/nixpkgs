@@ -3104,6 +3104,8 @@ in {
 
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
 
+  keep = callPackage ../development/python-modules/keep { };
+
   keepalive = callPackage ../development/python-modules/keepalive { };
 
   keepkey_agent = callPackage ../development/python-modules/keepkey_agent { };
