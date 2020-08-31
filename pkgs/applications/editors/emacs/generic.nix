@@ -68,11 +68,15 @@ in stdenv.mkDerivation {
     # Make native compilation work both inside and outside of nix build
     (lib.optionalString nativeComp (let
       libPath = (lib.concatStringsSep " "
-        (builtins.map (x: ''\"-L${x}\"'') [
+        (builtins.map (x: ''\"-B${x}\"'') [
           "${lib.getLib libgccjit}/lib"
           "${lib.getLib libgccjit}/lib/gcc/${targetPlatform.config}/${libgccjit.version}"
           "${lib.getLib stdenv.cc.cc}/lib"
           "${lib.getLib stdenv.cc.libc}/lib"
+          "${lib.getBin stdenv.cc.cc}"
+          "${lib.getBin stdenv.cc.cc}"
+          "${lib.getBin stdenv.cc.bintools}"
+          "${lib.getBin stdenv.cc.bintools.bintools}"
         ]));
     in ''
       substituteInPlace lisp/emacs-lisp/comp.el --replace \
@@ -156,11 +160,6 @@ in stdenv.mkDerivation {
         "$out/bin/emacs"
       patchelf --add-needed "libXcursor.so.1" "$out/bin/emacs"
     '')
-
-    (lib.optionalString nativeComp ''
-      wrapProgram $out/bin/emacs-* --prefix PATH : "${lib.makeBinPath [ stdenv.cc.bintools stdenv.cc.bintools.bintools ]}"
-    '')
-
   ];
 
   passthru = {
