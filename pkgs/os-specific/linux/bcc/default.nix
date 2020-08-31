@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, makeWrapper, cmake, llvmPackages, kernel
+{ stdenv, fetchurl, fetchpatch
+, makeWrapper, cmake, llvmPackages, kernel
 , flex, bison, elfutils, python, luajit, netperf, iperf, libelf
 , systemtap, bash
 }:
@@ -23,6 +24,12 @@ python.pkgs.buildPythonApplication rec {
     # This is needed until we fix
     # https://github.com/NixOS/nixpkgs/issues/40427
     ./fix-deadlock-detector-import.patch
+
+    # This is already upstream; remove it on the next release
+    (fetchpatch {
+      url = "https://github.com/iovisor/bcc/commit/60de17161fe7f44b534a8da343edbad2427220e3.patch";
+      sha256 = "0pd5b4vgpdxbsrjwrw2kmn4l9hpj0rwdm3hvwvk7dsr3raz7w4b3";
+    })
   ];
 
   propagatedBuildInputs = [ python.pkgs.netaddr ];
