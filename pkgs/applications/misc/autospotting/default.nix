@@ -12,8 +12,6 @@ buildGoPackage {
     sha256 = "0p48lgig9kblxvgq1kggczkn4qdbx6ciq9c8x0179i80vl4jf7v6";
   };
 
-  goDeps = ./deps.nix;
-
   # patching path where repository used to exist
   postPatch = ''
     sed -i "s+github.com/cristim/autospotting/core+github.com/AutoSpotting/AutoSpotting/core+" autospotting.go
