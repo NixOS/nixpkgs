@@ -23481,12 +23481,6 @@ in
     inherit (xorg) libxcb;
   };
 
-  qvim = lowPrio (callPackage ../applications/editors/vim/qvim.nix {
-    features = "huge"; # one of  tiny, small, normal, big or huge
-    lua = pkgs.lua5;
-    flags = [ "python" "X11" ]; # only flag "X11" by now
-  });
-
   vimpc = callPackage ../applications/audio/vimpc { };
 
   wrapNeovim = callPackage ../applications/editors/neovim/wrapper.nix { };
