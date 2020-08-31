@@ -105,5 +105,8 @@ insert_final_newline = unset
 indent_size = unset
 trim_trailing_whitespace = unset
 
+[pkgs/top-level/emscripten-packages.nix]
+trim_trailing_whitespace = unset
+
 [pkgs/top-level/perl-packages.nix]
 indent_size = unset
