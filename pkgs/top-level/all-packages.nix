@@ -7396,6 +7396,8 @@ in
 
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
 
+  toss = callPackage ../tools/networking/toss { };
+
   tox-node = callPackage ../tools/networking/tox-node { };
 
   toxvpn = callPackage ../tools/networking/toxvpn { };
