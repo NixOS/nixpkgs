@@ -2,14 +2,14 @@
 
 buildGoPackage rec {
   pname = "vultr";
-  version = "2.0.1";
+  version = "2.0.2";
   goPackagePath = "github.com/JamesClonk/vultr";
 
   src = fetchFromGitHub {
     owner = "JamesClonk";
     repo = "vultr";
     rev = "v${version}";
-    sha256 = "16wlncf0wax5jhpbfif5k16knigxy89vcby0b821klv6hlm6cc58";
+    sha256 = "0br8nxi9syraarp4hzav9a3p4zxhyi45cq5dsclzxi3fga2l6mqg";
   };
 
   meta = {
