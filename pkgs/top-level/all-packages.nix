@@ -123,6 +123,8 @@ in
 
   appimageTools = callPackage ../build-support/appimage { };
 
+  appindicator-sharp = callPackage ../development/libraries/appindicator-sharp { };
+
   ensureNewerSourcesHook = { year }: makeSetupHook {}
     (writeScript "ensure-newer-sources-hook.sh" ''
       postUnpackHooks+=(_ensureNewerSources)
