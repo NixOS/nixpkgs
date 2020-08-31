@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "spring-boot-cli";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchzip {
     url = "https://repo.spring.io/release/org/springframework/boot/${pname}/${version}.RELEASE/${pname}-${version}.RELEASE-bin.zip";
-    sha256 = "0ddmwcifrmw197vc49b0x8vfampj3n947r4vv4nni5vjclqqfds5";
+    sha256 = "1zqfnxz57234227rp303iwis0mjkkjkpcqnj9jgw78gykjnqdmmq";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
