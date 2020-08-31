@@ -5815,6 +5815,9 @@ in {
 
   pywavelets = callPackage ../development/python-modules/pywavelets { };
 
+  # We need "normal" libxml2 and not the python package by the same name.
+  pywbem = callPackage ../development/python-modules/pywbem { libxml2 = pkgs.libxml2; };
+
   PyWebDAV = callPackage ../development/python-modules/pywebdav { };
 
   pywebpush = callPackage ../development/python-modules/pywebpush { };
