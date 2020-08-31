@@ -11,11 +11,11 @@ let
 
   jack-libs = pkgs.runCommand "jack-libs" {} ''
     mkdir -p "$out/lib"
-    ln -s "${pkgs.pipewire.lib}"/lib/pipewire-*/jack "$out/lib/pipewire"
+    ln -s "${pkgs.pipewire.jack}/lib" "$out/lib/pipewire"
   '';
   pulse-libs = pkgs.runCommand "pulse-libs" {} ''
     mkdir -p "$out/lib"
-    ln -s "${pkgs.pipewire.lib}"/lib/pipewire-*/pulse "$out/lib/pipewire"
+    ln -s "${pkgs.pipewire.pulse}/lib" "$out/lib/pipewire"
   '';
 in {
 
