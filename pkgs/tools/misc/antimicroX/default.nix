@@ -14,13 +14,13 @@
 
 mkDerivation rec {
   pname = "antimicroX";
-  version = "3.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "juliagoda";
     repo = "antimicroX";
     rev = version;
-    sha256 = "0li22sjl95233azxhyda36idnfzbb4b02wf57hnpnba6qvrlpwwl";
+    sha256 = "05asxlkgb4cgvpcyksw1cx8cz8nzi8hmw8b91lw92892j7a2r7wj";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig itstool ];
