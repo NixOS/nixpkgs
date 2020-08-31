@@ -7466,6 +7466,19 @@ let
     meta.homepage = "https://github.com/Shougo/vimshell.vim/";
   };
 
+  vimspector = buildVimPluginFrom2Nix {
+    pname = "vimspector";
+    version = "2020-08-29";
+    src = fetchFromGitHub {
+      owner = "puremourning";
+      repo = "vimspector";
+      rev = "e634982d78573cf0d678b2981b9ac59cd99126cb";
+      sha256 = "09ifckx1rks7qdj6zq7vqw3acfx6bxqa6ylsls1rnckn0fnn6li4";
+      fetchSubmodules = true;
+    };
+    meta.homepage = "https://github.com/puremourning/vimspector/";
+  };
+
   vimtex = buildVimPluginFrom2Nix {
     pname = "vimtex";
     version = "2020-08-21";
