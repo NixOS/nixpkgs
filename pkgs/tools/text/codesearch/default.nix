@@ -14,8 +14,6 @@ buildGoPackage rec {
     sha256 = "12bv3yz0l3bmsxbasfgv7scm9j719ch6pmlspv4bd4ix7wjpyhny";
   };
 
-  goDeps = ./deps.nix;
-
   meta = {
     description = "Fast, indexed regexp search over large file trees";
     homepage = "https://github.com/google/codesearch";
