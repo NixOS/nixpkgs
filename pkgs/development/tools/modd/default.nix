@@ -11,7 +11,6 @@ buildGoPackage rec {
   };
   goPackagePath = "github.com/cortesi/modd";
   subPackages = [ "cmd/modd" ];
-  goDeps = ./deps.nix;
   meta = with stdenv.lib; {
     description = "A flexible developer tool that runs processes and responds to filesystem changes";
     homepage = "https://github.com/cortesi/modd";
