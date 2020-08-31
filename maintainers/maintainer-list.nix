@@ -7117,6 +7117,16 @@
     githubId = 3621083;
     name = "Roosembert (Roosemberth) Palacios";
   };
+  rople380 = {
+    name = "rople380";
+    email = "55679162+rople380@users.noreply.github.com";
+    github = "rople380";
+    githubId = 55679162;
+    keys = [{
+      longkeyid = "rsa2048/0x8526B7574A536236";
+      fingerprint = "1401 1B63 393D 16C1 AA9C  C521 8526 B757 4A53 6236";
+    }];
+  };
   royneary = {
     email = "christian@ulrich.earth";
     github = "royneary";
