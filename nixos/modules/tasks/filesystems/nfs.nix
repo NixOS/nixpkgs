@@ -101,13 +101,6 @@ in
       };
 
     systemd.services.rpc-statd =
-      { restartTriggers = [ nfsConfFile ];
-
-        preStart =
-          ''
-            mkdir -p /var/lib/nfs/{sm,sm.bak}
-          '';
-      };
-
+      { restartTriggers = [ nfsConfFile ]; };
   };
 }
