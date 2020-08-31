@@ -20,7 +20,7 @@ let
         size = 2048;
     };
     CN = top.masterAddress;
-    hosts = cfg.cfsslAPIExtraSANs;
+    hosts = [top.masterAddress] ++ cfg.cfsslAPIExtraSANs;
   });
 
   cfsslAPITokenBaseName = "apitoken.secret";
@@ -228,7 +228,8 @@ in
             };
             private_key = cert.privateKeyOptions;
             request = {
-              inherit (cert) CN hosts;
+              hosts = [cert.CN] ++ cert.hosts;
+              inherit (cert) CN;
               key = {
                 algo = "rsa";
                 size = 2048;
