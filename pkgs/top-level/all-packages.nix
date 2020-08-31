@@ -10237,6 +10237,8 @@ in
 
   spark = callPackage ../applications/networking/cluster/spark { };
 
+  sparkleshare = callPackage ../applications/version-management/sparkleshare { };
+
   spidermonkey_1_8_5 = callPackage ../development/interpreters/spidermonkey/1.8.5.nix { };
   spidermonkey_38 = callPackage ../development/interpreters/spidermonkey/38.nix ({
     inherit (darwin) libobjc;
