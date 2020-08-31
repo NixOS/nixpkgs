@@ -112,6 +112,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  preFixup = ''
+    # The rpaths mistakenly points to libpulseaudio instead
+    for file in "$pulse"/lib/*.so; do
+      oldrpath="$(patchelf --print-rpath "$file")"
+      patchelf --set-rpath "$pulse/lib:$oldrpath" "$file"
+    done
+  '';
+
   passthru.tests = {
     installedTests = nixosTests.installed-tests.pipewire;
 
