@@ -5,7 +5,6 @@ set -eu -o pipefail
 
 oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion oh-my-zsh" | tr -d '"')"
 latestSha="$(curl -L -s https://api.github.com/repos/ohmyzsh/ohmyzsh/commits\?sha\=master\&since\=${oldVersion} | jq -r '.[0].sha')"
-url="$(nix-instantiate --eval -E "with import ./. {}; oh-my-zsh.src.url" | tr -d '"')"
 
 if [ ! "null" = "${latestSha}" ]; then
   latestDate="$(curl -L -s https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/${latestSha} | jq '.commit.author.date' | sed 's|"\(.*\)T.*|\1|g')"
