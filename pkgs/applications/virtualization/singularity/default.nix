@@ -26,7 +26,6 @@ buildGoPackage rec {
   };
 
   goPackagePath = "github.com/sylabs/singularity";
-  goDeps = ./deps.nix;
 
   buildInputs = [ gpgme openssl libuuid ];
   nativeBuildInputs = [ removeReferencesTo utillinux which makeWrapper cryptsetup ];
