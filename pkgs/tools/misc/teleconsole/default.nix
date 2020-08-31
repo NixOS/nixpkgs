@@ -13,7 +13,16 @@ buildGoPackage rec {
     sha256 = "01552422n0bj1iaaw6pvg9l1qr66r69sdsngxbcdjn1xh3mj74sm";
   };
 
-  goDeps = ./deps.nix;
+  srcTeleport = fetchFromGitHub {
+    owner = "gravitational";
+    repo = "teleport";
+    rev = "2cb40abd8ea8fb2915304ea4888b5b9f3e5bc223";
+    sha256 = "1xw3bfnjbj88x465snwwzn4bmpmzmsrq9r0pkj388qwvfrclgnfk";
+  };
+
+  preBuild = ''
+    cp -r ${srcTeleport} ./go/src/github.com/gravitational/teleport
+  '';
 
   CGO_ENABLED = 1;
   buildFlags = [ "-ldflags" ];
