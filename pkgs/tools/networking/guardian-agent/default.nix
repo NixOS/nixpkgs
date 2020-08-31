@@ -20,6 +20,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/StanfordSNR/guardian-agent";
 
+  deleteVendor = true;
   goDeps = ./deps.nix;
 
   postInstall = ''
