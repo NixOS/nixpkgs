@@ -5,9 +5,9 @@
         "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.14.195.a/linux-hardened-4.14.195.a.patch"
     },
     "4.19": {
-        "name": "linux-hardened-4.19.141.a.patch",
-        "sha256": "0yiqkkp17pf9r6nakpnqhvmf8awpzp5n27cmh15ril7vn1y71sxw",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.19.141.a/linux-hardened-4.19.141.a.patch"
+        "name": "linux-hardened-4.19.142.a.patch",
+        "sha256": "1gwvacr23lp8qryfhnqn89pn9ly9d8c42rirvkz5psfmvnm7vxbn",
+        "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.19.142.a/linux-hardened-4.19.142.a.patch"
     },
     "5.4": {
         "name": "linux-hardened-5.4.60.a.patch",
