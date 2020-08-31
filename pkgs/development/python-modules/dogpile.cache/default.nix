@@ -1,5 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
-, pytest, pytestcov, mock, Mako, decorator
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pytest
+, pytestcov
+, mock
+, Mako
+, decorator
+, stevedore
 }:
 
 buildPythonPackage rec {
@@ -27,7 +35,7 @@ buildPythonPackage rec {
 
   checkInputs = [ pytest pytestcov mock Mako ];
 
-  propagatedBuildInputs = [ decorator ];
+  propagatedBuildInputs = [ decorator stevedore ];
 
   meta = with stdenv.lib; {
     description = "A caching front-end based on the Dogpile lock";

@@ -21,14 +21,14 @@ index 44fbacd..6b5abf5 100644
 -    if (!QFile::exists(daemon)) { // if not in libexec, find it in PATH
 -        daemon = QStandardPaths::findExecutable(QStringLiteral("kdesud"));
 -        if (daemon.isEmpty()) {
--            qWarning() << "kdesud daemon not found.";
+-            qCWarning(KSU_LOG) << "kdesud daemon not found.";
 +    QString daemon = QFile::decodeName("/run/wrappers/bin/kdesud");
 +    if (!QFile::exists(daemon)) { // if not in wrappers
 +        daemon = QFile::decodeName(CMAKE_INSTALL_FULL_LIBEXECDIR_KF5 "/kdesud");
 +        if (!QFile::exists(daemon)) { // if not in libexec, find it in PATH
 +            daemon = QStandardPaths::findExecutable(QStringLiteral("kdesud"));
 +            if (daemon.isEmpty()) {
-+                qWarning() << "kdesud daemon not found.";
++                qCWarning(KSU_LOG) << "kdesud daemon not found.";
 +            }
          }
      }

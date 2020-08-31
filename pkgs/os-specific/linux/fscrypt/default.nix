@@ -34,10 +34,6 @@ buildGoModule rec {
     make install
   '';
 
-  preFixup = ''
-    remove-references-to -t ${fscrypt-experimental.go} $out/lib/security/pam_fscrypt.so
-  '';
-
   meta = with stdenv.lib; {
     description =
       "A high-level tool for the management of Linux filesystem encryption";
