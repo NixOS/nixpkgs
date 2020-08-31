@@ -16,7 +16,12 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev"];
   outputBin = "dev";
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig which ];
+  # for cross platform builds of p11-kit, libtasn1 in nativeBuildInputs
+  # provides the asn1Parser binary on the hostPlatform needed for building.
+  # at the same time, libtasn1 in buildInputs provides the libasn1 library
+  # to link against for the target platform.
+  # hence, libtasn1 is required in both native and build inputs.
+  nativeBuildInputs = [ autoreconfHook pkgconfig which libtasn1 ];
   buildInputs = [ gettext libffi libiconv libtasn1 ];
 
   autoreconfPhase = ''
