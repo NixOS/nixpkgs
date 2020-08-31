@@ -1,6 +1,12 @@
 { stdenv, lib, runCommand, patchelf
-, fetchFromGitHub, rustPlatform
+, fetchFromGitHub, rustPlatform, makeWrapper
 , pkgconfig, curl, zlib, Security, CoreServices }:
+
+let
+  libPath = lib.makeLibraryPath [
+    zlib # libz.so.1
+  ];
+in
 
 rustPlatform.buildRustPackage rec {
   pname = "rustup";
@@ -15,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0kn3sq99sgsh8msignyb4vjllv0wf1crqaw7sqp3ggmlkrdq35sd";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
 
   buildInputs = [
     curl zlib
@@ -24,19 +30,13 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "--features no-self-update" ];
 
   patches = lib.optionals stdenv.isLinux [
-    (let
-      libPath = lib.makeLibraryPath [
-        zlib # libz.so.1
-      ];
-    in
-      (runCommand "0001-dynamically-patchelf-binaries.patch" { CC=stdenv.cc; patchelf = patchelf; libPath = "$ORIGIN/../lib:${libPath}"; } ''
-       export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
-       substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
-         --subst-var patchelf \
-         --subst-var dynamicLinker \
-         --subst-var libPath
+    (runCommand "0001-dynamically-patchelf-binaries.patch" { CC=stdenv.cc; patchelf = patchelf; libPath = "$ORIGIN/../lib:${libPath}"; } ''
+     export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
+     substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
+       --subst-var patchelf \
+       --subst-var dynamicLinker \
+       --subst-var libPath
     '')
-    )
   ];
 
   doCheck = !stdenv.isAarch64 && !stdenv.isDarwin;
@@ -52,6 +52,8 @@ rustPlatform.buildRustPackage rec {
       ln -s rustup $link
     done
     popd
+
+    wrapProgram $out/bin/rustup --prefix "LD_LIBRARY_PATH" : "${libPath}"
 
     # tries to create .rustup
     export HOME=$(mktemp -d)
