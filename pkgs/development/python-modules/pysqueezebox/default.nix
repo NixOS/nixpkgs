@@ -1,8 +1,9 @@
-{ stdenv, fetchPypi, buildPythonPackage }:
+{ stdenv, fetchPypi, buildPythonPackage, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "pysqueezebox";
   version = "0.4.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
