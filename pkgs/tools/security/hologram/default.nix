@@ -13,8 +13,6 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/AdRoll/hologram";
 
-  goDeps = ./deps.nix;
-
   preConfigure = ''
     sed -i 's|cacheTimeout != 3600|cacheTimeout != 0|' cmd/hologram-server/main.go
   '';
