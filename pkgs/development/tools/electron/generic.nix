@@ -10,7 +10,7 @@ let
     license = licenses.mit;
     maintainers = with maintainers; [ travisbhartwell manveru prusnak ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" "armv7l-linux" "aarch64-linux" ];
-    knownVulnerabilities = optional (version < "6") "Electron version ${version} is EOL";
+    knownVulnerabilities = optional (versionOlder version "6.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher = vers: tag: hash: fetchurl {
@@ -34,7 +34,7 @@ let
     src = fetcher version (get tags platform) (get hashes platform);
   };
 
-  electronLibPath = stdenv.lib.makeLibraryPath ([ libuuid at-spi2-atk at-spi2-core ] ++ stdenv.lib.optionals (version > "9") [ libdrm mesa ]);
+  electronLibPath = with stdenv.lib; makeLibraryPath ([ libuuid at-spi2-atk at-spi2-core ] ++ optionals (! versionOlder version "9.0.0") [ libdrm mesa ]);
 
   linux = {
     buildInputs = [ glib gtk3 ];
