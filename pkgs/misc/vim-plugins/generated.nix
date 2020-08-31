@@ -2878,16 +2878,16 @@ let
     meta.homepage = "https://github.com/neovimhaskell/nvim-hs.vim/";
   };
 
-  nvim-lsp = buildVimPluginFrom2Nix {
-    pname = "nvim-lsp";
+  nvim-lspconfig = buildVimPluginFrom2Nix {
+    pname = "nvim-lspconfig";
     version = "2020-08-30";
     src = fetchFromGitHub {
       owner = "neovim";
-      repo = "nvim-lsp";
+      repo = "nvim-lspconfig";
       rev = "b7b311e22a0b071dfb43aa6a9ccc0ed92e5eab3d";
       sha256 = "1q9z5hryjm6j2bb6iy57bwadm45m402k2bq1w0dkn1bgsnfkbsg3";
     };
-    meta.homepage = "https://github.com/neovim/nvim-lsp/";
+    meta.homepage = "https://github.com/neovim/nvim-lspconfig/";
   };
 
   nvim-terminal-lua = buildVimPluginFrom2Nix {

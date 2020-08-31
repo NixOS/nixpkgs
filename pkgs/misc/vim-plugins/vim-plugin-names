@@ -384,7 +384,7 @@ neoclide/denite-extra
 neoclide/denite-git
 neoclide/vim-easygit
 neomake/neomake
-neovim/nvim-lsp
+neovim/nvim-lspconfig
 neovim/nvimdev.nvim
 neovimhaskell/haskell-vim
 neovimhaskell/nvim-hs.vim
