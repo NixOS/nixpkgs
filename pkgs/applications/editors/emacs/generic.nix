@@ -67,13 +67,14 @@ in stdenv.mkDerivation {
 
     # Make native compilation work both inside and outside of nix build
     (lib.optionalString nativeComp (let
-      libPath = (lib.concatStringsSep " "
+      backendPath = (lib.concatStringsSep " "
         (builtins.map (x: ''\"-B${x}\"'') [
+          # Paths necessary so the JIT compiler finds its libraries:
           "${lib.getLib libgccjit}/lib"
-          "${lib.getLib libgccjit}/lib/gcc/${targetPlatform.config}/${libgccjit.version}"
-          "${lib.getLib stdenv.cc.cc}/lib"
+          "${lib.getLib libgccjit}/lib/gcc"
           "${lib.getLib stdenv.cc.libc}/lib"
-          "${lib.getBin stdenv.cc.cc}"
+
+          # Executable paths necessary for compilation (ld, as):
           "${lib.getBin stdenv.cc.cc}"
           "${lib.getBin stdenv.cc.bintools}"
           "${lib.getBin stdenv.cc.bintools.bintools}"
@@ -81,7 +82,7 @@ in stdenv.mkDerivation {
     in ''
       substituteInPlace lisp/emacs-lisp/comp.el --replace \
         "(defcustom comp-native-driver-options nil" \
-        "(defcustom comp-native-driver-options '(${libPath})"
+        "(defcustom comp-native-driver-options '(${backendPath})"
     ''))
     ""
   ];
