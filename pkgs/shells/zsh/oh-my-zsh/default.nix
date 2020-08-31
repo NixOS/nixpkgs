@@ -1,7 +1,7 @@
 # This script was inspired by the ArchLinux User Repository package:
 #
 #   https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=oh-my-zsh-git
-{ stdenv, fetchFromGitHub, fetchpatch }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   version = "2020-08-28";
