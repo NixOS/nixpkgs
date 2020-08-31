@@ -1,12 +1,13 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
+{ stdenv, fetchFromGitLab, pkgconfig, autoreconfHook
 , mono, gtk-sharp-3_0, dbus-sharp-1_0, dbus-sharp-glib-1_0 }:
 
 stdenv.mkDerivation rec {
   pname = "notify-sharp";
   version = "3.0.3";
 
-  src = fetchFromGitHub {
-    owner = "GNOME";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "Archive";
     repo = "notify-sharp";
 
     rev = version;
