@@ -429,6 +429,7 @@ preservim/nerdcommenter
 preservim/nerdtree
 psliwka/vim-smoothie
 ptzz/lf.vim
+puremourning/vimspector
 purescript-contrib/purescript-vim
 python-mode/python-mode
 qnighy/lalrpop.vim
