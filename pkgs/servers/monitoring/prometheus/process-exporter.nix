@@ -6,8 +6,6 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/ncabatoff/process-exporter";
 
-  goDeps = ./process-exporter_deps.nix;
-
   src = fetchFromGitHub {
     owner = "ncabatoff";
     repo = pname;
