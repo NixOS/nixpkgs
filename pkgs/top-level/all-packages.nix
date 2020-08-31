@@ -4062,6 +4062,8 @@ in
 
   gopro = callPackage ../tools/video/gopro { };
 
+  goreplay = callPackage ../tools/networking/goreplay { };
+
   gource = callPackage ../applications/version-management/gource { };
 
   govc = callPackage ../tools/virtualization/govc { };
