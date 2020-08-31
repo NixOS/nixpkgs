@@ -16,8 +16,6 @@ in buildGoPackage rec {
   goPackagePath = "github.com/Shopify/ejson";
   subPackages = [ "cmd/ejson" ];
 
-  goDeps = ./deps.nix;
-
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "ejson";
