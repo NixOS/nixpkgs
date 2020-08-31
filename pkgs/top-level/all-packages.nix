@@ -22993,6 +22993,8 @@ in
 
   prusa-slicer = callPackage ../applications/misc/prusa-slicer { };
 
+  robustirc-bridge = callPackage ../servers/irc/robustirc-bridge { };
+
   sddm = libsForQt5.callPackage ../applications/display-managers/sddm { };
 
   skrooge = libsForQt5.callPackage ../applications/office/skrooge {};
