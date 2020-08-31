@@ -277,6 +277,7 @@ in {
           ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
           RuntimeDirectory = "phpfpm";
           RuntimeDirectoryPreserve = true; # Relevant when multiple processes are running
+          Restart = "always";
         };
       }
     ) cfg.pools;
