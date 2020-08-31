@@ -39,7 +39,15 @@ stdenv.mkDerivation rec {
   pname = "pipewire";
   version = "0.3.9";
 
-  outputs = [ "out" "lib" "dev" "doc" "installedTests" ];
+  outputs = [
+    "out"
+    "lib"
+    "pulse"
+    "jack"
+    "dev"
+    "doc"
+    "installedTests"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -95,6 +103,8 @@ stdenv.mkDerivation rec {
     "-Dgstreamer=true"
     "-Dudevrulesdir=lib/udev/rules.d"
     "-Dinstalled_tests=true"
+    "-Dlibpulse-path=${placeholder "pulse"}/lib"
+    "-Dlibjack-path=${placeholder "jack"}/lib"
   ] ++ stdenv.lib.optional nativeHspSupport "-Dbluez5-backend-native=true"
   ++ stdenv.lib.optional ofonoSupport "-Dbluez5-backend-ofono=true";
 
