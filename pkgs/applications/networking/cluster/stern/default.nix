@@ -15,6 +15,7 @@ buildGoPackage rec {
     sha256 = "0xndlq0ks8flzx6rdd4lnkxpkbvdy9sj1jwys5yj7p989ls8by3n";
   };
 
+  deleteVendor = true;
   goDeps = ./deps.nix;
 
   nativeBuildInputs = [ installShellFiles ];
