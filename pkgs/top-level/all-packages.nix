@@ -2241,6 +2241,8 @@ in
 
   nix-direnv = callPackage ../tools/misc/nix-direnv { };
 
+  nix-template = callPackage ../tools/package-management/nix-template { };
+
   nixpkgs-pytools = with python3.pkgs; toPythonApplication nixpkgs-pytools;
 
   noteshrink = callPackage ../tools/misc/noteshrink { };
