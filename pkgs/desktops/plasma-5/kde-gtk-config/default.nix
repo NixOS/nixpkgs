@@ -18,6 +18,9 @@ mkDerivation {
     "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
     "-DGLIB_SCHEMAS_DIR=${gsettings-desktop-schemas.out}/"
   ];
+  # The gtkconfig KDED module will crash the daemon if the GSettings schemas
+  # aren't found.
+  patches = [ ./0001-gsettings-schemas-path.patch ];
   preConfigure = ''
     NIX_CFLAGS_COMPILE+=" -DGSETTINGS_SCHEMAS_PATH=\"$GSETTINGS_SCHEMAS_PATH\""
   '';
