@@ -14,8 +14,6 @@ buildGoPackage rec {
     sha256 = "1iq643brha5q6w2v1hz5l3d1z0pqzqr43gpwih4cnx3m5br0wg2k";
   };
 
-  goDeps = ./deps.nix;
-
   # re date: https://github.com/NixOS/nixpkgs/pull/45997#issuecomment-418186178
   # > .. keep the derivation deterministic. Otherwise, we would have to rebuild it every time.
   buildFlagsArray = [ ''-ldflags=
