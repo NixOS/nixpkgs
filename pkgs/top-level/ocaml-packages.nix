@@ -916,6 +916,10 @@ let
 
     sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
 
+    srt = callPackage ../development/ocaml-modules/srt {
+      inherit (pkgs) srt;
+    };
+
     ssl = callPackage ../development/ocaml-modules/ssl { };
 
     stdlib-shims = callPackage ../development/ocaml-modules/stdlib-shims { };
