@@ -112,6 +112,7 @@ let
       kitemmodels = callPackage ./kitemmodels.nix {};
       kitemviews = callPackage ./kitemviews.nix {};
       kplotting = callPackage ./kplotting.nix {};
+      kquickcharts = callPackage ./kquickcharts.nix {};
       kwayland = callPackage ./kwayland.nix {};
       kwidgetsaddons = callPackage ./kwidgetsaddons.nix {};
       kwindowsystem = callPackage ./kwindowsystem {};
