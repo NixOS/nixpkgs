@@ -10,6 +10,9 @@ let
     find ${toString config.fonts.fonts} -regex "$font_regexp" \
       -exec ln -sf -t "$out/share/X11/fonts" '{}' \;
     cd "$out/share/X11/fonts"
+    ${optionalString config.fonts.fontDir.decompressFonts ''
+      ${pkgs.gzip}/bin/gunzip -f *.gz
+    ''}
     ${pkgs.xorg.mkfontscale}/bin/mkfontscale
     ${pkgs.xorg.mkfontdir}/bin/mkfontdir
     cat $(find ${pkgs.xorg.fontalias}/ -name fonts.alias) >fonts.alias
@@ -31,6 +34,14 @@ in
         '';
       };
 
+      decompressFonts = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to decompress fonts in
+          <filename>/run/current-system/sw/share/X11/fonts</filename>.
+        '';
+      };
 
     };
   };
