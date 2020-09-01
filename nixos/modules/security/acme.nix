@@ -150,11 +150,27 @@ let
         '';
       };
 
+      extraLegoFlags = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Additional global flags to pass to all lego commands.
+        '';
+      };
+
       extraLegoRenewFlags = mkOption {
         type = types.listOf types.str;
         default = [];
         description = ''
           Additional flags to pass to lego renew.
+        '';
+      };
+
+      extraLegoRunFlags = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Additional flags to pass to lego run.
         '';
       };
     };
@@ -313,9 +329,10 @@ in
                           ++ optionals (data.dnsProvider != null && !data.dnsPropagationCheck) [ "--dns.disable-cp" ]
                           ++ concatLists (mapAttrsToList (name: root: [ "-d" name ]) data.extraDomains)
                           ++ (if data.dnsProvider != null then [ "--dns" data.dnsProvider ] else [ "--http" "--http.webroot" data.webroot ])
-                          ++ optionals (cfg.server != null || data.server != null) ["--server" (if data.server == null then cfg.server else data.server)];
+                          ++ optionals (cfg.server != null || data.server != null) ["--server" (if data.server == null then cfg.server else data.server)]
+                          ++ data.extraLegoFlags;
                 certOpts = optionals data.ocspMustStaple [ "--must-staple" ];
-                runOpts = escapeShellArgs (globalOpts ++ [ "run" ] ++ certOpts);
+                runOpts = escapeShellArgs (globalOpts ++ [ "run" ] ++ certOpts ++ data.extraLegoRunFlags);
                 renewOpts = escapeShellArgs (globalOpts ++
                   [ "renew" "--days" (toString cfg.validMinDays) ] ++
                   certOpts ++ data.extraLegoRenewFlags);

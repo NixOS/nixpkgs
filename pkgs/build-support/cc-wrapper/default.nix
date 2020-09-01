@@ -209,6 +209,7 @@ stdenv.mkDerivation {
       wrap ${targetPrefix}gfortran $wrapper $ccPath/${targetPrefix}gfortran
       ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}g77
       ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}f77
+      export named_fc=${targetPrefix}gfortran
     ''
 
     + optionalString cc.langJava or false ''
@@ -227,8 +228,8 @@ stdenv.mkDerivation {
 
   setupHooks = [
     ../setup-hooks/role.bash
-    ./setup-hook.sh
-  ];
+  ] ++ stdenv.lib.optional (cc.langC or true) ./setup-hook.sh
+    ++ stdenv.lib.optional (cc.langFortran or false) ./fortran-hook.sh;
 
   postFixup =
     # Ensure flags files exists, as some other programs cat them. (That these

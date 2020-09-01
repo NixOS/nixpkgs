@@ -137,11 +137,15 @@ let
 
     cohttp = callPackage ../development/ocaml-modules/cohttp { };
 
+    cohttp-async = callPackage ../development/ocaml-modules/cohttp/async.nix { };
+
     cohttp-lwt = callPackage ../development/ocaml-modules/cohttp/lwt.nix { };
 
     cohttp-lwt-unix = callPackage ../development/ocaml-modules/cohttp/lwt-unix.nix { };
 
     conduit = callPackage ../development/ocaml-modules/conduit { };
+
+    conduit-async = callPackage ../development/ocaml-modules/conduit/async.nix { };
 
     conduit-lwt = callPackage ../development/ocaml-modules/conduit/lwt.nix { };
 
@@ -150,6 +154,8 @@ let
     config-file = callPackage ../development/ocaml-modules/config-file { };
 
     containers = callPackage ../development/ocaml-modules/containers { };
+
+    containers-data = callPackage ../development/ocaml-modules/containers/data.nix { };
 
     cow = callPackage ../development/ocaml-modules/cow { };
 
@@ -218,15 +224,19 @@ let
     dune = callPackage ../development/tools/ocaml/dune { };
 
     dune_2 =
-      if lib.versionAtLeast ocaml.version "4.07"
+      if lib.versionAtLeast ocaml.version "4.08"
       then callPackage ../development/tools/ocaml/dune/2.nix { }
       else if lib.versionAtLeast ocaml.version "4.02"
       then pkgs.dune_2
       else throw "dune_2 is not available for OCaml ${ocaml.version}";
 
+    dune-action-plugin = callPackage ../development/ocaml-modules/dune-action-plugin { };
+
     dune-build-info = callPackage ../development/ocaml-modules/dune-build-info { };
 
     dune-configurator = callPackage ../development/ocaml-modules/dune-configurator { };
+
+    dune-glob = callPackage ../development/ocaml-modules/dune-glob { };
 
     dune-private-libs = callPackage ../development/ocaml-modules/dune-private-libs { };
 
@@ -311,6 +321,8 @@ let
     hacl_x25519 = callPackage ../development/ocaml-modules/hacl_x25519 { };
 
     herelib = callPackage ../development/ocaml-modules/herelib { };
+
+    hidapi = callPackage ../development/ocaml-modules/hidapi { };
 
     higlo = callPackage ../development/ocaml-modules/higlo { };
 
@@ -742,6 +754,12 @@ let
 
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
 
+    posix-base = callPackage ../development/ocaml-modules/posix/base.nix { };
+
+    posix-socket = callPackage ../development/ocaml-modules/posix/socket.nix { };
+
+    posix-types = callPackage ../development/ocaml-modules/posix/types.nix { };
+
     ppxfind = callPackage ../development/ocaml-modules/ppxfind { };
 
     ppxlib = callPackage ../development/ocaml-modules/ppxlib { };
@@ -943,6 +961,8 @@ let
 
     wasm = callPackage ../development/ocaml-modules/wasm { };
 
+    webbrowser = callPackage ../development/ocaml-modules/webbrowser { };
+
     webmachine = callPackage ../development/ocaml-modules/webmachine { };
 
     wtf8 = callPackage ../development/ocaml-modules/wtf8 { };
@@ -983,7 +1003,7 @@ let
     janeStreet =
     if lib.versionOlder "4.08" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.13.nix {
-      inherit ctypes janePackage num octavius ppxlib re;
+      inherit ctypes dune-configurator janePackage num octavius ppxlib re;
       inherit (pkgs) openssl;
     }
     else if lib.versionOlder "4.07" ocaml.version
@@ -1213,7 +1233,7 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_4_11 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.11.nix { });
 
-  ocamlPackages_latest = ocamlPackages_4_10;
+  ocamlPackages_latest = ocamlPackages_4_11;
 
   ocamlPackages = ocamlPackages_4_10;
 }

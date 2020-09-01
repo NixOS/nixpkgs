@@ -158,7 +158,10 @@ in import ./make-test-python.nix {
 
     s3 = { pkgs, ... } : {
       # Minio requires at least 1GiB of free disk space to run.
-      virtualisation.diskSize = 2 * 1024;
+      virtualisation = {
+        diskSize = 2 * 1024;
+        memorySize = 1024;
+      };
       networking.firewall.allowedTCPPorts = [ minioPort ];
 
       services.minio = {
@@ -235,7 +238,7 @@ in import ./make-test-python.nix {
     # Test if the Thanos bucket command is able to retrieve blocks from the S3 bucket
     # and check if the blocks have the correct labels:
     store.succeed(
-        "thanos bucket ls "
+        "thanos tools bucket ls "
         + "--objstore.config-file=${nodes.store.config.services.thanos.store.objstore.config-file} "
         + "--output=json | "
         + "jq .thanos.labels.some_label | "

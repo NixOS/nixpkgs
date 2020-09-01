@@ -73,6 +73,13 @@ let
       # This patch disables the test that tries to read /etc/os-release which
       # is not accessible in sandboxed builds.
       ./skip_test_linux_distro.patch
+
+      # fix compatibility with the latest SQLAlchemy
+      (fetchpatch {
+        url = "https://github.com/buildbot/buildbot/commit/96f3cd1c5f5c82b733baecb133576366ecf544fc.patch";
+        sha256 = "0n1jm13h08j7ksbs8ixayn3wziq5hzyp3kscz9fpgxd8gl885y5n";
+        stripLen = 1;
+      })
     ];
 
     postPatch = ''

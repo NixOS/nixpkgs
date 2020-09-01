@@ -3,6 +3,7 @@
 , fetchPypi
 , mock
 , jsonpickle
+, mmh3
 , ordered-set
 , numpy
 , pytestCheckHook
@@ -10,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "4.3.2";
+  version = "5.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "91360be1d9d93b1d9c13ae9c5048fa83d9cff17a88eb30afaa0d7ff2d0fee17d";
+    sha256 = "e2b74af4da0ef9cd338bb6e8c97242c1ec9d81fcb28298d7bb24acdc19ea79d7";
   };
 
   # # Extra packages (may not be necessary)
@@ -24,14 +25,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # skipped tests require murmur module
-    "test_prep_str_murmur3_64bit"
-    "test_prep_str_murmur3_128bit"
-  ];
-
   propagatedBuildInputs = [
     jsonpickle
+    mmh3
     ordered-set
   ];
 

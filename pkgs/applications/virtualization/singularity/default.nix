@@ -18,11 +18,11 @@ with lib;
 
 buildGoPackage rec {
   pname = "singularity";
-  version = "3.6.1";
+  version = "3.6.2";
 
   src = fetchurl {
     url = "https://github.com/hpcng/singularity/releases/download/v${version}/singularity-${version}.tar.gz";
-    sha256 = "070jj6kbiw23sd2p4xhvmyb8gd83imwgisdf18ahkwp7dq85db3c";
+    sha256 = "16sd08bfa2b1qgpnd3q6k7glw0w1wyrqyf47fz2220yafrryrmyz";
   };
 
   goPackagePath = "github.com/sylabs/singularity";
@@ -65,10 +65,6 @@ buildGoPackage rec {
     sed -i 's|^# cryptsetup path =.*$|cryptsetup path = ${stdenv.lib.makeBinPath [cryptsetup]}/cryptsetup|' $out/etc/singularity/singularity.conf
 
     runHook postInstall
-  '';
-
-  postFixup = ''
-    find $out/libexec/ -type f -executable -exec remove-references-to -t ${go} '{}' + || true
   '';
 
   meta = with stdenv.lib; {

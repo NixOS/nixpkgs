@@ -25,7 +25,7 @@ let
       "nss-lookup.target"
       "nss-user-lookup.target"
       "time-sync.target"
-      #"cryptsetup.target"
+      "cryptsetup.target"
       "sigpwr.target"
       "timers.target"
       "paths.target"
@@ -903,11 +903,9 @@ in
       )
       ]);
       passwd = (mkMerge [
-        [ "mymachines" ]
         (mkAfter [ "systemd" ])
       ]);
       group = (mkMerge [
-        [ "mymachines" ]
         (mkAfter [ "systemd" ])
       ]);
     };

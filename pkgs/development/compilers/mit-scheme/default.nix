@@ -2,12 +2,11 @@
   enableX11 ? false, xlibsWrapper ? null }:
 
 let
-  version = "9.2";
+  version = "10.1.10";
   bootstrapFromC = ! (stdenv.isi686 || stdenv.isx86_64);
 
   arch = if      stdenv.isi686   then "-i386"
-         else if stdenv.isx86_64 then "-x86-64"
-         else                         "";
+         else                         "-x86-64";
 in
 stdenv.mkDerivation {
   name = if enableX11 then "mit-scheme-x11-${version}" else "mit-scheme-${version}";
@@ -20,14 +19,10 @@ stdenv.mkDerivation {
     if stdenv.isi686
     then fetchurl {
       url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-i386.tar.gz";
-      sha256 = "1fmlpnhf5a75db93phajh4ysbdgrgl72v45lk3kznriprl0a7jc6";
-    } else if stdenv.isx86_64
-    then fetchurl {
+      sha256 = "117lf06vcdbaa5432hwqnskpywc6x8ai0gj99h480a4wzkp3vhy6";
+  } else fetchurl {
       url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-x86-64.tar.gz";
-      sha256 = "1skzxxhr0iq96bf0j5m7mvf3i4sppfyfa6gpqn34mwgkw1fx8274";
-    } else fetchurl {
-      url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-c-${version}.tar.gz";
-      sha256 = "0w5ib5vsidihb4hb6fma3sp596ykr8izagm57axvgd6lqzwicsjg";
+      sha256 = "1rljv6iddrbssm91c0nn08myj92af36hkix88cc6qwq38xsxs52g";
     };
 
   buildInputs = if enableX11 then [xlibsWrapper] else [];

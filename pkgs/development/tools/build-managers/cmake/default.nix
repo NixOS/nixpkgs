@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig
+{ stdenv, lib, fetchurl, pkgconfig, fetchpatch
 , bzip2, curl, expat, libarchive, xz, zlib, libuv, rhash
 , buildPackages
 # darwin attributes
@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
           + lib.optionalString useNcurses "-cursesUI"
           + lib.optionalString withQt5 "-qt5UI"
           + lib.optionalString useQt4 "-qt4UI";
-  version = "3.18.0";
+  version = "3.18.2";
 
   src = fetchurl {
     url = "${meta.homepage}files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
     # compare with https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}-SHA-256.txt
-    sha256 = "0aby67jn3i0rqhj6cvpm0f7idw3dl7jayaqxa9hkk9w2jk5zzd43";
+    sha256 = "0zhxsnxm5d8wdarz2gs3r41r1dfrnh35ki75fa684gaxfzy40kjx";
   };
 
   patches = [
@@ -110,8 +110,17 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails
 
   meta = with lib; {
-    homepage = "http://www.cmake.org/";
+    homepage = "https://cmake.org/";
+    changelog = "https://cmake.org/cmake/help/v${lib.versions.majorMinor version}/"
+      + "release/${lib.versions.majorMinor version}.html";
     description = "Cross-Platform Makefile Generator";
+    longDescription = ''
+      CMake is an open-source, cross-platform family of tools designed to
+      build, test and package software. CMake is used to control the software
+      compilation process using simple platform and compiler independent
+      configuration files, and generate native makefiles and workspaces that
+      can be used in the compiler environment of your choice.
+    '';
     platforms = if useQt4 then qt4.meta.platforms else platforms.all;
     maintainers = with maintainers; [ ttuegel lnl7 ];
     license = licenses.bsd3;

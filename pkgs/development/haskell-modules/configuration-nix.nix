@@ -655,16 +655,16 @@ self: super: builtins.intersectAttrs super {
 
       # This defines the version of the purescript-docs-search release we are using.
       # This is defined in the src/Spago/Prelude.hs file in the spago source.
-      docsSearchVersion = "v0.0.8";
+      docsSearchVersion = "v0.0.10";
 
       docsSearchAppJsFile = pkgs.fetchurl {
         url = "https://github.com/spacchetti/purescript-docs-search/releases/download/${docsSearchVersion}/docs-search-app.js";
-        sha256 = "00pzi7pgjicpa0mg0al80gh2q1q2lqiyb3kjarpydlmn8dfjny7v";
+        sha256 = "0m5ah29x290r0zk19hx2wix2djy7bs4plh9kvjz6bs9r45x25pa5";
       };
 
       purescriptDocsSearchFile = pkgs.fetchurl {
         url = "https://github.com/spacchetti/purescript-docs-search/releases/download/${docsSearchVersion}/purescript-docs-search";
-        sha256 = "1hsi1hc4p1z2xbw82w2jxmmczw6mravli1r89vrkivb72sqdjya7";
+        sha256 = "0wc1zyhli4m2yykc6i0crm048gyizxh7b81n8xc4yb7ibjqwhyj3";
       };
 
       spagoFixHpack = overrideCabal spagoWithOverrides (drv: {
@@ -766,5 +766,9 @@ self: super: builtins.intersectAttrs super {
   hasql-queue = dontCheck super.hasql-queue;
   postgresql-libpq-notify = dontCheck super.postgresql-libpq-notify;
   postgresql-pure = dontCheck super.postgresql-pure;
+
+  retrie = overrideCabal super.retrie (drv: {
+    testToolDepends = [ pkgs.git pkgs.mercurial ];
+  });
 
 }

@@ -195,10 +195,11 @@
 /pkgs/top-level/php-packages.nix         @NixOS/php
 
 # Podman, CRI-O modules and related
-/nixos/modules/virtualisation/containers.nix @NixOS/podman
-/nixos/modules/virtualisation/cri-o.nix      @NixOS/podman
-/nixos/modules/virtualisation/podman.nix     @NixOS/podman
-/nixos/tests/podman.nix                      @NixOS/podman
+/nixos/modules/virtualisation/containers.nix @NixOS/podman @zowoq
+/nixos/modules/virtualisation/cri-o.nix      @NixOS/podman @zowoq
+/nixos/modules/virtualisation/podman.nix     @NixOS/podman @zowoq
+/nixos/tests/cri-o.nix                       @NixOS/podman @zowoq
+/nixos/tests/podman.nix                      @NixOS/podman @zowoq
 
 # Blockchains
 /pkgs/applications/blockchains  @mmahut

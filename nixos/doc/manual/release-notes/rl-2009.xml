@@ -128,7 +128,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
    </listitem>
    <listitem>
     <para>
-      Two new option <link linkend="opt-documentation.man.generateCaches">documentation.man.generateCaches</link>
+      The new option <link linkend="opt-documentation.man.generateCaches">documentation.man.generateCaches</link>
       has been added to automatically generate the <literal>man-db</literal> caches, which are needed by utilities
       like <command>whatis</command> and <command>apropos</command>. The caches are generated during the build of
       the NixOS configuration: since this can be expensive when a large number of packages are installed, the
@@ -137,7 +137,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
    </listitem>
    <listitem>
     <para>
-     <varname>services.postfix.sslCACert</varname> was replaced by <varname>services.postfix.tlsTrustedAuthorities</varname> which now defaults to system certifcate authorities.
+     <varname>services.postfix.sslCACert</varname> was replaced by <varname>services.postfix.tlsTrustedAuthorities</varname> which now defaults to system certificate authorities.
     </para>
    </listitem>
    <listitem>
@@ -154,6 +154,64 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
    <listitem>
      <para>
        Support for built-in LCDs in various pieces of Logitech hardware (keyboards and USB speakers). <varname>hardware.logitech.lcd.enable</varname> enables support for all hardware supported by the g15daemon project.
+     </para>
+   </listitem>
+   <listitem>
+    <para>
+      Zabbix now defaults to 5.0, updated from 4.4. Please carefully read through
+      <link xlink:href="https://www.zabbix.com/documentation/current/manual/installation/upgrade/sources">the upgrade guide</link>
+      and apply any changes required. Be sure to take special note of the section on
+      <link xlink:href="https://www.zabbix.com/documentation/current/manual/installation/upgrade_notes_500#enabling_extended_range_of_numeric_float_values">enabling extended range of numeric (float) values</link>
+      as you will need to apply this database migration manually.
+    </para>
+    <para>
+      If you are using Zabbix Server with a MySQL or MariaDB database you should note that using a character set of <literal>utf8</literal> and a collate of <literal>utf8_bin</literal> has become mandatory with
+      this release. See the upstream <link xlink:href="https://support.zabbix.com/browse/ZBX-17357">issue</link> for further discussion. Before upgrading you should check the character set and collation used by
+      your database and ensure they are correct:
+<programlisting>
+  SELECT
+    default_character_set_name,
+    default_collation_name
+  FROM
+    information_schema.schemata
+  WHERE
+    schema_name = 'zabbix';
+</programlisting>
+      If these values are not correct you should take a backup of your database and convert the character set and collation as required. Here is an
+      <link xlink:href="https://www.zabbix.com/forum/zabbix-help/396573-reinstall-after-upgrade?p=396891#post396891">example</link> of how to do so, taken from
+      the Zabbix forums:
+<programlisting>
+  ALTER DATABASE `zabbix` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
+
+  -- the following will produce a list of SQL commands you should subsequently execute
+  SELECT CONCAT("ALTER TABLE ", TABLE_NAME," CONVERT TO CHARACTER SET utf8 COLLATE utf8_bin;") AS ExecuteTheString
+  FROM information_schema.`COLUMNS`
+  WHERE table_schema = "zabbix" AND COLLATION_NAME = "utf8_general_ci";
+</programlisting>
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+      The NixOS module system now supports freeform modules as a mix between <literal>types.attrsOf</literal> and <literal>types.submodule</literal>. These allow you to explicitly declare a subset of options while still permitting definitions without an associated option. See <xref linkend='sec-freeform-modules'/> for how to use them.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       The GRUB module gained support for basic password protection, which
+       allows to restrict non-default entries in the boot menu to one or more
+       users. The users and passwords are defined via the option
+       <option>boot.loader.grub.users</option>.
+       Note: Password support is only avaiable in GRUB version 2.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
+       Following its deprecation in 20.03, the Perl NixOS test driver has been removed.
+       All remaining tests have been ported to the Python test framework.
+       Code outside nixpkgs using <filename>make-test.nix</filename> or
+       <filename>testing.nix</filename> needs to be ported to
+       <filename>make-test-python.nix</filename> and
+       <filename>testing-python.nix</filename> respectively.
      </para>
    </listitem>
   </itemizedlist>
@@ -174,6 +232,11 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
    <listitem>
     <para>
       There is a new <xref linkend="opt-security.doas.enable"/> module that provides <command>doas</command>, a lighter alternative to <command>sudo</command> with many of the same features.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <link xlink:href="https://hercules-ci.com">Hercules CI</link> Agent is a specialized build agent for projects built with Nix. See the <link xlink:href="https://nixos.org/nixos/options.html#services.hercules-ci-agent">options</link> and <link xlink:href="https://docs.hercules-ci.com/hercules-ci/getting-started/#deploy-agent">setup</link>.
     </para>
    </listitem>
   </itemizedlist>
@@ -199,7 +262,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
      in the source tree for downloaded modules instead of using go's <link
      xlink:href="https://golang.org/cmd/go/#hdr-Module_proxy_protocol">module
      proxy protocol</link>. This storage format is simpler and therefore less
-     likekly to break with future versions of go. As a result
+     likely to break with future versions of go. As a result
      <literal>buildGoModule</literal> switched from
      <literal>modSha256</literal> to the <literal>vendorSha256</literal>
      attribute to pin fetched version data.
@@ -211,7 +274,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
      <link xlink:href="https://grafana.com/docs/grafana/latest/guides/whats-new-in-v6-4/">deprecated in Grafana</link>
      and the <package>phantomjs</package> project is
      <link xlink:href="https://github.com/ariya/phantomjs/issues/15344#issue-302015362">currently unmaintained</link>.
-     It can still be enabled by providing <literal>phantomJsSupport = true</literal> to the package instanciation:
+     It can still be enabled by providing <literal>phantomJsSupport = true</literal> to the package instantiation:
 <programlisting>{
   services.grafana.package = pkgs.grafana.overrideAttrs (oldAttrs: rec {
     phantomJsSupport = false;
@@ -223,7 +286,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
     <para>
       The <link linkend="opt-services.supybot.enable">supybot</link> module now uses <literal>/var/lib/supybot</literal>
       as its default <link linkend="opt-services.supybot.stateDir">stateDir</link> path if <literal>stateVersion</literal>
-      is 20.09 or higher. It also enables number of
+      is 20.09 or higher. It also enables a number of
       <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.exec.html#Sandboxing">systemd sandboxing options</link>
       which may possibly interfere with some plugins. If this is the case you can disable the options through attributes in
       <option>systemd.services.supybot.serviceConfig</option>.
@@ -697,6 +760,13 @@ CREATE ROLE postgres LOGIN SUPERUSER;
      The USBGuard module now removes options and instead hardcodes values for <literal>IPCAccessControlFiles</literal>, <literal>ruleFiles</literal>, and <literal>auditFilePath</literal>. Audit logs can be found in the journal.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The NixOS module system now evaluates option definitions more strictly, allowing it to detect a larger set of problems.
+     As a result, what previously evaluated may not do so anymore.
+     See <link xlink:href="https://github.com/NixOS/nixpkgs/pull/82743#issuecomment-674520472">the PR that changed this</link> for more info.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -915,7 +985,16 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
    </listitem>
    <listitem>
     <para>
+     Nginx module <literal>nginxModules.fastcgi-cache-purge</literal> renamed to official name <literal>nginxModules.cache-purge</literal>.
+     Nginx module <literal>nginxModules.ngx_aws_auth</literal> renamed to official name <literal>nginxModules.aws-auth</literal>.
       The packages <package>perl</package>, <package>rsync</package> and <package>strace</package> were removed from <option>systemPackages</option>. If you need them, install them again with <code><xref linkend="opt-environment.systemPackages"/> = with pkgs; [ perl rsync strace ];</code> in your <filename>configuration.nix</filename>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <literal>undervolt</literal> option no longer needs to apply its
+      settings every 30s. If they still become undone, open an issue and restore
+      the previous behaviour using <literal>undervolt.useTimer</literal>.
     </para>
    </listitem>
   </itemizedlist>

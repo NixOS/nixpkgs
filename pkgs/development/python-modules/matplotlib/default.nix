@@ -1,7 +1,7 @@
 { stdenv, fetchPypi, python, buildPythonPackage, isPy3k, pycairo, backports_functools_lru_cache
 , which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado, kiwisolver
 , freetype, libpng, pkgconfig, mock, pytz, pygobject3, gobject-introspection
-, pillow
+, certifi, pillow
 , enableGhostscript ? true, ghostscript ? null, gtk3
 , enableGtk3 ? false, cairo
 # darwin has its own "MacOSX" backend
@@ -20,14 +20,14 @@ assert enableTk -> (tcl != null)
 assert enableQt -> pyqt5 != null;
 
 buildPythonPackage rec {
-  version = "3.3.0";
+  version = "3.3.1";
   pname = "matplotlib";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "24e8db94948019d531ce0bcd637ac24b1c8f6744ac86d2aa0eb6dbaeb1386f82";
+    sha256 = "87f53bcce90772f942c2db56736788b39332d552461a5cb13f05ff45c1680f0e";
   };
 
   XDG_RUNTIME_DIR = "/tmp";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs =
     [ cycler dateutil numpy pyparsing tornado freetype kiwisolver
-      libpng mock pytz pillow ]
+      certifi libpng mock pytz pillow ]
     ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobject-introspection pygobject3 ]
     ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ]
     ++ stdenv.lib.optionals enableQt [ pyqt5 ];

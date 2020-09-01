@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-gmmlib";
-  version = "20.2.3";
+  version = "20.2.5";
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "gmmlib";
     rev    = "${pname}-${version}";
-    sha256 = "1gsjcsad70pxafhw0jhxdrnfqwv8ffp5sawbgylvc009jlzxh5l8";
+    sha256 = "0jg3kc74iqmbclx77a6dp4h85va8wi210x4zf5jypiq35c57r8hh";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     description = "Intel Graphics Memory Management Library";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [ danieldk ];
   };
 }

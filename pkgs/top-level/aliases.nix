@@ -87,6 +87,7 @@ mapAliases ({
   coprthr = throw "coprthr has been removed."; # added 2019-12-08
   corebird = throw "deprecated 2019-10-02: See https://www.patreon.com/posts/corebirds-future-18921328. Please use Cawbird as replacement.";
   coredumper = throw "coredumper has been removed: Abandoned by upstream."; # added 2019-11-16
+  cryptol = throw "cryptol was remove for prolonged broken build"; # added 2020-08-21
   cpp-gsl = microsoft_gsl; # added 2019-05-24
   cupsBjnp = cups-bjnp; # added 2016-01-02
   cups_filters = cups-filters; # added 2016-08
@@ -456,6 +457,7 @@ mapAliases ({
   phonon = throw "Please use libsForQt5.phonon, as Qt4 support in this package has been removed."; # added 2019-11-22
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
   quake3game = ioquake3; # added 2016-01-14
+  qvim = throw "qvim has been removed."; # added 2020-08-31
   qwt6 = libsForQt5.qwt;  # added 2015-12-19
   qtpfsgui = throw "Is now luminanceHDR"; # added 2019-06-26
   quaternion-git = throw "quaternion-git has been removed in favor of the stable version 'quaternion'"; # added 2020-04-09
@@ -465,10 +467,13 @@ mapAliases ({
   rhc = throw "deprecated in 2019-04-09: abandoned by upstream.";
   rng_tools = rng-tools; # added 2018-10-24
   robomongo = robo3t; #added 2017-09-28
+  rocm-runtime-ext = throw "rocm-runtime-ext has been removed, since its functionality was added to rocm-runtime"; #added 2020-08-21
   rssglx = rss-glx; #added 2015-03-25
+  rssh = throw "rssh has been removed from nixpkgs: no upstream releases since 2012, several known CVEs"; # added 2020-08-25
   recordmydesktop = throw "recordmydesktop has been removed from nixpkgs, as it's unmaintained and uses deprecated libraries"; # added 2019-12-10
   gtk-recordmydesktop = throw "gtk-recordmydesktop has been removed from nixpkgs, as it's unmaintained and uses deprecated libraries"; # added 2019-12-10
   qt-recordmydesktop = throw "qt-recordmydesktop has been removed from nixpkgs, as it's abandoned and uses deprecated libraries"; # added 2019-12-10
+  rfkill = throw "rfkill has been removed, as it's included in util-linux"; # added 2020-08-23
   rkt = throw "rkt was archived by upstream"; # added 2020-05-16
   ruby_2_0_0 = throw "deprecated 2018-0213: use a newer version of ruby";
   ruby_2_1_0 = throw "deprecated 2018-0213: use a newer version of ruby";
@@ -559,7 +564,9 @@ mapAliases ({
   suil-qt5 = suil; # added 2018-05-01
   surf-webkit2 = surf; # added 2017-04-02
   sup = throw "deprecated in 2019-09-10: abandoned by upstream";
+  swfdec = throw "swfdec has been removed as broken and unmaintained."; # added 2020-08-23
   system_config_printer = system-config-printer;  # added 2016-01-03
+  systemd-cryptsetup-generator = throw "systemd-cryptsetup-generator is now included in the systemd package"; # added 2020-07-12
   systemd_with_lvm2 = throw "obsolete, enabled by default via the lvm module"; # added 2020-07-12
   systool = sysfsutils; # added 2018-04-25
   tahoelafs = tahoe-lafs; # added 2018-03-26
@@ -687,6 +694,9 @@ mapAliases ({
   # added 2019-08-01
   mumble_git = pkgs.mumble;
   murmur_git = pkgs.murmur;
+
+  # added 2020-08-17
+  zabbix44 = throw "Zabbix 4.4 is end of life, see https://www.zabbix.com/documentation/current/manual/installation/upgrade_notes_500 for details on upgrading to Zabbix 5.0.";
 
   # added 2019-09-06
   zeroc_ice = pkgs.zeroc-ice;

@@ -38,7 +38,7 @@
 , # Whether to build terminfo.
   enableTerminfo ? !stdenv.targetPlatform.isWindows
 
-, version ? "8.11.20200731"
+, version ? "8.11.20200824"
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
   ghcFlavour ? stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
@@ -61,7 +61,7 @@ let
     (targetPlatform != hostPlatform)
     "${targetPlatform.config}-";
 
-  buildMK = ''
+  buildMK = dontStrip: ''
     BuildFlavour = ${ghcFlavour}
     ifneq \"\$(BuildFlavour)\" \"\"
     include mk/flavours/\$(BuildFlavour).mk
@@ -69,11 +69,13 @@ let
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
     BIGNUM_BACKEND = ${if enableNativeBignum then "native" else "gmp"}
   '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
-    Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
+    Stage1Only = ${if (targetPlatform.system == hostPlatform.system && !targetPlatform.isiOS) then "NO" else "YES"}
     CrossCompilePrefix = ${targetPrefix}
     HADDOCK_DOCS = NO
     BUILD_SPHINX_HTML = NO
     BUILD_SPHINX_PDF = NO
+  '' + stdenv.lib.optionalString dontStrip ''
+    STRIP_CMD = :
   '' + stdenv.lib.optionalString (!enableProfiledLibs) ''
     GhcLibWays = "v dyn"
   '' + stdenv.lib.optionalString enableRelocatedStaticLibs ''
@@ -108,8 +110,8 @@ stdenv.mkDerivation (rec {
 
   src = fetchgit {
     url = "https://gitlab.haskell.org/ghc/ghc.git/";
-    rev = "380638a33691ba43fdcd2e18bca636750e5f66f1";
-    sha256 = "029cgiyhddvwnx5zx31i0vgj13zsvzb8fna99zr6ifscz6x7rid1";
+    rev = "3f50154591ada9064351ccec4adfe6df53ca2439";
+    sha256 = "1w2p5bc74aswspzvgvrhcb95hvj5ky38rgqqjvrri19z2qyiky6d";
   };
 
   enableParallelBuilding = true;
@@ -137,7 +139,7 @@ stdenv.mkDerivation (rec {
     export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
     export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
 
-    echo -n "${buildMK}" > mk/build.mk
+    echo -n "${buildMK dontStrip}" > mk/build.mk
     echo ${version} > VERSION
     echo ${src.rev} > GIT_COMMIT_ID
     ./boot
@@ -256,8 +258,9 @@ stdenv.mkDerivation (rec {
     inherit (ghc.meta) license platforms;
   };
 
-} // stdenv.lib.optionalAttrs targetPlatform.useAndroidPrebuilt {
-  dontStrip = true;
+  dontStrip = (targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm);
+
+} // stdenv.lib.optionalAttrs targetPlatform.useAndroidPrebuilt{
   dontPatchELF = true;
   noAuditTmpdir = true;
 })

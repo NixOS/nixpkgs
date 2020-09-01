@@ -38,15 +38,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     fontDir="$out/share/fonts/misc"
-    install -m 644 -D out/* -t "$fontDir"
-    mkfontdir "$fontDir"
-
-    fontDir="$otb/share/fonts/misc"
-    install -m 644 -D *.otb -t "$fontDir"
+    install -m 644 -D *.otb out/* -t "$fontDir"
     mkfontdir "$fontDir"
   '';
-
-  outputs = [ "out" "otb" ];
 
   meta = with stdenv.lib; {
     description = "A nice bitmap font, readable even at small sizes";

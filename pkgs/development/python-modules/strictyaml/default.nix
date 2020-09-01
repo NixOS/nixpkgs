@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jj20fwcpvqzp7rnzk3mc3xm94wz3gy3zi3787nj7c3syzadn1vb";
+    sha256 = "6b07dbd4f77ab023ed4167c43ffc1b9f9354fb6075cc6ff3b91fefcbb80342ca";
   };
 
   propagatedBuildInputs = [ ruamel_yaml python-dateutil ];

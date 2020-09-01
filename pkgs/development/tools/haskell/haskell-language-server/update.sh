@@ -26,10 +26,10 @@ ghcide_old_version="$(sed -En 's/.*\bversion = "(.*?)".*/\1/p' "$ghcide_derivati
 # This is the revision of ghcide used by hls on GitHub.
 ghcide_new_version=$(curl --silent "https://api.github.com/repos/haskell/haskell-language-server/contents/ghcide" | jq '.sha' --raw-output)
 
-echo "Updating haskell-language-server from old version $ghcide_old_version to new version $ghcide_new_version."
+echo "Updating haskell-language-server's ghcide from old version $ghcide_old_version to new version $ghcide_new_version."
 echo "Running cabal2nix and outputting to ${ghcide_derivation_file}..."
 
-cabal2nix --revision "$ghcide_new_version" "https://github.com/bubba/ghcide" > "$ghcide_derivation_file"
+cabal2nix --revision "$ghcide_new_version" "https://github.com/wz1000/ghcide" > "$ghcide_derivation_file"
 
 
 # ===========================

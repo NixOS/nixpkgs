@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "marwaita";
-  version = "7.4.2";
+  version = "7.5.1";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
     rev = version;
-    sha256 = "0kq7d8nqp8m0kbh2k9s0yybfdkyfkhbkjsv22lplnzh1p84pnlx7";
+    sha256 = "0ig5wc6dkbly6yrvd13h4lyr8x0y7k3d9iv4rhg0pnjgcpna83mw";
   };
 
   buildInputs = [
@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $out/share/themes
     cp -a Marwaita* $out/share/themes
-    rm $out/share/themes/*/COPYING
     runHook postInstall
   '';
 

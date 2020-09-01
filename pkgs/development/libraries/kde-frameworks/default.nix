@@ -146,10 +146,11 @@ let
       kbookmarks = callPackage ./kbookmarks.nix {};
       kcmutils = callPackage ./kcmutils {};
       kconfigwidgets = callPackage ./kconfigwidgets {};
+      kdav = callPackage ./kdav.nix {};
       kdeclarative = callPackage ./kdeclarative.nix {};
       kded = callPackage ./kded.nix {};
       kdesignerplugin = callPackage ./kdesignerplugin.nix {};
-      kdesu = callPackage ./kdesu.nix {};
+      kdesu = callPackage ./kdesu {};
       kdewebkit = callPackage ./kdewebkit.nix {};
       kemoticons = callPackage ./kemoticons.nix {};
       kglobalaccel = callPackage ./kglobalaccel.nix {};

@@ -4039,6 +4039,23 @@ let
     };
   };
 
+  CryptSodium = buildPerlPackage {
+    pname = "Crypt-Sodium";
+    version = "0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MG/MGREGORO/Crypt-Sodium-0.11.tar.gz";
+      sha256 = "0y3c24zv4iwnvlf9zwxambk8ddram54fm6l1m5yhbskc0nhp6z4h";
+    };
+    NIX_CFLAGS_COMPILE = "-I${pkgs.libsodium.dev}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.libsodium.out}/lib -lsodium";
+    meta = {
+      homepage = "https://metacpan.org/release/Crypt-Sodium";
+      description = "Perl bindings for libsodium (NaCL)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CryptTwofish = buildPerlPackage {
     pname = "Crypt-Twofish";
     version = "2.17";
@@ -12858,10 +12875,10 @@ let
 
   Mojolicious = buildPerlPackage {
     pname = "Mojolicious";
-    version = "8.55";
+    version = "8.58";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-8.55.tar.gz";
-      sha256 = "116f79a8jvdk0zfj34gp3idhxgk4l8qq4ka6pwhdp8pmks969w0x";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-8.58.tar.gz";
+      sha256 = "0543m2g1pjm06b0yr4cffw70ki76762ria65zvrjccc2zk69pwvy";
     };
     meta = {
       homepage = "https://mojolicious.org";
@@ -16713,6 +16730,24 @@ let
       homepage = "https://github.com/kazeburo/POSIX-strftime-Compiler";
       description = "GNU C library compatible strftime for loggers and servers";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  Apprainbarf = buildPerlModule {
+    pname = "Apprainbarf";
+    version = "1.4";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SY/SYP/App-rainbarf-1.4.tar.gz";
+      sha256 = "4f139ad35faaf2de0623dc0bb1dd89fa5a431e548bfec87dee194cf0e25cc97d";
+    };
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/rainbarf
+    '';
+    meta = {
+      homepage = "https://github.com/creaktive/rainbarf";
+      description = "CPU/RAM/battery stats chart bar for tmux (and GNU screen)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus  ];
     };
   };
 

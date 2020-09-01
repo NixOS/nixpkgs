@@ -424,15 +424,18 @@ class Machine:
                 output += out
         return output
 
-    def fail(self, *commands: str) -> None:
+    def fail(self, *commands: str) -> str:
         """Execute each command and check that it fails."""
+        output = ""
         for command in commands:
             with self.nested("must fail: {}".format(command)):
-                status, output = self.execute(command)
+                (status, out) = self.execute(command)
                 if status == 0:
                     raise Exception(
                         "command `{}` unexpectedly succeeded".format(command)
                     )
+                output += out
+        return output
 
     def wait_until_succeeds(self, command: str) -> str:
         """Wait until a command returns success and return its output.
@@ -837,7 +840,8 @@ class Machine:
             retry(window_is_visible)
 
     def sleep(self, secs: int) -> None:
-        time.sleep(secs)
+        # We want to sleep in *guest* time, not *host* time.
+        self.succeed(f"sleep {secs}")
 
     def forward_port(self, host_port: int = 8080, guest_port: int = 80) -> None:
         """Forward a TCP port on the host to a TCP port on the guest.
