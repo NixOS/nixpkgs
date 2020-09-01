@@ -10,7 +10,7 @@ buildPythonPackage rec {
   # pytz fake_factory django numpy pytest
   # If you need these, you can just add them to your environment.
 
-  version = "5.11.0";
+  version = "5.30.0";
   pname = "hypothesis";
 
   # Use github tarballs that includes tests
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "HypothesisWorks";
     repo = "hypothesis-python";
     rev = "hypothesis-python-${version}";
-    sha256 = "1ca2dwih65s4r8vazwqm963ywngdr3v854ldnfyny7bvx1v28m8k";
+    sha256 = "0fmc4jfaksr285fjhp18ibj2rr8cxmbd0pwx370r5wf8jnhm6jb3";
   };
 
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
