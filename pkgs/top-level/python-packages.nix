@@ -5624,6 +5624,8 @@ in {
 
   python_keyczar = callPackage ../development/python-modules/python_keyczar { };
 
+  python-keystoneclient = disabledIf (!pythonOlder "3.8") (callPackage ../development/python-modules/python-keystoneclient { });
+
   python-language-server = callPackage ../development/python-modules/python-language-server { };
 
   python-ldap-test = callPackage ../development/python-modules/python-ldap-test { };
