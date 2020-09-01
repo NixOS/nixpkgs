@@ -28,5 +28,9 @@ stdenv.mkDerivation {
     description = "Adobe Reader, a viewer for PDF documents";
     homepage = http://www.adobe.com/products/reader;
     license = stdenv.lib.licenses.unfree;
+    knownVulnerabilities = [
+      "Numerous unresolved vulnerabilities"
+      "See: https://www.cvedetails.com/product/497/Adobe-Acrobat-Reader.html?vendor_id=53"
+    ];
   };
 }
