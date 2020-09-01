@@ -1,15 +1,20 @@
 {
   mkDerivation,
   extra-cmake-modules, kdoctools,
-  gconf, glib, kconfigwidgets, kcoreaddons, kdeclarative, kglobalaccel, ki18n,
-  libcanberra-gtk3, libpulseaudio, plasma-framework, qtdeclarative, kwindowsystem
+  kconfigwidgets, kcoreaddons, kdeclarative, kglobalaccel, ki18n, kwindowsystem, plasma-framework,
+  qtdeclarative,
+  gconf, glib, libcanberra-gtk3, libpulseaudio, sound-theme-freedesktop
 }:
 
 mkDerivation {
   name = "plasma-pa";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    gconf glib kconfigwidgets kcoreaddons kdeclarative kglobalaccel ki18n
-    libcanberra-gtk3 libpulseaudio plasma-framework qtdeclarative kwindowsystem
+    gconf glib libcanberra-gtk3 libpulseaudio sound-theme-freedesktop
+
+    kconfigwidgets kcoreaddons kdeclarative kglobalaccel ki18n plasma-framework
+    kwindowsystem
+
+    qtdeclarative
   ];
 }
