@@ -11,7 +11,8 @@
   kinit, kjsembed, knewstuff, knotifyconfig, kpackage, kpeople, krunner,
   kscreenlocker, ktexteditor, ktextwidgets, kwallet, kwayland, kwin,
   kxmlrpcclient, libkscreen, libksysguard, libqalculate, networkmanager-qt,
-  phonon, plasma-framework, prison, solid, kholidays,
+  phonon, plasma-framework, prison, solid, kholidays, kquickcharts,
+  appstream-qt,
 
   qtgraphicaleffects, qtquickcontrols, qtquickcontrols2, qtscript, qttools,
   qtwayland, qtx11extras,
@@ -31,7 +32,7 @@ mkDerivation {
     knotifyconfig kpackage kpeople krunner kscreenlocker ktexteditor
     ktextwidgets kwallet kwayland kwin kxmlrpcclient libkscreen libksysguard
     libqalculate networkmanager-qt phonon plasma-framework prison solid
-    kholidays
+    kholidays kquickcharts appstream-qt
 
     qtgraphicaleffects qtquickcontrols qtquickcontrols2 qtscript qtwayland qtx11extras
   ];
