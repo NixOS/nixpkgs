@@ -59,8 +59,9 @@ rec {
     loongson2f     = [ ];
   };
 
-  predicates = rec {
+  predicates = let
     featureSupport = feature: x: builtins.elem feature features.${x};
+  in {
     sse3Support    = featureSupport "sse3";
     ssse3Support   = featureSupport "ssse3";
     sse4_1Support  = featureSupport "sse4_1";
