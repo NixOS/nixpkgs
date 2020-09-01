@@ -156,8 +156,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   cheese = callPackage ./apps/cheese { };
 
-  evolution = callPackage ./apps/evolution { };
-
   file-roller = callPackage ./apps/file-roller { };
 
   gedit = callPackage ./apps/gedit { };

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, gnome3, cmake, gettext, intltool, pkg-config, evolution-data-server
-, sqlite, gtk3, webkitgtk, libgdata, libmspack }:
+, sqlite, gtk3, webkitgtk, libgdata, libmspack, evolution }:
 
 stdenv.mkDerivation rec {
   pname = "evolution-ews";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake gettext intltool pkg-config ];
 
   buildInputs = [
-    evolution-data-server gnome3.evolution
+    evolution-data-server evolution
     sqlite libgdata
     gtk3 webkitgtk
     libmspack

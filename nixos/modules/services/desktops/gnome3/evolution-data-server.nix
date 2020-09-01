@@ -32,14 +32,13 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.services.gnome3.evolution-data-server.enable {
+  config =
+  let evolution-with-plugins = (import ../../../../.. {}).evolution-with-plugins; in
+  mkIf config.services.gnome3.evolution-data-server.enable {
+    environment.systemPackages = [ evolution-with-plugins ];
 
-    environment.systemPackages = [ pkgs.gnome3.evolution-data-server ];
+    services.dbus.packages = [ evolution-with-plugins ];
 
-    services.dbus.packages = [ pkgs.gnome3.evolution-data-server ];
-
-    systemd.packages = [ pkgs.gnome3.evolution-data-server ];
-
+    systemd.packages = [ evolution-with-plugins ];
   };
-
 }

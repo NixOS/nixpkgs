@@ -20208,6 +20208,8 @@ in
   inherit (gnome3) evince;
   evolution-data-server = gnome3.evolution-data-server;
   evolution-ews = callPackage ../applications/networking/mailreaders/evolution/evolution-ews { };
+  evolution = callPackage ../applications/networking/mailreaders/evolution/evolution { };
+  evolution-with-plugins = callPackage ../applications/networking/mailreaders/evolution/evolution/wrapper.nix { };
 
   keepass = callPackage ../applications/misc/keepass { };
 
