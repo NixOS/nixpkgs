@@ -5,8 +5,10 @@
 , gtk3
 , wrapGAppsHook
 , alsaLib
+, libjack2
 , libpulseaudio
 , fftw
+, jackSupport ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -29,11 +31,9 @@ stdenv.mkDerivation rec {
     alsaLib
     libpulseaudio
     fftw
-  ];
+  ] ++ stdenv.lib.optional jackSupport libjack2;
 
-  configureFlags = [
-    "--disable-jack"
-  ];
+  configureFlags = stdenv.lib.optional (!jackSupport) "--disable-jack";
 
   meta = {
     description = "Not a Guitar-Only tuner";
