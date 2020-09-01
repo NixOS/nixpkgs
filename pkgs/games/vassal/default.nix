@@ -1,11 +1,11 @@
 { stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "VASSAL-3.2.17";
+  name = "VASSAL-3.3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/vassalengine/${name}-linux.tar.bz2";
-    sha256 = "0nxskr46janxnb31c03zv61kr46vy98l7cwxha3vll81l4ij1sjb";
+    sha256 = "1abhlkl27gyfa1lghvv76xa6ks5hiwv2s9wb9ddadm0m07f87n1w";
   };
 
   buildInputs = [ makeWrapper ];

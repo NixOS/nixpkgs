@@ -297,7 +297,6 @@
   ./services/desktops/accountsservice.nix
   ./services/desktops/bamf.nix
   ./services/desktops/blueman.nix
-  ./services/desktops/deepin/deepin.nix
   ./services/desktops/dleyna-renderer.nix
   ./services/desktops/dleyna-server.nix
   ./services/desktops/pantheon/files.nix
@@ -719,6 +718,7 @@
   ./services/networking/rdnssd.nix
   ./services/networking/redsocks.nix
   ./services/networking/resilio.nix
+  ./services/networking/robustirc-bridge.nix
   ./services/networking/rpcbind.nix
   ./services/networking/rxe.nix
   ./services/networking/sabnzbd.nix

@@ -62,7 +62,7 @@ rec {
         ''
           mkdir -p $out
 
-          tests='exec(os.environ["testScript"])' ${driver}/bin/nixos-test-driver
+          LOGFILE=/dev/null tests='exec(os.environ["testScript"])' ${driver}/bin/nixos-test-driver
 
           for i in */xchg/coverage-data; do
             mkdir -p $out/coverage-data

@@ -2241,6 +2241,8 @@ in
 
   nix-direnv = callPackage ../tools/misc/nix-direnv { };
 
+  nix-template = callPackage ../tools/package-management/nix-template { };
+
   nixpkgs-pytools = with python3.pkgs; toPythonApplication nixpkgs-pytools;
 
   noteshrink = callPackage ../tools/misc/noteshrink { };
@@ -2576,6 +2578,8 @@ in
   };
 
   bzip2 = callPackage ../tools/compression/bzip2 { };
+
+  bzip2_1_1 = callPackage ../tools/compression/bzip2/1_1.nix { };
 
   cabextract = callPackage ../tools/archivers/cabextract { };
 
@@ -4546,7 +4550,9 @@ in
     buildGoModule = buildGo114Module;
   };
   ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
-  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
+  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster {
+    buildGoModule = buildGo114Module;
+  };
 
   ipget = callPackage ../applications/networking/ipget { };
 
@@ -6992,6 +6998,10 @@ in
 
   snort = callPackage ../applications/networking/ids/snort { };
 
+  so = callPackage ../development/tools/so {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   soapui = callPackage ../applications/networking/soapui { };
 
   sshguard = callPackage ../tools/security/sshguard {};
@@ -7387,6 +7397,8 @@ in
   touchegg = callPackage ../tools/inputmethods/touchegg { };
 
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
+
+  toss = callPackage ../tools/networking/toss { };
 
   tox-node = callPackage ../tools/networking/tox-node { };
 
@@ -13974,6 +13986,8 @@ in
 
   libtheora = callPackage ../development/libraries/libtheora { };
 
+  libthreadar = callPackage ../development/libraries/libthreadar { };
+
   libtiff = callPackage ../development/libraries/libtiff { };
 
   libtiger = callPackage ../development/libraries/libtiger { };
@@ -15671,7 +15685,6 @@ in
   webkitgtk = callPackage ../development/libraries/webkitgtk {
     harfbuzz = harfbuzzFull;
     inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
-    stdenv = clangStdenv; # TODO: https://github.com/NixOS/nixpkgs/issues/36947
   };
 
   websocketpp = callPackage ../development/libraries/websocket++ { };
@@ -17654,8 +17667,6 @@ in
 
     ddcci-driver = callPackage ../os-specific/linux/ddcci { };
 
-    deepin-anything = callPackage ../os-specific/linux/deepin-anything { };
-
     digimend = callPackage ../os-specific/linux/digimend { };
 
     dpdk = callPackage ../os-specific/linux/dpdk { };
@@ -18374,6 +18385,7 @@ in
     ubootPine64
     ubootPine64LTS
     ubootPinebook
+    ubootPinebookPro
     ubootQemuAarch64
     ubootQemuArm
     ubootRaspberryPi
@@ -19265,6 +19277,8 @@ in
 
   vegeta = callPackage ../tools/networking/vegeta { };
 
+  venta = callPackage ../data/themes/venta { };
+
   victor-mono = callPackage ../data/fonts/victor-mono { };
 
   vimix-gtk-themes = callPackage ../data/themes/vimix {};
@@ -19969,9 +19983,7 @@ in
     buildServerGui = false;
   };
 
-  droopy = callPackage ../applications/networking/droopy {
-    inherit (python3Packages) wrapPython;
-  };
+  droopy = python37Packages.callPackage ../applications/networking/droopy { };
 
   drumgizmo = callPackage ../applications/audio/drumgizmo { };
 
@@ -21905,8 +21917,6 @@ in
 
   neocomp  = callPackage ../applications/window-managers/neocomp { };
 
-  netease-cloud-music = callPackage ../applications/audio/netease-cloud-music {};
-
   newsflash = callPackage ../applications/networking/feedreaders/newsflash { };
 
   nicotine-plus = callPackage ../applications/networking/soulseek/nicotine-plus {
@@ -22984,6 +22994,8 @@ in
 
   prusa-slicer = callPackage ../applications/misc/prusa-slicer { };
 
+  robustirc-bridge = callPackage ../servers/irc/robustirc-bridge { };
+
   sddm = libsForQt5.callPackage ../applications/display-managers/sddm { };
 
   skrooge = libsForQt5.callPackage ../applications/office/skrooge {};
@@ -23469,12 +23481,6 @@ in
   qtile = callPackage ../applications/window-managers/qtile {
     inherit (xorg) libxcb;
   };
-
-  qvim = lowPrio (callPackage ../applications/editors/vim/qvim.nix {
-    features = "huge"; # one of  tiny, small, normal, big or huge
-    lua = pkgs.lua5;
-    flags = [ "python" "X11" ]; # only flag "X11" by now
-  });
 
   vimpc = callPackage ../applications/audio/vimpc { };
 
@@ -25319,11 +25325,6 @@ in
 
   cinnamon = recurseIntoAttrs (callPackage ../desktops/cinnamon { });
 
-  deepin = recurseIntoAttrs (import ../desktops/deepin {
-    inherit pkgs libsForQt5;
-    inherit (lib) makeScope;
-  });
-
   enlightenment = recurseIntoAttrs (callPackage ../desktops/enlightenment {
     callPackage = newScope pkgs.enlightenment;
   });
@@ -26662,11 +26663,11 @@ in
   # Exceptions are versions that we need to keep to allow upgrades from older NixOS releases
   inherit (callPackage ../applications/networking/cluster/kops {})
     mkKops
-    kops_1_15
     kops_1_16
     kops_1_17
+    kops_1_18
     ;
-  kops = kops_1_17;
+  kops = kops_1_18;
 
   lguf-brightness = callPackage ../misc/lguf-brightness { };
 
@@ -27147,9 +27148,7 @@ in
 
   sanoid = callPackage ../tools/backup/sanoid { };
 
-  satysfi = callPackage ../tools/typesetting/satysfi {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_07;
-  };
+  satysfi = callPackage ../tools/typesetting/satysfi { };
 
   sc-controller = pythonPackages.callPackage ../misc/drivers/sc-controller {
     inherit libusb1; # Shadow python.pkgs.libusb1.
