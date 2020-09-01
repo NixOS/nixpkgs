@@ -2,9 +2,14 @@
 , fetchurl
 , appimageTools
 , makeWrapper
-, electron
+, electron_9
 , openssl
 }:
+
+let
+  electron = electron_9;
+
+in
 
 stdenv.mkDerivation rec {
   pname = "1password";
