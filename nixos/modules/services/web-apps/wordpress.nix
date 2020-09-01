@@ -301,37 +301,38 @@ in
     services.httpd = {
       enable = true;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts = mapAttrs (hostName: cfg: mkMerge [ cfg.virtualHost {
-        documentRoot = mkForce "${pkg hostName cfg}/share/wordpress";
-        extraConfig = ''
-          <Directory "${pkg hostName cfg}/share/wordpress">
-            <FilesMatch "\.php$">
-              <If "-f %{REQUEST_FILENAME}">
-                SetHandler "proxy:unix:${config.services.phpfpm.pools."wordpress-${hostName}".socket}|fcgi://localhost/"
-              </If>
-            </FilesMatch>
+      virtualHosts = mapAttrs' (hostName: cfg: (
+        nameValuePair "wordpress-${hostName}" (mkMerge [ cfg.virtualHost {
+          documentRoot = mkForce "${pkg hostName cfg}/share/wordpress";
+          extraConfig = ''
+            <Directory "${pkg hostName cfg}/share/wordpress">
+              <FilesMatch "\.php$">
+                <If "-f %{REQUEST_FILENAME}">
+                  SetHandler "proxy:unix:${config.services.phpfpm.pools."wordpress-${hostName}".socket}|fcgi://localhost/"
+                </If>
+              </FilesMatch>
 
-            # standard wordpress .htaccess contents
-            <IfModule mod_rewrite.c>
-              RewriteEngine On
-              RewriteBase /
-              RewriteRule ^index\.php$ - [L]
-              RewriteCond %{REQUEST_FILENAME} !-f
-              RewriteCond %{REQUEST_FILENAME} !-d
-              RewriteRule . /index.php [L]
-            </IfModule>
+              # standard wordpress .htaccess contents
+              <IfModule mod_rewrite.c>
+                RewriteEngine On
+                RewriteBase /
+                RewriteRule ^index\.php$ - [L]
+                RewriteCond %{REQUEST_FILENAME} !-f
+                RewriteCond %{REQUEST_FILENAME} !-d
+                RewriteRule . /index.php [L]
+              </IfModule>
 
-            DirectoryIndex index.php
-            Require all granted
-            Options +FollowSymLinks
-          </Directory>
+              DirectoryIndex index.php
+              Require all granted
+              Options +FollowSymLinks
+            </Directory>
 
-          # https://wordpress.org/support/article/hardening-wordpress/#securing-wp-config-php
-          <Files wp-config.php>
-            Require all denied
-          </Files>
-        '';
-      } ]) eachSite;
+            # https://wordpress.org/support/article/hardening-wordpress/#securing-wp-config-php
+            <Files wp-config.php>
+              Require all denied
+            </Files>
+          '';
+      } ]))) eachSite;
     };
 
     systemd.tmpfiles.rules = flatten (mapAttrsToList (hostName: cfg: [
