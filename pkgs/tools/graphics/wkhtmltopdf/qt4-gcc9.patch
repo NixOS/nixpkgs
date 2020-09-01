@@ -1,0 +1,20 @@
+--- a/configure
++++ b/configure
+@@ -7744,7 +7744,7 @@
+     *-g++*)
+ 	# Check gcc's version
+ 	case "$(${QMAKE_CONF_COMPILER} -dumpversion)" in
+-	    8*|7*|6*|5*|4*|3.4*)
++	    *)
+ 		;;
+             3.3*)
+                 canBuildWebKit="no"
+@@ -8060,7 +8060,7 @@
+     3.*)
+         COMPILER_VERSION="3.*"
+         ;;
+-    8*|7*|6*|5*|4.*)
++    *)
+         COMPILER_VERSION="4"
+         ;;
+     *)

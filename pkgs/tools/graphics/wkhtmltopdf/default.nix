@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, qt4, fontconfig, freetype, libpng, zlib, libjpeg
+{ stdenv, fetchFromGitHub, removeReferencesTo
+, qt4, fontconfig, freetype, libpng, zlib, libjpeg
 , openssl, libX11, libXext, libXrender, lib }:
 
 # wkhtmltopdf is a weird beast.
@@ -47,7 +48,7 @@ let
       "qt4-openssl-1.1.patch"
       "libressl.patch"
       "qt4-gcc6.patch" ];
-    patches = builtins.filter (
+    patches = [ ./qt4-gcc9.patch ] ++ builtins.filter (
       patch: ! lib.any (exclude: builtins.baseNameOf patch == exclude)
                        excludePatches ) oldAttrs.patches;
     configureFlags =
@@ -146,6 +147,8 @@ stdenv.mkDerivation rec {
     sha256 = "0m2zy986kzcpg0g3bvvm815ap9n5ann5f6bdy7pfj6jv482bm5mg";
   };
 
+  nativeBuildInputs = [ removeReferencesTo ];
+
   buildInputs = [
     wkQt fontconfig freetype libpng zlib libjpeg openssl
     libX11 libXext libXrender
@@ -158,6 +161,10 @@ stdenv.mkDerivation rec {
   '';
 
   configurePhase = "qmake wkhtmltopdf.pro INSTALLBASE=$out";
+
+  postFixup = ''
+    remove-references-to -t ${wkQt} $out/bin/* $out/lib/*
+  '';
 
   enableParallelBuilding = true;
 
