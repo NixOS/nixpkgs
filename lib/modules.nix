@@ -254,11 +254,11 @@ rec {
       */
       injectAssertions = assertions: config: let
         # Partition into assertions that are triggered on this level and ones that aren't
-        parted = partition (a: length a.triggerPath == 0) assertions;
+        parted = lib.partition (a: length a.triggerPath == 0) assertions;
 
         # From the ones that are triggered, filter out ones that aren't enabled
         # and group into warnings/errors
-        byType = groupBy (a: a.type) (filter (a: a.enable) parted.right);
+        byType = lib.groupBy (a: a.type) (filter (a: a.enable) parted.right);
 
         # Triggers semantically are just lib.id, but they print warning cause errors in addition
         warningTrigger = value: lib.foldr (w: warn w.show) value (byType.warning or []);
@@ -266,16 +266,16 @@ rec {
           if byType.error or [] == [] then value else
           throw ''
             Failed assertions:
-            ${concatMapStringsSep "\n" (a: "- ${a.show}") byType.error}
+            ${lib.concatMapStringsSep "\n" (a: "- ${a.show}") byType.error}
           '';
         # Trigger for both warnings and errors
         trigger = value: warningTrigger (errorTrigger value);
 
         # From the non-triggered assertions, split off the first element of triggerPath
         # to get a mapping from nested attributes to a list of assertions for that attribute
-        nested = zipAttrs (map (a: {
+        nested = lib.zipAttrs (map (a: {
           ${head a.triggerPath} = a // {
-            triggerPath = tail a.triggerPath;
+            triggerPath = lib.tail a.triggerPath;
           };
         }) parted.wrong);
 
@@ -296,7 +296,7 @@ rec {
       # has a `show` attribute for how to show it if triggered
       assertions = mapAttrsToList (name: value:
         let id =
-          if hasPrefix "_" name then ""
+          if lib.hasPrefix "_" name then ""
           else "[${showOption prefix}${optionalString (prefix != []) "/"}${name}] ";
         in value // {
           show = "${id}${value.message}";

@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, config, ... }:
 
 with lib;
 
@@ -29,6 +29,25 @@ with lib;
       '';
     };
 
+    _module.assertions = mkOption {
+      type = types.attrsOf (types.submodule {
+        triggerPath = mkDefault [ "system" "build" "toplevel" ];
+      });
+    };
+
   };
+
+  config._module.assertions = lib.listToAttrs (lib.imap1 (n: value:
+    let
+      name = "_${toString n}";
+      isWarning = lib.isString value;
+      result = {
+        enable = if isWarning then true else ! value.assertion;
+        type = if isWarning then "warning" else "error";
+        message = if isWarning then value else value.message;
+      };
+    in nameValuePair name result
+  ) (config.assertions ++ config.warnings));
+
   # impl of assertions is in <nixpkgs/nixos/modules/system/activation/top-level.nix>
 }
