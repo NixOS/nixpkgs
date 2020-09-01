@@ -22992,6 +22992,8 @@ in
 
   prusa-slicer = callPackage ../applications/misc/prusa-slicer { };
 
+  super-slicer = callPackage ../applications/misc/prusa-slicer/super-slicer.nix { };
+
   robustirc-bridge = callPackage ../servers/irc/robustirc-bridge { };
 
   sddm = libsForQt5.callPackage ../applications/display-managers/sddm { };
