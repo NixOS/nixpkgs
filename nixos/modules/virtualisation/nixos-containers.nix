@@ -717,6 +717,12 @@ in
 
   config = mkIf (config.boot.enableContainers) (let
 
+    warnings = flatten [
+      (optional (config.virtualisation.containers.enable && versionOlder config.system.stateVersion "20.09") ''
+        Enabling both boot.enableContainers & virtualisation.containers on system.stateVersion < 20.09 is unsupported.
+      '')
+    ];
+
     unit = {
       description = "Container '%i'";
 
