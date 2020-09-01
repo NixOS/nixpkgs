@@ -20,10 +20,9 @@ in
 {
 
   options = {
+    fonts.fontDir = {
 
-    fonts = {
-
-      enableFontDir = mkOption {
+      enable = mkOption {
         type = types.bool;
         default = false;
         description = ''
@@ -32,11 +31,11 @@ in
         '';
       };
 
-    };
 
+    };
   };
 
-  config = mkIf config.fonts.enableFontDir {
+  config = mkIf config.fonts.fontDir.enable {
 
     # This is enough to make a symlink because the xserver
     # module already links all /share/X11 paths.
@@ -47,5 +46,9 @@ in
     '';
 
   };
+
+  imports = [
+    (mkRenamedOptionModule [ "fonts" "enableFontDir" ] [ "fonts" "fontDir" "enable" ])
+  ];
 
 }
