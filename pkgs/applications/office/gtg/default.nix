@@ -50,8 +50,15 @@ python3Packages.buildPythonApplication rec {
     liblarch
   ];
 
+  checkInputs = with python3Packages; [
+    nose
+    mock
+  ];
+
   format = "other";
   strictDeps = false; # gobject-introspection does not run with strictDeps (https://github.com/NixOS/nixpkgs/issues/56943)
+
+  checkPhase = "python3 ../run-tests";
 
   meta = with stdenv.lib; {
     description = " A personal tasks and TODO-list items organizer.";
