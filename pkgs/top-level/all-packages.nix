@@ -10440,8 +10440,7 @@ in
   aws-adfs = with python3Packages; toPythonApplication aws-adfs;
 
   inherit (callPackages ../development/tools/electron { })
-    electron_3 electron_4 electron_5 electron_6 electron_7 electron_8 electron_9 electron_10;
-  electron = electron_10;
+    electron electron_3 electron_4 electron_5 electron_6 electron_7 electron_8 electron_9 electron_10;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 

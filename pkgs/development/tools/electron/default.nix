@@ -3,7 +3,10 @@
 let
   mkElectron = import ./generic.nix args;
 in
-{
+rec {
+
+  electron = electron_10;
+
   electron_3 = mkElectron "3.1.13" {
     x86_64-linux = "1psmbplz6jhnnf6hmfhxbmmhn4n1dpnhzbc12pxn645xhfpk9ark";
     x86_64-darwin = "1vvjm4jifzjqvbs2kjlwg1h9p2czr2b5imjr9hld1j8nyfrzb0dx";
