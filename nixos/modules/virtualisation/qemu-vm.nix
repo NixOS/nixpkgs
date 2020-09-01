@@ -746,7 +746,6 @@ in
         (isEnabled "EXT4_FS")
         (isYes "BLK_DEV")
         (isYes "PCI")
-        (isYes "EXPERIMENTAL")
         (isYes "NETDEVICES")
         (isYes "NET_CORE")
         (isYes "INET")
