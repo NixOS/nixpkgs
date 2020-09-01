@@ -1906,6 +1906,10 @@ in
 
   f3 = callPackage ../tools/filesystems/f3 { };
 
+  f3d = callPackage ../applications/graphics/f3d {
+    inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
+  };
+
   fac = callPackage ../development/tools/fac { };
 
   facedetect = callPackage ../tools/graphics/facedetect { };
