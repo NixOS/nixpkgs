@@ -1372,6 +1372,11 @@ in
     then python.pkgs.tensorflow.libtensorflow
     else libtensorflow-bin;
 
+  libtorch-bin = callPackage ../development/libraries/science/math/libtorch/bin.nix {
+    inherit (linuxPackages) nvidia_x11;
+    cudaSupport = pkgs.config.cudaSupport or false;
+  };
+
   behdad-fonts = callPackage ../data/fonts/behdad-fonts { };
 
   bless = callPackage ../applications/editors/bless { };
