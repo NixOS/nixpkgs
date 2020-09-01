@@ -3,9 +3,9 @@
 , fetchFromGitHub
 , go-md2man
 , installShellFiles
-, libseccomp
-, linuxPackages
 , pkg-config
+, bcc
+, libseccomp
 }:
 
 buildGoModule rec {
@@ -27,8 +27,8 @@ buildGoModule rec {
     pkg-config
   ];
   buildInputs = [
+    bcc
     libseccomp
-    linuxPackages.bcc
   ];
 
   buildPhase = ''
