@@ -9219,12 +9219,7 @@ in
 
   me_cleaner = pythonPackages.callPackage ../tools/misc/me_cleaner { };
 
-  mesos = callPackage ../applications/networking/cluster/mesos {
-    sasl = cyrus_sasl;
-    inherit (pythonPackages) python boto setuptools wrapPython;
-    pythonProtobuf = pythonPackages.protobuf.override { protobuf = protobuf3_6; };
-    perf = linuxPackages.perf;
-  };
+  mesos = callPackage ../applications/networking/cluster/mesos { };
 
   mesos-dns = callPackage ../servers/mesos-dns { };
 
@@ -11740,6 +11735,7 @@ in
   grilo-plugins = callPackage ../development/libraries/grilo-plugins { };
 
   grpc = callPackage ../development/libraries/grpc { };
+  grpc_1_10 = callPackage ../development/libraries/grpc/1_10.nix { };
 
   gsettings-qt = libsForQt5.callPackage ../development/libraries/gsettings-qt { };
 
