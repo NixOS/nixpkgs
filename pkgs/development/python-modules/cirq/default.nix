@@ -69,7 +69,7 @@ buildPythonPackage rec {
   ];
 
   doCheck = true;
-  # pythonImportsCheck = [ "cirq" "cirq.Ciruit" ];  # cirq's importlib hook doesn't work here
+  # pythonImportsCheck = [ "cirq" "cirq.Circuit" ];  # cirq's importlib hook doesn't work here
   dontUseSetuptoolsCheck = true;
   checkInputs = [
     pytestCheckHook
@@ -83,16 +83,10 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "--ignore=dev_tools"  # Only needed when developing new code, which is out-of-scope
+    "--benchmark-disable" # Don't need to run benchmarks when packaging.
   ];
   disabledTests = [
-    "test_serialize_sympy_constants"  # fails due to small error in pi (~10e-7)
-    "test_convert_to_ion_gates" # fails due to rounding error, 0.75 != 0.750...2
-
-    # Newly disabled tests on cirq 0.8
-    # TODO: test & figure out why failing
-    "engine_job_test"
-    "test_health"
-    "test_run_delegation"
+    "test_convert_to_ion_gates" # fails on some systems due to rounding error, 0.75 != 0.750...2
   ] ++ lib.optionals stdenv.isAarch64 [
     # Seem to fail due to math issues on aarch64?
     "expectation_from_wavefunction"
@@ -102,6 +96,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A framework for creating, editing, and invoking Noisy Intermediate Scale Quantum (NISQ) circuits.";
     homepage = "https://github.com/quantumlib/cirq";
+    changelog = "https://github.com/quantumlib/Cirq/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };
