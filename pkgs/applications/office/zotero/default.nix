@@ -1,6 +1,7 @@
 { stdenv, fetchurl, wrapGAppsHook, makeDesktopItem
 , atk
 , cairo
+, coreutils
 , curl
 , cups
 , dbus-glib
@@ -129,6 +130,12 @@ stdenv.mkDerivation rec {
      find . -executable -type f -exec \
        patchelf --set-rpath "$libPath" \
          "$out/usr/lib/zotero-bin-${version}/{}" \;
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : ${stdenv.lib.makeBinPath [ coreutils ]}
+    )
   '';
 
   meta = with stdenv.lib; {
