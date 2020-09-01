@@ -17757,6 +17757,8 @@ in
 
     netatop = callPackage ../os-specific/linux/netatop { };
 
+    oci-seccomp-bpf-hook = if stdenv.lib.versionAtLeast kernel.version "5.4" then callPackage ../os-specific/linux/oci-seccomp-bpf-hook { } else null;
+
     perf = callPackage ../os-specific/linux/kernel/perf.nix { };
 
     phc-intel = if stdenv.lib.versionAtLeast kernel.version "4.10" then callPackage ../os-specific/linux/phc-intel { } else null;
@@ -24832,8 +24834,6 @@ in
   nudoku = callPackage ../games/nudoku { };
 
   nxengine-evo = callPackage ../games/nxengine-evo { };
-
-  oci-seccomp-bpf-hook = callPackage ../applications/virtualization/oci-seccomp-bpf-hook { };
 
   odamex = callPackage ../games/odamex { };
 
