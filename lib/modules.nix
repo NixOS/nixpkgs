@@ -46,6 +46,7 @@ let
     showFiles
     showOption
     unknownModule
+    literalExample
     ;
 in
 
@@ -116,6 +117,98 @@ rec {
               turned off.
             '';
           };
+
+          _module.assertions = mkOption {
+            description = ''
+              Assertions and warnings to trigger during module evaluation. The
+              attribute name will be displayed when it is triggered, allowing
+              users to disable/change these assertions again if necessary. See
+              the section on Warnings and Assertions in the manual for more
+              information.
+            '';
+            example = literalExample ''
+              {
+                gpgSshAgent = {
+                  enable = config.programs.gnupg.agent.enableSSHSupport && config.programs.ssh.startAgent;
+                  message = "You can't use ssh-agent and GnuPG agent with SSH support enabled at the same time!";
+                };
+
+                grafanaPassword = {
+                  enable = config.services.grafana.database.password != "";
+                  message = "Grafana passwords will be stored as plaintext in the Nix store!";
+                  type = "warning";
+                };
+              }
+            '';
+            default = {};
+            internal = true;
+            type = types.attrsOf (types.submodule {
+              # TODO: Rename to assertion? Or allow also setting assertion?
+              options.enable = mkOption {
+                description = ''
+                  Whether to enable this assertion.
+                  <note><para>
+                    This is the inverse of asserting a condition: If a certain
+                    condition should be <literal>true</literal>, then this
+                    option should be set to <literal>false</literal> when that
+                    case occurs
+                  </para></note>
+                '';
+                type = types.bool;
+              };
+
+              options.type = mkOption {
+                description = ''
+                  The type of the assertion. The default
+                  <literal>"error"</literal> type will cause evaluation to fail,
+                  while the <literal>"warning"</literal> type will only show a
+                  warning.
+                '';
+                type = types.enum [ "error" "warning" ];
+                default = "error";
+                example = "warning";
+              };
+
+              options.message = mkOption {
+                description = ''
+                  The assertion message to display if this assertion triggers.
+                  To display option names in the message, add
+                  <literal>options</literal> to the module function arguments
+                  and use <literal>''${options.path.to.option}</literal>.
+                '';
+                type = types.str;
+                example = literalExample ''
+                  Enabling both ''${options.services.foo.enable} and ''${options.services.bar.enable} is not possible.
+                '';
+              };
+
+              options.triggerPath = mkOption {
+                description = ''
+                  The <literal>config</literal> path which when evaluated should
+                  trigger this assertion. By default this is
+                  <literal>[]</literal>, meaning evaluating
+                  <literal>config</literal> at all will trigger the assertion.
+                  On NixOS this default is changed to
+                  <literal>[ "system" "build" "toplevel"</literal> such that
+                  only a system evaluation triggers the assertions.
+                  <warning><para>
+                   Evaluating <literal>config</literal> from within the current
+                   module evaluation doesn't cause a trigger. Only accessing it
+                   from outside will do that. This means it's easy to miss
+                   assertions if this option doesn't have an externally-accessed
+                   value.
+                  </para></warning>
+                '';
+                # Mark as internal as it's easy to misuse it
+                internal = true;
+                type = types.uniq (types.listOf types.str);
+                # Default to [], causing assertions to be triggered when
+                # anything is evaluated. This is a safe and convenient default.
+                default = [];
+                example = [ "system" "build" "vm" ];
+              };
+            });
+          };
         };
 
         config = {
@@ -154,6 +247,64 @@ rec {
           # paths, meaning recursiveUpdate will never override any value
           else recursiveUpdate freeformConfig declaredConfig;
 
+      /*
+      Inject a list of assertions into a config value, corresponding to their
+      triggerPath (meaning when that path is accessed from the result of this
+      function, the assertion triggers).
+      */
+      injectAssertions = assertions: config: let
+        # Partition into assertions that are triggered on this level and ones that aren't
+        parted = partition (a: length a.triggerPath == 0) assertions;
+
+        # From the ones that are triggered, filter out ones that aren't enabled
+        # and group into warnings/errors
+        byType = groupBy (a: a.type) (filter (a: a.enable) parted.right);
+
+        # Triggers semantically are just lib.id, but they print warning cause errors in addition
+        warningTrigger = value: lib.foldr (w: warn w.show) value (byType.warning or []);
+        errorTrigger = value:
+          if byType.error or [] == [] then value else
+          throw ''
+            Failed assertions:
+            ${concatMapStringsSep "\n" (a: "- ${a.show}") byType.error}
+          '';
+        # Trigger for both warnings and errors
+        trigger = value: warningTrigger (errorTrigger value);
+
+        # From the non-triggered assertions, split off the first element of triggerPath
+        # to get a mapping from nested attributes to a list of assertions for that attribute
+        nested = zipAttrs (map (a: {
+          ${head a.triggerPath} = a // {
+            triggerPath = tail a.triggerPath;
+          };
+        }) parted.wrong);
+
+        # Recursively inject assertions if config is an attribute set and we
+        # have assertions under its attributes
+        result =
+          if isAttrs config
+          then
+            mapAttrs (name: value:
+              if nested ? ${name}
+              then injectAssertions nested.${name} value
+              else value
+            ) config
+          else config;
+      in trigger result;
+
+      # List of assertions for this module evaluation, where each assertion also
+      # has a `show` attribute for how to show it if triggered
+      assertions = mapAttrsToList (name: value:
+        let id =
+          if hasPrefix "_" name then ""
+          else "[${showOption prefix}${optionalString (prefix != []) "/"}${name}] ";
+        in value // {
+          show = "${id}${value.message}";
+        }
+      ) config._module.assertions;
+
+      finalConfig = injectAssertions assertions (removeAttrs config [ "_module" ]);
+
       checkUnmatched =
         if config._module.check && config._module.freeformType == null && merged.unmatchedDefns != [] then
           let
@@ -173,7 +324,7 @@ rec {
 
       result = builtins.seq checkUnmatched {
         inherit options;
-        config = removeAttrs config [ "_module" ];
+        config = finalConfig;
         inherit (config) _module;
       };
     in result;
