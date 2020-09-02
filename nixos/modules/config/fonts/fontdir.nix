@@ -4,13 +4,15 @@ with lib;
 
 let
 
+  cfg = config.fonts.fontDir;
+
   x11Fonts = pkgs.runCommand "X11-fonts" { preferLocalBuild = true; } ''
     mkdir -p "$out/share/X11/fonts"
     font_regexp='.*\.\(ttf\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
     find ${toString config.fonts.fonts} -regex "$font_regexp" \
       -exec ln -sf -t "$out/share/X11/fonts" '{}' \;
     cd "$out/share/X11/fonts"
-    ${optionalString config.fonts.fontDir.decompressFonts ''
+    ${optionalString cfg.decompressFonts ''
       ${pkgs.gzip}/bin/gunzip -f *.gz
     ''}
     ${pkgs.xorg.mkfontscale}/bin/mkfontscale
@@ -36,7 +38,7 @@ in
 
       decompressFonts = mkOption {
         type = types.bool;
-        default = false;
+        default = config.programs.xwayland.enable;
         description = ''
           Whether to decompress fonts in
           <filename>/run/current-system/sw/share/X11/fonts</filename>.
@@ -46,7 +48,7 @@ in
     };
   };
 
-  config = mkIf config.fonts.fontDir.enable {
+  config = mkIf cfg.enable {
 
     # This is enough to make a symlink because the xserver
     # module already links all /share/X11 paths.
