@@ -3,9 +3,7 @@
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
 , libmng, which, libGLU, openssl, dbus, cups, pkgconfig
 , libtiff, glib, icu, libmysqlclient, postgresql, sqlite, perl, coreutils, libXi
-, buildMultimedia ? false # ancient gstreamer is broken
-, alsaLib, gstreamer, gst-plugins-base
-, buildWebkit ? false
+, alsaLib
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , flashplayerFix ? false, gdk-pixbuf
 , gtkStyle ? stdenv.hostPlatform == stdenv.buildPlatform, gtk2
@@ -178,7 +176,7 @@ stdenv.mkDerivation rec {
     "-exceptions" "-xmlpatterns"
 
     "-make" "libs" "-make" "tools" "-make" "translations"
-    "-no-phonon" (mk buildWebkit "webkit") (mk buildMultimedia "multimedia") "-audio-backend"
+    "-no-phonon" "-no-webkit" "-no-multimedia" "-audio-backend"
   ]) ++ [
     "-${if demos then "" else "no"}make" "demos"
     "-${if examples then "" else "no"}make" "examples"
@@ -191,9 +189,7 @@ stdenv.mkDerivation rec {
     [ libXrender libXrandr libXinerama libXcursor libXext libXfixes libXv libXi
       libSM zlib libpng openssl dbus freetype fontconfig glib ]
         # Qt doesn't directly need GLU (just GL), but many apps use, it's small and doesn't remain a runtime-dep if not used
-    ++ lib.optional libGLSupported libGLU
-    ++ lib.optional ((buildWebkit || buildMultimedia) && stdenv.isLinux ) alsaLib
-    ++ lib.optionals (buildWebkit || buildMultimedia) [ gstreamer gst-plugins-base ];
+    ++ lib.optional libGLSupported libGLU;
 
   # The following libraries are only used in plugins
   buildInputs =
