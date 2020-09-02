@@ -677,6 +677,8 @@ in {
 
   azure-mgmt-subscription = callPackage ../development/python-modules/azure-mgmt-subscription { };
 
+  azure-mgmt-synapse = callPackage ../development/python-modules/azure-mgmt-synapse { };
+
   azure-mgmt-trafficmanager = callPackage ../development/python-modules/azure-mgmt-trafficmanager { };
 
   azure-mgmt-web = callPackage ../development/python-modules/azure-mgmt-web { };
