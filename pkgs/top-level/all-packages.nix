@@ -2151,6 +2151,8 @@ in
 
   numatop = callPackage ../os-specific/linux/numatop { };
 
+  numworks-udev-rules = callPackage ../os-specific/linux/numworks-udev-rules { };
+
   iio-sensor-proxy = callPackage ../os-specific/linux/iio-sensor-proxy { };
 
   ipvsadm = callPackage ../os-specific/linux/ipvsadm { };
