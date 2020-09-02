@@ -27,37 +27,50 @@ reportFailure() {
     fail=$((fail + 1))
 }
 
-checkConfigOutput() {
+checkConfigCodeOutErr() {
+    local expectedExit=$1
+    shift;
     local outputContains=$1
     shift;
-    if evalConfig "$@" 2>/dev/null | grep --silent "$outputContains" ; then
-        pass=$((pass + 1))
-        return 0;
-    else
-        echo 2>&1 "error: Expected result matching '$outputContains', while evaluating"
+    local errorContains=$1
+    shift;
+    out=$(mktemp)
+    err=$(mktemp)
+    evalConfig "$@" 1>"$out" 2>"$err"
+    if [[ "$?" -ne "$expectedExit" ]]; then
+        echo 2>&1 "error: Expected exit code $expectedExit while evaluating"
         reportFailure "$@"
         return 1
     fi
+
+    if [[ -n "$outputContains" ]] && ! grep -zP --silent "$outputContains" "$out"; then
+        echo 2>&1 "error: Expected output matching '$outputContains', while evaluating"
+        reportFailure "$@"
+        return 1
+    fi
+
+    if [[ -n "$errorContains" ]] && ! grep -zP --silent "$errorContains" "$err"; then
+        echo 2>&1 "error: Expected error matching '$errorContains', while evaluating"
+        reportFailure "$@"
+        return 1
+    fi
+
+    pass=$((pass + 1))
+
+    # Clean up temp files
+    rm "$out" "$err"
+}
+
+checkConfigOutput() {
+    local outputContains=$1
+    shift;
+    checkConfigCodeOutErr 0 "$outputContains" "" "$@"
 }
 
 checkConfigError() {
     local errorContains=$1
-    local err=""
     shift;
-    if err==$(evalConfig "$@" 2>&1 >/dev/null); then
-        echo 2>&1 "error: Expected error code, got exit code 0, while evaluating"
-        reportFailure "$@"
-        return 1
-    else
-        if echo "$err" | grep -zP --silent "$errorContains" ; then
-            pass=$((pass + 1))
-            return 0;
-        else
-            echo 2>&1 "error: Expected error matching '$errorContains', while evaluating"
-            reportFailure "$@"
-            return 1
-        fi
-    fi
+    checkConfigCodeOutErr 1 "" "$errorContains" "$@"
 }
 
 # Check boolean option.
