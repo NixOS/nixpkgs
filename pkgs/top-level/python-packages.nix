@@ -842,6 +842,8 @@ in {
 
   black = callPackage ../development/python-modules/black { };
 
+  black-macchiato = callPackage ../development/python-modules/black-macchiato { };
+
   bleach = callPackage ../development/python-modules/bleach { };
 
   bleak = callPackage ../development/python-modules/bleak { };
