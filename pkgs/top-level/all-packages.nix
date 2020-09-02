@@ -877,6 +877,8 @@ in
 
   automirror = callPackage ../tools/misc/automirror { };
 
+  balena-cli = callPackage ../development/tools/balena-cli { };
+
   barman = python3Packages.callPackage ../tools/misc/barman { };
 
   bash-my-aws = callPackage ../tools/admin/bash-my-aws { };
