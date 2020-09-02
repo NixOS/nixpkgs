@@ -110,6 +110,12 @@
     githubId = 1174810;
     name = "Nikolay Amiantov";
   };
+  aberDerBart = {
+    email = "aber@der-b.art";
+    github = "AberDerBart";
+    githubId = 8435083;
+    name = "Jonas Grosse-Holz";
+  };
   abhi18av = {
     email = "abhi18av@gmail.com";
     github = "abhi18av";
