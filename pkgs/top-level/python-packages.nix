@@ -1412,6 +1412,8 @@ in {
 
   databricks-cli = callPackage ../development/python-modules/databricks-cli { };
 
+  databricks-connect = callPackage ../development/python-modules/databricks-connect { inherit (pkgs) jdk; };
+
   dataclasses = callPackage ../development/python-modules/dataclasses { };
 
   dataclasses-json = callPackage ../development/python-modules/dataclasses-json { };
@@ -3103,6 +3105,8 @@ in {
   kazoo = callPackage ../development/python-modules/kazoo { };
 
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
+
+  keep = callPackage ../development/python-modules/keep { };
 
   keepalive = callPackage ../development/python-modules/keepalive { };
 
@@ -5815,6 +5819,9 @@ in {
 
   pywavelets = callPackage ../development/python-modules/pywavelets { };
 
+  # We need "normal" libxml2 and not the python package by the same name.
+  pywbem = callPackage ../development/python-modules/pywbem { libxml2 = pkgs.libxml2; };
+
   PyWebDAV = callPackage ../development/python-modules/pywebdav { };
 
   pywebpush = callPackage ../development/python-modules/pywebpush { };
@@ -6986,6 +6993,12 @@ in {
     callPackage ../development/python-modules/tornado { }
   else
     callPackage ../development/python-modules/tornado/5.nix { };
+
+  # Used by circus and grab-site, 2020-08-29
+  tornado_4 = callPackage ../development/python-modules/tornado/4.nix { };
+
+  # Used by luigi, 2020-08-29
+  tornado_5 = callPackage ../development/python-modules/tornado/5.nix { };
 
   towncrier = callPackage ../development/python-modules/towncrier { inherit (pkgs) git; };
 

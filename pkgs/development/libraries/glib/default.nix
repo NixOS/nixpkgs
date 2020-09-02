@@ -16,9 +16,6 @@ with stdenv.lib;
 assert stdenv.isLinux -> utillinuxMinimal != null;
 
 # TODO:
-# * Add gio-module-fam
-#     Problem: cyclic dependency on gamin
-#     Possible solution: build as a standalone module, set env. vars
 # * Make it build without python
 #     Problem: an example (test?) program needs it.
 #     Possible solution: disable compilation of this example somehow

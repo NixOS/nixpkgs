@@ -4310,6 +4310,12 @@
     githubId = 494012;
     name = "Kevin Cox";
   };
+  kfollesdal = {
+    email = "kfollesdal@gmail.com";
+    github = "kfollesdal";
+    githubId = 546087;
+    name = "Kristoffer K. Føllesdal";
+  };
   khumba = {
     email = "bog@khumba.net";
     github = "khumba";

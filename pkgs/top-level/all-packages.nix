@@ -123,6 +123,8 @@ in
 
   appimageTools = callPackage ../build-support/appimage { };
 
+  appindicator-sharp = callPackage ../development/libraries/appindicator-sharp { };
+
   ensureNewerSourcesHook = { year }: makeSetupHook {}
     (writeScript "ensure-newer-sources-hook.sh" ''
       postUnpackHooks+=(_ensureNewerSources)
@@ -1371,6 +1373,11 @@ in
     if python.pkgs.tensorflow ? libtensorflow
     then python.pkgs.tensorflow.libtensorflow
     else libtensorflow-bin;
+
+  libtorch-bin = callPackage ../development/libraries/science/math/libtorch/bin.nix {
+    inherit (linuxPackages) nvidia_x11;
+    cudaSupport = pkgs.config.cudaSupport or false;
+  };
 
   behdad-fonts = callPackage ../data/fonts/behdad-fonts { };
 
@@ -4550,7 +4557,9 @@ in
     buildGoModule = buildGo114Module;
   };
   ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
-  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
+  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster {
+    buildGoModule = buildGo114Module;
+  };
 
   ipget = callPackage ../applications/networking/ipget { };
 
@@ -10228,6 +10237,8 @@ in
 
   spark = callPackage ../applications/networking/cluster/spark { };
 
+  sparkleshare = callPackage ../applications/version-management/sparkleshare { };
+
   spidermonkey_1_8_5 = callPackage ../development/interpreters/spidermonkey/1.8.5.nix { };
   spidermonkey_38 = callPackage ../development/interpreters/spidermonkey/38.nix ({
     inherit (darwin) libobjc;
@@ -14848,8 +14859,9 @@ in
       knotifyconfig kpackage kparts kpeople kplotting kpty kross krunner
       kservice ktexteditor ktextwidgets kunitconversion kwallet kwayland
       kwidgetsaddons kwindowsystem kxmlgui kxmlrpcclient modemmanager-qt
-      networkmanager-qt plasma-framework prison qqc2-desktop-style solid sonnet syntax-highlighting
-      syndication threadweaver kirigami2 kholidays kpurpose kcontacts;
+      networkmanager-qt plasma-framework prison qqc2-desktop-style solid sonnet
+      syntax-highlighting syndication threadweaver kirigami2 kholidays kpurpose
+      kcontacts kquickcharts;
 
     ### KDE PLASMA 5
 
@@ -15705,19 +15717,15 @@ in
   wxGTK30 = wxGTK30-gtk2;
   wxGTK31 = wxGTK31-gtk2;
 
-  wxGTK28 = callPackage ../development/libraries/wxwidgets/2.8 {
-    inherit (gnome2) GConf;
-  };
+  wxGTK28 = callPackage ../development/libraries/wxwidgets/2.8 { };
 
   wxGTK29 = callPackage ../development/libraries/wxwidgets/2.9 {
-    inherit (gnome2) GConf;
     inherit (darwin.stubs) setfile;
     inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QuickTime;
   };
 
   wxGTK30-gtk2 = callPackage ../development/libraries/wxwidgets/3.0 {
     withGtk2 = true;
-    inherit (gnome2) GConf;
     inherit (darwin.stubs) setfile;
     inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
   };
@@ -15730,7 +15738,6 @@ in
 
   wxGTK31-gtk2 = callPackage ../development/libraries/wxwidgets/3.1 {
     withGtk2 = true;
-    inherit (gnome2) GConf;
     inherit (darwin.stubs) setfile;
     inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
   };
@@ -17575,6 +17582,22 @@ in
     ];
   };
 
+  linux-rt_5_4 = callPackage ../os-specific/linux/kernel/linux-rt-5.4.nix {
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.request_key_helper
+      kernelPatches.export_kernel_fpu_functions."5.3"
+    ];
+  };
+
+  linux-rt_5_6 = callPackage ../os-specific/linux/kernel/linux-rt-5.6.nix {
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.request_key_helper
+      kernelPatches.export_kernel_fpu_functions."5.3"
+    ];
+  };
+
   linux_5_7 = callPackage ../os-specific/linux/kernel/linux-5.7.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -17817,12 +17840,20 @@ in
   linuxPackages_latest = linuxPackages_5_8;
   linux_latest = linuxPackages_latest.kernel;
 
-  # Build the kernel modules for the some of the kernels.
+  # Realtime kernel packages.
+  linuxPackages-rt_5_4 = linuxPackagesFor pkgs.linux-rt_5_4;
+  linuxPackages-rt = linuxPackages-rt_5_4;
+  linux-rt = linuxPackages-rt.kernel;
+  linuxPackages-rt_5_6 = linuxPackagesFor pkgs.linux-rt_5_6;
+  linuxPackages-rt_latest = linuxPackages-rt_5_6;
+  linux-rt_latest = linuxPackages-rt_latest.kernel;
+
   linuxPackages_mptcp = linuxPackagesFor pkgs.linux_mptcp;
   linuxPackages_rpi1 = linuxPackagesFor pkgs.linux_rpi1;
   linuxPackages_rpi2 = linuxPackagesFor pkgs.linux_rpi2;
   linuxPackages_rpi3 = linuxPackagesFor pkgs.linux_rpi3;
   linuxPackages_rpi4 = linuxPackagesFor pkgs.linux_rpi4;
+  # Build kernel modules for some of the kernels.
   linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4);
   linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
@@ -17831,7 +17862,7 @@ in
   linuxPackages_5_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_7);
   linuxPackages_5_8 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_8);
 
-  # When adding to this list:
+  # When adding to the list above:
   # - Update linuxPackages_latest to the latest version
   # - Update the rev in ../os-specific/linux/kernel/linux-libre.nix to the latest one.
 
@@ -18383,6 +18414,7 @@ in
     ubootPine64
     ubootPine64LTS
     ubootPinebook
+    ubootPinebookPro
     ubootQemuAarch64
     ubootQemuArm
     ubootRaspberryPi
@@ -19980,9 +20012,7 @@ in
     buildServerGui = false;
   };
 
-  droopy = callPackage ../applications/networking/droopy {
-    inherit (python3Packages) wrapPython;
-  };
+  droopy = python37Packages.callPackage ../applications/networking/droopy { };
 
   drumgizmo = callPackage ../applications/audio/drumgizmo { };
 
@@ -21258,8 +21288,6 @@ in
   k4dirstat = libsForQt5.callPackage ../applications/misc/k4dirstat { };
 
   kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };
-
-  kdecoration-viewer = libsForQt5.callPackage ../tools/misc/kdecoration-viewer { };
 
   inherit (kdeFrameworks) kdesu;
 
@@ -23107,6 +23135,11 @@ in
 
   surf-display = callPackage ../desktops/surf-display { };
 
+  surge = callPackage ../applications/audio/surge {
+    inherit (gnome3) zenity;
+    git = gitMinimal;
+  };
+
   sunvox = callPackage ../applications/audio/sunvox { };
 
   swh_lv2 = callPackage ../applications/audio/swh-lv2 { };
@@ -23387,6 +23420,10 @@ in
   };
 
   tudu = callPackage ../applications/office/tudu { };
+
+  tunefish = callPackage ../applications/audio/tunefish {
+    stdenv = clangStdenv; # https://github.com/jpcima/tunefish/issues/4
+  };
 
   tut = callPackage ../applications/misc/tut { };
 
@@ -24627,7 +24664,6 @@ in
   fsg = callPackage ../games/fsg {
     wxGTK = wxGTK28.override {
       unicode = false;
-      gst-plugins-base = null;
     };
   };
 
@@ -27147,9 +27183,7 @@ in
 
   sanoid = callPackage ../tools/backup/sanoid { };
 
-  satysfi = callPackage ../tools/typesetting/satysfi {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_07;
-  };
+  satysfi = callPackage ../tools/typesetting/satysfi { };
 
   sc-controller = pythonPackages.callPackage ../misc/drivers/sc-controller {
     inherit libusb1; # Shadow python.pkgs.libusb1.
@@ -27343,6 +27377,8 @@ in
   wcalc = callPackage ../applications/misc/wcalc { };
 
   webfs = callPackage ../servers/http/webfs { };
+
+  webkit2-sharp = callPackage ../development/libraries/webkit2-sharp {  };
 
   websocketd = callPackage ../applications/networking/websocketd { };
 

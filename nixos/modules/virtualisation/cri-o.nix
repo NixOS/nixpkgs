@@ -101,6 +101,7 @@ in
       log_level = "${cfg.logLevel}"
       manage_ns_lifecycle = true
       pinns_path = "${cfg.package}/bin/pinns"
+      hooks_dir = []
 
       ${optionalString (cfg.runtime != null) ''
       default_runtime = "${cfg.runtime}"

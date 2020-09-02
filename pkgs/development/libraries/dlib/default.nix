@@ -2,7 +2,7 @@
 , guiSupport ? false, libX11
 
   # see http://dlib.net/compile.html
-, avxSupport ? true
+, avxSupport ? stdenv.hostPlatform.avxSupport
 , cudaSupport ? true
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     rm -rf dlib/external
   '';
 
-  cmakeFlags = [ 
+  cmakeFlags = [
     "-DUSE_DLIB_USE_CUDA=${if cudaSupport then "1" else "0"}"
     "-DUSE_AVX_INSTRUCTIONS=${if avxSupport then "yes" else "no"}" ];
 

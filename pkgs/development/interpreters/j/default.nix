@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, readline, libedit, bc
-, avxSupport ? false
+, avxSupport ? stdenv.hostPlatform.avxSupport
 }:
 
 stdenv.mkDerivation rec {
