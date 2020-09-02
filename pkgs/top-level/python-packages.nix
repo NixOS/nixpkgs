@@ -707,6 +707,8 @@ in {
 
   azure-storage-queue = callPackage ../development/python-modules/azure-storage-queue { };
 
+  azure-synapse-accesscontrol = callPackage ../development/python-modules/azure-synapse-accesscontrol { };
+
   Babel = callPackage ../development/python-modules/Babel { };
 
   babelfish = callPackage ../development/python-modules/babelfish { };
