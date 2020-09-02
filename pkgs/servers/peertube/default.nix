@@ -4,7 +4,7 @@
 let
   nodeHeaders = fetchurl {
     url = "https://nodejs.org/download/release/v${nodejs.version}/node-v${nodejs.version}-headers.tar.gz";
-    sha256 = "1df3yhlwlvai0m9kvjyknjg11hnw0kj0rnhyzbwvsfjnmr6z8r76";
+    sha256 = "15hkcbs328d3rc1s14rmky8lh8d3rr86l8k0bia0ggxzwl23lj9c";
   };
   source = rec {
     version = "v2.1.1";
