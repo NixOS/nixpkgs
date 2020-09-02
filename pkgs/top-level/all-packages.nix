@@ -2048,6 +2048,8 @@ in
 
   gorilla-bin = callPackage ../tools/security/gorilla-bin { };
 
+  godu = callPackage ../tools/misc/godu { };
+
   gosu = callPackage ../tools/misc/gosu { };
 
   gotify-cli = callPackage ../tools/misc/gotify-cli { };
