@@ -924,14 +924,16 @@ rec {
         visible = false;
         apply = x: throw "The option `${showOption optionName}' can no longer be used since it's been removed. ${replacementInstructions}";
       });
-      config.assertions =
-        let opt = getAttrFromPath optionName options; in [{
-          assertion = !opt.isDefined;
+      config._module.assertions =
+        let opt = getAttrFromPath optionName options; in {
+        ${showOption optionName} = {
+          enable = mkDefault opt.isDefined;
           message = ''
             The option definition `${showOption optionName}' in ${showFiles opt.files} no longer has any effect; please remove it.
             ${replacementInstructions}
           '';
-        }];
+        };
+      };
     };
 
   /* Return a module that causes a warning to be shown if the
@@ -992,14 +994,19 @@ rec {
       })) from);
 
       config = {
-        warnings = filter (x: x != "") (map (f:
-          let val = getAttrFromPath f config;
-              opt = getAttrFromPath f options;
-          in
-          optionalString
-            (val != "_mkMergedOptionModule")
-            "The option `${showOption f}' defined in ${showFiles opt.files} has been changed to `${showOption to}' that has a different type. Please read `${showOption to}' documentation and update your configuration accordingly."
-        ) from);
+        _module.assertions =
+          let warningMessages = map (f:
+            let val = getAttrFromPath f config;
+                opt = getAttrFromPath f options;
+            in {
+              ${showOption f} = {
+                enable = mkDefault (val != "_mkMergedOptionModule");
+                type = "warning";
+                message = "The option `${showOption f}' defined in ${showFiles opt.files} has been changed to `${showOption to}' that has a different type. Please read `${showOption to}' documentation and update your configuration accordingly.";
+              };
+            }
+            ) from;
+          in mkMerge warningMessages;
       } // setAttrByPath to (mkMerge
              (optional
                (any (f: (getAttrFromPath f config) != "_mkMergedOptionModule") from)
@@ -1058,8 +1065,11 @@ rec {
       });
       config = mkMerge [
         {
-          warnings = optional (warn && fromOpt.isDefined)
-            "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
+          _module.assertions.${showOption from} = {
+            enable = mkDefault (warn && fromOpt.isDefined);
+            type = "warning";
+            message = "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
+          };
         }
         (if withPriority
           then mkAliasAndWrapDefsWithPriority (setAttrByPath to) fromOpt
