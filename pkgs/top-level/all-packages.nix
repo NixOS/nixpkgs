@@ -20393,6 +20393,8 @@ in
 
   gthumb = callPackage ../applications/graphics/gthumb { };
 
+  gtkcord3 = callPackage ../applications/networking/instant-messengers/gtkcord3 { };
+
   gtimelog = pythonPackages.gtimelog;
 
   inherit (gnome3) gucharmap;
