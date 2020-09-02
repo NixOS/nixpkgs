@@ -20,6 +20,10 @@ let
         "8.9" = v_8_8;
         "8.10" = v_8_10;
         "8.11" = v_8_10;
+	"8.12" = {
+	  version = "8.12";
+          sha256 = "1slka4w0pya15js4drx9frj7lxyp3k2lzib8v23givzpnxs8ijdj";
+	};
       };
   param = params.${coq.coq-version};
 in
