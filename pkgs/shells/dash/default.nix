@@ -1,4 +1,4 @@
-{ autoreconfHook, lib, stdenv, fetchurl }:
+{ stdenv, buildPackages, autoreconfHook, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "dash-0.5.11.1";
@@ -11,8 +11,9 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   # Temporary fix until a proper one is accepted upstream
-  patches = lib.lists.optional stdenv.isDarwin ./0001-fix-dirent64-et-al-on-darwin.patch;
-  nativeBuildInputs = lib.lists.optional stdenv.isDarwin autoreconfHook;
+  patches = stdenv.lib.optional stdenv.isDarwin ./0001-fix-dirent64-et-al-on-darwin.patch;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin autoreconfHook;
 
   meta = with stdenv.lib; {
     homepage = "http://gondor.apana.org.au/~herbert/dash/";
