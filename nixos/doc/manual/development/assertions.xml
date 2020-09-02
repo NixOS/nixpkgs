@@ -8,7 +8,7 @@
  <para>
   When configuration problems are detectable in a module, it is a good idea to
   write an assertion or warning. Doing so provides clear feedback to the user
-  and prevents errors after the build.
+  and can prevent errors before the build.
  </para>
 
  <para>
@@ -20,55 +20,114 @@
   NixOS module system.
  </para>
 
- <section xml:id="sec-assertions-warnings">
-  <title>Warnings</title>
+ <section xml:id="sec-assertions-define">
+  <title>Defining Warnings and Assertions</title>
 
   <para>
-   This is an example of using <literal>warnings</literal>.
+   Both warnings and assertions can be defined using the <xref linkend="opt-_module.assertions"/> option. Each assertion needs an attribute name, under which you have to define an enable condition using <xref linkend="opt-_module.assertions._name_.enable"/> and a message using <xref linkend="opt-_module.assertions._name_.message"/>. Note that the enable condition is <emphasis>inverse</emphasis> of what an assertion would be: To assert a value being true, the enable condition should be false in that case, so that it isn't triggered. For the assertion message, you can add <literal>options</literal> to the module arguments and use <literal>${options.path.to.option}</literal> to print a context-aware string representation of the option path. Here is an example showing how this can be done.
   </para>
 
 <programlisting>
-<![CDATA[
-{ config, lib, ... }:
-{
-  config = lib.mkIf config.services.foo.enable {
-    warnings =
-      if config.services.foo.bar
-      then [ ''You have enabled the bar feature of the foo service.
-               This is known to cause some specific problems in certain situations.
-               '' ]
-      else [];
-  }
+{ config, options, ... }: {
+  _module.assertions.gpgSshAgent = {
+    enable = config.programs.gnupg.agent.enableSSHSupport &amp;&amp; config.programs.ssh.startAgent;
+    message = "You can't enable both ${options.programs.ssh.startAgent}"
+      + " and ${options.programs.gnupg.agent.enableSSHSupport}!";
+  };
+
+  _module.assertions.grafanaPassword = {
+    enable = config.services.grafana.database.password != "";
+    message = "The grafana password defined with ${options.services.grafana.database.password}"
+      + " will be stored as plaintext in the Nix store!";
+    # This is a non-fatal warning
+    type = "warning";
+  };
 }
-]]>
 </programlisting>
+
  </section>
 
- <section xml:id="sec-assertions-assertions">
-  <title>Assertions</title>
+ <section xml:id="sec-assertions-ignoring">
+  <title>Ignoring Warnings and Assertions</title>
 
   <para>
-   This example, extracted from the
-   <link xlink:href="https://github.com/NixOS/nixpkgs/blob/release-17.09/nixos/modules/services/logging/syslogd.nix">
-   <literal>syslogd</literal> module </link> shows how to use
-   <literal>assertions</literal>. Since there can only be one active syslog
-   daemon at a time, an assertion is useful to prevent such a broken system
-   from being built.
+   Sometimes you can get warnings or assertions that don't apply to your specific case and you wish to ignore them, or at least make assertions non-fatal. You can do so for all assertions defined using <xref linkend="opt-_module.assertions"/> by using the attribute name of the definition, which is conveniently printed using <literal>[...]</literal> when the assertion is triggered. For above example, the evaluation output when the assertions are triggered looks as follows:
   </para>
 
 <programlisting>
-<![CDATA[
-{ config, lib, ... }:
-{
-  config = lib.mkIf config.services.syslogd.enable {
-    assertions =
-      [ { assertion = !config.services.rsyslogd.enable;
-          message = "rsyslogd conflicts with syslogd";
-        }
-      ];
-  }
-}
-]]>
+trace: warning: [grafanaPassword] The grafana password defined with
+  services.grafana.database.password will be stored as plaintext in the Nix store!
+error: Failed assertions:
+- [gpgSshAgent] You can't enable both programs.ssh.startAgent and
+  programs.gnupg.agent.enableSSHSupport!
 </programlisting>
+
+  <para>
+   The <literal>[grafanaPassword]</literal> and <literal>[gpgSshAgent]</literal> strings tell you that these were defined under the <literal>grafanaPassword</literal> and <literal>gpgSshAgent</literal> attributes of <xref linkend="opt-_module.assertions"/> respectively. With this knowledge you can adjust them to your liking:
+  </para>
+
+<programlisting>
+{ lib, ... }: {
+  # Change the assertion into a non-fatal warning
+  _module.assertions.gpgSshAgent.type = "warning";
+
+  # We don't care about this warning, disable it
+  _module.assertions.grafanaPassword.enable = lib.mkForce false;
+}
+</programlisting>
+
+
+ </section>
+ <section xml:id="sec-assertions-submodules">
+  <title>Warnings and Assertions in Submodules</title>
+
+  <para>
+   Warnings and assertions can be defined within submodules in the same way. Here is an example:
+  </para>
+
+<programlisting>
+{ lib, ... }: {
+
+  options.myServices = lib.mkOption {
+    type = lib.types.attrsOf (lib.types.submodule ({ config, options, ... }: {
+      options.port = lib.mkOption {};
+
+      config._module.assertions.portConflict = {
+        enable = config.port == 80;
+        message = "Port ${toString config.port} defined using"
+          + " ${options.port} is usually used for HTTP";
+        type = "warning";
+      };
+    }));
+  };
+
+}
+</programlisting>
+
+  <para>
+   When this assertion is triggered, it shows both the submodule path along with the assertion attribute within that submodule, joined by a <literal>/</literal>. Note also how <literal>${options.port}</literal> correctly shows the context of the option.
+  </para>
+
+<programlisting>
+trace: warning: [myServices.foo/portConflict] Port 80 defined using
+  myServices.foo.port is usually used for HTTP
+</programlisting>
+
+  <para>
+   Therefore to disable such an assertion, you can do so by changing the <xref linkend="opt-_module.assertions"/> option within the <literal>myServices.foo</literal> submodule:
+  </para>
+
+<programlisting>
+{ lib, ... }: {
+  myServices.foo._module.assertions.portConflict.enable = lib.mkForce false;
+}
+</programlisting>
+
+<note>
+ <para>
+  Assertions defined in submodules under <literal>types.listOf</literal> can't be ignored, since there's no way to change previously defined list items.
+ </para>
+</note>
+
  </section>
 </section>
