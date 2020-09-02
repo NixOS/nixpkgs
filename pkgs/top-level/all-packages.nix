@@ -23135,6 +23135,11 @@ in
 
   surf-display = callPackage ../desktops/surf-display { };
 
+  surge = callPackage ../applications/audio/surge {
+    inherit (gnome3) zenity;
+    git = gitMinimal;
+  };
+
   sunvox = callPackage ../applications/audio/sunvox { };
 
   swh_lv2 = callPackage ../applications/audio/swh-lv2 { };
