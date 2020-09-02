@@ -23392,6 +23392,10 @@ in
 
   tudu = callPackage ../applications/office/tudu { };
 
+  tunefish = callPackage ../applications/audio/tunefish {
+    stdenv = clangStdenv; # https://github.com/jpcima/tunefish/issues/4
+  };
+
   tut = callPackage ../applications/misc/tut { };
 
   tuxguitar = callPackage ../applications/editors/music/tuxguitar { };
