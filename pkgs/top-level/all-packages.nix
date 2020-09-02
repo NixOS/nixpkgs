@@ -12568,24 +12568,6 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   });
 
-  gstreamer = callPackage ../development/libraries/gstreamer/legacy/gstreamer { };
-
-  gst-plugins-base = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-base {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
-  };
-
-  gst-plugins-good = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-good {};
-
-  gst-plugins-bad = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-bad {};
-
-  gst-plugins-ugly = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-ugly {};
-
-  gst-python = callPackage ../development/libraries/gstreamer/legacy/gst-python {};
-
-  gstreamermm = callPackage ../development/libraries/gstreamer/legacy/gstreamermm { };
-
-  gnonlin = callPackage ../development/libraries/gstreamer/legacy/gnonlin {};
-
   gusb = callPackage ../development/libraries/gusb { };
 
   qt-mobility = callPackage ../development/libraries/qt-mobility {};

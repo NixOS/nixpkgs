@@ -187,11 +187,6 @@ mapAliases ({
   googleAuthenticator = google-authenticator; # added 2016-10-16
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
   gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
-  gst_plugins_bad = gst-plugins-bad;  # added 2017-02
-  gst_plugins_base = gst-plugins-base;  # added 2017-02
-  gst_plugins_good = gst-plugins-good;  # added 2017-02
-  gst_plugins_ugly = gst-plugins-ugly;  # added 2017-02
-  gst_python = gst-python;  # added 2017-02
   gtk_doc = gtk-doc; # added 2018-02-25
   guileCairo = guile-cairo; # added 2017-09-24
   guileGnome = guile-gnome; # added 2017-09-24
@@ -677,18 +672,6 @@ mapAliases ({
     ocamlPackages_4_00_1 ocamlPackages_4_01_0 ocamlPackages_4_02
     ocamlPackages_4_03
     ocamlPackages_latest;
-
-  gst_all = { # added 2018-04-25
-    inherit (pkgs) gstreamer gnonlin gst-python;
-    gstPluginsBase = pkgs.gst-plugins-base;
-    gstPluginsBad = pkgs.gst-plugins-bad;
-    gstPluginsGood = pkgs.gst-plugins-good;
-    gstPluginsUgly = pkgs.gst-plugins-ugly;
-    gst-plugins-base = pkgs.gst-plugins-base;
-    gst-plugins-bad = pkgs.gst-plugins-bad;
-    gst-plugins-good = pkgs.gst-plugins-good;
-    gst-plugins-ugly = pkgs.gst-plugins-ugly;
-  };
 
   # added 2019-08-01
   mumble_git = pkgs.mumble;
