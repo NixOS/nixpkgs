@@ -36,6 +36,18 @@ stdenv.mkDerivation rec {
     ./tests-add-test-cases-for-import-without-uid.patch
     ./allow-import-of-previously-known-keys-even-without-UI.patch
     ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
+
+    /* Add option to enable scdaemon shared-access to smartcard
+
+    See here for detailed description of the issue: https://wiki.archlinux.org/index.php/GnuPG#Shared_access_with_pcscd
+    Upstream GnuPG issue, closed as wontfix: https://dev.gnupg.org/T3267
+    GPGTools issue where this patch was created: https://gpgtools.lighthouseapp.com/projects/66001/tickets/690-add-support-to-scdaemon-for-shared-access-mode
+    */
+    (fetchpatch {
+      name = "scdaemon_shared-access.patch";
+      url = "https://raw.githubusercontent.com/GPGTools/MacGPG2/7f6df478aea90e25816f53b441a40993823c0973/patches/gnupg/scdaemon_shared-access.patch";
+      sha256 = "1b34ac03cp0q92rl9n6vihz9amb5lp473qwhmkcwh9bfbi2vxrls";
+    })
   ];
   postPatch = ''
     sed -i 's,hkps://hkps.pool.sks-keyservers.net,hkps://keys.openpgp.org,g' configure doc/dirmngr.texi doc/gnupg.info-1
