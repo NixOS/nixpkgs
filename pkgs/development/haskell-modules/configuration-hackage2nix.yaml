@@ -8335,7 +8335,6 @@ broken-packages:
   - pam
   - pan-os-syslog
   - panda
-  - pandoc-crossref
   - pandoc-emphasize-code
   - pandoc-filter-graphviz
   - pandoc-include
