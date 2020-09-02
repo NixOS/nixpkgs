@@ -627,7 +627,7 @@ in
 		    };
 
             bindMounts = mkOption {
-              type = with types; loaOf (submodule bindMountOpts);
+              type = with types; attrsOf (submodule bindMountOpts);
               default = {};
               example = literalExample ''
                 { "/home" = { hostPath = "/home/alice";

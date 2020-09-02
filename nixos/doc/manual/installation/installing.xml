@@ -550,7 +550,7 @@ Retype new UNIX password: ***</screen>
   # Note: setting fileSystems is generally not
   # necessary, since nixos-generate-config figures them out
   # automatically in hardware-configuration.nix.
-  #<link linkend="opt-fileSystems._name__.device">fileSystems."/".device</link> = "/dev/disk/by-label/nixos";
+  #<link linkend="opt-fileSystems._name_.device">fileSystems."/".device</link> = "/dev/disk/by-label/nixos";
 
   # Enable the OpenSSH server.
   services.sshd.enable = true;
