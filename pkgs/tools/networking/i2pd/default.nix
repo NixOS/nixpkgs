@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub
 , boost, zlib, openssl
 , upnpSupport ? true, miniupnpc ? null
-, aesniSupport ? false
-, avxSupport ? false
+, aesniSupport ? stdenv.hostPlatform.aesSupport
+, avxSupport   ? stdenv.hostPlatform.avxSupport
 }:
 
 assert upnpSupport -> miniupnpc != null;

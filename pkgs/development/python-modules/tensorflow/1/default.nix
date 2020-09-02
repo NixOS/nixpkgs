@@ -23,9 +23,9 @@
 , xlaSupport ? cudaSupport
 # Default from ./configure script
 , cudaCapabilities ? [ "3.5" "5.2" ]
-, sse42Support ? builtins.elem (stdenv.hostPlatform.platform.gcc.arch or "default") ["westmere" "sandybridge" "ivybridge" "haswell" "broadwell" "skylake" "skylake-avx512"]
-, avx2Support  ? builtins.elem (stdenv.hostPlatform.platform.gcc.arch or "default") [                                     "haswell" "broadwell" "skylake" "skylake-avx512"]
-, fmaSupport   ? builtins.elem (stdenv.hostPlatform.platform.gcc.arch or "default") [                                     "haswell" "broadwell" "skylake" "skylake-avx512"]
+, sse42Support ? stdenv.hostPlatform.sse4_2Support
+, avx2Support  ? stdenv.hostPlatform.avx2Support
+, fmaSupport   ? stdenv.hostPlatform.fmaSupport
 # Darwin deps
 , Foundation, Security
 }:
