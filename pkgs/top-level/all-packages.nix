@@ -19812,6 +19812,8 @@ in
 
   convchain = callPackage ../tools/graphics/convchain {};
 
+  cordless = callPackage ../applications/networking/instant-messengers/cordless { };
+
   coursera-dl = callPackage ../applications/misc/coursera-dl {};
 
   coyim = callPackage ../applications/networking/instant-messengers/coyim {};
