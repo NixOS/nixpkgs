@@ -12,7 +12,6 @@
 , gst_all_1
 , libwebcam
 , libunwind
-, gstreamer
 , elfutils
 , orc
 , python3
@@ -46,7 +45,6 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base
     libwebcam
     libunwind
-    gstreamer
     elfutils
     orc
     python3
