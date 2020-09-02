@@ -77,10 +77,15 @@ rec {
       # attribute.  These options are fragile, as they are used by the
       # module system to change the interpretation of modules.
       internalModule = rec {
-        _file = ./modules.nix;
+        # FIXME: Using ./modules.nix directly breaks the doc for some reason
+        _file = "lib/modules.nix";
 
         key = _file;
 
+        # These options are set to be internal only for prefix != [], aka it's
+        # a submodule evaluation. This way their docs are displayed only once
+        # as a top-level NixOS option, but will be hidden for all submodules,
+        # even though they are available there too
         options = {
           _module.args = mkOption {
             # Because things like `mkIf` are entirely useless for
@@ -90,13 +95,13 @@ rec {
             # a `_module.args.pkgs = import (fetchTarball { ... }) {}` won't
             # start a download when `pkgs` wasn't evaluated.
             type = types.lazyAttrsOf types.unspecified;
-            internal = true;
+            internal = prefix != [];
             description = "Arguments passed to each module.";
           };
 
           _module.check = mkOption {
             type = types.bool;
-            internal = true;
+            internal = prefix != [];
             default = check;
             description = "Whether to check whether all option definitions have matching declarations.";
           };
@@ -104,7 +109,7 @@ rec {
           _module.freeformType = mkOption {
             # Disallow merging for now, but could be implemented nicely with a `types.optionType`
             type = types.nullOr (types.uniq types.attrs);
-            internal = true;
+            internal = prefix != [];
             default = null;
             description = ''
               If set, merge all definitions that don't have an associated option
@@ -141,7 +146,7 @@ rec {
               }
             '';
             default = {};
-            internal = true;
+            internal = prefix != [];
             type = types.attrsOf (types.submodule {
               # TODO: Rename to assertion? Or allow also setting assertion?
               options.enable = mkOption {
