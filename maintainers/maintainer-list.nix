@@ -4098,6 +4098,12 @@
     githubId = 1918771;
     name = "Joe Doyle";
   };
+  jperras = {
+    email = "joel@nerderati.com";
+    github = "jperras";
+    githubId = 20675;
+    name = "Joël Perras";
+  };
   jpierre03 = {
     email = "nix@prunetwork.fr";
     github = "jpierre03";
