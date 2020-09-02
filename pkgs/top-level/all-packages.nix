@@ -11013,6 +11013,8 @@ in
 
   gnome-latex = callPackage ../applications/editors/gnome-latex/default.nix { };
 
+  gnome-network-displays = callPackage ../applications/networking/gnome-network-displays { };
+
   gnome-multi-writer = callPackage ../applications/misc/gnome-multi-writer {};
 
   gnome-online-accounts = callPackage ../development/libraries/gnome-online-accounts { };
