@@ -707,6 +707,8 @@ in {
 
   azure-synapse-accesscontrol = callPackage ../development/python-modules/azure-synapse-accesscontrol { };
 
+  azure-synapse-spark = callPackage ../development/python-modules/azure-synapse-spark { };
+
   Babel = callPackage ../development/python-modules/Babel { };
 
   babelfish = callPackage ../development/python-modules/babelfish { };
