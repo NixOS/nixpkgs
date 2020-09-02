@@ -89,6 +89,7 @@ in buildFHSUserEnv rec {
     at-spi2-core   # CrossCode
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-plugins-base
     libdrm
     mono
     xorg.xkeyboardconfig
@@ -193,8 +194,6 @@ in buildFHSUserEnv rec {
     SDL_mixer
     SDL2_ttf
     SDL2_mixer
-    gstreamer
-    gst-plugins-base
     libappindicator-gtk2
     libcaca
     libcanberra
