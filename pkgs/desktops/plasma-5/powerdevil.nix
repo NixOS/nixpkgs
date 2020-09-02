@@ -30,7 +30,7 @@ mkDerivation {
     # Reduce log message spam by setting the default log level to Warning.
     (fetchpatch {
       url = "https://invent.kde.org/plasma/powerdevil/-/commit/c7590f9065ec9547b7fabad77a548bbc0c693113.patch";
-      sha256 = "0vj70mhx6qhvbh4vn9qk9ir5w4s2m76hw2lsxmh3ibgsydz4yilz";
+      sha256 = "077whhi0jrb3bajx357k7n66hv7nchis8jix0nfc1zjvi9fm6pi2";
     })
   ];
 }
