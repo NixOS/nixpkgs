@@ -970,6 +970,8 @@ in
 
   crc32c = callPackage ../development/libraries/crc32c { };
 
+  crcpp = callPackage ../development/libraries/crcpp { };
+
   cudd = callPackage ../development/libraries/cudd { };
 
   cue = callPackage ../development/tools/cue { };
