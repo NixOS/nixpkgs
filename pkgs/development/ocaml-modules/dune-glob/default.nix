@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "dune-glob";
-  inherit (dune_2) src version;
+  inherit (dune_2) src version patches;
 
   useDune2 = true;
 
