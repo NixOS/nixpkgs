@@ -17237,7 +17237,7 @@ in
   cryptsetup = callPackage ../os-specific/linux/cryptsetup {
     # cryptsetup only really needs the devmapper component of cryptsetup
     # but itself is used as a library in systemd (=udev)
-    lvm2 = lvm2.override { udev = null; };
+    lvm2 = lvm2.override { udev = udev.override { cryptsetup = null; }; };
   };
 
   cramfsprogs = callPackage ../os-specific/linux/cramfsprogs { };
