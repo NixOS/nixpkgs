@@ -1451,6 +1451,8 @@ in {
 
   debian = callPackage ../development/python-modules/debian { };
 
+  debtcollector = disabledIf (pythonOlder "3.6") (callPackage ../development/python-modules/debtcollector { });
+
   debts = callPackage ../development/python-modules/debts { };
 
   debugpy = callPackage ../development/python-modules/debugpy { };

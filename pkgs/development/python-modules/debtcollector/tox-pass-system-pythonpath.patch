@@ -1,0 +1,11 @@
+diff -ur a/tox.ini b/tox.ini
+--- a/tox.ini	2020-09-02 15:25:55.642778420 +0200
++++ b/tox.ini	2020-09-02 15:26:37.941018870 +0200
+@@ -5,6 +5,7 @@
+ ignore_basepython_conflict = true
+ 
+ [testenv]
++passenv = PYTHONPATH
+ basepython = python3
+ whitelist_externals =
+   find
