@@ -12,12 +12,12 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "ultrastardx";
-  version = "unstable-2019-01-07";
+  version = "2020.4.0";
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
-    rev = "3df142590f29db1505cc58746af9f8cf7cb4a6a5";
-    sha256 = "0853rg7vppkmw37wm9xm0m0wab3r09ws6w04xs2wgwj1mwl0d70j";
+    rev = "v${version}";
+    sha256 = "0vmfv8zpyf8ymx3rjydpd7iqis080lni94vb316vfxkgvjmqbhym";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
