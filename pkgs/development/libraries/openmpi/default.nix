@@ -18,7 +18,7 @@
 assert !cudaSupport || cudatoolkit != null;
 
 let
-  version = "4.0.4";
+  version = "4.0.5";
 
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   src = with stdenv.lib.versions; fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "1i0slg2dxjdgw513aml1n9dsbdxn2fimi2b5712d5r9z4ar4xqj7";
+    sha256 = "02f0r9d3xgs08svkmj8v7lzviyxqnkk4yd3z0wql550xnriki3y5";
   };
 
   postPatch = ''
