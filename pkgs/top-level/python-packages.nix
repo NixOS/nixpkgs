@@ -4146,6 +4146,8 @@ in {
 
   oslo-serialization = callPackage ../development/python-modules/oslo-serialization { };
 
+  oslo-utils = callPackage ../development/python-modules/oslo-utils { };
+
   osmnx = callPackage ../development/python-modules/osmnx { };
 
   osmpythontools = callPackage ../development/python-modules/osmpythontools { };
