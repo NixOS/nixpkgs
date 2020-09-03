@@ -42,7 +42,7 @@ assert withXwidgets -> withGTK3 && webkitgtk != null;
 let
 
 in stdenv.mkDerivation {
-  inherit pname version;
+  inherit pname version patches;
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${name}.tar.xz";
