@@ -1,15 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, pytest, freezegun }:
 
 buildPythonPackage rec {
   version = "4.0.0";
   pname = "ftputil";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "d494c47f24fd3f8fbe92d40d90e0902c0e04288f200688af2b16d6b46fe441e1";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest freezegun ];
 
   checkPhase = ''
     touch Makefile
