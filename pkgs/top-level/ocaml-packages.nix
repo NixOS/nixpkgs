@@ -173,6 +173,8 @@ let
 
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
 
+    csexp = callPackage ../development/ocaml-modules/csexp { };
+
     cstruct =
       if lib.versionAtLeast ocaml.version "4.2"
       then callPackage ../development/ocaml-modules/cstruct {}
