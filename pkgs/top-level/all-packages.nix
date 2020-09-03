@@ -11507,6 +11507,8 @@ in
 
   svlint = callPackage ../development/tools/analysis/svlint { };
 
+  svls = callPackage ../development/tools/misc/svls { };
+
   swarm = callPackage ../development/tools/analysis/swarm { };
 
   swiftformat = callPackage ../development/tools/swiftformat { };
