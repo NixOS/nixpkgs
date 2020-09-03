@@ -34,6 +34,10 @@ mkDerivation rec {
   postPatch = ''
     substituteInPlace gameServer/CMakeLists.txt \
       --replace mask evaluate
+
+    # compile with fpc >= 3.2.0
+    # https://github.com/archlinux/svntogit-community/blob/75a1b3900fb3dd553d5114bbc8474d85fd6abb02/trunk/PKGBUILD#L26
+    sed -i 's/procedure ShiftWorld(Dir: LongInt); inline;/procedure ShiftWorld(Dir: LongInt);/' hedgewars/uWorld.pas
   '';
 
   cmakeFlags = [
@@ -42,7 +46,7 @@ mkDerivation rec {
   ];
 
 
-  # hslogger brings network-3 and network-bsd which conflict with 
+  # hslogger brings network-3 and network-bsd which conflict with
   # network-2.6.3.1
   preConfigure = ''
     substituteInPlace gameServer/CMakeLists.txt \
