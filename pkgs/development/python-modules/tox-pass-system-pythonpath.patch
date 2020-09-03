@@ -1,0 +1,11 @@
+diff -ur a/tox.ini b/tox.ini
+--- a/tox.ini	2019-05-12 14:03:11.000000000 +0200
++++ b/tox.ini	2020-09-03 13:17:56.359160435 +0200
+@@ -4,6 +4,7 @@
+ skipsdist = True
+ 
+ [testenv]
++passenv = PYTHONPATH
+ usedevelop = True
+ install_command = pip install {opts} {packages}
+ setenv =

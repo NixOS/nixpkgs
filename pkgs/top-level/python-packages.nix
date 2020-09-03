@@ -4138,6 +4138,8 @@ in {
 
   oset = callPackage ../development/python-modules/oset { };
 
+  os-service-types = callPackage ../development/python-modules/os-service-types { };
+
   osmnx = callPackage ../development/python-modules/osmnx { };
 
   osmpythontools = callPackage ../development/python-modules/osmpythontools { };
