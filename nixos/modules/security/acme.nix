@@ -106,7 +106,6 @@ let
     mkHash = with builtins; val: substring 0 20 (hashString "sha256" val);
     certDir = mkHash hashData;
     othersHash = mkHash "${toString acmeServer} ${data.keyType}";
-    keyDir = "key-" + othersHash;
     accountDir = "/var/lib/acme/.lego/accounts/" + othersHash;
 
     protocolOpts = if useDns then (
@@ -215,7 +214,7 @@ let
       # https://github.com/NixOS/nixpkgs/pull/81371#issuecomment-605526099
       wantedBy = optionals (!config.boot.isContainer) [ "multi-user.target" ];
 
-      path = with pkgs; [ lego coreutils ];
+      path = with pkgs; [ lego coreutils diffutils ];
 
       serviceConfig = commonServiceConfig // {
         Group = data.group;
@@ -223,14 +222,13 @@ let
         # AccountDir dir will be created by tmpfiles to ensure correct permissions
         # And to avoid deletion during systemctl clean
         # acme/.lego/${cert} is listed so that it is deleted during systemctl clean
-        StateDirectory = "acme/${cert} acme/.lego/${cert} acme/.lego/${cert}/${certDir} acme/.lego/${cert}/${keyDir}";
+        StateDirectory = "acme/${cert} acme/.lego/${cert} acme/.lego/${cert}/${certDir}";
 
         # Needs to be space separated, but can't use a multiline string because that'll include newlines
         BindPaths =
           "${accountDir}:/tmp/accounts " +
           "/var/lib/acme/${cert}:/tmp/out " +
-          "/var/lib/acme/.lego/${cert}/${certDir}:/tmp/certificates " +
-          "/var/lib/acme/.lego/${cert}/${keyDir}:/tmp/keys";
+          "/var/lib/acme/.lego/${cert}/${certDir}:/tmp/certificates ";
 
         # Only try loading the credentialsFile if the dns challenge is enabled
         EnvironmentFile = mkIf useDns data.credentialsFile;
@@ -239,9 +237,6 @@ let
       # Working directory will be /tmp
       script = ''
         set -euo pipefail
-
-        # Safely copy keyDir contents into certificates (it might be empty).
-        cp -af keys/. certificates/
 
         # Check if we can renew
         if [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' ]; then
@@ -258,17 +253,15 @@ let
         # Group might change between runs, re-apply it
         chown 'acme:${data.group}' certificates/*
 
-        # Copy the key to keyDir
-        cp -pf 'certificates/${keyName}.key' 'keys/'
-
         # Copy all certs to the "real" certs directory
         CERT='certificates/${keyName}.crt'
         CERT_CHANGED=no
-        if [ -e "$CERT" -a "$CERT" -nt out/fullchain.pem ]; then
+        if [ -e "$CERT" ] && ! cmp -s "$CERT" out/fullchain.pem; then
           CERT_CHANGED=yes
-          cp -p 'certificates/${keyName}.crt' out/fullchain.pem
-          cp -p 'certificates/${keyName}.key' out/key.pem
-          cp -p 'certificates/${keyName}.issuer.crt' out/chain.pem
+          echo Installing new certificate
+          cp -vp 'certificates/${keyName}.crt' out/fullchain.pem
+          cp -vp 'certificates/${keyName}.key' out/key.pem
+          cp -vp 'certificates/${keyName}.issuer.crt' out/chain.pem
           ln -sf fullchain.pem out/cert.pem
           cat out/key.pem out/fullchain.pem > out/full.pem
         fi

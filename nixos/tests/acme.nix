@@ -164,6 +164,9 @@ in import ./make-test-python.nix ({ lib, ... }: {
     # reaches the active state. Targets do not have this issue.
 
     ''
+      import time
+
+
       has_switched = False
 
 
@@ -175,27 +178,8 @@ in import ./make-test-python.nix ({ lib, ... }: {
               )
           has_switched = True
           node.succeed(
-              "/run/current-system/specialisation/{}/bin/switch-to-configuration test".format(
-                  name
-              )
+              f"/run/current-system/specialisation/{name}/bin/switch-to-configuration test"
           )
-
-
-      # In order to determine if a config reload has finished, we need to watch
-      # the log files for the relevant lines
-      def wait_httpd_reload(node):
-          # Check for SIGUSER received
-          node.succeed("( tail -n3 -f /var/log/httpd/error.log & ) | grep -q AH00493")
-          # Check for service restart. This line also occurs when the service is started,
-          # hence the above check is necessary too.
-          node.succeed("( tail -n1 -f /var/log/httpd/error.log & ) | grep -q AH00094")
-
-
-      def wait_nginx_reload(node):
-          # Check for SIGHUP received
-          node.succeed("( journalctl -fu nginx -n18 & ) | grep -q SIGHUP")
-          # Check for SIGCHLD from killed worker processes
-          node.succeed("( journalctl -fu nginx -n10 & ) | grep -q SIGCHLD")
 
 
       # Ensures the issuer of our cert matches the chain
@@ -204,40 +188,57 @@ in import ./make-test-python.nix ({ lib, ... }: {
       # are not still selfsigned afer verification
       def check_issuer(node, cert_name, issuer):
           for fname in ("cert.pem", "fullchain.pem"):
-              node.succeed(
-                  (
-                      """openssl x509 -noout -issuer -in /var/lib/acme/{cert_name}/{fname} \
-                        | tee /proc/self/fd/2 \
-                        | cut -d'=' -f2- \
-                        | grep "$(openssl x509 -noout -subject -in /var/lib/acme/{cert_name}/chain.pem \
-                        | cut -d'=' -f2-)\" \
-                        | grep -i '{issuer}'
-                      """
-                  ).format(cert_name=cert_name, issuer=issuer, fname=fname)
-              )
+              actual_issuer = node.succeed(
+                  f"openssl x509 -noout -issuer -in /var/lib/acme/{cert_name}/{fname}"
+              ).partition("=")[2]
+              print(f"{fname} issuer: {actual_issuer}")
+              assert issuer.lower() in actual_issuer.lower()
 
 
       # Ensure cert comes before chain in fullchain.pem
       def check_fullchain(node, cert_name):
-          node.succeed(
-              (
-                  """openssl crl2pkcs7 -nocrl -certfile /var/lib/acme/{cert_name}/fullchain.pem \
-                    | tee /proc/self/fd/2 \
-                    | openssl pkcs7 -print_certs -noout | head -1 | grep {cert_name}
-                  """
-              ).format(cert_name=cert_name)
+          subject_data = node.succeed(
+              f"openssl crl2pkcs7 -nocrl -certfile /var/lib/acme/{cert_name}/fullchain.pem"
+              " | openssl pkcs7 -print_certs -noout"
           )
+          for line in subject_data.lower().split("\n"):
+              if "subject" in line:
+                  print(f"First subject in fullchain.pem: ", line)
+                  assert cert_name.lower() in line
+                  return
+
+          assert False
 
 
-      def check_connection(node, domain):
-          node.succeed(
-              (
-                  """openssl s_client -brief -verify 2 -verify_return_error -CAfile /tmp/ca.crt \
-                    -servername {domain} -connect {domain}:443 < /dev/null 2>&1 \
-                    | tee /proc/self/fd/2
-                  """
-              ).format(domain=domain)
+      def check_connection(node, domain, retries=3):
+          if retries == 0:
+              assert False
+
+          result = node.succeed(
+              "openssl s_client -brief -verify 2 -CAfile /tmp/ca.crt"
+              f" -servername {domain} -connect {domain}:443 < /dev/null 2>&1"
           )
+
+          for line in result.lower().split("\n"):
+              if "verification" in line and "error" in line:
+                  time.sleep(1)
+                  return check_connection(node, domain, retries - 1)
+
+
+      def check_connection_key_bits(node, domain, bits, retries=3):
+          if retries == 0:
+              assert False
+
+          result = node.succeed(
+              "openssl s_client -CAfile /tmp/ca.crt"
+              f" -servername {domain} -connect {domain}:443 < /dev/null"
+              " | openssl x509 -noout -text | grep -i Public-Key"
+          )
+          print("Key type:", result)
+
+          if bits not in result:
+              time.sleep(1)
+              return check_connection_key_bits(node, domain, bits, retries - 1)
 
 
       client.start()
@@ -261,7 +262,6 @@ in import ./make-test-python.nix ({ lib, ... }: {
 
       with subtest("Can request certificate with HTTPS-01 challenge"):
           webserver.wait_for_unit("acme-finished-a.example.test.target")
-          wait_nginx_reload(webserver)
           check_fullchain(webserver, "a.example.test")
           check_issuer(webserver, "a.example.test", "pebble")
           check_connection(client, "a.example.test")
@@ -273,35 +273,26 @@ in import ./make-test-python.nix ({ lib, ... }: {
           check_issuer(webserver, "a.example.test", "minica")
           # Will succeed if nginx can load the certs
           webserver.succeed("systemctl start nginx-config-reload.service")
-          wait_nginx_reload(webserver)
 
       with subtest("Can reload nginx when timer triggers renewal"):
           webserver.succeed("systemctl start test-renew-nginx.target")
-          wait_nginx_reload(webserver)
           check_issuer(webserver, "a.example.test", "pebble")
           check_connection(client, "a.example.test")
 
       with subtest("Can reload web server when cert configuration changes"):
           switch_to(webserver, "cert-change")
           webserver.wait_for_unit("acme-finished-a.example.test.target")
-          wait_nginx_reload(webserver)
-          client.succeed(
-              """openssl s_client -CAfile /tmp/ca.crt -connect a.example.test:443 < /dev/null \
-                | openssl x509 -noout -text | grep -i Public-Key | grep 384
-          """
-          )
+          check_connection_key_bits(client, "a.example.test", "384")
 
       with subtest("Can request certificate with HTTPS-01 when nginx startup is delayed"):
           switch_to(webserver, "slow-startup")
           webserver.wait_for_unit("acme-finished-slow.example.com.target")
-          wait_nginx_reload(webserver)
           check_issuer(webserver, "slow.example.com", "pebble")
           check_connection(client, "slow.example.com")
 
       with subtest("Can request certificate for vhost + aliases (nginx)"):
           switch_to(webserver, "nginx-aliases")
           webserver.wait_for_unit("acme-finished-a.example.test.target")
-          wait_nginx_reload(webserver)
           check_issuer(webserver, "a.example.test", "pebble")
           check_connection(client, "a.example.test")
           check_connection(client, "b.example.test")
@@ -309,7 +300,6 @@ in import ./make-test-python.nix ({ lib, ... }: {
       with subtest("Can request certificates for vhost + aliases (apache-httpd)"):
           switch_to(webserver, "httpd-aliases")
           webserver.wait_for_unit("acme-finished-c.example.test.target")
-          wait_httpd_reload(webserver)
           check_issuer(webserver, "c.example.test", "pebble")
           check_connection(client, "c.example.test")
           check_connection(client, "d.example.test")
@@ -318,18 +308,15 @@ in import ./make-test-python.nix ({ lib, ... }: {
           # Switch to selfsigned first
           webserver.succeed("systemctl clean acme-c.example.test.service --what=state")
           webserver.succeed("systemctl start acme-selfsigned-c.example.test.service")
-          wait_httpd_reload(webserver)
           check_issuer(webserver, "c.example.test", "minica")
           webserver.succeed("systemctl start httpd-config-reload.service")
           webserver.succeed("systemctl start test-renew-httpd.target")
-          wait_httpd_reload(webserver)
           check_issuer(webserver, "c.example.test", "pebble")
           check_connection(client, "c.example.test")
 
       with subtest("Can request wildcard certificates using DNS-01 challenge"):
           switch_to(webserver, "dns-01")
           webserver.wait_for_unit("acme-finished-example.test.target")
-          wait_nginx_reload(webserver)
           check_issuer(webserver, "example.test", "pebble")
           check_connection(client, "dns.example.test")
     '';
