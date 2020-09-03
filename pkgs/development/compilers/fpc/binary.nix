@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
         url = "mirror://sourceforge/project/freepascal/Linux/${version}/fpc-${version}-x86_64-linux.tar";
         sha256 = "0gfbwjvjqlx0562ayyl08khagslrws758al2yhbi4bz5rzk554ni";
       }
+    else if stdenv.hostPlatform.system == "aarch64-linux" then
+      fetchurl {
+        url = "mirror://sourceforge/project/freepascal/Linux/${version}/fpc-${version}.aarch64-linux.tar";
+        sha256 = "1h481ngg3m8nlsg9mw7rr1bn2c4sj4wzqny9bxyq3xvcral12r71";
+      }
     else throw "Not supported on ${stdenv.hostPlatform.system}.";
 
   builder = ./binary-builder.sh;

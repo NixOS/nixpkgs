@@ -1,5 +1,5 @@
 diff --git a/fpcsrc/compiler/systems/t_linux.pas b/fpcsrc/compiler/systems/t_linux.pas
-index a7398fb9..a1e41ecb 100644
+index a7398fb9..8e46fec0 100644
 --- a/fpcsrc/compiler/systems/t_linux.pas
 +++ b/fpcsrc/compiler/systems/t_linux.pas
 @@ -135,13 +135,13 @@ begin
@@ -19,6 +19,15 @@ index a7398fb9..a1e41ecb 100644
  {$else powerpc64}
        LibrarySearchPath.AddLibraryPath(sysrootpath,'=/lib;=/usr/lib;=/usr/X11R6/lib',true);
  {$endif powerpc64}
+@@ -164,7 +164,7 @@ begin
+       LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib/i386-linux-gnu',true);
+ {$endif i386}
+ {$ifdef aarch64}
+-      LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib/aarch64-linux-gnu',true);
++      LibrarySearchPath.AddLibraryPath(sysrootpath,'=@syslibpath@',true);
+ {$endif aarch64}
+ {$ifdef powerpc}
+       LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib/powerpc-linux-gnu',true);
 @@ -185,53 +185,53 @@ begin
  end;
  
