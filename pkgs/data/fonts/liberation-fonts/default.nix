@@ -2,6 +2,7 @@
 let
   inherit (python3.pkgs) fonttools;
 
+  commonNativeBuildInputs = [ fontforge python3 ];
   common =
     { version, repo, sha256, nativeBuildInputs, postPatch ? null }:
       stdenv.mkDerivation rec {
@@ -50,13 +51,13 @@ in
   liberation_ttf_v1 = common {
     repo = "liberation-1.7-fonts";
     version = "1.07.5";
-    nativeBuildInputs = [ fontforge ];
+    nativeBuildInputs = commonNativeBuildInputs ;
     sha256 = "1ffl10mf78hx598sy9qr5m6q2b8n3mpnsj73bwixnd4985gsz56v";
   };
   liberation_ttf_v2 = common {
     repo = "liberation-fonts";
     version = "2.1.0";
-    nativeBuildInputs = [ fontforge fonttools ];
+    nativeBuildInputs = commonNativeBuildInputs ++ [ fonttools ];
     postPatch = ''
       substituteInPlace scripts/setisFixedPitch-fonttools.py --replace \
         'font = ttLib.TTFont(fontfile)' \
