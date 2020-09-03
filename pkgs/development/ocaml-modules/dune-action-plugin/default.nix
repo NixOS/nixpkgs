@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "dune-action-plugin";
-  inherit (dune_2) src version;
+  inherit (dune_2) src version patches;
 
   useDune2 = true;
 
