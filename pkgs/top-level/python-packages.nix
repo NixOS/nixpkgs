@@ -4140,6 +4140,8 @@ in {
 
   os-service-types = callPackage ../development/python-modules/os-service-types { };
 
+  oslo-config = callPackage ../development/python-modules/oslo-config { };
+
   osmnx = callPackage ../development/python-modules/osmnx { };
 
   osmpythontools = callPackage ../development/python-modules/osmpythontools { };
