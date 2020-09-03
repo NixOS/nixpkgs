@@ -23,6 +23,9 @@
 , # kernel intermediate config overrides, as a set
  structuredExtraConfig ? {}
 
+, # use default config for nixos kernels (disable for embedded use)
+  useCommonConfig ? true
+
 , # The version number used for the module directory
   modDirVersion ? version
 
@@ -159,13 +162,11 @@ let
       #   check = false;
       # The result is a set of two attributes
       moduleStructuredConfig = (lib.evalModules {
-        modules = [
-          module
-          { settings = commonStructuredConfig; _file = "pkgs/os-specific/linux/kernel/common-config.nix"; }
-          { settings = structuredExtraConfig; _file = "structuredExtraConfig"; }
-        ]
-        ++  structuredConfigFromPatches
-        ;
+        modules =
+          [module]
+          ++ lib.optional useCommonConfig { settings = commonStructuredConfig; _file = "pkgs/os-specific/linux/kernel/common-config.nix"; }
+          ++ [{ settings = structuredExtraConfig; _file = "structuredExtraConfig"; }]
+          ++  structuredConfigFromPatches;
       }).config;
 
       structuredConfig = moduleStructuredConfig.settings;
