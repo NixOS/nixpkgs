@@ -317,7 +317,6 @@ let
             texinfo
             unionfs-fuse
             xorg.lndir
-            (lvm2.override { udev = null; }) # for initrd (extra-utils)
 
             # add curl so that rather than seeing the test attempt to download
             # curl's tarball, we see what it's trying to download

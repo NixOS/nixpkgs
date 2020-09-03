@@ -17246,11 +17246,7 @@ in
 
   criu = callPackage ../os-specific/linux/criu { };
 
-  cryptsetup = callPackage ../os-specific/linux/cryptsetup {
-    # cryptsetup only really needs the devmapper component of cryptsetup
-    # but itself is used as a library in systemd (=udev)
-    lvm2 = lvm2.override { udev = null; };
-  };
+  cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
 
   cramfsprogs = callPackage ../os-specific/linux/cramfsprogs { };
 
@@ -18032,7 +18028,12 @@ in
 
   lsscsi = callPackage ../os-specific/linux/lsscsi { };
 
-  lvm2 = callPackage ../os-specific/linux/lvm2 { };
+  lvm2 = callPackage ../os-specific/linux/lvm2 {
+    # udev is the same package as systemd which depends on cryptsetup
+    # which depends on lvm2 again.  But we only need the libudev part
+    # which does not depend on cryptsetup.
+    udev = udev.override { cryptsetup = null; };
+  };
   lvm2_dmeventd = callPackage ../os-specific/linux/lvm2 {
     enableDmeventd = true;
     enableCmdlib = true;
