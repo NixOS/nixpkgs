@@ -603,6 +603,8 @@ in
 
   adlplug = callPackage ../applications/audio/adlplug { };
 
+  arc_unpacker = callPackage ../tools/archivers/arc_unpacker { };
+
   tuijam = callPackage ../applications/audio/tuijam { inherit (python3Packages) buildPythonApplication; };
 
   opnplug = callPackage ../applications/audio/adlplug {
