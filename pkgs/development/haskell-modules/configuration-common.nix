@@ -1231,13 +1231,6 @@ self: super: {
   x509-validation = dontCheck super.x509-validation;
   tls = dontCheck super.tls;
 
-  # Upstream PR: https://github.com/bgamari/monoidal-containers/pull/62
-  # Bump these version bound
-  monoidal-containers = appendPatch super.monoidal-containers (pkgs.fetchpatch {
-    url = "https://github.com/bgamari/monoidal-containers/commit/715093b22a015398a1390f636be6f39a0de83254.patch";
-    sha256="1lfxvwp8g55ljxvj50acsb0wjhrvp2hvir8y0j5pfjkd1kq628ng";
-  });
-
   patch = appendPatches super.patch [
     # Upstream PR: https://github.com/reflex-frp/patch/pull/20
     # Makes tests work with hlint 3
