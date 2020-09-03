@@ -15876,6 +15876,8 @@ in
 
   zmqpp = callPackage ../development/libraries/zmqpp { };
 
+  libzra = callPackage ../development/libraries/libzra { };
+
   zig = callPackage ../development/compilers/zig {
     llvmPackages = llvmPackages_10;
   };
