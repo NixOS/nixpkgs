@@ -20921,8 +20921,8 @@ in
 
   hugo = callPackage ../applications/misc/hugo { };
 
-  hydrogen = callPackage ../applications/audio/hydrogen { };
-  hydrogen-unstable = qt5.callPackage ../applications/audio/hydrogen/unstable.nix { };
+  hydrogen = qt5.callPackage ../applications/audio/hydrogen { };
+  hydrogen_0 = callPackage ../applications/audio/hydrogen/0.nix { }; # Old stable, has GMKit.
 
   hydroxide = callPackage ../applications/networking/hydroxide { };
 
