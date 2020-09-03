@@ -5,6 +5,8 @@
 , makeWrapper
 , coreutils
 , libiconv
+, xcbuild
+, zlib
 , Security
 }:
 
@@ -19,9 +21,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0nqmincayjv1snxz94i14fypc9dv69fxfqqdz3qbcvc2cs62zayg";
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+    xcbuild # The cc crate attempts to run xcbuild.
+  ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [
+    libiconv
+    Security
+    zlib
+  ];
 
   postPatch = ''
     substituteInPlace src/verb/builtin.rs --replace '"/bin/' '"${coreutils}/bin/'
