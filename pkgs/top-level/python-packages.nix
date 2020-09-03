@@ -4144,6 +4144,8 @@ in {
 
   oslo-i18n = disabledIf (pythonOlder "3.6") (callPackage ../development/python-modules/oslo-i18n { });
 
+  oslo-serialization = callPackage ../development/python-modules/oslo-serialization { };
+
   osmnx = callPackage ../development/python-modules/osmnx { };
 
   osmpythontools = callPackage ../development/python-modules/osmpythontools { };

@@ -1,0 +1,11 @@
+diff -ur a/tox.ini b/tox.ini
+--- a/tox.ini	2020-06-16 22:19:25.000000000 +0200
++++ b/tox.ini	2020-09-03 12:56:23.861196969 +0200
+@@ -5,6 +5,7 @@
+ ignore_basepython_conflict = true
+ 
+ [testenv]
++passenv = PYTHONPATH
+ deps =
+   -c{env:UPPER_CONSTRAINTS_FILE:https://releases.openstack.org/constraints/upper/master}
+   -r{toxinidir}/test-requirements.txt
