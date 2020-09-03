@@ -1,11 +1,11 @@
 {stdenv, fetchurl, libX11, libXft}:
 stdenv.mkDerivation rec {
   pname = "xfractint";
-  version = "20.04p15";
+  version = "20.04p16";
   # or fetchFromGitHub(owner,repo,rev) or fetchgit(rev)
   src = fetchurl {
     url = "https://www.fractint.net/ftp/current/linux/xfractint-${version}.tar.gz";
-    sha256 = "1wv2hgyjvrjxzqxb55vz65ra80p24j8sd34llykk2qlx73x8f3nk";
+    sha256 = "1ba77jifxv8jql044mdydh4p4ms4w5vw3qrqmcfzlvqfxk7h2m2f";
   };
 
   buildInputs = [libX11 libXft];
