@@ -12,7 +12,7 @@
                 extension-element-prefixes="str"
                 >
 
-  <xsl:output method='xml' encoding="UTF-8" doctype-system="fonts.dtd" />
+  <xsl:output method='xml' encoding="UTF-8" doctype-system="urn:fontconfig:fonts.dtd" />
 
   <xsl:param name="fontDirectories" />
   <xsl:param name="fontconfig" />

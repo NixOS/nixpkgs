@@ -35,7 +35,7 @@ let
     in
     pkgs.writeText "fc-00-nixos-cache.conf" ''
       <?xml version='1.0'?>
-      <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+      <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
       <fontconfig>
         <!-- Font directories -->
         ${concatStringsSep "\n" (map (font: "<dir>${font}</dir>") config.fonts.fonts)}
@@ -53,7 +53,7 @@ let
   # priority 10
   renderConf = pkgs.writeText "fc-10-nixos-rendering.conf" ''
     <?xml version='1.0'?>
-    <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+    <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
     <fontconfig>
 
       <!-- Default rendering settings -->
@@ -110,7 +110,7 @@ let
     in
     pkgs.writeText "fc-52-nixos-default-fonts.conf" ''
     <?xml version='1.0'?>
-    <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+    <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
     <fontconfig>
 
       <!-- Default fonts -->
@@ -129,7 +129,7 @@ let
   # priority 53
   rejectBitmaps = pkgs.writeText "fc-53-no-bitmaps.conf" ''
     <?xml version="1.0"?>
-    <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+    <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
     <fontconfig>
 
     ${optionalString (!cfg.allowBitmaps) ''
@@ -157,7 +157,7 @@ let
   # priority 53
   rejectType1 = pkgs.writeText "fc-53-nixos-reject-type1.conf" ''
     <?xml version="1.0"?>
-    <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+    <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
     <fontconfig>
 
     <!-- Reject Type 1 fonts -->
