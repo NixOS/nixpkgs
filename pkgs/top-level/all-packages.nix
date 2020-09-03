@@ -7619,6 +7619,8 @@ in
 
   vbetool = callPackage ../tools/system/vbetool { };
 
+  vcsi = callPackage ../tools/video/vcsi { };
+
   vde2 = callPackage ../tools/networking/vde2 { };
 
   vboot_reference = callPackage ../tools/system/vboot_reference {};
