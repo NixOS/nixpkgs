@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
   stdenv.lib.optionals (udev != null) [
     "--enable-udev_rules"
     "--enable-udev_sync"
+    # TODO: somehow override the systemd version check?
+    #"--enable-udev-systemd-background-jobs"
   ];
 
   preConfigure = ''
