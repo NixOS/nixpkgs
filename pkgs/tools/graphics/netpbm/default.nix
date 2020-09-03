@@ -12,6 +12,7 @@
 , libtiff
 , enableX11 ? false
 , libX11
+, buildPackages
 }:
 
 stdenv.mkDerivation {
@@ -27,6 +28,11 @@ stdenv.mkDerivation {
     sha256 = "1m7ks6k53gsjsdazgf22g16dfgj3pqvqy9mhxzlwszv5808sj5w5";
   };
 
+  makeFlags = [
+    "CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
+  ];
+
+  strictDeps = true;
   nativeBuildInputs = [
     pkg-config
     flex
@@ -48,7 +54,19 @@ stdenv.mkDerivation {
     # Install libnetpbm.so symlink to correct destination
     substituteInPlace lib/Makefile \
       --replace '/sharedlink' '/lib'
-  '';
+  '' + (stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+
+      substituteInPlace GNUmakefile \
+          --replace 'pkg-config' '${buildPackages.pkgconfig}/bin/${buildPackages.pkgconfig.targetPrefix}pkg-config'
+
+      substituteInPlace config.mk.in \
+          --replace 'AR = ar' 'AR = ${stdenv.lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar'
+      substituteInPlace config.mk.in \
+          --replace 'RANLIB = ranlib' 'RANLIB = ${stdenv.lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib'
+
+      substituteInPlace buildtools/install.sh \
+          --replace 'STRIPPROG-strip' 'STRIPPROG:-${stdenv.lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip'
+    '');
 
   configurePhase = ''
     runHook preConfigure
@@ -72,6 +90,12 @@ stdenv.mkDerivation {
     echo "NETPBMLIBSUFFIX = dylib" >> config.mk
 
     runHook postConfigure
+  '';
+
+  preBuild = ''
+    pushd buildtools
+    make CC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc
+    popd
   '';
 
   installPhase = ''
