@@ -377,6 +377,8 @@ in {
   else
     callPackage ../development/python-modules/ase { };
 
+  asgi-csrf = callPackage ../development/python-modules/asgi-csrf { };
+
   asgiref = callPackage ../development/python-modules/asgiref { };
 
   asn1ate = callPackage ../development/python-modules/asn1ate { };
@@ -2683,6 +2685,8 @@ in {
 
   httpbin = callPackage ../development/python-modules/httpbin { };
 
+  httpcore = callPackage ../development/python-modules/httpcore { };
+
   http-ece = callPackage ../development/python-modules/http-ece { };
 
   httplib2 = callPackage ../development/python-modules/httplib2 { };
@@ -3588,6 +3592,8 @@ in {
   memory_profiler = callPackage ../development/python-modules/memory_profiler { };
 
   mercurial = disabledIf (!isPy3k) (toPythonModule (pkgs.mercurial.override { python3Packages = self; }));
+
+  mergedeep = callPackage ../development/python-modules/mergedeep { };
 
   merkletools = callPackage ../development/python-modules/merkletools { };
 
