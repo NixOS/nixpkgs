@@ -2,6 +2,7 @@
 , lib, fetchurl, cmake, pkgconfig, lua5_1, SDL2, SDL2_mixer
 , zlib, libpng, libGL, libGLU, physfs
 , qtbase, qttools
+, llvm
 , withServer ? true
 }:
 
@@ -27,6 +28,7 @@ mkDerivation rec {
   buildInputs = [
     SDL2_ttf SDL2_net SDL2 SDL2_mixer SDL2_image
     fpc lua5_1
+    llvm # hard-requirement on aarch64, for some reason not strictly necessary on x86-64
     ffmpeg_3 freeglut physfs
     qtbase
   ] ++ lib.optional withServer ghc;
