@@ -13,6 +13,12 @@ let
       rev = "${version}";
       sha256 = "0dcl5a5jykgfmnfj42vl7kah9k26wg38l2g6yfh5pssmlf0nax33";
     };
+
+    postPatch = ''
+      substituteInPlace hfuzz_cc/hfuzz-cc.c \
+        --replace '"clang' '"${clang}/bin/clang'
+    '';
+
     enableParallelBuilding = true;
 
     nativeBuildInputs = [ makeWrapper ];
