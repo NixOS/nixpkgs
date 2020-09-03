@@ -2,7 +2,7 @@
 , withCryptodev ? false, cryptodev
 , enableSSL2 ? false
 , enableSSL3 ? false
-, static ? stdenv.hostPlatform.isStatic
+, static ? stdenv.isStatic
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus

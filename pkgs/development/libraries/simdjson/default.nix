@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DSIMDJSON_JUST_LIBRARY=ON"
-  ] ++ lib.optional stdenv.hostPlatform.isStatic "-DSIMDJSON_BUILD_STATIC=ON";
+  ] ++ lib.optional stdenv.isStatic "-DSIMDJSON_BUILD_STATIC=ON";
 
   meta = with lib; {
     homepage = "https://simdjson.org/";

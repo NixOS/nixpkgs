@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, fetchurl, fetchpatch, pkg-config, libuuid, gettext, texinfo
-, shared ? !stdenv.hostPlatform.isStatic
+, shared ? !stdenv.isStatic
 }:
 
 stdenv.mkDerivation rec {

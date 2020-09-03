@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, shared ? !stdenv.hostPlatform.isStatic
+, shared ? !stdenv.isStatic
 , static ? true
 # If true, a separate .static ouput is created and the .a is moved there.
 # In this case `pkg-config` auto detection does not currently work if the

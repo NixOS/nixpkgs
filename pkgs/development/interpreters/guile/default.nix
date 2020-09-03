@@ -59,7 +59,7 @@
 
   # don't have "libgcc_s.so.1" on darwin
   LDFLAGS = lib.optionalString
-    (!stdenv.isDarwin && !stdenv.hostPlatform.isStatic) "-lgcc_s";
+    (!stdenv.isDarwin && !stdenv.isStatic) "-lgcc_s";
 
   configureFlags = [ "--with-libreadline-prefix=${readline.dev}" ]
     ++ lib.optionals stdenv.isSunOS [

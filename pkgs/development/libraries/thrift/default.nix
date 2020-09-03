@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch, boost, zlib, libevent, openssl, python, cmake, pkg-config
 , bison, flex, twisted
-, static ? stdenv.hostPlatform.isStatic
+, static ? stdenv.isStatic
 }:
 
 stdenv.mkDerivation rec {

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, coreutils, gfortran, gnused
 , python3, util-linux, which
 
-, enableStatic ? stdenv.hostPlatform.isStatic
+, enableStatic ? stdenv.isStatic
 }:
 
 let

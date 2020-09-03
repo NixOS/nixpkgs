@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, autoreconfHook, pkg-config
 , libxslt, xz, elf-header
-, withStatic ? stdenv.hostPlatform.isStatic
+, withStatic ? stdenv.isStatic
 }:
 
 let

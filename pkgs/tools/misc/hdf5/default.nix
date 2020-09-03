@@ -7,7 +7,7 @@
 , szip ? null
 , mpiSupport ? false
 , mpi
-, enableShared ? !stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.isStatic
 }:
 
 # cpp and mpi options are mutually exclusive

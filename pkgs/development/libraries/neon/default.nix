@@ -1,8 +1,8 @@
 { lib, stdenv, fetchurl, libxml2, pkg-config, perl
 , compressionSupport ? true, zlib ? null
 , sslSupport ? true, openssl ? null
-, static ? stdenv.hostPlatform.isStatic
-, shared ? !stdenv.hostPlatform.isStatic
+, static ? stdenv.isStatic
+, shared ? !stdenv.isStatic
 }:
 
 assert compressionSupport -> zlib != null;

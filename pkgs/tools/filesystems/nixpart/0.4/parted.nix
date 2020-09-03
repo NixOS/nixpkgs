@@ -1,6 +1,6 @@
 { lib,stdenv, fetchurl, fetchpatch, lvm2, libuuid, gettext, readline
 , util-linux, check
-, enableStatic ? stdenv.hostPlatform.isStatic
+, enableStatic ? stdenv.isStatic
 }:
 
 stdenv.mkDerivation rec {

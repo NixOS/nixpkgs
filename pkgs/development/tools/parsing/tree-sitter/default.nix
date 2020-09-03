@@ -5,8 +5,8 @@
 , Security
 , callPackage
 
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableStatic ? stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.isStatic
+, enableStatic ? stdenv.isStatic
 , webUISupport ? false
 }:
 

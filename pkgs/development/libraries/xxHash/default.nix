@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   # Upstream Makefile does not anticipate that user may not want to
   # build .so library.
-  postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''
+  postPatch = lib.optionalString stdenv.isStatic ''
     sed -i 's/lib: libxxhash.a libxxhash/lib: libxxhash.a/' Makefile
     sed -i '/LIBXXH) $(DESTDIR/ d' Makefile
   '';

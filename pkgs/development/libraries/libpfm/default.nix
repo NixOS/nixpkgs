@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl
-, enableShared ? !stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.isStatic
 }:
 
 stdenv.mkDerivation (rec {

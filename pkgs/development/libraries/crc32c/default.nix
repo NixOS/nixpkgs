@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, gflags
-, staticOnly ? stdenv.hostPlatform.isStatic
+, staticOnly ? stdenv.isStatic
 }:
 
 stdenv.mkDerivation rec {

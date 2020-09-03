@@ -1,5 +1,5 @@
 { lib, stdenv, fetch, cmake, python3, libcxxabi, llvm, fixDarwinDylibNames, version
-, enableShared ? !stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.isStatic
 }:
 
 stdenv.mkDerivation {

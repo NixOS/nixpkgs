@@ -23,7 +23,7 @@ common =
   , confDir
   , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
   , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
-  , enableStatic ? stdenv.hostPlatform.isStatic
+  , enableStatic ? stdenv.isStatic
   , name, suffix ? "", src
   , patches ? [ ]
   }:

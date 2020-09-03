@@ -218,7 +218,6 @@ let
       crossOverlays = [ (import ./static.nix) ];
     } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
       crossSystem = {
-        isStatic = true;
         parsed = stdenv.hostPlatform.parsed // {
           abi = {
             gnu = lib.systems.parse.abis.musl;

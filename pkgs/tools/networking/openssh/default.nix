@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   # code in openssh's configure.ac. Neither of them support static
   # build, but patching code for krb5-config is simpler, so to get it
   # into PATH, kerberos.dev is added into buildInputs.
-  + optionalString stdenv.hostPlatform.isStatic ''
+  + optionalString stdenv.isStatic ''
     sed -i "s,PKGCONFIG --libs,PKGCONFIG --libs --static,g" configure
     sed -i 's#KRB5CONF --libs`#KRB5CONF --libs` -lkrb5support -lkeyutils#g' configure
     sed -i 's#KRB5CONF --libs gssapi`#KRB5CONF --libs gssapi` -lkrb5support -lkeyutils#g' configure

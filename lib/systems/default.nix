@@ -75,7 +75,7 @@ rec {
          # uname -r
          release = null;
       };
-      isStatic = final.isWasm || final.isRedox;
+      hasDynamicLoader = !final.isWasm && !final.isRedox;
 
       # Just a guess, based on `system`
       inherit

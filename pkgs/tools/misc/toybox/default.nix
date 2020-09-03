@@ -1,7 +1,7 @@
 {
   stdenv, lib, fetchFromGitHub, which,
   buildPackages,
-  enableStatic ? stdenv.hostPlatform.isStatic,
+  enableStatic ? stdenv.isStatic,
   enableMinimal ? false,
   extraConfig ? ""
 }:

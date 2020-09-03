@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, m4
 , cxx ? !stdenv.hostPlatform.useAndroidPrebuilt && !stdenv.hostPlatform.isWasm
 , buildPackages
-, withStatic ? stdenv.hostPlatform.isStatic
+, withStatic ? stdenv.isStatic
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus

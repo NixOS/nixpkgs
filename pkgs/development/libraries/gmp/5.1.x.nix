@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, m4
 , cxx ? true
-, withStatic ? stdenv.hostPlatform.isStatic
+, withStatic ? stdenv.isStatic
 }:
 
 let inherit (lib) optional; in

@@ -70,7 +70,7 @@ self: super:
 
   libxcb = super.libxcb.overrideAttrs (attrs: {
     configureFlags = [ "--enable-xkb" "--enable-xinput" ]
-      ++ lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
+      ++ lib.optional stdenv.isStatic "--disable-shared";
     outputs = [ "out" "dev" "man" "doc" ];
   });
 
@@ -80,7 +80,7 @@ self: super:
       ++ malloc0ReturnsNullCrossFlag;
     depsBuildBuild = [
       buildPackages.stdenv.cc
-    ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+    ] ++ lib.optionals stdenv.isStatic [
       (self.buildPackages.stdenv.cc.libc.static or null)
     ];
     preConfigure = ''
@@ -139,7 +139,7 @@ self: super:
       ++ malloc0ReturnsNullCrossFlag;
     preConfigure = attrs.preConfigure or ""
     # missing transitive dependencies
-    + lib.optionalString stdenv.hostPlatform.isStatic ''
+    + lib.optionalString stdenv.isStatic ''
       export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lXau -lXdmcp"
     '';
   });
@@ -229,7 +229,7 @@ self: super:
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ self.libXfixes ];
     configureFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "xorg_cv_malloc0_returns_null=no"
-    ] ++ lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
+    ] ++ lib.optional stdenv.isStatic "--disable-shared";
   });
 
   libXinerama = super.libXinerama.overrideAttrs (attrs: {
@@ -752,7 +752,7 @@ self: super:
     doCheck = false; # fails
     preConfigure = attrs.preConfigure or ""
     # missing transitive dependencies
-    + lib.optionalString stdenv.hostPlatform.isStatic ''
+    + lib.optionalString stdenv.isStatic ''
       export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lxcb -lXau -lXdmcp"
     '';
   });

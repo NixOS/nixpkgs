@@ -6,7 +6,7 @@
 , undmg
 , darwin
 , validatePkgConfig
-, enableStatic ? stdenv.hostPlatform.isStatic
+, enableStatic ? stdenv.isStatic
 }:
 
 /*

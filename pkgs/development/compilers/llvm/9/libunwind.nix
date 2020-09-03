@@ -1,5 +1,5 @@
 { lib, stdenv, version, fetch, cmake, fetchpatch
-, enableShared ? !stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.isStatic
 }:
 
 stdenv.mkDerivation rec {

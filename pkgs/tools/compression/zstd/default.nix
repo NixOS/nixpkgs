@@ -2,7 +2,7 @@
 , fixDarwinDylibNames
 , file
 , legacySupport ? false
-, static ? stdenv.hostPlatform.isStatic
+, static ? stdenv.isStatic
 }:
 
 stdenv.mkDerivation rec {

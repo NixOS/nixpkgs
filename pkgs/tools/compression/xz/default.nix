@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl
-, enableStatic ? stdenv.hostPlatform.isStatic
+, enableStatic ? stdenv.isStatic
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
