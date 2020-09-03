@@ -18,6 +18,7 @@
 , prepend ? []
 , lib
 , makeUInitrd ? stdenvNoCC.hostPlatform.platform.kernelTarget == "uImage"
+, uInitrdArch ? stdenvNoCC.hostPlatform.parsed.cpu.family
 }:
 let
   # !!! Move this into a public lib function, it is probably useful for others
@@ -25,7 +26,7 @@ let
     lib.concatStringsSep "-" (filter (x: !(isList x)) (split "[^a-zA-Z0-9_=.?-]+" x));
 
 in stdenvNoCC.mkDerivation rec {
-  inherit name makeUInitrd;
+  inherit name makeUInitrd uInitrdArch;
 
   builder = ./make-initrd.sh;
 

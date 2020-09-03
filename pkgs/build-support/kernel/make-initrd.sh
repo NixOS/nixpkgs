@@ -44,5 +44,5 @@ done
 
 if [ -n "$makeUInitrd" ]; then
     mv $out/initrd $out/initrd.gz
-    mkimage -A arm -O linux -T ramdisk -C gzip -d $out/initrd.gz $out/initrd
+    mkimage -A $uInitrdArch -O linux -T ramdisk -C gzip -d $out/initrd.gz $out/initrd
 fi
