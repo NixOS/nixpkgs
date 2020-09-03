@@ -17,6 +17,7 @@
 , compressor ? "gzip -9n"
 , prepend ? []
 , lib
+, makeUInitrd ? stdenvNoCC.hostPlatform.platform.kernelTarget == "uImage"
 }:
 let
   # !!! Move this into a public lib function, it is probably useful for others
@@ -24,11 +25,9 @@ let
     lib.concatStringsSep "-" (filter (x: !(isList x)) (split "[^a-zA-Z0-9_=.?-]+" x));
 
 in stdenvNoCC.mkDerivation rec {
-  inherit name;
+  inherit name makeUInitrd;
 
   builder = ./make-initrd.sh;
-
-  makeUInitrd = stdenvNoCC.hostPlatform.platform.kernelTarget == "uImage";
 
   nativeBuildInputs = [ perl cpio ]
     ++ stdenvNoCC.lib.optional makeUInitrd ubootTools;
