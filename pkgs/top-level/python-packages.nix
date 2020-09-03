@@ -1694,7 +1694,13 @@ in {
 
   dnslib = callPackage ../development/python-modules/dnslib { };
 
-  dnspython = callPackage ../development/python-modules/dnspython { };
+  dnspython = if isPy3k then
+    callPackage ../development/python-modules/dnspython { }
+  else
+    self.dnspython_1;
+
+  dnspython_1 = callPackage ../development/python-modules/dnspython/1.nix { };
+
   dns = self.dnspython; # Alias for compatibility, 2017-12-10
 
   doc8 = callPackage ../development/python-modules/doc8 { };
