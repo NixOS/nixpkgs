@@ -522,7 +522,12 @@ rec {
             # would be used, and use of `<` and `>` would break the XML document.
             # It shouldn't cause an issue since this is cosmetic for the manual.
             args.name = "‹name›";
-          }).options;
+          }).options // optionalAttrs (freeformType != null) {
+            # Expose the sub options of the freeform type. Note that the option
+            # discovery doesn't care about the attribute name used here, so this
+            # is just to avoid conflicts with potential options from the submodule
+            _freeformOptions = freeformType.getSubOptions prefix;
+          };
         getSubModules = modules;
         substSubModules = m: submoduleWith (attrs // {
           modules = m;
