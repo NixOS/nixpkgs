@@ -17,14 +17,14 @@
 stdenv.mkDerivation {
   # Determine version and revision from:
   # https://sourceforge.net/p/netpbm/code/HEAD/log/?path=/advanced
-  name = "netpbm-10.89.1";
+  name = "netpbm-10.91.3";
 
   outputs = [ "bin" "out" "dev" ];
 
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/netpbm/code/advanced";
-    rev = "3735";
-    sha256 = "1m7ks6k53gsjsdazgf22g16dfgj3pqvqy9mhxzlwszv5808sj5w5";
+    rev = "3940";
+    sha256 = "DLpby9vZ1fZd1Cb5GbNcfKWkWh27jwoog5W+p2FM7IM=";
   };
 
   nativeBuildInputs = [
@@ -70,7 +70,7 @@ stdenv.mkDerivation {
     echo "LDSHLIB=-dynamiclib -install_name $out/lib/libnetpbm.\$(MAJ).dylib" >> config.mk
     echo "NETPBMLIBTYPE = dylib" >> config.mk
     echo "NETPBMLIBSUFFIX = dylib" >> config.mk
-
+  '' + ''
     runHook postConfigure
   '';
 
