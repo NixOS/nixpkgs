@@ -521,7 +521,7 @@
 
    <varlistentry>
     <term>
-     <option>--flake</option> <replaceable>flake-uri</replaceable>[<replaceable>name</replaceable>]
+     <option>--flake</option> <replaceable>flake-uri</replaceable><optional>#<replaceable>name</replaceable></optional>
     </term>
     <listitem>
      <para>
