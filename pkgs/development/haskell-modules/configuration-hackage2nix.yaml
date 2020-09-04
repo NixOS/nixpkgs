@@ -3916,6 +3916,7 @@ broken-packages:
   - codemonitor
   - codepad
   - codeworld-api
+  - codex
   - codo-notation
   - coin
   - coinbase-exchange
@@ -4186,6 +4187,7 @@ broken-packages:
   - cryptocipher
   - cryptocompare
   - cryptoconditions
+  - cryptoids
   - cryptol
   - cryptsy-api
   - crystalfontz
@@ -4728,6 +4730,7 @@ broken-packages:
   - enchant
   - encoding
   - encoding-io
+  - encryptable
   - engine-io
   - engine-io-growler
   - engine-io-snap
@@ -4974,6 +4977,7 @@ broken-packages:
   - FileManip
   - FileManipCompat
   - fileneglect
+  - filepath-crypto
   - filepath-io-access
   - FilePather
   - filepather
@@ -5464,10 +5468,12 @@ broken-packages:
   - google-drive
   - google-html5-slide
   - google-mail-filters
+  - google-maps-geocoding
   - google-oauth2
   - google-oauth2-easy
   - google-search
   - google-server-api
+  - google-static-maps
   - google-translate
   - GoogleCodeJam
   - GoogleDirections
@@ -5660,18 +5666,25 @@ broken-packages:
   - hakismet
   - hakka
   - hako
+  - hakyll
   - hakyll-agda
   - hakyll-blaze-templates
   - hakyll-contrib
   - hakyll-contrib-csv
   - hakyll-contrib-elm
+  - hakyll-contrib-hyphenation
   - hakyll-contrib-links
   - hakyll-convert
+  - hakyll-dhall
   - hakyll-dir-list
+  - hakyll-favicon
   - hakyll-filestore
+  - hakyll-images
   - hakyll-ogmarkup
   - hakyll-R
+  - hakyll-sass
   - hakyll-series
+  - hakyll-shakespeare
   - hakyll-shortcode
   - hakyll-shortcut-links
   - hakyll-typescript
@@ -6233,6 +6246,7 @@ broken-packages:
   - HLogger
   - hlogger
   - hlongurl
+  - hlrdb
   - hls
   - hlwm
   - hly
@@ -6745,8 +6759,20 @@ broken-packages:
   - ignore
   - igraph
   - igrf
+  - ihaskell
+  - ihaskell-aeson
   - ihaskell-basic
+  - ihaskell-blaze
+  - ihaskell-charts
+  - ihaskell-diagrams
   - ihaskell-display
+  - ihaskell-gnuplot
+  - ihaskell-graphviz
+  - ihaskell-hatex
+  - ihaskell-hvega
+  - ihaskell-inline-r
+  - ihaskell-juicypixels
+  - ihaskell-magic
   - ihaskell-parsec
   - ihaskell-plot
   - ihaskell-rlangqq
@@ -7219,6 +7245,8 @@ broken-packages:
   - latest-npm-version
   - latex-formulae-hakyll
   - latex-formulae-pandoc
+  - latex-svg-hakyll
+  - latex-svg-pandoc
   - LATS
   - launchdarkly-server-sdk
   - launchpad-control
@@ -8340,9 +8368,11 @@ broken-packages:
   - pam
   - pan-os-syslog
   - panda
+  - pandoc-csv2table
   - pandoc-emphasize-code
   - pandoc-filter-graphviz
   - pandoc-include
+  - pandoc-include-code
   - pandoc-japanese-filters
   - pandoc-lens
   - pandoc-markdown-ghci-filter
@@ -8352,6 +8382,7 @@ broken-packages:
   - pandoc-pyplot
   - pandoc-sidenote
   - pandoc-unlit
+  - pandoc-utils
   - PandocAgda
   - pang-a-lambda
   - pangraph
@@ -8644,6 +8675,7 @@ broken-packages:
   - polysemy-http
   - polysemy-optics
   - polysemy-RandomFu
+  - polysemy-test
   - polysemy-webserver
   - polysemy-zoo
   - polyseq
@@ -8745,6 +8777,8 @@ broken-packages:
   - prim
   - prim-array
   - prim-ref
+  - primal
+  - primal-memory
   - primes-type
   - primitive-indexed
   - primitive-maybe
@@ -9678,6 +9712,7 @@ broken-packages:
   - siphon
   - siren-json
   - sirkel
+  - sitepipe
   - sixfiguregroup
   - sized-grid
   - sized-types
@@ -10043,6 +10078,8 @@ broken-packages:
   - stripe-haskell
   - stripe-http-client
   - stripe-http-streams
+  - stripe-scotty
+  - stripe-signature
   - stripe-tests
   - strongswan-sql
   - structural-induction
@@ -10237,6 +10274,7 @@ broken-packages:
   - tellbot
   - tempi
   - template-default
+  - template-haskell-optics
   - template-haskell-util
   - template-hsml
   - template-yj
@@ -10385,6 +10423,7 @@ broken-packages:
   - timeseries
   - timespan
   - timeutils
+  - timezone-detect
   - timezone-olson-th
   - timezone-unix
   - tini
@@ -10735,6 +10774,7 @@ broken-packages:
   - uuagc-diagrams
   - uuid-aeson
   - uuid-bytes
+  - uuid-crypto
   - uvector
   - uvector-algorithms
   - uxadt
@@ -11332,4 +11372,3 @@ broken-packages:
   - Zwaluw
   - zxcvbn-dvorak
   - zxcvbn-hs
-
