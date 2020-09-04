@@ -7865,6 +7865,7 @@ in {
   };
 
   wxPython_4_0 = callPackage ../development/python-modules/wxPython/4.0.nix {
+    inherit (pkgs.darwin.apple_sdk.frameworks) Carbon Cocoa WebKit;
     inherit (pkgs) pkgconfig;
     wxGTK = pkgs.wxGTK30.override {
       withGtk2 = false;

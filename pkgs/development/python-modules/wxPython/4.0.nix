@@ -1,18 +1,6 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pkgconfig
-, which
-, cairo
-, pango
-, python
-, doxygen
-, ncurses
-, wxGTK
-, numpy
-, pillow
-, six
+{ stdenv, buildPythonPackage, fetchPypi, pkgconfig, which, cairo, pango
+, python, doxygen, ncurses, wxGTK, wxmac, libintl, numpy, pillow, six
+, Carbon, Cocoa, WebKit
 }:
 
 buildPythonPackage rec {
@@ -26,12 +14,18 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ pkgconfig which doxygen wxGTK ];
-  buildInputs = [ ncurses wxGTK.gtk ];
+  nativeBuildInputs = [ pkgconfig which doxygen ]
+    ++ (if stdenv.isDarwin then [ wxmac ] else [ wxGTK ]);
+
+  buildInputs = [ ncurses libintl ]
+    ++ (if stdenv.isDarwin then
+      [ Carbon Cocoa WebKit ]
+    else
+      [ wxGTK.gtk ]);
 
   DOXYGEN = "${doxygen}/bin/doxygen";
 
-  preConfigure = lib.optionalString (!stdenv.isDarwin) ''
+  preConfigure = stdenv.lib.optionalString (!stdenv.isDarwin) ''
     substituteInPlace wx/lib/wxcairo/wx_pycairo.py \
       --replace 'cairoLib = None' 'cairoLib = ctypes.CDLL("${cairo}/lib/libcairo.so")'
     substituteInPlace wx/lib/wxcairo/wx_pycairo.py \
@@ -43,20 +37,19 @@ buildPythonPackage rec {
   '';
 
   buildPhase = ''
-    ${python.interpreter} build.py -v --use_syswx dox etg --nodoc sip build_py
+    ${python.interpreter} build.py -v -j$NIX_BUILD_CORES --use_syswx dox etg --nodoc sip build_py
   '';
 
   installPhase = ''
     ${python.interpreter} setup.py install --skip-build --prefix=$out
   '';
 
-  passthru = { inherit wxGTK; };
+  passthru = { wxWidgets = if stdenv.isDarwin then wxmac else wxGTK; };
 
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "Cross platform GUI toolkit for Python, Phoenix version";
     homepage = "http://wxpython.org/";
-    license = lib.licenses.wxWindows;
+    license = licenses.wxWindows;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
-
 }
