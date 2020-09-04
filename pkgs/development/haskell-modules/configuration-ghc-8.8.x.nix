@@ -114,4 +114,16 @@ self: super: {
   # cabal-fmt requires Cabal3
   cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_2_0_0; };
 
+  # liquidhaskell does not support ghc version 8.8.x.
+  liquid = markBroken super.liquid;
+  liquid-base = markBroken super.liquid-base;
+  liquid-bytestring = markBroken super.liquid-bytestring;
+  liquid-containers = markBroken super.liquid-containers;
+  liquid-ghc-prim = markBroken super.liquid-ghc-prim;
+  liquid-parallel = markBroken super.liquid-parallel;
+  liquid-platform = markBroken super.liquid-platform;
+  liquid-prelude = markBroken super.liquid-prelude;
+  liquid-vector = markBroken super.liquid-vector;
+  liquidhaskell = markBroken super.liquidhaskell;
+
 }
