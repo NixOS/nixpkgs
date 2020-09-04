@@ -21,13 +21,13 @@ in
 
 buildPythonPackage rec {
   pname = "python-language-server";
-  version = "0.33.1";
+  version = "0.34.1";
 
   src = fetchFromGitHub {
     owner = "palantir";
     repo = "python-language-server";
     rev = version;
-    sha256 = "064ck4ikrrrhq8wjpbs5k6hzkrjvfg91pd6351471xpsij0kj16f";
+    sha256 = "sha256-/tVzaoyUO6+7DSvnf3JxpcTY0rU+hHBu5qlru/ZTpxU=";
   };
 
   postPatch = ''
