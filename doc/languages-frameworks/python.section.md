@@ -1554,9 +1554,9 @@ Following rules are desired to be respected:
 
 * Python libraries are called from `python-packages.nix` and packaged with
   `buildPythonPackage`. The expression of a library should be in
-  `pkgs/development/python-modules/<name>/default.nix`. Libraries in
-  `pkgs/top-level/python-packages.nix` are sorted quasi-alphabetically to avoid
-  merge conflicts.
+  `pkgs/development/python-modules/<name>/default.nix`.
+* Libraries in `pkgs/top-level/python-packages.nix` are sorted
+  alphanumerically to avoid merge conflicts and ease locating attributes.
 * Python applications live outside of `python-packages.nix` and are packaged
   with `buildPythonApplication`.
 * Make sure libraries build for all Python interpreters.
@@ -1570,3 +1570,4 @@ Following rules are desired to be respected:
   [PEP 0503](https://www.python.org/dev/peps/pep-0503/#normalized-names). This
   means that characters should be converted to lowercase and `.` and `_` should
   be replaced by a single `-` (foo-bar-baz instead of Foo__Bar.baz )
+* Attribute names in `python-packages.nix` should be sorted alphanumerically.
