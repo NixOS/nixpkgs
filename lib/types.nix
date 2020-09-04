@@ -255,9 +255,6 @@ rec {
       merge = mergeEqualOption;
     };
 
-    # TODO: drop this in the future:
-    list = builtins.trace "`types.list` has been removed; please use `types.listOf` instead" types.listOf;
-
     listOf = elemType: mkOptionType rec {
       name = "listOf";
       description = "list of ${elemType.description}s";
