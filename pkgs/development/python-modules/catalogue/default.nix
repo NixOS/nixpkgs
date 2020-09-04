@@ -2,8 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, pytestCheckHook
 , importlib-metadata
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {

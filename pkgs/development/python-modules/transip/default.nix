@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, isPy27
 , requests
 , cryptography
 , suds-jurko
@@ -10,6 +11,7 @@
 buildPythonPackage rec {
   pname = "transip-api";
   version = "2.0.0";
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "benkonrath";
