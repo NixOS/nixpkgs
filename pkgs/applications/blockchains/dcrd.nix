@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "dcrd";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "decred";
     repo = "dcrd";
     rev = "refs/tags/release-v${version}";
-    sha256 = "1ggw289y1f4dqvj3w60q9bahq8bblbfjymn5xy04ldylr3qlxm9x";
+    sha256 = "14pxajc8si90hnddilfm09kmljwxq6i6p53fk0g09jp000cbklkl";
   };
 
   vendorSha256 = "03aw6mcvp1vr01ppxy673jf5hdryd5032cxndlkaiwg005mxp1dy";
