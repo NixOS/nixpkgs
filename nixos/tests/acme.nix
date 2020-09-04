@@ -218,8 +218,7 @@ in import ./make-test-python.nix ({ lib, ... }: {
 
 
       def check_connection(node, domain, retries=3):
-          if retries == 0:
-              assert False
+          assert retries >= 0
 
           result = node.succeed(
               "openssl s_client -brief -verify 2 -CAfile /tmp/ca.crt"
@@ -233,8 +232,7 @@ in import ./make-test-python.nix ({ lib, ... }: {
 
 
       def check_connection_key_bits(node, domain, bits, retries=3):
-          if retries == 0:
-              assert False
+          assert retries >= 0
 
           result = node.succeed(
               "openssl s_client -CAfile /tmp/ca.crt"

@@ -395,6 +395,20 @@ php.override {
      </para>
    </listitem>
    <listitem>
+    <para>
+     The ACME module has been overhauled for simplicity and maintainability.
+     Cert generation now implicitly uses the <literal>acme</literal>
+     user, and the <literal>security.acme.certs._name_.user</literal> option
+     has been removed. Instead, certificate access from other services is now
+     managed through group permissions. The module no longer runs lego
+     twice under certain conditions, and will correctly renew certificates if
+     their configuration is changed. Services which reload nginx and httpd after
+     certificate renewal are now properly configured too so you no longer have
+     to do this manually if you are using HTTPS enabled virtual hosts. A mechanism
+     for regenerating certs on demand has also been added and documented.
+    </para>
+   </listitem>
+   <listitem>
      <para>
       Gollum received a major update to version 5.x and you may have to change
       some links in your wiki when migrating from gollum 4.x. More information
