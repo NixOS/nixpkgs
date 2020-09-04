@@ -212,7 +212,7 @@ self: super: {
     # https://github.com/haskell-nix/hnix/issues/676
     # Once neat-interpolation >= 0.4 is in our stack release,
     # (which should happen soon), we can remove this override
-    neat-interpolation = self.neat-interpolation_0_5_1_1;
+    neat-interpolation = self.neat-interpolation_0_5_1_2;
   });
 
   # Fails for non-obvious reasons while attempting to use doctest.
