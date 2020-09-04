@@ -69,6 +69,14 @@
      user D-Bus session available also for non-graphical logins.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The option <option>fonts.enableFontDir</option> has been renamed to
+      <xref linkend="opt-fonts.fontDir.enable"/>. The path of font directory
+      has also been changed to <literal>/run/current-system/sw/share/X11/fonts</literal>,
+      for consistency with other X11 resources.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
