@@ -61,6 +61,7 @@
 , "csslint"
 , "dat"
 , "dhcp"
+, "diagnostic-languageserver"
 , "dockerfile-language-server-nodejs"
 , "elasticdump"
 , "elm-oracle"
