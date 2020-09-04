@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "checksec";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "slimm609";
     repo = "checksec.sh";
     rev = version;
-    sha256 = "0gm438sfh84bif5d40wvaqrfl4dh3fxjvnjk9ab33al8ws3afpsj";
+    sha256 = "0hw8bd7dj71m1ml9zvfab2j87jacs542z7a89nziapckmg6kmh6f";
   };
 
   patches = [ ./0001-attempt-to-modprobe-config-before-checking-kernel.patch ];
