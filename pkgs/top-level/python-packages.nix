@@ -7667,8 +7667,6 @@ in {
 
   zope-hookable = callPackage ../development/python-modules/zope-hookable { };
 
-  zope_i18n = callPackage ../development/python-modules/zope_i18n { };
-
   zope_i18nmessageid = callPackage ../development/python-modules/zope_i18nmessageid { };
 
   zope_interface = callPackage ../development/python-modules/zope_interface { };
