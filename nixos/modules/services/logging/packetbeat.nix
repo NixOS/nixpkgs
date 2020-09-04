@@ -35,8 +35,8 @@ in
 
       settings = mkOption {
         type = types.submodule {
+          freeformType = format.type;
           options = {
-            freeformType = format.type;
             name = mkOption {
               type = types.str;
               default = "packetbeat";
@@ -77,7 +77,7 @@ in
               };
             };
             output = mkOption {
-              type = with types; attrsOf (oneOf [ bool str (attrsOf str) (linesOf str) ]);
+              type = with types; attrsOf (oneOf [ bool str (attrsOf str) (listOf str) ]);
               description = ''
                 Configuration of where packetbeat should send the information its gathered.
                 See <link xlink:href='https://www.elastic.co/guide/en/beats/packetbeat/current/configuring-output.html'/>
