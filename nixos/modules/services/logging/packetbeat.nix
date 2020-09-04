@@ -51,7 +51,7 @@ in
 
             packetbeat = {
               interfaces = mkOption {
-                type = with types; attrsOf (oneOf [ bool str ]);
+                type = format.type;
                 description = ''
                   Configuration of what interfaces packetbeat should monitor and how. See
                   <link xlink:href='https://www.elastic.co/guide/en/beats/packetbeat/current/configuration-interfaces.html'/>
@@ -59,7 +59,7 @@ in
                 '';
               };
               flows = mkOption {
-                type = with types; attrsOf (oneOf [ bool str ]);
+                type = format.type;
                 description = ''
                   Configuration of how packetbeat should handle flows. See
                   <link xlink:href='https://www.elastic.co/guide/en/beats/packetbeat/current/configuration-flows.html'/>
@@ -68,7 +68,7 @@ in
               };
 
               protocols = mkOption {
-                type = with types; attrsOf (oneOf [ bool (listOf port) (listOf str) ]);
+                type = format.type;
                 description = ''
                   Configuration of what protocols packetbeat should gather info about.
                   See <link xlink:href='https://www.elastic.co/guide/en/beats/packetbeat/current/configuration-protocols.html'/>
@@ -77,7 +77,7 @@ in
               };
             };
             output = mkOption {
-              type = with types; attrsOf (oneOf [ bool str (attrsOf str) (listOf str) ]);
+              type = format.type;
               description = ''
                 Configuration of where packetbeat should send the information its gathered.
                 See <link xlink:href='https://www.elastic.co/guide/en/beats/packetbeat/current/configuring-output.html'/>
@@ -86,7 +86,7 @@ in
             };
 
             setup = mkOption {
-              type = with types; attrsOf (oneOf [ bool str (attrsOf str) ]);
+              type = format.type;
               description = ''
                 Configures where the kibana endpoint is for setting up dashboards and
                 whether packetbeat should setup ILM and index templates in elasticsearch.
@@ -94,7 +94,7 @@ in
             };
 
             fields = mkOption {
-              type = with types; attrsOf str;
+              type = format.type;
               description = ''
                 Extra fields that packetbeat should add to the top-level of the objects it
                 sends to its output.
@@ -102,7 +102,7 @@ in
             };
 
             processors = mkOption {
-              type = with types; listOf (oneOf [ str (listOf str) (attrsOf str) ]);
+              type = format.type;
               description = ''
                 Configuration of what enrichment and/or filtering processors packetbeat
                 should gather information from before sending it to the output.
