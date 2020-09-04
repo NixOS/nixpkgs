@@ -21,6 +21,7 @@ let
     "8.9" = versions.post_8_6;
     "8.10" = versions.post_8_6;
     "8.11" = versions.post_8_6;
+    "8.12" = versions.post_8_6;
   };
   param = params.${coq.coq-version};
 in
