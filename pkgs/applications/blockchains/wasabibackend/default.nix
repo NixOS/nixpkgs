@@ -35,7 +35,7 @@ let
   };
 
   pname = "WasabiBackend";
-  version = "1.1.11.1";
+  version = "1.1.12";
 
   projectName = "WalletWasabi.Backend";
   projectConfiguration = "Release";
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     owner = "zkSNACKs";
     repo = "WalletWasabi";
     rev = "v${version}";
-    sha256 = "0kxww8ywhld00b0qsv5jh5s19jqpahnb9mvshmjnp3cb840j12a7";
+    sha256 = "001k43z2jxvs03csyzndlzlk034aclzc4n8ddrqxykgrq508xk1d";
   };
 
   buildInputs = [
