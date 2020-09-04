@@ -233,6 +233,35 @@ checkConfigError 'infinite recursion encountered' config.foo ./freeform-attrsOf.
 checkConfigError 'The option .* is used but not defined' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix
 checkConfigOutput 24 config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix ./define-value-string.nix
 
+## types.anything
+# Check that attribute sets are merged recursively
+checkConfigOutput null config.value.foo ./types-anything/nested-attrs.nix
+checkConfigOutput null config.value.l1.foo ./types-anything/nested-attrs.nix
+checkConfigOutput null config.value.l1.l2.foo ./types-anything/nested-attrs.nix
+checkConfigOutput null config.value.l1.l2.l3.foo ./types-anything/nested-attrs.nix
+# Attribute sets that are coercible to strings shouldn't be recursed into
+checkConfigOutput foo config.value.outPath ./types-anything/attrs-coercible.nix
+# Multiple lists aren't concatenated together
+checkConfigError 'The option .* has conflicting definitions' config.value ./types-anything/lists.nix
+# Check that all equalizable atoms can be used as long as all definitions are equal
+checkConfigOutput 0 config.value.int ./types-anything/equal-atoms.nix
+checkConfigOutput false config.value.bool ./types-anything/equal-atoms.nix
+checkConfigOutput '""' config.value.string ./types-anything/equal-atoms.nix
+checkConfigOutput / config.value.path ./types-anything/equal-atoms.nix
+checkConfigOutput null config.value.null ./types-anything/equal-atoms.nix
+checkConfigOutput 0.1 config.value.float ./types-anything/equal-atoms.nix
+# Functions can't be merged together
+checkConfigError "The option .* has conflicting definitions" config.value.multiple-lambdas ./types-anything/functions.nix
+checkConfigOutput '<LAMBDA>' config.value.single-lambda ./types-anything/functions.nix
+# Check that all mk* modifiers are applied
+checkConfigError 'attribute .* not found' config.value.mkiffalse ./types-anything/mk-mods.nix
+checkConfigOutput '{ }' config.value.mkiftrue ./types-anything/mk-mods.nix
+checkConfigOutput 1 config.value.mkdefault ./types-anything/mk-mods.nix
+checkConfigOutput '{ }' config.value.mkmerge ./types-anything/mk-mods.nix
+checkConfigOutput true config.value.mkbefore ./types-anything/mk-mods.nix
+checkConfigOutput 1 config.value.nested.foo ./types-anything/mk-mods.nix
+checkConfigOutput baz config.value.nested.bar.baz ./types-anything/mk-mods.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
