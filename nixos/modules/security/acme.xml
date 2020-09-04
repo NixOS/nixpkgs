@@ -251,4 +251,16 @@ chmod 400 /var/lib/secrets/certs.secret
    journalctl -fu acme-example.com.service</literal> and watching its log output.
   </para>
  </section>
+ <section xml:id="module-security-acme-regenerate">
+  <title>Regenerating certificates</title>
+
+  <para>
+   Should you need to regenerate a particular certificate in a hurry, such
+   as when a vulnerability is found in Let's Encrypt, there is now a convenient
+   mechanism for doing so. Running <literal>systemctl clean acme-example.com.service</literal>
+   will remove all certificate files for the given domain, allowing you to then
+   <literal>systemctl start acme-example.com.service</literal> to generate fresh
+   ones.
+  </para>
+ </section>
 </chapter>
