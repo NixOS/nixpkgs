@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "theme-obsidian2";
-  version = "2.13";
+  version = "2.14";
 
   src = fetchFromGitHub {
     owner = "madmaxms";
     repo = "theme-obsidian-2";
     rev = "v${version}";
-    sha256 = "1chbz1cbkbfzk8835x1dywk38d7wjh90myajgk5f7v2zgnvbya23";
+    sha256 = "0i5lrj45zswd3rmclvywpk7x30bvib5zldhmfl38gbj477ag8ng8";
   };
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Gnome theme, based upon Adwaita-Maia dark skin";
     homepage = "https://github.com/madmaxms/theme-obsidian-2";
-    license = with licenses; [ gpl3 ];
+    license = with licenses; [ gpl3Only ];
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];
   };
