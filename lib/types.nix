@@ -225,8 +225,10 @@ rec {
 
     # Deprecated; should not be used because it quietly concatenates
     # strings, which is usually not what you want.
-    string = warn "types.string is deprecated because it quietly concatenates strings"
-      (separatedString "");
+    string = separatedString "" // {
+      name = "string";
+      deprecationMessage = "See https://github.com/NixOS/nixpkgs/pull/66346 for better alternative types.";
+    };
 
     attrs = mkOptionType {
       name = "attrs";
