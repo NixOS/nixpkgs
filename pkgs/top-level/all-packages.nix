@@ -6650,6 +6650,8 @@ in
 
   playbar2 = libsForQt5.callPackage ../applications/audio/playbar2 { };
 
+  plujain-ramp = callPackage ../applications/audio/plujain-ramp { };
+
   plex = callPackage ../servers/plex { };
   plexRaw = callPackage ../servers/plex/raw.nix { };
 
