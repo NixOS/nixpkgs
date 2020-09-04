@@ -23,7 +23,7 @@ rec {
     inherit gst-plugins-base gstreamer gst-plugins-bad;
   };
 
-  gst-validate = callPackage ./validate { inherit gst-plugins-base; };
+  gst-validate = callPackage ./validate { inherit gstreamer gst-plugins-base; };
 
   # note: gst-python is in ./python/default.nix - called under pythonPackages
 }

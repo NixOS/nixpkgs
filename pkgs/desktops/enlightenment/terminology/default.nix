@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
     mesa
   ];
 
+  mesonFlags = [
+    "-D edje-cc=${efl}/bin/edje_cc"
+  ];
+
   meta = {
     description = "Powerful terminal emulator based on EFL";
     homepage = "https://www.enlightenment.org/about-terminology";

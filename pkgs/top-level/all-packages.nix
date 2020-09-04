@@ -10554,6 +10554,8 @@ in
 
   black = with python3Packages; toPythonApplication black;
 
+  black-macchiato = with python3Packages; toPythonApplication black-macchiato;
+
   blackmagic = callPackage ../development/tools/misc/blackmagic { };
 
   bloaty = callPackage ../development/tools/bloaty { };
@@ -11502,6 +11504,8 @@ in
   strace = callPackage ../development/tools/misc/strace { };
 
   summon = callPackage ../development/tools/summon { };
+
+  svlint = callPackage ../development/tools/analysis/svlint { };
 
   swarm = callPackage ../development/tools/analysis/swarm { };
 
@@ -12574,24 +12578,6 @@ in
     callPackage = newScope { libav = pkgs.ffmpeg; };
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   });
-
-  gstreamer = callPackage ../development/libraries/gstreamer/legacy/gstreamer { };
-
-  gst-plugins-base = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-base {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
-  };
-
-  gst-plugins-good = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-good {};
-
-  gst-plugins-bad = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-bad {};
-
-  gst-plugins-ugly = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-ugly {};
-
-  gst-python = callPackage ../development/libraries/gstreamer/legacy/gst-python {};
-
-  gstreamermm = callPackage ../development/libraries/gstreamer/legacy/gstreamermm { };
-
-  gnonlin = callPackage ../development/libraries/gstreamer/legacy/gnonlin {};
 
   gusb = callPackage ../development/libraries/gusb { };
 
@@ -18932,6 +18918,8 @@ in
 
   marwaita = callPackage ../data/themes/marwaita { };
 
+  marwaita-manjaro = callPackage ../data/themes/marwaita-manjaro { };
+
   matcha-gtk-theme = callPackage ../data/themes/matcha { };
 
   materia-theme = callPackage ../data/themes/materia-theme { };
@@ -19861,6 +19849,8 @@ in
   containerd = callPackage ../applications/virtualization/containerd { };
 
   convchain = callPackage ../tools/graphics/convchain {};
+
+  cordless = callPackage ../applications/networking/instant-messengers/cordless { };
 
   coursera-dl = callPackage ../applications/misc/coursera-dl {};
 
@@ -21910,6 +21900,7 @@ in
       avahi = avahi-compat;
       pulseSupport = config.pulseaudio or false;
       iceSupport = config.murmur.iceSupport or true;
+      grpcSupport = config.murmur.grpcSupport or true;
     }).murmur;
 
   mumble = (callPackages ../applications/networking/mumble {
@@ -22243,6 +22234,8 @@ in
   omxplayer = callPackage ../applications/video/omxplayer { };
 
   inherit (python3Packages.callPackage ../applications/networking/onionshare { }) onionshare onionshare-gui;
+
+  openambit = qt5.callPackage ../applications/misc/openambit { };
 
   openbox = callPackage ../applications/window-managers/openbox { };
 
@@ -24783,6 +24776,8 @@ in
 
   legendary-gl = python38Packages.callPackage ../games/legendary-gl { };
 
+  left4gore-bin = callPackage ../games/left4gore { };
+
   lgogdownloader = callPackage ../games/lgogdownloader { };
 
   liberal-crime-squad = callPackage ../games/liberal-crime-squad { };
@@ -25474,6 +25469,8 @@ in
     systemsettings user-manager xdg-desktop-portal-kde;
 
   plasma-applet-caffeine-plus = libsForQt5.callPackage ../desktops/plasma-5/addons/caffeine-plus.nix { };
+
+  kwin-dynamic-workspaces = libsForQt5.callPackage ../desktops/plasma-5/kwin/scripts/dynamic-workspaces.nix { };
 
   kwin-tiling = libsForQt5.callPackage ../desktops/plasma-5/kwin/scripts/tiling.nix { };
 
@@ -27364,6 +27361,10 @@ in
   vivid = callPackage ../tools/misc/vivid { };
 
   vokoscreen = libsForQt5.callPackage ../applications/video/vokoscreen { };
+
+  vokoscreen-ng = libsForQt5.callPackage ../applications/video/vokoscreen-ng {
+    inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly;
+  };
 
   vttest = callPackage ../tools/misc/vttest { };
 

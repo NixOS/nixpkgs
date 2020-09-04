@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "du-dust";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "bootandy";
     repo = "dust";
     rev = "v${version}";
-    sha256 = "181xlm0zj9pb73ijwf202kwwm2jji0m11ynsbaxl44alva3xpvmk";
+    sha256 = "1rcbxqcxr8v5faa52psjsjjlnkia5cwc3b1cwka9f5cxwhdwg7hr";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     extraPostFetch = ''
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoSha256 = "1ypphm9n6wri5f03fj65i5p6lb11qj5zp8ddvybanaypv5llkfcb";
+  cargoSha256 = "1q15xy15hk6r3sai9wry2jm57dhinx6r84yxg9fwvq354613k645";
 
   doCheck = false;
 
