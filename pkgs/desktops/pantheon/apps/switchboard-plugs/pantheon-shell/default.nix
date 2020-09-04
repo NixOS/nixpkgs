@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala, glib
 , libgee, granite, gexiv2, elementary-settings-daemon, gtk3, gnome-desktop
-, gala, wingpanel, plank, switchboard, gettext, bamf, fetchpatch }:
+, gala, wingpanel, elementary-dock, switchboard, gettext, bamf, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-pantheon-shell";
@@ -29,17 +29,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bamf
+    elementary-dock
     elementary-settings-daemon
+    gala
     gexiv2
     glib
     gnome-desktop
     granite
     gtk3
     libgee
-    gala
-    wingpanel
-    plank
     switchboard
+    wingpanel
   ];
 
   meta = with stdenv.lib; {

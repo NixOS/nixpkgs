@@ -16,7 +16,7 @@
 , libnotify
 , libunity
 , pango
-, plank
+, elementary-dock
 , bamf
 , sqlite
 , libdbusmenu-gtk3
@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bamf
+    elementary-dock
     elementary-icon-theme
     granite
     gtk3
@@ -74,7 +75,6 @@ stdenv.mkDerivation rec {
     libnotify
     libunity
     pango
-    plank
     sqlite
     zeitgeist
   ];

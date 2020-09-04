@@ -14,7 +14,7 @@
 , appstream
 , gnome-menus
 , json-glib
-, plank
+, elementary-dock
 , bamf
 , switchboard
 , libunity
@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bamf
+    elementary-dock
     gnome-menus
     granite
     gtk3
@@ -64,7 +65,6 @@ stdenv.mkDerivation rec {
     libhandy
     libsoup
     libunity
-    plank
     switchboard
     wingpanel
     zeitgeist
