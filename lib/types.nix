@@ -529,8 +529,9 @@ rec {
     # declarations from the ‘options’ attribute of containing option
     # declaration.
     optionSet = mkOptionType {
-      name = builtins.trace "types.optionSet is deprecated; use types.submodule instead" "optionSet";
+      name = "optionSet";
       description = "option set";
+      deprecationMessage = "Use `types.submodule' instead";
     };
     # Augment the given type with an additional type check function.
     addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
