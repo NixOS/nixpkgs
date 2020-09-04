@@ -4090,6 +4090,7 @@ broken-packages:
   - Control-Monad-ST2
   - contstuff-monads-tf
   - contstuff-transformers
+  - conversions
   - convert
   - convert-annotation
   - convertible-ascii
@@ -7478,6 +7479,7 @@ broken-packages:
   - lp-diagrams
   - lp-diagrams-svg
   - LRU
+  - lrucaching-haxl
   - ls-usb
   - lscabal
   - LslPlus
@@ -9043,6 +9045,7 @@ broken-packages:
   - redis-hs
   - redis-io
   - redis-simple
+  - rediscaching-haxl
   - redland
   - Redmine
   - reduce-equations
@@ -9394,6 +9397,7 @@ broken-packages:
   - scotty-fay
   - scotty-format
   - scotty-hastache
+  - scotty-haxl
   - scotty-resource
   - scotty-rest
   - scotty-session
@@ -11328,3 +11332,4 @@ broken-packages:
   - Zwaluw
   - zxcvbn-dvorak
   - zxcvbn-hs
+
