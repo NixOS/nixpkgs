@@ -1209,7 +1209,15 @@ self: super: {
 
   # this will probably need to get updated with every ghcide update,
   # we need an override because ghcide is tracking haskell-lsp closely.
-  ghcide = dontCheck (super.ghcide.override { ghc-check = self.ghc-check_0_3_0_1; });
+  ghcide = dontCheck (appendPatch (super.ghcide.override {
+    hie-bios = dontCheck super.hie-bios_0_7_1;
+    lsp-test = dontCheck self.lsp-test_0_11_0_4;
+  }) (pkgs.fetchpatch {
+    # This patch loosens the hie-bios upper bound.
+    # It is already merged into upstream and won‘t be needed for ghcide 0.4.0
+    url = "https://github.com/haskell/ghcide/commit/3e1b3620948870a4da8808ca0c0897fbd3ecad16.patch";
+    sha256 = "1jwn7jgi740x6wwv1k0mz9d4z0b9p3mzs54pdg4nfq0h2v7zxchz";
+  }));
 
   # hasn‘t bumped upper bounds
   # upstream: https://github.com/obsidiansystems/which/pull/6
