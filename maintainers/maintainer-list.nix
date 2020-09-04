@@ -8433,6 +8433,12 @@
     githubId = 1391883;
     name = "Tom Hall";
   };
+  tiagolobocastro = {
+    email = "tiagolobocastro@gmail.com";
+    github = "tiagolobocastro";
+    githubId = 1618946;
+    name = "Tiago Castro";
+  };
   tilpner = {
     email = "till@hoeppner.ws";
     github = "tilpner";
