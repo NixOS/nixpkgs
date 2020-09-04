@@ -203,9 +203,14 @@ rec {
     /* If this option is true, attrsets like { __pretty = fn; val = …; }
        will use fn to convert val to a pretty printed representation.
        (This means fn is type Val -> String.) */
-    allowPrettyValues ? false
-  }@args: let go = v: with builtins;
+    allowPrettyValues ? false,
+    /* If this option is true, the output is indented with newlines for attribute sets and lists */
+    multiline ? true
+  }@args: let
+    go = indent: v: with builtins;
     let     isPath   = v: typeOf v == "path";
+            introSpace = if multiline then "\n${indent}  " else " ";
+            outroSpace = if multiline then "\n${indent}" else " ";
     in if   isInt      v then toString v
     else if isFloat    v then "~${toString v}"
     else if isString   v then ''"${libStr.escape [''"''] v}"''
@@ -213,9 +218,9 @@ rec {
     else if false ==   v then "false"
     else if null  ==   v then "null"
     else if isPath     v then toString v
-    else if isList     v then "[ "
-        + libStr.concatMapStringsSep " " go v
-      + " ]"
+    else if isList     v then "[" + introSpace
+        + libStr.concatMapStringsSep introSpace (go (indent + "  ")) v
+      + outroSpace + "]"
     else if isAttrs    v then
       # apply pretty values if allowed
       if attrNames v == [ "__pretty" "val" ] && allowPrettyValues
@@ -224,11 +229,11 @@ rec {
       else if v ? type && v.type == "derivation" then
         "<δ:${v.name}>"
         # "<δ:${concatStringsSep "," (builtins.attrNames v)}>"
-      else "{ "
-          + libStr.concatStringsSep " " (libAttr.mapAttrsToList
+      else "{" + introSpace
+          + libStr.concatStringsSep introSpace (libAttr.mapAttrsToList
               (name: value:
-                "${libStr.escapeNixIdentifier name} = ${go value};") v)
-        + " }"
+                "${libStr.escapeNixIdentifier name} = ${go (indent + "  ") value};") v)
+        + outroSpace + "}"
     else if isFunction v then
       let fna = lib.functionArgs v;
           showFnas = concatStringsSep "," (libAttr.mapAttrsToList
@@ -237,7 +242,7 @@ rec {
       in if fna == {}    then "<λ>"
                          else "<λ:{${showFnas}}>"
     else abort "generators.toPretty: should never happen (v = ${v})";
-  in go;
+  in go "";
 
   # PLIST handling
   toPlist = {}: v: let
