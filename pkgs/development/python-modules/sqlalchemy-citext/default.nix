@@ -18,9 +18,10 @@ buildPythonPackage rec {
     sqlalchemy
   ];
 
-  checkPhase = ''
-    ${python.interpreter} tests/test_citext.py
-  '';
+  # tests are not packaged in pypi tarball
+  doCheck = false;
+
+  pythonImportsCheck = [ "citext" ];
 
   meta = with lib; {
     description = "A sqlalchemy plugin that allows postgres use of CITEXT";
