@@ -29,7 +29,7 @@ ghcide_new_version=$(curl --silent "https://api.github.com/repos/haskell/haskell
 echo "Updating haskell-language-server's ghcide from old version $ghcide_old_version to new version $ghcide_new_version."
 echo "Running cabal2nix and outputting to ${ghcide_derivation_file}..."
 
-cabal2nix --revision "$ghcide_new_version" "https://github.com/wz1000/ghcide" > "$ghcide_derivation_file"
+cabal2nix --revision "$ghcide_new_version" "https://github.com/haskell/ghcide" > "$ghcide_derivation_file"
 
 
 # ===========================
