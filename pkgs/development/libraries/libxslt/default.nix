@@ -29,6 +29,14 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional pythonSupport "--with-python=${python}"
     ++ stdenv.lib.optional (!cryptoSupport) "--without-crypto";
 
+  patches = [
+    # Makes NixOS manual build deterministic
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/libx/libxslt/1.1.34-4/debian/patches/0002-Make-generate-id-deterministic.patch";
+      sha256 = "0i2m8vfpnx8d07vcqpflqbydixw6xara3ic7dyc5s829h4j0w7x0";
+    })
+  ];
+
   postFixup = ''
     moveToOutput bin/xslt-config "$dev"
     moveToOutput lib/xsltConf.sh "$dev"
