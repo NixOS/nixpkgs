@@ -168,7 +168,7 @@ let
     selfsignService = {
       description = "Generate self-signed certificate for ${cert}";
       after = [ "acme-selfsigned-ca.service" "acme-fixperms.service" ];
-      wants = [ "acme-selfsigned-ca.service" "acme-fixperms.service" ];
+      requires = [ "acme-selfsigned-ca.service" "acme-fixperms.service" ];
 
       path = with pkgs; [ minica ];
 
@@ -232,6 +232,15 @@ let
 
         # Only try loading the credentialsFile if the dns challenge is enabled
         EnvironmentFile = mkIf useDns data.credentialsFile;
+
+        # Run as root (Prefixed with +)
+        ExecStartPost = "+" + (pkgs.writeShellScript "acme-postrun" ''
+          cd /var/lib/acme/${escapeShellArg cert}
+          if [ -e renewed ]; then
+            rm renewed
+            ${data.postRun}
+          fi
+        '');
       };
 
       # Working directory will be /tmp
@@ -255,21 +264,14 @@ let
 
         # Copy all certs to the "real" certs directory
         CERT='certificates/${keyName}.crt'
-        CERT_CHANGED=no
         if [ -e "$CERT" ] && ! cmp -s "$CERT" out/fullchain.pem; then
-          CERT_CHANGED=yes
+          touch out/renewed
           echo Installing new certificate
           cp -vp 'certificates/${keyName}.crt' out/fullchain.pem
           cp -vp 'certificates/${keyName}.key' out/key.pem
           cp -vp 'certificates/${keyName}.issuer.crt' out/chain.pem
           ln -sf fullchain.pem out/cert.pem
           cat out/key.pem out/fullchain.pem > out/full.pem
-        fi
-
-        if [ "$CERT_CHANGED" = "yes" ]; then
-          cd out
-          set +euo pipefail
-          ${data.postRun}
         fi
       '';
     };
@@ -344,7 +346,7 @@ let
         example = "cp full.pem backup.pem";
         description = ''
           Commands to run after new certificates go live. Note that
-          these commands run as the acme user and configured group.
+          these commands run as the root user.
 
           Executed in the same directory with the new certificate.
         '';
@@ -648,7 +650,7 @@ in {
       # Create some targets which can be depended on to be "active" after cert renewals
       systemd.targets = mapAttrs' (cert: conf: nameValuePair "acme-finished-${cert}" {
         wantedBy = [ "default.target" ];
-        wants = [ "acme-${cert}.service" "acme-selfsigned-${cert}.service" ];
+        requires = [ "acme-${cert}.service" "acme-selfsigned-${cert}.service" ];
         after = [ "acme-${cert}.service" "acme-selfsigned-${cert}.service" ];
       }) certConfigs;
     })
