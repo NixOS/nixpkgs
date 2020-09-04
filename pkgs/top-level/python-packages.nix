@@ -677,6 +677,8 @@ in {
 
   azure-mgmt-subscription = callPackage ../development/python-modules/azure-mgmt-subscription { };
 
+  azure-mgmt-synapse = callPackage ../development/python-modules/azure-mgmt-synapse { };
+
   azure-mgmt-trafficmanager = callPackage ../development/python-modules/azure-mgmt-trafficmanager { };
 
   azure-mgmt-web = callPackage ../development/python-modules/azure-mgmt-web { };
@@ -704,6 +706,10 @@ in {
   azure-storage-nspkg = callPackage ../development/python-modules/azure-storage-nspkg { };
 
   azure-storage-queue = callPackage ../development/python-modules/azure-storage-queue { };
+
+  azure-synapse-accesscontrol = callPackage ../development/python-modules/azure-synapse-accesscontrol { };
+
+  azure-synapse-spark = callPackage ../development/python-modules/azure-synapse-spark { };
 
   Babel = callPackage ../development/python-modules/Babel { };
 
@@ -841,6 +847,8 @@ in {
   bkcharts = callPackage ../development/python-modules/bkcharts { };
 
   black = callPackage ../development/python-modules/black { };
+
+  black-macchiato = callPackage ../development/python-modules/black-macchiato { };
 
   bleach = callPackage ../development/python-modules/bleach { };
 
@@ -1610,6 +1618,8 @@ in {
 
   django-multiselectfield = callPackage ../development/python-modules/django-multiselectfield { };
 
+  django-maintenance-mode = callPackage ../development/python-modules/django-maintenance-mode { };
+
   django_nose = callPackage ../development/python-modules/django_nose { };
 
   django-oauth-toolkit = callPackage ../development/python-modules/django-oauth-toolkit { };
@@ -1694,7 +1704,13 @@ in {
 
   dnslib = callPackage ../development/python-modules/dnslib { };
 
-  dnspython = callPackage ../development/python-modules/dnspython { };
+  dnspython = if isPy3k then
+    callPackage ../development/python-modules/dnspython { }
+  else
+    self.dnspython_1;
+
+  dnspython_1 = callPackage ../development/python-modules/dnspython/1.nix { };
+
   dns = self.dnspython; # Alias for compatibility, 2017-12-10
 
   doc8 = callPackage ../development/python-modules/doc8 { };
