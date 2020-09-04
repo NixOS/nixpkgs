@@ -91,9 +91,12 @@ rec {
       #            combinable with the binOp binary operation.
       #   binOp: binary operation that merge two payloads of the same type.
       functor ? defaultFunctor name
+    , # The deprecation message to display when this type is used by an option
+      # If null, the type isn't deprecated
+      deprecationMessage ? null
     }:
     { _type = "option-type";
-      inherit name check merge emptyValue getSubOptions getSubModules substSubModules typeMerge functor;
+      inherit name check merge emptyValue getSubOptions getSubModules substSubModules typeMerge functor deprecationMessage;
       description = if description == null then name else description;
     };
 
