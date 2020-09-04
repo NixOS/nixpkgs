@@ -103,6 +103,5 @@ mkDerivation rec {
        all movement on the battlefield has ceased).'';
     maintainers = with maintainers; [ kragniz fpletz ];
     inherit (ghc.meta) platforms;
-    hydraPlatforms = [];
   };
 }
