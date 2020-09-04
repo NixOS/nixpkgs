@@ -19877,6 +19877,10 @@ in
   codeblocks = callPackage ../applications/editors/codeblocks { };
   codeblocksFull = codeblocks.override { contribPlugins = true; };
 
+  cudatext-qt = callPackage ../applications/editors/cudatext { widgetset = "qt5"; };
+  cudatext-gtk = callPackage ../applications/editors/cudatext { widgetset = "gtk2"; };
+  cudatext = cudatext-qt;
+
   convos = callPackage ../applications/networking/irc/convos { };
 
   comical = callPackage ../applications/graphics/comical { };

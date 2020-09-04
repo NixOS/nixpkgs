@@ -1,0 +1,42 @@
+{
+  "EncConv": {
+    "rev": "2020.06.15",
+    "sha256": "07dpvq3ppfq3b70i1smkf7vwdlzq8qnxs3fk94hi9h1z36bz2rw3"
+  },
+  "ATBinHex-Lazarus": {
+    "rev": "2020.09.05",
+    "sha256": "022yx5vic4hnc9lz53wvr4h7hf0h71801dzlilj55x5mf8p59072"
+  },
+  "ATFlatControls": {
+    "rev": "2020.08.23",
+    "sha256": "1axzwiz5h62v11ncynxcg431dfbky9pwyha7cd6kpizjdjagfklw"
+  },
+  "ATSynEdit": {
+    "rev": "2020.09.05",
+    "sha256": "0qn0fp7rbi48f3nrysb0knkd7a3a6pl5w72yf95g5iibal4zrib2"
+  },
+  "ATSynEdit_Cmp": {
+    "rev": "2020.09.05",
+    "sha256": "1bd25zc97001b7lg0bvi8va9mazkr6jih6d2ddkabcxcnsj0dxnq"
+  },
+  "EControl": {
+    "rev": "2020.09.05",
+    "sha256": "1n7s1zkhrr216gqdqvq6wq0n3jq7s78mwpi5s5j8054p0fak1ywi"
+  },
+  "ATSynEdit_Ex": {
+    "rev": "2020.09.05",
+    "sha256": "17y2cx5syj3jvrszjgdyf1p6vilp2qgaggz4y8yqnz99cvd0shs7"
+  },
+  "Python-for-Lazarus": {
+    "rev": "2020.07.31",
+    "sha256": "0qbs51h6gw8qd3h06kwy1j7db35shbg7r2rayrhvvw0vzr9n330j"
+  },
+  "Emmet-Pascal": {
+    "rev": "2020.09.05",
+    "sha256": "0qfiirxnk5g3whx8y8hp54ch3h6gkkd01yf79m95bwar5qvdfybg"
+  },
+  "CudaText-lexers": {
+    "rev": "2020.08.10",
+    "sha256": "1gzs2psyfhb9si1qyacxzfjb3dz2v255hv7y4jlkbxdxv0kckqr6"
+  }
+}
