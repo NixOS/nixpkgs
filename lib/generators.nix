@@ -227,7 +227,7 @@ rec {
       else "{ "
           + libStr.concatStringsSep " " (libAttr.mapAttrsToList
               (name: value:
-                "${toPretty args name} = ${toPretty args value};") v)
+                "${libStr.escapeNixIdentifier name} = ${toPretty args value};") v)
         + " }"
     else if isFunction v then
       let fna = lib.functionArgs v;

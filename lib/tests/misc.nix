@@ -469,7 +469,7 @@ runTests {
       function = "<λ>";
       functionArgs = "<λ:{(arg),foo}>";
       list = "[ 3 4 ${function} [ false ] ]";
-      attrs = "{ \"foo\" = null; \"foo bar\" = \"baz\"; }";
+      attrs = "{ foo = null; \"foo bar\" = \"baz\"; }";
       drv = "<δ:test>";
     };
   };
