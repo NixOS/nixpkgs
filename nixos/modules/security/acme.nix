@@ -77,6 +77,7 @@ let
     acmeServer = if data.server != null then data.server else cfg.server;
     useDns = data.dnsProvider != null;
     destPath = "/var/lib/acme/${cert}";
+    selfsignedDeps = optionals (cfg.preliminarySelfsigned) [ "acme-selfsigned-${cert}.service" ];
 
     # Minica and lego have a "feature" which replaces * with _. We need
     # to make this substitution to reference the output files from both programs.
@@ -92,19 +93,17 @@ let
     );
 
     # Create hashes for cert data directories based on configuration
+    # Flags are separated to avoid collisions
     hashData = with builtins; ''
-      ${data.domain} ${data.keyType}
-      ${concatStringsSep " " (
-        extraDomains
-        ++ data.extraLegoFlags
-        ++ data.extraLegoRunFlags
-        ++ data.extraLegoRenewFlags
-      )}
+      ${concatStringsSep " " data.extraLegoFlags} -
+      ${concatStringsSep " " data.extraLegoRunFlags} -
+      ${concatStringsSep " " data.extraLegoRenewFlags} -
       ${toString acmeServer} ${toString data.dnsProvider}
-      ${toString data.ocspMustStaple}
+      ${toString data.ocspMustStaple} ${data.keyType}
     '';
     mkHash = with builtins; val: substring 0 20 (hashString "sha256" val);
     certDir = mkHash hashData;
+    domainHash = mkHash "${concatStringsSep " " extraDomains} ${data.domain}";
     othersHash = mkHash "${toString acmeServer} ${data.keyType}";
     accountDir = "/var/lib/acme/.lego/accounts/" + othersHash;
 
@@ -134,12 +133,12 @@ let
     );
     renewOpts = escapeShellArgs (
       commonOpts
-      ++ [ "renew" "--reuse-key" "--days" (toString cfg.validMinDays) ]
+      ++ [ "renew" "--reuse-key" ]
       ++ data.extraLegoRenewFlags
     );
 
   in {
-    inherit accountDir;
+    inherit accountDir selfsignedDeps;
 
     webroot = data.webroot;
     group = data.group;
@@ -208,8 +207,8 @@ let
 
     renewService = {
       description = "Renew ACME certificate for ${cert}";
-      after = [ "network.target" "network-online.target" "acme-selfsigned-${cert}.service" "acme-fixperms.service" ];
-      wants = [ "network-online.target" "acme-selfsigned-${cert}.service" "acme-fixperms.service" ];
+      after = [ "network.target" "network-online.target" "acme-fixperms.service" ] ++ selfsignedDeps;
+      wants = [ "network-online.target" "acme-fixperms.service" ] ++ selfsignedDeps;
 
       # https://github.com/NixOS/nixpkgs/pull/81371#issuecomment-605526099
       wantedBy = optionals (!config.boot.isContainer) [ "multi-user.target" ];
@@ -247,15 +246,26 @@ let
       script = ''
         set -euo pipefail
 
+        echo '${domainHash}' > domainhash.txt
+
         # Check if we can renew
         if [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' ]; then
-          lego ${renewOpts}
+
+          # When domains are updated, there's no need to do a full
+          # Lego run, but it's likely renew won't work if days is too low.
+          if [ -e certificates/domainhash.txt ] && cmp -s domainhash.txt certificates/domainhash.txt; then
+            lego ${renewOpts} --days ${toString cfg.validMinDays}
+          else
+            # Any number > 90 works, but this one is over 9000 ;-)
+            lego ${renewOpts} --days 9001
+          fi
 
         # Otherwise do a full run
         else
           lego ${runOpts}
         fi
 
+        mv domainhash.txt certificates/
         chmod 640 certificates/*
         chmod -R 700 accounts/*
 
@@ -650,8 +660,8 @@ in {
       # Create some targets which can be depended on to be "active" after cert renewals
       systemd.targets = mapAttrs' (cert: conf: nameValuePair "acme-finished-${cert}" {
         wantedBy = [ "default.target" ];
-        requires = [ "acme-${cert}.service" "acme-selfsigned-${cert}.service" ];
-        after = [ "acme-${cert}.service" "acme-selfsigned-${cert}.service" ];
+        requires = [ "acme-${cert}.service" ] ++ conf.selfsignedDeps;
+        after = [ "acme-${cert}.service" ] ++ conf.selfsignedDeps;
       }) certConfigs;
     })
   ];
