@@ -204,7 +204,7 @@ rec {
        will use fn to convert val to a pretty printed representation.
        (This means fn is type Val -> String.) */
     allowPrettyValues ? false
-  }@args: v: with builtins;
+  }@args: let go = v: with builtins;
     let     isPath   = v: typeOf v == "path";
     in if   isInt      v then toString v
     else if isFloat    v then "~${toString v}"
@@ -214,7 +214,7 @@ rec {
     else if null  ==   v then "null"
     else if isPath     v then toString v
     else if isList     v then "[ "
-        + libStr.concatMapStringsSep " " (toPretty args) v
+        + libStr.concatMapStringsSep " " go v
       + " ]"
     else if isAttrs    v then
       # apply pretty values if allowed
@@ -227,7 +227,7 @@ rec {
       else "{ "
           + libStr.concatStringsSep " " (libAttr.mapAttrsToList
               (name: value:
-                "${libStr.escapeNixIdentifier name} = ${toPretty args value};") v)
+                "${libStr.escapeNixIdentifier name} = ${go value};") v)
         + " }"
     else if isFunction v then
       let fna = lib.functionArgs v;
@@ -237,6 +237,7 @@ rec {
       in if fna == {}    then "<λ>"
                          else "<λ:{${showFnas}}>"
     else abort "generators.toPretty: should never happen (v = ${v})";
+  in go;
 
   # PLIST handling
   toPlist = {}: v: let
