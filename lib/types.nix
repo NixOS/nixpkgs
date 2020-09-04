@@ -101,6 +101,42 @@ rec {
   # When adding new types don't forget to document them in
   # nixos/doc/manual/development/option-types.xml!
   types = rec {
+
+    anything = mkOptionType {
+      name = "anything";
+      description = "anything";
+      check = value: true;
+      merge = loc: defs:
+        let
+          getType = value:
+            if isAttrs value && isCoercibleToString value
+            then "stringCoercibleSet"
+            else builtins.typeOf value;
+
+          # Returns the common type of all definitions, throws an error if they
+          # don't have the same type
+          commonType = foldl' (type: def:
+            if getType def.value == type
+            then type
+            else throw "The option `${showOption loc}' has conflicting option types in ${showFiles (getFiles defs)}"
+          ) (getType (head defs).value) defs;
+
+          mergeFunction = {
+            # Recursively merge attribute sets
+            set = (attrsOf anything).merge;
+            # Safe and deterministic behavior for lists is to only accept one definition
+            # listOf only used to apply mkIf and co.
+            list =
+              if length defs > 1
+              then throw "The option `${showOption loc}' has conflicting definitions, in ${showFiles (getFiles defs)}."
+              else (listOf anything).merge;
+            # This is the type of packages, only accept a single definition
+            stringCoercibleSet = mergeOneOption;
+            # Otherwise fall back to only allowing all equal definitions
+          }.${commonType} or mergeEqualOption;
+        in mergeFunction loc defs;
+    };
+
     unspecified = mkOptionType {
       name = "unspecified";
     };
