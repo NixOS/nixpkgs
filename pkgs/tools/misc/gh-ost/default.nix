@@ -2,8 +2,8 @@
 
 let
   goPackagePath = "github.com/github/gh-ost";
-  version = "1.0.49";
-  sha256 = "0mncjhmv25wnhgjkn9gwkz2gzh0v6954w47ql7fs2iqr9al111dq";
+  version = "1.1.0";
+  sha256 = "0laj5nmf10qn01mqn0flipmhankgvrcfbdl3bc76wa14qkkg722m";
 
 in
 buildGoPackage ({
