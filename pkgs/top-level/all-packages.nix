@@ -1385,6 +1385,8 @@ in
 
   blink1-tool = callPackage ../tools/misc/blink1-tool { };
 
+  blis = callPackage ../development/libraries/science/math/blis { };
+
   bliss = callPackage ../applications/science/math/bliss { };
 
   blobfuse = callPackage ../tools/filesystems/blobfuse { };
