@@ -1,12 +1,12 @@
 { lib, fetchzip }:
 
 let
-  version = "1.059";
+  version = "1.064";
 in
 fetchzip {
   name = "recursive-${version}";
 
-  url = "https://github.com/arrowtype/recursive/releases/download/${version}/Recursive-${version}.zip";
+  url = "https://github.com/arrowtype/recursive/releases/download/${version}/ArrowType-Recursive-${version}.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts/
@@ -15,7 +15,7 @@ fetchzip {
     unzip -j $downloadedFile \*.woff2 -d $out/share/fonts/woff2
   '';
 
-  sha256 = "0dlv8nrcqdn5vn3s918in5ph6kx6rg607kgp66p6ibpbg2s8ljy7";
+  sha256 = "1pbrqk848nkaambvsz0n8f88xdm8hyib83in27rmal739qh9d1z6";
 
   meta = with lib; {
     homepage = "https://recursive.design/";

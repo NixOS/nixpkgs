@@ -136,8 +136,13 @@ rec {
 
     extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute iptables e2fsprogs xz xfsprogs procps utillinux git ]);
 
-    installPhase = optionalString (stdenv.isLinux) ''
+    installPhase = ''
       cd ./go/src/${goPackagePath}
+      install -Dm755 ./components/cli/docker $out/libexec/docker/docker
+
+      makeWrapper $out/libexec/docker/docker $out/bin/docker \
+        --prefix PATH : "$out/libexec/docker:$extraPath"
+    '' + optionalString (stdenv.isLinux) ''
       install -Dm755 ./components/engine/bundles/dynbinary-daemon/dockerd $out/libexec/docker/dockerd
 
       makeWrapper $out/libexec/docker/dockerd $out/bin/dockerd \
@@ -153,11 +158,6 @@ rec {
       # systemd
       install -Dm644 ./components/engine/contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
     '' + ''
-      install -Dm755 ./components/cli/docker $out/libexec/docker/docker
-
-      makeWrapper $out/libexec/docker/docker $out/bin/docker \
-        --prefix PATH : "$out/libexec/docker:$extraPath"
-
       # completion (cli)
       installShellCompletion --bash ./components/cli/contrib/completion/bash/docker
       installShellCompletion --fish ./components/cli/contrib/completion/fish/docker.fish
@@ -180,7 +180,7 @@ rec {
     '';
 
     preFixup = ''
-      find $out -type f -exec remove-references-to -t ${go} -t ${stdenv.cc.cc} '{}' +
+      find $out -type f -exec remove-references-to -t ${stdenv.cc.cc} '{}' +
     '' + optionalString (stdenv.isLinux) ''
       find $out -type f -exec remove-references-to -t ${stdenv.glibc.dev} '{}' +
     '';

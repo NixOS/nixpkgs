@@ -257,7 +257,7 @@ let
               pkgs.gnused
               systemd
             ];
-          environment.PATH = config.path;
+          environment.PATH = "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
         }
         (mkIf (config.preStart != "")
           { serviceConfig.ExecStartPre =
@@ -903,11 +903,9 @@ in
       )
       ]);
       passwd = (mkMerge [
-        [ "mymachines" ]
         (mkAfter [ "systemd" ])
       ]);
       group = (mkMerge [
-        [ "mymachines" ]
         (mkAfter [ "systemd" ])
       ]);
     };
@@ -1008,7 +1006,7 @@ in
       "sysctl.d/50-coredump.conf".source = "${systemd}/example/sysctl.d/50-coredump.conf";
       "sysctl.d/50-default.conf".source = "${systemd}/example/sysctl.d/50-default.conf";
 
-      "tmpfiles.d".source = pkgs.symlinkJoin {
+      "tmpfiles.d".source = (pkgs.symlinkJoin {
         name = "tmpfiles.d";
         paths = map (p: p + "/lib/tmpfiles.d") cfg.tmpfiles.packages;
         postBuild = ''
@@ -1018,8 +1016,10 @@ in
               exit 1
             )
           done
-        '';
-      };
+        '' + concatMapStrings (name: optionalString (hasPrefix "tmpfiles.d/" name) ''
+          rm -f $out/${removePrefix "tmpfiles.d/" name}
+        '') config.system.build.etc.targets;
+      }) + "/*";
 
       "systemd/system-generators" = { source = hooks "generators" cfg.generators; };
       "systemd/system-shutdown" = { source = hooks "shutdown" cfg.shutdown; };

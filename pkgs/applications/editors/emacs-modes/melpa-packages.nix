@@ -531,6 +531,12 @@ let
               (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
           }));
 
+        orgit-forge = super.orgit-forge.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or [ ]) ++ [ external.git ];
+        });
+
         # tries to write to $HOME
         php-auto-yasnippets = super.php-auto-yasnippets.overrideAttrs (attrs: {
           HOME = "/tmp";

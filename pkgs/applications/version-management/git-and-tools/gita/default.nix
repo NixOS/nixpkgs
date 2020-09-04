@@ -9,11 +9,11 @@
 }:
 
 buildPythonApplication rec {
-  version = "0.10.9";
+  version = "0.10.10";
   pname = "gita";
 
   src = fetchFromGitHub {
-    sha256 = "0wilyf4nnn2jyxrfqs8krya3zvhj6x36szsp9xhb6h08g1ihzp5i";
+    sha256 = "0k7hicncbrqvhmpq1w3v1309bqij6izw31xs8xcb8is85dvi754h";
     rev = "v${version}";
     repo = "gita";
     owner = "nosarthur";
@@ -45,6 +45,7 @@ buildPythonApplication rec {
 
   postInstall = ''
     installShellCompletion --bash --name gita ${src}/.gita-completion.bash
+    installShellCompletion --zsh --name gita ${src}/.gita-completion.zsh
   '';
 
   meta = with lib; {

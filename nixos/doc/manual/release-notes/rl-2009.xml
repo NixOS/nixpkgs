@@ -233,6 +233,11 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
     <para>
       There is a new <xref linkend="opt-security.doas.enable"/> module that provides <command>doas</command>, a lighter alternative to <command>sudo</command> with many of the same features.
     </para>
+  </listitem>
+  <listitem>
+    <para>
+      <link xlink:href="https://hercules-ci.com">Hercules CI</link> Agent is a specialized build agent for projects built with Nix. See the <link xlink:href="https://nixos.org/nixos/options.html#services.hercules-ci-agent">options</link> and <link xlink:href="https://docs.hercules-ci.com/hercules-ci/getting-started/#deploy-agent">setup</link>.
+    </para>
    </listitem>
   </itemizedlist>
 
@@ -762,6 +767,21 @@ CREATE ROLE postgres LOGIN SUPERUSER;
      See <link xlink:href="https://github.com/NixOS/nixpkgs/pull/82743#issuecomment-674520472">the PR that changed this</link> for more info.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     For NixOS configuration options, the type <literal>loaOf</literal>, after
+     its initial deprecation in release 20.03, has been removed. In NixOS and
+     Nixpkgs options using this type have been converted to <literal>attrsOf</literal>.
+     For more information on this change have look at these links:
+     <link xlink:href="https://github.com/NixOS/nixpkgs/issues/1800">issue #1800</link>,
+     <link xlink:href="https://github.com/NixOS/nixpkgs/pull/63103">PR #63103</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      <literal>config.systemd.services.${name}.path</literal> now returns a list of paths instead of a colon-separated string.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -990,6 +1010,53 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
       The <literal>undervolt</literal> option no longer needs to apply its
       settings every 30s. If they still become undone, open an issue and restore
       the previous behaviour using <literal>undervolt.useTimer</literal>.
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+      Agda has been heavily reworked.
+      <itemizedlist>
+	<listitem>
+	  <para>
+	    <literal>agda.mkDerivation</literal> has been heavily changed and
+	    is now located at <package>agdaPackages.mkDerivation</package>.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    New top-level packages <package>agda</package> and
+	    <literal>agda.withPackages</literal> have been added, the second
+	    of which sets up agda with access to chosen libraries.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    All agda libraries now live under
+	    <literal>agdaPackages</literal>.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    Many broken libraries have been removed.
+	  </para>
+	</listitem>
+      </itemizedlist>
+      See the <link
+      xlink:href="https://nixos.org/nixpkgs/manual/#agda">new
+      documentation</link> for more information.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <literal>deepin</literal> package set has been removed from
+      nixpkgs. It was a work in progress to package the
+      <link xlink:href="https://www.deepin.org/en/dde/">Deepin Desktop Environment (DDE)</link>,
+      including libraries, tools and applications, and it was still
+      missing a service to lauch the desktop environment. It has shown
+      to no longer be a feasible goal due to reasons discussed in
+      <link xlink:href="https://github.com/NixOS/nixpkgs/issues/94870">issue #94870</link>.
+      The package <literal>netease-cloud-music</literal> has also been
+      removed, as it depends on libraries from deepin.
     </para>
    </listitem>
   </itemizedlist>

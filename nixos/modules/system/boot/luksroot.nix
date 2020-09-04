@@ -516,7 +516,7 @@ in
         <filename>/dev/mapper/<replaceable>name</replaceable></filename>.
       '';
 
-      type = with types; loaOf (submodule (
+      type = with types; attrsOf (submodule (
         { name, ... }: { options = {
 
           name = mkOption {

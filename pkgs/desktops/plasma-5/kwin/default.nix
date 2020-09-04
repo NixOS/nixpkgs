@@ -1,17 +1,18 @@
 {
-  mkDerivation, lib, copyPathsToStore,
+  mkDerivation, lib,
   extra-cmake-modules, kdoctools,
 
   epoxy,libICE, libSM, libinput, libxkbcommon, udev, wayland, xcb-util-cursor,
   xwayland,
 
-  qtdeclarative, qtmultimedia, qtscript, qtx11extras,
+  qtdeclarative, qtmultimedia, qtquickcontrols2, qtscript, qtsensors,
+  qtvirtualkeyboard, qtx11extras,
 
   breeze-qt5, kactivities, kcompletion, kcmutils, kconfig, kconfigwidgets,
   kcoreaddons, kcrash, kdeclarative, kdecoration, kglobalaccel, ki18n,
   kiconthemes, kidletime, kinit, kio, knewstuff, knotifications, kpackage,
   kscreenlocker, kservice, kwayland, kwidgetsaddons, kwindowsystem, kxmlgui,
-  plasma-framework, qtsensors, libcap, libdrm, mesa
+  plasma-framework, libcap, libdrm, mesa
 }:
 
 # TODO (ttuegel): investigate qmlplugindump failure
@@ -23,7 +24,8 @@ mkDerivation {
     epoxy libICE libSM libinput libxkbcommon udev wayland xcb-util-cursor
     xwayland
 
-    qtdeclarative qtmultimedia qtscript qtx11extras qtsensors
+    qtdeclarative qtmultimedia qtquickcontrols2 qtscript qtsensors
+    qtvirtualkeyboard qtx11extras
 
     breeze-qt5 kactivities kcmutils kcompletion kconfig kconfigwidgets
     kcoreaddons kcrash kdeclarative kdecoration kglobalaccel ki18n kiconthemes

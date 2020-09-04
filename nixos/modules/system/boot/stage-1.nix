@@ -121,12 +121,13 @@ let
       copy_bin_and_libs ${pkgs.mdadm}/sbin/mdmon
 
       # Copy udev.
-      copy_bin_and_libs ${udev}/lib/systemd/systemd-udevd
-      copy_bin_and_libs ${udev}/lib/systemd/systemd-sysctl
       copy_bin_and_libs ${udev}/bin/udevadm
+      copy_bin_and_libs ${udev}/lib/systemd/systemd-sysctl
       for BIN in ${udev}/lib/udev/*_id; do
         copy_bin_and_libs $BIN
       done
+      # systemd-udevd is only a symlink to udevadm these days
+      ln -sf udevadm $out/bin/systemd-udevd
 
       # Copy modprobe.
       copy_bin_and_libs ${pkgs.kmod}/bin/kmod
@@ -557,7 +558,7 @@ in
       };
 
     fileSystems = mkOption {
-      type = with lib.types; loaOf (submodule {
+      type = with lib.types; attrsOf (submodule {
         options.neededForBoot = mkOption {
           default = false;
           type = types.bool;

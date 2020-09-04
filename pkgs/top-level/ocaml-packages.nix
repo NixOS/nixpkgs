@@ -137,11 +137,15 @@ let
 
     cohttp = callPackage ../development/ocaml-modules/cohttp { };
 
+    cohttp-async = callPackage ../development/ocaml-modules/cohttp/async.nix { };
+
     cohttp-lwt = callPackage ../development/ocaml-modules/cohttp/lwt.nix { };
 
     cohttp-lwt-unix = callPackage ../development/ocaml-modules/cohttp/lwt-unix.nix { };
 
     conduit = callPackage ../development/ocaml-modules/conduit { };
+
+    conduit-async = callPackage ../development/ocaml-modules/conduit/async.nix { };
 
     conduit-lwt = callPackage ../development/ocaml-modules/conduit/lwt.nix { };
 
@@ -168,6 +172,8 @@ let
     crunch = callPackage ../development/tools/ocaml/crunch { };
 
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
+
+    csexp = callPackage ../development/ocaml-modules/csexp { };
 
     cstruct =
       if lib.versionAtLeast ocaml.version "4.2"
@@ -750,6 +756,12 @@ let
 
     piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
 
+    posix-base = callPackage ../development/ocaml-modules/posix/base.nix { };
+
+    posix-socket = callPackage ../development/ocaml-modules/posix/socket.nix { };
+
+    posix-types = callPackage ../development/ocaml-modules/posix/types.nix { };
+
     ppxfind = callPackage ../development/ocaml-modules/ppxfind { };
 
     ppxlib = callPackage ../development/ocaml-modules/ppxlib { };
@@ -951,6 +963,8 @@ let
 
     wasm = callPackage ../development/ocaml-modules/wasm { };
 
+    webbrowser = callPackage ../development/ocaml-modules/webbrowser { };
+
     webmachine = callPackage ../development/ocaml-modules/webmachine { };
 
     wtf8 = callPackage ../development/ocaml-modules/wtf8 { };
@@ -991,7 +1005,7 @@ let
     janeStreet =
     if lib.versionOlder "4.08" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.13.nix {
-      inherit ctypes janePackage num octavius ppxlib re;
+      inherit ctypes dune-configurator janePackage num octavius ppxlib re;
       inherit (pkgs) openssl;
     }
     else if lib.versionOlder "4.07" ocaml.version

@@ -199,6 +199,7 @@
 , "vim-language-server"
 , "vscode-css-languageserver-bin"
 , "vscode-html-languageserver-bin"
+, "vscode-json-languageserver-bin"
 , "vue-cli"
 , "vue-language-server"
 , "web-ext"

@@ -30,7 +30,7 @@ Enter passphrase for /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d: ***
   <filename>/</filename>, add the following to
   <filename>configuration.nix</filename>:
 <programlisting>
-<link linkend="opt-boot.initrd.luks.devices._name__.device">boot.initrd.luks.devices.crypted.device</link> = "/dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d";
+<link linkend="opt-boot.initrd.luks.devices._name_.device">boot.initrd.luks.devices.crypted.device</link> = "/dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d";
 <xref linkend="opt-fileSystems"/>."/".device = "/dev/mapper/crypted";
 </programlisting>
   Should grub be used as bootloader, and <filename>/boot</filename> is located
@@ -60,13 +60,13 @@ Added to key to device /dev/sda2, slot: 2
   To ensure that this file system is decrypted using the FIDO2 compatible key, add the following to <filename>configuration.nix</filename>:
 <programlisting>
 <link linkend="opt-boot.initrd.luks.fido2Support">boot.initrd.luks.fido2Support</link> = true;
-<link linkend="opt-boot.initrd.luks.devices._name__.fido2.credential">boot.initrd.luks.devices."/dev/sda2".fido2.credential</link> = "f1d00200108b9d6e849a8b388da457688e3dd653b4e53770012d8f28e5d3b269865038c346802f36f3da7278b13ad6a3bb6a1452e24ebeeaa24ba40eef559b1b287d2a2f80b7";
+<link linkend="opt-boot.initrd.luks.devices._name_.fido2.credential">boot.initrd.luks.devices."/dev/sda2".fido2.credential</link> = "f1d00200108b9d6e849a8b388da457688e3dd653b4e53770012d8f28e5d3b269865038c346802f36f3da7278b13ad6a3bb6a1452e24ebeeaa24ba40eef559b1b287d2a2f80b7";
 </programlisting>
 
   You can also use the FIDO2 passwordless setup, but for security reasons, you might want to enable it only when your device is PIN protected, such as <link xlink:href="https://trezor.io/">Trezor</link>.
 
 <programlisting>
-<link linkend="opt-boot.initrd.luks.devices._name__.fido2.passwordLess">boot.initrd.luks.devices."/dev/sda2".fido2.passwordLess</link> = true;
+<link linkend="opt-boot.initrd.luks.devices._name_.fido2.passwordLess">boot.initrd.luks.devices."/dev/sda2".fido2.passwordLess</link> = true;
 </programlisting>
   </para>
  </section>

@@ -69,13 +69,13 @@ assert waylandSupport -> gtk3Support == true;
 
 stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "78.1.1";
+  version = "78.2.1";
 
   src = fetchurl {
     url =
       "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
     sha512 =
-      "1lf15zl3p8y1vxv4s04y088flkspf0r0c6j8gfrlfzla5ckfcsbad3zbygh6y73m35j882g7fbacby5a4hiw891zq2kji5dn3nbahyi";
+      "2iya9a5qaini524wrdrnxx6wsrgb8fa2b1m42mlypskxjjgb7n66vpxlbpi9x9mqzc63ca2ag36fjpbpsvbv5ppxvpfwk2j1zbfvb5w";
   };
 
   nativeBuildInputs = [
@@ -301,7 +301,7 @@ stdenv.mkDerivation rec {
   # package a Thunderbird >=71.0 since XUL shouldn't be anymore (in use)?
   postFixup = ''
     local xul="$out/lib/thunderbird/libxul.so"
-    patchelf --set-rpath "${libnotify}/lib:${systemd.lib}/lib:$(patchelf --print-rpath $xul)" $xul
+    patchelf --set-rpath "${libnotify}/lib:${lib.getLib systemd}/lib:$(patchelf --print-rpath $xul)" $xul
   '';
 
   doInstallCheck = true;

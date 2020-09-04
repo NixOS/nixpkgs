@@ -1,7 +1,26 @@
-{ stdenv, autoreconfHook, fetchFromGitHub, pkgconfig
-, lua, fpc, pcre, portaudio, freetype, libpng
-, SDL2, SDL2_image, SDL2_gfx, SDL2_mixer, SDL2_net, SDL2_ttf
-, ffmpeg, sqlite, zlib, libX11, libGLU, libGL }:
+{ stdenv
+, autoreconfHook
+, fetchFromGitHub
+, fetchpatch
+, pkgconfig
+, lua
+, fpc
+, pcre
+, portaudio
+, freetype
+, libpng
+, SDL2
+, SDL2_image
+, SDL2_gfx
+, SDL2_mixer
+, SDL2_net, SDL2_ttf
+, ffmpeg
+, sqlite
+, zlib
+, libX11
+, libGLU
+, libGL
+}:
 
 let
   sharedLibs = [
@@ -12,16 +31,24 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "ultrastardx";
-  version = "unstable-2019-01-07";
+  version = "2020.4.0";
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
-    rev = "3df142590f29db1505cc58746af9f8cf7cb4a6a5";
-    sha256 = "0853rg7vppkmw37wm9xm0m0wab3r09ws6w04xs2wgwj1mwl0d70j";
+    rev = "v${version}";
+    sha256 = "0vmfv8zpyf8ymx3rjydpd7iqis080lni94vb316vfxkgvjmqbhym";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [ fpc libpng ] ++ sharedLibs;
+
+  patches = [
+    (fetchpatch {
+      name = "fpc-3.2-support.patch";
+      url = "https://github.com/UltraStar-Deluxe/USDX/commit/1b8e8714c1523ef49c2fd689a1545d097a3d76d7.patch";
+      sha256 = "02zmjymj9w1mkpf7armdpf067byvml6lprs1ca4lhpkv45abddp4";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace src/config.inc.in \

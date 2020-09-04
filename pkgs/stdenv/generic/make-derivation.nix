@@ -338,6 +338,32 @@ in rec {
         validity.handled
         ({
            overrideAttrs = f: mkDerivation (attrs // (f attrs));
+
+           # A derivation that always builds successfully and whose runtime
+           # dependencies are the original derivations build time dependencies
+           # This allows easy building and distributing of all derivations
+           # needed to enter a nix-shell with
+           #   nix-build shell.nix -A inputDerivation
+           inputDerivation = derivation (derivationArg // {
+             # Add a name in case the original drv didn't have one
+             name = derivationArg.name or "inputDerivation";
+             # This always only has one output
+             outputs = [ "out" ];
+
+             # Propagate the original builder and arguments, since we override
+             # them and they might contain references to build inputs
+             _derivation_original_builder = derivationArg.builder;
+             _derivation_original_args = derivationArg.args;
+
+             builder = stdenv.shell;
+             # The bash builtin `export` dumps all current environment variables,
+             # which is where all build input references end up (e.g. $PATH for
+             # binaries). By writing this to $out, Nix can find and register
+             # them as runtime dependencies (since Nix greps for store paths
+             # through $out to find them)
+             args = [ "-c" "export > $out" ];
+           });
+
            inherit meta passthru;
          } //
          # Pass through extra attributes that are not inputs, but
