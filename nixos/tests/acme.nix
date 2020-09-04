@@ -79,8 +79,15 @@ in import ./make-test-python.nix ({ lib, ... }: {
 
       # Cert config changes will not cause the nginx configuration to change.
       # This tests that the reload service is correctly triggered.
+      # It also tests that postRun is exec'd as root
       specialisation.cert-change.configuration = { pkgs, ... }: {
         security.acme.certs."a.example.test".keyType = "ec384";
+        security.acme.certs."a.example.test".postRun = ''
+          set -euo pipefail
+          touch test
+          chown root:root test
+          echo testing > test
+        '';
       };
 
       # Now adding an alias to ensure that the certs are updated
@@ -283,6 +290,7 @@ in import ./make-test-python.nix ({ lib, ... }: {
           switch_to(webserver, "cert-change")
           webserver.wait_for_unit("acme-finished-a.example.test.target")
           check_connection_key_bits(client, "a.example.test", "384")
+          webserver.succeed("grep testing /var/lib/acme/a.example.test/test")
 
       with subtest("Can request certificate with HTTPS-01 when nginx startup is delayed"):
           switch_to(webserver, "slow-startup")
