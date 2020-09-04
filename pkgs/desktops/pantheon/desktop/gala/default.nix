@@ -20,7 +20,7 @@
 , gnome-desktop
 , mutter
 , clutter
-, plank
+, elementary-dock
 , elementary-icon-theme
 , elementary-settings-daemon
 , wrapGAppsHook
@@ -58,16 +58,16 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bamf
     clutter
+    elementary-dock
     elementary-icon-theme
-    gnome-desktop
     elementary-settings-daemon
+    gnome-desktop
     granite
     gtk3
     libcanberra
     libcanberra-gtk3
     libgee
     mutter
-    plank
   ];
 
   patches = [
