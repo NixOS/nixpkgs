@@ -297,11 +297,17 @@ in import ./make-test-python.nix ({ lib, ... }: {
           check_connection(client, "slow.example.com")
 
       with subtest("Can request certificate for vhost + aliases (nginx)"):
+          # Check the key hash before and after adding an alias. It should not change.
+          # The previous test reverts the ed384 change
+          webserver.wait_for_unit("acme-finished-a.example.test.target")
+          keyhash_old = webserver.succeed("md5sum /var/lib/acme/a.example.test/key.pem")
           switch_to(webserver, "nginx-aliases")
           webserver.wait_for_unit("acme-finished-a.example.test.target")
           check_issuer(webserver, "a.example.test", "pebble")
           check_connection(client, "a.example.test")
           check_connection(client, "b.example.test")
+          keyhash_new = webserver.succeed("md5sum /var/lib/acme/a.example.test/key.pem")
+          assert keyhash_old == keyhash_new
 
       with subtest("Can request certificates for vhost + aliases (apache-httpd)"):
           switch_to(webserver, "httpd-aliases")
