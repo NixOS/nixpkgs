@@ -446,7 +446,7 @@ runTests {
   };
 
   testToPretty = {
-    expr = mapAttrs (const (generators.toPretty {})) rec {
+    expr = mapAttrs (const (generators.toPretty { multiline = false; })) rec {
       int = 42;
       float = 0.1337;
       bool = true;
@@ -471,6 +471,30 @@ runTests {
       list = "[ 3 4 ${function} [ false ] ]";
       attrs = "{ foo = null; \"foo bar\" = \"baz\"; }";
       drv = "<δ:test>";
+    };
+  };
+
+  testToPrettyMultiline = {
+    expr = mapAttrs (const (generators.toPretty { })) rec {
+      list = [ 3 4 [ false ] ];
+      attrs = { foo = null; bar.foo = "baz"; };
+    };
+    expected = rec {
+      list = ''
+        [
+          3
+          4
+          [
+            false
+          ]
+        ]'';
+      attrs = ''
+        {
+          bar = {
+            foo = "baz";
+          };
+          foo = null;
+        }'';
     };
   };
 
