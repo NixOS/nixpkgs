@@ -17,9 +17,9 @@ mkDerivation {
   pname = "ghcide";
   version = "0.2.0";
   src = fetchgit {
-    url = "https://github.com/wz1000/ghcide";
-    sha256 = "112bsk2660750n94gnsgrvd30rk0ccxb8dbhka606a11pcqv5cgx";
-    rev = "3f6cd4553279ec47d1599b502720791a4f4613cd";
+    url = "https://github.com/haskell/ghcide";
+    sha256 = "1zq7ngaak8il91a309rl51dghzasnk4m2sm3av6d93cyqyra1hfc";
+    rev = "078e3d3c0d319f83841ccbcdc60ff5f0e243f6be";
     fetchSubmodules = true;
   };
   isLibrary = true;

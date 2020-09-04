@@ -16317,17 +16317,9 @@ in
 
   hashi-ui = callPackage ../servers/hashi-ui {};
 
-  /* This package duplicates a lot of functionality from haskellPackages
-     instead of using the packages we maintain there. Now, a recent update to
-     haskellPackages causes these tools to fail evaluation, and I have been
-     unable to mark them as "broken" in a way that ofBorg bot recognizes. Since
-     I don't want to merge code into master that generates evaluation errors, I
-     have no other idea but to comment them out entirely.
+  hasura-graphql-engine = haskellPackages.graphql-engine;
 
-  inherit (callPackage ../servers/hasura { })
-    hasura-cli
-    hasura-graphql-engine;
-   */
+  hasura-cli = callPackage ../servers/hasura/cli.nix { };
 
   heapster = callPackage ../servers/monitoring/heapster { };
 
