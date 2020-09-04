@@ -11507,6 +11507,8 @@ in
 
   svlint = callPackage ../development/tools/analysis/svlint { };
 
+  svls = callPackage ../development/tools/misc/svls { };
+
   swarm = callPackage ../development/tools/analysis/swarm { };
 
   swiftformat = callPackage ../development/tools/swiftformat { };
@@ -16315,17 +16317,9 @@ in
 
   hashi-ui = callPackage ../servers/hashi-ui {};
 
-  /* This package duplicates a lot of functionality from haskellPackages
-     instead of using the packages we maintain there. Now, a recent update to
-     haskellPackages causes these tools to fail evaluation, and I have been
-     unable to mark them as "broken" in a way that ofBorg bot recognizes. Since
-     I don't want to merge code into master that generates evaluation errors, I
-     have no other idea but to comment them out entirely.
+  hasura-graphql-engine = haskellPackages.graphql-engine;
 
-  inherit (callPackage ../servers/hasura { })
-    hasura-cli
-    hasura-graphql-engine;
-   */
+  hasura-cli = callPackage ../servers/hasura/cli.nix { };
 
   heapster = callPackage ../servers/monitoring/heapster { };
 
@@ -19720,7 +19714,7 @@ in
 
   catimg = callPackage ../tools/misc/catimg { };
 
-  catt = python3Packages.callPackage ../applications/video/catt { };
+  catt = callPackage ../applications/video/catt { };
 
   cava = callPackage ../applications/audio/cava { };
 
@@ -20914,8 +20908,8 @@ in
 
   hugo = callPackage ../applications/misc/hugo { };
 
-  hydrogen = callPackage ../applications/audio/hydrogen { };
-  hydrogen-unstable = qt5.callPackage ../applications/audio/hydrogen/unstable.nix { };
+  hydrogen = qt5.callPackage ../applications/audio/hydrogen { };
+  hydrogen_0 = callPackage ../applications/audio/hydrogen/0.nix { }; # Old stable, has GMKit.
 
   hydroxide = callPackage ../applications/networking/hydroxide { };
 

@@ -72,7 +72,7 @@ default-package-overrides:
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
-  # LTS Haskell 16.11
+  # LTS Haskell 16.12
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -512,7 +512,7 @@ default-package-overrides:
   - constraints ==0.12
   - constraint-tuples ==0.1.2
   - contravariant ==1.5.2
-  - contravariant-extras ==0.3.5.1
+  - contravariant-extras ==0.3.5.2
   - control-bool ==0.2.1
   - control-monad-free ==0.6.2
   - control-monad-omega ==0.3.2
@@ -760,7 +760,7 @@ default-package-overrides:
   - extended-reals ==0.2.4.0
   - extensible-effects ==5.0.0.1
   - extensible-exceptions ==0.1.1.4
-  - extra ==1.7.6
+  - extra ==1.7.7
   - extractable-singleton ==0.0.1
   - extrapolate ==0.4.2
   - fail ==4.9.0.0
@@ -931,7 +931,7 @@ default-package-overrides:
   - gi-graphene ==1.0.1
   - gi-gtk ==3.0.33
   - gi-gtk-hs ==0.3.8.1
-  - ginger ==0.10.0.5
+  - ginger ==0.10.1.0
   - gingersnap ==0.3.1.0
   - gi-pango ==1.0.22
   - giphy-api ==0.7.0.0
@@ -1190,7 +1190,7 @@ default-package-overrides:
   - ieee754 ==0.8.0
   - if ==0.1.0.0
   - iff ==0.0.6
-  - ihaskell ==0.10.1.1
+  - ihaskell ==0.10.1.2
   - ihs ==0.1.0.3
   - ilist ==0.4.0.1
   - imagesize-conduit ==1.1
@@ -1242,7 +1242,7 @@ default-package-overrides:
   - iproute ==1.7.9
   - IPv6Addr ==1.1.5
   - ipynb ==0.1.0.1
-  - ipython-kernel ==0.10.2.0
+  - ipython-kernel ==0.10.2.1
   - irc ==0.6.1.0
   - irc-client ==1.1.1.1
   - irc-conduit ==0.3.0.4
@@ -1369,7 +1369,7 @@ default-package-overrides:
   - logging ==3.0.5
   - logging-facade ==0.3.0
   - logging-facade-syslog ==1
-  - logict ==0.7.0.2
+  - logict ==0.7.0.3
   - loop ==0.3.0
   - loopbreaker ==0.1.1.1
   - lrucache ==1.2.0.1
@@ -1906,7 +1906,7 @@ default-package-overrides:
   - safe-exceptions-checked ==0.1.0
   - safe-foldable ==0.1.0.0
   - safeio ==0.0.5.0
-  - safe-json ==1.1.0
+  - safe-json ==1.1.1
   - safe-money ==0.9
   - SafeSemaphore ==0.10.1
   - salak ==0.3.6
@@ -1996,7 +1996,7 @@ default-package-overrides:
   - sexp-grammar ==2.1.0
   - SHA ==1.6.4.4
   - shake-plus ==0.1.10.0
-  - shakespeare ==2.0.24.1
+  - shakespeare ==2.0.25
   - shared-memory ==0.2.0.0
   - shell-conduit ==4.7.0
   - shell-escape ==0.2.0
@@ -2182,7 +2182,7 @@ default-package-overrides:
   - TCache ==0.12.1
   - tce-conf ==1.3
   - tdigest ==0.2.1
-  - template-haskell-compat-v0208 ==0.1.2.1
+  - template-haskell-compat-v0208 ==0.1.4
   - temporary ==1.3
   - temporary-rc ==1.2.0.3
   - temporary-resourcet ==0.1.0.1
@@ -2463,7 +2463,7 @@ default-package-overrides:
   - writer-cps-transformers ==0.5.6.1
   - wss-client ==0.3.0.0
   - wuss ==1.1.17
-  - X11 ==1.9.1
+  - X11 ==1.9.2
   - X11-xft ==0.3.1
   - x11-xim ==0.0.9.0
   - x509 ==1.7.5
@@ -2563,7 +2563,6 @@ extra-packages:
   - Diff < 0.4                          # required by liquidhaskell-0.8.10.2: https://github.com/ucsd-progsys/liquidhaskell/issues/1729
   - doctemplates == 0.8                 # required by pandoc-2.9.x
   - generic-deriving == 1.10.5.*        # new versions don't compile with GHC 7.10.x
-  - ghc-check == 0.3.0.1                # only version compatible with ghcide 0.2.0
   - ghc-tcplugins-extra ==0.3.2         # required for polysemy-plugin 0.2.5.0
   - gi-gdk == 3.0.23                    # required for gi-pango 1.0.23
   - gi-gtk == 3.0.35                    # required for gi-pango 1.0.23
@@ -2575,8 +2574,6 @@ extra-packages:
   - happy <1.19.6                       # newer versions break Agda
   - happy == 1.19.9                     # for purescript
   - haskell-gi-overloading == 0.0       # gi-* packages use this dependency to disable overloading support
-  - haskell-lsp == 0.22.*               # required for ghcide 0.2.0
-  - haskell-lsp-types == 0.22.*         # required for ghcide 0.2.0
   - haskell-src-exts == 1.19.*          # required by hindent and structured-haskell-mode
   - hinotify == 0.3.9                   # for xmonad-0.26: https://github.com/kolmodin/hinotify/issues/29
   - hoogle == 5.0.14                    # required by hie-hoogle
@@ -2617,6 +2614,13 @@ extra-packages:
   - yesod-persistent < 1.5              # pre-lts-11.x versions neeed by git-annex 6.20180227
   - yesod-static ^>= 1.5                # pre-lts-11.x versions neeed by git-annex 6.20180227
   - yesod-test ^>= 1.5                  # pre-lts-11.x versions neeed by git-annex 6.20180227
+  - immortal == 0.2.2.1                 # required by Hasura 1.3.1, 2020-08-20
+  - dependent-map == 0.2.4.0            # required by Hasura 1.3.1, 2020-08-20
+  - dependent-sum == 0.4                # required by Hasura 1.3.1, 2020-08-20
+  - witherable == 0.3.2                 # required by Hasura 1.3.1, 2020-08-20
+  - protolude == 0.3.0                  # required by Hasura 1.3.1, 2020-08-20
+  - optics-core == 0.3.0.1              # required by Hasura 1.3.1, 2020-08-20
+  - base-compat == 0.11.1              # required by Hasura 1.3.1, 2020-08-20
 
 package-maintainers:
   peti:
@@ -3912,6 +3916,7 @@ broken-packages:
   - codemonitor
   - codepad
   - codeworld-api
+  - codex
   - codo-notation
   - coin
   - coinbase-exchange
@@ -4086,6 +4091,7 @@ broken-packages:
   - Control-Monad-ST2
   - contstuff-monads-tf
   - contstuff-transformers
+  - conversions
   - convert
   - convert-annotation
   - convertible-ascii
@@ -4181,6 +4187,7 @@ broken-packages:
   - cryptocipher
   - cryptocompare
   - cryptoconditions
+  - cryptoids
   - cryptol
   - cryptsy-api
   - crystalfontz
@@ -4723,6 +4730,7 @@ broken-packages:
   - enchant
   - encoding
   - encoding-io
+  - encryptable
   - engine-io
   - engine-io-growler
   - engine-io-snap
@@ -4969,6 +4977,7 @@ broken-packages:
   - FileManip
   - FileManipCompat
   - fileneglect
+  - filepath-crypto
   - filepath-io-access
   - FilePather
   - filepather
@@ -5459,10 +5468,12 @@ broken-packages:
   - google-drive
   - google-html5-slide
   - google-mail-filters
+  - google-maps-geocoding
   - google-oauth2
   - google-oauth2-easy
   - google-search
   - google-server-api
+  - google-static-maps
   - google-translate
   - GoogleCodeJam
   - GoogleDirections
@@ -5655,18 +5666,25 @@ broken-packages:
   - hakismet
   - hakka
   - hako
+  - hakyll
   - hakyll-agda
   - hakyll-blaze-templates
   - hakyll-contrib
   - hakyll-contrib-csv
   - hakyll-contrib-elm
+  - hakyll-contrib-hyphenation
   - hakyll-contrib-links
   - hakyll-convert
+  - hakyll-dhall
   - hakyll-dir-list
+  - hakyll-favicon
   - hakyll-filestore
+  - hakyll-images
   - hakyll-ogmarkup
   - hakyll-R
+  - hakyll-sass
   - hakyll-series
+  - hakyll-shakespeare
   - hakyll-shortcode
   - hakyll-shortcut-links
   - hakyll-typescript
@@ -6228,6 +6246,7 @@ broken-packages:
   - HLogger
   - hlogger
   - hlongurl
+  - hlrdb
   - hls
   - hlwm
   - hly
@@ -6740,8 +6759,20 @@ broken-packages:
   - ignore
   - igraph
   - igrf
+  - ihaskell
+  - ihaskell-aeson
   - ihaskell-basic
+  - ihaskell-blaze
+  - ihaskell-charts
+  - ihaskell-diagrams
   - ihaskell-display
+  - ihaskell-gnuplot
+  - ihaskell-graphviz
+  - ihaskell-hatex
+  - ihaskell-hvega
+  - ihaskell-inline-r
+  - ihaskell-juicypixels
+  - ihaskell-magic
   - ihaskell-parsec
   - ihaskell-plot
   - ihaskell-rlangqq
@@ -7214,6 +7245,8 @@ broken-packages:
   - latest-npm-version
   - latex-formulae-hakyll
   - latex-formulae-pandoc
+  - latex-svg-hakyll
+  - latex-svg-pandoc
   - LATS
   - launchdarkly-server-sdk
   - launchpad-control
@@ -7368,7 +7401,6 @@ broken-packages:
   - list-mux
   - list-prompt
   - list-remote-forwards
-  - list-t
   - list-t-attoparsec
   - list-t-html-parser
   - list-t-http-client
@@ -7475,6 +7507,7 @@ broken-packages:
   - lp-diagrams
   - lp-diagrams-svg
   - LRU
+  - lrucaching-haxl
   - ls-usb
   - lscabal
   - LslPlus
@@ -8335,10 +8368,11 @@ broken-packages:
   - pam
   - pan-os-syslog
   - panda
-  - pandoc-crossref
+  - pandoc-csv2table
   - pandoc-emphasize-code
   - pandoc-filter-graphviz
   - pandoc-include
+  - pandoc-include-code
   - pandoc-japanese-filters
   - pandoc-lens
   - pandoc-markdown-ghci-filter
@@ -8348,6 +8382,7 @@ broken-packages:
   - pandoc-pyplot
   - pandoc-sidenote
   - pandoc-unlit
+  - pandoc-utils
   - PandocAgda
   - pang-a-lambda
   - pangraph
@@ -8640,6 +8675,7 @@ broken-packages:
   - polysemy-http
   - polysemy-optics
   - polysemy-RandomFu
+  - polysemy-test
   - polysemy-webserver
   - polysemy-zoo
   - polyseq
@@ -8741,8 +8777,9 @@ broken-packages:
   - prim
   - prim-array
   - prim-ref
+  - primal
+  - primal-memory
   - primes-type
-  - primitive-extras
   - primitive-indexed
   - primitive-maybe
   - primitive-simd
@@ -9042,6 +9079,7 @@ broken-packages:
   - redis-hs
   - redis-io
   - redis-simple
+  - rediscaching-haxl
   - redland
   - Redmine
   - reduce-equations
@@ -9393,6 +9431,7 @@ broken-packages:
   - scotty-fay
   - scotty-format
   - scotty-hastache
+  - scotty-haxl
   - scotty-resource
   - scotty-rest
   - scotty-session
@@ -9673,6 +9712,7 @@ broken-packages:
   - siphon
   - siren-json
   - sirkel
+  - sitepipe
   - sixfiguregroup
   - sized-grid
   - sized-types
@@ -9875,7 +9915,6 @@ broken-packages:
   - Spock-api-ghcjs
   - Spock-api-server
   - Spock-auth
-  - Spock-core
   - Spock-digestive
   - Spock-lucid
   - Spock-worker
@@ -9983,9 +10022,7 @@ broken-packages:
   - STL
   - STLinkUSB
   - stm-chunked-queues
-  - stm-containers
   - stm-firehose
-  - stm-hamt
   - stm-promise
   - stm-stats
   - stm-supply
@@ -10041,6 +10078,8 @@ broken-packages:
   - stripe-haskell
   - stripe-http-client
   - stripe-http-streams
+  - stripe-scotty
+  - stripe-signature
   - stripe-tests
   - strongswan-sql
   - structural-induction
@@ -10076,7 +10115,6 @@ broken-packages:
   - sunroof-server
   - super-user-spark
   - superbubbles
-  - superbuffer
   - supercollider-ht
   - supercollider-midi
   - superconstraints
@@ -10236,6 +10274,7 @@ broken-packages:
   - tellbot
   - tempi
   - template-default
+  - template-haskell-optics
   - template-haskell-util
   - template-hsml
   - template-yj
@@ -10384,6 +10423,7 @@ broken-packages:
   - timeseries
   - timespan
   - timeutils
+  - timezone-detect
   - timezone-olson-th
   - timezone-unix
   - tini
@@ -10734,6 +10774,7 @@ broken-packages:
   - uuagc-diagrams
   - uuid-aeson
   - uuid-bytes
+  - uuid-crypto
   - uvector
   - uvector-algorithms
   - uxadt

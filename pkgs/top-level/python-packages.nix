@@ -3242,8 +3242,6 @@ in {
 
   libarchive-c = callPackage ../development/python-modules/libarchive-c { inherit (pkgs) libarchive; };
 
-  libarchive = self.python-libarchive; # The latter is the name upstream uses
-
   libarcus = callPackage ../development/python-modules/libarcus { inherit (pkgs) protobuf; };
 
   libasyncns = callPackage ../development/python-modules/libasyncns { inherit (pkgs) libasyncns pkgconfig; };
@@ -3491,8 +3489,6 @@ in {
   mailcap-fix = callPackage ../development/python-modules/mailcap-fix { };
 
   mailchimp = callPackage ../development/python-modules/mailchimp { };
-
-  maildir-deduplicate = callPackage ../development/python-modules/maildir-deduplicate { };
 
   mailman = callPackage ../servers/mail/mailman { };
 
@@ -4404,8 +4400,6 @@ in {
   pims = callPackage ../development/python-modules/pims { };
 
   pint = callPackage ../development/python-modules/pint { };
-
-  pip2nix = callPackage ../development/python-modules/pip2nix { };
 
   pip = callPackage ../development/python-modules/pip { };
 
@@ -5652,8 +5646,6 @@ in {
 
   python-Levenshtein = callPackage ../development/python-modules/python-levenshtein { };
 
-  python-libarchive = callPackage ../development/python-modules/python-libarchive { };
-
   python-logstash = callPackage ../development/python-modules/python-logstash { };
 
   python-ly = callPackage ../development/python-modules/python-ly { };
@@ -5931,8 +5923,6 @@ in {
   querystring_parser = callPackage ../development/python-modules/querystring-parser { };
 
   queuelib = callPackage ../development/python-modules/queuelib { };
-
-  qutip = callPackage ../development/python-modules/qutip { };
 
   r2pipe = callPackage ../development/python-modules/r2pipe { };
 
@@ -7666,8 +7656,6 @@ in {
   zope_filerepresentation = callPackage ../development/python-modules/zope_filerepresentation { };
 
   zope-hookable = callPackage ../development/python-modules/zope-hookable { };
-
-  zope_i18n = callPackage ../development/python-modules/zope_i18n { };
 
   zope_i18nmessageid = callPackage ../development/python-modules/zope_i18nmessageid { };
 
