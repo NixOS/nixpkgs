@@ -25484,6 +25484,8 @@ in
 
   plasma-applet-caffeine-plus = libsForQt5.callPackage ../desktops/plasma-5/addons/caffeine-plus.nix { };
 
+  kwin-dynamic-workspaces = libsForQt5.callPackage ../desktops/plasma-5/kwin/scripts/dynamic-workspaces.nix { };
+
   kwin-tiling = libsForQt5.callPackage ../desktops/plasma-5/kwin/scripts/tiling.nix { };
 
   krohnkite = libsForQt5.callPackage ../desktops/plasma-5/kwin/scripts/krohnkite.nix { };
