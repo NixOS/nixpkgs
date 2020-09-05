@@ -22106,7 +22106,7 @@ in
   };
 
   synfigstudio = callPackage ../applications/graphics/synfigstudio {
-    mlt-qt5 = libsForQt5.mlt;
+    mlt-qt5 = libsForQt514.mlt;
   };
 
   typora = callPackage ../applications/editors/typora { };
