@@ -155,7 +155,7 @@ stdenv.mkDerivation (args // {
       echo
       echo "To fix the issue:"
       echo '1. Use "0000000000000000000000000000000000000000000000000000" as the cargoSha256 value'
-      echo "2. Build the derivation and wait it to fail with a hash mismatch"
+      echo "2. Build the derivation and wait for it to fail with a hash mismatch"
       echo "3. Copy the 'got: sha256:' value back into the cargoSha256 field"
       echo
 
