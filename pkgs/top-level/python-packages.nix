@@ -3655,6 +3655,8 @@ in {
 
   misaka = callPackage ../development/python-modules/misaka { };
 
+  mistletoe = callPackage ../development/python-modules/mistletoe { };
+
   mistune = callPackage ../development/python-modules/mistune { };
 
   mitmproxy = callPackage ../development/python-modules/mitmproxy { };
