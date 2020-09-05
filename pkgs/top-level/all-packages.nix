@@ -196,6 +196,8 @@ in
 
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
 
+  elixir-ls = callPackage ../development/tools/elixir-ls { };
+
   glade = callPackage ../development/tools/glade { };
 
   hobbes = callPackage ../development/tools/hobbes { };
