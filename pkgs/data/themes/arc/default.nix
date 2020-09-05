@@ -8,6 +8,7 @@
 , gtk-engine-murrine
 , optipng
 , inkscape_0
+, cinnamon
 }:
 
 stdenv.mkDerivation rec {
@@ -43,8 +44,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
+    "--with-cinnamon=${cinnamon.cinnamon-common.version}"
     "--with-gnome-shell=${gnome3.gnome-shell.version}"
-    "--disable-cinnamon" # not equipped to test
     "--disable-unity"
   ];
 
