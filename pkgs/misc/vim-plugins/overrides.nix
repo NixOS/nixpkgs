@@ -633,7 +633,7 @@ self: super: {
     ];
     nodePackage2VimPackage = name: buildVimPluginFrom2Nix {
       pname = name;
-      inherit (nodePackages.${name}) version;
+      inherit (nodePackages.${name}) version meta;
       src = "${nodePackages.${name}}/lib/node_modules/${name}";
     };
   in
