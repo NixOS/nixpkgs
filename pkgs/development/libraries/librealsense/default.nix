@@ -7,7 +7,7 @@ assert enablePython -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
   pname = "librealsense";
-  version = "2.38.0";
+  version = "2.38.1";
 
   outputs = [ "out" "dev" ];
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "IntelRealSense";
     repo = pname;
     rev = "v${version}";
-    sha256 = "12rs0gklgzn8bplqjmaxixk04pr870i333mmcp9i5bhkn8x86zbx";
+    sha256 = "05sgi90ivmci0ai8x7ljhk7na8c04bdj33fiyjsig4iv1gb7ay45";
   };
 
   buildInputs = [
