@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "oppai-ng";
-  version = "3.2.3";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "Francesco149";
     repo = pname;
     rev = version;
-    sha256 = "1wrnpnx1yl0pdzmla4knlpcwy7baamy2wpdypnbdqxrn0zkw7kzk";
+    sha256 = "0ymprwyv92pr58851wzryymhfznnpwcbg4m1yri0c9cyzvabwmfk";
   };
 
   buildPhase = ''
