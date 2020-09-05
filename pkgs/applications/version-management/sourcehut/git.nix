@@ -11,8 +11,6 @@ let
     pname = "gitsrht-shell";
 
     vendorSha256 = "1zvbqn4r940mibn4h1cqz94gbr476scm281ps361n0rfqlimw8g5";
-
-    doCheck = false;
   };
 
   buildDispatcher = src: buildGoModule {
@@ -20,8 +18,6 @@ let
     pname = "gitsrht-dispatcher";
 
     vendorSha256 = "1lzkf13m54pq0gnn3bcxc80nfg76hgck4l8q8jpaicrsiwgcyrd9";
-
-    doCheck = false;
   };
 
   buildKeys = src: buildGoModule {
@@ -29,8 +25,6 @@ let
     pname = "gitsrht-keys";
 
     vendorSha256 = "08g3cvxq2zkdqbbb9r9rvdg23fs7hn5zqf7fzhr792f6mshdm5v2";
-
-    doCheck = false;
   };
 
   buildUpdateHook = src: buildGoModule {
@@ -38,8 +32,6 @@ let
     pname = "gitsrht-update-hook";
 
     vendorSha256 = "1rmv3p60g6w4h4v9wx99jkyx0q02snslyjrjy9n1flardjs01b63";
-
-    doCheck = false;
   };
 
   buildAPI = src: buildGoModule {
@@ -47,8 +39,6 @@ let
     pname = "gitsrht-api";
 
     vendorSha256 = "1drrs3wrvhw8lp0877zkbx8gnbxly3fsqynww9vplajkx62z5m3a";
-
-    doCheck = false;
   };
 in buildPythonPackage rec {
   pname = "gitsrht";
