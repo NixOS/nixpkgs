@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "Translations files for the Cinnamon desktop";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }

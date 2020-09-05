@@ -100,6 +100,6 @@ stdenv.mkDerivation rec {
     description = "The Cinnamon session manager";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }
