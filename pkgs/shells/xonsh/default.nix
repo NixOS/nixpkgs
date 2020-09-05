@@ -4,30 +4,21 @@
 , glibcLocales
 , coreutils
 , git
-, fetchpatch
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "xonsh";
-  version = "0.9.20";
+  version = "0.9.21";
 
   # fetch from github because the pypi package ships incomplete tests
   src = fetchFromGitHub {
     owner  = "xonsh";
     repo   = "xonsh";
     rev    = version;
-    sha256 = "05phrwqd1c64531y78zxkxd4w1cli8yj3x2cqch7nkzbyz93608p";
+    sha256 = "16k8506fk54krpkls374cn3vm1dp9ixi0byh5xvi3m5a4bnbvrs0";
   };
 
   LC_ALL = "en_US.UTF-8";
-
-  patches = [
-    # Fix vox tests. Remove with the next release
-    (fetchpatch {
-      url = "https://github.com/xonsh/xonsh/commit/00aeb7645af97134495cc6bc5fe2f41922df8676.patch";
-      sha256 = "0hx5jk22wxgmjzmqbxr2pjs3mwh7p0jwld0xhslc1s6whbjml25h";
-    })
-  ];
 
   postPatch = ''
     sed -ie "s|/bin/ls|${coreutils}/bin/ls|" tests/test_execer.py
