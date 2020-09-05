@@ -6,6 +6,7 @@
 , cinnamon-control-center
 , cinnamon-desktop
 , cinnamon-menus
+, cinnamon-session
 , cjs
 , fetchFromGitHub
 , gdk-pixbuf
@@ -146,7 +147,14 @@ stdenv.mkDerivation rec {
     sed "s|/usr/bin|/run/current-system/sw/bin|g" -i ./files/usr/bin/cinnamon-launcher
 
     sed 's|"lspci"|"${pciutils}/bin/lspci"|g' -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_info.py
+
+    sed "s| cinnamon-session| ${cinnamon-session}/bin/cinnamon-session|g" -i ./files/usr/bin/cinnamon-session-cinnamon  -i ./files/usr/bin/cinnamon-session-cinnamon2d
+    sed "s|/usr/bin|$out/bin|g" -i ./files/usr/share/xsessions/cinnamon.desktop ./files/usr/share/xsessions/cinnamon2d.desktop
   '';
+
+  passthru = {
+    providedSessions = ["cinnamon" "cinnamon2d"];
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/linuxmint/cinnamon";
