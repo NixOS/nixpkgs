@@ -1,18 +1,20 @@
 { stdenv, fetchFromGitHub, meson, ninja, pkgconfig, gettext
 , xmlto, docbook_xsl, docbook_xml_dtd_45, libxslt
 , libstemmer, glib, xapian, libxml2, libyaml, gobject-introspection
-, pcre, itstool, gperf, vala
+, pcre, itstool, gperf, vala, lmdb, libsoup
 }:
 
 stdenv.mkDerivation rec {
   pname = "appstream";
-  version = "0.12.6";
+  version = "0.12.11";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner  = "ximion";
     repo   = "appstream";
-    rev    = "APPSTREAM_${stdenv.lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "0hbl26aw3g2hag7z4di9z59qz057qcywrxpnnmp86z7rngvjbqpx";
+    rev    = "v${version}";
+    sha256 = "sha256-bCDyMwQdn9Csxs2hy4dm+LjtxK4+YBK6yDkAdhu1QVU=";
   };
 
   nativeBuildInputs = [
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
     gobject-introspection itstool vala
   ];
 
-  buildInputs = [ libstemmer pcre glib xapian libxml2 libyaml gperf ];
+  buildInputs = [ libstemmer pcre glib xapian libxml2 libyaml gperf lmdb libsoup ];
 
   prePatch = ''
     substituteInPlace meson.build \
