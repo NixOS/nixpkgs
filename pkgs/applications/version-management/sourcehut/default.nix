@@ -1,4 +1,4 @@
-{ python37, openssl
+{ python38, openssl
 , callPackage, recurseIntoAttrs }:
 
 # To expose the *srht modules, they have to be a python module so we use `buildPythonModule`
@@ -8,7 +8,7 @@
 let
   fetchNodeModules = callPackage ./fetchNodeModules.nix { };
 
-  python = python37.override {
+  python = python38.override {
     packageOverrides = self: super: {
       srht = self.callPackage ./core.nix { inherit fetchNodeModules; };
 
