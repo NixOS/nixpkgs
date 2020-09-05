@@ -13033,7 +13033,7 @@ in
     let
       mkFrameworks = import ../development/libraries/kde-frameworks;
       attrs = {
-        inherit libsForQt5;
+        libsForQt5 = libsForQt514;
         inherit lib fetchurl;
       };
     in
@@ -21295,7 +21295,8 @@ in
     let
       mkApplications = import ../applications/kde;
       attrs = {
-        inherit lib libsForQt5 fetchurl;
+        libsForQt5 = libsForQt514;
+        inherit lib fetchurl;
         inherit okteta;
       };
     in
@@ -25505,7 +25506,8 @@ in
     let
       mkPlasma5 = import ../desktops/plasma-5;
       attrs = {
-        inherit libsForQt5 lib fetchurl;
+        libsForQt5 = libsForQt514;
+        inherit lib fetchurl;
         gconf = gnome2.GConf;
         inherit gsettings-desktop-schemas;
       };
