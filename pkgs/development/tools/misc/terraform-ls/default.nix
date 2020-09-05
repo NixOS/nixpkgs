@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "terraform-ls";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0yhpxb9dkwi6rlabr0sd5rk15q0bin6yhww171jrzlnfl036l0sl";
+    sha256 = "1afdd1zs242nh1cync5ip1fbah34wc3gbsx3hwwiisc8yziwiq18";
   };
 
   goPackagePath = "github.com/hashicorp/terraform-ls";
