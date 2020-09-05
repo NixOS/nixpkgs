@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "skaffold";
-  version = "1.13.2";
+  version = "1.14.0";
 
   goPackagePath = "github.com/GoogleContainerTools/skaffold";
   subPackages = ["cmd/skaffold"];
@@ -19,7 +19,7 @@ buildGoPackage rec {
     owner = "GoogleContainerTools";
     repo = "skaffold";
     rev = "v${version}";
-    sha256 = "0xicf4bf52fnnwaimxrxv16x15lcmw12a5rrl0xjm4p059jnvy54";
+    sha256 = "18wk8cnp0sc47drgjc0iis4dkqwr9h5yxi40c1gjsiscrvy5akvc";
   };
 
   nativeBuildInputs = [ installShellFiles ];
