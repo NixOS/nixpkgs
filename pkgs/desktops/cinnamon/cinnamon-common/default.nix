@@ -15,7 +15,7 @@
 , gtk3
 , intltool
 , json-glib
-, libcroco
+, callPackage
 , libsoup
 , libstartup_notification
 , libXtst
@@ -38,11 +38,13 @@
 , accountsservice
 , gnome-online-accounts
 , glib-networking
-, callPackage
 , pciutils
 , timezonemap
 }:
 
+let
+  libcroco = callPackage ./libcroco.nix { };
+in
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
   version = "4.4.1";
