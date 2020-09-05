@@ -5935,6 +5935,12 @@
     githubId = 1916245;
     name = "Fernando Jose Pando";
   };
+  nasadorian = {
+    email = "narek.asadorian@gmail.com";
+    github = "nasadorian";
+    githubId = 1136563;
+    name = "Narek Asadorian";
+  };
   Nate-Devv = {
     email = "natedevv@gmail.com";
     name = "Nathan Moore";

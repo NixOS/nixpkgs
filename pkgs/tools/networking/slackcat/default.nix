@@ -15,6 +15,6 @@ buildGoPackage rec {
     description = "CLI utility to post files and command output to slack";
     homepage = "http://slackcat.chat/";
     license = licenses.mit;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ nasadorian ];
   };
 }
