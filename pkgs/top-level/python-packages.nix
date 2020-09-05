@@ -6684,6 +6684,8 @@ in {
 
   pytoml = callPackage ../development/python-modules/pytoml { };
 
+  pytomlpp = callPackage ../development/python-modules/pytomlpp { };
+
   pytools = callPackage ../development/python-modules/pytools { };
 
   pytorch = callPackage ../development/python-modules/pytorch {
