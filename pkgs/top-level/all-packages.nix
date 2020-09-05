@@ -11529,6 +11529,8 @@ in
 
   scaff = callPackage ../development/tools/scaff { };
 
+  sd-local = callPackage ../development/tools/sd-local { };
+
   selenium-server-standalone = callPackage ../development/tools/selenium/server { };
 
   selendroid = callPackage ../development/tools/selenium/selendroid { };
