@@ -9,36 +9,31 @@ let
   buildShell = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-shell";
-
-    vendorSha256 = "1zvbqn4r940mibn4h1cqz94gbr476scm281ps361n0rfqlimw8g5";
+    vendorSha256 = "1abyv2s5l3bs0iylpgyj3jri2hh1iy8fiadxm7g6l2vl58h0b9ba";
   };
 
   buildDispatcher = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-dispatcher";
-
     vendorSha256 = "1lzkf13m54pq0gnn3bcxc80nfg76hgck4l8q8jpaicrsiwgcyrd9";
   };
 
   buildKeys = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-keys";
-
-    vendorSha256 = "08g3cvxq2zkdqbbb9r9rvdg23fs7hn5zqf7fzhr792f6mshdm5v2";
+    vendorSha256 = "0lks3js57bb41x1ry5xfadlzf0v2gm68g7h3j94gzlm6j4jfprk9";
   };
 
   buildUpdateHook = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-update-hook";
-
-    vendorSha256 = "1rmv3p60g6w4h4v9wx99jkyx0q02snslyjrjy9n1flardjs01b63";
+    vendorSha256 = "06ykh9ncamd922xsd329jpn293wsq6vkqnlf3sckjlp2hm290pd8";
   };
 
   buildAPI = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-api";
-
-    vendorSha256 = "1drrs3wrvhw8lp0877zkbx8gnbxly3fsqynww9vplajkx62z5m3a";
+    vendorSha256 = "0d6kmsbsgj2q5nddx4w675zbsiarffj9vqplwvqk7dwz4id2wnif";
   };
 in buildPythonPackage rec {
   pname = "gitsrht";
