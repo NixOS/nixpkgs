@@ -118,6 +118,7 @@ let
       ksysguard = callPackage ./ksysguard.nix {};
       kwallet-pam = callPackage ./kwallet-pam.nix {};
       kwayland-integration = callPackage ./kwayland-integration.nix {};
+      kwayland-server = callPackage ./kwayland-server {};
       kwin = callPackage ./kwin {};
       kwrited = callPackage ./kwrited.nix {};
       libkscreen = callPackage ./libkscreen {};
