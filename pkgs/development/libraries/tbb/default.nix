@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, compiler ? if stdenv.cc.isClang then "clang" else null, stdver ? null }:
+{ stdenv, fetchFromGitHub, fixDarwinDylibNames, compiler ? if stdenv.cc.isClang then "clang" else null, stdver ? null }:
 
 with stdenv.lib; stdenv.mkDerivation rec {
   pname = "tbb";
@@ -10,6 +10,8 @@ with stdenv.lib; stdenv.mkDerivation rec {
     rev = version;
     sha256 = "1a39nflw7b2n51jfp3fdprnkpgzaspzww1dckfvaigflfli9s8rj";
   };
+
+  nativeBuildInputs = optional stdenv.isDarwin fixDarwinDylibNames;
 
   makeFlags = optional (compiler != null) "compiler=${compiler}"
     ++ optional (stdver != null) "stdver=${stdver}";
