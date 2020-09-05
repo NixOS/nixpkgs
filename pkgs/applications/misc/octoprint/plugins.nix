@@ -252,4 +252,23 @@ in {
       maintainers = with maintainers; [ WhittlesJr ];
     };
   };
+
+  displaylayerprogress = buildPlugin rec {
+    pname = "OctoPrint-DisplayLayerProgress";
+    version = "1.23.2";
+
+    src = fetchFromGitHub {
+      owner = "OllisGit";
+      repo = pname;
+      rev = version;
+      sha256 = "0yv8gy5dq0rl7zxkvqa98az391aiixl8wbzkyvbmpjar9r6whdzm";
+    };
+
+    meta = with stdenv.lib; {
+      description = "OctoPrint-Plugin that sends the current progress of a print via M117 command";
+      homepage = "https://github.com/OllisGit/OctoPrint-DisplayLayerProgress";
+      license = licenses.agpl3;
+      maintainers = with maintainers; [ j0hax ];
+    };
+  };
 }
