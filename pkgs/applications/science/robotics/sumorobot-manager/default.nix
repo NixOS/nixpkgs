@@ -1,14 +1,14 @@
-{ lib, stdenv, python3, qt5, fetchFromGitHub, wrapPython, pyqt5, pyserial }:
+{ lib, stdenv, python3, qt5, fetchFromGitHub, wrapPython, pyqt5, pyserial, dos2unix }:
 
 stdenv.mkDerivation rec {
   pname = "sumorobot-manager";
-  version = "0.9.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "robokoding";
     repo = pname;
     rev = "v${version}";
-    sha256 = "03zhb54c259a66hsahmv2ajbzwcjnfjj050wbjhw51zqzxinlgqr";
+    sha256 = "07snhwmqqp52vdgr66vx50zxx0nmpmns5cdjgh50hzlhji2z1fl9";
   };
 
   buildInputs = [ python3 ];
