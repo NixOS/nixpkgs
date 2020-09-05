@@ -12,8 +12,6 @@ let
     pname = "metasrht-api";
 
     vendorSha256 = "0k7i7j604wqvzjavmcsw7g2x059jkkgrgz1qyvzlqc0y4ws59xkq";
-
-    doCheck = false;
   };
 in buildPythonPackage rec {
   pname = "metasrht";
