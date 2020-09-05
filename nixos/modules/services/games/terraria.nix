@@ -115,7 +115,7 @@ in
         type        = types.str;
         default     = "/var/lib/terraria";
         example     = "/srv/terraria";
-        description = "Home directory for terraria.";
+        description = "Path to variable state data directory for terraria.";
       };
     };
   };
