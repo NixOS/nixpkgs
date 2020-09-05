@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.nushell.sh/";
     license = licenses.mit;
     maintainers = with maintainers; [ filalex77 johntitor marsam ];
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
   };
 
   passthru = {
