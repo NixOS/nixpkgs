@@ -63,7 +63,8 @@ buildPythonPackage rec {
     # these tests don't always fail
     substituteInPlace tiledb/tests/test_libtiledb.py --replace \
       "test_varlen_write_int_subarray" "dont_test_varlen_write_int_subarray" \
-      --replace "test_memory_cleanup" "dont_test_memory_cleanup"
+      --replace "test_memory_cleanup" "dont_test_memory_cleanup" \
+      --replace "test_ctx_thread_cleanup" "dont_test_ctx_thread_cleanup"
     substituteInPlace tiledb/tests/test_metadata.py --replace \
       "test_metadata_consecutive" "dont_test_metadata_consecutive"
   '';
