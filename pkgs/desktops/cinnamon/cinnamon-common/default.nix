@@ -40,6 +40,7 @@
 , glib-networking
 , pciutils
 , timezonemap
+, libnma
 }:
 
 let
@@ -99,6 +100,7 @@ stdenv.mkDerivation rec {
     nemo
     libnotify
     accountsservice
+    libnma
 
     # gsi bindings
     gnome-online-accounts
