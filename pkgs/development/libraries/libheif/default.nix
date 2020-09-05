@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libheif";
-  version = "1.7.0";
+  version = "1.8.0";
 
   outputs = [ "bin" "out" "dev" "man" ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "strukturag";
     repo = "libheif";
     rev = "v${version}";
-    sha256 = "0alri5h486ck9b5z6wwrmlpzydhz58l223z3zxkizqrzxlllhr6p";
+    sha256 = "15az44qdqp2vncdfv1bzdl30977kvqxcb2bhx4x3q6vcxnm1xfgg";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
