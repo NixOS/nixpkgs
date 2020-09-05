@@ -2667,7 +2667,10 @@ in
     cudatoolkit_9_2
     cudatoolkit_10
     cudatoolkit_10_0
-    cudatoolkit_10_1;
+    cudatoolkit_10_1
+    cudatoolkit_10_2
+    cudatoolkit_11
+    cudatoolkit_11_0;
 
   cudatoolkit = cudatoolkit_10;
 
@@ -2683,7 +2686,10 @@ in
     cudnn_cudatoolkit_9_2
     cudnn_cudatoolkit_10
     cudnn_cudatoolkit_10_0
-    cudnn_cudatoolkit_10_1;
+    cudnn_cudatoolkit_10_1
+    cudnn_cudatoolkit_10_2
+    cudnn_cudatoolkit_11
+    cudnn_cudatoolkit_11_0;
 
   cudnn = cudnn_cudatoolkit_10;
 
@@ -8776,6 +8782,9 @@ in
     inherit (darwin) apple_sdk;
   };
 
+  rust_1_44 = callPackage ../development/compilers/rust/1_44.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
   rust_1_41_0 = callPackage ../development/compilers/rust/1_41_0.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
@@ -8784,6 +8793,7 @@ in
   };
   rust = rust_1_41_0;
 
+  rustPackages_1_44 = rust_1_44.packages.stable;
   rustPackages_1_41_0 = rust_1_41_0.packages.stable;
   rustPackages_1_38_0 = rust_1_38_0.packages.stable;
   rustPackages = rustPackages_1_41_0;
@@ -8877,7 +8887,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  rust-cbindgen_0_14_1 = callPackage ../development/tools/rust/cbindgen/0_14_1.nix {
+  rust-cbindgen_latest = callPackage ../development/tools/rust/cbindgen/0_14_3.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -12516,6 +12526,8 @@ in
 
   libfilezilla = callPackage ../development/libraries/libfilezilla { };
 
+  libfishsound = callPackage ../development/libraries/libfishsound { };
+
   libfm = callPackage ../development/libraries/libfm { };
   libfm-extra = libfm.override {
     extraOnly = true;
@@ -13537,8 +13549,11 @@ in
   nspr = callPackage ../development/libraries/nspr {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
+  nspr_latest = lowPrio (callPackage ../development/libraries/nspr/latest.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  });
 
-  nss_latest = lowPrio (callPackage ../development/libraries/nss/latest.nix { });
+  nss_latest = lowPrio (callPackage ../development/libraries/nss/latest.nix { nspr = nspr_latest;});
   nss = lowPrio (callPackage ../development/libraries/nss { });
   nssTools = nss.tools;
 
@@ -21806,16 +21821,28 @@ in
 
   thonny = callPackage ../applications/editors/thonny { };
 
-  thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
+  thunderbird-78 = callPackage ../applications/networking/mailreaders/thunderbird {
+    inherit (rustPackages_1_44) cargo rustc;
+    rust-cbindgen = rust-cbindgen_latest;
+    nodejs = nodejs-13_x;
+    nss = nss_latest;
+    libpng = libpng_apng;
+    icu = icu67;
+    libvpx = libvpx_1_8;
+    gtk3Support = true;
+  };
+
+  thunderbird = callPackage ../applications/networking/mailreaders/thunderbird/68.nix {
     inherit (gnome2) libIDL;
-    inherit (rustPackages_1_38_0) cargo rustc;
     libpng = libpng_apng;
     gtk3Support = true;
   };
 
   thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
 
-  thunderbird-bin = callPackage ../applications/networking/mailreaders/thunderbird-bin {
+  thunderbird-bin-78 = callPackage ../applications/networking/mailreaders/thunderbird-bin { };
+
+  thunderbird-bin = callPackage ../applications/networking/mailreaders/thunderbird-bin/68.nix {
     gconf = pkgs.gnome2.GConf;
     inherit (pkgs.gnome2) libgnome libgnomeui;
   };

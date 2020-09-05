@@ -1,4 +1,5 @@
 { stdenv, fetchurl, config, makeWrapper
+, gconf
 , alsaLib
 , at-spi2-atk
 , atk
@@ -12,6 +13,8 @@
 , gdk-pixbuf
 , glib
 , glibc
+, gst-plugins-base
+, gstreamer
 , gtk2
 , gtk3
 , kerberos
@@ -27,7 +30,9 @@
 , libXrender
 , libXt
 , libxcb
-, libcanberra
+, libcanberra-gtk2
+, libgnome
+, libgnomeui
 , gnome3
 , libGLU, libGL
 , nspr
@@ -43,7 +48,7 @@
 }:
 
 # imports `version` and `sources`
-with (import ./release_sources.nix);
+with (import ./68_sources.nix);
 
 let
   arch = if stdenv.hostPlatform.system == "i686-linux"
@@ -77,6 +82,7 @@ stdenv.mkDerivation {
 
   libPath = stdenv.lib.makeLibraryPath
     [ stdenv.cc.cc
+      gconf
       alsaLib
       at-spi2-atk
       atk
@@ -90,6 +96,8 @@ stdenv.mkDerivation {
       gdk-pixbuf
       glib
       glibc
+      gst-plugins-base
+      gstreamer
       gtk2
       gtk3
       kerberos
@@ -105,7 +113,9 @@ stdenv.mkDerivation {
       libXrender
       libXt
       libxcb
-      libcanberra
+      libcanberra-gtk2
+      libgnome
+      libgnomeui
       libGLU libGL
       nspr
       nss
@@ -170,10 +180,10 @@ stdenv.mkDerivation {
   };
   meta = with stdenv.lib; {
     description = "Mozilla Thunderbird, a full-featured email client (binary package)";
-    homepage = "http://www.mozilla.org/thunderbird/";
+    homepage = http://www.mozilla.org/thunderbird/;
     license = {
       free = false;
-      url = "http://www.mozilla.org/en-US/foundation/trademarks/policy/";
+      url = http://www.mozilla.org/en-US/foundation/trademarks/policy/;
     };
     maintainers = with stdenv.lib.maintainers; [ ];
     platforms = platforms.linux;

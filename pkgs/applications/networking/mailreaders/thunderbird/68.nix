@@ -18,6 +18,7 @@
 , lib
 , libGL
 , libGLU
+, libIDL
 , libevent
 , libjpeg
 , libnotify
@@ -42,7 +43,6 @@
 , rustc
 , sqlite
 , stdenv
-, systemd
 , unzip
 , which
 , writeScript
@@ -72,13 +72,13 @@ assert waylandSupport -> gtk3Support == true;
 
 stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "78.2.1";
+  version = "68.12.0";
 
   src = fetchurl {
     url =
       "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
     sha512 =
-      "2iya9a5qaini524wrdrnxx6wsrgb8fa2b1m42mlypskxjjgb7n66vpxlbpi9x9mqzc63ca2ag36fjpbpsvbv5ppxvpfwk2j1zbfvb5w";
+      "33350vjgzvsg6sdhdld92z75k1xcf1wmngdcvzsj4f3y3aal73pyw03mlvgg6y36bm0j8fhaxvgbbg5zm7hxhn779z78970m4v9amg7";
   };
 
   nativeBuildInputs = [
@@ -112,6 +112,7 @@ stdenv.mkDerivation rec {
     jemalloc
     libGL
     libGLU
+    libIDL
     libevent
     libjpeg
     libnotify
@@ -148,7 +149,7 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    ./no-buildconfig.patch
+    ./no-buildconfig-68.patch
   ];
 
   postPatch = ''
@@ -190,7 +191,7 @@ stdenv.mkDerivation rec {
           lib.getVersion stdenv.cc.cc
         } -isystem ${stdenv.cc.cc}/include/c++/${
           lib.getVersion stdenv.cc.cc
-        }/${stdenv.hostPlatform.config}"
+        }/$(cc -dumpmachine)"
       } \
       $NIX_CFLAGS_COMPILE"
 
@@ -206,12 +207,14 @@ stdenv.mkDerivation rec {
   in [
     "--enable-application=comm/mail"
 
+    "--with-system-bz2"
     "--with-system-icu"
     "--with-system-jpeg"
     "--with-system-libevent"
     "--with-system-nspr"
     "--with-system-nss"
     "--with-system-png" # needs APNG support
+    "--with-system-icu"
     "--with-system-zlib"
     "--with-system-webp"
     "--with-system-libvpx"
@@ -221,9 +224,12 @@ stdenv.mkDerivation rec {
     "--enable-default-toolkit=${toolkitValue}"
     "--enable-js-shell"
     "--enable-necko-wifi"
+    "--enable-startup-notification"
     "--enable-system-ffi"
     "--enable-system-pixman"
+    "--enable-system-sqlite"
 
+    "--disable-gconf"
     "--disable-tests"
     "--disable-updater"
     "--enable-jemalloc"
@@ -299,11 +305,11 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  # FIXME: The XUL portion of this can probably be removed as soon as we
-  # package a Thunderbird >=71.0 since XUL shouldn't be anymore (in use)?
+  # FIXME: This can probably be removed as soon as we package a
+  # Thunderbird >=71.0 since XUL shouldn't be anymore (in use)?
   postFixup = ''
     local xul="$out/lib/thunderbird/libxul.so"
-    patchelf --set-rpath "${libnotify}/lib:${systemd.lib}/lib:$(patchelf --print-rpath $xul)" $xul
+    patchelf --set-rpath "${libnotify}/lib:$(patchelf --print-rpath $xul)" $xul
   '';
 
   doInstallCheck = true;
@@ -316,7 +322,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.updateScript = import ./../../browsers/firefox/update.nix {
-    attrPath = "thunderbird-78";
+    attrPath = "thunderbird";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
     inherit writeScript lib common-updater-scripts xidel coreutils gnused
       gnugrep curl runtimeShell;
@@ -331,6 +337,5 @@ stdenv.mkDerivation rec {
       pierron
     ];
     platforms = platforms.linux;
-    license = licenses.mpl20;
   };
 }

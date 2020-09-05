@@ -19,14 +19,14 @@ let
       };
   };
 in buildGoPackage rec {
-  version = "12.10.14";
+  version = "13.0.12";
   pname = "gitaly";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "0v2ikj4vvlgj2cpp4m5di9kw63nsc3p9hgjfacvzr7nj3ar2pwqa";
+    sha256 = "00jzrib8f51b3wkl0zy9a9cr5j9kp6cmm49vxm27zgxpyz8k1axw";
   };
 
   # Fix a check which assumes that hook files are writeable by their
@@ -49,13 +49,6 @@ in buildGoPackage rec {
   postInstall = ''
     mkdir -p $ruby
     cp -rv $src/ruby/{bin,lib,proto,git-hooks,gitlab-shell} $ruby
-
-    # gitlab-shell will try to read its config relative to the source
-    # code by default which doesn't work in nixos because it's a
-    # read-only filesystem
-    substituteInPlace $ruby/gitlab-shell/lib/gitlab_config.rb --replace \
-       "ROOT_PATH.join('config.yml')" \
-       "Pathname.new('/run/gitlab/shell-config.yml')"
   '';
 
   outputs = [ "bin" "out" "ruby" ];

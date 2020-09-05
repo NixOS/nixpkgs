@@ -16,8 +16,11 @@
 
 ### backorted packages
 
+, nspr_latest
 , nss_latest
 , sqlite_3_31_1
+, rustPackages_1_44
+, rust-cbindgen_latest
 
 ### optionals
 
@@ -50,10 +53,6 @@
 # macOS dependencies
 , xcbuild, CoreMedia, ExceptionHandling, Kerberos, AVFoundation, MediaToolbox
 , CoreLocation, Foundation, AddressBook, libobjc, cups, rsync
-
-# dependencies requires for stable backports
-
-, rust-cbindgen_0_14_1
 
 ## other
 
@@ -99,8 +98,11 @@ let
 # Firefoxs requirements
 
 nss_pkg = if lib.versionAtLeast ffversion "74" then nss_latest else nss;
+nspr_pkg = if lib.versionAtLeast ffversion "79" then nspr_latest else nspr;
 sqlite_pkg = if lib.versionAtLeast ffversion "74" then sqlite_3_31_1 else sqlite;
-rust-cbindgen_pkg = if lib.versionAtLeast ffversion "77" then rust-cbindgen_0_14_1 else rust-cbindgen;
+rust-cbindgen_pkg = if lib.versionAtLeast ffversion "77" then rust-cbindgen_latest else rust-cbindgen;
+rustc_pkg = if lib.versionAtLeast ffversion "79" then rustPackages_1_44.rustc else rustc;
+cargo_pkg = if lib.versionAtLeast ffversion "79" then rustPackages_1_44.cargo else cargo;
 
 in
 
@@ -135,7 +137,7 @@ stdenv.mkDerivation ({
     # yasm can potentially be removed in future versions
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
     # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
-    nspr nss_pkg
+    nspr_pkg nss_pkg
   ]
   ++ lib.optionals (lib.versionOlder ffversion "75") [ libvpx sqlite ]
   ++ lib.optional  (lib.versionAtLeast ffversion "75.0") libvpx_1_8
@@ -159,12 +161,20 @@ stdenv.mkDerivation ({
 
   postPatch = ''
     rm -rf obj-x86_64-pc-linux-gnu
+  '' + lib.optionalString (lib.versionAtLeast ffversion "80") ''
+    substituteInPlace dom/system/IOUtils.h \
+      --replace '#include "nspr/prio.h"'          '#include "prio.h"'
+
+    substituteInPlace dom/system/IOUtils.cpp \
+      --replace '#include "nspr/prio.h"'          '#include "prio.h"' \
+      --replace '#include "nspr/private/pprio.h"' '#include "private/pprio.h"' \
+      --replace '#include "nspr/prtypes.h"'       '#include "prtypes.h"'
   '';
 
   nativeBuildInputs =
     [
       autoconf213
-      cargo
+      cargo_pkg
       gnused
       llvmPackages.llvm # llvm-objdump
       nodejs
@@ -173,7 +183,7 @@ stdenv.mkDerivation ({
       python2
       python3
       rust-cbindgen_pkg
-      rustc
+      rustc_pkg
       which
     ]
     ++ lib.optional gtk3Support wrapGAppsHook
@@ -307,7 +317,7 @@ stdenv.mkDerivation ({
     version = ffversion;
     isFirefox3Like = true;
     gtk = gtk2;
-    inherit nspr;
+    nspr = nspr_pkg;
     inherit ffmpegSupport;
     inherit gssSupport;
     inherit execdir;
