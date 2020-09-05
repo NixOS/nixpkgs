@@ -48,8 +48,7 @@ stdenv.mkDerivation rec {
   stdenv.lib.optionals (udev != null) [
     "--enable-udev_rules"
     "--enable-udev_sync"
-    # TODO: somehow override the systemd version check?
-    #"--enable-udev-systemd-background-jobs"
+    "--enable-udev-systemd-background-jobs"
   ];
 
   preConfigure = ''
@@ -63,6 +62,15 @@ stdenv.mkDerivation rec {
 
     substituteInPlace make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
     substituteInPlace libdm/make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
+  ''
+  # Fake systemd presence; otherwise we can't --enable-udev-systemd-background-jobs
+  + stdenv.lib.optionalString (udev != null) ''
+    cat >systemd.pc <<-EOF
+      Name: systemd
+      Description: fake systemd
+      Version: ${udev.version}
+    EOF
+    PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$(pwd)"
   '';
 
   postConfigure = ''
