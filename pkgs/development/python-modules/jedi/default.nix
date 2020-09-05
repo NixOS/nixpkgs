@@ -1,23 +1,22 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, glibcLocales, tox, pytestcov, parso }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, fetchPypi, pytest, glibcLocales, tox, pytestcov, parso }:
 
 buildPythonPackage rec {
   pname = "jedi";
-  version = "0.17.2";
+  # switch back to stable version on the next release.
+  # current stable is incompatible with parso
+  version = "2020-08-06";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "86ed7d9b750603e4ba582ea8edc678657fb4007894a12bcf6f4bb97892f31d20";
+  src = fetchFromGitHub {
+    owner = "davidhalter";
+    repo = "jedi";
+    rev = "216f976fd5cab7a460e5d287e853d11759251e52";
+    sha256 = "1kb2ajzigadl95pnwglg8fxz9cvpg9hx30hqqj91jkgrc7djdldj";
+    fetchSubmodules = true;
   };
 
   checkInputs = [ pytest glibcLocales tox pytestcov ];
 
   propagatedBuildInputs = [ parso ];
-
-  # remove next bump, >=0.17.2, already fixed in master
-  prePatch = ''
-    substituteInPlace requirements.txt \
-      --replace "parso>=0.7.0,<0.8.0" "parso"
-  '';
 
   checkPhase = ''
     LC_ALL="en_US.UTF-8" py.test test
