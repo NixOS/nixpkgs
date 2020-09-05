@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     description = "The Mint-Y icon theme";
     license = licenses.gpl3; # from debian/copyright
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }

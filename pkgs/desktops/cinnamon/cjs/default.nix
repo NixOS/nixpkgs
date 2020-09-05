@@ -83,6 +83,6 @@ stdenv.mkDerivation rec {
      mpl11
    ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }

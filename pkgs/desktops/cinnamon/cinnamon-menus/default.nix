@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     description = "A menu system for the Cinnamon project";
     license = [ licenses.gpl2 licenses.lgpl2 ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }
