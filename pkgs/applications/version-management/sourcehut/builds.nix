@@ -11,8 +11,6 @@ let
     pname = "builds-sr-ht-worker";
 
     vendorSha256 = "1sbcjp93gb0c4p7dd1gjhmhwr1pygxvrrzp954j2fvxvi38w6571";
-
-    doCheck = false;
   };
 in buildPythonPackage rec {
   inherit version;
