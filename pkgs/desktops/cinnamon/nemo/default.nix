@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     description = "File browser for Cinnamon";
     license = [ licenses.gpl2 licenses.lgpl2 ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }
