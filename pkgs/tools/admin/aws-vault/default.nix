@@ -1,16 +1,16 @@
 { buildGoModule, lib, fetchFromGitHub }:
 buildGoModule rec {
   pname = "aws-vault";
-  version = "5.4.4";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "99designs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0qmxq2jd7dg5fp9giw6xd96q2l2df3sxksc0rwmrgx2rjx6iyivn";
+    sha256 = "0ssm58ksk5jb28w1ipa57spzf6wixjy1m7flw61ls8k86cy7qb7c";
   };
 
-  vendorSha256 = "0jlraq480llamns6yw8yjkzxsndyqiyzy120djni8sw5h0bz65j7";
+  vendorSha256 = "0lxm7nkzf9j9id7m46gqn26prb1jfl34gy1fycr0578absdvsrjd";
 
   doCheck = false;
 
