@@ -20157,6 +20157,8 @@ in
 
   inherit (gnome3) empathy;
 
+  emulsion = callPackage ../applications/graphics/emulsion { };
+
   enhanced-ctorrent = callPackage ../applications/networking/enhanced-ctorrent { };
 
   envelope = callPackage ../applications/office/envelope { };
