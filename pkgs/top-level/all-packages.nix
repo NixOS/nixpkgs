@@ -25495,13 +25495,11 @@ in
     plasma-workspace-wallpapers polkit-kde-agent powerdevil sddm-kcm
     systemsettings user-manager xdg-desktop-portal-kde;
 
-  plasma-applet-caffeine-plus = libsForQt5.callPackage ../desktops/plasma-5/addons/caffeine-plus.nix { };
-
-  kwin-dynamic-workspaces = libsForQt5.callPackage ../desktops/plasma-5/kwin/scripts/dynamic-workspaces.nix { };
-
-  kwin-tiling = libsForQt5.callPackage ../desktops/plasma-5/kwin/scripts/tiling.nix { };
-
-  krohnkite = libsForQt5.callPackage ../desktops/plasma-5/kwin/scripts/krohnkite.nix { };
+  inherit (plasma5.thirdParty)
+    plasma-applet-caffeine-plus
+    kwin-dynamic-workspaces
+    kwin-tiling
+    krohnkite;
 
   ### SCIENCE
 
