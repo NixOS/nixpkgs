@@ -4,6 +4,7 @@
 , pkg-config
 , libjpeg
 , libpng
+, jbigkit
 , flex
 , zlib
 , perl
@@ -40,6 +41,7 @@ stdenv.mkDerivation {
     libjpeg
     libxml2
     libtiff
+    jbigkit
   ] ++ lib.optional enableX11 libX11;
 
   enableParallelBuilding = true;
@@ -63,6 +65,9 @@ stdenv.mkDerivation {
     echo "TIFFLIB_NEEDS_JPEG = N" >> config.mk
     echo "TIFFLIB_NEEDS_Z = N" >> config.mk
     echo "JPEGLIB = libjpeg.so" >> config.mk
+    echo "JBIGLIB = libjbig.a" >> config.mk
+    # Insecure
+    echo "JASPERLIB = NONE" >> config.mk
 
     # Fix path to rgb.txt
     echo "RGB_DB_PATH = $out/share/netpbm/misc/rgb.txt" >> config.mk
