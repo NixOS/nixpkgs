@@ -7,13 +7,13 @@ let
     sha256 = "15hkcbs328d3rc1s14rmky8lh8d3rr86l8k0bia0ggxzwl23lj9c";
   };
   source = rec {
-    version = "v2.1.1";
+    version = "v2.3.0";
     name = "peertube-${version}";
     src = fetchFromGitHub {
       owner = "Chocobozzz";
       repo = "PeerTube";
-      rev = "76f7b571c04c03ba422bd5790944fe80dbb24067";
-      sha256 = "147gm1j657fkpv2ix1bmkhl7ld5h224q7hgdj9ffj3z14mqgk8hj";
+      rev = version;
+      sha256 = "1si4adhdd7c4avgm9qvva2f77x2bmfq0gx5ibnhlxr9bsc8s4ran";
       fetchSubmodules = true;
     };
   };
