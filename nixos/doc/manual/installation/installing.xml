@@ -73,7 +73,7 @@
     can use activated SSH daemon. You need to copy your ssh key to either
     <literal>/home/nixos/.ssh/authorized_keys</literal> or
     <literal>/root/.ssh/authorized_keys</literal> (Tip: For installers with a
-    modifyable filesystem such as the sd-card installer image a key can be be manual
+    modifiable filesystem such as the sd-card installer image a key can be be manually
     placed by mounting the image on a different machine). Alternatively you must set
     a password for either <literal>root</literal> or <literal>nixos</literal> with
     <command>passwd</command> to be able to login.
