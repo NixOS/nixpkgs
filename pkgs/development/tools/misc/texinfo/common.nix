@@ -1,6 +1,6 @@
 { version, sha256 }:
 
-{ stdenv, buildPackages, fetchurl, perl, xz
+{ stdenv, buildPackages, fetchurl, perl, xz, gettext
 
 # we are a dependency of gcc, this simplifies bootstraping
 , interactive ? false, ncurses, procps
@@ -39,6 +39,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ xz.bin ]
     ++ optionals stdenv.isSunOS [ libiconv gawk ]
+    ++ optionals stdenv.isDarwin [ gettext ]
     ++ optional interactive ncurses;
 
   configureFlags = [ "PERL=${buildPackages.perl}/bin/perl" ]
