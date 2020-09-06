@@ -32,10 +32,10 @@ let
     CONFIG_FEATURE_WTMP n
   '';
 
-  debianName = "busybox_1.30.1-5";
+  debianName = "busybox_1.30.1-6";
   debianTarball = fetchzip {
     url = "http://deb.debian.org/debian/pool/main/b/busybox/${debianName}.debian.tar.xz";
-    sha256 = "03m4rvs2pd0hj0mdkdm3r4m1gh0bgwr0cvnqds297xnkfi5s01nx";
+    sha256 = "05n6mxc8n4zsli4dijrr2x5c9ggwi223i5za4n0xwhgd4lkhqymw";
   };
   debianDispatcherScript = "${debianTarball}/tree/udhcpc/etc/udhcpc/default.script";
   outDispatchPath = "$out/default.script";
