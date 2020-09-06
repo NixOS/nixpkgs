@@ -12,4 +12,7 @@ mkDerivation {
   patches = [ ./0001-qdiriterator-follow-symlinks.patch ];
   outputs = [ "out" "dev" ];
   outputBin = "dev";
+  postInstall = ''
+    moveToOutput ''${qtPluginPrefix:?}/designer/kconfigwidgets5widgets.so "$out"
+  '';
 }
