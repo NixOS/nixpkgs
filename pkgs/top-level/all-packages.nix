@@ -7637,6 +7637,8 @@ in
 
   verilog = callPackage ../applications/science/electronics/verilog {};
 
+  vgrep = callPackage ../tools/text/vgrep { };
+
   vhd2vl = callPackage ../applications/science/electronics/vhd2vl { };
 
   video2midi = callPackage ../tools/audio/video2midi {
