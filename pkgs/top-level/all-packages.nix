@@ -121,7 +121,9 @@ in
   autoPatchelfHook = makeSetupHook { name = "auto-patchelf-hook"; }
     ../build-support/setup-hooks/auto-patchelf.sh;
 
-  appimageTools = callPackage ../build-support/appimage { };
+  appimageTools = callPackage ../build-support/appimage {
+    buildFHSUserEnv = buildFHSUserEnvBubblewrap;
+  };
 
   appindicator-sharp = callPackage ../development/libraries/appindicator-sharp { };
 
