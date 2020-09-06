@@ -11744,8 +11744,6 @@ in
 
   appstream-glib = callPackage ../development/libraries/appstream-glib { };
 
-  appstream-qt = libsForQt5.callPackage ../development/libraries/appstream/qt.nix { };
-
   apr = callPackage ../development/libraries/apr { };
 
   aprutil = callPackage ../development/libraries/apr-util {
@@ -14900,6 +14898,8 @@ in
     accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
     alkimia = callPackage ../development/libraries/alkimia { };
+
+    appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
 
     fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
 
