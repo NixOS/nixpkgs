@@ -1,6 +1,7 @@
 { stdenv
 , buildGoModule
 , fetchFromGitHub
+, go-md2man
 , installShellFiles
 , pkg-config
 , gpgme
@@ -13,13 +14,13 @@
 
 buildGoModule rec {
   pname = "buildah";
-  version = "1.15.2";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
-    rev = "v${version}";
-    sha256 = "13kqcdrdzkbg6h5za6hhkzdx4nbrg5yl97ydj2hfcakl00q4y0dp";
+    rev = "V${version}";
+    sha256 = "0z9fblxm3pk2jqw7h36clmj8k4k39n6ab536lyh0rp6p7hz5a988";
   };
 
   outputs = [ "out" "man" ];
@@ -28,7 +29,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [ go-md2man installShellFiles pkg-config ];
 
   buildInputs = [
     btrfs-progs
@@ -41,12 +42,12 @@ buildGoModule rec {
 
   buildPhase = ''
     patchShebangs .
-    make GIT_COMMIT="unknown"
-    make -C docs
+    make bin/buildah GIT_COMMIT="unknown"
+    make -C docs GOMD2MAN="${go-md2man}/bin/go-md2man"
   '';
 
   installPhase = ''
-    install -Dm755 buildah $out/bin/buildah
+    install -Dm755 bin/buildah $out/bin/buildah
     installShellCompletion --bash contrib/completions/bash/buildah
     make -C docs install PREFIX="$man"
   '';
