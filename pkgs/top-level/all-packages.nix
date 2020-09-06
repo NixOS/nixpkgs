@@ -4959,6 +4959,8 @@ in
 
   minergate-cli = callPackage ../applications/misc/minergate-cli { };
 
+  minica = callPackage ../tools/security/minica { };
+
   minidlna = callPackage ../tools/networking/minidlna { };
 
   minisign = callPackage ../tools/security/minisign { };
