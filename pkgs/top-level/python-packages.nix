@@ -5360,6 +5360,8 @@ in {
 
   pysqlite = callPackage ../development/python-modules/pysqlite { };
 
+  pysqueezebox = callPackage ../development/python-modules/pysqueezebox { };
+
   pysrim = callPackage ../development/python-modules/pysrim { };
 
   pysrt = callPackage ../development/python-modules/pysrt { };
@@ -7544,6 +7546,8 @@ in {
   yattag = callPackage ../development/python-modules/yattag { };
 
   ydiff = callPackage ../development/python-modules/ydiff { };
+
+  yeelight = callPackage ../development/python-modules/yeelight { };
 
   yenc = callPackage ../development/python-modules/yenc { };
 
