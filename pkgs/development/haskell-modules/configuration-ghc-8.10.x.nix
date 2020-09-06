@@ -76,6 +76,16 @@ self: super: {
   singletons = self.singletons_2_7;
   th-desugar = self.th-desugar_1_11;
 
+  insert-ordered-containers = super.insert-ordered-containers.override {
+    optics-core = self.optics-core_0_3_0_1;
+    optics-extra = self.optics-extra_0_3.override {
+      optics-core = self.optics-core_0_3_0_1;
+    };
+  };
+
+  # Jailbreaking because monoidal-containers hasn‘t bumped it's base dependency for 8.10.
+  monoidal-containers = doJailbreak super.monoidal-containers;
+
   # `ghc-lib-parser-ex` (see conditionals in its `.cabal` file) does not need
   # the `ghc-lib-parser` dependency on GHC >= 8.8. However, because we have
   # multiple verions of `ghc-lib-parser(-ex)` available, and the default ones
@@ -118,11 +128,5 @@ self: super: {
       # executable is allowed for ghc >= 8.10 and needs repline
       executableHaskellDepends = drv.executableToolDepends or [] ++ [ self.repline ];
     }));
-
-  # We want the latest version of Pandoc.
-  pandoc = self.pandoc_2_10_1;
-  pandoc-citeproc = self.pandoc-citeproc_0_17_0_2;
-  pandoc-plot = self.pandoc-plot_0_9_2_0;
-  pandoc-types = self.pandoc-types_1_21;
 
 }

@@ -371,8 +371,8 @@
   })
   (fetchNuGet {
     name = "Microsoft.Diagnostics.Runtime";
-    version = "2.0.137201";
-    sha256 = "0cfsd8nn6y30bqzx1pf9xi29jnxap1fgk720zdpz93kqzqv8r0vc";
+    version = "2.0.142701";
+    sha256 = "114ivn09zlxkna78hyxa3h40k5iaivapws755i0aiys7nxhdn3mw";
   })
   (fetchNuGet {
     name = "Microsoft.DotNet.PlatformAbstractions";
@@ -586,8 +586,8 @@
   })
   (fetchNuGet {
     name = "ppy.osu.Framework";
-    version = "2020.819.0";
-    sha256 = "1ghbbwpjjl0dp6gs1638v880hr7wwrn2jklqwbbckpx8g57bnq2m";
+    version = "2020.903.0";
+    sha256 = "0g15yw8c21m2g0lpca4f519dgj2phccz15nqdbaq49736akr4qzm";
   })
   (fetchNuGet {
     name = "ppy.osu.Framework.NativeLibs";
@@ -596,8 +596,8 @@
   })
   (fetchNuGet {
     name = "ppy.osu.Game.Resources";
-    version = "2020.812.0";
-    sha256 = "0fsg47bsffvk16clwwwav4yly1ykn09pyap46dvdmsxhjrzkvzb7";
+    version = "2020.903.0";
+    sha256 = "0f94kms4xyjl9xwf26j6n6k5zfbx61a6bkd3vljfmbmr88advssy";
   })
   (fetchNuGet {
     name = "ppy.osuTK.NS20";
@@ -721,8 +721,8 @@
   })
   (fetchNuGet {
     name = "Sentry";
-    version = "2.1.5";
-    sha256 = "094rhsn5rfk7f2ygk6jgv3cq01gv3a8lnqa85l593ys3957j0qhs";
+    version = "2.1.6";
+    sha256 = "0vc45p1arxwifv5fb6lzkqqxlsvm4i0xmpq2vc73vbjqzydd2phm";
   })
   (fetchNuGet {
     name = "Sentry.PlatformAbstractions";
@@ -731,8 +731,8 @@
   })
   (fetchNuGet {
     name = "Sentry.Protocol";
-    version = "2.1.5";
-    sha256 = "1yjgn6na14rr6crmm886x597h9gdjyasgxx3n9m3zn7ig8726mpg";
+    version = "2.1.6";
+    sha256 = "0qc18kc9d7f0s6hmnpji3sbz0z09kdgg4fwh55rrmpfgr3w851s7";
   })
   (fetchNuGet {
     name = "SharpCompress";

@@ -1059,6 +1059,12 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
       removed, as it depends on libraries from deepin.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       The <literal>opendkim</literal> module now uses systemd sandboxing features
+       to limit the exposure of the system towards the opendkim service.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>

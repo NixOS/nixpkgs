@@ -11,11 +11,11 @@
 }:
 mkDerivation {
   pname = "haskell-language-server";
-  version = "0.3.0.0";
+  version = "0.4.0.0";
   src = fetchgit {
     url = "https://github.com/haskell/haskell-language-server.git";
-    sha256 = "0gh3sgy6a08d8d3q6r2qn5r817ilzka2qkp0g0y6wsx7rjwag0yx";
-    rev = "23dda97f583e8ff39993b89c01bbd1ac24187605";
+    sha256 = "157bsq6i824bl6krw7znp0byd8ibaqsq7mfwnkl741dmrflsxpa9";
+    rev = "cb861b878ae01911b066182ff0d8080050c3b2d6";
     fetchSubmodules = true;
   };
   isLibrary = true;

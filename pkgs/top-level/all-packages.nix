@@ -4904,11 +4904,6 @@ in
 
   kippo = callPackage ../servers/kippo { };
 
-  kimg = callPackage ../development/tools/misc/kimg {
-    asciidoc = asciidoc-full;
-    imagemagick = imagemagick7Big;
-  };
-
   kristall = libsForQt5.callPackage ../applications/networking/browsers/kristall { };
 
   kzipmix = pkgsi686Linux.callPackage ../tools/compression/kzipmix { };
@@ -7619,6 +7614,8 @@ in
 
   vbetool = callPackage ../tools/system/vbetool { };
 
+  vcsi = callPackage ../tools/video/vcsi { };
+
   vde2 = callPackage ../tools/networking/vde2 { };
 
   vboot_reference = callPackage ../tools/system/vboot_reference {};
@@ -9271,7 +9268,20 @@ in
 
   jwasm =  callPackage ../development/compilers/jwasm { };
 
-  knightos-kcc = callPackage ../development/compilers/kcc { };
+  knightos-kcc = callPackage ../development/tools/knightos/kcc { };
+
+  knightos-kimg = callPackage ../development/tools/knightos/kimg {
+    asciidoc = asciidoc-full;
+    imagemagick = imagemagick7Big;
+  };
+
+  knightos-kpack = callPackage ../development/tools/knightos/kpack { };
+
+  knightos-mkrom = callPackage ../development/tools/knightos/mkrom {
+    asciidoc = asciidoc-full;
+  };
+
+  knightos-scas = callPackage ../development/tools/knightos/scas { };
 
   kotlin = callPackage ../development/compilers/kotlin { };
 
@@ -9665,8 +9675,6 @@ in
   scala_2_12 = callPackage ../development/compilers/scala/2.12.nix { jre = jre8; };
   scala_2_13 = callPackage ../development/compilers/scala/2.13.nix { jre = jre8; };
   scala = scala_2_13;
-
-  scas = callPackage ../development/compilers/scas { };
 
   metal = callPackage ../development/libraries/metal { };
   metals = callPackage ../development/tools/metals { };
@@ -11104,8 +11112,6 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  kpack = callPackage ../development/tools/misc/kpack { };
-
   kustomize = callPackage ../development/tools/kustomize { };
 
   ktlint = callPackage ../development/tools/ktlint { };
@@ -11177,10 +11183,6 @@ in
   mk = callPackage ../development/tools/build-managers/mk { };
 
   mkcert = callPackage ../development/tools/misc/mkcert { };
-
-  mkrom = callPackage ../development/tools/misc/mkrom {
-    asciidoc = asciidoc-full;
-  };
 
   mkdocs = callPackage ../development/tools/documentation/mkdocs { };
 
@@ -11507,6 +11509,8 @@ in
 
   svlint = callPackage ../development/tools/analysis/svlint { };
 
+  svls = callPackage ../development/tools/misc/svls { };
+
   swarm = callPackage ../development/tools/analysis/swarm { };
 
   swiftformat = callPackage ../development/tools/swiftformat { };
@@ -11544,8 +11548,10 @@ in
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo4 = texinfo413;
   texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
+  texinfo6_5 = callPackage ../development/tools/misc/texinfo/6.5.nix { };
   texinfo6 = callPackage ../development/tools/misc/texinfo/6.7.nix { };
-  texinfo = texinfo6;
+  # Temporarily use older version on Darwin until it works.
+  texinfo = if stdenv.isDarwin then texinfo6_5 else texinfo6;
   texinfoInteractive = appendToName "interactive" (
     texinfo.override { interactive = true; }
   );
@@ -12956,6 +12962,8 @@ in
   };
 
   isocodes = callPackage ../development/libraries/iso-codes { };
+
+  iso-flags = callPackage ../data/icons/iso-flags { };
 
   ispc = callPackage ../development/compilers/ispc {
     stdenv = llvmPackages_10.stdenv;
@@ -16315,17 +16323,9 @@ in
 
   hashi-ui = callPackage ../servers/hashi-ui {};
 
-  /* This package duplicates a lot of functionality from haskellPackages
-     instead of using the packages we maintain there. Now, a recent update to
-     haskellPackages causes these tools to fail evaluation, and I have been
-     unable to mark them as "broken" in a way that ofBorg bot recognizes. Since
-     I don't want to merge code into master that generates evaluation errors, I
-     have no other idea but to comment them out entirely.
+  hasura-graphql-engine = haskellPackages.graphql-engine;
 
-  inherit (callPackage ../servers/hasura { })
-    hasura-cli
-    hasura-graphql-engine;
-   */
+  hasura-cli = callPackage ../servers/hasura/cli.nix { };
 
   heapster = callPackage ../servers/monitoring/heapster { };
 
@@ -19720,7 +19720,7 @@ in
 
   catimg = callPackage ../tools/misc/catimg { };
 
-  catt = python3Packages.callPackage ../applications/video/catt { };
+  catt = callPackage ../applications/video/catt { };
 
   cava = callPackage ../applications/audio/cava { };
 
@@ -20914,8 +20914,8 @@ in
 
   hugo = callPackage ../applications/misc/hugo { };
 
-  hydrogen = callPackage ../applications/audio/hydrogen { };
-  hydrogen-unstable = qt5.callPackage ../applications/audio/hydrogen/unstable.nix { };
+  hydrogen = qt5.callPackage ../applications/audio/hydrogen { };
+  hydrogen_0 = callPackage ../applications/audio/hydrogen/0.nix { }; # Old stable, has GMKit.
 
   hydroxide = callPackage ../applications/networking/hydroxide { };
 
