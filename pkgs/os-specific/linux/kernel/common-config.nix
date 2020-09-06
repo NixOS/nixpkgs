@@ -244,6 +244,8 @@ let
       DRM_AMDGPU_SI = whenAtLeast "4.9" yes;
       # (stable) amdgpu support for bonaire and newer chipsets
       DRM_AMDGPU_CIK = whenAtLeast "4.9" yes;
+      # Allow device firmware updates
+      DRM_DP_AUX_CHARDEV = whenAtLeast "4.6" yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
       # Intel GVT-g graphics virtualization supports 64-bit only
       DRM_I915_GVT = whenAtLeast "4.16" yes;
