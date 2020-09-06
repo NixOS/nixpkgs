@@ -1,10 +1,12 @@
 # based on https://github.com/nim-lang/Nim/blob/v0.18.0/.travis.yml
 
-{ stdenv, lib, fetchurl, makeWrapper, openssl, pcre, readline,
-  boehmgc, sfml, sqlite }:
+{ stdenv, lib, fetchurl, makeWrapper, openssl, pcre, readline
+, boehmgc, sfml, sqlite
+, minimal ? false
+}:
 
 stdenv.mkDerivation rec {
-  pname = "nim";
+  pname = "nim" + lib.optionalString (!minimal) "-minimal";
   version = "1.2.6";
 
   src = fetchurl {
@@ -14,7 +16,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_LDFLAGS = "-lcrypto -lpcre -lreadline -lgc -lsqlite3";
+  NIX_LDFLAGS = toString(lib.optionals (!minimal) [
+    "-lcrypto"
+    "-lgc"
+    "-lpcre"
+    "-lreadline"
+    "-lsqlite3"
+  ]);
 
   # we could create a separate derivation for the "written in c" version of nim
   # used for bootstrapping, but koch insists on moving the nim compiler around
@@ -24,8 +32,13 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [
-    openssl pcre readline boehmgc sfml sqlite
+  buildInputs = lib.optionals (!minimal) [
+    pcre
+    readline
+    boehmgc
+    openssl
+    sfml
+    sqlite
   ];
 
   buildPhase = ''
@@ -63,7 +76,7 @@ stdenv.mkDerivation rec {
     description = "Statically typed, imperative programming language";
     homepage = "https://nim-lang.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ehmry ];
+    maintainers = with maintainers; [ ehmry ] ++ lib.optionals (!minimal) [ fridh ];
     platforms = with platforms; linux ++ darwin; # arbitrary
   };
 }
