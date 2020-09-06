@@ -1,0 +1,29 @@
+diff --git a/mailpile/crypto/gpgi.py b/mailpile/crypto/gpgi.py
+index fbe061ef..c5ed12a0 100644
+--- a/mailpile/crypto/gpgi.py
++++ b/mailpile/crypto/gpgi.py
+@@ -640,8 +640,8 @@ class GnuPG:
+ 
+         if version > (2, 1, 11):
+             binaries = mailpile.platforms.DetectBinaries()
+-            for which, setting in (('GnuPG/dm', 'dirmngr-program'),
+-                                   ('GnuPG/ga', 'agent-program')):
++            for which, setting in (('GnuPG_dm', 'dirmngr-program'),
++                                   ('GnuPG_ga', 'agent-program')):
+                 if which in binaries:
+                     args.insert(1, "--%s=%s" % (setting, binaries[which]))
+                 else:
+diff --git a/mailpile/platforms.py b/mailpile/platforms.py
+index b1e73d79..eff87fb1 100644
+--- a/mailpile/platforms.py
++++ b/mailpile/platforms.py
+@@ -17,8 +17,8 @@ BINARIES = {}
+ # they are available/working.
+ BINARIES_WANTED = {
+     'GnuPG':    ['gpg', '--version'],
+-    'GnuPG/dm': ['dirmngr', '--version'],
+-    'GnuPG/ga': ['gpg-agent', '--version'],
++    'GnuPG_dm': ['dirmngr', '--version'],
++    'GnuPG_ga': ['gpg-agent', '--version'],
+     'OpenSSL':  ['openssl', 'version'],
+     'Tor':      ['tor', '--version']}
