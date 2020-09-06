@@ -6876,6 +6876,8 @@ in {
 
   swagger-ui-bundle = callPackage ../development/python-modules/swagger-ui-bundle { };
 
+  swspotify = callPackage ../development/python-modules/swspotify { };
+
   sybil = callPackage ../development/python-modules/sybil { };
 
   symengine = callPackage ../development/python-modules/symengine { symengine = pkgs.symengine; };
