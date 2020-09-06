@@ -410,6 +410,7 @@
   ./services/mail/postsrsd.nix
   ./services/mail/postgrey.nix
   ./services/mail/spamassassin.nix
+  ./services/mail/rainloop.nix
   ./services/mail/rspamd.nix
   ./services/mail/rss2email.nix
   ./services/mail/roundcube.nix
