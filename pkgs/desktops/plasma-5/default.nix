@@ -138,6 +138,14 @@ let
       systemsettings = callPackage ./systemsettings.nix {};
       user-manager = callPackage ./user-manager.nix {};
       xdg-desktop-portal-kde = callPackage ./xdg-desktop-portal-kde.nix {};
+
+      thirdParty = let inherit (libsForQt5) callPackage; in {
+        plasma-applet-caffeine-plus = callPackage ./3rdparty/addons/caffeine-plus.nix { };
+        kwin-dynamic-workspaces = callPackage ./3rdparty/kwin/scripts/dynamic-workspaces.nix { };
+        kwin-tiling = callPackage ./3rdparty/kwin/scripts/tiling.nix { };
+        krohnkite = callPackage ./3rdparty/kwin/scripts/krohnkite.nix { };
+      };
+
     };
 in
 lib.makeScope libsForQt5.newScope packages
