@@ -702,7 +702,7 @@ in
 
     services.qemuGuest.enable = cfg.qemu.guestAgent.enable;
 
-    system.build.vm = pkgs.runCommand "run-${config.system.name}-vm" { preferLocalBuild = true; }
+    system.build.vm = pkgs.runCommand "nixos-vm" { preferLocalBuild = true; }
       ''
         mkdir -p $out/bin
         ln -s ${config.system.build.toplevel} $out/system
