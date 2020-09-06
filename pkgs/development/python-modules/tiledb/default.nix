@@ -3,28 +3,31 @@
 , buildPythonPackage
 , fetchFromGitHub
 , cython
+, pybind11
 , tiledb
 , numpy
 , wheel
 , isPy3k
 , setuptools_scm
 , psutil
+, pandas
 }:
 
 buildPythonPackage rec {
   pname = "tiledb";
-  version = "0.5.6";
+  version = "0.6.6";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB-Py";
     rev = version;
-    sha256 = "0cgm4dhyqay26xmrzlv21ha8qh55m4q3yr338lrv81ngz77zxsvw";
+    sha256 = "0b2kn1xyf7d994kz29dpqiaf8yzvx0axw4yqi854c54pl22ddgzl";
   };
 
   nativeBuildInputs = [
     cython
+    pybind11
     setuptools_scm
   ];
 
@@ -39,6 +42,8 @@ buildPythonPackage rec {
 
   checkInputs = [
     psutil
+    # optional
+    pandas
   ];
 
   TILEDB_PATH = tiledb;
@@ -57,16 +62,19 @@ buildPythonPackage rec {
       "test_docs" "dont_test_docs"
     # these tests don't always fail
     substituteInPlace tiledb/tests/test_libtiledb.py --replace \
-      "test_varlen_write_int_subarray" "dont_test_varlen_write_int_subarray"
+      "test_varlen_write_int_subarray" "dont_test_varlen_write_int_subarray" \
+      --replace "test_memory_cleanup" "dont_test_memory_cleanup" \
+      --replace "test_ctx_thread_cleanup" "dont_test_ctx_thread_cleanup"
     substituteInPlace tiledb/tests/test_metadata.py --replace \
       "test_metadata_consecutive" "dont_test_metadata_consecutive"
   '';
 
   checkPhase = ''
-    pushd "$out"
+    pushd "$TMPDIR"
     ${python.interpreter} -m unittest tiledb.tests.all.suite_test
     popd
   '';
+  pythonImportsCheck = [ "tiledb" ];
 
   meta = with lib; {
     description = "Python interface to the TileDB storage manager";
