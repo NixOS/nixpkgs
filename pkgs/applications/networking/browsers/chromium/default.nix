@@ -67,7 +67,7 @@ let
   pkgSuffix = if channel == "dev" then "unstable" else channel;
   pkgName = "google-chrome-${pkgSuffix}";
   chromeSrc = fetchurl {
-    url = map (repo: "${repo}/${pkgName}/${pkgName}_${version}-1_amd64.deb") [
+    urls = map (repo: "${repo}/${pkgName}/${pkgName}_${version}-1_amd64.deb") [
       "https://dl.google.com/linux/chrome/deb/pool/main/g"
       "http://95.31.35.30/chrome/pool/main/g"
       "http://mirror.pcbeta.com/google/chrome/deb/pool/main/g"
