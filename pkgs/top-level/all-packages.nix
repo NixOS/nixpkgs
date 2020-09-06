@@ -4904,11 +4904,6 @@ in
 
   kippo = callPackage ../servers/kippo { };
 
-  kimg = callPackage ../development/tools/misc/kimg {
-    asciidoc = asciidoc-full;
-    imagemagick = imagemagick7Big;
-  };
-
   kristall = libsForQt5.callPackage ../applications/networking/browsers/kristall { };
 
   kzipmix = pkgsi686Linux.callPackage ../tools/compression/kzipmix { };
@@ -7619,6 +7614,8 @@ in
 
   vbetool = callPackage ../tools/system/vbetool { };
 
+  vcsi = callPackage ../tools/video/vcsi { };
+
   vde2 = callPackage ../tools/networking/vde2 { };
 
   vboot_reference = callPackage ../tools/system/vboot_reference {};
@@ -9271,7 +9268,20 @@ in
 
   jwasm =  callPackage ../development/compilers/jwasm { };
 
-  knightos-kcc = callPackage ../development/compilers/kcc { };
+  knightos-kcc = callPackage ../development/tools/knightos/kcc { };
+
+  knightos-kimg = callPackage ../development/tools/knightos/kimg {
+    asciidoc = asciidoc-full;
+    imagemagick = imagemagick7Big;
+  };
+
+  knightos-kpack = callPackage ../development/tools/knightos/kpack { };
+
+  knightos-mkrom = callPackage ../development/tools/knightos/mkrom {
+    asciidoc = asciidoc-full;
+  };
+
+  knightos-scas = callPackage ../development/tools/knightos/scas { };
 
   kotlin = callPackage ../development/compilers/kotlin { };
 
@@ -9665,8 +9675,6 @@ in
   scala_2_12 = callPackage ../development/compilers/scala/2.12.nix { jre = jre8; };
   scala_2_13 = callPackage ../development/compilers/scala/2.13.nix { jre = jre8; };
   scala = scala_2_13;
-
-  scas = callPackage ../development/compilers/scas { };
 
   metal = callPackage ../development/libraries/metal { };
   metals = callPackage ../development/tools/metals { };
@@ -11104,8 +11112,6 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  kpack = callPackage ../development/tools/misc/kpack { };
-
   kustomize = callPackage ../development/tools/kustomize { };
 
   ktlint = callPackage ../development/tools/ktlint { };
@@ -11177,10 +11183,6 @@ in
   mk = callPackage ../development/tools/build-managers/mk { };
 
   mkcert = callPackage ../development/tools/misc/mkcert { };
-
-  mkrom = callPackage ../development/tools/misc/mkrom {
-    asciidoc = asciidoc-full;
-  };
 
   mkdocs = callPackage ../development/tools/documentation/mkdocs { };
 
@@ -12960,6 +12962,8 @@ in
   };
 
   isocodes = callPackage ../development/libraries/iso-codes { };
+
+  iso-flags = callPackage ../data/icons/iso-flags { };
 
   ispc = callPackage ../development/compilers/ispc {
     stdenv = llvmPackages_10.stdenv;

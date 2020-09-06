@@ -286,6 +286,8 @@ let
 
     farfadet = callPackage ../development/ocaml-modules/farfadet { };
 
+    fdkaac = callPackage ../development/ocaml-modules/fdkaac { };
+
     fiat-p256 = callPackage ../development/ocaml-modules/fiat-p256 { };
 
     fieldslib_p4 = callPackage ../development/ocaml-modules/fieldslib { };
@@ -913,6 +915,10 @@ let
     spelll = callPackage ../development/ocaml-modules/spelll { };
 
     sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
+
+    srt = callPackage ../development/ocaml-modules/srt {
+      inherit (pkgs) srt;
+    };
 
     ssl = callPackage ../development/ocaml-modules/ssl { };
 

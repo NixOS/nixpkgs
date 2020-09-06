@@ -5,6 +5,8 @@
 # and is formatted with black.
 import fileinput
 import json
+import xml.etree.ElementTree as ET
+from urllib.parse import urlparse
 import re
 import subprocess
 import tempfile
@@ -30,10 +32,20 @@ def prefetch_github(owner: str, repo: str, ref: str) -> str:
 
 
 def get_radare2_rev() -> str:
-    url = "https://api.github.com/repos/radare/radare2/releases/latest"
-    with urllib.request.urlopen(url) as response:
-        release = json.load(response)  # type: ignore
-    return release["tag_name"]
+    feed_url = "http://github.com/radareorg/radare2/releases.atom"
+    with urllib.request.urlopen(feed_url) as resp:
+        tree = ET.fromstring(resp.read())
+    releases = tree.findall(".//{http://www.w3.org/2005/Atom}entry")
+    for release in releases:
+        link = release.find("{http://www.w3.org/2005/Atom}link")
+        assert link is not None
+        url = urlparse(link.attrib["href"])
+        tag = url.path.split("/")[-1]
+        if re.match(r"[0-9.]+", tag):
+            return tag
+        else:
+            print(f"ignore {tag}")
+    raise RuntimeError(f"No release found at {feed_url}")
 
 
 def get_cutter_version() -> str:
