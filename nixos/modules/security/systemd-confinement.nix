@@ -135,7 +135,7 @@ in {
           ];
           execPkgs = lib.concatMap (opt: let
             isSet = config.serviceConfig ? ${opt};
-          in lib.optional isSet config.serviceConfig.${opt}) execOpts;
+          in lib.flatten (lib.optional isSet config.serviceConfig.${opt})) execOpts;
           unitAttrs = toplevelConfig.systemd.units."${name}.service";
           allPkgs = lib.singleton (builtins.toJSON unitAttrs);
           unitPkgs = if fullUnit then allPkgs else execPkgs;
