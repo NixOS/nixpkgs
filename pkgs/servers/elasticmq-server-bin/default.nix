@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "elasticmq-server";
-  version = "0.14.6";
+  version = "0.15.7";
 
   src = fetchurl {
     url = "https://s3-eu-west-1.amazonaws.com/softwaremill-public/${pname}-${version}.jar";
-    sha256 = "1cp2pmkc6gx7gr6109jlcphlky5rr6s1wj528r6hyhzdc01sjhhz";
+    sha256 = "01jmb6rwh570f2y30b2if5fhcbpdnb2vkxylp9xa09c0x7a2vv4q";
   };
 
   # don't do anything?
