@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       homepage = "http://www.yafaray.org";
       maintainers = with maintainers; [ hodapp ];
       license = licenses.lgpl21;
-      platforms = platforms.linux;
+      platforms = [ "x86_64-linux" ];
     };
   }
 
