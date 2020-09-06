@@ -19,6 +19,12 @@ in
 
 {
 
+  imports = [
+    (mkRemovedOptionModule
+      [ "services" "dbus" "socketActivated" ]
+      "The user D-Bus is now always socket activated")
+  ];
+
   ###### interface
 
   options = {
@@ -49,14 +55,6 @@ in
           <filename><replaceable>pkg</replaceable>/etc/dbus-1/session.d</filename>
           <filename><replaceable>pkg</replaceable>/share/dbus-1/session.d</filename>
           <filename><replaceable>pkg</replaceable>/share/dbus-1/services</filename>
-        '';
-      };
-
-      socketActivated = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Make the user instance socket activated.
         '';
       };
     };
@@ -108,7 +106,7 @@ in
         reloadIfChanged = true;
         restartTriggers = [ configDir ];
       };
-      sockets.dbus.wantedBy = mkIf cfg.socketActivated [ "sockets.target" ];
+      sockets.dbus.wantedBy = [ "sockets.target" ];
     };
 
     environment.pathsToLink = [ "/etc/dbus-1" "/share/dbus-1" ];
