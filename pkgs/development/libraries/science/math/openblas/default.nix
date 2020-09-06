@@ -68,7 +68,6 @@ let
       BINARY = 64;
       TARGET = setTarget "ATHLON";
       DYNAMIC_ARCH = true;
-      NO_AVX512 = true;
       USE_OPENMP = !stdenv.hostPlatform.isMusl;
     };
   };
