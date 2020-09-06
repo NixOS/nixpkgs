@@ -59,7 +59,15 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+     If the <varname>services.dbus</varname> module is enabled, then
+     the user D-Bus session is now always socket activated. The
+     associated options <varname>services.dbus.socketActivated</varname>
+     and <varname>services.xserver.startDbusSession</varname> have
+     therefore been removed and you will receive a warning if
+     they are present in your configuration. This change makes the
+     user D-Bus session available also for non-graphical logins.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
