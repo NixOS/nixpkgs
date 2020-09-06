@@ -14949,6 +14949,8 @@ in
 
     phonon-backend-vlc = callPackage ../development/libraries/phonon/backends/vlc.nix { };
 
+    plasma-wayland-protocols = callPackage ../development/libraries/plasma-wayland-protocols { };
+
     polkit-qt = callPackage ../development/libraries/polkit-qt-1/qt-5.nix { };
 
     poppler = callPackage ../development/libraries/poppler {
@@ -22030,8 +22032,6 @@ in
   plank = callPackage ../applications/misc/plank { };
 
   planner = callPackage ../applications/office/planner { };
-
-  plasma-wayland-protocols = libsForQt5.callPackage ../development/libraries/plasma-wayland-protocols { };
 
   playonlinux = callPackage ../applications/misc/playonlinux {
      stdenv = stdenv_32bit;
