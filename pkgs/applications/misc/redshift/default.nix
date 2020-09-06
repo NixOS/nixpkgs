@@ -24,11 +24,6 @@ let
         ./575.patch
       ];
 
-      postPatch = stdenv.lib.optionalString (pname == "gammastep") ''
-        substituteInPlace configure.ac \
-          --replace "[gammastep], [2.0]" "[gammastep], [${version}]"
-      '';
-
       nativeBuildInputs = [
         autoconf
         automake
@@ -132,13 +127,13 @@ rec {
 
   gammastep = mkRedshift rec {
     pname = "gammastep";
-    version = "2.0.1";
+    version = "2.0.2";
 
     src = fetchFromGitLab {
       owner = "chinstrap";
       repo = pname;
       rev = "v${version}";
-      sha256 = "1ky4h892sg2mfbwwq5xv0vnjflsl2x3nsy5q456r1kyk1gwkj0rg";
+      sha256 = "09wqlz3yya955galhs20014qfwm2yk0lxhyqdsw8gwddvcpyprzg";
     };
 
     meta = redshift.meta // {
