@@ -5187,7 +5187,7 @@ in {
 
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix { inherit (pkgs) pkgconfig; };
 
-  pyqt5 = pkgs.libsForQt5.callPackage ../development/python-modules/pyqt/5.x.nix { pythonPackages = self; };
+  pyqt5 = pkgs.libsForQt514.callPackage ../development/python-modules/pyqt/5.x.nix { pythonPackages = self; };
 
   pyqt5_with_qtmultimedia = self.pyqt5.override { withMultimedia = true; };
 
@@ -5200,7 +5200,7 @@ in {
 
   pyqtgraph = callPackage ../development/python-modules/pyqtgraph { };
 
-  pyqtwebengine = pkgs.libsForQt5.callPackage ../development/python-modules/pyqtwebengine { pythonPackages = self; };
+  pyqtwebengine = pkgs.libsForQt514.callPackage ../development/python-modules/pyqtwebengine { pythonPackages = self; };
 
   pyquery = callPackage ../development/python-modules/pyquery { };
 
