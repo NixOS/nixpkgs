@@ -15,6 +15,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   cinnamon-common = callPackage ./cinnamon-common { };
   cinnamon-control-center = callPackage ./cinnamon-control-center { };
   cinnamon-desktop = callPackage ./cinnamon-desktop { };
+  cinnamon-gsettings-overrides = callPackage ./cinnamon-gsettings-overrides { };
   cinnamon-menus = callPackage ./cinnamon-menus { };
   cinnamon-translations = callPackage ./cinnamon-translations { };
   cinnamon-screensaver = callPackage ./cinnamon-screensaver { };
