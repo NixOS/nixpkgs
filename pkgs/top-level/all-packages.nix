@@ -23538,6 +23538,8 @@ in
 
   sunvox = callPackage ../applications/audio/sunvox { };
 
+  swaglyrics = callPackage ../tools/misc/swaglyrics { };
+
   swh_lv2 = callPackage ../applications/audio/swh-lv2 { };
 
   swift-im = libsForQt514.callPackage ../applications/networking/instant-messengers/swift-im {
