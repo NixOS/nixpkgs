@@ -1,4 +1,4 @@
-{ pkgs, makeScope, libsForQt5 }:
+{ pkgs, makeScope, libsForQt5, qt5 }:
 let
   packages = self: with self; {
 
@@ -60,7 +60,7 @@ let
       pkgs.lxmenu-data
       pkgs.menu-cache
       pkgs.openbox # default window manager
-      libsForQt5.qtsvg # provides QT5 plugins for svg icons
+      qt5.qtsvg # provides QT5 plugins for svg icons
     ];
 
     corePackages = [
