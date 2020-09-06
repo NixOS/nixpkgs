@@ -13939,6 +13939,8 @@ in
 
   libqalculate = callPackage ../development/libraries/libqalculate { };
 
+  libqt5pas = callPackage ../development/compilers/fpc/libqt5pas.nix { };
+
   libroxml = callPackage ../development/libraries/libroxml { };
 
   librsvg = callPackage ../development/libraries/librsvg { };
