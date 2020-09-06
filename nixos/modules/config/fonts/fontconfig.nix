@@ -198,10 +198,8 @@ let
     ln -s ${renderConf}       $dst/10-nixos-rendering.conf
 
     # 50-user.conf
-    # Since latest fontconfig looks for default files inside the package,
-    # we had to move this one elsewhere to be able to exclude it here.
-    ${optionalString cfg.includeUserConf ''
-    ln -s ${pkg.out}/etc/fonts/conf.d.bak/50-user.conf $dst/50-user.conf
+    ${optionalString (!cfg.includeUserConf) ''
+    rm $dst/50-user.conf
     ''}
 
     # local.conf (indirect priority 51)
