@@ -2814,6 +2814,8 @@ in {
 
   imgaug = callPackage ../development/python-modules/imgaug { };
 
+  imgsize = callPackage ../development/python-modules/imgsize { };
+
   immutables = callPackage ../development/python-modules/immutables { };
 
   impacket = callPackage ../development/python-modules/impacket { };
