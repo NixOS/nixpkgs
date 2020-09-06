@@ -1873,6 +1873,12 @@
     githubId = 1918;
     name = "David Anderson";
   };
+  dandellion = {
+    email = "daniel@dodsorf.as";
+    github = "dali99";
+    githubId = 990767;
+    name = "Daniel Olsen";
+  };
   danharaj = {
     email = "dan@obsidian.systems";
     github = "danharaj";
