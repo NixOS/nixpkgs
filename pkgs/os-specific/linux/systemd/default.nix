@@ -19,7 +19,34 @@
 
 let
   version = "246";
-in stdenv.mkDerivation {
+
+  libudev = systemd.overrideAttrs (_: {
+    pname = "libudev";
+
+    outputs = [ "out" "dev" ];
+
+    buildInputs =
+      [ linuxHeaders libcap curl.dev kmod xz pam acl
+        libuuid glib libgcrypt libgpgerror libidn2
+        pcre2 ] ++
+        stdenv.lib.optional withKexectools kexectools ++
+        stdenv.lib.optional withLibseccomp libseccomp ++
+      [ libffi audit lz4 bzip2 libapparmor
+        iptables gnu-efi
+      ] ++ stdenv.lib.optional withSelinux libselinux;
+
+    # We did a full build, but at least retain only the required results.
+    postInstall = ''
+      mv "$out" out-all
+      mv "$dev" dev-all
+      mkdir -p "$out"/lib "$dev"/include "$dev"/lib/pkgconfig
+      mv out-all/lib/libudev* "$out"/lib/
+      mv {dev-all,"$dev"}/include/libudev.h
+      mv {dev-all,"$dev"}/lib/pkgconfig/libudev.pc
+    '';
+  });
+
+systemd = stdenv.mkDerivation {
   inherit version;
   pname = "systemd";
 
@@ -79,15 +106,8 @@ in stdenv.mkDerivation {
 
       (buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]))
     ];
-  buildInputs =
-    [ linuxHeaders libcap curl.dev kmod xz pam acl
-      cryptsetup libuuid glib libgcrypt libgpgerror libidn2
-      pcre2 ] ++
-      stdenv.lib.optional withKexectools kexectools ++
-      stdenv.lib.optional withLibseccomp libseccomp ++
-    [ libffi audit lz4 bzip2 libapparmor
-      iptables gnu-efi
-    ] ++ stdenv.lib.optional withSelinux libselinux;
+
+  buildInputs = libudev.buildInputs ++ [ cryptsetup ];
 
   #dontAddPrefix = true;
 
@@ -265,6 +285,12 @@ in stdenv.mkDerivation {
 
     # "kernel-install" shouldn't be used on NixOS.
     find $out -name "*kernel-install*" -exec rm {} \;
+
+    # libudev deduplication
+    # TODO: instead of this, patch meson.build files to use libudev cleanly?
+    cp -sf '${libudev.out}'/lib/libudev.so.1.* "$out"/lib/
+    cp -sf '${libudev.dev}'/include/libudev.h "$dev"/include/
+    cp -sf '${libudev.dev}'/lib/pkgconfig/libudev.pc "$dev"/lib/pkgconfig/
   ''; # */
 
   enableParallelBuilding = true;
@@ -277,6 +303,8 @@ in stdenv.mkDerivation {
   # runtime; otherwise we can't and we need to reboot.
   passthru.interfaceVersion = 2;
 
+  passthru.libudev = libudev;
+
   meta = with stdenv.lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/systemd/";
     description = "A system and service manager for Linux";
@@ -286,3 +314,5 @@ in stdenv.mkDerivation {
     maintainers = with maintainers; [ andir eelco flokli ];
   };
 }
+;
+in systemd
