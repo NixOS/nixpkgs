@@ -20410,7 +20410,7 @@ in
   inherit (ocamlPackages) google-drive-ocamlfuse;
 
   google-musicmanager = callPackage ../applications/audio/google-musicmanager {
-    inherit (qt5) qtbase qtwebkit;
+    inherit (qt514) qtbase qtwebkit;
     # Downgrade to 1.34 to get libidn.so.11
     libidn = (libidn.overrideAttrs (oldAttrs: {
       src = fetchurl {
