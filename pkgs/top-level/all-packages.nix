@@ -15698,7 +15698,7 @@ in
     });
   };
 
-  vtkWithQt5 = vtk.override { qtLib = qt5; };
+  vtkWithQt5 = vtk.override { qtLib = qt514; };
 
   vxl = callPackage ../development/libraries/vxl {
     libpng = libpng12;
