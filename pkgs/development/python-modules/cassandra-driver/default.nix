@@ -66,7 +66,7 @@ buildPythonPackage rec {
     "--ignore=tests/unit/io/test_twistedreactor.py"
   ];
   # TODO Maybe the flags were added much earlier back when there were only three tests in io
-  # doCheck = false;
+  doCheck = false;
 
   meta = with lib; {
     description = "A Python client driver for Apache Cassandra";
