@@ -5,7 +5,7 @@
 
 let
   sha256 = {
-    x86_64-linux = "19c6blkkqpyjf330v16mdmsh7q6x087p6gw5ag8r2mc6jwq5ixlx";
+    x86_64-linux = "19751ygq1ng79aniqx91qawc0cw07cwdjdjd88azc9ww6z6nv0mp";
     i386-linux   = "0dwc7v4p1dz51444zwn0kds23yi87r4h2d3isfj9xwkn90pxb7in";
   }.${stdenv.hostPlatform.system} or (throw "system ${stdenv.hostPlatform.system} not supported");
 
@@ -28,7 +28,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "anydesk";
-  version = "6.0.0";
+  version = "6.0.1";
 
   src = fetchurl {
     urls = [
