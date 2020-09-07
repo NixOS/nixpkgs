@@ -93,6 +93,8 @@ stdenv.mkDerivation rec {
     pkgconfig
   ];
 
+  outputs = [ "out" "dev" ];
+
   postPatch = ''
     sed "s|/usr/share/zoneinfo|${tzdata}/share/zoneinfo|g" -i plugins/datetime/system-timezone.h
   '';
