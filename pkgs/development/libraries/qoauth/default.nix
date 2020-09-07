@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt5, qca2-qt5 }:
+{ stdenv, fetchurl, qt5, qca-qt5 }:
 
 stdenv.mkDerivation {
   name = "qoauth-2.0.0";
@@ -15,10 +15,10 @@ stdenv.mkDerivation {
         -e '/features.path =/ s|$$\[QMAKE_MKSPECS\]|$$NIX_OUTPUT_DEV/mkspecs|'
   '';
 
-  buildInputs = [ qt5.qtbase qca2-qt5 ];
+  buildInputs = [ qt5.qtbase qca-qt5 ];
   nativeBuildInputs = [ qt5.qmake ];
 
-  NIX_CFLAGS_COMPILE = "-I${qca2-qt5}/include/Qca-qt5/QtCrypto";
+  NIX_CFLAGS_COMPILE = "-I${qca-qt5}/include/Qca-qt5/QtCrypto";
   NIX_LDFLAGS = "-lqca-qt5";
 
   meta = with stdenv.lib; {
