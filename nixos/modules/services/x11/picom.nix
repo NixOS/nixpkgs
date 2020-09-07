@@ -57,7 +57,15 @@ in {
       type = types.bool;
       default = false;
       description = ''
-        Whether of not to enable Picom as the X.org composite manager.
+        Whether or not to enable Picom as the X.org composite manager.
+      '';
+    };
+
+    experimentalBackends = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to use the unstable new reimplementation of the backends.
       '';
     };
 
@@ -302,7 +310,8 @@ in {
       };
 
       serviceConfig = {
-        ExecStart = "${pkgs.picom}/bin/picom --config ${configFile}";
+        ExecStart = "${pkgs.picom}/bin/picom --config ${configFile}"
+          + (optionalString cfg.experimentalBackends " --experimental-backends");
         RestartSec = 3;
         Restart = "always";
       };
