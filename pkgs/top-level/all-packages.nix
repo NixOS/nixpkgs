@@ -14981,6 +14981,8 @@ in
       withQt5 = true;
     };
 
+    qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
+
     qtstyleplugins = callPackage ../development/libraries/qtstyleplugins { };
 
     qtstyleplugin-kvantum = libsForQt5.callPackage ../development/libraries/qtstyleplugin-kvantum { };
@@ -15001,8 +15003,6 @@ in
   qt5Full = qt5.full;
 
   qtkeychain = callPackage ../development/libraries/qtkeychain { };
-
-  qtpbfimageplugin = libsForQt5.callPackage ../development/libraries/qtpbfimageplugin { };
 
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
 
