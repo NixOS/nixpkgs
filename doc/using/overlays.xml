@@ -187,14 +187,28 @@ self: super:
        <listitem>
          <para>
            <link
-           xlink:href="https://developer.amd.com/amd-aocl/blas-library/">AMD
-           BLIS/LIBFLAME</link> (optimized for modern AMD x86_64 CPUs)
+           xlink:href="https://github.com/flame/blis">BLIS</link>
          </para>
          <para>
-          The AMD BLIS library, with attribute <literal>amd-blis</literal>,
-          provides a BLAS implementation. The complementary AMD LIBFLAME
-          library, with attribute <literal>amd-libflame</literal>, provides
-          a LAPACK implementation.
+          BLIS, available through the attribute
+          <literal>blis</literal>, is a framework for linear algebra kernels. In
+          addition, it implements the BLAS interface.
+         </para>
+       </listitem>
+       <listitem>
+         <para>
+          <link
+           xlink:href="https://developer.amd.com/amd-aocl/blas-library/">AMD
+          BLIS/LIBFLAME</link> (optimized for modern AMD x86_64 CPUs)
+         </para>
+         <para>
+          The AMD fork of the BLIS library, with attribute
+          <literal>amd-blis</literal>, extends BLIS with optimizations for
+          modern AMD CPUs. The changes are usually submitted to
+          the upstream BLIS project after some time. However, AMD BLIS
+          typically provides some performance improvements on AMD Zen CPUs.
+          The complementary AMD LIBFLAME library, with attribute
+          <literal>amd-libflame</literal>, provides a LAPACK implementation.
          </para>
        </listitem>
      </itemizedlist>
