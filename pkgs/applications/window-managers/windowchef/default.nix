@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "windowchef";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner  = "tudurom";
     repo   = "windowchef";
     rev    = "v${version}";
-    sha256 = "02fvb8fxnkpzb0vpbsl6rf7ssdrvw6mlm43qvl2sxq7zb88zdw96";
+    sha256 = "0fs5ss2z6qjxvmls0g2f3gmv8hshi81xsmmcjn9x7651rv9552pl";
   };
 
   buildInputs = [ libxcb libXrandr xcbutil xcbutilkeysyms xcbutilwm xcbproto];
