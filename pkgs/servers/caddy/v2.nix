@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, substituteAll }:
 
 buildGoModule rec {
   pname = "caddy";
@@ -16,6 +16,13 @@ buildGoModule rec {
   vendorSha256 = "0jzx00c2b8y7zwl73r2fh1826spcd15y39nfzr53s5lay3fvkybc";
 
   doCheck = false;
+
+  patches = [
+    (substituteAll rec {
+      src = ./nix-store-etag.patch;
+      inherit (builtins) storeDir;
+    })
+  ];
 
   meta = with stdenv.lib; {
     homepage = "https://caddyserver.com";

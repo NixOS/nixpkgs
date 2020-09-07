@@ -42,6 +42,7 @@ in
   borgbackup = handleTest ./borgbackup.nix {};
   buildbot = handleTest ./buildbot.nix {};
   caddy = handleTest ./caddy.nix {};
+  caddy2-etag = handleTest ./caddy2-etag.nix {};
   cadvisor = handleTestOn ["x86_64-linux"] ./cadvisor.nix {};
   cage = handleTest ./cage.nix {};
   cassandra = handleTest ./cassandra.nix {};
@@ -132,6 +133,7 @@ in
   graylog = handleTest ./graylog.nix {};
   grub = handleTest ./grub.nix {};
   gvisor = handleTest ./gvisor.nix {};
+  h2o-etag = handleTest ./h2o-etag.nix {};
   hadoop.hdfs = handleTestOn [ "x86_64-linux" ] ./hadoop/hdfs.nix {};
   hadoop.yarn = handleTestOn [ "x86_64-linux" ] ./hadoop/yarn.nix {};
   handbrake = handleTestOn ["x86_64-linux"] ./handbrake.nix {};
