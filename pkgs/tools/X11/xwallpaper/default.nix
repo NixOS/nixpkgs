@@ -1,5 +1,14 @@
-{ stdenv, fetchFromGitHub, pkg-config, autoreconfHook, pixman, xcbutil, xcbutilimage
-, libjpeg, libpng, libXpm }:
+{ stdenv
+, fetchFromGitHub
+, pkg-config
+, autoreconfHook
+, pixman
+, xcbutil
+, xcbutilimage
+, libjpeg
+, libpng
+, libXpm
+}:
 
 stdenv.mkDerivation rec {
   pname = "xwallpaper";
