@@ -86,6 +86,7 @@ in {
     systemd.packages = [ pkgs.pipewire ];
 
     systemd.user.sockets.pipewire.wantedBy = lib.mkIf cfg.socketActivation [ "sockets.target" ];
+    services.udev.packages = [ pkgs.pipewire ];
 
     # If any paths are updated here they must also be updated in the package test.
     sound.extraConfig = mkIf cfg.alsa.enable ''
