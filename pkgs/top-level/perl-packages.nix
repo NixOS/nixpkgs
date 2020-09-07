@@ -7,7 +7,7 @@
 
 { config
 , stdenv, buildPackages, pkgs
-, fetchurl, fetchpatch, fetchFromGitHub
+, fetchurl, fetchgit, fetchpatch, fetchFromGitHub
 , perl, overrides, buildPerl, shortenPerlShebang
 }:
 
@@ -10821,7 +10821,7 @@ let
   ListBinarySearch = buildPerlPackage {
     pname = "List-BinarySearch";
     version = "0.25";
-    src = pkgs.fetchurl {
+    src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAVIDO/List-BinarySearch-0.25.tar.gz";
       sha256 = "0ap8y9rsjxg75887klgij90mf459f8dwy0dbx1g06h30pmqk04f8";
     };
@@ -17126,8 +17126,7 @@ let
     };
     perlPreHook = "export LD=$CC";
     preCheck = "rm t/core_audiospec.t";
-    buildInputs = [ AlienSDL CaptureTiny TestDeep TestDifferences TestException TestMost TestWarn ]
-      ++ (with pkgs; [ SDL SDL_gfx SDL_mixer SDL_image SDL_ttf SDL_Pango SDL_net ] );
+    buildInputs = [ pkgs.SDL pkgs.SDL_gfx pkgs.SDL_mixer pkgs.SDL_image pkgs.SDL_ttf pkgs.SDL_Pango pkgs.SDL_net AlienSDL CaptureTiny TestDeep TestDifferences TestException TestMost TestWarn ];
     propagatedBuildInputs = [ FileShareDir TieSimple ];
     meta = {
       description = "SDL bindings to Perl";
@@ -18381,7 +18380,7 @@ let
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
     version = "6.3.0";
-    src = assert version == pkgs.libvirt.version; pkgs.fetchgit {
+    src = assert version == pkgs.libvirt.version; fetchgit {
       url = "git://libvirt.org/libvirt-perl.git";
       rev = "v${version}";
       sha256 = "0m75g0kf2dmllx5c1wxzszm1zakiqjighcsjbgq66674pvqf5mk7";
