@@ -329,7 +329,11 @@ rec {
       check = isAttrs;
       merge = loc: defs:
         mapAttrs (n: v: v.value) (filterAttrs (n: v: v ? value) (zipAttrsWith (name: defs:
-            (mergeDefinitions (loc ++ [name]) elemType defs).optionalValue
+            # Add a loc option path entry that indicates that it didn't come
+            # from an  option, but an arbitrary chosen attribute instead. This
+            # is used by submodules to provide the name module argument
+            let newLoc = loc ++ [{ type = "attrs"; inherit name; __toString = _: name; }]; in
+            (mergeDefinitions newLoc elemType defs).optionalValue
           )
           # Push down position info.
           (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) defs)));
@@ -351,7 +355,12 @@ rec {
       check = isAttrs;
       merge = loc: defs:
         zipAttrsWith (name: defs:
-          let merged = mergeDefinitions (loc ++ [name]) elemType defs;
+          let
+            # Add a loc option path entry that indicates that it didn't come
+            # from an  option, but an arbitrary chosen attribute instead. This
+            # is used by submodules to provide the name module argument
+            newLoc = loc ++ [{ type = "attrs"; inherit name; __toString = _: name; }];
+            merged = mergeDefinitions newLoc elemType defs;
           # mergedValue will trigger an appropriate error when accessed
           in merged.optionalValue.value or elemType.emptyValue.value or merged.mergedValue
         )
@@ -438,10 +447,32 @@ rec {
         description = freeformType.description or name;
         check = x: isAttrs x || isFunction x || path.check x;
         merge = loc: defs:
+          let
+            # Every attrsOf-like option adds an entry to the loc list indicating
+            # that its value isn't a defined option, but rather an arbitrary
+            # name. We pass these to the submodule such that it can know its
+            # context. We reverse this list such that static list indices can be
+            # used to get a specific attrs context.
+            # Example: For an option with a type like
+            #   attrsOf (attrsOf (submodule ..))
+            # and a definition of
+            #   { foo.bar = {}; }
+            # nameStack would be
+            #   [ "bar" "foo" .. ]
+            # where .. can be more entries depending on where the submodule
+            # is evaluated
+            nameStack = reverseList (map (l: l.name) (filter (l: l.type or "" == "attrs") loc));
+          in
           (evalModules {
             modules = allModules defs;
             inherit specialArgs;
-            args.name = last loc;
+            args = {
+              inherit nameStack;
+            } // optionalAttrs (nameStack != []) {
+              # For backwards compatibility, expose the most relevant name
+              # directly
+              name = head nameStack;
+            };
             prefix = loc;
           }).config;
         emptyValue = { value = {}; };
