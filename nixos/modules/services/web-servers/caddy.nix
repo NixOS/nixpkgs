@@ -16,13 +16,15 @@ let
       };
     }];
   };
-  adaptedConfig = importJSON (pkgs.runCommand "caddy-config-adapted.json" { } ''
+
+  adaptedConfig = pkgs.runCommand "caddy-config-adapted.json" { } ''
     ${cfg.package}/bin/caddy adapt \
       --config ${configFile} --adapter ${cfg.adapter} > $out
-  '');
-  # TODO: validate with `caddy validate`?
-  configJSON = pkgs.writeText "caddy-config.json" (builtins.toJSON
-    (recursiveUpdate adaptedConfig tlsConfig));
+  '';
+  tlsJSON = pkgs.writeText "tls.json" (builtins.toJSON tlsConfig);
+  configJSON = pkgs.runCommand "caddy-config.json" { } ''
+    ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${adaptedConfig} ${tlsJSON} > $out
+  '';
 in {
   options.services.caddy = {
     enable = mkEnableOption "Caddy web server";
@@ -114,7 +116,11 @@ in {
             -root=/var/tmp -conf=${configFile} \
             -ca=${cfg.ca} -email=${cfg.email} ${optionalString cfg.agree "-agree"}
         '';
-        ExecReload = "${pkgs.coreutils}/bin/kill -USR1 $MAINPID";
+        ExecReload =
+          if isCaddy2 then
+            "${cfg.package}/bin/caddy reload --config ${configJSON}"
+          else
+            "${pkgs.coreutils}/bin/kill -USR1 $MAINPID";
         Type = "simple";
         User = "caddy";
         Group = "caddy";

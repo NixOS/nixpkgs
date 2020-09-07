@@ -11,6 +11,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         http://localhost {
           encode gzip
 
+          file_server
           root * ${
             pkgs.runCommand "testdir" {} ''
               mkdir "$out"
@@ -25,6 +26,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           http://localhost {
             encode gzip
 
+            file_server
             root * ${
               pkgs.runCommand "testdir2" {} ''
                 mkdir "$out"
@@ -59,9 +61,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         )
         etag = etag.replace("\r\n", " ")
         http_code = webserver.succeed(
-            "curl -w \"%{{http_code}}\" -X HEAD -H 'If-None-Match: {}' {}".format(etag, url)
+            "curl --silent --show-error -o /dev/null -w \"%{{http_code}}\" --head -H 'If-None-Match: {}' {}".format(
+                etag, url
+            )
         )
-        assert int(http_code) == 304, "HTTP code is not 304"
+        assert int(http_code) == 304, "HTTP code is {}, expected 304".format(http_code)
         return etag
 
 
