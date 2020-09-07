@@ -18922,6 +18922,8 @@ in
 
   marwaita-manjaro = callPackage ../data/themes/marwaita-manjaro { };
 
+  marwaita-peppermint = callPackage ../data/themes/marwaita-peppermint { };
+
   matcha-gtk-theme = callPackage ../data/themes/matcha { };
 
   materia-theme = callPackage ../data/themes/materia-theme { };
