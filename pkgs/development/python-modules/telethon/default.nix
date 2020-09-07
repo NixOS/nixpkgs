@@ -10,6 +10,11 @@ buildPythonPackage rec {
     sha256 = "1fg12gcg6ca7rjh7m3g48m30cx4aaw5g09855nlyz2sa1kw3gfyq";
   };
 
+  patchPhase = ''
+    substituteInPlace telethon/crypto/libssl.py --replace \
+      "ctypes.util.find_library('ssl')" "'${openssl.out}/lib/libssl.so'"
+  '';
+
   propagatedBuildInputs = [
     async_generator
     rsa
