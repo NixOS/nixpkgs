@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, glibc, zlib
+{ stdenv, lib, fetchurl, zlib
 , enableStatic ? false
 , sftpPath ? "/run/current-system/sw/libexec/sftp-server"
 }:
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   dontDisableStatic = enableStatic;
 
-  configureFlags = lib.optional enableStatic "LDFLAGS=-static";
+  configureFlags = lib.optional enableStatic "LDFLAGS=-static --enable-static";
 
   CFLAGS = "-DSFTPSERVER_PATH=\\\"${sftpPath}\\\"";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     ./pass-path.patch
   ];
 
-  buildInputs = [ zlib ] ++ lib.optionals enableStatic [ glibc.static zlib.static ];
+  buildInputs = [ zlib ] ++ lib.optionals enableStatic [ zlib.static ] ++ lib.optionals (enableStatic && stdenv.cc.libc ? static) [ stdenv.cc.libc.static ];
 
   meta = with stdenv.lib; {
     homepage = "http://matt.ucc.asn.au/dropbear/dropbear.html";
