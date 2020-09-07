@@ -1509,8 +1509,8 @@ in
     '';
   });
 
-  caddy = callPackage ../servers/caddy { };
-  caddy1 = callPackage ../servers/caddy/v1.nix { };
+  caddy = callPackage ../servers/caddy { buildGoModule = buildGo114Module; };  # https://github.com/lucas-clemente/quic-go/issues/2614
+  caddy1 = callPackage ../servers/caddy/v1.nix { buildGoModule = buildGo114Module; };
   traefik = callPackage ../servers/traefik { };
 
   calamares = libsForQt514.callPackage ../tools/misc/calamares {
