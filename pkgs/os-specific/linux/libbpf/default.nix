@@ -25,6 +25,9 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     substituteInPlace ../scripts/check-reallocarray.sh \
       --replace '/bin/rm' 'rm'
+    # Without patching this the config-test program will be refused by our CC wrapper.
+    chmod +w ../scripts
+    sed -e '2a NIX_ENFORCE_PURITY=0' -i ../scripts/check-reallocarray.sh
   '';
 
   # FIXME: Multi-output requires some fixes to the way the pkgconfig file is
@@ -37,7 +40,7 @@ stdenv.mkDerivation rec {
     description = "Upstream mirror of libbpf";
     homepage    = "https://github.com/libbpf/libbpf";
     license     = with licenses; [ lgpl21 /* or */ bsd2 ];
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [ thoughtpolice vcunat ];
     platforms   = platforms.linux;
   };
 }
