@@ -16,6 +16,7 @@ let
                 cfg.extraPackages cfg.haskellPackages ++
                 optionals cfg.enableContribAndExtras
                 (with cfg.haskellPackages; [ xmonad-contrib xmonad-extras ]);
+    inherit (cfg) ghcArgs;
   } cfg.config;
 
 in
@@ -82,6 +83,15 @@ in
         type = with lib.types; listOf str;
         description = ''
           Command line arguments passed to the xmonad binary.
+        '';
+      };
+
+      ghcArgs = mkOption {
+        default = [];
+        type = with lib.types; listOf str;
+        description = ''
+          Command line arguments passed to the compiler (ghc)
+          invocation when xmonad.config is set.
         '';
       };
 
