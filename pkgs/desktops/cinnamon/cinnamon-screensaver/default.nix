@@ -1,7 +1,8 @@
 { stdenv
 , fetchFromGitHub
 , pkgconfig
-, autoreconfHook
+, meson
+, ninja
 , glib
 , dbus
 , gettext
@@ -30,32 +31,41 @@
 , xapps
 , xorg
 , iso-flags-png-320x420
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-screensaver";
-  version = "4.4.0";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "03v41wk1gmgmyl31j7a3pav52gfv2faibj1jnpj3ycwcv4cch5w5";
+    sha256 = "068lh6wcmznfyvny7hx83q2rf4j96b6mv4a5v79y02k9110m7bsm";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/linuxmint/cinnamon-screensaver/pull/349/commits/4a9e5715f406bf2ca1aacddd5fd8f830102a423c.patch";
+      sha256 = "0fmkmskry4c88zcw0i8vsmh6q14k3m937hqi77p5xi1p93imr46y";
+    })
+  ];
 
   nativeBuildInputs = [
     pkgconfig
-    autoreconfHook
     wrapGAppsHook
     gettext
     intltool
-    dbus # for configure.ac
+    dbus # for meson.build
     libxslt
     libtool
+    meson
+    ninja
   ];
 
   buildInputs = [
-    # from configure.ac
+    # from meson.build
     gobject-introspection
     gtk3
     glib
@@ -79,13 +89,12 @@ stdenv.mkDerivation rec {
     iso-flags-png-320x420
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0"; # TODO: https://github.com/NixOS/nixpkgs/issues/36468
+  mesonFlags = [
+    # TODO: https://github.com/NixOS/nixpkgs/issues/36468
+    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
+  ];
 
   postPatch = ''
-    patchShebangs autogen.sh
-
-    sed ${stdenv.lib.escapeShellArg "s&DBUS_SESSION_SERVICE_DIR=.*&DBUS_SESSION_SERVICE_DIR=`$PKG_CONFIG --variable session_bus_services_dir dbus-1 | sed -e 's,/usr/share,\${datarootdir},g' | sed 's|^|$out|'`&g"} -i configure.ac
-
     # cscreensaver hardcodes absolute paths everywhere. Nuke from orbit.
     find . -type f -exec sed -i \
       -e s,/usr/share/locale,/run/current-system/sw/share/locale,g \
@@ -97,15 +106,11 @@ stdenv.mkDerivation rec {
     sed "s|/usr/share/locale|/run/current-system/sw/share/locale|g" -i ./src/cinnamon-screensaver-main.py
   '';
 
-  autoreconfPhase = ''
-    NOCONFIGURE=1 bash ./autogen.sh
-  '';
-
   meta = with stdenv.lib; {
     homepage = "https://github.com/linuxmint/cinnamon-screensaver";
     description = "The Cinnamon screen locker and screensaver program";
     license = [ licenses.gpl2 licenses.lgpl2 ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }
