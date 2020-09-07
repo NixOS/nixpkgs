@@ -19412,7 +19412,7 @@ in
 
   ahoviewer = callPackage ../applications/graphics/ahoviewer { };
 
-  airwave = callPackage ../applications/audio/airwave { };
+  airwave = callPackage ../applications/audio/airwave { qt5 = qt514; };
 
   akira-unstable = callPackage ../applications/graphics/akira { };
 
