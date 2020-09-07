@@ -38,8 +38,12 @@ let php-embed = php.override {
                   (lib.nameValuePair "php" {
                     # usage: https://uwsgi-docs.readthedocs.io/en/latest/PHP.html#running-php-apps-with-nginx
                     path = "plugins/php";
-                    inputs = [ php-embed ] ++ php-embed.buildInputs;
-                    NIX_CFLAGS_LINK = [ "-L${libmysqlclient}/lib/mysql" ];
+                    inputs = [
+                        php-embed
+                        php-embed.extensions.session
+                        php-embed.extensions.session.dev
+                        php-embed.unwrapped.dev
+                    ] ++ php-embed.unwrapped.buildInputs;
                   })
                 ];
 
@@ -60,6 +64,8 @@ stdenv.mkDerivation rec {
     url = "https://projects.unbit.it/downloads/${pname}-${version}.tar.gz";
     sha256 = "0256v72b7zr6ds4srpaawk1px3bp0djdwm239w3wrxpw7dzk1gjn";
   };
+
+  patches = [ ./0001-no-ext-session-php_session.h-on-NixOS.patch ];
 
   nativeBuildInputs = [ python3 pkgconfig ];
 
@@ -93,8 +99,6 @@ stdenv.mkDerivation rec {
     install -Dm755 uwsgi $out/bin/uwsgi
     ${lib.concatMapStringsSep "\n" (x: x.install or "") needed}
   '';
-
-  NIX_CFLAGS_LINK = toString (lib.optional withSystemd "-lsystemd" ++ lib.concatMap (x: x.NIX_CFLAGS_LINK or []) needed);
 
   meta = with stdenv.lib; {
     homepage = "https://uwsgi-docs.readthedocs.org/en/latest/";
