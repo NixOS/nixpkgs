@@ -19705,7 +19705,7 @@ in
 
   calibre-py3 = libsForQt5.callPackage ../applications/misc/calibre { pythonPackages = python3Packages; };
 
-  calibre = self.calibre-py3;
+  calibre = calibre-py3;
 
   calligra = libsForQt5.callPackage ../applications/office/calligra {
     inherit (kdeApplications) akonadi-calendar akonadi-contacts;
