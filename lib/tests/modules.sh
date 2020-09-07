@@ -262,6 +262,11 @@ checkConfigOutput true config.value.mkbefore ./types-anything/mk-mods.nix
 checkConfigOutput 1 config.value.nested.foo ./types-anything/mk-mods.nix
 checkConfigOutput baz config.value.nested.bar.baz ./types-anything/mk-mods.nix
 
+# Check that submodules receive the name and names arguments
+checkConfigOutput bar config.value.foo.bar.name ./submodule-name.nix
+checkConfigOutput bar config.value.foo.bar.nameStack.0 ./submodule-name.nix
+checkConfigOutput foo config.value.foo.bar.nameStack.1 ./submodule-name.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
