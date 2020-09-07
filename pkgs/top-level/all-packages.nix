@@ -18948,8 +18948,6 @@ in
 
   medio = callPackage ../data/fonts/medio { };
 
-  mint-x-icons = callPackage ../data/icons/mint-x-icons { };
-
   mno16 = callPackage ../data/fonts/mno16 { };
 
   mnist = callPackage ../data/machine-learning/mnist { };
@@ -25398,6 +25396,8 @@ in
   cdesktopenv = callPackage ../desktops/cdesktopenv { };
 
   cinnamon = recurseIntoAttrs (callPackage ../desktops/cinnamon { });
+
+  inherit (cinnamon) mint-x-icons mint-y-icons;
 
   enlightenment = recurseIntoAttrs (callPackage ../desktops/enlightenment {
     callPackage = newScope pkgs.enlightenment;
