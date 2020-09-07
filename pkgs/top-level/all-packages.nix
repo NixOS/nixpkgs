@@ -25099,8 +25099,8 @@ in
     lua = lua5_1;
   };
 
-  solarus = libsForQt5.callPackage ../games/solarus { };
-
+  # solarus and solarus-quest-editor must use the same version of Qt.
+  solarus = libsForQt514.callPackage ../games/solarus { };
   solarus-quest-editor = libsForQt514.callPackage ../development/tools/solarus-quest-editor { };
 
   # You still can override by passing more arguments.
