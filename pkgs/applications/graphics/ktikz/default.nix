@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch
 , pkgconfig, wrapQtAppsHook
-, poppler, qt5, gnuplot
+, poppler, gnuplot
+, qmake, qtbase, qttools
 }:
 
 # This package only builds ktikz without KDE integration because KDE4 is
@@ -36,10 +37,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig qt5.qttools qt5.qmake wrapQtAppsHook ];
-  QT_PLUGIN_PATH = "${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}";
+  nativeBuildInputs = [ pkgconfig qttools qmake wrapQtAppsHook ];
+  QT_PLUGIN_PATH = "${qtbase}/${qtbase.qtPluginPrefix}";
 
-  buildInputs = [ qt5.qtbase poppler ];
+  buildInputs = [ qtbase poppler ];
   enableParallelBuilding = true;
 
   qmakeFlags = [
