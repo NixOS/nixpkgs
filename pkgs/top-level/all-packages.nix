@@ -3658,7 +3658,7 @@ in
 
   flashrom = callPackage ../tools/misc/flashrom { };
 
-  flent = python3Packages.callPackage ../applications/networking/flent { };
+  flent = python3Packages.callPackage ../applications/networking/flent { qt5 = qt514; };
 
   flpsed = callPackage ../applications/editors/flpsed { };
 
