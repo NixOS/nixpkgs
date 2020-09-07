@@ -23681,7 +23681,7 @@ in
 
   vkeybd = callPackage ../applications/audio/vkeybd {};
 
-  vlc = libsForQt5.vlc;
+  vlc = libsForQt514.vlc;
 
   vlc_qt5 = vlc;
 
