@@ -2033,7 +2033,7 @@ in
 
   gmic = callPackage ../tools/graphics/gmic { };
 
-  gmic-qt = libsForQt5.callPackage ../tools/graphics/gmic-qt { };
+  gmic-qt = libsForQt514.callPackage ../tools/graphics/gmic-qt { };
 
   gmic-qt-krita = gmic-qt.override {
     variant = "krita";
