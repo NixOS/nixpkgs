@@ -542,4 +542,30 @@ runTests {
     name = "";
     expected = "unknown";
   };
+
+  testFreeformOptions = {
+    expr =
+      let
+        submodule = { lib, ... }: {
+          freeformType = lib.types.attrsOf (lib.types.submodule {
+            options.bar = lib.mkOption {};
+          });
+          options.bar = lib.mkOption {};
+        };
+
+        module = { lib, ... }: {
+          options.foo = lib.mkOption {
+            type = lib.types.submodule submodule;
+          };
+        };
+
+        options = (evalModules {
+          modules = [ module ];
+        }).options;
+
+        locs = filter (o: ! o.internal) (optionAttrSetToDocList options);
+      in map (o: o.loc) locs;
+    expected = [ [ "foo" ] [ "foo" "<name>" "bar" ] [ "foo" "bar" ] ];
+  };
+
 }
