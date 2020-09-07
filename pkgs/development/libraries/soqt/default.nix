@@ -1,4 +1,4 @@
-{ fetchhg, stdenv, coin3d, qt5, cmake, pkgconfig }:
+{ fetchhg, stdenv, coin3d, qtbase, cmake, pkgconfig }:
 
 stdenv.mkDerivation {
   pname = "soqt";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     fetchSubrepos = true;
   };
 
-  buildInputs = [ coin3d qt5.qtbase ];
+  buildInputs = [ coin3d qtbase ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
