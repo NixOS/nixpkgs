@@ -4417,7 +4417,9 @@ in {
 
   pipx = callPackage ../development/python-modules/pipx { };
 
-  pivy = callPackage ../development/python-modules/pivy { };
+  pivy = callPackage ../development/python-modules/pivy {
+    inherit (qt5) qtbase qmake;
+  };
 
   pkgconfig = callPackage ../development/python-modules/pkgconfig { inherit (pkgs) pkgconfig; };
 
