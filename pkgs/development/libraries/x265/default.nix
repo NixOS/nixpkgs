@@ -28,7 +28,7 @@ let
   src = fetchFromGitHub {
     owner  = "videolan";
     repo   = "x265";
-    rev    = "${version}";
+    rev    = version;
     sha256 = "048c906xpp3m12m2xnb6zf2y39milxajp2n0kffa41pdya3zqn95";
   };
 
