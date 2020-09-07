@@ -5314,9 +5314,9 @@ in {
   pyshp = callPackage ../development/python-modules/pyshp { };
 
   pyside2-tools =
-    toPythonModule (callPackage ../development/python-modules/pyside2-tools { inherit (pkgs) cmake qt5; });
+    toPythonModule (callPackage ../development/python-modules/pyside2-tools { inherit (pkgs) cmake; inherit qt5; });
 
-  pyside2 = toPythonModule (callPackage ../development/python-modules/pyside2 { inherit (pkgs) cmake qt5 ninja; });
+  pyside2 = toPythonModule (callPackage ../development/python-modules/pyside2 { inherit (pkgs) cmake ninja; inherit qt5; });
 
   pyside = callPackage ../development/python-modules/pyside { inherit (pkgs) mesa; };
 
