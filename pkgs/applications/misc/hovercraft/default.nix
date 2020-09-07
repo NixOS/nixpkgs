@@ -31,6 +31,5 @@ buildPythonApplication rec {
     homepage = https://github.com/regebro/hovercraft;
     license = licenses.mit;
     maintainers = with maintainers; [ goibhniu makefu ];
-    broken = true;
   };
 }
