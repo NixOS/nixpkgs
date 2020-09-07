@@ -107,7 +107,7 @@ stdenv.mkDerivation {
 
     + ''
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
-      substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
+      substituteAll ${if stdenv.isDarwin then ../wrapper-common/utils.bash.darwin else ../wrapper-common/utils.bash} $out/nix-support/utils.bash
     ''
 
     ##

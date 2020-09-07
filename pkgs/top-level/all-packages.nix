@@ -121,7 +121,9 @@ in
   autoPatchelfHook = makeSetupHook { name = "auto-patchelf-hook"; }
     ../build-support/setup-hooks/auto-patchelf.sh;
 
-  appimageTools = callPackage ../build-support/appimage { };
+  appimageTools = callPackage ../build-support/appimage {
+    buildFHSUserEnv = buildFHSUserEnvBubblewrap;
+  };
 
   appindicator-sharp = callPackage ../development/libraries/appindicator-sharp { };
 
@@ -4855,7 +4857,6 @@ in
 
   liquidsoap = callPackage ../tools/audio/liquidsoap/full.nix {
     ffmpeg = ffmpeg-full;
-    ocamlPackages = ocaml-ng.ocamlPackages_4_07;
   };
 
   lksctp-tools = callPackage ../os-specific/linux/lksctp-tools { };
@@ -4958,6 +4959,8 @@ in
   minergate = callPackage ../applications/misc/minergate { };
 
   minergate-cli = callPackage ../applications/misc/minergate-cli { };
+
+  minica = callPackage ../tools/security/minica { };
 
   minidlna = callPackage ../tools/networking/minidlna { };
 
@@ -7634,6 +7637,8 @@ in
 
   verilog = callPackage ../applications/science/electronics/verilog {};
 
+  vgrep = callPackage ../tools/text/vgrep { };
+
   vhd2vl = callPackage ../applications/science/electronics/vhd2vl { };
 
   video2midi = callPackage ../tools/audio/video2midi {
@@ -9440,6 +9445,8 @@ in
   mozart2-binary = callPackage ../development/compilers/mozart/binary.nix { };
 
   nim = callPackage ../development/compilers/nim { };
+  nim-unwrapped = nim.unwrapped;
+  nim-stdlib = nim.stdlib;
   nrpl = callPackage ../development/tools/nrpl { };
 
   neko = callPackage ../development/compilers/neko { };
@@ -19698,7 +19705,11 @@ in
 
   calculix = callPackage ../applications/science/math/calculix {};
 
-  calibre = libsForQt5.callPackage ../applications/misc/calibre { };
+  calibre-py2 = libsForQt5.callPackage ../applications/misc/calibre { pythonPackages = python2Packages; };
+
+  calibre-py3 = libsForQt5.callPackage ../applications/misc/calibre { pythonPackages = python3Packages; };
+
+  calibre = calibre-py3;
 
   calligra = libsForQt5.callPackage ../applications/office/calligra {
     inherit (kdeApplications) akonadi-calendar akonadi-contacts;
