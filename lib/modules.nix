@@ -457,7 +457,11 @@ rec {
       # yield a value computed from the definitions
       value = if opt ? apply then opt.apply res.mergedValue else res.mergedValue;
 
-    in opt //
+      warnDeprecation =
+        if opt.type.deprecationMessage == null then id
+        else warn "The type `types.${opt.type.name}' of option `${showOption loc}' defined in ${showFiles opt.declarations} is deprecated. ${opt.type.deprecationMessage}";
+
+    in warnDeprecation opt //
       { value = builtins.addErrorContext "while evaluating the option `${showOption loc}':" value;
         inherit (res.defsFinal') highestPrio;
         definitions = map (def: def.value) res.defsFinal;
