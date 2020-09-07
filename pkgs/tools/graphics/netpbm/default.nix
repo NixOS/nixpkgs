@@ -13,6 +13,7 @@
 , libtiff
 , enableX11 ? false
 , libX11
+, buildPackages
 }:
 
 stdenv.mkDerivation {
@@ -44,12 +45,22 @@ stdenv.mkDerivation {
     jbigkit
   ] ++ lib.optional enableX11 libX11;
 
+
+  strictDeps = true;
+
   enableParallelBuilding = true;
+
+  # Environment variables
+  STRIPPROG = "${stdenv.lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip";
 
   postPatch = ''
     # Install libnetpbm.so symlink to correct destination
     substituteInPlace lib/Makefile \
       --replace '/sharedlink' '/lib'
+
+    # TODO: move to config.mk in 10.91.4
+    substituteInPlace GNUmakefile \
+        --replace 'pkg-config' '${buildPackages.pkgconfig}/bin/${buildPackages.pkgconfig.targetPrefix}pkg-config'
   '';
 
   configurePhase = ''
@@ -59,6 +70,13 @@ stdenv.mkDerivation {
 
     # Disable building static library
     echo "STATICLIB_TOO = N" >> config.mk
+
+    # Enable cross-compilation
+    echo 'AR = ${stdenv.lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar' >> config.mk
+    echo 'CC = ${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc' >> config.mk
+    echo 'CC_FOR_BUILD = ${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc' >> config.mk
+    echo 'LD_FOR_BUILD = $(CC_FOR_BUILD)' >> config.mk
+    echo 'RANLIB = ${stdenv.lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib' >> config.mk
 
     # Use libraries from Nixpkgs
     echo "TIFFLIB = libtiff.so" >> config.mk
