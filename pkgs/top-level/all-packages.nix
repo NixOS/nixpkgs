@@ -5293,7 +5293,7 @@ in
 
   lzip = callPackage ../tools/compression/lzip { };
 
-  luxcorerender = callPackage ../tools/graphics/luxcorerender { };
+  luxcorerender = callPackage ../tools/graphics/luxcorerender { qt5 = qt514; };
 
   xz = callPackage ../tools/compression/xz { };
   lzma = xz; # TODO: move to aliases.nix
@@ -20719,7 +20719,7 @@ in
 
   moe =  callPackage ../applications/editors/moe { };
 
-  multibootusb = libsForQt514.callPackage ../applications/misc/multibootusb {};
+  multibootusb = libsForQt514.callPackage ../applications/misc/multibootusb { qt5 = qt514; };
 
   praat = callPackage ../applications/audio/praat { };
 
@@ -25050,7 +25050,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  samplv1 = callPackage ../applications/audio/samplv1 { };
+  samplv1 = callPackage ../applications/audio/samplv1 { qt5 = qt514; };
 
   sauerbraten = callPackage ../games/sauerbraten {};
 
