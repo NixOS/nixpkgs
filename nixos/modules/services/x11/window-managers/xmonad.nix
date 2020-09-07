@@ -76,6 +76,15 @@ in
                  }
         '';
       };
+
+      xmonadCliArgs = mkOption {
+        default = [];
+        type = with lib.types; listOf str;
+        description = ''
+          Command line arguments passed to the xmonad binary.
+        '';
+      };
+
     };
   };
   config = mkIf cfg.enable {
@@ -85,7 +94,7 @@ in
         start = let
           xmonadCommand = if (cfg.config != null) then xmonadBin else "${xmonad}/bin/xmonad";
         in ''
-           systemd-cat -t xmonad ${xmonadCommand} &
+           systemd-cat -t xmonad -- ${xmonadCommand} ${lib.escapeShellArgs cfg.xmonadCliArgs} &
            waitPID=$!
         '';
       }];
