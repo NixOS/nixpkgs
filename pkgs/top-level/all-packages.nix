@@ -14988,6 +14988,8 @@ in
 
     qwt = callPackage ../development/libraries/qwt/6.nix { };
 
+    soqt = callPackage ../development/libraries/soqt { };
+
     telepathy = callPackage ../development/libraries/telepathy/qt { };
 
     vlc = callPackage ../applications/video/vlc {};
@@ -15298,8 +15300,6 @@ in
   sope = callPackage ../development/libraries/sope { };
 
   soprano = callPackage ../development/libraries/soprano { };
-
-  soqt = callPackage ../development/libraries/soqt { };
 
   sord = callPackage ../development/libraries/sord {};
 
