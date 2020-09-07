@@ -276,7 +276,7 @@ in
 
   dispad = callPackage ../tools/X11/dispad { };
 
-  dupeguru = callPackage ../applications/misc/dupeguru { };
+  dupeguru = callPackage ../applications/misc/dupeguru { qt5 = qt514; };
 
   dump1090 = callPackage ../applications/radio/dump1090 { };
 
