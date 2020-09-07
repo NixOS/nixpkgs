@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, AppKit, Security }:
+{ stdenv, fetchFromGitHub, rustPlatform, installShellFiles, AppKit, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "the-way";
@@ -11,11 +11,21 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1whmvzpqm8x1q45mzrp4p40nj251drcryj9z4qjxgjlfsd5d1fxq";
   };
 
+  nativeBuildInputs = [ installShellFiles ];
+
   buildInputs = stdenv.lib.optionals stdenv.isDarwin  [ AppKit Security ];
 
   cargoSha256 = "0adhgp6blwx7s1hlwqzzsgkzc43q9avxx8a9ykvvv2s1w7m9ql78";
   #checkFlags = "--test-threads=1";
   doCheck = false;
+
+  postInstall = ''
+    $out/bin/the-way config default tmp.toml
+    for shell in bash fish zsh; do
+      THE_WAY_CONFIG=tmp.toml $out/bin/the-way complete $shell > the-way.$shell
+      installShellCompletion the-way.$shell
+    done
+  '';
 
   meta = with stdenv.lib; {
     description = "Terminal code snippets manager";
