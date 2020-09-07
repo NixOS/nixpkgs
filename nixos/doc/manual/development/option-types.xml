@@ -362,6 +362,106 @@
    </varlistentry>
    <varlistentry>
     <term>
+     <varname>types.orderOf</varname> {
+      <replaceable>before</replaceable> ? a: b: false,
+      <replaceable>elemType</replaceable> }
+    </term>
+    <listitem>
+     <para>
+      A set of elements of type <replaceable>elemType</replaceable>, ordered
+      according to the given partial ordering function <replaceable>before
+      </replaceable>, equivalent to a
+      <link xlink:href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">
+      DAG (directed acyclic graph)</link>. This type takes an attribute set
+      with the following attributes as a parameter:
+      <itemizedlist>
+       <listitem><para>
+        <replaceable>elemType</replaceable>
+        The type of elements. The <literal>orderOf</literal> type accepts
+        the same values as <literal>attrsOf elemType</literal> accepts.
+       </para></listitem>
+       <listitem><para> <replaceable>before</replaceable>
+        The partial ordering function. It takes two parameters, each an
+        attribute set of the form
+        <variablelist>
+         <varlistentry>
+          <term><varname>name</varname></term>
+          <listitem>
+           <para>
+            The attribute name of the entry.
+           </para>
+          </listitem>
+         </varlistentry>
+         <varlistentry>
+          <term><varname>value</varname></term>
+          <listitem>
+           <para>
+            The attribute value of the entry. This is of type <replaceable>elemType</replaceable>.
+           </para>
+          </listitem>
+         </varlistentry>
+        </variablelist>
+        This function should return <literal>true</literal> if the first parameter should be ordered <emphasis>before</emphasis> the second one.
+       </para></listitem>
+      </itemizedlist>
+      The result of this type is a list of <replaceable>elemType</replaceable>
+      items, ordered according to the <replaceable>before</replaceable> function.
+      If there are multiple possible orderings an arbitrary one of them is chosen.
+     </para>
+     <example xml:id="ex-orderOf"><title><literal>orderOf</literal> Example</title><para>
+      Here is a simple example of using this type to order a list of text
+      entries by allowing them to specify which entries they should come
+      before of.
+<programlisting>
+{ lib, ... }:
+{
+  options.value = lib.mkOption {
+    type = lib.types.orderOf {
+      # a should come before b if the value of a specifies { before.&lt;b&gt; = true; }
+      before = a: b: a.value.before.${b.name} or false;
+      elemType = lib.types.submodule {
+        options.text = lib.mkOption {
+          type = lib.types.str;
+        };
+        options.before = lib.mkOption {
+          type = lib.types.attrsOf lib.types.bool;
+          default = {};
+        };
+      };
+    };
+  };
+
+  config.value = {
+    foo = {
+      text = "This is foo";
+      before.bar = true;
+    };
+    bar = {
+      text = "This is bar";
+    };
+  };
+}
+</programlisting>
+      This option will evaluate to
+<programlisting>
+[
+  {
+    text = "This is foo";
+    before = {
+      bar = true;
+    };
+  }
+  {
+    text = "This is bar";
+    before = { };
+  }
+]
+</programlisting>
+     </para></example>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
      <varname>types.lazyAttrsOf</varname> <replaceable>t</replaceable>
     </term>
     <listitem>
