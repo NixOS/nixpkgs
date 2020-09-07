@@ -12138,8 +12138,6 @@ in
 
   duckdb = callPackage ../development/libraries/duckdb {};
 
-  dxflib = callPackage ../development/libraries/dxflib {};
-
   easyloggingpp = callPackage ../development/libraries/easyloggingpp {};
 
   eccodes = callPackage ../development/libraries/eccodes {
@@ -14897,6 +14895,8 @@ in
     alkimia = callPackage ../development/libraries/alkimia { };
 
     appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
+
+    dxflib = callPackage ../development/libraries/dxflib {};
 
     fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
 
