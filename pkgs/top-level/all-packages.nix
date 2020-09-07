@@ -19107,7 +19107,7 @@ in
 
   qogir-theme = callPackage ../data/themes/qogir { };
 
-  qtcurve = libsForQt5.callPackage ../data/themes/qtcurve {};
+  qtcurve = libsForQt514.callPackage ../data/themes/qtcurve {};
 
   redhat-official-fonts = callPackage ../data/fonts/redhat-official { };
 
