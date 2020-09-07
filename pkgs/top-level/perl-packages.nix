@@ -1189,8 +1189,6 @@ let
     };
   };
 
-  bignum = null; # part of Perl 5.30.3, 5.32.0, 5.33.1
-
   BitVector = buildPerlPackage {
     pname = "Bit-Vector";
     version = "7.4";
@@ -4348,8 +4346,6 @@ let
     };
   };
 
-  DataDumper = null; # part of Perl 5.30.3, 5.32.0, 5.33.1
-
   DataDumperConcise = buildPerlPackage {
     pname = "Data-Dumper-Concise";
     version = "2.023";
@@ -7216,8 +7212,6 @@ let
      };
   };
 
-  ExtUtilsManifest = null; # part of Perl 5.30.3, 5.32.0, 5.33.1
-
   ExtUtilsPkgConfig = buildPerlPackage {
     pname = "ExtUtils-PkgConfig";
     version = "1.16";
@@ -7934,8 +7928,6 @@ let
       maintainers = [ maintainers.limeytexan ];
     };
   };
-
-  FileTemp = null; # part of Perl 5.30.3, 5.32.0, 5.33.1
 
   FileTouch = buildPerlPackage {
     pname = "File-Touch";
@@ -11731,8 +11723,6 @@ let
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
      };
   };
-
-  MathBigRat = null; # part of Perl 5.30.3, 5.32.0, 5.33.1
 
   MathClipper = buildPerlModule {
     pname = "Math-Clipper";
@@ -17676,8 +17666,6 @@ let
     propagatedBuildInputs = [ StatisticsDescriptive StatisticsDistributions ];
   };
 
-  Storable = null; # part of Perl 5.30.3, 5.32.0, 5.33.1
-
   StreamBuffered = buildPerlPackage {
     pname = "Stream-Buffered";
     version = "0.03";
@@ -20867,10 +20855,6 @@ let
     buildInputs = [ TestDifferences ];
   };
 
-  threadsshared = null; # part of Perl 5.30.3, 5.32.0, 5.33.1
-
-  ThreadQueue = null; # part of Perl 5.30.3, 5.32.0, 5.33.1
-
   Throwable = buildPerlPackage {
     pname = "Throwable";
     version = "0.200013";
@@ -22466,6 +22450,15 @@ let
   TimeHiRes = null; # part of Perl 5.28
   UnicodeCollate = null; # part of Perl 5.28
   ModuleCoreList = null; # part of Perl 5.28.2
+
+  bignum = null; # part of Perl 5.30.3
+  DataDumper = null; # part of Perl 5.30.3
+  ExtUtilsManifest = null; # part of Perl 5.30.3
+  FileTemp = null; # part of Perl 5.30.3
+  MathBigRat = null; # part of Perl 5.30.3
+  Storable = null; # part of Perl 5.30.3
+  threadsshared = null; # part of Perl 5.30.3
+  ThreadQueue = null; # part of Perl 5.30.3
 
   ArchiveZip_1_53 = self.ArchiveZip;
   Autobox = self.autobox;
