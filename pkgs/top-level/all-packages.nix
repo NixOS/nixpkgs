@@ -14755,7 +14755,7 @@ in
 
   python-qt = callPackage ../development/libraries/python-qt {
     python = python27;
-    inherit (qt5) qmake qttools qtwebengine qtxmlpatterns;
+    inherit (qt514) qmake qttools qtwebengine qtxmlpatterns;
   };
 
   pyotherside = libsForQt5.callPackage ../development/libraries/pyotherside {};
