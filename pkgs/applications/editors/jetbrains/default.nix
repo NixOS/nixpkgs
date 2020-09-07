@@ -312,6 +312,19 @@ in
     update-channel = "IntelliJ IDEA RELEASE";
   };
 
+  mps = buildMps rec {
+    name = "mps-${version}";
+    version = "2020.1.4"; /* updated by script */
+    description = "Create your own domain-specific language";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/mps/2020.1/MPS-${version}.tar.gz";
+      sha256 = "1j5n100fl8yvfla2slm95wv499azwzzxigp1kdcaj8xbc0a0mp7c"; /* updated by script */
+    };
+    wmClass = "jetbrains-mps";
+    update-channel = "MPS RELEASE";
+  };
+
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
     version = "2019.3.2"; /* updated by script */
