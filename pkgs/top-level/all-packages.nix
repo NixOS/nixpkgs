@@ -25161,6 +25161,8 @@ in
 
   protonmail-bridge = callPackage ../applications/networking/protonmail-bridge { };
 
+  protege = callPackage ../applications/science/logic/protege { };
+
   protonvpn-cli = callPackage ../applications/networking/protonvpn-cli { };
 
   protonvpn-gui = callPackage ../applications/networking/protonvpn-gui { };
