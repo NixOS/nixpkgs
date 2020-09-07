@@ -5,14 +5,14 @@
 # mkdir -p ~/.config/obs-studio/plugins/bin
 # ln -s ~/.nix-profile/lib/obs-plugins/obs-ndi.so ~/.config/obs-studio/plugins/bin/
 
-{ stdenv, fetchFromGitHub, obs-studio, cmake, qt5, ndi }:
+{ stdenv, fetchFromGitHub, obs-studio, cmake, qtbase, ndi }:
 
 stdenv.mkDerivation rec {
   pname = "obs-ndi";
   version = "4.7.1";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ obs-studio qt5.qtbase ndi ];
+  buildInputs = [ obs-studio qtbase ndi ];
 
   src = fetchFromGitHub {
     owner = "Palakis";
