@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, getopt, makeWrapper, utillinux, gperf }:
+{ stdenv, fetchurl, getopt, utillinux, gperf }:
 
 stdenv.mkDerivation rec {
   pname = "libseccomp";
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" "man" ];
 
-  buildInputs = [ getopt makeWrapper gperf ];
+  nativeBuildInputs = [ gperf ];
+  buildInputs = [ getopt ];
 
   patchPhase = ''
     patchShebangs .

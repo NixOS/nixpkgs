@@ -1,10 +1,19 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, pytestcov, mock, Mako, decorator, stevedore
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pytest
+, pytestcov
+, mock
+, Mako
+, decorator
+, stevedore
 }:
 
 buildPythonPackage rec {
   pname = "dogpile.cache";
   version = "1.0.2";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

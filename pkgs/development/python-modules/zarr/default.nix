@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, isPy27
 , fetchPypi
 , setuptools_scm
 , asciitree
@@ -12,6 +13,7 @@
 buildPythonPackage rec {
   pname = "zarr";
   version = "2.4.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

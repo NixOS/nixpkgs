@@ -1,6 +1,6 @@
 /*
 
-Configuration files are linked to /etc/fonts/${pkgs.fontconfig.configVersion}/conf.d/
+Configuration files are linked to /etc/fonts/conf.d/
 
 This module generates a package containing configuration files and link it in /etc/fonts.
 
@@ -35,7 +35,7 @@ let
     in
     pkgs.writeText "fc-00-nixos-cache.conf" ''
       <?xml version='1.0'?>
-      <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+      <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
       <fontconfig>
         <!-- Font directories -->
         ${concatStringsSep "\n" (map (font: "<dir>${font}</dir>") config.fonts.fonts)}
@@ -53,7 +53,7 @@ let
   # priority 10
   renderConf = pkgs.writeText "fc-10-nixos-rendering.conf" ''
     <?xml version='1.0'?>
-    <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+    <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
     <fontconfig>
 
       <!-- Default rendering settings -->
@@ -110,7 +110,7 @@ let
     in
     pkgs.writeText "fc-52-nixos-default-fonts.conf" ''
     <?xml version='1.0'?>
-    <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+    <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
     <fontconfig>
 
       <!-- Default fonts -->
@@ -129,7 +129,7 @@ let
   # priority 53
   rejectBitmaps = pkgs.writeText "fc-53-no-bitmaps.conf" ''
     <?xml version="1.0"?>
-    <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+    <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
     <fontconfig>
 
     ${optionalString (!cfg.allowBitmaps) ''
@@ -157,7 +157,7 @@ let
   # priority 53
   rejectType1 = pkgs.writeText "fc-53-nixos-reject-type1.conf" ''
     <?xml version="1.0"?>
-    <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+    <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
     <fontconfig>
 
     <!-- Reject Type 1 fonts -->
@@ -176,15 +176,16 @@ let
   confPkg = pkgs.runCommand "fontconfig-conf" {
     preferLocalBuild = true;
   } ''
-    dst=$out/etc/fonts/${pkg.configVersion}/conf.d
+    dst=$out/etc/fonts/conf.d
     mkdir -p $dst
 
     # fonts.conf
     ln -s ${pkg.out}/etc/fonts/fonts.conf \
           $dst/../fonts.conf
     # TODO: remove this legacy symlink once people stop using packages built before #95358 was merged
-    ln -s /etc/fonts/${pkg.configVersion}/fonts.conf \
-          $out/etc/fonts/fonts.conf
+    mkdir -p $out/etc/fonts/2.11
+    ln -s /etc/fonts/fonts.conf \
+          $out/etc/fonts/2.11/fonts.conf
 
     # fontconfig default config files
     ln -s ${pkg.out}/etc/fonts/conf.d/*.conf \
@@ -197,10 +198,8 @@ let
     ln -s ${renderConf}       $dst/10-nixos-rendering.conf
 
     # 50-user.conf
-    # Since latest fontconfig looks for default files inside the package,
-    # we had to move this one elsewhere to be able to exclude it here.
-    ${optionalString cfg.includeUserConf ''
-    ln -s ${pkg.out}/etc/fonts/conf.d.bak/50-user.conf $dst/50-user.conf
+    ${optionalString (!cfg.includeUserConf) ''
+    rm $dst/50-user.conf
     ''}
 
     # local.conf (indirect priority 51)

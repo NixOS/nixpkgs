@@ -12,7 +12,7 @@
 # files.
 
 let
-  crossBuildTools = interactive && stdenv.hostPlatform != stdenv.buildPlatform;
+  crossBuildTools = stdenv.hostPlatform != stdenv.buildPlatform;
 in
 
 with stdenv.lib;
@@ -26,8 +26,7 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
-  patches = optional (version == "6.5") ./perl.patch
-    ++ optional crossBuildTools ./cross-tools-flags.patch;
+  patches = optional crossBuildTools ./cross-tools-flags.patch;
 
   # ncurses is required to build `makedoc'
   # this feature is introduced by the ./cross-tools-flags.patch

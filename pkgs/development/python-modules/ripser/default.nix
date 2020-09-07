@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , cython
 , numpy
 , scipy
@@ -11,11 +12,12 @@
 
 buildPythonPackage rec {
   pname = "ripser";
-  version = "0.5.3";
+  version = "0.5.4";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cb63a03205511cd3d2aae586cec9515dddfbec3ce269dd0560911b0a55d75632";
+    sha256 = "7a54750427e3f1bbb26c625075c831314760a9e5b5bcd3b797df668f020c9eb6";
   };
 
   checkInputs = [

@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-kms";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5af43d30adbb19023f9fec9d481b1d2d35be690d2a8dcdf9d6abc2c1d302cc17";
+    sha256 = "c590a8ab12a3f776ab35e570d21c0881f9d73c444bd509e54321a4c715233372";
   };
 
   checkInputs = [ pytest mock ];

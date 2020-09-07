@@ -12,11 +12,9 @@
                 extension-element-prefixes="str"
                 >
 
-  <xsl:output method='xml' encoding="UTF-8" doctype-system="fonts.dtd" />
+  <xsl:output method='xml' encoding="UTF-8" doctype-system="urn:fontconfig:fonts.dtd" />
 
   <xsl:param name="fontDirectories" />
-  <xsl:param name="fontconfig" />
-  <xsl:param name="fontconfigConfigVersion" />
 
   <xsl:template match="/fontconfig">
 
@@ -28,11 +26,8 @@
       <!-- /var/cache/fontconfig is useful for non-nixos systems -->
       <cachedir>/var/cache/fontconfig</cachedir>
 
-      <!-- versioned system-wide config -->
-      <include ignore_missing="yes">/etc/fonts/<xsl:value-of select="$fontconfigConfigVersion" />/conf.d</include>
-
-      <!-- upstream config -->
-      <include><xsl:value-of select="$fontconfig" />/etc/fonts/conf.d</include>
+      <!-- system-wide config -->
+      <include ignore_missing="yes">/etc/fonts/conf.d</include>
 
       <dir prefix="xdg">fonts</dir>
       <xsl:for-each select="str:tokenize($fontDirectories)">
