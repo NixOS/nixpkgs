@@ -12,7 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "1a747bmc6s007ram0w4xf1y2nb3pphvqnlx59098lr3v7gllp7x3";
-  checkFlags = "--test-threads=1";
+  #checkFlags = "--test-threads=1";
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Terminal code snippets manager";
