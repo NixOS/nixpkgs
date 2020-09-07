@@ -1,19 +1,17 @@
-{ stdenv, fetchFromGitHub, buildGoPackage}:
+{ stdenv, fetchFromGitHub, buildGoModule }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "dnscontrol";
-  version = "3.2.0";
-
-  goPackagePath = "github.com/StackExchange/dnscontrol";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "StackExchange";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1lrn1whmx9zkyvs505zxrsmnr5s6kpj3kjkr6rblfwdlnadkgfj7";
+    sha256 = "0lldkx906imwm8mxcfafpanbgaqh0sdm3zdkwkn7j0nmngyncx9p";
   };
 
-  subPackages = [ "." ];
+  vendorSha256 = "16cc6hb2iwh1zwrrnb7s4dqxqhaj67gq3gfr5xvh5kqafd685hvx";
 
   meta = with stdenv.lib; {
     description = "Synchronize your DNS to multiple providers from a simple DSL";
