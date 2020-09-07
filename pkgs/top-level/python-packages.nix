@@ -4425,6 +4425,7 @@ in {
 
   pivy = callPackage ../development/python-modules/pivy {
     inherit (qt5) qtbase qmake;
+    inherit (libsForQt5) soqt;
   };
 
   pkgconfig = callPackage ../development/python-modules/pkgconfig { inherit (pkgs) pkgconfig; };

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pkgs, qtbase, qmake }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, pkgs, qtbase, qmake, soqt }:
 
 buildPythonPackage rec {
   pname = "pivy";
