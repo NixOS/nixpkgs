@@ -6094,8 +6094,9 @@ in {
   robomachine = callPackage ../development/python-modules/robomachine { };
 
   roboschool = callPackage ../development/python-modules/roboschool {
-    inherit (pkgs) pkgconfig;
-  }; # use normal pkgconfig, not the python package
+    inherit (pkgs) pkgconfig; # use normal pkgconfig, not the python package
+    inherit (qt5) qtbase;
+  };
 
   robot-detection = callPackage ../development/python-modules/robot-detection { };
 
