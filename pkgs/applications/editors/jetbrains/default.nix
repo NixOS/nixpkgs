@@ -294,12 +294,12 @@ in
 
   goland = buildGoland rec {
     name = "goland-${version}";
-    version = "2020.2.1"; /* updated by script */
+    version = "2020.2.2"; /* updated by script */
     description = "Up and Coming Go IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "15jd2yn4g3lya54ppcp8b0bvf2pp2khdvqba2g1aml16d5z8mkq6"; /* updated by script */
+      sha256 = "1r6bbx5hsg82l1pa3syfdi8nbsz6rrfszsw4dmwcnxvccp2hs3mh"; /* updated by script */
     };
     wmClass = "jetbrains-goland";
     update-channel = "GoLand RELEASE";
