@@ -6376,7 +6376,7 @@ in {
   shellingham = callPackage ../development/python-modules/shellingham { };
 
   shiboken2 =
-    toPythonModule (callPackage ../development/python-modules/shiboken2 { inherit (pkgs) cmake qt5 llvmPackages; });
+    toPythonModule (callPackage ../development/python-modules/shiboken2 { inherit (pkgs) cmake llvmPackages; inherit qt5; });
 
   shippai = callPackage ../development/python-modules/shippai { };
 
