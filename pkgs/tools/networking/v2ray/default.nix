@@ -1,8 +1,8 @@
-{ callPackage, fetchFromGitHub, fetchurl
+{ lib, fetchFromGitHub, fetchurl, linkFarm, buildGoModule, runCommand, makeWrapper, nixosTests
 , assetOverrides ? {}
-, ... } @ args:
+}:
 
-callPackage ./generic.nix (rec {
+let
   version = "4.27.5";
 
   src = fetchFromGitHub {
@@ -35,4 +35,55 @@ callPackage ./generic.nix (rec {
 
   } // assetOverrides;
 
-} // args)
+  assetsDrv = linkFarm "v2ray-assets" (lib.mapAttrsToList (name: path: {
+    inherit name path;
+  }) assets);
+
+  core = buildGoModule rec {
+    pname = "v2ray-core";
+    inherit version src;
+
+    inherit vendorSha256;
+
+    doCheck = false;
+
+    buildPhase = ''
+      runHook preBuild
+
+      go build -o v2ray v2ray.com/core/main
+      go build -o v2ctl v2ray.com/core/infra/control/main
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      install -Dm755 v2ray v2ctl -t $out/bin
+    '';
+  };
+
+in runCommand "v2ray-${version}" {
+  inherit version;
+
+  buildInputs = [ assetsDrv core ];
+  nativeBuildInputs = [ makeWrapper ];
+
+  meta = {
+    homepage = "https://www.v2ray.com/en/index.html";
+    description = "A platform for building proxies to bypass network restrictions";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ servalcatty ];
+  };
+
+  passthru = {
+    updateScript = ./update.sh;
+    tests = {
+      simple-vmess-proxy-test = nixosTests.v2ray;
+    };
+  };
+
+} ''
+  for file in ${core}/bin/*; do
+    makeWrapper "$file" "$out/bin/$(basename "$file")" \
+      --set-default V2RAY_LOCATION_ASSET ${assetsDrv}
+  done
+''
