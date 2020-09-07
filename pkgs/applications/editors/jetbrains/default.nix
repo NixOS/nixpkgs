@@ -346,12 +346,12 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2020.2"; /* updated by script */
+    version = "2020.2.1"; /* updated by script */
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "1zxhb2w7nivnx8habcf5vii6bwzaihs5x8smy0zf8ngv3xwr6vjc"; /* updated by script */
+      sha256 = "14hz6w5lgn8ddscicm4s9xhi07j5adsq0bmyr8amzmj5q6jgw4p9"; /* updated by script */
     };
     wmClass = "jetbrains-phpstorm";
     update-channel = "PhpStorm RELEASE";
