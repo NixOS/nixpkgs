@@ -5118,7 +5118,9 @@ in {
   else
     throw "pyobjc can only be built on Mac OS";
 
-  pyocr = callPackage ../development/python-modules/pyocr { };
+  pyocr = callPackage ../development/python-modules/pyocr {
+    tesseract = pkgs.tesseract_4;
+  };
 
   pyodbc = callPackage ../development/python-modules/pyodbc { };
 
