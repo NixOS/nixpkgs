@@ -4193,7 +4193,8 @@ in {
 
   palettable = callPackage ../development/python-modules/palettable { };
 
-  pam = callPackage ../development/python-modules/pam { inherit (pkgs) pam; };
+  # Alias. Added 2020-09-07.
+  pam = self.python-pam;
 
   pamela = callPackage ../development/python-modules/pamela { };
 
@@ -5713,7 +5714,9 @@ in {
 
   python-packer = callPackage ../development/python-modules/python-packer { };
 
-  python-pam = callPackage ../development/python-modules/python-pam { };
+  python-pam = callPackage ../development/python-modules/python-pam {
+    inherit (pkgs) pam;
+  };
 
   python-periphery = callPackage ../development/python-modules/python-periphery { };
 
