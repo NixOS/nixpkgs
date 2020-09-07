@@ -302,6 +302,35 @@ rec {
       functor = (defaultFunctor name) // { wrapped = elemType; };
     };
 
+
+    orderOf = {
+      before ? a: b: false,
+      elemType
+    }: mkOptionType rec {
+      name = "orderOf";
+      description = "ordered entries of ${elemType.description}s";
+      check = elemType.check;
+      merge = loc: defs:
+        let
+          nodeAttributes = (attrsOf elemType).merge loc defs;
+          entries = mapAttrsToList nameValuePair nodeAttributes;
+          sortedEntries = toposort before entries;
+          cycleError =
+            let showCycle = cycle: concatMapStringsSep " -> " (x: x.name) (reverseList (cycle ++ [ (head cycle) ]));
+            in throw "Cycle detected when trying to order option `${showOption loc}': ${showCycle sortedEntries.cycle}";
+        in if sortedEntries ? result then map (v: v.value) sortedEntries.result else cycleError;
+      getSubOptions = elemType.getSubOptions;
+      getSubModules = elemType.getSubModules;
+      substSubModules = m: orderOf { inherit before; elemType = elemType.substSubModules m; };
+      functor = defaultFunctor name // {
+        payload = { inherit before elemType; };
+        binOp = lhs: rhs: {
+          before = a: b: lhs.before a b || rhs.before a b;
+          elemType = lhs.elemType.typeMerge rhs.elemType.functor;
+        };
+      };
+    };
+
     # A version of attrsOf that's lazy in its values at the expense of
     # conditional definitions not working properly. E.g. defining a value with
     # `foo.attr = mkIf false 10`, then `foo ? attr == true`, whereas with
