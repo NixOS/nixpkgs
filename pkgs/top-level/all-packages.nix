@@ -14772,8 +14772,6 @@ in
 
   qjson = callPackage ../development/libraries/qjson { };
 
-  qoauth = callPackage ../development/libraries/qoauth { };
-
   qolibri = libsForQt514.callPackage ../applications/misc/qolibri { };
 
   qt3 = callPackage ../development/libraries/qt-3 {
@@ -14963,7 +14961,10 @@ in
     qmltermwidget = callPackage ../development/libraries/qmltermwidget {
       inherit (darwin.apple_sdk.libs) utmp;
     };
-    qmlbox2d = libsForQt5.callPackage ../development/libraries/qmlbox2d { };
+
+    qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
+
+    qoauth = callPackage ../development/libraries/qoauth { };
 
     qscintilla = callPackage ../development/libraries/qscintilla {
       withQt5 = true;
