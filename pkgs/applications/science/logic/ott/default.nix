@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, ocaml }:
+{ stdenv, fetchFromGitHub, pkgconfig, ocaml, opaline }:
 
 stdenv.mkDerivation rec {
   pname = "ott";
@@ -11,17 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "0l81126i2qkz11fs5yrjdgymnqgjcs5avb7f951h61yh1s68jpnn";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig opaline ];
   buildInputs = [ ocaml ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp src/ott.opt $out/bin
-    ln -s $out/bin/ott.opt $out/bin/ott
+  installTargets = "ott.install";
 
-    mkdir -p $out/share/emacs/site-lisp
-    cp emacs/ott-mode.el $out/share/emacs/site-lisp
-    '';
+  postInstall = "opaline -prefix $out";
 
   meta = {
     description = "Ott: tool for the working semanticist";
