@@ -72,7 +72,7 @@ python3.pkgs.buildPythonApplication rec  {
   meta = with stdenv.lib; {
     homepage = "https://github.com/linuxmint/warpinator";
     description = "Share files across the LAN";
-    license = licenses.gpl3plus;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.mkg20001 ];
   };
