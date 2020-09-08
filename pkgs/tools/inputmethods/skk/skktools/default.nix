@@ -10,12 +10,12 @@
 #   Probably, shall package the newer tools as skktools-extra in the future.
 stdenv.mkDerivation rec {
   pname = "skktools";
-  version = "1.3.3";
+  version = "1.3.4";
   src = fetchFromGitHub {
     owner = "skk-dev";
     repo = "skktools";
     rev = "skktools-${stdenv.lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "11v1i5gkxvfsipigc1w1m16ijzh85drpl694kg6ih4jfam1q4vdh";
+    sha256 = "1zway8jsm18279xq8zlpr84iqiw373x3v0ysay74n9bjqxbl234a";
   };
   # # See "12.2. Package naming"
   # name = "skktools-unstable-${version}";
