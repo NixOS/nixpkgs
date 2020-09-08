@@ -5,14 +5,8 @@ with lib;
 let
   cfg = config.services.telegraf;
 
-  configFile = pkgs.runCommand "config.toml" {
-    buildInputs = [ pkgs.remarshal ];
-    preferLocalBuild = true;
-  } ''
-    remarshal -if json -of toml \
-      < ${pkgs.writeText "config.json" (builtins.toJSON cfg.extraConfig)} \
-      > $out
-  '';
+  settingsFormat = pkgs.formats.toml {};
+  configFile = settingsFormat.generate "config.toml" cfg.extraConfig;
 in {
   ###### interface
   options = {
@@ -42,7 +36,7 @@ in {
       extraConfig = mkOption {
         default = {};
         description = "Extra configuration options for telegraf";
-        type = types.attrs;
+        type = settingsFormat.type;
         example = {
           outputs = {
             influxdb = {
@@ -67,7 +61,7 @@ in {
     systemd.services.telegraf = let
       finalConfigFile = if config.services.telegraf.environmentFile == null
                         then configFile
-                        else "/tmp/config.toml";
+                        else "/var/run/telegraf/config.toml";
     in {
       description = "Telegraf Agent";
       wantedBy = [ "multi-user.target" ];
@@ -75,12 +69,15 @@ in {
       serviceConfig = {
         EnvironmentFile = config.services.telegraf.environmentFile;
         ExecStartPre = lib.optional (config.services.telegraf.environmentFile != null)
-          ''${pkgs.envsubst}/bin/envsubst -o /tmp/config.toml -i "${configFile}"'';
+          (pkgs.writeShellScript "pre-start" ''
+            umask 077
+            ${pkgs.envsubst}/bin/envsubst -i "${configFile}" > /var/run/telegraf/config.toml
+          '');
         ExecStart=''${cfg.package}/bin/telegraf -config ${finalConfigFile}'';
         ExecReload="${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        RuntimeDirectory = "telegraf";
         User = "telegraf";
         Restart = "on-failure";
-        PrivateTmp = true;
         # for ping probes
         AmbientCapabilities = [ "CAP_NET_RAW" ];
       };
