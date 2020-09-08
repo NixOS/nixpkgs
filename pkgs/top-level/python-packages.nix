@@ -2455,6 +2455,8 @@ in {
 
   google-compute-engine = callPackage ../tools/virtualization/google-compute-engine { };
 
+  google_crc32c = callPackage ../development/python-modules/google_crc32c { };
+
   google-i18n-address = callPackage ../development/python-modules/google-i18n-address { };
 
   google-music = callPackage ../development/python-modules/google-music { };
