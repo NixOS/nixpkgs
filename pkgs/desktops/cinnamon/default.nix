@@ -12,6 +12,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     installPhase = "mv svg $out/share/iso-flags-svg";
   });
 
+  blueberry = callPackage ./blueberry { };
   cinnamon-common = callPackage ./cinnamon-common { };
   cinnamon-control-center = callPackage ./cinnamon-control-center { };
   cinnamon-desktop = callPackage ./cinnamon-desktop { };
