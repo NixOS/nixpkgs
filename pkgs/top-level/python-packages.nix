@@ -15,6 +15,11 @@
 with pkgs.lib;
 
 let
+  qt5 = pkgs.qt514;
+  libsForQt5 = pkgs.libsForQt514;
+in
+
+let
   packages = ( self:
 
 let
@@ -3582,7 +3587,7 @@ in {
 
   maya = callPackage ../development/python-modules/maya { };
 
-  mayavi = pkgs.libsForQt5.callPackage ../development/python-modules/mayavi {
+  mayavi = libsForQt5.callPackage ../development/python-modules/mayavi {
     inherit buildPythonPackage isPy27 fetchPypi;
     inherit (self) pyface pygments numpy vtk traitsui envisage apptools pyqt5;
   };
@@ -4168,7 +4173,7 @@ in {
 
   ovh = callPackage ../development/python-modules/ovh { };
 
-  ovito = toPythonModule (pkgs.libsForQt5.callPackage ../development/python-modules/ovito { pythonPackages = self; });
+  ovito = toPythonModule (libsForQt5.callPackage ../development/python-modules/ovito { pythonPackages = self; });
 
   owslib = callPackage ../development/python-modules/owslib { };
 
@@ -4418,7 +4423,10 @@ in {
 
   pipx = callPackage ../development/python-modules/pipx { };
 
-  pivy = callPackage ../development/python-modules/pivy { };
+  pivy = callPackage ../development/python-modules/pivy {
+    inherit (qt5) qtbase qmake;
+    inherit (libsForQt5) soqt;
+  };
 
   pkgconfig = callPackage ../development/python-modules/pkgconfig { inherit (pkgs) pkgconfig; };
 
@@ -4489,8 +4497,8 @@ in {
   pooch = callPackage ../development/python-modules/pooch { };
 
   poppler-qt5 = callPackage ../development/python-modules/poppler-qt5 {
-    inherit (pkgs.qt5) qtbase;
-    inherit (pkgs.libsForQt5) poppler;
+    inherit (qt5) qtbase;
+    inherit (libsForQt5) poppler;
     inherit (pkgs) pkgconfig;
   };
 
@@ -5193,7 +5201,7 @@ in {
 
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix { inherit (pkgs) pkgconfig; };
 
-  pyqt5 = pkgs.libsForQt5.callPackage ../development/python-modules/pyqt/5.x.nix { pythonPackages = self; };
+  pyqt5 = libsForQt5.callPackage ../development/python-modules/pyqt/5.x.nix { pythonPackages = self; };
 
   pyqt5_with_qtmultimedia = self.pyqt5.override { withMultimedia = true; };
 
@@ -5206,7 +5214,7 @@ in {
 
   pyqtgraph = callPackage ../development/python-modules/pyqtgraph { };
 
-  pyqtwebengine = pkgs.libsForQt5.callPackage ../development/python-modules/pyqtwebengine { pythonPackages = self; };
+  pyqtwebengine = libsForQt5.callPackage ../development/python-modules/pyqtwebengine { pythonPackages = self; };
 
   pyquery = callPackage ../development/python-modules/pyquery { };
 
@@ -5312,9 +5320,9 @@ in {
   pyshp = callPackage ../development/python-modules/pyshp { };
 
   pyside2-tools =
-    toPythonModule (callPackage ../development/python-modules/pyside2-tools { inherit (pkgs) cmake qt5; });
+    toPythonModule (callPackage ../development/python-modules/pyside2-tools { inherit (pkgs) cmake; inherit qt5; });
 
-  pyside2 = toPythonModule (callPackage ../development/python-modules/pyside2 { inherit (pkgs) cmake qt5 ninja; });
+  pyside2 = toPythonModule (callPackage ../development/python-modules/pyside2 { inherit (pkgs) cmake ninja; inherit qt5; });
 
   pyside = callPackage ../development/python-modules/pyside { inherit (pkgs) mesa; };
 
@@ -5909,7 +5917,7 @@ in {
 
   qscintilla-qt4 = callPackage ../development/python-modules/qscintilla { };
 
-  qscintilla-qt5 = pkgs.libsForQt5.callPackage ../development/python-modules/qscintilla-qt5 { pythonPackages = self; };
+  qscintilla-qt5 = libsForQt5.callPackage ../development/python-modules/qscintilla-qt5 { pythonPackages = self; };
 
   qscintilla = self.qscintilla-qt4;
 
@@ -6089,8 +6097,9 @@ in {
   robomachine = callPackage ../development/python-modules/robomachine { };
 
   roboschool = callPackage ../development/python-modules/roboschool {
-    inherit (pkgs) pkgconfig;
-  }; # use normal pkgconfig, not the python package
+    inherit (pkgs) pkgconfig; # use normal pkgconfig, not the python package
+    inherit (qt5) qtbase;
+  };
 
   robot-detection = callPackage ../development/python-modules/robot-detection { };
 
@@ -6375,7 +6384,7 @@ in {
   shellingham = callPackage ../development/python-modules/shellingham { };
 
   shiboken2 =
-    toPythonModule (callPackage ../development/python-modules/shiboken2 { inherit (pkgs) cmake qt5 llvmPackages; });
+    toPythonModule (callPackage ../development/python-modules/shiboken2 { inherit (pkgs) cmake llvmPackages; inherit qt5; });
 
   shippai = callPackage ../development/python-modules/shippai { };
 

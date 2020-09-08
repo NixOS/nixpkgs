@@ -1,6 +1,6 @@
 { stdenv
 , fetchurl
-, qt5
+, qmake
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "09yjgzh8677pzkkr7a59pql5d11451c22pxksk2my30mapxsri96";
   };
   nativeBuildInputs = [
-    qt5.qmake
+    qmake
   ];
   preConfigure = ''
     sed -i 's/CONFIG += staticlib/CONFIG += shared/' dxflib.pro
@@ -42,4 +42,3 @@ stdenv.mkDerivation rec {
     description = ''DXF file format library'';
   };
 }
-
