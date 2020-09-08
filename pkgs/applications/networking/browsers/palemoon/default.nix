@@ -11,7 +11,7 @@
 
 let
 
-  libPath = lib.makeLibraryPath [ ffmpeg ];
+  libPath = lib.makeLibraryPath [ ffmpeg libpulseaudio ];
   gtkVersion = if withGTK3 then "3" else "2";
 
 in stdenv.mkDerivation rec {
