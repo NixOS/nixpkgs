@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
 `buildRustPackage` requires a `cargoSha256` attribute which is computed over
 all crate sources of this package. Currently it is obtained by inserting a
 fake checksum into the expression and building the package once. The correct
-checksum can be then take from the failed build.
+checksum can then be taken from the failed build.
 
 Per the instructions in the [Cargo Book](https://doc.rust-lang.org/cargo/guide/cargo-toml-vs-cargo-lock.html)
 best practices guide, Rust applications should always commit the `Cargo.lock`
