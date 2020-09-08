@@ -1,7 +1,8 @@
 { stdenv, buildPythonPackage, fetchPypi, fetchpatch
 , nose, numpy
 , bottle, pyyaml, redis, six
-, zlib }:
+, zlib
+, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "Jug";
@@ -20,6 +21,9 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "859a4b4cb26a0010299b189c92cfba626852c97a38e22f3d1b56e4e1d8ad8620";
   };
+
+  checkInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [ "jug" ];
 
   meta = with stdenv.lib; {
     description = "A Task-Based Parallelization Framework";
