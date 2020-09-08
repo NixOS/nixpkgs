@@ -13939,6 +13939,8 @@ in
 
   libqalculate = callPackage ../development/libraries/libqalculate { };
 
+  libqt5pas = callPackage ../development/compilers/fpc/libqt5pas.nix { };
+
   libroxml = callPackage ../development/libraries/libroxml { };
 
   librsvg = callPackage ../development/libraries/librsvg { };
@@ -19874,6 +19876,10 @@ in
 
   codeblocks = callPackage ../applications/editors/codeblocks { };
   codeblocksFull = codeblocks.override { contribPlugins = true; };
+
+  cudatext-qt = callPackage ../applications/editors/cudatext { widgetset = "qt5"; };
+  cudatext-gtk = callPackage ../applications/editors/cudatext { widgetset = "gtk2"; };
+  cudatext = cudatext-qt;
 
   convos = callPackage ../applications/networking/irc/convos { };
 
