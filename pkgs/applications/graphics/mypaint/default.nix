@@ -8,6 +8,7 @@
 , librsvg
 , gobject-introspection
 , libmypaint
+, hicolor-icon-theme
 , mypaint-brushes
 , gdk-pixbuf
 , pkgconfig
@@ -36,7 +37,9 @@ in buildPythonApplication rec {
     swig
     wrapGAppsHook
     gobject-introspection # for setup hook
+    hicolor-icon-theme # fór setup hook
   ];
+
   buildInputs = [
     gtk3
     gdk-pixbuf
@@ -48,6 +51,9 @@ in buildPythonApplication rec {
     librsvg
     pycairo
     pygobject3
+
+    # Mypaint checks for a presence of this theme scaffold and crashes when not present.
+    hicolor-icon-theme
   ];
 
   propagatedBuildInputs = [
