@@ -1,5 +1,17 @@
-{ stdenv, fetchurl, coreutils, bash, btrfs-progs, openssh, perl, perlPackages
-, util-linux, asciidoc, asciidoctor, mbuffer, makeWrapper }:
+{ stdenv
+, fetchurl
+, coreutils
+, bash
+, btrfs-progs
+, openssh
+, perl
+, perlPackages
+, mbuffer
+, makeWrapper
+, buildPackages
+, logger
+, sudo
+}:
 
 stdenv.mkDerivation rec {
   pname = "btrbk";
@@ -10,9 +22,9 @@ stdenv.mkDerivation rec {
     sha256 = "153inyvvnl17hq1w3nsa783havznaykdam2yrj775bmi2wg6fvwn";
   };
 
-  nativeBuildInputs = [ asciidoc asciidoctor makeWrapper ];
+  nativeBuildInputs = [ buildPackages.asciidoc buildPackages.asciidoctor makeWrapper ];
 
-  buildInputs = with perlPackages; [ perl DateCalc ];
+  buildInputs = [ bash ] ++ (with perlPackages; [ perl DateCalc ]);
 
   preInstall = ''
     for f in $(find . -name Makefile); do
@@ -29,24 +41,27 @@ stdenv.mkDerivation rec {
       --replace "/bin/date" "${coreutils}/bin/date" \
       --replace "/bin/echo" "${coreutils}/bin/echo" \
       --replace '$btrbk' 'btrbk'
-
-    # Fix SSH filter script
-    sed -i '/^export PATH/d' ssh_filter_btrbk.sh
-    substituteInPlace ssh_filter_btrbk.sh --replace logger ${util-linux}/bin/logger
   '';
 
   preFixup = ''
     wrapProgram $out/sbin/btrbk \
       --set PERL5LIB $PERL5LIB \
       --prefix PATH ':' "${stdenv.lib.makeBinPath [ btrfs-progs bash mbuffer openssh ]}"
+    substituteInPlace $out/sbin/btrbk --replace "${buildPackages.bash}" "${bash}"
+
+    # Fix SSH filter script
+    sed -i '/^export PATH/d' $out/share/btrbk/scripts/ssh_filter_btrbk.sh
+    wrapProgram $out/share/btrbk/scripts/ssh_filter_btrbk.sh \
+        --prefix PATH ':' "${stdenv.lib.makeBinPath [ btrfs-progs bash coreutils logger sudo ]}"
+    substituteInPlace $out/share/btrbk/scripts/ssh_filter_btrbk.sh --replace "${buildPackages.bash}" "${bash}"
   '';
 
   meta = with stdenv.lib; {
     description = "A backup tool for btrfs subvolumes";
     homepage = "https://digint.ch/btrbk";
-    license = licenses.gpl3;
+    changelog = "https://digint.ch/download/btrbk/releases/ChangeLog";
+    license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ asymmetric ];
-    inherit version;
+    maintainers = with maintainers; [ asymmetric kampka ];
   };
 }

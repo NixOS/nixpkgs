@@ -1671,9 +1671,7 @@ in
 
   btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
 
-  btrbk = callPackage ../tools/backup/btrbk {
-    asciidoc = asciidoc-full;
-  };
+  btrbk = callPackage ../tools/backup/btrbk { };
 
   buildpack = callPackage ../development/tools/buildpack { };
 
