@@ -1,5 +1,10 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
-    name = "shadowsocks";
+{ name
+, plugin ? null
+, pluginOpts ? ""
+}:
+
+import ../make-test-python.nix ({ pkgs, lib, ... }: {
+    inherit name;
     meta = {
       maintainers = with lib.maintainers; [ hmenke ];
     };
@@ -22,8 +27,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           port = 8488;
           fastOpen = false;
           mode = "tcp_and_udp";
-          plugin = "${pkgs.shadowsocks-v2ray-plugin}/bin/v2ray-plugin";
-          pluginOpts = "server;host=nixos.org";
+        } // lib.optionalAttrs (plugin != null) {
+          inherit plugin;
+          pluginOpts = "server;${pluginOpts}";
         };
         services.nginx = {
           enable = true;
@@ -42,10 +48,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           description = "connect to shadowsocks";
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
-          path = with pkgs; [
-            shadowsocks-libev
-            shadowsocks-v2ray-plugin
-          ];
+          path = with pkgs; [ shadowsocks-libev ];
           script = ''
             exec ss-local \
                 -s 192.168.0.1 \
@@ -54,8 +57,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
                 -k 'pa$$w0rd' \
                 -m chacha20-ietf-poly1305 \
                 -a nobody \
-                --plugin "${pkgs.shadowsocks-v2ray-plugin}/bin/v2ray-plugin" \
-                --plugin-opts "host=nixos.org"
+                ${lib.optionalString (plugin != null) ''
+                  --plugin "${plugin}" --plugin-opts "${pluginOpts}"
+                ''}
           '';
         };
       };
