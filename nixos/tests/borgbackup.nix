@@ -184,6 +184,8 @@ in {
         client.wait_for_unit("network.target")
         client.systemctl("start --wait borgbackup-job-remote")
         client.fail("systemctl is-failed borgbackup-job-remote")
+        client.systemctl("start --wait borgbackup-check-remote")
+        client.fail("systemctl is-failed borgbackup-check-remote")
 
         # Make sure we can't access repos other than the specified one
         client.fail("{} list borg\@server:wrong".format(borg))

@@ -125,6 +125,25 @@ let
       after = optional (cfg.persistentTimer && !isLocalPath cfg.repo) "network-online.target";
     };
 
+  mkCheckService = name: cfg: nameValuePair "borgbackup-check-${name}" rec {
+      description = "Check BorgBackup repository ${name}";
+      after = [ "borgbackup-job-${name}.service" ];
+      conflicts = after;
+      path = with pkgs; [ borgbackup openssh ];
+      serviceConfig = {
+        User = cfg.user;
+        Group = cfg.group;
+        CPUSchedulingPolicy = "idle";
+        IOSchedulingClass = "idle";
+        ReadWritePaths = mkIf (isLocalPath cfg.repo) [ cfg.repo ];
+        ExecStart = "${pkgs.borgbackup}/bin/borg check";
+      };
+      environment = {
+        BORG_REPO = cfg.repo;
+      } // (mkPassEnv cfg) // cfg.environment;
+      startAt = "weekly";
+    };
+
   # utility function around makeWrapper
   mkWrapperDrv = {
       original, name, set ? {}
@@ -763,7 +782,9 @@ in {
         # A job named "foo" is mapped to systemd.services.borgbackup-job-foo
         mapAttrs' mkBackupService jobs
         # A repo named "foo" is mapped to systemd.services.borgbackup-repo-foo
-        // mapAttrs' mkRepoService repos;
+        // mapAttrs' mkRepoService repos
+        # A job named "foo" is mapped to systemd.services.borgbackup-check-foo
+        // mapAttrs' mkCheckService jobs;
 
       # A job named "foo" is mapped to systemd.timers.borgbackup-job-foo
       # only generate the timer if interval (startAt) is set
