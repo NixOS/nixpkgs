@@ -20,4 +20,8 @@ buildLinux (args // {
     maintainers = with stdenv.lib.maintainers; [ atemu ];
   };
 
+  extraConfig = ''
+    IOSCHED_BFQ y
+  '';
+
 } // (args.argsOverride or {}))
