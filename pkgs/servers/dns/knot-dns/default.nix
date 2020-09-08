@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     # Don't try to create directories like /var/lib/knot at build time.
     # They are later created from NixOS itself.
     ./dont-create-run-time-dirs.patch
+    ./runtime-deps.patch
   ];
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
