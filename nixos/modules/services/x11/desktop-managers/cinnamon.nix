@@ -193,8 +193,8 @@ in
 
       environment.systemPackages = (with pkgs // pkgs.gnome3 // pkgs.cinnamon; pkgs.gnome3.removePackagesByName [
         # cinnamon team apps
-        # warp
-        # blueberry
+        blueberry
+        warpinator
 
         # external apps shipped with linux-mint
         hexchat
