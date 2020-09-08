@@ -1945,6 +1945,8 @@ in
 
   filebench = callPackage ../tools/misc/filebench { };
 
+  filebot = callPackage ../applications/video/filebot { };
+
   fileshare = callPackage ../servers/fileshare {};
 
   fileshelter = callPackage ../servers/web-apps/fileshelter { };
