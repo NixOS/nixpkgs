@@ -2704,7 +2704,7 @@ in
   cmt = callPackage ../applications/audio/cmt {};
 
   codimd = callPackage ../servers/web-apps/codimd {
-    nodejs = nodejs-10_x;
+    nodejs = nodejs-12_x;
   };
 
   colord = callPackage ../tools/misc/colord { };
