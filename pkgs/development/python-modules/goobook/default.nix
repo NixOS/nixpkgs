@@ -1,4 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi, isPy3k
+, docutils, installShellFiles
 , google_api_python_client, simplejson, oauth2client, setuptools, xdg
 }:
 
@@ -12,9 +13,15 @@ buildPythonPackage rec {
     sha256 = "1rmfyma3gwdf5mrw4l3j66y86fy8hgdbd0z4a5kck0kcm3hy34j9";
   };
 
+  nativeBuildInputs = [ docutils installShellFiles ];
   propagatedBuildInputs = [
     google_api_python_client simplejson oauth2client setuptools xdg
   ];
+
+  postInstall = ''
+    rst2man goobook.1.rst goobook.1
+    installManPage goobook.1
+  '';
 
   meta = with stdenv.lib; {
     description = "Access your Google contacts from the command line";
