@@ -14,6 +14,8 @@ in appimageTools.wrapType2 rec {
     libXcomposite libXext libXrandr libXtst libSM libICE libxcb
 
     libselinux pciutils libpulseaudio
+
+    libxml2
   ]);
 
   profile = ''
