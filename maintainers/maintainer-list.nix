@@ -2805,6 +2805,16 @@
     githubId = 541748;
     name = "Felipe Espinoza";
   };
+  felschr = {
+    email = "dev@felschr.com";
+    github = "felschr";
+    githubId = 3314323;
+    name = "Felix Tenley";
+    keys = [{
+      longkeyid = "ed25519/0x910ACB9F6BD26F58";
+      fingerprint = "6AB3 7A28 5420 9A41 82D9  0068 910A CB9F 6BD2 6F58";
+    }];
+  };
   ffinkdevs = {
     email = "fink@h0st.space";
     github = "ffinkdevs";
