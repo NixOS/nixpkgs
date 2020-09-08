@@ -23079,7 +23079,7 @@ in
 
   robustirc-bridge = callPackage ../servers/irc/robustirc-bridge { };
 
-  sddm = libsForQt5.callPackage ../applications/display-managers/sddm { };
+  sddm = libsForQt512.callPackage ../applications/display-managers/sddm { };
 
   skrooge = libsForQt514.callPackage ../applications/office/skrooge {};
 
