@@ -10150,6 +10150,8 @@ in
   pony-corral = callPackage ../development/compilers/ponyc/pony-corral.nix { };
   pony-stable = callPackage ../development/compilers/ponyc/pony-stable.nix { };
 
+  probe-run = callPackage ../development/tools/rust/probe-run { };
+
   qbe = callPackage ../development/compilers/qbe { };
 
   rasm = callPackage ../development/compilers/rasm { };
