@@ -3,8 +3,10 @@
 pkgs.substituteAll {
   src = ./raspberrypi-builder.sh;
   isExecutable = true;
-  postInstall = "shellcheck $out";
-  nativeBuildInputs = [ pkgs.buildPackages.shellcheck ];
+
+  checkPhase = "shellcheck $out";
+  checkInputs = [ pkgs.buildPackages.shellcheck ];
+  doCheck = false;
 
   inherit (pkgs.buildPackages) bash;
   path = with pkgs.buildPackages; [coreutils gnused gnugrep];
