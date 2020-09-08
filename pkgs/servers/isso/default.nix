@@ -74,6 +74,10 @@ with python3.pkgs; buildPythonApplication rec {
     ${python.interpreter} setup.py nosetests
   '';
 
+  passthru.tests = {
+    show-version = callPackage ./test-show-version.nix {};
+  };
+
   meta = with lib; {
     description = "A commenting server similar to Disqus";
     homepage = "https://posativ.org/isso/";
