@@ -14,6 +14,7 @@
 , qtmultimedia
 , qtsvg
 , qttools
+, libsecret
 
 # optional client deps
 , giflib
@@ -45,6 +46,7 @@ let
     qtmultimedia
     qtsvg
     qttools
+    libsecret
     # optional:
     giflib # gif animation export support
     kdnssd # local server discovery with Zeroconf
