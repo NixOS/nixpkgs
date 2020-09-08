@@ -71,5 +71,8 @@ qtModule {
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';
 
-  meta.maintainers = with stdenv.lib.maintainers; [ abbradar periklis ];
+  meta = {
+    broken = lib.versionAtLeast qtbase.version "5.15";
+    maintainers = with stdenv.lib.maintainers; [ abbradar periklis ];
+  };
 }
