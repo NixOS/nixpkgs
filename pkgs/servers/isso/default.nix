@@ -74,11 +74,12 @@ with python3.pkgs; buildPythonApplication rec {
     ${python.interpreter} setup.py nosetests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A commenting server similar to Disqus";
     homepage = "https://posativ.org/isso/";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz ];
+    platforms = platforms.all;
   };
 }
 
