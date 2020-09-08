@@ -4,24 +4,28 @@
 , gnome-icon-theme
 , hicolor-icon-theme
 , gtk3
+, humanity-icon-theme
+, ubuntu-themes
 }:
 
 stdenv.mkDerivation rec {
-  pname = "mint-y-icons";
-  version = "1.4.3";
+  pname = "mint-x-icons";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
-    # commit is named 1.4.3, tags=404
-    rev = "c997af402d425889f2e4277966eebe473f7451f7";
-    sha256 = "0yfas949xm85a28vgjqm9ym3bhhynrq256w9vfs8aiqq9nbm18mf";
+    # commit is named 1.5.5, tags=404
+    rev = "ecfbeb62bba41e85a61099df467c4700ac63c1e0";
+    sha256 = "1yxm7h7giag5hmymgxsg16vc0rhxb2vn3piaksc463mic4vwfa3i";
   };
 
   propagatedBuildInputs = [
     gnome3.adwaita-icon-theme
     gnome-icon-theme
     hicolor-icon-theme
+    humanity-icon-theme
+    ubuntu-themes # provides ubuntu-mono-dark
   ];
 
   nativeBuildInputs = [
@@ -44,9 +48,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/linuxmint/mint-y-icons";
-    description = "The Mint-Y icon theme";
-    license = licenses.gpl3; # from debian/copyright
+    homepage = "https://github.com/linuxmint/mint-x-icons";
+    description = "Mint/metal theme based on mintified versions of Clearlooks Revamp, Elementary and Faenza";
+    license = licenses.gpl3Plus; # from debian/copyright
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;
   };
