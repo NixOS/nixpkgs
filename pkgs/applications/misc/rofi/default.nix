@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rofi-unwrapped";
-  version = "1.5.4";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "https://github.com/davatorium/rofi/releases/download/${version}/rofi-${version}.tar.gz";
-    sha256 = "1g1170zmh5v7slnm1sm2d08jgz6icikf8rm17apm1bjzzyw1lhk7";
+    sha256 = "sha256-BS/ypMS/MfaiUizWVov8yYgGJjgwMWvz0PiH3sYYn50=";
   };
 
   preConfigure = ''
