@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
     sha256 = "0kyrgd4s2pq51ps5z385kw1hn62m8qp7c4h6im0g4ibrf89qwxc2";
   };
 
+  patches = [
+    ./CVE-2020-11080.patch
+  ];
+
   outputs = [ "bin" "out" "dev" "lib" ];
 
   nativeBuildInputs = [ pkgconfig ];
