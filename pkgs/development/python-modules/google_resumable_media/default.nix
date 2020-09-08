@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, google_crc32c
 , six
 , requests
 , setuptools
@@ -10,15 +11,15 @@
 
 buildPythonPackage rec {
   pname = "google-resumable-media";
-  version = "0.7.1";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "57841f5e65fb285c01071f439724745b2549a72eb75e5fd979198eb518608ed0";
+    sha256 = "1wpw5r83jvxqzmhr8bnl17ff4fjl2wknr752kx90lj71mmmwqfhp";
   };
 
   checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ requests setuptools six ];
+  propagatedBuildInputs = [ google_crc32c requests setuptools six ];
 
   checkPhase = ''
     py.test tests/unit
