@@ -17,7 +17,7 @@ let
     plugin_opts = cfg.pluginOpts;
   } // optionalAttrs (cfg.password != null) {
     password = cfg.password;
-  };
+  } // cfg.extraConfig;
 
   configFile = pkgs.writeText "shadowsocks.json" (builtins.toJSON opts);
 
@@ -110,6 +110,24 @@ in
         example = "server;host=example.com";
         description = ''
           Options to pass to the plugin if one was specified
+        '';
+      };
+
+      extraConfig = mkOption {
+        type = types.attrs;
+        default = {};
+        example = ''
+          {
+            nameserver = "8.8.8.8";
+          }
+        '';
+        description = ''
+          Additional configuration for shadowsocks that is not covered by the
+          provided options. The provided attrset will be serialized to JSON and
+          has to contain valid shadowsocks options. Unfortunately most
+          additional options are undocumented but it's easy to find out what is
+          available by looking into the source code of
+          <link xlink:href="https://github.com/shadowsocks/shadowsocks-libev/blob/master/src/jconf.c"/>
         '';
       };
     };
