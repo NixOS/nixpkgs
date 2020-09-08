@@ -568,6 +568,18 @@ let
     meta.homepage = "https://github.com/Shougo/context_filetype.vim/";
   };
 
+  Coqtail = buildVimPluginFrom2Nix {
+    pname = "Coqtail";
+    version = "2020-09-08";
+    src = fetchFromGitHub {
+      owner = "whonore";
+      repo = "Coqtail";
+      rev = "828f950097e33325912fd142aa3c4c284c081986";
+      sha256 = "1qwc40fvfbhnn160m0clab4kcd1laqibhp7rvivqnk537pw5fk6l";
+    };
+    meta.homepage = "https://github.com/whonore/Coqtail/";
+  };
+
   cosco-vim = buildVimPluginFrom2Nix {
     pname = "cosco-vim";
     version = "2018-08-07";
