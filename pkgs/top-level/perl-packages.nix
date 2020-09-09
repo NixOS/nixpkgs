@@ -2238,10 +2238,10 @@ let
 
   CGICompile = buildPerlModule {
      pname = "CGI-Compile";
-     version = "0.24";
+     version = "0.25";
      src = fetchurl {
-       url = "mirror://cpan/authors/id/R/RK/RKITOVER/CGI-Compile-0.24.tar.gz";
-       sha256 = "1zyz35hmflgm9jibi0mkni7n13lg5wwfvkavpzqgyza6kgzp515j";
+       url = "mirror://cpan/authors/id/R/RK/RKITOVER/CGI-Compile-0.25.tar.gz";
+       sha256 = "198f94r9xjxgn0hvwy5f93xfa8jlw7d9v3v8z7qbh7mxvzp78jzl";
      };
      propagatedBuildInputs = [ Filepushd SubName ];
      buildInputs = [ CGI CaptureTiny ModuleBuildTiny SubIdentify Switch TestNoWarnings TestRequires TryTiny ];
