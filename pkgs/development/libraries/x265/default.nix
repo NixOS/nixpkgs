@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cmake, nasm, numactl
+{ stdenv, fetchFromGitHub, cmake, nasm, numactl
 , numaSupport ? stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64)  # Enabled by default on NUMA platforms
 , debugSupport ? false # Run-time sanity checks (debugging)
 , highbitdepthSupport ? false # false=8bits per channel, true=10/12bits per channel
@@ -17,25 +17,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "x265";
-  version = "3.2";
+  version = "3.4";
 
-  src = fetchurl {
-    urls = [
-      "https://get.videolan.org/x265/x265_${version}.tar.gz"
-      "ftp://ftp.videolan.org/pub/videolan/x265/x265_${version}.tar.gz"
-    ];
-    sha256 = "0fqkhfhr22gzavxn60cpnj3agwdf5afivszxf3haj5k1sny7jk9n";
-  };
+  src = fetchFromGitHub {
+            owner  = "videolan";
+            repo   = "x265";
+            rev    = "${version}";
+            sha256 = "048c906xpp3m12m2xnb6zf2y39milxajp2n0kffa41pdya3zqn95";
+        };
 
   enableParallelBuilding = true;
-
-  patches = [
-    # Fix build on ARM (#406)
-    (fetchpatch {
-      url = "https://bitbucket.org/multicoreware/x265/issues/attachments/406/multicoreware/x265/1527562952.26/406/X265-2.8-asm-primitives.patch";
-      sha256 = "1vf8bpl37gbd9dcbassgkq9i0rp24qm3bl6hx9zv325174bn402v";
-    })
-  ];
 
   postPatch = ''
     sed -i 's/unknown/${version}/g' source/cmake/version.cmake
