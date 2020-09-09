@@ -16502,7 +16502,7 @@ let
       url = "mirror://cpan/authors/id/K/KR/KRYDE/podlinkcheck-15.tar.gz";
       sha256 = "4e3bebec1bf82dbf850a94ae26a253644cf5806ec41afc74e43e1710a37321db";
     };
-    propagatedBuildInputs = [ FileFindIterator FileHomeDir IPCRun constant-defer libintl_perl ];
+    propagatedBuildInputs = [ FileFindIterator FileHomeDir IPCRun PodParser constant-defer libintl_perl ];
     meta = {
       homepage = "http://user42.tuxfamily.org/podlinkcheck/index.html";
       description = "Check POD L<> link references";
