@@ -9015,7 +9015,7 @@ let
     pname = "HTML-Mason";
     version = "1.59";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/HTML-Mason-1.59.tar.gz;
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/HTML-Mason-1.59.tar.gz";
       sha256 = "95bed2a6c488370046aa314be4b592bd65a6522f8845da8b36a6aff9a8b439d0";
     };
     buildInputs = [ TestDeep ];
