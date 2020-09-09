@@ -14,7 +14,7 @@ self: super: let
   inherit (super.stdenvAdapters) makeStaticBinaries
                                  makeStaticLibraries
                                  propagateBuildInputs;
-  inherit (super.lib) foldl optional flip id composeExtensions optionalAttrs;
+  inherit (super.lib) foldl optional flip id composeExtensions optionalAttrs any;
   inherit (super) makeSetupHook;
 
   # Best effort static binaries. Will still be linked to libSystem,
@@ -31,7 +31,19 @@ self: super: let
     });
   };
 
-  staticAdapters = [ makeStaticLibraries propagateBuildInputs ]
+
+  # Force a "dev" output for static builds to avoid unwanted build-time noise in "out".
+  # Add a "dev" output for static builds in case there are `propagatedBuildInputs`.
+  # Do not add "dev" if it already exists.
+  addDevOutput = stdenv: stdenv // {
+    mkDerivation = args: stdenv.mkDerivation (args // optionalAttrs ((args.propagatedBuildInputs or []) != []) {
+      outputs = if args ? outputs then
+        args.outputs ++ optional (!(any (x: x=="dev") args.outputs)) "dev"
+      else [ "out" "dev" ];
+    });
+  };
+
+  staticAdapters = [ makeStaticLibraries addDevOutput propagateBuildInputs ]
 
     # Apple does not provide a static version of libSystem or crt0.o
     # So we can’t build static binaries without extensive hacks.
