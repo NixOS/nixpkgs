@@ -12,9 +12,9 @@ diff --git a/Lib/ctypes/util.py b/Lib/ctypes/util.py
 index 7684eab81d..e9957d7951 100644
 --- a/Lib/ctypes/util.py
 +++ b/Lib/ctypes/util.py
-@@ -95,46 +95,7 @@ elif os.name == "posix":
+@@ -94,28 +94,7 @@ elif os.name == "posix":
      import re, tempfile
- 
+
      def _findLib_gcc(name):
 -        expr = r'[^\(\)\s]*lib%s\.[^\(\)\s]*' % re.escape(name)
 -        fdout, ccout = tempfile.mkstemp()
@@ -38,9 +38,9 @@ index 7684eab81d..e9957d7951 100644
 -        if not res:
 -            return None
 -        return res.group(0)
-+        return None
++        return None 
  
- 
+
      if sys.platform == "sunos5":
 @@ -256,34 +217,7 @@ elif os.name == "posix":
      else:
