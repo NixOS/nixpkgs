@@ -1110,7 +1110,7 @@ let
     pname = "B-COW";
     version = "0.004";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AT/ATOOMIC/B-COW-0.004.tar.gz;
+      url = "mirror://cpan/authors/id/A/AT/ATOOMIC/B-COW-0.004.tar.gz";
       sha256 = "0lazb25jzhdha4dmrkdxn1pw1crc6iqzspvcq315p944xmsvgbzw";
     };
     meta = {
