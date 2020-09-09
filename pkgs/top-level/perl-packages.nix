@@ -5817,7 +5817,7 @@ let
     pname = "Devel-Declare";
     version = "0.006022";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Devel-Declare-0.006022.tar.gz;
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Devel-Declare-0.006022.tar.gz";
       sha256 = "72f29ca35646a593be98311ffddb72033ae1e8a9d8254c62aa248bd6260e596e";
     };
     buildInputs = [ ExtUtilsDepends TestRequires ];
