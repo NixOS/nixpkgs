@@ -869,7 +869,7 @@ let
     pname = "Authen-Krb5-Admin";
     version = "0.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SJ/SJQUINNEY/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/S/SJ/SJQUINNEY/Authen-Krb5-Admin-0.17.tar.gz";
       sha256 = "5dd49cacd983efd61a8c3f1a56571bb73785eb155908b5d7bec97eed78df0c54";
     };
     propagatedBuildInputs = [ pkgs.krb5Full.dev AuthenKrb5 ];
