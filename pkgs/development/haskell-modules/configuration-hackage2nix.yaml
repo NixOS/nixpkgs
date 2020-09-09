@@ -5671,7 +5671,6 @@ broken-packages:
   - hakyll-contrib
   - hakyll-contrib-csv
   - hakyll-contrib-elm
-  - hakyll-contrib-hyphenation
   - hakyll-contrib-links
   - hakyll-convert
   - hakyll-dhall
