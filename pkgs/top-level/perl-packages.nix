@@ -6466,7 +6466,7 @@ let
       sha256 = "04c7a7cc4511617d7a70c4ca410d10707dc496248cdad20240ae242223212454";
     };
     buildInputs = [ TestCPANMeta TestPod TestPodCoverage ];
-    propagatedBuildInputs = [ PathTiny PodParser ];
+    propagatedBuildInputs = [ PathTiny ];
     meta = {
       description = "Support for C<dotenv> in Perl";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
