@@ -3497,10 +3497,10 @@ let
 
   Coro = buildPerlPackage {
      pname = "Coro";
-     version = "6.55";
+     version = "6.57";
      src = fetchurl {
-       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/Coro-6.55.tar.gz";
-       sha256 = "0c4ams0lqxlh9nwp2l3gd0if35dw0m3774pfl16dmz3hf419rms3";
+       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/Coro-6.57.tar.gz";
+       sha256 = "1ihl2zaiafr2k5jzj46j44j8vxqs23fqcsahypmi23jl6f0f8a0r";
      };
      propagatedBuildInputs = [ AnyEvent Guard commonsense ];
      buildInputs = [ CanaryStability ];
