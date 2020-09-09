@@ -5530,7 +5530,7 @@ let
     pname = "DBI";
     version = "1.643";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TI/TIMB/DBI-1.643.tar.gz;
+      url = "mirror://cpan/authors/id/T/TI/TIMB/DBI-1.643.tar.gz";
       sha256 = "8a2b993db560a2c373c174ee976a51027dd780ec766ae17620c20393d2e836fa";
     };
     postInstall = stdenv.lib.optionalString (perl ? crossVersion) ''
