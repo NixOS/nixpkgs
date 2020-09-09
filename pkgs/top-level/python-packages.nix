@@ -3916,7 +3916,7 @@ in {
 
   mayavi = pkgs.libsForQt5.callPackage ../development/python-modules/mayavi {
     inherit buildPythonPackage isPy27 fetchPypi;
-    inherit (self) pyface pygments numpy vtk traitsui envisage apptools pyqt5;
+    inherit (self) pyface pygments numpy vtk_9 traitsui envisage apptools pyqt5;
   };
 
   mccabe = callPackage ../development/python-modules/mccabe { };
@@ -8030,19 +8030,12 @@ in {
 
   vsts-cd-manager = callPackage ../development/python-modules/vsts-cd-manager { };
 
-  vtk = self.vtk_7;
-  vtk_7 = toPythonModule (pkgs.vtk_7.override {
+  vtk = self.vtk_9;
+
+  vtk_9 = disabledIf isPy27 (toPythonModule (pkgs.vtk_9.override {
     pythonInterpreter = python;
     enablePython = true;
-  });
-  vtk_8 = toPythonModule (pkgs.vtk_8.override {
-    pythonInterpreter = python;
-    enablePython = true;
-  });
-  vtk_9 = toPythonModule (pkgs.vtk_9.override {
-    pythonInterpreter = python;
-    enablePython = true;
-  });
+  }));
 
   vultr = callPackage ../development/python-modules/vultr { };
 

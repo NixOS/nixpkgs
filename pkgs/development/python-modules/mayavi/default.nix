@@ -1,17 +1,17 @@
 { lib, buildPythonPackage, isPy27, fetchPypi, wrapQtAppsHook
-, pyface, pygments, numpy, vtk, traitsui, envisage, apptools, pyqt5
+, pyface, pygments, numpy, vtk_9, traitsui, envisage, apptools, pyqt5
 }:
 
 buildPythonPackage rec {
   pname = "mayavi";
-  version = "4.7.1";
+  version = "4.7.2";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    extension = "tar.bz2";
-    sha256 = "095p7mds6kqqrp7xqv24iygr3mw85rm7x41wb5y4yc3gi1pznldy";
+    extension = "tar.gz";
+    sha256 = "0wxk7icv37n4sb28wj8pshf4i4kpp1sisibzmg60wp29aw3jj1x2";
   };
 
   postPatch = ''
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ wrapQtAppsHook ];
 
   propagatedBuildInputs = [
-    pyface pygments numpy vtk traitsui envisage apptools pyqt5
+    pyface pygments numpy vtk_9 traitsui envisage apptools pyqt5
   ];
 
   doCheck = false; # Needs X server
