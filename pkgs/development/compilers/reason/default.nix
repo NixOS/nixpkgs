@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-reason-${version}";
-  version = "3.6.0";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "reason";
-    rev = "2860cc274b1b5b76a71d0e5190bf67a133d6f809";
-    sha256 = "05wcg0gfln85spjfgsij818h2sp4y6s8bvdcwmzv0r8jblr8402b";
+    rev = "6017d6dd930f4989177c3f7c3c20cffbaabaa49a";
+    sha256 = "17wkcl3r0ckhlki9fk0mcwbnd7kpkqm1h0xjw2j2x1097n470df0";
   };
 
   nativeBuildInputs = [ makeWrapper ];
