@@ -8,12 +8,12 @@ let
   # generally, sufficient for our tests.
   alpine-meta = pkgs.fetchurl {
     url = "https://tarballs.nixos.org/alpine/3.12/lxd.tar.xz";
-    sha256 = "sha256-1tcKaO9lOkvqfmG/7FMbfAEToAuFy2YMewS8ysBKuLA=";
+    hash = "sha256-1tcKaO9lOkvqfmG/7FMbfAEToAuFy2YMewS8ysBKuLA=";
   };
 
   alpine-rootfs = pkgs.fetchurl {
     url = "https://tarballs.nixos.org/alpine/3.12/rootfs.tar.xz";
-    sha256 = "sha256-Tba9sSoaiMtQLY45u7p5DMqXTSDgs/763L/SQp0bkCA=";
+    hash = "sha256-Tba9sSoaiMtQLY45u7p5DMqXTSDgs/763L/SQp0bkCA=";
   };
 
   lxd-config = pkgs.writeText "config.yaml" ''
