@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   preConfigure = ''
+    find -name Makefile.in | xargs sed -i '/^TMPDIR=/d'
+
     find . -name '*.sh' -or -name '*.in' -or -name '*.c' -or -name configure | xargs sed -i \
       -e 's@/bin/ls@${coreutils}/bin/ls@g' \
       -e 's@/bin/rm@${coreutils}/bin/rm@g'
