@@ -16317,12 +16317,12 @@ let
 
   PerlPrereqScannerNotQuiteLite = buildPerlPackage {
     pname = "Perl-PrereqScanner-NotQuiteLite";
-    version = "0.9911";
+    version = "0.9913";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Perl-PrereqScanner-NotQuiteLite-0.9911.tar.gz;
-      sha256 = "1h8sv5df7736sr7vasl6hkcvqlsqz9y61wiky6bvqa7fnlfhcyp0";
+      url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/Perl-PrereqScanner-NotQuiteLite-0.9913.tar.gz";
+      sha256 = "13alrwwh36wsqn0gliwdpp2a9kymjk8gx30gfkqw0f29w72ry3cp";
     };
-    propagatedBuildInputs = [ DataDump ModuleCPANfile ModuleFind RegexpTrie ];
+    propagatedBuildInputs = [ DataDump ModuleCPANfile ModuleFind RegexpTrie URIcpan ];
     buildInputs = [ ExtUtilsMakeMakerCPANfile TestFailWarnings TestUseAllModules ];
     meta = {
       description = "a tool to scan your Perl code for its prerequisites";
@@ -21569,6 +21569,21 @@ let
     meta = {
       description = "Object for handling URI templates (RFC 6570)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  URIcpan = buildPerlPackage {
+    pname = "URI-cpan";
+    version = "1.007";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/URI-cpan-1.007.tar.gz";
+      sha256 = "1lsjw7m9c3vyq1h9pqzngww18yq23mn4jxv9d7i4a2ifcsa16nhj";
+    };
+    propagatedBuildInputs = [ CPANDistnameInfo URI ];
+    meta = {
+      description = "URLs that refer to things on the CPAN";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      homepage = "https://github.com/rjbs/URI-cpan";
     };
   };
 
