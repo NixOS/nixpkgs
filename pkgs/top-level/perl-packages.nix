@@ -16734,7 +16734,7 @@ let
   };
 
   Apprainbarf = buildPerlModule {
-    pname = "Apprainbarf";
+    pname = "App-rainbarf";
     version = "1.4";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SY/SYP/App-rainbarf-1.4.tar.gz";
