@@ -11490,7 +11490,7 @@ let
      pname = "Mail-Message";
      version = "3.009";
      src = fetchurl {
-       url = mirror://cpan/authors/id/M/MA/MARKOV/Mail-Message-3.009.tar.gz;
+       url = "mirror://cpan/authors/id/M/MA/MARKOV/Mail-Message-3.009.tar.gz";
        sha256 = "06ngjxnw0r5s6fnwc6qd2710p5v28ssgjkghkw8nqy2glacczlir";
      };
      propagatedBuildInputs = [ IOStringy MIMETypes MailTools URI UserIdentity ];
