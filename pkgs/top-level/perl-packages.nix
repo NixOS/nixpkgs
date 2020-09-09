@@ -13175,7 +13175,7 @@ let
      pname = "MooX-StrictConstructor";
      version = "0.011";
      src = fetchurl {
-       url = mirror://cpan/authors/id/H/HA/HARTZELL/MooX-StrictConstructor-0.011.tar.gz;
+       url = "mirror://cpan/authors/id/H/HA/HARTZELL/MooX-StrictConstructor-0.011.tar.gz";
        sha256 = "1qjkqrmzgz7lxhv14klsv0v9v6blf8js86d47ah24kpw5y12yf6s";
      };
      propagatedBuildInputs = [ Moo strictures ];
