@@ -7341,10 +7341,10 @@ in {
 
   vsts-cd-manager = callPackage ../development/python-modules/vsts-cd-manager { };
 
-  vtk = toPythonModule (pkgs.vtk_7.override {
+  vtk = disabledIf isPy27 (toPythonModule (pkgs.vtk_9.override {
     inherit (self) python;
     enablePython = true;
-  });
+  }));
 
   vultr = callPackage ../development/python-modules/vultr { };
 
