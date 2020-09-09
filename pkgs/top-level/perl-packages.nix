@@ -14426,11 +14426,11 @@ let
     pname = "Net-FreeDB";
     version = "0.10";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DS/DSHULTZ/Net-FreeDB-0.10.tar.gz;
+      url = "mirror://cpan/authors/id/D/DS/DSHULTZ/Net-FreeDB-0.10.tar.gz";
       sha256 = "11dfi14qnzsnmr71cygir85zfj15n08b7d5g0i4cj5pb70if2hzp";
     };
-    buildInputs = [ TestMost TestDeep TestWarn TestException TestDifferences ];
-    propagatedBuildInputs = [ CDDBFile Moo libnet ];
+    buildInputs = [ TestDeep TestDifferences TestException TestMost TestWarn ];
+    propagatedBuildInputs = [ CDDBFile Moo ];
     meta = {
       description = "Perl interface to freedb server(s)";
       license = with stdenv.lib.licenses; [ artistic1 ];
