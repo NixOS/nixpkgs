@@ -12090,10 +12090,10 @@ let
 
   MetaCPANClient = buildPerlPackage {
     pname = "MetaCPAN-Client";
-    version = "2.026000";
+    version = "2.028000";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MICKEY/MetaCPAN-Client-2.026000.tar.gz";
-      sha256 = "ee711619d59655dac1bd2e4b894ffeb3171bd73b1ed38ba4b7b07d3690f94465";
+      url = "mirror://cpan/authors/id/M/MI/MICKEY/MetaCPAN-Client-2.028000.tar.gz";
+      sha256 = "1fcafd1504e838ea37fa1769c751e096fe6ac7bba41c5f62959b156ea27d319a";
     };
 
     # Most tests are online, so we only include offline tests
@@ -12103,8 +12103,8 @@ let
         '"t/00-report-prereqs.t t/api/_get.t t/api/_get_or_search.t t/api/_search.t t/entity.t t/request.t t/resultset.t"'
     '';
 
-    buildInputs = [ LWPProtocolhttps TestFatal TestNeeds ];
-    propagatedBuildInputs = [ IOSocketSSL JSONMaybeXS Moo NetSSLeay RefUtil SafeIsa TypeTiny URI ];
+    buildInputs = [ LWPProtocolHttps TestFatal TestNeeds ];
+    propagatedBuildInputs = [ IOSocketSSL JSONMaybeXS Moo RefUtil SafeIsa TypeTiny URI ];
     meta = {
       homepage = "https://github.com/metacpan/metacpan-client";
       description = "A comprehensive, DWIM-featured client to the MetaCPAN API";
