@@ -17109,12 +17109,12 @@ let
 
   SerealDecoder = buildPerlPackage {
     pname = "Sereal-Decoder";
-    version = "4.014";
+    version = "4.018";
     src = fetchurl {
-      url = mirror://cpan/authors/id/Y/YV/YVES/Sereal-Decoder-4.014.tar.gz;
-      sha256 = "0ph5k99ssm5anwsdjal7sw96pjs65lirfanfsw8gh6k40w0w6f44";
+      url = "mirror://cpan/authors/id/Y/YV/YVES/Sereal-Decoder-4.018.tar.gz";
+      sha256 = "0wfdixpm3p94mnng474l0nh9mjiy8q8hbrbh2af4vwn2hmazr91f";
     };
-    buildInputs = [ TestDeep TestDifferences TestLongString TestMemoryGrowth TestWarn ];
+    buildInputs = [ TestDeep TestDifferences TestLongString TestWarn ];
     preBuild = ''ls'';
     meta = {
       homepage = "https://github.com/Sereal/Sereal";
