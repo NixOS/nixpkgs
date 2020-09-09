@@ -292,7 +292,7 @@ let
     pname = "Alien-patch";
     version = "0.15";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PL/PLICEASE/Alien-patch-0.15.tar.gz;
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-patch-0.15.tar.gz";
       sha256 = "1l00mq56596wn09nn7fv552j2aa7sgh46bvx5xlncsnrn8jp5mpy";
     };
     propagatedBuildInputs = [ AlienBuild ];
