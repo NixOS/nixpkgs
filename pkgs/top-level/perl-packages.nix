@@ -5250,7 +5250,7 @@ let
     pname = "Devel-Leak";
     version = "0.03";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NI/NI-S/Devel-Leak-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/N/NI/NI-S/Devel-Leak-0.03.tar.gz";
       sha256 = "0lkj2xwc3lhxv7scl43r8kfmls4am0b98sqf5vmf7d72257w6hkg";
     };
     meta = {
