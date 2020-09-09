@@ -21633,10 +21633,10 @@ let
 
   Version = buildPerlPackage {
     pname = "version";
-    version = "0.9924";
+    version = "0.9927";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JP/JPEACOCK/version-0.9924.tar.gz";
-      sha256 = "81e4485ff3faf9b7813584d57b557f4b34e73b6c2eb696394f6deefacf5ca65b";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/version-0.9927.tar.gz";
+      sha256 = "a78cb8d9ecbfea200ac18bed9e6e72c8efd60e6ebeb47ee142c3c5c635a88d06";
     };
     meta = {
       description = "Structured version objects";
