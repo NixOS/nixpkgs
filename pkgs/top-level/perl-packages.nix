@@ -17793,7 +17793,7 @@ let
     pname = "String-Interpolate";
     version = "0.32";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NE/NEILB/String-Interpolate-0.32.tar.gz;
+      url = "mirror://cpan/authors/id/N/NE/NEILB/String-Interpolate-0.32.tar.gz";
       sha256 = "15fwbpz3jdpdgmz794iw9hz2caxrnrw9pdwprxxkanpm92cdhaf7";
     };
     meta = with stdenv.lib; {
