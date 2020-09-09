@@ -20884,18 +20884,7 @@ let
     };
   };
 
-  ThreadQueue = buildPerlPackage {
-    pname = "Thread-Queue";
-    version = "3.13";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JD/JDHEDDEN/Thread-Queue-3.13.tar.gz";
-      sha256 = "1s6wpxy07mr03krkzjr5r02cswsj18dd38aa5f16dfrgvp6xm8vb";
-    };
-    meta = {
-      description = "Thread-safe queues";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  ThreadQueue = null; # part of Perl 5.30.3, 5.32.0, 5.33.1
 
   Throwable = buildPerlPackage {
     pname = "Throwable";
