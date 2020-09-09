@@ -1751,10 +1751,10 @@ let
 
   CatalystManual = buildPerlPackage {
     pname = "Catalyst-Manual";
-    version = "5.9010";
+    version = "5.9011";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HA/HAARG/Catalyst-Manual-5.9010.tar.gz";
-      sha256 = "1xg2m6d76xl0a76vq0v4yv25458d6df00k5xq1ab2z8mzvwbm4ah";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/Catalyst-Manual-5.9011.tar.gz";
+      sha256 = "0g61za6844ya0lk0bpvw43sj0jd553aks3hqw21hbh03b6b377mk";
     };
     meta = {
       description = "The Catalyst developer's manual";
