@@ -17,7 +17,9 @@ stdenv.mkDerivation rec {
   pname = "exiv2";
   version = "0.27.3";
 
-  outputs = [ "out" "dev" "doc" "man" ];
+  # Disabled since splitting the outputs leads to issues, see
+  # https://github.com/NixOS/nixpkgs/pull/97161#issuecomment-689426419
+  # outputs = [ "out" "dev" "doc" "man" ];
 
   src = fetchFromGitHub {
     owner = "exiv2";
