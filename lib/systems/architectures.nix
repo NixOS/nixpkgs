@@ -60,7 +60,7 @@ rec {
   };
 
   predicates = let
-    featureSupport = feature: x: builtins.elem feature features.${x};
+    featureSupport = feature: x: builtins.elem feature features.${x} or [];
   in {
     sse3Support    = featureSupport "sse3";
     ssse3Support   = featureSupport "ssse3";
