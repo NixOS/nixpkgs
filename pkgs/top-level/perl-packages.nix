@@ -15662,7 +15662,7 @@ let
     pname = "PerlIO-Layers";
     version = "0.012";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LE/LEONT/PerlIO-Layers-0.012.tar.gz;
+      url = "mirror://cpan/authors/id/L/LE/LEONT/PerlIO-Layers-0.012.tar.gz";
       sha256 = "1psaq3kwlk7g9rxvgsacfjk2mh6cscqf4xl7ggfkzfrnz91aabal";
     };
     meta = {
