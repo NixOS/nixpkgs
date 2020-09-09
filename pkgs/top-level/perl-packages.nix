@@ -3430,7 +3430,7 @@ let
     pname = "Convert-UU";
     version = "0.5201";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AN/ANDK/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/A/AN/ANDK/Convert-UU-0.5201.tar.gz";
       sha256 = "92329ce1c32b5952c48e1223db018c8c58ceafef03bfa0fd4817cd89c355a3bd";
     };
     meta = {
