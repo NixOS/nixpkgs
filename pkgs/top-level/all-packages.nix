@@ -19495,8 +19495,6 @@ in
 
   arion = callPackage ../applications/virtualization/arion { };
 
-  arora = callPackage ../applications/networking/browsers/arora { };
-
   asuka = callPackage ../applications/networking/browsers/asuka {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
