@@ -4213,7 +4213,7 @@ let
 
     makeMakerFlags = "--libpath=${pkgs.openssl.out}/lib --incpath=${pkgs.openssl.dev}/include";
     buildInputs = [ PathClass ];
-    propagatedBuildInputs = [ LWPProtocolHttps BytesRandomSecure ];
+    propagatedBuildInputs = [ BytesRandomSecure LWPProtocolHttps ];
   };
 
   CSSDOM = buildPerlPackage {
