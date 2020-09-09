@@ -14585,7 +14585,7 @@ let
     pname = "Net-Ping";
     version = "2.73";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RU/RURBAN/Net-Ping-2.73.tar.gz;
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/Net-Ping-2.73.tar.gz";
       sha256 = "a5fbeafd3e65778364bead8800ae6a06d468ed68208619b5d4c1debd4d197cf2";
     };
     meta = {
