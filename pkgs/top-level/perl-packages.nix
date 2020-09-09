@@ -13019,7 +13019,7 @@ let
     pname = "Mojo-Pg";
     version = "4.19";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SR/SRI/Mojo-Pg-4.19.tar.gz;
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojo-Pg-4.19.tar.gz";
       sha256 = "5061eaddddb52c9daf2cbc34bb21e9aeea6ae58a22775fdf1ffa747905ebc992";
     };
     propagatedBuildInputs = [ DBDPg Mojolicious SQLAbstract ];
