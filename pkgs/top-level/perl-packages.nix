@@ -17403,7 +17403,7 @@ let
      pname = "Specio";
      version = "0.46";
      src = fetchurl {
-       url = mirror://cpan/authors/id/D/DR/DROLSKY/Specio-0.46.tar.gz;
+       url = "mirror://cpan/authors/id/D/DR/DROLSKY/Specio-0.46.tar.gz";
        sha256 = "15lmxffbzj1gq7n9m80a3ka8nqxmmk3p4azp33y6wv872shjmx0b";
      };
      propagatedBuildInputs = [ DevelStackTrace EvalClosure MROCompat ModuleRuntime RoleTiny SubQuote TryTiny ];
