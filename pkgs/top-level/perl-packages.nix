@@ -14996,12 +14996,12 @@ let
 
   OggVorbisHeaderPurePerl = buildPerlPackage {
     pname = "Ogg-Vorbis-Header-PurePerl";
-    version = "1.0";
+    version = "1.04";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DANIEL/Ogg-Vorbis-Header-PurePerl-1.0.tar.gz;
-      sha256 = "0kjqswnwhp7yf7czvhggdyp2pgg5wa58b4jwpn8j3km7h2ll8pmy";
+      url = "mirror://cpan/authors/id/D/DA/DAVECROSS/Ogg-Vorbis-Header-PurePerl-1.04.tar.gz";
+      sha256 = "04xcjbpkp6mc57f1626871xy3aqnmp8nr21hfsazih8mzklld5sg";
     };
-    buildInputs = [ TestMore ];
+
     # The testing mechanism is erorrneous upstream. See http://matrix.cpantesters.org/?dist=Ogg-Vorbis-Header-PurePerl+1.0
     doCheck = false;
     meta = {
