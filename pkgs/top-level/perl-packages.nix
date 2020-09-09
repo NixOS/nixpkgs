@@ -16014,7 +16014,7 @@ let
     pname = "POE";
     version = "1.368";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BINGOS/POE-1.368.tar.gz;
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/POE-1.368.tar.gz";
       sha256 = "08g1vzxamqg0gmkirdcx7fycq3pwv9vbajc30qwqpm1n3rvdrcdp";
     };
     # N.B. removing TestPodLinkCheck from buildInputs because tests requiring
