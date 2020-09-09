@@ -10252,7 +10252,7 @@ let
     pname = "JSON-MaybeXS";
     version = "1.004002";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004002.tar.gz;
+      url = "mirror://cpan/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004002.tar.gz";
       sha256 = "1dbpdlrk4pjwbn3wzawwsj57jqzdvi01h4kqpknwbl1n7gf2z3iv";
     };
     meta = {
