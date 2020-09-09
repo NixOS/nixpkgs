@@ -7628,10 +7628,10 @@ let
 
   FileLibMagic = buildPerlPackage {
     pname = "File-LibMagic";
-    version = "1.22";
+    version = "1.23";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/File-LibMagic-1.22.tar.gz;
-      sha256 = "93639bd076849e93a020fea1507f0a2b3467b8792eb5c306f2aacbbfb4d080d6";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/File-LibMagic-1.23.tar.gz";
+      sha256 = "52e6b1dc7cb2d87a4cdf439ba145e0b9e8cf28cc26a48a3cf9977c83463967ee";
     };
     buildInputs = [ pkgs.file ConfigAutoConf TestFatal ];
     makeMakerFlags = "--lib=${pkgs.file}/lib";
