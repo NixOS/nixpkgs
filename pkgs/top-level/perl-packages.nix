@@ -2909,14 +2909,14 @@ let
     pname = "Clipboard";
     version = "0.26";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Clipboard-0.26.tar.gz;
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Clipboard-0.26.tar.gz";
       sha256 = "886ae43dc8538f9bfc4e07fdbcf09b7fbd6ee59c31f364618c859de14953c58a";
     };
     meta = {
       description = "Clipboard - Copy and Paste with any OS";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
-    propagatedBuildInputs = [ CGI URI ];
+    propagatedBuildInputs = [ CGI ];
     # Disable test on darwin because MacPasteboard fails when not logged in interactively.
     # Mac OS error -4960 (coreFoundationUnknownErr): The unknown error at lib/Clipboard/MacPasteboard.pm line 3.
     # Mac-Pasteboard-0.009.readme: 'NOTE that Mac OS X appears to restrict pasteboard access to processes that are logged in interactively.
