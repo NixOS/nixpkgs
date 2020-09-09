@@ -11739,18 +11739,7 @@ let
      };
   };
 
-  MathBigRat = buildPerlPackage {
-    pname = "Math-BigRat";
-    version = "0.2614";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/Math-BigRat-0.2614.tar.gz";
-      sha256 = "cea6c20afc6c10a3dc3b62a71df3f842dce13898443bd827242ff3f09f1f3d59";
-    };
-    meta = {
-      description = "Arbitrary big rational numbers";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  MathBigRat = null; # part of Perl 5.30.3, 5.32.0, 5.33.1
 
   MathClipper = buildPerlModule {
     pname = "Math-Clipper";
