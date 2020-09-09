@@ -7681,10 +7681,10 @@ let
 
   FileMap = buildPerlModule {
     pname = "File-Map";
-    version = "0.66";
+    version = "0.67";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LE/LEONT/File-Map-0.66.tar.gz;
-      sha256 = "12d540v47jscjizcry2ir5vpp5q797vmd3gn9p91brqdbk5swfz7";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/File-Map-0.67.tar.gz";
+      sha256 = "1hpv4aprgypjxjx1kzbjnf6r29a98rw7mndlinixzk62vyz5sy0j";
     };
     propagatedBuildInputs = [ PerlIOLayers SubExporterProgressive ];
     buildInputs = [ TestFatal TestWarnings ];
