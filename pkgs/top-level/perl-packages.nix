@@ -19035,7 +19035,7 @@ let
     pname = "Test-Deep";
     version = "1.130";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Test-Deep-1.130.tar.gz;
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Test-Deep-1.130.tar.gz";
       sha256 = "0mkw18q5agr30djxr1y68rcfw8aq20ws872hmv88f9gnynag8r20";
     };
     meta = {
