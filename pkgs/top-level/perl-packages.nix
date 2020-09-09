@@ -21623,10 +21623,10 @@ let
 
   vidir = buildPerlPackage {
     pname = "App-vidir";
-    version = "0.042";
+    version = "0.050";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/W/WO/WOLDRICH/App-vidir-0.042.tar.gz";
-      sha256 = "18xkln3xajysxk0jwfyhavnifrsz38zv81s1gfb1w0xkwky3cla3";
+      url = "mirror://cpan/authors/id/W/WO/WOLDRICH/App-vidir-0.050.tar.gz";
+      sha256 = "1xa3vabbkxaqa8pnyl0dblr1m4g2229m1fzl8c9q74f06i00hikh";
     };
     outputs = [ "out" ];
     meta = {
