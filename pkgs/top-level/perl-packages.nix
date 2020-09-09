@@ -17638,7 +17638,7 @@ let
     pname = "Statistics-ChiSquare";
     version = "1.0000";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Statistics-ChiSquare-1.0000.tar.gz";
       sha256 = "255a5a38336d048ddb9077222691e000984e907aae09a4ea695a9cfd49a1ddd0";
     };
     meta = {
