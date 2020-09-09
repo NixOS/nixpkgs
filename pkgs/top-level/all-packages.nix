@@ -6588,7 +6588,7 @@ in
 
   recutils = callPackage ../tools/misc/recutils { };
 
-  recoll = callPackage ../applications/search/recoll { };
+  recoll = libsForQt5.callPackage ../applications/search/recoll { };
 
   redoc-cli = nodePackages.redoc-cli;
 
