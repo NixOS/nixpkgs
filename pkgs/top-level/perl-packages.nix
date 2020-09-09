@@ -14336,10 +14336,10 @@ let
 
   NetDNS = buildPerlPackage {
     pname = "Net-DNS";
-    version = "1.24";
+    version = "1.26";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NL/NLNETLABS/Net-DNS-1.24.tar.gz;
-      sha256 = "11a6c2ba6cb1c6640f01c9bbf2036bcbe3974232e9b939ab94985230c92cde63";
+      url = "mirror://cpan/authors/id/N/NL/NLNETLABS/Net-DNS-1.26.tar.gz";
+      sha256 = "eabaecd0fdb3e6adef8c9e016e8509319f19caa8c76836253f7db72bafe56498";
     };
     propagatedBuildInputs = [ DigestHMAC ];
     makeMakerFlags = "--noonline-tests";
