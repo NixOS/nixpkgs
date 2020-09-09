@@ -4833,7 +4833,7 @@ let
     pname = "Date-Manip";
     version = "6.82";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SB/SBECK/Date-Manip-6.82.tar.gz;
+      url = "mirror://cpan/authors/id/S/SB/SBECK/Date-Manip-6.82.tar.gz";
       sha256 = "0ak72kpydwhq2z03mhdfwm3ganddzb8gawzh6crpsjvb9kwvr5ps";
     };
     # for some reason, parsing /etc/localtime does not work anymore - make sure that the fallback "/bin/date +%Z" will work
