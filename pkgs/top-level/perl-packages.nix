@@ -11867,6 +11867,7 @@ let
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
     };
+    buildInputs = [ TestWarn ];
   };
 
   MathPrimeUtilGMP = buildPerlPackage {
