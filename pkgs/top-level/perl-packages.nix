@@ -22292,7 +22292,7 @@ let
     pname = "XS-Object-Magic";
     version = "0.05";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/XS-Object-Magic-0.05.tar.gz;
+      url = "mirror://cpan/authors/id/E/ET/ETHER/XS-Object-Magic-0.05.tar.gz";
       sha256 = "0njyy4y0zax4zz55y82dlm9cly1pld1lcxb281s12bp9rrhf9j9x";
     };
     buildInputs = [ ExtUtilsDepends TestFatal TestSimple13 ];
