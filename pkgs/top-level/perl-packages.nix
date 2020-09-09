@@ -12745,10 +12745,10 @@ let
 
   ModuleSignature = buildPerlPackage {
     pname = "Module-Signature";
-    version = "0.83";
+    version = "0.87";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AU/AUDREYT/Module-Signature-0.83.tar.gz";
-      sha256 = "3c15f3845a85d2a76a81253be53cb0f716465a3f696eb9c50e92eef34e9601cb";
+      url = "mirror://cpan/authors/id/A/AU/AUDREYT/Module-Signature-0.87.tar.gz";
+      sha256 = "214e8055c50fec371a95743520fe26940004e76169063b2b44ec90a0d45d6982";
     };
     buildInputs = [ IPCRun ];
     meta = {
