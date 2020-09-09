@@ -2796,10 +2796,10 @@ let
 
   ClassTiny = buildPerlPackage {
      pname = "Class-Tiny";
-     version = "1.006";
+     version = "1.008";
      src = fetchurl {
-       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Class-Tiny-1.006.tar.gz";
-       sha256 = "0knbi1agcfc9d7fca0szvxr6335pb22pc5n648q1vrcba8qvvz1f";
+       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Class-Tiny-1.008.tar.gz";
+       sha256 = "05anh4hn8va46xwbdx7rqxnhb8i1lingb614lywzr89gj5iql1gf";
      };
      meta = {
        description = "Minimalist class construction";
