@@ -30,7 +30,7 @@ in
 packagesWith
   (name: pkg:
     (
-      if builtins.hasAttr "maintainers" pkg.meta
+      if builtins.hasAttr "meta" pkg && builtins.hasAttr "maintainers" pkg.meta
       then (
         if builtins.isList pkg.meta.maintainers
         then builtins.elem maintainer_ pkg.meta.maintainers
