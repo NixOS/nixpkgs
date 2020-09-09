@@ -3402,7 +3402,7 @@ let
     pname = "Convert-Bencode";
     version = "1.03";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OR/ORCLEV/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/O/OR/ORCLEV/Convert-Bencode-1.03.tar.gz";
       sha256 = "0v2ywj18px67mg97xnrdq9mnlzgqvj92pr2g47g9c9b9cpw3v7r6";
     };
     meta = {
