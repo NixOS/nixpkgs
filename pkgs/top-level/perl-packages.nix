@@ -5252,7 +5252,7 @@ let
     pname = "Devel-PatchPerl";
     version = "2.00";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BINGOS/Devel-PatchPerl-2.00.tar.gz;
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/Devel-PatchPerl-2.00.tar.gz";
       sha256 = "07yy02v86ia7j8qbn46jqan8c8d6xdqigvv5a4wmkqwln7jxmhrr";
     };
     propagatedBuildInputs = [ Filepushd ModulePluggable ];
