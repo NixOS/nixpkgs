@@ -144,7 +144,22 @@ self: super: {
     then dontCheck (overrideCabal super.hakyll (drv: {
       testToolDepends = [];
     }))
-    else super.hakyll;
+    else overrideCabal super.hakyll {
+      patches = [
+        (pkgs.fetchpatch {
+          url = "https://github.com/jaspervdj/hakyll/pull/787/commits/b71955f7db1fd6532d3988be671281d1f6fcdd1d.patch";
+          sha256 = "Q9dFJpd9vmV1StjBpscDymprdF0Cdfil/tHD6c/ejBs=";
+        })
+        (pkgs.fetchpatch {
+          url = "https://github.com/jaspervdj/hakyll/pull/787/commits/d5197f78ca42264e506acca2735293704495f0a0.patch";
+          sha256 = "ogOBWviarMUc4rGaqAZiIePd9aRehvXwHOIoGIT+kgI=";
+        })
+        (pkgs.fetchpatch {
+          url = "https://github.com/jaspervdj/hakyll/pull/787/commits/d2bd8a4b0a42a547c79cef2035ee8f538417ea47.patch";
+          sha256 = "e3kx5TeCF2CO0Yp9iDke9UvIc4yigWF0zGdYG3Vf3xY=";
+        })
+      ];
+    };
 
   double-conversion = if !pkgs.stdenv.isDarwin
     then super.double-conversion
