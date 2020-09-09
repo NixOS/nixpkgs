@@ -15102,7 +15102,7 @@ let
     pname = "Net-OpenSSH";
     version = "0.79";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SA/SALVA/Net-OpenSSH-0.79.tar.gz;
+      url = "mirror://cpan/authors/id/S/SA/SALVA/Net-OpenSSH-0.79.tar.gz";
       sha256 = "4210fa64b50820f91ab4b6c0e02a579543fc071e73fbdec0f476447ca11172cc";
     };
     meta = {
