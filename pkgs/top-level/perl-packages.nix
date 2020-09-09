@@ -8720,7 +8720,7 @@ let
     pname = "Gtk3-SimpleList";
     version = "0.21";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TV/TVIGNAUD/Gtk3-SimpleList-0.21.tar.gz;
+      url = "mirror://cpan/authors/id/T/TV/TVIGNAUD/Gtk3-SimpleList-0.21.tar.gz";
       sha256 = "1158mnr2ldq02098hqbkwfv64d83zl3a8scll9s09g7k1c86ai0x";
     };
     meta = {
