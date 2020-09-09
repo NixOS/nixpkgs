@@ -20053,7 +20053,7 @@ let
       license = with stdenv.lib.licenses; [ asl20 ];
       homepage = "https://github.com/dagolden/Test-TempDir-Tiny";
     };
-    propagatedBuildInputs = [ FileTemp ];
+
   };
 
   TestTCP = buildPerlPackage {
