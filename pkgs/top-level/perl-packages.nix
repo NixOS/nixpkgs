@@ -8706,7 +8706,7 @@ let
     pname = "Gtk3";
     version = "0.037";
     src = fetchurl {
-      url = mirror://cpan/authors/id/X/XA/XAOC/Gtk3-0.037.tar.gz;
+      url = "mirror://cpan/authors/id/X/XA/XAOC/Gtk3-0.037.tar.gz";
       sha256 = "0l9zis8l9jall1m48mgd5g4f85lsz4hcp22spal8r9wlf9af2nmz";
     };
     propagatedBuildInputs = [ pkgs.gtk3 CairoGObject GlibObjectIntrospection ];
