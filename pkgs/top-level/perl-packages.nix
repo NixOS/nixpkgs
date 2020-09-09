@@ -17681,17 +17681,7 @@ let
     propagatedBuildInputs = [ StatisticsDescriptive StatisticsDistributions ];
   };
 
-  Storable = buildPerlPackage {
-    pname = "Storable";
-    version = "3.15";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XS/XSAWYERX/Storable-3.15.tar.gz";
-      sha256 = "fc3dad06cb2e6fc86a2f2abc5b5491d9da328ca3e6b6306559c224521db174da";
-    };
-    meta = {
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  Storable = null; # part of Perl 5.30.3, 5.32.0, 5.33.1
 
   StreamBuffered = buildPerlPackage {
     pname = "Stream-Buffered";
