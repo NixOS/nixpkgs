@@ -7963,10 +7963,10 @@ let
 
   FileUtil = buildPerlModule {
     pname = "File-Util";
-    version = "4.161950";
+    version = "4.201720";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TOMMY/File-Util-4.161950.tar.gz";
-      sha256 = "88507b19da580d595b5c25fe6ba75bbd6096b4359e389ead067a216f766c20ee";
+      url = "mirror://cpan/authors/id/T/TO/TOMMY/File-Util-4.201720.tar.gz";
+      sha256 = "d4491021850d5c5cbd702c7e4744858079841d2fa93f1c2d09ddc9a7863608df";
     };
     buildInputs = [ TestNoWarnings ];
     meta = {
