@@ -1,5 +1,5 @@
 { stdenv, lib, buildEnv, buildGoPackage, fetchFromGitHub, makeWrapper
-, runCommand, writeText, terraform-providers }:
+, runCommand, writeText, terraform-providers, fetchpatch }:
 
 let
   goPackagePath = "github.com/hashicorp/terraform";
@@ -114,7 +114,12 @@ in rec {
   terraform_0_12 = pluggable (generic {
     version = "0.12.20";
     sha256 = "1k94iwhdvp1ifg9w7y26cl89ihki2w9kxv8mz06pp9bnfwfw67x5";
-    patches = [ ./provider-path.patch ];
+    patches = [ ./provider-path.patch ]
+      ++ lib.optional stdenv.isDarwin (fetchpatch {
+        name = "go1.14-mojave.patch";
+        url = "https://github.com/hashicorp/terraform/pull/24562.patch";
+        sha256 = "1k70kk4hli72x8gza6fy3vpckdm3sf881w61fmssrah3hgmfmbrs";
+      });
     passthru = { inherit plugins; };
   });
 
