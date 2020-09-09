@@ -2269,7 +2269,7 @@ let
       sha256 = "dd5b6c353f08fba100dae09904284f7f73f8328d31f6a67b2c136fad728d158b";
     };
     buildInputs = [ TestRequires ];
-    propagatedBuildInputs = [ CGI HTTPMessage ];
+    propagatedBuildInputs = [ CGI ];
     meta = {
       homepage = "https://github.com/tokuhirom/p5-cgi-emulate-psgi";
       description = "PSGI adapter for CGI";
