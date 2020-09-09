@@ -11617,10 +11617,10 @@ let
 
   MailTransport = buildPerlPackage {
      pname = "Mail-Transport";
-     version = "3.004";
+     version = "3.005";
      src = fetchurl {
-       url = "mirror://cpan/authors/id/M/MA/MARKOV/Mail-Transport-3.004.tar.gz";
-       sha256 = "049xsjxfn00v5znmrg7vgyafy5wzxxa901hq2g083s0pyq4mlcfg";
+       url = "mirror://cpan/authors/id/M/MA/MARKOV/Mail-Transport-3.005.tar.gz";
+       sha256 = "18wna71iyrgn63l7samacvnx2a5ydpcffkg313c8a4jwf0zvkp6h";
      };
      propagatedBuildInputs = [ MailMessage ];
      meta = {
