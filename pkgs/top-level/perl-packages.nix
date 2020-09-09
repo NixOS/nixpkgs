@@ -11268,10 +11268,10 @@ let
 
   LWP = buildPerlPackage {
     pname = "libwww-perl";
-    version = "6.45";
+    version = "6.47";
     src = fetchurl {
-      url = mirror://cpan/authors/id/O/OA/OALDERS/libwww-perl-6.45.tar.gz;
-      sha256 = "4391cec148d83c32482350c8ee1bc88f1b42d33921584b83017eba1591a42954";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/libwww-perl-6.47.tar.gz";
+      sha256 = "3029d6efc2099c4175bf976d0db7fbab9771ada631010c809cb4664230898f53";
     };
     propagatedBuildInputs = [ FileListing HTMLParser HTTPCookies HTTPDaemon HTTPNegotiate NetHTTP TryTiny WWWRobotRules ];
     # support cross-compilation by avoiding using `has_module` which does not work in miniperl (it requires B native module)
