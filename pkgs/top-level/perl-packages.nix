@@ -5445,11 +5445,11 @@ let
 
   DBDPg = buildPerlPackage {
     pname = "DBD-Pg";
-    version = "3.12.3";
+    version = "3.14.2";
 
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TU/TURNSTEP/DBD-Pg-3.12.3.tar.gz;
-      sha256 = "0rrlg2rwgkpcx67qf7081g7mj2shpqhj2iyxrq5fixf32nb0ad4v";
+      url = "mirror://cpan/authors/id/T/TU/TURNSTEP/DBD-Pg-3.14.2.tar.gz";
+      sha256 = "0kcfqq7g3832wiix0sbyvlc885qghjrp2ah3akn7h2lnb22fjwy9";
     };
 
     buildInputs = [ pkgs.postgresql ];
