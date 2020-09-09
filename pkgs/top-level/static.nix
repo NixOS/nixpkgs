@@ -264,13 +264,12 @@ in {
     if set ? overrideScope' then set.overrideScope' ocamlStaticAdapter else set
   ) super.ocaml-ng;
 
-  python27  = super.python27.override { static = true; };
-  python352 = super.python352.override { static = true; };
-  #python35  = super.python35.override { static = true; };
-  python36  = super.python36.override { static = true; };
-  python37  = super.python37.override { static = true; };
-  python38  = super.python38.override { static = true; };
-  python39  = super.python39.override { static = true; };
+  python27 = super.python27.override { static = true; };
+  python35 = super.python35.override { static = true; };
+  python36 = super.python36.override { static = true; };
+  python37 = super.python37.override { static = true; };
+  python38 = super.python38.override { static = true; };
+  python39 = super.python39.override { static = true; };
   python3Minimal = super.python3Minimal.override { static = true; };
 
 

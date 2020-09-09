@@ -63,8 +63,8 @@ in {
     inherit passthruFun;
   };
 
-  python352 = callPackage ./cpython {
-    self = python352;
+  python35 = callPackage ./cpython {
+    self = python35;
     sourceVersion = {
       major = "3";
       minor = "5";
