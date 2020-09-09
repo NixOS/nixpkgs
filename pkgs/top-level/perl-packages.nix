@@ -17086,7 +17086,7 @@ let
     pname = "Search-Xapian";
     version = "1.2.25.2";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OL/OLLY/Search-Xapian-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/O/OL/OLLY/Search-Xapian-1.2.25.2.tar.gz";
       sha256 = "0hpa8gi38j0ibq8af6dy69lm1bl5jnq76nsa69dbrzbr88l5m594";
     };
     patches = [
@@ -17097,7 +17097,7 @@ let
         stripLen = 1;
       })
     ];
-    buildInputs = [ pkgs.xapian ExtUtilsMakeMaker DevelLeak ];
+    buildInputs = [ pkgs.xapian DevelLeak ];
     meta = {
       description = "Perl XS frontend to the Xapian C++ search library";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
