@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 # propagatedBuildInputs
 , aiohttp
 , async-timeout
@@ -14,6 +15,9 @@
 buildPythonPackage rec {
   pname = "pyhaversion";
   version = "3.3.0";
+
+  # needs aiohttp which is py3k-only
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
