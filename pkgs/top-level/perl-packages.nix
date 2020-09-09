@@ -10859,10 +10859,10 @@ let
 
   LocaleCodes = buildPerlPackage {
     pname = "Locale-Codes";
-    version = "3.64";
+    version = "3.65";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SB/SBECK/Locale-Codes-3.64.tar.gz;
-      sha256 = "4ed9ef810b68cbb3417e28b34606c1b73c205ce2128535e53b4c9bf612c3e861";
+      url = "mirror://cpan/authors/id/S/SB/SBECK/Locale-Codes-3.65.tar.gz";
+      sha256 = "8e0a3f5f9a5f9ec027dcfc6e21ad414b10e3a5c0826b3f9ea498e1a79881cd5d";
     };
     meta = {
       description = "A distribution of modules to handle locale codes";
