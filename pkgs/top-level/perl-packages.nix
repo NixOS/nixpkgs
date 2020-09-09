@@ -13081,10 +13081,10 @@ let
 
   Moose = buildPerlPackage {
     pname = "Moose";
-    version = "2.2012";
+    version = "2.2013";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/Moose-2.2012.tar.gz";
-      sha256 = "46bbe47a9d16379c355b3a263214eb69bf0edca6a0ef75499a012236f5153569";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Moose-2.2013.tar.gz";
+      sha256 = "df74dc78088921178edf72d827017d6c92737c986659f2dadc533ae24675e77c";
     };
     buildInputs = [ CPANMetaCheck TestCleanNamespaces TestFatal TestRequires ];
     propagatedBuildInputs = [ ClassLoadXS DevelGlobalDestruction DevelOverloadInfo DevelStackTrace EvalClosure ModuleRuntimeConflicts PackageDeprecationManager PackageStashXS SubExporter ];
