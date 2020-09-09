@@ -3654,10 +3654,10 @@ let
 
   CPANPerlReleases = buildPerlPackage {
     pname = "CPAN-Perl-Releases";
-    version = "5.20200607";
+    version = "5.20200820";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BINGOS/CPAN-Perl-Releases-5.20200607.tar.gz;
-      sha256 = "0x09ghg5s69kajpw19qs8bhdzma900ipry4zizi37qcdby3kadf1";
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/CPAN-Perl-Releases-5.20200820.tar.gz";
+      sha256 = "07vsbsxygdbv0nk9389ng3jdsl1d3yk1z54xdci1gpy0lghbij70";
     };
     meta = {
       homepage = "https://github.com/bingos/cpan-perl-releases";
