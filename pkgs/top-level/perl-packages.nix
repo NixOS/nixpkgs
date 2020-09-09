@@ -9541,10 +9541,10 @@ let
 
   HTTPTinyish = buildPerlPackage {
     pname = "HTTP-Tinyish";
-    version = "0.16";
+    version = "0.17";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/HTTP-Tinyish-0.16.tar.gz;
-      sha256 = "1a3318b89987c2aa5dd18990a109e8af63049f87e4e1a9357583beed1c3bfbda";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/HTTP-Tinyish-0.17.tar.gz";
+      sha256 = "47bd111e474566d733c41870e2374c81689db5e0b5a43adc48adb665d89fb067";
     };
     propagatedBuildInputs = [ FileWhich IPCRun3 ];
     meta = {
