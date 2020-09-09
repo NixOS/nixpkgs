@@ -20666,7 +20666,7 @@ let
     pname = "Text-Table";
     version = "1.134";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Table-1.134.tar.gz;
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Table-1.134.tar.gz";
       sha256 = "02yigisvgshpgfyqwj0xad4jg473cd80a6c210nb5h5p32dl5kxs";
     };
     propagatedBuildInputs = [ TextAligner ];
