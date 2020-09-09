@@ -1311,6 +1311,8 @@ in {
 
   crashtest = callPackage ../development/python-modules/crashtest { };
 
+  crate = callPackage ../development/python-modules/crate { };
+
   crayons = callPackage ../development/python-modules/crayons { };
 
   crc16 = callPackage ../development/python-modules/crc16 { };
