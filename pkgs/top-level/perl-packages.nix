@@ -17917,17 +17917,17 @@ let
 
   StringUtil = buildPerlModule {
     pname = "String-Util";
-    version = "1.26";
+    version = "1.31";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIKO/String-Util-1.26.tar.gz";
-      sha256 = "0bgs6fsc0gcj9qa1k98nwjp4xbkl3ckz71rz3qhmav0lgkrr96pl";
+      url = "mirror://cpan/authors/id/B/BA/BAKERSCOT/String-Util-1.31.tar.gz";
+      sha256 = "0vfjvy04y71f8jsjg0yll28wqlpgn7gbkcrb0i72k0qcliz9mg7v";
     };
     meta = {
       description = "String::Util -- String processing utilities";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
-    propagatedBuildInputs = [ NumberMisc ];
-    buildInputs = [ TestToolbox ];
+
+    buildInputs = [ ModuleBuildTiny ];
   };
 
   strip-nondeterminism = callPackage ../development/perl-modules/strip-nondeterminism { };
