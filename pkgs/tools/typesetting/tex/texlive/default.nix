@@ -2,7 +2,7 @@
   - source: ../../../../../doc/languages-frameworks/texlive.xml
   - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
-{ stdenv, lib, fetchurl, runCommand, writeText, buildEnv
+{ stdenv, lib, fetchurl, fetchpatch, runCommand, writeText, buildEnv
 , callPackage, ghostscriptX, harfbuzz, poppler_min
 , makeWrapper, python, ruby, perl
 , useFixedHashes ? true
@@ -56,6 +56,21 @@ let
       };
       collection-plaingeneric = orig.collection-plaingeneric // {
         deps = orig.collection-plaingeneric.deps // { inherit (tl) xdvi; };
+      };
+
+      # TODO revert for texlive 2020
+      arara = lib.recursiveUpdate orig.arara {
+        postUnpack = let
+          arara_jar_fix = fetchpatch {
+            url = "https://github.com/TeX-Live/texlive-source/commit/dbaf12f4a47dcd62bcc96346f65493fda3fec2c8.diff";
+            sha256 = "148knr8k6sm6fpyj31kdq85yxvzvwp1prjha3f07q24kbar2l830";
+          };
+        in ''
+          if [ -f "$out"/scripts/arara/arara.sh ]; then
+            cd "$out"/scripts/
+            patch -p4 <${arara_jar_fix}
+          fi
+        '';
       };
     }); # overrides
 
