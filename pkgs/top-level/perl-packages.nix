@@ -15586,7 +15586,7 @@ let
     pname = "Pegex";
     version = "0.75";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IN/INGY/Pegex-0.75.tar.gz;
+      url = "mirror://cpan/authors/id/I/IN/INGY/Pegex-0.75.tar.gz";
       sha256 = "4dc8d335de80b25247cdb3f946f0d10d9ba0b3c34b0ed7d00316fd068fd05edc";
     };
     buildInputs = [ TestPod TieIxHash ];
