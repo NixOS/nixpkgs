@@ -179,7 +179,7 @@ let
     pname = "Alien-GMP";
     version = "1.16";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PL/PLICEASE/Alien-GMP-1.16.tar.gz;
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-GMP-1.16.tar.gz";
       sha256 = "199x24pl6jnqshgnl066lhdf2fkqa6l1fml9g3qn5grmwn7d8309";
     };
     propagatedBuildInputs = [ AlienBuild ];
