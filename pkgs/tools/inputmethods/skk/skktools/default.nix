@@ -8,13 +8,13 @@
 #   dependencies on a Ruby interpreter etc.
 # - We for the moment do not package them to keep the dependencies slim.
 #   Probably, shall package the newer tools as skktools-extra in the future.
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "skktools";
   version = "1.3.3";
   src = fetchFromGitHub {
     owner = "skk-dev";
     repo = "skktools";
-    rev = "c8816fe720604d4fd79f3552e99e0430ca6f2769";
+    rev = "skktools-${stdenv.lib.replaceStrings ["."] ["_"] version}";
     sha256 = "11v1i5gkxvfsipigc1w1m16ijzh85drpl694kg6ih4jfam1q4vdh";
   };
   # # See "12.2. Package naming"
