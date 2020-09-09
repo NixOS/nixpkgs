@@ -8361,7 +8361,7 @@ let
     pname = "Glib";
     version = "1.3293";
     src = fetchurl {
-      url = mirror://cpan/authors/id/X/XA/XAOC/Glib-1.3293.tar.gz;
+      url = "mirror://cpan/authors/id/X/XA/XAOC/Glib-1.3293.tar.gz";
       sha256 = "005m3inz12xcsd5sr056cm1kbhmxsx2ly88ifbdv6p6cwz0s05kk";
     };
     buildInputs = [ pkgs.glib ];
