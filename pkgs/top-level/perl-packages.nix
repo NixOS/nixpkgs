@@ -12839,12 +12839,12 @@ let
 
   MojoliciousPluginAssetPack = buildPerlPackage {
     pname = "Mojolicious-Plugin-AssetPack";
-    version = "2.08";
+    version = "2.09";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-AssetPack-2.08.tar.gz";
-      sha256 = "585d9e056258b00590da109b4d5ee573fa3eb2248425247aebbfedac5a157152";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-AssetPack-2.09.tar.gz";
+      sha256 = "7d3277748fb05221085a7632dd1c152e8b41c5519fd3984a0380404221e0686d";
     };
-    propagatedBuildInputs = [ FileWhich IPCRun3 Mojolicious JavaScriptMinifierXS CSSMinifierXS ];
+    propagatedBuildInputs = [ FileWhich IPCRun3 Mojolicious ];
     meta = {
       homepage = "https://github.com/jhthorsen/mojolicious-plugin-assetpack";
       description = "Compress and convert css, less, sass, javascript and coffeescript files";
