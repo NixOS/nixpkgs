@@ -19,8 +19,9 @@ let
                 then packagesWith cond return pkg
                 else [ ]
               );
+            isDerivation = result.success && (pkgs.lib.isDerivation result.value);
           in
-          if result.success then result.value
+          if isDerivation then result.value
           else [ ]
         )
         set
