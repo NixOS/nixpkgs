@@ -103,7 +103,7 @@ let
     };
 
     node-red = super.node-red.override {
-      meta.broken = since "10";
+      buildInputs = [ self.node-pre-gyp ];
     };
 
     pnpm = super.pnpm.override {

@@ -1,5 +1,14 @@
-{ stdenv, fetchFromGitHub, pkg-config, autoreconfHook, pixman, xcbutil, xcbutilimage
-, libseccomp, libjpeg, libpng, libXpm }:
+{ stdenv
+, fetchFromGitHub
+, pkg-config
+, autoreconfHook
+, pixman
+, xcbutil
+, xcbutilimage
+, libjpeg
+, libpng
+, libXpm
+}:
 
 stdenv.mkDerivation rec {
   pname = "xwallpaper";
@@ -15,7 +24,7 @@ stdenv.mkDerivation rec {
   preConfigure = "./autogen.sh";
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ pixman xcbutilimage xcbutil libseccomp libjpeg libpng libXpm ];
+  buildInputs = [ pixman xcbutilimage xcbutil libjpeg libpng libXpm ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/stoeckmann/xwallpaper";
