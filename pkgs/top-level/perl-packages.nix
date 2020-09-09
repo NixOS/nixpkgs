@@ -2330,7 +2330,7 @@ let
     pname = "CGI-Minimal";
     version = "1.30";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SN/SNOWHARE/CGI-Minimal-1.30.tar.gz;
+      url = "mirror://cpan/authors/id/S/SN/SNOWHARE/CGI-Minimal-1.30.tar.gz";
       sha256 = "b94d50821b02611da6ee5423193145078c4dbb282f2b162a4b0d58094997bc47";
     };
     meta = {
