@@ -22380,7 +22380,7 @@ let
     pname = "YAML-LibYAML";
     version = "0.82";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TI/TINITA/YAML-LibYAML-0.82.tar.gz;
+      url = "mirror://cpan/authors/id/T/TI/TINITA/YAML-LibYAML-0.82.tar.gz";
       sha256 = "0j7yhxkaasccynl5iq1cqpf4x253p4bi5wsq6qbwwv2wjsiwgd02";
     };
   };
