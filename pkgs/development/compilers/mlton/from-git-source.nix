@@ -6,6 +6,7 @@
 , sha256
 , stdenv
 , version
+, which
 }:
 
 stdenv.mkDerivation {
@@ -15,6 +16,8 @@ stdenv.mkDerivation {
   src = fetchgit {
     inherit url rev sha256;
   };
+
+  nativeBuildInputs = [ which ];
 
   buildInputs = [mltonBootstrap gmp];
 
