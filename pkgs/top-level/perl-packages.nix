@@ -9947,10 +9947,10 @@ let
 
   IOTee = buildPerlPackage {
     pname = "IO-Tee";
-    version = "0.65";
+    version = "0.66";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NE/NEILB/IO-Tee-0.65.tar.gz";
-      sha256 = "04hc94fk6qlazrarcznw2d8wiqw289js4za0czw65296kc8csgf6";
+      url = "mirror://cpan/authors/id/N/NE/NEILB/IO-Tee-0.66.tar.gz";
+      sha256 = "1q2jhp02rywrbyhvl2lv6qp70dcv5cfalrx3cc4c7y8nclhfg71d";
     };
   };
 
