@@ -4611,7 +4611,7 @@ let
     pname = "Data-Serializer";
     version = "0.65";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NE/NEELY/Data-Serializer-0.65.tar.gz;
+      url = "mirror://cpan/authors/id/N/NE/NEELY/Data-Serializer-0.65.tar.gz";
       sha256 = "048zjy8valnil8yawa3vrxr005rz95gpfwvmy2jq0g830195l58j";
     };
     meta = {
