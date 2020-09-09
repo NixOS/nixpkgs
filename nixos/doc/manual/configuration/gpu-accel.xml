@@ -100,8 +100,8 @@ Platform Vendor      Advanced Micro Devices, Inc.</screen>
        support. For example, for Gen8 and later GPUs, the following
        configuration can be used:
 
-	      <programlisting><xref linkend="opt-hardware.opengl.extraPackages"/> = with pkgs; [
-  intel-compute-runtime
+	      <programlisting><xref linkend="opt-hardware.opengl.extraPackages"/> = [
+  pkgs.intel-compute-runtime
 ];</programlisting>
 
       </para>
