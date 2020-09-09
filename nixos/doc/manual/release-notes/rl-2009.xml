@@ -843,6 +843,17 @@ CREATE ROLE postgres LOGIN SUPERUSER;
      of the default <literal>out</literal> output anymore - if you relied on the
      <literal>notmuch-emacs-mua</literal> binary or the emacs lisp files, access them via
      the <literal>notmuch.emacs</literal> output.
+
+     Device tree overlay support was improved in
+     <link xlink:href="https://github.com/NixOS/nixpkgs/pull/79370">#79370</link>
+     and now uses <xref linkend="opt-hardware.deviceTree.kernelPackage"/>
+     instead of <option>hardware.deviceTree.base</option>.
+
+     <xref linkend="opt-hardware.deviceTree.overlays"/> configuration was
+     extended to support <literal>.dts</literal> files with symbols.
+
+     Device trees can now be filtered by setting
+     <xref linkend="opt-hardware.deviceTree.filter"/> option.
     </para>
    </listitem>
    <listitem>
