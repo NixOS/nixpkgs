@@ -11844,7 +11844,7 @@ let
     preConfigure = "cp ${pari_tgz} pari-${pariversion}.tgz";
     makeMakerFlags = "pari_tgz=pari-${pariversion}.tgz";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IL/ILYAZ/modules/${pname}-${version}.zip";
+      url = "mirror://cpan/authors/id/I/IL/ILYAZ/modules/Math-Pari-2.030518.zip";
       sha256 = "dc38955a9690be6bafa8de2526212377c3ec9fe8da5ec02263a9caf94b58bb91";
     };
     meta = {
