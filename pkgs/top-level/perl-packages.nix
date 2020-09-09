@@ -18145,7 +18145,7 @@ let
     pname = "Safe-Hole";
     version = "0.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TODDR/Safe-Hole-0.14.tar.gz;
+      url = "mirror://cpan/authors/id/T/TO/TODDR/Safe-Hole-0.14.tar.gz";
       sha256 = "01gc2lfli282dj6a2pkpxb0vmpyavs323cbdw15gxi06pn5nxxgl";
     };
     meta = {
