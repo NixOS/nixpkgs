@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gettext, m4, intltool, libxmlxx, keybinder
-, gtk2, libX11, libfm, libwnck, libXmu, libXpm, cairo, gdk-pixbuf
+, gtk2, libX11, libfm, libwnck, libXmu, libXpm, cairo, gdk-pixbuf, gdk-pixbuf-xlib
 , menu-cache, lxmenu-data, wirelesstools
 , supportAlsa ? false, alsaLib
 }:
@@ -14,9 +14,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig gettext m4 intltool libxmlxx ];
   buildInputs = [
-    keybinder gtk2 libX11 libfm libwnck libXmu libXpm cairo gdk-pixbuf
+    keybinder gtk2 libX11 libfm libwnck libXmu libXpm cairo gdk-pixbuf gdk-pixbuf-xlib.dev
     menu-cache lxmenu-data m4 wirelesstools
   ] ++ stdenv.lib.optional supportAlsa alsaLib;
+
+  postPatch = ''
+    substituteInPlace src/Makefile.in \
+      --replace "@PACKAGE_CFLAGS@" "@PACKAGE_CFLAGS@ -I${gdk-pixbuf-xlib.dev}/include/gdk-pixbuf-2.0"
+    substituteInPlace plugins/Makefile.in \
+      --replace "@PACKAGE_CFLAGS@" "@PACKAGE_CFLAGS@ -I${gdk-pixbuf-xlib.dev}/include/gdk-pixbuf-2.0"
+  '';
 
   meta = {
     description = "Lightweight X11 desktop panel for LXDE";
