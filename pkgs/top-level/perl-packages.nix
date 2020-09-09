@@ -2696,7 +2696,7 @@ let
     pname = "Class-Loader";
     version = "2.03";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/V/VI/VIPUL/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/V/VI/VIPUL/Class-Loader-2.03.tar.gz";
       sha256 = "4fef2076ead60423454ff1f4e82859a9a9b9942b5fb8eee0c98b9c63c9f2b8e7";
     };
     meta = {
