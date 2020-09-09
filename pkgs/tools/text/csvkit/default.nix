@@ -2,11 +2,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "csvkit";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1830lb95rh1iyi3drlwxzb6y3pqkii0qiyzd40c1kvhvaf1s6lqk";
+    sha256 = "1ffmbzk4rxnl1yhqfl58v7kvl5m9cbvjm8v7xp4mvr00sgs91lvv";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
