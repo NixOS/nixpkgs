@@ -21737,7 +21737,7 @@ let
     pname = "WWW-Mechanize";
     version = "2.00";
     src = fetchurl {
-      url = mirror://cpan/authors/id/O/OA/OALDERS/WWW-Mechanize-2.00.tar.gz;
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/WWW-Mechanize-2.00.tar.gz";
       sha256 = "0j5bzn9jwb8rclif776gax57jxxn108swmajiqi2cpjbmlwng0ki";
     };
     propagatedBuildInputs = [ HTMLForm HTMLTree LWP ];
