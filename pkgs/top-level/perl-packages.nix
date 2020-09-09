@@ -6382,6 +6382,7 @@ let
       description = "Add release tests for POD links";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestPodLinkCheck ];
   };
 
   DistZillaPluginTestPortability = buildPerlModule {
