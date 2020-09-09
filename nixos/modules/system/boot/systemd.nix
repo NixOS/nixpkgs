@@ -243,6 +243,8 @@ let
           OnFailure = toString config.onFailure; }
         // optionalAttrs (options.startLimitIntervalSec.isDefined) {
           StartLimitIntervalSec = toString config.startLimitIntervalSec;
+        } // optionalAttrs (options.startLimitBurst.isDefined) {
+          StartLimitBurst = toString config.startLimitBurst;
         };
     };
   };

@@ -25,19 +25,18 @@ in
   ];
 
   config = mkIf cfg.enable {
-
     systemd.services.hercules-ci-agent = {
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
       path = [ config.nix.package ];
+      startLimitBurst = 30 * 1000000; # practically infinite
       serviceConfig = {
         User = "hercules-ci-agent";
         ExecStart = command;
         ExecStartPre = testCommand;
         Restart = "on-failure";
         RestartSec = 120;
-        StartLimitBurst = 30 * 1000000; # practically infinite
       };
     };
 

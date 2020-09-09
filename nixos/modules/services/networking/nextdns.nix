@@ -28,9 +28,9 @@ in {
       environment = {
         SERVICE_RUN_MODE = "1";
       };
+      startLimitIntervalSec = 5;
+      startLimitBurst = 10;
       serviceConfig = {
-        StartLimitInterval = 5;
-        StartLimitBurst = 10;
         ExecStart = "${pkgs.nextdns}/bin/nextdns run ${escapeShellArgs config.services.nextdns.arguments}";
         RestartSec = 120;
         LimitMEMLOCK = "infinity";
