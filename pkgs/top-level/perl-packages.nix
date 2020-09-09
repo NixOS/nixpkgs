@@ -6123,7 +6123,7 @@ let
     pname = "Dist-Zilla";
     version = "6.015";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Dist-Zilla-6.015.tar.gz;
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Dist-Zilla-6.015.tar.gz";
       sha256 = "06w9mdk46y4n2dshkx6laphkqk08wfw6bqpsa5q2yb4lky0yb212";
     };
     buildInputs = [ CPANMetaCheck TestDeep TestFailWarnings TestFatal TestFileShareDir ];
