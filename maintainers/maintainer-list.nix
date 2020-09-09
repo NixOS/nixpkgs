@@ -886,9 +886,9 @@
     githubId = 1017537;
     name = "Bruno Bieth";
   };
-  badi = {
-    email = "abdulwahidc@gmail.com";
-    github = "badi";
+  badmutex = {
+    email = "github@badi.sh";
+    github = "badmutex";
     githubId = 35324;
     name = "Badi' Abdul-Wahid";
   };
