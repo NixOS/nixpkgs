@@ -18227,7 +18227,7 @@ let
     pname = "Sys-Mmap";
     version = "0.20";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TODDR/Sys-Mmap-0.20.tar.gz;
+      url = "mirror://cpan/authors/id/T/TO/TODDR/Sys-Mmap-0.20.tar.gz";
       sha256 = "1kz22l7sh2mibliixyshc9958bqlkzsb13agcibp7azii4ncw80q";
     };
     meta = with stdenv.lib; {
