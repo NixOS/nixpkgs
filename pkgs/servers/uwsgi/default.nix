@@ -65,7 +65,10 @@ stdenv.mkDerivation rec {
     sha256 = "0256v72b7zr6ds4srpaawk1px3bp0djdwm239w3wrxpw7dzk1gjn";
   };
 
-  patches = [ ./0001-no-ext-session-php_session.h-on-NixOS.patch ];
+  patches = [
+        ./no-ext-session-php_session.h-on-NixOS.patch
+        ./additional-php-ldflags.patch
+  ];
 
   nativeBuildInputs = [ python3 pkgconfig ];
 
@@ -88,6 +91,16 @@ stdenv.mkDerivation rec {
     export pluginDir=$out/lib/uwsgi
     substituteAll ${./nixos.ini} buildconf/nixos.ini
   '';
+
+  # this is a hack to make the php plugin link with session.so (which on nixos is a separate package)
+  # the hack works in coordination with ./additional-php-ldflags.patch
+  UWSGICONFIG_PHP_LDFLAGS = lib.optionalString (builtins.any (x: x.name == "php") needed)
+        (lib.concatStringsSep "," [
+            "-Wl"
+            "-rpath=${php-embed.extensions.session}/lib/php/extensions/"
+            "--library-path=${php-embed.extensions.session}/lib/php/extensions/"
+            "-l:session.so"
+        ]);
 
   buildPhase = ''
     mkdir -p $pluginDir
