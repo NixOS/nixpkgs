@@ -2928,7 +2928,7 @@ let
     pname = "Clone";
     version = "0.45";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AT/ATOOMIC/Clone-0.45.tar.gz;
+      url = "mirror://cpan/authors/id/A/AT/ATOOMIC/Clone-0.45.tar.gz";
       sha256 = "1rm9g68fklni63jdkrlgqq6yfj95fm33p2bq90p475gsi8sfxdnb";
     };
     meta = {
