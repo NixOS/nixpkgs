@@ -12129,10 +12129,10 @@ let
 
   MetricsAny = buildPerlModule {
     pname = "Metrics-Any";
-    version = "0.05";
+    version = "0.06";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PEVANS/Metrics-Any-0.05.tar.gz;
-      sha256 = "1xg7y8szbfwmh72y8l1w0rz4jrd66hisl6hh3hyq31f52cs6hwvr";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Metrics-Any-0.06.tar.gz";
+      sha256 = "0dwqzd40f6isb2sxn7lymsp0ism7s4xwfhb2ilavnxx2x3w9sllw";
     };
     buildInputs = [ TestFatal ];
     meta = {
