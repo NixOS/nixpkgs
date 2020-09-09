@@ -7,7 +7,8 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
 
-  inherit (pkgs) kdeApplications plasma5 libsForQt5 qt5;
+  inherit (pkgs) kdeApplications plasma5;
+  libsForQt5 = pkgs.libsForQt514;
   inherit (pkgs) writeText;
 
   pulseaudio = config.hardware.pulseaudio;

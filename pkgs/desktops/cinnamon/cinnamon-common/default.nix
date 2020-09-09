@@ -6,6 +6,7 @@
 , cinnamon-control-center
 , cinnamon-desktop
 , cinnamon-menus
+, cinnamon-session
 , cjs
 , fetchFromGitHub
 , gdk-pixbuf
@@ -40,6 +41,7 @@
 , glib-networking
 , pciutils
 , timezonemap
+, libnma
 }:
 
 let
@@ -47,13 +49,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
-  version = "4.4.1";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     rev = version;
-    sha256 = "0sv7nqd1l6c727qj30dcgdkvfh1wxpszpgmbdyh58ilmc8xklnqd";
+    sha256 = "149lhg953fa0glm250f76z2jzyaabh97jxiqkjnqvsk6bjk1d0bw";
   };
 
   patches = [
@@ -66,7 +68,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     # TODO: review if we really need this all
-    (python3.withPackages (pp: with pp; [ dbus-python setproctitle pygobject3 pycairo xapp pillow pytz tinycss pam pexpect ]))
+    (python3.withPackages (pp: with pp; [ dbus-python setproctitle pygobject3 pycairo xapp pillow pytz tinycss2 pam pexpect distro ]))
     atk
     cacert
     cinnamon-control-center
@@ -99,6 +101,7 @@ stdenv.mkDerivation rec {
     nemo
     libnotify
     accountsservice
+    libnma
 
     # gsi bindings
     gnome-online-accounts
@@ -144,13 +147,20 @@ stdenv.mkDerivation rec {
     sed "s|/usr/bin|/run/current-system/sw/bin|g" -i ./files/usr/bin/cinnamon-launcher
 
     sed 's|"lspci"|"${pciutils}/bin/lspci"|g' -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_info.py
+
+    sed "s| cinnamon-session| ${cinnamon-session}/bin/cinnamon-session|g" -i ./files/usr/bin/cinnamon-session-cinnamon  -i ./files/usr/bin/cinnamon-session-cinnamon2d
+    sed "s|/usr/bin|$out/bin|g" -i ./files/usr/share/xsessions/cinnamon.desktop ./files/usr/share/xsessions/cinnamon2d.desktop
   '';
+
+  passthru = {
+    providedSessions = ["cinnamon" "cinnamon2d"];
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/linuxmint/cinnamon";
     description = "The Cinnamon desktop environment";
     license = [ licenses.gpl2 ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }
