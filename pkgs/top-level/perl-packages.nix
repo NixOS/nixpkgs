@@ -13992,11 +13992,11 @@ let
     pname = "MP3-Tag";
     version = "1.15";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IL/ILYAZ/modules/MP3-Tag-1.15.zip;
+      url = "mirror://cpan/authors/id/I/IL/ILYAZ/modules/MP3-Tag-1.15.zip";
       sha256 = "1lanbwv97sfsb7h4vsg1v0dv3yghpz01nf3rzl4a9p3ycgs4ib5a";
     };
     buildInputs = [ pkgs.unzip ];
-    propagatedBuildInputs = [ CompressZlib ExtUtilsMakeMaker ];
+
     postPatch = ''
       substituteInPlace Makefile.PL --replace "'PL_FILES'" "#'PL_FILES'"
     '';
