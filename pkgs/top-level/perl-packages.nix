@@ -15353,7 +15353,7 @@ let
     pname = "parent";
     version = "0.238";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CO/CORION/parent-0.238.tar.gz;
+      url = "mirror://cpan/authors/id/C/CO/CORION/parent-0.238.tar.gz";
       sha256 = "1lfjqjxsvgpsn6ycah4z0qygkykj4v8ca3cdki61k2p2ygg8zx9q";
     };
   };
