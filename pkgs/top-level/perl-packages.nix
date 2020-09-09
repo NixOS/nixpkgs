@@ -310,7 +310,7 @@ let
       url = "mirror://cpan/authors/id/D/DA/DANAJ/Alt-Crypt-RSA-BigInt-0.06.tar.gz";
       sha256 = "76f434cab36999cdf09811345bb39d6b7cbed7e085b02338328c7f46e08b38f3";
     };
-    propagatedBuildInputs = [ ClassLoader ConvertASCIIArmour CryptBlowfish CryptCBC DataBuffer DigestMD2 MathBigIntGMP MathPrimeUtil MathPrimeUtilGMP SortVersions TieEncryptedHash ];
+    propagatedBuildInputs = [ ClassLoader ConvertASCIIArmour DataBuffer DigestMD2 MathBigIntGMP MathPrimeUtil SortVersions TieEncryptedHash ];
     meta = {
       homepage = "https://github.com/danaj/Alt-Crypt-RSA-BigInt";
       description = "RSA public-key cryptosystem, using Math::BigInt";
