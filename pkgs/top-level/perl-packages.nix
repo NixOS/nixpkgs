@@ -14602,7 +14602,7 @@ let
     pname = "Net-Prometheus";
     version = "0.11";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PEVANS/Net-Prometheus-0.11.tar.gz;
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Prometheus-0.11.tar.gz";
       sha256 = "0skjkz6q68y8g9blm7i03k4wprac3djq15akmlv1kmgag3i0ky12";
     };
     propagatedBuildInputs = [ RefUtil StructDumb URI ];
