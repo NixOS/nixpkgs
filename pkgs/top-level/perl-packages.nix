@@ -15622,7 +15622,7 @@ let
     pname = "Perl-osnames";
     version = "0.122";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PERLANCAR/Perl-osnames-0.122.tar.gz;
+      url = "mirror://cpan/authors/id/P/PE/PERLANCAR/Perl-osnames-0.122.tar.gz";
       sha256 = "7075939d747e375178d00348d00c52ff9db2cebb18bae7473dcb09df825118a0";
     };
     meta = {
