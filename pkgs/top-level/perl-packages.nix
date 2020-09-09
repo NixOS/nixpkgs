@@ -10055,10 +10055,10 @@ let
 
   IPCSysV = buildPerlPackage {
     pname = "IPC-SysV";
-    version = "2.07";
+    version = "2.08";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MH/MHX/IPC-SysV-2.07.tar.gz";
-      sha256 = "d01a367af771d35e3b11a21366ad6405f8d28e8cbca4c0cf08ab78bf157d052d";
+      url = "mirror://cpan/authors/id/M/MH/MHX/IPC-SysV-2.08.tar.gz";
+      sha256 = "1b89bf3a2564f578bd9cd17659ac53e064c28ef7dd80e3cb5efef4ba6126ea4f";
     };
     meta = {
       description = "System V IPC constants and system calls";
