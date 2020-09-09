@@ -7334,7 +7334,7 @@ let
     pname = "FFI-CheckLib";
     version = "0.27";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PL/PLICEASE/FFI-CheckLib-0.27.tar.gz;
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/FFI-CheckLib-0.27.tar.gz";
       sha256 = "0x1dk4hlhvcbgwivf345phbqz0v5hawxxnby21h8bkagq93jfi4d";
     };
     buildInputs = [ Test2Suite ];
