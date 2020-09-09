@@ -18503,10 +18503,10 @@ let
 
   TemplateToolkit = buildPerlPackage {
     pname = "Template-Toolkit";
-    version = "3.008";
+    version = "3.009";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AT/ATOOMIC/Template-Toolkit-3.008.tar.gz;
-      sha256 = "14m6kl9zrs6ycr440an7zswrmcimv2747qq0r87inwznprl0yh2j";
+      url = "mirror://cpan/authors/id/A/AT/ATOOMIC/Template-Toolkit-3.009.tar.gz";
+      sha256 = "1dpmy62x1yshf7kwslj85sc8bcgw1m30dh0szmfrp99pysxj7bfn";
     };
     doCheck = !stdenv.isDarwin;
     meta = {
