@@ -5882,7 +5882,7 @@ let
     pname = "Devel-Hide";
     version = "0.0013";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DC/DCANTRELL/Devel-Hide-0.0013.tar.gz;
+      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Devel-Hide-0.0013.tar.gz";
       sha256 = "1jvyy3yasiwyjsn9ay9sja3ch4wcjc4wk5l22vjsclq29z7vphvg";
     };
   };
