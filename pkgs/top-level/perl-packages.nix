@@ -3659,7 +3659,7 @@ let
     pname = "CPANPLUS";
     version = "0.9908";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BINGOS/CPANPLUS-0.9908.tar.gz;
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/CPANPLUS-0.9908.tar.gz";
       sha256 = "1m4xas67fax947kahvg4jsnsr2r1i58c5g3f1bixh7krgnsarxjq";
     };
     propagatedBuildInputs = [ ArchiveExtract ModulePluggable ObjectAccessor PackageConstants TermUI ];
