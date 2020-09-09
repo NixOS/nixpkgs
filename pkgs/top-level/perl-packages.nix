@@ -15808,10 +15808,10 @@ let
 
   PkgConfig = buildPerlPackage {
     pname = "PkgConfig";
-    version = "0.23026";
+    version = "0.24026";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/PkgConfig-0.23026.tar.gz";
-      sha256 = "56c8ad9015af3799b99a21b8790997723406acf479f35d13fe9bf632db2d5c26";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/PkgConfig-0.24026.tar.gz";
+      sha256 = "345d44562802ddf3da70faf817e2d1884808166d00480fcce6d7b92005d91aee";
     };
     meta = {
       description = "Pure-Perl Core-Only replacement for pkg-config";
