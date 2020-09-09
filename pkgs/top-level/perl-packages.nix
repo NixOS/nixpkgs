@@ -17022,7 +17022,7 @@ let
     pname = "Scalar-List-Utils";
     version = "1.55";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PEVANS/Scalar-List-Utils-1.55.tar.gz;
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Scalar-List-Utils-1.55.tar.gz";
       sha256 = "4d2bdc1c72a7bc4d69d6a5cc85bc7566497c3b183c6175b832784329d58feb4b";
     };
     meta = {
