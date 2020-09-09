@@ -8262,10 +8262,10 @@ let
 
   GetoptLong = buildPerlPackage {
     pname = "Getopt-Long";
-    version = "2.51";
+    version = "2.52";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JV/JV/Getopt-Long-2.51.tar.gz";
-      sha256 = "0r659i6rkz8zkfgdccbn29zmd4bk9lcdc4y20ng6w2glqaa3pd10";
+      url = "mirror://cpan/authors/id/J/JV/JV/Getopt-Long-2.52.tar.gz";
+      sha256 = "1yh5fykxrw68pvdvhvjh3wfs7a1s29xqwm5fxw2mqg9mfg1sgiwx";
     };
   };
 
