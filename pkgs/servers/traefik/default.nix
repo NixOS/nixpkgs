@@ -26,9 +26,9 @@ buildGoModule rec {
 
     CODENAME=$(awk -F "=" '/CODENAME=/ { print $2}' script/binary)
 
-    makeFlagsArray+=("-ldflags=\
-      -X github.com/containous/traefik/version.Version=${version} \
-      -X github.com/containous/traefik/version.Codename=$CODENAME")
+    buildFlagsArray+=("-ldflags=\
+      -X github.com/containous/traefik/v2/pkg/version.Version=${version} \
+      -X github.com/containous/traefik/v2/pkg/version.Codename=$CODENAME")
   '';
 
   meta = with stdenv.lib; {
