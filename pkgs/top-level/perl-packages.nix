@@ -4743,7 +4743,7 @@ let
     pname = "Data-UUID";
     version = "1.226";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Data-UUID-1.226.tar.gz;
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Data-UUID-1.226.tar.gz";
       sha256 = "0lv4k4ibxwkw7zz9hw97s34za9nvjxb4kbmgmx5sj4fll3zmfg89";
     };
   };
