@@ -6754,10 +6754,10 @@ let
 
   Encode = buildPerlPackage {
     pname = "Encode";
-    version = "3.06";
+    version = "3.07";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-3.06.tar.gz;
-      sha256 = "5b2dcd6861287880584e63b2e518840d483aa38da70194cf64d9957282851eea";
+      url = "mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-3.07.tar.gz";
+      sha256 = "34a4ec9b574b7a6c6132c4ab3ded490fd600bc7ce382124aeda58bb1e112910f";
     };
     meta = {
       description = "Character encodings in Perl";
