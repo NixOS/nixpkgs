@@ -8016,10 +8016,10 @@ let
 
   Filter = buildPerlPackage {
     pname = "Filter";
-    version = "1.59";
+    version = "1.60";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/Filter-1.59.tar.gz";
-      sha256 = "b4babfad4e0566a9a61199735f6e622a60d3274122752304f18f623412bf4e5a";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/Filter-1.60.tar.gz";
+      sha256 = "e11ef2f2ee8727b7f666fd249a3226f768e6eadfd51d9cdb49b3c3f1a35464f9";
     };
     meta = {
       description = "Source Filters";
