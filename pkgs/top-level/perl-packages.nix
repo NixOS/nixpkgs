@@ -7031,7 +7031,7 @@ let
     pname = "Exporter-Tiny";
     version = "1.002002";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TOBYINK/Exporter-Tiny-1.002002.tar.gz;
+      url = "mirror://cpan/authors/id/T/TO/TOBYINK/Exporter-Tiny-1.002002.tar.gz";
       sha256 = "00f0b95716b18157132c6c118ded8ba31392563d19e490433e9a65382e707101";
     };
     meta = {
