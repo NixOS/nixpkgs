@@ -9043,12 +9043,12 @@ let
 
   HTMLParser = buildPerlPackage {
     pname = "HTML-Parser";
-    version = "3.72";
+    version = "3.75";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GA/GAAS/HTML-Parser-3.72.tar.gz";
-      sha256 = "12v05ywlnsi9lc17z32k9jxx3sj1viy7y1wpl7n4az76v7hwfa7c";
+      url = "mirror://cpan/authors/id/C/CA/CAPOEIRAB/HTML-Parser-3.75.tar.gz";
+      sha256 = "1ack2799azfciyiw3vccq126gaxrbz2927i0hm4gaynzm0jmwsxc";
     };
-    propagatedBuildInputs = [ HTMLTagset ];
+    propagatedBuildInputs = [ HTMLTagset HTTPMessage ];
     meta = {
       description = "HTML parser class";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
