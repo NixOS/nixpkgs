@@ -6499,7 +6499,6 @@ broken-packages:
   - hslogger-template
   - hslogstash
   - hsluv-haskell
-  - hsmagick
   - HSmarty
   - hsmodetweaks
   - Hsmtlib
