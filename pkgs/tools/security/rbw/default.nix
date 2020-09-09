@@ -19,15 +19,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
-  version = "0.4.4";
+  version = "0.4.6";
 
   src = fetchCrate {
     inherit version;
     crateName = "${pname}";
-    sha256 = "01p37zx2h3gpm363xn96w0wlg7kqayjl3an65h9p6md21d41bvyr";
+    sha256 = "0vq7cwk3i57fvn54q2rgln74j4p9vqm5zyhap94s73swjywicwk0";
   };
 
-  cargoSha256 = "1xiw21snsbqxfw624cdc340asp2kmcp8rymfcjj7w2lwcqhadrh9";
+  cargoSha256 = "1h253ncick2v9aki5rf1bdrg5rj3h4nrvx5q01gw03cgwnqvyiiy";
 
   nativeBuildInputs = [
     pkgconfig
