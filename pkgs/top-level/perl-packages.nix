@@ -7890,10 +7890,10 @@ let
 
   FileSlurp = buildPerlPackage {
     pname = "File-Slurp";
-    version = "9999.30";
+    version = "9999.32";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CA/CAPOEIRAB/File-Slurp-9999.30.tar.gz;
-      sha256 = "0irpx72dk27d7c4cjr08dq4bwwbmq8gsr39hxd44widrn0yicdra";
+      url = "mirror://cpan/authors/id/C/CA/CAPOEIRAB/File-Slurp-9999.32.tar.gz";
+      sha256 = "1c655gxs0pjm5yd50rcx4rbq1lr77p4a6x6xg4xbwhlx5acj2g2c";
     };
     meta = {
       description = "Simple and Efficient Reading/Writing/Modifying of Complete Files";
