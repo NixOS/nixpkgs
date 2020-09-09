@@ -19697,7 +19697,7 @@ let
       sha256 = "2bfe771173c38b69eeb089504e3f76511b8e45e6a9e6dac3e616e400ea67bcf0";
     };
     buildInputs = [ ModuleBuildTiny TestPod ];
-    propagatedBuildInputs = [ CaptureTiny Moose podlinkcheck PodParser ];
+    propagatedBuildInputs = [ CaptureTiny Moose podlinkcheck ];
     meta = {
       description = "Tests POD for invalid links";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
