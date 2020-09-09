@@ -857,11 +857,12 @@ let
       sha256 = "0kgpl0x1qxq1p2ccxy8qqkrvqba2gq6aq6p931qnz9812nxh0yyp";
     };
     perlPreHook = "export LD=$CC";
-    propagatedBuildInputs = [ pkgs.libkrb5 DevelChecklib FileWhich PkgConfig ];
+    propagatedBuildInputs = [ pkgs.libkrb5 ];
     meta = {
       description = "XS bindings for Kerberos 5";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ DevelChecklib FileWhich PkgConfig ];
   };
 
   AuthenKrb5Admin = buildPerlPackage rec {
