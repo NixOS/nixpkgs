@@ -240,8 +240,8 @@ in
         name = "opentracing";
         owner = "opentracing-contrib";
         repo = "nginx-opentracing";
-        rev = "v0.9.0";
-        sha256 = "02rf1909grbhvs9mjxrv7pwgbf7b8rpjw7j8rpwxag2rgvlsic3g";
+        rev = "v0.10.0";
+        sha256 = "1q234s3p55xv820207dnh4fcxkqikjcq5rs02ai31ylpmfsf0kkb";
       };
       in "${src'}/opentracing";
     inputs = [ pkgs.opentracing-cpp ];
