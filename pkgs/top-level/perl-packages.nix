@@ -21071,7 +21071,7 @@ let
     pname = "TimeDate";
     version = "2.33";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AT/ATOOMIC/TimeDate-2.33.tar.gz;
+      url = "mirror://cpan/authors/id/A/AT/ATOOMIC/TimeDate-2.33.tar.gz";
       sha256 = "1cjyc0yi873597r7xcp9yz0l1c46ik2kxwfrn00zbrlx0d5rrdn0";
     };
   };
