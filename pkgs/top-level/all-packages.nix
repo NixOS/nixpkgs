@@ -5687,8 +5687,15 @@ in
   noip = callPackage ../tools/networking/noip { };
 
   nomad = nomad_0_11;
-  nomad_0_11 = callPackage ../applications/networking/cluster/nomad/0.11.nix { };
-  nomad_0_12 = callPackage ../applications/networking/cluster/nomad/0.12.nix { };
+  # Nomad never updates major go versions within a release series and is unsupported
+  # on Go versions that it did not ship with. Due to historic bugs when compiled
+  # with different versions we pin Go for all versions.
+  nomad_0_11 = callPackage ../applications/networking/cluster/nomad/0.11.nix {
+    buildGoPackage = buildGo114Package;
+  };
+  nomad_0_12 = callPackage ../applications/networking/cluster/nomad/0.12.nix {
+    buildGoPackage = buildGo114Package;
+  };
 
   notable = callPackage ../applications/misc/notable { };
 
