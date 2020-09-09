@@ -794,7 +794,7 @@ let
     pname = "Archive-Zip";
     version = "1.68";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PH/PHRED/Archive-Zip-1.68.tar.gz;
+      url = "mirror://cpan/authors/id/P/PH/PHRED/Archive-Zip-1.68.tar.gz";
       sha256 = "0l663s3a68p8r2qjy4pn1g05lx0i8js8wpz7qqln3bsvg1fihklq";
     };
     buildInputs = [ TestMockModule ];
