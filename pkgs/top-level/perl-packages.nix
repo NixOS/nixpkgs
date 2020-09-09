@@ -8142,7 +8142,7 @@ let
     pname = "Games-Solitaire-Verify";
     version = "0.2403";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Games-Solitaire-Verify-0.2403.tar.gz;
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Games-Solitaire-Verify-0.2403.tar.gz";
       sha256 = "e5ab475c82ba1cb088ad28f423ca514d46944d6ae3c3eb55e9636e9e7f1dc893";
     };
     buildInputs = [ DirManifest TestDifferences ];
