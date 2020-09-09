@@ -1612,7 +1612,7 @@ in
 
   coloredlogs = with python3Packages; toPythonApplication coloredlogs;
 
-  colord-kde = libsForQt5.callPackage ../tools/misc/colord-kde {};
+  colord-kde = libsForQt512.callPackage ../tools/misc/colord-kde {};
 
   colpack = callPackage ../applications/science/math/colpack { };
 
@@ -13022,7 +13022,7 @@ in
     let
       mkFrameworks = import ../development/libraries/kde-frameworks;
       attrs = {
-        libsForQt5 = libsForQt514;
+        libsForQt5 = libsForQt512;
         inherit lib fetchurl;
       };
     in
@@ -21290,7 +21290,7 @@ in
     let
       mkApplications = import ../applications/kde;
       attrs = {
-        libsForQt5 = libsForQt514;
+        libsForQt5 = libsForQt512;
         inherit lib fetchurl;
         inherit okteta;
       };
@@ -23076,7 +23076,7 @@ in
 
   robustirc-bridge = callPackage ../servers/irc/robustirc-bridge { };
 
-  sddm = libsForQt5.callPackage ../applications/display-managers/sddm { };
+  sddm = libsForQt512.callPackage ../applications/display-managers/sddm { };
 
   skrooge = libsForQt514.callPackage ../applications/office/skrooge {};
 
@@ -25506,7 +25506,7 @@ in
     let
       mkPlasma5 = import ../desktops/plasma-5;
       attrs = {
-        libsForQt5 = libsForQt514;
+        libsForQt5 = libsForQt512;
         inherit lib fetchurl;
         gconf = gnome2.GConf;
         inherit gsettings-desktop-schemas;
