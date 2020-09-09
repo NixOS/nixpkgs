@@ -1188,19 +1188,7 @@ let
     };
   };
 
-  bignum = buildPerlPackage {
-    pname = "bignum";
-    version = "0.51";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/bignum-0.51.tar.gz";
-      sha256 = "8ac0f6efe0b6f24804690e53908bdc5346613667f1c0590d8cf808ec090e9c47";
-    };
-    meta = {
-      description = "Transparent BigNumber support for Perl";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-    propagatedBuildInputs = [ MathBigInt ];
-  };
+  bignum = null; # part of Perl 5.30.3, 5.32.0, 5.33.1
 
   BitVector = buildPerlPackage {
     pname = "Bit-Vector";
