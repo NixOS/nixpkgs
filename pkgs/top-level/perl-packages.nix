@@ -17528,7 +17528,7 @@ let
     pname = "SQL-Translator";
     version = "1.61";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MS/MSTROUT/SQL-Translator-1.61.tar.gz;
+      url = "mirror://cpan/authors/id/M/MS/MSTROUT/SQL-Translator-1.61.tar.gz";
       sha256 = "840e3c77cd48b47e1343c79ae8ef4fca46d036356d143d33528900740416dfe8";
     };
     buildInputs = [ FileShareDirInstall JSONMaybeXS TestDifferences TestException XMLWriter YAML ];
