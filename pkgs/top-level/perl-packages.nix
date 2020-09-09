@@ -10108,10 +10108,10 @@ let
 
   Inline = buildPerlPackage {
     pname = "Inline";
-    version = "0.83";
+    version = "0.86";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TI/TINITA/Inline-0.83.tar.gz";
-      sha256 = "171a8e5f66faf88fe5ef4de7126267cd8fb2503483432eabc3b88ac7d5be4239";
+      url = "mirror://cpan/authors/id/I/IN/INGY/Inline-0.86.tar.gz";
+      sha256 = "510a7de2d011b0db80b0874e8c0f7390010991000ae135cff7474df1e6d51e3a";
     };
     buildInputs = [ TestWarn ];
     meta = {
