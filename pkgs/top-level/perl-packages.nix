@@ -19754,7 +19754,7 @@ let
     pname = "Test-Requires";
     version = "0.11";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TOKUHIROM/Test-Requires-0.11.tar.gz;
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/Test-Requires-0.11.tar.gz";
       sha256 = "03q49vi09b4n31kpnmq4v2dga5ja438a8f1wgkgwvvlpjmadx22b";
     };
     meta = {
