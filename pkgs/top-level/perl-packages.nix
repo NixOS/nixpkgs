@@ -277,11 +277,11 @@ let
     pname = "Alien-m4";
     version = "0.19";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PL/PLICEASE/Alien-m4-0.19.tar.gz;
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-m4-0.19.tar.gz";
       sha256 = "1xnh8qa99dcvqcqzbpy0s5jrxvn7wa5ydz3lfd56n358l5jfzns9";
     };
     propagatedBuildInputs = [ AlienBuild ];
-    buildInputs = [ Alienpatch IOSocketSSL MojoDOM58 NetSSLeay SortVersions Test2Suite URI pkgs.gnum4 ];
+    buildInputs = [ pkgs.gnum4 Alienpatch IOSocketSSL MojoDOM58 NetSSLeay SortVersions Test2Suite URI ];
     meta = {
       description = "Find or build GNU m4";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
