@@ -4489,10 +4489,10 @@ let
     pname = "Data-MessagePack";
     version = "1.01";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SY/SYOHEX/Data-MessagePack-1.01.tar.gz;
+      url = "mirror://cpan/authors/id/S/SY/SYOHEX/Data-MessagePack-1.01.tar.gz";
       sha256 = "8fa0ed0101d04e661821a7b78e8d62ce3e19b299275bbfed178e2ba8912663ea";
     };
-    buildInputs = [ DevelPPPort ModuleBuildXSUtil TestRequires ];
+    buildInputs = [ ModuleBuildXSUtil TestRequires ];
     meta = {
       homepage = "https://github.com/msgpack/msgpack-perl";
       description = "MessagePack serializing/deserializing";
