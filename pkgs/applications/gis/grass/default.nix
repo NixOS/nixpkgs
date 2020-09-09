@@ -3,6 +3,8 @@
 , proj, gdal, geos, sqlite, postgresql, libmysqlclient, python2Packages, libLAS, proj-datumgrid
 }:
 
+let inherit (stdenv) lib; in
+
 stdenv.mkDerivation rec {
   name = "grass";
   version = "7.6.1";
@@ -42,7 +44,7 @@ stdenv.mkDerivation rec {
     "--with-postgres-libs=${postgresql.lib}/lib/"
     # it complains about missing libmysqld but doesn't really seem to need it
     "--with-mysql"
-    "--with-mysql-includes=${libmysqlclient}/include/mysql"
+    "--with-mysql-includes=${lib.getDev libmysqlclient}/include/mysql"
     "--with-mysql-libs=${libmysqlclient}/lib/mysql"
     "--with-blas"
     "--with-liblas=${libLAS}/bin/liblas-config"
