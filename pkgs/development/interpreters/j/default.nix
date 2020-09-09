@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # Causes build failure due to warning
+  hardeningDisable = stdenv.lib.optional stdenv.cc.isClang "strictoverflow";
+
   buildPhase = ''
     export SOURCE_DIR=$(pwd)
     export HOME=$TMPDIR
