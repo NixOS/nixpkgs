@@ -12483,10 +12483,10 @@ let
 
   ModuleCompile = buildPerlPackage rec {
     pname = "Module-Compile";
-    version = "0.37";
+    version = "0.38";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IN/INGY/${pname}-${version}.tar.gz";
-      sha256 = "18e6c4c4d2d5e39c21dde60a64424eed547e1d234ecc73a35278ea08161a8078";
+      url = "mirror://cpan/authors/id/I/IN/INGY/Module-Compile-0.38.tar.gz";
+      sha256 = "8090cfbb61123437eefec3e3bed86005d1f7c5a529fb6fda2ebebc6564b9aa10";
     };
     propagatedBuildInputs = [ CaptureTiny DigestSHA1 ];
     meta = {
