@@ -17935,7 +17935,7 @@ let
     pname = "Struct-Dumb";
     version = "0.12";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PEVANS/Struct-Dumb-0.12.tar.gz;
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Struct-Dumb-0.12.tar.gz";
       sha256 = "0wvzcpil9xc2wkibq3sj8i5bgq4iadx2k7hfqb8jm5p66g271kjj";
     };
     buildInputs = [ TestFatal ];
