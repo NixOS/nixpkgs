@@ -2222,7 +2222,7 @@ let
     pname = "CDDB-File";
     version = "1.05";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TM/TMTM/CDDB-File-1.05.tar.gz;
+      url = "mirror://cpan/authors/id/T/TM/TMTM/CDDB-File-1.05.tar.gz";
       sha256 = "1jf7xhd4w9iwabhz2wajh6fid3nyvkid9q5gdhyff52w86f45rpb";
     };
     meta = {
