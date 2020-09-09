@@ -3315,12 +3315,12 @@ let
 
   Connector = buildPerlPackage {
     pname = "Connector";
-    version = "1.28";
+    version = "1.32";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MR/MRSCOTTY/Connector-1.28.tar.gz";
-      sha256 = "0cd1575bab80e78294aa79809904f40d2f534d99b78e0161454f037625c6bf7d";
+      url = "mirror://cpan/authors/id/M/MR/MRSCOTTY/Connector-1.32.tar.gz";
+      sha256 = "c108ce559fa48faf95d01eb6bae9c14ecef49386f89c4aa2c2ce5edf9fd0ca14";
     };
-    buildInputs = [ ConfigMerge ConfigStd ConfigVersioned DBDSQLite DBI ProcSafeExec TemplateToolkit YAML ];
+    buildInputs = [ ConfigMerge ConfigStd ConfigVersioned DBDSQLite DBI IOSocketSSL JSON LWP LWPProtocolHttps ProcSafeExec TemplateToolkit YAML ];
     propagatedBuildInputs = [ LogLog4perl Moose ];
     prePatch = ''
       # Attempts to use network.
