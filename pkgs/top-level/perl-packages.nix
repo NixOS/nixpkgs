@@ -7118,16 +7118,17 @@ let
 
   ExtUtilsF77 = buildPerlPackage rec {
     pname = "ExtUtils-F77";
-    version = "1.23";
+    version = "1.24";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/K/KG/KGB/${pname}-${version}.tar.gz";
-      sha256 = "634715969c1650be815b3f11c151444e8793ebd6b6d92ce8654d56d6f893a6a9";
+      url = "mirror://cpan/authors/id/K/KG/KGB/ExtUtils-F77-1.24.tar.gz";
+      sha256 = "355878a4a7f901eb18d21f9e21be8c8bfc6aaf9665d34b241bc1d43e32c5b730";
     };
-    buildInputs = [ FileWhich pkgs.gfortran ];
+    buildInputs = [ pkgs.gfortran ];
     meta = {
       description = "A simple interface to F77 libs";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    propagatedBuildInputs = [ FileWhich ];
   };
 
   ExtUtilsHelpers = buildPerlPackage {
