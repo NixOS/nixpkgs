@@ -17471,7 +17471,7 @@ let
     pname = "SQL-Abstract";
     version = "1.87";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IL/ILMARI/SQL-Abstract-1.87.tar.gz;
+      url = "mirror://cpan/authors/id/I/IL/ILMARI/SQL-Abstract-1.87.tar.gz";
       sha256 = "e926a0a83da7efa18e57e5b2952a2ab3b7563a51733fc6dd5c89f12156481c4a";
     };
     buildInputs = [ TestDeep TestException TestWarn ];
