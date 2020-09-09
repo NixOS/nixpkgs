@@ -1,20 +1,14 @@
-{ buildPythonPackage, fetchPypi, lib, cython, jq }:
+{ buildPythonPackage, fetchPypi, lib, jq }:
 
 buildPythonPackage rec {
   pname = "jq";
-  version = "0.1.8";
+  version = "1.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9b6bb376237133080185ab556ca2a724e8be5b31946eb2053d4a1f17ae9df9a8";
+    sha256 = "9fe6ce07bc8d209c385d8ba132a2971c69aef015103c46bea87a73a16c5ec147";
   };
   patches = [ ./jq-py-setup.patch ];
-
-  nativeBuildInputs = [ cython ];
-
-  preBuild = ''
-    cython jq.pyx
-  '';
 
   buildInputs = [ jq ];
 
