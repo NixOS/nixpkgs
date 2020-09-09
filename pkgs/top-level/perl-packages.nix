@@ -2179,10 +2179,10 @@ let
 
   Catmandu = buildPerlModule {
     pname = "Catmandu";
-    version = "1.2012";
+    version = "1.2013";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NI/NICS/Catmandu-1.2012.tar.gz;
-      sha256 = "1dn5bqfg9vswwmvpgfziirqbjlm3gzswhknnmvg07igv1jcrk3d0";
+      url = "mirror://cpan/authors/id/N/NI/NICS/Catmandu-1.2013.tar.gz";
+      sha256 = "0sh4qqjh53rhqcpbvq3pyg0k1ybs8qxivhc1an6w5hjar2bihwiq";
     };
     propagatedBuildInputs = [ AnyURIEscape AppCmd CGIExpand ConfigOnion CpanelJSONXS DataCompare DataUtil IOHandleUtil LWP ListMoreUtils LogAny MIMETypes ModuleInfo MooXAliases ParserMGC PathIteratorRule PathTiny StringCamelCase TextCSV TextHogan Throwable TryTinyByClass URITemplate UUIDTiny YAMLLibYAML namespaceclean ];
     buildInputs = [ LogAnyAdapterLog4perl LogLog4perl TestDeep TestException TestLWPUserAgent TestPod ];
