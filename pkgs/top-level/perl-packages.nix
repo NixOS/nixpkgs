@@ -10044,7 +10044,7 @@ let
     pname = "IPC-System-Simple";
     version = "1.30";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JK/JKEENAN/IPC-System-Simple-1.30.tar.gz;
+      url = "mirror://cpan/authors/id/J/JK/JKEENAN/IPC-System-Simple-1.30.tar.gz";
       sha256 = "22e6f5222b505ee513058fdca35ab7a1eab80539b98e5ca4a923a70a8ae9ba9e";
     };
     meta = {
