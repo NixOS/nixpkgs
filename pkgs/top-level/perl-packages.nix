@@ -15880,7 +15880,7 @@ let
     pname = "Plack-Middleware-Debug";
     version = "0.18";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-Debug-0.18.tar.gz;
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-Debug-0.18.tar.gz";
       sha256 = "192ef79e521c90c6eff6f4149ad2e4bfc911d2c95df78935855e90d659e9ac9a";
     };
     buildInputs = [ ModuleBuildTiny TestRequires ];
