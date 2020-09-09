@@ -8,9 +8,26 @@ let
 in {
   options.services.xserver.desktopManager.cde = {
     enable = mkEnableOption "Common Desktop Environment";
+
+    extraPackages = mkOption {
+      type = with types; listOf package;
+      default = with pkgs.xorg; [
+        xclock bitmap xlsfonts xfd xrefresh xload xwininfo xdpyinfo xwd xwud
+      ];
+      example = literalExample ''
+        with pkgs.xorg; [
+          xclock bitmap xlsfonts xfd xrefresh xload xwininfo xdpyinfo xwd xwud
+        ]
+      '';
+      description = ''
+        Extra packages to be installed system wide.
+      '';
+    };
   };
 
   config = mkIf (xcfg.enable && cfg.enable) {
+    environment.systemPackages = cfg.extraPackages;
+
     services.rpcbind.enable = true;
 
     services.xinetd.enable = true;

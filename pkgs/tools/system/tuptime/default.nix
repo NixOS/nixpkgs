@@ -1,28 +1,37 @@
-{ stdenv, fetchFromGitHub, python3 }:
+{ stdenv, fetchFromGitHub
+, makeWrapper, installShellFiles
+, python3, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "tuptime";
-  version = "4.1.0";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "rfrail3";
     repo = "tuptime";
     rev = version;
-    sha256 = "0p5v1jp6bl0hjv04q3gh11q6dx9z0x61h6svcbvwp5ni0h1bkz1a";
+    sha256 = "0izps85p8pxidfrzp7l4hp221fx3dcgapapsix1zavq6jrsl2qyh";
   };
+
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   buildInputs = [ python3 ];
 
+  outputs = [ "out" "man" ];
+
   installPhase = ''
     mkdir -p $out/bin
-    install -m 755 src/tuptime $out/bin/
+    install -m 755 $src/src/tuptime $out/bin/
 
-    mkdir -p $out/share/man/man1
-    cp src/man/tuptime.1 $out/share/man/man1/
+    installManPage $src/src/man/tuptime.1
 
-    # upstream only ships this, there are more scripts there...
-    mkdir -p $out/usr/share/doc/tuptime/contrib
-    cp misc/scripts/uptimed-to-tuptime.py $out/usr/share/doc/tuptime/contrib/
+    install -Dm 0755 $src/misc/scripts/db-tuptime-migrate-4.0-to-5.0.sh \
+      $out/share/tuptime/db-tuptime-migrate-4.0-to-5.0.sh
+  '';
+
+  preFixup = ''
+    wrapProgram $out/share/tuptime/db-tuptime-migrate-4.0-to-5.0.sh \
+      --prefix PATH : "${stdenv.lib.makeBinPath [ sqlite ]}"
   '';
 
   meta = with stdenv.lib; {

@@ -7,10 +7,11 @@ buildGoModule rec {
   src = hasura-graphql-engine.src;
   modRoot = "./cli";
 
-  goPackagePath = "github.com/hasura/graphql-engine/cli";
   subPackages = [ "cmd/hasura" ];
 
-  modSha256 = "0bpb9r0n8n8c1p8sas3qanhvqw45rq8kygb4dmkfhj3d9vlgn6d2";
+  vendorSha256 = "sha256-Fp6o3xZ/964q8yzJJFrqWZtQ5zYNy6Wreh42YxWjNbU=";
+
+  doCheck = false;
 
   buildFlagsArray = [''-ldflags=
     -X github.com/hasura/graphql-engine/cli/version.BuildVersion=${version}

@@ -17,6 +17,7 @@
 , libgudev
 , libraw
 , glib
+, glib-networking
 , json-glib
 , gcr
 , libgee
@@ -39,11 +40,11 @@
 
 stdenv.mkDerivation rec {
   pname = "shotwell";
-  version = "0.31.1";
+  version = "0.31.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0mbgrad4d4snffw2z3rkhwqq1bkxdgy52pblx99vjadvpgspb034";
+    sha256 = "0ywzr6vgcz8yy60v0jp55na9lgqi4dbh2vakfphkcml1gpah0r2l";
   };
 
   nativeBuildInputs = [
@@ -77,6 +78,7 @@ stdenv.mkDerivation rec {
     libraw
     json-glib
     glib
+    glib-networking
     gdk-pixbuf
     librsvg
     librest

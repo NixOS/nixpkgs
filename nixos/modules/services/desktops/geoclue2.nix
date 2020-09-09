@@ -160,7 +160,7 @@ in
       };
 
       appConfig = mkOption {
-        type = types.loaOf appConfigModule;
+        type = types.attrsOf appConfigModule;
         default = {};
         example = literalExample ''
           "com.github.app" = {

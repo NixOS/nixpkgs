@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-outdated";
-  version = "0.9.10";
+  version = "0.9.11";
 
   src = fetchFromGitHub {
     owner = "kbknapp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1aj76wwpnvniv5xdygfv17kj74rxxkvngkvw2019qinm2nv81c3p";
+    sha256 = "11fdh24366czb3vv2szf5bl0mhsilwvpfc1h4qxq18z2dpb0y18m";
   };
 
-  cargoSha256 = "0nzxx31nlmrcrcs67z1wci0d4n6kdq83z2ld4bq8xgp6p916f4sl";
+  cargoSha256 = "0sr3ijq6vh2269xav03d117kzmg68xiwqsq48xjdrsnn4dx5lizy";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ]
@@ -25,7 +25,6 @@ rustPlatform.buildRustPackage rec {
     description = "A cargo subcommand for displaying when Rust dependencies are out of date";
     homepage = "https://github.com/kbknapp/cargo-outdated";
     license = with licenses; [ asl20 /* or */ mit ];
-    platforms = platforms.all;
     maintainers = with maintainers; [ sondr3 ivan ];
   };
 }

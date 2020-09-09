@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "--with-iconv=${libiconv}"
     "--with-dbm=gdbm"
     "--with-zlib=${zlib}"
-    "--with-ca-bundle=$NIX_SSL_CERT_FILE"
+    "--with-ca-bundle=${cacert}/etc/ssl/certs/ca-bundle.crt"
     # TODO: Enable slib
     #       Current slib in nixpkgs is specialized to Guile
     # "--with-slib=${slibGuile}/lib/slib"

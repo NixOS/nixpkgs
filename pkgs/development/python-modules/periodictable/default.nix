@@ -1,6 +1,6 @@
 {lib, fetchPypi, buildPythonPackage, numpy, pyparsing}:
 
-buildPythonPackage rec{
+buildPythonPackage rec {
   pname = "periodictable";
   version = "1.5.2";
 

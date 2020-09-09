@@ -210,6 +210,29 @@ checkConfigOutput "empty" config.value.foo ./declare-lazyAttrsOf.nix ./attrsOf-c
 checkConfigError 'The option value .* in .* is not of type .*' \
   config.value ./declare-int-unsigned-value.nix ./define-value-list.nix ./define-value-int-positive.nix
 
+## Freeform modules
+# Assigning without a declared option should work
+checkConfigOutput 24 config.value ./freeform-attrsOf.nix ./define-value-string.nix
+# No freeform assigments shouldn't make it error
+checkConfigOutput '{ }' config ./freeform-attrsOf.nix
+# but only if the type matches
+checkConfigError 'The option value .* in .* is not of type .*' config.value ./freeform-attrsOf.nix ./define-value-list.nix
+# and properties should be applied
+checkConfigOutput yes config.value ./freeform-attrsOf.nix ./define-value-string-properties.nix
+# Options should still be declarable, and be able to have a type that doesn't match the freeform type
+checkConfigOutput false config.enable ./freeform-attrsOf.nix ./define-value-string.nix ./declare-enable.nix
+checkConfigOutput 24 config.value ./freeform-attrsOf.nix ./define-value-string.nix ./declare-enable.nix
+# and this should work too with nested values
+checkConfigOutput false config.nest.foo ./freeform-attrsOf.nix ./freeform-nested.nix
+checkConfigOutput bar config.nest.bar ./freeform-attrsOf.nix ./freeform-nested.nix
+# Check whether a declared option can depend on an freeform-typed one
+checkConfigOutput null config.foo ./freeform-attrsOf.nix ./freeform-str-dep-unstr.nix
+checkConfigOutput 24 config.foo ./freeform-attrsOf.nix ./freeform-str-dep-unstr.nix ./define-value-string.nix
+# Check whether an freeform-typed value can depend on a declared option, this can only work with lazyAttrsOf
+checkConfigError 'infinite recursion encountered' config.foo ./freeform-attrsOf.nix ./freeform-unstr-dep-str.nix
+checkConfigError 'The option .* is used but not defined' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix
+checkConfigOutput 24 config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix ./define-value-string.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass

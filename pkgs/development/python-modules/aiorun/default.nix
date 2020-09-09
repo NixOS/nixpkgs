@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
+, pygments
 , pytest
 , pytestcov
 , uvloop
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aiorun";
-  version = "2020.2.1";
+  version = "2020.6.1";
   format = "flit";
 
   disabled = isPy27;
@@ -18,8 +19,12 @@ buildPythonPackage rec {
     owner = "cjrh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0wcj8prkijb889ic8n6varms7xkwy028hhw0imgkd1i0p64lm3m4";
+    sha256 = "00mq5ylhhdfdqrh7zdqabf3wy85jrkqvgfb1421ll46fsjim2d14";
   };
+
+  propagatedBuildInputs = [
+    pygments
+  ];
 
   checkInputs = [
     pytest

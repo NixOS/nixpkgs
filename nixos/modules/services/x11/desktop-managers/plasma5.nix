@@ -7,7 +7,8 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
 
-  inherit (pkgs) kdeApplications plasma5 libsForQt5 qt5;
+  inherit (pkgs) kdeApplications plasma5;
+  libsForQt5 = pkgs.libsForQt514;
   inherit (pkgs) writeText;
 
   pulseaudio = config.hardware.pulseaudio;
@@ -158,6 +159,19 @@ in
         example = "vlc";
         description = "Phonon audio backend to install.";
       };
+
+      supportDDC = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Support setting monitor brightness via DDC.
+          </para>
+          <para>
+          This is not needed for controlling brightness of the internal monitor
+          of a laptop and as it is considered experimental by upstream, it is
+          disabled by default.
+        '';
+      };
     };
 
   };
@@ -183,6 +197,12 @@ in
           capabilities = "cap_sys_nice+ep";
         };
       };
+
+      # DDC support
+      boot.kernelModules = lib.optional cfg.supportDDC "i2c_dev";
+      services.udev.extraRules = lib.optionalString cfg.supportDDC ''
+        KERNEL=="i2c-[0-9]*", TAG+="uaccess"
+      '';
 
       environment.systemPackages = with pkgs; with qt5; with libsForQt5; with plasma5; with kdeApplications;
         [
@@ -302,7 +322,7 @@ in
 
       fonts.fonts = with pkgs; [ noto-fonts hack-font ];
       fonts.fontconfig.defaultFonts = {
-        monospace = [ "Hack" "Noto Mono" ];
+        monospace = [ "Hack" "Noto Sans Mono" ];
         sansSerif = [ "Noto Sans" ];
         serif = [ "Noto Serif" ];
       };

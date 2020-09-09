@@ -37,14 +37,17 @@ let
   # Make a tree out of expression groups (parens)
   findSubExpressions = expr:
     let
-      acc = builtins.foldl' findSubExpressionsFun {
-        exprs = [ ];
-        expr = expr;
-        pos = 0;
-        openP = 0;
-        exprPos = 0;
-        startPos = 0;
-      } (lib.stringToCharacters expr);
+      acc = builtins.foldl'
+        findSubExpressionsFun
+        {
+          exprs = [ ];
+          expr = expr;
+          pos = 0;
+          openP = 0;
+          exprPos = 0;
+          startPos = 0;
+        }
+        (lib.stringToCharacters expr);
       tailExpr = (substr acc.exprPos acc.pos expr);
       tailExprs = if tailExpr != "" then [ tailExpr ] else [ ];
     in
@@ -53,7 +56,7 @@ let
     let
       splitCond = (
         s: builtins.map
-          (x: stripStr ( if builtins.typeOf x == "list" then (builtins.elemAt x 0) else x))
+          (x: stripStr (if builtins.typeOf x == "list" then (builtins.elemAt x 0) else x))
           (builtins.split " (and|or) " (s + " "))
       );
       mapfn = expr: (
@@ -71,8 +74,9 @@ let
     in
     builtins.foldl'
       (
-        acc: v: acc ++ ( if builtins.typeOf v == "string" then parse v else [ (parseExpressions v) ])
-      ) [ ] exprs;
+        acc: v: acc ++ (if builtins.typeOf v == "string" then parse v else [ (parseExpressions v) ])
+      ) [ ]
+      exprs;
 
   # Transform individual expressions to structured expressions
   # This function also performs variable substitution, replacing environment markers with their explicit values
@@ -159,10 +163,9 @@ let
           let
             parts = builtins.splitVersion c;
             pruned = lib.take ((builtins.length parts) - 1) parts;
-            upper = builtins.toString
-              (
-                (lib.toInt (builtins.elemAt pruned (builtins.length pruned - 1))) + 1
-              );
+            upper = builtins.toString (
+              (lib.toInt (builtins.elemAt pruned (builtins.length pruned - 1))) + 1
+            );
             upperConstraint = builtins.concatStringsSep "." (ireplace (builtins.length pruned - 1) upper pruned);
           in
           op.">=" v c && op."<" v upperConstraint;
@@ -207,10 +210,13 @@ let
           ) else throw "Unsupported type"
         ) else if builtins.typeOf v == "list" then (
           let
-            ret = builtins.foldl' reduceExpressionsFun {
-              value = true;
-              cond = "and";
-            } v;
+            ret = builtins.foldl'
+              reduceExpressionsFun
+              {
+                value = true;
+                cond = "and";
+              }
+              v;
           in
           acc // {
             value = cond."${acc.cond}" acc.value ret.value;
@@ -219,10 +225,13 @@ let
       );
     in
     (
-      builtins.foldl' reduceExpressionsFun {
-        value = true;
-        cond = "and";
-      } exprs
+      builtins.foldl'
+        reduceExpressionsFun
+        {
+          value = true;
+          cond = "and";
+        }
+        exprs
     ).value;
 in
 e: builtins.foldl' (acc: v: v acc) e [

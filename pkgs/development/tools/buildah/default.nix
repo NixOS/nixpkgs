@@ -1,44 +1,53 @@
 { stdenv
-, buildGoPackage
+, buildGoModule
 , fetchFromGitHub
+, go-md2man
 , installShellFiles
 , pkg-config
 , gpgme
-, libgpgerror
 , lvm2
 , btrfs-progs
+, libapparmor
 , libselinux
 , libseccomp
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "buildah";
-  version = "1.14.9";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
-    rev = "v${version}";
-    sha256 = "1vp59xp374wr7sbx89aikz4rv8fdg0a40v06saryxww9iqyvk8wp";
+    rev = "V${version}";
+    sha256 = "0z9fblxm3pk2jqw7h36clmj8k4k39n6ab536lyh0rp6p7hz5a988";
   };
 
   outputs = [ "out" "man" ];
 
-  goPackagePath = "github.com/containers/buildah";
+  vendorSha256 = null;
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
-  buildInputs = [ gpgme libgpgerror lvm2 btrfs-progs libselinux libseccomp ];
+  doCheck = false;
 
-  patches = [ ./disable-go-module-mode.patch ];
+  nativeBuildInputs = [ go-md2man installShellFiles pkg-config ];
+
+  buildInputs = [
+    btrfs-progs
+    gpgme
+    libapparmor
+    libseccomp
+    libselinux
+    lvm2
+  ];
 
   buildPhase = ''
-    pushd go/src/${goPackagePath}
-    make GIT_COMMIT="unknown"
-    make -C docs
+    patchShebangs .
+    make bin/buildah GIT_COMMIT="unknown"
+    make -C docs GOMD2MAN="${go-md2man}/bin/go-md2man"
   '';
 
   installPhase = ''
-    install -Dm755 buildah $out/bin/buildah
+    install -Dm755 bin/buildah $out/bin/buildah
     installShellCompletion --bash contrib/completions/bash/buildah
     make -C docs install PREFIX="$man"
   '';

@@ -11,8 +11,13 @@ let
     method = cfg.encryptionMethod;
     mode = cfg.mode;
     user = "nobody";
-    fast_open = true;
-  } // optionalAttrs (cfg.password != null) { password = cfg.password; };
+    fast_open = cfg.fastOpen;
+  } // optionalAttrs (cfg.plugin != null) {
+    plugin = cfg.plugin;
+    plugin_opts = cfg.pluginOpts;
+  } // optionalAttrs (cfg.password != null) {
+    password = cfg.password;
+  };
 
   configFile = pkgs.writeText "shadowsocks.json" (builtins.toJSON opts);
 
@@ -74,6 +79,14 @@ in
         '';
       };
 
+      fastOpen = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          use TCP fast-open
+        '';
+      };
+
       encryptionMethod = mkOption {
         type = types.str;
         default = "chacha20-ietf-poly1305";
@@ -82,6 +95,23 @@ in
         '';
       };
 
+      plugin = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "\${pkgs.shadowsocks-v2ray-plugin}/bin/v2ray-plugin";
+        description = ''
+          SIP003 plugin for shadowsocks
+        '';
+      };
+
+      pluginOpts = mkOption {
+        type = types.str;
+        default = "";
+        example = "server;host=example.com";
+        description = ''
+          Options to pass to the plugin if one was specified
+        '';
+      };
     };
 
   };
@@ -99,7 +129,7 @@ in
       description = "shadowsocks-libev Daemon";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.shadowsocks-libev ] ++ optional (cfg.passwordFile != null) pkgs.jq;
+      path = [ pkgs.shadowsocks-libev cfg.plugin ] ++ optional (cfg.passwordFile != null) pkgs.jq;
       serviceConfig.PrivateTmp = true;
       script = ''
         ${optionalString (cfg.passwordFile != null) ''

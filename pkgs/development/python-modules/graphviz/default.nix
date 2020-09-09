@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "graphviz";
-  version = "0.10.1";
+  version = "0.14.1";
 
   # patch does not apply to PyPI tarball due to different line endings
   src = fetchFromGitHub {
     owner = "xflr6";
     repo = "graphviz";
     rev = version;
-    sha256 = "1vqk4xy45c72la56j24z9jmjp5a0aa2k32fybnlbkzqjvvbl72d8";
+    sha256 = "02bdiac5x93f2mjw5kpgs6kv81hzg07y0mw1nxvhyg8aignzmh3c";
   };
 
   patches = [
@@ -30,9 +30,9 @@ buildPythonPackage rec {
     })
   ];
 
-  # Fontconfig error: Cannot load default config file 
-  FONTCONFIG_FILE = makeFontsConf { 
-    fontDirectories = [ freefont_ttf ]; 
+  # Fontconfig error: Cannot load default config file
+  FONTCONFIG_FILE = makeFontsConf {
+    fontDirectories = [ freefont_ttf ];
   };
 
   checkInputs = [ mock pytest pytest-mock pytestcov ];

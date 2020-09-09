@@ -1,24 +1,30 @@
 { lib, buildPythonPackage, fetchPypi
-, setuptools_scm, pytest, freezegun, backports_unittest-mock
-, six, pytz, jaraco_functools }:
+, setuptools_scm, pytest, pytest-freezegun, freezegun, backports_unittest-mock
+, six, pytz, jaraco_functools, pythonOlder
+, pytest-flake8, pytestcov, pytest-black, pytest-mypy
+}:
 
 buildPythonPackage rec {
   pname = "tempora";
-  version = "1.14.1";
+  version = "4.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cb60b1d2b1664104e307f8e5269d7f4acdb077c82e35cd57246ae14a3427d2d6";
+    sha256 = "599a3a910b377f2b544c7b221582ecf4cb049b017c994b37f2b1a9ed1099716e";
   };
 
-  buildInputs = [ setuptools_scm ];
+  disabled = pythonOlder "3.2";
+
+  nativeBuildInputs = [ setuptools_scm ];
 
   propagatedBuildInputs = [ six pytz jaraco_functools ];
 
-  checkInputs = [ pytest freezegun backports_unittest-mock ];
+  checkInputs = [
+    pytest-freezegun pytest freezegun backports_unittest-mock
+    pytest-flake8 pytestcov pytest-black pytest-mypy
+  ];
 
   checkPhase = ''
-    substituteInPlace pytest.ini --replace "--flake8" ""
     pytest
   '';
 

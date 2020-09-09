@@ -2,11 +2,11 @@
 with lib;
 buildPythonPackage rec {
   pname = "requests-aws4auth";
-  version = "0.9";
+  version = "1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0g52a1pm53aqkc9qb5q1m918c1qy6q47c1qz63p5ilynfbs3m5y9";
+    sha256 = "2950f6ff686b5a452a269076d990e4821d959b61cfac319c3d3c6daaa5db55ce";
   };
 
   postPatch = optionalString isPy3k ''

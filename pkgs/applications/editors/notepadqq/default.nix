@@ -3,12 +3,12 @@
 mkDerivation rec {
   pname = "notepadqq";
   version = "1.4.8";
+
   src = fetchFromGitHub {
     owner = "notepadqq";
     repo = "notepadqq";
     rev = "v${version}";
     sha256 = "0lbv4s7ng31dkznzbkmp2cvkqglmfj6lv4mbg3r410fif2nrva7k";
-    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [

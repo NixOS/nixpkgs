@@ -2,13 +2,14 @@
 
 buildDunePackage (rec {
 	pname = "ppxfind";
-	version = "1.3";
+	version = "1.4";
 	src = fetchurl {
 		url = "https://github.com/diml/ppxfind/releases/download/${version}/ppxfind-${version}.tbz";
-		sha256 = "1r4jp0516378js62ss50a9s8ql2pm8lfdd3mnk214hp7s0kb17fl";
+		sha256 = "0wa9vcrc26kirc2cqqs6kmarbi8gqy3dgdfiv9y7nzsgy1liqacq";
 	};
 
 	minimumOCamlVersion = "4.03";
+	useDune2 = true;
 
 	buildInputs = [ ocaml-migrate-parsetree ];
 

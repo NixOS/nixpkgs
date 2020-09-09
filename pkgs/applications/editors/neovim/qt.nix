@@ -38,6 +38,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Neovim client library and GUI, in Qt5";
+      homepage = "https://github.com/equalsraf/neovim-qt";
       license     = licenses.isc;
       maintainers = with maintainers; [ peterhoeg ];
       inherit (neovim.meta) platforms;

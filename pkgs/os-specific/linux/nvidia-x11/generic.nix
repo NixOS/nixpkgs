@@ -19,6 +19,9 @@
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
   libsOnly ? false
+, # don't include the bundled 32-bit libraries on 64-bit platforms,
+  # even if it’s in downloaded binary
+  disable32Bit ? false
 }:
 
 with stdenv.lib;
@@ -30,7 +33,7 @@ assert ! versionOlder version "391" -> stdenv.hostPlatform.system == "x86_64-lin
 let
   nameSuffix = optionalString (!libsOnly) "-${kernel.version}";
   pkgSuffix = optionalString (versionOlder version "304") "-pkg0";
-  i686bundled = versionAtLeast version "391";
+  i686bundled = versionAtLeast version "391" && !disable32Bit;
 
   libPathFor = pkgs: pkgs.lib.makeLibraryPath [ pkgs.libdrm pkgs.xorg.libXext pkgs.xorg.libX11
     pkgs.xorg.libXv pkgs.xorg.libXrandr pkgs.xorg.libxcb pkgs.zlib pkgs.stdenv.cc.cc ];
@@ -92,7 +95,7 @@ let
       homepage = "https://www.nvidia.com/object/unix.html";
       description = "X.org driver and kernel module for NVIDIA graphics cards";
       license = licenses.unfreeRedistributable;
-      platforms = [ "i686-linux" "x86_64-linux" ];
+      platforms = [ "x86_64-linux" ] ++ optionals (!i686bundled) [ "i686-linux" ];
       maintainers = with maintainers; [ baracoder ];
       priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
       inherit broken;

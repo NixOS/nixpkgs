@@ -1,18 +1,23 @@
-{ stdenv, fetchPypi, buildPythonPackage, pyparsing }:
+{ stdenv
+, fetchPypi
+, buildPythonPackage
+, pyparsing
+}:
 
 buildPythonPackage rec {
   pname = "PuLP";
-  version = "2.0";
+  version = "2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fb0b0e8073aa82f3459c4241b9625e0ccd26c0838ad8253c6bc67e041901b765";
+    sha256 = "9d8ecf532868cc31fa9ff59ee5d5b2049600c5c902c18c794a2bad677c1f92e5";
   };
 
   propagatedBuildInputs = [ pyparsing ];
 
   # only one test that requires an extra
   doCheck = false;
+  pythonImportsCheck = [ "pulp" ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/coin-or/pulp";

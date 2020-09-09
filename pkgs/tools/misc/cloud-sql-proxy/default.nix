@@ -23,6 +23,5 @@ buildGoPackage rec {
     homepage = "https://${goPackagePath}";
     license = licenses.asl20;
     maintainers = [ maintainers.nicknovitski ];
-    platforms = platforms.all;
   };
 }

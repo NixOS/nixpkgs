@@ -45,14 +45,17 @@ let
            " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}")
       ) dependencies;
 
+   # Create feature arguments for rustc.
+   mkRustcFeatureArgs = lib.concatMapStringsSep " " (f: ''--cfg feature=\"${f}\"'');
+
    inherit (import ./log.nix { inherit lib; }) noisily echo_colored;
 
    configureCrate = import ./configure-crate.nix {
-     inherit lib stdenv echo_colored noisily mkRustcDepArgs;
+     inherit lib stdenv echo_colored noisily mkRustcDepArgs mkRustcFeatureArgs;
    };
 
    buildCrate = import ./build-crate.nix {
-     inherit lib stdenv mkRustcDepArgs rust;
+     inherit lib stdenv mkRustcDepArgs mkRustcFeatureArgs rust;
    };
 
    installCrate = import ./install-crate.nix { inherit stdenv; };
@@ -233,8 +236,11 @@ stdenv.mkDerivation (rec {
       ++ lib.concatMap (dep: dep.completeBuildDeps ++ dep.completeDeps) buildDependencies
     );
 
-    crateFeatures = lib.optionalString (crate ? features)
-      (lib.concatMapStringsSep " " (f: ''--cfg feature=\"${f}\"'') (crate.features ++ features));
+    # Create a list of features that are enabled by the crate itself and
+    # through the features argument of buildRustCrate. Exclude features
+    # with a forward slash, since they are passed through to dependencies.
+    crateFeatures = lib.optionals (crate ? features)
+      (builtins.filter (f: !lib.hasInfix "/" f) (crate.features ++ features));
 
     libName = if crate ? libName then crate.libName else crate.crateName;
     libPath = if crate ? libPath then crate.libPath else "";
@@ -244,7 +250,8 @@ stdenv.mkDerivation (rec {
     metadata = let
       depsMetadata = lib.foldl' (str: dep: str + dep.metadata) "" (dependencies ++ buildDependencies);
       hashedMetadata = builtins.hashString "sha256"
-        (crateName + "-" + crateVersion + "___" + toString crateFeatures + "___" + depsMetadata);
+        (crateName + "-" + crateVersion + "___" + toString (mkRustcFeatureArgs crateFeatures) +
+          "___" + depsMetadata);
       in lib.substring 0 10 hashedMetadata;
 
     build = crate.build or "";

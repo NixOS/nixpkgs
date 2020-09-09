@@ -11,7 +11,9 @@ buildGoModule rec {
     sha256 = "0xrki9w83b4b3l5adq1rxz374f124wf388sdyvy7ngc3b04k7qlb";
   };
 
-  modSha256 = "0v45ikw0bl00412krg4v6sr9bggvsrvl0h6clihkh4mdfz6kwa47";
+  vendorSha256 = "094mn1r69c40w7k3lsggjh0dpws9l0j7mgiyjy1lpblkvkyk2azm";
+
+  doCheck = false;
 
   subPackages = [ "cmd/nebula" "cmd/nebula-cert" ];
 
@@ -37,7 +39,6 @@ buildGoModule rec {
     homepage = "https://github.com/slackhq/nebula";
     license = licenses.mit;
     maintainers = with maintainers; [ filalex77 ];
-    platforms = platforms.all;
   };
 
 }

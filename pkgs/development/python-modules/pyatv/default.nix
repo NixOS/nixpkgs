@@ -1,19 +1,49 @@
-{ stdenv, buildPythonPackage, fetchPypi, srptools, aiohttp, zeroconf
-, ed25519, cryptography, curve25519-donna, pytest, pytestrunner
-, netifaces, asynctest, virtualenv, toml, filelock, tox }:
+{ stdenv, buildPythonPackage, fetchPypi
+, aiohttp
+, aiozeroconf
+, asynctest
+, cryptography
+, deepdiff
+, netifaces
+, protobuf
+, pytest
+, pytest-aiohttp
+, pytest-asyncio
+, pytestrunner
+, srptools
+}:
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.3.13";
+  version = "0.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8fc1a903a9d666e4109127410d35a83458559a86bc0de3fe1ffb3f15d2d653b3";
+    sha256 = "83d86fac517d33a1e3063a547ee2a520fde74c74a1b95cb5a6f20afccfd59843";
   };
 
-  propagatedBuildInputs = [ srptools aiohttp zeroconf ed25519 cryptography curve25519-donna tox ];
+  nativeBuildInputs = [ pytestrunner];
 
-  checkInputs = [ pytest pytestrunner netifaces asynctest virtualenv toml filelock ];
+  propagatedBuildInputs = [
+    aiozeroconf
+    srptools
+    aiohttp
+    protobuf
+    cryptography
+    netifaces
+  ];
+
+  checkInputs = [
+    deepdiff
+    pytest
+    pytest-aiohttp
+    pytest-asyncio
+  ];
+
+  # just run vanilla pytest to avoid inclusion of coverage reports and xdist
+  checkPhase = ''
+    pytest
+  '';
 
   meta = with stdenv.lib; {
     description = "A python client library for the Apple TV";

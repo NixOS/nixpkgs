@@ -1,8 +1,8 @@
-{ stdenv, git, setuptools, setuptools_scm, fetchFromGitHub, requests, boto3, buildPythonPackage, responses }: 
+{ stdenv, git, setuptools, setuptools_scm, fetchFromGitHub, requests, boto3, buildPythonPackage, responses }:
 
-buildPythonPackage rec { 
-    pname = "sapi-python-client"; 
-    version = "0.1.3"; 
+buildPythonPackage rec {
+    pname = "sapi-python-client";
+    version = "0.1.3";
 
     src = fetchFromGitHub {
         owner = "keboola";
@@ -17,15 +17,14 @@ buildPythonPackage rec {
 
     doCheck = false; # requires API token and an active keboola bucket
 
-    nativeBuildInputs = [ git setuptools_scm ]; 
+    nativeBuildInputs = [ git setuptools_scm ];
 
-    propagatedBuildInputs = [ setuptools requests boto3 responses ]; 
+    propagatedBuildInputs = [ setuptools requests boto3 responses ];
 
-    meta = with stdenv.lib; { 
-        description = "Keboola Connection Storage API client"; 
-        homepage = "https://github.com/keboola/sapi-python-client"; 
+    meta = with stdenv.lib; {
+        description = "Keboola Connection Storage API client";
+        homepage = "https://github.com/keboola/sapi-python-client";
         maintainers = with maintainers; [ mrmebelman ];
-        license = licenses.mit; 
-    }; 
+        license = licenses.mit;
+    };
 }
-

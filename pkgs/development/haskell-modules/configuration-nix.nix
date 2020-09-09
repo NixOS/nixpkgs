@@ -96,6 +96,7 @@ self: super: builtins.intersectAttrs super {
 
   # profiling is disabled to allow C++/C mess to work, which is fixed in GHC 8.8
   cachix = disableLibraryProfiling super.cachix;
+  hercules-ci-agent = disableLibraryProfiling super.hercules-ci-agent;
 
   # avoid compiling twice by providing executable as a separate output (with small closure size)
   niv = enableSeparateBinOutput super.niv;
@@ -442,6 +443,9 @@ self: super: builtins.intersectAttrs super {
                             [ pkgs.darwin.apple_sdk.frameworks.OpenCL ];
   });
 
+  # requires an X11 display in test suite
+  gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
+
   # depends on 'hie' executable
   lsp-test = dontCheck super.lsp-test;
 
@@ -542,6 +546,9 @@ self: super: builtins.intersectAttrs super {
   # Break infinite recursion cycle between tasty and clock.
   clock = dontCheck super.clock;
 
+  # Break infinite recursion cycle between devtools and mprelude.
+  devtools = super.devtools.override { mprelude = dontCheck super.mprelude; };
+
   # loc and loc-test depend on each other for testing. Break that infinite cycle:
   loc-test = super.loc-test.override { loc = dontCheck self.loc; };
 
@@ -636,31 +643,28 @@ self: super: builtins.intersectAttrs super {
   spago =
     let
       # Spago needs a small patch to work with the latest versions of rio.
-      # https://github.com/purescript/spago/pull/616
-      # This can probably be removed when a version after spago-0.15.1 is released.
+      # https://github.com/purescript/spago/pull/647
       spagoWithPatches = appendPatch super.spago (pkgs.fetchpatch {
-        url = "https://github.com/purescript/spago/pull/616/commits/95b5fa0f1d3bfb07972d1ef5004b8bee8a070667.patch";
-        sha256 = "0v3890lwhddfrq9mhbq92962pkxra8kwbin97wg3s0b02dk65ysc";
+        url = "https://github.com/purescript/spago/pull/647/commits/917ee541a966db74f0f5d11f2f86df0030c35dd7.patch";
+        sha256 = "1nspqgcjk6z90cl9zhard0rn2q979kplcqz72x8xv5mh57zabk0w";
       });
 
-      # Spago basically compiles with LTS-14, but it requires a newer version
-      # of directory.  This is to work around a bug only present on windows, so
-      # we can safely jailbreak spago and use the older directory package from
-      # LTS-14.
+      # spago requires an older version of megaparsec, but it appears to work
+      # fine with newer versions.
       spagoWithOverrides = doJailbreak spagoWithPatches;
 
       # This defines the version of the purescript-docs-search release we are using.
       # This is defined in the src/Spago/Prelude.hs file in the spago source.
-      docsSearchVersion = "v0.0.8";
+      docsSearchVersion = "v0.0.10";
 
       docsSearchAppJsFile = pkgs.fetchurl {
         url = "https://github.com/spacchetti/purescript-docs-search/releases/download/${docsSearchVersion}/docs-search-app.js";
-        sha256 = "00pzi7pgjicpa0mg0al80gh2q1q2lqiyb3kjarpydlmn8dfjny7v";
+        sha256 = "0m5ah29x290r0zk19hx2wix2djy7bs4plh9kvjz6bs9r45x25pa5";
       };
 
       purescriptDocsSearchFile = pkgs.fetchurl {
         url = "https://github.com/spacchetti/purescript-docs-search/releases/download/${docsSearchVersion}/purescript-docs-search";
-        sha256 = "1hsi1hc4p1z2xbw82w2jxmmczw6mravli1r89vrkivb72sqdjya7";
+        sha256 = "0wc1zyhli4m2yykc6i0crm048gyizxh7b81n8xc4yb7ibjqwhyj3";
       };
 
       spagoFixHpack = overrideCabal spagoWithOverrides (drv: {
@@ -715,12 +719,8 @@ self: super: builtins.intersectAttrs super {
   # break infinite recursion with base-orphans
   primitive = dontCheck super.primitive;
 
-  # dhall's tests access the network.
-  dhall_1_29_0 = dontCheck super.dhall_1_29_0;
-  dhall_1_31_1 = dontCheck super.dhall_1_31_1;
-
   cut-the-crap =
-    let path = pkgs.stdenv.lib.makeBinPath [ pkgs.ffmpeg ];
+    let path = pkgs.stdenv.lib.makeBinPath [ pkgs.ffmpeg_3 ];
     in overrideCabal (addBuildTool super.cut-the-crap pkgs.makeWrapper) (_drv: {
       postInstall = ''
         wrapProgram $out/bin/cut-the-crap \
@@ -730,4 +730,45 @@ self: super: builtins.intersectAttrs super {
 
   # Tests access homeless-shelter.
   hie-bios = dontCheck super.hie-bios;
+  hie-bios_0_5_0 = dontCheck super.hie-bios_0_5_0;
+
+  # Compiling the readme throws errors and has no purpose in nixpkgs
+  aeson-gadt-th =
+    disableCabalFlag (doJailbreak (super.aeson-gadt-th)) "build-readme";
+
+  neuron = overrideCabal (super.neuron) (drv: {
+    # neuron expects the neuron-search script to be in PATH at built-time.
+    buildTools = [ pkgs.makeWrapper ];
+    preConfigure = ''
+      mkdir -p $out/bin
+      cp src-bash/neuron-search $out/bin/neuron-search
+      chmod +x $out/bin/neuron-search
+      wrapProgram $out/bin/neuron-search --prefix 'PATH' ':' ${
+        with pkgs;
+        lib.makeBinPath [ fzf ripgrep gawk bat findutils envsubst ]
+      }
+      PATH=$PATH:$out/bin
+    '';
+  });
+
+  # Fix compilation of Setup.hs by removing the module declaration.
+  # See: https://github.com/tippenein/guid/issues/1
+  guid = overrideCabal (super.guid) (drv: {
+    prePatch = "sed -i '1d' Setup.hs"; # 1st line is module declaration, remove it
+    doCheck = false;
+  });
+
+  # Tests disabled as recommended at https://github.com/luke-clifton/shh/issues/39
+  shh = dontCheck super.shh;
+
+  # The test suites fail because there's no PostgreSQL database running in our
+  # build sandbox.
+  hasql-queue = dontCheck super.hasql-queue;
+  postgresql-libpq-notify = dontCheck super.postgresql-libpq-notify;
+  postgresql-pure = dontCheck super.postgresql-pure;
+
+  retrie = overrideCabal super.retrie (drv: {
+    testToolDepends = [ pkgs.git pkgs.mercurial ];
+  });
+
 }

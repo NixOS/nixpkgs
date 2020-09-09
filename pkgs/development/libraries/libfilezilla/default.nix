@@ -5,20 +5,23 @@
 , gnutls
 , nettle
 , pkgconfig
+, libiconv
+, ApplicationServices
 }:
 
 stdenv.mkDerivation rec {
   pname = "libfilezilla";
-  version = "0.21.0";
+  version = "0.24.0";
 
   src = fetchurl {
     url = "https://download.filezilla-project.org/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "1wjvxi3spkp58lay590bs5s2i8fn94lqkc7qvq4q7ns4l9k9z3av";
+    sha256 = "1372i9f501kn8p1vkqdydaqvvi6lzxsnw2yzyxx5j4syqd4p0qa5";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ gettext gnutls nettle ];
+  buildInputs = [ gettext gnutls nettle ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ApplicationServices ];
 
   enableParallelBuilding = true;
 
@@ -27,6 +30,6 @@ stdenv.mkDerivation rec {
     description = "A modern C++ library, offering some basic functionality to build high-performing, platform-independent programs";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

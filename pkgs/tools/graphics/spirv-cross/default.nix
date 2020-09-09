@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spirv-cross";
-  version = "2020-04-03";
+  version = "2020-06-29";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Cross";
     rev = version;
-    sha256 = "0489s29kqgq20clxqg22y299yxz23p0yjh87yhka705hm9skx4sa";
+    sha256 = "0mnccmhlqmpdx92v495z39i07hbvjwdr5n4zbarlrr1d7rm99lx4";
   };
 
   nativeBuildInputs = [ cmake python3 ];

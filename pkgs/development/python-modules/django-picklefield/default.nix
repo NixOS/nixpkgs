@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "django-picklefield";
-  version = "2.1.1";
+  version = "3.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0imncys5s3vsy2q79nn7k5d670da1xgmcr9gmhn06fry6ibf39b7";
+    sha256 = "15ccba592ca953b9edf9532e64640329cd47b136b7f8f10f2939caa5f9ce4287";
   };
 
   propagatedBuildInputs = [ django ];

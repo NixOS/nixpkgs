@@ -3,11 +3,11 @@
 buildPythonPackage rec {
 
   pname = "schema";
-  version = "0.7.1";
+  version = "0.7.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c9dc8f4624e287c7d1435f8fd758f6a0aabbb7eff442db9192cd46f0e2b6d959";
+    sha256 = "4cf529318cfd1e844ecbe02f41f7e5aa027463e7403666a52746f31f04f47a5e";
   };
 
   preConfigure = ''

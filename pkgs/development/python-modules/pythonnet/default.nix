@@ -9,6 +9,7 @@
 , pkgconfig
 , dotnetbuildhelpers
 , clang
+, glib
 , mono
 }:
 
@@ -63,6 +64,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
+    glib
     mono
     psutil # needed for memory leak tests
   ];

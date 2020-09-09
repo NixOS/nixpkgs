@@ -63,5 +63,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
+    broken = versionAtLeast qtbase.version "5.15";
   };
 }

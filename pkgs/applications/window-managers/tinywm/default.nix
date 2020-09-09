@@ -42,10 +42,11 @@ stdenv.mkDerivation rec {
       - Resize windows interactively with Alt+Button3 drag (right mouse button)
       - Raise windows with Alt+F1 (not high on usability I know, but I needed a
         keybinding in there somewhere)
-      - Focus windows with the mouse pointer (X does this on its own)      
+      - Focus windows with the mouse pointer (X does this on its own)
     '';
     homepage = "http://incise.org/tinywm.html";
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = libX11.meta.platforms;
+    license = licenses.publicDomain;
   };
 }

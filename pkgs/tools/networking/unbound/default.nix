@@ -2,19 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "unbound";
-  version = "1.10.0";
+  version = "1.11.0";
 
   src = fetchurl {
     url = "https://unbound.net/downloads/${pname}-${version}.tar.gz";
-    sha256 = "0mg9divpysr42sp0m693a70693dp8025v6c9dv1yabr4g1jlhbqm";
+    sha256 = "1xqywn2qdmjjq0csrqxh9p2rnizdrr1f99zdx87z7f3fyyc0fbwz";
   };
-
-  # https://github.com/NLnetLabs/unbound/pull/90
-  postPatch = ''
-    substituteInPlace validator/val_secalgo.c \
-      --replace '&nettle_secp_256r1' 'nettle_get_secp_256r1()' \
-      --replace '&nettle_secp_384r1' 'nettle_get_secp_384r1()'
-  '';
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
@@ -30,6 +23,8 @@ stdenv.mkDerivation rec {
     "--with-rootkey-file=${dns-root-data}/root.key"
     "--enable-pie"
     "--enable-relro-now"
+  ] ++ stdenv.lib.optional stdenv.hostPlatform.isStatic [
+    "--disable-flto"
   ];
 
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];

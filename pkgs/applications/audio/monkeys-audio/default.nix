@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
+    description = "Lossless audio codec";
     platforms = platforms.linux;
+    license = licenses.lgpl2;
     maintainers = [ ];
   };
 }

@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/hakatashi/RictyDiminished-with-FiraCode.git";
     rev = version;
-    sha256 = "sha256-twh3yLAM4MUjWzSDNmo8gNIRf01hieXeOS334sNdFk4=";
+    sha256 = "0khnbp1y5xrd77gfb2b19mzi3ll07im3d0rlbciwbq0cn347f25p";
     fetchSubmodules = true;
   };
 

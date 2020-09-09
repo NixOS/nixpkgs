@@ -23,7 +23,7 @@
 , docbook_xsl
 , docbook_xml_dtd_42
 , gobject-introspection
-, inkscape
+, inkscape_0
 , poppler_utils
 , desktop-file-utils
 , wrapGAppsHook
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     python3
 
     # building getting started
-    inkscape
+    inkscape_0
     poppler_utils
   ];
 

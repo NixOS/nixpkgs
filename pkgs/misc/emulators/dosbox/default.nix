@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     comment = "x86 emulator with internal DOS";
     desktopName = "DOSBox";
     genericName = "DOS emulator";
-    categories = "Application;Emulator;";
+    categories = "Emulator;";
   };
 
   postInstall = ''

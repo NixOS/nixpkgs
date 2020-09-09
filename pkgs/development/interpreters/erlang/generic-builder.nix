@@ -3,6 +3,7 @@
 , openjdk ? null # javacSupport
 , unixODBC ? null # odbcSupport
 , libGL ? null, libGLU ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
+, parallelBuild ? false
 , withSystemd ? stdenv.isLinux, systemd # systemd support in epmd
 }:
 
@@ -60,7 +61,7 @@ in stdenv.mkDerivation ({
   debugInfo = enableDebugInfo;
 
   # On some machines, parallel build reliably crashes on `GEN    asn1ct_eval_ext.erl` step
-  enableParallelBuilding = false;
+  enableParallelBuilding = parallelBuild;
 
   # Clang 4 (rightfully) thinks signed comparisons of pointers with NULL are nonsense
   prePatch = ''
@@ -88,7 +89,8 @@ in stdenv.mkDerivation ({
     ++ optional odbcSupport "--with-odbc=${unixODBC}"
     ++ optional wxSupport "--enable-wx"
     ++ optional withSystemd "--enable-systemd"
-    ++ optional stdenv.isDarwin "--enable-darwin-64bit";
+    ++ optional stdenv.isDarwin "--enable-darwin-64bit"
+    ++ configureFlags;
 
   # install-docs will generate and install manpages and html docs
   # (PDFs are generated only when fop is available).
@@ -130,7 +132,6 @@ in stdenv.mkDerivation ({
 // optionalAttrs (postUnpack != "")     { inherit postUnpack; }
 // optionalAttrs (patches != [])        { inherit patches; }
 // optionalAttrs (patchPhase != "")     { inherit patchPhase; }
-// optionalAttrs (configureFlags != []) { inherit configureFlags; }
 // optionalAttrs (configurePhase != "") { inherit configurePhase; }
 // optionalAttrs (preConfigure != "")   { inherit preConfigure; }
 // optionalAttrs (postConfigure != "")  { inherit postConfigure; }

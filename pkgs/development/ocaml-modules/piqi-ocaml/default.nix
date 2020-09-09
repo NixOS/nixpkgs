@@ -1,20 +1,18 @@
-{ stdenv, fetchurl, fetchpatch, ocaml, findlib, piqi, camlp4 }:
+{ stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, piqi, stdlib-shims }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.5";
+  version = "0.7.7";
   pname = "piqi-ocaml";
+  name = "ocaml${ocaml.version}-${pname}-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/alavrik/piqi-ocaml/archive/v${version}.tar.gz";
-    sha256 = "0ngz6y8i98i5v2ma8nk6mc83pdsmf2z0ks7m3xi6clfg3zqbddrv";
+  src = fetchFromGitHub {
+    owner = "alavrik";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1913jpsb8mvqi8609j4g4sm5jhg50dq0xqxgy8nmvknfryyc89nm";
   };
 
-  patches = [ (fetchpatch {
-    url = "https://github.com/alavrik/piqi-ocaml/commit/336e8fdb84e77f4105e9bbb5ab545b8729101308.patch";
-    sha256 = "071s4xjyr6xx95v6az2lbl2igc87n7z5jqnnbhfq2pidrxakd0la";
-  })];
-
-  buildInputs = [ ocaml findlib piqi camlp4 ];
+  buildInputs = [ ocaml findlib piqi stdlib-shims ];
 
   createFindlibDestdir = true;
 

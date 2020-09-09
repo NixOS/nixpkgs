@@ -1,16 +1,19 @@
 { buildGoModule, lib, fetchFromGitHub }:
 buildGoModule rec {
   pname = "aws-vault";
-  version = "5.3.2";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "99designs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04dyibcaijv5011laycf39m4gvprvvsn5zkxslyih1kqd170w3wg";
+    sha256 = "0ssm58ksk5jb28w1ipa57spzf6wixjy1m7flw61ls8k86cy7qb7c";
   };
 
-  modSha256 = "1d3hjfmfmlpw2scfyn597zkzz864w97p0wrsxjp49m9mi0pgmhq9";
+  vendorSha256 = "0lxm7nkzf9j9id7m46gqn26prb1jfl34gy1fycr0578absdvsrjd";
+
+  doCheck = false;
+
   subPackages = [ "." ];
 
   # set the version. see: aws-vault's Makefile

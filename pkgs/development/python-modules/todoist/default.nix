@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "todoist-python";
-  version = "8.1.1";
+  version = "8.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0khipf8v0gqvspq7m67aqv0ql3rdqyqr8qfhbm1szc1z6mygj8ns";
+    sha256 = "750b2d2300e8590cd56414ab7bbbc8dfcaf8c27102b342398955812176499498";
   };
 
   propagatedBuildInputs = [ requests ];

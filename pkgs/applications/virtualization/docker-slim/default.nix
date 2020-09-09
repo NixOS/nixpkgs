@@ -6,7 +6,7 @@
 
 buildGoPackage rec {
   pname = "docker-slim";
-  version = "1.29.0";
+  version = "1.32.0";
 
   goPackagePath = "github.com/docker-slim/docker-slim";
 
@@ -14,7 +14,7 @@ buildGoPackage rec {
     owner = "docker-slim";
     repo = "docker-slim";
     rev = version;
-    sha256 = "0qfjmwqxgghp9pqj4s2z71cmn8mi1l6655z6nbhh72yqaxh5a6ia";
+    sha256 = "0pd2v7df176ca923c4nw9ns5gz442jkb0jhzqjl53rwfwz1vxy9h";
   };
 
   subPackages = [ "cmd/docker-slim" "cmd/docker-slim-sensor" ];
@@ -41,10 +41,5 @@ buildGoPackage rec {
     homepage = "https://dockersl.im/";
     license = licenses.asl20;
     maintainers = with maintainers; [ filalex77 marsam mbrgm ];
-    # internal/app/sensor/monitors/ptrace/monitor.go:151:16: undefined:
-    #     system.CallNumber
-    # internal/app/sensor/monitors/ptrace/monitor.go:161:15: undefined:
-    #     system.CallReturnValue
-    badPlatforms = [ "aarch64-linux" ];
   };
 }

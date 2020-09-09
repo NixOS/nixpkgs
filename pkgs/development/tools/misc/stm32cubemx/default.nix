@@ -1,12 +1,12 @@
-{ stdenv, requireFile, makeDesktopItem, libicns, imagemagick, zstd, jre }:
+{ stdenv, requireFile, makeDesktopItem, libicns, imagemagick, jre, fetchzip }:
 
 let
-  version = "5.3.0";
+  version = "5.6.1";
   desktopItem = makeDesktopItem {
     name = "stm32CubeMX";
     exec = "stm32cubemx";
     desktopName = "STM32CubeMX";
-    categories = "Application;Development;";
+    categories = "Development;";
     icon = "stm32cubemx";
   };
 in
@@ -14,32 +14,19 @@ stdenv.mkDerivation rec {
   pname = "stm32cubemx";
   inherit version;
 
-  src = requireFile rec {
-    name = "STM32CubeMX.tar.zst";
-    message = ''
-      Unfortunately, we cannot download file ${name} automatically.
-      Please proceed with the following steps to download and add it to the Nix
-      store yourself:
 
-      1. get en.STM32CubeMX_${builtins.replaceStrings ["."] ["-"] version}.zip
-      2. unzip en.STM32CubeMX_${builtins.replaceStrings ["."] ["-"] version}.zip
-      3. run the setup: java -jar SetupSTM32CubeMX-${version}.exe
-      4. create a tar from created folder: tar --zstd -cf ${name} STM32CubeMX
-      5. add the result to the store: nix-prefetch-url file://\$PWD/${name}
-
-      Notice: The setup will quit with an error about /bin/chmod
-    '';
-    sha256 = "1r5k5wmsvw1w2nfs3nb4gc6pb3j0x6bqljn9jzc4r8y5bxc34rr8";
+  src = fetchzip {
+    url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${builtins.replaceStrings ["."] [""] version}.zip";
+    sha256 = "1y4a340wcjl88kjw1f1x85ffp4b5g1psryn9mgkd717w2bfpf29l";
+    stripRoot= false;
   };
 
-  nativeBuildInputs = [ libicns imagemagick zstd ];
+  nativeBuildInputs = [ libicns imagemagick ];
 
   buildCommand = ''
-    mkdir -p $out/{bin,opt,share/applications}
-
-    tar --extract --zstd --file $src --directory $out/opt/
+    mkdir -p $out/{bin,opt/STM32CubeMX,share/applications}
+    cp -r $src/. $out/opt/STM32CubeMX/
     chmod +rx $out/opt/STM32CubeMX/STM32CubeMX.exe
-
     cat << EOF > $out/bin/${pname}
     #!${stdenv.shell}
     ${jre}/bin/java -jar $out/opt/STM32CubeMX/STM32CubeMX.exe
@@ -63,7 +50,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = ''
+    description = "A graphical tool for configuring STM32 microcontrollers and microprocessors";
+    longDescription = ''
       A graphical tool that allows a very easy configuration of STM32
       microcontrollers and microprocessors, as well as the generation of the
       corresponding initialization C code for the Arm® Cortex®-M core or a

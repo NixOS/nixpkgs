@@ -23,11 +23,17 @@ in
          default = [];
          description = "List of packages to be added to apparmor's include path";
        };
+       parserConfig = mkOption {
+         type = types.str;
+         default = "";
+         description = "AppArmor parser configuration file content";
+       };
      };
    };
 
    config = mkIf cfg.enable {
      environment.systemPackages = [ pkgs.apparmor-utils ];
+     environment.etc."apparmor/parser.conf".text = cfg.parserConfig;
 
      boot.kernelParams = [ "apparmor=1" "security=apparmor" ];
 

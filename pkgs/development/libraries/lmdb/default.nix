@@ -1,14 +1,13 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchgit }:
 
 stdenv.mkDerivation rec {
   pname = "lmdb";
-  version = "0.9.24";
+  version = "0.9.25";
 
-  src = fetchFromGitHub {
-    owner = "LMDB";
-    repo = "lmdb";
+  src = fetchgit {
+    url = "https://git.openldap.org/openldap/openldap.git";
     rev = "LMDB_${version}";
-    sha256 = "088q6m8fvr12w43s461h7cvpg5hj8csaqj6n9pci150dz7bk5lxm";
+    sha256 = "0i60zlca8r6fib23gdgl4c80gxpx24772ggpvz94yr7zaai4k11w";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/libraries/liblmdb";

@@ -754,4 +754,33 @@ in rec {
     readmeFile = "README_sk.txt";
     license = with stdenv.lib.licenses; [ gpl2 lgpl21 mpl11 ];
   };
+
+  /* DANISH */
+
+  da_DK = da-dk;
+  da-dk = mkDict rec {
+    name = "hunspell-dict-da-dk-${version}";
+    version = "2.5.137";
+
+    src = fetchurl {
+      url = "https://stavekontrolden.dk/dictionaries/da_DK/da_DK-${version}.oxt";
+      sha256 = "16y0smkg1mq0133r1fbw5ak6s2xw39281knk5ivhanakayq789qx";
+    };
+
+    shortName = "da-dk";
+    shortDescription = "Danish (Danmark)";
+    dictFileName = "da_DK";
+    readmeFile = "README_da_DK.txt";
+    nativeBuildInputs = [ unzip ];
+    unpackCmd = ''
+      unzip $src ${dictFileName}.dic ${dictFileName}.aff ${readmeFile} -d ${dictFileName}
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Hunspell dictionary for Danish (Denmark) from Stavekontrolden";
+      homepage = "https://github.com/jeppebundsgaard/stavekontrolden";
+      license = with stdenv.lib.licenses; [ gpl2Only lgpl21Only mpl11 ];
+      maintainers = with maintainers; [ louisdk1 ];
+    };
+  };
 }

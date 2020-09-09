@@ -66,7 +66,7 @@ in
 
         killer = mkOption {
           default = null; # default according to `man xautolock` is none
-          example = "${pkgs.systemd}/bin/systemctl suspend";
+          example = "/run/current-system/systemd/bin/systemctl suspend";
           type = types.nullOr types.str;
 
           description = ''

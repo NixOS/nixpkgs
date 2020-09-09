@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
     # Figure out what extra flags to pass to the gcc compilers
     # being generated to make sure that they use our glibc.
-    EXTRA_FLAGS="-I$NIX_FIXINC_DUMMY $(cat $NIX_CC/nix-support/libc-cflags) -O2"
+    EXTRA_FLAGS="-I$NIX_FIXINC_DUMMY $(cat $NIX_CC/nix-support/libc-crt1-cflags) $(cat $NIX_CC/nix-support/libc-cflags) -O2"
 
     extraLDFlags="-L$glibc_libdir -rpath $glibc_libdir $(cat $NIX_BINTOOLS/nix-support/libc-ldflags) $(cat $NIX_BINTOOLS/nix-support/libc-ldflags-before)"
     for i in $extraLDFlags; do

@@ -2,7 +2,7 @@
 , libtoxcore
 , libpthreadstubs, libXdmcp, libXScrnSaver
 , qtbase, qtsvg, qttools, qttranslations
-, ffmpeg, filter-audio, libexif, libsodium, libopus
+, ffmpeg_3, filter-audio, libexif, libsodium, libopus
 , libvpx, openal, pcre, qrencode, sqlcipher
 , AVFoundation ? null }:
 
@@ -25,7 +25,7 @@ in mkDerivation {
     libtoxcore
     libpthreadstubs libXdmcp libXScrnSaver
     qtbase qtsvg qttranslations
-    ffmpeg filter-audio libexif libopus libsodium
+    ffmpeg_3 filter-audio libexif libopus libsodium
     libvpx openal pcre qrencode sqlcipher
   ] ++ lib.optionals stdenv.isDarwin [ AVFoundation] ;
 

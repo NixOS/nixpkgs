@@ -17,21 +17,20 @@
 }:
 
 let
-  basename = "gdb-${version}";
-  version = "9.1";
+  basename = "gdb";
+  targetPrefix = stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
+                 "${stdenv.targetPlatform.config}-";
 in
 
 assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
-  name =
-    stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
-                              (stdenv.targetPlatform.config + "-")
-    + basename;
+  pname = targetPrefix + basename;
+  version = "9.2";
 
   src = fetchurl {
-    url = "mirror://gnu/gdb/${basename}.tar.xz";
-    sha256 = "0dqp1p7w836iwijg1zb4a784n0j4pyjiw5v6h8fg5lpx6b40x7k9";
+    url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
+    sha256 = "0mf5fn8v937qwnal4ykn3ji1y2sxk0fa1yfqi679hxmpg6pdf31n";
   };
 
   postPatch = if stdenv.isDarwin then ''

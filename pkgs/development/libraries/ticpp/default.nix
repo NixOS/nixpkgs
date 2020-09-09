@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     owner = "wxFormBuilder";
     repo = "ticpp";
     rev = "eb79120ea16b847ce9f483a298a394050f463d6b";
-    sha256 = "sha256:0xk4cy0xbkr6326cqd1vd6b2x0rfsx4iz2sq8f5jz3yl3slxgjm2";
+    sha256 = "0xk4cy0xbkr6326cqd1vd6b2x0rfsx4iz2sq8f5jz3yl3slxgjm2";
   };
 
   nativeBuildInputs = [ cmake ];

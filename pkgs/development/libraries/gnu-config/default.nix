@@ -1,21 +1,20 @@
 { stdenv, fetchurl }:
 
 let
-  rev = "a8d79c3130da83c7cacd6fee31b9acc53799c406";
+  rev = "e78c96e5288993aaea3ec44e5c6ee755c668da79";
 
   # Don't use fetchgit as this is needed during Aarch64 bootstrapping
   configGuess = fetchurl {
     url = "https://git.savannah.gnu.org/cgit/config.git/plain/config.guess?id=${rev}";
-    sha256 = "0qbq49gr2cmf4gzrjvrmpwxxgzl3vap1xm902xa8pkcqdvriq0qw";
+    sha256 = "sha256-TSLpYIDGSp1flqCBi2Sgg9IWDV5bcO+Hn2Menv3R6KU=";
   };
   configSub = fetchurl {
     url = "https://git.savannah.gnu.org/cgit/config.git/plain/config.sub?id=${rev}";
-    sha256 = "0i699axqfkxk9mgv1hlms5r44pf0s642yz75ajjjpwzhw4d5pnv4";
+    sha256 = "sha256-DkCGDN/DE3phQ1GO/Ua5ZPPtp0Ya93PnW3yfSK8EV9s=";
   };
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "gnu-config";
-  version = "2019-04-15";
+  version = "2020-05-04";
 
   buildCommand = ''
     mkdir -p $out

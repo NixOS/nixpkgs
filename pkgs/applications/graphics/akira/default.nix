@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "akira";
-  version = "2019-10-12";
+  version = "2020-05-01";
 
   src = fetchFromGitHub {
     owner = "akiraux";
     repo = "Akira";
-    rev = "cab952dee4591b6bde34d670c1f853f5a3ff6b19";
-    sha256 = "1fp3a79hkh6xwwqqdrx4zqq2zhsm236c6fhhl5f2nmi108yxz04q";
+    rev = "87c495fa0a686b1e9b84aff7d9c0a9553da2c466";
+    sha256 = "0ikz6dyx0z2wqskas628hbrbhx3z5gy7i4acrvspfhhg6rk88aqd";
   };
 
   nativeBuildInputs = [
@@ -58,8 +58,6 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [ "-Dprofile=default" ];
-
-  patches = [ ./fix-build-with-vala-0-44-or-later.patch ];
 
   postPatch = ''
     chmod +x build-aux/meson/post_install.py

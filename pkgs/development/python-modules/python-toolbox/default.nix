@@ -4,10 +4,11 @@
 , fetchFromGitHub
 , isPy27
 , nose
+, pytest
 }:
 
 buildPythonPackage rec {
-  version = "0.9.4";
+  version = "1.0.10";
   pname = "python_toolbox";
   disabled = isPy27;
 
@@ -15,12 +16,12 @@ buildPythonPackage rec {
     owner = "cool-RR";
     repo = pname;
     rev = version;
-    sha256 = "1qy2sfqfrkgxixmd22v5lkrdykdfiymsd2s3xa7ndlvg084cgj6r";
+    sha256 = "1hpls1hwisdjx1g15cq052bdn9fvh43r120llws8bvgvj9ivnaha";
   };
 
   checkInputs = [
     docutils
-    nose
+    pytest
   ];
 
   meta = with lib; {

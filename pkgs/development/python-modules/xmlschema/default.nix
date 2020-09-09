@@ -1,26 +1,27 @@
 { lib, buildPythonPackage, fetchFromGitHub
 , elementpath
+, lxml
 , pytest
 }:
 
 buildPythonPackage rec {
-  version = "1.1.0";
+  version = "1.2.3";
   pname = "xmlschema";
 
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "xmlschema";
     rev = "v${version}";
-    sha256 = "1h8321jb6q3dhlh3608y3f3sbbzfd3jg1psyirxkrm4w5xs3lbvy";
+    sha256 = "1lasi84d5v66xpd40fbj3lqwc5hfh3izxrr2wbfdbj4a3m996zc9";
   };
 
   propagatedBuildInputs = [ elementpath ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ lxml pytest ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "elementpath~=1.4.0" "elementpath~=1.4"
+      --replace "elementpath~=2.0.0" "elementpath~=2.0"
   '';
 
   # Ignore broken fixtures, and tests for files which don't exist.

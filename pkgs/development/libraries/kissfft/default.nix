@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "mborgerding";
     repo = pname;
     rev = "v${version}";
-    sha256 = "4lmRyBzW4H5wXb0EpgAp/hbaE2SslB6rAJyyLLbCtSs=";
+    sha256 = "0axmqav2rclw02mix55cch9xl5py540ac15xbmq7xq6n3k492ng2";
   };
 
   patches = [
@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
     # Make datatype configurable
     (fetchpatch {
       url = "https://github.com/mborgerding/kissfft/pull/38.patch";
-      sha256 = "Rsrob1M+lxwEag6SV5FqaTeyiJaOpspZxVtkeihX4TI=";
+      sha256 = "0cp1awl7lr2vqmcwm9lfjs4b4dv9da8mg4hfd821r5ryadpyijj6";
     })
     # Install headers as well
     (fetchpatch {
       url = "https://github.com/mborgerding/kissfft/commit/71df949992d2dbbe15ce707cf56c3fa1e43b1080.patch";
-      sha256 = "9ap6ZWyioBiut9UQM3v6W1Uv+iP3Kmt27xWhIfWfBI4=";
+      sha256 = "13h4kzsj388mxxv6napp4gx2ymavz9xk646mnyp1i852dijpmapm";
     })
   ];
 

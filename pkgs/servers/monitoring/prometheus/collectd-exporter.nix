@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, nixosTests }:
 
 buildGoPackage rec {
   pname = "collectd-exporter";
@@ -13,6 +13,8 @@ buildGoPackage rec {
     repo = "collectd_exporter";
     sha256 = "1p0kb7c8g0r0sp5a6xrx8vnwbw14hhwlqzk4n2xx2y8pvnbivajz";
   };
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) collectd; };
 
   meta = with stdenv.lib; {
     description = "Relay server for exporting metrics from collectd to Prometheus";

@@ -5,13 +5,13 @@
  start_service()
  {
 -  systemctl start displaylink-driver
-+  @systemd@/bin/systemctl start --no-block dlm
++  /run/current-system/systemd/bin/systemctl start --no-block dlm
  }
  
  stop_service()
  {
 -  systemctl stop displaylink-driver
-+  @systemd@/bin/systemctl stop dlm
++  /run/current-system/systemd/bin/systemctl stop dlm
  }
  
  EOF

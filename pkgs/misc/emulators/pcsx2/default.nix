@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pcsx2";
-  version = "1.6.0-rc";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2";
     rev = "v${version}";
-    sha256 = "1mdv1dgwawb4k6bs1jh6j2jaaxg168fbssm1lwnlk5di0gz31h23";
+    sha256 = "0528kh3275285lvfsykycdhc35c1z8pmccl2s7dfi3va2cp4x8wa";
   };
 
   postPatch = "sed '1i#include \"x86intrin.h\"' -i common/src/x86emitter/cpudetect.cpp";

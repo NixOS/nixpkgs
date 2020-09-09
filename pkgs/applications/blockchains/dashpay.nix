@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.dash.org";
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
+    license = licenses.mit;
   };
 }

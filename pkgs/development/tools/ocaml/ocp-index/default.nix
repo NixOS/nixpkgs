@@ -1,15 +1,15 @@
-{ lib, fetchurl, buildDunePackage, ocp-build, ocp-indent, cmdliner, re }:
+{ lib, fetchzip, buildDunePackage, cppo, ocp-indent, cmdliner, re }:
 
 buildDunePackage rec {
   pname = "ocp-index";
-  version = "1.2";
+  version = "1.2.1";
 
-  src = fetchurl {
-    url = "https://github.com/OCamlPro/ocp-index/releases/download/${version}/ocp-index-${version}.tbz";
-    sha256 = "1lchw02sakjjppmzr0rzlarwbg1lc2bl7pwcfpsiycnaz46x6gmr";
+  src = fetchzip {
+    url = "https://github.com/OCamlPro/ocp-index/archive/${version}.tar.gz";
+    sha256 = "08r7mxdnxmhff37fw4hmrpjgckgi5kaiiiirwp4rmdl594z0h9c8";
   };
 
-  buildInputs = [ ocp-build cmdliner re ];
+  buildInputs = [ cppo cmdliner re ];
 
   propagatedBuildInputs = [ ocp-indent ];
 

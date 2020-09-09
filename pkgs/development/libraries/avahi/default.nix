@@ -1,5 +1,5 @@
 { fetchurl, fetchpatch, stdenv, pkgconfig, libdaemon, dbus, perlPackages
-, expat, gettext, intltool, glib, libiconv
+, expat, gettext, intltool, glib, libiconv, writeShellScriptBin
 , gtk3Support ? false, gtk3 ? null
 , qt4 ? null
 , qt4Support ? false
@@ -9,6 +9,11 @@
 
 assert qt4Support -> qt4 != null;
 
+let
+  # despite the configure script claiming it supports $PKG_CONFIG, it doesnt respect it
+  pkgconfig-helper = writeShellScriptBin "pkg-config" ''exec $PKG_CONFIG "$@"'';
+in
+
 stdenv.mkDerivation rec {
   name = "avahi${stdenv.lib.optionalString withLibdnssdCompat "-compat"}-${version}";
   version = "0.7";
@@ -17,6 +22,11 @@ stdenv.mkDerivation rec {
     url = "https://github.com/lathiat/avahi/releases/download/v${version}/avahi-${version}.tar.gz";
     sha256 = "0128n7jlshw4bpx0vg8lwj8qwdisjxi7mvniwfafgnkzzrfrpaap";
   };
+
+  prePatch = ''
+    substituteInPlace configure \
+      --replace pkg-config "$PKG_CONFIG"
+  '';
 
   patches = [
     ./no-mkdir-localstatedir.patch
@@ -35,7 +45,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs =
     stdenv.lib.optionals withPython (with python.pkgs; [ python pygobject3 dbus-python ]);
 
-  nativeBuildInputs = [ pkgconfig gettext intltool glib ];
+  nativeBuildInputs = [ pkgconfig pkgconfig-helper gettext intltool glib ];
 
   configureFlags =
     [ "--disable-qt3" "--disable-gdbm" "--disable-mono"

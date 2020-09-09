@@ -4,7 +4,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   machine = { lib, ... }: {
     imports = [ common/user-account.nix common/x11.nix ];
 
-    virtualisation.emptyDiskImages = [ 512 ];
+    virtualisation.emptyDiskImages = [ 512 512 ];
+    virtualisation.memorySize = 1024;
+
+    environment.systemPackages = [ pkgs.cryptsetup ];
 
     fileSystems = lib.mkVMOverride {
       "/test-x-initrd-mount" = {
@@ -49,6 +52,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           touch "$HOME/user_conf_read"
         fi
       '';
+    };
+
+    systemd.watchdog = {
+      device = "/dev/watchdog";
+      runtimeTime = "30s";
+      rebootTime = "10min";
+      kexecTime = "5min";
     };
   };
 
@@ -97,6 +107,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             re.search(r"^Filesystem state: *clean$", extinfo, re.MULTILINE) is not None
         ), ("File system was not cleanly unmounted: " + extinfo)
 
+    # Regression test for https://github.com/NixOS/nixpkgs/pull/91232
+    with subtest("setting transient hostnames works"):
+        machine.succeed("hostnamectl set-hostname --transient machine-transient")
+        machine.fail("hostnamectl set-hostname machine-all")
+
     with subtest("systemd-shutdown works"):
         machine.shutdown()
         machine.wait_for_unit("multi-user.target")
@@ -117,5 +132,41 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         retcode, output = machine.execute("systemctl status testservice1.service")
         assert retcode in [0, 3]  # https://bugs.freedesktop.org/show_bug.cgi?id=77507
         assert "CPU:" in output
+
+    # Test systemd is configured to manage a watchdog
+    with subtest("systemd manages hardware watchdog"):
+        machine.wait_for_unit("multi-user.target")
+
+        # It seems that the device's path doesn't appear in 'systemctl show' so
+        # check it separately.
+        assert "WatchdogDevice=/dev/watchdog" in machine.succeed(
+            "cat /etc/systemd/system.conf"
+        )
+
+        output = machine.succeed("systemctl show | grep Watchdog")
+        # assert "RuntimeWatchdogUSec=30s" in output
+        # for some reason RuntimeWatchdogUSec, doesn't seem to be updated in here.
+        assert "RebootWatchdogUSec=10min" in output
+        assert "KExecWatchdogUSec=5min" in output
+
+    # Test systemd cryptsetup support
+    with subtest("systemd successfully reads /etc/crypttab and unlocks volumes"):
+        # create a luks volume and put a filesystem on it
+        machine.succeed(
+            "echo -n supersecret | cryptsetup luksFormat -q /dev/vdc -",
+            "echo -n supersecret | cryptsetup luksOpen --key-file - /dev/vdc foo",
+            "mkfs.ext3 /dev/mapper/foo",
+        )
+
+        # create a keyfile and /etc/crypttab
+        machine.succeed("echo -n supersecret > /var/lib/luks-keyfile")
+        machine.succeed("chmod 600 /var/lib/luks-keyfile")
+        machine.succeed("echo 'luks1 /dev/vdc /var/lib/luks-keyfile luks' > /etc/crypttab")
+
+        # after a reboot, systemd should unlock the volume and we should be able to mount it
+        machine.shutdown()
+        machine.succeed("systemctl status systemd-cryptsetup@luks1.service")
+        machine.succeed("mkdir -p /tmp/luks1")
+        machine.succeed("mount /dev/mapper/luks1 /tmp/luks1")
   '';
 })

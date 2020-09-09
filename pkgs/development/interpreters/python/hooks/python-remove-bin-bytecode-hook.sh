@@ -1,9 +1,9 @@
-# Setup hook for detecting conflicts in Python packages
+# Setup hook for removing bytecode from the bin folder
 echo "Sourcing python-remove-bin-bytecode-hook.sh"
 
-# Check if we have two packages with the same name in the closure and fail.
-# If this happens, something went wrong with the dependencies specs.
-# Intentionally kept in a subdirectory, see catch_conflicts/README.md.
+# The bin folder is added to $PATH and should only contain executables.
+# It may happen there are executables with a .py extension for which
+# bytecode is generated. This hook removes that bytecode.
 
 pythonRemoveBinBytecodePhase () {
     if [ -d "$out/bin" ]; then

@@ -1,6 +1,6 @@
-{ config, stdenv, fetchurl, fetchFromGitHub, makeWrapper, fetchpatch
+{ config, stdenv, fetchurl, fetchFromGitHub, fetchpatch
 , addOpenGLRunpath, docutils, perl, pkgconfig, python3, wafHook, which
-, ffmpeg_4, freefont_ttf, freetype, libass, libpthreadstubs, mujs
+, ffmpeg, freefont_ttf, freetype, libass, libpthreadstubs, mujs
 , nv-codec-headers, lua, libuchardet, libiconv ? null
 , CoreFoundation, Cocoa, CoreAudio, MediaPlayer
 
@@ -39,7 +39,10 @@
 , libpngSupport      ? true,           libpng        ? null
 , pulseSupport       ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , rubberbandSupport  ? stdenv.isLinux, rubberband    ? null
-, sambaSupport       ? stdenv.isLinux, samba         ? null
+# NOTE: samba support should be removed on the next mpv release, see also:
+# https://github.com/NixOS/nixpkgs/pull/89145#issuecomment-636424362
+# Please remove this line on the next mpv release.
+, sambaSupport       ? false,          samba         ? null
 , screenSaverSupport ? true,           libXScrnSaver ? null
 , sdl2Support        ? true,           SDL2          ? null
 , sndioSupport       ? true,           sndio         ? null
@@ -50,7 +53,6 @@
 , vdpauSupport       ? true,           libvdpau      ? null
 , xineramaSupport    ? stdenv.isLinux, libXinerama   ? null
 , xvSupport          ? stdenv.isLinux, libXv         ? null
-, youtubeSupport     ? true,           youtube-dl    ? null
 , zimgSupport        ? true,           zimg          ? null
 , archiveSupport     ? true,           libarchive    ? null
 , jackaudioSupport   ? false,          libjack2      ? null
@@ -91,7 +93,6 @@ assert waylandSupport     -> all available [ wayland wayland-protocols libxkbcom
 assert x11Support         -> all available [ libGLU libGL libX11 libXext libXxf86vm libXrandr ];
 assert xineramaSupport    -> x11Support && available libXinerama;
 assert xvSupport          -> x11Support && available libXv;
-assert youtubeSupport     -> available youtube-dl;
 assert zimgSupport        -> available zimg;
 
 let
@@ -111,6 +112,20 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs ./TOOLS/
   '';
+
+  passthru = {
+    inherit
+    # The wrapper consults luaEnv and lua.version
+    luaEnv
+    lua
+    # In the wrapper, we want to reference vapoursynth which has the
+    # `python3` passthru attribute (which has the `sitePrefix`
+    # attribute). This way we'll be sure that in the wrapper we'll
+    # use the same python3.sitePrefix used to build vapoursynth.
+    vapoursynthSupport
+    vapoursynth
+    ;
+  };
 
   NIX_LDFLAGS = optionalString x11Support "-lX11 -lXext "
               + optionalString stdenv.isDarwin "-framework CoreFoundation";
@@ -135,12 +150,12 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (!swiftSupport) "--disable-macos-cocoa-cb";
 
   nativeBuildInputs = [
-    addOpenGLRunpath docutils makeWrapper perl pkgconfig python3 wafHook which
+    addOpenGLRunpath docutils perl pkgconfig python3 wafHook which
   ]
     ++ optional swiftSupport swift;
 
   buildInputs = [
-    ffmpeg_4 freetype libass libpthreadstubs
+    ffmpeg freetype libass libpthreadstubs
     luaEnv libuchardet mujs
   ] ++ optional alsaSupport        alsaLib
     ++ optional archiveSupport     libarchive
@@ -164,7 +179,6 @@ in stdenv.mkDerivation rec {
     ++ optional vdpauSupport       libvdpau
     ++ optional xineramaSupport    libXinerama
     ++ optional xvSupport          libXv
-    ++ optional youtubeSupport     youtube-dl
     ++ optional zimgSupport        zimg
     ++ optional stdenv.isDarwin    libiconv
     ++ optional stdenv.isLinux     nv-codec-headers
@@ -182,15 +196,6 @@ in stdenv.mkDerivation rec {
     python3 TOOLS/osxbundle.py -s build/mpv
   '';
 
-  # Ensure youtube-dl is available in $PATH for mpv
-  wrapperFlags =
-    ''--prefix PATH : "${luaEnv}/bin" \''
-  + optionalString youtubeSupport ''
-      --prefix PATH : "${youtube-dl}/bin" \
-  '' + optionalString vapoursynthSupport ''
-      --prefix PYTHONPATH : "${vapoursynth}/lib/${python3.libPrefix}/site-packages:$PYTHONPATH"
-  '';
-
   patches = stdenv.lib.optionals stdenv.isDarwin [
     # Fix cocoa backend. Remove with the next release
     (fetchpatch {
@@ -203,24 +208,17 @@ in stdenv.mkDerivation rec {
     # Use a standard font
     mkdir -p $out/share/mpv
     ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
-    wrapProgram "$out/bin/mpv" \
-      ${wrapperFlags}
 
     cp TOOLS/umpv $out/bin
-    wrapProgram $out/bin/umpv \
-      --set MPV "$out/bin/mpv"
-
   '' + optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     cp -r build/mpv.app $out/Applications
-    wrapProgram "$out/Applications/mpv.app/Contents/MacOS/mpv" \
-      ${wrapperFlags}
   '';
 
   # Set RUNPATH so that libcuda in /run/opengl-driver(-32)/lib can be found.
   # See the explanation in addOpenGLRunpath.
   postFixup = optionalString stdenv.isLinux ''
-    addOpenGLRunpath $out/bin/.mpv-wrapped
+    addOpenGLRunpath $out/bin/mpv
   '';
 
   meta = with stdenv.lib; {

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hcxdumptool";
-  version = "6.0.5";
+  version = "6.1.1";
 
   src = fetchFromGitHub {
     owner = "ZerBea";
     repo = "hcxdumptool";
     rev = version;
-    sha256 = "0rh19lblz8wp8q2x123nlwvxq1pjq9zw12w18z83v2l2knjbc524";
+    sha256 = "0v6dq6x2mrmavazknmhb08ks53773sll367anfrrramild8350bh";
   };
 
   buildInputs = [ openssl ];

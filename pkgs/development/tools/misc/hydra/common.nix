@@ -1,6 +1,6 @@
 { stdenv, nix, perlPackages, buildEnv, fetchFromGitHub
 , makeWrapper, autoconf, automake, libtool, unzip, pkgconfig, sqlite, libpqxx
-, gitAndTools, mercurial, darcs, subversion, bazaar, openssl, bzip2, libxslt
+, gitAndTools, mercurial, darcs, subversion, breezy, openssl, bzip2, libxslt
 , guile, perl, postgresql, nukeReferences, git, boehmgc, nlohmann_json
 , docbook_xsl, openssh, gnused, coreutils, findutils, gzip, lzma, gnutar
 , rpm, dpkg, cdrkit, pixz, lib, boost, autoreconfHook, src ? null, version ? null
@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs =
     [ makeWrapper autoconf automake libtool unzip nukeReferences sqlite libpqxx
-      gitAndTools.top-git mercurial /*darcs*/ subversion bazaar openssl bzip2 libxslt
+      gitAndTools.top-git mercurial /*darcs*/ subversion breezy openssl bzip2 libxslt
       perlDeps perl nix
       postgresql # for running the tests
       nlohmann_json
@@ -88,7 +88,7 @@ in stdenv.mkDerivation rec {
 
   hydraPath = lib.makeBinPath (
     [ sqlite subversion openssh nix coreutils findutils pixz
-      gzip bzip2 lzma gnutar unzip git gitAndTools.top-git mercurial /*darcs*/ gnused bazaar
+      gzip bzip2 lzma gnutar unzip git gitAndTools.top-git mercurial /*darcs*/ gnused breezy
     ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ] );
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

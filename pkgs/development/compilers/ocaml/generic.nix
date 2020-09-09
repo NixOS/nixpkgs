@@ -10,20 +10,22 @@ let
   safeX11 = stdenv: !(stdenv.isAarch32 || stdenv.isMips);
 in
 
-{ stdenv, fetchurl, ncurses, buildEnv
+{ stdenv, fetchurl, ncurses, buildEnv, libunwind
 , libX11, xorgproto, useX11 ? safeX11 stdenv && !stdenv.lib.versionAtLeast version "4.09"
 , aflSupport ? false
 , flambdaSupport ? false
+, spaceTimeSupport ? false
 }:
 
 assert useX11 -> !stdenv.isAarch32 && !stdenv.isMips;
 assert aflSupport -> stdenv.lib.versionAtLeast version "4.05";
 assert flambdaSupport -> stdenv.lib.versionAtLeast version "4.03";
+assert spaceTimeSupport -> stdenv.lib.versionAtLeast version "4.04";
 
 let
    useNativeCompilers = !stdenv.isMips;
    inherit (stdenv.lib) optional optionals optionalString;
-   name = "ocaml${optionalString aflSupport "+afl"}${optionalString flambdaSupport "+flambda"}-${version}";
+   name = "ocaml${optionalString aflSupport "+afl"}${optionalString spaceTimeSupport "+spacetime"}${optionalString flambdaSupport "+flambda"}-${version}";
 in
 
 let
@@ -53,11 +55,13 @@ stdenv.mkDerivation (args // {
       [ "-x11lib" x11lib "-x11include" x11inc ])
   ++ optional aflSupport (flags "--with-afl" "-afl-instrument")
   ++ optional flambdaSupport (flags "--enable-flambda" "-flambda")
+  ++ optional spaceTimeSupport (flags "--enable-spacetime" "-spacetime")
   ;
 
   buildFlags = [ "world" ] ++ optionals useNativeCompilers [ "bootstrap" "world.opt" ];
   buildInputs = optional (!stdenv.lib.versionAtLeast version "4.07") ncurses
     ++ optionals useX11 [ libX11 xorgproto ];
+  propagatedBuildInputs = optional spaceTimeSupport libunwind;
   installTargets = [ "install" ] ++ optional useNativeCompilers "installopt";
   preConfigure = optionalString (!stdenv.lib.versionAtLeast version "4.04") ''
     CAT=$(type -tp cat)

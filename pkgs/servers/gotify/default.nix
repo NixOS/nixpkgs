@@ -21,7 +21,9 @@ buildGoModule rec {
     sha256 = import ./source-sha.nix;
   };
 
-  modSha256 = import ./mod-sha.nix;
+  vendorSha256 = import ./vendor-sha.nix;
+
+  doCheck = false;
 
   postPatch = ''
     substituteInPlace app.go \
@@ -55,7 +57,6 @@ buildGoModule rec {
     homepage = "https://gotify.net";
     license = licenses.mit;
     maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.all;
   };
 
 }

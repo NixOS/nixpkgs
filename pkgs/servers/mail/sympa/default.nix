@@ -63,13 +63,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sympa";
-  version = "6.2.54";
+  version = "6.2.56";
 
   src = fetchFromGitHub {
     owner = "sympa-community";
     repo = pname;
     rev = version;
-    sha256 = "07wfvr8rrg7pwkl2zglrdri7n42rl9gwrjbaffb8m37wq67s7fca";
+    sha256 = "13cs2azpskmp2hkfy5zqf4qb6sb9r8d4wwzc8mw74mg2kdjnvfpy";
   };
 
   configureFlags = [

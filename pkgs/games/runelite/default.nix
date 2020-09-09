@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     terminal = "false";
     desktopName = "RuneLite";
     genericName = "Oldschool Runescape";
-    categories = "Application;Game";
+    categories = "Game";
     startupNotify = null;
   };
 

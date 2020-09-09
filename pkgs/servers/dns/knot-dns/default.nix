@@ -1,18 +1,17 @@
 { stdenv, fetchurl, pkgconfig, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
-, systemd, nettle, libedit, zlib, libiconv, libintl
+, systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb
 , autoreconfHook
 }:
 
 let inherit (stdenv.lib) optional optionals; in
 
-# Note: ATM only the libraries have been tested in nixpkgs.
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "2.9.4";
+  version = "2.9.6";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "57f3c93a1b40dfa0431508203f559b7ea257afab79078c38bcddf960d5a4a501";
+    sha256 = "bf742883c6825b54f19f2dadca2c94fec1ff8bdcf0a52388e2e167937594b2e7";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -27,6 +26,7 @@ stdenv.mkDerivation rec {
     # Don't try to create directories like /var/lib/knot at build time.
     # They are later created from NixOS itself.
     ./dont-create-run-time-dirs.patch
+    ./runtime-deps.patch
   ];
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     gnutls liburcu libidn2 libunistring
     nettle libedit
     libiconv lmdb libintl
+    libmaxminddb # optional for geoip module (it's tiny)
     # without sphinx &al. for developer documentation
   ]
     ++ optionals stdenv.isLinux [ libcap_ng systemd ]

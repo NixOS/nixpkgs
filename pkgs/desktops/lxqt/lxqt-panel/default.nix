@@ -3,40 +3,40 @@
 , fetchFromGitHub
 , cmake
 , pkgconfig
+, alsaLib
+, kguiaddons
+, kwindowsystem
+, libXdamage
+, libdbusmenu
+, liblxqt
+, libpulseaudio
+, libqtxdg
+, libstatgrab
+, libsysstat
+, lm_sensors
+, lxmenu-data
 , lxqt-build-tools
+, lxqt-globalkeys
+, lxqtUpdateScript
+, menu-cache
+, pcre
 , qtbase
+, qtsvg
 , qttools
 , qtx11extras
-, qtsvg
-, libdbusmenu
-, kwindowsystem
 , solid
-, kguiaddons
-, liblxqt
-, libqtxdg
-, lxqt-globalkeys
-, libsysstat
 , xorg
-, libstatgrab
-, lm_sensors
-, libpulseaudio
-, alsaLib
-, menu-cache
-, lxmenu-data
-, pcre
-, libXdamage
-, lxqtUpdateScript
 }:
 
 mkDerivation rec {
   pname = "lxqt-panel";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0k2gqf9f4g8fpny8p5m1anzk7mdxm9dgh6xlngz25nj4mshnq3xs";
+    sha256 = "0f3sjzkria61nz342daxps2w57wnx6laq9iww8hha7rbi24yw2sd";
   };
 
   nativeBuildInputs = [
@@ -46,28 +46,28 @@ mkDerivation rec {
   ];
 
   buildInputs = [
+    alsaLib
+    kguiaddons
+    kwindowsystem
+    libXdamage
+    libdbusmenu
+    liblxqt
+    libpulseaudio
+    libqtxdg
+    libstatgrab
+    libsysstat
+    lm_sensors
+    lxmenu-data
+    lxqt-globalkeys
+    menu-cache
+    pcre
     qtbase
+    qtsvg
     qttools
     qtx11extras
-    qtsvg
-    libdbusmenu
-    kwindowsystem
     solid
-    kguiaddons
-    liblxqt
-    libqtxdg
-    lxqt-globalkeys
-    libsysstat
-    xorg.libpthreadstubs
     xorg.libXdmcp
-    libstatgrab
-    lm_sensors
-    libpulseaudio
-    alsaLib
-    menu-cache
-    lxmenu-data
-    pcre
-    libXdamage
+    xorg.libpthreadstubs
   ];
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };

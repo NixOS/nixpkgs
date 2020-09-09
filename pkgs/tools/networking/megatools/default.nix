@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "Command line client for Mega.co.nz";
     homepage = "https://megatools.megous.com/";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.viric maintainers.AndersonTorres ];
+    maintainers = with maintainers; [ viric AndersonTorres zowoq ];
     platforms = platforms.unix;
   };
 }

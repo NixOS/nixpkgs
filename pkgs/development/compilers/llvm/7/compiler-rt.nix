@@ -46,6 +46,9 @@ stdenv.mkDerivation {
   outputs = [ "out" "dev" ];
 
   patches = [
+    # https://github.com/llvm/llvm-project/commit/947f9692440836dcb8d88b74b69dd379d85974ce
+    ./compiler-rt-glibc.patch
+
     ./compiler-rt-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
   ] ++ stdenv.lib.optional (useLLVM) ./crtbegin-and-end.patch
     ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
@@ -56,7 +59,7 @@ stdenv.mkDerivation {
   # can build this. If we didn't do it, basically the entire nixpkgs on Darwin would have an unfree dependency and we'd
   # get no binary cache for the entire platform. If you really find yourself wanting the TSAN, make this controllable by
   # a flag and turn the flag off during the stdenv build.
-  postPatch = ''
+  postPatch = stdenv.lib.optionalString (!stdenv.isDarwin) ''
     substituteInPlace cmake/builtin-config-ix.cmake \
       --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
   '' + stdenv.lib.optionalString stdenv.isDarwin ''

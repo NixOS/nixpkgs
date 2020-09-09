@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "zope.testrunner";
-  version = "5.1";
+  version = "5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "354a65f6c6fe6c0584e2fcf06d7318e90dc7f7de1b7008d8913733e299317870";
+    sha256 = "873d6017abadc213992a0c38c786ed020341b6e0fe78d14bc2a684cf5a70de4b";
   };
 
   propagatedBuildInputs = [ zope_interface zope_exceptions zope_testing six ];

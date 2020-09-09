@@ -15,4 +15,6 @@ stdenv.mkDerivation {
     cp -v libresim/libarmsim.so $out/lib/libarmsim.so
     cp -v vc4emul/vc4emul $out/bin/vc4emul
   '';
+
+  meta.license = stdenv.lib.licenses.mit;
 }

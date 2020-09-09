@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gbenchmark";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "benchmark";
     rev = "v${version}";
-    sha256 = "0r9dbg4cbk47gwmayys31a83m3y67k0kh1f6pl8i869rbd609ndh";
+    sha256 = "16xlk8h4mfszl4rig22fgpj9kw312az22981ph6pmkf35xsvvv66";
   };
 
   nativeBuildInputs = [ cmake ];

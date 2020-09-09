@@ -11,7 +11,10 @@ in appimageTools.wrapType2 rec {
     libpqxx gtk3 libsecret lsb-release openssl nodejs ncurses5
 
     libX11 libXcursor libXdamage libXfixes libXrender libXi
-    libXcomposite libXext libXrandr libXtst libSM libICE libxcb ]);
+    libXcomposite libXext libXrandr libXtst libSM libICE libxcb
+
+    libselinux pciutils libpulseaudio
+  ]);
 
   profile = ''
     export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS

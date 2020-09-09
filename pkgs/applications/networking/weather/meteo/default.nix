@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitLab, vala, python3, pkgconfig, meson, ninja, gtk3
-, json-glib, libsoup, webkitgtk, geocode-glib
+, json-glib, libsoup, webkitgtk, geocode-glib, nix-update-script
 , libappindicator, desktop-file-utils, appstream, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +37,13 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
 
   meta = with stdenv.lib; {
     description = "Know the forecast of the next hours & days";

@@ -1,5 +1,6 @@
-{ stdenv, callPackage, fetchFromGitHub, bash, makeWrapper, ncurses, bat
-# batgrep and batwatch
+{ stdenv, callPackage, fetchFromGitHub, bash, makeWrapper, bat
+# batdiff, batgrep, and batwatch
+, coreutils
 , less
 # batgrep
 , ripgrep
@@ -10,34 +11,35 @@
 , withRustFmt ? rustfmt != null, rustfmt ? null
 # batwatch
 , withEntr ? entr != null, entr ? null
- }:
+# batdiff
+, gitMinimal
+, withDelta ? gitAndTools?delta, gitAndTools ? null
+}:
 
 let
   # Core derivation that all the others are based on.
   # This includes the complete source so the per-script derivations can run the tests.
   core = stdenv.mkDerivation rec {
     pname   = "bat-extras";
-    version = "20200408";
+    # there hasn't been a release since 2020-05-01 but there are important bugfixes
+    # to the test suite so we'll pull the latest commit as of 2020-06-17.
+    version = "20200515-dev"; # latest commit was dated 2020-05-15
 
     src = fetchFromGitHub {
       owner  = "eth-p";
       repo   = pname;
-      rev    = "v${version}";
-      sha256 = "184d5rwasfpgbj2k98alg3wy8jmzna2dgfik98w2a297ky67s51v";
+      rev    = "3029b6749f61f7514e9eef30e035cfab0e31eb1d";
+      sha256 = "08mb94k2n182ql97c5s5j1v7np25ivynn5g0418whrx11ra41wr7";
       fetchSubmodules = true;
     };
 
-    nativeBuildInputs = [ bash makeWrapper ];
+    # bat needs to be in the PATH during building so EXECUTABLE_BAT picks it up
+    nativeBuildInputs = [ bash bat ];
 
     dontConfigure = true;
 
     postPatch = ''
-      substituteInPlace lib/constants.sh \
-        --replace 'EXECUTABLE_BAT="bat"' 'EXECUTABLE_BAT="${bat}/bin/bat"'
-
       patchShebangs --build test.sh test/shimexec .test-framework/bin/best.sh
-      wrapProgram .test-framework/bin/best.sh \
-        --prefix PATH : "${ncurses}/bin"
     '';
 
     buildPhase = ''
@@ -131,17 +133,13 @@ let
     stdenv.lib.optional cond dep;
 in
 {
-  batgrep = script "batgrep" [ less ripgrep ];
-  batman = (script "batman" []).overrideAttrs (drv: {
-    doCheck = stdenv.isDarwin; # test fails on Linux due to SIGPIPE (eth-p/bat-extras#19)
-  });
-  batwatch = script "batwatch" ([ less ] ++ optionalDep withEntr entr);
-  prettybat = (script "prettybat" ([]
+  batdiff = script "batdiff" ([ less coreutils gitMinimal ] ++ optionalDep withDelta gitAndTools.delta);
+  batgrep = script "batgrep" [ less coreutils ripgrep ];
+  batman = script "batman" [];
+  batwatch = script "batwatch" ([ less coreutils ] ++ optionalDep withEntr entr);
+  prettybat = script "prettybat" ([]
     ++ optionalDep withShFmt shfmt
     ++ optionalDep withPrettier nodePackages.prettier
     ++ optionalDep withClangTools clang-tools
-    ++ optionalDep withRustFmt rustfmt)
-  ).overrideAttrs (drv: {
-    doCheck = stdenv.isDarwin; # test fails on Linux due to SIGPIPE (eth-p/bat-extras#19)
-  });
+    ++ optionalDep withRustFmt rustfmt);
 }

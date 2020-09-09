@@ -55,30 +55,33 @@ let
 
   server = index: { pkgs, ... }:
     let
-      ip = builtins.elemAt allConsensusServerHosts index;
+      numConsensusServers = builtins.length allConsensusServerHosts;
+      thisConsensusServerHost = builtins.elemAt allConsensusServerHosts index;
+      ip = thisConsensusServerHost; # since we already use IPs to identify servers
     in
       {
         networking.interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-          { address = builtins.elemAt allConsensusServerHosts index; prefixLength = 16; }
+          { address = ip; prefixLength = 16; }
         ];
         networking.firewall = firewallSettings;
 
         services.consul =
-          let
-            thisConsensusServerHost = builtins.elemAt allConsensusServerHosts index;
-          in
           assert builtins.elem thisConsensusServerHost allConsensusServerHosts;
           {
             enable = true;
             inherit webUi;
             extraConfig = defaultExtraConfig // {
               server = true;
-              bootstrap_expect = builtins.length allConsensusServerHosts;
+              bootstrap_expect = numConsensusServers;
+              # Tell Consul that we never intend to drop below this many servers.
+              # Ensures to not permanently lose consensus after temporary loss.
+              # See https://github.com/hashicorp/consul/issues/8118#issuecomment-645330040
+              autopilot.min_quorum = numConsensusServers;
               retry_join =
                 # If there's only 1 node in the network, we allow self-join;
                 # otherwise, the node must not try to join itself, and join only the other servers.
                 # See https://github.com/hashicorp/consul/issues/2868
-                if builtins.length allConsensusServerHosts == 1
+                if numConsensusServers == 1
                   then allConsensusServerHosts
                   else builtins.filter (h: h != thisConsensusServerHost) allConsensusServerHosts;
               bind_addr = ip;
@@ -104,40 +107,123 @@ in {
     for m in machines:
         m.wait_for_unit("consul.service")
 
-    for m in machines:
-        m.wait_until_succeeds("[ $(consul members | grep -o alive | wc -l) == 5 ]")
+
+    def wait_for_healthy_servers():
+        # See https://github.com/hashicorp/consul/issues/8118#issuecomment-645330040
+        # for why the `Voter` column of `list-peers` has that info.
+        # TODO: The `grep true` relies on the fact that currently in
+        #       the output like
+        #           # consul operator raft list-peers
+        #           Node     ID   Address           State     Voter  RaftProtocol
+        #           server3  ...  192.168.1.3:8300  leader    true   3
+        #           server2  ...  192.168.1.2:8300  follower  true   3
+        #           server1  ...  192.168.1.1:8300  follower  false  3
+        #       `Voter`is the only boolean column.
+        #       Change this to the more reliable way to be defined by
+        #       https://github.com/hashicorp/consul/issues/8118
+        #       once that ticket is closed.
+        for m in machines:
+            m.wait_until_succeeds(
+                "[ $(consul operator raft list-peers | grep true | wc -l) == 3 ]"
+            )
+
+
+    def wait_for_all_machines_alive():
+        """
+        Note that Serf-"alive" does not mean "Raft"-healthy;
+        see `wait_for_healthy_servers()` for that instead.
+        """
+        for m in machines:
+            m.wait_until_succeeds("[ $(consul members | grep -o alive | wc -l) == 5 ]")
+
+
+    wait_for_healthy_servers()
+    # Also wait for clients to be alive.
+    wait_for_all_machines_alive()
 
     client1.succeed("consul kv put testkey 42")
     client2.succeed("[ $(consul kv get testkey) == 42 ]")
 
-    # Test that the cluster can tolearate failures of any single server:
-    for server in servers:
-        server.crash()
 
-        # For each client, wait until they have connection again
-        # using `kv get -recurse` before issuing commands.
-        client1.wait_until_succeeds("consul kv get -recurse")
-        client2.wait_until_succeeds("consul kv get -recurse")
+    def rolling_reboot_test(proper_rolling_procedure=True):
+        """
+        Tests that the cluster can tolearate failures of any single server,
+        following the recommended rolling upgrade procedure from
+        https://www.consul.io/docs/upgrading#standard-upgrades.
 
-        # Do some consul actions while one server is down.
-        client1.succeed("consul kv put testkey 43")
-        client2.succeed("[ $(consul kv get testkey) == 43 ]")
-        client2.succeed("consul kv delete testkey")
+        Optionally, `proper_rolling_procedure=False` can be given
+        to wait only for each server to be back `Healthy`, not `Stable`
+        in the Raft consensus, see Consul setting `ServerStabilizationTime` and
+        https://github.com/hashicorp/consul/issues/8118#issuecomment-645330040.
+        """
 
-        # Restart crashed machine.
-        server.start()
+        for server in servers:
+            server.crash()
+
+            # For each client, wait until they have connection again
+            # using `kv get -recurse` before issuing commands.
+            client1.wait_until_succeeds("consul kv get -recurse")
+            client2.wait_until_succeeds("consul kv get -recurse")
+
+            # Do some consul actions while one server is down.
+            client1.succeed("consul kv put testkey 43")
+            client2.succeed("[ $(consul kv get testkey) == 43 ]")
+            client2.succeed("consul kv delete testkey")
+
+            # Restart crashed machine.
+            server.start()
+
+            if proper_rolling_procedure:
+                # Wait for recovery.
+                wait_for_healthy_servers()
+            else:
+                # NOT proper rolling upgrade procedure, see above.
+                wait_for_all_machines_alive()
+
+            # Wait for client connections.
+            client1.wait_until_succeeds("consul kv get -recurse")
+            client2.wait_until_succeeds("consul kv get -recurse")
+
+            # Do some consul actions with server back up.
+            client1.succeed("consul kv put testkey 44")
+            client2.succeed("[ $(consul kv get testkey) == 44 ]")
+            client2.succeed("consul kv delete testkey")
+
+
+    def all_servers_crash_simultaneously_test():
+        """
+        Tests that the cluster will eventually come back after all
+        servers crash simultaneously.
+        """
+
+        for server in servers:
+            server.crash()
+
+        for server in servers:
+            server.start()
 
         # Wait for recovery.
-        for m in machines:
-            m.wait_until_succeeds("[ $(consul members | grep -o alive | wc -l) == 5 ]")
+        wait_for_healthy_servers()
 
         # Wait for client connections.
         client1.wait_until_succeeds("consul kv get -recurse")
         client2.wait_until_succeeds("consul kv get -recurse")
 
-        # Do some consul actions with server back up.
+        # Do some consul actions with servers back up.
         client1.succeed("consul kv put testkey 44")
         client2.succeed("[ $(consul kv get testkey) == 44 ]")
         client2.succeed("consul kv delete testkey")
+
+
+    # Run the tests.
+
+    print("rolling_reboot_test()")
+    rolling_reboot_test()
+
+    print("all_servers_crash_simultaneously_test()")
+    all_servers_crash_simultaneously_test()
+
+    print("rolling_reboot_test(proper_rolling_procedure=False)")
+    rolling_reboot_test(proper_rolling_procedure=False)
   '';
 })

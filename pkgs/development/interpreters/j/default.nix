@@ -1,14 +1,16 @@
-{ stdenv, fetchFromGitHub, readline, libedit, bc }:
+{ stdenv, fetchFromGitHub, readline, libedit, bc
+, avxSupport ? stdenv.hostPlatform.avxSupport
+}:
 
 stdenv.mkDerivation rec {
   pname = "j";
   version = "901";
-  jtype = "release-e";
+  jtype = "release-f";
   src = fetchFromGitHub {
     owner = "jsoftware";
     repo = "jsource";
     rev = "j${version}-${jtype}";
-    sha256 = "13ky37rrl6mc66fckrdnrw64gmvq1qlv6skzd513lab4d0wigshw";
+    sha256 = "1776021m0j1aanzwg60by83n53pw7i6afd5wplfzczwk8bywax4p";
     name = "jsource";
   };
 
@@ -19,6 +21,9 @@ stdenv.mkDerivation rec {
     if stdenv.isLinux then "linux" else
     if stdenv.isDarwin then "darwin" else
     "unknown";
+  variant = if stdenv.isx86_64 && avxSupport then "avx" else "";
+
+  j64x="j${bits}${variant}";
 
   doCheck = true;
 
@@ -34,7 +39,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
     sed -i $JLIB/bin/profile.ijs -e "s@'/usr/share/j/.*'@'$out/share/j'@;"
 
-    ./build_all.sh
+    j64x="${j64x}" ./build_all.sh
 
     cp $SOURCE_DIR/bin/${platform}/j${bits}*/* "$JLIB/bin"
   '';

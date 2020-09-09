@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xlayoutdisplay";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "alex-courtis";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ldqbwsryy7mqhxywdn2c2yi1mzlnl39sw8p3vx10w6q9drya9iv";
+    sha256 = "0n3vg25gzwn1pcg6caxyyd1xf2w6n98m6jpxc70kqpxfqldxwl0m";
   };
 
   nativeBuildInputs = [ cmake ];

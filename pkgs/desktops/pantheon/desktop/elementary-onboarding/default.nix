@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , fetchpatch
 , pkgconfig
@@ -20,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-onboarding";
-  version = "1.2.0";
+  version = "1.2.1";
 
   repoName = "onboarding";
 
@@ -28,11 +29,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0yxafz7jlzj8gsbp6m72q4zbcvm1ch2y4fibj9cymjvz2i0izhba";
+    sha256 = "sha256-tLTwXA2miHqYqCUbIiBjb2nQB+uN/WzuE4F9m3fVCbM=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };

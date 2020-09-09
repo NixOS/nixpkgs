@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, installShellFiles, makeWrapper, asciidoc
 , docbook_xml_dtd_45, git, docbook_xsl, libxml2, libxslt, coreutils, gawk
-, gnugrep, gnused, jq, nix }:
+, gnugrep, gnused, jq, nix, fetchpatch }:
 
 let
   binPath = stdenv.lib.makeBinPath [ coreutils gawk git gnugrep gnused jq nix ];
@@ -19,6 +19,14 @@ in stdenv.mkDerivation rec {
       echo $(stat -c %Y $out) > $out/.timestamp
     '';
   };
+
+  patches = [
+    # Fix compatibility with nixUnstable: https://github.com/msteen/nix-prefetch/pull/8
+    (fetchpatch {
+      url = "https://github.com/msteen/nix-prefetch/commit/817a7695d98663386fa27a6c04d1617e0a83e1ab.patch";
+      sha256 = "1zfgvafg30frwrh56k2wj4g76cljyjylm47ll60ms0yfx55spa7x";
+    })
+  ];
 
   postPatch = ''
     lib=$out/lib/${pname}
