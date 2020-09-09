@@ -10609,10 +10609,10 @@ let
 
   LinguaStem = buildPerlModule {
     pname = "Lingua-Stem";
-    version = "0.84";
+    version = "2.30";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SN/SNOWHARE/Lingua-Stem-0.84.tar.gz";
-      sha256 = "12avh2mnnc7llmmshrr5bgb473fvydxnlqrqbl2815mf2dp4pxcg";
+      url = "mirror://cpan/authors/id/S/SN/SNOWHARE/Lingua-Stem-2.30.tar.gz";
+      sha256 = "0wx1sa3y3l1a09zxqlfysxlc0x8cwjin3ivh849shv2xy2a3x27q";
     };
     doCheck = false;
     propagatedBuildInputs = [ LinguaPTStemmer LinguaStemFr LinguaStemIt LinguaStemRu LinguaStemSnowballDa SnowballNorwegian SnowballSwedish TextGerman ];
