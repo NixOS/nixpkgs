@@ -20,7 +20,7 @@ in
 
 {
   fastcgi-cache-purge = throw "fastcgi-cache-purge was renamed to cache-purge";
-  ngx_aws_auth = throw "fastcgi-cache-purge was renamed to aws-auth";
+  ngx_aws_auth = throw "ngx_aws_auth was renamed to aws-auth";
 
   aws-auth = {
     src = fetchFromGitHub {
