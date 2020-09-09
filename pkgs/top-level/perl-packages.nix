@@ -14031,7 +14031,7 @@ let
     pname = "Mozilla-CA";
     version = "20200520";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AB/ABH/Mozilla-CA-20200520.tar.gz;
+      url = "mirror://cpan/authors/id/A/AB/ABH/Mozilla-CA-20200520.tar.gz";
       sha256 = "b3ca0002310bf24a16c0d5920bdea97a2f46e77e7be3e7377e850d033387c726";
     };
 
