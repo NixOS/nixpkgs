@@ -1511,7 +1511,10 @@ in
 
   caddy = callPackage ../servers/caddy { buildGoModule = buildGo114Module; };  # https://github.com/lucas-clemente/quic-go/issues/2614
   caddy1 = callPackage ../servers/caddy/v1.nix { buildGoModule = buildGo114Module; };
-  traefik = callPackage ../servers/traefik { };
+
+  # Traefik 2.2 uses go1.14, pinning can be removed with 2.3
+  # https://github.com/containous/traefik/issues/7234#issuecomment-684950612
+  traefik = callPackage ../servers/traefik { buildGoModule = buildGo114Module; };
 
   calamares = libsForQt514.callPackage ../tools/misc/calamares {
     python = python3;
