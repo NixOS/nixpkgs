@@ -19314,7 +19314,7 @@ let
     pname = "Test-LWP-UserAgent";
     version = "0.034";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Test-LWP-UserAgent-0.034.tar.gz;
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Test-LWP-UserAgent-0.034.tar.gz";
       sha256 = "1ybhl9zpxkz77d25h96kbgh16zy9f27n95p6j9jg52kvdg0r2lbp";
     };
     propagatedBuildInputs = [ LWP SafeIsa namespaceclean ];
