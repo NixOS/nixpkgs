@@ -4358,18 +4358,7 @@ let
     };
   };
 
-  DataDumper = buildPerlPackage {
-    pname = "Data-Dumper";
-    version = "2.173";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XS/XSAWYERX/Data-Dumper-2.173.tar.gz";
-      sha256 = "697608b39330988e519131be667ff47168aaaaf99f06bd2095d5b46ad05d76fa";
-    };
-    outputs = [ "out" ];
-    meta = {
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  DataDumper = null; # part of Perl 5.30.3, 5.32.0, 5.33.1
 
   DataDumperConcise = buildPerlPackage {
     pname = "Data-Dumper-Concise";
