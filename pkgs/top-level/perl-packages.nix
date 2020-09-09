@@ -4799,13 +4799,13 @@ let
 
   DataVisitor = buildPerlPackage {
     pname = "Data-Visitor";
-    version = "0.30";
+    version = "0.31";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DO/DOY/Data-Visitor-0.30.tar.gz";
-      sha256 = "0m7d1505af9z2hj5aw020grcmjjlvnkjpvjam457d7k5qfy4m8lf";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Data-Visitor-0.31.tar.gz";
+      sha256 = "0vjcsc2hbhml1w126673z31z9rr0hxz64f5rvk7drlmwicr6kc9b";
     };
-    buildInputs = [ TestRequires ];
-    propagatedBuildInputs = [ Moose TaskWeaken TieToObject namespaceclean ];
+    buildInputs = [ TestNeeds ];
+    propagatedBuildInputs = [ Moose TieToObject namespaceclean ];
   };
 
   DateCalc = buildPerlPackage {
