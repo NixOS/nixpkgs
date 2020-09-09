@@ -5228,7 +5228,7 @@ let
     pname = "Devel-CheckOS";
     version = "1.83";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DC/DCANTRELL/Devel-CheckOS-1.83.tar.gz;
+      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Devel-CheckOS-1.83.tar.gz";
       sha256 = "b20fb5ab55d2cf8539fdc7268d77cdbf944408e620c4969023e687ddd28c9972";
     };
     propagatedBuildInputs = [ FileFindRule ];
