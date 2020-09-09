@@ -4984,18 +4984,19 @@ let
     };
   };
 
-  DateTimeFormatISO8601 = buildPerlModule {
+  DateTimeFormatISO8601 = buildPerlPackage {
     pname = "DateTime-Format-ISO8601";
-    version = "0.08";
+    version = "0.14";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHOBLITT/DateTime-Format-ISO8601-0.08.tar.gz";
-      sha256 = "1syccqd5jlwms8v78ksnf68xijzl97jky5vbwhnyhxi5gvgfx8xk";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Format-ISO8601-0.14.tar.gz";
+      sha256 = "1ssy41d7g1kgrdlhnz1vr7rhxspmnhzx1hkdmrf11ca293kq7r47";
     };
     propagatedBuildInputs = [ DateTimeFormatBuilder ];
     meta = {
       description = "Parses ISO8601 formats";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ Test2Suite ];
   };
 
   DateTimeFormatMail = buildPerlPackage {
