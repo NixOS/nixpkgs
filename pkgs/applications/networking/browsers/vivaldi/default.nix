@@ -90,7 +90,7 @@ in stdenv.mkDerivation rec {
     description = "A Browser for our Friends, powerful and personal";
     homepage    = "https://vivaldi.com";
     license     = licenses.unfree;
-    maintainers = with maintainers; [ otwieracz nequissimus ];
+    maintainers = with maintainers; [ otwieracz nequissimus badmutex ];
     platforms   = [ "x86_64-linux" ];
   };
 }
