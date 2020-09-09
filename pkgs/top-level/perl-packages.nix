@@ -10000,7 +10000,7 @@ let
     pname = "IPC-Run";
     version = "20200505.0";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TODDR/IPC-Run-20200505.0.tar.gz;
+      url = "mirror://cpan/authors/id/T/TO/TODDR/IPC-Run-20200505.0.tar.gz";
       sha256 = "00f9wjvhn55zbk3n9il76xvsqy7ddk60lg6phg2rkpx0gwhvyvl1";
     };
     doCheck = false; /* attempts a network connection to localhost */
