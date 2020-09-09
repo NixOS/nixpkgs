@@ -1380,7 +1380,7 @@ let
     pname = "Cache-FastMmap";
     version = "1.49";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RO/ROBM/Cache-FastMmap-1.49.tar.gz;
+      url = "mirror://cpan/authors/id/R/RO/ROBM/Cache-FastMmap-1.49.tar.gz";
       sha256 = "1azz66d4syk6b6gc95drkglajvf8igiy3449hpsm444inis9mscm";
     };
   };
