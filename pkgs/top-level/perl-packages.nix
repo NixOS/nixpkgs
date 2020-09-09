@@ -13597,13 +13597,13 @@ let
 
   MooseXMethodAttributes = buildPerlPackage {
     pname = "MooseX-MethodAttributes";
-    version = "0.31";
+    version = "0.32";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-MethodAttributes-0.31.tar.gz";
-      sha256 = "1whd10w7bm3dwaj7gpgw40bci9vvb2zmxs4349ifji91hvinwqck";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-MethodAttributes-0.32.tar.gz";
+      sha256 = "0yqrihv609j2q0hrmpmvgpn0mnxc0z3ws39cqhwxvlmpfijqhcyb";
     };
-    buildInputs = [ MooseXRoleParameterized TestFatal TestRequires ];
-    propagatedBuildInputs = [ MooseXTypes ];
+    buildInputs = [ MooseXRoleParameterized TestFatal TestNeeds ];
+    propagatedBuildInputs = [ Moose namespaceautoclean ];
     meta = {
       homepage = "https://github.com/karenetheridge/moosex-methodattributes";
       description = "Code attribute introspection";
