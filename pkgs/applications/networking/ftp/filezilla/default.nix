@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, autoreconfHook
 , dbus
 , gettext
 , gnutls
@@ -16,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "filezilla";
-  version = "3.49.1";
+  version = "3.50.0";
 
   src = fetchurl {
     url = "https://download.filezilla-project.org/client/FileZilla_${version}_src.tar.bz2";
-    sha256 = "1dmkwpc0vy7058bh9a10ida0k64rxggap8ysl5xx3457y468rk2f";
+    sha256 = "sha256-4NuHJpylIIqtFKAkFTN7T57+PEnC1NFOZukhx4oTXBA=";
   };
 
   # https://www.linuxquestions.org/questions/slackware-14/trouble-building-filezilla-3-47-2-1-current-4175671182/#post6099769
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     "--disable-autoupdatecheck"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   buildInputs = [
     dbus
