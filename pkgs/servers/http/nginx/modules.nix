@@ -229,8 +229,8 @@ in
       name = "naxsi";
       owner = "nbs-system";
       repo = "naxsi";
-      rev = "07a056ccd36bc3c5c40dc17991db226cb8cf6241";
-      sha256 = "1kdqy7by6ha2pl9lkkjxh4qrwcsrj2alm8fl129831h5y5xy8qx2";
+      rev = "95ac520eed2ea04098a76305fd0ad7e9158840b7";
+      sha256 = "0b5pnqkgg18kbw5rf2ifiq7lsx5rqmpqsql6hx5ycxjzxj6acfb3";
     } + "/naxsi_src";
   };
 
