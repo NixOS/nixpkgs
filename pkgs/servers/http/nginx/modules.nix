@@ -335,8 +335,8 @@ in
       name = "shibboleth";
       owner = "nginx-shib";
       repo = "nginx-http-shibboleth";
-      rev = "5eadab80b2f5940d8873398bca000d93d3f0cf27";
-      sha256 = "1l0h3ic9mfsci89d0k5q3igkfpzq052ia25xj5hc8fq388yrhpap";
+      rev = "3f5ff4212fa12de23cb1acae8bf3a5a432b3f43b";
+      sha256 = "136zjipaz7iikgcgqwdv1mrh3ya996zyzbkdy6d4k07s2h9g7hy6";
     };
   };
 
