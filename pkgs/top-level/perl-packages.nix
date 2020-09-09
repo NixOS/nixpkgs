@@ -3118,7 +3118,7 @@ let
     pname = "Config-GitLike";
     version = "1.18";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AL/ALEXMV/Config-GitLike-1.18.tar.gz;
+      url = "mirror://cpan/authors/id/A/AL/ALEXMV/Config-GitLike-1.18.tar.gz";
       sha256 = "f7ae7440f3adab5b9ff9aa57216d84fd4a681009b9584e32da42f8bb71e332c5";
     };
     buildInputs = [ TestException ];
