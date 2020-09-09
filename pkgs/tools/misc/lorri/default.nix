@@ -37,6 +37,8 @@ in (rustPlatform.buildRustPackage rec {
     inherit sha256;
   };
 
+  outputs = [ "out" "man" "doc" ];
+
   inherit cargoSha256;
   doCheck = false;
 
@@ -68,7 +70,4 @@ in (rustPlatform.buildRustPackage rec {
       nixos = nixosTests.lorri;
     };
   };
-}).overrideAttrs (old: {
-  # add man and doc outputs to put our documentation into
-  outputs = old.outputs or [ "out" ] ++ [ "man" "doc" ];
 })
