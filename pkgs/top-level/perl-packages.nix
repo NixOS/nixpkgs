@@ -9712,7 +9712,7 @@ let
     pname = "IO-Async";
     version = "0.77";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-0.77.tar.gz;
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-0.77.tar.gz";
       sha256 = "153rfnbs2xwvx559h0ilfr0g9pg30avjad3cad659is9bdmfipri";
     };
     preCheck = "rm t/50resolver.t"; # this test fails with "Temporary failure in name resolution" in sandbox
