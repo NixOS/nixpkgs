@@ -16819,7 +16819,7 @@ let
     pname = "Regexp-Grammars";
     version = "1.057";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DC/DCONWAY/Regexp-Grammars-1.057.tar.gz;
+      url = "mirror://cpan/authors/id/D/DC/DCONWAY/Regexp-Grammars-1.057.tar.gz";
       sha256 = "af53c19818461cd701aeb57c49dffdb463edc4bf8f658d9ea4e6d534ac177041";
     };
     meta = {
