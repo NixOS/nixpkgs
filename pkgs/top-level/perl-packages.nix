@@ -14210,13 +14210,13 @@ let
 
   NetAmazonS3 = buildPerlPackage {
     pname = "Net-Amazon-S3";
-    version = "0.89";
+    version = "0.91";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LL/LLAP/Net-Amazon-S3-0.89.tar.gz;
-      sha256 = "466b4d02b5b17790f1df22df92b22a3879423b3b33317388f0975a13e74b4eea";
+      url = "mirror://cpan/authors/id/B/BA/BARNEY/Net-Amazon-S3-0.91.tar.gz";
+      sha256 = "9779f8dea7155b6f96549b4817ca55ee5c6d6e1b0ee872d8d0de8ff13205caff";
     };
-    buildInputs = [ TestDeep TestException TestLoadAllModules TestMockTime TestWarnings ];
-    propagatedBuildInputs = [ DataStreamBulk DateTimeFormatHTTP DigestHMAC DigestMD5File FileFindRule LWPUserAgentDetermined MIMETypes MooseXRoleParameterized MooseXStrictConstructor MooseXTypesDateTimeMoreCoercions RefUtil RegexpCommon SubOverride TermEncoding TermProgressBarSimple XMLLibXML ];
+    buildInputs = [ TestDeep TestException TestLWPUserAgent TestMockTime TestWarnings ];
+    propagatedBuildInputs = [ DataStreamBulk DateTimeFormatHTTP DigestHMAC DigestMD5File FileFindRule LWPUserAgentDetermined MIMETypes MooseXRoleParameterized MooseXStrictConstructor MooseXTypesDateTimeMoreCoercions RefUtil RegexpCommon SafeIsa SubOverride TermEncoding TermProgressBarSimple XMLLibXML ];
     meta = {
       description = "Use the Amazon S3 - Simple Storage Service";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
