@@ -18007,10 +18007,10 @@ let
 
   SubHandlesVia = buildPerlPackage {
     pname = "Sub-HandlesVia";
-    version = "0.013";
+    version = "0.014";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TOBYINK/Sub-HandlesVia-0.013.tar.gz;
-      sha256 = "1q5lqjnqw29ywkiv0iqidc88ydqp1cywrgfd8mi7yarksc296a3l";
+      url = "mirror://cpan/authors/id/T/TO/TOBYINK/Sub-HandlesVia-0.014.tar.gz";
+      sha256 = "0mhwnh3966gr10hxnbsdq2ccsha958divcfhwn2yia3q06j6bk4d";
     };
     propagatedBuildInputs = [ ClassMethodModifiers ClassTiny RoleTiny ScalarListUtils TypeTiny ];
     buildInputs = [ TestFatal TestRequires ];
