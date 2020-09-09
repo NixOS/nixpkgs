@@ -19395,10 +19395,10 @@ let
 
   TestMemoryGrowth = buildPerlModule {
     pname = "Test-MemoryGrowth";
-    version = "0.03";
+    version = "0.04";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PEVANS/Test-MemoryGrowth-0.03.tar.gz;
-      sha256 = "0z6lmalhq3k3p303qahs0ijp6sarf3ij88m39yhzizzf9abapvsz";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Test-MemoryGrowth-0.04.tar.gz";
+      sha256 = "1l1f7mwjyfgfbhad13p4wgavnb3mdjs6v3xr2m0rxm5ba8kqard0";
     };
     meta = {
       description = "assert that code does not cause growth in memory usage";
