@@ -19401,7 +19401,7 @@ let
     pname = "Test-Metrics-Any";
     version = "0.01";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PEVANS/Test-Metrics-Any-0.01.tar.gz;
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Test-Metrics-Any-0.01.tar.gz";
       sha256 = "0s744lv997g1wr4i4vg1d7zpzjfw334hdy45215jf6xj9s6wh1i5";
     };
     propagatedBuildInputs = [ MetricsAny ];
