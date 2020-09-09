@@ -20859,18 +20859,7 @@ let
     buildInputs = [ TestDifferences ];
   };
 
-  threadsshared = buildPerlPackage {
-    pname = "threads-shared";
-    version = "1.59";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JD/JDHEDDEN/threads-shared-1.59.tar.gz";
-      sha256 = "1krz69ks3siz0fhc9waf817nnlmxsgq7rc5rq99xvqg1f1g9iz6i";
-    };
-    meta = {
-      description = "Perl extension for sharing data structures between threads";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  threadsshared = null; # part of Perl 5.30.3, 5.32.0, 5.33.1
 
   ThreadQueue = null; # part of Perl 5.30.3, 5.32.0, 5.33.1
 
