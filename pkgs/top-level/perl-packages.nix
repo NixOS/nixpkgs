@@ -19445,7 +19445,7 @@ let
     pname = "Test-MockModule";
     version = "0.173.0";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GF/GFRANKS/Test-MockModule-v0.173.0.tar.gz;
+      url = "mirror://cpan/authors/id/G/GF/GFRANKS/Test-MockModule-v0.173.0.tar.gz";
       sha256 = "0hnv2ziyasrri58ys93j5qyyzgxw3jx5hvjhd72nsp4vqq6lhg6s";
     };
     propagatedBuildInputs = [ SUPER ];
