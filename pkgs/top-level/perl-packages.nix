@@ -3546,7 +3546,7 @@ let
       sha256 = "5a297afc3e367ad80811464d4eb7e4dd3caff8ba499cdd2b558f6279443a7657";
     };
     nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
-    propagatedBuildInputs = [ FileHomeDir LWP LWPProtocolHttps URI ];
+    propagatedBuildInputs = [ FileHomeDir LWPProtocolHttps ];
     postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
       shortenPerlShebang $out/bin/minicpan
     '';
