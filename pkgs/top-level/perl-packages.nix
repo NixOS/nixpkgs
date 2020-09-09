@@ -8128,7 +8128,7 @@ let
     pname = "Future";
     version = "0.45";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PEVANS/Future-0.45.tar.gz;
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-0.45.tar.gz";
       sha256 = "1h5609wd1m774h8brgm5vinz6pfmdszp2ms6ybxlyhs0p5msp36f";
     };
     buildInputs = [ TestFatal TestIdentity TestRefcount ];
