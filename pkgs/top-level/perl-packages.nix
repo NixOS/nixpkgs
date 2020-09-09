@@ -20131,7 +20131,7 @@ let
     pname = "Test-Warnings";
     version = "0.030";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Test-Warnings-0.030.tar.gz;
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Test-Warnings-0.030.tar.gz";
       sha256 = "89a4947ddf1564ae01122275584433d7f6c4370370bcf3768922d796956ae24f";
     };
     buildInputs = [ CPANMetaCheck PadWalker ];
