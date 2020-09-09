@@ -3812,7 +3812,7 @@ let
     pname = "Crypt-ECB";
     version = "2.22";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AP/APPEL/Crypt-ECB-2.22.tar.gz;
+      url = "mirror://cpan/authors/id/A/AP/APPEL/Crypt-ECB-2.22.tar.gz";
       sha256 = "f5af62e908cd31a34b2b813135a0718016fd003ffa0021ffbdd84c50158267aa";
     };
     meta = with stdenv.lib; {
