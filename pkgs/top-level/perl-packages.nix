@@ -9665,10 +9665,10 @@ let
 
   Importer = buildPerlPackage {
     pname = "Importer";
-    version = "0.025";
+    version = "0.026";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EX/EXODIST/Importer-0.025.tar.gz";
-      sha256 = "0745138c487d74033d0cbeb36f06595036dc7e688f1a5dbec9cc2fa799e13946";
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/Importer-0.026.tar.gz";
+      sha256 = "e08fa84e13cb998b7a897fc8ec9c3459fcc1716aff25cc343e36ef875891b0ef";
     };
     meta = {
       description = "Alternative but compatible interface to modules that export symbols";
