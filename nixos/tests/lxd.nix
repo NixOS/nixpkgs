@@ -68,6 +68,7 @@ in {
   testScript = ''
     machine.wait_for_unit("sockets.target")
     machine.wait_for_unit("lxd.service")
+    machine.wait_for_file("/var/lib/lxd/unix.socket")
 
     # It takes additional second for lxd to settle
     machine.sleep(1)
