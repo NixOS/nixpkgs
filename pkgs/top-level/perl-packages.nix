@@ -10766,10 +10766,10 @@ let
 
   ListAllUtils = buildPerlPackage {
     pname = "List-AllUtils";
-    version = "0.16";
+    version = "0.18";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/List-AllUtils-0.16.tar.gz;
-      sha256 = "559b3aa911c73003a3a1ebd860d3b16e171137de8203d86be63a2390364c63dd";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/List-AllUtils-0.18.tar.gz";
+      sha256 = "b7c4bf80090b281c4a1560c76a1a819094c3a1294302f77afb8c60ca4862ecf9";
     };
     propagatedBuildInputs = [ ListSomeUtils ListUtilsBy ];
     meta = {
