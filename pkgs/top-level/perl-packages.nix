@@ -3886,7 +3886,7 @@ let
     pname = "Crypt-Random";
     version = "1.52";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/V/VI/VIPUL/${pname}-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/V/VI/VIPUL/Crypt-Random-1.52.tar.gz";
       sha256 = "a93c06de409e6f2eb2e9868ea6d4e653d99f2f7900b2c1831e1f65ace0c4ef84";
     };
     propagatedBuildInputs = [ ClassLoader MathPari StatisticsChiSquare ];
