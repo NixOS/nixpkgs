@@ -9089,7 +9089,7 @@ let
       url = "mirror://cpan/authors/id/T/TS/TSIBLEY/HTML-RewriteAttributes-0.05.tar.gz";
       sha256 = "1808ec7cdf40d2708575fe6155a88f103b17fec77973a5831c2f24c250e7a58c";
     };
-    propagatedBuildInputs = [ HTMLParser URI ];
+    propagatedBuildInputs = [ HTMLParser ];
     meta = {
       description = "Concise attribute rewriting";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
