@@ -9582,7 +9582,7 @@ let
     pname = "Imager";
     version = "1.012";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TONYC/Imager-1.012.tar.gz;
+      url = "mirror://cpan/authors/id/T/TO/TONYC/Imager-1.012.tar.gz";
       sha256 = "a321c728e3277fd15de842351e69bbef0e2a5a608a31d089e5029b8381e23f21";
     };
     buildInputs = [ pkgs.freetype pkgs.fontconfig pkgs.libjpeg pkgs.libpng ];
