@@ -1341,7 +1341,7 @@ let
     pname = "Business-ISSN";
     version = "1.004";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BD/BDFOY/Business-ISSN-1.004.tar.gz;
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/Business-ISSN-1.004.tar.gz";
       sha256 = "97ecab15d24d11e2852bf0b28f84c8798bd38402a0a69e17be0e6689b272715e";
     };
     meta = {
