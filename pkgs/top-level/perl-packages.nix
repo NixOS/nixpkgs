@@ -4915,10 +4915,10 @@ let
 
   DateTimeFormatBuilder = buildPerlPackage {
     pname = "DateTime-Format-Builder";
-    version = "0.82";
+    version = "0.83";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Format-Builder-0.82.tar.gz";
-      sha256 = "383faeb22b992c77ca65a5257992dd2f6db91a7db73ea4601c512e1c6c2e1ca3";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Format-Builder-0.83.tar.gz";
+      sha256 = "61ffb23d85b3ca1786b2da3289e99b57e0625fe0e49db02a6dc0cb62c689e2f2";
     };
     propagatedBuildInputs = [ DateTimeFormatStrptime ParamsValidate ];
     meta = {
