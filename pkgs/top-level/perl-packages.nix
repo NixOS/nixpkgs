@@ -20368,10 +20368,10 @@ let
 
   TextCSV_XS = buildPerlPackage {
     pname = "Text-CSV_XS";
-    version = "1.43";
+    version = "1.44";
     src = fetchurl {
-      url = mirror://cpan/authors/id/H/HM/HMBRAND/Text-CSV_XS-1.43.tgz;
-      sha256 = "cd94538e8ae9388d9e9e5527630f38f4d2b766e30310d283f0f9c692b94230bb";
+      url = "mirror://cpan/authors/id/H/HM/HMBRAND/Text-CSV_XS-1.44.tgz";
+      sha256 = "c4812ddca8e2654736c44bc2ce60b27a428a1bc4d5364b0ed1fad3609c8f9bc4";
     };
     meta = {
       description = "Comma-Separated Values manipulation routines";
