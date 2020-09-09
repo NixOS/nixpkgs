@@ -22009,7 +22009,7 @@ let
     pname = "XML-LibXML";
     version = "2.0205";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXML-2.0205.tar.gz;
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXML-2.0205.tar.gz";
       sha256 = "0y12bcpnxzn8vs9zglaaxkw0kgrgmljxrxdf1cnijgxi2hkh099s";
     };
     SKIP_SAX_INSTALL = 1;
