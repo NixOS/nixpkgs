@@ -7223,14 +7223,7 @@ let
      };
   };
 
-  ExtUtilsManifest = buildPerlPackage {
-    pname = "ExtUtils-Manifest";
-    version = "1.72";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/ExtUtils-Manifest-1.72.tar.gz";
-      sha256 = "0pml5pfdk34nj9fa8m4f0qp1rh1yv0d54xagvxzjvvwq9w3q14kr";
-    };
-  };
+  ExtUtilsManifest = null; # part of Perl 5.30.3, 5.32.0, 5.33.1
 
   ExtUtilsPkgConfig = buildPerlPackage {
     pname = "ExtUtils-PkgConfig";
