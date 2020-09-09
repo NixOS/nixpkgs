@@ -388,7 +388,7 @@ let
     pname = "AnyEvent-RabbitMQ";
     version = "1.22";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DL/DLAMBLEY/AnyEvent-RabbitMQ-1.22.tar.gz;
+      url = "mirror://cpan/authors/id/D/DL/DLAMBLEY/AnyEvent-RabbitMQ-1.22.tar.gz";
       sha256 = "98c52a1fe700710f3e5bc55a38b25de625e9b2e8341d278dcf9e1b3f3d19acee";
     };
     buildInputs = [ FileShareDirInstall TestException ];
