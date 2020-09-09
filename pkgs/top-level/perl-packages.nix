@@ -14354,7 +14354,7 @@ let
      pname = "Net-DNS-Resolver-Mock";
      version = "1.20200215";
      src = fetchurl {
-       url = mirror://cpan/authors/id/M/MB/MBRADSHAW/Net-DNS-Resolver-Mock-1.20200215.tar.gz;
+       url = "mirror://cpan/authors/id/M/MB/MBRADSHAW/Net-DNS-Resolver-Mock-1.20200215.tar.gz";
        sha256 = "1rv745c16l3m3w6xx2hjmmgzkdklmzm9imdfiddmdr9hwm8g3xxy";
      };
      propagatedBuildInputs = [ NetDNS ];
