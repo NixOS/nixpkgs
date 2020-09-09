@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     zstd lz4 python3Packages.pytest
   ] ++ stdenv.lib.optional fuseSupport fuse3;
 
-  doCheck = true;
+  doCheck = false; # needs bcachefs module loaded on builder
 
   checkFlags = [
     "BCACHEFS_TEST_USE_VALGRIND=no"
