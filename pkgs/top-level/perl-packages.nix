@@ -14520,12 +14520,12 @@ let
 
   NetIPv6Addr = buildPerlPackage {
     pname = "Net-IPv6Addr";
-    version = "0.96";
+    version = "1.01";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BK/BKB/Net-IPv6Addr-0.96.tar.gz";
-      sha256 = "1y6dpv3gafvjcw9c5ldxminykz6aggwqdj6l93h9w2hncz8fa0iv";
+      url = "mirror://cpan/authors/id/B/BK/BKB/Net-IPv6Addr-1.01.tar.gz";
+      sha256 = "008blh52k8g3syfk4dlmg7wclhdmksqkb5vk2qaxjpxmzq1pzqi7";
     };
-    propagatedBuildInputs = [ MathBase85 MathBigInt NetIPv4Addr ];
+    propagatedBuildInputs = [ MathBase85 NetIPv4Addr ];
     meta = {
       description = "Check and manipulate IPv6 addresses";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
