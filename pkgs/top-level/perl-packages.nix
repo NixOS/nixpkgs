@@ -4296,10 +4296,10 @@ let
 
   CryptX = buildPerlPackage {
     pname = "CryptX";
-    version = "0.068";
+    version = "0.069";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIK/CryptX-0.068.tar.gz;
-      sha256 = "b1806a1fa4d4b8c9265f44ac706eb0b05107d644edb24ffea1b507168e88fd59";
+      url = "mirror://cpan/authors/id/M/MI/MIK/CryptX-0.069.tar.gz";
+      sha256 = "b5503a35046a973174234a823dba63403b080957c4a370d60d66aa7c7587d850";
     };
     meta = {
       description = "Crypto toolkit";
