@@ -11248,7 +11248,7 @@ let
     pname = "Log-Journald";
     version = "0.30";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LK/LKUNDRAK/Log-Journald-${version}.tar.gz";
+      url = "mirror://cpan/authors/id/L/LK/LKUNDRAK/Log-Journald-0.30.tar.gz";
       sha256 = "55992cf9a1e1fb833f428300525bfa7cf7ed46b83ec414f82a091789b37d08a3";
     };
     buildInputs = [ pkgs.pkgconfig pkgs.systemd ];
