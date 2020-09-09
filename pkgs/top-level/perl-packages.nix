@@ -20247,7 +20247,7 @@ let
     pname = "Text-Aligner";
     version = "0.16";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Aligner-0.16.tar.gz;
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Aligner-0.16.tar.gz";
       sha256 = "09ap457vrlqvw2544j907fbb5crs08hd7sy4syipzxc6wny7v1aw";
     };
     meta = {
