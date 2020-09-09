@@ -9322,7 +9322,7 @@ let
       description = "Date conversion routines";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
-    propagatedBuildInputs = [ TimeDate TimeLocal ];
+    propagatedBuildInputs = [ TimeDate ];
   };
 
   HTTPEntityParser = buildPerlModule {
