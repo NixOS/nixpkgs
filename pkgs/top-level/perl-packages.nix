@@ -13979,7 +13979,7 @@ let
     pname = "MP3-Info";
     version = "1.26";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JM/JMERELO/MP3-Info-1.26.tar.gz;
+      url = "mirror://cpan/authors/id/J/JM/JMERELO/MP3-Info-1.26.tar.gz";
       sha256 = "1rwbrsdw6y6jgcjvrlji6fbcvwl4wlka3mkhlw12a7s2683k8qjp";
     };
     meta = {
