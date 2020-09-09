@@ -28,6 +28,9 @@ stdenv.mkDerivation {
     substituteInPlace src/tools/clm/clm.c --replace '/usr/bin/gcc' $(type -p gcc)
     substituteInPlace src/tools/clm/clm.c --replace '/usr/bin/as' $(type -p as)
 
+    # /tmp is hardcoded in some Clean C files.
+    export TMP=/tmp
+
     cd src
   '';
 
