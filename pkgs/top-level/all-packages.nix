@@ -553,9 +553,7 @@ in
 
   _1password = callPackage ../applications/misc/1password { };
 
-  _1password-gui = callPackage ../tools/security/1password-gui {
-    electron = electron_9;
-  };
+  _1password-gui = callPackage ../tools/security/1password-gui { };
 
   _6tunnel = callPackage ../tools/networking/6tunnel { };
 
@@ -10450,8 +10448,7 @@ in
   aws-adfs = with python3Packages; toPythonApplication aws-adfs;
 
   inherit (callPackages ../development/tools/electron { })
-    electron_3 electron_4 electron_5 electron_6 electron_7 electron_8 electron_9;
-  electron = electron_9;
+    electron electron_3 electron_4 electron_5 electron_6 electron_7 electron_8 electron_9 electron_10;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
