@@ -8911,10 +8911,10 @@ let
     pname = "HTML-Form";
     version = "6.07";
     src = fetchurl {
-      url = mirror://cpan/authors/id/O/OA/OALDERS/HTML-Form-6.07.tar.gz;
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTML-Form-6.07.tar.gz";
       sha256 = "09v29cdzwjm139c67y1np3kvx2ymg3s8n723qc0ma07lmxz8rakx";
     };
-    propagatedBuildInputs = [ HTMLParser HTTPMessage ];
+    propagatedBuildInputs = [ HTMLParser ];
     meta = {
       description = "Class that represents an HTML form element";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
