@@ -19129,10 +19129,10 @@ let
 
   TestFatal = buildPerlPackage {
     pname = "Test-Fatal";
-    version = "0.014";
+    version = "0.016";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Test-Fatal-0.014.tar.gz";
-      sha256 = "bcdcef5c7b2790a187ebca810b0a08221a63256062cfab3c3b98685d91d1cbb0";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Test-Fatal-0.016.tar.gz";
+      sha256 = "7283d430f2ba2030b8cd979ae3039d3f1b2ec3dde1a11ca6ae09f992a66f788f";
     };
     propagatedBuildInputs = [ TryTiny ];
     meta = {
