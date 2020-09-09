@@ -9884,7 +9884,7 @@ let
     pname = "IO-Socket-SSL";
     version = "2.068";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SU/SULLR/IO-Socket-SSL-2.068.tar.gz;
+      url = "mirror://cpan/authors/id/S/SU/SULLR/IO-Socket-SSL-2.068.tar.gz";
       sha256 = "4420fc0056f1827b4dd1245eacca0da56e2182b4ef6fc078f107dc43c3fb8ff9";
     };
     propagatedBuildInputs = [ MozillaCA NetSSLeay ];
