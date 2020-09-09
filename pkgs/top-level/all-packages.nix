@@ -1113,6 +1113,7 @@ in
 
   pass-wayland = callPackage ../tools/security/pass {
     waylandSupport = true;
+    pass = pass-wayland;
   };
 
   passExtensions = recurseIntoAttrs pass.extensions;
