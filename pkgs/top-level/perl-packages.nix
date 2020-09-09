@@ -8770,10 +8770,10 @@ let
 
   HashMerge = buildPerlPackage {
     pname = "Hash-Merge";
-    version = "0.300";
+    version = "0.302";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RE/REHSACK/Hash-Merge-0.300.tar.gz";
-      sha256 = "0h3wfnpv5d4d3f9xzmwkchay6251nhzngdv3f6xia56mj4hxabs0";
+      url = "mirror://cpan/authors/id/H/HE/HERMES/Hash-Merge-0.302.tar.gz";
+      sha256 = "0i46agids6pk445gfck80f8z7q3pjvkp0ip1vmhqnq1rcpvj41df";
     };
     propagatedBuildInputs = [ CloneChoose ];
     meta = {
