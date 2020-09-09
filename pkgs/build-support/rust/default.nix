@@ -30,6 +30,8 @@
 , cargoVendorDir ? null
 , checkType ? buildType
 , depsExtraArgs ? {}
+, cargoParallelTestThreads ? true
+
 # Needed to `pushd`/`popd` into a subdir of a tarball if this subdir
 # contains a Cargo.toml, but isn't part of a workspace (which is e.g. the
 # case for `rustfmt`/etc from the `rust-sources).
@@ -204,11 +206,12 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // {
 
   checkPhase = args.checkPhase or (let
     argstr = "${stdenv.lib.optionalString (checkType == "release") "--release"} --target ${rustTarget} --frozen";
+    threads = if cargoParallelTestThreads then "$NIX_BUILD_CORES" else "1";
   in ''
     ${stdenv.lib.optionalString (buildAndTestSubdir != null) "pushd ${buildAndTestSubdir}"}
     runHook preCheck
     echo "Running cargo test ${argstr} -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
-    cargo test -j $NIX_BUILD_CORES ${argstr} -- --test-threads=$NIX_BUILD_CORES ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
+    cargo test -j $NIX_BUILD_CORES ${argstr} -- --test-threads=${threads} ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
     runHook postCheck
     ${stdenv.lib.optionalString (buildAndTestSubdir != null) "popd"}
   '');
