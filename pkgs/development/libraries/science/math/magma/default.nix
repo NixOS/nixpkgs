@@ -23,25 +23,7 @@ in stdenv.mkDerivation {
     export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
   '';
 
-  enableParallelBuilding=true;
-  buildFlags = [ "magma" "magma_sparse" ];
-
-  # MAGMA's default CMake setup does not care about installation. So we copy files directly.
-  installPhase = ''
-    mkdir -p $out
-    mkdir -p $out/include
-    mkdir -p $out/lib
-    mkdir -p $out/lib/pkgconfig
-    cp -a ../include/*.h $out/include
-    #cp -a sparse-iter/include/*.h $out/include
-    cp -a lib/*.so $out/lib
-    cat ../lib/pkgconfig/magma.pc.in                   | \
-    sed -e s:@INSTALL_PREFIX@:"$out":          | \
-    sed -e s:@CFLAGS@:"-I$out/include":    | \
-    sed -e s:@LIBS@:"-L$out/lib -lmagma -lmagma_sparse": | \
-    sed -e s:@MAGMA_REQUIRED@::                       \
-        > $out/lib/pkgconfig/magma.pc
-  '';
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Matrix Algebra on GPU and Multicore Architectures";
