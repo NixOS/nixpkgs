@@ -163,10 +163,11 @@ in
     # rpc-statd will drop privileges by changing user from root to the owner of
     # /var/lib/nfs
     systemd.tmpfiles.rules = [
-      "d /var/lib/nfs 0700 ${rpcUser} ${rpcUser} - -"
-    ] ++ map (e:
-      "d /var/lib/nfs/${e} 0755 root root - -"
-    ) [ "recovery" "v4recovery" "sm" "sm.bak" ];
+      "d /var/lib/nfs            0700 ${rpcUser} ${rpcUser} - -"
+      "d /var/lib/nfs/sm         0755 ${rpcUser} nogroup    - -"
+      "d /var/lib/nfs/sm.bak     0755 ${rpcUser} nogroup    - -"
+      "d /var/lib/nfs/v4recovery 0755 root       root       - -"
+    ];
 
     users = {
       groups."${rpcUser}" = {};
