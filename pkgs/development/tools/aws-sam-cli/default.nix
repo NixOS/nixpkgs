@@ -79,8 +79,8 @@ buildPythonApplication rec {
       --replace "serverlessrepo==0.1.9" "serverlessrepo~=0.1.9" \
       --replace "python-dateutil~=2.6, <2.8.1" "python-dateutil~=2.6" \
       --replace "jmespath~=0.9.5" "jmespath~=0.10.0" \
-      --replace "tomlkit==0.5.8" "tomlkit~=0.6.0" \
-      --replace "requests==2.22.0" "requests~=2.22"
+      --replace "tomlkit==0.5.8" "tomlkit~=0.7.0" \
+      --replace "requests==2.23.0" "requests~=2.24"
   '';
 
   meta = with lib; {
