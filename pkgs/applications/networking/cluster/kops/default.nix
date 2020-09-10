@@ -1,11 +1,11 @@
 { stdenv, lib, buildGoPackage, fetchFromGitHub, go-bindata, installShellFiles }:
-
 let
   goPackagePath = "k8s.io/kops";
 
-  generic = { version, sha256, rev ? version, ...}@attrs:
-    let attrs' = builtins.removeAttrs attrs ["version" "sha256" "rev"] ; in
-      buildGoPackage {
+  generic = { version, sha256, rev ? version, ... }@attrs:
+    let attrs' = builtins.removeAttrs attrs [ "version" "sha256" "rev" ]; in
+    buildGoPackage
+      {
         pname = "kops";
         inherit version;
 
@@ -42,12 +42,14 @@ let
         meta = with stdenv.lib; {
           description = "Easiest way to get a production Kubernetes up and running";
           homepage = "https://github.com/kubernetes/kops";
+          changelog = "https://github.com/kubernetes/kops/tree/master/docs/releases";
           license = licenses.asl20;
           maintainers = with maintainers; [ offline zimbatm kampka ];
           platforms = platforms.unix;
         };
       } // attrs';
-in rec {
+in
+rec {
 
   mkKops = generic;
 
