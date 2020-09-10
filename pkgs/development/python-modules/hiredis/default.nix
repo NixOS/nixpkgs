@@ -16,8 +16,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ redis ];
 
   checkPhase = ''
+    mv hiredis _hiredis
     ${python.interpreter} test.py
   '';
+  pythonImportsCheck = [ "hiredis" ];
 
   meta = with stdenv.lib; {
     description = "Wraps protocol parsing code in hiredis, speeds up parsing of multi bulk replies";
