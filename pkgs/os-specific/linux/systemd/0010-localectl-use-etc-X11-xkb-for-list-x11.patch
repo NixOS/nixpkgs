@@ -1,4 +1,4 @@
-From 141d1d7acf5f018df86f0a5f7fbe49a8e928fd73 Mon Sep 17 00:00:00 2001
+From 84a2d35d4e75295edf7e190a94dfaf65db4973b6 Mon Sep 17 00:00:00 2001
 From: Imuli <i@imu.li>
 Date: Wed, 19 Oct 2016 08:46:47 -0400
 Subject: [PATCH 10/18] localectl: use /etc/X11/xkb for list-x11-*
@@ -23,5 +23,5 @@ index e0664de826..c521f33a2a 100644
                  return log_error_errno(errno, "Failed to open keyboard mapping list. %m");
  
 -- 
-2.27.0
+2.28.0
 

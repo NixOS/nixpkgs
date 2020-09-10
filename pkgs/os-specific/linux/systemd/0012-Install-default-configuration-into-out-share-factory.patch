@@ -1,4 +1,4 @@
-From 245af064c4d315d868cc12201b3663f61702cce3 Mon Sep 17 00:00:00 2001
+From 7dbe84b7c43669dccd90db8ac33c38a70e6b6914 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
 Date: Mon, 26 Feb 2018 14:25:57 +0000
 Subject: [PATCH 12/18] Install default configuration into $out/share/factory
@@ -44,7 +44,7 @@ index 5c77387a26..6404bc01ba 100644
          meson.add_install_script('sh', '-c',
                                   'test -n "$DESTDIR" || @0@/systemd-hwdb update'
 diff --git a/meson.build b/meson.build
-index bbeb23223d..1a9c56fad2 100644
+index 2ef9d4d770..ae7acbd769 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -163,6 +163,9 @@ udevhwdbdir = join_paths(udevlibexecdir, 'hwdb.d')
@@ -57,7 +57,7 @@ index bbeb23223d..1a9c56fad2 100644
  bootlibdir = join_paths(prefixdir, 'lib/systemd/boot/efi')
  testsdir = join_paths(prefixdir, 'lib/systemd/tests')
  systemdstatedir = join_paths(localstatedir, 'lib/systemd')
-@@ -2651,7 +2654,7 @@ if conf.get('ENABLE_BINFMT') == 1
+@@ -2653,7 +2656,7 @@ if conf.get('ENABLE_BINFMT') == 1
          meson.add_install_script('sh', '-c',
                                   mkdir_p.format(binfmtdir))
          meson.add_install_script('sh', '-c',
@@ -66,7 +66,7 @@ index bbeb23223d..1a9c56fad2 100644
  endif
  
  if conf.get('ENABLE_REPART') == 1
-@@ -2767,7 +2770,7 @@ executable(
+@@ -2769,7 +2772,7 @@ executable(
          install_dir : rootlibexecdir)
  
  install_data('src/sleep/sleep.conf',
@@ -75,7 +75,7 @@ index bbeb23223d..1a9c56fad2 100644
  
  public_programs += executable(
          'systemd-sysctl',
-@@ -3101,7 +3104,7 @@ if conf.get('HAVE_KMOD') == 1
+@@ -3103,7 +3106,7 @@ if conf.get('HAVE_KMOD') == 1
          meson.add_install_script('sh', '-c',
                                   mkdir_p.format(modulesloaddir))
          meson.add_install_script('sh', '-c',
@@ -84,7 +84,7 @@ index bbeb23223d..1a9c56fad2 100644
  endif
  
  public_programs += executable(
-@@ -3352,7 +3355,7 @@ install_subdir('factory/etc',
+@@ -3354,7 +3357,7 @@ install_subdir('factory/etc',
                 install_dir : factorydir)
  
  install_data('xorg/50-systemd-user.sh',
@@ -297,10 +297,10 @@ index 0a9582d8b9..3c56ca7d83 100644
 +                mkdir_p.format(join_paths(factoryconfdir, 'tmpfiles.d')))
  endif
 diff --git a/units/meson.build b/units/meson.build
-index aa2ed115ea..12e2925226 100644
+index 275daad3f4..491abd8eef 100644
 --- a/units/meson.build
 +++ b/units/meson.build
-@@ -323,7 +323,7 @@ install_data('user-.slice.d/10-defaults.conf',
+@@ -324,7 +324,7 @@ install_data('user-.slice.d/10-defaults.conf',
  
  meson.add_install_script(meson_make_symlink,
                           join_paths(pkgsysconfdir, 'user'),
@@ -310,5 +310,5 @@ index aa2ed115ea..12e2925226 100644
                           join_paths(dbussystemservicedir, 'org.freedesktop.systemd1.service'),
                           join_paths(dbussessionservicedir, 'org.freedesktop.systemd1.service'))
 -- 
-2.27.0
+2.28.0
 
