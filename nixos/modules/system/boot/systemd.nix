@@ -746,6 +746,70 @@ in
       '';
     };
 
+    systemd.tmpfiles.paths = mkOption {
+      description = ''
+        Attributes to automaticly create and remove files. See
+        <citerefentry><refentrytitle>tmpfiles.d</refentrytitle><manvolnum>5</manvolnum></citerefentry>
+        for the exact format.
+      '';
+      default = {};
+      example = {
+        d."/tmp" = {
+          mode = "1777";
+          user = "root";
+          group = "root";
+          age = "10d";
+        };
+      };
+      type = types.attrsOf (types.attrsOf (types.submodule (
+        { name, ... }:
+        {
+          options = let
+            emptyOption = description: mkOption {
+              type = types.str;
+              default = "-";
+              inherit description;
+            };
+          in {
+            path = mkOption {
+              type = types.str;
+              default = name;
+              description = "The path to the file to create";
+            };
+            enable = mkOption {
+              type = types.bool;
+              default = true;
+              description = "disable this tmpfile rule";
+            };
+            mode = emptyOption ''
+              File acces mode. See
+              <link xlink:href="https://www.freedesktop.org/software/systemd/man/tmpfiles.d.html#Mode">
+              tmpfiles.d(5)</link>
+            '';
+            user = emptyOption ''
+              User of the tmpfile. See
+              <link xlink:href="https://www.freedesktop.org/software/systemd/man/tmpfiles.d.html#User,%20Group">
+              tmpfiles.d(5)</link>
+            '';
+            group = emptyOption ''
+              Group of the tmpfile. See
+              <link xlink:href="https://www.freedesktop.org/software/systemd/man/tmpfiles.d.html#User,%20Group">
+              tmpfiles.d(5)</link>
+            '';
+            age = emptyOption ''
+              Age to delete the file. See
+              <link xlink:href="https://www.freedesktop.org/software/systemd/man/tmpfiles.d.html#Age">
+              tmpfiles.d(5)</link>
+            '';
+            argument = emptyOption ''
+              Argument for the type. See
+              <link xlink:href="https://www.freedesktop.org/software/systemd/man/tmpfiles.d.html#Argument">
+              tmpfiles.d(5)</link>
+            '';
+          };
+        })));
+    };
+
     systemd.tmpfiles.packages = mkOption {
       type = types.listOf types.package;
       default = [];
@@ -891,7 +955,9 @@ in
       in optional
       (type == "oneshot" && (restart == "always" || restart == "on-success"))
       "Service '${name}.service' with 'Type=oneshot' cannot have 'Restart=always' or 'Restart=on-success'")
-      cfg.services);
+      cfg.services) ++ optional (cfg.tmpfiles.rules != [ ]) ''
+        systemd.tmpfiles.`rules` is deprecated, please use systemd.tmpfiles.`paths`.
+      '';
 
     system.build.units = cfg.units;
 
@@ -1040,7 +1106,14 @@ in
         unitConfig.X-StopOnReconfiguration = true;
       };
 
-    systemd.tmpfiles.packages = [
+    systemd.tmpfiles.packages = let
+      /*writeRule = path: if path.enable then
+        "${path.type} ${path.path} ${path.mode} ${path.user} ${path.group} ${path.age} ${path.arguments}"
+        else "";*/
+        writeRules = type: paths: concatStringsSep "\n" (mapAttrsToList (name: path: writeRule type path) paths);
+        writeRule = type: path: if path.enable then
+          "${type} ${path.path} ${path.mode} ${path.user} ${path.group} ${path.age} ${path.argument}" else "";
+      in [
       # Default tmpfiles rules provided by systemd
       (pkgs.runCommand "systemd-default-tmpfiles" {} ''
         mkdir -p $out/lib/tmpfiles.d
@@ -1063,9 +1136,10 @@ in
         destination = "/lib/tmpfiles.d/00-nixos.conf";
         text = ''
           # This file is created automatically and should not be modified.
-          # Please change the option ‘systemd.tmpfiles.rules’ instead.
+          # Please change the option ‘systemd.tmpfiles.paths’ instead.
 
           ${concatStringsSep "\n" cfg.tmpfiles.rules}
+          ${concatStringsSep "\n" (mapAttrsToList (type: paths: writeRules type paths) cfg.tmpfiles.paths)}
         '';
       })
     ];
