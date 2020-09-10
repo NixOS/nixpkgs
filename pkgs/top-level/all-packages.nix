@@ -14341,6 +14341,8 @@ in
 
   micropython = callPackage ../development/interpreters/micropython { };
 
+  MIDIVisualizer = callPackage ../applications/audio/midi-visualizer { };
+
   mimalloc = callPackage ../development/libraries/mimalloc { };
 
   minizip = callPackage ../development/libraries/minizip { };
