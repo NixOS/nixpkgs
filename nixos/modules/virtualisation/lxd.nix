@@ -169,5 +169,8 @@ in {
       "net.ipv6.neigh.default.gc_thresh3" = 8192;
       "kernel.keys.maxkeys" = 2000;
     };
+
+    boot.kernelModules = [ "veth" "xt_comment" "xt_MASQUERADE" ]
+      ++ optionals (!config.networking.nftables.enable) [ "iptable_mangle" ];
   };
 }
