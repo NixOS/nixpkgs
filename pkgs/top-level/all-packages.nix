@@ -27214,6 +27214,8 @@ in
 
   sift = callPackage ../tools/text/sift { };
 
+  xdragon = lowPrio (callPackage ../applications/misc/xdragon { });
+
   xlockmore = callPackage ../misc/screensavers/xlockmore { };
 
   xtrlock-pam = callPackage ../misc/screensavers/xtrlock-pam { };
