@@ -200,7 +200,9 @@ def main():
     else:
         # Update bootloader to latest if needed
         systemd_version = subprocess.check_output(["@systemd@/bin/bootctl", "--version"], universal_newlines=True).split()[1]
-        sdboot_status = subprocess.check_output(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "status"], universal_newlines=True)
+        # Ideally this should use check_output as well, but as a temporary
+        # work-around for #97433 we ignore any errors.
+        sdboot_status = subprocess.run(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "status"], universal_newlines=True, stdout=subprocess.PIPE).stdout
 
         # See status_binaries() in systemd bootctl.c for code which generates this
         m = re.search("^\W+File:.*/EFI/(BOOT|systemd)/.*\.efi \(systemd-boot (\d+)\)$",
