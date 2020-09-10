@@ -28,6 +28,12 @@
    </listitem>
    <listitem>
     <para>
+      Quickly configure a complete, private, self-hosted video
+      conferencing solution with the new Jitsi Meet module.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
     <package>maxx</package> package removed along with <varname>services.xserver.desktopManager.maxx</varname> module.
     Please migrate to <package>cdesktopenv</package> and <varname>services.xserver.desktopManager.cde</varname> module.
     </para>
