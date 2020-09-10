@@ -18,7 +18,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     ];
     services.nginx.enable = true;
     services.nginx.package = pkgs.nginx-lua;
-    services.nginx.enableSandbox = true;
     services.nginx.virtualHosts.localhost = {
       extraConfig = ''
         location /test1-write {
