@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitLab, autoreconfHook, pkgconfig, parallel
-, sassc, inkscape_0, libxml2, glib, gdk-pixbuf, librsvg, gtk-engine-murrine
+, sassc, inkscape, libxml2, glib, gdk-pixbuf, librsvg, gtk-engine-murrine
 , cinnamonSupport ? true
 , gnomeFlashbackSupport ? true
 , gnomeShellSupport ? true
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     pkgconfig
     parallel
     sassc
-    inkscape_0
+    inkscape
     libxml2
     glib.dev
   ]

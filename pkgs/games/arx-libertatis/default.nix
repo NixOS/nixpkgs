@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, zlib, boost
 , openal, glm, freetype, libGLU, SDL2, epoxy
-, dejavu_fonts, inkscape_0, optipng, imagemagick
+, dejavu_fonts, inkscape, optipng, imagemagick
 , withCrashReporter ? !stdenv.isDarwin
 ,   qtbase ? null
 ,   wrapQtAppsHook ? null
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    cmake inkscape_0 imagemagick optipng
+    cmake inkscape imagemagick optipng
   ] ++ optionals withCrashReporter [ wrapQtAppsHook ];
 
   buildInputs = [

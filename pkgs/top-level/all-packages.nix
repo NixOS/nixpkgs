@@ -21225,10 +21225,6 @@ in
 
   inkscape-extensions = recurseIntoAttrs (callPackages ../applications/graphics/inkscape/extensions.nix {});
 
-  inkscape_0 = callPackage ../applications/graphics/inkscape/0.x.nix {
-    lcms = lcms2;
-  };
-
   inspectrum = libsForQt514.callPackage ../applications/radio/inspectrum { };
 
   ion3 = callPackage ../applications/window-managers/ion-3 {

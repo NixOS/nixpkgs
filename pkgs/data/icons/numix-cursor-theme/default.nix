@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, inkscape_0, xcursorgen }:
+{ stdenv, fetchFromGitHub, inkscape, xcursorgen }:
 
 stdenv.mkDerivation rec {
   version = "1.1";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0p8h48wsy3z5dz9vdnp01fpn6q8ky0h74l5qgixlip557bsa1spi";
   };
 
-  nativeBuildInputs = [ inkscape_0 xcursorgen ];
+  nativeBuildInputs = [ inkscape xcursorgen ];
 
   buildPhase = ''
     patchShebangs .
