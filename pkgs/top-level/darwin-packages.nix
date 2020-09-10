@@ -41,6 +41,8 @@ in
 
   DarwinTools = callPackage ../os-specific/darwin/DarwinTools { };
 
+  darwin-stubs = callPackage ../os-specific/darwin/darwin-stubs { };
+
   maloader = callPackage ../os-specific/darwin/maloader {
     inherit (darwin) opencflite;
   };
