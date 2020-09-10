@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
         wrapPythonPrograms
     '';
 
-    meta = {
+    meta = with stdenv.lib; {
         homepage = "http://fungi.yuggoth.org/weather";
         description = "Quick access to current weather conditions and forecasts";
-        license = stdenv.lib.licenses.isc;
-        maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
-        platforms = with stdenv.lib.platforms; linux; # my only platform
+        license = licenses.isc;
+        maintainers = [ maintainers.matthiasbeyer ];
+        platforms = platforms.linux; # my only platform
     };
 }
