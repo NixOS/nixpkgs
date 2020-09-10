@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mkrom";
-  version = "unstable-2020-06-11";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "KnightOS";
     repo = "mkrom";
-    rev = "7a735ecbe09409e74680a9dc1c50dd4db99a409f";
-    sha256 = "18h7a0fb5zb991iy9ljpknmk9qvl9nz3yh1zh5bm399rpxn4nzx3";
+    rev = version;
+    sha256 = "1nx3787gvs04xdvvamzkjkn9nmy2w70ja8dnh4szk420mvpc85na";
   };
 
   nativeBuildInputs = [
