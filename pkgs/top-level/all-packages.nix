@@ -27543,6 +27543,8 @@ in
     wxGTK = wxGTK30;
   };
 
+  wyvern = callPackage ../games/wyvern { };
+
   x11idle = callPackage ../tools/misc/x11idle {};
 
   x11docker = callPackage ../applications/virtualization/x11docker { };
