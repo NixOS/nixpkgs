@@ -2,8 +2,9 @@
 , buildPythonPackage
 , isPy27
 , fetchFromGitHub
-, pytest
+, pytestCheckHook
 , pytestcov
+, hyppo
 , matplotlib
 , networkx
 , numpy
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "graspy";
-  version = "0.2";
+  version = "0.3";
 
   disabled = isPy27;
 
@@ -22,10 +23,11 @@ buildPythonPackage rec {
     owner = "neurodata";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ss7d71lwblimg7ri88ir9w59j0ri13wl75091hjf7q0mchqr6yd";
+    sha256 = "0lab76qiryxvwl6zrcikhnxil1xywl0wkkm2vzi4v9mdzpa7w29r";
   };
 
   propagatedBuildInputs = [
+    hyppo
     matplotlib
     networkx
     numpy
@@ -34,14 +36,9 @@ buildPythonPackage rec {
     seaborn
   ];
 
-  checkInputs = [ pytest pytestcov ];
-
-  checkPhase = ''
-    runHook preCheck
-    # `test_autogmm` takes too long; fixed in next release (graspy/pull/328)
-    pytest tests -k 'not test_autogmm'
-    runHook postCheck
-  '';
+  checkInputs = [ pytestCheckHook pytestcov ];
+  pytestFlagsArray = [ "tests" "--ignore=docs" ];
+  disabledTests = [ "gridplot_outputs" ];
 
   meta = with lib; {
     homepage = "https://graspy.neurodata.io";
