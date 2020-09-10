@@ -61,32 +61,4 @@ rec {
       versionKey = "ffversion";
     };
   };
-
-  firefox-esr-68 = (common rec {
-    pname = "firefox-esr";
-    ffversion = "68.12.0esr";
-    src = fetchurl {
-      url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "169y4prlb4mi31jciz89kp35rpb1p2gxrk93qkwfzdk4imi9hk8mi2yvxknpr0rni3bn2x0zgrrc6ccr8swv5895sqvv1sc5r1056w3";
-    };
-
-    patches = [
-      ./no-buildconfig-ffx65.patch
-    ];
-
-    meta = firefox.meta // {
-      description = "A web browser built from Firefox Extended Support Release source tree";
-    };
-    updateScript = callPackage ./update.nix {
-      attrPath = "firefox-esr-68-unwrapped";
-      versionSuffix = "esr";
-      versionKey = "ffversion";
-    };
-  }).override {
-    # Mozilla unfortunately doesn't support building with latest NSS anymore;
-    # instead they provide ESR releases for NSS:
-    # https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_Releases
-    nss = nss_3_44;
-  };
-
 }
