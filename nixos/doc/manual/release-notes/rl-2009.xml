@@ -815,6 +815,13 @@ CREATE ROLE postgres LOGIN SUPERUSER;
      the value of <option>services.jellyfin.package</option> to <literal>pkgs.jellyfin_10_5</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <literal>security.rngd</literal> service is now disabled by default.
+     This choice was made because there's krngd in the linux kernel space making it (for most usecases)
+     functionally redundent.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
