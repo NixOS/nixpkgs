@@ -34,13 +34,15 @@ stdenv.mkDerivation rec {
     gnutls liburcu libidn2 libunistring
     nettle libedit
     libiconv lmdb libintl
-    libbpf # XDP support
     nghttp2 # DoH support in kdig
     libmaxminddb # optional for geoip module (it's tiny)
     # without sphinx &al. for developer documentation
     # TODO: add dnstap support?
   ]
-    ++ optionals stdenv.isLinux [ libcap_ng systemd ]
+    ++ optionals stdenv.isLinux [
+      libcap_ng systemd
+      libbpf # XDP support
+    ]
     ++ optional stdenv.isDarwin zlib; # perhaps due to gnutls
 
   enableParallelBuilding = true;
