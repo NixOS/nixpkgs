@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "openrgb";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "CalcProgrammer1";
     repo = "OpenRGB";
     rev = "release_${version}";
-    sha256 = "1931aisdahjr99d4qqk824ib4x19mvhqgqmkm3j6fc5zd2hnw87m";
+    sha256 = "sha256-tHrRG2Zx7NYqn+WPiRpAlWA/QmxuAYidENanTkC1XVw";
   };
 
   nativeBuildInputs = [ qmake pkg-config ];
