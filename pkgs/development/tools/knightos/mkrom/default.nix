@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KnightOS";
     repo = "mkrom";
-    rev = "${version}";
+    rev = version;
     sha256 = "1nx3787gvs04xdvvamzkjkn9nmy2w70ja8dnh4szk420mvpc85na";
   };
 
