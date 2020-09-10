@@ -717,8 +717,8 @@ php.override {
    </listitem>
    <listitem>
      <para>
-       Add option <literal>services.nginx.enableSandbox</literal> to starting Nginx web server with additional sandbox/hardening options.
-       By default, write access to <literal>services.nginx.stateDir</literal> is allowed. To allow writing to other folders,
+       Nginx web server now starting with additional sandbox/hardening options. By default, write access
+       to <literal>services.nginx.stateDir</literal> is allowed. To allow writing to other folders,
        use <literal>systemd.services.nginx.serviceConfig.ReadWritePaths</literal>
        <programlisting>
 systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
