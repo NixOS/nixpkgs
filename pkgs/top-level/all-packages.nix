@@ -22486,6 +22486,8 @@ in
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
+  picoloop = callPackage ../applications/audio/picoloop { };
+
   pidgin = callPackage ../applications/networking/instant-messengers/pidgin {
     openssl = if config.pidgin.openssl or true then openssl else null;
     gnutls = if config.pidgin.gnutls or false then gnutls else null;
