@@ -13,13 +13,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "ryujinx";
-  version = "1.0.5160";
+  version = "1.0.5320"; # Based on the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "58f65b6523fb25d989b011c51f963520c811f9f0";
-    sha256 = "19fizqmcr8i3axi3j5hg8p6dxr1pxnl5l58z4pws6nj1xbq8z5mi";
+    rev = "4c7bebf3e691f356eaa595ee395690d740162e2f";
+    sha256 = "1kx7rn1w797rjdfrrlak3p02bqlhx8mp1p18gakl0nvgvb5v4npk";
   };
 
   nativeBuildInputs = [ dotnet-sdk_3 dotnetPackages.Nuget makeWrapper wrapGAppsHook gobject-introspection ];
