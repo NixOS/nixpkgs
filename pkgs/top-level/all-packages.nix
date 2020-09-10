@@ -3348,7 +3348,7 @@ in
 
   volctl = callPackage ../tools/audio/volctl { };
 
-  vorta = python3Packages.callPackage ../applications/backup/vorta { };
+  vorta = python3Packages.callPackage ../applications/backup/vorta { qt5 = qt514; };
 
   utahfs = callPackage ../applications/networking/utahfs { };
 
