@@ -3553,6 +3553,12 @@
     githubId = 993484;
     name = "Greg Hale";
   };
+  immae = {
+    email = "ismael@bouya.org";
+    github = "immae";
+    githubId = 510202;
+    name = "Ismaël Bouya";
+  };
   imuli = {
     email = "i@imu.li";
     github = "imuli";
