@@ -211,6 +211,7 @@ mapAliases ({
   idea = jetbrains; # added 2017-04-03
   infiniband-diags = rdma-core; # added 2019-08-09
   inotifyTools = inotify-tools;
+  jasper = throw "jasper has been removed: abandoned upstream with many vulnerabilities";
   jbuilder = dune; # added 2018-09-09
   jikes = throw "deprecated in 2019-10-07: jikes was abandoned by upstream";
   joseki = apache-jena-fuseki; # added 2016-02-28
