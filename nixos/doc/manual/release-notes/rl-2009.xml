@@ -1181,8 +1181,10 @@ CREATE ROLE postgres LOGIN SUPERUSER;
    </para>
    </listitem>
    <listitem>
+    <para>
     The installer now enables sshd by default. This improves installation on headless machines especially ARM single-board-computer.
     To login through ssh, either a password or an ssh key must be set for the root user or the nixos user.
+    </para>
    </listitem>
    <listitem>
     <para>
