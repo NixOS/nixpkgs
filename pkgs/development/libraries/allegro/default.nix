@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./nix-unstable-sandbox-fix.patch
+    ./encoding.patch
   ];
 
   buildInputs = [
