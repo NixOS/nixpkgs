@@ -15,11 +15,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  prePatch = ''
-    substituteInPlace configure.in \
-      --replace "AC_CHECK_LIB(termcap, tputs)" "AC_CHECK_LIB(termcap, tputs)"
-  '';
-
   preConfigure = ''
     chmod +x $PWD/autoconf.sh
     $PWD/autoconf.sh
@@ -31,9 +26,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Icarus Verilog compiler";
-    repositories.git = "https://github.com/steveicarus/iverilog.git";
     homepage = "http://iverilog.icarus.com/";
-    license = licenses.lgpl21;
+    license = with licenses; [ gpl2Plus lgpl21Plus] ;
     maintainers = with maintainers; [ winden ];
     platforms = platforms.all;
   };
