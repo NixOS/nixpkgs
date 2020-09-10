@@ -954,6 +954,8 @@ in
 
   cloud-custodian = python3Packages.callPackage ../tools/networking/cloud-custodian  { };
 
+  cod = callPackage ../tools/misc/cod { };
+
   codespell = with python3Packages; toPythonApplication codespell;
 
   coolreader = libsForQt5.callPackage ../applications/misc/coolreader {};
