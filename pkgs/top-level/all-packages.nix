@@ -27604,6 +27604,8 @@ in
 
   xteddy = callPackage ../applications/misc/xteddy { };
 
+  xva-img = callPackage ../tools/virtualization/xva-img { };
+
   xwiimote = callPackage ../misc/drivers/xwiimote { };
 
   xzoom = callPackage ../tools/X11/xzoom {};
