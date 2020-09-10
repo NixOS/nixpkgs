@@ -2764,6 +2764,8 @@ in {
 
   hypothesis = if isPy3k then callPackage ../development/python-modules/hypothesis { } else self.hypothesis_4;
 
+  hyppo = callPackage ../development/python-modules/hyppo { };
+
   i3ipc = callPackage ../development/python-modules/i3ipc { };
 
   i3-py = callPackage ../development/python-modules/i3-py { };
