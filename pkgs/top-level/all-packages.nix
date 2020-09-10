@@ -26631,6 +26631,8 @@ in
 
   dumb = callPackage ../misc/dumb { };
 
+  dump = callPackage ../tools/backup/dump { };
+
   ecdsatool = callPackage ../tools/security/ecdsatool { };
 
   emulationstation = callPackage ../misc/emulators/emulationstation { };
