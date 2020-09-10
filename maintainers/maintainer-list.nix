@@ -1641,6 +1641,12 @@
     githubId = 5561189;
     name = "Cody Opel";
   };
+  cohei = {
+    email = "a.d.xvii.kal.mai@gmail.com";
+    github = "cohei";
+    githubId = 3477497;
+    name = "TANIGUCHI Kohei";
+  };
   cohencyril = {
     email = "cyril.cohen@inria.fr";
     github = "CohenCyril";
