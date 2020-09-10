@@ -8,8 +8,6 @@ let
 
   exports = pkgs.writeText "exports" cfg.exports;
 
-  rpcUser = "statd";
-
 in
 
 {
@@ -142,40 +140,36 @@ in
 
     environment.etc.exports.source = exports;
 
-    systemd.services.nfs-server = {
-      enable = true;
-      wantedBy = [ "multi-user.target" ];
-    };
+    systemd.services.nfs-server =
+      { enable = true;
+        wantedBy = [ "multi-user.target" ];
 
-    systemd.services.nfs-mountd = {
-      enable = true;
-      restartTriggers = [ exports ];
-
-      preStart = optionalString cfg.createMountPoints ''
-        # create export directories:
-        # skip comments, take first col which may either be a quoted
-        # "foo bar" or just foo (-> man export)
-        sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${exports} \
-        | xargs -d '\n' mkdir -p
-      '';
-    };
-
-    # rpc-statd will drop privileges by changing user from root to the owner of
-    # /var/lib/nfs
-    systemd.tmpfiles.rules = [
-      "d /var/lib/nfs 0700 ${rpcUser} ${rpcUser} - -"
-    ] ++ map (e:
-      "d /var/lib/nfs/${e} 0755 root root - -"
-    ) [ "recovery" "v4recovery" "sm" "sm.bak" ];
-
-    users = {
-      groups."${rpcUser}" = {};
-      users."${rpcUser}" = {
-        description = "NFS RPC user";
-        group = rpcUser;
-        isSystemUser = true;
+        preStart =
+          ''
+            mkdir -p /var/lib/nfs/v4recovery
+          '';
       };
-    };
+
+    systemd.services.nfs-mountd =
+      { enable = true;
+        restartTriggers = [ exports ];
+
+        preStart =
+          ''
+            mkdir -p /var/lib/nfs
+
+            ${optionalString cfg.createMountPoints
+              ''
+                # create export directories:
+                # skip comments, take first col which may either be a quoted
+                # "foo bar" or just foo (-> man export)
+                sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${exports} \
+                | xargs -d '\n' mkdir -p
+              ''
+            }
+          '';
+      };
+
   };
 
 }
