@@ -23,6 +23,7 @@ stdenv.mkDerivation {
 
   preBuild = ''
     find . -type f | grep -v -e '\.tgz''$' | xargs sed -i "s@/usr/bin/env bash@$(type -p bash)@"
+    sed -i "s|/tmp|$TMPDIR|" bin/regression
 
     makeFlagsArray=(
       MLTON_VERSION="${version} ${rev}"
