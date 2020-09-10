@@ -124,7 +124,7 @@ let
           homepage    = https://www.foundationdb.org;
           license     = licenses.asl20;
           platforms   = [ "x86_64-linux" ];
-          maintainers = with maintainers; [ vlche ];
+          maintainers = with maintainers; [ thoughtpolice ];
        };
     };
 in makeFdb
