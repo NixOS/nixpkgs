@@ -83,9 +83,9 @@
 /pkgs/development/haskell-modules/hoogle.nix	      @cdepillabout
 
 # Perl
-/pkgs/development/interpreters/perl @volth
-/pkgs/top-level/perl-packages.nix   @volth
-/pkgs/development/perl-modules      @volth
+/pkgs/development/interpreters/perl @volth @stigtsp
+/pkgs/top-level/perl-packages.nix   @volth @stigtsp
+/pkgs/development/perl-modules      @volth @stigtsp
 
 # R
 /pkgs/applications/science/math/R   @peti
