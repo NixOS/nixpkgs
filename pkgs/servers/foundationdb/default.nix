@@ -2,12 +2,16 @@
 , lib, fetchurl, fetchpatch, fetchFromGitHub
 
 , cmake, ninja, which, findutils, m4, gawk
-, python, python3, openjdk, mono, libressl, boost
+, python, python3, openjdk, mono, libressl, boost, openssl
 }@args:
 
 let
   vsmakeBuild = import ./vsmake.nix args;
   cmakeBuild = import ./cmake.nix (args // {
+    gccStdenv    = gccStdenv;
+    llvmPackages = llvmPackages;
+  });
+  cmakeBuild62 = import ./cmake62.nix (args // {
     gccStdenv    = gccStdenv;
     llvmPackages = llvmPackages;
   });
@@ -82,6 +86,22 @@ in with builtins; {
 
     patches = [
       ./patches/clang-libcxx.patch
+      ./patches/suppress-clang-warnings.patch
+      glibc230-fix
+    ];
+  };
+
+  # 6.2 and later versions should always use CMake
+  # ------------------------------------------------------
+
+  foundationdb62 = cmakeBuild62 {
+    version = "6.2.25";
+    branch  = "release-6.2";
+    sha256  = "01p8q0kpcnki65hlk5sav2isjlskqrwq5281maghhk9fzsc1cx26";
+
+    patches = [
+      ./patches/cmakelists-dsuffix.patch
+      ./patches/cmakelists-errors-6.2.patch
       ./patches/suppress-clang-warnings.patch
       glibc230-fix
     ];
