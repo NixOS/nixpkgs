@@ -1436,6 +1436,8 @@ in {
 
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
+  datasets = callPackage ../development/python-modules/datasets { };
+
   datasette = callPackage ../development/python-modules/datasette { };
 
   datashader = callPackage ../development/python-modules/datashader { };
