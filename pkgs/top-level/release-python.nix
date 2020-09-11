@@ -5,9 +5,11 @@
 
 { # The platforms for which we build Nixpkgs.
   supportedSystems ? [ "x86_64-linux" ]
+, # Attributes passed to nixpkgs. Don't build packages marked as unfree.
+  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
 }:
 
-with import ./release-lib.nix {inherit supportedSystems; };
+with import ./release-lib.nix {inherit supportedSystems nixpkgsArgs; };
 with lib;
 
 let
