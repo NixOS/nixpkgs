@@ -28,8 +28,8 @@ let
   };
 in {
   nextcloud17 = generic {
-    version = "17.0.6";
-    sha256 = "0qq7lkgzsn1zakfym5bjqzpcisxmgfcdd927ddqlhddy3zvgxrxx";
+    version = "17.0.9";
+    sha256 = "0ky819ifc3apci6bjw0cgiza6an33c5lnm1slqazlqhylb8gh13v";
   };
 
   nextcloud18 = generic {
