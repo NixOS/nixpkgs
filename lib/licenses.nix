@@ -7,7 +7,7 @@ let
 
 in
 
-lib.mapAttrs (n: v: v // { shortName = n; }) {
+lib.mapAttrs (n: v: v // { shortName = n; free = if v ? free then v.free else true; redist = if v ? redist then v.redist else if v ? free then v.free else true; }) {
   /* License identifiers from spdx.org where possible.
    * If you cannot find your license here, then look for a similar license or
    * add it to this list. The URL mentioned above is a good source for inspiration.
@@ -710,12 +710,13 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
   unfreeRedistributable = {
     fullName = "Unfree redistributable";
     free = false;
+    redist = true;
   };
 
   unfreeRedistributableFirmware = {
     fullName = "Unfree redistributable firmware";
-    # Note: we currently consider these "free" for inclusion in the
-    # channel and NixOS images.
+    free = false;
+    redist = true;
   };
 
   unicode-dfs-2016 = spdx {
