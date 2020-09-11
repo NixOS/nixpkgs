@@ -3401,6 +3401,8 @@ in
 
   cholmod-extra = callPackage ../development/libraries/science/math/cholmod-extra { };
 
+  choose = callPackage ../tools/text/choose { };
+
   emscripten = callPackage ../development/compilers/emscripten { };
 
   emscriptenPackages = recurseIntoAttrs (callPackage ./emscripten-packages.nix { });
