@@ -1473,7 +1473,7 @@ self: super: {
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 
 } // (let
-  inherit (self) hls-ghcide;
+  inherit (self) hls-ghcide hls-brittany;
   hlsScopeOverride = self: super: {
     # haskell-language-server uses its own fork of ghcide
     # Test disabled: it seems to freeze (is it just that it takes a long time ?)
@@ -1484,7 +1484,8 @@ self: super: {
     # fourmolu can‘t compile with an older aeson
     aeson = dontCheck super.aeson_1_5_2_0;
     # brittany has an aeson upper bound of 1.5
-    brittany = doJailbreak super.brittany;
+    brittany = hls-brittany;
+    data-tree-print = doJailbreak super.data-tree-print;
   };
   in {
     # jailbreaking for hie-bios 0.7.0 (upstream PR: https://github.com/haskell/haskell-language-server/pull/357)
@@ -1496,6 +1497,7 @@ self: super: {
         url = "https://github.com/haskell/ghcide/commit/3e1b3620948870a4da8808ca0c0897fbd3ecad16.patch";
         sha256 = "1jwn7jgi740x6wwv1k0mz9d4z0b9p3mzs54pdg4nfq0h2v7zxchz";
       });
+    hls-brittany = dontCheck (super.hls-brittany.overrideScope hlsScopeOverride);
     fourmolu = super.fourmolu.overrideScope hlsScopeOverride;
   }
 )  // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
