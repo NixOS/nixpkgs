@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, python
 , fetchPypi
 , substituteAll
 , fetchpatch
@@ -25,6 +26,8 @@ buildPythonPackage rec {
       inherit graphviz;
     })
   ];
+
+  disabled = python.isPy2;
 
   checkInputs = [
     nose
