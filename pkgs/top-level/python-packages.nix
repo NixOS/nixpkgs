@@ -7247,6 +7247,8 @@ in {
 
   urwidtrees = callPackage ../development/python-modules/urwidtrees { };
 
+  urwid-readline = callPackage ../development/python-modules/urwid-readline { };
+
   usbtmc = callPackage ../development/python-modules/usbtmc { };
 
   us = callPackage ../development/python-modules/us { };
