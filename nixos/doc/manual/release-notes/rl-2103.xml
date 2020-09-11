@@ -279,6 +279,16 @@
     </programlisting>
    </listitem>
    <listitem>
+    <para>
+      The <literal>services.tor</literal> module has a new exhaustively typed <xref linkend="opt-services.tor.settings" /> option following RFC 0042; backward compatibility with old options has been preserved when aliasing was possible.
+      The corresponding systemd service has been hardened,
+      but there is a chance that the service still requires more permissions,
+      so please report any related trouble on the bugtracker.
+      Onion services v3 are now supported in <xref linkend="opt-services.tor.relay.onionServices" />.
+      A new <xref linkend="opt-services.tor.openFirewall" /> option as been introduced for allowing connections on all the TCP ports configured.
+    </para>
+   </listitem>
+   <listitem>
      <para>
        The options <literal>services.slurm.dbdserver.storagePass</literal>
        and <literal>services.slurm.dbdserver.configFile</literal> have been removed.
