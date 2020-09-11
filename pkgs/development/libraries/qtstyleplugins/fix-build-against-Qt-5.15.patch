@@ -1,0 +1,44 @@
+From 335dbece103e2cbf6c7cf819ab6672c2956b17b3 Mon Sep 17 00:00:00 2001
+From: Fabian Vogt <fvogt@suse.de>
+Date: Thu, 28 May 2020 12:35:42 +0200
+Subject: [PATCH] fix build against Qt 5.15
+
+With 0a93db4d82c051164923a10e4382b12de9049b45 ("Unify application
+palette handling between QGuiApplication and QApplication")
+QApplicationPrivate::setSystemPalette is no longer used and necessary.
+---
+ src/plugins/styles/gtk2/qgtkstyle.cpp   | 2 ++
+ src/plugins/styles/gtk2/qgtkstyle_p.cpp | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/src/plugins/styles/gtk2/qgtkstyle.cpp b/src/plugins/styles/gtk2/qgtkstyle.cpp
+index 36169c9..2544593 100644
+--- a/src/plugins/styles/gtk2/qgtkstyle.cpp
++++ b/src/plugins/styles/gtk2/qgtkstyle.cpp
+@@ -440,7 +440,9 @@ void QGtkStyle::polish(QApplication *app)
+     // not supported as these should be entirely determined by
+     // current Gtk settings
+     if (app->desktopSettingsAware() && d->isThemeAvailable()) {
++#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+         QApplicationPrivate::setSystemPalette(standardPalette());
++#endif
+         QApplicationPrivate::setSystemFont(d->getThemeFont());
+         d->applyCustomPaletteHash();
+         if (!d->isKDE4Session())
+diff --git a/src/plugins/styles/gtk2/qgtkstyle_p.cpp b/src/plugins/styles/gtk2/qgtkstyle_p.cpp
+index e57b3d8..e71beb0 100644
+--- a/src/plugins/styles/gtk2/qgtkstyle_p.cpp
++++ b/src/plugins/styles/gtk2/qgtkstyle_p.cpp
+@@ -508,7 +508,9 @@ void QGtkStyleUpdateScheduler::updateTheme()
+       if (oldTheme != QGtkStylePrivate::getThemeName()) {
+           oldTheme = QGtkStylePrivate::getThemeName();
+           QPalette newPalette = qApp->style()->standardPalette();
++#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+           QApplicationPrivate::setSystemPalette(newPalette);
++#endif
+           QApplication::setPalette(newPalette);
+           if (!QGtkStylePrivate::instances.isEmpty()) {
+               QGtkStylePrivate::instances.last()->initGtkWidgets();
+-- 
+2.26.2
+
