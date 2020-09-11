@@ -1,16 +1,16 @@
 diff --git a/src/crypto/x509/root_darwin_amd64.go b/src/crypto/x509/root_darwin_amd64.go
-index 8ad5a9607d..1d6091cf83 100644
+index ce88de025e..258ecc45d1 100644
 --- a/src/crypto/x509/root_darwin_amd64.go
 +++ b/src/crypto/x509/root_darwin_amd64.go
-@@ -8,6 +8,7 @@ import (
+@@ -10,6 +10,7 @@ import (
  	"bytes"
- 	"crypto/x509/internal/macOS"
+ 	macOS "crypto/x509/internal/macos"
  	"fmt"
 +	"io/ioutil"
  	"os"
  	"strings"
  )
-@@ -23,6 +24,14 @@ func (c *Certificate) systemVerify(opts *VerifyOptions) (chains [][]*Certificate
+@@ -25,6 +26,14 @@ func (c *Certificate) systemVerify(opts *VerifyOptions) (chains [][]*Certificate
  var loadSystemRootsWithCgo func() (*CertPool, error)
  
  func loadSystemRoots() (*CertPool, error) {
@@ -25,10 +25,10 @@ index 8ad5a9607d..1d6091cf83 100644
  	var trustedRoots []*Certificate
  	untrustedRoots := make(map[string]bool)
  
-diff --git a/src/crypto/x509/root_darwin_arm64.go b/src/crypto/x509/root_darwin_arm64.go
-index 2fb079ba66..6a072f3e78 100644
---- a/src/crypto/x509/root_darwin_arm64.go
-+++ b/src/crypto/x509/root_darwin_arm64.go
+diff --git a/src/crypto/x509/root_darwin_ios.go b/src/crypto/x509/root_darwin_ios.go
+index 5ecc4911b3..14b4205c00 100644
+--- a/src/crypto/x509/root_darwin_ios.go
++++ b/src/crypto/x509/root_darwin_ios.go
 @@ -6,6 +6,11 @@
  
  package x509

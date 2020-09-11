@@ -25,6 +25,10 @@ buildPythonPackage rec {
     name = "${pname}-${version}-source";
   };
 
+  # Remove when solved https://github.com/NixOS/nixpkgs/issues/81441
+  # Also update pkgs/development/interpreters/python/hooks/pip-install-hook.sh accordingly
+  patches = [ ./reproducible.patch ];
+
   nativeBuildInputs = [ bootstrapped-pip ];
 
   # pip detects that we already have bootstrapped_pip "installed", so we need

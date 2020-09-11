@@ -39,8 +39,9 @@ import json
 import hashlib
 import pathlib
 import tarfile
+import itertools
 import threading
-from datetime import datetime
+from datetime import datetime, timezone
 from collections import namedtuple
 
 
@@ -73,6 +74,10 @@ def archive_paths_to(obj, paths, mtime, add_nix, filter=None):
         ti.gname = "root"
         return filter(ti)
 
+    def nix_root(ti):
+        ti.mode = 0o0555  # r-xr-xr-x
+        return ti
+
     def dir(path):
         ti = tarfile.TarInfo(path)
         ti.type = tarfile.DIRTYPE
@@ -83,20 +88,20 @@ def archive_paths_to(obj, paths, mtime, add_nix, filter=None):
         # these directories first when building layer tarballs. But
         # we don't need them on the customisation layer.
         if add_nix:
-            tar.addfile(apply_filters(dir("/nix")))
-            tar.addfile(apply_filters(dir("/nix/store")))
+            tar.addfile(apply_filters(nix_root(dir("/nix"))))
+            tar.addfile(apply_filters(nix_root(dir("/nix/store"))))
 
         for path in paths:
-            ti = tar.gettarinfo(os.path.join("/", path))
-            tar.addfile(apply_filters(append_root(ti)))
-
-            for filename in pathlib.Path(path).rglob("*"):
+            path = pathlib.Path(path)
+            files = itertools.chain([path], path.rglob("*"))
+            for filename in sorted(files):
                 ti = append_root(tar.gettarinfo(filename))
 
                 # copy hardlinks as regular files
                 if ti.islnk():
                     ti.type = tarfile.REGTYPE
                     ti.linkname = ""
+                    ti.size = filename.stat().st_size
 
                 ti = apply_filters(ti)
                 if ti.isfile():
@@ -241,7 +246,7 @@ def main():
         conf = json.load(f)
 
     created = (
-      datetime.now(tz=datetime.timezone.utc)
+      datetime.now(tz=timezone.utc)
       if conf["created"] == "now"
       else datetime.fromisoformat(conf["created"])
     )
@@ -279,7 +284,7 @@ def main():
             },
             "history": [
                 {
-                  "created": conf["created"],
+                  "created": datetime.isoformat(created),
                   "comment": f"store paths: {layer.paths}"
                 }
                 for layer in layers

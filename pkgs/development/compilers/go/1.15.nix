@@ -31,11 +31,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.15beta1";
+  version = "1.15.1";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "1h1sg6j9jac5bw2pjrd13bf4nr18prs89147izdhzbhp896sikbq";
+    sha256 = "0c2d2ngckcfsgrb7a4p6ag83mk5yd15npiq7q1f1p211li93fx6k";
   };
 
   # perl is used for testing go vet
@@ -196,8 +196,11 @@ stdenv.mkDerivation rec {
 
     export PATH=$(pwd)/bin:$PATH
 
+    ${optionalString (stdenv.buildPlatform != stdenv.targetPlatform) ''
     # Independent from host/target, CC should produce code for the building system.
+    # We only set it when cross-compiling.
     export CC=${buildPackages.stdenv.cc}/bin/cc
+    ''}
     ulimit -a
   '';
 

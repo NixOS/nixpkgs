@@ -12,13 +12,13 @@ let
   ;
 in pythonPackages.buildPythonApplication rec {
   pname = "picard";
-  version = "2.3.2";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = pname;
     rev = "release-${version}";
-    sha256 = "1785wnxhasp4j8w2a8bgbfp3gyhc7zac18r5fqw5qcndz2hfk5mc";
+    sha256 = "0sbccsisk9w0gnblvhg7wk1c5ydppldjbvaa0zhl3yrid5a363ah";
   };
 
   nativeBuildInputs = [ gettext qt5.wrapQtAppsHook qt5.qtbase ]
@@ -37,6 +37,7 @@ in pythonPackages.buildPythonApplication rec {
     mutagen
     chromaprint
     discid
+    dateutil
   ];
 
   prePatch = ''

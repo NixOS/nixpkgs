@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "bravia-tv";
-  version = "1.0.5";
+  version = "1.0.6";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "dcnielsen90";
     repo = "python-bravia-tv";
     rev = "v${version}";
-    sha256 = "17nd0v3pgmbfafi3vypls9jnpg4dk7wyh7fl7gpzcnkq1f8pf087";
+    sha256 = "07i1j3y04w2jwylff8w1aimmy4fj1g42wq8iz83an7dl4cz3rap9";
   };
 
   propagatedBuildInputs = [ requests ];

@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1jh2f66ys6rmrrwrf5zqfprgcvziyq6l4z8bfqwxgf1ysnxx525h";
 
+  doCheck = false;
+
   buildFlagsArray = ''
     -ldflags=
     -X github.com/xetys/hetzner-kube/cmd.version=${version}

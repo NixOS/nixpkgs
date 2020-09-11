@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "parso";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "908e9fae2144a076d72ae4e25539143d40b8e3eafbaeae03c1bfe226f4cdf12c";
+    sha256 = "2b6db14759c528d857eeb9eac559c2166b2554548af39f5198bdfb976f72aa64";
   };
 
   checkInputs = [ pytest ];

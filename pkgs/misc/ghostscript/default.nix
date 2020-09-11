@@ -45,6 +45,11 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    (fetchpatch {
+      name = "CVE-2020-15900.patch";
+      url = "https://github.com/ArtifexSoftware/ghostpdl/commit/5d499272b95a6b890a1397e11d20937de000d31b.patch";
+      sha256 = "1nnnrn8q33x7nc8227ygc60f3mj4bjzrhj40sxp6dah58rb5x5jz";
+    })
     ./urw-font-files.patch
     ./doc-no-ref.diff
     # rebased version of upstream http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=1b4c3669a20c,
@@ -98,9 +103,6 @@ stdenv.mkDerivation rec {
     ln -s gsc "$out"/bin/gs
 
     cp -r Resource "$out/share/ghostscript/${version}"
-
-    mkdir -p "$doc/share/doc/ghostscript"
-    mv "$doc/share/doc/${version}" "$doc/share/doc/ghostscript/"
 
     ln -s "${fonts}" "$out/share/ghostscript/fonts"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''

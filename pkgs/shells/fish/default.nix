@@ -7,6 +7,7 @@
 , gnused
 , gnugrep
 , groff
+, gawk
 , man-db
 , getent
 , libiconv
@@ -165,6 +166,9 @@ let
           -i $out/share/fish/functions/{__fish_config_interactive.fish,fish_config.fish,fish_update_completions.fish}
       sed -i "s|/usr/local/sbin /sbin /usr/sbin||"         \
              $out/share/fish/completions/{sudo.fish,doas.fish}
+      sed -e "s| awk | ${gawk}/bin/awk |"                  \
+          -i $out/share/fish/functions/{__fish_print_packages.fish,__fish_print_addresses.fish,__fish_describe_command.fish,__fish_complete_man.fish,__fish_complete_convert_options.fish} \
+             $out/share/fish/completions/{cwebp,adb,ezjail-admin,grunt,helm,heroku,lsusb,make,p4,psql,rmmod,vim-addons}.fish
 
       cat > $out/share/fish/functions/__fish_anypython.fish <<EOF
       function __fish_anypython

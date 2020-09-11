@@ -216,6 +216,10 @@ in {
   libressl = super.libressl.override {
     buildShared = false;
   };
+  libjpeg_turbo = super.libjpeg_turbo.override {
+    enableStatic = true;
+    enableShared = false;
+  };
 
   darwin = super.darwin // {
     libiconv = super.darwin.libiconv.override {
@@ -242,7 +246,7 @@ in {
   };
 
   zstd = super.zstd.override {
-    enableShared = false;
+    static = true;
   };
 
   llvmPackages_8 = super.llvmPackages_8 // {
@@ -265,7 +269,6 @@ in {
   ) super.ocaml-ng;
 
   python27 = super.python27.override { static = true; };
-  python35 = super.python35.override { static = true; };
   python36 = super.python36.override { static = true; };
   python37 = super.python37.override { static = true; };
   python38 = super.python38.override { static = true; };
@@ -276,4 +279,28 @@ in {
   libev = super.libev.override { static = true; };
 
   libexecinfo = super.libexecinfo.override { enableShared = false; };
+
+  xorg = super.xorg.overrideScope' (xorgself: xorgsuper: {
+    libX11 = xorgsuper.libX11.overrideAttrs (attrs: {
+      depsBuildBuild = attrs.depsBuildBuild ++ [ (self.buildPackages.stdenv.cc.libc.static or null) ];
+    });
+    xauth = xorgsuper.xauth.overrideAttrs (attrs: {
+      # missing transitive dependencies
+      preConfigure = attrs.preConfigure or "" + ''
+        export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lxcb -lXau -lXdmcp"
+      '';
+    });
+    xdpyinfo = xorgsuper.xdpyinfo.overrideAttrs (attrs: {
+      # missing transitive dependencies
+      preConfigure = attrs.preConfigure or "" + ''
+        export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lXau -lXdmcp"
+      '';
+    });
+    libxcb = xorgsuper.libxcb.overrideAttrs (attrs: {
+      configureFlags = attrs.configureFlags ++ [ "--disable-shared" ];
+    });
+    libXi= xorgsuper.libXi.overrideAttrs (attrs: {
+      configureFlags = attrs.configureFlags ++ [ "--disable-shared" ];
+    });
+  });
 }

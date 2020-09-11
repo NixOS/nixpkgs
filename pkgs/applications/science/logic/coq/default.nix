@@ -5,11 +5,10 @@
 # - The exact version can be specified through the `version` argument to
 #   the derivation; it defaults to the latest stable version.
 
-{ stdenv, fetchFromGitHub, writeText, pkgconfig
+{ stdenv, fetchFromGitHub, writeText, pkgconfig, gnumake42
 , ocamlPackages, ncurses
 , buildIde ? !(stdenv.isDarwin && stdenv.lib.versionAtLeast version "8.10")
 , glib, gnome3, wrapGAppsHook
-, darwin
 , csdp ? null
 , version
 }:
@@ -35,7 +34,7 @@ let
    "8.11.0" = "1rfdic6mp7acx2zfwz7ziqk12g95bl9nyj68z4n20a5bcjv2pxpn";
    "8.11.1" = "0qriy9dy36dajsv5qmli8gd6v55mah02ya334nw49ky19v7518m0";
    "8.11.2" = "0f77ccyxdgbf1nrj5fa8qvrk1cyfy06fv8gj9kzfvlcgn0cf48sa";
-   "8.12+beta1" = "0jbm8am9j926s0h4fi0cjl95l37l6p7i03spcryyrd4sg5xrddr7";
+   "8.12.0" = "18dc7k0piv6v064zgdadpw6mkkxk7j663hb3svgj5236fihjr0cz";
   }.${version};
   coq-version = stdenv.lib.versions.majorMinor version;
   versionAtLeast = stdenv.lib.versionAtLeast coq-version;
@@ -107,15 +106,18 @@ self = stdenv.mkDerivation {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ]
+  ++ stdenv.lib.optional (!versionAtLeast "8.6") gnumake42
+  ;
   buildInputs = [ ncurses ocamlPackages.ocaml ocamlPackages.findlib ]
   ++ stdenv.lib.optional (!versionAtLeast "8.10") ocamlPackages.camlp5
-  ++ [ ocamlPackages.num ]
+  ++ stdenv.lib.optional (!versionAtLeast "8.12") ocamlPackages.num
   ++ stdenv.lib.optionals buildIde
     (if versionAtLeast "8.10"
      then [ ocamlPackages.lablgtk3-sourceview3 glib gnome3.defaultIconTheme wrapGAppsHook ]
-     ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa
      else [ ocamlPackages.lablgtk ]);
+
+  propagatedBuildInputs = stdenv.lib.optional (versionAtLeast "8.12") ocamlPackages.num;
 
   postPatch = ''
     UNAME=$(type -tp uname)

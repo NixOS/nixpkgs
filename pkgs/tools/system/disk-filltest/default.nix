@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "disk-filltest";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "bingmann";
     repo = "disk-filltest";
     rev = "v${version}";
-    sha256 = "1vcb43hdln7xlklz1n0fsfp5x1j9pn829wbad4b110hrc7nwrnvm";
+    sha256 = "0qmcf5k5j7946wsbxrw4rqfj48mwl3r6kb4l3gppl97k7iyni6kj";
   };
 
   preBuild = ''

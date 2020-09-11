@@ -2,14 +2,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "radicale";
-  version = "3.0.3";
+  version = "3.0.5";
 
   # No tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
     rev = version;
-    sha256 = "170mqxlnfzx15img4wb71axq9cnxwllk5cabsv8i008q7wyjqp0n";
+    sha256 = "0w8qkjm7b62cr49dbis41kvv3179sfmvvzlhlc0rbqss6vmwbq4p";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

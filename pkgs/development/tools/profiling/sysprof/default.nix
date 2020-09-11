@@ -1,4 +1,5 @@
 { stdenv
+, lib
 , desktop-file-utils
 , fetchurl
 , fetchpatch
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     gnome3.adwaita-icon-theme
   ];
-  buildInputs = [ glib gtk3 pango polkit systemd.dev systemd.lib libdazzle ];
+  buildInputs = [ glib gtk3 pango polkit systemd.dev (lib.getLib systemd) libdazzle ];
 
   mesonFlags = [
     "-Dsystemdunitdir=lib/systemd/system"

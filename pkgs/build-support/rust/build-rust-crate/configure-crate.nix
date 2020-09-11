@@ -43,7 +43,7 @@ in ''
   noisily cd "${workspace_member}"
 ''}
   ${lib.optionalString (workspace_member == null) ''
-  echo_colored "Searching for matching Cargo.toml (${crateName})" 
+  echo_colored "Searching for matching Cargo.toml (${crateName})"
   local cargo_toml_dir=$(matching_cargo_toml_dir "${crateName}")
   if [ -z "$cargo_toml_dir" ]; then
     echo_error "ERROR configuring ${crateName}: No matching Cargo.toml in $(pwd) found." >&2
@@ -53,7 +53,7 @@ in ''
 ''}
 
   runHook preConfigure
- 
+
   symlink_dependency() {
     # $1 is the nix-store path of a dependency
     # $2 is the target path

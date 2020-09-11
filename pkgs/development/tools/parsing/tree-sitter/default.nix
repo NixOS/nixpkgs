@@ -55,13 +55,16 @@ in rustPlatform.buildRustPackage {
     # needed for the tests
     rm -rf test/fixtures/grammars
     ln -s ${grammars} test/fixtures/grammars
+
+    # These functions do not appear in the source code
+    sed -i /_ts_query_context/d lib/binding_web/exports.json
+    sed -i /___assert_fail/d lib/binding_web/exports.json
   '';
 
   # Compile web assembly with emscripten. The --debug flag prevents us from
   # minifying the JavaScript; passing it allows us to side-step more Node
   # JS dependencies for installation.
   preBuild = ''
-    HOME=/tmp
     bash ./script/build-wasm --debug
   '';
 
@@ -90,7 +93,6 @@ in rustPlatform.buildRustPackage {
       * Robust enough to provide useful results even in the presence of syntax errors
       * Dependency-free so that the runtime library (which is written in pure C) can be embedded in any application
     '';
-    platforms = lib.platforms.all;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Profpatsch ];
     # Darwin needs some more work with default libraries

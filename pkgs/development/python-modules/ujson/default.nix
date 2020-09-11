@@ -1,18 +1,19 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 , isPyPy
 , setuptools_scm
 }:
 
 buildPythonPackage rec {
   pname = "ujson";
-  version = "3.0.0";
-  disabled = isPyPy;
+  version = "3.1.0";
+  disabled = isPyPy || (!isPy3k);
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e0199849d61cc6418f94d52a314c6a27524d65e82174d2a043fb718f73d1520d";
+    sha256 = "00bda1de275ed6fe81817902189c75dfd156b4fa29b44dc1f4620775d2f50cf7";
   };
 
   nativeBuildInputs = [ setuptools_scm ];

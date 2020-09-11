@@ -20,14 +20,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.18.1";
+  version = "0.18.3";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "1g4mfgygyl143k0k6d3cb8b2l05ahiamlcqs1iqi66pc73cax4z6";
+    sha256 = "0y05bw6d1m79dyhm7b6lk6wy82pmy2s9jhf01kf8gr2p0rjjp9yl";
   };
 
   buildInputs = [
@@ -85,9 +85,15 @@ buildPythonApplication rec {
 
   checkInputs = [ pillow ];
 
-  checkPhase = ''
-    ${python.interpreter} test.py
-  '';
+  checkPhase =
+    let buildBinPath =
+      if stdenv.isDarwin
+        then "kitty.app/Contents/MacOS"
+        else "linux-package/bin";
+    in
+    ''
+      env PATH="${buildBinPath}:$PATH" ${python.interpreter} test.py
+    '';
 
   installPhase = ''
     runHook preInstall
@@ -130,6 +136,6 @@ buildPythonApplication rec {
     license = licenses.gpl3;
     changelog = "https://sw.kovidgoyal.net/kitty/changelog.html";
     platforms = platforms.darwin ++ platforms.linux;
-    maintainers = with maintainers; [ tex rvolosatovs ma27 Luflosi ];
+    maintainers = with maintainers; [ tex rvolosatovs Luflosi ];
   };
 }

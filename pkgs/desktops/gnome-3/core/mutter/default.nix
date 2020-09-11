@@ -1,19 +1,18 @@
 { fetchurl
 , fetchpatch
 , substituteAll
+, runCommand
 , stdenv
 , pkgconfig
 , gnome3
 , gettext
 , gobject-introspection
-, upower
 , cairo
 , pango
-, cogl
 , json-glib
 , libstartup_notification
 , zenity
-, libcanberra-gtk3
+, libcanberra
 , ninja
 , xkeyboard_config
 , libxkbfile
@@ -24,7 +23,6 @@
 , glib
 , gtk3
 , gnome-desktop
-, geocode-glib
 , pipewire
 , libgudev
 , libwacom
@@ -42,16 +40,27 @@
 , wayland-protocols
 }:
 
-stdenv.mkDerivation rec {
+let self = stdenv.mkDerivation rec {
   pname = "mutter";
-  version = "3.36.3";
+  version = "3.36.5";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1lpf7anlm073npmfqc5n005kyj12j0ym8y9dqg9q7448ilp79kka";
+    sha256 = "1py7sqrpvg2qvswxclshysx7hd9jk65i6cwqsagd6rg6rnjhblp0";
   };
+
+  patches = [
+    # Drop inheritable cap_sys_nice, to prevent the ambient set from leaking
+    # from mutter/gnome-shell, see https://github.com/NixOS/nixpkgs/issues/71381
+    ./drop-inheritable.patch
+
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit zenity;
+    })
+  ];
 
   mesonFlags = [
     "-Degl_device=true"
@@ -85,16 +94,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cairo
-    cogl
     egl-wayland
-    geocode-glib
     glib
     gnome-desktop
     gnome-settings-daemon
     gobject-introspection
     gsettings-desktop-schemas
     gtk3
-    libcanberra-gtk3
+    libcanberra
     libgudev
     libinput
     libstartup_notification
@@ -104,23 +111,9 @@ stdenv.mkDerivation rec {
     pango
     pipewire
     sysprof
-    upower
     xkeyboard_config
     xwayland
-    zenity
-    zenity
     wayland-protocols
-  ];
-
-  patches = [
-    # Drop inheritable cap_sys_nice, to prevent the ambient set from leaking
-    # from mutter/gnome-shell, see https://github.com/NixOS/nixpkgs/issues/71381
-    ./drop-inheritable.patch
-
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit zenity;
-    })
   ];
 
   postPatch = ''
@@ -132,6 +125,18 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    libdir = "${self}/lib/mutter-6";
+
+    tests = {
+      libdirExists = runCommand "mutter-libdir-exists" {} ''
+        if [[ ! -d ${self.libdir} ]]; then
+          echo "passthru.libdir should contain a directory, “${self.libdir}” is not one."
+          exit 1
+        fi
+        touch $out
+      '';
+    };
+
     updateScript = gnome3.updateScript {
       packageName = pname;
       attrPath = "gnome3.${pname}";
@@ -145,4 +150,5 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-}
+};
+in self

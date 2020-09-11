@@ -2,11 +2,11 @@
 
 bitwig-studio1.overrideAttrs (oldAttrs: rec {
   name = "bitwig-studio-${version}";
-  version = "3.2.2";
+  version = "3.2.7";
 
   src = fetchurl {
     url = "https://downloads.bitwig.com/stable/${version}/bitwig-studio-${version}.deb";
-    sha256 = "10zb78n75nbriyjah0m3syv3rv7qwbmj590z24hss7lifa3rs784";
+    sha256 = "1mj9kii4bnk5w2p18hypwy8swkpzkaqw98q5fsjq362x4qm0b3py";
   };
 
   buildInputs = oldAttrs.buildInputs ++ [ xorg.libXtst ];

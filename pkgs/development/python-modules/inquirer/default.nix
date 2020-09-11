@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "inquirer";
-  version = "2.6.3";
+  version = "2.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01lf51y3bxsxkghbdk9hr42yvihpwi2s5zpxnra3bx41r35msvjz";
+    sha256 = "e819188de0ca7985a99c282176c6f50fb08b0d33867fd1965d3f3e97d6c8f83f";
   };
 
   propagatedBuildInputs = [ python-editor readchar blessings ];

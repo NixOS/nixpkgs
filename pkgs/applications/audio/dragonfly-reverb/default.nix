@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dragonfly-reverb";
-  version = "3.1.1";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "michaelwillis";
     repo = "dragonfly-reverb";
     rev = version;
-    sha256 = "188cm45hr0i33m4h2irql1wrsmsfis65s706wjiid0z59q47rf9p";
+    sha256 = "0vfm2510shah67k87mdyar4wr4vqwii59y9lqfhwm6blxparkrqa";
     fetchSubmodules = true;
   };
 

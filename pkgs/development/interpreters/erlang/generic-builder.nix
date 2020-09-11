@@ -3,6 +3,7 @@
 , openjdk ? null # javacSupport
 , unixODBC ? null # odbcSupport
 , libGL ? null, libGLU ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
+, parallelBuild ? false
 , withSystemd ? stdenv.isLinux, systemd # systemd support in epmd
 }:
 
@@ -60,7 +61,7 @@ in stdenv.mkDerivation ({
   debugInfo = enableDebugInfo;
 
   # On some machines, parallel build reliably crashes on `GEN    asn1ct_eval_ext.erl` step
-  enableParallelBuilding = false;
+  enableParallelBuilding = parallelBuild;
 
   # Clang 4 (rightfully) thinks signed comparisons of pointers with NULL are nonsense
   prePatch = ''

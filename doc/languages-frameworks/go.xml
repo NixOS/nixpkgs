@@ -40,6 +40,10 @@ pet = buildGoModule rec {
 
   subPackages = [ "." ]; <co xml:id='ex-buildGoModule-2' />
 
+  deleteVendor = true; <co xml:id='ex-buildGoModule-3' />
+
+  runVend = true; <co xml:id='ex-buildGoModule-4' />
+
   meta = with lib; {
     description = "Simple command-line snippet manager, written in Go";
     homepage = "https://github.com/knqyf263/pet";
@@ -64,6 +68,16 @@ pet = buildGoModule rec {
       <varname>subPackages</varname> limits the builder from building child packages that have not been listed. If <varname>subPackages</varname> is not specified, all child packages will be built.
      </para>
     </callout>
+    <callout arearefs='ex-buildGoModule-3'>
+     <para>
+      <varname>deleteVendor</varname> removes the pre-existing vendor directory and fetches the dependencies. This should only be used if the dependencies included in the vendor folder are broken or incomplete.
+     </para>
+    </callout>
+    <callout arearefs='ex-buildGoModule-4'>
+     <para>
+      <varname>runVend</varname> runs the vend command to generate the vendor directory. This is useful if your code depends on c code and go mod tidy does not include the needed sources to build.
+     </para>
+    </callout>
    </calloutlist>
   </para>
 
@@ -72,7 +86,7 @@ pet = buildGoModule rec {
 
     When `null` is used as a value, rather than fetching the dependencies
     and vendoring them, we use the vendoring included within the source repo.
-    If you'd like to not have to update this field on dependency changes, 
+    If you'd like to not have to update this field on dependency changes,
     run `go mod vendor` in your source repo and set 'vendorSha256 = null;'
   </para>
  </section>

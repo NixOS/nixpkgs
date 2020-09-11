@@ -6,7 +6,7 @@
 , qtquickcontrols2, qtscript, qtsvg , qttools, qtwayland, qtwebchannel
 , qtwebengine
 # Runtime
-, coreutils, libjpeg_turbo, pciutils, procps, utillinux
+, coreutils, faac, pciutils, procps, utillinux
 , pulseaudioSupport ? true, libpulseaudio ? null
 }:
 
@@ -15,11 +15,11 @@ assert pulseaudioSupport -> libpulseaudio != null;
 let
   inherit (stdenv.lib) concatStringsSep makeBinPath optional;
 
-  version = "5.1.418436.0628";
+  version = "5.1.422789.0705";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.tar.xz";
-      sha256 = "0qgjsc6880i5zn4ck57haidcq40w37sjpdrix4gf09986qcc8gmm";
+      sha256 = "1sc454xadxsbxxyb68qi7ac20yq0vymzzw1i07z19c9idfpjy75f";
     };
   };
 
@@ -40,7 +40,7 @@ in mkDerivation {
   nativeBuildInputs = [ autoPatchelfHook ];
 
   buildInputs = [
-    dbus glib libGL libX11 libXfixes libuuid libxcb libjpeg_turbo qtbase
+    dbus glib libGL libX11 libXfixes libuuid libxcb faac qtbase
     qtdeclarative qtgraphicaleffects qtlocation qtquickcontrols qtquickcontrols2
     qtscript qtwebchannel qtwebengine qtimageformats qtsvg qttools qtwayland
   ];
@@ -70,7 +70,10 @@ in mkDerivation {
       cp -ar ${files} $out/share/zoom-us
 
       # TODO Patch this somehow; tries to dlopen './libturbojpeg.so' from cwd
-      ln -s $(readlink -e "${libjpeg_turbo.out}/lib/libturbojpeg.so") $out/share/zoom-us/libturbojpeg.so
+      cp libturbojpeg.so $out/share/zoom-us/libturbojpeg.so
+
+      # Again, requires faac with a nonstandard filename.
+      ln -s $(readlink -e "${faac}/lib/libfaac.so") $out/share/zoom-us/libfaac1.so
 
       runHook postInstall
     '';

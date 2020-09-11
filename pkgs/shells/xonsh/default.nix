@@ -8,17 +8,18 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xonsh";
-  version = "0.9.18";
+  version = "0.9.21";
 
   # fetch from github because the pypi package ships incomplete tests
   src = fetchFromGitHub {
     owner  = "xonsh";
     repo   = "xonsh";
     rev    = version;
-    sha256 = "1zg5dl9qdysbaw2djy9f7f1ydp7vzjv840cjwqxlmg9615lgg7xa";
+    sha256 = "16k8506fk54krpkls374cn3vm1dp9ixi0byh5xvi3m5a4bnbvrs0";
   };
 
   LC_ALL = "en_US.UTF-8";
+
   postPatch = ''
     sed -ie "s|/bin/ls|${coreutils}/bin/ls|" tests/test_execer.py
     sed -ie "s|SHELL=xonsh|SHELL=$out/bin/xonsh|" tests/test_integrations.py

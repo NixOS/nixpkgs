@@ -8,7 +8,7 @@ let patch = (callPackage ./sources.nix {}).staging;
 in assert stdenv.lib.getVersion wineUnstable == patch.version;
 
 (stdenv.lib.overrideDerivation wineUnstable (self: {
-  buildInputs = build-inputs [ "perl" "utillinux" "autoconf" ] self.buildInputs;
+  buildInputs = build-inputs [ "perl" "utillinux" "autoconf" "gitMinimal" ] self.buildInputs;
 
   name = "${self.name}-staging";
 
@@ -18,7 +18,7 @@ in assert stdenv.lib.getVersion wineUnstable == patch.version;
     chmod +w patches
     cd patches
     patchShebangs gitapply.sh
-    ./patchinstall.sh DESTDIR="$PWD/.." --all
+    ./patchinstall.sh DESTDIR="$PWD/.." --all ${stdenv.lib.concatMapStringsSep " " (ps: "-W ${ps}") patch.disabledPatchsets}
     cd ..
   '';
 })) // {

@@ -99,8 +99,11 @@ let
       urls = args.urls or (if args ? url then [ args.url ] else
         lib.concatMap
           (up: [
-            "${up}/${urlName}.r${toString revision}.tar.xz"
-            "${up}/${urlName}.tar.xz" # TODO To be removed for telive 2020
+            # Only ~11% of packages in texlive 2019 have revisions, so
+            # the number of requests is nearly doubled if we lookup
+            # the name with revision
+            # "${up}/${urlName}.r${toString revision}.tar.xz"
+            "${up}/${urlName}.tar.xz" # TODO To be removed for texlive 2020?
           ])
           urlPrefixes);
 

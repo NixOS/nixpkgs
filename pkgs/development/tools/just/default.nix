@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1sl235wr4fdsw0f0x7jynv6ljhvgis4d87xzpvjzajhdaappdp8d";
+    sha256 = "07fjixz8y5rxfwpyr1kiimnn27jhc20gacd17i0yvfcpy5qf8z5p";
   };
 
-  cargoSha256 = "0k3aqwvdm95403s279gkksklnikgyjpf5qvngsvsrm5xqda438jk";
+  cargoSha256 = "1zn0kiqi8p25lscjd661gczay631nwzadl36cfzqnbww6blayy1j";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -40,22 +40,12 @@ rustPlatform.buildRustPackage rec {
 
   # Skip "edit" when running "cargo test",
   # since this test case needs "cat".
-  checkPhase = ''
-    runHook preCheck
-    echo "Running cargo test --
-        --skip edit
-        ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
-    cargo test -- \
-        --skip edit \
-        ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
-    runHook postCheck
-  '';
+  checkFlagsArray = [ "--skip=edit" ];
 
   meta = with stdenv.lib; {
     description = "A handy way to save and run project-specific commands";
     homepage = "https://github.com/casey/just";
     license = licenses.cc0;
     maintainers = with maintainers; [ xrelkd ];
-    platforms = platforms.all;
   };
 }

@@ -269,4 +269,7 @@ in
     users.groups = mapAttrs' (instanceName: cfg: (
       nameValuePair "${cfg.group}" { })) eachBlockbook;
   };
+
+  meta.maintainers = with maintainers; [ _1000101 ];
+
 }

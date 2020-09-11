@@ -2,6 +2,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
 let
   configDir = "/var/lib/foobar";
+  mqttUsername = "homeassistant";
   mqttPassword = "secret";
 in {
   name = "home-assistant";
@@ -11,6 +12,15 @@ in {
 
   nodes.hass = { pkgs, ... }: {
     environment.systemPackages = with pkgs; [ mosquitto ];
+    services.mosquitto = {
+      enable = true;
+      users = {
+        "${mqttUsername}" = {
+          acl = [ "pattern readwrite #" ];
+          password = mqttPassword;
+        };
+      };
+    };
     services.home-assistant = {
       inherit configDir;
       enable = true;
@@ -23,8 +33,11 @@ in {
           elevation = 0;
         };
         frontend = {};
-        # uses embedded mqtt broker
-        mqtt.password = mqttPassword;
+        mqtt = {
+          broker = "127.0.0.1";
+          username = mqttUsername;
+          password = mqttPassword;
+        };
         binary_sensor = [{
           platform = "mqtt";
           state_topic = "home-assistant/test";
@@ -64,10 +77,10 @@ in {
     with subtest("Toggle a binary sensor using MQTT"):
         # wait for broker to become available
         hass.wait_until_succeeds(
-            "mosquitto_sub -V mqttv311 -t home-assistant/test -u homeassistant -P '${mqttPassword}' -W 1 -t '*'"
+            "mosquitto_sub -V mqttv311 -t home-assistant/test -u ${mqttUsername} -P '${mqttPassword}' -W 1 -t '*'"
         )
         hass.succeed(
-            "mosquitto_pub -V mqttv311 -t home-assistant/test -u homeassistant -P '${mqttPassword}' -m let_there_be_light"
+            "mosquitto_pub -V mqttv311 -t home-assistant/test -u ${mqttUsername} -P '${mqttPassword}' -m let_there_be_light"
         )
     with subtest("Print log to ease debugging"):
         output_log = hass.succeed("cat ${configDir}/home-assistant.log")

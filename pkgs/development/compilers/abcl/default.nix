@@ -1,11 +1,11 @@
 {stdenv, fetchurl, ant, jre, jdk}:
 stdenv.mkDerivation rec {
   pname = "abcl";
-  version = "1.7.0";
+  version = "1.7.1";
   # or fetchFromGitHub(owner,repo,rev) or fetchgit(rev)
   src = fetchurl {
     url = "https://common-lisp.net/project/armedbear/releases/${version}/${pname}-src-${version}.tar.gz";
-    sha256 = "0pbn5s22zygk6k0rzjc9g76220628lj1b3057gr0n4grl11p4lx5";
+    sha256 = "09wjcjvriagml740krg9nva5v6bsc3sav86dmb55pjvfpsr1846m";
   };
   configurePhase = ''
     mkdir nix-tools

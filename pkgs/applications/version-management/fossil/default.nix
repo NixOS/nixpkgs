@@ -1,11 +1,21 @@
 { stdenv
-, libiconv, fetchurl, zlib, openssl, tcl, readline, sqlite, ed, which
-, tcllib, withJson ? true
+, installShellFiles
+, tcl
+, libiconv
+, fetchurl
+, zlib
+, openssl
+, readline
+, sqlite
+, ed
+, which
+, tcllib
+, withJson ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "fossil";
-  version = "2.11.1";
+  version = "2.12.1";
 
   src = fetchurl {
     urls =
@@ -13,29 +23,36 @@ stdenv.mkDerivation rec {
         "https://www.fossil-scm.org/index.html/uv/fossil-src-${version}.tar.gz"
       ];
     name = "${pname}-${version}.tar.gz";
-    sha256 = "1sxq1hn87fdikhbg9y3v4sjy4gxaifnx4dig8nx6xwd5mm7z74dk";
+    sha256 = "00v6gmn2wpfms5jzf103hkm5s8i3bfs5mzacmznlhdzdrzzjc8w2";
   };
 
+  nativeBuildInputs = [ installShellFiles tcl ];
+
   buildInputs = [ zlib openssl readline sqlite which ed ]
-             ++ stdenv.lib.optional stdenv.isDarwin libiconv;
-  nativeBuildInputs = [ tcl ];
+    ++ stdenv.lib.optional stdenv.isDarwin libiconv;
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+
+  configureFlags = [ "--disable-internal-sqlite" ]
+    ++ stdenv.lib.optional withJson "--json";
+
   preCheck = ''
     export TCLLIBPATH="${tcllib}/lib/tcllib${tcllib.version}"
   '';
-  configureFlags = stdenv.lib.optional withJson "--json";
 
-  preBuild=''
+  preBuild = ''
     export USER=nonexistent-but-specified-user
   '';
 
   installPhase = ''
     mkdir -p $out/bin
     INSTALLDIR=$out/bin make install
+
+    installManPage fossil.1
+    installShellCompletion --name fossil.bash tools/fossil-autocomplete.bash
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Simple, high-reliability, distributed software configuration management";
     longDescription = ''
       Fossil is a software configuration management system.  Fossil is
@@ -45,11 +62,7 @@ stdenv.mkDerivation rec {
       from the others by being extremely simple to setup and operate.
     '';
     homepage = "http://www.fossil-scm.org/";
-    license = stdenv.lib.licenses.bsd2;
-    platforms = with stdenv.lib.platforms; all;
-    maintainers = [ #Add your name here!
-      stdenv.lib.maintainers.maggesi
-      stdenv.lib.maintainers.viric
-    ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ maggesi viric ];
   };
 }

@@ -41,15 +41,13 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    install -D -m 644 -t "$out/share/fonts/misc" *.pcf.gz
+    install -D -m 644 -t "$out/share/fonts/misc" *.pcf.gz *.otb
     install -D -m 644 -t "$bdf/share/fonts/misc" *.bdf
-    install -D -m 644 -t "$otb/share/fonts/misc" *.otb
     mkfontdir "$out/share/fonts/misc"
     mkfontdir "$bdf/share/fonts/misc"
-    mkfontdir "$otb/share/fonts/misc"
   '';
 
-  outputs = [ "out" "bdf" "otb" ];
+  outputs = [ "out" "bdf" ];
 
   meta = with stdenv.lib; {
     description = "A monospace bitmap font aimed at programmers";

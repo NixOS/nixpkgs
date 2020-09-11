@@ -234,7 +234,6 @@ in rec {
     path = mkOption {
       default = [];
       type = with types; listOf (oneOf [ package str ]);
-      apply = ps: "${makeBinPath ps}:${makeSearchPathOutput "bin" "sbin" ps}";
       description = ''
         Packages added to the service's <envar>PATH</envar>
         environment variable.  Both the <filename>bin</filename>
@@ -375,6 +374,16 @@ in rec {
       example = [ "0.0.0.0:993" "/run/my-socket" ];
       description = ''
         For each item in this list, a <literal>ListenStream</literal>
+        option in the <literal>[Socket]</literal> section will be created.
+      '';
+    };
+
+    listenDatagrams = mkOption {
+      default = [];
+      type = types.listOf types.str;
+      example = [ "0.0.0.0:993" "/run/my-socket" ];
+      description = ''
+        For each item in this list, a <literal>ListenDatagram</literal>
         option in the <literal>[Socket]</literal> section will be created.
       '';
     };

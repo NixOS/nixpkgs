@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     ++ optionals withBluez [ bluez.dev pkgconfig ];
 
   # We need to force the autodetection because detection doesn't
-  # work in pure build enviroments.
+  # work in pure build environments.
   configureFlags = [
     ("--with-pcap=" + {
       linux = "linux";
@@ -29,7 +29,9 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    rm -f $out/lib/libpcap.a
+    if [ "$dontDisableStatic" -ne "1" ]; then
+      rm -f $out/lib/libpcap.a
+    fi
   '';
 
   meta = {

@@ -3,6 +3,7 @@
 
 let
   system = stdenv.hostPlatform.system;
+  electron = electron_7;
 
 in stdenv.mkDerivation rec {
   pname = "whirlpool-gui";
@@ -71,7 +72,7 @@ in stdenv.mkDerivation rec {
     ln -s "${desktopItem}/share/applications" "$out/share/applications"
 
     # wrap electron
-    makeWrapper '${electron_7}/bin/electron' "$out/bin/whirlpool-gui" \
+    makeWrapper '${electron}/bin/electron' "$out/bin/whirlpool-gui" \
       --add-flags "$out/libexec/whirlpool-gui" \
       --prefix PATH : "${jre8}/bin:${tor}/bin"
   '';

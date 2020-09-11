@@ -1,18 +1,17 @@
 { stdenv, fetchurl, pkgconfig, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
-, systemd, nettle, libedit, zlib, libiconv, libintl
+, systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb
 , autoreconfHook
 }:
 
 let inherit (stdenv.lib) optional optionals; in
 
-# Note: ATM only the libraries have been tested in nixpkgs.
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "2.9.5";
+  version = "2.9.6";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "1109a8ba212ff8ddfdbaf44a6f8fc13a2b880a98a9e54c19112ba72a1aacbf76";
+    sha256 = "bf742883c6825b54f19f2dadca2c94fec1ff8bdcf0a52388e2e167937594b2e7";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -34,6 +33,7 @@ stdenv.mkDerivation rec {
     gnutls liburcu libidn2 libunistring
     nettle libedit
     libiconv lmdb libintl
+    libmaxminddb # optional for geoip module (it's tiny)
     # without sphinx &al. for developer documentation
   ]
     ++ optionals stdenv.isLinux [ libcap_ng systemd ]

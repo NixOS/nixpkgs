@@ -1,12 +1,12 @@
 { stdenv, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
-  version = "3.9.7";
+  version = "3.9.8";
   pname = "pycryptodome";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f1add21b6d179179b3c177c33d18a2186a09cc0d3af41ff5ed3f377360b869f2";
+    sha256 = "0e24171cf01021bc5dc17d6a9d4f33a048f09d62cc3f62541e95ef104588bda4";
   };
 
   meta = {

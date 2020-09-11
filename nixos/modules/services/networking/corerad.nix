@@ -81,6 +81,7 @@ in {
         NotifyAccess = "main";
         ExecStart = "${getBin cfg.package}/bin/corerad -c=${cfg.configFile}";
         Restart = "on-failure";
+        RestartKillSignal = "SIGHUP";
       };
     };
   };

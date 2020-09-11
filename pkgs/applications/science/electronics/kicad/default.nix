@@ -1,4 +1,5 @@
-{ lib, stdenv, gnome3, pkgs, wxGTK30, wxGTK31
+{ lib, stdenv, gnome3, wxGTK30, wxGTK31
+, makeWrapper
 , gsettings-desktop-schemas, hicolor-icon-theme
 , callPackage, callPackages
 , librsvg, cups
@@ -31,9 +32,8 @@ let
     # but brings high DPI support?
     else wxGTK31.override { withGtk2 = false; };
 
-  pythonPackages = python.pkgs;
   python = python3;
-  wxPython = pythonPackages.wxPython_4_0;
+  wxPython = python.pkgs.wxPython_4_0;
 
 in
 stdenv.mkDerivation rec {
@@ -55,10 +55,11 @@ stdenv.mkDerivation rec {
   dontFixup = true;
 
   pythonPath = optionals (scriptingSupport)
-    [ wxPython pythonPackages.six ];
+    [ wxPython python.pkgs.six ];
 
-  nativeBuildInputs = optionals (scriptingSupport)
-    [ pythonPackages.wrapPython ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ optionals (scriptingSupport)
+      [ python.pkgs.wrapPython ];
 
   # wrapGAppsHook added the equivalent to ${base}/share
   # though i noticed no difference without it

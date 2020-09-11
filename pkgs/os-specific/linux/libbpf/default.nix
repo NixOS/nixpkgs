@@ -6,13 +6,13 @@ with builtins;
 
 stdenv.mkDerivation rec {
   pname = "libbpf";
-  version = "0.0.9";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
-    owner = "libbpf";
-    repo = "libbpf";
-    rev = "v${version}";
-    sha256 = "18l0gff7nm841mwhr7bc7x863xcyvwh58zl7mc0amnsjqlbrvqg7";
+    owner  = "libbpf";
+    repo   = "libbpf";
+    rev    = "v${version}";
+    sha256 = "1wi3a795jq0smqg1c5ml2ghai47n1m5ijmch017wscybx4jdlynv";
   };
 
   nativeBuildInputs = [ pkgconfig ];

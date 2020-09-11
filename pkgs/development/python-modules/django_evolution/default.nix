@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "django_evolution";
-  version = "0.7.8";
+  version = "2.0";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "493ff2adad760990ce8cf87c13955af85d4dcff097427bc3619ed01672fac4a8";
+    sha256 = "a0bc983657de1b0bc5c8d29ddcbf7b6fb113685bf306ccc266cf22b8a77bd862";
   };
 
   propagatedBuildInputs = [ django ];

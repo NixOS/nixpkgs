@@ -252,8 +252,8 @@ rec {
       merge = mergeEqualOption;
     };
 
-    # drop this in the future:
-    list = builtins.trace "`types.list` is deprecated; use `types.listOf` instead" types.listOf;
+    # TODO: drop this in the future:
+    list = builtins.trace "`types.list` has been removed; please use `types.listOf` instead" types.listOf;
 
     listOf = elemType: mkOptionType rec {
       name = "listOf";
@@ -326,110 +326,15 @@ rec {
       functor = (defaultFunctor name) // { wrapped = elemType; };
     };
 
-    # List or attribute set of ...
-    loaOf = elemType:
-      let
-        convertAllLists = loc: defs:
-          let
-            padWidth = stringLength (toString (length defs));
-            unnamedPrefix = i: "unnamed-" + fixedWidthNumber padWidth i + ".";
-          in
-            imap1 (i: convertIfList loc (unnamedPrefix i)) defs;
-        convertIfList = loc: unnamedPrefix: def:
-          if isList def.value then
-            let
-              padWidth = stringLength (toString (length def.value));
-              unnamed = i: unnamedPrefix + fixedWidthNumber padWidth i;
-              anyString = placeholder "name";
-              nameAttrs = [
-                { path = [ "environment" "etc" ];
-                  name = "target";
-                }
-                { path = [ "containers" anyString "bindMounts" ];
-                  name = "mountPoint";
-                }
-                { path = [ "programs" "ssh" "knownHosts" ];
-                  # hostNames is actually a list so we would need to handle it only when singleton
-                  name = "hostNames";
-                }
-                { path = [ "fileSystems" ];
-                  name = "mountPoint";
-                }
-                { path = [ "boot" "specialFileSystems" ];
-                  name = "mountPoint";
-                }
-                { path = [ "services" "znapzend" "zetup" ];
-                  name = "dataset";
-                }
-                { path = [ "services" "znapzend" "zetup" anyString "destinations" ];
-                  name = "label";
-                }
-                { path = [ "services" "geoclue2" "appConfig" ];
-                  name = "desktopID";
-                }
-              ];
-              matched = let
-                equals = a: b: b == anyString || a == b;
-                fallback = { name = "name"; };
-              in findFirst ({ path, ... }: all (v: v == true) (zipListsWith equals loc path)) fallback nameAttrs;
-              nameAttr = matched.name;
-              nameValueOld = value:
-                if isList value then
-                  if length value > 0 then
-                    "[ " + concatMapStringsSep " " escapeNixString value + " ]"
-                  else
-                    "[ ]"
-                else
-                  escapeNixString value;
-              nameValueNew = value: unnamed:
-                if isList value then
-                  if length value > 0 then
-                    head value
-                  else
-                    unnamed
-                else
-                  value;
-              res =
-                { inherit (def) file;
-                  value = listToAttrs (
-                    imap1 (elemIdx: elem:
-                      { name  = nameValueNew (elem.${nameAttr} or (unnamed elemIdx)) (unnamed elemIdx);
-                        value = elem;
-                      }) def.value);
-                };
-              option = concatStringsSep "." loc;
-              sample = take 3 def.value;
-              more = lib.optionalString (length def.value > 3) "... ";
-              list = concatMapStrings (x: ''{ ${nameAttr} = ${nameValueOld (x.${nameAttr} or "unnamed")}; ...} '') sample;
-              set = concatMapStrings (x: ''${nameValueNew (x.${nameAttr} or "unnamed") "unnamed"} = {...}; '') sample;
-              msg = ''
-                In file ${def.file}
-                a list is being assigned to the option config.${option}.
-                This will soon be an error as type loaOf is deprecated.
-                See https://github.com/NixOS/nixpkgs/pull/63103 for more information.
-                Do
-                  ${option} =
-                    { ${set}${more}}
-                instead of
-                  ${option} =
-                    [ ${list}${more}]
-              '';
-            in
-              lib.warn msg res
-          else
-            def;
-        attrOnly = attrsOf elemType;
-      in mkOptionType rec {
-        name = "loaOf";
-        description = "list or attribute set of ${elemType.description}s";
-        check = x: isList x || isAttrs x;
-        merge = loc: defs: attrOnly.merge loc (convertAllLists loc defs);
-        emptyValue = { value = {}; };
-        getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name?>"]);
-        getSubModules = elemType.getSubModules;
-        substSubModules = m: loaOf (elemType.substSubModules m);
-        functor = (defaultFunctor name) // { wrapped = elemType; };
-      };
+    # TODO: drop this in the future:
+    loaOf =
+      let msg =
+        ''
+          `types.loaOf` has been removed and mixing lists with attribute values
+          is no longer possible; please use `types.attrsOf` instead.
+          See https://github.com/NixOS/nixpkgs/issues/1800 for the motivation.
+        '';
+      in builtins.trace msg types.attrsOf;
 
     # Value of given type but with no merging (i.e. `uniq list`s are not concatenated).
     uniq = elemType: mkOptionType rec {
@@ -486,9 +391,15 @@ rec {
           else value
         ) defs;
 
+        freeformType = (evalModules {
+          inherit modules specialArgs;
+          args.name = "‹name›";
+        })._module.freeformType;
+
       in
       mkOptionType rec {
         name = "submodule";
+        description = freeformType.description or name;
         check = x: isAttrs x || isFunction x || path.check x;
         merge = loc: defs:
           (evalModules {

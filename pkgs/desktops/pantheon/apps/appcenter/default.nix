@@ -1,4 +1,5 @@
 { stdenv
+, nix-update-script
 , appstream
 , appstream-glib
 , dbus
@@ -23,22 +24,24 @@
 , pkgconfig
 , python3
 , vala
+, polkit
+, libhandy
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "appcenter";
-  version = "3.4.0";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "04q2gp9yyqsg4jd53rivcmikw52psxijrzfy2vxzjsx8fccd48ra";
+    sha256 = "sha256-8r0DlmG8xlCQ1uFHZQjXG2ls4VBrsRzrVY8Ey3/OYAU=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -58,17 +61,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     appstream
-    elementary-icon-theme
     elementary-gtk-theme
+    elementary-icon-theme
     flatpak
     glib
     granite
     gtk3
     json-glib
     libgee
+    libhandy
     libsoup
     libxml2
     packagekit
+    polkit
   ];
 
   mesonFlags = [

@@ -2,17 +2,18 @@
 
 gerbil-support.gerbilPackage {
   pname = "gerbil-utils";
-  version = "unstable-2020-05-17";
-  git-version = "33ef720";
-  package = "clan";
+  version = "unstable-2020-08-02";
+  git-version = "0.2-21-g7e7d053";
+  gerbil-package = "clan";
   gerbil = gerbil-unstable;
   gambit-params = gambit-support.unstable-params;
-  version-path = "";
+  version-path = "version";
+  softwareName = "Gerbil-utils";
   src = fetchFromGitHub {
     owner = "fare";
     repo = "gerbil-utils";
-    rev = "33ef720799ba98dc9eec773c662f070af4bac016";
-    sha256 = "0dsb97magbxzjqqfzwq4qwf7i80llv0s1dsy9nkzkvkq8drxlmqf";
+    rev = "7e7d053ec5e78cc58d38cb03baf554d83b31b0c6";
+    sha256 = "078vqdcddfavqq0d9pw430iz1562cgx1ck3fw6dpwxjkyc6m4bms";
   };
   meta = {
     description = "Gerbil Clan: Community curated Collection of Common Utilities";

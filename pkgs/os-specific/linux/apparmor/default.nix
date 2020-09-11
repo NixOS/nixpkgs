@@ -30,7 +30,18 @@ let
     sha256 = "03nislxccnbxld89giak2s8xa4mdbwscfxbdwhmw5qpvgz08dgwh";
   };
 
+  # See <https://gitlab.com/apparmor/apparmor/-/issues/74> This and the
+  # accompanying application in prePatchCommon should be removed in 2.13.5
+  gnumake43Patch = fetchpatch {
+    url = "https://gitlab.com/apparmor/apparmor/-/merge_requests/465.patch";
+    name = "2-23-fix-build-with-make-4.3.patch";
+    sha256 = "0xw028iqp69j9mxv0kbwraplgkj5i5djdlgf0anpkc5cdbsf96r9";
+  };
+
   prePatchCommon = ''
+    patch -p1 < ${gnumake43Patch}
+    chmod a+x ./common/list_capabilities.sh ./common/list_af_names.sh
+    patchShebangs ./common/list_capabilities.sh ./common/list_af_names.sh
     substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2man" "${buildPackages.perl}/bin/pod2man"
     substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2html" "${buildPackages.perl}/bin/pod2html"
     substituteInPlace ./common/Make.rules --replace "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
@@ -119,7 +130,11 @@ let
       libapparmor.python
     ];
 
-    prePatch = prePatchCommon;
+    prePatch = prePatchCommon + ''
+      substituteInPlace ./utils/apparmor/easyprof.py --replace "/sbin/apparmor_parser" "${apparmor-parser}/bin/apparmor_parser"
+      substituteInPlace ./utils/apparmor/aa.py --replace "/sbin/apparmor_parser" "${apparmor-parser}/bin/apparmor_parser"
+      substituteInPlace ./utils/logprof.conf --replace "/sbin/apparmor_parser" "${apparmor-parser}/bin/apparmor_parser"
+    '';
     inherit patches;
     postPatch = "cd ./utils";
     makeFlags = [ "LANGS=" ];

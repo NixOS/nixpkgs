@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, c-ares, pkgconfig, openssl, protobuf, gflags, abseil-cpp }:
 
 stdenv.mkDerivation rec {
-  version = "1.29.0"; # N.B: if you change this, change pythonPackages.grpcio-tools to a matching version too
+  version = "1.31.0"; # N.B: if you change this, change pythonPackages.grpcio-tools to a matching version too
   pname = "grpc";
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    sha256 = "1n604grkf2amzrmwcz6am0rpbp3yfb062lpgmhv943hj8wk7xw27";
+    sha256 = "1h7gmhkjijfkpqhz8vswhkz2gkphs638g10dlkayic8xg9xdl4gj";
     fetchSubmodules = true;
   };
   patches = [

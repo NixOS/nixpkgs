@@ -408,6 +408,9 @@ in
         (this derives it from the machine-id that systemd generates) or
 
         <literal>head -c4 /dev/urandom | od -A none -t x4</literal>
+
+        The primary use case is to ensure when using ZFS that a pool isn't imported
+        accidentally on a wrong machine.
       '';
     };
 
@@ -516,7 +519,7 @@ in
         <option>networking.useDHCP</option> is true, then every
         interface not listed here will be configured using DHCP.
       '';
-      type = with types; loaOf (submodule interfaceOpts);
+      type = with types; attrsOf (submodule interfaceOpts);
     };
 
     networking.vswitches = mkOption {
@@ -541,7 +544,7 @@ in
           interfaces = mkOption {
             example = [ "eth0" "eth1" ];
             description = "The physical network interfaces connected by the vSwitch.";
-            type = with types; loaOf (submodule vswitchInterfaceOpts);
+            type = with types; attrsOf (submodule vswitchInterfaceOpts);
           };
 
           controllers = mkOption {
@@ -1126,7 +1129,6 @@ in
       ++ optionals config.networking.wireless.enable [
         pkgs.wirelesstools # FIXME: obsolete?
         pkgs.iw
-        pkgs.rfkill
       ]
       ++ bridgeStp;
 

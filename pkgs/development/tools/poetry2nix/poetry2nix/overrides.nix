@@ -12,6 +12,40 @@ self: super:
     }
   );
 
+  ansible = super.ansible.overridePythonAttrs (
+    old: {
+
+      prePatch = pkgs.python.pkgs.ansible.prePatch or "";
+
+      postInstall = pkgs.python.pkgs.ansible.postInstall or "";
+
+      # Inputs copied from nixpkgs as ansible doesn't specify it's dependencies
+      # in a correct manner.
+      propagatedBuildInputs = old.propagatedBuildInputs ++ [
+        self.pycrypto
+        self.paramiko
+        self.jinja2
+        self.pyyaml
+        self.httplib2
+        self.six
+        self.netaddr
+        self.dnspython
+        self.jmespath
+        self.dopy
+        self.ncclient
+      ];
+    }
+  );
+
+  ansible-lint = super.ansible-lint.overridePythonAttrs (
+    old: {
+      buildInputs = old.buildInputs ++ [ self.setuptools-scm-git-archive ];
+      preBuild = ''
+        export HOME=$(mktemp -d)
+      '';
+    }
+  );
+
   astroid = super.astroid.overridePythonAttrs (
     old: rec {
       buildInputs = old.buildInputs ++ [ self.pytest-runner ];
@@ -24,7 +58,7 @@ self: super:
       nativeBuildInputs = old.nativeBuildInputs ++ [
         pkgs.pkgconfig
       ];
-      buildInputs = old.buildInputs ++ [ pkgs.ffmpeg ];
+      buildInputs = old.buildInputs ++ [ pkgs.ffmpeg_4 ];
     }
   );
 
@@ -135,6 +169,15 @@ self: super:
     }
   );
 
+  h3 = super.h3.overridePythonAttrs (
+    old: {
+      preBuild = (old.preBuild or "") + ''
+        substituteInPlace h3/h3.py \
+          --replace "'{}/{}'.format(_dirname, libh3_path)" '"${pkgs.h3}/lib/libh3${pkgs.stdenv.hostPlatform.extensions.sharedLibrary}"'
+      '';
+    }
+  );
+
   h5py = super.h5py.overridePythonAttrs (
     old:
     if old.format != "wheel" then rec {
@@ -241,8 +284,7 @@ self: super:
   kiwisolver = super.kiwisolver.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [
-        # cppy is at the time of writing not in nixpkgs
-        (self.cppy or null)
+        self.cppy
       ];
     }
   );
@@ -254,6 +296,11 @@ self: super:
       ];
     }
   );
+
+  libvirt-python = super.libvirt-python.overridePythonAttrs ({ nativeBuildInputs ? [ ], ... }: {
+    nativeBuildInputs = nativeBuildInputs ++ [ pkgs.pkgconfig ];
+    propagatedBuildInputs = [ pkgs.libvirt ];
+  });
 
   llvmlite = super.llvmlite.overridePythonAttrs (
     old: {
@@ -320,6 +367,13 @@ self: super:
         pkgs.pkgconfig
       ];
 
+      postPatch = ''
+        cat > setup.cfg <<EOF
+        [libs]
+        system_freetype = True
+        EOF
+      '';
+
       propagatedBuildInputs = old.propagatedBuildInputs ++ [
         pkgs.libpng
         pkgs.freetype
@@ -344,6 +398,31 @@ self: super:
       doCheck = false;
     }
   );
+
+  mip = super.mip.overridePythonAttrs (
+    old: {
+      nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.autoPatchelfHook ];
+
+      buildInputs = old.buildInputs ++ [ pkgs.zlib self.cppy ];
+    }
+  );
+
+  molecule =
+    if lib.versionOlder super.molecule.version "3.0.0" then (super.molecule.overridePythonAttrs (
+      old: {
+        patches = (old.patches or [ ]) ++ [
+          # Fix build with more recent setuptools versions
+          (pkgs.fetchpatch {
+            url = "https://github.com/ansible-community/molecule/commit/c9fee498646a702c77b5aecf6497cff324acd056.patch";
+            sha256 = "1g1n45izdz0a3c9akgxx14zhdw6c3dkb48j8pq64n82fa6ndl1b7";
+            excludes = [ "pyproject.toml" ];
+          })
+        ];
+        buildInputs = old.buildInputs ++ [ self.setuptools-scm-git-archive ];
+      }
+    )) else super.molecule.overridePythonAttrs (old: {
+      buildInputs = old.buildInputs ++ [ self.setuptools-scm-git-archive ];
+    });
 
   netcdf4 = super.netcdf4.overridePythonAttrs (
     old: {
@@ -439,12 +518,16 @@ self: super:
 
   psycopg2 = super.psycopg2.overridePythonAttrs (
     old: {
+      buildInputs = old.buildInputs
+        ++ lib.optional stdenv.isDarwin pkgs.openssl;
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.postgresql ];
     }
   );
 
   psycopg2-binary = super.psycopg2-binary.overridePythonAttrs (
     old: {
+      buildInputs = old.buildInputs
+        ++ lib.optional stdenv.isDarwin pkgs.openssl;
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.postgresql ];
     }
   );
@@ -454,7 +537,14 @@ self: super:
       old:
       let
         parseMinor = drv: lib.concatStringsSep "." (lib.take 2 (lib.splitVersion drv.version));
-        _arrow-cpp = pkgs.arrow-cpp.override { inherit (self) python; };
+
+        # Starting with nixpkgs revision f149c7030a7, pyarrow takes "python3" as an argument
+        # instead of "python". Below we inspect function arguments to maintain compatibilitiy.
+        _arrow-cpp = pkgs.arrow-cpp.override (
+          builtins.intersectAttrs
+            (lib.functionArgs pkgs.arrow-cpp.override) { python = self.python; python3 = self.python; }
+        );
+
         ARROW_HOME = _arrow-cpp;
         arrowCppVersion = parseMinor pkgs.arrow-cpp;
         pyArrowVersion = parseMinor super.pyarrow;
@@ -595,6 +685,12 @@ self: super:
     }
   );
 
+  python-ldap = super.python-ldap.overridePythonAttrs (
+    old: {
+      buildInputs = old.buildInputs ++ [ pkgs.openldap pkgs.cyrus_sasl ];
+    }
+  );
+
   pytoml = super.pytoml.overridePythonAttrs (
     old: {
       doCheck = false;
@@ -728,6 +824,12 @@ self: super:
     }
   );
 
+  ffmpeg-python = super.ffmpeg-python.overridePythonAttrs (
+    old: {
+      buildInputs = old.buildInputs ++ [ self.pytest-runner ];
+    }
+  );
+
   python-prctl = super.python-prctl.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [
@@ -841,6 +943,14 @@ self: super:
     }
   );
 
+  tensorflow = super.tensorflow.overridePythonAttrs (
+    old: {
+      postInstall = ''
+        rm $out/bin/tensorboard
+      '';
+    }
+  );
+
   tensorpack = super.tensorpack.overridePythonAttrs (
     old: {
       postPatch = ''
@@ -848,6 +958,9 @@ self: super:
       '';
     }
   );
+
+  # nix uses a dash, poetry uses an underscore
+  typing_extensions = super.typing_extensions or self.typing-extensions;
 
   urwidtrees = super.urwidtrees.overridePythonAttrs (
     old: {
@@ -865,6 +978,16 @@ self: super:
     }
   );
 
+  vispy = super.vispy.overrideAttrs (
+    old: {
+      inherit (pkgs.python3.pkgs.vispy) patches;
+      nativeBuildInputs = old.nativeBuildInputs ++ [
+        self.cython
+        self.setuptools-scm-git-archive
+      ];
+    }
+  );
+
   uvloop = super.uvloop.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ lib.optionals stdenv.isDarwin [
@@ -874,17 +997,34 @@ self: super:
     }
   );
 
+
   # Stop infinite recursion by using bootstrapped pkg from nixpkgs
-  wheel = (
-    pkgs.python3.pkgs.override {
+  bootstrapped-pip = super.bootstrapped-pip.override {
+    wheel = (pkgs.python3.pkgs.override {
       python = self.python;
-    }
-  ).wheel.overridePythonAttrs (
-    old:
-    if old.format == "other" then old else {
-      inherit (super.wheel) pname name version src;
-    }
-  );
+    }).wheel;
+  };
+  wheel =
+    let
+      isWheel = super.wheel.src.isWheel or false;
+      # If "wheel" is a pre-built binary wheel
+      wheelPackage = super.buildPythonPackage {
+        inherit (super.wheel) pname name version src;
+        inherit (pkgs.python3.pkgs.wheel) meta;
+        format = "wheel";
+      };
+      # If "wheel" is built from source
+      sourcePackage = (
+        pkgs.python3.pkgs.override {
+          python = self.python;
+        }
+      ).wheel.overridePythonAttrs (
+        old: {
+          inherit (super.wheel) pname name version src;
+        }
+      );
+    in
+    if isWheel then wheelPackage else sourcePackage;
 
   zipp =
     (

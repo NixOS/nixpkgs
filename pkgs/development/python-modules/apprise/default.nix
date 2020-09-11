@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "apprise";
-  version = "0.8.5";
+  version = "0.8.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aacdd54640a9c66d1c84c8f4390f63feb5a7a8741867a6b451f82ff74c8c792c";
+    sha256 = "18a65c5917bf7f2d48bb557bf0879e49c5293b4c0e9809328387ae09338ae37b";
   };
 
   nativeBuildInputs = [ Babel ];

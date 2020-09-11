@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, toml }:
+{ stdenv, buildPythonPackage, fetchPypi, pep517, toml, mock, breezy, git }:
 
 buildPythonPackage rec {
   pname = "check-manifest";
@@ -9,15 +9,19 @@ buildPythonPackage rec {
     sha256 = "0d8e1b0944a667dd4a75274f6763e558f0d268fde2c725e894dfd152aae23300";
   };
 
-  propagatedBuildInputs = [ toml ];
+  # Test requires filesystem access
+  postPatch = ''
+    substituteInPlace tests.py --replace "test_build_sdist" "no_test_build_sdist"
+  '';
 
-  doCheck = false;
+  propagatedBuildInputs = [ pep517 toml ];
+
+  checkInputs = [ mock breezy git ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/mgedmin/check-manifest";
     description = "Check MANIFEST.in in a Python source package for completeness";
     license = licenses.mit;
     maintainers = with maintainers; [ lewo ];
-    broken = true; # pep517 package doesn't exist in nixpkgs
   };
 }

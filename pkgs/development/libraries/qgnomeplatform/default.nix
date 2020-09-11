@@ -1,6 +1,7 @@
 { mkDerivation
 , lib
 , fetchFromGitHub
+, nix-update-script
 , pkgconfig
 , gtk3
 , glib
@@ -52,7 +53,7 @@ mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };

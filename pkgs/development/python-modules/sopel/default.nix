@@ -5,20 +5,21 @@
 , praw
 , pyenchant
 , pygeoip
-, pytest
+, pytestCheckHook
 , python
 , pytz
+, sqlalchemy
 , xmltodict
 }:
 
 buildPythonPackage rec {
   pname = "sopel";
-  version = "7.0.4";
+  version = "7.0.6";
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c8fc7186ff34c5f86ebbf2bff734503e92ce29aaf5a242eaf93875983617c6d0";
+    sha256 = "5e394d9797e221f90a95e5eb9987e8c1faf4f2488964f521e8ca1628798f0a38";
   };
 
   propagatedBuildInputs = [
@@ -29,20 +30,26 @@ buildPythonPackage rec {
     pyenchant
     pygeoip
     pytz
+    sqlalchemy
     xmltodict
   ];
 
   # remove once https://github.com/sopel-irc/sopel/pull/1653 lands
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "praw<6.0.0" "praw<7.0.0"
+      --replace "praw>=4.0.0,<6.0.0" "praw"
   '';
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    HOME=$PWD # otherwise tries to create tmpdirs at root
-    pytest .
+  preCheck = ''
+    export TESTDIR=$(mktemp -d)
+    cp -R ./test $TESTDIR
+    pushd $TESTDIR
+  '';
+
+  postCheck = ''
+    popd
   '';
 
   meta = with stdenv.lib; {

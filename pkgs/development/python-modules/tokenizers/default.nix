@@ -32,16 +32,24 @@ let
   };
 in rustPlatform.buildRustPackage rec {
   pname = "tokenizers";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "python-v${version}";
-    sha256 = "0f5r1wm5ybyk3jvihj1g98y7ihq0iklg0pwkaa11pk1gv0k869w3";
+    sha256 = "0sxdwx05hr87j2z32rk4rgwn6a26w9r7m5fgj6ah1sgagiiyxbjw";
   };
 
-  cargoSha256 = "131bvf35q5n65mq6zws1rp5fn2qkfwfg9sbxi5y6if24n8fpdz4m";
+  # Update parking_lot to be compatible with recent Rust versions, that
+  # replace asm! by llvm_asm!:
+  #
+  # https://github.com/Amanieu/parking_lot/pull/223
+  #
+  # Remove once upstream updates this dependency.
+  cargoPatches = [ ./update-parking-lot.diff ];
+
+  cargoSha256 = "0cdkxmj8z2wdspn6r62lqlpvd0sj1z0cmb1zpqaajxvr0b2kjlj8";
 
   sourceRoot = "source/bindings/python";
 

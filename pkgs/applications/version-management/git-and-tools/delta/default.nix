@@ -9,24 +9,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "delta";
-  version = "0.2.0";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "dandavison";
     repo = pname;
     rev = version;
-    sha256 = "15c7rsmiinnpxh12520jz3wr0j86vgzjq1ss5pf30fa7lcgicb32";
+    sha256 = "0g7jg6bxxihplxzq3ixdm24d36xd7xlwpazz8qj040m981cj123i";
   };
 
-  cargoSha256 = "0lzz32qh80s4dxr0d4pg0qagkn549lr4vbqknl2l0cmlq1bvvq6g";
+  cargoSha256 = "0q73adygyddjyajwwbkrhwss4f8ynxsga5yz4ac5fk5rzmda75rv";
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
   postInstall = ''
-    installShellCompletion --bash --name delta.bash completion/completion.bash
-    installShellCompletion --zsh --name _delta completion/completion.zsh
+    installShellCompletion --bash --name delta.bash etc/completion/completion.bash
+    installShellCompletion --zsh --name _delta etc/completion/completion.zsh
   '';
 
   meta = with lib; {

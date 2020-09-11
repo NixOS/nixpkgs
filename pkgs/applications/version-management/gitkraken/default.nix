@@ -3,7 +3,7 @@
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
 , makeDesktopItem, openssl, wrapGAppsHook, at-spi2-atk, at-spi2-core, libuuid
-, e2fsprogs, krb5
+, e2fsprogs, krb5, libdrm, mesa
 }:
 
 with stdenv.lib;
@@ -13,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gitkraken";
-  version = "7.0.1";
+  version = "7.3.0";
 
   src = fetchzip {
     url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-    sha256 = "0vj2ggbm617fypl69ksbrbl048xp4v6wc46y4sp7hrk6lg0gw1b0";
+    sha256 = "0q9imaka79p3krmcrxvnxzb2gprczybnw8d4y9p4icbmdbyb6h70";
   };
 
   dontBuild = true;
@@ -61,6 +61,8 @@ stdenv.mkDerivation rec {
     libuuid
     e2fsprogs
     krb5
+    libdrm
+    mesa
   ];
 
   desktopItem = makeDesktopItem {

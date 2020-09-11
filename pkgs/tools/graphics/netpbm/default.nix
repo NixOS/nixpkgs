@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchsvn
-, pkgconfig
+, pkg-config
 , libjpeg
 , libpng
 , flex
@@ -27,14 +27,8 @@ stdenv.mkDerivation {
     sha256 = "1m7ks6k53gsjsdazgf22g16dfgj3pqvqy9mhxzlwszv5808sj5w5";
   };
 
-  postPatch = ''
-    # Install libnetpbm.so symlink to correct destination
-    substituteInPlace lib/Makefile \
-      --replace '/sharedlink' '/lib'
-  '';
-
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     flex
     makeWrapper
   ];
@@ -47,6 +41,14 @@ stdenv.mkDerivation {
     libxml2
     libtiff
   ] ++ lib.optional enableX11 libX11;
+
+  enableParallelBuilding = true;
+
+  postPatch = ''
+    # Install libnetpbm.so symlink to correct destination
+    substituteInPlace lib/Makefile \
+      --replace '/sharedlink' '/lib'
+  '';
 
   configurePhase = ''
     runHook preConfigure
@@ -71,8 +73,6 @@ stdenv.mkDerivation {
 
     runHook postConfigure
   '';
-
-  enableParallelBuilding = true;
 
   installPhase = ''
     runHook preInstall

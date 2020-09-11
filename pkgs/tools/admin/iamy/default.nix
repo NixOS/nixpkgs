@@ -4,8 +4,6 @@ buildGoModule rec {
   pname = "iamy";
   version = "2.3.2";
 
-  goPackagePath = "github.com/99designs/iamy";
-
   src = fetchFromGitHub {
     owner = "99designs";
     repo = "iamy";
@@ -14,6 +12,8 @@ buildGoModule rec {
   };
 
   vendorSha256 = "0c4g1zr0wl118g41hqri0vwvfin39yvgs214w3spw8ggjcj6bzph";
+
+  doCheck = false;
 
   buildFlagsArray = [''-ldflags=
     -X main.Version=v${version} -s -w

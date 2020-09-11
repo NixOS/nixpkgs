@@ -9,21 +9,15 @@ stdenv.mkDerivation rec {
     sha256 = "1gbkpbjwjaaifxff8amm9b47dynq4l4698snjdgnn4flndw62q88";
   };
 
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
+  # The prefix passed to configure is not used.
+  makeFlags = [ "DESTDIR=$(out)" ];
 
-  makeFlags = [ "CC=${stdenv.cc.outPath}/bin/cc" ];
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -fv dpic $out/bin
-  '';
-
-  meta = {
-    homepage = "https://ece.uwaterloo.ca/~aplevich/dpic/";
+  meta = with stdenv.lib; {
     description = "An implementation of the pic little language for creating drawings";
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = [ stdenv.lib.maintainers.aespinosa ];
-    platforms = stdenv.lib.platforms.all;
+    homepage = "https://ece.uwaterloo.ca/~aplevich/dpic/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ aespinosa ];
+    platforms = platforms.all;
   };
 }
 

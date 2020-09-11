@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "0w065ls8dp687jmps4xdffcarss1wyls14dngr43g58xjw6519gb";
 
+  doCheck = false;
+
   passthru.tests = { inherit (nixosTests.prometheus-exporters) keylight; };
 
   meta = with stdenv.lib; {

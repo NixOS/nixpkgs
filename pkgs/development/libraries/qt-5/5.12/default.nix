@@ -38,14 +38,14 @@ let
   mirror = "https://download.qt.io";
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; } // {
     # Community port of the now unmaintained upstream qtwebkit.
-    qtwebkit = {
+    qtwebkit = rec {
       src = fetchFromGitHub {
-        owner = "annulen";
-        repo = "webkit";
-        rev = "4ce8ebc4094512b9916bfa5984065e95ac97c9d8";
-        sha256 = "05h1xnxzbf7sp3plw5dndsvpf6iigh0bi4vlj4svx0hkf1giakjf";
+        owner = "qtwebkit";
+        repo = "qtwebkit";
+        rev = "qtwebkit-${version}";
+        sha256 = "11lc5sk10d9cyg8jqkbgkqiap72b9rax7hy61nm90zw9749y2yfg";
       };
-      version = "5.212-alpha-01-26-2018";
+      version = "5.212.0-alpha4";
     };
   };
 
@@ -97,13 +97,21 @@ let
         url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qtbug-77037-workaround.patch?h=packages/qt5-webengine&id=fc77d6b3d5ec74e421b58f199efceb2593cbf951";
         sha256 = "1gv733qfdn9746nbqqxzyjx4ijjqkkb7zb71nxax49nna5bri3am";
       })
-    ]
-      ++ optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
-    qtwebkit = [ ./qtwebkit.patch ]
-      ++ optionals stdenv.isDarwin [
-        ./qtwebkit-darwin-no-readline.patch
-        ./qtwebkit-darwin-no-qos-classes.patch
-      ];
+    ] ++ optionals stdenv.isDarwin [
+      ./qtwebengine-darwin-no-platform-check.patch
+      ./qtwebengine-darwin-fix-failed-static-assertion.patch
+    ];
+    qtwebkit = [
+      (fetchpatch {
+        name = "qtwebkit-bison-3.7-build.patch";
+        url = "https://github.com/qtwebkit/qtwebkit/commit/d92b11fea65364fefa700249bd3340e0cd4c5b31.patch";
+        sha256 = "0h8ymfnwgkjkwaankr3iifiscsvngqpwb91yygndx344qdiw9y0n";
+      })
+      ./qtwebkit.patch
+    ] ++ optionals stdenv.isDarwin [
+      ./qtwebkit-darwin-no-readline.patch
+      ./qtwebkit-darwin-no-qos-classes.patch
+    ];
     qttools = [ ./qttools.patch ];
   };
 
@@ -158,6 +166,7 @@ let
       qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
       qtscript = callPackage ../modules/qtscript.nix {};
       qtsensors = callPackage ../modules/qtsensors.nix {};
+      qtserialbus = callPackage ../modules/qtserialbus.nix {};
       qtserialport = callPackage ../modules/qtserialport.nix {};
       qtspeech = callPackage ../modules/qtspeech.nix {};
       qtsvg = callPackage ../modules/qtsvg.nix {};

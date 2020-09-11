@@ -22,20 +22,15 @@ rec {
   # Policy: use the highest stable version as the default (on our master).
   stable = if stdenv.hostPlatform.system == "x86_64-linux"
     then generic {
-      version = "440.100";
-      sha256_64bit = "07ygp8xs293glbybv2psi5ykfdlpgwp03bkczf51fyzknkx895k4";
-      settingsSha256 = "1chis62wk4a93m49w4ncq0za4h7si6f3ckbl9ifxx7vnab8rk6ly";
-      persistencedSha256 = "142fdxhznzjsnmvgpmi9x7gy6mp3n25acxfnfmf37ncs4sk0wm6i";
+      version = "450.66";
+      sha256_64bit = "1a6va0gvbzpkyza693v2ml1is4xbv8wxasqk0zd5y7rxin94c1ms";
+      settingsSha256 = "0mkgs91gx7xb7f24xkq9fl7i8d4l7s0wr9a44b1gm1vkw82fm7lj";
+      persistencedSha256 = "02id8cg8fba7c1j4m6vj4gp2mv39lz2k557kdjw8lszcpw6f1fhh";
     }
     else legacy_390;
 
   # No active beta right now
-  beta = generic {
-    version = "450.51";
-    sha256_64bit = "17pam9737jx9vvczma5rafa0rihprccmfz84clb1y4nhbay5alf2";
-    settingsSha256 = "09hc1mjh7s94hy37rslxrxr30kx9a4yfnkmv35wn86b2p9zk3w6n";
-    persistencedSha256 = "0jmri8kj6gffqn8pm8nijhq2airvgid11vj2ffc037l7z4w0s6ar";
-  };
+  beta = stable;
 
   # Last one supporting x86
   legacy_390 = generic {

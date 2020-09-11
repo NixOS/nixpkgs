@@ -82,6 +82,7 @@ in buildPythonApplication rec {
   patches = [
     ./fix-searchpath.patch
     ./use-local-spdx-license-list.patch
+    ./missing-udev-rules-nixos.patch
   ];
 
   postPatch = ''

@@ -1,23 +1,33 @@
-{ stdenv, fetchurl, pkgconfig, glib, python3, systemd, libgudev }:
+{ stdenv
+, fetchurl
+, pkg-config
+, gobject-introspection
+, glib
+, python3
+, systemd
+, libgudev
+}:
 
 stdenv.mkDerivation rec {
   pname = "libmbim";
-  version = "1.23.900";
+  version = "1.24.2";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/libmbim/${pname}-${version}.tar.xz";
-    sha256 = "0ikzjs44q44cj4m786gvm575a7x61rgmav6b60n2y74pgqvj3791";
+    sha256 = "1r41d4yddp8rgccxrkz9vg5lbrj3dr5vy71d8igrr147k44qq69j";
   };
 
   outputs = [ "out" "dev" "man" ];
 
   configureFlags = [
     "--with-udev-base-dir=${placeholder "out"}/lib/udev"
+    "--enable-introspection"
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     python3
+    gobject-introspection
   ];
 
   buildInputs = [

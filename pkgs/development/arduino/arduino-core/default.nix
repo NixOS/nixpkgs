@@ -68,13 +68,14 @@ let
     xorg.libXxf86vm
     zlib
   ];
-  teensy_architecture =
-    lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") "linux64"
-    + lib.optionalString (stdenv.hostPlatform.system == "i686-linux") "linux32"
-    + lib.optionalString (stdenv.hostPlatform.system == "aarch64-linux") "linuxaarch64"
-    + lib.optionalString (builtins.match "armv[67]l-linux" stdenv.hostPlatform.system != null) "linuxarm";
-  flavor = ( if withTeensyduino then "teensyduino" else "arduino")
-    + stdenv.lib.optionalString (!withGui) "-core";
+  teensy_architecture = if stdenv.hostPlatform.isx86_32 then "linux32"
+                        else if stdenv.hostPlatform.isx86_64 then "linux64"
+                        else if stdenv.hostPlatform.isAarch64 then "linuxaarch64"
+                        else if stdenv.hostPlatform.isAarch32 then "linuxarm"
+                        else throw "${stdenv.hostPlatform.system} is not supported in teensy";
+
+  flavor = (if withTeensyduino then "teensyduino" else "arduino")
+             + stdenv.lib.optionalString (!withGui) "-core";
 in
 stdenv.mkDerivation rec {
   version = "1.8.12";
@@ -90,28 +91,23 @@ stdenv.mkDerivation rec {
   teensyduino_version = "151";
   teensyduino_src = fetchurl {
     url = "https://www.pjrc.com/teensy/td_${teensyduino_version}/TeensyduinoInstall.${teensy_architecture}";
-    sha256 =
-      lib.optionalString (teensy_architecture == "linux64")
-        "0q8mw9bm2vb5vwa98gwcs6ad164i98hc1qqh2qw029yhwm599pn0"
-      + lib.optionalString (teensy_architecture == "linux32")
-        "1rq6sx0048ab200jy0cz5vznwxi99avidngj42rjnh7kcfas5c4m"
-      + lib.optionalString (teensy_architecture == "linuxaarch64")
-        "09k78dycn1vcpcx37c1dak8bgjv8gs34l89n9r9s0c3rqmv3pg4x"
-      + lib.optionalString (teensy_architecture == "linuxarm")
-        "19j55bq36040rpdpfxcqimda76rkbx137q15bs8nvxj13wrbl4ip";
+    sha256 = {
+      linux64 = "0q8mw9bm2vb5vwa98gwcs6ad164i98hc1qqh2qw029yhwm599pn0";
+      linux32 = "1rq6sx0048ab200jy0cz5vznwxi99avidngj42rjnh7kcfas5c4m";
+      linuxarm = "19j55bq36040rpdpfxcqimda76rkbx137q15bs8nvxj13wrbl4ip";
+      linuxaarch64 = "09k78dycn1vcpcx37c1dak8bgjv8gs34l89n9r9s0c3rqmv3pg4x";
+    }.${teensy_architecture} or (throw "No arduino binaries for ${teensy_architecture}");
   };
   # Used because teensyduino requires jars be a specific size
   arduino_dist_src = fetchurl {
     url = "http://downloads.arduino.cc/arduino-${version}-${teensy_architecture}.tar.xz";
     sha256 =
-      lib.optionalString (teensy_architecture == "linux64")
-        "128f34kkxz7ab6ir5mqyr8d1mgxig8f9jygwxy44pdnq2rk6gmh9"
-      + lib.optionalString (teensy_architecture == "linux32")
-        "11n85lwsn1w4ysfacyw08v85s3f3zvl8j8ac7rld19yxgjslvisi"
-      + lib.optionalString (teensy_architecture == "linuxaarch64")
-        "04v2nhyjhahml6nmz23bfb63c0an4a7zxgcgxqqq442i8vd304wa"
-      + lib.optionalString (teensy_architecture == "linuxarm")
-        "1k8yjivaydm6y16mplrjyblgx7l0wjzm3mjxh5saxrjq7drswmxx";
+      {
+        linux64 = "128f34kkxz7ab6ir5mqyr8d1mgxig8f9jygwxy44pdnq2rk6gmh9";
+        linux32 = "11n85lwsn1w4ysfacyw08v85s3f3zvl8j8ac7rld19yxgjslvisi";
+        linuxarm = "1k8yjivaydm6y16mplrjyblgx7l0wjzm3mjxh5saxrjq7drswmxx";
+        linuxaarch64 = "04v2nhyjhahml6nmz23bfb63c0an4a7zxgcgxqqq442i8vd304wa";
+      }.${teensy_architecture} or (throw "No arduino binaries for ${teensy_architecture}");
   };
 
 

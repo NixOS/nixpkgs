@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "libversion";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1p3snjlsg11vhba8h286h19kn6azlxbywg9f6rdhj8sfraccqlmk";
+    sha256 = "1h8x9hglrqi03f461lhw3wwz23zs84dgw7hx4laxcmyrgvyzvcq1";
   };
 
   nativeBuildInputs = [ pkgconfig ];

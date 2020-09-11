@@ -1,4 +1,4 @@
-{ stdenv, callPackage, lib, fetchurl, fetchFromGitHub
+{ stdenv, callPackage, lib, fetchurl, fetchFromGitHub, installShellFiles
 , runCommand, runCommandCC, makeWrapper, recurseIntoAttrs
 # this package (through the fixpoint glass)
 , bazel_self
@@ -419,10 +419,18 @@ stdenv.mkDerivation rec {
 
       # add nix environment vars to .bazelrc
       cat >> .bazelrc <<EOF
+      # Limit the resources Bazel is allowed to use during the build to 1/2 the
+      # available RAM and 3/4 the available CPU cores. This should help avoid
+      # overwhelming the build machine.
+      build --local_ram_resources=HOST_RAM*.5
+      build --local_cpu_resources=HOST_CPUS*.75
+
       build --distdir=${distDir}
       fetch --distdir=${distDir}
       build --copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt="/g')"
       build --host_copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt="/g')"
+      build --linkopt="$(echo $(< ${stdenv.cc}/nix-support/libcxx-ldflags) | sed -e 's/ /" --linkopt="/g')"
+      build --host_linkopt="$(echo $(< ${stdenv.cc}/nix-support/libcxx-ldflags) | sed -e 's/ /" --host_linkopt="/g')"
       build --linkopt="-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt="-Wl,/g')"
       build --host_linkopt="-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt="-Wl,/g')"
       build --host_javabase='@local_jdk//:jdk'
@@ -432,6 +440,8 @@ stdenv.mkDerivation rec {
       # add the same environment vars to compile.sh
       sed -e "/\$command \\\\$/a --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\" \\\\" \
           -e "/\$command \\\\$/a --host_copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt=\"/g')\" \\\\" \
+          -e "/\$command \\\\$/a --linkopt=\"$(echo $(< ${stdenv.cc}/nix-support/libcxx-ldflags) | sed -e 's/ /" --linkopt=\"/g')\" \\\\" \
+          -e "/\$command \\\\$/a --host_linkopt=\"$(echo $(< ${stdenv.cc}/nix-support/libcxx-ldflags) | sed -e 's/ /" --host_linkopt=\"/g')\" \\\\" \
           -e "/\$command \\\\$/a --linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt=\"-Wl,/g')\" \\\\" \
           -e "/\$command \\\\$/a --host_linkopt=\"-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --host_linkopt=\"-Wl,/g')\" \\\\" \
           -e "/\$command \\\\$/a --host_javabase='@local_jdk//:jdk' \\\\" \
@@ -465,6 +475,7 @@ stdenv.mkDerivation rec {
   # when a command can’t be found in a bazel build, you might also
   # need to add it to `defaultShellPath`.
   nativeBuildInputs = [
+    installShellFiles
     zip
     python3
     unzip
@@ -507,9 +518,15 @@ stdenv.mkDerivation rec {
     mv ./bazel_src/output/bazel $out/bin/bazel-${version}-${system}-${arch}
 
     # shell completion files
-    mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
-    mv ./bazel_src/output/bazel-complete.bash $out/share/bash-completion/completions/bazel
-    cp ./bazel_src/scripts/zsh_completion/_bazel $out/share/zsh/site-functions/
+    installShellCompletion --bash \
+      --name bazel.bash \
+      ./bazel_src/output/bazel-complete.bash
+    installShellCompletion --zsh \
+      --name _bazel \
+      ./bazel_src/scripts/zsh_completion/_bazel
+    installShellCompletion --fish \
+      --name bazel.fish \
+      ./bazel_src/scripts/fish/completions/bazel.fish
   '';
 
   doInstallCheck = true;

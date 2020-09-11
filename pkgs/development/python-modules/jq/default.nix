@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "jq";
-  version = "0.1.6";
+  version = "0.1.8";
 
-  srcs = fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "34bdf9f9e49e522e1790afc03f3584c6b57329215ea0567fb2157867d6d6f602";
+    sha256 = "9b6bb376237133080185ab556ca2a724e8be5b31946eb2053d4a1f17ae9df9a8";
   };
   patches = [ ./jq-py-setup.patch ];
 

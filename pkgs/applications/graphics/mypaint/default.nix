@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , gtk3
-, intltool
+, gettext
 , json_c
 , lcms2
 , libpng
@@ -20,18 +20,18 @@ let
   inherit (python3.pkgs) pycairo pygobject3 numpy buildPythonApplication;
 in buildPythonApplication rec {
   pname = "mypaint";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "mypaint";
     repo = "mypaint";
     rev = "v${version}";
-    sha256 = "180kyilhf81ndhwl1hlvy82gh6hxpcvka2d1nkghbpgy431rls6r";
+    sha256 = "rVKcxzWZRLcuxK8xRyRgvitXAh4uOEyqHswLeTdA2Mk=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    intltool
+    gettext
     pkgconfig
     swig
     wrapGAppsHook

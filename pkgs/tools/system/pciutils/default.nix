@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, zlib, kmod, which }:
+{ stdenv, fetchurl, pkgconfig, zlib, kmod, which
+, static ? stdenv.targetPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
   name = "pciutils-3.7.0"; # with release-date database
@@ -12,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib kmod which ];
 
   makeFlags = [
-    "SHARED=yes"
+    "SHARED=${if static then "no" else "yes"}"
     "PREFIX=\${out}"
     "STRIP="
     "HOST=${stdenv.hostPlatform.system}"

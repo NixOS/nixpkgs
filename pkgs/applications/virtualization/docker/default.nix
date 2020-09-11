@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, removeReferencesTo, installShellFiles, pkgconfig
+{ stdenv, lib, fetchFromGitHub, fetchpatch, buildGoPackage
+, makeWrapper, removeReferencesTo, installShellFiles, pkgconfig
 , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
 , sqlite, iproute, lvm2, systemd
 , btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs, git
@@ -56,7 +57,7 @@ rec {
       NIX_CFLAGS_COMPILE = "-DMINIMAL=ON";
     });
   in
-    stdenv.mkDerivation ((optionalAttrs (stdenv.isLinux) {
+    buildGoPackage ((optionalAttrs (stdenv.isLinux) {
 
     inherit docker-runc docker-containerd docker-proxy docker-tini;
 
@@ -66,7 +67,7 @@ rec {
       ++ optional (lvm2 == null) "exclude_graphdriver_devicemapper"
       ++ optional (libseccomp != null) "seccomp";
 
-   }) // {
+   }) // rec {
     inherit version rev;
 
     name = "docker-${version}";
@@ -78,9 +79,19 @@ rec {
       sha256 = sha256;
     };
 
-    nativeBuildInputs = [ installShellFiles pkgconfig ];
+    patches = [
+      # Replace hard-coded cross-compiler with $CC
+      (fetchpatch {
+        url = https://github.com/docker/docker-ce/commit/2fdfb4404ab811cb00227a3de111437b829e55cf.patch;
+        sha256 = "1af20bzakhpfhaixc29qnl9iml9255xdinxdnaqp4an0n1xa686a";
+      })
+    ];
+
+    goPackagePath = "github.com/docker/docker-ce";
+
+    nativeBuildInputs = [ pkgconfig go-md2man go libtool removeReferencesTo installShellFiles ];
     buildInputs = [
-      makeWrapper removeReferencesTo go-md2man go libtool
+      makeWrapper
     ] ++ optionals (stdenv.isLinux) [
       sqlite lvm2 btrfs-progs systemd libseccomp
     ];
@@ -91,7 +102,7 @@ rec {
       export GOCACHE="$TMPDIR/go-cache"
     '' + (optionalString (stdenv.isLinux) ''
       # build engine
-      cd ./components/engine
+      cd ./go/src/${goPackagePath}/components/engine
       export AUTO_GOPATH=1
       export DOCKER_GITCOMMIT="${rev}"
       export VERSION="${version}"
@@ -99,7 +110,7 @@ rec {
       cd -
     '') + ''
       # build cli
-      cd ./components/cli
+      cd ./go/src/${goPackagePath}/components/cli
       # Mimic AUTO_GOPATH
       mkdir -p .gopath/src/github.com/docker/
       ln -sf $PWD .gopath/src/github.com/docker/cli
@@ -113,7 +124,7 @@ rec {
     '';
 
     # systemd 230 no longer has libsystemd-journal as a separate entity from libsystemd
-    patchPhase = ''
+    postPatch = ''
       substituteInPlace ./components/cli/scripts/build/.variables --replace "set -eu" ""
     '' + optionalString (stdenv.isLinux) ''
       patchShebangs .
@@ -125,7 +136,13 @@ rec {
 
     extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute iptables e2fsprogs xz xfsprogs procps utillinux git ]);
 
-    installPhase = optionalString (stdenv.isLinux) ''
+    installPhase = ''
+      cd ./go/src/${goPackagePath}
+      install -Dm755 ./components/cli/docker $out/libexec/docker/docker
+
+      makeWrapper $out/libexec/docker/docker $out/bin/docker \
+        --prefix PATH : "$out/libexec/docker:$extraPath"
+    '' + optionalString (stdenv.isLinux) ''
       install -Dm755 ./components/engine/bundles/dynbinary-daemon/dockerd $out/libexec/docker/dockerd
 
       makeWrapper $out/libexec/docker/dockerd $out/bin/dockerd \
@@ -141,24 +158,20 @@ rec {
       # systemd
       install -Dm644 ./components/engine/contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
     '' + ''
-      install -Dm755 ./components/cli/docker $out/libexec/docker/docker
-
-      makeWrapper $out/libexec/docker/docker $out/bin/docker \
-        --prefix PATH : "$out/libexec/docker:$extraPath"
-
       # completion (cli)
       installShellCompletion --bash ./components/cli/contrib/completion/bash/docker
       installShellCompletion --fish ./components/cli/contrib/completion/fish/docker.fish
       installShellCompletion --zsh ./components/cli/contrib/completion/zsh/_docker
 
       # Include contributed man pages (cli)
+      cd ./components/cli
+    '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
       # Generate man pages from cobra commands
       echo "Generate man pages from cobra"
-      cd ./components/cli
       mkdir -p ./man/man1
       go build -o ./gen-manpages github.com/docker/cli/man
       ./gen-manpages --root . --target ./man/man1
-
+    '' + ''
       # Generate legacy pages from markdown
       echo "Generate legacy manpages"
       ./man/md2man-all.sh -q
@@ -167,7 +180,7 @@ rec {
     '';
 
     preFixup = ''
-      find $out -type f -exec remove-references-to -t ${go} -t ${stdenv.cc.cc} '{}' +
+      find $out -type f -exec remove-references-to -t ${stdenv.cc.cc} '{}' +
     '' + optionalString (stdenv.isLinux) ''
       find $out -type f -exec remove-references-to -t ${stdenv.glibc.dev} '{}' +
     '';

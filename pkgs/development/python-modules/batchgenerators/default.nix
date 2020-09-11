@@ -25,7 +25,7 @@ buildPythonPackage rec {
     repo = pname;
     rev = "v${version}";
     sha256 = "0cc3i4wznqb7lk8n6jkprvkpsby6r7khkxqwn75k8f01mxgjfpvf";
-    
+
   };
 
   patches = [

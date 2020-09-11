@@ -18,10 +18,10 @@
 }:
 
 let
-  defaultVersion = "2020.04";
+  defaultVersion = "2020.07";
   defaultSrc = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    sha256 = "0wjkasnz87q86hx93inspdjfjsinmxi87bcvj30c773x0fpjlwzy";
+    sha256 = "0sjzy262x93aaqd6z24ziaq19xjjjk5f577ivf768vmvwsgbzxf1";
   };
   buildUBoot = {
     version ? null
@@ -269,6 +269,13 @@ in {
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootPinebookPro = buildUBoot {
+    defconfig = "pinebook-pro-rk3399_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareRK3399}/bl31.elf";
+    filesToInstall = [ "u-boot.itb" "idbloader.img"];
   };
 
   ubootQemuAarch64 = buildUBoot {

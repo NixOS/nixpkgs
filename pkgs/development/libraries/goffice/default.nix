@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "goffice";
-  version = "0.10.47";
+  version = "0.10.48";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0xmigfdzvmlpa0fw79mf3xwchmxc8rlidryn5syv8bz7msmrb215";
+    sha256 = "1z6f3q8fxkd1ysqrwdxdi0844zqa00vjpf07gq8mh3kal8picfd4";
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];

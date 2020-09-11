@@ -14,7 +14,7 @@
 , lldbVersions ? [ ]
 , cmakeVersions ? [ ]
 , includeNDK ? false
-, ndkVersion ? "18.1.5063045"
+, ndkVersion ? "21.0.6113669"
 , useGoogleAPIs ? false
 , useGoogleTVAddOns ? false
 , includeExtras ? []

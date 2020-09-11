@@ -2,29 +2,19 @@
 
 buildGoModule rec {
   pname = "saml2aws";
-  version = "2.26.2";
+  version = "2.27.0";
 
   src = fetchFromGitHub {
     owner = "Versent";
     repo = "saml2aws";
     rev = "v${version}";
-    sha256 = "0y5gvdrdr6i9spdwsxvzs1bxs32icxpkqxnglp1bf4gglc580d87";
+    sha256 = "15ddzab93iqwbvxnaw5wp4dzwlxjqxvyy1c4w37jm69zkczylrmc";
   };
 
-  hid = fetchFromGitHub {
-    owner = "karalabe";
-    repo = "hid";
-    rev = "9c14560f9ee858c43f40b5cd01392b167aacf4e8";
-    sha256 = "0xc7b8mwha64j7l2fr2g5zy8pz7cqi0vrxx60gii52b6ii31xncx";
-  };
+  runVend = true;
+  vendorSha256 = "1w7vnpv36lhxpaljdhslbckkr7p81nzc91a0503wk8nrrc4ljsyy";
 
-  vendorSha256 = "0f81nrg8v3xh2hcx7g77p3ahr4gyj042bwr1knf2phpahgz9n9rn";
-  overrideModAttrs = (_: {
-      postBuild = ''
-      cp -r --reflink=auto ${hid}/libusb vendor/github.com/karalabe/hid
-      cp -r --reflink=auto ${hid}/hidapi vendor/github.com/karalabe/hid
-      '';
-    });
+  doCheck = false;
 
   subPackages = [ "." "cmd/saml2aws" ];
 

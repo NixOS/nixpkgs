@@ -204,6 +204,9 @@ with super;
     externalDeps = [
       { name = "EXPAT"; dep = pkgs.expat; }
     ];
+    patches = [
+      ./luaexpat.patch
+    ];
   });
 
   # TODO Somehow automatically amend buildInputs for things that need luaffi
@@ -343,14 +346,5 @@ with super;
     setSourceRoot = ''
       sourceRoot=./readline-2.6
     '';
-  });
-
-  pulseaudio = super.pulseaudio.override({
-    buildInputs = [
-      pkgs.libpulseaudio
-    ];
-    nativeBuildInputs = [
-      pkgs.pulseaudio pkgs.pkgconfig
-    ];
   });
 }

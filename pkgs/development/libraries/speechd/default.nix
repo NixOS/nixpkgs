@@ -39,11 +39,11 @@ let
       throw "You need to enable at least one output module.";
 in stdenv.mkDerivation rec {
   pname = "speech-dispatcher";
-  version = "0.9.1";
+  version = "0.10.1";
 
   src = fetchurl {
     url = "https://github.com/brailcom/speechd/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "16bg52hnkrsrs7kgbzanb34b9zb6fqxwj0a9bmsxmj1skkil1h1p";
+    sha256 = "0j2lfzkmbsxrrgjw6arzvnfd4jn5pxab28xsk2djssr2ydb9x309";
   };
 
   patches = [

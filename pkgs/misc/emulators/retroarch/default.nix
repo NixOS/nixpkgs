@@ -43,9 +43,6 @@ stdenv.mkDerivation rec {
                                               libXdmcp libXext libXxf86vm mesa udev
                                               wayland libxkbcommon ];
 
-  # we use prefix-less pkg-config
-  PKG_CONF_PATH = "pkg-config";
-
   enableParallelBuilding = true;
 
   configureFlags = stdenv.lib.optionals stdenv.isLinux [ "--enable-kms" "--enable-egl" ];

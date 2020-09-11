@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, cmake
+{ stdenv, fetchFromGitHub, pkgconfig, cmake
 , libjpeg ? null
 , zlib ? null
 , libpng ? null
@@ -8,15 +8,14 @@
 , enableDocs ? false }:
 
 stdenv.mkDerivation rec {
-  version = "1.3";
+  version = "1.6";
   pname = "openmvg";
 
-  src = fetchgit {
-    url = "https://www.github.com/openmvg/openmvg.git";
-
-    # Tag v1.1
-    rev = "refs/tags/v${version}";
-    sha256 = "1cf1gbcl8zvxp4rr6f6vaxwcg0yzc4xban2b5p9zy1m4k1f81zyb";
+  src = fetchFromGitHub {
+    owner = "openmvg";
+    repo = "openmvg";
+    rev = "v${version}";
+    sha256 = "0mrsi0dzgi7cjzn13r9xv7rnc8c9a4h8ip78xy88m9xsyr21wd1h";
     fetchSubmodules = true;
   };
 
@@ -46,6 +45,5 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mpl20;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ mdaiter ];
-    broken = true; # 2018-04-11
   };
 }

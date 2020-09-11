@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "python-redis-lock";
-  version = "3.5.0";
+  version = "3.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06f28f63bf4ea3d739ff5c472e76563e24aa5c887002a85cbdb7a5b13aa05897";
+    sha256 = "6c79b87f2fefcf47bbcebea56056d324e9d7971c9b98123b79590e08cbb0a8f7";
   };
 
   checkInputs = [ pytest process-tests pkgs.redis ];

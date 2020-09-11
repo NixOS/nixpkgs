@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1mzvpr12qh9668iz97p62zl4zhlrcyfgwr4a9zg9irj585pkb5x2";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     homepage = "https://pgcenter.org/";
     description = "Command-line admin tool for observing and troubleshooting PostgreSQL";

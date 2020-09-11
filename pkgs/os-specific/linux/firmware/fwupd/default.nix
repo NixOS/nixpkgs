@@ -93,11 +93,11 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.4.4";
+    version = "1.4.5";
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "03yn96kxs53vxcbza17y99rdhbjlybv44gkc90vaj6301grxahnp";
+      sha256 = "0hpqxwqbbqn440c2swpnc06z8dskisrli4ynsxrzzqyp0dan46xw";
     };
 
     # libfwupd goes to lib
@@ -166,6 +166,11 @@ let
         src = ./installed-tests-path.patch;
         # Needs a different set of modules than po/make-images.
         inherit installedTestsPython;
+      })
+
+      (fetchpatch {
+        url = "https://github.com/fwupd/fwupd/commit/3e82beeddac31292c50229e59e2404865edee5ad.patch";
+        sha256 = "17p9r8qddqkrnhy9bvp9207afh5fcl1whn79nqcp57b4q4c17zgk";
       })
     ];
 

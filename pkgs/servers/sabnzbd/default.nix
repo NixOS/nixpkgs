@@ -1,17 +1,33 @@
-{stdenv, fetchFromGitHub, python2, par2cmdline, unzip, unrar, p7zip, makeWrapper}:
+{ stdenv
+, fetchFromGitHub
+, python3
+, par2cmdline
+, unzip
+, unrar
+, p7zip
+, makeWrapper
+}:
 
 let
-  pythonEnv = python2.withPackages(ps: with ps; [ cryptography cheetah yenc sabyenc ]);
+  pythonEnv = python3.withPackages(ps: with ps; [
+    chardet
+    cheetah3
+    cherrypy
+    cryptography
+    configobj
+    feedparser
+    sabyenc3
+  ]);
   path = stdenv.lib.makeBinPath [ par2cmdline unrar unzip p7zip ];
 in stdenv.mkDerivation rec {
-  version = "2.3.9";
+  version = "3.0.1";
   pname = "sabnzbd";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "06ln00rqz4xpsqhq0f495893xq1w5dfjawb8dgfyjjfds8627p16";
+    sha256 = "1zp8cxz56qmai1z6xcscnq85gxhv64dv1s5zqsqdn0zpbxyqqdlr";
   };
 
   buildInputs = [ pythonEnv makeWrapper ];

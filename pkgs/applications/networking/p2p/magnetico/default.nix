@@ -18,7 +18,6 @@ buildGoModule rec {
     make magneticow magneticod
   '';
 
-  doCheck = true;
   checkPhase = ''
     make test
   '';

@@ -1,5 +1,6 @@
 { janePackage
 , ctypes
+, dune-configurator
 , num
 , octavius
 , ppxlib
@@ -415,6 +416,15 @@ rec {
     hash = "0bfxyvdmyv23zfr49pb4c3bgfkjr4s3nb3z07xrw6szia3j1kp4j";
     meta.description = "Shell helpers for Async";
     propagatedBuildInputs = [ async shell ];
+  };
+
+  async_ssl = janePackage {
+    pname = "async_ssl";
+    useDune2 = true;
+    hash = "0z5dbiam5k7ipx9ph4r8nqv0a1ldx1ymxw3xjxgrdjda90lmwf2k";
+    meta.description = "Async wrappers for SSL";
+    buildInputs = [ dune-configurator ];
+    propagatedBuildInputs = [ async ctypes openssl ];
   };
 
   core_bench = janePackage {

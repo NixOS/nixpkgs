@@ -97,11 +97,11 @@ let
         "dd-agent/conf.d/nginx.yaml".source = nginxConfig;
       }) //
       (optionalAttrs (cfg.mongoConfig != null)
-      { 
+      {
         "dd-agent/conf.d/mongo.yaml".source = mongoConfig;
       }) //
       (optionalAttrs (cfg.processConfig != null)
-      { 
+      {
         "dd-agent/conf.d/process.yaml".source = processConfig;
       }) //
       (optionalAttrs (cfg.jmxConfig != null)

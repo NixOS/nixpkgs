@@ -54,7 +54,7 @@ let
         type = types.bool // { merge = mergeFalseByDefault; };
         default = false;
         description = ''
-          Wether option should generate a failure when unused.
+          Whether option should generate a failure when unused.
           Upon merging values, mandatory wins over optional.
         '';
       };

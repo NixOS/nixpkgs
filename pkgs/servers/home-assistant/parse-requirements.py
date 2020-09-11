@@ -113,6 +113,10 @@ def name_to_attr_path(req: str, packages: Dict[str, Dict[str, str]]) -> Optional
     # instead of python-3.6-python-mpd2 inside Nixpkgs
     if req.startswith("python-") or req.startswith("python_"):
         names.append(req[len("python-") :])
+    # Add name variant without extra_require, e.g. samsungctl
+    # instead of samsungctl[websocket]
+    if req.endswith("]"):
+        names.append(req[:req.find("[")])
     for name in names:
         # treat "-" and "_" equally
         name = re.sub("[-_]", "[-_]", name)
@@ -173,9 +177,10 @@ def main() -> None:
         f.write("  components = {\n")
         for component, deps in build_inputs.items():
             available, missing = deps
-            f.write(f'    "{component}" = ps: with ps; [ ')
-            f.write(" ".join(available))
-            f.write("];")
+            f.write(f'    "{component}" = ps: with ps; [')
+            if available:
+                f.write(" " + " ".join(available))
+            f.write(" ];")
             if len(missing) > 0:
                 f.write(f" # missing inputs: {' '.join(missing)}")
             f.write("\n")

@@ -1,3 +1,4 @@
+Remove about:buildconfig.  If used as-is, it would add unnecessary runtime dependencies.
 diff -ur firefox-65.0-orig/docshell/base/nsAboutRedirector.cpp firefox-65.0/docshell/base/nsAboutRedirector.cpp
 --- firefox-65.0-orig/docshell/base/nsAboutRedirector.cpp       2019-01-23 00:48:28.988747428 +0100
 +++ firefox-65.0/docshell/base/nsAboutRedirector.cpp    2019-01-23 00:51:13.378188397 +0100

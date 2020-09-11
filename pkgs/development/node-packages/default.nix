@@ -43,17 +43,6 @@ let
       name = "bitwarden-cli-${drv.version}";
     });
 
-    ios-deploy = super.ios-deploy.override (drv: {
-      nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.buildPackages.rsync ];
-      preRebuild = ''
-        LD=$CC
-        tmp=$(mktemp -d)
-        ln -s /usr/bin/xcodebuild $tmp
-        export PATH="$PATH:$tmp"
-      '';
-      meta.platforms = [ pkgs.lib.platforms.darwin ];
-    });
-
     fast-cli = super."fast-cli-1.x".override {
       preRebuild = ''
         # Simply ignore the phantomjs --version check. It seems to need a display but it is safe to ignore
@@ -70,6 +59,36 @@ let
     insect = super.insect.override (drv: {
       nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package self.pulp ];
     });
+
+    mirakurun = super.mirakurun.override rec {
+      nativeBuildInputs = with pkgs; [ makeWrapper ];
+      postInstall = let
+        runtimeDeps = [ nodejs ] ++ (with pkgs; [ bash which v4l_utils ]);
+      in
+      ''
+        substituteInPlace $out/lib/node_modules/mirakurun/processes.json \
+          --replace "/usr/local" ""
+
+        # XXX: Files copied from the Nix store are non-writable, so they need
+        # to be given explicit write permissions
+        substituteInPlace $out/lib/node_modules/mirakurun/lib/Mirakurun/config.js \
+          --replace 'fs.copyFileSync("config/server.yml", path);' \
+                    'fs.copyFileSync("config/server.yml", path); fs.chmodSync(path, 0o644);' \
+          --replace 'fs.copyFileSync("config/tuners.yml", path);' \
+                    'fs.copyFileSync("config/tuners.yml", path); fs.chmodSync(path, 0o644);' \
+          --replace 'fs.copyFileSync("config/channels.yml", path);' \
+                    'fs.copyFileSync("config/channels.yml", path); fs.chmodSync(path, 0o644);'
+
+        # XXX: The original mirakurun command uses PM2 to manage the Mirakurun
+        # server.  However, we invoke the server directly and let systemd
+        # manage it to avoid complication. This is okay since no features
+        # unique to PM2 is currently being used.
+        makeWrapper ${nodejs}/bin/npm $out/bin/mirakurun \
+          --add-flags "start" \
+          --run "cd $out/lib/node_modules/mirakurun" \
+          --prefix PATH : ${pkgs.lib.makeBinPath runtimeDeps}
+      '';
+    };
 
     node-inspector = super.node-inspector.override {
       buildInputs = [ self.node-pre-gyp ];
@@ -130,6 +149,14 @@ let
           --add-flags "$out/lib/node_modules/tedicross/main.js"
       '';
     };
+
+    tsun = super.tsun.overrideAttrs (oldAttrs: {
+      buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper ];
+      postInstall = ''
+        wrapProgram "$out/bin/tsun" \
+        --prefix NODE_PATH : ${self.typescript}/lib/node_modules
+      '';
+    });
 
     stf = super.stf.override {
       meta.broken = since "10";

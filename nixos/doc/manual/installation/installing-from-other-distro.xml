@@ -211,7 +211,7 @@ nixpkgs https://nixos.org/channels/nixpkgs-unstable</screen>
     use <literal>sudo</literal>)
    </para>
 <programlisting>
-<link linkend="opt-users.users._name__.initialHashedPassword">users.users.root.initialHashedPassword</link> = "";
+<link linkend="opt-users.users._name_.initialHashedPassword">users.users.root.initialHashedPassword</link> = "";
 </programlisting>
   </listitem>
   <listitem>

@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "dropbox";
-  version = "10.2.0";
+  version = "10.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4372916da70aad82e7227e7c31a8cfa2310e41c9d34d32883daedf43ed403f86";
+    sha256 = "6de5f6f36aad32d4382f3d0ad88ee85a22d81d638c960667b8e1ada05db2f98c";
   };
 
   # Set DROPBOX_TOKEN environment variable to a valid token.

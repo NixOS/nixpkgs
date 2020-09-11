@@ -1,17 +1,17 @@
-{ mkDerivation, lib, fetchFromGitHub, qmake, libusb1, hidapi }:
+{ mkDerivation, lib, fetchFromGitHub, qmake, libusb1, hidapi, pkg-config }:
 
 mkDerivation rec {
   pname = "openrgb";
-  version = "0.2";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "CalcProgrammer1";
     repo = "OpenRGB";
     rev = "release_${version}";
-    sha256 = "0b1mkp4ca4gdzk020kp6dkd3i9a13h4ikrn3417zscsvv5y9kv0s";
+    sha256 = "1931aisdahjr99d4qqk824ib4x19mvhqgqmkm3j6fc5zd2hnw87m";
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [ qmake pkg-config ];
   buildInputs = [ libusb1 hidapi ];
 
   installPhase = ''

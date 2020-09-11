@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xits-math";
-  version = "1.301";
+  version = "1.302";
 
   src = fetchFromGitHub {
     owner = "alif-type";
     repo = "xits";
     rev = "v${version}";
-    sha256 = "043g0gnjc7wn1szvrs0rc1vvrq1qmhqh45b0y2kwrlxsgprpv8ll";
+    sha256 = "1x3r505dylz9rz8dj98h5n9d0zixyxmvvhnjnms9qxdrz9bxy9g1";
   };
 
   nativeBuildInputs = (with python3Packages; [ python fonttools fontforge ]);

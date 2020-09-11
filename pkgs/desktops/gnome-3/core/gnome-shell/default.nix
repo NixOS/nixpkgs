@@ -1,59 +1,80 @@
-{ fetchurl, fetchpatch, substituteAll, stdenv, meson, ninja, pkgconfig, gnome3, json-glib, gettext, libsecret
-, python3, libsoup, polkit, clutter, networkmanager, docbook_xsl , docbook_xsl_ns, at-spi2-core
-, libstartup_notification, telepathy-glib, telepathy-logger, libXtst, unzip, glibcLocales, shared-mime-info
-, libgweather, libcanberra-gtk3, librsvg, geoclue2, perl, docbook_xml_dtd_42, desktop-file-utils
-, libpulseaudio, libical, gobject-introspection, wrapGAppsHook, libxslt, gcr
-, accountsservice, gdk-pixbuf, gdm, upower, ibus, libnma, libgnomekbd, gnome-desktop
-, gsettings-desktop-schemas, gnome-keyring, glib, gjs, mutter, evolution-data-server, gtk3
-, sassc, systemd, gst_all_1, adwaita-icon-theme, gnome-bluetooth, gnome-clocks, gnome-settings-daemon
-, gnome-autoar, asciidoc-full
+{ fetchurl
+, fetchpatch
+, substituteAll
+, stdenv
+, meson
+, ninja
+, pkg-config
+, gnome3
+, json-glib
+, gettext
+, libsecret
+, python3
+, polkit
+, networkmanager
+, gtk-doc
+, docbook-xsl-nons
+, at-spi2-core
+, libstartup_notification
+, telepathy-glib
+, telepathy-logger
+, unzip
+, shared-mime-info
+, libgweather
+, librsvg
+, geoclue2
+, perl
+, docbook_xml_dtd_412
+, docbook_xml_dtd_42
+, docbook_xml_dtd_43
+, desktop-file-utils
+, libpulseaudio
+, libical
+, gobject-introspection
+, wrapGAppsHook
+, libxslt
+, gcr
+, accountsservice
+, gdk-pixbuf
+, gdm
+, upower
+, ibus
+, libnma
+, libgnomekbd
+, gnome-desktop
+, gsettings-desktop-schemas
+, gnome-keyring
+, glib
+, gjs
+, mutter
+, evolution-data-server
+, gtk3
+, sassc
+, systemd
+, gst_all_1
+, adwaita-icon-theme
+, gnome-bluetooth
+, gnome-clocks
+, gnome-settings-daemon
+, gnome-autoar
+, asciidoc-full
 , bash-completion
 }:
 
 # http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/gnome-base/gnome-shell/gnome-shell-3.10.2.1.ebuild?revision=1.3&view=markup
-
 let
-  pythonEnv = python3.withPackages ( ps: with ps; [ pygobject3 ] );
-
-in stdenv.mkDerivation rec {
+  pythonEnv = python3.withPackages (ps: with ps; [ pygobject3 ]);
+in
+stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "3.36.3";
+  version = "3.36.5";
+
+  outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-shell/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1fs51lcaal4lnx6m5a3j8922yjbjk32khznx77cxb2db1zvspn46";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1hj7gmjmy92xndlgw7pzk5m6j2fbzcgfd1pxc32k38gml8qg19d4";
   };
-
-  LANG = "en_US.UTF-8";
-
-  nativeBuildInputs = [
-    meson ninja pkgconfig gettext docbook_xsl docbook_xsl_ns docbook_xml_dtd_42 perl wrapGAppsHook glibcLocales
-    sassc desktop-file-utils libxslt.bin python3 asciidoc-full
-  ];
-  buildInputs = [
-    systemd
-    gsettings-desktop-schemas gnome-keyring glib gcr json-glib accountsservice
-    libsecret libsoup polkit gdk-pixbuf librsvg
-    networkmanager libstartup_notification telepathy-glib
-    libXtst gjs mutter libpulseaudio evolution-data-server
-    libical gtk3 gdm libcanberra-gtk3 geoclue2
-    adwaita-icon-theme gnome-bluetooth
-    gnome-clocks # schemas needed
-    at-spi2-core upower ibus gnome-desktop telepathy-logger gnome-settings-daemon
-    gobject-introspection
-    gnome-autoar
-
-    # recording
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-
-    # not declared at build time, but typelib is needed at runtime
-    libgweather libnma
-
-    # for gnome-extension tool
-    bash-completion
-  ];
 
   patches = [
     # Hardcode paths to various dependencies so that they can be found at runtime.
@@ -84,6 +105,77 @@ in stdenv.mkDerivation rec {
       revert = true;
       sha256 = "14h7ahlxgly0n3sskzq9dhxzbyb04fn80pv74vz1526396676dzl";
     })
+  ];
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    docbook-xsl-nons
+    docbook_xml_dtd_412
+    docbook_xml_dtd_42
+    docbook_xml_dtd_43
+    gtk-doc
+    perl
+    wrapGAppsHook
+    sassc
+    desktop-file-utils
+    libxslt.bin
+    python3
+    asciidoc-full
+  ];
+
+  buildInputs = [
+    systemd
+    gsettings-desktop-schemas
+    gnome-keyring
+    glib
+    gcr
+    accountsservice
+    libsecret
+    polkit
+    gdk-pixbuf
+    librsvg
+    networkmanager
+    libstartup_notification
+    telepathy-glib
+    gjs
+    mutter
+    libpulseaudio
+    evolution-data-server
+    libical
+    gtk3
+    gdm
+    geoclue2
+    adwaita-icon-theme
+    gnome-bluetooth
+    gnome-clocks # schemas needed
+    at-spi2-core
+    upower
+    ibus
+    gnome-desktop
+    telepathy-logger
+    gnome-settings-daemon
+    gobject-introspection
+
+    # recording
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+
+    # not declared at build time, but typelib is needed at runtime
+    libgweather
+    libnma
+
+    # for gnome-extension tool
+    bash-completion
+    gnome-autoar
+    json-glib
+  ];
+
+  mesonFlags = [
+    "-Dgtk_doc=true"
   ];
 
   postPatch = ''

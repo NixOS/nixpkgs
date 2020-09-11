@@ -2,16 +2,22 @@
 
 buildPythonPackage rec {
   pname = "jedi";
-  version = "0.17.0";
+  version = "0.17.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "df40c97641cb943661d2db4c33c2e1ff75d491189423249e989bcea4464f3030";
+    sha256 = "86ed7d9b750603e4ba582ea8edc678657fb4007894a12bcf6f4bb97892f31d20";
   };
 
   checkInputs = [ pytest glibcLocales tox pytestcov ];
 
   propagatedBuildInputs = [ parso ];
+
+  # remove next bump, >=0.17.2, already fixed in master
+  prePatch = ''
+    substituteInPlace requirements.txt \
+      --replace "parso>=0.7.0,<0.8.0" "parso"
+  '';
 
   checkPhase = ''
     LC_ALL="en_US.UTF-8" py.test test

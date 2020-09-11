@@ -19,12 +19,12 @@ with lib;
 
 mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.1.13";
+  version = "2.3.0";
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "0mq3f7faxn1hfkhv5n37y5iajjnm38s2in631046m0q7c4w3lrfi";
+    sha256 = "0yga4p36jrc5m3d8q2y2g0505c2v540w5hgcscapl4xj9hyb21dw";
   };
 
   postPatch = ''
@@ -52,14 +52,15 @@ mkDerivation rec {
 
   cmakeFlags = [
     "-Ddisable_autoupdate=ON"
-    # TODO: Officiall API credentials for Nixpkgs
-    # (see: https://github.com/NixOS/nixpkgs/issues/55271):
-    "-DTDESKTOP_API_TEST=ON"
+    # We're allowed to used the API ID of the Snap package:
+    "-DTDESKTOP_API_ID=611335"
+    "-DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c"
     "-DDESKTOP_APP_USE_PACKAGED_RLOTTIE=OFF"
     "-DDESKTOP_APP_USE_PACKAGED_VARIANT=OFF"
     "-DDESKTOP_APP_USE_PACKAGED_GSL=OFF"
     "-DTDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME=ON"
     "-DTDESKTOP_USE_PACKAGED_TGVOIP=OFF"
+    "-DDESKTOP_APP_DISABLE_WEBRTC_INTEGRATION=ON"
     #"-DDESKTOP_APP_SPECIAL_TARGET=\"\"" # TODO: Error when set to "": Bad special target '""'
     "-DTDESKTOP_LAUNCHER_BASENAME=telegramdesktop" # Note: This is the default
   ];

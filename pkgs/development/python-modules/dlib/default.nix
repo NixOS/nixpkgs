@@ -1,4 +1,6 @@
-{ buildPythonPackage, dlib, python, pytest, more-itertools, avxSupport ? true, lib }:
+{ buildPythonPackage, stdenv, lib, dlib, python, pytest, more-itertools
+, avxSupport ? stdenv.hostPlatform.avxSupport
+}:
 
 buildPythonPackage {
   inherit (dlib) name src nativeBuildInputs buildInputs meta;

@@ -1,4 +1,4 @@
-{ callPackage, makeFontsConf, gnome2 }:
+{ callPackage, makeFontsConf, gnome2, buildFHSUserEnv }:
 
 let
   mkStudio = opts: callPackage (import ./common.nix opts) {
@@ -6,21 +6,22 @@ let
       fontDirectories = [];
     };
     inherit (gnome2) GConf gnome_vfs;
+    inherit buildFHSUserEnv;
   };
   stableVersion = {
-    version = "4.0.0.16"; # "Android Studio 4.0"
-    build = "193.6514223";
-    sha256Hash = "1sqj64vddwfrr9821habfz7dms9csvbp7b8gf1d027188b2lvh3h";
+    version = "4.0.1.0"; # "Android Studio 4.0.1"
+    build = "193.6626763";
+    sha256Hash = "15vm7fvi8c286wx9f28z6ysvm8wqqda759qql0zy9simwx22gy7j";
   };
   betaVersion = {
-    version = "4.0.0.16"; # "Android Studio 4.0"
-    build = "193.6514223";
-    sha256Hash = "1sqj64vddwfrr9821habfz7dms9csvbp7b8gf1d027188b2lvh3h";
+    version = "4.1.0.17"; # "Android Studio 4.1 RC 2"
+    build = "201.6776251";
+    sha256Hash = "sha256-3W+eUcffRk7lZxbvf3X/Np4hkwAUqU51sQ061XR7Ddc=";
   };
   latestVersion = { # canary & dev
-    version = "4.1.0.10"; # "Android Studio 4.1 Canary 10"
-    build = "201.6507185";
-    sha256Hash = "19yawwsjsdqc0brr0ahviljv4v4p085k3izdpmm915c0bjm89y72";
+    version = "4.2.0.8"; # "Android Studio 4.2 Canary 8"
+    build = "202.6787931";
+    sha256Hash = "0y5fzr22dknzxay1bhd1ymhdnmdrpccdw8dswy2z9bxjsvq65n62";
   };
 in {
   # Attributes are named by their corresponding release channels

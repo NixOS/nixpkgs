@@ -1,22 +1,22 @@
 {
     "4.14": {
-        "name": "linux-hardened-4.14.185.a.patch",
-        "sha256": "0kj18z2mbffnc0zksg7bfyy3hljiga0gzk0s3axvbxlp41vpvwp3",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.14.185.a/linux-hardened-4.14.185.a.patch"
+        "name": "linux-hardened-4.14.195.a.patch",
+        "sha256": "1a1g9q750gbnkcycqnzafb22f7250ck8dvzx6jqkz669wdg2pd7z",
+        "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.14.195.a/linux-hardened-4.14.195.a.patch"
     },
     "4.19": {
-        "name": "linux-hardened-4.19.129.a.patch",
-        "sha256": "0fyz4m2ih8biadziiqbyq4ddx8asn65z94wwrhi7krjqxlbdzgvs",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.19.129.a/linux-hardened-4.19.129.a.patch"
+        "name": "linux-hardened-4.19.142.a.patch",
+        "sha256": "1gwvacr23lp8qryfhnqn89pn9ly9d8c42rirvkz5psfmvnm7vxbn",
+        "url": "https://github.com/anthraxx/linux-hardened/releases/download/4.19.142.a/linux-hardened-4.19.142.a.patch"
     },
     "5.4": {
-        "name": "linux-hardened-5.4.48.a.patch",
-        "sha256": "0vcy64gl88l12rqv0z3g8858zdr82a68sfalaf768j4z537bpany",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.4.48.a/linux-hardened-5.4.48.a.patch"
+        "name": "linux-hardened-5.4.61.a.patch",
+        "sha256": "1sgysrkycca860m2h7vrnfkplbsari6blcrkbsn285s5d0fsicnc",
+        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.4.61.a/linux-hardened-5.4.61.a.patch"
     },
-    "5.6": {
-        "name": "linux-hardened-5.6.19.a.patch",
-        "sha256": "0gxdbcig6hpjxj6qr4lrj773gb76s0xlkrk3hclxk4ms6p82y4mm",
-        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.6.19.a/linux-hardened-5.6.19.a.patch"
+    "5.7": {
+        "name": "linux-hardened-5.7.19.a.patch",
+        "sha256": "1lydlh499aj3ck5cnv8q2271y4klvp17zm7j7qni16am14bld936",
+        "url": "https://github.com/anthraxx/linux-hardened/releases/download/5.7.19.a/linux-hardened-5.7.19.a.patch"
     }
 }

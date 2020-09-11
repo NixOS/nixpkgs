@@ -1,23 +1,20 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, pytest, setuptools, structlog, pytest-asyncio, flaky, tornado, pycurl, pytest-httpbin }:
+{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, pytestCheckHook, setuptools, structlog, pytest-asyncio, flaky, tornado, pycurl, aiohttp, pytest-httpbin }:
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "1.6.post1";
+  version = "1.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7d2e889a4ba2eeb75dd6649ed5e99f8cbfed45b2194657e8f46c978ec58d4175";
+    sha256 = "01be0e5587d346ad783b4b2dc45bd8eefe477081b33fff18cc2fdea58c2a38ef";
   };
 
-  propagatedBuildInputs = [ setuptools structlog tornado pycurl ];
-  checkInputs = [ pytest pytest-asyncio flaky pytest-httpbin ];
-
-  # disable `test_ubuntupkg` because it requires network
-  checkPhase = ''
-    py.test -m "not needs_net" --ignore=tests/test_ubuntupkg.py
-  '';
+  propagatedBuildInputs = [ setuptools structlog tornado pycurl aiohttp ];
+  checkInputs = [ pytestCheckHook pytest-asyncio flaky pytest-httpbin ];
 
   disabled = pythonOlder "3.5";
+
+  pytestFlagsArray = [ "-m 'not needs_net'" ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/lilydjwg/nvchecker";

@@ -105,14 +105,17 @@ symlinkJoin {
         --set "NIX_${ghcCommandCaps}_LIBDIR" "${libDir}"
     fi
 
-    # ghcide does package discovery without calling our ghc wrapper.
-    if [[ -x "$out/bin/ghcide" ]]; then
-      wrapProgram $out/bin/ghcide  \
+    # ghcide 0.2.0 does package discovery without calling our ghc wrapper.
+    # 2020-08-16 We can most likely remove this workaround as soon as we build ghcide with a newer hie-bios (currently we use 0.5.1 from stack)
+    for prg in ghcide; do
+      if [[ -x "$out/bin/$prg" ]]; then
+        wrapProgram $out/bin/$prg  \
           --set "NIX_${ghcCommandCaps}"        "$out/bin/${ghcCommand}"     \
           --set "NIX_${ghcCommandCaps}PKG"     "$out/bin/${ghcCommand}-pkg" \
           --set "NIX_${ghcCommandCaps}_DOCDIR" "${docDir}"                  \
           --set "NIX_${ghcCommandCaps}_LIBDIR" "${libDir}"
-    fi
+      fi
+    done
 
   '' + (lib.optionalString (stdenv.targetPlatform.isDarwin && !isGhcjs && !stdenv.targetPlatform.isiOS) ''
     # Work around a linker limit in macOS Sierra (see generic-builder.nix):

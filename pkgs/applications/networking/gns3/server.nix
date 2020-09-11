@@ -4,10 +4,19 @@
 
 let
   defaultOverrides = commonOverrides ++ [
-    (mkOverride "jsonschema" "3.2.0"
-      "0ykr61yiiizgvm3bzipa3l73rvj49wmrybbfwhvpgk3pscl5pa68")
-    (mkOverride "aiofiles" "0.4.0"
-      "1vmvq9qja3wahv8m1adkyk00zm7j0x64pk3f2ry051ja66xa07h2")
+    (mkOverride "aiofiles" "0.5.0"
+      "98e6bcfd1b50f97db4980e182ddd509b7cc35909e903a8fe50d8849e02d815af")
+    (self: super: {
+      py-cpuinfo = super.py-cpuinfo.overridePythonAttrs (oldAttrs: rec {
+        version = "7.0.0";
+        src = fetchFromGitHub {
+           owner = "workhorsy";
+           repo = "py-cpuinfo";
+           rev = "v${version}";
+           sha256 = "10qfaibyb2syiwiyv74l7d97vnmlk079qirgnw3ncklqjs0s3gbi";
+        };
+      });
+    })
   ];
 
   python = python3.override {
@@ -31,7 +40,7 @@ in python.pkgs.buildPythonPackage {
 
   propagatedBuildInputs = with python.pkgs; [
     aiohttp-cors yarl aiohttp multidict setuptools
-    jinja2 psutil zipstream raven jsonschema distro async_generator aiofiles
+    jinja2 psutil zipstream sentry-sdk jsonschema distro async_generator aiofiles
     prompt_toolkit py-cpuinfo
   ];
 

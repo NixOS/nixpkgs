@@ -8,7 +8,7 @@ let
 in
 buildGoPackage rec {
   pname = "gocryptfs";
-  version = "1.7.1";
+  version = "1.8.0";
 
   goPackagePath = "github.com/rfjakob/gocryptfs";
 
@@ -19,7 +19,7 @@ buildGoPackage rec {
     owner = "rfjakob";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zhzhvjhvi6xzib985bsnj9yzp4zsnm91m1679nbab6vm3kanq06";
+    sha256 = "1acalwrr5xqhpqca3gypj0s68w6vpckxmg5z5gfgh8wx6nqx4aw9";
   };
 
   postPatch = "rm -r tests";

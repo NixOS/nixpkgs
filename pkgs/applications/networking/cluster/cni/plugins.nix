@@ -2,19 +2,21 @@
 
 buildGoModule rec {
   pname = "cni-plugins";
-  version = "0.8.6";
+  version = "0.8.7";
 
   src = fetchFromGitHub {
     owner = "containernetworking";
     repo = "plugins";
     rev = "v${version}";
-    sha256 = "0f1cqxjf26sy1c4aw6y7pyd9lrz0vknby4q5j6xj77a1pab9073m";
+    sha256 = "1sjk0cghldygx1jgx4bqv83qky7shk64n6xkkfxl92f12wyvsq9j";
   };
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   buildFlagsArray = [
-    "-ldflags=-X github.com/containernetworking/plugins/pkg/utils/buildversion.BuildVersion=${version}"
+    "-ldflags=-X github.com/containernetworking/plugins/pkg/utils/buildversion.BuildVersion=v${version}"
   ];
 
   subPackages = [
@@ -36,7 +38,7 @@ buildGoModule rec {
     "plugins/meta/tuning"
   ];
 
-  passthru.tests.podman = nixosTests.podman;
+  passthru.tests = { inherit (nixosTests) cri-o podman; };
 
   meta = with lib; {
     description = "Some standard networking plugins, maintained by the CNI team";

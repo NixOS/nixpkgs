@@ -13,6 +13,9 @@ buildGoModule rec {
   };
 
   vendorSha256 = "08n3m6fkwh8jmmzky3ygij4gxlcqidqk5ywi8ki8bkyzzs2lqaw7";
+
+  doCheck = false;
+
   subPackages = [ "cmd/pixiecore" ];
 
   meta = {

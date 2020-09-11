@@ -2,7 +2,7 @@
 , xorg }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.0";
+  version = "1.5.0";
 
   pname = "alttab";
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "sagb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "028ifp54yl3xq5mj2ww9baga8p56nmrx4ypvj8k35akcaxdpyga9";
+    sha256 = "026xd1bkg10fj2q1n6xx797xk1grpby25qj1pnw2lp4f3vc19qn6";
   };
 
   nativeBuildInputs = [ 

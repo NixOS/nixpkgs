@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , meson
 , ninja
@@ -16,17 +17,17 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-sound";
-  version = "2.2.4";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1kwd3cj6kk5dnmhcrmf13adqrhhjv2j6j2i78cpqbi9yv2h7sv9y";
+    sha256 = "sha256-ITgxLZSB4zhSaFKX7Vbf89DGI8ibIcGEQTtLjcGN2tA=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };

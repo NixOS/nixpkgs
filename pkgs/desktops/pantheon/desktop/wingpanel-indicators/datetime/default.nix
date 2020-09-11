@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , pkgconfig
 , meson
@@ -19,17 +20,17 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-datetime";
-  version = "2.2.4";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0wrvya9438ncb2rvcz99aa497v95b4yhdw1479iacnb9f94jacns";
+    sha256 = "sha256-rZzZIh4bwZfwQFDbfPDKQtfLMJQ2IdykH1yiV6ckqnw=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };

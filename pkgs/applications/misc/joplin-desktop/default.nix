@@ -2,20 +2,19 @@
 
 let
   pname = "joplin-desktop";
-  version = "1.0.216";
-  desktopItem = makeDesktopItem {
-     name = "Joplin";
-     exec = "joplin-desktop";
-     type = "Application";
-     desktopName = "Joplin";
-  };
-in appimageTools.wrapType2 rec {
+  version = "1.0.233";
   name = "${pname}-${version}";
+
   src = fetchurl {
     url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}.AppImage";
-    sha256 = "17rb7h98h9i2p5kw5gznx5swpz6yxqdxwc9x5cgbkc31vk10iszn";
+    sha256 = "1fmk56b9b70ly1r471mhppr8fz1wm2gpxji1v760ynha8fqy7qg1";
   };
 
+  appimageContents = appimageTools.extractType2 {
+    inherit name src;
+  };
+in appimageTools.wrapType2 rec {
+  inherit name src;
 
   profile = ''
     export LC_ALL=C.UTF-8
@@ -25,9 +24,12 @@ in appimageTools.wrapType2 rec {
   multiPkgs = null; # no 32bit needed
   extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
   extraInstallCommands = ''
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications
     mv $out/bin/{${name},${pname}}
+    install -m 444 -D ${appimageContents}/joplin.desktop $out/share/applications/joplin.desktop
+    install -m 444 -D ${appimageContents}/joplin.png \
+      $out/share/pixmaps/joplin.png
+    substituteInPlace $out/share/applications/joplin.desktop \
+      --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
 

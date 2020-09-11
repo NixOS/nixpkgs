@@ -97,6 +97,7 @@ rec {
             cd ..
             mkdir -p /var/singularity/mnt/{container,final,overlay,session,source}
             echo "root:x:0:0:System administrator:/root:/bin/sh" > /etc/passwd
+            echo > /etc/resolv.conf
             TMPDIR=$(pwd -P) singularity build $out ./img
           '');
 

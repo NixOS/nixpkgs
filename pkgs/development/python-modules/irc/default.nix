@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "irc";
-  version = "18.0.0";
+  version = "19.0.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1qg5996mzvhnkm74ksaa4d47fz5vrpw6hvxyaq9kf6y4cf1l76wq";
+    sha256 = "29026b1e977dacb621c710ae9531fcab6fa21825b743c616c220da0e58a32233";
   };
 
   doCheck = false;

@@ -4,21 +4,21 @@ let
   generic = { subPackages, pname, postInstall ? "" }:
     buildGoModule rec {
       inherit pname;
-      version = "5.21.0";
+      version = "5.21.2";
       shortRev = "3a1ac58"; # for internal version info
-
-      goPackagePath = "github.com/sensu/sensu-go";
 
       src = fetchFromGitHub {
         owner = "sensu";
         repo = "sensu-go";
         rev = "v${version}";
-        sha256 = "0zkwhr2z8yy8k2lal026i565hxxh51jrgplq83bbisc24xpcfg9s";
+        sha256 = "1hsvdqz0ckk8d1yxinqwylw97jd3gnf7c63zkjly87vasg98qk9x";
       };
 
       inherit subPackages postInstall;
 
   vendorSha256 = "06yfaj9k5n3jw8a142sscaqrvdw2lq51v884lp65wjdwy5c3jbba";
+
+  doCheck = false;
 
       buildFlagsArray = let
         versionPkg = "github.com/sensu/sensu-go/version";

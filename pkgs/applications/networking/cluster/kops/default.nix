@@ -3,8 +3,8 @@
 let
   goPackagePath = "k8s.io/kops";
 
-  generic = { version, sha256, ...}@attrs:
-    let attrs' = builtins.removeAttrs attrs ["version" "sha256"] ; in
+  generic = { version, sha256, rev ? version, ...}@attrs:
+    let attrs' = builtins.removeAttrs attrs ["version" "sha256" "rev"] ; in
       buildGoPackage {
         pname = "kops";
         inherit version;
@@ -12,7 +12,7 @@ let
         inherit goPackagePath;
 
         src = fetchFromGitHub {
-          rev = version;
+          rev = rev;
           owner = "kubernetes";
           repo = "kops";
           inherit sha256;
@@ -51,18 +51,19 @@ in rec {
 
   mkKops = generic;
 
-  kops_1_15 = mkKops {
-    version = "1.15.3";
-    sha256 = "0pzgrsl61nw8pm3s032lj020fw13x3fpzlj7lknsnd581f0gg4df";
-  };
-
   kops_1_16 = mkKops {
-    version = "1.16.3";
-    sha256 = "01j7r89vim12wgb2dv6p2pib8wj2daain179cawlyb5kjyyb3jnq";
+    version = "1.16.4";
+    sha256 = "0qi80hzd5wc8vn3y0wsckd7pq09xcshpzvcr7rl5zd4akxb0wl3f";
   };
 
   kops_1_17 = mkKops {
-    version = "1.17.0";
-    sha256 = "175fi7pdzncqyv2gyaf96rn96zaywlyqrb6669n42faxilhyjbw7";
+    version = "1.17.1";
+    sha256 = "1km6nwanmhfx8rl1wp445z9ib50jr2f86rd92vilm3q4rs9kig1h";
+  };
+
+  kops_1_18 = mkKops rec {
+    version = "1.18.0";
+    sha256 = "16zbjxxv08j31y7lhkqx2bnx0pc3r0vpfrlhdjs26z22p5rc4rrh";
+    rev = "v${version}";
   };
 }

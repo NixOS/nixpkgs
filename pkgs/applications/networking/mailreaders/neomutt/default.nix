@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "20200626";
+  version = "20200821";
   pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = version;
-    sha256 = "0r16fy02z61dbjdxc28yzj5i4f6r7aakh453gaqc8ilm1nsxhmnp";
+    sha256 = "0l66xf6qp2fdhm5h2v58bbc73pwj72c80mriqac9pfyjh5padir5";
   };
 
   buildInputs = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
     # allow neomutt to map attachments to their proper mime.types if specified wrongly
     # and use a far more comprehensive list than the one shipped with neomutt
-    substituteInPlace sendlib.c \
+    substituteInPlace send/sendlib.c \
       --replace /etc/mime.types ${mailcap}/etc/mime.types
   '';
 

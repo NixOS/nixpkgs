@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
+, dask
 , numpy
 , scipy
 , numba
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "ffbca00a53f938e4f04230f582b210440efb54d74d60af1d1ced3864f61677ac";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest dask ];
   propagatedBuildInputs = [
     numpy
     scipy

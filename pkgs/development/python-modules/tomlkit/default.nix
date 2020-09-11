@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "tomlkit";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "74f976908030ff164c0aa1edabe3bf83ea004b3daa5b0940b9c86a060c004e9a";
+    sha256 = "ac57f29693fab3e309ea789252fcce3061e19110085aa31af5446ca749325618";
   };
 
   propagatedBuildInputs =

@@ -110,28 +110,14 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.21.23";
+      version = "0.21.25";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "0jnhjhm1ilpcwb4f58b8pgyzjq3dlr0j2xyk0zck0afwkdxyj9cb";
+        sha256 = "1yjp8pwr2zn0mp39ls1w0pl37zrjn5m9ycgjmcsw2wpa4709r356";
       };
-
-      # Won't be needed when 0.21.24 will be out
-      patches = [
-        # Tests fail otherwise, see https://github.com/MusicPlayerDaemon/MPD/issues/844
-        (fetchpatch {
-          url = "https://github.com/MusicPlayerDaemon/MPD/commit/7aea2853612743e111ae5e947c8d467049e291a8.patch";
-          sha256 = "1bmxlsaiz3wlg1yyc4rkwsmgvc0pirv0s1vdxxsn91yssmh16c2g";
-          excludes = [
-            # The patch fails otherwise because it tries to update the NEWS
-            # file which doesn't have the title "ver 0.21.24" yet.
-            "NEWS"
-          ];
-        })
-      ];
 
       buildInputs = [
         glib

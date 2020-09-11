@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "09xv2p9rydnsb185x61fxhyjqx41wz285c1gdd47ad3s08ay1qc7";
 
+  doCheck = false;
+
   # Change the default location of the management socket on Linux
   # systems so that the yggdrasil system service unit does not have to
   # be granted write permission to /run.
@@ -34,7 +36,6 @@ buildGoModule rec {
       "An experiment in scalable routing as an encrypted IPv6 overlay network";
     homepage = "https://yggdrasil-network.github.io/";
     license = licenses.lgpl3;
-    platforms = platforms.all;
     maintainers = with maintainers; [ ehmry gazally lassulus ];
   };
 }

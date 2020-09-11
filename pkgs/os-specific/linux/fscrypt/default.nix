@@ -21,6 +21,8 @@ buildGoModule rec {
 
   vendorSha256 = "0yak221mlyfacvlsaq9g3xiyk94n94vqgkbaji8d21pi8hhr38m6";
 
+  doCheck = false;
+
   nativeBuildInputs = [ gnum4 ];
   buildInputs = [ pam ];
 
@@ -30,10 +32,6 @@ buildGoModule rec {
 
   installPhase = ''
     make install
-  '';
-
-  preFixup = ''
-    remove-references-to -t ${fscrypt-experimental.go} $out/lib/security/pam_fscrypt.so
   '';
 
   meta = with stdenv.lib; {

@@ -1,23 +1,22 @@
-{ lib, fetchurl, stdenv, ncurses,
-IOKit, python3 }:
+{ lib, fetchFromGitHub, stdenv, autoreconfHook
+, ncurses, IOKit, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "htop";
-  version = "2.2.0";
+  version = "3.0.1";
 
-  src = fetchurl {
-    url = "https://hisham.hm/htop/releases/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0mrwpb3cpn3ai7ar33m31yklj64c3pp576vh1naqff6f21pq5mnr";
+  src = fetchFromGitHub {
+    owner = "htop-dev";
+    repo = pname;
+    rev = version;
+    sha256 = "0kjlphdvwwbj91kk91s4ksc954d3c2bznddzx2223jmb1bn9rcsa";
   };
 
-  nativeBuildInputs = [ python3 ];
-  buildInputs =
-    [ ncurses ] ++
-    lib.optionals stdenv.isDarwin [ IOKit ];
+  nativeBuildInputs = [ autoreconfHook python3 ];
 
-  prePatch = ''
-    patchShebangs scripts/MakeHeader.py
-  '';
+  buildInputs = [ ncurses
+  ] ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
   meta = with stdenv.lib; {
     description = "An interactive process viewer for Linux";

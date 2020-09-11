@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pycoin";
-  version = "0.90.20200322";
+  version = "0.90.20200809";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c8af579e86c118deb64d39e0d844d53a065cdd8227ddd632112e5667370b53a3";
+    sha256 = "301dd6df9d9d580701d7325c4d1c341233ba1a94cb805305ea3a43c31bdaaa4c";
   };
 
   propagatedBuildInputs = [ setuptools ];

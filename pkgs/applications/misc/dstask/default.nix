@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "dstask";
-  version = "0.18";
+  version = "0.20";
 
   src = fetchFromGitHub {
     owner = "naggie";
     repo = pname;
     rev = "v${version}";
-    sha256 = "16z5zlfj955pzsj0l58835slvpchdaq2vbyx2fjzi6y9xn1z2nd1";
+    sha256 = "0hrhvfkqflr4wx1r2xbfbi566pglrp4rp5yq0cr2ml0x6kw3yz0j";
   };
 
   # Set vendorSha256 to null because dstask vendors its dependencies (meaning
@@ -17,6 +17,8 @@ buildGoModule rec {
   # Ref <https://github.com/NixOS/nixpkgs/pull/87383#issuecomment-633204382>
   # and <https://github.com/NixOS/nixpkgs/blob/d4226e3a4b5fcf988027147164e86665d382bbfa/pkgs/development/go-modules/generic/default.nix#L18>
   vendorSha256 = null;
+
+  doCheck = false;
 
   # The ldflags reduce the executable size by stripping some debug stuff.
   # The other variables are set so that the output of dstask version shows the

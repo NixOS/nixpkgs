@@ -1,34 +1,35 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, Babel
 , celery
-, future
 , humanize
-, importlib-metadata
 , mock
 , pytz
 , tornado
+, prometheus_client
 }:
 
 buildPythonPackage rec {
   pname = "flower";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "25782840f7ffc25dcf478d94535a2d815448de4aa6c71426be6abfa9ca417448";
+    sha256 = "171zckhk9ni14f1d82wf62hhciy0gx13fd02sr9m9qlj50fnv4an";
   };
 
-  # flower and humanize aren't listed in setup.py but imported
+  postPatch = ''
+    # rely on using example programs (flowers/examples/tasks.py) which
+    # are not part of the distribution
+    rm tests/load.py
+  '';
+
   propagatedBuildInputs = [
-    Babel
     celery
-    future
-    importlib-metadata
     pytz
     tornado
     humanize
+    prometheus_client
   ];
 
   checkInputs = [ mock ];

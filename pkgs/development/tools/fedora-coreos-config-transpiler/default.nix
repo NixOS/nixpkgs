@@ -13,8 +13,9 @@ buildGoModule rec {
     sha256 = "18hmnip1s0smp58q500p8dfbrmi4i3nsyq22ri5cs53wbvz3ih1l";
   };
 
-  deleteVendor = true;
-  vendorSha256 = "0qqkaskmyxgwv9qg3y5lckqf6nchn3bxp69fyqdbvki65p445608";
+  vendorSha256 = null;
+
+  doCheck = false;
 
   subPackages = [ "internal" ];
 
@@ -34,4 +35,3 @@ buildGoModule rec {
     platforms = platforms.unix;
   };
 }
-

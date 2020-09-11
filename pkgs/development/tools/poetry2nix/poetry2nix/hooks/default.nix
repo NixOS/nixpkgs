@@ -49,4 +49,16 @@ in
         } ./fixup-hook.sh
     ) { };
 
+  # When the "wheel" package itself is a wheel the nixpkgs hook (which pulls in "wheel") leads to infinite recursion
+  # It doesn't _really_ depend on wheel though, it just copies the wheel.
+  wheelUnpackHook = callPackage
+    ({}:
+      makeSetupHook
+        {
+          name = "wheel-unpack-hook.sh";
+          deps = [ ];
+        } ./wheel-unpack-hook.sh
+    ) { };
+
+
 }

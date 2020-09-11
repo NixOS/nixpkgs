@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , cmake
 , pkgconfig
 , vala_0_40
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };

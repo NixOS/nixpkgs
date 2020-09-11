@@ -253,8 +253,8 @@ let
 
         createTunDevice = i: nameValuePair "${i.name}-netdev"
           { description = "Virtual Network Interface ${i.name}";
-            bindsTo = [ "dev-net-tun.device" ];
-            after = [ "dev-net-tun.device" "network-pre.target" ];
+            bindsTo = optional (!config.boot.isContainer) "dev-net-tun.device";
+            after = optional (!config.boot.isContainer) "dev-net-tun.device" ++ [ "network-pre.target" ];
             wantedBy = [ "network-setup.service" (subsystemDevice i.name) ];
             partOf = [ "network-setup.service" ];
             before = [ "network-setup.service" ];

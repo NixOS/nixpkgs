@@ -54,6 +54,8 @@ buildPythonPackage rec {
     "proxy_https_bad_response"
     "partially_applied_handler"
     "middleware"
+    # no longer compatible with pytest>=6
+    "aiohttp_plugin_async_fixture"
   ] ++ lib.optionals stdenv.is32bit [
     "test_cookiejar"
   ] ++ lib.optionals isPy38 [

@@ -20,16 +20,24 @@ let
     ));
 
   pyEnv = python.withPackages(ps: [ ps.pynvim ps.msgpack ]);
+
+  # FIXME: this is verry messy and strange.
+  # see https://github.com/NixOS/nixpkgs/pull/80528
+  luv = lua.pkgs.luv;
+  luvpath = with builtins ; if stdenv.isDarwin
+    then "${luv.libluv}/lib/lua/${lua.luaversion}/libluv.${head (match "([0-9.]+).*" luv.version)}.dylib"
+    else "${luv}/lib/lua/${lua.luaversion}/luv.so";
+
 in
   stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";
-    version = "0.4.3";
+    version = "0.4.4";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "03p7pic7hw9yxxv7fbgls1f42apx3lik2k6mpaz1a109ngyc5kaj";
+      sha256 = "11zyj6jvkwas3n6w1ckj3pk6jf81z1g7ngg4smmwm7c27y2a6f2m";
     };
 
     patches = [
@@ -47,7 +55,7 @@ in
       libtermkey
       libuv
       libvterm-neovim
-      lua.pkgs.luv.libluv
+      luv.libluv
       msgpack
       ncurses
       neovimLuaEnv
@@ -88,10 +96,8 @@ in
     cmakeFlags = [
       "-DGPERF_PRG=${gperf}/bin/gperf"
       "-DLUA_PRG=${neovimLuaEnv.interpreter}"
+      "-DLIBLUV_LIBRARY=${luvpath}"
     ]
-    # FIXME: this is verry messy and strange.
-    ++ optional (!stdenv.isDarwin) "-DLIBLUV_LIBRARY=${lua.pkgs.luv}/lib/lua/${lua.luaversion}/luv.so"
-    ++ optional (stdenv.isDarwin) "-DLIBLUV_LIBRARY=${lua.pkgs.luv.libluv}/lib/lua/${lua.luaversion}/libluv.dylib"
     ++ optional doCheck "-DBUSTED_PRG=${neovimLuaEnv}/bin/busted"
     ++ optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON"
     ;

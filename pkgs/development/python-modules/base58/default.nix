@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "base58";
-  version = "2.0.0";
+  version = "2.0.1";
   disabled = isPy27; # python 2 abandoned upstream
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c83584a8b917dc52dd634307137f2ad2721a9efb4f1de32fc7eaaaf87844177e";
+    sha256 = "365c9561d9babac1b5f18ee797508cd54937a724b6e419a130abad69cec5ca79";
   };
 
   checkInputs = [ pytest pyhamcrest ];

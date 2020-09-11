@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     homepage = "https://igraph.org/";
     license = lib.licenses.gpl2;
     # NB: Known to fail tests on aarch64.
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
     maintainers = [ lib.maintainers.MostAwesomeDude ];
   };
 }

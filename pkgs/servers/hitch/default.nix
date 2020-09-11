@@ -1,17 +1,19 @@
-{ stdenv, fetchurl, docutils, libev, openssl, pkgconfig }:
+{ stdenv, fetchurl, docutils, libev, openssl, pkgconfig, nixosTests }:
 stdenv.mkDerivation rec {
-  version = "1.5.2";
+  version = "1.6.0";
   pname = "hitch";
 
   src = fetchurl {
     url = "https://hitch-tls.org/source/${pname}-${version}.tar.gz";
-    sha256 = "1nnzqqigfw78nqhp81a72x1s8d6v49ayw4w5df0zzm2cb1jgv95i";
+    sha256 = "01n70yf8hx42jb801jv5q1xhrpqxyjnqhd98hjf81lvxpd5fnisf";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ docutils libev openssl ];
 
   outputs = [ "out" "doc" "man" ];
+
+  passthru.tests.hitch = nixosTests.hitch;
 
   meta = with stdenv.lib; {
     description = "Hitch is a libev-based high performance SSL/TLS proxy by Varnish Software";

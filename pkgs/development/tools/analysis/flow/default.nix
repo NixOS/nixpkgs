@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flow";
-  version = "0.128.0";
+  version = "0.133.0";
 
   src = fetchFromGitHub {
     owner  = "facebook";
     repo   = "flow";
     rev    = "refs/tags/v${version}";
-    sha256 = "1psplmqd1l6mxw0rbji2h73fvqhpp1zf9clzgc8khmkh0bbhc5ss";
+    sha256 = "1r4s4gw50pvp4r4mq2w45s9i7fbkf7zycgp8rrj1dqzmkl9v6kii";
   };
 
   installPhase = ''
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/facebook/flow/releases/tag/v${version}";
     license = licenses.mit;
     platforms = ocamlPackages.ocaml.meta.platforms;
+    broken = stdenv.isAarch64; # https://github.com/facebook/flow/issues/7556
     maintainers = with maintainers; [ marsam puffnfresh ];
   };
 }

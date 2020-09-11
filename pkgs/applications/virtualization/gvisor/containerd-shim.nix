@@ -17,7 +17,6 @@ buildGoModule rec {
     make
   '';
 
-  doCheck = true;
   checkPhase = ''
     make test
   '';

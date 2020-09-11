@@ -12,6 +12,8 @@ buildGoModule rec {
 
   vendorSha256 = "1rdvyypdl3fk6af66gfjhyl271cnlx5xgrl1w68sc6sbvq00bqkd";
 
+  doCheck = false;
+
   subPackages = [ "." ];
 
   # Terraform allow checking the provider versions, but this breaks

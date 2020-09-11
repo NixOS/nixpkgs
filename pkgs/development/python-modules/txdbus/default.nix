@@ -17,6 +17,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cocagne/txdbus";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ geistesk ];
+    maintainers = with maintainers; [ oxzi ];
   };
 }

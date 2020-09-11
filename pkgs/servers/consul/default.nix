@@ -27,6 +27,9 @@ buildGoModule rec {
   subPackages = ["." "connect/certgen"];
 
   vendorSha256 = "12a2x8j4kc1vi3ip0cz81k6anfwac23iqqyz00wf7wpvgxqzcxn3";
+
+  doCheck = false;
+
   deleteVendor = true;
 
   preBuild = ''

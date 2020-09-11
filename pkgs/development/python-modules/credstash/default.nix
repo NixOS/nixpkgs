@@ -1,4 +1,6 @@
-{ stdenv, buildPythonPackage, fetchPypi, cryptography, boto3, pyyaml, docutils, nose }:
+{ stdenv, buildPythonPackage, fetchPypi, cryptography, boto3, pyyaml, docutils, nose
+, fetchpatch
+}:
 
 buildPythonPackage rec {
   pname = "credstash";
@@ -9,6 +11,12 @@ buildPythonPackage rec {
     sha256 = "6c04e8734ef556ab459018da142dd0b244093ef176b3be5583e582e9a797a120";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/fugue/credstash/commit/9c02ee43ed6e37596cafbca2fe80c532ec19d2d8.patch";
+      sha256 = "dlybrpfLK+PqwWWhH9iXgXHYysZGmcZAFGWNOwsG0xA=";
+    })
+  ];
   # The install phase puts an executable and a copy of the library it imports in
   # bin/credstash and bin/credstash.py, despite the fact that the library is also
   # installed to lib/python<version>/site-packages/credstash.py.

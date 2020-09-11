@@ -32,6 +32,9 @@ let
     (mkOverride "pyowm" "2.10.0"
       "1xvcv3sbcn9na8cwz21nnjlixysfk5lymnf65d1nqkbgacc1mm4g")
 
+    (mkOverride "bcrypt" "3.1.7"
+      "0hhywhxx301cxivgxrpslrangbfpccc8y83qbwn1f57cab3nj00b")
+
     # required by aioesphomeapi
     (self: super: {
       protobuf = super.protobuf.override {
@@ -72,7 +75,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.111.4";
+  hassVersion = "0.114.4";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -81,7 +84,7 @@ in with py.pkgs; buildPythonApplication rec {
   disabled = pythonOlder "3.5";
 
   patches = [
-    ./0001-setup.py-relax-dependencies.patch
+    ./relax-dependencies.patch
   ];
 
   inherit availableComponents;
@@ -91,8 +94,13 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "08dkqczpmdaz8k9fsshgvgma7i7sffzgmhsi49qki7vwn20hl2hf";
+    sha256 = "0k9px4ny0b72d9ysr3x72idprgfgjab1z91ildr87629826bb4n7";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "yarl==1.4.2" "yarl~=1.4"
+  '';
 
   propagatedBuildInputs = [
     # From setup.py
@@ -114,9 +122,14 @@ in with py.pkgs; buildPythonApplication rec {
     # - components' dependencies are not included, so they cannot be tested
     # - test_merge_id_schema requires pyqwikswitch
     # - test_loader.py tries to load not-packaged dependencies
+    # - test_notify pyotp doesn't like the short mock keys
     # - unclear why test_merge fails: assert merge_log_err.call_count != 0
     # - test_setup_safe_mode_if_no_frontend: requires dependencies for components we have not packaged
-    py.test --ignore tests/components --ignore tests/test_loader.py -k "not test_setup_safe_mode_if_no_frontend and not test_merge_id_schema and not test_merge"
+    py.test \
+      --ignore tests/components \
+      --ignore tests/test_loader.py \
+      --ignore tests/auth/mfa_modules/test_notify.py \
+      -k "not test_setup_safe_mode_if_no_frontend and not test_merge_id_schema and not test_merge"
 
     # Some basic components should be tested however
     py.test \

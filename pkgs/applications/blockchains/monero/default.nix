@@ -2,7 +2,7 @@
 , cmake, pkgconfig
 , boost, miniupnpc, openssl, unbound
 , zeromq, pcsclite, readline, libsodium, hidapi
-, pythonProtobuf, randomx, rapidjson, libusb-compat-0_1
+, protobuf, randomx, rapidjson, libusb-compat-0_1
 , CoreData, IOKit, PCSC
 }:
 
@@ -10,13 +10,13 @@ assert stdenv.isDarwin -> IOKit != null;
 
 stdenv.mkDerivation rec {
   pname = "monero";
-  version = "0.16.0.0";
+  version = "0.16.0.3";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    sha256 = "0x74h5z0nxxxip97ibc854pqmrgd8r4d6w62m424f66i8gbzfskh";
+    sha256 = "1r9x3712vhb24dxxirfiwj5f9x0h4m7x0ngiiavf5983dfdlgz33";
     fetchSubmodules = true;
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     boost miniupnpc openssl unbound
     zeromq pcsclite readline
     libsodium hidapi randomx rapidjson
-    pythonProtobuf libusb-compat-0_1
+    protobuf libusb-compat-0_1
   ] ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit CoreData PCSC ];
 
   cmakeFlags = [

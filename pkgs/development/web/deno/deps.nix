@@ -2,11 +2,11 @@
 {}:
 rec {
   rustyV8Lib = {
-    version = "0.6.0";
+    version = "0.9.1";
     sha256s = {
-      x86_64-linux = "1mpgddlcsfc5jpkqpwpbld9d2pr3dflkbd1w9ryai0aymv8r2rmb";
-      aarch64-linux = "0qqr0i6z39fb298azp2rm0ns0bw3il3xj5zy58cn96h624rxkn67";
-      x86_64-darwin = "0pj7127cvz01kq6vs91sdxkwkbjx7j3cv7lwvyilifbl01j3vwip";
+      x86_64-linux = "07zph4x3k659ywld27b60as7j06bdbab2ws1pf67iwg7w6h7iash";
+      aarch64-linux = "0w9mbsdpkrla3ayaswpdjhiqs74h23qi2sv9355h138pw431ymnx";
+      x86_64-darwin = "091kzdg431lvkvcy0401di3if53pii0isk5ipfpsvic82kr7vaqk";
     };
   };
 }

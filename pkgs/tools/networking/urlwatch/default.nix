@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   name = "urlwatch-${version}";
-  version = "2.18";
+  version = "2.19";
 
   src = fetchFromGitHub {
     owner  = "thp";
     repo   = "urlwatch";
     rev    = version;
-    sha256 = "14dmyk95v3kajhn1w2lpil3rjs78y0wxylsxclv6zjxgjcc1xsi3";
+    sha256 = "05vxs0x8gnsv2r9cy0brqny1y5jnj2mw11lqc8lqahx84xcs2m00";
   };
 
   propagatedBuildInputs = with python3Packages; [

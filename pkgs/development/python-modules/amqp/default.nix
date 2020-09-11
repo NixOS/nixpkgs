@@ -1,19 +1,20 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, case, vine, pytest-sugar }:
+{ stdenv, buildPythonPackage, fetchPypi, pytestCheckHook, case, vine }:
 
 buildPythonPackage rec {
   pname = "amqp";
-  version = "2.6.0";
+  version = "2.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "24dbaff8ce4f30566bb88976b398e8c4e77637171af3af6f1b9650f48890e60b";
+    sha256 = "70cdb10628468ff14e57ec2f751c7aa9e48e7e3651cfd62d431213c0c4e58f21";
   };
 
-  checkInputs = [ pytest case pytest-sugar ];
   propagatedBuildInputs = [ vine ];
 
-  # Disable because pytest-sugar requires an old version of pytest
-  doCheck = false;
+  checkInputs = [ pytestCheckHook case ];
+  disabledTests = [
+    "test_rmq.py" # requires network access
+  ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/celery/py-amqp";

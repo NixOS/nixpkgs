@@ -91,6 +91,8 @@ let
     scheduler = {
       IOSCHED_CFQ = whenOlder "5.0" yes; # Removed in 5.0-RC1
       BLK_CGROUP  = yes; # required by CFQ"
+      BLK_CGROUP_IOLATENCY = whenAtLeast "4.19" yes;
+      BLK_CGROUP_IOCOST = whenAtLeast "5.4" yes;
       IOSCHED_DEADLINE = whenOlder "5.0" yes; # Removed in 5.0-RC1
       MQ_IOSCHED_DEADLINE = whenAtLeast "4.11" yes;
       BFQ_GROUP_IOSCHED = whenAtLeast "4.12" yes;
@@ -242,6 +244,8 @@ let
       DRM_AMDGPU_SI = whenAtLeast "4.9" yes;
       # (stable) amdgpu support for bonaire and newer chipsets
       DRM_AMDGPU_CIK = whenAtLeast "4.9" yes;
+      # Allow device firmware updates
+      DRM_DP_AUX_CHARDEV = whenAtLeast "4.6" yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
       # Intel GVT-g graphics virtualization supports 64-bit only
       DRM_I915_GVT = whenAtLeast "4.16" yes;
@@ -269,7 +273,7 @@ let
       SND_SOC_SOF_APOLLOLAKE_SUPPORT    = yes;
       SND_SOC_SOF_CANNONLAKE_SUPPORT    = yes;
       SND_SOC_SOF_COFFEELAKE_SUPPORT    = yes;
-      SND_SOC_SOF_COMETLAKE_H_SUPPORT   = yes;
+      SND_SOC_SOF_COMETLAKE_H_SUPPORT   = whenOlder "5.8" yes;
       SND_SOC_SOF_COMETLAKE_LP_SUPPORT  = yes;
       SND_SOC_SOF_ELKHARTLAKE_SUPPORT   = yes;
       SND_SOC_SOF_GEMINILAKE_SUPPORT    = yes;

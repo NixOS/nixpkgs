@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , coverage
 , pytest
 }:
@@ -8,6 +9,7 @@
 buildPythonPackage rec {
   pname = "pytest-testmon";
   version = "1.0.2";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

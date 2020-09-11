@@ -335,4 +335,87 @@ rec {
     };
   };
 
+  # 19. Support files in the store on buildLayeredImage
+  # See: https://github.com/NixOS/nixpkgs/pull/91084#issuecomment-653496223
+  filesInStore = pkgs.dockerTools.buildLayeredImageWithNixDb {
+    name = "file-in-store";
+    tag = "latest";
+    contents = [
+      pkgs.coreutils
+      pkgs.nix
+      (pkgs.writeScriptBin "myscript" ''
+        #!${pkgs.runtimeShell}
+        cat ${pkgs.writeText "somefile" "some data"}
+      '')
+    ];
+    config = {
+      Cmd = [ "myscript" ];
+      # For some reason 'nix-store --verify' requires this environment variable
+      Env = [ "USER=root" ];
+    };
+  };
+
+  # 20. Ensure that setting created to now results in a date which
+  # isn't the epoch + 1 for layered images.
+  unstableDateLayered = pkgs.dockerTools.buildLayeredImage {
+    name = "unstable-date-layered";
+    tag = "latest";
+    contents = [ pkgs.coreutils ];
+    created = "now";
+  };
+
+  # buildImage without explicit tag
+  bashNoTag = pkgs.dockerTools.buildImage {
+    name = "bash-no-tag";
+    contents = pkgs.bashInteractive;
+  };
+
+  # buildLayeredImage without explicit tag
+  bashNoTagLayered = pkgs.dockerTools.buildLayeredImage {
+    name = "bash-no-tag-layered";
+    contents = pkgs.bashInteractive;
+  };
+
+  # buildImage without explicit tag
+  bashNoTagStreamLayered = pkgs.dockerTools.streamLayeredImage {
+    name = "bash-no-tag-stream-layered";
+    contents = pkgs.bashInteractive;
+  };
+
+  # buildLayeredImage with non-root user
+  bashLayeredWithUser =
+  let
+    nonRootShadowSetup = { user, uid, gid ? uid }: with pkgs; [
+      (
+      writeTextDir "etc/shadow" ''
+        root:!x:::::::
+        ${user}:!:::::::
+      ''
+      )
+      (
+      writeTextDir "etc/passwd" ''
+        root:x:0:0::/root:${runtimeShell}
+        ${user}:x:${toString uid}:${toString gid}::/home/${user}:
+      ''
+      )
+      (
+      writeTextDir "etc/group" ''
+        root:x:0:
+        ${user}:x:${toString gid}:
+      ''
+      )
+      (
+      writeTextDir "etc/gshadow" ''
+        root:x::
+        ${user}:x::
+      ''
+      )
+    ];
+  in
+    pkgs.dockerTools.buildLayeredImage {
+      name = "bash-layered-with-user";
+      tag = "latest";
+      contents = [ pkgs.bash pkgs.coreutils (nonRootShadowSetup { uid = 999; user = "somebody"; }) ];
+    };
+
 }

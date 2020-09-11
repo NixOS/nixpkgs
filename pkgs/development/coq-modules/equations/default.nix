@@ -33,15 +33,15 @@ let
     };
 
     "8.11" = {
-      version = "1.2.2";
-      rev = "v1.2.2-8.11";
-      sha256 = "0g2y0s8kb2imbqyrx9hmvjzpwmicid7shv7ma10fnb8dgk2dqkf9";
+      version = "1.2.3";
+      rev = "v1.2.3-8.11";
+      sha256 = "1srxz1rws8jsh7402g2x2vcqgjbbsr64dxxj5d2zs48pmhb20csf";
     };
 
     "8.12" = {
-      version = "1.2.2";
-      rev = "v1.2.2-8.12";
-      sha256 = "0fkz78i2gn9x9scfa7n8fl2sq7czppsicy7w5mq919qqfp0w1aj0";
+      version = "1.2.3";
+      rev = "v1.2.3-8.12";
+      sha256 = "1y0jkvzyz5ssv5vby41p1i8zs7nsdc8g3pzyq73ih9jz8h252643";
     };
   };
   param = params.${coq.coq-version};

@@ -1,0 +1,15 @@
+diff --git a/eit.c b/eit.c
+index 50d8229..373dbca 100644
+--- a/eit.c
++++ b/eit.c
+@@ -391,7 +391,9 @@ cTDT::cTDT(const u_char *Data)
+   if (abs(diff) > MAX_TIME_DIFF) {
+      mutex.Lock();
+      if (abs(diff) > MAX_ADJ_DIFF) {
+-        if (stime(&dvbtim) == 0)
++        timespec ts = { 0 };
++        ts.tv_sec = dvbtim;
++        if (clock_settime(CLOCK_REALTIME, &ts) == 0)
+            isyslog("system time changed from %s (%ld) to %s (%ld)", *TimeToString(loctim), loctim, *TimeToString(dvbtim), dvbtim);
+         else
+            esyslog("ERROR while setting system time: %m");

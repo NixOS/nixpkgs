@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pdfsam-basic";
-  version = "4.1.3";
+  version = "4.1.4";
 
   src = fetchurl {
     url = "https://github.com/torakiki/pdfsam/releases/download/v${version}/pdfsam_${version}-1_amd64.deb";
-    sha256 = "1rhv6mf6pr9aaa8516i3b7v6h622qb1p8c4jsy3j0s5wrdry5l9l";
+    sha256 = "1gw3cmc8c1xxc55bm71v1dz9x9560lbhx9nkwprarhxlmn0m0zzp";
   };
 
   unpackPhase = ''
@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
       description = "Multi-platform software designed to extract pages, split, merge, mix and rotate PDF files";
       license = licenses.agpl3;
       platforms = platforms.all;
-      maintainers = with maintainers; [ maintainers."1000101" ];
+      maintainers = with maintainers; [ _1000101 ];
   };
 }

@@ -12,13 +12,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.16.0.0";
+  version = "0.16.0.3";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "06vdrsj5y9k0zn32hspyxc7sw1kkyrvi3chzkdbnxk9jvyj8k4ld";
+    sha256 = "0iwjp8x5swy8i8pzrlm5v55awhm54cf48pm1vz98lcq361lhfzk6";
   };
 
   nativeBuildInputs = [ qmake pkgconfig wrapQtAppsHook ];

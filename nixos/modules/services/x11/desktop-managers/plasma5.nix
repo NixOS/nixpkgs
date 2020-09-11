@@ -321,7 +321,7 @@ in
 
       fonts.fonts = with pkgs; [ noto-fonts hack-font ];
       fonts.fontconfig.defaultFonts = {
-        monospace = [ "Hack" "Noto Mono" ];
+        monospace = [ "Hack" "Noto Sans Mono" ];
         sansSerif = [ "Noto Sans" ];
         serif = [ "Noto Serif" ];
       };

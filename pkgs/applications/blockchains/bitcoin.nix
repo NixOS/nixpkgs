@@ -20,15 +20,11 @@
 
 with stdenv.lib;
 let
-  version = "0.20.0";
+  version = "0.20.1";
   majorMinorVersion = versions.majorMinor version;
   desktop = fetchurl {
     url = "https://raw.githubusercontent.com/bitcoin-core/packaging/${majorMinorVersion}/debian/bitcoin-qt.desktop";
     sha256 = "0cpna0nxcd1dw3nnzli36nf9zj28d2g9jf5y0zl9j18lvanvniha";
-  };
-  pixmap = fetchurl {
-    url = "https://raw.githubusercontent.com/bitcoin/bitcoin/v${version}/share/pixmaps/bitcoin128.png";
-    sha256 = "08p7j7dg50jlj783kkgdw037klmx0spqjikaprmbkzgcb620r25d";
   };
 in
 stdenv.mkDerivation rec {
@@ -40,7 +36,7 @@ stdenv.mkDerivation rec {
       "https://bitcoincore.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
       "https://bitcoin.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
     ];
-    sha256 = "ec5a2358ee868d845115dc4fc3ed631ff063c57d5e0a713562d083c5c45efb28";
+    sha256 = "4bbd62fd6acfa5e9864ebf37a24a04bc2dcfe3e3222f056056288d854c53b978";
   };
 
   nativeBuildInputs =
@@ -53,7 +49,7 @@ stdenv.mkDerivation rec {
 
   postInstall = optional withGui ''
     install -Dm644 ${desktop} $out/share/applications/bitcoin-qt.desktop
-    install -Dm644 ${pixmap} $out/share/pixmaps/bitcoin128.png
+    install -Dm644 share/pixmaps/bitcoin128.png $out/share/pixmaps/bitcoin128.png
   '';
 
   configureFlags = [

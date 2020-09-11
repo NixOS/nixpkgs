@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, gettext, perlPackages }:
+{ stdenv, fetchurl, fetchpatch, gettext, perlPackages, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "intltool";
@@ -19,8 +19,14 @@ stdenv.mkDerivation rec {
     sha256 = "12q2140867r5d0dysly72khi7b0mm2gd7nlm1k81iyg7fxgnyz45";
   })];
 
+  nativeBuildInputs = with perlPackages; [ perl XMLParser ];
   propagatedBuildInputs = [ gettext ] ++ (with perlPackages; [ perl XMLParser ]);
 
+  postInstall = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    for f in $out/bin/*; do
+      substituteInPlace $f --replace "${buildPackages.perl}" "${perlPackages.perl}"
+    done
+  '';
   meta = with stdenv.lib; {
     description = "Translation helper tool";
     homepage = "https://launchpad.net/intltool/";

@@ -1,7 +1,7 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, systemd }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, makeWrapper, systemd }:
 
 buildGoPackage rec {
-  version = "1.5.0";
+  version = "1.6.1";
   pname = "grafana-loki";
   goPackagePath = "github.com/grafana/loki";
 
@@ -11,7 +11,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "loki";
-    sha256 = "137lnd69p8qfg2z8l32dr1mrk2lhrxjx392xfij11sy5i9blfc3n";
+    sha256 = "0bakskzizazc5cd6km3n6facc5val5567zinnxg3yjy29xdi64ww";
   };
 
   postPatch = ''
@@ -25,7 +25,7 @@ buildGoPackage rec {
 
   preFixup = stdenv.lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/promtail \
-      --prefix LD_LIBRARY_PATH : "${systemd.lib}/lib"
+      --prefix LD_LIBRARY_PATH : "${lib.getLib systemd}/lib"
   '';
 
   meta = with stdenv.lib; {

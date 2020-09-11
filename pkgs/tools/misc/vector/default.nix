@@ -37,6 +37,5 @@ rustPlatform.buildRustPackage rec {
     homepage    = "https://github.com/timberio/vector";
     license     = with licenses; [ asl20 ];
     maintainers = with maintainers; [ thoughtpolice ];
-    platforms   = platforms.all;
   };
 }

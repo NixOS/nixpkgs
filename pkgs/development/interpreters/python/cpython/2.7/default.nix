@@ -90,6 +90,9 @@ let
 
       # Backport from CPython 3.8 of a good list of tests to run for PGO.
       ./profile-task.patch
+
+      # Patch is likely to go away in the next release (if there is any)
+      ./CVE-2019-20907.patch
     ] ++ optionals (x11Support && stdenv.isDarwin) [
       ./use-correct-tcl-tk-on-darwin.patch
     ] ++ optionals stdenv.isLinux [

@@ -17,6 +17,7 @@
 , sourceSpec
 , supportedExtensions ? lib.importJSON ./extensions.json
 , preferWheels ? false
+, __isBootstrap ? false  # Hack: Always add Poetry as a build input unless bootstrapping
 , ...
 }:
 
@@ -46,10 +47,16 @@ pythonPackages.callPackage
       isGit = isSource && source.type == "git";
       isLocal = isSource && source.type == "directory";
       localDepPath = toPath source.url;
-      pyProject = poetryLib.readTOML (localDepPath + "/pyproject.toml");
-      buildSystemPkgs = poetryLib.getBuildSystemPkgs {
-        inherit pythonPackages pyProject;
-      };
+
+      buildSystemPkgs =
+        let
+          pyProjectPath = localDepPath + "/pyproject.toml";
+          pyProject = poetryLib.readTOML pyProjectPath;
+        in
+        if builtins.pathExists pyProjectPath then poetryLib.getBuildSystemPkgs {
+          inherit pythonPackages pyProject;
+        } else [ ];
+
       fileInfo =
         let
           isBdist = f: lib.strings.hasSuffix "whl" f.file;
@@ -106,6 +113,7 @@ pythonPackages.callPackage
         baseBuildInputs
         ++ lib.optional (!isSource) (getManyLinuxDeps fileInfo.name).pkg
         ++ lib.optional isLocal buildSystemPkgs
+        ++ lib.optional (!__isBootstrap) [ pythonPackages.poetry ]
       );
 
       propagatedBuildInputs =

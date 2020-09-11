@@ -2,26 +2,26 @@
 , guiSupport ? false, libX11
 
   # see http://dlib.net/compile.html
-, avxSupport ? true
+, avxSupport ? stdenv.hostPlatform.avxSupport
 , cudaSupport ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "dlib";
-  version = "19.20";
+  version = "19.21";
 
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
     rev ="v${version}";
-    sha256 = "10b5hrprlls0nhljx18ys8cms7bgqirvhxlx6gbvbprbi6q16f9r";
+    sha256 = "00jwklnl21l3hlvb0bjc6rl3hgi88vxb41dsn4m0kh436c9v0rl3";
   };
 
   postPatch = ''
     rm -rf dlib/external
   '';
 
-  cmakeFlags = [ 
+  cmakeFlags = [
     "-DUSE_DLIB_USE_CUDA=${if cudaSupport then "1" else "0"}"
     "-DUSE_AVX_INSTRUCTIONS=${if avxSupport then "yes" else "no"}" ];
 

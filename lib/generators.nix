@@ -48,8 +48,10 @@ rec {
     else if isAttrs    v then err "attrsets" v
     # functions can’t be printed of course
     else if isFunction v then err "functions" v
-    # let’s not talk about floats. There is no sensible `toString` for them.
-    else if isFloat    v then err "floats" v
+    # Floats currently can't be converted to precise strings,
+    # condition warning on nix version once this isn't a problem anymore
+    # See https://github.com/NixOS/nix/pull/3480
+    else if isFloat    v then libStr.floatToString v
     else err "this value is" (toString v);
 
 

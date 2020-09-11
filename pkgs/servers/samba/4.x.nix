@@ -31,7 +31,6 @@
 , enableProfiling ? true
 , enableMDNS ? false, avahi
 , enableDomainController ? false, gpgme, lmdb
-, enableKerberos ? true, krb5Full
 , enableRegedit ? true, ncurses
 , enableCephFS ? false, libceph
 , enableGlusterFS ? false, glusterfs, libuuid
@@ -43,11 +42,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.12.3";
+  version = "4.12.5";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    sha256 = "09w7aap1cjc41ayhaksm1igc7p7gl40fad4a1l6q4ds9a2jbrb9z";
+    sha256 = "05dqj5l3spa8ggw0agxa5rf8fwgiizbmbfjms46y5jla6z31rd2l";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -92,7 +91,6 @@ stdenv.mkDerivation rec {
     ++ optional (enablePrinting && stdenv.isLinux) cups
     ++ optional enableMDNS avahi
     ++ optionals enableDomainController [ gpgme lmdb ]
-    ++ optional enableKerberos krb5Full
     ++ optional enableRegedit ncurses
     ++ optional (enableCephFS && stdenv.isLinux) libceph
     ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
@@ -116,13 +114,9 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--disable-rpath"
-  ] ++ singleton (if enableDomainController
-         then "--with-experimental-mit-ad-dc"
-         else "--without-ad-dc")
-    ++ optionals enableKerberos [
-    "--with-system-mitkrb5"
-    "--with-system-mitkdc=${krb5Full}"
-  ] ++ optionals (!enableLDAP) [
+  ] ++ optional (!enableDomainController)
+    "--without-ad-dc"
+  ++ optionals (!enableLDAP) [
     "--without-ldap"
     "--without-ads"
   ] ++ optional enableProfiling "--with-profiling-data"

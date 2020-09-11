@@ -42,7 +42,7 @@
   </para>
 
   <para>
-   If the text is too small to be legible, try <command>setfont ter-132n</command>
+   If the text is too small to be legible, try <command>setfont ter-v32n</command>
    to increase the font size.
   </para>
 
@@ -550,7 +550,7 @@ Retype new UNIX password: ***</screen>
   # Note: setting fileSystems is generally not
   # necessary, since nixos-generate-config figures them out
   # automatically in hardware-configuration.nix.
-  #<link linkend="opt-fileSystems._name__.device">fileSystems."/".device</link> = "/dev/disk/by-label/nixos";
+  #<link linkend="opt-fileSystems._name_.device">fileSystems."/".device</link> = "/dev/disk/by-label/nixos";
 
   # Enable the OpenSSH server.
   services.sshd.enable = true;

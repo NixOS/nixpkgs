@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1clar59x2dvn7yj4fbylby9nrzy8kdixi48hkbmrv8g5l8n0wdl2";
 
+  doCheck = false;
+
   subPackages = [ "cmd/cowsay" "cmd/cowthink" ];
 
   meta = with lib; {

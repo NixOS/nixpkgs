@@ -74,6 +74,7 @@ let
   ccForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
   cxxForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
   releaseDir = "target/${rustTarget}/${buildType}";
+  tmpDir = "${releaseDir}-tmp";
 
   # Specify the stdenv's `diff` by abspath to ensure that the user's build
   # inputs do not cause us to find the wrong `diff`.
@@ -154,7 +155,7 @@ stdenv.mkDerivation (args // {
       echo
       echo "To fix the issue:"
       echo '1. Use "0000000000000000000000000000000000000000000000000000" as the cargoSha256 value'
-      echo "2. Build the derivation and wait it to fail with a hash mismatch"
+      echo "2. Build the derivation and wait for it to fail with a hash mismatch"
       echo "3. Copy the 'got: sha256:' value back into the cargoSha256 field"
       echo
 
@@ -180,7 +181,7 @@ stdenv.mkDerivation (args // {
       "CXX_${rust.toRustTarget stdenv.buildPlatform}"="${cxxForBuild}" \
       "CC_${rust.toRustTarget stdenv.hostPlatform}"="${ccForHost}" \
       "CXX_${rust.toRustTarget stdenv.hostPlatform}"="${cxxForHost}" \
-      cargo build \
+      cargo build -j $NIX_BUILD_CORES \
         ${stdenv.lib.optionalString (buildType == "release") "--release"} \
         --target ${rustTarget} \
         --frozen ${concatStringsSep " " cargoBuildFlags}
@@ -193,7 +194,9 @@ stdenv.mkDerivation (args // {
     # This needs to be done after postBuild: packages like `cargo` do a pushd/popd in
     # the pre/postBuild-hooks that need to be taken into account before gathering
     # all binaries to install.
-    bins=$(find $releaseDir \
+    mkdir -p $tmpDir
+    cp -r $releaseDir/* $tmpDir/
+    bins=$(find $tmpDir \
       -maxdepth 1 \
       -type f \
       -executable ! \( -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \))
@@ -205,7 +208,7 @@ stdenv.mkDerivation (args // {
     ${stdenv.lib.optionalString (buildAndTestSubdir != null) "pushd ${buildAndTestSubdir}"}
     runHook preCheck
     echo "Running cargo test ${argstr} -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
-    cargo test ${argstr} -- ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
+    cargo test -j $NIX_BUILD_CORES ${argstr} -- --test-threads=$NIX_BUILD_CORES ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
     runHook postCheck
     ${stdenv.lib.optionalString (buildAndTestSubdir != null) "popd"}
   '');
@@ -214,13 +217,13 @@ stdenv.mkDerivation (args // {
 
   strictDeps = true;
 
-  inherit releaseDir;
+  inherit releaseDir tmpDir;
 
   installPhase = args.installPhase or ''
     runHook preInstall
 
     # rename the output dir to a architecture independent one
-    mapfile -t targets < <(find "$NIX_BUILD_TOP" -type d | grep '${releaseDir}$')
+    mapfile -t targets < <(find "$NIX_BUILD_TOP" -type d | grep '${tmpDir}$')
     for target in "''${targets[@]}"; do
       rm -rf "$target/../../${buildType}"
       ln -srf "$target" "$target/../../"
@@ -228,7 +231,7 @@ stdenv.mkDerivation (args // {
     mkdir -p $out/bin $out/lib
 
     xargs -r cp -t $out/bin <<< $bins
-    find $releaseDir \
+    find $tmpDir \
       -maxdepth 1 \
       -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \
       -print0 | xargs -r -0 cp -t $out/lib

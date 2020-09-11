@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "JayDeBeApi";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e9847e437ad293ee3cc47767b74c387068cd21607842de8470d5d3f13d613083";
+    sha256 = "f25e9307fbb5960cb035394c26e37731b64cc465b197c4344cee85ec450ab92f";
   };
 
   propagatedBuildInputs = [

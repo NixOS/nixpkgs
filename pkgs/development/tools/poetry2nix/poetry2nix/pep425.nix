@@ -62,7 +62,7 @@ let
   selectWheel = files:
     let
       filesWithoutSources = (builtins.filter (x: hasSuffix ".whl" x.file) files);
-      isPyAbiCompatible = pyabi: x: x == "none" || lib.hasPrefix pyabi x || (
+      isPyAbiCompatible = pyabi: x: x == "none" || lib.hasPrefix pyabi x || lib.hasPrefix x pyabi || (
         # The CPython stable ABI is abi3 as in the shared library suffix.
         python.passthru.implementation == "cpython" &&
           builtins.elemAt (lib.splitString "." python.version) 0 == "3" &&

@@ -50,7 +50,7 @@ map (p: p.name) pkgs.rxvt-unicode.plugins
     In addition to <literal>plugins</literal> the options
     <literal>extraDeps</literal> and <literal>perlDeps</literal> can be used
     to install extra packages.
-    <literal>extraDeps</literal> can be used, for example, to provide 
+    <literal>extraDeps</literal> can be used, for example, to provide
     <literal>xsel</literal> (a clipboard manager) to the clipboard plugin,
     without installing it globally:
     <programlisting>rxvt-unicode.override { configure = { availablePlugins, ... }: {

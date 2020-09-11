@@ -9,14 +9,15 @@
 , scikitlearn
 , scipy
   # Check Inputs
-, ddt
 , pytestCheckHook
+, ddt
+, pyfakefs
 , qiskit-aer
 }:
 
 buildPythonPackage rec {
   pname = "qiskit-ignis";
-  version = "0.3.3";
+  version = "0.4.0";
 
   disabled = pythonOlder "3.6";
 
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-ignis";
     rev = version;
-    sha256 = "0sy9qpw0jqirsk9y61j5kr18jrw1wa812n7y98fjj6w668rrv560";
+    sha256 = "07mxhaknkp121xm6mgrpcrbj9qw6j924ra3k0s6vr8qgvfcxvh0y";
   };
 
   propagatedBuildInputs = [
@@ -41,18 +42,21 @@ buildPythonPackage rec {
   dontUseSetuptoolsCheck = true;
   preCheck = "export HOME=$TMPDIR";
   checkInputs = [
-    ddt
     pytestCheckHook
+    ddt
+    pyfakefs
     qiskit-aer
   ];
-  # Test is in test/verification/test_entanglemet.py. test fails due to out-of-date calls & bad logic with this file since qiskit-ignis#328
-  # see qiskit-ignis#386 for all issues. Should be able to re-enable in future.
-  disabledTests = [ "TestEntanglement" ];
+  disabledTests = [
+    "test_tensored_meas_cal_on_circuit" # Flaky test, occasionally returns result outside bounds
+    "test_qv_fitter"  # execution hangs, ran for several minutes
+  ];
 
   meta = with lib; {
     description = "Qiskit tools for quantum hardware verification, noise characterization, and error correction";
     homepage = "https://qiskit.org/ignis";
     downloadPage = "https://github.com/QISKit/qiskit-ignis/releases";
+    changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };

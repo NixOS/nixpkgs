@@ -138,8 +138,11 @@ let
         is32bit is64bit
         isAarch32 isAarch64 isMips isBigEndian;
 
-      # The derivation's `system` is `buildPlatform.system`.
-      inherit (buildPlatform) system;
+      # Override `system` so that packages can get the system of the host
+      # platform through `stdenv.system`. `system` is originally set to the
+      # build platform within the derivation above so that Nix directs the build
+      # to correct type of machine.
+      inherit (hostPlatform) system;
 
       inherit (import ./make-derivation.nix {
         inherit lib config stdenv;

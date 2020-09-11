@@ -1,6 +1,6 @@
-#! @shell@
+#! @runtimeShell@
 
-if [ -x "@shell@" ]; then export SHELL="@shell@"; fi;
+if [ -x "@runtimeShell@" ]; then export SHELL="@runtimeShell@"; fi;
 
 set -e
 set -o pipefail
@@ -17,6 +17,7 @@ showSyntax() {
 origArgs=("$@")
 extraBuildFlags=()
 lockFlags=()
+flakeFlags=()
 action=
 buildNix=1
 fast=
@@ -99,6 +100,7 @@ while [ "$#" -gt 0 ]; do
         ;;
       --flake)
         flake="$1"
+        flakeFlags=(--experimental-features 'nix-command flakes')
         shift 1
         ;;
       --recreate-lock-file|--no-update-lock-file|--no-write-lock-file|--no-registries|--commit-lock-file)
@@ -281,16 +283,19 @@ fi
 
 # Resolve the flake.
 if [[ -n $flake ]]; then
-    flake=$(nix flake info --json "${extraBuildFlags[@]}" "${lockFlags[@]}" -- "$flake" | jq -r .url)
+    flake=$(nix "${flakeFlags[@]}" flake info --json "${extraBuildFlags[@]}" "${lockFlags[@]}" -- "$flake" | jq -r .url)
 fi
 
 # Find configuration.nix and open editor instead of building.
 if [ "$action" = edit ]; then
     if [[ -z $flake ]]; then
         NIXOS_CONFIG=${NIXOS_CONFIG:-$(nix-instantiate --find-file nixos-config)}
-        exec "${EDITOR:-nano}" "$NIXOS_CONFIG"
+        if [[ -d $NIXOS_CONFIG ]]; then
+            NIXOS_CONFIG=$NIXOS_CONFIG/default.nix
+        fi
+        exec ${EDITOR:-nano} "$NIXOS_CONFIG"
     else
-        exec nix edit "${lockFlags[@]}" -- "$flake#$flakeAttr"
+        exec nix "${flakeFlags[@]}" edit "${lockFlags[@]}" -- "$flake#$flakeAttr"
     fi
     exit 1
 fi
@@ -416,7 +421,7 @@ if [ -z "$rollback" ]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' --no-out-link -A system "${extraBuildFlags[@]}")"
         else
             outLink=$tmpDir/result
-            nix build "$flake#$flakeAttr.config.system.build.toplevel" \
+            nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.toplevel" \
               "${extraBuildFlags[@]}" "${lockFlags[@]}" --out-link $outLink
             pathToConfig="$(readlink -f $outLink)"
         fi
@@ -426,7 +431,7 @@ if [ -z "$rollback" ]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}")"
         else
-            nix build "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}"
+            nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}"
             pathToConfig="$(readlink -f ./result)"
         fi
     elif [ "$action" = build-vm ]; then

@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1pdrw4vwbj9cka2pjbjvxviigfvnrf8sgws27ixwwiblbkj4isc8";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "Fast and powerful Git hooks manager for any type of projects";
     homepage = "https://github.com/Arkweid/lefthook";

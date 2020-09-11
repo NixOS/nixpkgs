@@ -54,8 +54,19 @@ with lib.maintainers; {
       hedning
       jtojnar
       worldofpeace
+      dasj19
     ];
     scope = "Maintain GNOME desktop environment and platform.";
+  };
+
+  jitsi = {
+    members = [
+      mmilata
+      petabyteboy
+      prusnak
+      ryantm
+    ];
+    scope = "Maintain Jitsi.";
   };
 
   matrix = {

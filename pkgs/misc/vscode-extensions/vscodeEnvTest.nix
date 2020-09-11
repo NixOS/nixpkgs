@@ -1,5 +1,5 @@
 with import <nixpkgs>{};
-callPackage (import ./vscodeEnv.nix) { 
+callPackage (import ./vscodeEnv.nix) {
   extensionsFromVscodeMarketplace = vscode-utils.extensionsFromVscodeMarketplace;
   vscodeDefault = vscode;
 } {
@@ -9,4 +9,3 @@ callPackage (import ./vscodeEnv.nix) {
     t = "test";
   };
 }
-

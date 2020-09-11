@@ -25,11 +25,11 @@
 
 buildPythonPackage rec {
   pname = "papermill";
-  version = "2.1.1";
+  version = "2.1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5e599992317f761c5e0543430402b24faac89292d7770c3e20b520fa2a25f75a";
+    sha256 = "ecd4cafa9179693b0eedc3b6f4560f9ee47826a6e366e42bfa3cc20f7931b3f8";
   };
 
   propagatedBuildInputs = [

@@ -9,16 +9,16 @@ assert pythonSupport -> pythonPackages != null;
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia";
-  version = "0.16.0";
+  version = "0.18.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0iwzi2ylrwz56s77cd4vcf89ig6ipy4w6kp2pfwqvd2d00x54dhk";
+    sha256 = "18acv0185y51yz6jwchi1vf701shz37z5qmnzpq6z419lpjdaskd";
   };
 
-  cargoSha256 = "0jsmvs6hr9mhapz3a74wpfgkjkq3w10014j3z30bm659mxqrknha";
+  cargoSha256 = "1jazwpv5mrsd0hxfavk0lvq8n26iglzl8pggw311ysi0lwabjq0y";
 
   nativeBuildInputs = [
     pkgconfig
@@ -56,6 +56,10 @@ rustPlatform.buildRustPackage rec {
 
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
+  # Please check if this is still needed when updating.
+  # Exlude tests for sequoia-store, they often error with 'Too many open files' Hydra.
+  CARGO_TEST_ARGS = " --all --exclude sequoia-store";
+
   postPatch = ''
     # otherwise, the check fails because we delete the `.git` in the unpack phase
     substituteInPlace openpgp-ffi/Makefile \
@@ -85,7 +89,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://sequoia-pgp.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ minijackson doronbehar ];
-    platforms = platforms.all;
     broken = stdenv.targetPlatform.isDarwin;
   };
 }

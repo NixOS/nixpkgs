@@ -17,6 +17,8 @@ buildGoModule rec {
 
   vendorSha256 = "1b9gpym6kb4hpdbrixphfh1qylmqr265jrmcd4vxb87ahvrsrvgp";
 
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "Embed static files in Go binaries (replacement for gobuffalo/packr) ";
     homepage = "https://github.com/markbates/pkger";

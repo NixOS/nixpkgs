@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , boto
 , boto3
 , bz2file
@@ -12,11 +13,12 @@
 
 buildPythonPackage rec {
   pname = "smart_open";
-  version = "2.0.0";
+  version = "2.1.1";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "555962abf982faff8a8aeb65e0695474e3091f604826055782beffa8400e4e4e";
+    sha256 = "51b05acd85ec007e1d4dcdbf2bbf917218a45026f37d559559401114bb5e5840";
   };
 
   # nixpkgs version of moto is >=1.2.0, remove version pin to fix build

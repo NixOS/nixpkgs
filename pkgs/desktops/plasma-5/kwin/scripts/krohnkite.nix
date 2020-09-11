@@ -26,7 +26,7 @@ mkDerivation rec {
     plasmapkg2 --type kwinscript --install ${src}/res/ --packageroot $out/share/kwin/scripts
     install -Dm644 ${src}/res/metadata.desktop $out/share/kservices5/krohnkite.desktop
 
-    runHook postInstalll
+    runHook postInstall
   '';
 
   meta = with lib; {

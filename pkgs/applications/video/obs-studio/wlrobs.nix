@@ -13,12 +13,12 @@ assert dmabufSupport -> libdrm != null && libGL != null;
 
 stdenv.mkDerivation {
   pname = "obs-wlrobs";
-  version = "20200111";
+  version = "20200622";
 
   src = fetchhg {
     url = "https://hg.sr.ht/~scoopta/wlrobs";
-    rev = "8345bf985e390896d89e35e2feae1fa37722f4be";
-    sha256 = "0j01wkhwhhla4qx8mwyrq2qj9cfhxksxaq2k8rskmy2qbdkvvdpb";
+    rev = "1d3acaaf64049da3da9721aa8b9b47582fe0081b";
+    sha256 = "0qrcf8024r4ynfjw0zx8vn59ygx9q5rb196s6nyxmy3gkv2lfxlq";
   };
 
   buildInputs = [ libX11 libGL libdrm meson ninja pkgconfig wayland obs-studio ];

@@ -20,8 +20,6 @@ buildGoModule rec {
       --prefix PATH : "${varnish}/bin"
   '';
 
-  doCheck = true;
-
   passthru.tests = { inherit (nixosTests.prometheus-exporters) varnish; };
 
   meta = {

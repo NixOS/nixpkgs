@@ -27,25 +27,25 @@
   };
   "kicad-unstable" = {
     kicadVersion = {
-      version =			"2020-05-14";
+      version =			"2020-08-22";
       src = {
-        rev =			"3b8465359135e9f6dea4b0a5fcb62377753fe890";
-        sha256 =		"18xsg2s0pxx176rnblygq1f8xpmryw59lcjzm897gifz0sj0nhvx";
+        rev =			"a2341f0f335b0abb9fc8cb86d19cbe6f9b38fade";
+        sha256 =		"0167yb39f800xarq3khn7sbdkgcx9j2ayhy8c7lhhks6kh7459g0";
       };
     };
     libVersion = {
-      version =			"2020-05-14";
+      version =			"2020-08-22";
       libSources = {
-        i18n.rev =		"c4460d0d8e1075691d43dc928ffc332fa1282592";
-        i18n.sha256 =		"1gkrbfyfzsr5q7sahhlyhgfpfwm6b83lzf0q1v854gwxdfabvi0y";
-        symbols.rev =		"614b5f6256fbae82c2bba399086506bbe435bd94";
-        symbols.sha256 =	"10ix3wdcl832r4ha5q8phpx8j97gzngb41nczdli1qkhjmiw9y8r";
-        templates.rev =		"7db8d4d0ea0711f1961d117853547fb3edbc3857";
-        templates.sha256 =	"1hppcsrkn4dk6ggby6ckh0q65qxkywrbyxa4lwpaf7pxjyv498xg";
-        footprints.rev =	"240804c6c89b66af808379e1fc94ea6011433cbe";
-        footprints.sha256 =	"1jh71004lrn7bl384zfmbqqdbs28gjb6diwn6hyb587jpivdnl3g";
-        packages3d.rev =	"9b560cf94a35b692ca516d37bdaf392ce10e549d";
-        packages3d.sha256 =	"0b9jglf77fy0n0r8xs4yqkv6zvipyfvp0z5dnqlzp32csy5aqpi1";
+        i18n.rev =		"cbbb1efd940094bf0c3168280698b2b059a8c509";
+        i18n.sha256 =		"1q4jakn6m8smnr2mg7jgb520nrb6fag9mdvlcpx3smp3qbxka818";
+        symbols.rev =		"9ca6a5348cdeb88e699582d4ed051ff7303b44d3";
+        symbols.sha256 =	"13w6pb34rhz96rnar25z7kiscy6q1fm8l39hq1bpb8g9yn86ssz4";
+        templates.rev =		"ae16953b81055855bcede4a33305413599d86a15";
+        templates.sha256 =	"1pkv90p3liy3bj4nklxsvpzh9m56p0k5ldr22armvgqfaqaadx9v";
+        footprints.rev =	"f94c2d5d619d16033f69a555b449f59604d97865";
+        footprints.sha256 =	"1g71sk77jvqaf9xvgq6dkyvd9pij2lb4n0bn0dqnwddhwam935db";
+        packages3d.rev =	"f699b0e3c13fe75618086913e39279c85da14cc7";
+        packages3d.sha256 =	"0m5rb5axa946v729z35ga84in76y4zpk32qzi0hwqx957zy72hs9";
       };
     };
   };

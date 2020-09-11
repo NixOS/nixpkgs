@@ -3,6 +3,7 @@
 , fetchPypi
 , numpy
 , scipy
+, sparse
 , numba
 , future
 , h5py
@@ -23,6 +24,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy
     scipy
+    sparse
     numba
     future
     h5py

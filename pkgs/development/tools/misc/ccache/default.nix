@@ -2,13 +2,13 @@
 
 let ccache = stdenv.mkDerivation rec {
   pname = "ccache";
-  version = "3.7.10";
+  version = "3.7.11";
 
   src = fetchFromGitHub {
     owner = "ccache";
     repo = "ccache";
     rev = "v${version}";
-    sha256 = "0v6pvj50y18fxh2f6cx6xyg545xcpxfmrcg9bzbc6lc5acrvvjm7";
+    sha256 = "03c6riz4vb0jipplk69c1j8arjjrjn676kglsrzqf8cidrh8j91c";
   };
 
   nativeBuildInputs = [ asciidoc-full autoreconfHook gperf perl ];
