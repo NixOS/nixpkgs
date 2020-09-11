@@ -1475,7 +1475,7 @@ self: super: {
   # Will be fixed whenever they next bump the version number
   stylish-haskell = appendPatch super.stylish-haskell (pkgs.fetchpatch {
     url = "https://github.com/jaspervdj/stylish-haskell/commit/9550aa1cd177aa6fe271d075177109d66a79e67f.patch";
-    sha256 = "159jr80k40hdq5gpqfjknqx6vj2licx1l0f57l5r3k4264lnxjdb";
+    sha256 = "1ffnbd2s4fx0ylnnlcyyag119yxb32p5r20b38l39lsa0jwv229f";
   });
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 
