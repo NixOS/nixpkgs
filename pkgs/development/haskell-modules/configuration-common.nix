@@ -1500,6 +1500,6 @@ self: super: {
     haskell-language-server = dontCheck (doJailbreak (super.haskell-language-server.overrideScope hlsScopeOverride));
     hls-ghcide = dontCheck (super.hls-ghcide.overrideScope hlsScopeOverride);
     hls-brittany = dontCheck (super.hls-brittany.overrideScope hlsScopeOverride);
-    fourmolu = super.fourmolu.overrideScope hlsScopeOverride;
+    fourmolu = dontCheck (super.fourmolu.overrideScope hlsScopeOverride);
   }
 )  // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
