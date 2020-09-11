@@ -228,7 +228,7 @@ class Machine:
             return path
 
         self.state_dir = os.path.join(tmp_dir, f"vm-state-{self.name}")
-        if not args["keepVmState"]:
+        if not args.get("keepVmState", False):
             self.cleanup_statedir()
         os.makedirs(self.state_dir, mode=0o700, exist_ok=True)
         self.shared_dir = create_dir("shared-xchg")
