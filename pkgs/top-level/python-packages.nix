@@ -7710,6 +7710,8 @@ in {
 
   zstd = callPackage ../development/python-modules/zstd { inherit (pkgs) zstd pkgconfig; };
 
+  zulip = callPackage ../development/python-modules/zulip { };
+
   zxcvbn = callPackage ../development/python-modules/zxcvbn { };
 
 });
