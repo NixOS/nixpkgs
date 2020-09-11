@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "0a8c7j4w784w441j3j3bh640vy1g6g214641qv485wyi0xj49anf";
   };
 
-  # The gopls folder has its own module definition which causes a build failure.
+  # The gopls folder contains a Go submodule which causes a build failure.
   # Given that, we can't have the gopls binary be part of the gotools
   # derivation.
   #
