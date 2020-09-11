@@ -923,7 +923,7 @@ self: super: {
   dhall-json = generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] super.dhall-json;
   dhall-nix = generateOptparseApplicativeCompletion "dhall-to-nix" (
     super.dhall-nix.overrideScope (self: super: {
-      dhall = super.dhall_1_34_0;
+      dhall = super.dhall_1_35_0;
       repline = self.repline_0_4_0_0;
       haskeline = self.haskeline_0_8_1_0;
     }));
