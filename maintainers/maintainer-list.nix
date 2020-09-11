@@ -6693,6 +6693,12 @@
       fingerprint = "240B 57DE 4271 2480 7CE3  EAC8 4F74 D536 1C4C A31E";
     }];
   };
+  presto8 = {
+    name = "Preston Hunt";
+    email = "me@prestonhunt.com";
+    github = "presto8";
+    githubId = 246631;
+  };
   priegger = {
     email = "philipp@riegger.name";
     github = "priegger";
