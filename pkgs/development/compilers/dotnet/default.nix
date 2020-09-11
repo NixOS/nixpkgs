@@ -12,32 +12,32 @@ in
 rec {
   combinePackages = attrs: callPackage (import ./combine-packages.nix attrs) {};
 
-  # v2.1.15 (LTS)
+  # v2.1.22 (LTS)
 
   aspnetcore_2_1 = buildAspNetCore {
-    version = "2.1.16";
+    version = "2.1.22";
     sha512 = {
-      x86_64-linux = "0awdzi8dysbg8xcy4l8wx2sb8gaaklphmwv61qxh7dj6ih4nla34l02xdax1l8nw41znnnqzsa77avglnrz36pckm9mc52m7wc7877h";
+      x86_64-linux = "27v3a69dgnnb4lz5p2dn2qwadb8vpnqwdy6mnnqfp1dl4kgg3izvriz2268if272sy6flcz5lckjlmn0i0i1jci5zypc7x9kykj991l";
       aarch64-linux = null; # no aarch64 version of this package is available
-      x86_64-darwin = "1psqqpin4hipr2hzfp79712d6cag892jx4fx5001nlsynwrdq3vi4liakz4yz41rvk0jyd7f07z90wj97xlxyrqiqcc1fdbgn2q0px9";
+      x86_64-darwin = "0xh06jmzx2cfq51hv9l4h72hbfyh3r0wlla217821gi0hlw6xcc0gb3b4xmqcs240fllqnwrnrwz0axi3xi21wacgn3xbcmzpbi6jml";
     };
   };
 
   netcore_2_1 = buildNetCore {
-    version = "2.1.16";
+    version = "2.1.22";
     sha512 = {
-      x86_64-linux = "07vvmza32hsblpw4zpcksm2gicy4agh0d1fwradqj16y6xbh3frdp87mqgbj5m54mmyfp5bc8c46v1w6dfm1w3y80v2y46aynild45l";
-      aarch64-linux = "27ab982vz9rn2vzpq68dqfzhryfixq3s0apx7vi0cwiray3scgfmf45fm7qj63k9mvaqnk5g69i339109yasw3q5vpvpyjc1ykbi710";
-      x86_64-darwin = "2pxqpcw3djr18m0y124fbd6pz4lb5brlgvpvd9pdirkpsar8dmipsrhxcsk0d902zyxzgj1ac1ygzxsz49xvrkmh6s1m3w5fk8fws2f";
+      x86_64-linux = "0c2b31l59izcxbhz5wzjpjkdl550s5p3aid4vyghq468vyf67pm0npjny50c172b63vw0ikfbps2b2hj16hpifp116gj4b5llmqjhyc";
+      aarch64-linux = "3llai3d2xpgbr7a4ndg9wqfpnb5zb8k07dicc57a6cmniiqyqigyxinhpx2k0l45mbnihjsr5k1rih3r6bwlj241v67iwd2i0dpqd8a";
+      x86_64-darwin = "106mx6a4rwcvq41v54c1yx89156s43n889im9g0q2pvm7054q8b6xm6qrnymzmj5i2i6awyk0z02j5pfiyh35sw9afxb3695ymsb3v8";
     };
   };
 
   sdk_2_1 = buildNetCoreSdk {
-    version = "2.1.804";
+    version = "2.1.810";
     sha512 = {
-      x86_64-linux = "1kbzxcdgyvs94kkm6ikr1j0p0k3zq30d10sl69ig0rgbqbqm4rpqi6dq94jjbw7q3jlwz83vgq3549q38d2s9kalmzv9lmddn2kkc42";
-      aarch64-linux = "2d97xvhxnkdgghqlichkwdxxh641dzkd9hq5xgffgvbqv1qsh31k9yib2q1nsarpnbx0d758bdn2jm2wvsj7nx0gpxlb3nab0b3hc2g";
-      x86_64-darwin = "0fjn18vizgfdbziklhgppnvka5iw2hb4pfi6047i46il8ydb6z1m40cflq436sdf07sivi0mnldg9247qvqrl6f078w3fwnh3bwlac8";
+      x86_64-linux = "388nrba5f7z9syq23xh3k45rzy3iys58s32ya7a0q9mwdf1y3haw7yvbq79cn08741hhqdi73mip8jf50f4s64mbr62ay1p76zsrkj5";
+      aarch64-linux = "2vs8bhk63cjrqkm5n164ahc6bdz58aq9vmhaiyy27krp7wlkz4gpiva9153h7mywhk709l1qc7cddj99qsh2ygv6axjfigbhgrzslqi";
+      x86_64-darwin = "3qxlgbd0np0w8wmp98mhp4cqgva4zglqf7k9kzqbwxfwr5s795kap7rs5w0cy7h0bsvj0ygx3d5nzyn9hp3fsswx4jl4mkvillnvjzy";
     };
   };
 
