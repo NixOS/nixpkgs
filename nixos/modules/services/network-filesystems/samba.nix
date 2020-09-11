@@ -248,7 +248,7 @@ in
         };
 
         security.pam.services.samba = {};
-
+        environment.systemPackages = [ config.services.samba.package ];
       })
     ];
 
