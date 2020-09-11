@@ -77,11 +77,11 @@ rec {
   # v3.1.1 (LTS)
 
   aspnetcore_3_1 = buildAspNetCore {
-    version = "3.1.5";
+    version = "3.1.8";
     sha512 = {
-      x86_64-linux = "3ziyvm6llvhnjg8ayr4cfcabwkc46fqscgj12faavib34r5zx4mnv3qccqm3gg2r8jps60h42lvrwj3fliqmr0qqnhsw04819kqwai6";
-      aarch64-linux = "2nbhvh8dpg7dghcs6ysdg7mcc60hbk5d3zab0nnbqkib93fdhbzhzcra9qhh80h8x03zw0jsn3gzqx0d1z2vz5z3lsa14vmb86pzj4a";
-      x86_64-darwin = "1sfnp849vmsv8775fjsf9nzx28cmkvfgk8fa81h2l849z31ssaw9fn89kk0n83l0wrhr24ivmprfr11sp42gnjbncqfsnz4883lfchw";
+      x86_64-linux = "0i3dqsmh5x2aaagw30zvr0ydmzms5j6xvmwq0yx79r1hncw0zg8w1zq7cxvaddszl13d24wxb8vm4varkiv3fy8z3n2ndmhlqa2qcyw";
+      aarch64-linux = "3f3xky7jqpqwnsg730ka1576ppsspi25xlqsrqmwlbanad0r89lidfppr34nsys9gb5f1vx1zkv73dn4jhl6yawnas9j9f8nhi5mq40";
+      x86_64-darwin = "1gbiizljh80m9sqv4ynvch7si55if43f4ccfd9ynakwm777fddbg8py338l7irnxc5rid3xzw7c0yj5p8f22n38krlxkvr1zcwij68b";
     };
   };
 
