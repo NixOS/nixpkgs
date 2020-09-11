@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-gstreamer";
-  version = "v0.1.0";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "fzwoch";
     repo = "obs-gstreamer";
-    rev = version;
+    rev = "v${version}";
     sha256 = "1szfx5p2lb953blzw7prfd0nngjlwv2wn7jmnwvlssc9ci6jl6s8";
   };
 
