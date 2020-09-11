@@ -4,13 +4,13 @@
 , termstyle
 , lxml
 , unidecode
-, mock
-, backports_shutil_get_terminal_size
 }:
 
 buildPythonPackage rec {
   pname = "green";
   version = "3.2.1";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     colorama coverage termstyle unidecode lxml
-  ] ++ lib.optionals (!isPy3k) [ mock backports_shutil_get_terminal_size ];
+  ];
 
   # let green run it's own test suite
   checkPhase = ''
