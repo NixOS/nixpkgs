@@ -22945,6 +22945,8 @@ in
 
   seq24 = callPackage ../applications/audio/seq24 { };
 
+  seq66 = qt5.callPackage ../applications/audio/seq66 { };
+
   setbfree = callPackage ../applications/audio/setbfree { };
 
   sfizz = callPackage ../applications/audio/sfizz { };
