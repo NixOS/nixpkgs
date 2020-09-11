@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, six, unittest2 }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, six, unittest2, pyyaml, flask }:
 
 let
   testPath =
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six ];
-  checkInputs = [ unittest2 ];
+  checkInputs = [ unittest2 pyyaml flask ];
 
   checkPhase = ''
     unit2 discover -s tests/unit -p "${testPath}"
