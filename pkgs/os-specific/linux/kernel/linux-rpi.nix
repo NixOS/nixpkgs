@@ -1,8 +1,8 @@
 { stdenv, lib, buildPackages, fetchFromGitHub, perl, buildLinux, rpiVersion, ... } @ args:
 
 let
-  modDirVersion = "4.19.118";
-  tag = "1.20200601";
+  modDirVersion = "5.4.51";
+  tag = "1.20200819";
 in
 lib.overrideDerivation (buildLinux (args // {
   version = "${modDirVersion}-${tag}";
@@ -12,7 +12,7 @@ lib.overrideDerivation (buildLinux (args // {
     owner = "raspberrypi";
     repo = "linux";
     rev = "raspberrypi-kernel_${tag}-1";
-    sha256 = "11jzsmnd1qry2ir9vmsv0nfdzjpgkn5yab5ylxcz406plc073anp";
+    sha256 = "109bmhnkfccvmi9xwmgh7rcs9krqhhrjm9rl3yrwngpkpmfllymv";
   };
 
   defconfig = {
