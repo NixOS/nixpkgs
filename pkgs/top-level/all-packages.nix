@@ -9465,7 +9465,7 @@ in
 
   nim = callPackage ../development/compilers/nim { };
   nim-unwrapped = nim.unwrapped;
-  nim-stdlib = nim.stdlib;
+
   nrpl = callPackage ../development/tools/nrpl { };
 
   neko = callPackage ../development/compilers/neko { };
