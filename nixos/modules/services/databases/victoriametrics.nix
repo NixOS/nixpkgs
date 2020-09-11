@@ -49,8 +49,8 @@ let cfg = config.services.victoriametrics; in
         ExecStart = ''
           ${cfg.package}/bin/victoria-metrics \
               -storageDataPath=/var/lib/victoriametrics \
-              -httpListenAddr ${cfg.listenAddress}
-              -retentionPeriod ${toString cfg.retentionPeriod}
+              -httpListenAddr ${cfg.listenAddress} \
+              -retentionPeriod ${toString cfg.retentionPeriod} \
               ${lib.escapeShellArgs cfg.extraOptions}
         '';
       };
