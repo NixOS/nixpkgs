@@ -7,8 +7,9 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
 
-  inherit (pkgs) kdeApplications plasma5;
-  libsForQt5 = pkgs.libsForQt514;
+  inherit (pkgs) kdeApplications kdeFrameworks plasma5;
+  libsForQt5 = pkgs.libsForQt512;
+  qt5 = pkgs.qt512;
   inherit (pkgs) writeText;
 
   pulseaudio = config.hardware.pulseaudio;
@@ -84,7 +85,7 @@ let
     # recognize that software that has been removed.
     rm -fv $HOME/.cache/ksycoca*
 
-    ${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5
+    ${libsForQt5.kservice}/bin/kbuildsycoca5
   '';
 
   set_XDG_CONFIG_HOME = ''
@@ -204,7 +205,9 @@ in
         KERNEL=="i2c-[0-9]*", TAG+="uaccess"
       '';
 
-      environment.systemPackages = with pkgs; with qt5; with libsForQt5; with plasma5; with kdeApplications;
+      environment.systemPackages =
+        with qt5; with libsForQt5;
+        with plasma5; with kdeApplications; with kdeFrameworks;
         [
           frameworkintegration
           kactivities
@@ -294,7 +297,7 @@ in
 
           qtvirtualkeyboard
 
-          xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+          pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
         ]
 
         # Phonon audio backend
