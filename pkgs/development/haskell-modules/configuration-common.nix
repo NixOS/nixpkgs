@@ -1477,7 +1477,7 @@ self: super: {
   hlsScopeOverride = self: super: {
     # haskell-language-server uses its own fork of ghcide
     # Test disabled: it seems to freeze (is it just that it takes a long time ?)
-    ghcide = hls-ghcide;
+    ghcide = dontCheck hls-ghcide;
     # we are faster than stack here
     hie-bios = dontCheck super.hie-bios_0_7_1;
     lsp-test = dontCheck super.lsp-test_0_11_0_5;
@@ -1490,13 +1490,7 @@ self: super: {
   in {
     # jailbreaking for hie-bios 0.7.0 (upstream PR: https://github.com/haskell/haskell-language-server/pull/357)
     haskell-language-server = dontCheck (doJailbreak (super.haskell-language-server.overrideScope hlsScopeOverride));
-    hls-ghcide = appendPatch (dontCheck (super.hls-ghcide.overrideScope hlsScopeOverride))
-      (pkgs.fetchpatch {
-        # This patch loosens the hie-bios upper bound.
-        # It is already merged into upstream and won‘t be needed for ghcide 0.4.0
-        url = "https://github.com/haskell/ghcide/commit/3e1b3620948870a4da8808ca0c0897fbd3ecad16.patch";
-        sha256 = "1jwn7jgi740x6wwv1k0mz9d4z0b9p3mzs54pdg4nfq0h2v7zxchz";
-      });
+    hls-ghcide = dontCheck (super.hls-ghcide.overrideScope hlsScopeOverride);
     hls-brittany = dontCheck (super.hls-brittany.overrideScope hlsScopeOverride);
     fourmolu = super.fourmolu.overrideScope hlsScopeOverride;
   }

@@ -5,21 +5,20 @@
 , ghc-boot-th, ghc-check, ghc-paths, ghc-typelits-knownnat, gitrev
 , haddock-library, hashable, haskell-lsp, haskell-lsp-types
 , hie-bios, hslogger, lens, lsp-test, mtl, network-uri
-, opentelemetry, optparse-applicative, prettyprinter
-, prettyprinter-ansi-terminal, process, QuickCheck
-, quickcheck-instances, regex-tdfa, rope-utf16-splay, safe
-, safe-exceptions, shake, sorted-list, stdenv, stm, syb, tasty
-, tasty-expected-failure, tasty-hunit, tasty-quickcheck
-, tasty-rerun, text, time, transformers, unix, unordered-containers
-, utf8-string, yaml
+, optparse-applicative, prettyprinter, prettyprinter-ansi-terminal
+, process, QuickCheck, quickcheck-instances, regex-tdfa
+, rope-utf16-splay, safe, safe-exceptions, shake, sorted-list
+, stdenv, stm, syb, tasty, tasty-expected-failure, tasty-hunit
+, tasty-quickcheck, tasty-rerun, text, time, transformers, unix
+, unordered-containers, utf8-string, yaml
 }:
 mkDerivation {
   pname = "ghcide";
-  version = "0.2.0";
+  version = "0.3.0";
   src = fetchgit {
     url = "https://github.com/haskell/ghcide";
-    sha256 = "1zq7ngaak8il91a309rl51dghzasnk4m2sm3av6d93cyqyra1hfc";
-    rev = "078e3d3c0d319f83841ccbcdc60ff5f0e243f6be";
+    sha256 = "15v3g3i5v0xbq50lfvl4bv3rx01nixiqx02sddqi5lj2idgmg24g";
+    rev = "96cf8c53d0bdc16d3d2cd0559b74962593ce6dc5";
     fetchSubmodules = true;
   };
   isLibrary = true;
@@ -29,10 +28,10 @@ mkDerivation {
     containers cryptohash-sha1 data-default deepseq directory extra
     filepath fuzzy ghc ghc-boot ghc-boot-th ghc-check ghc-paths
     haddock-library hashable haskell-lsp haskell-lsp-types hie-bios
-    hslogger mtl network-uri opentelemetry prettyprinter
-    prettyprinter-ansi-terminal regex-tdfa rope-utf16-splay safe
-    safe-exceptions shake sorted-list stm syb text time transformers
-    unix unordered-containers utf8-string
+    hslogger mtl network-uri prettyprinter prettyprinter-ansi-terminal
+    regex-tdfa rope-utf16-splay safe safe-exceptions shake sorted-list
+    stm syb text time transformers unix unordered-containers
+    utf8-string
   ];
   executableHaskellDepends = [
     aeson base bytestring containers data-default directory extra
@@ -52,7 +51,7 @@ mkDerivation {
     aeson base Chart Chart-diagrams diagrams diagrams-svg directory
     extra filepath shake text yaml
   ];
-  homepage = "https://github.com/digital-asset/ghcide#readme";
+  homepage = "https://github.com/haskell/ghcide#readme";
   description = "The core of an IDE";
   license = stdenv.lib.licenses.asl20;
 }
