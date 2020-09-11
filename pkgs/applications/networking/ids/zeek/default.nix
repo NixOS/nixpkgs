@@ -14,9 +14,10 @@
 , swig
 , gettext
 , fetchpatch
+, coreutils
 }:
 let
-  preConfigure = (import ./script.nix);
+  preConfigure = (import ./script.nix {inherit coreutils;});
 in
 stdenv.mkDerivation rec {
   pname = "zeek";
