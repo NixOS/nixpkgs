@@ -15,7 +15,7 @@ buildGoModule rec {
   # Given that, we can't have the gopls binary be part of the gotools
   # derivation.
   #
-  # We have a seperate derivation to build the gopls tool.
+  # The attribute "gopls" provides the gopls binary.
   #
   # Related
   #
