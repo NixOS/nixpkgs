@@ -886,9 +886,9 @@
     githubId = 1017537;
     name = "Bruno Bieth";
   };
-  badi = {
-    email = "abdulwahidc@gmail.com";
-    github = "badi";
+  badmutex = {
+    email = "github@badi.sh";
+    github = "badmutex";
     githubId = 35324;
     name = "Badi' Abdul-Wahid";
   };
@@ -1199,6 +1199,12 @@
     github = "bricewge";
     githubId = 5525646;
     name = "Brice Waegeneire";
+  };
+  bsima = {
+    email = "ben@bsima.me";
+    github = "bsima";
+    githubId = 200617;
+    name = "Ben Sima";
   };
   bstrik = {
     email = "dutchman55@gmx.com";
@@ -1634,6 +1640,12 @@
     github = "codyopel";
     githubId = 5561189;
     name = "Cody Opel";
+  };
+  cohei = {
+    email = "a.d.xvii.kal.mai@gmail.com";
+    github = "cohei";
+    githubId = 3477497;
+    name = "TANIGUCHI Kohei";
   };
   cohencyril = {
     email = "cyril.cohen@inria.fr";
@@ -3540,6 +3552,12 @@
     github = "imalsogreg";
     githubId = 993484;
     name = "Greg Hale";
+  };
+  immae = {
+    email = "ismael@bouya.org";
+    github = "immae";
+    githubId = 510202;
+    name = "Ismaël Bouya";
   };
   imuli = {
     email = "i@imu.li";
@@ -7847,6 +7865,12 @@
     githubId = 3371635;
     name = "Salar Rahmanian";
   };
+  sohalt = {
+    email = "nixos@sohalt.net";
+    github = "sohalt";
+    githubId = 2157287;
+    name = "sohalt";
+  };
   solson = {
     email = "scott@solson.me";
     github = "solson";
@@ -8034,6 +8058,12 @@
     github = "suhr";
     githubId = 65870;
     name = "Сухарик";
+  };
+  superbo = {
+    email = "supernbo@gmail.com";
+    github = "SuperBo";
+    githubId = 2666479;
+    name = "Y Nguyen";
   };
   SuperSandro2000 = {
     email = "sandro.jaeckel@gmail.com";
@@ -8420,6 +8450,12 @@
     github = "Thra11";
     githubId = 1391883;
     name = "Tom Hall";
+  };
+  tiagolobocastro = {
+    email = "tiagolobocastro@gmail.com";
+    github = "tiagolobocastro";
+    githubId = 1618946;
+    name = "Tiago Castro";
   };
   tilpner = {
     email = "till@hoeppner.ws";

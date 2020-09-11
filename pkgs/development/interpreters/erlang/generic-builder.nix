@@ -89,7 +89,8 @@ in stdenv.mkDerivation ({
     ++ optional odbcSupport "--with-odbc=${unixODBC}"
     ++ optional wxSupport "--enable-wx"
     ++ optional withSystemd "--enable-systemd"
-    ++ optional stdenv.isDarwin "--enable-darwin-64bit";
+    ++ optional stdenv.isDarwin "--enable-darwin-64bit"
+    ++ configureFlags;
 
   # install-docs will generate and install manpages and html docs
   # (PDFs are generated only when fop is available).
@@ -131,7 +132,6 @@ in stdenv.mkDerivation ({
 // optionalAttrs (postUnpack != "")     { inherit postUnpack; }
 // optionalAttrs (patches != [])        { inherit patches; }
 // optionalAttrs (patchPhase != "")     { inherit patchPhase; }
-// optionalAttrs (configureFlags != []) { inherit configureFlags; }
 // optionalAttrs (configurePhase != "") { inherit configurePhase; }
 // optionalAttrs (preConfigure != "")   { inherit preConfigure; }
 // optionalAttrs (postConfigure != "")  { inherit postConfigure; }

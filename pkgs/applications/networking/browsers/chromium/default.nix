@@ -55,6 +55,17 @@ let
           sha256 = "0h3wf4152zdvrbb0jbj49q6814lfl3rcy5mj8b2pl9s0ahvkbc6q";
         };
       });
+    } // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "87") {
+      llvmPackages = llvmPackages_11;
+      useOzone = true; # YAY: https://chromium-review.googlesource.com/c/chromium/src/+/2382834 \o/
+      gnChromium = gn.overrideAttrs (oldAttrs: {
+        version = "2020-08-17";
+        src = fetchgit {
+          url = "https://gn.googlesource.com/gn";
+          rev = "6f13aaac55a977e1948910942675c69f2b4f7a94";
+          sha256 = "01hpma1sllpdx09mvr4d6073sg6zmk6iv44kd3r28khymcj4s251";
+        };
+      });
     });
 
     browser = callPackage ./browser.nix { inherit channel enableWideVine; };

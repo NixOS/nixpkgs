@@ -4,17 +4,13 @@
 
 buildPythonPackage rec {
   pname = "listssrht";
-  version = "0.41.8";
+  version = "0.45.9";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/lists.sr.ht";
     rev = version;
-    sha256 = "0x49i1fdgi4nawnl362hp4d9ki5phh221zr1lxhidjm9vfv7lsqs";
+    sha256 = "2Wb1hBx4GuRvVC0pD7gpE9dj5ketW/4ozxuVq2X5dDM=";
   };
-
-  patches = [
-    ./use-srht-path.patch
-  ];
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
@@ -28,7 +24,6 @@ buildPythonPackage rec {
 
   preBuild = ''
     export PKGVER=${version}
-    export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
   meta = with stdenv.lib; {

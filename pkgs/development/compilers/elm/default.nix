@@ -124,6 +124,8 @@ let
 
       elm-language-server = nodePkgs."@elm-tooling/elm-language-server";
 
+      elm-optimize-level-2 = nodePkgs."elm-optimize-level-2";
+
       inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse;
     };
 

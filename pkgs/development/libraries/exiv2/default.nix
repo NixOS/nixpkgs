@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
   pname = "exiv2";
   version = "0.27.3";
 
+  # Disabled since splitting the outputs leads to issues, see
+  # https://github.com/NixOS/nixpkgs/pull/97161#issuecomment-689426419
+  # outputs = [ "out" "dev" "doc" "man" ];
+
   src = fetchFromGitHub {
     owner = "exiv2";
     repo  = "exiv2";
@@ -31,20 +35,15 @@ stdenv.mkDerivation rec {
       url = "https://github.com/Exiv2/exiv2/commit/bbe0b70840cf28b7dd8c0b7e9bb1b741aeda2efd.patch";
       sha256 = "13zw1mn0ag0jrz73hqjhdsh1img7jvj5yddip2k2sb5phy04rzfx";
     })
-  ];
 
-  cmakeFlags = [
-    "-DEXIV2_BUILD_PO=ON"
-    "-DEXIV2_BUILD_DOC=ON"
-    # the cmake package does not handle absolute CMAKE_INSTALL_INCLUDEDIR correctly
-    # (setting it to an absolute path causes include files to go to $out/$out/include,
-    #  because the absolute path is interpreted with root at $out).
-    # Can probably be removed once https://github.com/Exiv2/exiv2/pull/1263 is merged.
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+    # Use correct paths with multiple outputs
+    # https://github.com/Exiv2/exiv2/pull/1275
+    (fetchpatch {
+      name = "cmake-fix-aarch64.patch";
+      url = "https://github.com/Exiv2/exiv2/commit/48f2c9dbbacc0ef84c8ebf4cb1a603327f0b8750.patch";
+      sha256 = "vjB3+Ld4c/2LT7nq6uatYwfHTh+HeU5QFPFXuNLpIPA=";
+    })
   ];
-
-  outputs = [ "out" "dev" "doc" "man" ];
 
   nativeBuildInputs = [
     cmake
@@ -65,7 +64,13 @@ stdenv.mkDerivation rec {
     which
   ];
 
+  cmakeFlags = [
+    "-DEXIV2_ENABLE_NLS=ON"
+    "-DEXIV2_BUILD_DOC=ON"
+  ];
+
   buildFlags = [
+    "all"
     "doc"
   ];
 
@@ -102,20 +107,11 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  # Fix CMake export paths. Can be removed once https://github.com/Exiv2/exiv2/pull/1263 is merged.
-  postFixup = ''
-    sed -i "$dev/lib/cmake/exiv2/exiv2Config.cmake" \
-        -e "/INTERFACE_INCLUDE_DIRECTORIES/ s@\''${_IMPORT_PREFIX}@$dev@" \
-        -e "/Compute the installation prefix/ a set(_IMPORT_PREFIX \"$out\")" \
-        -e "/^get_filename_component(_IMPORT_PREFIX/ d"
-  '';
-
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     homepage = "https://www.exiv2.org/";
     description = "A library and command-line utility to manage image metadata";
     platforms = platforms.all;
     license = licenses.gpl2Plus;
+    maintainers = [ ];
   };
 }

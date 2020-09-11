@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, wrapQtAppsHook
 , qtbase, qtmultimedia, qtx11extras, qttools, qtwebengine
-, libidn, qca2-qt5, libsecret, libXScrnSaver, hunspell
+, libidn, qca-qt5, libsecret, libXScrnSaver, hunspell
 , libgcrypt, libotr, html-tidy, libgpgerror, libsignal-protocol-c
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     qtbase qtmultimedia qtx11extras qttools qtwebengine
-    libidn qca2-qt5 libsecret libXScrnSaver hunspell
+    libidn qca-qt5 libsecret libXScrnSaver hunspell
     libgcrypt libotr html-tidy libgpgerror libsignal-protocol-c
   ];
 

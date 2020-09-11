@@ -22,6 +22,9 @@ let
  *  `metricProvider` (optional)
  *    this attribute contains additional machine config
  *
+ *  `nodeName` (optional)
+ *    override an incompatible testnode name
+ *
  *  Example:
  *    exporterTests.<exporterName> = {
  *      exporterConfig = {
@@ -590,6 +593,19 @@ let
       '';
     };
 
+    unifi-poller = {
+      nodeName = "unifi_poller";
+      exporterConfig.enable = true;
+      exporterConfig.controllers = [ { } ];
+      exporterTest = ''
+        wait_for_unit("prometheus-unifi-poller-exporter.service")
+        wait_for_open_port(9130)
+        succeed(
+            "curl -sSf localhost:9130/metrics | grep -q 'unifipoller_build_info{.\\+} 1'"
+        )
+      '';
+    };
+
     varnish = {
       exporterConfig = {
         enable = true;
@@ -646,24 +662,27 @@ let
     };
   };
 in
-mapAttrs (exporter: testConfig: (makeTest {
+mapAttrs (exporter: testConfig: (makeTest (let
+  nodeName = testConfig.nodeName or exporter;
+
+in {
   name = "prometheus-${exporter}-exporter";
 
-  nodes.${exporter} = mkMerge [{
+  nodes.${nodeName} = mkMerge [{
     services.prometheus.exporters.${exporter} = testConfig.exporterConfig;
   } testConfig.metricProvider or {}];
 
   testScript = ''
-    ${exporter}.start()
+    ${nodeName}.start()
     ${concatStringsSep "\n" (map (line:
       if (builtins.substring 0 1 line == " " || builtins.substring 0 1 line == ")")
       then line
-      else "${exporter}.${line}"
+      else "${nodeName}.${line}"
     ) (splitString "\n" (removeSuffix "\n" testConfig.exporterTest)))}
-    ${exporter}.shutdown()
+    ${nodeName}.shutdown()
   '';
 
   meta = with maintainers; {
-    maintainers = [ willibutz ];
+    maintainers = [ willibutz elseym ];
   };
-})) exporterTests
+}))) exporterTests

@@ -6,7 +6,6 @@
 , enablePNG ? true, libpng
 , enableTIFF ? true, libtiff
 , enableEXR ? (!stdenv.isDarwin), openexr, ilmbase
-, enableJPEG2K ? false, jasper  # disable jasper by default (many CVE)
 , enableFfmpeg ? false, ffmpeg_3
 , enableGStreamer ? false, gst_all_1
 , enableEigen ? true, eigen
@@ -50,7 +49,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional enablePNG libpng
     ++ lib.optional enableTIFF libtiff
     ++ lib.optionals enableEXR [ openexr ilmbase ]
-    ++ lib.optional enableJPEG2K jasper
     ++ lib.optional enableFfmpeg ffmpeg_3
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
@@ -65,7 +63,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     (opencvFlag "TIFF" enableTIFF)
-    (opencvFlag "JASPER" enableJPEG2K)
     (opencvFlag "JPEG" enableJPEG)
     (opencvFlag "PNG" enablePNG)
     (opencvFlag "OPENEXR" enableEXR)

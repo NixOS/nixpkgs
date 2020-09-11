@@ -211,6 +211,8 @@ let
 
   qgit = qt5.callPackage ./qgit { };
 
+  rs-git-fsmonitor = callPackage ./rs-git-fsmonitor { };
+
   scmpuff = callPackage ./scmpuff { };
 
   stgit = callPackage ./stgit { };
