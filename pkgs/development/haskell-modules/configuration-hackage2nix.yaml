@@ -72,7 +72,7 @@ default-package-overrides:
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
-  # LTS Haskell 16.12
+  # LTS Haskell 16.13
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -489,7 +489,7 @@ default-package-overrides:
   - concurrent-split ==0.0.1.1
   - concurrent-supply ==0.1.8
   - cond ==0.4.1.1
-  - conduit ==1.3.2
+  - conduit ==1.3.2.1
   - conduit-algorithms ==0.0.11.0
   - conduit-combinators ==1.3.0
   - conduit-concurrent-map ==0.1.1
@@ -504,7 +504,7 @@ default-package-overrides:
   - config-ini ==0.2.4.0
   - configurator ==0.3.0.0
   - configurator-export ==0.1.0.1
-  - configurator-pg ==0.2.3
+  - configurator-pg ==0.2.4
   - connection ==0.3.1
   - connection-pool ==0.2.2
   - console-style ==0.0.2.1
@@ -733,7 +733,7 @@ default-package-overrides:
   - errors ==2.3.0
   - errors-ext ==0.4.2
   - ersatz ==0.4.8
-  - esqueleto ==3.3.3.2
+  - esqueleto ==3.3.3.3
   - essence-of-live-coding ==0.1.0.3
   - essence-of-live-coding-gloss ==0.1.0.3
   - essence-of-live-coding-pulse ==0.1.0.3
@@ -1092,14 +1092,14 @@ default-package-overrides:
   - hslua-module-doclayout ==0.1.0
   - hslua-module-system ==0.2.2
   - hslua-module-text ==0.2.1
-  - HsOpenSSL ==0.11.4.18
+  - HsOpenSSL ==0.11.4.19
   - hsp ==0.10.0
-  - hspec ==2.7.2
+  - hspec ==2.7.4
   - hspec-attoparsec ==0.1.0.2
   - hspec-checkers ==0.1.0.2
   - hspec-contrib ==0.5.1
-  - hspec-core ==2.7.2
-  - hspec-discover ==2.7.2
+  - hspec-core ==2.7.4
+  - hspec-discover ==2.7.4
   - hspec-expectations ==0.8.2
   - hspec-expectations-lifted ==0.10.0
   - hspec-expectations-pretty-diff ==0.7.2.5
@@ -1385,13 +1385,13 @@ default-package-overrides:
   - mainland-pretty ==0.7.0.1
   - main-tester ==0.2.0.1
   - makefile ==1.1.0.0
-  - managed ==1.0.7
+  - managed ==1.0.8
   - markdown ==0.1.17.4
   - markdown-unlit ==0.5.0
   - markov-chain ==0.0.3.4
-  - massiv ==0.5.3.2
+  - massiv ==0.5.4.0
   - massiv-io ==0.2.1.0
-  - massiv-test ==0.1.3.1
+  - massiv-test ==0.1.4
   - mathexpr ==0.3.0.0
   - math-extras ==0.1.1.0
   - math-functions ==0.3.4.1
@@ -1433,7 +1433,7 @@ default-package-overrides:
   - midi ==0.2.2.2
   - mighty-metropolis ==2.0.0
   - mime-mail ==0.5.0
-  - mime-mail-ses ==0.4.2
+  - mime-mail-ses ==0.4.3
   - mime-types ==0.1.0.9
   - mini-egison ==1.0.0
   - minimal-configuration ==0.1.4
@@ -1963,7 +1963,7 @@ default-package-overrides:
   - servant-checked-exceptions-core ==2.2.0.0
   - servant-client ==0.16.0.1
   - servant-client-core ==0.16
-  - servant-conduit ==0.15
+  - servant-conduit ==0.15.1
   - servant-docs ==0.11.4
   - servant-docs-simple ==0.2.0.1
   - servant-elm ==0.7.2
@@ -1972,9 +1972,9 @@ default-package-overrides:
   - servant-js ==0.9.4.2
   - servant-JuicyPixels ==0.3.0.5
   - servant-lucid ==0.9
-  - servant-machines ==0.15
+  - servant-machines ==0.15.1
   - servant-mock ==0.8.5
-  - servant-pipes ==0.15.1
+  - servant-pipes ==0.15.2
   - servant-purescript ==0.10.0.0
   - servant-rawm ==0.3.2.0
   - servant-server ==0.16.2
@@ -2118,7 +2118,7 @@ default-package-overrides:
   - stringsearch ==0.3.6.6
   - string-transform ==1.1.1
   - stripe-concepts ==1.0.2.4
-  - stripe-signature ==1.0.0.4
+  - stripe-signature ==1.0.0.6
   - strive ==5.0.12
   - structs ==0.1.3
   - structured ==0.1
@@ -2145,7 +2145,7 @@ default-package-overrides:
   - system-fileio ==0.3.16.4
   - system-filepath ==0.4.14
   - system-info ==0.5.1
-  - tabular ==0.2.2.7
+  - tabular ==0.2.2.8
   - taffybar ==3.2.2
   - tagchup ==0.4.1.1
   - tagged ==0.8.6
@@ -2182,7 +2182,7 @@ default-package-overrides:
   - TCache ==0.12.1
   - tce-conf ==1.3
   - tdigest ==0.2.1
-  - template-haskell-compat-v0208 ==0.1.4
+  - template-haskell-compat-v0208 ==0.1.5
   - temporary ==1.3
   - temporary-rc ==1.2.0.3
   - temporary-resourcet ==0.1.0.1
@@ -2474,7 +2474,7 @@ default-package-overrides:
   - xdg-basedir ==0.2.2
   - xdg-desktop-entry ==0.1.1.1
   - xdg-userdirs ==0.1.0.2
-  - xeno ==0.4.1
+  - xeno ==0.4.2
   - xls ==0.1.3
   - xlsx ==0.8.1
   - xlsx-tabular ==0.2.2.1
