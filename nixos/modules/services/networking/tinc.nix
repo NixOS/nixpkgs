@@ -48,6 +48,14 @@ in
               '';
             };
 
+            rsaPrivateKeyFile = mkOption {
+              default = null;
+              type = types.nullOr types.path;
+              description = ''
+                Path of the private RSA keyfile.
+              '';
+            };
+
             debugLevel = mkOption {
               default = 0;
               type = types.addCheck types.int (l: l >= 0 && l <= 5);
@@ -139,6 +147,7 @@ in
               Name = ${if data.name == null then "$HOST" else data.name}
               DeviceType = ${data.interfaceType}
               ${optionalString (data.ed25519PrivateKeyFile != null) "Ed25519PrivateKeyFile = ${data.ed25519PrivateKeyFile}"}
+              ${optionalString (data.rsaPrivateKeyFile != null) "PrivateKeyFile = ${data.rsaPrivateKeyFile}"}
               ${optionalString (data.listenAddress != null) "ListenAddress = ${data.listenAddress}"}
               ${optionalString (data.bindToAddress != null) "BindToAddress = ${data.bindToAddress}"}
               Interface = tinc.${network}
@@ -170,12 +179,15 @@ in
           # Determine how we should generate our keys
           if type tinc >/dev/null 2>&1; then
             # Tinc 1.1+ uses the tinc helper application for key generation
-          ${if data.ed25519PrivateKeyFile != null then "  # Keyfile managed by nix" else ''
+          ${if data.ed25519PrivateKeyFile != null then "  # ed25519 Keyfile managed by nix" else ''
             # Prefer ED25519 keys (only in 1.1+)
             [ -f "/etc/tinc/${network}/ed25519_key.priv" ] || tinc -n ${network} generate-ed25519-keys
           ''}
-            # Otherwise use RSA keys
+          ${if data.rsaPrivateKeyFile != null then "  # RSA Keyfile managed by nix" else ''
             [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tinc -n ${network} generate-rsa-keys 4096
+          ''}
+            # In case there isn't anything to do
+            true
           else
             # Tinc 1.0 uses the tincd application
             [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tincd -n ${network} -K 4096

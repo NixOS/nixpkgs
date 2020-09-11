@@ -39,7 +39,6 @@ buildGoPackage rec {
     '';
     homepage = "https://github.com/mdempsky/gocode";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = with maintainers; [ kalbasit ];
   };
 }

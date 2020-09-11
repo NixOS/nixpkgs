@@ -1,12 +1,12 @@
 { stdenv, fetchurl, fuse, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  version = "1.14.4";
+  version = "1.14.7";
   pname = "bindfs";
 
   src = fetchurl {
     url    = "https://bindfs.org/downloads/${pname}-${version}.tar.gz";
-    sha256 = "1vk42bq8y13gv4yvajf65qsh59lscwcaw3xv94qpjxld3786i8c7";
+    sha256 = "1lbqyc9vpgck05n0q3qsvsr34142iv721z6iwxhc5j98370ff9i8";
   };
 
   dontStrip = true;

@@ -117,7 +117,7 @@ in stdenv.mkDerivation rec {
 
   makeFlags  = [
     "prefix=${placeholder "out"}"
-    "PKG_CONFIG=${pkgconfig}/bin/pkg-config"
+    "PKG_CONFIG=${pkgconfig}/bin/${pkgconfig.targetPrefix}pkg-config"
   ];
 
   # The .pc files does not declare an `includedir=`, so the multiple

@@ -4,13 +4,13 @@
 
 let
   pname = "gnome-calendar";
-  version = "3.36.0";
+  version = "3.36.2";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1cxy4qf83s8w1ys94rcc4ksf7ywi0hkkpfs0szkkip2v8g3j6kq2";
+    sha256 = "07sc1kn65dzxsxpv0vl5dj1a5awljjsfl9jldrg0hnjmq12m7c6h";
   };
 
   passthru = {

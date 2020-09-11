@@ -13,13 +13,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "45.0.0";
+  version = "48.0.0";
 
   src = fetchFromGitLab {
     owner  = "mbunkus";
     repo   = "mkvtoolnix";
     rev    = "release-${version}";
-    sha256 = "1m9ih6bgl3nrjgr0rxvfbvw8s9ska7ps1ypc2ynvyxba4gjkkyyf";
+    sha256 = "0lbl3w2m12blymda3m00afl9racgahvl0z4b2clwbawhvypc5vfc";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     (enableFeature withGUI "qt")
   ];
 
-  CXXFLAGS = optional stdenv.cc.isClang "-std=c++14";
+  CXXFLAGS = optional stdenv.cc.isClang "-std=c++17";
 
   dontWrapQtApps = true;
   postFixup = optionalString withGUI ''

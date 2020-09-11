@@ -5,12 +5,16 @@
 
 buildPythonPackage rec {
   pname = "certifi";
-  version = "2019.11.28";
+  version = "2020.6.20";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "25b64c7da4cd7479594d035c08c2d809eb4aab3a26e5a990ea98cc450c320f1f";
+    sha256 = "5930595817496dd21bb8dc35dad090f1c2cd0adfaf21204bf6732ca5d8ee34d3";
   };
+
+  pythonImportsCheck = [ "certifi" ];
+
+  dontUseSetuptoolsCheck = true;
 
   meta = {
     homepage = "https://certifi.io/";

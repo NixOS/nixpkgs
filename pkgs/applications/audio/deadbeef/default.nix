@@ -17,7 +17,7 @@
 , aacSupport ? true, faad2 ? null
 , opusSupport ? true, opusfile ? null
 , wavpackSupport ? false, wavpack ? null
-, ffmpegSupport ? false, ffmpeg ? null
+, ffmpegSupport ? false, ffmpeg_3 ? null
 , apeSupport ? true, yasm ? null
 # misc plugins
 , zipSupport ? true, libzip ? null
@@ -45,7 +45,7 @@ assert cdaSupport -> (libcdio != null && libcddb != null);
 assert aacSupport -> faad2 != null;
 assert opusSupport -> opusfile != null;
 assert zipSupport -> libzip != null;
-assert ffmpegSupport -> ffmpeg != null;
+assert ffmpegSupport -> ffmpeg_3 != null;
 assert apeSupport -> yasm != null;
 assert artworkSupport -> imlib2 != null;
 assert hotkeysSupport -> libX11 != null;
@@ -59,13 +59,13 @@ assert remoteSupport -> curl != null;
 
 stdenv.mkDerivation rec {
   pname = "deadbeef";
-  version = "1.8.3";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "DeaDBeeF-Player";
     repo = "deadbeef";
     rev = version;
-    sha256 = "0n0q7zfl56gnadcqqp5rg7sbh1xvfcmp7cvmh2ax07037b346qig";
+    sha256 = "161b0ll8v4cjgwwmk137hzvh0jidlkx56vjkpnr70f0x4jzv2nll";
   };
 
   buildInputs = with stdenv.lib; [ jansson ]
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     ++ optional aacSupport faad2
     ++ optional opusSupport opusfile
     ++ optional zipSupport libzip
-    ++ optional ffmpegSupport ffmpeg
+    ++ optional ffmpegSupport ffmpeg_3
     ++ optional apeSupport yasm
     ++ optional artworkSupport imlib2
     ++ optional hotkeysSupport libX11

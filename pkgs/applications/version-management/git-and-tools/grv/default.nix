@@ -36,7 +36,7 @@ buildGoPackage {
 
   installPhase = ''
     runHook preInstall
-    install -D grv $bin/bin/grv
+    install -D grv $out/bin/grv
     runHook postInstall
   '';
 

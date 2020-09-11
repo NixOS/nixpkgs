@@ -6,6 +6,7 @@
 , libxslt, tcl, tk, makeWrapper, libiconv
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs
 , perlSupport ? true
+, nlsSupport ? true
 , guiSupport
 , withManual ? true
 , pythonSupport ? true
@@ -21,7 +22,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.26.2";
+  version = "2.28.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
 
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
@@ -33,10 +34,10 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "0j685w6pzkn926z5nf5r8fij4ziipvw4c9yb0wc577nzf4j16rbd";
+    sha256 = "17a311vzimqn1glc9d7x82rhb1mb81m5rr4g8xji8idaafid39fz";
   };
 
-  outputs = [ "out" ];
+  outputs = [ "out" ] ++ stdenv.lib.optional withManual "doc";
 
   hardeningDisable = [ "format" ];
 
@@ -98,6 +99,7 @@ stdenv.mkDerivation {
   ++ (if stdenv.isDarwin then ["NO_APPLE_COMMON_CRYPTO=1"] else ["sysconfdir=/etc"])
   ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl ["NO_SYS_POLL_H=1" "NO_GETTEXT=YesPlease"]
   ++ stdenv.lib.optional withpcre2 "USE_LIBPCRE2=1"
+  ++ stdenv.lib.optional (!nlsSupport) "NO_GETTEXT=1"
   # git-gui refuses to start with the version of tk distributed with
   # macOS Catalina. We can prevent git from building the .app bundle
   # by specifying an invalid tk framework. The postInstall step will
@@ -234,7 +236,7 @@ stdenv.mkDerivation {
       '')
 
    + stdenv.lib.optionalString withManual ''# Install man pages and Info manual
-       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-info \
+       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html install-info \
          -C Documentation ''
 
    + (if guiSupport then ''
@@ -286,13 +288,14 @@ stdenv.mkDerivation {
         mv t/{,skip-}$test.sh || true
       else
         sed -i t/$test.sh \
-          -e "/^ *test_expect_.*$pattern/,/^ *' *\$/{s/^/#/}"
+          -e "/^\s*test_expect_.*$pattern/,/^\s*' *\$/{s/^/: #/}"
       fi
     }
 
     # Shared permissions are forbidden in sandbox builds.
     disable_test t0001-init shared
     disable_test t1301-shared-repo
+    disable_test t5324-split-commit-graph 'split commit-graph respects core.sharedrepository'
 
     # Our patched gettext never fallbacks
     disable_test t0201-gettext-fallbacks
@@ -343,6 +346,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ peti the-kenny wmertens globin ];
+    maintainers = with stdenv.lib.maintainers; [ primeos peti wmertens globin ];
   };
 }

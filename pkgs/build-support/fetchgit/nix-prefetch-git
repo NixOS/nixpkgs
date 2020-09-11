@@ -373,6 +373,7 @@ print_results() {
   "url": "$(json_escape "$url")",
   "rev": "$(json_escape "$fullRev")",
   "date": "$(json_escape "$commitDateStrict8601")",
+  "path": "$(json_escape "$finalPath")",
   "$(json_escape "$hashType")": "$(json_escape "$hash")",
   "fetchSubmodules": $([[ -n "$fetchSubmodules" ]] && echo true || echo false),
   "deepClone": $([[ -n "$deepClone" ]] && echo true || echo false),

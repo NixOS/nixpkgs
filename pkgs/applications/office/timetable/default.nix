@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , glib
 , gtk3
 , vala
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Plot out your own timetable for the week and organize it";
     homepage = "https://github.com/lainsce/timetable";
-    maintainers = [ maintainers.kjuvi ] ++ pantheon.maintainers;
+    maintainers = [ maintainers.xiorcale ] ++ pantheon.maintainers;
     license = licenses.gpl2Plus;
   };
 }

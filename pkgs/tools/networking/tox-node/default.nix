@@ -24,7 +24,7 @@ buildRustPackage rec {
   installPhase = ''
     runHook preInstall
 
-    install -D target/release/tox-node $out/bin/tox-node
+    install -D $releaseDir/tox-node $out/bin/tox-node
 
     runHook postInstall
   '';

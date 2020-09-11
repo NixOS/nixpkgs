@@ -21,6 +21,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-parsy/parsy";
     description = "Easy-to-use parser combinators, for parsing in pure Python";
     license = [ licenses.mit ];
-    maintainers = with maintainers; [ aepsil0n ];
+    maintainers = with maintainers; [ edibopp ];
   };
 }

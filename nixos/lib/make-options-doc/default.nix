@@ -36,7 +36,7 @@ let
     // lib.optionalAttrs (opt ? example) { example = substFunction opt.example; }
     // lib.optionalAttrs (opt ? default) { default = substFunction opt.default; }
     // lib.optionalAttrs (opt ? type) { type = substFunction opt.type; }
-    // lib.optionalAttrs (opt ? relatedPackages && opt.relatedPackages != []) { relatedPackages = genRelatedPackages opt.relatedPackages; }
+    // lib.optionalAttrs (opt ? relatedPackages && opt.relatedPackages != []) { relatedPackages = genRelatedPackages opt.relatedPackages opt.name; }
    );
 
   # Generate DocBook documentation for a list of packages. This is
@@ -48,7 +48,7 @@ let
   # - a list:    that will be interpreted as an attribute path from `pkgs`,
   # - an attrset: that can specify `name`, `path`, `package`, `comment`
   #   (either of `name`, `path` is required, the rest are optional).
-  genRelatedPackages = packages:
+  genRelatedPackages = packages: optName:
     let
       unpack = p: if lib.isString p then { name = p; }
                   else if lib.isList p then { path = p; }
@@ -58,7 +58,7 @@ let
           title = args.title or null;
           name = args.name or (lib.concatStringsSep "." args.path);
           path = args.path or [ args.name ];
-          package = args.package or (lib.attrByPath path (throw "Invalid package attribute path `${toString path}'") pkgs);
+          package = args.package or (lib.attrByPath path (throw "Invalid package attribute path `${toString path}' found while evaluating `relatedPackages' of option `${optName}'") pkgs);
         in "<listitem>"
         + "<para><literal>${lib.optionalString (title != null) "${title} aka "}pkgs.${name} (${package.meta.name})</literal>"
         + lib.optionalString (!package.meta.available) " <emphasis>[UNAVAILABLE]</emphasis>"

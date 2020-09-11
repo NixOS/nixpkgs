@@ -1,9 +1,9 @@
 { mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig
-, qtbase, qtcharts, qtmultimedia, qtquickcontrols, qtquickcontrols2
-, faad2, rtl-sdr, soapysdr-with-plugins, libusb, fftwSinglePrec, lame, mpg123 }:
+, qtbase, qtcharts, qtmultimedia, qtquickcontrols, qtquickcontrols2, qtgraphicaleffects
+, faad2, rtl-sdr, soapysdr-with-plugins, libusb-compat-0_1, fftwSinglePrec, lame, mpg123 }:
 let
 
-  version = "2.1";
+  version = "2.2";
 
 in mkDerivation {
 
@@ -14,7 +14,7 @@ in mkDerivation {
     owner = "AlbrechtL";
     repo = "welle.io";
     rev = "v${version}";
-    sha256 = "1j63gdbd66d6rfjsxwdm2agrcww1rs4438kg7313h6zixpcc1icj";
+    sha256 = "04fpm6sc431dl9i5h53xpd6k85j22sv8aawl7b6wv2fzpfsd9fwa";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -23,13 +23,14 @@ in mkDerivation {
     faad2
     fftwSinglePrec
     lame
-    libusb
+    libusb-compat-0_1
     mpg123
     qtbase
     qtcharts
     qtmultimedia
     qtquickcontrols
     qtquickcontrols2
+    qtgraphicaleffects
     rtl-sdr
     soapysdr-with-plugins
   ];

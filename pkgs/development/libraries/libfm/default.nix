@@ -28,6 +28,11 @@ stdenv.mkDerivation rec {
     "sysconfdir=${placeholder "out"}/etc"
   ];
 
+  # libfm-extra is pulled in by menu-cache and thus leads to a collision for libfm
+  postInstall = optional (!extraOnly) ''
+     rm $out/lib/libfm-extra.so $out/lib/libfm-extra.so.* $out/lib/libfm-extra.la $out/lib/pkgconfig/libfm-extra.pc
+  '';
+
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {

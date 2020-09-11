@@ -29,8 +29,8 @@ import ./make-test-python.nix ({ pkgs, ... } : let
 in {
 
   name = "matrix-synapse";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ corngood ];
+  meta = with pkgs.stdenv.lib; {
+    maintainers = teams.matrix.members;
   };
 
   nodes = {

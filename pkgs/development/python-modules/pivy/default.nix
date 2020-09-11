@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pkgs }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, pkgs, qtbase, qmake, soqt }:
 
 buildPythonPackage rec {
   pname = "pivy";
@@ -12,20 +12,20 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = with pkgs; [
-    swig qt5.qmake cmake
+    swig qmake cmake
   ];
 
   buildInputs = with pkgs; with xorg; [
-    coin3d soqt qt5.qtbase
+    coin3d soqt qtbase
     libGLU libGL
     libXi libXext libSM libICE libX11
   ];
 
   NIX_CFLAGS_COMPILE = toString [
-    "-I${pkgs.qt5.qtbase.dev}/include/QtCore"
-    "-I${pkgs.qt5.qtbase.dev}/include/QtGui"
-    "-I${pkgs.qt5.qtbase.dev}/include/QtOpenGL"
-    "-I${pkgs.qt5.qtbase.dev}/include/QtWidgets"
+    "-I${qtbase.dev}/include/QtCore"
+    "-I${qtbase.dev}/include/QtGui"
+    "-I${qtbase.dev}/include/QtOpenGL"
+    "-I${qtbase.dev}/include/QtWidgets"
   ];
 
   dontUseQmakeConfigure = true;

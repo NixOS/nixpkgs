@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "https://openmsx.org";
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
+    license = with licenses; [ bsd2 boost gpl2 ];
   };
 }

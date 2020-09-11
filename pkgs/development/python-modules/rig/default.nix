@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, isPy34, isPy35, isPy27
+, isPy35, isPy27
 , numpy, pytz, six, enum-compat, sentinel
 }:
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   # This is the list of officially supported versions. Other versions may work
   # as well.
-  disabled = !(isPy35 || isPy34 || isPy27);
+  disabled = !(isPy27 || isPy35);
 
   # Test Phase is only supported in development sources.
   doCheck = false;

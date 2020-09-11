@@ -15,12 +15,13 @@ buildGoPackage rec {
     sha256 = "0xndlq0ks8flzx6rdd4lnkxpkbvdy9sj1jwys5yj7p989ls8by3n";
   };
 
+  deleteVendor = true;
   goDeps = ./deps.nix;
 
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall =
-    let stern = if isCrossBuild then buildPackages.stern else "$bin"; in
+    let stern = if isCrossBuild then buildPackages.stern else "$out"; in
     ''
       for shell in bash zsh; do
         ${stern}/bin/stern --completion $shell > stern.$shell

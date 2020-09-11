@@ -4,7 +4,6 @@
 , python
 , buildPythonPackage
 , isPy27
-, isPy33
 , isPy3k
 , numpy
 , llvmlite
@@ -14,19 +13,20 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.48.0";
+  version = "0.51.1";
   pname = "numba";
   # uses f-strings
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9d21bc77e67006b5723052840c88cc59248e079a907cc68f1a1a264e1eaba017";
+    sha256 = "1e765b1a41535684bf3b0465c1d0a24dcbbff6af325270c8f4dad924c0940160";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
-  propagatedBuildInputs = [numpy llvmlite] ++ stdenv.lib.optional (!isPy3k) funcsigs ++ stdenv.lib.optional (isPy27 || isPy33) singledispatch;
+  propagatedBuildInputs = [numpy llvmlite]
+    ++ stdenv.lib.optionals isPy27 [ funcsigs singledispatch];
 
   # Copy test script into $out and run the test suite.
   checkPhase = ''

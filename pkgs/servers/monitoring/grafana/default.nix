@@ -1,10 +1,8 @@
-{ lib, buildGoPackage, fetchurl, fetchFromGitHub, phantomJsSupport ? false, phantomjs2 ? null }:
+{ lib, buildGoModule, fetchurl, fetchFromGitHub, nixosTests }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "grafana";
-  version = "6.7.3";
-
-  goPackagePath = "github.com/grafana/grafana";
+  version = "7.1.5";
 
   excludedPackages = [ "release_publisher" ];
 
@@ -12,28 +10,28 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "grafana";
-    sha256 = "14yrfrn59r3mxbkhs7mg7nlhnvvrmq959r8w4aj6m7wgr32jj8wl";
+    sha256 = "089z2x6jhiv5cx70vm7f1pyj5avappnaxrwah8jbnlkaz2kisp79";
   };
 
   srcStatic = fetchurl {
     url = "https://dl.grafana.com/oss/release/grafana-${version}.linux-amd64.tar.gz";
-    sha256 = "17h70h6cz1bdhczjqa68kxzfm4vi95zdnqzah8hcjr7rwnx874kr";
+    sha256 = "0l1lw3y5w4s6qfkmclzc6h6hqwxqmxlppnwsq1zpm2hmrndy440j";
   };
+
+  vendorSha256 = "0i0qdfh6cjdjg2mrrabm42427aaxs6a90ydb554ds14k6r4jdf8b";
 
   postPatch = ''
     substituteInPlace pkg/cmd/grafana-server/main.go \
       --replace 'var version = "5.0.0"'  'var version = "${version}"'
   '';
 
-  preBuild = "export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/${goPackagePath}/Godeps/_workspace";
-
   postInstall = ''
     tar -xvf $srcStatic
-    mkdir -p $bin/share/grafana
-    mv grafana-*/{public,conf,tools} $bin/share/grafana/
-  '' + lib.optionalString phantomJsSupport ''
-    ln -sf ${phantomjs2}/bin/phantomjs $bin/share/grafana/tools/phantomjs/phantomjs
+    mkdir -p $out/share/grafana
+    mv grafana-*/{public,conf,tools} $out/share/grafana/
   '';
+
+  passthru.tests = { inherit (nixosTests) grafana; };
 
   meta = with lib; {
     description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";

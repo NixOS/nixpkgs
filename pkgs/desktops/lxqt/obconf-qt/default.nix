@@ -1,15 +1,27 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, pcre, qtbase, qttools,
-  qtx11extras, xorg, lxqt-build-tools, openbox }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, pcre
+, qtbase
+, qttools
+, qtx11extras
+, xorg
+, lxqt-build-tools
+, openbox
+, lxqtUpdateScript
+}:
 
 mkDerivation rec {
   pname = "obconf-qt";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "15dizs072ylmld1lxwgqkvybqy8ms8zki5586xm305jnlmrkb4lq";
+    sha256 = "13bah70k78kscrr01z7dwdzwhay8mz0f7gfsg2a6w113mgqkn7ib";
   };
 
   nativeBuildInputs = [
@@ -28,6 +40,8 @@ mkDerivation rec {
     xorg.libSM
     openbox
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "The Qt port of obconf, the Openbox configuration tool";

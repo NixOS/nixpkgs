@@ -23,7 +23,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   postInstall = ''
-    wrapProgram $bin/bin/distrobuilder --prefix PATH ":" ${binPath}
+    wrapProgram $out/bin/distrobuilder --prefix PATH ":" ${binPath}
   '';
   nativeBuildInputs = [ pkgconfig makeWrapper ];
 

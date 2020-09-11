@@ -1,6 +1,5 @@
 { stdenv
 , buildPythonPackage
-, isPy33
 , fetchgit
 , cython
 }:
@@ -8,7 +7,6 @@
 buildPythonPackage {
   pname = "rencode";
   version = "git20150810";
-  disabled = isPy33;
 
   src = fetchgit {
     url = "https://github.com/aresch/rencode";

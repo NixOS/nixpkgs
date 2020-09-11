@@ -18,7 +18,7 @@ The primary objective of this project is to use the Nix expression language to
 specify how iOS apps can be built from source code, and to automatically spawn
 iOS simulator instances for testing.
 
-This component also makes it possible to use [Hydra](http://nixos.org/hydra),
+This component also makes it possible to use [Hydra](https://nixos.org/hydra),
 the Nix-based continuous integration server to regularly build iOS apps and to
 do wireless ad-hoc installations of enterprise IPAs on iOS devices through
 Hydra.

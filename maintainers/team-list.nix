@@ -17,9 +17,43 @@
 
 { lib }:
 with lib.maintainers; {
+  acme = {
+    members = [
+      aanderse
+      andrew-d
+      arianvp
+      emily
+      flokli
+      m1cr0man
+    ];
+    scope = "Maintain ACME-related packages and modules.";
+  };
+
+  cinnamon = {
+    members = [
+      mkg20001
+    ];
+    scope = "Maintain Cinnamon desktop environment and applications made by the LinuxMint team.";
+  };
+
   freedesktop = {
     members = [ jtojnar worldofpeace ];
     scope = "Maintain Freedesktop.org packages for graphical desktop.";
+  };
+
+  golang = {
+    members = [
+      c00w
+      cstrahan
+      Frostman
+      kalbasit
+      mdlayher
+      mic92
+      orivej
+      rvolosatovs
+      zowoq
+    ];
+    scope = "Maintain Golang compilers.";
   };
 
   gnome = {
@@ -27,8 +61,42 @@ with lib.maintainers; {
       hedning
       jtojnar
       worldofpeace
+      dasj19
     ];
     scope = "Maintain GNOME desktop environment and platform.";
+  };
+
+  jitsi = {
+    members = [
+      mmilata
+      petabyteboy
+      prusnak
+      ryantm
+    ];
+    scope = "Maintain Jitsi.";
+  };
+
+  matrix = {
+    members = [
+      ma27
+      pacien
+      fadenb
+      mguentner
+      ekleog
+      ralith
+    ];
+    scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
+  };
+
+  php = {
+    members = [
+      aanderse
+      etu
+      globin
+      ma27
+      talyz
+    ];
+    scope = "Maintain PHP related packages and extensions.";
   };
 
   podman = {

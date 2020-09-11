@@ -1,4 +1,4 @@
-{ stdenvNoCC, fetchFromGitHub, gnome-themes-extra, inkscape, xcursorgen }:
+{ stdenvNoCC, fetchFromGitHub, gnome-themes-extra, inkscape_0, xcursorgen }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "bibata-cursors-translucent";
@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs  = [
     gnome-themes-extra
-    inkscape
+    inkscape_0
     xcursorgen
   ];
 

@@ -19,7 +19,7 @@ buildRustPackage rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -p target/release/cfdyndns $out/bin/
+    cp -p $releaseDir/cfdyndns $out/bin/
   '';
 
   meta = with stdenv.lib; {

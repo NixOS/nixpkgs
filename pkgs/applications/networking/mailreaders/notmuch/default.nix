@@ -1,4 +1,4 @@
-{ fetchurl, stdenv
+{ fetchurl, fetchgit, stdenv
 , pkgconfig, gnupg
 , xapian, gmime, talloc, zlib
 , doxygen, perl, texinfo
@@ -12,17 +12,18 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "0.29.3";
+  version = "0.30.1c80020";
   pname = "notmuch";
 
   passthru = {
-    pythonSourceRoot = "${pname}-${version}/bindings/python";
+    pythonSourceRoot = "${src.name}/bindings/python";
     inherit version;
   };
 
-  src = fetchurl {
-    url = "https://notmuchmail.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "0dfwa38vgnxk9cvvpza66szjgp8lir6iz6yy0cry9593lywh9xym";
+  src = fetchgit {
+    url = "https://git.notmuchmail.org/git/notmuch";
+    sha256 = "0xj944c4ayps1bg21pksjih3y9v6lb34dd582df14i14q0yzji51";
+    rev = "1c80020e701c7323de137c0616fc8864443d7bd3";
   };
 
   nativeBuildInputs = [
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--zshcompletiondir=${placeholder "out"}/share/zsh/site-functions"
     "--bashcompletiondir=${placeholder "out"}/share/bash-completion/completions"
-    "--infodir=${placeholder "info"}"
+    "--infodir=${placeholder "info"}/share/info"
   ] ++ optional (!withEmacs) "--without-emacs"
     ++ optional (withEmacs) "--emacslispdir=${placeholder "emacs"}/share/emacs/site-lisp"
     ++ optional (isNull ruby) "--without-ruby";
@@ -75,6 +76,7 @@ stdenv.mkDerivation rec {
       sha256 = "1lk91s00y4qy4pjh8638b5lfkgwyl282g1m27srsf7qfn58y16a2";
     };
   in ''
+    mkdir -p test/test-databases
     ln -s ${test-database} test/test-databases/database-v1.tar.xz
   '';
   doCheck = !stdenv.hostPlatform.isDarwin && (versionAtLeast gmime.version "3.0.3");
@@ -96,7 +98,7 @@ stdenv.mkDerivation rec {
     description = "Mail indexer";
     homepage    = "https://notmuchmail.org/";
     license     = licenses.gpl3;
-    maintainers = with maintainers; [ flokli puckipedia the-kenny ];
+    maintainers = with maintainers; [ flokli puckipedia ];
     platforms   = platforms.unix;
   };
 }

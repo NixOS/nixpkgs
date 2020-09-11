@@ -34,6 +34,7 @@ the main ones:
 
 * [Nix](https://github.com/NixOS/nix) - the purely functional package manager
 * [NixOps](https://github.com/NixOS/nixops) - the tool to remotely deploy NixOS machines
+* [nixos-hardware](https://github.com/NixOS/nixos-hardware) - NixOS profiles to optimize settings for different hardware
 * [Nix RFCs](https://github.com/NixOS/rfcs) - the formal process for making substantial changes to the community
 * [NixOS homepage](https://github.com/NixOS/nixos-homepage) - the [NixOS.org](https://nixos.org) website
 * [hydra](https://github.com/NixOS/hydra) - our continuous integration system

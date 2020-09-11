@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, zlib, which, IOKit, qtbase }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, zlib, which, IOKit, qtbase, libusb-compat-0_1 }:
 
 stdenv.mkDerivation rec {
   pname = "gpsbabel";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ zlib qtbase which ]
+  buildInputs = [ zlib qtbase which libusb-compat-0_1 ]
     ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
   /* FIXME: Building the documentation, with "make doc", requires this:

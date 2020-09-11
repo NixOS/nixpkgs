@@ -4,18 +4,18 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "st-0.8.2";
+  pname = "st";
+  version = "0.8.4";
 
   src = fetchurl {
-    url = "https://dl.suckless.org/st/${name}.tar.gz";
-    sha256 = "0ddz2mdp1c7q67rd5vrvws9r0493ln0mlqyc3d73dv8im884xdxf";
+    url = "https://dl.suckless.org/st/${pname}-${version}.tar.gz";
+    sha256 = "19j66fhckihbg30ypngvqc9bcva47mp379ch5vinasjdxgn3qbfl";
   };
 
   inherit patches;
 
-  prePatch = optionalString (conf != null) ''
-    cp ${writeText "config.def.h" conf} config.def.h
-  '';
+  configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
+  postPatch = optionalString (conf!=null) "cp ${configFile} config.def.h";
 
   nativeBuildInputs = [ pkgconfig ncurses ];
   buildInputs = [ libX11 libXft ] ++ extraLibs;

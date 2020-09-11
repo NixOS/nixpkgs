@@ -5,13 +5,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "sysdig";
-  version = "0.26.6";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    sha256 = "1rw9s5lamr02036z26vfmnp5dnn97f00hcnp4xv6gdxim6rpmbz7";
+    sha256 = "0lpp271g0749sx7qgpwl6myi0kgfpsxk1kc4yp3r9k1pynv8bq1b";
   };
 
   nativeBuildInputs = [ cmake perl ];

@@ -28,10 +28,16 @@ stdenv.mkDerivation {
     for f in ${aflplusplus.src.name}/qemu_mode/patches/* ; do
       sed -E -i 's|(\.\./)+patches/([a-z-]+\.h)|\2|g' $f
       sed -E -i 's|\.\./\.\./config\.h|afl-config.h|g' $f
+      sed -E -i 's|\.\./\.\./include/cmplog\.h|afl-cmplog.h|g' $f
     done
     cp ${aflplusplus.src.name}/qemu_mode/patches/*.h $sourceRoot/
     cp ${aflplusplus.src.name}/types.h $sourceRoot/afl-types.h
     substitute ${aflplusplus.src.name}/config.h $sourceRoot/afl-config.h \
+      --replace "types.h" "afl-types.h"
+    substitute ${aflplusplus.src.name}/include/cmplog.h $sourceRoot/afl-cmplog.h \
+      --replace "config.h" "afl-config.h" \
+      --replace "forkserver.h" "afl-forkserver.h"
+    substitute ${aflplusplus.src.name}/include/forkserver.h $sourceRoot/afl-forkserver.h \
       --replace "types.h" "afl-types.h"
 
     cat ${aflplusplus.src.name}/qemu_mode/patches/*.diff > all.patch
@@ -68,7 +74,7 @@ stdenv.mkDerivation {
     ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.qemu.org/;
+    homepage = "https://www.qemu.org/";
     description = "Fork of QEMU with AFL++ instrumentation support";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ris ];

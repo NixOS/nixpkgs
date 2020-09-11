@@ -9,22 +9,24 @@
 
 buildPythonPackage rec {
   pname = "blis";
-  version = "0.4.1";
+  version = "0.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d69257d317e86f34a7f230a2fd1f021fd2a1b944137f40d8cdbb23bd334cd0c4";
+    sha256 = "014771a0f753a64ef5610c5b3d4a090b263073bdd59b8ad0d872ce1e06e7315a";
   };
 
   nativeBuildInputs = [
     cython
   ];
 
+  propagatedBuildInputs = [
+    numpy
+  ];
+
 
   checkInputs = [
-    cython
     hypothesis
-    numpy
     pytest
   ];
 

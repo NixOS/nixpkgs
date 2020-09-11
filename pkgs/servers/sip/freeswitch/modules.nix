@@ -1,8 +1,12 @@
 { libopus
+, opusfile
+, libopusenc
+, libogg
 , libctb
 , gsmlib
 , lua
 , curl
+, ffmpeg
 , libmysqlclient
 , postgresql
 }:
@@ -17,7 +21,7 @@ in
 {
   applications = {
     abstraction = mk "applications/mod_abstraction" [];
-    av = mk "applications/mod_av" [];
+    av = mk "applications/mod_av" [ ffmpeg ];
     avmd = mk "applications/mod_avmd" [];
     bert = mk "applications/mod_bert" [];
     blacklist = mk "applications/mod_blacklist" [];
@@ -161,6 +165,7 @@ in
     imagick = mk "formats/mod_imagick" [];
     local_stream = mk "formats/mod_local_stream" [];
     native_file = mk "formats/mod_native_file" [];
+    opusfile = mk "formats/mod_opusfile" [ libopus opusfile libopusenc libogg ];
     png = mk "formats/mod_png" [];
     portaudio_stream = mk "formats/mod_portaudio_stream" [];
     shell_stream = mk "formats/mod_shell_stream" [];
@@ -169,6 +174,7 @@ in
     ssml = mk "formats/mod_ssml" [];
     tone_stream = mk "formats/mod_tone_stream" [];
     vlc = mk "formats/mod_vlc" [];
+    webm = mk "formats/mod_webm" [];
   };
 
   languages = {

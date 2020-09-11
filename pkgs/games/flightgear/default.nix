@@ -6,15 +6,15 @@
 }:
 
 let
-  version = "2019.1.1";
+  version = "2020.1.2";
   shortVersion = builtins.substring 0 6 version;
   data = stdenv.mkDerivation rec {
-    pname = "flightgear-base";
+    pname = "flightgear-data";
     inherit version;
 
     src = fetchurl {
       url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.tar.bz2";
-      sha256 = "14zm0hzshbca4ych72631hpc4pw2w24zib62ri3lwm8nz6j63qhf";
+      sha256 = "0ldsjb54k8nb99h6n4f4x20nawd2pa0a8skkwkrgckdpmdv0zwyk";
     };
 
     phases = [ "installPhase" ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/flightgear/release-${shortVersion}/${pname}-${version}.tar.bz2";
-    sha256 = "189wal08p9lrz757pmazxnf85sfymsqrm3nfvdad95pfp6bg7pyi";
+    sha256 = "1770kgwa7z70sx6da9x1q9cszpd3ywz6nn8jrb6xv8ldjqcpqpvb";
   };
 
   # Of all the files in the source and data archives, there doesn't seem to be
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Flight simulator";
-    maintainers = with maintainers; [ raskin the-kenny ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     hydraPlatforms = []; # disabled from hydra because it's so big
     license = licenses.gpl2;

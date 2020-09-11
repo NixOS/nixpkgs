@@ -1,14 +1,29 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtx11extras, qtsvg, kwindowsystem, solid, kidletime, liblxqt, libqtxdg }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, lxqt-build-tools
+, qtbase
+, qttools
+, qtx11extras
+, qtsvg
+, kwindowsystem
+, solid
+, kidletime
+, liblxqt
+, libqtxdg
+, lxqtUpdateScript
+}:
 
 mkDerivation rec {
   pname = "lxqt-powermanagement";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1nhp4a28bpczhwz8b8da355zsxr1qwmkrm3bwllwp39liw947clx";
+    sha256 = "0gqxy4d05gibsvq27qdfwp5v19310l0ln4bvwaan6ailbyyya90f";
   };
 
   nativeBuildInputs = [
@@ -27,6 +42,8 @@ mkDerivation rec {
     liblxqt
     libqtxdg
   ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "Power management module for LXQt";

@@ -4,7 +4,7 @@
 
 buildPythonPackage rec {
   pname = "lightparam";
-  version = "0.3.7";
+  version = "0.4.6";
   disabled = !isPy3k;
   format = "wheel";
 
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     inherit pname version;
     format = "wheel";
     python = "py3";
-    sha256 = "53d5d5b225bac27bc14929c9ad4e51ece4f692813dd367f317fb1586145d93f1";
+    sha256 = "eca63016524208afb6a06db19baf659e698cce3ae2e57be15b37bc988549c631";
   };
 
   propagatedBuildInputs = [

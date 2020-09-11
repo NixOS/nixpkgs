@@ -38,9 +38,8 @@ in {
         if [ ! -z "$ECS_DATADIR" ]; then
           mkdir -p "$ECS_DATADIR"
         fi
-        ${cfg.package.bin}/bin/agent
+        ${cfg.package}/bin/agent
       '';
     };
   };
 }
-

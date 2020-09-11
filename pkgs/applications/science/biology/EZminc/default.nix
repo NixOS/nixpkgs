@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, libminc, bicpl, itk, fftwFloat, gsl }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, libminc, bicpl, itk4, fftwFloat, gsl }:
 
 stdenv.mkDerivation rec {
   pname = "EZminc";
-  name  = "${pname}-unstable-2019-07-25";
+  name  = "${pname}-unstable-2019-03-12";
 
   src = fetchFromGitHub {
     owner  = "BIC-MNI";
     repo   = pname;
-    rev    = "9591edd5389a5bda2c1f606816c7cdb35c065adf";
-    sha256 = "02k87qbpx0f48l2lbcjmlqx82py684z3sfi29va5icfg3hjd6j7b";
+    rev    = "5e3333ee356f914d34d66d33ea8df809c7f7fa51";
+    sha256 = "0wy8cppf5xpgfqvgb3mqs1cjh81n6qzkk6zxv29wvng8nar9wsy4";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ itk libminc bicpl fftwFloat gsl ];
+  buildInputs = [ itk4 libminc bicpl fftwFloat gsl ];
 
   cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/"
                  "-DEZMINC_BUILD_TOOLS=TRUE"

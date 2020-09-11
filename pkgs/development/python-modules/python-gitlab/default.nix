@@ -1,22 +1,24 @@
-{ stdenv, buildPythonPackage, fetchPypi, requests, six, mock, httmock }:
+{ stdenv, buildPythonPackage, fetchPypi, requests, mock, httmock, pythonOlder }:
 
 buildPythonPackage rec {
-  pname   = "python-gitlab";
-  version = "1.15.0";
+  pname = "python-gitlab";
+  version = "2.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "45125a0ed4d0027d4317bdbd71ca02fc52b0ac160b9d2c3c5be131b4d19f867e";
+    sha256 = "e240b5c371d9e98c46c980d878c3f03cd83f3da6cda01d533db27fa3e0dd474f";
   };
 
-  propagatedBuildInputs = [ requests six ];
+  propagatedBuildInputs = [ requests ];
 
   checkInputs = [ mock httmock ];
 
+  disabled = pythonOlder "3.6";
+
   meta = with stdenv.lib; {
     description = "Interact with GitLab API";
-    homepage    = "https://github.com/python-gitlab/python-gitlab";
-    license     = licenses.lgpl3;
+    homepage = "https://github.com/python-gitlab/python-gitlab";
+    license = licenses.lgpl3;
     maintainers = with maintainers; [ nyanloutre ];
   };
 }

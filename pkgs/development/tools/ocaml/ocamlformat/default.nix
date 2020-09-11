@@ -2,7 +2,7 @@
 
 with ocamlPackages; buildDunePackage rec {
   pname = "ocamlformat";
-  version = "0.14.1";
+  version = "0.15.0";
 
   minimumOCamlVersion = "4.06";
 
@@ -10,7 +10,7 @@ with ocamlPackages; buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/ocaml-ppx/ocamlformat/releases/download/${version}/ocamlformat-${version}.tbz";
-    sha256 = "03wn46xib63748157xchj7gflkw5000fcjw6n89h9g82q9slazaa";
+    sha256 = "0190vz59n6ma9ca1m3syl3mc8i1smj1m3d8x1jp21f710y4llfr6";
   };
 
   buildInputs = [
@@ -29,7 +29,7 @@ with ocamlPackages; buildDunePackage rec {
   meta = {
     homepage = "https://github.com/ocaml-ppx/ocamlformat";
     description = "Auto-formatter for OCaml code";
-    maintainers = [ lib.maintainers.Zimmi48 ];
+    maintainers = [ lib.maintainers.Zimmi48 lib.maintainers.marsam ];
     license = lib.licenses.mit;
   };
 }

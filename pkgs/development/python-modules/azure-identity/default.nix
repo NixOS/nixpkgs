@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "azure-identity";
-  version = "1.3.0";
+  version = "1.4.0";
   disabled = isPy38;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "17fa904e0447fd2a2dc19909379edb769b05656dbaf4863b8c4fdfb2bb54350c";
+    sha256 = "820e1f3e21f90d36063239c6cb7ca9a6bb644cb120a6b1ead3081cafdf6ceaf8";
   };
 
   propagatedBuildInputs = [
@@ -37,6 +37,13 @@ buildPythonPackage rec {
     msrest
     msrestazure
   ];
+
+  prePatch = ''
+    substituteInPlace setup.py \
+      --replace msal-extensions~=0.1.3 msal-extensions
+  '';
+
+  pythonImportsCheck = [ "azure.identity" ];
 
   # Requires checkout from mono-repo and a mock account:
   #   https://github.com/Azure/azure-sdk-for-python/blob/master/sdk/identity/tests.yml

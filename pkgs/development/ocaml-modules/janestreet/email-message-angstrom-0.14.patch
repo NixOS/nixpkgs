@@ -1,0 +1,22 @@
+diff --git a/email_address/src/email_address.ml b/email_address/src/email_address.ml
+index 7470273..d070465 100644
+--- a/email_address/src/email_address.ml
++++ b/email_address/src/email_address.ml
+@@ -38,7 +38,7 @@ module Stable = struct
+       let of_string ?default_domain input_str =
+         let open Core_kernel in
+         let open! Int.Replace_polymorphic_compare in
+-        match Angstrom.parse_string Email_address_parser_stable_v1.email_only input_str with
++        match Angstrom.parse_string ~consume:Prefix Email_address_parser_stable_v1.email_only input_str with
+         | Error error ->
+           Or_error.error_s [%message
+             "Failed to parse email address"
+@@ -104,7 +104,7 @@ module T = Stable.V1.With_comparator
+ include T
+ 
+ let list_of_string ?default_domain input_str =
+-  match Angstrom.parse_string Email_address_parser_stable_v1.email_list_only input_str with
++  match Angstrom.parse_string ~consume:Prefix Email_address_parser_stable_v1.email_list_only input_str with
+   | Error error ->
+     Or_error.error_s [%message
+       "Failed to parse email address(es)"

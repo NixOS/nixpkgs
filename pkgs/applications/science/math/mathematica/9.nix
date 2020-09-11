@@ -8,7 +8,7 @@
 , gcc
 , glib
 , ncurses
-, opencv
+, opencv2
 , openssl
 , unixODBC
 , xorg
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     gcc.libc
     glib
     ncurses
-    opencv
+    opencv2
     openssl
     unixODBC
   ] ++ (with xorg; [

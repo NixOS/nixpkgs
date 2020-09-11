@@ -246,7 +246,7 @@ in
       videoDrivers = mkOption {
         type = types.listOf types.str;
         # !!! We'd like "nv" here, but it segfaults the X server.
-        default = [ "radeon" "cirrus" "vesa" "vmware" "modesetting" ];
+        default = [ "radeon" "cirrus" "vesa" "modesetting" ];
         example = [
           "ati_unfree" "amdgpu" "amdgpu-pro"
           "nv" "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"

@@ -110,11 +110,15 @@ runCommand "xcodebuild-${xcbuild.version}" {
   mkdir -p $out/Applications/Xcode.app/Contents
   ln -s $out $out/Applications/Xcode.app/Contents/Developer
 
+  # The native xcodebuild command supports an invocation like "xcodebuild -version -sdk" without specifying the specific SDK, so we simulate this by
+  # detecting this case and simulating the output; printing the header and appending the normal output via appending the sdk version to the positional
+  # arguments we pass through to the wrapped xcodebuild.
   makeWrapper ${xcbuild}/bin/xcodebuild $out/bin/xcodebuild \
     --add-flags "-xcconfig ${xcconfig}" \
     --add-flags "DERIVED_DATA_DIR=." \
     --set DEVELOPER_DIR "$out" \
     --set SDKROOT ${sdkName} \
+    --run '[ "$#" -eq 2 ] && [ "$1" = "-version" ] && [ "$2" = "-sdk" ] && echo ${sdkName}.sdk - macOS ${sdkVer} \(macosx${sdkVer}\) && set -- "$@" "${sdkName}"' \
     --run '[ "$1" = "-version" ] && [ "$#" -eq 1 ] && (echo Xcode ${xcodeVer}; echo Build version ${sdkBuildVersion}) && exit 0' \
     --run '[ "$1" = "-license" ] && exit 0'
 

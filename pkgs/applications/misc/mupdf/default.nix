@@ -13,12 +13,12 @@ let
 
 
 in stdenv.mkDerivation rec {
-  version = "1.16.1";
+  version = "1.17.0";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    sha256 = "0iz4ickj52fxjp8crg573kjrl4viq279g589isdpgpckslysf7g7";
+    sha256 = "13nl9nrcx2awz9l83mlv2psi1lmn3hdnfwxvwgwiwbxlkjl3zqq0";
   };
 
   patches =
@@ -74,6 +74,7 @@ in stdenv.mkDerivation rec {
     Comment=PDF viewer
     Exec=$bin/bin/mupdf-x11 %f
     Terminal=false
+    MimeType=application/pdf;application/x-pdf;application/x-cbz;application/oxps;application/vnd.ms-xpsdocument;application/epub+zip
     EOF
   '';
 

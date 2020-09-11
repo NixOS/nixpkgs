@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "kgshank";
     repo = "gse-sound-output-device-chooser";
     rev = version;
-    sha256 = "JmDUi6xTMbkMzW+hYJuKtjQj4ERctaiHr6eLsl5Fru4=";
+    sha256 = "1vmf8mgb52x7my3sidaw8kh26d5niadn18bgrl6bjcakmj5x8q16";
   };
 
   patches = [
@@ -28,8 +28,10 @@ stdenv.mkDerivation rec {
 
   uuid = "sound-output-device-chooser@kgshank.net";
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
     cp -r ${uuid} $out/share/gnome-shell/extensions
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {

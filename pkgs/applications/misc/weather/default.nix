@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pythonPackages }:
 
 stdenv.mkDerivation rec {
-    version = "2.3";
+    version = "2.4.1";
     pname = "weather";
 
     src = fetchurl {
         url = "http://fungi.yuggoth.org/weather/src/${pname}-${version}.tar.xz";
-        sha256 = "0inij30prqqcmzjwcmfzjjn0ya5klv18qmajgxipz1jr3lpqs546";
+        sha256 = "0nf680dl7a2vlgavdhj6ljq8a7lkhvr6zghkpzad53vmilxsndys";
     };
 
     nativeBuildInputs = [ pythonPackages.wrapPython ];
@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
         wrapPythonPrograms
     '';
 
-    meta = {
+    meta = with stdenv.lib; {
         homepage = "http://fungi.yuggoth.org/weather";
         description = "Quick access to current weather conditions and forecasts";
-        license = stdenv.lib.licenses.isc;
-        maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
-        platforms = with stdenv.lib.platforms; linux; # my only platform
+        license = licenses.isc;
+        maintainers = [ maintainers.matthiasbeyer ];
+        platforms = platforms.linux; # my only platform
     };
 }

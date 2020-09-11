@@ -1,15 +1,26 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, json-glib, libfm-qt, qtbase, qttools, qtx11extras }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, lxqt-build-tools
+, json-glib
+, libfm-qt
+, qtbase
+, qttools
+, qtx11extras
+, lxqtUpdateScript
+}:
 
 mkDerivation rec {
-  # pname = "lxqt-archiver";
-  pname = "lxqt-archiver-unstable";
-  version = "2019-09-25";
+  pname = "lxqt-archiver";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-archiver";
-    rev = "62501255434b2ba6a8fd043a5af13dc0df038a5b";
-    sha256 = "1af58k68karmnay7xgngzlmcgkmvx6hay5m1xbl5id9hh16n20in";
+    rev = version;
+    sha256 = "1cip2dbvxbdlx1axz5sn4mwigwvfxb1q14byn09crv71adyfprw5";
   };
 
   nativeBuildInputs = [
@@ -26,9 +37,9 @@ mkDerivation rec {
     qtx11extras
   ];
 
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
-
   hardeningDisable = [ "format" ];
+
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
     description = "Archive tool for the LXQt desktop environment";

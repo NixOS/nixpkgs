@@ -1,11 +1,11 @@
 { stdenv, fetchurl, makeWrapper, jre, gnugrep, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "scala-2.13.1";
+  name = "scala-2.13.3";
 
   src = fetchurl {
     url = "https://www.scala-lang.org/files/archive/${name}.tgz";
-    sha256 = "1nq49acx3j6vnw0lhyrfqa23f671y3kc9lja4nki0j73jk2cq639";
+    sha256 = "0zv9w9f6g2cfydsvp8mqcfgv2v3487xp4ca1qndg6v7jrhdp7wy9";
   };
 
   propagatedBuildInputs = [ jre ] ;

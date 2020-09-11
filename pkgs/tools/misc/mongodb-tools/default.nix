@@ -45,7 +45,7 @@ in buildGoPackage {
     runHook preBuild
 
     ${stdenv.lib.concatMapStrings (t: ''
-      go build -o "$bin/bin/${t}" -tags ssl -ldflags "-s -w" $goPackagePath/${t}/main
+      go build -o "$out/bin/${t}" -tags ssl -ldflags "-s -w" $goPackagePath/${t}/main
     '') tools}
 
     runHook postBuild

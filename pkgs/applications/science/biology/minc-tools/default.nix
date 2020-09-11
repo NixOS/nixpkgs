@@ -14,15 +14,19 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix-netcdf-header.patch ];
 
+  # add missing CMake module to build NIFTI support
+  # (the maintainers normally build libminc and minc-tools in a meta-project)
+  postPatch = ''
+    cp ${libminc.src}/cmake-modules/FindNIFTI.cmake cmake-modules
+  '';
+
   nativeBuildInputs = [ cmake flex bison makeWrapper ];
-  buildInputs = [ libminc libjpeg zlib ];
+  buildInputs = [ libminc libjpeg nifticlib zlib ];
   propagatedBuildInputs = [ perl TextFormat ];
 
   cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/"
-                 "-DZNZ_INCLUDE_DIR=${nifticlib}/include/"
-                 "-DZNZ_LIBRARY=${nifticlib}/lib/libznz.a"
-                 "-DNIFTI_INCLUDE_DIR=${nifticlib}/include/nifti/"
-                 "-DNIFTI_LIBRARY=${nifticlib}/lib/libniftiio.a" ];
+                 "-DZNZ_INCLUDE_DIR=${nifticlib}/include/nifti"
+                 "-DNIFTI_INCLUDE_DIR=${nifticlib}/include/nifti" ];
 
   postFixup = ''
     for prog in minccomplete minchistory mincpik; do

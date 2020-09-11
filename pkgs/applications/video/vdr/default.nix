@@ -1,15 +1,16 @@
-{ stdenv, fetchurl, fontconfig, libjpeg, libcap, freetype, fribidi, pkgconfig
+{ stdenv, fetchgit, fontconfig, libjpeg, libcap, freetype, fribidi, pkgconfig
 , gettext, systemd, perl, lib
 , enableSystemd ? true
 , enableBidi ? true
 }: stdenv.mkDerivation rec {
 
   pname = "vdr";
-  version = "2.4.1";
+  version = "2.4.4";
 
-  src = fetchurl {
-    url = "ftp://ftp.tvdr.de/vdr/${pname}-${version}.tar.bz2";
-    sha256 = "1p51b14aqzncx3xpfg0rjplc48pg7520035i5p6r5zzkqhszihr5";
+  src = fetchgit {
+    url = "git://git.tvdr.de/vdr.git";
+    rev = "V20404";
+    sha256 = "1fzghnp5mpcwn3a3fyk3w8h15z4f2cnc75247kvxj1c9069mgnwa";
   };
 
   enableParallelBuilding = true;

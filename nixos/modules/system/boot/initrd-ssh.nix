@@ -83,6 +83,12 @@ in
         Authorized keys for the root user on initrd.
       '';
     };
+
+    extraConfig = mkOption {
+      type = types.lines;
+      default = "";
+      description = "Verbatim contents of <filename>sshd_config</filename>.";
+    };
   };
 
   imports =
@@ -126,6 +132,8 @@ in
       '' else ''
         UseDNS no
       ''}
+
+      ${cfg.extraConfig}
     '';
   in mkIf (config.boot.initrd.network.enable && cfg.enable) {
     assertions = [

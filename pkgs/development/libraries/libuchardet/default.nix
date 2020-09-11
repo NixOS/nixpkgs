@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "uchardet";
-  version = "0.0.6";
+  version = "0.0.7";
 
   outputs = [ "bin" "out" "man" "dev" ];
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/${pname}/releases/${pname}-${version}.tar.xz";
-    sha256 = "0q9c02b6nmw41yfsiqsnphgc3f0yg3fj31wkccp47cmwvy634lc3";
+    sha256 = "1ca51sryhryqz82v4d0graaiqqq5w2f33a9gj83b910xmq499irz";
   };
 
   nativeBuildInputs = [ cmake ];

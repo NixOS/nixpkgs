@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   pname = "wsjtx";
-  version = "2.1.2";
+  version = "2.2.2";
 
   # This is a "superbuild" tarball containing both wsjtx and a hamlib fork
   src = fetchurl {
     url = "http://physics.princeton.edu/pulsar/k1jt/wsjtx-${version}.tgz";
-    sha256 = "0aj3wg5xjjqwjvw6lra171ag5wq86w0hf1ra4k8mnaf0mc1qgbyl";
+    sha256 = "17agyrhclqyahgdwba8vi9sl7vq03sm00jlyrmjgv34a4czidg0w";
   };
 
   # Hamlib builds with autotools, wsjtx builds with cmake
@@ -22,9 +22,6 @@ stdenv.mkDerivation rec {
 
   # Remove Git dependency from superbuild since sources are included
   patches = [ ./super.patch ];
-
-  # Superbuild has its own patch step after it extracts the inner archives
-  postPatch = "cp ${./wsjtx.patch} wsjtx.patch";
 
   meta = with stdenv.lib; {
     description = "Weak-signal digital communication modes for amateur radio";

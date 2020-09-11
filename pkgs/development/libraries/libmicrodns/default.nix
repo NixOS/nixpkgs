@@ -1,22 +1,24 @@
 { stdenv
 , fetchFromGitHub
-, autoreconfHook
+, meson
+, ninja
 , pkgconfig
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.1.0";
+  version = "0.1.2";
   pname = "libmicrodns";
 
   src = fetchFromGitHub {
     owner = "videolabs";
     repo = pname;
     rev = version;
-    sha256 = "1pmf461zn35spbpbls1ih68ki7f8g8xjwhzr2csy63nnyq2k9jji";
+    sha256 = "1yb0j0acidp494d28wqhzhrfski2qjb2a5mp5bq5qrpcg38zyz6i";
   };
 
   nativeBuildInputs = [
-    autoreconfHook
+    meson
+    ninja
     pkgconfig
   ];
 

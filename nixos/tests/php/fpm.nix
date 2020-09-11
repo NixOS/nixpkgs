@@ -1,6 +1,6 @@
-import ../make-test-python.nix ({pkgs, ...}: {
+import ../make-test-python.nix ({pkgs, lib, ...}: {
   name = "php-fpm-nginx-test";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ etu ];
+  meta.maintainers = lib.teams.php.members;
 
   machine = { config, lib, pkgs, ... }: {
     services.nginx = {

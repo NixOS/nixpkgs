@@ -1,14 +1,19 @@
 #!/usr/bin/env bash
 
-VERSION="1.12.0"
+VERSION="2.6.1"
 
-declare -A plugins
+# Bash 3 compatible for Darwin
 plugins=(
-    ["aws"]="1.24.0"
-    ["gcp"]="2.8.0"
-    ["random"]="1.5.0"
-    ["kubernetes"]="1.5.6"
-)
+    # https://github.com/pulumi/pulumi-aws/releases
+    "aws=2.13.0"
+    # https://github.com/pulumi/pulumi-gcp/releases
+    "gcp=3.13.0"
+    # https://github.com/pulumi/pulumi-random/releases
+    "random=2.2.0"
+    # https://github.com/pulumi/pulumi-kubernetes/releases
+    "kubernetes=2.4.0"
+    # https://github.com/pulumi/pulumi-postgresql/releases
+    "postgresql=2.2.2");
 
 function genMainSrc() {
     local url="https://get.pulumi.com/releases/sdk/pulumi-v${VERSION}-$1-x64.tar.gz"
@@ -21,8 +26,9 @@ function genMainSrc() {
 }
 
 function genSrcs() {
-    for plug in "${!plugins[@]}"; do
-        local version=${plugins[$plug]}
+    for plugVers in "${plugins[@]}"; do
+        local plug=${plugVers%=*}
+        local version=${plugVers#*=}
         # url as defined here
         # https://github.com/pulumi/pulumi/blob/06d4dde8898b2a0de2c3c7ff8e45f97495b89d82/pkg/workspace/plugins.go#L197
         local url="https://api.pulumi.com/releases/plugins/pulumi-resource-${plug}-v${version}-$1-amd64.tar.gz"
@@ -35,7 +41,7 @@ function genSrcs() {
     done
 }
 
-cat <<EOF
+cat <<EOF                     > data.nix
 # DO NOT EDIT! This file is generated automatically by update.sh
 { }:
 {
@@ -43,13 +49,14 @@ cat <<EOF
   pulumiPkgs = {
     x86_64-linux = [
 EOF
-genMainSrc "linux"
-genSrcs "linux"
-echo "    ];"
+genMainSrc "linux"           >> data.nix
+genSrcs "linux"              >> data.nix
+echo "    ];"                >> data.nix
 
-echo "    x86_64-darwin = ["
-genMainSrc "darwin"
-genSrcs "darwin"
-echo "    ];"
-echo "  };"
-echo "}"
+echo "    x86_64-darwin = [" >> data.nix
+genMainSrc "darwin"          >> data.nix
+genSrcs "darwin"             >> data.nix
+echo "    ];"                >> data.nix
+echo "  };"                  >> data.nix
+echo "}"                     >> data.nix
+

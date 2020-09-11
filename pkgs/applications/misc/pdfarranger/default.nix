@@ -5,13 +5,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pdfarranger";
-  version = "1.4.2";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "jeromerobert";
     repo = pname;
     rev = version;
-    sha256 = "11q14pxyp5z4y3gabjnis3ip3xss6n94zjl42akwf27dxgxlpcjk";
+    sha256 = "03siz4ar6flyvrrgh7hr7sslc6n9x5d9i13lc5rm2qnssd0qdich";
   };
 
   nativeBuildInputs = [
@@ -27,6 +27,7 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [
     pygobject3
     pikepdf
+    img2pdf
     setuptools
   ];
 

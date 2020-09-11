@@ -20,12 +20,14 @@ let
     ssid=${cfg.ssid}
     hw_mode=${cfg.hwMode}
     channel=${toString cfg.channel}
+    ${optionalString (cfg.countryCode != null) ''country_code=${cfg.countryCode}''}
+    ${optionalString (cfg.countryCode != null) ''ieee80211d=1''}
 
     # logging (debug level)
     logger_syslog=-1
-    logger_syslog_level=2
+    logger_syslog_level=${toString cfg.logLevel}
     logger_stdout=-1
-    logger_stdout_level=2
+    logger_stdout_level=${toString cfg.logLevel}
 
     ctrl_interface=/run/hostapd
     ctrl_interface_group=${cfg.group}
@@ -147,6 +149,35 @@ in
         '';
       };
 
+      logLevel = mkOption {
+        default = 2;
+        type = types.int;
+        description = ''
+          Levels (minimum value for logged events):
+          0 = verbose debugging
+          1 = debugging
+          2 = informational messages
+          3 = notification
+          4 = warning
+        '';
+      };
+
+      countryCode = mkOption {
+        default = null;
+        example = "US";
+        type = with types; nullOr str;
+        description = ''
+          Country code (ISO/IEC 3166-1). Used to set regulatory domain.
+          Set as needed to indicate country in which device is operating.
+          This can limit available channels and transmit power.
+          These two octets are used as the first two octets of the Country String
+          (dot11CountryString).
+          If set this enables IEEE 802.11d. This advertises the countryCode and
+          the set of allowed channels and transmit power levels based on the
+          regulatory limits.
+        '';
+      };
+
       extraConfig = mkOption {
         default = "";
         example = ''
@@ -166,6 +197,8 @@ in
   config = mkIf cfg.enable {
 
     environment.systemPackages =  [ pkgs.hostapd ];
+
+    services.udev.packages = optional (cfg.countryCode != null) [ pkgs.crda ];
 
     systemd.services.hostapd =
       { description = "hostapd wireless AP";

@@ -1,14 +1,15 @@
-{ lib, fetchFromGitHub, python3Packages, qtbase, wrapQtAppsHook, secp256k1 }:
+{ lib, fetchFromGitHub, python3Packages, qtbase, fetchpatch, wrapQtAppsHook
+, secp256k1 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
-  version = "4.0.14";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "Electron-Cash";
     repo = "Electron-Cash";
     rev = version;
-    sha256 = "1dp7cj1185h6xfz6jzh0iq58zvg3wq9hl96bkgxkf5h4ygni2vm6";
+    sha256 = "1ccfm6kkmbkvykfdzrisxvr0lx9kgq4l43ixk6v3xnvhnbfwz4s2";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -35,6 +36,15 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
+  patches = [
+    # Patch a failed test, this can be removed in next version
+    (fetchpatch {
+      url =
+        "https://github.com/Electron-Cash/Electron-Cash/commit/1a9122d59be0c351b14c174a60880c2e927e6168.patch";
+      sha256 = "0zw629ypn9jxb1y124s3dkbbf2q3wj1i97j16lzdxpjy3sk0p5hk";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace contrib/requirements/requirements.txt \
       --replace "qdarkstyle==2.6.8" "qdarkstyle<3"
@@ -43,9 +53,7 @@ python3Packages.buildPythonApplication rec {
       --replace "(share_dir" "(\"share\""
   '';
 
-  checkInputs = with python3Packages; [
-    pytest
-  ];
+  checkInputs = with python3Packages; [ pytest ];
 
   checkPhase = ''
     unset HOME

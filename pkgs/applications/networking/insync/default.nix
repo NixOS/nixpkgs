@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper }:
+{ stdenv, fetchurl, makeWrapper, autoPatchelfHook }:
 
 stdenv.mkDerivation rec {
   pname = "insync";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
       throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
 
   buildInputs = [ makeWrapper ];
+
+  nativeBuildInputs = [ autoPatchelfHook ];
 
   postPatch = ''
     patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" client/insync-portable

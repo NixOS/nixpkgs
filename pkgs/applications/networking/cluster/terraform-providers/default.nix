@@ -50,9 +50,10 @@ let
 
   # These are the providers that don't fall in line with the default model
   special-providers = {
-    # Override the google providers
+    # Override providers that use Go modules + vendor/ folder
     google = patchGoModVendor automated-providers.google;
     google-beta = patchGoModVendor automated-providers.google-beta;
+    ibm = patchGoModVendor automated-providers.ibm;
 
     # providers that were moved to the `hashicorp` organization,
     # but haven't updated their references yet:
@@ -78,6 +79,14 @@ let
       prePatch = attrs.prePatch or "" + ''
         substituteInPlace go.mod --replace terraform-providers/terraform-provider-external hashicorp/terraform-provider-external
         substituteInPlace main.go --replace terraform-providers/terraform-provider-external hashicorp/terraform-provider-external
+      '';
+    });
+
+    # https://github.com/hashicorp/terraform-provider-helm/pull/522
+    helm = automated-providers.helm.overrideAttrs (attrs: {
+      prePatch = attrs.prePatch or "" + ''
+        substituteInPlace go.mod --replace terraform-providers/terraform-provider-helm hashicorp/terraform-provider-helm
+        substituteInPlace main.go --replace terraform-providers/terraform-provider-helm hashicorp/terraform-provider-helm
       '';
     });
 
@@ -129,12 +138,15 @@ let
       '';
     });
 
+    # Packages that don't fit the default model
+    ansible = callPackage ./ansible {};
     elasticsearch = callPackage ./elasticsearch {};
     gandi = callPackage ./gandi {};
-    ibm = callPackage ./ibm {};
+    keycloak = callPackage ./keycloak {};
     libvirt = callPackage ./libvirt {};
     lxd = callPackage ./lxd {};
-    ansible = callPackage ./ansible {};
+    shell = callPackage ./shell {};
+    vpsadmin = callPackage ./vpsadmin {};
   };
 in
   automated-providers // special-providers

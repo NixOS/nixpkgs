@@ -25,12 +25,13 @@
 , frei0r
 , phonon-backend-gstreamer
 , qtdeclarative
-, qtquickcontrols
+, qtquickcontrols2
 , qtscript
 , qtwebkit
 , rttr
 , kpurpose
 , kdeclarative
+, wrapGAppsHook
 }:
 
 mkDerivation {
@@ -59,7 +60,7 @@ mkDerivation {
     mlt
     phonon-backend-gstreamer
     qtdeclarative
-    qtquickcontrols
+    qtquickcontrols2
     qtscript
     qtwebkit
     shared-mime-info
@@ -69,6 +70,7 @@ mkDerivation {
     rttr
     kpurpose
     kdeclarative
+    wrapGAppsHook
   ];
   # Both MLT and FFMpeg paths must be set or Kdenlive will complain that it
   # doesn't find them. See:

@@ -11,12 +11,10 @@ buildGoPackage rec {
   };
   goPackagePath = "github.com/cortesi/devd";
   subPackages = [ "cmd/devd" ];
-  goDeps = ./deps.nix;
   meta = with stdenv.lib; {
     description = "A local webserver for developers";
     homepage = "https://github.com/cortesi/devd";
     license = licenses.mit;
     maintainers = with maintainers; [ brianhicks ];
-    platforms = platforms.all;
   };
 }

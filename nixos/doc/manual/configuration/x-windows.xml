@@ -31,6 +31,7 @@
 <xref linkend="opt-services.xserver.windowManager.twm.enable"/> = true;
 <xref linkend="opt-services.xserver.windowManager.icewm.enable"/> = true;
 <xref linkend="opt-services.xserver.windowManager.i3.enable"/> = true;
+<xref linkend="opt-services.xserver.windowManager.herbstluftwm.enable"/> = true;
 </programlisting>
  </para>
  <para>
@@ -89,10 +90,50 @@
   using lightdm for a user <literal>alice</literal>:
 <programlisting>
 <xref linkend="opt-services.xserver.displayManager.lightdm.enable"/> = true;
-<xref linkend="opt-services.xserver.displayManager.lightdm.autoLogin.enable"/> = true;
-<xref linkend="opt-services.xserver.displayManager.lightdm.autoLogin.user"/> = "alice";
+<xref linkend="opt-services.xserver.displayManager.autoLogin.enable"/> = true;
+<xref linkend="opt-services.xserver.displayManager.autoLogin.user"/> = "alice";
 </programlisting>
-  The options are named identically for all other display managers.
+  </para>
+ </simplesect>
+ <simplesect xml:id="sec-x11--graphics-cards-intel">
+  <title>Intel Graphics drivers</title>
+  <para>
+   There are two choices for Intel Graphics drivers in X.org:
+   <literal>modesetting</literal> (included in the <package>xorg-server</package> itself)
+   and <literal>intel</literal> (provided by the package <package>xf86-video-intel</package>).
+  </para>
+  <para>
+   The default and recommended is <literal>modesetting</literal>.
+   It is a generic driver which uses the kernel
+   <link xlink:href="https://en.wikipedia.org/wiki/Mode_setting">mode setting</link>
+   (KMS) mechanism. It supports Glamor (2D graphics acceleration via OpenGL)
+   and is actively maintained but may perform worse in some cases (like in old chipsets).
+  </para>
+  <para>
+   The second driver, <literal>intel</literal>, is specific to Intel GPUs,
+   but not recommended by most distributions: it lacks several modern features
+   (for example, it doesn't support Glamor) and the package hasn't been officially
+   updated since 2015.
+  </para>
+  <para>
+   The results vary depending on the hardware, so you may have to try both drivers.
+   Use the option <xref linkend="opt-services.xserver.videoDrivers"/> to set one.
+   The recommended configuration for modern systems is:
+<programlisting>
+  <xref linkend="opt-services.xserver.videoDrivers"/> = [ "modesetting" ];
+  <xref linkend="opt-services.xserver.useGlamor"/> = true;
+</programlisting>
+   If you experience screen tearing no matter what, this configuration was
+   reported to resolve the issue:
+<programlisting>
+  <xref linkend="opt-services.xserver.videoDrivers"/> = [ "intel" ];
+  <xref linkend="opt-services.xserver.deviceSection"/> = ''
+    Option "DRI" "2"
+    Option "TearFree" "true"
+  '';
+</programlisting>
+   Note that this will likely downgrade the performance compared to
+  <literal>modesetting</literal> or <literal>intel</literal> with DRI 3 (default).
   </para>
  </simplesect>
  <simplesect xml:id="sec-x11-graphics-cards-nvidia">

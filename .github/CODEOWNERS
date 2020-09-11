@@ -10,6 +10,12 @@
 # This file
 /.github/CODEOWNERS @edolstra
 
+# GitHub actions
+/.github/workflows @Mic92 @zowoq
+
+# EditorConfig
+/.editorconfig @Mic92 @zowoq
+
 # Libraries
 /lib                        @edolstra @nbp @infinisil
 /lib/systems                @nbp @ericson2314 @matthewbauer
@@ -55,6 +61,13 @@
 # NixOS integration test driver
 /nixos/lib/test-driver  @tfc
 
+# Updaters
+## update.nix
+/maintainers/scripts/update.nix   @jtojnar
+/maintainers/scripts/update.py    @jtojnar
+## common-updater-scripts
+/pkgs/common-updater/scripts/update-source-version    @jtojnar
+
 # Python-related code and docs
 /maintainers/scripts/update-python-libraries	@FRidh
 /pkgs/top-level/python-packages.nix     @FRidh @jonringer
@@ -70,9 +83,9 @@
 /pkgs/development/haskell-modules/hoogle.nix	      @cdepillabout
 
 # Perl
-/pkgs/development/interpreters/perl @volth
-/pkgs/top-level/perl-packages.nix   @volth
-/pkgs/development/perl-modules      @volth
+/pkgs/development/interpreters/perl @volth @stigtsp
+/pkgs/top-level/perl-packages.nix   @volth @stigtsp
+/pkgs/development/perl-modules      @volth @stigtsp
 
 # R
 /pkgs/applications/science/math/R   @peti
@@ -174,8 +187,24 @@
 /nixos/modules/services/monitoring/prometheus/exporters.xml  @WilliButz
 /nixos/tests/prometheus-exporters.nix                        @WilliButz
 
-# PHP
-/doc/languages-frameworks/php.section.md @etu
-/pkgs/development/interpreters/php       @etu
-/pkgs/top-level/php-packages.nix         @etu
-/pkgs/build-support/build-pecl.nix       @etu
+# PHP interpreter, packages, extensions, tests and documentation
+/doc/languages-frameworks/php.section.md @NixOS/php
+/nixos/tests/php                         @NixOS/php
+/pkgs/build-support/build-pecl.nix       @NixOS/php
+/pkgs/development/interpreters/php       @NixOS/php
+/pkgs/top-level/php-packages.nix         @NixOS/php
+
+# Podman, CRI-O modules and related
+/nixos/modules/virtualisation/containers.nix @NixOS/podman @zowoq
+/nixos/modules/virtualisation/cri-o.nix      @NixOS/podman @zowoq
+/nixos/modules/virtualisation/podman.nix     @NixOS/podman @zowoq
+/nixos/tests/cri-o.nix                       @NixOS/podman @zowoq
+/nixos/tests/podman.nix                      @NixOS/podman @zowoq
+
+# Blockchains
+/pkgs/applications/blockchains  @mmahut
+
+# Go
+/pkgs/development/compilers/go @kalbasit @Mic92 @zowoq
+/pkgs/development/go-modules   @kalbasit @Mic92 @zowoq
+/pkgs/development/go-packages  @kalbasit @Mic92 @zowoq

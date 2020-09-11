@@ -1,11 +1,9 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "consul";
-  version = "1.7.2";
+  version = "1.8.3";
   rev = "v${version}";
-
-  goPackagePath = "github.com/hashicorp/consul";
 
   # Note: Currently only release tags are supported, because they have the Consul UI
   # vendored. See
@@ -19,11 +17,26 @@ buildGoPackage rec {
     owner = "hashicorp";
     repo = pname;
     inherit rev;
-    sha256 = "1q587d8aqfkwg4fymr56fnf038vkxbdqz5yilz96dzny27dhspj4";
+    sha256 = "172m8izv0jqvwxl8nwxdy6x7syp7gn70x4zx41h6ajy4h564l16y";
   };
 
+  passthru.tests.consul = nixosTests.consul;
+
+  # This corresponds to paths with package main - normally unneeded but consul
+  # has a split module structure in one repo
+  subPackages = ["." "connect/certgen"];
+
+  vendorSha256 = "1q4mvmypza2n2kqnri71y9k2qqmb34x3pa7ifql8gwlp8r0bicy7";
+
+  doCheck = false;
+
+  deleteVendor = true;
+
   preBuild = ''
-    buildFlagsArray+=("-ldflags" "-X github.com/hashicorp/consul/version.GitDescribe=v${version} -X github.com/hashicorp/consul/version.Version=${version} -X github.com/hashicorp/consul/version.VersionPrerelease=")
+    buildFlagsArray+=("-ldflags"
+                      "-X github.com/hashicorp/consul/version.GitDescribe=v${version}
+                       -X github.com/hashicorp/consul/version.Version=${version}
+                       -X github.com/hashicorp/consul/version.VersionPrerelease=")
   '';
 
   meta = with stdenv.lib; {

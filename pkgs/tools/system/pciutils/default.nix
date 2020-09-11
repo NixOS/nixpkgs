@@ -1,18 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, zlib, kmod, which }:
+{ stdenv, fetchurl, pkgconfig, zlib, kmod, which
+, static ? stdenv.targetPlatform.isStatic
+}:
 
 stdenv.mkDerivation rec {
-  name = "pciutils-3.6.4"; # with release-date database
+  name = "pciutils-3.7.0"; # with release-date database
 
   src = fetchurl {
     url = "mirror://kernel/software/utils/pciutils/${name}.tar.xz";
-    sha256 = "0mb0f2phdcmp4kfiqsszn2k6nlln0w160ffzrjjv4bbfjwrgfzzn";
+    sha256 = "1ss0rnfsx8gvqjxaji4mvbhf9xyih4cadmgadbwwv8mnx1xvjh4x";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ zlib kmod which ];
 
   makeFlags = [
-    "SHARED=yes"
+    "SHARED=${if static then "no" else "yes"}"
     "PREFIX=\${out}"
     "STRIP="
     "HOST=${stdenv.hostPlatform.system}"

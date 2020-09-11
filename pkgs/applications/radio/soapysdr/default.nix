@@ -1,6 +1,6 @@
 { stdenv, lib, lndir, makeWrapper
 , fetchFromGitHub, cmake
-, libusb, pkgconfig
+, libusb-compat-0_1, pkgconfig
 , usePython ? false
 , python, ncurses, swig2
 , extraPackages ? []
@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
-  buildInputs = [ libusb ncurses ]
+  buildInputs = [ libusb-compat-0_1 ncurses ]
     ++ lib.optionals usePython [ python swig2 ];
 
   propagatedBuildInputs = lib.optional usePython python.pkgs.numpy;

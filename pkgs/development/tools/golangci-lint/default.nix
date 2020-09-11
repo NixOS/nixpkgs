@@ -1,24 +1,37 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
 
 buildGoModule rec {
   pname = "golangci-lint";
-  version = "1.25.0";
+  version = "1.31.0";
 
   src = fetchFromGitHub {
     owner = "golangci";
     repo = "golangci-lint";
     rev = "v${version}";
-    sha256 = "0xf9chk6f1ydg2wyi6wzj2fxl641z7iyk6spp5gb1chq7plsi8sm";
+    sha256 = "10divgsc095jiw7n3gwzikbgvsd0hdwjyv469vq939zm7rqq3acy";
   };
 
-  modSha256 = "15lb8y4kj2h514nl5517ah3ml9d2i71zv6ah08lpycz1b4v9hlwv";
+  vendorSha256 = "1pa99jfz6i696x6v06aq56r0kmxmz4khb1hw7pvxds0bn16a4swr";
+
+  doCheck = false;
+
   subPackages = [ "cmd/golangci-lint" ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.commit=${src.rev} -X main.date=19700101-00:00:00" ];
+
+  postInstall = ''
+    for shell in bash zsh; do
+      HOME=$TMPDIR $out/bin/golangci-lint completion $shell > golangci-lint.$shell
+      installShellCompletion golangci-lint.$shell
+    done
+  '';
+
   meta = with lib; {
-    description = "Linters Runner for Go. 5x faster than gometalinter. Nice colored output.";
-    homepage = "https://golangci.com/";
-    license = licenses.agpl3;
-    platforms = platforms.unix;
+    description = "Fast linters Runner for Go";
+    homepage = "https://golangci-lint.run/";
+    license = licenses.gpl3;
     maintainers = with maintainers; [ anpryl manveru ];
   };
 }

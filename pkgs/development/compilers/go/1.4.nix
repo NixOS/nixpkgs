@@ -151,8 +151,6 @@ stdenv.mkDerivation rec {
     ./all.bash
   '';
 
-  setupHook = ./setup-hook.sh;
-
   meta = with stdenv.lib; {
     branch = "1.4";
     homepage = "http://golang.org/";

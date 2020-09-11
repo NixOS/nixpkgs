@@ -14,7 +14,7 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  postInstall = "mv $bin/bin/harmonist.git $bin/bin/harmonist";
+  postInstall = "mv $out/bin/harmonist.git $out/bin/harmonist";
 
   meta = with stdenv.lib; {
     description = "A stealth coffee-break roguelike game";

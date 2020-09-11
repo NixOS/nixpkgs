@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "curio";
-  version = "0.9";
+  version = "1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "51d1a7b49b4f8dd1486ac785c72d522962e93ccfdcfc1f818f5c7553a307b5ef";
+    sha256 = "90f320fafb3f5b791f25ffafa7b561cc980376de173afd575a2114380de7939b";
   };
 
   disabled = !isPy3k;
@@ -24,9 +24,7 @@ buildPythonPackage rec {
   # test_aside_basic times out,
   # test_aside_cancel fails because modifies PYTHONPATH and cant find pytest
   checkPhase = ''
-    # __pycache__ was packaged accidentally, https://github.com/dabeaz/curio/issues/301
-    rm -r tests/__pycache__
-    pytest --deselect tests/test_task.py::test_aside_basic --deselect tests/test_task.py::test_aside_cancel
+    pytest --deselect tests/test_task.py::test_aside_basic --deselect tests/test_task.py::test_aside_cancel -k "not test_ssl_outgoing"
   '';
 
   meta = with lib; {

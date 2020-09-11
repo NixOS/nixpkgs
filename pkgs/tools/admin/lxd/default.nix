@@ -1,23 +1,36 @@
-{ stdenv, pkgconfig, lxc, buildGoPackage, fetchurl
+{ stdenv, hwdata, pkgconfig, lxc, buildGoPackage, fetchurl
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
-, squashfsTools, iproute, iptables, ebtables, libcap, libco-canonical, dqlite
-, raft-canonical, sqlite-replication, udev
+, squashfsTools, iproute, iptables, ebtables, iptables-nftables-compat, libcap
+, libco-canonical, dqlite, raft-canonical, sqlite-replication, udev
 , writeShellScriptBin, apparmor-profiles, apparmor-parser
 , criu
 , bash
 , installShellFiles
+, nftablesSupport ? false
 }:
 
+let
+  networkPkgs = if nftablesSupport then
+    [ iptables-nftables-compat ]
+  else
+    [ iptables ebtables ];
+
+in
 buildGoPackage rec {
   pname = "lxd";
-  version = "4.0.1";
+  version = "4.5";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "0sxkyjayn7yyiy9kvbdlpkl58lwsl2rhlxnncg628f2kad2zgkdx";
+    sha256 = "1nszzcyn8kvpnxppjbxky5x9a8n0jfmhy20j6nrwm3196gd6hirr";
   };
+
+  postPatch = ''
+    substituteInPlace shared/usbid/load.go \
+      --replace "/usr/share/misc/usb.ids" "${hwdata}/share/hwdata/usb.ids"
+  '';
 
   preBuild = ''
     # unpack vendor
@@ -31,14 +44,16 @@ buildGoPackage rec {
 
   postInstall = ''
     # test binaries, code generation
-    rm $bin/bin/{deps,macaroon-identity,generate}
+    rm $out/bin/{deps,macaroon-identity,generate}
 
-    wrapProgram $bin/bin/lxd --prefix PATH : ${stdenv.lib.makeBinPath [
-      acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables ebtables bash criu
-      (writeShellScriptBin "apparmor_parser" ''
-        exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
-      '')
-    ]}
+    wrapProgram $out/bin/lxd --prefix PATH : ${stdenv.lib.makeBinPath (
+      networkPkgs
+      ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute bash criu ]
+      ++ [ (writeShellScriptBin "apparmor_parser" ''
+             exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
+           '') ]
+      )
+    }
 
     installShellCompletion --bash go/src/github.com/lxc/lxd/scripts/bash/lxd-client
   '';

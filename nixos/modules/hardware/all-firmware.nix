@@ -51,6 +51,7 @@ in {
         rtlwifi_new-firmware
         zd1211fw
         alsa-firmware
+        sof-firmware
         openelec-dvb-firmware
       ] ++ optional (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) raspberrypiWirelessFirmware
         ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "4.13") [

@@ -145,10 +145,14 @@ rec {
            # packed-refs file, so we have to grep through it:
            then
              let fileContent = readFile packedRefsName;
-                 matchRef    = match (".*\n([^\n ]*) " + file + "\n.*") fileContent;
-             in if  matchRef == null
+                 matchRef = builtins.match "([a-z0-9]+) ${file}";
+                 isRef = s: builtins.isString s && (matchRef s) != null;
+                 # there is a bug in libstdc++ leading to stackoverflow for long strings:
+                 # https://github.com/NixOS/nix/issues/2147#issuecomment-659868795
+                 refs = builtins.filter isRef (builtins.split "\n" fileContent);
+             in if refs == []
                 then throw ("Could not find " + file + " in " + packedRefsName)
-                else lib.head matchRef
+                else lib.head (matchRef (lib.head refs))
 
            else throw ("Not a .git directory: " + path);
     in readCommitFromFile "HEAD";

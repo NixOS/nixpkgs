@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.54.0";
+  version = "0.55.1";
   format = "flit";
   disabled = !isPy3k;
 
@@ -24,8 +24,13 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = "fastapi";
     rev = version;
-    sha256 = "17bicrpr801z71wrn9iimvh7qk6iwyxvr89ialf0s2rxxa2s0yb5";
+    sha256 = "1515nhwari48v0angyl5z3cfpvwn4al2nvqh0cjd9xgxzvm310s8";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "starlette ==0.13.2" "starlette"
+  '';
 
   propagatedBuildInputs = [
     uvicorn

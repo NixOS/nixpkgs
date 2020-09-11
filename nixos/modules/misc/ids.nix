@@ -198,7 +198,7 @@ in
       bosun = 161;
       kubernetes = 162;
       peerflix = 163;
-      chronos = 164;
+      #chronos = 164; # removed 2020-08-15
       gitlab = 165;
       tox-bootstrapd = 166;
       cadvisor = 167;
@@ -239,7 +239,6 @@ in
       shout = 206;
       gateone = 207;
       namecoin = 208;
-      dnschain = 209;
       #lxd = 210; # unused
       kibana = 211;
       xtreemfs = 212;
@@ -248,7 +247,7 @@ in
       bepasty = 215;
       # pumpio = 216; # unused, removed 2018-02-24
       nm-openvpn = 217;
-      mathics = 218;
+      # mathics = 218; # unused, removed 2020-08-15
       ejabberd = 219;
       postsrsd = 220;
       opendkim = 221;
@@ -322,7 +321,7 @@ in
       monetdb = 290;
       restic = 291;
       openvpn = 292;
-      meguca = 293;
+      # meguca = 293; # removed 2020-08-21
       yarn = 294;
       hdfs = 295;
       mapred = 296;
@@ -346,6 +345,7 @@ in
       zoneminder = 314;
       paperless = 315;
       #mailman = 316;  # removed 2019-08-30
+      zigbee2mqtt = 317;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -549,7 +549,6 @@ in
       #shout = 206; #unused
       gateone = 207;
       namecoin = 208;
-      #dnschain = 209; #unused
       lxd = 210; # unused
       #kibana = 211;
       xtreemfs = 212;
@@ -623,7 +622,7 @@ in
       monetdb = 290;
       restic = 291;
       openvpn = 292;
-      meguca = 293;
+      # meguca = 293; # removed 2020-08-21
       yarn = 294;
       hdfs = 295;
       mapred = 296;
@@ -647,6 +646,7 @@ in
       zoneminder = 314;
       paperless = 315;
       #mailman = 316;  # removed 2019-08-30
+      zigbee2mqtt = 317;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

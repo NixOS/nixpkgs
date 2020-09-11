@@ -1,18 +1,29 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 buildGoModule rec {
   pname = "libgen-cli";
-  version = "1.0.5";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "ciehanski";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1lfsnyzin2dqhwhz6phms6yipli88sqiw55ls18dfv7bvx30sqlp";
+    sha256 = "15nzdwhmgpm36dqx7an5rjl5sw2r4p66qn2y3jzl6fc0y7224ns1";
   };
 
-  modSha256 = "1k16zjb7p65g72hr9vsk38jhpsy1yclm7fjgq47qy6jwjd44w1bi";
+  vendorSha256 = "0smb83mq711b2pby57ijcllccn7y2l10zb4fbf779xibb2g09608";
+
+  doCheck = false;
 
   subPackages = [ "." ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    for shell in bash zsh; do
+      $out/bin/libgen-cli completion $shell > libgen-cli.$shell || :
+      installShellCompletion libgen-cli.$shell
+    done
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/ciehanski/libgen-cli";
@@ -24,7 +35,6 @@ buildGoModule rec {
       contents.
     '';
     license = licenses.asl20;
-    platforms = platforms.all;
     maintainers = with maintainers; [ zaninime ];
   };
 }

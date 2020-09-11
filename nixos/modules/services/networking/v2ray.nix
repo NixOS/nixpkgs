@@ -58,7 +58,13 @@ with lib;
     cfg = config.services.v2ray;
     configFile = if cfg.configFile != null
       then cfg.configFile
-      else (pkgs.writeText "v2ray.json" (builtins.toJSON cfg.config));
+      else pkgs.writeTextFile {
+        name = "v2ray.json";
+        text = builtins.toJSON cfg.config;
+        checkPhase = ''
+          ${pkgs.v2ray}/bin/v2ray -test -config $out
+        '';
+      };
 
   in mkIf cfg.enable {
     assertions = [

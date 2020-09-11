@@ -16,7 +16,7 @@ buildGoPackage rec {
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
     for shell in bash zsh; do
-      $bin/bin/kompose completion $shell > kompose.$shell
+      $out/bin/kompose completion $shell > kompose.$shell
       installShellCompletion kompose.$shell
     done
   '';

@@ -30,7 +30,7 @@
 
 let
   pname = "gnome-flashback";
-  version = "3.36.1";
+  version = "3.36.3";
 
   # From data/sessions/Makefile.am
   requiredComponentsCommon = [
@@ -61,7 +61,7 @@ let
 
     src = fetchurl {
       url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-      sha256 = "16gknn5mj29i8svlncarj92qi0swdlziggxpg9rryqslsy896a2x";
+      sha256 = "19y1a4kq6db6a19basss76l4rypiz0lwr32ajli1ra1d1yj9xfid";
     };
 
     # make .desktop Execs absolute

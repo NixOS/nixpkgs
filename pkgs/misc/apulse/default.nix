@@ -5,13 +5,13 @@ let oz = x: if x then "1" else "0"; in
 
 stdenv.mkDerivation rec {
   pname = "apulse";
-  version = "0.1.12";
+  version = "0.1.13";
 
   src = fetchFromGitHub {
     owner = "i-rinat";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0yk9vgb4aws8xnkhdhgpxp5c0rri8yq61yxk85j99j8ax806i3r8";
+    sha256 = "1p6fh6ah5v3qz7dxhcsixx38bxg44ypbim4m03bxk3ls5i9xslmn";
   };
 
   enableParallelBuilding = true;

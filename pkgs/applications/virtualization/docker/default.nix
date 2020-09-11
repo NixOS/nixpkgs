@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, removeReferencesTo, pkgconfig
+{ stdenv, lib, fetchFromGitHub, fetchpatch, buildGoPackage
+, makeWrapper, removeReferencesTo, installShellFiles, pkgconfig
 , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
 , sqlite, iproute, lvm2, systemd
 , btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs, git
@@ -56,7 +57,7 @@ rec {
       NIX_CFLAGS_COMPILE = "-DMINIMAL=ON";
     });
   in
-    stdenv.mkDerivation ((optionalAttrs (stdenv.isLinux) {
+    buildGoPackage ((optionalAttrs (stdenv.isLinux) {
 
     inherit docker-runc docker-containerd docker-proxy docker-tini;
 
@@ -66,7 +67,7 @@ rec {
       ++ optional (lvm2 == null) "exclude_graphdriver_devicemapper"
       ++ optional (libseccomp != null) "seccomp";
 
-   }) // {
+   }) // rec {
     inherit version rev;
 
     name = "docker-${version}";
@@ -78,9 +79,19 @@ rec {
       sha256 = sha256;
     };
 
-    nativeBuildInputs = [ pkgconfig ];
+    patches = [
+      # Replace hard-coded cross-compiler with $CC
+      (fetchpatch {
+        url = https://github.com/docker/docker-ce/commit/2fdfb4404ab811cb00227a3de111437b829e55cf.patch;
+        sha256 = "1af20bzakhpfhaixc29qnl9iml9255xdinxdnaqp4an0n1xa686a";
+      })
+    ];
+
+    goPackagePath = "github.com/docker/docker-ce";
+
+    nativeBuildInputs = [ pkgconfig go-md2man go libtool removeReferencesTo installShellFiles ];
     buildInputs = [
-      makeWrapper removeReferencesTo go-md2man go libtool
+      makeWrapper
     ] ++ optionals (stdenv.isLinux) [
       sqlite lvm2 btrfs-progs systemd libseccomp
     ];
@@ -91,7 +102,7 @@ rec {
       export GOCACHE="$TMPDIR/go-cache"
     '' + (optionalString (stdenv.isLinux) ''
       # build engine
-      cd ./components/engine
+      cd ./go/src/${goPackagePath}/components/engine
       export AUTO_GOPATH=1
       export DOCKER_GITCOMMIT="${rev}"
       export VERSION="${version}"
@@ -99,7 +110,7 @@ rec {
       cd -
     '') + ''
       # build cli
-      cd ./components/cli
+      cd ./go/src/${goPackagePath}/components/cli
       # Mimic AUTO_GOPATH
       mkdir -p .gopath/src/github.com/docker/
       ln -sf $PWD .gopath/src/github.com/docker/cli
@@ -113,7 +124,7 @@ rec {
     '';
 
     # systemd 230 no longer has libsystemd-journal as a separate entity from libsystemd
-    patchPhase = ''
+    postPatch = ''
       substituteInPlace ./components/cli/scripts/build/.variables --replace "set -eu" ""
     '' + optionalString (stdenv.isLinux) ''
       patchShebangs .
@@ -125,7 +136,13 @@ rec {
 
     extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute iptables e2fsprogs xz xfsprogs procps utillinux git ]);
 
-    installPhase = optionalString (stdenv.isLinux) ''
+    installPhase = ''
+      cd ./go/src/${goPackagePath}
+      install -Dm755 ./components/cli/docker $out/libexec/docker/docker
+
+      makeWrapper $out/libexec/docker/docker $out/bin/docker \
+        --prefix PATH : "$out/libexec/docker:$extraPath"
+    '' + optionalString (stdenv.isLinux) ''
       install -Dm755 ./components/engine/bundles/dynbinary-daemon/dockerd $out/libexec/docker/dockerd
 
       makeWrapper $out/libexec/docker/dockerd $out/bin/dockerd \
@@ -141,42 +158,29 @@ rec {
       # systemd
       install -Dm644 ./components/engine/contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
     '' + ''
-      install -Dm755 ./components/cli/docker $out/libexec/docker/docker
-
-      makeWrapper $out/libexec/docker/docker $out/bin/docker \
-        --prefix PATH : "$out/libexec/docker:$extraPath"
-
       # completion (cli)
-      install -Dm644 ./components/cli/contrib/completion/bash/docker $out/share/bash-completion/completions/docker
-      install -Dm644 ./components/cli/contrib/completion/fish/docker.fish $out/share/fish/vendor_completions.d/docker.fish
-      install -Dm644 ./components/cli/contrib/completion/zsh/_docker $out/share/zsh/site-functions/_docker
+      installShellCompletion --bash ./components/cli/contrib/completion/bash/docker
+      installShellCompletion --fish ./components/cli/contrib/completion/fish/docker.fish
+      installShellCompletion --zsh ./components/cli/contrib/completion/zsh/_docker
 
       # Include contributed man pages (cli)
+      cd ./components/cli
+    '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
       # Generate man pages from cobra commands
       echo "Generate man pages from cobra"
-      cd ./components/cli
       mkdir -p ./man/man1
       go build -o ./gen-manpages github.com/docker/cli/man
       ./gen-manpages --root . --target ./man/man1
-
+    '' + ''
       # Generate legacy pages from markdown
       echo "Generate legacy manpages"
       ./man/md2man-all.sh -q
 
-      manRoot="$man/share/man"
-      mkdir -p "$manRoot"
-      for manDir in ./man/man?; do
-        manBase="$(basename "$manDir")" # "man1"
-        for manFile in "$manDir"/*; do
-          manName="$(basename "$manFile")" # "docker-build.1"
-          mkdir -p "$manRoot/$manBase"
-          gzip -c "$manFile" > "$manRoot/$manBase/$manName.gz"
-        done
-      done
+      installManPage man/*/*.[1-9]
     '';
 
     preFixup = ''
-      find $out -type f -exec remove-references-to -t ${go} -t ${stdenv.cc.cc} '{}' +
+      find $out -type f -exec remove-references-to -t ${stdenv.cc.cc} '{}' +
     '' + optionalString (stdenv.isLinux) ''
       find $out -type f -exec remove-references-to -t ${stdenv.glibc.dev} '{}' +
     '';
@@ -193,9 +197,9 @@ rec {
   # Get revisions from
   # https://github.com/docker/docker-ce/tree/${version}/components/engine/hack/dockerfile/install/*
 
-  docker_18_09 = makeOverridable dockerGen {
+  docker_18_09 = makeOverridable dockerGen rec {
     version = "18.09.9";
-    rev = "039a7df9ba8097dd987370782fcdd6ea79b26016";
+    rev = "v${version}";
     sha256 = "0wqhjx9qs96q2jd091wffn3cyv2aslqn2cvpdpgljk8yr9s0yg7h";
     runcRev = "3e425f80a8c931f88e6d94a8c831b9d5aa481657";
     runcSha256 = "18psc830b2rkwml1x6vxngam5b5wi3pj14mw817rshpzy87prspj";
@@ -205,10 +209,10 @@ rec {
     tiniSha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
   };
 
-  docker_19_03 = makeOverridable dockerGen {
-    version = "19.03.8";
-    rev = "afacb8b7f0d8d4f9d2a8e8736e9c993e672b41f3";
-    sha256 = "15iq16rlnkw78lvapcfpbnsnxhdjbvfvgzg3xzxhpdg1dmq40b6j";
+  docker_19_03 = makeOverridable dockerGen rec {
+    version = "19.03.12";
+    rev = "v${version}";
+    sha256 = "0i5xr8q3yjrz5zsjcq63v4g1mzqpingjr1hbf9amk14484i2wkw7";
     runcRev = "dc9208a3303feef5b3839f4323d9beb36df0a9dd"; # v1.0.0-rc10
     runcSha256 = "0pi3rvj585997m4z9ljkxz2z9yxf9p2jr0pmqbqrc7bc95f5hagk";
     containerdRev = "7ad184331fa3e55e52b890ea95e65ba581ae3429"; # v1.2.13

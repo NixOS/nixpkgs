@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-katex";
-  version = "0.6.0";
+  version = "0.6.1";
 
   # pkgutil namespaces are broken in nixpkgs (because they can't scan multiple
   # directories). But python2 is EOL, so not supporting it should be ok.
@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1692q3f3z1rsd3nyxd8wrv0vscwcq2gqjbv79c8ws402y3m7y5ni";
+    sha256 = "88320b2780f350d67f84a5424973ce24aee65701e8e163a7f5856c5df3353188";
   };
 
   propagatedBuildInputs = [ sphinx ];

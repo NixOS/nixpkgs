@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     repo = "dash-to-dock";
     # rev = "extensions.gnome.org-v" + version;
     rev = "1788f31b049b622f78d0e65c56bef76169022ca9";
-    sha256 = "M3tlRbQ1PjKvNrKNtg0+CBEtzLSFQYauXJXQojdkHuk=";
+    sha256 = "1s8ychvs5l4mbjp8chc5nk62s4887q6vd3dj6spk4gimni2nayrk";
   };
 
   nativeBuildInputs = [
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "INSTALLBASE=${placeholder "out"}/share/gnome-shell/extensions"
   ];
+
+  uuid = "dash-to-dock@micxgx.gmail.com";
 
   meta = with stdenv.lib; {
     description = "A dock for the Gnome Shell";

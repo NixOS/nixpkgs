@@ -16,7 +16,7 @@ buildGoPackage rec {
   goDeps = null;
 
   installPhase = ''
-    install -m755 -D ./go/bin/proxy $bin/bin/docker-proxy
+    install -m755 -D ./go/bin/proxy $out/bin/docker-proxy
   '';
 
   meta = with stdenv.lib; {

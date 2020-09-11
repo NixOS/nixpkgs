@@ -46,7 +46,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "7.6"; # always change at once with ./minimal.nix
+  version = "7.8"; # always change at once with ./minimal.nix
 
   src = (stdenv.lib.makeOverridable ({ name, sha256 }:
     fetchurl {
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     }
   )) {
     name = "${pname}-${version}";
-    sha256 = "0yagy7qrnz96gwafnj3whh2vs54788k1ci3vkm100h68gsw638b8";
+    sha256 = "19z3dayybcra277s4gk2mppalwawd93f2b16xyrb6d7rbbfz7j9j";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -82,10 +82,7 @@ stdenv.mkDerivation rec {
   '';
 
   shared = if stdenv.isDarwin then "dylib" else "shared";
-  configureFlags = [ "--enable-${shared}"  "--enable-lt=${libtool}/bin/libtool"
-                     # The following flag is a temporary workaround for an upstream bug:
-                     #   https://github.com/racket/racket/issues/3046
-                     "--enable-useprefix" ]
+  configureFlags = [ "--enable-${shared}"  "--enable-lt=${libtool}/bin/libtool" ]
                    ++ stdenv.lib.optional disableDocs [ "--disable-docs" ]
                    ++ stdenv.lib.optional stdenv.isDarwin [ "--enable-xonx" ];
 

@@ -4,7 +4,7 @@
 , SDL2
 , libGL
 , libarchive
-, libusb
+, libusb-compat-0_1
 , qtbase
 , qmake
 , git
@@ -33,7 +33,7 @@ mkDerivation rec {
     SDL2
     libGL
     libarchive
-    libusb
+    libusb-compat-0_1
     qtbase
     libpng_apng
   ];

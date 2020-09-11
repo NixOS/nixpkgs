@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-contacts";
-  version = "3.36";
+  version = "3.36.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-contacts/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0yvgsfmqm8dxbhay12m20xp6qi9v31wwyv1gz4fx7j4kklhd5jzf";
+    sha256 = "048l07biy8xrfidfyzrjd5lrnfzqhb767ih2gl7w6c4mmhj4g2dy";
   };
 
   propagatedUserEnvPkgs = [ evolution-data-server ];

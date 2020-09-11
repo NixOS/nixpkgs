@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , ujson
 , email_validator
 , typing-extensions
@@ -12,15 +13,23 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "1.4";
+  version = "1.5.1";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zmnwyvvrj6nb2r1wh63yb6dzqaxw8m4njzqycjdq9911c5gwg6z";
+    sha256 = "0fwrx7p6d5vskg9ibganahiz9y9299idvdmzhjw62jy84gn1vrb4";
   };
+
+  # fix tests, remove on next version bump
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/samuelcolvin/pydantic/commit/a5b0e741e585040a0ab8b0be94dd9dc2dd3afcc7.patch";
+      sha256 = "0v91ac3dw23rm73370s2ns84vi0xqbfzpvj84zb7xdiicx8fhmf1";
+    })
+  ];
 
   propagatedBuildInputs = [
     ujson

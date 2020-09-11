@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pcsclite , libusb }:
+{ stdenv, fetchurl, pkgconfig, pcsclite , libusb-compat-0_1 }:
 
 stdenv.mkDerivation {
   version = "1.7.11";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   doCheck = true;
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ pcsclite libusb ];
+  buildInputs = [ pcsclite libusb-compat-0_1 ];
 
   preBuild = ''
     makeFlagsArray=(usbdropdir="$out/pcsc/drivers");

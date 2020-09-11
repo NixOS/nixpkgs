@@ -546,7 +546,7 @@ in
 
                 Note that this option might require to do some adjustments to the container configuration,
                 e.g. you might want to set
-                <varname>systemd.network.networks.$interface.dhcpConfig.ClientIdentifier</varname> to "mac"
+                <varname>systemd.network.networks.$interface.dhcpV4Config.ClientIdentifier</varname> to "mac"
                 if you use <varname>macvlans</varname> option.
                 This way dhcp client identifier will be stable between the container restarts.
 
@@ -627,7 +627,7 @@ in
 		    };
 
             bindMounts = mkOption {
-              type = with types; loaOf (submodule bindMountOpts);
+              type = with types; attrsOf (submodule bindMountOpts);
               default = {};
               example = literalExample ''
                 { "/home" = { hostPath = "/home/alice";

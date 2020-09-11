@@ -1,5 +1,5 @@
 { lib, fetchurl, buildPythonPackage
-, zip, ffmpeg_4, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
+, zip, ffmpeg, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
 # Pandoc is required to build the package's man page. Release tarballs contain a
 # formatted man page already, though, it will still be installed. We keep the
 # manpage argument in place in case someone wants to use this derivation to
@@ -18,11 +18,11 @@ buildPythonPackage rec {
   # The websites youtube-dl deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2020.03.24";
+  version = "2020.09.06";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${pname}-${version}.tar.gz";
-    sha256 = "05l4asakakxn53wrvxn6c03fd80zdizdbj6r2cj8c1ja3sj9i8s5";
+    sha256 = "1827hcp9bvwq7p2f5r0wgkg6yb5fgvr4miyi3d99hkah2afw12za";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   makeWrapperArgs = let
       packagesToBinPath =
         [ atomicparsley ]
-        ++ lib.optional ffmpegSupport ffmpeg_4
+        ++ lib.optional ffmpegSupport ffmpeg
         ++ lib.optional rtmpSupport rtmpdump
         ++ lib.optional phantomjsSupport phantomjs2;
     in [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];

@@ -1,4 +1,5 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, installShellFiles, nixosTests}:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, installShellFiles, makeWrapper
+, nixosTests, rclone }:
 
 buildGoPackage rec {
   pname = "restic";
@@ -15,12 +16,14 @@ buildGoPackage rec {
 
   subPackages = [ "cmd/restic" ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   passthru.tests.restic = nixosTests.restic;
 
-  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
-    $bin/bin/restic generate \
+  postInstall = ''
+    wrapProgram $out/bin/restic --prefix PATH : '${rclone}/bin'
+  '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    $out/bin/restic generate \
       --bash-completion restic.bash \
       --zsh-completion restic.zsh \
       --man .

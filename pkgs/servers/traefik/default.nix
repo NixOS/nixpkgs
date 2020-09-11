@@ -2,16 +2,19 @@
 
 buildGoModule rec {
   pname = "traefik";
-  version = "2.2.0";
+  version = "2.2.11";
 
   src = fetchFromGitHub {
     owner = "containous";
     repo = "traefik";
     rev = "v${version}";
-    sha256 = "1dcazssabqxr9wv3dds3z7ks3y628qa07vgnn3hpdwxzm2b2ma92";
+    sha256 = "0l93qb0kjbm5gjba0bxfyb5a0n1p54n5crhcsyzgrki4x586lan0";
   };
 
-  modSha256 = "0w3ssxvsmq8i6hbfmn4ig2x13i2nlqy5q1khcblf9pq5vhk202qx";
+  vendorSha256 = "06x2mcyp6c1jdf5wz51prhcn071d0580322lcv3x2bxk2grx08i2";
+
+  doCheck = false;
+
   subPackages = [ "cmd/traefik" ];
 
   nativeBuildInputs = [ go-bindata ];
@@ -23,9 +26,9 @@ buildGoModule rec {
 
     CODENAME=$(awk -F "=" '/CODENAME=/ { print $2}' script/binary)
 
-    makeFlagsArray+=("-ldflags=\
-      -X github.com/containous/traefik/version.Version=${version} \
-      -X github.com/containous/traefik/version.Codename=$CODENAME")
+    buildFlagsArray+=("-ldflags=\
+      -X github.com/containous/traefik/v2/pkg/version.Version=${version} \
+      -X github.com/containous/traefik/v2/pkg/version.Codename=$CODENAME")
   '';
 
   meta = with stdenv.lib; {

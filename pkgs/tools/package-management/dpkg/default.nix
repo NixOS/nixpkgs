@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dpkg";
-  version = "1.20.0";
+  version = "1.20.5";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "0009dp4p3d2j5vd956achqczf8qizfixha8hw5hzn3h31qmwqcxn";
+    sha256 = "1pg0yd1q9l5cx7pr0853yds1n3mh5b28zkw79gjqjzcmjwqkzwpj";
   };
 
   configureFlags = [
@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.debian.org/Teams/Dpkg";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ siriobalmelli ];
   };
 }

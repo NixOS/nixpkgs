@@ -2,21 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "leatherman";
-  version = "1.11.0";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
-    sha256 = "1kp35gnph9myqxdxzyj1871ay19nfajxglzwai1gvsnh5840xnxy";
+    sha256 = "1mgd7jqfg6f0y2yrh2m1njlwrpd15kas88776jdd5fsl7gvb5khn";
     rev = version;
     repo = "leatherman";
     owner = "puppetlabs";
   };
 
-  NIX_CFLAGS_COMPILE = builtins.toString [
-    "-Wno-error=ignored-qualifiers"
-    "-Wno-error=class-memaccess"
-    "-Wno-error=catch-value"
-    "-Wno-error=deprecated-copy"
-  ];
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost curl ruby ];
@@ -28,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "A collection of C++ and CMake utility libraries";
     license = licenses.asl20;
     maintainers = [ maintainers.womfoo ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 
 }

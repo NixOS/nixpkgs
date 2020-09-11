@@ -73,6 +73,6 @@ in
 
       license = licenses.epl10;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ the-kenny havvy couchemar ankhers filalex77 ];
+      maintainers = with maintainers; [ havvy couchemar ankhers filalex77 ];
     };
   })

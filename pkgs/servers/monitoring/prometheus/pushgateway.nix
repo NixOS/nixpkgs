@@ -29,7 +29,7 @@ buildGoPackage rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    export PATH=$PATH:$bin/bin
+    export PATH=$PATH:$out/bin
 
     pushgateway --help
 

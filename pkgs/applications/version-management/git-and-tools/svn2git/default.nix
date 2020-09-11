@@ -34,8 +34,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/nirvdrum/svn2git";
     description = "Tool for importing Subversion repositories into git";
     license = stdenv.lib.licenses.mit;
-
-    maintainers = [ stdenv.lib.maintainers.the-kenny ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

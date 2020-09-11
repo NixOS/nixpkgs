@@ -1,12 +1,10 @@
-{ lib, fetchFromGitHub, meson, ninja, buildPythonPackage, pytest, pkgconfig, cairo, xlibsWrapper, isPy33, isPy3k }:
+{ lib, fetchFromGitHub, meson, ninja, buildPythonPackage, pytest, pkgconfig, cairo, xlibsWrapper, isPy3k }:
 
 buildPythonPackage rec {
   pname = "pycairo";
   version = "1.18.2";
 
   format = "other";
-
-  disabled = isPy33;
 
   src = fetchFromGitHub {
     owner = "pygobject";

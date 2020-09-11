@@ -27,12 +27,12 @@
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2.9.1";
+  version = "2.23.0";
 
   # get full repository need conftest.py to run tests
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d37a5c5be992f3b16db24b54d2801cbe370990fbc63089c6e7ef40d6f03cf5dd";
+    sha256 = "469e505fd7ce75f600188bdb69a95641899d5b372f74246c8f308376b6929e9c";
   };
 
   checkInputs = [ pytest pytest-repeat pytest-timeout mock joblib ];

@@ -1,21 +1,29 @@
-{ rustPlatform, fetchFromGitHub, lib, openssl, pkgconfig, stdenv, curl, Security, ... }:
+{ rustPlatform, fetchFromGitHub, lib, openssl, pkgconfig, stdenv, curl, Security
+, runCommand
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasm-bindgen-cli";
-  version = "0.2.60";
+  version = "0.2.67";
 
-  src = fetchFromGitHub {
-    owner = "rustwasm";
-    repo = "wasm-bindgen";
-    rev = version;
-    sha256 = "1jr4v5y9hbkyg8gjkr3qc2qxwhyagfs8q3y3z248mr1919mcas8h";
-  };
+  src =
+    let
+      tarball = fetchFromGitHub {
+        owner = "rustwasm";
+        repo = "wasm-bindgen";
+        rev = version;
+        sha256 = "0qx178aicbn59b150j5r78zya5n0yljvw4c4lhvg8x4cpfshjb5j";
+      };
+    in runCommand "source" { } ''
+      cp -R ${tarball} $out
+      chmod -R +w $out
+      cp ${./Cargo.lock} $out/Cargo.lock
+    '';
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security curl ];
   nativeBuildInputs = [ pkgconfig ];
 
-  cargoSha256 = "08g110qahipgm1qyyihgqwnkr23w0gk1gp63ici5dj2qsxnc4mxv";
-  cargoPatches = [ ./0001-Add-cargo.lock.patch ];
+  cargoSha256 = "0chpw6syqxn824cbkdjx1s26vmajx511gc4mp9y64vy7b7asba6x";
   cargoBuildFlags = [ "-p" pname ];
 
   meta = with lib; {

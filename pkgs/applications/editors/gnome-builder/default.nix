@@ -9,6 +9,7 @@
 , gnome3
 , libgit2-glib
 , gobject-introspection
+, glade
 , gspell
 , gtk-doc
 , gtk3
@@ -39,11 +40,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "3.36.0";
+  version = "3.36.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "G0nl6DVzb3k6cN2guFIe/XNhFNhKbaq5e8wz62VA0Qo=";
+    sha256 = "17pvmd5jypar8dkr6w56hvf7jnq4l1wih2wwgkrv7sblr7rkkar2";
   };
 
   nativeBuildInputs = [
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
     ctags
     flatpak
     gnome3.devhelp
-    gnome3.glade
+    glade
     libgit2-glib
     libpeas
     libportal

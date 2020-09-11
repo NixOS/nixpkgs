@@ -2,24 +2,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmtime";
-  version = "0.12.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "${pname}";
     rev = "v${version}";
-    sha256 = "08dhk5s8rv41mjqbwfqwqmp6p6p9y7qc5yc76ljjd9l7j1phl7mr";
+    sha256 = "0gb8xk27ych553b7knflbbks9q64m39v40sdirycm6prqfnfrnm8";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "0vyxp74jlnrisk0kblsbj9d9a54wcgzbyjm7iqav1k4ns3syrnmh";
+  cargoSha256 = "1dqaxpwfm234yjwrhglzvsqhh2fr5nsx7bpk7bmycyk6lml8vxy7";
 
   nativeBuildInputs = [ python cmake clang ];
   buildInputs = [ llvmPackages.libclang ] ++
    lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
-  doCheck = false; # https://github.com/bytecodealliance/wasmtime/issues/1197
+  doCheck = true;
 
   meta = with lib; {
     description = "Standalone JIT-style runtime for WebAssembly, using Cranelift";

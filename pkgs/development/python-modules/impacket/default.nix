@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "impacket";
-  version = "0.9.20";
+  version = "0.9.21";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "43ebdb62e179113a55ccd4297316532582be71857b85d85ba187cd6146757397";
+    sha256 = "912f812564e87c31a162cfe0626f3a6cbc5b6864deedbfefc31f6d321859ade3";
   };
 
   disabled = isPy3k;

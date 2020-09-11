@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "bugsnag";
-  version = "3.6.0";
+  version = "3.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17cjh7g8gbr0gb22nzybkw7vq9x5wfa5ln94hhzijbz934bw1f37";
+    sha256 = "32966bfe625ec6fc0dbc9d86d79a18f31b22b2fdec3ca070eeb3495304f7e18d";
   };
 
   propagatedBuildInputs = [ six webob ];

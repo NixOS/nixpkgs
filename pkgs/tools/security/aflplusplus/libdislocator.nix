@@ -12,6 +12,8 @@ stdenv.mkDerivation {
 
   preInstall = ''
     mkdir -p $out/lib/afl
+    # issue is fixed upstream: https://github.com/AFLplusplus/AFLplusplus/commit/2a60ceb6944a7ca273057ddf64dcf837bf7f9521
+    sed -i 's/README\.dislocator\.md/README\.md/g' Makefile
   '';
   postInstall = ''
     mkdir $out/bin

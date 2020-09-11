@@ -12,7 +12,7 @@ let
     comment = description;
     desktopName = "Frogatto";
     genericName = "frogatto";
-    categories = "Application;Game;ArcadeGame;";
+    categories = "Game;ArcadeGame;";
   };
   version = "unstable-2018-12-18";
 in buildEnv {

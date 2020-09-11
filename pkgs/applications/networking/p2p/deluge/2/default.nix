@@ -1,5 +1,5 @@
 { stdenv, fetchurl, intltool, libtorrentRasterbar, pythonPackages
-, gtk3, gobject-introspection, librsvg, wrapGAppsHook }:
+, gtk3, glib, gobject-introspection, librsvg, wrapGAppsHook }:
 
 pythonPackages.buildPythonPackage rec {
   pname = "deluge";
@@ -18,7 +18,7 @@ pythonPackages.buildPythonPackage rec {
     gtk3 gobject-introspection librsvg
   ];
 
-  nativeBuildInputs = [ intltool wrapGAppsHook ];
+  nativeBuildInputs = [ intltool wrapGAppsHook glib ];
 
   checkInputs = with pythonPackages; [
     pytest /* pytest-twisted */ pytestcov mock

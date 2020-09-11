@@ -2,23 +2,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowsocks-rust";
-  version = "1.7.2";
+  version = "1.8.17";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "shadowsocks";
     repo = pname;
-    sha256 = "0w7ysha46ml3j1i1knvll4pmqg291z8a2ypcy650m61dhrvkh2ng";
+    sha256 = "1fl23q4hccwdapknj7yd8294jil15758k1r6ljbms2gijlly9lg3";
   };
 
-  cargoSha256 = "0srmn8ndy7vdvcysyb7a5pjly0m3jchq0zrqzhrwicynm291w56h";
+  cargoSha256 = "0jgzh9p6ziq3337461cj4fkbghks3bq8dnrn6ab8dkynjwvd47bx";
+
+  SODIUM_USE_PKG_CONFIG = 1;
 
   buildInputs = [ openssl libsodium ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
   nativeBuildInputs = [ pkgconfig ];
-
-  # tries to read /etc/resolv.conf, hence fails in sandbox
-  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/shadowsocks/shadowsocks-rust";

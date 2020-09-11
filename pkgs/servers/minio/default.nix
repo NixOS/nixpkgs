@@ -1,23 +1,29 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "minio";
-  version = "2020-03-25T07-03-04Z";
+  version = "2020-08-08T04-50-06Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio";
     rev = "RELEASE.${version}";
-    sha256 = "0xdflc7pfx1misbh695x8kmqpysi5iydsarr9mwmjragf5b1kbl5";
+    sha256 = "0l5yd3k154h3q9sc5psv80n9wpnhpj5sb3r9v9gsqcam46ljwpna";
   };
 
-  modSha256 = "09kbibsfa7qq55paqr7wcs4gpwk6g5pknc5fjssmd12nm2cji96k";
+  vendorSha256 = "1xxhvgawkj2lq39cxgl4l5v41m6nsask79n2cxfpcgb00fqq147x";
+
+  doCheck = false;
 
   subPackages = [ "." ];
 
-  buildFlagsArray = [''-ldflags=
-    -X github.com/minio/minio/cmd.Version=${version}
-  ''];
+  patchPhase = ''
+    sed -i "s/Version.*/Version = \"${version}\"/g" cmd/build-constants.go
+    sed -i "s/ReleaseTag.*/ReleaseTag = \"RELEASE.${version}\"/g" cmd/build-constants.go
+    sed -i "s/CommitID.*/CommitID = \"${src.rev}\"/g" cmd/build-constants.go
+  '';
+
+  passthru.tests.minio = nixosTests.minio;
 
   meta = with stdenv.lib; {
     homepage = "https://www.minio.io/";

@@ -2,22 +2,16 @@
 
 stdenv.mkDerivation {
   pname = "metamath";
-  version = "0.181";
+  version = "0.182";
 
   buildInputs = [ autoreconfHook ];
 
   src = fetchFromGitHub {
     owner = "metamath";
     repo = "metamath-exe";
-    rev = "67cbfa8468deb6f8ad5bedafc6399bee59064764";
-    sha256 = "1mk3g41qz26j38j68i9qmnl8khkd8jwrzj4vxkb855h4b819s000";
+    rev = "5df616efe4119ff88daf77e7041d45b6fa39c578";
+    sha256 = "0amjdgy42c7jypf6sz98iczlxcyl9bqx67ws1q8w2zdqk2izsyjp";
   };
-
-  # the files necessary to build the DATA target are not in this distribution
-  # luckily, they're not really needed so we don't build it.
-  makeFlags = [ "DATA=" ];
-
-  installTargets = [ "install-exec" ];
 
   meta = with stdenv.lib; {
     description = "Interpreter for the metamath proof language";

@@ -16,6 +16,7 @@
 , enableSharedLibraries ? true
 , enablePFM ? !(stdenv.isDarwin
   || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
+  || stdenv.isAarch32 # broken for the armv7l builder
 )
 , enablePolly ? true
 }:
@@ -31,8 +32,8 @@ in stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
-  src = fetch pname "1pwgm6cr0xr5a0hrbqs1zvsvvjvy0yq1y47c96804wcs795s90yz";
-  polly_src = fetch "polly" "15sd3dq0w60jsb76pis09lkagj5iy43h9hg4kd9gx5l8cbnsdyrm";
+  src = fetch pname "1wydhbp9kyjp5y0rc627imxgkgqiv3dfirbqil9dgpnbaw5y7n65";
+  polly_src = fetch "polly" "0nm2d8niz47yjsa3r17v3p13b70igkd338ib8191znr1dfw0pyyj";
 
   unpackPhase = ''
     unpackFile $src
@@ -53,11 +54,6 @@ in stdenv.mkDerivation (rec {
     ++ optional enablePFM libpfm; # exegesis
 
   propagatedBuildInputs = [ ncurses zlib ];
-
-  patches = [
-    # 10.0.0rc3-only
-    ./llvm-extension-handling.patch
-  ];
 
   postPatch = optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
@@ -85,6 +81,7 @@ in stdenv.mkDerivation (rec {
     rm test/DebugInfo/X86/convert-debugloc.ll
     rm test/DebugInfo/X86/convert-inlined.ll
     rm test/DebugInfo/X86/convert-linked.ll
+    rm test/DebugInfo/X86/debug_addr.ll
     rm test/tools/dsymutil/X86/op-convert.test
   '' + optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
     # Seems to require certain floating point hardware (NEON?)
@@ -159,6 +156,7 @@ in stdenv.mkDerivation (rec {
 
   enableParallelBuilding = true;
 
+  requiredSystemFeatures = [ "big-parallel" ];
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = "https://llvm.org/";

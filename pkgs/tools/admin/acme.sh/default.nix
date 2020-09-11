@@ -1,13 +1,13 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, curl, openssl, socat, iproute, unixtools, dnsutils }:
 stdenv.mkDerivation rec {
   pname = "acme.sh";
-  version = "2.8.5";
+  version = "2.8.7";
 
   src = fetchFromGitHub {
     owner = "Neilpang";
     repo = "acme.sh";
     rev = version;
-    sha256 = "0yxhfdb0jz0wn10ka6c79qvcx07656vsaxmjls8qgcfgc472ymhs";
+    sha256 = "0bwzrrm07v2lpsja0r0z7nj3jrf814w57mmk8lbdk9dsb3i07x4w";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -40,7 +40,7 @@ python2Packages.buildPythonApplication rec {
     description = "Command line toolkit for working with Arduino hardware";
     homepage = "http://inotool.org/";
     license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ antono the-kenny ];
+    maintainers = with stdenv.lib.maintainers; [ antono ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

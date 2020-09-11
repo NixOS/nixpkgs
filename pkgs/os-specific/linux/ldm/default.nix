@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
 
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.the-kenny ];
     repositories.git = git;
   };
 }

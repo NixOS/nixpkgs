@@ -82,6 +82,7 @@ in {
         ]);
         ProtectHome = "tmpfs";
         WorkingDirectory = libDir;
+        SyslogIdentifier = "pykms";
         Restart = "on-failure";
         MemoryLimit = cfg.memoryLimit;
       };

@@ -1,23 +1,23 @@
-{ stdenv, fetchFromGitHub,
-  SDL2, cmake, curl, fontconfig, freetype, icu, jansson, libiconv, libpng,
-  libpthreadstubs, libzip, libGLU, openssl, pkgconfig, speexdsp, zlib
+{ stdenv, fetchFromGitHub
+, SDL2, cmake, curl, duktape, fontconfig, freetype, icu, jansson, libGLU
+, libiconv, libpng, libpthreadstubs, libzip, openssl, pkgconfig, speexdsp, zlib
 }:
 
 let
-  version = "0.2.6";
+  version = "0.3.0";
 
   openrct2-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${version}";
-    sha256 = "1vikbkg3wh5ngzdfilb6irbh6nqinf138qpdz8wz9izlvl8s36k4";
+    sha256 = "0xs8pnn3lq30iy76pv42hywsrabapcrrkl597dhjafwh1xaxxj91";
   };
 
   objects-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "objects";
-    rev = "v1.0.14";
-    sha256 = "1bqbia5y73v4r0sv5cvi5729jh2ns7cxn557blh715yxswk91590";
+    rev = "v1.0.16";
+    sha256 = "1xz50ghiqj9rm0m6d65j09ich6dlhyj36zah6zvmmzr4kg6svnk5";
   };
 
   title-sequences-src = fetchFromGitHub {
@@ -41,15 +41,16 @@ stdenv.mkDerivation {
   buildInputs = [
     SDL2
     curl
+    duktape
     fontconfig
     freetype
     icu
     jansson
+    libGLU
     libiconv
     libpng
     libpthreadstubs
     libzip
-    libGLU
     openssl
     speexdsp
     zlib
@@ -57,7 +58,7 @@ stdenv.mkDerivation {
 
   postUnpack = ''
     cp -r ${objects-src}         $sourceRoot/data/object
-    cp -r ${title-sequences-src} $sourceRoot/data/title
+    cp -r ${title-sequences-src} $sourceRoot/data/sequence
   '';
 
   cmakeFlags = [
@@ -74,6 +75,6 @@ stdenv.mkDerivation {
     homepage = "https://openrct2.io/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ geistesk ];
+    maintainers = with maintainers; [ oxzi ];
   };
 }

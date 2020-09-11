@@ -13,21 +13,29 @@
 with lib;
 let
   mkLib = name:
-    stdenv.mkDerivation
-      {
-        pname = "kicad-${name}";
-        version = "${version}";
-        src = fetchFromGitHub (
-          {
-            owner = "KiCad";
-            repo = "kicad-${name}";
-            rev = version;
-            inherit name;
-          } // (libSources.${name} or { })
-        );
-        nativeBuildInputs = [ cmake ];
-        meta.license = licenses.cc-by-sa-40;
+    stdenv.mkDerivation {
+      pname = "kicad-${name}";
+      # Use the revision instead of `version` (which is an ISO 8601 date)
+      # to prevent duplicating the library when just the date changed
+      version = "${builtins.substring 0 10 libSources.${name}.rev}";
+      src = fetchFromGitHub (
+        {
+          owner = "KiCad";
+          repo = "kicad-${name}";
+          rev = version;
+          inherit name;
+        } // (libSources.${name} or { })
+      );
+      nativeBuildInputs = [ cmake ];
+
+      meta = rec {
+        license = licenses.cc-by-sa-40;
+        platforms = stdenv.lib.platforms.all;
+        # the 3d models are a ~1 GiB download and occupy ~5 GiB in store.
+        # this would exceed the hydra output limit
+        hydraPlatforms = if (name == "packages3d" ) then [ ] else platforms;
       };
+    };
 in
 {
   symbols = mkLib "symbols";
@@ -44,7 +52,7 @@ in
   i18n = let name = "i18n"; in
     stdenv.mkDerivation {
       pname = "kicad-${name}";
-      version = "${version}";
+      version = "${builtins.substring 0 10 libSources.${name}.rev}";
       src = fetchFromGitLab (
         {
           group = "kicad";
@@ -56,6 +64,9 @@ in
       );
       buildInputs = [ gettext ];
       nativeBuildInputs = [ cmake ];
-      meta.license = licenses.gpl2; # https://github.com/KiCad/kicad-i18n/issues/3
+      meta = {
+        license = licenses.gpl2; # https://github.com/KiCad/kicad-i18n/issues/3
+        platforms = stdenv.lib.platforms.all;
+      };
     };
 }

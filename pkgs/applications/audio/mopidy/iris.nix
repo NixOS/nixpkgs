@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-Iris";
-  version = "3.46.0";
+  version = "3.50.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0c7b6zbcj4bq5qsxvhjwqclrl1k2hs3wb50pfjbw7gs7m3gm2b7d";
+    sha256 = "04miwf0dqb8jir9g7xkfnn3l62bdn74ap03kqzz2v3byg64f1p0g";
   };
 
   propagatedBuildInputs = [
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   ] ++ (with python3Packages; [
     configobj
     requests
-    tornado_4
+    tornado
   ]);
 
   # no tests implemented

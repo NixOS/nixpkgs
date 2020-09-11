@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "yamllint";
-  version = "1.21.0";
+  version = "1.24.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14yijcnmanyd3s2ir38sxl07rzpxgpgw9s6b8sy68jrl7n5nj7ky";
+    sha256 = "07xn11i0c7x72xjxkkzrq9zxl40vfdr41mfvhlayrk6dpbk8vdj0";
   };
 
   checkInputs = [ nose ];
@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "A linter for YAML files";
     homepage = "https://github.com/adrienverge/yamllint";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ mikefaille ];
+    maintainers = with maintainers; [ jonringer mikefaille ];
   };
 }

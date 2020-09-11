@@ -11,12 +11,11 @@ let
     port ${toString cfg.port}
     ${condOption "bind" cfg.bind}
     ${condOption "unixsocket" cfg.unixSocket}
-    daemonize yes
+    daemonize no
     supervised systemd
     loglevel ${cfg.logLevel}
     logfile ${cfg.logfile}
     syslog-enabled ${redisBool cfg.syslog}
-    pidfile /run/redis/redis.pid
     databases ${toString cfg.databases}
     ${concatMapStrings (d: "save ${toString (builtins.elemAt d 0)} ${toString (builtins.elemAt d 1)}\n") cfg.save}
     dbfilename dump.rdb
@@ -219,6 +218,7 @@ in
       description = "Redis database user";
       isSystemUser = true;
     };
+    users.groups.redis = {};
 
     environment.systemPackages = [ cfg.package ];
 
@@ -241,6 +241,7 @@ in
         StateDirectory = "redis";
         Type = "notify";
         User = "redis";
+        Group = "redis";
       };
     };
   };

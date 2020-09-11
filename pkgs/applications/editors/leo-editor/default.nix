@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "leo-editor";
-  version = "6.2";
+  version = "6.2.1";
 
   src = fetchFromGitHub {
     owner = "leo-editor";
     repo = "leo-editor";
     rev = version;
-    sha256 = "07f10qwvi3p7bskzxnx5rlhlfrh7rx8v0xdlc4vs2271438j1j2z";
+    sha256 = "1s9jvxwzsl32clp78g92nq9p2byf08libr5widl1jnkv1cpkbvh9";
   };
 
   dontBuild = true;

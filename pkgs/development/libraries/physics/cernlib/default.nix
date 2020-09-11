@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gnumake imake makedepend ];
   sourceRoot = ".";
 
-  patches = [ ./patch ];
+  patches = [ ./patch.patch ];
 
   postPatch = ''
     substituteInPlace 2006/src/config/site.def \

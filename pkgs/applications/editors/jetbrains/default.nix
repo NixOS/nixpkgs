@@ -1,13 +1,13 @@
 { lib, stdenv, callPackage, fetchurl
 , python
 , jdk, cmake, libxml2, zlib, python3, ncurses5
+, dotnet-sdk_3
 }:
 
 with stdenv.lib;
 
 let
   mkJetBrainsProduct = callPackage ./common.nix { };
-
   # Sorted alphabetically
 
   buildClion = { name, version, src, license, description, wmClass, ... }:
@@ -66,7 +66,7 @@ let
             bin/gdb/linux/bin/gdbserver
 
           patchelf --set-interpreter $interp \
-            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}" \
+            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}" \
             bin/clang/linux/clangd
           patchelf --set-interpreter $interp \
             --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}" \
@@ -138,6 +138,24 @@ let
       };
     });
 
+  buildMps = { name, version, src, license, description, wmClass, ... }:
+    (mkJetBrainsProduct rec {
+      inherit name version src wmClass jdk;
+      product = "MPS";
+      meta = with stdenv.lib; {
+        homepage = https://www.jetbrains.com/mps/;
+        inherit license description;
+        longDescription = ''
+          A metaprogramming system which uses projectional editing
+          which allows users to overcome the limits of language
+          parsers, and build DSL editors, such as ones with tables and
+          diagrams.
+        '';
+        maintainers = with maintainers; [ rasendubi ];
+        platforms = platforms.linux;
+      };
+    });
+
   buildPhpStorm = { name, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
@@ -202,9 +220,9 @@ let
       };
     }) (attrs: {
       patchPhase = lib.optionalString (!stdenv.isDarwin) (attrs.patchPhase + ''
-        # Patch built-in mono for ReSharperHost to start successfully
-        interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
-        patchelf --set-interpreter "$interpreter" lib/ReSharperHost/linux-x64/mono/bin/mono-sgen
+        rm -rf lib/ReSharperHost/linux-x64/dotnet
+        mkdir -p lib/ReSharperHost/linux-x64/dotnet/
+        ln -s ${dotnet-sdk_3}/bin/dotnet lib/ReSharperHost/linux-x64/dotnet/dotnet
       '');
     });
 
@@ -250,12 +268,12 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2020.1"; /* updated by script */
+    version = "2020.2.1"; /* updated by script */
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "18mbw72vgrzkvjykc23h17qxrxfvhjzhy9rxpi2asw196qalavzp"; /* updated by script */
+      sha256 = "1sma3ay02lajg6q1g3k05gi7jdja7cf9rxb9v0w62s6z87l719bv"; /* updated by script */
     };
     wmClass = "jetbrains-clion";
     update-channel = "CLion RELEASE"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
@@ -263,12 +281,12 @@ in
 
   datagrip = buildDataGrip rec {
     name = "datagrip-${version}";
-    version = "2020.1"; /* updated by script */
+    version = "2020.2.2"; /* updated by script */
     description = "Your Swiss Army Knife for Databases and SQL";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
-      sha256 = "1z3asz9fp3xnmbhngar60g8rba83kx987ar67j5m8ws7cijqlzix"; /* updated by script */
+      sha256 = "1bk6z6mirrykypb4j2wa4744v0m9y1n7973qgj6z3dsifrq9q7zc"; /* updated by script */
     };
     wmClass = "jetbrains-datagrip";
     update-channel = "DataGrip RELEASE";
@@ -276,12 +294,12 @@ in
 
   goland = buildGoland rec {
     name = "goland-${version}";
-    version = "2020.1"; /* updated by script */
+    version = "2020.2.2"; /* updated by script */
     description = "Up and Coming Go IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "1qlpx3vfqwpyyxjsknhxvbdhyciwihhl0hkinrpdky6bza1yfgf6"; /* updated by script */
+      sha256 = "1r6bbx5hsg82l1pa3syfdi8nbsz6rrfszsw4dmwcnxvccp2hs3mh"; /* updated by script */
     };
     wmClass = "jetbrains-goland";
     update-channel = "GoLand RELEASE";
@@ -289,12 +307,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2020.1"; /* updated by script */
+    version = "2020.2.1"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "1rgqr7fn1sy0zbkfmrw3ll8jps345br3y4aqhynyr48mxiwi4c7s"; /* updated by script */
+      sha256 = "055hy5jy5151x3gf8hn7ar36br545qr253fz9wrc3b49wydg01x1"; /* updated by script */
     };
     wmClass = "jetbrains-idea-ce";
     update-channel = "IntelliJ IDEA RELEASE";
@@ -302,25 +320,38 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2020.1"; /* updated by script */
+    version = "2020.2.1"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}-no-jbr.tar.gz";
-      sha256 = "0lrimmczl49azwsms56l4dg7himzr991a209r921jxa32rdjfq6x"; /* updated by script */
+      sha256 = "1g18l3malsyn7dij4w83yfcsb8msa0s89mzlld3dby8hr9bq0aqm"; /* updated by script */
     };
     wmClass = "jetbrains-idea";
     update-channel = "IntelliJ IDEA RELEASE";
   };
 
+  mps = buildMps rec {
+    name = "mps-${version}";
+    version = "2020.1.4"; /* updated by script */
+    description = "Create your own domain-specific language";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/mps/2020.1/MPS-${version}.tar.gz";
+      sha256 = "1j5n100fl8yvfla2slm95wv499azwzzxigp1kdcaj8xbc0a0mp7c"; /* updated by script */
+    };
+    wmClass = "jetbrains-mps";
+    update-channel = "MPS RELEASE";
+  };
+
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2020.1"; /* updated by script */
+    version = "2020.2.1"; /* updated by script */
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "1yvqljjv6004kw2nkpddrsgnigb56rapgs3f1pcvl20h6hj08qj8"; /* updated by script */
+      sha256 = "14hz6w5lgn8ddscicm4s9xhi07j5adsq0bmyr8amzmj5q6jgw4p9"; /* updated by script */
     };
     wmClass = "jetbrains-phpstorm";
     update-channel = "PhpStorm RELEASE";
@@ -328,12 +359,12 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2020.1"; /* updated by script */
+    version = "2020.2.1"; /* updated by script */
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1ld9hh9bxirsv5rwrx7wbmfaxwvxfw7cjfjqi8l0q0n93v89z90s"; /* updated by script */
+      sha256 = "0kml58v6clqj0j0vlvghrywxym2n9h41izazzn4srn7wjj9010fa"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm-ce";
     update-channel = "PyCharm RELEASE";
@@ -341,12 +372,12 @@ in
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2020.1"; /* updated by script */
+    version = "2020.2.1"; /* updated by script */
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1swd2qfhsa6i1aq7z2s183d0hif2gmk1kkw9ns4aybny0wvvnqw2"; /* updated by script */
+      sha256 = "0ml9fg1dlfg8sdp9n8nlsj7z88dx0ac1kvlpk61p7q5di1lyxc94"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm";
     update-channel = "PyCharm RELEASE";
@@ -354,12 +385,12 @@ in
 
   rider = buildRider rec {
     name = "rider-${version}";
-    version = "2020.1.0"; /* updated by script */
+    version = "2020.2.1"; /* updated by script */
     description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/rider/JetBrains.Rider-${version}.tar.gz";
-      sha256 = "1allpdr7k48nvl8vbvzyn6h81jpklzaqdqivrqqyh8hy9l98w4ws"; /* updated by script */
+      sha256 = "0xrk7n0mprzy7dfkx3vj5wasw5031jl61qkh89y6w031hp77vq7n"; /* updated by script */
     };
     wmClass = "jetbrains-rider";
     update-channel = "Rider RELEASE";
@@ -367,12 +398,12 @@ in
 
   ruby-mine = buildRubyMine rec {
     name = "ruby-mine-${version}";
-    version = "2020.1"; /* updated by script */
+    version = "2020.2.1"; /* updated by script */
     description = "The Most Intelligent Ruby and Rails IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
-      sha256 = "1hk6k4f24infw9qj9mxp305nl0bxif6ymdsqg005pskvnyi8v5fi"; /* updated by script */
+      sha256 = "1pkzql710bc4qdz5pdhh0yx9wkqx85qwkwm1jvvvxbvbsj299vcb"; /* updated by script */
     };
     wmClass = "jetbrains-rubymine";
     update-channel = "RubyMine RELEASE";
@@ -380,12 +411,12 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "2020.1"; /* updated by script */
+    version = "2020.2.1"; /* updated by script */
     description = "Professional IDE for Web and JavaScript development";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "1c68li5jxsjml0macdb0s04llwwq1hni5z8vq2zdfcn5zm3xwpif"; /* updated by script */
+      sha256 = "1sx67bms90fsc1bf6pqz1rd1x9aysj0xxb8d7cnclz6bv8kzhgfp"; /* updated by script */
     };
     wmClass = "jetbrains-webstorm";
     update-channel = "WebStorm RELEASE";

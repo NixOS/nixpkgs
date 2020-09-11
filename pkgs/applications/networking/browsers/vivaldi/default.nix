@@ -1,10 +1,11 @@
 { stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE
 , libXfixes, libXt, libXi, libXcursor, libXScrnSaver, libXcomposite, libXdamage, libXtst, libXrandr
-, alsaLib, dbus, cups, libexif, ffmpeg, systemd
+, alsaLib, dbus, cups, libexif, ffmpeg_3, systemd
 , freetype, fontconfig, libXft, libXrender, libxcb, expat
 , libuuid
-, gstreamer, gst-plugins-base, libxml2
+, libxml2
 , glib, gtk3, pango, gdk-pixbuf, cairo, atk, at-spi2-atk, at-spi2-core, gnome2
+, libdrm, mesa
 , nss, nspr
 , patchelf, makeWrapper
 , isSnapshot ? false
@@ -17,11 +18,11 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "2.11.1811.52-1";
+  version = "3.1.1929.45-1";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}_amd64.deb";
-    sha256 = "0bq9ggk75xzka2nbrnc7vghq8s7jjy9nbfmyrf51kf0nni1zg1fp";
+    sha256 = "0pg16zs9fcr6b360igszpkia3i8i5xf4m0hs1b2a17lf8vkldix9";
   };
 
   unpackPhase = ''
@@ -34,9 +35,10 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb
     libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
-    atk at-spi2-atk at-spi2-core alsaLib dbus cups gtk3 gdk-pixbuf libexif ffmpeg systemd
+    atk at-spi2-atk at-spi2-core alsaLib dbus cups gtk3 gdk-pixbuf libexif ffmpeg_3 systemd
     freetype fontconfig libXrender libuuid expat glib nss nspr
-    gstreamer libxml2 gst-plugins-base pango cairo gnome2.GConf
+    libxml2 pango cairo gnome2.GConf
+    libdrm mesa
   ] ++ stdenv.lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs;
 
   libPath = stdenv.lib.makeLibraryPath buildInputs
@@ -88,7 +90,7 @@ in stdenv.mkDerivation rec {
     description = "A Browser for our Friends, powerful and personal";
     homepage    = "https://vivaldi.com";
     license     = licenses.unfree;
-    maintainers = with maintainers; [ otwieracz nequissimus ];
+    maintainers = with maintainers; [ otwieracz nequissimus badmutex ];
     platforms   = [ "x86_64-linux" ];
   };
 }

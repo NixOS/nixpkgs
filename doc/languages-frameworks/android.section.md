@@ -167,7 +167,7 @@ parameters that the SDK composition function (the function shown in the
 previous section) supports.
 
 This build function is particularly useful when it is desired to use
-[Hydra](http://nixos.org/hydra): the Nix-based continuous integration solution
+[Hydra](https://nixos.org/hydra): the Nix-based continuous integration solution
 to build Android apps. An Android APK gets exposed as a build product and can be
 installed on any Android device with a web browser by navigating to the build
 result page.
@@ -190,6 +190,8 @@ androidenv.emulateApp {
   systemImageType = "google_apis_playstore";
 }
 ```
+
+Additional flags may be applied to the Android SDK's emulator through the runtime environment variable `$NIX_ANDROID_EMULATOR_FLAGS`.
 
 It is also possible to specify an APK to deploy inside the emulator
 and the package and activity names to launch it:

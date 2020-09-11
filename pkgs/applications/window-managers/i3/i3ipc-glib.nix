@@ -6,13 +6,13 @@
 stdenv.mkDerivation rec {
 
   pname = "i3ipc-glib";
-  version = "0.6.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "acrisci";
     repo = "i3ipc-glib";
     rev = "v${version}";
-    sha256 = "1gmk1zjafrn6jh4j7r0wkwrpwvf9drl1lcw8vya23i1f4zbk0wh4";
+    sha256 = "01fzvrbnzcwx0vxw29igfpza9zwzp2s7msmzb92v01z0rz0y5m0p";
   };
 
   nativeBuildInputs = [ autoreconfHook which pkgconfig ];

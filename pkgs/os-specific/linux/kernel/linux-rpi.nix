@@ -1,8 +1,8 @@
 { stdenv, lib, buildPackages, fetchFromGitHub, perl, buildLinux, rpiVersion, ... } @ args:
 
 let
-  modDirVersion = "4.19.75";
-  tag = "1.20190925";
+  modDirVersion = "4.19.118";
+  tag = "1.20200601";
 in
 lib.overrideDerivation (buildLinux (args // {
   version = "${modDirVersion}-${tag}";
@@ -12,13 +12,13 @@ lib.overrideDerivation (buildLinux (args // {
     owner = "raspberrypi";
     repo = "linux";
     rev = "raspberrypi-kernel_${tag}-1";
-    sha256 = "0l91kb4jjxg4fcp7d2aqm1fj34ns137rys93k907mdgnarcliafs";
+    sha256 = "11jzsmnd1qry2ir9vmsv0nfdzjpgkn5yab5ylxcz406plc073anp";
   };
 
   defconfig = {
     "1" = "bcmrpi_defconfig";
     "2" = "bcm2709_defconfig";
-    "3" = "bcmrpi3_defconfig";
+    "3" = if stdenv.hostPlatform.isAarch64 then "bcmrpi3_defconfig" else "bcm2709_defconfig";
     "4" = "bcm2711_defconfig";
   }.${toString rpiVersion};
 

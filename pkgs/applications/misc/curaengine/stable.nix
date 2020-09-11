@@ -25,6 +25,5 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Ultimaker/CuraEngine";
     license = licenses.agpl3;
     platforms = platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };
 }

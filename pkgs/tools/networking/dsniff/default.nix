@@ -14,7 +14,7 @@ let
   };
   pcap = symlinkJoin {
     inherit (libpcap) name;
-    paths = [ libpcap ];
+    paths = [ (libpcap.overrideAttrs(old: { dontDisableStatic = true; })) ];
     postBuild = ''
       cp -rs $out/include/pcap $out/include/net
       # prevent references to libpcap

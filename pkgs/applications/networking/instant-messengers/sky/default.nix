@@ -4,7 +4,7 @@
 , curl, sqlite, openssl
 , libuuid, openh264, libv4l, libxkbfile, libXv, zlib, libXmu
 , libXtst, libXdamage, pam, libXfixes, libXrender, libjpeg_original
-, ffmpeg
+, ffmpeg_3
 }:
  let
    # Sky is linked to the libjpeg 8 version and checks for the version number in the code.
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     file
     qt5.qtbase
     SDL
-    ffmpeg
+    ffmpeg_3
     sqlite
     openssl
     openh264

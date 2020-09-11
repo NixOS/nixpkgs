@@ -4,8 +4,6 @@ buildGoModule rec {
   pname = "gopkgs";
   version = "2.1.2";
 
-  goPackagePath = "github.com/uudashr/gopkgs";
-
   subPackages = [ "cmd/gopkgs" ];
 
   src = fetchFromGitHub {
@@ -15,7 +13,9 @@ buildGoModule rec {
     sha256 = "1jak1bg6k5iasscw68ra875k59k3iqhka2ykabsd427k1j3mypln";
   };
 
-  modSha256 = "0v9lg5kq3776b2s4kgyi19jy8shjqrr0f5ljrchsj1k7867sxiw7";
+  vendorSha256 = "1pwsc488ldw039by8nqpni801zry7dnf0rx4hhd73xpv2w7s8n2r";
+
+  doCheck = false;
 
   meta = {
     description = "Tool to get list available Go packages.";

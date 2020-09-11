@@ -9,7 +9,7 @@ let
   allBass = {
     bass = {
       h = "bass.h";
-      version = "2.4.14";
+      version = "2.4.15";
       so = {
         i686_linux = "libbass.so";
         x86_64-linux = "x64/libbass.so";

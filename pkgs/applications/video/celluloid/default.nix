@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , meson
 , ninja
 , python3
@@ -48,6 +49,12 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Simple GTK frontend for the mpv video player";

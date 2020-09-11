@@ -31,19 +31,21 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-blas-libs=-lcblas"
     "--with-lapack-libs=-llapacke"
-  ] ++ stdenv.lib.optionals stdenv.isx86_64 {
+  ] ++ stdenv.lib.optionals stdenv.isx86_64 [
     # disable SIMD instructions (which are enabled *when available* by default)
     # for now we need to be careful to disable *all* relevant versions of an instruction set explicitly (https://github.com/linbox-team/fflas-ffpack/issues/284)
-    default        = [ "--disable-sse3" "--disable-ssse3" "--disable-sse41" "--disable-sse42" "--disable-avx" "--disable-avx2" "--disable-avx512f" "--disable-avx512dq" "--disable-avx512vl" "--disable-fma" "--disable-fma4" ];
-    westmere       = [                                                                        "--disable-avx" "--disable-avx2" "--disable-avx512f" "--disable-avx512dq" "--disable-avx512vl" "--disable-fma" "--disable-fma4" ];
-    sandybridge    = [                                                                                        "--disable-avx2" "--disable-avx512f" "--disable-avx512dq" "--disable-avx512vl" "--disable-fma" "--disable-fma4" ];
-    ivybridge      = [                                                                                        "--disable-avx2" "--disable-avx512f" "--disable-avx512dq" "--disable-avx512vl" "--disable-fma" "--disable-fma4" ];
-    haswell        = [                                                                                                                                                                       "--disable-fma4" ];
-    broadwell      = [                                                                                                                                                                       "--disable-fma4" ];
-    skylake        = [                                                                                                                                                                       "--disable-fma4" ];
-    skylake-avx512 = [                                                                                                                                                                       "--disable-fma4" ];
-  }.${stdenv.hostPlatform.platform.gcc.arch or "default"};
-
+    "--${if stdenv.hostPlatform.sse3Support   then "enable" else "disable"}-sse3"
+    "--${if stdenv.hostPlatform.ssse3Support  then "enable" else "disable"}-ssse3"
+    "--${if stdenv.hostPlatform.sse4_1Support then "enable" else "disable"}-sse41"
+    "--${if stdenv.hostPlatform.sse4_2Support then "enable" else "disable"}-sse42"
+    "--${if stdenv.hostPlatform.avxSupport    then "enable" else "disable"}-avx"
+    "--${if stdenv.hostPlatform.avx2Support   then "enable" else "disable"}-avx2"
+    "--${if stdenv.hostPlatform.avx512Support then "enable" else "disable"}-avx512f"
+    "--${if stdenv.hostPlatform.avx512Support then "enable" else "disable"}-avx512dq"
+    "--${if stdenv.hostPlatform.avx512Support then "enable" else "disable"}-avx512vl"
+    "--${if stdenv.hostPlatform.fmaSupport    then "enable" else "disable"}-fma"
+    "--${if stdenv.hostPlatform.fma4Support   then "enable" else "disable"}-fma4"
+  ];
   doCheck = true;
 
   meta = with stdenv.lib; {

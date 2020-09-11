@@ -8,11 +8,11 @@ with stdenv.lib;
 
 buildGoPackage rec {
   pname = "gitea";
-  version = "1.11.4";
+  version = "1.12.4";
 
   src = fetchurl {
     url = "https://github.com/go-gitea/gitea/releases/download/v${version}/gitea-src-${version}.tar.gz";
-    sha256 = "18k6kcdq0ijpzgay2aq1w95qkgfvrn1dgh4cxyj9c4i0pwb3ar7f";
+    sha256 = "0zz3mwf1yhncvi6pl52lcwbl7k4kkrqyw8q3476akwszjn79n83c";
   };
 
   unpackPhase = ''
@@ -22,7 +22,9 @@ buildGoPackage rec {
 
   sourceRoot = "source";
 
-  patches = [ ./static-root-path.patch ];
+  patches = [
+    ./static-root-path.patch
+  ];
 
   postPatch = ''
     patchShebangs .
@@ -44,7 +46,7 @@ buildGoPackage rec {
     )
   '';
 
-  outputs = [ "bin" "out" "data" ];
+  outputs = [ "out" "data" ];
 
   postInstall = ''
     mkdir $data
@@ -52,7 +54,7 @@ buildGoPackage rec {
     mkdir -p $out
     cp -R ./go/src/${goPackagePath}/options/locale $out/locale
 
-    wrapProgram $bin/bin/gitea \
+    wrapProgram $out/bin/gitea \
       --prefix PATH : ${makeBinPath [ bash git gzip openssh ]}
   '';
 

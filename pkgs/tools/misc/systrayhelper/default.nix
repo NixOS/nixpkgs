@@ -14,8 +14,6 @@ buildGoPackage rec {
     sha256 = "1iq643brha5q6w2v1hz5l3d1z0pqzqr43gpwih4cnx3m5br0wg2k";
   };
 
-  goDeps = ./deps.nix;
-
   # re date: https://github.com/NixOS/nixpkgs/pull/45997#issuecomment-418186178
   # > .. keep the derivation deterministic. Otherwise, we would have to rebuild it every time.
   buildFlagsArray = [ ''-ldflags=
@@ -36,6 +34,5 @@ buildGoPackage rec {
     license     = licenses.mit;
     # It depends on the inputs, i guess? not sure about solaris, for instance. go supports it though
     # I hope nix can figure this out?! ¯\\_(ツ)_/¯
-    platforms   = platforms.all;
   };
 }

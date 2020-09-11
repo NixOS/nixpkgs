@@ -12,13 +12,13 @@
 , libiberty
 }:
 let
-  version = "1.26.0";
+  version = "1.27.0";
 in
 gsmakeDerivation {
   name = "gnustep-base-${version}";
   src = fetchurl {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-base-${version}.tar.gz";
-    sha256 = "0ws16rwqx0qvqpyjsxbdylfpkgjr19nqc9i3b30wywqcqrkc12zn";
+    sha256 = "10xjrv5d443wzll6lf9y65p6v9kvx7xxklhsm1j05y93vwgzl0w8";
   };
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [

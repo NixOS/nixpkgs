@@ -44,7 +44,7 @@ let generic = { major, version, src }:
       homepage = "http://alloytools.org/";
       downloadPage = "http://alloytools.org/download.html";
       license = licenses.mit;
-      platforms = platforms.linux;
+      platforms = platforms.unix;
       maintainers = with maintainers; [ notbandali ];
     };
   };

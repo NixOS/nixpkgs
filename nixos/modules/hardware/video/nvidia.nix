@@ -34,10 +34,12 @@ let
   enabled = nvidia_x11 != null;
 
   cfg = config.hardware.nvidia;
+
   pCfg = cfg.prime;
   syncCfg = pCfg.sync;
   offloadCfg = pCfg.offload;
   primeEnabled = syncCfg.enable || offloadCfg.enable;
+  nvidiaPersistencedEnabled =  cfg.nvidiaPersistenced;
 in
 
 {
@@ -50,6 +52,15 @@ in
     ];
 
   options = {
+    hardware.nvidia.powerManagement.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Experimental power management through systemd. For more information, see
+        the NVIDIA docs, on Chapter 21. Configuring Power Management Support.
+      '';
+    };
+
     hardware.nvidia.modesetting.enable = mkOption {
       type = types.bool;
       default = false;
@@ -127,6 +138,15 @@ in
         If this is enabled, then the bus IDs of the NVIDIA and Intel GPUs have to be
         specified (<option>hardware.nvidia.prime.nvidiaBusId</option> and
         <option>hardware.nvidia.prime.intelBusId</option>).
+      '';
+    };
+
+    hardware.nvidia.nvidiaPersistenced = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Update for NVIDA GPU headless mode, i.e. nvidia-persistenced. It ensures all
+        GPUs stay awake even during headless mode.
       '';
     };
   };
@@ -215,6 +235,46 @@ in
     environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
       ++ filter (p: p != null) [ nvidia_x11.persistenced ];
 
+    systemd.packages = optional cfg.powerManagement.enable nvidia_x11.out;
+
+    systemd.services = let
+      baseNvidiaService = state: {
+        description = "NVIDIA system ${state} actions";
+
+        path = with pkgs; [ kbd ];
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = "${nvidia_x11.out}/bin/nvidia-sleep.sh '${state}'";
+        };
+      };
+
+      nvidiaService = sleepState: (baseNvidiaService sleepState) // {
+        before = [ "systemd-${sleepState}.service" ];
+        requiredBy = [ "systemd-${sleepState}.service" ];
+      };
+
+      services = (builtins.listToAttrs (map (t: nameValuePair "nvidia-${t}" (nvidiaService t)) ["hibernate" "suspend"]))
+        // {
+          nvidia-resume = (baseNvidiaService "resume") // {
+            after = [ "systemd-suspend.service" "systemd-hibernate.service" ];
+            requiredBy = [ "systemd-suspend.service" "systemd-hibernate.service" ];
+          };
+        };
+    in optionalAttrs cfg.powerManagement.enable services
+      // optionalAttrs nvidiaPersistencedEnabled {
+        "nvidia-persistenced" = mkIf nvidiaPersistencedEnabled {
+          description = "NVIDIA Persistence Daemon";
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig = {
+            Type = "forking";
+            Restart = "always";
+            PIDFile = "/var/run/nvidia-persistenced/nvidia-persistenced.pid";
+            ExecStart = "${nvidia_x11.persistenced}/bin/nvidia-persistenced --verbose";
+            ExecStopPost = "${pkgs.coreutils}/bin/rm -rf /var/run/nvidia-persistenced";
+          };
+        };
+      };
+
     systemd.tmpfiles.rules = optional config.virtualisation.docker.enableNvidia
         "L+ /run/nvidia-docker/bin - - - - ${nvidia_x11.bin}/origBin"
       ++ optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
@@ -227,7 +287,8 @@ in
       optionals config.services.xserver.enable [ "nvidia" "nvidia_modeset" "nvidia_drm" ];
 
     # If requested enable modesetting via kernel parameter.
-    boot.kernelParams = optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1";
+    boot.kernelParams = optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1"
+      ++ optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1";
 
     # Create /dev/nvidia-uvm when the nvidia-uvm module is loaded.
     services.udev.extraRules =

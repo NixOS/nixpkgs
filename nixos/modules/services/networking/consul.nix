@@ -179,15 +179,15 @@ in
             (filterAttrs (n: _: hasPrefix "consul.d/" n) config.environment.etc);
 
         serviceConfig = {
-          ExecStart = "@${cfg.package.bin}/bin/consul consul agent -config-dir /etc/consul.d"
+          ExecStart = "@${cfg.package}/bin/consul consul agent -config-dir /etc/consul.d"
             + concatMapStrings (n: " -config-file ${n}") configFiles;
-          ExecReload = "${cfg.package.bin}/bin/consul reload";
+          ExecReload = "${cfg.package}/bin/consul reload";
           PermissionsStartOnly = true;
           User = if cfg.dropPrivileges then "consul" else null;
           Restart = "on-failure";
           TimeoutStartSec = "infinity";
         } // (optionalAttrs (cfg.leaveOnStop) {
-          ExecStop = "${cfg.package.bin}/bin/consul leave";
+          ExecStop = "${cfg.package}/bin/consul leave";
         });
 
         path = with pkgs; [ iproute gnugrep gawk consul ];
@@ -238,7 +238,7 @@ in
 
         serviceConfig = {
           ExecStart = ''
-            ${cfg.alerts.package.bin}/bin/consul-alerts start \
+            ${cfg.alerts.package}/bin/consul-alerts start \
               --alert-addr=${cfg.alerts.listenAddr} \
               --consul-addr=${cfg.alerts.consulAddr} \
               ${optionalString cfg.alerts.watchChecks "--watch-checks"} \

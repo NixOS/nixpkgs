@@ -3,9 +3,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "xfconf";
-  version = "4.14.1";
+  version = "4.14.3";
 
-  sha256 = "1mbqc1463xgn7gafbh2fyshshdxin33iwk96y4nw2gl48nhx4sgs";
+  sha256 = "0yxpdcyz81di7w9493jzps09bgrlgianjj5abnzahqmkpmpvb0rh";
 
   buildInputs = [ libxfce4util ];
 

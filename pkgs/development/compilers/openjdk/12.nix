@@ -55,6 +55,7 @@ let
 
     configureFlags = [
       "--with-boot-jdk=${openjdk11.home}"
+      "--with-version-pre="
       "--enable-unlimited-crypto"
       "--with-native-debug-symbols=internal"
       "--with-libjpeg=system"
@@ -114,7 +115,7 @@ let
       # Set JAVA_HOME automatically.
       mkdir -p $out/nix-support
       cat <<EOF > $out/nix-support/setup-hook
-      if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out/lib/openjdk; fi
+      if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out/lib/openjdk; fi
       EOF
     '';
 

@@ -79,7 +79,7 @@ def cli(jobset):
     and print a summary of failed builds
     """
 
-    url = "http://hydra.nixos.org/jobset/{}".format(jobset)
+    url = "https://hydra.nixos.org/jobset/{}".format(jobset)
 
     # get the last evaluation
     click.echo(click.style(

@@ -111,7 +111,7 @@
     </para>
     <para>
      The exact syntax and semantics of the Nix expression language, including the built-in function, are described in the Nix manual in the <link
-    xlink:href="http://hydra.nixos.org/job/nix/trunk/tarball/latest/download-by-type/doc/manual/#chap-writing-nix-expressions">chapter on writing Nix expressions</link>.
+    xlink:href="https://hydra.nixos.org/job/nix/trunk/tarball/latest/download-by-type/doc/manual/#chap-writing-nix-expressions">chapter on writing Nix expressions</link>.
     </para>
    </listitem>
    <listitem>

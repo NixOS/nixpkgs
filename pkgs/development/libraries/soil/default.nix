@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, mesa, libX11 }:
+{ stdenv, fetchurl, unzip, mesa, libX11, libGL }:
 
 stdenv.mkDerivation {
   name = "soil";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "00gpwp9dldzhsdhksjvmbhsd2ialraqbv6v6dpikdmpncj6mnc52";
   };
 
-  buildInputs = [ unzip mesa libX11 ];
+  buildInputs = [ unzip mesa libGL libX11 ];
 
   sourceRoot = "Simple OpenGL Image Library/projects/makefile";
   preBuild   = "mkdir obj";

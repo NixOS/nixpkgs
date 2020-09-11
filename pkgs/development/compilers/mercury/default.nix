@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mercury";
-  version = "20.01.1";
+  version = "20.06";
 
   src = fetchurl {
     url    = "https://dl.mercurylang.org/release/mercury-srcdist-${version}.tar.gz";
-    sha256 = "0vxp9f0jmr228n13p6znhbxncav6ay0bnl4ypy6r3lw5lh7z172p";
+    sha256 = "1gkr9w8lsdzqykqwd3f1a1phsqv090648i14ilhv8jdg85frdimr";
   };
 
   buildInputs = [ gcc flex bison texinfo jdk erlang makeWrapper

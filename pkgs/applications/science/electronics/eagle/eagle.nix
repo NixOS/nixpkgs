@@ -13,11 +13,11 @@ let
   in
   mkDerivation rec {
     pname = "eagle";
-    version = "9.6.0";
+    version = "9.6.2";
 
     src = fetchurl {
       url = "https://eagle-updates.circuits.io/downloads/${builtins.replaceStrings ["."] ["_"] version}/Autodesk_EAGLE_${version}_English_Linux_64bit.tar.gz";
-      sha256 = "1crkyc7ws2zz5dfs00h6rj4z2hyqb97kp6r4hxhmcgg5647ij4z8";
+      sha256 = "18syygnskl286kn8aqfzzdsyzq59d2w19y1h1ynyxsnrvkyv71h0";
     };
 
     desktopItem = makeDesktopItem {
@@ -27,7 +27,7 @@ let
       comment = "Schematic capture and PCB layout";
       desktopName = "Eagle";
       genericName = "Schematic editor";
-      categories = "Application;Development;";
+      categories = "Development;";
     };
 
     buildInputs =

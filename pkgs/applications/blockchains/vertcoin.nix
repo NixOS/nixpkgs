@@ -19,7 +19,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "vertcoin";
-  version = "0.14.0";
+  version = "0.15.0.1";
 
   name = pname + toString (optional (!withGui) "d") + "-" + version;
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = pname + "-project";
     repo = pname + "-core";
     rev = version;
-    sha256 = "00vnmrhn5mad58dyiz8rxgsrn0663ii6fdbcqm20mv1l313k4882";
+    sha256 = "09q7qicw52gv225hq6wlpsf4zr4hjc8miyim5cygi5nxxrlw7kd3";
   };
 
   nativeBuildInputs = [

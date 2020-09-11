@@ -1,20 +1,20 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "scc";
-  version = "2.11.0";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "boyter";
     repo = "scc";
     rev = "v${version}";
-    sha256 = "1wk6s9ga9rkywgqys960s6fz4agwzh3ac2l6cpcr7kca4379s28k";
+    sha256 = "16p5g20n5jsbisbgikk9xny94xx6c0dxf19saa686ghh31jr2hh3";
   };
 
-  goPackagePath = "github.com/boyter/scc";
+  vendorSha256 = null;
 
   # scc has a scripts/ sub-package that's for testing.
-  subPackages = [ "./" ];
+  excludedPackages = [ "scripts" ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/boyter/scc";

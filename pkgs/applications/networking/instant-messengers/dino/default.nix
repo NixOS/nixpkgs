@@ -4,6 +4,7 @@
 , xorg, libXdmcp, libxkbcommon
 , libnotify, libsoup, libgee
 , librsvg, libsignal-protocol-c
+, fetchpatch
 , libgcrypt
 , epoxy
 , at-spi2-core
@@ -25,6 +26,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "1k5cgj5n8s40i71wqdh6m1q0njl45ichfdbbywx9rga5hljz1c54";
   };
+
+  patches = [
+    (fetchpatch {
+      # Allow newer versions of libsignal-protocol-c
+      url = "https://github.com/dino/dino/commit/fbd70ceaac5ebbddfa21a580c61165bf5b861303.patch";
+      sha256 = "0ydpwsmwrzfsry89fsffkfalhki4n1dw99ixjvpiingdrhjmwyl2";
+      excludes = [ "plugins/signal-protocol/libsignal-protocol-c" ];
+    })
+  ];
 
   nativeBuildInputs = [
     vala

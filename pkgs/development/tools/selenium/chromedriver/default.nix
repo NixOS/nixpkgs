@@ -1,17 +1,17 @@
 { stdenv, fetchurl, cairo, fontconfig, freetype, gdk-pixbuf, glib
 , glibc, gtk2, libX11, makeWrapper, nspr, nss, pango, unzip, gconf
-, libXi, libXrender, libXext
+, libxcb, libXi, libXrender, libXext
 }:
 let
   allSpecs = {
     x86_64-linux = {
       system = "linux64";
-      sha256 = "1mqsangjindfqgvjxgmpgfrcd8a2lqmwl587l0ip0p5wwz8yq5wi";
+      sha256 = "0absr1fp2h87gpyw6jxj2f08sbhkkh3pf13145hfyzdvajj5rfjy";
     };
 
     x86_64-darwin = {
       system = "mac64";
-      sha256 = "18ydf2bk5aiin3yffb9z8215idz65nkhgxq0mmlvwb8gwsdvnwi1";
+      sha256 = "1p9k92fgyx0xis6r50vhcpx3iws2gaspq3dnpigglv3bj9yg8zvi";
     };
   };
 
@@ -23,12 +23,12 @@ let
     cairo fontconfig freetype
     gdk-pixbuf glib gtk2 gconf
     libX11 nspr nss pango libXrender
-    gconf libXext libXi
+    gconf libxcb libXext libXi
   ];
 in
 stdenv.mkDerivation rec {
   pname = "chromedriver";
-  version = "81.0.4044.69";
+  version = "85.0.4183.87";
 
   src = fetchurl {
     url = "https://chromedriver.storage.googleapis.com/${version}/chromedriver_${spec.system}.zip";
