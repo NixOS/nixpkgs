@@ -54,6 +54,11 @@
    </listitem>
    <listitem>
     <para>
+     Python package pytricia upgraded to 1.0.2.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      Two new options, <link linkend="opt-services.openssh.authorizedKeysCommand">authorizedKeysCommand</link>
      and <link linkend="opt-services.openssh.authorizedKeysCommandUser">authorizedKeysCommandUser</link>, have
      been added to the <literal>openssh</literal> module. If you have <literal>AuthorizedKeysCommand</literal>
