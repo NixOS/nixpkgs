@@ -9839,6 +9839,8 @@ in
 
   zulip = callPackage ../applications/networking/instant-messengers/zulip { };
 
+  zulip-term = callPackage ../applications/networking/instant-messengers/zulip-term { };
+
   zulu8 = callPackage ../development/compilers/zulu/8.nix { };
   zulu = callPackage ../development/compilers/zulu { };
 
