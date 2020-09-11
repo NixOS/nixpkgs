@@ -102,4 +102,15 @@ rec {
       x86_64-darwin = "1gk6sgd9gdc6nr64mdfj6lhzdi6ixi5c1r0i1b7bhkg2xycx5cnbgjycrpqh17h6wbp68dz4mkg5hf1y3527hdwypa9k0sqdg3yrdb8";
     };
   };
+
+  # v5.0.0
+
+  sdk_5_0 = buildNetCoreSdk {
+    version = "5.0.100-preview.8.20417.9";
+    sha512 = {
+      x86_64-linux = "2a4m4jb75hc0l135pjpinawlc0jr3rz9hyfm22kkaqs5wacwj5d87lsds2wvp2jf7r1f445098sg65l6az9zqwg4da52qrvcv1ck1hd";
+      aarch64-linux = "1zb5f3ihlcjbij6sa9nfvj9rn4frhdbiw0nplqm8lf8q2z2y7h210p8r4l1qwkkm080185kj7kgd2hja54hddgghva26jpq6r36b7hj";
+      x86_64-darwin = "0c5cj6b0kc4nrsbxfmal4c1z5anqbxr6gd6knpqfb6m30z37qiks16xakacrm69313wmqpr9mmyiwpj38gcsw2dam9hgzawibwnv4fv";
+    };
+  };
 }
