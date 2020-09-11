@@ -130,8 +130,6 @@ stdenv.mkDerivation rec {
       ];
       paths-lib = [
         "lib/alsa-lib/libasound_module_pcm_pipewire.so"
-        "lib/pipewire-0.3/jack"
-        "lib/pipewire-0.3/pulse"
         "share/alsa-card-profile/mixer"
       ];
     };
