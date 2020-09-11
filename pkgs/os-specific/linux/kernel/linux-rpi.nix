@@ -1,8 +1,8 @@
 { stdenv, lib, buildPackages, fetchFromGitHub, perl, buildLinux, rpiVersion, ... } @ args:
 
 let
-  modDirVersion = "4.19.118";
-  tag = "1.20200601";
+  modDirVersion = "5.4.51";
+  tag = "1.20200819";
 in
 lib.overrideDerivation (buildLinux (args // {
   version = "${modDirVersion}-${tag}";
@@ -12,7 +12,7 @@ lib.overrideDerivation (buildLinux (args // {
     owner = "raspberrypi";
     repo = "linux";
     rev = "raspberrypi-kernel_${tag}-1";
-    sha256 = "11jzsmnd1qry2ir9vmsv0nfdzjpgkn5yab5ylxcz406plc073anp";
+    sha256 = "0n23q5mm2jyi42m0a45mx0add12pcc5jmfkd858s3v2d5g3bb1f0";
   };
 
   defconfig = {
@@ -21,6 +21,11 @@ lib.overrideDerivation (buildLinux (args // {
     "3" = if stdenv.hostPlatform.isAarch64 then "bcmrpi3_defconfig" else "bcm2709_defconfig";
     "4" = "bcm2711_defconfig";
   }.${toString rpiVersion};
+
+  extraConfig = ''
+    # ../drivers/pci/controller/pcie-altera.c:679:8: error: too few arguments to function 'devm_of_pci_get_host_bridge_resources'
+    PCIE_ALTERA n
+  '';
 
   features = {
     efiBootStub = false;
