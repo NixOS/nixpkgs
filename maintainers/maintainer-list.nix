@@ -8919,6 +8919,16 @@
     githubId = 687198;
     name = "Yuri Aisaka";
   };
+  yurkobb = {
+    name = "Yury Bulka";
+    email = "setthemfree@privacyrequired.com";
+    github = "yurkobb";
+    githubId = 479389;
+    keys = [{
+      longkeyid = "rsa4096/0xD834635CA9470CA2";
+      fingerprint = "36DD 7515 B47D E2C9 9057  D440 D834 635C A947 0CA2";
+    }];
+  };
   yurrriq = {
     email = "eric@ericb.me";
     github = "yurrriq";

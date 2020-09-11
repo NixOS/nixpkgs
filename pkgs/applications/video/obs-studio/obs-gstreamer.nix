@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     description = "GStreamer OBS Studio plugin";
     homepage = "https://github.com/fzwoch/obs-gstreamer";
     license = licenses.gpl2;
+    maintainers = with maintainers; [ yurkobb ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }
