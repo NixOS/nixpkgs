@@ -1486,6 +1486,7 @@ self: super: {
     # brittany has an aeson upper bound of 1.5
     brittany = hls-brittany;
     data-tree-print = doJailbreak super.data-tree-print;
+    ghc-exactprint = dontCheck super.ghc-exactprint_0_6_3_2;
   };
   in {
     # jailbreaking for hie-bios 0.7.0 (upstream PR: https://github.com/haskell/haskell-language-server/pull/357)
