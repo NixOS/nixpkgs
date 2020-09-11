@@ -3971,6 +3971,7 @@ broken-packages:
   - compdata-automata
   - compdata-dags
   - compdata-param
+  - compdoc
   - competition
   - compilation
   - complexity
@@ -3978,6 +3979,7 @@ broken-packages:
   - composite-aeson
   - composite-aeson-path
   - composite-aeson-refined
+  - composite-aeson-throw
   - composite-binary
   - composite-ekg
   - composite-opaleye
