@@ -1459,16 +1459,16 @@ self: super: {
 
   # We want the latest version of cryptonite. This is a first step towards
   # resolving https://github.com/NixOS/nixpkgs/issues/81915.
-  cryptonite = self.cryptonite_0_27;
+  cryptonite = doDistribute self.cryptonite_0_27;
 
   # We want the latest version of Pandoc.
-  hslua = self.hslua_1_1_2;
-  jira-wiki-markup = self.jira-wiki-markup_1_3_2;
-  pandoc = self.pandoc_2_10_1;
-  pandoc-citeproc = self.pandoc-citeproc_0_17_0_2;
-  pandoc-plot = self.pandoc-plot_0_9_2_0;
-  pandoc-types = self.pandoc-types_1_21;
-  rfc5051 = self.rfc5051_0_2;
+  hslua = doDistribute self.hslua_1_1_2;
+  jira-wiki-markup = doDistribute self.jira-wiki-markup_1_3_2;
+  pandoc = doDistribute self.pandoc_2_10_1;
+  pandoc-citeproc = doDistribute self.pandoc-citeproc_0_17_0_2;
+  pandoc-plot = doDistribute self.pandoc-plot_0_9_2_0;
+  pandoc-types = doDistribute self.pandoc-types_1_21;
+  rfc5051 = doDistribute self.rfc5051_0_2;
 
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 
