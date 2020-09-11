@@ -29,6 +29,8 @@ buildPythonPackage rec {
 
   checkInputs = [ eventlet mock nose pytest pytz pyyaml sure ];
 
+  disabled = python.isPy2;
+
   # ignore test files which try to do socket.getprotocolname('tcp')
   # as it fails in sandbox mode due to lack of a /etc/protocols file
   checkPhase = ''
