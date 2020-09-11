@@ -1,7 +1,7 @@
 # https://nim-lang.github.io/Nim/packaging.html
 
 { stdenv, lib, fetchgit, fetchurl, makeWrapper, gdb, openssl, pcre, readline
-, boehmgc, sqlite, nim-unwrapped, nim-stdlib, nim }:
+, boehmgc, sqlite, nim-unwrapped, nim }:
 
 let
   version = "1.2.6";
@@ -106,7 +106,6 @@ let
     };
 
     unwrapped = stdenv.mkDerivation {
-      # https://nim-lang.github.io/Nim/packaging.html
       pname = "nim-unwrapped";
       inherit version src;
 
@@ -147,30 +146,12 @@ let
       installPhase = ''
         runHook preInstall
         install -Dt $out/bin bin/*
+        ln -sf $out/nim/bin/nim $out/bin/nim
+        ./install.sh $out
         runHook postInstall
       '';
 
       inherit meta;
-    };
-
-    stdlib = stdenv.mkDerivation {
-      pname = "nim-stdlib";
-      inherit (nim-unwrapped) version src patches;
-
-      dontConfigure = true;
-      dontBuild = true;
-
-      installPhase = ''
-        runHook preInstall
-        touch bin/nim
-        ./install.sh $TMPDIR
-        cp -r $TMPDIR/nim/lib $out
-        runHook postInstall
-      '';
-
-      meta = meta // {
-        description = meta.description + " (standard library)";
-      };
     };
   };
 
@@ -197,8 +178,12 @@ let
       "--prefix PATH : ${lib.makeBinPath [ stdenv.cc gdb ]}:${
         placeholder "out"
       }/bin"
-      "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.libc openssl ]}"
+      "--prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [ stdenv.cc.libc openssl ]
+      }"
       "--set NIM_CONFIG_PATH ${placeholder "out"}/etc/nim"
+      ''--set NIX_HARDENING_ENABLE "''${NIX_HARDENING_ENABLE/fortify}"''
+      # Fortify hardening appends -O2 to gcc flags which is unwanted for unoptimized nim builds.
     ];
 
     buildPhase = with stdenv;
@@ -227,20 +212,19 @@ let
 
         for binpath in ${nim}/bin/nim?*; do
           local binname=`basename $binpath`
-          makeWrapper $binpath $out/bin/${targetPlatform.config}-$binname \
+          makeWrapper \
+            $binpath $out/bin/${targetPlatform.config}-$binname \
             $wrapperArgs
           ln -s $out/bin/${targetPlatform.config}-$binname $out/bin/$binname
         done
 
-        makeWrapper ${nim}/bin/nim $out/bin/${targetPlatform.config}-nim \
-          $wrapperArgs \
-          --set NIX_HARDENING_ENABLE "''${NIX_HARDENING_ENABLE/fortify}" \
-          --add-flags --lib:${nim-stdlib}
+        makeWrapper \
+          ${nim}/nim/bin/nim $out/bin/${targetPlatform.config}-nim \
+          $wrapperArgs
         ln -s $out/bin/${targetPlatform.config}-nim $out/bin/nim
 
         runHook postBuild
-                '';
-    # Fortify hardening appends -O2 to gcc flags which is unwanted for unoptimized nim builds.
+      '';
 
     dontInstall = true;
 
