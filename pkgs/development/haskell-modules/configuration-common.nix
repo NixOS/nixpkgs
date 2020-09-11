@@ -1470,32 +1470,36 @@ self: super: {
   pandoc-types = doDistribute self.pandoc-types_1_21;
   rfc5051 = doDistribute self.rfc5051_0_2;
 
+  # Upstream forgot to change the Cabal version bounds in the test suite.
+  # See: https://github.com/jaspervdj/stylish-haskell/pull/297
+  # Will be fixed whenever they next bump the version number
+  stylish-haskell = appendPatch super.stylish-haskell (pkgs.fetchpatch {
+    url = "https://github.com/jaspervdj/stylish-haskell/commit/9550aa1cd177aa6fe271d075177109d66a79e67f.patch";
+    sha256 = "159jr80k40hdq5gpqfjknqx6vj2licx1l0f57l5r3k4264lnxjdb";
+  });
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 
 } // (let
-  inherit (self) hls-ghcide;
+  inherit (self) hls-ghcide hls-brittany;
   hlsScopeOverride = self: super: {
     # haskell-language-server uses its own fork of ghcide
     # Test disabled: it seems to freeze (is it just that it takes a long time ?)
-    ghcide = hls-ghcide;
+    ghcide = dontCheck hls-ghcide;
     # we are faster than stack here
     hie-bios = dontCheck super.hie-bios_0_7_1;
     lsp-test = dontCheck super.lsp-test_0_11_0_5;
     # fourmolu can‘t compile with an older aeson
     aeson = dontCheck super.aeson_1_5_2_0;
     # brittany has an aeson upper bound of 1.5
-    brittany = doJailbreak super.brittany;
+    brittany = hls-brittany;
+    data-tree-print = doJailbreak super.data-tree-print;
+    ghc-exactprint = dontCheck super.ghc-exactprint_0_6_3_2;
   };
   in {
     # jailbreaking for hie-bios 0.7.0 (upstream PR: https://github.com/haskell/haskell-language-server/pull/357)
     haskell-language-server = dontCheck (doJailbreak (super.haskell-language-server.overrideScope hlsScopeOverride));
-    hls-ghcide = appendPatch (dontCheck (super.hls-ghcide.overrideScope hlsScopeOverride))
-      (pkgs.fetchpatch {
-        # This patch loosens the hie-bios upper bound.
-        # It is already merged into upstream and won‘t be needed for ghcide 0.4.0
-        url = "https://github.com/haskell/ghcide/commit/3e1b3620948870a4da8808ca0c0897fbd3ecad16.patch";
-        sha256 = "1jwn7jgi740x6wwv1k0mz9d4z0b9p3mzs54pdg4nfq0h2v7zxchz";
-      });
-    fourmolu = super.fourmolu.overrideScope hlsScopeOverride;
+    hls-ghcide = dontCheck (super.hls-ghcide.overrideScope hlsScopeOverride);
+    hls-brittany = dontCheck (super.hls-brittany.overrideScope hlsScopeOverride);
+    fourmolu = dontCheck (super.fourmolu.overrideScope hlsScopeOverride);
   }
 )  // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
