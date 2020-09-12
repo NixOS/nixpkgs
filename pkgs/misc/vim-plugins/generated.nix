@@ -2398,6 +2398,18 @@ let
     meta.homepage = "https://github.com/preservim/nerdtree/";
   };
 
+  nerdtree-git-plugin = buildVimPluginFrom2Nix {
+    pname = "nerdtree-git-plugin";
+    version = "2020-09-11";
+    src = fetchFromGitHub {
+      owner = "Xuyuanp";
+      repo = "nerdtree-git-plugin";
+      rev = "a8c031f11dd312f53357729ca47ad493e798aa86";
+      sha256 = "1d64cmywhj43q9fkrh0kcfsxa7ijxcb1fbz38pxaacg082y6l0jy";
+    };
+    meta.homepage = "https://github.com/Xuyuanp/nerdtree-git-plugin/";
+  };
+
   neuron-vim = buildVimPluginFrom2Nix {
     pname = "neuron-vim";
     version = "2020-08-07";
