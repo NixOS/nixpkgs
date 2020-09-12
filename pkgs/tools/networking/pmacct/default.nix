@@ -19,7 +19,7 @@ assert withSQLite -> sqlite != null;
 assert withPgSQL -> postgresql != null;
 assert withMysql -> libmysqlclient != null;
 
-let inherit (stdenv.lib) optional; in
+let inherit (stdenv.lib) getDev optional optionalString; in
 
 stdenv.mkDerivation rec {
   version = "1.7.5";
@@ -39,6 +39,9 @@ stdenv.mkDerivation rec {
     ++ optional withSQLite sqlite
     ++ optional withPgSQL postgresql
     ++ optional withMysql [ libmysqlclient zlib ];
+
+  MYSQL_CONFIG =
+    optionalString withMysql "${getDev libmysqlclient}/bin/mysql_config";
 
   configureFlags = [
     "--with-pcap-includes=${libpcap}/include"
