@@ -13,8 +13,11 @@
   };
 
   config = lib.mkIf config.virtualisation.spiceUSBRedirection.enable {
-    environment.systemPackages = [ pkgs.spice_gtk ];
-    security.wrappers.spice-client-glib-usb-acl-helper.source = "${pkgs.spice_gtk}/bin/spice-client-glib-usb-acl-helper";
+    environment.systemPackages = [ pkgs.spice-gtk ]; # For polkit actions
+    security.wrappers.spice-client-glib-usb-acl-helper ={
+      source = "${pkgs.spice-gtk}/bin/spice-client-glib-usb-acl-helper";
+      capabilities = "cap_fowner+ep";
+    };
   };
 
   meta.maintainers = [ lib.maintainers.lheckemann ];
