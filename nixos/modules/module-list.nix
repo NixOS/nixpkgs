@@ -1027,6 +1027,7 @@
   ./virtualisation/podman.nix
   ./virtualisation/qemu-guest-agent.nix
   ./virtualisation/railcar.nix
+  ./virtualisation/spice-usb-redirection.nix
   ./virtualisation/virtualbox-guest.nix
   ./virtualisation/virtualbox-host.nix
   ./virtualisation/vmware-guest.nix
