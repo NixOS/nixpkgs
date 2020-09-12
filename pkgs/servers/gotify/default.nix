@@ -3,7 +3,6 @@
 , lib
 , fetchFromGitHub
 , buildGoModule
-, packr
 , sqlite
 , callPackage
 }:
@@ -32,12 +31,10 @@ buildGoModule rec {
 
   buildInputs = [ sqlite ];
 
-  nativeBuildInputs = [ packr ];
-
   ui = callPackage ./ui.nix { };
 
   preBuild = ''
-    cp -r ${ui}/libexec/gotify-ui/deps/gotify-ui/build ui/build && packr
+    cp -r ${ui}/libexec/gotify-ui/deps/gotify-ui/build ui/build && go run hack/packr/packr.go
   '';
 
   passthru = {
