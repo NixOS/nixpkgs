@@ -47,7 +47,7 @@ with stdenv.lib;
 with builtins;
 
 let majorVersion = "10";
-    version = "${majorVersion}.1.0";
+    version = "${majorVersion}.2.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -81,7 +81,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "b6898a23844b656f1b68691c5c012036c2e694ac4b53a8918d4712ad876e7ea2";
+    sha256 = "130xdkhmz1bc2kzx061s3sfwk36xah1fw5w332c0nzwwpdl47pdq";
   };
 
   inherit patches;
