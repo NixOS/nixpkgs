@@ -869,4 +869,21 @@ rec {
       ];
     };
 
+  /* Use this function to import a JSON file as NixOS configuration.
+
+     importJSON -> path -> attrs
+  */
+  importJSON = file: {
+    _file = file;
+    config = lib.importJSON file;
+  };
+
+  /* Use this function to import a TOML file as NixOS configuration.
+
+     importTOML -> path -> attrs
+  */
+  importTOML = file: {
+    _file = file;
+    config = lib.importTOML file;
+  };
 }
