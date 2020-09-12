@@ -644,6 +644,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     url = "https://enterprise.dejacode.com/licenses/public/purdue-bsd";
   };
 
+  prosperity30 = {
+    fullName = "Prosperity-3.0.0";
+    free = false;
+    url = "https://prosperitylicense.com/versions/3.0.0.html";
+  };
+
   qhull = spdx {
     spdxId = "Qhull";
     fullName = "Qhull License";
