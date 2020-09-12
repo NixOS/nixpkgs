@@ -1,14 +1,13 @@
 { stdenv
 , lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , six
-, enum34
 , decorator
 , nose
 , krb5Full
 , darwin
-, isPy27
 , parameterized
 , shouldbe
 , cython
@@ -18,13 +17,14 @@
 
 buildPythonPackage rec {
   pname = "gssapi";
-  version = "1.6.2";
+  version = "1.6.9";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "pythongssapi";
     repo = "python-${pname}";
     rev = "v${version}";
-    sha256 = "195x3zqzyv491i9hf7l4asmic5pb2w3l1r7bps89651wkb3mrz1l";
+    sha256 = "1shm3pc0l2r91qadkpq4bx45my0165nw3kdcp0gw4lk50z215hag";
   };
 
   # It's used to locate headers
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   propagatedBuildInputs =  [
     decorator
     six
-  ] ++ lib.optional isPy27 enum34;
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.GSS
@@ -55,7 +55,8 @@ buildPythonPackage rec {
     six
   ];
 
-  doCheck = !stdenv.isDarwin; # many failures on darwin
+  doCheck = pythonOlder "3.8"  # `shouldbe` not available
+    && !stdenv.isDarwin;  # many failures on darwin
 
   # skip tests which fail possibly due to be an upstream issue (see
   # https://github.com/pythongssapi/python-gssapi/issues/220)
