@@ -22,16 +22,6 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace 'gzip' 'gzip -n'
   '';
 
-  preBuild = ''
-    makeFlagsArray+=(CC="cc"
-                     ADD_CFLAGS=""
-                     COLOR="-DCOLOR_SUPPORT"
-                     CLOCK="-DCLOCK_SUPPORT"
-                     READLINE="-DREADLINE_SUPPORT"
-                     CFLAGS="-D_GNU_SOURCE -DWITH_UTF8 $(ADD_CFLAGS) $(COLOR) $(CLOCK) $(READLINE)"
-                     LDFLAGS="-lncursesw -lreadline")
-  '';
-
   installFlags = [ "DESTDIR=${placeholder "out"}" ];
 
   preInstall = ''
