@@ -7,7 +7,7 @@
 , gtk-doc
 , pkg-config
 , gobject-introspection
-, intltool
+, gettext
 , libgudev
 , polkit
 , libxmlb
@@ -23,7 +23,6 @@
 , libsmbios
 , efivar
 , gnu-efi
-, libyaml
 , valgrind
 , meson
 , libuuid
@@ -89,7 +88,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "fwupd";
-    version = "1.4.5";
+    version = "1.4.6";
 
     # libfwupd goes to lib
     # daemon, plug-ins and libfwupdplugin go to out
@@ -98,7 +97,7 @@ let
 
     src = fetchurl {
       url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-      sha256 = "0hpqxwqbbqn440c2swpnc06z8dskisrli4ynsxrzzqyp0dan46xw";
+      sha256 = "AKG5stioIveQc7ooYb/2UoOaBzbPUFzYk8tZK0rzvK0=";
     };
 
     patches = [
@@ -119,11 +118,6 @@ let
         # Needs a different set of modules than po/make-images.
         inherit installedTestsPython;
       })
-
-      (fetchpatch {
-        url = "https://github.com/fwupd/fwupd/commit/3e82beeddac31292c50229e59e2404865edee5ad.patch";
-        sha256 = "17p9r8qddqkrnhy9bvp9207afh5fcl1whn79nqcp57b4q4c17zgk";
-      })
     ];
 
     nativeBuildInputs = [
@@ -132,7 +126,7 @@ let
       gtk-doc
       pkg-config
       gobject-introspection
-      intltool
+      gettext
       shared-mime-info
       valgrind
       gcab
@@ -154,7 +148,6 @@ let
       libsoup
       elfutils
       gnu-efi
-      libyaml
       libgudev
       colord
       libjcat
