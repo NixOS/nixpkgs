@@ -26,7 +26,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Fontmatrix is a free/libre font explorer for Linux, Windows and Mac";
     homepage = "https://github.com/fontmatrix/fontmatrix";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }
