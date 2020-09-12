@@ -158,6 +158,15 @@
       <literal>vim</literal> switched to Python 3, dropping all Python 2 support.
     </para>
    </listitem>
+   <listitem>
+     <para>
+      <link linkend="opt-boot.zfs.forceImportAll">boot.zfs.forceImportAll</link>
+      previously did nothing, but has been fixed. However its default has been
+      changed to <literal>false</literal> to preserve the existing default
+      behaviour. If you have this explicitly set to <literal>true</literal>,
+      please note that your non-root pools will now be forcibly imported.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
