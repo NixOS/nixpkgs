@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "iverilog";
-  version = "unstable-2019-08-01";
+  version = "unstable-2020-08-24";
 
   src = fetchFromGitHub {
-    owner  = "steveicarus";
+    owner = "steveicarus";
     repo = pname;
-    rev    = "c383d2048c0bd15f5db083f14736400546fb6215";
-    sha256 = "1zs0gyhws0qa315magz3w5m45v97knczdgbf2zn4d7bdb7cv417c";
+    rev = "d8556e4c86e1465b68bdc8d5ba2056ba95a42dfd";
+    sha256 = "sha256-sT9j/0Q2FD5MOGpH/quMGvAuM7t7QavRHKD9lX7Elfs=";
   };
 
   enableParallelBuilding = true;

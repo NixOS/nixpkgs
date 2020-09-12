@@ -14,8 +14,8 @@ mkDerivation {
   version = "0.4.0.0";
   src = fetchgit {
     url = "https://github.com/haskell/haskell-language-server.git";
-    sha256 = "157bsq6i824bl6krw7znp0byd8ibaqsq7mfwnkl741dmrflsxpa9";
-    rev = "cb861b878ae01911b066182ff0d8080050c3b2d6";
+    sha256 = "1fh9k9b3880m6ql4i10yn2yanskk9xhrakrrddqvainhcf2ik8hl";
+    rev = "c4576992f443a9abe48ffcfa0e2d2b9bce15d7ae";
     fetchSubmodules = true;
   };
   isLibrary = true;

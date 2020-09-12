@@ -1,27 +1,31 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27, coloredlogs, property-manager, fasteners, pytest, mock, virtualenv }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy27, coloredlogs, property-manager, fasteners, pytestCheckHook, mock, virtualenv }:
 
 buildPythonPackage rec {
   pname = "executor";
-  version = "21.3";
+  version = "23.1";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "xolox";
     repo = "python-executor";
     rev = version;
-    sha256 = "0rc14vjx3d6irfaw0pczzw1pn0xjl7xikv32hc1fvxv2ibnldv5d";
+    sha256 = "1jfmagw126di0qd82bydwvryqcxc54pqja3rbx3ny3fv1ahi5s7k";
   };
 
   propagatedBuildInputs = [ coloredlogs property-manager fasteners ];
 
-  checkInputs = [ pytest mock virtualenv ];
+  checkInputs = [ pytestCheckHook mock virtualenv ];
 
   # ignore impure tests
-  checkPhase = ''
-    pytest . -k "not option and not retry \
-                 and not remote and not ssh \
-                 and not foreach and not local_context"
-  '';
+  disabledTests = [
+    "option"
+    "retry"
+    "remote"
+    "ssh"
+    "foreach"
+    "local_context"
+    "release"  # meant to be ran on ubuntu to succeed
+  ];
 
   meta = with lib; {
     description = "Programmer friendly subprocess wrapper";

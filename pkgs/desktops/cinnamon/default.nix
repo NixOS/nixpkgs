@@ -12,9 +12,11 @@ lib.makeScope pkgs.newScope (self: with self; {
     installPhase = "mv svg $out/share/iso-flags-svg";
   });
 
+  # blueberry -> pkgs/tools/bluetooth/blueberry/default.nix
   cinnamon-common = callPackage ./cinnamon-common { };
   cinnamon-control-center = callPackage ./cinnamon-control-center { };
   cinnamon-desktop = callPackage ./cinnamon-desktop { };
+  cinnamon-gsettings-overrides = callPackage ./cinnamon-gsettings-overrides { };
   cinnamon-menus = callPackage ./cinnamon-menus { };
   cinnamon-translations = callPackage ./cinnamon-translations { };
   cinnamon-screensaver = callPackage ./cinnamon-screensaver { };
@@ -22,8 +24,11 @@ lib.makeScope pkgs.newScope (self: with self; {
   cinnamon-settings-daemon = callPackage ./cinnamon-settings-daemon { };
   cjs = callPackage ./cjs { };
   nemo = callPackage ./nemo { };
+  mint-artwork = callPackage ./mint-artwork { };
   mint-themes = callPackage ./mint-themes { };
+  mint-x-icons = callPackage ./mint-x-icons { };
   mint-y-icons = callPackage ./mint-y-icons { };
   muffin = callPackage ./muffin { };
   xapps = callPackage ./xapps { };
+  warpinator = callPackage ./warpinator { };
 })

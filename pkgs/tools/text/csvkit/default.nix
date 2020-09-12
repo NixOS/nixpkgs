@@ -12,7 +12,14 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     agate
     agate-excel
-    agate-dbf
+    # dbf test fail with agate-dbf-0.2.2
+    (agate-dbf.overridePythonAttrs(old: rec {
+      version = "0.2.1";
+      src = python3.pkgs.fetchPypi {
+        inherit (old) pname;
+        inherit version;
+        sha256 = "0brprva3vjypb5r9lk6zy10jazp681rxsqxzhz2lr869ir4krj80";
+      };}))
     # sql test fail with agate-sql-0.5.4
     (agate-sql.overridePythonAttrs(old: rec {
       version = "0.5.3";

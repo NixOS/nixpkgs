@@ -3,6 +3,7 @@
   coreutils,
   fetchFromGitHub,
   git,
+  git-lfs,
   glib,
   gtk-sharp-3_0,
   lib,
@@ -58,6 +59,7 @@ stdenv.mkDerivation rec {
           paths = [
             coreutils
             git
+            git-lfs
             glib
             mono
             openssh

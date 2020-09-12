@@ -69,7 +69,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1d24080xh7gl197i0y5bkn3j94hvh8zqyg9gfcnx2qdlxfca1knb";
+      sha256 = "19ipaalp9g25zhg44rialwhp2fv5n8q5fzqw72rfcjcca5iy6r72";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -923,7 +923,7 @@ self: super: {
   dhall-json = generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] super.dhall-json;
   dhall-nix = generateOptparseApplicativeCompletion "dhall-to-nix" (
     super.dhall-nix.overrideScope (self: super: {
-      dhall = super.dhall_1_34_0;
+      dhall = super.dhall_1_35_0;
       repline = self.repline_0_4_0_0;
       haskeline = self.haskeline_0_8_1_0;
     }));
@@ -1211,7 +1211,7 @@ self: super: {
   # we need an override because ghcide is tracking haskell-lsp closely.
   ghcide = dontCheck (appendPatch (super.ghcide.override {
     hie-bios = dontCheck super.hie-bios_0_7_1;
-    lsp-test = dontCheck self.lsp-test_0_11_0_4;
+    lsp-test = dontCheck self.lsp-test_0_11_0_5;
   }) (pkgs.fetchpatch {
     # This patch loosens the hie-bios upper bound.
     # It is already merged into upstream and won‘t be needed for ghcide 0.4.0
@@ -1340,7 +1340,7 @@ self: super: {
   # 2020-08-14: gi-pango from stackage is to old for the C libs it links against in nixpkgs.
   # That's why we need to bump a ton of dependency versions to unbreak them.
   gi-pango = assert super.gi-pango.version == "1.0.22"; self.gi-pango_1_0_23;
-  haskell-gi-base = assert super.haskell-gi-base.version == "0.23.0"; addBuildDepends (self.haskell-gi-base_0_24_2) [ pkgs.gobject-introspection ];
+  haskell-gi-base = assert super.haskell-gi-base.version == "0.23.0"; addBuildDepends (self.haskell-gi-base_0_24_3) [ pkgs.gobject-introspection ];
   haskell-gi = assert super.haskell-gi.version == "0.23.1"; self.haskell-gi_0_24_4;
   gi-cairo = assert super.gi-cairo.version == "1.0.23"; self.gi-cairo_1_0_24;
   gi-glib = assert super.gi-glib.version == "2.0.23"; self.gi-glib_2_0_24;
@@ -1459,43 +1459,47 @@ self: super: {
 
   # We want the latest version of cryptonite. This is a first step towards
   # resolving https://github.com/NixOS/nixpkgs/issues/81915.
-  cryptonite = self.cryptonite_0_27;
+  cryptonite = doDistribute self.cryptonite_0_27;
 
   # We want the latest version of Pandoc.
-  hslua = self.hslua_1_1_2;
-  jira-wiki-markup = self.jira-wiki-markup_1_3_2;
-  pandoc = self.pandoc_2_10_1;
-  pandoc-citeproc = self.pandoc-citeproc_0_17_0_2;
-  pandoc-plot = self.pandoc-plot_0_9_2_0;
-  pandoc-types = self.pandoc-types_1_21;
-  rfc5051 = self.rfc5051_0_2;
+  hslua = doDistribute self.hslua_1_1_2;
+  jira-wiki-markup = doDistribute self.jira-wiki-markup_1_3_2;
+  pandoc = doDistribute self.pandoc_2_10_1;
+  pandoc-citeproc = doDistribute self.pandoc-citeproc_0_17_0_2;
+  pandoc-plot = doDistribute self.pandoc-plot_0_9_2_0;
+  pandoc-types = doDistribute self.pandoc-types_1_21;
+  rfc5051 = doDistribute self.rfc5051_0_2;
 
+  # Upstream forgot to change the Cabal version bounds in the test suite.
+  # See: https://github.com/jaspervdj/stylish-haskell/pull/297
+  # Will be fixed whenever they next bump the version number
+  stylish-haskell = appendPatch super.stylish-haskell (pkgs.fetchpatch {
+    url = "https://github.com/jaspervdj/stylish-haskell/commit/9550aa1cd177aa6fe271d075177109d66a79e67f.patch";
+    sha256 = "1ffnbd2s4fx0ylnnlcyyag119yxb32p5r20b38l39lsa0jwv229f";
+  });
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 
 } // (let
-  inherit (self) hls-ghcide;
+  inherit (self) hls-ghcide hls-brittany;
   hlsScopeOverride = self: super: {
     # haskell-language-server uses its own fork of ghcide
     # Test disabled: it seems to freeze (is it just that it takes a long time ?)
-    ghcide = hls-ghcide;
+    ghcide = dontCheck hls-ghcide;
     # we are faster than stack here
     hie-bios = dontCheck super.hie-bios_0_7_1;
-    lsp-test = dontCheck super.lsp-test_0_11_0_4;
+    lsp-test = dontCheck super.lsp-test_0_11_0_5;
     # fourmolu can‘t compile with an older aeson
     aeson = dontCheck super.aeson_1_5_2_0;
     # brittany has an aeson upper bound of 1.5
-    brittany = doJailbreak super.brittany;
+    brittany = hls-brittany;
+    data-tree-print = doJailbreak super.data-tree-print;
+    ghc-exactprint = dontCheck super.ghc-exactprint_0_6_3_2;
   };
   in {
     # jailbreaking for hie-bios 0.7.0 (upstream PR: https://github.com/haskell/haskell-language-server/pull/357)
     haskell-language-server = dontCheck (doJailbreak (super.haskell-language-server.overrideScope hlsScopeOverride));
-    hls-ghcide = appendPatch (dontCheck (super.hls-ghcide.overrideScope hlsScopeOverride))
-      (pkgs.fetchpatch {
-        # This patch loosens the hie-bios upper bound.
-        # It is already merged into upstream and won‘t be needed for ghcide 0.4.0
-        url = "https://github.com/haskell/ghcide/commit/3e1b3620948870a4da8808ca0c0897fbd3ecad16.patch";
-        sha256 = "1jwn7jgi740x6wwv1k0mz9d4z0b9p3mzs54pdg4nfq0h2v7zxchz";
-      });
-    fourmolu = super.fourmolu.overrideScope hlsScopeOverride;
+    hls-ghcide = dontCheck (super.hls-ghcide.overrideScope hlsScopeOverride);
+    hls-brittany = dontCheck (super.hls-brittany.overrideScope hlsScopeOverride);
+    fourmolu = dontCheck (super.fourmolu.overrideScope hlsScopeOverride);
   }
 )  // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

@@ -4,56 +4,46 @@
 , srht, minio, pygit2, scmsrht }:
 
 let
-  version = "0.50.3";
+  version = "0.60.7";
 
   buildShell = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-shell";
-
-    vendorSha256 = "1zvbqn4r940mibn4h1cqz94gbr476scm281ps361n0rfqlimw8g5";
-
-    doCheck = false;
+    vendorSha256 = "1abyv2s5l3bs0iylpgyj3jri2hh1iy8fiadxm7g6l2vl58h0b9ba";
   };
 
   buildDispatcher = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-dispatcher";
-
     vendorSha256 = "1lzkf13m54pq0gnn3bcxc80nfg76hgck4l8q8jpaicrsiwgcyrd9";
-
-    doCheck = false;
   };
 
   buildKeys = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-keys";
-
-    vendorSha256 = "16j7kpar318s4766pln8xn6d51xqblwig5n1jywhj0sl80qjl5cv";
-
-    doCheck = false;
+    vendorSha256 = "0lks3js57bb41x1ry5xfadlzf0v2gm68g7h3j94gzlm6j4jfprk9";
   };
 
   buildUpdateHook = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-update-hook";
+    vendorSha256 = "06ykh9ncamd922xsd329jpn293wsq6vkqnlf3sckjlp2hm290pd8";
+  };
 
-    vendorSha256 = "1rmv3p60g6w4h4v9wx99jkyx0q02snslyjrjy9n1flardjs01b63";
-
-    doCheck = false;
+  buildAPI = src: buildGoModule {
+    inherit src version;
+    pname = "gitsrht-api";
+    vendorSha256 = "0d6kmsbsgj2q5nddx4w675zbsiarffj9vqplwvqk7dwz4id2wnif";
   };
 in buildPythonPackage rec {
-  inherit version;
   pname = "gitsrht";
+  inherit version;
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/git.sr.ht";
     rev = version;
-    sha256 = "0rxsr8cizac5xv8bgx2s1p2q4n8i5s51p9qbqdjad9z1xmwi6rvn";
+    sha256 = "EdxgT6IQZgj3KeU3UC+QAQb7BilBY769NhJK633tmE4=";
   };
-
-  patches = [
-    ./use-srht-path.patch
-  ];
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
@@ -66,7 +56,6 @@ in buildPythonPackage rec {
 
   preBuild = ''
     export PKGVER=${version}
-    export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
   postInstall = ''
@@ -75,6 +64,7 @@ in buildPythonPackage rec {
     cp ${buildDispatcher "${src}/gitsrht-dispatch"}/bin/gitsrht-dispatch $out/bin/gitsrht-dispatch
     cp ${buildKeys "${src}/gitsrht-keys"}/bin/gitsrht-keys $out/bin/gitsrht-keys
     cp ${buildUpdateHook "${src}/gitsrht-update-hook"}/bin/gitsrht-update-hook $out/bin/gitsrht-update-hook
+    cp ${buildAPI "${src}/api"}/bin/api $out/bin/gitsrht-api
   '';
 
   meta = with stdenv.lib; {

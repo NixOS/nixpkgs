@@ -6,15 +6,14 @@ let
   #
   # I've chosen to import Alpine Linux, because its image is turbo-tiny and,
   # generally, sufficient for our tests.
-
   alpine-meta = pkgs.fetchurl {
-    url = "https://uk.images.linuxcontainers.org/images/alpine/3.11/i386/default/20200608_13:00/lxd.tar.xz";
-    sha256 = "1hkvaj3rr333zmx1759njy435lps33gl4ks8zfm7m4nqvipm26a0";
+    url = "https://tarballs.nixos.org/alpine/3.12/lxd.tar.xz";
+    hash = "sha256-1tcKaO9lOkvqfmG/7FMbfAEToAuFy2YMewS8ysBKuLA=";
   };
 
   alpine-rootfs = pkgs.fetchurl {
-    url = "https://uk.images.linuxcontainers.org/images/alpine/3.11/i386/default/20200608_13:00/rootfs.tar.xz";
-    sha256 = "1v82zdra4j5xwsff09qlp7h5vbsg54s0j7rdg4rynichfid3r347";
+    url = "https://tarballs.nixos.org/alpine/3.12/rootfs.tar.xz";
+    hash = "sha256-Tba9sSoaiMtQLY45u7p5DMqXTSDgs/763L/SQp0bkCA=";
   };
 
   lxd-config = pkgs.writeText "config.yaml" ''
@@ -44,8 +43,10 @@ let
             type: disk
   '';
 
+
 in {
   name = "lxd";
+
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ patryk27 ];
   };
@@ -53,7 +54,7 @@ in {
   machine = { lib, ... }: {
     virtualisation = {
       # Since we're testing `limits.cpu`, we've gotta have a known number of
-      # cores to lay on
+      # cores to lean on
       cores = 2;
 
       # Ditto, for `limits.memory`
@@ -67,6 +68,7 @@ in {
   testScript = ''
     machine.wait_for_unit("sockets.target")
     machine.wait_for_unit("lxd.service")
+    machine.wait_for_file("/var/lib/lxd/unix.socket")
 
     # It takes additional second for lxd to settle
     machine.sleep(1)

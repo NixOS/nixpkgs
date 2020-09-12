@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig
 , libelf, zlib
+, fetchpatch
 }:
 
 with builtins;
@@ -15,17 +16,27 @@ stdenv.mkDerivation rec {
     sha256 = "1wi3a795jq0smqg1c5ml2ghai47n1m5ijmch017wscybx4jdlynv";
   };
 
+  patches = [
+    (fetchpatch { # included upstream for > 0.1.0
+      name = "link-zlib.patch";
+      url = "https://github.com/libbpf/libbpf/commit/8b14cb43ff837.diff";
+      sha256 = "17mvjrs7s727drz013a8qlyj0345ldi2kph6pazcmxv6kl1qrz2z";
+    })
+  ];
+  patchFlags = "-p2";
+  # https://github.com/libbpf/libbpf/pull/201#issuecomment-689174740
+  postPatch = ''
+    substituteInPlace ../scripts/check-reallocarray.sh \
+      --replace 'mktemp /tmp/' 'mktemp ' \
+      --replace '/bin/rm' 'rm'
+  '';
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libelf zlib ];
 
   sourceRoot = "source/src";
   enableParallelBuilding = true;
   makeFlags = [ "PREFIX=$(out)" ];
-
-  patchPhase = ''
-    substituteInPlace ../scripts/check-reallocarray.sh \
-      --replace '/bin/rm' 'rm'
-  '';
 
   # FIXME: Multi-output requires some fixes to the way the pkgconfig file is
   # constructed (it gets put in $out instead of $dev for some reason, with
@@ -37,7 +48,7 @@ stdenv.mkDerivation rec {
     description = "Upstream mirror of libbpf";
     homepage    = "https://github.com/libbpf/libbpf";
     license     = with licenses; [ lgpl21 /* or */ bsd2 ];
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [ thoughtpolice vcunat ];
     platforms   = platforms.linux;
   };
 }

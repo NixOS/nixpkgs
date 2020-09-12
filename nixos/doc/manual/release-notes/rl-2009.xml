@@ -427,8 +427,8 @@ php.override {
    </listitem>
    <listitem>
      <para>
-       Add option <literal>services.nginx.enableSandbox</literal> to starting Nginx web server with additional sandbox/hardening options.
-       By default, write access to <literal>services.nginx.stateDir</literal> is allowed. To allow writing to other folders,
+       Nginx web server now starting with additional sandbox/hardening options. By default, write access
+       to <literal>services.nginx.stateDir</literal> is allowed. To allow writing to other folders,
        use <literal>systemd.services.nginx.serviceConfig.ReadWritePaths</literal>
        <programlisting>
 systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
@@ -796,6 +796,32 @@ CREATE ROLE postgres LOGIN SUPERUSER;
       <literal>config.systemd.services.${name}.path</literal> now returns a list of paths instead of a colon-separated string.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Caddy module now uses Caddy v2 by default. Caddy v1 can still be used by setting
+     <xref linkend="opt-services.caddy.package"/> to <literal>pkgs.caddy1</literal>.
+    </para>
+    <para>
+     New option <xref linkend="opt-services.caddy.adapter"/> has been added.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <link linkend="opt-services.jellyfin.enable">jellyfin</link> module will use and stay on the Jellyfin version <literal>10.5.5</literal>
+     if <literal>stateVersion</literal> is lower than <literal>20.09</literal>. This is because significant changes were made to the database schema,
+     and it is highly recommended to backup your instance before upgrading. After making your backup, you can upgrade to the latest version either by
+     setting your <literal>stateVersion</literal> to <literal>20.09</literal> or higher, or set the <option>services.jellyfin.package</option> to
+     <literal>pkgs.jellyfin</literal>. If you do not wish to upgrade Jellyfin, but want to change your <literal>stateVersion</literal>, you can set
+     the value of <option>services.jellyfin.package</option> to <literal>pkgs.jellyfin_10_5</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>security.rngd</literal> service is now disabled by default.
+     This choice was made because there's krngd in the linux kernel space making it (for most usecases)
+     functionally redundent.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -824,6 +850,17 @@ CREATE ROLE postgres LOGIN SUPERUSER;
      of the default <literal>out</literal> output anymore - if you relied on the
      <literal>notmuch-emacs-mua</literal> binary or the emacs lisp files, access them via
      the <literal>notmuch.emacs</literal> output.
+
+     Device tree overlay support was improved in
+     <link xlink:href="https://github.com/NixOS/nixpkgs/pull/79370">#79370</link>
+     and now uses <xref linkend="opt-hardware.deviceTree.kernelPackage"/>
+     instead of <option>hardware.deviceTree.base</option>.
+
+     <xref linkend="opt-hardware.deviceTree.overlays"/> configuration was
+     extended to support <literal>.dts</literal> files with symbols.
+
+     Device trees can now be filtered by setting
+     <xref linkend="opt-hardware.deviceTree.filter"/> option.
     </para>
    </listitem>
    <listitem>
@@ -863,6 +900,12 @@ CREATE ROLE postgres LOGIN SUPERUSER;
    <para>
      Default algorithm for ZRAM swap was changed to <literal>zstd</literal>.
    </para>
+   </listitem>
+   <listitem>
+    <para>
+    The installer now enables sshd by default. This improves installation on headless machines especially ARM single-board-computer.
+    To login through ssh, either a password or an ssh key must be set for the root user or the nixos user.
+    </para>
    </listitem>
    <listitem>
     <para>
@@ -1016,7 +1059,11 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
     <para>
      Nginx module <literal>nginxModules.fastcgi-cache-purge</literal> renamed to official name <literal>nginxModules.cache-purge</literal>.
      Nginx module <literal>nginxModules.ngx_aws_auth</literal> renamed to official name <literal>nginxModules.aws-auth</literal>.
-      The packages <package>perl</package>, <package>rsync</package> and <package>strace</package> were removed from <option>systemPackages</option>. If you need them, install them again with <code><xref linkend="opt-environment.systemPackages"/> = with pkgs; [ perl rsync strace ];</code> in your <filename>configuration.nix</filename>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The option <option>defaultPackages</option> was added. It installs the packages <package>perl</package>, <package>rsync</package> and <package>strace</package> for now. They were added unconditionally to <option>systemPackages</option> before, but are not strictly necessary for a minimal NixOS install. You can set it to an empty list to have a more minimal system. Be aware that some functionality might still have an impure dependency on those packages, so things might break.
     </para>
    </listitem>
    <listitem>

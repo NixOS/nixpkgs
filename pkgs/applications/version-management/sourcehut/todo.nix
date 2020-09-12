@@ -5,17 +5,13 @@
 
 buildPythonPackage rec {
   pname = "todosrht";
-  version = "0.57.14";
+  version = "0.61.11";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/todo.sr.ht";
     rev = version;
-    sha256 = "15x78rl0zh1rw0izc36k47b27l75k7iyina5ajm3mgkslpndym4y";
+    sha256 = "lUM81FYlR6AXCtXZtYiB+1FD8E1aOX7qxbWUVc36lJM=";
   };
-
-  patches = [
-    ./use-srht-path.patch
-  ];
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
@@ -28,7 +24,6 @@ buildPythonPackage rec {
 
   preBuild = ''
     export PKGVER=${version}
-    export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
   # pytest tests fail

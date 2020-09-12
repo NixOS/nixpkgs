@@ -70,9 +70,13 @@
 
    <para>
     If you would like to continue the installation from a different machine you
-    need to activate the SSH daemon via <command>systemctl start
-    sshd</command>. You then must set a password for either <literal>root</literal> or
-    <literal>nixos</literal> with <command>passwd</command> to be able to login.
+    can use activated SSH daemon. You need to copy your ssh key to either
+    <literal>/home/nixos/.ssh/authorized_keys</literal> or
+    <literal>/root/.ssh/authorized_keys</literal> (Tip: For installers with a
+    modifiable filesystem such as the sd-card installer image a key can be manually
+    placed by mounting the image on a different machine). Alternatively you must set
+    a password for either <literal>root</literal> or <literal>nixos</literal> with
+    <command>passwd</command> to be able to login.
    </para>
   </section>
  </section>

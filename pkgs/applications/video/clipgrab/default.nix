@@ -5,10 +5,10 @@
 
 mkDerivation rec {
   pname = "clipgrab";
-  version = "3.8.13";
+  version = "3.8.14";
 
   src = fetchurl {
-    sha256 = "0ryaha33m41y0xjrspa838qqr4iy2c8vbvhbb334qimpqn1hj3q5";
+    sha256 = "19337qjxwlkpdnnh6q0y4b8askk17a8zb88gifznllrk06a6pgyf";
     # The .tar.bz2 "Download" link is a binary blob, the source is the .tar.gz!
     url = "https://download.clipgrab.org/${pname}-${version}.tar.gz";
   };
