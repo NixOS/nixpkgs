@@ -3188,6 +3188,8 @@ in {
 
   konfig = callPackage ../development/python-modules/konfig { };
 
+  korean-lunar-calendar = callPackage ../development/python-modules/korean-lunar-calendar { };
+
   kubernetes = callPackage ../development/python-modules/kubernetes { };
 
   labelbox = callPackage ../development/python-modules/labelbox { };
