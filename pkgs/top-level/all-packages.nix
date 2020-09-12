@@ -4131,6 +4131,8 @@ in
 
   gandom-fonts = callPackage ../data/fonts/gandom-fonts { };
 
+  ganeti = callPackage ../applications/virtualization/ganeti { };
+
   garmin-plugin = callPackage ../applications/misc/garmin-plugin {};
 
   garmintools = callPackage ../development/libraries/garmintools {};
