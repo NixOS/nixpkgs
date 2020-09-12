@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation {
   pname = "libgumath";
-  version = "unstable-2018-11-27";
+  version = "unstable-2019-08-01";
 
   src = fetchFromGitHub {
-    owner = "plures";
+    owner = "xnd-project";
     repo = "gumath";
-    rev = "5a9d27883b40432246d6a93cd6133157267fd166";
-    sha256 = "0w2qzp7anxd1wzkvv5r2pdkkpgrnqzgrq47lrvpqc1i1wqzcwf0w";
+    rev = "360ed454105ac5615a7cb7d216ad25bc4181b876";
+    sha256 = "1wprkxpmjrk369fpw8rbq51r7jvqkcndqs209y7p560cnagmsxc6";
   };
 
   buildInputs = [ libndtypes libxnd ];
