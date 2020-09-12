@@ -11403,6 +11403,8 @@ in
 
   pax-rs = callPackage ../development/tools/pax-rs { };
 
+  perfect-hash = callPackage ../development/tools/misc/perfect-hash { };
+
   peg = callPackage ../development/tools/parsing/peg { };
 
   pgcli = pkgs.python3Packages.pgcli;
