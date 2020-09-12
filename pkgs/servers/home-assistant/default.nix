@@ -35,13 +35,6 @@ let
     (mkOverride "bcrypt" "3.1.7"
       "0hhywhxx301cxivgxrpslrangbfpccc8y83qbwn1f57cab3nj00b")
 
-    # required by aioesphomeapi
-    (self: super: {
-      protobuf = super.protobuf.override {
-        protobuf = protobuf3_6;
-      };
-    })
-
     # hass-frontend does not exist in python3.pkgs
     (self: super: {
       hass-frontend = self.callPackage ./frontend.nix { };
