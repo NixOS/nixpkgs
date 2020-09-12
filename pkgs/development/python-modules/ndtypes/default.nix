@@ -1,4 +1,6 @@
-{ buildPythonPackage
+{ stdenv
+, buildPythonPackage
+, python
 , numpy
 , libndtypes
 , isPy27
@@ -24,5 +26,14 @@ buildPythonPackage {
   postInstall = ''
     mkdir $out/include
     cp python/ndtypes/*.h $out/include
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    install_name_tool -add_rpath ${libndtypes}/lib $out/${python.sitePackages}/ndtypes/_ndtypes.*.so
+  '';
+
+  checkPhase = ''
+    pushd python
+    mv ndtypes _ndtypes
+    python test_ndtypes.py
+    popd
   '';
 }
