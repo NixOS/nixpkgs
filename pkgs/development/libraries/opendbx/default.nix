@@ -1,5 +1,7 @@
 { stdenv, fetchurl, readline, libmysqlclient, postgresql, sqlite }:
 
+let inherit (stdenv.lib) getDev; in
+
 stdenv.mkDerivation rec {
   name = "opendbx-1.4.6";
 
@@ -9,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    export CPPFLAGS="-I${libmysqlclient}/include/mysql"
+    export CPPFLAGS="-I${getDev libmysqlclient}/include/mysql"
     export LDFLAGS="-L${libmysqlclient}/lib/mysql -L${postgresql}/lib"
     configureFlagsArray=(--with-backends="mysql pgsql sqlite3")
   '';
