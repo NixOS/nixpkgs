@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python2, libxslt, texlive
-, enableAllFeatures ? false, imagemagick ? null, transfig ? null, inkscape_0 ? null, fontconfig ? null, ghostscript ? null
+, enableAllFeatures ? false, imagemagick ? null, transfig ? null, inkscape ? null, fontconfig ? null, ghostscript ? null
 
 , tex ? texlive.combine { # satisfy all packages that ./configure mentions
     inherit (texlive) scheme-basic epstopdf anysize appendix changebar
@@ -16,7 +16,7 @@
 assert enableAllFeatures ->
   imagemagick != null &&
   transfig != null &&
-  inkscape_0 != null &&
+  inkscape != null &&
   fontconfig != null &&
   ghostscript != null;
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
             -e 's|Popen("pdflatex|Popen("${tex}/bin/pdflatex|g' \
             -e 's|"fc-match"|"${fontconfig.bin}/bin/fc-match"|g' \
             -e 's|"fc-list"|"${fontconfig.bin}/bin/fc-list"|g' \
-            -e 's|cmd = "inkscape|cmd = "${inkscape_0}/bin/inkscape|g' \
+            -e 's|cmd = "inkscape|cmd = "${inkscape}/bin/inkscape|g' \
             -e 's|cmd = "fig2dev|cmd = "${transfig}/bin/fig2dev|g' \
             -e 's|cmd = \["ps2pdf|cmd = ["${ghostscript}/bin/ps2pdf|g' \
             -e 's|cmd = "convert|cmd = "${imagemagick.out}/bin/convert|g' \
