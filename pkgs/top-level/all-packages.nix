@@ -1622,6 +1622,8 @@ in
 
   colpack = callPackage ../applications/science/math/colpack { };
 
+  commitizen = callPackage ../applications/version-management/commitizen {};
+
   compactor = callPackage ../applications/networking/compactor { };
 
   consul = callPackage ../servers/consul { };
@@ -9465,7 +9467,7 @@ in
 
   nim = callPackage ../development/compilers/nim { };
   nim-unwrapped = nim.unwrapped;
-  nim-stdlib = nim.stdlib;
+
   nrpl = callPackage ../development/tools/nrpl { };
 
   neko = callPackage ../development/compilers/neko { };
@@ -14456,6 +14458,8 @@ in
 
   nettle = callPackage ../development/libraries/nettle { };
 
+  newman = callPackage ../development/web/newman {};
+
   newt = callPackage ../development/libraries/newt { };
 
   nghttp2 = callPackage ../development/libraries/nghttp2 { };
@@ -16254,6 +16258,11 @@ in
   couchdb2 = callPackage ../servers/http/couchdb/2.0.0.nix {
     spidermonkey = spidermonkey_1_8_5;
     erlang = erlangR21;
+  };
+
+  couchdb3 = callPackage ../servers/http/couchdb/3.nix {
+    spidermonkey = spidermonkey_68;
+    erlang = erlangR22;
   };
 
   couchpotato = callPackage ../servers/couchpotato {};
@@ -21963,6 +21972,7 @@ in
   mpv = wrapMpv mpv-unwrapped {};
 
   mpvScripts = recurseIntoAttrs {
+    autoload = callPackage ../applications/video/mpv/scripts/autoload.nix {};
     convert = callPackage ../applications/video/mpv/scripts/convert.nix {};
     mpris = callPackage ../applications/video/mpv/scripts/mpris.nix {};
     simple-mpv-webui = callPackage ../applications/video/mpv/scripts/simple-mpv-webui.nix {};
@@ -27598,6 +27608,8 @@ in
   };
 
   xteddy = callPackage ../applications/misc/xteddy { };
+
+  xva-img = callPackage ../tools/virtualization/xva-img { };
 
   xwiimote = callPackage ../misc/drivers/xwiimote { };
 

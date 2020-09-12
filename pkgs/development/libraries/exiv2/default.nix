@@ -17,9 +17,7 @@ stdenv.mkDerivation rec {
   pname = "exiv2";
   version = "0.27.3";
 
-  # Disabled since splitting the outputs leads to issues, see
-  # https://github.com/NixOS/nixpkgs/pull/97161#issuecomment-689426419
-  # outputs = [ "out" "dev" "doc" "man" ];
+  outputs = [ "out" "dev" "doc" "man" ];
 
   src = fetchFromGitHub {
     owner = "exiv2";
@@ -39,9 +37,13 @@ stdenv.mkDerivation rec {
     # Use correct paths with multiple outputs
     # https://github.com/Exiv2/exiv2/pull/1275
     (fetchpatch {
-      name = "cmake-fix-aarch64.patch";
       url = "https://github.com/Exiv2/exiv2/commit/48f2c9dbbacc0ef84c8ebf4cb1a603327f0b8750.patch";
       sha256 = "vjB3+Ld4c/2LT7nq6uatYwfHTh+HeU5QFPFXuNLpIPA=";
+    })
+    # https://github.com/Exiv2/exiv2/pull/1294
+    (fetchpatch {
+      url = "https://github.com/Exiv2/exiv2/commit/306c8a6fd4ddd70e76043ab255734720829a57e8.patch";
+      sha256 = "0D/omxYxBPGUu3uSErlf48dc6Ukwc2cEN9/J3e7a9eU=";
     })
   ];
 
