@@ -411,8 +411,10 @@ in {
 
       After deploying this configuration, you can run:
         slapcat -F ${configDir} -n0 -H 'ldap:///???(!(objectClass=olcSchemaConfig))'
-      on the same host to print your current configuration in LDIF format,
-      which should be straightforward to convert into Nix settings.
+      on the same host to print your current configuration in LDIF format, which
+      should be straightforward to convert into Nix settings. This does not show
+      your schema configuration (as this is unnecessarily verbose users of the
+      default schemas), so be sure to migrate that as well.
     '') ++ (flatten (map (args@{old, new, ...}: lib.optional ((lib.hasAttr old cfg) && (lib.getAttr old cfg) != null) ''
       The attribute `services.openldap.${old}` is deprecated. Please set it to
       `null` and use the following option instead:
