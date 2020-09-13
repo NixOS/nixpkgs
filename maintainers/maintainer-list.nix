@@ -3771,6 +3771,12 @@
     githubId = 1436960;
     name = "Christoph Hrdinka";
   };
+  hrhino = {
+    email = "hora.rhino@gmail.com";
+    github = "hrhino";
+    githubId = 28076058;
+    name = "Harrison Houghton";
+  };
   hschaeidt = {
     email = "he.schaeidt@gmail.com";
     github = "hschaeidt";
