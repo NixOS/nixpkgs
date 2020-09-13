@@ -200,6 +200,7 @@
 , "uglify-js"
 , "ungit"
 , "vega-cli"
+, "vega-lite"
 , "vim-language-server"
 , "vscode-css-languageserver-bin"
 , "vscode-html-languageserver-bin"
