@@ -7,8 +7,8 @@
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU, libGL, sqlite, unzip, makeWrapper
 , hunspell, libXdamage, libevent, libstartup_notification
-, libvpx, libvpx_1_8
-, icu, icu67, libpng, jemalloc, glib
+, libvpx_1_8
+, icu67, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , debugBuild ? false
@@ -112,17 +112,13 @@ stdenv.mkDerivation ({
     xorg.libXext unzip makeWrapper
     libevent libstartup_notification /* cairo */
     libpng jemalloc glib
-    nasm
+    nasm icu67 libvpx_1_8
     # >= 66 requires nasm for the AV1 lib dav1d
     # yasm can potentially be removed in future versions
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
     # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
     nspr nss
   ]
-  ++ lib.optionals (lib.versionOlder ffversion "75") [ libvpx sqlite ]
-  ++ lib.optional  (lib.versionAtLeast ffversion "75.0") libvpx_1_8
-  ++ lib.optional  (lib.versionOlder ffversion "78") icu
-  ++ lib.optional  (lib.versionAtLeast ffversion "78.0") icu67
   ++ lib.optional  alsaSupport alsaLib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gtk3Support gtk3
@@ -132,12 +128,10 @@ stdenv.mkDerivation ({
                                      AVFoundation MediaToolbox CoreLocation
                                      Foundation libobjc AddressBook cups ];
 
-  NIX_CFLAGS_COMPILE = toString ([
+  NIX_CFLAGS_COMPILE = toString [
     "-I${glib.dev}/include/gio-unix-2.0"
     "-I${nss.dev}/include/nss"
-  ]
-  ++ lib.optional (pname == "firefox-esr" && lib.versionOlder ffversion "69")
-    "-Wno-error=format-security");
+  ];
 
   postPatch = ''
     rm -rf obj-x86_64-pc-linux-gnu
@@ -228,16 +222,7 @@ stdenv.mkDerivation ({
     "--with-system-nspr"
     "--with-system-nss"
   ]
-  ++ lib.optionals (lib.versionOlder ffversion "78") [
-    "--with-system-bz2"
-    "--enable-startup-notification"
-    "--disable-gconf"
-  ]
-  ++ lib.optional (lib.versionOlder ffversion "75") "--enable-system-sqlite"
   ++ lib.optional (stdenv.isDarwin) "--disable-xcode-checks"
-  ++ lib.optionals (lib.versionOlder ffversion "69") [
-    "--enable-webrender=build"
-  ]
 
   ++ flag alsaSupport "alsa"
   ++ flag pulseaudioSupport "pulseaudio"
@@ -305,16 +290,13 @@ stdenv.mkDerivation ({
     inherit execdir;
     inherit browserName;
   } // lib.optionalAttrs gtk3Support { inherit gtk3; };
-} //
-lib.optionalAttrs (lib.versionAtLeast ffversion "74") {
-  hardeningDisable = [ "format" ]; # -Werror=format-security
-} //
-# the build system verifies checksums of the bundled rust sources
-# ./third_party/rust is be patched by our libtool fixup code in stdenv
-# unfortunately we can't just set this to `false` when we do not want it.
-# See https://github.com/NixOS/nixpkgs/issues/77289 for more details
 
-lib.optionalAttrs (lib.versionAtLeast ffversion "72") {
+  hardeningDisable = [ "format" ]; # -Werror=format-security
+
+  # the build system verifies checksums of the bundled rust sources
+  # ./third_party/rust is be patched by our libtool fixup code in stdenv
+  # unfortunately we can't just set this to `false` when we do not want it.
+  # See https://github.com/NixOS/nixpkgs/issues/77289 for more details
   # Ideally we would figure out how to tell the build system to not
   # care about changed hashes as we are already doing that when we
   # fetch the sources. Any further modifications of the source tree
