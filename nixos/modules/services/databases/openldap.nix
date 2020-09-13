@@ -421,13 +421,7 @@ in {
           let oldValue = (getAttr old cfg);
           in if (isList oldValue) then "[ ${concatStringsSep " " oldValue} ]" else oldValue
         )}
-    '') deprecations)) ++ (optional (cfg.configDir != null && (versionOlder config.system.stateVersion "20.09")) ''
-      The attribute `services.openldap.settings` now exists, and may be more
-      useful than `services.openldap.configDir`. If you continue to use
-      `configDir`, ensure that `olcPidFile` is set to "/run/slapd/slapd.pid".
-
-      Set `system.stateVersion` to "20.09" or greater to silence this message.
-    '');
+    '') deprecations));
 
     assertions = [{
       assertion = !(cfg.rootpwFile != null && cfg.rootpw != null);
