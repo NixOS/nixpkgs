@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   buildInputs = [ chez chez-srfi chez-mit ];
 
   buildPhase = ''
-    export CHEZSCHEMELIBDIRS=${chez-srfi}/lib/csv9.5-site:${chez-mit}/lib/csv9.5-site
+    export CHEZSCHEMELIBDIRS=${chez-srfi}/lib/csv-site:${chez-mit}/lib/csv-site
     make PREFIX=$out CHEZ=${chez}/bin/scheme
   '';
 
