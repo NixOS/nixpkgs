@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, alsaLib, file, fluidsynth, ffmpeg_3, jack2
+{ stdenv, fetchFromGitHub, alsaLib, file, fluidsynth, ffmpeg, jack2
 , libX11, libXcursor, libXext, freetype
 , liblo, libpulseaudio, libsndfile, pkgconfig, python3Packages
 , which, withFrontend ? true
