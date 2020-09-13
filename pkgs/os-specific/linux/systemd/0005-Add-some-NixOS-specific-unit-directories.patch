@@ -1,4 +1,4 @@
-From e5d73359928b79bd846bda29ce61fe276d8c0b76 Mon Sep 17 00:00:00 2001
+From b46f1b20e990f01af4bdf3dd6fef45f5b4a5993e Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Fri, 19 Dec 2014 14:46:17 +0100
 Subject: [PATCH 05/18] Add some NixOS-specific unit directories
@@ -120,5 +120,5 @@ index 8424837824..b1c541bc52 100644
  
  systemd_system_generator_dir=${root_prefix}/lib/systemd/system-generators
 -- 
-2.27.0
+2.28.0
 
