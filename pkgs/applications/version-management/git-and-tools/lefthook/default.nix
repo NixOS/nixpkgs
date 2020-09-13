@@ -1,5 +1,11 @@
 { stdenv, buildGoModule, fetchFromGitHub }:
 
+# Currently `buildGo114Module` is passed as `buildGoModule` from
+# `../default.nix`. Please remove the fixed 1.14 once a new release has been
+# made and the issue linked below has been closed upstream.
+
+# https://github.com/Arkweid/lefthook/issues/151
+
 buildGoModule rec {
   pname = "lefthook";
   version = "0.7.2";
