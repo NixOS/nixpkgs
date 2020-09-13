@@ -65,6 +65,8 @@ in stdenv.mkDerivation rec {
     ln -s "${videos}" "uqm-${version}/content/addons/3dovideo"
   '';
 
+  NIX_LDFLAGS = "-lpng";
+
   postPatch = ''
     # Using _STRINGS_H as include guard conflicts with glibc.
     sed -i -e '/^#/s/_STRINGS_H/_UQM_STRINGS_H/g' src/uqm/comm/*/strings.h
@@ -79,6 +81,7 @@ in stdenv.mkDerivation rec {
     echo "INPUT_install_bindir_VALUE='$out/bin'" >> config.state
     echo "INPUT_install_libdir_VALUE='$out/lib'" >> config.state
     echo "INPUT_install_sharedir_VALUE='$out/share'" >> config.state
+    echo "CHOICE_debug_VALUE=nodebug" >> config.state
     PREFIX=$out ./build.sh uqm config
   '';
 
