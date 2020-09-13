@@ -199,6 +199,7 @@
 , "typescript-language-server"
 , "uglify-js"
 , "ungit"
+, "vega-cli"
 , "vim-language-server"
 , "vscode-css-languageserver-bin"
 , "vscode-html-languageserver-bin"
