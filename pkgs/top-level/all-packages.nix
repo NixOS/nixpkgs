@@ -20914,6 +20914,8 @@ in
 
   hackrf = callPackage ../applications/radio/hackrf { };
 
+  hacksaw = callPackage ../tools/misc/hacksaw {};
+
   hakuneko = callPackage ../tools/misc/hakuneko { };
 
   hamster = callPackage ../applications/misc/hamster { };
