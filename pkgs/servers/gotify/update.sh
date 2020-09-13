@@ -9,11 +9,11 @@ latest_release=$(curl --silent https://api.github.com/repos/gotify/server/releas
 version=$(jq -r '.tag_name' <<<"$latest_release")
 echo got version $version
 echo \""${version#v}"\" > "$dirname/version.nix"
-printf '%s' $(nix-prefetch-git --quiet --rev ${version} https://github.com/gotify/server | jq .sha256) > $dirname/source-sha.nix
+printf '%s\n' $(nix-prefetch-git --quiet --rev ${version} https://github.com/gotify/server | jq .sha256) > $dirname/source-sha.nix
 tput setaf 1
 echo zeroing vendorSha256 in $dirname/vendor-sha.nix
 tput sgr0
-printf '"%s"' "0000000000000000000000000000000000000000000000000000" > $dirname/vendor-sha.nix
+printf '"%s"\n' "0000000000000000000000000000000000000000000000000000" > $dirname/vendor-sha.nix
 
 GOTIFY_WEB_SRC="https://raw.githubusercontent.com/gotify/server/$version"
 
@@ -32,7 +32,7 @@ echo running nix-build for gotify itself in order to get vendorSha256
 set +e
 vendorSha256="$(nix-build -A gotify-server 2>&1 | grep "got:" | cut -d':' -f3)"
 set -e
-printf '"%s"' "$vendorSha256" > $dirname/vendor-sha.nix
+printf '"%s"\n' "$vendorSha256" > $dirname/vendor-sha.nix
 tput setaf 2
 echo got vendorSha256 of: $vendorSha256
 tput sgr0
