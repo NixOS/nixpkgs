@@ -85,10 +85,12 @@ stdenv.mkDerivation rec {
     ''}
 
     ${stdenv.lib.optionalString stdenv.isDarwin ''
+      export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD/lib
       # Removing tests depending on charset conversion
       substituteInPlace ../test/Makefile --replace "conversions.sh" ""
       rm -f ../tests/bugfixes/redmine/test_issue_460.py
       rm -f ../tests/bugfixes/redmine/test_issue_662.py
+      rm -f ../tests/bugfixes/github/test_issue_1046.py
      ''}
   '';
 
