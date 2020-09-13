@@ -26541,6 +26541,8 @@ with pkgs;
 
   octoprint = callPackage ../applications/misc/octoprint { };
 
+  ocr-a = callPackage ../data/fonts/ocr-a {};
+
   ocrad = callPackage ../applications/graphics/ocrad { };
 
   offrss = callPackage ../applications/networking/offrss { };
