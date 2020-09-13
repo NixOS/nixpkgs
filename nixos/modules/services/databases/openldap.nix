@@ -28,17 +28,31 @@ let
   configDir = if cfg.configDir != null then cfg.configDir else "/etc/openldap/slapd.d";
 
   ldapValueType = let
-    singleLdapValueType = types.either types.str (types.submodule {
-      options = {
-        path = mkOption {
-          type = types.path;
-          description = ''
-            A path containing the LDAP attribute. This is included at run-time, so
-            is recommended for storing secrets.
-          '';
+    singleLdapValueType = types.oneOf [
+      types.str
+      (types.submodule {
+        options = {
+          path = mkOption {
+            type = types.path;
+            description = ''
+              A path containing the LDAP attribute. This is included at run-time, so
+              is recommended for storing secrets.
+            '';
+          };
         };
-      };
-    });
+      })
+      (types.submodule {
+        options = {
+          base64 = mkOption {
+            type = types.str;
+            description = ''
+              A base64-encoded LDAP attribute. Useful for storing values which
+              contain special characters (e.g. newlines) in LDIF files.
+            '';
+          };
+        };
+      })
+    ];
   in types.either singleLdapValueType (types.listOf singleLdapValueType);
 
   ldapAttrsType =
@@ -83,8 +97,14 @@ let
     in types.submodule { inherit options; };
 
   valueToLdif = attr: values: let
-    singleValueToLdif = value: if lib.isAttrs value then "${attr}:< file://${value.path}" else "${attr}: ${value}";
-  in if lib.isList values then map singleValueToLdif values else [ (singleValueToLdif values) ];
+    listValues = if lib.isList values then values else lib.singleton values;
+  in map (value:
+    if lib.isAttrs value then
+      if lib.hasAttr "path" value
+      then "${attr}:< file://${value.path}"
+      else "${attr}:: ${value.base64}"
+    else "${attr}: ${lib.replaceStrings [ "\n" ] [ "\n " ] value}"
+  ) listValues;
 
   attrsToLdif = dn: { attrs, children, includes, ... }: [''
     dn: ${dn}
