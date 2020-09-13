@@ -165,7 +165,11 @@ let
 
   lab = callPackage ./lab { };
 
-  lefthook = callPackage ./lefthook { };
+  lefthook = callPackage ./lefthook {
+    # Please use empty attrset once upstream bugs have been fixed
+    # https://github.com/Arkweid/lefthook/issues/151
+    buildGoModule = buildGo114Module;
+  };
 
   pre-commit = pkgs.python3Packages.toPythonApplication pkgs.python3Packages.pre-commit;
 
