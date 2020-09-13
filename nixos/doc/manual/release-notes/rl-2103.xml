@@ -187,6 +187,24 @@
       to migrate. If you continue to use <literal>configDir</literal>, ensure that
       <literal>olcPidFile</literal> is set to <literal>/run/slapd/slapd.pid</literal>.
     </para>
+    <para>
+      As a result, <literal>extraConfig</literal> and <literal>extraDatabaseConfig</literal>
+      are removed. To help with migration, you can convert your <literal>slapd.conf</literal>
+      file to OLC configuration with the following script (find the location of this
+      configuration file by running <literal>systemctl status openldap</literal>, it is the
+      <literal>-f</literal> option.
+    </para>
+    <programlisting>
+      TMPDIR=$(mktemp -d)
+      slaptest -f /path/to/slapd.conf $TMPDIR
+      slapcat -F $TMPDIR -n0 -H 'ldap:///???(!(objectClass=olcSchemaConfig))'
+    </programlisting>
+    <para>
+      This will dump your current configuration in LDIF format, which should be
+      straightforward to convert into Nix settings. This does not show your schema
+      configuration, as this is unnecessarily verbose for users of the default schemas
+      and <literal>slaptest</literal> is buggy with schemas directly in the config file.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
