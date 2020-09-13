@@ -875,6 +875,8 @@ in
 
   automirror = callPackage ../tools/misc/automirror { };
 
+  barman = python3Packages.callPackage ../tools/misc/barman { };
+
   bash-my-aws = callPackage ../tools/admin/bash-my-aws { };
 
   bashcards = callPackage ../tools/misc/bashcards { };
