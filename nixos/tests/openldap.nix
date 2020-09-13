@@ -121,26 +121,4 @@ in {
       )
     '' + testScript;
   };
-
-  # extraConfig forces use of slapd.conf, test this until that option is removed
-  legacyConfig = import ./make-test-python.nix {
-    inherit testScript;
-    name = "openldap";
-
-    machine = { pkgs, ... }: {
-      services.openldap = {
-        enable = true;
-        suffix = "dc=example";
-        rootdn = "cn=root,dc=example";
-        rootpw = "notapassword";
-        extraConfig = ''
-          # No-op
-        '';
-        extraDatabaseConfig = ''
-          # No-op
-        '';
-        declarativeContents = dbContents;
-      };
-    };
-  };
 }
