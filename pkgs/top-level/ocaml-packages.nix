@@ -882,6 +882,8 @@ let
 
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
 
+    ptset = callPackage ../development/ocaml-modules/ptset { };
+
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
 
     qcheck = callPackage ../development/ocaml-modules/qcheck { };

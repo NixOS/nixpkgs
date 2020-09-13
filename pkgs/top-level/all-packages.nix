@@ -619,7 +619,7 @@ in
 
   aescrypt = callPackage ../tools/misc/aescrypt { };
 
-  acme-client = callPackage ../tools/networking/acme-client { inherit (darwin) apple_sdk; };
+  acme-client = callPackage ../tools/networking/acme-client { inherit (darwin) apple_sdk; stdenv = gccStdenv; };
 
   amass = callPackage ../tools/networking/amass { };
 
@@ -771,6 +771,8 @@ in
   ascii = callPackage ../tools/text/ascii { };
 
   asciinema = callPackage ../tools/misc/asciinema {};
+
+  asciinema-scenario = callPackage ../tools/misc/asciinema-scenario {};
 
   asciiquarium = callPackage ../applications/misc/asciiquarium {};
 
@@ -925,6 +927,8 @@ in
     kernel = null;
     withDriver = false;
   };
+
+  chroma = callPackage ../tools/text/chroma { };
 
   clair = callPackage ../tools/admin/clair { };
 
@@ -3400,6 +3404,8 @@ in
   carp = callPackage ../development/compilers/carp { };
 
   cholmod-extra = callPackage ../development/libraries/science/math/cholmod-extra { };
+
+  choose = callPackage ../tools/text/choose { };
 
   emscripten = callPackage ../development/compilers/emscripten { };
 
@@ -9860,6 +9866,8 @@ in
   z88dk = callPackage ../development/compilers/z88dk { };
 
   zulip = callPackage ../applications/networking/instant-messengers/zulip { };
+
+  zulip-term = callPackage ../applications/networking/instant-messengers/zulip-term { };
 
   zulu8 = callPackage ../development/compilers/zulu/8.nix { };
   zulu = callPackage ../development/compilers/zulu { };
@@ -20134,7 +20142,7 @@ in
 
   electron-cash = libsForQt514.callPackage ../applications/misc/electron-cash { };
 
-  electrum = libsForQt514.callPackage ../applications/misc/electrum { };
+  electrum = libsForQt5.callPackage ../applications/misc/electrum { };
 
   electrum-dash = callPackage ../applications/misc/electrum/dash.nix { };
 
@@ -21220,10 +21228,6 @@ in
   inkscape-with-extensions = callPackage ../applications/graphics/inkscape/with-extensions.nix { };
 
   inkscape-extensions = recurseIntoAttrs (callPackages ../applications/graphics/inkscape/extensions.nix {});
-
-  inkscape_0 = callPackage ../applications/graphics/inkscape/0.x.nix {
-    lcms = lcms2;
-  };
 
   inspectrum = libsForQt514.callPackage ../applications/radio/inspectrum { };
 
@@ -23130,6 +23134,8 @@ in
   printrun = callPackage ../applications/misc/printrun { };
 
   prusa-slicer = callPackage ../applications/misc/prusa-slicer { };
+
+  super-slicer = callPackage ../applications/misc/prusa-slicer/super-slicer.nix { };
 
   robustirc-bridge = callPackage ../servers/irc/robustirc-bridge { };
 
@@ -27664,7 +27670,7 @@ in
   snes9x-gtk = callPackage ../misc/emulators/snes9x-gtk { };
 
   openmsx = callPackage ../misc/emulators/openmsx {
-    python = python27;
+    python = python3;
   };
 
   higan = callPackage ../misc/emulators/higan {

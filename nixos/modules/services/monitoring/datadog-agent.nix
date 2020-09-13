@@ -6,7 +6,7 @@ let
   cfg = config.services.datadog-agent;
 
   ddConf = {
-    dd_url              = "https://app.datadoghq.com";
+    dd_url              = cfg.ddUrl;
     skip_ssl_validation = false;
     confd_path          = "/etc/datadog-agent/conf.d";
     additional_checksd  = "/etc/datadog-agent/checks.d";
@@ -75,6 +75,18 @@ in {
       '';
       example = "/run/keys/datadog_api_key";
       type = types.path;
+    };
+
+    ddUrl = mkOption {
+      description = ''
+        Custom dd_url to configure the agent with.
+        Useful when you want to point datadog to another endpoint, either
+        because you need a proxy to send out data, or because you use their EU
+        endpoint.
+      '';
+      default = "https://app.datadoghq.com";
+      example = "https://app.datadoghq.eu";
+      type = types.str;
     };
 
     tags = mkOption {

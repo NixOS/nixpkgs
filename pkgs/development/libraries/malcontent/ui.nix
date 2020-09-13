@@ -11,6 +11,7 @@
 , flatpak
 , malcontent
 , gtk3
+, appstream-glib
 , desktop-file-utils
 , polkit
 , glib-testing
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    appstream-glib
     dbus
     polkit
     glib-testing
