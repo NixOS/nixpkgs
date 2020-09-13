@@ -185,6 +185,14 @@
      which is the new stable release.  OpenAFS 1.6 was removed.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The <literal>openldap</literal> module now has support for OLC-style
+      configuration, users of the <literal>configDir</literal> option may wish
+      to migrate. If you continue to use <literal>configDir</literal>, ensure that
+      <literal>olcPidFile</literal> is set to <literal>/run/slapd/slapd.pid</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
