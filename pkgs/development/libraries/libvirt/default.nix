@@ -4,7 +4,7 @@
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode, dbus
+, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode, dbus, libtirpc, rpcsvc-proto
 , enableXen ? false, xen ? null
 , enableIscsi ? false, openiscsi
 , enableCeph ? false, ceph
@@ -33,10 +33,15 @@ in stdenv.mkDerivation rec {
         fetchSubmodules = true;
       };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig docutils ] ++ optionals (!buildFromTarball) [ autoreconfHook ];
+  patches = [
+    ./0001-Fix-build-with-libtirpc.patch
+  ];
+
+  nativeBuildInputs = [ makeWrapper pkgconfig docutils rpcsvc-proto ]
+    ++ optionals (!buildFromTarball) [ autoreconfHook ];
   buildInputs = [
     libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
-    libxslt xhtml1 perlPackages.XMLXPath curl libpcap glib dbus
+    libxslt xhtml1 perlPackages.XMLXPath curl libpcap glib dbus libtirpc
   ] ++ optionals stdenv.isLinux [
     libpciaccess lvm2 utillinux systemd libnl numad zfs
     libapparmor libcap_ng numactl attr parted
@@ -80,6 +85,7 @@ in stdenv.mkDerivation rec {
     "QEMU_BRIDGE_HELPER=/run/wrappers/bin/qemu-bridge-helper"
     "QEMU_PR_HELPER=/run/libvirt/nix-helpers/qemu-pr-helper"
     "EBTABLES_PATH=${ebtables}/bin/ebtables-legacy"
+    "CFLAGS=-I${libtirpc.dev}/include/tirpc"
     "--with-attr"
     "--with-apparmor"
     "--with-secdriver-apparmor"

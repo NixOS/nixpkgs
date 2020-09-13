@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gnumake imake makedepend ];
   sourceRoot = ".";
 
-  patches = [ ./patch.patch ];
+  patches = [ ./patch.patch ./0001-Use-strerror-rather-than-sys_errlist-to-fix-compilat.patch ];
 
   postPatch = ''
     substituteInPlace 2006/src/config/site.def \
