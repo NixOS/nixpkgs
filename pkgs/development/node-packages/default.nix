@@ -170,6 +170,17 @@ let
       meta.broken = since "10";
     };
 
+    vega-cli = super.vega-cli.override {
+      nativeBuildInputs = [ pkgs.pkgconfig ];
+      buildInputs = with pkgs; [
+        super.node-pre-gyp
+        pixman
+        cairo
+        pango
+        libjpeg
+      ];
+    };
+
     webtorrent-cli = super.webtorrent-cli.override {
       buildInputs = [ self.node-gyp-build ];
     };
