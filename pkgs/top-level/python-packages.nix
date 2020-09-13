@@ -7247,6 +7247,8 @@ in {
 
   urwidtrees = callPackage ../development/python-modules/urwidtrees { };
 
+  urwid-readline = callPackage ../development/python-modules/urwid-readline { };
+
   usbtmc = callPackage ../development/python-modules/usbtmc { };
 
   us = callPackage ../development/python-modules/us { };
@@ -7709,6 +7711,8 @@ in {
   zstandard = callPackage ../development/python-modules/zstandard { };
 
   zstd = callPackage ../development/python-modules/zstd { inherit (pkgs) zstd pkgconfig; };
+
+  zulip = callPackage ../development/python-modules/zulip { };
 
   zxcvbn = callPackage ../development/python-modules/zxcvbn { };
 

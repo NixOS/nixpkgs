@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "malcontent";
-  version = "0.8.0";
+  version = "0.9.0";
 
   outputs = [ "bin" "out" "lib" "pam" "dev" "man" "installedTests" ];
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "pwithnall";
     repo = pname;
     rev = version;
-    sha256 = "Y9HzysChzzmKW5PuCLm9AZ4oaBLMpB0I5NyZUOYFzm4=";
+    sha256 = "DEtibrGgHSgRjaarAzizzLN1xsJKXl+LCQ29FmpPoJo=";
   };
 
   patches = [
