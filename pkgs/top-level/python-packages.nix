@@ -5744,6 +5744,10 @@ in {
 
   python-slugify = callPackage ../development/python-modules/python-slugify { };
 
+  python-snap7 = callPackage ../development/python-modules/python-snap7 {
+    inherit (pkgs) snap7;
+  };
+
   python-snappy = callPackage ../development/python-modules/python-snappy { inherit (pkgs) snappy; };
 
   python-socketio = callPackage ../development/python-modules/python-socketio { };
