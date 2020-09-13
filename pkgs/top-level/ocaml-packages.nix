@@ -886,6 +886,8 @@ let
 
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
 
+    qcheck-core = callPackage ../development/ocaml-modules/qcheck/core.nix { };
+
     qcheck = callPackage ../development/ocaml-modules/qcheck { };
 
     qtest = callPackage ../development/ocaml-modules/qtest { };
