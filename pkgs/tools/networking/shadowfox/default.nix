@@ -15,7 +15,9 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildFlags = [ "--tags" "release" ];
+  buildFlagsArray = [
+    "-ldflags=-X main.tag=v${version}"
+  ];
 
   meta = with stdenv.lib; {
     description = ''
