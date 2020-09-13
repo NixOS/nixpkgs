@@ -28,6 +28,12 @@
    </listitem>
    <listitem>
     <para>
+      Quickly configure a complete, private, self-hosted video
+      conferencing solution with the new Jitsi Meet module.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
     <package>maxx</package> package removed along with <varname>services.xserver.desktopManager.maxx</varname> module.
     Please migrate to <package>cdesktopenv</package> and <varname>services.xserver.desktopManager.cde</varname> module.
     </para>
@@ -1125,6 +1131,21 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
        The <literal>opendkim</literal> module now uses systemd sandboxing features
        to limit the exposure of the system towards the opendkim service.
      </para>
+   </listitem>
+  </itemizedlist>
+  <itemizedlist>
+   <listitem>
+    <para />
+    <para>
+        Kubernetes has been upgraded to 1.19.1, which also means that the
+        golang version to build it has been bumped to 1.15. This may have
+        consequences for your existing clusters and their certificates. Please
+        consider
+        <link xlink:href="https://relnotes.k8s.io/?markdown=93264">
+            the release notes for Kubernetes 1.19 carefully
+        </link>
+        before upgrading.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
