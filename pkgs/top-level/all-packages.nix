@@ -18251,6 +18251,8 @@ in
 
   pam_ccreds = callPackage ../os-specific/linux/pam_ccreds { };
 
+  pam_gnupg = callPackage ../os-specific/linux/pam_gnupg { };
+
   pam_krb5 = callPackage ../os-specific/linux/pam_krb5 { };
 
   pam_ldap = callPackage ../os-specific/linux/pam_ldap { };

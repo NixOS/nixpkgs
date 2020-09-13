@@ -5899,6 +5899,12 @@
     githubId = 2176611;
     name = "Marko Poikonen";
   };
+  mtreca = {
+    email = "maxime@treca.dev";
+    name = "Maxime Tréca";
+    github = "mtreca";
+    githubId = 16440823;
+  };
   mtreskin = {
     email = "zerthurd@gmail.com";
     github = "Zert";
