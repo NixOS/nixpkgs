@@ -45,7 +45,7 @@ let
 
   cmdlineArgs = cfg.extraFlags ++ [
     "--storage.tsdb.path=${workingDir}/data/"
-    "--config.file=${prometheusYml}"
+    "--config.file=/tmp/prometheus-substituted.yaml"
     "--web.listen-address=${cfg.listenAddress}:${builtins.toString cfg.port}"
     "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
     "--alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
@@ -522,6 +522,18 @@ in {
       '';
     };
 
+    environmentFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/root/prometheus.env";
+      description = ''
+        File to load as environment file. Environment variables
+        from this file will be interpolated into the config file
+        using envsubst with this syntax:
+        <literal>$ENVIRONMENT ''${VARIABLE}</literal>
+      '';
+    };
+
     configText = mkOption {
       type = types.nullOr types.lines;
       default = null;
@@ -662,12 +674,18 @@ in {
     systemd.services.prometheus = {
       wantedBy = [ "multi-user.target" ];
       after    = [ "network.target" ];
+      preStart = ''
+         ${lib.getBin pkgs.envsubst}/bin/envsubst -o "/tmp/prometheus-substituted.yaml" \
+                                                  -i "${prometheusYml}"
+      '';
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/prometheus" +
           optionalString (length cmdlineArgs != 0) (" \\\n  " +
             concatStringsSep " \\\n  " cmdlineArgs);
         User = "prometheus";
         Restart  = "always";
+        PrivateTmp = true;
+        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         WorkingDirectory = workingDir;
         StateDirectory = cfg.stateDir;
       };
