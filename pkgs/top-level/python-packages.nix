@@ -5013,6 +5013,8 @@ in {
 
   pyjwt = callPackage ../development/python-modules/pyjwt { };
 
+  pykdl = callPackage ../development/python-modules/pykdl { };
+
   pykdtree = callPackage ../development/python-modules/pykdtree { inherit (pkgs.llvmPackages) openmp; };
 
   pykeepass = callPackage ../development/python-modules/pykeepass { };
