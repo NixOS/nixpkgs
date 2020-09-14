@@ -3,7 +3,6 @@ airblade/vim-gitgutter
 airblade/vim-rooter
 ajh17/Spacegray.vim
 aklt/plantuml-syntax
-albfan/nerdtree-git-plugin
 altercation/vim-colors-solarized
 alvan/vim-closetag
 alx741/vim-hindent
@@ -604,6 +603,7 @@ xavierd/clang_complete
 xolox/vim-easytags
 xolox/vim-misc
 xuhdev/vim-latex-live-preview
+Xuyuanp/nerdtree-git-plugin
 ycm-core/YouCompleteMe
 Yggdroot/indentLine
 Yilin-Yang/vim-markbar
