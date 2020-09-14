@@ -1,3 +1,13 @@
+From eb21fd64a19a0e10c4c3826fc71610fd5850fa2f Mon Sep 17 00:00:00 2001
+From: Christoph Neidahl <christoph.neidahl@gmail.com>
+Date: Sun, 13 Sep 2020 23:18:51 +0200
+Subject: [PATCH 1/2] Drop baked-in build date for r13y
+
+---
+ src/ct2util.d | 2 +-
+ src/ui/ui.d   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
 diff --git a/src/ct2util.d b/src/ct2util.d
 index 523cadc..e462b09 100644
 --- a/src/ct2util.d
@@ -24,3 +34,6 @@ index e418dda..21af408 100644
  		screen.cprint(4, 0, 1, headerColor, hdr);
  		screen.cprint(screen.width - 14, 0, 1, headerColor, "F12 = Help");
  		int c1 = audio.player.isPlaying ? 13 : 12;
+-- 
+2.25.4
+

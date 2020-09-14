@@ -1,26 +1,31 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch
-, acme, ldc, patchelf
+{ stdenv
+, lib
+, fetchFromGitHub
+, acme
+, ldc
+, patchelf
 , SDL
 }:
-
 stdenv.mkDerivation rec {
   pname = "cheesecutter";
-  version = "unstable-2019-12-06";
+  version = "unstable-2020-04-03";
 
   src = fetchFromGitHub {
     owner = "theyamo";
     repo = "CheeseCutter";
-    rev = "6b433c5512d693262742a93c8bfdfb353d4be853";
-    sha256 = "1szlcg456b208w1237581sg21x69mqlh8cr6v8yvbhxdz9swxnwy";
+    rev = "68d6518f0e6249a2a5d122fc80201578337c1277";
+    sha256 = "0xspzjhc6cp3m0yd0mwxncg8n1wklizamxvidrnn21jgj3mnaq2q";
   };
 
-  nativeBuildInputs = [ acme ldc patchelf ];
+  patches = [
+    ./0001-Drop-baked-in-build-date-for-r13y.patch
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin ./0002-Prepend-libSDL.dylib-to-macOS-SDL-loader.patch;
+
+  nativeBuildInputs = [ acme ldc ]
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) patchelf;
 
   buildInputs = [ SDL ];
-
-  patches = [
-    ./0001-fix-impure-build-date-display.patch
-  ];
 
   makefile = "Makefile.ldc";
 
@@ -33,15 +38,21 @@ stdenv.mkDerivation rec {
     cp -r tunes/* $out/share/cheesecutter/example_tunes
   '';
 
-  postFixup = ''
-    rpath=$(patchelf --print-rpath $out/bin/ccutter)
-    patchelf --set-rpath "$rpath:${lib.makeLibraryPath buildInputs}" $out/bin/ccutter
-  '';
+  postFixup =
+    let
+      rpathSDL = lib.makeLibraryPath [ SDL ];
+    in
+    if stdenv.hostPlatform.isDarwin then ''
+      install_name_tool -add_rpath ${rpathSDL} $out/bin/ccutter
+    '' else ''
+      rpath=$(patchelf --print-rpath $out/bin/ccutter)
+      patchelf --set-rpath "$rpath:${rpathSDL}" $out/bin/ccutter
+    '';
 
   meta = with lib; {
-    description = "A tracker program for composing music for the SID chip.";
+    description = "A tracker program for composing music for the SID chip";
     homepage = "https://github.com/theyamo/CheeseCutter/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ OPNA2608 ];
   };
