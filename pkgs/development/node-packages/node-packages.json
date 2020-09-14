@@ -66,6 +66,7 @@
 , "elm-oracle"
 , "emoj"
 , "emojione"
+, {"epgstation": "../../applications/video/epgstation"}
 , "escape-string-regexp"
 , "eslint"
 , "eslint_d"
