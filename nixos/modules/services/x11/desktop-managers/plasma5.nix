@@ -311,7 +311,7 @@ in
         ++ lib.optional config.powerManagement.enable powerdevil
         ++ lib.optional config.services.colord.enable pkgs.colord-kde
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ]
-        ++ lib.optional config.services.xserver.wacom.enable wacomtablet;
+        ++ lib.optional config.services.xserver.wacom.enable pkgs.wacomtablet;
 
       environment.pathsToLink = [
         # FIXME: modules should link subdirs of `/share` rather than relying on this
