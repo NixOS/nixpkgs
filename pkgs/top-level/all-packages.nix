@@ -27968,4 +27968,6 @@ in
 
   unifi-poller = callPackage ../servers/monitoring/unifi-poller {};
 
+  melody = callPackage ../applications/audio/melody {};
+
 }
