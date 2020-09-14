@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, zlib, shadow
+{ lib, stdenv, fetchurl, pkgconfig, zlib, shadow, libcap_ng
 , ncurses ? null, perl ? null, pam, systemd ? null, minimal ? false }:
 
 stdenv.mkDerivation rec {
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs =
-    [ zlib pam ]
+    [ zlib pam libcap_ng ]
     ++ lib.filter (p: p != null) [ ncurses systemd perl ];
 
   doCheck = false; # "For development purpose only. Don't execute on production system!"
