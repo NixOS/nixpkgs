@@ -267,7 +267,6 @@ lyokha/vim-xkbswitch
 machakann/vim-highlightedyank
 machakann/vim-sandwich
 machakann/vim-swap
-majutsushi/tagbar
 maksimr/vim-jsbeautify
 MarcWeber/vim-addon-actions
 MarcWeber/vim-addon-async
@@ -392,9 +391,11 @@ ponko2/deoplete-fish
 posva/vim-vue
 powerman/vim-plugin-AnsiEsc
 PProvost/vim-ps1
+prabirshrestha/asyncomplete.vim
 prabirshrestha/vim-lsp
 preservim/nerdcommenter
 preservim/nerdtree
+preservim/tagbar
 psliwka/vim-smoothie
 ptzz/lf.vim
 puremourning/vimspector
@@ -469,6 +470,7 @@ slashmili/alchemist.vim
 sodapopcan/vim-twiggy
 solarnz/arcanist.vim
 sonph/onehalf
+sotte/presenting.vim
 stefandtw/quickfix-reflector.vim
 stephpy/vim-yaml
 sunaku/vim-dasht
