@@ -778,7 +778,10 @@ in {
 
   bcdoc = callPackage ../development/python-modules/bcdoc { };
 
-  bcrypt = callPackage ../development/python-modules/bcrypt { };
+  bcrypt = if pythonOlder "3.6" then
+    callPackage ../development/python-modules/bcrypt/3_1.nix { }
+  else
+    callPackage ../development/python-modules/bcrypt { };
 
   beaker = callPackage ../development/python-modules/beaker { };
 
