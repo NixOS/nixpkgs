@@ -722,11 +722,11 @@
       };
     }
     {
-      name = "bl___bl_4.0.2.tgz";
+      name = "bl___bl_4.0.3.tgz";
       path = fetchurl {
-        name = "bl___bl_4.0.2.tgz";
-        url  = "https://registry.yarnpkg.com/bl/-/bl-4.0.2.tgz";
-        sha1 = "52b71e9088515d0606d9dd9cc7aa48dc1f98e73a";
+        name = "bl___bl_4.0.3.tgz";
+        url  = "https://registry.yarnpkg.com/bl/-/bl-4.0.3.tgz";
+        sha1 = "12d6287adc29080e22a705e5764b2a9522cdc489";
       };
     }
     {
@@ -799,14 +799,6 @@
         name = "buffer_from___buffer_from_1.1.1.tgz";
         url  = "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.1.tgz";
         sha1 = "32713bc028f75c02fdb710d7c7bcec1f2c6070ef";
-      };
-    }
-    {
-      name = "buffer___buffer_5.4.3.tgz";
-      path = fetchurl {
-        name = "buffer___buffer_5.4.3.tgz";
-        url  = "https://registry.yarnpkg.com/buffer/-/buffer-5.4.3.tgz";
-        sha1 = "3fbc9c69eb713d323e3fc1a895eee0710c072115";
       };
     }
     {
@@ -4946,22 +4938,6 @@
       };
     }
     {
-      name = "readable_stream___readable_stream_2.3.6.tgz";
-      path = fetchurl {
-        name = "readable_stream___readable_stream_2.3.6.tgz";
-        url  = "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.3.6.tgz";
-        sha1 = "b11c27d88b8ff1fbe070643cf94b0c79ae1b0aaf";
-      };
-    }
-    {
-      name = "readable_stream___readable_stream_3.4.0.tgz";
-      path = fetchurl {
-        name = "readable_stream___readable_stream_3.4.0.tgz";
-        url  = "https://registry.yarnpkg.com/readable-stream/-/readable-stream-3.4.0.tgz";
-        sha1 = "a51c26754658e0a3c21dbf59163bd45ba6f447fc";
-      };
-    }
-    {
       name = "readable_stream___readable_stream_3.6.0.tgz";
       path = fetchurl {
         name = "readable_stream___readable_stream_3.6.0.tgz";
@@ -5199,6 +5175,14 @@
         name = "safe_buffer___safe_buffer_5.1.2.tgz";
         url  = "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.2.tgz";
         sha1 = "991ec69d296e0313747d59bdfd2b745c35f8828d";
+      };
+    }
+    {
+      name = "safe_buffer___safe_buffer_5.2.1.tgz";
+      path = fetchurl {
+        name = "safe_buffer___safe_buffer_5.2.1.tgz";
+        url  = "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.2.1.tgz";
+        sha1 = "1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6";
       };
     }
     {
