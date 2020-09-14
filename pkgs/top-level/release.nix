@@ -19,7 +19,10 @@
 , nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
 }:
 
-with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; };
+with import ./release-lib.nix {
+  inherit supportedSystems scrubJobs nixpkgsArgs;
+  system = "x86_64-linux";
+};
 
 let
 

@@ -6,7 +6,10 @@ with import ../lib;
 , configuration ? {}
 }:
 
-with import ../pkgs/top-level/release-lib.nix { inherit supportedSystems; };
+with import ../pkgs/top-level/release-lib.nix {
+  inherit supportedSystems;
+  system = "x86_64-linux";
+};
 
 let
 

@@ -5,7 +5,10 @@
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
 }:
 
-with import ./release-lib.nix { inherit supportedSystems; };
+with import ./release-lib.nix {
+  inherit supportedSystems;
+  system = "x86_64-linux";
+};
 
 {
 
