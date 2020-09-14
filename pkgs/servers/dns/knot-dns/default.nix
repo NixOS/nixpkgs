@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   CFLAGS = [ "-O2" "-DNDEBUG" ];
 
   doCheck = true;
-  doInstallCheck = false; # needs pykeymgr?
+  doInstallCheck = true;
 
   postInstall = ''
     rm -r "$out"/lib/*.la
