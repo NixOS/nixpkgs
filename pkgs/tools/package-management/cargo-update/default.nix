@@ -11,6 +11,7 @@
 , openssl
 , Security
 , zlib
+, xcbuild
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,7 +28,10 @@ rustPlatform.buildRustPackage rec {
   cargoPatches = [ ./0001-Generate-lockfile-for-cargo-update-v4.1.1.patch ];
   cargoSha256 = "1yaawp015gdnlfqkdmqsf95gszz0h5j1vpfjh763y7kk0bp7zswl";
 
-  nativeBuildInputs = [ cmake installShellFiles pkg-config ronn ];
+  nativeBuildInputs = [
+    cmake installShellFiles pkg-config ronn
+    xcbuild # The cc crate attempts to run xcbuild.
+  ];
 
   buildInputs = [ libgit2 libssh2 openssl zlib ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ curl Security ];
