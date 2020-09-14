@@ -17,8 +17,7 @@
   # The serial ports listed here are:
   # - ttyS0: for Tegra (Jetson TX1)
   # - ttyAMA0: for QEMU's -machine virt
-  # Also increase the amount of CMA to ensure the virtual console on the RPi3 works.
-  boot.kernelParams = ["cma=32M" "console=ttyS0,115200n8" "console=ttyAMA0,115200n8" "console=tty0"];
+  boot.kernelParams = ["console=ttyS0,115200n8" "console=ttyAMA0,115200n8" "console=tty0"];
 
   boot.initrd.availableKernelModules = [
     # Allows early (earlier) modesetting for the Raspberry Pi
