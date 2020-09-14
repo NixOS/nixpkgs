@@ -2710,6 +2710,18 @@ let
     meta.homepage = "https://github.com/dleonard0/pony-vim-syntax/";
   };
 
+  presenting-vim = buildVimPluginFrom2Nix {
+    pname = "presenting-vim";
+    version = "2018-11-25";
+    src = fetchFromGitHub {
+      owner = "sotte";
+      repo = "presenting.vim";
+      rev = "9fb8ccc626cda329c08a35c1df8deff67768a537";
+      sha256 = "1098gps6vnmvvljcqbsx2a5z2syzan30dl95x7pfbs6q1hskj5k7";
+    };
+    meta.homepage = "https://github.com/sotte/presenting.vim/";
+  };
+
   PreserveNoEOL = buildVimPluginFrom2Nix {
     pname = "PreserveNoEOL";
     version = "2013-06-14";
