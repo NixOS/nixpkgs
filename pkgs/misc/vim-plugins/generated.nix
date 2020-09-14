@@ -5629,6 +5629,18 @@ let
     meta.homepage = "https://github.com/tpope/vim-obsession/";
   };
 
+  vim-ocaml = buildVimPluginFrom2Nix {
+    pname = "vim-ocaml";
+    version = "2020-08-20";
+    src = fetchFromGitHub {
+      owner = "ocaml";
+      repo = "vim-ocaml";
+      rev = "a3b6c91b8cfed991ff469363a6c081df26a18f6c";
+      sha256 = "15lk6a40rl37iswa8yhx5ns0k83n4wyi6afy62107x9wha8hagax";
+    };
+    meta.homepage = "https://github.com/ocaml/vim-ocaml/";
+  };
+
   vim-one = buildVimPluginFrom2Nix {
     pname = "vim-one";
     version = "2020-08-09";

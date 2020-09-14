@@ -369,6 +369,7 @@ nvim-lua/completion-nvim
 nvim-lua/diagnostic-nvim
 nvim-treesitter/completion-treesitter
 nvim-treesitter/nvim-treesitter
+ocaml/vim-ocaml
 octol/vim-cpp-enhanced-highlight
 Olical/conjure
 OrangeT/vim-csharp
