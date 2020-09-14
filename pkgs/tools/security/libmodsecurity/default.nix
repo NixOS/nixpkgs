@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkgconfig
 , doxygen, perl, valgrind
 , curl, geoip, libxml2, lmdb, lua, pcre, yajl }:
 
@@ -15,6 +15,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig doxygen ];
+
+  patches = [
+    (fetchpatch {
+      name = "cve-2020-15598.patch";
+      url = "https://gist.githubusercontent.com/crsgists/0e1f6f7f1bd1f239ded64cecee46a11d/raw/181bc852065e9782367f1dc67c96d4d250e73a46/cve-2020-15598.patch";
+      sha256 = "1bcb12563qkanxq2h5dfrw5vgwgj73midc1cfl7gj443zcqhf3si";
+    })
+  ];
 
   buildInputs = [ perl valgrind curl geoip libxml2 lmdb lua pcre yajl ];
 
