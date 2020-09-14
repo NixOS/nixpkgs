@@ -27090,7 +27090,7 @@ in
   };
 
   vector = callPackage ../tools/misc/vector {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security CoreServices;
   };
 
   epkowa = callPackage ../misc/drivers/epkowa { };
