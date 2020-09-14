@@ -393,8 +393,8 @@ let
     src = fetchFromGitHub {
       owner = "weirongxu";
       repo = "coc-explorer";
-      rev = "7f97e92347155d14033ac18a4f40777dde87ac74";
-      sha256 = "1p4458kbl52l4l07ps2cqljynw0bldzk0inpi5i22wsv55s59hrg";
+      rev = "29ae0c4c07d735e27b780b48e7a1f12a8bcb1aa4";
+      sha256 = "012ixvjs6cj7f1s9l26fkmmvzlv6wxy9awi2rgs71bwqgflxxksk";
     };
     meta.homepage = "https://github.com/weirongxu/coc-explorer/";
   };
