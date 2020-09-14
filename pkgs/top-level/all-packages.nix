@@ -9558,6 +9558,8 @@ in
 
   orc = callPackage ../development/compilers/orc { };
 
+  orocos-kdl = callPackage ../development/libraries/orocos-kdl { };
+
   metaocaml_3_09 = callPackage ../development/compilers/ocaml/metaocaml-3.09.nix { };
 
   ber_metaocaml = callPackage ../development/compilers/ocaml/ber-metaocaml.nix { };
