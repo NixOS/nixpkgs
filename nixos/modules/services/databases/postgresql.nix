@@ -77,7 +77,7 @@ in
           via the Unix socket, and md5 password authentication will be
           used for users connecting via TCP. Any added rules will be
           inserted above the default rules. If you'd like to replace the
-          default rules entirely, you can use `lib.mkForce` in your
+          default rules entirely, you can use <function>lib.mkForce</function> in your
           module.
         '';
       };
