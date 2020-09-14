@@ -5709,6 +5709,12 @@
     githubId = 117842;
     name = "Henri Bourcereau";
   };
+  mmesch = {
+    email = "mmesch@noreply.github.com";
+    github = "mmesch";
+    githubId = 2597803;
+    name = "Matthias Meschede";
+  };
   mmilata = {
     email = "martin@martinmilata.cz";
     github = "mmilata";
