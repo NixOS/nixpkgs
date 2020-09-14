@@ -1,4 +1,4 @@
-{ newScope, config, stdenv, fetchurl, makeWrapper
+args@{ newScope, config, stdenv, fetchurl, makeWrapper
 , llvmPackages_10, llvmPackages_11, ed, gnugrep, coreutils, xdg_utils
 , glib, gtk3, gnome3, gsettings-desktop-schemas, gn, fetchgit
 , libva ? null
@@ -21,6 +21,7 @@
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , commandLineArgs ? ""
+, enableExtensions ? [ ]
 }:
 
 let
@@ -74,6 +75,7 @@ let
 
     plugins = callPackage ./plugins.nix {
       inherit enablePepperFlash;
+      inherit enableExtensions;
     };
 
     ungoogled-chromium = callPackage ./ungoogled.nix {};
@@ -238,10 +240,13 @@ in stdenv.mkDerivation {
 
   inherit (chromium.browser) packageName;
   meta = chromium.browser.meta;
-  passthru = {
+  passthru = rec {
     inherit (chromium) upstream-info browser;
     mkDerivation = chromium.mkChromiumDerivation;
     inherit chromeSrc sandboxExecutableName;
     updateScript = ./update.py;
+
+    pkgs = callPackage ../../../../misc/chromium-extensions { };
+    withPackages = f: callPackage ../ungoogled-chromium (args // { enableExtensions = f pkgs; });
   };
 }

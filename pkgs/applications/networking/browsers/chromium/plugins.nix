@@ -1,11 +1,12 @@
 { stdenv, gcc
+, pkgs
 , jshon
 , glib
 , nspr
 , nss
 , fetchzip
 , enablePepperFlash ? false
-
+, enableExtensions ? []
 , upstream-info
 }:
 
@@ -86,7 +87,22 @@ let
       platforms = platforms.x86_64;
     };
   };
+  extensions = stdenv.mkDerivation {
+    name = "chromium-extensions";
+    builder = let
+      extpaths = strings.concatMapStringsSep "," (pkg: pkg + "/lib") enableExtensions;
+    in pkgs.writeScript "builder.sh" ''
+      source $stdenv/setup
 
+      extpaths=${extpaths}
+      ${mkPluginInfo {
+        allowedVars = [ "extpaths"];
+        flags = [
+          "--load-extension=@extpaths@"
+        ];
+      }}
+    '';
+  };
 in {
-  enabled = optional enablePepperFlash flash;
+  enabled = optional enablePepperFlash flash ++ optional (enableExtensions != null) extensions;
 }
