@@ -10,6 +10,8 @@
 , AppKit
 , Security
 , withStableFeatures ? true
+, zlib
+, xcbuild
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,11 +27,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "15kvl490abxdv6706zs7pv0q5fhghmdvlfbn19037sldkcsfl86b";
 
-  nativeBuildInputs = [ pkg-config ]
+  nativeBuildInputs = [
+    pkg-config
+    xcbuild # The cc crate attempts to run xcbuild.
+  ]
     ++ lib.optionals (withStableFeatures && stdenv.isLinux) [ python3 ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security ]
+  buildInputs =  lib.optionals stdenv.isLinux [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv Security zlib openssl ]
     ++ lib.optionals (withStableFeatures && stdenv.isLinux) [ xorg.libX11 ]
     ++ lib.optionals (withStableFeatures && stdenv.isDarwin) [ AppKit ];
 
