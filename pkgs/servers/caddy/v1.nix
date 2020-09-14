@@ -21,9 +21,10 @@ buildGoModule rec {
     cat << EOF > caddy/main.go
     package main
     import "github.com/caddyserver/caddy/caddy/caddymain"
+    var run = caddymain.Run // replaced for tests
     func main() {
       caddymain.EnableTelemetry = false
-      caddymain.Run()
+      run()
     }
     EOF
   '';
