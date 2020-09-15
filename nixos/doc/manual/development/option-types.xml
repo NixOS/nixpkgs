@@ -56,6 +56,46 @@
    </varlistentry>
    <varlistentry>
     <term>
+     <varname>types.anything</varname>
+    </term>
+    <listitem>
+     <para>
+      A type that accepts any value and recursively merges attribute sets together.
+      This type is recommended when the option type is unknown.
+      <example xml:id="ex-types-anything">
+       <title><literal>types.anything</literal> Example</title>
+       <para>
+        Two definitions of this type like
+<programlisting>
+{
+  str = lib.mkDefault "foo";
+  pkg.hello = pkgs.hello;
+  fun.fun = x: x + 1;
+}
+</programlisting>
+<programlisting>
+{
+  str = lib.mkIf true "bar";
+  pkg.gcc = pkgs.gcc;
+  fun.fun = lib.mkForce (x: x + 2);
+}
+</programlisting>
+        will get merged to
+<programlisting>
+{
+  str = "bar";
+  pkg.gcc = pkgs.gcc;
+  pkg.hello = pkgs.hello;
+  fun.fun = x: x + 2;
+}
+</programlisting>
+       </para>
+      </example>
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
      <varname>types.attrs</varname>
     </term>
     <listitem>
