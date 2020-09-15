@@ -804,6 +804,20 @@ let
     };
   };
 
+  AstroFITSHeader = buildPerlModule rec {
+    pname = "Astro-FITS-Header";
+    version = "3.07";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TJ/TJENNESS/${pname}-${version}.tar.gz";
+      sha256 = "530d59ef0c0935f9862d187187a2d7583b12c639bb67db14f983322b161892d9";
+    };
+    meta = {
+      homepage = "http://github.com/timj/perl-Astro-FITS-Header/tree/master";
+      description = "Object-oriented interface to FITS HDUs";
+      license = stdenv.lib.licenses.free;
+    };
+  };
+
   AudioScan = buildPerlPackage {
     pname = "Audio-Scan";
     version = "1.01";
@@ -15645,6 +15659,51 @@ let
     meta = {
       description = "Facilitates the creation and modification of PDF files";
       license = stdenv.lib.licenses.lgpl21Plus;
+    };
+  };
+
+  PDL = buildPerlPackage rec {
+    pname = "PDL";
+    version = "2.022";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/ET/ETJ/${pname}-${version}.tar.gz";
+      sha256 = "12isj05ni44bgf76lc0fs5v88ai8gn5dqrppsbj7vsxblcya7113";
+    };
+    patchPhase = ''
+      substituteInPlace perldl.conf \
+        --replace 'POSIX_THREADS_LIBS => undef' 'POSIX_THREADS_LIBS => "-L${pkgs.glibc.dev}/lib"' \
+        --replace 'POSIX_THREADS_INC  => undef' 'POSIX_THREADS_INC  => "-I${pkgs.glibc.dev}/include"' \
+        --replace 'WITH_MINUIT => undef' 'WITH_MINUIT => 0' \
+        --replace 'WITH_SLATEC => undef' 'WITH_SLATEC => 0' \
+        --replace 'WITH_HDF => undef' 'WITH_HDF => 0' \
+        --replace 'WITH_GD => undef' 'WITH_GD => 0' \
+        --replace 'WITH_PROJ => undef' 'WITH_PROJ => 0'
+    '';
+
+    nativeBuildInputs = with pkgs; [ autoPatchelfHook libGL.dev glibc.dev mesa_glu.dev ];
+
+    buildInputs = [ DevelChecklib TestDeep TestException TestWarn ] ++
+                  (with pkgs; [ gsl freeglut xorg.libXmu xorg.libXi ]);
+
+    propagatedBuildInputs = [
+      AstroFITSHeader
+      ConvertUU
+      ExtUtilsF77
+      FileMap
+      Inline
+      InlineC
+      ListMoreUtils
+      ModuleCompile
+      OpenGL
+      PodParser
+      TermReadKey
+    ];
+
+    meta = {
+      homepage = "http://pdl.perl.org/";
+      description = "Perl Data Language";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
