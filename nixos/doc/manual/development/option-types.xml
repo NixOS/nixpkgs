@@ -23,16 +23,6 @@
   <variablelist>
    <varlistentry>
     <term>
-     <varname>types.attrs</varname>
-    </term>
-    <listitem>
-     <para>
-      A free-form attribute set.
-     </para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>
      <varname>types.bool</varname>
     </term>
     <listitem>
@@ -61,6 +51,24 @@
     <listitem>
      <para>
       A derivation or a store path.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>types.attrs</varname>
+    </term>
+    <listitem>
+     <para>
+      A free-form attribute set.
+      <warning><para>
+       This type will be deprecated in the future because it doesn't recurse
+       into attribute sets, silently drops earlier attribute definitions, and
+       doesn't discharge <literal>lib.mkDefault</literal>, <literal>lib.mkIf
+       </literal> and co. For allowing arbitrary attribute sets, prefer
+       <literal>types.attrsOf types.anything</literal> instead which doesn't
+       have these problems.
+      </para></warning>
      </para>
     </listitem>
    </varlistentry>
