@@ -6,5 +6,5 @@ in {
 
   https-everywhere = pkgs.callPackage ./extensions/https-everywhere { inherit buildChromiumExtension; };
 
-  ublock = pkgs.callPackage ./extensions/ublock { inherit buildChromiumExtension; };
+  ublock-origin = pkgs.callPackage ./extensions/ublock-origin { inherit buildChromiumExtension; };
 }

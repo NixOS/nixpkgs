@@ -4,7 +4,7 @@ let
   uassets = import ../../libs/uassets { inherit stdenv fetchFromGitHub; };
 in
 buildChromiumExtension rec {
-  pname = "ublock";
+  pname = "ublock-origin";
   version = "1.29.2";
 
   src = fetchFromGitHub {
