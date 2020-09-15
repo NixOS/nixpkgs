@@ -7995,6 +7995,12 @@
     githubId = 231788;
     name = "Stephen Weinberg";
   };
+  stephenwithph = {
+    name = "StephenWithPH";
+    email = "StephenWithPH@users.noreply.github.com";
+    github = "StephenWithPH";
+    githubId = 2990492;
+  };
   sterfield = {
     email = "sterfield@gmail.com";
     github = "sterfield";

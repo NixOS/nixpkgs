@@ -27371,6 +27371,8 @@ in
 
   sqsh = callPackage ../development/tools/sqsh { };
 
+  go-swag = callPackage ../development/tools/go-swag { };
+
   go-swagger = callPackage ../development/tools/go-swagger { };
 
   jx = callPackage ../applications/networking/cluster/jx {};
