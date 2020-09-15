@@ -139,6 +139,7 @@
 , "ocaml-language-server"
 , "parcel-bundler"
 , "parsoid"
+, "patch-package"
 , "peerflix"
 , "peerflix-server"
 , "pnpm"
