@@ -72,6 +72,13 @@ default-package-overrides:
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
+  # This bumps hledger from 1.19 to 1.19.1.  There is a small bug in 1.19 that
+  # is fixed in 1.19.1.
+  # https://github.com/simonmichael/hledger/issues/1349
+  - hledger ==1.19.1
+  - hledger-lib ==1.19.1
+  - hledger-ui ==1.19.1
+  - hledger-web ==1.19.1
   # LTS Haskell 16.12
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
