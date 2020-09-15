@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openmpi, python2, python2Packages, autoconf, automake } :
+{ stdenv, fetchFromGitHub, openmpi, python2Packages, autoconf, automake } :
 
 stdenv.mkDerivation rec {
   pname = "hp2p";
@@ -35,4 +35,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.bzizou ];
   };
 }
-
