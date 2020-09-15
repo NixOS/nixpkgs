@@ -1,5 +1,6 @@
 { buildPythonPackage
 , fetchPypi
+, pythonOlder
 , h5py
 , numpy
 , dill
@@ -19,6 +20,7 @@
 buildPythonPackage rec {
   pname   = "hickle";
   version = "4.0.1";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
