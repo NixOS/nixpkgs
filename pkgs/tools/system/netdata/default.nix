@@ -15,14 +15,14 @@ with stdenv.lib;
 let
   go-d-plugin = callPackage ./go.d.plugin.nix {};
 in stdenv.mkDerivation rec {
-  version = "1.24.0";
+  version = "1.25.0";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "19zr2wlsc8rbw6a7vjy4ivgq71l34lh70pcgwa0k5sp1vryj7r3d";
+    sha256 = "0wsgs0slqmj9q5prwlx7d4692lc4c42g0sv35r33vlxnfdwimfh5";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -76,7 +76,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "Real-time performance monitoring tool";
-    homepage = "https://my-netdata.io/";
+    homepage = "https://www.netdata.cloud/";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = [ maintainers.lethalman ];
