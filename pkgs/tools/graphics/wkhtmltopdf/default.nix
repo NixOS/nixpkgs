@@ -18,18 +18,18 @@
 #
 # Previously (before this solution here) we thought that individual versions
 # of wkhtmltopdf like 0.12.3, 0.12.4, 0.12.5 had different bugs that users
-# were experiencing, but the "patched QT" fix seems to have shown us that 
+# were experiencing, but the "patched QT" fix seems to have shown us that
 # NixOS (and our own builds) didn't properly include the patched QT version
 # all the time.
 #
 # As a history of this code, here are the bugs we had in our hands:
 #
-# * #128175 triggered a full review of this code and has shown us that 
-#   we maybe do not need pin the versions but need to be careful about 
+# * #128175 triggered a full review of this code and has shown us that
+#   we maybe do not need pin the versions but need to be careful about
 #   including the right version of QT.
 #
 
-let 
+let
   wkQt = qt4.overrideAttrs (oldAttrs: rec {
     name = "qt-mod-4.8.7-7480f44";
     enableParallelBuilding = true;
@@ -130,11 +130,11 @@ let
         -system-libjpeg
         -system-libpng
         -system-zlib
-        -webkit 
+        -webkit
         -xmlpatterns
       '';
   });
-in 
+in
 
 stdenv.mkDerivation rec {
   version = "0.12.6";
