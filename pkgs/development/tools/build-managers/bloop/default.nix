@@ -82,6 +82,8 @@ stdenv.mkDerivation rec {
     installShellCompletion --name bloop.fish --fish ${bloop-fish}
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with stdenv.lib; {
     homepage = "https://scalacenter.github.io/bloop/";
     license = licenses.asl20;
