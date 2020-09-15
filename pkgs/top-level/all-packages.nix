@@ -23489,6 +23489,10 @@ in
 
   tixati = callPackage ../applications/networking/p2p/tixati { };
 
+  tizonia-openmax-il = callPackage ../applications/audio/tizonia-openmax-il {
+    boost = python3.pkgs.boost.override { enablePython = true; };
+  };
+
   tkcvs = callPackage ../applications/version-management/tkcvs { };
 
   tla = callPackage ../applications/version-management/arch { };
