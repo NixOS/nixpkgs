@@ -23096,7 +23096,7 @@ in
 
   maestral = with python3Packages; toPythonApplication maestral;
 
-  maestral-gui = libsForQt514.callPackage ../applications/networking/maestral-qt { };
+  maestral-gui = libsForQt515.callPackage ../applications/networking/maestral-qt { };
 
   insync = callPackage ../applications/networking/insync { };
 
