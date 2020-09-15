@@ -1,6 +1,7 @@
-{ stdenv, fetchurl, cmake, boost, ffmpeg }:
+{ lib, stdenv, fetchurl, cmake, boost, ffmpeg, zlib }:
 
-stdenv.mkDerivation rec {
+let frameworks = (import <nixpkgs> {}).darwin.apple_sdk.frameworks;
+in stdenv.mkDerivation rec {
   pname = "chromaprint";
   version = "1.5.0";
 
@@ -11,7 +12,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ boost ffmpeg ];
+  darwinInputs = [
+    frameworks.Accelerate
+    frameworks.CoreGraphics
+    frameworks.CoreVideo
+    zlib
+    ];
+  buildInputs = [ boost ffmpeg ] ++ lib.optional stdenv.isDarwin darwinInputs;
 
   cmakeFlags = [ "-DBUILD_EXAMPLES=ON" "-DBUILD_TOOLS=ON" ];
 
@@ -20,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "AcoustID audio fingerprinting library";
     maintainers = with maintainers; [ ehmry ];
     license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
