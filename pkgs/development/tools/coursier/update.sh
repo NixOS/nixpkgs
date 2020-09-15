@@ -9,7 +9,7 @@ if [ ! -f "$ROOT/default.nix" ]; then
   exit 1
 fi
 
-COURSIER_VER=$(git ls-remote --tags --refs --sort=version:refname https://github.com/coursier/coursier | awk -F"/v" '{ print $NF }' | tail -1)
+COURSIER_VER=$(git -c 'versionsort.suffix=-' ls-remote --refs --tags --sort='version:refname' https://github.com/coursier/coursier | awk -F"/v" '{ print $NF }' | tail -1)
 sed -i "s/version = \".*\"/version = \"${COURSIER_VER}\"/" "$ROOT/default.nix"
 
 COURSIER_ZSH_URL="https://raw.githubusercontent.com/coursier/coursier/v${COURSIER_VER}/modules/cli/src/main/resources/completions/zsh"

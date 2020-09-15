@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     install -Dm755 ${zshCompletion version} $out/share/zsh/site-functions/_coursier
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with stdenv.lib; {
     homepage = "https://get-coursier.io/";
     description = "A Scala library to fetch dependencies from Maven / Ivy repositories";
