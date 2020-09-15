@@ -1,21 +1,21 @@
-{ lib, python3, platformio, esptool, git, protobuf3_11, fetchpatch }:
+{ lib, python3, platformio, esptool, git, protobuf3_12, fetchpatch }:
 
 let
   python = python3.override {
     packageOverrides = self: super: {
       protobuf = super.protobuf.override {
-        protobuf = protobuf3_11;
+        protobuf = protobuf3_12;
       };
     };
   };
 
 in python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "1.14.5";
+  version = "1.15.0";
 
   src = python.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "176mi361677d5cqbi0hn52kky845byjs6gdad8pdhihyjgv7a9y9";
+    sha256 = "1npw5rm0mcfydrxxyk4bgzj5vmcwasw1y2idc3bw0ksgv9q69ird";
   };
 
   ESPHOME_USE_SUBPROCESS = "";
@@ -28,7 +28,7 @@ in python.pkgs.buildPythonApplication rec {
 
   # remove all version pinning (E.g tornado==5.1.1 -> tornado)
   postPatch = ''
-    sed -i -e "s/==[0-9.]*//" setup.py
+    sed -i -e "s/==[0-9.]*//" requirements.txt
   '';
 
   makeWrapperArgs = [
