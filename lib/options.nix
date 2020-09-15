@@ -107,6 +107,10 @@ rec {
   /* "Merge" option definitions by checking that they all have the same value. */
   mergeEqualOption = loc: defs:
     if defs == [] then abort "This case should never happen."
+    # Return early if we only have one element
+    # This also makes it work for functions, because the foldl' below would try
+    # to compare the first element with itself, which is false for functions
+    else if length defs == 1 then (elemAt defs 0).value
     else foldl' (val: def:
       if def.value != val then
         throw "The option `${showOption loc}' has conflicting definitions, in ${showFiles (getFiles defs)}."
