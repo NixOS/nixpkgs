@@ -4024,6 +4024,8 @@ in
 
   gnome-keysign = callPackage ../tools/security/gnome-keysign { };
 
+  gnome-passwordsafe = callPackage ../applications/misc/gnome-passwordsafe { };
+
   gnome-podcasts = callPackage ../applications/audio/gnome-podcasts { };
 
   gnome-photos = callPackage ../applications/graphics/gnome-photos {
