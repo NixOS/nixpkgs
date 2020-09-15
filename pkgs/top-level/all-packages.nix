@@ -5370,6 +5370,8 @@ in
 
   mandoc = callPackage ../tools/misc/mandoc { };
 
+  manix = callPackage ../tools/nix/manix {};
+
   marktext = callPackage ../applications/misc/marktext { };
 
   mawk = callPackage ../tools/text/mawk { };
