@@ -1,0 +1,79 @@
+From fa163678134aced775651558f91a006791e26ef8 Mon Sep 17 00:00:00 2001
+From: Anton Lazarev <antonok35@gmail.com>
+Date: Thu, 13 Aug 2020 12:35:21 -0400
+Subject: [PATCH] use microhttpd's MHD_Result return type
+
+ Originally retrieved from https://github.com/cinemast/libjson-rpc-cpp/commit/fa163678134aced775651558f91a006791e26ef8.patch
+ via https://github.com/cinemast/libjson-rpc-cpp/pull/299, included in-tree because
+ it is unmerged
+
+diff --git a/src/jsonrpccpp/server/connectors/httpserver.cpp b/src/jsonrpccpp/server/connectors/httpserver.cpp
+index a8496154..bd4a81d3 100644
+--- a/src/jsonrpccpp/server/connectors/httpserver.cpp
++++ b/src/jsonrpccpp/server/connectors/httpserver.cpp
+@@ -151,10 +151,10 @@ void HttpServer::SetUrlHandler(const string &url,
+   this->SetHandler(NULL);
+ }
+ 
+-int HttpServer::callback(void *cls, MHD_Connection *connection, const char *url,
+-                         const char *method, const char *version,
+-                         const char *upload_data, size_t *upload_data_size,
+-                         void **con_cls) {
++MHD_Result HttpServer::callback(void *cls, MHD_Connection *connection,
++                                const char *url, const char *method,
++                                const char *version, const char *upload_data,
++                                size_t *upload_data_size, void **con_cls) {
+   (void)version;
+   if (*con_cls == NULL) {
+     struct mhd_coninfo *client_connection = new mhd_coninfo;
+diff --git a/src/jsonrpccpp/server/connectors/httpserver.h b/src/jsonrpccpp/server/connectors/httpserver.h
+index ebd70c9b..e5b57898 100644
+--- a/src/jsonrpccpp/server/connectors/httpserver.h
++++ b/src/jsonrpccpp/server/connectors/httpserver.h
+@@ -79,7 +79,7 @@ class HttpServer : public AbstractServerConnector {
+   std::map<std::string, IClientConnectionHandler *> urlhandler;
+   struct sockaddr_in loopback_addr;
+ 
+-  static int callback(void *cls, struct MHD_Connection *connection,
++  static MHD_Result callback(void *cls, struct MHD_Connection *connection,
+                       const char *url, const char *method, const char *version,
+                       const char *upload_data, size_t *upload_data_size,
+                       void **con_cls);
+diff --git a/src/test/testhttpserver.cpp b/src/test/testhttpserver.cpp
+index 6e6db4b6..15a2ba8b 100644
+--- a/src/test/testhttpserver.cpp
++++ b/src/test/testhttpserver.cpp
+@@ -41,7 +41,7 @@ std::string TestHttpServer::GetHeader(const std::string &key) {
+   return "";
+ }
+ 
+-int TestHttpServer::callback(void *cls, MHD_Connection *connection,
++MHD_Result TestHttpServer::callback(void *cls, MHD_Connection *connection,
+                              const char *url, const char *method,
+                              const char *version, const char *upload_data,
+                              size_t *upload_data_size, void **con_cls) {
+@@ -69,7 +69,7 @@ int TestHttpServer::callback(void *cls, MHD_Connection *connection,
+   return MHD_YES;
+ }
+ 
+-int TestHttpServer::header_iterator(void *cls, MHD_ValueKind kind,
++MHD_Result TestHttpServer::header_iterator(void *cls, MHD_ValueKind kind,
+                                     const char *key, const char *value) {
+   (void)kind;
+   TestHttpServer *_this = static_cast<TestHttpServer *>(cls);
+diff --git a/src/test/testhttpserver.h b/src/test/testhttpserver.h
+index f438c640..71573d6a 100644
+--- a/src/test/testhttpserver.h
++++ b/src/test/testhttpserver.h
+@@ -36,9 +36,9 @@ namespace jsonrpc {
+             std::map<std::string,std::string> headers;
+             std::string response;
+ 
+-            static int callback(void *cls, struct MHD_Connection *connection, const char *url, const char *method, const char *version, const char *upload_data, size_t *upload_data_size, void **con_cls);
++            static MHD_Result callback(void *cls, struct MHD_Connection *connection, const char *url, const char *method, const char *version, const char *upload_data, size_t *upload_data_size, void **con_cls);
+ 
+-            static int header_iterator (void *cls, enum MHD_ValueKind kind, const char *key, const char *value);
++            static MHD_Result header_iterator (void *cls, enum MHD_ValueKind kind, const char *key, const char *value);
+     };
+ 
+ } // namespace jsonrpc
