@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     description =
       "GNOME Shell extension to switch windows or launch applications quickly by typing";
     license = licenses.gpl3Plus;
-    #maintainers = with maintainers; [ chickensoupwithrice ];
+    maintainers = with maintainers; [ chickensoupwithrice ];
     homepage = "https://github.com/daniellandau/switcher";
   };
 }

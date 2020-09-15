@@ -9604,4 +9604,10 @@
       fingerprint = "F1C5 760E 45B9 9A44 72E9  6BFB D65C 9AFB 4C22 4DA3";
     }];
   };
+  chickensoupwithrice = {
+    name = "Anish Lakhwara";
+    email = "anish@lakhwara.com";
+    github = "chickensoupwithrice";
+    githubId = 22575913;
+  };
 }
