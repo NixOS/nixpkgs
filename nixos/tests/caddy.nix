@@ -57,11 +57,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
     def check_etag(url):
         etag = webserver.succeed(
-            "curl -v '{}' 2>&1 | sed -n -e \"s/^< [Ee][Tt][Aa][Gg]: *//p\"".format(url)
+            "curl --fail -v '{}' 2>&1 | sed -n -e \"s/^< [Ee][Tt][Aa][Gg]: *//p\"".format(
+                url
+            )
         )
         etag = etag.replace("\r\n", " ")
         http_code = webserver.succeed(
-            "curl --silent --show-error -o /dev/null -w \"%{{http_code}}\" --head -H 'If-None-Match: {}' {}".format(
+            "curl --fail --silent --show-error -o /dev/null -w \"%{{http_code}}\" --head -H 'If-None-Match: {}' {}".format(
                 etag, url
             )
         )
