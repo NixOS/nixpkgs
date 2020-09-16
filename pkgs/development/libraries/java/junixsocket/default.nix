@@ -1,42 +1,44 @@
-{ lib, stdenv, fetchurl, ant, jdk, junit }:
-
-stdenv.mkDerivation rec {
-  name = "junixsocket-1.3";
-
+{ lib, stdenv, fetchurl, jre, runtimeShell }:
+let
+  pname = "junixsocket";
+  version = "2.3.4";
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/junixsocket/${name}-src.tar.bz2";
-    sha256 = "0c6p8vmiv5nk8i6g1hgivnl3mpb2k3lhjjz0ss9dlirisfrxf1ym";
+    url = "https://github.com/kohlschutter/junixsocket/releases/download/${pname}-parent-${version}/${pname}-dist-${version}-bin.tar.gz";
+    sha256 = "0zmvc5ddlch1s6yd88m0wfkwpddksjlkdcg0jzn5vf6cqdds020w";
   };
+  selftestjar = "${pname}-selftest-${version}-jar-with-dependencies.jar";
+in
+stdenv.mkDerivation {
+  inherit pname;
+  inherit version;
+  inherit src;
 
-  patches = [ ./darwin.patch ];
+  preferLocalBuild = true;
+  outputs = [ "lib" "test" "out" ];
 
-  buildInputs = [ ant jdk junit ];
-
-  preConfigure =
-    ''
-      substituteInPlace src/main/org/newsclub/net/unix/NativeUnixSocketConfig.java \
-        --replace /opt/newsclub/lib-native $out/lib
-    '';
-
-  buildPhase = "ant";
-
-  ANT_ARGS =
-    # Note that our OpenJDK on Darwin is currently 32-bit, so we have to build a 32-bit dylib.
-    (if stdenv.is64bit then [ "-Dskip32=true" ] else [ "-Dskip64=true" ])
-    ++ [ "-Dgcc=${stdenv.cc.targetPrefix}cc" "-Dant.build.javac.source=1.6" ]
-    ++ lib.optional stdenv.isDarwin "-DisMac=true";
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase =
     ''
-      mkdir -p $out/share/java $out/lib
-      cp -v dist/*.jar $out/share/java
-      cp -v lib-native/*.so lib-native/*.dylib $out/lib/
+      mkdir -p $lib/share/java
+      cp lib/*.jar $lib/share/java/.
+      mkdir -p $test
+      cp ${selftestjar} $test/.
+    '';
+
+  doCheck = true;
+  checkInputs = [ jre ];
+  checkPhase = ''
+      #!${runtimeShell}
+      ${jre}/bin/java -jar ${selftestjar} "$@" | tee test.log
+      grep -F 'Selftest PASSED' test.log
     '';
 
   meta = {
     description = "A Java/JNI library for using Unix Domain Sockets from Java";
     homepage = "https://github.com/kohlschutter/junixsocket";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = lib.platforms.linux;
   };
 }
