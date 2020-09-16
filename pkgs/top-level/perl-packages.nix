@@ -18966,6 +18966,19 @@ let
     };
   };
 
+  TermSk = buildPerlPackage {
+    pname = "Term-Sk";
+    version = "0.18";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KE/KEICHNER/Term-Sk-0.18.tar.gz";
+      sha256 = "f2e491796061205b08688802b287792d7d803b08972339fb1070ba05612af885";
+    };
+    meta = {
+      description = "Perl extension for displaying a progress indicator on a terminal.";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TermUI = buildPerlPackage {
      pname = "Term-UI";
      version = "0.46";
