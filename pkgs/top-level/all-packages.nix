@@ -4950,6 +4950,8 @@ in
 
   matrix-appservice-discord = callPackage ../servers/matrix-appservice-discord { };
 
+  matrix-appservice-irc = callPackage ../servers/matrix-appservice-irc { };
+
   mautrix-telegram = recurseIntoAttrs (callPackage ../servers/mautrix-telegram { });
 
   mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp { };
