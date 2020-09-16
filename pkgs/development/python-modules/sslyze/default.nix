@@ -19,11 +19,6 @@ buildPythonPackage rec {
     sha256 = "06mwzxw6xaqin2gwzcqb9r7qhbyx3k7zcxygxywi2bpxyjv9lq32";
   };
 
-  patchPhase = ''
-    substituteInPlace setup.py \
-      --replace "cryptography>=2.6,<=2.9" "cryptography>=2.6,<=3"
-  '';
-
   checkInputs = [ pytest ];
 
   checkPhase = ''
@@ -48,5 +43,6 @@ buildPythonPackage rec {
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.agpl3;
     maintainers = with maintainers; [ veehaitch ];
+    broken = true; # Needs cryptography <= 2.9, but nixpkgs has cryptography > 3 now
   };
 }
