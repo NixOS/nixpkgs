@@ -14,6 +14,9 @@ let
   myHotel = hotel.overrideAttrs(oa: oa // {
     preRebuild = ''
       ${nodejs}/bin/node node_modules/babel-cli/bin/babel.js src -d lib --copy-files --ignore src/app
+
+      # Needed but fails
+      ${nodejs}/bin/node node_modules/webpack/bin/webpack.js --config webpack.prod.js
     '';
   });
 
