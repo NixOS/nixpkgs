@@ -31,7 +31,7 @@ in
     machine.succeed('echo "import IO" > TestIO.agda')
     machine.succeed("agda -l standard-library -i . TestIO.agda")
 
-    # # Hello world
+    # Hello world
     machine.succeed(
         "cp ${hello-world} HelloWorld.agda"
     )
