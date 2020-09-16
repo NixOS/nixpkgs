@@ -27953,4 +27953,6 @@ in
 
   unifi-poller = callPackage ../servers/monitoring/unifi-poller {};
 
+  fac-build = callPackage ../development/tools/build-managers/fac {};
+
 }
