@@ -15,13 +15,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gtg";
-  version = "unstable-2020-08-02";
+  version = "unstable-2020-09-16";
 
   src = fetchFromGitHub {
     owner = "getting-things-gnome";
     repo = "gtg";
-    rev = "6623731f301c1b9c7b727e009f4a6462ad381c68";
-    sha256 = "14gxgg4nl0ki3dn913041jpyfhxsj90fkd55z6mmpyklhr8mwss1";
+    rev = "1be991c6d7f7b2e4b8ac16f82e8a07f9dce4272f";
+    sha256 = "1f5acpjwnp08c78dds7xm22qjzcfnx2qs121yvm3rswkh27s4n23";
   };
 
 
