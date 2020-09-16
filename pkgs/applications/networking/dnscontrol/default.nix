@@ -19,6 +19,6 @@ buildGoModule rec {
     description = "Synchronize your DNS to multiple providers from a simple DSL";
     homepage = "https://stackexchange.github.io/dnscontrol/";
     license = licenses.mit;
-    maintainers = with maintainers; [ mmahut ];
+    maintainers = with maintainers; [ mmahut SuperSandro2000 ];
   };
 }
