@@ -158,6 +158,19 @@ This can be overridden.
 
 By default, Agda sources are files ending on `.agda`, or literate Agda files ending on `.lagda`, `.lagda.tex`, `.lagda.org`, `.lagda.md`, `.lagda.rst`. The list of recognised Agda source extensions can be extended by setting the `extraExtensions` config variable.
 
+## Creating a development environment {#creating-a-development-environment}
+
+You can create a `nix-shell` containing `agda` with all dependency libraries by accessing the `env` attribute of an Agda derivation.
+Assuming that you have already created an Agda package `mypkg` using `agdaPackages.mkDerivation`,
+create a file `shell.nix` containing:
+
+```nix
+(import ./mypkg.nix).env
+```
+
+This will bring `agda` in scope with all dependencies of your package,
+but not build your package itself (which is useful if you are developing it currently).
+
 ## Adding Agda packages to Nixpkgs {#adding-agda-packages-to-nixpkgs}
 
 To add an Agda package to `nixpkgs`, the derivation should be written to `pkgs/development/libraries/agda/${library-name}/` and an entry should be added to `pkgs/top-level/agda-packages.nix`. Here it is called in a scope with access to all other Agda libraries, so the top line of the `default.nix` can look like:

@@ -44,6 +44,8 @@ let
     "lagda.tex"
   ];
 
+  filterAgdaBuildInputs = builtins.filter (p: p ? isAgdaDerivation);
+
   defaults =
     { pname
     , meta
@@ -56,7 +58,7 @@ let
     , extraExtensions ? []
     , ...
     }: let
-      agdaWithArgs = withPackages (builtins.filter (p: p ? isAgdaDerivation) buildInputs);
+      agdaWithArgs = withPackages (filterAgdaBuildInputs buildInputs);
     in
       {
         inherit libraryName libraryFile;
@@ -78,6 +80,8 @@ let
           runHook postInstall
         '';
         meta = if meta.broken or false then meta // { hydraPlatforms = lib.platforms.none; } else meta;
+
+        env = withPackages buildInputs;
       };
 in
 {
