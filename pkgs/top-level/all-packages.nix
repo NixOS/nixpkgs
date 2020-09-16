@@ -22835,7 +22835,20 @@ in
 
   quodlibet-xine-full = quodlibet-full.override { xineBackend = true; tag = "-xine-full"; };
 
-  qutebrowser = libsForQt514.callPackage ../applications/networking/browsers/qutebrowser { };
+  qutebrowser = let
+    libsForQt5 = qt515;
+    qt5 = qt515;
+    python = python3.override {
+      packageOverrides = self: super: {
+        pkgs = pkgs // {
+          inherit libsForQt5 qt5;
+        };
+      };
+      self = python3;
+    };
+  in libsForQt5.callPackage ../applications/networking/browsers/qutebrowser { 
+    python3 = python;
+  };
 
   rabbitvcs = callPackage ../applications/version-management/rabbitvcs {};
 
