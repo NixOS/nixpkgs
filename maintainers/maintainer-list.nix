@@ -974,6 +974,12 @@
     githubId = 14111;
     name = "Brandon Dimcheff";
   };
+  beardhatcode = {
+    email = "nixos@beardhatcode.be";
+    github = "beardhatcode";
+    githubId = 662538;
+    name = "Robbert Gurdeep Singh";
+  };
   bendlas = {
     email = "herwig@bendlas.net";
     github = "bendlas";
