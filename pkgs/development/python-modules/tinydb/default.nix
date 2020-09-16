@@ -1,7 +1,9 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
-, pytest
+, poetry
+, pytestCheckHook
 , pytestcov
 , pytestrunner
 , pycodestyle
@@ -10,21 +12,21 @@
 
 buildPythonPackage rec {
   pname = "tinydb";
-  version = "v3.14.1";
+  version = "4.1.1";
+  disabled = pythonOlder "3.5";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "msiemens";
     repo = pname;
-    rev = version;
-    sha256 = "02idbvrm8j4mwsjfkzy11f4png19k307p53s4qa2ifzssysxpb96";
+    rev = "v${version}";
+    sha256 = "09cwdmpj91c6q7jympip1lrcd3idbm9cqblgvmrh0v1vy1iv2ki7";
   };
 
-  nativeBuildInputs = [
-    pytestrunner
-  ];
+  nativeBuildInputs = [ poetry ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     pytestcov
     pycodestyle
     pyyaml
@@ -32,8 +34,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A lightweight document oriented database written in pure Python with no external dependencies";
-    homepage = "https://github.com/msiemens/tinydb";
-    license = licenses.asl20;
+    homepage = "https://tinydb.readthedocs.org/";
+    changelog = "https://tinydb.readthedocs.io/en/latest/changelog.html";
+    license = licenses.mit;
     maintainers = with maintainers; [ marcus7070 ];
   };
 }
