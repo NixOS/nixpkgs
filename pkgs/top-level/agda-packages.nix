@@ -7,9 +7,9 @@ let
     inherit (callPackage ../build-support/agda {
       inherit Agda self;
       inherit (pkgs.haskellPackages) ghcWithPackages;
-    }) withPackages mkDerivation;
+    }) withPackages mkDerivation shellFor;
   in {
-    inherit mkDerivation;
+    inherit mkDerivation shellFor;
 
     lib = lib.extend (final: prev: import ../build-support/agda/lib.nix { lib = prev; });
 

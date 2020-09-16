@@ -160,9 +160,16 @@ By default, Agda sources are files ending on `.agda`, or literate Agda files end
 
 ## Creating a development environment {#creating-a-development-environment}
 
-You can create a `nix-shell` containing `agda` with all dependency libraries by accessing the `env` attribute of an Agda derivation.
-Assuming that you have already created an Agda package `mypkg` using `agdaPackages.mkDerivation`,
+You can create a `nix-shell` containing `agda` with all dependency libraries with the function `agdaPackages.shellFor`.
+Assuming that you have already created an agda package `mypkg` using `agdaPackages.mkDerivation`,
 create a file `shell.nix` containing:
+
+```nix
+{ nixpkgs ? import <nixpkgs> {} }:
+(nixpkgs.pkgs.agdaPackages.shellFor (import ./mypkg.nix))
+```
+
+For convenience, you can also arrive at the same result by accessing the `env` attribute of an Agda derivation:
 
 ```nix
 (import ./mypkg.nix).env

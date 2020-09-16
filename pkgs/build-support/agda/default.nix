@@ -46,6 +46,11 @@ let
 
   filterAgdaBuildInputs = builtins.filter (p: p ? isAgdaDerivation);
 
+  shellFor = agdaDrv: mkShell {
+    buildInputs = [ (withPackages (filterAgdaBuildInputs agdaDrv.buildInputs)) ];
+    inputsFrom = agdaDrv.buildInputs ++ agdaDrv.nativeBuildInputs;
+  };
+
   defaults =
     { pname
     , meta
@@ -81,11 +86,16 @@ let
         '';
         meta = if meta.broken or false then meta // { hydraPlatforms = lib.platforms.none; } else meta;
 
-        env = withPackages buildInputs;
+        env = stdenv.mkDerivation {
+          name = "agda-shell-for-${pname}";
+          buildInputs = [ (withPackages buildInputs) ];
+          phases = ["installPhase"];
+          installPhase = "echo $buildInputs > $out";
+        };
       };
 in
 {
   mkDerivation = args: stdenv.mkDerivation (args // defaults args);
 
-  inherit withPackages withPackages';
+  inherit withPackages withPackages' shellFor;
 }
