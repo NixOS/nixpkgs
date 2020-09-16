@@ -30,5 +30,14 @@
       installCheckPhase = ''
         test -e $out/manifest.json || (echo "INVALID EXTENSION: missing manifest.json" && exit 1)
       '';
+
+      # Filter out "key" and "update_url" entries from manifest.json
+      fixupPhase = ''
+        tmpmanifest=$(mktemp)
+        ${stdenv.lib.getBin pkgs.jq}/bin/jq \
+          'with_entries(.|select((.key != "key") and (.key != "update_url")))' \
+          $out/manifest.json >$tmpmanifest
+        mv $tmpmanifest $out/manifest.json
+      '';
     });
 }
