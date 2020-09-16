@@ -8,16 +8,12 @@ let inherit (stdenv.hostPlatform.parsed) kernel;
       darwin = rec {
         systemTag =  "nix-darwin";
         capitalized = systemTag;
-        ext = "ttc";
-        fontFile = "Apple%20Color%20Emoji.ttc";
-        name = "joypixels-apple-color-emoji.ttc";
+        fontFile = "JoyPixels-SBIX.ttf";
       };
     }.${kernel.name} or rec {
         systemTag = "nixos";
         capitalized = "NixOS";
-        ext = "ttf";
         fontFile = "joypixels-android.ttf";
-        name = fontFile;
       };
 
     joypixels-free-license = with systemSpecific; {
@@ -46,7 +42,7 @@ let inherit (stdenv.hostPlatform.parsed) kernel;
       configuration.nix:
         nixpkgs.config.allowUnfree = true;
         nixpkgs.config.joypixels.acceptLicense = true;
-      
+
       config.nix:
         allowUnfree = true;
         joypixels.acceptLicense = true;
@@ -63,17 +59,17 @@ stdenv.mkDerivation rec {
 
   src = assert !acceptLicense -> throwLicense;
     with systemSpecific; fetchurl {
-      inherit name;
+      name = fontFile;
       url = "https://cdn.joypixels.com/distributions/${systemTag}/font/${version}/${fontFile}";
       sha256 = {
-        darwin = "043980g0dlp8vd4qkbx6298fwz8ns0iwbxm0f8czd9s7n2xm4npq";
+        darwin = "1s1dibgpv4lc9cwbgykgwjxxhg2rbn5g9fyd10r6apj9xhfn8cyn";
       }.${kernel.name} or "1vxqsqs93g4jyp01r47lrpcm0fmib2n1vysx32ksmfxmprimb75s";
     };
 
   dontUnpack = true;
 
   installPhase = with systemSpecific; ''
-    install -Dm644 $src $out/share/fonts/truetype/joypixels.${ext}
+    install -Dm644 $src $out/share/fonts/truetype/${fontFile}
   '';
 
   meta = with stdenv.lib; {
