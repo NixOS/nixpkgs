@@ -1,15 +1,19 @@
-{ stdenv, buildGoModule, fetchFromGitHub, go-bindata, nixosTests }:
+{ stdenv, fetchurl, buildGoModule, go-bindata, nixosTests }:
 
 buildGoModule rec {
   pname = "traefik";
   version = "2.2.11";
 
-  src = fetchFromGitHub {
-    owner = "containous";
-    repo = "traefik";
-    rev = "v${version}";
-    sha256 = "0l93qb0kjbm5gjba0bxfyb5a0n1p54n5crhcsyzgrki4x586lan0";
+  src = fetchurl {
+    url = "https://github.com/containous/traefik/releases/download/v${version}/traefik-v${version}.src.tar.gz";
+    sha256 = "00kprbr437ml33bxm4nhxm9vwh6ywrpxvlij7p3r306bfpwa4j3r";
   };
+
+  unpackPhase = ''
+    mkdir source
+    cd source
+    tar xf $src
+  '';
 
   vendorSha256 = "06x2mcyp6c1jdf5wz51prhcn071d0580322lcv3x2bxk2grx08i2";
 
