@@ -5677,6 +5677,12 @@
     githubId = 622577;
     name = "Michael Lieberman";
   };
+  mlvzk = {
+    name = "mlvzk";
+    email = "mlvzk@users.noreply.github.com";
+    github = "mlvzk";
+    githubId = 44906333;
+  };
   mmahut = {
     email = "marek.mahut@gmail.com";
     github = "mmahut";
