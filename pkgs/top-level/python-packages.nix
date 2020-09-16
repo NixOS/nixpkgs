@@ -9,8 +9,8 @@
 { pkgs
 , stdenv
 , python
-, qt5
-, libsForQt5
+, qt5 ? pkgs.qt514
+, libsForQt5 ? pkgs.libsForQt514
 , overrides ? (self: super: {})
 }:
 
@@ -21,6 +21,7 @@ let
 
 let
   inherit (python.passthru) isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
+  inherit libsForQt5 qt5;
 
   callPackage = pkgs.newScope self;
 
