@@ -29,7 +29,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             """
         )
         machine.wait_for_open_port(80)
-        machine.succeed(f"curl {url}")
+        machine.succeed(f"curl -f {url}")
         machine.succeed("kill -INT $(cat my-nginx.pid)")
         machine.wait_for_closed_port(80)
   '';
