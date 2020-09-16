@@ -5,7 +5,7 @@
 , isPy27
 , ipaddress
 , openssl
-, cryptography_vectors
+, cryptography_vectors_2_9
 , darwin
 , packaging
 , six
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   ++ stdenv.lib.optionals isPy27 [ ipaddress enum34 ];
 
   checkInputs = [
-    cryptography_vectors
+    cryptography_vectors_2_9
     hypothesis
     iso8601
     pretend

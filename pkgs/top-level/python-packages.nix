@@ -1328,14 +1328,17 @@ in {
   cryptacular = callPackage ../development/python-modules/cryptacular { };
 
   cryptography = if isPy27 then
-    callPackage ../development/python-modules/cryptography/2.9.nix { }
+    cryptography_2_9
   else
     callPackage ../development/python-modules/cryptography { };
 
   cryptography_vectors = if isPy27 then
-    callPackage ../development/python-modules/cryptography/vectors-2.9.nix { }
+    cryptography_vectors_2_9
   else
     callPackage ../development/python-modules/cryptography/vectors.nix { };
+
+  cryptography_2_9 = callPackage ../development/python-modules/cryptography/2.9.nix { };
+  cryptography_vectors_2_9 = callPackage ../development/python-modules/cryptography/vectors-2.9.nix { };
 
   csscompressor = callPackage ../development/python-modules/csscompressor { };
 
