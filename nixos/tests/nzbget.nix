@@ -21,7 +21,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     server.wait_for_unit("network.target")
     server.wait_for_open_port(6789)
     assert "This file is part of nzbget" in server.succeed(
-        "curl -s -u nzbget:tegbzn6789 http://127.0.0.1:6789"
+        "curl -f -s -u nzbget:tegbzn6789 http://127.0.0.1:6789"
     )
     server.succeed(
         "${pkgs.nzbget}/bin/nzbget -n -o Control_iP=127.0.0.1 -o Control_port=6789 -o Control_password=tegbzn6789 -V"
