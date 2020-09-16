@@ -10,19 +10,6 @@ let
     [ "color"              "black"              ]
     [ "OpenMoji-Color.ttf" "OpenMoji-Black.ttf" ]
     variant;
-  scfbuildOptions = stdenv.lib.optionalString (variant == "black") "--glyph-only";
-
-  # We have to use their scfbuild fork:
-  # https://github.com/hfg-gmuend/openmoji/tree/master/font#setup
-  scfbuildPatched = scfbuild.overrideAttrs (old: {
-    src = fetchFromGitHub {
-      owner = "b-g";
-      repo = "scfbuild";
-      rev = "880f690332fc9cc4dee0790921d331f13bd5acaa";
-      sha256 = "0d61gn69hgxn17jvs69xpblq9z1l85aymbrn6jjwqamhpcl42c04";
-    };
-    propagatedBuildInputs = old.propagatedBuildInputs ++ [ python3Packages.lxml ];
-  });
 
 in stdenv.mkDerivation rec {
   pname = "openmoji";
@@ -36,16 +23,8 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    scfbuildPatched
+    scfbuild
   ];
-
-  # Some id and data-* attributes in the svg files contain unicode characters,
-  # which scfbuild (a python2 program) does not like
-  # (https://github.com/13rac1/scfbuild/issues/14).
-  # Fortunately, it's only metadata which we can remove:
-  postPatch = ''
-    sed -Ei 's/(id|data-[^=]*)="[^"]*"//g' black/svg/*.svg color/svg/*.svg
-  '';
 
   buildPhase = ''
     # Bash reimplementation of helpers/export-svg-font.js
@@ -74,7 +53,7 @@ in stdenv.mkDerivation rec {
 
     # Actually build the font:
     cd font
-    scfbuild ${scfbuildOptions} -c scfbuild-${variant}.yml
+    scfbuild -c scfbuild-${variant}.yml
   '';
 
   installPhase = ''
