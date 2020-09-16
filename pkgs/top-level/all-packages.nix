@@ -16337,6 +16337,8 @@ in
 
   raul = callPackage ../development/libraries/audio/raul { };
 
+  raylib = callPackage ../development/libraries/raylib { };
+
   readline = readline6;
   readline6 = readline63;
 
