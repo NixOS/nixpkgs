@@ -9,9 +9,9 @@ let
     set -euo pipefail
     echo '[INFO]' "[$2]" 'dns-hook.sh' $*
     if [ "$1" = "present" ]; then
-      ${pkgs.curl}/bin/curl --data '{"host": "'"$2"'", "value": "'"$3"'"}' http://${dnsAddress}:8055/set-txt
+      ${pkgs.curl}/bin/curl --fail --data '{"host": "'"$2"'", "value": "'"$3"'"}' http://${dnsAddress}:8055/set-txt
     else
-      ${pkgs.curl}/bin/curl --data '{"host": "'"$2"'"}' http://${dnsAddress}:8055/clear-txt
+      ${pkgs.curl}/bin/curl --fail --data '{"host": "'"$2"'"}' http://${dnsAddress}:8055/clear-txt
     fi
   '';
 
@@ -253,7 +253,7 @@ in import ./make-test-python.nix ({ lib, ... }: {
       client.wait_for_unit("default.target")
 
       client.succeed(
-          'curl --data \'{"host": "acme.test", "addresses": ["${nodes.acme.config.networking.primaryIPAddress}"]}\' http://${dnsServerIP nodes}:8055/add-a'
+          'curl --fail --data \'{"host": "acme.test", "addresses": ["${nodes.acme.config.networking.primaryIPAddress}"]}\' http://${dnsServerIP nodes}:8055/add-a'
       )
 
       acme.start()
@@ -262,8 +262,8 @@ in import ./make-test-python.nix ({ lib, ... }: {
       acme.wait_for_unit("default.target")
       acme.wait_for_unit("pebble.service")
 
-      client.succeed("curl https://acme.test:15000/roots/0 > /tmp/ca.crt")
-      client.succeed("curl https://acme.test:15000/intermediate-keys/0 >> /tmp/ca.crt")
+      client.succeed("curl --fail https://acme.test:15000/roots/0 > /tmp/ca.crt")
+      client.succeed("curl --fail https://acme.test:15000/intermediate-keys/0 >> /tmp/ca.crt")
 
       with subtest("Can request certificate with HTTPS-01 challenge"):
           webserver.wait_for_unit("acme-finished-a.example.test.target")
