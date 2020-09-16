@@ -7,6 +7,7 @@
     unpackPhase ? "",
     configurePhase ? "",
     buildPhase ? "",
+    installPhase ? null,
     preInstall ? "",
     postInstall ? "",
     ...
@@ -16,7 +17,7 @@
 
       inherit configurePhase buildPhase preInstall postInstall;
 
-      installPhase = ''
+      installPhase = if installPhase != null then installPhase else ''
         runHook preInstall
 
         mkdir -p $out
