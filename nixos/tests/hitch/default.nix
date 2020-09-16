@@ -28,6 +28,6 @@ import ../make-test-python.nix ({ pkgs, ... }:
       machine.wait_for_unit("multi-user.target")
       machine.wait_for_unit("hitch.service")
       machine.wait_for_open_port(443)
-      assert "We are all good!" in machine.succeed("curl -k https://localhost:443/index.txt")
+      assert "We are all good!" in machine.succeed("curl -fk https://localhost:443/index.txt")
     '';
 })
