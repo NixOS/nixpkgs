@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=$(out)"
-    "LUA_INCLUDE=${lua52Packages.lua}/include"
-    "LUA_LIB=${lua52Packages.lua}/lib/liblua.so"
   ];
 
   preBuild = stdenv.lib.optionalString stdenv.isLinux ''
