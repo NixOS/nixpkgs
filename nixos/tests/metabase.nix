@@ -15,6 +15,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     start_all()
     machine.wait_for_unit("metabase.service")
     machine.wait_for_open_port(3000)
-    machine.wait_until_succeeds("curl -L http://localhost:3000/setup | grep Metabase")
+    machine.wait_until_succeeds("curl -fL http://localhost:3000/setup | grep Metabase")
   '';
 })
