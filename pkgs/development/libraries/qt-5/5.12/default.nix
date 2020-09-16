@@ -55,6 +55,10 @@ let
         ./qtbase.patch.d/0001-qtbase-mkspecs-mac.patch
         ./qtbase.patch.d/0002-qtbase-mac.patch
         ./qtbase.patch.d/0013-define-kiosurfacesuccess.patch
+
+        # Patch framework detection to support X.framework/X.tbd,
+        # extending the current support for X.framework/X.
+        ./qtbase.patch.d/0015-qtbase-tbd-frameworks.patch
       ]
       ++ [
         ./qtbase.patch.d/0003-qtbase-mkspecs.patch
