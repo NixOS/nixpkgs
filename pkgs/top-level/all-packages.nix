@@ -24443,6 +24443,8 @@ in
   };
   btc1d = btc1.override { withGui = false; };
 
+  btcpayserver = callPackage ../applications/blockchains/btcpayserver { };
+
   cryptop = python3.pkgs.callPackage ../applications/blockchains/cryptop { };
 
   dashpay = callPackage ../applications/blockchains/dashpay.nix { };
@@ -24495,7 +24497,9 @@ in
   namecoin  = callPackage ../applications/blockchains/namecoin.nix  { withGui = true; };
   namecoind = callPackage ../applications/blockchains/namecoin.nix { withGui = false; };
 
-  pivx = libsForQt514.callPackage ../applications/blockchains/pivx.nix { withGui = true; };
+  nbxplorer = callPackage ../applications/blockchains/nbxplorer { };
+
+  pivx = libsForQt5.callPackage ../applications/blockchains/pivx.nix { withGui = true; };
   pivxd = callPackage ../applications/blockchains/pivx.nix { withGui = false; };
 
   ethabi = callPackage ../applications/blockchains/ethabi.nix { };
