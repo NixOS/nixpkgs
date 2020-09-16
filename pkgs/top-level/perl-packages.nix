@@ -19399,6 +19399,20 @@ let
     propagatedBuildInputs = [ SubUplevel ];
   };
 
+  TestExpect = buildPerlPackage {
+    pname = "Test-Expect";
+    version = "0.34";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BP/BPS/Test-Expect-0.34.tar.gz";
+      sha256 = "2628fcecdda5f649bd25323f646b96a1a07e4557cadcb327c9bad4dc41bbb999";
+    };
+    propagatedBuildInputs = [ ClassAccessorChained ExpectSimple ];
+    meta = {
+      description = "Automated driving and testing of terminal-based programs";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TestFailWarnings = buildPerlPackage {
     pname = "Test-FailWarnings";
     version = "0.008";
