@@ -65,6 +65,8 @@ stdenv.mkDerivation rec {
     rm -rf $out/lib/csv${version}/examples
   '';
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
     description  = "A powerful and incredibly fast R6RS Scheme compiler";
     homepage     = "https://cisco.github.io/ChezScheme/";
