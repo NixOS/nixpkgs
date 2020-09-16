@@ -22836,7 +22836,7 @@ in
   quodlibet-xine-full = quodlibet-full.override { xineBackend = true; tag = "-xine-full"; };
 
   qutebrowser = let
-    libsForQt5 = qt515;
+    libsForQt5 = libsForQt515;
     qt5 = qt515;
     python = python3.override {
       packageOverrides = self: super: {
