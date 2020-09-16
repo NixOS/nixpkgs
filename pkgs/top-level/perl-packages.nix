@@ -6116,6 +6116,20 @@ let
     };
   };
 
+  DirSelf = buildPerlPackage {
+    pname = "Dir-Self";
+    version = "0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MAUKE/Dir-Self-0.11.tar.gz";
+      sha256 = "e251a51abc7d9ba3e708f73c2aa208e09d47a0c528d6254710fa78cc8d6885b5";
+    };
+    meta = {
+      homepage = "https://github.com/mauke/Dir-Self";
+      description = "A __DIR__ constant for the directory your source file is in";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   DispatchClass = buildPerlPackage {
     pname = "Dispatch-Class";
     version = "0.02";
