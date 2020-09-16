@@ -9,12 +9,15 @@
 { pkgs
 , stdenv
 , python
-, qt5
-, libsForQt5
 , overrides ? (self: super: {})
 }:
 
 with pkgs.lib;
+
+let
+  qt5 = pkgs.qt514;
+  libsForQt5 = pkgs.libsForQt514;
+in
 
 let
   packages = ( self:
