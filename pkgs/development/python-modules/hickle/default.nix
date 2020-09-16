@@ -1,5 +1,6 @@
 { buildPythonPackage
 , fetchPypi
+, pythonOlder
 , h5py
 , numpy
 , dill
@@ -19,6 +20,7 @@
 buildPythonPackage rec {
   pname   = "hickle";
   version = "4.0.1";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
@@ -31,9 +33,13 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [ h5py numpy dill ];
+
+  doCheck = false; # incompatible with latest astropy
   checkInputs = [
     pytest pytestcov pytestrunner coveralls scipy pandas astropy twine check-manifest codecov
   ];
+
+  pythonImportsCheck = [ "hickle" ];
 
   meta = {
     description = "Serialize Python data to HDF5";

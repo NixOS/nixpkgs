@@ -4,10 +4,12 @@
 , minimal ? false
   # Ignored
 , config ? {}
+  # !!! See comment about args in lib/modules.nix
+, specialArgs ? {}
   # Modules to add to each VM
 , extraConfigurations ? [] }:
 
-with import ./build-vms.nix { inherit system pkgs minimal extraConfigurations; };
+with import ./build-vms.nix { inherit system pkgs minimal specialArgs extraConfigurations; };
 with pkgs;
 
 rec {

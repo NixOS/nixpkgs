@@ -1,4 +1,5 @@
 { lib
+, pythonOlder
 , buildPythonPackage
 , fetchPypi
 , stdenv
@@ -13,6 +14,7 @@
 buildPythonPackage rec {
   pname = "joblib";
   version = "0.16.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

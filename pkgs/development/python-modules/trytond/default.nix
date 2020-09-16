@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonApplication
 , fetchPypi
+, pythonOlder
 , mock
 , lxml
 , relatorio
@@ -25,6 +26,8 @@ with stdenv.lib;
 buildPythonApplication rec {
   pname = "trytond";
   version = "5.6.5";
+  disabled = pythonOlder "3.5";
+
   src = fetchPypi {
     inherit pname version;
     sha256 = "a373d73b141d71f8e30d728dd8380955bc0f33daaa097201fa9a952e3663e6d8";

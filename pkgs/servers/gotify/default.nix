@@ -24,11 +24,6 @@ buildGoModule rec {
 
   doCheck = false;
 
-  postPatch = ''
-    substituteInPlace app.go \
-      --replace 'Version = "unknown"' 'Version = "${version}"'
-  '';
-
   buildInputs = [ sqlite ];
 
   ui = callPackage ./ui.nix { };
@@ -46,7 +41,7 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   buildFlagsArray = [
-    "-ldflags='-X main.Version=${version} -X main.Mode=prod'"
+    "-ldflags=-X main.Version=${version} -X main.Mode=prod"
   ];
 
   meta = with stdenv.lib; {

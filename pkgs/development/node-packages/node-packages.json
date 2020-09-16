@@ -61,11 +61,13 @@
 , "csslint"
 , "dat"
 , "dhcp"
+, "diagnostic-languageserver"
 , "dockerfile-language-server-nodejs"
 , "elasticdump"
 , "elm-oracle"
 , "emoj"
 , "emojione"
+, {"epgstation": "../../applications/video/epgstation"}
 , "escape-string-regexp"
 , "eslint"
 , "eslint_d"

@@ -875,6 +875,8 @@ in
 
   automirror = callPackage ../tools/misc/automirror { };
 
+  barman = python3Packages.callPackage ../tools/misc/barman { };
+
   bash-my-aws = callPackage ../tools/admin/bash-my-aws { };
 
   bashcards = callPackage ../tools/misc/bashcards { };
@@ -951,6 +953,8 @@ in
   claws = callPackage ../tools/misc/claws { };
 
   cloud-custodian = python3Packages.callPackage ../tools/networking/cloud-custodian  { };
+
+  cod = callPackage ../tools/misc/cod { };
 
   codespell = with python3Packages; toPythonApplication codespell;
 
@@ -2698,7 +2702,7 @@ in
 
   circus = callPackage ../tools/networking/circus { };
 
-  citrix_workspace = citrix_workspace_20_06_0;
+  citrix_workspace = citrix_workspace_20_09_0;
 
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
     citrix_workspace_19_6_0
@@ -2707,6 +2711,7 @@ in
     citrix_workspace_19_12_0
     citrix_workspace_20_04_0
     citrix_workspace_20_06_0
+    citrix_workspace_20_09_0
   ;
 
   citra = libsForQt5.callPackage ../misc/emulators/citra { };
@@ -5364,6 +5369,8 @@ in
   man-db = callPackage ../tools/misc/man-db { };
 
   mandoc = callPackage ../tools/misc/mandoc { };
+
+  manix = callPackage ../tools/nix/manix {};
 
   marktext = callPackage ../applications/misc/marktext { };
 
@@ -12157,6 +12164,7 @@ in
   # Multi-arch "drivers" which we want to build for i686.
   driversi686Linux = recurseIntoAttrs {
     inherit (pkgsi686Linux)
+      amdvlk
       mesa
       vaapiIntel
       libvdpau-va-gl
@@ -14582,7 +14590,7 @@ in
   };
 
   opencv4 = callPackage ../development/libraries/opencv/4.x.nix {
-    inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa VideoDecodeAcceleration;
+    inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox;
   };
 
   opencv = opencv4;
@@ -16464,6 +16472,8 @@ in
 
   mattermost-desktop = callPackage ../applications/networking/instant-messengers/mattermost-desktop { };
 
+  mbtileserver = callPackage ../servers/mbtileserver { };
+
   mediatomb = callPackage ../servers/mediatomb { };
 
   memcached = callPackage ../servers/memcached {};
@@ -17849,6 +17859,12 @@ in
 
     systemtap = callPackage ../development/tools/profiling/systemtap { };
 
+    system76 = callPackage ../os-specific/linux/system76 { };
+
+    system76-acpi = callPackage ../os-specific/linux/system76-acpi { };
+
+    system76-io = callPackage ../os-specific/linux/system76-io { };
+
     tmon = callPackage ../os-specific/linux/tmon { };
 
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
@@ -18250,6 +18266,8 @@ in
   # pam_bioapi ( see http://www.thinkwiki.org/wiki/How_to_enable_the_fingerprint_reader )
 
   pam_ccreds = callPackage ../os-specific/linux/pam_ccreds { };
+
+  pam_gnupg = callPackage ../os-specific/linux/pam_gnupg { };
 
   pam_krb5 = callPackage ../os-specific/linux/pam_krb5 { };
 
@@ -18987,6 +19005,8 @@ in
   marwaita = callPackage ../data/themes/marwaita { };
 
   marwaita-manjaro = callPackage ../data/themes/marwaita-manjaro { };
+
+  marwaita-peppermint = callPackage ../data/themes/marwaita-peppermint { };
 
   matcha-gtk-theme = callPackage ../data/themes/matcha { };
 
@@ -20245,6 +20265,8 @@ in
 
   epeg = callPackage ../applications/graphics/epeg { };
 
+  epgstation = callPackage ../applications/video/epgstation { };
+
   inherit (gnome3) epiphany;
 
   ephemeral = callPackage ../applications/networking/browsers/ephemeral { };
@@ -20564,11 +20586,9 @@ in
   });
 
   firefox-unwrapped = firefoxPackages.firefox;
-  firefox-esr-68-unwrapped = firefoxPackages.firefox-esr-68;
   firefox-esr-78-unwrapped = firefoxPackages.firefox-esr-78;
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-wayland = wrapFirefox firefox-unwrapped { forceWayland = true; };
-  firefox-esr-68 = wrapFirefox firefox-esr-68-unwrapped { };
   firefox-esr-78 = wrapFirefox firefox-esr-78-unwrapped { };
   firefox-esr = firefox-esr-78;
 
@@ -20915,6 +20935,8 @@ in
   gxplugins-lv2 = callPackage ../applications/audio/gxplugins-lv2 { };
 
   hackrf = callPackage ../applications/radio/hackrf { };
+
+  hacksaw = callPackage ../tools/misc/hacksaw {};
 
   hakuneko = callPackage ../tools/misc/hakuneko { };
 
@@ -26271,6 +26293,8 @@ in
 
   csxcad = callPackage ../applications/science/electronics/csxcad { };
 
+  flatcam = callPackage ../applications/science/electronics/flatcam { };
+
   fparser = callPackage ../applications/science/electronics/fparser { };
 
   geda = callPackage ../applications/science/electronics/geda {
@@ -27355,6 +27379,8 @@ in
 
   sqsh = callPackage ../development/tools/sqsh { };
 
+  go-swag = callPackage ../development/tools/go-swag { };
+
   go-swagger = callPackage ../development/tools/go-swagger { };
 
   jx = callPackage ../applications/networking/cluster/jx {};
@@ -27958,5 +27984,7 @@ in
   zettlr = callPackage ../applications/misc/zettlr { };
 
   unifi-poller = callPackage ../servers/monitoring/unifi-poller {};
+
+  fac-build = callPackage ../development/tools/build-managers/fac {};
 
 }
