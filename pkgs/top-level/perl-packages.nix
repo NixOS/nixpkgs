@@ -16702,6 +16702,21 @@ let
     };
   };
 
+  PodSection = buildPerlModule {
+    pname = "Pod-Section";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KT/KTAT/Pod-Section-0.02.tar.gz";
+      sha256 = "c9d1d75292f321881184ec56983c16f408fd2d312d5a720f8fb0d2cafa729238";
+    };
+    propagatedBuildInputs = [ PodAbstract ];
+    meta = {
+      homepage = "https://github.com/ktat/Pod-Section";
+      description = "Select specified section from Module's POD";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   PodLaTeX = buildPerlModule {
     pname = "Pod-LaTeX";
     version = "0.61";
