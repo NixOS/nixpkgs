@@ -7100,6 +7100,20 @@ let
     };
   };
 
+  ExpectSimple = buildPerlPackage {
+    pname = "Expect-Simple";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DJ/DJERIUS/Expect-Simple-0.04.tar.gz";
+      sha256 = "af83b92185e642695913ff138efe819752e80857759996deafcaab2700ad5db5";
+    };
+    propagatedBuildInputs = [ Expect ];
+    meta = {
+      description = "Wrapper around the Expect module";
+      license = stdenv.lib.licenses.free;
+    };
+  };
+
   ExtUtilsCChecker = buildPerlModule {
     pname = "ExtUtils-CChecker";
     version = "0.10";
