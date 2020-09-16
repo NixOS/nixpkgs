@@ -1,4 +1,4 @@
-{ lib, stdenv, pkgs, fetchurl, wrapGAppsHook, gvfs, gtk3, atomEnv }:
+{ lib, stdenv, pkgs, fetchurl, wrapGAppsHook, glib, gtk3, atomEnv }:
 
 let
   versions = {
@@ -54,7 +54,8 @@ let
 
     preFixup = ''
       gappsWrapperArgs+=(
-        --prefix "PATH" : "${gvfs}/bin"
+        # needed for gio executable to be able to delete files
+        --prefix "PATH" : "${glib.bin}/bin"
       )
     '';
 
