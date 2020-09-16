@@ -1287,6 +1287,22 @@ let
     };
   };
 
+  BotTrainingStarCraft = buildPerlPackage {
+    pname = "Bot-Training-StarCraft";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AV/AVAR/Bot-Training-StarCraft-0.03.tar.gz";
+      sha256 = "e7ceb8d01c62e732dd89bfe5f4d83e781c1cd912542d177c22e761b7c8614d5e";
+    };
+    buildInputs = [ FileShareDirInstall ];
+    propagatedBuildInputs = [ BotTraining ];
+    meta = {
+      homepage = "http://metacpan.org/release/Bot-Training-StarCraft";
+      description = "Provide starcraft.trn via Bot::Training";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   BSDResource = buildPerlPackage {
     pname = "BSD-Resource";
     version = "1.2911";
