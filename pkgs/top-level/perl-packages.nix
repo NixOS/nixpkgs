@@ -8868,6 +8868,29 @@ let
     };
   };
 
+  Hailo = buildPerlPackage {
+    pname = "Hailo";
+    version = "0.75";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AV/AVAR/Hailo-0.75.tar.gz";
+      sha256 = "bba99cb0cfa3ee8632dd89906c6e6fa05fe6bb367f2282e88909cefd8f9174c2";
+    };
+    buildInputs = [ BotTrainingMegaHAL BotTrainingStarCraft DataSection FileSlurp PodSection TestException TestExpect TestOutput TestScript TestScriptRun ];
+    propagatedBuildInputs = [ ClassLoad DBDSQLite DataDump DirSelf FileCountLines GetoptLongDescriptive IOInteractive IPCSystemSimple ListMoreUtils Moose MooseXGetopt MooseXStrictConstructor MooseXTypes RegexpCommon TermSk namespaceclean ];
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+    postPatch = ''
+      patchShebangs bin
+    '';
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/hailo
+    '';
+    meta = {
+      homepage = "https://github.com/hailo/hailo";
+      description = "A pluggable Markov engine analogous to MegaHAL";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   HashDiff = buildPerlPackage {
     pname = "Hash-Diff";
     version = "0.010";
