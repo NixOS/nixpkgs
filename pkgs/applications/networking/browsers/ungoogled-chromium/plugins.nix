@@ -90,7 +90,7 @@ let
   extensions = stdenv.mkDerivation {
     name = "chromium-extensions";
     builder = let
-      extpaths = strings.concatMapStringsSep "," (pkg: pkg + "/lib") enableExtensions;
+      extpaths = strings.concatStringsSep "," enableExtensions;
     in pkgs.writeScript "builder.sh" ''
       source $stdenv/setup
 

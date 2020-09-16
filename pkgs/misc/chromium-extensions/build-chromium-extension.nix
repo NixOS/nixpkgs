@@ -19,15 +19,15 @@
       installPhase = ''
         runHook preInstall
 
-        mkdir -p $out/lib
-        cp -r . $out/lib
+        mkdir -p $out
+        cp -r . $out
 
         runHook postInstall
       '';
 
       doInstallCheck = true;
       installCheckPhase = ''
-        test -e $out/lib/manifest.json || (echo "INVALID EXTENSION: missing manifest.json" && exit 1)
+        test -e $out/manifest.json || (echo "INVALID EXTENSION: missing manifest.json" && exit 1)
       '';
     });
 }
