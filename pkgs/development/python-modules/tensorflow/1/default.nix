@@ -132,6 +132,13 @@ let
       })
       ./lift-gast-restriction.patch
 
+      (fetchpatch {
+        # fix compilation with numpy >= 1.19
+        name = "add-const-overload.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/75ea0b31477d6ba9e990e296bbbd8ca4e7eebadf.patch";
+        sha256 = "1xp1icacig0xm0nmb05sbrf4nw4xbln9fhc308birrv8286zx7wv";
+      })
+
       # cuda 10.2 does not have "-bin2c-path" option anymore
       # https://github.com/tensorflow/tensorflow/issues/34429
       ../cuda-10.2-no-bin2c-path.patch
