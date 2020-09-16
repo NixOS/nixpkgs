@@ -7477,6 +7477,19 @@ let
      };
   };
 
+  FileCountLines = buildPerlPackage {
+    pname = "File-CountLines";
+    version = "0.0.3";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MO/MORITZ/File-CountLines-v0.0.3.tar.gz";
+      sha256 = "cfd97cce7c9613e4e569d47874a2b5704f1be9eced2f0739c870725694382a62";
+    };
+    meta = {
+      description = "Efficiently count the number of line breaks in a file";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   FileDesktopEntry = buildPerlPackage {
     version = "0.22";
     pname = "File-DesktopEntry";
