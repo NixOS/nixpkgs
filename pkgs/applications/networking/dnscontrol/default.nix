@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   pname = "dnscontrol";
@@ -13,7 +13,9 @@ buildGoModule rec {
 
   vendorSha256 = "16cc6hb2iwh1zwrrnb7s4dqxqhaj67gq3gfr5xvh5kqafd685hvx";
 
-  meta = with stdenv.lib; {
+  subPackages = [ "." ];
+
+  meta = with lib; {
     description = "Synchronize your DNS to multiple providers from a simple DSL";
     homepage = "https://stackexchange.github.io/dnscontrol/";
     license = licenses.mit;
