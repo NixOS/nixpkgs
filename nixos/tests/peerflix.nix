@@ -18,6 +18,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     start_all()
 
     peerflix.wait_for_unit("peerflix.service")
-    peerflix.wait_until_succeeds("curl localhost:9000")
+    peerflix.wait_until_succeeds("curl -f localhost:9000")
   '';
 })
