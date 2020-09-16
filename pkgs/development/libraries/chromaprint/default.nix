@@ -1,7 +1,6 @@
-{ lib, stdenv, fetchurl, cmake, boost, ffmpeg, zlib }:
+{ lib, stdenv, fetchurl, cmake, boost, ffmpeg, darwin, zlib }:
 
-let frameworks = (import <nixpkgs> {}).darwin.apple_sdk.frameworks;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "chromaprint";
   version = "1.5.0";
 
@@ -12,13 +11,8 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  darwinInputs = [
-    frameworks.Accelerate
-    frameworks.CoreGraphics
-    frameworks.CoreVideo
-    zlib
-    ];
-  buildInputs = [ boost ffmpeg ] ++ lib.optional stdenv.isDarwin darwinInputs;
+  buildInputs = [ boost ffmpeg ] ++ lib.optionals stdenv.isDarwin
+    (with darwin.apple_sdk.frameworks; [Accelerate CoreGraphics CoreVideo zlib]);
 
   cmakeFlags = [ "-DBUILD_EXAMPLES=ON" "-DBUILD_TOOLS=ON" ];
 
