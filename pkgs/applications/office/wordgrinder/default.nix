@@ -12,11 +12,17 @@ stdenv.mkDerivation rec {
     sha256 = "08lnq5wmspfqdjmqm15gizcq0xr7mg4h62qhvwj63v0sd6ks1cal";
   };
 
+  # The `Makefile` uses a dedicated directory to store temporary artifacts.
+  # Override through `makeFlags` to ensure purity of the build.
+  objdir = "tmp/wg-build";
+
   makeFlags = [
+    "OBJDIR=./${objdir}"
     "PREFIX=$(out)"
   ];
 
   preBuild = stdenv.lib.optionalString stdenv.isLinux ''
+    mkdir -p ./${objdir}
     makeFlagsArray+=('XFT_PACKAGE=--cflags={} --libs={-lX11 -lXft}')
   '';
 
