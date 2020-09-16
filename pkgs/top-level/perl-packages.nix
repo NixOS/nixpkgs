@@ -20254,6 +20254,20 @@ let
     propagatedBuildInputs = [ CaptureTiny ProbePerl ];
   };
 
+  TestScriptRun = buildPerlPackage {
+    pname = "Test-Script-Run";
+    version = "0.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SU/SUNNAVY/Test-Script-Run-0.08.tar.gz";
+      sha256 = "1fef216e70bc425ace3e2c4370dfcdddb5e798b099efba2679244a4d5bc1ab0a";
+    };
+    propagatedBuildInputs = [ IPCRun3 TestException ];
+    meta = {
+      description = "Test scripts with run";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TestSharedFork = buildPerlPackage {
     pname = "Test-SharedFork";
     version = "0.35";
