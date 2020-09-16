@@ -1462,6 +1462,8 @@ in {
 
   dbfread = callPackage ../development/python-modules/dbfread { };
 
+  dbus-next = callPackage ../development/python-modules/dbus-next { };
+
   dbus-python = callPackage ../development/python-modules/dbus { inherit (pkgs) dbus pkgconfig; };
 
   dcmstack = callPackage ../development/python-modules/dcmstack { };
