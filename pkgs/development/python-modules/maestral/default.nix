@@ -3,27 +3,28 @@
 , fetchFromGitHub
 , pythonOlder
 , python
-, blinker, bugsnag, click, dropbox, fasteners, keyring, keyrings-alt, pathspec, Pyro5, requests, u-msgpack-python, watchdog
+, blinker, bugsnag, click, dbus-next, dropbox, fasteners, keyring, keyrings-alt, pathspec, Pyro5, requests, sqlalchemy, u-msgpack-python, watchdog
 , sdnotify
 , systemd
 }:
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.1.0";
+  version = "1.2.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";
     rev = "v${version}";
-    sha256 = "0d1pxbg69ll07w4bbpzs7zz1yn82qyrym95b0mqmhrrg2ysxjngg";
+    sha256 = "sha256-/xm6sGios5N68X94GqFFzH1jNSMK1OnvQiEykU9IAZU=";
   };
 
   propagatedBuildInputs = [
     blinker
     bugsnag
     click
+    dbus-next
     dropbox
     fasteners
     keyring
@@ -31,6 +32,7 @@ buildPythonPackage rec {
     pathspec
     Pyro5
     requests
+    sqlalchemy
     u-msgpack-python
     watchdog
   ] ++ stdenv.lib.optionals stdenv.isLinux [
