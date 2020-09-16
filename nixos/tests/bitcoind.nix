@@ -31,16 +31,16 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.wait_for_unit("bitcoind-testnet.service")
 
     machine.wait_until_succeeds(
-        'curl --user rpc:rpc --data-binary \'{"jsonrpc": "1.0", "id":"curltest", "method": "getblockchaininfo", "params": [] }\' -H \'content-type: text/plain;\' localhost:8332 |  grep \'"chain":"main"\' '
+        'curl --fail --user rpc:rpc --data-binary \'{"jsonrpc": "1.0", "id":"curltest", "method": "getblockchaininfo", "params": [] }\' -H \'content-type: text/plain;\' localhost:8332 |  grep \'"chain":"main"\' '
     )
     machine.wait_until_succeeds(
-        'curl --user rpc2:rpc2 --data-binary \'{"jsonrpc": "1.0", "id":"curltest", "method": "getblockchaininfo", "params": [] }\' -H \'content-type: text/plain;\' localhost:8332 |  grep \'"chain":"main"\' '
+        'curl --fail --user rpc2:rpc2 --data-binary \'{"jsonrpc": "1.0", "id":"curltest", "method": "getblockchaininfo", "params": [] }\' -H \'content-type: text/plain;\' localhost:8332 |  grep \'"chain":"main"\' '
     )
     machine.wait_until_succeeds(
-        'curl --user rpc:rpc --data-binary \'{"jsonrpc": "1.0", "id":"curltest", "method": "getblockchaininfo", "params": [] }\' -H \'content-type: text/plain;\' localhost:18332 |  grep \'"chain":"test"\' '
+        'curl --fail --user rpc:rpc --data-binary \'{"jsonrpc": "1.0", "id":"curltest", "method": "getblockchaininfo", "params": [] }\' -H \'content-type: text/plain;\' localhost:18332 |  grep \'"chain":"test"\' '
     )
     machine.wait_until_succeeds(
-        'curl --user rpc2:rpc2 --data-binary \'{"jsonrpc": "1.0", "id":"curltest", "method": "getblockchaininfo", "params": [] }\' -H \'content-type: text/plain;\' localhost:18332 |  grep \'"chain":"test"\' '
+        'curl --fail --user rpc2:rpc2 --data-binary \'{"jsonrpc": "1.0", "id":"curltest", "method": "getblockchaininfo", "params": [] }\' -H \'content-type: text/plain;\' localhost:18332 |  grep \'"chain":"test"\' '
     )
   '';
 })
