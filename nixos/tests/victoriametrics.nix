@@ -19,9 +19,11 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
     # write some points and run simple query
     out = one.succeed(
-        "curl -d 'measurement,tag1=value1,tag2=value2 field1=123,field2=1.23' -X POST 'http://localhost:8428/write'"
+        "curl -f -d 'measurement,tag1=value1,tag2=value2 field1=123,field2=1.23' -X POST 'http://localhost:8428/write'"
     )
-    cmd = """curl -s -G 'http://localhost:8428/api/v1/export' -d 'match={__name__!=""}'"""
+    cmd = (
+        """curl -f -s -G 'http://localhost:8428/api/v1/export' -d 'match={__name__!=""}'"""
+    )
     # data takes a while to appear
     one.wait_until_succeeds(f"[[ $({cmd} | wc -l) -ne 0 ]]")
     out = one.succeed(cmd)
