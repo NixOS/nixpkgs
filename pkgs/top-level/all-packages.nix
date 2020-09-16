@@ -10115,7 +10115,13 @@ in
   python2Packages = python2.pkgs;
   python3Packages = python3.pkgs;
 
-  pythonInterpreters = callPackage ./../development/interpreters/python {};
+  pythonInterpreters = callPackage ./../development/interpreters/python {
+    # Overrides that apply to all Python interpreters
+    pkgs = pkgs // {
+      qt5 = pkgs.qt514;
+      libsForQt5 = pkgs.libsForQt514;
+    };
+  };
   inherit (pythonInterpreters) python27 python36 python37 python38 python39 python3Minimal pypy27 pypy36;
 
   # Python package sets.
