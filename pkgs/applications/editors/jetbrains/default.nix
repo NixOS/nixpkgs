@@ -307,12 +307,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2020.2.1"; /* updated by script */
+    version = "2020.2.2"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "055hy5jy5151x3gf8hn7ar36br545qr253fz9wrc3b49wydg01x1"; /* updated by script */
+      sha256 = "0kbn9q7fvhrzb1w6l8i2nv4cx8qrj74jp7fidj9yk8vkv9lfijg6"; /* updated by script */
     };
     wmClass = "jetbrains-idea-ce";
     update-channel = "IntelliJ IDEA RELEASE";
