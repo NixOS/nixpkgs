@@ -230,13 +230,16 @@ rec {
     else if false ==   v then "false"
     else if null  ==   v then "null"
     else if isPath     v then toString v
-    else if isList     v then "[" + introSpace
+    else if isList     v then
+      if v == [] then "[ ]"
+      else "[" + introSpace
         + libStr.concatMapStringsSep introSpace (go (indent + "  ")) v
-      + outroSpace + "]"
+        + outroSpace + "]"
     else if isAttrs    v then
       # apply pretty values if allowed
       if attrNames v == [ "__pretty" "val" ] && allowPrettyValues
          then v.__pretty v.val
+      else if v == {} then "{ }"
       else if v ? type && v.type == "derivation" then
         "<derivation ${v.drvPath}>"
       else "{" + introSpace
