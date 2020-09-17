@@ -962,6 +962,8 @@ in
 
   cozy = callPackage ../applications/audio/cozy-audiobooks { };
 
+  cpuid = callPackage ../os-specific/linux/cpuid { };
+
   ctrtool = callPackage ../tools/archivers/ctrtool { };
 
   crowbar = callPackage ../tools/security/crowbar { };
