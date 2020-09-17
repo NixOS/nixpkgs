@@ -1,4 +1,4 @@
-{ pkgs, lib }:
+{ pkgs }:
 
 with pkgs;
 
