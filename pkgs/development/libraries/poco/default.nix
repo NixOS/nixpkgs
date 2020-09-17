@@ -31,7 +31,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ zlib pcre expat sqlite openssl unixODBC libmysqlclient ];
+  buildInputs = [ openssl unixODBC libmysqlclient ];
+  propagatedBuildInputs = [ zlib pcre expat sqlite ];
+
+  outputs = [ "out" "dev" ];
 
   MYSQL_DIR = libmysqlclient;
   MYSQL_INCLUDE_DIR = "${MYSQL_DIR}/include/mysql";
