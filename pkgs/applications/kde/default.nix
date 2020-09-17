@@ -216,6 +216,7 @@ let
       messagelib = callPackage ./messagelib.nix {};
       minuet = callPackage ./minuet.nix {};
       okular = callPackage ./okular.nix {};
+      parley = callPackage ./parley.nix {};
       picmi = callPackage ./picmi.nix {};
       pimcommon = callPackage ./pimcommon.nix {};
       pim-data-exporter = callPackage ./pim-data-exporter.nix {};
