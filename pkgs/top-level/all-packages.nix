@@ -15817,6 +15817,8 @@ in
     # Not a library, but we do want it to be built for every qt version there
     # is, to allow users to choose the right build if needed.
     sddm = callPackage ../applications/display-managers/sddm { };
+
+    signond = callPackage ../development/libraries/signond {};
   };
 
   qtEnv = qt5.env;
