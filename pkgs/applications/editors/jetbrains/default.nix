@@ -359,12 +359,12 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2020.2.1"; /* updated by script */
+    version = "2020.2.2"; /* updated by script */
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "0kml58v6clqj0j0vlvghrywxym2n9h41izazzn4srn7wjj9010fa"; /* updated by script */
+      sha256 = "1a1vhlc2q5n3dxli0x6ppxx3mgary4gpakcxdp9nylmixjzjph6v"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm-ce";
     update-channel = "PyCharm RELEASE";
