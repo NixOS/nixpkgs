@@ -69,6 +69,7 @@ let
       akonadi-search = callPackage ./akonadi-search.nix {};
       akonadiconsole = callPackage ./akonadiconsole.nix {};
       akregator = callPackage ./akregator.nix {};
+      analitza = callPackage ./analitza.nix {};
       ark = callPackage ./ark {};
       baloo-widgets = callPackage ./baloo-widgets.nix {};
       blinken = callPackage ./blinken.nix {};
@@ -91,6 +92,7 @@ let
       kaddressbook = callPackage ./kaddressbook.nix {};
       kalarm = callPackage ./kalarm.nix {};
       kalarmcal = callPackage ./kalarmcal.nix {};
+      kalgebra = callPackage ./kalgebra.nix {};
       kalzium = callPackage ./kalzium.nix {};
       kapman = callPackage ./kapman.nix {};
       kapptemplate = callPackage ./kapptemplate.nix { };
