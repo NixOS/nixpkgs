@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   pname = "dmidecode";
   version = "3.2.8";
   src = fetchurl {
-    # Download version in upstream is 3.2. Version 3.2.8 does not come from upstream and was made up to differentiate the applied recommended patches bellow.
+    # Download version in upstream is 3.2. Version 3.2.8 does not come from upstream
+    # and was made up to differentiate the applied recommended patches below.
     url = "mirror://savannah/dmidecode/${pname}-3.2.tar.xz";
     sha256 = "1pcfhcgs2ifdjwp7amnsr3lq95pgxpr150bjhdinvl505px0cw07";
   };
