@@ -217,6 +217,7 @@ let
       print-manager = callPackage ./print-manager.nix {};
       rocs = callPackage ./rocs.nix {};
       spectacle = callPackage ./spectacle.nix {};
+      sweeper = callPackage ./sweeper.nix {};
       yakuake = callPackage ./yakuake.nix {};
     };
 
