@@ -99,6 +99,7 @@ let
       kblocks = callPackage ./kblocks.nix {};
       kbounce = callPackage ./kbounce.nix {};
       kbreakout = callPackage ./kbreakout.nix {};
+      kbruch = callPackage ./kbruch.nix {};
       kcachegrind = callPackage ./kcachegrind.nix {};
       kcalc = callPackage ./kcalc.nix {};
       kcalutils = callPackage ./kcalutils.nix {};
