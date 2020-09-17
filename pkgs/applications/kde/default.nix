@@ -85,6 +85,7 @@ let
       ffmpegthumbs = callPackage ./ffmpegthumbs.nix { };
       filelight = callPackage ./filelight.nix {};
       granatier = callPackage ./granatier.nix {};
+      grantlee-editor = callPackage ./grantlee-editor.nix {};
       grantleetheme = callPackage ./grantleetheme {};
       gwenview = callPackage ./gwenview.nix {};
       incidenceeditor = callPackage ./incidenceeditor.nix {};
