@@ -180,6 +180,7 @@ let
       krfb = callPackage ./krfb.nix {};
       kruler = callPackage ./kruler.nix {};
       kshisen = callPackage ./kshisen.nix {};
+      ksirk = callPackage ./ksirk.nix {};
       ksnakeduel = callPackage ./ksnakeduel.nix {};
       kspaceduel = callPackage ./kspaceduel.nix {};
       ksudoku = callPackage ./ksudoku.nix {};
