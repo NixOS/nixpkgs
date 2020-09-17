@@ -461,7 +461,9 @@ runTests {
       function = x: x;
       functionArgs = { arg ? 4, foo }: arg;
       list = [ 3 4 function [ false ] ];
+      emptylist = [];
       attrs = { foo = null; "foo bar" = "baz"; };
+      emptyattrs = {};
       drv = deriv;
     };
     expected = rec {
@@ -476,7 +478,9 @@ runTests {
       function = "<function>";
       functionArgs = "<function, args: {arg?, foo}>";
       list = "[ 3 4 ${function} [ false ] ]";
+      emptylist = "[ ]";
       attrs = "{ foo = null; \"foo bar\" = \"baz\"; }";
+      emptyattrs = "{ }";
       drv = "<derivation ${deriv.drvPath}>";
     };
   };
