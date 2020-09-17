@@ -398,12 +398,12 @@ in
 
   ruby-mine = buildRubyMine rec {
     name = "ruby-mine-${version}";
-    version = "2020.2.1"; /* updated by script */
+    version = "2020.2.2"; /* updated by script */
     description = "The Most Intelligent Ruby and Rails IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
-      sha256 = "1pkzql710bc4qdz5pdhh0yx9wkqx85qwkwm1jvvvxbvbsj299vcb"; /* updated by script */
+      sha256 = "11v26hpf891nq5vj8i0ad4shhzpy8b7rvyrkr3l29dwfnd83lgpz"; /* updated by script */
     };
     wmClass = "jetbrains-rubymine";
     update-channel = "RubyMine RELEASE";
