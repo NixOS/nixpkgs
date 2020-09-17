@@ -148,6 +148,7 @@ let
       kio-extras = callPackage ./kio-extras.nix {};
       kio-gdrive = callPackage ./kio-gdrive.nix {};
       kiriki = callPackage ./kiriki.nix {};
+      kjumpingcube = callPackage ./kjumpingcube.nix {};
       kldap = callPackage ./kldap.nix {};
       kleopatra = callPackage ./kleopatra.nix {};
       klettres = callPackage ./klettres.nix {};
