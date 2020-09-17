@@ -224,6 +224,7 @@ let
       messagelib = callPackage ./messagelib.nix {};
       minuet = callPackage ./minuet.nix {};
       okular = callPackage ./okular.nix {};
+      palapeli = callPackage ./palapeli.nix {};
       parley = callPackage ./parley.nix {};
       picmi = callPackage ./picmi.nix {};
       pimcommon = callPackage ./pimcommon.nix {};
