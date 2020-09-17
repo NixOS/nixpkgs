@@ -78,6 +78,7 @@ let
       bovo = callPackage ./bovo.nix {};
       bomber = callPackage ./bomber.nix {};
       calendarsupport = callPackage ./calendarsupport.nix {};
+      cantor = callPackage ./cantor.nix {};
       dolphin = callPackage ./dolphin.nix {};
       dolphin-plugins = callPackage ./dolphin-plugins.nix {};
       dragon = callPackage ./dragon.nix {};
