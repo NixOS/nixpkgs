@@ -9610,4 +9610,10 @@
       fingerprint = "F1C5 760E 45B9 9A44 72E9  6BFB D65C 9AFB 4C22 4DA3";
     }];
   };
+  hotlineguy = {
+    name = "Marius Schmidt";
+    email = "63499838+hotlineguy@users.noreply.github.com";
+    github = "hotlineguy";
+    githubId = 63499838;
+  };
 }
