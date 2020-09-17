@@ -320,12 +320,12 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2020.2.1"; /* updated by script */
+    version = "2020.2.2"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}-no-jbr.tar.gz";
-      sha256 = "1g18l3malsyn7dij4w83yfcsb8msa0s89mzlld3dby8hr9bq0aqm"; /* updated by script */
+      sha256 = "1196zrcbgrr9271kjrzd2mzvhvxd7hkr1d2a4ij4h8f97qmsd6r6"; /* updated by script */
     };
     wmClass = "jetbrains-idea";
     update-channel = "IntelliJ IDEA RELEASE";
