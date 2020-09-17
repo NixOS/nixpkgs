@@ -111,18 +111,18 @@ in
   };
 
   noto-fonts-emoji = let
-    version = "unstable-2020-08-20";
+    version = "2020-09-16-unicode13_1";
     emojiPythonEnv =
       python3.withPackages (p: with p; [ fonttools nototools ]);
   in stdenv.mkDerivation {
     pname = "noto-fonts-emoji";
-    inherit version;
+    version = builtins.replaceStrings [ "_" ] [ "." ] version;
 
     src = fetchFromGitHub {
       owner = "googlefonts";
       repo = "noto-emoji";
-      rev = "1bc491419fa2925d018f27bfe702792031be0e68";
-      sha256 = "1vak4s1p4wlwzpnqfb1c2sg62q82gnjpnmqrfz8xl6bd0z55imzy";
+      rev = "v${version}";
+      sha256 = "0659336dp0l2nkac153jpcb9yvp0p3dx1crcyxjd14i8cqkfi2hh";
     };
 
     nativeBuildInputs = [
