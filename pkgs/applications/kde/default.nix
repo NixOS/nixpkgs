@@ -122,6 +122,7 @@ let
       keditbookmarks = callPackage ./keditbookmarks.nix {};
       kfind = callPackage ./kfind.nix {};
       kfloppy = callPackage ./kfloppy.nix {};
+      kfourinline = callPackage ./kfourinline.nix {};
       kgeography = callPackage ./kgeography.nix {};
       kget = callPackage ./kget.nix {};
       kgpg = callPackage ./kgpg.nix {};
