@@ -235,6 +235,7 @@ let
       rocs = callPackage ./rocs.nix {};
       spectacle = callPackage ./spectacle.nix {};
       step = callPackage ./step.nix {};
+      svgpart = callPackage ./svgpart.nix {};
       sweeper = callPackage ./sweeper.nix {};
       yakuake = callPackage ./yakuake.nix {};
     };
