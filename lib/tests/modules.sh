@@ -49,7 +49,7 @@ checkConfigError() {
         reportFailure "$@"
         return 1
     else
-        if echo "$err" | grep --silent "$errorContains" ; then
+        if echo "$err" | grep -zP --silent "$errorContains" ; then
             pass=$((pass + 1))
             return 0;
         else
