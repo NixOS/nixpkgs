@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     url = "mirror://savannah/dmidecode/${pname}-3.2.tar.xz";
     sha256 = "1pcfhcgs2ifdjwp7amnsr3lq95pgxpr150bjhdinvl505px0cw07";
   };
-  
+
   patches = [
     # suggested patches for 3.2 according to https://www.nongnu.org/dmidecode/
     (fetchpatch {
