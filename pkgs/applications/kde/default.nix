@@ -181,6 +181,7 @@ let
       ktnef = callPackage ./ktnef.nix {};
       ktouch = callPackage ./ktouch.nix {};
       kturtle = callPackage ./kturtle.nix {};
+      kubrick = callPackage ./kubrick.nix {};
       kwalletmanager = callPackage ./kwalletmanager.nix {};
       kwave = callPackage ./kwave.nix {};
       libgravatar = callPackage ./libgravatar.nix {};
