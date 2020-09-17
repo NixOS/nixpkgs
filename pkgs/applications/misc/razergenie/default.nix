@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "0.8.1";
+  version = "0.9.0";
   pname = "razergenie";
 
 in stdenv.mkDerivation {
@@ -15,7 +15,7 @@ in stdenv.mkDerivation {
     owner = "z3ntu";
     repo = "RazerGenie";
     rev = "v${version}";
-    sha256 = "1ggxnaidxbbpkv1h3zwwyci6886sssgslk5adbikbhz9kc9qg239";
+    sha256 = "RI2wJ6Y5Jza3Q075QYkg4t1EyCCgNg7AVqtphI3YtJ8=";
   };
 
   nativeBuildInputs = [
