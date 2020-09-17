@@ -87,6 +87,7 @@ let
       grantleetheme = callPackage ./grantleetheme {};
       gwenview = callPackage ./gwenview.nix {};
       incidenceeditor = callPackage ./incidenceeditor.nix {};
+      juk = callPackage ./juk.nix {};
       k3b = callPackage ./k3b.nix {};
       kaccounts-integration = callPackage ./kaccounts-integration.nix {};
       kaddressbook = callPackage ./kaddressbook.nix {};
