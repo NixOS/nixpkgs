@@ -445,7 +445,10 @@ runTests {
       expected = builtins.toJSON val;
   };
 
-  testToPretty = {
+  testToPretty =
+    let
+      deriv = derivation { name = "test"; builder = "/bin/sh"; system = builtins.currentSystem; };
+    in {
     expr = mapAttrs (const (generators.toPretty { multiline = false; })) rec {
       int = 42;
       float = 0.1337;
@@ -459,7 +462,7 @@ runTests {
       functionArgs = { arg ? 4, foo }: arg;
       list = [ 3 4 function [ false ] ];
       attrs = { foo = null; "foo bar" = "baz"; };
-      drv = derivation { name = "test"; system = builtins.currentSystem; };
+      drv = deriv;
     };
     expected = rec {
       int = "42";
@@ -470,11 +473,11 @@ runTests {
       newlinestring = "\"\\n\"";
       path = "/foo";
       null_ = "null";
-      function = "<λ>";
-      functionArgs = "<λ:{(arg),foo}>";
+      function = "<function>";
+      functionArgs = "<function, args: {arg?, foo}>";
       list = "[ 3 4 ${function} [ false ] ]";
       attrs = "{ foo = null; \"foo bar\" = \"baz\"; }";
-      drv = "<δ:test>";
+      drv = "<derivation ${deriv.drvPath}>";
     };
   };
 

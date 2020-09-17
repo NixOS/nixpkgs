@@ -237,10 +237,8 @@ rec {
       # apply pretty values if allowed
       if attrNames v == [ "__pretty" "val" ] && allowPrettyValues
          then v.__pretty v.val
-      # TODO: there is probably a better representation?
       else if v ? type && v.type == "derivation" then
-        "<δ:${v.name}>"
-        # "<δ:${concatStringsSep "," (builtins.attrNames v)}>"
+        "<derivation ${v.drvPath}>"
       else "{" + introSpace
           + libStr.concatStringsSep introSpace (libAttr.mapAttrsToList
               (name: value:
@@ -248,11 +246,11 @@ rec {
         + outroSpace + "}"
     else if isFunction v then
       let fna = lib.functionArgs v;
-          showFnas = concatStringsSep "," (libAttr.mapAttrsToList
-                       (name: hasDefVal: if hasDefVal then "(${name})" else name)
+          showFnas = concatStringsSep ", " (libAttr.mapAttrsToList
+                       (name: hasDefVal: if hasDefVal then name + "?" else name)
                        fna);
-      in if fna == {}    then "<λ>"
-                         else "<λ:{${showFnas}}>"
+      in if fna == {}    then "<function>"
+                         else "<function, args: {${showFnas}}>"
     else abort "generators.toPretty: should never happen (v = ${v})";
   in go "";
 
