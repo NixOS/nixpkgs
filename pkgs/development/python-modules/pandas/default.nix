@@ -1,27 +1,29 @@
-{ buildPythonPackage
+{ stdenv
+, buildPythonPackage
 , fetchPypi
 , python
-, stdenv
-, pytest
-, glibcLocales
+, isPy38
+, beautifulsoup4
+, bottleneck
 , cython
 , dateutil
-, scipy
-, moto
-, numexpr
-, pytz
-, xlrd
-, bottleneck
-, sqlalchemy
-, lxml
 , html5lib
-, beautifulsoup4
-, hypothesis
+, lxml
+, numexpr
 , openpyxl
+, pytz
+, sqlalchemy
+, scipy
 , tables
+, xlrd
 , xlwt
+# Test Inputs
+, glibcLocales
+, hypothesis
+, moto
+, pytest
+# Darwin inputs
 , runtimeShell
-, isPy38
 , libcxx ? null
 }:
 
@@ -43,18 +45,18 @@ in buildPythonPackage rec {
   nativeBuildInputs = [ cython ];
   buildInputs = optional isDarwin libcxx;
   propagatedBuildInputs = [
-    dateutil
-    scipy
-    numexpr
-    pytz
-    xlrd
-    bottleneck
-    sqlalchemy
-    lxml
-    html5lib
     beautifulsoup4
+    bottleneck
+    dateutil
+    html5lib
+    numexpr
+    lxml
     openpyxl
+    pytz
+    scipy
+    sqlalchemy
     tables
+    xlrd
     xlwt
   ];
 
@@ -128,14 +130,15 @@ in buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     # https://github.com/pandas-dev/pandas/issues/14866
     # pandas devs are no longer testing i686 so safer to assume it's broken
     broken = stdenv.isi686;
     homepage = "https://pandas.pydata.org/";
+    changelog = "https://pandas.pydata.org/docs/whatsnew/index.html";
     description = "Python Data Analysis Library";
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ raskin fridh knedlsepp ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ raskin fridh knedlsepp ];
+    platforms = platforms.unix;
   };
 }
