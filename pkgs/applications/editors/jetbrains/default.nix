@@ -372,12 +372,12 @@ in
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2020.2.1"; /* updated by script */
+    version = "2020.2.2"; /* updated by script */
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "0ml9fg1dlfg8sdp9n8nlsj7z88dx0ac1kvlpk61p7q5di1lyxc94"; /* updated by script */
+      sha256 = "0v64f5sbv1639d6fjg0shfgdy40f1xc2zbn0jqfrx6xmkg7wgsz9"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm";
     update-channel = "PyCharm RELEASE";
