@@ -72,6 +72,7 @@ let
       akregator = callPackage ./akregator.nix {};
       analitza = callPackage ./analitza.nix {};
       ark = callPackage ./ark {};
+      audiocd-kio = callPackage ./audiocd-kio.nix {};
       baloo-widgets = callPackage ./baloo-widgets.nix {};
       blinken = callPackage ./blinken.nix {};
       bovo = callPackage ./bovo.nix {};
