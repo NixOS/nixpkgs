@@ -1,0 +1,48 @@
+From 08188f4303c279861121e85d8d3a6402e6208683 Mon Sep 17 00:00:00 2001
+From: ryneeverett <ryneeverett@gmail.com>
+Date: Sat, 26 Sep 2020 14:04:43 +0000
+Subject: [PATCH] Consistent extension id's for packaged extensions
+
+Extension id's are generated from a hash of the extension path. In
+development this is fine as the extension is updated in place, but as a
+nix package this would cause state to be lost on every rebuild when the
+path changes.  Therefore we replace the path with the extension's name
+for the purposes of generating an id.
+---
+ components/crx_file/id_util.cc | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/components/crx_file/id_util.cc b/components/crx_file/id_util.cc
+index a6250c1f60e6..c624b4162e94 100644
+--- a/components/crx_file/id_util.cc
++++ b/components/crx_file/id_util.cc
+@@ -8,6 +8,7 @@
+ 
+ #include "base/files/file_path.h"
+ #include "base/hash/sha1.h"
++#include "base/json/json_reader.h"
+ #include "base/strings/string_number_conversions.h"
+ #include "base/strings/string_util.h"
+ #include "build/build_config.h"
+@@ -62,6 +63,18 @@ std::string GenerateIdForPath(const base::FilePath& path) {
+   const base::StringPiece path_bytes(
+       reinterpret_cast<const char*>(new_path.value().data()),
+       new_path.value().size() * sizeof(base::FilePath::CharType));
++
++  const char* nix_map_chars = getenv("NIX_CHROMIUM_EXTENSION_MAP");
++  if (nix_map_chars) {
++    std::string nix_map_str(nix_map_chars);
++    const auto nix_map_json = base::JSONReader::Read(nix_map_str);
++    const auto* nix_store_mapped = nix_map_json->FindKey(path_bytes);
++    if (nix_store_mapped) {
++      std::string extension_name_str(nix_store_mapped->GetString());
++      return GenerateId(extension_name_str);
++    }
++  }
++
+   return GenerateId(path_bytes);
+ }
+ 
+-- 
+2.25.4
+
