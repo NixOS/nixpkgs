@@ -450,7 +450,9 @@ runTests {
       int = 42;
       float = 0.1337;
       bool = true;
+      emptystring = "";
       string = ''fno"rd'';
+      newlinestring = "\n";
       path = /. + "/foo";
       null_ = null;
       function = x: x;
@@ -463,7 +465,9 @@ runTests {
       int = "42";
       float = "~0.133700";
       bool = "true";
+      emptystring = ''""'';
       string = ''"fno\"rd"'';
+      newlinestring = "\"\\n\"";
       path = "/foo";
       null_ = "null";
       function = "<λ>";
@@ -478,6 +482,16 @@ runTests {
     expr = mapAttrs (const (generators.toPretty { })) rec {
       list = [ 3 4 [ false ] ];
       attrs = { foo = null; bar.foo = "baz"; };
+      newlinestring = "\n";
+      multilinestring = ''
+        hello
+        there
+        test
+      '';
+      multilinestring' = ''
+        hello
+        there
+        test'';
     };
     expected = rec {
       list = ''
@@ -495,6 +509,19 @@ runTests {
           };
           foo = null;
         }'';
+      newlinestring = "''\n  \n''";
+      multilinestring = ''
+        '''
+          hello
+          there
+          test
+        ''''';
+      multilinestring' = ''
+        '''
+          hello
+          there
+          test''''';
+
     };
   };
 
