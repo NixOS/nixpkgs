@@ -1715,6 +1715,8 @@ in
 
   csv2odf = callPackage ../applications/office/csv2odf { };
 
+  csview = callPackage ../tools/text/csview { };
+
   csvkit = callPackage ../tools/text/csvkit { };
 
   csv2latex = callPackage ../tools/misc/csv2latex { };
