@@ -200,6 +200,7 @@ let
       libkdcraw = callPackage ./libkdcraw.nix {};
       libkdegames = callPackage ./libkdegames.nix {};
       libkdepim = callPackage ./libkdepim.nix {};
+      libkeduvocdocument = callPackage ./libkeduvocdocument.nix {};
       libkexiv2 = callPackage ./libkexiv2.nix {};
       libkgapi = callPackage ./libkgapi.nix {};
       libkipi = callPackage ./libkipi.nix {};
