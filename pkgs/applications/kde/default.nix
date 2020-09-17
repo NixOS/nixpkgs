@@ -199,6 +199,7 @@ let
       kwave = callPackage ./kwave.nix {};
       libgravatar = callPackage ./libgravatar.nix {};
       libkcddb = callPackage ./libkcddb.nix {};
+      libkcompactdisc = callPackage ./libkcompactdisc.nix {};
       libkdcraw = callPackage ./libkdcraw.nix {};
       libkdegames = callPackage ./libkdegames.nix {};
       libkdepim = callPackage ./libkdepim.nix {};
