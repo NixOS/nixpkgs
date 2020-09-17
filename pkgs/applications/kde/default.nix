@@ -19,14 +19,14 @@ still shows most of the available features is in `./gwenview.nix`.
 
 1. Update the URL in `./fetch.sh`.
 2. Run `./maintainers/scripts/fetch-kde-qt.sh pkgs/applications/kde`
-   from the top of the Nixpkgs tree.
+ from the top of the Nixpkgs tree.
 3. Use `nox-review wip` to check that everything builds.
 4. Commit the changes and open a pull request.
 
 */
 
 {
-  lib, libsForQt5, fetchurl,
+lib, libsForQt5, fetchurl,
 }:
 
 let
