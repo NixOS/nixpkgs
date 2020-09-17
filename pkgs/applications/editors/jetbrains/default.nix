@@ -411,12 +411,12 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "2020.2.1"; /* updated by script */
+    version = "2020.2.2"; /* updated by script */
     description = "Professional IDE for Web and JavaScript development";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "1sx67bms90fsc1bf6pqz1rd1x9aysj0xxb8d7cnclz6bv8kzhgfp"; /* updated by script */
+      sha256 = "1w17cf0qj0vyizkzj1frcmi52q5qxbf31msg8df38wy2l8r0b928"; /* updated by script */
     };
     wmClass = "jetbrains-webstorm";
     update-channel = "WebStorm RELEASE";
