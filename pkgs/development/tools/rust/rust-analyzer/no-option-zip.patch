@@ -1,0 +1,63 @@
+diff --git a/crates/assists/src/handlers/merge_imports.rs b/crates/assists/src/handlers/merge_imports.rs
+index 0bd679260..e0b76e079 100644
+--- a/crates/assists/src/handlers/merge_imports.rs
++++ b/crates/assists/src/handlers/merge_imports.rs
+@@ -32,7 +32,7 @@ pub(crate) fn merge_imports(acc: &mut Assists, ctx: &AssistContext) -> Option<()
+     if let Some(use_item) = tree.syntax().parent().and_then(ast::Use::cast) {
+         let (merged, to_delete) =
+             next_prev().filter_map(|dir| neighbor(&use_item, dir)).find_map(|use_item2| {
+-                try_merge_imports(&use_item, &use_item2, MergeBehaviour::Full).zip(Some(use_item2))
++                Some((try_merge_imports(&use_item, &use_item2, MergeBehaviour::Full)?, use_item2))
+             })?;
+
+         rewriter.replace_ast(&use_item, &merged);
+@@ -44,7 +44,7 @@ pub(crate) fn merge_imports(acc: &mut Assists, ctx: &AssistContext) -> Option<()
+     } else {
+         let (merged, to_delete) =
+             next_prev().filter_map(|dir| neighbor(&tree, dir)).find_map(|use_tree| {
+-                try_merge_trees(&tree, &use_tree, MergeBehaviour::Full).zip(Some(use_tree))
++                Some((try_merge_trees(&tree, &use_tree, MergeBehaviour::Full)?, use_tree))
+             })?;
+
+         rewriter.replace_ast(&tree, &merged);
+diff --git a/crates/assists/src/utils/insert_use.rs b/crates/assists/src/utils/insert_use.rs
+index 6d110aaaf..1f1838729 100644
+--- a/crates/assists/src/utils/insert_use.rs
++++ b/crates/assists/src/utils/insert_use.rs
+@@ -223,7 +223,7 @@ fn common_prefix(lhs: &ast::Path, rhs: &ast::Path) -> Option<(ast::Path, ast::Pa
+         }
+         res = Some((lhs_curr.clone(), rhs_curr.clone()));
+
+-        match lhs_curr.parent_path().zip(rhs_curr.parent_path()) {
++        match zip(lhs_curr.parent_path(), rhs_curr.parent_path()) {
+             Some((lhs, rhs)) => {
+                 lhs_curr = lhs;
+                 rhs_curr = rhs;
+@@ -309,8 +309,8 @@ fn find_insert_position(
+     let path_node_iter = scope
+         .as_syntax_node()
+         .children()
+-        .filter_map(|node| ast::Use::cast(node.clone()).zip(Some(node)))
+-        .flat_map(|(use_, node)| use_.use_tree().and_then(|tree| tree.path()).zip(Some(node)));
++        .filter_map(|node| zip(ast::Use::cast(node.clone()), Some(node)))
++        .flat_map(|(use_, node)| zip(use_.use_tree().and_then(|tree| tree.path()), Some(node)));
+     // Iterator that discards anything thats not in the required grouping
+     // This implementation allows the user to rearrange their import groups as this only takes the first group that fits
+     let group_iter = path_node_iter
+@@ -328,7 +328,7 @@ fn find_insert_position(
+             segments
+                 .clone()
+                 .zip(check_segments)
+-                .flat_map(|(seg, seg2)| seg.name_ref().zip(seg2.name_ref()))
++                .flat_map(|(seg, seg2)| zip(seg.name_ref(), seg2.name_ref()))
+                 .all(|(l, r)| l.text() <= r.text())
+         });
+     match post_insert {
+@@ -743,3 +743,7 @@ use foo::bar::baz::Qux;",
+         check(path, ra_fixture_before, ra_fixture_after, None)
+     }
+ }
++
++fn zip<T, U>(x: Option<T>, y: Option<U>) -> Option<(T, U)> {
++    Some((x?, y?))
++}
