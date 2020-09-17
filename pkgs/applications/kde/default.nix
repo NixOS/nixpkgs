@@ -179,6 +179,7 @@ let
       krfb = callPackage ./krfb.nix {};
       kruler = callPackage ./kruler.nix {};
       kshisen = callPackage ./kshisen.nix {};
+      ksnakeduel = callPackage ./ksnakeduel.nix {};
       kspaceduel = callPackage ./kspaceduel.nix {};
       ksudoku = callPackage ./ksudoku.nix {};
       ksystemlog = callPackage ./ksystemlog.nix {};
