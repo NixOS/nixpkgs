@@ -5545,6 +5545,18 @@ let
     meta.homepage = "https://github.com/simnalamburt/vim-mundo/";
   };
 
+  vim-nerdtree-syntax-highlight = buildVimPluginFrom2Nix {
+    pname = "vim-nerdtree-syntax-highlight";
+    version = "2020-07-19";
+    src = fetchFromGitHub {
+      owner = "tiagofumo";
+      repo = "vim-nerdtree-syntax-highlight";
+      rev = "1acc12aa7f773ede38538293332905f1ba3fea6a";
+      sha256 = "0zm023mhi1si9g5r46md1v4rlls6z2m6kyn1jcfxjqyrgba67899";
+    };
+    meta.homepage = "https://github.com/tiagofumo/vim-nerdtree-syntax-highlight/";
+  };
+
   vim-nerdtree-tabs = buildVimPluginFrom2Nix {
     pname = "vim-nerdtree-tabs";
     version = "2018-12-21";
