@@ -10160,10 +10160,10 @@ in
 
   pythonInterpreters = callPackage ./../development/interpreters/python {
     # Overrides that apply to all Python interpreters
-    pkgs = pkgs // {
+    pkgs = pkgs.extend (pkgs: _: {
       qt5 = pkgs.qt514;
       libsForQt5 = pkgs.libsForQt514;
-    };
+    });
   };
   inherit (pythonInterpreters) python27 python36 python37 python38 python39 python3Minimal pypy27 pypy36;
 
@@ -22836,18 +22836,10 @@ in
   quodlibet-xine-full = quodlibet-full.override { xineBackend = true; tag = "-xine-full"; };
 
   qutebrowser = let
-    libsForQt5 = libsForQt515;
-    qt5 = qt515;
-    python = python3.override {
-      packageOverrides = self: super: {
-        pkgs = pkgs // {
-          inherit libsForQt5 qt5;
-        };
-      };
-      self = python3;
-    };
+    pythonI = pkgs.pythonInterpreters.override { inherit pkgs; };
+    verString = lib.concatStrings (lib.take 2 (lib.splitVersion pkgs.python3.version));
   in libsForQt5.callPackage ../applications/networking/browsers/qutebrowser {
-    python3 = python;
+    python3 = pythonI."python${verString}";
   };
 
   rabbitvcs = callPackage ../applications/version-management/rabbitvcs {};
