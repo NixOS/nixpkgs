@@ -22846,7 +22846,7 @@ in
       };
       self = python3;
     };
-  in libsForQt5.callPackage ../applications/networking/browsers/qutebrowser { 
+  in libsForQt5.callPackage ../applications/networking/browsers/qutebrowser {
     python3 = python;
   };
 
