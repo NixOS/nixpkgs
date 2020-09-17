@@ -125,6 +125,7 @@ let
       kgeography = callPackage ./kgeography.nix {};
       kget = callPackage ./kget.nix {};
       kgpg = callPackage ./kgpg.nix {};
+      kgoldrunner = callPackage ./kgoldrunner.nix {};
       khelpcenter = callPackage ./khelpcenter.nix {};
       kidentitymanagement = callPackage ./kidentitymanagement.nix {};
       kig = callPackage ./kig.nix {};
