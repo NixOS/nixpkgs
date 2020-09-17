@@ -138,6 +138,7 @@ let
       killbots = callPackage ./killbots.nix {};
       kimap = callPackage ./kimap.nix {};
       kipi-plugins = callPackage ./kipi-plugins.nix {};
+      kiten = callPackage ./kiten.nix {};
       kitinerary = callPackage ./kitinerary.nix {};
       kio-extras = callPackage ./kio-extras.nix {};
       kldap = callPackage ./kldap.nix {};
