@@ -235,6 +235,13 @@ rec {
       else "[" + introSpace
         + libStr.concatMapStringsSep introSpace (go (indent + "  ")) v
         + outroSpace + "]"
+    else if isFunction v then
+      let fna = lib.functionArgs v;
+          showFnas = concatStringsSep ", " (libAttr.mapAttrsToList
+                       (name: hasDefVal: if hasDefVal then name + "?" else name)
+                       fna);
+      in if fna == {}    then "<function>"
+                         else "<function, args: {${showFnas}}>"
     else if isAttrs    v then
       # apply pretty values if allowed
       if attrNames v == [ "__pretty" "val" ] && allowPrettyValues
@@ -247,13 +254,6 @@ rec {
               (name: value:
                 "${libStr.escapeNixIdentifier name} = ${go (indent + "  ") value};") v)
         + outroSpace + "}"
-    else if isFunction v then
-      let fna = lib.functionArgs v;
-          showFnas = concatStringsSep ", " (libAttr.mapAttrsToList
-                       (name: hasDefVal: if hasDefVal then name + "?" else name)
-                       fna);
-      in if fna == {}    then "<function>"
-                         else "<function, args: {${showFnas}}>"
     else abort "generators.toPretty: should never happen (v = ${v})";
   in go "";
 
