@@ -15667,9 +15667,9 @@ in
 
     inherit (kdeApplications.override { libsForQt5 = self; })
       libkdcraw libkexiv2 libkipi libkomparediff2 libksane libkcddb akonadi-contacts
-      akonadi-calendar akonadi-notes akonadi-search kidentitymanagement kontactinterface
-      kldap akonadi akregator ark bomber bovo dolphin dragon elisa ffmpegthumbs filelight
-      granatier gwenview k3b kaddressbook kalzium kapptemplate kapman kate katomic
+      akonadi-calendar akonadi-notes akonadi-search kaccounts-integration kidentitymanagement
+      kontactinterface kldap akonadi akregator ark bomber bovo dolphin dragon elisa ffmpegthumbs
+      filelight granatier gwenview k3b kaddressbook kalzium kapptemplate kapman kate katomic
       kblackbox kblocks kbounce kcachegrind kcalc kcharselect kcolorchooser
       kdenlive kdf kdialog kdiamond keditbookmarks kfind kfloppy kget kgpg khelpcenter
       kig kigo killbots kitinerary kleopatra klettres klines kmag kmail kmines kmix kmplot
