@@ -144,6 +144,7 @@ let
       kldap = callPackage ./kldap.nix {};
       kleopatra = callPackage ./kleopatra.nix {};
       klettres = callPackage ./klettres.nix {};
+      klickety = callPackage ./klickety.nix {};
       klines = callPackage ./klines.nix {};
       kmag = callPackage ./kmag.nix {};
       kmahjongg = callPackage ./kmahjongg.nix {};
