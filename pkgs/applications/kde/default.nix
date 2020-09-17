@@ -142,6 +142,7 @@ let
       kigo = callPackage ./kigo.nix {};
       killbots = callPackage ./killbots.nix {};
       kimap = callPackage ./kimap.nix {};
+      kimagemapeditor = callPackage ./kimagemapeditor.nix {};
       kipi-plugins = callPackage ./kipi-plugins.nix {};
       kiten = callPackage ./kiten.nix {};
       kitinerary = callPackage ./kitinerary.nix {};
