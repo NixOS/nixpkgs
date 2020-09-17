@@ -21,7 +21,7 @@
 , glibcLocales
 , hypothesis
 , moto
-, pytest
+, pytestCheckHook
 # Darwin inputs
 , runtimeShell
 , libcxx ? null
@@ -40,8 +40,6 @@ in buildPythonPackage rec {
     sha256 = "a979d0404b135c63954dea79e6246c45dd45371a88631cdbb4877d844e6de3b6";
   };
 
-  checkInputs = [ pytest glibcLocales moto hypothesis ];
-
   nativeBuildInputs = [ cython ];
   buildInputs = optional isDarwin libcxx;
   propagatedBuildInputs = [
@@ -59,6 +57,8 @@ in buildPythonPackage rec {
     xlrd
     xlwt
   ];
+
+  checkInputs = [ pytestCheckHook glibcLocales moto hypothesis ];
 
   # doesn't work with -Werror,-Wunused-command-line-argument
   # https://github.com/NixOS/nixpkgs/issues/39687
@@ -82,8 +82,14 @@ in buildPythonPackage rec {
     "--parallel=$NIX_BUILD_CORES"
   ];
 
+  doCheck = !stdenv.isAarch64; # upstream doesn't test this architecture
 
-  disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) ([
+  pytestFlagsArray = [
+    "$out/${python.sitePackages}/pandas"
+    "--skip-slow"
+    "--skip-network"
+  ];
+  disabledTests = [
     # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
     # was supposed to be solved by https://github.com/dateutil/dateutil/issues/321, but is not the case
     "test_fallback_plural"
@@ -110,12 +116,10 @@ in buildPythonPackage rec {
   ] ++ optionals isDarwin [
     "test_locale"
     "test_clipboard"
-  ]);
+  ];
 
-  doCheck = !stdenv.isAarch64; # upstream doesn't test this architecture
-
-  checkPhase = ''
-    runHook preCheck
+  preCheck = ''
+    export LC_ALL="en_US.UTF-8"
   ''
   # TODO: Get locale and clipboard support working on darwin.
   #       Until then we disable the tests.
@@ -125,9 +129,6 @@ in buildPythonPackage rec {
     echo "#!${runtimeShell}" > pbpaste
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
-  '' + ''
-    LC_ALL="en_US.UTF-8" py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network -k "$disabledTests"
-    runHook postCheck
   '';
 
   meta = with stdenv.lib; {
