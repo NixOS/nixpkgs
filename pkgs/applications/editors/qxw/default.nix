@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkg-config, gtk2, pcre }:
 
-let version = "20190909"; in stdenv.mkDerivation {
-  inherit version;
+stdenv.mkDerivation rec {
   pname = "qxw";
+  version = "20200708";
 
   src = fetchurl {
     url = "https://www.quinapalus.com/qxw-${version}.tar.gz";
-    sha256 = "1w6f2c70lbdbi2dvh3rm463ai20fhfnnxf205kyyl46gz141kz48";
+    sha256 = "1si3ila7137c7x4mp3jv1q1mh3jp0p4khir1yz1rwy0mp3znwv7d";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -23,9 +23,9 @@ let version = "20190909"; in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A program to help create and publish crosswords";
-    homepage    = https://www.quinapalus.com/qxw.html;
-    license     = licenses.gpl2;
+    homepage = "https://www.quinapalus.com/qxw.html";
+    license = licenses.gpl2;
     maintainers = [ maintainers.tckmn ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }
