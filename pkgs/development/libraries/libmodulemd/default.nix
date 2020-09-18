@@ -32,10 +32,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Use proper glib devdoc path.
-    (substituteAll {
-      src = ./glib-devdoc.patch;
-      glib_devdoc = glib.devdoc;
-    })
+    # TODO: We don't compile anymore glib's docs.
+    # (substituteAll {
+      # src = ./glib-devdoc.patch;
+      # glib_devdoc = glib.devdoc;
+    # })
 
     # Install pygobject overrides to our prefix instead of python3 one.
     # https://github.com/fedora-modularity/libmodulemd/pull/469
