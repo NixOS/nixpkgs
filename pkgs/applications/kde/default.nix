@@ -231,6 +231,7 @@ let
       libkomparediff2 = callPackage ./libkomparediff2.nix {};
       libksane = callPackage ./libksane.nix {};
       libksieve = callPackage ./libksieve.nix {};
+      lokalize = callPackage ./lokalize.nix {};
       mailcommon = callPackage ./mailcommon.nix {};
       mailimporter = callPackage ./mailimporter.nix {};
       marble = callPackage ./marble.nix {};
