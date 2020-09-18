@@ -130,6 +130,7 @@ let
       kdepim-runtime = callPackage ./kdepim-runtime {};
       kdepim-addons = callPackage ./kdepim-addons.nix {};
       kdepim-apps-libs = callPackage ./kdepim-apps-libs {};
+      kdesdk-kioslaves = callPackage ./kdesdk-kioslaves.nix {};
       kdf = callPackage ./kdf.nix {};
       kdialog = callPackage ./kdialog.nix {};
       kdiamond = callPackage ./kdiamond.nix {};
