@@ -72,7 +72,7 @@ default-package-overrides:
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
-  # LTS Haskell 16.13
+  # LTS Haskell 16.15
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -243,7 +243,7 @@ default-package-overrides:
   - asn1-encoding ==0.9.6
   - asn1-parse ==0.9.5
   - asn1-types ==0.3.4
-  - assert-failure ==0.1.2.4
+  - assert-failure ==0.1.2.5
   - assoc ==1.0.2
   - astro ==0.4.2.1
   - async ==2.2.2
@@ -261,12 +261,12 @@ default-package-overrides:
   - attoparsec-iso8601 ==1.0.1.0
   - attoparsec-path ==0.0.0.1
   - audacity ==0.0.2
-  - aur ==7.0.3
-  - aura ==3.1.8
+  - aur ==7.0.4
+  - aura ==3.1.9
   - authenticate ==1.3.5
   - authenticate-oauth ==1.6.0.1
   - auto ==0.4.3.1
-  - autoexporter ==1.1.18
+  - autoexporter ==1.1.19
   - auto-update ==0.1.6
   - avers ==0.0.17.1
   - avro ==0.5.2.0
@@ -402,7 +402,7 @@ default-package-overrides:
   - casing ==0.1.4.1
   - cassava ==0.5.2.0
   - cassava-conduit ==0.5.1
-  - cassava-megaparsec ==2.0.1
+  - cassava-megaparsec ==2.0.2
   - cast ==0.1.0.2
   - category ==0.2.5.0
   - cayley-client ==0.4.13
@@ -454,7 +454,7 @@ default-package-overrides:
   - clumpiness ==0.17.0.2
   - ClustalParser ==1.3.0
   - cmark ==0.6
-  - cmark-gfm ==0.2.1
+  - cmark-gfm ==0.2.2
   - cmark-lucid ==0.1.0.0
   - cmdargs ==0.10.20
   - codec-beam ==0.2.0
@@ -657,7 +657,7 @@ default-package-overrides:
   - distributed-closure ==0.4.2.0
   - distribution-opensuse ==1.1.1
   - distributive ==0.6.2
-  - dl-fedora ==0.7.4
+  - dl-fedora ==0.7.5
   - dlist ==0.8.0.8
   - dlist-instances ==0.1.1.1
   - dlist-nonempty ==0.1.1
@@ -671,7 +671,7 @@ default-package-overrides:
   - doldol ==0.4.1.2
   - do-list ==1.0.1
   - do-notation ==0.1.0.2
-  - dotenv ==0.8.0.6
+  - dotenv ==0.8.0.7
   - dotgen ==0.4.3
   - dotnet-timespan ==0.0.1.0
   - double-conversion ==2.0.2.0
@@ -733,7 +733,7 @@ default-package-overrides:
   - errors ==2.3.0
   - errors-ext ==0.4.2
   - ersatz ==0.4.8
-  - esqueleto ==3.3.3.3
+  - esqueleto ==3.3.4.0
   - essence-of-live-coding ==0.1.0.3
   - essence-of-live-coding-gloss ==0.1.0.3
   - essence-of-live-coding-pulse ==0.1.0.3
@@ -760,7 +760,7 @@ default-package-overrides:
   - extended-reals ==0.2.4.0
   - extensible-effects ==5.0.0.1
   - extensible-exceptions ==0.1.1.4
-  - extra ==1.7.7
+  - extra ==1.7.8
   - extractable-singleton ==0.0.1
   - extrapolate ==0.4.2
   - fail ==4.9.0.0
@@ -902,8 +902,8 @@ default-package-overrides:
   - ghcid ==0.8.7
   - ghci-hexcalc ==0.1.1.0
   - ghcjs-codemirror ==0.0.0.2
-  - ghc-lib ==8.10.2.20200808
-  - ghc-lib-parser ==8.10.2.20200808
+  - ghc-lib ==8.10.2.20200916
+  - ghc-lib-parser ==8.10.2.20200916
   - ghc-lib-parser-ex ==8.10.0.16
   - ghc-parser ==0.2.2.0
   - ghc-paths ==0.1.0.12
@@ -988,7 +988,7 @@ default-package-overrides:
   - hashable-time ==0.2.0.2
   - hashids ==1.0.2.4
   - hashmap ==1.3.3
-  - hashtables ==1.2.3.4
+  - hashtables ==1.2.4.1
   - haskeline ==0.7.5.0
   - haskell-gi ==0.23.1
   - haskell-gi-base ==0.23.0
@@ -1130,7 +1130,7 @@ default-package-overrides:
   - html-entity-map ==0.1.0.0
   - htoml ==1.0.0.3
   - http2 ==2.0.5
-  - HTTP ==4000.3.14
+  - HTTP ==4000.3.15
   - http-api-data ==0.4.1.1
   - http-client ==0.6.4.1
   - http-client-openssl ==0.3.1.0
@@ -1205,7 +1205,7 @@ default-package-overrides:
   - indexed-list-literals ==0.2.1.3
   - indexed-profunctors ==0.1
   - infer-license ==0.2.0
-  - inflections ==0.4.0.5
+  - inflections ==0.4.0.6
   - influxdb ==1.7.1.6
   - ini ==0.4.1
   - inj ==1.0
@@ -1232,11 +1232,11 @@ default-package-overrides:
   - invertible ==0.2.0.7
   - invertible-grammar ==0.1.3
   - io-machine ==0.2.0.0
-  - io-manager ==0.1.0.2
+  - io-manager ==0.1.0.3
   - io-memoize ==1.1.1.0
   - io-region ==0.1.1
   - io-storage ==0.3
-  - io-streams ==1.5.1.0
+  - io-streams ==1.5.2.0
   - io-streams-haproxy ==1.0.1.0
   - ip6addr ==1.0.1
   - iproute ==1.7.9
@@ -1597,7 +1597,7 @@ default-package-overrides:
   - OpenGLRaw ==3.3.4.0
   - openpgp-asciiarmor ==0.1.2
   - opensource ==0.1.1.0
-  - openssl-streams ==1.2.2.0
+  - openssl-streams ==1.2.3.0
   - opentelemetry ==0.4.2
   - opentelemetry-extra ==0.4.2
   - opentelemetry-lightstep ==0.4.2
@@ -1782,7 +1782,7 @@ default-package-overrides:
   - pushbullet-types ==0.4.1.0
   - pusher-http-haskell ==1.5.1.14
   - pvar ==0.2.0.0
-  - PyF ==0.9.0.1
+  - PyF ==0.9.0.2
   - qchas ==1.1.0.1
   - qm-interpolated-string ==0.3.0.0
   - qrcode-core ==0.9.4
@@ -1793,7 +1793,7 @@ default-package-overrides:
   - quickcheck-arbitrary-adt ==0.3.1.0
   - quickcheck-assertions ==0.3.0
   - quickcheck-classes ==0.6.4.0
-  - quickcheck-classes-base ==0.6.0.0
+  - quickcheck-classes-base ==0.6.1.0
   - quickcheck-instances ==0.3.23
   - quickcheck-io ==0.2.0
   - quickcheck-simple ==0.1.1.1
@@ -1886,7 +1886,7 @@ default-package-overrides:
   - rhine ==0.6.0
   - rhine-gloss ==0.6.0.1
   - rigel-viz ==0.2.0.0
-  - rio ==0.1.18.0
+  - rio ==0.1.19.0
   - rio-orphans ==0.1.1.0
   - rio-prettyprint ==0.1.1.0
   - roc-id ==0.1.0.0
@@ -2039,7 +2039,7 @@ default-package-overrides:
   - smallcheck ==1.1.7
   - smash ==0.1.1.0
   - smash-aeson ==0.1.0.0
-  - smash-lens ==0.1.0.0
+  - smash-lens ==0.1.0.1
   - smash-microlens ==0.1.0.0
   - smoothie ==0.4.2.11
   - snap-blaze ==0.2.1.5
@@ -2413,7 +2413,7 @@ default-package-overrides:
   - wai-cors ==0.2.7
   - wai-enforce-https ==0.0.2.1
   - wai-eventsource ==3.0.0
-  - wai-extra ==3.0.29.2
+  - wai-extra ==3.0.31
   - wai-handler-launch ==3.0.3.1
   - wai-logger ==2.3.6
   - wai-middleware-caching ==0.1.0.2
@@ -2512,7 +2512,7 @@ default-package-overrides:
   - yesod-gitrev ==0.2.1
   - yesod-newsfeed ==1.7.0.0
   - yesod-persistent ==1.6.0.4
-  - yesod-recaptcha2 ==1.0.0
+  - yesod-recaptcha2 ==1.0.1
   - yesod-sitemap ==1.6.0
   - yesod-static ==1.6.1.0
   - yesod-test ==1.6.10
