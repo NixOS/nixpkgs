@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $HOME/.nuget/NuGet
     cp $HOME/.config/NuGet/NuGet.Config $HOME/.nuget/NuGet
 
-    dotnet restore --source nixos osu.Desktop
+    dotnet restore --source "$PWD/nixos" osu.Desktop
 
     runHook postConfigure
   '';
