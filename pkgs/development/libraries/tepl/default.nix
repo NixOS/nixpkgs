@@ -12,16 +12,14 @@
 , libxml2
 , pkg-config
 }:
-let
-  version = "4.99.3";
+
+stdenv.mkDerivation rec {
   pname = "tepl";
-in
-stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  version = "5.0.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0mribr59n2isf1is6n849g3xpwmxm71xj1npaap30m8cy0sfdbz4";
+    sha256 = "0x2s0ks575b57jdqnp9r9miz40pm705n2dlj2k8bfj1hyl22kgf6";
   };
 
   nativeBuildInputs = [
