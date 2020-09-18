@@ -100,6 +100,7 @@ let
       kalarmcal = callPackage ./kalarmcal.nix {};
       kalgebra = callPackage ./kalgebra.nix {};
       kalzium = callPackage ./kalzium.nix {};
+      kanagram = callPackage ./kanagram.nix {};
       kapman = callPackage ./kapman.nix {};
       kapptemplate = callPackage ./kapptemplate.nix { };
       kate = callPackage ./kate.nix {};
