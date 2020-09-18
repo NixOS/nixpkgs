@@ -233,6 +233,22 @@ checkConfigError 'infinite recursion encountered' config.foo ./freeform-attrsOf.
 checkConfigError 'The option .* is used but not defined' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix
 checkConfigOutput 24 config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix ./define-value-string.nix
 
+## orderOf
+# Check whether two elements with after/before are ordered correctly
+checkConfigOutput e config.value.0.data ./order/single-option.nix ./order/orderable.nix
+checkConfigOutput d config.value.1.data ./order/single-option.nix ./order/orderable.nix
+checkConfigOutput c config.value.2.data ./order/single-option.nix ./order/orderable.nix
+checkConfigOutput b config.value.3.data ./order/single-option.nix ./order/orderable.nix
+checkConfigOutput a config.value.4.data ./order/single-option.nix ./order/orderable.nix
+# Check that a cycle throws an error
+checkConfigError 'Cycle detected when trying to order option .*: a -> e -> d -> b -> a' config.value ./order/single-option.nix ./order/cycle.nix
+# Check that multiple orderOf declarations can be merged
+checkConfigOutput e config.value.0.data ./order/multiple-options.nix ./order/orderable.nix
+checkConfigOutput d config.value.1.data ./order/multiple-options.nix ./order/orderable.nix
+checkConfigOutput c config.value.2.data ./order/multiple-options.nix ./order/orderable.nix
+checkConfigOutput b config.value.3.data ./order/multiple-options.nix ./order/orderable.nix
+checkConfigOutput a config.value.4.data ./order/multiple-options.nix ./order/orderable.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
