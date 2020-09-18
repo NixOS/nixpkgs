@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "eom";
-  version = "1.24.0";
+  version = "1.24.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0zzximp2534bky0vac219alafblw6m0lis0gncq92017s6c1mb77";
+    sha256 = "0dralsc0dvs0l38cysdhx6kiaiqlb8qi6g9xz2cm6mjqyq3d3f9f";
   };
 
   nativeBuildInputs = [
