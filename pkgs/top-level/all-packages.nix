@@ -5457,6 +5457,8 @@ in
 
   microcom = callPackage ../applications/misc/microcom { };
 
+  microserver = callPackage ../servers/microserver { };
+
   midisheetmusic = callPackage ../applications/audio/midisheetmusic { };
 
   mikutter = callPackage ../applications/networking/instant-messengers/mikutter { };
