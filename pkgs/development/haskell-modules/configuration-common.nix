@@ -1461,7 +1461,6 @@ self: super: {
   jira-wiki-markup = doDistribute self.jira-wiki-markup_1_3_2;
   pandoc = doDistribute self.pandoc_2_10_1;
   pandoc-citeproc = doDistribute self.pandoc-citeproc_0_17_0_2;
-  pandoc-plot = doDistribute self.pandoc-plot_0_9_2_0;
   pandoc-types = doDistribute self.pandoc-types_1_21;
   rfc5051 = doDistribute self.rfc5051_0_2;
 
