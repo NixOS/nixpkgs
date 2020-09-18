@@ -209,6 +209,7 @@ let
       kubrick = callPackage ./kubrick.nix {};
       kwalletmanager = callPackage ./kwalletmanager.nix {};
       kwave = callPackage ./kwave.nix {};
+      kwordquiz = callPackage ./kwordquiz.nix {};
       libgravatar = callPackage ./libgravatar.nix {};
       libkcddb = callPackage ./libkcddb.nix {};
       libkcompactdisc = callPackage ./libkcompactdisc.nix {};
