@@ -113,6 +113,7 @@ let
       kcron = callPackage ./kcron.nix {};
       kdebugsettings = callPackage ./kdebugsettings.nix {};
       kdeconnect-kde = callPackage ./kdeconnect-kde.nix {};
+      kdeedu-data = callPackage ./kdeedu-data.nix {};
       kdegraphics-mobipocket = callPackage ./kdegraphics-mobipocket.nix {};
       kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers.nix {};
       kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
