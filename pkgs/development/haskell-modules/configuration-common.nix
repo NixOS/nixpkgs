@@ -1360,6 +1360,10 @@ self: super: {
     extraPrefix = "";
   });
 
+  logging-effect = markUnbroken (super.logging-effect.override {
+    unliftio-core = super.unliftio-core_0_2_0_1;
+  });
+
   # Missing -Iinclude parameter to doc-tests (pull has been accepted, so should be resolved when 0.5.3 released)
   # https://github.com/lehins/massiv/pull/104
   massiv = dontCheck super.massiv;
