@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "totem";
-  version = "3.34.1";
+  version = "3.38.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/totem/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "028sc6xbyi7rs884862d8f3di6zhcm0lhvlpc3r69ifzjsq9my3b";
+    sha256 = "0bs33ijvxbr2prb9yj4dxglsszslsn9k258n311sld84masz4ad8";
   };
 
   doCheck = true;
@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
     gdk-pixbuf libxml2 adwaita-icon-theme gnome-desktop
     gsettings-desktop-schemas tracker nautilus
     python3Packages.pygobject3 python3Packages.dbus-python # for plug-ins
+  ];
+
+  mesonFlags = [
+    # TODO: https://github.com/NixOS/nixpkgs/issues/36468
+    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
   ];
 
   postPatch = ''
