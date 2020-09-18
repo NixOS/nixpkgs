@@ -1,4 +1,4 @@
-{ appleDerivation }:
+{ appleDerivation, darwin-stubs }:
 
 appleDerivation {
   phases = [ "unpackPhase" "installPhase" ];
@@ -12,14 +12,15 @@ appleDerivation {
   ];
 
   installPhase = ''
-    ###### IMPURITIES
     mkdir -p $out/Library/Frameworks/Security.framework
-    pushd $out/Library/Frameworks/Security.framework
-    ln -s /System/Library/Frameworks/Security.framework/Security
-    ln -s /System/Library/Frameworks/Security.framework/Resources
-    ln -s /System/Library/Frameworks/Security.framework/PlugIns
-    ln -s /System/Library/Frameworks/Security.framework/XPCServices
-    popd
+
+    ###### IMPURITIES
+    ln -s /System/Library/Frameworks/Security.framework/{Resources,Plugins,XPCServices} \
+      $out/Library/Frameworks/Security.framework
+
+    ###### STUBS
+    cp ${darwin-stubs}/System/Library/Frameworks/Security.framework/Versions/A/Security.tbd \
+      $out/Library/Frameworks/Security.framework
 
     ###### HEADERS
 
