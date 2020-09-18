@@ -67,13 +67,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "3.36.5";
+  version = "3.38.0";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1hj7gmjmy92xndlgw7pzk5m6j2fbzcgfd1pxc32k38gml8qg19d4";
+    url = "mirror://gnome/sources/gnome-shell/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "15qabakial0jcsqkq1xg4fsssarixq6aqqksikdfcpl7q0xl09n6";
   };
 
   patches = [
@@ -82,13 +82,6 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit libgnomekbd unzip;
       gsettings = "${glib.bin}/bin/gsettings";
-    })
-
-    # Install bash-completions to correct prefix.
-    # https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/1194
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/9f1ad5d86ddbabaa840eb2860279d53f4e635453.patch";
-      sha256 = "18amnqw342vllcrjpfcq232z9xr28vgjsf2z8k73xx70nwah7hvz";
     })
 
     # Use absolute path for libshew installation to make our patched gobject-introspection
