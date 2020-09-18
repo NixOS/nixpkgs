@@ -1,35 +1,65 @@
-from typing import Dict, Generator, Tuple, Union
+from __future__ import annotations
+from typing import Dict, Generator, List, Optional, Tuple
 import argparse
+import asyncio
 import contextlib
-import concurrent.futures
 import json
 import os
 import subprocess
 import sys
 import tempfile
-import threading
 
-updates: Dict[concurrent.futures.Future, Dict] = {}
-
-TempDirs = Dict[str, Tuple[str, str, threading.Lock]]
-
-thread_name_prefix = 'UpdateScriptThread'
+class CalledProcessError(Exception):
+    process: asyncio.subprocess.Process
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
-def run_update_script(package: Dict, commit: bool, temp_dirs: TempDirs) -> subprocess.CompletedProcess:
-    worktree: Union[None, str] = None
+async def check_subprocess(*args, **kwargs):
+    """
+    Emulate check argument of subprocess.run function.
+    """
+    process = await asyncio.create_subprocess_exec(*args, **kwargs)
+    returncode = await process.wait()
 
-    if commit and 'commit' in package['supportedFeatures']:
-        thread_name = threading.current_thread().name
-        worktree, _branch, lock = temp_dirs[thread_name]
-        lock.acquire()
-        package['thread'] = thread_name
+    if returncode != 0:
+        error = CalledProcessError()
+        error.process = process
+
+        raise error
+
+    return process
+
+async def run_update_script(merge_lock: asyncio.Lock, temp_dir: Optional[Tuple[str, str]], package: Dict, keep_going: bool):
+    worktree: Optional[str] = None
+
+    if temp_dir is not None:
+        worktree, _branch = temp_dir
 
     eprint(f" - {package['name']}: UPDATING ...")
 
-    return subprocess.run(package['updateScript'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, cwd=worktree)
+    try:
+        update_process = await check_subprocess(*package['updateScript'], stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, cwd=worktree)
+        update_info = await update_process.stdout.read()
+
+        await merge_changes(merge_lock, package, update_info, temp_dir)
+    except KeyboardInterrupt as e:
+        eprint('Cancelling…')
+        raise asyncio.exceptions.CancelledError()
+    except CalledProcessError as e:
+        eprint(f" - {package['name']}: ERROR")
+        eprint()
+        eprint(f"--- SHOWING ERROR LOG FOR {package['name']} ----------------------")
+        eprint()
+        stderr = await e.process.stderr.read()
+        eprint(stderr.decode('utf-8'))
+        with open(f"{package['pname']}.log", 'wb') as logfile:
+            logfile.write(stderr)
+        eprint()
+        eprint(f"--- SHOWING ERROR LOG FOR {package['name']} ----------------------")
+
+        if not keep_going:
+            raise asyncio.exceptions.CancelledError()
 
 @contextlib.contextmanager
 def make_worktree() -> Generator[Tuple[str, str], None, None]:
@@ -37,46 +67,76 @@ def make_worktree() -> Generator[Tuple[str, str], None, None]:
         branch_name = f'update-{os.path.basename(wt)}'
         target_directory = f'{wt}/nixpkgs'
 
-        subprocess.run(['git', 'worktree', 'add', '-b', branch_name, target_directory], check=True)
+        subprocess.run(['git', 'worktree', 'add', '-b', branch_name, target_directory])
         yield (target_directory, branch_name)
-        subprocess.run(['git', 'worktree', 'remove', target_directory], check=True)
-        subprocess.run(['git', 'branch', '-D', branch_name], check=True)
+        subprocess.run(['git', 'worktree', 'remove', '--force', target_directory])
+        subprocess.run(['git', 'branch', '-D', branch_name])
 
-def commit_changes(worktree: str, branch: str, execution: subprocess.CompletedProcess) -> None:
-    changes = json.loads(execution.stdout)
+async def commit_changes(merge_lock: asyncio.Lock, worktree: str, branch: str, update_info: str) -> None:
+    changes = json.loads(update_info)
     for change in changes:
-        subprocess.run(['git', 'add'] + change['files'], check=True, cwd=worktree)
-        commit_message = '{attrPath}: {oldVersion} → {newVersion}'.format(**change)
-        subprocess.run(['git', 'commit', '-m', commit_message], check=True, cwd=worktree)
-        subprocess.run(['git', 'cherry-pick', branch], check=True)
+        # Git can only handle a single index operation at a time
+        async with merge_lock:
+            await check_subprocess('git', 'add', *change['files'], cwd=worktree)
+            commit_message = '{attrPath}: {oldVersion} → {newVersion}'.format(**change)
+            await check_subprocess('git', 'commit', '--quiet', '-m', commit_message, cwd=worktree)
+            await check_subprocess('git', 'cherry-pick', branch)
 
-def merge_changes(package: Dict, future: concurrent.futures.Future, commit: bool, keep_going: bool, temp_dirs: TempDirs) -> None:
-    try:
-        execution = future.result()
-        if commit and 'commit' in package['supportedFeatures']:
-            thread_name = package['thread']
-            worktree, branch, lock = temp_dirs[thread_name]
-            commit_changes(worktree, branch, execution)
-        eprint(f" - {package['name']}: DONE.")
-    except subprocess.CalledProcessError as e:
-        eprint(f" - {package['name']}: ERROR")
-        eprint()
-        eprint(f"--- SHOWING ERROR LOG FOR {package['name']} ----------------------")
-        eprint()
-        eprint(e.stdout.decode('utf-8'))
-        with open(f"{package['pname']}.log", 'wb') as logfile:
-            logfile.write(e.stdout)
-        eprint()
-        eprint(f"--- SHOWING ERROR LOG FOR {package['name']} ----------------------")
+async def merge_changes(merge_lock: asyncio.Lock, package: Dict, update_info: str, temp_dir: Optional[Tuple[str, str]]) -> None:
+    if temp_dir is not None:
+        worktree, branch = temp_dir
+        await commit_changes(merge_lock, worktree, branch, update_info)
+    eprint(f" - {package['name']}: DONE.")
 
-        if not keep_going:
-            sys.exit(1)
-    finally:
-        if commit and 'commit' in package['supportedFeatures']:
-            lock.release()
+async def updater(temp_dir: Optional[Tuple[str, str]], merge_lock: asyncio.Lock, packages_to_update: asyncio.Queue[Optional[Dict]], keep_going: bool, commit: bool):
+    while True:
+        package = await packages_to_update.get()
+        if package is None:
+            # A sentinel received, we are done.
+            return
 
-def main(max_workers: int, keep_going: bool, commit: bool, packages: Dict) -> None:
-    with open(sys.argv[1]) as f:
+        if not ('commit' in package['supportedFeatures']):
+            temp_dir = None
+
+        await run_update_script(merge_lock, temp_dir, package, keep_going)
+
+async def start_updates(max_workers: int, keep_going: bool, commit: bool, packages: List[Dict]):
+    merge_lock = asyncio.Lock()
+    packages_to_update: asyncio.Queue[Optional[Dict]] = asyncio.Queue()
+
+    with contextlib.ExitStack() as stack:
+        temp_dirs: List[Optional[Tuple[str, str]]] = []
+
+        # Do not create more workers than there are packages.
+        num_workers = min(max_workers, len(packages))
+
+        # Set up temporary directories when using auto-commit.
+        for i in range(num_workers):
+            temp_dir = stack.enter_context(make_worktree()) if commit else None
+            temp_dirs.append(temp_dir)
+
+        # Fill up an update queue,
+        for package in packages:
+            await packages_to_update.put(package)
+
+        # Add sentinels, one for each worker.
+        # A workers will terminate when it gets sentinel from the queue.
+        for i in range(num_workers):
+            await packages_to_update.put(None)
+
+        # Prepare updater workers for each temp_dir directory.
+        # At most `num_workers` instances of `run_update_script` will be running at one time.
+        updaters = asyncio.gather(*[updater(temp_dir, merge_lock, packages_to_update, keep_going, commit) for temp_dir in temp_dirs])
+
+        try:
+            # Start updater workers.
+            await updaters
+        except asyncio.exceptions.CancelledError as e:
+            # When one worker is cancelled, cancel the others too.
+            updaters.cancel()
+
+def main(max_workers: int, keep_going: bool, commit: bool, packages_path: str) -> None:
+    with open(packages_path) as f:
         packages = json.load(f)
 
     eprint()
@@ -90,19 +150,7 @@ def main(max_workers: int, keep_going: bool, commit: bool, packages: Dict) -> No
         eprint()
         eprint('Running update for:')
 
-        with contextlib.ExitStack() as stack, concurrent.futures.ThreadPoolExecutor(max_workers=max_workers, thread_name_prefix=thread_name_prefix) as executor:
-            if commit:
-                temp_dirs = {f'{thread_name_prefix}_{str(i)}': (*stack.enter_context(make_worktree()), threading.Lock()) for i in range(max_workers)}
-            else:
-                temp_dirs = {}
-
-            for package in packages:
-                updates[executor.submit(run_update_script, package, commit, temp_dirs)] = package
-
-            for future in concurrent.futures.as_completed(updates):
-                package = updates[future]
-
-                merge_changes(package, future, commit, keep_going, temp_dirs)
+        asyncio.run(start_updates(max_workers, keep_going, commit, packages))
 
         eprint()
         eprint('Packages updated!')
@@ -122,8 +170,6 @@ if __name__ == '__main__':
 
     try:
         main(args.max_workers, args.keep_going, args.commit, args.packages)
-    except (KeyboardInterrupt, SystemExit) as e:
-        for update in updates:
-            update.cancel()
-
-        sys.exit(e.code if isinstance(e, SystemExit) else 130)
+    except KeyboardInterrupt as e:
+        # Let’s cancel outside of the main loop too.
+        sys.exit(130)
