@@ -85,17 +85,10 @@ let
           runHook postInstall
         '';
         meta = if meta.broken or false then meta // { hydraPlatforms = lib.platforms.none; } else meta;
-
-        env = stdenv.mkDerivation {
-          name = "agda-shell-for-${pname}";
-          buildInputs = [ (withPackages buildInputs) ];
-          phases = ["installPhase"];
-          installPhase = "echo $buildInputs > $out";
-        };
       };
 in
 {
-  mkDerivation = args: stdenv.mkDerivation (args // defaults args);
+  mkDerivation = args: (lib.extends (self: super: super // { env = shellFor super; }) stdenv.mkDerivation (args // defaults args));
 
   inherit withPackages withPackages' shellFor;
 }
