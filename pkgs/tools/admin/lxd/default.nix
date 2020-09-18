@@ -18,13 +18,13 @@ let
 in
 buildGoPackage rec {
   pname = "lxd";
-  version = "4.5";
+  version = "4.6";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "1nszzcyn8kvpnxppjbxky5x9a8n0jfmhy20j6nrwm3196gd6hirr";
+    sha256 = "011fsyafmpis6j0aq7vwd56m2mcb9v3rn4f246ms5nx6zgmga0ip";
   };
 
   postPatch = ''
