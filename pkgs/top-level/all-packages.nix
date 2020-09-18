@@ -22972,6 +22972,8 @@ in
 
   sakura = callPackage ../applications/misc/sakura { };
 
+  sameboy = callPackage ../misc/emulators/sameboy { };
+
   sayonara = libsForQt514.callPackage ../applications/audio/sayonara { };
 
   sbagen = callPackage ../applications/misc/sbagen { };
