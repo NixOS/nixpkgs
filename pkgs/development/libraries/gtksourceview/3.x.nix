@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gtksourceview";
-  version = "3.24.11";
+  version = "4.8.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtksourceview/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1zbpj283b5ycz767hqz5kdq02wzsga65pp4fykvhg8xj6x50f6v9";
+    sha256 = "06jfbfbi73j9i3qsr7sxg3yl3643bn3aydbzx6xg3v8ca0hr3880";
   };
 
   propagatedBuildInputs = [

@@ -3,13 +3,13 @@
 
 let
   pname = "libgnome-games-support";
-  version = "1.6.1";
+  version = "1.8.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1gq8p38k92lsr6dbav6pgmw0adnzzhcs06jqdkr37p145vv6ls7v";
+    sha256 = "1pdk9hc30xdlv0ba24f7pvcr2d5370zykrmpws7hgmjgl4wfbpdb";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext vala ];

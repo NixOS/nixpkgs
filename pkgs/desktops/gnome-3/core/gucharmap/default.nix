@@ -44,7 +44,7 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "gucharmap";
-  version = "13.0.2";
+  version = "12.0.1";
 
   outputs = [ "out" "lib" "dev" "devdoc" ];
 
@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = pname;
     rev = version;
-    sha256 = "099za9mc6qdq9pwcbjp3d7hxjbaa43vk2w9qw4yiyswl1xq3jw62";
+    sha256 = "0si3ymyfzc5v7ly0dmcs3qgw2wp8cyasycq5hmcr8frl09lr6gkw";
   };
 
   nativeBuildInputs = [

@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dconf";
-  version = "0.36.0";
+  version = "0.38.0";
 
   outputs = [ "out" "lib" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0bfs069pjv6lhp7xrzmrhz3876ay2ryqxzc6mlva1hhz34ibprlz";
+    sha256 = "0n2gqkp6d61h7gnnp2xnxp6w5wcl7w9ay58krrf729qd6d0hzxj5";
   };
 
   patches = [

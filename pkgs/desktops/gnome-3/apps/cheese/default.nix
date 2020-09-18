@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cheese";
-  version = "3.34.0";
+  version = "3.38.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/cheese/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0wvyc9wb0avrprvm529m42y5fkv3lirdphqydc9jw0c8mh05d1ni";
+    sha256 = "0vyim2avlgq3a48rgdfz5g21kqk11mfb53b2l883340v88mp7ll8";
   };
 
   postPatch = ''

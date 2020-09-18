@@ -19,11 +19,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gdm";
-  version = "3.34.1";
+  version = "3.38.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1lyqvcwxhwxklbxn4xjswjzr6fhjix6h28mi9ypn34wdm9bzcpg8";
+    sha256 = "1fimhklb204rflz8k345756jikgbw8113hms3zlcwk6975f43m26";
   };
 
   # Only needed to make it build
