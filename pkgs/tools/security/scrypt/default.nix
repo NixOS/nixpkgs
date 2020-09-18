@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, utillinux }:
+{ stdenv, fetchurl, openssl, utillinux, getconf }:
 
 stdenv.mkDerivation rec {
   pname = "scrypt";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-libscrypt-kdf" ];
 
   buildInputs = [ openssl ];
+
+  nativeBuildInputs = [ getconf ];
 
   patchPhase = ''
     for f in Makefile.in autotools/Makefile.am libcperciva/cpusupport/Build/cpusupport.sh configure ; do
