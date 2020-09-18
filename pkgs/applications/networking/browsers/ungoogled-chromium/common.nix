@@ -1,7 +1,7 @@
-{ stdenv, lib, llvmPackages, gnChromium, ninja, which, nodejs, fetchpatch, gnutar
+{ stdenv, lib, llvmPackages, gnChromium, ninja, which, nodejs, fetchpatch, fetchurl
 
 # default dependencies
-, bzip2, flac, speex, libopus
+, gnutar, bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
 , libpng, libcap
 , xdg_utils, yasm, nasm, minizip, libwebp
@@ -41,6 +41,7 @@
 , ungoogled-chromium
 , ungoogled ? false
 
+, channel
 , upstream-info
 }:
 
@@ -110,7 +111,7 @@ let
   versionRange = min-version: upto-version:
     let inherit (upstream-info) version;
         result = versionAtLeast version min-version && versionOlder version upto-version;
-        stable-version = (import ./upstream-info.nix).stable.version;
+        stable-version = (importJSON ./upstream-info.json).stable.version;
     in if versionAtLeast stable-version upto-version
        then warn "chromium: stable version ${stable-version} is newer than a patchset bounded at ${upto-version}. You can safely delete it."
             result
@@ -123,10 +124,13 @@ let
     };
   base = rec {
     name = "${packageName}-unwrapped-${version}";
-    inherit (upstream-info) channel version;
-    inherit packageName buildType buildPath;
+    inherit (upstream-info) version;
+    inherit channel packageName buildType buildPath;
 
-    src = upstream-info.main;
+    src = fetchurl {
+      url = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${version}.tar.xz";
+      inherit (upstream-info) sha256;
+    };
 
     nativeBuildInputs = [
       ninja which python2Packages.python perl pkgconfig
@@ -151,8 +155,9 @@ let
       ++ optional pulseSupport libpulseaudio
       ++ optionals useOzone [ libdrm wayland mesa_drivers libxkbcommon ];
 
-    patches = [
+    patches = optionals (versionRange "68" "86") [
       ./patches/nix_plugin_paths_68.patch
+    ] ++ [
       ./patches/remove-webp-include-69.patch
       ./patches/no-build-timestamps.patch
       ./patches/widevine-79.patch
@@ -166,12 +171,18 @@ let
       #
       # ++ optionals (channel == "dev") [ ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" ) ]
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
-    ] ++ optionals (useVaapi) [ # Improvements for the VA-API build:
+    ] ++ optionals (useVaapi && versionRange "68" "86") [ # Improvements for the VA-API build:
       ./patches/enable-vdpau-support-for-nvidia.patch # https://aur.archlinux.org/cgit/aur.git/tree/vdpau-support.patch?h=chromium-vaapi
       ./patches/enable-video-acceleration-on-linux.patch # Can be controlled at runtime (i.e. without rebuilding Chromium)
     ];
 
-    postPatch = ''
+    postPatch = optionalString (!versionRange "0" "86") ''
+      # Required for patchShebangs (unsupported interpreter directive, basename: invalid option -- '*', etc.):
+      substituteInPlace native_client/SConstruct \
+        --replace "#! -*- python -*-" ""
+      substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
+        --replace "/usr/bin/env -S make -f" "/usr/bin/make -f"
+    '' + ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
       substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \
         --replace \
@@ -300,8 +311,8 @@ let
       use_system_libdrm = true;
       system_wayland_scanner_path = "${wayland}/bin/wayland-scanner";
     } // optionalAttrs ungoogled {
-      closure_compile = false;
       enable_hangout_services_extension = false;
+      enable_js_type_check = false;
       enable_mdns = false;
       enable_nacl_nonsfi = false;
       enable_one_click_signin = false;
@@ -313,7 +324,6 @@ let
       google_api_key = "";
       google_default_client_id = "";
       google_default_client_secret = "";
-      optimize_webui = false;
       safe_browsing_mode = 0;
       use_official_google_api_keys = false;
       use_unofficial_version_number = false;
@@ -366,9 +376,11 @@ let
       origRpath="$(patchelf --print-rpath "$chromiumBinary")"
       patchelf --set-rpath "${libGL}/lib:$origRpath" "$chromiumBinary"
     '';
+
+    passthru.updateScript = ./update.py;
   };
 
 # Remove some extraAttrs we supplied to the base attributes already.
 in stdenv.mkDerivation (base // removeAttrs extraAttrs [
   "name" "gnFlags" "buildTargets"
-])
+] // { passthru = base.passthru // (extraAttrs.passthru or {}); })
