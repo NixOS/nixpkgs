@@ -43,6 +43,8 @@ in
 
   darwin-stubs = callPackage ../os-specific/darwin/darwin-stubs { };
 
+  print-reexports = callPackage ../os-specific/darwin/apple-sdk/print-reexports { };
+
   maloader = callPackage ../os-specific/darwin/maloader {
     inherit (darwin) opencflite;
   };
