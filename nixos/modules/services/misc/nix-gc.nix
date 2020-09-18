@@ -41,6 +41,19 @@ in
         '';
       };
 
+      randomizedDelaySec = mkOption {
+        default = "0";
+        type = types.str;
+        example = "45min";
+        description = ''
+          Add a randomized delay before each garbage collection.
+          The delay will be chosen between zero and this value.
+          This value must be a time span in the format specified by
+          <citerefentry><refentrytitle>systemd.time</refentrytitle>
+          <manvolnum>7</manvolnum></citerefentry>
+        '';
+      };
+
     };
 
   };
@@ -55,6 +68,9 @@ in
         script = "exec ${config.nix.package.out}/bin/nix-collect-garbage ${cfg.options}";
         startAt = optional cfg.automatic cfg.dates;
       };
+
+    systemd.timers.nix-gc.timerConfig.RandomizedDelaySec =
+      cfg.randomizedDelaySec;
 
   };
 
