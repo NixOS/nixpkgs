@@ -244,6 +244,7 @@ let
       pimcommon = callPackage ./pimcommon.nix {};
       pim-data-exporter = callPackage ./pim-data-exporter.nix {};
       pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};
+      poxml = callPackage ./poxml.nix {};
       print-manager = callPackage ./print-manager.nix {};
       rocs = callPackage ./rocs.nix {};
       spectacle = callPackage ./spectacle.nix {};
