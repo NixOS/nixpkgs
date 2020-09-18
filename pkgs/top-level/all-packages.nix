@@ -21882,6 +21882,8 @@ in
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
+  lyrebird = callPackage ../applications/audio/lyrebird { };
+
   lyx = libsForQt5.callPackage ../applications/misc/lyx { };
 
   mac = callPackage ../development/libraries/mac { };
