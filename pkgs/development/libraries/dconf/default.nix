@@ -28,15 +28,6 @@ stdenv.mkDerivation rec {
     sha256 = "0n2gqkp6d61h7gnnp2xnxp6w5wcl7w9ay58krrf729qd6d0hzxj5";
   };
 
-  patches = [
-    # Fix bash-completion installation
-    # https://gitlab.gnome.org/GNOME/dconf/merge_requests/58
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/dconf/commit/b3c9423c6151f3c28e526083ea2f04987a780fdf.patch";
-      sha256 = "0kdapiw3zq041jhzsx90kk08vqfgzr6vy2k541iav984d0m0zcnf";
-    })
-  ];
-
   nativeBuildInputs = [
     meson
     ninja
