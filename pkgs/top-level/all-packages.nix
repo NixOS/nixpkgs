@@ -1097,6 +1097,8 @@ in
 
   glyr = callPackage ../tools/audio/glyr { };
 
+  hp2p = callPackage ../tools/networking/hp2p { };
+
   hpe-ltfs = callPackage ../tools/backup/hpe-ltfs { };
 
   http2tcp = callPackage ../tools/networking/http2tcp { };
