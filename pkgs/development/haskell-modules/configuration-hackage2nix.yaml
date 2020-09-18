@@ -3441,6 +3441,7 @@ broken-packages:
   - bitcoin-api
   - bitcoin-api-extra
   - bitcoin-block
+  - bitcoin-compact-filters
   - bitcoin-hs
   - bitcoin-rpc
   - bitcoin-script
@@ -5543,6 +5544,7 @@ broken-packages:
   - graphicstools
   - graphmod-plugin
   - graphql
+  - graphql-utils
   - graphql-w-persistent
   - graphted
   - graphtype
@@ -7515,6 +7517,7 @@ broken-packages:
   - LslPlus
   - lsystem
   - ltext
+  - lti13
   - ltk
   - LTS
   - lua-bc
@@ -11227,6 +11230,7 @@ broken-packages:
   - yesod-auth-ldap
   - yesod-auth-ldap-mediocre
   - yesod-auth-ldap-native
+  - yesod-auth-lti13
   - yesod-auth-nopassword
   - yesod-auth-oauth2
   - yesod-auth-pam
