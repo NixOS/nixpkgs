@@ -1,7 +1,8 @@
 { stdenv, fetchurl, substituteAll, pkgconfig, meson, ninja, gettext, gnome3, wrapGAppsHook, packagekit, ostree
 , glib, appstream-glib, libsoup, polkit, isocodes, gspell, libxslt, gobject-introspection, flatpak, fwupd
 , gtk3, gsettings-desktop-schemas, gnome-desktop, libxmlb, gnome-online-accounts
-, json-glib, libsecret, valgrind-light, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_43, gtk-doc, desktop-file-utils }:
+, json-glib, libsecret, valgrind-light, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_43, gtk-doc, desktop-file-utils
+, sysprof }:
 
 let
 
@@ -11,11 +12,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnome-software";
-  version = "3.36.1";
+  version = "3.38.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0vkgpy2afb33rrk94zqlm2q728xhzjj8s24n9wh9ylw00z3nckad";
+    sha256 = "0rjm486vgn6gi9mv1rqdcvr9cilmw6in4r6djqkxbxqll89cp2l7";
   };
 
   patches = [
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     gtk3 glib packagekit appstream-glib libsoup
     gsettings-desktop-schemas gnome-desktop
     gspell json-glib libsecret ostree
-    polkit flatpak libxmlb gnome-online-accounts
+    polkit flatpak libxmlb gnome-online-accounts sysprof
   ] ++ stdenv.lib.optionals withFwupd [
     fwupd
   ];
