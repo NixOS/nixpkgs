@@ -22191,10 +22191,6 @@ in
     };
   };
 
-  sky = callPackage ../applications/networking/instant-messengers/sky {
-    qt5 = qt514;
-  };
-
   smplayer = libsForQt5.callPackage ../applications/video/smplayer { };
 
   smtube = libsForQt514.callPackage ../applications/video/smtube {};
