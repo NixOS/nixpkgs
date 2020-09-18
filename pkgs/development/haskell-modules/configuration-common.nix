@@ -208,11 +208,11 @@ self: super: {
   # Generating the completions should be activated again, once we default to
   # ghc 8.10.
   hnix = dontCheck (super.hnix.override {
-    # The neat-interpolation package from stack is to old for hnix.
-    # https://github.com/haskell-nix/hnix/issues/676
-    # Once neat-interpolation >= 0.4 is in our stack release,
-    # (which should happen soon), we can remove this override
-    neat-interpolation = self.neat-interpolation_0_5_1_2;
+    # 2020-09-18: Those packages are all needed by hnix at versions newer than on stackage
+    neat-interpolation = self.neat-interpolation_0_5_1_2; # at least 0.5.1
+    data-fix = self.data-fix_0_3_0; # at least 0.3
+    prettyprinter = self.prettyprinter_1_7_0; # at least 1.7
+
   });
 
   # Fails for non-obvious reasons while attempting to use doctest.
