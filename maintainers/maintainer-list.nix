@@ -6143,6 +6143,12 @@
     githubId = 6930756;
     name = "Nicolas Mattia";
   };
+  nobbz = {
+    name = "Norbert Melzer";
+    email = "timmelzer+nixpkgs@gmail.com";
+    github = "NobbZ";
+    githubId = 58951;
+  };
   nocent = {
     email = "nocent@protonmail.ch";
     github = "nocent";
