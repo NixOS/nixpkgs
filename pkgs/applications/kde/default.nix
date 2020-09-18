@@ -225,6 +225,7 @@ let
       libkeduvocdocument = callPackage ./libkeduvocdocument.nix {};
       libkexiv2 = callPackage ./libkexiv2.nix {};
       libkgapi = callPackage ./libkgapi.nix {};
+      libkgeomap = callPackage ./libkgeomap.nix {};
       libkipi = callPackage ./libkipi.nix {};
       libkleo = callPackage ./libkleo.nix {};
       libkmahjongg = callPackage ./libkmahjongg.nix {};
