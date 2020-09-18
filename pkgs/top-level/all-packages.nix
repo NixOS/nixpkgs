@@ -3468,6 +3468,7 @@ in
     python = python3;
   };
 
+  embree = callPackage ../development/libraries/embree { };
   embree2 = callPackage ../development/libraries/embree/2.x.nix { };
 
   emem = callPackage ../applications/misc/emem { };
