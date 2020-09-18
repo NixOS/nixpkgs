@@ -970,6 +970,8 @@ in
 
   crc32c = callPackage ../development/libraries/crc32c { };
 
+  crcpp = callPackage ../development/libraries/crcpp { };
+
   cudd = callPackage ../development/libraries/cudd { };
 
   cue = callPackage ../development/tools/cue { };
@@ -1944,6 +1946,8 @@ in
   fdroidserver = python3Packages.callPackage ../development/tools/fdroidserver { };
 
   filebench = callPackage ../tools/misc/filebench { };
+
+  filebot = callPackage ../applications/video/filebot { };
 
   fileshare = callPackage ../servers/fileshare {};
 
@@ -10156,7 +10160,13 @@ in
   python2Packages = python2.pkgs;
   python3Packages = python3.pkgs;
 
-  pythonInterpreters = callPackage ./../development/interpreters/python {};
+  pythonInterpreters = callPackage ./../development/interpreters/python {
+    # Overrides that apply to all Python interpreters
+    pkgs = pkgs // {
+      qt5 = pkgs.qt514;
+      libsForQt5 = pkgs.libsForQt514;
+    };
+  };
   inherit (pythonInterpreters) python27 python36 python37 python38 python39 python3Minimal pypy27 pypy36;
 
   # Python package sets.
@@ -22827,11 +22837,19 @@ in
 
   quodlibet-xine-full = quodlibet-full.override { xineBackend = true; tag = "-xine-full"; };
 
-  qutebrowser = libsForQt515.callPackage ../applications/networking/browsers/qutebrowser {
-    python3Packages = python3Packages.override {
-      qt5 = qt515;
-      libsForQt5 = libsForQt515;
+  qutebrowser = let
+    libsForQt5 = libsForQt515;
+    qt5 = qt515;
+    python = python3.override {
+      packageOverrides = self: super: {
+        pkgs = pkgs // {
+          inherit libsForQt5 qt5;
+        };
+      };
+      self = python3;
     };
+  in libsForQt5.callPackage ../applications/networking/browsers/qutebrowser {
+    python3 = python;
   };
 
   rabbitvcs = callPackage ../applications/version-management/rabbitvcs {};
@@ -23521,8 +23539,6 @@ in
   trustedqsl = tqsl; # Alias added 2019-02-10
 
   transcode = callPackage ../applications/audio/transcode { };
-
-  transcribe = callPackage ../applications/audio/transcribe { };
 
   transmission = callPackage ../applications/networking/p2p/transmission { };
   transmission-gtk = transmission.override { enableGTK3 = true; };
@@ -24443,6 +24459,8 @@ in
   };
   btc1d = btc1.override { withGui = false; };
 
+  btcpayserver = callPackage ../applications/blockchains/btcpayserver { };
+
   cryptop = python3.pkgs.callPackage ../applications/blockchains/cryptop { };
 
   dashpay = callPackage ../applications/blockchains/dashpay.nix { };
@@ -24495,7 +24513,9 @@ in
   namecoin  = callPackage ../applications/blockchains/namecoin.nix  { withGui = true; };
   namecoind = callPackage ../applications/blockchains/namecoin.nix { withGui = false; };
 
-  pivx = libsForQt514.callPackage ../applications/blockchains/pivx.nix { withGui = true; };
+  nbxplorer = callPackage ../applications/blockchains/nbxplorer { };
+
+  pivx = libsForQt5.callPackage ../applications/blockchains/pivx.nix { withGui = true; };
   pivxd = callPackage ../applications/blockchains/pivx.nix { withGui = false; };
 
   ethabi = callPackage ../applications/blockchains/ethabi.nix { };

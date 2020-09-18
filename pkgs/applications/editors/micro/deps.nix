@@ -190,6 +190,15 @@
     };
   }
   {
+    goPackagePath = "github.com/xo/terminfo";
+    fetch = {
+      type = "git";
+      url = "https://github.com/xo/terminfo";
+      rev = "454e5b68f9e8";
+      sha256 = "0xvjb09nwbanp7ja4560pwb6b2xr9h0axyr7f5clgncca2k4f1pd";
+    };
+  }
+  {
     goPackagePath = "github.com/yuin/gopher-lua";
     fetch = {
       type = "git";
@@ -203,8 +212,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/zyedidia/clipboard";
-      rev = "7c45b8673834";
-      sha256 = "0ag36wd3830d4s6fvpj05v6f662c5rymgdydsj2gq8aaqplfb0v4";
+      rev = "v1.0.3";
+      sha256 = "134vnx0r51f08b37yaymlxlfl14qv6r8yzgqz7dxxn1zw9197b3q";
     };
   }
   {
@@ -257,8 +266,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/zyedidia/tcell";
-      rev = "v1.4.7";
-      sha256 = "1ddaznp0haz35mxfjjh2fmamdrlk1igqg65fz22l5r6vvhcdsfxa";
+      rev = "v2.0.2";
+      sha256 = "0fr7zm6zcir2bjll5ycdxy9m98gjr3ins7mzmqpd46b3njzbl75z";
     };
   }
   {

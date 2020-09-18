@@ -99,7 +99,6 @@ in
       [crio.runtime]
       cgroup_manager = "systemd"
       log_level = "${cfg.logLevel}"
-      manage_ns_lifecycle = true
       pinns_path = "${cfg.package}/bin/pinns"
       hooks_dir = []
 
