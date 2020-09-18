@@ -137,6 +137,7 @@ let
       kget = callPackage ./kget.nix {};
       kgpg = callPackage ./kgpg.nix {};
       kgoldrunner = callPackage ./kgoldrunner.nix {};
+      khangman = callPackage ./khangman.nix {};
       khelpcenter = callPackage ./khelpcenter.nix {};
       kidentitymanagement = callPackage ./kidentitymanagement.nix {};
       kig = callPackage ./kig.nix {};
