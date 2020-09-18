@@ -206,6 +206,7 @@ let
       ktimer = callPackage ./ktimer.nix {};
       ktnef = callPackage ./ktnef.nix {};
       ktouch = callPackage ./ktouch.nix {};
+      ktuberling = callPackage ./ktuberling.nix {};
       kturtle = callPackage ./kturtle.nix {};
       kubrick = callPackage ./kubrick.nix {};
       kwalletmanager = callPackage ./kwalletmanager.nix {};
