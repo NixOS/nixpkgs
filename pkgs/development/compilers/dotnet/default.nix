@@ -106,11 +106,11 @@ rec {
   # v5.0.0
 
   sdk_5_0 = buildNetCoreSdk {
-    version = "5.0.100-preview.8.20417.9";
+    version = "5.0.100-rc.1.20452.10";
     sha512 = {
-      x86_64-linux = "2a4m4jb75hc0l135pjpinawlc0jr3rz9hyfm22kkaqs5wacwj5d87lsds2wvp2jf7r1f445098sg65l6az9zqwg4da52qrvcv1ck1hd";
-      aarch64-linux = "1zb5f3ihlcjbij6sa9nfvj9rn4frhdbiw0nplqm8lf8q2z2y7h210p8r4l1qwkkm080185kj7kgd2hja54hddgghva26jpq6r36b7hj";
-      x86_64-darwin = "0c5cj6b0kc4nrsbxfmal4c1z5anqbxr6gd6knpqfb6m30z37qiks16xakacrm69313wmqpr9mmyiwpj38gcsw2dam9hgzawibwnv4fv";
+      x86_64-linux = "d7e709dacc4bb188c2380060d24bfb5b791240dc33af8499fb4a31e1885a9377dad1d1ebc76847432ea67d5e4ac832a31679dc293e09fa6dade28f5fbbe4db9b";
+      aarch64-linux = "2d04890c71e845d1eb08f5dfbbb9c93024d7a52fb1cc3fd50bd51bc6bd44e455c5c82abc8f04eef23bd012984ae5f86143c600ceb49c4c733935d95d5b68785f";
+      x86_64-darwin = "06bb40273071f3dd1e84ebf58abc7798795d5f1ac298f24bf7109d1597fd52ff31bcbf2b81f86d91d37ae293678d07f8da0469d7cbd318d19a8d718b6629dcac";
     };
   };
 }
