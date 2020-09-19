@@ -1969,7 +1969,9 @@ in
 
   fsql = callPackage ../tools/misc/fsql { };
 
-  fop = callPackage ../tools/typesetting/fop { };
+  fop = callPackage ../tools/typesetting/fop {
+    jdk = openjdk8;
+  };
 
   fondu = callPackage ../tools/misc/fondu { };
 
