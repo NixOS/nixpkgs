@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper, bash, coreutils, gnugrep, gnused, ps,
+{ stdenv, fetchurl, jre8, makeWrapper, bash, coreutils, gnugrep, gnused, ps,
   majorVersion ? "1.0" }:
 
 let
@@ -54,6 +54,8 @@ let
       sha256 = "1vng5ipkjzqy0wijc706w2m1rjl5d0nsgbxiacci739y1jmjnn5r";
     };
   };
+
+  jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
 in
 
 with versionMap.${majorVersion};
