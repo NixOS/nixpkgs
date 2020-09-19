@@ -9435,7 +9435,9 @@ in
 
   manticore = callPackage ../development/compilers/manticore { };
 
-  mercury = callPackage ../development/compilers/mercury { };
+  mercury = callPackage ../development/compilers/mercury {
+    jdk = openjdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  };
 
   microscheme = callPackage ../development/compilers/microscheme { };
 
