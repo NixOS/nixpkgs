@@ -12862,8 +12862,6 @@ in
 
   herqq = libsForQt514.callPackage ../development/libraries/herqq { };
 
-  heyefi = haskellPackages.heyefi;
-
   hidapi = callPackage ../development/libraries/hidapi { };
 
   highfive = callPackage ../development/libraries/highfive { };
