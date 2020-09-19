@@ -107,6 +107,6 @@ in {
     environment.etc."alsa/conf.d/50-pipewire.conf" = mkIf cfg.alsa.enable {
       source = "${pkgs.pipewire}/share/alsa/alsa.conf.d/50-pipewire.conf";
     };
-    environment.sessionVariables.LD_LIBRARY_PATH = "/run/current-system/sw/lib/pipewire";
+    environment.sessionVariables.LD_LIBRARY_PATH = [ "/run/current-system/sw/lib/pipewire" ];
   };
 }
