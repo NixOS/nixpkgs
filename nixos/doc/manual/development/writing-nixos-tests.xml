@@ -43,7 +43,7 @@ xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/login.nix">
   console, whether device ownership is correctly maintained when switching
   between consoles, and so on. On the other hand,
   <filename
-xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nfs.nix">nfs.nix</filename>,
+xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nfs/simple.nix">nfs/simple.nix</filename>,
   which tests NFS client and server functionality in the Linux kernel
   (including whether locks are maintained across server crashes), requires
   three machines: a server and two clients.
