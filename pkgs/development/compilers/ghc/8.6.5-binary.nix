@@ -117,6 +117,11 @@ stdenv.mkDerivation rec {
   # calls install-strip ...
   dontBuild = true;
 
+  # Stripping exposes a latent bug in patchelf (0.12, but possibly older
+  # versions too) and causes the resulting ghc binary to crash on ARMv8 when
+  # getting loaded by the dynamic linker. See #97407.
+  dontStrip = stdenv.hostPlatform.isAarch64;
+
   # On Linux, use patchelf to modify the executables so that they can
   # find editline/gmp.
   postFixup = stdenv.lib.optionalString stdenv.isLinux ''
