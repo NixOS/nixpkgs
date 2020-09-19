@@ -1,13 +1,13 @@
 { stdenv
 , fetchurl
 , unzip
-, jdk
+, jdk8
 , ant
 , makeWrapper
-, jre
 , callPackage
 }:
 
+let jre = jdk8.jre; jdk = jdk8; in
 stdenv.mkDerivation rec {
   pname = "jasmin";
   version = "2.4";
