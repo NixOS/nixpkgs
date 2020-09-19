@@ -84,7 +84,7 @@ with builtins; buildDotnetPackage rec {
 
   dynlibPath = stdenv.lib.makeLibraryPath [ gtk2 ];
 
-  postInstall = 
+  postInstall =
   let
     extractFDeskIcons = ./extractWinRscIconsToStdFreeDesktopDir.sh;
   in
@@ -108,7 +108,7 @@ with builtins; buildDotnetPackage rec {
   meta = {
     description = "GUI password manager with strong cryptography";
     homepage = "http://www.keepass.info/";
-    maintainers = with stdenv.lib.maintainers; [ amorsillo obadz joncojonathan jraygauthier ];
+    maintainers = with stdenv.lib.maintainers; [ amorsillo obadz jraygauthier ];
     platforms = with stdenv.lib.platforms; all;
     license = stdenv.lib.licenses.gpl2;
   };
