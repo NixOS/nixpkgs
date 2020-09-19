@@ -5408,6 +5408,8 @@ in {
 
   pysvn = callPackage ../development/python-modules/pysvn { };
 
+  pytabix = callPackage ../development/python-modules/pytabix { };
+
   pytado = callPackage ../development/python-modules/pytado { };
 
   pytaglib = callPackage ../development/python-modules/pytaglib { };
