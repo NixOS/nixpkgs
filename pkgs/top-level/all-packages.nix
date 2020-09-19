@@ -23739,6 +23739,7 @@ in
   virtualbox = libsForQt514.callPackage ../applications/virtualization/virtualbox {
     stdenv = stdenv_32bit;
     inherit (gnome2) libIDL;
+    jdk = openjdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
   virtualboxHardened = lowPrio (virtualbox.override {
