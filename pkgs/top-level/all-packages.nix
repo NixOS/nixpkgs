@@ -11085,7 +11085,7 @@ in
   gputils = callPackage ../development/tools/misc/gputils { };
 
   gradleGen = callPackage ../development/tools/build-managers/gradle {
-    java = jdk;
+    java = jdk8; # TODO: upgrade https://github.com/NixOS/nixpkgs/pull/89731
   };
   gradle = res.gradleGen.gradle_latest;
   gradle_4_10 = res.gradleGen.gradle_4_10;
