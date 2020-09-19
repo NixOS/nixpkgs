@@ -17,7 +17,7 @@
 , libXScrnSaver, libXcursor, libXtst, libGLU, libGL
 , protobuf, speechd, libXdamage, cups
 , ffmpeg_3, libxslt, libxml2, at-spi2-core
-, jre
+, jre8
 , pipewire_0_2
 
 # optional dependencies
@@ -52,6 +52,8 @@ with stdenv.lib;
 # see http://www.linuxfromscratch.org/blfs/view/cvs/xsoft/chromium.html
 
 let
+  jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+
   # The additional attributes for creating derivations based on the chromium
   # source tree.
   extraAttrs = buildFun base;
