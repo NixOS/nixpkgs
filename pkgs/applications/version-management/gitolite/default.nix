@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/bin/gitolite-shell \
-      --prefix PATH : "${git}/bin"
+      --prefix PATH : ${lib.makeBinPath [ git perl ]}
   '';
 
   installPhase = ''
