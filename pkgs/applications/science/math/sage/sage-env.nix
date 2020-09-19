@@ -50,7 +50,7 @@
 , zlib
 , gsl
 , ntl
-, jdk
+, jdk8
 , less
 }:
 
@@ -61,6 +61,8 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 # dependencies.
 
 let
+  jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+
   runtimepath = (lib.makeBinPath ([
     "@sage-local@"
     "@sage-local@/build"
