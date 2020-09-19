@@ -15,6 +15,8 @@ if [[ -n "@coreutils_bin@" && -n "@gnugrep_bin@" ]]; then
     PATH="@coreutils_bin@/bin:@gnugrep_bin@/bin"
 fi
 
+cInclude=0
+
 source @out@/nix-support/utils.bash
 
 # Flirting with a layer violation here.
