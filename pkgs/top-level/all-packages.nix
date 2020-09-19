@@ -8396,7 +8396,10 @@ in
 
   ### DEVELOPMENT / COMPILERS
 
-  abcl = callPackage ../development/compilers/abcl {};
+  abcl = callPackage ../development/compilers/abcl {
+    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  };
 
   adoptopenjdk-bin-13-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk13-linux.nix;
   adoptopenjdk-bin-13-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk13-darwin.nix;
