@@ -25689,7 +25689,9 @@ in
 
   gwyddion = callPackage ../applications/science/chemistry/gwyddion {};
 
-  jmol = callPackage ../applications/science/chemistry/jmol { };
+  jmol = callPackage ../applications/science/chemistry/jmol {
+    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  };
 
   marvin = callPackage ../applications/science/chemistry/marvin { };
 
