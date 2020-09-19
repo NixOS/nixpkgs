@@ -3825,7 +3825,9 @@ in
 
   fusuma = callPackage ../tools/inputmethods/fusuma {};
 
-  fdbPackages = dontRecurseIntoAttrs (callPackage ../servers/foundationdb { });
+  fdbPackages = dontRecurseIntoAttrs (callPackage ../servers/foundationdb {
+    openjdk = openjdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  });
 
   inherit (fdbPackages)
     foundationdb51
