@@ -5,12 +5,12 @@
 
 stdenv.mkDerivation rec {
   pname = "foot";
-  version = "1.4.4";
+  version = "1.5.0";
 
   src = fetchgit {
     url = "https://codeberg.org/dnkl/foot.git";
     rev = "${version}";
-    sha256 = "1cr4sz075v18clh8nlvgyxlbvfkhbsg0qrqgnclip5rwa24ry1lg";
+    sha256 = "0k1aqwydbybf94nag93b92d78rzn4zk3dr5n4mm9lvr76fys3kfs";
   };
 
   nativeBuildInputs = [
@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
     platforms = platforms.linux;
+    changelog = "https://codeberg.org/dnkl/foot/releases/tag/${version}";
   };
 }
