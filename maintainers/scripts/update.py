@@ -81,30 +81,42 @@ async def commit_changes(name: str, merge_lock: asyncio.Lock, worktree: str, bra
             await check_subprocess('git', 'commit', '--quiet', '-m', commit_message, cwd=worktree)
             await check_subprocess('git', 'cherry-pick', branch)
 
+async def check_changes(package: Dict, worktree: str, update_info: str):
+    if 'commit' in package['supportedFeatures']:
+        changes = json.loads(update_info)
+    else:
+        changes = [{}]
+
+    # Try to fill in missing attributes when there is just a single change.
+    if len(changes) == 1:
+        # Dynamic data from updater take precedence over static data from passthru.updateScript.
+        if 'attrPath' not in changes[0]:
+            if 'attrPath' in package:
+                changes[0]['attrPath'] = package['attrPath']
+
+        if 'oldVersion' not in changes[0]:
+            # update.nix is always passing oldVersion
+            changes[0]['oldVersion'] = package['oldVersion']
+
+        if 'newVersion' not in changes[0]:
+            attr_path = changes[0]['attrPath']
+            obtain_new_version_process = await check_subprocess('nix-instantiate', '--expr', f'with import ./. {{}}; lib.getVersion {attr_path}', '--eval', '--strict', '--json', stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, cwd=worktree)
+            changes[0]['newVersion'] = json.loads((await obtain_new_version_process.stdout.read()).decode('utf-8'))
+
+        if 'files' not in changes[0]:
+            changed_files_process = await check_subprocess('git', 'diff', '--name-only', stdout=asyncio.subprocess.PIPE, cwd=worktree)
+            changed_files = (await changed_files_process.stdout.read()).splitlines()
+            changes[0]['files'] = changed_files
+
+            if len(changed_files) == 0:
+                return []
+
+    return changes
+
 async def merge_changes(merge_lock: asyncio.Lock, package: Dict, update_info: str, temp_dir: Optional[Tuple[str, str]]) -> None:
     if temp_dir is not None:
         worktree, branch = temp_dir
-
-        if 'commit' in package['supportedFeatures']:
-            changes = json.loads(update_info)
-        elif 'attrPath' in package:
-            attr_path = package['attrPath']
-            obtain_new_version_process = await check_subprocess('nix-instantiate', '--expr', f'with import ./. {{}}; lib.getVersion {attr_path}', '--eval', '--strict', '--json', stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, cwd=worktree)
-            new_version = json.loads((await obtain_new_version_process.stdout.read()).decode('utf-8'))
-            changed_files_process = await check_subprocess('git', 'diff', '--name-only', stdout=asyncio.subprocess.PIPE, cwd=worktree)
-            changed_files = (await changed_files_process.stdout.read()).splitlines()
-            if len(changed_files) > 0:
-                changes = [
-                    {
-                        'files': changed_files,
-                        'oldVersion': package['oldVersion'],
-                        'newVersion': new_version,
-                        'attrPath': attr_path,
-                    }
-                ]
-            else:
-                changes = []
-
+        changes = await check_changes(package, worktree, update_info)
         await commit_changes(package['name'], merge_lock, worktree, branch, changes)
 
     eprint(f" - {package['name']}: DONE.")

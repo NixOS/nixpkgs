@@ -518,6 +518,9 @@ passthru.updateScript = {
 ]
 </programlisting>
         </para>
+        <para>
+          When the returned array contains exactly one object (e.g. <literal>[{}]</literal>), keys can be omitted and will be determined automatically. Finding out <variable>newVersion</variable> requires <variable>attrPath</variable> to be present either in the update script output or passed to the <variable>passthru.updateScript</variable> attribute set.
+        </para>
        </listitem>
       </varlistentry>
      </variablelist>
