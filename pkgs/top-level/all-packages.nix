@@ -17191,7 +17191,9 @@ in
 
   xinetd = callPackage ../servers/xinetd { };
 
-  zookeeper = callPackage ../servers/zookeeper { };
+  zookeeper = callPackage ../servers/zookeeper {
+    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  };
 
   zookeeper_mt = callPackage ../development/libraries/zookeeper_mt { };
 
