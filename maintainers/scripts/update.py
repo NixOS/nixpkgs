@@ -39,7 +39,7 @@ async def run_update_script(merge_lock: asyncio.Lock, temp_dir: Optional[Tuple[s
     eprint(f" - {package['name']}: UPDATING ...")
 
     try:
-        update_process = await check_subprocess(*package['updateScript'], stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, cwd=worktree)
+        update_process = await check_subprocess('env', f"UPDATE_NIX_ATTR_PATH={package['attrPath']}", *package['updateScript'], stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, cwd=worktree)
         update_info = await update_process.stdout.read()
 
         await merge_changes(merge_lock, package, update_info, temp_dir)
