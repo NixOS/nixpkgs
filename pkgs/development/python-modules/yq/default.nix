@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "yq";
-  version = "2.10.1";
+  version = "2.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1h6nnkp53mm4spwy8nyxwvh9j6p4lxvf20j4bgjskhnhaw3jl9gn";
+    sha256 = "1gp9q5w1bjbw7wmba5hm8ippwvkind0p02n07fqa9jlqglhxhm46";
   };
 
   postPatch = ''
