@@ -4032,6 +4032,8 @@ in {
 
   nplusone = callPackage ../development/python-modules/nplusone { };
 
+  ntc-templates = callPackage ../development/python-modules/ntc-templates { };
+
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
 
   ntplib = callPackage ../development/python-modules/ntplib { };
