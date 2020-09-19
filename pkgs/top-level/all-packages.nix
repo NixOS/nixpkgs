@@ -4479,7 +4479,10 @@ in
 
   i2c-tools = callPackage ../os-specific/linux/i2c-tools { };
 
-  i2p = callPackage ../tools/networking/i2p {};
+  i2p = callPackage ../tools/networking/i2p {
+    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  };
 
   i2pd = callPackage ../tools/networking/i2pd { };
 
