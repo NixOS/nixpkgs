@@ -9322,7 +9322,9 @@ in
 
   jasmin = callPackage ../development/compilers/jasmin { };
 
-  java-service-wrapper = callPackage ../tools/system/java-service-wrapper { };
+  java-service-wrapper = callPackage ../tools/system/java-service-wrapper {
+    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  };
 
   javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
 
