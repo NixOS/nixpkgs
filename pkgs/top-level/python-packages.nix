@@ -6463,7 +6463,9 @@ in {
 
   six = callPackage ../development/python-modules/six { };
 
-  skein = callPackage ../development/python-modules/skein { };
+  skein = callPackage ../development/python-modules/skein {
+    jre = pkgs.jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  };
 
   sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
 
