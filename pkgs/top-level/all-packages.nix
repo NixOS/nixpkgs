@@ -16126,6 +16126,9 @@ in
   smack = callPackage ../development/libraries/java/smack { };
 
   swt = callPackage ../development/libraries/java/swt { };
+  swt_jdk8 = callPackage ../development/libraries/java/swt {
+    jdk = jdk8;
+  };
 
 
   ### DEVELOPMENT / LIBRARIES / JAVASCRIPT
@@ -26730,7 +26733,11 @@ in
 
   auctex = callPackage ../tools/typesetting/tex/auctex { };
 
-  areca = callPackage ../applications/backup/areca { };
+  areca = callPackage ../applications/backup/areca {
+    jdk = jdk8;
+    jre = jre8;
+    swt = swt_jdk8;
+  };
 
   attract-mode = callPackage ../misc/emulators/attract-mode { };
 
