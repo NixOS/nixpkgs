@@ -23179,8 +23179,13 @@ in
 
   linuxstopmotion = callPackage ../applications/video/linuxstopmotion { };
 
-  sweethome3d = recurseIntoAttrs (  (callPackage ../applications/misc/sweethome3d { })
+  sweethome3d = recurseIntoAttrs (  (callPackage ../applications/misc/sweethome3d {
+    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  })
                                  // (callPackage ../applications/misc/sweethome3d/editors.nix {
+                                      jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+                                      jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
                                       sweethome3dApp = sweethome3d.application;
                                     })
                                  );
