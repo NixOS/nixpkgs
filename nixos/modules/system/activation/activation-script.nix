@@ -5,6 +5,19 @@ with lib;
 
 let
 
+  stringWithDepsType = (
+    types.coercedTo types.str noDepEntry (
+      types.submodule {
+        options.text = mkOption {
+          type = types.str;
+          default = "";
+        };
+        options.deps = mkOption {
+          type = types.listOf types.str;
+          default = [];
+        };
+      }));
+
   addAttributeName = mapAttrs (a: v: v // {
     text = ''
       #### Activation script snippet ${a}:
@@ -62,7 +75,7 @@ in
         idempotent and fast.
       '';
 
-      type = types.attrsOf types.unspecified; # FIXME
+      type = types.attrsOf stringWithDepsType;
 
       apply = set: {
         script =
@@ -125,7 +138,7 @@ in
         idempotent and fast.
       '';
 
-      type = types.attrsOf types.unspecified;
+      type = types.attrsOf stringWithDepsType;
 
       apply = set: {
         script = ''
