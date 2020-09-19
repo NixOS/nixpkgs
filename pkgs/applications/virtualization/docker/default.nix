@@ -79,7 +79,7 @@ rec {
       sha256 = sha256;
     };
 
-    patches = [
+    patches = lib.optional (versionAtLeast version "19.03") [
       # Replace hard-coded cross-compiler with $CC
       (fetchpatch {
         url = https://github.com/docker/docker-ce/commit/2fdfb4404ab811cb00227a3de111437b829e55cf.patch;
