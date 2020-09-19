@@ -15162,7 +15162,10 @@ in
 
   range-v3 = callPackage ../development/libraries/range-v3 {};
 
-  rabbitmq-java-client = callPackage ../development/libraries/rabbitmq-java-client {};
+  rabbitmq-java-client = callPackage ../development/libraries/rabbitmq-java-client {
+    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  };
 
   rapidcheck = callPackage ../development/libraries/rapidcheck {};
 
