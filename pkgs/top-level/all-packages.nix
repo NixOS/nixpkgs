@@ -20697,7 +20697,9 @@ in
 
   freemind = callPackage ../applications/misc/freemind { };
 
-  freenet = callPackage ../applications/networking/p2p/freenet { };
+  freenet = callPackage ../applications/networking/p2p/freenet {
+    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  };
 
   freeoffice = callPackage ../applications/office/softmaker/freeoffice.nix {};
 
