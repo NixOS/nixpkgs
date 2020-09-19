@@ -18254,7 +18254,7 @@ in
     # udev is the same package as systemd which depends on cryptsetup
     # which depends on lvm2 again.  But we only need the libudev part
     # which does not depend on cryptsetup.
-    udev = udev.override { cryptsetup = null; };
+    udev = systemdMinimal;
   };
   lvm2_dmeventd = callPackage ../os-specific/linux/lvm2 {
     enableDmeventd = true;
@@ -18603,8 +18603,23 @@ in
       bzip2 = null;
     };
   };
+  systemdMinimal = systemd.override {
+    pname = "systemd-minimal";
+    withResolved = false;
+    withLogind = false;
+    withHostnamed = false;
+    withLocaled = false;
+    withTimedated = false;
+    withHwdb = false;
+    withEfi = false;
+    withImportd = false;
+    withCryptsetup = false;
+    cryptsetup = null;
+    lvm2 = null;
+  };
 
-  udev = systemd; # TODO: move to aliases.nix
+
+  udev = systemd; # TODO: change to systemdMinimal
 
   systemd-wait = callPackage ../os-specific/linux/systemd-wait { };
 
