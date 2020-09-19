@@ -16308,11 +16308,11 @@ in
   cassandra = cassandra_3_11;
 
   apache-jena = callPackage ../servers/nosql/apache-jena/binary.nix {
-    java = jdk;
+    java = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
   apache-jena-fuseki = callPackage ../servers/nosql/apache-jena/fuseki-binary.nix {
-    java = jdk;
+    java = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
   apcupsd = callPackage ../servers/apcupsd { };
