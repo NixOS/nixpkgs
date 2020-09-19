@@ -490,7 +490,7 @@ passthru.updateScript = {
       </note>
      </para>
      <para>
-       <filename>maintainers/scripts/update.nix</filename> also supports automatically creating commits by running it with <literal>--argstr commit true</literal> but it requires either declaring the <variable>attrPath</variable>, or adding a <literal>commit</literal> to <variable>supportedFeatures</variable> and <link xlink:href="#var-passthru-updateScript-commit">modifying the script accordingly</link>.
+       <filename>maintainers/scripts/update.nix</filename> also supports automatically creating commits by running it with <literal>--argstr commit true</literal>. Neither declaring the <variable>attrPath</variable> attribute, or adding a <literal>commit</literal> to <variable>supportedFeatures</variable> and <link xlink:href="#var-passthru-updateScript-commit">modifying the script accordingly</link> is required. It might be useful if you want to customize the values to something else than what <filename>update.nix</filename> detects.
      </para>
      <variablelist>
       <title>Supported features</title>

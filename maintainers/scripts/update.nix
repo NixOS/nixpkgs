@@ -32,27 +32,31 @@ let
       in
         [x] ++ nubOn f xs;
 
-  packagesWithPath = relativePath: cond: return: pathContent:
+  packagesWithPath = rootPath: cond: pkgs:
     let
-      result = builtins.tryEval pathContent;
-
-      dedupResults = lst: nubOn (pkg: pkg.updateScript) (lib.concatLists lst);
-    in
-      if result.success then
+      packagesWithPathInner = relativePath: pathContent:
         let
-          pathContent = result.value;
+          result = builtins.tryEval pathContent;
+
+          dedupResults = lst: nubOn ({ package, attrPath }: package.updateScript) (lib.concatLists lst);
         in
-          if lib.isDerivation pathContent then
-            lib.optional (cond relativePath pathContent) (return relativePath pathContent)
-          else if lib.isAttrs pathContent then
-            # If user explicitly points to an attrSet or it is marked for recursion, we recur.
-            if relativePath == [] || pathContent.recurseForDerivations or false || pathContent.recurseForRelease or false then
-              dedupResults (lib.mapAttrsToList (name: elem: packagesWithPath (relativePath ++ [name]) cond return elem) pathContent)
-            else []
-          else if lib.isList pathContent then
-            dedupResults (lib.imap0 (i: elem: packagesWithPath (relativePath ++ [i]) cond return elem) pathContent)
-          else []
-      else [];
+          if result.success then
+            let
+              pathContent = result.value;
+            in
+              if lib.isDerivation pathContent then
+                lib.optional (cond relativePath pathContent) { attrPath = lib.concatStringsSep "." relativePath; package = pathContent; }
+              else if lib.isAttrs pathContent then
+                # If user explicitly points to an attrSet or it is marked for recursion, we recur.
+                if relativePath == rootPath || pathContent.recurseForDerivations or false || pathContent.recurseForRelease or false then
+                  dedupResults (lib.mapAttrsToList (name: elem: packagesWithPathInner (relativePath ++ [name]) elem) pathContent)
+                else []
+              else if lib.isList pathContent then
+                dedupResults (lib.imap0 (i: elem: packagesWithPathInner (relativePath ++ [i]) elem) pathContent)
+              else []
+          else [];
+    in
+      packagesWithPathInner rootPath pkgs;
 
   packagesWith = packagesWithPath [];
 
@@ -73,18 +77,17 @@ let
                                    else false
                                  )
                    )
-                   (relativePath: pkg: pkg)
                    pkgs;
 
   packagesWithUpdateScript = path:
     let
-      pathContent = lib.attrByPath (lib.splitString "." path) null pkgs;
+      prefix = lib.splitString "." path;
+      pathContent = lib.attrByPath prefix null pkgs;
     in
       if pathContent == null then
         builtins.throw "Attribute path `${path}` does not exists."
       else
-        packagesWith (relativePath: pkg: builtins.hasAttr "updateScript" pkg)
-                       (relativePath: pkg: pkg)
+        packagesWithPath prefix (relativePath: pkg: builtins.hasAttr "updateScript" pkg)
                        pathContent;
 
   packageByName = name:
@@ -96,7 +99,7 @@ let
       else if ! builtins.hasAttr "updateScript" package then
         builtins.throw "Package with an attribute name `${name}` does not have a `passthru.updateScript` attribute defined."
       else
-        package;
+        { attrPath = name; inherit package; };
 
   packages =
     if package != null then
@@ -140,13 +143,13 @@ let
         --argstr commit true
   '';
 
-  packageData = package: {
+  packageData = { package, attrPath }: {
     name = package.name;
     pname = lib.getName package;
     oldVersion = lib.getVersion package;
     updateScript = map builtins.toString (lib.toList (package.updateScript.command or package.updateScript));
     supportedFeatures = package.updateScript.supportedFeatures or [];
-    attrPath = package.updateScript.attrPath or null;
+    attrPath = package.updateScript.attrPath or attrPath;
   };
 
   packagesJson = pkgs.writeText "packages.json" (builtins.toJSON (map packageData packages));
