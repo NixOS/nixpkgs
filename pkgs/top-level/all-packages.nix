@@ -21635,6 +21635,7 @@ in
       (libreoffice-args // {
         icu = icu64;
         variant = "still";
+        jdk = jdk8;
       });
   });
   libreoffice-still-unwrapped = libreoffice-still.libreoffice;
