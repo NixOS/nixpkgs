@@ -4,27 +4,30 @@
 
 mkDerivation rec {
   pname = "fritzing";
-  version = "0.9.3b";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "fritzing";
     repo = "fritzing-app";
-    rev = version;
-    sha256 = "0hpyc550xfhr6gmnc85nq60w00rm0ljm0y744dp0z88ikl04f4s3";
+    rev = "CD-498";
+    sha256 = "0aljj2wbmm1vd64nhj6lh9qy856pd5avlgydsznya2vylyz20p34";
   };
 
   parts = fetchFromGitHub {
     owner = "fritzing";
     repo = "fritzing-parts";
-    rev = version;
-    sha256 = "1d2v8k7p176j0lczx4vx9n9gbg3vw09n2c4b6w0wj5wqmifywhc1";
+    rev = "97dfd491bec4355d946792a27a59a199b9abbd8b";
+    sha256 = "0n1i1zp8n96w1jk2xh4y5mw518718fk12nzlwqa2j9ll98q1g40c";
   };
 
-  patches = [(fetchpatch {
-    name = "0001-Squashed-commit-of-the-following.patch";
-    url = "https://aur.archlinux.org/cgit/aur.git/plain/0001-Squashed-commit-of-the-following.patch?h=fritzing";
-    sha256 = "1cv6myidxhy28i8m8v13ghzkvx5978p9dcd8v7885y0l1h3108mf";
-  })];
+  patches = [
+    (fetchpatch {
+      name = "0001-fix-libgit2-version-check.patch";
+      url = "https://github.com/fritzing/fritzing-app/commit/472951243d70eeb40a53b1f7e16e6eab0588d079.patch";
+      sha256 = "0v1zi609cjnqac80xgnk23n54z08g1lia37hbzfl8jcq9sn9adak";
+    })
+    ./0002-libgit-dynamic.patch
+  ];
 
   buildInputs = [ qtbase qtsvg qtserialport boost libgit2 ];
 
