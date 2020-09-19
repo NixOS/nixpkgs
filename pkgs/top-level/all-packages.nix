@@ -22670,7 +22670,9 @@ in
 
   pommed_light = callPackage ../os-specific/linux/pommed-light {};
 
-  polymake = callPackage ../applications/science/math/polymake { };
+  polymake = callPackage ../applications/science/math/polymake {
+    openjdk = openjdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  };
 
   pond = callPackage ../applications/networking/instant-messengers/pond { };
 
