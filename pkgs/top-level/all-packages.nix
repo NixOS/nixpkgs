@@ -16293,10 +16293,18 @@ in
 
   cadvisor = callPackage ../servers/monitoring/cadvisor { };
 
-  cassandra_2_1 = callPackage ../servers/nosql/cassandra/2.1.nix { };
-  cassandra_2_2 = callPackage ../servers/nosql/cassandra/2.2.nix { };
-  cassandra_3_0 = callPackage ../servers/nosql/cassandra/3.0.nix { };
-  cassandra_3_11 = callPackage ../servers/nosql/cassandra/3.11.nix { };
+  cassandra_2_1 = callPackage ../servers/nosql/cassandra/2.1.nix {
+    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  };
+  cassandra_2_2 = callPackage ../servers/nosql/cassandra/2.2.nix {
+    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  };
+  cassandra_3_0 = callPackage ../servers/nosql/cassandra/3.0.nix {
+    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  };
+  cassandra_3_11 = callPackage ../servers/nosql/cassandra/3.11.nix {
+    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  };
   cassandra = cassandra_3_11;
 
   apache-jena = callPackage ../servers/nosql/apache-jena/binary.nix {
