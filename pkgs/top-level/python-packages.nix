@@ -1332,6 +1332,8 @@ in {
   else
     callPackage ../development/python-modules/cryptography { };
 
+  cryptography_2_9 = callPackage ../development/python-modules/cryptography/2.9.nix { };
+
   cryptography_vectors = if isPy27 then
     callPackage ../development/python-modules/cryptography/vectors-2.9.nix { }
   else

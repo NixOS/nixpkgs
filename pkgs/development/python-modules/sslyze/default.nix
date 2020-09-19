@@ -3,7 +3,7 @@
 , pytest
 , buildPythonPackage
 , nassl
-, cryptography
+, cryptography_2_9
 , typing-extensions
 , faker
 }:
@@ -18,11 +18,6 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "06mwzxw6xaqin2gwzcqb9r7qhbyx3k7zcxygxywi2bpxyjv9lq32";
   };
-
-  patchPhase = ''
-    substituteInPlace setup.py \
-      --replace "cryptography>=2.6,<=2.9" "cryptography>=2.6,<=3"
-  '';
 
   checkInputs = [ pytest ];
 
@@ -40,7 +35,7 @@ buildPythonPackage rec {
       -k "not (TestScanner and test_client_certificate_missing)"
   '';
 
-  propagatedBuildInputs = [ nassl cryptography typing-extensions faker ];
+  propagatedBuildInputs = [ nassl cryptography_2_9 typing-extensions faker ];
 
   meta = with lib; {
     homepage = "https://github.com/nabla-c0d3/sslyze";
