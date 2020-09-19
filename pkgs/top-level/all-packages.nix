@@ -3443,17 +3443,21 @@ in
 
   elasticsearch6 = callPackage ../servers/search/elasticsearch/6.x.nix {
     utillinux = utillinuxMinimal;
+    jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   elasticsearch6-oss = callPackage ../servers/search/elasticsearch/6.x.nix {
     enableUnfree = false;
     utillinux = utillinuxMinimal;
+    jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   elasticsearch7 = callPackage ../servers/search/elasticsearch/7.x.nix {
     utillinux = utillinuxMinimal;
+    jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   elasticsearch7-oss = callPackage ../servers/search/elasticsearch/7.x.nix {
     enableUnfree = false;
     utillinux = utillinuxMinimal;
+    jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   elasticsearch = elasticsearch6;
   elasticsearch-oss = elasticsearch6-oss;
