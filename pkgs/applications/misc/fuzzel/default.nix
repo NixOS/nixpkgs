@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "fuzzel";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchgit {
     url = "https://codeberg.org/dnkl/fuzzel";
     rev = "${version}";
-    sha256 = "18pg46xry7q4i19mpjfz942c6vkqlrj4q18p85zldzv9gdsxnm9c";
+    sha256 = "0c0p9spklzmy9f7abz3mvw0vp6zgnk3ns1i6ks95ljjb3kqy9vs2";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja scdoc git ];
@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ fionera ];
     platforms = with platforms; linux;
+    changelog = "https://codeberg.org/dnkl/fuzzel/releases/tag/${version}";
   };
 }
