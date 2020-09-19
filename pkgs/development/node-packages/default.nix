@@ -207,6 +207,8 @@ let
         # https://sharp.pixelplumbing.com/install
         vips
 
+        libsecret
+        self.node-gyp-build
         self.node-pre-gyp
       ];
     };
