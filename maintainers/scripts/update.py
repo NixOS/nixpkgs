@@ -91,8 +91,8 @@ async def check_changes(package: Dict, worktree: str, update_info: str):
     if len(changes) == 1:
         # Dynamic data from updater take precedence over static data from passthru.updateScript.
         if 'attrPath' not in changes[0]:
-            if 'attrPath' in package:
-                changes[0]['attrPath'] = package['attrPath']
+            # update.nix is always passing attrPath
+            changes[0]['attrPath'] = package['attrPath']
 
         if 'oldVersion' not in changes[0]:
             # update.nix is always passing oldVersion
