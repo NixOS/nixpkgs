@@ -2766,6 +2766,7 @@ in
 
   collectd = callPackage ../tools/system/collectd {
     libsigrok = libsigrok-0-3-0; # not compatible with >= 0.4.0 yet
+    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
   collectd-data = callPackage ../tools/system/collectd/data.nix { };
