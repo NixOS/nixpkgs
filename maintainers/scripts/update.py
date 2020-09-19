@@ -117,9 +117,13 @@ async def merge_changes(merge_lock: asyncio.Lock, package: Dict, update_info: st
     if temp_dir is not None:
         worktree, branch = temp_dir
         changes = await check_changes(package, worktree, update_info)
-        await commit_changes(package['name'], merge_lock, worktree, branch, changes)
 
-    eprint(f" - {package['name']}: DONE.")
+        if len(changes) > 0:
+            await commit_changes(package['name'], merge_lock, worktree, branch, changes)
+        else:
+            eprint(f" - {package['name']}: DONE, no changes.")
+    else:
+        eprint(f" - {package['name']}: DONE.")
 
 async def updater(temp_dir: Optional[Tuple[str, str]], merge_lock: asyncio.Lock, packages_to_update: asyncio.Queue[Optional[Dict]], keep_going: bool, commit: bool):
     while True:
