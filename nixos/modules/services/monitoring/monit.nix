@@ -4,29 +4,19 @@ with lib;
 
 let
   cfg = config.services.monit;
-  extraConfig = pkgs.writeText "monitConfig" cfg.extraConfig;
 in
 
 {
-  imports = [
-    (mkRenamedOptionModule [ "services" "monit" "config" ] ["services" "monit" "extraConfig" ])
-  ];
-
   options.services.monit = {
 
     enable = mkEnableOption "Monit";
 
-    configFiles = mkOption {
-      type = types.listOf types.path;
-      default = [];
-      description = "List of paths to be included in the monitrc file";
-    };
-
-    extraConfig = mkOption {
+    config = mkOption {
       type = types.lines;
       default = "";
-      description = "Additional monit config as string";
+      description = "monitrc content";
     };
+
   };
 
   config = mkIf cfg.enable {
@@ -34,7 +24,7 @@ in
     environment.systemPackages = [ pkgs.monit ];
 
     environment.etc.monitrc = {
-      text = concatMapStringsSep "\n" (path: "include ${path}")  (cfg.configFiles ++ [extraConfig]);
+      text = cfg.config;
       mode = "0400";
     };
 
