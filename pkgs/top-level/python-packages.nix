@@ -979,6 +979,8 @@ in {
 
   bx-python = callPackage ../development/python-modules/bx-python { inherit (pkgs) zlib; };
 
+  bwapy = callPackage ../development/python-modules/bwapy { };
+
   bytecode = callPackage ../development/python-modules/bytecode { };
 
   bz2file = callPackage ../development/python-modules/bz2file { };
