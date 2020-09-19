@@ -61,6 +61,10 @@ mkDerivationWith stdenv.mkDerivation rec {
     cp -r plugins $out/lib/plugins
     cp -r patterns $out/lib/patterns
 
+    # workaround to fix the library browser:
+    rm -r $out/lib/plugins/sqldrivers
+    ln -s -t $out/lib/plugins ${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}/sqldrivers
+
     install -Dm644 scripts/qcad_icon.svg $out/share/icons/hicolor/scalable/apps/qcad.svg
 
     runHook postInstall
