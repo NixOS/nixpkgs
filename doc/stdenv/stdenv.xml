@@ -475,55 +475,12 @@ passthru.updateScript = writeScript "update-zoom-us" ''
 <programlisting>
 passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
 </programlisting>
-      Finally, the attribute can be an attribute set, listing the attribute path and extra supported features in addition to command.
-<programlisting>
-passthru.updateScript = {
-  command = [ ../../update.sh pname ];
-  attrPath = pname;
-  supportedFeatures = [ … ];
-};
-</programlisting>
       <note>
        <para>
         The script will be usually run from the root of the Nixpkgs repository but you should not rely on that. Also note that the update scripts will be run in parallel by default; you should avoid running <command>git commit</command> or any other commands that cannot handle that.
        </para>
       </note>
      </para>
-     <para>
-       <filename>maintainers/scripts/update.nix</filename> also supports automatically creating commits by running it with <literal>--argstr commit true</literal>. Neither declaring the <variable>attrPath</variable> attribute, or adding a <literal>commit</literal> to <variable>supportedFeatures</variable> and <link xlink:href="#var-passthru-updateScript-commit">modifying the script accordingly</link> is required. It might be useful if you want to customize the values to something else than what <filename>update.nix</filename> detects.
-     </para>
-     <variablelist>
-      <title>Supported features</title>
-      <varlistentry xml:id="var-passthru-updateScript-commit">
-       <term>
-        <varname>commit</varname>
-       </term>
-       <listitem>
-        <para>
-         Whenever the update script exits with <literal>0</literal> return
-         status, it is expected to print a JSON list containing an object for
-         each updated attribute. Empty list can be returned when the script did
-         not update any files: for example, when the attribute is already the
-         latest version. The required keys can be seen below:
-<programlisting>
-[
-  {
-    "attrPath": "volume_key",
-    "oldVersion": "0.3.11",
-    "newVersion": "0.3.12",
-    "files": [
-      "/path/to/nixpkgs/pkgs/development/libraries/volume-key/default.nix"
-    ]
-  }
-]
-</programlisting>
-        </para>
-        <para>
-          When the returned array contains exactly one object (e.g. <literal>[{}]</literal>), keys can be omitted and will be determined automatically. Finding out <variable>newVersion</variable> requires <variable>attrPath</variable> to be present either in the update script output or passed to the <variable>passthru.updateScript</variable> attribute set.
-        </para>
-       </listitem>
-      </varlistentry>
-     </variablelist>
      <para>
       For information about how to run the updates, execute <command>nix-shell maintainers/scripts/update.nix</command>.
      </para>
