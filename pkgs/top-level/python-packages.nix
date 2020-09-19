@@ -6921,6 +6921,8 @@ in {
 
   testfixtures = callPackage ../development/python-modules/testfixtures { };
 
+  textfsm = callPackage ../development/python-modules/textfsm { };
+
   testpath = callPackage ../development/python-modules/testpath { };
 
   testrepository = callPackage ../development/python-modules/testrepository { };
