@@ -6420,7 +6420,10 @@ in
 
   profile-sync-daemon = callPackage ../tools/misc/profile-sync-daemon { };
 
-  projectlibre = callPackage ../applications/misc/projectlibre { };
+  projectlibre = callPackage ../applications/misc/projectlibre {
+    jre = jre8;
+    jdk = jdk8;
+  };
 
   projectm = libsForQt5.callPackage ../applications/audio/projectm { };
 
