@@ -7622,6 +7622,8 @@ in {
 
   yowsup = callPackage ../development/python-modules/yowsup { };
 
+  yq = callPackage ../development/python-modules/yq { };
+
   yt = callPackage ../development/python-modules/yt { };
 
   yubico-client = callPackage ../development/python-modules/yubico-client { };
