@@ -1808,6 +1808,8 @@ in
 
   discount = callPackage ../tools/text/discount { };
 
+  discocss = callPackage ../tools/misc/discocss { };
+
   disk-filltest = callPackage ../tools/system/disk-filltest { };
 
   diskscan = callPackage ../tools/misc/diskscan { };
