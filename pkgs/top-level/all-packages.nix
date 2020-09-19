@@ -20762,7 +20762,10 @@ in
     python3Packages = python37Packages;
   };
 
-  freemind = callPackage ../applications/misc/freemind { };
+  freemind = callPackage ../applications/misc/freemind {
+    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  };
 
   freenet = callPackage ../applications/networking/p2p/freenet {
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
