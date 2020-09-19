@@ -9996,7 +9996,9 @@ in
 
   guile = guile_2_2;
 
-  inherit (callPackages ../applications/networking/cluster/hadoop { })
+  inherit (callPackages ../applications/networking/cluster/hadoop {
+    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  })
     hadoop_2_7
     hadoop_2_8
     hadoop_2_9
