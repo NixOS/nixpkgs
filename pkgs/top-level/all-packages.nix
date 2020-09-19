@@ -9179,6 +9179,14 @@ in
     else
       openjdk11.override { headless = true; };
 
+  openjdk11_jre = callPackage ../development/compilers/openjdk/jre.nix {
+    jdk = openjdk11;
+  };
+
+  openjdk11_headless_jre = callPackage ../development/compilers/openjdk/jre.nix {
+    jdk = openjdk11_headless;
+  };
+
   openjdk14-bootstrap =
     if adoptopenjdk-hotspot-bin-13.meta.available then
       adoptopenjdk-hotspot-bin-13
@@ -9223,6 +9231,8 @@ in
 
   jdk11 = openjdk11;
   jdk11_headless = openjdk11_headless;
+  jre11 = openjdk11_jre;
+  jre11_headless = openjdk11_headless_jre;
 
   jdk14 = openjdk14;
   jdk14_headless = openjdk14_headless;
