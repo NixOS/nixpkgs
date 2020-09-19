@@ -14890,7 +14890,15 @@ in
     ### KDE APPLICATIONS
 
     inherit (kdeApplications.override { libsForQt5 = self; })
-      libkdcraw libkexiv2 libkipi libkomparediff2 libksane;
+      akonadi-calendar akonadi-contacts akonadi-import-wizard akonadi-mime
+      akonadi-notes akonadi-search baloo-widgets calendarsupport eventviews
+      grantleetheme incidenceeditor kalarmcal kcalutils kdegraphics-mobipocket
+      kdepim-addons kdepim-apps-libs kdepim-runtime kidentitymanagement kimap
+      kipi-plugins kitinerary kldap kmail-account-wizard kmailtransport kmbox
+      kmime kontactinterface kpimtextedit kpkpass kqtquickcharts ksmtp ktnef
+      libgravatar libkcddb libkdcraw libkdegames libkdepim libkexiv2 libkgapi
+      libkipi libkleo libkmahjongg libkomparediff2 libksane libksieve mailcommon
+      mailimporter messagelib pim-sieve-editor pimcommon;
 
     ### LIBRARIES
 
