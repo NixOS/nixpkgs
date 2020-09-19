@@ -7551,6 +7551,8 @@ in {
 
   yamllint = callPackage ../development/python-modules/yamllint { };
 
+  yamlordereddictloader = callPackage ../development/python-modules/yamlordereddictloader { };
+
   yanc = callPackage ../development/python-modules/yanc { };
 
   yapf = callPackage ../development/python-modules/yapf { };
