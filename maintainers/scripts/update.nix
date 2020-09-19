@@ -143,8 +143,10 @@ let
   packageData = package: {
     name = package.name;
     pname = lib.getName package;
+    oldVersion = lib.getVersion package;
     updateScript = map builtins.toString (lib.toList (package.updateScript.command or package.updateScript));
     supportedFeatures = package.updateScript.supportedFeatures or [];
+    attrPath = package.updateScript.attrPath or null;
   };
 
   packagesJson = pkgs.writeText "packages.json" (builtins.toJSON (map packageData packages));

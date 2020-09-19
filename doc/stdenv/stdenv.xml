@@ -475,11 +475,12 @@ passthru.updateScript = writeScript "update-zoom-us" ''
 <programlisting>
 passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
 </programlisting>
-      Finally, the attribute can be an attribute set, listing the extra supported features among other things.
+      Finally, the attribute can be an attribute set, listing the attribute path and extra supported features in addition to command.
 <programlisting>
 passthru.updateScript = {
   command = [ ../../update.sh pname ];
-  supportedFeatures = [ "commit" ];
+  attrPath = pname;
+  supportedFeatures = [ … ];
 };
 </programlisting>
       <note>
@@ -488,9 +489,12 @@ passthru.updateScript = {
        </para>
       </note>
      </para>
+     <para>
+       <filename>maintainers/scripts/update.nix</filename> also supports automatically creating commits by running it with <literal>--argstr commit true</literal> but it requires either declaring the <variable>attrPath</variable>, or adding a <literal>commit</literal> to <variable>supportedFeatures</variable> and <link xlink:href="#var-passthru-updateScript-commit">modifying the script accordingly</link>.
+     </para>
      <variablelist>
       <title>Supported features</title>
-      <varlistentry>
+      <varlistentry xml:id="var-passthru-updateScript-commit">
        <term>
         <varname>commit</varname>
        </term>

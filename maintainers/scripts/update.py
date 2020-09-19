@@ -72,8 +72,7 @@ def make_worktree() -> Generator[Tuple[str, str], None, None]:
         subprocess.run(['git', 'worktree', 'remove', '--force', target_directory])
         subprocess.run(['git', 'branch', '-D', branch_name])
 
-async def commit_changes(merge_lock: asyncio.Lock, worktree: str, branch: str, update_info: str) -> None:
-    changes = json.loads(update_info)
+async def commit_changes(name: str, merge_lock: asyncio.Lock, worktree: str, branch: str, changes: List[Dict]) -> None:
     for change in changes:
         # Git can only handle a single index operation at a time
         async with merge_lock:
@@ -85,7 +84,29 @@ async def commit_changes(merge_lock: asyncio.Lock, worktree: str, branch: str, u
 async def merge_changes(merge_lock: asyncio.Lock, package: Dict, update_info: str, temp_dir: Optional[Tuple[str, str]]) -> None:
     if temp_dir is not None:
         worktree, branch = temp_dir
-        await commit_changes(merge_lock, worktree, branch, update_info)
+
+        if 'commit' in package['supportedFeatures']:
+            changes = json.loads(update_info)
+        elif 'attrPath' in package:
+            attr_path = package['attrPath']
+            obtain_new_version_process = await check_subprocess('nix-instantiate', '--expr', f'with import ./. {{}}; lib.getVersion {attr_path}', '--eval', '--strict', '--json', stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, cwd=worktree)
+            new_version = json.loads((await obtain_new_version_process.stdout.read()).decode('utf-8'))
+            changed_files_process = await check_subprocess('git', 'diff', '--name-only', stdout=asyncio.subprocess.PIPE, cwd=worktree)
+            changed_files = (await changed_files_process.stdout.read()).splitlines()
+            if len(changed_files) > 0:
+                changes = [
+                    {
+                        'files': changed_files,
+                        'oldVersion': package['oldVersion'],
+                        'newVersion': new_version,
+                        'attrPath': attr_path,
+                    }
+                ]
+            else:
+                changes = []
+
+        await commit_changes(package['name'], merge_lock, worktree, branch, changes)
+
     eprint(f" - {package['name']}: DONE.")
 
 async def updater(temp_dir: Optional[Tuple[str, str]], merge_lock: asyncio.Lock, packages_to_update: asyncio.Queue[Optional[Dict]], keep_going: bool, commit: bool):
@@ -95,7 +116,7 @@ async def updater(temp_dir: Optional[Tuple[str, str]], merge_lock: asyncio.Lock,
             # A sentinel received, we are done.
             return
 
-        if not ('commit' in package['supportedFeatures']):
+        if not ('commit' in package['supportedFeatures'] or 'attrPath' in package):
             temp_dir = None
 
         await run_update_script(merge_lock, temp_dir, package, keep_going)

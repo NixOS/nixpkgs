@@ -21,9 +21,9 @@ let
     version_policy="$3"
     PATH=${lib.makeBinPath [ common-updater-scripts python ]}
     latest_tag=$(python "${./find-latest-version.py}" "$package_name" "$version_policy" "stable" ${upperBoundFlag})
-    update-source-version "$attr_path" "$latest_tag" --print-changes
+    update-source-version "$attr_path" "$latest_tag"
   '';
 in {
   command = [ updateScript packageName attrPath versionPolicy ];
-  supportedFeatures = [ "commit" ];
+  inherit attrPath;
 }
