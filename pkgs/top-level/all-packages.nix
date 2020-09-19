@@ -10994,7 +10994,9 @@ in
 
   gdbgui = python3Packages.callPackage ../development/tools/misc/gdbgui { };
 
-  pmd = callPackage ../development/tools/analysis/pmd { };
+  pmd = callPackage ../development/tools/analysis/pmd {
+    openjdk = openjdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  };
 
   pmdk = callPackage ../development/libraries/pmdk { };
 
