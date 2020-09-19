@@ -35,7 +35,7 @@ let
       # Steam VR
       procps
       usbutils
-    ] ++ lib.optional withJava jdk
+    ] ++ lib.optional withJava jdk8 # TODO: upgrade https://github.com/NixOS/nixpkgs/pull/89731
       ++ lib.optional withPrimus primus
       ++ extraPkgs pkgs;
 
