@@ -11241,7 +11241,9 @@ in
   massif-visualizer = libsForQt514.callPackage ../development/tools/analysis/massif-visualizer { };
 
   maven = maven3;
-  maven3 = callPackage ../development/tools/build-managers/apache-maven { };
+  maven3 = callPackage ../development/tools/build-managers/apache-maven {
+    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  };
 
   mavproxy = python3Packages.callPackage ../applications/science/robotics/mavproxy { };
 
