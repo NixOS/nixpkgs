@@ -15208,8 +15208,8 @@ in
   resolv_wrapper = callPackage ../development/libraries/resolv_wrapper { };
 
   rhino = callPackage ../development/libraries/java/rhino {
-    javac = jdk;
-    jvm = jre;
+    javac = jdk8;
+    jvm = jre8;
   };
 
   rlog = callPackage ../development/libraries/rlog { };
