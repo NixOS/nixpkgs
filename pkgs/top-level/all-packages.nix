@@ -12384,7 +12384,9 @@ in
 
   freeimage = callPackage ../development/libraries/freeimage { };
 
-  freetts = callPackage ../development/libraries/freetts { };
+  freetts = callPackage ../development/libraries/freetts {
+    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  };
 
   frog = res.languageMachines.frog;
 
