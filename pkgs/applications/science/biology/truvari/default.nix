@@ -25,13 +25,15 @@ python3Packages.buildPythonApplication rec {
 
   prePatch = ''
     substituteInPlace ./setup.py \
-      --replace '"progressbar2==3.41.0",' '"progressbar2==3.47.0",' \
-      --replace '"pysam==0.15.2",' '"pysam==0.15.4",' \
-      --replace '"pyfaidx==0.5.5.2",' '"pyfaidx==0.5.8",'
+      --replace '"progressbar2==3.41.0",' '"progressbar2",' \
+      --replace '"pysam==0.15.2",' '"pysam",' \
+      --replace '"pyfaidx==0.5.5.2",' '"pyfaidx",' \
+      --replace '"intervaltree==3.0.2",' '"intervaltree",'
   '';
 
   meta = with lib; {
     description = "Structural variant comparison tool for VCFs";
+    homepage = "https://github.com/spiralgenetics/truvari";
     license = licenses.mit;
     maintainers = with maintainers; [ scalavision ];
     longDescription = ''
