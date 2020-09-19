@@ -8185,6 +8185,7 @@ in
 
   xtreemfs = callPackage ../tools/filesystems/xtreemfs {
     boost = boost165;
+    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
   xurls = callPackage ../tools/text/xurls {};
