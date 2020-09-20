@@ -5,6 +5,7 @@ import asyncio
 import contextlib
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -30,16 +31,22 @@ async def check_subprocess(*args, **kwargs):
 
     return process
 
-async def run_update_script(merge_lock: asyncio.Lock, temp_dir: Optional[Tuple[str, str]], package: Dict, keep_going: bool):
+async def run_update_script(nixpkgs_root: str, merge_lock: asyncio.Lock, temp_dir: Optional[Tuple[str, str]], package: Dict, keep_going: bool):
     worktree: Optional[str] = None
+
+    update_script_command = package['updateScript']
 
     if temp_dir is not None:
         worktree, _branch = temp_dir
 
+        # Update scripts can use $(dirname $0) to get their location but we want to run
+        # their clones in the git worktree, not in the main nixpkgs repo.
+        update_script_command = map(lambda arg: re.sub(r'^{0}'.format(re.escape(nixpkgs_root)), worktree, arg), update_script_command)
+
     eprint(f" - {package['name']}: UPDATING ...")
 
     try:
-        update_process = await check_subprocess('env', f"UPDATE_NIX_ATTR_PATH={package['attrPath']}", *package['updateScript'], stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, cwd=worktree)
+        update_process = await check_subprocess('env', f"UPDATE_NIX_ATTR_PATH={package['attrPath']}", *update_script_command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, cwd=worktree)
         update_info = await update_process.stdout.read()
 
         await merge_changes(merge_lock, package, update_info, temp_dir)
@@ -125,7 +132,7 @@ async def merge_changes(merge_lock: asyncio.Lock, package: Dict, update_info: st
     else:
         eprint(f" - {package['name']}: DONE.")
 
-async def updater(temp_dir: Optional[Tuple[str, str]], merge_lock: asyncio.Lock, packages_to_update: asyncio.Queue[Optional[Dict]], keep_going: bool, commit: bool):
+async def updater(nixpkgs_root: str, temp_dir: Optional[Tuple[str, str]], merge_lock: asyncio.Lock, packages_to_update: asyncio.Queue[Optional[Dict]], keep_going: bool, commit: bool):
     while True:
         package = await packages_to_update.get()
         if package is None:
@@ -135,7 +142,7 @@ async def updater(temp_dir: Optional[Tuple[str, str]], merge_lock: asyncio.Lock,
         if not ('commit' in package['supportedFeatures'] or 'attrPath' in package):
             temp_dir = None
 
-        await run_update_script(merge_lock, temp_dir, package, keep_going)
+        await run_update_script(nixpkgs_root, merge_lock, temp_dir, package, keep_going)
 
 async def start_updates(max_workers: int, keep_going: bool, commit: bool, packages: List[Dict]):
     merge_lock = asyncio.Lock()
@@ -146,6 +153,9 @@ async def start_updates(max_workers: int, keep_going: bool, commit: bool, packag
 
         # Do not create more workers than there are packages.
         num_workers = min(max_workers, len(packages))
+
+        nixpkgs_root_process = await check_subprocess('git', 'rev-parse', '--show-toplevel', stdout=asyncio.subprocess.PIPE)
+        nixpkgs_root = (await nixpkgs_root_process.stdout.read()).decode('utf-8').strip()
 
         # Set up temporary directories when using auto-commit.
         for i in range(num_workers):
@@ -163,7 +173,7 @@ async def start_updates(max_workers: int, keep_going: bool, commit: bool, packag
 
         # Prepare updater workers for each temp_dir directory.
         # At most `num_workers` instances of `run_update_script` will be running at one time.
-        updaters = asyncio.gather(*[updater(temp_dir, merge_lock, packages_to_update, keep_going, commit) for temp_dir in temp_dirs])
+        updaters = asyncio.gather(*[updater(nixpkgs_root, temp_dir, merge_lock, packages_to_update, keep_going, commit) for temp_dir in temp_dirs])
 
         try:
             # Start updater workers.
