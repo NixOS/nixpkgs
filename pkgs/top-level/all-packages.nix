@@ -9455,6 +9455,13 @@ in
   julia_1 = julia_10;
   julia = callPackage ../development/compilers/julia { };
 
+  julia_10 = callPackage ../development/compilers/julia/1.0.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+    libgit2 = libgit2_0_27;
+  };
+
+  julia_1 = julia_10;
+
   jwasm =  callPackage ../development/compilers/jwasm { };
 
   knightos-kcc = callPackage ../development/tools/knightos/kcc { };
