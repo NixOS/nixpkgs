@@ -1311,6 +1311,8 @@ in {
 
   crashtest = callPackage ../development/python-modules/crashtest { };
 
+  crate = callPackage ../development/python-modules/crate { };
+
   crayons = callPackage ../development/python-modules/crayons { };
 
   crc16 = callPackage ../development/python-modules/crc16 { };
@@ -2764,6 +2766,8 @@ in {
 
   hypothesis = if isPy3k then callPackage ../development/python-modules/hypothesis { } else self.hypothesis_4;
 
+  hyppo = callPackage ../development/python-modules/hyppo { };
+
   i3ipc = callPackage ../development/python-modules/i3ipc { };
 
   i3-py = callPackage ../development/python-modules/i3-py { };
@@ -4031,6 +4035,8 @@ in {
   nototools = callPackage ../data/fonts/noto-fonts/tools.nix { };
 
   nplusone = callPackage ../development/python-modules/nplusone { };
+
+  ntc-templates = callPackage ../development/python-modules/ntc-templates { };
 
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
 
@@ -6459,7 +6465,9 @@ in {
 
   six = callPackage ../development/python-modules/six { };
 
-  skein = callPackage ../development/python-modules/skein { };
+  skein = callPackage ../development/python-modules/skein {
+    jre = pkgs.jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  };
 
   sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
 
@@ -6920,6 +6928,8 @@ in {
   tesserocr = callPackage ../development/python-modules/tesserocr { };
 
   testfixtures = callPackage ../development/python-modules/testfixtures { };
+
+  textfsm = callPackage ../development/python-modules/textfsm { };
 
   testpath = callPackage ../development/python-modules/testpath { };
 
@@ -7568,6 +7578,8 @@ in {
   yahooweather = callPackage ../development/python-modules/yahooweather { };
 
   yamllint = callPackage ../development/python-modules/yamllint { };
+
+  yamlordereddictloader = callPackage ../development/python-modules/yamlordereddictloader { };
 
   yanc = callPackage ../development/python-modules/yanc { };
 
