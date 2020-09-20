@@ -637,7 +637,6 @@
   ./services/networking/gvpe.nix
   ./services/networking/hans.nix
   ./services/networking/haproxy.nix
-  ./services/networking/heyefi.nix
   ./services/networking/hostapd.nix
   ./services/networking/htpdate.nix
   ./services/networking/hylafax/default.nix
@@ -725,7 +724,6 @@
   ./services/networking/rxe.nix
   ./services/networking/sabnzbd.nix
   ./services/networking/searx.nix
-  ./services/networking/seeks.nix
   ./services/networking/skydns.nix
   ./services/networking/shadowsocks.nix
   ./services/networking/shairport-sync.nix
@@ -838,6 +836,7 @@
   ./services/ttys/gpm.nix
   ./services/ttys/kmscon.nix
   ./services/wayland/cage.nix
+  ./services/video/epgstation/default.nix
   ./services/video/mirakurun.nix
   ./services/web-apps/atlassian/confluence.nix
   ./services/web-apps/atlassian/crowd.nix
@@ -1027,6 +1026,7 @@
   ./virtualisation/podman.nix
   ./virtualisation/qemu-guest-agent.nix
   ./virtualisation/railcar.nix
+  ./virtualisation/spice-usb-redirection.nix
   ./virtualisation/virtualbox-guest.nix
   ./virtualisation/virtualbox-host.nix
   ./virtualisation/vmware-guest.nix

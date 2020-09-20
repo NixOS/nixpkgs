@@ -11,13 +11,13 @@
 
 mkDerivationWith stdenv.mkDerivation rec {
   pname = "qcad";
-  version = "3.25.0.0";
+  version = "3.25.2.0";
 
   src = fetchFromGitHub {
     owner = "qcad";
     repo = "qcad";
     rev = "v${version}";
-    sha256 = "07qph2645m1wi9yi04ixdvx8dli03q1vimj3laqdmnpipi54lljc";
+    sha256 = "1lz6q9n2p0l7k8rwqsdj6av9p3426423g5avc4y6s7nbk36280mz";
   };
 
   patches = [
@@ -60,6 +60,10 @@ mkDerivationWith stdenv.mkDerivation rec {
     cp -r scripts $out/lib
     cp -r plugins $out/lib/plugins
     cp -r patterns $out/lib/patterns
+
+    # workaround to fix the library browser:
+    rm -r $out/lib/plugins/sqldrivers
+    ln -s -t $out/lib/plugins ${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}/sqldrivers
 
     install -Dm644 scripts/qcad_icon.svg $out/share/icons/hicolor/scalable/apps/qcad.svg
 

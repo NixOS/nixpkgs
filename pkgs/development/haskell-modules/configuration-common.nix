@@ -208,11 +208,11 @@ self: super: {
   # Generating the completions should be activated again, once we default to
   # ghc 8.10.
   hnix = dontCheck (super.hnix.override {
-    # The neat-interpolation package from stack is to old for hnix.
-    # https://github.com/haskell-nix/hnix/issues/676
-    # Once neat-interpolation >= 0.4 is in our stack release,
-    # (which should happen soon), we can remove this override
-    neat-interpolation = self.neat-interpolation_0_5_1_2;
+    # 2020-09-18: Those packages are all needed by hnix at versions newer than on stackage
+    neat-interpolation = self.neat-interpolation_0_5_1_2; # at least 0.5.1
+    data-fix = self.data-fix_0_3_0; # at least 0.3
+    prettyprinter = self.prettyprinter_1_7_0; # at least 1.7
+
   });
 
   # Fails for non-obvious reasons while attempting to use doctest.
@@ -1209,14 +1209,9 @@ self: super: {
 
   # this will probably need to get updated with every ghcide update,
   # we need an override because ghcide is tracking haskell-lsp closely.
-  ghcide = dontCheck (appendPatch (super.ghcide.override {
+  ghcide = dontCheck (super.ghcide.overrideScope (self: super: {
     hie-bios = dontCheck super.hie-bios_0_7_1;
     lsp-test = dontCheck self.lsp-test_0_11_0_5;
-  }) (pkgs.fetchpatch {
-    # This patch loosens the hie-bios upper bound.
-    # It is already merged into upstream and won‘t be needed for ghcide 0.4.0
-    url = "https://github.com/haskell/ghcide/commit/3e1b3620948870a4da8808ca0c0897fbd3ecad16.patch";
-    sha256 = "1jwn7jgi740x6wwv1k0mz9d4z0b9p3mzs54pdg4nfq0h2v7zxchz";
   }));
 
   # hasn‘t bumped upper bounds
@@ -1466,7 +1461,6 @@ self: super: {
   jira-wiki-markup = doDistribute self.jira-wiki-markup_1_3_2;
   pandoc = doDistribute self.pandoc_2_10_1;
   pandoc-citeproc = doDistribute self.pandoc-citeproc_0_17_0_2;
-  pandoc-plot = doDistribute self.pandoc-plot_0_9_2_0;
   pandoc-types = doDistribute self.pandoc-types_1_21;
   rfc5051 = doDistribute self.rfc5051_0_2;
 

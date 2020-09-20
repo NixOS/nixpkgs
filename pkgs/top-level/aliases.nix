@@ -130,6 +130,7 @@ mapAliases ({
   fast-neural-doodle = throw "fast-neural-doodle has been removed, as the upstream project has been abandoned"; # added 2020-03-28
   fetchFromGithub = throw "You meant fetchFromGitHub, with a capital H.";
   ffadoFull = ffado; # added 2018-05-01
+  firefox-esr-68 = throw "Firefox 68 ESR reached end of life with its final release 68.12esr on 2020-08-25 and was therefore removed from nixpkgs";
   firefox-esr-wrapper = firefox-esr;  # 2016-01
   firefox-wrapper = firefox;          # 2016-01
   firefoxWrapper = firefox;           # 2015-09
@@ -511,9 +512,11 @@ mapAliases ({
   scim = sc-im; # added 2016-01-22
   scollector = bosun; # added 2018-04-25
   sdlmame = mame; # added 2019-10-30
+  seeks = throw "seeks has been removed from nixpkgs, as it was unmaintained"; # added 2020-06-21
   seg3d = throw "seg3d has been removed from nixpkgs (2019-11-10)";
   shared_mime_info = shared-mime-info; # added 2018-02-25
   skrooge2 = skrooge; # added 2017-02-18
+  sky = throw "sky has been removed from nixpkgs (2020-09-16)";
   skype = skypeforlinux; # added 2017-07-27
   skydive = throw "skydive has been removed from nixpkgs (2019-09-10)";
   slack-dark = slack; # added 2020-03-27
@@ -600,6 +603,7 @@ mapAliases ({
   torch-repl = throw "torch-repl has been removed, as the upstream project has been abandoned"; # added 2020-03-28
   torchPackages = throw "torchPackages has been removed, as the upstream project has been abandoned"; # added 2020-03-28
   trang = jing-trang; # added 2018-04-25
+  transcribe = throw "transcribe has been removed after being marked a broken for over a year"; # added 2020-09-16
   transmission_gtk = transmission-gtk; # added 2018-01-06
   transmission_remote_gtk = transmission-remote-gtk; # added 2018-01-06
   transporter = throw "transporter has been removed. It was archived upstream, so it's considered abandoned.";

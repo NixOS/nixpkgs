@@ -113,14 +113,14 @@ let
   in concatMapStrings (getAttr "value") monitors;
 
   configFile = pkgs.runCommand "xserver.conf"
-    { xfs = optionalString (cfg.useXFS != false)
-        ''FontPath "${toString cfg.useXFS}"'';
+    { fontpath = optionalString (cfg.fontPath != null)
+        ''FontPath "${cfg.fontPath}"'';
       inherit (cfg) config;
       preferLocalBuild = true;
     }
       ''
         echo 'Section "Files"' >> $out
-        echo $xfs >> $out
+        echo $fontpath >> $out
 
         for i in ${toString fontsForXServer}; do
           if test "''${i:0:''${#NIX_STORE}}" == "$NIX_STORE"; then
@@ -154,6 +154,8 @@ in
       (mkRemovedOptionModule
         [ "services" "xserver" "startDbusSession" ]
         "The user D-Bus session is now always socket activated and this option can safely be removed.")
+      (mkRemovedOptionModule ["services" "xserver" "useXFS" ]
+        "Use services.xserver.fontPath instead of useXFS")
     ];
 
 
@@ -476,11 +478,15 @@ in
         description = "Default colour depth.";
       };
 
-      useXFS = mkOption {
-        # FIXME: what's the type of this option?
-        default = false;
+      fontPath = mkOption {
+        type = types.nullOr types.str;
+        default = null;
         example = "unix/:7100";
-        description = "Determines how to connect to the X Font Server.";
+        description = ''
+          Set the X server FontPath. Defaults to null, which
+          means the compiled in defaults will be used. See
+          man xorg.conf for details.
+        '';
       };
 
       tty = mkOption {

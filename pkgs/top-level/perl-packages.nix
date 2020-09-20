@@ -804,6 +804,20 @@ let
     };
   };
 
+  AstroFITSHeader = buildPerlModule rec {
+    pname = "Astro-FITS-Header";
+    version = "3.07";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TJ/TJENNESS/${pname}-${version}.tar.gz";
+      sha256 = "530d59ef0c0935f9862d187187a2d7583b12c639bb67db14f983322b161892d9";
+    };
+    meta = {
+      homepage = "http://github.com/timj/perl-Astro-FITS-Header/tree/master";
+      description = "Object-oriented interface to FITS HDUs";
+      license = stdenv.lib.licenses.free;
+    };
+  };
+
   AudioScan = buildPerlPackage {
     pname = "Audio-Scan";
     version = "1.01";
@@ -2900,6 +2914,22 @@ let
     meta = {
       description = "Generate fast XS accessors without runtime compilation";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  CLIHelpers = buildPerlPackage {
+    pname = "CLI-Helpers";
+    version = "1.8";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BL/BLHOTSKY/CLI-Helpers-1.8.tar.gz";
+      sha256 = "1hgiynpy7q4gbx1d9pwnzdzil36k13vjxhscalj710ikcddvjz92";
+    };
+    buildInputs = [ PodCoverageTrustPod TestPerlCritic ];
+    propagatedBuildInputs = [ CaptureTiny RefUtil SubExporter TermReadKey YAML ];
+    meta = {
+      homepage = "https://github.com/reyjrar/CLI-Helpers";
+      description = "Subroutines for making simple command line scripts";
+      license = stdenv.lib.licenses.bsd3;
     };
   };
 
@@ -10155,7 +10185,8 @@ let
 
     propagatedBuildInputs = [ Inline ];
 
-    makeMakerFlags = "J2SDK=${pkgs.jdk}";
+    # TODO: upgrade https://github.com/NixOS/nixpkgs/pull/89731
+    makeMakerFlags = "J2SDK=${pkgs.jdk8}";
 
     # FIXME: Apparently tests want to access the network.
     doCheck = false;
@@ -15575,6 +15606,51 @@ let
     };
   };
 
+  PDL = buildPerlPackage rec {
+    pname = "PDL";
+    version = "2.022";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/ET/ETJ/${pname}-${version}.tar.gz";
+      sha256 = "12isj05ni44bgf76lc0fs5v88ai8gn5dqrppsbj7vsxblcya7113";
+    };
+    patchPhase = ''
+      substituteInPlace perldl.conf \
+        --replace 'POSIX_THREADS_LIBS => undef' 'POSIX_THREADS_LIBS => "-L${pkgs.glibc.dev}/lib"' \
+        --replace 'POSIX_THREADS_INC  => undef' 'POSIX_THREADS_INC  => "-I${pkgs.glibc.dev}/include"' \
+        --replace 'WITH_MINUIT => undef' 'WITH_MINUIT => 0' \
+        --replace 'WITH_SLATEC => undef' 'WITH_SLATEC => 0' \
+        --replace 'WITH_HDF => undef' 'WITH_HDF => 0' \
+        --replace 'WITH_GD => undef' 'WITH_GD => 0' \
+        --replace 'WITH_PROJ => undef' 'WITH_PROJ => 0'
+    '';
+
+    nativeBuildInputs = with pkgs; [ autoPatchelfHook libGL.dev glibc.dev mesa_glu.dev ];
+
+    buildInputs = [ DevelChecklib TestDeep TestException TestWarn ] ++
+                  (with pkgs; [ gsl freeglut xorg.libXmu xorg.libXi ]);
+
+    propagatedBuildInputs = [
+      AstroFITSHeader
+      ConvertUU
+      ExtUtilsF77
+      FileMap
+      Inline
+      InlineC
+      ListMoreUtils
+      ModuleCompile
+      OpenGL
+      PodParser
+      TermReadKey
+    ];
+
+    meta = {
+      homepage = "http://pdl.perl.org/";
+      description = "Perl Data Language";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      platforms = stdenv.lib.platforms.linux;
+    };
+  };
+
   Pegex = buildPerlPackage {
     pname = "Pegex";
     version = "0.75";
@@ -16961,6 +17037,22 @@ let
     meta = {
       description = "An Asynchronous Remote Procedure Stack";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+    RPM2 = buildPerlModule {
+    pname = "RPM2";
+    version = "1.4";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LK/LKUNDRAK/RPM2-1.4.tar.gz";
+      sha256 = "5ecb42aa69324e6f4088abfae07313906e5aabf2f46f1204f3f1de59155bb636";
+    };
+    buildInputs = [ pkgs.pkg-config pkgs.rpm ];
+    doCheck = false; # Tries to open /var/lib/rpm
+    meta = {
+      description = "Perl bindings for the RPM Package Manager API";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 

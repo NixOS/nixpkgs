@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchzip, python3Packages
+{ stdenv, lib, fetchurl, fetchzip, python3
 , mkDerivationWith, wrapQtAppsHook, wrapGAppsHook, qtbase, glib-networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
 , libxslt, gst_all_1 ? null
@@ -10,6 +10,7 @@
 assert withMediaPlayback -> gst_all_1 != null;
 
 let
+  python3Packages = python3.pkgs;
   pdfjs = let
     version = "2.4.456";
   in

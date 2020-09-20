@@ -7,8 +7,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  srcVersion = "jun20b";
-  version = "20200601_b";
+  srcVersion = "sep20a";
+  version = "20200901_a";
   pname = "gildas";
 
   src = fetchurl {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     # source code of the previous release to a different directory
     urls = [ "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
       "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz" ];
-    sha256 = "190na9p9kaif4hviraksig6hsq35i1q3nlrm50l00kpj2n8knisk";
+    sha256 = "9faa0b3e674b5ffe5b1aee88027d7401a46ae28cd0b306595300547605d6222a";
   };
 
   nativeBuildInputs = [ pkgconfig groff perl getopt gfortran which ];
