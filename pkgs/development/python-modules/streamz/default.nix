@@ -10,6 +10,7 @@
 , toolz
 , tornado
 , zict
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -37,6 +38,8 @@ buildPythonPackage rec {
     pytest
     requests
   ];
+
+  disabled = pythonOlder "3.6";
 
   # Disable test_tcp_async because fails on sandbox build
   # disable kafka tests
