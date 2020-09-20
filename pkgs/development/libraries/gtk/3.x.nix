@@ -25,6 +25,7 @@
 , epoxy
 , json-glib
 , libxkbcommon
+, libxml2
 , gmp
 , gnome3
 , gsettings-desktop-schemas
@@ -48,7 +49,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "gtk+3";
-  version = "3.24.21";
+  version = "3.24.23";
 
   outputs = [ "out" "dev" ] ++ optional withGtkDoc "devdoc";
   outputBin = "dev";
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${stdenv.lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "0llgq2adzn9p3bfq9rv2dhscmvzs35jp3glrfvy3vs1mrpknmsmf";
+    sha256 = "1cg2vbwbcp7bc84ky0b69ipgdr9djhspnf5k8lajb8jphcj4v1jx";
   };
 
   patches = [
@@ -71,8 +72,8 @@ stdenv.mkDerivation rec {
       sha256 = "0g6fhqcv8spfy3mfmxpyji93k8d4p4q4fz1v9a1c1cgcwkz41d7p";
     })
 
-    # Fix path handling in pkg-config
-    # https://gitlab.gnome.org/GNOME/gtk/merge_requests/1793
+    # Fix path handling in pkg-config. MR for the gtk-3-24 branch:
+    # https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/2605
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gtk/commit/6d9db8610eff8c12d594d53b7813d9eea1247801.patch";
       sha256 = "0rd1kjh0m4mrj2hkcqlsq1j0d6ahn5c237fd211r158gd1jiwys0";
@@ -97,11 +98,6 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
 
   postPatch = ''
-    # TODO: Remove in 3.24.21
-    # https://gitlab.gnome.org/GNOME/gtk/issues/2669
-    echo "${stdenv.shell}" > check-version.py
-    chmod +x check-version.py
-
     files=(
       build-aux/meson/post-install.py
       demos/gtk-demo/geninclude.py
@@ -130,6 +126,8 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
     docbook_xsl
     gtk-doc
+    # For xmllint
+    libxml2
   ];
 
   buildInputs = [
