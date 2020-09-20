@@ -21,9 +21,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ boltons attrs face ];
 
   checkInputs = [ pytest pyyaml ];
-  checkPhase = "pytest glom/test";
-
-  doCheck = !isPy37; # https://github.com/mahmoud/glom/issues/72
+  # test_cli.py checks the output of running "glom"
+  checkPhase = "PATH=$out/bin:$PATH pytest glom/test";
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/mahmoud/glom";
