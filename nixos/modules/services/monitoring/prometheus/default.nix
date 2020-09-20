@@ -629,7 +629,9 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       ( let
-          legacy = builtins.match "(.*):(.*)" cfg.listenAddress;
+          # Match something with dots (an IPv4 address) or something ending in
+          # a square bracket (an IPv6 addresses) followed by a port number.
+          legacy = builtins.match "(.*\\..*|.*]):([[:digit:]]+)" cfg.listenAddress;
         in {
           assertion = legacy == null;
           message = ''
