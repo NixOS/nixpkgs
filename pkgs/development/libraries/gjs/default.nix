@@ -8,7 +8,7 @@
 , gtk3
 , atk
 , gobject-introspection
-, spidermonkey_68
+, spidermonkey_78
 , pango
 , cairo
 , readline
@@ -29,11 +29,11 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "gjs";
-  version = "1.64.4";
+  version = "1.66.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0k6l2qc2vkws34zrgdhl57qxf0jjkar2iziz6qn4n1w7va73mk53";
+    sha256 = "1y5m7as3jwhb3svb4xgk443hyxhijralk5q5s3ywidkd047gj37k";
   };
 
   outputs = [ "out" "dev" "installedTests" ];
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
     gobject-introspection
     cairo
     readline
-    spidermonkey_68
+    spidermonkey_78
     dbus # for dbus-run-session
   ];
 
@@ -73,7 +73,7 @@ in stdenv.mkDerivation rec {
     ./fix-paths.patch
 
     # Allow installing installed tests to a separate output.
-    ./installed-tests-path.patch
+    # ./installed-tests-path.patch
   ];
 
   doCheck = true;
