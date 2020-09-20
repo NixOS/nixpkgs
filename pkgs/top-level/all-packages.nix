@@ -21436,9 +21436,7 @@ in
 
   jdupes = callPackage ../tools/misc/jdupes { };
 
-  jedit = callPackage ../applications/editors/jedit {
-    jdk = jdk8; # TODO: upgrade
-  };
+  jedit = callPackage ../applications/editors/jedit { };
 
   jgmenu = callPackage ../applications/misc/jgmenu { };
 
