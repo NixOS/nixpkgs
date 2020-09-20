@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   src = if hpnSupport then
       fetchurl {
         url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-${replaceStrings [ "." "p" ] [ "_" "_P" ] version}.tar.gz";
-        sha256 = "0lwr7xzhy8m4y0vzi1a78ddhag3qp6cba0c37mnhivbhb67dkywp";
+        sha256 = "1ssdwgdxnvjwigisqi8c053znps5a4jf7bzsi99y0xyfzbw0x55k";
       }
     else
       fetchurl {
