@@ -438,15 +438,17 @@ if [ -z "$rollback" ]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A vm -k "${extraBuildFlags[@]}")"
         else
-            echo "$0: 'build-vm' is not supported with '--flake'" >&2
-            exit 1
+            nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.vm" \
+              "${extraBuildFlags[@]}" "${lockFlags[@]}"
+            pathToConfig="$(readlink -f ./result)"
         fi
     elif [ "$action" = build-vm-with-bootloader ]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A vmWithBootLoader -k "${extraBuildFlags[@]}")"
         else
-            echo "$0: 'build-vm-with-bootloader' is not supported with '--flake'" >&2
-            exit 1
+            nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.vmWithBootLoader" \
+              "${extraBuildFlags[@]}" "${lockFlags[@]}"
+            pathToConfig="$(readlink -f ./result)"
         fi
     else
         showSyntax
