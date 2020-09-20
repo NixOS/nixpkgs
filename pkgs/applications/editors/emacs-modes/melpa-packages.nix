@@ -196,6 +196,26 @@ let
 
         ivy-rtags = fix-rtags super.ivy-rtags;
 
+        libgit = super.libgit.overrideAttrs(attrs: {
+          nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ [ pkgs.cmake ];
+          buildInputs = attrs.buildInputs ++ [ pkgs.libgit2 ];
+          dontUseCmakeBuildDir = true;
+          postPatch = ''
+            sed -i s/'add_subdirectory(libgit2)'// CMakeLists.txt
+          '';
+          postBuild = ''
+            pushd working/libgit
+            make
+            popd
+          '';
+          postInstall = ''
+            outd=$(echo $out/share/emacs/site-lisp/elpa/libgit-**)
+            mkdir $outd/build
+            install -m444 -t $outd/build ./source/src/libegit2.so
+            rm -r $outd/src $outd/Makefile $outd/CMakeLists.txt
+          '';
+        });
+
         magit = super.magit.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
