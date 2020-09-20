@@ -25,11 +25,12 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest discover
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Super-fast templating language";
-    homepage = "http://www.makotemplates.org";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ domenkozar ];
+    homepage = "https://www.makotemplates.org/";
+    changelog = "https://docs.makotemplates.org/en/latest/changelog.html";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ domenkozar ];
   };
 }
