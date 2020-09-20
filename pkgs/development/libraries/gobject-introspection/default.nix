@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gobject-introspection";
-  version = "1.64.1";
+  version = "1.66.0";
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "19vz7vp10h0zj3f491yk72dp89bix6rgkzxg4qcm4d6151ksxgl0";
+    sha256 = "0q00llz0p7qik19a9fxq4bf6mqqqivkv77fqhcgqygvwxhxflrix";
   };
 
   patches = [
@@ -63,7 +63,6 @@ stdenv.mkDerivation rec {
     bison
     gtk-doc
     docbook-xsl-nons
-    docbook_xml_dtd_43 # FIXME: remove in next release
     docbook_xml_dtd_45
     python3
     setupHook # move .gir files
@@ -90,6 +89,12 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = !stdenv.isAarch64;
+
+  # During configurePhase, two python scripts are generated and need this. See
+  # https://github.com/NixOS/nixpkgs/pull/98316#issuecomment-695785692
+  postConfigure = ''
+    patchShebangs tools/*
+  '';
 
   preCheck = ''
     # Our gobject-introspection patches make the shared library paths absolute
