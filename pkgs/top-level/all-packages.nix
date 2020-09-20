@@ -20120,8 +20120,6 @@ in
 
   das_watchdog = callPackage ../tools/system/das_watchdog { };
 
-  dbvisualizer = callPackage ../applications/misc/dbvisualizer {};
-
   dd-agent = callPackage ../tools/networking/dd-agent/5.nix { };
   datadog-agent = callPackage ../tools/networking/dd-agent/datadog-agent.nix {
     pythonPackages = datadog-integrations-core {};
