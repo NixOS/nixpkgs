@@ -1,11 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
-, markupsafe
-, nose
-, mock
 , isPyPy
+, markupsafe
+, mock
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -17,13 +16,18 @@ buildPythonPackage rec {
     sha256 = "8195c8c1400ceb53496064314c6736719c6f25e7479cd24c77be3d9361cddc27";
   };
 
-  checkInputs = [ markupsafe nose mock ];
   propagatedBuildInputs = [ markupsafe ];
+  checkInputs = [ pytestCheckHook markupsafe mock ];
 
-  doCheck = !isPyPy;  # https://bitbucket.org/zzzeek/mako/issue/238/2-tests-failed-on-pypy-24-25
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
+  disabledTests = lib.optionals isPyPy [
+    # https://github.com/sqlalchemy/mako/issues/315
+    "test_alternating_file_names"
+    # https://github.com/sqlalchemy/mako/issues/238
+    "test_file_success"
+    "test_stdin_success"
+    # fails on pypy2.7
+    "test_bytestring_passthru"
+  ];
 
   meta = with lib; {
     description = "Super-fast templating language";
