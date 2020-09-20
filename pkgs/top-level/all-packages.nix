@@ -8577,9 +8577,7 @@ in
 
   clean = callPackage ../development/compilers/clean { };
 
-  closurecompiler = callPackage ../development/compilers/closure {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  closurecompiler = callPackage ../development/compilers/closure { };
 
   cmdstan = callPackage ../development/compilers/cmdstan { };
 
