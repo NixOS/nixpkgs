@@ -10111,8 +10111,6 @@ broken-packages:
   - SuffixStructures
   - sugarhaskell
   - suitable
-  - summoner
-  - summoner-tui
   - sump
   - sunlight
   - sunroof-compiler
