@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "mock-open";
-  version = "1.3.1";
+  version = "1.3.2";
 
   # no tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "nivbend";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ikhrhlkl5c7qbigpsv44jw89ws1z7j06gzyg5dh1ki533ifbjm2";
+    sha256 = "08m8mq7wws59zir06b7dzikb6gl6plq3kk2zqrmar6922zcbnk8m";
   };
 
   propagatedBuildInputs = lib.optional (pythonOlder "3.3") mock;
