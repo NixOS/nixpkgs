@@ -10418,7 +10418,8 @@ in
 
   sourceFromHead = callPackage ../build-support/source-from-head-fun.nix {};
 
-  jruby = callPackage ../development/interpreters/jruby { };
+  jruby-group = callPackage ../development/interpreters/jruby {};
+  jruby = jruby-group.latest;
 
   jython = callPackage ../development/interpreters/jython {};
 
