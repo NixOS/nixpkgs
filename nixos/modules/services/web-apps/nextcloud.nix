@@ -85,7 +85,7 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud17" "nextcloud18" "nextcloud19" ];
+      relatedPackages = [ "nextcloud18" "nextcloud19" ];
     };
 
     maxUploadSize = mkOption {
@@ -354,7 +354,7 @@ in {
           recommended to upgrade to nextcloud19 after that.
         '')
         ++ (optional (versionOlder cfg.package.version "19") ''
-          A legacy Nextcloud install (from before NixOS 20.09/unstable) may be installed.
+          A legacy Nextcloud install (from before NixOS 20.09) may be installed.
 
           If/After nextcloud18 is installed successfully, you can safely upgrade to
           nextcloud19. If not, please upgrade to nextcloud18 first since Nextcloud doesn't
