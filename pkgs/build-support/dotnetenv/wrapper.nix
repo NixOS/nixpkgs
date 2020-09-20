@@ -36,25 +36,25 @@ dotnetenv.buildSolution {
 	    do
 		windowsPath=$(cygpath --windows $i | sed 's|\\|\\\\|g')
 		assemblySearchArray="$assemblySearchArray @\"$windowsPath\""
-		
+
 		addRuntimeDeps $i
 	    done
 	fi
     }
-    
+
     export exePath=$(cygpath --windows $(find ${application} -name \*.exe) | sed 's|\\|\\\\|g')
-    
+
     # Generate assemblySearchPaths string array contents
     for path in ${toString assemblyInputs}
     do
         assemblySearchArray="$assemblySearchArray @\"$(cygpath --windows $path | sed 's|\\|\\\\|g')\", "
 	addRuntimeDeps $path
     done
-    
+
     sed -e "s|@ROOTNAMESPACE@|${namespace}Wrapper|" \
         -e "s|@ASSEMBLYNAME@|${namespace}|" \
         Wrapper/Wrapper.csproj.in > Wrapper/Wrapper.csproj
-    
+
     sed -e "s|@NAMESPACE@|${namespace}|g" \
         -e "s|@MAINCLASSNAME@|${mainClassName}|g" \
 	-e "s|@EXEPATH@|$exePath|g" \
