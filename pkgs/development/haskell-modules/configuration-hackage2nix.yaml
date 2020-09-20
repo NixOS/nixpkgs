@@ -7502,7 +7502,6 @@ broken-packages:
   - loopy
   - lord
   - lorem
-  - lorentz
   - loris
   - loshadka
   - lostcities
@@ -7877,7 +7876,6 @@ broken-packages:
   - moo
   - morfette
   - morfeusz
-  - morley
   - morpheus-graphql-cli
   - morpheus-graphql-client
   - morphisms-functors
@@ -10111,8 +10109,6 @@ broken-packages:
   - SuffixStructures
   - sugarhaskell
   - suitable
-  - summoner
-  - summoner-tui
   - sump
   - sunlight
   - sunroof-compiler
