@@ -21,22 +21,16 @@
 
 stdenv.mkDerivation rec {
   pname = "sysprof";
-  version = "3.36.0";
+  version = "3.38.0";
 
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "024i0gzqnm79rpr4gqxdvcj6gvf82xdlcp2p1k9ikcppmi6xnw46";
+    sha256 = "1kj1yb7sfd874jm0666cnf5lc0c83gxhsdqhjic6ykppqa6p5kcb";
   };
 
   patches = [
-    # Fix 32-bit builds
-    # https://gitlab.gnome.org/GNOME/sysprof/merge_requests/24
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/sysprof/commit/5dea152c7728f5a37370ad8a229115833e36b4f6.patch";
-      sha256 = "0c76s7r329pbdlmgvm3grn89iylrxv5wg87craqp937nwk3wb80g";
-    })
   ];
 
   nativeBuildInputs = [
