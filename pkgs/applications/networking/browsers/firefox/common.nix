@@ -221,6 +221,7 @@ stdenv.mkDerivation ({
     "--with-clang-path=${llvmPackages.clang}/bin/clang"
     "--with-system-nspr"
     "--with-system-nss"
+    "--enable-linker=gold"
   ]
   ++ lib.optional (stdenv.isDarwin) "--disable-xcode-checks"
 
