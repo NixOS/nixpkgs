@@ -160,7 +160,7 @@ in
     ];
 
     # Otherwise GDM will not be able to start correctly and display Wayland sessions
-    systemd.packages = with pkgs.gnome3; [ gnome-session gnome-shell ];
+    systemd.packages = with pkgs.gnome3; [ gdm gnome-session gnome-shell ];
     environment.systemPackages = [ pkgs.gnome3.adwaita-icon-theme ];
 
     systemd.services.display-manager.wants = [
