@@ -743,9 +743,7 @@ in
 
   arduino-cli = callPackage ../development/arduino/arduino-cli { };
 
-  arduino-core = callPackage ../development/arduino/arduino-core {
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  arduino-core = callPackage ../development/arduino/arduino-core { };
 
   arduino-mk = callPackage ../development/arduino/arduino-mk {};
 
@@ -1251,9 +1249,7 @@ in
 
   aws_mturk_clt = callPackage ../tools/misc/aws-mturk-clt { };
 
-  awstats = callPackage ../tools/system/awstats {
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  awstats = callPackage ../tools/system/awstats { };
 
   awsweeper = callPackage ../tools/admin/awsweeper { };
 
@@ -3049,9 +3045,7 @@ in
 
   davfs2 = callPackage ../tools/filesystems/davfs2 { };
 
-  dbeaver = callPackage ../applications/misc/dbeaver {
-    jdk = jdk11;
-  };
+  dbeaver = callPackage ../applications/misc/dbeaver { };
 
   dbench = callPackage ../development/tools/misc/dbench { };
 
@@ -3431,9 +3425,7 @@ in
 
   choose = callPackage ../tools/text/choose { };
 
-  emscripten = callPackage ../development/compilers/emscripten {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  emscripten = callPackage ../development/compilers/emscripten { };
 
   emscriptenPackages = recurseIntoAttrs (callPackage ./emscripten-packages.nix { });
 
@@ -6783,9 +6775,7 @@ in
 
   rubocop = callPackage ../development/tools/rubocop { };
 
-  runelite = callPackage ../games/runelite {
-    jre = openjdk11;
-  };
+  runelite = callPackage ../games/runelite { };
 
   runningx = callPackage ../tools/X11/runningx { };
 
@@ -8579,9 +8569,7 @@ in
 
   clean = callPackage ../development/compilers/clean { };
 
-  closurecompiler = callPackage ../development/compilers/closure {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  closurecompiler = callPackage ../development/compilers/closure { };
 
   cmdstan = callPackage ../development/compilers/cmdstan { };
 
@@ -21446,9 +21434,7 @@ in
 
   jdupes = callPackage ../tools/misc/jdupes { };
 
-  jedit = callPackage ../applications/editors/jedit {
-    jdk = jdk8; # TODO: upgrade
-  };
+  jedit = callPackage ../applications/editors/jedit { };
 
   jgmenu = callPackage ../applications/misc/jgmenu { };
 
@@ -21458,7 +21444,7 @@ in
 
   joe = callPackage ../applications/editors/joe { };
 
-  josm = callPackage ../applications/misc/josm { jre = jdk11; };
+  josm = callPackage ../applications/misc/josm { };
 
   jwm = callPackage ../applications/window-managers/jwm { };
 
@@ -21915,7 +21901,7 @@ in
 
   mediainfo-gui = callPackage ../applications/misc/mediainfo-gui { };
 
-  mediathekview = callPackage ../applications/video/mediathekview { jre = openjdk11; };
+  mediathekview = callPackage ../applications/video/mediathekview { };
 
   meteo = callPackage ../applications/networking/weather/meteo { };
 
