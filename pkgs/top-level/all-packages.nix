@@ -21456,7 +21456,7 @@ in
 
   joe = callPackage ../applications/editors/joe { };
 
-  josm = callPackage ../applications/misc/josm { jre = jdk11; };
+  josm = callPackage ../applications/misc/josm { };
 
   jwm = callPackage ../applications/window-managers/jwm { };
 
