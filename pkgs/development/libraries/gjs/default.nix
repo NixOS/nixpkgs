@@ -8,7 +8,7 @@
 , gtk3
 , atk
 , gobject-introspection
-, spidermonkey_68
+, spidermonkey_78
 , pango
 , cairo
 , readline
@@ -29,11 +29,11 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "gjs";
-  version = "1.64.4";
+  version = "1.66.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0k6l2qc2vkws34zrgdhl57qxf0jjkar2iziz6qn4n1w7va73mk53";
+    sha256 = "1y5m7as3jwhb3svb4xgk443hyxhijralk5q5s3ywidkd047gj37k";
   };
 
   outputs = [ "out" "dev" "installedTests" ];
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
     gobject-introspection
     cairo
     readline
-    spidermonkey_68
+    spidermonkey_78
     dbus # for dbus-run-session
   ];
 
@@ -88,22 +88,22 @@ in stdenv.mkDerivation rec {
     # in the GIR files. When running tests, the library is not yet installed,
     # though, so we need to replace the absolute path with a local one during build.
     # We are using a symlink that will be overridden during installation.
-    mkdir -p $out/lib $installedTests/libexec/gjs/installed-tests
+    mkdir -p $out/lib $installedTests/libexec/installed-tests/gjs
     ln -s $PWD/libgjs.so.0 $out/lib/libgjs.so.0
-    ln -s $PWD/installed-tests/js/libgimarshallingtests.so $installedTests/libexec/gjs/installed-tests/libgimarshallingtests.so
-    ln -s $PWD/installed-tests/js/libregress.so $installedTests/libexec/gjs/installed-tests/libregress.so
-    ln -s $PWD/installed-tests/js/libwarnlib.so $installedTests/libexec/gjs/installed-tests/libwarnlib.so
+    ln -s $PWD/installed-tests/js/libgimarshallingtests.so $installedTests/libexec/installed-tests/gjs/libgimarshallingtests.so
+    ln -s $PWD/installed-tests/js/libregress.so $installedTests/libexec/installed-tests/gjs/libregress.so
+    ln -s $PWD/installed-tests/js/libwarnlib.so $installedTests/libexec/installed-tests/gjs/libwarnlib.so
   '';
 
   postInstall = ''
-    # TODO: make the glib setup hook handle this
+    # TODO: make the glib setup hook handle moving the schemas in other outputs.
     installedTestsSchemaDatadir="$installedTests/share/gsettings-schemas/${pname}-${version}"
     mkdir -p "$installedTestsSchemaDatadir"
     mv "$installedTests/share/glib-2.0" "$installedTestsSchemaDatadir"
   '';
 
   postFixup = ''
-    wrapProgram "$installedTests/libexec/gjs/installed-tests/minijasmine" \
+    wrapProgram "$installedTests/libexec/installed-tests/gjs/minijasmine" \
       --prefix XDG_DATA_DIRS : "$installedTestsSchemaDatadir" \
       --prefix GI_TYPELIB_PATH : "${stdenv.lib.makeSearchPath "lib/girepository-1.0" testDeps}"
   '';
