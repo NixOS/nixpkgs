@@ -64,7 +64,7 @@ let
 in
 
 stdenv.mkDerivation {
-  pname = "spotify";
+  pname = "spotify-unwrapped";
   inherit version;
 
   # fetch from snapcraft instead of the debian repository most repos fetch from.

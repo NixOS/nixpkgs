@@ -23326,13 +23326,15 @@ in
 
   spek = callPackage ../applications/audio/spek { };
 
-  spotify = callPackage ../applications/audio/spotify {
+  spotify-unwrapped = callPackage ../applications/audio/spotify {
     libgcrypt = libgcrypt_1_5;
     libpng = libpng12;
     curl = curl.override {
       sslSupport = false; gnutlsSupport = true;
     };
   };
+
+  spotify = callPackage ../applications/audio/spotify/wrapper.nix { };
 
   libspotify = callPackage ../development/libraries/libspotify (config.libspotify or {});
 
