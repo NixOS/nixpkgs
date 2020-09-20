@@ -10230,7 +10230,8 @@ let
 
     propagatedBuildInputs = [ Inline ];
 
-    makeMakerFlags = "J2SDK=${pkgs.jdk}";
+    # TODO: upgrade https://github.com/NixOS/nixpkgs/pull/89731
+    makeMakerFlags = "J2SDK=${pkgs.jdk8}";
 
     # FIXME: Apparently tests want to access the network.
     doCheck = false;

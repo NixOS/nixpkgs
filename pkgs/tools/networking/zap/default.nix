@@ -1,5 +1,6 @@
-{ stdenv, fetchFromGitHub, jdk, ant, runtimeShell }:
+{ stdenv, fetchFromGitHub, jdk8, ant, runtimeShell }:
 
+let jdk = jdk8; in
 stdenv.mkDerivation rec {
   pname = "zap";
   version = "2.7.0";

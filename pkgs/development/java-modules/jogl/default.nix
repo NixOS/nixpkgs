@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, ant, jdk, git, xorg, udev, libGL, libGLU }:
+{ stdenv, fetchgit, ant, jdk8, git, xorg, udev, libGL, libGLU }:
 
 {
   jogl_2_3_2 =
@@ -28,7 +28,8 @@
           -exec sed -i 's@"libGLU.so"@"${libGLU}/lib/libGLU.so"@' {} \;
       '';
 
-      nativeBuildInputs = [ jdk ant git ];
+      # TODO: upgrade to jdk https://github.com/NixOS/nixpkgs/pull/89731
+      nativeBuildInputs = [ jdk8 ant git ];
       buildInputs = [ udev xorg.libX11 xorg.libXrandr xorg.libXcursor xorg.libXt xorg.libXxf86vm xorg.libXrender ];
 
       buildPhase = ''
