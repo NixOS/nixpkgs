@@ -743,9 +743,7 @@ in
 
   arduino-cli = callPackage ../development/arduino/arduino-cli { };
 
-  arduino-core = callPackage ../development/arduino/arduino-core {
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  arduino-core = callPackage ../development/arduino/arduino-core { };
 
   arduino-mk = callPackage ../development/arduino/arduino-mk {};
 
