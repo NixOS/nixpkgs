@@ -42,7 +42,10 @@ buildPythonPackage rec {
     # remove dependency on pyqtwebengine
     # this is still part of the pyqt 5.11 version we have in nixpkgs
     sed -i /pyqtwebengine/d setup.py
-    substituteInPlace setup.py --replace "pyqt5<5.13" "pyqt5"
+    substituteInPlace setup.py \
+      --replace "pyqt5<5.13" "pyqt5" \
+      --replace "parso==0.7.0" "parso" \
+      --replace "jedi==0.17.1" "jedi"
   '';
 
   postInstall = ''
