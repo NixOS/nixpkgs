@@ -6,6 +6,7 @@
 , curl
 , dbus
 , dbus-glib
+, fetchpatch
 , fetchurl
 , file
 , fontconfig
@@ -146,6 +147,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-buildconfig.patch
+    (fetchpatch { # included in 78.3.0
+      name = "empty-UI.patch";
+      url = "https://hg.mozilla.org/releases/comm-esr78/raw-rev/f085dbd311bc";
+      # paths: {a,b}/foo -> {a,b}/comm/foo
+      stripLen = 1; extraPrefix = "comm/";
+      sha256 = "0x9pw62w93kyd99q9wi2d8llcfzbrqib7fp5kcrjidvhnkxpr6j7";
+    })
   ];
 
   postPatch = ''
