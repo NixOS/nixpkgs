@@ -37,6 +37,7 @@ stdenv.mkDerivation {
     description = "Library for fast updating of qr and cholesky decompositions";
     homepage = "https://sourceforge.net/projects/qrupdate/";
     license = licenses.gpl3;
+    maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.unix;
   };
 }
