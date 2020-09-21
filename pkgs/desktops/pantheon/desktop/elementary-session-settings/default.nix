@@ -64,22 +64,33 @@ let
   executable = writeScript "pantheon" ''
     export XDG_CONFIG_DIRS=${elementary-settings-daemon}/etc/xdg:${elementary-default-settings}/etc:$XDG_CONFIG_DIRS
     export XDG_DATA_DIRS=@out@/share:$XDG_DATA_DIRS
-    exec ${gnome-session}/bin/gnome-session --session=pantheon "$@"
+    exec ${gnome-session}/bin/gnome-session --builtin --session=pantheon "$@"
+  '';
+
+  xsession = writeText "pantheon.desktop" ''
+    [Desktop Entry]
+    Name=Pantheon
+    Comment=This session provides elementary experience
+    Exec=@out@/libexec/pantheon
+    TryExec=${wingpanel}/bin/wingpanel
+    Icon=
+    DesktopNames=Pantheon
+    Type=Application
   '';
 
 in
 
 stdenv.mkDerivation rec {
   pname = "elementary-session-settings-unstable";
-  version = "2020-06-11";
+  version = "2020-07-06";
 
   repoName = "session-settings";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = repoName;
-    rev = "130c9ae221913032ed18bcf6d21e3dcdba3c4209";
-    sha256 = "0bzg9vbq0ssnxgcb2vxpx6x9zv8ngkm9r3ki5q83m9al9919n0pr";
+    rev = "fa15cbd83fba0ba30e9a302db880350bff5ace52";
+    hash = "sha256-26H791c7OAjFYtjVChIatICSocMt0uTej1TKBOvw+6w=";
   };
 
   nativeBuildInputs = [
@@ -112,12 +123,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/libexec
     substitute ${executable} $out/libexec/pantheon --subst-var out
     chmod +x $out/libexec/pantheon
-  '';
 
-  postFixup = ''
-    substituteInPlace $out/share/xsessions/pantheon.desktop \
-      --replace "gnome-session --session=pantheon" "$out/libexec/pantheon" \
-      --replace "wingpanel" "${wingpanel}/bin/wingpanel"
+    substitute ${xsession} $out/share/xsessions/pantheon.desktop --subst-var out
   '';
 
   passthru = {
