@@ -3357,6 +3357,8 @@ in
 
   tracker = callPackage ../development/libraries/tracker { };
 
+  tracker_2 = callPackage ../development/libraries/tracker/2.x { };
+
   tracker-miners = callPackage ../development/libraries/tracker-miners { };
 
   tracy = callPackage ../development/tools/tracy {
