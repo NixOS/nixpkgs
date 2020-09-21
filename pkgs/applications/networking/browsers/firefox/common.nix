@@ -159,6 +159,8 @@ stdenv.mkDerivation ({
   ++ lib.optional (pname == "firefox-esr" && lib.versionOlder ffversion "69")
     "-Wno-error=format-security");
 
+  MACH_USE_SYSTEM_PYTHON = "1";
+
   postPatch = ''
     rm -rf obj-x86_64-pc-linux-gnu
   '' + lib.optionalString (lib.versionAtLeast ffversion "80") ''
