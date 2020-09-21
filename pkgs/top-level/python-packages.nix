@@ -7258,6 +7258,8 @@ in {
 
   unpaddedbase64 = callPackage ../development/python-modules/unpaddedbase64 { };
 
+  unrardll = callPackage ../development/python-modules/unrardll { };
+
   unrpa = callPackage ../development/python-modules/unrpa { };
 
   untangle = callPackage ../development/python-modules/untangle { };
