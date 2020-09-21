@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk-pixbuf
-, librsvg, gettext, itstool, libxml2, wrapGAppsHook
+, librsvg, libgnome-games-support, gettext, itstool, libxml2, wrapGAppsHook
 , meson, ninja, python3, desktop-file-utils
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     pkgconfig gnome3.adwaita-icon-theme
     libxml2 itstool gettext wrapGAppsHook
   ];
-  buildInputs = [ gtk3 gdk-pixbuf librsvg ];
+  buildInputs = [ gtk3 gdk-pixbuf librsvg libgnome-games-support ];
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py
