@@ -21632,6 +21632,8 @@ in
 
   k9s = callPackage ../applications/networking/cluster/k9s { };
 
+  popeye = callPackage ../applications/networking/cluster/popeye { };
+
   fluxctl = callPackage ../applications/networking/cluster/fluxctl { };
 
   linkerd = callPackage ../applications/networking/cluster/linkerd { };
