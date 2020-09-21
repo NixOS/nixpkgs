@@ -9,7 +9,7 @@ fi
 path_backup="$PATH"
 
 # That @-vars are substituted separately from bash evaluation makes
-# shellcheck think this, and others like it, are useless conditionals.
+# "shellcheck" think this, and others like it, are useless conditionals.
 # shellcheck disable=SC2157
 if [[ -n "@coreutils_bin@" && -n "@gnugrep_bin@" ]]; then
     PATH="@coreutils_bin@/bin:@gnugrep_bin@/bin"
