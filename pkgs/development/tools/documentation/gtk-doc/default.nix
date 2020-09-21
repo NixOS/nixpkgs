@@ -13,10 +13,9 @@
 }:
 
 python3.pkgs.buildPythonApplication rec {
-  pname = "gtk-doc";
-  version = "1.32.1";
+  pname = "gtk-doc-unstable";
+  version = "2020-08-21";
 
-  # TODO: Is this used?
   format = "other";
 
   src = fetchFromGitLab {
