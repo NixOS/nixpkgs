@@ -7307,6 +7307,8 @@ in
 
   t = callPackage ../tools/misc/t { };
 
+  t_py = python3Packages.callPackage ../applications/misc/t_py { };
+
   t1utils = callPackage ../tools/misc/t1utils { };
 
   talkfilters = callPackage ../misc/talkfilters {};
