@@ -81,7 +81,7 @@ let
       };
 
       key = mkOption {
-        type = with types; nullOr path;
+        type = with types; nullOr (strMatching "/.*");
         default = null;
         description = "Client's key with which it authenticates to the server.";
       };
