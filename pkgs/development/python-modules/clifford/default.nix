@@ -1,14 +1,16 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
+, future
+, h5py
+, numba
 , numpy
 , scipy
 , sparse
-, numba
-, future
-, h5py
-, nose
-, isPy27
+, pytestCheckHook
+, pytest-benchmark
+, ipython
 }:
 
 buildPythonPackage rec {
@@ -22,26 +24,44 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    future
+    h5py
+    numba
     numpy
     scipy
     sparse
-    numba
-    future
-    h5py
   ];
 
   checkInputs = [
-    nose
+    pytestCheckHook
+    pytest-benchmark
+    ipython
   ];
 
-  preConfigure = ''
+  postPatch = ''
     substituteInPlace setup.py \
       --replace "'numba==0.43'" "'numba'"
   '';
 
-  checkPhase = ''
-    nosetests
-  '';
+  pytestFlagsArray = [
+    "--pyargs clifford"
+    "--benchmark-skip"
+    "-m 'not veryslow'"
+  ];
+  disabledTests = [
+    # Slow tests, > 10 seconds
+    "test_iterative_model_match"
+    "test_estimate_rotor"
+    "test_estimate_motor"
+    "test_array_control"
+    "test_clustering"
+    "test_write_and_read"
+    "test_assign_objects_to_objects"
+    "test_general_logarithm_conformal"
+    # Flaky tests
+    "test_get_properties_of_sphere"
+    "test_get_midpoint_between_lines"
+  ];
 
   meta = with lib; {
     description = "Numerical Geometric Algebra Module";
