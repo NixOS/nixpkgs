@@ -19838,6 +19838,10 @@ in
     gtk = gtk3;
   };
 
+  bluej = callPackage ../applications/editors/bluej/default.nix {
+    jdk = jetbrains.jdk;
+  };
+
   bluejeans-gui = callPackage ../applications/networking/instant-messengers/bluejeans { };
 
   blugon = callPackage ../applications/misc/blugon { };

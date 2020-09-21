@@ -1445,6 +1445,12 @@
     githubId = 89596;
     name = "Florian Friesdorf";
   };
+  charvp = {
+    email = "nixpkgs@cvpetegem.be";
+    github = "charvp";
+    githubId = 42220376;
+    name = "Charlotte Van Petegem";
+  };
   chattered = {
     email = "me@philscotted.com";
     name = "Phil Scott";
