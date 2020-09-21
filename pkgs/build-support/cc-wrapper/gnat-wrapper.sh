@@ -110,7 +110,7 @@ fi
 
 
 # Clear march/mtune=native -- they bring impurity.
-if [ "$NIX_ENFORCE_NO_NATIVE_@suffixSalt@" = 1 ]; then
+if [ "${NIX_ENFORCE_NO_NATIVE_@suffixSalt@:-0}" = 1 ]; then
     rest=()
     # Old bash empty array hack
     for p in ${params+"${params[@]}"}; do
