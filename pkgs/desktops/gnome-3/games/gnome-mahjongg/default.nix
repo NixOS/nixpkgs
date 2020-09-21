@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
 , librsvg, gettext, itstool, libxml2
-, meson, ninja, python3, vala, desktop-file-utils
+, meson, ninja, glib, vala, desktop-file-utils
 }:
 
 stdenv.mkDerivation rec {
@@ -12,30 +12,34 @@ stdenv.mkDerivation rec {
     sha256 = "N0LcYxD8M/NewYfwJpnfIDzVb27pS0Hz7vJdrinutkc=";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-mahjongg"; attrPath = "gnome3.gnome-mahjongg"; };
-  };
-
   nativeBuildInputs = [
-    meson ninja vala python3 desktop-file-utils
+    meson ninja vala desktop-file-utils
     pkgconfig gnome3.adwaita-icon-theme
     libxml2 itstool gettext wrapGAppsHook
+    glib # for glib-compile-schemas
   ];
   buildInputs = [
-    gtk3 librsvg
+    glib
+    gtk3
+    librsvg
   ];
 
-  postPatch = ''
-    chmod +x data/meson_post_install.py
-    patchShebangs data/meson_post_install.py
-  '';
+  mesonFlags = [
+    "-Dcompile-schemas=enabled"
+  ];
 
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://wiki.gnome.org/Apps/Mahjongg";
     description = "Disassemble a pile of tiles by removing matching pairs";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
 }
