@@ -437,7 +437,7 @@ stdenv.mkDerivation {
     '' + optionalString targetPlatform.isNetBSD ''
       hardening_unsupported_flags+=" stackprotector fortify"
     '' + optionalString cc.langAda or false ''
-      hardening_unsupported_flags+=" stackprotector strictoverflow"
+      hardening_unsupported_flags+=" stackprotector strictoverflow format"
     '' + optionalString cc.langD or false ''
       hardening_unsupported_flags+=" format"
     '' + optionalString targetPlatform.isWasm ''
