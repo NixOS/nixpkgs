@@ -4,6 +4,7 @@
 , meson
 , ninja
 , pkgconfig
+, asciidoc
 , gobject-introspection
 , python3
 , gtk-doc
@@ -31,19 +32,19 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "2.3.4";
+  version = "3.0.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0vai0qz9jn3z5dlzysynwhbbmslp84ygdql81f5wfxxr98j54yap";
+    sha256 = "0drqsfqc4smfbpjk74iap114yww5cpldfhn4z6b0aavmylalb1kh";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      gdbus = "${glib.bin}/bin/gdbus";
+      inherit asciidoc;
     })
   ];
 
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
     ninja
     vala
     pkgconfig
+    asciidoc
     gettext
     libxslt
     wrapGAppsHook
@@ -83,8 +85,6 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    # TODO: figure out wrapping unit tests, some of them fail on missing gsettings-desktop-schemas
-    # "-Dfunctional_tests=true"
     "-Ddocs=true"
   ];
 
@@ -106,18 +106,22 @@ stdenv.mkDerivation rec {
     # though, so we need to replace the absolute path with a local one during build.
     # We are using a symlink that will be overridden during installation.
     mkdir -p $out/lib
-    ln -s $PWD/src/libtracker-sparql-backend/libtracker-sparql-2.0.so $out/lib/libtracker-sparql-2.0.so.0
-    ln -s $PWD/src/libtracker-miner/libtracker-miner-2.0.so $out/lib/libtracker-miner-2.0.so.0
-    ln -s $PWD/src/libtracker-data/libtracker-data.so $out/lib/libtracker-data.so
+    ln -s $PWD/src/libtracker-sparql/libtracker-sparql-3.0.so $out/lib/libtracker-sparql-3.0.so.0
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    dbus-run-session \
+      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      meson test --print-errorlogs
+
+    runHook postCheck
   '';
 
   postCheck = ''
     # Clean up out symlinks
     rm -r $out/lib
-  '';
-
-  postInstall = ''
-    glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
   passthru = {
