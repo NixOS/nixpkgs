@@ -10,6 +10,7 @@
 , flake8
 , jq
 , pytest
+, unixtools
 , toml
 }:
 
@@ -22,10 +23,6 @@ buildPythonPackage rec {
     sha256 = "1gp9q5w1bjbw7wmba5hm8ippwvkind0p02n07fqa9jlqglhxhm46";
   };
 
-  postPatch = ''
-    substituteInPlace test/test.py --replace "expect_exit_codes={0} if sys.stdin.isatty() else {2}" "expect_exit_codes={0}"
-  '';
-
   propagatedBuildInputs = [
     pyyaml
     xmltodict
@@ -35,6 +32,7 @@ buildPythonPackage rec {
   doCheck = true;
 
   checkInputs = [
+   unixtools.script
    pytest
    coverage
    flake8
@@ -42,7 +40,8 @@ buildPythonPackage rec {
    toml
   ];
 
-  checkPhase = "pytest ./test/test.py";
+  # tests fails if stdin is not a tty
+  checkPhase = "echo | script -c 'pytest ./test/test.py'";
 
   pythonImportsCheck = [ "yq" ];
 
