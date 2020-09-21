@@ -21,10 +21,16 @@ in stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Fix compatibility with nixUnstable: https://github.com/msteen/nix-prefetch/pull/8
+    # Fix compatibility with nixUnstable
+    # https://github.com/msteen/nix-prefetch/pull/9
     (fetchpatch {
-      url = "https://github.com/msteen/nix-prefetch/commit/817a7695d98663386fa27a6c04d1617e0a83e1ab.patch";
-      sha256 = "1zfgvafg30frwrh56k2wj4g76cljyjylm47ll60ms0yfx55spa7x";
+      url = "https://github.com/msteen/nix-prefetch/commit/2722cda48ab3f4795105578599b29fc99518eff4.patch";
+      sha256 = "037m388sbl72kyqnk86mw7lhjhj9gzfglw3ri398ncfmmkq8b7r4";
+    })
+    # https://github.com/msteen/nix-prefetch/pull/12
+    (fetchpatch {
+      url = "https://github.com/msteen/nix-prefetch/commit/de96564e9f28df82bccd0584953094e7dbe87e20.patch";
+      sha256 = "0mxai6w8cfs7k8wfbsrpg5hwkyb0fj143nm0v142am0ky8ahn0d9";
     })
   ];
 
