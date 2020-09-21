@@ -35,7 +35,10 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.isLinux "extra"; # f3brew, f3fix, f3probe
 
   installFlags = [
-    "PREFIX=$(out)"
+    "PREFIX=${placeholder "out"}"
+  ];
+
+  installTargets = [
     "install"
   ]
   ++ lib.optional stdenv.isLinux "install-extra";
@@ -48,7 +51,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Fight Flash Fraud";
     homepage = "http://oss.digirati.com.br/f3/";
-    license = licenses.gpl2;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ makefu ];
   };
 }
