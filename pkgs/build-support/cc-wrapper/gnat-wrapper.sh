@@ -91,20 +91,30 @@ if [ "${NIX_ENFORCE_NO_NATIVE_@suffixSalt@:-0}" = 1 ]; then
     params=(${rest+"${rest[@]}"})
 fi
 
-if [ "$(basename $0)x" = "gnatmakex" ]; then
-    extraBefore=("--GNATBIND=@out@/bin/gnatbind" "--GNATLINK=@out@/bin/gnatlink")
-    extraAfter=($NIX_GNATFLAGS_COMPILE_@suffixSalt@)
-fi
-
-if [ "$(basename $0)x" = "gnatbindx" ]; then
-    extraBefore=()
-    extraAfter=($NIX_GNATFLAGS_COMPILE_@suffixSalt@)
-fi
-
-if [ "$(basename $0)x" = "gnatlinkx" ]; then
-    extraBefore=()
-    extraAfter=("--GCC=@out@/bin/gcc")
-fi
+toolname=$(basename "$0")
+case $toolname in
+    gnatmake)
+        extraBefore=("--GNATBIND=@out@/bin/gnatbind"
+                     "--GNATLINK=@out@/bin/gnatlink")
+        # Explicit multi-word to array conversion
+        # shellcheck disable=SC2206
+        extraAfter=($NIX_GNATFLAGS_COMPILE_@suffixSalt@)
+        ;;
+    gnatbind)
+        extraBefore=()
+        # Explicit multi-word to array conversion
+        # shellcheck disable=SC2206
+        extraAfter=($NIX_GNATFLAGS_COMPILE_@suffixSalt@)
+        ;;
+    gnatlink)
+        extraBefore=()
+        extraAfter=("--GCC=@out@/bin/gcc")
+        ;;
+    *)
+        extraBefore=()
+        extraAfter=()
+        ;;
+esac
 
 # As a very special hack, if the arguments are just `-v', then don't
 # add anything.  This is to prevent `gcc -v' (which normally prints
