@@ -203,40 +203,59 @@ rec {
     /* If this option is true, attrsets like { __pretty = fn; val = …; }
        will use fn to convert val to a pretty printed representation.
        (This means fn is type Val -> String.) */
-    allowPrettyValues ? false
-  }@args: v: with builtins;
+    allowPrettyValues ? false,
+    /* If this option is true, the output is indented with newlines for attribute sets and lists */
+    multiline ? true
+  }@args: let
+    go = indent: v: with builtins;
     let     isPath   = v: typeOf v == "path";
+            introSpace = if multiline then "\n${indent}  " else " ";
+            outroSpace = if multiline then "\n${indent}" else " ";
     in if   isInt      v then toString v
     else if isFloat    v then "~${toString v}"
-    else if isString   v then ''"${libStr.escape [''"''] v}"''
+    else if isString   v then
+      let
+        # Separate a string into its lines
+        newlineSplits = filter (v: ! isList v) (builtins.split "\n" v);
+        # For a '' string terminated by a \n, which happens when the closing '' is on a new line
+        multilineResult = "''" + introSpace + concatStringsSep introSpace (lib.init newlineSplits) + outroSpace + "''";
+        # For a '' string not terminated by a \n, which happens when the closing '' is not on a new line
+        multilineResult' = "''" + introSpace + concatStringsSep introSpace newlineSplits + "''";
+        # For single lines, replace all newlines with their escaped representation
+        singlelineResult = "\"" + libStr.escape [ "\"" ] (concatStringsSep "\\n" newlineSplits) + "\"";
+      in if multiline && length newlineSplits > 1 then
+        if lib.last newlineSplits == "" then multilineResult else multilineResult'
+      else singlelineResult
     else if true  ==   v then "true"
     else if false ==   v then "false"
     else if null  ==   v then "null"
     else if isPath     v then toString v
-    else if isList     v then "[ "
-        + libStr.concatMapStringsSep " " (toPretty args) v
-      + " ]"
+    else if isList     v then
+      if v == [] then "[ ]"
+      else "[" + introSpace
+        + libStr.concatMapStringsSep introSpace (go (indent + "  ")) v
+        + outroSpace + "]"
+    else if isFunction v then
+      let fna = lib.functionArgs v;
+          showFnas = concatStringsSep ", " (libAttr.mapAttrsToList
+                       (name: hasDefVal: if hasDefVal then name + "?" else name)
+                       fna);
+      in if fna == {}    then "<function>"
+                         else "<function, args: {${showFnas}}>"
     else if isAttrs    v then
       # apply pretty values if allowed
       if attrNames v == [ "__pretty" "val" ] && allowPrettyValues
          then v.__pretty v.val
-      # TODO: there is probably a better representation?
+      else if v == {} then "{ }"
       else if v ? type && v.type == "derivation" then
-        "<δ:${v.name}>"
-        # "<δ:${concatStringsSep "," (builtins.attrNames v)}>"
-      else "{ "
-          + libStr.concatStringsSep " " (libAttr.mapAttrsToList
+        "<derivation ${v.drvPath}>"
+      else "{" + introSpace
+          + libStr.concatStringsSep introSpace (libAttr.mapAttrsToList
               (name: value:
-                "${toPretty args name} = ${toPretty args value};") v)
-        + " }"
-    else if isFunction v then
-      let fna = lib.functionArgs v;
-          showFnas = concatStringsSep "," (libAttr.mapAttrsToList
-                       (name: hasDefVal: if hasDefVal then "(${name})" else name)
-                       fna);
-      in if fna == {}    then "<λ>"
-                         else "<λ:{${showFnas}}>"
+                "${libStr.escapeNixIdentifier name} = ${go (indent + "  ") value};") v)
+        + outroSpace + "}"
     else abort "generators.toPretty: should never happen (v = ${v})";
+  in go "";
 
   # PLIST handling
   toPlist = {}: v: let
