@@ -3708,6 +3708,8 @@ in {
 
   modestmaps = callPackage ../development/python-modules/modestmaps { };
 
+  mohawk = callPackage ../development/python-modules/mohawk { };
+
   moinmoin = callPackage ../development/python-modules/moinmoin
     { }; # Needed here because moinmoin is loaded as a Python library.
 
