@@ -1533,6 +1533,18 @@ let
     meta.homepage = "https://github.com/mpickering/hlint-refactor-vim/";
   };
 
+  hoon-vim = buildVimPluginFrom2Nix {
+    pname = "hoon-vim";
+    version = "2019-02-19";
+    src = fetchFromGitHub {
+      owner = "urbit";
+      repo = "hoon.vim";
+      rev = "116f29971a2fbec8e484daeba8afd9d60f85800f";
+      sha256 = "029rm8njpsa0lhhh504975lmw7yr2bkvxi2gag1l9279r629vp2r";
+    };
+    meta.homepage = "https://github.com/urbit/hoon.vim/";
+  };
+
   i3config-vim = buildVimPluginFrom2Nix {
     pname = "i3config-vim";
     version = "2020-03-28";
