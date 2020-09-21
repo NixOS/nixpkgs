@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "luakit";
-  version = "2.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "luakit";
     repo = "luakit";
     rev = version;
-    sha256 = "05mm76g72fs48410pbij4mw0s3nqji3r7f3mnr2fvhv02xqj05aa";
+    sha256 = "0dx7wc1m0d63m4my0qisnrpaw9frwh5djfvh404m7c0ng6yprh7g";
   };
 
   nativeBuildInputs = [
