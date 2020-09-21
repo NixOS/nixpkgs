@@ -3752,7 +3752,7 @@ in
 
   fontforge-fonttools = callPackage ../tools/misc/fontforge/fontforge-fonttools.nix {};
 
-  fontmatrix = callPackage ../applications/graphics/fontmatrix {};
+  fontmatrix = libsForQt514.callPackage ../applications/graphics/fontmatrix {};
 
   foremost = callPackage ../tools/system/foremost { };
 
