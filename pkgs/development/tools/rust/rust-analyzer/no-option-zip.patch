@@ -1,5 +1,5 @@
 diff --git a/crates/assists/src/handlers/merge_imports.rs b/crates/assists/src/handlers/merge_imports.rs
-index 0bd679260..e0b76e079 100644
+index fe33cee53..2184a4154 100644
 --- a/crates/assists/src/handlers/merge_imports.rs
 +++ b/crates/assists/src/handlers/merge_imports.rs
 @@ -32,7 +32,7 @@ pub(crate) fn merge_imports(acc: &mut Assists, ctx: &AssistContext) -> Option<()
@@ -21,10 +21,10 @@ index 0bd679260..e0b76e079 100644
 
          rewriter.replace_ast(&tree, &merged);
 diff --git a/crates/assists/src/utils/insert_use.rs b/crates/assists/src/utils/insert_use.rs
-index 6d110aaaf..1f1838729 100644
+index 09f4a2224..2c3a0ca0b 100644
 --- a/crates/assists/src/utils/insert_use.rs
 +++ b/crates/assists/src/utils/insert_use.rs
-@@ -223,7 +223,7 @@ fn common_prefix(lhs: &ast::Path, rhs: &ast::Path) -> Option<(ast::Path, ast::Pa
+@@ -280,7 +280,7 @@ fn common_prefix(lhs: &ast::Path, rhs: &ast::Path) -> Option<(ast::Path, ast::Pa
          }
          res = Some((lhs_curr.clone(), rhs_curr.clone()));
 
@@ -33,7 +33,16 @@ index 6d110aaaf..1f1838729 100644
              Some((lhs, rhs)) => {
                  lhs_curr = lhs;
                  rhs_curr = rhs;
-@@ -309,8 +309,8 @@ fn find_insert_position(
+@@ -324,7 +324,7 @@ fn path_cmp(a: &ast::Path, b: &ast::Path) -> Ordering {
+             // cmp_by would be useful for us here but that is currently unstable
+             // cmp doesnt work due the lifetimes on text's return type
+             a.zip(b)
+-                .flat_map(|(seg, seg2)| seg.name_ref().zip(seg2.name_ref()))
++                .flat_map(|(seg, seg2)| zip(seg.name_ref(), seg2.name_ref()))
+                 .find_map(|(a, b)| match a.text().cmp(b.text()) {
+                     ord @ Ordering::Greater | ord @ Ordering::Less => Some(ord),
+                     Ordering::Equal => None,
+@@ -404,8 +404,8 @@ fn find_insert_position(
      let path_node_iter = scope
          .as_syntax_node()
          .children()
@@ -44,7 +53,7 @@ index 6d110aaaf..1f1838729 100644
      // Iterator that discards anything thats not in the required grouping
      // This implementation allows the user to rearrange their import groups as this only takes the first group that fits
      let group_iter = path_node_iter
-@@ -328,7 +328,7 @@ fn find_insert_position(
+@@ -423,7 +423,7 @@ fn find_insert_position(
              segments
                  .clone()
                  .zip(check_segments)
@@ -53,8 +62,8 @@ index 6d110aaaf..1f1838729 100644
                  .all(|(l, r)| l.text() <= r.text())
          });
      match post_insert {
-@@ -743,3 +743,7 @@ use foo::bar::baz::Qux;",
-         check(path, ra_fixture_before, ra_fixture_after, None)
+@@ -931,3 +931,7 @@ use foo::bar::baz::Qux;",
+         assert_eq!(result.map(|u| u.to_string()), None);
      }
  }
 +
