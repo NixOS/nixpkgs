@@ -1,25 +1,35 @@
+From 1ae0eca39ba6af27f37e2fe81395b91a2761a408 Mon Sep 17 00:00:00 2001
+Message-Id: <1ae0eca39ba6af27f37e2fe81395b91a2761a408.1600627676.git-series.worldofpeace@protonmail.ch>
+From: WORLDofPEACE <worldofpeace@protonmail.ch>
+Date: Sun, 20 Sep 2020 14:46:59 -0400
+Subject: [PATCH] fix paths
+
+---
+ data/gnome-welcome-tour                               | 4 ++--
+ gnome-initial-setup/pages/keyboard/cc-input-chooser.c | 6 +++---
+ gnome-initial-setup/pages/timezone/tz.h               | 4 ++--
+ 3 files changed, 7 insertions(+), 7 deletions(-)
+
 diff --git a/data/gnome-welcome-tour b/data/gnome-welcome-tour
-index c479296..3dd629c 100755
+index 51c9b59..68ab0c4 100755
 --- a/data/gnome-welcome-tour
 +++ b/data/gnome-welcome-tour
-@@ -3,7 +3,7 @@
+@@ -3,11 +3,11 @@
  cfgdir=${XDG_CONFIG_DIR:-$HOME/.config}
  
- # Don't do anything if yelp isn't installed
--yelp_path=$(which yelp 2>/dev/null)
-+yelp_path=@yelp@
- if test -z "${yelp_path}"; then
+ # Don't do anything if gnome-tour isn't installed
+-gnome_tour_path=$(which gnome-tour 2>/dev/null)
++gnome_tour_path="@gnome_tour@"
+ if test -z "${gnome_tour_path}"; then
      rm -f $cfgdir/run-welcome-tour
      exit
-@@ -17,5 +17,5 @@ geometry=(1024, 709)
- EOF
  fi
  
--yelp help:gnome-help/getting-started
-+$yelp_path help:gnome-help/getting-started
+-gnome-tour
++@gnome_tour@
  rm -f $cfgdir/run-welcome-tour
 diff --git a/gnome-initial-setup/pages/keyboard/cc-input-chooser.c b/gnome-initial-setup/pages/keyboard/cc-input-chooser.c
-index 1c34ef7..a1e7f93 100644
+index 196abf6..613d0e5 100644
 --- a/gnome-initial-setup/pages/keyboard/cc-input-chooser.c
 +++ b/gnome-initial-setup/pages/keyboard/cc-input-chooser.c
 @@ -177,9 +177,9 @@ preview_cb (GtkLabel       *label,
@@ -34,7 +44,7 @@ index 1c34ef7..a1e7f93 100644
  	g_spawn_command_line_async (commandline, NULL);
  	g_free (commandline);
  
-@@ -829,7 +829,7 @@ cc_input_chooser_class_init (CcInputChooserClass *klass)
+@@ -831,7 +831,7 @@ cc_input_chooser_class_init (CcInputChooserClass *klass)
                  g_param_spec_string ("showing-extra", "", "", "",
                                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
  
@@ -44,7 +54,7 @@ index 1c34ef7..a1e7f93 100644
  			      G_TYPE_FROM_CLASS (object_class),
  			      G_SIGNAL_RUN_FIRST,
 diff --git a/gnome-initial-setup/pages/timezone/tz.h b/gnome-initial-setup/pages/timezone/tz.h
-index 93905b3..e7ee785 100644
+index a2376f8..5cb7bc9 100644
 --- a/gnome-initial-setup/pages/timezone/tz.h
 +++ b/gnome-initial-setup/pages/timezone/tz.h
 @@ -4,7 +4,7 @@
@@ -57,7 +67,7 @@ index 93905b3..e7ee785 100644
   *
   * This program is free software; you can redistribute it and/or modify
 @@ -28,7 +28,7 @@
- #include <glib.h>
+ G_BEGIN_DECLS
  
  #ifndef __sun
 -#  define TZ_DATA_FILE "/usr/share/zoneinfo/zone.tab"
@@ -65,3 +75,7 @@ index 93905b3..e7ee785 100644
  #else
  #  define TZ_DATA_FILE "/usr/share/lib/zoneinfo/tab/zone_sun.tab"
  #endif
+
+base-commit: 5132e206a6bf81964450561d68473ac015760455
+-- 
+git-series 0.9.1
