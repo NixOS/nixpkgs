@@ -112,7 +112,7 @@ let
 
   git-ignore = callPackage ./git-ignore { };
 
-  git-imerge = callPackage ./git-imerge { };
+  git-imerge = python3Packages.callPackage ./git-imerge { };
 
   git-interactive-rebase-tool = callPackage ./git-interactive-rebase-tool {
     inherit (darwin.apple_sdk.frameworks) Security;
