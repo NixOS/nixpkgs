@@ -3,6 +3,7 @@
 , gfortran
 , blas
 , lapack
+, which
 }:
 stdenv.mkDerivation {
   name = "qrupdate-1.1.2";
@@ -32,6 +33,8 @@ stdenv.mkDerivation {
   installTargets = stdenv.lib.optionals stdenv.isDarwin [ "install-staticlib" "install-shlib" ];
 
   buildInputs = [ gfortran blas lapack ];
+
+  nativeBuildInputs = [ which ];
 
   meta = with stdenv.lib; {
     description = "Library for fast updating of qr and cholesky decompositions";
