@@ -1,9 +1,30 @@
-{ stdenv, meson, ninja, gettext, fetchurl, evince, gjs
-, pkgconfig, gtk3, glib, tracker, tracker-miners, libxslt
-, webkitgtk, gnome-desktop, libgepub, gnome3, gdk-pixbuf
-, gsettings-desktop-schemas, adwaita-icon-theme, docbook_xsl
-, docbook_xml_dtd_42, desktop-file-utils, python3
-, gobject-introspection, wrapGAppsHook }:
+{ stdenv
+, meson
+, ninja
+, gettext
+, fetchurl
+, evince
+, gjs
+, pkgconfig
+, gtk3
+, glib
+, tracker
+, tracker-miners
+, libxslt
+, webkitgtk
+, gnome-desktop
+, libgepub
+, gnome3
+, gdk-pixbuf
+, gsettings-desktop-schemas
+, adwaita-icon-theme
+, docbook_xsl
+, docbook_xml_dtd_42
+, desktop-file-utils
+, python3
+, gobject-introspection
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-books";
@@ -15,15 +36,32 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext libxslt desktop-file-utils
-    docbook_xsl docbook_xml_dtd_42 wrapGAppsHook python3
+    meson
+    ninja
+    pkgconfig
+    gettext
+    libxslt
+    desktop-file-utils
+    docbook_xsl
+    docbook_xml_dtd_42
+    wrapGAppsHook
+    python3
   ];
 
   buildInputs = [
-    gtk3 glib gsettings-desktop-schemas
-    gdk-pixbuf adwaita-icon-theme evince
-    webkitgtk gjs gobject-introspection tracker
-    tracker-miners gnome-desktop libgepub
+    gtk3
+    glib
+    gsettings-desktop-schemas
+    gdk-pixbuf
+    adwaita-icon-theme
+    evince
+    webkitgtk
+    gjs
+    gobject-introspection
+    tracker
+    tracker-miners
+    gnome-desktop
+    libgepub
   ];
 
   postPatch = ''
