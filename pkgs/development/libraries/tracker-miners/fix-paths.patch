@@ -1,11 +1,26 @@
+diff --git a/docs/manpages/meson.build b/docs/manpages/meson.build
+index 0b8a64863..a09db59f0 100644
+--- a/docs/manpages/meson.build
++++ b/docs/manpages/meson.build
+@@ -43,7 +43,7 @@ foreach m : daemon_manpages + cli_manpages
+     command: [xsltproc,
+               '--output', '@OUTPUT@',
+               '--stringparam', 'man.authors.section.enabled', '0',
+-              '/etc/asciidoc/docbook-xsl/manpage.xsl', '@INPUT@'],
++              '@asciidoc@/etc/asciidoc/docbook-xsl/manpage.xsl', '@INPUT@'],
+     input: xml,
+     output: manpage,
+     install: true,
+diff --git a/src/libtracker-miners-common/tracker-domain-ontology.c b/src/libtracker-miners-common/tracker-domain-ontology.c
+index 308cc0727..f0567e9c3 100644
 --- a/src/libtracker-miners-common/tracker-domain-ontology.c
 +++ b/src/libtracker-miners-common/tracker-domain-ontology.c
-@@ -323,7 +323,7 @@
- 			goto end;
- 		}
- 	} else {
--		path = g_build_filename (SHAREDIR, "tracker", "domain-ontologies",
-+		path = g_build_filename ("@tracker@", "share", "tracker", "domain-ontologies",
- 		                         DEFAULT_RULE, NULL);
- 
- 		if (!g_file_test (path, G_FILE_TEST_IS_REGULAR)) {
+@@ -257,7 +257,7 @@ tracker_domain_ontology_new (const gchar   *domain_name,
+ 				g_error ("Unable to find test domain ontology rule %s", path);
+ 			}
+ 		} else {
+-			path = g_build_filename (SHAREDIR, TRACKERSHAREDIR, "domain-ontologies",
++			path = g_build_filename ("@tracker@", "share", TRACKERSHAREDIR, "domain-ontologies",
+ 		                             DEFAULT_RULE, NULL);
+
+ 			if (!g_file_test (path, G_FILE_TEST_IS_REGULAR)) {

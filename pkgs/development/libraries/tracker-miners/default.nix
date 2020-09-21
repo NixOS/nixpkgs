@@ -1,6 +1,9 @@
 { stdenv
 , fetchurl
 , substituteAll
+, asciidoc
+, docbook_xsl
+, docbook_xml_dtd_45
 , intltool
 , itstool
 , libxslt
@@ -37,6 +40,7 @@
 , libuuid
 , libvorbis
 , libxml2
+, networkmanager
 , poppler
 , taglib
 , upower
@@ -45,14 +49,17 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "2.3.3";
+  version = "3.0.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "06abxrnrz7xayykrabn135rpsm6z0fqw7gibrb9j09l6swlalwkl";
+    sha256 = "0hj0ixrladm7sxcmi0hr6d7wdlg9zcq0cyk22prg9pn54dy1lj5v";
   };
 
   nativeBuildInputs = [
+    asciidoc
+    docbook_xsl
+    docbook_xml_dtd_45
     intltool
     itstool
     libxslt
@@ -94,6 +101,7 @@ stdenv.mkDerivation rec {
     libuuid
     libvorbis
     libxml2
+    networkmanager
     poppler
     taglib
     upower
@@ -102,19 +110,15 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     # TODO: tests do not like our sandbox
     "-Dfunctional_tests=false"
-    "-Ddbus_services=${placeholder "out"}/share/dbus-1/services"
-    "-Dsystemd_user_services=${placeholder "out"}/lib/systemd/user"
+    "-Ddbus_services_dir=${placeholder "out"}/share/dbus-1/services"
+    "-Dsystemd_user_services=true"
+    "-Dsystemd_user_services_dir=${placeholder "out"}/lib/systemd/user"
   ];
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit tracker;
-    })
-    # https://bugzilla.gnome.org/show_bug.cgi?id=795576
-    (fetchurl {
-      url = "https://bugzilla.gnome.org/attachment.cgi?id=371427";
-      sha256 = "187flswvzymjfxwfrrhizb1cvs780zm39aa3i2vwa5fbllr7kcpf";
+      inherit asciidoc tracker;
     })
   ];
 
