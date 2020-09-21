@@ -27,6 +27,18 @@
     <para>GNOME desktop environment was upgraded to 3.36, see its <link xlink:href="https://help.gnome.org/misc/release-notes/3.36/">release notes</link>.</para>
    </listitem>
    <listitem>
+     <para>
+     The Cinnamon desktop environment (v4.6) has been added. <varname>services.xserver.desktopManager.cinnamon.enable = true;</varname> to try it out!
+     Remember that, with any new feature it's possible you could run into issues, so please send all support requests to <link xlink:href="https://github.com/NixOS/nixpkgs/issues">github.com/NixOS/nixpkgs</link> to notify the maintainers.
+     </para>
+   </listitem>
+   <listitem>
+    <para>
+      Quickly configure a complete, private, self-hosted video
+      conferencing solution with the new Jitsi Meet module.
+    </para>
+   </listitem>
+   <listitem>
     <para>
     <package>maxx</package> package removed along with <varname>services.xserver.desktopManager.maxx</varname> module.
     Please migrate to <package>cdesktopenv</package> and <varname>services.xserver.desktopManager.cde</varname> module.
@@ -717,8 +729,8 @@ php.override {
    </listitem>
    <listitem>
      <para>
-       Add option <literal>services.nginx.enableSandbox</literal> to starting Nginx web server with additional sandbox/hardening options.
-       By default, write access to <literal>services.nginx.stateDir</literal> is allowed. To allow writing to other folders,
+       Nginx web server now starting with additional sandbox/hardening options. By default, write access
+       to <literal>services.nginx.stateDir</literal> is allowed. To allow writing to other folders,
        use <literal>systemd.services.nginx.serviceConfig.ReadWritePaths</literal>
        <programlisting>
 systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
@@ -1105,6 +1117,13 @@ CREATE ROLE postgres LOGIN SUPERUSER;
      the value of <option>services.jellyfin.package</option> to <literal>pkgs.jellyfin_10_5</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <literal>security.rngd</literal> service is now disabled by default.
+     This choice was made because there's krngd in the linux kernel space making it (for most usecases)
+     functionally redundent.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -1172,6 +1191,12 @@ CREATE ROLE postgres LOGIN SUPERUSER;
    <para>
      Default algorithm for ZRAM swap was changed to <literal>zstd</literal>.
    </para>
+   </listitem>
+   <listitem>
+    <para>
+    The installer now enables sshd by default. This improves installation on headless machines especially ARM single-board-computer.
+    To login through ssh, either a password or an ssh key must be set for the root user or the nixos user.
+    </para>
    </listitem>
    <listitem>
     <para>
@@ -1391,6 +1416,21 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
        The <literal>opendkim</literal> module now uses systemd sandboxing features
        to limit the exposure of the system towards the opendkim service.
      </para>
+   </listitem>
+  </itemizedlist>
+  <itemizedlist>
+   <listitem>
+    <para />
+    <para>
+        Kubernetes has been upgraded to 1.19.1, which also means that the
+        golang version to build it has been bumped to 1.15. This may have
+        consequences for your existing clusters and their certificates. Please
+        consider
+        <link xlink:href="https://relnotes.k8s.io/?markdown=93264">
+            the release notes for Kubernetes 1.19 carefully
+        </link>
+        before upgrading.
+    </para>
    </listitem>
   </itemizedlist>
  </section>

@@ -15,6 +15,7 @@ buildPythonApplication rec {
   patches = [
     ./css.patch
     ./menubar.patch
+    ./texinfo.patch
     ./webbrowser.patch
   ];
 

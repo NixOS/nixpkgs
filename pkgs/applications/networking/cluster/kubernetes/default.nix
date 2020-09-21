@@ -15,13 +15,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "kubernetes";
-  version = "1.18.8";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "1dswgxxbybwllf2lf89saarsrn4pkb2617wycim07cd7i1l1dv5n";
+    sha256 = "1wnlw2rl14q7cb8shhldbavdamvl3w3mlfvymwfvmvxfxzhrjlaq";
   };
 
   nativeBuildInputs = [ removeReferencesTo makeWrapper which go rsync go-bindata ];

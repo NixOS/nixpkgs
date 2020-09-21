@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder, isPy27
+{ stdenv, buildPythonPackage, fetchFromGitHub, fetchpatch, pythonOlder, isPy27
 , backports_functools_lru_cache, configparser, futures, future, jedi, pluggy, python-jsonrpc-server, flake8
 , pytestCheckHook, mock, pytestcov, coverage, setuptools, ujson
 , # Allow building a limited set of providers, e.g. ["pycodestyle"].
@@ -21,14 +21,22 @@ in
 
 buildPythonPackage rec {
   pname = "python-language-server";
-  version = "0.33.1";
+  version = "0.34.1";
 
   src = fetchFromGitHub {
     owner = "palantir";
     repo = "python-language-server";
     rev = version;
-    sha256 = "064ck4ikrrrhq8wjpbs5k6hzkrjvfg91pd6351471xpsij0kj16f";
+    sha256 = "sha256-/tVzaoyUO6+7DSvnf3JxpcTY0rU+hHBu5qlru/ZTpxU=";
   };
+
+  patches = [
+    # https://github.com/palantir/python-language-server/pull/851
+    (fetchpatch {
+      url = "https://github.com/palantir/python-language-server/commit/f513f3297132492dd41e001d943980e6c4f40809.patch";
+      sha256 = "04c9hrb3dzlfchjk4625ipazyfcbq6qq2kj2hg3zf2xsny2jcvi5";
+    })
+  ];
 
   postPatch = ''
     # https://github.com/palantir/python-jsonrpc-server/issues/36

@@ -619,7 +619,7 @@ in
 
   aescrypt = callPackage ../tools/misc/aescrypt { };
 
-  acme-client = callPackage ../tools/networking/acme-client { inherit (darwin) apple_sdk; };
+  acme-client = callPackage ../tools/networking/acme-client { inherit (darwin) apple_sdk; stdenv = gccStdenv; };
 
   amass = callPackage ../tools/networking/amass { };
 
@@ -1113,6 +1113,7 @@ in
 
   pass-wayland = callPackage ../tools/security/pass {
     waylandSupport = true;
+    pass = pass-wayland;
   };
 
   passExtensions = recurseIntoAttrs pass.extensions;
@@ -2686,7 +2687,7 @@ in
 
   circus = callPackage ../tools/networking/circus { };
 
-  citrix_workspace = citrix_workspace_20_06_0;
+  citrix_workspace = citrix_workspace_20_09_0;
 
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
     citrix_workspace_19_6_0
@@ -2695,6 +2696,7 @@ in
     citrix_workspace_19_12_0
     citrix_workspace_20_04_0
     citrix_workspace_20_06_0
+    citrix_workspace_20_09_0
   ;
 
   citra = libsForQt5.callPackage ../misc/emulators/citra { };
@@ -2704,7 +2706,7 @@ in
   cmt = callPackage ../applications/audio/cmt {};
 
   codimd = callPackage ../servers/web-apps/codimd {
-    nodejs = nodejs-10_x;
+    nodejs = nodejs-12_x;
   };
 
   colord = callPackage ../tools/misc/colord { };
@@ -3347,7 +3349,7 @@ in
 
   volctl = callPackage ../tools/audio/volctl { };
 
-  vorta = python3Packages.callPackage ../applications/backup/vorta { };
+  vorta = python3Packages.callPackage ../applications/backup/vorta { qt5 = qt514; };
 
   utahfs = callPackage ../applications/networking/utahfs { };
 
@@ -3709,7 +3711,7 @@ in
 
   fontforge-fonttools = callPackage ../tools/misc/fontforge/fontforge-fonttools.nix {};
 
-  fontmatrix = callPackage ../applications/graphics/fontmatrix {};
+  fontmatrix = libsForQt514.callPackage ../applications/graphics/fontmatrix {};
 
   foremost = callPackage ../tools/system/foremost { };
 
@@ -6582,7 +6584,7 @@ in
 
   recutils = callPackage ../tools/misc/recutils { };
 
-  recoll = callPackage ../applications/search/recoll { };
+  recoll = libsForQt5.callPackage ../applications/search/recoll { };
 
   redoc-cli = nodePackages.redoc-cli;
 
@@ -9440,7 +9442,7 @@ in
 
   nim = callPackage ../development/compilers/nim { };
   nim-unwrapped = nim.unwrapped;
-  nim-stdlib = nim.stdlib;
+
   nrpl = callPackage ../development/tools/nrpl { };
 
   neko = callPackage ../development/compilers/neko { };
@@ -10113,7 +10115,13 @@ in
   python2Packages = python2.pkgs;
   python3Packages = python3.pkgs;
 
-  pythonInterpreters = callPackage ./../development/interpreters/python {};
+  pythonInterpreters = callPackage ./../development/interpreters/python {
+    # Overrides that apply to all Python interpreters
+    pkgs = pkgs // {
+      qt5 = pkgs.qt514;
+      libsForQt5 = pkgs.libsForQt514;
+    };
+  };
   inherit (pythonInterpreters) python27 python36 python37 python38 python39 python3Minimal pypy27 pypy36;
 
   # Python package sets.
@@ -14426,6 +14434,8 @@ in
   };
 
   nettle = callPackage ../development/libraries/nettle { };
+
+  newman = callPackage ../development/web/newman {};
 
   newt = callPackage ../development/libraries/newt { };
 
@@ -20514,11 +20524,9 @@ in
   });
 
   firefox-unwrapped = firefoxPackages.firefox;
-  firefox-esr-68-unwrapped = firefoxPackages.firefox-esr-68;
   firefox-esr-78-unwrapped = firefoxPackages.firefox-esr-78;
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-wayland = wrapFirefox firefox-unwrapped { forceWayland = true; };
-  firefox-esr-68 = wrapFirefox firefox-esr-68-unwrapped { };
   firefox-esr-78 = wrapFirefox firefox-esr-78-unwrapped { };
   firefox-esr = firefox-esr-78;
 

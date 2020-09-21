@@ -11,18 +11,18 @@
 
 let
 
-  libPath = lib.makeLibraryPath [ ffmpeg_3 ];
+  libPath = lib.makeLibraryPath [ ffmpeg_3 libpulseaudio ];
   gtkVersion = if withGTK3 then "3" else "2";
 
 in stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "28.12.0";
+  version = "28.13.0";
 
   src = fetchFromGitHub {
     owner = "MoonchildProductions";
     repo = "Pale-Moon";
     rev = "${version}_Release";
-    sha256 = "1cc75972nhmxkkynkky1m2fijbf3qlzvpxsd98mxlx0b7h4d3l5l";
+    sha256 = "1lza6239kb32wnwd9cwddn11npg1qx7p69l7qy63h9c59w29iypa";
     fetchSubmodules = true;
   };
 
@@ -88,11 +88,15 @@ in stdenv.mkDerivation rec {
     ac_add_options --disable-debug
     ac_add_options --disable-necko-wifi
     ac_add_options --disable-updater
+
     ac_add_options --with-pthreads
 
     # Please see https://www.palemoon.org/redist.shtml for restrictions when using the official branding.
     ac_add_options --enable-official-branding
     export MOZILLA_OFFICIAL=1
+
+    # For versions after 28.12.0
+    ac_add_options --enable-phoenix-extensions
 
     ac_add_options --x-libraries=${lib.makeLibraryPath [ xorg.libX11 ]}
 
