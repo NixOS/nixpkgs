@@ -449,7 +449,13 @@ rec {
       # Handle properties, check types, and merge everything together.
       res =
         if opt.readOnly or false && length defs' > 1 then
-          throw "The option `${showOption loc}' is read-only, but it's set multiple times. Definition values:${showDefs defs'}"
+          let
+            # For a better error message, evaluate all readOnly definitions as
+            # if they were the only definition.
+            separateDefs = map (def: def // {
+              value = (mergeDefinitions loc opt.type [ def ]).mergedValue;
+            }) defs';
+          in throw "The option `${showOption loc}' is read-only, but it's set multiple times. Definition values:${showDefs separateDefs}"
         else
           mergeDefinitions loc opt.type defs';
 
