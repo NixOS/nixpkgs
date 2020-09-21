@@ -14607,9 +14607,7 @@ in
 
   nvidia-optical-flow-sdk = callPackage ../development/libraries/nvidia-optical-flow-sdk { };
 
-  nvtop = callPackage ../tools/system/nvtop {
-    nvidia_x11 = linuxPackages.nvidia_x11.override { libsOnly = true; };
-  };
+  nvtop = callPackage ../tools/system/nvtop { };
 
   ocl-icd = callPackage ../development/libraries/ocl-icd { };
 
