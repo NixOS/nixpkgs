@@ -3251,6 +3251,8 @@ in
 
   duc = callPackage ../tools/misc/duc { };
 
+  duf = callPackage ../tools/filesystems/duf { };
+
   duff = callPackage ../tools/filesystems/duff { };
 
   dumptorrent = callPackage ../tools/misc/dumptorrent { };
