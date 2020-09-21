@@ -32,15 +32,17 @@
 , tzdata
 , yelp
 , libgnomekbd
+, gsettings-desktop-schemas
+, gnome-tour
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-initial-setup";
-  version = "3.36.4";
+  version = "3.38.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "17szzz2a5wpi7kwjnhimiwf8vg0bfliyk3k0adgv1pw2mcfpxp5s";
+    hash = "sha256-OoV67177aJ9AhjLbhGmtJ2IPdi2XcHCjYDXFIsb4J1k=";
   };
 
   nativeBuildInputs = [
@@ -62,10 +64,12 @@ stdenv.mkDerivation rec {
     gnome-desktop
     gnome-getting-started-docs
     gnome-online-accounts
+    gsettings-desktop-schemas
     gtk3
     json-glib
     krb5
     libgweather
+    libnma
     libpwquality
     librest
     libsecret
@@ -73,14 +77,13 @@ stdenv.mkDerivation rec {
     pango
     polkit
     webkitgtk
-    libnma
   ];
 
   patches = [
     (substituteAll {
-      src = ./fix-paths.patch;
+      src = ./0001-fix-paths.patch;
       inherit tzdata libgnomekbd;
-      yelp = "${yelp}/bin/yelp"; # gnome-welcome-tour
+      gnome_tour = "${gnome-tour}/bin/gnome-tour";
     })
   ];
 
