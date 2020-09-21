@@ -1,0 +1,11 @@
+--- a/src/libtracker-miners-common/tracker-domain-ontology.c
++++ b/src/libtracker-miners-common/tracker-domain-ontology.c
+@@ -323,7 +323,7 @@
+ 			goto end;
+ 		}
+ 	} else {
+-		path = g_build_filename (SHAREDIR, "tracker", "domain-ontologies",
++		path = g_build_filename ("@tracker_2@", "share", "tracker", "domain-ontologies",
+ 		                         DEFAULT_RULE, NULL);
+
+ 		if (!g_file_test (path, G_FILE_TEST_IS_REGULAR)) {
