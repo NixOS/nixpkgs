@@ -1,10 +1,16 @@
-{ stdenv, fetchurl, gtk3
-, pkgconfig, gobject-introspection, gnome3, dbus, xvfb_run }:
-let
-  version = "5.1.1";
+{ stdenv
+, fetchurl
+, gtk3
+, pkgconfig
+, gobject-introspection
+, gnome3
+, dbus
+, xvfb_run
+}:
+
+stdenv.mkDerivation rec {
   pname = "amtk";
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  version = "5.1.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
