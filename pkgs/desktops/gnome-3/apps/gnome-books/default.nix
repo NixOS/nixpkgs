@@ -8,8 +8,8 @@
 , pkgconfig
 , gtk3
 , glib
-, tracker
-, tracker-miners
+, tracker_2
+, tracker-miners-2
 , libxslt
 , webkitgtk
 , gnome-desktop
@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
     webkitgtk
     gjs
     gobject-introspection
-    tracker
-    tracker-miners
+    tracker_2
+    tracker-miners-2
     gnome-desktop
     libgepub
   ];
