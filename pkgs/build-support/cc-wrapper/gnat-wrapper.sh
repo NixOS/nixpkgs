@@ -10,68 +10,24 @@ path_backup="$PATH"
 
 # That @-vars are substituted separately from bash evaluation makes
 # "shellcheck" think this, and others like it, are useless conditionals.
+
 # shellcheck disable=SC2157
 if [[ -n "@coreutils_bin@" && -n "@gnugrep_bin@" ]]; then
     PATH="@coreutils_bin@/bin:@gnugrep_bin@/bin"
 fi
 
-cInclude=0
-
 source @out@/nix-support/utils.bash
 
-# Flirting with a layer violation here.
-if [ -z "${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
-    source @bintools@/nix-support/add-flags.sh
-fi
+# Parse command line options and set internal variables used here and
+# in nearby supporting scripts to adjust the invocation of GCC to
+# avoid warnings for unneeded flags.
+cInclude=0
 
-# Put this one second so libc ldflags take priority.
-if [ -z "${NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
-    source @out@/nix-support/add-flags.sh
-fi
-
-
-# Parse command line options and set several variables.
-# For instance, figure out if linker flags should be passed.
-# GCC prints annoying warnings when they are not needed.
-dontLink=0
-nonFlagArgs=0
-# shellcheck disable=SC2193
 
 expandResponseParams "$@"
 declare -i n=0
 nParams=${#params[@]}
-while (( "$n" < "$nParams" )); do
-    p=${params[n]}
-    p2=${params[n+1]:-} # handle `p` being last one
-    if [ "$p" = -c ]; then
-        dontLink=1
-    elif [ "$p" = -S ]; then
-        dontLink=1
-    elif [ "$p" = -E ]; then
-        dontLink=1
-    elif [ "$p" = -E ]; then
-        dontLink=1
-    elif [ "$p" = -M ]; then
-        dontLink=1
-    elif [ "$p" = -MM ]; then
-        dontLink=1
-    elif [[ "$p" = -x && "$p2" = *-header ]]; then
-        dontLink=1
-    elif [[ "$p" != -?* ]]; then
-        # A dash alone signifies standard input; it is not a flag
-        nonFlagArgs=1
-    fi
-    n+=1
-done
 
-# If we pass a flag like -Wl, then gcc will call the linker unless it
-# can figure out that it has to do something else (e.g., because of a
-# "-c" flag).  So if no non-flag arguments are given, don't pass any
-# linker flags.  This catches cases like "gcc" (should just print
-# "gcc: no input files") and "gcc -v" (should print the version).
-if [ "$nonFlagArgs" = 0 ]; then
-    dontLink=1
-fi
 
 # Optionally filter out paths not refering to the store.
 if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "$NIX_STORE" ]]; then
@@ -106,6 +62,17 @@ if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "$NIX_STORE" ]]; then
     done
     # Old bash empty array hack
     params=(${rest+"${rest[@]}"})
+fi
+
+
+# Flirting with a layer violation here.
+if [ -z "${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
+    source @bintools@/nix-support/add-flags.sh
+fi
+
+# Put this one second so libc ldflags take priority.
+if [ -z "${NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
+    source @out@/nix-support/add-flags.sh
 fi
 
 
