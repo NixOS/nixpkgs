@@ -28,8 +28,8 @@
 , nixosTests
 , pkgconfig
 , python3
-, tracker
-, tracker-miners
+, tracker_2
+, tracker-miners-2
 , wrapGAppsHook
 }:
 
@@ -84,8 +84,8 @@ stdenv.mkDerivation rec {
     gtk3
     libdazzle
     libgdata
-    tracker
-    tracker-miners # For 'org.freedesktop.Tracker.Miner.Files' GSettings schema
+    tracker_2
+    tracker-miners-2 # For 'org.freedesktop.Tracker.Miner.Files' GSettings schema
 
     at-spi2-core # for tests
   ];
