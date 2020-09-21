@@ -7,6 +7,9 @@ import ./make-test-python.nix {
 
       {
         services.neo4j.enable = true;
+        # require tls certs to be available
+        services.neo4j.https.enable = false;
+        services.neo4j.bolt.enable = false;
       };
   };
 
