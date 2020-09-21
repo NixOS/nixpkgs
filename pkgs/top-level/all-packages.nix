@@ -10696,6 +10696,8 @@ in
 
   buildkite-cli = callPackage ../development/tools/continuous-integration/buildkite-cli { };
 
+  bump = callPackage ../development/tools/github/bump { };
+
   libbpf = callPackage ../os-specific/linux/libbpf { };
 
   bpftool = callPackage ../os-specific/linux/bpftool { };
