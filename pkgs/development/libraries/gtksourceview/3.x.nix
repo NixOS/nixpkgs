@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
       make check
   '';
 
-  passthru = {
-    updateScript = gnome3.updateScript {
-      packageName = "gtksourceview";
-      attrPath = "gtksourceview3";
-    };
-  };
+  # passthru = {
+  #   updateScript = gnome3.updateScript {
+  #     packageName = "gtksourceview";
+  #     attrPath = "gtksourceview3";
+  #   };
+  # };
 
   meta = with stdenv.lib; {
     homepage = "https://wiki.gnome.org/Projects/GtkSourceView";
