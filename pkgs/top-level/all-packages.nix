@@ -2344,6 +2344,8 @@ in
 
   pueue = callPackage ../applications/misc/pueue { };
 
+  puppy = callPackage ../tools/misc/puppy { };
+
   pixiecore = callPackage ../tools/networking/pixiecore {};
 
   pyCA = python3Packages.callPackage ../applications/video/pyca {};

@@ -7025,6 +7025,12 @@
     githubId = 1973389;
     name = "Reuben D'Netto";
   };
+  rebecca = {
+    name = "Rebecca Turner";
+    email = "rbt@sent.as";
+    github = "9999years";
+    githubId = 15312184;
+  };
   redbaron = {
     email = "ivanov.maxim@gmail.com";
     github = "redbaron";
