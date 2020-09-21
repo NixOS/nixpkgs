@@ -137,14 +137,18 @@ fi
 
 source @out@/nix-support/add-hardening.sh
 
-# Add the flags for the C compiler proper.
+# Add the flags for the C compiler proper.  Explicitly converting
+# space-separated words into array elements.
+# shellcheck disable=SC2206
 extraAfter=($NIX_CFLAGS_COMPILE_@suffixSalt@)
+# shellcheck disable=SC2206
 extraBefore=(${hardeningCFlags[@]+"${hardeningCFlags[@]}"} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@)
 
 if [ "$dontLink" != 1 ]; then
 
     # Add the flags that should only be passed to the compiler when
     # linking.
+    # shellcheck disable=SC2206
     extraAfter+=($NIX_CFLAGS_LINK_@suffixSalt@)
 
     # Add the flags that should be passed to the linker (and prevent
