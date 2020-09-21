@@ -1,22 +1,22 @@
 diff --git a/installed-tests/meson.build b/installed-tests/meson.build
-index 7e842025..1e5029e0 100644
+index 04c7910f..9647908c 100644
 --- a/installed-tests/meson.build
 +++ b/installed-tests/meson.build
 @@ -1,7 +1,7 @@
  ### Installed tests ############################################################
  
--installed_tests_execdir = get_option('prefix') / pkglibexecdir / 'installed-tests'
+-installed_tests_execdir = get_option('prefix') / get_option('libexecdir') / 'installed-tests' / meson.project_name()
 -installed_tests_metadir = abs_datadir / 'installed-tests' / meson.project_name()
-+installed_tests_execdir = get_option('installed_test_prefix') / 'libexec' / meson.project_name() / 'installed-tests'
++installed_tests_execdir = get_option('installed_test_prefix') / 'libexec' / 'installed-tests' / meson.project_name()
 +installed_tests_metadir = get_option('installed_test_prefix') / 'share' / 'installed-tests' / meson.project_name()
  
  # Simple shell script tests #
  
 diff --git a/meson.build b/meson.build
-index 084d5396..e5d73fcd 100644
+index 9ab29475..42ffe07f 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -540,7 +540,7 @@ install_data('installed-tests/extra/lsan.supp',
+@@ -557,7 +557,7 @@ install_data('installed-tests/extra/lsan.supp',
      install_dir: get_option('datadir') / api_name / 'lsan')
  
  if get_option('installed_tests')
@@ -26,7 +26,7 @@ index 084d5396..e5d73fcd 100644
      meson.add_install_script('build/compile-gschemas.py', schemadir)
  endif
 diff --git a/meson_options.txt b/meson_options.txt
-index 66f66024..008687cb 100644
+index 825ba77a..21f0323c 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
 @@ -25,3 +25,5 @@ option('skip_gtk_tests', type: 'boolean', value: false,

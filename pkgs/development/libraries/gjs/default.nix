@@ -73,7 +73,7 @@ in stdenv.mkDerivation rec {
     ./fix-paths.patch
 
     # Allow installing installed tests to a separate output.
-    # ./installed-tests-path.patch
+    ./installed-tests-path.patch
   ];
 
   doCheck = true;
@@ -88,22 +88,22 @@ in stdenv.mkDerivation rec {
     # in the GIR files. When running tests, the library is not yet installed,
     # though, so we need to replace the absolute path with a local one during build.
     # We are using a symlink that will be overridden during installation.
-    mkdir -p $out/lib $installedTests/libexec/gjs/installed-tests
+    mkdir -p $out/lib $installedTests/libexec/installed-tests/gjs
     ln -s $PWD/libgjs.so.0 $out/lib/libgjs.so.0
-    ln -s $PWD/installed-tests/js/libgimarshallingtests.so $installedTests/libexec/gjs/installed-tests/libgimarshallingtests.so
-    ln -s $PWD/installed-tests/js/libregress.so $installedTests/libexec/gjs/installed-tests/libregress.so
-    ln -s $PWD/installed-tests/js/libwarnlib.so $installedTests/libexec/gjs/installed-tests/libwarnlib.so
+    ln -s $PWD/installed-tests/js/libgimarshallingtests.so $installedTests/libexec/installed-tests/gjs/libgimarshallingtests.so
+    ln -s $PWD/installed-tests/js/libregress.so $installedTests/libexec/installed-tests/gjs/libregress.so
+    ln -s $PWD/installed-tests/js/libwarnlib.so $installedTests/libexec/installed-tests/gjs/libwarnlib.so
   '';
 
   postInstall = ''
-    # TODO: make the glib setup hook handle this
+    # TODO: make the glib setup hook handle moving the schemas in other outputs.
     installedTestsSchemaDatadir="$installedTests/share/gsettings-schemas/${pname}-${version}"
     mkdir -p "$installedTestsSchemaDatadir"
     mv "$installedTests/share/glib-2.0" "$installedTestsSchemaDatadir"
   '';
 
   postFixup = ''
-    wrapProgram "$installedTests/libexec/gjs/installed-tests/minijasmine" \
+    wrapProgram "$installedTests/libexec/installed-tests/gjs/minijasmine" \
       --prefix XDG_DATA_DIRS : "$installedTestsSchemaDatadir" \
       --prefix GI_TYPELIB_PATH : "${stdenv.lib.makeSearchPath "lib/girepository-1.0" testDeps}"
   '';
