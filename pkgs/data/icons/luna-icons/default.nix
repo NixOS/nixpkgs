@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "luna-icons";
-  version = "2020-08-09";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
-    rev = "d32aacabcc018212c460833327e1b54a716a5a23";
-    sha256 = "1f1ypxcvmd97afn7612i8gxmbrj80vx45vqrrh3n0p65jw5lg7zc";
+    rev = version;
+    sha256 = "1lm7ws7in8cjjl38c7xw67jr42d717kk5kkfac7rprk0z7pb104l";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     cp -a Luna* $out/share/icons
 
     for theme in $out/share/icons/*; do
-      gtk-update-icon-cache $theme
+      gtk-update-icon-cache "$theme"
     done
 
     runHook postInstall
