@@ -4,6 +4,7 @@
 , meson
 , ninja
 , pkgconfig
+, asciidoc
 , gobject-introspection
 , python3
 , gtk-doc
@@ -31,19 +32,19 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "2.3.4";
+  version = "3.0.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0vai0qz9jn3z5dlzysynwhbbmslp84ygdql81f5wfxxr98j54yap";
+    sha256 = "0drqsfqc4smfbpjk74iap114yww5cpldfhn4z6b0aavmylalb1kh";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      gdbus = "${glib.bin}/bin/gdbus";
+      inherit asciidoc;
     })
   ];
 
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
     ninja
     vala
     pkgconfig
+    asciidoc
     gettext
     libxslt
     wrapGAppsHook
@@ -88,7 +90,7 @@ stdenv.mkDerivation rec {
     "-Ddocs=true"
   ];
 
-  doCheck = true;
+  doCheck = false;
 
   postPatch = ''
     patchShebangs utils/g-ir-merge/g-ir-merge
@@ -114,10 +116,6 @@ stdenv.mkDerivation rec {
   postCheck = ''
     # Clean up out symlinks
     rm -r $out/lib
-  '';
-
-  postInstall = ''
-    glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
   passthru = {
