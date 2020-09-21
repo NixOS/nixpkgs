@@ -14,6 +14,15 @@ stdenv.mkDerivation rec {
     "--enable-utf8"
   ];
 
+  # Required for goaccess to build on OSX.
+  # Won't be required once goaccess cuts a new release
+  prePatch = if stdenv.hostPlatform.isDarwin
+  then ''
+    substituteInPlace src/parser.c \
+      --replace '#include <malloc.h>' ""
+  ''
+  else null;
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     libmaxminddb
