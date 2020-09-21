@@ -47,6 +47,12 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/debian/lizardfs/raw/bfcd5bcf/debian/patches/spdlog.patch";
       sha256 = "0j44rb816i6kfh3y2qdha59c4ja6wmcnlrlq29il4ybxn42914md";
     })
+    # Fix https://github.com/lizardfs/lizardfs/issues/655
+    # (Remove upon update to 3.13)
+    (fetchpatch {
+      url = "https://github.com/lizardfs/lizardfs/commit/5d20c95179be09241b039050bceda3c46980c004.patch";
+      sha256 = "185bfcz2rjr4cnxld2yc2nxwzz0rk4x1fl1sd25g8gr5advllmdv";
+    })
   ];
 
   meta = with stdenv.lib; {
