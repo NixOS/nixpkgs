@@ -3,20 +3,18 @@ pycairo, cairo, which, ncurses, meson, ninja, isPy3k, gnome3 }:
 
 buildPythonPackage rec {
   pname = "pygobject";
-  version = "3.36.1";
+  version = "3.38.0";
+
+  disabled = ! isPy3k;
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0b9CgC0c7BE7Wtqg579/N0W0RSHcIWNYjSdtXNYdcY8=";
+    sha256 = "A3LRu5Ei/Bn1AKJJsfOMK7Z0hQAPWIdJe0sgWz5whNU=";
   };
 
   outputs = [ "out" "dev" ];
-
-  mesonFlags = [
-    "-Dpython=python${if isPy3k then "3" else "2" }"
-  ];
 
   nativeBuildInputs = [ pkgconfig meson ninja gobject-introspection ];
   buildInputs = [ glib gobject-introspection ]
