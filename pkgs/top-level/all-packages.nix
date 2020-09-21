@@ -23000,9 +23000,7 @@ with pkgs;
 
   check_zfs = callPackage ../servers/monitoring/nagios/plugins/zfs.nix { };
 
-  neo4j = callPackage ../servers/nosql/neo4j {
-    jre = jre8_headless;
-  };
+  neo4j = callPackage ../servers/nosql/neo4j { };
 
   neo4j-desktop = callPackage ../applications/misc/neo4j-desktop { };
 
