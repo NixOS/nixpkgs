@@ -228,6 +228,8 @@ in {
 
   aiomysql = callPackage ../development/python-modules/aiomysql { };
 
+  aionotify = callPackage ../development/python-modules/aionotify { };
+
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
   aioredis = callPackage ../development/python-modules/aioredis { };
