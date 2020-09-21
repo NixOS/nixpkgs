@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "untrunc";
-  version = "2018.01.13";
+  version = "2020.02.09";
 
   src = fetchFromGitHub {
     owner = "ponchio";
     repo = "untrunc";
-    rev = "3a2e6d0718faf06589f7b9d95c8f966348e537f7";
-    sha256 = "03ka4lr69k7mikfpcpd95smzdj62v851ididnjyps5a0j06f8087";
+    rev = "4eed44283168c727ace839ff7590092fda2e0848";
+    sha256 = "0nfj67drc6bxqlkf8a1iazqhi0w38a7rjrb2bpa74gwq6xzygvbr";
   };
 
   buildInputs = [ gcc libav_12 ];
