@@ -6,6 +6,7 @@
 , curl
 , dbus
 , dbus-glib
+, fetchpatch
 , fetchurl
 , file
 , fontconfig
@@ -69,13 +70,13 @@ assert waylandSupport -> gtk3Support == true;
 
 stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "78.2.1";
+  version = "78.2.2";
 
   src = fetchurl {
     url =
       "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
     sha512 =
-      "2iya9a5qaini524wrdrnxx6wsrgb8fa2b1m42mlypskxjjgb7n66vpxlbpi9x9mqzc63ca2ag36fjpbpsvbv5ppxvpfwk2j1zbfvb5w";
+      "2cbpyx9jn23kc289z8ikzx3035g5z6p076izvld50mj3kqc0v4n3igih3rv1lsdwysik8c0ax5w3pa037lnrp6ridgbnix34gxr4nw6";
   };
 
   nativeBuildInputs = [
@@ -146,6 +147,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-buildconfig.patch
+    (fetchpatch { # included in 78.3.0
+      name = "empty-UI.patch";
+      url = "https://hg.mozilla.org/releases/comm-esr78/raw-rev/f085dbd311bc";
+      # paths: {a,b}/foo -> {a,b}/comm/foo
+      stripLen = 1; extraPrefix = "comm/";
+      sha256 = "0x9pw62w93kyd99q9wi2d8llcfzbrqib7fp5kcrjidvhnkxpr6j7";
+    })
   ];
 
   postPatch = ''
@@ -327,6 +335,7 @@ stdenv.mkDerivation rec {
       eelco
       lovesegfault
       pierron
+      vcunat
     ];
     platforms = platforms.linux;
     license = licenses.mpl20;
