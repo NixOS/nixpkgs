@@ -94,18 +94,7 @@ rec {
        trace: { a = { b = {…}; }; }
        => null
    */
-  traceSeqN = depth: x: y: with lib;
-    let snip = v: if      isList  v then noQuotes "[…]" v
-                  else if isAttrs v then noQuotes "{…}" v
-                  else v;
-        noQuotes = str: v: { __pretty = const str; val = v; };
-        modify = n: fn: v: if (n == 0) then fn v
-                      else if isList  v then map (modify (n - 1) fn) v
-                      else if isAttrs v then mapAttrs
-                        (const (modify (n - 1) fn)) v
-                      else v;
-    in trace (generators.toPretty { allowPrettyValues = true; }
-               (modify depth snip x)) y;
+  traceSeqN = depth: x: y: trace (lib.generators.toPretty { recursionLimit = depth; } x) y;
 
   /* A combination of `traceVal` and `traceSeq` that applies a
      provided function to the value to be traced after `deepSeq`ing
