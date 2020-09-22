@@ -72,9 +72,9 @@
    To install any of those builders into your profile, refer to them by their attribute path <literal>beamPackages.rebar3</literal>:
   </para>
 
-  <screen>
-  <prompt>$ </prompt>nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA beamPackages.rebar3
-  </screen>
+<screen>
+<prompt>$ </prompt>nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA beamPackages.rebar3
+</screen>
 </section>
 
  <section xml:id="packaging-beam-applications">
