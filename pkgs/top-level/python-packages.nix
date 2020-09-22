@@ -5205,6 +5205,11 @@ self: super: with self; {
     (p: p.py)
   ];
 
+  libsmu = toPythonModule (pkgs.libsmu.override {
+    pythonSupport = true;
+    inherit python;
+  });
+
   libsoundtouch = callPackage ../development/python-modules/libsoundtouch { };
 
   libthumbor = callPackage ../development/python-modules/libthumbor { };

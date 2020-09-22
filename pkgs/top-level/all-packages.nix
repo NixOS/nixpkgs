@@ -20650,6 +20650,8 @@ with pkgs;
 
   libslirp = callPackage ../development/libraries/libslirp { };
 
+  libsmu = callPackage ../development/libraries/libsmu { };
+
   libsndfile = callPackage ../development/libraries/libsndfile {
     inherit (darwin.apple_sdk.frameworks) Carbon AudioToolbox;
   };
