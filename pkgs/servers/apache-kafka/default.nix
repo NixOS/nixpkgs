@@ -12,9 +12,9 @@ let
       jre = jre8;
     };
     "2.5" = {
-      kafkaVersion = "2.5.0";
-      scalaVersion = "2.13";
-      sha256 = "0w3g7ii8x63m2blv2a8c491d0diczpliaqm9f7w5yn98hikh0aqi";
+      kafkaVersion = "2.5.1";
+      scalaVersion = "2.12";
+      sha256 = "1wn4iszrm2rvsfyyr515zx79k5m86davjkcwcwpxcgc4k3q0z7lv";
       jre = jre8;
     };
   };
