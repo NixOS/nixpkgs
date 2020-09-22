@@ -209,6 +209,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share/mpv
     ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
 
+    cp TOOLS/mpv_identify.sh $out/bin
     cp TOOLS/umpv $out/bin
   '' + optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
