@@ -475,6 +475,7 @@ mapAliases ({
   pynagsystemd = throw "pynagsystemd was removed as it was unmaintained and incompatible with recent systemd versions. Instead use its fork check_systemd."; # added 2020-10-24
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
   qcsxcad = libsForQt5.qcsxcad;  # added 2020-11-05
+  qr-filetransfer = throw ''"qr-filetransfer" has been renamed to "qrcp"''; # added 2020-12-02
   quake3game = ioquake3; # added 2016-01-14
   qvim = throw "qvim has been removed."; # added 2020-08-31
   qwt6 = libsForQt5.qwt;  # added 2015-12-19
