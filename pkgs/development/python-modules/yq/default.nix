@@ -1,6 +1,7 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
+, pkgs
 , argcomplete
 , pyyaml
 , xmltodict
@@ -9,31 +10,40 @@
 , flake8
 , jq
 , pytest
+, unixtools
 , toml
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "yq";
-  version = "2.10.1";
+  version = "2.11.0";
 
-  propagatedBuildInputs = [ pyyaml xmltodict jq argcomplete ];
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1gp9q5w1bjbw7wmba5hm8ippwvkind0p02n07fqa9jlqglhxhm46";
+  };
+
+  propagatedBuildInputs = [
+    pyyaml
+    xmltodict
+    argcomplete
+  ];
 
   doCheck = true;
 
   checkInputs = [
+   unixtools.script
    pytest
    coverage
    flake8
-   jq
+   pkgs.jq
    toml
   ];
 
-  checkPhase = "pytest ./test/test.py";
+  # tests fails if stdin is not a tty
+  checkPhase = "echo | script -c 'pytest ./test/test.py'";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1h6nnkp53mm4spwy8nyxwvh9j6p4lxvf20j4bgjskhnhaw3jl9gn";
-  };
+  pythonImportsCheck = [ "yq" ];
 
   meta = with lib; {
     description = "Command-line YAML processor - jq wrapper for YAML documents.";

@@ -713,6 +713,8 @@ in {
 
   azure-synapse-spark = callPackage ../development/python-modules/azure-synapse-spark { };
 
+  b2sdk = callPackage ../development/python-modules/b2sdk { };
+
   Babel = callPackage ../development/python-modules/Babel { };
 
   babelfish = callPackage ../development/python-modules/babelfish { };
@@ -1459,6 +1461,8 @@ in {
   dbf = callPackage ../development/python-modules/dbf { };
 
   dbfread = callPackage ../development/python-modules/dbfread { };
+
+  dbus-next = callPackage ../development/python-modules/dbus-next { };
 
   dbus-python = callPackage ../development/python-modules/dbus { inherit (pkgs) dbus pkgconfig; };
 
@@ -2716,6 +2720,8 @@ in {
 
   httplib2 = callPackage ../development/python-modules/httplib2 { };
 
+  http-parser = callPackage ../development/python-modules/http-parser { };
+
   httpretty = if isPy3k then
     callPackage ../development/python-modules/httpretty { }
   else
@@ -3705,6 +3711,8 @@ in {
   moderngl-window = callPackage ../development/python-modules/moderngl_window { };
 
   modestmaps = callPackage ../development/python-modules/modestmaps { };
+
+  mohawk = callPackage ../development/python-modules/mohawk { };
 
   moinmoin = callPackage ../development/python-modules/moinmoin
     { }; # Needed here because moinmoin is loaded as a Python library.
@@ -5007,6 +5015,8 @@ in {
 
   pyjwt = callPackage ../development/python-modules/pyjwt { };
 
+  pykdl = callPackage ../development/python-modules/pykdl { };
+
   pykdtree = callPackage ../development/python-modules/pykdtree { inherit (pkgs.llvmPackages) openmp; };
 
   pykeepass = callPackage ../development/python-modules/pykeepass { };
@@ -5910,6 +5920,8 @@ in {
 
   pyxml = disabledIf isPy3k (callPackage ../development/python-modules/pyxml { });
 
+  pyxnat = callPackage ../development/python-modules/pyxnat { };
+
   pyyaml = callPackage ../development/python-modules/pyyaml { };
 
   pyzmq = callPackage ../development/python-modules/pyzmq { };
@@ -6110,6 +6122,8 @@ in {
   rig = callPackage ../development/python-modules/rig { };
 
   ripser = callPackage ../development/python-modules/ripser { };
+
+  rising = callPackage ../development/python-modules/rising { };
 
   rivet = disabledIf (!isPy3k) (toPythonModule (pkgs.rivet.override { python3 = python; }));
 
@@ -7615,6 +7629,8 @@ in {
   };
 
   yowsup = callPackage ../development/python-modules/yowsup { };
+
+  yq = callPackage ../development/python-modules/yq { };
 
   yt = callPackage ../development/python-modules/yt { };
 

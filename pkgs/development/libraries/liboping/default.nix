@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses ? null, perl ? null }:
+{ stdenv, fetchurl, ncurses ? null, perl ? null, lib }:
 
 stdenv.mkDerivation rec {
   name = "liboping-1.10.0";
@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1n2wkmvw6n80ybdwkjq8ka43z2x8mvxq49byv61b52iyz69slf7b";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation";
+  NIX_CFLAGS_COMPILE = lib.optionalString
+    stdenv.cc.isGNU "-Wno-error=format-truncation";
 
   buildInputs = [ ncurses perl ];
 

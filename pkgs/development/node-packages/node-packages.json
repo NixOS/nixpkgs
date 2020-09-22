@@ -205,6 +205,7 @@
 , "vscode-css-languageserver-bin"
 , "vscode-html-languageserver-bin"
 , "vscode-json-languageserver-bin"
+, { "vscode-lldb-build-deps": "../../misc/vscode-extensions/vscode-lldb/build-deps" }
 , "vue-cli"
 , "vue-language-server"
 , "web-ext"

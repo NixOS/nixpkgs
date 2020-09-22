@@ -1,4 +1,4 @@
-{ stdenv, callPackage, vscode-utils, llvmPackages_8 }:
+{ stdenv, callPackage, vscode-utils, llvmPackages_8, llvmPackages_latest }:
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
@@ -176,6 +176,10 @@ in
     meta = with stdenv.lib; {
       license = licenses.mit;
     };
+  };
+
+  vadimcn.vscode-lldb = callPackage ./vscode-lldb {
+    lldb = llvmPackages_latest.lldb;
   };
 
   vscodevim.vim = buildVscodeMarketplaceExtension {

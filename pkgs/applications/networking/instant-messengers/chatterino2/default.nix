@@ -2,12 +2,12 @@
 
 mkDerivation rec {
   pname = "chatterino2";
-  version = "2.1.7";
+  version = "2.2.2";
   src = fetchFromGitHub {
-    owner = "fourtf";
+    owner = "Chatterino";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0bbdzainfa7hlz5p0jfq4y04i3wix7z3i6w193906bi4gr9wilpg";
+    sha256 = "026cs48hmqkv7k4akbm205avj2pn3x1g7q46chwa707k9km325dz";
     fetchSubmodules = true;
   };
   nativeBuildInputs = [ qmake pkgconfig wrapQtAppsHook ];
@@ -26,8 +26,9 @@ mkDerivation rec {
       improved/extended version of the Twitch web chat. Chatterino 2 is
       the second installment of the Twitch chat client series
       "Chatterino".
-  '';
-    homepage = "https://github.com/fourtf/chatterino2";
+    '';
+    homepage = "https://github.com/Chatterino/chatterino2";
+    changelog = "https://github.com/Chatterino/chatterino2/blob/master/CHANGELOG.md";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ rexim ];
