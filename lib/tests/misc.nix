@@ -486,7 +486,7 @@ runTests {
   };
 
   testToPrettyMultiline = {
-    expr = mapAttrs (const (generators.toPretty { })) rec {
+    expr = mapAttrs (const (generators.toPretty { recursionLimit = 3; })) rec {
       list = [ 3 4 [ false ] ];
       attrs = { foo = null; bar.foo = "baz"; };
       newlinestring = "\n";
@@ -499,6 +499,7 @@ runTests {
         hello
         there
         test'';
+      recursive = let x = { inherit x; }; in x;
     };
     expected = rec {
       list = ''
@@ -528,7 +529,14 @@ runTests {
           hello
           there
           test''''';
-
+      recursive = ''
+        {
+          x = {
+            x = {
+              x = { ... };
+            };
+          };
+        }'';
     };
   };
 
