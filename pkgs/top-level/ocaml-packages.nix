@@ -1224,6 +1224,7 @@ let
 
 in let inherit (pkgs) callPackage; in rec
 {
+  inherit mkOcamlPackages;
 
   ocamlPackages_4_00_1 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.00.1.nix { });
 
