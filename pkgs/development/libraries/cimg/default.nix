@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "dtschump";
     repo = "CImg";
     rev = "v.${version}";
-    sha256 = "1sb0z5ryh34y80ghlr2agsl64gayjmxpl96l9fjaylf5k2m3fg2b";
+    sha256 = "sha256-7v8651yDkxTdRMoGhEl4d/k7mxYwfIwW/rkuyjqVGwY=";
   };
 
   installPhase = ''
