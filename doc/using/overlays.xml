@@ -240,7 +240,7 @@ self: super:
     lapackProvider = self.mkl;
   }
 }
-     </programlisting>
+</programlisting>
      <para>
        This overlay uses Intel’s MKL library for both BLAS and LAPACK
        interfaces. Note that the same can be accomplished at runtime
@@ -248,9 +248,9 @@ self: super:
        <literal>libblas.so.3</literal> and
        <literal>liblapack.so.3</literal>. For instance:
      </para>
-     <programlisting>
-$ LD_LIBRARY_PATH=$(nix-build -A mkl)/lib:$LD_LIBRARY_PATH nix-shell -p octave --run octave
-     </programlisting>
+<screen>
+<prompt>$ </prompt>LD_LIBRARY_PATH=$(nix-build -A mkl)/lib:$LD_LIBRARY_PATH nix-shell -p octave --run octave
+</screen>
      <para>
        Intel MKL requires an <literal>openmp</literal> implementation
        when running with multiple processors. By default,
@@ -288,7 +288,7 @@ assert (!blas.isILP64) &amp;&amp; (!lapack.isILP64);
 stdenv.mkDerivation {
   ...
 }
-     </programlisting>
+</programlisting>
    </section>
  </section>
 </chapter>

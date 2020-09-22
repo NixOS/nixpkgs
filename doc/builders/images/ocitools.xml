@@ -38,8 +38,7 @@ buildContainer {
 
   readonly = false; <co xml:id='ex-ociTools-buildContainer-3' />
 }
-
-    </programlisting>
+</programlisting>
    <calloutlist>
     <callout arearefs='ex-ociTools-buildContainer-1'>
      <para>

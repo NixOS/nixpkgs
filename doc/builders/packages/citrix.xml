@@ -22,10 +22,10 @@
   </para>
   <para>
    In order to set this up, you first have to <link xlink:href="https://its.uiowa.edu/support/article/102186">download the <literal>.cr</literal> file from the Netscaler Gateway</link>. After that you can configure the <command>selfservice</command> like this:
-   <screen>
-    <prompt>$ </prompt>storebrowse -C ~/Downloads/receiverconfig.cr
-    <prompt>$ </prompt>selfservice
-   </screen>
+<screen>
+<prompt>$ </prompt>storebrowse -C ~/Downloads/receiverconfig.cr
+<prompt>$ </prompt>selfservice
+</screen>
   </para>
  </section>
 
