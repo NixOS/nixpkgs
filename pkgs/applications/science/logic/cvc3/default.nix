@@ -13,9 +13,14 @@ stdenv.mkDerivation rec {
 
   patches = [ ./cvc3-2.4.1-gccv6-fix.patch ];
 
-  preConfigure = ''
+  postPatch = ''
     sed -e "s@ /bin/bash@bash@g" -i Makefile.std
     find . -exec sed -e "s@/usr/bin/perl@${perl}/bin/perl@g" -i '{}' ';'
+
+    # bison 3.7 workaround
+    for f in parsePL parseLisp parsesmtlib parsesmtlib2 ; do
+      ln -s ../parser/''${f}_defs.h src/include/''${f}.hpp
+    done
   '';
 
   meta = with stdenv.lib; {
