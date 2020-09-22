@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeWrapper, openjdk11, which, gawk }:
+{ stdenv, lib, fetchurl, nixosTests, makeWrapper, openjdk11, which, gawk }:
 
 stdenv.mkDerivation rec {
   pname = "neo4j";
@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     # user will be asked to change password on first login
     $out/bin/neo4j-admin set-initial-password neo4j
   '';
+
+  passthru.tests.nixos = nixosTests.neo4j;
 
   meta = with lib; {
     description = "A highly scalable, robust (fully ACID) native graph database";
