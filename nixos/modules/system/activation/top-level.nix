@@ -159,9 +159,9 @@ in
         To switch to a specialised configuration
         (e.g. <literal>fewJobsManyCores</literal>) at runtime, run:
 
-        <programlisting>
-        # sudo /run/current-system/specialisation/fewJobsManyCores/bin/switch-to-configuration test
-        </programlisting>
+        <screen>
+        <prompt># </prompt>sudo /run/current-system/specialisation/fewJobsManyCores/bin/switch-to-configuration test
+        </screen>
       '';
       type = types.attrsOf (types.submodule (
         { ... }: {
