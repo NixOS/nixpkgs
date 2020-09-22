@@ -28,12 +28,12 @@
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "6.1.3";
+  version = "6.1.4";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9990d51b9931a31e681635899aeb198b4c4b41586a9e87fbfaaed1a71d0a05b6";
+    sha256 = "0cnyi4zd3byh7zixdj2q71axm31xgjiyfklh1c63c87acgwh2zb8";
   };
 
   LC_ALL = "en_US.utf8";
@@ -67,6 +67,10 @@ buildPythonPackage rec {
     "TestInstallServerExtension"
     "launch_socket"
     "sock_server"
+  ]
+  ++ lib.optional stdenv.isDarwin [
+    "test_delete"
+    "test_checkpoints_follow_file" 
   ];
 
   # Some of the tests use localhost networking.
