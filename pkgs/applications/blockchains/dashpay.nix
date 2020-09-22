@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       private as you make transactions without waits, similar to cash.
     '';
     homepage = "https://www.dash.org";
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     license = licenses.mit;
   };
