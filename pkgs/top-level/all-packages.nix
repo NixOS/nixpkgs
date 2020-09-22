@@ -1858,6 +1858,8 @@ in
 
   dua = callPackage ../tools/misc/dua { };
 
+  duf = callPackage ../tools/misc/duf { };
+
   inherit (ocamlPackages) dune dune_2 dune-release;
 
   duperemove = callPackage ../tools/filesystems/duperemove { };
