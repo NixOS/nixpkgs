@@ -2,7 +2,7 @@
 , wayland, wlroots, gtkmm3, libsigcxx, jsoncpp, fmt, scdoc, spdlog, gtk-layer-shell
 , howard-hinnant-date, cmake
 , traySupport  ? true,  libdbusmenu-gtk3
-, pulseSupport ? false, libpulseaudio
+, pulseSupport ? true,  libpulseaudio
 , nlSupport    ? true,  libnl
 , udevSupport  ? true,  udev
 , swaySupport  ? true,  sway
