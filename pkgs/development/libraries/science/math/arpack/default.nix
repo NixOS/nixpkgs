@@ -13,12 +13,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ gfortran blas lapack eigen ];
+  buildInputs = assert (blas.isILP64 == lapack.isILP64); [
+    gfortran
+    blas
+    lapack
+    eigen
+  ];
 
   doCheck = true;
-
-  BLAS_LIBS = "-L${blas}/lib -lblas";
-  LAPACK_LIBS = "-L${lapack}/lib -llapack";
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
