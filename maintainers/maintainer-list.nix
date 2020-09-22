@@ -3739,6 +3739,12 @@
     githubId = 5283991;
     name = "Jake Waksbaum";
   };
+  jamiemagee = {
+    email = "jamie.magee@gmail.com";
+    github = "JamieMagee";
+    githubId = 1358764;
+    name = "Jamie Magee";
+  };
   jammerful = {
     email = "jammerful@gmail.com";
     github = "jammerful";
