@@ -106,6 +106,13 @@ in {
       type = types.package;
     };
 
+    jre = mkOption {
+      description = "The JRE with which to run Kafka";
+      default = cfg.package.passthru.jre;
+      defaultText = "pkgs.apacheKafka.passthru.jre";
+      type = types.package;
+    };
+
   };
 
   config = mkIf cfg.enable {
@@ -126,7 +133,7 @@ in {
       after = [ "network.target" ];
       serviceConfig = {
         ExecStart = ''
-          ${pkgs.jre}/bin/java \
+          ${cfg.jre}/bin/java \
             -cp "${cfg.package}/libs/*" \
             -Dlog4j.configuration=file:${logConfig} \
             ${toString cfg.jvmOptions} \
