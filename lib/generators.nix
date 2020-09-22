@@ -237,7 +237,10 @@ rec {
       if v == [] then "[ ]"
       else if recursionLimit != null && depth >= recursionLimit then "[ ... ]"
       else "[" + introSpace
-        + libStr.concatMapStringsSep introSpace (go (depth + 1)) v
+        + libStr.concatStringsSep introSpace (lib.imap0 (n: value:
+            builtins.addErrorContext "while lib.generators.toPretty descended into list index `${toString n}'"
+            (go (depth + 1) value)
+          ) v)
         + outroSpace + "]"
     else if isFunction v then
       let fna = lib.functionArgs v;
@@ -257,6 +260,7 @@ rec {
       else "{" + introSpace
           + libStr.concatStringsSep introSpace (libAttr.mapAttrsToList
               (name: value:
+                builtins.addErrorContext "while lib.generators.toPretty descended into the `${name}' attribute"
                 "${libStr.escapeNixIdentifier name} = ${go (depth + 1) value};") v)
         + outroSpace + "}"
     else abort "generators.toPretty: should never happen (v = ${v})";
