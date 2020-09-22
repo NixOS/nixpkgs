@@ -174,11 +174,11 @@ let
       priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
     };
   } // optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-    crossVersion = "15ca5359f99698ef0a199bc307b7956c08907abc"; # Aug 27, 2020
+    crossVersion = "f59d2b6a179760230d925550db78b93c410433e4"; # Sept 22, 2020
 
     perl-cross-src = fetchurl {
       url = "https://github.com/arsv/perl-cross/archive/${crossVersion}.tar.gz";
-      sha256 = "0pcwv2ac02i2l0fjc8drdw70q6gwbypj2c5a53x2449m919v37h9";
+      sha256 = "1r07waq4ik4gf32c046f27pglwcy5rv9b6whj6497xbxfmaa5562";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
@@ -214,7 +214,7 @@ in {
   perldevel = common {
     perl = pkgs.perldevel;
     buildPerl = buildPackages.perldevel;
-    version = "5.33.1";
-    sha256 = "1rlnqqqzyhal79ys5dv7fwm3mg81s43dwks28b74x2gcmsngjnw9";
+    version = "5.33.2";
+    sha256 = "0zrb3d744argzy5idmafk92iprq9qbhzqbg4xj5w2i80sgg41212";
   };
 }
