@@ -69,10 +69,10 @@
     access this single repository. You need the output of the generate pub file.
   </para>
     <para>
-        <programlisting>
-# sudo ssh-keygen -N '' -t ed25519 -f /run/keys/id_ed25519_my_borg_repo
-# cat /run/keys/id_ed25519_my_borg_repo
-ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID78zmOyA+5uPG4Ot0hfAy+sLDPU1L4AiIoRYEIVbbQ/ root@nixos</programlisting>
+<screen>
+<prompt># </prompt>sudo ssh-keygen -N '' -t ed25519 -f /run/keys/id_ed25519_my_borg_repo
+<prompt># </prompt>cat /run/keys/id_ed25519_my_borg_repo
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID78zmOyA+5uPG4Ot0hfAy+sLDPU1L4AiIoRYEIVbbQ/ root@nixos</screen>
     </para>
     <para>
       Add the following snippet to your NixOS configuration:

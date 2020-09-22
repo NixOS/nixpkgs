@@ -11,7 +11,7 @@
   you create an encrypted Ext4 file system on the device
   <filename>/dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d</filename>:
 <screen>
-# cryptsetup luksFormat /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d
+<prompt># </prompt>cryptsetup luksFormat <replaceable>/dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d</replaceable>
 
 WARNING!
 ========
@@ -21,17 +21,17 @@ Are you sure? (Type uppercase yes): YES
 Enter LUKS passphrase: ***
 Verify passphrase: ***
 
-# cryptsetup luksOpen /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d crypted
+<prompt># </prompt>cryptsetup luksOpen <replaceable>/dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d</replaceable> <replaceable>crypted</replaceable>
 Enter passphrase for /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d: ***
 
-# mkfs.ext4 /dev/mapper/crypted
+<prompt># </prompt>mkfs.ext4 /dev/mapper/<replaceable>crypted</replaceable>
 </screen>
   To ensure that this file system is automatically mounted at boot time as
   <filename>/</filename>, add the following to
   <filename>configuration.nix</filename>:
 <programlisting>
-<link linkend="opt-boot.initrd.luks.devices._name_.device">boot.initrd.luks.devices.crypted.device</link> = "/dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d";
-<xref linkend="opt-fileSystems"/>."/".device = "/dev/mapper/crypted";
+<link linkend="opt-boot.initrd.luks.devices._name_.device">boot.initrd.luks.devices.crypted.device</link> = "<replaceable>/dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d</replaceable>";
+<xref linkend="opt-fileSystems"/>."/".device = "/dev/mapper/<replaceable>crypted</replaceable>";
 </programlisting>
   Should grub be used as bootloader, and <filename>/boot</filename> is located
   on an encrypted partition, it is necessary to add the following grub option:
@@ -45,11 +45,11 @@ Enter passphrase for /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d: ***
    and add it as a new key to our existing device <filename>/dev/sda2</filename>:
 
    <screen>
-# export FIDO2_LABEL="/dev/sda2 @ $HOSTNAME"
-# fido2luks credential "$FIDO2_LABEL"
+<prompt># </prompt>export FIDO2_LABEL="<replaceable>/dev/sda2</replaceable> @ $HOSTNAME"
+<prompt># </prompt>fido2luks credential "$FIDO2_LABEL"
 f1d00200108b9d6e849a8b388da457688e3dd653b4e53770012d8f28e5d3b269865038c346802f36f3da7278b13ad6a3bb6a1452e24ebeeaa24ba40eef559b1b287d2a2f80b7
 
-# fido2luks -i add-key /dev/sda2 f1d00200108b9d6e849a8b388da457688e3dd653b4e53770012d8f28e5d3b269865038c346802f36f3da7278b13ad6a3bb6a1452e24ebeeaa24ba40eef559b1b287d2a2f80b7
+<prompt># </prompt>fido2luks -i add-key <replaceable>/dev/sda2</replaceable> <replaceable>f1d00200108b9d6e849a8b388da457688e3dd653b4e53770012d8f28e5d3b269865038c346802f36f3da7278b13ad6a3bb6a1452e24ebeeaa24ba40eef559b1b287d2a2f80b7</replaceable>
 Password:
 Password (again):
 Old password:
@@ -60,13 +60,13 @@ Added to key to device /dev/sda2, slot: 2
   To ensure that this file system is decrypted using the FIDO2 compatible key, add the following to <filename>configuration.nix</filename>:
 <programlisting>
 <link linkend="opt-boot.initrd.luks.fido2Support">boot.initrd.luks.fido2Support</link> = true;
-<link linkend="opt-boot.initrd.luks.devices._name_.fido2.credential">boot.initrd.luks.devices."/dev/sda2".fido2.credential</link> = "f1d00200108b9d6e849a8b388da457688e3dd653b4e53770012d8f28e5d3b269865038c346802f36f3da7278b13ad6a3bb6a1452e24ebeeaa24ba40eef559b1b287d2a2f80b7";
+<link linkend="opt-boot.initrd.luks.devices._name_.fido2.credential">boot.initrd.luks.devices."<replaceable>/dev/sda2</replaceable>".fido2.credential</link> = "<replaceable>f1d00200108b9d6e849a8b388da457688e3dd653b4e53770012d8f28e5d3b269865038c346802f36f3da7278b13ad6a3bb6a1452e24ebeeaa24ba40eef559b1b287d2a2f80b7</replaceable>";
 </programlisting>
 
   You can also use the FIDO2 passwordless setup, but for security reasons, you might want to enable it only when your device is PIN protected, such as <link xlink:href="https://trezor.io/">Trezor</link>.
 
 <programlisting>
-<link linkend="opt-boot.initrd.luks.devices._name_.fido2.passwordLess">boot.initrd.luks.devices."/dev/sda2".fido2.passwordLess</link> = true;
+<link linkend="opt-boot.initrd.luks.devices._name_.fido2.passwordLess">boot.initrd.luks.devices."<replaceable>/dev/sda2</replaceable>".fido2.passwordLess</link> = true;
 </programlisting>
   </para>
  </section>
