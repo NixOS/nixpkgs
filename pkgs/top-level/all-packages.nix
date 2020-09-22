@@ -4893,6 +4893,8 @@ in
 
   libcryptui = callPackage ../development/libraries/libcryptui { };
 
+  libcyaml = callPackage ../development/libraries/libcyaml  { };
+
   libsmi = callPackage ../development/libraries/libsmi { };
 
   libgen-cli = callPackage ../tools/misc/libgen-cli { };
@@ -11915,6 +11917,8 @@ in
   aqbanking = callPackage ../development/libraries/aqbanking { };
 
   aubio = callPackage ../development/libraries/aubio { };
+
+  audec = callPackage ../development/libraries/audec  { };
 
   audiofile = callPackage ../development/libraries/audiofile {
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreServices;
@@ -24544,6 +24548,8 @@ in
   zoom-us = libsForQt514.callPackage ../applications/networking/instant-messengers/zoom-us { };
 
   zotero = callPackage ../applications/office/zotero { };
+
+  zrythm = callPackage ../applications/audio/zrythm { };
 
   zscroll = callPackage ../applications/misc/zscroll {};
 
