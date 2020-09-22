@@ -18,7 +18,11 @@ stdenv.mkDerivation {
   configurePhase= ":";
   buildPhase = ''
     runHook preBuild
-    $CC -I$src/src/ -shared -o parser -Os $src/src/parser.c
+    scanner_cc="$src/src/scanner.cc"
+    if [ ! -f "$scanner_cc" ]; then
+      scanner_cc=""
+    fi
+    $CC -I$src/src/ -shared -o parser -Os $src/src/parser.c $scanner_cc -lstdc++
     runHook postBuild
   '';
   installPhase = ''
