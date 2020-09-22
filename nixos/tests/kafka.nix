@@ -30,11 +30,6 @@ let
           '';
           package = kafkaPackage;
           zookeeper = "zookeeper1:2181";
-          # These are the default options, but UseCompressedOops doesn't work with 32bit JVM
-          jvmOptions = [
-            "-server" "-Xmx1G" "-Xms1G" "-XX:+UseParNewGC" "-XX:+UseConcMarkSweepGC" "-XX:+CMSClassUnloadingEnabled"
-            "-XX:+CMSScavengeBeforeRemark" "-XX:+DisableExplicitGC" "-Djava.awt.headless=true" "-Djava.net.preferIPv4Stack=true"
-          ] ++ optionals (! pkgs.stdenv.isi686 ) [ "-XX:+UseCompressedOops" ];
         };
 
         networking.firewall.allowedTCPPorts = [ 9092 ];

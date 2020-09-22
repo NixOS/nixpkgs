@@ -90,19 +90,7 @@ in {
 
     jvmOptions = mkOption {
       description = "Extra command line options for the JVM running Kafka.";
-      default = [
-        "-server"
-        "-Xmx1G"
-        "-Xms1G"
-        "-XX:+UseCompressedOops"
-        "-XX:+UseParNewGC"
-        "-XX:+UseConcMarkSweepGC"
-        "-XX:+CMSClassUnloadingEnabled"
-        "-XX:+CMSScavengeBeforeRemark"
-        "-XX:+DisableExplicitGC"
-        "-Djava.awt.headless=true"
-        "-Djava.net.preferIPv4Stack=true"
-      ];
+      default = [];
       type = types.listOf types.str;
       example = [
         "-Djava.net.preferIPv4Stack=true"
