@@ -2716,6 +2716,8 @@ in {
 
   httplib2 = callPackage ../development/python-modules/httplib2 { };
 
+  http-parser = callPackage ../development/python-modules/http-parser { };
+
   httpretty = if isPy3k then
     callPackage ../development/python-modules/httpretty { }
   else
