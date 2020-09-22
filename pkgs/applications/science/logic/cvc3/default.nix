@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "A prover for satisfiability modulo theory (SMT)";
     maintainers = with maintainers;
       [ raskin ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.free;
     homepage = "http://www.cs.nyu.edu/acsys/cvc3/index.html";
   };
