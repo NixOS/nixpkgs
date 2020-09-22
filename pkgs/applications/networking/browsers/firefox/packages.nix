@@ -36,10 +36,10 @@ rec {
 
   firefox-esr-78 = common rec {
     pname = "firefox-esr";
-    ffversion = "78.2.0esr";
+    ffversion = "78.3.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "1dnvr9nyvnv5dkpnjnadff38lf9r7g37gk401c1i22d661ib5xj0gm2rnz1rjyrkvzrnr6p9f7liy3i41varja00g0x1racccj1my9q";
+      sha512 = "3rg4rjmigir2wsvzdl5dkh74hahjv36yvd04rhq0rszw6xz9wyig64nxhkrpf416z6iy3y1qavk7x9j6j02sc2f545pd6cx8abjgqc9";
     };
 
     patches = [
