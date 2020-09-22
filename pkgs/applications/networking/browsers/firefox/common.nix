@@ -21,7 +21,7 @@
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
 , ffmpegSupport ? true
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
-, waylandSupport ? true, libxkbcommon
+, waylandSupport ? true, libxkbcommon, pipewire
 , gssSupport ? true, kerberos
 
 ## privacy-related options
@@ -94,6 +94,11 @@ stdenv.mkDerivation ({
 
   patches = [
     ./env_var_for_system_dir.patch
+    (fetchpatch {
+      # https://src.fedoraproject.org/rpms/firefox/blob/master/f/firefox-pipewire-0-3.patch
+      url = "https://src.fedoraproject.org/rpms/firefox/raw/e99b683a352cf5b2c9ff198756859bae408b5d9d/f/firefox-pipewire-0-3.patch";
+      sha256 = "0qc62di5823r7ly2lxkclzj9rhg2z7ms81igz44nv0fzv3dszdab";
+    })
   ]
   ++ patches;
 
@@ -123,7 +128,7 @@ stdenv.mkDerivation ({
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gtk3Support gtk3
   ++ lib.optional  gssSupport kerberos
-  ++ lib.optional  waylandSupport libxkbcommon
+  ++ lib.optionals waylandSupport [ libxkbcommon pipewire ]
   ++ lib.optionals stdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
                                      AVFoundation MediaToolbox CoreLocation
                                      Foundation libobjc AddressBook cups ];
@@ -135,6 +140,11 @@ stdenv.mkDerivation ({
 
   postPatch = ''
     rm -rf obj-x86_64-pc-linux-gnu
+
+    # needed for enabling webrtc+pipewire
+    substituteInPlace \
+      media/webrtc/trunk/webrtc/modules/desktop_capture/desktop_capture_generic_gn/moz.build \
+      --replace /usr/include ${pipewire.dev}/include
   '' + lib.optionalString (lib.versionAtLeast ffversion "80") ''
     substituteInPlace dom/system/IOUtils.h \
       --replace '#include "nspr/prio.h"'          '#include "prio.h"'

@@ -8809,6 +8809,21 @@ let
     };
   };
 
+  HamAPRSFAP = buildPerlPackage {
+    pname = "Ham-APRS-FAP";
+    version = "1.21";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HE/HESSU/Ham-APRS-FAP-1.21.tar.gz";
+      sha256 = "e01b455d46f44710dbcf21b6fa843f09358ce60eee1c4141bc74e0a204d3a020";
+    };
+    propagatedBuildInputs = [ DateCalc ];
+    meta = with stdenv.lib; {
+      description = "Finnish APRS Parser (Fabulous APRS Parser)";
+      maintainers = with maintainers; [ andrew-d ];
+      license = with licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   HashDiff = buildPerlPackage {
     pname = "Hash-Diff";
     version = "0.010";

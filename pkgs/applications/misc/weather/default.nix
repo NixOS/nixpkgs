@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
         description = "Quick access to current weather conditions and forecasts";
         license = licenses.isc;
         maintainers = [ maintainers.matthiasbeyer ];
-        platforms = platforms.linux; # my only platform
+        platforms = platforms.linux ++ platforms.darwin;
     };
 }

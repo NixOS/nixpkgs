@@ -6,6 +6,7 @@
 , cython
 , enum34
 , gfortran
+, isPy27
 , isPy3k
 , numpy
 , pytest
@@ -17,6 +18,8 @@
 buildPythonPackage rec {
   pname = "scikits.odes";
   version = "2.6.1";
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;

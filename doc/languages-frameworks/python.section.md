@@ -567,7 +567,7 @@ test run would be:
   checkPhase = "pytest";
 ```
 
-However, many repositories' test suites do not translate well to nix's build 
+However, many repositories' test suites do not translate well to nix's build
 sandbox, and will generally need many tests to be disabled.
 
 To filter tests using pytest, one can do the following:
