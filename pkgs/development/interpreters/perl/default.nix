@@ -73,7 +73,7 @@ let
     # Miniperl needs -lm. perl needs -lrt.
     configureFlags =
       (if crossCompiling
-       then [ "-Dlibpth=\"\"" "-Dglibpth=\"\"" ]
+       then [ "-Dlibpth=\"\"" "-Dglibpth=\"\"" "-Ddefault_inc_excludes_dot" ]
        else [ "-de" "-Dcc=cc" ])
       ++ [
         "-Uinstallusrbinperl"
