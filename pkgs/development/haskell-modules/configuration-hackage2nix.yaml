@@ -3581,7 +3581,6 @@ broken-packages:
   - buster
   - buster-gtk
   - buster-network
-  - bustle
   - butter
   - butterflies
   - bv-sized
@@ -7439,8 +7438,6 @@ broken-packages:
   - llvm-general
   - llvm-general-pure
   - llvm-general-quote
-  - llvm-hs
-  - llvm-hs-pretty
   - llvm-ht
   - llvm-pkg-config
   - llvm-pretty
