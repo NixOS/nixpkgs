@@ -205,13 +205,16 @@ rec {
        (This means fn is type Val -> String.) */
     allowPrettyValues ? false,
     /* If this option is true, the output is indented with newlines for attribute sets and lists */
-    multiline ? true
+    multiline ? true,
+    recursionLimit ? null,
   }@args: let
-    go = indent: v: with builtins;
+    go = depth: v: with builtins;
     let     isPath   = v: typeOf v == "path";
+            indent = lib.concatStrings (lib.genList (_: "  ") depth);
             introSpace = if multiline then "\n${indent}  " else " ";
             outroSpace = if multiline then "\n${indent}" else " ";
-    in if   isInt      v then toString v
+
+    in   if isInt      v then toString v
     else if isFloat    v then "~${toString v}"
     else if isString   v then
       let
@@ -232,8 +235,9 @@ rec {
     else if isPath     v then toString v
     else if isList     v then
       if v == [] then "[ ]"
+      else if recursionLimit != null && depth >= recursionLimit then "[ ... ]"
       else "[" + introSpace
-        + libStr.concatMapStringsSep introSpace (go (indent + "  ")) v
+        + libStr.concatMapStringsSep introSpace (go (depth + 1)) v
         + outroSpace + "]"
     else if isFunction v then
       let fna = lib.functionArgs v;
@@ -249,13 +253,14 @@ rec {
       else if v == {} then "{ }"
       else if v ? type && v.type == "derivation" then
         "<derivation ${v.drvPath}>"
+      else if recursionLimit != null && depth >= recursionLimit then "{ ... }"
       else "{" + introSpace
           + libStr.concatStringsSep introSpace (libAttr.mapAttrsToList
               (name: value:
-                "${libStr.escapeNixIdentifier name} = ${go (indent + "  ") value};") v)
+                "${libStr.escapeNixIdentifier name} = ${go (depth + 1) value};") v)
         + outroSpace + "}"
     else abort "generators.toPretty: should never happen (v = ${v})";
-  in go "";
+  in go 0;
 
   # PLIST handling
   toPlist = {}: v: let
