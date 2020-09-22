@@ -1211,7 +1211,7 @@ self: super: {
   # we need an override because ghcide is tracking haskell-lsp closely.
   ghcide = dontCheck (super.ghcide.overrideScope (self: super: {
     hie-bios = dontCheck super.hie-bios_0_7_1;
-    lsp-test = dontCheck self.lsp-test_0_11_0_5;
+    lsp-test = dontCheck self.lsp-test_0_11_0_6;
   }));
 
   # hasn‘t bumped upper bounds
@@ -1461,7 +1461,7 @@ self: super: {
   jira-wiki-markup = doDistribute self.jira-wiki-markup_1_3_2;
   pandoc = doDistribute self.pandoc_2_10_1;
   pandoc-citeproc = doDistribute self.pandoc-citeproc_0_17_0_2;
-  pandoc-types = doDistribute self.pandoc-types_1_21;
+  pandoc-types = doDistribute self.pandoc-types_1_22;
   rfc5051 = doDistribute self.rfc5051_0_2;
 
   # Upstream forgot to change the Cabal version bounds in the test suite.
@@ -1481,7 +1481,7 @@ self: super: {
     ghcide = dontCheck hls-ghcide;
     # we are faster than stack here
     hie-bios = dontCheck super.hie-bios_0_7_1;
-    lsp-test = dontCheck super.lsp-test_0_11_0_5;
+    lsp-test = dontCheck super.lsp-test_0_11_0_6;
     # fourmolu can‘t compile with an older aeson
     aeson = dontCheck super.aeson_1_5_2_0;
     # brittany has an aeson upper bound of 1.5
