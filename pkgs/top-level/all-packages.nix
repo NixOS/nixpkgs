@@ -10957,6 +10957,8 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  doxyrest = callPackage ../development/tools/documentation/doxyrest {};
+
   doxygen_gui = lowPrio (doxygen.override { inherit qt4; });
 
   drake = callPackage ../development/tools/build-managers/drake { };
