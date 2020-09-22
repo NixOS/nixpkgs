@@ -1,26 +1,29 @@
 { stdenv, rustPlatform, fetchFromGitHub, stfl, sqlite, curl, gettext, pkg-config, libxml2, json_c, ncurses
-, asciidoctor, libiconv, Security, makeWrapper }:
+, asciidoctor, libiconv, Security, Foundation, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "newsboat";
-  version = "2.20.1";
+  version = "2.21";
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
     rev = "r${version}";
-    sha256 = "1i9dpkdlsm3ya0w2x4c8kplrp3qzd8slbkcqvzfpqggb67gvczvv";
+    sha256 = "0ignfmh5193bigvk9f057r0r4yaxymxv2afycn2b98w05gljccb6";
   };
 
-  cargoSha256 = "1ykffx2lhn4w56qm1wypkg9wsqpvzzrz419qkl95w1384xf3f7ix";
+  cargoSha256 = "16652i2hbs6d3fam2hdlc947i5nrb3na186zfcb4nfh7hnb7lh8g";
 
   postPatch = ''
     substituteInPlace Makefile --replace "|| true" ""
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    # Allow other ncurses versions on Darwin
-    substituteInPlace config.sh \
-      --replace "ncurses5.4" "ncurses"
-  '';
+  ''
+    # TODO: Check if that's still needed
+    + stdenv.lib.optionalString stdenv.isDarwin ''
+      # Allow other ncurses versions on Darwin
+      substituteInPlace config.sh \
+        --replace "ncurses5.4" "ncurses"
+    ''
+  ;
 
   nativeBuildInputs = [
     pkg-config
@@ -29,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   ] ++ stdenv.lib.optionals stdenv.isDarwin [ makeWrapper ncurses ];
 
   buildInputs = [ stfl sqlite curl libxml2 json_c ncurses ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Security libiconv gettext ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Security Foundation libiconv gettext ];
 
   postBuild = ''
     make prefix="$out"
@@ -37,6 +40,13 @@ rustPlatform.buildRustPackage rec {
 
   # TODO: Check if that's still needed
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin " -Wno-error=format-security";
+
+  # https://github.com/NixOS/nixpkgs/pull/98471#issuecomment-703100014 . We set
+  # these for all platforms, since upstream's gettext crate behavior might
+  # change in the future.
+  GETTEXT_LIB_DIR = "${stdenv.lib.getLib gettext}/lib";
+  GETTEXT_INCLUDE_DIR = "${stdenv.lib.getDev gettext}/include";
+  GETTEXT_BIN_DIR = "${stdenv.lib.getBin gettext}/bin";
 
   doCheck = true;
 
