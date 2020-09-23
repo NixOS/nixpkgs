@@ -75,8 +75,8 @@ clangStdenv.mkDerivation ( rec {
 
 
   preBuild = ''
-    make libs '$makeFlags'
-    make configure '$makeFlags'
+    make libs 
+    make configure 
   '';
 
   makeFlags = [ "PONYC_VERSION=0.37.0" "prefix=${placeholder "out"}" ] ++ clangStdenv.lib.optionals clangStdenv.isDarwin [ "bits=64" ]
