@@ -15,6 +15,8 @@ let
       sha256 = "1psryc2ql1cp91xd3f8jz84mdaqvwzkdq2pr96nwn03ds4cd88wh";
     };
 
+    patches = [ ];
+
     installFlags = [ "PREFIX=$(out)" ];
   });
 
