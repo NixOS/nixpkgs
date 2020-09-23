@@ -11924,6 +11924,8 @@ in
 
   aubio = callPackage ../development/libraries/aubio { };
 
+  audiality2 = callPackage ../development/libraries/audiality2 { };
+
   audiofile = callPackage ../development/libraries/audiofile {
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreServices;
   };
@@ -25077,6 +25079,12 @@ in
   klavaro = callPackage ../games/klavaro {};
 
   kobodeluxe = callPackage ../games/kobodeluxe { };
+
+  koboredux = callPackage ../games/koboredux { };
+
+  koboredux-free = callPackage ../games/koboredux {
+    useProprietaryAssets = false;
+  };
 
   leela-zero = libsForQt5.callPackage ../games/leela-zero { };
 
