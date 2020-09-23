@@ -14,7 +14,8 @@ buildGoModule rec {
   # tarball contains multiple files/directories
   postUnpack = ''
     mkdir ipfs-src
-    mv * ipfs-src || true
+    shopt -s extglob
+    mv !(ipfs-src) ipfs-src || true
     cd ipfs-src
   '';
 
