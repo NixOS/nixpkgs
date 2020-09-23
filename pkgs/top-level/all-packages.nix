@@ -15794,6 +15794,11 @@ in
     inherit (darwin.stubs) setfile rez derez;
   };
 
+  wxGTK30-gtk3-kicad = callPackage ../development/libraries/wxwidgets/3.0/kicad.nix {
+    inherit (darwin.stubs) setfile;
+    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit WebKit AVFoundation AVKit;
+  };
+
   wxSVG = callPackage ../development/libraries/wxSVG {
     wxGTK = wxGTK30;
   };
