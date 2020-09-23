@@ -65,6 +65,12 @@ rec {
           mkdir -p $out
 
           LOGFILE=/dev/null tests='exec(os.environ["testScript"])' ${driver}/bin/nixos-test-driver
+
+          for i in */xchg/coverage-data; do
+            mkdir -p $out/coverage-data
+            mv $i $out/coverage-data/$(dirname $(dirname $i))
+          done
+>>>>>>> parent of 59b6664f15c... Revert "Merge pull request #96254 from Mic92/logging"
         '';
     };
 
