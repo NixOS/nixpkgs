@@ -98,7 +98,7 @@ sub parseGroup {
     return ($f[0], { name => $f[0], password => $f[1], gid => $gid, members => $f[3] });
 }
 
-my %groupsCur = -f "/etc/group" ? map { parseGroup } read_file("/etc/group") : ();
+my %groupsCur = -f "/etc/group" ? map { parseGroup } read_file("/etc/group", { binmode => ":utf8" }) : ();
 
 # Read the current /etc/passwd.
 sub parseUser {
@@ -109,20 +109,19 @@ sub parseUser {
     return ($f[0], { name => $f[0], fakePassword => $f[1], uid => $uid,
         gid => $f[3], description => $f[4], home => $f[5], shell => $f[6] });
 }
-
-my %usersCur = -f "/etc/passwd" ? map { parseUser } read_file("/etc/passwd") : ();
+my %usersCur = -f "/etc/passwd" ? map { parseUser } read_file("/etc/passwd", { binmode => ":utf8" }) : ();
 
 # Read the groups that were created declaratively (i.e. not by groups)
 # in the past. These must be removed if they are no longer in the
 # current spec.
 my $declGroupsFile = "/var/lib/nixos/declarative-groups";
 my %declGroups;
-$declGroups{$_} = 1 foreach split / /, -e $declGroupsFile ? read_file($declGroupsFile) : "";
+$declGroups{$_} = 1 foreach split / /, -e $declGroupsFile ? read_file($declGroupsFile, { binmode => ":utf8" }) : "";
 
 # Idem for the users.
 my $declUsersFile = "/var/lib/nixos/declarative-users";
 my %declUsers;
-$declUsers{$_} = 1 foreach split / /, -e $declUsersFile ? read_file($declUsersFile) : "";
+$declUsers{$_} = 1 foreach split / /, -e $declUsersFile ? read_file($declUsersFile, { binmode => ":utf8" }) : "";
 
 
 # Generate a new /etc/group containing the declared groups.
@@ -260,7 +259,7 @@ system("nscd --invalidate passwd");
 my @shadowNew;
 my %shadowSeen;
 
-foreach my $line (-f "/etc/shadow" ? read_file("/etc/shadow") : ()) {
+foreach my $line (-f "/etc/shadow" ? read_file("/etc/shadow", { binmode => ":utf8" }) : ()) {
     chomp $line;
     my ($name, $hashedPassword, @rest) = split(':', $line, -9);
     my $u = $usersOut{$name};;
