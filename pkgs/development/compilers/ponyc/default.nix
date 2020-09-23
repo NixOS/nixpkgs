@@ -18,12 +18,12 @@ clangStdenv.mkDerivation ( rec {
 # as possible so hopefully in a few revisions this package build will
 # become a lot simpler.
 #
-# https://reviews.llvm.org/rG9f4f237e29e7150dfcf04ae78fa287d2dc8d48e2 
+# https://reviews.llvm.org/rG9f4f237e29e7150dfcf04ae78fa287d2dc8d48e2
 
     fetchSubmodules = true;
   };
 
-# build time dependencies for the patched LLVM also need patches 
+# build time dependencies for the patched LLVM also need patches
   googletest = fetchurl {
     url = https://github.com/google/googletest/archive/release-1.8.1.tar.gz;
     sha256 = "17147961i01fl099ygxjx4asvjanwdd446nwbq9v8156h98zxwcv";
@@ -53,8 +53,8 @@ clangStdenv.mkDerivation ( rec {
   postPatch = ''
     # Patching Vendor LLVM
     patchShebangs --host build/build_libs/gbenchmark-prefix/src/benchmark/tools/*.py
-    patch -d lib/llvm/src/ -p1 < lib/llvm/patches/2020-01-07-01-c-exports.diff 
-    patch -d lib/llvm/src/ -p1 < lib/llvm/patches/2019-12-23-01-jit-eh-frames.diff 
+    patch -d lib/llvm/src/ -p1 < lib/llvm/patches/2020-01-07-01-c-exports.diff
+    patch -d lib/llvm/src/ -p1 < lib/llvm/patches/2019-12-23-01-jit-eh-frames.diff
 
     # Patching CMakeList to remove all the download code which will fail inside
     # the sandbox.
