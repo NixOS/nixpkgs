@@ -55,7 +55,7 @@ in buildPythonPackage {
   inherit (packages) version;
   format = "wheel";
 
-  disabled = ! isPy3k || isPy38;
+  disabled = ! isPy3k;
 
   src = let
     pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) python.pythonVersion;
@@ -102,6 +102,11 @@ in buildPythonPackage {
     # https://github.com/tensorflow/tensorflow/issues/40884
     substituteInPlace ./unpacked/tensorflow*/tensorflow/tools/pip_package/setup.py --replace "scipy == 1.4.1" "scipy >= 1.4.1"
     substituteInPlace ./unpacked/tensorflow*/tensorflow_*.dist-info/METADATA --replace "scipy (==1.4.1)" "scipy (>=1.4.1)"
+
+    # Tensorflow has a hard dependency on gast==0.3.3, but we relax it to
+    # whatev gast version is avail
+    substituteInPlace ./unpacked/tensorflow*/tensorflow/tools/pip_package/setup.py --replace "gast == 0.3.3" "gast == ${gast.version}"
+    substituteInPlace ./unpacked/tensorflow*/tensorflow_*.dist-info/METADATA --replace "gast (==0.3.3)" "gast (==${gast.version})"
 
     # Pack the wheel file back up.
     wheel pack ./unpacked/tensorflow*

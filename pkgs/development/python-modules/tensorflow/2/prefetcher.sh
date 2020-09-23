@@ -1,28 +1,19 @@
 #!/usr/bin/env bash
 
-version=2.2.0
+version=$(curl -s https://pypi.org/project/tensorflow/ | grep -A1 'release__version' | grep -v 'release__version'  | head -n 1 | sed "s| ||g")
 
 # List of binary wheels for Tensorflow.  The most recent versions can be found
 # on the following page:
 # https://www.tensorflow.org/install/pip?lang=python3#package-location
-url_and_key_list=(
-  "linux_py_35_gpu https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-${version}-cp35-cp35m-manylinux2010_x86_64.whl"
-  "linux_py_35_cpu https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow_cpu-${version}-cp35-cp35m-manylinux2010_x86_64.whl"
-  "linux_py_36_gpu https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-${version}-cp36-cp36m-manylinux2010_x86_64.whl"
-  "linux_py_36_cpu https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow_cpu-${version}-cp36-cp36m-manylinux2010_x86_64.whl"
-  "linux_py_37_gpu https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-${version}-cp37-cp37m-manylinux2010_x86_64.whl"
-  "linux_py_37_cpu https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow_cpu-${version}-cp37-cp37m-manylinux2010_x86_64.whl"
-  "mac_py_35_cpu https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-${version}-cp35-cp35m-macosx_10_6_intel.whl"
-  "mac_py_36_cpu https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-${version}-cp36-cp36m-macosx_10_9_x86_64.whl"
-  "mac_py_37_cpu https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-${version}-cp37-cp37m-macosx_10_9_x86_64.whl"
-)
 
 hashfile=binary-hashes.nix
 rm -f $hashfile
 echo "{" >> $hashfile
 echo "version = \"$version\";" >> $hashfile
 
-for url_and_key in "${url_and_key_list[@]}"; do
+# this big ol mess really just does a regex match and then takes some of the groups
+curl -s https://www.tensorflow.org/install/pip?lang=python3#package-location | grep storage | grep -o "https.*whl" | sed -r "s|(.+tensorflow\/([a-z]+)\/([a-z]+)\/.+cp([0-9][0-9]).+)|\2_py_\4_\3 \1|g" | grep -v "windows" | grep -v "raspberrypi" |
+(while read url_and_key; do
   key=$(echo "$url_and_key" | cut -d' ' -f1)
   url=$(echo "$url_and_key" | cut -d' ' -f2)
 
@@ -35,7 +26,7 @@ for url_and_key in "${url_and_key_list[@]}"; do
   echo "};" >> $hashfile
 
   echo
-done
+done)
 
 echo "}" >> $hashfile
 echo "done."
