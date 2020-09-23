@@ -70,6 +70,12 @@ stdenv.mkDerivation rec {
   # CC_FOR_BUILD and CXX_FOR_BUILD are used to bootstrap cmake
   + ''
     configureFlags="--parallel=''${NIX_BUILD_CORES:-1} CC=$CC_FOR_BUILD CXX=$CXX_FOR_BUILD $configureFlags"
+  ''
+  # Detect dylibs in /usr/lib as system libraries on Darwin to correctly build App bundles
+  + stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Modules/GetPrerequisites.cmake --replace \
+      "if(resolved_file MATCHES \"^(/System/Library/|/var/empty/lib/)\")" \
+      "if(resolved_file MATCHES \"^(/System/Library/|/usr/lib/)\")"
   '';
 
   configureFlags = [
