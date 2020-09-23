@@ -29,7 +29,7 @@
 , target ? null
 , cargoVendorDir ? null
 , checkType ? buildType
-
+, depsExtraArgs ? {}
 # Needed to `pushd`/`popd` into a subdir of a tarball if this subdir
 # contains a Cargo.toml, but isn't part of a workspace (which is e.g. the
 # case for `rustfmt`/etc from the `rust-sources).
@@ -43,11 +43,11 @@ assert buildType == "release" || buildType == "debug";
 let
 
   cargoDeps = if cargoVendorDir == null
-    then fetchCargoTarball {
+    then fetchCargoTarball ({
         inherit name src srcs sourceRoot unpackPhase cargoUpdateHook;
         patches = cargoPatches;
         sha256 = cargoSha256;
-      }
+      } // depsExtraArgs)
     else null;
 
   # If we have a cargoSha256 fixed-output derivation, validate it at build time
@@ -83,7 +83,7 @@ let
 
 in
 
-stdenv.mkDerivation (args // {
+stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // {
   inherit cargoDeps;
 
   patchRegistryDeps = ./patch-registry-deps;
