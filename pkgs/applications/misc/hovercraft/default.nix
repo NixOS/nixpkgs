@@ -13,14 +13,14 @@
 
 buildPythonApplication rec {
   pname = "hovercraft";
-  version = "2.6";
+  version = "2.7";
   disabled = ! isPy3k;
 
   src = fetchFromGitHub {
     owner = "regebro";
     repo = "hovercraft";
     rev = version;
-    sha256 = "150sn6kvqi2s89di1akl5i0g81fasji2ipr12zq5s4dcnhw4r5wp";
+    sha256 = "0k0gjlqjz424rymcfdjpj6a71ppblfls5f8y2hd800d1as4im8az";
   };
 
   checkInputs = [ manuel ];
@@ -31,6 +31,5 @@ buildPythonApplication rec {
     homepage = https://github.com/regebro/hovercraft;
     license = licenses.mit;
     maintainers = with maintainers; [ goibhniu makefu ];
-    broken = true;
   };
 }

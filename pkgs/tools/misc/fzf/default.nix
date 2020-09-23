@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, writeText, runtimeShell, ncurses, }:
+{ lib, buildGoModule, fetchFromGitHub, writeText, runtimeShell, ncurses }:
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.20.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    sha256 = "02zy3c4k84rzqdkaf04idbj10v286hi0ix1xl2qsz1wrblh168w8";
+    sha256 = "0n0cy5q2r3dm1a3ivlzrv9c5d11awxlqim5b9x8zc85dlr73n35l";
   };
 
-  modSha256 = "12lnv8b96adpcg9qfizcyd9nxz590nxd82xch6ij719zlqyps143";
+  vendorSha256 = "1c2iz28hjrw9rig9a6r27wd8clycdhi8fgs3da91c63w4qi140zm";
 
   outputs = [ "out" "man" ];
 

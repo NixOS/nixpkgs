@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , pantheon
 , pkgconfig
 , meson
@@ -18,7 +19,7 @@
 , gnome-desktop
 , mutter
 , clutter
-, plank
+, elementary-dock
 , elementary-icon-theme
 , elementary-settings-daemon
 , wrapGAppsHook
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1qd8ynn04rzkki68w4x3ryq6fhlbi6mk359rx86a8ni084fsprh4";
+    sha256 = "sha256-BOarHUEgWqQM6jmVMauJi0JnsM+jE45MnPNnAqz1qOE=";
   };
 
   passthru = {
@@ -56,19 +57,26 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bamf
     clutter
+    elementary-dock
     elementary-icon-theme
-    gnome-desktop
     elementary-settings-daemon
+    gnome-desktop
     granite
     gtk3
     libcanberra
     libcanberra-gtk3
     libgee
     mutter
-    plank
   ];
 
   patches = [
+    # https://github.com/elementary/gala/pull/869
+    # build failure in vala 0.48.7
+    # https://github.com/elementary/gala/pull/869#issuecomment-657147695
+    (fetchpatch {
+      url = "https://github.com/elementary/gala/commit/85d290c75eaa147b704ad34e6c67498071707ee8.patch";
+      sha256 = "19jkvmxidf453qfrxkvi35igxzfz2cm8srwkabvyn9wyd1yhiw0l";
+    })
     ./plugins-dir.patch
   ];
 
