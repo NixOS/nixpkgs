@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, openssl
 , glibcLocales, expect, ncurses, libotr, curl, readline, libuuid
-, cmocka, libmicrohttpd, expat, sqlite, libmesode
+, cmocka, libmicrohttpd, expat, sqlite, libmesode, fetchpatch
 , autoconf-archive
 
 , autoAwaySupport ? true,       libXScrnSaver ? null, libX11 ? null
@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    (fetchpatch {
+      url = "https://github.com/profanity-im/profanity/commit/54667c022f17bdb547c3b8b4eec1c2889c9d60f3.patch";
+      sha256 = "0aqrq45im1qnq308hyhh7dqbggzmcqb0b868wr5v8v08pd94s45k";
+    })
     ./patches/packages-osx.patch
   ];
 
