@@ -3,6 +3,7 @@ import argparse
 import atexit
 import base64
 import io
+import itertools
 import logging
 import os
 import pathlib
@@ -92,10 +93,17 @@ logging.basicConfig(format="%(message)s")
 logger = logging.getLogger("test-driver")
 logger.setLevel(logging.INFO)
 
+machine_colours_iter = (
+    "\x1b[{}m".format(x) for x in itertools.cycle(reversed(range(31, 37)))
+)
+
 
 class MachineLogAdapter(logging.LoggerAdapter):
     def process(self, msg: str, kwargs: Any) -> Tuple[str, Any]:
-        return f"{self.extra['machine']}: {msg}", kwargs
+        return (
+            f"{self.extra['colour_code']}{self.extra['machine']}\x1b[39m: {msg}",
+            kwargs,
+        )
 
 
 def make_command(args: list) -> str:
@@ -153,7 +161,10 @@ class Machine:
                 match = re.search("run-(.+)-vm$", cmd)
                 if match:
                     self.name = match.group(1)
-        self.logger = MachineLogAdapter(logger, extra=dict(machine=self.name))
+        self.logger = MachineLogAdapter(
+            logger,
+            extra=dict(machine=self.name, colour_code=next(machine_colours_iter)),
+        )
         self.script = args.get("startCommand", self.create_startcommand(args))
 
         tmp_dir = os.environ.get("TMPDIR", tempfile.gettempdir())
