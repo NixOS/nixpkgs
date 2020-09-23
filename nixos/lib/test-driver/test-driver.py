@@ -336,6 +336,14 @@ class Machine:
     def log(self, message: str) -> None:
         self.logger.info(message)
 
+    @contextmanager
+    def nested(self, message: str) -> Iterator[None]:
+        self.logger.info(message)
+        tic = time.time()
+        yield
+        toc = time.time()
+        self.logger.info("({:.2f}s)".format(toc - tic))
+
     def execute(self, command: str) -> Tuple[int, str]:
         self.connect()
 
