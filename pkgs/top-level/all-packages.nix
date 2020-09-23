@@ -17468,6 +17468,8 @@ in
 
   fwupd = callPackage ../os-specific/linux/firmware/fwupd { };
 
+  firmware-manager = callPackage ../os-specific/linux/firmware/firmware-manager { };
+
   fwts = callPackage ../os-specific/linux/fwts { };
 
   gobi_loader = callPackage ../os-specific/linux/gobi_loader { };
