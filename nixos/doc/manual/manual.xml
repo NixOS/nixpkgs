@@ -20,4 +20,5 @@
                 xpointer="configuration-variable-list" />
  </appendix>
  <xi:include href="release-notes/release-notes.xml" />
+ <xi:include href="manual-contrib/manual-contrib.xml" />
 </book>

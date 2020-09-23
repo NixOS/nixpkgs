@@ -1,0 +1,13 @@
+<appendix xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          version="5.0"
+          xml:id="ch-manual-contrib">
+ <title>Contributing to this manual</title>
+ <para>
+  The NixOS manual is maintained as part of the
+  <link xlink:href="https://github.com/nixos/nixpkgs">nixpkgs</link> collection.
+  You can find the sources and documentation on how to build them in
+  the <link xlink:href="https://github.com/nixos/nixpkgs/tree/master/nixos/doc/manual">nixos/doc/manual</link> directory.
+ </para>
+</appendix>
