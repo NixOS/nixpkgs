@@ -352,8 +352,6 @@ let
 
     ipaddr-sexp = callPackage ../development/ocaml-modules/ipaddr/sexp.nix { };
 
-    irmin_1 = callPackage ../development/ocaml-modules/irmin/1.4.nix { };
-
     iso8601 = callPackage ../development/ocaml-modules/iso8601 { };
 
     iter = callPackage ../development/ocaml-modules/iter { };
