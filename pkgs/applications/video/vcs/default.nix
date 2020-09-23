@@ -8,7 +8,8 @@ let
   runtimeDeps = [ coreutils ffmpeg gawk gnugrep gnused imagemagick mplayer utillinux ];
 in
 stdenv.mkDerivation {
-  name = "vcs-${version}";
+  pname = "vcs";
+  inherit version;
   src = fetchurl {
     url = "http://p.outlyer.net/files/vcs/vcs-${version}.bash";
     sha256 = "0nhwcpffp3skz24kdfg4445i6j37ks6a0qsbpfd3dbi4vnpa60a0";
