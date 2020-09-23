@@ -3149,6 +3149,12 @@
     githubId = 3217744;
     name = "Peter Ferenczy";
   };
+  ghuntley = {
+    email = "ghuntley@ghuntley.com";
+    github = "ghuntley";
+    githubId = 127353;
+    name = "Geoffrey Huntley";
+  };
   gila = {
     email = "jeffry.molanus@gmail.com";
     github = "gila";
