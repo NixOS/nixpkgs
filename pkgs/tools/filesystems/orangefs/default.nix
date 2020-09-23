@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "orangefs";
-  version = "2.9.7";
+  version = "2.9.8";
 
   src = fetchurl {
     url = "http://download.orangefs.org/current/source/orangefs-${version}.tar.gz";
-    sha256 = "15669f5rcvn44wkas0mld0qmyclrmhbrw4bbbp66sw3a12vgn4sm";
+    sha256 = "0c2yla615j04ygclfavh8g5miqhbml2r0zs2c5mvkacf9in7p7sq";
   };
 
   nativeBuildInputs = [ bison flex perl autoreconfHook ];
