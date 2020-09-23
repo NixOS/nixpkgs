@@ -67,10 +67,9 @@ buildPythonPackage rec {
     "TestInstallServerExtension"
     "launch_socket"
     "sock_server"
-  ]
-  ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optional stdenv.isDarwin [
     "test_delete"
-    "test_checkpoints_follow_file" 
+    "test_checkpoints_follow_file"
   ];
 
   # Some of the tests use localhost networking.
