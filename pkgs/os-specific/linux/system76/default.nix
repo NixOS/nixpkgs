@@ -25,6 +25,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     install -D system76.ko $out/lib/modules/${kernel.modDirVersion}/misc/system76.ko
+    mkdir -p $out/lib/udev/hwdb.d
+    mv lib/udev/hwdb.d/* $out/lib/udev/hwdb.d
   '';
 
   meta = with stdenv.lib; {
