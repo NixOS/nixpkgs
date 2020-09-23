@@ -1,28 +1,17 @@
 { stdenv, fetchFromGitHub, fetchpatch, cmake, flex, bison }:
-let
-  version = "2.4.3";
-in
-stdenv.mkDerivation {
-  pname = "minizinc";
-  inherit version;
 
-  buildInputs = [ cmake flex bison ];
+stdenv.mkDerivation rec {
+  pname = "minizinc";
+  version = "unstable-2020-09-22";
 
   src = fetchFromGitHub {
     owner = "MiniZinc";
     repo = "libminizinc";
-    rev = version;
-    sha256 = "0mahf621zwwywimly5nd6j39j7qr48k5p7zwpfqnjq4wn010mbf8";
+    rev = "d4a286f8c8dae2d9d4c3a3cd43f9252f54c586d3";
+    sha256 = "0nni772hw2g6m33ff0j5b5c57gvm6vsibcdv52sndy10897nay86";
   };
 
-  patches = [
-    # Fix build with newer Bison versions:
-    # https://github.com/MiniZinc/libminizinc/issues/389
-    (fetchpatch {
-      url = "https://github.com/MiniZinc/libminizinc/commit/d3136f6f198d3081943c17ac6890dbe14a81d112.diff";
-      sha256 = "1f4wxn9422ndgq6dd0vqdxm2313srm7gn9nh82aas2xijdxlmz2c";
-    })
-  ];
+  nativeBuildInputs = [ cmake flex bison ];
 
   meta = with stdenv.lib; {
     homepage = "https://www.minizinc.org/";
