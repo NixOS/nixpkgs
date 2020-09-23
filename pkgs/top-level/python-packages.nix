@@ -150,6 +150,8 @@ in {
 
   accupy = callPackage ../development/python-modules/accupy { };
 
+  acebinf = callPackage ../development/python-modules/acebinf { };
+
   acme = callPackage ../development/python-modules/acme { };
 
   acme-tiny = callPackage ../development/python-modules/acme-tiny { };
@@ -980,6 +982,8 @@ in {
   bunch = callPackage ../development/python-modules/bunch { };
 
   bx-python = callPackage ../development/python-modules/bx-python { inherit (pkgs) zlib; };
+
+  bwapy = callPackage ../development/python-modules/bwapy { };
 
   bytecode = callPackage ../development/python-modules/bytecode { };
 
@@ -5434,6 +5438,8 @@ in {
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
   pysvn = callPackage ../development/python-modules/pysvn { };
+
+  pytabix = callPackage ../development/python-modules/pytabix { };
 
   pytado = callPackage ../development/python-modules/pytado { };
 
