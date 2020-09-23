@@ -1099,6 +1099,8 @@ in
 
   glyr = callPackage ../tools/audio/glyr { };
 
+  google-amber = callPackage ../tools/graphics/amber { };
+
   hpe-ltfs = callPackage ../tools/backup/hpe-ltfs { };
 
   http2tcp = callPackage ../tools/networking/http2tcp { };
