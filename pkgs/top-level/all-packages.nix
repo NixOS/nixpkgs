@@ -1842,6 +1842,8 @@ in
 
   dosage = callPackage ../applications/graphics/dosage { };
 
+  dot-merlin-reader = callPackage ../development/tools/ocaml/merlin/dot-merlin-reader.nix { };
+
   dozenal = callPackage ../applications/misc/dozenal { };
 
   dpic = callPackage ../tools/graphics/dpic { };
