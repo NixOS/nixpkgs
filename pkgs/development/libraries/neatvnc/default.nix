@@ -4,14 +4,19 @@
 
 stdenv.mkDerivation rec {
   pname = "neatvnc";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "036kzhbabbwc3gvsw8kqf6rs0gh8kgn6i0by9pxski38mi0qs1qs";
+    sha256 = "0zx9f9h1hqcyh3sf6k0scny2039p1lwdqbwqi8ppwwhjl2fzniv8";
   };
+
+  postPatch = ''
+    substituteInPlace meson.build --replace \
+      "version: '0.2.0'" "version: '${version}'"
+  '';
 
   nativeBuildInputs = [ meson pkg-config ninja ];
   buildInputs = [ pixman gnutls libdrm libjpeg_turbo zlib aml ];
