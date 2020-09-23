@@ -1461,7 +1461,7 @@ self: super: {
   jira-wiki-markup = doDistribute self.jira-wiki-markup_1_3_2;
   pandoc = doDistribute self.pandoc_2_10_1;
   pandoc-citeproc = doDistribute self.pandoc-citeproc_0_17_0_2;
-  pandoc-types = doDistribute self.pandoc-types_1_22;
+  pandoc-types = doDistribute self.pandoc-types_1_21;
   rfc5051 = doDistribute self.rfc5051_0_2;
 
   # Upstream forgot to change the Cabal version bounds in the test suite.
