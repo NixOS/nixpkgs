@@ -9596,7 +9596,8 @@ in
   picat = callPackage ../development/compilers/picat { };
 
   ponyc = callPackage ../development/compilers/ponyc {
-    llvm = llvm_7;
+    # Upstream pony has dropped support for versions compiled with gcc.
+    stdenv = clangStdenv;
   };
 
   pony-stable = callPackage ../development/compilers/ponyc/pony-stable.nix { };
