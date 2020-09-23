@@ -174,7 +174,7 @@ foreach my $name (keys %groupsCur) {
 # Rewrite /etc/group. FIXME: acquire lock.
 my @lines = map { join(":", $_->{name}, $_->{password}, $_->{gid}, $_->{members}) . "\n" }
     (sort { $a->{gid} <=> $b->{gid} } values(%groupsOut));
-updateFile($gidMapFile, encode_json($gidMap));
+updateFile($gidMapFile, to_json($gidMap));
 updateFile("/etc/group", \@lines);
 system("nscd --invalidate group");
 
@@ -250,7 +250,7 @@ foreach my $name (keys %usersCur) {
 # Rewrite /etc/passwd. FIXME: acquire lock.
 @lines = map { join(":", $_->{name}, $_->{fakePassword}, $_->{uid}, $_->{gid}, $_->{description}, $_->{home}, $_->{shell}) . "\n" }
     (sort { $a->{uid} <=> $b->{uid} } (values %usersOut));
-updateFile($uidMapFile, encode_json($uidMap));
+updateFile($uidMapFile, to_json($uidMap));
 updateFile("/etc/passwd", \@lines);
 system("nscd --invalidate passwd");
 
