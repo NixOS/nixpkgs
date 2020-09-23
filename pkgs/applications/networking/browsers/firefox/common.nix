@@ -138,6 +138,8 @@ stdenv.mkDerivation ({
     "-I${nss.dev}/include/nss"
   ];
 
+  MACH_USE_SYSTEM_PYTHON = "1";
+
   postPatch = ''
     rm -rf obj-x86_64-pc-linux-gnu
 
