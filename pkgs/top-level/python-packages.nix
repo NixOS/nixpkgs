@@ -164,6 +164,8 @@ in {
 
   adb-homeassistant = callPackage ../development/python-modules/adb-homeassistant { };
 
+  adb-shell = callPackage ../development/python-modules/adb-shell { };
+
   addic7ed-cli = callPackage ../development/python-modules/addic7ed-cli { };
 
   adguardhome= callPackage ../development/python-modules/adguardhome { };
