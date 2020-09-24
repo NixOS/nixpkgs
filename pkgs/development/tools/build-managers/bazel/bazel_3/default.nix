@@ -143,7 +143,7 @@ let
       build --override_repository=${remote_java_tools.name}=${remote_java_tools}
       fetch --override_repository=${remote_java_tools.name}=${remote_java_tools}
       query --override_repository=${remote_java_tools.name}=${remote_java_tools}
-      
+
       # Provide a default java toolchain, this will be the same as ${runJdk}
       build --host_javabase='@local_jdk//:jdk'
 
