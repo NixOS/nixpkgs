@@ -10701,7 +10701,7 @@ in
   };
 
   # Does not actually depend on Qt 5
-  inherit (kdeFrameworks) extra-cmake-modules kapidox kdoctools;
+  inherit (kdeFrameworks) extra-cmake-modules kapidox;
 
   coccinelle = callPackage ../development/tools/misc/coccinelle {
     ocamlPackages = ocaml-ng.ocamlPackages_4_05;
@@ -14869,14 +14869,14 @@ in
     ### KDE FRAMEWORKS
 
     inherit (kdeFrameworks.override { libsForQt5 = self; })
-      attica baloo bluez-qt kactivities kactivities-stats
-      karchive kauth kbookmarks kcmutils kcalendarcore kcodecs kcompletion kconfig
-      kconfigwidgets kcoreaddons kcrash kdav kdbusaddons kdeclarative kdelibs4support
-      kdesignerplugin kdnssd kemoticons kfilemetadata kglobalaccel kguiaddons
-      khtml ki18n kiconthemes kidletime kimageformats kio kitemmodels kitemviews
-      kjobwidgets kjs kjsembed kmediaplayer knewstuff knotifications
-      knotifyconfig kpackage kparts kpeople kplotting kpty kross krunner
-      kservice ktexteditor ktextwidgets kunitconversion kwallet kwayland
+      attica baloo bluez-qt kactivities kactivities-stats karchive kauth
+      kbookmarks kcmutils kcalendarcore kcodecs kcompletion kconfig
+      kconfigwidgets kcoreaddons kcrash kdav kdbusaddons kdeclarative
+      kdelibs4support kdesignerplugin kdnssd kdoctools kemoticons kfilemetadata
+      kglobalaccel kguiaddons khtml ki18n kiconthemes kidletime kimageformats
+      kio kitemmodels kitemviews kjobwidgets kjs kjsembed kmediaplayer knewstuff
+      knotifications knotifyconfig kpackage kparts kpeople kplotting kpty kross
+      krunner kservice ktexteditor ktextwidgets kunitconversion kwallet kwayland
       kwidgetsaddons kwindowsystem kxmlgui kxmlrpcclient modemmanager-qt
       networkmanager-qt plasma-framework prison qqc2-desktop-style solid sonnet
       syntax-highlighting syndication threadweaver kirigami2 kholidays kpurpose
@@ -14889,7 +14889,8 @@ in
 
     ### KDE APPLICATIONS
 
-    inherit (kdeApplications.override { libsForQt5 = self; })
+    inherit
+      (import ../applications/kde { libsForQt5 = self; inherit lib fetchurl; })
       akonadi-calendar akonadi-contacts akonadi-import-wizard akonadi-mime
       akonadi-notes akonadi-search baloo-widgets calendarsupport eventviews
       grantleetheme incidenceeditor kalarmcal kcalutils kdegraphics-mobipocket
@@ -21310,18 +21311,58 @@ in
 
   kdeApplications =
     let
-      mkApplications = attrs:
-        import ../applications/kde attrs // {
-          # Okteta was removed from kde applications and will now be released independently
-          # Lets keep an alias for compatibility reasons
-          inherit okteta;
+      forQt512 =
+        import ../applications/kde {
+          libsForQt5 = libsForQt512;
+          inherit lib fetchurl;
         };
-      attrs = {
-        libsForQt5 = libsForQt512;
-        inherit lib fetchurl;
+      forQt515 =
+        import ../applications/kde {
+          libsForQt5 = libsForQt515;
+          inherit lib fetchurl;
+        };
+      default = {
+        inherit (forQt512)
+          akregator ark
+          bomber bovo
+          dolphin dragon
+          elisa
+          ffmpegthumbs filelight
+          granatier gwenview
+          k3b
+          kaddressbook kalzium kapptemplate kapman kate katomic
+          kblackbox kblocks kbounce
+          kcachegrind kcalc kcharselect kcolorchooser
+          kdenlive kdf kdialog kdiamond
+          keditbookmarks
+          kfind kfloppy
+          kget kgpg
+          khelpcenter
+          kig kigo killbots kitinerary
+          kleopatra klettres klines
+          kmag kmines kmix kmplot
+          knavalbattle knetwalk knights
+          kollision kolourpaint kompare konsole
+          krdc kreversi krfb
+          kshisen ksquares ksystemlog
+          kteatime ktimer ktouch kturtle
+          kwalletmanager kwave
+          marble minuet
+          okular
+          picmi
+          spectacle
+          yakuake;
+      };
+      overrides = {
+        inherit (forQt515) akonadi kmail kontact korganizer kpkpass;
+      };
+      compat = {
+        # Okteta was removed from kde applications and will now be released independently
+        # Lets keep an alias for compatibility reasons
+        inherit okteta;
       };
     in
-      recurseIntoAttrs (makeOverridable mkApplications attrs);
+      default // overrides // compat;
 
   inherit (kdeApplications)
     akonadi akregator ark
