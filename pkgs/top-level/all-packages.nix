@@ -15105,6 +15105,8 @@ in
 
     kreport = callPackage ../development/libraries/kreport { };
 
+    ldutils = callPackage ../development/libraries/ldutils { };
+
     libcommuni = callPackage ../development/libraries/libcommuni { };
 
     libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
