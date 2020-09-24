@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   pname = "dnsperf";
-  version = "2.3.1";
+  version = "2.3.4";
 
   # The same as the initial commit of the new GitHub repo (only readme changed).
   src = fetchFromGitHub {
     owner = "DNS-OARC";
     repo = "dnsperf";
     rev = "v${version}";
-    sha256 = "0yxwm5xi9ry154ayzn2h27bnwwc202bsna8h6i4a65pn76nrn81w";
+    sha256 = "1lyci2vdl6g0s5pqs7dkq7pxdahcpkzh614wmy5fwi2f3334y0d1";
   };
 
   outputs = [ "out" "man" "doc" ];
