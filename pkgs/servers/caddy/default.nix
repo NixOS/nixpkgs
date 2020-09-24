@@ -1,8 +1,8 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "caddy";
-  version = "2.1.1";
+  version = "2.2.0";
 
   subPackages = [ "cmd/caddy" ];
 
@@ -10,10 +10,12 @@ buildGoModule rec {
     owner = "caddyserver";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0c682zrivkawsxlps5hlx8js5zp4ddahg0zi5cr0861gnllbdll0";
+    sha256 = "086zgbwb3v11gik2w024p7m7ywkzn0w27y6hrngd4rxylj7jq7c8";
   };
 
-  vendorSha256 = "0jzx00c2b8y7zwl73r2fh1826spcd15y39nfzr53s5lay3fvkybc";
+  vendorSha256 = "1rm7v03v6rf9fdqrrl639z8a46cdzswjp8rdpygcsndqfznn5w7b";
+
+  passthru.tests = { inherit (nixosTests) caddy; };
 
   meta = with stdenv.lib; {
     homepage = "https://caddyserver.com";
