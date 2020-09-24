@@ -8,6 +8,7 @@ import ./make-test-python.nix ({ lib, ... }:
   ];
 
   machine = { config, pkgs, ... }: {
+    fonts.fontconfig.enable = true;
     fonts.enableDefaultFonts = true; # Background fonts
     fonts.fonts = with pkgs; [
       noto-fonts-emoji

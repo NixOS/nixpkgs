@@ -88,6 +88,8 @@ in {
 
     hardware.opengl.enable = mkDefault true;
 
+    fonts.fontconfig.enable = true;
+
     systemd.targets.graphical.wants = [ "cage-tty1.service" ];
 
     systemd.defaultUnit = "graphical.target";

@@ -107,6 +107,7 @@ in
       icons.enable = true;
     };
 
+    fonts.fontconfig.enable = true;
     fonts.enableDefaultFonts = mkDefault true;
 
     systemd = {

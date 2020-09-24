@@ -253,7 +253,7 @@ in
       fontconfig = {
         enable = mkOption {
           type = types.bool;
-          default = true;
+          default = false;
           description = ''
             If enabled, a Fontconfig configuration file will be built
             pointing to a set of default fonts.  If you don't care about

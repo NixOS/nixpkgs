@@ -59,7 +59,9 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+      Fontconfig is no longer enabled by default. It is enabled by various modules that use fonts (xserver, sway, kmscon, cage, xrdp), but if you have services on a headless server which require fonts (e.g. for rendering images) or use an X server or Wayland compositor independently of the NixOS modules, you may need to set <xref linkend="opt-fonts.fontconfig.enable" /> to <literal>true</literal>.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
