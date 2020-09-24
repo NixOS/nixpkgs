@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgpiod";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchurl {
     url = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/snapshot/libgpiod-${version}.tar.gz";
-    sha256 = "14iv8iwyvfznyifhkqz1bjh24dvb03gmpjn8v3fs6h734l93vvw5";
+    sha256 = "1bknh7kn5gxc8xwf913lsdm9zgn1bwj42nsnp6kbkyn6ip7s6c4r";
   };
 
   buildInputs = [ kmod ] ++ lib.optionals enablePython [ python3 ncurses ];
