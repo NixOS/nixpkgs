@@ -150,6 +150,8 @@ in {
 
   accupy = callPackage ../development/python-modules/accupy { };
 
+  acebinf = callPackage ../development/python-modules/acebinf { };
+
   acme = callPackage ../development/python-modules/acme { };
 
   acme-tiny = callPackage ../development/python-modules/acme-tiny { };
@@ -981,6 +983,8 @@ in {
 
   bx-python = callPackage ../development/python-modules/bx-python { inherit (pkgs) zlib; };
 
+  bwapy = callPackage ../development/python-modules/bwapy { };
+
   bytecode = callPackage ../development/python-modules/bytecode { };
 
   bz2file = callPackage ../development/python-modules/bz2file { };
@@ -1188,6 +1192,8 @@ in {
 
   clize = callPackage ../development/python-modules/clize { };
 
+  clldutils = callPackage ../development/python-modules/clldutils { };
+
   closure-linter = callPackage ../development/python-modules/closure-linter { };
 
   cloudflare = callPackage ../development/python-modules/cloudflare { };
@@ -1354,6 +1360,8 @@ in {
   cssutils = callPackage ../development/python-modules/cssutils { };
 
   csvs-to-sqlite = callPackage ../development/python-modules/csvs-to-sqlite { };
+
+  csvw = callPackage ../development/python-modules/csvw { };
 
   cucumber-tag-expressions = callPackage ../development/python-modules/cucumber-tag-expressions { };
 
@@ -2462,6 +2470,10 @@ in {
   google_cloud_websecurityscanner = callPackage ../development/python-modules/google_cloud_websecurityscanner { };
 
   google-compute-engine = callPackage ../tools/virtualization/google-compute-engine { };
+
+  google-crc32c = callPackage ../development/python-modules/google-crc32c {
+    inherit (pkgs) crc32c;
+  };
 
   google-i18n-address = callPackage ../development/python-modules/google-i18n-address { };
 
@@ -5427,6 +5439,8 @@ in {
 
   pysvn = callPackage ../development/python-modules/pysvn { };
 
+  pytabix = callPackage ../development/python-modules/pytabix { };
+
   pytado = callPackage ../development/python-modules/pytado { };
 
   pytaglib = callPackage ../development/python-modules/pytaglib { };
@@ -6356,6 +6370,8 @@ in {
   secure = callPackage ../development/python-modules/secure { };
 
   seekpath = callPackage ../development/python-modules/seekpath { };
+
+  segments = callPackage ../development/python-modules/segments { };
 
   selectors2 = callPackage ../development/python-modules/selectors2 { };
 

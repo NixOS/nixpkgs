@@ -2,19 +2,20 @@
 
 buildGoModule rec {
   pname = "ipfs";
-  version = "0.6.0";
+  version = "0.7.0";
   rev = "v${version}";
 
   # go-ipfs makes changes to it's source tarball that don't match the git source.
   src = fetchurl {
     url = "https://github.com/ipfs/go-ipfs/releases/download/${rev}/go-ipfs-source.tar.gz";
-    sha256 = "14bgq2j2bjjy0pspy2lsj5dm3w9rmfha0l8kyq5ig86yhc4nzn80";
+    sha256 = "1fkzwm4qxxpmbjammk6s5qcyjxivfa0ydqz4mpz1w756c4jq0jf3";
   };
 
   # tarball contains multiple files/directories
   postUnpack = ''
     mkdir ipfs-src
-    mv * ipfs-src || true
+    shopt -s extglob
+    mv !(ipfs-src) ipfs-src || true
     cd ipfs-src
   '';
 
@@ -27,9 +28,9 @@ buildGoModule rec {
   vendorSha256 = null;
 
   postInstall = ''
-    install -D misc/systemd/ipfs.service $out/etc/systemd/system/ipfs.service
-    install -D misc/systemd/ipfs-api.socket $out/etc/systemd/system/ipfs-api.socket
-    install -D misc/systemd/ipfs-gateway.socket $out/etc/systemd/system/ipfs-gateway.socket
+    install --mode=444 -D misc/systemd/ipfs.service $out/etc/systemd/system/ipfs.service
+    install --mode=444 -D misc/systemd/ipfs-api.socket $out/etc/systemd/system/ipfs-api.socket
+    install --mode=444 -D misc/systemd/ipfs-gateway.socket $out/etc/systemd/system/ipfs-gateway.socket
     substituteInPlace $out/etc/systemd/system/ipfs.service \
       --replace /usr/bin/ipfs $out/bin/ipfs
   '';

@@ -191,6 +191,9 @@ in {
   gsm = super.gsm.override {
     staticSupport = true;
   };
+  crc32c = super.crc32c.override {
+    staticOnly = true;
+  };
   parted = super.parted.override {
     enableStatic = true;
   };

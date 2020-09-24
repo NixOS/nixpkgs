@@ -4605,9 +4605,7 @@ in
   iperf3 = callPackage ../tools/networking/iperf/3.nix { };
   iperf = iperf3;
 
-  ipfs = callPackage ../applications/networking/ipfs {
-    buildGoModule = buildGo114Module;
-  };
+  ipfs = callPackage ../applications/networking/ipfs { };
   ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
   ipfs-cluster = callPackage ../applications/networking/ipfs-cluster {
     buildGoModule = buildGo114Module;
@@ -7597,6 +7595,8 @@ in
 
   ua = callPackage ../tools/networking/ua { };
 
+  ubidump = python3Packages.callPackage ../tools/filesystems/ubidump { };
+
   ubridge = callPackage ../tools/networking/ubridge { };
 
   ucl = callPackage ../development/libraries/ucl { };
@@ -9376,6 +9376,12 @@ in
 
   lizardfs = callPackage ../tools/filesystems/lizardfs { };
 
+  lobster = callPackage ../development/compilers/lobster {
+    inherit (darwin) cf-private;
+    inherit (darwin.apple_sdk.frameworks)
+      Cocoa AudioToolbox OpenGL Foundation ForceFeedback;
+  };
+
   lld = llvmPackages.lld;
   lld_5 = llvmPackages_5.lld;
   lld_6 = llvmPackages_6.lld;
@@ -9734,6 +9740,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-sweep = callPackage ../development/tools/rust/cargo-sweep { };
+  cargo-sync-readme = callPackage ../development/tools/rust/cargo-sync-readme {};
   cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
@@ -10225,10 +10232,10 @@ in
 
   pythonInterpreters = callPackage ./../development/interpreters/python {
     # Overrides that apply to all Python interpreters
-    pkgs = pkgs // {
-      qt5 = pkgs.qt514;
-      libsForQt5 = pkgs.libsForQt514;
-    };
+    pkgs = pkgs.extend (final: _: {
+      qt5 = final.qt514;
+      libsForQt5 = final.libsForQt514;
+    });
   };
   inherit (pythonInterpreters) python27 python36 python37 python38 python39 python3Minimal pypy27 pypy36;
 
@@ -11924,6 +11931,8 @@ in
 
   aubio = callPackage ../development/libraries/aubio { };
 
+  audiality2 = callPackage ../development/libraries/audiality2 { };
+
   audiofile = callPackage ../development/libraries/audiofile {
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreServices;
   };
@@ -13287,6 +13296,8 @@ in
   libavc1394 = callPackage ../development/libraries/libavc1394 { };
 
   libb2 = callPackage ../development/libraries/libb2 { };
+
+  libbacktrace = callPackage ../development/libraries/libbacktrace { };
 
   libbap = callPackage ../development/libraries/libbap {
     inherit (ocaml-ng.ocamlPackages_4_06) bap ocaml findlib ctypes;
@@ -17476,6 +17487,8 @@ in
 
   fwupd = callPackage ../os-specific/linux/firmware/fwupd { };
 
+  firmware-manager = callPackage ../os-specific/linux/firmware/firmware-manager { };
+
   fwts = callPackage ../os-specific/linux/fwts { };
 
   gobi_loader = callPackage ../os-specific/linux/gobi_loader { };
@@ -17914,11 +17927,12 @@ in
 
     nvidiaPackages = dontRecurseIntoAttrs (callPackage ../os-specific/linux/nvidia-x11 { });
 
-    nvidia_x11_legacy304 = nvidiaPackages.legacy_304;
-    nvidia_x11_legacy340 = nvidiaPackages.legacy_340;
-    nvidia_x11_legacy390 = nvidiaPackages.legacy_390;
-    nvidia_x11_beta      = nvidiaPackages.beta;
-    nvidia_x11           = nvidiaPackages.stable;
+    nvidia_x11_legacy304   = nvidiaPackages.legacy_304;
+    nvidia_x11_legacy340   = nvidiaPackages.legacy_340;
+    nvidia_x11_legacy390   = nvidiaPackages.legacy_390;
+    nvidia_x11_beta        = nvidiaPackages.beta;
+    nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
+    nvidia_x11             = nvidiaPackages.stable;
 
     openrazer = callPackage ../os-specific/linux/openrazer/driver.nix { };
 
@@ -18283,6 +18297,8 @@ in
   numad = callPackage ../os-specific/linux/numad { };
 
   nvme-cli = callPackage ../os-specific/linux/nvme-cli { };
+
+  system76-firmware = callPackage ../os-specific/linux/firmware/system76-firmware { };
 
   open-vm-tools = callPackage ../applications/virtualization/open-vm-tools { };
   open-vm-tools-headless = open-vm-tools.override { withX = false; };
@@ -21765,6 +21781,10 @@ in
 
   linuxband = callPackage ../applications/audio/linuxband { };
 
+  littlegptracker = callPackage ../applications/audio/littlegptracker {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
+
   ledger = callPackage ../applications/office/ledger { };
 
   ledger-autosync = callPackage  ../applications/office/ledger-autosync { };
@@ -22966,19 +22986,14 @@ in
   quodlibet-xine-full = quodlibet-full.override { xineBackend = true; tag = "-xine-full"; };
 
   qutebrowser = let
-    libsForQt5 = libsForQt515;
-    qt5 = qt515;
-    python = python3.override {
-      packageOverrides = self: super: {
-        pkgs = pkgs // {
-          inherit libsForQt5 qt5;
-        };
-      };
-      self = python3;
-    };
-  in libsForQt5.callPackage ../applications/networking/browsers/qutebrowser {
-    python3 = python;
-  };
+    pkgs_ = pkgs.extend(_: prev: {
+      pythonInterpreters = prev.pythonInterpreters.override(oldAttrs: {
+        pkgs = oldAttrs.pkgs.extend(_: _: {
+          inherit (pkgs) qt5 libsForQt5;
+        });
+      });
+    });
+  in pkgs_.libsForQt5.callPackage ../applications/networking/browsers/qutebrowser { };
 
   rabbitvcs = callPackage ../applications/version-management/rabbitvcs {};
 
@@ -23768,6 +23783,8 @@ in
   vbindiff = callPackage ../applications/editors/vbindiff { };
 
   vcprompt = callPackage ../applications/version-management/vcprompt { };
+
+  vcs = callPackage ../applications/video/vcs { };
 
   vcv-rack = callPackage ../applications/audio/vcv-rack { };
 
@@ -25077,6 +25094,12 @@ in
 
   kobodeluxe = callPackage ../games/kobodeluxe { };
 
+  koboredux = callPackage ../games/koboredux { };
+
+  koboredux-free = callPackage ../games/koboredux {
+    useProprietaryAssets = false;
+  };
+
   leela-zero = libsForQt5.callPackage ../games/leela-zero { };
 
   legendary-gl = python38Packages.callPackage ../games/legendary-gl { };
@@ -25970,6 +25993,8 @@ in
 
   manta = callPackage ../applications/science/biology/manta { };
 
+  obitools3 = callPackage ../applications/science/biology/obitools/obitools3.nix { };
+
   octopus-caller = callPackage ../applications/science/biology/octopus { };
 
   paml = callPackage ../applications/science/biology/paml { };
@@ -26287,6 +26312,7 @@ in
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {
     gmp = lib.overrideDerivation gmp (a: { dontDisableStatic = true; });
+    stdenv = gccStdenv;
   };
   cvc4 = callPackage ../applications/science/logic/cvc4 {
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
