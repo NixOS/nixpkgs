@@ -45,6 +45,12 @@ let
 
         outputs = args.outputs or [ "out" ];
 
+        buildInputs =
+          (args.buildInputs or [])
+          # Include the default Plasma theme, in case of a Qt version mismatch
+          # between Plasma and Applications.
+          ++ [libsForQt5.breeze-qt5];
+
         meta = {
           platforms = lib.platforms.linux;
           homepage = "http://www.kde.org";
