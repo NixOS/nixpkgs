@@ -9,13 +9,13 @@ let
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-settings";
-    rev = nvidia_x11.version;
+    rev = nvidia_x11.settingsVersion;
     inherit sha256;
   };
 
   libXNVCtrl = stdenv.mkDerivation {
     pname = "libXNVCtrl";
-    inherit (nvidia_x11) version;
+    version = nvidia_x11.settingsVersion;
     inherit src;
 
     buildInputs = [ libXrandr libXext ];
@@ -42,7 +42,7 @@ in
 
 stdenv.mkDerivation {
   pname = "nvidia-settings";
-  inherit (nvidia_x11) version;
+  version = nvidia_x11.settingsVersion;
   inherit src;
 
   nativeBuildInputs = [ pkgconfig m4 ];
