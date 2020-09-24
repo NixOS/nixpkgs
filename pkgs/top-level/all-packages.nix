@@ -21338,7 +21338,7 @@ in
           kget
           khelpcenter
           kig kigo killbots kitinerary
-          kleopatra klettres klines
+          klettres klines
           kmag kmines kmix kmplot
           knavalbattle knetwalk knights
           kollision kolourpaint kompare konsole
@@ -21353,7 +21353,8 @@ in
           yakuake;
       };
       overrides = {
-        inherit (forQt515) akonadi elisa kgpg kmail kontact korganizer kpkpass;
+        inherit (forQt515)
+          akonadi elisa kgpg kleopatra kmail kontact korganizer kpkpass;
       };
       compat = {
         # Okteta was removed from kde applications and will now be released independently
