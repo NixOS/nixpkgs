@@ -21326,7 +21326,6 @@ in
           akregator ark
           bomber bovo
           dolphin dragon
-          elisa
           ffmpegthumbs filelight
           granatier gwenview
           k3b
@@ -21354,7 +21353,7 @@ in
           yakuake;
       };
       overrides = {
-        inherit (forQt515) akonadi kmail kontact korganizer kpkpass;
+        inherit (forQt515) akonadi elisa kmail kontact korganizer kpkpass;
       };
       compat = {
         # Okteta was removed from kde applications and will now be released independently
