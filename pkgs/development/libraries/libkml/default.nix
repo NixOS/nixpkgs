@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_TESTING=ON"
+  # Darwin tests require rpath for libs in build dir
+  ] ++ stdenv.lib.optional stdenv.isDarwin [
+    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
   ];
 
   buildInputs = [
