@@ -1873,6 +1873,8 @@ in
     enableSSH = true;
   };
 
+  dynalist = callPackage ../applications/misc/dynalist { };
+
   dylibbundler = callPackage ../tools/misc/dylibbundler { };
 
   dynamic-colors = callPackage ../tools/misc/dynamic-colors { };
