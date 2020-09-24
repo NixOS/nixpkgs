@@ -15,9 +15,6 @@ stdenv.mkDerivation rec {
   inherit patches;
 
   configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
-  patchPhase = optionalString stdenv.isDarwin ''
-    substituteInPlace config.mk --replace "-lrt" ""
-  '';
   postPatch = optionalString (conf!=null) "cp ${configFile} config.def.h";
 
   nativeBuildInputs = [ pkgconfig ncurses ];
