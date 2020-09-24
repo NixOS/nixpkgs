@@ -10132,12 +10132,12 @@ in
     mkDerivation = stdenv.mkDerivation;
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
-  octaveFull = (lowPrio (libsForQt5.callPackage ../development/interpreters/octave {
+  octaveFull = libsForQt5.callPackage ../development/interpreters/octave {
     python = python3;
     enableQt = true;
     overridePlatforms = ["x86_64-linux" "x86_64-darwin"];
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  }));
+  };
 
   ocropus = callPackage ../applications/misc/ocropus { };
 
