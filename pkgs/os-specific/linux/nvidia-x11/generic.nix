@@ -92,8 +92,7 @@ let
         withGtk3 = !preferGtk2;
       };
       persistenced = mapNullable (hash: callPackage (import ./persistenced.nix self hash) { }) persistencedSha256;
-      persistencedVersion = persistencedVersion;
-      settingsVersion = settingsVersion;
+      inherit persistencedVersion settingsVersion;
     };
 
     meta = with stdenv.lib; {
