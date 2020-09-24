@@ -21323,7 +21323,7 @@ in
         };
       default = {
         inherit (forQt512)
-          akregator ark
+          ark
           bomber bovo
           dolphin dragon
           ffmpegthumbs filelight
@@ -21354,8 +21354,8 @@ in
       };
       overrides = {
         inherit (forQt515)
-          akonadi elisa kgpg kitinerary kleopatra kmail kontact korganizer
-          kpkpass;
+          akonadi akregator elisa kgpg kitinerary kleopatra kmail kontact
+          korganizer kpkpass;
       };
       compat = {
         # Okteta was removed from kde applications and will now be released independently
