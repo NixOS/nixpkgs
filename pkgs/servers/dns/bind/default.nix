@@ -2,7 +2,7 @@
 , perl, pkg-config
 , libcap, libtool, libxml2, openssl, libuv
 , enablePython ? config.bind.enablePython or false, python3 ? null
-, enableSeccomp ? false, libseccomp ? null, buildPackages
+, enableSeccomp ? false, libseccomp ? null, buildPackages, nixosTests
 }:
 
 assert enableSeccomp -> libseccomp != null;
@@ -71,6 +71,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = false; # requires root and the net
+
+  passthru.tests = { inherit (nixosTests) bind; };
 
   meta = with stdenv.lib; {
     homepage = "https://www.isc.org/downloads/bind/";
