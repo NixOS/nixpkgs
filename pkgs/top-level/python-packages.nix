@@ -4692,6 +4692,8 @@ in {
 
   purepng = callPackage ../development/python-modules/purepng { };
 
+  pure-python-adb = callPackage ../development/python-modules/pure-python-adb { };
+
   pure-python-adb-homeassistant = callPackage ../development/python-modules/pure-python-adb-homeassistant { };
 
   purl = callPackage ../development/python-modules/purl { };
