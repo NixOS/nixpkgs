@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.isc;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rickynils obadz ekleog ];
+    maintainers = with maintainers; [ obadz ekleog ];
   };
   passthru.tests = {
     basic-functionality-and-dovecot-interaction = nixosTests.opensmtpd;
