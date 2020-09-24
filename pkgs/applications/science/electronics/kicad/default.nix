@@ -16,6 +16,7 @@
 }:
 
 assert ngspiceSupport -> libngspice != null;
+assert scriptingSupport -> stable;
 
 with lib;
 let
@@ -25,15 +26,18 @@ let
   versions =  import ./versions.nix;
   versionConfig = versions.${baseName};
 
-  wxGTK = if (stable)
+  python = python3;
+  wxPython = python.pkgs.wxPython_4_0;
+
+  wxGTK = if (scriptingSupport)
+    # build Kicad with same wxWidgets as wxPython, see #98634
+    then wxPython.wxGTK
+    else if (stable)
     # wxGTK3x may default to withGtk2 = false, see #73145
     then wxGTK30.override { withGtk2 = false; }
     # wxGTK31 currently introduces an issue with opening the python interpreter in pcbnew
     # but brings high DPI support?
     else wxGTK31.override { withGtk2 = false; };
-
-  python = python3;
-  wxPython = python.pkgs.wxPython_4_0;
 
 in
 stdenv.mkDerivation rec {
