@@ -48,26 +48,51 @@ let
 
   removeExpr = refs: ''remove-references-to ${lib.concatMapStrings (ref: " -t ${ref}") refs}'';
 
+  fetchsrc = fetch:
+    if fetch.type == "git" then
+      fetchgit {
+        inherit (fetch) url rev sha256;
+      }
+    else if fetch.type == "hg" then
+      fetchhg {
+        inherit (fetch) url rev sha256;
+      }
+    else if fetch.type == "bzr" then
+      fetchbzr {
+        inherit (fetch) url rev sha256;
+      }
+    else if fetch.type == "FromGitHub" then
+      fetchFromGitHub {
+        inherit (fetch) owner repo rev sha256;
+      }
+    else abort "Unrecognized package fetch type: ${fetch.type}";
+
   dep2src = goDep:
-    {
+    let main = fetchsrc goDep.fetch;
+        otherMajorVersions = map (v: {
+          src = fetchsrc v.fetch;
+          inherit (v) majorVersion;
+        }) (goDep.otherMajorVersions or []);
+        combined = stdenv.mkDerivation {
+          inherit (main) name;
+          unpackPhase = "true";
+          unpackCmd = "cp -r $curSrc/* ./";
+          buildPhase = ''
+            unpackFile "${main}"
+          '' + lib.flip lib.concatMapStrings otherMajorVersions (drv: ''
+            mkdir ./${drv.majorVersion}
+            cd ./${drv.majorVersion}
+            unpackFile "${drv.src}"
+            cd ..
+          '');
+          installPhase =''
+            mkdir $out
+            cp -r ./* $out/
+          '';
+        };
+    in {
       inherit (goDep) goPackagePath;
-      src = if goDep.fetch.type == "git" then
-        fetchgit {
-          inherit (goDep.fetch) url rev sha256;
-        }
-      else if goDep.fetch.type == "hg" then
-        fetchhg {
-          inherit (goDep.fetch) url rev sha256;
-        }
-      else if goDep.fetch.type == "bzr" then
-        fetchbzr {
-          inherit (goDep.fetch) url rev sha256;
-        }
-      else if goDep.fetch.type == "FromGitHub" then
-        fetchFromGitHub {
-          inherit (goDep.fetch) owner repo rev sha256;
-        }
-      else abort "Unrecognized package fetch type: ${goDep.fetch.type}";
+      src = if otherMajorVersions == [] then main else combined;
     };
 
   importGodeps = { depsFile }:
