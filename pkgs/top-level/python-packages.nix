@@ -282,6 +282,8 @@ in {
 
   amqplib = callPackage ../development/python-modules/amqplib { };
 
+  androidtv = callPackage ../development/python-modules/androidtv { };
+
   androguard = callPackage ../development/python-modules/androguard { };
 
   aniso8601 = callPackage ../development/python-modules/aniso8601 { };
