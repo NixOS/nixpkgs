@@ -1,7 +1,7 @@
 <book xmlns="http://docbook.org/ns/docbook"
       xmlns:xi="http://www.w3.org/2001/XInclude">
  <info>
-  <title>Nixpkgs Users and Contributors Guide</title>
+  <title>Nixpkgs Manual</title>
   <subtitle>Version <xi:include href=".version" parse="text" />
   </subtitle>
  </info>
