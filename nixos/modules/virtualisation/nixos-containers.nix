@@ -471,13 +471,14 @@ in
               '';
               type = let
                 confPkgs = if config.pkgs == null then pkgs else config.pkgs;
+                evalConfigArgs = optionalAttrs (config.pkgs != null) {
+                  pkgs = confPkgs;
+                  inherit (confPkgs) lib;
+                };
               in lib.mkOptionType {
                 name = "Toplevel NixOS config";
-                merge = loc: defs: (import (confPkgs.path + "/nixos/lib/eval-config.nix") {
+                merge = loc: defs: (import (confPkgs.path + "/nixos/lib/eval-config.nix") ({
                   inherit system;
-                  pkgs = confPkgs;
-                  baseModules = import (confPkgs.path + "/nixos/modules/module-list.nix");
-                  inherit (confPkgs) lib;
                   modules =
                     let
                       extraConfig = {
@@ -500,7 +501,7 @@ in
                       };
                     in [ extraConfig ] ++ (map (x: x.value) defs);
                   prefix = [ "containers" name ];
-                }).config;
+                } // evalConfigArgs)).config;
               };
             };
 
@@ -528,10 +529,12 @@ in
 
             pkgs = mkOption {
               type = types.nullOr types.attrs;
-              default = null;
-              example = literalExample "pkgs";
+              default = pkgs;
+              defaultText = "pkgs";
+              example = literalExample "null";
               description = ''
-                Customise which nixpkgs to use for this container.
+                The nixpkgs to use for the container.
+                When <literal>null</literal>, the pkgs are set by the container <option>config</option>.
               '';
             };
 
