@@ -40,6 +40,10 @@ jruby = stdenv.mkDerivation rec {
      EOF
   '';
 
+  postFixup = ''
+    PATH=$out/bin:$PATH patchShebangs $out/bin
+  '';
+
   passthru = rec {
     rubyEngine = "jruby";
     gemPath = "lib/${rubyEngine}/gems/${rubyVersion.libDir}";
