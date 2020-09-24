@@ -1,10 +1,14 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, astring }:
 
+if !stdenv.lib.versionAtLeast ocaml.version "4.03"
+then throw "fpath is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-fpath-0.7.2";
+  name = "ocaml${ocaml.version}-fpath-0.7.3";
   src = fetchurl {
-    url = "https://erratique.ch/software/fpath/releases/fpath-0.7.2.tbz";
-    sha256 = "1hr05d8bpqmqcfdavn4rjk9rxr7v2zl84866f5knjifrm60sxqic";
+    url = "https://erratique.ch/software/fpath/releases/fpath-0.7.3.tbz";
+    sha256 = "03z7mj0sqdz465rc4drj1gr88l9q3nfs374yssvdjdyhjbqqzc0j";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild topkg ];
