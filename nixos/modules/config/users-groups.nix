@@ -537,6 +537,7 @@ in {
       input.gid = ids.gids.input;
       kvm.gid = ids.gids.kvm;
       render.gid = ids.gids.render;
+      shadow.gid = ids.gids.shadow;
     };
 
     system.activationScripts.users = stringAfter [ "stdio" ]
