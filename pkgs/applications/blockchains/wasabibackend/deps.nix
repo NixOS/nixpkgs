@@ -770,13 +770,13 @@ in [
   })
   (fetchNuGet {
     name = "Microsoft.AspNetCore.App.Runtime.linux-x64";
-    version = "3.1.2";
-    sha256 = "19wfh9yg4n2khbl7pvf6ngx95m5p8lw4l9y935pv7nh4xgwk02p9";
+    version = "3.1.8";
+    sha256 = "140zr3nwkmf6xc52gq4iz6ycyh95fxy0jpgn637pkd9z423z8135";
   })
   (fetchNuGet {
     name = "Microsoft.NETCore.App.Runtime.linux-x64";
-    version = "3.1.2";
-    sha256 = "0a332ia5pabnz7mdfc99a5hlc7drnwzlc7cj9b5c3an6dq636p66";
+    version = "3.1.8";
+    sha256 = "1bv9n9wzsqf9g8h6z10p61xkcx8ad4nnip83qv8yyfvhr4kdmbsa";
   })
   (fetchNuGet {
     name = "Microsoft.CSharp";

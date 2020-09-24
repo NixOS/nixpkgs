@@ -67,7 +67,7 @@
     <para>
      <command>nix-env</command> silenty disregards the outputs selected by the user, and instead installs the outputs from <varname>meta.outputsToInstall</varname>. For example,
     </para>
-<programlisting>$ nix-env -iA nixpkgs.coreutils.info</programlisting>
+<screen><prompt>$ </prompt>nix-env -iA nixpkgs.coreutils.info</screen>
     <para>
      installs the <literal>"out"</literal> output (<varname>coreutils.meta.outputsToInstall</varname> is <literal>[ "out" ]</literal>) instead of the requested <literal>"info"</literal>.
     </para>

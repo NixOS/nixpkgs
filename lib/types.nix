@@ -299,16 +299,14 @@ rec {
       check = isList;
       merge = loc: defs:
         map (x: x.value) (filter (x: x ? value) (concatLists (imap1 (n: def:
-          if isList def.value then
-            imap1 (m: def':
-              (mergeDefinitions
-                (loc ++ ["[definition ${toString n}-entry ${toString m}]"])
-                elemType
-                [{ inherit (def) file; value = def'; }]
-              ).optionalValue
-            ) def.value
-          else
-            throw "The option value `${showOption loc}` in `${def.file}` is not a list.") defs)));
+          imap1 (m: def':
+            (mergeDefinitions
+              (loc ++ ["[definition ${toString n}-entry ${toString m}]"])
+              elemType
+              [{ inherit (def) file; value = def'; }]
+            ).optionalValue
+          ) def.value
+        ) defs)));
       emptyValue = { value = {}; };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
       getSubModules = elemType.getSubModules;

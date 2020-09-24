@@ -2,15 +2,13 @@
 
 buildDunePackage rec {
   pname = "csexp";
-  version = "1.3.1";
-
-  useDune2 = true;
+  version = "1.3.2";
 
   minimumOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/ocaml-dune/csexp/releases/download/${version}/csexp-${version}.tbz";
-    sha256 = "0maihbqbqq9bwr0r1cv51r3m4hrkx9cf5wnxcz7rjgn13lcc9s49";
+    sha256 = "0jhwrxfjb0x31xj4g4b89fzw34sq19j0rq2hs2zyh1vz4xxl47zj";
   };
 
   postPatch = ''
