@@ -1942,6 +1942,18 @@ let
     meta.homepage = "https://github.com/junegunn/limelight.vim/";
   };
 
+  lsp_extensions-nvim = buildVimPluginFrom2Nix {
+    pname = "lsp_extensions-nvim";
+    version = "2020-09-06";
+    src = fetchFromGitHub {
+      owner = "tjdevries";
+      repo = "lsp_extensions.nvim";
+      rev = "7c3f907c3cf94d5797dcdaf5a72c5364a91e6bd2";
+      sha256 = "0c9glx0hn28m5jzz52ny1rcp63s9fdlznvywy4gzwwqi9rscqznz";
+    };
+    meta.homepage = "https://github.com/tjdevries/lsp_extensions.nvim/";
+  };
+
   lushtags = buildVimPluginFrom2Nix {
     pname = "lushtags";
     version = "2017-04-19";
