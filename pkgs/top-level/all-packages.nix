@@ -21337,7 +21337,7 @@ in
           kfind kfloppy
           kget
           khelpcenter
-          kig kigo killbots kitinerary
+          kig kigo killbots
           klettres klines
           kmag kmines kmix kmplot
           knavalbattle knetwalk knights
@@ -21354,7 +21354,8 @@ in
       };
       overrides = {
         inherit (forQt515)
-          akonadi elisa kgpg kleopatra kmail kontact korganizer kpkpass;
+          akonadi elisa kgpg kitinerary kleopatra kmail kontact korganizer
+          kpkpass;
       };
       compat = {
         # Okteta was removed from kde applications and will now be released independently
