@@ -23820,7 +23820,7 @@ in
 
   neovim = wrapNeovim neovim-unwrapped { };
 
-  neovim-qt = libsForQt514.callPackage ../applications/editors/neovim/qt.nix { };
+  neovim-qt = libsForQt5.callPackage ../applications/editors/neovim/qt.nix { };
 
   olifant = callPackage ../applications/misc/olifant { };
 
