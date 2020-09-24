@@ -18529,9 +18529,6 @@ in
     ubootWandboard
     ;
 
-  # Non-upstream U-Boots:
-  ubootNanonote = callPackage ../misc/uboot/nanonote.nix { };
-
   uclibc = callPackage ../os-specific/linux/uclibc { };
 
   uclibcCross = callPackage ../os-specific/linux/uclibc {
