@@ -23775,6 +23775,8 @@ in
 
   vcprompt = callPackage ../applications/version-management/vcprompt { };
 
+  vcs = callPackage ../applications/video/vcs { };
+
   vcv-rack = callPackage ../applications/audio/vcv-rack { };
 
   vdirsyncer = with python3Packages; toPythonApplication vdirsyncer;
