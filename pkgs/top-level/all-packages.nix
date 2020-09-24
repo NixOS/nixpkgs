@@ -7036,7 +7036,7 @@ in
 
   sonata = callPackage ../applications/audio/sonata { };
 
-  soundkonverter = kdeApplications.callPackage ../applications/audio/soundkonverter {};
+  soundkonverter = libsForQt512.callPackage ../applications/audio/soundkonverter {};
 
   sozu = callPackage ../servers/sozu { };
 
@@ -21310,11 +21310,15 @@ in
 
   kdeApplications =
     let
-      mkApplications = import ../applications/kde;
+      mkApplications = attrs:
+        import ../applications/kde attrs // {
+          # Okteta was removed from kde applications and will now be released independently
+          # Lets keep an alias for compatibility reasons
+          inherit okteta;
+        };
       attrs = {
         libsForQt5 = libsForQt512;
         inherit lib fetchurl;
-        inherit okteta;
       };
     in
       recurseIntoAttrs (makeOverridable mkApplications attrs);
