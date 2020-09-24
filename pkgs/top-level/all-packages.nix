@@ -21345,7 +21345,7 @@ in
           krdc kreversi krfb
           kshisen ksquares ksystemlog
           kteatime ktimer ktouch kturtle
-          kwalletmanager kwave
+          kwalletmanager
           marble
           okular
           picmi
@@ -21355,7 +21355,7 @@ in
       overrides = {
         inherit (forQt515)
           akonadi akregator elisa kaddressbook kgpg kitinerary kleopatra kmail
-          kontact korganizer kpkpass minuet;
+          kontact korganizer kpkpass kwave minuet;
       };
       compat = {
         # Okteta was removed from kde applications and will now be released independently
