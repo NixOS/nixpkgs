@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "1password";
-  version = "1.1.1";
+  version = "1.7.0";
   src =
     if stdenv.isLinux then fetchzip {
       url = {
@@ -10,13 +10,13 @@ stdenv.mkDerivation rec {
         "x86_64-linux" = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_amd64_v${version}.zip";
       }.${stdenv.hostPlatform.system};
       sha256 = {
-        "i686-linux" = "1andl3ripkcg4jhwdkd4b39c9aaxqpx9wzq21pysn6rlyy4hfcb0";
-        "x86_64-linux" = "0qj5v8psqyp0sra0pvzkwjpm28kx3bgg36y37wklb6zl2ngpxm5g";
+        "i686-linux" = "0fvi9pfcm6pfy628q2lg62bkikrgsisynrk3kkjisb9ldcyjgabw";
+        "x86_64-linux" = "1iskhls8g8w2zhk79gprz4vzrmm7r7fq87gwgd4xmj5md4nkzran";
       }.${stdenv.hostPlatform.system};
       stripRoot = false;
     } else fetchurl {
       url = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_darwin_amd64_v${version}.pkg";
-      sha256 = "16inwxkrky4xwlr7vara1l8kapdgjg3kfq1l94i5855782hn4ppm";
+      sha256 = "0x6s26zgjryzmcg9qxmv5s2vml06q96yqbapasjfxqc3l205lnnn";
     };
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ xar cpio ];
