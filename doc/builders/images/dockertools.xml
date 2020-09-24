@@ -132,11 +132,11 @@ buildImage {
    <para>
     By default <function>buildImage</function> will use a static date of one second past the UNIX Epoch. This allows <function>buildImage</function> to produce binary reproducible images. When listing images with <command>docker images</command>, the newly created images will be listed like this:
    </para>
-<screen><![CDATA[
-$ docker images
+<screen>
+<prompt>$ </prompt>docker images
 REPOSITORY   TAG      IMAGE ID       CREATED        SIZE
 hello        latest   08c791c7846e   48 years ago   25.2MB
-]]></screen>
+</screen>
    <para>
     You can break binary reproducibility but have a sorted, meaningful <literal>CREATED</literal> column by setting <literal>created</literal> to <literal>now</literal>.
    </para>
@@ -152,11 +152,11 @@ pkgs.dockerTools.buildImage {
 ]]></programlisting>
    <para>
     and now the Docker CLI will display a reasonable date and sort the images as expected:
-<screen><![CDATA[
-$ docker images
+<screen>
+<prompt>$ </prompt>docker images
 REPOSITORY   TAG      IMAGE ID       CREATED              SIZE
 hello        latest   de2bf4786de6   About a minute ago   25.2MB
-]]></screen>
+</screen>
     however, the produced images will not be binary reproducible.
    </para>
   </example>
