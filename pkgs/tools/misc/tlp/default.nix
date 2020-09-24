@@ -87,8 +87,8 @@
         smartmontools
         systemd
         utillinux
-        x86_energy_perf_policy
       ] ++ lib.optional enableRDW networkmanager
+        ++ lib.optional (lib.any (lib.meta.platformMatch stdenv.hostPlatform) x86_energy_perf_policy.meta.platforms) x86_energy_perf_policy
     );
   in
     ''
