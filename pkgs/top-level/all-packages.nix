@@ -24671,6 +24671,8 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  zombietrackergps = libsForQt514.callPackage ../applications/gis/zombietrackergps { };
+
   zoom-us = libsForQt514.callPackage ../applications/networking/instant-messengers/zoom-us { };
 
   zotero = callPackage ../applications/office/zotero { };
