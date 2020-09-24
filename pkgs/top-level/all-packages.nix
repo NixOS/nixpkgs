@@ -21329,7 +21329,7 @@ in
           ffmpegthumbs filelight
           granatier gwenview
           k3b
-          kaddressbook kalzium kapptemplate kapman kate katomic
+          kalzium kapptemplate kapman kate katomic
           kblackbox kblocks kbounce
           kcachegrind kcalc kcharselect kcolorchooser
           kdenlive kdf kdialog kdiamond
@@ -21354,8 +21354,8 @@ in
       };
       overrides = {
         inherit (forQt515)
-          akonadi akregator elisa kgpg kitinerary kleopatra kmail kontact
-          korganizer kpkpass;
+          akonadi akregator elisa kaddressbook kgpg kitinerary kleopatra kmail
+          kontact korganizer kpkpass;
       };
       compat = {
         # Okteta was removed from kde applications and will now be released independently
