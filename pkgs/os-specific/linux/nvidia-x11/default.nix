@@ -32,6 +32,17 @@ rec {
   # No active beta right now
   beta = stable;
 
+  # Vulkan developer beta driver
+  vulkan_beta = generic {
+    version = "450.56.11";
+    persistencedVersion = "450.57";
+    settingsVersion = "450.57";
+    sha256_64bit = "1k64h8sp4rf6kc7liypznjgkmxi67njy1s8xy2r341fhl62pl010";
+    settingsSha256 = "1clbj9a3kv3j8jg35c197gd7b3f9f9f4h9ll5hlax95hdg12lgan";
+    persistencedSha256 = "17747z1fsbiznfsmahxmz8kmhwwcjanpfih60v5mwzk63gy4i3d5";
+    url = "https://developer.nvidia.com/vulkan-beta-4505611-linux";
+  };
+
   # Last one supporting x86
   legacy_390 = generic {
     version = "390.138";
