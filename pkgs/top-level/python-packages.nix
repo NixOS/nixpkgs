@@ -6762,6 +6762,8 @@ in {
 
   sseclient = callPackage ../development/python-modules/sseclient { };
 
+  sseclient-py = callPackage ../development/python-modules/sseclient-py { };
+
   sshpubkeys = callPackage ../development/python-modules/sshpubkeys { };
 
   sshtunnel = callPackage ../development/python-modules/sshtunnel { };
