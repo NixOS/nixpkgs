@@ -14885,7 +14885,7 @@ in
     ### KDE PLASMA 5
 
     inherit (plasma5.override { libsForQt5 = self; })
-      kdecoration khotkeys libkscreen libksysguard;
+      breeze-qt5 kdecoration khotkeys libkscreen libksysguard;
 
     ### KDE APPLICATIONS
 
