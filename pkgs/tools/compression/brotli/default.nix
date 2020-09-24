@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   patches = stdenv.lib.optional staticOnly (fetchpatch {
-    url = "https://github.com/google/brotli/pull/655/commits/7289e5a378ba13801996a84d89d8fe95c3fc4c11.patch";
+    # from https://github.com/google/brotli/pull/655
+    url = "https://github.com/google/brotli/commit/7289e5a378ba13801996a84d89d8fe95c3fc4c11.patch";
     sha256 = "1bghbdvj24jrvb0sqfdif9vwg7wx6pn8dvl6flkrcjkhpj0gi0jg";
   });
 
