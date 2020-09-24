@@ -1459,8 +1459,9 @@ in {
 
   datashape = callPackage ../development/python-modules/datashape { };
 
-  datatable =
-    callPackage ../development/python-modules/datatable { inherit (pkgs.llvmPackages) openmp libcxx libcxxabi; };
+  datatable = callPackage ../development/python-modules/datatable {
+    inherit (pkgs.llvmPackages) libcxx;
+  };
 
   dateparser = callPackage ../development/python-modules/dateparser { };
 
