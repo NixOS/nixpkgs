@@ -492,6 +492,7 @@ thirtythreeforty/lessspace.vim
 thosakwe/vim-flutter
 tiagofumo/vim-nerdtree-syntax-highlight
 tikhomirov/vim-glsl
+tjdevries/lsp_extensions.nvim
 tmhedberg/SimpylFold
 tmsvg/pear-tree
 tmux-plugins/vim-tmux
