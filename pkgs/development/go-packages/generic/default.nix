@@ -79,6 +79,8 @@ let
       combined = stdenv.mkDerivation {
         inherit (main) name;
 
+        unpackCmd = "cp -r $curSrc/* ./";
+
         unpackPhase = ''
           unpackFile "${main}"
         '' + lib.flip lib.concatMapStrings otherMajorVersions (drv: ''
