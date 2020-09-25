@@ -2342,6 +2342,8 @@ in {
 
   GitPython = callPackage ../development/python-modules/GitPython { };
 
+  git-filter-repo = callPackage ../development/python-modules/git-filter-repo { };
+
   git-revise = callPackage ../development/python-modules/git-revise { };
 
   git-sweep = callPackage ../development/python-modules/git-sweep { };
