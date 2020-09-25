@@ -6688,6 +6688,12 @@
     githubId = 3371635;
     name = "Salar Rahmanian";
   };
+  solene = {
+    email = "solene@perso.pw";
+    github = "rapenne-s";
+    githubId = 248016;
+    name = "Solène Rapenne";
+  };
   solson = {
     email = "scott@solson.me";
     github = "solson";
