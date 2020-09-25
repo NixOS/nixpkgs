@@ -529,12 +529,16 @@ in
 
             pkgs = mkOption {
               type = types.nullOr types.attrs;
-              default = pkgs;
-              defaultText = "pkgs";
-              example = literalExample "null";
+              default = null;
+              example = literalExample "pkgs";
               description = ''
                 The nixpkgs to use for the container.
-                When <literal>null</literal>, the pkgs are set by the container <option>config</option>.
+                When <literal>null</literal>, the pkgs are set by the container <option>config</option>
+                through the <option>nixpkgs</option> option.
+                Otherwise, option <option>nixpkgs</option> from the container config is ignored.
+
+                Set this option to <literal>pkgs</literal> to speed up container evaluation by reusing
+                the system pkgs.
               '';
             };
 
