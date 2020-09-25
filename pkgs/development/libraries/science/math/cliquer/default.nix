@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.21";
+  version = "1.22";
   pname = "cliquer";
 
   # autotoolized version of the original cliquer
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "dimpase";
     repo = "autocliquer";
     rev = "v${version}";
-    sha256 = "180i4qj1a25qfp75ig2d3144xfpb1dgcgpha0iqqghd7di4awg7z";
+    sha256 = "00gcmrhi2fjn8b246w5a3b0pl7p6haxy5wjvd9kcqib1xanz59z4";
   };
 
   doCheck = true;
