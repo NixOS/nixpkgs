@@ -79,18 +79,16 @@ let
       combined = stdenv.mkDerivation {
         inherit (main) name;
 
-        unpackPhase = "true";
-
-        unpackCmd = "cp -r $curSrc/* ./";
-
-        buildPhase = ''
+        unpackPhase = ''
           unpackFile "${main}"
         '' + lib.flip lib.concatMapStrings otherMajorVersions (drv: ''
           mkdir ./${drv.majorVersion}
-          cd ./${drv.majorVersion}
+          pushd ./${drv.majorVersion}
           unpackFile "${drv.src}"
-          cd ..
+          popd
         '');
+
+        dontBuild = true;
 
         installPhase =''
           mkdir $out
