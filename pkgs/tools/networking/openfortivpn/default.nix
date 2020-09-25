@@ -16,11 +16,13 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ openssl ppp ];
+
+  buildInputs = (if pkgs.stdenv.isDarwin then [ openssl ] else [ openssl ppp ]);
 
   NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
 
-  configureFlags = [ "--with-pppd=${ppp}/bin/pppd" ];
+  configureFlags = (if pkgs.stdenv.isDarwin then [ "--with-pppd=/usr/sbin/pppd" ]
+                    else [ "--with-pppd=${ppp}/bin/pppd" ] );
 
   enableParallelBuilding = true;
 
