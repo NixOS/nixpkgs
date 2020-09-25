@@ -35,10 +35,10 @@ in
     };
     showqPath = mkOption {
       type = types.path;
-      default = "/var/spool/postfix/public/showq";
-      example = "/var/lib/postfix/queue/public/showq";
+      default = "/var/lib/postfix/queue/public/showq";
+      example = "/var/spool/postfix/public/showq";
       description = ''
-        Path where Postfix places it's showq socket.
+        Path where Postfix places its showq socket.
       '';
     };
     systemd = {
