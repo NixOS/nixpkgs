@@ -21,11 +21,8 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-  ]
-  ++ lib.optional enableWX wxWidgets
-  ++ lib.optional enableXWin libX11
-  ;
+  buildInputs = lib.optional enableWX wxWidgets
+    ++ lib.optional enableXWin libX11;
 
   passthru = {
     inherit
