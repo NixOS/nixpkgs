@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "diskonaut";
-  version = "0.9.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "imsnif";
     repo = "diskonaut";
     rev = version;
-    sha256 = "125ba9qwh7j8bz74w2zbw729s1wfnjg6dg8yicqrp6559x9k7gq5";
+    sha256 = "1pmbag3r2ka30zmy2rs9jps2qxj2zh0gy4a774v9yhf0b6qjid54";
   };
 
-  cargoSha256 = "0vvbrlmviyn9w8i416767vhvd1gqm3qjvia730m0rs0w5h8khiqf";
+  cargoSha256 = "0y86ikf235lp5j85fgzawgp4vx66rmzqd6p5n8iy3mqwn3c1ggb8";
 
   meta = with stdenv.lib; {
     description = "Terminal disk space navigator";
