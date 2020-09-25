@@ -172,9 +172,9 @@ rec {
           if isAttrs value then
             lib.mapAttrsToList (name: value: recurse ([ name ] ++ path) value) value
           else if length path > 1 then {
-            ${concatStringsSep "." (lib.reverseList (tail path))}.${head path} = value;
+            "${concatStringsSep "." (lib.reverseList (tail path))}.${head path}" = value;
           } else {
-            ${head path} = value;
+            "${head path}" = value;
           };
       in attrs: lib.foldl lib.recursiveUpdate { } (lib.flatten (recurse [ ] attrs));
 
