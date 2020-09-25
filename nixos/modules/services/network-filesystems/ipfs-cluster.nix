@@ -45,12 +45,12 @@ in {
     systemd.services.ipfs-cluster = {
       path = [ "/run/wrappers" pkgs.ipfs-cluster ];
       environment.IPFS_PATH = cfg.dataDir;
+      wantedBy = [ "default.target" ];
 
       serviceConfig = {
         ExecStart = ["" "${pkgs.ipfs-cluster}/bin/ipfs-cluster-service daemon"];
         User = cfg.user;
         Group = cfg.group;
-        wantedBy = [ "default.target" ];
       };
     };
   };
