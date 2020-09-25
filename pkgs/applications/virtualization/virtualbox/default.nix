@@ -24,6 +24,7 @@ let
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
   version = "6.1.14";
+  tarballVersion = "${version}a";
 
   iasl' = iasl.overrideAttrs (old: rec {
     inherit (old) pname;
@@ -39,8 +40,8 @@ in stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "91fa05bcfce36316ca93e3927c9550ea66286fff4c5bec900b753fca278ce1a0";
+    url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${tarballVersion}.tar.bz2";
+    sha256 = "16f3cb83ab3c4dacf2a9d3cc638cbd18db23767828bba6b8ba1c1b57abeb6aef";
   };
 
   outputs = [ "out" "modsrc" ];
@@ -120,8 +121,6 @@ in stdenv.mkDerivation {
     NIX_CFLAGS_COMPILE=$(echo "$NIX_CFLAGS_COMPILE" | sed 's,\-isystem ${lib.getDev stdenv.cc.libc}/include,,g')
 
     cat >> LocalConfig.kmk <<LOCAL_CONFIG
-    VBOX_WITH_VIRTIO               :=
-
     VBOX_WITH_TESTCASES            :=
     VBOX_WITH_TESTSUITE            :=
     VBOX_WITH_VALIDATIONKIT        :=
