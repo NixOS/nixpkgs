@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "dstask";
-  version = "0.20";
+  version = "0.21";
 
   src = fetchFromGitHub {
     owner = "naggie";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0hrhvfkqflr4wx1r2xbfbi566pglrp4rp5yq0cr2ml0x6kw3yz0j";
+    sha256 = "0af85rs4s0wfnibdhn28qycvy90aafkczccs5vyh36y7cnyhvgkl";
   };
 
   # Set vendorSha256 to null because dstask vendors its dependencies (meaning
