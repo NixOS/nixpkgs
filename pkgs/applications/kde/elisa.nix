@@ -14,13 +14,13 @@
 , kinit
 , kirigami2
 , baloo
-, vlc
+, libvlc
 }:
 
 mkDerivation rec {
   name = "elisa";
 
-  buildInputs = [ vlc ];
+  buildInputs = [ libvlc ];
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 
