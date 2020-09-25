@@ -30,6 +30,12 @@ in {
         default = "/var/lib/ipfs";
         description = "The data dir for ipfs-cluster";
       };
+
+      consensus = mkOption {
+        type = types.str;
+        default = null;
+        description = "Consensus protocol - 'raft' or 'crdt'";
+      };
     };
   };
 
@@ -42,10 +48,27 @@ in {
 
     systemd.packages = [ pkgs.ipfs-cluster ];
 
+    systemd.services.ipfs-cluster-init = {
+      path = [ "/run/wrappers" pkgs.ipfs-cluster ];
+      environment.IPFS_PATH = cfg.dataDir;
+      wantedBy = [ "default.target" ];
+
+      serviceConfig = {
+        ExecStart = ["" "${pkgs.ipfs-cluster}/bin/ipfs-cluster-service init --consensus ${cfg.consensus}"];
+        Type = "oneshot";
+        RemainAfterExit = true;
+        User = cfg.user;
+        Group = cfg.group;
+      };
+    };
+
     systemd.services.ipfs-cluster = {
       path = [ "/run/wrappers" pkgs.ipfs-cluster ];
       environment.IPFS_PATH = cfg.dataDir;
       wantedBy = [ "default.target" ];
+
+      wants = [ "ipfs-cluster-init.service" ];
+      after = [ "ipfs-cluster-init.service" ];
 
       serviceConfig = {
         ExecStart = ["" "${pkgs.ipfs-cluster}/bin/ipfs-cluster-service daemon"];
