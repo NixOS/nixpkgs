@@ -2,7 +2,6 @@
 , fetchFromGitLab
 , substituteAll
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , pkgconfig
@@ -55,11 +54,6 @@ stdenv.mkDerivation rec {
   });
 
   patches = [
-    # sysconfdir
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/commit/3660130f2a55ddd0f950029b2326f4a9606e2919.diff";
-      sha256 = "0ffh1x1yg0l2g6gwiw4a3hrgadqdkj2wjhdga254k0mk4frpg6fg";
-    })
     (substituteAll {
       src = ./fix-paths.patch;
       inherit tzdata;
@@ -107,7 +101,6 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dudev_dir=${placeholder "out"}/lib/udev"
-    # TODO: @worldofpeace set gnome_session_libexecdir?
   ];
 
   # Default for release buildtype but passed manually because
