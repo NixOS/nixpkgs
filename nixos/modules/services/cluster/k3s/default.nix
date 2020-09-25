@@ -75,6 +75,8 @@ in
     virtualisation.docker = mkIf cfg.docker {
       enable = mkDefault true;
     };
+    
+    boot.kernelModules = [ "ip_conntrack" ];
 
     systemd.services.k3s = {
       description = "k3s service";
