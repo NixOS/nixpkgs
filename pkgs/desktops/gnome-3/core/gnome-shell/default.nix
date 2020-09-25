@@ -1,4 +1,5 @@
 { fetchurl
+, fetchFromGitLab
 , fetchpatch
 , substituteAll
 , stdenv
@@ -75,6 +76,11 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/gnome-shell/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "15qabakial0jcsqkq1xg4fsssarixq6aqqksikdfcpl7q0xl09n6";
   };
+
+  # See https://mail.gnome.org/archives/distributor-list/2020-September/msg00001.html
+  prePatch = (import ../gvc-with-ucm-prePatch.nix {
+    inherit fetchFromGitLab;
+  });
 
   patches = [
     # Hardcode paths to various dependencies so that they can be found at runtime.
