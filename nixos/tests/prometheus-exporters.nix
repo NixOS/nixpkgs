@@ -457,6 +457,31 @@ let
       '';
     };
 
+    openvpn = {
+      exporterConfig = {
+        enable = true;
+        group = "openvpn";
+        statusPaths = ["/run/openvpn-test"];
+      };
+      metricProvider = {
+        users.groups.openvpn = {};
+        services.openvpn.servers.test = {
+          config = ''
+            dev tun
+            status /run/openvpn-test
+            status-version 3
+          '';
+          up = "chmod g+r /run/openvpn-test";
+        };
+        systemd.services."openvpn-test".serviceConfig.Group = "openvpn";
+      };
+      exporterTest = ''
+        wait_for_unit("openvpn-test.service")
+        wait_for_unit("prometheus-openvpn-exporter.service")
+        succeed("curl -sSf http://localhost:9176/metrics | grep -q 'openvpn_up{.*} 1'")
+      '';
+    };
+
     postfix = {
       exporterConfig = {
         enable = true;

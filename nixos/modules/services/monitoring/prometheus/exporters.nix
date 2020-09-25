@@ -38,6 +38,7 @@ let
     "nextcloud"
     "nginx"
     "node"
+    "openvpn"
     "postfix"
     "postgres"
     "redis"
