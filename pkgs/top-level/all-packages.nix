@@ -15155,8 +15155,6 @@ in
 
     telepathy = callPackage ../development/libraries/telepathy/qt { };
 
-    vlc = callPackage ../applications/video/vlc {};
-
     qtwebkit-plugins = callPackage ../development/libraries/qtwebkit-plugins { };
 
   };
@@ -23942,7 +23940,7 @@ in
 
   vkeybd = callPackage ../applications/audio/vkeybd {};
 
-  vlc = libsForQt514.vlc;
+  vlc = libsForQt514.callPackage ../applications/video/vlc {};
 
   vlc_qt5 = vlc;
 
