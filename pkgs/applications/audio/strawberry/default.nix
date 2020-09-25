@@ -30,7 +30,7 @@
 , withGstreamer ? true
 , gst_all_1 ? null
 , withVlc ? true
-, vlc ? null
+, libvlc ? null
 }:
 
 mkDerivation rec {
@@ -75,7 +75,7 @@ mkDerivation rec {
     gst-plugins-good
     gst-plugins-ugly
   ])
-  ++ lib.optional withVlc vlc;
+  ++ lib.optional withVlc libvlc;
 
   nativeBuildInputs = [ cmake ninja pkgconfig qttools ];
 
