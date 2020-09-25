@@ -72,7 +72,7 @@ in stdenv.mkDerivation {
 
   name = "google-chrome${suffix}-${version}";
 
-  src = chromium.upstream-info.binary;
+  src = chromium.chromeSrc;
 
   nativeBuildInputs = [ patchelf makeWrapper ];
   buildInputs = [

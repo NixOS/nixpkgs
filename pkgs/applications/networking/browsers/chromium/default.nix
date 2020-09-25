@@ -1,5 +1,5 @@
-{ newScope, config, stdenv, llvmPackages_9, llvmPackages_10
-, makeWrapper, ed, gnugrep, coreutils
+{ newScope, config, stdenv, fetchurl, makeWrapper
+, llvmPackages_10, ed, gnugrep, coreutils, xdg_utils
 , glib, gtk3, gnome3, gsettings-desktop-schemas, gn, fetchgit
 , libva ? null
 , gcc, nspr, nss, patchelfUnstable, runCommand
@@ -30,10 +30,11 @@ let
   chromium = rec {
     inherit stdenv llvmPackages;
 
-    upstream-info = (callPackage ./update.nix {}).getChannel channel;
+    upstream-info = (lib.importJSON ./upstream-info.json).${channel};
 
     mkChromiumDerivation = callPackage ./common.nix ({
-      inherit gnome gnomeSupport gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport useOzone;
+      inherit channel gnome gnomeSupport gnomeKeyringSupport proprietaryCodecs
+              cupsSupport pulseSupport useOzone;
       # TODO: Remove after we can update gn for the stable channel (backward incompatible changes):
       gnChromium = gn.overrideAttrs (oldAttrs: {
         version = "2020-05-19";
@@ -52,6 +53,16 @@ let
           sha256 = "0h3wf4152zdvrbb0jbj49q6814lfl3rcy5mj8b2pl9s0ahvkbc6q";
         };
       });
+    } // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "87") {
+      useOzone = true; # YAY: https://chromium-review.googlesource.com/c/chromium/src/+/2382834 \o/
+      gnChromium = gn.overrideAttrs (oldAttrs: {
+        version = "2020-08-17";
+        src = fetchgit {
+          url = "https://gn.googlesource.com/gn";
+          rev = "6f13aaac55a977e1948910942675c69f2b4f7a94";
+          sha256 = "01hpma1sllpdx09mvr4d6073sg6zmk6iv44kd3r28khymcj4s251";
+        };
+      });
     });
 
     browser = callPackage ./browser.nix { inherit channel enableWideVine; };
@@ -61,12 +72,23 @@ let
     };
   };
 
+  pkgSuffix = if channel == "dev" then "unstable" else channel;
+  pkgName = "google-chrome-${pkgSuffix}";
+  chromeSrc = fetchurl {
+    urls = map (repo: "${repo}/${pkgName}/${pkgName}_${version}-1_amd64.deb") [
+      "https://dl.google.com/linux/chrome/deb/pool/main/g"
+      "http://95.31.35.30/chrome/pool/main/g"
+      "http://mirror.pcbeta.com/google/chrome/deb/pool/main/g"
+      "http://repo.fdzh.org/chrome/deb/pool/main/g"
+    ];
+    sha256 = chromium.upstream-info.sha256bin64;
+  };
+
   mkrpath = p: "${lib.makeSearchPathOutput "lib" "lib64" p}:${lib.makeLibraryPath p}";
-  widevineCdm = let upstream-info = chromium.upstream-info; in stdenv.mkDerivation {
+  widevineCdm = stdenv.mkDerivation {
     name = "chrome-widevine-cdm";
 
-    # The .deb file for Google Chrome
-    src = upstream-info.binary;
+    src = chromeSrc;
 
     nativeBuildInputs = [ patchelfUnstable ];
 
@@ -74,11 +96,11 @@ let
 
     unpackCmd = let
       widevineCdmPath =
-        if upstream-info.channel == "stable" then
+        if channel == "stable" then
           "./opt/google/chrome/WidevineCdm"
-        else if upstream-info.channel == "beta" then
+        else if channel == "beta" then
           "./opt/google/chrome-beta/WidevineCdm"
-        else if upstream-info.channel == "dev" then
+        else if channel == "dev" then
           "./opt/google/chrome-unstable/WidevineCdm"
         else
           throw "Unknown chromium channel.";
@@ -192,6 +214,9 @@ in stdenv.mkDerivation {
 
     export XDG_DATA_DIRS=$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH\''${XDG_DATA_DIRS:+:}\$XDG_DATA_DIRS
 
+    # Mainly for xdg-open but also other xdg-* tools:
+    export PATH="${xdg_utils}/bin\''${PATH:+:}\$PATH"
+
     .
     w
     EOF
@@ -211,6 +236,7 @@ in stdenv.mkDerivation {
   passthru = {
     inherit (chromium) upstream-info browser;
     mkDerivation = chromium.mkChromiumDerivation;
-    inherit sandboxExecutableName;
+    inherit chromeSrc sandboxExecutableName;
+    updateScript = ./update.py;
   };
 }
