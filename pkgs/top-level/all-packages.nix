@@ -4443,6 +4443,8 @@ in
 
   host = bind.host;
 
+  hotdoc = callPackage ../development/tools/hotdoc { };
+
   hotpatch = callPackage ../development/libraries/hotpatch { };
 
   hotspot = libsForQt5.callPackage ../development/tools/analysis/hotspot { };
