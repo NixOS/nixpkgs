@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, autoconf, makeDesktopItem
+{ stdenv, lib, fetchurl, pkgconfig, autoconf, makeDesktopItem
 , libX11, gdk-pixbuf, cairo, libXft, gtk3, vte
 , harfbuzz #substituting glyphs with opentype fonts
 , fribidi, m17n_lib #bidi and encoding
@@ -46,9 +46,9 @@ stdenv.mkDerivation rec {
     -L${stdenv.cc.cc.lib}/lib
     -lX11 -lgdk_pixbuf-2.0 -lcairo -lfontconfig -lfreetype -lXft
     -lvte-2.91 -lgtk-3 -lharfbuzz -lfribidi -lm17n
-  " + stdenv.lib.optionalString (openssl != null) "
+  " + lib.optionalString (openssl != null) "
     -lcrypto
-  " + stdenv.lib.optionalString (libssh2 != null) "
+  " + lib.optionalString (libssh2 != null) "
     -lssh2
   ";
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     "--with-tools=mlclient,mlconfig,mlcc,mlterm-menu,mlimgloader,registobmp,mlfc"
      #mlterm-menu and mlconfig depend on enabling gnome3.at-spi2-core
      #and configuring ~/.mlterm/key correctly.
- ] ++ stdenv.lib.optional (libssh2 == null) "--disable-ssh2";
+ ] ++ lib.optional (libssh2 == null) "--disable-ssh2";
 
   postInstall = ''
     install -D contrib/icon/mlterm-icon.svg "$out/share/icons/hicolor/scalable/apps/mlterm.svg"
@@ -80,13 +80,13 @@ stdenv.mkDerivation rec {
     comment = "Terminal emulator";
     desktopName = "mlterm";
     genericName = "Terminal emulator";
-    categories = stdenv.lib.concatStringsSep ";" [
+    categories = lib.concatStringsSep ";" [
       "Application" "System" "TerminalEmulator"
     ];
     startupNotify = "false";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multi Lingual TERMinal emulator on X11";
     homepage = "http://mlterm.sourceforge.net/";
     license = licenses.bsd3;
