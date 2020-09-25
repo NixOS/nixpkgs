@@ -466,10 +466,12 @@ let
       };
       exporterTest = ''
         wait_for_unit("prometheus-postfix-exporter.service")
+        wait_for_file("/var/lib/postfix/queue/public/showq")
         wait_for_open_port(9154)
         succeed(
             "curl -sSf http://localhost:9154/metrics | grep -q 'postfix_smtpd_connects_total 0'"
         )
+        succeed("curl -sSf http://localhost:9154/metrics | grep -q 'postfix_up{.*} 1'")
       '';
     };
 
