@@ -32,6 +32,11 @@
 , depsExtraArgs ? {}
 , cargoParallelTestThreads ? true
 
+# If set the CARGO_TARGET_DIR will be set to this directory. This will allow
+# you to avoid rebuilding dependencies.
+# This setting is *incompatible* with sandboxing.
+, impureCacheDir ? null
+
 # Needed to `pushd`/`popd` into a subdir of a tarball if this subdir
 # contains a Cargo.toml, but isn't part of a workspace (which is e.g. the
 # case for `rustfmt`/etc from the `rust-sources).
@@ -75,8 +80,17 @@ let
   cxxForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
   ccForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
   cxxForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
-  releaseDir = "target/${rustTarget}/${buildType}";
-  tmpDir = "${releaseDir}-tmp";
+
+  releaseDirPrefix = if impureCacheDir == null
+    then "target"
+    else
+      assert
+        stdenv.lib.assertMsg (stdenv.lib.hasPrefix "/" impureCacheDir)
+        "impureCacheDir must be an absolute path.";
+      impureCacheDir;
+
+  releaseDir = "${releaseDirPrefix}/${rustTarget}/${buildType}";
+  tmpDir = "target/${rustTarget}/${buildType}-tmp";
 
   # Specify the stdenv's `diff` by abspath to ensure that the user's build
   # inputs do not cause us to find the wrong `diff`.
@@ -97,6 +111,8 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // {
 
   PKG_CONFIG_ALLOW_CROSS =
     if stdenv.buildPlatform != stdenv.hostPlatform then 1 else 0;
+
+  CARGO_TARGET_DIR = impureCacheDir;
 
   postUnpack = ''
     eval "$cargoDepsHook"
