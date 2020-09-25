@@ -3977,9 +3977,11 @@ broken-packages:
   - complexity
   - compose-trans
   - composite-aeson
+  - composite-aeson-cofree-list
   - composite-aeson-path
   - composite-aeson-refined
   - composite-aeson-throw
+  - composite-aeson-writeonly
   - composite-binary
   - composite-ekg
   - composite-opaleye
@@ -8182,6 +8184,8 @@ broken-packages:
   - np-extras
   - np-linear
   - nptools
+  - nri-env-parser
+  - nri-prelude
   - ntp-control
   - ntrip-client
   - null-canvas
@@ -8827,6 +8831,7 @@ broken-packages:
   - prolog-graph
   - prolog-graph-lib
   - prologue
+  - prolude
   - prometheus-effect
   - promise
   - pronounce
@@ -10215,6 +10220,7 @@ broken-packages:
   - tagsoup-navigate
   - tagsoup-parsec
   - tagsoup-selection
+  - tagstew
   - tagstream-conduit
   - tai64
   - takahashi
