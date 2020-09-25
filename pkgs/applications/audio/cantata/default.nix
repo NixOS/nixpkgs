@@ -16,7 +16,7 @@
 , withDevices ? true, udisks2
 , withDynamic ? true
 , withHttpServer ? true
-, withLibVlc ? false, vlc
+, withLibVlc ? false, libvlc
 , withStreams ? true
 }:
 
@@ -71,7 +71,7 @@ in mkDerivation {
     ++ lib.optional  withMtp libmtp
     ++ lib.optional  withMusicbrainz libmusicbrainz5
     ++ lib.optional  withUdisks udisks2
-    ++ lib.optional  withLibVlc vlc;
+    ++ lib.optional  withLibVlc libvlc;
 
   nativeBuildInputs = [ cmake pkgconfig qttools ];
 
