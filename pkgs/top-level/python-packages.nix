@@ -5025,6 +5025,8 @@ in {
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
+  
+  pyvips = callPackage ../development/python-modules/pyvips { };
 
   pillow = callPackage ../development/python-modules/pillow {
     inherit (pkgs) freetype libjpeg zlib libtiff libwebp tcl lcms2 tk;
