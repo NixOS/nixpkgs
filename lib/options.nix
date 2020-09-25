@@ -216,19 +216,24 @@ rec {
 
   showDefs = defs: concatMapStrings (def:
     let
-      # Pretty print the value for display, if successful
-      prettyEval = builtins.tryEval (lib.generators.toPretty {} def.value);
-      # Split it into its lines
-      lines = filter (v: ! isList v) (builtins.split "\n" prettyEval.value);
-      # Only display the first 5 lines, and indent them for better visibility
-      value = concatStringsSep "\n    " (take 5 lines ++ optional (length lines > 5) "...");
-      result =
-        # Don't print any value if evaluating the value strictly fails
-        if ! prettyEval.success then ""
-        # Put it on a new line if it consists of multiple
-        else if length lines > 1 then ":\n    " + value
-        else ": " + value;
-    in "\n- In `${def.file}'${result}"
+      pretty = lib.generators.toPretty {
+        initialState = { result = null; count = 0; };
+        nextState = line: { result, count }:
+          if count == 0 then {
+            result = line;
+            count = count + 1;
+          } else if count == 1 then {
+            result = "\n    " + result + "\n    " + line;
+            count = count + 1;
+          } else if count < 5 then {
+            result = result + "\n    " + line;
+            count = count + 1;
+          } else {
+            return = null;
+            result = result + "\n    ...";
+          };
+      } def.value;
+    in "\n- In `${def.file}': " + pretty.result
   ) defs;
 
   unknownModule = "<unknown-file>";
