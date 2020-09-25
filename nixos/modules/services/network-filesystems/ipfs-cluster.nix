@@ -30,8 +30,8 @@ in {
         default = "/var/lib/ipfs";
         description = "The data dir for ipfs-cluster";
       };
-  	};
- };
+    };
+  };
 
 
   ###### implementation
@@ -48,5 +48,7 @@ in {
         ExecStart = ["" "${pkgs.ipfs}/bin/ipfs daemon ${ipfsFlags}"];
         User = cfg.user;
         Group = cfg.group;
-			};
-	};
+      };
+    };
+  };
+}
