@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ lib, pkgs, ... }:
 let
   fakeReply = pkgs.writeText "namecoin-reply.json" ''
   { "error": null,
@@ -15,10 +15,18 @@ let
     }
   }
   '';
+
+  # Disabled because DNSSEC does not currently validate,
+  # see https://github.com/namecoin/ncdns/issues/127
+  dnssec = false;
+
 in
 
 {
   name = "ncdns";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ rnhmjoj ];
+  };
 
   nodes.server = { ... }: {
     networking.nameservers = [ "127.0.0.1" ];
@@ -44,13 +52,15 @@ in
 
     services.ncdns = {
       enable = true;
-      dnssec.enable = true;
+      dnssec.enable = dnssec;
+      identity.hostname   = "example.com";
+      identity.hostmaster = "root@example.com";
+      identity.address    = "1.0.0.1";
     };
 
     services.pdns-recursor = {
       enable = true;
       dns.allowFrom = [ "127.0.0.0/8" ];
-      settings.loglevel = 8;
       resolveNamecoin = true;
     };
 
@@ -58,20 +68,29 @@ in
 
   };
 
-  testScript = ''
-    with subtest("DNSSEC keys have been generated"):
-        server.wait_for_unit("ncdns")
-        server.wait_for_file("/var/lib/ncdns/bit.key")
-        server.wait_for_file("/var/lib/ncdns/bit-zone.key")
+  testScript =
+    (lib.optionalString dnssec ''
+      with subtest("DNSSEC keys have been generated"):
+          server.wait_for_unit("ncdns")
+          server.wait_for_file("/var/lib/ncdns/bit.key")
+          server.wait_for_file("/var/lib/ncdns/bit-zone.key")
 
-    with subtest("DNSKEY bit record is present"):
-        server.wait_for_unit("pdns-recursor")
-        server.wait_for_open_port("53")
-        server.succeed("host -t DNSKEY bit")
+      with subtest("DNSKEY bit record is present"):
+          server.wait_for_unit("pdns-recursor")
+          server.wait_for_open_port("53")
+          server.succeed("host -t DNSKEY bit")
+    '') +
+    ''
+      with subtest("can resolve a .bit name"):
+          server.wait_for_unit("namecoind")
+          server.wait_for_unit("ncdns")
+          server.wait_for_open_port("8332")
+          assert "1.2.3.4" in server.succeed("dig @localhost -p 5333 test.bit")
 
-    with subtest("can resolve a .bit name"):
-        server.wait_for_unit("namecoind")
-        server.wait_for_open_port("8332")
-        assert "1.2.3.4" in server.succeed("host -t A test.bit")
-  '';
+      with subtest("SOA record has identity information"):
+          assert "example.com" in server.succeed("dig SOA @localhost -p 5333 bit")
+
+      with subtest("bit. zone forwarding works"):
+          assert "1.2.3.4" in server.succeed("host test.bit")
+    '';
 })
