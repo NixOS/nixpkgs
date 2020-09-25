@@ -1,4 +1,5 @@
 { stdenv
+, fetchFromGitLab
 , substituteAll
 , fetchurl
 , meson
@@ -46,6 +47,11 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/gnome-settings-daemon/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0bkrsqzyrxvnw2x1p2a67k3f692ih3i5pafnxqn1kbcsmdgmpvdp";
   };
+
+  # See https://mail.gnome.org/archives/distributor-list/2020-September/msg00001.html
+  prePatch = (import ../gvc-with-ucm-prePatch.nix {
+    inherit fetchFromGitLab;
+  });
 
   patches = [
     (substituteAll {
