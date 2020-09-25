@@ -28,7 +28,7 @@ in {
 
       dataDir = mkOption {
         type = types.str;
-        default = "/var/lib/ipfs";
+        default = "/var/lib/ipfs-cluster";
         description = "The data dir for ipfs-cluster";
       };
 
@@ -50,7 +50,7 @@ in {
 
     systemd.services.ipfs-cluster-init = {
       path = [ "/run/wrappers" pkgs.ipfs-cluster ];
-      environment.IPFS_PATH = cfg.dataDir;
+      environment.IPFS_CLUSTER_PATH = cfg.dataDir;
       wantedBy = [ "default.target" ];
 
       serviceConfig = if cfg.consensus == null then
