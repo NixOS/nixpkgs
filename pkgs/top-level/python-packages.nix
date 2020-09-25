@@ -7474,6 +7474,8 @@ in {
 
   wheel = callPackage ../development/python-modules/wheel { };
 
+  wheezy-template = callPackage ../development/python-modules/wheezy-template { };
+
   whichcraft = callPackage ../development/python-modules/whichcraft { };
 
   whisper = callPackage ../development/python-modules/whisper { };
