@@ -119,6 +119,18 @@ The above are just guidelines, and exceptions may be granted on a case-by-case b
 However, please check if it's possible to disable a problematic subset of the
 test suite and leave a comment explaining your reasoning.
 
+#### Setting `test-threads`
+
+`buildRustPackage` will use parallel test threads by default,
+sometimes it may be necessary to disable this so the tests run consecutively.
+
+```nix
+rustPlatform.buildRustPackage {
+  /* ... */
+  cargoParallelTestThreads = false;
+}
+```
+
 ### Building a package in `debug` mode
 
 By default, `buildRustPackage` will use `release` mode for builds. If a package
