@@ -22,14 +22,14 @@
 
 stdenv.mkDerivation rec {
   pname = "calls";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = "calls";
     rev = "v${version}";
-    sha256 = "0715cap3w8gppxlfaynhiqvc2ss512xgykjcpqq8f5syz2776skh";
+    sha256 = "1wqkczl1fn4d2py00fsb6kh05avmc7c49gi49j3592fqsvi87j18";
   };
 
   nativeBuildInputs = [

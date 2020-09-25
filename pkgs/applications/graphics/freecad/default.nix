@@ -1,7 +1,7 @@
-{ stdenv, mkDerivation, fetchFromGitHub, fetchpatch, cmake, ninja, coin3d, xercesc, ode
-, eigen, qtbase, qttools, qtwebkit, opencascade-occt, gts, hdf5, vtk, medfile
-, zlib, python3Packages, swig, gfortran, libXmu, soqt, libf2c, libGLU
-, makeWrapper, pkgconfig, mpi ? null }:
+{ stdenv, mkDerivation, fetchFromGitHub, fetchpatch, cmake, ninja, coin3d,
+xercesc, ode, eigen, qtbase, qttools, qtwebkit, wrapQtAppsHook,
+opencascade-occt, gts, hdf5, vtk, medfile, zlib, python3Packages, swig,
+gfortran, libXmu, soqt, libf2c, libGLU, makeWrapper, pkgconfig, mpi ? null }:
 
 assert mpi != null;
 
@@ -18,8 +18,16 @@ in mkDerivation rec {
     sha256 = "1phs9a0px5fnzpyx930cz39p5dis0f0yajxzii3c3sazgkzrd55s";
   };
 
-  nativeBuildInputs = [ cmake ninja pkgconfig pythonPackages.pyside2-tools ];
-  buildInputs = [ cmake coin3d xercesc ode eigen opencascade-occt gts
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkgconfig
+    pythonPackages.pyside2-tools
+    wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    cmake coin3d xercesc ode eigen opencascade-occt gts
     zlib swig gfortran soqt libf2c makeWrapper mpi vtk hdf5 medfile
     libGLU libXmu qtbase qttools qtwebkit
   ] ++ (with pythonPackages; [

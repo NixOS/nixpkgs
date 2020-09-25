@@ -99,12 +99,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.9";
+  version = "0.3.10";
   src = fetchFromGitHub {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "0nq51j45shb32n6086xff3x374kx5qhr2cwjzvppx4s2z0ahflal";
+    sha256 = "174id98ga82bhz2v7sy9yj6pqy0h0088p3mkdikip69p9rh3d17b";
   };
 
   inherit blas64;

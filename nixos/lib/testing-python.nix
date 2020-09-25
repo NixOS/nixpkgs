@@ -4,17 +4,15 @@
 , minimal ? false
   # Ignored
 , config ? {}
+  # !!! See comment about args in lib/modules.nix
+, specialArgs ? {}
   # Modules to add to each VM
 , extraConfigurations ? [] }:
 
-with import ./build-vms.nix { inherit system pkgs minimal extraConfigurations; };
+with import ./build-vms.nix { inherit system pkgs minimal specialArgs extraConfigurations; };
 with pkgs;
 
-let
-  jquery-ui = callPackage ./testing/jquery-ui.nix { };
-  jquery = callPackage ./testing/jquery.nix { };
-
-in rec {
+rec {
 
   inherit pkgs;
 
@@ -67,18 +65,12 @@ in rec {
           mkdir -p $out
 
           LOGFILE=/dev/null tests='exec(os.environ["testScript"])' ${driver}/bin/nixos-test-driver
-
-          for i in */xchg/coverage-data; do
-            mkdir -p $out/coverage-data
-            mv $i $out/coverage-data/$(dirname $(dirname $i))
-          done
         '';
     };
 
 
   makeTest =
     { testScript
-    , makeCoverageReport ? false
     , enableOCR ? false
     , name ? "unnamed"
     # Skip linting (mainly intended for faster dev cycles)
@@ -118,7 +110,7 @@ in rec {
 
       imagemagick_tiff = imagemagick_light.override { inherit libtiff; };
 
-      # Generate onvenience wrappers for running the test driver
+      # Generate convenience wrappers for running the test driver
       # interactively with the specified network, and for starting the
       # VMs from the command line.
       driver = let warn = if skipLint then lib.warn "Linting is disabled!" else lib.id; in warn (runCommand testDriverName
@@ -157,7 +149,6 @@ in rec {
       };
 
       test = passMeta (runTests driver);
-      report = passMeta (releaseTools.gcovReport { coverageRuns = [ test ]; });
 
       nodeNames = builtins.attrNames nodes;
       invalidNodeNames = lib.filter
@@ -173,7 +164,7 @@ in rec {
           Please stick to alphanumeric chars and underscores as separation.
         ''
       else
-        (if makeCoverageReport then report else test) // {
+        test // {
           inherit nodes driver test;
         };
 

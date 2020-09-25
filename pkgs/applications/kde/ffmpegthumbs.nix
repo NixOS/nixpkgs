@@ -1,7 +1,7 @@
 {
   mkDerivation, lib,
   extra-cmake-modules,
-  ffmpeg, kio
+  ffmpeg_3, kio
 }:
 
 mkDerivation {
@@ -11,5 +11,5 @@ mkDerivation {
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ ffmpeg kio ];
+  buildInputs = [ ffmpeg_3 kio ];
 }

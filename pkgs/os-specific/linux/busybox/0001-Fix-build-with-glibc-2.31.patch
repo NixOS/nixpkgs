@@ -1,0 +1,71 @@
+From c29b637b55c93214993f40b1a223233d40b8a7d6 Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Wed, 19 Feb 2020 22:32:28 +0100
+Subject: [PATCH] Fix build with glibc 2.31
+
+This is derived from the corresponding upstream patch[1], however this
+one doesn't apply cleanly on busybox-1.31.1, so I rebased the patch
+locally and added it directly to nixpkgs.
+
+[1] https://git.busybox.net/busybox/patch/?id=d3539be8f27b8cbfdfee460fe08299158f08bcd9
+---
+ coreutils/date.c         | 2 +-
+ libbb/missing_syscalls.c | 8 --------
+ util-linux/rdate.c       | 8 ++++++--
+ 3 files changed, 7 insertions(+), 11 deletions(-)
+
+diff --git a/coreutils/date.c b/coreutils/date.c
+index 3414d38..931b7f9 100644
+--- a/coreutils/date.c
++++ b/coreutils/date.c
+@@ -303,7 +303,7 @@ int date_main(int argc UNUSED_PARAM, char **argv)
+ 		ts.tv_sec = validate_tm_time(date_str, &tm_time);
+ 
+ 		/* if setting time, set it */
+-		if ((opt & OPT_SET) && stime(&ts.tv_sec) < 0) {
++		if ((opt & OPT_SET) && clock_settime(CLOCK_REALTIME, &ts) < 0) {
+ 			bb_perror_msg("can't set date");
+ 		}
+ 	}
+diff --git a/libbb/missing_syscalls.c b/libbb/missing_syscalls.c
+index 87cf59b..dc40d91 100644
+--- a/libbb/missing_syscalls.c
++++ b/libbb/missing_syscalls.c
+@@ -15,14 +15,6 @@ pid_t getsid(pid_t pid)
+ 	return syscall(__NR_getsid, pid);
+ }
+ 
+-int stime(const time_t *t)
+-{
+-	struct timeval tv;
+-	tv.tv_sec = *t;
+-	tv.tv_usec = 0;
+-	return settimeofday(&tv, NULL);
+-}
+-
+ int sethostname(const char *name, size_t len)
+ {
+ 	return syscall(__NR_sethostname, name, len);
+diff --git a/util-linux/rdate.c b/util-linux/rdate.c
+index 70f829e..878375d 100644
+--- a/util-linux/rdate.c
++++ b/util-linux/rdate.c
+@@ -95,9 +95,13 @@ int rdate_main(int argc UNUSED_PARAM, char **argv)
+ 	if (!(flags & 2)) { /* no -p (-s may be present) */
+ 		if (time(NULL) == remote_time)
+ 			bb_error_msg("current time matches remote time");
+-		else
+-			if (stime(&remote_time) < 0)
++		else {
++			struct timespec ts;
++			ts.tv_sec = remote_time;
++			ts.tv_nsec = 0;
++			if (clock_settime(CLOCK_REALTIME, &ts) < 0)
+ 				bb_perror_msg_and_die("can't set time of day");
++		}
+ 	}
+ 
+ 	if (flags != 1) /* not lone -s */
+-- 
+2.25.0
+

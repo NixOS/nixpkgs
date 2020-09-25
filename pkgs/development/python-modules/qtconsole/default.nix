@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "qtconsole";
-  version = "4.7.3";
+  version = "4.7.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8f5ae5571f0e921db9f2d12613ed667c350ee22c7db598d9bbbe143e8533f932";
+    sha256 = "6c24397c19a49a5cf69582c931db4b0f6b00a78530a2bfd122936f2ebfae2fef";
   };
 
   checkInputs = [ nose ] ++ lib.optionals isPy27 [mock];

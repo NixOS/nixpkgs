@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, buildGoPackage, git, which }:
-  
+
 buildGoPackage rec {
   pname = "quorum";
   version = "2.5.0";

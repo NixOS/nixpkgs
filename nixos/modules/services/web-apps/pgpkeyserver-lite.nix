@@ -33,7 +33,7 @@ in
         description = "
           Which hostname to set the vHost to that is proxying to sks.
         ";
-      };     
+      };
 
       hkpAddress = mkOption {
         default = builtins.head sksCfg.hkpAddress;

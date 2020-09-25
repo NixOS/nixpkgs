@@ -1,59 +1,52 @@
 { stdenv
-, buildGoPackage
+, buildGoModule
 , fetchFromGitHub
-, runCommand
 , gpgme
-, libgpgerror
 , lvm2
 , btrfs-progs
 , pkg-config
-, libselinux
 , go-md2man
 , installShellFiles
+, makeWrapper
+, fuse-overlayfs
 }:
 
-let
-  version = "0.2.0";
+buildGoModule rec {
+  pname = "skopeo";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "containers";
     repo = "skopeo";
-    sha256 = "09zqzrw6f1s6kaknnj3hra3xz4nq6y86vmw5vk8p4f6g7cwakg1x";
+    sha256 = "1v7k3ki10i6082r7zswblyirx6zck674y6bw3plssw4p1l2611rd";
   };
-
-  defaultPolicyFile = runCommand "skopeo-default-policy.json" {} "cp ${src}/default-policy.json $out";
-
-  goPackagePath = "github.com/containers/skopeo";
-
-  vendorPath = "${goPackagePath}/vendor/github.com/containers/image/v5";
-
-in
-buildGoPackage {
-  pname = "skopeo";
-  inherit version;
-  inherit src goPackagePath;
 
   outputs = [ "out" "man" ];
 
-  excludedPackages = [ "integration" ];
+  vendorSha256 = null;
 
-  nativeBuildInputs = [ pkg-config go-md2man installShellFiles ];
+  doCheck = false;
+
+  nativeBuildInputs = [ pkg-config go-md2man installShellFiles makeWrapper ];
+
   buildInputs = [ gpgme ]
-  ++ stdenv.lib.optionals stdenv.isLinux [ libgpgerror lvm2 btrfs-progs libselinux ];
+  ++ stdenv.lib.optionals stdenv.isLinux [ lvm2 btrfs-progs ];
 
-  buildFlagsArray = ''
-    -ldflags=
-    -X ${vendorPath}/signature.systemDefaultPolicyPath=${defaultPolicyFile}
-    -X ${vendorPath}/internal/tmpdir.unixTempDirForBigFiles=/tmp
+  buildPhase = ''
+    patchShebangs .
+    make bin/skopeo docs
   '';
 
-  postBuild = ''
-    # depends on buildGoPackage not changing …
-    pushd ./go/src/${goPackagePath}
-    make install-docs MANINSTALLDIR="$man/share/man"
+  installPhase = ''
+    install -Dm755 bin/skopeo -t $out/bin
+    installManPage docs/*.[1-9]
     installShellCompletion --bash completions/bash/skopeo
-    popd
+  '';
+
+  postInstall = stdenv.lib.optionals stdenv.isLinux ''
+    wrapProgram $out/bin/skopeo \
+      --prefix PATH : ${stdenv.lib.makeBinPath [ fuse-overlayfs ]}
   '';
 
   meta = with stdenv.lib; {

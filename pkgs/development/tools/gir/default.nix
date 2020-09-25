@@ -18,6 +18,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/gtk-rs/gir/";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ekleog ];
-    platforms = platforms.all;
   };
 }

@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "open-iscsi";
-  version = "2.1.1";
+  version = "2.1.2";
 
   nativeBuildInputs = [ autoconf automake gettext libtool perl pkgconf ];
   buildInputs = [ kmod openisns.lib openssl systemd utillinux ];
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "open-iscsi";
     repo = "open-iscsi";
     rev = version;
-    sha256 = "1xa3mbid9mkajp8mr8jx6cymv0kd7yqs96jvff54n6wb9qhn9qll";
+    sha256 = "0fazf2ighj0akrvcj3jm3kd6wl9lgznvr38g6icwfkqk7bykjkam";
   };
 
   DESTDIR = "$(out)";

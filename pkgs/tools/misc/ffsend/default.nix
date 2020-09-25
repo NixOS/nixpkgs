@@ -16,21 +16,21 @@ with rustPlatform;
 
 buildRustPackage rec {
   pname = "ffsend";
-  version = "0.2.61";
+  version = "0.2.65";
 
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "ffsend";
     rev = "v${version}";
-    sha256 = "1d0rx5gcp9z06kxjknqa1r2b4m5c4vrhp4a9spkawvgiky5a9x07";
+    sha256 = "02yw129rw072jlf36k60jbhfdv9ayx2wb5il61fc0v07h1nd7i0d";
   };
 
-  cargoSha256 = "1bmyhg1y4gz719nsfdfjf4y73f9l6aag17dx9iazfzwnwwaq46m9";
+  cargoSha256 = "04waki61b5pjlgznbhbrjpi9rxgdwg9mjbx2apfh9swvfip602r6";
 
   nativeBuildInputs = [ cmake pkgconfig installShellFiles ];
-  buildInputs = [ openssl ]
-  ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices Security AppKit ])
-  ;
+  buildInputs =
+    if stdenv.isDarwin then (with darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices Security AppKit ])
+    else [ openssl ];
 
   preBuild = stdenv.lib.optionalString (x11Support && usesX11) (
     if preferXsel && xsel != null then ''

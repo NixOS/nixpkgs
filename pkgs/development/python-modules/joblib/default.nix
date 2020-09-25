@@ -1,4 +1,5 @@
 { lib
+, pythonOlder
 , buildPythonPackage
 , fetchPypi
 , stdenv
@@ -12,11 +13,12 @@
 
 buildPythonPackage rec {
   pname = "joblib";
-  version = "0.14.1";
+  version = "0.16.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0630eea4f5664c463f23fbf5dcfc54a2bc6168902719fa8e19daf033022786c8";
+    sha256 = "8f52bf24c64b608bf0b2563e0e47d6fcf516abc8cfafe10cfd98ad66d94f92d6";
   };
 
   checkInputs = [ sphinx numpydoc pytest ];

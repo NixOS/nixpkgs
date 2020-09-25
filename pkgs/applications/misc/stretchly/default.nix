@@ -1,8 +1,11 @@
-{ stdenv, lib, fetchurl, makeWrapper, wrapGAppsHook, electron
+{ stdenv, lib, fetchurl, makeWrapper, wrapGAppsHook, electron_7
 , common-updater-scripts
 , writeShellScript
 }:
 
+let
+  electron = electron_7;
+in
 stdenv.mkDerivation rec {
   pname = "stretchly";
   version = "0.21.1";

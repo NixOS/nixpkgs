@@ -1,21 +1,22 @@
 { stdenv
 , lib
-, fetchFromGitHub
-, curl
-, json_c
-, pam
 , bashInteractive
+, curl
+, fetchFromGitHub
+, json_c
+, nixosTests
+, pam
 }:
 
 stdenv.mkDerivation rec {
   pname = "google-compute-engine-oslogin";
-  version = "20200325.00";
+  version = "20200507.00";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "guest-oslogin";
     rev = version;
-    sha256 = "03hk95pgzcgy6ginp8zdy0fbk88m6n65qq22jq490z1xwbjffm8r";
+    sha256 = "1np8c96sm29pwnxykc0id8kkgalhw576g43fgi1y936sr2hfvx3v";
   };
 
   postPatch = ''
@@ -42,10 +43,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru.tests = {
+    inherit (nixosTests) google-oslogin;
+  };
+
   meta = with stdenv.lib; {
     homepage = "https://github.com/GoogleCloudPlatform/compute-image-packages";
     description = "OS Login Guest Environment for Google Compute Engine";
     license = licenses.asl20;
-    maintainers = with maintainers; [ adisbladis flokli ];
+    maintainers = with maintainers; [ flokli ];
   };
 }

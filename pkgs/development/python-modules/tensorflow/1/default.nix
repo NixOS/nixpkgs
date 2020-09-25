@@ -23,9 +23,9 @@
 , xlaSupport ? cudaSupport
 # Default from ./configure script
 , cudaCapabilities ? [ "3.5" "5.2" ]
-, sse42Support ? builtins.elem (stdenv.hostPlatform.platform.gcc.arch or "default") ["westmere" "sandybridge" "ivybridge" "haswell" "broadwell" "skylake" "skylake-avx512"]
-, avx2Support  ? builtins.elem (stdenv.hostPlatform.platform.gcc.arch or "default") [                                     "haswell" "broadwell" "skylake" "skylake-avx512"]
-, fmaSupport   ? builtins.elem (stdenv.hostPlatform.platform.gcc.arch or "default") [                                     "haswell" "broadwell" "skylake" "skylake-avx512"]
+, sse42Support ? stdenv.hostPlatform.sse4_2Support
+, avx2Support  ? stdenv.hostPlatform.avx2Support
+, fmaSupport   ? stdenv.hostPlatform.fmaSupport
 # Darwin deps
 , Foundation, Security
 }:
@@ -131,6 +131,13 @@ let
         sha256 = "077cpj0kzyqxzdya1dwh8df17zfzhqn7c685hx6iskvw2979zg2n";
       })
       ./lift-gast-restriction.patch
+
+      (fetchpatch {
+        # fix compilation with numpy >= 1.19
+        name = "add-const-overload.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/75ea0b31477d6ba9e990e296bbbd8ca4e7eebadf.patch";
+        sha256 = "1xp1icacig0xm0nmb05sbrf4nw4xbln9fhc308birrv8286zx7wv";
+      })
 
       # cuda 10.2 does not have "-bin2c-path" option anymore
       # https://github.com/tensorflow/tensorflow/issues/34429
@@ -430,7 +437,10 @@ in buildPythonPackage {
     EOF
   '';
 
-  passthru.libtensorflow = bazel-build.out;
+  passthru = {
+    deps = bazel-build.deps;
+    libtensorflow = bazel-build.out;
+  };
 
   inherit (bazel-build) meta;
 }

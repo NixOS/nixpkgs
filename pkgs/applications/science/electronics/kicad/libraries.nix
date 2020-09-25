@@ -15,7 +15,9 @@ let
   mkLib = name:
     stdenv.mkDerivation {
       pname = "kicad-${name}";
-      version = "${version}";
+      # Use the revision instead of `version` (which is an ISO 8601 date)
+      # to prevent duplicating the library when just the date changed
+      version = "${builtins.substring 0 10 libSources.${name}.rev}";
       src = fetchFromGitHub (
         {
           owner = "KiCad";
@@ -50,7 +52,7 @@ in
   i18n = let name = "i18n"; in
     stdenv.mkDerivation {
       pname = "kicad-${name}";
-      version = "${version}";
+      version = "${builtins.substring 0 10 libSources.${name}.rev}";
       src = fetchFromGitLab (
         {
           group = "kicad";
@@ -60,8 +62,7 @@ in
           inherit name;
         } // (libSources.${name} or { })
       );
-      buildInputs = [ gettext ];
-      nativeBuildInputs = [ cmake ];
+      nativeBuildInputs = [ cmake gettext ];
       meta = {
         license = licenses.gpl2; # https://github.com/KiCad/kicad-i18n/issues/3
         platforms = stdenv.lib.platforms.all;

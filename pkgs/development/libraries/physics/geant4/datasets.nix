@@ -109,4 +109,11 @@ in
       sha256 = "0l3gs0nlp10cjlwiln3f72zfch0av2g1r8m2ny9afgvwgbwiyj4h";
       envvar = "REALSURFACE";
     }
+
+    {
+      name = "G4TENDL";
+      version = "1.3.2";
+      sha256 = "0jdqmz3rz5a7yrq1mli6dj3bnmn73igf4fdxwfbl3rxywg38fa9v";
+      envvar = "PARTICLEHP";
+    }
   ])

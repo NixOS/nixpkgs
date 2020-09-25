@@ -254,12 +254,13 @@ rec {
 
   cdt = buildEclipseUpdateSite rec {
     name = "cdt-${version}";
-    version = "9.11.0";
+    # find current version at https://www.eclipse.org/cdt/downloads.php
+    version = "9.11.1";
 
     src = fetchzip {
       stripRoot = false;
       url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/9.11/${name}/${name}.zip";
-      sha256 = "1730w6rbv649nzfalfd10p2ph0z9rbrrcflga0n1dpmg181xh9lk";
+      sha256 = "00cpaal6jm9xb4nbkljrf381r3lf1rb1p06vrbn4l0lxnbckb9df";
     };
 
     meta = with stdenv.lib; {
@@ -474,12 +475,12 @@ rec {
 
   jdt = buildEclipseUpdateSite rec {
     name = "jdt-${version}";
-    version = "4.15";
+    version = "4.16";
 
     src = fetchzip {
       stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-${version}-202003050155/org.eclipse.jdt-${version}.zip";
-      sha256 = "1dm4qgfb6rm7w0dk8br071c7wy0ybp7zrwvr3i02c2bxzy2psz7q";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-${version}-202006040540/org.eclipse.jdt-${version}.zip";
+      sha256 = "0g349hg2nv1y628daxf84396wpf33z52wxv0gawlgrirbbizaznd";
     };
 
     meta = with stdenv.lib; {

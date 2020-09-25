@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "texstudio";
-  version = "2.12.22";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "${pname}-org";
     repo = pname;
     rev = version;
-    sha256 = "037jvsfln8wav17qj9anxz2a7p51v7ky85wmhdj2hgwp40al651g";
+    sha256 = "18ad85y4hrsvp7gs50dfg08cz40vbakb9hs8gw4cvi7r17vds5ar";
   };
 
   nativeBuildInputs = [ qmake wrapQtAppsHook pkgconfig ];

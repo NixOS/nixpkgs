@@ -1,59 +1,68 @@
 # This script was inspired by the ArchLinux User Repository package:
 #
 #   https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=oh-my-zsh-git
-{ stdenv, fetchgit }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "2020-05-07";
+  version = "2020-09-20";
   pname = "oh-my-zsh";
-  rev = "b876198575cbf23d589ddc8da6b22254d3d5358b";
+  rev = "93c837fec8e9fe61509b9dff9e909e84f7ebe32d";
 
-  src = fetchgit { inherit rev;
-    url = "https://github.com/ohmyzsh/ohmyzsh";
-    sha256 = "0vx3pi9wk9crmwgkpd3nwp88ci6ly0savj6v2md7qazmimgffsfi";
+  src = fetchFromGitHub {
+    inherit rev;
+    owner = "ohmyzsh";
+    repo = "ohmyzsh";
+    sha256 = "1ww50c1xf64z1m0sy30xaf2adr87cqr5yyv9jrqr227j97vrwj04";
   };
 
-  pathsToLink = [ "/share/oh-my-zsh" ];
-
-  phases = "installPhase";
-
   installPhase = ''
-  outdir=$out/share/oh-my-zsh
-  template=templates/zshrc.zsh-template
+    outdir=$out/share/oh-my-zsh
+    template=templates/zshrc.zsh-template
 
-  mkdir -p $outdir
-  cp -r $src/* $outdir
-  cd $outdir
+    mkdir -p $outdir
+    cp -r * $outdir
+    cd $outdir
 
-  rm LICENSE.txt
-  rm -rf .git*
+    rm LICENSE.txt
+    rm -rf .git*
 
-  chmod -R +w templates
+    chmod -R +w templates
 
-  # Change the path to oh-my-zsh dir and disable auto-updating.
-  sed -i -e "s#ZSH=\$HOME/.oh-my-zsh#ZSH=$outdir#" \
-         -e 's/\# \(DISABLE_AUTO_UPDATE="true"\)/\1/' \
-   $template
+    # Change the path to oh-my-zsh dir and disable auto-updating.
+    sed -i -e "s#ZSH=\$HOME/.oh-my-zsh#ZSH=$outdir#" \
+           -e 's/\# \(DISABLE_AUTO_UPDATE="true"\)/\1/' \
+     $template
 
-  # Look for .zsh_variables, .zsh_aliases, and .zsh_funcs, and source
-  # them, if found.
-  cat >> $template <<- EOF
+    chmod +w oh-my-zsh.sh
 
-  # Load the variables.
-  if [ -f ~/.zsh_variables ]; then
-      . ~/.zsh_variables
-  fi
+    # Both functions expect oh-my-zsh to be in ~/.oh-my-zsh and try to
+    # modify the directory.
+    cat >> oh-my-zsh.sh <<- EOF
 
-  # Load the functions.
-  if [ -f ~/.zsh_funcs ]; then
-    . ~/.zsh_funcs
-  fi
+    # Undefine functions that don't work on Nix.
+    unfunction uninstall_oh_my_zsh
+    unfunction upgrade_oh_my_zsh
+    EOF
 
-  # Load the aliases.
-  if [ -f ~/.zsh_aliases ]; then
-      . ~/.zsh_aliases
-  fi
-  EOF
+    # Look for .zsh_variables, .zsh_aliases, and .zsh_funcs, and source
+    # them, if found.
+    cat >> $template <<- EOF
+
+    # Load the variables.
+    if [ -f ~/.zsh_variables ]; then
+        . ~/.zsh_variables
+    fi
+
+    # Load the functions.
+    if [ -f ~/.zsh_funcs ]; then
+      . ~/.zsh_funcs
+    fi
+
+    # Load the aliases.
+    if [ -f ~/.zsh_aliases ]; then
+        . ~/.zsh_aliases
+    fi
+    EOF
   '';
 
   meta = with stdenv.lib; {

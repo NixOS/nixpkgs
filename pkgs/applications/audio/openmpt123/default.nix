@@ -2,14 +2,14 @@
 , usePulseAudio ? config.pulseaudio or false, libpulseaudio }:
 
 let
-  version = "0.4.12";
+  version = "0.5.2";
 in stdenv.mkDerivation {
   pname = "openmpt123";
   inherit version;
 
   src = fetchurl {
     url = "https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-${version}+release.autotools.tar.gz";
-    sha256 = "0q2yf9g6hcwvr2nk3zggkscyf0np6i03q2g7fx10i2kcdr3n9k8c";
+    sha256 = "1cwpc4j90dpxa2siia68rg9qwwm2xk6bhxnslfjj364507jy6s4l";
   };
 
   enableParallelBuilding = true;

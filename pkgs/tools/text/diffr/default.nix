@@ -24,6 +24,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mookid/diffr";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ davidtwco ];
-    platforms = platforms.all;
   };
 }

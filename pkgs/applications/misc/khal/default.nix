@@ -2,21 +2,14 @@
 
 with python3.pkgs; buildPythonApplication rec {
   pname = "khal";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1r8bkgjwkh7i8ygvsv51h1cnax50sb183vafg66x5snxf3dgjl6l";
+    sha256 = "11qhrga44knlnp88py9p547d4nr5kn041d2nszwa3dqw7mf22ks9";
   };
 
-  # Include a khal.desktop file via upstream commit.
-  # This patch should be removed when updating to the next version, probably.
   patches = [
-    (fetchpatch {
-      name = "add-khal-dot-desktop.patch";
-      url = "https://github.com/pimutils/khal/commit/1f93d238fec7c934dd2f8e48f54925d22130e3aa.patch";
-      sha256 = "06skn3van7zd93348fc6axllx71ckkc7h2zljqlvwa339vca608c";
-    })
     ./skip-broken-test.patch
   ];
 

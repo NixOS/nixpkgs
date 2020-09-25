@@ -3,7 +3,7 @@
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
 , makeDesktopItem, openssl, wrapGAppsHook, at-spi2-atk, at-spi2-core, libuuid
-, e2fsprogs, krb5
+, e2fsprogs, krb5, libdrm, mesa
 }:
 
 with stdenv.lib;
@@ -13,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gitkraken";
-  version = "6.6.0";
+  version = "7.3.2";
 
   src = fetchzip {
     url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-    sha256 = "1k94dyynsnm90mp7q9h6baq6q9zi539b1qszf3mqvd5i0id9kjcw";
+    sha256 = "0bw75m87qbnnn1gjphik3xcjx2zwczsa37rpr16la1zjhqjl5m7j";
   };
 
   dontBuild = true;
@@ -61,6 +61,8 @@ stdenv.mkDerivation rec {
     libuuid
     e2fsprogs
     krb5
+    libdrm
+    mesa
   ];
 
   desktopItem = makeDesktopItem {
@@ -69,7 +71,7 @@ stdenv.mkDerivation rec {
     icon = "gitkraken";
     desktopName = "GitKraken";
     genericName = "Git Client";
-    categories = "Application;Development;";
+    categories = "Development;";
     comment = "Graphical Git client from Axosoft";
   };
 

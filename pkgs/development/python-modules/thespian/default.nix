@@ -1,13 +1,13 @@
 { fetchPypi, buildPythonPackage, lib }:
 
 buildPythonPackage rec {
-  version = "3.10.0";
+  version = "3.10.1";
   pname = "thespian";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "0n85nhj5hr8kv33jk4by8hnxm3kni5f4z1jhiw27dlf6cbgsv892";
+    sha256 = "e00bba5b0b91f9d7ec3df0ac671136df7a7be0a14dfea38ca3850488bca73d8c";
   };
 
   # Do not run the test suite: it takes a long time and uses

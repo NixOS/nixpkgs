@@ -2,22 +2,25 @@
 
 buildGoModule rec {
   pname = "act";
-  version = "0.2.8";
+  version = "0.2.13";
 
   src = fetchFromGitHub {
     owner = "nektos";
     repo = pname;
     rev = "v${version}";
-    sha256 = "14ird8z8f467spa0kdzjf6lq7pipq7rwxrdk6ppv7y1fxw96qm9x";
+    sha256 = "112vmq9wg31alw9lw1jmsdvkd7kz1d9ak4p9dli7vgr9rhdf0hnb";
   };
 
-  modSha256 = "09q8dh4g4k0y7mrhwyi9py7zdiipmq91j3f32cn635v2xw6zyg2k";
+  vendorSha256 = "0bcrw3hf92m7n58lrlm0vj1wiwwy82q2rl1a725q3d6xwvi5kh9h";
+
+  doCheck = false;
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
   meta = with lib; {
     description = "Run your GitHub Actions locally";
     homepage = "https://github.com/nektos/act";
+    changelog = "https://github.com/nektos/act/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ filalex77 ];
   };

@@ -19,11 +19,11 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   pname = "duplicity";
-  version = "0.8.12.1612";
+  version = "0.8.13";
 
   src = fetchurl {
     url = "https://code.launchpad.net/duplicity/${majorMinor version}-series/${majorMinorPatch version}/+download/duplicity-${version}.tar.gz";
-    sha256 = "06n58pwqg6kfigckjlslz2kx1lsykz1kn9a0r1cl8r3kn93zhk07";
+    sha256 = "0lflg1ay4q4w9qzpmh6y2hza4fc3ig12q44qkd80ks17hj21bxa6";
   };
 
   patches = [
@@ -46,9 +46,8 @@ pythonPackages.buildPythonApplication rec {
     librsync
   ];
 
-  propagatedBuildInputs = [
-    backblaze-b2
-  ] ++ (with pythonPackages; [
+  propagatedBuildInputs = with pythonPackages; [
+    b2sdk
     boto
     cffi
     cryptography
@@ -65,7 +64,7 @@ pythonPackages.buildPythonApplication rec {
     future
   ] ++ stdenv.lib.optionals (!isPy3k) [
     enum
-  ]);
+  ];
 
   checkInputs = [
     gnupg # Add 'gpg' to PATH.

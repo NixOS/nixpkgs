@@ -2,7 +2,7 @@
 , docutils
 , lockfile
 , mock
-, pytest
+, pytest_4
 , testscenarios
 , twine
 }:
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ twine ];
   propagatedBuildInputs = [ docutils lockfile ];
 
-  checkInputs = [ pytest mock testscenarios ];
+  checkInputs = [ pytest_4 mock testscenarios ];
   checkPhase = ''
     pytest -k 'not detaches_process_context \
                 and not standard_stream_file_descriptors'

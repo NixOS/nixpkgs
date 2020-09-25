@@ -1,5 +1,6 @@
 { stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg
 , lua5, luasocket, luasec, luaexpat, luafilesystem, luabitop
+, nixosTests
 , withLibevent ? true, luaevent ? null
 , withDBI ? true, luadbi ? null
 # use withExtraLibs to add additional dependencies of community modules
@@ -14,7 +15,7 @@ with stdenv.lib;
 
 
 stdenv.mkDerivation rec {
-  version = "0.11.5"; # also update communityModules
+  version = "0.11.6"; # also update communityModules
   pname = "prosody";
   # The following community modules are necessary for the nixos module
   # prosody module to comply with XEP-0423 and provide a working
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
   src = fetchurl {
     url = "https://prosody.im/downloads/source/${pname}-${version}.tar.gz";
-    sha256 = "12s0hn6hvjbi61cdw3165l6iw0878971dmlvfg663byjsmjvvy2m";
+    sha256 = "0m8p2kwiy4l87ifpygricpyixi1vpx6j1jb6ki1zi4az3iixp8fd";
   };
 
   # A note to all those merging automated updates: Please also update this
@@ -36,8 +37,8 @@ stdenv.mkDerivation rec {
   # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "acd231e2b46f";
-    sha256 = "1b33lsxrrrvarknqz9xs7j7f19bzxxymmfdhch7k70x3yyiwmfsy";
+    rev = "e77122025080";
+    sha256 = "1pjax8lzgcwcn3mq5q4kbwfyyzaifqcc3a0s4rl9gib5rhwddybh";
   };
 
   buildInputs = [
@@ -71,13 +72,19 @@ stdenv.mkDerivation rec {
         --prefix LUA_CPATH ';' "$LUA_CPATH"
     '';
 
-  passthru.communityModules = withCommunityModules;
+  passthru = {
+    communityModules = withCommunityModules;
+    tests = {
+      main = nixosTests.prosody;
+      mysql = nixosTests.prosodyMysql;
+    };
+  };
 
   meta = {
     description = "Open-source XMPP application server written in Lua";
     license = licenses.mit;
     homepage = "https://prosody.im";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin ];
+    maintainers = with maintainers; [ fpletz globin ninjatrappeur ];
   };
 }

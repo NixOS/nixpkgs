@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   pname = "libc++";
   inherit version;
 
-  src = fetch "libcxx" "1isnj78diknh0nvd73mlq8p8g209f9bab2mbysq826bg2wzql3r7";
+  src = fetch "libcxx" "0v78bfr6h2zifvdqnj2wlfk4pvxzrqn3hg1v6lqk3y12bx9p9xny";
 
   postUnpack = ''
     unpackFile ${libcxxabi.src}
@@ -39,12 +39,9 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  linkCxxAbi = stdenv.isLinux;
-
-  setupHooks = [
-    ../../../../../build-support/setup-hooks/role.bash
-    ./setup-hook.sh
-  ];
+  passthru = {
+    isLLVM = true;
+  };
 
   meta = {
     homepage = "https://libcxx.llvm.org/";

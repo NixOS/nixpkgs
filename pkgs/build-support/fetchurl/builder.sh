@@ -15,8 +15,14 @@ curl=(
     --retry 3
     --disable-epsv
     --cookie-jar cookies
-    --insecure
     --user-agent "curl/$curlVersion Nixpkgs/$nixpkgsVersion"
+)
+
+if ! [ -f "$SSL_CERT_FILE" ]; then
+    curl+=(--insecure)
+fi
+
+curl+=(
     $curlOpts
     $NIX_CURL_FLAGS
 )

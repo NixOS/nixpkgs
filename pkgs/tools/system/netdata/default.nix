@@ -1,6 +1,7 @@
 { stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkgconfig
 , CoreFoundation, IOKit, libossp_uuid
 , curl, libcap,  libuuid, lm_sensors, zlib, fetchpatch
+, nixosTests
 , withCups ? false, cups
 , withDBengine ? true, libuv, lz4, judy
 , withIpmi ? (!stdenv.isDarwin), freeipmi
@@ -14,14 +15,14 @@ with stdenv.lib;
 let
   go-d-plugin = callPackage ./go.d.plugin.nix {};
 in stdenv.mkDerivation rec {
-  version = "1.21.1";
+  version = "1.25.0";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "0i0k64r8j1g02s2bi2gm0j47y52l3xli63w686ncpgmlhwmdfz65";
+    sha256 = "0wsgs0slqmj9q5prwlx7d4692lc4c42g0sv35r33vlxnfdwimfh5";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -71,12 +72,13 @@ in stdenv.mkDerivation rec {
     rm -r $out/sbin
   '';
 
+  passthru.tests.netdata = nixosTests.netdata;
+
   meta = {
     description = "Real-time performance monitoring tool";
-    homepage = "https://my-netdata.io/";
+    homepage = "https://www.netdata.cloud/";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = [ maintainers.lethalman ];
   };
-
 }

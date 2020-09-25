@@ -8,26 +8,29 @@
 , libapparmor
 , apparmor-parser
 , libseccomp
+, libselinux
+, nixosTests
 }:
 
 buildGoPackage rec {
   pname = "runc";
-  version = "1.0.0-rc10";
+  version = "1.0.0-rc92";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    sha256 = "0pi3rvj585997m4z9ljkxz2z9yxf9p2jr0pmqbqrc7bc95f5hagk";
+    sha256 = "0r4zbxbs03xr639r7848282j1ybhibfdhnxyap9p76j5w8ixms94";
   };
 
   goPackagePath = "github.com/opencontainers/runc";
   outputs = [ "out" "man" ];
 
   nativeBuildInputs = [ go-md2man installShellFiles pkg-config which ];
-  buildInputs = [ libseccomp libapparmor apparmor-parser ];
 
-  makeFlags = [ "BUILDTAGS+=seccomp" "BUILDTAGS+=apparmor" ];
+  buildInputs = [ libselinux libseccomp libapparmor apparmor-parser ];
+
+  makeFlags = [ "BUILDTAGS+=seccomp" "BUILDTAGS+=apparmor" "BUILDTAGS+=selinux" ];
 
   buildPhase = ''
     cd go/src/${goPackagePath}
@@ -41,6 +44,8 @@ buildGoPackage rec {
     install -Dm755 runc $out/bin/runc
     installManPage man/*/*.[1-9]
   '';
+
+  passthru.tests = { inherit (nixosTests) cri-o podman; };
 
   meta = with lib; {
     homepage = "https://github.com/opencontainers/runc";

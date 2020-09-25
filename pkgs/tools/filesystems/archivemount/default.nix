@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, fuse, libarchive }:
 
 let
-  name = "archivemount-0.8.12";
+  name = "archivemount-0.9.1";
 in
 stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "https://www.cybernoia.de/software/archivemount/${name}.tar.gz";
-    sha256 = "12fb8fcmd1zwvfgzx4pay47md5cr2kgxcgq82cm6skmq75alfzi4";
+    sha256 = "1cy5b6qril9c3ry6fv7ir87s8iyy5vxxmbyx90dm86fbra0vjaf5";
   };
 
   nativeBuildInputs = [ pkgconfig ];

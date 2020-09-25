@@ -67,7 +67,7 @@ in {
         type = types.bool;
         default = false;
         description = ''
-          Whether to build thinkfan with SMART support to read temperatures 
+          Whether to build thinkfan with SMART support to read temperatures
           directly from hard disks.
         '';
       };

@@ -40,7 +40,7 @@ let
   $CFG->disableupdateautodeploy = true;
 
   $CFG->pathtogs = '${pkgs.ghostscript}/bin/gs';
-  $CFG->pathtophp = '${pkgs.php}/bin/php';
+  $CFG->pathtophp = '${phpExt}/bin/php';
   $CFG->pathtodu = '${pkgs.coreutils}/bin/du';
   $CFG->aspellpath = '${pkgs.aspell}/bin/aspell';
   $CFG->pathtodot = '${pkgs.graphviz}/bin/dot';
@@ -55,6 +55,9 @@ let
 
   mysqlLocal = cfg.database.createLocally && cfg.database.type == "mysql";
   pgsqlLocal = cfg.database.createLocally && cfg.database.type == "pgsql";
+
+  phpExt = pkgs.php.withExtensions
+        ({ enabled, all }: with all; [ iconv mbstring curl openssl tokenizer xmlrpc soap ctype zip gd simplexml dom  intl json sqlite3 pgsql pdo_sqlite pdo_pgsql pdo_odbc pdo_mysql pdo mysqli session zlib xmlreader fileinfo ]);
 in
 {
   # interface
@@ -222,6 +225,7 @@ in
 
     services.phpfpm.pools.moodle = {
       inherit user group;
+      phpPackage = phpExt;
       phpEnv.MOODLE_CONFIG = "${moodleConfig}";
       phpOptions = ''
         zend_extension = opcache.so
@@ -263,13 +267,13 @@ in
       after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
       environment.MOODLE_CONFIG = moodleConfig;
       script = ''
-        ${pkgs.php}/bin/php ${cfg.package}/share/moodle/admin/cli/check_database_schema.php && rc=$? || rc=$?
+        ${phpExt}/bin/php ${cfg.package}/share/moodle/admin/cli/check_database_schema.php && rc=$? || rc=$?
 
-        [ "$rc" == 1 ] && ${pkgs.php}/bin/php ${cfg.package}/share/moodle/admin/cli/upgrade.php \
+        [ "$rc" == 1 ] && ${phpExt}/bin/php ${cfg.package}/share/moodle/admin/cli/upgrade.php \
           --non-interactive \
           --allow-unstable
 
-        [ "$rc" == 2 ] && ${pkgs.php}/bin/php ${cfg.package}/share/moodle/admin/cli/install_database.php \
+        [ "$rc" == 2 ] && ${phpExt}/bin/php ${cfg.package}/share/moodle/admin/cli/install_database.php \
           --agree-license \
           --adminpass=${cfg.initialPassword}
 
@@ -289,7 +293,7 @@ in
       serviceConfig = {
         User = user;
         Group = group;
-        ExecStart = "${pkgs.php}/bin/php ${cfg.package}/share/moodle/admin/cli/cron.php";
+        ExecStart = "${phpExt}/bin/php ${cfg.package}/share/moodle/admin/cli/cron.php";
       };
     };
 

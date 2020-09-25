@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ trevorj ];
     downloadPage = "https://github.com/jaymzh/iptstate/releases";
+    license = licenses.zlib;
   };
 
   installPhase = ''

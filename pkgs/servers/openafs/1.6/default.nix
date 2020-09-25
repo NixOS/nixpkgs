@@ -85,5 +85,7 @@ stdenv.mkDerivation {
     license = licenses.ipl10;
     platforms = platforms.linux;
     maintainers = [ maintainers.maggesi maintainers.spacefrogg ];
+    # Package will be removed in 21.03
+    broken = true;
   };
 }

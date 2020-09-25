@@ -4,7 +4,7 @@
 , boost
 , curl
 , fetchFromGitHub
-, ffmpeg
+, ffmpeg_3
 , lame
 , libev
 , libmicrohttpd
@@ -17,17 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "musikcube";
-  version = "0.90.1";
+  version = "0.93.1";
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
-    sha256 = "1ff2cgbllrl2pl5zfbf0cd9qbf6hqpwr395sa1k245ar4f1rfwpg";
+    sha256 = "05qsxyr7x8l0vlmn4yjg4gglxvcw9raf6vfzvblsl2ngsdsrnizy";
   };
-
-  # https://github.com/clangen/musikcube/issues/339
-  patches = [ ./dont-strip.patch ];
 
   nativeBuildInputs = [
     cmake
@@ -37,7 +34,7 @@ stdenv.mkDerivation rec {
     alsaLib
     boost
     curl
-    ffmpeg
+    ffmpeg_3
     lame
     libev
     libmicrohttpd
@@ -45,6 +42,10 @@ stdenv.mkDerivation rec {
     pulseaudio
     taglib
   ] ++ stdenv.lib.optional systemdSupport systemd;
+
+  cmakeFlags = [
+    "-DDISABLE_STRIP=true"
+  ];
 
   meta = with stdenv.lib; {
     description = "A fully functional terminal-based music player, library, and streaming audio server";

@@ -1,22 +1,32 @@
-{ stdenv, fetchFromGitHub, python }:
+{ stdenv, fetchFromGitHub, python3, python3Packages, docker, autoreconfHook, coreutils, makeWrapper, gnused, gnutar, gzip, findutils, sudo, nixosTests }:
 
 stdenv.mkDerivation rec {
 
-  version = "0.12";
+  version = "0.19";
   pname = "charliecloud";
 
   src = fetchFromGitHub {
     owner = "hpc";
     repo = "charliecloud";
     rev = "v${version}";
-    sha256 = "177rcf1klcxsp6x9cw75cmz3y2izgd1hvi1rb9vc6iz9qx1nmk3v";
+    sha256 = "1rmvm0s1jdpzfg32b3hwsbdkzws7gsy4xq227hmzv3n2dv64svm6";
   };
 
-  buildInputs = [ python ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper ];
+  buildInputs = [
+    docker
+    (python3.withPackages (ps: [ ps.lark-parser ps.requests ]))
+  ];
+
+  configureFlags = let
+    pythonEnv = python3.withPackages (ps: [ ps.lark-parser ps.requests ]);
+  in [
+    "--with-python=${pythonEnv}/bin/python3"
+  ];
 
   preConfigure = ''
-    substituteInPlace Makefile --replace '/bin/bash' '${stdenv.shell}'
     patchShebangs test/
+    substituteInPlace configure.ac --replace "/usr/bin/env" "${coreutils}/bin/env"
   '';
 
   makeFlags = [
@@ -24,11 +34,15 @@ stdenv.mkDerivation rec {
     "LIBEXEC_DIR=lib/charliecloud"
   ];
 
+  # Charliecloud calls some external system tools.
+  # Here we wrap those deps so they are resolved inside nixpkgs.
   postInstall = ''
-    mkdir -p $out/share/charliecloud
-    mv $out/lib/charliecloud/examples $out/share/charliecloud
-    mv $out/lib/charliecloud/test $out/share/charliecloud
+    for file in $out/bin/* ; do \
+      wrapProgram $file --prefix PATH : ${stdenv.lib.makeBinPath [ coreutils docker gnused gnutar gzip findutils sudo ]}
+    done
   '';
+
+  passthru.tests.charliecloud = nixosTests.charliecloud;
 
   meta = {
     description = "User-defined software stacks (UDSS) for high-performance computing (HPC) centers";

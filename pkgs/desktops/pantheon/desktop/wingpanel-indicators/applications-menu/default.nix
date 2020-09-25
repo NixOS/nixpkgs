@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , substituteAll
 , meson
@@ -14,7 +15,7 @@
 , appstream
 , gnome-menus
 , json-glib
-, plank
+, elementary-dock
 , bamf
 , switchboard
 , libunity
@@ -22,11 +23,12 @@
 , wingpanel
 , zeitgeist
 , bc
+, libhandy
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-applications-menu";
-  version = "2.6.0";
+  version = "2.7.1";
 
   repoName = "applications-menu";
 
@@ -34,11 +36,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "16ki1x6697jmfqajynx2zvwqrpjpshnd08y7vf6g7xc7zwwh38c5";
+    sha256 = "sha256-NeazBzkbdQTC6OzPxxyED4OstMkNkUGtCIaZD67fTnM=";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };
@@ -55,14 +57,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bamf
+    elementary-dock
     gnome-menus
     granite
     gtk3
     json-glib
     libgee
+    libhandy
     libsoup
     libunity
-    plank
     switchboard
     wingpanel
     zeitgeist

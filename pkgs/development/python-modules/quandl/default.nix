@@ -1,7 +1,7 @@
 {
-  lib, fetchPypi, buildPythonPackage, isPy3k,
+  lib, fetchPypi, buildPythonPackage, isPy3k, pythonOlder,
   # runtime dependencies
-  pandas, numpy, requests, inflection, python-dateutil, six, more-itertools,
+  pandas, numpy, requests, inflection, python-dateutil, six, more-itertools, importlib-metadata,
   # test suite dependencies
   nose, unittest2, flake8, httpretty, mock, jsondate, parameterized, faker, factory_boy,
   # additional runtime dependencies are required on Python 2.x
@@ -45,6 +45,8 @@ buildPythonPackage rec {
     pyOpenSSL
     ndg-httpsclient
     pyasn1
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
   meta = with lib; {

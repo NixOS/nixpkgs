@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, fetchFromGitHub, cmake, lib }:
 
 stdenv.mkDerivation rec {
   pname = "libversion";
@@ -13,8 +13,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = lib.optional stdenv.isDarwin [
+    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # needed for tests
+  ];
+
   preCheck = ''
-    export LD_LIBRARY_PATH=/build/source/build/libversion/:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=/build/source/build/libversion/''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
   '';
   doCheck = true;
   checkTarget = "test";

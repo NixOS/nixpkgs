@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, glib, systemd, boost, darwin
+{ stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, darwin
 # Inputs
 , curl, libmms, libnfs, samba
 # Archive support
@@ -19,6 +19,13 @@
 # Tag support
 , libid3tag
 , nixosTests
+# For documentation
+, doxygen
+, python3Packages # for sphinx-build
+# For tests
+, gtest
+, fetchpatch # used to fetch an upstream patch fixing a failing test
+, zip
 }:
 
 let
@@ -103,26 +110,55 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.21.23";
+      version = "0.21.25";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "0jnhjhm1ilpcwb4f58b8pgyzjq3dlr0j2xyk0zck0afwkdxyj9cb";
+        sha256 = "1yjp8pwr2zn0mp39ls1w0pl37zrjn5m9ycgjmcsw2wpa4709r356";
       };
 
-      buildInputs = [ glib boost ]
+      buildInputs = [
+        glib
+        boost
+        # According to the configurePhase of meson, gtest is considered a
+        # runtime dependency. Quoting:
+        #
+        #    Run-time dependency GTest found: YES 1.10.0
+        gtest
+      ]
         ++ (lib.concatLists (lib.attrVals features_ featureDependencies))
         ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AudioToolbox darwin.apple_sdk.frameworks.AudioUnit ];
 
-      nativeBuildInputs = [ meson ninja pkgconfig ];
+      nativeBuildInputs = [
+        meson
+        ninja
+        pkg-config
+        python3Packages.sphinx
+        doxygen
+      ];
+
+      # Otherwise, the meson log says:
+      #
+      #    Program zip found: NO
+      checkInputs = [ zip ];
+
+      doCheck = true;
 
       enableParallelBuilding = true;
 
       mesonAutoFeatures = "disabled";
-      mesonFlags =
-        map (x: "-D${x}=enabled") features_
+
+      outputs = [ "out" "doc" "man" ];
+
+      mesonFlags = [
+        # Documentation is enabled unconditionally but it's not installed
+        # unconditionally thanks to the outputs being split
+        "-Ddocumentation=true"
+        "-Dtest=true"
+      ]
+        ++ map (x: "-D${x}=enabled") features_
         ++ map (x: "-D${x}=disabled") (lib.subtractLists features_ knownFeatures)
         ++ lib.optional (builtins.elem "zeroconf" features_)
           "-Dzeroconf=avahi"

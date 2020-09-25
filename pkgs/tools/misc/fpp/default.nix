@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace fpp --replace 'PYTHONCMD="python"' 'PYTHONCMD="${python3.interpreter}"'
+    substituteInPlace fpp --replace 'PYTHONCMD="python3"' 'PYTHONCMD="${python3.interpreter}"'
   '';
 
   installPhase = ''

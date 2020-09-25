@@ -11,19 +11,18 @@
 
 buildPythonPackage rec {
   pname = "glom";
-  version = "19.10.0";
+  version = "20.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c8a50cb9fcf0c84807836c6a73cf61285557834b9050d7bde7732b936aceb7dd";
+    sha256 = "5fa3a9d99c7f3e5410a810fa8a158c0f71e39036c47b77745c7f2e4630372f82";
   };
 
   propagatedBuildInputs = [ boltons attrs face ];
 
   checkInputs = [ pytest pyyaml ];
-  checkPhase = "pytest glom/test";
-
-  doCheck = !isPy37; # https://github.com/mahmoud/glom/issues/72
+  # test_cli.py checks the output of running "glom"
+  checkPhase = "PATH=$out/bin:$PATH pytest glom/test";
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/mahmoud/glom";

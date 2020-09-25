@@ -1,8 +1,21 @@
+diff --git a/clients/common/nm-polkit-listener.c b/clients/common/nm-polkit-listener.c
+index ace205e80..f19c1dea0 100644
+--- a/clients/common/nm-polkit-listener.c
++++ b/clients/common/nm-polkit-listener.c
+@@ -552,7 +552,7 @@ begin_authentication (AuthRequest *request)
+ {
+ 	int fd_flags;
+ 	const char *helper_argv[] = {
+-		POLKIT_PACKAGE_PREFIX "/lib/polkit-1/polkit-agent-helper-1",
++		"/run/wrappers/bin/polkit-agent-helper-1",
+ 		request->username,
+ 		NULL,
+ 	};
 diff --git a/clients/common/nm-vpn-helpers.c b/clients/common/nm-vpn-helpers.c
-index ffae5f553..ba1093e4d 100644
+index 74ff52bb2..638857df4 100644
 --- a/clients/common/nm-vpn-helpers.c
 +++ b/clients/common/nm-vpn-helpers.c
-@@ -203,10 +203,7 @@ nm_vpn_openconnect_authenticate_helper (const char *host,
+@@ -213,10 +213,7 @@ nm_vpn_openconnect_authenticate_helper (const char *host,
  		NULL,
  	};
  
@@ -40,35 +53,25 @@ index 91ebd9a36..5201a56c3 100644
  ExecStart=@sbindir@/NetworkManager --no-daemon
  Restart=on-failure
 diff --git a/libnm/meson.build b/libnm/meson.build
-index 51ca46d2b..0c04cc216 100644
+index d3991ab19..58f01c666 100644
 --- a/libnm/meson.build
 +++ b/libnm/meson.build
-@@ -261,7 +261,7 @@ if enable_introspection
-     name,
-     input: libnm_gir[0],
-     output: name,
--    command: [generate_setting_docs_env, python.path(), generate_setting_docs, '--lib-path', meson.current_build_dir(), '--gir', '@INPUT@', '--output', '@OUTPUT@'],
-+    command: [generate_setting_docs_env, generate_setting_docs, '--lib-path', meson.current_build_dir(), '--gir', '@INPUT@', '--output', '@OUTPUT@'],
-     depends: libnm_gir,
-   )
- 
-@@ -270,7 +270,7 @@ if enable_introspection
-     name,
-     input: [libnm_gir[0], nm_settings_docs_overrides],
-     output: name,
--    command: [generate_setting_docs_env, python.path(), generate_setting_docs, '--lib-path', meson.current_build_dir(), '--gir', '@INPUT0@', '--overrides', '@INPUT1@', '--output', '@OUTPUT@'],
-+    command: [generate_setting_docs_env, generate_setting_docs, '--lib-path', meson.current_build_dir(), '--gir', '@INPUT0@', '--overrides', '@INPUT1@', '--output', '@OUTPUT@'],
-     depends: libnm_gir,
-   )
- endif
+@@ -283,7 +283,6 @@ if enable_introspection
+     output: 'nm-settings-docs-gir.xml',
+     command: [
+       generate_setting_docs_env,
+-      python.path(),
+       join_paths(meson.source_root(), 'tools', 'generate-docs-nm-settings-docs-gir.py'),
+       '--lib-path', meson.current_build_dir(),
+       '--gir', '@INPUT@',
 diff --git a/src/devices/nm-device.c b/src/devices/nm-device.c
-index e7a4a059a..0a8f8b7c6 100644
+index de09e4807..2755db165 100644
 --- a/src/devices/nm-device.c
 +++ b/src/devices/nm-device.c
-@@ -13179,14 +13179,14 @@ nm_device_start_ip_check (NMDevice *self)
+@@ -13705,14 +13705,14 @@ nm_device_start_ip_check (NMDevice *self)
  			gw = nm_ip4_config_best_default_route_get (priv->ip_config_4);
  			if (gw) {
- 				nm_utils_inet4_ntop (NMP_OBJECT_CAST_IP4_ROUTE (gw)->gateway, buf);
+ 				_nm_utils_inet4_ntop (NMP_OBJECT_CAST_IP4_ROUTE (gw)->gateway, buf);
 -				ping_binary = nm_utils_find_helper ("ping", "/usr/bin/ping", NULL);
 +				ping_binary = "@iputils@/bin/ping";
  				log_domain = LOGD_IP4;
@@ -76,14 +79,14 @@ index e7a4a059a..0a8f8b7c6 100644
  		} else if (priv->ip_config_6 && priv->ip_state_6 == NM_DEVICE_IP_STATE_DONE) {
  			gw = nm_ip6_config_best_default_route_get (priv->ip_config_6);
  			if (gw) {
- 				nm_utils_inet6_ntop (&NMP_OBJECT_CAST_IP6_ROUTE (gw)->gateway, buf);
+ 				_nm_utils_inet6_ntop (&NMP_OBJECT_CAST_IP6_ROUTE (gw)->gateway, buf);
 -				ping_binary = nm_utils_find_helper ("ping6", "/usr/bin/ping6", NULL);
 +				ping_binary = "@iputils@/bin/ping";
  				log_domain = LOGD_IP6;
  			}
  		}
 diff --git a/src/nm-core-utils.c b/src/nm-core-utils.c
-index fb92289f0..c91b27b09 100644
+index 3950c3c3a..a9436d75a 100644
 --- a/src/nm-core-utils.c
 +++ b/src/nm-core-utils.c
 @@ -336,7 +336,7 @@ nm_utils_modprobe (GError **error, gboolean suppress_error_logging, const char *

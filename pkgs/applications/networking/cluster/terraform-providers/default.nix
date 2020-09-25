@@ -82,6 +82,14 @@ let
       '';
     });
 
+    # https://github.com/hashicorp/terraform-provider-helm/pull/522
+    helm = automated-providers.helm.overrideAttrs (attrs: {
+      prePatch = attrs.prePatch or "" + ''
+        substituteInPlace go.mod --replace terraform-providers/terraform-provider-helm hashicorp/terraform-provider-helm
+        substituteInPlace main.go --replace terraform-providers/terraform-provider-helm hashicorp/terraform-provider-helm
+      '';
+    });
+
     # https://github.com/hashicorp/terraform-provider-http/pull/40
     http = automated-providers.http.overrideAttrs (attrs: {
       prePatch = attrs.prePatch or "" + ''
@@ -132,10 +140,12 @@ let
 
     # Packages that don't fit the default model
     ansible = callPackage ./ansible {};
-    gandi = callPackage ./gandi {};
     elasticsearch = callPackage ./elasticsearch {};
+    gandi = callPackage ./gandi {};
+    keycloak = callPackage ./keycloak {};
     libvirt = callPackage ./libvirt {};
     lxd = callPackage ./lxd {};
+    shell = callPackage ./shell {};
     vpsadmin = callPackage ./vpsadmin {};
   };
 in

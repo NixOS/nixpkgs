@@ -1,25 +1,24 @@
-{stdenv, fetchurl, alsaLib, gettext, ncurses, libsamplerate, pciutils, fftw}:
+{stdenv, fetchurl, alsaLib, gettext, makeWrapper, ncurses, libsamplerate, pciutils, which, fftw}:
 
 stdenv.mkDerivation rec {
   pname = "alsa-utils";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchurl {
     url = "mirror://alsa/utils/${pname}-${version}.tar.bz2";
-    sha256 = "1wz460by17rmxrcydn583rd4lhj6wlvqs6x1j5pdzxn5g3app024";
+    sha256 = "1ai1z4kf91b1m3qrpwqkc1af5vm2fkdkknqv95xdwf19q94aw6gz";
   };
 
-  patchPhase = ''
-    substituteInPlace alsa-info/alsa-info.sh \
-      --replace "which" "type -p" \
-      --replace "lspci" "${pciutils}/bin/lspci"
-  '';
-  nativeBuildInputs = [ gettext ];
+  nativeBuildInputs = [ gettext makeWrapper ];
   buildInputs = [ alsaLib ncurses libsamplerate fftw ];
 
   configureFlags = [ "--disable-xmlto" "--with-udev-rules-dir=$(out)/lib/udev/rules.d" ];
 
   installFlags = [ "ASOUND_STATE_DIR=$(TMPDIR)/dummy" ];
+
+  postFixup = ''
+    wrapProgram $out/bin/alsa-info.sh --prefix PATH : "${stdenv.lib.makeBinPath [ which pciutils ]}"
+  '';
 
   meta = with stdenv.lib; {
     homepage = "http://www.alsa-project.org/";

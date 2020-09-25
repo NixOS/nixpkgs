@@ -8,6 +8,8 @@ buildDunePackage rec {
 
   inherit (graphql) version src;
 
+  useDune2 = true;
+
   nativeBuildInputs = [ ocaml-crunch ];
   propagatedBuildInputs = [ astring cohttp digestif graphql ocplib-endian ];
 

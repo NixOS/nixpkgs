@@ -1,19 +1,36 @@
 { lib, buildPythonPackage, isPy3k, fetchPypi
-, urllib3, future, python-dateutil , pytz, faker, mock, nose }:
+, configparser
+, faker
+, future
+, mock
+, nose
+, python-dateutil
+, pytz
+, pytestCheckHook
+, urllib3
+}:
 
 buildPythonPackage rec {
   pname = "minio";
-  version = "5.0.6";
+  version = "6.0.0";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1p6gnbapwzpg7h0wv52fn4dd3dlhxl5qziadkiqjl8xaz8yp3vys";
+    sha256 = "97d275ff01ddae45101eced0d9d5258f2869308c949b17d86a77b77a2a50b7b3";
   };
 
-  disabled = !isPy3k;
+  propagatedBuildInputs = [
+    configparser
+    future
+    python-dateutil
+    pytz
+    urllib3
+  ];
 
-  checkInputs = [ faker mock nose ];
-  propagatedBuildInputs = [ urllib3 python-dateutil pytz future ];
+  checkInputs = [ faker mock nose pytestCheckHook ];
+  # example credentials aren't present
+  pytestFlagsArray = [ "--ignore=tests/unit/credentials_test.py" ];
 
   meta = with lib; {
     description = "Simple APIs to access any Amazon S3 compatible object storage server";

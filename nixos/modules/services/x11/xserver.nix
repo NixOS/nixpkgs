@@ -113,14 +113,14 @@ let
   in concatMapStrings (getAttr "value") monitors;
 
   configFile = pkgs.runCommand "xserver.conf"
-    { xfs = optionalString (cfg.useXFS != false)
-        ''FontPath "${toString cfg.useXFS}"'';
+    { fontpath = optionalString (cfg.fontPath != null)
+        ''FontPath "${cfg.fontPath}"'';
       inherit (cfg) config;
       preferLocalBuild = true;
     }
       ''
         echo 'Section "Files"' >> $out
-        echo $xfs >> $out
+        echo $fontpath >> $out
 
         for i in ${toString fontsForXServer}; do
           if test "''${i:0:''${#NIX_STORE}}" == "$NIX_STORE"; then
@@ -151,6 +151,8 @@ in
       ./desktop-managers/default.nix
       (mkRemovedOptionModule [ "services" "xserver" "startGnuPGAgent" ]
         "See the 16.09 release notes for more information.")
+      (mkRemovedOptionModule ["services" "xserver" "useXFS" ]
+        "Use services.xserver.fontPath instead of useXFS")
     ];
 
 
@@ -246,7 +248,7 @@ in
       videoDrivers = mkOption {
         type = types.listOf types.str;
         # !!! We'd like "nv" here, but it segfaults the X server.
-        default = [ "radeon" "cirrus" "vesa" "vmware" "modesetting" ];
+        default = [ "radeon" "cirrus" "vesa" "modesetting" ];
         example = [
           "ati_unfree" "amdgpu" "amdgpu-pro"
           "nv" "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
@@ -481,11 +483,15 @@ in
         description = "Default colour depth.";
       };
 
-      useXFS = mkOption {
-        # FIXME: what's the type of this option?
-        default = false;
+      fontPath = mkOption {
+        type = types.nullOr types.str;
+        default = null;
         example = "unix/:7100";
-        description = "Determines how to connect to the X Font Server.";
+        description = ''
+          Set the X server FontPath. Defaults to null, which
+          means the compiled in defaults will be used. See
+          man xorg.conf for details.
+        '';
       };
 
       tty = mkOption {

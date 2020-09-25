@@ -3,7 +3,7 @@
 { fetchurl, stdenv }:
 let
   defaultRepos = [
-    "http://central.maven.org/maven2"
+    "http://repo1.maven.org/maven2"
     "http://oss.sonatype.org/content/repositories/releases"
     "http://oss.sonatype.org/content/repositories/public"
     "http://repo.typesafe.com/typesafe/releases"

@@ -1,0 +1,10 @@
+--- a/src/runtime.rs
++++ b/src/runtime.rs
+@@ -85,6 +85,7 @@ fn format_rust_expression(value: &str) -> Cow<'_, str> {
+ }
+ 
+ #[test]
++#[ignore]
+ fn test_format_rust_expression() {
+     use crate::assert_snapshot;
+     assert_snapshot!(format_rust_expression("vec![1,2,3]"), @"vec![1, 2, 3]");

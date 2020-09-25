@@ -7,7 +7,9 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
 
-  inherit (pkgs) kdeApplications plasma5 libsForQt5 qt5;
+  inherit (pkgs) kdeApplications kdeFrameworks plasma5;
+  libsForQt5 = pkgs.libsForQt514;
+  qt5 = pkgs.qt514;
   inherit (pkgs) writeText;
 
   pulseaudio = config.hardware.pulseaudio;
@@ -83,7 +85,7 @@ let
     # recognize that software that has been removed.
     rm -fv $HOME/.cache/ksycoca*
 
-    ${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5
+    ${libsForQt5.kservice}/bin/kbuildsycoca5
   '';
 
   set_XDG_CONFIG_HOME = ''
@@ -158,6 +160,19 @@ in
         example = "vlc";
         description = "Phonon audio backend to install.";
       };
+
+      supportDDC = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Support setting monitor brightness via DDC.
+          </para>
+          <para>
+          This is not needed for controlling brightness of the internal monitor
+          of a laptop and as it is considered experimental by upstream, it is
+          disabled by default.
+        '';
+      };
     };
 
   };
@@ -184,7 +199,15 @@ in
         };
       };
 
-      environment.systemPackages = with pkgs; with qt5; with libsForQt5; with plasma5; with kdeApplications;
+      # DDC support
+      boot.kernelModules = lib.optional cfg.supportDDC "i2c_dev";
+      services.udev.extraRules = lib.optionalString cfg.supportDDC ''
+        KERNEL=="i2c-[0-9]*", TAG+="uaccess"
+      '';
+
+      environment.systemPackages =
+        with qt5; with libsForQt5;
+        with plasma5; with kdeApplications; with kdeFrameworks;
         [
           frameworkintegration
           kactivities
@@ -274,7 +297,7 @@ in
 
           qtvirtualkeyboard
 
-          xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+          pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
         ]
 
         # Phonon audio backend
@@ -282,13 +305,13 @@ in
         ++ lib.optional (cfg.phononBackend == "vlc") libsForQt5.phonon-backend-vlc
 
         # Optional hardware support features
-        ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt openobex obexftp ]
+        ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt pkgs.openobex pkgs.obexftp ]
         ++ lib.optional config.networking.networkmanager.enable plasma-nm
         ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
         ++ lib.optional config.powerManagement.enable powerdevil
-        ++ lib.optional config.services.colord.enable colord-kde
+        ++ lib.optional config.services.colord.enable pkgs.colord-kde
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ]
-        ++ lib.optional config.services.xserver.wacom.enable wacomtablet;
+        ++ lib.optional config.services.xserver.wacom.enable pkgs.wacomtablet;
 
       environment.pathsToLink = [
         # FIXME: modules should link subdirs of `/share` rather than relying on this
@@ -302,7 +325,7 @@ in
 
       fonts.fonts = with pkgs; [ noto-fonts hack-font ];
       fonts.fontconfig.defaultFonts = {
-        monospace = [ "Hack" "Noto Mono" ];
+        monospace = [ "Hack" "Noto Sans Mono" ];
         sansSerif = [ "Noto Sans" ];
         serif = [ "Noto Serif" ];
       };

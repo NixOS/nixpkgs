@@ -19,6 +19,7 @@ let
   externalClient2Address = "80.100.100.2";
   externalTrackerAddress = "80.100.100.3";
 
+  download-dir = "/var/lib/transmission/Downloads";
   transmissionConfig = { ... }: {
     environment.systemPackages = [ pkgs.transmission ];
     services.transmission = {
@@ -26,6 +27,7 @@ let
       settings = {
         dht-enabled = false;
         message-level = 3;
+        inherit download-dir;
       };
     };
   };
@@ -117,12 +119,12 @@ in
       router.wait_for_unit("miniupnpd")
 
       # Create the torrent.
-      tracker.succeed("mkdir /tmp/data")
+      tracker.succeed("mkdir ${download-dir}/data")
       tracker.succeed(
-          "cp ${file} /tmp/data/test.tar.bz2"
+          "cp ${file} ${download-dir}/data/test.tar.bz2"
       )
       tracker.succeed(
-          "transmission-create /tmp/data/test.tar.bz2 --private --tracker http://${externalTrackerAddress}:6969/announce --outfile /tmp/test.torrent"
+          "transmission-create ${download-dir}/data/test.tar.bz2 --private --tracker http://${externalTrackerAddress}:6969/announce --outfile /tmp/test.torrent"
       )
       tracker.succeed("chmod 644 /tmp/test.torrent")
 
@@ -133,18 +135,16 @@ in
 
       # Start the initial seeder.
       tracker.succeed(
-          "transmission-remote --add /tmp/test.torrent --no-portmap --no-dht --download-dir /tmp/data"
+          "transmission-remote --add /tmp/test.torrent --no-portmap --no-dht --download-dir ${download-dir}/data"
       )
 
       # Now we should be able to download from the client behind the NAT.
       tracker.wait_for_unit("httpd")
       client1.wait_for_unit("network-online.target")
+      client1.succeed("transmission-remote --add http://${externalTrackerAddress}/test.torrent >&2 &")
+      client1.wait_for_file("${download-dir}/test.tar.bz2")
       client1.succeed(
-          "transmission-remote --add http://${externalTrackerAddress}/test.torrent --download-dir /tmp >&2 &"
-      )
-      client1.wait_for_file("/tmp/test.tar.bz2")
-      client1.succeed(
-          "cmp /tmp/test.tar.bz2 ${file}"
+          "cmp ${download-dir}/test.tar.bz2 ${file}"
       )
 
       # Bring down the initial seeder.
@@ -154,11 +154,11 @@ in
       # the first client created a NAT hole in the router.
       client2.wait_for_unit("network-online.target")
       client2.succeed(
-          "transmission-remote --add http://${externalTrackerAddress}/test.torrent --no-portmap --no-dht --download-dir /tmp >&2 &"
+          "transmission-remote --add http://${externalTrackerAddress}/test.torrent --no-portmap --no-dht >&2 &"
       )
-      client2.wait_for_file("/tmp/test.tar.bz2")
+      client2.wait_for_file("${download-dir}/test.tar.bz2")
       client2.succeed(
-          "cmp /tmp/test.tar.bz2 ${file}"
+          "cmp ${download-dir}/test.tar.bz2 ${file}"
       )
     '';
 })

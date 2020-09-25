@@ -78,7 +78,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ configDirectory ];
       serviceConfig = {
-        ExecStart = "${pkgs.systemd}/bin/systemctl try-reload-or-restart freeswitch.service";
+        ExecStart = "/run/current-system/systemd/bin/systemctl try-reload-or-restart freeswitch.service";
         RemainAfterExit = true;
         Type = "oneshot";
       };
@@ -95,9 +95,11 @@ in {
           -conf ${configPath} \\
           -base /var/lib/freeswitch";
         ExecReload = "${pkg}/bin/fs_cli -x reloadxml";
-        Restart = "always";
+        Restart = "on-failure";
         RestartSec = "5s";
+        CPUSchedulingPolicy = "fifo";
       };
     };
+    environment.systemPackages = [ pkg ];
   };
 }

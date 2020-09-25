@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, alsaLib, file, fluidsynth, ffmpeg, jack2,
+{ stdenv, fetchFromGitHub, alsaLib, file, fluidsynth, ffmpeg_3, jack2,
   liblo, libpulseaudio, libsndfile, pkgconfig, python3Packages,
   which, withFrontend ? true,
   withQt ? true, qtbase ? null, wrapQtAppsHook ? null,
@@ -15,13 +15,13 @@ assert withGtk3 -> gtk3 != null;
 
 stdenv.mkDerivation rec {
   pname = "carla";
-  version = "2.1";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "falkTX";
     repo = pname;
     rev = "v${version}";
-    sha256 = "074y40yrgl3qrdr3a5vn0scsw0qv77r5p5m6gc89zhf20ic8ajzc";
+    sha256 = "0c3y4a6cgi4bv1mg57i3qn5ia6pqjqlaylvkapj6bmpsw71ig22g";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ] ++ optional withFrontend pyqt5;
 
   buildInputs = [
-    file liblo alsaLib fluidsynth ffmpeg jack2 libpulseaudio libsndfile
+    file liblo alsaLib fluidsynth ffmpeg_3 jack2 libpulseaudio libsndfile
   ] ++ pythonPath
     ++ optional withQt qtbase
     ++ optional withGtk2 gtk2

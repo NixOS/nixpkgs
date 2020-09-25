@@ -1,6 +1,5 @@
 { buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio
-, utillinuxMinimal
+, libelf, cpio, elfutils
 , writeTextFile
 }:
 
@@ -280,8 +279,9 @@ let
     };
 in
 
-assert stdenv.lib.versionAtLeast version "4.14" -> libelf != null;
-assert stdenv.lib.versionAtLeast version "4.15" -> utillinuxMinimal != null;
+assert (stdenv.lib.versionAtLeast version "4.14" && stdenv.lib.versionOlder version "5.8") -> libelf != null;
+assert stdenv.lib.versionAtLeast version "5.8" -> elfutils != null;
+
 stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches configfile) // {
   pname = "linux";
   inherit version;
@@ -291,10 +291,11 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr ]
       ++ optional  (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
-      ++ optional  (stdenv.lib.versionAtLeast version "4.14") libelf
-      ++ optional  (stdenv.lib.versionAtLeast version "4.15") utillinuxMinimal
+      ++ optional  (stdenv.lib.versionAtLeast version "4.14" && stdenv.lib.versionOlder version "5.8") libelf
+      # Removed utillinuxMinimal since it should not be a dependency.
       ++ optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ]
       ++ optional  (stdenv.lib.versionAtLeast version "5.2")  cpio
+      ++ optional  (stdenv.lib.versionAtLeast version "5.8")  elfutils
       ;
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];

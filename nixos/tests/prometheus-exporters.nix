@@ -22,6 +22,9 @@ let
  *  `metricProvider` (optional)
  *    this attribute contains additional machine config
  *
+ *  `nodeName` (optional)
+ *    override an incompatible testnode name
+ *
  *  Example:
  *    exporterTests.<exporterName> = {
  *      exporterConfig = {
@@ -56,6 +59,21 @@ let
  */
 
   exporterTests = {
+     apcupsd = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        services.apcupsd.enable = true;
+      };
+      exporterTest = ''
+        wait_for_unit("apcupsd.service")
+        wait_for_open_port(3551)
+        wait_for_unit("prometheus-apcupsd-exporter.service")
+        wait_for_open_port(9162)
+        succeed("curl -sSf http://localhost:9162/metrics | grep -q 'apcupsd_info'")
+      '';
+    };
 
     bind = {
       exporterConfig = {
@@ -202,6 +220,69 @@ let
       '';
     };
 
+    keylight = {
+      # A hardware device is required to properly test this exporter, so just
+      # perform a couple of basic sanity checks that the exporter is running
+      # and requires a target, but cannot reach a specified target.
+      exporterConfig = {
+        enable = true;
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-keylight-exporter.service")
+        wait_for_open_port(9288)
+        succeed(
+            "curl -sS --write-out '%{http_code}' -o /dev/null http://localhost:9288/metrics | grep -q '400'"
+        )
+        succeed(
+            "curl -sS --write-out '%{http_code}' -o /dev/null http://localhost:9288/metrics?target=nosuchdevice | grep -q '500'"
+        )
+      '';
+    };
+
+    lnd = {
+      exporterConfig = {
+        enable = true;
+        lndTlsPath = "/var/lib/lnd/tls.cert";
+        lndMacaroonDir = "/var/lib/lnd";
+      };
+      metricProvider = {
+        systemd.services.prometheus-lnd-exporter.serviceConfig.DynamicUser = false;
+        services.bitcoind.enable = true;
+        services.bitcoind.extraConfig = ''
+          rpcauth=bitcoinrpc:e8fe33f797e698ac258c16c8d7aadfbe$872bdb8f4d787367c26bcfd75e6c23c4f19d44a69f5d1ad329e5adf3f82710f7
+          bitcoind.zmqpubrawblock=tcp://127.0.0.1:28332
+          bitcoind.zmqpubrawtx=tcp://127.0.0.1:28333
+        '';
+        systemd.services.lnd = {
+          serviceConfig.ExecStart = ''
+          ${pkgs.lnd}/bin/lnd \
+            --datadir=/var/lib/lnd \
+            --tlscertpath=/var/lib/lnd/tls.cert \
+            --tlskeypath=/var/lib/lnd/tls.key \
+            --logdir=/var/log/lnd \
+            --bitcoin.active \
+            --bitcoin.mainnet \
+            --bitcoin.node=bitcoind \
+            --bitcoind.rpcuser=bitcoinrpc \
+            --bitcoind.rpcpass=hunter2 \
+            --bitcoind.zmqpubrawblock=tcp://127.0.0.1:28332 \
+            --bitcoind.zmqpubrawtx=tcp://127.0.0.1:28333 \
+            --readonlymacaroonpath=/var/lib/lnd/readonly.macaroon
+          '';
+          serviceConfig.StateDirectory = "lnd";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("lnd.service")
+        wait_for_open_port(10009)
+        wait_for_unit("prometheus-lnd-exporter.service")
+        wait_for_open_port(9092)
+        succeed("curl -sSf localhost:9092/metrics | grep -q '^promhttp_metric_handler'")
+      '';
+    };
+
     mail = {
       exporterConfig = {
         enable = true;
@@ -281,6 +362,31 @@ let
         wait_for_open_port(9436)
         succeed(
             "curl -sSf http://localhost:9436/metrics | grep -q 'mikrotik_scrape_collector_success{device=\"router\"} 0'"
+        )
+      '';
+    };
+
+    modemmanager = {
+      exporterConfig = {
+        enable = true;
+        refreshRate = "10s";
+      };
+      metricProvider = {
+        # ModemManager is installed when NetworkManager is enabled. Ensure it is
+        # started and is wanted by NM and the exporter to start everything up
+        # in the right order.
+        networking.networkmanager.enable = true;
+        systemd.services.ModemManager = {
+          enable = true;
+          wantedBy = [ "NetworkManager.service" "prometheus-modemmanager-exporter.service" ];
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("ModemManager.service")
+        wait_for_unit("prometheus-modemmanager-exporter.service")
+        wait_for_open_port(9539)
+        succeed(
+            "curl -sSf http://localhost:9539/metrics | grep -q 'modemmanager_info'"
         )
       '';
     };
@@ -397,6 +503,20 @@ let
       '';
     };
 
+    redis = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider.services.redis.enable = true;
+      exporterTest = ''
+        wait_for_unit("redis.service")
+        wait_for_unit("prometheus-redis-exporter.service")
+        wait_for_open_port(6379)
+        wait_for_open_port(9121)
+        wait_until_succeeds("curl -sSf localhost:9121/metrics | grep -q 'redis_up 1'")
+      '';
+    };
+
     rspamd = {
       exporterConfig = {
         enable = true;
@@ -473,6 +593,19 @@ let
       '';
     };
 
+    unifi-poller = {
+      nodeName = "unifi_poller";
+      exporterConfig.enable = true;
+      exporterConfig.controllers = [ { } ];
+      exporterTest = ''
+        wait_for_unit("prometheus-unifi-poller-exporter.service")
+        wait_for_open_port(9130)
+        succeed(
+            "curl -sSf localhost:9130/metrics | grep -q 'unifipoller_build_info{.\\+} 1'"
+        )
+      '';
+    };
+
     varnish = {
       exporterConfig = {
         enable = true;
@@ -529,24 +662,27 @@ let
     };
   };
 in
-mapAttrs (exporter: testConfig: (makeTest {
+mapAttrs (exporter: testConfig: (makeTest (let
+  nodeName = testConfig.nodeName or exporter;
+
+in {
   name = "prometheus-${exporter}-exporter";
 
-  nodes.${exporter} = mkMerge [{
+  nodes.${nodeName} = mkMerge [{
     services.prometheus.exporters.${exporter} = testConfig.exporterConfig;
   } testConfig.metricProvider or {}];
 
   testScript = ''
-    ${exporter}.start()
+    ${nodeName}.start()
     ${concatStringsSep "\n" (map (line:
       if (builtins.substring 0 1 line == " " || builtins.substring 0 1 line == ")")
       then line
-      else "${exporter}.${line}"
+      else "${nodeName}.${line}"
     ) (splitString "\n" (removeSuffix "\n" testConfig.exporterTest)))}
-    ${exporter}.shutdown()
+    ${nodeName}.shutdown()
   '';
 
   meta = with maintainers; {
-    maintainers = [ willibutz ];
+    maintainers = [ willibutz elseym ];
   };
-})) exporterTests
+}))) exporterTests

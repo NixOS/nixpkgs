@@ -1,18 +1,17 @@
 { stdenv, fetchurl, pkgconfig, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
-, systemd, nettle, libedit, zlib, libiconv, libintl
+, systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb, libbpf, nghttp2
 , autoreconfHook
 }:
 
 let inherit (stdenv.lib) optional optionals; in
 
-# Note: ATM only the libraries have been tested in nixpkgs.
 stdenv.mkDerivation rec {
   pname = "knot-dns";
-  version = "2.9.4";
+  version = "3.0.0";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "57f3c93a1b40dfa0431508203f559b7ea257afab79078c38bcddf960d5a4a501";
+    sha256 = "f1c96aff6e873a2f9b1b8c2441d5a7801dd48d3abdb738a4d24b26c2a8fbe6c4";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -27,6 +26,7 @@ stdenv.mkDerivation rec {
     # Don't try to create directories like /var/lib/knot at build time.
     # They are later created from NixOS itself.
     ./dont-create-run-time-dirs.patch
+    ./runtime-deps.patch
   ];
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
@@ -34,9 +34,15 @@ stdenv.mkDerivation rec {
     gnutls liburcu libidn2 libunistring
     nettle libedit
     libiconv lmdb libintl
+    nghttp2 # DoH support in kdig
+    libmaxminddb # optional for geoip module (it's tiny)
     # without sphinx &al. for developer documentation
+    # TODO: add dnstap support?
   ]
-    ++ optionals stdenv.isLinux [ libcap_ng systemd ]
+    ++ optionals stdenv.isLinux [
+      libcap_ng systemd
+      libbpf # XDP support
+    ]
     ++ optional stdenv.isDarwin zlib; # perhaps due to gnutls
 
   enableParallelBuilding = true;

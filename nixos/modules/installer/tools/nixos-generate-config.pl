@@ -497,8 +497,8 @@ if (-f $fb_modes_file && -r $fb_modes_file) {
     $modes =~ m/([0-9]+)x([0-9]+)/;
     my $console_width = $1, my $console_height = $2;
     if ($console_width > 1920) {
-        push @attrs, "# High-DPI console";
-        push @attrs, 'console.font = lib.mkDefault "${pkgs.terminus_font}/share/consolefonts/ter-u28n.psf.gz";';
+        push @attrs, "# high-resolution display";
+        push @attrs, 'hardware.video.hidpi.enable = lib.mkDefault true;';
     }
 }
 
@@ -628,6 +628,7 @@ EOF
         write_file($fn, <<EOF);
 @configuration@
 EOF
+        print STDERR "For more hardware-specific settings, see https://github.com/NixOS/nixos-hardware"
     } else {
         print STDERR "warning: not overwriting existing $fn\n";
     }

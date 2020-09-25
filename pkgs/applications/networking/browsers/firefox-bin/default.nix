@@ -8,7 +8,6 @@
 , dbus
 , fontconfig
 , freetype
-, gconf
 , gdk-pixbuf
 , glib
 , glibc
@@ -27,9 +26,7 @@
 , libXinerama
 , libXrender
 , libXt
-, libcanberra-gtk2
-, libgnome
-, libgnomeui
+, libcanberra
 , libnotify
 , gnome3
 , libGLU, libGL
@@ -50,6 +47,7 @@
 , gnupg
 , ffmpeg
 , runtimeShell
+, mesa # firefox wants gbm for drm+dmabuf
 , systemLocale ? config.i18n.defaultLocale or "en-US"
 }:
 
@@ -87,7 +85,7 @@ in
 stdenv.mkDerivation {
   inherit name;
 
-  src = fetchurl { inherit (source) url sha512; };
+  src = fetchurl { inherit (source) url sha256; };
 
   phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
 
@@ -103,13 +101,13 @@ stdenv.mkDerivation {
       dbus
       fontconfig
       freetype
-      gconf
       gdk-pixbuf
       glib
       glibc
       gtk2
       gtk3
       kerberos
+      mesa
       libX11
       libXScrnSaver
       libXcomposite
@@ -122,9 +120,7 @@ stdenv.mkDerivation {
       libXinerama
       libXrender
       libXt
-      libcanberra-gtk2
-      libgnome
-      libgnomeui
+      libcanberra
       libnotify
       libGLU libGL
       nspr

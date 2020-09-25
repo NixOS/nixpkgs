@@ -3,17 +3,17 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "babashka";
-  version = "0.0.94";
+  version = "0.0.97";
 
   reflectionJson = fetchurl {
     name = "reflection.json";
     url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-reflection.json";
-    sha256 = "103x5ih48rhhdipar66bp0s0j62fv4r3sszh8fwaivs7dvsvcvsd";
+    sha256 = "1gd9ih9l02n1j9qkbxb36d3cb5sddwvxiw8kkicgc4xig77lsa7z";
   };
 
   src = fetchurl {
     url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "0fin80x898qzylzq91q6mp8pgwk0sciwwa9l71mdhahqasa90sri";
+    sha256 = "08py6bawfrhg90fbcnv2mq4c91g5wa1q2q6zdjy2i1b9q4x1654r";
   };
 
   dontUnpack = true;
@@ -53,14 +53,14 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A Clojure babushka for the grey areas of Bash";
     longDescription = ''
-      The main idea behind babashka is to leverage Clojure in places where you 
+      The main idea behind babashka is to leverage Clojure in places where you
       would be using bash otherwise.
 
       As one user described it:
 
-          I’m quite at home in Bash most of the time, but there’s a substantial 
-          grey area of things that are too complicated to be simple in bash, but 
-          too simple to be worth writing a clj/s script for. Babashka really 
+          I’m quite at home in Bash most of the time, but there’s a substantial
+          grey area of things that are too complicated to be simple in bash, but
+          too simple to be worth writing a clj/s script for. Babashka really
           seems to hit the sweet spot for those cases.
 
     Goals:
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     - Easy installation: grab the self-contained binary and run. No JVM needed.
     - Familiarity and portability:
       - Scripts should be compatible with JVM Clojure as much as possible
-      - Scripts should be platform-independent as much as possible. Babashka 
+      - Scripts should be platform-independent as much as possible. Babashka
         offers support for linux, macOS and Windows.
     - Allow interop with commonly used classes like java.io.File and System
     - Multi-threading support (pmap, future, core.async)

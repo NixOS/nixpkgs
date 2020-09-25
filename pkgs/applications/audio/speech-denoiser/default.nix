@@ -27,6 +27,8 @@ stdenv.mkDerivation  {
   nativeBuildInputs = [ pkgconfig meson ninja ];
   buildInputs = [ lv2 rnnoise-nu ];
 
+  mesonFlags = ("--prefix=${placeholder "out"}/lib/lv2");
+
   postPatch = ''
     substituteInPlace meson.build \
       --replace "cc.find_library('rnnoise-nu',dirs: meson.current_source_dir() + '/rnnoise/.libs/',required : true)" "cc.find_library('rnnoise-nu', required : true)"

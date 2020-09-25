@@ -3,11 +3,11 @@
 let
   version = "5.2.0";
   bcpg = fetchurl {
-    url = "http://central.maven.org/maven2/org/bouncycastle/bcpg-jdk16/1.46/bcpg-jdk16-1.46.jar";
+    url = "mirror://maven/org/bouncycastle/bcpg-jdk16/1.46/bcpg-jdk16-1.46.jar";
     sha256 = "16xhmwks4l65m5x150nd23y5lyppha9sa5fj65rzhxw66gbli82d";
   };
   jsr305 = fetchurl {
-    url = "http://central.maven.org/maven2/com/google/code/findbugs/jsr305/2.0.0/jsr305-2.0.0.jar";
+    url = "mirror://maven/com/google/code/findbugs/jsr305/2.0.0/jsr305-2.0.0.jar";
     sha256 = "0s74pv8qjc42c7q8nbc0c3b1hgx0bmk3b8vbk1z80p4bbgx56zqy";
   };
 in
@@ -44,12 +44,8 @@ stdenv.mkDerivation {
     mkdir -p $out/share/applications
     mv package-files/linux/deb/jedit.desktop $out/share/applications/jedit.desktop
 
-    patch package-files/linux/jedit << EOF
-    5a6,8
-    > # specify the correct JAVA_HOME
-    > JAVA_HOME=${jdk.jre.home}/jre
-    > 
-    EOF
+    # specify the correct JAVA_HOME
+    sed -i '1a JAVA_HOME=${jdk}' package-files/linux/jedit
     sed -i "s|/usr/share/jEdit/@jar.filename@|$out/share/jEdit/jedit.jar|g" package-files/linux/jedit
     mkdir -p $out/bin
     cp package-files/linux/jedit $out/bin/jedit

@@ -89,7 +89,7 @@ nixpkgs https://nixos.org/channels/nixpkgs-unstable</screen>
     NixOS partition. They are installed by default on NixOS, but you don't have
     NixOS yet..
    </para>
-<screen><prompt>$ </prompt>nix-env -iE "_: with import &lt;nixpkgs/nixos&gt; { configuration = {}; }; with config.system.build; [ nixos-generate-config nixos-install nixos-enter manual.manpages ]"</screen>
+<screen><prompt>$ </prompt>nix-env -f '&lt;nixpkgs/nixos&gt;' --arg configuration {} -iA config.system.build.{nixos-generate-config,nixos-install,nixos-enter,manual.manpages}</screen>
   </listitem>
   <listitem>
    <note>
@@ -211,7 +211,7 @@ nixpkgs https://nixos.org/channels/nixpkgs-unstable</screen>
     use <literal>sudo</literal>)
    </para>
 <programlisting>
-<link linkend="opt-users.users._name__.initialHashedPassword">users.users.root.initialHashedPassword</link> = "";
+<link linkend="opt-users.users._name_.initialHashedPassword">users.users.root.initialHashedPassword</link> = "";
 </programlisting>
   </listitem>
   <listitem>
@@ -325,14 +325,14 @@ sudo /nix/var/nix/profiles/system/bin/switch-to-configuration boot
     to boot on a USB rescue disk and do something along these lines:
    </para>
 <screen>
-# mkdir root
-# mount /dev/sdaX root
-# mkdir root/nixos-root
-# mv -v root/* root/nixos-root/
-# mv -v root/nixos-root/old-root/* root/
-# mv -v root/boot.bak root/boot  # We had renamed this by hand earlier
-# umount root
-# reboot</screen>
+<prompt># </prompt>mkdir root
+<prompt># </prompt>mount /dev/sdaX root
+<prompt># </prompt>mkdir root/nixos-root
+<prompt># </prompt>mv -v root/* root/nixos-root/
+<prompt># </prompt>mv -v root/nixos-root/old-root/* root/
+<prompt># </prompt>mv -v root/boot.bak root/boot  # We had renamed this by hand earlier
+<prompt># </prompt>umount root
+<prompt># </prompt>reboot</screen>
    <para>
     This may work as is or you might also need to reinstall the boot loader
    </para>

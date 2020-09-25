@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pop-gtk-theme";
-  version = "2020-04-22";
+  version = "2020-06-30";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "gtk-theme";
-    rev = "b3f98dfd61cfff81f69cdc7f57bce7a9efaa36f4";
-    sha256 = "0vhcc694x33sgcpbqkrc5bycbd7017k4iii0mjjxgd22jd5lzgkb";
+    rev = "8c31be9f9257375bf7a049069cb4ecbac7d281a1";
+    sha256 = "16dxxazpllcxlbiblynqq4b65wfn9k1jab8dl69l819v73z303ky";
   };
 
   nativeBuildInputs = [
@@ -48,9 +48,9 @@ stdenv.mkDerivation rec {
     for file in $(find -name render-\*.sh); do
       substituteInPlace "$file" \
         --replace 'INKSCAPE="/usr/bin/inkscape"' \
-                  'INKSCAPE="inkscape"' \
+                  'INKSCAPE="${inkscape}/bin/inkscape"' \
         --replace 'OPTIPNG="/usr/bin/optipng"' \
-                  'OPTIPNG="optipng"'
+                  'OPTIPNG="${optipng}/bin/optipng"'
     done
   '';
 

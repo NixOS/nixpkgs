@@ -1,13 +1,22 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ stdenv, fetchurl, jre, makeWrapper, substituteAll, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "cytoscape";
-  version = "3.7.2";
+  version = "3.8.1";
 
   src = fetchurl {
-    url = "https://github.com/cytoscape/cytoscape/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "125vgr8vqbmy2nsm1yl0h0q8p49lxxqfw5cmxzbx1caklcn4rryc";
+    url = "https://github.com/cytoscape/cytoscape/releases/download/${version}/${pname}-unix-${version}.tar.gz";
+    sha256 = "006g0w29sccg5h0zlrxdp3lx4vx1bfdhx2cms6aah85r5b82wgkf";
   };
+
+  patches = [
+    # By default, gen_vmoptions.sh tries to store custom options in $out/share
+    # at run time. This patch makes sure $HOME is used instead.
+    (substituteAll {
+      src = ./gen_vmoptions_to_homedir.patch;
+      inherit coreutils;
+    })
+  ];
 
   buildInputs = [jre makeWrapper];
 

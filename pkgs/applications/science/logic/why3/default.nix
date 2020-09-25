@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation {
   pname = "why3";
-  version = "1.2.1";
+  version = "1.3.3";
 
   src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/file/38185/why3-1.2.1.tar.gz";
-    sha256 = "014gkwisjp05x3342zxkryb729p02ngx1hcjjsrplpa53jzgz647";
+    url = "https://gforge.inria.fr/frs/download.php/file/38367/why3-1.3.3.tar.gz";
+    sha256 = "1n0a2nn1gnk0zg339lh698g4wpk7m8m1vyi2yvifd5adqvk4milw";
   };
 
   buildInputs = with ocamlPackages; [
@@ -29,14 +29,9 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  # Remove unnecessary call to which
-  patches = [ ./configure.patch
-    # Compatibility with js_of_ocaml 3.5
-    (fetchpatch {
-      url = "https://gitlab.inria.fr/why3/why3/commit/269ab313382fe3e64ef224813937314748bf7cf0.diff";
-      sha256 = "0i92wdnbh8pihvl93ac0ma1m5g95jgqqqj4kw6qqvbbjjqdgvzwa";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace Makefile.in --replace js_of_ocaml.ppx js_of_ocaml-ppx
+  '';
 
   configureFlags = [ "--enable-verbose-make" ];
 

@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "NetworkManager-strongswan";
-  version = "1.5.0";
+  version = "1.5.2";
 
   src = fetchurl {
     url = "https://download.strongswan.org/NetworkManager/${pname}-${version}.tar.bz2";
-    sha256 = "1x6hivr1v76fxy1dn82xrj9rj8k3r097kf4yiblqq16y631hxzy4";
+    sha256 = "0sc1yzlxjfvl58hjjw99bchqc4061i3apw254z61v22k4sajnif8";
   };
 
   buildInputs = [ networkmanager strongswanNM libsecret gtk3 libnma ];

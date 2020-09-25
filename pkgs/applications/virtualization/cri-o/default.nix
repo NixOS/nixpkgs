@@ -1,62 +1,51 @@
-{ flavor ? ""
-, stdenv
+{ stdenv
 , btrfs-progs
-, buildGoPackage
+, buildGoModule
 , fetchFromGitHub
 , glibc
 , gpgme
 , installShellFiles
 , libapparmor
-, libassuan
-, libgpgerror
 , libseccomp
 , libselinux
 , lvm2
 , pkg-config
+, nixosTests
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "cri-o";
-  version = "1.18.0";
-  name = "${pname}-${version}${flavor}";
-
-  goPackagePath = "github.com/cri-o/cri-o";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "cri-o";
     repo = "cri-o";
     rev = "v${version}";
-    sha256 = "142flmv54pj48rjqkd26fbxrcbx2cv6pdmrc33jgyvn6r99zliah";
+    sha256 = "1lrr8y0k6609z4gb8cg277rq58sh0bqd2b4mzjlynyjdgp3xskfq";
   };
+  vendorSha256 = null;
+
+  doCheck = false;
 
   outputs = [ "out" "man" ];
-
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
   buildInputs = [
     btrfs-progs
     gpgme
     libapparmor
-    libassuan
-    libgpgerror
     libseccomp
     libselinux
     lvm2
   ] ++ stdenv.lib.optionals (glibc != null) [ glibc glibc.static ];
 
-  BUILDTAGS = "apparmor seccomp selinux containers_image_ostree_stub";
+  BUILDTAGS = "apparmor seccomp selinux containers_image_openpgp containers_image_ostree_stub";
   buildPhase = ''
-    pushd go/src/${goPackagePath}
-
-    sed -i '/version.buildDate/d' Makefile
-
     make binaries docs BUILDTAGS="$BUILDTAGS"
   '';
 
   installPhase = ''
-    install -Dm755 bin/crio $out/bin/crio${flavor}
-    install -Dm755 bin/crio-status $out/bin/crio-status${flavor}
-    install -Dm755 bin/pinns $out/bin/pinns${flavor}
+    install -Dm755 bin/* -t $out/bin
 
     for shell in bash fish zsh; do
       installShellCompletion --$shell completions/$shell/*
@@ -64,6 +53,8 @@ buildGoPackage rec {
 
     installManPage docs/*.[1-9]
   '';
+
+  passthru.tests = { inherit (nixosTests) cri-o; };
 
   meta = with stdenv.lib; {
     homepage = "https://cri-o.io";

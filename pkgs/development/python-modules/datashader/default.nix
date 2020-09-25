@@ -25,15 +25,16 @@
 , fastparquet
 , testpath
 , nbconvert
+, pytest_xdist
 }:
 
 buildPythonPackage rec {
   pname = "datashader";
-  version = "0.9.0";
+  version = "0.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3a423d61014ae8d2668848edab6c12a6244be6f249570bd7811dd5698d5ff633";
+    sha256 = "b1f80415f72f92ccb660aaea7b2881ddd35d07254f7c44101709d42e819d6be6";
   };
 
   propagatedBuildInputs = [
@@ -60,6 +61,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytest
     pytest-benchmark
+    pytest_xdist # not needed
     flake8
     nbsmoke
     fastparquet
@@ -69,11 +71,11 @@ buildPythonPackage rec {
 
   postConfigure = ''
     substituteInPlace setup.py \
-      --replace "'testpath<0.4'" "'testpath'"
+      --replace "'numba >=0.37.0,<0.49'" "'numba'"
   '';
 
   checkPhase = ''
-    pytest datashader
+    pytest -n $NIX_BUILD_CORES datashader
   '';
 
   meta = with lib; {

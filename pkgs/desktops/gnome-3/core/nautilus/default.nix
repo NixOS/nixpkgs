@@ -32,11 +32,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nautilus";
-  version = "3.36.2";
+  version = "3.36.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1yknaz8n0l949sr8j3b7kdm0cm5mx2dp4n4k577m492hk6akqrr6";
+    sha256 = "1y0fsd7j48v4qkc051cg41mz7jycgw4vd4g37lw682p7n5xgrjmn";
   };
 
   nativeBuildInputs = [

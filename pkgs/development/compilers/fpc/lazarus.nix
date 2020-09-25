@@ -1,6 +1,7 @@
 { stdenv, fetchurl, makeWrapper
 , fpc, gtk2, glib, pango, atk, gdk-pixbuf
 , libXi, xorgproto, libX11, libXext
+, gdb, gnumake, binutils
 }:
 stdenv.mkDerivation rec {
   pname = "lazarus";
@@ -34,8 +35,12 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/startlazarus --prefix NIX_LDFLAGS ' ' "'$NIX_LDFLAGS'" \
-      --prefix LCL_PLATFORM ' ' "'$LCL_PLATFORM'"
+    wrapProgram $out/bin/startlazarus --prefix NIX_LDFLAGS ' ' \
+      "$(echo "$NIX_LDFLAGS" | sed -re 's/-rpath [^ ]+//g')" \
+      --prefix NIX_LDFLAGS_${binutils.suffixSalt} ' ' \
+      "$(echo "$NIX_LDFLAGS" | sed -re 's/-rpath [^ ]+//g')" \
+      --prefix LCL_PLATFORM ' ' "$LCL_PLATFORM" \
+      --prefix PATH ':' "${fpc}/bin:${gdb}/bin:${gnumake}/bin:${binutils}/bin"
   '';
 
   meta = with stdenv.lib; {

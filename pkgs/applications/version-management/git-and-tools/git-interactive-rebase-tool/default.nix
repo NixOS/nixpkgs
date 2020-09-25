@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ ncurses5 ] ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  checkFlagsArray = [ "--test-threads=1" ];
+  cargoParallelTestThreads = false;
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/MitMaro/git-interactive-rebase-tool";

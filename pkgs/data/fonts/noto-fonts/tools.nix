@@ -1,32 +1,62 @@
-{ fetchFromGitHub, lib, fetchpatch, buildPythonPackage, isPy3k, fonttools, numpy, pillow, six, bash }:
+{ fetchFromGitHub, lib, buildPythonPackage, pythonOlder
+, afdko, appdirs, attrs, black, booleanoperations, brotlipy, click
+, defcon, fontmath, fontparts, fontpens, fonttools, fs, lxml
+, mutatormath, pathspec, psautohint, pyclipper, pytz, regex, scour
+, toml, typed-ast, ufonormalizer, ufoprocessor, unicodedata2, zopfli
+, pillow, six, bash, setuptools_scm }:
 
 buildPythonPackage rec {
   pname = "nototools";
-  version = "unstable-2019-10-21";
+  version = "0.2.13";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "nototools";
-    rev = "cae92ce958bee37748bf0602f5d7d97bb6db98ca";
-    sha256 = "1jqr0dz23rjqiyxw1w69l6ry16dwdcf3c6cysiy793g2v7pir2yi";
+    rev = "v${version}";
+    sha256 = "0ggp65xgkf9y7jamncm65lkm84wapsa47abf133pcb702875v8jz";
   };
 
-  propagatedBuildInputs = [ fonttools numpy ];
-
-  patches = lib.optionals isPy3k [
-    # Additional Python 3 compat https://github.com/googlefonts/nototools/pull/497
-    (fetchpatch {
-      url = "https://github.com/googlefonts/nototools/commit/ded1f311b3260f015b5c5b80f05f7185392c4eff.patch";
-      sha256 = "0bn0rlbddxicw0h1dnl0cibgj6xjalja2qcm563y7kk3z5cdwhgq";
-    })
-  ];
-
   postPatch = ''
-    sed -ie "s^join(_DATA_DIR_PATH,^join(\"$out/third_party/ucd\",^" nototools/unicode_data.py
+    sed -i 's/use_scm_version=.*,/version="${version}",/' setup.py
   '';
 
+  nativeBuildInputs = [ setuptools_scm ];
+
+  propagatedBuildInputs = [
+    afdko
+    appdirs
+    attrs
+    black
+    booleanoperations
+    brotlipy
+    click
+    defcon
+    fontmath
+    fontparts
+    fontpens
+    fonttools
+    lxml
+    mutatormath
+    pathspec
+    psautohint
+    pyclipper
+    pytz
+    regex
+    scour
+    toml
+    typed-ast
+    ufonormalizer
+    ufoprocessor
+    unicodedata2
+    zopfli
+  ];
+
   checkInputs = [
-    pillow six bash
+    pillow
+    six
+    bash
   ];
 
   checkPhase = ''

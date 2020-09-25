@@ -19,6 +19,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     wrapGAppsHook
+    glib
+    gtk3
   ];
 
   buildInputs = [

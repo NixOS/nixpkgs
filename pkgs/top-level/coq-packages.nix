@@ -1,4 +1,4 @@
-{ lib, callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_05 }:
+{ lib, callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_05, ocamlPackages_4_09 }:
 
 let
   mkCoqPackages' = self: coq:
@@ -19,7 +19,6 @@ let
       coq-bits = callPackage ../development/coq-modules/coq-bits {};
       coq-elpi = callPackage ../development/coq-modules/coq-elpi {};
       coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
-      coq-extensible-records = callPackage ../development/coq-modules/coq-extensible-records {};
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
       coqhammer = callPackage ../development/coq-modules/coqhammer {};
       coqprime = callPackage ../development/coq-modules/coqprime {};
@@ -100,19 +99,26 @@ in rec {
     version = "8.6.1";
   };
   coq_8_7 = callPackage ../applications/science/logic/coq {
+    ocamlPackages = ocamlPackages_4_09;
     version = "8.7.2";
   };
   coq_8_8 = callPackage ../applications/science/logic/coq {
+    ocamlPackages = ocamlPackages_4_09;
     version = "8.8.2";
   };
   coq_8_9 = callPackage ../applications/science/logic/coq {
+    ocamlPackages = ocamlPackages_4_09;
     version = "8.9.1";
   };
   coq_8_10 = callPackage ../applications/science/logic/coq {
+    ocamlPackages = ocamlPackages_4_09;
     version = "8.10.2";
   };
   coq_8_11 = callPackage ../applications/science/logic/coq {
-    version = "8.11.1";
+    version = "8.11.2";
+  };
+  coq_8_12 = callPackage ../applications/science/logic/coq {
+    version = "8.12.0";
   };
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
@@ -122,8 +128,9 @@ in rec {
   coqPackages_8_9 = mkCoqPackages coq_8_9;
   coqPackages_8_10 = mkCoqPackages coq_8_10;
   coqPackages_8_11 = mkCoqPackages coq_8_11;
+  coqPackages_8_12 = mkCoqPackages coq_8_12;
   coqPackages = recurseIntoAttrs (lib.mapDerivationAttrset lib.dontDistribute
-    coqPackages_8_9
+    coqPackages_8_11
   );
   coq = coqPackages.coq;
 

@@ -36,13 +36,13 @@
       archives = {
       <xsl:for-each select="archives/archive[not(host-os)]">
         all = fetchurl {
-          url = <xsl:call-template name="repository-url"/>;
+          url = "<xsl:call-template name="repository-url"/>";
           sha1 = "<xsl:value-of select="complete/checksum" />";
         };
       </xsl:for-each>
       <xsl:for-each select="archives/archive[host-os and not(host-os = 'windows')]">
         <xsl:value-of select="host-os" /> = fetchurl {
-          url = <xsl:call-template name="repository-url"/>;
+          url = "<xsl:call-template name="repository-url"/>";
           sha1 = "<xsl:value-of select="complete/checksum" />";
         };
       </xsl:for-each>
@@ -60,13 +60,13 @@
       archives = {
       <xsl:for-each select="archives/archive[not(host-os)]">
         all = fetchurl {
-          url = <xsl:call-template name="repository-url"/>;
+          url = "<xsl:call-template name="repository-url"/>";
           sha1 = "<xsl:value-of select="complete/checksum" />";
         };
       </xsl:for-each>
       <xsl:for-each select="archives/archive[host-os and not(host-os = 'windows')]">
         <xsl:value-of select="host-os" /> = fetchurl {
-          url = <xsl:call-template name="repository-url"/>;
+          url = "<xsl:call-template name="repository-url"/>";
           sha1 = "<xsl:value-of select="complete/checksum" />";
         };
       </xsl:for-each>
@@ -108,13 +108,13 @@
       archives = {
       <xsl:for-each select="archives/archive[not(host-os)]">
         all = fetchurl {
-          url = <xsl:call-template name="repository-url"/>;
+          url = "<xsl:call-template name="repository-url"/>";
           sha1 = "<xsl:value-of select="complete/checksum" />";
         };
       </xsl:for-each>
       <xsl:for-each select="archives/archive[host-os and not(host-os = 'windows')]">
         <xsl:value-of select="host-os" /> = fetchurl {
-          url = <xsl:call-template name="repository-url"/>;
+          url = "<xsl:call-template name="repository-url"/>";
           sha1 = "<xsl:value-of select="complete/checksum" />";
         };
       </xsl:for-each>

@@ -1,14 +1,14 @@
 { stdenv, mkDerivation, fetchFromGitHub, cmake, qttools, alsaLib }:
 
 mkDerivation rec {
-  version = "1.5";
+  version = "1.5.1";
   pname = "OPL3BankEditor";
 
   src = fetchFromGitHub {
     owner = "Wohlstand";
     repo = pname;
     rev = "v${version}";
-    sha256 = "16va5xfbyn2m63722ab5yph0l7kmghkbk6dkia93041mfhdyg9rc";
+    sha256 = "1g59qrkcm4xnyxx0s2x28brqbf2ix6vriyx12pcdvfhhcdi55hxh";
     fetchSubmodules = true;
   };
 

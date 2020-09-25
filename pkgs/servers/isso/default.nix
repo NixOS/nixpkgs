@@ -1,26 +1,32 @@
-{ stdenv, python2, fetchFromGitHub }:
+{ stdenv, python3Packages, fetchFromGitHub }:
 
-with python2.pkgs; buildPythonApplication rec {
+with python3Packages; buildPythonApplication rec {
+
   pname = "isso";
-  version = "0.12.2";
+  # Can not use 0.12.2 because of:
+  # https://github.com/posativ/isso/issues/617
+  version = "unstable-2020-09-14";
 
   # no tests on PyPI
   src = fetchFromGitHub {
     owner = "posativ";
     repo = pname;
-    rev = version;
-    sha256 = "18v8lzwgl5hcbnawy50lfp3wnlc0rjhrnw9ja9260awkx7jra9ba";
+    rev = "f4d2705d4f1b51f444d0629355a6fcbcec8d57b5";
+    sha256 = "02jgfzq3svd54zj09jj7lm2r7ypqqjynzxa9dgnnm0pqvq728wzr";
   };
 
   propagatedBuildInputs = [
-    bleach
-    cffi
-    configparser
-    html5lib
-    ipaddr
+    itsdangerous
     jinja2
     misaka
+    html5lib
     werkzeug
+    bleach
+    flask-caching
+  ];
+
+  buildInputs = [
+    cffi
   ];
 
   checkInputs = [ nose ];

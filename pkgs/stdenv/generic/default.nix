@@ -98,7 +98,7 @@ let
       # TODO: This really wants to be in stdenv/darwin but we don't have hostPlatform
       # there (yet?) so it goes here until then.
       preHook = preHook+ lib.optionalString buildPlatform.isDarwin ''
-        export NIX_BUILD_DONT_SET_RPATH=1
+        export NIX_DONT_SET_RPATH_FOR_BUILD=1
       '' + lib.optionalString (hostPlatform.isDarwin || (hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.elf && hostPlatform.parsed.kernel.execFormat != lib.systems.parse.execFormats.macho)) ''
         export NIX_DONT_SET_RPATH=1
         export NIX_NO_SELF_RPATH=1
@@ -107,7 +107,7 @@ let
       # think the best solution would just be to fixup linux RPATHs so we don't
       # need to set `-rpath` anywhere.
       # + lib.optionalString targetPlatform.isDarwin ''
-      #   export NIX_TARGET_DONT_SET_RPATH=1
+      #   export NIX_DONT_SET_RPATH_FOR_TARGET=1
       # ''
       ;
 
@@ -138,8 +138,11 @@ let
         is32bit is64bit
         isAarch32 isAarch64 isMips isBigEndian;
 
-      # The derivation's `system` is `buildPlatform.system`.
-      inherit (buildPlatform) system;
+      # Override `system` so that packages can get the system of the host
+      # platform through `stdenv.system`. `system` is originally set to the
+      # build platform within the derivation above so that Nix directs the build
+      # to correct type of machine.
+      inherit (hostPlatform) system;
 
       inherit (import ./make-derivation.nix {
         inherit lib config stdenv;

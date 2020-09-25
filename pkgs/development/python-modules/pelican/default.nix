@@ -1,18 +1,20 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ stdenv, buildPythonPackage, fetchFromGitHub, isPy27
 , glibcLocales, git
 , mock, nose, markdown, lxml, typogrify
 , jinja2, pygments, docutils, pytz, unidecode, six, dateutil, feedgenerator
-, blinker, pillow, beautifulsoup4, markupsafe }:
+, blinker, pillow, beautifulsoup4, markupsafe, pandoc }:
 
 buildPythonPackage rec {
   pname = "pelican";
-  version = "4.2.0";
+  version = "4.5.0";
+
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "getpelican";
     repo = "pelican";
     rev = version;
-    sha256 = "0w9nqdw2jmqc6kqwg4rh6irr5k6j7hk8axg6vgd137rs50v62yv5";
+    sha256 = "0p8p84fcpkr19d54dhxvldd8ijbg334wmrmkr99pnbrdl1gf64qi";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     extraPostFetch = ''
@@ -24,15 +26,15 @@ buildPythonPackage rec {
 
   # Exclude custom locale test, which files were removed above to fix the source checksum
   checkPhase = ''
-    nosetests -sv --exclude=test_custom_locale_generation_works pelican
+    nosetests -s \
+      --exclude=test_custom_locale_generation_works \
+      --exclude=test_log_filter \
+      pelican
   '';
 
   buildInputs = [
     glibcLocales
-    # Note: Pelican has to adapt to a changed CLI of pandoc before enabling this
-    # again. Compare https://github.com/getpelican/pelican/pull/2252.
-    # Version 4.2.0 is incompatible with our current pandoc version.
-    # pandoc
+    pandoc
     git
     mock
     markdown
@@ -46,20 +48,15 @@ buildPythonPackage rec {
 
   checkInputs = [
     nose
+    pandoc
   ];
 
   postPatch= ''
     substituteInPlace pelican/tests/test_pelican.py \
       --replace "'git'" "'${git}/bin/git'"
-
-    # Markdown-3.1 changed footnote separator to colon
-    # https://github.com/getpelican/pelican/issues/2493#issuecomment-491723744
-    sed -i '/test_article_with_footnote/i\
-        @unittest.skip("")' pelican/tests/test_readers.py
   '';
 
   LC_ALL="en_US.UTF-8";
-
 
   # We only want to patch shebangs in /bin, and not those
   # of the project scripts that are created by Pelican.

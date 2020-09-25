@@ -1,18 +1,18 @@
 { stdenv, fetchPypi, buildPythonPackage, execnet, pytest
-, setuptools_scm, pytest-forked, filelock, six, isPy3k }:
+, setuptools_scm, pytest-forked, filelock, psutil, six, isPy3k }:
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
-  version = "1.30.0";
+  version = "1.34.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5d1b1d4461518a6023d56dab62fb63670d6f7537f23e2708459a557329accf48";
+    sha256 = "1vh4ps32lp5ignch5adbl3pgchvigdfmrl6qpmhxih54wa1qw3il";
   };
 
   nativeBuildInputs = [ setuptools_scm pytest ];
   checkInputs = [ pytest filelock ];
-  propagatedBuildInputs = [ execnet pytest-forked six ];
+  propagatedBuildInputs = [ execnet pytest-forked psutil six ];
 
   # Encountered a memory leak
   # https://github.com/pytest-dev/pytest-xdist/issues/462

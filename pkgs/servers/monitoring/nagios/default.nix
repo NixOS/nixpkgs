@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--localstatedir=/var/lib/nagios" ];
   buildFlags = [ "all" ];
+  CFLAGS = "-ldl";
 
   # Do not create /var directories
   preInstall = ''
@@ -36,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://www.nagios.org/";
     license     = stdenv.lib.licenses.gpl2;
     platforms   = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice relrod ];
+    maintainers = with stdenv.lib.maintainers; [ immae thoughtpolice relrod ];
   };
 }

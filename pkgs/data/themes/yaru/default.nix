@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yaru";
-  version = "20.04.6";
+  version = "20.10.2";
 
   src = fetchFromGitHub {
     owner = "ubuntu";
     repo = "yaru";
     rev = version;
-    sha256 = "04z16bcv1xdq4acnchd6cq9a8j46zl2bjp50cj90qmd6plpiiz50";
+    sha256 = "0vxs17nbahrdix1q9xj06nflm344lfgj2mrafsvyfcr2isn61iv6";
   };
 
   nativeBuildInputs = [ meson sassc pkg-config glib ninja python3 ];

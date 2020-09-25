@@ -1,5 +1,8 @@
-{ stdenv, makeWrapper
-, buildGoModule, fetchFromGitHub, installShellFiles
+{ stdenv
+, makeWrapper
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
 , git
 , gnupg
 , xclip
@@ -9,7 +12,7 @@
 
 buildGoModule rec {
   pname = "gopass";
-  version = "1.9.1";
+  version = "1.10.1";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
@@ -17,18 +20,22 @@ buildGoModule rec {
     owner = "gopasspw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "19xhyyd76r17rwn6s8xgfjnyi7kywagy0i4anqws40w79j3qb1p0";
+    sha256 = "0dhh64mxfhk610wr7bpakzgmc4a4iyhfkkl3qhjp6a46g9iygana";
   };
 
-  modSha256 = "0zr4ihpcclw5pfhcdrd4n4qb3i3djcwyvwr4m2kpn99icp55bml8";
+  vendorSha256 = "07wv6yahx4yzr3h1x93x4r5rvw8wbfk836f04b4r9xjbnpq7lb2a";
+
+  doCheck = false;
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.commit=${src.rev}" ];
 
-  wrapperPath = stdenv.lib.makeBinPath ([
-    git
-    gnupg
-    xclip
-  ] ++ stdenv.lib.optional stdenv.isLinux wl-clipboard);
+  wrapperPath = stdenv.lib.makeBinPath (
+    [
+      git
+      gnupg
+      xclip
+    ] ++ stdenv.lib.optional stdenv.isLinux wl-clipboard
+  );
 
   postInstall = ''
     for shell in bash fish zsh; do
@@ -40,16 +47,18 @@ buildGoModule rec {
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/gopass \
-      --prefix PATH : "${wrapperPath}"
+    for bin in $out/bin/*; do
+      wrapProgram $bin \
+        --prefix PATH : "${wrapperPath}"
+    done
   '';
 
   meta = with stdenv.lib; {
-    description     = "The slightly more awesome Standard Unix Password Manager for Teams. Written in Go.";
-    homepage        = "https://www.gopass.pw/";
-    license         = licenses.mit;
-    maintainers     = with maintainers; [ andir rvolosatovs ];
-    platforms       = platforms.unix;
+    description = "The slightly more awesome Standard Unix Password Manager for Teams. Written in Go.";
+    homepage = "https://www.gopass.pw/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ andir rvolosatovs ];
+    platforms = platforms.unix;
 
     longDescription = ''
       gopass is a rewrite of the pass password manager in Go with the aim of
