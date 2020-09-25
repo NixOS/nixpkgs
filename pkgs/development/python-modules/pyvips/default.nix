@@ -24,7 +24,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "pyvips" ];
-  
+
   preConfigure = ''
     export PKG_CONFIG_PATH="${vips.dev}/lib/pkgconfig:${glib.dev}/lib/pkgconfig"
   '';

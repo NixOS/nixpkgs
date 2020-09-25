@@ -5507,13 +5507,11 @@ in {
 
   pytest-dependency = callPackage ../development/python-modules/pytest-dependency { };
 
-
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
-  
-  pyvips = callPackage ../development/python-modules/pyvips { };
-  
-  pytest-django = callPackage ../development/python-modules/pytest-django { };
 
+  pyvips = callPackage ../development/python-modules/pyvips { };
+
+  pytest-django = callPackage ../development/python-modules/pytest-django { };
 
   pytest-doctestplus = callPackage ../development/python-modules/pytest-doctestplus { };
 
