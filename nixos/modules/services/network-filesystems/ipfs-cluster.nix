@@ -11,7 +11,8 @@ in {
 
     services.ipfs-cluster = {
 
-      enable = mkEnableOption "Pinset orchestration for IPFS - requires ipfs daemon to be useful";
+      enable = mkEnableOption
+        "Pinset orchestration for IPFS - requires ipfs daemon to be useful";
 
       user = mkOption {
         type = types.str;
@@ -39,29 +40,32 @@ in {
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
-    if cfg.consensus == null then throw "ipfs-cluster requires the option 'consensus' to be set" else {
-      environment.systemPackages = [ pkgs.ipfs-cluster ];
-      environment.variables.IPFS_CLUSTER_PATH = cfg.dataDir;
+    environment.systemPackages = [ pkgs.ipfs-cluster ];
+    environment.variables.IPFS_CLUSTER_PATH = cfg.dataDir;
 
-      systemd.packages = [ pkgs.ipfs-cluster ];
+    systemd.packages = [ pkgs.ipfs-cluster ];
 
-      systemd.services.ipfs-cluster-init = {
-        path = [ "/run/wrappers" pkgs.ipfs-cluster ];
-        environment.IPFS_PATH = cfg.dataDir;
-        wantedBy = [ "default.target" ];
+    systemd.services.ipfs-cluster-init = {
+      path = [ "/run/wrappers" pkgs.ipfs-cluster ];
+      environment.IPFS_PATH = cfg.dataDir;
+      wantedBy = [ "default.target" ];
 
-        serviceConfig = {
-          ExecStart = ["" "${pkgs.ipfs-cluster}/bin/ipfs-cluster-service init --consensus ${cfg.consensus}"];
-          Type = "oneshot";
-          RemainAfterExit = true;
-          User = cfg.user;
-          Group = cfg.group;
-        };
+      serviceConfig = if cfg.consensus == null then
+        throw "ipfs-cluster requires the option 'consensus' to be set"
+      else {
+        ExecStart = [
+          ""
+          "${pkgs.ipfs-cluster}/bin/ipfs-cluster-service init --consensus ${cfg.consensus}"
+        ];
+        Type = "oneshot";
+        RemainAfterExit = true;
+        User = cfg.user;
+        Group = cfg.group;
       };
+    };
 
     systemd.services.ipfs-cluster = {
       path = [ "/run/wrappers" pkgs.ipfs-cluster ];
@@ -72,7 +76,8 @@ in {
       after = [ "ipfs-cluster-init.service" ];
 
       serviceConfig = {
-        ExecStart = ["" "${pkgs.ipfs-cluster}/bin/ipfs-cluster-service daemon"];
+        ExecStart =
+          [ "" "${pkgs.ipfs-cluster}/bin/ipfs-cluster-service daemon" ];
         User = cfg.user;
         Group = cfg.group;
       };
