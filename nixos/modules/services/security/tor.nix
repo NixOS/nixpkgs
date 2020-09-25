@@ -43,8 +43,8 @@ let
   ''
   # Client connection config
   + optionalString cfg.client.enable ''
-    SOCKSPort ${cfg.client.socksListenAddress} ${toString cfg.client.socksIsolationOptions}
-    SOCKSPort ${cfg.client.socksListenAddressFaster}
+    SOCKSPort ${cfg.client.socksListenAddress} ${optionalString cfg.client.onionOnly "OnionTrafficOnly"} ${toString cfg.client.socksIsolationOptions}
+    SOCKSPort ${cfg.client.socksListenAddressFaster} ${optionalString cfg.client.onionOnly "OnionTrafficOnly"}
     ${opt "SocksPolicy" cfg.client.socksPolicy}
 
     ${optionalString cfg.client.transparentProxy.enable ''
@@ -220,6 +220,12 @@ in
             is set, we accept all (and only) requests from
             <option>socksListenAddress</option>.
           '';
+        };
+
+        onionOnly = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Tell the tor client to only connect to .onion addresses in response to SOCKS5 requests";
         };
 
         socksIsolationOptions = mkOption (isolationOptions // {
