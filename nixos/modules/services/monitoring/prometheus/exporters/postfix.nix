@@ -42,9 +42,13 @@ in
       '';
     };
     systemd = {
-      enable = mkEnableOption ''
-        reading metrics from the systemd-journal instead of from a logfile
-      '';
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable reading metrics from the systemd journal instead of from a logfile
+        '';
+      };
       unit = mkOption {
         type = types.str;
         default = "postfix.service";
