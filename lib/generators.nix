@@ -204,7 +204,7 @@ rec {
       # The state transition function to be called for every resulting line. It takes two arguments:
       # - line: A string, this is the line that was generated and should be processed
       # - state: The state as returned by the previous invocation of this function
-      #          (from the previous line, or initialState for invocation)
+      #          (from the previous line, or initialState for the first invocation)
       #
       # The function should then return the new state, incorporating the given
       # line into it. The function may also abort printing by returning an
@@ -224,7 +224,9 @@ rec {
       # - collecting a list of lines:
       #     nextState = line: list: list ++ [ line ]
       #     initialState = []
-    , nextState ? line: state: if state == null then line else state + "\n" + line
+    , nextState ? line: state: if state == null then line else state + (if multiline then "\n" else " ") + line
+    , multiline ? true
+    , allowPrettyValues ? false
       # The initial state for the transition function
     , initialState ? null
     }: let
@@ -233,9 +235,11 @@ rec {
         if state ? return then state
         else nextState line state;
 
+      shift = if multiline then "  " else "";
+
       go = buildup: state: depth: value: let
 
-        indent = lib.concatStrings (lib.genList (_: "  ") depth);
+        indent = lib.concatStrings (lib.genList (_: shift) depth);
         canRecurse = recursionLimit == null || depth < recursionLimit;
         printLiteral = lit: { buildup = buildup + lit; inherit state; };
 
@@ -244,18 +248,19 @@ rec {
           # Separate a string into its lines
           newlineSplits = lib.filter (r: ! lib.isList r) (builtins.split "\n" str);
 
+
           multilineResult = {
             state =
               builtins.foldl' (acc: el:
-                yield (indent + "  " + el) acc
+                yield (indent + shift + el) acc
               ) (yield (buildup + "''") state) (lib.init newlineSplits);
             buildup =
               if lib.last newlineSplits == ""
-              then "${indent}''"
-              else "${indent}  ${lib.last newlineSplits}''";
+              then indent + "''"
+              else indent + "  ${lib.last newlineSplits}''";
           };
           singlelineResult = printLiteral ("\"" + libStr.escape [ "\"" ] str + "\"");
-        in if lib.length newlineSplits > 1 then multilineResult else singlelineResult;
+        in if multiline && lib.length newlineSplits > 1 then multilineResult else singlelineResult;
 
         printList = list:
           if list == [] then printLiteral "[ ]"
@@ -264,10 +269,10 @@ rec {
             else printLiteral ("[ <" + toString (lib.length list) + " elements> ]")
           else {
             state = builtins.foldl' (acc: el:
-                let start = go "${indent}  " acc (depth + 1) el;
+                let start = go (indent + shift) acc (depth + 1) el;
                 in yield start.buildup start.state
               ) (yield (buildup + "[") state) list;
-            buildup = "${indent}]";
+            buildup = indent + "]";
           };
 
         printAttrs = attrs:
@@ -277,7 +282,7 @@ rec {
             else printLiteral ("{ <" + toString (lib.length (lib.attrNames attrs)) + " attributes> }")
           else {
             state = builtins.foldl' (acc: el:
-                let start = go "${indent}  ${libStr.escapeNixIdentifier el} = " acc (depth + 1) attrs.${el};
+                let start = go (indent + shift + libStr.escapeNixIdentifier el + " = ") acc (depth + 1) attrs.${el};
                 in yield (start.buildup + ";") start.state
               ) (yield (buildup + "{") state) (builtins.attrNames attrs);
             buildup = "${indent}}";
@@ -308,7 +313,10 @@ rec {
           lambda = printFun (builtins.functionArgs value);
           list = printList value;
           set =
-            eval (value ? type && value.type == "derivation") (isDrv:
+            eval (lib.attrNames value == [ "__pretty" "val" ]) (isPretty:
+            if isPretty && allowPrettyValues then eval (value.__pretty value.val) printLiteral
+
+            else eval (value ? type && value.type == "derivation") (isDrv:
             if isDrv then eval "<derivation ${value.drvPath}>" printLiteral
 
             else eval (value ? __functor) (isFunctor:
@@ -317,7 +325,7 @@ rec {
             else eval (value ? __toString || value ? outPath) (isStringCoercible:
             if isStringCoercible then eval (toString value) printStr
 
-            else printAttrs value)));
+            else printAttrs value))));
         }.${type} or (throw "Type not implemented: ${type}"));
 
       in if state ? return then { inherit buildup state; } else result;
