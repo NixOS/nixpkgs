@@ -1,4 +1,5 @@
 { fetchurl
+, fetchFromGitLab
 , stdenv
 , substituteAll
 , accountsservice
@@ -74,6 +75,10 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1nmi5mf7bffjyb7sd6kcv151j0mfmlqpzy2spaaxhf4wxywbbdpn";
   };
+  # See https://mail.gnome.org/archives/distributor-list/2020-September/msg00001.html
+  prePatch = (import ../gvc-with-ucm-prePatch.nix {
+    inherit fetchFromGitLab;
+  });
 
   nativeBuildInputs = [
     docbook_xsl
