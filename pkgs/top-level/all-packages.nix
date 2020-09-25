@@ -24983,6 +24983,8 @@ in
 
   tessera = callPackage ../applications/blockchains/tessera.nix { };
 
+  turbo-geth = callPackage ../applications/blockchains/turbo-geth.nix { };
+
   vertcoin  = libsForQt514.callPackage ../applications/blockchains/vertcoin.nix { boost = boost165; withGui = true; };
   vertcoind = callPackage ../applications/blockchains/vertcoin.nix { boost = boost165; withGui = false; };
 
