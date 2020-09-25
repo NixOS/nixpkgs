@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dasm";
-  version = "2.20.13";
+  version = "2.20.14";
 
   src = fetchFromGitHub {
     owner = "dasm-assembler";
     repo = "dasm";
     rev = version;
-    sha256 = "1nr4kvw42vyc6i4p1c06jlih11rhbjjxc27dc7cx5qj635xf4jcf";
+    sha256 = "09hzw228j43a78624bmq9cam7y1fjs48d3hpjqh2gn8iwnyk0pnp";
   };
 
   configurePhase = false;
