@@ -40,12 +40,12 @@ in {
     environment.systemPackages = [ pkgs.ipfs-cluster ];
     environment.variables.IPFS_CLUSTER_PATH = cfg.dataDir;
 
-    systemd.services.ipfs = {
+    systemd.services.ipfs-cluster = {
       path = [ "/run/wrappers" pkgs.ipfs-cluster ];
       environment.IPFS_PATH = cfg.dataDir;
 
       serviceConfig = {
-        ExecStart = ["" "${pkgs.ipfs}/bin/ipfs daemon ${ipfsFlags}"];
+        ExecStart = ["" "${pkgs.ipfs-cluster}/bin/ipfs-cluster-service daemon"];
         User = cfg.user;
         Group = cfg.group;
       };
