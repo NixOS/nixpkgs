@@ -1,6 +1,6 @@
 { fetchurl, stdenv, substituteAll, meson, ninja, pkgconfig, gnome3, glib, gtk3, gsettings-desktop-schemas
 , gnome-desktop, dbus, json-glib, libICE, xmlto, docbook_xsl, docbook_xml_dtd_412, python3
-, libxslt, gettext, makeWrapper, systemd, xorg, epoxy, gnugrep, bash }:
+, libxslt, gettext, makeWrapper, systemd, xorg, epoxy, gnugrep, bash, gnome-session-ctl }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-session";
@@ -39,6 +39,14 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file
     patchShebangs meson_post_install.py
+
+    # Use our provided `gnome-session-ctl`
+    original="@libexecdir@/gnome-session-ctl"
+    replacement="${gnome-session-ctl}/libexec/gnome-session-ctl"
+
+    find data/ -type f -name "*.service.in" -exec sed -i \
+      -e s,$original,$replacement,g \
+      {} +
   '';
 
   # `bin/gnome-session` will reset the environment when run in wayland, we
@@ -59,6 +67,9 @@ stdenv.mkDerivation rec {
     mkdir $sessions
     moveToOutput share/wayland-sessions "$sessions"
     moveToOutput share/xsessions "$sessions"
+
+    # Our provided one is being used
+    rm -rf $out/libexec/gnome-session-ctl
   '';
 
   passthru = {
