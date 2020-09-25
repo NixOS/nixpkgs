@@ -1,6 +1,8 @@
---- a/daemon/gdm-local-display-factory.c
-+++ b/daemon/gdm-local-display-factory.c
-@@ -201,7 +201,7 @@
+diff --git i/daemon/gdm-local-display-factory.c w/daemon/gdm-local-display-factory.c
+index e7cafeb1..e36b2e8e 100644
+--- i/daemon/gdm-local-display-factory.c
++++ w/daemon/gdm-local-display-factory.c
+@@ -203,7 +203,7 @@ gdm_local_display_factory_use_wayland (void)
  #ifdef ENABLE_WAYLAND_SUPPORT
          gboolean wayland_enabled = FALSE;
          if (gdm_settings_direct_get_boolean (GDM_KEY_WAYLAND_ENABLE, &wayland_enabled)) {
@@ -9,50 +11,45 @@
                          return TRUE;
          }
  #endif
---- a/daemon/gdm-manager.c
-+++ b/daemon/gdm-manager.c
-@@ -145,7 +145,7 @@
+diff --git i/daemon/gdm-manager.c w/daemon/gdm-manager.c
+index e828544b..68897f74 100644
+--- i/daemon/gdm-manager.c
++++ w/daemon/gdm-manager.c
+@@ -148,7 +148,7 @@ plymouth_is_running (void)
          GError  *error;
  
          error = NULL;
--        res = g_spawn_command_line_sync ("/bin/plymouth --ping",
+-        res = g_spawn_command_line_sync ("plymouth --ping",
 +        res = g_spawn_command_line_sync ("@plymouth@/bin/plymouth --ping",
                                           NULL, NULL, &status, &error);
          if (! res) {
                  g_debug ("Could not ping plymouth: %s", error->message);
-@@ -163,7 +163,7 @@
+@@ -166,7 +166,7 @@ plymouth_prepare_for_transition (void)
          GError  *error;
  
          error = NULL;
--        res = g_spawn_command_line_sync ("/bin/plymouth deactivate",
+-        res = g_spawn_command_line_sync ("plymouth deactivate",
 +        res = g_spawn_command_line_sync ("@plymouth@/bin/plymouth deactivate",
                                           NULL, NULL, NULL, &error);
          if (! res) {
                  g_warning ("Could not deactivate plymouth: %s", error->message);
-@@ -178,7 +178,7 @@
+@@ -181,7 +181,7 @@ plymouth_quit_with_transition (void)
          GError  *error;
  
          error = NULL;
--        res = g_spawn_command_line_async ("/bin/plymouth quit --retain-splash", &error);
+-        res = g_spawn_command_line_async ("plymouth quit --retain-splash", &error);
 +        res = g_spawn_command_line_async ("@plymouth@/bin/plymouth quit --retain-splash", &error);
          if (! res) {
                  g_warning ("Could not quit plymouth: %s", error->message);
                  g_error_free (error);
-@@ -194,7 +194,7 @@
-         GError  *error;
- 
-         error = NULL;
--        res = g_spawn_command_line_async ("/bin/plymouth quit", &error);
-+        res = g_spawn_command_line_async ("@plymouth@/bin/plymouth quit", &error);
-         if (! res) {
-                 g_warning ("Could not quit plymouth: %s", error->message);
-                 g_error_free (error);
---- a/data/gdm.service.in
-+++ b/data/gdm.service.in
-@@ -28,7 +28,7 @@ BusName=org.gnome.DisplayManager
- StandardOutput=syslog
- StandardError=inherit
- EnvironmentFile=-@LANG_CONFIG_FILE@
+diff --git i/data/gdm.service.in w/data/gdm.service.in
+index 17e8a8de..afc70977 100644
+--- i/data/gdm.service.in
++++ w/data/gdm.service.in
+@@ -26,7 +26,7 @@ Restart=always
+ IgnoreSIGPIPE=no
+ BusName=org.gnome.DisplayManager
+ EnvironmentFile=-${LANG_CONFIG_FILE}
 -ExecReload=/bin/kill -SIGHUP $MAINPID
 +ExecReload=@coreutils@/bin/kill -SIGHUP $MAINPID
  KeyringMode=shared
