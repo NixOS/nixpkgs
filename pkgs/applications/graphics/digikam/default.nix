@@ -45,6 +45,7 @@
 , hugin
 , gnumake
 
+, breeze-icons
 , oxygen
 }:
 
@@ -94,6 +95,7 @@ mkDerivation rec {
     kwidgetsaddons
     kxmlgui
 
+    breeze-icons
     marble
     oxygen
     threadweaver
