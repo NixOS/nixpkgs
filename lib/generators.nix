@@ -298,11 +298,17 @@ rec {
             result = if args == {} then "<function>" else "<function, args: {${allArgs}}>";
           in printLiteral result;
 
+        # This function evaluates the first argument and passes it to the
+        # function given in the second argument. If the evaluation of the first
+        # argument fails, it return a printer result signaling a failed evaluation
         eval = value: cont:
           let result = builtins.tryEval value; in
           if result.success then cont result.value
           else printLiteral "<failure>";
 
+        # We use `eval` every time we evaluate part of the input value, and for
+        # nothing else, making sure that only input value failures are shown as failures
+        # E.g. failures in the nextState function won't be caught (and they shouldn't)
         result = eval (builtins.typeOf value) (type: {
           null = printLiteral "null";
           bool = printLiteral (if value then "true" else "false");
