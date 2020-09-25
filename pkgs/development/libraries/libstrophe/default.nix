@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libstrophe";
-  version = "0.9.3";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "strophe";
     repo = pname;
     rev = version;
-    sha256 = "1g1l0w9z9hdy5ncdvd9097gi7k7783did6py5h9camlpb2fnk5mk";
+    sha256 = "1hizw695fw0cy88h1dpl9pvniapml2zw9yvxck8xvxbqfz54jwja";
   };
 
   nativeBuildInputs = [ automake autoconf pkgconfig libtool check ];
