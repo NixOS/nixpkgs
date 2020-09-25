@@ -43,24 +43,25 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.ipfs-cluster ];
-    environment.variables.IPFS_CLUSTER_PATH = cfg.dataDir;
+    if cfg.consensus == null then throw "ipfs-cluster requires the option 'consensus' to be set" else {
+      environment.systemPackages = [ pkgs.ipfs-cluster ];
+      environment.variables.IPFS_CLUSTER_PATH = cfg.dataDir;
 
-    systemd.packages = [ pkgs.ipfs-cluster ];
+      systemd.packages = [ pkgs.ipfs-cluster ];
 
-    systemd.services.ipfs-cluster-init = {
-      path = [ "/run/wrappers" pkgs.ipfs-cluster ];
-      environment.IPFS_PATH = cfg.dataDir;
-      wantedBy = [ "default.target" ];
+      systemd.services.ipfs-cluster-init = {
+        path = [ "/run/wrappers" pkgs.ipfs-cluster ];
+        environment.IPFS_PATH = cfg.dataDir;
+        wantedBy = [ "default.target" ];
 
-      serviceConfig = {
-        ExecStart = ["" "${pkgs.ipfs-cluster}/bin/ipfs-cluster-service init --consensus ${cfg.consensus}"];
-        Type = "oneshot";
-        RemainAfterExit = true;
-        User = cfg.user;
-        Group = cfg.group;
+        serviceConfig = {
+          ExecStart = ["" "${pkgs.ipfs-cluster}/bin/ipfs-cluster-service init --consensus ${cfg.consensus}"];
+          Type = "oneshot";
+          RemainAfterExit = true;
+          User = cfg.user;
+          Group = cfg.group;
+        };
       };
-    };
 
     systemd.services.ipfs-cluster = {
       path = [ "/run/wrappers" pkgs.ipfs-cluster ];
