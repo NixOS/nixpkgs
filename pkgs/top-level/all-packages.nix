@@ -23930,6 +23930,15 @@ in
 
   vlc_qt5 = vlc;
 
+  libvlc = vlc.override {
+    withQt5 = false;
+    qtbase = null;
+    qtsvg = null;
+    qtx11extras = null;
+    wrapQtAppsHook = null;
+    onlyLibVLC = true;
+  };
+
   vmpk = callPackage ../applications/audio/vmpk { };
 
   vocproc = callPackage ../applications/audio/vocproc { };
