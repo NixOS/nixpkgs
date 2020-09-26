@@ -2,8 +2,9 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
-, pytest
+, pytestCheckHook
 , sphinx
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -17,15 +18,18 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  checkInputs = [ pytest sphinx ];
+  checkInputs = [ pytestCheckHook sphinx ];
 
   __darwinAllowLocalNetworking = true;
 
-  # test_aside_basic times out,
-  # test_aside_cancel fails because modifies PYTHONPATH and cant find pytest
-  checkPhase = ''
-    pytest --deselect tests/test_task.py::test_aside_basic --deselect tests/test_task.py::test_aside_cancel -k "not test_ssl_outgoing"
-  '';
+  disabledTests = [
+     "test_aside_basic" # times out
+     "test_aside_cancel" # fails because modifies PYTHONPATH and cant find pytest
+     "test_ssl_outgoing" # touches network
+   ] ++ lib.optionals (stdenv.isDarwin) [
+     "test_unix_echo" # socket bind error on hydra when built with other packages
+     "test_unix_ssl_server" # socket bind error on hydra when built with other packages
+   ];
 
   meta = with lib; {
     homepage = "https://github.com/dabeaz/curio";
