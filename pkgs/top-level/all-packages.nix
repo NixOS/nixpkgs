@@ -7450,6 +7450,8 @@ in
 
   tarsnapper = callPackage ../tools/backup/tarsnapper { };
 
+  tarssh = callPackage ../servers/tarssh { };
+
   tartube = callPackage ../applications/video/tartube { };
 
   tayga = callPackage ../tools/networking/tayga { };
