@@ -22373,6 +22373,8 @@ in
 
   rep-gtk = callPackage ../development/libraries/rep-gtk { };
 
+  reproc = callPackage ../development/libraries/reproc { };
+
   sawfish = callPackage ../applications/window-managers/sawfish { };
 
   sidplayfp = callPackage ../applications/audio/sidplayfp { };
