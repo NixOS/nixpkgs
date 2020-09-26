@@ -276,7 +276,12 @@ in
           } >"$conf"
           mv -fT "$conf" /run/nslcd/nslcd.conf
         '';
-        restartTriggers = [ "/run/nslcd/nslcd.conf" ];
+
+        restartTriggers = [
+          nslcdConfig
+          cfg.bind.passwordFile
+          cfg.daemon.rootpwmodpwFile
+        ];
 
         serviceConfig = {
           ExecStart = "${nslcdWrapped}/bin/nslcd";
