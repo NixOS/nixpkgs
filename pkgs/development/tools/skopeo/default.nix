@@ -42,9 +42,7 @@ buildGoModule rec {
     install -Dm755 bin/skopeo -t $out/bin
     installManPage docs/*.[1-9]
     installShellCompletion --bash completions/bash/skopeo
-  '';
-
-  postInstall = stdenv.lib.optionals stdenv.isLinux ''
+  '' + stdenv.lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/skopeo \
       --prefix PATH : ${stdenv.lib.makeBinPath [ fuse-overlayfs ]}
   '';
