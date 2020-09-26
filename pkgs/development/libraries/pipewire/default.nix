@@ -11,7 +11,7 @@
 , dbus
 , gst_all_1
 , alsaLib
-, ffmpeg_3
+, ffmpeg_4
 , libjack2
 , udev
 , libva
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     alsaLib
     bluez
     dbus
-    ffmpeg_3
+    ffmpeg_4
     glib
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
