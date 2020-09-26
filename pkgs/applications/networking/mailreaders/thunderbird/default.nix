@@ -70,13 +70,13 @@ assert waylandSupport -> gtk3Support == true;
 
 stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "78.2.2";
+  version = "78.3.1";
 
   src = fetchurl {
     url =
       "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
     sha512 =
-      "2cbpyx9jn23kc289z8ikzx3035g5z6p076izvld50mj3kqc0v4n3igih3rv1lsdwysik8c0ax5w3pa037lnrp6ridgbnix34gxr4nw6";
+      "16b05e51776ba16503bc5fba02a6d0b5050a206e264a4707544354ad76af61902fd2dcf5d97b82b432dc69362ccd18543a0acccd80e06648e6c6f470886da450";
   };
 
   nativeBuildInputs = [
@@ -147,13 +147,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-buildconfig.patch
-    (fetchpatch { # included in 78.3.0
-      name = "empty-UI.patch";
-      url = "https://hg.mozilla.org/releases/comm-esr78/raw-rev/f085dbd311bc";
-      # paths: {a,b}/foo -> {a,b}/comm/foo
-      stripLen = 1; extraPrefix = "comm/";
-      sha256 = "0x9pw62w93kyd99q9wi2d8llcfzbrqib7fp5kcrjidvhnkxpr6j7";
-    })
   ];
 
   postPatch = ''
