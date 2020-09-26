@@ -3913,6 +3913,8 @@ in
 
   genimage = callPackage ../tools/filesystems/genimage { };
 
+  geomyidae = callPackage ../servers/gopher/geomyidae {};
+
   geonkick = callPackage ../applications/audio/geonkick {};
 
   gerrit = callPackage ../applications/version-management/gerrit { };

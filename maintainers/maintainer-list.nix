@@ -7955,6 +7955,12 @@
     githubId = 2157287;
     name = "sohalt";
   };
+  solene = {
+    email = "solene@perso.pw";
+    github = "rapenne-s";
+    githubId = 248016;
+    name = "Solène Rapenne";
+  };
   solson = {
     email = "scott@solson.me";
     github = "solson";
