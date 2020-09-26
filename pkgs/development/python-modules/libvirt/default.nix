@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "libvirt";
-  version = "6.3.0";
+  version = "6.6.0";
 
   src = assert version == libvirt.version; fetchgit {
     url = "git://libvirt.org/libvirt-python.git";
     rev = "v${version}";
-    sha256 = "088cksq59jxkkzbvmwl8jw9v2k3zibwksl7j57yb51bxaa2sa1cx";
+    sha256 = "0jj6b2nlx7qldwbvixz74abn3p0sq4lkf6ak74vynrv5xvlycb9v";
   };
 
   nativeBuildInputs = [ pkgconfig ];
