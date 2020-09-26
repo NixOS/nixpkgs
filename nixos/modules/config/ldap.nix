@@ -78,11 +78,13 @@ in
       };
 
       server = mkOption {
+        type = types.str;
         example = "ldap://ldap.example.org/";
         description = "The URL of the LDAP server.";
       };
 
       base = mkOption {
+        type = types.str;
         example = "dc=example,dc=org";
         description = "The distinguished name of the search base.";
       };
