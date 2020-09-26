@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, glib, gnome3, libxml2
 , libgdata, grilo, libzapojit, grilo-plugins, gnome-online-accounts, libmediaart
-, tracker, gfbgraph, librest, libsoup, json-glib, gmp, openssl, dleyna-server, wrapGAppsHook }:
+, tracker_2, gfbgraph, librest, libsoup, json-glib, gmp, openssl, dleyna-server, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-online-miners";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     glib libgdata libxml2 libsoup gmp openssl
     grilo libzapojit grilo-plugins
     gnome-online-accounts libmediaart
-    tracker gfbgraph json-glib librest
+    tracker_2 gfbgraph json-glib librest
     dleyna-server
   ];
 
