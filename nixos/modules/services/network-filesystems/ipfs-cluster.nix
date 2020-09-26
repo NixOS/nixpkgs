@@ -40,7 +40,7 @@ in {
 
       initPeerStore = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Peer addresses to initialize with on first run";
       };
     };
@@ -52,18 +52,17 @@ in {
     environment.systemPackages = [ pkgs.ipfs-cluster ];
     environment.variables.IPFS_CLUSTER_PATH = cfg.dataDir;
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
-      ];
+    systemd.tmpfiles.rules =
+      [ "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -" ];
 
     systemd.packages = [ pkgs.ipfs-cluster ];
 
-    systemd.services.ipfs-cluster-init =
-    let 
+    systemd.services.ipfs-cluster-init = let
       peerstore = writeTextFile {
         name = "peerstore";
         text = lib.strings.concatStringsSep "\n" cfg.initPeerStore;
-      }; in {
+      };
+    in {
       path = [ "/run/wrappers" pkgs.ipfs-cluster ];
       environment.IPFS_CLUSTER_PATH = cfg.dataDir;
       wantedBy = [ "default.target" ];
