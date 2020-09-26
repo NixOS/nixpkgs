@@ -1636,10 +1636,6 @@ substitute ./foo.in ./foo.out \
     --subst-var someVar
 </programlisting>
      </para>
-     <para>
-      <function>substitute</function> is implemented using the <command
-      xlink:href="http://replace.richardlloyd.org.uk/">replace</command> command. Unlike with the <command>sed</command> command, you don’t have to worry about escaping special characters. It supports performing substitutions on binary files (such as executables), though there you’ll probably want to make sure that the replacement string is as long as the replaced string.
-     </para>
     </listitem>
    </varlistentry>
    <varlistentry xml:id='fun-substituteInPlace'>
