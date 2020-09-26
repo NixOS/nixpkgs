@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "systrayhelper";
-  version = "0.0.4";
+  version = "0.0.5";
   rev = "ded1f2ed4d30f6ca2c89a13db0bd3046c6d6d0f9";
 
   goPackagePath = "github.com/ssbc/systrayhelper";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "ssbc";
     repo = "systrayhelper";
-    sha256 = "1iq643brha5q6w2v1hz5l3d1z0pqzqr43gpwih4cnx3m5br0wg2k";
+    sha256 = "0bn3nf43m89qmh8ds5vmv0phgdz32idz1zisr47jmvqm2ky1a45s";
   };
 
   # re date: https://github.com/NixOS/nixpkgs/pull/45997#issuecomment-418186178
