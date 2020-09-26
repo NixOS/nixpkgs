@@ -54,12 +54,16 @@ in {
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
-      "f '${cfg.dataDir}/peerstore' - ${cfg.user} ${cfg.group} - ${lib.strings.concatStringsSep "\n" cfg.initPeerStore}"
       ];
 
     systemd.packages = [ pkgs.ipfs-cluster ];
 
-    systemd.services.ipfs-cluster-init = {
+    systemd.services.ipfs-cluster-init =
+    let 
+      peerstore = writeTextFile {
+        name = "peerstore";
+        text = lib.strings.concatStringsSep "\n" cfg.initPeerStore;
+      }; in {
       path = [ "/run/wrappers" pkgs.ipfs-cluster ];
       environment.IPFS_CLUSTER_PATH = cfg.dataDir;
       wantedBy = [ "default.target" ];
@@ -67,6 +71,7 @@ in {
       serviceConfig = if cfg.consensus == null then
         throw "ipfs-cluster requires the option 'consensus' to be set"
       else {
+        ExecStartPre = [ "cp " ];
         ExecStart = [
           ""
           "${pkgs.ipfs-cluster}/bin/ipfs-cluster-service init --consensus ${cfg.consensus}"
