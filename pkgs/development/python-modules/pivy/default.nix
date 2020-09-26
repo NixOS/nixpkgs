@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pivy";
-  version = "0.6.5a2";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
-    owner = "FreeCAD";
+    owner = "coin3d";
     repo = "pivy";
     rev = version;
-    sha256 = "1w03jaha36bjyfaz8hchnv8yrkm5715w15crhd3qrlagz8fs38hm";
+    sha256 = "0vids7sxk8w5vr73xdnf8xdci71a7syl6cd35aiisppbqyyfmykx";
   };
 
   nativeBuildInputs = with pkgs; [
