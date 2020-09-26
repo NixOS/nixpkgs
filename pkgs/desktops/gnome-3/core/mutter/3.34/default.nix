@@ -107,11 +107,10 @@ stdenv.mkDerivation rec {
     ./0001-EGL-Include-EGL-eglmesaext.h.patch
     ./0002-drop-inheritable.patch
     ./0003-Fix-glitches-in-gala.patch
-    ./0004-build-use-get_pkgconfig_variable-for-sysprof-dbusdir.patch
-    ./0005-profiler-track-changes-in-GLib-and-Sysprof.patch
-    ./0006-meta-Add-missing-display.h-to-meta-workspace-manager.h.patch
-    ./0007-build-bump-ABI-to-sysprof-capture-4.patch
-    ./0008-fix-paths.patch
+    ./0004-profiler-track-changes-in-GLib-and-Sysprof.patch
+    ./0005-meta-Add-missing-display.h-to-meta-workspace-manager.h.patch
+    ./0006-build-bump-ABI-to-sysprof-capture-4.patch
+    ./0007-fix-paths.patch
   ];
 
   postPatch = ''

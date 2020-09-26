@@ -1,10 +1,10 @@
-From 217e05c260aadcd4e8c77fe8a1352e56f3edc8db Mon Sep 17 00:00:00 2001
-Message-Id: <217e05c260aadcd4e8c77fe8a1352e56f3edc8db.1601082051.git-series.worldofpeace@protonmail.ch>
-In-Reply-To: <7b94f980f2a099dd4b19b60c357cfcf5ff7ada6d.1601082051.git-series.worldofpeace@protonmail.ch>
-References: <7b94f980f2a099dd4b19b60c357cfcf5ff7ada6d.1601082051.git-series.worldofpeace@protonmail.ch>
+From 0c95e5a5b31eab93f149b90982680f38e8977063 Mon Sep 17 00:00:00 2001
+Message-Id: <0c95e5a5b31eab93f149b90982680f38e8977063.1601082838.git-series.worldofpeace@protonmail.ch>
+In-Reply-To: <7b94f980f2a099dd4b19b60c357cfcf5ff7ada6d.1601082838.git-series.worldofpeace@protonmail.ch>
+References: <7b94f980f2a099dd4b19b60c357cfcf5ff7ada6d.1601082838.git-series.worldofpeace@protonmail.ch>
 From: WORLDofPEACE <worldofpeace@protonmail.ch>
 Date: Sat,  4 Jul 2020 12:01:28 -0700
-Subject: [PATCH 7/8] build: bump ABI to sysprof-capture-4
+Subject: [PATCH 6/7] build: bump ABI to sysprof-capture-4
 
 From: Christian Hergert <chergert@redhat.com>
 
@@ -69,14 +69,14 @@ index 86970df..3dc0098 100644
  
  required_functions = [
 diff --git a/src/meson.build b/src/meson.build
-index b7a3bbf..a91baa1 100644
+index a9fffa2..a91baa1 100644
 --- a/src/meson.build
 +++ b/src/meson.build
 @@ -711,9 +711,13 @@ if have_profiler
      'backends/meta-profiler.h',
    ]
  
--  dbus_interfaces_dir = join_paths(sysprof_dep.get_pkgconfig_variable('prefix'), 'share', 'dbus-1', 'interfaces')
+-  dbus_interfaces_dir = join_paths(datadir, 'dbus-1', 'interfaces')
 -  sysprof3_dbus_file = join_paths(dbus_interfaces_dir, 'org.gnome.Sysprof3.Profiler.xml')
 +  if sysprof_dep.type_name() == 'pkgconfig'
 +    sysprof_dbus_interfaces_dir = join_paths(sysprof_dep.get_pkgconfig_variable('datadir'), 'dbus-1', 'interfaces')

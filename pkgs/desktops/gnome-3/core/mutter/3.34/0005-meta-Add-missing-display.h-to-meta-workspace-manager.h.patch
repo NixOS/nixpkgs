@@ -1,10 +1,10 @@
-From 425c39a6bc5c04543620f1242851aa4bb182aa73 Mon Sep 17 00:00:00 2001
-Message-Id: <425c39a6bc5c04543620f1242851aa4bb182aa73.1601082051.git-series.worldofpeace@protonmail.ch>
-In-Reply-To: <7b94f980f2a099dd4b19b60c357cfcf5ff7ada6d.1601082051.git-series.worldofpeace@protonmail.ch>
-References: <7b94f980f2a099dd4b19b60c357cfcf5ff7ada6d.1601082051.git-series.worldofpeace@protonmail.ch>
+From 2caa072dd8e283a8e43febeab55fe8b76dda69b7 Mon Sep 17 00:00:00 2001
+Message-Id: <2caa072dd8e283a8e43febeab55fe8b76dda69b7.1601082838.git-series.worldofpeace@protonmail.ch>
+In-Reply-To: <7b94f980f2a099dd4b19b60c357cfcf5ff7ada6d.1601082838.git-series.worldofpeace@protonmail.ch>
+References: <7b94f980f2a099dd4b19b60c357cfcf5ff7ada6d.1601082838.git-series.worldofpeace@protonmail.ch>
 From: WORLDofPEACE <worldofpeace@protonmail.ch>
 Date: Wed, 29 Jan 2020 11:02:33 +0100
-Subject: [PATCH 6/8] meta: Add missing display.h to meta-workspace-manager.h
+Subject: [PATCH 5/7] meta: Add missing display.h to meta-workspace-manager.h
 
 From: Corentin Noël <corentin@elementary.io>
 
