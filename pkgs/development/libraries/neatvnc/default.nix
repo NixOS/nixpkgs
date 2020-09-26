@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "neatvnc";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0zx9f9h1hqcyh3sf6k0scny2039p1lwdqbwqi8ppwwhjl2fzniv8";
+    sha256 = "1209dzlmqf5p1cqzf6kss5inwgj644ynrh9qgpjf1kskqwfxn1c4";
   };
 
   postPatch = ''
