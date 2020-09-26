@@ -228,6 +228,14 @@ self: super: {
     configurePhase = "cd plugins/nvim";
   });
 
+  vimsence = super.vimsence.overrideAttrs(old: {
+    meta = with stdenv.lib; {
+      description = "Discord rich presence for Vim";
+      homepage = "https://github.com/hugolgst/vimsence";
+      maintainers = with stdenv.lib.maintainers; [ hugolgst ];
+    };
+  });
+
   vim-gist = super.vim-gist.overrideAttrs(old: {
     dependencies = with super; [ webapi-vim ];
   });
