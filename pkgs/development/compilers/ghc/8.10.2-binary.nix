@@ -1,6 +1,6 @@
 { stdenv
 , fetchurl, perl, gcc
-, ncurses6, gmp, glibc, libiconv
+, ncurses6, gmp, glibc, libiconv, numactl
 , llvmPackages
 }:
 
@@ -12,7 +12,8 @@ let
 
   libPath = stdenv.lib.makeLibraryPath ([
     ncurses6 gmp
-  ] ++ stdenv.lib.optional (stdenv.hostPlatform.isDarwin) libiconv);
+  ] ++ stdenv.lib.optional (stdenv.hostPlatform.isDarwin) libiconv
+    ++ stdenv.lib.optional (stdenv.hostPlatform.isAarch64) numactl);
 
   libEnvVar = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin "DY"
     + "LD_LIBRARY_PATH";
