@@ -59,22 +59,18 @@ in
 
     users.ldap = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable authentication against an LDAP server.";
-      };
+      enable = mkEnableOption "authentication against an LDAP server";
 
       loginPam = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether to include authentication against LDAP in login PAM";
+        description = "Whether to include authentication against LDAP in login PAM.";
       };
 
       nsswitch = mkOption {
         type = types.bool;
         default = true;
-        description = "Whether to include lookup against LDAP in NSS";
+        description = "Whether to include lookup against LDAP in NSS.";
       };
 
       server = mkOption {
@@ -131,7 +127,7 @@ in
           type = types.lines;
           description = ''
             Extra configuration options that will be added verbatim at
-            the end of the nslcd configuration file (nslcd.conf).
+            the end of the nslcd configuration file (<literal>nslcd.conf(5)</literal>).
           '' ;
         } ;
 
@@ -182,7 +178,7 @@ in
           description = ''
             Specifies the time limit (in seconds) to use when connecting
             to the directory server. This is distinct from the time limit
-            specified in <literal>users.ldap.timeLimit</literal> and affects
+            specified in <option>users.ldap.timeLimit</option> and affects
             the initial server connection only.
           '';
         };
@@ -199,7 +195,7 @@ in
             actually contact the directory server, and it is possible that
             a malformed configuration file will trigger reconnection. If
             <literal>soft</literal> is specified, then
-            <literal>nss_ldap</literal> will return immediately on server
+            <package>nss_ldap</package> will return immediately on server
             failure. All hard reconnect policies block with exponential
             backoff before retrying.
           '';
@@ -211,10 +207,10 @@ in
         type = types.lines;
         description = ''
           Extra configuration options that will be added verbatim at
-          the end of the ldap configuration file (ldap.conf).
-          If <literal>users.ldap.daemon</literal> is enabled, this
+          the end of the ldap configuration file (<literal>ldap.conf(5)</literal>).
+          If <option>users.ldap.daemon</option> is enabled, this
           configuration will not be used. In that case, use
-          <literal>users.ldap.daemon.extraConfig</literal> instead.
+          <option>users.ldap.daemon.extraConfig</option> instead.
         '' ;
       };
 
