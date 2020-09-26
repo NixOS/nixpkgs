@@ -14520,6 +14520,7 @@ in
 
   opencascade = callPackage ../development/libraries/opencascade { };
   opencascade-occt = callPackage ../development/libraries/opencascade-occt { };
+  opencascade-occt730 = callPackage ../development/libraries/opencascade-occt/7.3.nix { };
 
   opencl-headers = callPackage ../development/libraries/opencl-headers { };
 
