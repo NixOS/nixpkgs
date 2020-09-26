@@ -39,111 +39,69 @@
 , zlib
 , xdg_utils
 , wrapGAppsHook
+, undmg
 }:
 
 let
 
-rpath = lib.makeLibraryPath [
-  alsaLib
-  at-spi2-atk
-  at-spi2-core
-  atk
-  cairo
-  cups
-  dbus
-  expat
-  fontconfig
-  freetype
-  gdk-pixbuf
-  glib
-  gnome2.GConf
-  gtk3
-  libdrm
-  libpulseaudio
-  libX11
-  libXScrnSaver
-  libXcomposite
-  libXcursor
-  libXdamage
-  libXext
-  libXfixes
-  libXi
-  libXrandr
-  libXrender
-  libXtst
-  libuuid
-  mesa
-  nspr
-  nss
-  pango
-  udev
-  xdg_utils
-  xorg.libxcb
-  zlib
-];
+  inherit (stdenv.hostPlatform) system;
+  throwSystem = throw "Unsupported system: ${system}";
 
-in
-
-stdenv.mkDerivation rec {
   pname = "brave";
   version = "1.12.112";
 
-  src = fetchurl {
-    url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "0nvxmz1wrr6cfyhbnrfjsy9szbjmvjl6080pgkp25xa8rcql5gmb";
-  };
+  src = let
+    base = "https://github.com/brave/brave-browser/releases/download/v${version}";
+  in {
+    x86_64-darwin = fetchurl {
+      url = "${base}/Brave-Browser.dmg";
+      sha256 = "09k6rdr14ihfxfz3lw6a9xmr98dkxamcrrnayixzcdqpwhqw7y1j";
+    };
+    x86_64-linux = fetchurl {
+      url = "${base}/brave-browser_${version}_amd64.deb";
+      sha256 = "0nvxmz1wrr6cfyhbnrfjsy9szbjmvjl6080pgkp25xa8rcql5gmb";
+    };
+  }.${system} or throwSystem;
 
-  dontConfigure = true;
-  dontBuild = true;
-  dontPatchELF = true;
 
-  nativeBuildInputs = [ dpkg wrapGAppsHook ];
-
-  buildInputs = [ glib gsettings-desktop-schemas gnome3.adwaita-icon-theme ];
-
-  unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
-
-  installPhase = ''
-      mkdir -p $out $out/bin
-
-      cp -R usr/share $out
-      cp -R opt/ $out/opt
-
-      export BINARYWRAPPER=$out/opt/brave.com/brave/brave-browser
-
-      # Fix path to bash in $BINARYWRAPPER
-      substituteInPlace $BINARYWRAPPER \
-          --replace /bin/bash ${stdenv.shell}
-
-      ln -sf $BINARYWRAPPER $out/bin/brave
-
-      patchelf \
-          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "${rpath}" $out/opt/brave.com/brave/brave
-
-      # Fix paths
-      substituteInPlace $out/share/applications/brave-browser.desktop \
-          --replace /usr/bin/brave-browser-stable $out/bin/brave
-      substituteInPlace $out/share/gnome-control-center/default-apps/brave-browser.xml \
-          --replace /opt/brave.com $out/opt/brave.com
-      substituteInPlace $out/share/menu/brave-browser.menu \
-          --replace /opt/brave.com $out/opt/brave.com
-      substituteInPlace $out/opt/brave.com/brave/default-app-block \
-          --replace /opt/brave.com $out/opt/brave.com
-
-      # Correct icons location
-      icon_sizes=("16" "22" "24" "32" "48" "64" "128" "256")
-
-      for icon in ''${icon_sizes[*]}
-      do
-          mkdir -p $out/share/icons/hicolor/$icon\x$icon/apps
-          ln -s $out/opt/brave.com/brave/product_logo_$icon.png $out/share/icons/hicolor/$icon\x$icon/apps/brave-browser.png
-      done
-
-      # Replace xdg-settings and xdg-mime
-      ln -sf ${xdg_utils}/bin/xdg-settings $out/opt/brave.com/brave/xdg-settings
-      ln -sf ${xdg_utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
-  '';
+  rpath = lib.makeLibraryPath [
+    alsaLib
+    at-spi2-atk
+    at-spi2-core
+    atk
+    cairo
+    cups
+    dbus
+    expat
+    fontconfig
+    freetype
+    gdk-pixbuf
+    glib
+    gnome2.GConf
+    gtk3
+    libdrm
+    libpulseaudio
+    libX11
+    libXScrnSaver
+    libXcomposite
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXrandr
+    libXrender
+    libXtst
+    libuuid
+    mesa
+    nspr
+    nss
+    pango
+    udev
+    xdg_utils
+    xorg.libxcb
+    zlib
+  ];
 
   meta = with stdenv.lib; {
     homepage = "https://brave.com/";
@@ -156,6 +114,78 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mpl20;
     maintainers = with maintainers; [ uskudnik rht jefflabonte ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
-}
+
+  linux = stdenv.mkDerivation rec {
+    inherit pname version src meta;
+
+    dontConfigure = true;
+    dontBuild = true;
+    dontPatchELF = true;
+
+    nativeBuildInputs = [ dpkg wrapGAppsHook ];
+
+    buildInputs = [ glib gsettings-desktop-schemas gnome3.adwaita-icon-theme ];
+
+    unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
+
+    installPhase = ''
+        mkdir -p $out $out/bin
+
+        cp -R usr/share $out
+        cp -R opt/ $out/opt
+
+        export BINARYWRAPPER=$out/opt/brave.com/brave/brave-browser
+
+        # Fix path to bash in $BINARYWRAPPER
+        substituteInPlace $BINARYWRAPPER \
+            --replace /bin/bash ${stdenv.shell}
+
+        ln -sf $BINARYWRAPPER $out/bin/brave
+
+        patchelf \
+            --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+            --set-rpath "${rpath}" $out/opt/brave.com/brave/brave
+
+        # Fix paths
+        substituteInPlace $out/share/applications/brave-browser.desktop \
+            --replace /usr/bin/brave-browser-stable $out/bin/brave
+        substituteInPlace $out/share/gnome-control-center/default-apps/brave-browser.xml \
+            --replace /opt/brave.com $out/opt/brave.com
+        substituteInPlace $out/share/menu/brave-browser.menu \
+            --replace /opt/brave.com $out/opt/brave.com
+        substituteInPlace $out/opt/brave.com/brave/default-app-block \
+            --replace /opt/brave.com $out/opt/brave.com
+
+        # Correct icons location
+        icon_sizes=("16" "22" "24" "32" "48" "64" "128" "256")
+
+        for icon in ''${icon_sizes[*]}
+        do
+            mkdir -p $out/share/icons/hicolor/$icon\x$icon/apps
+            ln -s $out/opt/brave.com/brave/product_logo_$icon.png $out/share/icons/hicolor/$icon\x$icon/apps/brave-browser.png
+        done
+
+        # Replace xdg-settings and xdg-mime
+        ln -sf ${xdg_utils}/bin/xdg-settings $out/opt/brave.com/brave/xdg-settings
+        ln -sf ${xdg_utils}/bin/xdg-mime $out/opt/brave.com/brave/xdg-mime
+    '';
+  };
+
+  darwin = stdenv.mkDerivation {
+    inherit pname version src meta;
+
+    nativeBuildInputs = [ undmg ];
+
+    sourceRoot = "Brave Browser.app";
+
+    installPhase = ''
+      mkdir -p $out/Applications/Brave-Browser.app
+      cp -R . $out/Applications/Brave-Browser.app
+    '';
+  };
+
+in if stdenv.isDarwin
+  then darwin
+  else linux
