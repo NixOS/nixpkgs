@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkgconfig
@@ -30,6 +31,14 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0cs7ggj88n8sira5vzsijmzl3fmflic48lbis24r1d9blx944s63";
   };
+
+  patches = [
+    # Port to libhandy-1
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-calendar/-/commit/8be361b6ce8f0f8053e1609decbdbdc164ec8448.patch";
+      sha256 = "Ue0pWwcbYyCZPHPPoR0dXW5n948/AZ3wVDMTIZDOnyE=";
+    })
+  ];
 
   passthru = {
     updateScript = gnome3.updateScript {
