@@ -26,6 +26,8 @@
 , exiv2
 , ffmpeg
 , flex
+, graphviz
+, imagemagick
 , lcms2
 , lensfun
 , libgphoto2
@@ -40,6 +42,7 @@
 , opencv3
 , pcre
 , threadweaver
+, x265
 
 # For panorama and focus stacking
 , enblend-enfuse
@@ -52,11 +55,11 @@
 
 mkDerivation rec {
   pname   = "digikam";
-  version = "6.4.0";
+  version = "7.1.0";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0vwd97zkxv30y8x0z76s4fsj4w9ysgsmpjclp2h2bpava7zi4l3p";
+    url = "mirror://kde/stable/${pname}/${version}/${pname}-${version}.tar.xz";
+    sha256 = "1gmblnsm0aida3yynyddm6jdh59hx3w177hrhfar616z793ch0xi";
   };
 
   nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
@@ -68,6 +71,8 @@ mkDerivation rec {
     exiv2
     ffmpeg
     flex
+    graphviz
+    imagemagick
     lcms2
     lensfun
     libgphoto2
@@ -80,6 +85,7 @@ mkDerivation rec {
     libGLU
     opencv3
     pcre
+    x265
 
     qtbase
     qtxmlpatterns
