@@ -6077,6 +6077,8 @@ in {
 
   requests-cache = callPackage ../development/python-modules/requests-cache { };
 
+  requests-hawk = callPackage ../development/python-modules/requests-hawk { };
+
   requests = callPackage ../development/python-modules/requests { };
 
   requests_download = callPackage ../development/python-modules/requests_download { };
