@@ -181,8 +181,8 @@ let
     sourceRoot = "Brave Browser.app";
 
     installPhase = ''
-      mkdir -p $out/Applications/Brave-Browser.app
-      cp -R . $out/Applications/Brave-Browser.app
+      mkdir -p $out/Applications/Brave.app
+      cp -R . $out/Applications/Brave.app
     '';
   };
 
