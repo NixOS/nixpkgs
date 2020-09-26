@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pantheon
 , substituteAll
@@ -76,6 +77,12 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
+    # Port to Libhandy-1
+    (fetchpatch {
+      url = "https://github.com/elementary/applications-menu/commit/8eb2430e8513e9d37f875c5c9b8b15a968c27127.patch";
+      sha256 = "8Uw9mUw7U5nrAwUDGVpAwoRqb9ah503wQCr9kPbBJIo=";
+    })
+
     (substituteAll {
       src = ./fix-paths.patch;
       bc = "${bc}/bin/bc";
