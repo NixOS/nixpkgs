@@ -7,9 +7,8 @@
 , pybind11
 , pyfma
 , eigen
-, pytest
+, pytestCheckHook
 , matplotlib
-, perfplot
 , isPy27
 }:
 
@@ -35,9 +34,8 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     matplotlib
-    perfplot
   ];
 
   postConfigure = ''
@@ -49,9 +47,15 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  checkPhase = ''
-    pytest test
+  # performance tests aren't useful to us and disabling them allows us to
+  # decouple ourselves from an unnecessary build dep
+  preCheck = ''
+    for f in test/test*.py ; do
+      substituteInPlace $f --replace 'import perfplot' ""
+    done
   '';
+  disabledTests = [ "test_speed_comparison1" "test_speed_comparison2" ];
+  pythonImportsCheck = [ "accupy" ];
 
   meta = with lib; {
     description = "Accurate sums and dot products for Python";
