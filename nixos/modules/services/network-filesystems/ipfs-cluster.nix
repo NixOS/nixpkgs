@@ -68,6 +68,7 @@ in {
         User = cfg.user;
         Group = cfg.group;
       };
+      unitConfig.ConditionDirectoryNotEmpty = "!${cfg.dataDir}";
     };
 
     systemd.services.ipfs-cluster = {
