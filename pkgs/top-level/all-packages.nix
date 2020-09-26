@@ -16731,6 +16731,8 @@ in
 
   petidomo = callPackage ../servers/mail/petidomo { };
 
+  photoprism = callPackage ../servers/web-apps/photoprism { };
+
   popa3d = callPackage ../servers/mail/popa3d { };
 
   postfix = callPackage ../servers/mail/postfix { };
