@@ -63,7 +63,10 @@ let
 
   executable = writeScript "pantheon" ''
     # gnome-session can find RequiredComponents for `pantheon` session (notably pantheon's patched g-s-d autostarts)
-    export XDG_CONFIG_DIRS=${elementary-default-settings}/etc/xdg:$XDG_CONFIG_DIRS
+    export XDG_CONFIG_DIRS=@out@/etc/xdg:$XDG_CONFIG_DIRS
+
+    # Make sure we use our gtk-3.0/settings.ini
+    export XDG_CONFIG_DIRS=${elementary-default-settings}/etc:$XDG_CONFIG_DIRS
 
     # * gnome-session can find the `pantheon' session
     # * use pantheon-mimeapps.list
