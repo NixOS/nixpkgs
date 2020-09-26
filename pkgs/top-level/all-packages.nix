@@ -20803,8 +20803,6 @@ in
 
   freecad = libsForQt514.callPackage ../applications/graphics/freecad {
     mpi = openmpi;
-    # pyside2 5.12 is broken under python 3.8
-    python3Packages = python37Packages;
   };
 
   freemind = callPackage ../applications/misc/freemind {
