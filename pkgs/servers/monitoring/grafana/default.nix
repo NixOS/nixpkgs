@@ -25,6 +25,12 @@ buildGoModule rec {
       --replace 'var version = "5.0.0"'  'var version = "${version}"'
   '';
 
+  # fixes build failure with go 1.15:
+  # main module (github.com/grafana/grafana) does not contain package github.com/grafana/grafana/scripts/go
+  preBuild = ''
+    rm -rf scripts/go
+  '';
+
   postInstall = ''
     tar -xvf $srcStatic
     mkdir -p $out/share/grafana
