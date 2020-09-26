@@ -75,6 +75,9 @@ rec {
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
+      knownVulnerabilities = [
+        "Firefox 68 ESR reached end of life with its final release 68.12esr on 2020-08-25 and was therefore marked as insecure"
+      ];
     };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-68-unwrapped";
