@@ -37,6 +37,12 @@ in {
         default = null;
         description = "Consensus protocol - 'raft' or 'crdt'";
       };
+
+      initPeerStore = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = "Peer addresses to initialize with on first run";
+      };
     };
   };
 
@@ -47,7 +53,9 @@ in {
     environment.variables.IPFS_CLUSTER_PATH = cfg.dataDir;
 
     systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -" ];
+      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
+      "f '${cfg.dataDir}/peerstore' - ${cfg.user} ${cfg.group} - ${lib.strings.concatStringsSep "\n" cfg.initPeerStore}"
+      ];
 
     systemd.packages = [ pkgs.ipfs-cluster ];
 
