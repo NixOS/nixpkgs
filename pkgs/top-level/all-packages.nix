@@ -22238,6 +22238,8 @@ in
 
   ninjas2 = callPackage ../applications/audio/ninjas2 {};
 
+  nncp = callPackage ../tools/misc/nncp { };
+
   notion = callPackage ../applications/window-managers/notion { };
 
   nootka = qt5.callPackage ../applications/audio/nootka { };
