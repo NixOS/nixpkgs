@@ -110,7 +110,10 @@ stdenv.mkDerivation rec {
     ./0004-profiler-track-changes-in-GLib-and-Sysprof.patch
     ./0005-meta-Add-missing-display.h-to-meta-workspace-manager.h.patch
     ./0006-build-bump-ABI-to-sysprof-capture-4.patch
-    ./0007-fix-paths.patch
+    (substituteAll {
+      src = ./0007-fix-paths.patch;
+      inherit zenity;
+    })
   ];
 
   postPatch = ''
