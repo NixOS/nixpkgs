@@ -132,6 +132,8 @@ let
     utillinux = if stdenv.isLinux then utillinuxMinimal else utillinux;
   };
 
+  git-remote-codecommit = python3Packages.callPackage ./git-remote-codecommit { };
+
   git-remote-gcrypt = callPackage ./git-remote-gcrypt { };
 
   git-remote-hg = callPackage ./git-remote-hg { };
