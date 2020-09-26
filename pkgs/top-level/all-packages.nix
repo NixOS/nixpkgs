@@ -2597,9 +2597,7 @@ in
 
   davix = callPackage ../tools/networking/davix { };
 
-  cantata = libsForQt5.callPackage ../applications/audio/cantata {
-    inherit vlc;
-  };
+  cantata = libsForQt5.callPackage ../applications/audio/cantata { };
 
   can-utils = callPackage ../os-specific/linux/can-utils { };
 
@@ -14998,8 +14996,6 @@ in
 
     telepathy = callPackage ../development/libraries/telepathy/qt { };
 
-    vlc = callPackage ../applications/video/vlc {};
-
     qtwebkit-plugins = callPackage ../development/libraries/qtwebkit-plugins { };
 
   };
@@ -23697,9 +23693,18 @@ in
 
   vkeybd = callPackage ../applications/audio/vkeybd {};
 
-  vlc = libsForQt514.vlc;
+  vlc = libsForQt514.callPackage ../applications/video/vlc {};
 
   vlc_qt5 = vlc;
+
+  libvlc = vlc.override {
+    withQt5 = false;
+    qtbase = null;
+    qtsvg = null;
+    qtx11extras = null;
+    wrapQtAppsHook = null;
+    onlyLibVLC = true;
+  };
 
   vmpk = callPackage ../applications/audio/vmpk { };
 

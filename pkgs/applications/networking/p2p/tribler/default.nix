@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgs, python3Packages, makeWrapper
-, enablePlayer ? true, vlc ? null, qt5, lib }:
+, enablePlayer ? true, libvlc ? null, qt5, lib }:
 
 stdenv.mkDerivation rec {
   pname = "tribler";
@@ -50,9 +50,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     ${stdenv.lib.optionalString enablePlayer ''
-      substituteInPlace "./TriblerGUI/vlc.py" --replace "ctypes.CDLL(p)" "ctypes.CDLL('${vlc}/lib/libvlc.so')"
+      substituteInPlace "./TriblerGUI/vlc.py" --replace "ctypes.CDLL(p)" "ctypes.CDLL('${libvlc}/lib/libvlc.so')"
       substituteInPlace "./TriblerGUI/widgets/videoplayerpage.py" --replace "if vlc and vlc.plugin_path" "if vlc"
-      substituteInPlace "./TriblerGUI/widgets/videoplayerpage.py" --replace "os.environ['VLC_PLUGIN_PATH'] = vlc.plugin_path" "os.environ['VLC_PLUGIN_PATH'] = '${vlc}/lib/vlc/plugins'"
+      substituteInPlace "./TriblerGUI/widgets/videoplayerpage.py" --replace "os.environ['VLC_PLUGIN_PATH'] = vlc.plugin_path" "os.environ['VLC_PLUGIN_PATH'] = '${libvlc}/lib/vlc/plugins'"
     ''}
   '';
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
         --run 'cd $_TRIBLERPATH' \
         --add-flags "-O $out/run_tribler.py" \
         ${stdenv.lib.optionalString enablePlayer ''
-          --prefix LD_LIBRARY_PATH : ${vlc}/lib
+          --prefix LD_LIBRARY_PATH : ${libvlc}/lib
         ''}
 
     mkdir -p $out/share/applications $out/share/icons $out/share/man/man1
