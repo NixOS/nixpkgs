@@ -2,7 +2,6 @@
 , fetchurl, perl, gcc
 , ncurses6, gmp, glibc, libiconv, numactl
 , llvmPackages
-, ...
 }:
 
 # Prebuilt only does native
