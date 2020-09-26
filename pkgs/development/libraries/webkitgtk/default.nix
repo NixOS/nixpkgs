@@ -67,6 +67,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  separateDebugInfo = stdenv.isLinux;
+
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
     sha256 = "04axfmzsb9gnyqaz5v7ljapiycxnzwpiya1l9rhp4c1qsbrdpwya";
@@ -180,7 +182,7 @@ stdenv.mkDerivation rec {
     description = "Web content rendering engine, GTK port";
     homepage = "https://webkitgtk.org/";
     license = licenses.bsd2;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = teams.gnome.members;
   };
 }
