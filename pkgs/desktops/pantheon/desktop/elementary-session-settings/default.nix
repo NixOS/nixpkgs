@@ -64,7 +64,18 @@ let
   executable = writeScript "pantheon" ''
     export XDG_CONFIG_DIRS=${elementary-settings-daemon}/etc/xdg:${elementary-default-settings}/etc:$XDG_CONFIG_DIRS
     export XDG_DATA_DIRS=@out@/share:$XDG_DATA_DIRS
-    exec ${gnome-session}/bin/gnome-session --session=pantheon "$@"
+    exec ${gnome-session}/bin/gnome-session --builtin --session=pantheon "$@"
+  '';
+
+  xsession = writeText "pantheon.desktop" ''
+    [Desktop Entry]
+    Name=Pantheon
+    Comment=This session provides elementary experience
+    Exec=@out@/libexec/pantheon
+    TryExec=${wingpanel}/bin/wingpanel
+    Icon=
+    DesktopNames=Pantheon
+    Type=Application
   '';
 
 in
@@ -112,12 +123,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/libexec
     substitute ${executable} $out/libexec/pantheon --subst-var out
     chmod +x $out/libexec/pantheon
-  '';
 
-  postFixup = ''
-    substituteInPlace $out/share/xsessions/pantheon.desktop \
-      --replace "gnome-session --session=pantheon" "$out/libexec/pantheon" \
-      --replace "wingpanel" "${wingpanel}/bin/wingpanel"
+    substitute ${xsession} $out/share/xsessions/pantheon.desktop --subst-var out
   '';
 
   passthru = {
