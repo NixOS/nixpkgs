@@ -19,15 +19,6 @@ stdenv.mkDerivation {
 
   buildInputs = [ libXxf86vm ];
 
-  # FIXME remove when https://github.com/Fushko/gammy/issues/45 is fixed
-  installPhase = ''
-    runHook preInstall
-
-    install gammy -Dt $out/bin/
-
-    runHook postInstall
-  '';
-
   meta = with stdenv.lib; {
     description = "GUI tool for manual- of auto-adjusting of brightness/temperature";
     homepage = "https://github.com/Fushko/gammy";
