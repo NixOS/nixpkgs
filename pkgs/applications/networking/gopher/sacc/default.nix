@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "sacc";
-  version = "1.01";
+  version = "1.02";
 
   src = fetchgit {
     url = "git://bitreich.org/sacc";
