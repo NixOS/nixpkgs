@@ -20805,6 +20805,11 @@ in
   freecad = libsForQt514.callPackage ../applications/graphics/freecad {
     mpi = openmpi;
   };
+  freecadStable = libsForQt514.callPackage ../applications/graphics/freecad/stable.nix {
+    mpi = openmpi;
+    opencascade-occt = opencascade-occt730;
+    python3Packages = python37Packages;
+  };
 
   freemind = callPackage ../applications/misc/freemind {
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
