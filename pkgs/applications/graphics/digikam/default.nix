@@ -32,6 +32,7 @@
 , libkipi
 , libksane
 , liblqr1
+, libqtav
 , libusb1
 , marble
 , libGL
@@ -72,6 +73,7 @@ mkDerivation rec {
     libkipi
     libksane
     liblqr1
+    libqtav
     libusb1
     libGL
     libGLU
