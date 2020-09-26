@@ -14341,6 +14341,8 @@ in
 
   libyamlcpp = callPackage ../development/libraries/libyaml-cpp { };
 
+  libcyaml = callPackage ../development/libraries/libcyaml { };
+
   rang = callPackage ../development/libraries/rang { };
 
   libyamlcpp_0_3 = pkgs.libyamlcpp.overrideAttrs (oldAttrs: {
