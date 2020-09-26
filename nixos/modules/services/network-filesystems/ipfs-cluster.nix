@@ -46,6 +46,9 @@ in {
     environment.systemPackages = [ pkgs.ipfs-cluster ];
     environment.variables.IPFS_CLUSTER_PATH = cfg.dataDir;
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -" ];
+
     systemd.packages = [ pkgs.ipfs-cluster ];
 
     systemd.services.ipfs-cluster-init = {
