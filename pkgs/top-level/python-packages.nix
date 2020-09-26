@@ -5897,6 +5897,10 @@ in {
 
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
 
+  pyvips = callPackage ../development/python-modules/pyvips {
+    inherit (pkgs) pkg-config vips glib;
+  };
+
   pyvmomi = callPackage ../development/python-modules/pyvmomi { };
 
   pyvoro = callPackage ../development/python-modules/pyvoro { };
