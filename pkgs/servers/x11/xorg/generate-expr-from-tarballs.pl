@@ -307,7 +307,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
     name = "$pkgNames{$pkg}";
     builder = ./builder.sh;
     src = fetchurl {
-      url = $pkgURLs{$pkg};
+      url = "$pkgURLs{$pkg}";
       sha256 = "$pkgHashes{$pkg}";
     };
     hardeningDisable = [ "bindnow" "relro" ];
