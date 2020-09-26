@@ -1,0 +1,32 @@
+From 2caa072dd8e283a8e43febeab55fe8b76dda69b7 Mon Sep 17 00:00:00 2001
+Message-Id: <2caa072dd8e283a8e43febeab55fe8b76dda69b7.1601082838.git-series.worldofpeace@protonmail.ch>
+In-Reply-To: <7b94f980f2a099dd4b19b60c357cfcf5ff7ada6d.1601082838.git-series.worldofpeace@protonmail.ch>
+References: <7b94f980f2a099dd4b19b60c357cfcf5ff7ada6d.1601082838.git-series.worldofpeace@protonmail.ch>
+From: WORLDofPEACE <worldofpeace@protonmail.ch>
+Date: Wed, 29 Jan 2020 11:02:33 +0100
+Subject: [PATCH 5/7] meta: Add missing display.h to meta-workspace-manager.h
+
+From: Corentin Noël <corentin@elementary.io>
+
+This is required because MetaDisplayCorner is only defined in display.h
+
+https://gitlab.gnome.org/GNOME/mutter/merge_requests/1025
+(cherry picked from commit 9d390ee49fb1f6300336e82ae94cc8061c6bae12)
+---
+ src/meta/meta-workspace-manager.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/meta/meta-workspace-manager.h b/src/meta/meta-workspace-manager.h
+index 0390c44..92cd681 100644
+--- a/src/meta/meta-workspace-manager.h
++++ b/src/meta/meta-workspace-manager.h
+@@ -26,6 +26,7 @@
+ #include <glib-object.h>
+ 
+ #include <meta/common.h>
++#include <meta/display.h>
+ #include <meta/prefs.h>
+ #include <meta/types.h>
+ 
+-- 
+git-series 0.9.1

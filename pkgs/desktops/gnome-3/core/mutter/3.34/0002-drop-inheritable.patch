@@ -1,36 +1,40 @@
-From e9c772e265b2293af031c79f4bbc99b5847dfe3c Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Tor=20Hedin=20Br=C3=B8nner?= <torhedinbronner@gmail.com>
+From 14cee101882e65a57dcd66ea0f8399477b23ce7e Mon Sep 17 00:00:00 2001
+Message-Id: <14cee101882e65a57dcd66ea0f8399477b23ce7e.1601082838.git-series.worldofpeace@protonmail.ch>
+In-Reply-To: <7b94f980f2a099dd4b19b60c357cfcf5ff7ada6d.1601082838.git-series.worldofpeace@protonmail.ch>
+References: <7b94f980f2a099dd4b19b60c357cfcf5ff7ada6d.1601082838.git-series.worldofpeace@protonmail.ch>
+From: WORLDofPEACE <worldofpeace@protonmail.ch>
 Date: Sat, 19 Oct 2019 13:26:05 +0200
-Subject: [PATCH] drop inheritable
+Subject: [PATCH 2/7] drop inheritable
+
+From: Tor Hedin Brønner <torhedinbronner@gmail.com>
 
 Adapted from https://gitlab.gnome.org/GNOME/mutter/commit/c53c47ae123b03cc66044d2b846342123ecb3a01
 
 We only want to drop inheritable though, to prevent the ambient set leaking further than gnome-shell.
-
 ---
  config.h.meson    |  3 +++
  meson.build       |  5 +++++
  meson_options.txt |  6 ++++++
- src/core/main.c   | 11 +++++++++++
+ src/core/main.c   | 10 ++++++++++
  src/meson.build   |  1 +
- 5 files changed, 26 insertions(+)
+ 5 files changed, 25 insertions(+)
 
 diff --git a/config.h.meson b/config.h.meson
-index 0bab71848..202fb7ed1 100644
+index 0bab718..202fb7e 100644
 --- a/config.h.meson
 +++ b/config.h.meson
 @@ -58,6 +58,9 @@
  /* Xwayland applications allowed to issue keyboard grabs */
  #mesondefine XWAYLAND_GRAB_DEFAULT_ACCESS_RULES
-
+ 
 +/* Defined if libcap-ng is available */
 +#mesondefine HAVE_LIBCAPNG
 +
  /* XKB base prefix */
  #mesondefine XKB_BASE
-
+ 
 diff --git a/meson.build b/meson.build
-index 3322bd3b1..01c8020fa 100644
+index 29d495b..86970df 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -35,6 +35,7 @@ libstartup_notification_req = '>= 0.7'
@@ -38,7 +42,7 @@ index 3322bd3b1..01c8020fa 100644
  libwacom_req = '>= 0.13'
  atk_req = '>= 2.5.3'
 +libcapng_req = '>= 0.7.9'
-
+ 
  # optional version requirements
  udev_req = '>= 228'
 @@ -125,6 +126,7 @@ xau_dep = dependency('xau')
@@ -46,7 +50,7 @@ index 3322bd3b1..01c8020fa 100644
  atk_dep = dependency('atk', version: atk_req)
  libcanberra_dep = dependency('libcanberra', version: libcanberra_req)
 +libcapng_dep = dependency('libcap-ng', required: get_option('libcapng'))
-
+ 
  # For now always require X11 support
  have_x11 = true
 @@ -256,6 +258,7 @@ have_core_tests = false
@@ -54,7 +58,7 @@ index 3322bd3b1..01c8020fa 100644
  have_clutter_tests = false
  have_installed_tests = false
 +have_libcapng = libcapng_dep.found()
-
+ 
  if have_tests
    have_core_tests = get_option('core_tests')
 @@ -361,6 +364,7 @@ cdata.set('HAVE_LIBWACOM', have_libwacom)
@@ -63,7 +67,7 @@ index 3322bd3b1..01c8020fa 100644
  cdata.set('HAVE_INTROSPECTION', have_introspection)
 +cdata.set('HAVE_LIBCAPNG', have_libcapng)
  cdata.set('HAVE_PROFILER', have_profiler)
-
+ 
  xkb_base = xkeyboard_config_dep.get_pkgconfig_variable('xkb_base')
 @@ -443,6 +447,7 @@ output = [
    '        Startup notification..... ' + have_startup_notification.to_string(),
@@ -74,7 +78,7 @@ index 3322bd3b1..01c8020fa 100644
    '    Tests:',
    '',
 diff --git a/meson_options.txt b/meson_options.txt
-index 73aa7adde..8bfaacd9a 100644
+index 73aa7ad..8bfaacd 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
 @@ -152,3 +152,9 @@ option('xwayland_grab_default_access_rules',
@@ -88,13 +92,13 @@ index 73aa7adde..8bfaacd9a 100644
 +  description: 'Enable libcap-ng support'
 +)
 diff --git a/src/core/main.c b/src/core/main.c
-index 7f4f666d2..b27968f13 100644
+index 3935f35..ecf3cb2 100644
 --- a/src/core/main.c
 +++ b/src/core/main.c
 @@ -66,6 +66,10 @@
  #include <girepository.h>
  #endif
-
+ 
 +#ifdef HAVE_LIBCAPNG
 +#include <cap-ng.h>
 +#endif
@@ -105,7 +109,7 @@ index 7f4f666d2..b27968f13 100644
 @@ -673,6 +677,12 @@ meta_run (void)
    if (!meta_display_open ())
      meta_exit (META_EXIT_ERROR);
-
+ 
 +#ifdef HAVE_LIBCAPNG
 +  capng_clear(CAPNG_SELECT_BOTH);
 +  capng_update(CAPNG_ADD, CAPNG_EFFECTIVE|CAPNG_PERMITTED, CAP_SYS_NICE);
@@ -113,10 +117,10 @@ index 7f4f666d2..b27968f13 100644
 +#endif
 +
    g_main_loop_run (meta_main_loop);
-
+ 
    meta_finalize ();
 diff --git a/src/meson.build b/src/meson.build
-index 90d80734f..a9fffa2c2 100644
+index 90d8073..a9fffa2 100644
 --- a/src/meson.build
 +++ b/src/meson.build
 @@ -18,6 +18,7 @@ mutter_pkg_deps = [
@@ -126,7 +130,6 @@ index 90d80734f..a9fffa2c2 100644
 +  libcapng_dep,
    pango_dep,
  ]
-
---
-2.23.0
-
+ 
+-- 
+git-series 0.9.1
