@@ -1,0 +1,46 @@
+From f2453fece3672feb0c5ef2b6741f4122084c79df Mon Sep 17 00:00:00 2001
+Message-Id: <f2453fece3672feb0c5ef2b6741f4122084c79df.1602412141.git-series.worldofpeace@protonmail.ch>
+In-Reply-To: <933ae4eecb696213bcd8aa881ba33ed60544fbfd.1602412141.git-series.worldofpeace@protonmail.ch>
+References: <933ae4eecb696213bcd8aa881ba33ed60544fbfd.1602412141.git-series.worldofpeace@protonmail.ch>
+From: WORLDofPEACE <worldofpeace@protonmail.ch>
+Date: Wed, 26 Feb 2020 10:08:56 -0500
+Subject: [PATCH 6/8] build: Use dbus interface dir from pkg-config
+
+From: Arun Raghavan <arun@arunraghavan.net>
+
+Using 'datadir' breaks prefixed builds (as we look for interface files
+in the prefix we are going to install to).
+
+https://gitlab.gnome.org/GNOME/mutter/merge_requests/1094
+---
+ meson.build     | 1 +
+ src/meson.build | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 86970df..232358c 100644
+--- a/meson.build
++++ b/meson.build
+@@ -92,6 +92,7 @@ gdk_pixbuf_dep = dependency('gdk-pixbuf-2.0')
+ pango_dep = dependency('pango', version: pango_req)
+ cairo_dep = dependency('cairo', version: cairo_req)
+ cairo_gobject_dep = dependency('cairo-gobject', version: cairo_req)
++dbus_dep = dependency('dbus-1')
+ pangocairo_dep = dependency('pangocairo', version: pangocairo_req)
+ fribidi_dep = dependency('fribidi', version: fribidi_req)
+ gsettings_desktop_schemas_dep = dependency('gsettings-desktop-schemas',
+diff --git a/src/meson.build b/src/meson.build
+index a9fffa2..d246b7e 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -711,7 +711,7 @@ if have_profiler
+     'backends/meta-profiler.h',
+   ]
+ 
+-  dbus_interfaces_dir = join_paths(datadir, 'dbus-1', 'interfaces')
++  dbus_interfaces_dir = dbus_dep.get_pkgconfig_variable('interfaces_dir')
+   sysprof3_dbus_file = join_paths(dbus_interfaces_dir, 'org.gnome.Sysprof3.Profiler.xml')
+ 
+   dbus_sysprof3_profiler_built_sources = gnome.gdbus_codegen('meta-dbus-sysprof3-profiler',
+-- 
+git-series 0.9.1

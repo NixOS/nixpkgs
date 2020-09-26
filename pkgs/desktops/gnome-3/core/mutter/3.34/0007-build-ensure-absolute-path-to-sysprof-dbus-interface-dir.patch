@@ -1,0 +1,68 @@
+From 7b6cdee6f6af04ad0e92910383706e7c2abf82fa Mon Sep 17 00:00:00 2001
+Message-Id: <7b6cdee6f6af04ad0e92910383706e7c2abf82fa.1602412141.git-series.worldofpeace@protonmail.ch>
+In-Reply-To: <933ae4eecb696213bcd8aa881ba33ed60544fbfd.1602412141.git-series.worldofpeace@protonmail.ch>
+References: <933ae4eecb696213bcd8aa881ba33ed60544fbfd.1602412141.git-series.worldofpeace@protonmail.ch>
+From: WORLDofPEACE <worldofpeace@protonmail.ch>
+Date: Wed,  4 Dec 2019 17:25:41 -0500
+Subject: [PATCH 7/8] build: ensure absolute path to sysprof dbus interface dir
+
+From: worldofpeace <worldofpeace@protonmail.ch>
+
+We want sysprof's exact datadir for compatability with
+platforms where software is installed into their own
+individual immutable prefix's. Such that, mutter's prefix will
+never equate to sysprof's. This depends on a MR in sysprof [0]
+which adds datadir to its pkgconfig files, as these files will always
+have the proper path we want.
+
+This adds version a constraint on sysprof_dep, as datadir was added to
+the .pc in this version.
+
+[0]: https://gitlab.gnome.org/GNOME/sysprof/merge_requests/19
+
+https://gitlab.gnome.org/GNOME/mutter/merge_requests/957
+---
+ meson.build     | 5 ++++-
+ src/meson.build | 4 ++--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index 232358c..8b920eb 100644
+--- a/meson.build
++++ b/meson.build
+@@ -52,6 +52,9 @@ gbm_req = '>= 10.3'
+ # screen cast version requirements
+ libpipewire_req = '>= 0.2.5'
+ 
++# profiler requirements
++sysprof_req = '>= 3.35.2'
++
+ gnome = import('gnome')
+ pkg = import('pkgconfig')
+ i18n  = import('i18n')
+@@ -276,7 +279,7 @@ endif
+ 
+ have_profiler = get_option('profiler')
+ if have_profiler
+-  sysprof_dep = dependency('sysprof-capture-3')
++  sysprof_dep = dependency('sysprof-capture-3', version: sysprof_req)
+ endif
+ 
+ required_functions = [
+diff --git a/src/meson.build b/src/meson.build
+index d246b7e..08c13fb 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -711,8 +711,8 @@ if have_profiler
+     'backends/meta-profiler.h',
+   ]
+ 
+-  dbus_interfaces_dir = dbus_dep.get_pkgconfig_variable('interfaces_dir')
+-  sysprof3_dbus_file = join_paths(dbus_interfaces_dir, 'org.gnome.Sysprof3.Profiler.xml')
++  sysprof_dbus_interfaces_dir = join_paths(sysprof_dep.get_pkgconfig_variable('datadir'), 'dbus-1', 'interfaces')
++  sysprof3_dbus_file = join_paths(sysprof_dbus_interfaces_dir, 'org.gnome.Sysprof3.Profiler.xml')
+ 
+   dbus_sysprof3_profiler_built_sources = gnome.gdbus_codegen('meta-dbus-sysprof3-profiler',
+       sysprof3_dbus_file,
+-- 
+git-series 0.9.1

@@ -1,0 +1,27 @@
+From 840c27920e68363fc5ec1fa9761e8d770d7e5de1 Mon Sep 17 00:00:00 2001
+Message-Id: <840c27920e68363fc5ec1fa9761e8d770d7e5de1.1602412141.git-series.worldofpeace@protonmail.ch>
+In-Reply-To: <933ae4eecb696213bcd8aa881ba33ed60544fbfd.1602412141.git-series.worldofpeace@protonmail.ch>
+References: <933ae4eecb696213bcd8aa881ba33ed60544fbfd.1602412141.git-series.worldofpeace@protonmail.ch>
+From: WORLDofPEACE <worldofpeace@protonmail.ch>
+Date: Fri, 25 Sep 2020 20:48:33 -0400
+Subject: [PATCH 8/8] fix paths
+
+---
+ src/core/util.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/core/util.c b/src/core/util.c
+index 79bcfdc..87ce549 100644
+--- a/src/core/util.c
++++ b/src/core/util.c
+@@ -623,7 +623,7 @@ meta_show_dialog (const char *type,
+ 
+   args = g_ptr_array_new ();
+ 
+-  append_argument (args, "zenity");
++  append_argument (args, "@zenity@/bin/zenity");
+   append_argument (args, type);
+ 
+   if (display)
+-- 
+git-series 0.9.1
