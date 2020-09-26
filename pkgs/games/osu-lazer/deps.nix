@@ -371,8 +371,8 @@
   })
   (fetchNuGet {
     name = "Microsoft.Diagnostics.Runtime";
-    version = "2.0.142701";
-    sha256 = "114ivn09zlxkna78hyxa3h40k5iaivapws755i0aiys7nxhdn3mw";
+    version = "2.0.145301";
+    sha256 = "02gzyal13ilqdxzzdzdavw85xk4z8zp88waanr7b72zxhm0fzfj9";
   })
   (fetchNuGet {
     name = "Microsoft.DotNet.PlatformAbstractions";
@@ -466,8 +466,8 @@
   })
   (fetchNuGet {
     name = "Microsoft.Extensions.ObjectPool";
-    version = "3.0.3";
-    sha256 = "0zxsdwh9mhy3wsbjyfr4k0r10s1h06dzw8hcck9aknv155q26zqk";
+    version = "3.1.8";
+    sha256 = "00il5z4pwysii0di9lxx7a2hc9ca64rrvw3zvzfi4wgf05xm66ff";
   })
   (fetchNuGet {
     name = "Microsoft.Extensions.Options";
@@ -586,23 +586,23 @@
   })
   (fetchNuGet {
     name = "ppy.osu.Framework";
-    version = "2020.903.0";
-    sha256 = "0g15yw8c21m2g0lpca4f519dgj2phccz15nqdbaq49736akr4qzm";
+    version = "2020.925.0";
+    sha256 = "1244fxm7x4rqi43kp6l98bsbjc2yvv7dmpbajdr9fapqm37fdbdj";
   })
   (fetchNuGet {
     name = "ppy.osu.Framework.NativeLibs";
-    version = "2020.213.0";
-    sha256 = "1yzrx7bji2163dzvyqri42byc7lgxlm59xbwgi312dw5714snmxy";
+    version = "2020.923.0";
+    sha256 = "1sy98s0dxcfxxslm1q503qhd9fl8d3idf47qi4561j5fds4dpdsv";
   })
   (fetchNuGet {
     name = "ppy.osu.Game.Resources";
-    version = "2020.903.0";
-    sha256 = "0f94kms4xyjl9xwf26j6n6k5zfbx61a6bkd3vljfmbmr88advssy";
+    version = "2020.904.0";
+    sha256 = "0n0alpyxpf65mmnqidh044sh4nibsfj0m5n8hfmpjwq11wnpmbih";
   })
   (fetchNuGet {
     name = "ppy.osuTK.NS20";
-    version = "1.0.161";
-    sha256 = "0li5vcpki1ih605c8h1hjf15m9wawkdaizcxib6v3mfjf860ma3s";
+    version = "1.0.165";
+    sha256 = "0ryb483i0jqy94mhvrh0xicv43h4r4amzgpmfrrmzrfvp9ajjar6";
   })
   (fetchNuGet {
     name = "ppy.SDL2-CS";
