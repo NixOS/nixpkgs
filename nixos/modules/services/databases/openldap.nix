@@ -51,26 +51,26 @@ let
           default = {};
           description = "Child entries of the current entry, with recursively the same structure.";
           example = lib.literalExample ''
-          {
-            "cn=schema" = {
-              # The attribute used in the DN must be defined
-              attrs = { cn = "schema"; };
-              children = {
-                # This entry's DN is expanded to "cn=foo,cn=schema"
-                "cn=foo" = { ... };
-              };
-              # These includes are inserted after "cn=schema", but before "cn=foo,cn=schema"
-              includes = [ ... ];
-            };
-          }
-        '';
+            {
+                "cn=schema" = {
+                # The attribute used in the DN must be defined
+                attrs = { cn = "schema"; };
+                children = {
+                    # This entry's DN is expanded to "cn=foo,cn=schema"
+                    "cn=foo" = { ... };
+                };
+                # These includes are inserted after "cn=schema", but before "cn=foo,cn=schema"
+                includes = [ ... ];
+                };
+            }
+          '';
         };
         includes = mkOption {
           type = types.listOf types.path;
           default = [];
           description = ''
-          LDIF files to include after the parent's attributes but before its children.
-        '';
+            LDIF files to include after the parent's attributes but before its children.
+          '';
         };
       };
     in types.submodule { inherit options; };
