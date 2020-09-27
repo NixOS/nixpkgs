@@ -584,6 +584,7 @@ in {
   simple = handleTest ./simple.nix {};
   slurm = handleTest ./slurm.nix {};
   smokeping = handleTest ./smokeping.nix {};
+  smtp-to-telegram = handleTest ./smtp-to-telegram.nix {};
   snapcast = handleTest ./snapcast.nix {};
   snapper = handleTest ./snapper.nix {};
   soapui = handleTest ./soapui.nix {};

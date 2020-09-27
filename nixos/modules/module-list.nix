@@ -546,6 +546,8 @@
   ./services/mail/rss2email.nix
   ./services/mail/schleuder.nix
   ./services/mail/spamassassin.nix
+  ./services/mail/smtp-to-telegram.nix
+  ./services/mail/roundcube.nix
   ./services/mail/sympa.nix
   ./services/matrix/appservice-discord.nix
   ./services/matrix/appservice-irc.nix
