@@ -96,6 +96,7 @@
 , "http-server"
 , "hsd"
 , "hs-airdrop"
+, "hs-client"
 , "hueadm"
 , "inliner"
 , "imapnotify"
