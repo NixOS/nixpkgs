@@ -26288,6 +26288,8 @@ in
 
   zathura = callPackage ../applications/misc/zathura { };
 
+  zerobin = callPackage ../applications/networking/zerobin { };
+
   zeroc-ice = callPackage ../development/libraries/zeroc-ice {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
