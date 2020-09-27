@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "namedlist";
-  version = "1.7";
+  version = "1.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11n9c4a5ak9971awkf1g92m6mcmiprhrw98ik2cmjsqxmz73j2qr";
+    sha256 = "34f89fc992592c80b39a709e136edcf41ea17f24ba31eaf84a314a02c8b9bcef";
   };
 
   # Test file has a `unittest.main()` at the bottom that fails the tests;
