@@ -9,13 +9,13 @@ assert stdenv.lib.versionAtLeast mlt.version "6.22.1";
 
 mkDerivation rec {
   pname = "shotcut";
-  version = "20.09.13";
+  version = "20.10.31";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "1q7ba6j3b2yzn3y5z9s5ldh15wrvhi6vymhwm910nqa5379dcc21";
+    sha256 = "16ypq1v396pibhh33nm78p6hr5fz3h74l0ykg9f72b8whw23jyz6";
   };
 
   enableParallelBuilding = true;
@@ -27,7 +27,11 @@ mkDerivation rec {
   ];
 
   NIX_CFLAGS_COMPILE = "-I${libmlt}/include/mlt++ -I${libmlt}/include/mlt";
-  qmakeFlags = [ "QMAKE_LRELEASE=${stdenv.lib.getDev qttools}/bin/lrelease" "SHOTCUT_VERSION=${version}" ];
+  qmakeFlags = [
+    "QMAKE_LRELEASE=${stdenv.lib.getDev qttools}/bin/lrelease"
+    "SHOTCUT_VERSION=${version}"
+    "DEFINES+=SHOTCUT_NOUPGRADE"
+  ];
 
   prePatch = ''
     sed 's_shotcutPath, "qmelt"_"${mlt}/bin/melt"_' -i src/jobs/meltjob.cpp
