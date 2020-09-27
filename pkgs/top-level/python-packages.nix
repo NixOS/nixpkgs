@@ -1869,6 +1869,8 @@ in {
 
   entrance-with-router-features = callPackage ../development/python-modules/entrance { routerFeatures = true; };
 
+  entrypoint2 = callPackage ../development/python-modules/entrypoint2 { };
+
   entrypoints = callPackage ../development/python-modules/entrypoints { };
 
   enum34 = callPackage ../development/python-modules/enum34 { };
