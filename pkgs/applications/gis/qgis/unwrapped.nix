@@ -1,6 +1,6 @@
 { mkDerivation, lib, fetchFromGitHub, cmake, ninja, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
 , qwt, fcgi, python3Packages, libspatialindex, libspatialite, postgresql
-, txt2tags, openssl, libzip, hdf5, netcdf, exiv2
+, txt2tags, openssl, libzip, hdf5, netcdf, exiv2, protobuf
 , qtbase, qtwebkit, qtsensors, qca-qt5, qtkeychain, qscintilla, qtserialport, qtxmlpatterns
 , withGrass ? true, grass
 }:
@@ -10,7 +10,7 @@ let
     [ qscintilla-qt5 gdal jinja2 numpy psycopg2
       chardet dateutil pyyaml pytz requests urllib3 pygments pyqt5 sip owslib six ];
 in mkDerivation rec {
-  version = "3.10.10";
+  version = "3.14.16";
   pname = "qgis";
   name = "${pname}-unwrapped-${version}";
 
@@ -18,7 +18,7 @@ in mkDerivation rec {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "yZBG+bpJA7iKkUEjVo45d+bmRp9WS7mk8z96FLf0ZQ0=";
+    sha256 = "0pzqx3jkaryszssw6zjgabiy82y36k131v6pifmkiwvl0qki0cnz";
   };
 
   passthru = {
@@ -27,7 +27,7 @@ in mkDerivation rec {
   };
 
   buildInputs = [ openssl proj geos xlibsWrapper sqlite gsl qwt exiv2
-    fcgi libspatialindex libspatialite postgresql txt2tags libzip hdf5 netcdf
+    fcgi libspatialindex libspatialite postgresql txt2tags libzip hdf5 netcdf protobuf
     qtbase qtwebkit qtsensors qca-qt5 qtkeychain qscintilla qtserialport qtxmlpatterns] ++
     (lib.optional withGrass grass) ++ pythonBuildInputs;
 
