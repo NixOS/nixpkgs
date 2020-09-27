@@ -7,31 +7,14 @@ let
   configDir = if cfg.configDir != null then cfg.configDir else "/etc/openldap/slapd.d";
 
   ldapValueType = let
-    singleLdapValueType = types.oneOf [
-      types.str
-      (types.submodule {
-        options = {
-          path = mkOption {
-            type = types.path;
-            description = ''
-              A path containing the LDAP attribute. This is included at run-time, so
-              is recommended for storing secrets.
-            '';
-          };
-        };
-      })
-      (types.submodule {
-        options = {
-          base64 = mkOption {
-            type = types.str;
-            description = ''
-              A base64-encoded LDAP attribute. Useful for storing values which
-              contain special characters (e.g. newlines) in LDIF files.
-            '';
-          };
-        };
-      })
-    ];
+    # Can't do types.either with multiple non-overlapping submodules, so define our own
+    singleLdapValueType = lib.mkOptionType rec {
+      name = "LDAP";
+      description = "LDAP value";
+      check = x: lib.isString x || (lib.isAttrs x && (x ? "path" || x ? "base64"));
+      merge = lib.mergeEqualOption;
+    };
+    # We don't coerce to lists of single values, as some values must be unique
   in types.either singleLdapValueType (types.listOf singleLdapValueType);
 
   ldapAttrsType =
