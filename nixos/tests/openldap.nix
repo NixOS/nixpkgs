@@ -21,6 +21,7 @@ in {
     name = "openldap";
 
     machine = { pkgs, ... }: {
+      environment.etc."openldap/root_password".text = "notapassword";
       services.openldap = {
         enable = true;
         defaultSchemas = null;
@@ -37,13 +38,19 @@ in {
               ];
             };
             "olcDatabase={1}mdb" = {
+              # This tests string, base64 and path values, as well as lists of string values
               attrs = {
                 objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
                 olcDatabase = "{1}mdb";
                 olcDbDirectory = "/var/db/openldap";
                 olcSuffix = "dc=example";
-                olcRootDN = "cn=root,dc=example";
-                olcRootPW = "notapassword";
+                olcRootDN = {
+                  # cn=root,dc=example
+                  base64 = "Y249cm9vdCxkYz1leGFtcGxl";
+                };
+                olcRootPW = {
+                  path = "/etc/openldap/root_password";
+                };
               };
             };
           };
