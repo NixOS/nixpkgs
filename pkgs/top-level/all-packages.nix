@@ -14872,15 +14872,15 @@ in
       attica baloo bluez-qt kactivities kactivities-stats karchive kauth
       kbookmarks kcmutils kcalendarcore kcodecs kcompletion kconfig
       kconfigwidgets kcoreaddons kcrash kdav kdbusaddons kdeclarative
-      kdelibs4support kdesignerplugin kdnssd kdoctools kemoticons kfilemetadata
-      kglobalaccel kguiaddons khtml ki18n kiconthemes kidletime kimageformats
-      kio kitemmodels kitemviews kjobwidgets kjs kjsembed kmediaplayer knewstuff
-      knotifications knotifyconfig kpackage kparts kpeople kplotting kpty kross
-      krunner kservice ktexteditor ktextwidgets kunitconversion kwallet kwayland
-      kwidgetsaddons kwindowsystem kxmlgui kxmlrpcclient modemmanager-qt
-      networkmanager-qt plasma-framework prison qqc2-desktop-style solid sonnet
-      syntax-highlighting syndication threadweaver kirigami2 kholidays kpurpose
-      kcontacts kquickcharts;
+      kdelibs4support kdesignerplugin kdewebkit kdnssd kdoctools kemoticons
+      kfilemetadata kglobalaccel kguiaddons khtml ki18n kiconthemes kidletime
+      kimageformats kio kitemmodels kitemviews kjobwidgets kjs kjsembed
+      kmediaplayer knewstuff knotifications knotifyconfig kpackage kparts
+      kpeople kplotting kpty kross krunner kservice ktexteditor ktextwidgets
+      kunitconversion kwallet kwayland kwidgetsaddons kwindowsystem kxmlgui
+      kxmlrpcclient modemmanager-qt networkmanager-qt plasma-framework prison
+      qqc2-desktop-style solid sonnet syntax-highlighting syndication
+      threadweaver kirigami2 kholidays kpurpose kcontacts kquickcharts;
 
     ### KDE PLASMA 5
 
