@@ -24681,8 +24681,6 @@ in
 
   digikam = libsForQt514.callPackage ../applications/graphics/digikam {
     inherit (plasma5) oxygen;
-    inherit (kdeApplications) akonadi-contacts;
-    inherit (kdeFrameworks) kcalendarcore;
     opencv3 = opencv3WithoutCuda;
   };
 
