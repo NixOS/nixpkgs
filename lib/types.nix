@@ -580,19 +580,10 @@ rec {
       let
         inherit (lib.modules) evalModules;
 
-        shorthandToModule = if shorthandOnlyDefinesConfig == false
-          then value: value
-          else value: { config = value; };
-
         allModules = defs: imap1 (n: { value, file }:
-          if isFunction value
-          then setFunctionArgs
-                (args: lib.modules.unifyModuleSyntax file "${toString file}-${toString (n + extensionOffset)}" (value args))
-                (functionArgs value)
-          else if isAttrs value
-          then
-            lib.modules.unifyModuleSyntax file "${toString file}-${toString (n + extensionOffset)}" (shorthandToModule value)
-          else value
+          if isAttrs value && shorthandOnlyDefinesConfig
+          then { _file = file; config = value; }
+          else { _file = file; imports = [ value ]; }
         ) defs;
 
         base = evalModules {
