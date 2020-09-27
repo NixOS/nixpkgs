@@ -7204,6 +7204,8 @@ in {
 
   typeguard = callPackage ../development/python-modules/typeguard { };
 
+  typer = callPackage ../development/python-modules/typer { };
+
   typesentry = callPackage ../development/python-modules/typesentry { };
 
   typesystem = callPackage ../development/python-modules/typesystem { };
