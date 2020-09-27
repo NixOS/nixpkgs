@@ -1,10 +1,13 @@
 { stdenv, fetchFromGitHub, python, fixDarwinDylibNames
 , javaBindings ? false
+, ocamlBindings ? false
 , pythonBindings ? true
 , jdk ? null
+, ocaml ? null, findlib ? null, zarith ? null
 }:
 
 assert javaBindings -> jdk != null;
+assert ocamlBindings -> ocaml != null && findlib != null && zarith != null;
 
 with stdenv.lib;
 
@@ -19,13 +22,22 @@ stdenv.mkDerivation rec {
     sha256 = "1hnbzq10d23drd7ksm3c1n2611c3kd0q0yxgz8y78zaafwczvwxx";
   };
 
-  buildInputs = [ python fixDarwinDylibNames ] ++ optional javaBindings jdk;
+  buildInputs = [ python fixDarwinDylibNames ]
+  ++ optional javaBindings jdk
+  ++ optionals ocamlBindings [ ocaml findlib zarith ]
+  ;
   propagatedBuildInputs = [ python.pkgs.setuptools ];
   enableParallelBuilding = true;
+
+  postPatch = optionalString ocamlBindings ''
+    export OCAMLFIND_DESTDIR=$ocaml/lib/ocaml/${ocaml.version}/site-lib
+    mkdir -p $OCAMLFIND_DESTDIR/stublibs
+  '';
 
   configurePhase = concatStringsSep " " (
     [ "${python.interpreter} scripts/mk_make.py --prefix=$out" ]
     ++ optional javaBindings   "--java"
+    ++ optional ocamlBindings  "--ml"
     ++ optional pythonBindings "--python --pypkgdir=$out/${python.sitePackages}"
   ) + "\n" + "cd build";
 
@@ -39,7 +51,9 @@ stdenv.mkDerivation rec {
     ln -sf $lib/lib/libz3${stdenv.hostPlatform.extensions.sharedLibrary} $python/${python.sitePackages}/z3/lib/libz3${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
 
-  outputs = [ "out" "lib" "dev" "python" ];
+  outputs = [ "out" "lib" "dev" "python" ]
+  ++ optional ocamlBindings "ocaml"
+  ;
 
   meta = {
     description = "A high-performance theorem prover and SMT solver";

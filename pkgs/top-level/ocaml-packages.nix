@@ -993,6 +993,10 @@ let
 
     yojson = callPackage ../development/ocaml-modules/yojson { };
 
+    z3 = callPackage ../development/ocaml-modules/z3 {
+      inherit (pkgs) z3;
+    };
+
     zarith = callPackage ../development/ocaml-modules/zarith { };
 
     zed = callPackage ../development/ocaml-modules/zed { };
