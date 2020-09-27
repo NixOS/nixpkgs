@@ -467,15 +467,10 @@ rec {
       let
         inherit (lib.modules) evalModules;
 
-        coerce = unify: value: if isFunction value
-          then setFunctionArgs (args: unify (value args)) (functionArgs value)
-          else unify (if shorthandOnlyDefinesConfig then { config = value; } else value);
-
         allModules = defs: modules ++ imap1 (n: { value, file }:
-          if isAttrs value || isFunction value then
-            # Annotate the value with the location of its definition for better error messages
-            coerce (lib.modules.unifyModuleSyntax file "${toString file}-${toString n}") value
-          else value
+          if isAttrs value && shorthandOnlyDefinesConfig
+          then { _file = file; config = value; }
+          else { _file = file; imports = [ value ]; }
         ) defs;
 
         freeformType = (evalModules {
