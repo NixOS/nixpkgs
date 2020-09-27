@@ -1536,9 +1536,7 @@ in
     buildGoModule = buildGo114Module;
   };
 
-  # Traefik 2.2 uses go1.14, pinning can be removed with 2.3
-  # https://github.com/containous/traefik/issues/7234#issuecomment-684950612
-  traefik = callPackage ../servers/traefik { buildGoModule = buildGo114Module; };
+  traefik = callPackage ../servers/traefik { };
 
   calamares = libsForQt514.callPackage ../tools/misc/calamares {
     python = python3;
