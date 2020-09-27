@@ -66,6 +66,17 @@ stdenv.mkDerivation rec {
 
   CXXFLAGS = "-fpermissive";
 
+  # N.B. the S-57 driver needs s57objectclasses.csv and
+  # s57attributes.csv, which it would usually find via the S57_CSV environment
+  # variable. We rather apply a patch (./fix-57-directory.patch) and
+  # hard-code this directory to point into the nix store.
+  patches = [ ./fix-s57-directory.patch ];
+
+  postPatch = ''
+    substituteInPlace ogr/ogrsf_frmts/s57/s57classregistrar.cpp \
+      --replace NIX_S57_CSV \"$out/share/gdal\"
+  '';
+
   # - Unset CC and CXX as they confuse libtool.
   # - teach gdal that libdf is the legacy name for libhdf
   preConfigure = ''
