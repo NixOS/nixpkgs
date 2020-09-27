@@ -1,7 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 , EasyProcess
+, entrypoint2
+, jeepney
+, mss
 }:
 
 buildPythonPackage rec {
@@ -15,6 +19,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     EasyProcess
+    entrypoint2
+  ] ++ lib.optionals (isPy3k) [
+    jeepney
+    mss
   ];
 
   # recursive dependency on pyvirtualdisplay
