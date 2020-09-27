@@ -3406,6 +3406,8 @@ in
 
   wob = callPackage ../tools/misc/wob { };
 
+  wtype = callPackage ../tools/wayland/wtype { };
+
   wrangler = callPackage ../development/tools/wrangler { };
 
   xkcdpass = with pythonPackages; toPythonApplication xkcdpass;
@@ -23074,6 +23076,10 @@ in
   rofi-menugen = callPackage ../applications/misc/rofi-menugen { };
 
   rofi-systemd = callPackage ../tools/system/rofi-systemd { };
+
+  rofimoji = callPackage ../applications/misc/rofimoji {
+    inherit (python3Packages) buildPythonApplication ConfigArgParse pyxdg;
+  };
 
   rootlesskit = callPackage ../tools/virtualization/rootlesskit {};
 
