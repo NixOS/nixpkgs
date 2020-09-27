@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, enableShared ? true }:
 
 stdenv.mkDerivation rec {
   pname = "fmt";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
+    "-DBUILD_SHARED_LIBS=${if enableShared then "ON" else "OFF"}"
     "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
   ];
 
