@@ -94,6 +94,7 @@
 , "html-minifier"
 , "htmlhint"
 , "http-server"
+, "hsd"
 , "hueadm"
 , "inliner"
 , "imapnotify"
