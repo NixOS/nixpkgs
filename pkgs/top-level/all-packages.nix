@@ -6089,6 +6089,8 @@ in
 
   pacman = callPackage ../tools/package-management/pacman { };
 
+  paco = callPackage ../development/compilers/paco { };
+
   padthv1 = libsForQt5.callPackage ../applications/audio/padthv1 { };
 
   page = callPackage ../tools/misc/page { };
