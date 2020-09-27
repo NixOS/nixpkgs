@@ -408,11 +408,11 @@ rec {
 
     submoduleWith =
       { modules
+      , evalModules ? lib.modules.evalModules
       , specialArgs ? {}
       , shorthandOnlyDefinesConfig ? false
       }@attrs:
       let
-        inherit (lib.modules) evalModules;
 
         allModules = defs: modules ++ imap1 (n: { value, file }:
           if isAttrs value && shorthandOnlyDefinesConfig
@@ -423,7 +423,8 @@ rec {
         freeformType = (evalModules {
           inherit modules specialArgs;
           args.name = "‹name›";
-        })._module.freeformType;
+        })._module.freeformType or null;
+        # `or null` in case the given evalModules doesn't have that attribute yet
 
       in
       mkOptionType rec {
@@ -472,6 +473,10 @@ rec {
             modules = modules;
             specialArgs = specialArgs;
             shorthandOnlyDefinesConfig = shorthandOnlyDefinesConfig;
+          } // optionalAttrs (attrs ? evalModules) {
+            # We need to be able to detect whether evalModules was set or not in
+            # the binOp function, to throw an error if it was set multiple times
+            inherit (attrs) evalModules;
           };
           binOp = lhs: rhs: {
             modules = lhs.modules ++ rhs.modules;
@@ -484,6 +489,10 @@ rec {
               if lhs.shorthandOnlyDefinesConfig == rhs.shorthandOnlyDefinesConfig
               then lhs.shorthandOnlyDefinesConfig
               else throw "A submoduleWith option is declared multiple times with conflicting shorthandOnlyDefinesConfig values";
+          } // optionalAttrs (lhs ? evalModules || rhs ? evalModules) {
+            evalModules = if lhs ? evalModules && rhs ? evalModules
+              then throw "A submoduleWith option is declared multiple times with conflicting evalModules values"
+              else lhs.evalModules or rhs.evalModules;
           };
         };
       };

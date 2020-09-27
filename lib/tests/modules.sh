@@ -179,6 +179,9 @@ checkConfigOutput "true" config.submodule.outer ./declare-submoduleWith-modules.
 ## Paths should be allowed as values and work as expected
 checkConfigOutput "true" config.submodule.enable ./declare-submoduleWith-path.nix
 
+## evalModules should be settable
+checkConfigOutput 10 config.submodule.value ./submoduleWithLib.nix
+
 # Check the file location information is propagated into submodules
 checkConfigOutput the-file.nix config.submodule.internalFiles.0 ./submoduleFiles.nix
 

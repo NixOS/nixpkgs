@@ -319,6 +319,7 @@
      <term>
        <varname>types.submoduleWith</varname> {
         <replaceable>modules</replaceable>,
+        <replaceable>evalModules</replaceable> ? lib.evalModules,
         <replaceable>specialArgs</replaceable> ? {},
         <replaceable>shorthandOnlyDefinesConfig</replaceable> ? false }
      </term>
@@ -334,6 +335,14 @@
              <note><para>
                Only options defined with this argument are included in rendered documentation.
              </para></note>
+           </para></listitem>
+           <listitem><para>
+             <replaceable>evalModules</replaceable>
+             The function used to evaluate the given modules. This can be set to a
+             <literal>lib.evalModules</literal> from another nixpkgs version if
+             the modules require that version for evaluation. This also causes
+             the <literal>lib</literal> module argument for the submodules to
+             point to the <literal>lib</literal> from <literal>evalModules</literal>.
            </para></listitem>
            <listitem><para>
              <replaceable>specialArgs</replaceable>
