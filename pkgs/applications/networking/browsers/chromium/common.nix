@@ -146,8 +146,9 @@ let
       ++ optional pulseSupport libpulseaudio
       ++ optionals useOzone [ libdrm wayland mesa_drivers libxkbcommon ];
 
-    patches = [
+    patches = optionals (versionRange "68" "86") [
       ./patches/nix_plugin_paths_68.patch
+    ] ++ [
       ./patches/remove-webp-include-69.patch
       ./patches/no-build-timestamps.patch
       ./patches/widevine-79.patch
@@ -161,12 +162,18 @@ let
       #
       # ++ optionals (channel == "dev") [ ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" ) ]
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
-    ] ++ optionals (useVaapi) [ # Improvements for the VA-API build:
+    ] ++ optionals (useVaapi && versionRange "68" "86") [ # Improvements for the VA-API build:
       ./patches/enable-vdpau-support-for-nvidia.patch # https://aur.archlinux.org/cgit/aur.git/tree/vdpau-support.patch?h=chromium-vaapi
       ./patches/enable-video-acceleration-on-linux.patch # Can be controlled at runtime (i.e. without rebuilding Chromium)
     ];
 
-    postPatch = ''
+    postPatch = optionalString (!versionRange "0" "86") ''
+      # Required for patchShebangs (unsupported interpreter directive, basename: invalid option -- '*', etc.):
+      substituteInPlace native_client/SConstruct \
+        --replace "#! -*- python -*-" ""
+      substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
+        --replace "/usr/bin/env -S make -f" "/usr/bin/make -f"
+    '' + ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
       substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \
         --replace \
