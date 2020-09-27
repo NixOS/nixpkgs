@@ -95,6 +95,7 @@
 , "htmlhint"
 , "http-server"
 , "hsd"
+, "hs-airdrop"
 , "hueadm"
 , "inliner"
 , "imapnotify"
