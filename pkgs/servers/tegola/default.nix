@@ -15,6 +15,8 @@ buildGoPackage rec {
 
   buildFlagsArray = [ "-ldflags=-s -w -X ${goPackagePath}/cmd/tegola/cmd.Version=${version}" ];
 
+  excludedPackages = [ "example" ];
+
   meta = with stdenv.lib; {
     homepage = "https://www.tegola.io/";
     description = "Mapbox Vector Tile server";
