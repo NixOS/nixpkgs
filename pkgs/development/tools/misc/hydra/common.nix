@@ -66,6 +66,7 @@ let
         TextDiff
         TextTable
         XMLSimple
+        YAML
         nix
         nix.perl-bindings
         git
