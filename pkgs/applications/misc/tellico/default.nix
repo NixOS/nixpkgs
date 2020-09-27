@@ -1,7 +1,6 @@
 { lib
 , fetchurl
 , mkDerivation
-, kdeApplications
 , kinit
 , kdelibs4support
 , solid
@@ -15,6 +14,7 @@
 , exempi
 , extra-cmake-modules
 , libcdio
+, libkcddb
 , poppler
 , makeWrapper
 , kdoctools
@@ -53,7 +53,7 @@ mkDerivation rec {
     exempi
     extra-cmake-modules
     libcdio
-    kdeApplications.libkcddb
+    libkcddb
     poppler
   ];
 
