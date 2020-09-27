@@ -26,14 +26,12 @@ in {
         enable = true;
         settings = {
           children = {
-            "cn=schema" = {
-              includes = [
-                "${pkgs.openldap}/etc/schema/core.ldif"
-                "${pkgs.openldap}/etc/schema/cosine.ldif"
-                "${pkgs.openldap}/etc/schema/inetorgperson.ldif"
-                "${pkgs.openldap}/etc/schema/nis.ldif"
-              ];
-            };
+            "cn=schema".includes = [
+              "${pkgs.openldap}/etc/schema/core.ldif"
+              "${pkgs.openldap}/etc/schema/cosine.ldif"
+              "${pkgs.openldap}/etc/schema/inetorgperson.ldif"
+              "${pkgs.openldap}/etc/schema/nis.ldif"
+            ];
             "olcDatabase={1}mdb" = {
               # This tests string, base64 and path values, as well as lists of string values
               attrs = {

@@ -17,10 +17,26 @@
     machine = { pkgs, ... }: {
       services.openldap = {
         enable = true;
-        database = "mdb";
-        rootdn = "cn=${ldapRootUser},${dbSuffix}";
-        rootpw = ldapRootPassword;
-        suffix = dbSuffix;
+        settings = {
+          children = {
+            "cn=schema".includes = [
+              "${pkgs.openldap}/etc/schema/core.ldif"
+              "${pkgs.openldap}/etc/schema/cosine.ldif"
+              "${pkgs.openldap}/etc/schema/inetorgperson.ldif"
+              "${pkgs.openldap}/etc/schema/nis.ldif"
+            ];
+            "olcDatabase={1}mdb" = {
+              attrs = {
+                objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
+                olcDatabase = "{1}mdb";
+                olcDbDirectory = "/var/db/openldap";
+                olcSuffix = dbSuffix;
+                olcRootDN = "cn=${ldapRootUser},${dbSuffix}";
+                olcRootPW = ldapRootPassword;
+              };
+            };
+          };
+        };
         declarativeContents = {
           ${dbSuffix} = ''
             dn: ${dbSuffix}
