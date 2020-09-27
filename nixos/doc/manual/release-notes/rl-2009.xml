@@ -834,6 +834,31 @@ CREATE ROLE postgres LOGIN SUPERUSER;
      functionally redundent.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The package <package>nextcloud17</package> has been removed and <package>nextcloud18</package> was marked as insecure
+     since both of them will <link xlink:href="https://docs.nextcloud.com/server/19/admin_manual/release_schedule.html">
+     will be EOL (end of life) within the lifetime of 20.09</link>.
+    </para>
+    <para>
+     It's necessary to upgrade to <package>nextcloud19</package>:
+     <itemizedlist>
+      <listitem>
+       <para>
+        From <package>nextcloud17</package>, you have to upgrade to <package>nextcloud18</package> first as
+        Nextcloud doesn't allow going multiple major revisions forward in a single upgrade. This is possible
+        by setting <xref linkend="opt-services.nextcloud.package" /> to <package>nextcloud18</package>.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        From <package>nextcloud18</package>, it's possible to directly upgrade to <package>nextcloud19</package>
+        by setting <xref linkend="opt-services.nextcloud.package" /> to <package>nextcloud19</package>.
+       </para>
+      </listitem>
+     </itemizedlist>
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
