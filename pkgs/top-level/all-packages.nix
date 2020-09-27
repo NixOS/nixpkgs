@@ -3406,6 +3406,8 @@ in
 
   wob = callPackage ../tools/misc/wob { };
 
+  wtype = callPackage ../tools/wayland/wtype { };
+
   wrangler = callPackage ../development/tools/wrangler { };
 
   xkcdpass = with pythonPackages; toPythonApplication xkcdpass;
