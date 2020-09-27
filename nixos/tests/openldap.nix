@@ -71,7 +71,6 @@ in {
         suffix = "dc=example";
         rootdn = "cn=root,dc=example";
         rootpw = "notapassword";
-        dataDir = "/var/db/openldap";
         declarativeContents."dc=example" = dbContents;
       };
     };

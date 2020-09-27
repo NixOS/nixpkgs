@@ -3,6 +3,7 @@
 with lib;
 let
   cfg = config.services.openldap;
+  legacyOptions = [ "rootpwFile" "suffix" "dataDir" "rootdn" "rootpw" ];
   openldap = cfg.package;
   configDir = if cfg.configDir != null then cfg.configDir else "/etc/openldap/slapd.d";
 
@@ -77,6 +78,12 @@ let
 in {
   imports = let
     deprecationNote = "This option is removed due to the deprecation of `slapd.conf` upstream. Please migrate to `services.openldap.settings`, see the release notes for advice with this process.";
+    mkDatabaseOption = old: new:
+      lib.mkChangedOptionModule [ "services" "openldap" old ] [ "services" "openldap" "settings" "children" ]
+        (config: let
+          database = lib.getAttrFromPath [ "services" "openldap" "database" ] config;
+          value = lib.getAttrFromPath [ "services" "openldap" old ] config;
+        in lib.setAttrByPath ([ "olcDatabase={1}${database}" "attrs" ] ++ new) value);
   in [
     (lib.mkRemovedOptionModule [ "services" "openldap" "extraConfig" ] deprecationNote)
     (lib.mkRemovedOptionModule [ "services" "openldap" "extraDatabaseConfig" ] deprecationNote)
@@ -85,7 +92,7 @@ in {
       (config: lib.splitString " " (lib.getAttrFromPath [ "services" "openldap" "logLevel" ] config)))
     (lib.mkChangedOptionModule [ "services" "openldap" "defaultSchemas" ] [ "services" "openldap" "settings" "children" "cn=schema" "includes"]
       (config: lib.optionals (lib.getAttrFromPath [ "services" "openldap" "defaultSchemas" ] config) (
-        map (schema: "${pkgs.openldap}/etc/schema/${schema}.ldif") [ "core" "cosine" "inetorgperson" "nis" ])))
+        map (schema: "${openldap}/etc/schema/${schema}.ldif") [ "core" "cosine" "inetorgperson" "nis" ])))
 
     (lib.mkChangedOptionModule [ "services" "openldap" "database" ] [ "services" "openldap" "settings" "children" ]
       (config: let
@@ -97,17 +104,15 @@ in {
           olcDatabase = "{1}${database}";
           olcDbDirectory = lib.mkDefault "/var/db/openldap";
         };
+        "cn=schema".includes = lib.mkDefault (
+          map (schema: "${openldap}/etc/schema/${schema}.ldif") [ "core" "cosine" "inetorgperson" "nis" ]
+        );
       }))
-    (lib.mkRenamedOptionModule [ "services" "openldap" "rootpwFile" ]
-      [ "services" "openldap" "settings" "children" "olcDatabase={1}${cfg.database}" "attrs" "olcRootPW" "path"])
-    (lib.mkRenamedOptionModule [ "services" "openldap" "suffix" ]
-      [ "services" "openldap" "settings" "children" "olcDatabase={1}${cfg.database}" "attrs" "olcSuffix"])
-    (lib.mkRenamedOptionModule [ "services" "openldap" "dataDir" ]
-      [ "services" "openldap" "settings" "children" "olcDatabase={1}${cfg.database}" "attrs" "olcDbDirectory"])
-    (lib.mkRenamedOptionModule [ "services" "openldap" "rootdn" ]
-      [ "services" "openldap" "settings" "children" "olcDatabase={1}${cfg.database}" "attrs" "olcRootDN"])
-    (lib.mkRenamedOptionModule [ "services" "openldap" "rootpw" ]
-      [ "services" "openldap" "settings" "children" "olcDatabase={1}${cfg.database}" "attrs" "olcRootPW"])
+    (mkDatabaseOption "rootpwFile" [ "olcRootPW" "path" ])
+    (mkDatabaseOption "suffix" [ "olcSuffix" ])
+    (mkDatabaseOption "dataDir" [ "olcDbDirectory" ])
+    (mkDatabaseOption "rootdn" [ "olcRootDN" ])
+    (mkDatabaseOption "rootpw" [ "olcRootPW" ])
   ];
   options = {
     services.openldap = {
@@ -242,14 +247,10 @@ in {
   meta.maintainers = with lib.maintainters; [ mic92 kwohlfahrt ];
 
   config = mkIf cfg.enable {
-    assertions = [{
-      assertion = lib.length (lib.attrNames cfg.settings.children) >= 2 || cfg ? database;
-      message = ''
-        No OpenLDAP database is defined. Configure one with `services.openldap.settings`
-        or `services.openldap.database` (legacy).
-      '';
-    }];
-
+    assertions = map (opt: {
+      assertion = ((getAttr opt cfg) != "_mkMergedOptionModule") -> (cfg.database != "_mkMergedOptionModule");
+      message = "Legacy OpenLDAP option `services.openldap.${opt}` requires `services.openldap.database` (use value \"mdb\" if unsure)";
+    }) legacyOptions;
     environment.systemPackages = [ openldap ];
 
     # Literal attributes must always be set
@@ -259,13 +260,9 @@ in {
         cn = "config";
         olcPidFile = "/run/slapd/slapd.pid";
       };
-      children = {
-        "cn=schema" = {
-          attrs = {
-            cn = "schema";
-            objectClass = "olcSchemaConfig";
-          };
-        };
+      children."cn=schema".attrs = {
+        cn = "schema";
+        objectClass = "olcSchemaConfig";
       };
     };
 

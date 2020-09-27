@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+({ pkgs, ... }:
   let
     dbDomain = "example.org";
     dbSuffix = "dc=example,dc=org";
@@ -7,8 +7,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     ldapRootPassword = "foobar";
 
     testUser = "alice";
-  in
-  {
+  in import ./make-test-python.nix {
     name = "sssd-ldap";
 
     meta = with pkgs.stdenv.lib.maintainers; {
@@ -18,34 +17,37 @@ import ./make-test-python.nix ({ pkgs, ... }:
     machine = { pkgs, ... }: {
       services.openldap = {
         enable = true;
+        database = "mdb";
         rootdn = "cn=${ldapRootUser},${dbSuffix}";
         rootpw = ldapRootPassword;
         suffix = dbSuffix;
-        declarativeContents = ''
-          dn: ${dbSuffix}
-          objectClass: top
-          objectClass: dcObject
-          objectClass: organization
-          o: ${dbDomain}
+        declarativeContents = {
+          ${dbSuffix} = ''
+            dn: ${dbSuffix}
+            objectClass: top
+            objectClass: dcObject
+            objectClass: organization
+            o: ${dbDomain}
 
-          dn: ou=posix,${dbSuffix}
-          objectClass: top
-          objectClass: organizationalUnit
+            dn: ou=posix,${dbSuffix}
+            objectClass: top
+            objectClass: organizationalUnit
 
-          dn: ou=accounts,ou=posix,${dbSuffix}
-          objectClass: top
-          objectClass: organizationalUnit
+            dn: ou=accounts,ou=posix,${dbSuffix}
+            objectClass: top
+            objectClass: organizationalUnit
 
-          dn: uid=${testUser},ou=accounts,ou=posix,${dbSuffix}
-          objectClass: person
-          objectClass: posixAccount
-          # userPassword: somePasswordHash
-          homeDirectory: /home/${testUser}
-          uidNumber: 1234
-          gidNumber: 1234
-          cn: ""
-          sn: ""
-        '';
+            dn: uid=${testUser},ou=accounts,ou=posix,${dbSuffix}
+            objectClass: person
+            objectClass: posixAccount
+            # userPassword: somePasswordHash
+            homeDirectory: /home/${testUser}
+            uidNumber: 1234
+            gidNumber: 1234
+            cn: ""
+            sn: ""
+          '';
+        };
       };
 
       services.sssd = {
