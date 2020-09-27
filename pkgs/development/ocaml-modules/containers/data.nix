@@ -1,5 +1,5 @@
 { buildDunePackage, containers
-, gen, iter, mdx, ounit, qcheck
+, gen, iter, qcheck
 }:
 
 buildDunePackage {
@@ -8,7 +8,7 @@ buildDunePackage {
   inherit (containers) src version;
 
   doCheck = true;
-  checkInputs = [ gen iter mdx.bin ounit qcheck ];
+  checkInputs = [ gen iter qcheck ];
 
   propagatedBuildInputs = [ containers ];
 
