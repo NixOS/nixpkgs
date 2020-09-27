@@ -10711,7 +10711,9 @@ let
       sha256 = "92599b45fb587ac14b2ba9cc84b85d9ddc2deaf1cbdc2e89e7a6559e1fbb34cc";
     };
     propagatedBuildInputs = [ ArchiveZip DBFile FileWhich IOString ImageSize JSONXS LWP ParseRecDescent PodParser TextUnidecode XMLLibXSLT ];
-    doCheck = false;  # epub test fails
+    preCheck = ''
+      rm t/931_epub.t # epub test fails
+    '';
     nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
     # shebangs need to be patched before executables are copied to $out
     preBuild = ''
