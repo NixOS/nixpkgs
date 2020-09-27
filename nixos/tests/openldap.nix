@@ -24,9 +24,6 @@ in {
       environment.etc."openldap/root_password".text = "notapassword";
       services.openldap = {
         enable = true;
-        defaultSchemas = null;
-        dataDir = null;
-        database = null;
         settings = {
           children = {
             "cn=schema" = {
@@ -61,17 +58,21 @@ in {
   };
 
   # Old-style configuration
-  shortOptions = import ./make-test-python.nix {
+  oldOptions = import ./make-test-python.nix {
     inherit testScript;
     name = "openldap";
 
     machine = { pkgs, ... }: {
       services.openldap = {
         enable = true;
+        logLevel = "stats acl";
+        defaultSchemas = true;
+        database = "mdb";
         suffix = "dc=example";
         rootdn = "cn=root,dc=example";
         rootpw = "notapassword";
-        declarativeContents = dbContents;
+        dataDir = "/var/db/openldap";
+        declarativeContents."dc=example" = dbContents;
       };
     };
   };
@@ -84,10 +85,6 @@ in {
       services.openldap = {
         enable = true;
         configDir = "/var/db/slapd.d";
-        # Silence warnings
-        defaultSchemas = null;
-        dataDir = null;
-        database = null;
       };
     };
 
