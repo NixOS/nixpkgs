@@ -3,6 +3,7 @@
 lib.makeScope pkgs.newScope (self: with self; {
   buildsystem    = callPackage ./buildsystem.nix { };
   libcss         = callPackage ./libcss.nix { };
+  libdom         = callPackage ./libdom.nix { };
   libhubbub      = callPackage ./libhubbub.nix { };
   libnsbmp       = callPackage ./libnsbmp.nix { };
   libnsgif       = callPackage ./libnsgif.nix { };
