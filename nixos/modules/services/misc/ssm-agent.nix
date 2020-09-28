@@ -29,8 +29,6 @@ in {
 
   config = mkIf cfg.enable {
     systemd.services.ssm-agent = {
-      users.extraUsers.ssm-user = {};
-
       inherit (cfg.package.meta) description;
       after    = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
@@ -42,6 +40,27 @@ in {
         Restart = "on-failure";
         RestartSec = "15min";
       };
+    };
+
+    # Add user that Session Manager needs, and give it sudo.
+    # This is consistent with Amazon Linux 2 images.
+    security.sudo.extraRules = [
+      {
+        users = [ "ssm-user" ];
+        commands = [
+          {
+            command = "ALL";
+            options = [ "NOPASSWD" ];
+          }
+        ];
+      }
+    ];
+    # On Amazon Linux 2 images, the ssm-user user is pretty much a
+    # normal user with its own group. We do the same.
+    users.groups.ssm-user = {};
+    users.users.ssm-user = {
+      isNormalUser = true;
+      group = "ssm-user";
     };
   };
 }
