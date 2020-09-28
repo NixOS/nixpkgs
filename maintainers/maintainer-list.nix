@@ -4265,7 +4265,7 @@
   justinlovinger = {
     email = "git@justinlovinger.com";
     github = "JustinLovinger";
-    githubID = 7183441;
+    githubId = 7183441;
     name = "Justin Lovinger";
   };
   justinwoo = {
