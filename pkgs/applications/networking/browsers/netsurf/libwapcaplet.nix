@@ -3,14 +3,13 @@
 }:
 
 stdenv.mkDerivation rec {
-
-  name = "netsurf-${libname}-${version}";
+  pname = "netsurf-${libname}";
   libname = "libwapcaplet";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
-    sha256 = "1fjwzbn7j8bi1b9bvwxsy3i2cr6byq2s2d29866801pjnf528g86";
+    sha256 = "sha256-myqh3W1mRfjpkrNpf9vYfwwOHaVyH6VO0ptITRMWDFw=";
   };
 
   buildInputs = [ buildsystem ];
@@ -23,10 +22,10 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type";
 
   meta = with stdenv.lib; {
-    homepage = "http://www.netsurf-browser.org/";
+    homepage = "https://www.netsurf-browser.org/projects/${libname}/";
     description = "String internment library for netsurf browser";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.vrthra ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vrthra maintainers.AndersonTorres ];
     platforms = platforms.linux;
   };
 }

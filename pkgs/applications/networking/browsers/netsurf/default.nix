@@ -9,4 +9,5 @@ lib.makeScope pkgs.newScope (self: with self; {
   libnsutils     = callPackage ./libnsutils.nix { };
   libparserutils = callPackage ./libparserutils.nix { };
   libutf8proc    = callPackage ./libutf8proc.nix { };
+  libwapcaplet   = callPackage ./libwapcaplet.nix { };
 })
