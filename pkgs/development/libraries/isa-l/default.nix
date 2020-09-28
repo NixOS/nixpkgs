@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "isa-l";
-  version = "2.28.0";
+  version = "2.29.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "isa-l";
     rev = "v${version}";
-    sha256 = "0zswmyi3r7i7n1k0s3jkkmd3xgjpd5chnqf2ffmz3zk46w8imj15";
+    sha256 = "1sfk7942b2i00bfhlh6ddx2dl76wss0k8gm6v5rqcrzrs3z01pc8";
   };
 
   nativeBuildInputs = [ nasm ];
