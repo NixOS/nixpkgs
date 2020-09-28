@@ -3,6 +3,7 @@
 buildPythonPackage rec {
   pname = "git-filter-repo";
   version = "2.28.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
