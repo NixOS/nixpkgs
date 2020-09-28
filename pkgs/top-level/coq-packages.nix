@@ -59,6 +59,7 @@ let
       tlc = callPackage ../development/coq-modules/tlc {};
       Velisarios = callPackage ../development/coq-modules/Velisarios {};
       Verdi = callPackage ../development/coq-modules/Verdi {};
+      VST = callPackage ../development/coq-modules/VST {};
 
       filterPackages = filterCoqPackages;
     };
