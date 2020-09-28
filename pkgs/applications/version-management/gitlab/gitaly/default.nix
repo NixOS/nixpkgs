@@ -19,14 +19,14 @@ let
       };
   };
 in buildGoPackage rec {
-  version = "13.0.14";
+  version = "13.4.3";
   pname = "gitaly";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "16ynkwiv0faa60msashj5w1bc4rdh7yv2qjmpcbf7dwq54gqmlbv";
+    sha256 = "0gyy8l3xbdrpbq8zmdqvn7x34hxc48in4klhw5klacs1mgi3vqax";
   };
 
   # Fix a check which assumes that hook files are writeable by their
@@ -44,7 +44,7 @@ in buildGoPackage rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ rubyEnv.wrappedRuby libgit2_0_27 ];
   goDeps = ./deps.nix;
-  preBuild = "rm -r go/src/gitlab.com/gitlab-org/labkit/vendor";
+  preBuild = "rm -rf go/src/gitlab.com/gitlab-org/labkit/vendor";
 
   postInstall = ''
     mkdir -p $ruby

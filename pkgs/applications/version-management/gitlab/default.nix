@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchFromGitLab, bundlerEnv
-, ruby, tzdata, git, nettools, nixosTests, nodejs
+, ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
 , fixup_yarn_lock, replace
 }:
@@ -27,6 +27,10 @@ let
         grpc = x.grpc // {
           patches = [ ./fix-grpc-ar.patch ];
           dontBuild = false;
+        };
+        # the openssl needs the openssl include files
+        openssl = x.openssl // {
+          buildInputs = [ openssl ];
         };
       };
     groups = [
