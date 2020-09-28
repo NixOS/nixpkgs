@@ -68,8 +68,6 @@ stdenv.mkDerivation {
       "--disable-sparkle"
   ];
 
-  makeFlags = ''PREFIX=$(out) CPPFLAGS="-Wno-error"'';
-
   # Remove references to Sparkle.framework from the project.
   # It's unused (we disabled it with --disable-sparkle) and this avoids
   # copying the unnecessary several-megabyte framework into the result.
@@ -85,7 +83,10 @@ stdenv.mkDerivation {
 
     DEV_DIR=$(/usr/bin/xcode-select -print-path)/Platforms/MacOSX.platform/Developer
     configureFlagsArray+=(
-      "--with-developer-dir=$DEV_DIR"
+      --with-developer-dir="$DEV_DIR"
+      LDFLAGS="-L${ncurses}/lib"
+      CPPFLAGS="-isystem ${ncurses.dev}/include"
+      CFLAGS="-Wno-error=implicit-function-declaration"
     )
   ''
   # For some reason having LD defined causes PSMTabBarControl to fail at link-time as it
