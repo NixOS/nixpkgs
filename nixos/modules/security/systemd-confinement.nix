@@ -160,7 +160,7 @@ in {
               + " the 'users.users' option instead as this combination is"
               + " currently not supported.";
     }
-    { assertion = !cfg.serviceConfig.ProtectSystem or false;
+    { assertion = cfg.serviceConfig ? ProtectSystem -> cfg.serviceConfig.ProtectSystem == false;
       message = "${whatOpt "ProtectSystem"}. ProtectSystem is not compatible"
               + " with service confinement as it fails to remount /usr within"
               + " our chroot. Please disable the option.";
