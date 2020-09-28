@@ -3,17 +3,16 @@
 }:
 
 stdenv.mkDerivation rec {
-
-  name = "netsurf-${libname}-${version}";
+  pname = "netsurf-${libname}";
   libname = "libparserutils";
   version = "0.2.4";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
-    sha256 = "1n2794y2l0c8nv8z2pxwfnbn882987ifmxjv60zdxkhcndhswarj";
+    sha256 = "sha256-MiuuYbMMzt4+MFv26uJBSSBkl3W8X/HRtogBKjxJR9g=";
   };
 
-  buildInputs = [ buildsystem perl ];
+  buildInputs = [ perl buildsystem ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -21,10 +20,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.netsurf-browser.org/";
+    homepage = "https://www.netsurf-browser.org/projects/${libname}/";
     description = "Parser building library for netsurf browser";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.vrthra ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vrthra maintainers.AndersonTorres ];
     platforms = platforms.linux;
   };
 }
