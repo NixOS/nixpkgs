@@ -72,8 +72,8 @@ in {
           };
       '';
       description = ''
-        Generate your init file from your list of plugins and custom commands,
-        Neovim will then be wrapped to load <command>nvim -u /nix/store/hash-vimrc</command>
+        Generate your init file from your list of plugins and custom commands.
+        Neovim will then be wrapped to load <command>nvim -u /nix/store/<hash>-vimrc</command>
       '';
     };
 
@@ -94,9 +94,7 @@ in {
     runtime = mkOption {
       default = {};
       example = literalExample ''
-        {
         runtime."ftplugin/c.vim".text = "setlocal omnifunc=v:lua.vim.lsp.omnifunc";
-        }
       '';
       description = ''
         Set of files that have to be linked in <filename>runtime</filename>.
