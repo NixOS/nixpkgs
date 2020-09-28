@@ -10,4 +10,5 @@ lib.makeScope pkgs.newScope (self: with self; {
   libparserutils = callPackage ./libparserutils.nix { };
   libutf8proc    = callPackage ./libutf8proc.nix { };
   libwapcaplet   = callPackage ./libwapcaplet.nix { };
+  nsgenbind      = callPackage ./nsgenbind.nix { };
 })
