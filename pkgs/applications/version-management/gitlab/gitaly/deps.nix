@@ -1787,8 +1787,8 @@
     fetch = {
       type = "git";
       url = "https://gitlab.com/gitlab-org/gitlab-shell.git";
-      rev = "716e30c55e89";
-      sha256 = "0g2bgwm5rf93xfd40j3d2a5js1a212r2l2qdbds3gp7h0v73npjw";
+      rev = "82ec8144fb2a";
+      sha256 = "1gh3rwnd6688v7q07g2y69fdz2nyy7disjqifvbl7z1cpfw4h45b";
     };
   }
   {
@@ -1796,8 +1796,8 @@
     fetch = {
       type = "git";
       url = "https://gitlab.com/gitlab-org/labkit.git";
-      rev = "0149780c759d";
-      sha256 = "1krp5jkwpckpdznbl9xp4yvq6cii750r24agcni3snbbs8hd8gb1";
+      rev = "45895e129029";
+      sha256 = "17adv1gcdg0jiy8i5lr064pm3p9ywq6s0iwh9w4q5pycp4qkmn48";
     };
   }
   {
@@ -1913,8 +1913,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/text";
-      rev = "v0.3.2";
-      sha256 = "0flv9idw0jm5nm8lx25xqanbkqgfiym6619w575p7nrdh0riqwqh";
+      rev = "v0.3.3";
+      sha256 = "19pihqm3phyndmiw6i42pdv6z1rbvlqlsnhsyqf9gsnn0qnmqqlh";
     };
   }
   {

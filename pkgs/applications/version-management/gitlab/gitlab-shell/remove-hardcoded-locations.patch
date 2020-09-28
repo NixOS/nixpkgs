@@ -30,18 +30,18 @@ index 2231851..c869930 100644
  
  func newFromFile(filename string) (*Config, error) {
 diff --git a/internal/keyline/key_line.go b/internal/keyline/key_line.go
-index c29a320..c44b701 100644
+index e2abb82..7e9c481 100644
 --- a/internal/keyline/key_line.go
 +++ b/internal/keyline/key_line.go
-@@ -36,7 +36,7 @@ func NewPrincipalKeyLine(keyId string, principal string, rootDir string) (*KeyLi
- }
- 
+@@ -38,7 +38,7 @@ func NewPrincipalKeyLine(keyId, principal string, config *config.Config) (*KeyLi
+
  func (k *KeyLine) ToString() string {
--	command := fmt.Sprintf("%s %s-%s", path.Join(k.RootDir, executable.BinDir, executable.GitlabShell), k.Prefix, k.Id)
+ 	sslCertDirEnvVar := k.sslCertDirEnvVar()
+-	command := fmt.Sprintf("%s %s-%s", path.Join(k.Config.RootDir, executable.BinDir, executable.GitlabShell), k.Prefix, k.Id)
 +	command := fmt.Sprintf("%s %s-%s", path.Join("/run/current-system/sw/bin", executable.GitlabShell), k.Prefix, k.Id)
- 
- 	return fmt.Sprintf(`command="%s",%s %s`, command, SshOptions, k.Value)
- }
+
+ 	if sslCertDirEnvVar != "" {
+ 		sslCertDirEnvVar = fmt.Sprintf(`%s `, sslCertDirEnvVar)
 diff --git a/support/gitlab_config.rb b/support/gitlab_config.rb
 index 52ac5ee..d96baa3 100644
 --- a/support/gitlab_config.rb
