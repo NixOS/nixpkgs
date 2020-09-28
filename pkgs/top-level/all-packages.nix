@@ -5047,49 +5047,8 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
   };
 
-  netsurf = recurseIntoAttrs (let callPackage = newScope pkgs.netsurf; in rec {
-    # ui could be gtk, sixel or framebuffer. Note that console display (sixel)
-    # requires a terminal that supports `sixel` capabilities such as mlterm
-    # or xterm -ti 340
-    ui = "sixel";
-
-    uilib = if ui == "gtk" then "gtk" else "framebuffer";
-
-    SDL = if ui == "gtk" then null else if ui == "sixel" then SDL_sixel else SDL;
-
-    buildsystem = callPackage ../applications/misc/netsurf/buildsystem { };
-
-    libwapcaplet = callPackage ../applications/misc/netsurf/libwapcaplet { };
-
-    nsgenbind = callPackage ../applications/misc/netsurf/nsgenbind { };
-
-    libparserutils = callPackage ../applications/misc/netsurf/libparserutils { };
-
-    libnslog = callPackage ../applications/misc/netsurf/libnslog { };
-
-    libcss = callPackage ../applications/misc/netsurf/libcss { };
-
-    libhubbub = callPackage ../applications/misc/netsurf/libhubbub { };
-
-    libdom = callPackage ../applications/misc/netsurf/libdom { };
-
-    libnsbmp = callPackage ../applications/misc/netsurf/libnsbmp { };
-
-    libnsgif = callPackage ../applications/misc/netsurf/libnsgif { };
-
-    libnsfb = callPackage ../applications/misc/netsurf/libnsfb { };
-
-    libnsutils = callPackage ../applications/misc/netsurf/libnsutils { };
-
-    libsvgtiny = callPackage ../applications/misc/netsurf/libsvgtiny { };
-
-    libnspsl = callPackage ../applications/misc/netsurf/libnspsl { };
-
-    libutf8proc = callPackage ../applications/misc/netsurf/libutf8proc { };
-
-    browser = callPackage ../applications/misc/netsurf/browser { };
-
-  });
+  netsurf = recurseIntoAttrs (callPackage ../applications/networking/browsers/netsurf { });
+  netsurf-browser = netsurf.browser;
 
   netperf = callPackage ../applications/networking/netperf { };
 
