@@ -317,7 +317,7 @@ self: super: {
 
   # Needs the latest version of vty and brick.
   matterhorn = super.matterhorn.overrideScope (self: super: {
-    brick = self.brick_0_55;
+    brick = self.brick_0_56;
     vty = self.vty_5_30;
   });
 
@@ -1336,7 +1336,7 @@ self: super: {
   # That's why we need to bump a ton of dependency versions to unbreak them.
   gi-pango = assert super.gi-pango.version == "1.0.22"; self.gi-pango_1_0_23;
   haskell-gi-base = assert super.haskell-gi-base.version == "0.23.0"; addBuildDepends (self.haskell-gi-base_0_24_3) [ pkgs.gobject-introspection ];
-  haskell-gi = assert super.haskell-gi.version == "0.23.1"; self.haskell-gi_0_24_4;
+  haskell-gi = assert super.haskell-gi.version == "0.23.1"; self.haskell-gi_0_24_5;
   gi-cairo = assert super.gi-cairo.version == "1.0.23"; self.gi-cairo_1_0_24;
   gi-glib = assert super.gi-glib.version == "2.0.23"; self.gi-glib_2_0_24;
   gi-gobject = assert super.gi-gobject.version == "2.0.22"; self.gi-gobject_2_0_24;
