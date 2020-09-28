@@ -11,6 +11,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   libnspsl       = callPackage ./libnspsl.nix { };
   libnsutils     = callPackage ./libnsutils.nix { };
   libparserutils = callPackage ./libparserutils.nix { };
+  libsvgtiny     = callPackage ./libsvgtiny.nix { };
   libutf8proc    = callPackage ./libutf8proc.nix { };
   libwapcaplet   = callPackage ./libwapcaplet.nix { };
   nsgenbind      = callPackage ./nsgenbind.nix { };
