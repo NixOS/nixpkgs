@@ -73,7 +73,7 @@ in {
       '';
       description = ''
         Generate your init file from your list of plugins and custom commands.
-        Neovim will then be wrapped to load <command>nvim -u /nix/store/<hash>-vimrc</command>
+        Neovim will then be wrapped to load <command>nvim -u /nix/store/<replaceable>hash</replaceable>-vimrc</command>
       '';
     };
 
