@@ -64,6 +64,8 @@
 , "diagnostic-languageserver"
 , "dockerfile-language-server-nodejs"
 , "elasticdump"
+, "elm-git-install"
+, "elm-install"
 , "elm-oracle"
 , "emoj"
 , "emojione"
