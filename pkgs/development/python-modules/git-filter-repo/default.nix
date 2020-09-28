@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools_scm, click }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, setuptools_scm, click }:
 
 buildPythonPackage rec {
   pname = "git-filter-repo";
