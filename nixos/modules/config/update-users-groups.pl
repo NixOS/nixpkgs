@@ -281,6 +281,12 @@ foreach my $u (values %usersOut) {
 }
 
 updateFile("/etc/shadow", \@shadowNew, 0600);
+{
+    my $uid = getpwnam "root";
+    my $gid = getgrnam "shadow";
+    my $path = "/etc/shadow";
+    chown($uid, $gid, $path) || die "Failed to change ownership of $path: $!";
+}
 
 # Rewrite /etc/subuid & /etc/subgid to include default container mappings
 

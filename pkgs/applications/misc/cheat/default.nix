@@ -3,13 +3,13 @@
 
 buildGoModule rec {
   pname = "cheat";
-  version = "4.0.4";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "cheat";
     repo = "cheat";
     rev = version;
-    sha256 = "0cracw6pja3d7z6ip6lbmpvfxlxcnh3fbgh5ba8c87bhfz99idqn";
+    sha256 = "0x6msbbqkwxs6msqacpqw4wlw7c9ilf8n6jqmx297ij6isswgksh";
   };
 
   subPackages = [ "cmd/cheat" ];

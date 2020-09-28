@@ -266,6 +266,8 @@ in
 
   dotnet-sdk_3 = dotnetCorePackages.sdk_3_1;
 
+  dotnet-sdk_5 = dotnetCorePackages.sdk_5_0;
+
   dotnet-netcore = dotnetCorePackages.netcore_2_1;
 
   dotnet-aspnetcore = dotnetCorePackages.aspnetcore_2_1;
@@ -1099,6 +1101,8 @@ in
 
   glyr = callPackage ../tools/audio/glyr { };
 
+  google-amber = callPackage ../tools/graphics/amber { };
+
   hpe-ltfs = callPackage ../tools/backup/hpe-ltfs { };
 
   http2tcp = callPackage ../tools/networking/http2tcp { };
@@ -1526,8 +1530,11 @@ in
     '';
   });
 
-  caddy = callPackage ../servers/caddy { buildGoModule = buildGo114Module; };  # https://github.com/lucas-clemente/quic-go/issues/2614
-  caddy1 = callPackage ../servers/caddy/v1.nix { buildGoModule = buildGo114Module; };
+  caddy = callPackage ../servers/caddy { };
+  caddy1 = callPackage ../servers/caddy/v1.nix {
+    # https://github.com/lucas-clemente/quic-go/issues/2614
+    buildGoModule = buildGo114Module;
+  };
 
   # Traefik 2.2 uses go1.14, pinning can be removed with 2.3
   # https://github.com/containous/traefik/issues/7234#issuecomment-684950612
@@ -1841,6 +1848,8 @@ in
   doppler = callPackage ../tools/security/doppler {};
 
   dosage = callPackage ../applications/graphics/dosage { };
+
+  dot-merlin-reader = callPackage ../development/tools/ocaml/merlin/dot-merlin-reader.nix { };
 
   dozenal = callPackage ../applications/misc/dozenal { };
 
@@ -2396,6 +2405,8 @@ in
 
   bash-supergenpass = callPackage ../tools/security/bash-supergenpass { };
 
+  swappy = callPackage ../applications/misc/swappy { gtk = gtk3; };
+
   sweep-visualizer = callPackage ../tools/misc/sweep-visualizer { };
 
   syscall_limiter = callPackage ../os-specific/linux/syscall_limiter {};
@@ -2628,9 +2639,7 @@ in
 
   davix = callPackage ../tools/networking/davix { };
 
-  cantata = libsForQt5.callPackage ../applications/audio/cantata {
-    inherit vlc;
-  };
+  cantata = libsForQt5.callPackage ../applications/audio/cantata { };
 
   can-utils = callPackage ../os-specific/linux/can-utils { };
 
@@ -3398,6 +3407,8 @@ in
   wl-clipboard = callPackage ../tools/misc/wl-clipboard { };
 
   wob = callPackage ../tools/misc/wob { };
+
+  wtype = callPackage ../tools/wayland/wtype { };
 
   wrangler = callPackage ../development/tools/wrangler { };
 
@@ -9594,7 +9605,8 @@ in
   picat = callPackage ../development/compilers/picat { };
 
   ponyc = callPackage ../development/compilers/ponyc {
-    llvm = llvm_7;
+    # Upstream pony has dropped support for versions compiled with gcc.
+    stdenv = clangStdenv;
   };
 
   pony-stable = callPackage ../development/compilers/ponyc/pony-stable.nix { };
@@ -9999,7 +10011,7 @@ in
   inherit (beam.interpreters)
     erlang erlangR23 erlangR22 erlangR21 erlangR20 erlangR19 erlangR18
     erlang_odbc erlang_javac erlang_odbc_javac erlang_nox erlang_basho_R16B02
-    elixir elixir_1_10 elixir_1_9 elixir_1_8 elixir_1_7 elixir_1_6;
+    elixir elixir_1_10 elixir_1_9 elixir_1_8 elixir_1_7;
 
   inherit (beam.packages.erlang)
     rebar rebar3
@@ -10130,19 +10142,21 @@ in
 
   octave = callPackage ../development/interpreters/octave {
     python = python3;
+    mkDerivation = stdenv.mkDerivation;
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
   octave-jit = callPackage ../development/interpreters/octave {
     python = python3;
     enableJIT = true;
+    mkDerivation = stdenv.mkDerivation;
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
-  octaveFull = (lowPrio (libsForQt512.callPackage ../development/interpreters/octave {
+  octaveFull = libsForQt5.callPackage ../development/interpreters/octave {
     python = python3;
     enableQt = true;
     overridePlatforms = ["x86_64-linux" "x86_64-darwin"];
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  }));
+  };
 
   ocropus = callPackage ../applications/misc/ocropus { };
 
@@ -14668,6 +14682,7 @@ in
     inherit (darwin.apple_sdk.frameworks) OpenCL Cocoa;
   };
   opencascade-occt = callPackage ../development/libraries/opencascade-occt { };
+  opencascade-occt730 = callPackage ../development/libraries/opencascade-occt/7.3.nix { };
 
   opencl-headers = callPackage ../development/libraries/opencl-headers { };
 
@@ -15143,8 +15158,6 @@ in
     soqt = callPackage ../development/libraries/soqt { };
 
     telepathy = callPackage ../development/libraries/telepathy/qt { };
-
-    vlc = callPackage ../applications/video/vlc {};
 
     qtwebkit-plugins = callPackage ../development/libraries/qtwebkit-plugins { };
 
@@ -16527,7 +16540,7 @@ in
 
   hashi-ui = callPackage ../servers/hashi-ui {};
 
-  hasura-graphql-engine = haskellPackages.graphql-engine;
+  hasura-graphql-engine = haskell.lib.justStaticExecutables haskellPackages.graphql-engine;
 
   hasura-cli = callPackage ../servers/hasura/cli.nix { };
 
@@ -16968,6 +16981,7 @@ in
     postgresql_10
     postgresql_11
     postgresql_12
+    postgresql_13
   ;
   postgresql = postgresql_11.override { this = postgresql; };
   postgresqlPackages = recurseIntoAttrs postgresql.pkgs;
@@ -17368,7 +17382,7 @@ in
 
   inherit (callPackages ../os-specific/linux/apparmor { python = python3; })
     libapparmor apparmor-utils apparmor-bin-utils apparmor-parser apparmor-pam
-    apparmor-profiles apparmor-kernel-patches;
+    apparmor-profiles apparmor-kernel-patches apparmorRulesFromClosure;
 
   atop = callPackage ../os-specific/linux/atop { };
 
@@ -20802,7 +20816,10 @@ in
 
   freecad = libsForQt514.callPackage ../applications/graphics/freecad {
     mpi = openmpi;
-    # pyside2 5.12 is broken under python 3.8
+  };
+  freecadStable = libsForQt514.callPackage ../applications/graphics/freecad/stable.nix {
+    mpi = openmpi;
+    opencascade-occt = opencascade-occt730;
     python3Packages = python37Packages;
   };
 
@@ -20971,8 +20988,6 @@ in
   gnumeric = callPackage ../applications/office/gnumeric { };
 
   gnunet = callPackage ../applications/networking/p2p/gnunet { };
-
-  gnunet_git = lowPrio (callPackage ../applications/networking/p2p/gnunet/git.nix { });
 
   gnunet-gtk = callPackage ../applications/networking/p2p/gnunet/gtk.nix { };
 
@@ -22239,6 +22254,8 @@ in
 
   ninjas2 = callPackage ../applications/audio/ninjas2 {};
 
+  nncp = callPackage ../tools/misc/nncp { };
+
   notion = callPackage ../applications/window-managers/notion { };
 
   nootka = qt5.callPackage ../applications/audio/nootka { };
@@ -22389,7 +22406,7 @@ in
 
   imapfilter = callPackage ../applications/networking/mailreaders/imapfilter.nix {
     lua = lua5;
- };
+  };
 
   maxlib = callPackage ../applications/audio/pd-plugins/maxlib { };
 
@@ -23073,6 +23090,10 @@ in
 
   rofi-systemd = callPackage ../tools/system/rofi-systemd { };
 
+  rofimoji = callPackage ../applications/misc/rofimoji {
+    inherit (python3Packages) buildPythonApplication ConfigArgParse pyxdg;
+  };
+
   rootlesskit = callPackage ../tools/virtualization/rootlesskit {};
 
   rpcs3 = libsForQt514.callPackage ../misc/emulators/rpcs3 { };
@@ -23461,9 +23482,7 @@ in
   # this can be changed to python3 once pyside2 is updated to support the latest python version
   syncplay = python37.pkgs.callPackage ../applications/networking/syncplay { };
 
-  inherit (callPackages ../applications/networking/syncthing {
-    buildGoModule = buildGo114Module;
-  })
+  inherit (callPackages ../applications/networking/syncthing { })
     syncthing
     syncthing-cli
     syncthing-discovery
@@ -23932,9 +23951,18 @@ in
 
   vkeybd = callPackage ../applications/audio/vkeybd {};
 
-  vlc = libsForQt514.vlc;
+  vlc = libsForQt514.callPackage ../applications/video/vlc {};
 
   vlc_qt5 = vlc;
+
+  libvlc = vlc.override {
+    withQt5 = false;
+    qtbase = null;
+    qtsvg = null;
+    qtx11extras = null;
+    wrapQtAppsHook = null;
+    onlyLibVLC = true;
+  };
 
   vmpk = callPackage ../applications/audio/vmpk { };
 
@@ -26521,6 +26549,8 @@ in
   librepcb = libsForQt5.callPackage ../applications/science/electronics/librepcb { };
 
   ngspice = callPackage ../applications/science/electronics/ngspice { };
+
+  openems = callPackage ../applications/science/electronics/openems { };
 
   pcb = callPackage ../applications/science/electronics/pcb { };
 

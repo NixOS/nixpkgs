@@ -75,9 +75,9 @@ in stdenv.mkDerivation {
           "${lib.getLib stdenv.cc.libc}/lib"
 
           # Executable paths necessary for compilation (ld, as):
-          "${lib.getBin stdenv.cc.cc}"
-          "${lib.getBin stdenv.cc.bintools}"
-          "${lib.getBin stdenv.cc.bintools.bintools}"
+          "${lib.getBin stdenv.cc.cc}/bin"
+          "${lib.getBin stdenv.cc.bintools}/bin"
+          "${lib.getBin stdenv.cc.bintools.bintools}/bin"
         ]));
     in ''
       substituteInPlace lisp/emacs-lisp/comp.el --replace \
