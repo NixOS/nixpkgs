@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, fetchurl, llvm, makeWrapper, pcre2, coreutils, which, libressl, libxml2, cmake, z3, substituteAll,
+{ stdenv, fetchFromGitHub, fetchurl, makeWrapper, pcre2, coreutils, which, libressl, libxml2, cmake, z3, substituteAll,
   cc ? stdenv.cc, lto ? !stdenv.isDarwin }:
 
-stdenv.mkDerivation ( rec {
+stdenv.mkDerivation (rec {
   pname = "ponyc";
   version = "0.38.1";
 
@@ -28,7 +28,6 @@ stdenv.mkDerivation ( rec {
     sha256 = "06i2cr4rj126m1zfz0x1rbxv1mw1l7a11mzal5kqk56cdrdicsiw";
     name = "v1.5.0.tar.gz";
   };
-
 
   buildInputs = [ makeWrapper which libxml2 cmake z3 ];
   propagatedBuildInputs = [ cc ];
@@ -76,8 +75,12 @@ stdenv.mkDerivation ( rec {
     make configure build_flags=-j$NIX_BUILD_CORES
   '';
 
-  makeFlags = [ "PONYC_VERSION=0.38.1" "prefix=${placeholder "out"}" ] ++ stdenv.lib.optionals stdenv.isDarwin [ "bits=64" ]
-             ++ stdenv.lib.optionals (stdenv.isDarwin && (!lto)) [ "lto=no" ];
+  makeFlags = [
+    "PONYC_VERSION=${version}"
+    "prefix=${placeholder "out"}"
+  ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ "bits=64" ]
+    ++ stdenv.lib.optionals (stdenv.isDarwin && (!lto)) [ "lto=no" ];
 
   enableParallelBuilding = true;
 
