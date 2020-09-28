@@ -70,7 +70,7 @@ in {
       serviceConfig = if cfg.consensus == null then
         throw "ipfs-cluster requires the option 'consensus' to be set"
       else {
-        ExecStartPre = [ "${pkgs.coreutils}/bin/cp ${peerstore} ${cfg.dataDir}/peerstore" ];
+        ExecStartPre = [ "${pkgs.coreutils}/bin/install -m 644 ${peerstore} ${cfg.dataDir}/peerstore" ];
         ExecStart = [
           ""
           "${pkgs.ipfs-cluster}/bin/ipfs-cluster-service init --consensus ${cfg.consensus}"
