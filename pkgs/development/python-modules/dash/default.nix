@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "1.14.0";
+  version = "1.16.2";
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1f7gal9x0bjsmwxlbvlkwfwz1cyyg5d0n6jh4399wkjilpd966d5";
+    sha256 = "1krhwxlz8kpaklf5ii3h339id6c3139xzxxkq7mvvag330j6nbgg";
   };
 
   propagatedBuildInputs = [
