@@ -11,7 +11,7 @@ in
     settings = mkOption {
       description = ''
         Attrset that is converted and passed as TOML config file.
-        For available params, see: <link xlink:href="https://github.com/DNSCrypt/dnscrypt-proxy/blob/master/dnscrypt-proxy/example-dnscrypt-proxy.toml"/>
+        For available params, see: <link xlink:href="https://github.com/DNSCrypt/dnscrypt-proxy/blob/${pkgs.dnscrypt-proxy2.version}/dnscrypt-proxy/example-dnscrypt-proxy.toml"/>
       '';
       example = literalExample ''
         {
