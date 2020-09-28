@@ -3,6 +3,11 @@ with lib;
 let
   cfg = config.services.ipfs-cluster;
   opt = options.services.ipfs-cluster;
+
+  # secret is by envvar, not flag
+  initFlags = toString [
+    (optionalString (lib.strings.concatStringsSep "," cfg.initPeerStore) "--peers")
+  ];
 in {
 
   ###### interface
@@ -26,23 +31,36 @@ in {
         description = "Group under which the ipfs-cluster daemon runs";
       };
 
-      dataDir = mkOption {
-        type = types.str;
-        default = "/var/lib/ipfs-cluster";
-        description = "The data dir for ipfs-cluster";
-      };
-
       consensus = mkOption {
         type = types.str;
         default = null;
         description = "Consensus protocol - 'raft' or 'crdt'";
       };
 
-      initPeerStore = mkOption {
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/ipfs-cluster";
+        description = "The data dir for ipfs-cluster";
+      };
+
+      initPeers = mkOption {
         type = types.listOf types.str;
         default = [ ];
         description = "Peer addresses to initialize with on first run";
       };
+
+      secret = mkOption {
+        type = types.str;
+        default = null;
+        description = "Secret for an existing cluster; if null, a new secret is generated";
+      };
+
+      secretFile = mkOption {
+        type = types.path;
+        default = null;
+        description = "File containing the secret - 'secret' and 'secretFile' should not both be set";
+      };
+
     };
   };
 
@@ -57,11 +75,10 @@ in {
 
     systemd.packages = [ pkgs.ipfs-cluster pkgs.coreutils ];
 
-    systemd.services.ipfs-cluster-init = let
-        peers = lib.strings.concatStringsSep "," cfg.initPeerStore;
-    in {
+    systemd.services.ipfs-cluster-init = {
       path = [ "/run/wrappers" pkgs.ipfs-cluster ];
       environment.IPFS_CLUSTER_PATH = cfg.dataDir;
+      environment.CLUSTER_SECRET = cfg.secret;
       wantedBy = [ "default.target" ];
 
       serviceConfig = if cfg.consensus == null then
@@ -69,7 +86,7 @@ in {
       else {
         ExecStart = [
           ""
-          "${pkgs.ipfs-cluster}/bin/ipfs-cluster-service init --consensus ${cfg.consensus} --peers '${peers}'"
+          "${pkgs.ipfs-cluster}/bin/ipfs-cluster-service init --consensus ${cfg.consensus} ${initFlags}"
         ];
         Type = "oneshot";
         RemainAfterExit = true;
