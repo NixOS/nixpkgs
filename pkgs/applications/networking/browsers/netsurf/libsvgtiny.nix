@@ -7,24 +7,22 @@
 }:
 
 stdenv.mkDerivation rec {
-
-  name = "netsurf-${libname}-${version}";
+  pname = "netsurf-${libname}";
   libname = "libsvgtiny";
   version = "0.1.7";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
-    sha256 = "10bpkmvfpydj74im3r6kqm9vnvgib6afy0alx71q5n0w5yawy39c";
+    sha256 = "sha256-LA3PlS8c2ILD6VQB75RZ8W27U8XT5FEjObL563add4E=";
   };
 
   nativeBuildInputs = [ pkgconfig gperf ];
   buildInputs = [
-    buildsystem
     libdom
     libhubbub
     libparserutils
     libwapcaplet
-  ];
+    buildsystem ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -32,10 +30,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.netsurf-browser.org/";
+    homepage = "https://www.netsurf-browser.org/projects/${libname}/";
     description = "NetSurf SVG decoder";
     license = licenses.mit;
-    maintainers = [ maintainers.samueldr ];
+    maintainers = [ maintainers.samueldr maintainers.AndersonTorres ];
     platforms = platforms.linux;
   };
 }
