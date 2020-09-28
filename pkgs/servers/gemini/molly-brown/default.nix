@@ -2,15 +2,15 @@
 
 buildGoPackage rec {
   pname = "molly-brown";
-  version = "unstable-2020-07-06";
-  rev = "2e510328ef1737c67641c588095e4628e3dfa8d3";
+  version = "unstable-2020-08-19";
+  rev = "48f9a206c03c0470e1c132b9667c6daa3583dada";
 
   goPackagePath = "tildegit.org/solderpunk/molly-brown";
 
   src = fetchgit {
     inherit rev;
     url = "https://tildegit.org/solderpunk/molly-brown.git";
-    sha256 = "0c2pmkcs5a04h2vwzbhj6rg47mb9wcmkh22i56kx7clh51wbbvc4";
+    sha256 = "1w79a25mbgav95p78fkdm9j62chwwpkqv0m2wmh5my03yq398gya";
   };
 
   goDeps = ./deps.nix;
