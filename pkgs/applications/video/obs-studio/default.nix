@@ -20,7 +20,7 @@
 , xorg
 , makeWrapper
 , pkgconfig
-, vlc
+, libvlc
 , mbedtls
 
 , scriptingSupport ? true
@@ -65,7 +65,7 @@ in mkDerivation rec {
     qtsvg
     speex
     x264
-    vlc
+    libvlc
     makeWrapper
     mbedtls
   ]
@@ -84,7 +84,7 @@ in mkDerivation rec {
 
   postInstall = ''
       wrapProgram $out/bin/obs \
-        --prefix "LD_LIBRARY_PATH" : "${xorg.libX11.out}/lib:${vlc}/lib"
+        --prefix "LD_LIBRARY_PATH" : "${xorg.libX11.out}/lib:${libvlc}/lib"
   '';
 
   postFixup = stdenv.lib.optionalString stdenv.isLinux ''

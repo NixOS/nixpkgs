@@ -38,11 +38,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sile";
-  version = "0.10.10";
+  version = "0.10.11";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "0m7yyvw8ypz89rfx8nm70mf87l357w5qac73pmfgl84f24cbxh7g";
+    sha256 = "0c4azy2iqcj5qg09caqzzjzvig5h0sjilkprphdxvg2bi7dr9g5c";
   };
 
   configureFlags = [

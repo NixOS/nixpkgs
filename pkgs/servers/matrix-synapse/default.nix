@@ -9,11 +9,11 @@ let
 in
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.19.3";
+  version = "1.20.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1r63gw9a4n2sd3520zadpn05zxfk45nqrgwxp3zky5nkyrh4qbys";
+    sha256 = "1sf36vwvy2f9jy6dldq6gqfmh60384i5j64s7yc131b4dp0n7lcw";
   };
 
   patches = [

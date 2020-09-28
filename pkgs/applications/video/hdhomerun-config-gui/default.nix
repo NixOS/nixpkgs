@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libhdhomerun, vlc, gcc, gnumake, pkg-config, gtk2 }:
+{ stdenv, fetchurl, libhdhomerun, gcc, gnumake, pkg-config, gtk2 }:
 
 stdenv.mkDerivation rec {
   pname = "hdhomerun-config-gui";
