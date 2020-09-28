@@ -7036,7 +7036,7 @@ in
 
   sonata = callPackage ../applications/audio/sonata { };
 
-  soundkonverter = kdeApplications.callPackage ../applications/audio/soundkonverter {};
+  soundkonverter = libsForQt512.callPackage ../applications/audio/soundkonverter {};
 
   sozu = callPackage ../servers/sozu { };
 
@@ -10701,7 +10701,7 @@ in
   };
 
   # Does not actually depend on Qt 5
-  inherit (kdeFrameworks) extra-cmake-modules kapidox kdoctools;
+  inherit (kdeFrameworks) extra-cmake-modules kapidox;
 
   coccinelle = callPackage ../development/tools/misc/coccinelle {
     ocamlPackages = ocaml-ng.ocamlPackages_4_05;
@@ -14869,28 +14869,37 @@ in
     ### KDE FRAMEWORKS
 
     inherit (kdeFrameworks.override { libsForQt5 = self; })
-      attica baloo bluez-qt kactivities kactivities-stats
-      karchive kauth kbookmarks kcmutils kcalendarcore kcodecs kcompletion kconfig
-      kconfigwidgets kcoreaddons kcrash kdav kdbusaddons kdeclarative kdelibs4support
-      kdesignerplugin kdnssd kemoticons kfilemetadata kglobalaccel kguiaddons
-      khtml ki18n kiconthemes kidletime kimageformats kio kitemmodels kitemviews
-      kjobwidgets kjs kjsembed kmediaplayer knewstuff knotifications
-      knotifyconfig kpackage kparts kpeople kplotting kpty kross krunner
-      kservice ktexteditor ktextwidgets kunitconversion kwallet kwayland
-      kwidgetsaddons kwindowsystem kxmlgui kxmlrpcclient modemmanager-qt
-      networkmanager-qt plasma-framework prison qqc2-desktop-style solid sonnet
-      syntax-highlighting syndication threadweaver kirigami2 kholidays kpurpose
-      kcontacts kquickcharts;
+      attica baloo bluez-qt kactivities kactivities-stats karchive kauth
+      kbookmarks kcmutils kcalendarcore kcodecs kcompletion kconfig
+      kconfigwidgets kcoreaddons kcrash kdav kdbusaddons kdeclarative
+      kdelibs4support kdesignerplugin kdewebkit kdnssd kdoctools kemoticons
+      kfilemetadata kglobalaccel kguiaddons khtml ki18n kiconthemes kidletime
+      kimageformats kio kitemmodels kitemviews kjobwidgets kjs kjsembed
+      kmediaplayer knewstuff knotifications knotifyconfig kpackage kparts
+      kpeople kplotting kpty kross krunner kservice ktexteditor ktextwidgets
+      kunitconversion kwallet kwayland kwidgetsaddons kwindowsystem kxmlgui
+      kxmlrpcclient modemmanager-qt networkmanager-qt plasma-framework prison
+      qqc2-desktop-style solid sonnet syntax-highlighting syndication
+      threadweaver kirigami2 kholidays kpurpose kcontacts kquickcharts;
 
     ### KDE PLASMA 5
 
     inherit (plasma5.override { libsForQt5 = self; })
-      kdecoration khotkeys libkscreen libksysguard;
+      breeze-qt5 kdecoration khotkeys libkscreen libksysguard;
 
     ### KDE APPLICATIONS
 
-    inherit (kdeApplications.override { libsForQt5 = self; })
-      libkdcraw libkexiv2 libkipi libkomparediff2 libksane;
+    inherit
+      (import ../applications/kde { libsForQt5 = self; inherit lib fetchurl; })
+      akonadi-calendar akonadi-contacts akonadi-import-wizard akonadi-mime
+      akonadi-notes akonadi-search baloo-widgets calendarsupport eventviews
+      grantleetheme incidenceeditor kalarmcal kcalutils kdegraphics-mobipocket
+      kdepim-addons kdepim-apps-libs kdepim-runtime kidentitymanagement kimap
+      kipi-plugins kitinerary kldap kmail-account-wizard kmailtransport kmbox
+      kmime kontactinterface kpimtextedit kpkpass kqtquickcharts ksmtp ktnef
+      libgravatar libkcddb libkdcraw libkdegames libkdepim libkexiv2 libkgapi
+      libkipi libkleo libkmahjongg libkomparediff2 libksane libksieve mailcommon
+      mailimporter messagelib pim-sieve-editor pimcommon;
 
     ### LIBRARIES
 
@@ -19738,7 +19747,6 @@ in
   calibre = calibre-py3;
 
   calligra = libsForQt514.callPackage ../applications/office/calligra {
-    inherit (kdeApplications) akonadi-calendar akonadi-contacts;
     openjpeg = openjpeg_1;
     poppler = poppler_0_61;
   };
@@ -21302,14 +21310,59 @@ in
 
   kdeApplications =
     let
-      mkApplications = import ../applications/kde;
-      attrs = {
-        libsForQt5 = libsForQt512;
-        inherit lib fetchurl;
+      forQt512 =
+        import ../applications/kde {
+          libsForQt5 = libsForQt512;
+          inherit lib fetchurl;
+        };
+      forQt515 =
+        import ../applications/kde {
+          libsForQt5 = libsForQt515;
+          inherit lib fetchurl;
+        };
+      default = {
+        inherit (forQt512)
+          ark
+          bomber bovo
+          dolphin dragon
+          ffmpegthumbs filelight
+          granatier gwenview
+          k3b
+          kalzium kapptemplate kapman kate katomic
+          kblackbox kblocks kbounce
+          kcachegrind kcalc kcharselect kcolorchooser
+          kdenlive kdf kdialog kdiamond
+          keditbookmarks
+          kfind kfloppy
+          kget
+          khelpcenter
+          kig kigo killbots
+          klettres klines
+          kmag kmines kmix kmplot
+          knavalbattle knetwalk knights
+          kollision kolourpaint kompare konsole
+          krdc kreversi krfb
+          kshisen ksquares ksystemlog
+          kteatime ktimer ktouch kturtle
+          kwalletmanager
+          marble
+          okular
+          picmi
+          spectacle
+          yakuake;
+      };
+      overrides = {
+        inherit (forQt515)
+          akonadi akregator elisa kaddressbook kgpg kitinerary kleopatra kmail
+          kontact korganizer kpkpass kwave minuet;
+      };
+      compat = {
+        # Okteta was removed from kde applications and will now be released independently
+        # Lets keep an alias for compatibility reasons
         inherit okteta;
       };
     in
-      recurseIntoAttrs (makeOverridable mkApplications attrs);
+      default // overrides // compat;
 
   inherit (kdeApplications)
     akonadi akregator ark
@@ -21408,10 +21461,7 @@ in
 
   kmplayer = libsForQt5.callPackage ../applications/video/kmplayer { };
 
-  kmymoney = libsForQt514.callPackage ../applications/office/kmymoney {
-    inherit (kdeApplications) kidentitymanagement;
-    inherit (kdeFrameworks) kdewebkit;
-  };
+  kmymoney = libsForQt514.callPackage ../applications/office/kmymoney { };
 
   kodestudio = callPackage ../applications/editors/kodestudio { };
 
@@ -23490,9 +23540,7 @@ in
 
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
-  trojita = libsForQt514.callPackage ../applications/networking/mailreaders/trojita {
-    inherit (kdeApplications) akonadi-contacts;
-  };
+  trojita = libsForQt514.callPackage ../applications/networking/mailreaders/trojita { };
 
   tudu = callPackage ../applications/office/tudu { };
 
@@ -24296,8 +24344,6 @@ in
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
   zanshin = libsForQt514.callPackage ../applications/office/zanshin {
-    inherit (kdeApplications) akonadi-calendar akonadi-notes akonadi-search kidentitymanagement kontactinterface kldap;
-    inherit (kdeFrameworks) krunner kwallet kcalendarcore;
     boost = boost160;
   };
 
@@ -24636,8 +24682,6 @@ in
 
   digikam = libsForQt514.callPackage ../applications/graphics/digikam {
     inherit (plasma5) oxygen;
-    inherit (kdeApplications) akonadi-contacts;
-    inherit (kdeFrameworks) kcalendarcore;
     opencv3 = opencv3WithoutCuda;
   };
 
