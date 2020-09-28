@@ -1,8 +1,8 @@
-diff --git a/internal/config/config.go b/internal/config/config.go
-index 037c9602..3d5409dc 100644
---- a/internal/config/config.go
-+++ b/internal/config/config.go
-@@ -185,7 +185,7 @@ func checkExecutable(path string) error {
+diff --git a/internal/gitaly/config/config.go b/internal/gitaly/config/config.go
+index 993e095d..f9bbb943 100644
+--- a/internal/gitaly/config/config.go
++++ b/internal/gitaly/config/config.go
+@@ -217,7 +217,7 @@ func checkExecutable(path string) error {
  		return err
  	}
  
