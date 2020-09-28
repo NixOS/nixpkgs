@@ -68,7 +68,7 @@ while [ "$#" -gt 0 ]; do
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
         ;;
-      --show-trace|--keep-failed|-K|--keep-going|-k|--verbose|-v|-vv|-vvv|-vvvv|-vvvvv|--fallback|--repair|--no-build-output|-Q|-j*|-L|--refresh|--no-net)
+      --show-trace|--keep-failed|-K|--keep-going|-k|--verbose|-v|-vv|-vvv|-vvvv|-vvvvv|--fallback|--repair|--no-build-output|-Q|-j*|-L|--refresh|--no-net|--impure)
         extraBuildFlags+=("$i")
         ;;
       --option)
