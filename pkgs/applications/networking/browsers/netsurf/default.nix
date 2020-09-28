@@ -6,5 +6,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   libnsgif       = callPackage ./libnsgif.nix { };
   libnslog       = callPackage ./libnslog.nix { };
   libnspsl       = callPackage ./libnspsl.nix { };
+  libnsutils     = callPackage ./libnsutils.nix { };
   libparserutils = callPackage ./libparserutils.nix { };
 })
