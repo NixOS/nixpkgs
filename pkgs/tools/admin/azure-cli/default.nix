@@ -1,12 +1,12 @@
 { stdenv, lib, python, fetchFromGitHub, installShellFiles }:
 
 let
-  version = "2.11.1";
+  version = "2.12.1";
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    sha256 = "11jmgc73b0w725rq89j6hk6gh67nfdbzp3rmywmrnah683d6xbpx";
+    sha256 = "14m2zjgaszrki34kva23vdsl0nxxifz8r9i54ld3idi8hj3nx0q3";
   };
 
   # put packages that needs to be overriden in the py package scope
@@ -36,6 +36,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
   nativeBuildInputs = [ installShellFiles ];
 
   propagatedBuildInputs = with py.pkgs; [
+    azure-appconfiguration
     azure-batch
     azure-cli-core
     azure-cli-telemetry
@@ -44,6 +45,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-functions-devops-build
     azure-graphrbac
     azure-keyvault
+    azure-keyvault-administration
     azure-loganalytics
     azure-mgmt-advisor
     azure-mgmt-apimanagement
