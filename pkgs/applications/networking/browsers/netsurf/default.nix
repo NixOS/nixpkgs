@@ -16,6 +16,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     else if ui == "framebuffer" then pkgs.SDL
     else null;
 
+  browser = callPackage ./browser.nix { };
+
   buildsystem    = callPackage ./buildsystem.nix { };
   libcss         = callPackage ./libcss.nix { };
   libdom         = callPackage ./libdom.nix { };
