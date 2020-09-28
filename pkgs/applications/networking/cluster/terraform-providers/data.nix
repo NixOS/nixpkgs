@@ -244,9 +244,9 @@
     {
       owner   = "poseidon";
       repo    = "terraform-provider-ct";
-      rev     = "v0.5.0";
-      version = "0.5.0";
-      sha256  = "1zqfaxlyhr9vpqj2qqpfyh1f1nfpynb7c5ris6mdmy9zin55ppni";
+      rev     = "v0.6.1";
+      version = "0.6.1";
+      sha256  = "0hh3hvi8lwb0h8x9viz5p991w94gn7354nw95b51rdmir9qi2x89";
     };
   datadog =
     {
