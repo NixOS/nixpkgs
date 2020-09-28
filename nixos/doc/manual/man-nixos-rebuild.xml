@@ -120,6 +120,11 @@
    </arg>
    <arg>
     <group choice='req'>
+     <arg choice='plain'><option>--impure</option></arg>
+    </group>
+   </arg>
+   <arg>
+    <group choice='req'>
      <arg choice='plain'><option>--max-jobs</option></arg>
      <arg choice='plain'><option>-j</option></arg>
     </group>
@@ -564,7 +569,7 @@
    In addition, <command>nixos-rebuild</command> accepts various Nix-related
    flags, including <option>--max-jobs</option> / <option>-j</option>,
    <option>--show-trace</option>, <option>--keep-failed</option>,
-   <option>--keep-going</option> and <option>--verbose</option> /
+   <option>--keep-going</option>, <option>--impure</option>, and <option>--verbose</option> /
    <option>-v</option>. See the Nix manual for details.
   </para>
  </refsection>
