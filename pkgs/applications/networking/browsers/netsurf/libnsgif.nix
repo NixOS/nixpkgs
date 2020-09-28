@@ -3,18 +3,17 @@
 }:
 
 stdenv.mkDerivation rec {
-
-  name = "netsurf-${libname}-${version}";
+  pname = "netsurf-${libname}";
   libname = "libnsgif";
   version = "0.2.1";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
-    sha256 = "0jwshypgmx16xlsbx3d8njk8a5khazlplca5mxd3rdbhrlsabbly";
+    sha256 = "sha256-nq6lNM1wtTxar0UxeulXcBaFprSojb407Sb0+q6Hmks=";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ buildsystem];
+  buildInputs = [ buildsystem ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -22,10 +21,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.netsurf-browser.org/";
+    homepage = "https://www.netsurf-browser.org/projects/${libname}/";
     description = "GIF Decoder for netsurf browser";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.vrthra ];
+    license = licenses.mit;
+    maintainers = [ maintainers.vrthra maintainers.AndersonTorres ];
     platforms = platforms.unix;
   };
 }
