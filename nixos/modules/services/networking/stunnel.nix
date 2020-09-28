@@ -129,7 +129,6 @@ in
         type = with types; attrsOf (submodule serverConfig);
         example = {
           fancyWebserver = {
-            enable = true;
             accept = 443;
             connect = 8080;
             cert = "/path/to/pem/file";
