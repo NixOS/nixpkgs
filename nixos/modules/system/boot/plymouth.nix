@@ -38,6 +38,14 @@ in
 
       enable = mkEnableOption "Plymouth boot splash screen";
 
+      font = mkOption {
+        default = "${pkgs.dejavu_fonts.minimal}/share/fonts/truetype/DejaVuSans.ttf";
+        type = types.path;
+        description = ''
+          Font file made available for displaying text on the splash screen.
+        '';
+      };
+
       themePackages = mkOption {
         default = [ nixosBreezePlymouth ];
         type = types.listOf types.package;
@@ -113,7 +121,7 @@ in
 
       mkdir -p $out/lib/plymouth/renderers
       # module might come from a theme
-      cp ${themesEnv}/lib/plymouth/{text,details,$moduleName}.so $out/lib/plymouth
+      cp ${themesEnv}/lib/plymouth/{text,details,label,$moduleName}.so $out/lib/plymouth
       cp ${plymouth}/lib/plymouth/renderers/{drm,frame-buffer}.so $out/lib/plymouth/renderers
 
       mkdir -p $out/share/plymouth/themes
@@ -133,6 +141,17 @@ in
 
       cp -r themes/* $out/share/plymouth/themes
       cp ${cfg.logo} $out/share/plymouth/logo.png
+
+      mkdir -p $out/share/fonts
+      cp ${cfg.font} $out/share/fonts
+      mkdir -p $out/etc/fonts
+      cat > $out/etc/fonts/fonts.conf <<EOF
+      <?xml version="1.0"?>
+      <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+      <fontconfig>
+          <dir>$out/share/fonts</dir>
+      </fontconfig>
+      EOF
     '';
 
     boot.initrd.extraUtilsCommandsTest = ''
@@ -154,6 +173,7 @@ in
       ln -s $extraUtils/share/plymouth/logo.png /etc/plymouth/logo.png
       ln -s $extraUtils/share/plymouth/themes /etc/plymouth/themes
       ln -s $extraUtils/lib/plymouth /etc/plymouth/plugins
+      ln -s $extraUtils/etc/fonts /etc/fonts
 
       plymouthd --mode=boot --pid-file=/run/plymouth/pid --attach-to-session
       plymouth show-splash
