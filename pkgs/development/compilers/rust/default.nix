@@ -13,12 +13,23 @@
 , llvmPackages
 , pkgsBuildTarget, pkgsBuildBuild
 }: rec {
+  # https://doc.rust-lang.org/reference/conditional-compilation.html#target_arch
+  toTargetArch = platform:
+    if platform.isAarch32 then "arm"
+    else platform.parsed.cpu.name;
+
+  # https://doc.rust-lang.org/reference/conditional-compilation.html#target_os
+  toTargetOs = platform:
+    if platform.isDarwin then "macos"
+    else platform.parsed.kernel.name;
+
+  # Target triple. Rust has slightly different naming conventions than we use.
   toRustTarget = platform: with platform.parsed; let
-    cpu_ = {
+    cpu_ = platform.rustc.arch or {
       "armv7a" = "armv7";
       "armv7l" = "armv7";
       "armv6l" = "arm";
-    }.${cpu.name} or platform.rustc.arch or cpu.name;
+    }.${cpu.name} or cpu.name;
   in platform.rustc.config
     or "${cpu_}-${vendor.name}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
 
