@@ -141,6 +141,10 @@ in
       # remove check for virtualenv, since we handle
       # python requirements using python.withPackages
       sed -i '/ifndef VIRTUAL_ENV/,+2d' Makefile
+
+      # Make the build verbose so it won't get culled by Hydra thinking that
+      # it somehow got stuck doing nothing.
+      sed -i 's;\t@;\t;' Makefile
     '';
 
     enableParallelBuilding = true;
