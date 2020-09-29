@@ -77,7 +77,6 @@ let
       mkdir -p $out/lib
 
       mv build/*/images/jdk $out/lib/openjdk
-      mv build/*/support/src.zip $out/lib/src.zip
 
       # Remove some broken manpages.
       rm -rf $out/lib/openjdk/man/ja*
@@ -86,6 +85,7 @@ let
       mkdir -p $out/share
       ln -s $out/lib/openjdk/include $out/include
       ln -s $out/lib/openjdk/man $out/share/man
+      ln -s $out/lib/openjdk/lib/src.zip $out/lib/src.zip
 
       # jni.h expects jni_md.h to be in the header search path.
       ln -s $out/include/linux/*_md.h $out/include/
