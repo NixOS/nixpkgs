@@ -2,14 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "precice";
-  version = "2.0.2";
-  # Todo next release switch back to versioning but for python3 support master is needed
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "precice";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1s41wv2077d2gqj0wsxls6wkgdk9cgzcbmk2q43ha08ccq5i3dav";
+    sha256 = "1268dz39sx3gygnm7vpg59k1wdhy6rhf72i8i0kz4jckll0s9102";
   };
 
   cmakeFlags = [
