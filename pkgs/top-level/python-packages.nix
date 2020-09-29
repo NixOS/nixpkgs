@@ -1150,6 +1150,8 @@ in {
 
   ckcc-protocol = callPackage ../development/python-modules/ckcc-protocol { };
 
+  class-registry = callPackage ../development/python-modules/class-registry { };
+
   cld2-cffi = callPackage ../development/python-modules/cld2-cffi { };
 
   cleo = callPackage ../development/python-modules/cleo { };
