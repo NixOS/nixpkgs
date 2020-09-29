@@ -9609,6 +9609,7 @@ in
     stdenv = clangStdenv;
   };
 
+  pony-corral = callPackage ../development/compilers/ponyc/pony-corral.nix { };
   pony-stable = callPackage ../development/compilers/ponyc/pony-stable.nix { };
 
   qbe = callPackage ../development/compilers/qbe { };
