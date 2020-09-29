@@ -24,7 +24,6 @@
 , python3Packages # for sphinx-build
 # For tests
 , gtest
-, fetchpatch # used to fetch an upstream patch fixing a failing test
 , zip
 }:
 
