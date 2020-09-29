@@ -22,12 +22,12 @@ in stdenv.mkDerivation rec {
   src =
     if buildFromTarball then
       fetchurl {
-        url = "http://libvirt.org/sources/${pname}-${version}.tar.xz";
+        url = "https://libvirt.org/sources/${pname}-${version}.tar.xz";
         sha256 = "1y8y13zvh820f4b15287wb77wq7ra7kbfnpblzhm1dki5pfjvrcl";
       }
     else
       fetchgit {
-        url = "git://libvirt.org/libvirt.git";
+        url = "https://libvirt.org/git/libvirt.git";
         rev = "v${version}";
         sha256 = "09hsbm2qmx0jfmm418rf5lx374g85bwgg0kzlga62x5180jhsssn";
         fetchSubmodules = true;
