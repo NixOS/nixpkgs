@@ -235,7 +235,9 @@ in
           # Refer to https://github.com/samba-team/samba/tree/master/packaging/systemd
           # for correct use with systemd
           services = {
-            samba-smbd = daemonService "smbd" "";
+            samba-smbd = daemonService "smbd" "" // {
+              unitConfig.RequiresMountsFor = mapAttrsToList (_: share: share.path) cfg.shares;
+            };
             samba-nmbd = mkIf cfg.enableNmbd (daemonService "nmbd" "");
             samba-winbindd = mkIf cfg.enableWinbindd (daemonService "winbindd" "");
           };
