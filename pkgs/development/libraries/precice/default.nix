@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gcc, boost, eigen, libxml2, openmpi, python3, python3Packages, petsc }:
+{ lib, stdenv, fetchFromGitHub, cmake, gcc, boost, eigen, libxml2, openmpi, python3, petsc }:
 
 stdenv.mkDerivation rec {
   pname = "precice";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake gcc ];
-  buildInputs = [ boost eigen libxml2 openmpi python3 python3Packages.numpy ];
+  buildInputs = [ boost eigen libxml2 openmpi python3 python3.pkgs.numpy ];
   enableParallelBuilding = true;
 
   meta = {
