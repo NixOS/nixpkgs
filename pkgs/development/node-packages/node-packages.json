@@ -189,6 +189,7 @@
 , "ssb-server"
 , "stackdriver-statsd-backend"
 , "stf"
+, "stylelint"
 , "svgo"
 , "swagger"
 , {"tedicross": "git+https://github.com/TediCross/TediCross.git#v0.8.7"}
