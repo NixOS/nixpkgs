@@ -3,18 +3,17 @@
 }:
 
 stdenv.mkDerivation rec {
-
-  name = "netsurf-${libname}-${version}";
-  libname = "libnsutils";
-  version = "0.0.5";
+  pname = "netsurf-${libname}";
+  libname = "libnspsl";
+  version = "0.1.6";
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
-    sha256 = "09w1rixps1iiq6wirjwxmd6h87llvjzvw565rahjb3rlyhcplfqf";
+    sha256 = "sha256-08WCBct40xC/gcpVNHotCYcZzsrHBGvDZ5g7E4tFAgs=";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ buildsystem];
+  buildInputs = [ buildsystem ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -22,10 +21,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.netsurf-browser.org/";
-    description = "Generalised utility library for netsurf browser";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.vrthra ];
+    homepage = "https://www.netsurf-browser.org/";
+    description = "NetSurf Public Suffix List - Handling library";
+    license = licenses.mit;
+    maintainers =  [ maintainers.samueldr maintainers.AndersonTorres ];
     platforms = platforms.linux;
   };
 }
