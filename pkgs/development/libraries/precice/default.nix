@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}m"
   ];
 
+  NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin [ "-D_GNU_SOURCE" ];
+
   nativeBuildInputs = [ cmake gcc ];
   buildInputs = [ boost eigen libxml2 openmpi python3 python3.pkgs.numpy ];
   enableParallelBuilding = true;
@@ -26,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "preCICE stands for Precise Code Interaction Coupling Environment";
     license = with lib.licenses; [ gpl3 ];
     homepage = "https://www.precice.org/";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ Scriptkiddi ];
   };
 }
