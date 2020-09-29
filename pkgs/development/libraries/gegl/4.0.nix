@@ -45,6 +45,15 @@ stdenv.mkDerivation rec {
     sha256 = "097427icgpgvcx40019b3dm8m84cchz79pixzpz648drs8p1wdqg";
   };
 
+  patches = [
+    # fix build with darwin: https://github.com/NixOS/nixpkgs/issues/99108
+    # https://gitlab.gnome.org/GNOME/gegl/-/merge_requests/83
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gegl/-/merge_requests/83.patch";
+      sha256 = "CSBYbJ2xnEN23xrla1qqr244jxOR5vNK8ljBSXdg4yE=";
+    })
+  ];
+
   nativeBuildInputs = [
     pkgconfig
     gettext
