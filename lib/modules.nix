@@ -224,7 +224,7 @@ rec {
       if badAttrs != {} then
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. This is caused by introducing a top-level `config' or `options' attribute. Add configuration attributes immediately on the top level instead, or move all of them (namely: ${toString (attrNames badAttrs)}) into the explicit `config' attribute."
       else
-        { _file = m._file or file;
+        { _file = toString m._file or file;
           key = toString m.key or key;
           disabledModules = m.disabledModules or [];
           imports = m.imports or [];
@@ -232,7 +232,7 @@ rec {
           config = addFreeformType (addMeta (m.config or {}));
         }
     else
-      { _file = m._file or file;
+      { _file = toString m._file or file;
         key = toString m.key or key;
         disabledModules = m.disabledModules or [];
         imports = m.require or [] ++ m.imports or [];
