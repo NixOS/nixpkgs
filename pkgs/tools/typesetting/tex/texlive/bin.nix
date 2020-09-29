@@ -145,6 +145,7 @@ core = stdenv.mkDerivation rec {
   configureFlags = common.configureFlags
     ++ [ "--without-x" ] # disable xdvik and xpdfopen
     ++ map (what: "--disable-${what}") ([
+      "chktex"
       "dvisvgm" "dvipng" # ghostscript dependency
       "luatex" "luajittex" "mp" "pmp" "upmp" "mf" # cairo would bring in X and more
       "xetex" "bibtexu" "bibtex8" "bibtex-x" "upmendex" # ICU isn't small
@@ -268,6 +269,24 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
     mv "$out/bin"/{luatex,texlua*} "$luatex/bin/"
     mv "$out/bin"/xetex "$xetex/bin/"
   '';
+};
+
+
+chktex = stdenv.mkDerivation {
+  pname = "texlive-chktex.bin";
+  inherit version;
+
+  inherit (common) src;
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ core/*kpathsea*/ ];
+
+  preConfigure = "cd texk/chktex";
+
+  configureFlags = common.configureFlags
+    ++ [ "--with-system-kpathsea" ];
+
+  enableParallelBuilding = true;
 };
 
 
