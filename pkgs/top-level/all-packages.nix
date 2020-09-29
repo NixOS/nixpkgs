@@ -23002,6 +23002,8 @@ in
     });
   in pkgs_.libsForQt5.callPackage ../applications/networking/browsers/qutebrowser { };
 
+  qxw = callPackage ../applications/editors/qxw {};
+
   rabbitvcs = callPackage ../applications/version-management/rabbitvcs {};
 
   rakarrack = callPackage ../applications/audio/rakarrack {
