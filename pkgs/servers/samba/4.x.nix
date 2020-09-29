@@ -12,6 +12,7 @@
 , docbook_xml_dtd_45
 , readline
 , popt
+, dbus
 , libbsd
 , libarchive
 , zlib
@@ -43,11 +44,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.12.6";
+  version = "4.13.0";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    sha256 = "1v3cmw40csmi3jd8mhlx4bm7bk4m0426zkyin7kq11skwnsrna02";
+    sha256 = "1xp7mmy5a892g5c56n7zz3l2kbgyrqn3y50lqq5aa2nvx2p547gi";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -79,6 +80,7 @@ stdenv.mkDerivation rec {
     python
     readline
     popt
+    dbus
     jansson
     libbsd
     libarchive
