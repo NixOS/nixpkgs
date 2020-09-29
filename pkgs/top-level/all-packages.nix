@@ -1059,6 +1059,8 @@ in
 
   git-fire = callPackage ../tools/misc/git-fire { };
 
+  git-privacy = python3.pkgs.callPackage ../tools/misc/git-privacy { };
+
   git-repo-updater = python3Packages.callPackage ../development/tools/git-repo-updater { };
 
   git-revise = with python3Packages; toPythonApplication git-revise;
