@@ -43,9 +43,13 @@ let
 
     [gitlab-shell]
     dir = "${cfg.packages.gitlab-shell}"
+
+    [gitlab]
     secret_file = "${cfg.statePath}/gitlab_shell_secret"
-    gitlab_url = "http+unix://${pathUrlQuote gitlabSocket}"
-    http_settings = { self_signed_cert = false }
+    url = "http+unix://${pathUrlQuote gitlabSocket}"
+
+    [gitlab.http-settings]
+    self_signed_cert = false
 
     ${concatStringsSep "\n" (attrValues (mapAttrs (k: v: ''
     [[storage]]
@@ -119,6 +123,7 @@ let
         receive_pack = true;
       };
       workhorse.secret_file = "${cfg.statePath}/.gitlab_workhorse_secret";
+      gitlab_kas.secret_file = "${cfg.statePath}/.gitlab_kas_secret";
       git.bin_path = "git";
       monitoring = {
         ip_whitelist = [ "127.0.0.0/8" "::1/128" ];
@@ -668,6 +673,7 @@ in {
             rm "${config.services.postgresql.dataDir}/.reassigning_${cfg.databaseName}"
         fi
         $PSQL '${cfg.databaseName}' -tAc "CREATE EXTENSION IF NOT EXISTS pg_trgm"
+        $PSQL '${cfg.databaseName}' -tAc "CREATE EXTENSION IF NOT EXISTS btree_gist;"
       '';
 
       serviceConfig = {
