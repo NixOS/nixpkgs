@@ -134,8 +134,6 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = "-fno-stack-protector";
-
   meta = {
     homepage = "https://libvirt.org/";
     repositories.git = "git://libvirt.org/libvirt.git";
