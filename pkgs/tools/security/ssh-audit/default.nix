@@ -39,6 +39,6 @@ python3Packages.buildPythonApplication rec {
     description = "Tool for ssh server auditing";
     homepage = "https://github.com/jtesta/ssh-audit";
     license = licenses.mit;
-    maintainers = with maintainers; [ tv ];
+    maintainers = with maintainers; [ tv SuperSandro2000 ];
   };
 }
