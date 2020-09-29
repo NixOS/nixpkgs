@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustscan";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "RustScan";
     repo = pname;
     rev = "${version}";
-    sha256 = "1x6vi3d250jhy75ybp8gm6cq9ncv0jig5c1v12r26raflhkh7fk3";
+    sha256 = "0dhy7b73ipsxsr7wlc3r5yy39i3cjrdszhsw9xwjj31692s3b605";
   };
 
-  cargoSha256 = "0q4p4pa1lh8kw5gmiim0zmmvs3l1kl319a3ji7gmj2fisha4319k";
+  cargoSha256 = "00s1iv8yw06647ijw9p3l5n7d899gsks5j8ljag6ha7hgl5vs4ci";
 
   postPatch = ''
     substituteInPlace src/main.rs \
@@ -26,6 +26,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=infer_ulimit_lowering_no_panic"
     "--skip=google_dns_runs"
     "--skip=parse_correct_host_addresses"
+    "--skip=parse_hosts_file_and_incorrect_hosts"
   ];
 
   meta = with lib; {
