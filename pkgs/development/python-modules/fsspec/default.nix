@@ -5,7 +5,6 @@
 , pytestCheckHook
 , numpy
 , stdenv
-, isPy38
 }:
 
 buildPythonPackage rec {
@@ -29,8 +28,9 @@ buildPythonPackage rec {
     # Test assumes user name is part of $HOME
     # AssertionError: assert 'nixbld' in '/homeless-shelter/foo/bar'
     "test_strip_protocol_expanduser"
-  ] ++ lib.optionals (stdenv.isDarwin && isPy38) [
+  ] ++ lib.optionals (stdenv.isDarwin) [
     "test_modified" # fails on hydra, works locally
+    "test_touch" # fails on hydra, works locally
   ];
 
   meta = with lib; {
