@@ -2,6 +2,7 @@
 , qmake, pkgconfig, olm, wrapQtAppsHook
 , qtbase, qtquickcontrols2, qtkeychain, qtmultimedia, qttools, qtgraphicaleffects
 , python3Packages, pyotherside
+, libXScrnSaver
 }:
 
 let
@@ -13,13 +14,13 @@ let
 in
 mkDerivation rec {
   pname = "mirage";
-  version = "0.5.2";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "mirukana";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0i891fafdncdz1xg6nji80jb86agsrbdvai9nwf1yy126q7piryv";
+    sha256 = "15x0x2rf4fzsd0zr84fq3j3ddzkgc5il8s54jpxk8wl4ah03g4nv";
     fetchSubmodules = true;
   };
 
@@ -30,6 +31,7 @@ mkDerivation rec {
     qtquickcontrols2
     qtkeychain qtgraphicaleffects
     olm pyotherside
+    libXScrnSaver
   ];
 
   propagatedBuildInputs = pypkgs;
