@@ -48,7 +48,7 @@ in
 
     package = lib.mkOption {
       type = lib.types.package;
-      default = pkgs.webapps.peertube;
+      default = pkgs.peertube;
       description = ''
         Peertube package to use.
       '';
