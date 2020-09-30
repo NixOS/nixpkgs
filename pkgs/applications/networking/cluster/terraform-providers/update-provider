@@ -1,0 +1,77 @@
+#!/usr/bin/env nix-shell
+#! nix-shell -i bash -p coreutils curl jq
+# shellcheck shell=bash
+#
+# Update a terraform provider to the latest version advertised at
+# the provider source address.
+set -euo pipefail
+
+USAGE=$(cat<<DOC
+Specify the terraform provider name to update.
+
+Example:
+To update nixpkgs.terraform-providers.aws run:
+./update-provider aws
+DOC
+)
+
+provider_name="${1:-}"
+if [ -z "$provider_name" ]; then
+  echo "No providers specified!"
+  echo
+  echo "$USAGE"
+  exit 1
+fi
+
+provider_source_address="$(jq -r ".$provider_name.\"provider-source-address\"" providers.json)"
+
+if [ "$provider_source_address" == "null" ]; then
+  echo "No provider source address specified with provider: $provider_name"
+  exit 1
+fi
+
+# The provider source address (used inside Terraform `required_providers` block) is
+# used to compute the registry API endpoint
+#
+# registry.terraform.io/hashicorp/aws (provider source address)
+# registry.terraform.io/providers/hashicorp/aws (provider URL for the website)
+# registry.terraform.io/v1/providers/hashicorp/aws (provider URL for the JSON API)
+registry_response=$(curl -s https://"${provider_source_address/\///v1/providers/}")
+
+prefetch_github() {
+  # of a given owner, repo and rev, fetch the tarball and return the output of
+  # `nix-prefetch-url`
+  local owner=$1
+  local repo=$2
+  local rev=$3
+  nix-prefetch-url --unpack "https://github.com/$owner/$repo/archive/$rev.tar.gz"
+}
+
+provider_source_url="$(jq -r '.source' <<< "$registry_response")"
+
+org="$(echo "$provider_source_url" | cut -d '/' -f 4)"
+repo="$(echo "$provider_source_url" | cut -d '/' -f 5)"
+rev="$(jq -r '.tag' <<< "$registry_response")"
+
+sha256=$(prefetch_github "$org" "$repo" "$rev")
+
+version="$(jq -r '.version' <<< "$registry_response")"
+
+updated_provider="$(mktemp)"
+cat <<EOF >> "$updated_provider"
+{
+  "$provider_name": {
+    "owner": "$org",
+    "repo": "$repo",
+    "rev": "$rev",
+    "sha256": "$sha256",
+    "version": "$version",
+    "provider-source-address": "$provider_source_address"
+  }
+}
+EOF
+
+original_provider_list="$(mktemp)"
+cat providers.json > "$original_provider_list"
+
+jq --sort-keys --slurp '.[0] * .[1]' "$original_provider_list" "$updated_provider" > providers.json
