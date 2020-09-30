@@ -92,6 +92,7 @@ rustPlatform.buildRustPackage rec {
     description = "Matrix group messaging app";
     homepage = "https://gitlab.gnome.org/GNOME/fractal";
     license = licenses.gpl3;
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ dtzWill worldofpeace ];
   };
 }
