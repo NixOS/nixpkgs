@@ -1,4 +1,4 @@
-{ lib, python3Packages, gobject-introspection, gtk3, pango, wrapGAppsHook
+{ fetchFromGitLab, lib, python3Packages, gobject-introspection, gtk3, pango, wrapGAppsHook
 , chromecastSupport ? false
 , serverSupport ? false
 , keyringSupport ? true
@@ -8,11 +8,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sublime-music";
-  version = "0.11.7";
+  version = "0.11.10";
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "1x6b02gw46gp6qcgv67j7k3gr1dpfczbyma6dxanag8pnpqrj8qi";
+  src = fetchFromGitLab {
+    owner = "sublime-music";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1g78gmiywg07kaywfc9q0yab2bzxs936vb3157ni1z0flbmcwrry";
   };
 
   nativeBuildInputs = [
@@ -30,6 +32,7 @@ python3Packages.buildPythonApplication rec {
   ;
 
   propagatedBuildInputs = with python3Packages; [
+    bleach
     dataclasses-json
     deepdiff
     fuzzywuzzy
@@ -52,7 +55,7 @@ python3Packages.buildPythonApplication rec {
 
   # no tests
   doCheck = false;
-  pythonImportsCheck = [ "sublime" ];
+  pythonImportsCheck = [ "sublime_music" ];
 
   meta = with lib; {
     description = "GTK3 Subsonic/Airsonic client";
