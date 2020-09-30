@@ -1,6 +1,8 @@
 { lib
 , fetchFromGitHub
+, genericUpdater
 , substituteAll
+, common-updater-scripts
 , ffmpeg_3
 , python3Packages
 , sox
@@ -32,6 +34,13 @@ python3Packages.buildPythonApplication rec {
   # Testing downloads media files for testing, which requires the
   # sandbox to be disabled.
   doCheck = false;
+
+  passthru = {
+    updateScript = genericUpdater {
+      inherit pname version;
+      versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+    };
+  };
 
   meta = with lib; {
     description = "Fast audio loudness scanner & tagger (ReplayGain v2 / R128)";
