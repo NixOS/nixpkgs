@@ -28192,4 +28192,6 @@ in
 
   fac-build = callPackage ../development/tools/build-managers/fac {};
 
+  bottom = callPackage ../tools/system/bottom {};
+
 }
