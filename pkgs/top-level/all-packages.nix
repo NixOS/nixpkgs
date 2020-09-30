@@ -11739,6 +11739,8 @@ in
 
   visualvm = callPackage ../development/tools/java/visualvm { };
 
+  vul = callPackage ../applications/misc/vul { };
+
   vultr = callPackage ../development/tools/vultr { };
 
   vultr-cli = callPackage ../development/tools/vultr-cli { };
