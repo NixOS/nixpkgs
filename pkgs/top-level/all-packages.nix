@@ -27304,6 +27304,8 @@ in
 
   nixpkgs-fmt = callPackage ../tools/nix/nixpkgs-fmt { };
 
+  nixadd = callPackage ../tools/nix/nixadd { };
+
   rnix-hashes = callPackage ../tools/nix/rnix-hashes { };
 
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };
