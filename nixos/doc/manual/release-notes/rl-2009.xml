@@ -594,8 +594,8 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
    <listitem>
      <para>
        The hostname (<literal>networking.hostName</literal>) must now be a valid
-       DNS label (see RFC 1035) and as such must not contain the domain part.
-       This means that the hostname must start with a letter, end with a letter
+       DNS label (see RFC 1035, RFC 1123) and as such must not contain the domain part.
+       This means that the hostname must start with a letter or digit, end with a letter
        or digit, and have as interior characters only letters, digits, and
        hyphen. The maximum length is 63 characters. Additionally it is
        recommended to only use lower-case characters.
