@@ -57,6 +57,16 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "sublime_music" ];
 
+  postInstall = ''
+    install -Dm444 sublime-music.desktop      -t $out/share/applications
+    install -Dm444 sublime-music.metainfo.xml -t $out/share/metainfo
+
+    for size in 16 22 32 48 64 72 96 128 192 512 1024; do
+        install -Dm444 logo/rendered/"$size".png \
+          $out/share/icons/hicolor/"$size"x"$size"/apps/sublime-music.png
+    done
+  '';
+
   meta = with lib; {
     description = "GTK3 Subsonic/Airsonic client";
     homepage = "https://sublimemusic.app/";
