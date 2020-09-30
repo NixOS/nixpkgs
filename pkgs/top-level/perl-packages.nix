@@ -12717,6 +12717,23 @@ let
     };
   };
 
+  ModuleInstallReadmeMarkdownFromPod = buildPerlPackage {
+    pname = "Module-Install-ReadmeMarkdownFromPod";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MATTN/Module-Install-ReadmeMarkdownFromPod-0.04.tar.gz";
+      sha256 = "300b2e244f83b9a54a95f8404c1cd3af0635b4fae974ca65390ee428ec668591";
+    };
+    buildInputs = [ URI ];
+    propagatedBuildInputs = [ ModuleInstall PodMarkdown ];
+    meta = {
+      homepage = "http://search.cpan.org/dist/Module-Install-ReadmeMarkdownFromPod/";
+      description = "Create README.mkdn from POD";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   ModuleManifest = buildPerlPackage {
     pname = "Module-Manifest";
     version = "1.09";
