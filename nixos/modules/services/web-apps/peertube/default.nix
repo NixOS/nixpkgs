@@ -128,7 +128,7 @@ in
       environment.NODE_ENV = "production";
       environment.HOME = cfg.package;
 
-      path = [ pkgs.nodejs pkgs.bashInteractive pkgs.ffmpeg pkgs.openssl ];
+      path = [ pkgs.nodejs pkgs.bashInteractive pkgs.ffmpeg pkgs.openssl pkgs.sudo ];
 
       script = ''
         install -m 0750 -d ${cfg.dataDir}/config
