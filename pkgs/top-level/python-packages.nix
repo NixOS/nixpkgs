@@ -2012,6 +2012,8 @@ in {
 
   fastdtw = callPackage ../development/python-modules/fastdtw { };
 
+  fastecdsa = callPackage ../development/python-modules/fastecdsa { };
+
   fasteners = callPackage ../development/python-modules/fasteners { };
 
   fastentrypoints = callPackage ../development/python-modules/fastentrypoints { };
