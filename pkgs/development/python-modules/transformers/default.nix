@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "3.2.0";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0jj94153kgdyklra30xcszxv11hwzfigzy82fgvgzvbwlxv3a1j5";
+    sha256 = "1j9nzhl0zw5z9rnvzfih7v6bax353rxp05b3f0cvkii3b5dbkc2j";
   };
 
   propagatedBuildInputs = [
@@ -52,9 +52,12 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME="$TMPDIR"
 
-    # This test requires the nlp module, which we haven't
-    # packaged yet. However, nlp is optional for transformers
-    # itself
+    # This test requires the `datasets` module to download test
+    # data. However, since we cannot download in the Nix sandbox
+    # and `dataset` is an optional dependency for transformers
+    # itself, we will just remove the tests files that import
+    # `dataset`.
+    rm tests/test_retrieval_rag.py
     rm tests/test_trainer.py
   '';
 
