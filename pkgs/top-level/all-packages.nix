@@ -21031,6 +21031,8 @@ in
 
   giada = callPackage ../applications/audio/giada {};
 
+  giara = callPackage ../applications/networking/giara/default.nix { };
+
   gitit = callPackage ../applications/misc/gitit {};
 
   gkrellm = callPackage ../applications/misc/gkrellm {
