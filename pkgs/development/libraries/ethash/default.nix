@@ -1,5 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost, cryptopp, opencl-headers, opencl-info,
-  openmpi, ocl-icd, mesa, gbenchmark, gtest }:
+{ stdenv, fetchFromGitHub, cmake, gbenchmark, gtest }:
 
 stdenv.mkDerivation rec {
   pname = "ethash";
@@ -15,16 +14,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-  ];
-
-  buildInputs = [
-    boost
-    cryptopp
-    opencl-headers
-    opencl-info
-    openmpi
-    ocl-icd
-    mesa
   ];
 
   checkInputs = [
