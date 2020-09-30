@@ -57,6 +57,13 @@ let
     google-beta = patchGoModVendor automated-providers.google-beta;
     ibm = patchGoModVendor automated-providers.ibm;
 
+    acme = automated-providers.acme.overrideAttrs (attrs: {
+      prePatch = attrs.prePatch or "" + ''
+        substituteInPlace go.mod --replace terraform-providers/terraform-provider-acme getstackhead/terraform-provider-acme
+        substituteInPlace main.go --replace terraform-providers/terraform-provider-acme getstackhead/terraform-provider-acme
+      '';
+    });
+
     # providers that were moved to the `hashicorp` organization,
     # but haven't updated their references yet:
 
