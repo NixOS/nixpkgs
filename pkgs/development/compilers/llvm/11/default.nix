@@ -6,7 +6,7 @@
 
 let
   release_version = "11.0.0";
-  candidate = "rc3";
+  candidate = "rc5";
   version = "${release_version}${candidate}"; # differentiating these (variables) is important for RCs
   targetConfig = stdenv.targetPlatform.config;
 
@@ -15,7 +15,7 @@ let
     inherit sha256;
   };
 
-  clang-tools-extra_src = fetch "clang-tools-extra" "0qmqzdiiq0prkn6gzzzhijjvmnj7n1h0y49lbw6c97l11frhishm";
+  clang-tools-extra_src = fetch "clang-tools-extra" "0slqx5430pc699idabqnq34s9n0y2fq6q8z8hn5wakbi93dal71r";
 
   tools = stdenv.lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
