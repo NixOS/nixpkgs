@@ -1,4 +1,4 @@
-{ fetchurl, bitwig-studio1, pulseaudio, xorg }:
+{ fetchurl, bitwig-studio1, pulseaudio, libjack2, xorg }:
 
 bitwig-studio1.overrideAttrs (oldAttrs: rec {
   name = "bitwig-studio-${version}";
@@ -11,7 +11,7 @@ bitwig-studio1.overrideAttrs (oldAttrs: rec {
 
   buildInputs = oldAttrs.buildInputs ++ [ xorg.libXtst ];
 
-  runtimeDependencies = [ pulseaudio ];
+  runtimeDependencies = [ pulseaudio libjack2 ];
 
   installPhase = ''
     ${oldAttrs.installPhase}
