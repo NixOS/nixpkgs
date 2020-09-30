@@ -10,13 +10,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "r128gain";
-  version = "1.0.1";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "desbma";
     repo = "r128gain";
     rev = version;
-    sha256 = "0fnxis2g7mw8mb0cz9bws909lrndli7ml54nnzda49vc2fhbjwxr";
+    sha256 = "0w2i2szajv1vcmc96w0fczdr8xc28ijcf1gdg180f21gi6yh96sc";
   };
 
   patches = [
