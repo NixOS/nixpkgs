@@ -20617,6 +20617,21 @@ let
     };
   };
 
+  TextDiffFormattedHTML = buildPerlPackage {
+    pname = "Text-Diff-FormattedHTML";
+    version = "0.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AM/AMBS/Text-Diff-FormattedHTML-0.08.tar.gz";
+      sha256 = "39ab775a5c056745f2abd8cc7c1cbc5496dfef7e52a9f4bd8ada6aa6c9c7b70d";
+    };
+    propagatedBuildInputs = [ FileSlurp StringDiff ];
+    meta = {
+      description = "Generate a colorful HTML diff of strings/files";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   TextGerman = buildPerlPackage {
      pname = "Text-German";
      version = "0.06";
