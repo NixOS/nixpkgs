@@ -97,7 +97,17 @@ let
         BORG_REPO = cfg.repo;
         inherit (cfg) extraArgs extraInitArgs extraCreateArgs extraPruneArgs;
       } // (mkPassEnv cfg) // cfg.environment;
-      inherit (cfg) startAt;
+    };
+
+  mkBackupTimer = name: cfg:
+    nameValuePair "borgbackup-job-${name}" {
+      description = "BorgBackup job ${name} timer";
+      timerConfig = {
+        OnCalendar = cfg.startAt;
+        Persistent = cfg.persistent;
+        RandomizedDelaySec = cfg.randomizedDelaySec;
+      };
+      wantedBy = [ "timers.target" ];
     };
 
   # utility function around makeWrapper
@@ -279,6 +289,26 @@ in {
             example = "-u +%s";
           };
 
+          persistent = mkOption {
+            type = types.bool;
+            default = false;
+            description = ''
+              Whether backups should be triggered if they would have triggered
+              at least once while inactive
+            '';
+          };
+
+          randomizedDelaySec = mkOption {
+            type = types.str;
+            default = "0";
+            description = ''
+              Backups are delayed by a uniformly random amount of time up to
+              the value. Useful to stagger remote backups on a weak network
+              connection.
+            '';
+            example = "5 min";
+          };
+
           restartSec = mkOption {
             type = with types; nullOr (either str (listOf str));
             default = null;
@@ -290,6 +320,7 @@ in {
               If you do not want a failed backup to restart
               automatically, use <literal>null</literal>.
             '';
+            example = "10 min";
           };
 
           startAt = mkOption {
@@ -682,6 +713,10 @@ in {
         mapAttrs' mkBackupService jobs
         # A repo named "foo" is mapped to systemd.services.borgbackup-repo-foo
         // mapAttrs' mkRepoService repos;
+
+      systemd.timers =
+        # A job named "foo" is mapped to systemd.timers.borgbackup-job-foo
+        mapAttrs' mkBackupTimer jobs;
 
       users = mkMerge (mapAttrsToList mkUsersConfig repos);
 
