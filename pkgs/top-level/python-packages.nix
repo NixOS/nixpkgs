@@ -2544,7 +2544,7 @@ in {
 
   grappelli_safe = callPackage ../development/python-modules/grappelli_safe { };
 
-  graspy = callPackage ../development/python-modules/graspy { };
+  graspologic = callPackage ../development/python-modules/graspologic { };
 
   greatfet = callPackage ../development/python-modules/greatfet { };
 
