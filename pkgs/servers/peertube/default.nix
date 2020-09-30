@@ -4,16 +4,16 @@
 let
   nodeHeaders = fetchurl {
     url = "https://nodejs.org/download/release/v${nodejs.version}/node-v${nodejs.version}-headers.tar.gz";
-    sha256 = "15hkcbs328d3rc1s14rmky8lh8d3rr86l8k0bia0ggxzwl23lj9c";
+    sha256 = "17kf05a92r4y4n1lj78265wr6zhkpzbr1k8nbwrl8sq71npd6n5j";
   };
   source = rec {
-    version = "v2.3.0";
+    version = "v2.1.1";
     name = "peertube-${version}";
     src = fetchFromGitHub {
       owner = "Chocobozzz";
       repo = "PeerTube";
       rev = version;
-      sha256 = "1si4adhdd7c4avgm9qvva2f77x2bmfq0gx5ibnhlxr9bsc8s4ran";
+      sha256 = "147gm1j657fkpv2ix1bmkhl7ld5h224q7hgdj9ffj3z14mqgk8hj";
       fetchSubmodules = true;
     };
   };
@@ -44,8 +44,8 @@ let
       buildInputs = [ nodePackages.node-pre-gyp ];
       postInstall = let
         bcrypt_lib = fetchurl {
-          url = "https://github.com/kelektiv/node.bcrypt.js/releases/download/v3.0.7/bcrypt_lib-v3.0.7-node-v64-linux-x64-glibc.tar.gz";
-          sha256 = "0gbq4grhp5wl0f9yqb4y43kjfh8nivfd6y0nkv1x6gfvs2v23wb0";
+          url = "https://github.com/kelektiv/node.bcrypt.js/releases/download/v3.0.7/bcrypt_lib-v3.0.7-node-v72-linux-x64-glibc.tar.gz";
+          sha256 = "0kpm9j0yc4lqsafldfsql3m72rr1fapljlb6ddxvy3zi13rb7ppx";
         };
       in
         ''
