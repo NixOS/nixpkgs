@@ -14899,7 +14899,8 @@ in
       kmime kontactinterface kpimtextedit kpkpass kqtquickcharts ksmtp ktnef
       libgravatar libkcddb libkdcraw libkdegames libkdepim libkexiv2 libkgapi
       libkipi libkleo libkmahjongg libkomparediff2 libksane libksieve mailcommon
-      mailimporter messagelib pim-sieve-editor pimcommon;
+      mailimporter messagelib pim-sieve-editor pimcommon kdegraphics-thumbnailers
+      kio-extras print-manager;
 
     ### LIBRARIES
 
@@ -21324,7 +21325,7 @@ in
         inherit (forQt512)
           ark
           bomber bovo
-          dolphin dragon
+          dolphin dolphin-plugins dragon
           ffmpegthumbs filelight
           granatier gwenview
           k3b
