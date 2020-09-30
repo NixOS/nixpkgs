@@ -12734,6 +12734,21 @@ let
     };
   };
 
+  ModuleInstallRepository = buildPerlPackage {
+    pname = "Module-Install-Repository";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Module-Install-Repository-0.06.tar.gz";
+      sha256 = "00e2590d09339ccccbdaa328d12ad8ec77e831a38c9ad663705e59ecbb18722b";
+    };
+    buildInputs = [ PathClass ];
+    meta = {
+      description = "Automatically sets repository URL from svn/svk/Git checkout";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   ModuleManifest = buildPerlPackage {
     pname = "Module-Manifest";
     version = "1.09";
