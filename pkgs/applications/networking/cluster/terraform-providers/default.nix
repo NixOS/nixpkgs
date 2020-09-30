@@ -4,7 +4,7 @@
 , callPackage
 }:
 let
-  list = import ./data.nix;
+  list = lib.importJSON ./providers.json;
 
   toDrv = data:
     buildGoPackage rec {
