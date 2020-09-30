@@ -20572,6 +20572,21 @@ let
     };
   };
 
+  TestInDistDir = buildPerlPackage {
+    pname = "Test-InDistDir";
+    version = "1.112071";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MITHALDU/Test-InDistDir-1.112071.tar.gz";
+      sha256 = "922c5c63314f406f4cbb35ec423ac2154d2c2b71a65addb7732c9d240a83fefb";
+    };
+    meta = {
+      homepage = "https://github.com/wchristian/Test-InDistDir";
+      description = "Test environment setup for development with IDE";
+      license = stdenv.lib.licenses.wtfpl;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   TestInter = buildPerlPackage {
     pname = "Test-Inter";
     version = "1.09";
