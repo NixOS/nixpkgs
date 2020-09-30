@@ -7,11 +7,12 @@
     "version": "0.2.3"
   },
   "acme": {
-    "owner": "terraform-providers",
+    "owner": "getstackhead",
+    "provider-source-address": "registry.terraform.io/getstackhead/acme",
     "repo": "terraform-provider-acme",
-    "rev": "v1.5.0",
-    "sha256": "1h53bgflchavnn4laf801d920bsgqqg0ph4slnf7y1fpb0mz5vdv",
-    "version": "1.5.0"
+    "rev": "v1.5.0-patched",
+    "sha256": "1wdrjpd3l0xadsa3lqhsc9c57g8x2qkwb76q824sk8za1a7lapii",
+    "version": "1.5.0-patched"
   },
   "akamai": {
     "owner": "terraform-providers",
