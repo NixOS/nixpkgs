@@ -35,7 +35,7 @@ in
       type = lib.types.path;
       description = ''
         The configuration file path for Peertube.
-        '';
+      '';
     };
 
     package = lib.mkOption {
@@ -43,7 +43,7 @@ in
       default = pkgs.webapps.peertube;
       description = ''
         Peertube package to use.
-        '';
+      '';
     };
 
     # Output variables
@@ -52,10 +52,10 @@ in
 
       # Use ReadWritePaths= instead if varDir is outside of /var/lib
       default = assert lib.strings.hasPrefix "/var/lib/" cfg.dataDir;
-        lib.strings.removePrefix "/var/lib/" cfg.dataDir;
+      lib.strings.removePrefix "/var/lib/" cfg.dataDir;
 
       description = ''
-      Adjusted Peertube data directory for systemd
+        Adjusted Peertube data directory for systemd
       '';
 
       readOnly = true;
