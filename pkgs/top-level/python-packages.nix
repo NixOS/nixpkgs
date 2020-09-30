@@ -1321,6 +1321,8 @@ in {
 
   cozy = callPackage ../development/python-modules/cozy { };
 
+  cppheaderparser = callPackage ../development/python-modules/cppheaderparser { };
+
   cppy = callPackage ../development/python-modules/cppy { };
 
   cram = callPackage ../development/python-modules/cram { };
