@@ -27300,6 +27300,8 @@ in
 
   nix-simple-deploy = callPackage ../tools/package-management/nix-simple-deploy { };
 
+  nixadd = callPackage ../tools/nix/nixadd { };
+
   nixfmt = haskell.lib.justStaticExecutables haskellPackages.nixfmt;
 
   nixpkgs-fmt = callPackage ../tools/nix/nixpkgs-fmt { };
