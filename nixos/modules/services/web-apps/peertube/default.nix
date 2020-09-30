@@ -31,6 +31,14 @@ in
       '';
     };
 
+    database = lib.mkOption {
+      type = lib.types.str;
+      default = "peertube_prod";
+      description = ''
+        The Postgres database where Peertube stores its data.
+      '';
+    };
+
     configFile = lib.mkOption {
       type = lib.types.path;
       description = ''
@@ -70,6 +78,8 @@ in
         description = "Peertube user";
         home = cfg.dataDir;
         useDefaultShell = true;
+        # todo: fix this. needed for postgres authentication
+        password = "peertube";
       };
     };
     users.groups = lib.optionalAttrs (cfg.group == name) {
@@ -78,11 +88,41 @@ in
       };
     };
 
+    services.redis = {
+      enable = true;
+    };
+
+    services.postgresql = {
+      enable = true;
+      package = pkgs.postgresql_12;
+      # requires sudo -u postgres createdb -O peertube -E UTF8 -T template0 ${cfg.database}
+      # so this may not suffice
+      # ensureDatabases = [ "${cfg.database}" ];
+      ensureUsers = [
+        {
+          name = "${cfg.user}";
+          # we create database with `peertube` as owner in `preStart`
+          # ensurePermissions = {
+            #   "DATABASE ${cfg.database}" = "ALL PRIVILEGES";
+            # };
+        }
+      ];
+      authentication = ''
+        host ${cfg.database} ${cfg.user} 127.0.0.1/32 trust
+        host ${cfg.database} ${cfg.user} 127.0.0.1/32 md5
+      '';
+
+    };
+
+    systemd.tmpfiles.rules = [
+      "d \"${cfg.dataDir}\" - ${cfg.user} ${cfg.group} - -"
+    ];
+
     systemd.services.peertube = {
       description = "Peertube";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "postgresql.service" ];
-      wants = [ "postgresql.service" ];
+      after = [ "network.target" "postgresql.service" "redis.service" ];
+      wants = [ "postgresql.service" "redis.service" ];
 
       environment.NODE_CONFIG_DIR = "${cfg.dataDir}/config";
       environment.NODE_ENV = "production";
@@ -108,6 +148,26 @@ in
         Restart = "always";
         Type = "simple";
         TimeoutSec = 60;
+        ExecStartPre = let script = pkgs.writeScript "peertube-pre-start.sh" ''
+          #!/bin/sh
+          set -e
+
+          if ! [ -e "${cfg.dataDir}/.first_run" ]; then
+          set -v
+          if [ -e "${cfg.dataDir}/.first_run_partial" ]; then
+          echo "Warn: first run was interrupted"
+          fi
+          touch "${cfg.dataDir}/.first_run_partial"
+
+          sudo -u postgres "${config.services.postgresql.package}/bin/createdb" -O ${cfg.user} -E UTF8 -T template0 ${cfg.database}
+          sudo -u postgres "${config.services.postgresql.package}/bin/psql" -c "CREATE EXTENSION pg_trgm;" ${cfg.database}
+          sudo -u postgres "${config.services.postgresql.package}/bin/psql" -c "CREATE EXTENSION unaccent;" ${cfg.database}
+
+          touch "${cfg.dataDir}/.first_run"
+          rm "${cfg.dataDir}/.first_run_partial"
+          fi
+        '';
+        in "+${script}";
       };
 
       unitConfig.RequiresMountsFor = cfg.dataDir;
