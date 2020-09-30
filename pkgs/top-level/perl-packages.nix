@@ -12700,6 +12700,23 @@ let
     };
   };
 
+  ModuleInstallReadmeFromPod = buildPerlPackage {
+    pname = "Module-Install-ReadmeFromPod";
+    version = "0.30";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/Module-Install-ReadmeFromPod-0.30.tar.gz";
+      sha256 = "79f6df5536619faffbda696bdd25ccad17c469bf32e51cd3e613366d49400169";
+    };
+    buildInputs = [ TestInDistDir ];
+    propagatedBuildInputs = [ CaptureTiny IOAll ModuleInstall PodMarkdown ];
+    meta = {
+      homepage = "https://github.com/bingos/module-install-readmefrompod/";
+      description = "A Module::Install extension to automatically convert POD to a README";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   ModuleManifest = buildPerlPackage {
     pname = "Module-Manifest";
     version = "1.09";
