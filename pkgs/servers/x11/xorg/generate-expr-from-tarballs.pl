@@ -11,8 +11,7 @@ use warnings;
 
 use File::Basename;
 use File::Spec::Functions;
-
-my $tmpDir = "/tmp/xorg-unpack";
+use File::Temp;
 
 
 my %pkgURLs;
@@ -93,8 +92,7 @@ while (<>) {
     $pkgHashes{$pkg} = $hash;
 
     print "\nunpacking $path\n";
-    system "rm -rf '$tmpDir'";
-    mkdir $tmpDir, 0700;
+    my $tmpDir = File::Temp->newdir();
     system "cd '$tmpDir' && tar xf '$path'";
     die "cannot unpack `$path'" if $? != 0;
     print "\n";
