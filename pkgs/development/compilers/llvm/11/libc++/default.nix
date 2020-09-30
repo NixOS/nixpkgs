@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   pname = "libc++";
   inherit version;
 
-  src = fetch "libcxx" "19lzg6n9vzcl9sk9xn2gbfnl4dzlhmxrm1d19ira1206xlmg39r7";
+  src = fetch "libcxx" "1rlp8hx0nmqpx0gxq8hh9kqbkkzfpadx9chm47c38d4lahdksr1v";
 
   postUnpack = ''
     unpackFile ${libcxxabi.src}
