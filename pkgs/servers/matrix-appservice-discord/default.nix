@@ -9,6 +9,17 @@ let
 in nodePackages."matrix-appservice-discord-git+https://github.com/Half-Shot/matrix-appservice-discord.git#v0.5.2".override {
   nativeBuildInputs = [ pkgs.makeWrapper ];
 
+  # Discord's API is migrating from discordapp.com to discord.com
+  # and will only be accessible through the latter domain after 2020-11-07.
+  # The CDN domain (cdn.discordapp.com) remains unchanged.
+  # https://github.com/Half-Shot/matrix-appservice-discord/issues/611
+  preRebuild = ''
+    shopt -s globstar
+    sed -i 's|https://discordapp.com|https://discord.com|g' \
+      ./node_modules/discord.js/src/**/*.js \
+      ./src/**/*.ts
+  '';
+
   postInstall = ''
     # compile Typescript sources
     npm run build
