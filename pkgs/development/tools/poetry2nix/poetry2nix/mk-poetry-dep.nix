@@ -3,8 +3,8 @@
 , lib
 , python
 , buildPythonPackage
-, pythonPackages
 , poetryLib
+, evalPep508
 }:
 { name
 , version
@@ -53,9 +53,11 @@ pythonPackages.callPackage
           pyProjectPath = localDepPath + "/pyproject.toml";
           pyProject = poetryLib.readTOML pyProjectPath;
         in
-        if builtins.pathExists pyProjectPath then poetryLib.getBuildSystemPkgs {
-          inherit pythonPackages pyProject;
-        } else [ ];
+        if builtins.pathExists pyProjectPath then
+          poetryLib.getBuildSystemPkgs
+            {
+              inherit pythonPackages pyProject;
+            } else [ ];
 
       fileInfo =
         let
@@ -127,8 +129,9 @@ pythonPackages.callPackage
                   n: v:
                     let
                       constraints = v.python or "";
+                      pep508Markers = v.markers or "";
                     in
-                    compat constraints
+                    compat constraints && evalPep508 pep508Markers
                 )
                 dependencies
             );
@@ -150,15 +153,18 @@ pythonPackages.callPackage
       # Interpreters should declare what wheel types they're compatible with (python type + ABI)
       # Here we can then choose a file based on that info.
       src =
-        if isGit then (
-          builtins.fetchGit {
-            inherit (source) url;
-            rev = source.reference;
-            ref = sourceSpec.branch or sourceSpec.rev or sourceSpec.tag or "HEAD";
-          }
-        ) else if isLocal then (poetryLib.cleanPythonSources { src = localDepPath; }) else fetchFromPypi {
+        if isGit then
+          (
+            builtins.fetchGit {
+              inherit (source) url;
+              rev = source.reference;
+              ref = sourceSpec.branch or sourceSpec.rev or sourceSpec.tag or "HEAD";
+            }
+          ) else if isLocal then (poetryLib.cleanPythonSources { src = localDepPath; }) else
+        fetchFromPypi {
           pname = name;
           inherit (fileInfo) file hash kind;
         };
     }
-  ) { }
+  )
+{ }
