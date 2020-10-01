@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   # Use compatible indexing for lapack and blas used
-  buildInputs = [
+  buildInputs = assert (blas.isILP64 == lapack.isILP64); [
     blas lapack
     metis
     gfortran.cc.lib
