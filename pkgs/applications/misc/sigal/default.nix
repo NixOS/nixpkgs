@@ -1,4 +1,4 @@
-{ lib, python3Packages, pythonAtLeast, ffmpeg }:
+{ lib, python3Packages, ffmpeg_3 }:
 
 python3Packages.buildPythonApplication rec {
   version = "2.1.1";
