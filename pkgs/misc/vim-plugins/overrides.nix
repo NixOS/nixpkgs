@@ -598,7 +598,7 @@ self: super: {
           libiconv
         ];
 
-        cargoSha256 = "0qqys51slz85rnx6knjyivnmyq4rj6rrnz7w72kqcl8da8zjbx7b";
+        cargoSha256 = "QUi3GyAsakAtDQkiVA7ez05s5CixqsVSp92svYmcWdQ=";
       };
     in ''
       ln -s ${maple-bin}/bin/maple $target/bin/maple
