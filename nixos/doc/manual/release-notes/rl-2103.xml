@@ -58,8 +58,10 @@
   </para>
 
   <itemizedlist>
-   <listitem>
-    <para />
+    <listitem>
+      <para>
+        <literal>systemd-journal2gelf</literal> no longer parses json and expects the receiving system to handle it. How to achieve this with Graylog is described in this <link xlink:href="https://github.com/parse-nl/SystemdJournal2Gelf/issues/10">GitHub issue</link>.
+      </para>
    </listitem>
   </itemizedlist>
  </section>
