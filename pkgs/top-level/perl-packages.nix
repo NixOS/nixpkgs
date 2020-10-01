@@ -18419,8 +18419,8 @@ let
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
     version = "6.3.0";
-    src = assert version == pkgs.libvirt.version; fetchgit {
-      url = "git://libvirt.org/libvirt-perl.git";
+    src = fetchgit {
+      url = "https://gitlab.com/libvirt/libvirt-perl.git";
       rev = "v${version}";
       sha256 = "0m75g0kf2dmllx5c1wxzszm1zakiqjighcsjbgq66674pvqf5mk7";
     };
