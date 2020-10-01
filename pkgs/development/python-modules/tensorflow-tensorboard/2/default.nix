@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "tensorflow-tensorboard";
-  version = "2.2.0";
+  version = "2.3.0";
   format = "wheel";
 
   disabled = ! isPy3k; # Python 2 not supported any more in version 2.2
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     inherit version;
     format = "wheel";
     python = "py3";
-    sha256 = "1vdsgmr9i0nshcg884bfhr4rz5vnf90y8jdxdjx1319dmmsvqsxv";
+    sha256 = "0pmfirgdy52g0abh3mmb1nx6n5lwzhf070gg95dxs0gzhgnhjink";
   };
 
   propagatedBuildInputs = [
