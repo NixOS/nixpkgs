@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, fetchpatch
 , pkgconfig
 , gtk3
 , vala
@@ -99,6 +100,13 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
+    # https://gitlab.gnome.org/GNOME/geary/-/issues/985
+    # drop in 3.38.1
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/geary/-/commit/b5abd3f9664c396ad57f177750973695c58e8b7f.patch";
+      sha256 = "zBPhlz8Zujt9tmZrIUkvZSOpD7/UhTeokE9U/704qSE=";
+    })
+
     # Longer timeout for client test.
     ./Bump-client-test-timeout-to-300s.patch
   ];
