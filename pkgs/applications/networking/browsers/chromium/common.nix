@@ -152,7 +152,6 @@ let
       ./patches/remove-webp-include-69.patch
       ./patches/no-build-timestamps.patch
       ./patches/widevine-79.patch
-      ./patches/dont-use-ANGLE-by-default.patch
       # Unfortunately, chromium regularly breaks on major updates and
       # then needs various patches backported in order to be compiled with GCC.
       # Good sources for such patches and other hints:
