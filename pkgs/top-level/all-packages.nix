@@ -7279,6 +7279,8 @@ in
 
   t = callPackage ../tools/misc/t { };
 
+  tabnine = callPackage ../development/tools/tabnine { };
+
   t1utils = callPackage ../tools/misc/t1utils { };
 
   talkfilters = callPackage ../misc/talkfilters {};
