@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gdk-pixbuf
     glade
-    gnome3.gnome-desktop
     gtk3
     libxml2
   ];
