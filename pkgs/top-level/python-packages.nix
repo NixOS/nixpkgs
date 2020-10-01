@@ -6734,6 +6734,8 @@ in {
 
   sqlitedict = callPackage ../development/python-modules/sqlitedict { };
 
+  sqlite-utils = callPackage ../development/python-modules/sqlite-utils { };
+
   sqlmap = callPackage ../development/python-modules/sqlmap { };
 
   sqlobject = callPackage ../development/python-modules/sqlobject { };
