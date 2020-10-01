@@ -9659,7 +9659,8 @@ in
   rustPackages = rustPackages_1_45;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
-  inherit (rust) makeRustPlatform;
+
+  makeRustPlatform = callPackage ../development/compilers/rust/make-rust-platform.nix {};
 
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate { };
   buildRustCrateHelpers = callPackage ../build-support/rust/build-rust-crate/helpers.nix { };
