@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl
 , meson
+, nasm
 , ninja
 , pkgconfig
 , python3
@@ -34,6 +35,8 @@
 , libXext
 , libXfixes
 , ncurses
+, wayland
+, wayland-protocols
 , xorg
 , libgudev
 , wavpack
@@ -46,16 +49,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.16.2";
+  version = "1.18.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "068k3cbv1yf3gbllfdzqsg263kzwh21y8dpwr0wvgh15vapkpfs0";
+    sha256 = "1b4b3a6fm2wyqpnx300pg1sz01m9qhfajadk3b7sbzisg8vvqab3";
   };
-
-  patches = [ ./fix_pkgconfig_includedir.patch ];
 
   nativeBuildInputs = [
     pkgconfig
@@ -63,6 +64,9 @@ stdenv.mkDerivation rec {
     meson
     ninja
     gettext
+    nasm
+  ] ++ optionals stdenv.isLinux [
+    wayland-protocols
   ];
 
   buildInputs = [
@@ -102,12 +106,14 @@ stdenv.mkDerivation rec {
     libavc1394
     libiec61883
     libgudev
+    wayland
   ] ++ optionals enableJack [
     libjack2
   ];
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
     "-Dqt5=disabled" # not clear as of writing how to correctly pass in the required qt5 deps
   ] ++ optionals (!gtkSupport) [
     "-Dgtk3=disabled"
@@ -122,8 +128,14 @@ stdenv.mkDerivation rec {
     "-Dv4l2=disabled" # Linux-only
     "-Dximagesrc=disabled" # Linux-only
     "-Dpulse=disabled" # TODO check if we can keep this enabled
+  ] ++ optionals (!(stdenv.isLinux && stdenv.hostPlatform.isAarch64)) [
+    "-Drpicamsrc=disabled" # only works on Linux aarch64, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/-/blob/428c9b60532917c0ac49c9d48b15bdcd00a1370b/sys/rpicamsrc/meson.build#L10
   ];
 
+  postPatch = ''
+    patchShebangs \
+      scripts/extract-release-date-from-doap-file.py
+  '';
 
   NIX_LDFLAGS = [
     # linking error on Darwin

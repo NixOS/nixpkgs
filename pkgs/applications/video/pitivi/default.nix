@@ -127,7 +127,7 @@ in python3Packages.buildPythonApplication rec {
     gst-plugins-bad
     gst-plugins-ugly
     gst-libav
-    gst-validate
+    gst-devtools
   ]);
 
   pythonPath = with python3Packages; [
