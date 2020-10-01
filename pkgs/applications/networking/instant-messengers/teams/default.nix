@@ -40,9 +40,14 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PATH : "${coreutils}/bin:${gawk}/bin:${xdg_utils}/bin")
   '';
 
+  # As of Teams 1.3 screen sharing does not work unless a window composer is
+  # used. The user will see a black screen with a red border, drawn by the
+  # program `rect-overlay`. Getting rid of `rect-overlay` makes screen sharing
+  # work.
   installPhase = ''
     mkdir -p $out/{opt,bin}
 
+    rm share/teams/resources/app.asar.unpacked/node_modules/slimcore/bin/rect-overlay
     mv share/teams $out/opt/
     mv share $out/share
 
