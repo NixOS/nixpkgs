@@ -13,7 +13,11 @@ mkChromiumDerivation (base: rec {
 
   installPhase = ''
     mkdir -p "$libExecPath"
-    cp -v "$buildPath/"*.pak "$buildPath/"*.bin "$libExecPath/"
+    # Copies:
+    # libEGL.so libGLESv2.so libVkICD_mock_icd.so libvk_swiftshader.so libvulkan.so
+    # chrome_100_percent.pak chrome_200_percent.pak headless_lib.pak resources.pak
+    # snapshot_blob.bin v8_context_snapshot.bin
+    cp -v "$buildPath/"*.so "$buildPath/"*.pak "$buildPath/"*.bin "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
     cp -v "$buildPath/chrome" "$libExecPath/$packageName"
