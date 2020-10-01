@@ -11,7 +11,7 @@
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
 , jansson, harfbuzz
-, libgccjit, targetPlatform, makeWrapper # native-comp params
+, libgccjit, targetPlatform, makeWrapper, nukeReferences # native-comp params
 , systemd ? null
 , withX ? !stdenv.isDarwin
 , withNS ? stdenv.isDarwin
@@ -91,7 +91,7 @@ in stdenv.mkDerivation {
 
   LIBRARY_PATH = if nativeComp then "${lib.getLib stdenv.cc.libc}/lib" else "";
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ]
+  nativeBuildInputs = [ pkgconfig makeWrapper nukeReferences ]
     ++ lib.optionals srcRepo [ autoreconfHook texinfo ]
     ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
 
@@ -140,6 +140,9 @@ in stdenv.mkDerivation {
 
     rm -rf $out/var
     rm -rf $siteVersionDir
+
+    nuke-refs $out/libexec/emacs/*/*/emacs.pdmp
+
   '' + lib.optionalString withCsrc ''
     for srcdir in src lisp lwlib ; do
       dstdir=$siteVersionDir/$srcdir
