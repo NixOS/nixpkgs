@@ -16,7 +16,14 @@ stdenv.mkDerivation rec {
     sha256 = "0qd6pd4siss016ffmcyw5qc6pr2wihnvrgd4kh1x725w7wr02nar";
   };
 
-  patches = [ ./findlib.patch ];
+  patches = [
+    ./findlib.patch
+    (fetchurl {
+      name = "CVE-2020-17353.patch";
+      url = "https://git.savannah.gnu.org/gitweb/?p=lilypond.git;a=commitdiff_plain;h=b84ea4740f3279516905c5db05f4074e777c16ff;hp=b97bd35ac99efd68569327f62f3c8a19511ebe43";
+      sha256 = "1i79gy3if070rdgj7j6inw532j0f6ya5qc6kgcnlkbx02rqrhr7v";
+    })
+  ];
 
   postInstall = ''
     for f in "$out/bin/"*; do
