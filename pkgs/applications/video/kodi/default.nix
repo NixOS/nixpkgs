@@ -3,7 +3,7 @@
 , libgcrypt, libgpgerror, libunistring
 , boost, avahi, lame, autoreconfHook
 , gettext, pcre-cpp, yajl, fribidi, which
-, openssl, gperf, tinyxml2, taglib, libssh, swig, jre
+, openssl, gperf, tinyxml2, taglib, libssh, swig, jre_headless
 , libxml2, systemd
 , alsaLib, libGLU, libGL, glew, fontconfig, freetype, ftgl
 , libjpeg, libpng, libtiff
@@ -211,7 +211,7 @@ in stdenv.mkDerivation {
       which
       pkgconfig gnumake
       autoconf automake libtool # still needed for some components. Check if that is the case with 19.0
-      jre yasm gettext python2Packages.python flatbuffers
+      jre_headless yasm gettext python2Packages.python flatbuffers
 
       # for TexturePacker
       giflib zlib libpng libjpeg lzo
