@@ -16,7 +16,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pillow ];
 
   meta = with stdenv.lib; {
-    description = "Pillow Fight";
+    description = "Eases the transition from PIL to Pillow for Python packages";
     homepage = "https://github.com/beanbaginc/pillowfight";
     license = licenses.mit;
   };
