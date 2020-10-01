@@ -5412,6 +5412,8 @@ in {
 
   pysolr = callPackage ../development/python-modules/pysolr { };
 
+  py-sonic = callPackage ../development/python-modules/py-sonic { };
+
   pysonos = callPackage ../development/python-modules/pysonos { };
 
   pysoundfile = self.soundfile; # Alias added 23-06-2019
