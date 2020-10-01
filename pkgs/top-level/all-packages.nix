@@ -24385,18 +24385,14 @@ in
     gtk = gtk2;
   };
 
-  kodiPlain = callPackage ../applications/video/kodi {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
+  kodiPlain = callPackage ../applications/video/kodi { };
 
   kodiPlainWayland = callPackage ../applications/video/kodi {
     useWayland = true;
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
   kodiGBM = callPackage ../applications/video/kodi {
     useGbm = true;
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
   kodiPlugins = recurseIntoAttrs (callPackage ../applications/video/kodi/plugins.nix {});
