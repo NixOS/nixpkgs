@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
       }
     else
       fetchgit {
-        url = "https://libvirt.org/git/libvirt.git";
+        url = "https://gitlab.com/libvirt/libvirt.git";
         rev = "v${version}";
         sha256 = "09hsbm2qmx0jfmm418rf5lx374g85bwgg0kzlga62x5180jhsssn";
         fetchSubmodules = true;
