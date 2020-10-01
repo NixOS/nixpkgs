@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "VictoriaMetrics";
-  version = "1.40.0";
+  version = "1.42.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0dnzc7yrd91g67wkx0g1b0gi7918pi1hqv4mjlxi2ccs8phxkk7l";
+    sha256 = "10da15i3rn11dxnh82czaa2f9a4c3vf1d8kgfayp0dl7xs1xqhsd";
   };
 
   goPackagePath = "github.com/VictoriaMetrics/VictoriaMetrics";
