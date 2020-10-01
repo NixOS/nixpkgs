@@ -71,12 +71,13 @@ let
       withPython = ver: abi: x: (isPyVersionCompatible ver x.pyVer) && (isPyAbiCompatible abi x.abi);
       withPlatform =
         if isLinux
-        then (
-          x: x.platform == "manylinux1_${stdenv.platform.kernelArch}"
-            || x.platform == "manylinux2010_${stdenv.platform.kernelArch}"
-            || x.platform == "manylinux2014_${stdenv.platform.kernelArch}"
-            || x.platform == "any"
-        )
+        then
+          (
+            x: x.platform == "manylinux1_${stdenv.platform.kernelArch}"
+              || x.platform == "manylinux2010_${stdenv.platform.kernelArch}"
+              || x.platform == "manylinux2014_${stdenv.platform.kernelArch}"
+              || x.platform == "any"
+          )
         else (x: hasInfix "macosx" x.platform || x.platform == "any");
       filterWheel = x:
         let
