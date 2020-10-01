@@ -19201,6 +19201,8 @@ in
 
   marwaita-peppermint = callPackage ../data/themes/marwaita-peppermint { };
 
+  marwaita-pop_os = callPackage ../data/themes/marwaita-pop_os { };
+
   matcha-gtk-theme = callPackage ../data/themes/matcha { };
 
   materia-theme = callPackage ../data/themes/materia-theme { };
