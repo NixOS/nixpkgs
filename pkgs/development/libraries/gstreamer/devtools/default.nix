@@ -1,5 +1,7 @@
 { stdenv
 , fetchurl
+, meson
+, ninja
 , pkgconfig
 , gstreamer
 , gst-plugins-base
@@ -9,19 +11,32 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "gst-validate";
-  version = "1.16.2";
+  pname = "gst-devtools";
+  version = "1.18.0";
 
   src = fetchurl {
     url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1jpfrzg3yc6kp66bgq3jy14xsj3x71mk2zh0k16yf0326awwqqa8";
+    sha256 = "05jzjkkdr5hg01mjihlqdcxqnjfrm4mqk0zp83212kv5nm0p2cw2";
   };
 
-  outputs = [ "out" "dev" ];
+  patches = [
+    ./fix_pkgconfig_includedir.patch
+  ];
+
+  outputs = [
+    "out"
+    "dev"
+    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
+  ];
 
   nativeBuildInputs = [
+    meson
+    ninja
     pkgconfig
     gobject-introspection
+
+    # documentation
+    # TODO add hotdoc here
   ];
 
   buildInputs = [
@@ -32,6 +47,10 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     gstreamer
     gst-plugins-base
+  ];
+
+  mesonFlags = [
+    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
   ];
 
   meta = with stdenv.lib; {
