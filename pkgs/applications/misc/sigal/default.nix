@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0l07p457svznirz7qllgyl3qbhiisv7klhz7cbdw6417hxf9bih8";
   };
 
-  disabled = python3Packages.pythonAtLeast "3.6.0";
+  disabled = !(python3Packages.pythonAtLeast "3.6");
 
   checkInputs = with python3Packages; [ pytest ];
   propagatedBuildInputs = with python3Packages; [
