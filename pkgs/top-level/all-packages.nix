@@ -6465,7 +6465,9 @@ in
 
   pywal = with python3Packages; toPythonApplication pywal;
 
-  rbw = callPackage ../tools/security/rbw { };
+  rbw = callPackage ../tools/security/rbw {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   remarshal = callPackage ../development/tools/remarshal { };
 

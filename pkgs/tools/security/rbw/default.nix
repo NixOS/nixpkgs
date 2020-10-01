@@ -1,11 +1,12 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchCrate
 , pinentry
 , openssl
 , pkgconfig
 , makeWrapper
-, cargo
+, Security
 
 # rbw-fzf
 , withFzf ? false, fzf, perl
@@ -34,9 +35,11 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
 
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+
   postPatch = ''
     substituteInPlace src/pinentry.rs \
-        --replace "Command::new(\"pinentry\")" "Command::new(\"${pinentry}/bin/pinentry\")"
+      --replace 'Command::new("pinentry")' 'Command::new("${pinentry}/${pinentry.binaryPath or "bin/pinentry"}")'
   '' + lib.optionalString withFzf ''
     patchShebangs bin/rbw-fzf
     substituteInPlace bin/rbw-fzf \
