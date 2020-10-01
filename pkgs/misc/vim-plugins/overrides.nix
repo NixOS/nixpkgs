@@ -602,6 +602,8 @@ self: super: {
     in ''
       ln -s ${maple-bin}/bin/maple $target/bin/maple
     '';
+
+    meta.platforms = stdenv.lib.platforms.all;
   });
 } // (
   let
