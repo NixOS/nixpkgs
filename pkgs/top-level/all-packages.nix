@@ -19385,6 +19385,8 @@ in
 
   shades-of-gray-theme = callPackage ../data/themes/shades-of-gray { };
 
+  skeu = callPackage ../data/themes/skeu { };
+
   sweet = callPackage ../data/themes/sweet { };
 
   mime-types = callPackage ../data/misc/mime-types { };
