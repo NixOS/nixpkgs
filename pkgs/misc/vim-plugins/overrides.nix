@@ -9,6 +9,7 @@
 , gobject-introspection, glib, wrapGAppsHook
 , substituteAll
 , languagetool
+, tabnine
 , Cocoa, CoreFoundation, CoreServices
 , buildVimPluginFrom2Nix
 , nodePackages
@@ -601,6 +602,15 @@ self: super: {
       };
     in ''
       ln -s ${maple-bin}/bin/maple $target/bin/maple
+    '';
+  });
+
+  completion-tabnine = super.completion-tabnine.overrideAttrs(old: {
+    buildInputs = [ tabnine ];
+
+    postFixup = ''
+      mkdir $target/binaries
+      ln -s ${tabnine}/bin/TabNine $target/binaries/TabNine_$(uname -s)
     '';
   });
 } // (
