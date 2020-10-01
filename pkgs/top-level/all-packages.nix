@@ -9367,6 +9367,8 @@ in
 
   knightos-scas = callPackage ../development/tools/knightos/scas { };
 
+  knightos-z80e = callPackage ../development/tools/knightos/z80e { };
+
   kotlin = callPackage ../development/compilers/kotlin { };
 
   lazarus = callPackage ../development/compilers/fpc/lazarus.nix {
