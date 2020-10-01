@@ -12908,6 +12908,21 @@ let
     };
   };
 
+  MojoliciousPluginGravatar = buildPerlPackage {
+    pname = "Mojolicious-Plugin-Gravatar";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KO/KOORCHIK/Mojolicious-Plugin-Gravatar-0.04.tar.gz";
+      sha256 = "a49f970c6c70f9930b304a752163cb95f1d998712f79cb13640832e4b7b675dd";
+    };
+    propagatedBuildInputs = [ Mojolicious ];
+    meta = {
+      description = "Globally Recognized Avatars for Mojolicious";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ sgo ];
+    };
+  };
+
   MojoliciousPluginMail = buildPerlModule {
     pname = "Mojolicious-Plugin-Mail";
     version = "1.5";
