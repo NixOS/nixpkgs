@@ -11,30 +11,30 @@
 , buildPackages
 , newScope, callPackage
 , CoreFoundation, Security
-, llvmPackages
+, llvmPackages_5
 , pkgsBuildTarget, pkgsBuildBuild
 , makeRustPlatform
 } @ args:
 
 import ./default.nix {
-  rustcVersion = "1.45.2";
-  rustcSha256 = "0273a1g3f59plyi1n0azf21qjzwml1yqdnj5z472crz37qggr8xp";
+  rustcVersion = "1.44.1";
+  rustcSha256 = "0ww4z2v3gxgn3zddqzwqya1gln04p91ykbrflnpdbmcd575n8bky";
 
   # Note: the version MUST be one version prior to the version we're
   # building
-  bootstrapVersion = "1.44.1";
+  bootstrapVersion = "1.43.1";
 
-  # fetch hashes by running `print-hashes.sh 1.45.0`
+  # fetch hashes by running `print-hashes.sh 1.44.1`
   bootstrapHashes = {
-    i686-unknown-linux-gnu = "e69689b0a1b66599cf83e7dd54f839419007e44376195e93e301a3175da3d854";
-    x86_64-unknown-linux-gnu = "a41df89a461a580536aeb42755e43037556fba2e527dd13a1e1bb0749de28202";
-    arm-unknown-linux-gnueabihf = "ea18ccdfb62a153c2d43d013fdec56993cc9267f1cdc6f3834df8a2b9b468f08";
-    armv7-unknown-linux-gnueabihf = "d44294732cf268ea84908f1135f574ab9489132a332eaa9d5bda547374b15d54";
-    aarch64-unknown-linux-gnu = "a2d74ebeec0b6778026b6c37814cdc91d14db3b0d8b6d69d036216f4d9cf7e49";
-    x86_64-apple-darwin = "a5464e7bcbce9647607904a4afa8362382f1fc55d39e7bbaf4483ac00eb5d56a";
+    i686-unknown-linux-gnu = "0626fa8a6a2387021413d740543f7496656d81115e2284e4ef73217128398990";
+    x86_64-unknown-linux-gnu = "25cd71b95bba0daef56bad8c943a87368c4185b90983f4412f46e3e2418c0505";
+    arm-unknown-linux-gnueabihf = "16b9c4861565a195323d144fd0f54c0ae794ee3d2a867682f8aedbdacaad5a6c";
+    armv7-unknown-linux-gnueabihf = "0c32a5958a358a031e6ca52074cfd45256688dc334db315199f5dbbf7562e5b1";
+    aarch64-unknown-linux-gnu = "fbb612387a64c9da2869725afffc1f66a72d6e7ba6667ba717cd52c33080b7fb";
+    x86_64-apple-darwin = "e1c3e1426a9e615079159d6b619319235e3ca7b395e7603330375bfffcbb7003";
   };
 
-  selectRustPackage = pkgs: pkgs.rust_1_45;
+  selectRustPackage = pkgs: pkgs.rust_1_44;
 
   rustcPatches = [
   ];
