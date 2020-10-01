@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, nixosTests }:
 
 buildGoPackage rec {
   pname = "VictoriaMetrics";
@@ -14,6 +14,8 @@ buildGoPackage rec {
   goPackagePath = "github.com/VictoriaMetrics/VictoriaMetrics";
 
   buildFlagsArray = [ "-ldflags=-s -w -X ${goPackagePath}/lib/buildinfo.Version=${version}" ];
+
+  passthru.tests = { inherit (nixosTests) victoriametrics; };
 
   meta = with lib; {
     homepage = "https://victoriametrics.com/";
