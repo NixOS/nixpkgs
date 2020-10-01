@@ -108,7 +108,19 @@ services.mysql.initialScript = pkgs.writeText "mariadb-init.sql" ''
   ALTER USER root@localhost IDENTIFIED VIA mysql_native_password USING PASSWORD("verysecret");
 '';
 </programlisting>
-      When MariaDB data directory is just upgraded (not initialized), the users are not created or modified.
+  When MariaDB data directory is just upgraded (not initialized), the users are not created or modified. You have to create users beforehand.
+  Continue reading the next paragraph for instructions.
+    </para>
+    <para>
+      The MySQL service no longer runs its <literal>systemd</literal> service startup script as <literal>root</literal> anymore. A dedicated non <literal>root</literal>
+      super user account is required for operation. This means users with an existing MySQL or MariaDB database server are required to run the following SQL statements
+      as a super admin user before upgrading:
+<programlisting>
+CREATE USER IF NOT EXISTS 'mysql'@'localhost' identified with unix_socket;
+GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
+</programlisting>
+      If you use MySQL instead of MariaDB please replace <literal>unix_socket</literal> with <literal>auth_socket</literal>. If you have changed the value of <xref linkend="opt-services.mysql.user"/>
+      from the default of <literal>mysql</literal> to a different user please change <literal>'mysql'@'localhost'</literal> to the corresponding user instead.
     </para>
    </listitem>
    <listitem>
@@ -134,17 +146,6 @@ systemd.services.mysql.serviceConfig.ReadWritePaths = [ "/var/data" ];
 </para>
       </listitem>
      </itemizedlist>
-    </para>
-    <para>
-      The MySQL service no longer runs its <literal>systemd</literal> service startup script as <literal>root</literal> anymore. A dedicated non <literal>root</literal>
-      super user account is required for operation. This means users with an existing MySQL or MariaDB database server are required to run the following SQL statements
-      as a super admin user before upgrading:
-<programlisting>
-CREATE USER IF NOT EXISTS 'mysql'@'localhost' identified with unix_socket;
-GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
-</programlisting>
-      If you use MySQL instead of MariaDB please replace <literal>unix_socket</literal> with <literal>auth_socket</literal>. If you have changed the value of <xref linkend="opt-services.mysql.user"/>
-      from the default of <literal>mysql</literal> to a different user please change <literal>'mysql'@'localhost'</literal> to the corresponding user instead.
     </para>
    </listitem>
    <listitem>
