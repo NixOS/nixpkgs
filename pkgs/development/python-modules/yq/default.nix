@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "yq";
-  version = "2.11.0";
+  version = "2.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1gp9q5w1bjbw7wmba5hm8ippwvkind0p02n07fqa9jlqglhxhm46";
+    sha256 = "1q4rky0a6n4izmq7slb91a54g8swry1xrbfqxwc8lkd3hhvlxxkl";
   };
 
   propagatedBuildInputs = [
