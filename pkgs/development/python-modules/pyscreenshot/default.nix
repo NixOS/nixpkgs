@@ -6,6 +6,7 @@
 , entrypoint2
 , jeepney
 , mss
+, pillow
 }:
 
 buildPythonPackage rec {
@@ -20,6 +21,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     EasyProcess
     entrypoint2
+    pillow
   ] ++ lib.optionals (isPy3k) [
     jeepney
     mss
@@ -27,6 +29,8 @@ buildPythonPackage rec {
 
   # recursive dependency on pyvirtualdisplay
   doCheck = false;
+
+  pythonImportsCheck = [ "pyscreenshot" ];
 
   meta = with lib; {
     description = "python screenshot";
