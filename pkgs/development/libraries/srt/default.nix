@@ -4,13 +4,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "srt";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "Haivision";
     repo = "srt";
     rev = "v${version}";
-    sha256 = "01xaq44j95kbgqfl41pnybvqy0yq6wd4wdw88ckylzf0nzp977xz";
+    sha256 = "01nx3a35hzq2x0dvp2n2b86phpdy1z83kdraag7aq3hmc7f8iagg";
   };
 
   nativeBuildInputs = [ cmake ];
