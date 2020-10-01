@@ -7,6 +7,8 @@ buildDunePackage rec {
 
   inherit (dune_2) src version patches;
 
+  minimumOCamlVersion = "4.03";
+
   dontAddPrefix = true;
 
   propagatedBuildInputs = [ csexp result ];
