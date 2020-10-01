@@ -532,6 +532,18 @@ let
     meta.homepage = "https://github.com/nvim-lua/completion-nvim/";
   };
 
+  completion-tabnine = buildVimPluginFrom2Nix {
+    pname = "completion-tabnine";
+    version = "2020-10-01";
+    src = fetchFromGitHub {
+      owner = "aca";
+      repo = "completion-tabnine";
+      rev = "49771bca86f185c8cd1017f28b025addae82fe09";
+      sha256 = "1kc9ck62k7rj09i3bqhz36661z1501z7ns7q6dr4n07nqylcn5kb";
+    };
+    meta.homepage = "https://github.com/aca/completion-tabnine/";
+  };
+
   completion-treesitter = buildVimPluginFrom2Nix {
     pname = "completion-treesitter";
     version = "2020-06-26";
