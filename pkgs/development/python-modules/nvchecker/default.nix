@@ -1,18 +1,21 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, pytestCheckHook, setuptools, structlog, pytest-asyncio, flaky, tornado, pycurl, aiohttp, pytest-httpbin }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder, pytestCheckHook, setuptools, toml, structlog, appdirs, pytest-asyncio, flaky, tornado, pycurl, aiohttp, pytest-httpbin }:
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "1.7";
+  version = "2.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "01be0e5587d346ad783b4b2dc45bd8eefe477081b33fff18cc2fdea58c2a38ef";
+  # Tests not included in PyPI tarball
+  src = fetchFromGitHub {
+    owner = "lilydjwg";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "13wa95pvivbyshq3ys12iyvn8wlyzxfia8l6xh3fd46a2cs9x9g7";
   };
 
-  propagatedBuildInputs = [ setuptools structlog tornado pycurl aiohttp ];
+  propagatedBuildInputs = [ setuptools toml structlog appdirs tornado pycurl aiohttp ];
   checkInputs = [ pytestCheckHook pytest-asyncio flaky pytest-httpbin ];
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
   pytestFlagsArray = [ "-m 'not needs_net'" ];
 
