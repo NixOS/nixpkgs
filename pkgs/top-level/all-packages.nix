@@ -9323,6 +9323,10 @@ in
 
   jwasm =  callPackage ../development/compilers/jwasm { };
 
+  knightos-genkfs = callPackage ../development/tools/knightos/genkfs {
+    asciidoc = asciidoc-full;
+  };
+
   knightos-kcc = callPackage ../development/tools/knightos/kcc { };
 
   knightos-kimg = callPackage ../development/tools/knightos/kimg {
