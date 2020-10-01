@@ -8,7 +8,8 @@ buildGoPackage rec {
   version = "1.2.0";
 
   goPackagePath = "github.com/jgautheron/goconst";
-  excludedPackages = ''testdata'';
+
+  excludedPackages = [ "tests" ];
 
   src = fetchFromGitHub {
     owner = "jgautheron";
