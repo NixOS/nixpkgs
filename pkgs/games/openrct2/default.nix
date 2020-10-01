@@ -1,23 +1,24 @@
 { stdenv, fetchFromGitHub
 , SDL2, cmake, curl, duktape, fontconfig, freetype, icu, jansson, libGLU
-, libiconv, libpng, libpthreadstubs, libzip, openssl, pkgconfig, speexdsp, zlib
+, libiconv, libpng, libpthreadstubs, libzip, nlohmann_json, openssl, pkgconfig
+, speexdsp, zlib
 }:
 
 let
-  version = "0.3.0";
+  version = "0.3.1";
 
   openrct2-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${version}";
-    sha256 = "0xs8pnn3lq30iy76pv42hywsrabapcrrkl597dhjafwh1xaxxj91";
+    sha256 = "04z9dhin94qg42f458f0062zzjqlrzr8kllfkb21ag1l6bjfsk28";
   };
 
   objects-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "objects";
-    rev = "v1.0.16";
-    sha256 = "1xz50ghiqj9rm0m6d65j09ich6dlhyj36zah6zvmmzr4kg6svnk5";
+    rev = "v1.0.17";
+    sha256 = "1cx9f8ih7f7q79v0jgqa7cbaz2xhjpp59b0m4rfbam1cx3awvz1j";
   };
 
   title-sequences-src = fetchFromGitHub {
@@ -51,6 +52,7 @@ stdenv.mkDerivation {
     libpng
     libpthreadstubs
     libzip
+    nlohmann_json
     openssl
     speexdsp
     zlib
