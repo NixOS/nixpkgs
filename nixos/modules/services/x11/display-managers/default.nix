@@ -70,8 +70,12 @@ let
       # Speed up application start by 50-150ms according to
       # http://kdemonkey.blogspot.nl/2008/04/magic-trick.html
       compose_cache="''${XCOMPOSECACHE:-$HOME/.compose-cache}"
-      rm -rf "$compose_cache"
       mkdir -p "$compose_cache"
+      # To avoid accidentally deleting a wrongly set up XCOMPOSECACHE directory,
+      # defensively try to delete cache *files* only, following the file format specified in
+      # https://gitlab.freedesktop.org/xorg/lib/libx11/-/blob/master/modules/im/ximcp/imLcIm.c#L353-358
+      # sprintf (*res, "%s/%c%d_%03x_%08x_%08x", dir, _XimGetMyEndian(), XIM_CACHE_VERSION, (unsigned int)sizeof (DefTree), hash, hash2);
+      ${pkgs.findutils}/bin/find "$compose_cache" -maxdepth 1 -regextype posix-extended -regex '.*/[Bl][0-9]+_[0-9a-f]{3}_[0-9a-f]{8}_[0-9a-f]{8}' -delete
       unset compose_cache
 
       # Work around KDE errors when a user first logs in and
