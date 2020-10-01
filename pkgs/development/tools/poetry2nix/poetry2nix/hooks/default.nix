@@ -24,7 +24,8 @@ in
             pyprojectPatchScript = "${./pyproject-without-path.py}";
           };
         } ./remove-path-dependencies.sh
-    ) { };
+    )
+    { };
 
   pipBuildHook = callPackage
     (
@@ -37,7 +38,8 @@ in
             inherit pythonInterpreter pythonSitePackages;
           };
         } ./pip-build-hook.sh
-    ) { };
+    )
+    { };
 
   poetry2nixFixupHook = callPackage
     (
@@ -47,7 +49,8 @@ in
           name = "fixup-hook.sh";
           deps = [ ];
         } ./fixup-hook.sh
-    ) { };
+    )
+    { };
 
   # When the "wheel" package itself is a wheel the nixpkgs hook (which pulls in "wheel") leads to infinite recursion
   # It doesn't _really_ depend on wheel though, it just copies the wheel.
@@ -58,7 +61,8 @@ in
           name = "wheel-unpack-hook.sh";
           deps = [ ];
         } ./wheel-unpack-hook.sh
-    ) { };
+    )
+    { };
 
 
 }
