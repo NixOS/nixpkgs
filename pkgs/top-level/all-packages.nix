@@ -9357,6 +9357,10 @@ in
 
   knightos-patchrom = callPackage ../development/tools/knightos/patchrom { };
 
+  knightos-mktiupgrade = callPackage ../development/tools/knightos/mktiupgrade {
+    asciidoc = asciidoc-full;
+  };
+
   knightos-scas = callPackage ../development/tools/knightos/scas { };
 
   kotlin = callPackage ../development/compilers/kotlin { };
