@@ -1531,10 +1531,6 @@ in
   });
 
   caddy = callPackage ../servers/caddy { };
-  caddy1 = callPackage ../servers/caddy/v1.nix {
-    # https://github.com/lucas-clemente/quic-go/issues/2614
-    buildGoModule = buildGo114Module;
-  };
 
   traefik = callPackage ../servers/traefik { };
 
