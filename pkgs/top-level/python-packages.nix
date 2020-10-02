@@ -3498,6 +3498,8 @@ in {
 
   logzero = callPackage ../development/python-modules/logzero { };
 
+  lomond = callPackage ../development/python-modules/lomond { };
+
   loo-py = callPackage ../development/python-modules/loo-py { };
 
   lpod = callPackage ../development/python-modules/lpod { };
