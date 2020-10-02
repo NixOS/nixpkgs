@@ -1,7 +1,29 @@
-{ stdenv, fetchurl, substituteAll, pkgconfig, glib, itstool, libxml2, xorg
-, accountsservice, libX11, gnome3, systemd, autoreconfHook, dconf
-, gtk3, libcanberra-gtk3, pam, libtool, gobject-introspection, plymouth
-, librsvg, coreutils, xwayland, nixos-icons, fetchpatch }:
+{ stdenv
+, fetchurl
+, substituteAll
+, pkg-config
+, glib
+, itstool
+, libxml2
+, xorg
+, accountsservice
+, libX11
+, gnome3
+, systemd
+, autoreconfHook
+, dconf
+, gtk3
+, libcanberra-gtk3
+, pam
+, libtool
+, gobject-introspection
+, plymouth
+, librsvg
+, coreutils
+, xwayland
+, nixos-icons
+, fetchpatch
+}:
 
 let
 
@@ -43,11 +65,25 @@ stdenv.mkDerivation rec {
     "--with-udevdir=$(out)/lib/udev"
   ];
 
-  nativeBuildInputs = [ pkgconfig libxml2 itstool autoreconfHook libtool dconf ];
+  nativeBuildInputs = [
+    pkg-config
+    libxml2
+    itstool
+    autoreconfHook
+    libtool
+    dconf
+  ];
   buildInputs = [
-    glib accountsservice systemd
-    gobject-introspection libX11 gtk3
-    libcanberra-gtk3 pam plymouth librsvg
+    glib
+    accountsservice
+    systemd
+    gobject-introspection
+    libX11
+    gtk3
+    libcanberra-gtk3
+    pam
+    plymouth
+    librsvg
   ];
 
   enableParallelBuilding = true;
