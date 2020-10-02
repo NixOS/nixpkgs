@@ -43,7 +43,9 @@ stdenv.mkDerivation {
     inherit (param) rev sha256;
   };
 
-  buildInputs = with coq.ocamlPackages; [ ocaml camlp5 findlib coq ];
+  buildInputs = with coq.ocamlPackages; [ ocaml findlib coq ]
+  ++ stdenv.lib.optional (!stdenv.lib.versionAtLeast coq.coq-version "8.10") camlp5
+  ;
 
   installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
