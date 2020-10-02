@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     maintained by Stephen Anthony.
     As of its 3.5 release, Stella is officially donationware. 
     '';
-    homepage = "http://stella-emu.github.io/";
+    homepage = "https://stella-emu.github.io/";
     license = licenses.gpl2;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
