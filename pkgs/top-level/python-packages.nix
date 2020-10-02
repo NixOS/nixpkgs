@@ -146,6 +146,8 @@ in {
 
   aafigure = callPackage ../development/python-modules/aafigure { };
 
+  abodepy = callPackage ../development/python-modules/abodepy { };
+
   absl-py = callPackage ../development/python-modules/absl-py { };
 
   accupy = callPackage ../development/python-modules/accupy { };
