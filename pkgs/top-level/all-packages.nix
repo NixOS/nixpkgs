@@ -16556,7 +16556,7 @@ in
 
   jitsi-videobridge = callPackage ../servers/jitsi-videobridge { };
 
-  kapow = callPackage ../servers/kapow { };
+  kapowbang = callPackage ../servers/kapowbang { };
 
   keycloak = callPackage ../servers/keycloak { };
 

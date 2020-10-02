@@ -1,14 +1,14 @@
 { stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  pname = "kapow";
+  pname = "kapowbang";
   version = "0.5.4";
 
   subPackages = [ "." ];
 
   src = fetchFromGitHub {
     owner = "BBVA";
-    repo = pname;
+    repo = "kapow";
     rev = "v${version}";
     sha256 = "09qr631vzlgibz6q64f35lqzz9h1g3gxqfbapkrci5i0n3h04yr4";
   };
