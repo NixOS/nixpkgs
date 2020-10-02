@@ -19924,6 +19924,8 @@ in
 
   castor = callPackage ../applications/networking/browsers/castor { };
 
+  catfs = callPackage ../os-specific/linux/catfs { };
+
   catimg = callPackage ../tools/misc/catimg { };
 
   catt = callPackage ../applications/video/catt { };
