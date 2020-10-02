@@ -49,13 +49,51 @@ in
     networking.nameservers = lib.mkDefault [ "127.0.0.1" ];
 
     systemd.services.dnscrypt-proxy2 = {
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      description = "DNSCrypt-proxy client";
+      wants = [
+        "network-online.target"
+        "nss-lookup.target"
+      ];
+      before = [
+        "nss-lookup.target"
+      ];
+      wantedBy = [
+        "multi-user.target"
+      ];
       serviceConfig = {
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+        CacheDirectory = "dnscrypt-proxy";
         DynamicUser = true;
         ExecStart = "${pkgs.dnscrypt-proxy2}/bin/dnscrypt-proxy -config ${cfg.configFile}";
+        LockPersonality = true;
+        LogsDirectory = "dnscrypt-proxy";
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        NonBlocking = true;
+        PrivateDevices = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
         Restart = "always";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RuntimeDirectory = "dnscrypt-proxy";
+        StateDirectory = "dnscrypt-proxy";
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "@chown"
+          "~@resources"
+          "@privileged"
+        ];
       };
     };
   };
