@@ -206,9 +206,9 @@ in {
     # incompatibleKernelVersion = "4.19";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2.0.0-rc2";
+    version = "2.0.0-rc3";
 
-    sha256 = "0zzq2gjxhzh9agb3hd2xdjgdsmlpids0frhqws2mgml0q176fyxy";
+    sha256 = "00fljxs6vacfhzc13bgsrmq6p3agpzcq6waw4iv2m58dr90jhlcz";
     isUnstable = true;
   };
 }
