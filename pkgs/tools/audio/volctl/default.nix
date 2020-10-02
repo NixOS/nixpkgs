@@ -2,13 +2,13 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "volctl";
-  version = "0.6.3";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "buzz";
     repo = pname;
     rev = version;
-    sha256 = "0rppqc5wiqxd83z2mgvhi6gdx7yhy9wnav1dbbi1wvm7lzw6fnil";
+    sha256 = "02scfscf4mdrphzrd7cbwbhpig9bhvaws8qk4zc81z8vvf3mcfv2";
   };
 
   nativeBuildInputs = [
