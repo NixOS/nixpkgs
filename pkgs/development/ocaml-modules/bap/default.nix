@@ -4,20 +4,25 @@
  utop, libxml2,
  ppx_tools_versioned,
  which, makeWrapper, writeText
+, z3
 }:
 
-if stdenv.lib.versionAtLeast core_kernel.version "0.12"
-then throw "BAP needs core_kernel-0.11 (hence OCaml ≤ 4.06)"
+if !stdenv.lib.versionAtLeast ocaml.version "4.07"
+then throw "BAP is not available for OCaml ${ocaml.version}"
+else
+
+if stdenv.lib.versionAtLeast core_kernel.version "0.13"
+then throw "BAP needs core_kernel-0.12 (hence OCaml 4.07)"
 else
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-bap-${version}";
-  version = "2.0.0";
+  version = "2.1.0";
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
     repo = "bap";
     rev = "v${version}";
-    sha256 = "0lb9xkfp67wjjqr75p6krivmjra7l5673236v9ny4gp0xi0755bk";
+    sha256 = "10fkr6p798ad18j4h9bvp9dg4pmjdpv3hmj7k389i0vhqniwi5xq";
   };
 
   sigs = fetchurl {
@@ -36,6 +41,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml findlib ocamlbuild ocaml_oasis
                   llvm ppx_tools_versioned
+                  z3
                   utop libxml2 ];
 
   propagatedBuildInputs = [ bitstring camlzip cmdliner ppx_jane core_kernel ezjsonm fileutils ocaml_lwt ocamlgraph ocurl re uri zarith piqi parsexp
