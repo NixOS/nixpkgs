@@ -17,13 +17,14 @@
 , libvirt
 , spice-gtk
 , python3
+, appstream-glib
 , spice-protocol
-, libhandy
+, libhandy_0
 , libsoup
 , libosinfo
 , systemd
-, tracker
-, tracker-miners
+, tracker_2
+, tracker-miners-2
 , vala
 , libcap
 , yajl
@@ -93,12 +94,13 @@ stdenv.mkDerivation rec {
     gtk3
     gtksourceview4
     json-glib
+    appstream-glib
     libapparmor
     libarchive
     libcap
     libcap_ng
     libgudev
-    libhandy
+    libhandy_0
     libosinfo
     librsvg
     libsecret
@@ -111,8 +113,8 @@ stdenv.mkDerivation rec {
     spice-gtk
     spice-protocol
     systemd
-    tracker
-    tracker-miners
+    tracker_2
+    tracker-miners-2
     vte
     webkitgtk
     xen
