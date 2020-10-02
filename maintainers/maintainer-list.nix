@@ -9750,4 +9750,10 @@
       fingerprint = "8597 4506 EC69 5392 0443  0805 9D98 CDAC FF04 FD78";
     }];
   };
+  hloeffler = {
+    name = "Hauke Löffler";
+    email = "nix@hauke-loeffler.de";
+    github = "hloeffler";
+    githubId = 6627191;
+  };
 }
