@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Statisitical data visualization";
-    homepage = "http://stanford.edu/~mwaskom/software/seaborn/";
+    homepage = "https://seaborn.pydata.org/";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ fridh ];
   };
