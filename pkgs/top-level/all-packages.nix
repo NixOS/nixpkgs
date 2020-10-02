@@ -6813,6 +6813,8 @@ in
 
   samplicator = callPackage ../tools/networking/samplicator { };
 
+  sandboxfs = callPackage ../tools/filesystems/sandboxfs { };
+
   sasquatch = callPackage ../tools/filesystems/sasquatch { };
 
   sasview = callPackage ../applications/science/misc/sasview {};
