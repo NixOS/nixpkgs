@@ -66,6 +66,8 @@ in mkDerivation rec {
     mv $out/share/doc $out
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler";
     homepage = "https://www.freecadweb.org/";
