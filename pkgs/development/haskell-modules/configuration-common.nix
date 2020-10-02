@@ -317,8 +317,8 @@ self: super: {
 
   # Needs the latest version of vty and brick.
   matterhorn = super.matterhorn.overrideScope (self: super: {
-    brick = self.brick_0_56;
-    vty = self.vty_5_30;
+    brick = self.brick_0_57;
+    vty = self.vty_5_31;
   });
 
   memcache = dontCheck super.memcache;
