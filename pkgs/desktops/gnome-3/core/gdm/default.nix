@@ -24,6 +24,7 @@
 , librsvg
 , coreutils
 , xwayland
+, dbus_libs
 , nixos-icons
 , fetchpatch
 }:
@@ -98,6 +99,7 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit coreutils plymouth xwayland;
+      dbusLibs = dbus_libs;
     })
 
     # The following patches implement certain environment variables in GDM which are set by
