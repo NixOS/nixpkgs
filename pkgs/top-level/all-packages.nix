@@ -21638,6 +21638,8 @@ in
 
   popeye = callPackage ../applications/networking/cluster/popeye { };
 
+  kube-capacity = callPackage ../applications/networking/cluster/kube-capacity { };
+
   fluxctl = callPackage ../applications/networking/cluster/fluxctl { };
 
   linkerd = callPackage ../applications/networking/cluster/linkerd { };
