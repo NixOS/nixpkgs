@@ -272,8 +272,8 @@ let
         };
 
   php73base = callPackage generic (_args // {
-    version = "7.3.20";
-    sha256 = "1pl9bjwvdva2yx4sh465z9cr4bnr8mvv008w71sy1kqsj6a7ivf6";
+    version = "7.3.23";
+    sha256 = "0k600imsxm3r3qdv20ryqhvfmnkmjhvm2hcnqr180l058snncrpx";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = lib.optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
