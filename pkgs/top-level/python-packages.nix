@@ -768,7 +768,7 @@ in {
 
   bandit = callPackage ../development/python-modules/bandit { };
 
-  bap = callPackage ../development/python-modules/bap { bap = pkgs.ocaml-ng.ocamlPackages_4_06.bap; };
+  bap = callPackage ../development/python-modules/bap { bap = pkgs.ocaml-ng.ocamlPackages_4_07.bap; };
 
   base58 = callPackage ../development/python-modules/base58 { };
 
