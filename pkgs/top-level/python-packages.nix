@@ -166,6 +166,8 @@ in {
 
   addic7ed-cli = callPackage ../development/python-modules/addic7ed-cli { };
 
+  adguardhome= callPackage ../development/python-modules/adguardhome { };
+
   aenum = callPackage ../development/python-modules/aenum { };
 
   afdko = callPackage ../development/python-modules/afdko { };
