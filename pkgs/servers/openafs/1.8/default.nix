@@ -1,13 +1,15 @@
 { stdenv, buildPackages, fetchurl, which, autoconf, automake, flex
-, yacc , glibc, perl, kerberos, libxslt, docbook_xsl
 , docbook_xml_dtd_43 , libtool_2, removeReferencesTo
-, ncurses # Extra ncurses utilities. Only needed for debugging.
+, yacc , glibc, perl, kerberos, libxslt, docbook_xsl, file
+, ncurses # Extra ncurses utilities. Needed for debugging and monitoring.
 , tsmbac ? null # Tivoli Storage Manager Backup Client from IBM
 }:
 
 with (import ./srcs.nix { inherit fetchurl; });
+let
+  inherit (stdenv.lib) optional optionalString optionals;
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "openafs";
   inherit version srcs;
 
@@ -17,11 +19,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ kerberos ncurses ];
 
-  patches = [ ./bosserver.patch ./cross-build.patch ] ++ stdenv.lib.optional (tsmbac != null) ./tsmbac.patch;
+  patches = [ ./bosserver.patch ./cross-build.patch ] ++ optional (tsmbac != null) ./tsmbac.patch;
 
   outputs = [ "out" "dev" "man" "doc" "server" ];
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   setOutputFlags = false;
 
@@ -44,19 +46,20 @@ stdenv.mkDerivation {
 
     ./regen.sh
 
+
     configureFlagsArray=(
       "--with-gssapi"
       "--sysconfdir=/etc"
       "--localstatedir=/var"
       "--disable-kernel-module"
       "--disable-fuse-client"
-      "--with-html-xsl=${docbook_xsl}/share/xml/docbook-xsl/html/chunk.xsl"
-      ${stdenv.lib.optionalString (tsmbac != null) "--enable-tivoli-tsm"}
-      ${stdenv.lib.optionalString (ncurses == null) "--disable-gtx"}
+      "--with-docbook-stylesheets=${docbook_xsl}/share/xml/docbook-xsl"
+      ${optionalString (tsmbac != null) "--enable-tivoli-tsm"}
+      ${optionalString (ncurses == null) "--disable-gtx"}
       "--disable-linux-d_splice-alias-extra-iput"
       "--libexecdir=$server/libexec"
     )
-  '' + stdenv.lib.optionalString (tsmbac != null) ''
+  '' + optionalString (tsmbac != null) ''
     export XBSA_CFLAGS="-Dxbsa -DNEW_XBSA -I${tsmbac}/lib64/sample -DXBSA_TSMLIB=\\\"${tsmbac}/lib64/libApiTSM64.so\\\""
     export XBSA_XLIBS="-ldl"
   '';
