@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub
 , autoreconfHook, pkgconfig
 , gtk3, nssTools, pcsclite
-, libxml2, libproxy 
+, libxml2, libproxy
 , openssl, curl
 , makeWrapper
 , substituteAll }:
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       --replace "modutil" "${nssTools}/bin/modutil"
 
     rm $out/bin/about-eid-mw
-    wrapProgram $out/bin/eid-viewer --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/$name" 
+    wrapProgram $out/bin/eid-viewer --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/$name"
   '';
 
   enableParallelBuilding = true;
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     longDescription = ''
       Allows user authentication and digital signatures with Belgian ID cards.
-      Also requires a running pcscd service and compatible card reader. 
+      Also requires a running pcscd service and compatible card reader.
 
       eid-viewer is also installed.
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ SDL2 ];
-  
+
   enableParallelBuilding = true;
 
   meta = {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     the GNU General Public License (GPL). Stella was originally
     developed for Linux by Bradford W. Mott, and is currently
     maintained by Stephen Anthony.
-    As of its 3.5 release, Stella is officially donationware. 
+    As of its 3.5 release, Stella is officially donationware.
     '';
     homepage = "https://stella-emu.github.io/";
     license = licenses.gpl2;

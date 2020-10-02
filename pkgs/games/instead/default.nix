@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     substituteInPlace configure.sh \
       --replace "/tmp/sdl-test" $(mktemp)
   '';
-  
+
   configurePhase = ''
     { echo 2; echo $out; } | ./configure.sh
   '';
