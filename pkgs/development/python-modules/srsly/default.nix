@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "srsly";
-  version = "2.2.0";
+  version = "2.3.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1h246zvh2wsqyjlw3a3bwmd1zwrkgpflk4z4i9k3sqp2j1jika54";
+    sha256 = "f994a266f6e547c8ffe803cb90baed7ca566831f924e0491402564ba0d185e66";
   };
 
   nativeBuildInputs = [ cython ];
