@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , ecdsa
 , pysha3
@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "bip_utils";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchPypi {
     inherit pname version;
@@ -16,9 +16,6 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ ecdsa pysha3 ];
-
-  # tests are not packaged in the released tarball
-  doCheck = false;
 
   pythonImportsCheck = [
     "bip_utils"
