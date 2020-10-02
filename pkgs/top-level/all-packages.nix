@@ -19834,6 +19834,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics ForceFeedback OpenAL OpenGL;
   };
 
+  blogc = callPackage ../applications/misc/blogc { };
+
   bluefish = callPackage ../applications/editors/bluefish {
     gtk = gtk3;
   };
