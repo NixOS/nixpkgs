@@ -108,23 +108,8 @@ services.mysql.initialScript = pkgs.writeText "mariadb-init.sql" ''
   ALTER USER root@localhost IDENTIFIED VIA mysql_native_password USING PASSWORD("verysecret");
 '';
 </programlisting>
-      When MariaDB data directory is just upgraded (not initialized), the users are not created or modified.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
-      MySQL server is now started with additional systemd sandbox/hardening options for better security. The PrivateTmp, ProtectHome, and ProtectSystem options
-      may be problematic when MySQL is attempting to read from or write to your filesystem anywhere outside of its own state directory, for example when
-      calling <literal>LOAD DATA INFILE or SELECT * INTO OUTFILE</literal>. In this scenario a variant of the following may be required:
-        - allow MySQL to read from /home and /tmp directories when using <literal>LOAD DATA INFILE</literal>
-<programlisting>
-systemd.services.mysql.serviceConfig.ProtectHome = lib.mkForce "read-only";
-</programlisting>
-        - allow MySQL to write to custom folder <literal>/var/data</literal> when using <literal>SELECT * INTO OUTFILE</literal>, assuming the mysql user has write
-          access to <literal>/var/data</literal>
-<programlisting>
-systemd.services.mysql.serviceConfig.ReadWritePaths = [ "/var/data" ];
-</programlisting>
+  When MariaDB data directory is just upgraded (not initialized), the users are not created or modified. You have to create users beforehand.
+  Continue reading the next paragraph for instructions.
     </para>
     <para>
       The MySQL service no longer runs its <literal>systemd</literal> service startup script as <literal>root</literal> anymore. A dedicated non <literal>root</literal>
@@ -136,6 +121,31 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
 </programlisting>
       If you use MySQL instead of MariaDB please replace <literal>unix_socket</literal> with <literal>auth_socket</literal>. If you have changed the value of <xref linkend="opt-services.mysql.user"/>
       from the default of <literal>mysql</literal> to a different user please change <literal>'mysql'@'localhost'</literal> to the corresponding user instead.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      MySQL server is now started with additional systemd sandbox/hardening options for better security. The PrivateTmp, ProtectHome, and ProtectSystem options
+      may be problematic when MySQL is attempting to read from or write to your filesystem anywhere outside of its own state directory, for example when
+      calling <literal>LOAD DATA INFILE or SELECT * INTO OUTFILE</literal>. In this scenario a variant of the following may be required:
+      <itemizedlist>
+       <listitem>
+        <para>allow MySQL to read from /home and /tmp directories when using <literal>LOAD DATA INFILE</literal>
+<programlisting>
+systemd.services.mysql.serviceConfig.ProtectHome = lib.mkForce "read-only";
+</programlisting>
+        </para>
+       </listitem>
+      <listitem>
+       <para>
+        allow MySQL to write to custom folder <literal>/var/data</literal> when using <literal>SELECT * INTO OUTFILE</literal>, assuming the mysql user has write
+        access to <literal>/var/data</literal>
+<programlisting>
+systemd.services.mysql.serviceConfig.ReadWritePaths = [ "/var/data" ];
+</programlisting>
+</para>
+      </listitem>
+     </itemizedlist>
     </para>
    </listitem>
    <listitem>
