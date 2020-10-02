@@ -100,6 +100,16 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./fix_pkgconfig_includedir.patch
+    # Fixes srt usage failing with
+    #     Failed to open SRT: failed to set SRTO_LINGER (reason: Operation not supported: Bad parameters)
+    # see https://github.com/Haivision/srt/issues/1374
+    # Remove when https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/commit/84f8dbd932029220ee86154dd85b241911ea3891
+    # is shown as being in a release tag that nixpkgs uses.
+    (fetchpatch {
+      name = "gstreamer-srtobject-typecast-SRTO_LINGER-to-linger.patch";
+      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/commit/84f8dbd932029220ee86154dd85b241911ea3891.patch";
+      sha256 = "0596lvgi93sj3yn98grgmsrhnqhhq7fnjk91qi4xc6618fpqmp9x";
+    })
   ];
 
   nativeBuildInputs = [
