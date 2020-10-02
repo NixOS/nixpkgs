@@ -13,7 +13,7 @@
 , evolution-data-server
 , gnome-online-accounts
 , libuuid
-, libhandy
+, libhandy_0
 , webkitgtk
 , zeitgeist
 , gnome3
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     libuuid
-    libhandy
+    libhandy_0 # doesn't support libhandy-1 yet
     webkitgtk
     tracker
     gnome-online-accounts
