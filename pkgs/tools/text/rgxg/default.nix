@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ hloeffler ];
     homepage = "https://rgxg.github.io/";
     downloadPage = "https://github.com/rgxg/rgxg/releases";
-    inherit version;
   };
 }
