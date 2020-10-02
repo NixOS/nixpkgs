@@ -24,7 +24,7 @@ with stdenv.lib;
 assert (withQt5 -> qtbase != null && qtsvg != null && qtx11extras != null && wrapQtAppsHook != null);
 
 stdenv.mkDerivation rec {
-  pname = "vlc";
+  pname = "${optionalString onlyLibVLC "lib"}vlc";
   version = "3.0.11.1";
 
   src = fetchurl {
