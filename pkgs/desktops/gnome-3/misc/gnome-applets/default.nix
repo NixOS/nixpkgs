@@ -1,6 +1,8 @@
 { stdenv
 , fetchurl
+, fetchpatch
 , intltool
+, autoreconfHook
 , itstool
 , libxml2
 , libxslt
@@ -22,16 +24,22 @@
 , gnome3
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "gnome-applets";
   version = "3.37.2";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0l1mc9ymjg0bgk92a08zd85hx1vaqrzdj0dwzmna20rp51vf0l4a";
   };
+  patches = [
+    # Enable to configure gnome panel's modules dir. See
+    # https://gitlab.gnome.org/GNOME/gnome-applets/-/merge_requests/65
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-applets/commit/c9724bd40e50c22880e1dc7f21ddb6b161d2691c.diff";
+      sha256 = "1qd0li7jlyn33r8674g4fs08kf0q6na719vc4nccp55rhwy487b6";
+    })
+  ];
 
   nativeBuildInputs = [
     intltool
@@ -39,6 +47,8 @@ in stdenv.mkDerivation rec {
     pkgconfig
     libxml2
     libxslt
+    # Our patch changes configure.ac
+    autoreconfHook
   ];
 
   buildInputs = [
@@ -64,7 +74,8 @@ in stdenv.mkDerivation rec {
   doCheck = true;
 
   configureFlags = [
-    "--with-libpanel-applet-dir=${placeholder "out"}/share/gnome-panel/applets"
+    # Don't try to install modules to gnome panel's directory, as it's read only
+    "GNOME_PANEL_MODULES_DIR=${placeholder "out"}/share/gnome-panel/applets"
   ];
 
   passthru = {
