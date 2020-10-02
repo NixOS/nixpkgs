@@ -1,6 +1,6 @@
 { stdenv, buildPackages, fetchurl, which, autoconf, automake, flex
-, docbook_xml_dtd_43 , libtool_2, removeReferencesTo
 , yacc , glibc, perl, kerberos, libxslt, docbook_xsl, file
+, docbook_xml_dtd_43, libtool_2
 , ncurses # Extra ncurses utilities. Needed for debugging and monitoring.
 , tsmbac ? null # Tivoli Storage Manager Backup Client from IBM
 }:
@@ -15,13 +15,13 @@ in stdenv.mkDerivation {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ autoconf automake flex libxslt libtool_2 perl
-    removeReferencesTo which yacc ];
+    which yacc ];
 
   buildInputs = [ kerberos ncurses ];
 
   patches = [ ./bosserver.patch ./cross-build.patch ] ++ optional (tsmbac != null) ./tsmbac.patch;
 
-  outputs = [ "out" "dev" "man" "doc" "server" ];
+  outputs = [ "out" "dev" "man" "doc" ];
 
   enableParallelBuilding = false;
 
@@ -57,7 +57,6 @@ in stdenv.mkDerivation {
       ${optionalString (tsmbac != null) "--enable-tivoli-tsm"}
       ${optionalString (ncurses == null) "--disable-gtx"}
       "--disable-linux-d_splice-alias-extra-iput"
-      "--libexecdir=$server/libexec"
     )
   '' + optionalString (tsmbac != null) ''
     export XBSA_CFLAGS="-Dxbsa -DNEW_XBSA -I${tsmbac}/lib64/sample -DXBSA_TSMLIB=\\\"${tsmbac}/lib64/libApiTSM64.so\\\""
@@ -86,8 +85,6 @@ in stdenv.mkDerivation {
   # binaries.
   preFixup = ''
     rm -rf "$(pwd)" && mkdir "$(pwd)"
-
-    find $out -type f -exec remove-references-to -t $server '{}' '+'
   '';
 
   meta = with stdenv.lib; {
