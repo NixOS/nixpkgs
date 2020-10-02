@@ -96,7 +96,7 @@ in stdenv.mkDerivation {
     "-Ddbussessionservicedir=${placeholder "out"}/share/dbus-1/services"
     "-Ddbussystemservicedir=${placeholder "out"}/share/dbus-1/system-services"
     "-Dpamconfdir=${placeholder "out"}/etc/pam.d"
-    "-Drootprefix=${placeholder "out"}"
+    "-Drootprefix=/run/current-system/systemd"
     "-Dpkgconfiglibdir=${placeholder "dev"}/lib/pkgconfig"
     "-Dpkgconfigdatadir=${placeholder "dev"}/share/pkgconfig"
     "-Dloadkeys-path=${kbd}/bin/loadkeys"
