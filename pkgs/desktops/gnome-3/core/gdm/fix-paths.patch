@@ -15,7 +15,7 @@
          GError  *error;
  
          error = NULL;
--        res = g_spawn_command_line_sync ("/bin/plymouth --ping",
+-        res = g_spawn_command_line_sync ("plymouth --ping",
 +        res = g_spawn_command_line_sync ("@plymouth@/bin/plymouth --ping",
                                           NULL, NULL, &status, &error);
          if (! res) {
@@ -24,7 +24,7 @@
          GError  *error;
  
          error = NULL;
--        res = g_spawn_command_line_sync ("/bin/plymouth deactivate",
+-        res = g_spawn_command_line_sync ("plymouth deactivate",
 +        res = g_spawn_command_line_sync ("@plymouth@/bin/plymouth deactivate",
                                           NULL, NULL, NULL, &error);
          if (! res) {
@@ -33,7 +33,7 @@
          GError  *error;
  
          error = NULL;
--        res = g_spawn_command_line_async ("/bin/plymouth quit --retain-splash", &error);
+-        res = g_spawn_command_line_async ("plymouth quit --retain-splash", &error);
 +        res = g_spawn_command_line_async ("@plymouth@/bin/plymouth quit --retain-splash", &error);
          if (! res) {
                  g_warning ("Could not quit plymouth: %s", error->message);
@@ -42,19 +42,19 @@
          GError  *error;
  
          error = NULL;
--        res = g_spawn_command_line_async ("/bin/plymouth quit", &error);
+-        res = g_spawn_command_line_async ("plymouth quit", &error);
 +        res = g_spawn_command_line_async ("@plymouth@/bin/plymouth quit", &error);
          if (! res) {
                  g_warning ("Could not quit plymouth: %s", error->message);
                  g_error_free (error);
 --- a/data/gdm.service.in
 +++ b/data/gdm.service.in
-@@ -28,7 +28,7 @@ BusName=org.gnome.DisplayManager
- StandardOutput=syslog
- StandardError=inherit
- EnvironmentFile=-@LANG_CONFIG_FILE@
+@@ -26,7 +26,7 @@ Restart=always
+ IgnoreSIGPIPE=no
+ BusName=org.gnome.DisplayManager
+ EnvironmentFile=-${LANG_CONFIG_FILE}
 -ExecReload=/bin/kill -SIGHUP $MAINPID
 +ExecReload=@coreutils@/bin/kill -SIGHUP $MAINPID
  KeyringMode=shared
- 
+
  [Install]
