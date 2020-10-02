@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zola";
-  version = "0.12.1";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "getzola";
     repo = pname;
     rev = "v${version}";
-    sha256 = "00fkcrr40v93z23h3q2wqlfx0120g59j6j9szk8nx9x85i40j3if";
+    sha256 = "sha256:0fb227kgani32ljnw73a0h5zn5361z5lraf79y34a0chcby2qv35";
   };
 
-  cargoSha256 = "1wdypyy787dzdq5q64a9mjfygg0kli49yjzw7xh66sjd7263w9fs";
+  cargoSha256 = "sha256:0ilfr32zcajag05qcpwi5ixz250s427i4xrjf4wrk7qy32bblnr5";
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ openssl oniguruma ]
@@ -32,6 +32,6 @@ rustPlatform.buildRustPackage rec {
     description = "A fast static site generator with everything built-in";
     homepage = "https://www.getzola.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ dywedir ];
+    maintainers = with maintainers; [ dywedir _0x4A6F ];
   };
 }
