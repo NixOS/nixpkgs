@@ -22931,6 +22931,8 @@ in
 
   photoqt = libsForQt5.callPackage ../applications/graphics/photoqt { };
 
+  photoflare = libsForQt5.callPackage ../applications/graphics/photoflare { };
+
   photoflow = callPackage ../applications/graphics/photoflow { };
 
   phototonic = libsForQt5.callPackage ../applications/graphics/phototonic { };
