@@ -19,8 +19,7 @@ stdenv.mkDerivation rec {
  '';
 
   meta = with stdenv.lib; {
-    description = ''rgxg (ReGular eXpression Generator) is a C library and a command-line tool
-    to generate (extended) regular expressions.'';
+    description = "A C library and a command-line tool to generate (extended) regular expressions";
     license = licenses.zlib;
     maintainers = with maintainers; [ hloeffler ];
     homepage = "https://rgxg.github.io/";
