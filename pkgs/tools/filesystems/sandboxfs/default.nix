@@ -19,10 +19,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-k303TjWG+n+/ZMmko84KJtYb7swuQ1ZJOc4Vq6aOhX0=";
 
+  # Issue to add Cargo.lock upstream: https://github.com/bazelbuild/sandboxfs/pull/115
   cargoPatches = [ ./Cargo.lock.patch ];
 
-  buildInputs = [ fuse ];
   nativeBuildInputs = [ pkg-config installShellFiles ];
+
+  buildInputs = [ fuse ];
 
   postInstall = "installManPage man/sandboxfs.1";
 
