@@ -4,10 +4,10 @@
 , targetPackages, fetchpatch, bash
 , dmdBootstrap ? callPackage ./bootstrap.nix { }
 , HOST_DMD ? "${dmdBootstrap}/bin/dmd"
-, version ? "2.091.1"
-, dmdSha256 ? "0brz0n84jdkhr4sq4k91w48p739psbhbb1jk2pi9q60psmx353yr"
-, druntimeSha256 ? "0smgpmfriffh110ksski1s5j921kmxbc2zjy0dyj9ksyrxbzklbl"
-, phobosSha256 ? "1n00anajgibrfs1xzvrmag28hvbvkc0w1fwlimqbznvhf28rhrxs"
+, version ? "2.094.0"
+, dmdSha256 ? "1vxbrx1m26hpvi4whjv7vrzrs9r2z8a1h2dibhcdz5sisa4gag4k"
+, druntimeSha256 ? "1syzfryg8mxicdr51bysxg9sq1cnrrdib6vkc6hh17sn5v544sk9"
+, phobosSha256 ? "0kl3r80hlliil1y051fxyhs5vzzp92i3gkcvankmrd7fw5mlyq3c"
 }:
 
 let
@@ -53,18 +53,6 @@ stdenv.mkDerivation rec {
   })
   ];
 
-  patchFlags = [ "--directory=dmd" "-p1" "-F3" ];
-  patches = [
-    (fetchpatch {
-     url = "https://github.com/dlang/dmd/commit/4157298cf04f7aae9f701432afd1de7b7e05c30f.patch";
-     sha256 = "0v4xgqmrx5r8vbx5a4v88s0xnm23mam9nm99yfga7s2sxr0hi5p2";
-    })
-    (fetchpatch {
-     url = "https://github.com/dlang/dmd/commit/1b8a4c90b040bf2f0b68a2739de4991315580b13.patch";
-     sha256 = "1iih6aalv4fsw9mbrlrybhngkkchzzrzg7q8zl047w36c0x397cs";
-    })
-  ];
-
   sourceRoot = ".";
 
   # https://issues.dlang.org/show_bug.cgi?id=19553
@@ -100,7 +88,7 @@ stdenv.mkDerivation rec {
   top = "$(echo $NIX_BUILD_TOP)";
   pathToDmd = "${top}/dmd/generated/${osname}/release/${bits}/dmd";
 
-  # Buid and install are based on http://wiki.dlang.org/Building_DMD
+  # Build and install are based on http://wiki.dlang.org/Building_DMD
   buildPhase = ''
       cd dmd
       make -j$NIX_BUILD_CORES -f posix.mak INSTALL_DIR=$out BUILD=release ENABLE_RELEASE=1 PIC=1 HOST_DMD=${HOST_DMD}
