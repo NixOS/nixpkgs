@@ -8326,9 +8326,7 @@ in
   zssh = callPackage ../tools/networking/zssh { };
 
   zstd = callPackage ../tools/compression/zstd {
-    cmake = buildPackages.cmake.override {
-      libarchive = buildPackages.libarchive.override { zstd = null; };
-    };
+    cmake = buildPackages.cmakeMinimal;
   };
 
   zsync = callPackage ../tools/compression/zsync { };
@@ -10858,6 +10856,8 @@ in
   cmake_2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix { };
 
   cmake = libsForQt5.callPackage ../development/tools/build-managers/cmake { };
+
+  cmakeMinimal = cmake.override { isBootstrap = true; };
 
   cmakeCurses = cmake.override { useNcurses = true; };
 
