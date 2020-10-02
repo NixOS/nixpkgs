@@ -173,7 +173,7 @@ cjson = buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.kyne.com.au/~mark/software/lua-cjson.php";
+    homepage = "https://www.kyne.com.au/~mark/software/lua-cjson.php";
     description = "A fast JSON encoding/parsing module";
     license.fullName = "MIT";
   };
@@ -268,7 +268,7 @@ cyrussasl = buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/JorjBauer/lua-cyrussasl";
+    homepage = "https://github.com/JorjBauer/lua-cyrussasl";
     description = "Cyrus SASL library for Lua 5.1+";
     maintainers = with maintainers; [ vcunat ];
     license.fullName = "BSD";
@@ -420,7 +420,7 @@ lgi = buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/pavouk/lgi";
+    homepage = "https://github.com/pavouk/lgi";
     description = "Lua bindings to GObject libraries";
     license.fullName = "MIT/X11";
   };
@@ -546,7 +546,7 @@ lrexlib-gnu = buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/rrthomas/lrexlib";
+    homepage = "https://github.com/rrthomas/lrexlib";
     description = "Regular expression library binding (GNU flavour).";
     license.fullName = "MIT/X11";
   };
@@ -563,7 +563,7 @@ lrexlib-pcre = buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/rrthomas/lrexlib";
+    homepage = "https://github.com/rrthomas/lrexlib";
     description = "Regular expression library binding (PCRE flavour).";
     maintainers = with maintainers; [ vyp ];
     license.fullName = "MIT/X11";
@@ -581,7 +581,7 @@ lrexlib-posix = buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/rrthomas/lrexlib";
+    homepage = "https://github.com/rrthomas/lrexlib";
     description = "Regular expression library binding (POSIX flavour).";
     license.fullName = "MIT/X11";
   };
@@ -625,7 +625,7 @@ lua-cmsgpack = buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/antirez/lua-cmsgpack";
+    homepage = "https://github.com/antirez/lua-cmsgpack";
     description = "MessagePack C implementation and bindings for Lua 5.1/5.2/5.3";
     license.fullName = "Two-clause BSD";
   };
@@ -1109,7 +1109,7 @@ luaposix = buildLuarocksPackage {
   propagatedBuildInputs = [ bit32 lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/luaposix/luaposix/";
+    homepage = "https://github.com/luaposix/luaposix/";
     description = "Lua bindings for POSIX";
     maintainers = with maintainers; [ vyp lblasc ];
     license.fullName = "MIT/X11";
@@ -1253,7 +1253,7 @@ luautf8 = buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/starwing/luautf8";
+    homepage = "https://github.com/starwing/luautf8";
     description = "A UTF-8 support module for Lua";
     maintainers = with maintainers; [ pstn ];
     license.fullName = "MIT";
@@ -1288,7 +1288,7 @@ lua-yajl = buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/brimworks/lua-yajl";
+    homepage = "https://github.com/brimworks/lua-yajl";
     description = "Integrate the yajl JSON library with Lua.";
     maintainers = with maintainers; [ pstn ];
     license.fullName = "MIT/X11";
@@ -1340,7 +1340,7 @@ lyaml = buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/gvvaughan/lyaml";
+    homepage = "https://github.com/gvvaughan/lyaml";
     description = "libYAML binding for Lua";
     maintainers = with maintainers; [ lblasc ];
     license.fullName = "MIT/X11";

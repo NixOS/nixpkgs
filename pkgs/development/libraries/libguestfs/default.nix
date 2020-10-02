@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "1.40.2";
 
   src = fetchurl {
-    url = "http://libguestfs.org/download/1.40-stable/${pname}-${version}.tar.gz";
+    url = "https://libguestfs.org/download/1.40-stable/${pname}-${version}.tar.gz";
     sha256 = "ad6562c48c38e922a314cb45a90996843d81045595c4917f66b02a6c2dfe8058";
   };
 
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Tools for accessing and modifying virtual machine disk images";
     license = with licenses; [ gpl2 lgpl21 ];
-    homepage = "http://libguestfs.org/";
+    homepage = "https://libguestfs.org/";
     maintainers = with maintainers; [offline];
     platforms = platforms.linux;
   };

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "grml's zsh setup";
-    homepage = "http://grml.org/zsh/";
+    homepage = "https://grml.org/zsh/";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ msteen rvolosatovs ];

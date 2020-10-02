@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Version Control for your database";
-    homepage = "http://www.liquibase.org/";
+    homepage = "https://www.liquibase.org/";
     changelog = "https://raw.githubusercontent.com/liquibase/liquibase/v${version}/changelog.txt";
     license = licenses.asl20;
     maintainers = with maintainers; [ nequissimus ];

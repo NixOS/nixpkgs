@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    homepage = "http://www.reflectometry.org/danse/software.html";
+    homepage = "https://www.reflectometry.org/danse/software.html";
     description = "an extensible periodic table of the elements prepopulated with data important to neutron and x-ray scattering experiments";
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ rprospero ];

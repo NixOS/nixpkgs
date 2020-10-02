@@ -3980,7 +3980,7 @@ let
       sha256 = "ea64a1e9eb42f3d79855a392e7cca6b86e8e0bcc9aabcc5efa5fa32415b67dba";
     };
     meta = {
-      homepage = "http://wiki.github.com/toddr/Crypt-RIPEMD160";
+      homepage = "https://wiki.github.com/toddr/Crypt-RIPEMD160";
       description = "Perl extension for the RIPEMD-160 Hash function";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
@@ -10119,7 +10119,7 @@ let
       sha256 = "c7d6311eb6c79e983833c9e6b4e8d426d07a9874d20f4bc641b313b99c9bc8a0";
     };
     meta = {
-      homepage = "http://metacpan.org/release/IRC-Utils";
+      homepage = "https://metacpan.org/release/IRC-Utils";
       description = "Common utilities for IRC-related tasks";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ sgo ];
@@ -18350,7 +18350,7 @@ let
     meta = {
       description = "lib/Safe/Hole.pm";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      homepage = "http://github.com/toddr/Safe-Hole";
+      homepage = "https://github.com/toddr/Safe-Hole";
     };
   };
 

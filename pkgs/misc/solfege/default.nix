@@ -39,7 +39,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Ear training program";
-    homepage = "http://www.solfege.org/";
+    homepage = "https://www.solfege.org/";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor orivej ];

@@ -24,7 +24,7 @@ appimageTools.wrapType2 rec {
 
   meta = with lib; {
     description = "Sylk WebRTC client";
-    homepage = "http://sylkserver.com/";
+    homepage = "https://sylkserver.com/";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ zimbatm ];
     platforms = [ "i386-linux" "x86_64-linux" ];

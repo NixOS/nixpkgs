@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A modular and multi processing pass phrase cracking tool";
-    homepage = "http://leidecker.info/projects/phrasendrescher/index.shtml";
+    homepage = "https://leidecker.info/projects/phrasendrescher/index.shtml";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ bjornfor ];
