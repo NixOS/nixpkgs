@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "miniserve";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     rev = "v${version}";
-    sha256 = "1abmg2zk1qipqdl1yfj8ibm1w8n7fazxqccsg1gq4xzlhhfp3m2l";
+    sha256 = "01nsviw5nc5lb6z3j2yiymiwhiq719nwqpvqbyb5p65s98sph7yh";
   };
 
-  cargoSha256 = "0l750067x8k92ngg32bb8mnbq09aj65sdnpzdhij9n1mh90rkck9";
+  cargoSha256 = "098p4645air5402shqignc57zdm6755shahhby17nqv1s27gfinc";
 
   RUSTC_BOOTSTRAP = 1;
 
