@@ -19,14 +19,14 @@
 stdenv.mkDerivation {
   # Determine version and revision from:
   # https://sourceforge.net/p/netpbm/code/HEAD/log/?path=/advanced
-  name = "netpbm-10.91.3";
+  name = "netpbm-10.92.0";
 
   outputs = [ "bin" "out" "dev" ];
 
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/netpbm/code/advanced";
-    rev = "3940";
-    sha256 = "DLpby9vZ1fZd1Cb5GbNcfKWkWh27jwoog5W+p2FM7IM=";
+    rev = "3972";
+    sha256 = "09fpy4n4f867j23pr3b719wpvp8hjrr4drxp0r1csw74p8j6vfy3";
   };
 
   nativeBuildInputs = [
@@ -57,10 +57,6 @@ stdenv.mkDerivation {
     # Install libnetpbm.so symlink to correct destination
     substituteInPlace lib/Makefile \
       --replace '/sharedlink' '/lib'
-
-    # TODO: move to config.mk in 10.91.4
-    substituteInPlace GNUmakefile \
-        --replace 'pkg-config' '${buildPackages.pkgconfig}/bin/${buildPackages.pkgconfig.targetPrefix}pkg-config'
   '';
 
   configurePhase = ''
@@ -76,6 +72,7 @@ stdenv.mkDerivation {
     echo 'CC = ${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc' >> config.mk
     echo 'CC_FOR_BUILD = ${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc' >> config.mk
     echo 'LD_FOR_BUILD = $(CC_FOR_BUILD)' >> config.mk
+    echo 'PKG_CONFIG = ${buildPackages.pkgconfig}/bin/${buildPackages.pkgconfig.targetPrefix}pkg-config' >> config.mk
     echo 'RANLIB = ${stdenv.lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib' >> config.mk
 
     # Use libraries from Nixpkgs
