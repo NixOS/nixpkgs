@@ -27614,6 +27614,8 @@ in
 
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {};
 
+  terranix = callPackage ../applications/networking/cluster/terranix {};
+
   tilt = callPackage ../applications/networking/cluster/tilt {};
 
   timeular = callPackage ../applications/office/timeular {};
