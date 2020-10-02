@@ -44,14 +44,15 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  buildInputs =
-    [ setupHook pkgconfig ]
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  nativeBuildInputs = [ setupHook pkgconfig ];
+
+  buildInputs = []
     ++ lib.optionals useSharedLibraries [ bzip2 curl expat libarchive xz zlib libuv rhash ]
     ++ lib.optional useNcurses ncurses
     ++ lib.optional useQt4 qt4
     ++ lib.optional withQt5 qtbase;
-
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   propagatedBuildInputs = lib.optional stdenv.isDarwin ps;
 
