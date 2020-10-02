@@ -1,5 +1,21 @@
-{ stdenv, fetchurl, pkgconfig, gettext, gobject-introspection, wrapGAppsHook, gjs, glib, gtk3, gdk-pixbuf, gst_all_1, gnome3
-, meson, ninja, python3, desktop-file-utils }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, gettext
+, gobject-introspection
+, wrapGAppsHook
+, gjs
+, glib
+, gtk3
+, gdk-pixbuf
+, gst_all_1
+, gnome3
+, meson
+, ninja
+, python3
+, desktop-file-utils
+, libhandy
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-sound-recorder";
@@ -11,19 +27,33 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig gettext meson ninja gobject-introspection
-    wrapGAppsHook python3 desktop-file-utils
+    pkgconfig
+    gettext
+    meson
+    ninja
+    gobject-introspection
+    wrapGAppsHook
+    python3
+    desktop-file-utils
   ];
-  buildInputs = [ gjs glib gtk3 gdk-pixbuf ] ++ (with gst_all_1; [ gstreamer.dev gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad ]);
+
+  buildInputs = [
+    gjs
+    glib
+    gtk3
+    gdk-pixbuf
+    libhandy
+  ] ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+  ]);
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py
     patchShebangs build-aux/meson_post_install.py
   '';
-
-  # TODO: fix this in gstreamer
-  # TODO: make stdenv.lib.getBin respect outputBin
-  PKG_CONFIG_GSTREAMER_1_0_TOOLSDIR = "${gst_all_1.gstreamer.dev}/bin";
 
   passthru = {
     updateScript = gnome3.updateScript {
