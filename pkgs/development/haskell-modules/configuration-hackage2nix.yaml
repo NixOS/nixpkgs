@@ -3862,6 +3862,9 @@ broken-packages:
   - clexer
   - CLI
   - cli-builder
+  - cli-extras
+  - cli-git
+  - cli-nix
   - clif
   - clifford
   - clifm
@@ -8149,6 +8152,7 @@ broken-packages:
   - nix-deploy
   - nix-eval
   - nix-freeze-tree
+  - nix-thunk
   - nix-tools
   - nixfromnpm
   - nixpkgs-update
@@ -8677,10 +8681,12 @@ broken-packages:
   - polydata
   - polydata-core
   - polynomial
+  - polysemy-chronos
   - polysemy-http
   - polysemy-optics
   - polysemy-RandomFu
   - polysemy-test
+  - polysemy-time
   - polysemy-webserver
   - polysemy-zoo
   - polyseq
