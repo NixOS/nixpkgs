@@ -1,0 +1,19 @@
+name: "Build Nixpkgs manual"
+
+on:
+  pull_request_target:
+    paths:
+      - 'doc/**'
+
+jobs:
+  nixpkgs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: cachix/install-nix-action@v11
+      - uses: cachix/cachix-action@v6
+        with:
+          name: nixpkgs-ci
+          signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
+      - name: Building Nixpkgs manual
+        run: nix-build pkgs/top-level/release.nix -A manual
