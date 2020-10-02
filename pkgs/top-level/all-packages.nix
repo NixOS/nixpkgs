@@ -11189,6 +11189,8 @@ in
 
   jenkins-job-builder = with python3Packages; toPythonApplication jenkins-job-builder;
 
+  jpexs = callPackage ../development/tools/jpexs { };
+
   julius = callPackage ../games/julius { };
 
   augustus = callPackage ../games/augustus { };
