@@ -17534,6 +17534,8 @@ in
 
   gomp = callPackage ../applications/version-management/gomp { };
 
+  gomplate = callPackage ../development/tools/gomplate {};
+
   gpm = callPackage ../servers/gpm {
     ncurses = null;  # Keep curses disabled for lack of value
   };
