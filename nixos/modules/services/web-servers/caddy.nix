@@ -6,8 +6,6 @@ let
   cfg = config.services.caddy;
   configFile = pkgs.writeText "Caddyfile" cfg.config;
 
-  # v2-specific options
-  isCaddy2 = versionAtLeast cfg.package.version "2.0";
   tlsConfig = {
     apps.tls.automation.policies = [{
       issuer = {
@@ -50,7 +48,7 @@ in {
       example = "nginx";
       type = types.str;
       description = ''
-        Name of the config adapter to use. Not applicable to Caddy v1.
+        Name of the config adapter to use.
         See https://caddyserver.com/docs/config-adapters for the full list.
       '';
     };
@@ -90,11 +88,10 @@ in {
     package = mkOption {
       default = pkgs.caddy;
       defaultText = "pkgs.caddy";
-      example = "pkgs.caddy1";
+      example = "pkgs.caddy";
       type = types.package;
       description = ''
         Caddy package to use.
-        To use Caddy v1 (obsolete), set this to <literal>pkgs.caddy1</literal>.
       '';
     };
   };
@@ -106,21 +103,9 @@ in {
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ]; # systemd-networkd-wait-online.service
       wantedBy = [ "multi-user.target" ];
-      environment = mkIf (versionAtLeast config.system.stateVersion "17.09" && !isCaddy2)
-        { CADDYPATH = cfg.dataDir; };
       serviceConfig = {
-        ExecStart = if isCaddy2 then ''
-          ${cfg.package}/bin/caddy run --config ${configJSON}
-        '' else ''
-          ${cfg.package}/bin/caddy -log stdout -log-timestamps=false \
-            -root=/var/tmp -conf=${configFile} \
-            -ca=${cfg.ca} -email=${cfg.email} ${optionalString cfg.agree "-agree"}
-        '';
-        ExecReload =
-          if isCaddy2 then
-            "${cfg.package}/bin/caddy reload --config ${configJSON}"
-          else
-            "${pkgs.coreutils}/bin/kill -USR1 $MAINPID";
+        ExecStart = "${cfg.package}/bin/caddy run --config ${configJSON}";
+        ExecReload = "${cfg.package}/bin/caddy reload --config ${configJSON}";
         Type = "simple";
         User = "caddy";
         Group = "caddy";
