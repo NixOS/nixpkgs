@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "01bpzn38cwn9zlydzvnfz9k7mxdnjnvgnbcpx7i4al8fha7x9lw8";
   };
 
-  buildInputs = 
+  buildInputs =
   [ wxGTK SDL2 ];
 
   preConfigure = ''
