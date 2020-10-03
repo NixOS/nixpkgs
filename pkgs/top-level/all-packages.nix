@@ -26348,6 +26348,7 @@ in
     });
 
     java = openjdk11;
+    z3 = z3_4_4_0;
   };
 
   iprover = callPackage ../applications/science/logic/iprover { };
