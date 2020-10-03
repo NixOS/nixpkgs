@@ -164,6 +164,8 @@ in {
 
   adb-homeassistant = callPackage ../development/python-modules/adb-homeassistant { };
 
+  adb-shell = callPackage ../development/python-modules/adb-shell { };
+
   addic7ed-cli = callPackage ../development/python-modules/addic7ed-cli { };
 
   adguardhome= callPackage ../development/python-modules/adguardhome { };
@@ -279,6 +281,8 @@ in {
   amqp = callPackage ../development/python-modules/amqp { };
 
   amqplib = callPackage ../development/python-modules/amqplib { };
+
+  androidtv = callPackage ../development/python-modules/androidtv { };
 
   androguard = callPackage ../development/python-modules/androguard { };
 
@@ -4691,6 +4695,8 @@ in {
   pure-pcapy3 = callPackage ../development/python-modules/pure-pcapy3 { };
 
   purepng = callPackage ../development/python-modules/purepng { };
+
+  pure-python-adb = callPackage ../development/python-modules/pure-python-adb { };
 
   pure-python-adb-homeassistant = callPackage ../development/python-modules/pure-python-adb-homeassistant { };
 
