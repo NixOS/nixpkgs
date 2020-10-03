@@ -3,24 +3,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tectonic";
-  version = "0.1.15";
+  version = "0.1.16";
 
   src = fetchFromGitHub {
     owner = "tectonic-typesetting";
     repo = "tectonic";
     rev = "tectonic@${version}";
-    sha256 = "0pzhdfsi4jsj9p5cv8ia4kc4inl7q7jsw694dfyxkcpka6ywyzsh";
+    sha256 = "0dzqf67y4ci1vsl3zhmjkzfnf22w2bbk5w5qj2gryzrhp1q9ajyr";
   };
 
-  cargoSha256 = "017f1f49svx4inyv6xjx31lnb7dbl6gzwrrzpfz1gimqvdj2gm6j";
+  cargoSha256 = "1p0wzylkw1gxaff0m47il7qa0dfflxdyshvkvdirvjidg5cam9bk";
 
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ fontconfig harfbuzz openssl ]
     ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);
 
-  # tests fail due to read-only nix store
-  doCheck = false;
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Modernized, complete, self-contained TeX/LaTeX engine, powered by XeTeX and TeXLive";
