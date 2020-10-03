@@ -29,6 +29,7 @@ let
       #!$(type -P bash)
       $(declare -xp | sed -e '/^[^=]\+="\('"''${NIX_STORE//\//\\/}"'\|[^\/]\)/!d')
       declare -x NIX_BUILD_TOP="${buildTop}"
+      declare -x NIX_ENFORCE_PURITY=0
       $(type -P '${command}') "\$@"
       EOF
       chmod +x "$out"
@@ -68,7 +69,9 @@ in buildPythonPackage rec {
       --replace 'StrParam(default_dnn_base_path)' 'StrParam('\'''${cudnn}'\''')'
   '';
 
-  preCheck = ''
+  # needs to be postInstall so it runs before pythonImportsCheck even when
+  # doCheck = false (meaning preCheck would be disabled)
+  postInstall = ''
     mkdir -p check-phase
     export HOME=$(pwd)/check-phase
   '';
@@ -80,6 +83,8 @@ in buildPythonPackage rec {
   # keep Nose around since running the tests by hand is possible from Python or bash
   checkInputs = [ nose ];
   propagatedBuildInputs = [ numpy numpy.blas scipy six libgpuarray_ ];
+
+  pythonImportsCheck = [ "theano" ];
 
   meta = with stdenv.lib; {
     homepage = "http://deeplearning.net/software/theano/";
