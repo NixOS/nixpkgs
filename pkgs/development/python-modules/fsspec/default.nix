@@ -24,12 +24,15 @@ buildPythonPackage rec {
     numpy
   ];
 
-  pytestFlagsArray = [ "--rootdir=$(mktemp -d)" ];
-
   disabledTests = [
     # Test assumes user name is part of $HOME
     # AssertionError: assert 'nixbld' in '/homeless-shelter/foo/bar'
     "test_strip_protocol_expanduser"
+    # flaky: works locally but fails on hydra
+    # as it uses the install dir for tests instead of a temp dir
+    # resolved in https://github.com/intake/filesystem_spec/issues/432 and
+    # can be enabled again from version 0.8.4
+    "test_pathobject"
   ] ++ lib.optionals (stdenv.isDarwin) [
     # works locally on APFS, fails on hydra with AssertionError comparing timestamps
     # darwin hydra builder uses HFS+ and has only one second timestamp resolution
