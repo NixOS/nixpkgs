@@ -21,6 +21,10 @@ rustPlatform.buildRustPackage rec {
     install -D man/kmon.8 -t $out/share/man/man8/
   '';
 
+  # NOTICE: tests will parse provided arguments, thus do not provide
+  # any arguments
+  checkPhase = "cargo test";
+
   meta = with stdenv.lib; {
     description = "Linux Kernel Manager and Activity Monitor";
     homepage = "https://github.com/orhun/kmon";
