@@ -10,7 +10,7 @@
     "acmeda" = ps: with ps; [ ]; # missing inputs: aiopulse
     "actiontec" = ps: with ps; [ ];
     "adguard" = ps: with ps; [ adguardhome ];
-    "ads" = ps: with ps; [ ]; # missing inputs: pyads
+    "ads" = ps: with ps; [ pyads ];
     "aftership" = ps: with ps; [ ]; # missing inputs: pyaftership
     "agent_dvr" = ps: with ps; [ ]; # missing inputs: agent-py
     "air_quality" = ps: with ps; [ ];
