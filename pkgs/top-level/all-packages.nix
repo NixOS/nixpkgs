@@ -10687,6 +10687,8 @@ in
 
   black = with python3Packages; toPythonApplication black;
 
+  blackfire = callPackage ../development/tools/misc/blackfire { };
+
   black-macchiato = with python3Packages; toPythonApplication black-macchiato;
 
   blackmagic = callPackage ../development/tools/misc/blackmagic { };
