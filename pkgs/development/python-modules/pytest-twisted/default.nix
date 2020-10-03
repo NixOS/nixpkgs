@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-twisted";
-  version = "1.12";
+  version = "1.13.2";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "bb9af117c5c6063d9ef20ffdf2fa297caaf57de5a687e4d3607db7b0a6f74fea";
+    sha256 = "cee2320becc5625050ab221b8f38533e636651a24644612f4726891fdf1f1847";
   };
 
   propagatedBuildInputs = [ greenlet pytest decorator ];
