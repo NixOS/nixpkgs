@@ -521,13 +521,13 @@ in
 
     maxminddb = buildPecl rec {
       pname = "maxminddb";
-      version = "1.6.0";
+      version = "1.7.0";
 
       src = pkgs.fetchFromGitHub {
         owner = "maxmind";
         repo = "MaxMind-DB-Reader-php";
         rev = "v${version}";
-        sha256 = "0sa943ij9pgz55aik93lllb8lh063bvr66ibn77p3y3p41vdiabz";
+        sha256 = "16msc9s15y43lxw89kj51aldlkd57dc8gms199i51jc984b68ljc";
       };
 
       buildInputs = [ pkgs.libmaxminddb ];
