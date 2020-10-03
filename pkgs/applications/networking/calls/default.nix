@@ -3,7 +3,7 @@
 , meson
 , ninja
 , pkgconfig
-, libhandy
+, libhandy_0
 , modemmanager
 , gtk3
 , gom
@@ -43,13 +43,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     modemmanager
-    libhandy
+    libhandy_0
     evolution-data-server
     folks
     gom
     gsound
     gtk3
-    libhandy
     libpeas
   ];
 
