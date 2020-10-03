@@ -4728,6 +4728,8 @@ in {
 
   pyacoustid = callPackage ../development/python-modules/pyacoustid { };
 
+  pyads = callPackage ../development/python-modules/pyads { };
+
   pyaes = callPackage ../development/python-modules/pyaes { };
 
   pyairvisual = callPackage ../development/python-modules/pyairvisual { };
