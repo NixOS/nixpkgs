@@ -59,7 +59,13 @@ stdenv.mkDerivation rec {
     echo #!/bin/sh > build-aux/find-x-server.sh
     echo "echo ${stdenv.lib.getBin xorg.xorgserver}/bin/X" >> build-aux/find-x-server.sh
     patchShebangs build-aux/find-x-server.sh
-  '';
+  '' +
+  # fix a typo in data/meson.build
+  ''
+    substituteInPlace data/meson.build \
+      --replace "XSession.in" "Xsession.in"
+  ''
+  ;
 
   mesonFlags = [
     "-Dgdm-xsession=true"
