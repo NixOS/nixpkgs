@@ -20,7 +20,7 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    python -m aioitertools.tests
+    ${python.interpreter} -m aioitertools.tests
   '';
 
   meta = with lib; {
