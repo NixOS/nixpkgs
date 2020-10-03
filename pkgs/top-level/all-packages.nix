@@ -9508,6 +9508,8 @@ in
 
   nrpl = callPackage ../development/tools/nrpl { };
 
+  nimlsp = callPackage ../development/tools/misc/nimlsp { };
+
   neko = callPackage ../development/compilers/neko { };
 
   nextpnr = libsForQt514.callPackage ../development/compilers/nextpnr {
