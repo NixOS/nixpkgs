@@ -393,11 +393,10 @@ in
         gnome-system-monitor
         gnome-weather
         nautilus
+        pkgs.gnome-connections
         simple-scan
         totem
         yelp
-        # Unsure if sensible for NixOS
-        /* gnome-boxes */
       ] config.environment.gnome3.excludePackages);
 
       # Enable default program modules
