@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mamba";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "brummer10";
     repo = "Mamba";
     rev = "v${version}";
-    sha256 = "08dcm0mmka1lbssrgck66v9l2rk3r4y63ij06aw2f9la8a84y20j";
+    sha256 = "1l74ckqqrccgsdy430pfsbv4fbzny7zivx399bi2jk1lv06p4h9a";
     fetchSubmodules = true;
   };
 

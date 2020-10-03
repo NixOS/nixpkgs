@@ -15,16 +15,19 @@
 , xorg
 , zlib
 }:
+let
 
-stdenv.mkDerivation rec {
+  suffix = if stdenv.system == "x86_64-linux" then "64" else "32";
+
+in stdenv.mkDerivation rec {
   pname = "amdvlk";
-  version = "2020.Q3.4";
+  version = "2020.Q3.6";
 
   src = fetchRepoProject {
     name = "${pname}-src";
     manifest = "https://github.com/GPUOpen-Drivers/AMDVLK.git";
     rev = "refs/tags/v-${version}";
-    sha256 = "13yy1v43wyw2dbanl39sk1798344smmycgvl3gla61ipqls0qfgd";
+    sha256 = "05bvxxgaz94y85g1sq0jzjxd4j8vgdfan04q2fzmfcw3h6p7syjy";
   };
 
   buildInputs = [
@@ -62,14 +65,19 @@ stdenv.mkDerivation rec {
 
   cmakeDir = "../drivers/xgl";
 
+  # LTO is disabled in gcc for i686 as of #66528
+  cmakeFlags = stdenv.lib.optionals stdenv.is32bit ["-DXGL_ENABLE_LTO=OFF"];
+
   installPhase = ''
-    install -Dm755 -t $out/lib icd/amdvlk64.so
-    install -Dm644 -t $out/share/vulkan/icd.d ../drivers/AMDVLK/json/Redhat/amd_icd64.json
+    install -Dm755 -t $out/lib icd/amdvlk${suffix}.so
+    install -Dm644 -t $out/share/vulkan/icd.d ../drivers/AMDVLK/json/Redhat/amd_icd${suffix}.json
 
-    substituteInPlace $out/share/vulkan/icd.d/amd_icd64.json --replace \
+    substituteInPlace $out/share/vulkan/icd.d/amd_icd${suffix}.json --replace \
       "/usr/lib64" "$out/lib"
+    substituteInPlace $out/share/vulkan/icd.d/amd_icd${suffix}.json --replace \
+      "/usr/lib" "$out/lib"
 
-    patchelf --set-rpath "$rpath" $out/lib/amdvlk64.so
+    patchelf --set-rpath "$rpath" $out/lib/amdvlk${suffix}.so
   '';
 
   # Keep the rpath, otherwise vulkaninfo and vkcube segfault
@@ -80,7 +88,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/GPUOpen-Drivers/AMDVLK";
     changelog = "https://github.com/GPUOpen-Drivers/AMDVLK/releases/tag/v-${version}";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ danieldk Flakebi ];
   };
 }

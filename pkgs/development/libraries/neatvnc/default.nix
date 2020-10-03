@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "neatvnc";
-  version = "0.2.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "036kzhbabbwc3gvsw8kqf6rs0gh8kgn6i0by9pxski38mi0qs1qs";
+    sha256 = "1h9yc3krhjlyapsjaf6y76546rkqk7ygcjfgm0a9bc0cfvmlb5az";
   };
 
   nativeBuildInputs = [ meson pkg-config ninja ];

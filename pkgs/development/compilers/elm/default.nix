@@ -30,18 +30,6 @@ let
             `package/nix/build.sh`
             */
             elm-format = justStaticExecutables (overrideCabal (self.callPackage ./packages/elm-format.nix {}) (drv: {
-              # GHC 8.8.3 support
-              # https://github.com/avh4/elm-format/pull/640
-              patches = [(
-                fetchpatch {
-                  url = "https://github.com/turboMaCk/elm-format/commit/4f4abdc7117ed6ce3335f6cf39b6495b48067b7c.patch";
-                  sha256 = "1zqk6q6w0ph12mnwffgwzf4h1hcgqg0v09ws9q2g5bg2riq4rvd9";
-                }
-              )];
-              # Tests are failing after upgrade to ghc881.
-              # Cause is probably just a minor change in stdout output
-              # see https://github.com/avh4/elm-format/pull/640
-              doCheck = false;
               jailbreak = true;
             }));
 

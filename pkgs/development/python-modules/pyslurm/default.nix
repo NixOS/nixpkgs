@@ -22,5 +22,6 @@ buildPythonPackage rec {
     description = "Python bindings to Slurm";
     license = licenses.gpl2;
     maintainers = with maintainers; [ bhipple ];
+    broken = true;  # still needs slurm-19.05, but nixpkgs has slurm-20+ now
   };
 }

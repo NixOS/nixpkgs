@@ -112,7 +112,7 @@ let
 
   git-ignore = callPackage ./git-ignore { };
 
-  git-imerge = callPackage ./git-imerge { };
+  git-imerge = python3Packages.callPackage ./git-imerge { };
 
   git-interactive-rebase-tool = callPackage ./git-interactive-rebase-tool {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -131,6 +131,8 @@ let
   git-recent = callPackage ./git-recent {
     utillinux = if stdenv.isLinux then utillinuxMinimal else utillinux;
   };
+
+  git-remote-codecommit = python3Packages.callPackage ./git-remote-codecommit { };
 
   git-remote-gcrypt = callPackage ./git-remote-gcrypt { };
 
@@ -201,7 +203,11 @@ let
 
   lab = callPackage ./lab { };
 
-  lefthook = callPackage ./lefthook { };
+  lefthook = callPackage ./lefthook {
+    # Please use empty attrset once upstream bugs have been fixed
+    # https://github.com/Arkweid/lefthook/issues/151
+    buildGoModule = buildGo114Module;
+  };
 
   legit = callPackage ./legit { };
 

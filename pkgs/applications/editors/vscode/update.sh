@@ -1,6 +1,8 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl gnugrep gnused gawk
 
+set -eou pipefail
+
 ROOT="$(dirname "$(readlink -f "$0")")"
 if [ ! -f "$ROOT/vscode.nix" ]; then
   echo "ERROR: cannot find vscode.nix in $ROOT"

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 let
   cfg = config.virtualisation.containers;
 
@@ -13,10 +13,6 @@ let
     json2toml "$valuePath" "$out"
   '';
 
-  # Copy configuration files to avoid having the entire sources in the system closure
-  copyFile = filePath: pkgs.runCommandNoCC (builtins.unsafeDiscardStringContext (builtins.baseNameOf filePath)) {} ''
-    cp ${filePath} $out
-  '';
 in
 {
   meta = {
@@ -136,7 +132,7 @@ in
 
     environment.etc."containers/policy.json".source =
       if cfg.policy != {} then pkgs.writeText "policy.json" (builtins.toJSON cfg.policy)
-      else copyFile "${pkgs.skopeo.src}/default-policy.json";
+      else utils.copyFile "${pkgs.skopeo.src}/default-policy.json";
   };
 
 }

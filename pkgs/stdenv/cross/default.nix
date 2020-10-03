@@ -63,6 +63,8 @@ in lib.init bootStages ++ [
              # `tryEval` wouldn't catch, wrecking accessing previous stages
              # when there is a C compiler and everything should be fine.
              then throw "no C compiler provided for this platform"
+           else if crossSystem.isDarwin
+             then buildPackages.llvmPackages.clang
            else if crossSystem.useLLVM or false
              then buildPackages.llvmPackages_8.lldClang
            else buildPackages.gcc;

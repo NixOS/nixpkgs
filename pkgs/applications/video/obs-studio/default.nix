@@ -20,7 +20,7 @@
 , xorg
 , makeWrapper
 , pkgconfig
-, vlc
+, libvlc
 , mbedtls
 
 , scriptingSupport ? true
@@ -39,13 +39,13 @@ let
 
 in mkDerivation rec {
   pname = "obs-studio";
-  version = "25.0.8";
+  version = "26.0.0";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = version;
-    sha256 = "0j2k65q3wfyfxhvkl6icz4qy0s3kfqhksizy2i3ah7yml266axbj";
+    sha256 = "09y57b3c88szl3wyx3cxq8jrm3pfnyg2n25hxl1ynkq3rgaavdq2";
   };
 
   nativeBuildInputs = [ addOpenGLRunpath cmake pkgconfig ];
@@ -65,7 +65,7 @@ in mkDerivation rec {
     qtsvg
     speex
     x264
-    vlc
+    libvlc
     makeWrapper
     mbedtls
   ]
@@ -84,7 +84,7 @@ in mkDerivation rec {
 
   postInstall = ''
       wrapProgram $out/bin/obs \
-        --prefix "LD_LIBRARY_PATH" : "${xorg.libX11.out}/lib:${vlc}/lib"
+        --prefix "LD_LIBRARY_PATH" : "${xorg.libX11.out}/lib:${libvlc}/lib"
   '';
 
   postFixup = stdenv.lib.optionalString stdenv.isLinux ''

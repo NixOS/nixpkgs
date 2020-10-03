@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     installManPage $releaseDir/build/ripgrep-*/out/rg.1
 
     installShellCompletion $releaseDir/build/ripgrep-*/out/rg.{bash,fish}
-    installShellCompletion --zsh "$src/complete/_rg"
+    installShellCompletion --zsh complete/_rg
   '';
 
   meta = with stdenv.lib; {

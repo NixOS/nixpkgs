@@ -14,7 +14,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ python3 pkgconfig vala_0_44 gobject-introspection wrapGAppsHook ];
   buildInputs = [ xmlbird libgee cairo gdk-pixbuf glib gtk3 webkitgtk libnotify sqlite gsettings-desktop-schemas ];
 
-  postPatch = "patchShebangs .";
+  postPatch = ''
+    substituteInPlace install.py \
+      --replace 'platform.version()' '"Nix"'
+
+    patchShebangs .
+  '';
 
   buildPhase = "./build.py";
 

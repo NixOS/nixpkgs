@@ -457,6 +457,31 @@ let
       '';
     };
 
+    openvpn = {
+      exporterConfig = {
+        enable = true;
+        group = "openvpn";
+        statusPaths = ["/run/openvpn-test"];
+      };
+      metricProvider = {
+        users.groups.openvpn = {};
+        services.openvpn.servers.test = {
+          config = ''
+            dev tun
+            status /run/openvpn-test
+            status-version 3
+          '';
+          up = "chmod g+r /run/openvpn-test";
+        };
+        systemd.services."openvpn-test".serviceConfig.Group = "openvpn";
+      };
+      exporterTest = ''
+        wait_for_unit("openvpn-test.service")
+        wait_for_unit("prometheus-openvpn-exporter.service")
+        succeed("curl -sSf http://localhost:9176/metrics | grep -q 'openvpn_up{.*} 1'")
+      '';
+    };
+
     postfix = {
       exporterConfig = {
         enable = true;
@@ -466,10 +491,12 @@ let
       };
       exporterTest = ''
         wait_for_unit("prometheus-postfix-exporter.service")
+        wait_for_file("/var/lib/postfix/queue/public/showq")
         wait_for_open_port(9154)
         succeed(
             "curl -sSf http://localhost:9154/metrics | grep -q 'postfix_smtpd_connects_total 0'"
         )
+        succeed("curl -sSf http://localhost:9154/metrics | grep -q 'postfix_up{.*} 1'")
       '';
     };
 

@@ -311,7 +311,7 @@ stdenv.mkDerivation {
 
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
-      substituteAll ${if stdenv.isDarwin then ../wrapper-common/utils.bash.darwin else ../wrapper-common/utils.bash} $out/nix-support/utils.bash
+      substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
     ''
 
     ##

@@ -62,24 +62,24 @@ uid = 1000;
   <command>useradd</command>, <command>groupmod</command> and so on. For
   instance, to create a user account named <literal>alice</literal>:
 <screen>
-# useradd -m alice</screen>
+<prompt># </prompt>useradd -m <replaceable>alice</replaceable></screen>
   To make all nix tools available to this new user use `su - USER` which opens
   a login shell (==shell that loads the profile) for given user. This will
   create the ~/.nix-defexpr symlink. So run:
 <screen>
-# su - alice -c "true"</screen>
+<prompt># </prompt>su - <replaceable>alice</replaceable> -c "true"</screen>
   The flag <option>-m</option> causes the creation of a home directory for the
   new user, which is generally what you want. The user does not have an initial
   password and therefore cannot log in. A password can be set using the
   <command>passwd</command> utility:
 <screen>
-# passwd alice
+<prompt># </prompt>passwd <replaceable>alice</replaceable>
 Enter new UNIX password: ***
 Retype new UNIX password: ***
 </screen>
   A user can be deleted using <command>userdel</command>:
 <screen>
-# userdel -r alice</screen>
+<prompt># </prompt>userdel -r <replaceable>alice</replaceable></screen>
   The flag <option>-r</option> deletes the user’s home directory. Accounts
   can be modified using <command>usermod</command>. Unix groups can be managed
   using <command>groupadd</command>, <command>groupmod</command> and

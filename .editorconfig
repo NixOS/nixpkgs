@@ -105,6 +105,13 @@ insert_final_newline = unset
 indent_size = unset
 trim_trailing_whitespace = unset
 
+[pkgs/tools/misc/timidity/timidity.cfg]
+trim_trailing_whitespace = unset
+
+[pkgs/tools/security/enpass/data.json]
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+
 [pkgs/top-level/emscripten-packages.nix]
 trim_trailing_whitespace = unset
 

@@ -69,9 +69,9 @@ badPath() {
     # directory (including the build directory).
     test \
         "$p" != "/dev/null" -a \
-        "${p#${NIX_STORE}}" = "$p" -a \
-        "${p#${TMP:-/tmp}}" = "$p" -a \
-        "${p#${NIX_BUILD_TOP}}" = "$p"
+        "${p:0:${#NIX_STORE}}" != "$NIX_STORE" -a \
+        "${p:0:4}" != "/tmp" -a \
+        "${p:0:${#NIX_BUILD_TOP}}" != "$NIX_BUILD_TOP"
 }
 
 expandResponseParams() {

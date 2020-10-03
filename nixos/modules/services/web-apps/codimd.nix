@@ -877,6 +877,37 @@ in
         description = "Configure the SAML integration.";
       };
     };
+
+
+    environmentFile = mkOption {
+      type = with types; nullOr path;
+      default = null;
+      example = "/var/lib/codimd/codimd.env";
+      description = ''
+        Environment file as defined in <citerefentry>
+        <refentrytitle>systemd.exec</refentrytitle><manvolnum>5</manvolnum>
+        </citerefentry>.
+
+        Secrets may be passed to the service without adding them to the world-readable
+        Nix store, by specifying placeholder variables as the option value in Nix and
+        setting these variables accordingly in the environment file.
+
+        <programlisting>
+          # snippet of CodiMD-related config
+          services.codimd.configuration.dbURL = "postgres://codimd:\''${DB_PASSWORD}@db-host:5432/codimddb";
+          services.codimd.configuration.minio.secretKey = "$MINIO_SECRET_KEY";
+        </programlisting>
+
+        <programlisting>
+          # content of the environment file
+          DB_PASSWORD=verysecretdbpassword
+          MINIO_SECRET_KEY=verysecretminiokey
+        </programlisting>
+
+        Note that this file needs to be available on the host on which
+        <literal>CodiMD</literal> is running.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -900,11 +931,17 @@ in
       description = "CodiMD Service";
       wantedBy = [ "multi-user.target" ];
       after = [ "networking.target" ];
+      preStart = ''
+        ${pkgs.envsubst}/bin/envsubst \
+          -o ${cfg.workDir}/config.json \
+          -i ${prettyJSON cfg.configuration}
+      '';
       serviceConfig = {
         WorkingDirectory = cfg.workDir;
         ExecStart = "${pkgs.codimd}/bin/codimd";
+        EnvironmentFile = mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
         Environment = [
-          "CMD_CONFIG_FILE=${prettyJSON cfg.configuration}"
+          "CMD_CONFIG_FILE=${cfg.workDir}/config.json"
           "NODE_ENV=production"
         ];
         Restart = "always";

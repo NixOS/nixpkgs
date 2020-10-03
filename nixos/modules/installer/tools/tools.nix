@@ -22,10 +22,10 @@ let
     src = ./nixos-install.sh;
     inherit (pkgs) runtimeShell;
     nix = config.nix.package.out;
-    path = makeBinPath [ 
-      pkgs.nixUnstable 
+    path = makeBinPath [
+      pkgs.nixUnstable
       pkgs.jq
-      nixos-enter 
+      nixos-enter
     ];
   };
 

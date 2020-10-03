@@ -1,21 +1,17 @@
-{ lib, fetchurl, buildDunePackage }:
+{ lib, fetchurl, buildDunePackage, result }:
 
 buildDunePackage rec {
   pname = "csexp";
-  version = "1.3.1";
+  version = "1.3.2";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.08";
+  minimumOCamlVersion = "4.02.3";
 
   src = fetchurl {
     url = "https://github.com/ocaml-dune/csexp/releases/download/${version}/csexp-${version}.tbz";
-    sha256 = "0maihbqbqq9bwr0r1cv51r3m4hrkx9cf5wnxcz7rjgn13lcc9s49";
+    sha256 = "0jhwrxfjb0x31xj4g4b89fzw34sq19j0rq2hs2zyh1vz4xxl47zj";
   };
 
-  postPatch = ''
-    substituteInPlace src/csexp.ml --replace Result.result Result.t
-  '';
+  propagatedBuildInputs = [ result ];
 
   meta = with lib; {
     homepage = "https://github.com/ocaml-dune/csexp";

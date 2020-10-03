@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, requests, mock, httmock, pythonOlder }:
+{ stdenv, buildPythonPackage, fetchPypi, requests, mock, httmock, pythonOlder, pytest, responses }:
 
 buildPythonPackage rec {
   pname = "python-gitlab";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [ mock httmock ];
+  checkInputs = [ mock httmock pytest responses ];
 
   disabled = pythonOlder "3.6";
 

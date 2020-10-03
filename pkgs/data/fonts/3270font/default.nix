@@ -1,13 +1,13 @@
 { lib, fetchzip }:
 let
-  version = "2.0.4";
+  version = "2.1.0";
 in
-fetchzip rec {
+fetchzip {
   name = "3270font-${version}";
 
-  url = "https://github.com/rbanffy/3270font/releases/download/v${version}/3270_fonts_ece94f6.zip";
+  url = "https://github.com/rbanffy/3270font/releases/download/v.${version}/3270_fonts_fba25eb.zip";
 
-  sha256 = "04q7dnrlq5hm30iibh3jafb33m5lwsgb3g9n9i188sg02ydkrsl9";
+  sha256 = "04xqgiznd6d3c1rdbbdmd87rjy9bnhh00lm8xzmal1zidcr2g0n9";
 
   postFetch = ''
     mkdir -p $out/share/fonts/

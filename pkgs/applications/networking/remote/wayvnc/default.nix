@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, meson, pkg-config, ninja
+{ stdenv, fetchFromGitHub, meson, pkg-config, ninja, scdoc
 , pixman, libxkbcommon, wayland, neatvnc, libdrm, libX11, aml
 }:
 
 stdenv.mkDerivation rec {
   pname = "wayvnc";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ddcf8hrxhx4rcwvbjwa5j3ygiwca2dpw26wl37pb0q0jr81wylv";
+    sha256 = "1vlrk6zdkv0kl1ckxv65nay9vm6yjrs4kadsdvp42nryiifrdhad";
   };
 
-  nativeBuildInputs = [ meson pkg-config ninja wayland ];
+  nativeBuildInputs = [ meson pkg-config ninja scdoc wayland ];
   buildInputs = [ pixman libxkbcommon wayland neatvnc libdrm libX11 aml ];
 
   meta = with stdenv.lib; {

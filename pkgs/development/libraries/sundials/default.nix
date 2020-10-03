@@ -5,7 +5,9 @@
 , blas
 , lapack
 , gfortran
-, lapackSupport ? true }:
+, suitesparse
+, lapackSupport ? true
+, kluSupport ? true }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
@@ -13,7 +15,20 @@ stdenv.mkDerivation rec {
   pname = "sundials";
   version = "5.3.0";
 
-  buildInputs = [ python ] ++ stdenv.lib.optionals (lapackSupport) [ gfortran blas lapack ];
+  buildInputs = [
+    python
+  ] ++ stdenv.lib.optionals (lapackSupport) [
+    gfortran
+    blas
+    lapack
+  ]
+  # KLU support is based on Suitesparse.
+  # It is tested upstream according to the section 1.1.4 of
+  # [INSTALL_GUIDE.pdf](https://raw.githubusercontent.com/LLNL/sundials/master/INSTALL_GUIDE.pdf)
+  ++ stdenv.lib.optionals (kluSupport) [
+    suitesparse
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   src = fetchurl {
@@ -35,6 +50,10 @@ stdenv.mkDerivation rec {
     "-DSUNDIALS_INDEX_TYPE=int32_t"
     "-DLAPACK_ENABLE=ON"
     "-DLAPACK_LIBRARIES=${lapack}/lib/liblapack${stdenv.hostPlatform.extensions.sharedLibrary}"
+  ] ++ stdenv.lib.optionals (kluSupport) [
+    "-DKLU_ENABLE=ON"
+    "-DKLU_INCLUDE_DIR=${suitesparse.dev}/include"
+    "-DKLU_LIBRARY_DIR=${suitesparse}/lib"
   ];
 
   doCheck = true;
@@ -44,7 +63,7 @@ stdenv.mkDerivation rec {
     description = "Suite of nonlinear differential/algebraic equation solvers";
     homepage    = "https://computation.llnl.gov/projects/sundials";
     platforms   = platforms.all;
-    maintainers = with maintainers; [ flokli idontgetoutmuch ];
+    maintainers = with maintainers; [ idontgetoutmuch ];
     license     = licenses.bsd3;
   };
 }

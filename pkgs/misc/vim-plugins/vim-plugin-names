@@ -1,9 +1,9 @@
 907th/vim-auto-save
+aca/completion-tabnine
 airblade/vim-gitgutter
 airblade/vim-rooter
 ajh17/Spacegray.vim
 aklt/plantuml-syntax
-albfan/nerdtree-git-plugin
 altercation/vim-colors-solarized
 alvan/vim-closetag
 alx741/vim-hindent
@@ -151,6 +151,7 @@ hrsh7th/vim-vsnip
 hrsh7th/vim-vsnip-integ
 hsanson/vim-android
 hsitz/VimOrganizer
+hugolgst/vimsence
 iamcco/coc-spell-checker
 iamcco/coc-vimlsp
 ianks/vim-tsx
@@ -267,7 +268,6 @@ lyokha/vim-xkbswitch
 machakann/vim-highlightedyank
 machakann/vim-sandwich
 machakann/vim-swap
-majutsushi/tagbar
 maksimr/vim-jsbeautify
 MarcWeber/vim-addon-actions
 MarcWeber/vim-addon-async
@@ -371,6 +371,7 @@ nvim-lua/completion-nvim
 nvim-lua/diagnostic-nvim
 nvim-treesitter/completion-treesitter
 nvim-treesitter/nvim-treesitter
+ocaml/vim-ocaml
 octol/vim-cpp-enhanced-highlight
 Olical/conjure
 OrangeT/vim-csharp
@@ -392,9 +393,11 @@ ponko2/deoplete-fish
 posva/vim-vue
 powerman/vim-plugin-AnsiEsc
 PProvost/vim-ps1
+prabirshrestha/asyncomplete.vim
 prabirshrestha/vim-lsp
 preservim/nerdcommenter
 preservim/nerdtree
+preservim/tagbar
 psliwka/vim-smoothie
 ptzz/lf.vim
 puremourning/vimspector
@@ -489,7 +492,9 @@ thinca/vim-themis
 thinca/vim-visualstar
 thirtythreeforty/lessspace.vim
 thosakwe/vim-flutter
+tiagofumo/vim-nerdtree-syntax-highlight
 tikhomirov/vim-glsl
+tjdevries/lsp_extensions.nvim
 tmhedberg/SimpylFold
 tmsvg/pear-tree
 tmux-plugins/vim-tmux
@@ -542,6 +547,7 @@ uarun/vim-protobuf
 udalov/kotlin-vim
 ujihisa/neco-look
 unblevable/quick-scope
+urbit/hoon.vim
 Valodim/deoplete-notmuch
 vhda/verilog_systemverilog.vim
 vim-airline/vim-airline
@@ -604,6 +610,7 @@ xavierd/clang_complete
 xolox/vim-easytags
 xolox/vim-misc
 xuhdev/vim-latex-live-preview
+Xuyuanp/nerdtree-git-plugin
 ycm-core/YouCompleteMe
 Yggdroot/indentLine
 Yilin-Yang/vim-markbar

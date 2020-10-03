@@ -352,8 +352,6 @@ let
 
     ipaddr-sexp = callPackage ../development/ocaml-modules/ipaddr/sexp.nix { };
 
-    irmin_1 = callPackage ../development/ocaml-modules/irmin/1.4.nix { };
-
     iso8601 = callPackage ../development/ocaml-modules/iso8601 { };
 
     iter = callPackage ../development/ocaml-modules/iter { };
@@ -882,7 +880,15 @@ let
 
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
 
+    ptset = callPackage ../development/ocaml-modules/ptset { };
+
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
+
+    qcheck-alcotest = callPackage ../development/ocaml-modules/qcheck/alcotest.nix { };
+
+    qcheck-core = callPackage ../development/ocaml-modules/qcheck/core.nix { };
+
+    qcheck-ounit = callPackage ../development/ocaml-modules/qcheck/ounit.nix { };
 
     qcheck = callPackage ../development/ocaml-modules/qcheck { };
 
@@ -986,6 +992,10 @@ let
     yaml = callPackage ../development/ocaml-modules/yaml { };
 
     yojson = callPackage ../development/ocaml-modules/yojson { };
+
+    z3 = callPackage ../development/ocaml-modules/z3 {
+      inherit (pkgs) z3;
+    };
 
     zarith = callPackage ../development/ocaml-modules/zarith { };
 

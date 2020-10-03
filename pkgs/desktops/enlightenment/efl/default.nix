@@ -54,11 +54,11 @@
 
 stdenv.mkDerivation rec {
   pname = "efl";
-  version = "1.24.3";
+  version = "1.25.0";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "de95c6e673c170c1e21382918b122417c091c643e7dcaced89aa785529625c2a";
+    sha256 = "0vlmf0rp2qxdl06pdmrd1xdfa10sdz30vnxzc98inpdg1n8iz52k";
   };
 
   nativeBuildInputs = [
@@ -142,16 +142,17 @@ stdenv.mkDerivation rec {
     "--buildtype=release"
     "-D build-tests=false" # disable build tests, which are not working
     "-D drm=true"
-    "-D ecore-imf-loaders-disabler=ibus,scim" # ibus is disalbed by default, scim is not availabe in nixpkgs
+    "-D ecore-imf-loaders-disabler=ibus,scim" # ibus is disabled by default, scim is not availabe in nixpkgs
     "-D embedded-lz4=false"
     "-D fb=true"
     "-D network-backend=connman"
     "-D sdl=true"
+    "-D elua=true"
+    "-D bindings=lua,cxx"
   ];
 
   patches = [
     ./efl-elua.patch
-    ./0002-efreet-more-stat-info-changes.patch
   ];
 
   postPatch = ''
@@ -174,11 +175,10 @@ stdenv.mkDerivation rec {
     source "$setupHook"
   '';
 
-  NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
-
   postInstall = ''
     # fix use of $out variable
     substituteInPlace "$out/share/elua/core/util.lua" --replace '$out' "$out"
+    rm "$out/share/elua/core/util.lua.orig"
 
     # add all module include dirs to the Cflags field in efl.pc
     modules=$(for i in "$out/include/"*/; do printf ' -I''${includedir}/'`basename $i`; done)

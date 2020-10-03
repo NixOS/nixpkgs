@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, makeDesktopItem, makeWrapper
+{ stdenv, mkDerivation, fetchFromGitHub, fetchpatch, makeDesktopItem, makeWrapper
 , python, pkgconfig, SDL2, SDL2_ttf, alsaLib, which, qtbase, libXinerama
 , libpcap, CoreAudioKit, ForceFeedback
 , installShellFiles }:
@@ -7,7 +7,7 @@ with stdenv;
 
 let
   majorVersion = "0";
-  minorVersion = "223";
+  minorVersion = "224";
 
   desktopItem = makeDesktopItem {
     name = "MAME";
@@ -26,7 +26,7 @@ in mkDerivation {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${majorVersion}${minorVersion}";
-    sha256 = "1lh5cmz4f6km2d8fn3m9ns7fc4wzbdp71v0s6vjcynycpyhy3yl1";
+    sha256 = "1z012fk7nlvxxixxcavmzc9443xli6i7xzz7fdf755g7v1cys7im";
   };
 
   hardeningDisable = [ "fortify" ];
@@ -51,7 +51,15 @@ in mkDerivation {
   # by default MAME assumes that paths with stock resources
   # are relative and that you run MAME changing to
   # install directory, so we add absolute paths here
-  patches = [ ./emuopts.patch ];
+  patches = [
+    ./emuopts.patch
+    # Make the parallel build reliable -- see https://github.com/mamedev/mame/pull/7279
+    (fetchpatch {
+      name = "fix-mame-parallel-build.patch";
+      url = "https://github.com/mamedev/mame/commit/13a54fd4e8b8b1a4aad77671562b2d9ef3d82e1f.patch";
+      sha256 = "1p4bszir9hcdjx6am58p48zh17rhjzlhx2baiacas7fnig61i02n";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace src/emu/emuopts.cpp \

@@ -15,13 +15,13 @@
 
 buildGoModule rec {
   pname = "cri-o";
-  version = "1.18.3";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "cri-o";
     repo = "cri-o";
     rev = "v${version}";
-    sha256 = "1csdbyypqwxkfc061pdv7nj52a52b9xxzb6qgxcznd82w7wgfb3g";
+    sha256 = "1lrr8y0k6609z4gb8cg277rq58sh0bqd2b4mzjlynyjdgp3xskfq";
   };
   vendorSha256 = null;
 
@@ -41,10 +41,6 @@ buildGoModule rec {
 
   BUILDTAGS = "apparmor seccomp selinux containers_image_openpgp containers_image_ostree_stub";
   buildPhase = ''
-    patchShebangs .
-
-    sed -i '/version.buildDate/d' Makefile
-
     make binaries docs BUILDTAGS="$BUILDTAGS"
   '';
 

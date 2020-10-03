@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "202007";
+  version = "202008";
   pname = "pcm";
 
   src = fetchFromGitHub {
     owner = "opcm";
     repo = "pcm";
     rev = version;
-    sha256 = "1qqp51mvi52jvf6zf4g1fzv6nh9p37y0i7r2y273gwcdygbidzma";
+    sha256 = "1paxwq0p39vp2ma0rg7dkalc3r28wzj77sm3alavvk2vxgvxi0ig";
   };
 
   installPhase = ''

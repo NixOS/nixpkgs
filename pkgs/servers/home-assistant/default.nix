@@ -35,13 +35,6 @@ let
     (mkOverride "bcrypt" "3.1.7"
       "0hhywhxx301cxivgxrpslrangbfpccc8y83qbwn1f57cab3nj00b")
 
-    # required by aioesphomeapi
-    (self: super: {
-      protobuf = super.protobuf.override {
-        protobuf = protobuf3_6;
-      };
-    })
-
     # hass-frontend does not exist in python3.pkgs
     (self: super: {
       hass-frontend = self.callPackage ./frontend.nix { };
@@ -75,7 +68,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.114.4";
+  hassVersion = "0.115.6";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -85,6 +78,7 @@ in with py.pkgs; buildPythonApplication rec {
 
   patches = [
     ./relax-dependencies.patch
+    ./fix-media-path-test.patch
   ];
 
   inherit availableComponents;
@@ -94,7 +88,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "0k9px4ny0b72d9ysr3x72idprgfgjab1z91ildr87629826bb4n7";
+    sha256 = "07j54glcpa5ngkr0pwdg44f8gas3jz3nh653mr5sb5wg7xspgcr8";
   };
 
   postPatch = ''
@@ -107,8 +101,8 @@ in with py.pkgs; buildPythonApplication rec {
     aiohttp astral async-timeout attrs bcrypt certifi importlib-metadata jinja2
     pyjwt cryptography pip python-slugify pytz pyyaml requests ruamel_yaml
     setuptools voluptuous voluptuous-serialize
-    # From http, frontend and recorder components and auth.mfa_modules.totp
-    sqlalchemy aiohttp-cors hass-frontend pyotp pyqrcode ciso8601
+    # From frontend, image, http and recorder components and auth.mfa_modules.totp
+    sqlalchemy aiohttp-cors hass-frontend pillow pyotp pyqrcode ciso8601
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   # upstream only tests on Linux, so do we.
@@ -119,6 +113,9 @@ in with py.pkgs; buildPythonApplication rec {
   ];
 
   checkPhase = ''
+    # the tests require the existance of a media dir
+    mkdir /build/media
+
     # - components' dependencies are not included, so they cannot be tested
     # - test_merge_id_schema requires pyqwikswitch
     # - test_loader.py tries to load not-packaged dependencies

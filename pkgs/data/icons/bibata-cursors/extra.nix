@@ -1,4 +1,4 @@
-{ stdenvNoCC, fetchFromGitHub, gnome-themes-extra, inkscape_0, xcursorgen, python3 }:
+{ stdenvNoCC, fetchFromGitHub, gnome-themes-extra, inkscape, xcursorgen, python3 }:
 
 let
   py = python3.withPackages(ps: [ ps.pillow ]);
@@ -25,7 +25,7 @@ in stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs  = [
     gnome-themes-extra
-    inkscape_0
+    inkscape
     xcursorgen
     py
   ];

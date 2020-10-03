@@ -27,6 +27,18 @@
     <para>GNOME desktop environment was upgraded to 3.36, see its <link xlink:href="https://help.gnome.org/misc/release-notes/3.36/">release notes</link>.</para>
    </listitem>
    <listitem>
+     <para>
+     The Cinnamon desktop environment (v4.6) has been added. <varname>services.xserver.desktopManager.cinnamon.enable = true;</varname> to try it out!
+     Remember that, with any new feature it's possible you could run into issues, so please send all support requests to <link xlink:href="https://github.com/NixOS/nixpkgs/issues">github.com/NixOS/nixpkgs</link> to notify the maintainers.
+     </para>
+   </listitem>
+   <listitem>
+    <para>
+      Quickly configure a complete, private, self-hosted video
+      conferencing solution with the new Jitsi Meet module.
+    </para>
+   </listitem>
+   <listitem>
     <para>
     <package>maxx</package> package removed along with <varname>services.xserver.desktopManager.maxx</varname> module.
     Please migrate to <package>cdesktopenv</package> and <varname>services.xserver.desktopManager.cde</varname> module.
@@ -582,8 +594,8 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
    <listitem>
      <para>
        The hostname (<literal>networking.hostName</literal>) must now be a valid
-       DNS label (see RFC 1035) and as such must not contain the domain part.
-       This means that the hostname must start with a letter, end with a letter
+       DNS label (see RFC 1035, RFC 1123) and as such must not contain the domain part.
+       This means that the hostname must start with a letter or digit, end with a letter
        or digit, and have as interior characters only letters, digits, and
        hyphen. The maximum length is 63 characters. Additionally it is
        recommended to only use lower-case characters.
@@ -822,6 +834,31 @@ CREATE ROLE postgres LOGIN SUPERUSER;
      functionally redundent.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The package <package>nextcloud17</package> has been removed and <package>nextcloud18</package> was marked as insecure
+     since both of them will <link xlink:href="https://docs.nextcloud.com/server/19/admin_manual/release_schedule.html">
+     will be EOL (end of life) within the lifetime of 20.09</link>.
+    </para>
+    <para>
+     It's necessary to upgrade to <package>nextcloud19</package>:
+     <itemizedlist>
+      <listitem>
+       <para>
+        From <package>nextcloud17</package>, you have to upgrade to <package>nextcloud18</package> first as
+        Nextcloud doesn't allow going multiple major revisions forward in a single upgrade. This is possible
+        by setting <xref linkend="opt-services.nextcloud.package" /> to <package>nextcloud18</package>.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        From <package>nextcloud18</package>, it's possible to directly upgrade to <package>nextcloud19</package>
+        by setting <xref linkend="opt-services.nextcloud.package" /> to <package>nextcloud19</package>.
+       </para>
+      </listitem>
+     </itemizedlist>
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -965,6 +1002,24 @@ systemd.services.transmission.serviceConfig.BindPaths = [ "/path/to/alternative/
 services.transmission.settings.rpc-bind-address = "0.0.0.0";
 </programlisting>
      to get the previous behavior of listening on all network interfaces.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>security.apparmor</literal> module,
+     for the <link xlink:href="https://gitlab.com/apparmor/apparmor/-/wikis/Documentation">AppArmor</link>
+     Mandatory Access Control system,
+     has been substantialy improved along with related tools,
+     so that module maintainers can now more easily write AppArmor profiles for NixOS.
+     The most notable change on the user-side is the new option <xref linkend="opt-security.apparmor.policies"/>,
+     replacing the previous <literal>profiles</literal> option
+     to provide a way to disable a profile
+     and to select whether to confine in enforce mode (default)
+     or in complain mode (see <literal>journalctl -b --grep apparmor</literal>).
+     Before enabling this module, either directly
+     or by importing <literal>&lt;nixpkgs/nixos/modules/profiles/hardened.nix&gt;</literal>,
+     please be sure to read the documentation of <link linkend="opt-security.apparmor.enable">security.apparmor.enable</link>,
+     and especially the part about <xref linkend="opt-security.apparmor.killUnconfinedConfinables"/>.
     </para>
    </listitem>
    <listitem>
@@ -1125,6 +1180,21 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
        The <literal>opendkim</literal> module now uses systemd sandboxing features
        to limit the exposure of the system towards the opendkim service.
      </para>
+   </listitem>
+  </itemizedlist>
+  <itemizedlist>
+   <listitem>
+    <para />
+    <para>
+        Kubernetes has been upgraded to 1.19.1, which also means that the
+        golang version to build it has been bumped to 1.15. This may have
+        consequences for your existing clusters and their certificates. Please
+        consider
+        <link xlink:href="https://relnotes.k8s.io/?markdown=93264">
+            the release notes for Kubernetes 1.19 carefully
+        </link>
+        before upgrading.
+    </para>
    </listitem>
   </itemizedlist>
  </section>

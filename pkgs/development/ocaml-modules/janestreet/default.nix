@@ -234,7 +234,7 @@ rec {
   ppx_let = janePackage {
     pname = "ppx_let";
     hash = "1ckzwljlb78cdf6xxd24nddnmsihvjrnq75r1b255aj3xgkzsygx";
-    buildInputs = [ ppxlib ];
+    propagatedBuildInputs = [ base ppxlib ];
     meta.description = "Monadic let-bindings";
   };
 

@@ -7,7 +7,7 @@
 , gnome3
 , gtk-engine-murrine
 , optipng
-, inkscape_0
+, inkscape
 , cinnamon
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     pkgconfig
     sassc
     optipng
-    inkscape_0
+    inkscape
     gtk3
   ];
 

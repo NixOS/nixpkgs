@@ -7,9 +7,12 @@
 , paramiko
 , netaddr
 , ncclient
+, ntc-templates
 , lxml
 , jinja2
 , pyyaml
+, transitions
+, yamlordereddictloader
 , nose
 }:
 
@@ -22,11 +25,10 @@ buildPythonPackage rec {
     sha256 = "521659fe94da796897abc16773c3d84fa44d3e1f5386c71fbaef44cb80159855";
   };
 
-
   checkInputs = [ nose ];
 
   propagatedBuildInputs = [
-    scp six pyserial paramiko netaddr ncclient lxml jinja2 pyyaml
+    scp six pyserial paramiko netaddr ncclient ntc-templates lxml jinja2 pyyaml transitions yamlordereddictloader
   ];
 
   checkPhase = ''

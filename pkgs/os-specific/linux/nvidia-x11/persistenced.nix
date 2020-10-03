@@ -2,14 +2,14 @@ nvidia_x11: sha256:
 
 { stdenv, fetchFromGitHub, m4 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "nvidia-persistenced";
-  inherit (nvidia_x11) version;
+  version = nvidia_x11.persistencedVersion;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-persistenced";
-    rev = nvidia_x11.version;
+    rev = nvidia_x11.persistencedVersion;
     inherit sha256;
   };
 

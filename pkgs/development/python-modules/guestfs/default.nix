@@ -12,7 +12,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ libguestfs qemu ];
 
   meta = with stdenv.lib; {
-    homepage = "http://libguestfs.org/guestfs-python.3.html";
+    homepage = "https://libguestfs.org/guestfs-python.3.html";
     description = "Use libguestfs from Python";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ grahamc ];

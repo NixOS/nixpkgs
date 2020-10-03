@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libwacom";
-  version = "1.4.1";
+  version = "1.5";
 
   outputs = [ "out" "dev" ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "linuxwacom";
     repo = "libwacom";
     rev = "libwacom-${version}";
-    sha256 = "0m96zjj832l18rzg9l31ambm6rv9vnh2a1sfk8531da8m347z287";
+    sha256 = "1a3qkzpkag1vqd2xl7b7f2b8kbg1y1g6gg5ydzb1ppyqw3zdjf9x";
   };
 
   nativeBuildInputs = [ pkgconfig meson ninja doxygen ];

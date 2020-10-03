@@ -25,15 +25,11 @@ assert !openMPISupport || openmpi != null;
 assert !cudaSupport || cudatoolkit != null;
 assert cudnn == null || cudatoolkit != null;
 assert !cudaSupport || (let majorIs = lib.versions.major cudatoolkit.version;
-                        in majorIs == "9" || majorIs == "10");
+                        in majorIs == "9" || majorIs == "10" || majorIs == "11");
 
-let
-  hasDependency = dep: pkg: lib.lists.any (inp: inp == dep) pkg.buildInputs;
-  matchesCudatoolkit = hasDependency cudatoolkit;
-in
 # confirm that cudatoolkits are sync'd across dependencies
-assert !(openMPISupport && cudaSupport) || matchesCudatoolkit openmpi;
-assert !cudaSupport || matchesCudatoolkit magma;
+assert !(openMPISupport && cudaSupport) || openmpi.cudatoolkit == cudatoolkit;
+assert !cudaSupport || magma.cudatoolkit == cudatoolkit;
 
 let
   cudatoolkit_joined = symlinkJoin {

@@ -10,7 +10,6 @@
 , utillinux # nsenter
 , cni-plugins # not added to path
 , iptables
-, socat
 }:
 
 let
@@ -22,7 +21,6 @@ let
     conmon
     utillinux
     iptables
-    socat
   ] ++ extraPackages);
 
 in runCommand cri-o.name {

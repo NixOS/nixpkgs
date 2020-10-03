@@ -46,9 +46,8 @@ pythonPackages.buildPythonApplication rec {
     librsync
   ];
 
-  propagatedBuildInputs = [
-    backblaze-b2
-  ] ++ (with pythonPackages; [
+  propagatedBuildInputs = with pythonPackages; [
+    b2sdk
     boto
     cffi
     cryptography
@@ -65,7 +64,7 @@ pythonPackages.buildPythonApplication rec {
     future
   ] ++ stdenv.lib.optionals (!isPy3k) [
     enum
-  ]);
+  ];
 
   checkInputs = [
     gnupg # Add 'gpg' to PATH.

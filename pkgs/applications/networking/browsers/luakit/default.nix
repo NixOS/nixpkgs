@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "luakit";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchFromGitHub {
     owner = "luakit";
     repo = "luakit";
     rev = version;
-    sha256 = "05mm76g72fs48410pbij4mw0s3nqji3r7f3mnr2fvhv02xqj05aa";
+    sha256 = "sha256-rpHW5VyntmmtekdNcZMIw8Xdv4cfiqJaaHj4ZFFGjYc=";
   };
 
   nativeBuildInputs = [
@@ -54,9 +54,17 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Fast, small, webkit based browser framework extensible in Lua";
+    description = "Fast, small, webkit-based browser framework extensible in Lua";
+    longDescription = ''
+      Luakit is a highly configurable browser framework based on the WebKit web
+      content engine and the GTK+ toolkit. It is very fast, extensible with Lua,
+      and licensed under the GNU GPLv3 license. It is primarily targeted at
+      power users, developers and anyone who wants to have fine-grained control
+      over their web browser’s behaviour and interface.
+    '';
     homepage    = "https://luakit.github.io/";
-    license     = licenses.gpl3;
-    platforms   = platforms.linux; # Only tested linux
+    license     = licenses.gpl3Only;
+    platforms   = platforms.unix;
+    maintainers = [ maintainers.AndersonTorres ];
   };
 }

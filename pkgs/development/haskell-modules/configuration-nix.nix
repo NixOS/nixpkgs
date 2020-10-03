@@ -571,9 +571,20 @@ self: super: builtins.intersectAttrs super {
   }));
 
   # Expects z3 to be on path so we replace it with a hard
+  #
+  # The tests expect additional solvers on the path, replace the
+  # available ones also with hard coded paths, and remove the missing
+  # ones from the test.
   sbv = overrideCabal super.sbv (drv: {
     postPatch = ''
-      sed -i -e 's|"z3"|"${pkgs.z3}/bin/z3"|' Data/SBV/Provers/Z3.hs'';
+      sed -i -e 's|"abc"|"${pkgs.abc-verifier}/bin/abc"|' Data/SBV/Provers/ABC.hs
+      sed -i -e 's|"boolector"|"${pkgs.boolector}/bin/boolector"|' Data/SBV/Provers/Boolector.hs
+      sed -i -e 's|"cvc4"|"${pkgs.cvc4}/bin/cvc4"|' Data/SBV/Provers/CVC4.hs
+      sed -i -e 's|"yices-smt2"|"${pkgs.yices}/bin/yices-smt2"|' Data/SBV/Provers/Yices.hs
+      sed -i -e 's|"z3"|"${pkgs.z3}/bin/z3"|' Data/SBV/Provers/Z3.hs
+
+      sed -i -e 's|\[abc, boolector, cvc4, mathSAT, yices, z3, dReal\]|[abc, boolector, cvc4, yices, z3]|' SBVTestSuite/SBVConnectionTest.hs
+   '';
   });
 
   # The test-suite requires a running PostgreSQL server.
@@ -771,4 +782,14 @@ self: super: builtins.intersectAttrs super {
     testToolDepends = [ pkgs.git pkgs.mercurial ];
   });
 
+  haskell-language-server = overrideCabal super.haskell-language-server (drv: {
+    postInstall = let
+      inherit (pkgs.lib) concatStringsSep take splitString;
+      ghc_version = self.ghc.version;
+      ghc_major_version = concatStringsSep "." (take 2 (splitString "." ghc_version));
+    in ''
+        ln -s $out/bin/haskell-language-server $out/bin/haskell-language-server-${ghc_version}
+        ln -s $out/bin/haskell-language-server $out/bin/haskell-language-server-${ghc_major_version}
+       '';
+  });
 }

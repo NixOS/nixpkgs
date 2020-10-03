@@ -183,7 +183,12 @@ GPU1:
 	be forced as follows:
 
 	<programlisting><xref linkend="opt-hardware.opengl.extraPackages"/> = [
-  <package>amdvlk</package>
+  pkgs.<package>amdvlk</package>
+];
+
+# To enable Vulkan support for 32-bit applications, also add:
+<xref linkend="opt-hardware.opengl.extraPackages32"/> = [
+  pkgs.driversi686Linux.<package>amdvlk</package>
 ];
 
 # For amdvlk
