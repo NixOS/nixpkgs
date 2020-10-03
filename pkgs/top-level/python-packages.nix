@@ -2002,6 +2002,8 @@ in {
 
   fastpbkdf2 = callPackage ../development/python-modules/fastpbkdf2 { };
 
+  fastprogress = callPackage ../development/python-modules/fastprogress { };
+
   fastrlock = callPackage ../development/python-modules/fastrlock { };
 
   fasttext = callPackage ../development/python-modules/fasttext { };
