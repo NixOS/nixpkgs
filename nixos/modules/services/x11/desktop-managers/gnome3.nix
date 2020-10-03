@@ -141,6 +141,16 @@ in
       description = "Which packages gnome should exclude from the default environment";
     };
 
+    environment.gnome3.enableExtensions = mkOption {
+      default = null;
+      example = literalExample "with pkgs.gnomeExtensions; [ dash-to-dock ]";
+      type = with types; nullOr (listOf package);
+      description = ''
+        Which GNOME Shell Extensions to enable. If null, extensions are managed
+        imperatively via your browser and/or GNOME Tweaks.
+      '';
+    };
+
   };
 
   config = mkMerge [
@@ -308,6 +318,25 @@ in
         # Do not use the default environment, it provides a broken PATH
         environment = mkForce {};
       };
+
+    services.xserver.desktopManager.gnome3.extraGSettingsOverrides =
+      let
+        extensions = config.environment.gnome3.enableExtensions;
+        extensionUuids = builtins.toJSON (map (x: x.uuid) extensions);
+      in
+        lib.optionalString (extensions != null) ''
+          [org.gnome.shell]
+          enabled-extensions=${extensionUuids}
+        '';
+
+     # Add a lock file, it prevents users from modifying / overriding the
+     # system (default) settings.
+     # FIXME: It doesn't work! Users can still change these settings.
+     # Ref. https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/desktop_migration_and_administration_guide/custom-default-values-system-settings
+     environment.etc."dconf/db/local.d/locks/00-org-gnome-shell-enabled-extensions".text = ''
+       # Prevent this key from being overridden by users (enforcing declarative style)
+       /org/gnome/shell/enabled-extensions
+     '';
 
       # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-36/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages = with pkgs.gnome3; [
