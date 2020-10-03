@@ -499,6 +499,7 @@ rec {
         show = v:
                if builtins.isString v then ''"${v}"''
           else if builtins.isInt v then builtins.toString v
+          else if builtins.isBool v then if v then "true" else "false"
           else ''<${builtins.typeOf v}>'';
       in
       mkOptionType rec {
