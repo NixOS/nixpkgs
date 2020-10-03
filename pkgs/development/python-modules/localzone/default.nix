@@ -1,7 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, dnspython
+, dnspython_1
 , sphinx
 , pytest
 }:
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "154l7qglsm4jrhqddvlas8cgl9qm2z4dzihv05jmsyqjikcmfwk8";
   };
 
-  propagatedBuildInputs = [ dnspython sphinx ];
+  propagatedBuildInputs = [ dnspython_1 sphinx ];
 
   checkInputs = [ pytest ];
 
