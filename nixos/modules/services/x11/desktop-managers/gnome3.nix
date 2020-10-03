@@ -69,6 +69,7 @@ in
       core-os-services.enable = mkEnableOption "essential services for GNOME3";
       core-shell.enable = mkEnableOption "GNOME Shell services";
       core-utilities.enable = mkEnableOption "GNOME core utilities";
+      core-developer-tools.enable = mkEnableOption "GNOME core developer tools";
       games.enable = mkEnableOption "GNOME games";
 
       experimental-features = {
@@ -445,6 +446,22 @@ in
         swell-foop
         tali
       ] config.environment.gnome3.excludePackages);
+    })
+
+    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/3.38.0/elements/core/meta-gnome-core-developer-tools.bst
+    (mkIf serviceCfg.core-developer-tools.enable {
+      environment.systemPackages = (with pkgs.gnome3; removePackagesByName [
+        dconf-editor
+        devhelp
+        pkgs.gnome-builder
+        # boxes would make sense in this option, however
+        # it doesn't function well enough to be included
+        # in default configurations.
+        # https://github.com/NixOS/nixpkgs/issues/60908
+        /* gnome-boxes */
+      ] config.environment.gnome3.excludePackages);
+
+      services.sysprof.enable = true;
     })
   ];
 
