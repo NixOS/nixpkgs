@@ -2985,6 +2985,8 @@ in {
 
   irc = callPackage ../development/python-modules/irc { };
 
+  irctokens = callPackage ../development/python-modules/irctokens { };
+
   isbnlib = callPackage ../development/python-modules/isbnlib { };
 
   islpy = callPackage ../development/python-modules/islpy { };
