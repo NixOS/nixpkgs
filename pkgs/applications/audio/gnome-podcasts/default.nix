@@ -10,7 +10,7 @@
 , python3
 , pkgconfig
 , glib
-, libhandy
+, libhandy_0
 , gtk3
 , dbus
 , openssl
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     glib
     gtk3
-    libhandy
+    libhandy_0
     dbus
     openssl
     sqlite
