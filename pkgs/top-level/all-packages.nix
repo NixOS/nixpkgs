@@ -21215,9 +21215,7 @@ in
 
   swaylock-effects = callPackage ../applications/window-managers/sway/lock-effects.nix { };
 
-  waybar = callPackage ../applications/misc/waybar {
-    pulseSupport = config.pulseaudio or false;
-  };
+  waybar = callPackage ../applications/misc/waybar { };
 
   hikari = callPackage ../applications/window-managers/hikari { };
 
