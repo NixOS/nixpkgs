@@ -16,4 +16,6 @@
     "${patchSet}/patches/ruby/2.7/head/railsexpress/02-improve-gc-stats.patch"
     "${patchSet}/patches/ruby/2.7/head/railsexpress/03-more-detailed-stacktrace.patch"
   ];
+  "3.0.0" = ops useRailsExpress [ # no patches yet (2020-10-04)
+  ];
 }

@@ -27,6 +27,7 @@ let
     ver = version;
     tag = ver.gitTag;
     atLeast27 = lib.versionAtLeast ver.majMin "2.7";
+    atLeast30 = lib.versionAtLeast ver.majMin "3.0";
     baseruby = self.override {
       useRailsExpress = false;
       docSupport = false;
@@ -132,6 +133,11 @@ let
         preConfigure = opString docSupport ''
           configureFlagsArray+=("--with-ridir=$devdoc/share/ri")
         '';
+
+        NIX_CFLAGS_COMPILE =
+          if atLeast30 && stdenv.cc.isClang
+          then "-Wno-error=implicit-function-declaration"
+          else null;
 
         # fails with "16993 tests, 2229489 assertions, 105 failures, 14 errors, 89 skips"
         # mostly TZ- and patch-related tests
@@ -244,6 +250,14 @@ in {
     sha256 = {
       src = "1m63461mxi3fg4y3bspbgmb0ckbbb1ldgf9xi0piwkpfsk80cmvf";
       git = "0kbgznf1yprfp9645k31ra5f4757b7fichzi0hdg6nxkj90853s0";
+    };
+  };
+
+  ruby_3_0 = generic {
+    version = rubyVersion "3" "0" "0" "preview1";
+    sha256 = {
+      src = "019i4n2mgvnv088zlzbbsyrfbfz943m4a8adn9qaihky9r9xg2yf";
+      git = "04cm1c9am7955rxg9vb1qrqz9i38y4h93ad9acflia0c7k037sif";
     };
   };
 }

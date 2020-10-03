@@ -10328,7 +10328,8 @@ in
   })
     ruby_2_5
     ruby_2_6
-    ruby_2_7;
+    ruby_2_7
+    ruby_3_0;
 
   rubyMinimal = ruby.override {
     # gem support is minimal overhead
