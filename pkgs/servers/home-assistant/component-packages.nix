@@ -29,7 +29,7 @@
     "amcrest" = ps: with ps; [ ha-ffmpeg ]; # missing inputs: amcrest
     "ampio" = ps: with ps; [ ]; # missing inputs: asmog
     "android_ip_webcam" = ps: with ps; [ ]; # missing inputs: pydroid-ipcam
-    "androidtv" = ps: with ps; [ ]; # missing inputs: adb-shell[async] androidtv[async] pure-python-adb[async]
+    "androidtv" = ps: with ps; [ adb-shell androidtv pure-python-adb ];
     "anel_pwrctrl" = ps: with ps; [ ]; # missing inputs: anel_pwrctrl-homeassistant
     "anthemav" = ps: with ps; [ ]; # missing inputs: anthemav
     "apache_kafka" = ps: with ps; [ aiokafka ];
