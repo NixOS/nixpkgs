@@ -14900,8 +14900,8 @@ in
       kmime kontactinterface kpimtextedit kpkpass kqtquickcharts ksmtp ktnef
       libgravatar libkcddb libkdcraw libkdegames libkdepim libkexiv2 libkgapi
       libkipi libkleo libkmahjongg libkomparediff2 libksane libksieve mailcommon
-      mailimporter messagelib pim-sieve-editor pimcommon kdegraphics-thumbnailers
-      kio-extras print-manager;
+      mailimporter marble messagelib pim-sieve-editor pimcommon
+      kdegraphics-thumbnailers kio-extras print-manager;
 
     ### LIBRARIES
 
@@ -24688,7 +24688,6 @@ in
   dhewm3 = callPackage ../games/dhewm3 {};
 
   digikam = libsForQt514.callPackage ../applications/graphics/digikam {
-    inherit (plasma5) oxygen;
     opencv3 = opencv3WithoutCuda;
   };
 
