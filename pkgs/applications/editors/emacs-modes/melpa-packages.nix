@@ -125,15 +125,9 @@ let
           packageRequires = with self; [ evil ];
         });
 
-        evil-magit = buildWithGit super.evil-magit;
-
-        eopengrok = buildWithGit super.eopengrok;
-
         ess-R-data-view = super.ess-R-data-view.override {
           inherit (self.melpaPackages) ess ctable popup;
         };
-
-        forge = buildWithGit super.forge;
 
         flycheck-rtags = fix-rtags super.flycheck-rtags;
 
@@ -205,6 +199,12 @@ let
           '';
         });
 
+        evil-magit = buildWithGit super.evil-magit;
+
+        eopengrok = buildWithGit super.eopengrok;
+
+        forge = buildWithGit super.forge;
+
         magit = buildWithGit super.magit;
 
         magit-find-file = buildWithGit super.magit-find-file;
@@ -240,6 +240,38 @@ let
         kubernetes = buildWithGit super.kubernetes;
 
         kubernetes-evil = buildWithGit super.kubernetes-evil;
+
+        egg = buildWithGit super.egg;
+
+        kapacitor = buildWithGit super.kapacitor;
+
+        gerrit = buildWithGit super.gerrit;
+
+        gerrit-download = buildWithGit super.gerrit-download;
+
+        github-pullrequest = buildWithGit super.github-pullrequest;
+
+        jist = buildWithGit super.jist;
+
+        mandoku = buildWithGit super.mandoku;
+
+        mandoku-tls = buildWithGit super.mandoku-tls;
+
+        magit-p4 = buildWithGit super.magit-p4;
+
+        magit-rbr = buildWithGit super.magit-rbr;
+
+        magit-diff-flycheck = buildWithGit super.magit-diff-flycheck;
+
+        magit-reviewboard = buildWithGit super.magit-reviewboard;
+
+        magit-patch-changelog = buildWithGit super.magit-patch-changelog;
+
+        magit-circleci = buildWithGit super.magit-circleci;
+
+        orgit = buildWithGit super.orgit;
+
+        orgit-forge = buildWithGit super.orgit-forge;
 
         # upstream issue: missing file header
         mhc = super.mhc.override {
@@ -384,44 +416,12 @@ let
           propagatedUserEnvPkgs = [ external.editorconfig-core-c ];
         });
 
-        egg = buildWithGit super.egg;
-
         # missing dependencies
         evil-search-highlight-persist = super.evil-search-highlight-persist.overrideAttrs (attrs: {
           packageRequires = with self; [ evil highlight ];
         });
 
-        kapacitor = buildWithGit super.kapacitor;
-
-        gerrit = buildWithGit super.gerrit;
-
-        gerrit-download = buildWithGit super.gerrit-download;
-
-        github-pullrequest = buildWithGit super.github-pullrequest;
-
         helm-rtags = fix-rtags super.helm-rtags;
-
-        jist = buildWithGit super.jist;
-
-        mandoku = buildWithGit super.mandoku;
-
-        mandoku-tls = buildWithGit super.mandoku-tls;
-
-        magit-p4 = buildWithGit super.magit-p4;
-
-        magit-rbr = buildWithGit super.magit-rbr;
-
-        magit-diff-flycheck = buildWithGit super.magit-diff-flycheck;
-
-        magit-reviewboard = buildWithGit super.magit-reviewboard;
-
-        magit-patch-changelog = buildWithGit super.magit-patch-changelog;
-
-        magit-circleci = buildWithGit super.magit-circleci;
-
-        orgit = buildWithGit super.orgit;
-
-        orgit-forge = buildWithGit super.orgit-forge;
 
         # tries to write to $HOME
         php-auto-yasnippets = super.php-auto-yasnippets.overrideAttrs (attrs: {
