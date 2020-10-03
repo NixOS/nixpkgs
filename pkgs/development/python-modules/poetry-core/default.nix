@@ -13,21 +13,15 @@
 
 buildPythonPackage rec {
   pname = "poetry-core";
-  version = "1.0.0a9";
+  version = "1.0.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = pname;
     rev = version;
-    sha256 = "1ln47x1bc1yvhdfwfnkqx4d2j7988a59v8vmcriw14whfgzfki75";
+    sha256 = "02pqkwzbg43xz2zsw8q7m0sfkj8wbw07in83gy0bk0znhljhp0vw";
   };
-
-  # avoid mass-rebuild of python packages
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "^1.7.0" "^1.6.0"
-  '';
 
   nativeBuildInputs = [
     intreehooks
@@ -50,7 +44,7 @@ buildPythonPackage rec {
   ];
 
   # requires git history to work correctly
-  disabledTests = [ "default_with_excluded_data" ];
+  disabledTests = [ "default_with_excluded_data" "default_src_with_excluded_data" ];
 
   pythonImportsCheck = [ "poetry.core" ];
 
