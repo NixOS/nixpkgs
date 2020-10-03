@@ -425,10 +425,25 @@ in
 
     (mkIf serviceCfg.games.enable {
       environment.systemPackages = (with pkgs.gnome3; removePackagesByName [
-        aisleriot atomix five-or-more four-in-a-row gnome-chess gnome-klotski
-        gnome-mahjongg gnome-mines gnome-nibbles gnome-robots gnome-sudoku
-        gnome-taquin gnome-tetravex hitori iagno lightsoff quadrapassel
-        swell-foop tali
+        aisleriot
+        atomix
+        five-or-more
+        four-in-a-row
+        gnome-chess
+        gnome-klotski
+        gnome-mahjongg
+        gnome-mines
+        gnome-nibbles
+        gnome-robots
+        gnome-sudoku
+        gnome-taquin
+        gnome-tetravex
+        hitori
+        iagno
+        lightsoff
+        quadrapassel
+        swell-foop
+        tali
       ] config.environment.gnome3.excludePackages);
     })
   ];
