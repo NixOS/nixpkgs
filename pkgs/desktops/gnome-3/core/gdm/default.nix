@@ -119,10 +119,15 @@ stdenv.mkDerivation rec {
     ./reset-environment.patch
   ];
 
-  # TODO: Install icon
-  # preInstall = ''
-    # install -D ${override} ${glib.makeSchemaPath "$out" "${pname}-${version}"}/org.gnome.login-screen.gschema.override
-  # '';
+  # TODO: why is this suddenly necessary?
+  postInstall = ''
+    glib-compile-schemas $out/share/glib-2.0/schemas
+  '';
+
+  postFixup = ''
+    schema_dir=${glib.makeSchemaPath "$out" "${pname}-${version}"}
+    install -D ${override} $schema_dir/org.gnome.login-screen.gschema.override
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript {
