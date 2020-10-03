@@ -3,6 +3,7 @@
 , dune-configurator
 , num
 , octavius
+, ocaml_pcre
 , ppxlib
 , re
 , openssl
@@ -468,6 +469,13 @@ rec {
     hash = "012rlbnw21yq2lsbfk3f7l4m4qq3jdx238146z36v54vnhhs6r2r";
     meta.description = "Diff library using Bram Cohen's patience diff algorithm";
     propagatedBuildInputs = [ core_kernel ];
+  };
+
+  patdiff = janePackage {
+    pname = "patdiff";
+    hash = "1yqvxdmkgcwgx3npgncpdqwkpdxiqr1q41wci7589s8z7xi5nwyz";
+    propagatedBuildInputs = [ core ocaml_pcre patience_diff ];
+    meta.description = "File Diff using the Patience Diff algorithm";
   };
 
   ecaml = janePackage {
