@@ -12,7 +12,7 @@
 , coreutils
 , libsoup
 , libsecret
-, libhandy
+, libhandy_0
 , wrapGAppsHook
 , libgpgerror
 , json-glib
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     libsecret
-    libhandy
+    libhandy_0
     libgpgerror
     json-glib
   ];
