@@ -118,7 +118,7 @@ let
                   ${optionalString (cfg.nameservers != [] && cfg.domain != null) ''
                     domain ${cfg.domain}
                   ''}
-                  ${optionalString (cfg.search != []) ("search " + concatStringsSep " " cfg.search)}
+                  search ${concatStringsSep " " cfg.search}
                   ${flip concatMapStrings cfg.nameservers (ns: ''
                     nameserver ${ns}
                   '')}
