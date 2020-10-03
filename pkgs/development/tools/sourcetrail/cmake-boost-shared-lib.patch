@@ -1,0 +1,16 @@
+Makes to search for the latest Boost version, and disables static linking.
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 70f8c337..4204a1eb 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -99,8 +99,8 @@ endif()
+ # Boost ------------------------------------------------------------------------
+ 
+ set(Boost_USE_MULTITHREAD ON)
+-set(Boost_USE_STATIC_LIBS ON)
++set(Boost_USE_STATIC_LIBS OFF)
+ set(Boost_USE_STATIC_RUNTIME OFF)
+ 
+-find_package(Boost 1.68 COMPONENTS system program_options filesystem date_time REQUIRED)
++find_package(Boost COMPONENTS system program_options filesystem date_time REQUIRED)
