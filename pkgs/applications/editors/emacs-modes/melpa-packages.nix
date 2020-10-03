@@ -269,6 +269,8 @@ let
 
         magit-circleci = buildWithGit super.magit-circleci;
 
+        magit-delta = buildWithGit super.magit-delta;
+
         orgit = buildWithGit super.orgit;
 
         orgit-forge = buildWithGit super.orgit-forge;
