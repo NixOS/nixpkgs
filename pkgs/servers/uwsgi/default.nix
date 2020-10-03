@@ -14,13 +14,13 @@ let php-embed = php.override {
     };
 
     pythonPlugin = pkg : lib.nameValuePair "python${if pkg.isPy2 then "2" else "3"}" {
-                           interpreter = pkg.interpreter;
+                           interpreter = pkg.pythonForBuild.interpreter;
                            path = "plugins/python";
                            inputs = [ pkg ncurses ];
                            install = ''
                              install -Dm644 uwsgidecorators.py $out/${pkg.sitePackages}/uwsgidecorators.py
-                             ${pkg.executable} -m compileall $out/${pkg.sitePackages}/
-                             ${pkg.executable} -O -m compileall $out/${pkg.sitePackages}/
+                             ${pkg.pythonForBuild.executable} -m compileall $out/${pkg.sitePackages}/
+                             ${pkg.pythonForBuild.executable} -O -m compileall $out/${pkg.sitePackages}/
                            '';
                          };
 
@@ -90,6 +90,13 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit python2 python3;
   };
+
+  postPatch = ''
+    for f in uwsgiconfig.py plugins/*/uwsgiplugin.py; do
+      substituteInPlace "$f" \
+        --replace pkg-config "$PKG_CONFIG"
+    done
+  '';
 
   configurePhase = ''
     export pluginDir=$out/lib/uwsgi
