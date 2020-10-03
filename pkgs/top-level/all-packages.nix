@@ -27724,6 +27724,8 @@ in
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly;
   };
 
+  vsh = callPackage ../tools/misc/vsh { };
+
   vttest = callPackage ../tools/misc/vttest { };
 
   wacomtablet = libsForQt514.callPackage ../tools/misc/wacomtablet { };
