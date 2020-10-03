@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0xw1gg2c6zpw9s7i7q34qf0qxqdfj8nc2k1xnzqpw5q315db071l";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = lib.optionals (pythonAtLeast "3.7") [
     typing-extensions
   ];
 
