@@ -4,7 +4,7 @@
 {
   version = "0.115.6";
   components = {
-    "abode" = ps: with ps; [ ]; # missing inputs: abodepy
+    "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ ]; # missing inputs: accuweather
     "acer_projector" = ps: with ps; [ pyserial ];
     "acmeda" = ps: with ps; [ ]; # missing inputs: aiopulse
