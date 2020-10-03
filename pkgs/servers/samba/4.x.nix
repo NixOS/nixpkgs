@@ -1,13 +1,15 @@
 { lib, stdenv
+, buildPackages
 , fetchurl
-, python
+, python3
+, wafHook
 , pkg-config
 , bison
 , flex
 , perl
 , libxslt
+, heimdal
 , docbook_xsl
-, rpcgen
 , fixDarwinDylibNames
 , docbook_xml_dtd_45
 , readline
@@ -17,7 +19,6 @@
 , libarchive
 , zlib
 , liburing
-, fam
 , gnutls
 , libunwind
 , systemd
@@ -59,26 +60,30 @@ stdenv.mkDerivation rec {
     ./patch-source3__libads__kerberos_keytab.c.patch
     ./4.x-no-persistent-install-dynconfig.patch
     ./4.x-fix-makeflags-parsing.patch
+    ./build-find-pre-built-heimdal-build-tools-in-case-of-.patch
   ];
 
   nativeBuildInputs = [
+    python3
+    wafHook
     pkg-config
     bison
     flex
     perl
     perl.pkgs.ParseYapp
     libxslt
+    buildPackages.stdenv.cc
+    heimdal
     docbook_xsl
     docbook_xml_dtd_45
     cmocka
     rpcsvc-proto
   ] ++ optionals stdenv.isDarwin [
-    rpcgen
     fixDarwinDylibNames
   ];
 
   buildInputs = [
-    python
+    python3
     readline
     popt
     dbus
@@ -86,7 +91,6 @@ stdenv.mkDerivation rec {
     libbsd
     libarchive
     zlib
-    fam
     libunwind
     gnutls
     libtasn1
@@ -102,6 +106,8 @@ stdenv.mkDerivation rec {
     ++ optional enableAcl acl
     ++ optional enablePam pam;
 
+  wafPath = "buildtools/bin/waf";
+
   postPatch = ''
     # Removes absolute paths in scripts
     sed -i 's,/sbin/,,g' ctdb/config/functions
@@ -112,7 +118,11 @@ stdenv.mkDerivation rec {
     patchShebangs ./buildtools/bin
   '';
 
-  configureFlags = [
+  preConfigure = ''
+    export PKGCONFIG="$PKG_CONFIG"
+  '';
+
+  wafConfigureFlags = [
     "--with-static-modules=NONE"
     "--with-shared-modules=ALL"
     "--enable-fhs"
@@ -126,7 +136,15 @@ stdenv.mkDerivation rec {
     "--without-ads"
   ] ++ optional enableProfiling "--with-profiling-data"
     ++ optional (!enableAcl) "--without-acl-support"
-    ++ optional (!enablePam) "--without-pam";
+    ++ optional (!enablePam) "--without-pam"
+    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--bundled-libraries=!asn1_compile,!compile_et"
+  ];
+
+  # python-config from build Python gives incorrect values when cross-compiling.
+  # If python-config is not found, the build falls back to using the sysconfig
+  # module, which works correctly in all cases.
+  PYTHON_CONFIG = "/invalid";
 
   preBuild = ''
     export MAKEFLAGS="-j $NIX_BUILD_CORES"
@@ -146,6 +164,10 @@ stdenv.mkDerivation rec {
     patchelf --shrink-rpath "\$BIN";
     EOF
     find $out -type f -name \*.so -exec $SHELL -c "$SCRIPT" \;
+
+    # Samba does its own shebang patching, but uses build Python
+    find "$out/bin" -type f -executable -exec \
+      sed -i '1 s^#!${python3.pythonForBuild}/bin/python.*^#!${python3.interpreter}^' {} \;
   '';
 
   passthru = {
