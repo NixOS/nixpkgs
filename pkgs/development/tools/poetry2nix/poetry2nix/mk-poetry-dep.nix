@@ -157,7 +157,7 @@ pythonPackages.callPackage
           (
             builtins.fetchGit {
               inherit (source) url;
-              rev = source.reference;
+              rev = source.resolved_reference;
               ref = sourceSpec.branch or sourceSpec.rev or sourceSpec.tag or "HEAD";
             }
           ) else if isLocal then (poetryLib.cleanPythonSources { src = localDepPath; }) else

@@ -32,7 +32,7 @@ def fetch_git(pkg):
                 "--url",
                 pkg["source"]["url"],
                 "--rev",
-                pkg["source"]["reference"],
+                pkg["source"]["resolved_reference"],
             ],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
