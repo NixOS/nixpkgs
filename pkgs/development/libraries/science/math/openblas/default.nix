@@ -71,6 +71,13 @@ let
       NO_AVX512 = true;
       USE_OPENMP = !stdenv.hostPlatform.isMusl;
     };
+
+    powerpc64le-linux = {
+      BINARY = 64;
+      TARGET = setTarget "POWER5";
+      DYNAMIC_ARCH = true;
+      USE_OPENMP = !stdenv.hostPlatform.isMusl;
+    };
   };
 in
 
