@@ -22656,7 +22656,7 @@ in
 
   pianobooster = qt5.callPackage ../applications/audio/pianobooster { };
 
-  picard = callPackage ../applications/audio/picard { };
+  picard = python3Packages.callPackage ../applications/audio/picard { };
 
   picocom = callPackage ../tools/misc/picocom {
     inherit (darwin.apple_sdk.frameworks) IOKit;

@@ -1,10 +1,9 @@
-{ stdenv, python3Packages, fetchFromGitHub, gettext, chromaprint, qt5
+{ stdenv, pythonPackages, fetchFromGitHub, gettext, chromaprint, qt5
 , enablePlayback ? true
 , gst_all_1
 }:
 
 let
-  pythonPackages = python3Packages;
   pyqt5 = if enablePlayback then
     pythonPackages.pyqt5_with_qtmultimedia
   else
