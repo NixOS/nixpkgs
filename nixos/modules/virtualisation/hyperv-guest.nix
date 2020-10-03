@@ -52,6 +52,11 @@ in {
         SUBSYSTEM=="cpu", ACTION=="add", DEVPATH=="/devices/system/cpu/cpu[0-9]*", TEST=="online", ATTR{online}="1"
       '';
     });
+    
+    services.xserver = { 
+      modules = [ pkgs.xorg.xf86videofbdev ]; 
+      videoDrivers = [ "hyperv_fb" ]; 
+    };
 
     systemd = {
       packages = [ config.boot.kernelPackages.hyperv-daemons.lib ];
