@@ -7,7 +7,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "buzz";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     sha256 = "02scfscf4mdrphzrd7cbwbhpig9bhvaws8qk4zc81z8vvf3mcfv2";
   };
 
