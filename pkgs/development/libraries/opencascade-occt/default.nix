@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, cmake, ninja, tcl, tk,
-  libGL, libGLU, libXext, libXmu, libXi }:
+  libGL, libGLU, libXext, libXmu, libXi, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "opencascade-occt";
@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ninja ];
-  buildInputs = [ tcl tk libGL libGLU libXext libXmu libXi ];
+  buildInputs = [ tcl tk libGL libGLU libXext libXmu libXi ]
+    ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
 
   meta = with stdenv.lib; {
     description = "Open CASCADE Technology, libraries for 3D modeling and numerical simulation";
