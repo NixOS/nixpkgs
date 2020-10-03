@@ -21,6 +21,8 @@ let
     (mkFlag custatsSupport "DETAILED_CU_STATS")
     (mkFlag unittestsSupport "ENABLE_TESTS")
     (mkFlag werrorSupport "WARNINGS_AS_ERRORS")
+  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isPower [
+    "-DENABLE_ALTIVEC=OFF"
   ];
 
   version = "3.4";
