@@ -19,7 +19,11 @@ buildPythonPackage rec {
     libusb=${libusb1.dev}/include/libusb-1.0
     test -d $libusb || { echo "ERROR: $libusb doesn't exist, please update/fix this build expression."; exit 1; }
     sed -i -e "s|/usr/include/libusb-1.0|$libusb|" setup.py
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace setup.py --replace 'macos_sdk_path =' 'macos_sdk_path = "" #'
   '';
+
+  pythonImportsCheck = [ "hid" ];
 
   meta = with stdenv.lib; {
     description = "A Cython interface to the hidapi from https://github.com/signal11/hidapi";
