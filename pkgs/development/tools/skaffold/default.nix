@@ -19,7 +19,7 @@ buildGoPackage rec {
     owner = "GoogleContainerTools";
     repo = "skaffold";
     rev = "v${version}";
-    sha256 = "sha256-Got/8LI8E1LSwju8rvOnXgE8YQzfb8PjzwHfYBpNOTI=";
+    sha256 = "0cir9ld61pq1rziw6vyz1ihkq0aylzrsxg1vqb9544rwnbq7z2qs";
   };
 
   nativeBuildInputs = [ installShellFiles ];
