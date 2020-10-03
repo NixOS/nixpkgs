@@ -22979,11 +22979,11 @@ in
     pkgs_ = pkgs.extend(_: prev: {
       pythonInterpreters = prev.pythonInterpreters.override(oldAttrs: {
         pkgs = oldAttrs.pkgs.extend(_: _: {
-          inherit (pkgs) qt5 libsForQt5;
+          inherit (pkgs) qt5 libsForQt514;
         });
       });
     });
-  in pkgs_.libsForQt5.callPackage ../applications/networking/browsers/qutebrowser { };
+  in pkgs_.libsForQt514.callPackage ../applications/networking/browsers/qutebrowser { };
 
   qxw = callPackage ../applications/editors/qxw {};
 
