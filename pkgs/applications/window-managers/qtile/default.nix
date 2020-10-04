@@ -45,7 +45,7 @@ python37Packages.buildPythonApplication rec {
     psutil
     pyxdg
     pygobject3
-  ]; 
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/qtile \
