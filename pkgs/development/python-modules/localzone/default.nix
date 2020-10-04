@@ -30,5 +30,6 @@ buildPythonPackage rec {
     homepage = "https://localzone.iomaestro.com";
     license = licenses.bsd3;
     maintainers = with maintainers; [ flyfloh ];
+    broken = true; # incompatible with dnspython>=2.0.0
   };
 }
