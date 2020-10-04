@@ -31,14 +31,19 @@ in
 
 buildPythonApplication rec {
   pname = "lexicon";
-  version = "3.3.27";
+  version = "3.4.3";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "AnalogJ";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0i6grrpdwh7axhnsabb0pfjhpd3prc9ji1afivi7q3c0krgvncmc";
+    sha256 = "1ym4gj4xyd69rsc5niilvcb72gys22rjxhj4qd574vyx3ryl34za";
   };
+
+  nativeBuildInputs = [
+    poetry
+  ];
 
   propagatedBuildInputs = [
     beautifulsoup4
