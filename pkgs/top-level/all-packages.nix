@@ -27488,6 +27488,8 @@ in
 
   utsushi = callPackage ../misc/drivers/utsushi { };
 
+  iconnconfig = libsForQt5.callPackage ../applications/audio/iconnconfig { };
+
   idsk = callPackage ../tools/filesystems/idsk { };
 
   logtop = callPackage ../tools/misc/logtop { };
