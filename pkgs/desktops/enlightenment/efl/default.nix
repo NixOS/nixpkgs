@@ -2,7 +2,7 @@
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , SDL2
 , alsaLib
 , bullet
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     gtk3
-    pkgconfig
+    pkg-config
     check
   ];
 
