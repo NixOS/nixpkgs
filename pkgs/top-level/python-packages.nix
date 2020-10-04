@@ -5764,6 +5764,8 @@ in {
 
   python-multipart = callPackage ../development/python-modules/python-multipart { };
 
+  python-nest = callPackage ../development/python-modules/python-nest { };
+
   pythonnet = callPackage
     ../development/python-modules/pythonnet { # `mono >= 4.6` required to prevent crashes encountered with earlier versions.
       mono = pkgs.mono4;
@@ -6769,6 +6771,8 @@ in {
   ssdp = callPackage ../development/python-modules/ssdp { };
 
   sseclient = callPackage ../development/python-modules/sseclient { };
+
+  sseclient-py = callPackage ../development/python-modules/sseclient-py { };
 
   sshpubkeys = callPackage ../development/python-modules/sshpubkeys { };
 
