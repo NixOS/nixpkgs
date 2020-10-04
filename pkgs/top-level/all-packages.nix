@@ -12453,6 +12453,7 @@ in
   };
 
   freetype = callPackage ../development/libraries/freetype { };
+  freetype-demos = pkgs.freetype.demos;
 
   frei0r = callPackage ../development/libraries/frei0r { };
 
