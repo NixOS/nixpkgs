@@ -2,7 +2,7 @@
 , pkgconfig, autoconf213, alsaLib, bzip2, cairo
 , dbus, dbus-glib, ffmpeg_3, file, fontconfig, freetype
 , gnome2, gnum4, gtk2, hunspell, libevent, libjpeg
-, libnotify, libstartup_notification, makeWrapper
+, libnotify, libstartup_notification, wrapGAppsHook
 , libGLU, libGL, perl, python2, libpulseaudio
 , unzip, xorg, wget, which, yasm, zip, zlib
 
@@ -16,13 +16,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "28.13.0";
+  version = "28.14.2";
 
   src = fetchFromGitHub {
     owner = "MoonchildProductions";
     repo = "Pale-Moon";
     rev = "${version}_Release";
-    sha256 = "1lza6239kb32wnwd9cwddn11npg1qx7p69l7qy63h9c59w29iypa";
+    sha256 = "1qz2sqc8rcg5z5kncabgmpl6v4i6wrs9dlgmna69255qrmsshwgm";
     fetchSubmodules = true;
   };
 
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    desktop-file-utils file gnum4 makeWrapper perl pkgconfig python2 wget which
+    desktop-file-utils file gnum4 perl pkgconfig python2 wget which wrapGAppsHook
   ];
 
   buildInputs = [
@@ -126,9 +126,15 @@ in stdenv.mkDerivation rec {
       size=$n"x"$n
       install -Dm644 $src/palemoon/branding/official/$iconname.png $out/share/icons/hicolor/$size/apps/palemoon.png
     done
+  '';
 
-    wrapProgram $out/lib/palemoon-${version}/palemoon \
+  dontWrapGApps = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "${libPath}"
+    )
+    wrapGApp $out/lib/palemoon-${version}/palemoon
   '';
 
   meta = with lib; {
