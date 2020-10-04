@@ -2,6 +2,7 @@
   harfbuzz, fontconfig, pkgconfig, ncurses, imagemagick, xsel,
   libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
+  lcms2,
   installShellFiles,
   dbus,
   Cocoa,
@@ -20,19 +21,20 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.18.3";
+  version = "0.19.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "0y05bw6d1m79dyhm7b6lk6wy82pmy2s9jhf01kf8gr2p0rjjp9yl";
+    sha256 = "0j2ci6acfl21mm111iis0aa5jp1hl1fnlvlhhfps9j5w4ba8sy7z";
   };
 
   buildInputs = [
     harfbuzz
     ncurses
+    lcms2
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     Cocoa
     CoreGraphics
@@ -63,8 +65,6 @@ buildPythonApplication rec {
 
   patches = [
     ./fix-paths.patch
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    ./no-lto.patch
   ];
 
   # Causes build failure due to warning
@@ -73,7 +73,9 @@ buildPythonApplication rec {
   dontConfigure = true;
 
   buildPhase = if stdenv.isDarwin then ''
-    ${python.interpreter} setup.py kitty.app --update-check-interval=0
+    ${python.interpreter} setup.py kitty.app \
+    --update-check-interval=0 \
+    --disable-link-time-optimization
     make man
   '' else ''
     ${python.interpreter} setup.py linux-package \
