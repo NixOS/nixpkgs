@@ -11,11 +11,9 @@
 , libtool
 , gettext
 , dbus
-, telepathy-glib
 , gtk3
 , json-glib
 , librdf_raptor2
-, dbus-glib
 , pythonSupport ? true
 , python2Packages
 }:
@@ -57,8 +55,6 @@ stdenv.mkDerivation rec {
     glib
     sqlite
     dbus
-    telepathy-glib
-    dbus-glib
     gtk3
     json-glib
     librdf_raptor2
@@ -67,6 +63,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-session-bus-services-dir=${placeholder "out"}/share/dbus-1/services"
+    "--disable-telepathy"
   ];
 
   enableParallelBuilding = true;
