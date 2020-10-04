@@ -6177,6 +6177,8 @@ in
 
   nzbget = callPackage ../tools/networking/nzbget { };
 
+  nzbhydra2 = callPackage ../servers/nzbhydra2 { };
+
   oathToolkit = callPackage ../tools/security/oath-toolkit { };
 
   obex_data_server = callPackage ../tools/bluetooth/obex-data-server { };
