@@ -21336,7 +21336,7 @@ in
           kalzium kapptemplate kapman kate katomic
           kblackbox kblocks kbounce
           kcachegrind kcalc kcharselect kcolorchooser
-          kdenlive kdf kdialog kdiamond
+          kdenetwork-filesharing kdenlive kdf kdialog kdiamond
           keditbookmarks
           kfind kfloppy
           kget
@@ -21380,7 +21380,7 @@ in
     kaddressbook kalzium kapptemplate kapman kate katomic
     kblackbox kblocks kbounce
     kcachegrind kcalc kcharselect kcolorchooser
-    kdenlive kdf kdialog kdiamond
+    kdenetwork-filesharing kdenlive kdf kdialog kdiamond
     keditbookmarks
     kfind kfloppy
     kget kgpg
