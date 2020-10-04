@@ -5596,6 +5596,13 @@ in
 
   nabi = callPackage ../tools/inputmethods/nabi { };
 
+  hime = callPackage ../tools/inputmethods/hime {};
+
+  hime-all = callPackage ../tools/inputmethods/hime {
+    enableChewing = true;
+    enableAnthy = true;
+  };
+
   nahid-fonts = callPackage ../data/fonts/nahid-fonts { };
 
   namazu = callPackage ../tools/text/namazu { };
