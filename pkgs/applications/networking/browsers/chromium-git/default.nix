@@ -1,6 +1,6 @@
 { stdenv, stdenvNoCC, lib, fetchgit, fetchurl, runCommand, buildPackages, git, openjdk8
-, python2, ninja, llvmPackages_9, llvmPackages_10, bison, gperf, pkg-config
-, dbus, systemd, glibc, at-spi2-atk, atk, at-spi2-core, nspr, nss, pciutils, utillinux, kerberos, gdk-pixbuf, xorg
+, python2, ninja, llvmPackages_8, llvmPackages_9, llvmPackages_10, llvmPackages_11, bison, gperf, pkg-config, curl, cacert
+, dbus, systemd, glibc, at-spi2-atk, atk, at-spi2-core, nspr, nss, pciutils, utillinux, kerberos, gdk-pixbuf, libxkbcommon, xorg
 , gnome2, glib, gtk2, gtk3, cups, libgcrypt, alsaLib, pulseaudio, xdg_utils, libXScrnSaver, libXcursor, libXtst, libGLU, libGL, libXdamage
 , customGnFlags ? {}
 }:
@@ -88,6 +88,26 @@ let
                                     fi
                                 '') deps
           ) +
+          # for unknown reason these files are in .gitignore and thus are not in git repo (might be fixed upstream closer to releases of 87 and 88)
+          lib.optionalString (lib.versionAtLeast version "87" && lib.versionOlder version "89") ''
+            cp -r ${stdenvNoCC.mkDerivation {
+                      name = "shaka-player";
+                      nativeBuildInputs = [ curl ];
+                      SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+                      buildCommand = ''
+                        mkdir $out
+                        curl -o $out/shaka-player.ui.js         'https://www.unpkg.com/shaka-player@3.0.4/dist/shaka-player.ui.js'
+                        curl -o $out/shaka-player.ui.maps       'https://www.unpkg.com/shaka-player@3.0.4/dist/shaka-player.ui.map'
+                        curl -o $out/wrapper.js                 'https://www.unpkg.com/shaka-player@3.0.4/dist/wrapper.js'
+                        curl -o $out/shaka-player.ui.externs.js 'https://www.unpkg.com/shaka-player@3.0.4/dist/shaka-player.ui.externs.js'
+                        touch   $out/package.json
+                      '';
+                      outputHashMode = "recursive";
+                      outputHashAlgo = "sha256";
+                      outputHash     = "04xb8la3hgrgg3yi6hxg3iwada21pfs6g8xwpm1aq97nwir5fyzw";
+                    }
+                  } $out/src/third_party/shaka-player/dist
+          '' +
           # introduce files missing in git repos
           ''
             echo 'LASTCHANGE=${deps."src".rev}-refs/heads/master@{#0}'             > $out/src/build/util/LASTCHANGE
@@ -115,7 +135,7 @@ let
         ++ lib.optional (lib.versionAtLeast version "84") python2-xcbproto;
 
       buildInputs = [
-        dbus at-spi2-atk atk at-spi2-core nspr nss pciutils utillinux kerberos
+        dbus at-spi2-atk atk at-spi2-core nspr nss pciutils utillinux kerberos libxkbcommon
         gdk-pixbuf glib gtk3 alsaLib libXScrnSaver libXcursor libXtst libGLU libGL libXdamage
       ] ++ lib.optionals (lib.versionOlder version "65.0") [
         gnome2.GConf gtk2
@@ -157,7 +177,7 @@ let
 
           for f in device/udev_linux/udev?_loader.cc ; do
             echo "postPatch: patching $f"
-            sed -i.bak -e 's!"[^"]*libudev\.so!"${systemd.lib}/lib/libudev.so!' "$f"
+            sed -i.bak -e 's!"[^"]*libudev\.so!"${lib.getLib systemd}/lib/libudev.so!' "$f"
             git diff --no-index --  $f.bak $f || true
           done
 
@@ -188,7 +208,10 @@ let
                 --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
            ''}
 
-          patchShebangs --build .
+          # `patchShebangs --build .` would fail (see https://github.com/NixOS/nixpkgs/issues/99539)
+          for f in $(find . -type f -executable ! -regex '.+\.make$'); do
+            patchShebangs --build "$f"
+          done
 
           mkdir -p buildtools/linux64
           ln -s --force ${llvmPackages.clang.cc}/bin/clang-format      buildtools/linux64/clang-format                     || true
@@ -245,10 +268,12 @@ in {
   chromium-git_78 = common { version = "78.0.3905.1"  ; llvmPackages = llvmPackages_9;  };
   chromium-git_79 = common { version = "79.0.3945.147"; llvmPackages = llvmPackages_9;  };
   chromium-git_80 = common { version = "80.0.3987.165"; llvmPackages = llvmPackages_9;  };
-  chromium-git_81 = common { version = "81.0.4044.155"; llvmPackages = llvmPackages_9;  };
+  chromium-git_81 = common { version = "81.0.4044.156"; llvmPackages = llvmPackages_9;  };
   chromium-git_82 = common { version = "82.0.4085.28" ; llvmPackages = llvmPackages_10; };
   chromium-git_83 = common { version = "83.0.4103.122"; llvmPackages = llvmPackages_10; };
-  chromium-git_84 = common { version = "84.0.4147.95" ; llvmPackages = llvmPackages_10; };
-  chromium-git_85 = common { version = "85.0.4183.28" ; llvmPackages = llvmPackages_10; };
-  chromium-git_86 = common { version = "86.0.4204.0"  ; llvmPackages = llvmPackages_10; };
+  chromium-git_84 = common { version = "84.0.4147.141"; llvmPackages = llvmPackages_10; };
+  chromium-git_85 = common { version = "85.0.4183.140"; llvmPackages = llvmPackages_10; };
+  chromium-git_86 = common { version = "86.0.4240.72" ; llvmPackages = llvmPackages_11; };
+  chromium-git_87 = common { version = "87.0.4280.6"  ; llvmPackages = llvmPackages_11; };
+  chromium-git_88 = common { version = "88.0.4281.1"  ; llvmPackages = llvmPackages_11; };
 }
