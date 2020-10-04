@@ -19,6 +19,8 @@ buildPythonPackage rec {
     snowflake-connector-python
   ];
 
+  pythonImportsCheck = [ "snowflake.sqlalchemy" ];
+
   meta = with lib; {
     description = "Snowflake SQLAlchemy Dialect";
     homepage = "https://www.snowflake.net/";

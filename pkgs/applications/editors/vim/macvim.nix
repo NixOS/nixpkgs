@@ -27,13 +27,13 @@ in
 stdenv.mkDerivation {
   pname = "macvim";
 
-  version = "8.2.539";
+  version = "8.2.1719";
 
   src = fetchFromGitHub {
     owner = "macvim-dev";
     repo = "macvim";
-    rev = "snapshot-163";
-    sha256 = "0ibc6h7zmk81dygkxd8a2rcq72zbqmr9kh64xhsm9h0p70505cdk";
+    rev = "snapshot-166";
+    sha256 = "1p51q59l1dl5lnf1ms960lm8zfg39p8xq0pdjw6wdyypjj3r8v3v";
   };
 
   enableParallelBuilding = true;
@@ -68,8 +68,6 @@ stdenv.mkDerivation {
       "--disable-sparkle"
   ];
 
-  makeFlags = ''PREFIX=$(out) CPPFLAGS="-Wno-error"'';
-
   # Remove references to Sparkle.framework from the project.
   # It's unused (we disabled it with --disable-sparkle) and this avoids
   # copying the unnecessary several-megabyte framework into the result.
@@ -85,7 +83,10 @@ stdenv.mkDerivation {
 
     DEV_DIR=$(/usr/bin/xcode-select -print-path)/Platforms/MacOSX.platform/Developer
     configureFlagsArray+=(
-      "--with-developer-dir=$DEV_DIR"
+      --with-developer-dir="$DEV_DIR"
+      LDFLAGS="-L${ncurses}/lib"
+      CPPFLAGS="-isystem ${ncurses.dev}/include"
+      CFLAGS="-Wno-error=implicit-function-declaration"
     )
   ''
   # For some reason having LD defined causes PSMTabBarControl to fail at link-time as it

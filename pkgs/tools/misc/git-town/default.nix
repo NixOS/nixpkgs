@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Generic, high-level git support for git-flow workflows";
-    homepage = "http://www.git-town.com/";
+    homepage = "https://www.git-town.com/";
     maintainers = [ maintainers.allonsy maintainers.blaggacao ];
     license = licenses.mit;
   };

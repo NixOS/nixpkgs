@@ -1,4 +1,5 @@
 907th/vim-auto-save
+aca/completion-tabnine
 airblade/vim-gitgutter
 airblade/vim-rooter
 ajh17/Spacegray.vim
@@ -150,6 +151,7 @@ hrsh7th/vim-vsnip
 hrsh7th/vim-vsnip-integ
 hsanson/vim-android
 hsitz/VimOrganizer
+hugolgst/vimsence
 iamcco/coc-spell-checker
 iamcco/coc-vimlsp
 ianks/vim-tsx
@@ -492,6 +494,7 @@ thirtythreeforty/lessspace.vim
 thosakwe/vim-flutter
 tiagofumo/vim-nerdtree-syntax-highlight
 tikhomirov/vim-glsl
+tjdevries/lsp_extensions.nvim
 tmhedberg/SimpylFold
 tmsvg/pear-tree
 tmux-plugins/vim-tmux

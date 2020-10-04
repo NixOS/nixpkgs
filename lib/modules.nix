@@ -117,7 +117,7 @@ rec {
         if config._module.check && config._module.freeformType == null && merged.unmatchedDefns != [] then
           let
             firstDef = head merged.unmatchedDefns;
-            baseMsg = "The option `${showOption (prefix ++ firstDef.prefix)}' defined in `${firstDef.file}' does not exist.";
+            baseMsg = "The option `${showOption (prefix ++ firstDef.prefix)}' does not exist. Definition values:${showDefs [ firstDef ]}";
           in
             if attrNames options == [ "_module" ]
               then throw ''
@@ -449,7 +449,13 @@ rec {
       # Handle properties, check types, and merge everything together.
       res =
         if opt.readOnly or false && length defs' > 1 then
-          throw "The option `${showOption loc}' is read-only, but it's set multiple times."
+          let
+            # For a better error message, evaluate all readOnly definitions as
+            # if they were the only definition.
+            separateDefs = map (def: def // {
+              value = (mergeDefinitions loc opt.type [ def ]).mergedValue;
+            }) defs';
+          in throw "The option `${showOption loc}' is read-only, but it's set multiple times. Definition values:${showDefs separateDefs}"
         else
           mergeDefinitions loc opt.type defs';
 
@@ -497,8 +503,8 @@ rec {
     mergedValue =
       if isDefined then
         if all (def: type.check def.value) defsFinal then type.merge loc defsFinal
-        else let firstInvalid = findFirst (def: ! type.check def.value) null defsFinal;
-        in throw "The option value `${showOption loc}' in `${firstInvalid.file}' is not of type `${type.description}'."
+        else let allInvalid = filter (def: ! type.check def.value) defsFinal;
+        in throw "A definition for option `${showOption loc}' is not of type `${type.description}'. Definition values:${showDefs allInvalid}"
       else
         # (nixos-option detects this specific error message and gives it special
         # handling.  If changed here, please change it there too.)

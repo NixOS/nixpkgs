@@ -60,6 +60,7 @@
   ./hardware/printers.nix
   ./hardware/raid/hpsa.nix
   ./hardware/steam-hardware.nix
+  ./hardware/system-76.nix
   ./hardware/tuxedo-keyboard.nix
   ./hardware/usb-wwan.nix
   ./hardware/onlykey.nix
@@ -139,6 +140,7 @@
   ./programs/mininet.nix
   ./programs/mtr.nix
   ./programs/nano.nix
+  ./programs/neovim.nix
   ./programs/nm-applet.nix
   ./programs/npm.nix
   ./programs/oblogout.nix
@@ -183,7 +185,6 @@
   ./rename.nix
   ./security/acme.nix
   ./security/apparmor.nix
-  ./security/apparmor-suid.nix
   ./security/audit.nix
   ./security/auditd.nix
   ./security/ca.nix

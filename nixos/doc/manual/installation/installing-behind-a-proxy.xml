@@ -27,13 +27,13 @@ networking.proxy.noProxy = &quot;127.0.0.1,localhost,internal.domain&quot;;
     Setup the proxy environment variables in the shell where you are running
     <literal>nixos-install</literal>.
    </para>
-<programlisting>
-# proxy_url=&quot;http://user:password@proxy:port/&quot;
-# export http_proxy=&quot;$proxy_url&quot;
-# export HTTP_PROXY=&quot;$proxy_url&quot;
-# export https_proxy=&quot;$proxy_url&quot;
-# export HTTPS_PROXY=&quot;$proxy_url&quot;
-</programlisting>
+<screen>
+<prompt># </prompt>proxy_url=&quot;http://user:password@proxy:port/&quot;
+<prompt># </prompt>export http_proxy=&quot;$proxy_url&quot;
+<prompt># </prompt>export HTTP_PROXY=&quot;$proxy_url&quot;
+<prompt># </prompt>export https_proxy=&quot;$proxy_url&quot;
+<prompt># </prompt>export HTTPS_PROXY=&quot;$proxy_url&quot;
+</screen>
   </listitem>
  </orderedlist>
 

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       customized to suit user needs and a very powerful set of command line options can
       be used to filter and format appointments, making it suitable for use in scripts.
     '';
-    homepage = "http://calcurse.org/";
+    homepage = "https://calcurse.org/";
     license = licenses.bsd2;
     platforms = platforms.linux;
   };

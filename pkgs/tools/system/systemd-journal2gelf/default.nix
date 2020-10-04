@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "SystemdJournal2Gelf-unstable";
-  version = "20190702";
+  version = "20200813";
 
   src = fetchFromGitHub {
-    rev = "b1aa5ff31307d11a3c9b4dd08c3cd6230d935ec5";
+    rev = "d389dc8583b752cbd37c389a55a6c82200e47394";
     owner = "parse-nl";
     repo = "SystemdJournal2Gelf";
-    sha256 = "13jyh34wprjixinmh6l7wj7lr1f6qy6nrjcf8l29a74mczbphnvv";
+    sha256 = "0p38r5kdfcn6n2d44dygrs5xgv51s5qlsfhzzwn16r3n6x91s62b";
     fetchSubmodules = true;
   };
 

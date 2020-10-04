@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fdkaac";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "nu774";
     repo = pname;
-    rev = version;
-    sha256 = "16iwqmwagnb929byz8kj79pmmr0anbyv26drbavhppmxhk7rrpgh";
+    rev = "v${version}";
+    sha256 = "02mzx4bird2q5chzpavfc9pg259hwfvq6px85xarm59vmj9nryb6";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

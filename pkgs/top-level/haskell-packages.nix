@@ -5,6 +5,7 @@ let
   integerSimpleExcludes = [
     "ghc822Binary"
     "ghc865Binary"
+    "ghc8102Binary"
     "ghcjs"
     "ghcjs86"
     "integer-simple"
@@ -49,6 +50,10 @@ in {
 
     ghc865Binary = callPackage ../development/compilers/ghc/8.6.5-binary.nix { };
 
+    ghc8102Binary = callPackage ../development/compilers/ghc/8.10.2-binary.nix {
+      llvmPackages = pkgs.llvmPackages_9;
+    };
+
     ghc865 = callPackage ../development/compilers/ghc/8.6.5.nix {
       bootPkgs = packages.ghc822Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -84,6 +89,12 @@ in {
       inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_9;
       llvmPackages = pkgs.llvmPackages_9;
+    };
+    ghc901 = callPackage ../development/compilers/ghc/9.0.1.nix {
+      bootPkgs = packages.ghc8102Binary;
+      inherit (buildPackages.python3Packages) sphinx;
+      buildLlvmPackages = buildPackages.llvmPackages_10;
+      llvmPackages = pkgs.llvmPackages_10;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
       bootPkgs = packages.ghc883; # no binary yet
@@ -139,6 +150,12 @@ in {
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
+    ghc8102Binary = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc8102Binary;
+      ghc = bh.compiler.ghc8102Binary;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
+      packageSetConfig = bootstrapPackageSet;
+    };
     ghc865 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc865;
       ghc = bh.compiler.ghc865;
@@ -168,6 +185,11 @@ in {
       buildHaskellPackages = bh.packages.ghc8102;
       ghc = bh.compiler.ghc8102;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
+    };
+    ghc901 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc901;
+      ghc = bh.compiler.ghc901;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.0.x.nix { };
     };
     ghcHEAD = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghcHEAD;

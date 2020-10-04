@@ -85,7 +85,7 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud17" "nextcloud18" "nextcloud19" ];
+      relatedPackages = [ "nextcloud18" "nextcloud19" ];
     };
 
     maxUploadSize = mkOption {
@@ -354,7 +354,7 @@ in {
           recommended to upgrade to nextcloud19 after that.
         '')
         ++ (optional (versionOlder cfg.package.version "19") ''
-          A legacy Nextcloud install (from before NixOS 20.09/unstable) may be installed.
+          A legacy Nextcloud install (from before NixOS 20.09) may be installed.
 
           If/After nextcloud18 is installed successfully, you can safely upgrade to
           nextcloud19. If not, please upgrade to nextcloud18 first since Nextcloud doesn't
@@ -542,6 +542,9 @@ in {
       environment.systemPackages = [ occ ];
 
       services.nginx.enable = mkDefault true;
+
+      # FIXME(ma27) make sure that the config works fine with Nextcloud 19
+      # *and* Nextcloud 20 as soon as it gets released.
       services.nginx.virtualHosts.${cfg.hostName} = {
         root = cfg.package;
         locations = {
@@ -555,7 +558,7 @@ in {
           };
           "/" = {
             priority = 900;
-            extraConfig = "try_files $uri $uri/ /index.php$request_uri;";
+            extraConfig = "rewrite ^ /index.php;";
           };
           "~ ^/store-apps" = {
             priority = 201;
@@ -579,7 +582,7 @@ in {
           "~ ^/(?:\\.|autotest|occ|issue|indie|db_|console)".extraConfig = ''
             return 404;
           '';
-          "~ \\.php(?:$|/)" = {
+          "~ ^\\/(?:index|remote|public|cron|core\\/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|oc[ms]-provider\\/.+|.+\\/richdocumentscode\\/proxy)\\.php(?:$|\\/)" = {
             priority = 500;
             extraConfig = ''
               include ${config.services.nginx.package}/conf/fastcgi.conf;

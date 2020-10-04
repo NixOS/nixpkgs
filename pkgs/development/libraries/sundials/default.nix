@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     gfortran
     blas
     lapack
-  ] 
+  ]
   # KLU support is based on Suitesparse.
   # It is tested upstream according to the section 1.1.4 of
   # [INSTALL_GUIDE.pdf](https://raw.githubusercontent.com/LLNL/sundials/master/INSTALL_GUIDE.pdf)
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     description = "Suite of nonlinear differential/algebraic equation solvers";
     homepage    = "https://computation.llnl.gov/projects/sundials";
     platforms   = platforms.all;
-    maintainers = with maintainers; [ flokli idontgetoutmuch ];
+    maintainers = with maintainers; [ idontgetoutmuch ];
     license     = licenses.bsd3;
   };
 }

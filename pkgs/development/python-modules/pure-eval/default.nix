@@ -1,8 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, setuptools_scm, toml, pytest }:
+{ buildPythonPackage, isPy3k, lib, fetchFromGitHub, setuptools_scm, toml, pytest }:
 
 buildPythonPackage rec {
   pname = "pure_eval";
   version = "0.1.0";
+
+  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "alexmojaki";

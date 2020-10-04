@@ -1,8 +1,8 @@
 { config, stdenv, lib, fetchurl, fetchpatch
-, perl
-, libcap, libtool, libxml2, openssl
+, perl, pkg-config
+, libcap, libtool, libxml2, openssl, libuv
 , enablePython ? config.bind.enablePython or false, python3 ? null
-, enableSeccomp ? false, libseccomp ? null, buildPackages
+, enableSeccomp ? false, libseccomp ? null, buildPackages, nixosTests
 }:
 
 assert enableSeccomp -> libseccomp != null;
@@ -10,11 +10,11 @@ assert enablePython -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = "bind";
-  version = "9.14.12";
+  version = "9.16.7";
 
   src = fetchurl {
-    url = "https://ftp.isc.org/isc/bind9/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1j7ldvdschmvzxrbajjhmdsl2iqxc1lm64vk0a5sdykxpy9y8kcw";
+    url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
+    sha256 = "1l8lhgnkj3fnl1101bs3pzj5gv2x5m9ahvrbyscsc9mxxc91hzcz";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
     ./remove-mkdir-var.patch
   ];
 
-  nativeBuildInputs = [ perl ];
-  buildInputs = [ libtool libxml2 openssl ]
+  nativeBuildInputs = [ perl pkg-config ];
+  buildInputs = [ libtool libxml2 openssl libuv ]
     ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional enableSeccomp libseccomp
     ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--with-libtool"
-    "--with-libxml2=${libxml2.dev}"
-    "--with-openssl=${openssl.dev}"
     (if enablePython then "--with-python" else "--without-python")
     "--without-atf"
     "--without-dlopen"
@@ -59,7 +57,6 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     moveToOutput bin/bind9-config $dev
-    moveToOutput bin/isc-config.sh $dev
 
     moveToOutput bin/host $host
 
@@ -68,12 +65,14 @@ stdenv.mkDerivation rec {
     moveToOutput bin/nslookup $dnsutils
     moveToOutput bin/nsupdate $dnsutils
 
-    for f in "$lib/lib/"*.la "$dev/bin/"{isc-config.sh,bind*-config}; do
+    for f in "$lib/lib/"*.la "$dev/bin/"bind*-config; do
       sed -i "$f" -e 's|-L${openssl.dev}|-L${openssl.out}|g'
     done
   '';
 
   doCheck = false; # requires root and the net
+
+  passthru.tests = { inherit (nixosTests) bind; };
 
   meta = with stdenv.lib; {
     homepage = "https://www.isc.org/downloads/bind/";

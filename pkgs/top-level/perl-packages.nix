@@ -3993,7 +3993,7 @@ let
       sha256 = "ea64a1e9eb42f3d79855a392e7cca6b86e8e0bcc9aabcc5efa5fa32415b67dba";
     };
     meta = {
-      homepage = "http://wiki.github.com/toddr/Crypt-RIPEMD160";
+      homepage = "https://wiki.github.com/toddr/Crypt-RIPEMD160";
       description = "Perl extension for the RIPEMD-160 Hash function";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
@@ -9669,6 +9669,21 @@ let
     };
   };
 
+  ImagerQRCode = buildPerlPackage {
+    pname = "Imager-QRCode";
+    version = "0.035";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KU/KURIHARA/Imager-QRCode-0.035.tar.gz";
+      sha256 = "2a848deba29eb3942c44709a6853e318acab0c468cbfedbb9baae54760032513";
+    };
+    propagatedBuildInputs = [ Imager ];
+    meta = {
+      description = "Generate QR Code with Imager using libqrencode";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ sgo ];
+    };
+  };
+
   ImageInfo = buildPerlPackage {
     pname = "Image-Info";
     version = "1.42";
@@ -10149,7 +10164,7 @@ let
       sha256 = "c7d6311eb6c79e983833c9e6b4e8d426d07a9874d20f4bc641b313b99c9bc8a0";
     };
     meta = {
-      homepage = "http://metacpan.org/release/IRC-Utils";
+      homepage = "https://metacpan.org/release/IRC-Utils";
       description = "Common utilities for IRC-related tasks";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ sgo ];
@@ -10763,10 +10778,10 @@ let
 
   LinkEmbedder = buildPerlPackage {
     pname = "LinkEmbedder";
-    version = "1.12";
+    version = "1.14";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/LinkEmbedder-1.12.tar.gz";
-      sha256 = "1fd25bd6047b45cdcb1ab71a3d3bb0b36c71ec844a8742dee0bb34f8587fbd08";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/LinkEmbedder-1.14.tar.gz";
+      sha256 = "1dzbh40g773ivawn1smii6jz3kisz07pcn9sbqarc857q5zaf8dq";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ Mojolicious ];
@@ -12725,6 +12740,72 @@ let
     };
   };
 
+  ModuleInstallGithubMeta = buildPerlPackage {
+    pname = "Module-Install-GithubMeta";
+    version = "0.30";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/Module-Install-GithubMeta-0.30.tar.gz";
+      sha256 = "2ead44c973c748d72d9f199e41c44dc1801fe9ae06b0fadc59447693a3c98281";
+    };
+    buildInputs = [ CaptureTiny ];
+    propagatedBuildInputs = [ ModuleInstall ];
+    meta = {
+      homepage = "https://github.com/bingos/module-install-githubmeta/";
+      description = "A Module::Install extension to include GitHub meta information in META.yml";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  ModuleInstallReadmeFromPod = buildPerlPackage {
+    pname = "Module-Install-ReadmeFromPod";
+    version = "0.30";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/Module-Install-ReadmeFromPod-0.30.tar.gz";
+      sha256 = "79f6df5536619faffbda696bdd25ccad17c469bf32e51cd3e613366d49400169";
+    };
+    buildInputs = [ TestInDistDir ];
+    propagatedBuildInputs = [ CaptureTiny IOAll ModuleInstall PodMarkdown ];
+    meta = {
+      homepage = "https://github.com/bingos/module-install-readmefrompod/";
+      description = "A Module::Install extension to automatically convert POD to a README";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  ModuleInstallReadmeMarkdownFromPod = buildPerlPackage {
+    pname = "Module-Install-ReadmeMarkdownFromPod";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MATTN/Module-Install-ReadmeMarkdownFromPod-0.04.tar.gz";
+      sha256 = "300b2e244f83b9a54a95f8404c1cd3af0635b4fae974ca65390ee428ec668591";
+    };
+    buildInputs = [ URI ];
+    propagatedBuildInputs = [ ModuleInstall PodMarkdown ];
+    meta = {
+      homepage = "http://search.cpan.org/dist/Module-Install-ReadmeMarkdownFromPod/";
+      description = "Create README.mkdn from POD";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  ModuleInstallRepository = buildPerlPackage {
+    pname = "Module-Install-Repository";
+    version = "0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Module-Install-Repository-0.06.tar.gz";
+      sha256 = "00e2590d09339ccccbdaa328d12ad8ec77e831a38c9ad663705e59ecbb18722b";
+    };
+    buildInputs = [ PathClass ];
+    meta = {
+      description = "Automatically sets repository URL from svn/svk/Git checkout";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   ModuleManifest = buildPerlPackage {
     pname = "Module-Manifest";
     version = "1.09";
@@ -12946,6 +13027,21 @@ let
       homepage = "https://github.com/jhthorsen/mojolicious-plugin-assetpack";
       description = "Compress and convert css, less, sass, javascript and coffeescript files";
       license = stdenv.lib.licenses.artistic2;
+      maintainers = with maintainers; [ sgo ];
+    };
+  };
+
+  MojoliciousPluginGravatar = buildPerlPackage {
+    pname = "Mojolicious-Plugin-Gravatar";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KO/KOORCHIK/Mojolicious-Plugin-Gravatar-0.04.tar.gz";
+      sha256 = "a49f970c6c70f9930b304a752163cb95f1d998712f79cb13640832e4b7b675dd";
+    };
+    propagatedBuildInputs = [ Mojolicious ];
+    meta = {
+      description = "Globally Recognized Avatars for Mojolicious";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ sgo ];
     };
   };
@@ -17897,6 +17993,29 @@ let
     };
   };
 
+  StringDiff = buildPerlModule {
+    pname = "String-Diff";
+    version = "0.07";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Y/YA/YAPPO/String-Diff-0.07.tar.gz";
+      sha256 = "7215b67cbc3226e2d0e18b38ec58c93be0bf6090278698bef955348826cd0af3";
+    };
+    patches = [
+      (fetchpatch {
+        url = "https://salsa.debian.org/perl-team/modules/packages/libstring-diff-perl/-/raw/d8120a93f73f4d4aa40d10819b2f0a312608ca9b/debian/patches/0001-Fix-the-test-suite-for-YAML-1.21-compatibility.patch";
+        sha256 = "0rggwcp7rfnp3zhnxpn5pb878v2dhpk3x6682w9dnsym92gjrij5";
+      })
+    ];
+    buildInputs = [ TestBase ModuleBuildTiny ModuleInstallGithubMeta ModuleInstallRepository ModuleInstallReadmeFromPod ModuleInstallReadmeMarkdownFromPod YAML ];
+    propagatedBuildInputs = [ AlgorithmDiff ];
+    meta = {
+      homepage = "https://github.com/yappo/p5-String-Diff";
+      description = "Simple diff to String";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   StringErrf = buildPerlPackage {
     pname = "String-Errf";
     version = "0.008";
@@ -18300,7 +18419,7 @@ let
     meta = {
       description = "lib/Safe/Hole.pm";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      homepage = "http://github.com/toddr/Safe-Hole";
+      homepage = "https://github.com/toddr/Safe-Hole";
     };
   };
 
@@ -20567,6 +20686,21 @@ let
     };
   };
 
+  TextDiffFormattedHTML = buildPerlPackage {
+    pname = "Text-Diff-FormattedHTML";
+    version = "0.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AM/AMBS/Text-Diff-FormattedHTML-0.08.tar.gz";
+      sha256 = "39ab775a5c056745f2abd8cc7c1cbc5496dfef7e52a9f4bd8ada6aa6c9c7b70d";
+    };
+    propagatedBuildInputs = [ FileSlurp StringDiff ];
+    meta = {
+      description = "Generate a colorful HTML diff of strings/files";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   TextGerman = buildPerlPackage {
      pname = "Text-German";
      version = "0.06";
@@ -20608,6 +20742,21 @@ let
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MP/MPIOTR/Text-Iconv-1.7.tar.gz";
       sha256 = "5b80b7d5e709d34393bcba88971864a17b44a5bf0f9e4bcee383d029e7d2d5c3";
+    };
+  };
+
+  TestInDistDir = buildPerlPackage {
+    pname = "Test-InDistDir";
+    version = "1.112071";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MITHALDU/Test-InDistDir-1.112071.tar.gz";
+      sha256 = "922c5c63314f406f4cbb35ec423ac2154d2c2b71a65addb7732c9d240a83fefb";
+    };
+    meta = {
+      homepage = "https://github.com/wchristian/Test-InDistDir";
+      description = "Test environment setup for development with IDE";
+      license = stdenv.lib.licenses.wtfpl;
+      maintainers = [ maintainers.sgo ];
     };
   };
 

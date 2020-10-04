@@ -84,11 +84,9 @@ let
 
     (
       optionalString (cfg.mailboxes != {}) ''
-        protocol imap {
-          namespace inbox {
-            inbox=yes
-            ${concatStringsSep "\n" (map mailboxConfig (attrValues cfg.mailboxes))}
-          }
+        namespace inbox {
+          inbox=yes
+          ${concatStringsSep "\n" (map mailboxConfig (attrValues cfg.mailboxes))}
         }
       ''
     )

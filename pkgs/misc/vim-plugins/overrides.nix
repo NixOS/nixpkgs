@@ -9,6 +9,7 @@
 , gobject-introspection, glib, wrapGAppsHook
 , substituteAll
 , languagetool
+, tabnine
 , Cocoa, CoreFoundation, CoreServices
 , buildVimPluginFrom2Nix
 , nodePackages
@@ -226,6 +227,14 @@ self: super: {
 
   ghcid = super.ghcid.overrideAttrs(old: {
     configurePhase = "cd plugins/nvim";
+  });
+
+  vimsence = super.vimsence.overrideAttrs(old: {
+    meta = with stdenv.lib; {
+      description = "Discord rich presence for Vim";
+      homepage = "https://github.com/hugolgst/vimsence";
+      maintainers = with stdenv.lib.maintainers; [ hugolgst ];
+    };
   });
 
   vim-gist = super.vim-gist.overrideAttrs(old: {
@@ -589,10 +598,19 @@ self: super: {
           libiconv
         ];
 
-        cargoSha256 = "0qqys51slz85rnx6knjyivnmyq4rj6rrnz7w72kqcl8da8zjbx7b";
+        cargoSha256 = "QUi3GyAsakAtDQkiVA7ez05s5CixqsVSp92svYmcWdQ=";
       };
     in ''
       ln -s ${maple-bin}/bin/maple $target/bin/maple
+    '';
+  });
+
+  completion-tabnine = super.completion-tabnine.overrideAttrs(old: {
+    buildInputs = [ tabnine ];
+
+    postFixup = ''
+      mkdir $target/binaries
+      ln -s ${tabnine}/bin/TabNine $target/binaries/TabNine_$(uname -s)
     '';
   });
 } // (

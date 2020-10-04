@@ -38,7 +38,7 @@ mkDerivation rec {
 
   meta = {
     description = "An open source prototyping tool for Arduino-based projects";
-    homepage = "http://fritzing.org/";
+    homepage = "https://fritzing.org/";
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.robberer ];
     platforms = stdenv.lib.platforms.linux;

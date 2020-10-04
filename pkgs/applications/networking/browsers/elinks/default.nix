@@ -4,7 +4,7 @@
   enableGuile        ? false,                                         guile ? null
 , enablePython       ? false,                                         python ? null
 , enablePerl         ? (stdenv.hostPlatform == stdenv.buildPlatform), perl ? null
-, enableSpidermonkey ? (stdenv.hostPlatform == stdenv.buildPlatform), spidermonkey ? null
+, enableSpidermonkey ? (stdenv.hostPlatform == stdenv.buildPlatform), spidermonkey_38 ? null
 }:
 
 assert enableGuile -> guile != null;
@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional enableGuile guile
     ++ stdenv.lib.optional enablePython python
     ++ stdenv.lib.optional enablePerl perl
-    ++ stdenv.lib.optional enableSpidermonkey spidermonkey
+    ++ stdenv.lib.optional enableSpidermonkey spidermonkey_38
     ;
-  
+
   nativeBuildInputs = [ autoconf automake gettext pkgconfig ];
 
   configureFlags = [
@@ -50,9 +50,9 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional enableGuile        "--with-guile"
     ++ stdenv.lib.optional enablePython       "--with-python"
     ++ stdenv.lib.optional enablePerl         "--with-perl"
-    ++ stdenv.lib.optional enableSpidermonkey "--with-spidermonkey=${spidermonkey}"
+    ++ stdenv.lib.optional enableSpidermonkey "--with-spidermonkey=${spidermonkey_38}"
     ;
-  
+
   preConfigure = ''
     patchShebangs ./autogen.sh
     ./autogen.sh

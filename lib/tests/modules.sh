@@ -49,7 +49,7 @@ checkConfigError() {
         reportFailure "$@"
         return 1
     else
-        if echo "$err" | grep --silent "$errorContains" ; then
+        if echo "$err" | grep -zP --silent "$errorContains" ; then
             pass=$((pass + 1))
             return 0;
         else
@@ -62,17 +62,17 @@ checkConfigError() {
 
 # Check boolean option.
 checkConfigOutput "false" config.enable ./declare-enable.nix
-checkConfigError 'The option .* defined in .* does not exist.' config.enable ./define-enable.nix
+checkConfigError 'The option .* does not exist. Definition values:\n- In .*: true' config.enable ./define-enable.nix
 
 # Check integer types.
 # unsigned
 checkConfigOutput "42" config.value ./declare-int-unsigned-value.nix ./define-value-int-positive.nix
-checkConfigError 'The option value .* in .* is not of type.*unsigned integer.*' config.value ./declare-int-unsigned-value.nix ./define-value-int-negative.nix
+checkConfigError 'A definition for option .* is not of type.*unsigned integer.*. Definition values:\n- In .*: -23' config.value ./declare-int-unsigned-value.nix ./define-value-int-negative.nix
 # positive
-checkConfigError 'The option value .* in .* is not of type.*positive integer.*' config.value ./declare-int-positive-value.nix ./define-value-int-zero.nix
+checkConfigError 'A definition for option .* is not of type.*positive integer.*. Definition values:\n- In .*: 0' config.value ./declare-int-positive-value.nix ./define-value-int-zero.nix
 # between
 checkConfigOutput "42" config.value ./declare-int-between-value.nix ./define-value-int-positive.nix
-checkConfigError 'The option value .* in .* is not of type.*between.*-21 and 43.*inclusive.*' config.value ./declare-int-between-value.nix ./define-value-int-negative.nix
+checkConfigError 'A definition for option .* is not of type.*between.*-21 and 43.*inclusive.*. Definition values:\n- In .*: -23' config.value ./declare-int-between-value.nix ./define-value-int-negative.nix
 
 # Check either types
 # types.either
@@ -125,7 +125,7 @@ checkConfigOutput 'true' "$@" ./define-enable.nix ./define-attrsOfSub-foo-enable
 set -- config.enable ./define-enable.nix ./declare-enable.nix
 checkConfigOutput "true" "$@"
 checkConfigOutput "false" "$@" ./disable-define-enable.nix
-checkConfigError "The option .*enable.* defined in .* does not exist" "$@" ./disable-declare-enable.nix
+checkConfigError "The option .*enable.* does not exist. Definition values:\n- In .*: true" "$@" ./disable-declare-enable.nix
 checkConfigError "attribute .*enable.* in selection path .*config.enable.* not found" "$@" ./disable-define-enable.nix ./disable-declare-enable.nix
 checkConfigError "attribute .*enable.* in selection path .*config.enable.* not found" "$@" ./disable-enable-modules.nix
 
@@ -142,17 +142,17 @@ checkConfigError 'infinite recursion encountered' "$@"
 
 # Check _module.check.
 set -- config.enable ./declare-enable.nix ./define-enable.nix ./define-attrsOfSub-foo.nix
-checkConfigError 'The option .* defined in .* does not exist.' "$@"
+checkConfigError 'The option .* does not exist. Definition values:\n- In .*' "$@"
 checkConfigOutput "true" "$@" ./define-module-check.nix
 
 # Check coerced value.
 checkConfigOutput "\"42\"" config.value ./declare-coerced-value.nix
 checkConfigOutput "\"24\"" config.value ./declare-coerced-value.nix ./define-value-string.nix
-checkConfigError 'The option value .* in .* is not.*string or signed integer convertible to it' config.value ./declare-coerced-value.nix ./define-value-list.nix
+checkConfigError 'A definition for option .* is not.*string or signed integer convertible to it.*. Definition values:\n- In .*: \[ \]' config.value ./declare-coerced-value.nix ./define-value-list.nix
 
 # Check coerced value with unsound coercion
 checkConfigOutput "12" config.value ./declare-coerced-value-unsound.nix
-checkConfigError 'The option value .* in .* is not.*8 bit signed integer.* or string convertible to it' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
+checkConfigError 'A definition for option .* is not of type .*. Definition values:\n- In .*: "1000"' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
 checkConfigError 'unrecognised JSON value' config.value ./declare-coerced-value-unsound.nix ./define-value-string-arbitrary.nix
 
 # Check mkAliasOptionModule.
@@ -183,7 +183,7 @@ checkConfigOutput "true" config.submodule.enable ./declare-submoduleWith-path.ni
 checkConfigOutput "true" config.enable ./disable-recursive/main.nix
 checkConfigOutput "true" config.enable ./disable-recursive/{main.nix,disable-foo.nix}
 checkConfigOutput "true" config.enable ./disable-recursive/{main.nix,disable-bar.nix}
-checkConfigError 'The option .* defined in .* does not exist' config.enable ./disable-recursive/{main.nix,disable-foo.nix,disable-bar.nix}
+checkConfigError 'The option .* does not exist. Definition values:\n- In .*: true' config.enable ./disable-recursive/{main.nix,disable-foo.nix,disable-bar.nix}
 
 # Check that imports can depend on derivations
 checkConfigOutput "true" config.enable ./import-from-store.nix
@@ -207,7 +207,7 @@ checkConfigOutput "empty" config.value.foo ./declare-lazyAttrsOf.nix ./attrsOf-c
 
 
 # Even with multiple assignments, a type error should be thrown if any of them aren't valid
-checkConfigError 'The option value .* in .* is not of type .*' \
+checkConfigError 'A definition for option .* is not of type .*' \
   config.value ./declare-int-unsigned-value.nix ./define-value-list.nix ./define-value-int-positive.nix
 
 ## Freeform modules
@@ -216,7 +216,7 @@ checkConfigOutput 24 config.value ./freeform-attrsOf.nix ./define-value-string.n
 # No freeform assigments shouldn't make it error
 checkConfigOutput '{ }' config ./freeform-attrsOf.nix
 # but only if the type matches
-checkConfigError 'The option value .* in .* is not of type .*' config.value ./freeform-attrsOf.nix ./define-value-list.nix
+checkConfigError 'A definition for option .* is not of type .*' config.value ./freeform-attrsOf.nix ./define-value-list.nix
 # and properties should be applied
 checkConfigOutput yes config.value ./freeform-attrsOf.nix ./define-value-string-properties.nix
 # Options should still be declarable, and be able to have a type that doesn't match the freeform type
@@ -251,7 +251,7 @@ checkConfigOutput / config.value.path ./types-anything/equal-atoms.nix
 checkConfigOutput null config.value.null ./types-anything/equal-atoms.nix
 checkConfigOutput 0.1 config.value.float ./types-anything/equal-atoms.nix
 # Functions can't be merged together
-checkConfigError "The option .* has conflicting definitions" config.value.multiple-lambdas ./types-anything/functions.nix
+checkConfigError "The option .* has conflicting definition values" config.value.multiple-lambdas ./types-anything/functions.nix
 checkConfigOutput '<LAMBDA>' config.value.single-lambda ./types-anything/functions.nix
 # Check that all mk* modifiers are applied
 checkConfigError 'attribute .* not found' config.value.mkiffalse ./types-anything/mk-mods.nix

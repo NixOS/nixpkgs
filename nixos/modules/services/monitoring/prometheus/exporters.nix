@@ -38,6 +38,7 @@ let
     "nextcloud"
     "nginx"
     "node"
+    "openvpn"
     "postfix"
     "postgres"
     "redis"
@@ -101,7 +102,6 @@ let
       default = "${name}-exporter";
       description = ''
         User name under which the ${name} exporter shall be run.
-        Has no effect when <option>systemd.services.prometheus-${name}-exporter.serviceConfig.DynamicUser</option> is true.
       '';
     };
     group = mkOption {
@@ -109,7 +109,6 @@ let
       default = "${name}-exporter";
       description = ''
         Group under which the ${name} exporter shall be run.
-        Has no effect when <option>systemd.services.prometheus-${name}-exporter.serviceConfig.DynamicUser</option> is true.
       '';
     };
   });
@@ -161,10 +160,9 @@ let
         serviceConfig.PrivateTmp = mkDefault true;
         serviceConfig.WorkingDirectory = mkDefault /tmp;
         serviceConfig.DynamicUser = mkDefault enableDynamicUser;
-      } serviceOpts ] ++ optional (!enableDynamicUser) {
         serviceConfig.User = conf.user;
         serviceConfig.Group = conf.group;
-      });
+      } serviceOpts ]);
   };
 in
 {
@@ -229,6 +227,8 @@ in
   })] ++ [(mkIf config.services.nginx.enable {
     systemd.services.prometheus-nginx-exporter.after = [ "nginx.service" ];
     systemd.services.prometheus-nginx-exporter.requires = [ "nginx.service" ];
+  })] ++ [(mkIf config.services.postfix.enable {
+    services.prometheus.exporters.postfix.group = mkDefault config.services.postfix.setgidGroup;
   })] ++ (mapAttrsToList (name: conf:
     mkExporterConf {
       inherit name;
