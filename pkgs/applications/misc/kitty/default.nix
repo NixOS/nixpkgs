@@ -68,7 +68,7 @@ buildPythonApplication rec {
   ];
 
   # Causes build failure due to warning
-  hardeningDisable = stdenv.lib.optional stdenv.isDarwin "strictoverflow";
+  hardeningDisable = stdenv.lib.optional stdenv.cc.isClang "strictoverflow";
 
   dontConfigure = true;
 
