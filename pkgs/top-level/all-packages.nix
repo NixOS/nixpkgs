@@ -21485,6 +21485,8 @@ in
 
   kapitonov-plugins-pack = callPackage ../applications/audio/kapitonov-plugins-pack { };
 
+  kapow = libsForQt5.callPackage ../applications/misc/kapow { };
+
   kdeApplications =
     let
       mkApplications = import ../applications/kde;
