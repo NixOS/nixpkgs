@@ -12,7 +12,7 @@
 , pillow
 , scikitimage
 , scipy
-, tensorflow
+, tensorflow_2
 }:
 
 buildPythonPackage rec {
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pillow
     scikitimage
     scipy
-    tensorflow
+    tensorflow_2 # Keras only supports tensorflow 2 now
   ];
 
   meta = with lib; {
