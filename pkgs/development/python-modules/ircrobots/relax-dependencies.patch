@@ -1,0 +1,14 @@
+diff --git a/requirements.txt b/requirements.txt
+index 87a2d31..4e0efb1 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,6 +1,6 @@
+-anyio            ==1.3.0
++anyio
+ asyncio-throttle ==1.0.1
+-dataclasses      ==0.6
+-ircstates        ==0.11.2
++dataclasses; python_version < "3.7"
++ircstates        >=0.11.2
+ async_stagger    ==0.3.0
+ async_timeout    ==3.0.1

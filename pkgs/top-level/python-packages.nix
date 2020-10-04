@@ -2991,6 +2991,8 @@ in {
 
   irc = callPackage ../development/python-modules/irc { };
 
+  ircrobots = callPackage ../development/python-modules/ircrobots { };
+
   ircstates = callPackage ../development/python-modules/ircstates { };
 
   irctokens = callPackage ../development/python-modules/irctokens { };
