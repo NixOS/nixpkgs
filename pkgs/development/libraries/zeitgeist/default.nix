@@ -15,7 +15,7 @@
 , json-glib
 , librdf_raptor2
 , pythonSupport ? true
-, python2Packages
+, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     vala
-    python2Packages.python
+    python3
   ];
 
   buildInputs = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     gtk3
     json-glib
     librdf_raptor2
-    python2Packages.rdflib
+    python3.pkgs.rdflib
   ];
 
   configureFlags = [
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = stdenv.lib.optionalString pythonSupport ''
-    moveToOutput lib/${python2Packages.python.libPrefix} "$py"
+    moveToOutput lib/${python3.libPrefix} "$py"
   '';
 
   meta = with stdenv.lib; {
