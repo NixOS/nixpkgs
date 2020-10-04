@@ -2,25 +2,28 @@
 
 stdenv.mkDerivation rec {
   pname = "mergerfs";
-  version = "2.28.3";
+  version = "2.31.0";
 
   src = fetchFromGitHub {
     owner = "trapexit";
     repo = pname;
     rev = version;
-    sha256 = "1w6p3svc2yknp6swqg8lax6n9b31lyplb3j7r8nv14hbq4hymylx";
+    sha256 = "0j7nbxzv85as76glzk4cf7j6ggfihcjaihp06s0zcar4i7zaiy9z";
   };
 
   nativeBuildInputs = [
     automake autoconf pkgconfig gettext libtool pandoc which
   ];
+  prePatch = ''
+    sed -i -e '/chown/d' -e '/chmod/d' libfuse/Makefile
+  '';
   buildInputs = [ attr libiconv ];
 
   preConfigure = ''
     echo "${version}" > VERSION
   '';
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" "XATTR_AVAILABLE=1" ];
+  makeFlags = [ "DESTDIR=${placeholder "out"}" "XATTR_AVAILABLE=1" "PREFIX=/" "SBINDIR=/bin" ];
   enableParallelBuilding = true;
 
   postFixup = ''
