@@ -8,9 +8,9 @@ buildGoModule rec {
   excludedPackages = ''tools'';
 
   src = fetchFromGitHub {
-    owner  = "rancher";
-    repo   = "k3d";
-    rev    = "v${version}";
+    owner = "rancher";
+    repo = "k3d";
+    rev = "v${version}";
     sha256 = "1pq5x4fyn98f01mzfjv335gx29c61zd85qc5vhx9rk27hi825ima";
   };
 
