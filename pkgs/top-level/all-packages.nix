@@ -471,6 +471,8 @@ in
 
   ociTools = callPackage ../build-support/oci-tools { };
 
+  octant = callPackage ../applications/networking/cluster/octant { };
+
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
 
   pruneLibtoolFiles = makeSetupHook { name = "prune-libtool-files"; }
