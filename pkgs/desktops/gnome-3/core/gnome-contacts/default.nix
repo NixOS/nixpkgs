@@ -3,7 +3,6 @@
 , libchamplain, clutter-gtk, geocode-glib, gnome-desktop, gnome-online-accounts
 , wrapGAppsHook, folks, libxml2, gnome3
 , vala, meson, ninja, libhandy, gsettings-desktop-schemas
-# , telepathy-glib
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +25,6 @@ stdenv.mkDerivation rec {
     folks gnome-desktop libhandy
     libxml2 gnome-online-accounts cheese
     gnome3.adwaita-icon-theme libchamplain clutter-gtk geocode-glib
-    # telepathy-glib 3.35.90 fails to build with telepathy
   ];
 
   mesonFlags = [
