@@ -11531,6 +11531,7 @@ in
   rolespec = callPackage ../development/tools/misc/rolespec { };
 
   rr = callPackage ../development/tools/analysis/rr { };
+  rr-unstable = callPackage ../development/tools/analysis/rr/unstable.nix { }; # This is a temporary attribute, please see the corresponding file for details.
 
   samurai = callPackage ../development/tools/build-managers/samurai { };
 
