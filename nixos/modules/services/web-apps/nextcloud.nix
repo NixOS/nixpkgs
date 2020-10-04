@@ -535,9 +535,9 @@ in {
 
       services.nginx.enable = mkDefault true;
 
-      # FIXME(ma27) make sure that the config works fine with Nextcloud 19
-      # *and* Nextcloud 20 as soon as it gets released.
-      services.nginx.virtualHosts.${cfg.hostName} = {
+      services.nginx.virtualHosts.${cfg.hostName} = let
+        major = toInt (versions.major cfg.package.version);
+      in {
         root = cfg.package;
         locations = {
           "= /robots.txt" = {
@@ -550,7 +550,9 @@ in {
           };
           "/" = {
             priority = 900;
-            extraConfig = "rewrite ^ /index.php;";
+            extraConfig = if major < 20
+              then "rewrite ^ /index.php;"
+              else "try_files $uri $uri/ /index.php$request_uri;";
           };
           "~ ^/store-apps" = {
             priority = 201;
@@ -574,7 +576,7 @@ in {
           "~ ^/(?:\\.|autotest|occ|issue|indie|db_|console)".extraConfig = ''
             return 404;
           '';
-          "~ ^\\/(?:index|remote|public|cron|core\\/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|oc[ms]-provider\\/.+|.+\\/richdocumentscode\\/proxy)\\.php(?:$|\\/)" = {
+          ${if major < 20 then "~ ^\\/(?:index|remote|public|cron|core\\/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|oc[ms]-provider\\/.+|.+\\/richdocumentscode\\/proxy)\\.php(?:$|\\/)" else "~ \\.php(?:$|/)"} = {
             priority = 500;
             extraConfig = ''
               include ${config.services.nginx.package}/conf/fastcgi.conf;
