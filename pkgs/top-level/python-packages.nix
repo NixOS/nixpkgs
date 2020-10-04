@@ -432,6 +432,8 @@ in {
 
   asyncssh = callPackage ../development/python-modules/asyncssh { };
 
+  async_stagger = callPackage ../development/python-modules/async_stagger { };
+
   asynctest = callPackage ../development/python-modules/asynctest { };
 
   async-timeout = callPackage ../development/python-modules/async_timeout { };
