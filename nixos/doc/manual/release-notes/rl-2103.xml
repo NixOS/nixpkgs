@@ -653,6 +653,11 @@ self: super:
      The <varname>platform</varname> grouping of these things never meant anything, and was just a historial/implementation artifact that was overdue removal.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <varname>services.restic</varname> now uses a dedicated cache directory for every backup defined in <varname>services.restic.backups</varname>. The old global cache directory, <literal>/root/.cache/restic</literal>, is now unused and can be removed to free up disk space.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
