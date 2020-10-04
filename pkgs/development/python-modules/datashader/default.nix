@@ -74,8 +74,9 @@ buildPythonPackage rec {
       --replace "'numba >=0.37.0,<0.49'" "'numba'"
   '';
 
+  # dask doesn't do well with large core counts
   checkPhase = ''
-    pytest -n $NIX_BUILD_CORES datashader
+    pytest -n $NIX_BUILD_CORES datashader -k 'not dask.array'
   '';
 
   meta = with lib; {
