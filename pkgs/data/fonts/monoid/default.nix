@@ -1,19 +1,25 @@
-{ stdenv, fetchFromGitHub, python2 }:
-# Python 3 support requires https://github.com/larsenwork/monoid/pull/233 to be merged
+{ stdenv, fetchFromGitHub, fetchpatch, python3 }:
 
 stdenv.mkDerivation {
   pname = "monoid";
-  version = "2016-07-21";
+  version = "2018-06-03";
 
   src = fetchFromGitHub {
     owner = "larsenwork";
     repo = "monoid";
-    rev = "e9d77ec18c337dc78ceae787a673328615f0b120";
-    sha256 = "07h5q6cn6jjpmxp9vyag1bxx481waz344sr2kfs7d37bba8yjydj";
+    rev = "a331c7c5f402c449f623e0d0895bd2fd8dc30ccf";
+    sha256 = "sha256-RV6lxv5CjywTMcuPMj6rdjLKrap7zLJ7niaNeF//U1Y=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/larsenwork/monoid/pull/233/commits/f84f2ed61301ee84dadd16351314394f22ebed2f.patch";
+      sha256 = "sha256-CxfFHlR7TB64pvrfzVfUDkPwuRO2UdGOhXwW98c+oQU=";
+    })
+  ];
+
   nativeBuildInputs = [
-    (python2.withPackages (pp: with pp; [
+    (python3.withPackages (pp: with pp; [
       fontforge
     ]))
   ];
