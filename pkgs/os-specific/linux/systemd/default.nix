@@ -54,6 +54,7 @@ in stdenv.mkDerivation {
     ./0016-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
     ./0017-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
     ./0018-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0019-revert-get-rid-of-seat_can_multi_session.patch
   ];
 
   postPatch = ''
