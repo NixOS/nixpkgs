@@ -427,7 +427,7 @@ in {
               then ''"$(<"${toString c.dbpassFile}")"''
               else if c.dbpass != null
               then ''"${toString c.dbpass}"''
-              else null;
+              else ''""'';
             adminpass = if c.adminpassFile != null
               then ''"$(<"${toString c.adminpassFile}")"''
               else ''"${toString c.adminpass}"'';
@@ -441,8 +441,7 @@ in {
               ${if c.dbhost != null then "--database-host" else null} = ''"${c.dbhost}"'';
               ${if c.dbport != null then "--database-port" else null} = ''"${toString c.dbport}"'';
               ${if c.dbuser != null then "--database-user" else null} = ''"${c.dbuser}"'';
-              ${if (any (x: x != null) [c.dbpass c.dbpassFile])
-                 then "--database-pass" else null} = dbpass;
+              "--database-pass" = dbpass;
               ${if c.dbtableprefix != null
                 then "--database-table-prefix" else null} = ''"${toString c.dbtableprefix}"'';
               "--admin-user" = ''"${c.adminuser}"'';
