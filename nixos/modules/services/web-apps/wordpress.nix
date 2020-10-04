@@ -26,8 +26,16 @@ let
 
       # symlink the wordpress config
       ln -s ${wpConfig hostName cfg} $out/share/wordpress/wp-config.php
+
+      ${optionalString (!cfg.mutableWpContent) ''
       # symlink uploads directory
       ln -s ${cfg.uploadsDir} $out/share/wordpress/wp-content/uploads
+      ''}
+
+      ${optionalString cfg.mutableWpContent ''
+      rm -Rf $out/share/wordpress/wp-content
+      ln -s ${stateDir hostName} $out/share/wordpress/wp-content
+      ''}
 
       # https://github.com/NixOS/nixpkgs/pull/53399
       #
@@ -36,9 +44,11 @@ let
       # requests that look like: https://example.com/wp-content//nix/store/...plugin/path/some-file.js
       # Since hard linking directories is not allowed, copying is the next best thing.
 
+      ${optionalString (!cfg.mutableWpContent) ''
       # copy additional plugin(s) and theme(s)
       ${concatMapStringsSep "\n" (theme: "cp -r ${theme} $out/share/wordpress/wp-content/themes/${theme.name}") cfg.themes}
       ${concatMapStringsSep "\n" (plugin: "cp -r ${plugin} $out/share/wordpress/wp-content/plugins/${plugin.name}") cfg.plugins}
+      ''}
     '';
   };
 
@@ -53,9 +63,15 @@ let
 
       require_once('${stateDir hostName}/secret-keys.php');
 
+      ${optionalString (!cfg.mutableWpContent) ''
       # wordpress is installed onto a read-only file system
       define('DISALLOW_FILE_EDIT', true);
       define('AUTOMATIC_UPDATER_DISABLED', true);
+      ''}
+
+      ${optionalString cfg.mutableWpContent ''
+      define('FS_METHOD','direct');
+      ''}
 
       ${cfg.extraConfig}
 
@@ -98,6 +114,12 @@ let
             This directory is used for uploads of pictures. The directory passed here is automatically
             created and permissions adjusted as required.
           '';
+        };
+
+        mutableWpContent = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Allow any modification in the wp-content directory. This usually means adding, removing and updating plugins and themes in the web interface. This is helpful for testing which themes and plugins to use. It should only be used on a test server as migrating between mutable and readonly is not easily possible.";
         };
 
         plugins = mkOption {
@@ -376,7 +398,15 @@ in
       "d '${stateDir hostName}' 0750 ${user} ${webserver.group} - -"
       "d '${cfg.uploadsDir}' 0750 ${user} ${webserver.group} - -"
       "Z '${cfg.uploadsDir}' 0750 ${user} ${webserver.group} - -"
-    ]) eachSite);
+      ]
+      ++
+      (if cfg.mutableWpContent then [
+      "d '${stateDir hostName}/themes' 0750 ${user} ${webserver.group} - -"
+      "Z '${stateDir hostName}/themes' 0750 ${user} ${webserver.group} - -"
+      "d '${stateDir hostName}/plugins' 0750 ${user} ${webserver.group} - -"
+      "Z '${stateDir hostName}/plugins' 0750 ${user} ${webserver.group} - -"
+      ] else [])
+    ) eachSite);
 
     systemd.services = mkMerge [
       (mapAttrs' (hostName: cfg: (
