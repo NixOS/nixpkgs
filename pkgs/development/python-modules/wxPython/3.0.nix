@@ -37,10 +37,25 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkgconfig ]
     ++ (lib.optionals (!stdenv.isDarwin) [ wxGTK libX11 ])
-    ++ (lib.optionals stdenv.isDarwin [ wxmac darwin.apple_sdk.frameworks.Cocoa ]);
+    ++ (lib.optionals stdenv.isDarwin [ wxmac ]);
 
   buildInputs = [ ]
     ++ (lib.optionals (!stdenv.isDarwin) [  (wxGTK.gtk) ])
+    ++ (lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      ApplicationServices
+      AudioToolbox
+      CFNetwork
+      Carbon
+      Cocoa
+      CoreGraphics
+      CoreServices
+      CoreText
+      DiskArbitration
+      IOKit
+      ImageIO
+      OpenGL
+      Security
+    ]))
     ++ (lib.optional openglSupport pyopengl);
 
   preConfigure = ''
