@@ -36,7 +36,12 @@ buildGoModule rec {
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/rancher/k3d";
-    description = "A helper to run k3s (Lightweight Kubernetes. 5 less than k8s) in a docker container";
+    longDescription = ''
+      k3s is the lightweight Kubernetes distribution by Rancher: rancher/k3s
+
+      k3d creates containerized k3s clusters. This means, that you can spin up a
+      multi-node k3s cluster on a single machine using docker.
+    '';
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ kuznero jlesquembre ngerstle jk ];
