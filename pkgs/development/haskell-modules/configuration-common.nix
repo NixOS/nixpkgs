@@ -1490,8 +1490,7 @@ self: super: {
     ghc-exactprint = dontCheck super.ghc-exactprint_0_6_3_2;
   };
   in {
-    # jailbreaking for hie-bios 0.7.0 (upstream PR: https://github.com/haskell/haskell-language-server/pull/357)
-    haskell-language-server = dontCheck (doJailbreak (super.haskell-language-server.overrideScope hlsScopeOverride));
+    haskell-language-server = dontCheck (super.haskell-language-server.overrideScope hlsScopeOverride);
     hls-ghcide = dontCheck (super.hls-ghcide.overrideScope hlsScopeOverride);
     hls-brittany = dontCheck (super.hls-brittany.overrideScope hlsScopeOverride);
     fourmolu = dontCheck (super.fourmolu.overrideScope hlsScopeOverride);
