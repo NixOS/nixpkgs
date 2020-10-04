@@ -484,6 +484,13 @@ sub addEntry {
     }
 }
 
+# extraPrepareConfig could refer to @bootPath@, which we have to substitute
+$extraPrepareConfig =~ s/\@bootPath\@/$bootPath/g;
+
+# Run extraPrepareConfig in sh
+if ($extraPrepareConfig ne "") {
+  system((get("shell"), "-c", $extraPrepareConfig));
+}
 
 # Add default entries.
 $conf .= "$extraEntries\n" if $extraEntriesBeforeNixOS;
@@ -561,13 +568,6 @@ if ($grubVersion == 2) {
     }
 }
 
-# extraPrepareConfig could refer to @bootPath@, which we have to substitute
-$extraPrepareConfig =~ s/\@bootPath\@/$bootPath/g;
-
-# Run extraPrepareConfig in sh
-if ($extraPrepareConfig ne "") {
-  system((get("shell"), "-c", $extraPrepareConfig));
-}
 
 # write the GRUB config.
 my $confFile = $grubVersion == 1 ? "$bootPath/grub/menu.lst" : "$bootPath/grub/grub.cfg";
