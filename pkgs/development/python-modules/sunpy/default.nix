@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "sunpy";
-  version = "1.0.6";
+  version = "1.1.4";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "sunpy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0j2yfhfxgi95rig8cfp9lvszb7694gq90jvs0xrb472hwnzgh2sk";
+    sha256 = "0cv9nlq5am4kw78zds54hyk2s32h3xlg22jd3mva4msliqx0325v";
   };
 
   propagatedBuildInputs = [
