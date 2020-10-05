@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "zipp";
-  version = "3.1.0";
+  version = "3.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c599e4d75c98f6798c509911d08a22e6c021d074469042177c8c86fb92eefd96";
+    sha256 = "64ad89efee774d1897a58607895d80789c59778ea02185dd846ac38394a8642b";
   };
 
   nativeBuildInputs = [ setuptools_scm toml ];
