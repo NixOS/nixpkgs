@@ -4,14 +4,14 @@
 
 buildPythonPackage rec {
   pname = "zigpy-xbee";
-  version = "0.12.1";
+  version = "0.13.0";
 
   buildInputs = [ pyserial pyserial-asyncio zigpy ];
   checkInputs = [ pytest ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09488hl27qjv8shw38iiyzvzwcjkc0k4n00l2bfn1ac443xzw0vh";
+    sha256 = "1a018d1d14e6454033701364186e9d41d96b98a6babf05edff7bc09cc7c63f78";
   };
 
   meta = with stdenv.lib; {
