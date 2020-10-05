@@ -12344,7 +12344,9 @@ in
 
   egl-wayland = callPackage ../development/libraries/egl-wayland {};
 
-  elastix = callPackage ../development/libraries/science/biology/elastix { };
+  elastix = callPackage ../development/libraries/science/biology/elastix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   enchant1 = callPackage ../development/libraries/enchant/1.x.nix { };
 
