@@ -4,6 +4,7 @@
 , factory_boy
 , faker
 , inquirer
+, notify-py
 , pbr
 , pendulum
 , ptable
@@ -11,7 +12,6 @@
 , pytestcov
 , pytest-mock
 , requests
-, setuptools
 , twine
 , validate-email
 }:
@@ -19,22 +19,19 @@
 
 buildPythonPackage rec {
   pname = "toggl-cli";
-  version = "2.1.0";
-  disabled = pythonOlder "3.5" || pythonAtLeast "3.8";
+  version = "2.2.1";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     pname = "togglCli";
     inherit version;
-    sha256 = "0iirvvb8772569v28d36bnryksm1qkkw48d48fw26j7ka01qq6mm";
+    sha256 = "1izsxag98lvivkwf7724g2ak6icjak9jdqphaq1a79kwdnqprx1m";
   };
 
   postPatch = ''
    substituteInPlace requirements.txt \
-     --replace "pendulum==2.0.4" "pendulum>=2.0.4" \
-     --replace "click-completion==0.5.0" "click-completion>=0.5.0" \
-     --replace "click==7.0" "click>=7.0" \
-     --replace "pbr==5.1.2" "pbr>=5.1.2" \
-     --replace "inquirer==2.5.1" "inquirer>=2.5.1"
+     --replace "inquirer==2.6.3" "inquirer>=2.6.3" \
+     --replace "notify-py==0.2.2" "notify-py>=0.2.2"
   '';
 
   nativeBuildInputs = [ pbr twine ];
@@ -53,15 +50,15 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    setuptools
     click
     click-completion
-    validate-email
+    inquirer
+    notify-py
     pendulum
     ptable
     requests
-    inquirer
     pbr
+    validate-email
   ];
 
   meta = with stdenv.lib; {
@@ -71,4 +68,3 @@ buildPythonPackage rec {
     maintainers = [ maintainers.mmahut ];
   };
 }
-
