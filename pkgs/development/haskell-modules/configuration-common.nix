@@ -137,6 +137,14 @@ self: super: {
     then addBuildDepend super.halive pkgs.darwin.apple_sdk.frameworks.AppKit
     else super.halive;
 
+  # Test suite fails due golden tests checking text representation
+  # of normalized dhall expressions, and newer dhall versions format
+  # differently.
+  hpack-dhall =
+    if pkgs.lib.versionOlder "0.5.2" super.hpack-dhall.version
+    then throw "Drop dontCheck override for hpack-dhall > 0.5.2"
+    else dontCheck super.hpack-dhall;
+
   barbly = addBuildDepend super.barbly pkgs.darwin.apple_sdk.frameworks.AppKit;
 
   # Hakyll's tests are broken on Darwin (3 failures); and they require util-linux

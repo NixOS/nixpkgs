@@ -6357,7 +6357,6 @@ broken-packages:
   - hp2any-graph
   - hp2any-manager
   - hpack-convert
-  - hpack-dhall
   - hpaco
   - hpaco-lib
   - hpage
