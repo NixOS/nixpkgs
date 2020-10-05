@@ -10,13 +10,13 @@
 
 buildPythonPackage {
   pname = "azure-mgmt-commerce";
-  version = "1.0.1";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-sdk-for-python";
-    rev = "ee5b47525d6c1eae3b1fd5f65b0421eab62a6e6f";
-    sha256 = "0xzdn7da5c3q5knh033vbsqk36vwbm75cx8vf10x0yj58krb4kn4";
+    rev = "azure-core_${version}";
+    sha256 = "1nx0mwkvwy34dpmkp3gbbjxvz12cnj2xr8lrxg1hq9clqkrl9yl5";
   };
 
   preBuild = ''
