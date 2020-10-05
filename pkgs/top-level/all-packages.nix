@@ -6414,6 +6414,8 @@ in
 
   pastebinit = callPackage ../tools/misc/pastebinit { };
 
+  pm2 = nodePackages.pm2;
+
   pmacct = callPackage ../tools/networking/pmacct { };
 
   pmix = callPackage ../development/libraries/pmix { };
