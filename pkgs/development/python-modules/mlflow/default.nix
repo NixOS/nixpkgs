@@ -25,12 +25,12 @@
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "1.10.0";
+  version = "1.11.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11fe050373f3dbd422aa476c42cb0ed15467268bc1ad07e221e550bc54f94b75";
+    sha256 = "443d92761ac051c64f71ff51601a62c418a3f789642eda5238e933fc7c5bf5e2";
   };
 
   # run into https://stackoverflow.com/questions/51203641/attributeerror-module-alembic-context-has-no-attribute-config
