@@ -9,8 +9,8 @@ let
     };
     post_8_6 = rec {
       rev = "v${version}";
-      version = "4.0.0";
-      sha256 = "1ncrdyijkgf0s2q4rg1s9r2nrcb17gq3jz63iqdlyjq3ylv8gyx0";
+      version = "4.0.2";
+      sha256 = "1q96bsxclqx84xn5vkid501jkwlc1p6fhb8szrlrp82zglj58b0b";
     };
   };
   params = {
@@ -36,8 +36,7 @@ stdenv.mkDerivation rec {
     repo = "paco";
   };
 
-  buildInputs = with coq.ocamlPackages; [ ocaml camlp5 unzip ];
-  propagatedBuildInputs = [ coq ];
+  buildInputs = [ coq ];
 
   preBuild = "cd src";
 
