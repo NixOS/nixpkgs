@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "ecdsa";
-  version = "0.15";
+  version = "0.16.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8f12ac317f8a1318efa75757ef0a651abe12e51fc1af8838fb91079445227277";
+    sha256 = "494c6a853e9ed2e9be33d160b41d47afc50a6629b993d2b9c5ad7bb226add892";
   };
 
   propagatedBuildInputs = [ six ];
