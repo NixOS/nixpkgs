@@ -819,7 +819,13 @@ rec {
       '';
       result = runCommand "stream-${name}" {
         inherit (conf) imageName;
-        passthru = { inherit (conf) imageTag; };
+        passthru = {
+          inherit (conf) imageTag;
+
+          # Distinguish tarballs and exes at the Nix level so functions that
+          # take images can know in advance how the image is supposed to be used.
+          isExe = true;
+        };
         buildInputs = [ makeWrapper ];
       } ''
         makeWrapper ${streamScript} $out --add-flags ${conf}
