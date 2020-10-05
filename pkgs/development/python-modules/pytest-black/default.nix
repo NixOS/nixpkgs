@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-black";
-  version = "0.3.11";
+  version = "0.3.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mjxqvzadpyfvypv5isfda9c6lz8xbqci9b4hn58b2lbj3kv0pjr";
+    sha256 = "1d339b004f764d6cd0f06e690f6dd748df3d62e6fe1a692d6a5500ac2c5b75a5";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
