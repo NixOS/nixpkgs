@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "check-manifest";
-  version = "0.42";
+  version = "0.44";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d8e1b0944a667dd4a75274f6763e558f0d268fde2c725e894dfd152aae23300";
+    sha256 = "1d09db87162a70aa2877660c0ac1a1153e62b8e69bbde5e6155af7507e417af1";
   };
 
   # Test requires filesystem access
