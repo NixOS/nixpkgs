@@ -1,0 +1,22 @@
+{
+    "zeek-postgresql": {
+        "owner": "0xxon",
+        "repo": "zeek-postgresql",
+        "rev": "fb72b41140094ec8795cd7aaecbb3997c28ff202",
+        "sha256": "1r6nxxkpcb8d8mxm5nafvaixclll1xfslnzqhadl89kzvy4z6z00"
+    },
+
+    "bro-http2": {
+        "owner": "MITRECND",
+        "repo": "bro-http2",
+        "rev": "5b160f38c1f7a46d858e8568ee3f9097e9c1c45f",
+        "sha256": "sha256-ta2Jk05Z3lrsfkAQsdPJEiBr/d7JSAYOy9NlVC32PJc="
+    },
+
+    "metron-bro-plugin-kafka": {
+        "owner": "apache",
+        "repo": "metron-bro-plugin-kafka",
+        "rev": "92b85e5e00cc2fd9023ea7f53466db6592eb6634",
+        "sha256": "sha256-F2jWQYEQIo/oLdaLkBlddjlnUk8LrD3+x2QBElvQYrI="
+    }
+}

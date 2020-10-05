@@ -15,13 +15,29 @@
 , gettext
 , fetchpatch
 , coreutils
+## zeek plugin dep
+, caf, rdkafka, postgresql, libnghttp2, brotli
+, callPackage
+, PostgresqlPlugin ? false
+, Http2Plugin ? false
+, KafkaPlugin ? false
+, zeekctl ? true
 }:
 let
   preConfigure = (import ./script.nix {inherit coreutils;});
-in
-stdenv.mkDerivation rec {
+
   pname = "zeek";
   version = "3.2.1";
+
+  confdir = "/var/lib/${pname}";
+
+  plugin = callPackage ./plugin.nix {
+    inherit zeekctl confdir
+      rdkafka postgresql  PostgresqlPlugin KafkaPlugin Http2Plugin;
+  };
+in
+stdenv.mkDerivation rec {
+  inherit pname version;
 
   src = fetchurl {
     url = "https://download.zeek.org/zeek-${version}.tar.gz";
@@ -29,11 +45,19 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake flex bison file ];
-  buildInputs = [ openssl libpcap zlib curl libmaxminddb gperftools python swig ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ gettext ];
+  buildInputs = [ openssl libpcap zlib curl libmaxminddb gperftools python swig caf ]
+                ++ stdenv.lib.optionals KafkaPlugin
+                  [ rdkafka ]
+                ++ stdenv.lib.optionals PostgresqlPlugin
+                  [ postgresql ]
+                ++ stdenv.lib.optionals Http2Plugin
+                  [ libnghttp2 brotli ] ++
+                stdenv.lib.optionals stdenv.isDarwin [ gettext ];
 
   #see issue https://github.com/zeek/zeek/issues/804 to modify hardlinking duplicate files.
   inherit preConfigure;
+
+  ZEEK_DIST = "${placeholder "out"}";
 
   enableParallelBuilding = true;
 
@@ -51,7 +75,13 @@ stdenv.mkDerivation rec {
     "-DPY_MOD_INSTALL_DIR=${placeholder "out"}/${python.sitePackages}"
     "-DENABLE_PERFTOOLS=true"
     "-DINSTALL_AUX_TOOLS=true"
+    "-DINSTALL_ZEEKCTL=true"
+    "-DZEEK_ETC_INSTALL_DIR=${placeholder "out"}/etc"
+    "-DENABLE_PERFTOOLS=true"
+    "-DCAF_ROOT_DIR=${caf}"
   ];
+
+  inherit (plugin) postFixup;
 
   meta = with stdenv.lib; {
     description = "Powerful network analysis framework much different from a typical IDS";
