@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "pyosmium";
-  version = "2.15.3";
+  version = "2.15.4";
 
   src = fetchFromGitHub {
     owner = "osmcode";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1523ym9i4rnwi5kcp7n2lm67kxlhar8xlv91s394ixzwax9bgg7w";
+    sha256 = "0vnamij2ysijb5s6gsgrwcakdpzc12h1kq1b4iwagrk6yynq64y7";
   };
 
   nativeBuildInputs = [ cmake ];
