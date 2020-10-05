@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "sphinx_rtd_theme";
-  version = "0.4.3";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "728607e34d60456d736cc7991fd236afb828b21b82f956c5ea75f94c8414040a";
+    sha256 = "22c795ba2832a169ca301cd0a083f7a434e09c538c70beb42782c073651b707d";
   };
 
   propagatedBuildInputs = [ sphinx ];
