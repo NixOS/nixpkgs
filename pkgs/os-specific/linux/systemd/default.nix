@@ -55,10 +55,11 @@ in stdenv.mkDerivation {
     ./0017-kmod-static-nodes.service-Update-ConditionFileNotEmp.patch
     ./0018-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
     ./0019-revert-get-rid-of-seat_can_multi_session.patch
+    ./0020-NIXOS-use-different-values-for-runtime-dir-in-the-bi.patch
   ];
 
   postPatch = ''
-    substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
+    substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "/run/current-system/systemd/bin/"
     substituteInPlace src/boot/efi/meson.build \
       --replace \
       "find_program('ld'" \
