@@ -13,6 +13,7 @@
 , netifaces
 , croniter
 , importlib-metadata
+, lib
 }:
 
 buildPythonPackage rec {
