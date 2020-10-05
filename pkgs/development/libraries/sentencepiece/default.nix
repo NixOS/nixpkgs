@@ -1,9 +1,9 @@
-{ lib
+{ stdenv
 , fetchFromGitHub
-, stdenv
 , cmake
 , gperftools
 
+, enableStatic ? false
 , withGPerfTools ? true
 }:
 
@@ -18,7 +18,15 @@ stdenv.mkDerivation rec {
     sha256 = "1yg55h240iigjaii0k70mjb4sh3mgg54rp2sz8bx5glnsjwys5s3";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional withGPerfTools gperftools;
+  nativeBuildInputs = [ cmake ] ++ stdenv.lib.optional withGPerfTools gperftools;
+
+  cmakeFlags = [
+    "-DSPM_ENABLE_SHARED=${if enableStatic then "OFF" else "ON"}"
+  ];
+
+  postInstall = stdenv.lib.optionalString (!enableStatic) ''
+    rm $out/lib/*.a
+  '';
 
   outputs = [ "bin" "dev" "out" ];
 

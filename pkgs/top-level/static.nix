@@ -281,6 +281,9 @@ in {
   python39 = super.python39.override { static = true; };
   python3Minimal = super.python3Minimal.override { static = true; };
 
+  sentencepiece = super.sentencepiece.override {
+    enableStatic =  true;
+  };
 
   libev = super.libev.override { static = true; };
 
