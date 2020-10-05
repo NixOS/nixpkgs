@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "Shapely";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07lmrihj6pa7f99m97hbf2anqlhhwippcdz03bqkyihnlkhry6p2";
+    sha256 = "1641724c1055459a7e2b8bbe47ba25bdc89554582e62aec23cb3f3ca25f9b129";
   };
 
   nativeBuildInputs = [
