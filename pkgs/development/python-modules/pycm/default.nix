@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "pycm";
-  version = "2.5";
+  version = "2.9";
 
   disabled = !isPy3k;
 
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner  = "sepandhaghighi";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0zfv20hd7zq95sflsivjk47b0sm7q76w7fv2i2mafn83ficzx0p0";
+    sha256 = "181v4rdnblxpqq8rhnm2qdfh033a7sig1z2yz8yb93ypidj14hnk";
   };
 
   # remove a trivial dependency on the author's `art` Python ASCII art library
