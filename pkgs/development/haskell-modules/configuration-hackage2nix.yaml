@@ -4576,7 +4576,6 @@ broken-packages:
   - doi
   - DOM
   - dom-lt
-  - domain-auth
   - domplate
   - dot-linker
   - dotfs
