@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "qds_sdk";
-  version = "1.15.2";
+  version = "1.16.0";
 
   # pypi does not contain tests, using github sources instead
   src = fetchFromGitHub {
     owner = "qubole";
     repo = "qds-sdk-py";
     rev = "V${version}";
-    sha256 = "0xxg9s0y6fz7vb1kab4q93q7ryi71z8x6q9qspm6s506yr3mc67l";
+    sha256 = "1hw2bzz9xspzjr7jbvkm8ar58ag0c8x9by6lncydb8v7vxpy20wq";
   };
 
   propagatedBuildInputs = [
