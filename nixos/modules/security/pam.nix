@@ -877,8 +877,6 @@ in
         "mr ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so,"}
       ${optionalString (isEnabled (cfg: cfg.pamMount))
         "mr ${pkgs.pam_mount}/lib/security/pam_mount.so,"}
-      ${optionalString config.services.samba.syncPasswordsByPam
-        "mr ${pkgs.samba}/lib/security/pam_smbpass.so,"}
       ${optionalString (isEnabled (cfg: cfg.enableGnomeKeyring))
         "mr ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so,"}
       ${optionalString (isEnabled (cfg: cfg.startSession))
