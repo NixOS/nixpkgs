@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "stumpy";
-  version = "1.4";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "TDAmeritrade";
     repo = "stumpy";
     rev = "v${version}";
-    sha256 = "0s2s3y855jjwdb7p55zx8lknplz58ghpw547yzmqisacr968b67w";
+    sha256 = "1ydwqdvyq5cfcm8mqky0807f2wklijng5nmqbcj0bb2ibprrzs69";
   };
 
   propagatedBuildInputs = [
