@@ -63,6 +63,14 @@
         <literal>systemd-journal2gelf</literal> no longer parses json and expects the receiving system to handle it. How to achieve this with Graylog is described in this <link xlink:href="https://github.com/parse-nl/SystemdJournal2Gelf/issues/10">GitHub issue</link>.
       </para>
    </listitem>
+   <listitem>
+    <para>
+      The option <option>fonts.enableFontDir</option> has been renamed to
+      <xref linkend="opt-fonts.fontDir.enable"/>. The path of font directory
+      has also been changed to <literal>/run/current-system/sw/share/X11/fonts</literal>,
+      for consistency with other X11 resources.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
