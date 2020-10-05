@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "sumo";
-  version = "1.0.9";
+  version = "1.4.0";
 
   # No tests in Pypi tarball
   src = fetchFromGitHub {
     owner = "SMTG-UCL";
     repo = "sumo";
     rev = "v${version}";
-    sha256 = "1zw86qp9ycw2k0anw6pzvwgd3zds0z2cwy0s663zhiv9mnb5hx1n";
+    sha256 = "0643aiqk9mss0h03g5bq26f7kbxpz0bs08xcg046paqjq0j8b0n2";
   };
 
   propagatedBuildInputs = [ numpy scipy spglib pymatgen h5py matplotlib seekpath phonopy ];
