@@ -6,12 +6,13 @@
 , CoreServices, Cocoa, Hypervisor, rez, setfile
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
 , seccompSupport ? stdenv.isLinux, libseccomp
-, pulseSupport ? !stdenv.isDarwin, libpulseaudio
-, sdlSupport ? !stdenv.isDarwin, SDL2
-, gtkSupport ? !stdenv.isDarwin && !xenSupport, gtk3, gettext, vte, wrapGAppsHook
-, vncSupport ? true, libjpeg, libpng
-, smartcardSupport ? true, libcacard
-, spiceSupport ? !stdenv.isDarwin, spice, spice-protocol
+, alsaSupport ? stdenv.lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner
+, pulseSupport ? !stdenv.isDarwin && !nixosTestRunner, libpulseaudio
+, sdlSupport ? !stdenv.isDarwin && !nixosTestRunner, SDL2
+, gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner, gtk3, gettext, vte, wrapGAppsHook
+, vncSupport ? !nixosTestRunner, libjpeg, libpng
+, smartcardSupport ? !nixosTestRunner, libcacard
+, spiceSupport ? !stdenv.isDarwin && !nixosTestRunner, spice, spice-protocol
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
 , cephSupport ? false, ceph
@@ -29,7 +30,7 @@
 
 with stdenv.lib;
 let
-  audio = optionalString (hasSuffix "linux" stdenv.hostPlatform.system) "alsa,"
+  audio = optionalString alsaSupport "alsa,"
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
 
