@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "python-lz4";
-  version = "2.1.10";
+  version = "2.2.1";
 
   # get full repository inorder to run tests
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "02cadqfdmw4vc94px18dh4hcybpsa2lr6jz6j5phwc0jjaavh3wr";
+    sha256 = "1dc0y262yphpb4zqcp20nr2w9fpfbq7sjakm7mbjn31q7m9ishah";
   };
 
   nativeBuildInputs = [ setuptools_scm pkgconfig pytestrunner ];
