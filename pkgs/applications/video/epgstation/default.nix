@@ -14,12 +14,12 @@
 let
   # NOTE: use updateScript to bump the package version
   pname = "EPGStation";
-  version = "1.7.4";
+  version = "1.7.5";
   src = fetchFromGitHub {
     owner = "l3tnun";
     repo = "EPGStation";
     rev = "v${version}";
-    sha256 = "15z1kdbamj97frp3dfnbm0h8krihmv2xdab4id0rxin29ibrw1k2";
+    sha256 = "06yaf5yb5rp3q0kdhw33df7px7vyfby885ckb6bdzw3wnams5d8m";
   };
 
   workaround-opencollective-buildfailures = stdenv.mkDerivation {
