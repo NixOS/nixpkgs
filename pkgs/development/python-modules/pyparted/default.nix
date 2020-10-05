@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyparted";
-  version = "3.11.4";
+  version = "3.11.6";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "dcantrell";
     rev = "v${version}";
-    sha256 = "0wd0xhv1y1zw7djzcnimj8irif3mg0shbhgz0jn5yi914is88h6n";
+    sha256 = "1xgrqhvn44vr3676j5sy2x3xfv2dzf7vncg25cmrsmkbd49x3z5j";
   };
 
   postPatch = ''
