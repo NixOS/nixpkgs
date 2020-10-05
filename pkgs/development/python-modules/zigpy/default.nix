@@ -4,14 +4,14 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.22.2";
+  version = "0.25.0";
 
   propagatedBuildInputs = [ aiohttp crccheck pycrypto pycryptodome voluptuous ];
   checkInputs = [ pytest pytest-asyncio asynctest ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a43129932c6e4af0d2d57542218faf7695e2424ce18a5a8915d016e1303f5e44";
+    sha256 = "6e1338103cf0ed83e0a24b1c810b032f73cb44fb0029cf875e26b7d68860e901";
   };
 
   meta = with stdenv.lib; {
