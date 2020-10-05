@@ -6,12 +6,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.16.3";
+  version = "1.17.0";
   pname = "annoy";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fe2779664bd8846f2d67191a7e6010b8df890ac4586336748fd0697f31654379";
+    sha256 = "9891e264041d1dcf3af42f67fbb16cb273c5404bc8c869d0915a3087f71d58dd";
   };
 
   nativeBuildInputs = [ h5py ];
