@@ -22217,6 +22217,19 @@ let
     doCheck = false;
   };
 
+  XMLFilterSort = buildPerlPackage {
+    pname = "XML-Filter-Sort";
+    version = "1.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GR/GRANTM/XML-Filter-Sort-1.01.tar.gz";
+      sha256 = "sha256-UQWF85pJFszV+o1UXpYXnJHq9vx8l6QBp1aOhBFi+l8=";
+    };
+    propagatedBuildInputs = [
+      XMLSAX
+      XMLSAXWriter
+    ];
+  };
+
   XMLGrove = buildPerlPackage {
     pname = "XML-Grove";
     version = "0.46alpha";
