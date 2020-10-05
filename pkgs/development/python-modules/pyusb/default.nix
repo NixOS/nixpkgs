@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pyusb";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0qkk2jn270jwwl1x26hmdhb14m9kkbrzzwzizdjcl1a29b6756sf";
+    sha256 = "d69ed64bff0e2102da11b3f49567256867853b861178689671a163d30865c298";
   };
 
   # Fix the USB backend library lookup
