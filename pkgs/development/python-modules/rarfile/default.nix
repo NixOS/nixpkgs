@@ -8,13 +8,13 @@ assert !useUnrar -> libarchive != null;
 
 buildPythonPackage {
   pname = "rarfile";
-  version = "3.0";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "markokr";
     repo = "rarfile";
-    rev = "rarfile_3_0";
-    sha256 = "07yliz6p1bxzhipnrgz133gl8laic35gl4rqfay7f1vc384ch7sn";
+    rev = "v${version}";
+    sha256 = "0hzlrbl5vsxsw2vn5k20yyzc0xrp7bsdgy0m9d1dxdgsv3q5ilwz";
   };
   buildInputs = [ pytest nose glibcLocales ];
 
