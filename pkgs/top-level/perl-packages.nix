@@ -22228,6 +22228,9 @@ let
       XMLSAX
       XMLSAXWriter
     ];
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/xmlsort
+    '';
   };
 
   XMLGrove = buildPerlPackage {
