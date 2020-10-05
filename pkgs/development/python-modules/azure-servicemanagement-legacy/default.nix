@@ -6,14 +6,14 @@
 }:
 
 buildPythonPackage {
-  version = "0.20.7";
+  version = "0.48.0";
   pname = "azure-servicemanagement-legacy";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-sdk-for-python";
-    rev = "ab01fc1f23462f130c69f46505524b88101023dc";
-    sha256 = "0w2bm9hkwy1m94l8r2klnpqn4192y8bir3z8bymxgfx9y0b1mn2q";
+    rev = "azure-mgmt-web_${version}";
+    sha256 = "1ws94hnlzl5gnixx704v045b9pwqjcri9zg9k7ww84ixrbl29fyn";
   };
 
   preBuild = ''
