@@ -21277,6 +21277,7 @@ in
     # Use the same gnuradio for gr-osmosdr as well
     gr-osmosdr = gr-osmosdr.override {
       gnuradio = gnuradio3_7Minimal;
+      pythonSupport = false;
     };
   };
 
