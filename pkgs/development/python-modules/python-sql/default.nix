@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "python-sql";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f0g10y0whvax8yv0rfs7b4yd68lbxbss1za0mvbvr65b8r3pdxz";
+    sha256 = "bde7cd0e83bf90d1d9683c97ec83c0a656353cb7ff3cd788553c34b8f8b8c302";
   };
 
   meta = {
