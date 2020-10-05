@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "ignite";
-  version = "0.3.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0i863kxi1r1hspj19lhn6r8256vdazjcyvis0s33fgzrf7kxi08x";
+    sha256 = "00vcmhnp14s54g386izgaxzrdr2nqv3pz9nvpyiwrn33zawr308z";
   };
 
   checkInputs = [ pytest matplotlib mock ];
