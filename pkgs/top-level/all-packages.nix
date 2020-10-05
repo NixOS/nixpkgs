@@ -15743,7 +15743,13 @@ in
 
   qm-dsp = callPackage ../development/libraries/audio/qm-dsp { };
 
-  qradiolink = callPackage ../applications/radio/qradiolink { };
+  qradiolink = callPackage ../applications/radio/qradiolink {
+    # 3.8 support is not ready yet:
+    # https://github.com/qradiolink/qradiolink/issues/67#issuecomment-703222573
+    # The non minimal build is used because the 'qtgui' component is needed.
+    # gr-osmosdr is using the same gnuradio as of now.
+    gnuradio = gnuradio3_7-unwrapped;
+  };
 
   qrupdate = callPackage ../development/libraries/qrupdate { };
 
@@ -21154,34 +21160,80 @@ in
 
   gksu = callPackage ../applications/misc/gksu { };
 
-  gnss-sdr = callPackage ../applications/radio/gnss-sdr { boost=boost166; };
-
-  gnuradio = callPackage ../applications/radio/gnuradio {
-    inherit (python2Packages) cheetah lxml Mako matplotlib numpy python pyopengl pyqt4 scipy wxPython pygtk;
-    inherit (darwin.apple_sdk.frameworks) CoreAudio;
-    fftw = fftwFloat;
-    qwt = qwt6_qt4;
+  gnss-sdr = callPackage ../applications/radio/gnss-sdr {
+    boost = boost166;
+    gnuradio = gnuradio3_7-unwrapped;
   };
 
-  gnuradio-with-packages = callPackage ../applications/radio/gnuradio/wrapper.nix {
-    inherit (python2Packages) python;
-    extraPackages = [ gr-nacl gr-osmosdr gr-ais gr-rds ]
-      ++ lib.optionals stdenv.isLinux [ gr-gsm gr-limesdr ];
+  gnuradio-unwrapped = callPackage ../applications/radio/gnuradio {
+    inherit (darwin.apple_sdk.frameworks) CoreAudio;
+    python = python3;
+  };
+  # A build without gui components and other utilites not needed for end user
+  # libraries
+  gnuradioMinimal = gnuradio-unwrapped.override {
+    features = {
+      gnuradio-companion = false;
+      python-support = false;
+      gr-ctrlport = false;
+      examples = false;
+      gr-qtgui = false;
+      gr-utils = false;
+      gr-modtool = false;
+      sphinx = false;
+      doxygen = false;
+    };
+  };
+  gnuradio = callPackage ../applications/radio/gnuradio/wrapper.nix {
+    unwrapped = gnuradio-unwrapped;
+  };
+  gnuradio3_7-unwrapped = callPackage ../applications/radio/gnuradio/3.7.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreAudio;
+    python = python2;
+  };
+  # A build without gui components and other utilites not needed if gnuradio is
+  # used as a c++ library.
+  gnuradio3_7Minimal = gnuradio3_7-unwrapped.override {
+    features = {
+      gnuradio-companion = false;
+      python-support = false;
+      gr-ctrlport = false;
+      gr-qtgui = false;
+      gr-utils = false;
+      sphinx = false;
+      doxygen = false;
+      gr-wxgui = false;
+    };
+  };
+  gnuradio3_7 = callPackage ../applications/radio/gnuradio/wrapper.nix {
+    unwrapped = gnuradio3_7-unwrapped;
   };
 
   grandorgue = callPackage ../applications/audio/grandorgue { };
 
-  gr-nacl = callPackage ../applications/radio/gnuradio/nacl.nix { };
+  gr-nacl = callPackage ../applications/radio/gnuradio/nacl.nix {
+    gnuradio = gnuradio3_7-unwrapped;
+  };
 
-  gr-gsm = callPackage ../applications/radio/gnuradio/gsm.nix { };
+  gr-gsm = callPackage ../applications/radio/gnuradio/gsm.nix {
+    gnuradio = gnuradio3_7-unwrapped;
+  };
 
-  gr-ais = callPackage ../applications/radio/gnuradio/ais.nix { };
+  gr-ais = callPackage ../applications/radio/gnuradio/ais.nix {
+    gnuradio = gnuradio3_7-unwrapped;
+  };
 
-  gr-limesdr = callPackage ../applications/radio/gnuradio/limesdr.nix { };
+  gr-limesdr = callPackage ../applications/radio/gnuradio/limesdr.nix {
+    gnuradio = gnuradio3_7-unwrapped;
+  };
 
-  gr-rds = callPackage ../applications/radio/gnuradio/rds.nix { };
+  gr-rds = callPackage ../applications/radio/gnuradio/rds.nix {
+    gnuradio = gnuradio3_7-unwrapped;
+  };
 
-  gr-osmosdr = callPackage ../applications/radio/gnuradio/osmosdr.nix { };
+  gr-osmosdr = callPackage ../applications/radio/gnuradio/osmosdr.nix {
+    gnuradio = gnuradio3_7-unwrapped;
+  };
 
   goldendict = libsForQt514.callPackage ../applications/misc/goldendict {
     inherit (darwin) libiconv;
@@ -21220,7 +21272,13 @@ in
 
   gpx = callPackage ../applications/misc/gpx { };
 
-  gqrx = libsForQt514.callPackage ../applications/radio/gqrx { };
+  gqrx = libsForQt514.callPackage ../applications/radio/gqrx {
+    gnuradio = gnuradio3_7Minimal;
+    # Use the same gnuradio for gr-osmosdr as well
+    gr-osmosdr = gr-osmosdr.override {
+      gnuradio = gnuradio3_7Minimal;
+    };
+  };
 
   gpx-viewer = callPackage ../applications/misc/gpx-viewer { };
 
@@ -21986,7 +22044,9 @@ in
 
   inkscape-extensions = recurseIntoAttrs (callPackages ../applications/graphics/inkscape/extensions.nix {});
 
-  inspectrum = libsForQt514.callPackage ../applications/radio/inspectrum { };
+  inspectrum = libsForQt514.callPackage ../applications/radio/inspectrum {
+    gnuradio = gnuradioMinimal;
+  };
 
   ion3 = callPackage ../applications/window-managers/ion-3 {
     lua = lua5_1;

@@ -20,34 +20,36 @@
 , libjack2
 , CoreAudio
 , uhd
+, comedilib
+, libusb1
 , SDL
 , gsl
 , cppzmq
 , zeromq
 # GUI related
-, gtk3
+, gtk2
 , pango
-, gobject-introspection
 , cairo
-, qt5
-, libsForQt5
+, qt4
+, qwt6_qt4
 # Features available to override, the list of them is in featuresInfo. They
-# are all turned on by default.
-, features ? {}
+# are all turned on by default, besides wxgui which is recommended by upstream
+# in favor of gr-qtgui, see:
+# https://www.gnuradio.org/news/2019-08-10-gnu-radio-v3-8-0-0-release/
+, features ? { gr-wxgui = false; }
 # If one wishes to use a different src or name for a very custom build
 , overrideSrc ? {}
 , pname ? "gnuradio"
 , versionAttr ? {
-  major = "3.8";
-  minor = "2";
+  major = "3.7";
+  minor = "14";
   patch = "0";
 }
-# Should be false on the release after 3.8.2.0
 , fetchSubmodules ? true
 }:
 
 let
-  sourceSha256 =  "1mnfwdy7w3160vi6110x2qkyq8l78qi8771zwak9n72bl7lhhpnf";
+  sourceSha256 = "1nh4f9dmygprlbqybd3j1byg9fsr6065n140mvc4b0v8qqygmhrc";
   featuresInfo = {
     # Needed always
     basic = {
@@ -56,18 +58,9 @@ let
         pkgconfig
         orc
       ];
-      runtime = [
-        boost
-        log4cpp
-        mpir
-      ];
-      pythonNative = with python.pkgs; [
-        Mako
-        six
-      ];
+      runtime = [ boost log4cpp mpir ];
+      pythonNative = with python.pkgs; [ Mako six ];
     };
-    # NOTE: Should be removed on the release after 3.8.2.0, see:
-    # https://github.com/gnuradio/gnuradio/commit/80c04479d
     volk = {
       cmakeEnableFlag = "VOLK";
     };
@@ -95,9 +88,6 @@ let
       cmakeEnableFlag = "GNURADIO_RUNTIME";
     };
     gr-ctrlport = {
-      # Thrift support is not really working well, and even the patch they
-      # recommend applying on 0.9.2 won't apply. See:
-      # https://github.com/gnuradio/gnuradio/blob/v3.8.2.0/gnuradio-runtime/lib/controlport/thrift/README
       cmakeEnableFlag = "GR_CTRLPORT";
       native = [
         swig
@@ -106,14 +96,18 @@ let
     gnuradio-companion = {
       pythonRuntime = with python.pkgs; [
         pyyaml
-        Mako
+        cheetah
+        lxml
+        pygtk
         numpy
-        pygobject3
+        # propagated by pygtk, but since wrapping is done externally, it help
+        # the wrapper if it's here
+        pycairo
+        pygobject2
       ];
       runtime = [
-        gtk3
+        gtk2
         pango
-        gobject-introspection
         cairo
       ];
       cmakeEnableFlag = "GRC";
@@ -141,6 +135,9 @@ let
     gr-dtv = {
       cmakeEnableFlag = "GR_DTV";
     };
+    gr-atsc = {
+      cmakeEnableFlag = "GR_ATSC";
+    };
     gr-audio = {
       runtime = []
         ++ stdenv.lib.optionals stdenv.isLinux [ alsaLib libjack2 ]
@@ -148,12 +145,22 @@ let
       ;
       cmakeEnableFlag = "GR_AUDIO";
     };
+    gr-comedi = {
+      runtime = [ comedilib ];
+      cmakeEnableFlag = "GR_COMEDI";
+    };
     gr-channels = {
       cmakeEnableFlag = "GR_CHANNELS";
     };
+    gr-noaa = {
+      cmakeEnableFlag = "GR_NOAA";
+    };
+    gr-pager = {
+      cmakeEnableFlag = "GR_PAGER";
+    };
     gr-qtgui = {
-      runtime = [ qt5.qtbase libsForQt5.qwt ];
-      pythonRuntime = [ python.pkgs.pyqt5 ];
+      runtime = [ qt4 qwt6_qt4 ];
+      pythonRuntime = [ python.pkgs.pyqt4 ];
       cmakeEnableFlag = "GR_QTGUI";
     };
     gr-trellis = {
@@ -166,13 +173,6 @@ let
     gr-utils = {
       cmakeEnableFlag = "GR_UTILS";
     };
-    gr-modtool = {
-      pythonRuntime = with python.pkgs; [
-        click
-        click-plugins
-      ];
-      cmakeEnableFlag = "GR_MODTOOL";
-    };
     gr-video-sdl = {
       runtime = [ SDL ];
       cmakeEnableFlag = "GR_VIDEO_SDL";
@@ -181,6 +181,10 @@ let
       runtime = [ codec2 gsm ];
       cmakeEnableFlag = "GR_VOCODER";
     };
+    gr-fcd = {
+      runtime = [ libusb1 ];
+      cmakeEnableFlag = "GR_FCD";
+    };
     gr-wavelet = {
       cmakeEnableFlag = "GR_WAVELET";
       runtime = [ gsl ];
@@ -188,6 +192,10 @@ let
     gr-zeromq = {
       runtime = [ cppzmq zeromq ];
       cmakeEnableFlag = "GR_ZEROMQ";
+    };
+    gr-wxgui = {
+      pythonRuntime = with python.pkgs; [ numpy wxPython ];
+      cmakeEnableFlag = "GR_WXGUI";
     };
   };
   shared = (import ./shared.nix {
@@ -203,8 +211,8 @@ let
       fetchFromGitHub
       fetchSubmodules
     ;
-    qt = qt5;
-    gtk = gtk3;
+    qt = qt4;
+    gtk = gtk2;
   });
   inherit (shared)
     version
@@ -213,56 +221,57 @@ let
     nativeBuildInputs
     buildInputs
     disallowedReferences
-    stripDebugList
+    postInstall
     passthru
     doCheck
     dontWrapPythonPrograms
     meta
   ;
   cmakeFlags = shared.cmakeFlags
-    # From some reason, if these are not set, libcodec2 and gsm are not
-    # detected properly. NOTE: qradiolink needs libcodec2 to be detected in
-    # order to build, see https://github.com/qradiolink/qradiolink/issues/67
+    # From some reason, if these are not set, libcodec2 and gsm are
+    # not detected properly (slightly different then what's in
+    # ./default.nix).
     ++ stdenv.lib.optionals (hasFeature "gr-vocoder" features) [
       "-DLIBCODEC2_LIBRARIES=${codec2}/lib/libcodec2.so"
-      "-DLIBCODEC2_INCLUDE_DIRS=${codec2}/include"
-      "-DLIBCODEC2_HAS_FREEDV_API=ON"
+      "-DLIBCODEC2_INCLUDE_DIR=${codec2}/include"
       "-DLIBGSM_LIBRARIES=${gsm}/lib/libgsm.so"
-      "-DLIBGSM_INCLUDE_DIRS=${gsm}/include/gsm"
+      "-DLIBGSM_INCLUDE_DIR=${gsm}/include/gsm"
     ]
   ;
-
-  postInstall = shared.postInstall
-    # This is the only python reference worth removing, if needed (3.7 doesn't
-    # set that reference).
-    + stdenv.lib.optionalString (!hasFeature "python-support" features) ''
-      ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
-    ''
+  stripDebugList = shared.stripDebugList
+    # gr-fcd feature was dropped in 3.8
+    ++ stdenv.lib.optionals (hasFeature "gr-fcd" features) [ "share/gnuradio/examples/fcd" ]
   ;
   preConfigure = ''
   ''
+    # wxgui and pygtk are not looked up properly, so we force them to be
+    # detected as found, if they are requested by the `features` attrset.
+    + stdenv.lib.optionalString (hasFeature "gr-wxgui" features) ''
+      sed -i 's/.*wx\.version.*/set(WX_FOUND TRUE)/g' gr-wxgui/CMakeLists.txt
+    ''
+    + stdenv.lib.optionalString (hasFeature "gnuradio-companion" features) ''
+      sed -i 's/.*pygtk_version.*/set(PYGTK_FOUND TRUE)/g' grc/CMakeLists.txt
+    ''
     # If python-support is disabled, don't install volk's (git submodule)
     # volk_modtool - it references python.
     #
-    # NOTE: on the next release, volk will always be required to be installed
-    # externally (submodule removed upstream). Hence this hook will fail and
-    # we'll need to package volk while able to tell it to install or not
-    # install python referencing files. When we'll be there, this will help:
-    # https://github.com/gnuradio/volk/pull/404
+    # NOTE: The same is done for 3.8, but we don't put this string in
+    # ./shared.nix since on the next release of 3.8 it won't be needed there,
+    # but it will be needed for 3.7, probably for ever.
     + stdenv.lib.optionalString (!hasFeature "python-support" features) ''
       sed -i -e "/python\/volk_modtool/d" volk/CMakeLists.txt
     ''
   ;
   patches = [
     # Don't install python referencing files if python support is disabled.
-    # See: https://github.com/gnuradio/gnuradio/pull/3839
+    # See: https://github.com/gnuradio/gnuradio/pull/3856
     (fetchpatch {
-      url = "https://github.com/gnuradio/gnuradio/commit/4a4fd570b398b0b50fe875fcf0eb9c9db2ea5c6e.diff";
-      sha256 = "xz2E0ji6zfdOAhjfPecAcaVOIls1XP8JngLkBbBBW5Q=";
+      url = "https://github.com/gnuradio/gnuradio/commit/acef55433d15c231661fa44751f9a2d90a4baa4b.diff";
+      sha256 = "2CEX44Ll8frfLXTIWjdDhKl7aXcjiAWsezVdwrynelE=";
     })
     (fetchpatch {
-      url = "https://github.com/gnuradio/gnuradio/commit/dbc8ad7e7361fddc7b1dbc267c07a776a3f9664b.diff";
-      sha256 = "tQcCpcUbJv3yqAX8rSHN/pAuBq4ueEvoVo7sNzZGvf4=";
+      url = "https://github.com/gnuradio/gnuradio/commit/a2681edcfaabcb1ecf878ae861161b6a6bf8459d.diff";
+      sha256 = "2Pitgu8accs16B5X5+/q51hr+IY9DMsA15f56gAtBs8=";
     })
   ];
 in
