@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "toolz";
-  version = "0.10.0";
+  version = "0.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08fdd5ef7c96480ad11c12d472de21acd32359996f69a5259299b540feba4560";
+    sha256 = "c7a47921f07822fe534fb1c01c9931ab335a4390c782bd28c6bcc7c2f71f3fbf";
   };
 
   checkInputs = [ nose ];
