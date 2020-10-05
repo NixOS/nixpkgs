@@ -2466,6 +2466,8 @@ in
     libmaxminddb = null;
   };
 
+  xmlsort = perlPackages.XMLFilterSort;
+
   xmousepasteblock = callPackage ../tools/X11/xmousepasteblock { };
 
   mar1d = callPackage ../games/mar1d { } ;
