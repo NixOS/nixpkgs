@@ -6488,6 +6488,8 @@ in
 
   pim6sd = callPackage ../servers/pim6sd { };
 
+  pineapple = callPackage ../misc/emulators/pineapple { };
+
   pinentry = libsForQt5.callPackage ../tools/security/pinentry {
     libcap = if stdenv.isDarwin then null else libcap;
   };
