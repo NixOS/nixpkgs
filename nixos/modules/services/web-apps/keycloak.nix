@@ -1,0 +1,465 @@
+{ config, pkgs, lib, ... }:
+
+let
+  cfg = config.services.keycloak;
+in
+{
+  options.services.keycloak = {
+
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Whether to enable the Keycloak identity and access management
+        server.
+      '';
+    };
+
+    bindAddress = lib.mkOption {
+      type = lib.types.str;
+      default = "\${jboss.bind.address:0.0.0.0}";
+      example = "127.0.0.1";
+      description = ''
+        On which address Keycloak should accept new connections.
+
+        A special syntax can be used to allow command line Java system
+        properties to override the value: ''${property.name:value}
+      '';
+    };
+
+    httpPort = lib.mkOption {
+      type = lib.types.str;
+      default = "\${jboss.http.port:80}";
+      example = "8080";
+      description = ''
+        On which port Keycloak should listen for new HTTP connections.
+
+        A special syntax can be used to allow command line Java system
+        properties to override the value: ''${property.name:value}
+      '';
+    };
+
+    httpsPort = lib.mkOption {
+      type = lib.types.str;
+      default = "\${jboss.https.port:443}";
+      example = "8443";
+      description = ''
+        On which port Keycloak should listen for new HTTPS connections.
+
+        A special syntax can be used to allow command line Java system
+        properties to override the value: ''${property.name:value}
+      '';
+    };
+
+    frontendUrl = lib.mkOption {
+      type = lib.types.str;
+      example = "keycloak.example.com/auth";
+      description = ''
+        The public URL used as base for all frontend requests. Should
+        normally include a trailing <literal>/auth</literal>.
+
+        See <link xlink:href="https://www.keycloak.org/docs/latest/server_installation/#_hostname">the
+        Hostname section of the Keycloak server installation
+        manual</link> for more information.
+      '';
+    };
+
+    forceBackendUrlToFrontendUrl = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Whether Keycloak should force all requests to go through the
+        frontend URL configured in <xref
+        linkend="opt-services.keycloak.frontendUrl" />. By default,
+        Keycloak allows backend requests to instead use its local
+        hostname or IP address and may also advertise it to clients
+        through its OpenID Connect Discovery endpoint.
+
+        See <link
+        xlink:href="https://www.keycloak.org/docs/latest/server_installation/#_hostname">the
+        Hostname section of the Keycloak server installation
+        manual</link> for more information.
+      '';
+    };
+
+    certificatePrivateKeyBundle = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      example = "/run/keys/ssl_cert";
+      description = ''
+        The path to a PEM formatted bundle of the private key and
+        certificate to use for TLS connections.
+
+        This should be a string, not a Nix path, since Nix paths are
+        copied into the world-readable Nix store.
+      '';
+    };
+
+    databaseHost = lib.mkOption {
+      type = lib.types.str;
+      default = "localhost";
+      description = ''
+        Hostname of the PostgreSQL database to connect to.
+      '';
+    };
+
+    databaseCreateLocally = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Whether a database should be automatically created on the
+        local host. Set this to false if you plan on provisioning a
+        local database yourself. This has no effect if
+        services.keycloak.databaseHost is customized.
+      '';
+    };
+
+    databaseUsername = lib.mkOption {
+      type = lib.types.str;
+      default = "keycloak";
+      description = ''
+        Username to use when connecting to an external or manually
+        provisioned database; has no effect when a local database is
+        automatically provisioned.
+      '';
+    };
+
+    databasePasswordFile = lib.mkOption {
+      type = lib.types.path;
+      example = "/run/keys/db_password";
+      description = ''
+        File containing the database password.
+
+        This should be a string, not a Nix path, since Nix paths are
+        copied into the world-readable Nix store.
+      '';
+    };
+
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.keycloak;
+      description = ''
+        Keycloak package to use.
+      '';
+    };
+
+    initialAdminPassword = lib.mkOption {
+      type = lib.types.str;
+      default = "changeme";
+      description = ''
+        Initial password set for the <literal>admin</literal>
+        user. The password is not stored safely and should be changed
+        immediately in the admin panel.
+      '';
+    };
+
+    extraConfig = lib.mkOption {
+      type = lib.types.attrs;
+      default = { };
+      example = lib.literalExample ''
+        {
+          "subsystem=keycloak-server" = {
+            "spi=hostname" = {
+              "provider=default" = null;
+              "provider=fixed" = {
+                enabled = true;
+                properties.hostname = "keycloak.example.com";
+              };
+              default-provider = "fixed";
+            };
+          };
+        }
+      '';
+      description = ''
+        Additional Keycloak configuration options to set in
+        <literal>standalone.xml</literal>.
+
+        Options are expressed as a Nix attribute set which matches the
+        structure of the jboss-cli configuration. The configuration is
+        effectively overlayed on top of the default configuration
+        shipped with Keycloak. To remove existing nodes and undefine
+        attributes from the default configuration, set them to
+        <literal>null</literal>.
+
+        The example configuration does the equivalent of the following
+        script, which removes the hostname provider
+        <literal>default</literal>, adds the deprecated hostname
+        provider <literal>fixed</literal> and defines it the default:
+
+        <programlisting>
+        /subsystem=keycloak-server/spi=hostname/provider=default:remove()
+        /subsystem=keycloak-server/spi=hostname/provider=fixed:add(enabled = true, properties = { hostname = "keycloak.example.com" })
+        /subsystem=keycloak-server/spi=hostname:write-attribute(name=default-provider, value="fixed")
+        </programlisting>
+
+        You can discover available options by using the <link
+        xlink:href="http://docs.wildfly.org/21/Admin_Guide.html#Command_Line_Interface">jboss-cli.sh</link>
+        program and by referring to the <link
+        xlink:href="https://www.keycloak.org/docs/latest/server_installation/index.html">Keycloak
+        Server Installation and Configuration Guide</link>.
+      '';
+    };
+
+  };
+
+  config =
+    let
+      # We only want to create a database if we're actually going to connect to it.
+      databaseActuallyCreateLocally = cfg.databaseCreateLocally && cfg.databaseHost == "localhost";
+
+      keycloakConfig' = builtins.foldl' lib.recursiveUpdate {
+        "interface=public".inet-address = cfg.bindAddress;
+        "socket-binding-group=standard-sockets"."socket-binding=http".port = cfg.httpPort;
+        "subsystem=keycloak-server"."spi=hostname" = {
+          "provider=default" = {
+            enabled = true;
+            properties = {
+              inherit (cfg) frontendUrl forceBackendUrlToFrontendUrl;
+            };
+          };
+        };
+        "subsystem=datasources"."jdbc-driver=postgresql" = {
+          driver-module-name = "org.postgresql";
+          driver-name = "postgresql";
+          driver-xa-datasource-class-name = "org.postgresql.xa.PGXADataSource";
+        };
+        "subsystem=datasources"."data-source=KeycloakDS" = {
+          connection-url = "jdbc:postgresql://${cfg.databaseHost}/keycloak";
+          driver-name = "postgresql";
+          max-pool-size = "20";
+          user-name = if databaseActuallyCreateLocally then "keycloak" else cfg.databaseUsername;
+          password = "@db-password@";
+        };
+      } [
+        (lib.optionalAttrs (cfg.certificatePrivateKeyBundle != null) {
+          "socket-binding-group=standard-sockets"."socket-binding=https".port = cfg.httpsPort;
+          "core-service=management"."security-realm=UndertowRealm"."server-identity=ssl" = {
+            keystore-path = "/run/keycloak/ssl/certificate_private_key_bundle.p12";
+            keystore-password = "notsosecretpassword";
+          };
+          "subsystem=undertow"."server=default-server"."https-listener=https".security-realm = "UndertowRealm";
+        })
+        cfg.extraConfig
+      ];
+
+      mkJbossScript = attrs:
+        let
+          writeAttributes = path: set:
+            let
+              prefixExpression = string:
+                let
+                  match = (builtins.match ''"\$\{.*}"'' string);
+                in
+                  if match != null then
+                    "expression " + string
+                  else
+                    string;
+
+              writeAttribute = attribute: value:
+                let
+                  type = builtins.typeOf value;
+                in
+                  if type == "set" then
+                    let
+                      names = builtins.attrNames value;
+                    in
+                      builtins.foldl' (text: name: text + (writeAttribute "${attribute}.${name}" value.${name})) "" names
+                  else if value == null then ''
+                    if (outcome == success) of ${path}:read-attribute(name="${attribute}")
+                        ${path}:undefine-attribute(name="${attribute}")
+                    end-if
+                  ''
+                  else if builtins.elem type [ "string" "path" "bool" ] then
+                    let
+                      value' = if type == "bool" then lib.boolToString value else ''"${value}"'';
+                    in ''
+                      if (result != ${prefixExpression value'}) of ${path}:read-attribute(name="${attribute}")
+                        ${path}:write-attribute(name=${attribute}, value=${value'})
+                      end-if
+                    ''
+                  else throw "Unsupported type '${type}' for path '${path}'!";
+            in
+              lib.concatStrings
+                (lib.mapAttrsToList
+                  (attribute: value: (writeAttribute attribute value))
+                  set);
+
+          makeArgList = set:
+            let
+              makeArg = attribute: value:
+                let
+                  type = builtins.typeOf value;
+                in
+                  if type == "set" then
+                    "${attribute} = { " + (makeArgList value) + " }"
+                  else if builtins.elem type [ "string" "path" "bool" ] then
+                    "${attribute} = ${if type == "bool" then lib.boolToString value else ''"${value}"''}"
+                  else if value == null then
+                    ""
+                  else
+                    throw "Unsupported type '${type}' for attribute '${attribute}'!";
+            in
+              lib.concatStringsSep ", " (lib.mapAttrsToList makeArg set);
+
+          recurse = state: node:
+            let
+              path = state.path ++ (lib.optional (node != null) node);
+              isPath = name:
+                let
+                  value = lib.getAttrFromPath (path ++ [ name ]) attrs;
+                in
+                  if (builtins.match ".*([=]).*" name) == [ "=" ] then
+                    if builtins.isAttrs value || value == null then
+                      true
+                    else
+                      throw "Parsing path '${lib.concatStringsSep "." (path ++ [ name ])}' failed: JBoss attributes cannot contain '='!"
+                  else
+                    false;
+              jbossPath = "/" + (lib.concatStringsSep "/" path);
+              nodeValue = lib.getAttrFromPath path attrs;
+              children = if !builtins.isAttrs nodeValue then {} else nodeValue;
+              subPaths = builtins.filter isPath (builtins.attrNames children);
+              jbossAttrs = lib.filterAttrs (name: _: !(isPath name)) children;
+            in
+              state // {
+                text = state.text + (
+                  if nodeValue != null then ''
+                    if (outcome != success) of ${jbossPath}:read-resource()
+                        ${jbossPath}:add(${makeArgList jbossAttrs})
+                    end-if
+                  '' + (writeAttributes jbossPath jbossAttrs)
+                  else ''
+                    if (outcome == success) of ${jbossPath}:read-resource()
+                        ${jbossPath}:remove()
+                    end-if
+                  '') + (builtins.foldl' recurse { text = ""; inherit path; } subPaths).text;
+              };
+        in
+          (recurse { text = ""; path = []; } null).text;
+
+
+      jbossCliScript = pkgs.writeText "jboss-cli-script" (mkJbossScript keycloakConfig');
+
+      keycloakConfig = pkgs.runCommand "keycloak-config" {} ''
+        export JBOSS_BASE_DIR="$(pwd -P)";
+        export JBOSS_MODULEPATH="${cfg.package}/modules";
+        export JBOSS_LOG_DIR="$JBOSS_BASE_DIR/log";
+
+        cp -r ${cfg.package}/standalone/configuration .
+        chmod -R u+rwX ./configuration
+
+        mkdir -p {deployments,ssl}
+
+        "${cfg.package}/bin/standalone.sh"&
+
+        attempt=1
+        max_attempts=30
+        while ! ${cfg.package}/bin/jboss-cli.sh --connect ':read-attribute(name=server-state)'; do
+            if [[ "$attempt" == "$max_attempts" ]]; then
+                echo "ERROR: Could not connect to Keycloak after $attempt attempts! Failing.." >&2
+                exit 1
+            fi
+            echo "Keycloak not fully started yet, retrying.. ($attempt/$max_attempts)"
+            sleep 1
+            (( attempt++ ))
+        done
+
+        ${cfg.package}/bin/jboss-cli.sh --connect --file=${jbossCliScript} --echo-command
+
+        cp configuration/standalone.xml $out
+      '';
+    in
+      lib.mkIf cfg.enable {
+
+        environment.systemPackages = [ cfg.package ];
+
+        systemd.services.keycloakDatabaseInit = lib.mkIf databaseActuallyCreateLocally {
+          after = [ "postgresql.service" ];
+          before = [ "keycloak.service" ];
+          bindsTo = [ "postgresql.service" ];
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+            User = "postgres";
+            Group = "postgres";
+          };
+          script = ''
+            set -eu
+
+            PSQL=${config.services.postgresql.package}/bin/psql
+
+            db_password="$(<'${cfg.databasePasswordFile}')"
+            $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='keycloak'" | grep -q 1 || $PSQL -tAc "CREATE ROLE keycloak WITH LOGIN PASSWORD '$db_password' CREATEDB"
+            $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = 'keycloak'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "keycloak" OWNER "keycloak"'
+          '';
+        };
+
+        systemd.services.keycloak = {
+          after = lib.optionals databaseActuallyCreateLocally [
+            "keycloakDatabaseInit.service" "postgresql.service"
+          ];
+          bindsTo = lib.optionals databaseActuallyCreateLocally [
+            "keycloakDatabaseInit.service" "postgresql.service"
+          ];
+          wantedBy = [ "multi-user.target" ];
+          environment = {
+            JBOSS_LOG_DIR = "/var/log/keycloak";
+            JBOSS_BASE_DIR = "/run/keycloak";
+            JBOSS_MODULEPATH = "${cfg.package}/modules";
+          };
+          serviceConfig = {
+            ExecStartPre = let
+              startPreFullPrivileges = ''
+                set -eu
+
+                install -T -m 0400 -o keycloak -g keycloak '${cfg.databasePasswordFile}' /run/keycloak/secrets/db_password
+              '' + lib.optionalString (cfg.certificatePrivateKeyBundle != null) ''
+                install -T -m 0400 -o keycloak -g keycloak '${cfg.certificatePrivateKeyBundle}' /run/keycloak/secrets/ssl_cert_pk_bundle
+              '';
+              startPre = ''
+                set -eu
+
+                install -m 0600 ${cfg.package}/standalone/configuration/*.properties /run/keycloak/configuration
+                install -T -m 0600 ${keycloakConfig} /run/keycloak/configuration/standalone.xml
+
+                db_password="$(</run/keycloak/secrets/db_password)"
+                ${pkgs.replace}/bin/replace-literal -fe '@db-password@' "$db_password" /run/keycloak/configuration/standalone.xml
+
+                export JAVA_OPTS=-Djboss.server.config.user.dir=/run/keycloak/configuration
+                ${cfg.package}/bin/add-user-keycloak.sh -u admin -p '${cfg.initialAdminPassword}'
+              '' + lib.optionalString (cfg.certificatePrivateKeyBundle != null) ''
+                pushd /run/keycloak/ssl/
+                cat /run/keycloak/secrets/ssl_cert_pk_bundle <(echo) /etc/ssl/certs/ca-certificates.crt > allcerts.pem
+                ${pkgs.openssl}/bin/openssl pkcs12 -export -in /run/keycloak/secrets/ssl_cert_pk_bundle -chain \
+                                                   -name "${cfg.frontendUrl}" -out certificate_private_key_bundle.p12 \
+                                                   -CAfile allcerts.pem -passout pass:notsosecretpassword
+                popd
+              '';
+            in [
+              "+${pkgs.writeShellScript "keycloak-start-pre-full-privileges" startPreFullPrivileges}"
+              "${pkgs.writeShellScript "keycloak-start-pre" startPre}"
+            ];
+            ExecStart = "${cfg.package}/bin/standalone.sh";
+            User = "keycloak";
+            Group = "keycloak";
+            DynamicUser = true;
+            RuntimeDirectory = map (p: "keycloak/" + p) [
+              "secrets"
+              "configuration"
+              "deployments"
+              "data"
+              "ssl"
+              "log"
+              "tmp"
+            ];
+            RuntimeDirectoryMode = 0700;
+            LogsDirectory = "keycloak";
+            AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+          };
+        };
+
+        services.postgresql.enable = lib.mkDefault databaseActuallyCreateLocally;
+      };
+}
