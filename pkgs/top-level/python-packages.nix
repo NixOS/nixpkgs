@@ -6542,6 +6542,8 @@ in {
     jre = pkgs.jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
+  skidl = callPackage ../development/python-modules/skidl { };
+
   sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
 
   skorch = callPackage ../development/python-modules/skorch { };
