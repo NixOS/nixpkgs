@@ -7401,6 +7401,8 @@ in
 
   tiledb = callPackage ../development/libraries/tiledb { };
 
+  tilem = callPackage ../misc/emulators/tilem { };
+
   timemachine = callPackage ../applications/audio/timemachine { };
 
   timelapse-deflicker = callPackage ../applications/graphics/timelapse-deflicker { };
