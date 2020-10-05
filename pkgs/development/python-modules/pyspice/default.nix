@@ -1,5 +1,6 @@
 { stdenv
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , libngspice
 , numpy
@@ -15,6 +16,7 @@
 buildPythonPackage rec {
   pname = "PySpice";
   version = "1.4.3";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
