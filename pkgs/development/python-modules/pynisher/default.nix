@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pynisher";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b1079315ad1009de108c9ad701f6ae5274264e64503fc22c2de366d99953f34";
+    sha256 = "d82fb94c9ff2ed8f34d1cc9a2c6feb61f794cf931bd33a7f0628896bf450916f";
   };
 
   propagatedBuildInputs = [ psutil docutils ];
