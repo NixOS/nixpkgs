@@ -8,11 +8,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "coursier";
-  version = "2.0.0-RC6-27";
+  version = "2.0.0";
 
   src = fetchurl {
     url = "https://github.com/coursier/coursier/releases/download/v${version}/coursier";
-    sha256 = "1f98gsbxpha54nplw6y9hf338alwj2aalgr59fl51zjg1axs6cv6";
+    sha256 = "07j113cszd4wggm8js4jl1lhg88mfs46nl2xf1733icz7p5rvjim";
   };
 
   nativeBuildInputs = [ makeWrapper ];
