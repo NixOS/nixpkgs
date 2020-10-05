@@ -1,6 +1,6 @@
-{ stdenv, lazarus, qt5 }:
+{ mkDerivation, lib, lazarus, qmake, qtbase, qtx11extras }:
 
-stdenv.mkDerivation {
+mkDerivation {
   pname = "libqt5pas";
   inherit (lazarus) version src;
 
@@ -8,14 +8,14 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace Qt5Pas.pro \
-      --replace "target.path = \$\$[QT_INSTALL_LIBS]" "target.path = $out/lib"
+      --replace 'target.path = $$[QT_INSTALL_LIBS]' "target.path = $out/lib"
   '';
 
-  nativeBuildInputs = with qt5; [ qmake ];
+  nativeBuildInputs = [ qmake ];
 
-  buildInputs = with qt5; [ qtbase qtx11extras ];
+  buildInputs = [ qtbase qtx11extras ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free Pascal Qt5 binding library";
     homepage = "https://wiki.freepascal.org/Qt5_Interface#libqt5pas";
     maintainers = with maintainers; [ sikmir ];
