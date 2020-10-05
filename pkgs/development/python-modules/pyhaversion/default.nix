@@ -15,14 +15,14 @@
 }:
 buildPythonPackage rec {
   pname = "pyhaversion";
-  version = "3.3.0";
+  version = "3.4.2";
 
   # needs aiohttp which is py3k-only
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "376a1b232a26035bc82d64affa1c4f312d782234fe5453e8d0f9e1350a97be5b";
+    sha256 = "b4e49dfa0f9dae10edd072e630d902e5497daa312baad58b7df7618efe863377";
   };
 
   propagatedBuildInputs = [
