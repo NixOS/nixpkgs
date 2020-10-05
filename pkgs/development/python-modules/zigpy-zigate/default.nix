@@ -4,14 +4,14 @@
 
 buildPythonPackage rec {
   pname = "zigpy-zigate";
-  version = "0.6.1";
+  version = "0.6.2";
 
   buildInputs = [ pyserial pyserial-asyncio zigpy ];
   checkInputs = [ pytest ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xxqv65drrr96b9ncwsx9ayd369lpwimj1jjb0d7j6l9lil0wmf5";
+    sha256 = "338c8c3c40d0aacdea623ced66229da08616d90758fb19b56f33919018ac9aa6";
   };
 
   meta = with stdenv.lib; {
