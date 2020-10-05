@@ -29382,6 +29382,8 @@ in
 
   martyr = callPackage ../development/libraries/martyr { };
 
+  mas = callPackage ../os-specific/darwin/mas { };
+
   moltengamepad = callPackage ../misc/drivers/moltengamepad { };
 
   openzwave = callPackage ../development/libraries/openzwave { };
