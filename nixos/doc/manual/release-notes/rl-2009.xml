@@ -270,6 +270,11 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
   <itemizedlist>
    <listitem>
     <para>
+     The <link linkend="opt-services.matrix-synapse.enable">matrix-synapse</link> module no longer includes optional dependencies by default, they have to be added through the <link linkend="opt-services.matrix-synapse.plugins">plugins</link> option.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      <literal>buildGoModule</literal> now internally creates a vendor directory
      in the source tree for downloaded modules instead of using go's <link
      xlink:href="https://golang.org/cmd/go/#hdr-Module_proxy_protocol">module

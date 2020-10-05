@@ -131,7 +131,12 @@ in {
       plugins = mkOption {
         type = types.listOf types.package;
         default = [ ];
-        defaultText = "with config.services.matrix-synapse.package.plugins [ matrix-synapse-ldap3 matrix-synapse-pam ]";
+        example = literalExample ''
+          with config.services.matrix-synapse.package.plugins; [
+            matrix-synapse-ldap3
+            matrix-synapse-pam
+          ];
+        '';
         description = ''
           List of additional Matrix plugins to make available.
         '';
