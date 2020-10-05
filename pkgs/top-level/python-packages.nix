@@ -2279,6 +2279,8 @@ in {
 
   gateone = callPackage ../development/python-modules/gateone { };
 
+  gatt-python = callPackage ../development/python-modules/gatt-python { };
+
   gcovr = callPackage ../development/python-modules/gcovr { };
 
   gdal = toPythonModule (pkgs.gdal.override { pythonPackages = self; });
