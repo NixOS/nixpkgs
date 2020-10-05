@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "perfplot";
-  version = "0.5.0";
+  version = "0.8.4";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "nschloe";
     repo = "perfplot";
     rev = "v${version}";
-    sha256 = "16aj5ryjic1k3qn8xhpw6crczvxcs691vs5kv4pvb1zdx69g1xbv";
+    sha256 = "0avb0inx8qh8ss3j460v3z6mmn863hswa3bl19vkh475ndsjwmp0";
   };
 
   propagatedBuildInputs = [
