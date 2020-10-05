@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "zm-py";
-  version = "0.4.0";
+  version = "0.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f9693ca046de4ea12c1afb5c67709ec0c2a48744566c0a1a9327348e1a1617b0";
+    sha256 = "4cd1a2191ed1b8414b0c962a5a7c7ee0c573613da751178669685cfa118b9ca7";
   };
 
   disabled = !isPy3k;
