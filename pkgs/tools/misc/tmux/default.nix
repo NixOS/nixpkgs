@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
     sha256 = "0jvyq4r691bn0wsr8i6c0q0lzss25vm9nx8sv3fhw9cs63ncq04y";
   };
 
+  patches = [ ./malloc_trim.patch ];
+
   nativeBuildInputs = [
     pkgconfig
     autoreconfHook

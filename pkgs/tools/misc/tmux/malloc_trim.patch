@@ -1,0 +1,62 @@
+diff -ru /nix/store/47hjjjf4crqdgg3ggfxgllbz66yzb6v1-source/compat.h ./compat.h
+--- /nix/store/47hjjjf4crqdgg3ggfxgllbz66yzb6v1-source/compat.h	1970-01-01 01:00:01.000000000 +0100
++++ ./compat.h	2020-10-05 16:32:18.346529813 +0100
+@@ -363,6 +363,10 @@
+ void		*recallocarray(void *, size_t, size_t, size_t);
+ #endif
+ 
++#ifdef HAVE_MALLOC_TRIM
++#include <malloc.h>
++#endif
++
+ #ifdef HAVE_UTF8PROC
+ /* utf8proc.c */
+ int		 utf8proc_wcwidth(wchar_t);
+diff -ru /nix/store/47hjjjf4crqdgg3ggfxgllbz66yzb6v1-source/configure.ac ./configure.ac
+--- /nix/store/47hjjjf4crqdgg3ggfxgllbz66yzb6v1-source/configure.ac	1970-01-01 01:00:01.000000000 +0100
++++ ./configure.ac	2020-10-05 16:53:55.592976118 +0100
+@@ -321,6 +321,31 @@
+ AC_SEARCH_LIBS(socket, socket)
+ AC_CHECK_LIB(xnet, socket)
+ 
++# Check if using glibc and have malloc_trim(3). The glibc free(3) is pretty bad
++# about returning memory to the kernel unless the application tells it when to
++# with malloc_trim(3).
++AC_MSG_CHECKING(if free doesn't work very well)
++AC_LINK_IFELSE([AC_LANG_SOURCE(
++	[
++		#include <stdlib.h>
++		#ifdef __GLIBC__
++		#include <malloc.h>
++		int main(void) {
++			malloc_trim (0);
++			exit(0);
++		}
++		#else
++		no
++		#endif
++	])],
++	found_malloc_trim=yes,
++	found_malloc_trim=no
++)
++AC_MSG_RESULT($found_malloc_trim)
++if test "x$found_malloc_trim" = xyes; then
++	AC_DEFINE(HAVE_MALLOC_TRIM)
++fi
++
+ # Check for CMSG_DATA. Some platforms require _XOPEN_SOURCE_EXTENDED (for
+ # example see xopen_networking(7) on HP-UX).
+ XOPEN_DEFINES=
+diff -ru /nix/store/47hjjjf4crqdgg3ggfxgllbz66yzb6v1-source/grid.c ./grid.c
+--- /nix/store/47hjjjf4crqdgg3ggfxgllbz66yzb6v1-source/grid.c	1970-01-01 01:00:01.000000000 +0100
++++ ./grid.c	2020-10-05 16:32:18.347529812 +0100
+@@ -246,6 +246,9 @@
+ 
+ 	for (yy = py; yy < py + ny; yy++)
+ 		grid_free_line(gd, yy);
++#ifdef HAVE_MALLOC_TRIM
++	malloc_trim(0);
++#endif
+ }
+ 
+ /* Create a new grid. */
