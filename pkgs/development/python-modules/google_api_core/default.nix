@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "1.22.1";
+  version = "1.22.4";
   disabled = isPy27; # google namespace no longer works on python2
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "35cba563034d668ae90ffe1f03193a84e745b38f09592f60258358b5e5ee6238";
+    sha256 = "4a9d7ac2527a9e298eebb580a5e24e7e41d6afd97010848dd0f306cae198ec1a";
   };
 
   propagatedBuildInputs = [
