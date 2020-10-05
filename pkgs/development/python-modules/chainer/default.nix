@@ -5,7 +5,7 @@
 
 buildPythonPackage rec {
   pname = "chainer";
-  version = "6.5.0";
+  version = "6.7.0";
   disabled = !isPy3k; # python2.7 abandoned upstream
 
   # no tests in Pypi tarball
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "chainer";
     repo = "chainer";
     rev = "v${version}";
-    sha256 = "0ha9fbl6sa3fbnsz3y1pg335iiskdbxw838m5j06zgzy156zna1x";
+    sha256 = "00xcz8n4rsjqnhnh31j5mj225v10zkdmgildjfrv4jnwlfsarjl0";
   };
 
   # remove on 7.0 or 6.6 release
