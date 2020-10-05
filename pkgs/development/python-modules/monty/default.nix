@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "monty";
-  version = "3.0.2";
+  version = "3.0.4";
   disabled = isPy27; # uses type annotations
 
   # No tests in Pypi
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "materialsvirtuallab";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1wxqxp0j7i6czdpr2r1imgmy3qbgn2l7d4za2h1lg3hllvx6jra1";
+    sha256 = "1h4715xajfmi3j67bmkbd6kaswidhpryswsh8nsj1q3akcjh81mi";
   };
 
   checkInputs = [ lsof nose numpy msgpack coverage coveralls pymongo];
