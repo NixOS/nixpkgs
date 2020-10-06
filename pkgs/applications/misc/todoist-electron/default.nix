@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/KryDos/todoist-linux";
     description = "The Linux wrapper for Todoist web version";
     platforms = [ "x86_64-linux" ];
-    license = licenses.isc;
+    license = licenses.mit;
     maintainers = with maintainers; [ i077 ];
   };
 }
