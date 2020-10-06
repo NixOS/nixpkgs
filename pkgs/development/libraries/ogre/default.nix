@@ -24,20 +24,35 @@
 , unzip
 , libXrender
 , SDL2
+, pugixml
+, writeScriptBin
+, rsync
+, Foundation
+, AppKit
+, AGL
+, Cocoa
+, libobjc
 , withNvidiaCg ? false
 , nvidia_cg_toolkit
 , withSamples ? false
 }:
 
+let
+  ditto = writeScriptBin "ditto"''
+    #!${stdenv.shell}
+    ${rsync}/bin/rsync "$@"
+  '';
+in
+
 stdenv.mkDerivation rec {
   pname = "ogre";
-  version = "1.12.1";
+  version = "1.12.9";
 
   src = fetchFromGitHub {
     owner = "OGRECave";
     repo = "ogre";
     rev = "v${version}";
-    sha256 = "sha256-FHW0+DZhw6MLlhjh4DRYhA+6vBBXMN9K6GEVoR6P5kM=";
+    sha256 = "sha256-uv61SuZzmBZKConOHYKEv9/QHWUcS6MmdHl6GwbkFyw=";
   };
 
   # fix for ARM. sys/sysctl.h has moved in later glibcs, and
@@ -51,13 +66,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DOGRE_BUILD_DEPENDENCIES=OFF" "-DOGRE_BUILD_SAMPLES=${toString withSamples}" ]
     ++ map (x: "-DOGRE_BUILD_PLUGIN_${x}=on")
     ([ "BSP" "OCTREE" "PCZ" "PFX" ] ++ lib.optional withNvidiaCg "CG")
-    ++ map (x: "-DOGRE_BUILD_RENDERSYSTEM_${x}=on") [ "GL" ];
-
+    ++ map (x: "-DOGRE_BUILD_RENDERSYSTEM_${x}=on") [ "GL" ]
+    ++ lib.optionals stdenv.isDarwin [ "-DOGRE_ENABLE_PRECOMPILED_HEADERS=false" ];
 
   nativeBuildInputs = [ cmake unzip pkg-config ];
-  buildInputs =
-    [
-      cmake
+  buildInputs = [
       libGLU
       libGL
       freetype
@@ -78,13 +91,22 @@ stdenv.mkDerivation rec {
       libICE
       libXrender
       SDL2
-    ] ++ lib.optional withNvidiaCg nvidia_cg_toolkit;
+      pugixml
+  ] ++ lib.optional withNvidiaCg nvidia_cg_toolkit
+    ++ lib.optionals stdenv.isDarwin [
+      libobjc
+      Foundation
+      AppKit
+      Cocoa
+      AGL
+      ditto
+  ];
 
   meta = {
     description = "A 3D engine";
     homepage = "https://www.ogre3d.org/";
     maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     license = lib.licenses.mit;
   };
 }
