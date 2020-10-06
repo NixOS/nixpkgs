@@ -21527,6 +21527,8 @@ in
 
   nwg-launchers = callPackage ../applications/misc/nwg-launchers { };
 
+  ocenaudio = callPackage ../applications/audio/ocenaudio { };
+
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
 
   openshift = callPackage ../applications/networking/cluster/openshift { };
