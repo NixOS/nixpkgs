@@ -21233,6 +21233,8 @@ in
 
   hugo = callPackage ../applications/misc/hugo { };
 
+  hunter = callPackage ../applications/misc/hunter { };
+
   hydrogen = qt5.callPackage ../applications/audio/hydrogen { };
   hydrogen_0 = callPackage ../applications/audio/hydrogen/0.nix { }; # Old stable, has GMKit.
 
