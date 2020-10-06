@@ -5,8 +5,8 @@ generic: {
   };
 
   v40 = generic {
-    version = "4.0.24";
-    sha256 = "01nm0pqsb168qawm1j7b3lixbwkz6hi8hd2052q6dlzqm7s2mi2s";
+    version = "4.0.25";
+    sha256 = "1w9k0pw3w0klpzw7ny8igv5a97icv2jl4xicbgyr5464if8sw9ck";
   };
 
   v30 = generic {
