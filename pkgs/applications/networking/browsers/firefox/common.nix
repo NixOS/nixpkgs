@@ -21,8 +21,9 @@
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
 , ffmpegSupport ? true
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
-, waylandSupport ? true, libxkbcommon, pipewire
+, waylandSupport ? true, libxkbcommon
 , gssSupport ? true, kerberos
+, pipewireSupport ? waylandSupport && webrtcSupport, pipewire
 
 ## privacy-related options
 
@@ -69,6 +70,7 @@
 }:
 
 assert stdenv.cc.libc or null != null;
+assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "pipewireSupport requires both wayland and webrtc support.";
 
 let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
@@ -84,6 +86,7 @@ let
   execdir = if stdenv.isDarwin
             then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
             else "/bin";
+
 in
 
 stdenv.mkDerivation ({
@@ -94,12 +97,12 @@ stdenv.mkDerivation ({
 
   patches = [
     ./env_var_for_system_dir.patch
+  ] ++ lib.optional pipewireSupport
     (fetchpatch {
       # https://src.fedoraproject.org/rpms/firefox/blob/master/f/firefox-pipewire-0-3.patch
       url = "https://src.fedoraproject.org/rpms/firefox/raw/e99b683a352cf5b2c9ff198756859bae408b5d9d/f/firefox-pipewire-0-3.patch";
       sha256 = "0qc62di5823r7ly2lxkclzj9rhg2z7ms81igz44nv0fzv3dszdab";
     })
-  ]
   ++ patches;
 
 
@@ -128,7 +131,8 @@ stdenv.mkDerivation ({
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gtk3Support gtk3
   ++ lib.optional  gssSupport kerberos
-  ++ lib.optionals waylandSupport [ libxkbcommon pipewire ]
+  ++ lib.optionals waylandSupport [ libxkbcommon ]
+  ++ lib.optionals pipewireSupport [ pipewire ]
   ++ lib.optionals stdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
                                      AVFoundation MediaToolbox CoreLocation
                                      Foundation libobjc AddressBook cups ];
@@ -142,8 +146,10 @@ stdenv.mkDerivation ({
 
   postPatch = ''
     rm -rf obj-x86_64-pc-linux-gnu
-
-    # needed for enabling webrtc+pipewire
+  '' + lib.optionalString pipewireSupport ''
+    # substitute the /usr/include/ lines for the libraries that pipewire provides.
+    # The patch we pick from fedora only contains the generated moz.build files
+    # which hardcode the dependency paths instead of running pkg_config.
     substituteInPlace \
       media/webrtc/trunk/webrtc/modules/desktop_capture/desktop_capture_generic_gn/moz.build \
       --replace /usr/include ${pipewire.dev}/include
