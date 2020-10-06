@@ -4869,8 +4869,6 @@ in
 
   ksmoothdock = libsForQt514.callPackage ../applications/misc/ksmoothdock { };
 
-  kst = libsForQt514.callPackage ../tools/graphics/kst { gsl = gsl_1; };
-
   kstars = libsForQt514.callPackage ../applications/science/astronomy/kstars { };
 
   kytea = callPackage ../tools/text/kytea { };
