@@ -14713,7 +14713,9 @@ in
 
   opendmarc = callPackage ../development/libraries/opendmarc { };
 
-  ois = callPackage ../development/libraries/ois {};
+  ois = callPackage ../development/libraries/ois {
+    inherit (darwin.apple_sdk.frameworks) Cocoa IOKit Kernel;
+  };
 
   openh264 = callPackage ../development/libraries/openh264 { };
 
