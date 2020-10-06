@@ -727,6 +727,19 @@
           <literal>linuxPackages_5_10_hardened</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>services.wordpress.$name.database.name</literal>
+          default value has changed from <literal>wordpress</literal> to
+          <literal>wordpress-${name}</literal> on NixOS installations
+          where <literal>system.stateVersion</literal> is
+          <literal>21.11</literal> or higher. This will break existing
+          installations if you don’t manually set
+          <literal>services.wordpress.$name.database.name</literal> back
+          to <literal>wordpress</literal> or rename the database
+          manually to the new name.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">

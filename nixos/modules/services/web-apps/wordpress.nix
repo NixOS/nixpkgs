@@ -169,7 +169,7 @@ let
 
           name = mkOption {
             type = types.str;
-            default = "wordpress";
+            default = if lib.versionAtLeast config.system.stateVersion "21.11" then "wordpress-${name}" else "wordpress";
             description = "Database name.";
           };
 
@@ -315,7 +315,7 @@ in
       ensureDatabases = mapAttrsToList (hostName: cfg: cfg.database.name) eachSite;
       ensureUsers = mapAttrsToList (hostName: cfg:
         { name = cfg.database.user;
-          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
+          ensurePermissions = { "`${cfg.database.name}`.*" = "ALL PRIVILEGES"; };
         }
       ) eachSite;
     };
