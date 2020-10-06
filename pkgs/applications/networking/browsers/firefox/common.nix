@@ -9,7 +9,7 @@
 , hunspell, libXdamage, libevent, libstartup_notification
 , libvpx_1_8
 , icu67, libpng, jemalloc, glib
-, autoconf213, which, gnused, cargo, rustc, llvmPackages
+, autoconf213, which, gnused, cargo, rustc
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , debugBuild ? false
 
@@ -22,6 +22,7 @@
 , ffmpegSupport ? true
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
 , waylandSupport ? true, libxkbcommon
+, ltoSupport ? true, overrideCC, buildPackages
 , gssSupport ? true, kerberos
 , pipewireSupport ? waylandSupport && webrtcSupport, pipewire
 
@@ -87,9 +88,14 @@ let
             then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
             else "/bin";
 
+  llvmPackages = buildPackages.llvmPackages_10;
+
+  buildStdenv = if ltoSupport
+                then overrideCC stdenv llvmPackages.lldClang
+                else stdenv;
 in
 
-stdenv.mkDerivation ({
+buildStdenv.mkDerivation ({
   name = "${pname}-unwrapped-${ffversion}";
   version = ffversion;
 
@@ -131,11 +137,17 @@ stdenv.mkDerivation ({
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gtk3Support gtk3
   ++ lib.optional  gssSupport kerberos
+  ++ lib.optional  ltoSupport llvmPackages.libunwind
   ++ lib.optionals waylandSupport [ libxkbcommon ]
   ++ lib.optionals pipewireSupport [ pipewire ]
-  ++ lib.optionals stdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
-                                     AVFoundation MediaToolbox CoreLocation
-                                     Foundation libobjc AddressBook cups ];
+  ++ lib.optionals buildStdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
+                                          AVFoundation MediaToolbox CoreLocation
+                                          Foundation libobjc AddressBook cups ];
+
+  NIX_LDFLAGS = lib.optionalString ltoSupport ''
+    -rpath ${placeholder "out"}/lib/${binaryName}
+    -rpath ${llvmPackages.libunwind.out}/lib
+  '';
 
   NIX_CFLAGS_COMPILE = toString [
     "-I${glib.dev}/include/gio-unix-2.0"
@@ -179,7 +191,7 @@ stdenv.mkDerivation ({
       which
     ]
     ++ lib.optional gtk3Support wrapGAppsHook
-    ++ lib.optionals stdenv.isDarwin [ xcbuild rsync ]
+    ++ lib.optionals buildStdenv.isDarwin [ xcbuild rsync ]
     ++ extraNativeBuildInputs;
 
   preConfigure = ''
@@ -197,12 +209,12 @@ stdenv.mkDerivation ({
     # included we need to look in a few places.
     # TODO: generalize this process for other use-cases.
 
-    BINDGEN_CFLAGS="$(< ${stdenv.cc}/nix-support/libc-crt1-cflags) \
-      $(< ${stdenv.cc}/nix-support/libc-cflags) \
-      $(< ${stdenv.cc}/nix-support/cc-cflags) \
-      $(< ${stdenv.cc}/nix-support/libcxx-cxxflags) \
-      ${lib.optionalString stdenv.cc.isClang "-idirafter ${stdenv.cc.cc}/lib/clang/${lib.getVersion stdenv.cc.cc}/include"} \
-      ${lib.optionalString stdenv.cc.isGNU "-isystem ${stdenv.cc.cc}/include/c++/${lib.getVersion stdenv.cc.cc} -isystem ${stdenv.cc.cc}/include/c++/${lib.getVersion stdenv.cc.cc}/${stdenv.hostPlatform.config}"} \
+    BINDGEN_CFLAGS="$(< ${buildStdenv.cc}/nix-support/libc-crt1-cflags) \
+      $(< ${buildStdenv.cc}/nix-support/libc-cflags) \
+      $(< ${buildStdenv.cc}/nix-support/cc-cflags) \
+      $(< ${buildStdenv.cc}/nix-support/libcxx-cxxflags) \
+      ${lib.optionalString buildStdenv.cc.isClang "-idirafter ${buildStdenv.cc.cc}/lib/clang/${lib.getVersion buildStdenv.cc.cc}/include"} \
+      ${lib.optionalString buildStdenv.cc.isGNU "-isystem ${buildStdenv.cc.cc}/include/c++/${lib.getVersion buildStdenv.cc.cc} -isystem ${buildStdenv.cc.cc}/include/c++/${lib.getVersion buildStdenv.cc.cc}/${buildStdenv.hostPlatform.config}"} \
       $NIX_CFLAGS_COMPILE"
 
     echo "ac_add_options BINDGEN_CFLAGS='$BINDGEN_CFLAGS'" >> $MOZCONFIG
@@ -236,11 +248,19 @@ stdenv.mkDerivation ({
     "--enable-jemalloc"
     "--enable-default-toolkit=${default-toolkit}"
     "--with-libclang-path=${llvmPackages.libclang}/lib"
-    "--with-clang-path=${llvmPackages.clang}/bin/clang"
     "--with-system-nspr"
     "--with-system-nss"
   ]
-  ++ lib.optional (stdenv.isDarwin) "--disable-xcode-checks"
+  ++ lib.optional (buildStdenv.isDarwin) "--disable-xcode-checks"
+  ++ lib.optional (!ltoSupport) "--with-clang-path=${llvmPackages.clang}/bin/clang"
+  # LTO is done using clang and lld.
+  # elf-hack is broken when using clang:
+  # https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
+  ++ lib.optionals ltoSupport [
+    "--enable-lto"
+    "--enable-linker=lld"
+    "--disable-elf-hack"
+  ]
 
   ++ flag alsaSupport "alsa"
   ++ flag pulseaudioSupport "pulseaudio"
@@ -270,12 +290,12 @@ stdenv.mkDerivation ({
   enableParallelBuilding = true;
   doCheck = false; # "--disable-tests" above
 
-  installPhase = if stdenv.isDarwin then ''
+  installPhase = if buildStdenv.isDarwin then ''
     mkdir -p $out/Applications
     cp -LR dist/${binaryNameCapitalized}.app $out/Applications
   '' else null;
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString buildStdenv.isLinux ''
     # Remove SDK cruft. FIXME: move to a separate output?
     rm -rf $out/share/idl $out/include $out/lib/${binaryName}-devel-*
 
@@ -283,7 +303,7 @@ stdenv.mkDerivation ({
     gappsWrapperArgs+=(--argv0 "$out/bin/.${binaryName}-wrapped")
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString buildStdenv.isLinux ''
     # Fix notifications. LibXUL uses dlopen for this, unfortunately; see #18712.
     patchelf --set-rpath "${lib.getLib libnotify
       }/lib:$(patchelf --print-rpath "$out"/lib/${binaryName}*/libxul.so)" \
