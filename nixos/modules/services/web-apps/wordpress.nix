@@ -242,6 +242,18 @@ let
           '';
           description = ''
             Apache configuration can be done by adapting <option>services.httpd.virtualHosts</option>.
+            When changing the <literal>hostName</literal> you also need to migrate the database.
+            Do do this you first need to switch to the wordpress <literal>/nix/store</literal> path.
+            It is strongly recommended to make a backup using
+            <code>nix-shell -p wp-cli --command 'sudo -u wordpress -- wp db export /tmp/$(date +%s)'</code>
+            and moving the file to a persistent location.
+
+            Then you can do the actual migration by executing the following commands:
+            <code>
+            nix-shell -p wp-cli --command 'sudo -u wordpress -- wp db search old.example.org
+            nix-shell -p wp-cli --command 'sudo -u wordpress -- wp search-replace "old.example.org" "new.example.org"
+            </code>
+            You should check that the search doesn't yield places that shouldn't be replaced beforehand.
           '';
         };
 
