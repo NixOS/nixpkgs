@@ -15,20 +15,40 @@ import ./make-test-python.nix ({ ... }:
         fsType = "btrfs";
       };
     };
-    services.snapper.configs.home.subvolume = "/home";
+
+    users.users = {
+      alice = { isNormalUser = true; };
+      bob = { group = "foo"; };
+      charlie = {};
+    };
+    users.groups.foo = {};
+    services.snapper.configs.home = {
+      subvolume = "/home";
+      allowUsers = [ "alice" ];
+      allowGroups = [ "foo" ];
+    };
     services.snapper.filters = "/nix";
+    # users.users.createHome apparently happens before /home is mounted.
+    systemd.tmpfiles.rules = [
+      "d /home/alice 700 alice users"
+    ];
   };
 
   testScript = ''
-    machine.succeed("btrfs subvolume create /home/.snapshots")
-    machine.succeed("snapper -c home list")
-    machine.succeed("snapper -c home create --description empty")
-    machine.succeed("echo test > /home/file")
-    machine.succeed("snapper -c home create --description file")
-    machine.succeed("snapper -c home status 1..2")
-    machine.succeed("snapper -c home undochange 1..2")
-    machine.fail("ls /home/file")
-    machine.succeed("snapper -c home delete 2")
+    def doas(user, cmd):
+        return machine.succeed(f"sudo -u {user} sh -c '{cmd}'")
+
+
+    machine.wait_for_unit("multi-user.target")
+    doas("alice", "snapper -c home list")
+    doas("alice", "snapper -c home create --description empty")
+    doas("alice", "echo test > /home/alice/file")
+    doas("bob", "snapper -c home create --description file")
+    machine.fail("sudo -u charlie snapper -c home create --description denied")
+    print(doas("alice", "snapper -c home status 1..2"))
+    doas("alice", "snapper -c home undochange 1..2")
+    machine.fail("ls /home/alice/file")
+    doas("bob", "snapper -c home delete 2")
     machine.succeed("systemctl --wait start snapper-timeline.service")
     machine.succeed("systemctl --wait start snapper-cleanup.service")
   '';
