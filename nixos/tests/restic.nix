@@ -3,8 +3,8 @@ import ./make-test-python.nix (
 
     let
       password = "some_password";
-      repository = "/tmp/restic-backup";
-      rcloneRepository = "rclone:local:/tmp/restic-rclone-backup";
+      repository = "/root/tmp/restic-backup";
+      rcloneRepository = "rclone:local:/root/tmp/restic-rclone-backup";
 
       passwordFile = "${pkgs.writeText "password" "correcthorsebatterystaple"}";
       initialize = true;
@@ -65,7 +65,7 @@ import ./make-test-python.nix (
           server.succeed(
               "mkdir -p /opt",
               "touch /opt/some_file",
-              "mkdir -p /tmp/restic-rclone-backup",
+              "mkdir -p /root/tmp/restic-rclone-backup",
               "timedatectl set-time '2016-12-13 13:45'",
               "systemctl start restic-backups-remotebackup.service",
               "systemctl start restic-backups-rclonebackup.service",
