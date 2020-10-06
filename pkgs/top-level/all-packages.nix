@@ -9353,6 +9353,11 @@ in
     fpc = fpc;
   };
 
+  lazarus-qt = libsForQt5.callPackage ../development/compilers/fpc/lazarus.nix {
+    fpc = fpc;
+    withQt = true;
+  };
+
   lessc = nodePackages.less;
 
   liquibase = callPackage ../development/tools/database/liquibase { };
@@ -14071,7 +14076,7 @@ in
 
   libqalculate = callPackage ../development/libraries/libqalculate { };
 
-  libqt5pas = callPackage ../development/compilers/fpc/libqt5pas.nix { };
+  libqt5pas = libsForQt5.callPackage ../development/compilers/fpc/libqt5pas.nix { };
 
   libroxml = callPackage ../development/libraries/libroxml { };
 
