@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, ispc, tbb, glfw,
-  openimageio, libjpeg, libpng, libpthreadstubs, libX11 }:
+{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, ispc, tbb, glfw,
+  openimageio, libjpeg, libpng, libpthreadstubs, libX11, glib }:
 
 stdenv.mkDerivation rec {
   pname = "embree";
-  version = "3.11.0";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "embree";
     repo = "embree";
     rev = "v${version}";
-    sha256 = "0v5gqi8jp09xxcbyyknji83412bq4l0w35b6hnrqxycgdrnf7hkr";
+    sha256 = "1q06fkfww8z8pcnhaqc4d2zi8hn620i9h9dmpnrfy3azalvizhkq";
   };
 
   postPatch = ''
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     sed -i "s|SET(EMBREE_ROOT_DIR .*)|set(EMBREE_ROOT_DIR $out)|" \
       common/cmake/embree-config.cmake
     sed -i "s|$""{EMBREE_ROOT_DIR}/||" common/cmake/embree-config.cmake
+    substituteInPlace common/math/math.h --replace 'defined(__MACOSX__) && !defined(__INTEL_COMPILER)' 0
+    substituteInPlace common/math/math.h --replace 'defined(__WIN32__) || defined(__FreeBSD__)' 'defined(__WIN32__) || defined(__FreeBSD__) || defined(__MACOSX__)'
   '';
 
   cmakeFlags = [
@@ -24,8 +26,10 @@ stdenv.mkDerivation rec {
     "-DEMBREE_RAY_MASK=ON"
   ];
 
+
   nativeBuildInputs = [ ispc pkgconfig cmake ];
-  buildInputs = [ tbb glfw openimageio libjpeg libpng libX11 libpthreadstubs ];
+  buildInputs = [ tbb glfw openimageio libjpeg libpng libX11 libpthreadstubs ]
+                ++ lib.optionals stdenv.isDarwin [ glib ];
 
   meta = with stdenv.lib; {
     description = "High performance ray tracing kernels from Intel";
