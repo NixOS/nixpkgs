@@ -30,22 +30,21 @@ let
   deps = lib.mapAttrs
     (name: spec:
       fetchFromGitHub {
-        owner = "Alexey-T";
         repo = name;
-        inherit (spec) rev sha256;
+        inherit (spec) owner rev sha256;
       }
     )
     (builtins.fromJSON (builtins.readFile ./deps.json));
 in
 stdenv.mkDerivation rec {
   pname = "cudatext";
-  version = "1.111.0";
+  version = "1.115.0";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     rev = version;
-    sha256 = "1ai0g8fmw4m237dqh5dkr8w9qqricyvp49ijz2ivvmg9dsdfzjfp";
+    sha256 = "0q7gfpzc97fvyvabjdb9a4d3c2qhm4zf5bqgnsj73vkly80kgww8";
   };
 
   patches = [
@@ -74,6 +73,7 @@ stdenv.mkDerivation rec {
     cp -r --no-preserve=mode ${dep} ${name}
   '') deps) + ''
     lazbuild --lazarusdir=${lazarus}/share/lazarus --pcp=./lazarus --ws=${widgetset} \
+      bgrabitmap/bgrabitmap/bgrabitmappack.lpk \
       EncConv/encconv/encconv_package.lpk \
       ATBinHex-Lazarus/atbinhex/atbinhex_package.lpk \
       ATFlatControls/atflatcontrols/atflatcontrols_package.lpk \
