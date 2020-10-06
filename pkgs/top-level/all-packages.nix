@@ -18835,7 +18835,7 @@ in
 
   ant-bloody-theme = callPackage ../data/themes/ant-theme/ant-bloody.nix { };
 
-  ant-dracula-theme = callPackage ../data/themes/ant-theme/ant-dracula.nix { };
+  dracula-theme = callPackage ../data/themes/dracula-theme { };
 
   ant-nebula-theme = callPackage ../data/themes/ant-theme/ant-nebula.nix { };
 
