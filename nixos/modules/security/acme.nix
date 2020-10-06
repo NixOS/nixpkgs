@@ -207,7 +207,7 @@ let
 
     renewService = {
       description = "Renew ACME certificate for ${cert}";
-      after = [ "network.target" "network-online.target" "acme-fixperms.service" ] ++ selfsignedDeps;
+      after = [ "network.target" "network-online.target" "acme-fixperms.service" "nss-lookup.target" ] ++ selfsignedDeps;
       wants = [ "network-online.target" "acme-fixperms.service" ] ++ selfsignedDeps;
 
       # https://github.com/NixOS/nixpkgs/pull/81371#issuecomment-605526099
