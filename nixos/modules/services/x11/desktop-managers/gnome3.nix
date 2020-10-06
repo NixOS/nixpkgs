@@ -70,6 +70,38 @@ in
       core-shell.enable = mkEnableOption "GNOME Shell services";
       core-utilities.enable = mkEnableOption "GNOME core utilities";
       games.enable = mkEnableOption "GNOME games";
+
+      experimental-features = {
+        realtime-scheduling = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Makes mutter (which propagates to gnome-shell) request a low priority real-time
+            scheduling which is only available on the wayland session.
+            To enable this experimental feature it requires a restart of the compositor.
+            Note that enabling this option only enables the <emphasis>capability</emphasis>
+            for realtime-scheduling to be used. It doesn't automatically set the gsetting
+            so that mutter actually uses realtime-scheduling. This would require adding <literal>
+            rt-scheduler</literal> to <literal>/org/gnome/mutter/experimental-features</literal>
+            with dconf-editor. You cannot use extraGSettingsOverrides because that will only
+            change the default value of the setting.
+
+            Please be aware of these known issues with the feature in nixos:
+            <itemizedlist>
+             <listitem>
+              <para>
+               <link xlink:href="https://github.com/NixOS/nixpkgs/issues/90201">NixOS/nixpkgs#90201</link>
+              </para>
+             </listitem>
+             <listitem>
+              <para>
+               <link xlink:href="https://github.com/NixOS/nixpkgs/issues/86730">NixOS/nixpkgs#86730</link>
+              </para>
+            </listitem>
+            </itemizedlist>
+          '';
+        };
+      };
     };
 
     services.xserver.desktopManager.gnome3 = {
@@ -291,26 +323,6 @@ in
         source-sans-pro
       ];
 
-      ## Enable soft realtime scheduling, only supported on wayland ##
-
-      security.wrappers.".gnome-shell-wrapped" = {
-        source = "${pkgs.gnome3.gnome-shell}/bin/.gnome-shell-wrapped";
-        capabilities = "cap_sys_nice=ep";
-      };
-
-      systemd.user.services.gnome-shell-wayland = let
-        gnomeShellRT = with pkgs.gnome3; pkgs.runCommand "gnome-shell-rt" {} ''
-          mkdir -p $out/bin/
-          cp ${gnome-shell}/bin/gnome-shell $out/bin
-          sed -i "s@${gnome-shell}/bin/@${config.security.wrapperDir}/@" $out/bin/gnome-shell
-        '';
-      in {
-        # Note we need to clear ExecStart before overriding it
-        serviceConfig.ExecStart = ["" "${gnomeShellRT}/bin/gnome-shell"];
-        # Do not use the default environment, it provides a broken PATH
-        environment = mkForce {};
-      };
-
       # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-36/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages = with pkgs.gnome3; [
         adwaita-icon-theme
@@ -333,6 +345,27 @@ in
         pkgs.shared-mime-info # for update-mime-database
         pkgs.xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
       ];
+    })
+
+    # Enable soft realtime scheduling, only supported on wayland
+    (mkIf serviceCfg.experimental-features.realtime-scheduling {
+      security.wrappers.".gnome-shell-wrapped" = {
+        source = "${pkgs.gnome3.gnome-shell}/bin/.gnome-shell-wrapped";
+        capabilities = "cap_sys_nice=ep";
+      };
+
+      systemd.user.services.gnome-shell-wayland = let
+        gnomeShellRT = with pkgs.gnome3; pkgs.runCommand "gnome-shell-rt" {} ''
+          mkdir -p $out/bin/
+          cp ${gnome-shell}/bin/gnome-shell $out/bin
+          sed -i "s@${gnome-shell}/bin/@${config.security.wrapperDir}/@" $out/bin/gnome-shell
+        '';
+      in {
+        # Note we need to clear ExecStart before overriding it
+        serviceConfig.ExecStart = ["" "${gnomeShellRT}/bin/gnome-shell"];
+        # Do not use the default environment, it provides a broken PATH
+        environment = mkForce {};
+      };
     })
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-36/elements/core/meta-gnome-core-utilities.bst
