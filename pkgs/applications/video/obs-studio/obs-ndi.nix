@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-ndi";
-  version = "4.7.1";
+  version = "4.9.1";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio qtbase ndi ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "Palakis";
     repo = "obs-ndi";
     rev = version;
-    sha256 = "040fkbf3f3qgqcrd3072y3zrjb4fwga8zr10jym744xd7bgyylqh";
+    sha256 = "1y3xdqp55jayhg4sinwiwpk194zc4f4jf0abz647x2fprsk9jz7s";
   };
 
   patches = [ ./fix-search-path.patch ./hardcode-ndi-path.patch ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Network A/V plugin for OBS Studio";
     homepage = "https://github.com/Palakis/obs-ndi";
-    maintainers = with maintainers; [ peti ];
+    maintainers = with maintainers; [ peti jshcmpbll ];
     license = licenses.gpl2;
     platforms = with platforms; linux;
   };
