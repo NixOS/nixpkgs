@@ -53,6 +53,8 @@ let
 
   flashbackEnabled = cfg.flashback.enableMetacity || length cfg.flashback.customSessions > 0;
 
+  notExcluded = pkg: mkDefault (!(lib.elem pkg config.environment.gnome3.excludePackages));
+
 in
 
 {
@@ -363,6 +365,18 @@ in
         /* gnome-boxes */
       ] config.environment.gnome3.excludePackages);
 
+      # Enable default program modules
+      # Since some of these have a corresponding package, we only
+      # enable that program module if the package hasn't been excluded
+      # through `environment.gnome3.excludePackages`
+      programs.evince.enable = notExcluded pkgs.gnome3.evince;
+      programs.file-roller.enable = notExcluded pkgs.gnome3.file-roller;
+      programs.geary.enable = notExcluded pkgs.gnome3.geary;
+      programs.gnome-disks.enable = notExcluded pkgs.gnome3.gnome-disk-utility;
+      programs.gnome-terminal.enable = notExcluded pkgs.gnome3.gnome-terminal;
+      programs.seahorse.enable = notExcluded pkgs.gnome3.seahorse;
+      services.gnome3.sushi.enable = notExcluded pkgs.gnome3.sushi;
+
       # Let nautilus find extensions
       # TODO: Create nautilus-with-extensions package
       environment.sessionVariables.NAUTILUS_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-3.0";
@@ -373,25 +387,6 @@ in
       environment.pathsToLink = [
         "/share/nautilus-python/extensions"
       ];
-    })
-
-    # Enable default program modules
-    # Since some of these have a corresponding package, we only
-    # enable that program module if the package hasn't been excluded
-    # through `environment.gnome3.excludePackages`
-    (
-    let
-      notExcluded = pkg: mkDefault (!(lib.elem pkg config.environment.gnome3.excludePackages));
-    in
-    with pkgs.gnome3;
-    {
-      programs.evince.enable = notExcluded evince;
-      programs.file-roller.enable = notExcluded file-roller;
-      programs.geary.enable = notExcluded geary;
-      programs.gnome-disks.enable = notExcluded gnome-disk-utility;
-      programs.gnome-terminal.enable = notExcluded gnome-terminal;
-      programs.seahorse.enable = notExcluded seahorse;
-      services.gnome3.sushi.enable = notExcluded sushi;
     })
 
     (mkIf serviceCfg.games.enable {
