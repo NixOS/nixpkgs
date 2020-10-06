@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2;
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.linux;
+    broken = true;
   };
 }
