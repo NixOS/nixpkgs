@@ -82,6 +82,12 @@
       <literal>kicad/default.nix</literal>.
     </para>
    </listitem>
+   <listitem>
+      <para>
+        <xref linkend="opt-services.wordpress._name_.database.name" /> default value has changed from <literal>"wordpress"</literal> to <literal>"wordpress-${name}"</literal> on NixOS installations where <xref linkend="opt-system.stateVersion"/> is <literal>21.03</literal> or higher.
+        This will break existing installations if you don't manually set <xref linkend="opt-services.wordpress._name_.database.name" /> back to <literal>"wordpress"</literal> or rename the database manually to the new name.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
