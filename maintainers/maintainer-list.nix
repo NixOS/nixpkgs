@@ -9734,4 +9734,14 @@
     github = "yanganto";
     githubId = 10803111;
   };
+  starcraft66 = {
+    name = "Tristan Gosselin-Hane";
+    email = "starcraft66@gmail.com";
+    github = "starcraft66";
+    githubId = 1858154;
+    keys = [{
+      longkeyid = "rsa4096/0x9D98CDACFF04FD78";
+      fingerprint = "8597 4506 EC69 5392 0443  0805 9D98 CDAC FF04 FD78";
+    }];
+  };
 }
