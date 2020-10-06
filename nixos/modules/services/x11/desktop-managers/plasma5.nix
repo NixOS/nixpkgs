@@ -274,6 +274,7 @@ in
           plasma-browser-integration
           plasma-integration
           polkit-kde-agent
+          spectacle
           systemsettings
 
           plasma-desktop
