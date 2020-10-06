@@ -6,13 +6,13 @@
 stdenv.mkDerivation rec {
   version = "2020-10-05";
   pname = "oh-my-zsh";
-  rev = "fbb2b56c7ecd3c4873be805e004f70fa442e7c45";
+  rev = "6ebf27b8d34c760e25749790ea78dcb0c220d76b";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "ohmyzsh";
     repo = "ohmyzsh";
-    sha256 = "0mqhiawcfp094xsdmkadfp42kgpcfmsn24dw7zngvhria5bvr8hb";
+    sha256 = "0x53mf9lys15x86sc8kgf3y05jkhdszqrywf0mlv00n9kjzbkv5s";
   };
 
   installPhase = ''
