@@ -27032,6 +27032,8 @@ in
 
   idsk = callPackage ../tools/filesystems/idsk { };
 
+  logtop = callPackage ../tools/misc/logtop { };
+
   igraph = callPackage ../development/libraries/igraph { };
 
   igprof = callPackage ../development/tools/misc/igprof { };
