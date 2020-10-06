@@ -128,7 +128,7 @@ let
 
           name = mkOption {
             type = types.str;
-            default = "wordpress";
+            default = "wordpress-${name}";
             description = lib.mdDoc "Database name.";
           };
 
@@ -270,7 +270,7 @@ in
       ensureDatabases = mapAttrsToList (hostName: cfg: cfg.database.name) eachSite;
       ensureUsers = mapAttrsToList (hostName: cfg:
         { name = cfg.database.user;
-          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
+          ensurePermissions = { "\\`${cfg.database.name}\\`.*" = "ALL PRIVILEGES"; };
         }
       ) eachSite;
     };

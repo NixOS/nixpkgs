@@ -452,6 +452,17 @@ sudo -u wordpress wp maintenance-mode deactivate
       </listitem>
       <listitem>
         <para>
+          <literal>services.wordpress.$name.database.name</literal>
+          default value has changed from <literal>wordpress</literal> to
+          <literal>wordpress-${name}</literal>. This will break existing
+          installations if you don’t manually set
+          <literal>services.wordpress.$name.database.name</literal> back
+          to <literal>wordpress</literal> or rename the database
+          manually to the new name.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>k3s</literal> no longer supports docker as runtime
           due to upstream dropping support.
         </para>
