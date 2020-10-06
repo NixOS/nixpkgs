@@ -23,7 +23,6 @@ let
     inherit (pkgs) runtimeShell;
     nix = config.nix.package.out;
     path = makeBinPath [
-      pkgs.nixUnstable
       pkgs.jq
       nixos-enter
     ];

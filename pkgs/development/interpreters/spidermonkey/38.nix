@@ -67,5 +67,6 @@ stdenv.mkDerivation rec {
 
     maintainers = [ maintainers.abbradar ];
     platforms = platforms.unix;
+    knownVulnerabilities = [ "SpiderMonkey 38 is outdated and contains known security vulnerabilities." ]; # as per https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Releases/38
   };
 }

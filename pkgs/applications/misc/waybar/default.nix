@@ -2,7 +2,7 @@
 , wayland, wlroots, gtkmm3, libsigcxx, jsoncpp, fmt, scdoc, spdlog, gtk-layer-shell
 , howard-hinnant-date, cmake
 , traySupport  ? true,  libdbusmenu-gtk3
-, pulseSupport ? false, libpulseaudio
+, pulseSupport ? true,  libpulseaudio
 , nlSupport    ? true,  libnl
 , udevSupport  ? true,  udev
 , swaySupport  ? true,  sway
@@ -11,13 +11,13 @@
 }:
   stdenv.mkDerivation rec {
     pname = "waybar";
-    version = "0.9.3";
+    version = "0.9.4";
 
     src = fetchFromGitHub {
       owner = "Alexays";
       repo = "Waybar";
       rev = version;
-      sha256 = "0ks719khhg2zwpyiwa2079i6962qcxpapm28hmr4ckpsp2n659ck";
+      sha256 = "038vnma7y7z81caywp45yr364bc1aq8d01j5vycyiyfv33nm76fy";
     };
 
     nativeBuildInputs = [

@@ -1,26 +1,78 @@
 { lib
-, python3Packages
+, python3
 , fetchFromGitHub
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+      # until https://github.com/ags-slc/localzone/issues/1 gets resolved
+      dnspython = super.dnspython.overridePythonAttrs(oldAttrs: rec {
+        pname = "dnspython";
+        version = "1.16.0";
+        # since name is defined from the previous derivation, need to override
+        # name explicity for correct version to show in drvName
+        name = "${pname}-${version}";
+
+        src = super.fetchPypi {
+          inherit pname version;
+          extension = "zip";
+          sha256 = "00cfamn97w2vhq3id87f10mjna8ag5yz5dw0cy5s0sa3ipiyii9n";
+        };
+      });
+
+      localzone = super.localzone.overridePythonAttrs(oldAttrs: rec {
+        meta = oldAttrs.meta // { broken = false; };
+      });
+    };
+  };
+in
+  with py.pkgs;
+
+buildPythonApplication rec {
   pname = "lexicon";
-  version = "3.3.27";
-
-  propagatedBuildInputs = with python3Packages; [ requests tldextract future cryptography pyyaml boto3 zeep xmltodict beautifulsoup4 dnspython pynamecheap softlayer transip localzone ];
-
-  checkInputs = with python3Packages; [ pytest pytestcov pytest_xdist vcrpy mock ];
-
-  checkPhase = ''
-    pytest --ignore=lexicon/tests/providers/test_auto.py
-  '';
+  version = "3.4.3";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "AnalogJ";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0i6grrpdwh7axhnsabb0pfjhpd3prc9ji1afivi7q3c0krgvncmc";
+    sha256 = "1ym4gj4xyd69rsc5niilvcb72gys22rjxhj4qd574vyx3ryl34za";
   };
+
+  nativeBuildInputs = [
+    poetry
+  ];
+
+  propagatedBuildInputs = [
+    beautifulsoup4
+    boto3
+    cryptography
+    dnspython
+    future
+    localzone
+    pynamecheap
+    pyyaml
+    requests
+    softlayer
+    tldextract
+    transip
+    xmltodict
+    zeep
+  ];
+
+  checkInputs = [
+    mock
+    pytest
+    pytestcov
+    pytest_xdist
+    vcrpy
+  ];
+
+  checkPhase = ''
+    pytest --ignore=lexicon/tests/providers/test_auto.py
+  '';
 
   meta = with lib; {
     description = "Manipulate DNS records on various DNS providers in a standardized way.";

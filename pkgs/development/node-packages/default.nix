@@ -114,6 +114,20 @@ let
       buildInputs = [ self.node-pre-gyp ];
     };
 
+    mermaid-cli = super."@mermaid-js/mermaid-cli".override (
+    if stdenv.isDarwin
+    then {}
+    else {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      prePatch = ''
+        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+      '';
+      postInstall = ''
+        wrapProgram $out/bin/mmdc \
+        --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+      '';
+    });
+
     pnpm = super.pnpm.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
 

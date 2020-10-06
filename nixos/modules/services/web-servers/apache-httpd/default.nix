@@ -693,9 +693,6 @@ in
 
     services.httpd.phpOptions =
       ''
-        ; Needed for PHP's mail() function.
-        sendmail_path = ${pkgs.system-sendmail}/bin/sendmail -t -i
-
         ; Don't advertise PHP
         expose_php = off
       '' + optionalString (config.time.timeZone != null) ''

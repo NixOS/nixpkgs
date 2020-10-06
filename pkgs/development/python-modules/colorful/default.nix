@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Terminal string styling done right, in Python.";
-    homepage = "http://github.com/timofurrer/colorful";
+    homepage = "https://github.com/timofurrer/colorful";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
   };

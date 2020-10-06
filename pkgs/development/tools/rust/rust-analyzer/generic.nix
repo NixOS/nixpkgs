@@ -16,6 +16,11 @@ rustPlatform.buildRustPackage {
     inherit rev sha256;
   };
 
+  # FIXME: Temporary fix for our rust 1.45.0 since rust-analyzer requires 1.46.0
+  cargoPatches = [
+    ./downgrade-smol_str.patch
+  ];
+
   patches = [
     # FIXME: Temporary fix for our rust 1.45.0 since rust-analyzer requires 1.46.0
     ./no-loop-in-const-fn.patch

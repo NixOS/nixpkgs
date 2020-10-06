@@ -24,11 +24,11 @@ with stdenv.lib;
 assert (withQt5 -> qtbase != null && qtsvg != null && qtx11extras != null && wrapQtAppsHook != null);
 
 stdenv.mkDerivation rec {
-  pname = "vlc";
+  pname = "${optionalString onlyLibVLC "lib"}vlc";
   version = "3.0.11.1";
 
   src = fetchurl {
-    url = "http://get.videolan.org/vlc/${version}/${pname}-${version}.tar.xz";
+    url = "http://get.videolan.org/vlc/${version}/vlc-${version}.tar.xz";
     sha256 = "1f46h0hv7fk35zg4iczlp7ib7h2jmh8m4r5klw3g2558ib9134qq";
   };
 

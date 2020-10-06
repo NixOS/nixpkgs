@@ -3,7 +3,7 @@
 let
   version = "3.3.2";
 
-  # I took several games at random from http://instead.syscall.ru/games/
+  # I took several games at random from https://instead.syscall.ru/games/
   games = [
     (fetchurl {
       url = "http://instead-games.googlecode.com/files/instead-apple-day-1.2.zip";
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     substituteInPlace configure.sh \
       --replace "/tmp/sdl-test" $(mktemp)
   '';
-  
+
   configurePhase = ''
     { echo 2; echo $out; } | ./configure.sh
   '';
@@ -64,7 +64,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Simple text adventure interpreter for Unix and Windows";
-    homepage = "http://instead.syscall.ru/";
+    homepage = "https://instead.syscall.ru/";
     license = stdenv.lib.licenses.gpl2;
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with maintainers; [ pSub ];

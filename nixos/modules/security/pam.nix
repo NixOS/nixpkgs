@@ -429,8 +429,6 @@ let
               "password sufficient ${pkgs.sssd}/lib/security/pam_sss.so use_authtok"}
           ${optionalString config.krb5.enable
               "password sufficient ${pam_krb5}/lib/security/pam_krb5.so use_first_pass"}
-          ${optionalString config.services.samba.syncPasswordsByPam
-              "password optional ${pkgs.samba}/lib/security/pam_smbpass.so nullok use_authtok try_first_pass"}
           ${optionalString cfg.enableGnomeKeyring
               "password optional ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so use_authtok"}
 
@@ -879,8 +877,6 @@ in
         "mr ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so,"}
       ${optionalString (isEnabled (cfg: cfg.pamMount))
         "mr ${pkgs.pam_mount}/lib/security/pam_mount.so,"}
-      ${optionalString config.services.samba.syncPasswordsByPam
-        "mr ${pkgs.samba}/lib/security/pam_smbpass.so,"}
       ${optionalString (isEnabled (cfg: cfg.enableGnomeKeyring))
         "mr ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so,"}
       ${optionalString (isEnabled (cfg: cfg.startSession))

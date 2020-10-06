@@ -2,14 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "smartdns";
-  version =
-    "30"; # This would be used later in the next release as the FHS commit integrated into realse 31.
+  version = "33";
 
   src = fetchFromGitHub {
     owner = "pymumu";
     repo = pname;
-    rev = "3ad7cd7f454eec2fbdf338c0eb0541da301f1e73";
-    sha256 = "1y9p8gxpj2k4a10maggkxg8l55jvr7x1wyxi69waxf56ggh2dvv0";
+    rev = "Release${version}";
+    sha256 = "0cmzpm4y1yi96mg2cz2byqw6vl62dgnikldy08q43vi7jl3y0749";
   };
 
   buildInputs = [ openssl ];
