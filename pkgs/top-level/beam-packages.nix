@@ -96,8 +96,8 @@ rec {
 
     # Other Beam languages. These are built with `beam.interpreters.erlang`. To
     # access for example elixir built with different version of Erlang, use
-    # `beam.packages.erlangR22.elixir`.
-    inherit (packages.erlang) elixir elixir_1_10 elixir_1_9 elixir_1_8 elixir_1_7;
+    # `beam.packages.erlangR23.elixir`.
+    inherit (packages.erlang) elixir elixir_1_11 elixir_1_10 elixir_1_9 elixir_1_8 elixir_1_7;
 
     inherit (packages.erlang) lfe lfe_1_2 lfe_1_3;
   };
