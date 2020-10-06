@@ -16,6 +16,7 @@
   },
   "akamai": {
     "owner": "terraform-providers",
+    "provider-source-address": "registry.terraform.io/akamai/akamai",
     "repo": "terraform-provider-akamai",
     "rev": "v0.7.1",
     "sha256": "0mg81147yz0m24xqljpw6v0ayhvb4fwf6qwaj7ii34hy2gjwv405",
@@ -30,6 +31,7 @@
   },
   "archive": {
     "owner": "hashicorp",
+    "provider-source-address": "registry.terraform.io/hashicorp/archive",
     "repo": "terraform-provider-archive",
     "rev": "v1.3.0",
     "sha256": "1hwg8ai4bvsmgnl669608lr4v940xnyig1xshps490f47c8hqy6y",
@@ -65,6 +67,7 @@
   },
   "aws": {
     "owner": "terraform-providers",
+    "provider-source-address": "registry.terraform.io/hashicorp/aws",
     "repo": "terraform-provider-aws",
     "rev": "v2.65.0",
     "sha256": "005vs1qd6payicxldc9lr4w6kzr58xw9b930j52g1q7hlddl5mbb",
@@ -72,6 +75,7 @@
   },
   "azuread": {
     "owner": "terraform-providers",
+    "provider-source-address": "registry.terraform.io/hashicorp/azuread",
     "repo": "terraform-provider-azuread",
     "rev": "v0.10.0",
     "sha256": "0i9xrsqgh1024189hihm2nqrcy2pcyf1bwxnamwmwph5cas6hfb3",
@@ -79,6 +83,7 @@
   },
   "azurerm": {
     "owner": "terraform-providers",
+    "provider-source-address": "registry.terraform.io/hashicorp/azurerm",
     "repo": "terraform-provider-azurerm",
     "rev": "v2.13.0",
     "sha256": "0aj19vy1flpb2233rxaypjcfimjr1wfqri1m3p15dy1r108q84r7",
@@ -86,6 +91,7 @@
   },
   "azurestack": {
     "owner": "terraform-providers",
+    "provider-source-address": "registry.terraform.io/hashicorp/azurestack",
     "repo": "terraform-provider-azurestack",
     "rev": "v0.9.0",
     "sha256": "1msm7jwzry0vmas3l68h6p0migrsm6d18zpxcncv197m8xbvg324",
@@ -163,6 +169,7 @@
   },
   "cloudinit": {
     "owner": "hashicorp",
+    "provider-source-address": "registry.terraform.io/hashicorp/cloudinit",
     "repo": "terraform-provider-cloudinit",
     "rev": "v1.0.0",
     "sha256": "0i926f4xkfydd2bxmim69xrvi9ymn1vrc66zl117axzsmy9200zx",
@@ -205,6 +212,7 @@
   },
   "consul": {
     "owner": "terraform-providers",
+    "provider-source-address": "registry.terraform.io/hashicorp/consul",
     "repo": "terraform-provider-consul",
     "rev": "v2.8.0",
     "sha256": "1brd0fp9ksc3x8cygxm0k2q1sh4v5x89298pnidg6xirn41lvcr4",
@@ -240,6 +248,7 @@
   },
   "dns": {
     "owner": "hashicorp",
+    "provider-source-address": "registry.terraform.io/hashicorp/dns",
     "repo": "terraform-provider-dns",
     "rev": "v2.2.0",
     "sha256": "11xdxj6hfclaq9glbh14nihmrsk220crm9ld8bdv77w0bppmrrch",
@@ -282,6 +291,7 @@
   },
   "external": {
     "owner": "hashicorp",
+    "provider-source-address": "registry.terraform.io/hashicorp/external",
     "repo": "terraform-provider-external",
     "rev": "v1.2.0",
     "sha256": "1kx28bffhd1pg3m0cbldclc8l9zic16mqrk7gybcls9vyds5gbvc",
@@ -373,6 +383,7 @@
   },
   "helm": {
     "owner": "hashicorp",
+    "provider-source-address": "registry.terraform.io/hashicorp/helm",
     "repo": "terraform-provider-helm",
     "rev": "v1.2.2",
     "sha256": "1hjlf0pzc9jkcvqi52kvqwmd8v0cvnhhcbahzxmv0zkdwh310c12",
@@ -387,6 +398,7 @@
   },
   "http": {
     "owner": "hashicorp",
+    "provider-source-address": "registry.terraform.io/hashicorp/http",
     "repo": "terraform-provider-http",
     "rev": "v1.2.0",
     "sha256": "0q8ichbqrq62q1j0rc7sdz1jzfwg2l9v4ac9jqf6y485dblhmwqd",
@@ -499,6 +511,7 @@
   },
   "local": {
     "owner": "hashicorp",
+    "provider-source-address": "registry.terraform.io/hashicorp/local",
     "repo": "terraform-provider-local",
     "rev": "v1.4.0",
     "sha256": "1k1kbdn99ypn1pi6vqbs1l9a8vvf4vs32wl8waa16i26514sz1wk",
@@ -604,6 +617,7 @@
   },
   "null": {
     "owner": "hashicorp",
+    "provider-source-address": "registry.terraform.io/hashicorp/null",
     "repo": "terraform-provider-null",
     "rev": "v2.1.2",
     "sha256": "0di1hxmd3s80sz8hl5q2i425by8fbk15f0r4jmnm6vra0cq89jw2",
@@ -618,6 +632,7 @@
   },
   "oci": {
     "owner": "terraform-providers",
+    "provider-source-address": "registry.terraform.io/hashicorp/oci",
     "repo": "terraform-provider-oci",
     "rev": "v3.79.0",
     "sha256": "11n2v537zniiv5xvhpypqrm09my8zybirvq4ly94hp69v73xj89c",
@@ -772,6 +787,7 @@
   },
   "random": {
     "owner": "hashicorp",
+    "provider-source-address": "registry.terraform.io/hashicorp/random",
     "repo": "terraform-provider-random",
     "rev": "v2.2.1",
     "sha256": "1qklsxj443vsj61lwl7qf7xwgnllwcvb2yk6s0kn9g3iq63pcv30",
@@ -891,6 +907,7 @@
   },
   "template": {
     "owner": "hashicorp",
+    "provider-source-address": "registry.terraform.io/hashicorp/template",
     "repo": "terraform-provider-template",
     "rev": "v2.1.2",
     "sha256": "18w1mmma81m9j7yf6q500w8v9ss28w6sw2ynssl99pyw2gwmd04q",
@@ -919,6 +936,7 @@
   },
   "tls": {
     "owner": "hashicorp",
+    "provider-source-address": "registry.terraform.io/hashicorp/tls",
     "repo": "terraform-provider-tls",
     "rev": "v2.1.1",
     "sha256": "1qsx540pjcq4ra034q2dwnw5nmzab5h1c3vm20ppg5dkhhyiizq8",
@@ -954,6 +972,7 @@
   },
   "vault": {
     "owner": "terraform-providers",
+    "provider-source-address": "registry.terraform.io/hashicorp/vault",
     "repo": "terraform-provider-vault",
     "rev": "v2.11.0",
     "sha256": "1yzakc7jp0rs9axnfdqw409asrbjhq0qa7xn4xzpi7m94g1ii12d",
