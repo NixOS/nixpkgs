@@ -3,17 +3,17 @@
 let
   common = { stname, target, postInstall ? "" }:
     buildGoModule rec {
-      version = "1.9.0";
+      version = "1.10.0";
       name = "${stname}-${version}";
 
       src = fetchFromGitHub {
         owner  = "syncthing";
         repo   = "syncthing";
         rev    = "v${version}";
-        sha256 = "1p5wmcmv72hbd3dap9hqv4ryarsj8ljn833x9mcfgh8ff4k25qwr";
+        sha256 = "0wi8k248qr80vscb5qwh2ygiyy2am9hh6a8c1il1h2702ch2cd45";
       };
 
-      vendorSha256 = "1mwjfv0l2n21srxsh8w18my2j8diim91jlg00ailiq9fwnvxxn8c";
+      vendorSha256 = "0as1kn7bpgp5b82pf1bgr23az1qq8x85zr2zwgqsx57yjbc18658";
 
       doCheck = false;
 
@@ -45,6 +45,7 @@ let
       meta = with lib; {
         homepage = "https://syncthing.net/";
         description = "Open Source Continuous File Synchronization";
+        changelog = "https://github.com/syncthing/syncthing/releases/tag/v${version}";
         license = licenses.mpl20;
         maintainers = with maintainers; [ pshendry joko peterhoeg andrew-d ];
         platforms = platforms.unix;
