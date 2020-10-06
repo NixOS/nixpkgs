@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "2.0";
+  version = "2.1";
 
   # Tests not included in PyPI tarball
   src = fetchFromGitHub {
     owner = "lilydjwg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "13wa95pvivbyshq3ys12iyvn8wlyzxfia8l6xh3fd46a2cs9x9g7";
+    sha256 = "0zf9vhf8ka0v1mf1xhbvkc2nr54m0rkiw1i68ps4sgx2mdj6qrfk";
   };
 
   propagatedBuildInputs = [ setuptools toml structlog appdirs tornado pycurl aiohttp ];
