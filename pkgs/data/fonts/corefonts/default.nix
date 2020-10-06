@@ -59,7 +59,7 @@ stdenv.mkDerivation {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "0baadsrgpqj15fgjmcn0aim0k0nk7mvivcxinw1zwg61kkcwhalx";
+  outputHash = "089d2m9bvaacj36qdq77pcazji0sbbr796shic3k52cpxkjnzbwh";
 
   meta = with stdenv.lib; {
     homepage = "http://corefonts.sourceforge.net/";

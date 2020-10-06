@@ -4,9 +4,11 @@
 import csv
 import json
 import subprocess
+import sys
+
 from codecs import iterdecode
+from collections import OrderedDict
 from os.path import abspath, dirname
-from sys import stderr
 from urllib.request import urlopen
 
 HISTORY_URL = 'https://omahaproxy.appspot.com/history?os=linux'
@@ -27,7 +29,7 @@ def nix_prefetch_url(url, algo='sha256'):
 channels = {}
 last_channels = load_json(JSON_PATH)
 
-print(f'GET {HISTORY_URL}', file=stderr)
+print(f'GET {HISTORY_URL}', file=sys.stderr)
 with urlopen(HISTORY_URL) as resp:
     builds = csv.DictReader(iterdecode(resp, 'utf-8'))
     for build in builds:
@@ -59,5 +61,17 @@ with urlopen(HISTORY_URL) as resp:
         channels[channel_name] = channel
 
 with open(JSON_PATH, 'w') as out:
-    json.dump(channels, out, indent=2)
+    def get_channel_key(item):
+        channel_name = item[0]
+        if channel_name == 'stable':
+            return 0
+        elif channel_name == 'beta':
+            return 1
+        elif channel_name == 'dev':
+            return 2
+        else:
+            print(f'Error: Unexpected channel: {channel_name}', file=sys.stderr)
+            sys.exit(1)
+    sorted_channels = OrderedDict(sorted(channels.items(), key=get_channel_key))
+    json.dump(sorted_channels, out, indent=2)
     out.write('\n')

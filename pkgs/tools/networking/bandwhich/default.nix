@@ -2,28 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bandwhich";
-  version = "0.18.1";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "imsnif";
     repo = pname;
     rev = version;
-    sha256 = "0qzmkhrg7pqgblmva7xcww6zc4rryba6kkfkhj05mvd31z3c1rz8";
+    sha256 = "0963yfbf88hb5fvyckhs1vfvib5skkj9n17qibpv5vsdlynbaa96";
   };
 
-  cargoSha256 = "0iakw42nip0vxq50jjk73r0xl7xp426szb091ap4isad3zxq6saj";
-  cargoPatches = [
-    # Fixes rDNS support for systems using `systemd-networkd` from v246.
-    # See https://github.com/imsnif/bandwhich/pull/184 for context
-    (fetchpatch {
-      url = "https://github.com/imsnif/bandwhich/commit/19e485a1ce9f749c121d235147e3117cc847379e.patch";
-      sha256 = "03hg73gwlfq0l36k3aq7cfak3js7j05ssfpdbfiiwqq7lynm83jr";
-    })
-    (fetchpatch {
-      url = "https://github.com/imsnif/bandwhich/commit/35f03b716832fba9a735628d1c728d3e305f75c8.patch";
-      sha256 = "1bv837wc1dgg26s640f3lfya28ypnjs0675dykzxxxv5y9ns58l3";
-    })
-  ];
+  cargoSha256 = "0xp45kb0z7wiq6vnws4q7khbzslywh24sb43ssr39l1rajf7w64r";
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 

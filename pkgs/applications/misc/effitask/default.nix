@@ -4,6 +4,7 @@
 , pkg-config
 , openssl
 , gtk3
+, rust
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   # default installPhase don't install assets
   installPhase = ''
     runHook preInstall
-    make install PREFIX="$out"
+    make install PREFIX="$out" TARGET="target/${rust.toRustTarget stdenv.hostPlatform}/release/effitask"
     runHook postInstall
   '';
 

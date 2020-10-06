@@ -1,4 +1,4 @@
-{ pkgs, lib }:
+{ pkgs }:
 
 with pkgs;
 
@@ -108,9 +108,9 @@ in {
       major = "3";
       minor = "9";
       patch = "0";
-      suffix = "rc1";
+      suffix = "";
     };
-    sha256 = "0w6wvyy9fbvfvrmhvmlb5gq18haagywk9hjkp1knjdarfczag9zv";
+    sha256 = "0m18z05nlmqm1zjw9s0ifgrn1jvjn3jwjg0bpswhjmw5k4yfcwww";
     inherit (darwin) configd;
     inherit passthruFun;
   };

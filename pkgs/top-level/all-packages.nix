@@ -2311,7 +2311,7 @@ in
 
   psstop = callPackage ../tools/system/psstop { };
 
-  precice = callPackage ../development/libraries/precice { };
+  precice = callPackage ../development/libraries/precice { python3 = python37; };
 
   pueue = callPackage ../applications/misc/pueue { };
 
@@ -2537,7 +2537,7 @@ in
   biblatex-check = callPackage ../tools/typesetting/biblatex-check { };
 
   birdfont = callPackage ../tools/misc/birdfont { };
-  xmlbird = callPackage ../tools/misc/birdfont/xmlbird.nix { };
+  xmlbird = callPackage ../tools/misc/birdfont/xmlbird.nix { stdenv = gccStdenv; };
 
   blastem = callPackage ../misc/emulators/blastem {
     inherit (python27Packages) pillow;
@@ -2597,9 +2597,7 @@ in
 
   davix = callPackage ../tools/networking/davix { };
 
-  cantata = libsForQt5.callPackage ../applications/audio/cantata {
-    inherit vlc;
-  };
+  cantata = libsForQt5.callPackage ../applications/audio/cantata { };
 
   can-utils = callPackage ../os-specific/linux/can-utils { };
 
@@ -7038,7 +7036,7 @@ in
 
   sonata = callPackage ../applications/audio/sonata { };
 
-  soundkonverter = kdeApplications.callPackage ../applications/audio/soundkonverter {};
+  soundkonverter = libsForQt512.callPackage ../applications/audio/soundkonverter {};
 
   sozu = callPackage ../servers/sozu { };
 
@@ -10117,10 +10115,10 @@ in
 
   pythonInterpreters = callPackage ./../development/interpreters/python {
     # Overrides that apply to all Python interpreters
-    pkgs = pkgs // {
-      qt5 = pkgs.qt514;
-      libsForQt5 = pkgs.libsForQt514;
-    };
+    pkgs = pkgs.extend (final: _: {
+      qt5 = final.qt514;
+      libsForQt5 = final.libsForQt514;
+    });
   };
   inherit (pythonInterpreters) python27 python36 python37 python38 python39 python3Minimal pypy27 pypy36;
 
@@ -10703,7 +10701,7 @@ in
   };
 
   # Does not actually depend on Qt 5
-  inherit (kdeFrameworks) extra-cmake-modules kapidox kdoctools;
+  inherit (kdeFrameworks) extra-cmake-modules kapidox;
 
   coccinelle = callPackage ../development/tools/misc/coccinelle {
     ocamlPackages = ocaml-ng.ocamlPackages_4_05;
@@ -11049,7 +11047,7 @@ in
   iconnamingutils = callPackage ../development/tools/misc/icon-naming-utils { };
 
   ikos = callPackage ../development/tools/analysis/ikos {
-    inherit (llvmPackages_7) stdenv clang llvm;
+    inherit (llvmPackages_9) stdenv clang llvm;
   };
 
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
@@ -14522,6 +14520,7 @@ in
 
   opencascade = callPackage ../development/libraries/opencascade { };
   opencascade-occt = callPackage ../development/libraries/opencascade-occt { };
+  opencascade-occt730 = callPackage ../development/libraries/opencascade-occt/7.3.nix { };
 
   opencl-headers = callPackage ../development/libraries/opencl-headers { };
 
@@ -14551,7 +14550,7 @@ in
   };
 
   opencv4 = callPackage ../development/libraries/opencv/4.x.nix {
-    inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa VideoDecodeAcceleration;
+    inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox;
   };
 
   opencv = opencv4;
@@ -14871,28 +14870,38 @@ in
     ### KDE FRAMEWORKS
 
     inherit (kdeFrameworks.override { libsForQt5 = self; })
-      attica baloo bluez-qt kactivities kactivities-stats
-      karchive kauth kbookmarks kcmutils kcalendarcore kcodecs kcompletion kconfig
-      kconfigwidgets kcoreaddons kcrash kdav kdbusaddons kdeclarative kdelibs4support
-      kdesignerplugin kdnssd kemoticons kfilemetadata kglobalaccel kguiaddons
-      khtml ki18n kiconthemes kidletime kimageformats kio kitemmodels kitemviews
-      kjobwidgets kjs kjsembed kmediaplayer knewstuff knotifications
-      knotifyconfig kpackage kparts kpeople kplotting kpty kross krunner
-      kservice ktexteditor ktextwidgets kunitconversion kwallet kwayland
-      kwidgetsaddons kwindowsystem kxmlgui kxmlrpcclient modemmanager-qt
-      networkmanager-qt plasma-framework prison qqc2-desktop-style solid sonnet
-      syntax-highlighting syndication threadweaver kirigami2 kholidays kpurpose
-      kcontacts kquickcharts;
+      attica baloo bluez-qt kactivities kactivities-stats karchive kauth
+      kbookmarks kcmutils kcalendarcore kcodecs kcompletion kconfig
+      kconfigwidgets kcoreaddons kcrash kdav kdbusaddons kdeclarative
+      kdelibs4support kdesignerplugin kdewebkit kdnssd kdoctools kemoticons
+      kfilemetadata kglobalaccel kguiaddons khtml ki18n kiconthemes kidletime
+      kimageformats kio kitemmodels kitemviews kjobwidgets kjs kjsembed
+      kmediaplayer knewstuff knotifications knotifyconfig kpackage kparts
+      kpeople kplotting kpty kross krunner kservice ktexteditor ktextwidgets
+      kunitconversion kwallet kwayland kwidgetsaddons kwindowsystem kxmlgui
+      kxmlrpcclient modemmanager-qt networkmanager-qt plasma-framework prison
+      qqc2-desktop-style solid sonnet syntax-highlighting syndication
+      threadweaver kirigami2 kholidays kpurpose kcontacts kquickcharts;
 
     ### KDE PLASMA 5
 
     inherit (plasma5.override { libsForQt5 = self; })
-      kdecoration khotkeys libkscreen libksysguard;
+      breeze-qt5 kdecoration khotkeys libkscreen libksysguard;
 
     ### KDE APPLICATIONS
 
-    inherit (kdeApplications.override { libsForQt5 = self; })
-      libkdcraw libkexiv2 libkipi libkomparediff2 libksane;
+    inherit
+      (import ../applications/kde { libsForQt5 = self; inherit lib fetchurl; })
+      akonadi-calendar akonadi-contacts akonadi-import-wizard akonadi-mime
+      akonadi-notes akonadi-search baloo-widgets calendarsupport eventviews
+      grantleetheme incidenceeditor kalarmcal kcalutils kdegraphics-mobipocket
+      kdepim-addons kdepim-apps-libs kdepim-runtime kidentitymanagement kimap
+      kipi-plugins kitinerary kldap kmail-account-wizard kmailtransport kmbox
+      kmime kontactinterface kpimtextedit kpkpass kqtquickcharts ksmtp ktnef
+      libgravatar libkcddb libkdcraw libkdegames libkdepim libkexiv2 libkgapi
+      libkipi libkleo libkmahjongg libkomparediff2 libksane libksieve mailcommon
+      mailimporter marble messagelib pim-sieve-editor pimcommon
+      kdegraphics-thumbnailers kio-extras print-manager;
 
     ### LIBRARIES
 
@@ -14997,8 +15006,6 @@ in
     soqt = callPackage ../development/libraries/soqt { };
 
     telepathy = callPackage ../development/libraries/telepathy/qt { };
-
-    vlc = callPackage ../applications/video/vlc {};
 
     qtwebkit-plugins = callPackage ../development/libraries/qtwebkit-plugins { };
 
@@ -17304,6 +17311,8 @@ in
 
   fwupd = callPackage ../os-specific/linux/firmware/fwupd { };
 
+  firmware-manager = callPackage ../os-specific/linux/firmware/firmware-manager { };
+
   fwts = callPackage ../os-specific/linux/fwts { };
 
   gobi_loader = callPackage ../os-specific/linux/gobi_loader { };
@@ -17355,6 +17364,8 @@ in
   gfxtablet = callPackage ../os-specific/linux/gfxtablet {};
 
   gmailctl = callPackage ../applications/networking/gmailctl {};
+
+  gomplate = callPackage ../development/tools/gomplate {};
 
   gpm = callPackage ../servers/gpm {
     ncurses = null;  # Keep curses disabled for lack of value
@@ -17811,6 +17822,12 @@ in
 
     systemtap = callPackage ../development/tools/profiling/systemtap { };
 
+    system76 = callPackage ../os-specific/linux/system76 { };
+
+    system76-acpi = callPackage ../os-specific/linux/system76-acpi { };
+
+    system76-io = callPackage ../os-specific/linux/system76-io { };
+
     tmon = callPackage ../os-specific/linux/tmon { };
 
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
@@ -17916,7 +17933,7 @@ in
   # Hardened Linux
   hardenedLinuxPackagesFor = kernel': overrides:
     let # Note: We use this hack since the hardened patches can lag behind and we don't want to delay updates:
-      linux_latest_for_hardened = pkgs.linux_5_7;
+      linux_latest_for_hardened = pkgs.linux_5_8;
       kernel = (if kernel' == pkgs.linux_latest then linux_latest_for_hardened else kernel').override overrides;
     in linuxPackagesFor (kernel.override {
       structuredExtraConfig = import ../os-specific/linux/kernel/hardened/config.nix {
@@ -18103,6 +18120,8 @@ in
   numad = callPackage ../os-specific/linux/numad { };
 
   nvme-cli = callPackage ../os-specific/linux/nvme-cli { };
+
+  system76-firmware = callPackage ../os-specific/linux/firmware/system76-firmware { };
 
   open-vm-tools = callPackage ../applications/virtualization/open-vm-tools { };
   open-vm-tools-headless = open-vm-tools.override { withX = false; };
@@ -19732,7 +19751,6 @@ in
   calibre = calibre-py3;
 
   calligra = libsForQt514.callPackage ../applications/office/calligra {
-    inherit (kdeApplications) akonadi-calendar akonadi-contacts;
     openjpeg = openjpeg_1;
     poppler = poppler_0_61;
   };
@@ -20594,7 +20612,10 @@ in
 
   freecad = libsForQt514.callPackage ../applications/graphics/freecad {
     mpi = openmpi;
-    # pyside2 5.12 is broken under python 3.8
+  };
+  freecadStable = libsForQt514.callPackage ../applications/graphics/freecad/stable.nix {
+    mpi = openmpi;
+    opencascade-occt = opencascade-occt730;
     python3Packages = python37Packages;
   };
 
@@ -21296,14 +21317,59 @@ in
 
   kdeApplications =
     let
-      mkApplications = import ../applications/kde;
-      attrs = {
-        libsForQt5 = libsForQt512;
-        inherit lib fetchurl;
+      forQt512 =
+        import ../applications/kde {
+          libsForQt5 = libsForQt512;
+          inherit lib fetchurl;
+        };
+      forQt515 =
+        import ../applications/kde {
+          libsForQt5 = libsForQt515;
+          inherit lib fetchurl;
+        };
+      default = {
+        inherit (forQt512)
+          ark
+          bomber bovo
+          dolphin dolphin-plugins dragon
+          ffmpegthumbs filelight
+          granatier gwenview
+          k3b
+          kalzium kapptemplate kapman kate katomic
+          kblackbox kblocks kbounce
+          kcachegrind kcalc kcharselect kcolorchooser
+          kdenetwork-filesharing kdenlive kdf kdialog kdiamond
+          keditbookmarks
+          kfind kfloppy
+          kget
+          khelpcenter
+          kig kigo killbots
+          klettres klines
+          kmag kmines kmix kmplot
+          knavalbattle knetwalk knights
+          kollision kolourpaint kompare konsole
+          krdc kreversi krfb
+          kshisen ksquares ksystemlog
+          kteatime ktimer ktouch kturtle
+          kwalletmanager
+          marble
+          okular
+          picmi
+          spectacle
+          yakuake;
+      };
+      overrides = {
+        inherit (forQt515)
+          akonadi akregator elisa kaddressbook kgpg kitinerary kleopatra kmail
+          kontact korganizer kpkpass kwave minuet;
+      };
+      compat = {
+        # Okteta was removed from kde applications and will now be released independently
+        # Lets keep an alias for compatibility reasons
         inherit okteta;
       };
     in
-      recurseIntoAttrs (makeOverridable mkApplications attrs);
+      default // overrides // compat;
 
   inherit (kdeApplications)
     akonadi akregator ark
@@ -21316,7 +21382,7 @@ in
     kaddressbook kalzium kapptemplate kapman kate katomic
     kblackbox kblocks kbounce
     kcachegrind kcalc kcharselect kcolorchooser
-    kdenlive kdf kdialog kdiamond
+    kdenetwork-filesharing kdenlive kdf kdialog kdiamond
     keditbookmarks
     kfind kfloppy
     kget kgpg
@@ -21402,10 +21468,7 @@ in
 
   kmplayer = libsForQt5.callPackage ../applications/video/kmplayer { };
 
-  kmymoney = libsForQt514.callPackage ../applications/office/kmymoney {
-    inherit (kdeApplications) kidentitymanagement;
-    inherit (kdeFrameworks) kdewebkit;
-  };
+  kmymoney = libsForQt514.callPackage ../applications/office/kmymoney { };
 
   kodestudio = callPackage ../applications/editors/kodestudio { };
 
@@ -22759,7 +22822,15 @@ in
 
   quodlibet-xine-full = quodlibet-full.override { xineBackend = true; tag = "-xine-full"; };
 
-  qutebrowser = libsForQt514.callPackage ../applications/networking/browsers/qutebrowser { };
+  qutebrowser = let
+    pkgs_ = pkgs.extend(_: prev: {
+      pythonInterpreters = prev.pythonInterpreters.override(oldAttrs: {
+        pkgs = oldAttrs.pkgs.extend(_: _: {
+          inherit (pkgs) qt5 libsForQt514;
+        });
+      });
+    });
+  in pkgs_.libsForQt514.callPackage ../applications/networking/browsers/qutebrowser { };
 
   rabbitvcs = callPackage ../applications/version-management/rabbitvcs {};
 
@@ -23349,6 +23420,7 @@ in
 
   thonny = callPackage ../applications/editors/thonny { };
 
+  thunderbird = thunderbird-78;
   thunderbird-78 = callPackage ../applications/networking/mailreaders/thunderbird {
     inherit (rustPackages_1_44) cargo rustc;
     libpng = libpng_apng;
@@ -23357,7 +23429,7 @@ in
     gtk3Support = true;
   };
 
-  thunderbird = callPackage ../applications/networking/mailreaders/thunderbird/68.nix {
+  thunderbird-68 = callPackage ../applications/networking/mailreaders/thunderbird/68.nix {
     inherit (rustPackages_1_44) cargo rustc;
     libpng = libpng_apng;
     nss = nss_3_44;
@@ -23366,9 +23438,10 @@ in
 
   thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
 
+  thunderbird-bin = thunderbird-bin-78;
   thunderbird-bin-78 = callPackage ../applications/networking/mailreaders/thunderbird-bin { };
 
-  thunderbird-bin = callPackage ../applications/networking/mailreaders/thunderbird-bin/68.nix { };
+  thunderbird-bin-68 = callPackage ../applications/networking/mailreaders/thunderbird-bin/68.nix { };
 
   ticpp = callPackage ../development/libraries/ticpp { };
 
@@ -23476,9 +23549,7 @@ in
 
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
-  trojita = libsForQt514.callPackage ../applications/networking/mailreaders/trojita {
-    inherit (kdeApplications) akonadi-contacts;
-  };
+  trojita = libsForQt514.callPackage ../applications/networking/mailreaders/trojita { };
 
   tudu = callPackage ../applications/office/tudu { };
 
@@ -23687,9 +23758,18 @@ in
 
   vkeybd = callPackage ../applications/audio/vkeybd {};
 
-  vlc = libsForQt514.vlc;
+  vlc = libsForQt514.callPackage ../applications/video/vlc {};
 
   vlc_qt5 = vlc;
+
+  libvlc = vlc.override {
+    withQt5 = false;
+    qtbase = null;
+    qtsvg = null;
+    qtx11extras = null;
+    wrapQtAppsHook = null;
+    onlyLibVLC = true;
+  };
 
   vmpk = callPackage ../applications/audio/vmpk { };
 
@@ -24273,8 +24353,6 @@ in
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
   zanshin = libsForQt514.callPackage ../applications/office/zanshin {
-    inherit (kdeApplications) akonadi-calendar akonadi-notes akonadi-search kidentitymanagement kontactinterface kldap;
-    inherit (kdeFrameworks) krunner kwallet kcalendarcore;
     boost = boost160;
   };
 
@@ -24612,9 +24690,6 @@ in
   dhewm3 = callPackage ../games/dhewm3 {};
 
   digikam = libsForQt514.callPackage ../applications/graphics/digikam {
-    inherit (plasma5) oxygen;
-    inherit (kdeApplications) akonadi-contacts;
-    inherit (kdeFrameworks) kcalendarcore;
     opencv3 = opencv3WithoutCuda;
   };
 
@@ -26040,6 +26115,7 @@ in
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {
     gmp = lib.overrideDerivation gmp (a: { dontDisableStatic = true; });
+    stdenv = gccStdenv;
   };
   cvc4 = callPackage ../applications/science/logic/cvc4 {};
 

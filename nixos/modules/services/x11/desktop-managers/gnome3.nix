@@ -53,6 +53,8 @@ let
 
   flashbackEnabled = cfg.flashback.enableMetacity || length cfg.flashback.customSessions > 0;
 
+  notExcluded = pkg: mkDefault (!(lib.elem pkg config.environment.gnome3.excludePackages));
+
 in
 
 {
@@ -363,14 +365,17 @@ in
         /* gnome-boxes */
       ] config.environment.gnome3.excludePackages);
 
-      # Enable default programs
-      programs.evince.enable = mkDefault true;
-      programs.file-roller.enable = mkDefault true;
-      programs.geary.enable = mkDefault true;
-      programs.gnome-disks.enable = mkDefault true;
-      programs.gnome-terminal.enable = mkDefault true;
-      programs.seahorse.enable = mkDefault true;
-      services.gnome3.sushi.enable = mkDefault true;
+      # Enable default program modules
+      # Since some of these have a corresponding package, we only
+      # enable that program module if the package hasn't been excluded
+      # through `environment.gnome3.excludePackages`
+      programs.evince.enable = notExcluded pkgs.gnome3.evince;
+      programs.file-roller.enable = notExcluded pkgs.gnome3.file-roller;
+      programs.geary.enable = notExcluded pkgs.gnome3.geary;
+      programs.gnome-disks.enable = notExcluded pkgs.gnome3.gnome-disk-utility;
+      programs.gnome-terminal.enable = notExcluded pkgs.gnome3.gnome-terminal;
+      programs.seahorse.enable = notExcluded pkgs.gnome3.seahorse;
+      services.gnome3.sushi.enable = notExcluded pkgs.gnome3.sushi;
 
       # Let nautilus find extensions
       # TODO: Create nautilus-with-extensions package

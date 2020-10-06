@@ -806,6 +806,12 @@
     githubId = 574938;
     name = "Jonathan Glines";
   };
+  austinbutler = {
+    email = "austinabutler@gmail.com";
+    github = "austinbutler";
+    githubId = 354741;
+    name = "Austin Butler";
+  };
   avaq = {
     email = "nixpkgs@account.avaq.it";
     github = "avaq";

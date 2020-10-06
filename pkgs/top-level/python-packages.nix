@@ -150,6 +150,8 @@ in {
 
   accupy = callPackage ../development/python-modules/accupy { };
 
+  acebinf = callPackage ../development/python-modules/acebinf { };
+
   acme = callPackage ../development/python-modules/acme { };
 
   acme-tiny = callPackage ../development/python-modules/acme-tiny { };
@@ -776,7 +778,10 @@ in {
 
   bcdoc = callPackage ../development/python-modules/bcdoc { };
 
-  bcrypt = callPackage ../development/python-modules/bcrypt { };
+  bcrypt = if pythonOlder "3.6" then
+    callPackage ../development/python-modules/bcrypt/3_1.nix { }
+  else
+    callPackage ../development/python-modules/bcrypt { };
 
   beaker = callPackage ../development/python-modules/beaker { };
 
@@ -975,6 +980,8 @@ in {
   bunch = callPackage ../development/python-modules/bunch { };
 
   bx-python = callPackage ../development/python-modules/bx-python { inherit (pkgs) zlib; };
+
+  bwapy = callPackage ../development/python-modules/bwapy { };
 
   bytecode = callPackage ../development/python-modules/bytecode { };
 
@@ -1442,8 +1449,9 @@ in {
 
   datashape = callPackage ../development/python-modules/datashape { };
 
-  datatable =
-    callPackage ../development/python-modules/datatable { inherit (pkgs.llvmPackages) openmp libcxx libcxxabi; };
+  datatable = callPackage ../development/python-modules/datatable {
+    inherit (pkgs.llvmPackages) libcxx;
+  };
 
   dateparser = callPackage ../development/python-modules/dateparser { };
 
@@ -1849,6 +1857,8 @@ in {
   entrance = callPackage ../development/python-modules/entrance { routerFeatures = false; };
 
   entrance-with-router-features = callPackage ../development/python-modules/entrance { routerFeatures = true; };
+
+  entrypoint2 = callPackage ../development/python-modules/entrypoint2 { };
 
   entrypoints = callPackage ../development/python-modules/entrypoints { };
 
@@ -2451,6 +2461,10 @@ in {
   google_cloud_websecurityscanner = callPackage ../development/python-modules/google_cloud_websecurityscanner { };
 
   google-compute-engine = callPackage ../tools/virtualization/google-compute-engine { };
+
+  google-crc32c = callPackage ../development/python-modules/google-crc32c {
+    inherit (pkgs) crc32c;
+  };
 
   google-i18n-address = callPackage ../development/python-modules/google-i18n-address { };
 
@@ -3693,6 +3707,8 @@ in {
 
   modestmaps = callPackage ../development/python-modules/modestmaps { };
 
+  mohawk = callPackage ../development/python-modules/mohawk { };
+
   moinmoin = callPackage ../development/python-modules/moinmoin
     { }; # Needed here because moinmoin is loaded as a Python library.
 
@@ -3781,6 +3797,8 @@ in {
   msgpack = callPackage ../development/python-modules/msgpack { };
 
   msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy { };
+
+  mss = callPackage ../development/python-modules/mss { };
 
   msrestazure = callPackage ../development/python-modules/msrestazure { };
 
@@ -5399,6 +5417,8 @@ in {
 
   pysvn = callPackage ../development/python-modules/pysvn { };
 
+  pytabix = callPackage ../development/python-modules/pytabix { };
+
   pytado = callPackage ../development/python-modules/pytado { };
 
   pytaglib = callPackage ../development/python-modules/pytaglib { };
@@ -6026,6 +6046,8 @@ in {
   requests-aws4auth = callPackage ../development/python-modules/requests-aws4auth { };
 
   requests-cache = callPackage ../development/python-modules/requests-cache { };
+
+  requests-hawk = callPackage ../development/python-modules/requests-hawk { };
 
   requests = callPackage ../development/python-modules/requests { };
 

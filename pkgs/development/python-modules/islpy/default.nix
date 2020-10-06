@@ -2,7 +2,9 @@
 , buildPythonPackage
 , fetchPypi
 , isl
-, pytest
+, pybind11
+, pytestCheckHook
+, pythonOlder
 , cffi
 , six
 }:
@@ -10,6 +12,7 @@
 buildPythonPackage rec {
   pname = "islpy";
   version = "2020.2";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -21,16 +24,12 @@ buildPythonPackage rec {
       --replace "\"pytest>=2\"," ""
   '';
 
-  buildInputs = [ isl ];
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [
-    cffi
-    six
-  ];
+  buildInputs = [ isl pybind11 ];
+  propagatedBuildInputs = [ six ];
 
-  checkPhase = ''
-    pytest test
-  '';
+  preCheck = "mv islpy islpy.hidden";
+  checkInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [ "islpy" ];
 
   meta = with lib; {
     description = "Python wrapper around isl, an integer set library";

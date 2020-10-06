@@ -7,6 +7,10 @@ stdenv.mkDerivation rec {
     sha256 = "1bvp7pc71bln5yvfj87s8750c6l53wjl6f8m12v62q9926adhwys";
   };
 
+  postPatch = ''
+    substituteInPlace configure --replace "(os-tmp)" '(getenv "TMPDIR")'
+  '';
+
   buildInputs = [ bigloo ];
 
   preConfigure = ''

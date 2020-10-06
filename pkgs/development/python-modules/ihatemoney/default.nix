@@ -30,6 +30,7 @@
 , wtforms
 , psycopg2 # optional, for postgresql support
 , flask_testing
+, pytestCheckHook
 }:
 
 # ihatemoney is not really a library. It will only ever be imported
@@ -113,12 +114,19 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    flask_testing
+    flask_testing pytestCheckHook
+  ];
+
+  pytestFlagsArray = [ "--pyargs ihatemoney.tests.tests" ];
+  disabledTests = [
+    "test_notifications"  # requires running service.
+    "test_invite"         # requires running service.
   ];
 
   passthru.tests = {
-    inherit (nixosTests) ihatemoney;
+    inherit (nixosTests.ihatemoney) ihatemoney-postgresql ihatemoney-sqlite;
   };
+
   meta = with lib; {
     homepage = "https://ihatemoney.org";
     description = "A simple shared budget manager web application";

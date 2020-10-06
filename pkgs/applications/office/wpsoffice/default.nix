@@ -12,7 +12,7 @@
 , cups
 , dbus
 , expat
-, ffmpeg
+, ffmpeg_3
 , fontconfig
 , freetype
 , gdk-pixbuf
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     cairo
     dbus.lib
     expat
-    ffmpeg
+    ffmpeg_3
     fontconfig
     freetype
     gdk-pixbuf

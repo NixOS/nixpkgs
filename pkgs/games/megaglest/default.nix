@@ -1,4 +1,4 @@
-{ stdenv, cmake, pkgconfig, git, curl, SDL2, xercesc, openal, lua, vlc
+{ stdenv, cmake, pkgconfig, git, curl, SDL2, xercesc, openal, lua, libvlc
 , libjpeg, wxGTK, cppunit, ftgl, glew, libogg, libvorbis, buildEnv, libpng
 , fontconfig, freetype, xorg, makeWrapper, bash, which, gnome3, libGLU, glib
 , fetchFromGitHub
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake git curl SDL2 xercesc openal lua libpng libjpeg vlc wxGTK
+  buildInputs = [ cmake git curl SDL2 xercesc openal lua libpng libjpeg libvlc wxGTK
     glib cppunit fontconfig freetype ftgl glew libogg libvorbis makeWrapper libGLU ];
 
   configurePhase = ''
