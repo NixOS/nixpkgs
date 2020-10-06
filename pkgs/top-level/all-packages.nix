@@ -26776,6 +26776,8 @@ in
       else smlnj;
   };
 
+  key = callPackage ../applications/science/logic/key { };
+
   lean = callPackage ../applications/science/logic/lean {};
   lean2 = callPackage ../applications/science/logic/lean2 {};
   lean3 = lean;
