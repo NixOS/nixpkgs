@@ -845,6 +845,8 @@ in
 
   chamber = callPackage ../tools/admin/chamber {  };
 
+  charm = callPackage ../applications/misc/charm { };
+
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
   ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
