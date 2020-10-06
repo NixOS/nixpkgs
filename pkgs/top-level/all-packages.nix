@@ -28235,4 +28235,6 @@ in
 
   bottom = callPackage ../tools/system/bottom {};
 
+  cagebreak = callPackage ../applications/window-managers/cagebreak/default.nix {};
+
 }
