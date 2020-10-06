@@ -97,6 +97,19 @@ in import ./make-test-python.nix ({ lib, ... }: {
         };
       };
 
+      # Test OCSP Stapling
+      specialisation.ocsp-stapling.configuration = { pkgs, ... }: {
+        security.acme.certs."a.example.test" = {
+          ocspMustStaple = true;
+        };
+        services.nginx.virtualHosts."a.example.com" = {
+          extraConfig = ''
+            ssl_stapling on;
+            ssl_stapling_verify on;
+          '';
+        };
+      };
+
       # Test using Apache HTTPD
       specialisation.httpd-aliases.configuration = { pkgs, config, lib, ... }: {
         services.nginx.enable = lib.mkForce false;
@@ -163,6 +176,7 @@ in import ./make-test-python.nix ({ lib, ... }: {
 
   testScript = {nodes, ...}:
     let
+      caDomain = nodes.acme.config.test-support.acme.caDomain;
       newServerSystem = nodes.webserver.config.system.build.toplevel;
       switchToNewServer = "${newServerSystem}/bin/switch-to-configuration test";
     in
@@ -246,6 +260,22 @@ in import ./make-test-python.nix ({ lib, ... }: {
               return check_connection_key_bits(node, domain, bits, retries - 1)
 
 
+      def check_stapling(node, domain, retries=3):
+          assert retries >= 0
+
+          # Pebble doesn't provide a full OCSP responder, so just check the URL
+          result = node.succeed(
+              "openssl s_client -CAfile /tmp/ca.crt"
+              f" -servername {domain} -connect {domain}:443 < /dev/null"
+              " | openssl x509 -noout -ocsp_uri"
+          )
+          print("OCSP Responder URL:", result)
+
+          if "${caDomain}:4002" not in result.lower():
+              time.sleep(1)
+              return check_stapling(node, domain, retries - 1)
+
+
       client.start()
       dnsserver.start()
 
@@ -253,7 +283,7 @@ in import ./make-test-python.nix ({ lib, ... }: {
       client.wait_for_unit("default.target")
 
       client.succeed(
-          'curl --data \'{"host": "acme.test", "addresses": ["${nodes.acme.config.networking.primaryIPAddress}"]}\' http://${dnsServerIP nodes}:8055/add-a'
+          'curl --data \'{"host": "${caDomain}", "addresses": ["${nodes.acme.config.networking.primaryIPAddress}"]}\' http://${dnsServerIP nodes}:8055/add-a'
       )
 
       acme.start()
@@ -262,8 +292,8 @@ in import ./make-test-python.nix ({ lib, ... }: {
       acme.wait_for_unit("default.target")
       acme.wait_for_unit("pebble.service")
 
-      client.succeed("curl https://acme.test:15000/roots/0 > /tmp/ca.crt")
-      client.succeed("curl https://acme.test:15000/intermediate-keys/0 >> /tmp/ca.crt")
+      client.succeed("curl https://${caDomain}:15000/roots/0 > /tmp/ca.crt")
+      client.succeed("curl https://${caDomain}:15000/intermediate-keys/0 >> /tmp/ca.crt")
 
       with subtest("Can request certificate with HTTPS-01 challenge"):
           webserver.wait_for_unit("acme-finished-a.example.test.target")
@@ -289,6 +319,11 @@ in import ./make-test-python.nix ({ lib, ... }: {
           webserver.wait_for_unit("acme-finished-a.example.test.target")
           check_connection_key_bits(client, "a.example.test", "384")
           webserver.succeed("grep testing /var/lib/acme/a.example.test/test")
+
+      with subtest("Correctly implements OCSP stapling"):
+          switch_to(webserver, "ocsp-stapling")
+          webserver.wait_for_unit("acme-finished-a.example.test.target")
+          check_stapling(client, "a.example.test")
 
       with subtest("Can request certificate with HTTPS-01 when nginx startup is delayed"):
           switch_to(webserver, "slow-startup")
