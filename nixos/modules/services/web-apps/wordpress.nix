@@ -127,7 +127,7 @@ let
           default = [];
           description = ''
             List of path(s) to respective plugin(s) which are copied from the 'plugins' directory.
-            <note><para>These plugins need to be packaged before use, see example.</para></note>
+            <note><para>These plugins need to be packaged before use, see example. Using something like https://git.helsinki.tools/helsinki-systems/wp4nix may be a better option.</para></note>
           '';
           example = ''
             # Wordpress plugin 'embed-pdf-viewer' installation example
@@ -154,7 +154,7 @@ let
           default = [];
           description = ''
             List of path(s) to respective theme(s) which are copied from the 'theme' directory.
-            <note><para>These themes need to be packaged before use, see example.</para></note>
+            <note><para>These themes need to be packaged before use, see example. Using something like https://git.helsinki.tools/helsinki-systems/wp4nix may be a better option.</para></note>
           '';
           example = ''
             # Let's package the responsive theme
