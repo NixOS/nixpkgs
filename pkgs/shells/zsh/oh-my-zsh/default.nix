@@ -6,7 +6,7 @@
 stdenv.mkDerivation rec {
   version = "2020-10-05";
   pname = "oh-my-zsh";
-  rev = "fbb2b56c7ecd3c4873be805e004f70fa442e7c45";
+  rev = "6ebf27b8d34c760e25749790ea78dcb0c220d76b";
 
   src = fetchgit { inherit rev;
     url = "https://github.com/ohmyzsh/ohmyzsh";
