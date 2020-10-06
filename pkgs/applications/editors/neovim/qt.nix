@@ -4,17 +4,18 @@
 let
   unwrapped = mkDerivation rec {
     pname = "neovim-qt-unwrapped";
-    version = "0.2.15";
+    version = "0.2.16.1";
 
     src = fetchFromGitHub {
       owner  = "equalsraf";
       repo   = "neovim-qt";
       rev    = "v${version}";
-      sha256 = "097nykglqp4jyvla4yp32sc1f1hph4cqqhp6rm9ww7br8c0j54xl";
+      sha256 = "0x5brrim3f21bzdmh6wyrhrislwpx1248wbx56csvic6v78hzqny";
     };
 
     cmakeFlags = [
       "-DUSE_SYSTEM_MSGPACK=1"
+      "-DENABLE_TESTS=0"  # tests fail because xcb platform plugin is not found
     ];
 
     buildInputs = [

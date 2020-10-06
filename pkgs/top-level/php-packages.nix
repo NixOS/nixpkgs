@@ -57,12 +57,41 @@ in
     };
 
     composer = mkDerivation rec {
-      version = "1.10.8";
+      version = "1.10.13";
       pname = "composer";
 
       src = pkgs.fetchurl {
         url = "https://getcomposer.org/download/${version}/composer.phar";
-        sha256 = "1rbqa56bsc3wrhk8djxdzh755zx1qrqp3wrdid7x0djzbmzp6h2c";
+        sha256 = "13vhfdlkmpvmk1h30f1i688xk7sdgfj0b82am32jgpa8zmf499sw";
+      };
+
+      dontUnpack = true;
+
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+
+      installPhase = ''
+        mkdir -p $out/bin
+        install -D $src $out/libexec/composer/composer.phar
+        makeWrapper ${php}/bin/php $out/bin/composer \
+          --add-flags "$out/libexec/composer/composer.phar" \
+          --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.unzip ]}
+      '';
+
+      meta = with pkgs.lib; {
+        description = "Dependency Manager for PHP";
+        license = licenses.mit;
+        homepage = "https://getcomposer.org/";
+        maintainers = with maintainers; [ offline ] ++ teams.php.members;
+      };
+    };
+
+    composer2 = mkDerivation rec {
+      version = "2.0.0-RC1";
+      pname = "composer";
+
+      src = pkgs.fetchurl {
+        url = "https://getcomposer.org/download/${version}/composer.phar";
+        sha256 = "0wzr360gaa59cbjpa3vw9yrpc55a4fmdv68q0rn7vj0mjnz60fhd";
       };
 
       dontUnpack = true;
@@ -86,12 +115,12 @@ in
     };
 
     php-cs-fixer = mkDerivation rec {
-      version = "2.16.3";
+      version = "2.16.4";
       pname = "php-cs-fixer";
 
       src = pkgs.fetchurl {
         url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
-        sha256 = "195j61qbgbdn5xi0l6030mklji8m7fan2kf3446a1m2n4df3f5hb";
+        sha256 = "05rdvypxc86hjs8b7id2csa7g1rf7dk2swzfvd5768abdgfasvr8";
       };
 
       phases = [ "installPhase" ];
@@ -232,12 +261,12 @@ in
     };
 
     phpstan = mkDerivation rec {
-      version = "0.12.32";
+      version = "0.12.48";
       pname = "phpstan";
 
       src = pkgs.fetchurl {
         url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-        sha256 = "0sb7yhjjh4wj8wbv4cdf0n1lvhx1ciz7ch8lr73maajj2xbvy1zk";
+        sha256 = "170yzz23lyipyckv8y2x9masv5qdmbskwwlbfc8750xb3g2q7pzl";
       };
 
       phases = [ "installPhase" ];
@@ -492,13 +521,13 @@ in
 
     maxminddb = buildPecl rec {
       pname = "maxminddb";
-      version = "1.6.0";
+      version = "1.7.0";
 
       src = pkgs.fetchFromGitHub {
         owner = "maxmind";
         repo = "MaxMind-DB-Reader-php";
         rev = "v${version}";
-        sha256 = "0sa943ij9pgz55aik93lllb8lh063bvr66ibn77p3y3p41vdiabz";
+        sha256 = "16msc9s15y43lxw89kj51aldlkd57dc8gms199i51jc984b68ljc";
       };
 
       buildInputs = [ pkgs.libmaxminddb ];

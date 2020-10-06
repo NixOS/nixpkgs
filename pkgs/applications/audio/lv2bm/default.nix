@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, glib, lilv, lv2, pkgconfig, serd, sord, sratom }:
+{ stdenv, fetchFromGitHub, glib, libsndfile, lilv, lv2, pkgconfig, serd, sord, sratom }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "lv2bm";
-  version = "git-2015-11-29";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "moddevices";
     repo = "lv2bm";
-    rev = "e844931503b7597f45da6d61ff506bb9fca2e9ca";
-    sha256 = "1rrz5sp04zjal6v34ldkl6fjj9xqidb8xm1iscjyljf6z4l516cx";
+    rev = "v${version}";
+    sha256 = "0vlppxfb9zbmffazs1kiyb79py66s8x9hihj36m2vz86zsq7ybl0";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib lilv lv2 serd sord sratom ];
+  buildInputs = [ glib libsndfile lilv lv2 serd sord sratom ];
 
   installPhase = ''
     make install PREFIX=$out

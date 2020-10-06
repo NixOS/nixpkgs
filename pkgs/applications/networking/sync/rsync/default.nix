@@ -5,6 +5,7 @@
 , enableXXHash ? true, xxHash ? null
 , enableZstd ? true, zstd ? null
 , enableCopyDevicesPatch ? false
+, nixosTests
 }:
 
 assert enableACLs -> acl != null;
@@ -35,6 +36,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [perl];
 
   configureFlags = ["--with-nobody-group=nogroup"];
+
+  passthru.tests = { inherit (nixosTests) rsyncd; };
 
   meta = base.meta // {
     description = "A fast incremental file transfer utility";

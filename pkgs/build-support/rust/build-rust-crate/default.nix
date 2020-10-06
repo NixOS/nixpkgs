@@ -4,7 +4,8 @@
 # This can be useful for deploying packages with NixOps, and to share
 # binary dependencies between projects.
 
-{ lib, stdenv, defaultCrateOverrides, fetchCrate, rustc, rust, cargo, jq }:
+{ lib, stdenv, defaultCrateOverrides, fetchCrate, pkgsBuildBuild, rustc, rust
+, cargo, jq }:
 
 let
     # This doesn't appear to be officially documented anywhere yet.
@@ -83,6 +84,8 @@ in
    # A list of rust/cargo features to enable while building the crate.
    # Example: [ "std" "async" ]
    , features
+   # Additional native build inputs for building this crate.
+   , nativeBuildInputs
    # Additional build inputs for building this crate.
    #
    # Example: [ pkgs.openssl ]
@@ -188,12 +191,13 @@ let crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverr
     dependencies_ = dependencies;
     buildDependencies_ = buildDependencies;
     processedAttrs = [
-      "src" "buildInputs" "crateBin" "crateLib" "libName" "libPath"
+      "src" "nativeBuildInputs" "buildInputs" "crateBin" "crateLib" "libName" "libPath"
       "buildDependencies" "dependencies" "features" "crateRenames"
       "crateName" "version" "build" "authors" "colors" "edition"
       "buildTests"
     ];
     extraDerivationAttrs = builtins.removeAttrs crate processedAttrs;
+    nativeBuildInputs_ = nativeBuildInputs;
     buildInputs_ = buildInputs;
     extraRustcOpts_ = extraRustcOpts;
     buildTests_ = buildTests;
@@ -225,7 +229,8 @@ stdenv.mkDerivation (rec {
     src = crate.src or (fetchCrate { inherit (crate) crateName version sha256; });
     name = "rust_${crate.crateName}-${crate.version}${lib.optionalString buildTests_ "-test"}";
     version = crate.version;
-    depsBuildBuild = [ rust stdenv.cc cargo jq ];
+    depsBuildBuild = [ pkgsBuildBuild.stdenv.cc ];
+    nativeBuildInputs = [ rust stdenv.cc cargo jq ] ++ (crate.nativeBuildInputs or []) ++ nativeBuildInputs_;
     buildInputs = (crate.buildInputs or []) ++ buildInputs_;
     dependencies = map lib.getLib dependencies_;
     buildDependencies = map lib.getLib buildDependencies_;
@@ -301,6 +306,7 @@ stdenv.mkDerivation (rec {
   verbose = crate_.verbose or true;
   extraRustcOpts = [];
   features = [];
+  nativeBuildInputs = [];
   buildInputs = [];
   crateOverrides = defaultCrateOverrides;
   preUnpack = crate_.preUnpack or "";

@@ -21,13 +21,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "amdvlk";
-  version = "2020.Q3.5";
+  version = "2020.Q3.6";
 
   src = fetchRepoProject {
     name = "${pname}-src";
     manifest = "https://github.com/GPUOpen-Drivers/AMDVLK.git";
     rev = "refs/tags/v-${version}";
-    sha256 = "08fj3cg3axnwadlpfim23g5nyjl69044fqxdr57af6y79441njay";
+    sha256 = "05bvxxgaz94y85g1sq0jzjxd4j8vgdfan04q2fzmfcw3h6p7syjy";
   };
 
   buildInputs = [
@@ -67,11 +67,6 @@ in stdenv.mkDerivation rec {
 
   # LTO is disabled in gcc for i686 as of #66528
   cmakeFlags = stdenv.lib.optionals stdenv.is32bit ["-DXGL_ENABLE_LTO=OFF"];
-
-  postPatch = stdenv.lib.optionalString stdenv.is32bit ''
-    substituteInPlace drivers/pal/cmake/PalCompilerOptions.cmake \
-      --replace "pal_setup_gcc_ipo()" ""
-  '';
 
   installPhase = ''
     install -Dm755 -t $out/lib icd/amdvlk${suffix}.so

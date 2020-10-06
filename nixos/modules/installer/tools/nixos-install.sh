@@ -153,7 +153,7 @@ if [[ -z $system ]]; then
     else
         echo "building the flake in $flake..."
         nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.toplevel" \
-            --extra-substituters "$sub" "${verbosity[@]}" \
+            --store "$mountPoint" --extra-substituters "$sub" "${verbosity[@]}" \
             "${extraBuildFlags[@]}" "${lockFlags[@]}" --out-link "$outLink"
     fi
     system=$(readlink -f "$outLink")

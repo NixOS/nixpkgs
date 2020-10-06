@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, buildLinux, ... } @ args:
 
 let
-  version = "5.8.10";
+  version = "5.8.13";
 in
 
 buildLinux (args // {
@@ -12,7 +12,7 @@ buildLinux (args // {
     owner = "zen-kernel";
     repo = "zen-kernel";
     rev = "v${version}-zen1";
-    sha256 = "1mm4x2amnpwixvi7q8pj9my75b08ps2mafgz4j2iszpylkdzi53d";
+    sha256 = "161bvrmic7gspkgkv0pqssk6dzv95vkxld69rir968khwlnpsnim";
   };
 
   extraMeta = {

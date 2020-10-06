@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libstrophe";
-  version = "0.9.3";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "strophe";
     repo = pname;
     rev = version;
-    sha256 = "1g1l0w9z9hdy5ncdvd9097gi7k7783did6py5h9camlpb2fnk5mk";
+    sha256 = "1hizw695fw0cy88h1dpl9pvniapml2zw9yvxck8xvxbqfz54jwja";
   };
 
   nativeBuildInputs = [ automake autoconf pkgconfig libtool check ];
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
       minimal dependencies and is configurable for various environments. It
       runs well on both Linux, Unix, and Windows based platforms.
     '';
-    homepage = "http://strophe.im/libstrophe/";
+    homepage = "https://strophe.im/libstrophe/";
     license = with stdenv.lib.licenses; [ gpl3 mit ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ devhell flosse ];
   };
 }

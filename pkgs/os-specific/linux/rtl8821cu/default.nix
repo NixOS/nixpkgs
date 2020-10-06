@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, kernel, bc }:
 stdenv.mkDerivation rec {
   name = "rtl8821cu-${kernel.version}-${version}";
-  version = "unstable-2020-05-16";
+  version = "unstable-2020-08-21";
 
   src = fetchFromGitHub {
     owner = "brektrou";
     repo = "rtl8821cu";
-    rev = "5c510c9f14352fed4906a10921040b9e46b58346";
-    sha256 = "1n74h1m3l2dj35caswaghzcjwcv5qlv3gj6j1rqdddbyg5khl4ag";
+    rev = "45a8b4393e3281b969822c81bd93bdb731d58472";
+    sha256 = "1995zs1hvlxjhbh2w7zkwr824z19cgc91s00g7yhm5d7zjav14rd";
   };
 
   hardeningDisable = [ "pic" ];

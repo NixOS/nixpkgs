@@ -12,11 +12,10 @@ to update all non-pinned libraries in that folder.
 """
 
 import argparse
-import logging
 import os
+import pathlib
 import re
 import requests
-import toolz
 from concurrent.futures import ThreadPoolExecutor as Pool
 from packaging.version import Version as _Version
 from packaging.version import InvalidVersion
@@ -33,6 +32,8 @@ EXTENSIONS = ['tar.gz', 'tar.bz2', 'tar', 'zip', '.whl']
 PRERELEASES = False
 
 GIT = "git"
+
+NIXPGKS_ROOT = str(pathlib.Path(__file__).absolute().parents[5])
 
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -101,8 +102,22 @@ def _replace_value(attribute, value, text):
     new_text = text.replace(old_line, new_line)
     return new_text
 
+
 def _fetch_page(url):
     r = requests.get(url)
+    if r.status_code == requests.codes.ok:
+        return r.json()
+    else:
+        raise ValueError("request for {} failed".format(url))
+
+
+def _fetch_github(url):
+    headers = {}
+    token = os.environ.get('GITHUB_API_TOKEN')
+    if token:
+        headers["Authorization"] = f"token {token}"
+    r = requests.get(url, headers=headers)
+
     if r.status_code == requests.codes.ok:
         return r.json()
     else:
@@ -167,11 +182,42 @@ def _get_latest_version_pypi(package, extension, current_version, target):
             break
     else:
         sha256 = None
-    return version, sha256
+    return version, sha256, None
 
 
 def _get_latest_version_github(package, extension, current_version, target):
-    raise ValueError("updating from GitHub is not yet supported.")
+    def strip_prefix(tag):
+        return re.sub("^[^0-9]*", "", tag)
+
+    def get_prefix(string):
+        matches = re.findall(r"^([^0-9]*)", string)
+        return next(iter(matches), "")
+
+    try:
+        homepage = subprocess.check_output(
+            ["nix", "eval", "-f", f"{NIXPGKS_ROOT}/default.nix", "--raw", f"python3Packages.{package}.src.meta.homepage"])\
+            .decode('utf-8')
+    except Exception as e:
+        raise ValueError(f"Unable to determine homepage: {e}")
+    owner_repo = homepage[len("https://github.com/"):]  # remove prefix
+    owner, repo = owner_repo.split("/")
+
+    url = f"https://api.github.com/repos/{owner}/{repo}/releases"
+    all_releases = _fetch_github(url)
+    releases = list(filter(lambda x: not x['prerelease'], all_releases))
+
+    if len(releases) == 0:
+        raise ValueError(f"{homepage} does not contain any stable releases")
+
+    versions = map(lambda x: strip_prefix(x['tag_name']), releases)
+    version = _determine_latest_version(current_version, target, versions)
+
+    release = next(filter(lambda x: strip_prefix(x['tag_name']) == version, releases))
+    prefix = get_prefix(release['tag_name'])
+    sha256 = subprocess.check_output(["nix-prefetch-url", "--type", "sha256", "--unpack", f"{release['tarball_url']}"], stderr=subprocess.DEVNULL)\
+        .decode('utf-8').strip()
+
+    return version, sha256, prefix
 
 
 FETCHERS = {
@@ -240,7 +286,9 @@ def _determine_extension(text, fetcher):
             raise ValueError('url does not point to PyPI.')
 
     elif fetcher == 'fetchFromGitHub':
-        raise ValueError('updating from GitHub is not yet implemented.')
+        if "fetchSubmodules" in text:
+            raise ValueError("fetchFromGitHub fetcher doesn't support submodules")
+        extension = "tar.gz"
 
     return extension
 
@@ -262,7 +310,7 @@ def _update_package(path, target):
 
     extension = _determine_extension(text, fetcher)
 
-    new_version, new_sha256 = FETCHERS[fetcher](pname, extension, version, target)
+    new_version, new_sha256, prefix = FETCHERS[fetcher](pname, extension, version, target)
 
     if new_version == version:
         logging.info("Path {}: no update available for {}.".format(path, pname))
@@ -274,6 +322,10 @@ def _update_package(path, target):
 
     text = _replace_value('version', new_version, text)
     text = _replace_value('sha256', new_sha256, text)
+    if fetcher == 'fetchFromGitHub':
+        text = _replace_value('rev', f"{prefix}${{version}}", text)
+        # incase there's no prefix, just rewrite without interpolation
+        text = text.replace('"${version}";', 'version;')
 
     with open(path, 'w') as f:
         f.write(text)
@@ -333,7 +385,11 @@ def _commit(path, pname, old_version, new_version, pkgs_prefix="python: ", **kwa
 
 def main():
 
-    parser = argparse.ArgumentParser()
+    epilog = """
+environment variables:
+  GITHUB_API_TOKEN\tGitHub API token used when updating github packages
+    """
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, epilog=epilog)
     parser.add_argument('package', type=str, nargs='+')
     parser.add_argument('--target', type=str, choices=SEMVER.keys(), default='major')
     parser.add_argument('--commit', action='store_true', help='Create a commit for each package update')

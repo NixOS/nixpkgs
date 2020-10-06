@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "vkd3d";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchurl {
     url = "https://dl.winehq.org/vkd3d/source/vkd3d-${version}.tar.xz";
-    sha256 = "1dkayp95g1691w7n2yn1q9y7klq5xa921dgmn9a5vil0rihxqnj9";
+    sha256 = "0szr1lw3xbgi9qjm13d1q4gyzzwv8i5wfxiwjg6dmwphrc7h6jxh";
   };
 
   buildInputs = [ vulkan-headers spirv-headers vulkan-loader ];

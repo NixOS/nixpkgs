@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub
 , autoreconfHook, pkgconfig
 , gtk3, nssTools, pcsclite
-, libxml2, libproxy 
+, libxml2, libproxy
 , openssl, curl
 , makeWrapper
 , substituteAll }:
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       --replace "modutil" "${nssTools}/bin/modutil"
 
     rm $out/bin/about-eid-mw
-    wrapProgram $out/bin/eid-viewer --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/$name" 
+    wrapProgram $out/bin/eid-viewer --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/$name"
   '';
 
   enableParallelBuilding = true;
@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Belgian electronic identity card (eID) middleware";
-    homepage = "http://eid.belgium.be/en/using_your_eid/installing_the_eid_software/linux/";
+    homepage = "https://eid.belgium.be/en/using_your_eid/installing_the_eid_software/linux/";
     license = licenses.lgpl3;
     longDescription = ''
       Allows user authentication and digital signatures with Belgian ID cards.
-      Also requires a running pcscd service and compatible card reader. 
+      Also requires a running pcscd service and compatible card reader.
 
       eid-viewer is also installed.
 

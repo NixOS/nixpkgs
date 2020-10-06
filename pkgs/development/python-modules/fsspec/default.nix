@@ -5,7 +5,6 @@
 , pytestCheckHook
 , numpy
 , stdenv
-, isPy38
 }:
 
 buildPythonPackage rec {
@@ -25,12 +24,18 @@ buildPythonPackage rec {
     numpy
   ];
 
+  pytestFlagsArray = [ "--rootdir=$(mktemp -d)" ];
+
   disabledTests = [
     # Test assumes user name is part of $HOME
     # AssertionError: assert 'nixbld' in '/homeless-shelter/foo/bar'
     "test_strip_protocol_expanduser"
-  ] ++ lib.optionals (stdenv.isDarwin && isPy38) [
-    "test_modified" # fails on hydra, works locally
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    # works locally on APFS, fails on hydra with AssertionError comparing timestamps
+    # darwin hydra builder uses HFS+ and has only one second timestamp resolution
+    # this two tests however, assume nanosecond resolution
+    "test_modified"
+    "test_touch"
   ];
 
   meta = with lib; {

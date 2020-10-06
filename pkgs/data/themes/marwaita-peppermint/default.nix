@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "marwaita-peppermint";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
     rev = version;
-    sha256 = "0g1n84px69wjjxclw76d59v8ccs4bkml71kzkvh12s9jcjw4zkc6";
+    sha256 = "16jrkdkkg8vrzzdv23zbpwk4gi740gn6gj92m0yqv7d6whrbkcvp";
   };
 
   buildInputs = [

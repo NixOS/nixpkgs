@@ -1,14 +1,15 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, numpy
-, scipy
-, sparse
-, numba
+, isPy27
 , future
 , h5py
-, nose
-, isPy27
+, ipython
+, numba
+, numpy
+, pytestCheckHook
+, scipy
+, sparse
 }:
 
 buildPythonPackage rec {
@@ -22,26 +23,34 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    future
+    h5py
+    numba
     numpy
     scipy
     sparse
-    numba
-    future
-    h5py
   ];
 
   checkInputs = [
-    nose
+    pytestCheckHook
+    ipython
   ];
 
-  preConfigure = ''
+  postPatch = ''
     substituteInPlace setup.py \
       --replace "'numba==0.43'" "'numba'"
   '';
 
-  checkPhase = ''
-    nosetests
+  # avoid collecting local files
+  preCheck = ''
+    cd clifford/test
   '';
+
+  pytestFlagsArray = [
+    "-m \"not veryslow\""
+    "--ignore=test_algebra_initialisation.py" # fails without JIT
+    "--ignore=test_cga.py"
+  ];
 
   meta = with lib; {
     description = "Numerical Geometric Algebra Module";
