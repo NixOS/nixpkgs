@@ -17804,6 +17804,7 @@ in
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
       kernelPatches.export_kernel_fpu_functions."5.3"
+      kernelPatches.ext4_iomap_swap_activate
     ];
   };
 

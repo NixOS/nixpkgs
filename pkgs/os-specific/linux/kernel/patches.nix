@@ -92,4 +92,14 @@
     name = "mac_nvme_t2";
     patch = ./mac-nvme-t2.patch;
   };
+
+  # https://github.com/NixOS/nixpkgs/issues/91986
+  ext4_iomap_swap_activate = rec {
+    name = "ext4_iomap_swap_activate";
+    patch = fetchpatch {
+      name = name + ".patch";
+      url = "https://lore.kernel.org/lkml/20200904091653.1014334-1-riteshh@linux.ibm.com/raw";
+      sha256 = "1fl34cx9nflnywmym118l7fbzbaz0g1b7q90hmaqm3w5apc8z235";
+    };
+  };
 }
