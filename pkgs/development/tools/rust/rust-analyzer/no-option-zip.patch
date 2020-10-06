@@ -21,10 +21,10 @@ index fe33cee53..2184a4154 100644
 
          rewriter.replace_ast(&tree, &merged);
 diff --git a/crates/assists/src/utils/insert_use.rs b/crates/assists/src/utils/insert_use.rs
-index 09f4a2224..2c3a0ca0b 100644
+index f6025c99a..f9bd31cf3 100644
 --- a/crates/assists/src/utils/insert_use.rs
 +++ b/crates/assists/src/utils/insert_use.rs
-@@ -280,7 +280,7 @@ fn common_prefix(lhs: &ast::Path, rhs: &ast::Path) -> Option<(ast::Path, ast::Pa
+@@ -274,7 +274,7 @@ fn common_prefix(lhs: &ast::Path, rhs: &ast::Path) -> Option<(ast::Path, ast::Pa
          }
          res = Some((lhs_curr.clone(), rhs_curr.clone()));
 
@@ -33,36 +33,16 @@ index 09f4a2224..2c3a0ca0b 100644
              Some((lhs, rhs)) => {
                  lhs_curr = lhs;
                  rhs_curr = rhs;
-@@ -324,7 +324,7 @@ fn path_cmp(a: &ast::Path, b: &ast::Path) -> Ordering {
-             // cmp_by would be useful for us here but that is currently unstable
-             // cmp doesnt work due the lifetimes on text's return type
-             a.zip(b)
--                .flat_map(|(seg, seg2)| seg.name_ref().zip(seg2.name_ref()))
-+                .flat_map(|(seg, seg2)| zip(seg.name_ref(), seg2.name_ref()))
-                 .find_map(|(a, b)| match a.text().cmp(b.text()) {
-                     ord @ Ordering::Greater | ord @ Ordering::Less => Some(ord),
-                     Ordering::Equal => None,
-@@ -404,8 +404,8 @@ fn find_insert_position(
+@@ -452,7 +452,7 @@ fn find_insert_position(
      let path_node_iter = scope
          .as_syntax_node()
          .children()
 -        .filter_map(|node| ast::Use::cast(node.clone()).zip(Some(node)))
--        .flat_map(|(use_, node)| use_.use_tree().and_then(|tree| tree.path()).zip(Some(node)));
-+        .filter_map(|node| zip(ast::Use::cast(node.clone()), Some(node)))
-+        .flat_map(|(use_, node)| zip(use_.use_tree().and_then(|tree| tree.path()), Some(node)));
-     // Iterator that discards anything thats not in the required grouping
-     // This implementation allows the user to rearrange their import groups as this only takes the first group that fits
-     let group_iter = path_node_iter
-@@ -423,7 +423,7 @@ fn find_insert_position(
-             segments
-                 .clone()
-                 .zip(check_segments)
--                .flat_map(|(seg, seg2)| seg.name_ref().zip(seg2.name_ref()))
-+                .flat_map(|(seg, seg2)| zip(seg.name_ref(), seg2.name_ref()))
-                 .all(|(l, r)| l.text() <= r.text())
-         });
-     match post_insert {
-@@ -931,3 +931,7 @@ use foo::bar::baz::Qux;",
++        .filter_map(|node| Some((ast::Use::cast(node.clone())?, node)))
+         .flat_map(|(use_, node)| {
+             let tree = use_.use_tree()?;
+             let path = tree.path()?;
+@@ -989,3 +989,7 @@ use foo::bar::baz::Qux;",
          assert_eq!(result.map(|u| u.to_string()), None);
      }
  }
