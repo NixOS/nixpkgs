@@ -7,13 +7,13 @@ let inherit (stdenv.lib) getDev; in
 
 stdenv.mkDerivation rec {
   pname = "mlt";
-  version = "6.18.0";
+  version = "6.22.1";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    sha256 = "0iiqym15n8kbnjzj0asmm86gs23yykz0va5b475cc4v2vv5admgx";
+    sha256 = "0jxv848ykw0csbnayrd710ylw46m0picfv7rpzsxz1vh4jzs395k";
   };
 
   buildInputs = [
@@ -59,9 +59,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open source multimedia framework, designed for television broadcasting";
-    homepage = https://www.mltframework.org/;
+    homepage = "https://www.mltframework.org/";
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
+    broken = versionAtLeast qtbase.version "5.15";
   };
 }

@@ -1,24 +1,24 @@
 { stdenv, fetchFromGitHub, makeWrapper
-, SDL, ffmpeg, frei0r, libjack2, libdv, libsamplerate
-, libvorbis, libxml2, movit, pkgconfig, sox
-, gtk2
+, SDL, ffmpeg, frei0r, libjack2, libdv, libsamplerate, libexif
+, libvorbis, libxml2, movit, pkgconfig, sox, fftw, opencv4, SDL2
+, gtk2, libebur128
 }:
 
 stdenv.mkDerivation rec {
   pname = "mlt";
-  version = "6.18.0";
+  version = "6.22.1";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    sha256 = "0iiqym15n8kbnjzj0asmm86gs23yykz0va5b475cc4v2vv5admgx";
+    sha256 = "0jxv848ykw0csbnayrd710ylw46m0picfv7rpzsxz1vh4jzs395k";
   };
 
   buildInputs = [
     SDL ffmpeg frei0r libjack2 libdv libsamplerate libvorbis libxml2
-    makeWrapper movit pkgconfig sox
-    gtk2
+    makeWrapper movit pkgconfig sox libexif gtk2 fftw libebur128
+    opencv4 SDL2
   ];
 
   # Mostly taken from:
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open source multimedia framework, designed for television broadcasting";
-    homepage = https://www.mltframework.org;
+    homepage = "https://www.mltframework.org";
     license = licenses.gpl3;
     maintainers = with maintainers; [ tohl peti ];
     platforms = platforms.linux;
