@@ -6255,6 +6255,12 @@
     githubId = 40049608;
     name = "Andy Chun";
   };
+  norfair = {
+    email = "syd@cs-syd.eu";
+    github = "NorfairKing";
+    githubId = 3521180;
+    name = "Tom Sydney Kerckhove";
+  };
   notthemessiah = {
     email = "brian.cohen.88@gmail.com";
     github = "notthemessiah";
