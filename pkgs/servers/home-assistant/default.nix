@@ -68,18 +68,14 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.115.6";
+  hassVersion = "0.116.0";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
   version = assert (componentPackages.version == hassVersion); hassVersion;
 
-  disabled = pythonOlder "3.5";
-
-  patches = [
-    ./relax-dependencies.patch
-    ./fix-media-path-test.patch
-  ];
+  # check REQUIRED_PYTHON_VER in homeassistant/const.py
+  disabled = pythonOlder "3.7.1";
 
   inherit availableComponents;
 
@@ -88,12 +84,15 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "07j54glcpa5ngkr0pwdg44f8gas3jz3nh653mr5sb5wg7xspgcr8";
+    sha256 = "1bqpk9dpra53yhasmp0yb7kzmfwdvlhb7jrf6wyv12rwzf8wy5w7";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
+      --replace "cryptography==2.9.2" "cryptography" \
+      --replace "ruamel.yaml==0.15.100" "ruamel.yaml>=0.15.100" \
       --replace "yarl==1.4.2" "yarl~=1.4"
+    substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
 
   propagatedBuildInputs = [
