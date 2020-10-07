@@ -19957,9 +19957,9 @@ in
 
   calculix = callPackage ../applications/science/math/calculix {};
 
-  calibre-py2 = libsForQt514.callPackage ../applications/misc/calibre { pythonPackages = python2Packages; };
+  calibre-py2 = libsForQt5.callPackage ../applications/misc/calibre { pythonPackages = python2Packages; };
 
-  calibre-py3 = libsForQt514.callPackage ../applications/misc/calibre { pythonPackages = python3Packages; };
+  calibre-py3 = libsForQt5.callPackage ../applications/misc/calibre { pythonPackages = python3Packages; };
 
   calibre = calibre-py3;
 
