@@ -19,13 +19,13 @@
 
 let
 
-  version = "8.3p1";
+  version = "8.4p1";
 
   # **please** update this patch when you update to a new openssh release.
   gssapiPatch = fetchpatch {
     name = "openssh-gssapi.patch";
-    url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%25${version}-1/debian/patches/gssapi.patch";
-    sha256 = "0j22ccg6msyi88mpsb6x0il5cg8v2b7qdah57ninbwx5isyld80l";
+    url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%25${version}-2/debian/patches/gssapi.patch";
+    sha256 = "1z1ckzimlkm1dmr9f5fqjnjg28gsqcwx6xka0klak857548d2lp2";
   };
 
 in
@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
   src = if hpnSupport then
       fetchurl {
         url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-${replaceStrings [ "." "p" ] [ "_" "_P" ] version}.tar.gz";
-        sha256 = "1ssdwgdxnvjwigisqi8c053znps5a4jf7bzsi99y0xyfzbw0x55k";
+        sha256 = "06mr2q8d9kbj145r7mzmpm3a4ilnssibwlbjyy0bjsqrqnrll3zl";
       }
     else
       fetchurl {
         url = "mirror://openbsd/OpenSSH/portable/${pname}-${version}.tar.gz";
-        sha256 = "1cl74ghi9y21dc3f4xa0qamb7dhwacbynh1ks9syprrg8zhgpgpj";
+        sha256 = "091b3pxdlj47scxx6kkf4agkx8c8sdacdxx8m1dw1cby80pd40as";
       };
 
   patches =
