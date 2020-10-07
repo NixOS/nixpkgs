@@ -3699,6 +3699,8 @@ in
 
   entr = callPackage ../tools/misc/entr { };
 
+  envchain = callPackage ../tools/misc/envchain { inherit (pkgs.darwin.apple_sdk.frameworks) Security; };
+
   eot_utilities = callPackage ../tools/misc/eot-utilities { };
 
   eplot = callPackage ../tools/graphics/eplot { };
