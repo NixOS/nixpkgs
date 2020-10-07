@@ -28324,4 +28324,5 @@ in
 
   cagebreak = callPackage ../applications/window-managers/cagebreak/default.nix {};
 
+  psftools = callPackage ../os-specific/linux/psftools {};
 }
