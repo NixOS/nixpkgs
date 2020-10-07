@@ -40,8 +40,8 @@ let
 
   pname = "slack";
   version = {
-    x86_64-darwin = "4.8.0";
-    x86_64-linux = "4.8.0";
+    x86_64-darwin = "4.10.3";
+    x86_64-linux = "4.10.3";
   }.${system} or throwSystem;
 
   src = let
@@ -49,11 +49,11 @@ let
   in {
     x86_64-darwin = fetchurl {
       url = "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
-      sha256 = "0k22w3c3brbc7ivmc5npqy8h7zxfgnbs7bqwii03psymm6sw53j2";
+      sha256 = "0r77l57vr603xamich4h4gbdd5vdcj0sjs6yjpymfx9s0f98v8bb";
     };
     x86_64-linux = fetchurl {
       url = "${base}/linux_releases/slack-desktop-${version}-amd64.deb";
-      sha256 = "0q8qpz5nwhps7y5gq1bl8hjw7vsk789srrv39hzc7jrl8f1bxzk0";
+      sha256 = "1gnjj2iyk8cwjajg8h9qpmzx10j4qjxjzciq8csg45qfzwkr3drf";
     };
   }.${system} or throwSystem;
 
