@@ -18007,6 +18007,8 @@ in
   };
 
   fusionInventory = callPackage ../servers/monitoring/fusion-inventory { };
+  
+  gamehub = callPackage ../games/gamehub { };
 
   gatling = callPackage ../servers/http/gatling { };
 
