@@ -10,15 +10,12 @@
 # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
 # Applied after defaultOverrides
 , packageOverrides ? self: super: {
-  # TODO: Remove this override after updating to cryptography 2.8:
-
 }
 
 # Skip pip install of required packages on startup
 , skipPip ? true }:
 
 let
-
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py
 
@@ -87,6 +84,14 @@ in with py.pkgs; buildPythonApplication rec {
     sha256 = "1bqpk9dpra53yhasmp0yb7kzmfwdvlhb7jrf6wyv12rwzf8wy5w7";
   };
 
+  patches = [
+    (fetchpatch {
+      #  Fix group tests when run in parallel, remove >= 0.117.0
+      url = "https://github.com/home-assistant/core/pull/41446/commits/c79dc478b7136b6df43707bf0ad6b53419c8a909.patch";
+      sha256 = "1cl81swq960vd2f733dcqq60c0jjzrkm0l2sibcblhmyw597b4vj";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace setup.py \
       --replace "cryptography==2.9.2" "cryptography" \
@@ -100,37 +105,84 @@ in with py.pkgs; buildPythonApplication rec {
     aiohttp astral async-timeout attrs bcrypt certifi importlib-metadata jinja2
     pyjwt cryptography pip python-slugify pytz pyyaml requests ruamel_yaml
     setuptools voluptuous voluptuous-serialize
-    # From frontend, image, http and recorder components and auth.mfa_modules.totp
-    sqlalchemy aiohttp-cors hass-frontend pillow pyotp pyqrcode ciso8601
+    # From default_config. frontend, http, image, mobile_app and recorder components as well as
+    # the auth.mfa_modules.totp module
+    aiohttp-cors ciso8601 defusedxml distro emoji hass-frontend pynacl pillow pyotp
+    pyqrcode sqlalchemy
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   # upstream only tests on Linux, so do we.
   doCheck = stdenv.isLinux;
 
   checkInputs = [
-    asynctest pytest pytest-aiohttp requests-mock hass-nabucasa netdisco pydispatcher
+    asynctest pytestCheckHook pytest-aiohttp pytest_xdist requests-mock hass-nabucasa netdisco pydispatcher
   ];
 
-  checkPhase = ''
+  # We cannot test all components, since they'd introduce lots of dependencies, some of which are unpackaged,
+  # but we should test very common stuff, like what's in `default_config`.
+  componentTests = [
+    "api"
+    "automation"
+    "config"
+    "configurator"
+    "default_config"
+    "demo"
+    "discovery"
+    "frontend"
+    "group"
+    "history"
+    "homeassistant"
+    "http"
+    "input_boolean"
+    "input_datetime"
+    "input_text"
+    "input_number"
+    "input_select"
+    "logbook"
+    "logger"
+    "media_source"
+    "mobile_app"
+    "person"
+    "scene"
+    "script"
+    "shell_command"
+    "ssdp"
+    "sun"
+    "system_health"
+    "system_log"
+    "tag"
+    "websocket_api"
+    "zeroconf"
+    "zone"
+  ];
+
+  pytestFlagsArray = [
+    "-n auto"
+    # don't bulk test all components
+    "--ignore tests/components"
+    # prone to race conditions due to parallel file access
+    "--ignore tests/test_config.py"
+    # tries to import unpackaged dependencies
+    "--ignore tests/test_loader.py"
+    # pyotp since v2.4.0 complains about the short mock keys, hass pins v2.3.0
+    "--ignore tests/auth/mfa_modules/test_notify.py"
+    "tests"
+  ] ++ map (component: "tests/components/" + component) componentTests;
+
+  disabledTests = [
+    # AssertionError: merge_log_err.call_count != 0
+    "test_merge"
+    # ModuleNotFoundError: No module named 'pyqwikswitch'
+    "test_merge_id_schema"
+    # AssertionError: assert 'unknown' == 'not_home'
+    "test_device_tracker_not_home"
+    # Racy https://github.com/home-assistant/core/issues/41425
+    "test_cached_event_message"
+  ];
+
+  preCheck = ''
     # the tests require the existance of a media dir
     mkdir /build/media
-
-    # - components' dependencies are not included, so they cannot be tested
-    # - test_merge_id_schema requires pyqwikswitch
-    # - test_loader.py tries to load not-packaged dependencies
-    # - test_notify pyotp doesn't like the short mock keys
-    # - unclear why test_merge fails: assert merge_log_err.call_count != 0
-    # - test_setup_safe_mode_if_no_frontend: requires dependencies for components we have not packaged
-    py.test \
-      --ignore tests/components \
-      --ignore tests/test_loader.py \
-      --ignore tests/auth/mfa_modules/test_notify.py \
-      -k "not test_setup_safe_mode_if_no_frontend and not test_merge_id_schema and not test_merge"
-
-    # Some basic components should be tested however
-    py.test \
-      tests/components/{api,config,configurator,demo,discovery,frontend,group,history} \
-      tests/components/{homeassistant,http,logger,script,shell_command,system_log,websocket_api}
   '';
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
