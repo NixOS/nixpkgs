@@ -1,5 +1,5 @@
-{ channel, pname, version, sha256Hash, patches
-, filename ? "flutter_linux_v${version}-${channel}.tar.xz" }:
+{ channel, pname, version, sha256Hash, patches, dart
+, filename ? "flutter_linux_${version}-${channel}.tar.xz"}:
 
 { bash, buildFHSUserEnv, cacert, coreutils, git, makeWrapper, runCommand, stdenv
 , fetchurl, alsaLib, dbus, expat, libpulseaudio, libuuid, libX11, libxcb
@@ -72,6 +72,7 @@ let
       with pkgs; [
         bash
         curl
+        dart
         git
         unzip
         which
@@ -118,11 +119,15 @@ in runCommand drvName {
     homepage = "https://flutter.dev";
     license = licenses.bsd3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ babariviere ];
+    maintainers = with maintainers; [ babariviere ericdallo ];
   };
 } ''
   mkdir -p $out/bin
 
   echo -n "$startScript" > $out/bin/${pname}
   chmod +x $out/bin/${pname}
+
+  mkdir -p $out/bin/cache/dart-sdk/
+  cp -r ${dart}/* $out/bin/cache/dart-sdk/
+  ln $out/bin/cache/dart-sdk/bin/dart $out/bin/dart
 ''

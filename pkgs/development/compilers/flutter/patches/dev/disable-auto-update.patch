@@ -1,8 +1,8 @@
 diff --git a/bin/internal/shared.sh b/bin/internal/shared.sh
-index 702bd9ed5..4d4dc94c6 100755
+index 22efe87443..c6954575c5 100644
 --- a/bin/internal/shared.sh
 +++ b/bin/internal/shared.sh
-@@ -204,8 +204,6 @@ function shared::execute() {
+@@ -212,8 +212,6 @@ function shared::execute() {
    # FLUTTER_TOOL_ARGS="--enable-asserts $FLUTTER_TOOL_ARGS"
    # FLUTTER_TOOL_ARGS="$FLUTTER_TOOL_ARGS --observe=65432"
  
@@ -12,10 +12,10 @@ index 702bd9ed5..4d4dc94c6 100755
    case "$BIN_NAME" in
      flutter*)
 diff --git a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
-index 21be933e1..2ea73c4c0 100644
+index fb1616ba96..b973b3fd58 100644
 --- a/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
 +++ b/packages/flutter_tools/lib/src/runner/flutter_command_runner.dart
-@@ -294,13 +294,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
+@@ -291,13 +291,6 @@ class FlutterCommandRunner extends CommandRunner<void> {
            globals.flutterUsage.suppressAnalytics = true;
          }
  
