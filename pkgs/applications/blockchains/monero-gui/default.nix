@@ -57,8 +57,9 @@ stdenv.mkDerivation rec {
     # set monero-gui version
     substituteInPlace src/version.js.in \
        --replace '@VERSION_TAG_GUI@' '${version}'
-    substituteInPlace monero/src/version.cpp.in \
-      --replace '@VERSION_IS_RELEASE@' 'true'
+
+    # remove this line on the next release
+    rm cmake/Version.cmake
 
     # use monerod from the monero package
     substituteInPlace src/daemon/DaemonManager.cpp \

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ stdenv, fetchFromGitHub, fetchpatch
 , cmake, pkgconfig
 , boost, miniupnpc, openssl, unbound
 , zeromq, pcsclite, readline, libsodium, hidapi
@@ -27,7 +27,16 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  patches = [ ./use-system-libraries.patch ];
+  patches = [
+    ./use-system-libraries.patch
+
+    # This fixes a bug in the monero-gui build system,
+    # remove it once the PR has been merged
+    (fetchpatch {
+      url = "https://github.com/monero-project/monero/pull/6867.patch";
+      sha256 = "0nxa6861df1fadrm9bmhqf2g6mljgr4jndsbxqp7g501hv9z51j3";
+    })
+  ];
 
   postPatch = ''
     # remove vendored libraries
