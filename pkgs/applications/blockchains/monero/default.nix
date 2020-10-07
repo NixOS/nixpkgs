@@ -5,9 +5,9 @@
 , randomx, rapidjson
 , CoreData, IOKit, PCSC
 , trezorSupport ? true
-  , libusb1  ? null
-  , protobuf ? null
-  , python3  ? null
+,   libusb1  ? null
+,   protobuf ? null
+,   python3  ? null
 }:
 
 with stdenv.lib;
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # remove vendored libraries
     rm -r external/{miniupnp,randomx,rapidjson,unbound}
+    # export patched source for monero-gui
+    cp -r . $source
   '';
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -51,6 +53,8 @@ stdenv.mkDerivation rec {
     "-DReadline_ROOT_DIR=${readline.dev}"
     "-DRandomX_ROOT_DIR=${randomx}"
   ] ++ optional stdenv.isDarwin "-DBoost_USE_MULTITHREADED=OFF";
+
+  outputs = [ "out" "source" ];
 
   meta = with stdenv.lib; {
     description = "Private, secure, untraceable currency";
