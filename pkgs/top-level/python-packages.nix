@@ -3374,6 +3374,8 @@ in {
 
   librosa = callPackage ../development/python-modules/librosa { };
 
+  libsass-python = callPackage ../development/python-modules/libsass-python { };
+
   libsavitar = callPackage ../development/python-modules/libsavitar { };
 
   libselinux = pipe pkgs.libselinux [
