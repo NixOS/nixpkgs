@@ -1,23 +1,19 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, isPy3k
-, isPy38
+, isPy27
 # python dependencies
 , click
-, configparser ? null
 , dateutil
 , etelemetry
 , filelock
 , funcsigs
 , future
-, futures
 , mock
 , networkx
 , nibabel
 , numpy
 , packaging
-, pathlib2
 , prov
 , psutil
 , pybids
@@ -39,8 +35,6 @@
 , callPackage
 }:
 
-assert !isPy3k -> configparser != null;
-
 let
 
  # This is a temporary convenience package for changes waiting to be merged into the primary rdflib repo.
@@ -51,6 +45,7 @@ in
 buildPythonPackage rec {
   pname = "nipype";
   version = "1.5.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
@@ -85,10 +80,6 @@ buildPythonPackage rec {
     simplejson
     traits
     xvfbwrapper
-  ] ++ stdenv.lib.optionals (!isPy3k) [
-    configparser
-    futures
-    pathlib2 # darwin doesn't receive this transitively, but it is in install_requires
   ];
 
   checkInputs = [
