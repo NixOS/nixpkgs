@@ -10,13 +10,6 @@
 , pam
 , libnotify
 , buildPackages
-, coreutils
-, gnugrep
-, gnused
-, kmod
-, writeShellScript
-, closureInfo
-, runCommand
 }:
 
 let
@@ -44,12 +37,6 @@ let
     name = "2-23-fix-build-with-make-4.3.patch";
     sha256 = "0xw028iqp69j9mxv0kbwraplgkj5i5djdlgf0anpkc5cdbsf96r9";
   };
-
-  aa-teardown = writeShellScript "aa-teardown" ''
-    PATH="${lib.makeBinPath [coreutils gnused gnugrep]}:$PATH"
-    . ${apparmor-parser}/lib/apparmor/rc.apparmor.functions
-    remove_profiles
-  '';
 
   prePatchCommon = ''
     patch -p1 < ${gnumake43Patch}
@@ -162,15 +149,6 @@ let
       # aa-notify checks its name and does not work named ".aa-notify-wrapped"
       mv $out/bin/aa-notify $out/bin/aa-notify-wrapped
       makeWrapper ${perl}/bin/perl $out/bin/aa-notify --set PERL5LIB ${libapparmor}/${perl.libPrefix} --add-flags $out/bin/aa-notify-wrapped
-
-      substituteInPlace $out/bin/aa-remove-unknown \
-       --replace "/usr/bin/aa-status" "$out/bin/aa-status" \
-       --replace "/sbin/modprobe" "${kmod}/bin/modprobe" \
-       --replace "/lib/apparmor/rc.apparmor.functions" "${apparmor-parser}/lib/apparmor/rc.apparmor.functions"
-      wrapProgram $out/bin/aa-remove-unknown \
-       --prefix PATH : ${lib.makeBinPath [gawk]}
-
-      ln -s ${aa-teardown} $out/bin/aa-teardown
     '';
 
     inherit doCheck;
@@ -219,9 +197,6 @@ let
       substituteInPlace ./parser/Makefile --replace "/usr/include/linux/capability.h" "${linuxHeaders}/include/linux/capability.h"
       ## techdoc.pdf still doesn't build ...
       substituteInPlace ./parser/Makefile --replace "manpages htmlmanpages pdf" "manpages htmlmanpages"
-      substituteInPlace parser/rc.apparmor.functions \
-       --replace "/sbin/apparmor_parser" "$out/bin/apparmor_parser"
-      sed -i parser/rc.apparmor.functions -e '2i . ${./fix-rc.apparmor.functions.sh}'
     '';
     inherit patches;
     postPatch = "cd ./parser";
@@ -283,32 +258,8 @@ let
     meta = apparmor-meta "kernel patches";
   };
 
-  # Generate generic AppArmor rules in a file,
-  # from the closure of given rootPaths.
-  # To be included in an AppArmor profile like so:
-  # include "$(apparmorRulesFromClosure {} [pkgs.hello]}"
-  apparmorRulesFromClosure =
-    { # The store path of the derivation is given in $path
-      additionalRules ? []
-      # TODO: factorize here some other common paths
-      # that may emerge from use cases.
-    , baseRules ? [
-        "r $path"
-        "r $path/etc/**"
-        "r $path/share/**"
-        # Note that not all libraries are prefixed with "lib",
-        # eg. glibc-2.30/lib/ld-2.30.so
-        "mr $path/lib/**.so*"
-        # eg. glibc-2.30/lib/gconv/gconv-modules
-        "r $path/lib/**"
-      ]
-    }: rootPaths: runCommand "apparmor-closure-rules" {} ''
-    touch $out
-    while read -r path
-    do printf >>$out "%s,\n" ${lib.concatMapStringsSep " " (x: "\"${x}\"") (baseRules ++ additionalRules)}
-    done <${closureInfo {inherit rootPaths;}}/store-paths
-  '';
 in
+
 {
   inherit
     libapparmor
@@ -317,6 +268,5 @@ in
     apparmor-parser
     apparmor-pam
     apparmor-profiles
-    apparmor-kernel-patches
-    apparmorRulesFromClosure;
+    apparmor-kernel-patches;
 }

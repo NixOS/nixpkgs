@@ -1011,24 +1011,6 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
    </listitem>
    <listitem>
     <para>
-     The <literal>security.apparmor</literal> module,
-     for the <link xlink:href="https://gitlab.com/apparmor/apparmor/-/wikis/Documentation">AppArmor</link>
-     Mandatory Access Control system,
-     has been substantialy improved along with related tools,
-     so that module maintainers can now more easily write AppArmor profiles for NixOS.
-     The most notable change on the user-side is the new option <xref linkend="opt-security.apparmor.policies"/>,
-     replacing the previous <literal>profiles</literal> option
-     to provide a way to disable a profile
-     and to select whether to confine in enforce mode (default)
-     or in complain mode (see <literal>journalctl -b --grep apparmor</literal>).
-     Before enabling this module, either directly
-     or by importing <literal>&lt;nixpkgs/nixos/modules/profiles/hardened.nix&gt;</literal>,
-     please be sure to read the documentation of <link linkend="opt-security.apparmor.enable">security.apparmor.enable</link>,
-     and especially the part about <xref linkend="opt-security.apparmor.killUnconfinedConfinables"/>.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
      With this release <literal>systemd-networkd</literal> (when enabled through <xref linkend="opt-networking.useNetworkd"/>)
      has it's netlink socket created through a <literal>systemd.socket</literal> unit. This gives us control over
      socket buffer sizes and other parameters. For larger setups where networkd has to create a lot of (virtual)

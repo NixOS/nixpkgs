@@ -4251,7 +4251,7 @@
     name = "Julien Dehos";
   };
   julm = {
-    email = "julm+nixpkgs@sourcephile.fr";
+    email = "julm+nix@sourcephile.fr";
     github = "ju1m";
     githubId = 21160136;
     name = "Julien Moutinho";
