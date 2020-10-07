@@ -1,4 +1,4 @@
-{ lib, stdenv, fetch, cmake, python3, libcxxabi, fixDarwinDylibNames, version
+{ lib, stdenv, fetch, cmake, python3, libcxxabi, llvm, fixDarwinDylibNames, version
 , enableShared ? true }:
 
 stdenv.mkDerivation {
@@ -9,7 +9,11 @@ stdenv.mkDerivation {
 
   postUnpack = ''
     unpackFile ${libcxxabi.src}
-    export LIBCXXABI_INCLUDE_DIR="$PWD/$(ls -d libcxxabi-${version}*)/include"
+    mv libcxxabi-* libcxxabi
+    unpackFile ${llvm.src}
+    mv llvm-* llvm
+ls -ld *
+    export LIBCXXABI_INCLUDE_DIR="$PWD/$(ls -d libcxxabi)/include"
   '';
 
   patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ../../libcxx-0001-musl-hacks.patch;
