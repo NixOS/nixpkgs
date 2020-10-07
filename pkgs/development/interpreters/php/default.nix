@@ -106,7 +106,7 @@ let
                 name = "php-with-extensions-${version}";
                 inherit (php) version;
                 nativeBuildInputs = [ makeWrapper ];
-                passthru = {
+                passthru = php.passthru // {
                   buildEnv = mkBuildEnv allArgs allExtensionFunctions;
                   withExtensions = mkWithExtensions allArgs allExtensionFunctions;
                   phpIni = "${phpWithExtensions}/lib/php.ini";
@@ -259,6 +259,7 @@ let
           passthru = {
             buildEnv = mkBuildEnv {} [];
             withExtensions = mkWithExtensions {} [];
+            inherit ztsSupport;
           };
 
           meta = with stdenv.lib; {

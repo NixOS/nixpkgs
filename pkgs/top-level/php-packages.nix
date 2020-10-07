@@ -399,6 +399,8 @@ in
       meta.maintainers = lib.teams.php.members;
     };
 
+    blackfire = pkgs.callPackage ../development/tools/misc/blackfire/php-probe.nix { inherit php; };
+
     couchbase = buildPecl rec {
       version = "2.6.1";
       pname = "couchbase";
