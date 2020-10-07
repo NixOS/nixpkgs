@@ -83,7 +83,16 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+     The default-version of <literal>nextcloud</literal> is <package>nextcloud20</package>.
+     Please note that it's <emphasis>not</emphasis> possible to upgrade <literal>nextcloud</literal>
+     across multiple major versions! This means that it's e.g. not possible to upgrade
+     from <package>nextcloud18</package> to <package>nextcloud20</package> in a single deploy.
+    </para>
+    <para>
+     The package can be manually upgraded by setting <xref linkend="opt-services.nextcloud.package" />
+     to <package>nextcloud20</package>.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
