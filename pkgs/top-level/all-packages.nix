@@ -9789,6 +9789,8 @@ in
 
   souffle = callPackage ../development/compilers/souffle { };
 
+  spasm-ng = callPackage ../development/compilers/spasm-ng { };
+
   spirv-llvm-translator = callPackage ../development/compilers/spirv-llvm-translator { };
 
   sqldeveloper = callPackage ../development/tools/database/sqldeveloper {
