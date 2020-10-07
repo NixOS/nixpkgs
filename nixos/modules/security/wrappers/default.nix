@@ -179,14 +179,6 @@ in
       export PATH="${wrapperDir}:$PATH"
     '';
 
-    security.apparmor.includes."nixos/security.wrappers" = ''
-      include "${pkgs.apparmorRulesFromClosure {} [
-        securityWrapper
-        pkgs.stdenv.cc.cc
-        pkgs.stdenv.cc.libc
-      ]}"
-    '';
-
     ###### setcap activation script
     system.activationScripts.wrappers =
       lib.stringAfter [ "specialfs" "users" ]
