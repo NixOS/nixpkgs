@@ -33493,6 +33493,10 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
+  ciftilib = callPackage ../development/libraries/science/biology/ciftilib {
+    boost = boost16x;
+  };
+
   cmtk = callPackage ../applications/science/biology/cmtk { };
 
   clustal-omega = callPackage ../applications/science/biology/clustal-omega { };
