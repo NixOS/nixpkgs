@@ -23028,7 +23028,9 @@ in
     pkgs_ = pkgs.extend(_: prev: {
       pythonInterpreters = prev.pythonInterpreters.override(oldAttrs: {
         pkgs = oldAttrs.pkgs.extend(_: _: {
-          inherit (pkgs) qt5 libsForQt514;
+          # Use 5.14 https://github.com/NixOS/nixpkgs/commit/3fafb021256bc594cecd949b3edc5bc480fc721f
+          qt5 = pkgs.qt514;
+          libsForQt5 = pkgs.libsForQt514;
         });
       });
     });
