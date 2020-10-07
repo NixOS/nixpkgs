@@ -27,7 +27,6 @@ stdenv.mkDerivation {
     mv libcxx-* libcxx
     unpackFile ${llvm.src}
     mv llvm-* llvm
-    cmakeFlags+=" -DLLVM_PATH=$PWD/llvm -DLIBCXXABI_LIBCXX_PATH=$PWD/libcxx"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
   '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
