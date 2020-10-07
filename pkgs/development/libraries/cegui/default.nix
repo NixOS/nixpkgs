@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, ogre, freetype, boost, expat }:
+{ lib, stdenv, fetchurl, cmake, ogre, freetype, boost, expat, libiconv}:
 
 stdenv.mkDerivation rec {
   pname = "cegui";
@@ -10,12 +10,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ ogre freetype boost expat ];
+
+  buildInputs = [ ogre freetype boost expat ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   meta = with lib; {
     homepage = "http://cegui.org.uk/";
     description = "C++ Library for creating GUIs";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
