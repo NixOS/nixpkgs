@@ -52,13 +52,15 @@ in {
       secret = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = "Secret for an existing cluster; if null, a new secret is generated";
+        description =
+          "Secret for an existing cluster; if null, a new secret is generated";
       };
 
       secretFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description = "File containing the secret - 'secret' and 'secretFile' should not both be set";
+        description =
+          "File containing the secret - 'secret' and 'secretFile' should not both be set";
       };
 
     };
@@ -77,8 +79,10 @@ in {
 
     systemd.services.ipfs-cluster-init = {
       path = [ "/run/wrappers" pkgs.ipfs-cluster ];
-      environment.IPFS_CLUSTER_PATH = cfg.dataDir;
-      environment.CLUSTER_SECRET = cfg.secret;
+      environment = {
+        IPFS_CLUSTER_PATH = cfg.dataDir;
+        CLUSTER_SECRET = mkIf (cfg.secret != null) cfg.secret;
+      };
       wantedBy = [ "default.target" ];
 
       serviceConfig = if cfg.consensus == null then
