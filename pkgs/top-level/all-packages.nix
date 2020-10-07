@@ -10225,10 +10225,9 @@ in
   python3Packages = python3.pkgs;
 
   pythonInterpreters = callPackage ./../development/interpreters/python {
-    # Overrides that apply to all Python interpreters
+    # Overrides that apply to all Python interpreters and their packages
+    # Generally, this should be avoided.
     pkgs = pkgs.extend (final: _: {
-      qt5 = final.qt514;
-      libsForQt5 = final.libsForQt514;
     });
   };
   inherit (pythonInterpreters) python27 python36 python37 python38 python39 python3Minimal pypy27 pypy36;
