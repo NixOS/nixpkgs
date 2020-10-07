@@ -59,6 +59,12 @@ let
       buildInputs = [ pkgs.phantomjs2 ];
     };
 
+    expo-cli = super."expo-cli".overrideNodeAttrs (attrs: {
+      __acceptOverrideNodeAttrsCanBeDroppedAnytime = true;
+      # The traveling-fastlane-darwin optional dependency aborts build on Linux.
+      dependencies = builtins.filter (d: d.packageName != "@expo/traveling-fastlane-${if stdenv.isLinux then "darwin" else "linux"}") attrs.dependencies;
+    });
+
     git-ssb = super.git-ssb.override {
       buildInputs = [ self.node-gyp-build ];
       meta.broken = since "10";
