@@ -78,7 +78,7 @@ in {
     systemd.services.ipfs-cluster-init = {
       path = [ "/run/wrappers" pkgs.ipfs-cluster ];
       environment.IPFS_CLUSTER_PATH = cfg.dataDir;
-      environment.CLUSTER_SECRET = cfg.secret ? null;
+      environment.CLUSTER_SECRET = cfg.secret;
       wantedBy = [ "default.target" ];
 
       serviceConfig = if cfg.consensus == null then
