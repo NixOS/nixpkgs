@@ -50,13 +50,13 @@ in {
       };
 
       secret = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         default = null;
         description = "Secret for an existing cluster; if null, a new secret is generated";
       };
 
       secretFile = mkOption {
-        type = types.path;
+        type = types.nullOr types.path;
         default = null;
         description = "File containing the secret - 'secret' and 'secretFile' should not both be set";
       };
