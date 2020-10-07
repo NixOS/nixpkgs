@@ -12,15 +12,11 @@ stdenv.mkDerivation {
     mv libcxxabi-* libcxxabi
     unpackFile ${llvm.src}
     mv llvm-* llvm
-    export LIBCXXABI_INCLUDE_DIR="$PWD/libcxxabi/include"
   '';
 
   patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ../../libcxx-0001-musl-hacks.patch;
 
-  preConfigure = ''
-    # Get headers from the cxxabi source so we can see private headers not installed by the cxxabi package
-    cmakeFlagsArray=($cmakeFlagsArray -DLIBCXX_CXX_ABI_INCLUDE_PATHS="$LIBCXXABI_INCLUDE_DIR")
-  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
     patchShebangs utils/cat_files.py
   '';
   nativeBuildInputs = [ cmake ]
@@ -29,7 +25,6 @@ stdenv.mkDerivation {
   buildInputs = [ libcxxabi ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   cmakeFlags = [
-    "-DLIBCXX_LIBCXXABI_LIB_PATH=${libcxxabi}/lib"
     "-DLIBCXX_LIBCPPABI_VERSION=2"
     "-DLIBCXX_CXX_ABI=libcxxabi"
   ] ++ stdenv.lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
