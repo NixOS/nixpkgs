@@ -30,12 +30,7 @@ rec {
     else legacy_390;
 
   # No active beta right now
-  beta = generic {
-    version = "455.23.04";
-    sha256_64bit = "0rvbb9s4ijb0gyiscd93chbgim4lqmy4ksfy15b4abf078qk7q4g";
-    settingsSha256 = "0l0lkmnm05gf5020qnjlhg11flh0kz79ak5ivzgya9fybjaixrc4";
-    persistencedSha256 = "005dnxgqvari158xmh9ha58mlyz3ljzg4pbbiczib0ry73p6dimn";
-  };
+  beta = stable;
 
   # Vulkan developer beta driver
   vulkan_beta = generic {
