@@ -110,6 +110,7 @@ let
     protocolOpts = if useDns then (
       [ "--dns" data.dnsProvider ]
       ++ optionals (!data.dnsPropagationCheck) [ "--dns.disable-cp" ]
+      ++ optionals (data.dnsResolver != null) [ "--dns.resolvers" data.dnsResolver ]
     ) else (
       [ "--http" "--http.webroot" data.webroot ]
     );
@@ -400,6 +401,17 @@ let
         description = ''
           DNS Challenge provider. For a list of supported providers, see the "code"
           field of the DNS providers listed at <link xlink:href="https://go-acme.github.io/lego/dns/"/>.
+        '';
+      };
+
+      dnsResolver = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "1.1.1.1:53";
+        description = ''
+          Set the resolver to use for performing recursive DNS queries. Supported:
+          host:port. The default is to use the system resolvers, or Google's DNS
+          resolvers if the system's cannot be determined.
         '';
       };
 
