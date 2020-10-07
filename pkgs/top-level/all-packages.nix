@@ -16394,7 +16394,7 @@ in
 
   inherit (callPackages ../servers/asterisk { })
     asterisk asterisk-stable asterisk-lts
-    asterisk_13 asterisk_15 asterisk_16;
+    asterisk_13 asterisk_16 asterisk_17;
 
   asterisk-module-sccp = callPackage ../servers/asterisk/sccp { };
 
