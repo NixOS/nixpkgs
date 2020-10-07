@@ -2937,6 +2937,8 @@ in {
 
   google-pasta = callPackage ../development/python-modules/google-pasta { };
 
+  google-re2 = callPackage ../development/python-modules/google-re2 { };
+
   google-resumable-media = callPackage ../development/python-modules/google-resumable-media { };
 
   googletrans = callPackage ../development/python-modules/googletrans { };
