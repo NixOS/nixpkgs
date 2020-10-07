@@ -6,16 +6,15 @@
 
 let
   release_version = "11.0.0";
-  candidate = "rc5";
-  version = "${release_version}${candidate}"; # differentiating these (variables) is important for RCs
+  version = "${release_version}"; # differentiating these (variables) is important for RCs
   targetConfig = stdenv.targetPlatform.config;
 
   fetch = name: sha256: fetchurl {
-    url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-${release_version}-${candidate}/${name}-${version}.src.tar.xz";
+    url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-${release_version}/${name}-${version}.src.tar.xz";
     inherit sha256;
   };
 
-  clang-tools-extra_src = fetch "clang-tools-extra" "0slqx5430pc699idabqnq34s9n0y2fq6q8z8hn5wakbi93dal71r";
+  clang-tools-extra_src = fetch "clang-tools-extra" "02bcwwn54661madhq4nxc069s7p7pj5gpqi8ww50w3anbpviilzy";
 
   tools = stdenv.lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
