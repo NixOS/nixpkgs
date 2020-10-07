@@ -22671,10 +22671,7 @@ in
 
   opusTools = callPackage ../applications/audio/opus-tools { };
 
-  orpie = callPackage ../applications/misc/orpie {
-    gsl = gsl_1;
-    ocamlPackages = ocaml-ng.ocamlPackages_4_02;
-  };
+  orpie = callPackage ../applications/misc/orpie { };
 
   osmo = callPackage ../applications/office/osmo { };
 
