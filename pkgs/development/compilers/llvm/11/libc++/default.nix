@@ -12,8 +12,7 @@ stdenv.mkDerivation {
     mv libcxxabi-* libcxxabi
     unpackFile ${llvm.src}
     mv llvm-* llvm
-ls -ld *
-    export LIBCXXABI_INCLUDE_DIR="$PWD/$(ls -d libcxxabi)/include"
+    export LIBCXXABI_INCLUDE_DIR="$PWD/libcxxabi/include"
   '';
 
   patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ../../libcxx-0001-musl-hacks.patch;
