@@ -16607,7 +16607,10 @@ in
   };
 
   ogre1_9 = callPackage ../development/libraries/ogre/1.9.x.nix {};
-  ogre1_10 = callPackage ../development/libraries/ogre/1.10.x.nix {};
+  ogre1_10 = callPackage ../development/libraries/ogre/1.10.x.nix {
+    inherit (darwin.apple_sdk.frameworks) Foundation AppKit Cocoa AGL;
+    inherit (darwin) libobjc;
+  };
 
   ogrepaged = callPackage ../development/libraries/ogrepaged { };
 
