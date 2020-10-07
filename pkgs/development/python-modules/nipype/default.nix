@@ -21,6 +21,7 @@
 , pytest
 , pytest_xdist
 , pytest-forked
+, rdflib
 , scipy
 , simplejson
 , traits
@@ -33,6 +34,10 @@
 , bash
 , glibcLocales
 , callPackage
+# causes Python packaging conflict with any package requiring rdflib,
+# so use the unpatched rdflib by default (disables Nipype provenance tracking);
+# see https://github.com/nipy/nipype/issues/2888:
+, useNeurdflib ? false
 }:
 
 let
@@ -69,7 +74,6 @@ buildPythonPackage rec {
     funcsigs
     future
     networkx
-    neurdflib
     nibabel
     numpy
     packaging
@@ -80,7 +84,7 @@ buildPythonPackage rec {
     simplejson
     traits
     xvfbwrapper
-  ];
+  ] ++ [ (if useNeurdflib then neurdflib else rdflib) ];
 
   checkInputs = [
     pybids
