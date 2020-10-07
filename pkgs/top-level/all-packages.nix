@@ -979,6 +979,8 @@ in
 
   cue = callPackage ../development/tools/cue { };
 
+  cyclone-scheme = callPackage ../development/interpreters/cyclone { };
+
   deltachat-electron = callPackage
     ../applications/networking/instant-messengers/deltachat-electron { };
 
