@@ -4895,8 +4895,6 @@ in {
 
   pydot = callPackage ../development/python-modules/pydot { inherit (pkgs) graphviz; };
 
-  pydot_ng = callPackage ../development/python-modules/pydot_ng { graphviz = pkgs.graphviz; };
-
   pydotplus = callPackage ../development/python-modules/pydotplus { };
 
   pydrive = callPackage ../development/python-modules/pydrive { };
