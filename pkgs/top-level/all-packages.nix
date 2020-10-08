@@ -18553,6 +18553,8 @@ in
 
   smimesign = callPackage ../os-specific/darwin/smimesign { };
 
+  solo5 = callPackage ../os-specific/solo5 { };
+
   speedometer = callPackage ../os-specific/linux/speedometer { };
 
   statik = callPackage ../development/tools/statik { };
