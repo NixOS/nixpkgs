@@ -32,9 +32,8 @@ in py.buildPythonApplication rec {
     ./unlock_constraints.patch
   ];
 
-  postFixup = ''
-    wrapQtApp $out/bin/friture
-    wrapQtApp $out/bin/.friture-wrapped
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   meta = with lib; {

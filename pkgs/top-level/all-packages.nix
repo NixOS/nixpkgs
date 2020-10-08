@@ -20836,7 +20836,7 @@ in
 
   freerdpUnstable = freerdp;
 
-  friture = libsForQt514.callPackage ../applications/audio/friture { };
+  friture = libsForQt5.callPackage ../applications/audio/friture { };
 
   fte = callPackage ../applications/editors/fte { };
 
