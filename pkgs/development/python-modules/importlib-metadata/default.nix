@@ -9,9 +9,11 @@
 , isPy3k
 , importlib-resources
 , packaging
+, pythonAtLeast
 }:
 
-buildPythonPackage rec {
+if pythonAtLeast "3.8" then null
+else buildPythonPackage rec {
   pname = "importlib-metadata";
   version = "1.7.0";
 
