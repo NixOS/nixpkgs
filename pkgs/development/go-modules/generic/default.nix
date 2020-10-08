@@ -34,6 +34,9 @@
 # IE: programs coupled with the compiler
 , allowGoReference ? false
 
+# Verify go.sum is up-to-date (not modified by "go mod vendor")
+, checkGoSum ? false
+
 , meta ? {}
 
 , ... }@args':
@@ -100,7 +103,15 @@ let
         echo running vend to rewrite vendor folder
         ${vendCommand}
       else
+        if [ ${checkGoSum} == "true" ]; then
+          # verify go.sum is not modified (up-to-date)
+          GOSUM=$(sha256sum go.sum)
+        fi
         go mod vendor
+        if [ ${checkGoSum} == "true" && "$(sha256sum go.sum)" != "$GOSUM" ]; then
+          echo "go.sum is not up to date"
+          exit 10
+        fi
       fi
       mkdir -p vendor
 
