@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, fastjet, hepmc2, lhapdf, rsync, zlib }:
+{ stdenv, fetchurl, boost, fastjet, hepmc, lhapdf, rsync, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "pythia";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0gli6zf8931i7kyminppisc9d0q69xxnalvhld5fgnkh4q82nz6d";
   };
 
-  buildInputs = [ boost fastjet hepmc2 zlib rsync lhapdf ];
+  buildInputs = [ boost fastjet hepmc zlib rsync lhapdf ];
 
   preConfigure = ''
     patchShebangs ./configure
@@ -17,9 +17,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-shared"
-    "--with-hepmc2=${hepmc2}"
     "--with-lhapdf6=${lhapdf}"
-  ];
+  ] ++ (if stdenv.lib.versions.major hepmc.version == "3" then [
+    "--with-hepmc3=${hepmc}"
+  ] else [
+    "--with-hepmc2=${hepmc}"
+  ]);
 
   enableParallelBuilding = true;
 

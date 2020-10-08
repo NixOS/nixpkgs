@@ -26825,7 +26825,9 @@ in
 
   nlojet = callPackage ../development/libraries/physics/nlojet { };
 
-  pythia = callPackage ../development/libraries/physics/pythia { };
+  pythia = callPackage ../development/libraries/physics/pythia {
+    hepmc = hepmc2;
+  };
 
   rivet = callPackage ../development/libraries/physics/rivet {
     hepmc = hepmc2;
