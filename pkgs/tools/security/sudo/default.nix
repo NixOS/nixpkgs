@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
     license = "https://www.sudo.ws/sudo/license.html";
 
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    maintainers = with stdenv.lib.maintainers; [ eelco delroth ];
 
     platforms = stdenv.lib.platforms.linux;
   };
