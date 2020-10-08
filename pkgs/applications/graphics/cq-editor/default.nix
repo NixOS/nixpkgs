@@ -2,6 +2,7 @@
 , mkDerivationWith
 , python3Packages
 , fetchFromGitHub
+, wrapQtAppsHook
 }:
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
@@ -27,8 +28,9 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     requests
   ];
 
-  postFixup = ''
-    wrapQtApp "$out/bin/cq-editor"
+  nativeBuildInputs = [ wrapQtAppsHook ];
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   checkInputs = with python3Packages; [
