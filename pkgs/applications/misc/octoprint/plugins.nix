@@ -272,6 +272,25 @@ in {
     };
   };
 
+  octoklipper = buildPlugin rec {
+    pname = "OctoKlipper";
+    version = "0.3.2";
+
+    src = fetchFromGitHub {
+      owner = "AliceGrey";
+      repo = "OctoprintKlipperPlugin";
+      rev = version;
+      sha256 = "15yg2blbgqp2gdpsqqm8qiiznq5qaq8wss07jimkl0865vrvlz7l";
+    };
+
+    meta = with stdenv.lib; {
+      description = "A plugin for a better integration of Klipper into OctoPrint";
+      homepage = "https://github.com/AliceGrey/OctoprintKlipperPlugin";
+      license = licenses.agpl3;
+      maintainers = with maintainers; [ lovesegfault ];
+    };
+  };
+
   octoprint-dashboard = buildPlugin rec {
     pname = "OctoPrint-Dashboard";
     version = "1.13.0";
