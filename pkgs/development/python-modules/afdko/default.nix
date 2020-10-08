@@ -1,20 +1,20 @@
 { stdenv, buildPythonPackage, fetchPypi, pythonOlder, python
 , fonttools, defcon, lxml, fs, unicodedata2, zopfli, brotlipy, fontpens
 , brotli, fontmath, mutatormath, booleanoperations
-, ufoprocessor, ufonormalizer, psautohint, tqdm
+, ufoprocessor, ufonormalizer, psautohint
 , setuptools_scm
 , pytest
 }:
 
 buildPythonPackage rec {
   pname = "afdko";
-  version = "3.5.1";
+  version = "3.5.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1qg7dgl81yq0sp50pkhgvmf8az1svx20zmpkfa68ka9d0ssh1wjw";
+    sha256 = "0wid4l70bxm297xgayyrgw5glhp6n92gh4sz1nd4rncgf1ziz8ck";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
@@ -35,7 +35,6 @@ buildPythonPackage rec {
     ufoprocessor
     ufonormalizer
     psautohint
-    tqdm
   ];
 
   # tests are broken on non x86_64
