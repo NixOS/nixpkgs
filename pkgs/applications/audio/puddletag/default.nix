@@ -30,5 +30,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;
+    broken = true; # Needs Qt wrapping
   };
 }
