@@ -4,6 +4,10 @@
 , cargo
 , diffutils
 , fetchCargoTarball
+, runCommandNoCC
+, rustPlatform
+, callPackage
+, remarshal
 , git
 , rust
 , rustc
@@ -26,11 +30,14 @@
 , cargoBuildFlags ? []
 , buildType ? "release"
 , meta ? {}
-, target ? null
+, target ? rust.toRustTarget stdenv.hostPlatform
 , cargoVendorDir ? null
 , checkType ? buildType
 , depsExtraArgs ? {}
 , cargoParallelTestThreads ? true
+
+# Toggles whether a custom sysroot is created when the target is a .json file.
+, __internal_dontAddSysroot ? false
 
 # Needed to `pushd`/`popd` into a subdir of a tarball if this subdir
 # contains a Cargo.toml, but isn't part of a workspace (which is e.g. the
@@ -68,14 +75,26 @@ let
     else ''
       cargoDepsCopy="$sourceRoot/${cargoVendorDir}"
     '';
+  
+  targetIsJSON = stdenv.lib.hasSuffix ".json" target;
 
-  rustTarget = if target == null then rust.toRustTarget stdenv.hostPlatform else target;
+  # see https://github.com/rust-lang/cargo/blob/964a16a28e234a3d397b2a7031d4ab4a428b1391/src/cargo/core/compiler/compile_kind.rs#L151-L168
+  # the "${}" is needed to transform the path into a /nix/store path before baseNameOf
+  shortTarget = if targetIsJSON then
+      (stdenv.lib.removeSuffix ".json" (builtins.baseNameOf "${target}"))
+    else target;
+
+  sysroot = (callPackage ./sysroot {}) {
+    inherit target shortTarget;
+    RUSTFLAGS = args.RUSTFLAGS or "";
+    originalCargoToml = src + /Cargo.toml; # profile info is later extracted
+  };
 
   ccForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
   cxxForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
   ccForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
   cxxForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
-  releaseDir = "target/${rustTarget}/${buildType}";
+  releaseDir = "target/${shortTarget}/${buildType}";
   tmpDir = "${releaseDir}-tmp";
 
   # Specify the stdenv's `diff` by abspath to ensure that the user's build
@@ -115,7 +134,7 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // {
     [target."${rust.toRustTarget stdenv.buildPlatform}"]
     "linker" = "${ccForBuild}"
     ${stdenv.lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
-    [target."${rustTarget}"]
+    [target."${shortTarget}"]
     "linker" = "${ccForHost}"
     ${# https://github.com/rust-lang/rust/issues/46651#issuecomment-433611633
       stdenv.lib.optionalString (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64) ''
@@ -183,9 +202,11 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // {
       "CXX_${rust.toRustTarget stdenv.buildPlatform}"="${cxxForBuild}" \
       "CC_${rust.toRustTarget stdenv.hostPlatform}"="${ccForHost}" \
       "CXX_${rust.toRustTarget stdenv.hostPlatform}"="${cxxForHost}" \
-      cargo build -j $NIX_BUILD_CORES \
+        ${stdenv.lib.optionalString
+          (targetIsJSON && !__internal_dontAddSysroot) "RUSTFLAGS=\"--sysroot ${sysroot} $RUSTFLAGS\" "
+      }cargo build -j $NIX_BUILD_CORES \
         ${stdenv.lib.optionalString (buildType == "release") "--release"} \
-        --target ${rustTarget} \
+        --target ${target} \
         --frozen ${concatStringsSep " " cargoBuildFlags}
     )
 
@@ -205,7 +226,7 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // {
   '';
 
   checkPhase = args.checkPhase or (let
-    argstr = "${stdenv.lib.optionalString (checkType == "release") "--release"} --target ${rustTarget} --frozen";
+    argstr = "${stdenv.lib.optionalString (checkType == "release") "--release"} --target ${target} --frozen";
     threads = if cargoParallelTestThreads then "$NIX_BUILD_CORES" else "1";
   in ''
     ${stdenv.lib.optionalString (buildAndTestSubdir != null) "pushd ${buildAndTestSubdir}"}
