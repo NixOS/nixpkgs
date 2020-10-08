@@ -16775,7 +16775,7 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
   };
 
-  qpaeq = libsForQt514.callPackage ../servers/pulseaudio/qpaeq.nix { };
+  qpaeq = libsForQt5.callPackage ../servers/pulseaudio/qpaeq.nix { };
 
   pulseaudioFull = pulseaudio.override {
     x11Support = true;
