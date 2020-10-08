@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maestral-qt";
-  version = "1.2.0";
+  version = "1.2.1";
   disabled = python3.pkgs.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral-qt";
     rev = "v${version}";
-    sha256 = "sha256-bEVxtp2MqEsjQvcVXmrWcwys3AMg+lPcdYn4IlYhyqw=";
+    sha256 = "sha256-7qpVyQUbT+GChJl1TnKOONSyRDvzQ0M2z9RdN7PNl9U=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -22,6 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     click
     markdown2
     maestral
+    packaging
     pyqt5
   ];
 
