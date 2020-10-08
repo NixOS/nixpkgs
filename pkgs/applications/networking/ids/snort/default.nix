@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/snort --add-flags "--daq-dir ${daq}/lib/daq --dynamic-preprocessor-lib-dir $out/lib/snort_dynamicpreprocessor/ --dynamic-engine-lib-dir $out/lib/snort_dynamicengine"
   '';
-  
+
   meta = {
     description = "Network intrusion prevention and detection system (IDS/IPS)";
     homepage = "https://www.snort.org";

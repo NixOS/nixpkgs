@@ -583,10 +583,7 @@ in
 
   acpica-tools = callPackage ../tools/system/acpica-tools { };
 
-  act = callPackage ../development/tools/misc/act {
-    # go 1.15 cannot connect to docker-for-mac https://github.com/docker/for-mac/issues/4855
-    buildGoModule = if stdenv.isDarwin then buildGo114Module else buildGoModule;
-  };
+  act = callPackage ../development/tools/misc/act { };
 
   actdiag = with python3.pkgs; toPythonApplication actdiag;
 
@@ -844,6 +841,8 @@ in
   boxes = callPackage ../tools/text/boxes { };
 
   chamber = callPackage ../tools/admin/chamber {  };
+
+  charm = callPackage ../applications/misc/charm { };
 
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
@@ -4371,12 +4370,6 @@ in
     mpi = null;
   };
 
-  hdf5_1_8 = callPackage ../tools/misc/hdf5/1_8.nix {
-    gfortran = null;
-    szip = null;
-    mpi = null;
-  };
-
   hdf5-mpi = appendToName "mpi" (hdf5.override {
     szip = null;
     mpi = pkgs.openmpi;
@@ -5722,7 +5715,7 @@ in
   grocy = callPackage ../servers/grocy { };
 
   inherit (callPackage ../servers/nextcloud {})
-    nextcloud17 nextcloud18 nextcloud19;
+    nextcloud17 nextcloud18 nextcloud19 nextcloud20;
 
   nextcloud-client = libsForQt514.callPackage ../applications/networking/nextcloud-client { };
 
@@ -7359,6 +7352,8 @@ in
   texworks = libsForQt514.callPackage ../applications/editors/texworks { };
 
   thc-hydra = callPackage ../tools/security/thc-hydra { };
+
+  thc-ipv6 = callPackage ../tools/security/thc-ipv6 { };
 
   theharvester = callPackage ../tools/security/theharvester { };
 
@@ -9353,6 +9348,11 @@ in
     fpc = fpc;
   };
 
+  lazarus-qt = libsForQt5.callPackage ../development/compilers/fpc/lazarus.nix {
+    fpc = fpc;
+    withQt = true;
+  };
+
   lessc = nodePackages.less;
 
   liquibase = callPackage ../development/tools/database/liquibase { };
@@ -9589,6 +9589,8 @@ in
   rasm = callPackage ../development/compilers/rasm { };
 
   rgbds = callPackage ../development/compilers/rgbds { };
+
+  rgxg = callPackage ../tools/text/rgxg { };
 
   rocclr = callPackage ../development/libraries/rocclr {
     inherit (llvmPackages_rocm) clang;
@@ -9926,7 +9928,12 @@ in
 
   z88dk = callPackage ../development/compilers/z88dk { };
 
-  zulip = callPackage ../applications/networking/instant-messengers/zulip { };
+  zulip = callPackage ../applications/networking/instant-messengers/zulip {
+    # Bubblewrap breaks zulip, see https://github.com/NixOS/nixpkgs/pull/97264#issuecomment-704454645
+    appimageTools = pkgs.appimageTools.override {
+      buildFHSUserEnv = pkgs.buildFHSUserEnv;
+    };
+  };
 
   zulip-term = callPackage ../applications/networking/instant-messengers/zulip-term { };
 
@@ -10374,7 +10381,7 @@ in
   spidermonkey_60 = callPackage ../development/interpreters/spidermonkey/60.nix { };
   spidermonkey_68 = callPackage ../development/interpreters/spidermonkey/68.nix { };
   spidermonkey_78 = callPackage ../development/interpreters/spidermonkey/78.nix { };
-  spidermonkey = spidermonkey_38;
+  spidermonkey = spidermonkey_68;
 
   ssm-agent = callPackage ../applications/networking/cluster/ssm-agent { };
   ssm-session-manager-plugin = callPackage ../applications/networking/cluster/ssm-session-manager-plugin { };
@@ -10683,6 +10690,8 @@ in
   });
 
   black = with python3Packages; toPythonApplication black;
+
+  blackfire = callPackage ../development/tools/misc/blackfire { };
 
   black-macchiato = with python3Packages; toPythonApplication black-macchiato;
 
@@ -13300,7 +13309,7 @@ in
   libbacktrace = callPackage ../development/libraries/libbacktrace { };
 
   libbap = callPackage ../development/libraries/libbap {
-    inherit (ocaml-ng.ocamlPackages_4_06) bap ocaml findlib ctypes;
+    inherit (ocaml-ng.ocamlPackages_4_07) bap ocaml findlib ctypes;
   };
 
   libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
@@ -13930,9 +13939,7 @@ in
 
   libmilter = callPackage ../development/libraries/libmilter { };
 
-  libminc = callPackage ../development/libraries/libminc {
-    hdf5 = hdf5_1_8;
-  };
+  libminc = callPackage ../development/libraries/libminc { };
 
   libmirage = callPackage ../misc/emulators/cdemu/libmirage.nix { };
 
@@ -14078,7 +14085,7 @@ in
 
   libqalculate = callPackage ../development/libraries/libqalculate { };
 
-  libqt5pas = callPackage ../development/compilers/fpc/libqt5pas.nix { };
+  libqt5pas = libsForQt5.callPackage ../development/compilers/fpc/libqt5pas.nix { };
 
   libroxml = callPackage ../development/libraries/libroxml { };
 
@@ -14713,7 +14720,9 @@ in
 
   opendmarc = callPackage ../development/libraries/opendmarc { };
 
-  ois = callPackage ../development/libraries/ois {};
+  ois = callPackage ../development/libraries/ois {
+    inherit (darwin.apple_sdk.frameworks) Cocoa IOKit Kernel;
+  };
 
   openh264 = callPackage ../development/libraries/openh264 { };
 
@@ -16367,6 +16376,8 @@ in
     asterisk asterisk-stable asterisk-lts
     asterisk_13 asterisk_15 asterisk_16;
 
+  asterisk-module-sccp = callPackage ../servers/asterisk/sccp { };
+
   sabnzbd = callPackage ../servers/sabnzbd { };
 
   bftpd = callPackage ../servers/ftp/bftpd {};
@@ -16515,6 +16526,8 @@ in
   };
 
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
+
+  gerbera = callPackage ../servers/gerbera { };
 
   gobetween = callPackage ../servers/gobetween { };
 
@@ -17366,7 +17379,7 @@ in
 
   inherit (callPackages ../os-specific/linux/apparmor { python = python3; })
     libapparmor apparmor-utils apparmor-bin-utils apparmor-parser apparmor-pam
-    apparmor-profiles apparmor-kernel-patches apparmorRulesFromClosure;
+    apparmor-profiles apparmor-kernel-patches;
 
   atop = callPackage ../os-specific/linux/atop { };
 
@@ -18549,6 +18562,8 @@ in
 
   smimesign = callPackage ../os-specific/darwin/smimesign { };
 
+  solo5 = callPackage ../os-specific/solo5 { };
+
   speedometer = callPackage ../os-specific/linux/speedometer { };
 
   statik = callPackage ../development/tools/statik { };
@@ -18651,9 +18666,6 @@ in
     ubootUtilite
     ubootWandboard
     ;
-
-  # Non-upstream U-Boots:
-  ubootNanonote = callPackage ../misc/uboot/nanonote.nix { };
 
   uclibc = callPackage ../os-specific/linux/uclibc { };
 
@@ -22319,6 +22331,10 @@ in
     jre = openjdk11;
   };
 
+  prevo = callPackage ../applications/misc/prevo { };
+  prevo-data = callPackage ../applications/misc/prevo/data.nix { };
+  prevo-tools = callPackage ../applications/misc/prevo/tools.nix { };
+
   ptex = callPackage ../development/libraries/ptex {};
 
   qbec = callPackage ../applications/networking/cluster/qbec { };
@@ -23960,6 +23976,8 @@ in
   };
 
   vmpk = callPackage ../applications/audio/vmpk { };
+
+  vmware-horizon-client = callPackage ../applications/networking/remote/vmware-horizon-client { };
 
   vocproc = callPackage ../applications/audio/vocproc { };
 
@@ -28221,5 +28239,7 @@ in
   fac-build = callPackage ../development/tools/build-managers/fac {};
 
   bottom = callPackage ../tools/system/bottom {};
+
+  cagebreak = callPackage ../applications/window-managers/cagebreak/default.nix {};
 
 }

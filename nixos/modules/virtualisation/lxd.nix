@@ -93,15 +93,11 @@ in
 
     security.apparmor = {
       enable = true;
+      profiles = [
+        "${cfg.lxcPackage}/etc/apparmor.d/usr.bin.lxc-start"
+        "${cfg.lxcPackage}/etc/apparmor.d/lxc-containers"
+      ];
       packages = [ cfg.lxcPackage ];
-      policies = {
-        "bin.lxc-start".profile = ''
-          include ${cfg.lxcPackage}/etc/apparmor.d/usr.bin.lxc-start
-        '';
-        "lxc-containers".profile = ''
-          include ${cfg.lxcPackage}/etc/apparmor.d/lxc-containers
-        '';
-      };
     };
 
     systemd.services.lxd = {
