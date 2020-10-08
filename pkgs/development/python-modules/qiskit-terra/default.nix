@@ -16,7 +16,8 @@
 , retworkx
 , scipy
 , sympy
-  # Python visualization requirements, semi-optional
+, withVisualization ? false
+  # Python visualization requirements, optional
 , ipywidgets
 , matplotlib
 , pillow
@@ -24,6 +25,12 @@
 , pygments
 , pylatexenc
 , seaborn
+  # Crosstalk-adaptive layout pass
+, withCrosstalkPass ? false
+, z3
+  # Classical function -> Quantum Circuit compiler
+, withClassicalFunctionCompiler ? false
+, tweedledum ? null
   # test requirements
 , ddt
 , hypothesis
@@ -32,6 +39,20 @@
 , pytestCheckHook
 , python
 }:
+
+let
+  visualizationPackages = [
+    ipywidgets
+    matplotlib
+    pillow
+    pydot
+    pygments
+    pylatexenc
+    seaborn
+  ];
+  crosstalkPackages = [ z3 ];
+  classicalCompilerPackages = [ tweedledum ];
+in
 
 buildPythonPackage rec {
   pname = "qiskit-terra";
@@ -53,7 +74,6 @@ buildPythonPackage rec {
     fastjsonschema
     jsonschema
     numpy
-    matplotlib
     networkx
     ply
     psutil
@@ -62,25 +82,18 @@ buildPythonPackage rec {
     retworkx
     scipy
     sympy
-    # Optional/visualization inputs
-    ipywidgets
-    matplotlib
-    pillow
-    pydot
-    pygments
-    pylatexenc
-    seaborn
-  ];
-
+  ] ++ lib.optionals withVisualization visualizationPackages
+  ++ lib.optionals withCrosstalkPass crosstalkPackages
+  ++ lib.optionals withClassicalFunctionCompiler classicalCompilerPackages;
 
   # *** Tests ***
   checkInputs = [
+    pytestCheckHook
     ddt
     hypothesis
     nbformat
     nbconvert
-    pytestCheckHook
-  ];
+  ] ++ lib.optionals (!withVisualization) visualizationPackages;
 
   pythonImportsCheck = [
     "qiskit"
@@ -89,6 +102,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "--ignore=test/randomized/test_transpiler_equivalence.py" # collection requires qiskit-aer, which would cause circular dependency
+  ] ++ lib.optionals (!withClassicalFunctionCompiler ) [
     "--ignore=test/python/classical_function_compiler/"
   ];
 
