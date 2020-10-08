@@ -261,7 +261,7 @@ in {
         type = types.path;
         default = "/var/lib/${name}";
         description = ''
-          The directory where ${cfg.serverName} stores its state, data, etc.
+          The directory where Gerbera/Mediatomb stores its state, data, etc.
         '';
       };
 
@@ -306,10 +306,12 @@ in {
         default = false;
         description = ''
           If false (the default), this is up to the user to declare the firewall rules.
-          If true, this opens the 1900 (tcp and udp) and ${toString cfg.port} (tcp) ports.
-          If the option cfg.interface is set, the firewall rules opened are
-          dedicated to that interface. Otherwise, those rules are opened
-          globally.
+          If true, this opens port 1900 (tcp and udp) and the port specified by
+          <option>sercvices.mediatomb.port</option>.
+
+          If the option <option>services.mediatomb.interface</option> is set,
+          the firewall rules opened are dedicated to that interface. Otherwise,
+          those rules are opened globally.
         '';
       };
 
@@ -337,10 +339,12 @@ in {
         type = types.bool;
         default = false;
         description = ''
-          Allow ${name} to create and use its own config file inside ${cfg.dataDir}.
+          Allow ${name} to create and use its own config file inside the <literal>dataDir</literal> as
+          configured by <option>services.mediatomb.dataDir</option>.
           Deactivated by default, the service then runs with the configuration generated from this module.
           Otherwise, when enabled, no service configuration is generated. Gerbera/Mediatomb then starts using
-          ${cfg.dataDir}/config.xml. It's up to the user to make a correct configuration file.
+          config.xml within the configured <literal>dataDir</literal>. It's up to the user to make a correct
+          configuration file.
         '';
       };
 
