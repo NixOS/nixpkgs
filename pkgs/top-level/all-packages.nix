@@ -9590,6 +9590,8 @@ in
 
   rgbds = callPackage ../development/compilers/rgbds { };
 
+  rgxg = callPackage ../tools/text/rgxg { };
+
   rocclr = callPackage ../development/libraries/rocclr {
     inherit (llvmPackages_rocm) clang;
   };
