@@ -255,13 +255,13 @@ in {
 
   displaylayerprogress = buildPlugin rec {
     pname = "OctoPrint-DisplayLayerProgress";
-    version = "1.23.2";
+    version = "1.24.0";
 
     src = fetchFromGitHub {
       owner = "OllisGit";
       repo = pname;
       rev = version;
-      sha256 = "0yv8gy5dq0rl7zxkvqa98az391aiixl8wbzkyvbmpjar9r6whdzm";
+      sha256 = "1lbivg3rcjzv8zqvp8n8gcaczxdm7gvd5ihjb6jq0fgf958lv59n";
     };
 
     meta = with stdenv.lib; {
