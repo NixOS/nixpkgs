@@ -21586,7 +21586,7 @@ in
 
   k4dirstat = libsForQt5.callPackage ../applications/misc/k4dirstat { };
 
-  kdeconnect = libsForQt514.callPackage ../applications/misc/kdeconnect { };
+  kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };
 
   inherit (kdeFrameworks) kdesu;
 
