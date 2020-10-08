@@ -9663,15 +9663,15 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
     llvmPackages = llvmPackages_10;
   };
-  rust_1_46 = callPackage ../development/compilers/rust/1_46.nix {
+  rust_1_47 = callPackage ../development/compilers/rust/1_47.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-    llvmPackages = llvmPackages_10;
+    llvmPackages = llvmPackages_11;
   };
-  rust = rust_1_46;
+  rust = rust_1_47;
 
   rustPackages_1_45 = rust_1_45.packages.stable;
-  rustPackages_1_46 = rust_1_46.packages.stable;
-  rustPackages = rustPackages_1_46;
+  rustPackages_1_47 = rust_1_47.packages.stable;
+  rustPackages = rustPackages_1_47;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
   inherit (rust) makeRustPlatform;
