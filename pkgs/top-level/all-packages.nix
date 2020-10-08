@@ -22861,6 +22861,8 @@ in
     inherit (gnome2) libglade;
   };
 
+  oberon-risc-emu = callPackage ../misc/emulators/oberon-risc-emu { };
+
   obs-studio = libsForQt5.callPackage ../applications/video/obs-studio { };
 
   obs-wlrobs = callPackage ../applications/video/obs-studio/wlrobs.nix { };
