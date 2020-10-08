@@ -20,12 +20,12 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchurl {
     url =
       "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    sha256 = "0hzjrhr4brqpmy9f8fbj9p5a482ya8kjhkycz6maa0w2nkzbkpc6";
+    sha256 = "0p67dni8dwqbwq96gfdq3pyk799id6dgdl9h7cpp9icsjsmad70l";
   };
   sourceRoot = "apache-arrow-${version}/cpp";
 
