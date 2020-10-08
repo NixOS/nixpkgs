@@ -2765,6 +2765,10 @@
       fingerprint = "67FE 98F2 8C44 CF22 1828  E12F D57E FA62 5C9A 925F";
     }];
   };
+  euandreh = {
+    name = "EuAndreh";
+    email = "eu@euandre.org";
+  };
   euank = {
     email = "euank-nixpkg@euank.com";
     github = "euank";
