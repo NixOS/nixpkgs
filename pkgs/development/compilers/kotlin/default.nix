@@ -40,7 +40,7 @@ in stdenv.mkDerivation {
     homepage = "https://kotlinlang.org/";
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers;
-      [ nequissimus ];
+      [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }
