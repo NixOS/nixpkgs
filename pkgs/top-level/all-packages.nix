@@ -15119,6 +15119,8 @@ in
       suffix = "qt5";
     };
 
+    pulseaudio-qt = callPackage ../development/libraries/pulseaudio-qt { };
+
     qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
 
     qmltermwidget = callPackage ../development/libraries/qmltermwidget {
