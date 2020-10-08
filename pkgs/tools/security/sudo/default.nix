@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, coreutils, pam, groff, sssd
+{ stdenv, fetchurl, coreutils, pam, groff, sssd, nixosTests
 , sendmailPath ? "/run/wrappers/bin/sendmail"
 , withInsults ? false
 , withSssd ? false
@@ -60,6 +60,8 @@ stdenv.mkDerivation rec {
     ''
     rm -f $out/share/doc/sudo/ChangeLog
     '';
+
+  passthru.tests = { inherit (nixosTests) sudo; };
 
   meta = {
     description = "A command to run commands as root";
