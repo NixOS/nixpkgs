@@ -21652,7 +21652,7 @@ in
 
   kmplayer = libsForQt5.callPackage ../applications/video/kmplayer { };
 
-  kmymoney = libsForQt514.callPackage ../applications/office/kmymoney {
+  kmymoney = libsForQt5.callPackage ../applications/office/kmymoney {
     inherit (kdeApplications) kidentitymanagement;
     inherit (kdeFrameworks) kdewebkit;
   };
