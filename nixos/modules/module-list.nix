@@ -202,6 +202,7 @@
   ./security/lock-kernel-modules.nix
   ./security/misc.nix
   ./security/oath.nix
+  ./security/gnupg.nix
   ./security/pam.nix
   ./security/pam_usb.nix
   ./security/pam_mount.nix
