@@ -228,9 +228,8 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
    </listitem>
    <listitem>
      <para>
-       The <link linked="opt-services.mediatomb">mediatomb service</link>
-       declares new options. It also adapts existing options so the
-       configuration generation is now lazy. The existing option
+       The Mediatomb service declares new options. It also adapts existing
+       options to make the configuration generation lazy. The existing option
        <literal>customCfg</literal> (defaults to false), when enabled, stops
        the service configuration generation completely. It then expects the
        users to provide their own correct configuration at the right location
@@ -886,17 +885,17 @@ CREATE ROLE postgres LOGIN SUPERUSER;
       </listitem>
      </itemizedlist>
     </para>
+   </listitem>
    <listitem>
      <para>
-       The <link linked="opt-services.mediatomb">mediatomb service</link> is
-       now using by default the new and maintained fork
-       <literal>gerbera</literal> package instead of the unmaintained
+       The mediatomb service is now using the new and maintained <literal>gerbera</literal>
+       <literal>gerbera</literal> fork instead of the unmaintained
        <literal>mediatomb</literal> package. If you want to keep the old
        behavior, you must declare it with:
        <programlisting>
        services.mediatomb.package = pkgs.mediatomb;
        </programlisting>
-       One new option <literal>openFirewall<literal> has been introduced which
+       One new option <literal>openFirewall</literal> has been introduced which
        defaults to false. If you relied on the service declaration to add the
        firewall rules itself before, you should now declare it with:
        <programlisting>
