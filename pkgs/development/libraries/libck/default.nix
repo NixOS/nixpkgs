@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ asl20 bsd2 ];
     homepage = "http://concurrencykit.org/";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ chessai ];
   };
 }
