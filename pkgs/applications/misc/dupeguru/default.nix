@@ -58,5 +58,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = [ maintainers.novoxudonoser ];
+    broken = true; # mv: cannot stat '_block.cpython-38m*.so': No such file or directory
   };
 }
