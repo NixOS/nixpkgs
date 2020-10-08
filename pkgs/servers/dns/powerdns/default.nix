@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig
-, boost, libyamlcpp, libsodium, sqlite, protobuf, botan2, openssl
+, boost, libyamlcpp, libsodium, sqlite, protobuf, openssl
 , mysql57, postgresql, lua, openldap, geoip, curl, opendbx, unixODBC
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     boost mysql57.connector-c postgresql lua openldap sqlite protobuf geoip
-    libyamlcpp libsodium curl opendbx unixODBC botan2 openssl
+    libyamlcpp libsodium curl opendbx unixODBC openssl
   ];
 
   # nix destroy with-modules arguments, when using configureFlags
@@ -25,8 +25,7 @@ stdenv.mkDerivation rec {
       --with-sqlite3
       --with-socketdir=/var/lib/powerdns
       --with-libcrypto=${openssl.dev}
-      --enable-libsodium
-      --enable-botan
+      --with-libsodium
       --enable-tools
       --disable-dependency-tracking
       --disable-silent-rules
