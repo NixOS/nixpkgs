@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perlPackages, gettext, makeWrapper, PerlMagick, which
+{ stdenv, fetchurl, perlPackages, gettext, makeWrapper, PerlMagick, which, highlight
 , gitSupport ? false, git ? null
 , docutilsSupport ? false, python ? null, docutils ? null
 , monotoneSupport ? false, monotone ? null
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     sha256 = "17pyblaqhkb61lxl63bzndiffism8k859p54k3k4sghclq6lsynh";
   };
 
-  buildInputs = [ which ]
+  buildInputs = [ which highlight ]
     ++ (with perlPackages; [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
           TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext
           RpcXML XMLSimple PerlMagick YAML YAMLLibYAML HTMLTree AuthenPassphrase
