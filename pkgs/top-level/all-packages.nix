@@ -19767,7 +19767,17 @@ in
 
   bambootracker = libsForQt5.callPackage ../applications/audio/bambootracker { };
 
-  cadence = libsForQt514.callPackage ../applications/audio/cadence { };
+  cadence = let
+    # Use Qt 5.14 consistently
+    pkgs_ = pkgs.extend(_: prev: {
+      pythonInterpreters = prev.pythonInterpreters.override(oldAttrs: {
+        pkgs = oldAttrs.pkgs.extend(_: _: {
+          qt5 = pkgs.qt514;
+          libsForQt5 = pkgs.libsForQt514;
+        });
+      });
+    });
+  in pkgs_.libsForQt514.callPackage ../applications/audio/cadence { };
 
   cheesecutter = callPackage ../applications/audio/cheesecutter { };
 
