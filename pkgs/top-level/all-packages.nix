@@ -21486,7 +21486,7 @@ in
 
   kpt = callPackage ../applications/networking/cluster/kpt { };
 
-  krita = libsForQt514.callPackage ../applications/graphics/krita {
+  krita = libsForQt5.callPackage ../applications/graphics/krita {
     openjpeg = openjpeg_1;
   };
 
