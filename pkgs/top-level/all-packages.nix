@@ -23051,17 +23051,7 @@ in
 
   quodlibet-xine-full = quodlibet-full.override { xineBackend = true; tag = "-xine-full"; };
 
-  qutebrowser = let
-    pkgs_ = pkgs.extend(_: prev: {
-      pythonInterpreters = prev.pythonInterpreters.override(oldAttrs: {
-        pkgs = oldAttrs.pkgs.extend(_: _: {
-          # Use 5.14 https://github.com/NixOS/nixpkgs/commit/3fafb021256bc594cecd949b3edc5bc480fc721f
-          qt5 = pkgs.qt514;
-          libsForQt5 = pkgs.libsForQt514;
-        });
-      });
-    });
-  in pkgs_.libsForQt514.callPackage ../applications/networking/browsers/qutebrowser { };
+  qutebrowser = libsForQt5.callPackage ../applications/networking/browsers/qutebrowser { };
 
   qxw = callPackage ../applications/editors/qxw {};
 
