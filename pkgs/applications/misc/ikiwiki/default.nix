@@ -19,7 +19,7 @@ assert mercurialSupport -> (mercurial != null);
 
 let
   name = "ikiwiki";
-  version = "3.20190228";
+  version = "3.20200202.3";
 
   lib = stdenv.lib;
 in
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://debian/pool/main/i/ikiwiki/${name}_${version}.orig.tar.xz";
-    sha256 = "17pyblaqhkb61lxl63bzndiffism8k859p54k3k4sghclq6lsynh";
+    sha256 = "0skrc8r4wh4mjfgw1c94awr5sacfb9nfsbm4frikanc9xsy16ksr";
   };
 
   buildInputs = [ which highlight ]
