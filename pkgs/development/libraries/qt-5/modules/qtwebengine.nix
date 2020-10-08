@@ -47,6 +47,15 @@ qtModule {
       stripLen = 1;
       extraPrefix = "src/3rdparty/";
     })
+    # Manual backport of patch originally reviewed on
+    # https://chromium-review.googlesource.com/c/chromium/src/+/2153325:
+    # Downstream reference: https://github.com/NixOS/nixpkgs/pull/99456#issuecomment-703523943
+    (fetchpatch {
+      url = "https://code.qt.io/cgit/qt/qtwebengine-chromium.git/patch/?id=4e828b3b";
+      sha256 = "1lzqa7hlw2yns86vq4zz270vf77zk8yql080a0xryw0lds83jviv";
+      stripLen = 1;
+      extraPrefix = "src/3rdparty/";
+    })
   ];
 
   postPatch =
