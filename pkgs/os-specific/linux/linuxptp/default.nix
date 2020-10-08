@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "linuxptp";
-  version = "3.0";
+  version = "3.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/linuxptp/${pname}-${version}.tgz";
-    sha256 = "11aps4bc0maihldlb2d0yh2fnj6x4vwjad337kszyny74akyqk6p";
+    sha256 = "0zff502w3nlycgv2ad8cy8nd0hqf34kzpzcygi7prp0lrw8mp3zm";
   };
 
   postPatch = ''
