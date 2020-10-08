@@ -11687,8 +11687,10 @@ in
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo4 = texinfo413;
   texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
+  texinfo6_5 = callPackage ../development/tools/misc/texinfo/6.5.nix { };
   texinfo6 = callPackage ../development/tools/misc/texinfo/6.7.nix { };
-  texinfo = texinfo6;
+  # Temporarily use older version on Darwin until it works.
+  texinfo = if stdenv.isDarwin then texinfo6_5 else texinfo6;
   texinfoInteractive = appendToName "interactive" (
     texinfo.override { interactive = true; }
   );
