@@ -2498,6 +2498,8 @@ in {
 
   google-i18n-address = callPackage ../development/python-modules/google-i18n-address { };
 
+  googlemaps = callPackage ../development/python-modules/googlemaps { };
+
   google-music = callPackage ../development/python-modules/google-music { };
 
   google-music-proto = callPackage ../development/python-modules/google-music-proto { };
