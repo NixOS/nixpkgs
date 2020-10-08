@@ -1,5 +1,5 @@
 { stdenv, lib, buildEnv, buildGoPackage, fetchFromGitHub, makeWrapper, coreutils
-, runCommand, writeText, terraform-providers, fetchpatch }:
+, runCommand, runtimeShell, writeText, terraform-providers, fetchpatch }:
 
 let
   goPackagePath = "github.com/hashicorp/terraform";
@@ -43,12 +43,13 @@ let
         homepage = "https://www.terraform.io/";
         license = licenses.mpl20;
         maintainers = with maintainers; [
-          zimbatm
-          peterhoeg
+          Chili-Man
+          babariviere
           kalbasit
           marsam
-          babariviere
-          Chili-Man
+          peterhoeg
+          timstott
+          zimbatm
         ];
       };
     } // attrs');
@@ -58,6 +59,29 @@ let
       withPlugins = plugins:
         let
           actualPlugins = plugins terraform.plugins;
+
+          # Make providers available in Terraform 0.13 and 0.12 search paths.
+          pluginDir = lib.concatMapStrings (pl: let
+            inherit (pl) repo version GOOS GOARCH;
+            inherit (pl.passthru) providerSourceAddress;
+
+            shim = writeText "shim" ''
+              #!${runtimeShell}
+              exec ${pl}/bin/${repo}_v${version} \$@
+            '';
+            in ''
+              TF_0_13_PROVIDER_PATH=$out/plugins/${providerSourceAddress}/${version}/${GOOS}_${GOARCH}/${repo}_v${version}
+              mkdir -p "$(dirname $TF_0_13_PROVIDER_PATH)"
+
+              cp ${shim} "$TF_0_13_PROVIDER_PATH"
+              chmod +x "$TF_0_13_PROVIDER_PATH"
+
+              TF_0_12_PROVIDER_PATH=$out/plugins/${repo}_v${version}
+
+              cp ${shim} "$TF_0_12_PROVIDER_PATH"
+              chmod +x "$TF_0_12_PROVIDER_PATH"
+          ''
+          ) actualPlugins;
 
           # Wrap PATH of plugins propagatedBuildInputs, plugins may have runtime dependencies on external binaries
           wrapperInputs = lib.unique (lib.flatten
@@ -87,15 +111,10 @@ let
             inherit (terraform) name;
             buildInputs = [ makeWrapper ];
 
-            buildCommand = ''
+            buildCommand = pluginDir + ''
               mkdir -p $out/bin/
               makeWrapper "${terraform}/bin/terraform" "$out/bin/terraform" \
-                --set NIX_TERRAFORM_PLUGIN_DIR "${
-                  buildEnv {
-                    name = "tf-plugin-env";
-                    paths = actualPlugins;
-                  }
-                }/bin" \
+                --set NIX_TERRAFORM_PLUGIN_DIR $out/plugins \
                 --prefix PATH : "${lib.makeBinPath wrapperInputs}"
             '';
 
