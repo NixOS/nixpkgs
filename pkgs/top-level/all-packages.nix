@@ -10718,7 +10718,7 @@ in
   };
 
   # Does not actually depend on Qt 5
-  inherit (kdeFrameworks) extra-cmake-modules kapidox;
+  inherit (kdeFrameworks) extra-cmake-modules;
 
   coccinelle = callPackage ../development/tools/misc/coccinelle {
     ocamlPackages = ocaml-ng.ocamlPackages_4_05;
@@ -14896,7 +14896,8 @@ in
       kunitconversion kwallet kwayland kwidgetsaddons kwindowsystem kxmlgui
       kxmlrpcclient modemmanager-qt networkmanager-qt plasma-framework prison
       qqc2-desktop-style solid sonnet syntax-highlighting syndication
-      threadweaver kirigami2 kholidays kpurpose kcontacts kquickcharts;
+      threadweaver kirigami2 kholidays kpurpose kcontacts kquickcharts
+      kapidox;
 
     ### KDE PLASMA 5
 
