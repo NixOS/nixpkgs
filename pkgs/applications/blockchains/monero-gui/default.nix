@@ -18,6 +18,13 @@ with stdenv.lib;
 
 assert trezorSupport -> all (x: x!=null) [ libusb1 protobuf python3 ];
 
+let
+  arch = if stdenv.isx86_64  then "x86-64"
+    else if stdenv.isi686    then "i686"
+    else if stdenv.isAarch64 then "armv8-a"
+    else throw "unsupported architecture";
+in
+
 stdenv.mkDerivation rec {
   pname = "monero-gui";
   version = "0.17.0.1";
@@ -71,7 +78,10 @@ stdenv.mkDerivation rec {
                 'add_subdirectory(monero EXCLUDE_FROM_ALL)'
   '';
 
-  cmakeFlags = [ "-DCMAKE_INSTALL_PREFIX=$out/bin" ];
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_PREFIX=$out/bin"
+    "-DARCH=${arch}"
+  ];
 
   desktopItem = makeDesktopItem {
     name = "monero-wallet-gui";
