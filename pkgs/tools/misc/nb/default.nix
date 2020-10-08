@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
   };
 
   dontBuild = true;
- 
+
   installPhase = ''
     mkdir -p $out/bin ;
     chmod +x nb ;
