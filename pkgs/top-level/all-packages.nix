@@ -2274,6 +2274,8 @@ in
 
   mq-cli = callPackage ../tools/system/mq-cli { };
 
+  nb = callPackage ../tools/misc/nb { };
+
   nextdns = callPackage ../applications/networking/nextdns { };
 
   nfdump = callPackage ../tools/networking/nfdump { };
