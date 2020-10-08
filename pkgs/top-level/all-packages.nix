@@ -9266,7 +9266,18 @@ in
     graalvm8-ee
     graalvm11-ee;
 
-  openshot-qt = libsForQt514.callPackage ../applications/video/openshot-qt { };
+  openshot-qt = let
+    # Cannot use a newer Qt (5.15) version because it requires qtwebkit
+    # and our qtwebkit fails to build with 5.15. 01bcfd3579219d60e5d07df309a000f96b2b658b
+    pkgs_ = pkgs.extend(_: prev: {
+      pythonInterpreters = prev.pythonInterpreters.override(oldAttrs: {
+        pkgs = oldAttrs.pkgs.extend(_: _: {
+          qt5 = pkgs.qt514;
+          libsForQt5 = pkgs.libsForQt514;
+        });
+      });
+    });
+  in pkgs_.libsForQt514.callPackage ../applications/video/openshot-qt { };
 
   openspin = callPackage ../development/compilers/openspin { };
 
