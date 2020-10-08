@@ -1,13 +1,13 @@
 {stdenv, pkgconfig, luajit, openssl, fetchurl, libpcap, pcre, libdnet, daq, zlib, flex, bison, makeWrapper}:
 
 stdenv.mkDerivation rec {
-  version = "2.9.16";
+  version = "2.9.16.1";
   pname = "snort";
   
   src = fetchurl {
     name = "${pname}-${version}.tar.gz";
     url = "https://snort.org/downloads/archive/snort/${pname}-${version}.tar.gz";
-    sha256 = "1mxspk0060f62xp631w589b9ryb21qygn020az3dw2fsy7nxi24n";
+    sha256 = "13lzvjli6kbsnkd7lf0rm71l2mnz38pxk76ia9yrjb6clfhlbb73";
   };
   
   buildInputs = [ makeWrapper pkgconfig luajit openssl libpcap pcre libdnet daq zlib flex bison ];
