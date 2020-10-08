@@ -19,18 +19,20 @@ let
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py
 
-    # required by the sun/moon plugins
+    # Pinned due to API changes in astral>=2.0, required by the sun/moon plugins
     # https://github.com/home-assistant/core/issues/36636
     (mkOverride "astral" "1.10.1"
       "d2a67243c4503131c856cafb1b1276de52a86e5b8a1d507b7e08bee51cb67bf1")
 
-    # We have 3.x in nixpkgs which is incompatible with home-assistant atm:
-    # https://github.com/home-assistant/core/blob/dev/requirements_all.txt
+    # Pinned due to an API change in pyowm>=3.0
+    # Remove after https://github.com/home-assistant/core/pull/39839 gets merged
     (mkOverride "pyowm" "2.10.0"
       "1xvcv3sbcn9na8cwz21nnjlixysfk5lymnf65d1nqkbgacc1mm4g")
 
-    (mkOverride "bcrypt" "3.1.7"
-      "0hhywhxx301cxivgxrpslrangbfpccc8y83qbwn1f57cab3nj00b")
+    # Pinned, because v1.5.0 broke the google_translate integration
+    # https://github.com/home-assistant/core/pull/38428
+    (mkOverride "yarl" "1.4.2"
+      "0jzpgrdl6415zzl8js7095q8ks14555lhgxah76mimffkr39rkaq")
 
     # hass-frontend does not exist in python3.pkgs
     (self: super: {
@@ -94,20 +96,20 @@ in with py.pkgs; buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
+      --replace "bcrypt==3.1.7" "bcrypt>=3.1.7" \
       --replace "cryptography==2.9.2" "cryptography" \
-      --replace "ruamel.yaml==0.15.100" "ruamel.yaml>=0.15.100" \
-      --replace "yarl==1.4.2" "yarl~=1.4"
+      --replace "ruamel.yaml==0.15.100" "ruamel.yaml>=0.15.100"
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
 
   propagatedBuildInputs = [
     # From setup.py
-    aiohttp astral async-timeout attrs bcrypt certifi importlib-metadata jinja2
+    aiohttp astral async-timeout attrs bcrypt certifi ciso8601 jinja2
     pyjwt cryptography pip python-slugify pytz pyyaml requests ruamel_yaml
-    setuptools voluptuous voluptuous-serialize
+    setuptools voluptuous voluptuous-serialize yarl
     # From default_config. frontend, http, image, mobile_app and recorder components as well as
     # the auth.mfa_modules.totp module
-    aiohttp-cors ciso8601 defusedxml distro emoji hass-frontend pynacl pillow pyotp
+    aiohttp-cors defusedxml distro emoji hass-frontend pynacl pillow pyotp
     pyqrcode sqlalchemy
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
