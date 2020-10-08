@@ -12548,6 +12548,8 @@ in
 
   giblib = callPackage ../development/libraries/giblib { };
 
+  gifticlib = callPackage ../development/libraries/science/biology/gifticlib { };
+
   gio-sharp = callPackage ../development/libraries/gio-sharp { };
 
   givaro = callPackage ../development/libraries/givaro {};
