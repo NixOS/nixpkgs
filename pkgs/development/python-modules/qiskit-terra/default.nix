@@ -35,15 +35,15 @@
 
 buildPythonPackage rec {
   pname = "qiskit-terra";
-  version = "0.15.1";
+  version = "0.16.1";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    sha256 = "1p7y36gj3675dmp05nwi0m9nc7h0bwyimir3ncf9wbkx3crrh99c";
+    sha256 = "0007glsbrvq9swamvz8r76z9nzh46b388y0ds1dypczxpwlp9xcq";
   };
 
   nativeBuildInputs = [ cython ];
@@ -81,7 +81,6 @@ buildPythonPackage rec {
     nbconvert
     pytestCheckHook
   ];
-  dontUseSetuptoolsCheck = true;  # can't find setup.py, so fails. tested by pytest
 
   pythonImportsCheck = [
     "qiskit"
@@ -90,6 +89,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "--ignore=test/randomized/test_transpiler_equivalence.py" # collection requires qiskit-aer, which would cause circular dependency
+    "--ignore=test/python/classical_function_compiler/"
   ];
 
   # Moves tests to $PACKAGEDIR/test. They can't be run from /build because of finding
