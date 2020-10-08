@@ -45,7 +45,7 @@ buildPythonPackage rec {
     ++ stdenv.lib.optionals enableTk [ tcl tk tkinter libX11 ]
     ++ stdenv.lib.optionals enableQt [ pyqt5 ];
 
-  setup_cfg = ./setup.cfg;
+  setup_cfg = if stdenv.isDarwin then ./setup-darwin.cfg else ./setup.cfg;
   preBuild = ''
     cp "$setup_cfg" ./setup.cfg
   '';
