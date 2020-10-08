@@ -15075,6 +15075,8 @@ in
 
     kproperty = callPackage ../development/libraries/kproperty { };
 
+    kpeoplevcard = callPackage ../development/libraries/kpeoplevcard { };
+
     kreport = callPackage ../development/libraries/kreport { };
 
     libcommuni = callPackage ../development/libraries/libcommuni { };
