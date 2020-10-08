@@ -21749,7 +21749,7 @@ in
 
   legit = gitAndTools.legit;
 
-  leo-editor = libsForQt514.callPackage ../applications/editors/leo-editor { };
+  leo-editor = libsForQt5.callPackage ../applications/editors/leo-editor { };
 
   libowfat = callPackage ../development/libraries/libowfat { };
 
