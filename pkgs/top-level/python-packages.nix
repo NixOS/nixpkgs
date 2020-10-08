@@ -6885,6 +6885,8 @@ in {
 
   sphinx-argparse = callPackage ../development/python-modules/sphinx-argparse { };
 
+  sphinx-intl = callPackage ../development/python-modules/sphinx-intl { };
+
   sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
 
   sphinx-navtree = callPackage ../development/python-modules/sphinx-navtree { };
