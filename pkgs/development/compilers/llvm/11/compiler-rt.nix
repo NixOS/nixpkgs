@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
     "-DCMAKE_C_COMPILER_TARGET=${stdenv.hostPlatform.config}"
     "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
+  ] ++ stdenv.lib.optionals (stdenv.isDarwin) [
+    "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=ON"
   ] ++ stdenv.lib.optionals (useLLVM || bareMetal || isMusl) [
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
@@ -60,6 +62,8 @@ stdenv.mkDerivation rec {
     substituteInPlace cmake/builtin-config-ix.cmake \
       --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace cmake/builtin-config-ix.cmake \
+      --replace 'set(ARM64 arm64 arm64e)' 'set(ARM64)'
     substituteInPlace cmake/config-ix.cmake \
       --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
   '' + stdenv.lib.optionalString (useLLVM) ''
