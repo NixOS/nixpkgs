@@ -23062,7 +23062,7 @@ in
 
   rapcad = libsForQt514.callPackage ../applications/graphics/rapcad { boost = boost159; };
 
-  rapid-photo-downloader = libsForQt514.callPackage ../applications/graphics/rapid-photo-downloader { };
+  rapid-photo-downloader = libsForQt5.callPackage ../applications/graphics/rapid-photo-downloader { };
 
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
 
