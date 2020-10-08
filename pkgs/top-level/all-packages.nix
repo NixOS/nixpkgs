@@ -20962,7 +20962,7 @@ in
     opencv = python37Packages.opencv3;
   };
 
-  manuskript = libsForQt514.callPackage ../applications/editors/manuskript { };
+  manuskript = libsForQt5.callPackage ../applications/editors/manuskript { };
 
   manul = callPackage ../development/tools/manul { };
 
