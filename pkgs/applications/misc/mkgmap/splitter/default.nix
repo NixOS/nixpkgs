@@ -6,22 +6,21 @@
 , ant
 , makeWrapper
 , doCheck ? true
-, withExamples ? false
 }:
 let
-  version = "4565";
-  sha256 = "0cfh0msky5812l28mavy6p3k2zgyxb698xk79mvla9l45zcicnvw";
+  version = "597";
+  sha256 = "1al3160amw0gdarrc707dsppm0kcai9mpkfak7ffspwzw9alsndx";
 
-  deps = import ./deps.nix { inherit fetchurl; };
+  deps = import ../deps.nix { inherit fetchurl; };
   testInputs = import ./testinputs.nix { inherit fetchurl; };
 in
 stdenv.mkDerivation {
-  pname = "mkgmap";
+  pname = "splitter";
   inherit version;
 
   src = fetchsvn {
     inherit sha256;
-    url = "https://svn.mkgmap.org.uk/mkgmap/mkgmap/trunk";
+    url = "https://svn.mkgmap.org.uk/mkgmap/splitter/trunk";
     rev = version;
   };
 
@@ -29,7 +28,7 @@ stdenv.mkDerivation {
     # Disable automatic download of dependencies
     ./build.xml.patch
 
-    # Fix testJavaRules test
+    # Fix func.SolverAndProblemGeneratorTest test
     ./fix-failing-test.patch
   ];
 
@@ -41,16 +40,13 @@ stdenv.mkDerivation {
     cp ${fastutil} lib/compile/${fastutil.name}
     cp ${osmpbf} lib/compile/${osmpbf.name}
     cp ${protobuf} lib/compile/${protobuf.name}
+    cp ${xpp3} lib/compile/${xpp3.name}
   '' + stdenv.lib.optionalString doCheck ''
     mkdir -p lib/test
-    cp ${fastutil} lib/test/${fastutil.name}
-    cp ${osmpbf} lib/test/${osmpbf.name}
-    cp ${protobuf} lib/test/${protobuf.name}
-    cp ${jaxb-api} lib/test/${jaxb-api.name}
     cp ${junit} lib/test/${junit.name}
     cp ${hamcrest-core} lib/test/${hamcrest-core.name}
 
-    mkdir -p test/resources/in/img
+    mkdir -p test/resources/in/osm
     ${stdenv.lib.concatMapStringsSep "\n" (res: ''
       cp ${res} test/resources/in/${builtins.replaceStrings [ "__" ] [ "/" ] res.name}
     '') testInputs}
@@ -62,21 +58,18 @@ stdenv.mkDerivation {
 
   inherit doCheck;
 
-  checkPhase = "ant test";
+  checkPhase = "ant run.tests && ant run.func-tests";
 
   installPhase = ''
-    install -Dm644 dist/mkgmap.jar $out/share/java/mkgmap/mkgmap.jar
-    install -Dm644 dist/doc/mkgmap.1 $out/share/man/man1/mkgmap.1
-    cp -r dist/lib/ $out/share/java/mkgmap/
-    makeWrapper ${jre}/bin/java $out/bin/mkgmap \
-      --add-flags "-jar $out/share/java/mkgmap/mkgmap.jar"
-  '' + stdenv.lib.optionalString withExamples ''
-    mkdir -p $out/share/mkgmap
-    cp -r dist/examples $out/share/mkgmap/
+    install -Dm644 dist/splitter.jar $out/share/java/splitter/splitter.jar
+    install -Dm644 doc/splitter.1 $out/share/man/man1/splitter.1
+    cp -r dist/lib/ $out/share/java/splitter/
+    makeWrapper ${jre}/bin/java $out/bin/splitter \
+      --add-flags "-jar $out/share/java/splitter/splitter.jar"
   '';
 
   meta = with stdenv.lib; {
-    description = "Create maps for Garmin GPS devices from OpenStreetMap (OSM) data";
+    description = "Utility for splitting OpenStreetMap maps into tiles";
     homepage = "http://www.mkgmap.org.uk";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ sikmir ];
