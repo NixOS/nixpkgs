@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoPatchelfHook
-, ncurses5, zlib, gmp
+, ncurses5, zlib, gmp, less
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   nativeBuildInputs = stdenv.lib.optional (!stdenv.isDarwin) autoPatchelfHook;
-  buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [ ncurses5 zlib gmp ];
+  buildInputs = [ less ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ ncurses5 zlib gmp ];
 
   installPhase = ''
     mkdir -p $out/bin
