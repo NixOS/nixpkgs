@@ -366,7 +366,7 @@ let
           ${let p11 = config.security.pam.p11; in optionalString cfg.p11Auth
               "auth ${p11.control} ${pkgs.pam_p11}/lib/security/pam_p11.so ${pkgs.opensc}/lib/opensc-pkcs11.so"}
           ${let u2f = config.security.pam.u2f; in optionalString cfg.u2fAuth
-              "auth ${u2f.control} ${pkgs.pam_u2f}/lib/security/pam_u2f.so ${optionalString u2f.debug "debug"} ${optionalString (u2f.authFile != null) "authfile=${u2f.authFile}"} ${optionalString u2f.interactive "interactive"} ${optionalString u2f.cue "cue"}"}
+              "auth ${u2f.control} ${pkgs.pam_u2f}/lib/security/pam_u2f.so ${optionalString u2f.debug "debug"} ${optionalString (u2f.authFile != null) "authfile=${u2f.authFile}"} ${optionalString u2f.interactive "interactive"} ${optionalString u2f.cue "cue"} ${optionalString (u2f.appId != null) "appid=${u2f.appId}"}"}
           ${optionalString cfg.usbAuth
               "auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so"}
           ${let oath = config.security.pam.oath; in optionalString cfg.oathAuth
@@ -653,6 +653,22 @@ in
           xlink:href="https://developers.yubico.com/pam-u2f/">here</link>.
         '';
       };
+      
+      appId = mkOption {
+        default = null;
+        type = with types; nullOr str;
+        description = ''
+            By default <literal>pam-u2f</literal> module sets the application
+            ID to <literal>pam://$HOSTNAME</literal>.
+
+            When using <command>pamu2fcfg</command>, you can specify your
+            application ID with the <literal>-i</literal> flag.
+
+            More information can be found <link
+            xlink:href="https://developers.yubico.com/pam-u2f/Manuals/pam_u2f.8.html">
+            here</link>
+        '';
+      };
 
       control = mkOption {
         default = "sufficient";
@@ -833,61 +849,6 @@ in
            session". */
         runuser-l = { rootOK = true; unixAuth = false; };
       };
-
-    security.apparmor.includes."abstractions/pam" = let
-      isEnabled = test: fold or false (map test (attrValues config.security.pam.services));
-      in ''
-      ${lib.concatMapStringsSep "\n"
-         (name: "r ${config.environment.etc."pam.d/${name}".source},")
-         (attrNames config.security.pam.services)}
-      mr ${getLib pkgs.pam}/lib/security/pam_filter/*,
-      mr ${getLib pkgs.pam}/lib/security/pam_*.so,
-      r ${getLib pkgs.pam}/lib/security/,
-      ${optionalString use_ldap
-        "mr ${pam_ldap}/lib/security/pam_ldap.so,"}
-      ${optionalString config.services.sssd.enable
-        "mr ${pkgs.sssd}/lib/security/pam_sss.so,"}
-      ${optionalString config.krb5.enable ''
-        mr ${pam_krb5}/lib/security/pam_krb5.so,
-        mr ${pam_ccreds}/lib/security/pam_ccreds.so,
-      ''}
-      ${optionalString (isEnabled (cfg: cfg.googleOsLoginAccountVerification)) ''
-        mr ${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_login.so,
-        mr ${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_admin.so,
-      ''}
-      ${optionalString (isEnabled (cfg: cfg.googleOsLoginAuthentication))
-        "mr ${pkgs.google-compute-engine-oslogin}/lib/pam_oslogin_login.so,"}
-      ${optionalString (config.security.pam.enableSSHAgentAuth && isEnabled (cfg: cfg.sshAgentAuth))
-        "mr ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so,"}
-      ${optionalString (isEnabled (cfg: cfg.fprintAuth))
-        "mr ${pkgs.fprintd}/lib/security/pam_fprintd.so,"}
-      ${optionalString (isEnabled (cfg: cfg.u2fAuth))
-        "mr ${pkgs.pam_u2f}/lib/security/pam_u2f.so,"}
-      ${optionalString (isEnabled (cfg: cfg.usbAuth))
-        "mr ${pkgs.pam_usb}/lib/security/pam_usb.so,"}
-      ${optionalString (isEnabled (cfg: cfg.oathAuth))
-        "mr ${pkgs.oathToolkit}/lib/security/pam_oath.so,"}
-      ${optionalString (isEnabled (cfg: cfg.yubicoAuth))
-        "mr ${pkgs.yubico-pam}/lib/security/pam_yubico.so,"}
-      ${optionalString (isEnabled (cfg: cfg.duoSecurity.enable))
-        "mr ${pkgs.duo-unix}/lib/security/pam_duo.so,"}
-      ${optionalString (isEnabled (cfg: cfg.otpwAuth))
-        "mr ${pkgs.otpw}/lib/security/pam_otpw.so,"}
-      ${optionalString config.security.pam.enableEcryptfs
-        "mr ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so,"}
-      ${optionalString (isEnabled (cfg: cfg.pamMount))
-        "mr ${pkgs.pam_mount}/lib/security/pam_mount.so,"}
-      ${optionalString (isEnabled (cfg: cfg.enableGnomeKeyring))
-        "mr ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so,"}
-      ${optionalString (isEnabled (cfg: cfg.startSession))
-        "mr ${pkgs.systemd}/lib/security/pam_systemd.so,"}
-      ${optionalString (isEnabled (cfg: cfg.enableAppArmor) && config.security.apparmor.enable)
-        "mr ${pkgs.apparmor-pam}/lib/security/pam_apparmor.so,"}
-      ${optionalString (isEnabled (cfg: cfg.enableKwallet))
-        "mr ${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so,"}
-      ${optionalString config.virtualisation.lxc.lxcfs.enable
-        "mr ${pkgs.lxc}/lib/security/pam_cgfs.so"}
-    '';
 
   };
 

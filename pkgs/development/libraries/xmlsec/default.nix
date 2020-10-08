@@ -3,7 +3,7 @@
 
 lib.fix (self:
 let
-  version = "1.2.28";
+  version = "1.2.30";
 in
 stdenv.mkDerivation {
   pname = "xmlsec";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.aleksey.com/xmlsec/download/xmlsec1-${version}.tar.gz";
-    sha256 = "1m12caglhyx08g8lh2sl3nkldlpryzdx2d572q73y3m33s0w9vhk";
+    sha256 = "1j5bf7ni45jghyrbf7a14wx2pvfara557zyry7g7h8840c5kd11d";
   };
 
   patches = [
@@ -29,6 +29,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
   doCheck = true;
+  checkInputs = [ nss.tools ];
 
   # enable deprecated soap headers required by lasso
   # https://dev.entrouvert.org/issues/18771

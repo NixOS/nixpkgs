@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy3k, pycodestyle, isort }:
 
 buildPythonPackage rec {
   pname = "avro-python3";
@@ -10,6 +10,7 @@ buildPythonPackage rec {
     sha256 = "a455c215540b1fceb1823e2a918e94959b54cb363307c97869aa46b5b55bde05";
   };
 
+  buildInputs = [ pycodestyle isort ];
   doCheck = false;        # No such file or directory: './run_tests.py
 
   meta = with lib; {
