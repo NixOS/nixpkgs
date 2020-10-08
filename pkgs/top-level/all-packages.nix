@@ -24081,7 +24081,7 @@ in
 
   webcamoid = libsForQt514.callPackage ../applications/video/webcamoid { };
 
-  webmacs = libsForQt514.callPackage ../applications/networking/browsers/webmacs {};
+  webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs {};
 
   webtorrent_desktop = callPackage ../applications/video/webtorrent_desktop {};
 
