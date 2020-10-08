@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "four-in-a-row";
-  version = "3.36.2";
+  version = "3.36.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/four-in-a-row/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1pjwaly0f36gn8ashf19b6w1yldmqpa8grdxcyb6h7b0k3bd54z6";
+    sha256 = "1y1ihh72zk0bgyj197dpwgwj1q91dhvp0rasrib8k18sisrdq31h";
   };
 
   nativeBuildInputs = [

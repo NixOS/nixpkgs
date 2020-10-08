@@ -12,11 +12,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "imlib2";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/enlightenment/${pname}-${version}.tar.bz2";
-    sha256 = "0v8n3dswx7rxqfd0q03xwc7j2w1mv8lv18rdxv487a1xw5vklfad";
+    sha256 = "0zdk4afdrrr1539f2q15zja19j4wwfmpswzws2ffgflcnhywlxhr";
   };
 
   buildInputs = [

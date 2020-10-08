@@ -15,6 +15,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [  pkgconfig ];
 
+  postPatch = ''
+     # Fix build with lv2 1.18: https://github.com/tomszilagyi/ir.lv2/pull/20
+     find . -type f -exec fgrep -q LV2UI_Descriptor {} \; \
+       -exec sed -i {} -e 's/const struct _\?LV2UI_Descriptor/const LV2UI_Descriptor/' \;
+   '';
+
+
   postBuild = "make convert4chan";
 
   installPhase = ''

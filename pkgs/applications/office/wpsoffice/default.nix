@@ -36,7 +36,7 @@
 , zlib
 }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "wpsoffice";
   version = "11.1.0.9505";
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec{
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [];
     license = stdenv.lib.licenses.unfreeRedistributable;
-    maintainers = [ stdenv.lib.maintainers.mlatus ];
+    maintainers = with stdenv.lib.maintainers; [ mlatus th0rgal ];
   };
 
   buildInputs = with xorg; [

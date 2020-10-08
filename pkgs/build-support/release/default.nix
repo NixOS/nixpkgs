@@ -41,10 +41,6 @@ rec {
       doCoverityAnalysis = true;
     } // args);
 
-  gcovReport = args: import ./gcov-report.nix (
-    { inherit runCommand lcov rsync;
-    } // args);
-
   rpmBuild = args: import ./rpm-build.nix (
     { inherit vmTools;
     } // args);

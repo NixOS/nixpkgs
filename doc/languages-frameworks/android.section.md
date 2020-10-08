@@ -191,6 +191,8 @@ androidenv.emulateApp {
 }
 ```
 
+Additional flags may be applied to the Android SDK's emulator through the runtime environment variable `$NIX_ANDROID_EMULATOR_FLAGS`.
+
 It is also possible to specify an APK to deploy inside the emulator
 and the package and activity names to launch it:
 

@@ -1,4 +1,4 @@
-{ config, stdenv, lib, fetchurl, boost, cmake, ffmpeg, gettext, glew
+{ config, stdenv, lib, fetchurl, boost, cmake, ffmpeg_3, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, libGLU, libGL, openal, opencolorio, openexr, openimagedenoise, openimageio2, openjpeg, python3Packages
@@ -9,6 +9,7 @@
 , colladaSupport ? true, opencollada
 , makeWrapper
 , pugixml, SDL, Cocoa, CoreGraphics, ForceFeedback, OpenAL, OpenGL
+, embree
 }:
 
 with lib;
@@ -17,24 +18,25 @@ let python = python3Packages.python; in
 
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "2.82a";
+  version = "2.90.1";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    sha256 = "18zbdgas6qf2kmvvlimxgnq7y9kj7hdxcgixrs6fj50x40q01q2d";
+    sha256 = "169xcmm1zkvab14qdxggqc758xdkqs7r7imwi6yx2fl2djacr3g7";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
 
   nativeBuildInputs = [ cmake ] ++ optional cudaSupport addOpenGLRunpath;
   buildInputs =
-    [ boost ffmpeg gettext glew ilmbase
+    [ boost ffmpeg_3 gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff
       opencolorio openexr openimagedenoise openimageio2 openjpeg python zlib fftw jemalloc
       alembic
       (opensubdiv.override { inherit cudaSupport; })
       tbb
       makeWrapper
+      embree
     ]
     ++ (if (!stdenv.isDarwin) then [
       libXi libX11 libXext libXrender
@@ -50,13 +52,20 @@ stdenv.mkDerivation rec {
     ++ optional cudaSupport cudatoolkit
     ++ optional colladaSupport opencollada;
 
-  postPatch =
-    if stdenv.isDarwin then ''
+  postPatch = ''
+    # allow usage of dynamically linked embree
+    rm build_files/cmake/Modules/FindEmbree.cmake
+  '' +
+    (if stdenv.isDarwin then ''
       : > build_files/cmake/platform/platform_apple_xcode.cmake
       substituteInPlace source/creator/CMakeLists.txt \
         --replace '${"$"}{LIBDIR}/python' \
                   '${python}'
       substituteInPlace build_files/cmake/platform/platform_apple.cmake \
+        --replace 'set(PYTHON_VERSION 3.7)' \
+                  'set(PYTHON_VERSION ${python.pythonVersion})' \
+        --replace '${"$"}{PYTHON_VERSION}m' \
+                  '${"$"}{PYTHON_VERSION}' \
         --replace '${"$"}{LIBDIR}/python' \
                   '${python}' \
         --replace '${"$"}{LIBDIR}/opencollada' \
@@ -73,7 +82,7 @@ stdenv.mkDerivation rec {
                   'set(OPENEXR_INCLUDE_DIRS "${openexr.dev}/include/OpenEXR") #'
     '' else ''
       substituteInPlace extern/clew/src/clew.c --replace '"libOpenCL.so"' '"${ocl-icd}/lib/libOpenCL.so"'
-    '';
+    '');
 
   cmakeFlags =
     [
@@ -86,9 +95,9 @@ stdenv.mkDerivation rec {
       "-DWITH_SDL=OFF"
       "-DWITH_OPENCOLORIO=ON"
       "-DWITH_OPENSUBDIV=ON"
-      "-DPYTHON_LIBRARY=${python.libPrefix}m"
+      "-DPYTHON_LIBRARY=${python.libPrefix}"
       "-DPYTHON_LIBPATH=${python}/lib"
-      "-DPYTHON_INCLUDE_DIR=${python}/include/${python.libPrefix}m"
+      "-DPYTHON_INCLUDE_DIR=${python}/include/${python.libPrefix}"
       "-DPYTHON_VERSION=${python.pythonVersion}"
       "-DWITH_PYTHON_INSTALL=OFF"
       "-DWITH_PYTHON_INSTALL_NUMPY=OFF"
@@ -142,6 +151,6 @@ stdenv.mkDerivation rec {
     # say: "We've decided to cancel the BL offering for an indefinite period."
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = with maintainers; [ goibhniu veprbl ];
   };
 }

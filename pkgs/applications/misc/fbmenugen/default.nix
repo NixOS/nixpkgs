@@ -11,13 +11,13 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "fbmenugen";
-  version = "2020-05-20";
+  version = "0.85";
 
   src = fetchFromGitHub {
     owner = "trizen";
     repo = pname;
-    rev = "ed9a680546edbb5b05086971b6a9f42a37cb485f";
-    sha256 = "1fikdl08a0s8d6k1ls1pzmw2rcwkfbbczsjfx6lr12ngd2bz222h";
+    rev = version;
+    sha256 = "1pmms3wzkm8h41a8zrkpn6gq9m9yy5wr5rrzmb84lbacprqq6q7q";
   };
 
   patches = [

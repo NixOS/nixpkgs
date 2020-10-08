@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "git-filter-repo";
-  version = "2.26.0";
+  version = "2.28.0";
 
   src = fetchurl {
     url = "https://github.com/newren/git-filter-repo/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "15d07i66b090bhjfj9s4s2s38k75mhxmddzyn44bnnyb967w6yjk";
+    sha256 = "0sa6h6k1mnhx8p8w5d88gx7cqbnxaazfj1dv47c107fk70hqvvpx";
   };
 
   buildInputs = [ pythonPackages.python ];
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/newren/git-filter-repo";
     description = "Quickly rewrite git repository history (filter-branch replacement)";
     license = licenses.mit;
+    inherit (pythonPackages.python.meta) platforms;
     maintainers = [ maintainers.marsam ];
   };
 }

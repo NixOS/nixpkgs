@@ -2,7 +2,7 @@
 , alsaLib, flac, libmad, libvorbis, mpg123
 , dsdSupport ? true
 , faad2Support ? true, faad2
-, ffmpegSupport ? true, ffmpeg
+, ffmpegSupport ? true, ffmpeg_3
 , opusSupport ? true, opusfile
 , resampleSupport ? true, soxr
 , sslSupport ? true, openssl
@@ -35,7 +35,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [ alsaLib flac libmad libvorbis mpg123 ]
     ++ optional faad2Support faad2
-    ++ optional ffmpegSupport ffmpeg
+    ++ optional ffmpegSupport ffmpeg_3
     ++ optional opusSupport opusfile
     ++ optional resampleSupport soxr
     ++ optional sslSupport openssl;

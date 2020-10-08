@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
 , libX11, libXcomposite, libXft, libXmu, libXrandr, libXext, libXScrnSaver
-, pam, apacheHttpd, imagemagick, pamtester, xscreensaver, xset }:
+, pam, apacheHttpd, pamtester, xscreensaver }:
 
 stdenv.mkDerivation rec {
   pname = "xsecurelock";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     libX11 libXcomposite libXft libXmu libXrandr libXext libXScrnSaver
-    pam apacheHttpd imagemagick pamtester
+    pam apacheHttpd pamtester
   ];
 
   configureFlags = [

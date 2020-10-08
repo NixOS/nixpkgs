@@ -6,13 +6,13 @@
 stdenv.mkDerivation rec {
 
   pname = "home-manager";
-  version = "2020-03-17";
+  version = "2020-09-06";
 
   src = fetchFromGitHub {
-    owner = "rycee";
+    owner = "nix-community";
     repo = "home-manager";
-    rev = "5969551a5cc52f9470b5ff5ca01327bf4bda82c1";
-    sha256 = "0f4kz83a1kp3ci8zi5hvp8fp34wi73arpykl4d9vlywdk6w36bnd";
+    rev = "249650a07ee2d949fa599f3177a8c234adbd1bee";
+    sha256 = "0x858b7i15kx74aqwgi2n5ls7zjhcky95z9vbxfdlawmaz371dma";
   };
 
   nativeBuildInputs = [ makeWrapper ];

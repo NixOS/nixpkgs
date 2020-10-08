@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "gauge";
-  version = "1.0.4";
+  version = "1.1.3";
 
   goPackagePath = "github.com/getgauge/gauge";
   excludedPackages = ''\(build\|man\)'';
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "getgauge";
     repo = "gauge";
     rev = "v${version}";
-    sha256 = "1b52kpv5561pyjvqi8xmidarqp6lcyyy4sjsl4qjx4cr7hmk8kc7";
+    sha256 = "11qllg1alv9khkgjarpzlsqg5ygisjprg79n2jqhv1w6izx88cqc";
   };
 
   meta = with stdenv.lib; {

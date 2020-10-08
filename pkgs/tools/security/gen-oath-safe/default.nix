@@ -1,4 +1,4 @@
-{ coreutils, fetchFromGitHub, libcaca, makeWrapper, python, openssl, qrencode, stdenv, yubikey-manager }:
+{ coreutils, fetchFromGitHub, file, libcaca, makeWrapper, python, openssl, qrencode, stdenv, yubikey-manager }:
 
 stdenv.mkDerivation rec {
   pname = "gen-oath-safe";
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     let
       path = stdenv.lib.makeBinPath [
         coreutils
+        file
         libcaca.bin
         openssl.bin
         python

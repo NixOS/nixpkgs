@@ -7,12 +7,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.0.2";
+  version = "3.2.1";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "1yrnkw8c47kmy2x6m1xp69hwyk02xyc8pd9kvcmyj54lzrhzdfka";
+    sha256 = "035rvqmw386hm0jpi14lf4dnpr5rjkalzjkyprqh42nwi3m86dkf";
   };
 
   nativeBuildInputs = [ cmake ninja llvm pkgconfig intltool perl desktop-file-utils wrapGAppsHook ];
@@ -34,8 +34,6 @@ stdenv.mkDerivation rec {
     "-DUSE_KWALLET=OFF"
   ];
 
-  # Reduce the risk of collisions
-  postInstall = "rm -r $out/share/doc";
 
   # darktable changed its rpath handling in commit
   # 83c70b876af6484506901e6b381304ae0d073d3c and as a result the
@@ -45,6 +43,10 @@ stdenv.mkDerivation rec {
     libPathEnvVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     libPathPrefix = "$out/lib/darktable" + stdenv.lib.optionalString stdenv.isLinux ":${ocl-icd}/lib";
   in ''
+    for f in $out/share/darktable/kernels/*.cl; do
+      sed -r "s|#include \"(.*)\"|#include \"$out/share/darktable/kernels/\1\"|g" -i "$f"
+    done
+
     gappsWrapperArgs+=(
       --prefix ${libPathEnvVar} ":" "${libPathPrefix}"
     )

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libjpeg, lcms2, gettext, jasper, libiconv }:
+{stdenv, fetchurl, libjpeg, lcms2, gettext, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "dcraw-9.28.0";
@@ -9,12 +9,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
-  buildInputs = [ libjpeg lcms2 gettext jasper ];
+  buildInputs = [ libjpeg lcms2 gettext ];
 
+  # Jasper is disabled because the library is abandoned and has many
+  # CVEs.
   patchPhase = ''
     substituteInPlace install \
       --replace 'prefix=/usr/local' 'prefix=$out' \
-      --replace gcc '$CC'
+      --replace gcc '$CC' \
+      --replace '-ljasper' '-DNO_JASPER=1'
   '';
 
   buildPhase = ''

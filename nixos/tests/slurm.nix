@@ -1,16 +1,52 @@
-import ./make-test-python.nix ({ lib, ... }:
+import ./make-test-python.nix ({ lib, pkgs, ... }:
 let
-    mungekey = "mungeverryweakkeybuteasytointegratoinatest";
-
     slurmconfig = {
-      controlMachine = "control";
-      nodeName = [ "node[1-3] CPUs=1 State=UNKNOWN" ];
-      partitionName = [ "debug Nodes=node[1-3] Default=YES MaxTime=INFINITE State=UP" ];
-      extraConfig = ''
-        AccountingStorageHost=dbd
-        AccountingStorageType=accounting_storage/slurmdbd
-      '';
+      services.slurm = {
+        controlMachine = "control";
+        nodeName = [ "node[1-3] CPUs=1 State=UNKNOWN" ];
+        partitionName = [ "debug Nodes=node[1-3] Default=YES MaxTime=INFINITE State=UP" ];
+        extraConfig = ''
+          AccountingStorageHost=dbd
+          AccountingStorageType=accounting_storage/slurmdbd
+        '';
+      };
+      environment.systemPackages = [ mpitest ];
+      networking.firewall.enable = false;
+      systemd.tmpfiles.rules = [
+        "f /etc/munge/munge.key 0400 munge munge - mungeverryweakkeybuteasytointegratoinatest"
+      ];
     };
+
+    mpitest = let
+      mpitestC = pkgs.writeText "mpitest.c" ''
+        #include <stdio.h>
+        #include <stdlib.h>
+        #include <mpi.h>
+
+        int
+        main (int argc, char *argv[])
+        {
+          int rank, size, length;
+          char name[512];
+
+          MPI_Init (&argc, &argv);
+          MPI_Comm_rank (MPI_COMM_WORLD, &rank);
+          MPI_Comm_size (MPI_COMM_WORLD, &size);
+          MPI_Get_processor_name (name, &length);
+
+          if ( rank == 0 ) printf("size=%d\n", size);
+
+          printf ("%s: hello world from process %d of %d\n", name, rank, size);
+
+          MPI_Finalize ();
+
+          return EXIT_SUCCESS;
+        }
+      '';
+    in pkgs.runCommandNoCC "mpitest" {} ''
+      mkdir -p $out/bin
+      ${pkgs.openmpi}/bin/mpicc ${mpitestC} -o $out/bin/mpitest
+    '';
 in {
   name = "slurm";
 
@@ -21,37 +57,40 @@ in {
     computeNode =
       { ...}:
       {
+        imports = [ slurmconfig ];
         # TODO slurmd port and slurmctld port should be configurations and
         # automatically allowed by the  firewall.
-        networking.firewall.enable = false;
         services.slurm = {
           client.enable = true;
-        } // slurmconfig;
+        };
       };
     in {
 
     control =
       { ...}:
       {
-        networking.firewall.enable = false;
+        imports = [ slurmconfig ];
         services.slurm = {
           server.enable = true;
-        } // slurmconfig;
+        };
       };
 
     submit =
       { ...}:
       {
-        networking.firewall.enable = false;
+        imports = [ slurmconfig ];
         services.slurm = {
           enableStools = true;
-        } // slurmconfig;
+        };
       };
 
     dbd =
       { pkgs, ... } :
       {
         networking.firewall.enable = false;
+        systemd.tmpfiles.rules = [
+          "f /etc/munge/munge.key 0400 munge munge - mungeverryweakkeybuteasytointegratoinatest"
+        ];
         services.slurm.dbdserver = {
           enable = true;
           storagePass = "password123";
@@ -87,24 +126,7 @@ in {
   ''
   start_all()
 
-  # Set up authentification across the cluster
-  for node in [submit, control, dbd, node1, node2, node3]:
-
-      node.wait_for_unit("default.target")
-
-      node.succeed("mkdir /etc/munge")
-      node.succeed(
-          "echo '${mungekey}' > /etc/munge/munge.key"
-      )
-      node.succeed("chmod 0400 /etc/munge/munge.key")
-      node.succeed("chown munge:munge /etc/munge/munge.key")
-      node.succeed("systemctl restart munged")
-
-      node.wait_for_unit("munged")
-
-
-  # Restart the services since they have probably failed due to the munge init
-  # failure
+  # Make sure DBD is up after DB initialzation
   with subtest("can_start_slurmdbd"):
       dbd.succeed("systemctl restart slurmdbd")
       dbd.wait_for_unit("slurmdbd.service")
@@ -137,5 +159,8 @@ in {
           # find the srun job from above in the database
           control.succeed("sleep 5")
           control.succeed("sacct | grep hostname")
+
+  with subtest("run_PMIx_mpitest"):
+      submit.succeed("srun -N 3 --mpi=pmix mpitest | grep size=3")
   '';
 })

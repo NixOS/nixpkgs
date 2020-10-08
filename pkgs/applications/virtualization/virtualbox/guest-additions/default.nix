@@ -19,6 +19,7 @@ let
   dlopenLibs = [
     { name = "libdbus-1.so"; pkg = dbus; }
     { name = "libXfixes.so"; pkg = xorg.libXfixes; }
+    { name = "libXrandr.so"; pkg = xorg.libXrandr; }
   ];
 
 in stdenv.mkDerivation rec {
@@ -26,7 +27,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "bcde4691dea7de93b65a10a43dda2b8f52e570f820992ad281c9bb5c8dede181";
+    sha256 = "dd9f176abb89043c01cea7ec7e20130e76db71bd83beafeb2dc5858d4c9c86cd";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";

@@ -5,11 +5,11 @@ let
 in
 buildPythonApplication rec {
   pname = "todoman";
-  version = "3.7.0";
+  version = "3.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16brw2zhm5vamffin6qjb0lxjlj3ba40vaficl851nw2xh2mrdhy";
+    sha256 = "1aq7f63bhs9dnwzp15nfr07f2ki6s3lnqfap3b09rhchn6lfznwb";
   };
 
     LOCALE_ARCHIVE = stdenv.lib.optionalString stdenv.isLinux

@@ -24,6 +24,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/gnzlbg/cargo-asm";
     license = licenses.mit;
     maintainers = [ maintainers.danieldk ];
-    platforms = platforms.all;
   };
 }

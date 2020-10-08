@@ -2,21 +2,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fd";
-  version = "8.1.0";
+  version = "8.1.1";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    sha256 = "0zp9bsa0kmg1rsvnxf93d2fnib0cyla0wxpd3sn9kmz20b0vblvn";
+    sha256 = "0qzqnsjkq8i4gzn9273algx33kr1hzgxid8lnqp4awy2zxm4ksiq";
   };
 
-  cargoSha256 = "17fnf61q32a0ljjna3lb0bafwhsll4zgwfwbcqh2ah5gfk1pwc92";
+  cargoSha256 = "1d7hfgl9l4b9bnq2qcpvdq5rh7lpz33r19hw3wwgnqh142q67m7r";
 
   nativeBuildInputs = [ installShellFiles ];
 
   preFixup = ''
-    installManPage "$src/doc/fd.1"
+    installManPage doc/fd.1
 
     installShellCompletion $releaseDir/build/fd-find-*/out/fd.{bash,fish}
     installShellCompletion --zsh $releaseDir/build/fd-find-*/out/_fd
@@ -32,7 +32,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/sharkdp/fd";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dywedir globin ma27 ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ dywedir globin ma27 zowoq ];
   };
 }

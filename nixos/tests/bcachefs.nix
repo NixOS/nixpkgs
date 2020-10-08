@@ -13,7 +13,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.succeed("modprobe bcachefs")
     machine.succeed("bcachefs version")
     machine.succeed("ls /dev")
-    
+
     machine.succeed(
         "mkdir /tmp/mnt",
         "udevadm settle",

@@ -15,8 +15,10 @@ stdenv.mkDerivation rec {
 
   uuid = "window-corner-preview@fabiomereu.it";
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
     cp -r ${uuid} $out/share/gnome-shell/extensions
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {

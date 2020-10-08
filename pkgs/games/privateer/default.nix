@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, boost, cmake, ffmpeg, freeglut, glib,
+{ stdenv, fetchsvn, boost, cmake, ffmpeg_3, freeglut, glib,
   gtk2, libjpeg, libpng, libpthreadstubs, libvorbis, libXau, libXdmcp,
   libXmu, libGLU, libGL, openal, pixman, pkgconfig, python27, SDL }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ boost cmake ffmpeg freeglut glib gtk2 libjpeg libpng
+    [ boost cmake ffmpeg_3 freeglut glib gtk2 libjpeg libpng
       libpthreadstubs libvorbis libXau libXdmcp libXmu libGLU libGL openal
       pixman pkgconfig python27 SDL ];
 

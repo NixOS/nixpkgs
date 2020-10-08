@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fx_cast_bridge";
-  version = "0.0.6";
+  version = "0.0.7";
 
   src = fetchurl {
      url = "https://github.com/hensm/fx_cast/releases/download/v${version}/${pname}-${version}-x64.deb";
-     sha256 = "1mjpwd27b0cpigz4cc2mdl97d78rj5ikn2bqfdic50lqjciaqi1b";
+     sha256 = "0kd58vzsq1qzl7qsh1qv25ylxvr5y37li03gjb48x4vhd85slzz5";
   };
 
   nativeBuildInputs = [ dpkg ];

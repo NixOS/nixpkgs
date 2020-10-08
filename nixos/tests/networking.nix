@@ -8,7 +8,9 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
-  router = { config, pkgs, ... }:
+  qemu-flags = import ../lib/qemu-flags.nix { inherit pkgs; };
+
+  router = { config, pkgs, lib, ... }:
     with pkgs.lib;
     let
       vlanIfs = range 1 (length config.virtualisation.vlans);
@@ -30,17 +32,20 @@ let
       services.dhcpd4 = {
         enable = true;
         interfaces = map (n: "eth${toString n}") vlanIfs;
-        extraConfig = ''
-          authoritative;
-        '' + flip concatMapStrings vlanIfs (n: ''
+        extraConfig = flip concatMapStrings vlanIfs (n: ''
           subnet 192.168.${toString n}.0 netmask 255.255.255.0 {
             option routers 192.168.${toString n}.1;
-            # XXX: technically it's _not guaranteed_ that IP addresses will be
-            # issued from the first item in range onwards! We assume that in
-            # our tests however.
             range 192.168.${toString n}.2 192.168.${toString n}.254;
           }
-        '');
+        '')
+        ;
+        machines = flip map vlanIfs (vlan:
+          {
+            hostName = "client${toString vlan}";
+            ethernetAddress = qemu-flags.qemuNicMac vlan 1;
+            ipAddress = "192.168.${toString vlan}.2";
+          }
+        );
       };
       services.radvd = {
         enable = true;

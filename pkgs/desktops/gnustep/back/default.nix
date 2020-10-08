@@ -8,13 +8,13 @@
 , libXmu
 }:
 let
-  version = "0.27.0";
+  version = "0.28.0";
 in
 gsmakeDerivation {
   name = "gnustep-back-${version}";
   src = fetchurl {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-back-${version}.tar.gz";
-    sha256 = "0j400892ysxygh50i3918nn87vkxh15h892jwvphmkd34j8wdn9f";
+    sha256 = "1ynd27zwga17mp2qlym90k2xsypdvz24w6gyy2rfvmv0gkvlgrjr";
   };
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cairo base gui freetype xlibsWrapper libXmu ];

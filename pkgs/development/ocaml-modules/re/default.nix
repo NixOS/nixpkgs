@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, buildDunePackage, ounit, seq }:
+{ lib, fetchzip, buildDunePackage, ocaml, ounit, seq }:
 
 buildDunePackage rec {
   pname = "re";
@@ -11,14 +11,14 @@ buildDunePackage rec {
     sha256 = "07ycb103mr4mrkxfd63cwlsn023xvcjp0ra0k7n2gwrg0mwxmfss";
   };
 
-  buildInputs = [ ounit ];
+  buildInputs = lib.optional doCheck ounit;
   propagatedBuildInputs = [ seq ];
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.04";
 
   meta = {
     homepage = "https://github.com/ocaml/ocaml-re";
     description = "Pure OCaml regular expressions, with support for Perl and POSIX-style strings";
-    license = stdenv.lib.licenses.lgpl2;
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    license = lib.licenses.lgpl2;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

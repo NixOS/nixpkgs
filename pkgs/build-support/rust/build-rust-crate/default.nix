@@ -4,7 +4,8 @@
 # This can be useful for deploying packages with NixOps, and to share
 # binary dependencies between projects.
 
-{ lib, stdenv, defaultCrateOverrides, fetchCrate, rustc, rust, cargo, jq }:
+{ lib, stdenv, defaultCrateOverrides, fetchCrate, pkgsBuildBuild, rustc, rust
+, cargo, jq }:
 
 let
     # This doesn't appear to be officially documented anywhere yet.
@@ -45,14 +46,17 @@ let
            " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}")
       ) dependencies;
 
+   # Create feature arguments for rustc.
+   mkRustcFeatureArgs = lib.concatMapStringsSep " " (f: ''--cfg feature=\"${f}\"'');
+
    inherit (import ./log.nix { inherit lib; }) noisily echo_colored;
 
    configureCrate = import ./configure-crate.nix {
-     inherit lib stdenv echo_colored noisily mkRustcDepArgs;
+     inherit lib stdenv echo_colored noisily mkRustcDepArgs mkRustcFeatureArgs;
    };
 
    buildCrate = import ./build-crate.nix {
-     inherit lib stdenv mkRustcDepArgs rust;
+     inherit lib stdenv mkRustcDepArgs mkRustcFeatureArgs rust;
    };
 
    installCrate = import ./install-crate.nix { inherit stdenv; };
@@ -80,6 +84,8 @@ in
    # A list of rust/cargo features to enable while building the crate.
    # Example: [ "std" "async" ]
    , features
+   # Additional native build inputs for building this crate.
+   , nativeBuildInputs
    # Additional build inputs for building this crate.
    #
    # Example: [ pkgs.openssl ]
@@ -185,12 +191,13 @@ let crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverr
     dependencies_ = dependencies;
     buildDependencies_ = buildDependencies;
     processedAttrs = [
-      "src" "buildInputs" "crateBin" "crateLib" "libName" "libPath"
+      "src" "nativeBuildInputs" "buildInputs" "crateBin" "crateLib" "libName" "libPath"
       "buildDependencies" "dependencies" "features" "crateRenames"
       "crateName" "version" "build" "authors" "colors" "edition"
       "buildTests"
     ];
     extraDerivationAttrs = builtins.removeAttrs crate processedAttrs;
+    nativeBuildInputs_ = nativeBuildInputs;
     buildInputs_ = buildInputs;
     extraRustcOpts_ = extraRustcOpts;
     buildTests_ = buildTests;
@@ -222,7 +229,8 @@ stdenv.mkDerivation (rec {
     src = crate.src or (fetchCrate { inherit (crate) crateName version sha256; });
     name = "rust_${crate.crateName}-${crate.version}${lib.optionalString buildTests_ "-test"}";
     version = crate.version;
-    depsBuildBuild = [ rust stdenv.cc cargo jq ];
+    depsBuildBuild = [ pkgsBuildBuild.stdenv.cc ];
+    nativeBuildInputs = [ rust stdenv.cc cargo jq ] ++ (crate.nativeBuildInputs or []) ++ nativeBuildInputs_;
     buildInputs = (crate.buildInputs or []) ++ buildInputs_;
     dependencies = map lib.getLib dependencies_;
     buildDependencies = map lib.getLib buildDependencies_;
@@ -233,8 +241,11 @@ stdenv.mkDerivation (rec {
       ++ lib.concatMap (dep: dep.completeBuildDeps ++ dep.completeDeps) buildDependencies
     );
 
-    crateFeatures = lib.optionalString (crate ? features)
-      (lib.concatMapStringsSep " " (f: ''--cfg feature=\"${f}\"'') (crate.features ++ features));
+    # Create a list of features that are enabled by the crate itself and
+    # through the features argument of buildRustCrate. Exclude features
+    # with a forward slash, since they are passed through to dependencies.
+    crateFeatures = lib.optionals (crate ? features)
+      (builtins.filter (f: !lib.hasInfix "/" f) (crate.features ++ features));
 
     libName = if crate ? libName then crate.libName else crate.crateName;
     libPath = if crate ? libPath then crate.libPath else "";
@@ -244,7 +255,8 @@ stdenv.mkDerivation (rec {
     metadata = let
       depsMetadata = lib.foldl' (str: dep: str + dep.metadata) "" (dependencies ++ buildDependencies);
       hashedMetadata = builtins.hashString "sha256"
-        (crateName + "-" + crateVersion + "___" + toString crateFeatures + "___" + depsMetadata);
+        (crateName + "-" + crateVersion + "___" + toString (mkRustcFeatureArgs crateFeatures) +
+          "___" + depsMetadata);
       in lib.substring 0 10 hashedMetadata;
 
     build = crate.build or "";
@@ -294,6 +306,7 @@ stdenv.mkDerivation (rec {
   verbose = crate_.verbose or true;
   extraRustcOpts = [];
   features = [];
+  nativeBuildInputs = [];
   buildInputs = [];
   crateOverrides = defaultCrateOverrides;
   preUnpack = crate_.preUnpack or "";

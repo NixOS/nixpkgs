@@ -1,4 +1,4 @@
-{ pkgs, stdenv, fetchFromGitHub, erlang, rebar, makeWrapper,
+{ pkgs, stdenv, fetchFromGitHub, erlang, makeWrapper,
   coreutils, curl, bash, debugInfo ? false }:
 
 { baseName ? "elixir"
@@ -20,7 +20,7 @@ in
 
     inherit src version;
 
-    buildInputs = [ erlang rebar makeWrapper ];
+    buildInputs = [ erlang makeWrapper ];
 
     LANG = "C.UTF-8";
     LC_TYPE = "C.UTF-8";
@@ -32,10 +32,6 @@ in
     buildFlags = optional debugInfo "ERL_COMPILER_OPTIONS=debug_info";
 
     preBuild = ''
-      # The build process uses ./rebar. Link it to the nixpkgs rebar
-      rm -vf rebar
-      ln -s ${rebar}/bin/rebar rebar
-
       patchShebangs lib/elixir/generate_app.escript || true
 
       substituteInPlace Makefile \

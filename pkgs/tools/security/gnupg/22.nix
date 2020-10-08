@@ -16,11 +16,11 @@ assert guiSupport -> pinentry != null && enableMinimal == false;
 stdenv.mkDerivation rec {
   pname = "gnupg";
 
-  version = "2.2.20";
+  version = "2.2.23";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    sha256 = "0c6a4v9p6qzhsw1pfcwc459bxpc8hma0w9z8iqb9khvligack9q4";
+    sha256 = "0p6ss4f3vlkf91pmp27bmvfr5bdxxi0pb3dmxpqljglbsx4mxd8h";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -38,8 +38,10 @@ stdenv.mkDerivation rec {
     ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
   ];
   postPatch = ''
-    sed -i 's,hkps://hkps.pool.sks-keyservers.net,hkps://keys.openpgp.org,g' \
-        configure doc/dirmngr.texi doc/gnupg.info-1
+    sed -i 's,hkps://hkps.pool.sks-keyservers.net,hkps://keys.openpgp.org,g' configure doc/dirmngr.texi doc/gnupg.info-1
+    # Fix broken SOURCE_DATE_EPOCH usage - remove on the next upstream update
+    sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.am
+    sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.in
   '' + stdenv.lib.optionalString ( stdenv.isLinux && pcsclite != null) ''
     sed -i 's,"libpcsclite\.so[^"]*","${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   ''; #" fix Emacs syntax highlighting :-(

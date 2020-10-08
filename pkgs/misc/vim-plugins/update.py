@@ -40,7 +40,6 @@ DEFAULT_IN = ROOT.joinpath("vim-plugin-names")
 DEFAULT_OUT = ROOT.joinpath("generated.nix")
 DEPRECATED = ROOT.joinpath("deprecated.json")
 
-
 def retry(ExceptionToCheck: Any, tries: int = 4, delay: float = 3, backoff: float = 2):
     """Retry calling the decorated function using an exponential backoff.
     http://www.saltycrane.com/blog/2009/11/trying-out-retry-decorator-python/
@@ -71,6 +70,12 @@ def retry(ExceptionToCheck: Any, tries: int = 4, delay: float = 3, backoff: floa
 
     return deco_retry
 
+def make_request(url: str) -> urllib.request.Request:
+    token = os.getenv("GITHUB_API_TOKEN")
+    headers = {}
+    if token is not None:
+       headers["Authorization"] = f"token {token}"
+    return urllib.request.Request(url, headers=headers)
 
 class Repo:
     def __init__(
@@ -91,9 +96,8 @@ class Repo:
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
     def has_submodules(self) -> bool:
         try:
-            urllib.request.urlopen(
-                self.url(f"blob/{self.branch}/.gitmodules"), timeout=10
-            ).close()
+            req = make_request(self.url(f"blob/{self.branch}/.gitmodules"))
+            urllib.request.urlopen(req, timeout=10).close()
         except urllib.error.HTTPError as e:
             if e.code == 404:
                 return False
@@ -104,7 +108,8 @@ class Repo:
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
     def latest_commit(self) -> Tuple[str, datetime]:
         commit_url = self.url(f"commits/{self.branch}.atom")
-        with urllib.request.urlopen(commit_url, timeout=10) as req:
+        commit_req = make_request(commit_url)
+        with urllib.request.urlopen(commit_req, timeout=10) as req:
             self.check_for_redirect(commit_url, req)
             xml = req.read()
             root = ET.fromstring(xml)

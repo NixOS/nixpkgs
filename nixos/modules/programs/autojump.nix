@@ -18,7 +18,7 @@ in
         '';
       };
     };
-  }; 
+  };
 
   ###### implementation
 
@@ -26,7 +26,7 @@ in
     environment.pathsToLink = [ "/share/autojump" ];
     environment.systemPackages = [ pkgs.autojump ];
 
-    programs.bash.interactiveShellInit = "source ${pkgs.autojump}/share/autojump/autojump.bash"; 
+    programs.bash.interactiveShellInit = "source ${pkgs.autojump}/share/autojump/autojump.bash";
     programs.zsh.interactiveShellInit = mkIf prg.zsh.enable "source ${pkgs.autojump}/share/autojump/autojump.zsh";
     programs.fish.interactiveShellInit = mkIf prg.fish.enable "source ${pkgs.autojump}/share/autojump/autojump.fish";
   };

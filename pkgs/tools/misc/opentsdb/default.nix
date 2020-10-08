@@ -1,8 +1,8 @@
-{ stdenv, autoconf, automake, curl, fetchurl, jdk, jre, makeWrapper, nettools
+{ stdenv, autoconf, automake, curl, fetchurl, jdk8, makeWrapper, nettools
 , python, git
 }:
 
-with stdenv.lib;
+let jdk = jdk8; jre = jdk8.jre; in
 
 stdenv.mkDerivation rec {
   pname = "opentsdb";

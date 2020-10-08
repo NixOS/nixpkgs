@@ -8,7 +8,7 @@ let
     { callPackage, lib, stdenv, nixosTests, config, fetchurl, makeWrapper
     , symlinkJoin, writeText, autoconf, automake, bison, flex, libtool
     , pkgconfig, re2c, apacheHttpd, libargon2, libxml2, pcre, pcre2
-    , systemd, valgrind
+    , systemd, system-sendmail, valgrind, xcbuild
 
     , version
     , sha256
@@ -42,7 +42,7 @@ let
         # consecutive calls to buildEnv and overrides to work as
         # expected.
         mkBuildEnv = prevArgs: prevExtensionFunctions: lib.makeOverridable (
-          { extensions ? ({...}: []), extraConfig ? "", ... }@innerArgs:
+          { extensions ? ({ enabled, ... }: enabled), extraConfig ? "", ... }@innerArgs:
             let
               allArgs = args // prevArgs // innerArgs;
               filteredArgs = builtins.removeAttrs allArgs [ "extensions" "extraConfig" ];
@@ -55,8 +55,8 @@ let
               allExtensionFunctions = prevExtensionFunctions ++ [ extensions ];
               enabledExtensions =
                 builtins.foldl'
-                  (state: f:
-                    f { enabled = state; all = php-packages.extensions; })
+                  (enabled: f:
+                    f { inherit enabled; all = php-packages.extensions; })
                   []
                   allExtensionFunctions;
 
@@ -106,7 +106,7 @@ let
                 name = "php-with-extensions-${version}";
                 inherit (php) version;
                 nativeBuildInputs = [ makeWrapper ];
-                passthru = {
+                passthru = php.passthru // {
                   buildEnv = mkBuildEnv allArgs allExtensionFunctions;
                   withExtensions = mkWithExtensions allArgs allExtensionFunctions;
                   phpIni = "${phpWithExtensions}/lib/php.ini";
@@ -143,7 +143,8 @@ let
 
           enableParallelBuilding = true;
 
-          nativeBuildInputs = [ autoconf automake bison flex libtool pkgconfig re2c ];
+          nativeBuildInputs = [ autoconf automake bison flex libtool pkgconfig re2c ]
+            ++ lib.optional stdenv.isDarwin xcbuild;
 
           buildInputs =
             # PCRE extension
@@ -177,7 +178,10 @@ let
             ++ lib.optional (!cliSupport) "--disable-cli"
             ++ lib.optional fpmSupport    "--enable-fpm"
             ++ lib.optional pearSupport [ "--with-pear=$(out)/lib/php/pear" "--enable-xml" "--with-libxml" ]
-            ++ lib.optional (pearSupport && (lib.versionOlder version "7.4")) "--enable-libxml"
+            ++ lib.optionals (pearSupport && (lib.versionOlder version "7.4")) [
+              "--enable-libxml"
+              "--with-libxml-dir=${libxml2.dev}"
+            ]
             ++ lib.optional pharSupport   "--enable-phar"
             ++ lib.optional phpdbgSupport "--enable-phpdbg"
 
@@ -191,13 +195,18 @@ let
             ++ lib.optional systemdSupport "--with-fpm-systemd"
             ++ lib.optional valgrindSupport "--with-valgrind=${valgrind.dev}"
             ++ lib.optional ztsSupport "--enable-maintainer-zts"
+
+
+            # Sendmail
+            ++ [ "PROG_SENDMAIL=${system-sendmail}/bin/sendmail" ]
           ;
 
           hardeningDisable = [ "bindnow" ];
 
-          preConfigure = ''
-            # Don't record the configure flags since this causes unnecessary
-            # runtime dependencies
+          preConfigure =
+          # Don't record the configure flags since this causes unnecessary
+          # runtime dependencies
+          ''
             for i in main/build-defs.h.in scripts/php-config.in; do
               substituteInPlace $i \
                 --replace '@CONFIGURE_COMMAND@' '(omitted)' \
@@ -206,7 +215,14 @@ let
             done
 
             export EXTENSION_DIR=$out/lib/php/extensions
-
+          ''
+          # PKG_CONFIG need not be a relative path
+          + lib.optionalString (! lib.versionAtLeast version "7.4") ''
+            for i in $(find . -type f -name "*.m4"); do
+              substituteInPlace $i \
+                --replace 'test -x "$PKG_CONFIG"' 'type -P "$PKG_CONFIG" >/dev/null'
+            done
+          '' + ''
             ./buildconf --copy --force
 
             if test -f $src/genfiles; then
@@ -243,6 +259,7 @@ let
           passthru = {
             buildEnv = mkBuildEnv {} [];
             withExtensions = mkWithExtensions {} [];
+            inherit ztsSupport;
           };
 
           meta = with stdenv.lib; {
@@ -255,25 +272,17 @@ let
           };
         };
 
-  php72base = callPackage generic (_args // {
-    version = "7.2.29";
-    sha256 = "08xry2fgqgg8s0ym1hh11wkbr36av3zq1bn4krbciw1b7x8gb8ga";
-
-    # https://bugs.php.net/bug.php?id=76826
-    extraPatches = lib.optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
-  });
-
   php73base = callPackage generic (_args // {
-    version = "7.3.16";
-    sha256 = "0bh499v9dfgh9k51w4rird1slb9rh9whp5h37fb84c98d992s1xq";
+    version = "7.3.23";
+    sha256 = "0k600imsxm3r3qdv20ryqhvfmnkmjhvm2hcnqr180l058snncrpx";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = lib.optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
   });
 
   php74base = callPackage generic (_args // {
-    version = "7.4.6";
-    sha256 = "0j133pfwa823d4jhx2hkrrzjl4hswvz00b1z58r5c82xd5sr9vd6";
+    version = "7.4.11";
+    sha256 = "1idq2sk3x6msy8l2g42jv3y87h1fgb1aybxw7wpjkliv4iaz422l";
   });
 
   defaultPhpExtensions = { all, ... }: with all; ([
@@ -289,8 +298,7 @@ let
 
   php74 = php74base.withExtensions defaultPhpExtensions;
   php73 = php73base.withExtensions defaultPhpExtensionsWithHash;
-  php72 = php72base.withExtensions defaultPhpExtensionsWithHash;
 
 in {
-  inherit php72 php73 php74;
+  inherit php73 php74;
 }

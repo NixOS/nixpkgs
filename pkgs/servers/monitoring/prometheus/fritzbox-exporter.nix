@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, nixosTests }:
 
 buildGoPackage rec {
   pname = "fritzbox-exporter";
@@ -15,6 +15,8 @@ buildGoPackage rec {
   goPackagePath = "github.com/mxschmitt/fritzbox_exporter";
 
   goDeps = ./fritzbox-exporter-deps.nix;
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) fritzbox; };
 
   meta = with stdenv.lib; {
     description = "Prometheus Exporter for FRITZ!Box (TR64 and UPnP)";

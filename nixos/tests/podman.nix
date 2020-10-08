@@ -12,9 +12,6 @@ import ./make-test-python.nix (
         { pkgs, ... }:
         {
           virtualisation.podman.enable = true;
-          virtualisation.containers.users = [
-            "alice"
-          ];
 
           users.users.alice = {
             isNormalUser = true;

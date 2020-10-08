@@ -178,26 +178,54 @@ self: super:
          <para>
            <link
            xlink:href="https://software.intel.com/en-us/mkl">Intel
-           MKL</link> (only works on x86 architecture, unfree)
+           MKL</link> (only works on the x86_64 architecture, unfree)
          </para>
          <para>
            The Nixpkgs attribute is <literal>mkl</literal>.
+         </para>
+       </listitem>
+       <listitem>
+         <para>
+           <link
+           xlink:href="https://github.com/flame/blis">BLIS</link>
+         </para>
+         <para>
+          BLIS, available through the attribute
+          <literal>blis</literal>, is a framework for linear algebra kernels. In
+          addition, it implements the BLAS interface.
+         </para>
+       </listitem>
+       <listitem>
+         <para>
+          <link
+           xlink:href="https://developer.amd.com/amd-aocl/blas-library/">AMD
+          BLIS/LIBFLAME</link> (optimized for modern AMD x86_64 CPUs)
+         </para>
+         <para>
+          The AMD fork of the BLIS library, with attribute
+          <literal>amd-blis</literal>, extends BLIS with optimizations for
+          modern AMD CPUs. The changes are usually submitted to
+          the upstream BLIS project after some time. However, AMD BLIS
+          typically provides some performance improvements on AMD Zen CPUs.
+          The complementary AMD LIBFLAME library, with attribute
+          <literal>amd-libflame</literal>, provides a LAPACK implementation.
          </para>
        </listitem>
      </itemizedlist>
      <para>
        Introduced in <link
        xlink:href="https://github.com/NixOS/nixpkgs/pull/83888">PR
-       #83888</link>, we are able to override the ‘blas’ and ‘lapack’
-       packages to use different implementations, through the
-       ‘blasProvider’ and ‘lapackProvider’ argument. This can be used
+       #83888</link>, we are able to override the <literal>blas</literal>
+       and <literal>lapack</literal> packages to use different implementations,
+       through the <literal>blasProvider</literal> and
+       <literal>lapackProvider</literal> argument. This can be used
        to select a different provider. BLAS providers will have
        symlinks in <literal>$out/lib/libblas.so.3</literal> and
        <literal>$out/lib/libcblas.so.3</literal> to their respective
        BLAS libraries. Likewise, LAPACK providers will have symlinks
        in <literal>$out/lib/liblapack.so.3</literal> and
        <literal>$out/lib/liblapacke.so.3</literal> to their respective
-       LAPCK libraries. For example, Intel MKL is both a BLAS and
+       LAPACK libraries. For example, Intel MKL is both a BLAS and
        LAPACK provider. An overlay can be created to use Intel MKL
        that looks like:
      </para>
@@ -212,16 +240,17 @@ self: super:
     lapackProvider = self.mkl;
   }
 }
-     </programlisting>
+</programlisting>
      <para>
        This overlay uses Intel’s MKL library for both BLAS and LAPACK
        interfaces. Note that the same can be accomplished at runtime
-       using <literal>LD_LIBRARY_PATH</literal> of libblas.so.3 and
-       liblapack.so.3. For instance:
+       using <literal>LD_LIBRARY_PATH</literal> of
+       <literal>libblas.so.3</literal> and
+       <literal>liblapack.so.3</literal>. For instance:
      </para>
-     <programlisting>
-$ LD_LIBRARY_PATH=$(nix-build -A mkl)/lib:$LD_LIBRARY_PATH nix-shell -p octave --run octave
-     </programlisting>
+<screen>
+<prompt>$ </prompt>LD_LIBRARY_PATH=$(nix-build -A mkl)/lib:$LD_LIBRARY_PATH nix-shell -p octave --run octave
+</screen>
      <para>
        Intel MKL requires an <literal>openmp</literal> implementation
        when running with multiple processors. By default,
@@ -259,7 +288,7 @@ assert (!blas.isILP64) &amp;&amp; (!lapack.isILP64);
 stdenv.mkDerivation {
   ...
 }
-     </programlisting>
+</programlisting>
    </section>
  </section>
 </chapter>

@@ -1,19 +1,19 @@
 { stdenv, fetchFromGitHub, SDL, ffmpeg, frei0r, libjack2, libdv, libsamplerate
 , libvorbis, libxml2, makeWrapper, movit, pkgconfig, sox, qtbase, qtsvg
-, fftw, vid-stab, opencv3, ladspa-sdk
+, fftw, vid-stab, opencv3, ladspa-sdk, genericUpdater, common-updater-scripts
 }:
 
 let inherit (stdenv.lib) getDev; in
 
 stdenv.mkDerivation rec {
   pname = "mlt";
-  version = "6.20.0";
+  version = "6.22.1";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    sha256 = "14kayzas2wisyw0z27qkcm4qnxbdb7bqa0hg7gaj5kbm3nvsnafk";
+    sha256 = "0jxv848ykw0csbnayrd710ylw46m0picfv7rpzsxz1vh4jzs395k";
   };
 
   buildInputs = [
@@ -57,11 +57,18 @@ stdenv.mkDerivation rec {
     inherit ffmpeg;
   };
 
+  passthru.updateScript = genericUpdater {
+    inherit pname version;
+    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+    rev-prefix = "v";
+  };
+
   meta = with stdenv.lib; {
     description = "Open source multimedia framework, designed for television broadcasting";
     homepage = "https://www.mltframework.org/";
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
+    broken = versionAtLeast qtbase.version "5.15";
   };
 }

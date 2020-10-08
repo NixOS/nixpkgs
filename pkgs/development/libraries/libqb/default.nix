@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig }:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   name = "libqb-0.17.2";
 
   src = fetchurl {

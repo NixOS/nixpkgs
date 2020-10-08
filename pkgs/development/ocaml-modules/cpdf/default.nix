@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, camlpdf, ncurses }:
 
-let version = "2.3"; in
+let version = "2.3.1"; in
 
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-cpdf-${version}";
@@ -9,8 +9,12 @@ stdenv.mkDerivation {
     owner = "johnwhitington";
     repo = "cpdf-source";
     rev = "v${version}";
-    sha256 = "0i976y1v0l7x7k2n8k6v0h4bw9zlxsv04y4fdxss6dzpsfz49w23";
+    sha256 = "1gwz0iy28f67kbqap2q10nf98dalwbi03vv5j893z2an7pb4w68z";
   };
+
+  prePatch = ''
+    substituteInPlace META --replace 'version="1.7"' 'version="${version}"'
+  '';
 
   buildInputs = [ ocaml findlib ncurses ];
   propagatedBuildInputs = [ camlpdf ];

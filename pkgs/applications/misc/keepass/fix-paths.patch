@@ -56,24 +56,6 @@ diff --git a/KeePass/Util/ClipboardUtil.Unix.cs b/KeePass/Util/ClipboardUtil.Uni
 index ab49ee2..7f6c50f 100644
 --- a/KeePass/Util/ClipboardUtil.Unix.cs
 +++ b/KeePass/Util/ClipboardUtil.Unix.cs
-@@ -42,7 +42,7 @@ namespace KeePass.Util
- 			// string strGtk = GtkGetString();
- 			// if(strGtk != null) return strGtk;
- 
--			return (NativeLib.RunConsoleApp("pbpaste", "-pboard general") ??
-+			return (NativeLib.RunConsoleApp("@pbpaste@", "-pboard general") ??
- 				string.Empty);
- 		}
- 
-@@ -50,7 +50,7 @@ namespace KeePass.Util
- 		{
- 			// if(GtkSetString(str)) return;
- 
--			NativeLib.RunConsoleApp("pbcopy", "-pboard general", str);
-+			NativeLib.RunConsoleApp("@pbcopy@", "-pboard general", str);
- 		}
- 
- 		private static string GetStringU()
 @@ -62,7 +62,7 @@ namespace KeePass.Util
  			//	"-out -selection clipboard");
  			// if(str != null) return str;

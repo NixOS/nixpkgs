@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, autoreconfHook
 , dbus
 , gettext
 , gnutls
@@ -10,23 +11,17 @@
 , pugixml
 , sqlite
 , tinyxml
-, wxGTK30
+, wxGTK30-gtk3
 , xdg_utils
 }:
 
-let
-  # we can drop this when wxgtk is built with gtk3 by default
-  # see: https://github.com/NixOS/nixpkgs/pull/73145
-  wxgtk' = wxGTK30.override { compat26 = false; withGtk2 = false; };
-
-in
 stdenv.mkDerivation rec {
   pname = "filezilla";
-  version = "3.48.0";
+  version = "3.50.0";
 
   src = fetchurl {
     url = "https://download.filezilla-project.org/client/FileZilla_${version}_src.tar.bz2";
-    sha256 = "0msxl8ihbycd56hmn1q8sl1gzmsxc7j8ar9k4zsryd0ayyz7wv05";
+    sha256 = "sha256-4NuHJpylIIqtFKAkFTN7T57+PEnC1NFOZukhx4oTXBA=";
   };
 
   # https://www.linuxquestions.org/questions/slackware-14/trouble-building-filezilla-3-47-2-1-current-4175671182/#post6099769
@@ -40,7 +35,7 @@ stdenv.mkDerivation rec {
     "--disable-autoupdatecheck"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   buildInputs = [
     dbus
@@ -52,8 +47,8 @@ stdenv.mkDerivation rec {
     pugixml
     sqlite
     tinyxml
-    wxgtk'
-    wxgtk'.gtk
+    wxGTK30-gtk3
+    wxGTK30-gtk3.gtk
     xdg_utils
   ];
 

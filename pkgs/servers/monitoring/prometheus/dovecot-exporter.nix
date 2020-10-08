@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, nixosTests }:
 
 buildGoPackage rec {
   pname = "dovecot_exporter";
@@ -14,6 +14,8 @@ buildGoPackage rec {
   };
 
   goDeps = ./dovecot-exporter-deps.nix;
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) dovecot; };
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

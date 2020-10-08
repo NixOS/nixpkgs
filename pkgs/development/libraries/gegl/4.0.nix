@@ -35,23 +35,22 @@
 
 stdenv.mkDerivation rec {
   pname = "gegl";
-  version = "0.4.22";
+  version = "0.4.26";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/gegl/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0q9cckf90fb82qc5d496fjz459f1xw4j4p3rff1f57yivx0yr20q";
+    sha256 = "097427icgpgvcx40019b3dm8m84cchz79pixzpz648drs8p1wdqg";
   };
 
   patches = [
-    # Prevent deadlock making tests time-out
-    # https://gitlab.gnome.org/GNOME/gegl/issues/226
-    # https://gitlab.gnome.org/GNOME/glib/issues/1941
+    # fix build with darwin: https://github.com/NixOS/nixpkgs/issues/99108
+    # https://gitlab.gnome.org/GNOME/gegl/-/merge_requests/83
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gegl/commit/1d530816266b52c8788bbe1504c5b2d6eceba036.patch";
-      sha256 = "8PlUcLQkuskjDGCA2obUPDW3jE++A6B5YWVgvn+GFrU=";
+      url = "https://gitlab.gnome.org/GNOME/gegl/-/merge_requests/83.patch";
+      sha256 = "CSBYbJ2xnEN23xrla1qqr244jxOR5vNK8ljBSXdg4yE=";
     })
   ];
 

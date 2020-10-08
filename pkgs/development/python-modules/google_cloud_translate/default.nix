@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-translate";
-  version = "2.0.1";
+  version = "3.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02wlqlrxk0x6a9wifcly2pr84r6k8i97ws0prx21379fss39gf2a";
+    sha256 = "ecdea3e176e80f606d08c4c7fd5acea6b3dd960f4b2e9a65951aaf800350a759";
   };
 
   # google_cloud_core[grpc] -> grpcio

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tpm2-tools";
-  version = "4.1.1";
+  version = "4.1.3";
 
   src = fetchurl {
     url = "https://github.com/tpm2-software/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1cd74nd57wmms2yrnzs64xki29rf4kx61kd30fyd56wlicyjdfa0";
+    sha256 = "0117r0zzdnblkibv81y71v3limixsw5m7g9xwf7lcx8fc8836pdv";
   };
 
   nativeBuildInputs = [ pandoc pkgconfig makeWrapper ];

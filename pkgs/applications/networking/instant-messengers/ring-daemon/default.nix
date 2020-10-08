@@ -13,7 +13,7 @@
 , libsndfile
 , dbus
 , dbus_cplusplus
-, ffmpeg
+, ffmpeg_3
 , udev
 , pcre
 , gsm
@@ -101,7 +101,7 @@ stdenv.mkDerivation {
     libsndfile
     dbus
     dbus_cplusplus
-    ffmpeg
+    ffmpeg_3
     udev
     pcre
     gsm

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     # fix AppStream validation
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gnome-dictionary/commit/1c94d612030ef87c6e26a01a490470b71c39e341.patch";
-      sha256 = "sha256:0cbswmhs9mks3gsc0iy4wnidsa8sfzzf4s1kgvb80qwffgxz5m8b";
+      sha256 = "0cbswmhs9mks3gsc0iy4wnidsa8sfzzf4s1kgvb80qwffgxz5m8b";
     })
   ];
 

@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "quadrapassel";
-  version = "3.36.02";
+  version = "3.36.05";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/quadrapassel/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0c80pzipxricyh4wydffsc94wj6ymnanqr9bg6wdx51hz1mmmilb";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "04abxmimh5npw8rhz1sfi6wxilgc6i1wka9mlnfwp8v1p1cb00cv";
   };
 
   nativeBuildInputs = [

@@ -3,8 +3,8 @@
 , lib
 , python
 , buildPythonPackage
-, pythonPackages
 , poetryLib
+, evalPep508
 }:
 { name
 , version
@@ -17,6 +17,7 @@
 , sourceSpec
 , supportedExtensions ? lib.importJSON ./extensions.json
 , preferWheels ? false
+, __isBootstrap ? false  # Hack: Always add Poetry as a build input unless bootstrapping
 , ...
 }:
 
@@ -46,10 +47,18 @@ pythonPackages.callPackage
       isGit = isSource && source.type == "git";
       isLocal = isSource && source.type == "directory";
       localDepPath = toPath source.url;
-      pyProject = poetryLib.readTOML (localDepPath + "/pyproject.toml");
-      buildSystemPkgs = poetryLib.getBuildSystemPkgs {
-        inherit pythonPackages pyProject;
-      };
+
+      buildSystemPkgs =
+        let
+          pyProjectPath = localDepPath + "/pyproject.toml";
+          pyProject = poetryLib.readTOML pyProjectPath;
+        in
+        if builtins.pathExists pyProjectPath then
+          poetryLib.getBuildSystemPkgs
+            {
+              inherit pythonPackages pyProject;
+            } else [ ];
+
       fileInfo =
         let
           isBdist = f: lib.strings.hasSuffix "whl" f.file;
@@ -58,7 +67,7 @@ pythonPackages.callPackage
           binaryDist = selectWheel fileCandidates;
           sourceDist = builtins.filter isSdist fileCandidates;
           eggs = builtins.filter isEgg fileCandidates;
-          entries = ( if preferWheel then binaryDist ++ sourceDist else sourceDist ++ binaryDist) ++ eggs;
+          entries = (if preferWheel then binaryDist ++ sourceDist else sourceDist ++ binaryDist) ++ eggs;
           lockFileEntry = builtins.head entries;
           _isEgg = isEgg lockFileEntry;
         in
@@ -106,21 +115,25 @@ pythonPackages.callPackage
         baseBuildInputs
         ++ lib.optional (!isSource) (getManyLinuxDeps fileInfo.name).pkg
         ++ lib.optional isLocal buildSystemPkgs
+        ++ lib.optional (!__isBootstrap) [ pythonPackages.poetry ]
       );
 
       propagatedBuildInputs =
         let
           compat = isCompatible (poetryLib.getPythonVersion python);
-          deps = lib.filterAttrs (n: v: v)
+          deps = lib.filterAttrs
+            (n: v: v)
             (
               lib.mapAttrs
                 (
                   n: v:
                     let
                       constraints = v.python or "";
+                      pep508Markers = v.markers or "";
                     in
-                    compat constraints
-                ) dependencies
+                    compat constraints && evalPep508 pep508Markers
+                )
+                dependencies
             );
           depAttrs = lib.attrNames deps;
         in
@@ -140,15 +153,18 @@ pythonPackages.callPackage
       # Interpreters should declare what wheel types they're compatible with (python type + ABI)
       # Here we can then choose a file based on that info.
       src =
-        if isGit then (
-          builtins.fetchGit {
-            inherit (source) url;
-            rev = source.reference;
-            ref = sourceSpec.branch or sourceSpec.rev or sourceSpec.tag or "HEAD";
-          }
-        ) else if isLocal then (poetryLib.cleanPythonSources { src = localDepPath; }) else fetchFromPypi {
+        if isGit then
+          (
+            builtins.fetchGit {
+              inherit (source) url;
+              rev = source.reference;
+              ref = sourceSpec.branch or sourceSpec.rev or sourceSpec.tag or "HEAD";
+            }
+          ) else if isLocal then (poetryLib.cleanPythonSources { src = localDepPath; }) else
+        fetchFromPypi {
           pname = name;
           inherit (fileInfo) file hash kind;
         };
     }
-  ) { }
+  )
+{ }

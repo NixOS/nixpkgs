@@ -6,16 +6,18 @@
 
 buildGoModule rec {
   pname = "cri-tools";
-  version = "1.18.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "06sxjhjpd893fn945c1s4adri2bf7s50ddvcw5pnwb6qndzfljw6";
+    sha256 = "0dx21ws4nzzizzjb0g172fzvjgwck88ikr5c2av08ii06rys1567";
   };
 
   vendorSha256 = null;
+
+  doCheck = false;
 
   nativeBuildInputs = [ installShellFiles ];
 

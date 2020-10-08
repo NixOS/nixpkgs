@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     description = "A protocol for authentication, authorization and accounting (AAA) services for routers and network devices";
     homepage = "http://www.shrubbery.net/tac_plus/";
     license = licenses.free;
-    maintainers = [ maintainers."0x4A6F" ];
+    maintainers = with maintainers; [ _0x4A6F ];
     platforms = with platforms; linux;
   };
 }

@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "conftest";
-  version = "0.18.2";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
-    owner = "instrumenta";
+    owner = "open-policy-agent";
     repo = "conftest";
     rev = "v${version}";
-    sha256 = "15xzldcmnpfg1hd5zr5i7x2zjrgkwnp4nylxbn9kfic2dpjp1a38";
+    sha256 = "15xdsjv53hjgmdxzdakj07ggickw1jkcii31ycb3q8nh1ki05rhq";
   };
 
-  vendorSha256 = "1kay7b5rxypj4i0d2iwdlb1mj0qq3zvlrjp34zzv5kywz5gy4144";
+  vendorSha256 = "0795npr09680nmxiz9riq5v6rp91qgkvw1lc2mn9gzakv1ywl5rq";
+
+  doCheck = false;
 
   buildFlagsArray = ''
     -ldflags=
@@ -20,9 +22,8 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Write tests against structured configuration data";
-    homepage = "https://github.com/instrumenta/conftest";
+    inherit (src.meta) homepage;
     license = licenses.asl20;
     maintainers = with maintainers; [ yurrriq ];
-    platforms = platforms.all;
   };
 }

@@ -10,6 +10,8 @@ mkDerivation {
     sha256 = "085wyn85nrmzr8nv5zv7fi2kqf8rp1gnd30h72s30j55xvhmxvmy";
   };
 
+  patches = [ ./fix-build-against-Qt-5.15.patch ];
+
   nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [ gtk2 ];
 

@@ -2,8 +2,9 @@
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 # , cplex
-, cvxopt
+, cvxpy
 , dlx
 , docplex
 , fastdtw
@@ -16,6 +17,7 @@
 , qiskit-terra
 , quandl
 , scikitlearn
+, yfinance
   # Check Inputs
 , ddt
 , pytestCheckHook
@@ -24,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aqua";
-  version = "0.7.0";
+  version = "0.7.5";
 
   disabled = pythonOlder "3.5";
 
@@ -33,13 +35,22 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-aqua";
     rev = version;
-    sha256 = "0yykw6k1rb3f2ihcp0y9pb0695mcmy29nyqlj89qs4da0503vxvh";
+    sha256 = "19sdv7lnc4b1c86rd1dv7pjpi8cmrpzbv7nav0fb899ki8ldqdwq";
   };
+
+  # TODO: remove in next release
+  patches = [
+    (fetchpatch {
+      name = "qiskit-aqua-fix-test-issue-1214.patch";
+      url = "https://github.com/Qiskit/qiskit-aqua/commit/284a4323192ac85787b22cbe5f344996fae16f7d.patch";
+      sha256 = "0zl8hqa2fq9ng793x4dhh0ny67nnbjcd8l1cdsaaab4ca1y0xcfr";
+    })
+  ];
 
   # Optional packages: pyscf (see below NOTE) & pytorch. Can install via pip/nix if needed.
   propagatedBuildInputs = [
     # cplex
-    cvxopt
+    cvxpy
     docplex
     dlx # Python Dancing Links package
     fastdtw
@@ -51,6 +62,7 @@ buildPythonPackage rec {
     qiskit-ignis
     quandl
     scikitlearn
+    yfinance
   ];
 
   # *** NOTE ***
@@ -81,7 +93,6 @@ buildPythonPackage rec {
         "You must install it yourself via pip or add it to your environment from the Nix User Repository." \
         "', ImportWarning)\n" \
       >> qiskit/optimization/__init__.py
-
   '';
 
   postInstall = "rm -rf $out/${python.sitePackages}/docs";  # Remove docs dir b/c it can cause conflicts.
@@ -106,6 +117,10 @@ buildPythonPackage rec {
     # Disabled due to missing pyscf
     "test_validate" # test/chemistry/test_inputparser.py
 
+    # Online tests
+    "test_exchangedata"
+    "test_yahoo"
+
     # Disabling slow tests > 10 seconds
     "TestVQE"
     "TestVQC"
@@ -117,7 +132,6 @@ buildPythonPackage rec {
     "TestQGAN"
     "test_evaluate_qasm_mode"
     "test_measurement_error_mitigation_auto_refresh"
-    "test_exchangedata"
     "test_wikipedia"
     "test_shor_factoring_1__15___qasm_simulator____3__5__"
     "test_readme_sample"
@@ -127,14 +141,22 @@ buildPythonPackage rec {
     "test_shor_no_factors_1_5"
     "test_shor_no_factors_2_7"
     "test_evolve_2___suzuki___1__3_"
-    "test_delta_4"
+    "test_delta"
     "test_swaprz"
     "test_deprecated_algo_result"
+    "test_unsorted_grouping"
+    "test_ad_hoc_data"
+    "test_nft"
+    "test_oh"
+    "test_confidence_intervals_00001"
+    "test_eoh"
+    "test_qasm_5"
   ];
 
   meta = with lib; {
     description = "An extensible library of quantum computing algorithms";
     homepage = "https://github.com/QISKit/qiskit-aqua";
+    changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };

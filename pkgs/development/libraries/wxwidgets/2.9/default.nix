@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xorgproto
-, gstreamer, gst-plugins-base, GConf, setfile
+, setfile
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , withMesa ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , libGLU ? null, libGL ? null
@@ -32,8 +32,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs =
-    [ gtk2 libXinerama libSM libXxf86vm xorgproto gstreamer
-      gst-plugins-base GConf ]
+    [ gtk2 libXinerama libSM libXxf86vm xorgproto ]
     ++ optional withMesa libGLU
     ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QuickTime ];
 
@@ -42,7 +41,7 @@ stdenv.mkDerivation {
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
 
   configureFlags =
-    [ "--enable-gtk2" "--disable-precomp-headers" "--enable-mediactrl"
+    [ "--enable-gtk2" "--disable-precomp-headers"
       (if compat24 then "--enable-compat24" else "--disable-compat24")
       (if compat26 then "--enable-compat26" else "--disable-compat26") ]
     ++ optional unicode "--enable-unicode"

@@ -4,6 +4,7 @@
 , fetchurl
 , fetchFromGitHub
 , fetchNuGet
+, glib
 , pkgconfig
 , mono
 , fsharp
@@ -544,6 +545,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     buildInputs = [
       fsharp
+      glib
       dotnetPackages.FSharpCompilerService
       dotnetPackages.NewtonsoftJson
       dotnetPackages.NDeskOptions

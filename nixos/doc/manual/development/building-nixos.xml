@@ -24,4 +24,10 @@
 <screen>
 <prompt># </prompt>mount -o loop -t iso9660 ./result/iso/cd.iso /mnt/iso</screen>
  </para>
+ <para>
+ If you want to customize your NixOS CD in more detail, or generate other kinds
+ of images, you might want to check out <link
+ xlink:href="https://github.com/nix-community/nixos-generators">nixos-generators</link>. This can also be a good starting point when you want to use Nix to build a
+ 'minimal' image that doesn't include a NixOS installation.
+ </para>
 </chapter>

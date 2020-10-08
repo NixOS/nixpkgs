@@ -1,35 +1,39 @@
-{ stdenv, rustPlatform, fetchFromGitHub, llvmPackages, pkgconfig, less
-, Security, libiconv, installShellFiles, makeWrapper
+{ stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, less
+, Security
+, libiconv
+, installShellFiles
+, makeWrapper
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname   = "bat";
-  version = "0.15.1";
+  pname = "bat";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
-    owner  = "sharkdp";
-    repo   = pname;
-    rev    = "v${version}";
-    sha256 = "10cs94ja1dmn0f24gqkcy8rf68b3b43k6qpbb5njbg0hcx3x6cyj";
-    fetchSubmodules = true;
+    owner = "sharkdp";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "161pfix42j767ziyp4mslffdd20v9i0ncplvjw2pmpccwdm106kg";
   };
 
-  cargoSha256 = "13cphi08bp6lg054acgliir8dx2jajll4m3c4xxy04skmx555zr8";
+  cargoSha256 = "19vhhxfyx3nrngcs6dvwldnk9h4lvs7xjkb31aj1y0pyawz882h9";
 
-  # Disable test that's broken on macOS.
-  # This should probably be removed on the next release.
-  # https://github.com/sharkdp/bat/issues/983
-  patches = [ ./macos.patch ];
-
-  nativeBuildInputs = [ pkgconfig llvmPackages.libclang installShellFiles makeWrapper ];
+  nativeBuildInputs = [ pkg-config installShellFiles makeWrapper ];
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security libiconv ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  # Remove after https://github.com/NixOS/nixpkgs/pull/97000 lands into master
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    unset SDKROOT
+  '';
 
   postInstall = ''
     installManPage $releaseDir/build/bat-*/out/assets/manual/bat.1
-    installShellCompletion $releaseDir/build/bat-*/out/assets/completions/bat.fish
+    installShellCompletion $releaseDir/build/bat-*/out/assets/completions/bat.{fish,zsh}
   '';
 
   # Insert Nix-built `less` into PATH because the system-provided one may be too old to behave as
@@ -41,9 +45,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "A cat(1) clone with syntax highlighting and Git integration";
-    homepage    = "https://github.com/sharkdp/bat";
-    license     = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dywedir lilyball ];
-    platforms   = platforms.all;
+    homepage = "https://github.com/sharkdp/bat";
+    license = with licenses; [ asl20 /* or */ mit ];
+    maintainers = with maintainers; [ dywedir lilyball zowoq ];
   };
 }

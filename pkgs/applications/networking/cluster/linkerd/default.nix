@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, buildGoModule }:
 
 buildGoModule {
-  pname = "linkerd-unstablle";
+  pname = "linkerd-unstable";
   version = "2020-05-01";
 
   src = fetchFromGitHub {
@@ -12,6 +12,8 @@ buildGoModule {
   };
 
   vendorSha256 = "0vls58ld50jca5yn73kvg3lx4z83cc7skky54a90pkbj737y58pz";
+
+  doCheck = false;
 
   subPackages = [ "cli/cmd" ];
 

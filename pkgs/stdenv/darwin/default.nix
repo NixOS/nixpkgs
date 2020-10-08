@@ -36,9 +36,7 @@ in rec {
     export NIX_IGNORE_LD_THROUGH_GCC=1
     export SDKROOT=
 
-    # Ensure consistent LC_VERSION_MIN_MACOSX and remove LC_UUID.
     export MACOSX_DEPLOYMENT_TARGET=${macosVersionMin}
-    export NIX_LDFLAGS+=" -macosx_version_min ${macosVersionMin} -sdk_version ${appleSdkVersion} -no_uuid"
 
     # Workaround for https://openradar.appspot.com/22671534 on 10.11.
     export gl_cv_func_getcwd_abort_bug=no
@@ -92,11 +90,11 @@ in rec {
         inherit shell;
         inherit (last) stdenvNoCC;
 
-        extraPackages = lib.optional (libcxx != null) libcxx;
+        extraPackages = [];
 
         nativeTools  = false;
         nativeLibc   = false;
-        inherit buildPackages coreutils gnugrep bintools;
+        inherit buildPackages coreutils gnugrep bintools libcxx;
         libc         = last.pkgs.darwin.Libsystem;
         isClang      = true;
         cc           = { name = "${name}-clang"; outPath = bootstrapTools; };
@@ -170,8 +168,9 @@ in rec {
             ln -s ${bootstrapTools}/lib/libc++.dylib $out/lib/libc++.dylib
             ln -s ${bootstrapTools}/include/c++      $out/include/c++
           '';
-          linkCxxAbi = false;
-          setupHook = ../../development/compilers/llvm/7/libc++/setup-hook.sh;
+          passthru = {
+            isLLVM = true;
+          };
         };
 
         libcxxabi = stdenv.mkDerivation {
@@ -307,7 +306,7 @@ in rec {
       inherit
         gnumake gzip gnused bzip2 gawk ed xz patch bash python3
         ncurses libffi zlib gmp pcre gnugrep
-        coreutils findutils diffutils patchutils ninja;
+        coreutils findutils diffutils patchutils ninja libxml2;
 
       # Hack to make sure we don't link ncurses in bootstrap tools. The proper
       # solution is to avoid passing -L/nix-store/...-bootstrap-tools/lib,
@@ -321,7 +320,7 @@ in rec {
       llvmPackages_7 = super.llvmPackages_7 // (let
         tools = super.llvmPackages_7.tools.extend (llvmSelf: _: {
           clang-unwrapped = llvmPackages_7.clang-unwrapped.override { llvm = llvmSelf.llvm; };
-          llvm = llvmPackages_7.llvm.override { libxml2 = self.darwin.libxml2-nopython; };
+          llvm = llvmPackages_7.llvm.override { inherit libxml2; };
         });
         libraries = super.llvmPackages_7.libraries.extend (llvmSelf: _: {
           inherit (llvmPackages_7) libcxx libcxxabi compiler-rt;
@@ -332,9 +331,8 @@ in rec {
         inherit (darwin) dyld Libsystem libiconv locale;
 
         cctools = super.darwin.cctools.override { enableTapiSupport = false; };
-        libxml2-nopython = super.libxml2.override { pythonSupport = false; };
         CF = super.darwin.CF.override {
-          libxml2 = libxml2-nopython;
+          inherit libxml2;
           python3 = prevStage.python3;
         };
       };
@@ -419,9 +417,9 @@ in rec {
       gnugrep llvmPackages.clang-unwrapped llvmPackages.clang-unwrapped.lib patch pcre.out gettext
       binutils.bintools darwin.binutils darwin.binutils.bintools
       curl.out openssl.out libssh2.out nghttp2.lib libkrb5
-      cc.expand-response-params
+      cc.expand-response-params libxml2.out
     ]) ++ (with pkgs.darwin; [
-      dyld Libsystem CF cctools ICU libiconv locale libxml2-nopython.out
+      dyld Libsystem CF cctools ICU libiconv locale
     ]);
 
     overrides = lib.composeExtensions persistent (self: super: {

@@ -1,23 +1,33 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
+, isPy27
 , appdirs
+, importlib-metadata
 , requests
 , pytest
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pipdate";
-  version = "0.3.5";
+  version = "0.5.2";
+  format = "pyproject";
+  disabled = isPy27; # abandoned
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "240c0f270ddb7470ad7b8c8fba4106e3dbd8817a370624fd8c32cf19155c9547";
+    sha256 = "507065231f2d50b6319d483432cba82aadad78be21b7a2969b5881ed8dee9ab4";
   };
+
+  nativeBuildInputs = [ wheel ];
 
   propagatedBuildInputs = [
     appdirs
     requests
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
   checkInputs = [

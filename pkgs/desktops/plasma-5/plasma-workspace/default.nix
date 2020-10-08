@@ -11,7 +11,8 @@
   kinit, kjsembed, knewstuff, knotifyconfig, kpackage, kpeople, krunner,
   kscreenlocker, ktexteditor, ktextwidgets, kwallet, kwayland, kwin,
   kxmlrpcclient, libkscreen, libksysguard, libqalculate, networkmanager-qt,
-  phonon, plasma-framework, prison, solid, kholidays,
+  phonon, plasma-framework, prison, solid, kholidays, kquickcharts,
+  appstream-qt,
 
   qtgraphicaleffects, qtquickcontrols, qtquickcontrols2, qtscript, qttools,
   qtwayland, qtx11extras,
@@ -31,7 +32,7 @@ mkDerivation {
     knotifyconfig kpackage kpeople krunner kscreenlocker ktexteditor
     ktextwidgets kwallet kwayland kwin kxmlrpcclient libkscreen libksysguard
     libqalculate networkmanager-qt phonon plasma-framework prison solid
-    kholidays
+    kholidays kquickcharts appstream-qt
 
     qtgraphicaleffects qtquickcontrols qtquickcontrols2 qtscript qtwayland qtx11extras
   ];
@@ -47,6 +48,10 @@ mkDerivation {
     ./0002-absolute-wallpaper-install-dir.patch
   ];
 
+  postPatch = ''
+    substituteInPlace wallpapers/image/wallpaper.knsrc.cmake \
+      --replace '@QtBinariesDir@/qdbus' ${getBin qttools}/bin/qdbus
+  '';
 
   NIX_CFLAGS_COMPILE = [
     ''-DNIXPKGS_XMESSAGE="${getBin xmessage}/bin/xmessage"''

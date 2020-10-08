@@ -5,8 +5,7 @@ rustPlatform.buildRustPackage {
 
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
   cargoVendorDir = "vendor";
-  preBuild = "pushd src/tools/clippy";
-  postBuild = "popd";
+  buildAndTestSubdir = "src/tools/clippy";
 
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;

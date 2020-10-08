@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "isbnlib";
-  version = "3.10.0";
+  version = "3.10.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1p7iaa6ykvhalpv09svxs50hnp25j5nv1zzp42n5r7a7rw70wlf8";
+    sha256 = "2295c01465fe19776b1f9432fd99fd24e61230d146ded2752e0d980ef6f4101f";
   };
 
   checkInputs = [

@@ -37,10 +37,10 @@ let
      chmod -R a+w $out/share/gsettings-schemas/nixos-gsettings-overrides
      cat - > $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/nixos-defaults.gschema.override <<- EOF
        [org.gnome.desktop.background]
-       picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray}/share/artwork/gnome/nix-wallpaper-simple-dark-gray.png'
+       picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}'
 
        [org.gnome.desktop.screensaver]
-       picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom}/share/artwork/gnome/nix-wallpaper-simple-dark-gray_bottom.png'
+       picture-uri='file://${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom.gnomeFilePath}'
 
        [org.gnome.shell]
        favorite-apps=[ 'org.gnome.Epiphany.desktop', 'org.gnome.Geary.desktop', 'org.gnome.Music.desktop', 'org.gnome.Photos.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop' ]
@@ -52,6 +52,8 @@ let
     '';
 
   flashbackEnabled = cfg.flashback.enableMetacity || length cfg.flashback.customSessions > 0;
+
+  notExcluded = pkg: mkDefault (!(lib.elem pkg config.environment.gnome3.excludePackages));
 
 in
 
@@ -68,6 +70,38 @@ in
       core-shell.enable = mkEnableOption "GNOME Shell services";
       core-utilities.enable = mkEnableOption "GNOME core utilities";
       games.enable = mkEnableOption "GNOME games";
+
+      experimental-features = {
+        realtime-scheduling = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Makes mutter (which propagates to gnome-shell) request a low priority real-time
+            scheduling which is only available on the wayland session.
+            To enable this experimental feature it requires a restart of the compositor.
+            Note that enabling this option only enables the <emphasis>capability</emphasis>
+            for realtime-scheduling to be used. It doesn't automatically set the gsetting
+            so that mutter actually uses realtime-scheduling. This would require adding <literal>
+            rt-scheduler</literal> to <literal>/org/gnome/mutter/experimental-features</literal>
+            with dconf-editor. You cannot use extraGSettingsOverrides because that will only
+            change the default value of the setting.
+
+            Please be aware of these known issues with the feature in nixos:
+            <itemizedlist>
+             <listitem>
+              <para>
+               <link xlink:href="https://github.com/NixOS/nixpkgs/issues/90201">NixOS/nixpkgs#90201</link>
+              </para>
+             </listitem>
+             <listitem>
+              <para>
+               <link xlink:href="https://github.com/NixOS/nixpkgs/issues/86730">NixOS/nixpkgs#86730</link>
+              </para>
+            </listitem>
+            </itemizedlist>
+          '';
+        };
+      };
     };
 
     services.xserver.desktopManager.gnome3 = {
@@ -289,8 +323,32 @@ in
         source-sans-pro
       ];
 
-      ## Enable soft realtime scheduling, only supported on wayland ##
+      # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-36/elements/core/meta-gnome-core-shell.bst
+      environment.systemPackages = with pkgs.gnome3; [
+        adwaita-icon-theme
+        gnome-backgrounds
+        gnome-bluetooth
+        gnome-color-manager
+        gnome-control-center
+        gnome-getting-started-docs
+        gnome-shell
+        gnome-shell-extensions
+        gnome-themes-extra
+        pkgs.nixos-artwork.wallpapers.simple-dark-gray
+        pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom
+        pkgs.gnome-user-docs
+        pkgs.orca
+        pkgs.glib # for gsettings
+        pkgs.gnome-menus
+        pkgs.gtk3.out # for gtk-launch
+        pkgs.hicolor-icon-theme
+        pkgs.shared-mime-info # for update-mime-database
+        pkgs.xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
+      ];
+    })
 
+    # Enable soft realtime scheduling, only supported on wayland
+    (mkIf serviceCfg.experimental-features.realtime-scheduling {
       security.wrappers.".gnome-shell-wrapped" = {
         source = "${pkgs.gnome3.gnome-shell}/bin/.gnome-shell-wrapped";
         capabilities = "cap_sys_nice=ep";
@@ -308,27 +366,6 @@ in
         # Do not use the default environment, it provides a broken PATH
         environment = mkForce {};
       };
-
-      # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-36/elements/core/meta-gnome-core-shell.bst
-      environment.systemPackages = with pkgs.gnome3; [
-        adwaita-icon-theme
-        gnome-backgrounds
-        gnome-bluetooth
-        gnome-color-manager
-        gnome-control-center
-        gnome-getting-started-docs
-        gnome-shell
-        gnome-shell-extensions
-        gnome-themes-extra
-        pkgs.gnome-user-docs
-        pkgs.orca
-        pkgs.glib # for gsettings
-        pkgs.gnome-menus
-        pkgs.gtk3.out # for gtk-launch
-        pkgs.hicolor-icon-theme
-        pkgs.shared-mime-info # for update-mime-database
-        pkgs.xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
-      ];
     })
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-36/elements/core/meta-gnome-core-utilities.bst
@@ -361,14 +398,17 @@ in
         /* gnome-boxes */
       ] config.environment.gnome3.excludePackages);
 
-      # Enable default programs
-      programs.evince.enable = mkDefault true;
-      programs.file-roller.enable = mkDefault true;
-      programs.geary.enable = mkDefault true;
-      programs.gnome-disks.enable = mkDefault true;
-      programs.gnome-terminal.enable = mkDefault true;
-      programs.seahorse.enable = mkDefault true;
-      services.gnome3.sushi.enable = mkDefault true;
+      # Enable default program modules
+      # Since some of these have a corresponding package, we only
+      # enable that program module if the package hasn't been excluded
+      # through `environment.gnome3.excludePackages`
+      programs.evince.enable = notExcluded pkgs.gnome3.evince;
+      programs.file-roller.enable = notExcluded pkgs.gnome3.file-roller;
+      programs.geary.enable = notExcluded pkgs.gnome3.geary;
+      programs.gnome-disks.enable = notExcluded pkgs.gnome3.gnome-disk-utility;
+      programs.gnome-terminal.enable = notExcluded pkgs.gnome3.gnome-terminal;
+      programs.seahorse.enable = notExcluded pkgs.gnome3.seahorse;
+      services.gnome3.sushi.enable = notExcluded pkgs.gnome3.sushi;
 
       # Let nautilus find extensions
       # TODO: Create nautilus-with-extensions package

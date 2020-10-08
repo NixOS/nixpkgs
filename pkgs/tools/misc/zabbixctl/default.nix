@@ -19,7 +19,6 @@ buildGoPackage rec {
     description = "Most effective way for operating in Zabbix Server";
     homepage = "https://github.com/kovetskiy/zabbixctl";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = with maintainers; [ mmahut ];
   };
 }

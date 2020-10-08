@@ -2,29 +2,36 @@
 
 buildGoModule rec {
   pname = "gh";
-  version = "0.8.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "cli";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "08fy3677yq52x40rab49ijhw4r25ls2807dbv9wpna6w07n7r8v7";
+    sha256 = "1jf1y6135p30dlr42fnl0w7782fczizq8yya4bsd6xf66bcq0zzn";
   };
 
-  vendorSha256 = "0s99bjmsafnzhl3s2lcybxgsw1s4i1h3vh6p40gz4vsfhndidqrq";
-
-  buildFlagsArray = [
-    "-ldflags=-s -w -X github.com/cli/cli/command.Version=${version}"
-  ];
-
-  subPackages = [ "cmd/gh" ];
+  vendorSha256 = "12ka5x5m4h8dfpcdhfjc5lz6bm8pzfqkbhs9j3a8w08xsi93dvdz";
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = ''
+
+  buildPhase = ''
+    export GO_LDFLAGS="-s -w"
+    make GH_VERSION=${version} bin/gh manpages
+  '';
+
+  installPhase = ''
+    install -Dm755 bin/gh -t $out/bin
+    installManPage share/man/*/*.[1-9]
+
     for shell in bash fish zsh; do
       $out/bin/gh completion -s $shell > gh.$shell
       installShellCompletion gh.$shell
     done
+  '';
+
+  checkPhase = ''
+    make test
   '';
 
   meta = with lib; {

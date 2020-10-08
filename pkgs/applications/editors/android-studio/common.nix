@@ -198,7 +198,12 @@ in runCommand
       # binaries are also distributed as proprietary software (unlike the
       # source-code itself).
       platforms = [ "x86_64-linux" ];
-      maintainers = with maintainers; [ primeos ];
+      maintainers = with maintainers; rec {
+        stable = [ meutraa ];
+        beta = [ meutraa ];
+        canary = [ meutraa ];
+        dev = canary;
+      }."${channel}";
     };
   }
   ''

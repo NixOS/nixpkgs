@@ -2,16 +2,18 @@
 
 buildGoModule rec {
   pname = "node-problem-detector";
-  version = "0.8.1";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02avknglmkr9k933a64hkw0rjfxvyh4sc3x70p41b8q2g6vzv2gs";
+    sha256 = "1sga5l8bvqgm0j71yj3l1ykqvchxa7cg8pkfvjsrqlikgrfb54f3";
   };
 
   vendorSha256 = null;
+
+  doCheck = false;
 
   # Optionally, a log counter binary can be created to parse journald logs.
   # The binary is dynamically linked against systemd libraries, making it a
@@ -37,6 +39,7 @@ buildGoModule rec {
   meta = with stdenv.lib; {
     description = "Various problem detectors running on the Kubernetes nodes";
     homepage = "https://github.com/kubernetes/node-problem-detector";
+    changelog = "https://github.com/kubernetes/node-problem-detector/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ lbpdt ];
   };

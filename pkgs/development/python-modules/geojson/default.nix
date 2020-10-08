@@ -18,6 +18,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/frewsxcv/python-geojson";
     description = "Python bindings and utilities for GeoJSON";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ geistesk ];
+    maintainers = with lib.maintainers; [ oxzi ];
   };
 }

@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "aioftp";
-  version = "0.13.0";
+  version = "0.18.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5711c03433b510c101e9337069033133cca19b508b5162b414bed24320de6c18";
+    sha256 = "6f9d5b5ac910987daca4f7ad4a017530751e2107d2471c9f92a3e09b507cb2dc";
   };
 
   checkInputs = [
@@ -27,9 +27,12 @@ buildPythonPackage rec {
     async-timeout
   ];
 
+  doCheck = false; # requires siosocks, not packaged yet
   checkPhase = ''
     pytest
   '';
+
+  pythonImportsCheck = [ "aioftp" ];
 
   meta = with lib; {
     description = "Ftp client/server for asyncio";

@@ -31,7 +31,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/alvations/sacremoses";
     description = "Python port of Moses tokenizer, truecaser and normalizer";
     license = licenses.lgpl21Plus;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ pashashocky ];
   };
 }

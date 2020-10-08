@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , pkgconfig
 , meson
@@ -19,26 +20,17 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-datetime";
-  version = "2.2.2";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0a0pqrpmrdd5pch30lizr9righlc7165z7krmnaxrzd0fvfkbr2h";
+    sha256 = "sha256-rZzZIh4bwZfwQFDbfPDKQtfLMJQ2IdykH1yiV6ckqnw=";
   };
 
-  patches = [
-    # https://github.com/elementary/wingpanel-indicator-datetime/pull/207
-    # Fixes lots of issues despite being rejected upstream
-    # https://github.com/elementary/wingpanel-indicator-datetime/issues/206
-    # https://github.com/elementary/wingpanel-indicator-datetime/issues/55
-    # https://github.com/elementary/wingpanel-indicator-datetime/issues/127
-    ./207.patch
-  ];
-
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = "pantheon.${pname}";
     };
   };

@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sonic-lineup";
-  version = "1.0.1";
+  version = "1.1";
 
   src = fetchurl {
-    url = "https://code.soundsoftware.ac.uk/attachments/download/2610/${pname}-${version}.tar.gz";
-    sha256 = "0w4v5zr81d8fh97y820r0vj1rrbl0kwgvhfkdnyl4hiabs97b1i7";
+    url = "https://code.soundsoftware.ac.uk/attachments/download/2765/${pname}-${version}.tar.gz";
+    sha256 = "0k45k9fawcm4s5yy05x00pgww7j8m7k2cxcc7g0fn9vqy7vcbq9h";
   };
 
   buildInputs =

@@ -8,12 +8,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.20.2";
+  version = "2.21";
   pname = "links2";
 
   src = fetchurl {
     url = "${meta.homepage}/download/links-${version}.tar.bz2";
-    sha256 = "097ll98ympzfx7qfdyhc52yzvsp167x5nnjs6v8ih496wv80fksb";
+    sha256 = "0qqdcghsdqm7l6kyi0k752ws3ak5crw85pqkcb11wy67j62yspi8";
   };
 
   buildInputs = with stdenv.lib;
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "http://links.twibright.com/";
     description = "A small browser with some graphics support";
     maintainers = with maintainers; [ raskin ];
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
 }

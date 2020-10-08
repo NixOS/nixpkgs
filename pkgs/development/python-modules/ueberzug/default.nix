@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "ueberzug";
-  version = "18.1.5";
+  version = "18.1.6";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1rj864sdn1975v59i8j3cfa9hni1hacq0z2b8m7wib0da9apygby";
+    sha256 = "13a9q9rvkbsym5nrc1y2anhyx317vj1vi8k8kln8gin2yw311pyb";
   };
 
   buildInputs = [ libX11 libXext ];

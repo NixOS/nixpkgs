@@ -4,5 +4,5 @@
 # See pkgs/build-support/setup-hooks/role.bash
 if [ -z "${dontAddExtraLibs-}" ]; then
     getHostRole
-    export NIX_${role_pre}LDFLAGS+=" -liconv"
+    export NIX_LDFLAGS${role_post}+=" -liconv"
 fi

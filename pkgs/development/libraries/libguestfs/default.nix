@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, autoreconfHook, makeWrapper
 , ncurses, cpio, gperf, cdrkit, flex, bison, qemu, pcre, augeas, libxml2
-, acl, libcap, libcap_ng, libconfig, systemd, fuse, yajl, libvirt, hivex
+, acl, libcap, libcap_ng, libconfig, systemd, fuse, yajl, libvirt, hivex, db
 , gmp, readline, file, numactl, xen, libapparmor, jansson
 , getopt, perlPackages, ocamlPackages
 , appliance ? null
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "1.40.2";
 
   src = fetchurl {
-    url = "http://libguestfs.org/download/1.40-stable/${pname}-${version}.tar.gz";
+    url = "https://libguestfs.org/download/1.40-stable/${pname}-${version}.tar.gz";
     sha256 = "ad6562c48c38e922a314cb45a90996843d81045595c4917f66b02a6c2dfe8058";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses cpio gperf jansson
     cdrkit flex bison qemu pcre augeas libxml2 acl libcap libcap_ng libconfig
-    systemd fuse yajl libvirt gmp readline file hivex
+    systemd fuse yajl libvirt gmp readline file hivex db
     numactl xen libapparmor getopt perlPackages.ModuleBuild
   ] ++ (with perlPackages; [ perl libintl_perl GetoptLong SysVirt ])
     ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml_libvirt gettext-stub ounit ])
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Tools for accessing and modifying virtual machine disk images";
     license = with licenses; [ gpl2 lgpl21 ];
-    homepage = "http://libguestfs.org/";
+    homepage = "https://libguestfs.org/";
     maintainers = with maintainers; [offline];
     platforms = platforms.linux;
   };

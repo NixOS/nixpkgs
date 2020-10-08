@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, fetchFromGitHub, ruby, dune, ocamlPackages
+{ stdenv, fetchzip, fetchFromGitHub, ruby, dune_2, ocamlPackages
 , ipaexfont, junicode, lmodern, lmmath
 }:
 let
@@ -6,8 +6,8 @@ let
     src = fetchFromGitHub {
       owner = "gfngfn";
       repo = "camlpdf";
-      rev = "v2.2.2+satysfi";
-      sha256 = "1dkyibjd8qb9fzljlzdsfdhb798vc9m8xqkd7295fm6bcfpr5r5k";
+      rev = "v2.3.1+satysfi";
+      sha256 = "1s8wcqdkl1alvfcj67lhn3qdz8ikvd1v64f4q6bi4c0qj9lmp30k";
     };
   });
   otfm = ocamlPackages.otfm.overrideAttrs (o: {
@@ -18,23 +18,29 @@ let
       sha256 = "0y8s0ij1vp1s4h5y1hn3ns76fzki2ba5ysqdib33akdav9krbj8p";
     };
   });
-  yojson = ocamlPackages.yojson.overrideAttrs (o: {
+  yojson-with-position = ocamlPackages.buildDunePackage {
+    pname = "yojson-with-position";
+    version = "1.4.2";
     src = fetchFromGitHub {
       owner = "gfngfn";
-      repo = "yojson";
-      rev = "v1.4.1+satysfi";
-      sha256 = "06lajzycwmvc6s26cf40s9xn001cjxrpxijgfha3s4f4rpybb1mp";
+      repo = "yojson-with-position";
+      rev = "v1.4.2+satysfi";
+      sha256 = "17s5xrnpim54d1apy972b5l08bph4c0m5kzbndk600fl0vnlirnl";
     };
-  });
+    useDune2 = true;
+    nativeBuildInputs = [ ocamlPackages.cppo ];
+    propagatedBuildInputs = [ ocamlPackages.biniou ];
+    inherit (ocamlPackages.yojson) meta;
+  };
 in
   stdenv.mkDerivation rec {
     pname = "satysfi";
-    version = "0.0.4";
+    version = "0.0.5";
     src = fetchFromGitHub {
       owner = "gfngfn";
       repo = "SATySFi";
       rev = "v${version}";
-      sha256 = "0ilvgixglklqwavf8p9mcbrjq6cjfm9pk4kqx163c0irh0lh0adv";
+      sha256 = "1y72by6d15bc6qb1lv1ch6cm1i74gyr0w127nnvs2s657snm0y1n";
       fetchSubmodules = true;
     };
 
@@ -44,11 +50,11 @@ in
       $out/share/satysfi
     '';
 
-    nativeBuildInputs = [ ruby dune ];
+    nativeBuildInputs = [ ruby dune_2 ];
 
-    buildInputs = [ camlpdf otfm ] ++ (with ocamlPackages; [
+    buildInputs = [ camlpdf otfm yojson-with-position ] ++ (with ocamlPackages; [
       ocaml findlib menhir
-      batteries camlimages core_kernel ppx_deriving uutf yojson omd cppo re
+      batteries camlimages core_kernel ppx_deriving uutf omd cppo re
     ]);
 
     installPhase = ''

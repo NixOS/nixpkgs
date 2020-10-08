@@ -17,7 +17,7 @@
 
 buildPythonPackage {
   pname = "dogtail";
-  version = "0.9.10";
+  version = "0.9.11";
 
   # https://gitlab.com/dogtail/dogtail/issues/1
   # src = fetchPypi {
@@ -26,7 +26,7 @@ buildPythonPackage {
   # };
   src = fetchurl {
     url = "https://gitlab.com/dogtail/dogtail/raw/released/dogtail-0.9.10.tar.gz";
-    sha256 = "14sycidl8ahj3fwlhpwlpnyd43c302yqr7nqg2hj39pyj7kgk15b";
+    sha256 = "EGyxYopupfXPYtTL9mm9ujZorvh8AGaNXVKBPWsGy3c=";
   };
 
   patches = [
@@ -54,7 +54,7 @@ buildPythonPackage {
   meta = {
     description = "GUI test tool and automation framework that uses Accessibility technologies to communicate with desktop applications";
     homepage = "https://gitlab.com/dogtail/dogtail";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ jtojnar ];
   };
 }

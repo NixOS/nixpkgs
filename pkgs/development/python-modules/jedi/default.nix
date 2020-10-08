@@ -1,17 +1,18 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, glibcLocales, tox, pytestcov, parso }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, fetchPypi, pytest, glibcLocales, tox, pytestcov, parso }:
 
 buildPythonPackage rec {
   pname = "jedi";
-  version = "0.15.2";
+  # switch back to stable version on the next release.
+  # current stable is incompatible with parso
+  version = "2020-08-06";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e909527104a903606dd63bea6e8e888833f0ef087057829b89a18364a856f807";
+  src = fetchFromGitHub {
+    owner = "davidhalter";
+    repo = "jedi";
+    rev = "216f976fd5cab7a460e5d287e853d11759251e52";
+    sha256 = "1kb2ajzigadl95pnwglg8fxz9cvpg9hx30hqqj91jkgrc7djdldj";
+    fetchSubmodules = true;
   };
-
-  postPatch = ''
-    substituteInPlace requirements.txt --replace "parso==0.1.0" "parso"
-  '';
 
   checkInputs = [ pytest glibcLocales tox pytestcov ];
 

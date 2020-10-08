@@ -66,7 +66,8 @@ buildPythonPackage rec {
       --replace "marshmallow>=2.18.0, <4.0.0" "marshmallow" \
       --replace "PyJWT>=1.7.1" "PyJWT" \
       --replace "Flask-SQLAlchemy>=2.4, <3" "Flask-SQLAlchemy" \
-      --replace "Flask-JWT-Extended>=3.18, <4" "Flask-JWT-Extended"
+      --replace "Flask-JWT-Extended>=3.18, <4" "Flask-JWT-Extended" \
+      --replace "Flask-Login>=0.3, <0.5" "Flask-Login"
   '';
 
   # majority of tests require network access or mongo

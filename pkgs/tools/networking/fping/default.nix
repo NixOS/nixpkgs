@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "fping-4.2";
+  name = "fping-5.0";
 
   src = fetchurl {
     url = "https://www.fping.org/dist/${name}.tar.gz";
-    sha256 = "0jmnf4vmr43aiwk3h2b5qdsb95gxar8gz1yli8fswnm9nrs9ccvx";
+    sha256 = "1f2prmii4fyl44cfykp40hp4jjhicrhddh9v3dfs11j6nsww0f7d";
   };
 
   configureFlags = [ "--enable-ipv6" "--enable-ipv4" ];

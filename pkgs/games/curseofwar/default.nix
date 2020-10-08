@@ -1,34 +1,30 @@
 { stdenv
 , fetchFromGitHub
-, fetchpatch
 , ncurses
 , SDL
 }:
 
 stdenv.mkDerivation rec {
   pname = "curseofwar";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "a-nikolaev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1bj3lv5vrnwzzkgj31pyf1lzkz10qphvzlfz7a3j4plqkczjq92y";
+    sha256 = "1wd71wdnj9izg5d95m81yx3684g4zdi7fsy0j5wwnbd9j34ilz1i";
   };
-
-  patches = [(fetchpatch {
-    # Pull request #40: https://github.com/a-nikolaev/curseofwar/pull/40
-    name = "prefix-independent-data";
-    url = "https://github.com/fgaz/curseofwar/commit/947dea527b2bf4c6e107b8e9c66f4c4fd775b6f9.patch";
-    sha256 = "0ak5igaxmbavkbl8101xx6gswhwgzm5f6wyplwapgh7cylnclc61";
-  })];
 
   buildInputs = [
     ncurses
     SDL
   ];
 
-  makeFlags = (if isNull SDL then [] else [ "SDL=yes" ]) ++ [ "PREFIX=$(out)" ];
+  makeFlags = (if isNull SDL then [] else [ "SDL=yes" ]) ++ [
+    "PREFIX=$(out)"
+    # force platform's cc on darwin, otherwise gcc is used
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   meta = with stdenv.lib; {
     description = "A fast-paced action strategy game";

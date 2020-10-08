@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ lib, buildPythonPackage, fetchFromGitHub
 , cython
 , libxml2
 , libxslt
@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "lxml";
-  version = "4.5.0";
+  version = "4.5.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "1i3bhg8xb502afq4ar3kgvvi1hy83l4af2gznfwqvb5b221fr7ak";
+    sha256 = "1d0cpwdjxfzwjzmnz066ibzicyj2vhx15qxmm775l8hxqi65xps4";
   };
 
   # setuptoolsBuildPhase needs dependencies to be passed through nativeBuildInputs
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lxml" "lxml.etree" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pythonic binding for the libxml2 and libxslt libraries";
     homepage = "https://lxml.de";
     license = licenses.bsd3;

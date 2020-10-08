@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, ffmpeg
+, ffmpeg_3
 , imagemagick
 , makeWrapper
 , mplayer
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
     install -Dm755 gopro -t $out/bin
     wrapProgram $out/bin/gopro \
-      --prefix PATH ":" "${stdenv.lib.makeBinPath [ ffmpeg imagemagick mplayer ]}"
+      --prefix PATH ":" "${stdenv.lib.makeBinPath [ ffmpeg_3 imagemagick mplayer ]}"
 
     runHook postInstall
   '';

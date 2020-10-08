@@ -7,9 +7,10 @@ let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wi
 in stdenv.mkDerivation rec {
   pname = "rtlwifi_new";
   version = "2019-08-21";
+  # When updating see https://github.com/lwfinger/rtl8723be/issues/17#issuecomment-657326751
 
   src = fetchFromGitHub {
-    owner = "lwfinger";
+    owner = "rtlwifi-linux";
     repo = "rtlwifi_new";
     rev = "a108e3de87c2ed30b71c3c4595b79ab7a2f9e348";
     sha256 = "15kjs9i9vvmn1cdzccd5cljf3m45r4ssm65klkj2fdkf3kljj38k";

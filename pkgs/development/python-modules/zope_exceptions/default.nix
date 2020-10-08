@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "zope.exceptions";
-  version = "4.3";
+  version = "4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5fa59c3c1044bb9448aeec8328db0bfceaae2a2174e88528d3fe04adf8d47211";
+    sha256 = "0d72886b1bb8af4c346a117a540f28ab122577f5e3a105a261be72cd15776fda";
   };
 
   propagatedBuildInputs = [ zope_interface ];

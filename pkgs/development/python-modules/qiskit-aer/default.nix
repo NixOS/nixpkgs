@@ -6,6 +6,9 @@
 , cmake
 , cvxpy
 , cython
+, muparserx
+, ninja
+, nlohmann_json
 , numpy
 , openblas
 , pybind11
@@ -19,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aer";
-  version = "0.5.1";
+  version = "0.6.1";
 
   disabled = pythonOlder "3.5";
 
@@ -27,18 +30,20 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-aer";
     rev = version;
-    fetchSubmodules = true; # fetch muparserx and other required libraries
-    sha256 = "0pbi8ldz8f1zm7pf2n5229g6kccriq21f24q9cb7bd4j5gdky5sk";
+    sha256 = "1fnv11diis0as8zcc57mamz0gbjd6vj7nw3arxzvwa77ja803sr4";
   };
 
   nativeBuildInputs = [
     cmake
+    ninja
     scikit-build
   ];
 
   buildInputs = [
     openblas
     spdlog
+    nlohmann_json
+    muparserx
   ];
 
   propagatedBuildInputs = [
@@ -49,17 +54,9 @@ buildPythonPackage rec {
   ];
 
   patches = [
-    (fetchpatch{
-      name = "qiskit-aer-pr-727-fix-random-unitary-test.patch";
-      url = "https://github.com/Qiskit/qiskit-aer/commit/09afb3b6b0710042ab65d88e863363f2c843dcb0.patch";
-      sha256 = "0521b7i4fpc5brqs08w381g3c655f9cbn6my1740jnk7dv5lhsv9";
-    })
+    # TODO: remove in favor of qiskit-aer PR #877 patch once accepted/stable
+    ./remove-conan-install.patch
   ];
-
-  postPatch = ''
-    # remove dependency on PyPi cmake package, which isn't in Nixpkgs
-    substituteInPlace setup.py --replace "'cmake!=3.17,!=3.17.0'" ""
-  '';
 
   dontUseCmakeConfigure = true;
 
@@ -67,11 +64,6 @@ buildPythonPackage rec {
     "-DBUILD_TESTS=True"
     "-DAER_THRUST_BACKEND=OMP"
   ];
-
-  # Needed to find qiskit.providers.aer modules in cython. This exists in GitHub, don't know why it isn't copied by default
-  postFixup = ''
-    touch $out/${python.sitePackages}/qiskit/__init__.pxd
-  '';
 
   # *** Testing ***
 
@@ -103,11 +95,8 @@ buildPythonPackage rec {
     description = "High performance simulators for Qiskit";
     homepage = "https://qiskit.org/aer";
     downloadPage = "https://github.com/QISKit/qiskit-aer/releases";
+    changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
-    # Doesn't build on aarch64 (libmuparserx issue).
-    # Can fix by building muparserx from source (https://github.com/beltoforion/muparserx)
-    # or in future updates (e.g. Raspberry Pi enabled via https://github.com/Qiskit/qiskit-aer/pull/651 & https://github.com/Qiskit/qiskit-aer/pull/660)
-    platforms = platforms.x86_64;
   };
 }

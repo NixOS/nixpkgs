@@ -1,6 +1,7 @@
 { buildPythonPackage
 , lib
 , fetchPypi
+, isPy27
 , mock
 , pytest
 , pytestrunner
@@ -15,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "coveralls";
-  name = "${pname}-python-${version}";
-  version = "1.9.2";
+  version = "2.1.2";
+  disabled = isPy27;
 
   # wanted by tests
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8e3315e8620bb6b3c6f3179a75f498e7179c93b3ddc440352404f941b1f70524";
+    sha256 = "4430b862baabb3cf090d36d84d331966615e4288d8a8c5957e0fd456d0dd8bd6";
   };
 
   checkInputs = [

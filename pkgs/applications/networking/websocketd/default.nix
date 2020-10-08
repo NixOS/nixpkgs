@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "05k31z4h3b327mh940zh52im4xfk7kf5phb8b7xp4l9bgckhz4lb";
 
+  doCheck = false;
+
   meta = with lib; {
     description = "Turn any program that uses STDIN/STDOUT into a WebSocket server";
     homepage = "http://websocketd.com/";

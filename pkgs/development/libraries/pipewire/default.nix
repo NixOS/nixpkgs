@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitLab
+, fetchpatch
 , meson
 , ninja
 , pkgconfig
@@ -10,7 +11,7 @@
 , dbus
 , gst_all_1
 , alsaLib
-, ffmpeg
+, ffmpeg_3
 , libjack2
 , udev
 , libva
@@ -32,7 +33,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pipewire";
-  version = "0.3.5";
+  version = "0.3.7";
 
   outputs = [ "out" "lib" "dev" "doc" ];
 
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
     owner = "pipewire";
     repo = "pipewire";
     rev = version;
-    sha256 = "mgfhfKpUtHycXCUVKFs9A58E1D1pPKHvSoPqjQzWGfQ=";
+    sha256 = "04l66p0wj553gp2zf3vwwh6jbr1vkf6wrq4za9zlm9dn144am4j2";
   };
 
   nativeBuildInputs = [
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
     alsaLib
     bluez
     dbus
-    ffmpeg
+    ffmpeg_3
     glib
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer

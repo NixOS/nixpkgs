@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = stdenv.lib.optional stdenv.cc.isClang "--host=${stdenv.hostPlatform.system}";
 
+  enableParallelBuilding = true;
+
   buildInputs =
     [ glib cairo fontconfig libtiff giflib
       libjpeg libpng libXrender libexif

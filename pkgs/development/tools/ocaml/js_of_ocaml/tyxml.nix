@@ -1,4 +1,4 @@
-{ stdenv, ocaml, findlib, dune, js_of_ocaml-compiler
+{ stdenv, ocaml, findlib, dune_2, js_of_ocaml-compiler
 , js_of_ocaml-ppx, ocaml-migrate-parsetree, ppx_tools_versioned
 , js_of_ocaml, reactivedata, tyxml
 }:
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
 
 	inherit (js_of_ocaml-compiler) version src installPhase meta;
 
-	buildInputs = [ ocaml findlib dune js_of_ocaml-ppx ocaml-migrate-parsetree ppx_tools_versioned ];
+	buildInputs = [ ocaml findlib dune_2 js_of_ocaml-ppx ocaml-migrate-parsetree ppx_tools_versioned ];
 
 	propagatedBuildInputs = [ js_of_ocaml reactivedata tyxml ];
 

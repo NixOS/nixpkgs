@@ -15,6 +15,7 @@
 , libpulseaudio
 , AudioUnit, Cocoa, CoreAudio, CoreServices, ForceFeedback, OpenGL
 , audiofile, libiconv
+, withStatic ? false
 }:
 
 # NOTE: When editing this expression see if the same change applies to
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
     sha256 = "0qy8wbqvfkb5ps8kxgaaf2zzpkjqbsw712hlp74znbn0jpv6i4il";
   };
-
+  dontDisableStatic = withStatic;
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
 
@@ -41,9 +42,14 @@ stdenv.mkDerivation rec {
     substituteInPlace include/SDL_opengl_glext.h \
       --replace "typedef ptrdiff_t GLsizeiptr;" "typedef signed long int khronos_ssize_t; typedef khronos_ssize_t GLsizeiptr;" \
       --replace "typedef ptrdiff_t GLintptr;" "typedef signed long int khronos_intptr_t; typedef khronos_intptr_t GLintptr;"
+
+    substituteInPlace configure \
+      --replace 'WAYLAND_SCANNER=`$PKG_CONFIG --variable=wayland_scanner wayland-scanner`' 'WAYLAND_SCANNER=`pkg-config --variable=wayland_scanner wayland-scanner`'
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  depsBuildBuild = [ pkgconfig ];
+
+  nativeBuildInputs = [ pkgconfig ] ++ optionals waylandSupport [ wayland ];
 
   propagatedBuildInputs = dlopenPropagatedBuildInputs;
 

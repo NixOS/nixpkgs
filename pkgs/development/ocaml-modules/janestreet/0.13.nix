@@ -1,5 +1,6 @@
 { janePackage
 , ctypes
+, dune-configurator
 , num
 , octavius
 , ppxlib
@@ -357,7 +358,8 @@ rec {
 
   async_unix = janePackage {
     pname = "async_unix";
-    hash = "0n3jz3qjlphyhkqgnbjbwf2fqxaksws82dx1mk4m4wnw3275gdi5";
+    version = "0.13.1";
+    hash = "1sb8grbj4bv6ih3yfdihxhn5c9rqczr56b5bhl85wy2mi92m17xv";
     meta.description = "Monadic concurrency library";
     propagatedBuildInputs = [ async_kernel core ];
   };
@@ -414,6 +416,15 @@ rec {
     hash = "0bfxyvdmyv23zfr49pb4c3bgfkjr4s3nb3z07xrw6szia3j1kp4j";
     meta.description = "Shell helpers for Async";
     propagatedBuildInputs = [ async shell ];
+  };
+
+  async_ssl = janePackage {
+    pname = "async_ssl";
+    useDune2 = true;
+    hash = "0z5dbiam5k7ipx9ph4r8nqv0a1ldx1ymxw3xjxgrdjda90lmwf2k";
+    meta.description = "Async wrappers for SSL";
+    buildInputs = [ dune-configurator ];
+    propagatedBuildInputs = [ async ctypes openssl ];
   };
 
   core_bench = janePackage {

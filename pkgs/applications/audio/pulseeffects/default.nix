@@ -30,14 +30,12 @@
 , zita-convolver
 , zam-plugins
 , rubberband
-, mda_lv2
 , lsp-plugins
 }:
 
 let
   lv2Plugins = [
     calf # limiter, compressor exciter, bass enhancer and others
-    mda_lv2 # loudness
     lsp-plugins # delay
   ];
   ladspaPlugins = [
@@ -46,13 +44,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "pulseeffects";
-  version = "4.7.2";
+  version = "4.8.1";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
     rev = "v${version}";
-    sha256 = "1yga25da5bpg12zkikp6dn4wqhn9f7r10awvjzfcz8s6w9xlz6rx";
+    sha256 = "17yfs3ja7vflywhxbn3n3r8n6hl829x257kzplg2vpppppg6ylj6";
   };
 
   nativeBuildInputs = [

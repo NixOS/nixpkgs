@@ -1,5 +1,9 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, ctypes, libsodium }:
 
+if stdenv.lib.versionAtLeast ocaml.version "4.10"
+then throw "sodium is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-sodium";
   version = "0.6.0";

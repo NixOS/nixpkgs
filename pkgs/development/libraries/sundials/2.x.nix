@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     description = "Suite of nonlinear differential/algebraic equation solvers";
     homepage    = "https://computation.llnl.gov/projects/sundials";
     platforms   = platforms.all;
-    maintainers = with maintainers; [ flokli idontgetoutmuch ];
+    maintainers = with maintainers; [ idontgetoutmuch ];
     license     = licenses.bsd3;
   };
 }

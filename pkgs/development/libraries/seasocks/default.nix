@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "seasocks";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "mattgodbolt";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1c2gc0k9wgbgn7y7wmq2ylp0gvdbmagc1x8c4jwbsncl1gy6x4g2";
+    sha256 = "1f9a3mx3yjmr5qry4rc1c7mrx3348iifxm7d8sj8yd41kqnzmfv4";
   };
 
   nativeBuildInputs = [ cmake ];

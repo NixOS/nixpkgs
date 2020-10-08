@@ -39,6 +39,5 @@ buildRustPackage rec {
     homepage = "https://github.com/peterheesterman/chit";
     license = licenses.mit;
     maintainers = [ maintainers.lilyball ];
-    platforms = platforms.all;
   };
 }

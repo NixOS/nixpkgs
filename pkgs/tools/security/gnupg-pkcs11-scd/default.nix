@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/alonbl/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256:1mfh9zjbahjd788rq1mzx009pd7p1sq62sbz586rd7szif7pkpgx";
+    sha256 = "1mfh9zjbahjd788rq1mzx009pd7p1sq62sbz586rd7szif7pkpgx";
   };
 
   buildInputs = [ pkcs11helper pkgconfig openssl ];

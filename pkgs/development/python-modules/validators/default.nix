@@ -1,20 +1,22 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , six
 , decorator
-, pytest
+, pytestCheckHook
 , isort
 , flake8
 }:
 
 buildPythonPackage rec {
   pname = "validators";
-  version = "0.14.1";
+  version = "0.17.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0bfe836a1af37bb266d71ec1e98b530c38ce11bc7fbe0c4c96ef7b1532d019e5";
+    sha256 = "401cb441dd61bb1a03b10c8a3a884642409e22a2a19e03bbfc4891e0ddbc7268";
   };
 
   propagatedBuildInputs = [
@@ -23,14 +25,12 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     flake8
     isort
   ];
 
-  checkPhase = ''
-    pytest
-  '';
+  disabledTests = lib.optionals isPy27 [ "url" ];
 
   meta = with lib; {
     description = "Python Data Validation for Humans™";

@@ -29,5 +29,6 @@ stdenv.mkDerivation {
     # ensures not built on hydra
     # https://github.com/NixOS/nixpkgs/pull/46846#issuecomment-436388048
     hydraPlatforms = [ ];
+    broken = true; # cmake unable to find Qt5Core and other dependencies
   };
 }

@@ -1,10 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
 , pythonOlder
-, funcsigs
 , setuptools_scm
+, importlib-metadata
+, packaging
 # Check Inputs
 , pytestCheckHook
 , numpy
@@ -14,19 +14,20 @@
 
 buildPythonPackage rec {
   pname = "pint";
-  version = "0.11";
+  version = "0.14";
 
   src = fetchPypi {
     inherit version;
     pname = "Pint";
-    sha256 = "0kfgnmcs6z9ndhzvwg2xzhpwxgyyagdsdz5dns1jy40fa1q113rh";
+    sha256 = "0wkzb7g20wzpqr3xaqpq96dlfv6irw202icsz81ys8npp7mm194s";
   };
 
   disabled = pythonOlder "3.6";
 
-  propagatedBuildInputs = [
-    setuptools_scm
-  ] ++ lib.optional isPy27 funcsigs;
+  nativeBuildInputs = [ setuptools_scm ];
+  
+  propagatedBuildInputs = [ packaging ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # Test suite explicitly requires pytest
   checkInputs = [

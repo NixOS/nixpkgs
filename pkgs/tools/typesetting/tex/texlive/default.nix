@@ -2,7 +2,7 @@
   - source: ../../../../../doc/languages-frameworks/texlive.xml
   - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
-{ stdenv, lib, fetchurl, runCommand, writeText, buildEnv
+{ stdenv, lib, fetchurl, fetchpatch, runCommand, writeText, buildEnv
 , callPackage, ghostscriptX, harfbuzz, poppler_min
 , makeWrapper, python, ruby, perl
 , useFixedHashes ? true
@@ -57,6 +57,21 @@ let
       collection-plaingeneric = orig.collection-plaingeneric // {
         deps = orig.collection-plaingeneric.deps // { inherit (tl) xdvi; };
       };
+
+      # TODO revert for texlive 2020
+      arara = lib.recursiveUpdate orig.arara {
+        postUnpack = let
+          arara_jar_fix = fetchpatch {
+            url = "https://github.com/TeX-Live/texlive-source/commit/dbaf12f4a47dcd62bcc96346f65493fda3fec2c8.diff";
+            sha256 = "148knr8k6sm6fpyj31kdq85yxvzvwp1prjha3f07q24kbar2l830";
+          };
+        in ''
+          if [ -f "$out"/scripts/arara/arara.sh ]; then
+            cd "$out"/scripts/
+            patch -p4 <${arara_jar_fix}
+          fi
+        '';
+      };
     }); # overrides
 
     # tl =
@@ -99,8 +114,11 @@ let
       urls = args.urls or (if args ? url then [ args.url ] else
         lib.concatMap
           (up: [
-            "${up}/${urlName}.r${toString revision}.tar.xz"
-            "${up}/${urlName}.tar.xz" # TODO To be removed for telive 2020
+            # Only ~11% of packages in texlive 2019 have revisions, so
+            # the number of requests is nearly doubled if we lookup
+            # the name with revision
+            # "${up}/${urlName}.r${toString revision}.tar.xz"
+            "${up}/${urlName}.tar.xz" # TODO To be removed for texlive 2020?
           ])
           urlPrefixes);
 
@@ -175,7 +193,7 @@ in
             description = "TeX Live environment for ${pname}";
             platforms = lib.platforms.all;
             hydraPlatforms = lib.optionals
-              (lib.elem pname ["scheme-small" "scheme-basic"]) platforms;
+              (!lib.elem pname ["scheme-infraonly"]) platforms;
             maintainers = with lib.maintainers;  [ veprbl ];
           }
           (combine {

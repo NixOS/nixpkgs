@@ -12,18 +12,18 @@ stdenv.mkDerivation rec {
     owner = "c4dm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "e1PtCIzp7zIz+KKRxEGlAXTNqZ35vPgQ4opJKHIPa+4=";
+    sha256 = "1vkb1xr2hjcaw88gig7rknlwsx01lm0w94d2z0rk5vz9ih4fslvv";
   };
 
   patches = [
     # Make installable
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/qm-dsp/raw/6eb385e2f970c4150f9c8eba73b558318475ed15/f/qm-dsp-install.patch";
-      sha256 = "7JDg9yOECWG7Ql5lIoC4L++R1gUlKfztvED5Ey4YLxw=";
+      sha256 = "071g30p17ya0pknzqa950pb93vrgp2024ray8axn22c44gvy147c";
     })
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/qm-dsp/raw/6eb385e2f970c4150f9c8eba73b558318475ed15/f/qm-dsp-flags.patch";
-      sha256 = "2HRSbSFxC8DPXOgcflyBYeJI3NwO/1CFmyRdvYo09og=";
+      sha256 = "127n6j5bsp94kf2m1zqfvkf4iqk1h5f7w778bk7w02vi45nm4x6q";
       postFetch = ''
         sed -i 's~/Makefile~/build/linux/Makefile.linux32~g' "$out"
       '';

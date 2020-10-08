@@ -6,11 +6,11 @@ in
 
 stdenv.mkDerivation rec {
   pname  = "xfce4-eyes-plugin";
-  version = "4.5.0";
+  version = "4.5.1";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "17gj6fbvvrdzvz61czmia8hqynllsnmhk61fs4aml443cc1h1bpx";
+    sha256 = "1iaszzkagl1mb0cdafrvlfjnjklhhs9y90517par34sjiqbq1dsd";
   };
 
   nativeBuildInputs = [

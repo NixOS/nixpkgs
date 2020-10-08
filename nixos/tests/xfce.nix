@@ -11,8 +11,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
       services.xserver.enable = true;
 
-      services.xserver.displayManager.lightdm = {
-        enable = true;
+      services.xserver.displayManager = {
+        lightdm.enable = true;
         autoLogin = {
           enable = true;
           user = "alice";

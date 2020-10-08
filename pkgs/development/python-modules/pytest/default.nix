@@ -1,29 +1,58 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, attrs, hypothesis, py
-, setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
-, atomicwrites, mock, writeText, pathlib2, wcwidth, packaging, isPyPy, python
+{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
+, atomicwrites
+, attrs
+, funcsigs
+, hypothesis
+, iniconfig
+, mock
+, more-itertools
+, packaging
+, pathlib2
+, pluggy
+, py
+, pygments
+, python
+, setuptools
+, setuptools_scm
+, six
+, toml
+, wcwidth
+, writeText
 }:
+
 buildPythonPackage rec {
-  version = "5.3.5";
+  version = "6.0.1";
   pname = "pytest";
 
   disabled = !isPy3k;
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "85228d75db9f45e06e57ef9bf4429267f81ac7c0d742cc9ed63d09886a9fe6f4";
+  };
+
+  checkInputs = [ hypothesis pygments ];
+  nativeBuildInputs = [ setuptools_scm ];
+  propagatedBuildInputs = [
+    atomicwrites
+    attrs
+    iniconfig
+    more-itertools
+    packaging
+    pluggy
+    py
+    setuptools
+    six
+    toml
+    wcwidth
+  ] ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
+
+  doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
 
   preCheck = ''
     # don't test bash builtins
     rm testing/test_argcomplete.py
   '';
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0d5fe9189a148acc3c3eb2ac8e1ac0742cb7618c084f3d228baaec0c254b318d";
-  };
-
-  checkInputs = [ hypothesis mock ];
-  nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites wcwidth packaging ]
-    ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
-
-  doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
 
   # Ignored file https://github.com/pytest-dev/pytest/pull/5605#issuecomment-522243929
   checkPhase = ''

@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   pname = "conglomerate";
-  name  = "${pname}-2017-09-10";
+  version = "unstable-2017-09-10";
 
   src = fetchFromGitHub {
     owner  = "BIC-MNI";
@@ -16,7 +16,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ libminc zlib bicpl ];
   propagatedBuildInputs = [ coreutils minc_tools ] ++ (with perlPackages; [ perl GetoptTabular MNI-Perllib ]);
 
-  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" "-DBICPL_DIR=${bicpl}/lib/" ];
+  cmakeFlags = [
+    "-DLIBMINC_DIR=${libminc}/lib/cmake"
+    "-DBICPL_DIR=${bicpl}/lib"
+  ];
 
   postFixup = ''
     for p in $out/bin/*; do

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libglvnd";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "libglvnd";
     rev = "v${version}";
-    sha256 = "0mkzdzdxjxjl794rblq4mq33wmb8ikqmfswbqdbr8gw2kw4wlhdl";
+    sha256 = "10x7fgb114r4gikdg6flszl3kwzcb9y5qa7sj9936mk0zxhjaylz";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig python3 addOpenGLRunpath ];

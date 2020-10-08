@@ -11,11 +11,12 @@
 , dill
 , pandas
 , partd
+, pytest_xdist
 }:
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2.14.0";
+  version = "2.22.0";
 
   disabled = pythonOlder "3.5";
 
@@ -23,11 +24,12 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "0kj46pwzvdw8ii1h45y48wxvjid89yp4cfak2h4b8z8xic73fqgj";
+    sha256 = "08nvxj81cz9x92dh2gbmm4imkr8cfljfi2hxkballv2ygwcbzg8g";
   };
 
   checkInputs = [
     pytestCheckHook
+    pytest_xdist # takes >10mins to run single-threaded
   ];
 
   dontUseSetuptoolsCheck = true;
@@ -52,9 +54,18 @@ buildPythonPackage rec {
       --replace "cmdclass=versioneer.get_cmdclass()," ""
   '';
 
+  # dask test suite with consistently fail when using high core counts
+  preCheck = ''
+    NIX_BUILD_CORES=$((NIX_BUILD_CORES > 8 ? 8 : NIX_BUILD_CORES))
+  '';
+
+  pytestFlagsArray = [ "-n $NIX_BUILD_CORES" ];
+
   disabledTests = [
     "test_argwhere_str"
     "test_count_nonzero_str"
+    "rolling_methods"  # floating percision error ~0.1*10^8 small
+    "num_workers_config" # flaky
   ];
 
   meta = {

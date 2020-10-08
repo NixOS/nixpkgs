@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lite";
-  version = "1.03";
+  version = "1.11";
 
   src = fetchFromGitHub {
     owner = "rxi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1h8z4fav5ns9sm92axs3k9v6jgkqq0vg9mixza14949blr426mlj";
+    sha256 = "0wxqfb4ly8g7w5qph76xys95b55ackkags8jgd1nasmiyi8gcd5a";
   };
 
   nativeBuildInputs = [ makeWrapper pkg-config ];

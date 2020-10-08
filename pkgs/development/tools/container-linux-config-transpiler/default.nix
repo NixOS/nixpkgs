@@ -4,7 +4,7 @@ with lib;
 
 buildGoPackage rec {
   pname = "ct";
-  version = "0.7.0";
+  version = "0.9.0";
 
   goPackagePath = "github.com/coreos/container-linux-config-transpiler";
 
@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "coreos";
     repo = "container-linux-config-transpiler";
     rev = "v${version}";
-    sha256="058zjk9yqgdli55gc6y48455il6wjpslyz2r2ckk2ki9c5qc8b7c";
+    sha256="1w6nvgrl5qp3ci9igflk9dlk3020psv5m4f3p57f3qcx9vrcl4lw";
   };
 
   buildFlagsArray = ''

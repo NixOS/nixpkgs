@@ -29,13 +29,15 @@ in {
 
   config = mkIf cfg.enable {
     systemd.services.ssm-agent = {
+      users.extraUsers.ssm-user = {};
+
       inherit (cfg.package.meta) description;
       after    = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      path = [ fake-lsb-release ];
+      path = [ fake-lsb-release pkgs.coreutils ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/agent";
+        ExecStart = "${cfg.package}/bin/amazon-ssm-agent";
         KillMode = "process";
         Restart = "on-failure";
         RestartSec = "15min";

@@ -14,8 +14,10 @@ stdenv.mkDerivation rec {
   uuid = "icon-hider@kalnitsky.org";
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
     cp -r ${uuid} $out/share/gnome-shell/extensions
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {

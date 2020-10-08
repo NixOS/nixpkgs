@@ -1,12 +1,12 @@
 { buildPythonPackage, fetchPypi, lib, pytorch, contextlib2
 , graphviz, networkx, six, opt-einsum, tqdm }:
 buildPythonPackage rec {
-  version = "1.1.0";
+  version = "1.4.0";
   pname = "pyro-ppl";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "5ca2fd19276fcfcf52babb48d22892a41d6238d7a6c65e63f704b070a3816479";
+    sha256 = "e863321bee141fb8d20d621aedc5925c472e06c08988447490115f54a31487ad";
   };
 
   propagatedBuildInputs = [

@@ -1,12 +1,12 @@
 { lib, fetchzip }:
 
 let
-  version = "1.0";
+  version = "2.0";
 in
 fetchzip {
   name = "ultimate-oldschool-pc-font-pack-${version}";
-  url = "https://int10h.org/oldschool-pc-fonts/download/ultimate_oldschool_pc_font_pack_v${version}.zip";
-  sha256 = "0hid4dgqfy2w26734vcw2rxmpacd9vd1r2qpdr9ww1n3kgc92k9y";
+  url = "https://int10h.org/oldschool-pc-fonts/download/oldschool_pc_font_pack_v${version}_ttf.zip";
+  sha256 = "0z0fw6ni7iq806y4m83xrfx46r14xxxql09ch2gxjqi062awqyh8";
 
   postFetch= ''
     mkdir -p $out/share/fonts/truetype

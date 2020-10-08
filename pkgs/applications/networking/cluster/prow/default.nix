@@ -15,6 +15,8 @@ buildGoModule rec {
 
   vendorSha256 = "16fdc5r28andm8my4fxj0f1yygx6j2mvn92i6xdfhbcra0lvr4ql";
 
+  doCheck = false;
+
   subPackages = [
     "prow/cmd/admission"
     "prow/cmd/branchprotector"

@@ -1,5 +1,5 @@
 { clangStdenv, fetchFromGitHub, fetchpatch, which, ninja, python, gyp, pkgconfig
-, protobuf, ibus, gtk2, zinnia, qt5, libxcb }:
+, protobuf, ibus, gtk2, zinnia, qt5, libxcb, tegaki-zinnia-japanese }:
 
 let
   japanese_usage_dictionary = fetchFromGitHub {
@@ -21,7 +21,7 @@ in clangStdenv.mkDerivation rec {
     maintainers  = with maintainers; [ gebner ericsagnes ];
   };
 
-  nativeBuildInputs = [ which ninja python gyp pkgconfig ];
+  nativeBuildInputs = [ which ninja python gyp pkgconfig qt5.wrapQtAppsHook ];
   buildInputs = [ protobuf ibus gtk2 zinnia qt5.qtbase libxcb ];
 
   src = fetchFromGitHub {
@@ -37,6 +37,11 @@ in clangStdenv.mkDerivation rec {
       url = "https://github.com/google/mozc/commit/82d38f929882a9c62289b179c6fe41efed249987.patch";
       sha256 = "07cja1b7qfsd3i76nscf1zwiav74h7d6h2g9g2w4bs3h1mc9jwla";
     })
+    # Support dates after 2019
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/mozc/-/raw/master/debian/patches/add_support_new_japanese_era.patch";
+      sha256 = "1dsiiglrmm8i8shn2hv0j2b8pv6miysjrimj4569h606j4lwmcw2";
+    })
   ];
 
   postUnpack = ''
@@ -45,7 +50,7 @@ in clangStdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
-    export GYP_DEFINES="document_dir=$out/share/doc/mozc use_libzinnia=1 use_libprotobuf=1 ibus_mozc_path=$out/lib/ibus-mozc/ibus-engine-mozc"
+    export GYP_DEFINES="document_dir=$out/share/doc/mozc use_libzinnia=1 use_libprotobuf=1 ibus_mozc_path=$out/lib/ibus-mozc/ibus-engine-mozc zinnia_model_file=${tegaki-zinnia-japanese}/share/tegaki/models/zinnia/handwriting-ja.model"
     cd src && python build_mozc.py gyp --gypdir=${gyp}/bin --server_dir=$out/lib/mozc
   '';
 
@@ -65,6 +70,7 @@ in clangStdenv.mkDerivation rec {
 
     install -D -m 755 out_linux/Release/mozc_server $out/lib/mozc/mozc_server
     install    -m 755 out_linux/Release/mozc_tool   $out/lib/mozc/mozc_tool
+    wrapQtApp $out/lib/mozc/mozc_tool
 
     install -d        $out/share/doc/mozc
     install -m 644    data/installer/*.html         $out/share/doc/mozc/

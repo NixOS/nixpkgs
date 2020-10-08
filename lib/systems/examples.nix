@@ -46,16 +46,16 @@ rec {
 
   armv7a-android-prebuilt = {
     config = "armv7a-unknown-linux-androideabi";
-    sdkVer = "24";
-    ndkVer = "18b";
+    sdkVer = "29";
+    ndkVer = "21";
     platform = platforms.armv7a-android;
     useAndroidPrebuilt = true;
   };
 
   aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
-    sdkVer = "24";
-    ndkVer = "18b";
+    sdkVer = "29";
+    ndkVer = "21";
     platform = platforms.aarch64-multiplatform;
     useAndroidPrebuilt = true;
   };
@@ -161,6 +161,15 @@ rec {
   x86_64-embedded = {
     config = "x86_64-elf";
     libc = "newlib";
+  };
+
+  #
+  # Redox
+  #
+
+  x86_64-unknown-redox = {
+    config = "x86_64-unknown-redox";
+    libc = "relibc";
   };
 
   #

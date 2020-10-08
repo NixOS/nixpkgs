@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig
-, wayland, libGL, mesa, libxkbcommon, cairo, libxcb
+{ stdenv, fetchurl, meson, ninja, pkg-config, wayland
+, libGL, mesa, libxkbcommon, cairo, libxcb
 , libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput, libevdev
 , colord, lcms2, pipewire ? null
 , pango ? null, libunwind ? null, freerdp ? null, vaapi ? null, libva ? null
@@ -10,14 +10,14 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "weston";
-  version = "8.0.0";
+  version = "9.0.0";
 
   src = fetchurl {
     url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "0j3q0af3595g4wcicldgy749zm2g2b6bswa6ya8k075a5sdv863m";
+    sha256 = "1zlql0xgiqc3pvgbpnnvj4xvpd91pwva8qf83xfb23if377ddxaw";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland ];
   buildInputs = [
     wayland libGL mesa libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
     mtdev libjpeg pam dbus libinput libevdev pango libunwind freerdp vaapi libva
@@ -45,9 +45,19 @@ stdenv.mkDerivation rec {
   passthru.providedSessions = [ "weston" ];
 
   meta = {
-    description = "Reference implementation of a Wayland compositor";
-    homepage = "https://wayland.freedesktop.org/";
-    license = licenses.mit;
+    description = "A lightweight and functional Wayland compositor";
+    longDescription = ''
+      Weston is the reference implementation of a Wayland compositor, as well
+      as a useful environment in and of itself.
+      Out of the box, Weston provides a very basic desktop, or a full-featured
+      environment for non-desktop uses such as automotive, embedded, in-flight,
+      industrial, kiosks, set-top boxes and TVs. It also provides a library
+      allowing other projects to build their own full-featured environments on
+      top of Weston's core. A small suite of example or demo clients are also
+      provided.
+    '';
+    homepage = "https://gitlab.freedesktop.org/wayland/weston";
+    license = licenses.mit; # Expat version
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
   };

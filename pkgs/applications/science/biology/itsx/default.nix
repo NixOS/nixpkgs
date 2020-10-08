@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://microbiology.se/software/itsx/";
     license = licenses.gpl3;
     maintainers = [ maintainers.bzizou ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = platforms.unix;
   };
 }

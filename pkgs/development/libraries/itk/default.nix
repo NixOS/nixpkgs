@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, cmake, makeWrapper
-, pkgconfig, libX11, libuuid, xz, vtk, Cocoa }:
+, pkgconfig, libX11, libuuid, xz, vtk_7, Cocoa }:
 
 stdenv.mkDerivation rec {
   pname = "itk";
-  version = "5.1.0";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "InsightSoftwareConsortium";
     repo = "ITK";
     rev = "v${version}";
-    sha256 = "0rvkp00xj1js60021jv2ydyl74wvbyb205gm9d7hf8gy2q456hgl";
+    sha256 = "1z7rmqrhgl7hfb3d0077kvp8vpi05r2zk3qyqzmv7bzbal5sqqhv";
   };
 
   cmakeFlags = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ cmake xz makeWrapper ];
-  buildInputs = [ libX11 libuuid vtk ] ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
+  buildInputs = [ libX11 libuuid vtk_7 ] ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
 
   postInstall = ''
     wrapProgram "$out/bin/h5c++" --prefix PATH ":" "${pkgconfig}/bin"

@@ -4,18 +4,18 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   pname = "stella";
-  version = "6.1.2";
+  version = "6.2.1";
 
   src = fetchFromGitHub {
     owner = "stella-emu";
     repo = "stella";
     rev = version;
-    sha256 = "0m4vdgn7gqhga7hamy4djnlkfgz78gfkmg8by3mai5lw0cps7hr1";
+    sha256 = "1yhszswwg217x8d2qlcasi9l97y1z6w1pgliys4p27zv5b1ygy7p";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ SDL2 ];
-  
+
   enableParallelBuilding = true;
 
   meta = {
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
     the GNU General Public License (GPL). Stella was originally
     developed for Linux by Bradford W. Mott, and is currently
     maintained by Stephen Anthony.
-    As of its 3.5 release, Stella is officially donationware. 
+    As of its 3.5 release, Stella is officially donationware.
     '';
-    homepage = "http://stella-emu.github.io/";
+    homepage = "https://stella-emu.github.io/";
     license = licenses.gpl2;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

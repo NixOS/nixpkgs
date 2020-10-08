@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
+, importlib-metadata
 , jsonpickle
 , wrapt
 , requests
@@ -10,15 +12,17 @@
 
 buildPythonPackage rec {
   pname = "aws-xray-sdk";
-  version = "2.4.3";
+  version = "2.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "263a38f3920d9dc625e3acb92e6f6d300f4250b70f538bd009ce6e485676ab74";
+    sha256 = "abf5b90f740e1f402e23414c9670e59cb9772e235e271fef2bce62b9100cbc77";
   };
 
   propagatedBuildInputs = [
     jsonpickle wrapt requests future botocore
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
   meta = {

@@ -1,5 +1,5 @@
 {stdenv, fetchurl, zlib, openssl, libre, librem, pkgconfig, gst_all_1
-, cairo, mpg123, alsaLib, SDL, libv4l, celt, libsndfile, srtp, ffmpeg
+, cairo, mpg123, alsaLib, SDL, libv4l, celt, libsndfile, srtp, ffmpeg_3
 , gsm, speex, portaudio, spandsp, libuuid, ccache, libvpx
 }:
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [zlib openssl libre librem cairo mpg123
-    alsaLib SDL libv4l celt libsndfile srtp ffmpeg gsm speex portaudio spandsp libuuid
+    alsaLib SDL libv4l celt libsndfile srtp ffmpeg_3 gsm speex portaudio spandsp libuuid
     ccache libvpx
   ] ++ (with gst_all_1; [ gstreamer gst-libav gst-plugins-base gst-plugins-bad gst-plugins-good ]);
   makeFlags = [

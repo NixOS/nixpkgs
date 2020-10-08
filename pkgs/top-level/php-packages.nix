@@ -1,9 +1,9 @@
 { stdenv, lib, pkgs, fetchgit, php, autoconf, pkgconfig, re2c
-, gettext, bzip2, curl, libxml2, openssl, gmp, icu, oniguruma, libsodium
+, gettext, bzip2, curl, libxml2, openssl, gmp, icu64, oniguruma, libsodium
 , html-tidy, libzip, zlib, pcre, pcre2, libxslt, aspell, openldap, cyrus_sasl
 , uwimap, pam, libiconv, enchant1, libXpm, gd, libwebp, libjpeg, libpng
 , freetype, libffi, freetds, postgresql, sqlite, net-snmp, unixODBC, libedit
-, readline, rsync
+, readline, rsync, fetchpatch
 }:
 
 let
@@ -57,12 +57,41 @@ in
     };
 
     composer = mkDerivation rec {
-      version = "1.10.6";
+      version = "1.10.13";
       pname = "composer";
 
       src = pkgs.fetchurl {
         url = "https://getcomposer.org/download/${version}/composer.phar";
-        sha256 = "0yzfzgg9qlc388g91bdg7y7rp1q8vqb5hkwykwmr1n1lv8dsrg99";
+        sha256 = "13vhfdlkmpvmk1h30f1i688xk7sdgfj0b82am32jgpa8zmf499sw";
+      };
+
+      dontUnpack = true;
+
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+
+      installPhase = ''
+        mkdir -p $out/bin
+        install -D $src $out/libexec/composer/composer.phar
+        makeWrapper ${php}/bin/php $out/bin/composer \
+          --add-flags "$out/libexec/composer/composer.phar" \
+          --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.unzip ]}
+      '';
+
+      meta = with pkgs.lib; {
+        description = "Dependency Manager for PHP";
+        license = licenses.mit;
+        homepage = "https://getcomposer.org/";
+        maintainers = with maintainers; [ offline ] ++ teams.php.members;
+      };
+    };
+
+    composer2 = mkDerivation rec {
+      version = "2.0.0-RC1";
+      pname = "composer";
+
+      src = pkgs.fetchurl {
+        url = "https://getcomposer.org/download/${version}/composer.phar";
+        sha256 = "0wzr360gaa59cbjpa3vw9yrpc55a4fmdv68q0rn7vj0mjnz60fhd";
       };
 
       dontUnpack = true;
@@ -86,12 +115,12 @@ in
     };
 
     php-cs-fixer = mkDerivation rec {
-      version = "2.16.3";
+      version = "2.16.4";
       pname = "php-cs-fixer";
 
       src = pkgs.fetchurl {
         url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
-        sha256 = "195j61qbgbdn5xi0l6030mklji8m7fan2kf3446a1m2n4df3f5hb";
+        sha256 = "05rdvypxc86hjs8b7id2csa7g1rf7dk2swzfvd5768abdgfasvr8";
       };
 
       phases = [ "installPhase" ];
@@ -232,12 +261,12 @@ in
     };
 
     phpstan = mkDerivation rec {
-      version = "0.12.25";
+      version = "0.12.48";
       pname = "phpstan";
 
       src = pkgs.fetchurl {
         url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-        sha256 = "1a864v7fxpv5kp24nkvczrir3ldl6wxvaq85rd391ppa8ahdhvdd";
+        sha256 = "170yzz23lyipyckv8y2x9masv5qdmbskwwlbfc8750xb3g2q7pzl";
       };
 
       phases = [ "installPhase" ];
@@ -370,6 +399,8 @@ in
       meta.maintainers = lib.teams.php.members;
     };
 
+    blackfire = pkgs.callPackage ../development/tools/misc/blackfire/php-probe.nix { inherit php; };
+
     couchbase = buildPecl rec {
       version = "2.6.1";
       pname = "couchbase";
@@ -492,13 +523,13 @@ in
 
     maxminddb = buildPecl rec {
       pname = "maxminddb";
-      version = "1.6.0";
+      version = "1.7.0";
 
       src = pkgs.fetchFromGitHub {
         owner = "maxmind";
         repo = "MaxMind-DB-Reader-php";
         rev = "v${version}";
-        sha256 = "0sa943ij9pgz55aik93lllb8lh063bvr66ibn77p3y3p41vdiabz";
+        sha256 = "16msc9s15y43lxw89kj51aldlkd57dc8gms199i51jc984b68ljc";
       };
 
       buildInputs = [ pkgs.libmaxminddb ];
@@ -547,7 +578,7 @@ in
       nativeBuildInputs = [ pkgs.pkgconfig ];
       buildInputs = with pkgs; [
         cyrus_sasl
-        icu
+        icu64
         openssl
         snappy
         zlib
@@ -854,6 +885,9 @@ in
       inherit configureFlags internalDeps buildInputs
         zendExtension doCheck;
 
+      prePatch = "pushd ../..";
+      postPatch = "popd";
+
       preConfigure = ''
         nullglobRestore=$(shopt -p nullglob)
         shopt -u nullglob   # To make ?-globbing work
@@ -944,6 +978,12 @@ in
         enable = lib.versionOlder php.version "7.4"; }
       { name = "gettext";
         buildInputs = [ gettext ];
+        patches = lib.optionals (lib.versionOlder php.version "7.4") [
+          (fetchpatch {
+            url = "https://github.com/php/php-src/commit/632b6e7aac207194adc3d0b41615bfb610757f41.patch";
+            sha256 = "0xn3ivhc4p070vbk5yx0mzj2n7p04drz3f98i77amr51w0vzv046";
+          })
+        ];
         postPhpize = ''substituteInPlace configure --replace 'as_fn_error $? "Cannot locate header file libintl.h" "$LINENO" 5' ':' '';
         configureFlags = "--with-gettext=${gettext}"; }
       { name = "gmp";
@@ -962,7 +1002,13 @@ in
         # uwimap doesn't build on darwin.
         enable = (!stdenv.isDarwin); }
       # interbase (7.3, 7.2)
-      { name = "intl"; buildInputs = [ icu ]; }
+      { name = "intl";
+        buildInputs = [ icu64 ];
+        patches = lib.optional (lib.versionOlder php.version "7.4") (fetchpatch {
+          url = "https://github.com/php/php-src/commit/93a9b56c90c334896e977721bfb3f38b1721cec6.patch";
+          sha256 = "055l40lpyhb0rbjn6y23qkzdhvpp7inbnn6x13cpn4inmhjqfpg4";
+        });
+      }
       { name = "json"; }
       { name = "ldap";
         buildInputs = [ openldap cyrus_sasl ];
@@ -983,14 +1029,14 @@ in
         # The configure script doesn't correctly add library link
         # flags, so we add them to the variable used by the Makefile
         # when linking.
-        MYSQLND_SHARED_LIBADD = "-lssl -lcrypto -lz";
+        MYSQLND_SHARED_LIBADD = "-lssl -lcrypto";
         # The configure script builds a config.h which is never
         # included. Let's include it in the main header file
         # included by all .c-files.
         patches = [
           (pkgs.writeText "mysqlnd_config.patch" ''
-            --- a/mysqlnd.h
-            +++ b/mysqlnd.h
+            --- a/ext/mysqlnd/mysqlnd.h
+            +++ b/ext/mysqlnd/mysqlnd.h
             @@ -1,3 +1,6 @@
             +#ifdef HAVE_CONFIG_H
             +#include "config.h"
@@ -998,6 +1044,19 @@ in
              /*
                +----------------------------------------------------------------------+
                | Copyright (c) The PHP Group                                          |
+          '')
+        ] ++ lib.optional (lib.versionOlder php.version "7.4.8") [
+          (pkgs.writeText "mysqlnd_fix_compression.patch" ''
+            --- a/ext/mysqlnd/mysqlnd.h
+            +++ b/ext/mysqlnd/mysqlnd.h
+            @@ -48,7 +48,7 @@
+             #define MYSQLND_DBG_ENABLED 0
+             #endif
+
+            -#if defined(MYSQLND_COMPRESSION_WANTED) && defined(HAVE_ZLIB)
+            +#if defined(MYSQLND_COMPRESSION_WANTED)
+             #define MYSQLND_COMPRESSION_ENABLED 1
+             #endif
           '')
         ];
         postPhpize = lib.optionalString (lib.versionOlder php.version "7.4") ''
@@ -1013,8 +1072,8 @@ in
         # included after the ifdef...
         patches = lib.optional (lib.versionOlder php.version "7.4") [
           (pkgs.writeText "zend_file_cache_config.patch" ''
-            --- a/zend_file_cache.c
-            +++ b/zend_file_cache.c
+            --- a/ext/opcache/zend_file_cache.c
+            +++ b/ext/opcache/zend_file_cache.c
             @@ -27,9 +27,9 @@
              #include "ext/standard/md5.h"
              #endif
@@ -1142,6 +1201,10 @@ in
         doCheck = false; }
       { name = "zlib";
         buildInputs = [ zlib ];
+        patches = lib.optionals (lib.versionOlder php.version "7.4") [
+          # Derived from https://github.com/php/php-src/commit/f16b012116d6c015632741a3caada5b30ef8a699
+          ../development/interpreters/php/zlib-darwin-tests.patch
+        ];
         configureFlags = [ "--with-zlib" ]
           ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-zlib-dir=${zlib.dev}" ]; }
     ];

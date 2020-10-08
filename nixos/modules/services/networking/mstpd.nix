@@ -5,7 +5,7 @@ in
 with lib;
 {
   options.services.mstpd = {
-    
+
     enable = mkOption {
       default = false;
       type = types.bool;

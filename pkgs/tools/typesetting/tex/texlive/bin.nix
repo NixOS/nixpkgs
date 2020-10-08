@@ -46,7 +46,7 @@ let
         };
       in fetchurl {
         name = "pdftoepdf-poppler${popplerVersion}.cc";
-        url = "https://www.tug.org/svn/texlive/trunk/Build/source/texk/web2c/pdftexdir/pdftoepdf-poppler${popplerVersion}.cc?revision=52959&view=co";
+        url = "https://www.tug.org/svn/texlive/trunk/Build/source/texk/web2c/pdftexdir/pdftoepdf-poppler${popplerVersion}.cc?revision=52959&view=co&pathrev=52959";
         sha256 = "0pngvw1jgnm4cqskrzf5a3z8rj4ssl10007n3wbblj50hvvzjph3";
         postFetch = ''
           # The trunk added some extra arguments to certain functions so we need to revert that
@@ -56,7 +56,7 @@ let
       };
       pdftosrc = fetchurl {
         name = "pdftosrc-poppler${popplerVersion}.cc";
-        url = "https://www.tug.org/svn/texlive/trunk/Build/source/texk/web2c/pdftexdir/pdftosrc-poppler${popplerVersion}.cc?revision=52959&view=co";
+        url = "https://www.tug.org/svn/texlive/trunk/Build/source/texk/web2c/pdftexdir/pdftosrc-poppler${popplerVersion}.cc?revision=52959&view=co&pathrev=52959";
         sha256 = "0iq2cmwvf2lxy32sygrafwqgcwvvbdnvxm5l3mrg9cb2a1g06380";
       };
     in ''
@@ -145,6 +145,7 @@ core = stdenv.mkDerivation rec {
   configureFlags = common.configureFlags
     ++ [ "--without-x" ] # disable xdvik and xpdfopen
     ++ map (what: "--disable-${what}") ([
+      "chktex"
       "dvisvgm" "dvipng" # ghostscript dependency
       "luatex" "luajittex" "mp" "pmp" "upmp" "mf" # cairo would bring in X and more
       "xetex" "bibtexu" "bibtex8" "bibtex-x" "upmendex" # ICU isn't small
@@ -268,6 +269,24 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
     mv "$out/bin"/{luatex,texlua*} "$luatex/bin/"
     mv "$out/bin"/xetex "$xetex/bin/"
   '';
+};
+
+
+chktex = stdenv.mkDerivation {
+  pname = "texlive-chktex.bin";
+  inherit version;
+
+  inherit (common) src;
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ core/*kpathsea*/ ];
+
+  preConfigure = "cd texk/chktex";
+
+  configureFlags = common.configureFlags
+    ++ [ "--with-system-kpathsea" ];
+
+  enableParallelBuilding = true;
 };
 
 

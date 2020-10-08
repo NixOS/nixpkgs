@@ -3,7 +3,7 @@
 stdenvNoCC.mkDerivation rec {
   pname = "bibata-cursors-translucent";
   version = "unstable-2019-09-13";
-  
+
   src = fetchFromGitHub {
     owner = "Silicasandwhich";
     repo = "Bibata_Cursor_Translucent";

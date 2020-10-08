@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gitlab.redox-os.org/redox-os/ion";
     license = licenses.mit;
     maintainers = with maintainers; [ dywedir ];
-    platforms = platforms.all;
   };
 
   passthru = {

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook";
-  version = "0.3.7";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "rust-lang-nursery";
     repo = "mdBook";
     rev = "v${version}";
-    sha256 = "0a5i842aqa5xaii5lfrnks0ldavbhbd3bl4f2d442i1ahbin5b32";
+    sha256 = "1566jabmvafv6aiw5nvb6y2zcnxc7pbb9dl3s4vi6mx21kqp68ag";
   };
 
-  cargoSha256 = "1qx3447y684b7y18lgk9cc37if2ld42jnmy1kak191q6rjh5ssh7";
+  cargoSha256 = "0sa1h3qzdhgk2h3wrc0kg0ajq6zbkvn1ry4672gfn3j9gpgvy2bb";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
@@ -20,6 +20,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rust-lang-nursery/mdbook";
     license = [ licenses.mpl20 ];
     maintainers = [ maintainers.havvy ];
-    platforms = platforms.all;
   };
 }

@@ -334,7 +334,7 @@ let
     rtiff = [ pkgs.libtiff.dev ];
     runjags = [ pkgs.jags ];
     RVowpalWabbit = [ pkgs.zlib.dev pkgs.boost ];
-    rzmq = [ pkgs.zeromq3 ];
+    rzmq = [ pkgs.zeromq ];
     SAVE = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre ];
     sdcTable = [ pkgs.gmp pkgs.glpk ];
     seewave = [ pkgs.fftw.dev pkgs.libsndfile.dev ];
@@ -702,6 +702,10 @@ let
     });
 
     curl = old.curl.overrideDerivation (attrs: {
+      preConfigure = "patchShebangs configure";
+    });
+
+    RcppParallel = old.RcppParallel.overrideDerivation (attrs: {
       preConfigure = "patchShebangs configure";
     });
 

@@ -19,6 +19,5 @@ buildGoPackage rec {
     homepage    = "https://${goPackagePath}";
     maintainers = with maintainers; [ cryptix ];
     license     = licenses.mit;
-    platforms   = platforms.all;
   };
 }

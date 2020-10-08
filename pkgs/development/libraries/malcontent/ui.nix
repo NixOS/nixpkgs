@@ -3,6 +3,7 @@
 , ninja
 , pkg-config
 , gobject-introspection
+, itstool
 , wrapGAppsHook
 , glib
 , accountsservice
@@ -10,6 +11,7 @@
 , flatpak
 , malcontent
 , gtk3
+, appstream-glib
 , desktop-file-utils
 , polkit
 , glib-testing
@@ -20,7 +22,7 @@ stdenv.mkDerivation rec {
 
   inherit (malcontent) version src;
 
-  outputs = [ "bin" "out" "dev" ];
+  outputs = [ "out" "lib" "dev" ];
 
   patches = [
     # Allow installing installed tests to a separate output.
@@ -35,11 +37,13 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gobject-introspection
+    itstool
     desktop-file-utils
     wrapGAppsHook
   ];
 
   buildInputs = [
+    appstream-glib
     dbus
     polkit
     glib-testing

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "dpkt";
-  version = "1.9.2";
+  version = "1.9.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0m0ym219zsqfjl6jwivw5as3igjbmhpcn4dvabc5nkd0bk6jxaaj";
+    sha256 = "f4e579cbaf6e2285ebf3a9e84019459b4367636bac079ba169527e582fca48b4";
   };
 
   meta = with stdenv.lib; {

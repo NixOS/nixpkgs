@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, python3 }:
+{ stdenv, fetchurl, fetchpatch, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "libevdev";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "17pb5375njb1r05xmk0r57a2j986ihglh2n5nqcylbag4rj8mqg7";
+    sha256 = "1jvsphdrs1i54ccjcn6ll26jy42am7h28lbsvwa6pmxgqm43qq7m";
   };
 
   nativeBuildInputs = [ python3 ];

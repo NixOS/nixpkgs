@@ -1,4 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage, flake8, pycodestyle, pytestrunner, pytest }:
+{ lib, fetchPypi, buildPythonPackage, pythonOlder
+, flake8
+, importlib-metadata
+, pycodestyle
+, pytestrunner
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "flake8-debugger";
@@ -11,7 +17,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pytestrunner ];
 
-  propagatedBuildInputs = [ flake8 pycodestyle ];
+  propagatedBuildInputs = [ flake8 pycodestyle ]
+    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   checkInputs = [ pytest ];
 

@@ -46,7 +46,7 @@ in
         Set of files that have to be linked in <filename>/etc</filename>.
       '';
 
-      type = with types; loaOf (submodule (
+      type = with types; attrsOf (submodule (
         { name, config, ... }:
         { options = {
 

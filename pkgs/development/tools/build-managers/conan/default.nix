@@ -1,4 +1,4 @@
-{ lib, python3, git, pkgconfig }:
+{ lib, python3, fetchFromGitHub, git, pkgconfig }:
 
 # Note:
 # Conan has specific dependency demands; check
@@ -39,12 +39,14 @@ let newPython = python3.override {
 };
 
 in newPython.pkgs.buildPythonApplication rec {
-  version = "1.25.0";
+  version = "1.27.0";
   pname = "conan";
 
-  src = newPython.pkgs.fetchPypi {
-    inherit pname version;
-    sha256 = "1wgmx6s4h5m6zixb3wlaicy56rsqcy2srzmvii80xdx9g5wvi9pv";
+  src = fetchFromGitHub {
+    owner = "conan-io";
+    repo = "conan";
+    rev = version;
+    sha256 = "0ncqs1p4g23fmzgdmwppgxr8w275h38hgjdzs456cgivz8xs9rjl";
   };
 
   propagatedBuildInputs = with newPython.pkgs; [
@@ -75,23 +77,20 @@ in newPython.pkgs.buildPythonApplication rec {
   ] ++ (with newPython.pkgs; [
     codecov
     mock
-    pytest
-    node-semver
     nose
     parameterized
     webtest
   ]);
 
-  # Conan 1.14.0 has removed all tests from the Pypi source dist:
-  #     https://github.com/conan-io/conan/pull/4713
-  # We have recommended they be added back:
-  #     https://github.com/conan-io/conan/issues/4563#issuecomment-602225083
+  # TODO: reenable tests now that we fetch tests w/ the source from GitHub.
+  # Not enabled right now due to time constraints/failing tests that I didn't have time to track down
   doCheck = false;
 
   postPatch = ''
     substituteInPlace conans/requirements.txt \
       --replace "PyYAML>=3.11, <3.14.0" "PyYAML" \
-      --replace "deprecation>=2.0, <2.1" "deprecation"
+      --replace "deprecation>=2.0, <2.1" "deprecation" \
+      --replace "six>=1.10.0,<=1.14.0" "six"
   '';
 
   meta = with lib; {

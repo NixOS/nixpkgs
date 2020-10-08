@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ stdenv, fetchurl, fetchpatch, enableStatic ? true, enableShared ? true }:
 
 stdenv.mkDerivation rec {
   pname = "libexecinfo";
@@ -29,12 +29,19 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CC:=$(CC)" "AR:=$(AR)" ];
 
+  buildFlags =
+      stdenv.lib.optional enableStatic "static"
+   ++ stdenv.lib.optional enableShared "dynamic";
+
   patchFlags = [ "-p0" ];
 
   installPhase = ''
     install -Dm644 execinfo.h stacktraverse.h -t $out/include
-    install -Dm755 libexecinfo.{a,so.1} -t $out/lib
+  '' + stdenv.lib.optionalString enableShared ''
+    install -Dm755 libexecinfo.so.1 -t $out/lib
     ln -s $out/lib/libexecinfo.so{.1,}
+  '' + stdenv.lib.optionalString enableStatic ''
+    install -Dm755 libexecinfo.a -t $out/lib
   '';
 
   meta = with stdenv.lib; {

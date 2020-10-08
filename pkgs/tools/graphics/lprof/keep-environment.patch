@@ -3,7 +3,7 @@
 @@ -22,12 +22,7 @@
  # opts.Add(BoolOption('qt-mt-lib', 'Flag used to set QT library to either qt-mt or qt. Value of 1 = qt-mt, 0 = qt.', 'yes'))
  
- # setup base environemnt 
+ # setup base environment 
 -env = Environment(
 -    ENV = {
 -      'PATH' : os.environ[ 'PATH' ],

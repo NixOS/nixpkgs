@@ -20,6 +20,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/TankerHQ/ruplacer";
     license = [ licenses.bsd3 ];
     maintainers = with maintainers; [ filalex77 ];
-    platforms = platforms.all;
   };
 }

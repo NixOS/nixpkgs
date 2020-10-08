@@ -11,7 +11,7 @@ let
         owner = "pyproj4";
         repo = "pyproj";
         rev = "v${version}rel";
-        sha256 = "sha256:18v4h7jx4mcc0x2xy8y7dfjq9bzsyxs8hdb6v67cabvlz2njziqy";
+        sha256 = "18v4h7jx4mcc0x2xy8y7dfjq9bzsyxs8hdb6v67cabvlz2njziqy";
       };
       nativeBuildInputs = with python.pkgs; [ cython ];
       patches = [ ];

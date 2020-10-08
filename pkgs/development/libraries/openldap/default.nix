@@ -1,11 +1,11 @@
 { stdenv, fetchurl, openssl, cyrus_sasl, db, groff, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "openldap-2.4.50";
+  name = "openldap-2.4.51";
 
   src = fetchurl {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${name}.tgz";
-    sha256 = "1f46nlfwmys110j36sifm7ah8m8f3s10c3vaiikmmigmifapvdaw";
+    sha256 = "0qmy2jkk6v9iqwrsdsn8s7lwzaplr01a2mgf21r6nl66lig7g47l";
   };
 
   # TODO: separate "out" and "bin"
@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
     "STRIP="
     "prefix=$(out)"
     "moduledir=$(out)/lib/modules"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ "CC=cc" ];
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   configureFlags = [
     "--enable-overlays"
@@ -40,8 +41,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
 
   postBuild = ''
-    make $makeFlags -C contrib/slapd-modules/passwd/sha2
-    make $makeFlags -C contrib/slapd-modules/passwd/pbkdf2
+    make $makeFlags CC=$CC -C contrib/slapd-modules/passwd/sha2
+    make $makeFlags CC=$CC -C contrib/slapd-modules/passwd/pbkdf2
   '';
 
   doCheck = false; # needs a running LDAP server

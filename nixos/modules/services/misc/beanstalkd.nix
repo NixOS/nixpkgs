@@ -28,12 +28,22 @@ in
           example = "0.0.0.0";
         };
       };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to open ports in the firewall for the server.";
+      };
     };
   };
 
   # implementation
 
   config = mkIf cfg.enable {
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.listen.port ];
+    };
 
     environment.systemPackages = [ pkg ];
 

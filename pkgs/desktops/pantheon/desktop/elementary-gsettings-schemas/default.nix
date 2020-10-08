@@ -8,7 +8,7 @@
 , epiphany
 , elementary-settings-daemon
 , gtk3
-, plank
+, elementary-dock
 , gsettings-desktop-schemas
 , extraGSettingsOverrides ? ""
 , extraGSettingsOverridePackages ? []
@@ -17,13 +17,13 @@
 let
 
   gsettingsOverridePackages = [
+    elementary-dock
     elementary-settings-daemon
     epiphany
     gala
-    mutter
     gsettings-desktop-schemas
     gtk3
-    plank
+    mutter
   ] ++ extraGSettingsOverridePackages;
 
 in

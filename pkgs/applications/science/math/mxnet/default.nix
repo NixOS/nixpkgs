@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake perl ];
 
-  buildInputs = [ opencv3 gtest blas ]
+  buildInputs = [ opencv3 gtest blas.provider ]
               ++ lib.optionals cudaSupport [ cudatoolkit nvidia_x11 ]
               ++ lib.optional cudnnSupport cudnn;
 

@@ -5,17 +5,18 @@
 , makeDesktopItem
 , makeWrapper
 , stdenv
+, lib
 , udev
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "termius";
-  version = "5.10.1";
+  version = "6.4.1";
 
   src = fetchurl {
     url = "https://deb.termius.com/pool/main/t/termius-app/termius-app_${version}_amd64.deb";
-    sha256 = "04zh0zzyp906lf6mz3xzxybn2a55rv3vvrj0m12gnrb8kjb3pk5s";
+    sha256 = "0vc4nz5yndg11zhs92xj496jqzlhy9g0vqlfqrmg8zpf9ciygbqz";
   };
 
   desktopItem = makeDesktopItem {
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
     cp "${desktopItem}/share/applications/"* "$out/share/applications"
   '';
 
-  runtimeDependencies = [ udev.lib ];
+  runtimeDependencies = [ (lib.getLib udev) ];
 
   postFixup = ''
     makeWrapper $out/opt/Termius/termius-app $out/bin/termius-app \

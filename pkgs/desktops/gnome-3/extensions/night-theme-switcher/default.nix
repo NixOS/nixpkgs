@@ -1,25 +1,25 @@
-{ stdenv, fetchFromGitLab }:
+{ stdenv, fetchFromGitLab, glib, gnome3, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-night-theme-switcher";
-  version = "19";
+  version = "36";
 
   src = fetchFromGitLab {
     owner = "rmnvgr";
     repo = "nightthemeswitcher-gnome-shell-extension";
     rev = "v${version}";
-    sha256 = "1ll0yf1skf51wa10mlrajd1dy459w33kx0i3vhfcx2pdk7mw5a3c";
+    sha256 = "1c88979qprwb5lj0v7va017w7rdr89a648anhw4k5q135jwyskpz";
   };
 
-  # makefile tries to do install in home directory using
-  # `gnome-extensions install`
-  dontBuild = true;
+  buildInputs = [ glib gnome3.gnome-shell unzip ];
 
   uuid = "nightthemeswitcher@romainvigier.fr";
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions/
-    cp -r src/ $out/share/gnome-shell/extensions/${uuid}
+    unzip build/${uuid}.shell-extension.zip -d $out/share/gnome-shell/extensions/${uuid}
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {

@@ -20,7 +20,6 @@ buildGoPackage rec {
     description = ''Convert YAML <=> TOML <=> JSON <=> HCL'';
     license = licenses.asl20;
     maintainers = with maintainers; [ Profpatsch ];
-    platforms = platforms.all;
     downloadPage = "https://github.com/sclevine/yj";
     updateWalker = true;
     inherit version;

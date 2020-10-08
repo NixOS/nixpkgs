@@ -1,7 +1,14 @@
-{ stdenv, python3Packages }:
+{ stdenv, python3 }:
 
 let
-  inherit (python3Packages) buildPythonApplication fetchPypi iowait psutil pyzmq tornado_4 mock;
+  python = python3.override {
+    self = python;
+    packageOverrides = self: super: {
+      tornado = super.tornado_4;
+    };
+  };
+
+  inherit (python.pkgs) buildPythonApplication fetchPypi iowait psutil pyzmq tornado mock six;
 in
 
 buildPythonApplication rec {
@@ -23,7 +30,7 @@ buildPythonApplication rec {
 
   doCheck = false; # weird error
 
-  propagatedBuildInputs = [ iowait psutil pyzmq tornado_4 ];
+  propagatedBuildInputs = [ iowait psutil pyzmq tornado six ];
 
   meta = with stdenv.lib; {
     description = "A process and socket manager";

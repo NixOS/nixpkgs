@@ -1,25 +1,40 @@
-{ stdenv, fetchFromGitHub, ncurses }:
+{ fetchFromGitLab
+, libao
+, libmodplug
+, libsamplerate
+, libsndfile
+, libvorbis
+, ncurses
+, stdenv }:
 
 stdenv.mkDerivation rec {
-  version = "2.44";
+  version = "2.52";
   pname = "frotz";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
+    domain = "gitlab.com";
     owner = "DavidGriffith";
     repo = "frotz";
     rev = version;
-    sha256 = "0gjkk4gxzqmxfdirrz2lr0bms6l9fc31vkmlywigkbdlh8wxgypp";
+    sha256 = "11ca1dz31b7s5vxjqncwjwmbbcr2m5v2rxjn49g4gnvwd6mqw48y";
   };
 
-  makeFlags = [ "CC=cc" "PREFIX=$(out)" "CURSES=-lncurses" ];
-
-  buildInputs = [ ncurses ];
+  buildInputs = [ libao libmodplug libsamplerate libsndfile libvorbis ncurses ];
+  preBuild = ''
+    makeFlagsArray+=(
+      CC="cc"
+      CFLAGS="-D_DEFAULT_SOURCE -D_XOPEN_SOURCE=600"
+      LDFLAGS="-lncursesw -ltinfo"
+    )
+  '';
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = "http://frotz.sourceforge.net/";
+    homepage = "https://davidgriffith.gitlab.io/frotz/";
+    changelog = "https://gitlab.com/DavidGriffith/frotz/-/raw/${version}/NEWS";
     description = "A z-machine interpreter for Infocom games and other interactive fiction.";
     platforms = platforms.unix;
-    maintainers = [ maintainers.nicknovitski ];
+    maintainers = with maintainers; [ nicknovitski  ddelabru ];
     license = licenses.gpl2;
   };
 }

@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ stdenv, fetchFromGitHub, rustPlatform, Security, fetchpatch }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bandwhich";
-  version = "0.14.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "imsnif";
     repo = pname;
     rev = version;
-    sha256 = "09lyl9cpb5li7kyh0y78lhgvvb24ssfjmkz65xzbgm5jyrz8rmr4";
+    sha256 = "0963yfbf88hb5fvyckhs1vfvib5skkj9n17qibpv5vsdlynbaa96";
   };
 
-  cargoSha256 = "0m57cdbghzzjyxr6c0diyrfsjqip1dnqsh0zlapv8myizxy4rrzy";
+  cargoSha256 = "0xp45kb0z7wiq6vnws4q7khbzslywh24sb43ssr39l1rajf7w64r";
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 

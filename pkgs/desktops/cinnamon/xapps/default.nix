@@ -16,31 +16,33 @@
 , wrapGAppsHook
 , inxi
 , mate
+, dbus
+, libdbusmenu-gtk3
 }:
 
 stdenv.mkDerivation rec {
   pname = "xapps";
-  version = "1.6.10";
+  version = "1.8.9";
 
   outputs = [ "out" "dev" ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/linuxmint/xapp/pull/110/commits/208563d4e2bbcfbeb4425d05f649867065c37615.patch";
+      sha256 = "0brqndfgawhayrm36cjh6fkff274729jivjq3h5jx93lprvl2zih";
+    })
+  ];
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "1jkxvqv9fxf9il5qfyddn4j4nkxgbxlil8vizbx99xz0kafb81vp";
+    sha256 = "01jx7612p0c0pi0r7fn5g08s6zjfmq1gfm5hi0fkzl0fxf2cx7a7";
   };
 
   # TODO: https://github.com/NixOS/nixpkgs/issues/36468
   NIX_CFLAGS_COMPILE = [
     "-I${glib.dev}/include/gio-unix-2.0"
-  ];
-
-  patches = [
-    (fetchpatch { # details see https://github.com/linuxmint/xapps/pull/65
-      url = "https://github.com/linuxmint/xapps/compare/d361d9cf357fade59b4bb68df2dcb2c0c39f90e1...2dfe82ec68981ea046345b2be349bd56293579f7.diff";
-      sha256 = "0sffclamvjas8ad57kxrg0vrgrd95xsk0xdl53dc3yivpxkfxrnk";
-    })
   ];
 
   nativeBuildInputs = [
@@ -63,6 +65,8 @@ stdenv.mkDerivation rec {
     xorg.libxkbfile
     python3.pkgs.pygobject3 # for .pc file
     mate.mate-panel # for gobject-introspection
+    dbus
+    libdbusmenu-gtk3
   ];
 
   # Requires in xapp.pc
@@ -79,14 +83,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     chmod +x schemas/meson_install_schemas.py # patchShebangs requires executable file
 
-    # The fetchpatch hook removes the renames, so postPatch has to rename those files, remove once PR merged
-    mv files/usr/bin/pastebin scripts/pastebin
-    mv files/usr/bin/upload-system-info scripts/upload-system-info
-    mv files/usr/bin/xfce4-set-wallpaper scripts/xfce4-set-wallpaper
-    mv files/usr/share/icons/hicolor icons
-
     patchShebangs \
       libxapp/g-codegen.py \
+      meson-scripts/g-codegen.py \
       schemas/meson_install_schemas.py
 
     # Patch pastebin & inxi location
@@ -99,6 +98,6 @@ stdenv.mkDerivation rec {
     description = "Cross-desktop libraries and common resources";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mkg20001 ];
+    maintainers = teams.cinnamon.members;
   };
 }

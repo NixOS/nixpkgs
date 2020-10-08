@@ -5,12 +5,12 @@
 
 mkDerivation rec {
   pname = "ripcord";
-  version = "0.4.24";
+  version = "0.4.26";
 
   src = let
     appimage = fetchurl {
       url = "https://cancel.fm/dl/Ripcord-${version}-x86_64.AppImage";
-      sha256 = "0rscmnwxvbdl0vfx1pz7x5gxs9qsjk905zmcad4f330j5l5m227z";
+      sha256 = "0i9l21gyqga27ainzqp6icn8vbc22v1knq01pglgg1lg3p504ikq";
       name = "${pname}-${version}.AppImage";
     };
   in appimageTools.extract {
@@ -51,7 +51,8 @@ mkDerivation rec {
       --run "cd $out" \
       --set FONTCONFIG_FILE "${fontsConf}" \
       --prefix LD_LIBRARY_PATH ":" "${xorg.libXcursor}/lib" \
-      --prefix QT_XKB_CONFIG_ROOT ":" "${xorg.xkeyboardconfig}/share/X11/xkb"
+      --prefix QT_XKB_CONFIG_ROOT ":" "${xorg.xkeyboardconfig}/share/X11/xkb" \
+      --set RIPCORD_ALLOW_UPDATES 0
 
     runHook postInstall
   '';

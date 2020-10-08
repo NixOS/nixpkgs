@@ -162,6 +162,45 @@ in
             <manvolnum>7</manvolnum></citerefentry>.
           '';
         };
+
+        backupDir = mkOption {
+          type = types.str;
+          default = "${cfg.stateDir}/dump";
+          description = "Path to the dump files.";
+        };
+      };
+
+      ssh = {
+        enable = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Enable external SSH feature.";
+        };
+
+        clonePort = mkOption {
+          type = types.int;
+          default = 22;
+          example = 2222;
+          description = ''
+            SSH port displayed in clone URL.
+            The option is required to configure a service when the external visible port
+            differs from the local listening port i.e. if port forwarding is used.
+          '';
+        };
+      };
+
+      lfs = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Enables git-lfs support.";
+        };
+
+        contentDir = mkOption {
+          type = types.str;
+          default = "${cfg.stateDir}/data/lfs";
+          description = "Where to store LFS files.";
+        };
       };
 
       appName = mkOption {
@@ -198,6 +237,12 @@ in
         type = types.int;
         default = 3000;
         description = "HTTP listen port.";
+      };
+
+      enableUnixSocket = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Configure Gitea to listen on a unix socket instead of the default TCP port.";
       };
 
       cookieSecure = mkOption {
@@ -300,14 +345,34 @@ in
         ROOT = cfg.repositoryRoot;
       };
 
-      server = {
-        DOMAIN = cfg.domain;
-        HTTP_ADDR = cfg.httpAddress;
-        HTTP_PORT = cfg.httpPort;
-        ROOT_URL = cfg.rootUrl;
-        STATIC_ROOT_PATH = cfg.staticRootPath;
-        LFS_JWT_SECRET = "#jwtsecret#";
-      };
+      server = mkMerge [
+        {
+          DOMAIN = cfg.domain;
+          STATIC_ROOT_PATH = cfg.staticRootPath;
+          LFS_JWT_SECRET = "#jwtsecret#";
+          ROOT_URL = cfg.rootUrl;
+        }
+        (mkIf cfg.enableUnixSocket {
+          PROTOCOL = "unix";
+          HTTP_ADDR = "/run/gitea/gitea.sock";
+        })
+        (mkIf (!cfg.enableUnixSocket) {
+          HTTP_ADDR = cfg.httpAddress;
+          HTTP_PORT = cfg.httpPort;
+        })
+        (mkIf cfg.ssh.enable {
+          DISABLE_SSH = false;
+          SSH_PORT = cfg.ssh.clonePort;
+        })
+        (mkIf (!cfg.ssh.enable) {
+          DISABLE_SSH = true;
+        })
+        (mkIf cfg.lfs.enable {
+          LFS_START_SERVER = true;
+          LFS_CONTENT_PATH = cfg.lfs.contentDir;
+        })
+
+      ];
 
       session = {
         COOKIE_NAME = "session";
@@ -357,12 +422,26 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      "d '${cfg.stateDir}' - ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}/conf' - ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}/custom' - ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}/custom/conf' - ${cfg.user} gitea - -"
-      "d '${cfg.stateDir}/log' - ${cfg.user} gitea - -"
-      "d '${cfg.repositoryRoot}' - ${cfg.user} gitea - -"
+      "d '${cfg.dump.backupDir}' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.dump.backupDir}' 0750 ${cfg.user} gitea - -"
+      "Z '${cfg.dump.backupDir}' - ${cfg.user} gitea - -"
+      "d '${cfg.lfs.contentDir}' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.lfs.contentDir}' 0750 ${cfg.user} gitea - -"
+      "Z '${cfg.lfs.contentDir}' - ${cfg.user} gitea - -"
+      "d '${cfg.repositoryRoot}' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.repositoryRoot}' 0750 ${cfg.user} gitea - -"
+      "Z '${cfg.repositoryRoot}' - ${cfg.user} gitea - -"
+      "d '${cfg.stateDir}' 0750 ${cfg.user} gitea - -"
+      "d '${cfg.stateDir}/conf' 0750 ${cfg.user} gitea - -"
+      "d '${cfg.stateDir}/custom' 0750 ${cfg.user} gitea - -"
+      "d '${cfg.stateDir}/custom/conf' 0750 ${cfg.user} gitea - -"
+      "d '${cfg.stateDir}/log' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.stateDir}' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.stateDir}/.ssh' 0700 ${cfg.user} gitea - -"
+      "z '${cfg.stateDir}/conf' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.stateDir}/custom' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.stateDir}/custom/conf' 0750 ${cfg.user} gitea - -"
+      "z '${cfg.stateDir}/log' 0750 ${cfg.user} gitea - -"
       "Z '${cfg.stateDir}' - ${cfg.user} gitea - -"
 
       # If we have a folder or symlink with gitea locales, remove it
@@ -431,28 +510,39 @@ in
         User = cfg.user;
         Group = "gitea";
         WorkingDirectory = cfg.stateDir;
-        ExecStart = "${gitea}/bin/gitea web";
+        ExecStart = "${gitea}/bin/gitea web --pid /run/gitea/gitea.pid";
         Restart = "always";
-
-        # Filesystem
+        # Runtime directory and mode
+        RuntimeDirectory = "gitea";
+        RuntimeDirectoryMode = "0755";
+        # Access write directories
+        ReadWritePaths = [ cfg.dump.backupDir cfg.repositoryRoot cfg.stateDir cfg.lfs.contentDir ];
+        UMask = "0027";
+        # Capabilities
+        CapabilityBoundingSet = "";
+        # Security
+        NoNewPrivileges = true;
+        # Sandboxing
+        ProtectSystem = "strict";
         ProtectHome = true;
+        PrivateTmp = true;
         PrivateDevices = true;
+        PrivateUsers = true;
+        ProtectHostname = true;
+        ProtectClock = true;
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
+        ProtectKernelLogs = true;
         ProtectControlGroups = true;
-        ReadWritePaths = cfg.stateDir;
-        # Caps
-        CapabilityBoundingSet = "";
-        NoNewPrivileges = true;
-        # Misc.
+        RestrictAddressFamilies = [ "AF_UNIX AF_INET AF_INET6" ];
         LockPersonality = true;
-        RestrictRealtime = true;
-        PrivateMounts = true;
-        PrivateUsers = true;
         MemoryDenyWriteExecute = true;
-        SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @raw-io @reboot @resources @setuid @swap";
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        PrivateMounts = true;
+        # System Call Filtering
         SystemCallArchitectures = "native";
-        RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
+        SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @raw-io @reboot @resources @setuid @swap";
       };
 
       environment = {
@@ -504,7 +594,7 @@ in
          Type = "oneshot";
          User = cfg.user;
          ExecStart = "${gitea}/bin/gitea dump";
-         WorkingDirectory = cfg.stateDir;
+         WorkingDirectory = cfg.dump.backupDir;
        };
     };
 

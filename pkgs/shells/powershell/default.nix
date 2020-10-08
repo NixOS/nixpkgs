@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   doInstallCheck = true;
-  installCheck = ''
+  installCheckPhase = ''
     $out/bin/pwsh --help > /dev/null
   '';
 

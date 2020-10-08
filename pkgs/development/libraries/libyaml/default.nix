@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libyaml";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "yaml";
     repo = "libyaml";
     rev = version;
-    sha256 = "04z25mvw86jhzyrj0h8mlgisvj9glc5ww9g0cymzjfsd7z33gnmy";
+    sha256 = "18zsnsxc53pans4a01cs4401a2cjk3qi098hi440pj4zijifgcsb";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

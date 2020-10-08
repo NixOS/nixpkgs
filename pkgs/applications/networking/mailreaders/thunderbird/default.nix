@@ -6,6 +6,7 @@
 , curl
 , dbus
 , dbus-glib
+, fetchpatch
 , fetchurl
 , file
 , fontconfig
@@ -18,7 +19,6 @@
 , lib
 , libGL
 , libGLU
-, libIDL
 , libevent
 , libjpeg
 , libnotify
@@ -43,6 +43,7 @@
 , rustc
 , sqlite
 , stdenv
+, systemd
 , unzip
 , which
 , writeScript
@@ -60,25 +61,22 @@
 , waylandSupport ? true
 , libxkbcommon, calendarSupport ? true
 
-, # If you want the resulting program to call itself "Thunderbird" instead
-# of "Earlybird" or whatever, enable this option.  However, those
-# binaries may not be distributed without permission from the
-# Mozilla Foundation, see
-# http://www.mozilla.org/foundation/trademarks/.
-enableOfficialBranding ? false
+# Use official trademarked branding.  Permission obtained at:
+# https://github.com/NixOS/nixpkgs/pull/94880#issuecomment-675907971
+, enableOfficialBranding ? true
 }:
 
 assert waylandSupport -> gtk3Support == true;
 
 stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "68.8.0";
+  version = "78.3.1";
 
   src = fetchurl {
     url =
       "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
     sha512 =
-      "18963ccclfvz85bkiy7dpxgzkf71yh4qjbr8hblwyha9d3h8xnm29mi1dd3a2bz05qi3ly1v3k5mrhcbivhy2can2ippsal6j8rky0s";
+      "16b05e51776ba16503bc5fba02a6d0b5050a206e264a4707544354ad76af61902fd2dcf5d97b82b432dc69362ccd18543a0acccd80e06648e6c6f470886da450";
   };
 
   nativeBuildInputs = [
@@ -112,7 +110,6 @@ stdenv.mkDerivation rec {
     jemalloc
     libGL
     libGLU
-    libIDL
     libevent
     libjpeg
     libnotify
@@ -176,9 +173,10 @@ stdenv.mkDerivation rec {
     # included we need to look in a few places.
     # TODO: generalize this process for other use-cases.
 
-    BINDGEN_CFLAGS="$(< ${stdenv.cc}/nix-support/libc-cflags) \
+    BINDGEN_CFLAGS="$(< ${stdenv.cc}/nix-support/libc-crt1-cflags) \
+      $(< ${stdenv.cc}/nix-support/libc-cflags) \
       $(< ${stdenv.cc}/nix-support/cc-cflags) \
-      ${stdenv.cc.default_cxx_stdlib_compile} \
+      $(< ${stdenv.cc}/nix-support/libcxx-cxxflags) \
       ${
         lib.optionalString stdenv.cc.isClang
         "-idirafter ${stdenv.cc.cc}/lib/clang/${
@@ -207,14 +205,12 @@ stdenv.mkDerivation rec {
   in [
     "--enable-application=comm/mail"
 
-    "--with-system-bz2"
     "--with-system-icu"
     "--with-system-jpeg"
     "--with-system-libevent"
     "--with-system-nspr"
     "--with-system-nss"
     "--with-system-png" # needs APNG support
-    "--with-system-icu"
     "--with-system-zlib"
     "--with-system-webp"
     "--with-system-libvpx"
@@ -224,12 +220,9 @@ stdenv.mkDerivation rec {
     "--enable-default-toolkit=${toolkitValue}"
     "--enable-js-shell"
     "--enable-necko-wifi"
-    "--enable-startup-notification"
     "--enable-system-ffi"
     "--enable-system-pixman"
-    "--enable-system-sqlite"
 
-    "--disable-gconf"
     "--disable-tests"
     "--disable-updater"
     "--enable-jemalloc"
@@ -305,11 +298,11 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  # FIXME: This can probably be removed as soon as we package a
-  # Thunderbird >=71.0 since XUL shouldn't be anymore (in use)?
+  # FIXME: The XUL portion of this can probably be removed as soon as we
+  # package a Thunderbird >=71.0 since XUL shouldn't be anymore (in use)?
   postFixup = ''
     local xul="$out/lib/thunderbird/libxul.so"
-    patchelf --set-rpath "${libnotify}/lib:$(patchelf --print-rpath $xul)" $xul
+    patchelf --set-rpath "${libnotify}/lib:${lib.getLib systemd}/lib:$(patchelf --print-rpath $xul)" $xul
   '';
 
   doInstallCheck = true;
@@ -322,7 +315,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.updateScript = import ./../../browsers/firefox/update.nix {
-    attrPath = "thunderbird";
+    attrPath = "thunderbird-78";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
     inherit writeScript lib common-updater-scripts xidel coreutils gnused
       gnugrep curl runtimeShell;
@@ -335,7 +328,9 @@ stdenv.mkDerivation rec {
       eelco
       lovesegfault
       pierron
+      vcunat
     ];
     platforms = platforms.linux;
+    license = licenses.mpl20;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, systemd, utillinux, coreutils }:
+{ stdenv, fetchurl, fetchpatch, pkgconfig, systemd, utillinux, coreutils }:
 
 let
   v = "2.02.106";
@@ -11,6 +11,18 @@ stdenv.mkDerivation {
     url = "ftp://sources.redhat.com/pub/lvm2/releases/LVM2.${v}.tgz";
     sha256 = "0nr833bl0q4zq52drjxmmpf7bs6kqxwa5kahwwxm9411khkxz0vc";
   };
+
+  patches = [
+    # Fix build with glibc >= 2.28
+    # https://github.com/NixOS/nixpkgs/issues/86403
+    (fetchpatch {
+      url = "https://github.com/lvmteam/lvm2/commit/92d5a8441007f578e000b492cecf67d6b8a87405.patch";
+      sha256 = "1yqd6jng0b370k53vks1shg57yhfyribhpmv19km5zsjqf0qqx2d";
+      excludes = [
+        "libdm/libdm-stats.c"
+      ];
+    })
+  ];
 
   configureFlags = [
     "--disable-readline"

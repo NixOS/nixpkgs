@@ -66,6 +66,8 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     homepage = "https://github.com/sergiomb2/ufraw";
 
+    broken = true; # https://github.com/NixOS/nixpkgs/issues/97946
+
     description = "Utility to read and manipulate raw images from digital cameras";
 
     longDescription =

@@ -5,12 +5,13 @@
 , langObjCpp ? stdenv.targetPlatform.isDarwin
 , langGo ? false
 , profiledCompiler ? false
+, langJit ? false
 , staticCompiler ? false
 , enableShared ? true
 , enableLTO ? true
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
-, gmp, mpfr, libmpc, gettext, which
+, gmp, mpfr, libmpc, gettext, which, patchelf
 , libelf                      # optional, for link-time optimizations (LTO)
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null
@@ -46,7 +47,7 @@ with stdenv.lib;
 with builtins;
 
 let majorVersion = "10";
-    version = "${majorVersion}.1.0";
+    version = "${majorVersion}.2.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -80,12 +81,12 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "b6898a23844b656f1b68691c5c012036c2e694ac4b53a8918d4712ad876e7ea2";
+    sha256 = "130xdkhmz1bc2kzx061s3sfwk36xah1fw5w332c0nzwwpdl47pdq";
   };
 
   inherit patches;
 
-  outputs = [ "out" "lib" "man" "info" ];
+  outputs = [ "out" "man" "info" ] ++ stdenv.lib.optional (!langJit) "lib";
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
 
@@ -100,10 +101,10 @@ stdenv.mkDerivation ({
       --replace 'if (stdinc)' 'if (0)'
 
     substituteInPlace libgcc/config/t-slibgcc-darwin \
-      --replace "-install_name @shlib_slibdir@/\$(SHLIB_INSTALL_NAME)" "-install_name $lib/lib/\$(SHLIB_INSTALL_NAME)"
+      --replace "-install_name @shlib_slibdir@/\$(SHLIB_INSTALL_NAME)" "-install_name ''${!outputLib}/lib/\$(SHLIB_INSTALL_NAME)"
 
     substituteInPlace libgfortran/configure \
-      --replace "-install_name \\\$rpath/\\\$soname" "-install_name $lib/lib/\\\$soname"
+      --replace "-install_name \\\$rpath/\\\$soname" "-install_name ''${!outputLib}/lib/\\\$soname"
   '';
 
   postPatch = ''
@@ -150,11 +151,14 @@ stdenv.mkDerivation ({
 
   # For building runtime libs
   depsBuildTarget =
-    if hostPlatform == buildPlatform then [
-      targetPackages.stdenv.cc.bintools # newly-built gcc will be used
-    ] else assert targetPlatform == hostPlatform; [ # build != host == target
-      stdenv.cc
-    ];
+    (
+      if hostPlatform == buildPlatform then [
+        targetPackages.stdenv.cc.bintools # newly-built gcc will be used
+      ] else assert targetPlatform == hostPlatform; [ # build != host == target
+        stdenv.cc
+      ]
+    )
+    ++ optional targetPlatform.isLinux patchelf;
 
   buildInputs = [
     gmp mpfr libmpc libelf
@@ -202,6 +206,7 @@ stdenv.mkDerivation ({
       langGo
       langObjC
       langObjCpp
+      langJit
       ;
   };
 
@@ -237,8 +242,8 @@ stdenv.mkDerivation ({
     (import ../common/extra-target-flags.nix {
       inherit stdenv crossStageStatic libcCross threadsCross;
     })
-    EXTRA_TARGET_FLAGS
-    EXTRA_TARGET_LDFLAGS
+    EXTRA_FLAGS_FOR_TARGET
+    EXTRA_LDFLAGS_FOR_TARGET
     ;
 
   passthru = {

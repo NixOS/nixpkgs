@@ -6,14 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "swaylock-effects";
-  version = "v1.6-0";
+  version = "v1.6-1";
 
   src = fetchFromGitHub {
     owner = "mortie";
     repo = "swaylock-effects";
     rev = version;
-    sha256 = "15lshqq3qj9m3yfac65hjcciaf9zdfh3ir7hgh0ach7gpi3rbk13";
-
+    sha256 = "044fc4makjx8v29fkx5xlil6vr1v4r0k6c8741pl67gzvlm4cx3i";
   };
 
   postPatch = ''
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Screen locker for Wayland";
     longDescription = ''
-      swaylock-effects is a screen locking utility for Wayland compositors.
+      Swaylock, with fancy effects
     '';
     inherit (src.meta) homepage;
     license = licenses.mit;

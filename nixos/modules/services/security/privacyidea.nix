@@ -234,7 +234,6 @@ in
           ExecStop = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
           NotifyAccess = "main";
           KillSignal = "SIGQUIT";
-          StandardError = "syslog";
         };
       };
 

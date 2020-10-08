@@ -51,7 +51,7 @@ in
       };
 
       secretKeyFile = mkOption {
-        type = types.path;
+        type = types.nullOr types.path;
         default = null;
         description = ''
           A file containing your secret key. The security of your Duo application is tied to the security of your secret key.

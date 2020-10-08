@@ -5,13 +5,13 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "gcalcli";
-  version = "4.2.1";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner  = "insanum";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1xwrgmy2azvr99b7df92m2imj0wy4fh53bn7lvcrnghjbnh7n0l0";
+    sha256 = "0s5fhcmz3n0dwh3vkqr4aigi59q43v03ch5jhh6v75149icwr0df";
   };
 
   postPatch = lib.optionalString stdenv.isLinux ''

@@ -83,7 +83,7 @@ let
 
           in mkDerivation (args // {
             name = "${name}-${version}";
-            inherit meta outputs setupHook src;
+            inherit meta outputs setupHook src version;
           });
 
       };
@@ -112,6 +112,7 @@ let
       kitemmodels = callPackage ./kitemmodels.nix {};
       kitemviews = callPackage ./kitemviews.nix {};
       kplotting = callPackage ./kplotting.nix {};
+      kquickcharts = callPackage ./kquickcharts.nix {};
       kwayland = callPackage ./kwayland.nix {};
       kwidgetsaddons = callPackage ./kwidgetsaddons.nix {};
       kwindowsystem = callPackage ./kwindowsystem {};
@@ -146,10 +147,11 @@ let
       kbookmarks = callPackage ./kbookmarks.nix {};
       kcmutils = callPackage ./kcmutils {};
       kconfigwidgets = callPackage ./kconfigwidgets {};
+      kdav = callPackage ./kdav.nix {};
       kdeclarative = callPackage ./kdeclarative.nix {};
       kded = callPackage ./kded.nix {};
       kdesignerplugin = callPackage ./kdesignerplugin.nix {};
-      kdesu = callPackage ./kdesu.nix {};
+      kdesu = callPackage ./kdesu {};
       kdewebkit = callPackage ./kdewebkit.nix {};
       kemoticons = callPackage ./kemoticons.nix {};
       kglobalaccel = callPackage ./kglobalaccel.nix {};

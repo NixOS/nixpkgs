@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zenith";
-  version = "0.9.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "bvaisvil";
     repo = pname;
     rev = version;
-    sha256 = "1yfbr8zmcy7zp9s9cqv7qypj2vvhpq09r0398gr7ckjk6v70hhfg";
+    sha256 = "0jz0pjibjiyg0rjmpihxxjhg9cbccvqfr5si5rji585l0zrpdwsg";
   };
 
-  cargoSha256 = "1l4cjcpfghis983y31s54fzjppdnh3wa4anwi7bdsbyvqz3n3ywj";
+  cargoSha256 = "1zkx6sr5xlj7pb91bxvqjib5awscy1rmv4g89xb76dahac8fan6z";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
 
@@ -21,6 +21,7 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ bbigras ];
     # doesn't build on aarch64 https://github.com/bvaisvil/zenith/issues/19
+    # see https://github.com/NixOS/nixpkgs/pull/88616
     platforms = platforms.x86;
   };
 }

@@ -4,7 +4,7 @@ buildGoPackage rec {
   pname = "lint";
   version = "20181026-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "c67002cb31c3a748b7688c27f20d8358b4193582";
-  
+
   goPackagePath = "golang.org/x/lint";
   excludedPackages = "testdata";
 
@@ -25,6 +25,5 @@ buildGoPackage rec {
     description = "Linter for Go source code";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jhillyerd ];
-    platforms = platforms.all;
   };
 }

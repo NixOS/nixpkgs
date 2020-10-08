@@ -9,20 +9,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nym";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "nymtech";
     repo = "nym";
     rev = "v${version}";
-    sha256 = "1q9i24mzys6a9kp9n0bnxr3iwzblabmc6iif3ah75gffyf0cipk4";
+    sha256 = "05bxrpqwwf9spydac0q8sly65q8f1nk13i5fy3p5adr1phzxdnr8";
   };
 
-  cargoSha256 = "0qas544bs4wyllvqf2r5mvqxs1nviwcvxa3rzq10dvjyjm1xyh3k";
+  cargoSha256 = "0mh8cwia86bm68b0wcrmnsq1af5cp6kj1j81nwxb03awnqpxc34n";
 
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ openssl ];
+
+  checkType = "debug";
 
   /*
   Nym's test presence::converting_mixnode_presence_into_topology_mixnode::it_returns_resolved_ip_on_resolvable_hostname tries to resolve nymtech.net.
@@ -49,6 +51,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://nymtech.net";
     license = licenses.asl20;
     maintainers = [ maintainers.ehmry ];
-    platforms = with platforms; intersectLists (linux ++ darwin) (x86 ++ x86_64); # see https://github.com/nymtech/nym/issues/179 for architectures
+    platforms = with platforms; intersectLists (linux ++ darwin) (concatLists [ x86 x86_64 aarch64 arm ]);
   };
 }

@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "caddy";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ xfix ];
+    maintainers = [ xfix filalex77 ];
   };
 
   nodes = {
@@ -9,9 +9,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       services.caddy.enable = true;
       services.caddy.config = ''
         http://localhost {
-          gzip
+          encode gzip
 
-          root ${
+          file_server
+          root * ${
             pkgs.runCommand "testdir" {} ''
               mkdir "$out"
               echo hello world > "$out/example.html"
@@ -23,9 +24,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       specialisation.etag.configuration = {
         services.caddy.config = lib.mkForce ''
           http://localhost {
-            gzip
+            encode gzip
 
-            root ${
+            file_server
+            root * ${
               pkgs.runCommand "testdir2" {} ''
                 mkdir "$out"
                 echo changed > "$out/example.html"
@@ -59,9 +61,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         )
         etag = etag.replace("\r\n", " ")
         http_code = webserver.succeed(
-            "curl -w \"%{{http_code}}\" -X HEAD -H 'If-None-Match: {}' {}".format(etag, url)
+            "curl --silent --show-error -o /dev/null -w \"%{{http_code}}\" --head -H 'If-None-Match: {}' {}".format(
+                etag, url
+            )
         )
-        assert int(http_code) == 304, "HTTP code is not 304"
+        assert int(http_code) == 304, "HTTP code is {}, expected 304".format(http_code)
         return etag
 
 

@@ -1,23 +1,22 @@
 { stdenv, fetchFromGitHub, fetchpatch, mkDerivation, SDL2, frei0r, gettext, mlt
 , jack1, pkgconfig, qtbase, qtmultimedia, qtwebkit, qtx11extras, qtwebsockets
-, qtquickcontrols, qtgraphicaleffects, libmlt, qmake, qttools
+, qtquickcontrols, qtgraphicaleffects, libmlt, qmake, qttools, genericUpdater
+, common-updater-scripts
 }:
 
-assert stdenv.lib.versionAtLeast libmlt.version "6.18.0";
-assert stdenv.lib.versionAtLeast mlt.version "6.18.0";
+assert stdenv.lib.versionAtLeast libmlt.version "6.22.1";
+assert stdenv.lib.versionAtLeast mlt.version "6.22.1";
 
 mkDerivation rec {
   pname = "shotcut";
-  version = "20.04.12";
+  version = "20.09.13";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "05yyv9192f722j8fhfjrphxadgp3crvbq4pi23ln560zh9s1m8r4";
+    sha256 = "1q7ba6j3b2yzn3y5z9s5ldh15wrvhi6vymhwm910nqa5379dcc21";
   };
-
-  patches = [ ./0001-encodedock.cpp-connect-to-VAAPI-via-DRM-not-X11.patch ];
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig qmake ];
@@ -48,6 +47,12 @@ mkDerivation rec {
     mkdir -p $out/share/shotcut
     cp -r src/qml $out/share/shotcut/
   '';
+
+  passthru.updateScript = genericUpdater {
+    inherit pname version;
+    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+    rev-prefix = "v";
+  };
 
   meta = with stdenv.lib; {
     description = "A free, open source, cross-platform video editor";

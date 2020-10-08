@@ -1,24 +1,37 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
 
 buildGoModule rec {
   pname = "jx";
-  version = "2.1.31";
+  version = "2.1.138";
 
   src = fetchFromGitHub {
     owner = "jenkins-x";
     repo = "jx";
     rev = "v${version}";
-    sha256 = "1rbdmqi6m042jxd3hhqw821l567s9zzzgp0cvx8467yfi449qipn";
+    sha256 = "1i45gzaql6rfplliky56lrzwjnm2qzv25kgyq7gvn9c7hjaaq65b";
   };
 
-  vendorSha256 = "1jn636sv6ak6hngw4fpgxqm6gfay2ip6g3gafjb3m4adcc5n9f8s";
+  vendorSha256 = "1wvggarakshpw7m8h0x2zvd6bshd2kzbrjynfa113z90pgksvjng";
+
+  doCheck = false;
 
   subPackages = [ "cmd/jx" ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   buildFlagsArray = ''
     -ldflags=
+    -s -w
     -X github.com/jenkins-x/jx/pkg/version.Version=${version}
-    -X github.com/jenkins-x/jx/pkg/version.Revision=${version}
+    -X github.com/jenkins-x/jx/pkg/version.Revision=${src.rev}
+    -X github.com/jenkins-x/jx/pkg/version.GitTreeState=clean
+  '';
+
+  postInstall = ''
+    for shell in bash zsh; do
+      $out/bin/jx completion $shell > jx.$shell
+      installShellCompletion jx.$shell
+    done
   '';
 
   meta = with lib; {

@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libosinfo";
-  version = "1.7.1";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1s97sv24bybggjx6hgqba2qdqz3ivfpd4cmkh4zm5y59sim109mv";
+    sha256 = "1988l5rykpzvml1l7bi2hcax0gdc811vja0f92cnr7r01nz35zs9";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -68,10 +68,11 @@ stdenv.mkDerivation rec {
     "-Denable-gtk-doc=true"
   ];
 
-  # FIXME: fails two new tests added in 1.7.1:
-  # libosinfo:symbols / check-symfile
-  # 3/24 libosinfo:symbols / check-symsorting
-  doCheck = false;
+  preCheck = ''
+    patchShebangs ../osinfo/check-symfile.pl ../osinfo/check-symsorting.pl
+  '';
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "GObject based library API for managing information about operating systems, hypervisors and the (virtual) hardware devices they can support";

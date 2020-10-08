@@ -9,8 +9,7 @@ rustPlatform.buildRustPackage {
 
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
   cargoVendorDir = "vendor";
-  preBuild = "pushd src/tools/cargo";
-  postBuild = "popd";
+  buildAndTestSubdir = "src/tools/cargo";
 
   passthru.rustc = rustc;
 
@@ -39,6 +38,11 @@ rustPlatform.buildRustPackage {
       --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt"
 
     installManPage src/tools/cargo/src/etc/man/*
+
+    installShellCompletion --bash --name cargo \
+      src/tools/cargo/src/etc/cargo.bashcomp.sh
+
+    installShellCompletion --zsh src/tools/cargo/src/etc/_cargo
   '';
 
   checkPhase = ''

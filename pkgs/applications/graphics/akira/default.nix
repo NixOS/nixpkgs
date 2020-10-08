@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "akira";
-  version = "2019-10-12";
+  version = "0.0.13";
 
   src = fetchFromGitHub {
     owner = "akiraux";
     repo = "Akira";
-    rev = "cab952dee4591b6bde34d670c1f853f5a3ff6b19";
-    sha256 = "1fp3a79hkh6xwwqqdrx4zqq2zhsm236c6fhhl5f2nmi108yxz04q";
+    rev = "v${version}";
+    sha256 = "1i20q78jagy8xky68nmd0n7mqvh88r98kp626rnlgyzvlc3c22cm";
   };
 
   nativeBuildInputs = [
@@ -59,8 +59,6 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [ "-Dprofile=default" ];
 
-  patches = [ ./fix-build-with-vala-0-44-or-later.patch ];
-
   postPatch = ''
     chmod +x build-aux/meson/post_install.py
     patchShebangs build-aux/meson/post_install.py
@@ -70,7 +68,7 @@ stdenv.mkDerivation rec {
     description = "Native Linux Design application built in Vala and GTK";
     homepage = "https://github.com/akiraux/Akira";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ filalex77 ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ filalex77 neonfuz ] ++ pantheon.maintainers;
     platforms = platforms.linux;
   };
 }

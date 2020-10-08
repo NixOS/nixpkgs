@@ -24,4 +24,10 @@ stdenv.mkDerivation {
   doCheck = false; # hasdescriptor.c test fails, hrm.
 
   installPhase = ''prefix="/" DESTDIR=$out ./installlib'';
+
+  meta = with stdenv.lib; {
+    description = "Installs the BlocksRuntime library from the compiler-rt";
+    homepage = "https://github.com/mackyle/blocksruntime";
+    license = licenses.mit;
+  };
 }

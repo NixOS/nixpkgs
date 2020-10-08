@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig ];
 
-  buildInputs = [ bitlbee glib json-glib ];
+  buildInputs = [ bitlbee json-glib ];
 
   preConfigure = ''
     export BITLBEE_PLUGINDIR=$out/lib/bitlbee

@@ -232,6 +232,14 @@ in
         '';
       };
 
+      banner = mkOption {
+        type = types.nullOr types.lines;
+        default = null;
+        description = ''
+          Message to display to the remote user before authentication is allowed.
+        '';
+      };
+
       authorizedKeysFiles = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -361,7 +369,7 @@ in
     };
 
     users.users = mkOption {
-      type = with types; loaOf (submodule userOptions);
+      type = with types; attrsOf (submodule userOptions);
     };
 
   };
@@ -473,6 +481,8 @@ in
     services.openssh.extraConfig = mkOrder 0
       ''
         UsePAM yes
+
+        Banner ${if cfg.banner == null then "none" else pkgs.writeText "ssh_banner" cfg.banner}
 
         AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
         ${concatMapStrings (port: ''

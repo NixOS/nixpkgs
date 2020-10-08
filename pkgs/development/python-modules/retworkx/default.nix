@@ -1,50 +1,60 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, pythonAtLeast
-, isPy37
-, isPy38
+, rustPlatform
+, python
+, fetchpatch
 , fetchFromGitHub
-, fetchPypi
+, pipInstallHook
+, maturin
+, pip
   # Check inputs
 , pytestCheckHook
+, numpy
 }:
 
-let
-  rx-version = "0.3.3";
-  wheel-args = if isPy37 then
-      { python = "cp37"; sha256 = "1gbz7sh9i4h41xs9c40lixfdigmvfykkgxgzwsrs8v0smx20dczy"; }
-    else if isPy38 then
-      { python = "cp38"; sha256 = "09xxgp4ac4q6mfkj6lsqqfrzz1cb02vxy7wlv0bq3z2hd0jcanxk"; }
-    else throw "python version & hash not included. Override attribute `wheel-args` with version & hash at https://pypi.org/project/retworkx";
+rustPlatform.buildRustPackage rec {
+  pname = "retworkx";
+  version = "0.4.0";
 
-  github-source = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "retworkx";
-    rev = rx-version;
-    sha256 = "160w5vkzrl5rzcrdwhjq820i5lmc527m6hg0kxx0k6n2bz9qn26g";
-  };
-in
-buildPythonPackage rec {
-  pname = "retworkx";
-  version = rx-version;
-  format = "wheel";
-
-  disabled = pythonOlder "3.5" || pythonAtLeast "3.9"; # compiled versions only included for 3.5 <= py <= 3.8
-
-  src = fetchPypi {
-    inherit pname version format;
-    inherit (wheel-args) python sha256;
-    abi = if pythonOlder "3.8" then "${wheel-args.python}m" else wheel-args.python;
-    platform = "manylinux2010_x86_64"; # i686, aarch64, and ppc64 also available, restricting to x86 for simplicity
+    rev = version;
+    sha256 = "1xqp6d39apkjvd0ad9vw81cp2iqzhpagfa4p171xqm3bwfn2imdc";
   };
 
-  pythonImportsCheck = [ "retworkx" ];
+  cargoSha256 = "0bma0l14jv5qhcsxck7vw3ak1w3c8v84cq4hii86i4iqk523zns5";
+  cargoPatches = [
+      ( fetchpatch {
+        name = "retworkx-cargo-lock.patch";
+        url = "https://github.com/Qiskit/retworkx/commit/a02fd33d357a92dbe9530696a6d85aa59fe8a5b9.patch";
+        sha256 = "0gvxr1nqp9ll4skfks4p4d964pshal25kb1nbfzhpyipnzddizr5";
+      } )
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  propagatedBuildInputs = [ python ];
+
+  nativeBuildInputs = [ pipInstallHook maturin pip ];
+
+  # Need to check AFTER python wheel is installed (b/c using Rust Build, not buildPythonPackage)
+  doCheck = false;
+  doInstallCheck = true;
+
+  buildPhase = ''
+    runHook preBuild
+    maturin build --release --manylinux off --strip --interpreter ${python.interpreter}
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    install -Dm644 -t dist target/wheels/*.whl
+    pipInstallPhase
+  '';
+
+  installCheckInputs = [ pytestCheckHook numpy ];
   preCheck = ''
-    pushd $(mktemp -d)
-    cp -r ${github-source}/$sourceRoot/tests .
+    export TESTDIR=$(mktemp -d)
+    cp -r $TMP/$sourceRoot/tests $TESTDIR
+    pushd $TESTDIR
   '';
   postCheck = "popd";
 
@@ -52,8 +62,8 @@ buildPythonPackage rec {
     description = "A python graph library implemented in Rust.";
     homepage = "https://retworkx.readthedocs.io/en/latest/index.html";
     downloadPage = "https://github.com/Qiskit/retworkx/releases";
+    changelog = "https://github.com/Qiskit/retworkx/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
-    platforms = platforms.x86_64;
   };
 }

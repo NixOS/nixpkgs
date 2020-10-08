@@ -4,13 +4,13 @@
 
 buildGoModule rec {
   pname = "fscrypt";
-  version = "0.2.8";
+  version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fscrypt";
     rev = "v${version}";
-    sha256 = "0433f9kx43842ic8dydxhz8plyyrrxvqqwg7kd5ghn599ix28avy";
+    sha256 = "020hhdarbn3bwlc2j2g89868v8nfx8562z1a778ihpvvsa4ykr31";
   };
 
   postPatch = ''
@@ -21,6 +21,8 @@ buildGoModule rec {
 
   vendorSha256 = "0yak221mlyfacvlsaq9g3xiyk94n94vqgkbaji8d21pi8hhr38m6";
 
+  doCheck = false;
+
   nativeBuildInputs = [ gnum4 ];
   buildInputs = [ pam ];
 
@@ -30,10 +32,6 @@ buildGoModule rec {
 
   installPhase = ''
     make install
-  '';
-
-  preFixup = ''
-    remove-references-to -t ${fscrypt-experimental.go} $out/lib/security/pam_fscrypt.so
   '';
 
   meta = with stdenv.lib; {

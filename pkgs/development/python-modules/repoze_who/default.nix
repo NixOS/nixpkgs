@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "repoze.who";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b95dadc1242acc55950115a629cfb1352669774b46d22def51400ca683efea28";
+    sha256 = "cf97450de3c8eb5c03b4037be75b018db91befab1094204e452a0b1c0f7a94a6";
   };
 
   propagatedBuildInputs = [ zope_interface webob ];

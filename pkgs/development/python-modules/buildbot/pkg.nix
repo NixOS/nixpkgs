@@ -1,12 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, buildbot }:
 
 buildPythonPackage rec {
   pname = "buildbot-pkg";
-  version = "2.7.0";
+  inherit (buildbot) version;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03zb09r8w8dvd9qas7h6gdwlqc7q482ikph6h3708lpnkn72xdkb";
+    sha256 = "1p9qnrqx72y4jrhawgbpwisgily7zg4rh39hpky4x56d5afvjgqc";
   };
 
   postPatch = ''

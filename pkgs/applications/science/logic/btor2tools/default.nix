@@ -1,24 +1,24 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, cmake, fetchFromGitHub }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "btor2tools";
-  version = "pre55_8c150b39";
+  version = "1.0.0-pre_${src.rev}";
 
   src = fetchFromGitHub {
     owner  = "boolector";
     repo   = "btor2tools";
-    rev    = "8c150b39cdbcdef4247344acf465d75ef642365d";
-    sha256 = "1r5pid4x567nms02ajjrz3v0zj18k0fi5pansrmc2907rnx2acxx";
+    rev    = "9831f9909fb283752a3d6d60d43613173bd8af42";
+    sha256 = "0mfqmkgvyw8fa2c09kww107dmk180ch1hp98r5kv41vnc04iqb0s";
   };
 
-  configurePhase = "./configure.sh -shared";
+  nativeBuildInputs = [ cmake ];
 
   installPhase = ''
     mkdir -p $out $dev/include/btor2parser/ $lib/lib
 
     cp -vr bin $out
-    cp -v  src/btor2parser/btor2parser.h $dev/include/btor2parser
-    cp -v  build/libbtor2parser.* $lib/lib
+    cp -v  ../src/btor2parser/btor2parser.h $dev/include/btor2parser
+    cp -v  lib/libbtor2parser.* $lib/lib
   '';
 
   outputs = [ "out" "dev" "lib" ];

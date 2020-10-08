@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ffmpeg, flac, libvorbis, libogg, libid3tag, libexif, libjpeg, sqlite, gettext }:
+{ stdenv, fetchurl, ffmpeg_3, flac, libvorbis, libogg, libid3tag, libexif, libjpeg, sqlite, gettext }:
 
 let version = "1.2.1"; in
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     export makeFlags="INSTALLPREFIX=$out"
   '';
 
-  buildInputs = [ ffmpeg flac libvorbis libogg libid3tag libexif libjpeg sqlite gettext ];
+  buildInputs = [ ffmpeg_3 flac libvorbis libogg libid3tag libexif libjpeg sqlite gettext ];
 
   postInstall = ''
     mkdir -p $out/share/man/man{5,8}

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   buildInputs = [ html5lib ];
-  propagatedBuildInputs = [ six beautifulsoup4 pkgs.ffmpeg pkgs.swftools pkgs.rtmpdump ];
+  propagatedBuildInputs = [ six beautifulsoup4 pkgs.ffmpeg_3 pkgs.swftools pkgs.rtmpdump ];
 
   meta = with stdenv.lib; {
     description = "Discover presentations and/or create a movie consisting of slides and audio track from an infoq url";

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "r8125";
   # On update please verify (using `diff -r`) that the source matches the
   # realtek version.
-  version = "9.003.02";
+  version = "9.003.05";
 
   # This is a mirror. The original website[1] doesn't allow non-interactive
   # downloads, instead emailing you a download link.
@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ibmibmibm";
     repo = "r8125";
-    rev = "${version}";
-    sha256 = "09ip17x8nhcpxkkhyyawkmd10n73j2ffh1i2nmsr7l3jfq7f9zac";
+    rev = version;
+    sha256 = "016vh997xjs01si0zzs572vgflq3czxd0v4m7h1m3qxcv2cvq7i0";
   };
 
   hardeningDisable = [ "pic" ];

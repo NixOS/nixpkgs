@@ -18,9 +18,11 @@ stdenv.mkDerivation rec {
 
   uuid = "remove-dropdown-arrows@mpdeimos.com";
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions/${uuid}
     cp extension.js $out/share/gnome-shell/extensions/${uuid}
     cp metadata.json $out/share/gnome-shell/extensions/${uuid}
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {

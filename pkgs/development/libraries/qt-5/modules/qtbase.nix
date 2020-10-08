@@ -8,7 +8,7 @@
   darwin, libiconv,
 
   dbus, fontconfig, freetype, glib, harfbuzz, icu, libX11, libXcomposite,
-  libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng, libtiff,
+  libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng,
   libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre16, pcre2, sqlite, udev,
   xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm,
   zlib,
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
       harfbuzz icu
 
       # Image formats
-      libjpeg libpng libtiff
+      libjpeg libpng
       (if compareVersion "5.9.0" < 0 then pcre16 else pcre2)
     ]
     ++ (
@@ -255,18 +255,18 @@ stdenv.mkDerivation {
       "-no-warnings-are-errors"
     ]
     ++ (
-      if (!stdenv.hostPlatform.isx86_64)
-      then [ "-no-sse2" ]
-      else lib.optionals (compareVersion "5.9.0" >= 0) {
-        default        = [ "-sse2" "-no-sse3" "-no-ssse3" "-no-sse4.1" "-no-sse4.2" "-no-avx" "-no-avx2" ];
-        westmere       = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2" "-no-avx" "-no-avx2" ];
-        sandybridge    = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx" "-no-avx2" ];
-        ivybridge      = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx" "-no-avx2" ];
-        haswell        = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
-        broadwell      = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
-        skylake        = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
-        skylake-avx512 = [ "-sse2"    "-sse3"    "-ssse3"    "-sse4.1"    "-sse4.2"    "-avx"    "-avx2" ];
-      }.${stdenv.hostPlatform.platform.gcc.arch or "default"}
+      if (!stdenv.hostPlatform.isx86_64) then [
+        "-no-sse2"
+      ] else if (compareVersion "5.9.0" >= 0) then [
+        "-sse2"
+        "${if stdenv.hostPlatform.sse3Support   then "" else "-no"}-sse3"
+        "${if stdenv.hostPlatform.ssse3Support  then "" else "-no"}-ssse3"
+        "${if stdenv.hostPlatform.sse4_1Support then "" else "-no"}-sse4.1"
+        "${if stdenv.hostPlatform.sse4_2Support then "" else "-no"}-sse4.2"
+        "${if stdenv.hostPlatform.avxSupport    then "" else "-no"}-avx"
+        "${if stdenv.hostPlatform.avx2Support   then "" else "-no"}-avx2"
+      ] else [
+      ]
     )
     ++ [
       "-no-mips_dsp"
@@ -295,8 +295,8 @@ stdenv.mkDerivation {
       "-make tools"
       ''-${lib.optionalString (!buildExamples) "no"}make examples''
       ''-${lib.optionalString (!buildTests) "no"}make tests''
-      "-v"
     ]
+    ++ lib.optional (compareVersion "5.15.0" < 0) "-v"
 
     ++ (
       if stdenv.isDarwin
@@ -311,8 +311,9 @@ stdenv.mkDerivation {
       else
         [
           "-${lib.optionalString (compareVersion "5.9.0" < 0) "no-"}rpath"
-
-          "-system-xcb"
+        ]
+        ++ lib.optional (compareVersion "5.15.0" < 0) "-system-xcb"
+        ++ [
           "-xcb"
           "-qpa xcb"
           "-L" "${libX11.out}/lib"
@@ -327,7 +328,9 @@ stdenv.mkDerivation {
           ''-${lib.optionalString (cups == null) "no-"}cups''
           "-dbus-linked"
           "-glib"
-          "-system-libjpeg"
+        ]
+        ++ lib.optional (compareVersion "5.15.0" < 0) "-system-libjpeg"
+        ++ [
           "-system-libpng"
         ]
         ++ lib.optional withGtk3 "-gtk"

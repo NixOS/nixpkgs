@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
-  version = "0.7.0";
+  version = "0.8.0";
 
   disabled = pythonOlder "3.6";
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    sha256 = "1n13jjx1cx5gswwk8rpxfjqyk97cwx1n2hwsabkcbi7fksw3c5jk";
+    sha256 = "0rrpwr4a82j69j5ibl2g0nw8wbpg201cfz6f234k2v6pj500x9nl";
   };
 
   propagatedBuildInputs = [
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   ];
 
   # websockets seems to be pinned b/c in v8+ it drops py3.5 support. Not an issue here (usually py3.7+, and disabled for older py3.6)
-  prePatch = ''
+  postPatch = ''
     substituteInPlace requirements.txt --replace "websockets>=7,<8" "websockets"
     substituteInPlace setup.py --replace "websockets>=7,<8" "websockets"
   '';
@@ -85,6 +85,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Qiskit provider for accessing the quantum devices and simulators at IBMQ";
     homepage = "https://github.com/Qiskit/qiskit-ibmq-provider";
+    changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };

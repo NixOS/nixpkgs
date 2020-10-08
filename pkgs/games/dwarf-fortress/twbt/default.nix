@@ -42,9 +42,10 @@ let
       prerelease = false;
     };
     "0.47.04" = {
-      twbtRelease = "6.61";
-      sha256 = "07bqy9rkd64h033sxdpigp5zq4xrr0xd36wdr1b21g649mv8j6yw";
-      prerelease = false;
+      twbtRelease = "6.xx";
+      dfhackRelease = "0.47.04-r2";
+      sha256 = "092dgp8fh1j4nqr9wbzn89ib1nhscclr8m91lfxsvg0mgn7j8xlv";
+      prerelease = true;
     };
   };
 
@@ -58,7 +59,11 @@ stdenvNoCC.mkDerivation rec {
   version = release.twbtRelease;
 
   src = fetchurl {
-    url = "https://github.com/mifki/df-twbt/releases/download/v${version}/twbt-${version}-linux.zip";
+    url =
+      if version == "6.xx" then
+        "https://github.com/thurin/df-twbt/releases/download/${release.dfhackRelease}/twbt-${version}-linux64-${release.dfhackRelease}.zip"
+      else
+        "https://github.com/mifki/df-twbt/releases/download/v${version}/twbt-${version}-linux.zip";
     sha256 = release.sha256;
   };
 

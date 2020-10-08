@@ -1,0 +1,15 @@
+{
+  "name": "emscripten",
+  "version": "2.0.1",
+  "private": true,
+  "devDependencies": {
+    "ws": "~0.4.28"
+  },
+  "dependencies": {
+    "google-closure-compiler": "20200224.0.0",
+    "html-minifier-terser": "5.0.2",
+    "source-map": "0.5.6",
+    "wasm2c": "1.0.0",
+    "acorn": "7.3.1"
+  }
+}

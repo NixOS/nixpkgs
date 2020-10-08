@@ -28,6 +28,15 @@
 , meta ? {}
 , target ? null
 , cargoVendorDir ? null
+, checkType ? buildType
+, depsExtraArgs ? {}
+, cargoParallelTestThreads ? true
+
+# Needed to `pushd`/`popd` into a subdir of a tarball if this subdir
+# contains a Cargo.toml, but isn't part of a workspace (which is e.g. the
+# case for `rustfmt`/etc from the `rust-sources).
+# Otherwise, everything from the tarball would've been built/tested.
+, buildAndTestSubdir ? null
 , ... } @ args:
 
 assert cargoVendorDir == null -> cargoSha256 != "unset";
@@ -36,11 +45,11 @@ assert buildType == "release" || buildType == "debug";
 let
 
   cargoDeps = if cargoVendorDir == null
-    then fetchCargoTarball {
+    then fetchCargoTarball ({
         inherit name src srcs sourceRoot unpackPhase cargoUpdateHook;
         patches = cargoPatches;
         sha256 = cargoSha256;
-      }
+      } // depsExtraArgs)
     else null;
 
   # If we have a cargoSha256 fixed-output derivation, validate it at build time
@@ -67,14 +76,16 @@ let
   ccForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
   cxxForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
   releaseDir = "target/${rustTarget}/${buildType}";
+  tmpDir = "${releaseDir}-tmp";
 
   # Specify the stdenv's `diff` by abspath to ensure that the user's build
   # inputs do not cause us to find the wrong `diff`.
-  diff = "${diffutils}/bin/diff";
+  # The `.nativeDrv` stanza works like nativeBuildInputs and ensures cross-compiling has the right version available.
+  diff = "${diffutils.nativeDrv or diffutils}/bin/diff";
 
 in
 
-stdenv.mkDerivation (args // {
+stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // {
   inherit cargoDeps;
 
   patchRegistryDeps = ./patch-registry-deps;
@@ -130,6 +141,7 @@ stdenv.mkDerivation (args // {
       # give a friendlier error msg.
       if ! [ -e $srcLockfile ]; then
         echo "ERROR: Missing Cargo.lock from src. Expected to find it at: $srcLockfile"
+        echo "Hint: You can use the cargoPatches attribute to add a Cargo.lock manually to the build."
         exit 1
       fi
 
@@ -145,7 +157,7 @@ stdenv.mkDerivation (args // {
       echo
       echo "To fix the issue:"
       echo '1. Use "0000000000000000000000000000000000000000000000000000" as the cargoSha256 value'
-      echo "2. Build the derivation and wait it to fail with a hash mismatch"
+      echo "2. Build the derivation and wait for it to fail with a hash mismatch"
       echo "3. Copy the 'got: sha256:' value back into the cargoSha256 field"
       echo
 
@@ -161,6 +173,7 @@ stdenv.mkDerivation (args // {
   '';
 
   buildPhase = with builtins; args.buildPhase or ''
+    ${stdenv.lib.optionalString (buildAndTestSubdir != null) "pushd ${buildAndTestSubdir}"}
     runHook preBuild
 
     (
@@ -170,45 +183,58 @@ stdenv.mkDerivation (args // {
       "CXX_${rust.toRustTarget stdenv.buildPlatform}"="${cxxForBuild}" \
       "CC_${rust.toRustTarget stdenv.hostPlatform}"="${ccForHost}" \
       "CXX_${rust.toRustTarget stdenv.hostPlatform}"="${cxxForHost}" \
-      cargo build \
+      cargo build -j $NIX_BUILD_CORES \
         ${stdenv.lib.optionalString (buildType == "release") "--release"} \
         --target ${rustTarget} \
         --frozen ${concatStringsSep " " cargoBuildFlags}
     )
 
-    # rename the output dir to a architecture independent one
-    mapfile -t targets < <(find "$NIX_BUILD_TOP" -type d | grep '${releaseDir}$')
-    for target in "''${targets[@]}"; do
-      rm -rf "$target/../../${buildType}"
-      ln -srf "$target" "$target/../../"
-    done
-
     runHook postBuild
+
+    ${stdenv.lib.optionalString (buildAndTestSubdir != null) "popd"}
+
+    # This needs to be done after postBuild: packages like `cargo` do a pushd/popd in
+    # the pre/postBuild-hooks that need to be taken into account before gathering
+    # all binaries to install.
+    mkdir -p $tmpDir
+    cp -r $releaseDir/* $tmpDir/
+    bins=$(find $tmpDir \
+      -maxdepth 1 \
+      -type f \
+      -executable ! \( -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \))
   '';
 
-  checkPhase = args.checkPhase or ''
+  checkPhase = args.checkPhase or (let
+    argstr = "${stdenv.lib.optionalString (checkType == "release") "--release"} --target ${rustTarget} --frozen";
+    threads = if cargoParallelTestThreads then "$NIX_BUILD_CORES" else "1";
+  in ''
+    ${stdenv.lib.optionalString (buildAndTestSubdir != null) "pushd ${buildAndTestSubdir}"}
     runHook preCheck
-    echo "Running cargo cargo test -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
-    cargo test -- ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
+    echo "Running cargo test ${argstr} -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
+    cargo test -j $NIX_BUILD_CORES ${argstr} -- --test-threads=${threads} ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
     runHook postCheck
-  '';
+    ${stdenv.lib.optionalString (buildAndTestSubdir != null) "popd"}
+  '');
 
   doCheck = args.doCheck or true;
 
   strictDeps = true;
 
-  inherit releaseDir;
+  inherit releaseDir tmpDir;
 
   installPhase = args.installPhase or ''
     runHook preInstall
+
+    # rename the output dir to a architecture independent one
+    mapfile -t targets < <(find "$NIX_BUILD_TOP" -type d | grep '${tmpDir}$')
+    for target in "''${targets[@]}"; do
+      rm -rf "$target/../../${buildType}"
+      ln -srf "$target" "$target/../../"
+    done
     mkdir -p $out/bin $out/lib
 
-    find $releaseDir \
-      -maxdepth 1 \
-      -type f \
-      -executable ! \( -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \) \
-      -print0 | xargs -r -0 cp -t $out/bin
-    find $releaseDir \
+    xargs -r cp -t $out/bin <<< $bins
+    find $tmpDir \
       -maxdepth 1 \
       -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \
       -print0 | xargs -r -0 cp -t $out/lib

@@ -26,6 +26,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/google/cargo-raze";
     license = licenses.asl20;
     maintainers = with maintainers; [ elasticdog ];
-    platforms = platforms.all;
   };
 }

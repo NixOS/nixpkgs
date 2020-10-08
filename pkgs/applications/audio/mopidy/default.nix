@@ -26,6 +26,10 @@ let
 
     mopidy-mpd = callPackage ./mpd.nix { };
 
+    mopidy-mpris = callPackage ./mpris.nix { };
+
+    mopidy-somafm = callPackage ./somafm.nix { };
+
     mopidy-spotify-tunigo = callPackage ./spotify-tunigo.nix { };
 
     mopidy-youtube = callPackage ./youtube.nix { };
@@ -35,6 +39,8 @@ let
     mopidy-musicbox-webclient = callPackage ./musicbox-webclient.nix { };
 
     mopidy-iris = callPackage ./iris.nix { };
+
+    mopidy-tunein = callPackage ./tunein.nix { };
 
   };
 

@@ -92,9 +92,7 @@ let
   # `switch-to-configuration' that activates the configuration and
   # makes it bootable.
   baseSystem = pkgs.stdenvNoCC.mkDerivation {
-    name = let hn = config.networking.hostName;
-               nn = if (hn != "") then hn else "unnamed";
-        in "nixos-system-${nn}-${config.system.nixos.label}";
+    name = "nixos-system-${config.system.name}-${config.system.nixos.label}";
     preferLocalBuild = true;
     allowSubstitutes = false;
     buildCommand = systemBuilder;
@@ -161,9 +159,9 @@ in
         To switch to a specialised configuration
         (e.g. <literal>fewJobsManyCores</literal>) at runtime, run:
 
-        <programlisting>
-        # sudo /run/current-system/specialisation/fewJobsManyCores/bin/switch-to-configuration test
-        </programlisting>
+        <screen>
+        <prompt># </prompt>sudo /run/current-system/specialisation/fewJobsManyCores/bin/switch-to-configuration test
+        </screen>
       '';
       type = types.attrsOf (types.submodule (
         { ... }: {
@@ -262,6 +260,21 @@ in
         List of packages to override without doing a full rebuild.
         The original derivation and replacement derivation must have the same
         name length, and ideally should have close-to-identical directory layout.
+      '';
+    };
+
+    system.name = mkOption {
+      type = types.str;
+      default =
+        if config.networking.hostName == ""
+        then "unnamed"
+        else config.networking.hostName;
+      defaultText = '''networking.hostName' if non empty else "unnamed"'';
+      description = ''
+        The name of the system used in the <option>system.build.toplevel</option> derivation.
+        </para><para>
+        That derivation has the following name:
+        <literal>"nixos-system-''${config.system.name}-''${config.system.nixos.label}"</literal>
       '';
     };
 

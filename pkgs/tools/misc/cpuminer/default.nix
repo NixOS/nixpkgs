@@ -1,17 +1,25 @@
-{ stdenv, fetchurl, curl, jansson, perl }:
+{ stdenv
+, fetchFromGitHub
+, curl
+, jansson
+, perl
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "cpuminer";
-  version = "2.5.0";
+  version = "2.5.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/cpuminer/pooler-${pname}-${version}.tar.gz";
-    sha256 = "1xalrfrk5hvh1jh9kbqhib2an82ypd46vl9glaxhz3rbjld7c5pa";
+  src = fetchFromGitHub {
+    owner = "pooler";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0f44i0z8rid20c2hiyp92xq0q0mjj537r05sa6vdbc0nl0a5q40i";
   };
 
   patchPhase = if stdenv.cc.isClang then "${perl}/bin/perl ./nomacro.pl" else null;
 
-  buildInputs = [ curl jansson ];
+  buildInputs = [ curl jansson autoreconfHook ];
 
   configureFlags = [ "CFLAGS=-O3" ];
 

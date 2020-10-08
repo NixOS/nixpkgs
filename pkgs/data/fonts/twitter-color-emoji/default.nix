@@ -3,9 +3,8 @@
 
 { stdenv
 , fetchFromGitHub
-, fetchpatch
 , cairo
-, graphicsmagick
+, imagemagick
 , pkg-config
 , pngquant
 , python3
@@ -15,15 +14,18 @@
 }:
 
 let
-  version = "12.1.5";
+  version = "13.0.1";
 
   twemojiSrc = fetchFromGitHub {
     name = "twemoji";
     owner = "twitter";
     repo = "twemoji";
     rev = "v${version}";
-    hash = "sha256-qb3bLiUgtA8QQ13u928kvM+3qwmQpyjUk0EPKja1kSk=";
+    sha256 = "0acinlv2l3s1jga2i9wh16mvgkxw4ipzgvjx8c80zd104lpdpgd9";
   };
+
+  pythonEnv =
+    python3.withPackages (p: [ p.fonttools p.nototools ]);
 
 in
 stdenv.mkDerivation rec {
@@ -44,21 +46,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cairo
-    graphicsmagick
+    imagemagick
     pkg-config
     pngquant
-    python3
-    python3.pkgs.nototools
+    pythonEnv
     which
     zopfli
-  ];
-
-  patches = [
-    # ImageMagick -> GraphicsMagick
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/twitter-twemoji-fonts/raw/07778605d50696f6aa929020e82611a01d254c90/f/noto-emoji-use-gm.patch";
-      sha256 = "sha256-kyJwT1SKS1vnXxvPTiIMK6TRHMp1ZOSlb6rodL4Jbxs=";
-    })
   ];
 
   postPatch = let
@@ -74,7 +67,7 @@ stdenv.mkDerivation rec {
       ''s#http://scripts.sil.org/OFL#http://creativecommons.org/licenses/by/4.0/#''
     ];
   in ''
-    patchShebangs ./flag_glyph_name.py
+    ${noto-fonts-emoji.postPatch}
 
     sed '${templateSubstitutions}' NotoColorEmoji.tmpl.ttx.tmpl > TwitterColorEmoji.tmpl.ttx.tmpl
     pushd ${twemojiSrc.name}/assets/72x72/
@@ -88,6 +81,8 @@ stdenv.mkDerivation rec {
     "EMOJI=TwitterColorEmoji"
     "EMOJI_SRC_DIR=${twemojiSrc.name}/assets/72x72"
     "BODY_DIMENSIONS=76x72"
+    # twemoji contains some codepoints noto doesn't like
+    "BYPASS_SEQUENCE_CHECK=True"
   ];
 
   enableParallelBuilding = true;

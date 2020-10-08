@@ -14,7 +14,9 @@ buildGoModule rec {
   };
 
   vendorSha256 = "1qvbm8v8yah6r6cw1cvdw79yiwxb2amzdkkzvzbwigy0j4bvn9mi";
-  goPackagePath = "sigs.k8s.io/kind";
+
+  doCheck = false;
+
   subPackages = [ "." ];
 
   nativeBuildInputs = [ installShellFiles ];

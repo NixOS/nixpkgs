@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libX11, cups, zlib, libxml2, pango, atk, gtk2, glib
-, gdk-pixbuf }:
+, gdk-pixbuf, gdk-pixbuf-xlib }:
 
 assert stdenv.hostPlatform.system == "i686-linux";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   # versions.
 
   libPath = stdenv.lib.makeLibraryPath
-    [ stdenv.cc.cc libX11 zlib libxml2 cups pango atk gtk2 glib gdk-pixbuf ];
+    [ stdenv.cc.cc libX11 zlib libxml2 cups pango atk gtk2 glib gdk-pixbuf gdk-pixbuf-xlib ];
 
   passthru.mozillaPlugin = "/libexec/adobe-reader/Browser/intellinux";
 
@@ -28,5 +28,9 @@ stdenv.mkDerivation {
     description = "Adobe Reader, a viewer for PDF documents";
     homepage = "http://www.adobe.com/products/reader";
     license = stdenv.lib.licenses.unfree;
+    knownVulnerabilities = [
+      "Numerous unresolved vulnerabilities"
+      "See: https://www.cvedetails.com/product/497/Adobe-Acrobat-Reader.html?vendor_id=53"
+    ];
   };
 }

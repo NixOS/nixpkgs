@@ -1,25 +1,27 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, fetchurl, jre, autoPatchelfHook, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "sbt";
-  version = "1.3.10";
+  version = "1.4.0";
 
   src = fetchurl {
-    urls = [
-      "https://piccolo.link/sbt-${version}.tgz"
-      "https://github.com/sbt/sbt/releases/download/v${version}/sbt-${version}.tgz"
-    ];
-    sha256 = "1023qcbdbwl40l7mgyd3j0ggr6paz1zs2q787ym52dhrcibhcq1h";
+    url = "https://github.com/sbt/sbt/releases/download/v${version}/sbt-${version}.tgz";
+    sha256 = "1mgfs732w1c1p7dna7h47x8h073lvjs224fqlpkkvq10153mnxxl";
   };
 
   patchPhase = ''
     echo -java-home ${jre.home} >>conf/sbtopts
   '';
 
+  nativeBuildInputs = [ autoPatchelfHook ];
+
+  buildInputs = [ zlib ];
+
   installPhase = ''
     mkdir -p $out/share/sbt $out/bin
     cp -ra . $out/share/sbt
-    ln -s $out/share/sbt/bin/sbt $out/bin/
+    ln -sT ../share/sbt/bin/sbt $out/bin/sbt
+    ln -sT ../share/sbt/bin/sbtn-x86_64-${ if (stdenv.isDarwin) then "apple-darwin" else "pc-linux"} $out/bin/sbtn
   '';
 
   meta = with stdenv.lib; {

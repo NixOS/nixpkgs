@@ -1,15 +1,18 @@
-{ stdenv, fetchurl, makeWrapper, cmake, llvmPackages, kernel
+{ stdenv, fetchurl, fetchpatch
+, makeWrapper, cmake, llvmPackages, kernel
 , flex, bison, elfutils, python, luajit, netperf, iperf, libelf
 , systemtap, bash
 }:
 
 python.pkgs.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.14.0";
+  version = "0.16.0";
+
+  disabled = !stdenv.isLinux;
 
   src = fetchurl {
     url = "https://github.com/iovisor/bcc/releases/download/v${version}/bcc-src-with-submodule.tar.gz";
-    sha256 = "1hw02bib06fjyw61as5pmhf0qxy0wv0nw8fff2i8a9d1zcd8xf3p";
+    sha256 = "sha256-ekVRyugpZOU1nr0N9kWCSoJTmtD2qGsn/DmWgK7XZ/c=";
   };
   format = "other";
 
@@ -23,6 +26,12 @@ python.pkgs.buildPythonApplication rec {
     # This is needed until we fix
     # https://github.com/NixOS/nixpkgs/issues/40427
     ./fix-deadlock-detector-import.patch
+
+    # This is already upstream; remove it on the next release
+    (fetchpatch {
+      url = "https://github.com/iovisor/bcc/commit/60de17161fe7f44b534a8da343edbad2427220e3.patch";
+      sha256 = "0pd5b4vgpdxbsrjwrw2kmn4l9hpj0rwdm3hvwvk7dsr3raz7w4b3";
+    })
   ];
 
   propagatedBuildInputs = [ python.pkgs.netaddr ];

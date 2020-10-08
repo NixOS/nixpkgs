@@ -1,18 +1,5 @@
-From 9f56e78d111d726ca95a59b2d64e5c3298451505 Mon Sep 17 00:00:00 2001
-From: Chris Liddell <chris.liddell@artifex.com>
-Date: Mon, 27 Apr 2020 11:04:57 +0100
-Subject: [PATCH] Bug 702364: Fix missing echogs dependencies
-
-Rebased version of http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=1b4c3669a20c
-to fix parallel build
----
- contrib/contrib.mak | 281 ++++++++++++++++++++++----------------------
- 1 file changed, 143 insertions(+), 138 deletions(-)
-
-diff --git a/contrib/contrib.mak b/contrib/contrib.mak
-index 5411ae902..7dd9822a9 100644
---- a/contrib/contrib.mak
-+++ b/contrib/contrib.mak
+--- a/contrib/contrib.mak	2020-03-19 09:21:42.000000000 +0100
++++ b/contrib/contrib.mak	2020-05-14 13:41:03.202258445 +0200
 @@ -22,6 +22,10 @@
  CONTRIB_MAK=$(CONTRIBDIR)$(D)contrib.mak $(TOP_MAKEFILES)
  CONTRIBSRC=$(CONTRIBDIR)$(D)
@@ -24,7 +11,7 @@ index 5411ae902..7dd9822a9 100644
  ###### --------------------------- Catalog -------------------------- ######
  
  # The following drivers are user-contributed, and maintained (if at all) by
-@@ -161,19 +165,19 @@ $(DEVOBJ)gdevbjca.$(OBJ) : $(CONTRIBSRC)gdevbjca.c $(PDEVH) $(bjc_h) \
+@@ -185,19 +189,19 @@
  	$(DEVCC) $(DEVO_)gdevbjca.$(OBJ) $(C_) $(CONTRIBSRC)gdevbjca.c
  
  $(DD)bjcmono.dev : $(bjc_) $(DD)page.dev \
@@ -48,7 +35,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)bjccolor $(bjc_)
  
  
-@@ -184,25 +188,25 @@ cdeskjet8_=$(DEVOBJ)gdevcd8.$(OBJ) $(HPPCL)
+@@ -208,25 +212,25 @@
  # Author: Uli Wortmann (uliw@erdw.ethz.ch), Martin Gerbershagen (ger@ulm.temic.de)
  # Printer: HP 670
  $(DD)cdj670.dev : $(cdeskjet8_) $(DD)page.dev \
@@ -78,7 +65,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV2) $(DD)cdj1600 $(cdeskjet8_)
  
  $(DEVOBJ)gdevcd8.$(OBJ) : $(CONTRIBSRC)gdevcd8.c $(PDEVH) $(math__h)\
-@@ -220,7 +224,8 @@ $(DEVOBJ)gdevcd8.$(OBJ) : $(CONTRIBSRC)gdevcd8.c $(PDEVH) $(math__h)\
+@@ -244,7 +248,8 @@
  
  # Author: Matthew Gelhaus (mgelhaus@proaxis.com)
  # Printer: HP 880c
@@ -88,7 +75,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV2) $(DD)cdj880 $(cdeskjet8_)
  
  
-@@ -231,7 +236,7 @@ cdeskjet9_=$(DEVOBJ)gdevdj9.$(OBJ) $(HPPCL)
+@@ -255,7 +260,7 @@
  # Author: Rene Harsch (rene@harsch.net)
  # Printer: HP 970Cxi
  $(DD)cdj970.dev : $(cdeskjet9_) $(DD)page.dev \
@@ -97,7 +84,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV2) $(DD)cdj970 $(cdeskjet9_)
  
  $(DEVOBJ)gdevdj9.$(OBJ) : $(CONTRIBSRC)gdevdj9.c $(PDEVH) $(math__h) $(string__h)\
-@@ -244,7 +249,7 @@ $(DEVOBJ)gdevdj9.$(OBJ) : $(CONTRIBSRC)gdevdj9.c $(PDEVH) $(math__h) $(string__h
+@@ -268,7 +273,7 @@
  ### NOTE:  Same as chp2200 (some PJL and CRD changes).
  
  $(DD)cdnj500.dev : $(cdeskjet8_) $(DD)page.dev \
@@ -106,7 +93,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV2) $(DD)cdnj500 $(cdeskjet8_)
  
  
-@@ -253,7 +258,7 @@ $(DD)cdnj500.dev : $(cdeskjet8_) $(DD)page.dev \
+@@ -277,7 +282,7 @@
  ### NOTE:  Depends on the presence of the cdj850 section.
  
  $(DD)chp2200.dev : $(cdeskjet8_) $(DD)page.dev \
@@ -115,7 +102,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV2) $(DD)chp2200 $(cdeskjet8_)
  
  
-@@ -264,11 +269,11 @@ $(DD)chp2200.dev : $(cdeskjet8_) $(DD)page.dev \
+@@ -288,11 +293,11 @@
  GDIMONO=$(DEVOBJ)gdevgdi.$(OBJ) $(HPPCL)
  
  $(DD)gdi.dev : $(GDIMONO) $(DD)page.dev \
@@ -129,7 +116,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)samsunggdi $(GDIMONO)
  
  $(DEVOBJ)gdevgdi.$(OBJ) : $(CONTRIBSRC)gdevgdi.c $(PDEVH) $(gdevpcl_h) \
-@@ -282,17 +287,17 @@ $(DEVOBJ)gdevgdi.$(OBJ) : $(CONTRIBSRC)gdevgdi.c $(PDEVH) $(gdevpcl_h) \
+@@ -306,17 +311,17 @@
  
  hl1250_=$(DEVOBJ)gdevhl12.$(OBJ) $(HPDLJM)
  $(DD)hl1250.dev : $(hl1250_) $(DD)page.dev \
@@ -150,7 +137,7 @@ index 5411ae902..7dd9822a9 100644
  	$(DEVCC) $(DEVO_)gdevhl12.$(OBJ) $(C_) $(CONTRIBSRC)gdevhl12.c
  
  
-@@ -303,37 +308,37 @@ ln03_=$(DEVOBJ)gdevln03.$(OBJ)
+@@ -327,37 +332,37 @@
  # Author: Ulrich Mueller (ulm@vsnhd1.cern.ch)
  # Printer: DEC LN03
  $(DD)ln03.dev : $(ln03_) $(DD)page.dev \
@@ -194,7 +181,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)la75plus $(ln03_)
  
  $(DEVOBJ)gdevln03.$(OBJ) : $(CONTRIBSRC)gdevln03.c $(PDEVH) \
-@@ -356,27 +361,27 @@ $(DEVOBJ)gdevescv.$(OBJ) : $(ESCV_SRC)gdevescv.c $(ESCV_SRC)gdevescv.h $(PDEVH)
+@@ -380,233 +385,233 @@
  	$(DEVCC) -DA4 $(DEVO_)gdevescv.$(OBJ) $(C_) $(escv_opts) $(ESCV_SRC)gdevescv.c
  
  $(DD)alc1900.dev : $(escv_) $(DD)page.dev \
@@ -228,7 +215,8 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)alc8600 $(escv_)
  
  $(DD)alc9100.dev : $(escv_) $(DD)page.dev \
-@@ -384,11 +389,11 @@ $(DD)alc9100.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
  	$(SETPDEV) $(DD)alc9100 $(escv_)
  
  $(DD)lp3000c.dev : $(escv_) $(DD)page.dev \
@@ -242,7 +230,8 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)lp8000c $(escv_)
  
  $(DD)lp8200c.dev : $(escv_) $(DD)page.dev \
-@@ -396,15 +401,15 @@ $(DD)lp8200c.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
  	$(SETPDEV) $(DD)lp8200c $(escv_)
  
  $(DD)lp8300c.dev : $(escv_) $(DD)page.dev \
@@ -261,7 +250,8 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)lp8800c $(escv_)
  
  $(DD)lp9000c.dev : $(escv_) $(DD)page.dev \
-@@ -412,177 +417,177 @@ $(DD)lp9000c.dev : $(escv_) $(DD)page.dev \
+-                           $(CONTRIB_MAK) $(MAKEDIRS)
++                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
  	$(SETPDEV) $(DD)lp9000c $(escv_)
  
  $(DD)lp9200c.dev : $(escv_) $(DD)page.dev \
@@ -481,7 +471,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)lex2050 $(lex2050_)
  
  $(DEVOBJ)gdevlx7.$(OBJ) : $(CONTRIBSRC)gdevlx7.c $(PDEVH) \
-@@ -599,7 +604,7 @@ $(DEVOBJ)gdevlx32.$(OBJ) : $(CONTRIBSRC)gdevlx32.c $(PDEVH) $(gsparam_h) \
+@@ -623,7 +628,7 @@
  	$(DEVCC) $(DEVO_)gdevlx32.$(OBJ) $(C_) $(CONTRIBSRC)gdevlx32.c
  
  $(DD)lxm3200.dev : $(lxm3200_) $(DD)page.dev \
@@ -490,7 +480,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)lxm3200 $(lxm3200_)
  
  
-@@ -625,13 +630,13 @@ $(DEVOBJ)gdevlips.$(OBJ) : $(GX) $(LIPS_SRC)gdevlips.c $(std_h) \
+@@ -649,13 +654,13 @@
  	$(DEVCC) $(DEVO_)gdevlips.$(OBJ) $(LIPS_OPT) $(C_) $(LIPS_SRC)gdevlips.c
  
  $(DD)lips4.dev : $(lipsr_) $(DD)page.dev \
@@ -506,7 +496,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETDEV) $(DD)lips4v $(lipsv_)
  	$(ADDMOD) $(DD)lips4v -include $(GLD)vector
  
-@@ -644,11 +649,11 @@ $(DEVOBJ)gdevl4v.$(OBJ) : $(LIPS_SRC)gdevl4v.c $(LIPS_SRC)gdevlips.h $(GDEV)\
+@@ -668,11 +673,11 @@
  ### --------------- Some extra devices: lips2p, bjc880j ---------------- ###
  
  $(DD)lips2p.dev : $(lipsr_) $(DD)page.dev \
@@ -520,7 +510,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)bjc880j $(lipsr_)
  
  
-@@ -657,15 +662,15 @@ $(DD)bjc880j.dev : $(lipsr_) $(DD)page.dev \
+@@ -681,15 +686,15 @@
  md2k_=$(DEVOBJ)gdevmd2k.$(OBJ)
  
  $(DD)md2k.dev : $(md2k_) $(DD)page.dev \
@@ -539,7 +529,7 @@ index 5411ae902..7dd9822a9 100644
  	$(DEVCC) $(DEVO_)gdevmd2k.$(OBJ) $(C_) $(CONTRIBSRC)gdevmd2k.c
   
  
-@@ -673,7 +678,7 @@ $(DEVOBJ)gdevmd2k.$(OBJ) : $(CONTRIBSRC)gdevmd2k.c $(PDEVH) $(gsparam_h) \
+@@ -697,7 +702,7 @@
  
  oki4w_=$(DEVOBJ)gdevop4w.$(OBJ)
  $(DD)oki4w.dev : $(oki4w_) $(DD)page.dev \
@@ -548,7 +538,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)oki4w $(oki4w_)
  
  # Author: Ivan Schreter (ivan@shadow.sk)
-@@ -696,11 +701,11 @@ $(DEVOBJ)gdevopvp.$(OBJ) : $(OPVP_SRC)gdevopvp.c $(OPVP_SRC)opvp_common.h\
+@@ -720,11 +725,11 @@
  	$(DEVCC) $(DEVO_)gdevopvp.$(OBJ) $(OPVP_OPT) $(C_) $(OPVP_SRC)gdevopvp.c
  
  $(DD)opvp.dev : $(opvp_) $(DD)page.dev \
@@ -562,7 +552,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)oprp $(opvp_)
  
  
-@@ -877,78 +882,78 @@ $(DEVOBJ)pclcomp.$(OBJ) : $(pcl3_src)pclcomp.c $(pcl3_src)pclgen.h \
+@@ -901,78 +906,78 @@
  
  # The generic pcl3 device with selectable subdevices
  $(DD)pcl3.dev : $(pcl3_) $(DD)page.dev \
@@ -665,7 +655,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)hpdj1120c $(pcl3_)
  
  #------------------------------------------------------------------------------
-@@ -985,7 +990,7 @@ pcl3-install:
+@@ -1009,7 +1014,7 @@
  
  xes_=$(DEVOBJ)gdevxes.$(OBJ)
  $(DD)xes.dev : $(xes_) $(DD)page.dev \
@@ -674,7 +664,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)xes $(xes_)
  
  # Author: Peter Flass (flass@lbdrscs.bitnet)
-@@ -1005,16 +1010,16 @@ JAPSRC=$(JAPDIR)$(D)
+@@ -1029,16 +1034,16 @@
  
  pr201_=$(DEVOBJ)gdevp201.$(OBJ) $(DEVOBJ)gdevprn.$(OBJ)
  
@@ -695,7 +685,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)pr1000_4 $(pr201_)
  
  $(DEVOBJ)gdevp201.$(OBJ) : $(JAPSRC)gdevp201.c $(PDEVH) \
-@@ -1025,7 +1030,7 @@ $(DEVOBJ)gdevp201.$(OBJ) : $(JAPSRC)gdevp201.c $(PDEVH) \
+@@ -1049,7 +1054,7 @@
  
  jj100_=$(DEVOBJ)gdevj100.$(OBJ) $(DEVOBJ)gdevprn.$(OBJ)
  
@@ -704,7 +694,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)jj100 $(jj100_)
  
  $(DEVOBJ)gdevj100.$(OBJ) : $(JAPSRC)gdevj100.c $(PDEVH) \
-@@ -1037,11 +1042,11 @@ $(DEVOBJ)gdevj100.$(OBJ) : $(JAPSRC)gdevj100.c $(PDEVH) \
+@@ -1061,11 +1066,11 @@
  bj10v_=$(DEVOBJ)gdev10v.$(OBJ) $(DEVOBJ)gdevprn.$(OBJ)
  
  $(DD)bj10v.dev : $(bj10v_) \
@@ -718,7 +708,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)bj10vh $(bj10v_)
  
  # Uncomment the following line if you are using MS-DOS on PC9801 series.
-@@ -1056,7 +1061,7 @@ $(DEVOBJ)gdev10v.$(OBJ) : $(JAPSRC)gdev10v.c $(PDEVH) \
+@@ -1080,7 +1085,7 @@
  dmprt_=$(DEVOBJ)gdevdmpr.$(OBJ) $(DEVOBJ)dviprlib.$(OBJ) $(DEVOBJ)gdevprn.$(OBJ)
  
  $(DD)dmprt.dev : $(dmprt_) $(DD)page.dev \
@@ -727,7 +717,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETDEV) $(DD)dmprt $(dmprt_)
  	$(ADDMOD) $(DD)dmprt -ps dmp_init
  
-@@ -1086,19 +1091,19 @@ $(DEVOBJ)gdevmjc.$(OBJ) : $(JAPSRC)gdevmjc.c $(JAPSRC)gdevmjc.h $(PDEVH) $(gdevp
+@@ -1110,19 +1115,19 @@
  	$(DEVCC) -DA4 $(DEVO_)gdevmjc.$(OBJ) $(C_) $(JAPSRC)gdevmjc.c
  
  $(DD)mj700v2c.dev : $(mj700v2c_) $(DD)page.dev \
@@ -751,7 +741,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)mj8000c $(mj700v2c_)
  
  ### ----------------- The Fujitsu FMPR printer device ----------------- ###
-@@ -1106,7 +1111,7 @@ $(DD)mj8000c.dev : $(mj700v2c_) $(DD)page.dev \
+@@ -1130,7 +1135,7 @@
  fmpr_=$(DEVOBJ)gdevfmpr.$(OBJ) $(DEVOBJ)gdevprn.$(OBJ)
  
  $(DD)fmpr.dev : $(fmpr_) $(DD)page.dev \
@@ -760,7 +750,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)fmpr $(fmpr_)
  
  $(DEVOBJ)gdevfmpr.$(OBJ) : $(JAPSRC)gdevfmpr.c $(PDEVH) \
-@@ -1118,7 +1123,7 @@ $(DEVOBJ)gdevfmpr.$(OBJ) : $(JAPSRC)gdevfmpr.c $(PDEVH) \
+@@ -1142,7 +1147,7 @@
  fmlbp_=$(DEVOBJ)gdevfmlbp.$(OBJ) $(DEVOBJ)gdevprn.$(OBJ)
  
  $(DD)fmlbp.dev : $(fmlbp_) $(DD)page.dev \
@@ -769,7 +759,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)fmlbp $(fmlbp_)
  
  $(DEVOBJ)gdevfmlbp.$(OBJ) : $(JAPSRC)gdevfmlbp.c $(PDEVH) \
-@@ -1135,7 +1140,7 @@ $(DEVOBJ)gdevfmlbp.$(OBJ) : $(JAPSRC)gdevfmlbp.c $(PDEVH) \
+@@ -1159,7 +1164,7 @@
  ml6_=$(DEVOBJ)gdevml6.$(OBJ) $(DEVOBJ)gdevprn.$(OBJ)
  
  $(DD)ml600.dev : $(ml6_) $(DD)page.dev \
@@ -778,7 +768,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)ml600 $(ml6_)
  
  $(DEVOBJ)gdevml6.$(OBJ) : $(JAPSRC)gdevml6.c $(PDEVH) \
-@@ -1148,11 +1153,11 @@ $(DEVOBJ)gdevml6.$(OBJ) : $(JAPSRC)gdevml6.c $(PDEVH) \
+@@ -1172,11 +1177,11 @@
  lbp3x0_=$(DEVOBJ)gdevlbp3.$(OBJ)
  
  $(DD)lbp310.dev :$(lbp3x0_) $(DD)page.dev \
@@ -792,7 +782,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)lbp320 $(lbp3x0_)
  
  $(DEVOBJ)gdevlbp3.$(OBJ) : $(JAPSRC)gdevlbp3.c $(PDEVH)
-@@ -1167,7 +1172,7 @@ $(DEVOBJ)gdevnpdl.$(OBJ) : $(JAPSRC)gdevnpdl.c $(LIPS_SRC)gdevlprn.h $(PDEVH) \
+@@ -1191,7 +1196,7 @@
  	$(DEVCC) -DA4 $(DEVO_)gdevnpdl.$(OBJ) $(LIPS_OPT) $(C_) $(JAPSRC)gdevnpdl.c
  
  $(DD)npdl.dev : $(npdl_) $(DD)page.dev \
@@ -801,7 +791,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)npdl $(npdl_)
  
  ### ------- EPSON ESC/Page printer device ----------------- ###
-@@ -1179,11 +1184,11 @@ $(DEVOBJ)gdevespg.$(OBJ) : $(JAPSRC)gdevespg.c $(LIPS_SRC)gdevlprn.h $(PDEVH) \
+@@ -1203,11 +1208,11 @@
  	$(DEVCC) -DA4 $(DEVO_)gdevespg.$(OBJ) $(LIPS_OPT) $(C_) $(JAPSRC)gdevespg.c
  
  $(DD)escpage.dev : $(escpage_) $(DD)page.dev \
@@ -815,7 +805,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)lp2000 $(escpage_)
  
  ### --- The RICOH RPDL language printer device ------ ###
-@@ -1194,7 +1199,7 @@ $(DEVOBJ)gdevrpdl.$(OBJ) : $(JAPSRC)gdevrpdl.c $(LIPS_SRC)gdevlprn.h $(PDEVH) \
+@@ -1218,7 +1223,7 @@
  	$(DEVCC) $(DEVO_)gdevrpdl.$(OBJ) $(LIPS_OPT) $(C_) $(JAPSRC)gdevrpdl.c
  
  $(DD)rpdl.dev : $(rpdl_) $(DD)page.dev \
@@ -824,21 +814,7 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)rpdl $(rpdl_)
  
  ### ---------- RICOH RPDL IV(600dpi) printer devices ---------- ###
-@@ -1204,11 +1209,11 @@ $(DD)rpdl.dev : $(rpdl_) $(DD)page.dev \
- #	$(DEVCC) $(DEVO_)gdevrpdl.$(OBJ) $(C_) $(JAPSRC)gdevrpdl.c
- #
- #$(DD)nx100f.dev : $(rpdl_) $(DD)page.dev \
--                           $(CONTRIB_MAK) $(MAKEDIRS)
-+                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
- #	$(SETPDEV2) $(DD)nx100f $(rpdl_)
- #
- #$(DD)nx100v.dev : $(rpdl_) $(DD)page.dev \
--                           $(CONTRIB_MAK) $(MAKEDIRS)
-+                           $(CONTDEV) $(CONTRIB_MAK) $(MAKEDIRS)
- #	$(SETPDEV2) $(DD)nx100v $(rpdl_)
- 
- ### ------------ The ALPS Micro Dry printer devices ------------ ###
-@@ -1216,15 +1221,15 @@ $(DD)rpdl.dev : $(rpdl_) $(DD)page.dev \
+@@ -1240,15 +1245,15 @@
  alps_=$(DEVOBJ)gdevalps.$(OBJ)
  
  $(DD)md50Mono.dev : $(alps_) $(DD)page.dev \
@@ -857,6 +833,3 @@ index 5411ae902..7dd9822a9 100644
  	$(SETPDEV) $(DD)md1xMono $(alps_)
  
  $(DEVOBJ)gdevalps.$(OBJ) : $(JAPSRC)gdevalps.c $(PDEVH) \
--- 
-2.26.2
-

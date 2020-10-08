@@ -34,9 +34,6 @@ buildPythonApplication rec {
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH")
-    # gdk-pixbuf setup hook can not choose between propagated librsvg
-    # and our librsvg with GObject introspection.
-    GDK_PIXBUF_MODULE_FILE=$(echo ${librsvg}/lib/gdk-pixbuf-2.0/*/loaders.cache)
   '';
 
   postFixup = ''

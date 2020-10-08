@@ -18,13 +18,13 @@
 
 mkDerivation rec {
   pname = "nomacs";
-  version = "3.14.2";
+  version = "3.17.2206";
 
   src = fetchFromGitHub {
     owner = "nomacs";
     repo = "nomacs";
     rev = version;
-    sha256 = "1vms13kyg7cpqi2hxvrrhlnl7cq92ijr7dm1kl5ryglpcagqv811";
+    sha256 = "1bq7bv4p7w67172y893lvpk90d6fgdpnylynbj2kn8m2hs6khya4";
   };
 
   enableParallelBuilding = true;
@@ -55,7 +55,7 @@ mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://nomacs.org";
     description = "Qt-based image viewer";
-    maintainers = [maintainers.ahmedtd];
+    maintainers = with stdenv.lib.maintainers; [ mindavi ];
     license = licenses.gpl3Plus;
     repositories.git = "https://github.com/nomacs/nomacs.git";
     inherit (qtbase.meta) platforms;

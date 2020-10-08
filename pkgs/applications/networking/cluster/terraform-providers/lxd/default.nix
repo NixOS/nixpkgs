@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1shdpl1zsbbpc3mfs0l65ykq2h15ggvqylaixcap4j4lfl7m9my0";
 
+  doCheck = false;
+
   postBuild = "mv ../go/bin/terraform-provider-lxd{,_v${version}}";
 
   meta = with stdenv.lib; {

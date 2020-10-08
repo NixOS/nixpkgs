@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages, nixosTests }:
 
 python3Packages.buildPythonApplication rec {
   pname = "prometheus-cups-exporter-unstable";
@@ -25,6 +25,8 @@ python3Packages.buildPythonApplication rec {
           --set PYTHONPATH "$PYTHONPATH" \
           --add-flags "$out/share/cups_exporter.py"
   '';
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) cups; };
 
   meta = with lib; {
     description = "A simple prometheus exporter for cups implemented in python";

@@ -8,7 +8,7 @@ let
     pname = "clang";
     inherit version;
 
-    src = fetch "clang" "08fbxa2a0kr3ni35ckppj0kyvlcyaywrhpqwcdrdy0z900mhcnw8";
+    src = fetch "clang" "091bvcny2lh32zy8f3m9viayyhb2zannrndni7325rl85cwgr6pr";
 
     unpackPhase = ''
       unpackFile $src
@@ -27,6 +27,7 @@ let
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++14"
       "-DCLANGD_BUILD_XPC=OFF"
+      "-DLLVM_ENABLE_RTTI=ON"
     ] ++ stdenv.lib.optionals enableManpages [
       "-DCLANG_INCLUDE_DOCS=ON"
       "-DLLVM_ENABLE_SPHINX=ON"
@@ -36,9 +37,6 @@ let
     ];
 
     patches = [
-      # 10.0.0 only, this should be present in 10.0.1
-      ./clang-extension-handling.patch
-
       ./purity.patch
       # https://reviews.llvm.org/D51899
       ./compiler-rt-baremetal.patch
@@ -89,8 +87,6 @@ let
     passthru = {
       isClang = true;
       inherit llvm;
-    } // stdenv.lib.optionalAttrs (stdenv.targetPlatform.isLinux || (stdenv.cc.isGNU && stdenv.cc.cc ? gcc)) {
-      gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
     };
 
     meta = {

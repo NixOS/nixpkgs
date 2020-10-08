@@ -1,17 +1,18 @@
 { stdenv, fetchFromGitHub
 , cmake, pkgconfig, flex, bison
-, llvmPackages, kernel, elfutils, libelf, bcc
+, llvmPackages, kernel, elfutils
+, libelf, libbfd, libbpf, libopcodes, bcc
 }:
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.9.4";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner  = "iovisor";
     repo   = "bpftrace";
     rev    = "refs/tags/v${version}";
-    sha256 = "00fvkq3razwacnpb82zkpv63dgyigbqx3gj6g0ka94nwa74i5i77";
+    sha256 = "02f2r731yj3fdc8341id1ksk4dma9rwm2765n2xgx2ldrrz5823y";
   };
 
   enableParallelBuilding = true;
@@ -19,6 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = with llvmPackages;
     [ llvm clang-unwrapped
       kernel elfutils libelf bcc
+      libbpf libbfd libopcodes
     ];
 
   nativeBuildInputs = [ cmake pkgconfig flex bison ]
@@ -41,7 +43,7 @@ stdenv.mkDerivation rec {
   #
   cmakeFlags =
     [ "-DBUILD_TESTING=FALSE"
-      "-DLIBBCC_INCLUDE_DIRS=${bcc}/include/bcc"
+      "-DLIBBCC_INCLUDE_DIRS=${bcc}/include"
     ];
 
   # nuke the example/reference output .txt files, for the included tools,

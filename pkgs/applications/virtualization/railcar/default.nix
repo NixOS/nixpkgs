@@ -22,6 +22,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/oracle/railcar";
     license = with licenses; [ asl20 /* or */ upl ];
     maintainers = [ maintainers.spacekookie ];
-    platforms = platforms.all;
   };
 }

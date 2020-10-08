@@ -115,7 +115,7 @@ rec {
 
     echo "mounting host's temporary directory..."
     mkdir -p /fs/tmp/xchg
-    mount -t 9p xchg /fs/tmp/xchg -o trans=virtio,version=9p2000.L,cache=loose
+    mount -t 9p xchg /fs/tmp/xchg -o trans=virtio,version=9p2000.L
 
     mkdir -p /fs/proc
     mount -t proc none /fs/proc

@@ -49,7 +49,7 @@
   </listitem>
   <listitem>
    <para>
-    Click on Settings / Display / Screen and select VBoxVGA as Graphics Controller
+    Click on Settings / Display / Screen and select VMSVGA as Graphics Controller
    </para>
   </listitem>
   <listitem>

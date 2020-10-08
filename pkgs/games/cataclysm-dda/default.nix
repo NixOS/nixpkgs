@@ -1,25 +1,42 @@
-{ stdenv, callPackage, CoreFoundation
-, tiles ? true, Cocoa
-, debug ? false
-}:
+{ newScope, darwin }:
 
 let
-  inherit (callPackage ./common.nix { inherit tiles CoreFoundation Cocoa debug; }) common utils;
-  inherit (utils) fetchFromCleverRaven;
+  callPackage = newScope self;
+
+  stable = rec {
+    tiles = callPackage ./stable.nix {
+      inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa;
+    };
+
+    curses = tiles.override { tiles = false; };
+  };
+
+  git = rec {
+    tiles = callPackage ./git.nix {
+      inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa;
+    };
+
+    curses = tiles.override { tiles = false; };
+  };
+
+  lib = callPackage ./lib.nix {};
+
+  pkgs = callPackage ./pkgs {};
+
+  self = {
+    inherit
+    callPackage
+    stable
+    git;
+
+    inherit (lib)
+    buildMod
+    buildSoundPack
+    buildTileSet
+    wrapCDDA;
+
+    inherit pkgs;
+  };
 in
 
-stdenv.mkDerivation (common // rec {
-  version = "0.E";
-  name = "cataclysm-dda-${version}";
-
-  src = fetchFromCleverRaven {
-    rev = version;
-    sha256 = "0pbi0fw37zimzdklfj58s1ql0wlqq7dy6idkcsib3hn910ajaxan";
-  };
-
-  patches = [ ./patches/fix_locale_dir.patch ];
-
-  meta = with stdenv.lib.maintainers; common.meta // {
-    maintainers = common.meta.maintainers ++ [ skeidel ];
-  };
-})
+self

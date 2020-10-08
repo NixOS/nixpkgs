@@ -43,10 +43,10 @@ services.prosody = {
   <link linkend="opt-services.prosody.ssl.cert">ssl.cert</link> = "/var/lib/acme/example.org/fullchain.pem";
   <link linkend="opt-services.prosody.ssl.key">ssl.key</link> = "/var/lib/acme/example.org/key.pem";
   <link linkend="opt-services.prosody.virtualHosts">virtualHosts</link>."example.org" = {
-      <link linkend="opt-services.prosody.virtualHosts._name__.enabled">enabled</link> = true;
-      <link linkend="opt-services.prosody.virtualHosts._name__.domain">domain</link> = "example.org";
-      <link linkend="opt-services.prosody.virtualHosts._name__.ssl.cert">ssl.cert</link> = "/var/lib/acme/example.org/fullchain.pem";
-      <link linkend="opt-services.prosody.virtualHosts._name__.ssl.key">ssl.key</link> = "/var/lib/acme/example.org/key.pem";
+      <link linkend="opt-services.prosody.virtualHosts._name_.enabled">enabled</link> = true;
+      <link linkend="opt-services.prosody.virtualHosts._name_.domain">domain</link> = "example.org";
+      <link linkend="opt-services.prosody.virtualHosts._name_.ssl.cert">ssl.cert</link> = "/var/lib/acme/example.org/fullchain.pem";
+      <link linkend="opt-services.prosody.virtualHosts._name_.ssl.key">ssl.key</link> = "/var/lib/acme/example.org/key.pem";
   };
   <link linkend="opt-services.prosody.muc">muc</link> = [ {
       <link linkend="opt-services.prosody.muc">domain</link> = "conference.example.org";
@@ -65,7 +65,7 @@ services.prosody = {
    you'll need a single TLS certificate covering your main endpoint,
    the MUC one as well as the HTTP Upload one. We can generate such a
    certificate by leveraging the ACME
-   <link linkend="opt-security.acme.certs._name_.extraDomains">extraDomains</link> module option.
+   <link linkend="opt-security.acme.certs._name_.extraDomainNames">extraDomainNames</link> module option.
  </para>
  <para>
    Provided the setup detailed in the previous section, you'll need the following acme configuration to generate
@@ -78,8 +78,7 @@ security.acme = {
     "example.org" = {
       <link linkend="opt-security.acme.certs._name_.webroot">webroot</link> = "/var/www/example.org";
       <link linkend="opt-security.acme.certs._name_.email">email</link> = "root@example.org";
-      <link linkend="opt-security.acme.certs._name_.extraDomains">extraDomains."conference.example.org"</link> = null;
-      <link linkend="opt-security.acme.certs._name_.extraDomains">extraDomains."upload.example.org"</link> = null;
+      <link linkend="opt-security.acme.certs._name_.extraDomainNames">extraDomainNames</link> = [ "conference.example.org" "upload.example.org" ];
     };
   };
 };</programlisting>

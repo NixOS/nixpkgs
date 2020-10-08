@@ -20,6 +20,15 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  patches = [
+    # To use split outputs, we need this so double prefix won't be used in the
+    # pkg-config files. Hopefully, this won't be needed on the next release,
+    # _if_
+    # https://gitlab.freedesktop.org/gstreamer/gst-rtsp-server/merge_requests/1
+    # will be merged. For the current release, this merge request won't apply.
+    ./fix_pkgconfig_includedir.patch
+  ];
+
   nativeBuildInputs = [
     meson
     ninja

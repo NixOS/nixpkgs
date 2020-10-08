@@ -56,6 +56,16 @@ stdenv.mkDerivation ({
   meta = defaultMeta // meta;
 }
 
+// lib.optionalAttrs (emacs.nativeComp or false) {
+
+  LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
+
+  postInstall = ''
+    find $out/share/emacs -type f -name '*.el' -print0 | xargs -0 -n 1 -I {} -P $NIX_BUILD_CORES sh -c "emacs --batch -f batch-native-compile {} || true"
+  '';
+
+}
+
 // removeAttrs args [ "buildInputs" "packageRequires"
                       "meta"
                     ])

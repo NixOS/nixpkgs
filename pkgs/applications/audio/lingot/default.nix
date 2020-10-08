@@ -5,8 +5,10 @@
 , gtk3
 , wrapGAppsHook
 , alsaLib
+, libjack2
 , libpulseaudio
 , fftw
+, jackSupport ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "cbjHe7mI6DhKDsv0yGHYOPe5hShKjhj3VTKrmBbGoA8=";
+    sha256 = "03x0qqb9iarjapvii3ja522vkxrqv1hwix6b1r53is48p5xwgf3i";
   };
 
   nativeBuildInputs = [
@@ -29,11 +31,9 @@ stdenv.mkDerivation rec {
     alsaLib
     libpulseaudio
     fftw
-  ];
+  ] ++ stdenv.lib.optional jackSupport libjack2;
 
-  configureFlags = [
-    "--disable-jack"
-  ];
+  configureFlags = stdenv.lib.optional (!jackSupport) "--disable-jack";
 
   meta = {
     description = "Not a Guitar-Only tuner";

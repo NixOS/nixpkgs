@@ -1,0 +1,87 @@
+From 1891be119e298ef7c86347a6b74d40ff539cf06e Mon Sep 17 00:00:00 2001
+From: Euan Kemp <euank@euank.com>
+Date: Sun, 31 May 2020 19:02:37 -0700
+Subject: [PATCH 2/2] Add nixpkgs patches
+
+These patches let us re-use the upstream build scripts when building for
+nix.
+---
+ scripts/build       | 20 ++++----------------
+ scripts/package-cli | 10 ++++++----
+ 2 files changed, 10 insertions(+), 20 deletions(-)
+
+diff --git a/scripts/build b/scripts/build
+index 4ca6333c4a..df15f7db1d 100755
+--- a/scripts/build
++++ b/scripts/build
+@@ -12,7 +12,8 @@ PKG_CONTAINERD="github.com/containerd/containerd"
+ PKG_RANCHER_CONTAINERD="github.com/rancher/containerd"
+ PKG_CRICTL="github.com/kubernetes-sigs/cri-tools"
+ 
+-buildDate=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
++# nixpkgs: deterministic build date
++buildDate="$(date -d "$(git log -1 --format=%ai)" -u "+%Y-%m-%dT%H:%M:%SZ")"
+ 
+ VENDOR_PREFIX="${PKG}/vendor/"
+ VERSIONFLAGS="
+@@ -92,17 +93,7 @@ cleanup() {
+ }
+ 
+ INSTALLBIN=$(pwd)/bin
+-if [ ! -x ${INSTALLBIN}/cni ]; then
+-(
+-    echo Building cni
+-    TMPDIR=$(mktemp -d)
+-    trap cleanup EXIT
+-    WORKDIR=$TMPDIR/src/github.com/containernetworking/plugins
+-    git clone -b $VERSION_CNIPLUGINS https://github.com/rancher/plugins.git $WORKDIR
+-    cd $WORKDIR
+-    GOPATH=$TMPDIR CGO_ENABLED=0 "${GO}" build -tags "$TAGS" -ldflags "$LDFLAGS $STATIC" -o $INSTALLBIN/cni
+-)
+-fi
++# nixpkgs: skip building cni, we build it separately
+ # echo Building agent
+ # CGO_ENABLED=1 "${GO}" build -tags "$TAGS" -ldflags "$VERSIONFLAGS $LDFLAGS $STATIC" -o bin/k3s-agent ./cmd/agent/main.go
+ echo Building server
+@@ -118,10 +109,7 @@ ln -s containerd ./bin/ctr
+ #CGO_ENABLED=1 "${GO}" build -tags "$TAGS" -ldflags "$VERSIONFLAGS $LDFLAGS $STATIC_SQLITE" -o bin/ctr ./cmd/ctr/main.go
+ # echo Building containerd
+ # CGO_ENABLED=0 "${GO}" build -tags "$TAGS" -ldflags "$VERSIONFLAGS $LDFLAGS $STATIC" -o bin/containerd ./cmd/containerd/
+-echo Building runc
+-rm -f ./vendor/github.com/opencontainers/runc/runc
+-make EXTRA_LDFLAGS="-w -s" BUILDTAGS="$RUNC_TAGS" -C ./vendor/github.com/opencontainers/runc $RUNC_STATIC
+-cp -f ./vendor/github.com/opencontainers/runc/runc ./bin/runc
++# nixpkgs: we build runc separately
+ 
+ echo Building containerd-shim
+ rm -f ./vendor/github.com/containerd/containerd/bin/containerd-shim
+diff --git a/scripts/package-cli b/scripts/package-cli
+index f33d8c66dd..da34397a28 100755
+--- a/scripts/package-cli
++++ b/scripts/package-cli
+@@ -49,16 +49,18 @@ fi
+ 
+ CMD_NAME=dist/artifacts/k3s${BIN_SUFFIX}
+ 
+-"${GO}" generate
++CGO_ENABLED=0 env -u GOARCH "${GO}" generate
+ LDFLAGS="
+     -X github.com/rancher/k3s/pkg/version.Version=$VERSION
+     -X github.com/rancher/k3s/pkg/version.GitCommit=${COMMIT:0:8}
+     -w -s
+ "
+-STATIC="-extldflags '-static'"
++# STATIC="-extldflags '-static'"
++# nixpkgs: we can depend on dynamic linking because we have a good package manager
+ if [ "$DQLITE" = "true" ]; then
+     DQLITE_TAGS="dqlite"
+ fi
+-CGO_ENABLED=0 "${GO}" build -tags "$DQLITE_TAGS" -ldflags "$LDFLAGS $STATIC" -o ${CMD_NAME} ./cmd/k3s/main.go
++"${GO}" build -tags "$DQLITE_TAGS" -ldflags "$LDFLAGS" -o ${CMD_NAME} ./cmd/k3s/main.go
+ 
+-./scripts/build-upload ${CMD_NAME} ${COMMIT}
++# nixpkgs: skip uploading
++# ./scripts/build-upload ${CMD_NAME} ${COMMIT}
+-- 
+2.25.4
+

@@ -24,7 +24,7 @@ import sys
 import tarfile
 import tempfile
 from io import BytesIO
-from typing import Dict, Optional
+from typing import Dict, Optional, Set, Any
 from urllib.request import urlopen
 
 COMPONENT_PREFIX = "homeassistant.components"
@@ -79,11 +79,14 @@ def parse_components(version: str = "master"):
 
 
 # Recursively get the requirements of a component and its dependencies
-def get_reqs(components, component):
+def get_reqs(components: Dict[str, Dict[str, Any]], component: str, processed: Set[str]) -> Set[str]:
     requirements = set(components[component].get("requirements", []))
     deps = components[component].get("dependencies", [])
+    deps.extend(components[component].get("after_dependencies", []))
+    processed.add(component)
     for dependency in deps:
-        requirements.update(get_reqs(components, dependency))
+        if dependency not in processed:
+            requirements.update(get_reqs(components, dependency, processed))
     return requirements
 
 
@@ -110,6 +113,10 @@ def name_to_attr_path(req: str, packages: Dict[str, Dict[str, str]]) -> Optional
     # instead of python-3.6-python-mpd2 inside Nixpkgs
     if req.startswith("python-") or req.startswith("python_"):
         names.append(req[len("python-") :])
+    # Add name variant without extra_require, e.g. samsungctl
+    # instead of samsungctl[websocket]
+    if req.endswith("]"):
+        names.append(req[:req.find("[")])
     for name in names:
         # treat "-" and "_" equally
         name = re.sub("[-_]", "[-_]", name)
@@ -143,7 +150,7 @@ def main() -> None:
     for component in sorted(components.keys()):
         attr_paths = []
         missing_reqs = []
-        reqs = sorted(get_reqs(components, component))
+        reqs = sorted(get_reqs(components, component, set()))
         for req in reqs:
             # Some requirements are specified by url, e.g. https://example.org/foobar#xyz==1.0.0
             # Therefore, if there's a "#" in the line, only take the part after it
@@ -170,9 +177,10 @@ def main() -> None:
         f.write("  components = {\n")
         for component, deps in build_inputs.items():
             available, missing = deps
-            f.write(f'    "{component}" = ps: with ps; [ ')
-            f.write(" ".join(available))
-            f.write("];")
+            f.write(f'    "{component}" = ps: with ps; [')
+            if available:
+                f.write(" " + " ".join(available))
+            f.write(" ];")
             if len(missing) > 0:
                 f.write(f" # missing inputs: {' '.join(missing)}")
             f.write("\n")

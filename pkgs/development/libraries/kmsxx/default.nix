@@ -3,14 +3,14 @@
 
 stdenv.mkDerivation {
   pname = "kmsxx";
-  version = "2020-02-14";
+  version = "2020-08-04";
 
   src = fetchFromGitHub {
     owner = "tomba";
     repo = "kmsxx";
     fetchSubmodules = true;
-    rev = "7c5e645112a899ad018219365c3898b0e896353f";
-    sha256 = "1hj4gk4gwlvpjprjbrmrbrzqjhdgszsndrb1i4f9z7mjvdv8gij2";
+    rev = "38bee3092f2d477f1baebfcae464f888d3d04bbe";
+    sha256 = "0xz4m9bk0naawxwpx5cy1j3cm6c8c9m5y551csk88y88x1g0z0xh";
   };
 
   enableParallelBuilding = true;

@@ -8,17 +8,18 @@
 , gtk-engine-murrine
 , optipng
 , inkscape
+, cinnamon
 }:
 
 stdenv.mkDerivation rec {
   pname = "arc-theme";
-  version = "20200513";
+  version = "20200819";
 
   src = fetchFromGitHub {
     owner = "jnsh";
     repo = pname;
     rev = version;
-    sha256 = "1xiaf31v3j040hflhf09kpznc93a5fqs92m5jf79y46w3dgpia0p";
+    sha256 = "1l5sc4r5jp3526r4p32fszny0cw6pkb45cp424hq0s0k344z9px6";
   };
 
   nativeBuildInputs = [
@@ -43,8 +44,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
+    "--with-cinnamon=${cinnamon.cinnamon-common.version}"
     "--with-gnome-shell=${gnome3.gnome-shell.version}"
-    "--disable-cinnamon" # not equipped to test
     "--disable-unity"
   ];
 

@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "bleak";
-  version = "0.6.2";
+  version = "0.7.1";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1kmq2z3dhq6dd20i5w71gshjrfvyw0pkpnld8iib9ai2rz6a8aj0";
+    sha256 = "25f630cf558efda5cbf620d921b85a80ae963c537feaa18cc934f7fa38dc482d";
   };
 
   postPatch = ''
@@ -29,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/hbldh/bleak";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ geistesk ];
+    maintainers = with maintainers; [ oxzi ];
   };
 }

@@ -1,20 +1,21 @@
-{ stdenv, buildGoModule, fetchFromGitHub, makeDesktopItem }:
+{ stdenv, buildGoModule, fetchFromGitHub, olm, makeDesktopItem }:
 
 buildGoModule rec {
   pname = "gomuks";
-  version = "2020-03-20";
-
-  goPackagePath = "maunium.net/go/gomuks";
-  patches = [ ./gomod.patch ];
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = pname;
-    rev = "bce30e32a049b3ee76081c8d3881a3820b0e7341";
-    sha256 = "0f7i88vrvl1xl4hmjplq3wwihqwijbgxy6nk5fkvc8pfmm5hsjcs";
+    rev = "v" + version;
+    sha256 = "0sf1nqwimxqql8wm6763jyc5rclhd4zxgg9gfi0qvg5ccm1r1z5q";
   };
 
-  vendorSha256 = "0awiw41nzgp4gj9fd8lcgk880aa07n535jksn0ya1cmsgavcfbvc";
+  vendorSha256 = "sha256:0n9mwbzjkvlljlns7sby8nb9gm4vj0v4idp1zxv5xssqr5qalihf";
+
+  doCheck = false;
+
+  buildInputs = [ olm ];
 
   postInstall = ''
     cp -r ${

@@ -116,7 +116,7 @@ let
         # https://github.com/ruby/ruby/commit/97a5af62a318fcd93a4e5e4428d576c0280ddbae
         buildFlags = lib.optionals atLeast27 [ "REVISION_LATEST=0" ];
 
-        configureFlags = ["--enable-shared" "--enable-pthread" "--with-soname=ruby_${tag}"]
+        configureFlags = ["--enable-shared" "--enable-pthread" "--with-soname=ruby-${version}"]
           ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
           ++ op (!docSupport) "--disable-install-doc"
           ++ ops stdenv.isDarwin [
@@ -192,7 +192,7 @@ let
           description = "The Ruby language";
           homepage    = "http://www.ruby-lang.org/en/";
           license     = licenses.ruby;
-          maintainers = with maintainers; [ vrthra manveru ];
+          maintainers = with maintainers; [ vrthra manveru marsam ];
           platforms   = platforms.all;
         };
 
@@ -240,10 +240,10 @@ in {
   };
 
   ruby_2_7 = generic {
-    version = rubyVersion "2" "7" "1" "";
+    version = rubyVersion "2" "7" "2" "";
     sha256 = {
-      src = "0674x98f542y02r7n2yv2qhmh97blqhi2mvh2dn5f000vlxlh66l";
-      git = "0qk729kr5wm67xmwpljpdprwhp5wvn5y4ikqy00p1zcgwlwdcs33";
+      src = "1m63461mxi3fg4y3bspbgmb0ckbbb1ldgf9xi0piwkpfsk80cmvf";
+      git = "0kbgznf1yprfp9645k31ra5f4757b7fichzi0hdg6nxkj90853s0";
     };
   };
 }

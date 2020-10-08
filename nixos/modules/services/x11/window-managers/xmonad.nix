@@ -16,6 +16,7 @@ let
                 cfg.extraPackages cfg.haskellPackages ++
                 optionals cfg.enableContribAndExtras
                 (with cfg.haskellPackages; [ xmonad-contrib xmonad-extras ]);
+    inherit (cfg) ghcArgs;
   } cfg.config;
 
 in
@@ -76,18 +77,35 @@ in
                  }
         '';
       };
+
+      xmonadCliArgs = mkOption {
+        default = [];
+        type = with lib.types; listOf str;
+        description = ''
+          Command line arguments passed to the xmonad binary.
+        '';
+      };
+
+      ghcArgs = mkOption {
+        default = [];
+        type = with lib.types; listOf str;
+        description = ''
+          Command line arguments passed to the compiler (ghc)
+          invocation when xmonad.config is set.
+        '';
+      };
+
     };
   };
   config = mkIf cfg.enable {
     services.xserver.windowManager = {
       session = [{
         name = "xmonad";
-        start = if (cfg.config != null) then ''
-          ${xmonadBin}
-          waitPID=$!
-        '' else ''
-          systemd-cat -t xmonad ${xmonad}/bin/xmonad &
-          waitPID=$!
+        start = let
+          xmonadCommand = if (cfg.config != null) then xmonadBin else "${xmonad}/bin/xmonad";
+        in ''
+           systemd-cat -t xmonad -- ${xmonadCommand} ${lib.escapeShellArgs cfg.xmonadCliArgs} &
+           waitPID=$!
         '';
       }];
     };

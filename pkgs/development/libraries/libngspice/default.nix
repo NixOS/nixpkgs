@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     homepage = "http://ngspice.sourceforge.net";
     license = with licenses; [ bsd3 gpl2Plus lgpl2Plus ]; # See https://sourceforge.net/p/ngspice/ngspice/ci/master/tree/COPYING
     maintainers = with maintainers; [ bgamari ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = null;
 
+  doCheck = false;
+
   meta = with lib; {
     description = "HTTP load generator, ApacheBench (ab) replacement";
     homepage = "https://github.com/rakyll/hey";

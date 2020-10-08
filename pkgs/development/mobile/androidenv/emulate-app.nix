@@ -1,4 +1,4 @@
-{ composeAndroidPackages, stdenv, lib }:
+{ composeAndroidPackages, stdenv, lib, runtimeShell }:
 { name, app ? null
 , platformVersion ? "16", abiVersion ? "armeabi-v7a", systemImageType ? "default"
 , enableGPU ? false, extraAVDFiles ? []
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
 
     cat > $out/bin/run-test-emulator << "EOF"
-    #! ${stdenv.shell} -e
+    #!${runtimeShell} -e
 
     # We need a TMPDIR
     if [ "$TMPDIR" = "" ]

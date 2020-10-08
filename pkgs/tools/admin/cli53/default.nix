@@ -14,8 +14,6 @@ buildGoPackage {
     sha256 = "0bhczmzrgf7ypnhhzdrgnvg8cw8ch1x1d0cgajc5kklq9ixv9ygi";
   };
 
-  goDeps = ./deps.nix;
-
   meta = with lib; {
     description = "CLI tool for the Amazon Route 53 DNS service";
     homepage = "https://github.com/barnybug/cli53";

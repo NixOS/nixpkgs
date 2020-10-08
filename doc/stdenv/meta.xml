@@ -155,17 +155,17 @@ hello-2.3  A program that produces a familiar, friendly greeting
       <itemizedlist>
        <listitem>
         <para>
-         Single license referenced by attribute (preferred) <literal>stdenv.lib.licenses.gpl3</literal>.
+         Single license referenced by attribute (preferred) <literal>stdenv.lib.licenses.gpl3Only</literal>.
         </para>
        </listitem>
        <listitem>
         <para>
-         Single license referenced by its attribute shortName (frowned upon) <literal>"gpl3"</literal>.
+         Single license referenced by its attribute shortName (frowned upon) <literal>"gpl3Only"</literal>.
         </para>
        </listitem>
        <listitem>
         <para>
-         Single license referenced by its attribute spdxId (frowned upon) <literal>"GPL-3.0"</literal>.
+         Single license referenced by its attribute spdxId (frowned upon) <literal>"GPL-3.0-only"</literal>.
         </para>
        </listitem>
        <listitem>

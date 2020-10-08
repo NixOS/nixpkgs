@@ -34,12 +34,13 @@ stdenv.mkDerivation rec {
     # fixes tig-completion __git-complete dependency
     sed -i '1s;^;source ${git}/share/bash-completion/completions/git\n;' contrib/tig-completion.bash
 
-    substituteInPlace contrib/tig-completion.zsh \
-      --replace 'e=$(dirname ''${funcsourcetrace[1]%:*})/tig-completion.bash' "e=$out/share/bash-completion/completions/tig"
-
     install -D contrib/tig-completion.bash $out/share/bash-completion/completions/tig
-    install -D contrib/tig-completion.zsh $out/share/zsh/site-functions/_tig
     cp contrib/vim.tigrc $out/etc/
+
+    # Note: Until https://github.com/jonas/tig/issues/940 is resolved it is best
+    # not to install the ZSH completion so that the fallback implemenation from
+    # ZSH can be used (Completion/Unix/Command/_git: "_tig () { _git-log }"):
+    #install -D contrib/tig-completion.zsh $out/share/zsh/site-functions/_tig
 
     wrapProgram $out/bin/tig \
       --prefix PATH ':' "${git}/bin"

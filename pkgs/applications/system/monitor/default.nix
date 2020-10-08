@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , meson
 , ninja
 , vala
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monitor";
-  version = "0.7.2";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "stsdc";
     repo = "monitor";
     rev = version;
-    sha256 ="1gd2i7gja4k9j4xac8jnls3v41d6qqhmqradz2jbsxwm2sk3cgcf";
+    sha256 = "111g2f3y5lmz91m755jz0x8yx5cx9ym484gch8wcv80dmr7ilb1y";
     fetchSubmodules = true;
   };
 
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = pantheon.updateScript {
+    updateScript = nix-update-script {
       attrPath = pname;
     };
   };

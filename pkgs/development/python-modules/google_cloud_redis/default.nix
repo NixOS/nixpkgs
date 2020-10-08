@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-redis";
-  version = "0.3.0";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e24a5eeb126a3e8fcf990806c7a853a27bb9b830c2f03fda42a499894b7614c6";
+    sha256 = "73057750d6afcfc90c224ee4ffa3262b5e85e866b4db676f74a07b49713f2c3a";
   };
 
   checkInputs = [ pytest mock ];

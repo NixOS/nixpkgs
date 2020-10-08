@@ -5,9 +5,6 @@
   }:
 
 let
-  optional = stdenv.lib.optional;
-  version = "3.31";
-  name = "libreswan-${version}";
   binPath = stdenv.lib.makeBinPath [
     bash iproute iptables procps coreutils gnused gawk nss.tools which python
   ];
@@ -16,13 +13,13 @@ in
 assert docs -> xmlto != null;
 assert stdenv.isLinux -> libselinux != null;
 
-stdenv.mkDerivation {
-  inherit name;
-  inherit version;
+stdenv.mkDerivation rec {
+  pname = "libreswan";
+  version = "3.32";
 
   src = fetchurl {
-    url = "https://download.libreswan.org/${name}.tar.gz";
-    sha256 = "1wxqsv11nqgfj5and5xzfgh6ayqvl47midcghd5ryynh60mp7naa";
+    url = "https://download.libreswan.org/${pname}-${version}.tar.gz";
+    sha256 = "0bj3g6qwd3ir3gk6hdl9npy3k44shf56vcgjahn30qpmx3z5fsr3";
   };
 
   # These flags were added to compile v3.18. Try to lift them when updating.
@@ -37,8 +34,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [ bash iproute iptables systemd coreutils gnused gawk gmp unbound bison flex pam libevent
                   libcap_ng curl nspr nss python ldns ]
-                ++ optional docs xmlto
-                ++ optional stdenv.isLinux libselinux;
+                ++ stdenv.lib.optional docs xmlto
+                ++ stdenv.lib.optional stdenv.isLinux libselinux;
 
   prePatch = ''
     # Correct bash path

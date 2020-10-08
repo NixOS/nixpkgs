@@ -1,9 +1,10 @@
-{ stdenv, kernel }:
+{ stdenv, kernel, libcap }:
 
 stdenv.mkDerivation {
   pname = "turbostat";
   inherit (kernel) src version;
 
+  buildInputs = [ libcap ];
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   postPatch = ''

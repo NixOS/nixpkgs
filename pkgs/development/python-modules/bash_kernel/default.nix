@@ -6,6 +6,7 @@
 , isPy27
 , python
 , pexpect
+, bash
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,12 @@ buildPythonPackage rec {
       sha256 = "1qd7qjjmcph4dk6j0bl31h2fdmfiyyazvrc9xqqj8y21ki2sl33j";
     })
   ];
+
+  postPatch = ''
+    substituteInPlace bash_kernel/kernel.py \
+      --replace "'bash'" "'${bash}/bin/bash'" \
+      --replace "\"bash\"" "'${bash}/bin/bash'"
+  '';
 
   propagatedBuildInputs = [ ipykernel pexpect ];
 

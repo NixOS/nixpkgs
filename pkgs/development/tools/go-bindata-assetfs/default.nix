@@ -16,7 +16,6 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     description = "Serve embedded files from jteeuwen/go-bindata";
     license = licenses.bsd2;
-    platforms = platforms.all;
     maintainers = with maintainers; [ avnik ];
   };
 }

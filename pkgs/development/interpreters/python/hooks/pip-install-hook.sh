@@ -11,7 +11,9 @@ pipInstallPhase() {
     export PYTHONPATH="$out/@pythonSitePackages@:$PYTHONPATH"
 
     pushd dist || return 1
-    @pythonInterpreter@ -m pip install ./*.whl --no-index --prefix="$out" --no-cache $pipInstallFlags --build tmpbuild
+    mkdir tmpbuild
+    NIX_PIP_INSTALL_TMPDIR=tmpbuild @pythonInterpreter@ -m pip install ./*.whl --no-index --prefix="$out" --no-cache $pipInstallFlags
+    rm -rf tmpbuild
     popd || return 1
 
     runHook postInstall

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dovecot-pigeonhole";
-  version = "0.5.10";
+  version = "0.5.11";
 
   src = fetchurl {
     url = "https://pigeonhole.dovecot.org/releases/2.3/dovecot-2.3-pigeonhole-${version}.tar.gz";
-    sha256 = "0pk0579ifl3ymfzn505396bsjlg29ykwr7ag8prcbafayg4rrj28";
+    sha256 = "1w5mryv6izh1gv7davnl94rb0pvh5bxl2bydzbfla1b83x22m5qb";
   };
 
   buildInputs = [ dovecot openssl ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "http://pigeonhole.dovecot.org/";
     description = "A sieve plugin for the Dovecot IMAP server";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ rickynils globin ];
+    maintainers = with maintainers; [ globin ];
     platforms = platforms.unix;
   };
 }

@@ -21,6 +21,7 @@ in
     ./none.nix ./xterm.nix ./xfce.nix ./plasma5.nix ./lumina.nix
     ./lxqt.nix ./enlightenment.nix ./gnome3.nix ./kodi.nix
     ./mate.nix ./pantheon.nix ./surf-display.nix ./cde.nix
+    ./cinnamon.nix
   ];
 
   options = {

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "bazel-buildtools";
-  version = "2.2.1";
+  version = "3.3.0";
 
   goPackagePath = "github.com/bazelbuild/buildtools";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "bazelbuild";
     repo = "buildtools";
     rev = version;
-    sha256 = "165jvn7r7bxivb8mpvp6dni5a5ns9a3vm6y5clyxdbjhfkll8wra";
+    sha256 = "0g411gjbm02qd5b50iy6kk81kx2n5zw5x1m6i6g7nrmh38p3pn9k";
   };
 
   goDeps = ./deps.nix;
@@ -24,6 +24,5 @@ buildGoPackage rec {
     homepage = "https://github.com/bazelbuild/buildtools";
     license = licenses.asl20;
     maintainers = with maintainers; [ elasticdog uri-canva marsam ];
-    platforms = platforms.all;
   };
 }

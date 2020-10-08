@@ -9,6 +9,9 @@ let
   logConfigFile = pkgs.writeText "log_config.yaml" cfg.logConfig;
   mkResource = r: ''{names: ${builtins.toJSON r.names}, compress: ${boolToString r.compress}}'';
   mkListener = l: ''{port: ${toString l.port}, bind_address: "${l.bind_address}", type: ${l.type}, tls: ${boolToString l.tls}, x_forwarded: ${boolToString l.x_forwarded}, resources: [${concatStringsSep "," (map mkResource l.resources)}]}'';
+  pluginsEnv = cfg.package.python.buildEnv.override {
+    extraLibs = cfg.plugins;
+  };
   configFile = pkgs.writeText "homeserver.yaml" ''
 ${optionalString (cfg.tls_certificate_path != null) ''
 tls_certificate_path: "${cfg.tls_certificate_path}"
@@ -123,6 +126,19 @@ in {
         defaultText = "pkgs.matrix-synapse";
         description = ''
           Overridable attribute of the matrix synapse server package to use.
+        '';
+      };
+      plugins = mkOption {
+        type = types.listOf types.package;
+        default = [ ];
+        example = literalExample ''
+          with config.services.matrix-synapse.package.plugins; [
+            matrix-synapse-ldap3
+            matrix-synapse-pam
+          ];
+        '';
+        description = ''
+          List of additional Matrix plugins to make available.
         '';
       };
       no_tls = mkOption {
@@ -664,7 +680,7 @@ in {
       }
     ];
 
-    users.users.matrix-synapse = { 
+    users.users.matrix-synapse = {
         group = "matrix-synapse";
         home = cfg.dataDir;
         createHome = true;
@@ -686,6 +702,7 @@ in {
           --keys-directory ${cfg.dataDir} \
           --generate-keys
       '';
+      environment.PYTHONPATH = makeSearchPathOutput "lib" cfg.package.python.sitePackages [ pluginsEnv ];
       serviceConfig = {
         Type = "notify";
         User = "matrix-synapse";
@@ -715,5 +732,6 @@ in {
   ];
 
   meta.doc = ./matrix-synapse.xml;
+  meta.maintainers = teams.matrix.members;
 
 }

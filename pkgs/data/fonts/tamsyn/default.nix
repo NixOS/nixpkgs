@@ -29,14 +29,10 @@ in stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    install -m 644 -D *.pcf.gz -t "$out/share/fonts/misc"
+    install -m 644 -D *.otb *.pcf.gz -t "$out/share/fonts/misc"
     install -m 644 -D *.psf.gz -t "$out/share/consolefonts"
-    install -m 644 -D *.otb    -t "$otb/share/fonts/misc"
     mkfontdir "$out/share/fonts/misc"
-    mkfontdir "$otb/share/fonts/misc"
   '';
-
-  outputs = [ "out" "otb" ];
 
   meta = with stdenv.lib; {
     description = "A monospace bitmap font aimed at programmers";

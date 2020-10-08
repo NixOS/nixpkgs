@@ -1,0 +1,55 @@
+From 771ce704ebeac4cd9bd74b3ddde9fb01f3dc7eb4 Mon Sep 17 00:00:00 2001
+From: wisp3rwind <17089248+wisp3rwind@users.noreply.github.com>
+Date: Tue, 9 Jun 2020 19:34:31 +0200
+Subject: [PATCH] compatibility with breaking changes to the ast module
+
+new in 3.10, also backported to 3.8 and 3.9: https://github.com/python/cpython/pull/20649
+In fact, our generation of some Literals has been invalid since Python
+3.4, fix that too.
+---
+ beets/util/functemplate.py | 29 ++++++++++++++++++++---------
+ 1 file changed, 20 insertions(+), 9 deletions(-)
+
+diff --git a/beets/util/functemplate.py b/beets/util/functemplate.py
+index af22b790..266534a9 100644
+--- a/beets/util/functemplate.py
++++ b/beets/util/functemplate.py
+@@ -73,15 +73,26 @@ def ex_literal(val):
+     """An int, float, long, bool, string, or None literal with the given
+     value.
+     """
+-    if val is None:
+-        return ast.Name('None', ast.Load())
+-    elif isinstance(val, six.integer_types):
+-        return ast.Num(val)
+-    elif isinstance(val, bool):
+-        return ast.Name(bytes(val), ast.Load())
+-    elif isinstance(val, six.string_types):
+-        return ast.Str(val)
+-    raise TypeError(u'no literal for {0}'.format(type(val)))
++    if sys.version_info[:2] < (3, 4):
++        if val is None:
++            return ast.Name('None', ast.Load())
++        elif isinstance(val, six.integer_types):
++            return ast.Num(val)
++        elif isinstance(val, bool):
++            return ast.Name(bytes(val), ast.Load())
++        elif isinstance(val, six.string_types):
++            return ast.Str(val)
++        raise TypeError(u'no literal for {0}'.format(type(val)))
++    elif sys.version_info[:2] < (3, 6):
++        if val in [None, True, False]:
++            return ast.NameConstant(val)
++        elif isinstance(val, six.integer_types):
++            return ast.Num(val)
++        elif isinstance(val, six.string_types):
++            return ast.Str(val)
++        raise TypeError(u'no literal for {0}'.format(type(val)))
++    else:
++        return ast.Constant(val)
+ 
+ 
+ def ex_varassign(name, expr):
+-- 
+2.27.0
+

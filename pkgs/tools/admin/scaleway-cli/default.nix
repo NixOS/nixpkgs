@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, buildGoPackage }:
 
-buildGoPackage rec{
+buildGoPackage rec {
   pname = "scaleway-cli";
   version = "1.20";
 
@@ -18,6 +18,5 @@ buildGoPackage rec{
     homepage = "https://github.com/scaleway/scaleway-cli";
     license = licenses.mit;
     maintainers = with maintainers; [ nickhu ];
-    platforms = platforms.all;
   };
 }

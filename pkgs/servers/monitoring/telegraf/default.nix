@@ -1,10 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests, fetchpatch }:
 
 buildGoModule rec {
   pname = "telegraf";
-  version = "1.14.2";
-
-  goPackagePath = "github.com/influxdata/telegraf";
+  version = "1.15.2";
 
   excludedPackages = "test";
 
@@ -14,10 +12,19 @@ buildGoModule rec {
     owner = "influxdata";
     repo = "telegraf";
     rev = "v${version}";
-    sha256 = "009m9hysih55dn4p21vr7jfgc6l5jywyl98q3k068z5skrd8xqdb";
+    sha256 = "045wjpq29dr0s48ns3a4p8pw1j0ssfcw6m91iim4pkrppj7bm2di";
   };
 
-  vendorSha256 = "05nj99hl5f5l0a2aswy19wmbm94hd1h03r227gmn419dkzc5hpah";
+  patches = [
+    # https://github.com/influxdata/telegraf/pull/7988
+    # fix broken cgo vendoring
+    (fetchpatch {
+      url = "https://github.com/influxdata/telegraf/commit/63e1f41d8ff246d191d008ff7f69d69cc34b4fae.patch";
+      sha256 = "0ikifc4414bid3g6hhxz18cw71z63s5g805klx98vrndjlpbqkzw";
+    })
+  ];
+
+  vendorSha256 = "0f95xigpkindd7dmci8kqpqq5dlirimbqh8ai73142asbrd5h4yr";
 
   buildFlagsArray = [ ''-ldflags=
     -w -s -X main.version=${version}

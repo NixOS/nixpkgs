@@ -18,6 +18,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/m-cat/cargo-deps";
     license = licenses.mit;
     maintainers = with maintainers; [ arcnmx ];
-    platforms = platforms.all;
   };
 }

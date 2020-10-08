@@ -1,16 +1,18 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , pkgs
 }:
 
 buildPythonPackage rec {
   pname = "limnoria";
-  version = "2019.11.22";
+  version = "2020.08.30";
+  disabled = isPy27; # abandoned upstream
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6ccc6906fd644444a1edd0984d10bddf5abf4dd91c94eeeaa4660f7dc3eca320";
+    sha256 = "44d81682cdf246a0324638707a2ef0819aae8c84fc0e69daaaa57cbc3f9e18e1";
   };
 
   patchPhase = ''

@@ -29,6 +29,11 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.freedesktop.org/farstream/farstream/commit/73891c28fa27d5e65a71762e826f13747d743588.patch";
       sha256 = "19pw1m8xhxyf5yhl6k898w240ra2k0m28gfv858x70c4wl786lrn";
     })
+    # Fix build with newer gnumake.
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/farstream/farstream/-/commit/54987d44.diff";
+      sha256 = "02pka68p2j1wg7768rq7afa5wl9xv82wp86q7izrmwwnxdmz4zyg";
+    })
   ];
 
   buildInputs = [

@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "codebraid";
-  version = "0.5.0-unstable-2019-12-11";
+  version = "0.5.0-unstable-2020-07-01";
 
   src = fetchFromGitHub {
     owner = "gpoore";
     repo = pname;
-    rev = "fac1b29";
-    sha256 = "0ldfrkkip7i1fdyz1iydyik3mhm0xv0jvxnl37r7g707dl38vf3h";
+    rev = "c7962587e7f1e619b5dcf9a5e901eb7042520b00";
+    sha256 = "1f31yaiwc33ivjbipym7sggsqwqxn70kgf9dixi8392pk70jzq6p";
   };
 
   propagatedBuildInputs = with python3Packages; [ bespon ];

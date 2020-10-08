@@ -21,11 +21,11 @@ Modes of use of `emscripten`:
 * **Declarative usage**:
 
     This mode is far more power full since this makes use of `nix` for dependency management of emscripten libraries and targets by using the `mkDerivation` which is implemented by `pkgs.emscriptenStdenv` and `pkgs.buildEmscriptenPackage`. The source for the packages is in `pkgs/top-level/emscripten-packages.nix` and the abstraction behind it in `pkgs/development/em-modules/generic/default.nix`.
-    * build and install all packages: 
-        * `nix-env -iA emscriptenPackages` 
-          
-    * dev-shell for zlib implementation hacking: 
-        * `nix-shell -A emscriptenPackages.zlib` 
+    * build and install all packages:
+        * `nix-env -iA emscriptenPackages`
+
+    * dev-shell for zlib implementation hacking:
+        * `nix-shell -A emscriptenPackages.zlib`
 
 
 ## Imperative usage
@@ -90,7 +90,7 @@ See the `zlib` example:
         libz.so.${old.version} -I . -o example.js
 
         echo "Using node to execute the test"
-        ${pkgs.nodejs}/bin/node ./example.js 
+        ${pkgs.nodejs}/bin/node ./example.js
 
         set +x
         if [ $? -ne 0 ]; then
@@ -112,7 +112,7 @@ See the `zlib` example:
 
 ### Usage 2: pkgs.buildEmscriptenPackage
 
-This `xmlmirror` example features a emscriptenPackage which is defined completely from this context and no `pkgs.zlib.override` is used. 
+This `xmlmirror` example features a emscriptenPackage which is defined completely from this context and no `pkgs.zlib.override` is used.
 
     xmlmirror = pkgs.buildEmscriptenPackage rec {
       name = "xmlmirror";
@@ -163,7 +163,7 @@ This `xmlmirror` example features a emscriptenPackage which is defined completel
       checkPhase = ''
 
       '';
-    }; 
+    };
 
 ### Declarative debugging
 
@@ -182,4 +182,3 @@ Use `nix-shell -I nixpkgs=/some/dir/nixpkgs -A emscriptenPackages.libz` and from
 Using this toolchain makes it easy to leverage `nix` from NixOS, MacOSX or even Windows (WSL+ubuntu+nix). This toolchain is reproducible, behaves like the rest of the packages from nixpkgs and contains a set of well working examples to learn and adapt from.
 
 If in trouble, ask the maintainers.
-

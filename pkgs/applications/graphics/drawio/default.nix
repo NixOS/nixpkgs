@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "13.0.3";
+  version = "13.7.3";
 
   src = fetchurl {
     url = "https://github.com/jgraph/drawio-desktop/releases/download/v${version}/draw.io-x86_64-${version}.rpm";
-    sha256 = "104pfwipm8ch9xqlsz1gh18icr1p6i3n4c77bbdjakxcy4s5n7sg";
+    sha256 = "14wcj9jbpv1rg0g7djihzzq088aj96mwys4rc9540ajbkbbm9d36";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   ];
 
   runtimeDependencies = [
-    systemd.lib
+    (lib.getLib systemd)
   ];
 
   dontBuild = true;
@@ -88,6 +88,7 @@ stdenv.mkDerivation rec {
     description = "A desktop application for creating diagrams";
     homepage = "https://about.draw.io/";
     license = licenses.asl20;
+    changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${version}";
     maintainers = with maintainers; [ danieldk ];
     platforms = [ "x86_64-linux" ];
   };

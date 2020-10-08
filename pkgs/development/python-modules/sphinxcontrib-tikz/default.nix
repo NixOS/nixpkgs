@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-tikz";
-  version = "0.4.8";
+  version = "0.4.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1rvm0l40iz1z03d09irkqdwzi9gs6pn0203hylaqbix5c7gabwhy";
+    sha256 = "054429a04ed253256a676ecc29f0bae2c644d5bd1150cd95d658990a07ebc8fe";
   };
 
   patches = [

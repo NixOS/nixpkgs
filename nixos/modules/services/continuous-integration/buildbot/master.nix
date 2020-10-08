@@ -16,7 +16,7 @@ let
     factory = util.BuildFactory()
     c = BuildmasterConfig = dict(
      workers       = [${concatStringsSep "," cfg.workers}],
-     protocols     = { 'pb': {'port': ${toString cfg.bpPort} } },
+     protocols     = { 'pb': {'port': ${toString cfg.pbPort} } },
      title         = '${escapeStr cfg.title}',
      titleURL      = '${escapeStr cfg.titleUrl}',
      buildbotURL   = '${escapeStr cfg.buildbotUrl}',
@@ -25,7 +25,7 @@ let
      change_source = [ ${concatStringsSep "," cfg.changeSource} ],
      schedulers    = [ ${concatStringsSep "," cfg.schedulers} ],
      builders      = [ ${concatStringsSep "," cfg.builders} ],
-     status        = [ ${concatStringsSep "," cfg.status} ],
+     services      = [ ${concatStringsSep "," cfg.reporters} ],
     )
     for step in [ ${concatStringsSep "," cfg.factorySteps} ]:
       factory.addStep(step)
@@ -119,10 +119,10 @@ in {
         default = [ "worker.Worker('example-worker', 'pass')" ];
       };
 
-      status = mkOption {
+      reporters = mkOption {
         default = [];
         type = types.listOf types.str;
-        description = "List of status notification endpoints.";
+        description = "List of reporter objects used to present build status to various users.";
       };
 
       user = mkOption {
@@ -155,10 +155,20 @@ in {
         description = "Specifies the Buildbot directory.";
       };
 
-      bpPort = mkOption {
+      pbPort = mkOption {
         default = 9989;
-        type = types.int;
-        description = "Port where the master will listen to Buildbot Worker.";
+        type = types.either types.str types.int;
+        example = "'tcp:9990:interface=127.0.0.1'";
+        description = ''
+          The buildmaster will listen on a TCP port of your choosing
+          for connections from workers.
+          It can also use this port for connections from remote Change Sources,
+          status clients, and debug tools.
+          This port should be visible to the outside world, and you’ll need to tell
+          your worker admins about your choice.
+          If put in (single) quotes, this can also be used as a connection string,
+          as defined in the <link xlink:href="https://twistedmatrix.com/documents/current/core/howto/endpoints.html">ConnectionStrings guide</link>.
+        '';
       };
 
       listenAddress = mkOption {
@@ -263,6 +273,14 @@ in {
       };
     };
   };
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "buildbot-master" "bpPort" ] [ "services" "buildbot-master" "pbPort" ])
+    (mkRemovedOptionModule [ "services" "buildbot-master" "status" ] ''
+      Since Buildbot 0.9.0, status targets are deprecated and ignored.
+      Review your configuration and migrate to reporters (available at services.buildbot-master.reporters).
+    '')
+  ];
 
   meta.maintainers = with lib.maintainers; [ nand0p mic92 ];
 }

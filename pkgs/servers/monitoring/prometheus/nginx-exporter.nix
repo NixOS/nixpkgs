@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, nixosTests }:
 
 buildGoPackage rec {
   pname = "nginx_exporter";
@@ -18,6 +18,8 @@ buildGoPackage rec {
   };
 
   doCheck = true;
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) nginx; };
 
   meta = with stdenv.lib; {
     description = "NGINX Prometheus Exporter for NGINX and NGINX Plus";

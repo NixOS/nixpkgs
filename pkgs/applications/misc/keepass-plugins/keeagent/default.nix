@@ -1,14 +1,14 @@
 { stdenv, buildEnv, fetchzip, mono }:
 
 let
-  version = "0.10.1";
+  version = "0.12.0";
   drv = stdenv.mkDerivation {
     pname = "keeagent";
     inherit version;
 
     src = fetchzip {
-      url = "https://lechnology.com/wp-content/uploads/2018/04/KeeAgent_v0.10.1.zip";
-      sha256 = "0j7az6l9wcr8z66mfplkxwydd4bgz2p2vd69xncf0nxlfb0lshh7";
+      url = "https://lechnology.com/wp-content/uploads/2020/05/KeeAgent_v0.12.0.zip";
+      sha256 = "0fcfbj3yikiv3dmp69236h9r3c416amdq849kn131w1129gb68xd";
       stripRoot = false;
     };
 

@@ -90,7 +90,7 @@ in
   config = mkIf cfg.enable (
     mkMerge [
       {
-        meta.maintainers = [ lib.maintainers."0x4A6F" ];
+        meta.maintainers = with lib.maintainers; [ _0x4A6F ];
 
         systemd.services.xandikos = {
           description = "A Simple Calendar and Contact Server";
@@ -122,7 +122,7 @@ in
             ExecStart = ''
               ${cfg.package}/bin/xandikos \
                 --directory /var/lib/xandikos \
-                --listen_address ${cfg.address} \
+                --listen-address ${cfg.address} \
                 --port ${toString cfg.port} \
                 --route-prefix ${cfg.routePrefix} \
                 ${lib.concatStringsSep " " cfg.extraOptions}

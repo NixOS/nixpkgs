@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "vault";
-  version = "1.4.2";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "0aschysngs6f50plqkqbnhgl6zryd0bpypr50zd45cgww7jvvqd4";
+    sha256 = "0bin0r0qmyz8xal910csbclzc6ng2xv69jszyi69gd6n6f43vqw8";
   };
 
   goPackagePath = "github.com/hashicorp/vault";
@@ -17,10 +17,7 @@ buildGoPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildFlagsArray = [
-    "-tags='vault'"
-    "-ldflags=\"-X github.com/hashicorp/vault/sdk/version.GitCommit='v${version}'\""
-  ];
+  buildFlagsArray = [ "-tags=vault" "-ldflags=-s -w -X ${goPackagePath}/sdk/version.GitCommit=${src.rev}" ];
 
   postInstall = ''
     echo "complete -C $out/bin/vault vault" > vault.bash

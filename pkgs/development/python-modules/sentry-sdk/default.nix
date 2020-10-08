@@ -17,18 +17,24 @@
 , stdenv
 , tornado
 , urllib3
+, trytond
+, werkzeug
+, executing
+, pure-eval
+, asttokens
 }:
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "0.13.5";
+  version = "0.16.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c6b919623e488134a728f16326c6f0bcdab7e3f59e7f4c472a90eea4d6d8fe82";
+    sha256 = "e12eb1c2c01cd9e9cfe70608dbda4ef451f37ef0b7cbb92e5d43f87c341d6334";
   };
 
-  checkInputs = [ django flask tornado bottle rq falcon sqlalchemy ]
+  checkInputs = [ django flask tornado bottle rq falcon sqlalchemy werkzeug trytond
+    executing pure-eval asttokens ]
   ++ stdenv.lib.optionals isPy3k [ celery pyramid sanic aiohttp ];
 
   propagatedBuildInputs = [ urllib3 certifi ];

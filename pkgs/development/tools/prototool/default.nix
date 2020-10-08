@@ -15,6 +15,8 @@ buildGoModule rec {
 
   vendorSha256 = "0gyj0yrri2j4yxmyn4d4vdhaxf2p08srpjcxg9zpaxwv5rrvipav";
 
+  doCheck = false;
+
   postInstall = ''
     wrapProgram "$out/bin/prototool" \
       --prefix PROTOTOOL_PROTOC_BIN_PATH : "${protobuf}/bin/protoc" \

@@ -6,6 +6,7 @@
 , makeDesktopItem
 , makeWrapper
 , stdenv
+, lib
 , udev
 , wrapGAppsHook
 }:
@@ -16,11 +17,11 @@ let
   pname = "bitwarden";
 
   version = {
-    x86_64-linux = "1.17.2";
+    x86_64-linux = "1.22.1";
   }.${system} or "";
 
   sha256 = {
-    x86_64-linux = "0v7lrwj3sdypnqayknwg0cg9c2gfsxbjic5wswkfxljy652x8izx";
+    x86_64-linux = "1pbcrkafyjjcsd27s99g511llkz05d9qkny7g15wp6piyyv89k3n";
   }.${system} or "";
 
   meta = with stdenv.lib; {
@@ -72,7 +73,7 @@ let
     '';
 
     runtimeDependencies = [
-      udev.lib
+      (lib.getLib udev)
     ];
 
     postFixup = ''
