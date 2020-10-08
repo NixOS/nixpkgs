@@ -15,9 +15,9 @@ in stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/bin ;
-    chmod +x nb ;
-    cp nb $out/bin/nb ;
+    mkdir -p $out/bin;
+    chmod +x nb;
+    cp nb $out/bin/nb;
   '';
 
   meta = with stdenv.lib; {
