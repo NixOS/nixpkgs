@@ -19908,7 +19908,7 @@ in
 
   coyim = callPackage ../applications/networking/instant-messengers/coyim {};
 
-  cq-editor = libsForQt514.callPackage ../applications/graphics/cq-editor {
+  cq-editor = libsForQt5.callPackage ../applications/graphics/cq-editor {
     python3Packages = python37Packages;
   };
 
