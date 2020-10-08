@@ -22904,7 +22904,18 @@ in
 
   qemu-utils = callPackage ../applications/virtualization/qemu/utils.nix {};
 
-  qgis-unwrapped = libsForQt514.callPackage ../applications/gis/qgis/unwrapped.nix {
+  # Our 3.10 LTS cannot use a newer Qt (5.15) version because it requires qtwebkit
+  # and our qtwebkit fails to build with 5.15. 01bcfd3579219d60e5d07df309a000f96b2b658b
+  qgis-unwrapped = let
+    pkgs_ = pkgs.extend(_: prev: {
+      pythonInterpreters = prev.pythonInterpreters.override(oldAttrs: {
+        pkgs = oldAttrs.pkgs.extend(_: _: {
+          qt5 = pkgs.qt514;
+          libsForQt5 = pkgs.libsForQt514;
+        });
+      });
+    });
+  in pkgs_.libsForQt514.callPackage ../applications/gis/qgis/unwrapped.nix {
       withGrass = false;
   };
 
