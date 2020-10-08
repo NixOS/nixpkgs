@@ -1,45 +1,50 @@
-{ stdenv, fetchurl, jre
-, disableRemoteLogging ? true
-}:
+{ stdenv, fetchurl, jre, disableRemoteLogging ? true }:
 
 with stdenv.lib;
 
 let
-common = { scalaVersion, sha256 }:
-stdenv.mkDerivation rec {
-  pname = "ammonite";
-  version = "2.2.0";
+  common = { scalaVersion, sha256 }:
+    stdenv.mkDerivation rec {
+      pname = "ammonite";
+      version = "2.2.0";
 
-  src = fetchurl {
-    url = "https://github.com/lihaoyi/Ammonite/releases/download/${version}/${scalaVersion}-${version}";
-    inherit sha256;
-  };
+      src = fetchurl {
+        url =
+          "https://github.com/lihaoyi/Ammonite/releases/download/${version}/${scalaVersion}-${version}";
+        inherit sha256;
+      };
 
-  phases = "installPhase";
+      phases = "installPhase";
 
-  installPhase = ''
-    install -Dm755 $src $out/bin/amm
-    sed -i '0,/java/{s|java|${jre}/bin/java|}' $out/bin/amm
-  '' + optionalString (disableRemoteLogging) ''
-    sed -i '0,/ammonite.Main/{s|ammonite.Main|ammonite.Main --no-remote-logging|}' $out/bin/amm
-    sed -i '1i #!/bin/sh' $out/bin/amm
-  '';
+      installPhase = ''
+        install -Dm755 $src $out/bin/amm
+        sed -i '0,/java/{s|java|${jre}/bin/java|}' $out/bin/amm
+      '' + optionalString (disableRemoteLogging) ''
+        sed -i '0,/ammonite.Main/{s|ammonite.Main|ammonite.Main --no-remote-logging|}' $out/bin/amm
+        sed -i '1i #!/bin/sh' $out/bin/amm
+      '';
 
-  meta = {
-    description = "Improved Scala REPL";
-    longDescription = ''
-        The Ammonite-REPL is an improved Scala REPL, re-implemented from first principles.
-        It is much more featureful than the default REPL and comes
-        with a lot of ergonomic improvements and configurability
-        that may be familiar to people coming from IDEs or other REPLs such as IPython or Zsh.
-    '';
-    homepage = "http://www.lihaoyi.com/Ammonite/";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = [ maintainers.nequissimus ];
-  };
-};
+      meta = {
+        description = "Improved Scala REPL";
+        longDescription = ''
+          The Ammonite-REPL is an improved Scala REPL, re-implemented from first principles.
+          It is much more featureful than the default REPL and comes
+          with a lot of ergonomic improvements and configurability
+          that may be familiar to people coming from IDEs or other REPLs such as IPython or Zsh.
+        '';
+        homepage = "http://www.lihaoyi.com/Ammonite/";
+        license = licenses.mit;
+        platforms = platforms.all;
+        maintainers = [ maintainers.nequissimus ];
+      };
+    };
 in {
-  ammonite_2_12 = common { scalaVersion = "2.12"; sha256 = "0nclfqwy3jfn1680z1hd0zzmc0b79wpvx6gn1jnm19aq7qcvh5zp"; };
-  ammonite_2_13 = common { scalaVersion = "2.13"; sha256 = "104bnahn382sb6vwjvchsg0jrnkkwjn08rfh0g5ra7lwhgcj2719"; };
+  ammonite_2_12 = common {
+    scalaVersion = "2.12";
+    sha256 = "0nclfqwy3jfn1680z1hd0zzmc0b79wpvx6gn1jnm19aq7qcvh5zp";
+  };
+  ammonite_2_13 = common {
+    scalaVersion = "2.13";
+    sha256 = "104bnahn382sb6vwjvchsg0jrnkkwjn08rfh0g5ra7lwhgcj2719";
+  };
 }
