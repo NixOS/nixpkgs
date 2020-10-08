@@ -11689,8 +11689,7 @@ in
   texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
   texinfo6_5 = callPackage ../development/tools/misc/texinfo/6.5.nix { }; # needed for allegro
   texinfo6 = callPackage ../development/tools/misc/texinfo/6.7.nix { };
-  # Temporarily use older version on Darwin until it works.
-  texinfo = if stdenv.isDarwin then texinfo6_5 else texinfo6;
+  texinfo = texinfo6;
   texinfoInteractive = appendToName "interactive" (
     texinfo.override { interactive = true; }
   );
