@@ -85,7 +85,7 @@ let
       description = "A hackable text editor for the 21st Century";
       homepage = "https://atom.io/";
       license = licenses.mit;
-      maintainers = with maintainers; [ offline nequissimus ysndr ];
+      maintainers = with maintainers; [ offline ysndr ];
       platforms = platforms.x86_64;
     };
   };
