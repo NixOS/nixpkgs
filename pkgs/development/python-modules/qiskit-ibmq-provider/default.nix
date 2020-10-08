@@ -9,21 +9,33 @@
 , requests_ntlm
 , websockets
   # Visualization inputs
-, ipykernel
+, withVisualization ? false
+, ipython
 , ipyvuetify
 , ipywidgets
 , matplotlib
-, nbconvert
-, nbformat
 , plotly
 , pyperclip
 , seaborn
   # check inputs
 , pytestCheckHook
+, nbconvert
+, nbformat
 , pproxy
 , vcrpy
 }:
 
+let
+  visualizationPackages = [
+    ipython
+    ipyvuetify
+    ipywidgets
+    matplotlib
+    plotly
+    pyperclip
+    seaborn
+  ];
+in
 buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
   version = "0.11.1";
@@ -44,24 +56,16 @@ buildPythonPackage rec {
     requests
     requests_ntlm
     websockets
-    # Visualization/Jupyter inputs
-    ipykernel
-    ipyvuetify
-    ipywidgets
-    matplotlib
-    nbconvert
-    nbformat
-    plotly
-    pyperclip
-    seaborn
-  ];
+  ] ++ lib.optionals withVisualization visualizationPackages;
 
   # Most tests require credentials to run on IBMQ
   checkInputs = [
     pytestCheckHook
+    nbconvert
+    nbformat
     pproxy
     vcrpy
-  ];
+  ] ++ lib.optionals (!withVisualization) visualizationPackages;
 
   pythonImportsCheck = [ "qiskit.providers.ibmq" ];
   # These disabled tests require internet connection, aren't skipped elsewhere
