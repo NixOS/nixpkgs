@@ -6718,6 +6718,8 @@ in {
   else
     callPackage ../development/python-modules/sphinx/2.nix { };
 
+  sphinx-argparse = callPackage ../development/python-modules/sphinx-argparse { };
+
   sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
 
   sphinx-navtree = callPackage ../development/python-modules/sphinx-navtree { };
