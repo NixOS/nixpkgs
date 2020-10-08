@@ -1108,6 +1108,8 @@ in
 
   hime = callPackage ../tools/inputmethods/hime {};
 
+  hostctl = callPackage ../tools/system/hostctl { };
+
   hpe-ltfs = callPackage ../tools/backup/hpe-ltfs { };
 
   http2tcp = callPackage ../tools/networking/http2tcp { };
