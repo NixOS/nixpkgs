@@ -20120,7 +20120,7 @@ in
 
   ekho = callPackage ../applications/audio/ekho { };
 
-  electron-cash = libsForQt514.callPackage ../applications/misc/electron-cash { };
+  electron-cash = libsForQt5.callPackage ../applications/misc/electron-cash { };
 
   electrum = libsForQt514.callPackage ../applications/misc/electrum { };
 
