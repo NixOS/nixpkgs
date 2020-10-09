@@ -46,6 +46,12 @@ stdenv.mkDerivation rec {
   ];
   
   configurePhase = ''
+    HOME=/tmp git config --global user.email "nix@nix"
+    HOME=/tmp git config --global user.name "nix"
+    HOME=/tmp git init
+    HOME=/tmp git add .
+    HOME=/tmp git commit -m "nixOS Build Fake-Commit"
+
     pushd ..
     ls
     unzip ${depot_tools} -d depot_tools
