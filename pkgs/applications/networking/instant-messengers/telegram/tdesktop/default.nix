@@ -3,6 +3,7 @@
 , qtbase, qtimageformats, gtk3, libsForQt5, enchant2, lz4, xxHash
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 , tl-expected, hunspell
+, libwebrtc
 # TODO: Shouldn't be required:
 , pcre, xorg, utillinux, libselinux, libsepol, epoxy, at-spi2-core, libXtst
 , xdg_utils
@@ -60,9 +61,9 @@ mkDerivation rec {
     "-DDESKTOP_APP_USE_PACKAGED_GSL=OFF"
     "-DTDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME=ON"
     "-DTDESKTOP_USE_PACKAGED_TGVOIP=OFF"
-    "-DDESKTOP_APP_DISABLE_WEBRTC_INTEGRATION=ON"
     #"-DDESKTOP_APP_SPECIAL_TARGET=\"\"" # TODO: Error when set to "": Bad special target '""'
     "-DTDESKTOP_LAUNCHER_BASENAME=telegramdesktop" # Note: This is the default
+    "-DDESKTOP_APP_WEBRTC_LOCATION=${libwebrtc}"
   ];
 
   # Note: The following packages could be packaged system-wide, but it's
