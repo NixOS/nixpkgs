@@ -95,7 +95,7 @@ in {
         "-Xmx1G"
         "-Xms1G"
         "-XX:+UseCompressedOops"
-        "-XX:+UseParNewGC"
+        "-XX:+UseG1GC"
         "-XX:+UseConcMarkSweepGC"
         "-XX:+CMSClassUnloadingEnabled"
         "-XX:+CMSScavengeBeforeRemark"
