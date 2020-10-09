@@ -4235,7 +4235,6 @@ broken-packages:
   - curve25519
   - curves
   - custom-prelude
-  - cut-the-crap
   - CV
   - cv-combinators
   - cypher
