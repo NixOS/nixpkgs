@@ -1,0 +1,139 @@
+diff --git a/config/c++/c++.gni b/config/c++/c++.gni
+index 5ced459..db1b27c 100644
+--- a/config/c++/c++.gni
++++ b/config/c++/c++.gni
+@@ -11,7 +11,7 @@ declare_args() {
+   # Don't check in changes that set this to false for more platforms; doing so
+   # is not supported.
+   use_custom_libcxx =
+-      is_fuchsia || is_android || is_mac || (is_ios && !use_xcode_clang) ||
++      is_fuchsia || is_android || (is_mac && !use_xcode_clang) || (is_ios && !use_xcode_clang) ||
+       (is_win && is_clang) ||
+       (is_linux &&
+        (!is_chromeos || default_toolchain != "//build/toolchain/cros:target"))
+diff --git a/config/compiler/BUILD.gn b/config/compiler/BUILD.gn
+index 3d5e4de..1ebe692 100644
+--- a/config/compiler/BUILD.gn
++++ b/config/compiler/BUILD.gn
+@@ -535,7 +535,7 @@ config("compiler") {
+       # Override Chromium's default for projects that wish to stay on C++11.
+       cflags_cc += [ "-std=${standard_prefix}++11" ]
+     } else {
+-      cflags_cc += [ "-std=${standard_prefix}++14" ]
++      cflags_cc += [ "-std=${standard_prefix}++17" ]
+     }
+   } else if (!is_win && !is_nacl) {
+     if (target_os == "android") {
+@@ -1379,6 +1379,8 @@ config("default_warnings") {
+ 
+       "/wd4715",  # 'function' : not all control paths return a value'
+                   # MSVC does not analyze switch (enum) for completeness.
++
++      "/wd4018",  # signed/unsigned mismatch in h265 codec.
+     ]
+ 
+     cflags_cc += [
+@@ -1480,6 +1482,7 @@ config("default_warnings") {
+       cflags += [
+         # TODO(thakis): https://crbug.com/604888
+         "-Wno-undefined-var-template",
++        "-Wno-deprecated-declarations", # 'OSAtomicCompareAndSwap32Barrier' is deprecated: first deprecated in macOS 10.12
+       ]
+ 
+       if (is_win) {
+@@ -1488,7 +1491,7 @@ config("default_warnings") {
+         cflags += [ "-Wno-nonportable-include-path" ]
+       }
+ 
+-      if (current_toolchain == host_toolchain || !use_xcode_clang) {
++      if (current_toolchain == host_toolchain && !use_xcode_clang) {
+         # Flags NaCl (Clang 3.7) and Xcode 9.2 (Clang clang-900.0.39.2) do not
+         # recognize.
+         cflags += [
+@@ -1528,6 +1531,25 @@ config("default_warnings") {
+         ]
+       }
+     }
++  } else if (!is_win) {
++    cflags += [
++      "-Wno-attributes",
++      "-Wno-address",
++      "-Wno-nonnull-compare",
++      "-Wno-return-type",
++      "-Wno-dangling-else",
++      "-Wno-sequence-point",
++      "-Wno-sign-compare",
++      "-Wno-unused-but-set-variable",
++      "-Wno-int-in-bool-context",
++      "-Wno-unused-function",
++      "-Wno-parentheses",
++    ]
++    cflags_cc += [
++      "-Wno-subobject-linkage",
++      "-Wno-register",
++      "-Wno-array-bounds", # array subscript 18446744073709551615 is above array bounds of ‘const webrtc::SpatialLayer [5]’ `codec.spatialLayers[num_active_layers - 1].minBitrate);`
++    ]
+   }
+ }
+ 
+@@ -1660,7 +1682,7 @@ config("no_chromium_code") {
+       # suppressing them individually, we just blanket suppress them here.
+       "-Wno-unused-variable",
+     ]
+-    if (!is_nacl && (current_toolchain == host_toolchain || !use_xcode_clang)) {
++    if (!is_nacl && (current_toolchain == host_toolchain && !use_xcode_clang)) {
+       cflags += [
+         # TODO(https://crbug.com/1031169): Clean up and enable.
+         "-Wno-misleading-indentation",
+diff --git a/config/gcc/BUILD.gn b/config/gcc/BUILD.gn
+index 747245f..6e35afb 100644
+--- a/config/gcc/BUILD.gn
++++ b/config/gcc/BUILD.gn
+@@ -91,7 +91,8 @@ if (is_component_build && !is_android) {
+ # Settings for executables.
+ config("executable_config") {
+   configs = executable_and_shared_library_configs_
+-  ldflags = [ "-pie" ]
++  # ldflags = [ "-pie" ]
++  ldflags = []
+   if (is_android) {
+     ldflags += [
+       "-Bdynamic",
+diff --git a/config/linux/gtk/gtk.gni b/config/linux/gtk/gtk.gni
+index 0a3f35d..b23571a 100644
+--- a/config/linux/gtk/gtk.gni
++++ b/config/linux/gtk/gtk.gni
+@@ -12,4 +12,4 @@ declare_args() {
+   gtk_version = 3
+ }
+ 
+-assert(gtk_version >= 3 && gtk_version <= 4)
++assert(gtk_version >= 2 && gtk_version <= 4)
+diff --git a/toolchain/mac/BUILD.gn b/toolchain/mac/BUILD.gn
+index 08b17ff..7661885 100644
+--- a/toolchain/mac/BUILD.gn
++++ b/toolchain/mac/BUILD.gn
+@@ -86,7 +86,7 @@ template("mac_toolchain") {
+ 
+     # Supports building with the version of clang shipped with Xcode when
+     # targeting iOS by not respecting clang_base_path.
+-    if (toolchain_args.current_os == "ios" && use_xcode_clang) {
++    if (use_xcode_clang) {
+       prefix = ""
+     } else {
+       prefix = rebase_path("$clang_base_path/bin/", root_build_dir)
+diff --git a/toolchain/toolchain.gni b/toolchain/toolchain.gni
+index 552ceb6..71f2f64 100644
+--- a/toolchain/toolchain.gni
++++ b/toolchain/toolchain.gni
+@@ -45,8 +45,8 @@ declare_args() {
+ # Check target_os here instead of is_ios as this file is loaded for secondary
+ # toolchain (host toolchain in particular) but the argument is the same for
+ # all toolchains.
+-assert(!use_xcode_clang || target_os == "ios",
+-       "Using Xcode's clang is only supported in iOS builds")
++# assert(!use_xcode_clang || target_os == "ios",
++#        "Using Xcode's clang is only supported in iOS builds")
+ 
+ # Extension for shared library files (including leading dot).
+ if (is_mac || is_ios) {

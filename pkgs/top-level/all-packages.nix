@@ -5241,6 +5241,8 @@ in
     libwebsockets_4_0;
   libwebsockets = libwebsockets_3_2;
 
+  libwebrtc = callPackage ../development/libraries/libwebrtc { };
+
   licensee = callPackage ../tools/package-management/licensee { };
 
   lidarr = callPackage ../servers/lidarr { };

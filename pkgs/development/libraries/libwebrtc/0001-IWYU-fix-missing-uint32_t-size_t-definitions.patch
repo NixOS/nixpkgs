@@ -1,0 +1,141 @@
+From 0e7b7af7fbf86732dd64888f260a5df0335c695a Mon Sep 17 00:00:00 2001
+From: Jiachen YANG <farseerfc@gmail.com>
+Date: Fri, 21 Aug 2020 09:11:29 +0900
+Subject: [PATCH] IWYU fix missing uint32_t size_t definitions
+
+---
+ call/rtx_receive_stream.h                                      | 1 +
+ common_video/h264/h264_common.h                                | 1 +
+ common_video/h264/pps_parser.h                                 | 1 +
+ common_video/h264/prefix_parser.h                              | 1 +
+ common_video/h264/sps_parser.h                                 | 1 +
+ common_video/h265/h265_common.h                                | 1 +
+ common_video/h265/h265_pps_parser.h                            | 1 +
+ modules/audio_processing/aec3/clockdrift_detector.h            | 1 +
+ modules/congestion_controller/rtp/transport_feedback_demuxer.h | 1 +
+ modules/rtp_rtcp/source/receive_statistics_impl.h              | 1 +
+ 10 files changed, 10 insertions(+)
+
+diff --git a/call/rtx_receive_stream.h b/call/rtx_receive_stream.h
+index 8ffa4400a9..66cc46dc09 100644
+--- a/call/rtx_receive_stream.h
++++ b/call/rtx_receive_stream.h
+@@ -12,6 +12,7 @@
+ #define CALL_RTX_RECEIVE_STREAM_H_
+ 
+ #include <map>
++#include <stdint.h>
+ 
+ #include "call/rtp_packet_sink_interface.h"
+ 
+diff --git a/common_video/h264/h264_common.h b/common_video/h264/h264_common.h
+index 0b1843ee38..e0f10432af 100644
+--- a/common_video/h264/h264_common.h
++++ b/common_video/h264/h264_common.h
+@@ -14,6 +14,7 @@
+ #include <stddef.h>
+ #include <stdint.h>
+ 
++#include <stdint.h>
+ #include <vector>
+ 
+ #include "rtc_base/buffer.h"
+diff --git a/common_video/h264/pps_parser.h b/common_video/h264/pps_parser.h
+index d6c31b0688..43acb66c15 100644
+--- a/common_video/h264/pps_parser.h
++++ b/common_video/h264/pps_parser.h
+@@ -10,6 +10,7 @@
+ 
+ #ifndef COMMON_VIDEO_H264_PPS_PARSER_H_
+ #define COMMON_VIDEO_H264_PPS_PARSER_H_
++#include <stdint.h>
+ 
+ #include "absl/types/optional.h"
+ 
+diff --git a/common_video/h264/prefix_parser.h b/common_video/h264/prefix_parser.h
+index 9298eb4276..486a591d87 100644
+--- a/common_video/h264/prefix_parser.h
++++ b/common_video/h264/prefix_parser.h
+@@ -10,6 +10,7 @@
+ 
+ #ifndef COMMON_VIDEO_H264_PREFIX_PARSER_H_
+ #define COMMON_VIDEO_H264_PREFIX_PARSER_H_
++#include <stdint.h>
+ 
+ #include "absl/types/optional.h"
+ 
+diff --git a/common_video/h264/sps_parser.h b/common_video/h264/sps_parser.h
+index 76e627d27a..376b52852e 100644
+--- a/common_video/h264/sps_parser.h
++++ b/common_video/h264/sps_parser.h
+@@ -10,6 +10,7 @@
+ 
+ #ifndef COMMON_VIDEO_H264_SPS_PARSER_H_
+ #define COMMON_VIDEO_H264_SPS_PARSER_H_
++#include <stdint.h>
+ 
+ #include "absl/types/optional.h"
+ 
+diff --git a/common_video/h265/h265_common.h b/common_video/h265/h265_common.h
+index a829195a10..d2d93fb89e 100644
+--- a/common_video/h265/h265_common.h
++++ b/common_video/h265/h265_common.h
+@@ -14,6 +14,7 @@
+ #include <memory>
+ #include <vector>
+ 
++#include <stdint.h>
+ #include "rtc_base/buffer.h"
+ 
+ namespace webrtc {
+diff --git a/common_video/h265/h265_pps_parser.h b/common_video/h265/h265_pps_parser.h
+index 28c95ea9bc..a923b2b334 100644
+--- a/common_video/h265/h265_pps_parser.h
++++ b/common_video/h265/h265_pps_parser.h
+@@ -10,6 +10,7 @@
+ 
+ #ifndef COMMON_VIDEO_H265_PPS_PARSER_H_
+ #define COMMON_VIDEO_H265_PPS_PARSER_H_
++#include <stdint.h>
+ 
+ #include "absl/types/optional.h"
+ 
+diff --git a/modules/audio_processing/aec3/clockdrift_detector.h b/modules/audio_processing/aec3/clockdrift_detector.h
+index 22528c9489..69e624e8b1 100644
+--- a/modules/audio_processing/aec3/clockdrift_detector.h
++++ b/modules/audio_processing/aec3/clockdrift_detector.h
+@@ -12,6 +12,7 @@
+ #define MODULES_AUDIO_PROCESSING_AEC3_CLOCKDRIFT_DETECTOR_H_
+ 
+ #include <array>
++#include <cstddef>
+ 
+ namespace webrtc {
+ 
+diff --git a/modules/congestion_controller/rtp/transport_feedback_demuxer.h b/modules/congestion_controller/rtp/transport_feedback_demuxer.h
+index bcd25d5835..c7cede7ac3 100644
+--- a/modules/congestion_controller/rtp/transport_feedback_demuxer.h
++++ b/modules/congestion_controller/rtp/transport_feedback_demuxer.h
+@@ -10,6 +10,7 @@
+ #ifndef MODULES_CONGESTION_CONTROLLER_RTP_TRANSPORT_FEEDBACK_DEMUXER_H_
+ #define MODULES_CONGESTION_CONTROLLER_RTP_TRANSPORT_FEEDBACK_DEMUXER_H_
+ 
++#include <stdint.h>
+ #include <map>
+ #include <utility>
+ #include <vector>
+diff --git a/modules/rtp_rtcp/source/receive_statistics_impl.h b/modules/rtp_rtcp/source/receive_statistics_impl.h
+index e352ae8787..363dd9272a 100644
+--- a/modules/rtp_rtcp/source/receive_statistics_impl.h
++++ b/modules/rtp_rtcp/source/receive_statistics_impl.h
+@@ -14,6 +14,7 @@
+ #include <algorithm>
+ #include <map>
+ #include <vector>
++#include <stdint.h>
+ 
+ #include "absl/types/optional.h"
+ #include "modules/include/module_common_types_public.h"
+-- 
+2.28.0
+

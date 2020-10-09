@@ -1,0 +1,709 @@
+diff --git a/BUILD.gn b/BUILD.gn
+index 5fe6f84..719626d 100644
+--- a/BUILD.gn
++++ b/BUILD.gn
+@@ -335,7 +335,7 @@ config("common_config") {
+         "-Wnon-virtual-dtor",
+ 
+         # This is enabled for clang; enable for gcc as well.
+-        "-Woverloaded-virtual",
++        # "-Woverloaded-virtual", # a lot of such errors when compiling with g++.
+       ]
+     }
+ 
+@@ -445,9 +445,9 @@ if (!build_with_chromium) {
+       ":webrtc_lib_link_test",
+     ]
+ 
+-    if (build_with_owt) {
+-      visibility += [ "//talk/owt" ]
+-    }
++    # if (build_with_owt) {
++    #   visibility += [ "//talk/owt" ]
++    # }
+     sources = []
+     complete_static_lib = true
+     suppressed_configs += [ "//build/config/compiler:thin_archive" ]
+diff --git a/api/test/video/BUILD.gn b/api/test/video/BUILD.gn
+index 4ebb0c9..a4a0d7b 100644
+--- a/api/test/video/BUILD.gn
++++ b/api/test/video/BUILD.gn
+@@ -8,7 +8,7 @@
+ 
+ import("../../../webrtc.gni")
+ 
+-rtc_library("function_video_factory") {
++rtc_source_set("function_video_factory") {
+   visibility = [ "*" ]
+   testonly = true
+   public = [
+diff --git a/audio/utility/channel_mixer.cc b/audio/utility/channel_mixer.cc
+index 8867a3e..4bd3662 100644
+--- a/audio/utility/channel_mixer.cc
++++ b/audio/utility/channel_mixer.cc
+@@ -10,6 +10,8 @@
+ 
+ #include "audio/utility/channel_mixer.h"
+ 
++#include <cstring> // fix build with -std=gnu++17
++
+ #include "audio/utility/channel_mixing_matrix.h"
+ #include "rtc_base/checks.h"
+ #include "rtc_base/logging.h"
+diff --git a/build_overrides/build.gni b/build_overrides/build.gni
+index 6025cdd..a9f63f0 100644
+--- a/build_overrides/build.gni
++++ b/build_overrides/build.gni
+@@ -16,6 +16,8 @@ linux_use_bundled_binutils_override = true
+ # only needed to support both WebRTC standalone and Chromium builds.
+ build_with_chromium = false
+ 
++build_with_owt = false
++
+ # Use our own suppressions files.
+ asan_suppressions_file = "//build/sanitizers/asan_suppressions.cc"
+ lsan_suppressions_file = "//tools_webrtc/sanitizers/lsan_suppressions_webrtc.cc"
+@@ -35,7 +37,7 @@ lint_suppressions_file = "//tools_webrtc/android/suppressions.xml"
+ # so we just ignore that assert. See https://crbug.com/648948 for more info.
+ ignore_elf32_limitations = true
+ 
+-if (is_win || is_ios || is_android) {
++if (is_win || is_ios || is_android || is_mac || is_linux) {
+   rtc_use_h265 = true
+ } else {
+   rtc_use_h265 = false
+diff --git a/examples/BUILD.gn b/examples/BUILD.gn
+index 4fd2d70..217f520 100644
+--- a/examples/BUILD.gn
++++ b/examples/BUILD.gn
+@@ -232,7 +232,7 @@ if (is_ios || (is_mac && target_cpu != "x86")) {
+       # iOS must use WebRTC.framework which is dynamically linked.
+       deps = [ "../sdk:framework_objc+link" ]
+     } else {
+-      deps = [ "../sdk:mac_framework_objc+link" ]
++      deps = [ "../sdk:mac_framework_objc_static" ]
+     }
+   }
+ 
+@@ -301,7 +301,7 @@ if (is_ios || (is_mac && target_cpu != "x86")) {
+         "../sdk:ios_framework_bundle",
+       ]
+     } else {
+-      deps += [ "../sdk:mac_framework_objc+link" ]
++      deps += [ "../sdk:mac_framework_objc_static" ]
+     }
+     libs = [
+       "CoreMedia.framework",
+@@ -528,7 +528,7 @@ if (is_ios || (is_mac && target_cpu != "x86")) {
+       deps = [
+         ":apprtc_common",
+         ":apprtc_signaling",
+-        "../sdk:mac_framework_objc+link",
++        "../sdk:mac_framework_objc_static",
+       ]
+     }
+ 
+@@ -551,8 +551,8 @@ if (is_ios || (is_mac && target_cpu != "x86")) {
+ 
+       deps = [
+         ":AppRTCMobile_lib",
+-        "../sdk:mac_framework_bundle",
+-        "../sdk:mac_framework_objc+link",
++        # "../sdk:mac_framework_bundle",
++        "../sdk:mac_framework_objc_static",
+       ]
+     }
+   }
+diff --git a/modules/audio_coding/BUILD.gn b/modules/audio_coding/BUILD.gn
+index ceee0c0..8c4f00d 100644
+--- a/modules/audio_coding/BUILD.gn
++++ b/modules/audio_coding/BUILD.gn
+@@ -763,6 +763,8 @@ rtc_library("webrtc_opus") {
+     public_deps += [ rtc_opus_dir ]  # no-presubmit-check TODO(webrtc:8603)
+   } else if (build_with_mozilla) {
+     include_dirs = [ "/media/libopus/include" ]
++  } else {
++    public_configs = [ "../../rtc_base:external_opus_library" ]
+   }
+ }
+ 
+@@ -801,6 +803,8 @@ rtc_library("webrtc_multiopus") {
+     public_deps += [ rtc_opus_dir ]
+   } else if (build_with_mozilla) {
+     include_dirs = [ "/media/libopus/include" ]
++  } else {
++    public_configs = [ "../../rtc_base:external_opus_library" ]
+   }
+ }
+ 
+@@ -818,6 +822,8 @@ rtc_library("webrtc_opus_wrapper") {
+     public_deps = [ rtc_opus_dir ]  # no-presubmit-check TODO(webrtc:8603)
+   } else if (build_with_mozilla) {
+     include_dirs = [ getenv("DIST") + "/include/opus" ]
++  } else {
++    public_configs = [ "../../rtc_base:external_opus_library" ]
+   }
+ 
+   deps = [
+diff --git a/modules/audio_device/audio_device_buffer.cc b/modules/audio_device/audio_device_buffer.cc
+index 336846e..f0c388b 100644
+--- a/modules/audio_device/audio_device_buffer.cc
++++ b/modules/audio_device/audio_device_buffer.cc
+@@ -456,7 +456,7 @@ void AudioDeviceBuffer::LogStats(LogState state) {
+   }
+   last_stats_ = stats;
+ 
+-  int64_t time_to_wait_ms = next_callback_time - rtc::TimeMillis();
++  int64_t time_to_wait_ms = std::max(next_callback_time - rtc::TimeMillis(), int64_t(1));
+   RTC_DCHECK_GT(time_to_wait_ms, 0) << "Invalid timer interval";
+ 
+   // Keep posting new (delayed) tasks until state is changed to kLogStop.
+diff --git a/modules/audio_processing/aec3/reverb_model_estimator.h b/modules/audio_processing/aec3/reverb_model_estimator.h
+index 3b9971a..efc2912 100644
+--- a/modules/audio_processing/aec3/reverb_model_estimator.h
++++ b/modules/audio_processing/aec3/reverb_model_estimator.h
+@@ -13,6 +13,7 @@
+ 
+ #include <array>
+ #include <vector>
++#include <memory> // fix build with -std=gnu++17
+ 
+ #include "absl/types/optional.h"
+ #include "api/array_view.h"
+diff --git a/modules/utility/BUILD.gn b/modules/utility/BUILD.gn
+index 8710ed4..2a8fa4e 100644
+--- a/modules/utility/BUILD.gn
++++ b/modules/utility/BUILD.gn
+@@ -40,7 +40,7 @@ rtc_library("utility") {
+   ]
+ }
+ 
+-rtc_library("mock_process_thread") {
++rtc_source_set("mock_process_thread") {
+   testonly = true
+   visibility = [ "*" ]
+   sources = [ "include/mock/mock_process_thread.h" ]
+diff --git a/modules/video_coding/BUILD.gn b/modules/video_coding/BUILD.gn
+index 2f9d257..65130a8 100644
+--- a/modules/video_coding/BUILD.gn
++++ b/modules/video_coding/BUILD.gn
+@@ -370,10 +370,13 @@ rtc_library("webrtc_h264") {
+   ]
+ 
+   if (rtc_use_h264) {
+-    deps += [
+-      "//third_party/ffmpeg",
+-      "//third_party/openh264:encoder",
+-    ]
++    deps += [ "//third_party/openh264:encoder" ]
++    if (rtc_build_ffmpeg) {
++      deps += [ "//third_party/ffmpeg" ]
++    } else {
++      configs += [ "../../rtc_base:external_ffmpeg_library" ]
++      all_dependent_configs = [ "../../rtc_base:external_ffmpeg_linking" ]
++    }
+     if (!build_with_mozilla) {
+       deps += [ "../../media:rtc_media_base" ]
+     }
+diff --git a/modules/video_coding/codecs/h264/h264_color_space.h b/modules/video_coding/codecs/h264/h264_color_space.h
+index aec76ef..918ea26 100644
+--- a/modules/video_coding/codecs/h264/h264_color_space.h
++++ b/modules/video_coding/codecs/h264/h264_color_space.h
+@@ -19,7 +19,7 @@
+ #include "api/video/color_space.h"
+ 
+ extern "C" {
+-#include "third_party/ffmpeg/libavcodec/avcodec.h"
++#include <libavcodec/avcodec.h>
+ }  // extern "C"
+ 
+ namespace webrtc {
+diff --git a/modules/video_coding/codecs/h264/h264_decoder_impl.cc b/modules/video_coding/codecs/h264/h264_decoder_impl.cc
+index 6725a3b..a7e837c 100644
+--- a/modules/video_coding/codecs/h264/h264_decoder_impl.cc
++++ b/modules/video_coding/codecs/h264/h264_decoder_impl.cc
+@@ -21,9 +21,9 @@
+ #include <memory>
+ 
+ extern "C" {
+-#include "third_party/ffmpeg/libavcodec/avcodec.h"
+-#include "third_party/ffmpeg/libavformat/avformat.h"
+-#include "third_party/ffmpeg/libavutil/imgutils.h"
++#include <libavcodec/avcodec.h>
++#include <libavformat/avformat.h>
++#include <libavutil/imgutils.h>
+ }  // extern "C"
+ 
+ #include "api/video/color_space.h"
+diff --git a/modules/video_coding/codecs/h264/h264_decoder_impl.h b/modules/video_coding/codecs/h264/h264_decoder_impl.h
+index 80892de..70f34fb 100644
+--- a/modules/video_coding/codecs/h264/h264_decoder_impl.h
++++ b/modules/video_coding/codecs/h264/h264_decoder_impl.h
+@@ -36,7 +36,7 @@
+ // passed to ffmpeg.
+ 
+ extern "C" {
+-#include "third_party/ffmpeg/libavcodec/avcodec.h"
++#include <libavcodec/avcodec.h>
+ }  // extern "C"
+ 
+ #include "common_video/h264/h264_bitstream_parser.h"
+diff --git a/modules/video_coding/utility/ivf_file_reader.cc b/modules/video_coding/utility/ivf_file_reader.cc
+index 9667bb7..6fe4e88 100644
+--- a/modules/video_coding/utility/ivf_file_reader.cc
++++ b/modules/video_coding/utility/ivf_file_reader.cc
+@@ -12,6 +12,7 @@
+ 
+ #include <string>
+ #include <vector>
++#include <cstring> // fix build with -std=gnu++17
+ 
+ #include "api/video_codecs/video_codec.h"
+ #include "modules/rtp_rtcp/source/byte_io.h"
+diff --git a/p2p/BUILD.gn b/p2p/BUILD.gn
+index ae49deb..af19241 100644
+--- a/p2p/BUILD.gn
++++ b/p2p/BUILD.gn
+@@ -118,7 +118,7 @@ rtc_library("rtc_p2p") {
+ }
+ 
+ if (rtc_include_tests) {
+-  rtc_library("fake_ice_transport") {
++  rtc_source_set("fake_ice_transport") {
+     testonly = true
+     visibility = [ "*" ]
+     sources = [ "base/fake_ice_transport.h" ]
+@@ -132,7 +132,7 @@ if (rtc_include_tests) {
+     ]
+   }
+ 
+-  rtc_library("fake_port_allocator") {
++  rtc_source_set("fake_port_allocator") {
+     testonly = true
+     visibility = [ "*" ]
+     sources = [ "base/fake_port_allocator.h" ]
+diff --git a/p2p/base/basic_ice_controller.cc b/p2p/base/basic_ice_controller.cc
+index aa20025..506bf5c 100644
+--- a/p2p/base/basic_ice_controller.cc
++++ b/p2p/base/basic_ice_controller.cc
+@@ -195,7 +195,7 @@ const Connection* BasicIceController::FindNextPingableConnection() {
+         if (conn1 == conn2) {
+           return false;
+         }
+-        return MorePingable(conn1, conn2) == conn2;
++        return MorePingable(std::min(conn1, conn2), std::max(conn1, conn2)) == conn2;
+       });
+   if (iter != pingable_connections.end()) {
+     return *iter;
+diff --git a/rtc_base/BUILD.gn b/rtc_base/BUILD.gn
+index d078482..a1bb711 100644
+--- a/rtc_base/BUILD.gn
++++ b/rtc_base/BUILD.gn
+@@ -24,6 +24,35 @@ if (!rtc_build_ssl) {
+     assert(rtc_ssl_root != "",
+            "You must specify rtc_ssl_root when rtc_build_ssl==0.")
+     include_dirs = [ rtc_ssl_root ]
++    libs = rtc_ssl_libs
++  }
++}
++
++if (!rtc_build_ffmpeg) {
++  config("external_ffmpeg_linking") {
++    if (is_win && !is_clang) {
++      ldflags = [
++        "/NODEFAULTLIB:LIBCMT",
++
++        # libavcodec.a(me_cmp.o) : warning LNK4078: multiple '.rodata' sections found with different attributes (60500020)
++        "/ignore:4078",
++      ]
++    }
++  }
++  config("external_ffmpeg_library") {
++    assert(rtc_ffmpeg_root != "",
++           "You must specify rtc_ffmpeg_root when rtc_build_ffmpeg==0.")
++    include_dirs = [ rtc_ffmpeg_root ]
++    libs = rtc_ffmpeg_libs
++  }
++}
++
++if (!rtc_build_opus) {
++  config("external_opus_library") {
++    assert(rtc_opus_root != "",
++           "You must specify rtc_opus_root when rtc_build_opus==0.")
++    include_dirs = [ rtc_opus_root ]
++    libs = rtc_opus_libs
+   }
+ }
+ 
+@@ -1326,7 +1355,7 @@ if (rtc_include_tests) {
+         "win32_window_unittest.cc",
+       ]
+     }
+-    if (is_posix || is_fuchsia) {
++    if ((is_posix || is_fuchsia) && rtc_build_ssl) {
+       sources += [
+         "openssl_adapter_unittest.cc",
+         "openssl_session_cache_unittest.cc",
+diff --git a/sdk/BUILD.gn b/sdk/BUILD.gn
+index 7588baa..81f5ccf 100644
+--- a/sdk/BUILD.gn
++++ b/sdk/BUILD.gn
+@@ -23,6 +23,8 @@ group("sdk") {
+     }
+     if (is_ios) {
+       public_deps += [ ":framework_objc" ]
++    } else if (is_mac) {
++      public_deps += [ ":mac_framework_objc_static" ]
+     }
+   }
+ }
+@@ -1399,6 +1401,107 @@ if (is_ios || is_mac) {
+     }
+ 
+     if (is_mac) {
++      rtc_source_set("mac_framework_objc_static") {
++        visibility = [ "*" ]
++        allow_poison = [ "software_video_codecs", "audio_codecs", "default_task_queue" ]
++        sources = [
++          "objc/api/peerconnection/RTCAudioSource.h",
++          "objc/api/peerconnection/RTCAudioTrack.h",
++          "objc/api/peerconnection/RTCCertificate.h",
++          "objc/api/peerconnection/RTCConfiguration.h",
++          "objc/api/peerconnection/RTCCryptoOptions.h",
++          "objc/api/peerconnection/RTCDataChannel.h",
++          "objc/api/peerconnection/RTCDataChannelConfiguration.h",
++          "objc/api/peerconnection/RTCDtmfSender.h",
++          "objc/api/peerconnection/RTCFieldTrials.h",
++          "objc/api/peerconnection/RTCIceCandidate.h",
++          "objc/api/peerconnection/RTCIceServer.h",
++          "objc/api/peerconnection/RTCLegacyStatsReport.h",
++          "objc/api/peerconnection/RTCMediaConstraints.h",
++          "objc/api/peerconnection/RTCMediaSource.h",
++          "objc/api/peerconnection/RTCMediaStream.h",
++          "objc/api/peerconnection/RTCMediaStreamTrack.h",
++          "objc/api/peerconnection/RTCMetrics.h",
++          "objc/api/peerconnection/RTCMetricsSampleInfo.h",
++          "objc/api/peerconnection/RTCPeerConnection.h",
++          "objc/api/peerconnection/RTCPeerConnectionFactory.h",
++          "objc/api/peerconnection/RTCPeerConnectionFactoryOptions.h",
++          "objc/api/peerconnection/RTCRtcpParameters.h",
++          "objc/api/peerconnection/RTCRtpCodecParameters.h",
++          "objc/api/peerconnection/RTCRtpEncodingParameters.h",
++          "objc/api/peerconnection/RTCRtpHeaderExtension.h",
++          "objc/api/peerconnection/RTCRtpParameters.h",
++          "objc/api/peerconnection/RTCRtpReceiver.h",
++          "objc/api/peerconnection/RTCRtpSender.h",
++          "objc/api/peerconnection/RTCRtpTransceiver.h",
++          "objc/api/peerconnection/RTCSSLAdapter.h",
++          "objc/api/peerconnection/RTCSessionDescription.h",
++          "objc/api/peerconnection/RTCTracing.h",
++          "objc/api/peerconnection/RTCVideoSource.h",
++          "objc/api/peerconnection/RTCVideoTrack.h",
++          "objc/api/video_codec/RTCVideoDecoderVP8.h",
++          "objc/api/video_codec/RTCVideoDecoderVP9.h",
++          "objc/api/video_codec/RTCVideoEncoderVP8.h",
++          "objc/api/video_codec/RTCVideoEncoderVP9.h",
++          "objc/api/video_frame_buffer/RTCNativeI420Buffer.h",
++          "objc/api/video_frame_buffer/RTCNativeMutableI420Buffer.h",
++          "objc/base/RTCCodecSpecificInfo.h",
++          "objc/base/RTCEncodedImage.h",
++          "objc/base/RTCI420Buffer.h",
++          "objc/base/RTCLogging.h",
++          "objc/base/RTCMacros.h",
++          "objc/base/RTCMutableI420Buffer.h",
++          "objc/base/RTCMutableYUVPlanarBuffer.h",
++          "objc/base/RTCRtpFragmentationHeader.h",
++          "objc/base/RTCVideoCapturer.h",
++          "objc/base/RTCVideoCodecInfo.h",
++          "objc/base/RTCVideoDecoder.h",
++          "objc/base/RTCVideoDecoderFactory.h",
++          "objc/base/RTCVideoEncoder.h",
++          "objc/base/RTCVideoEncoderFactory.h",
++          "objc/base/RTCVideoEncoderQpThresholds.h",
++          "objc/base/RTCVideoEncoderSettings.h",
++          "objc/base/RTCVideoFrame.h",
++          "objc/base/RTCVideoFrameBuffer.h",
++          "objc/base/RTCVideoRenderer.h",
++          "objc/base/RTCYUVPlanarBuffer.h",
++          "objc/components/capturer/RTCCameraVideoCapturer.h",
++          "objc/components/capturer/RTCFileVideoCapturer.h",
++          "objc/components/renderer/metal/RTCMTLNSVideoView.h",
++          "objc/components/renderer/opengl/RTCNSGLVideoView.h",
++          "objc/components/renderer/opengl/RTCVideoViewShading.h",
++          "objc/components/video_codec/RTCCodecSpecificInfoH264.h",
++          "objc/components/video_codec/RTCDefaultVideoDecoderFactory.h",
++          "objc/components/video_codec/RTCDefaultVideoEncoderFactory.h",
++          "objc/components/video_codec/RTCH264ProfileLevelId.h",
++          "objc/components/video_codec/RTCVideoDecoderFactoryH264.h",
++          "objc/components/video_codec/RTCVideoDecoderH264.h",
++          "objc/components/video_codec/RTCVideoEncoderFactoryH264.h",
++          "objc/components/video_codec/RTCVideoEncoderH264.h",
++          "objc/components/video_frame_buffer/RTCCVPixelBuffer.h",
++          "objc/helpers/RTCDispatcher.h",
++        ]
++        if (!build_with_chromium) {
++          sources += [
++            "objc/api/logging/RTCCallbackLogger.h",
++            "objc/api/peerconnection/RTCFileLogger.h",
++          ]
++        }
++
++        deps = [
++          ":base_objc",
++          ":default_codec_factory_objc",
++          ":native_api",
++          ":native_video",
++          ":videocapture_objc",
++          ":videocodec_objc",
++          ":videotoolbox_objc",
++        ]
++
++        configs += [ "..:common_objc" ]
++
++        public_configs = [ ":common_config_objc" ]
++      }
+       mac_framework_bundle_with_umbrella_header("mac_framework_objc") {
+         info_plist = "objc/Info.plist"
+         output_name = "WebRTC"
+diff --git a/sdk/objc/components/video_codec/nalu_rewriter.cc b/sdk/objc/components/video_codec/nalu_rewriter.cc
+index ddf7346..05d15f5 100644
+--- a/sdk/objc/components/video_codec/nalu_rewriter.cc
++++ b/sdk/objc/components/video_codec/nalu_rewriter.cc
+@@ -269,8 +269,14 @@ bool H265CMSampleBufferToAnnexBBuffer(
+   // Get parameter set information.
+   int nalu_header_size = 0;
+   size_t param_set_count = 0;
+-  OSStatus status = CMVideoFormatDescriptionGetHEVCParameterSetAtIndex(
++  OSStatus status = noErr;
++  if (__builtin_available(macOS 10.13, *)) {
++    status = CMVideoFormatDescriptionGetHEVCParameterSetAtIndex(
+       description, 0, nullptr, nullptr, &param_set_count, &nalu_header_size);
++  } else {
++    RTC_LOG(LS_ERROR) << "H265 is unavailable on this system.";
++    return false;
++  }
+   if (status != noErr) {
+     RTC_LOG(LS_ERROR) << "Failed to get parameter set.";
+     return false;
+@@ -290,8 +296,13 @@ bool H265CMSampleBufferToAnnexBBuffer(
+     size_t param_set_size = 0;
+     const uint8_t* param_set = nullptr;
+     for (size_t i = 0; i < param_set_count; ++i) {
+-      status = CMVideoFormatDescriptionGetHEVCParameterSetAtIndex(
++      if (__builtin_available(macOS 10.13, *)) {
++        status = CMVideoFormatDescriptionGetHEVCParameterSetAtIndex(
+           description, i, &param_set, &param_set_size, nullptr, nullptr);
++      } else {
++        RTC_LOG(LS_ERROR) << "H265 is unavailable on this system.";
++        return false;
++      }
+       if (status != noErr) {
+         RTC_LOG(LS_ERROR) << "Failed to get parameter set.";
+         return false;
+@@ -527,9 +538,15 @@ CMVideoFormatDescriptionRef CreateH265VideoFormatDescription(
+ 
+   // Parse the SPS and PPS into a CMVideoFormatDescription.
+   CMVideoFormatDescriptionRef description = nullptr;
+-  OSStatus status = CMVideoFormatDescriptionCreateFromHEVCParameterSets(
++  OSStatus status = noErr;
++  if (__builtin_available(macOS 10.13, *)) {
++    status = CMVideoFormatDescriptionCreateFromHEVCParameterSets(
+       kCFAllocatorDefault, 3, param_set_ptrs, param_set_sizes, 4, nullptr,
+       &description);
++  } else {
++    RTC_LOG(LS_ERROR) << "H265 is unavailable on this system.";
++    return nullptr;
++  }
+   if (status != noErr) {
+     RTC_LOG(LS_ERROR) << "Failed to create video format description.";
+     return nullptr;
+diff --git a/test/BUILD.gn b/test/BUILD.gn
+index 2e22476..7d64957 100644
+--- a/test/BUILD.gn
++++ b/test/BUILD.gn
+@@ -768,7 +768,7 @@ rtc_library("encoder_settings") {
+   ]
+ }
+ 
+-rtc_library("rtc_expect_death") {
++rtc_source_set("rtc_expect_death") {
+   testonly = true
+   sources = [ "testsupport/rtc_expect_death.h" ]
+   deps = [ ":test_support" ]
+diff --git a/test/network/BUILD.gn b/test/network/BUILD.gn
+index fc56001..d3dd0e8 100644
+--- a/test/network/BUILD.gn
++++ b/test/network/BUILD.gn
+@@ -143,7 +143,7 @@ rtc_library("feedback_generator_unittest") {
+   ]
+ }
+ 
+-rtc_library("network_emulation_unittests") {
++rtc_source_set("network_emulation_unittests") {
+   testonly = true
+   deps = [
+     ":cross_traffic_unittest",
+diff --git a/test/pc/e2e/BUILD.gn b/test/pc/e2e/BUILD.gn
+index 8a5607a..8b28e64 100644
+--- a/test/pc/e2e/BUILD.gn
++++ b/test/pc/e2e/BUILD.gn
+@@ -42,7 +42,7 @@ if (rtc_include_tests) {
+   }
+ }
+ 
+-rtc_library("peer_connection_quality_test_params") {
++rtc_source_set("peer_connection_quality_test_params") {
+   visibility = [ "*" ]
+   testonly = true
+   sources = [ "peer_connection_quality_test_params.h" ]
+@@ -62,7 +62,7 @@ rtc_library("peer_connection_quality_test_params") {
+   ]
+ }
+ 
+-rtc_library("encoded_image_data_injector_api") {
++rtc_source_set("encoded_image_data_injector_api") {
+   visibility = [ "*" ]
+   testonly = true
+   sources = [ "analyzer/video/encoded_image_data_injector.h" ]
+diff --git a/test/pc/e2e/analyzer/audio/default_audio_quality_analyzer.cc b/test/pc/e2e/analyzer/audio/default_audio_quality_analyzer.cc
+index b8f1740..4de32d7 100644
+--- a/test/pc/e2e/analyzer/audio/default_audio_quality_analyzer.cc
++++ b/test/pc/e2e/analyzer/audio/default_audio_quality_analyzer.cc
+@@ -10,6 +10,8 @@
+ 
+ #include "test/pc/e2e/analyzer/audio/default_audio_quality_analyzer.h"
+ 
++#include <cstring> // fix build with -std=gnu++17
++
+ #include "api/stats_types.h"
+ #include "rtc_base/logging.h"
+ 
+diff --git a/test/pc/e2e/analyzer/video/default_encoded_image_data_injector.cc b/test/pc/e2e/analyzer/video/default_encoded_image_data_injector.cc
+index 2634e6e..11d7f4b 100644
+--- a/test/pc/e2e/analyzer/video/default_encoded_image_data_injector.cc
++++ b/test/pc/e2e/analyzer/video/default_encoded_image_data_injector.cc
+@@ -12,6 +12,7 @@
+ 
+ #include <algorithm>
+ #include <cstddef>
++#include <cstring> // fix build with -std=gnu++17
+ 
+ #include "absl/memory/memory.h"
+ #include "api/video/encoded_image.h"
+diff --git a/test/pc/e2e/analyzer/video/single_process_encoded_image_data_injector.cc b/test/pc/e2e/analyzer/video/single_process_encoded_image_data_injector.cc
+index ec0d26b..f51d57c 100644
+--- a/test/pc/e2e/analyzer/video/single_process_encoded_image_data_injector.cc
++++ b/test/pc/e2e/analyzer/video/single_process_encoded_image_data_injector.cc
+@@ -12,6 +12,7 @@
+ 
+ #include <algorithm>
+ #include <cstddef>
++#include <cstring> // fix build with -std=gnu++17
+ 
+ #include "absl/memory/memory.h"
+ #include "api/video/encoded_image.h"
+diff --git a/test/testsupport/jpeg_frame_writer.cc b/test/testsupport/jpeg_frame_writer.cc
+index 8bf1ee4..6817ee5 100644
+--- a/test/testsupport/jpeg_frame_writer.cc
++++ b/test/testsupport/jpeg_frame_writer.cc
+@@ -65,7 +65,7 @@ bool JpegFrameWriter::WriteFrame(const VideoFrame& input_frame, int quality) {
+   cinfo.image_width = input_frame.width();
+   cinfo.image_height = input_frame.height();
+   cinfo.input_components = kColorPlanes;
+-  cinfo.in_color_space = JCS_EXT_BGR;
++  cinfo.in_color_space = JCS_RGB; // JCS_EXT_BGR; <- this only in _turbo
+   jpeg_set_defaults(&cinfo);
+   jpeg_set_quality(&cinfo, quality, TRUE);
+ 
+diff --git a/video/BUILD.gn b/video/BUILD.gn
+index 14109c3..21d768b 100644
+--- a/video/BUILD.gn
++++ b/video/BUILD.gn
+@@ -242,7 +242,7 @@ rtc_library("video_stream_encoder_impl") {
+ }
+ 
+ if (rtc_include_tests) {
+-  rtc_library("video_mocks") {
++  rtc_source_set("video_mocks") {
+     testonly = true
+     sources = [ "test/mock_video_stream_encoder.h" ]
+     deps = [
+diff --git a/webrtc.gni b/webrtc.gni
+index 96b654a..636d1ce 100644
+--- a/webrtc.gni
++++ b/webrtc.gni
+@@ -12,7 +12,7 @@ import("//build/config/sanitizers/sanitizers.gni")
+ import("//build/config/sysroot.gni")
+ import("//build/config/ui.gni")
+ import("//build_overrides/build.gni")
+-import("//build_overrides/ssl/ssl.gni")
++#import("//build_overrides/ssl/ssl.gni")
+ 
+ if (!build_with_chromium && is_component_build) {
+   print("The Gn argument `is_component_build` is currently " +
+@@ -37,6 +37,25 @@ if (is_mac) {
+ }
+ 
+ declare_args() {
++  # Allow providing external ffmpeg
++  rtc_build_ffmpeg = true
++
++  # Used to specify an external ffmpeg include path when not compiling the
++  # library that comes with WebRTC (i.e. rtc_build_ffmpeg == 0).
++  rtc_ffmpeg_root = ""
++
++  # Used to specify an external ffmpeg libs.
++  rtc_ffmpeg_libs = []
++
++  # Used to specify and external opus include path when not compiling the
++  # library that comes with WebRTC (i.e. rtc_build_opus == 0).
++  rtc_opus_root = ""
++
++  # Used to specify an external opus libs.
++  rtc_opus_libs = []
++}
++
++declare_args() {
+   # Setting this to true will make RTC_EXPORT (see rtc_base/system/rtc_export.h)
+   # expand to code that will manage symbols visibility.
+   rtc_enable_symbol_export = false
+@@ -84,7 +103,10 @@ declare_args() {
+ 
+   # Used to specify an external OpenSSL include path when not compiling the
+   # library that comes with WebRTC (i.e. rtc_build_ssl == 0).
+-  rtc_ssl_root = owt_openssl_header_root
++  rtc_ssl_root = "" # owt_openssl_header_root
++
++  # Used to specify an external OpenSSL libs.
++  rtc_ssl_libs = []
+ 
+   # Selects fixed-point code where possible.
+   rtc_prefer_fixed_point = false
+@@ -151,7 +173,7 @@ declare_args() {
+   # Enabling H264 when building with MSVC is currently not supported, see
+   # bugs.webrtc.org/9213#c13 for more info.
+   rtc_use_h264 =
+-      proprietary_codecs && !is_android && !is_ios && !(is_win && !is_clang)
++      proprietary_codecs && !is_android && !is_ios && !(is_win && !is_clang && rtc_build_ffmpeg)
+ 
+   # By default, use normal platform audio support or dummy audio, but don't
+   # use file-based audio playout and record.
+@@ -213,7 +235,7 @@ declare_args() {
+   rtc_build_libvpx = !build_with_mozilla
+   rtc_libvpx_build_vp9 = !build_with_mozilla
+   rtc_build_opus = !build_with_mozilla
+-  rtc_build_ssl = !owt_use_openssl
++  rtc_build_ssl = !build_with_mozilla # owt_use_openssl
+   rtc_build_usrsctp = !build_with_mozilla
+ 
+   # Enable libevent task queues on platforms that support it.
+@@ -619,7 +641,8 @@ template("rtc_static_library") {
+ # For the same reason, testonly targets will always be expanded to
+ # source_set in order to be sure that tests are present in the test binary.
+ template("rtc_library") {
+-  if (is_component_build || (defined(invoker.testonly) && invoker.testonly)) {
++  # if (is_component_build || (defined(invoker.testonly) && invoker.testonly)) {
++  if (is_component_build) {
+     target_type = "source_set"
+   } else {
+     target_type = "static_library"
