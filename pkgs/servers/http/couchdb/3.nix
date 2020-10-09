@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, erlang, icu, openssl, spidermonkey
+{ stdenv, fetchurl, erlang, icu, openssl, spidermonkey_68
 , coreutils, bash, makeWrapper, python3 }:
 
 stdenv.mkDerivation rec {
@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "1vgqj3zsrkdqgnwzji3mqkapnfd6kq466f5xnya0fvzzl6bcfrs8";
   };
 
-  buildInputs = [ erlang icu openssl spidermonkey (python3.withPackages(ps: with ps; [ requests ]))];
+  buildInputs = [ erlang icu openssl spidermonkey_68 (python3.withPackages(ps: with ps; [ requests ]))];
   postPatch = ''
-    substituteInPlace src/couch/rebar.config.script --replace '/usr/include/mozjs-68' "${spidermonkey.dev}/include/mozjs-68"
+    substituteInPlace src/couch/rebar.config.script --replace '/usr/include/mozjs-68' "${spidermonkey_68.dev}/include/mozjs-68"
     patchShebangs bin/rebar
   '';
 
