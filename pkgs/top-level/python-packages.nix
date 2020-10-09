@@ -4163,6 +4163,8 @@ in {
 
   onnx = callPackage ../development/python-modules/onnx { };
 
+  onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common { };
+
   openant = callPackage ../development/python-modules/openant { };
 
   openapi-spec-validator = callPackage ../development/python-modules/openapi-spec-validator { };
