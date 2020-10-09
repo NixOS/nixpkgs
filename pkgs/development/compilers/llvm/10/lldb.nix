@@ -1,5 +1,6 @@
 { stdenv
-, fetch
+, wasmtime
+, fetchFromGitHub
 , cmake
 , zlib
 , ncurses
@@ -20,7 +21,14 @@ stdenv.mkDerivation (rec {
   pname = "lldb";
   inherit version;
 
-  src = fetch pname "051p5b04y6z3g730rmc2n2v71lipbw7k69riww3a6sl74myfiaq7";
+  src = fetchFromGitHub {
+    owner  = "ggreif";
+    repo   = "llvm-project";
+    rev    = "a3ee0c83fe6027d957fd01e2dfde1db451ff0432";
+    sha256 = "1hw3irivgl7ngg2zv8d2cl8gh360f04hqx650jh6a4y6fkkzg1r6";
+  };
+
+  sourceRoot = "source/${pname}";
 
   patches = [ ./lldb-procfs.patch ];
 

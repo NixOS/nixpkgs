@@ -7,12 +7,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "${pname}";
-    rev = "v${version}";
-    sha256 = "01k1fpk2qp4kv0xr4f0xmrjkr98j5ws48r1aks8l80mffs4ynqfr";
+    rev = "dev";
+    sha256 = "11nwl99n42izsw1r14zf8kirjvdcwqazpi19kxd8j4ih9b5fjsca";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "0vghcs1nbxlkmw9wfikzb1ndscx7fkmgv5q8dnfcisl05zpkj7si";
+  cargoSha256 = "03f3rjilhg8ky0hns2hy4lzaxhgyr4yxm8id4lycm3qvzpk1mnbn";
 
   nativeBuildInputs = [ python cmake clang ];
   buildInputs = [ llvmPackages.libclang ] ++
