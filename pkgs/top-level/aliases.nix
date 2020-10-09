@@ -662,6 +662,8 @@ mapAliases ({
   youtubeDL = youtube-dl;  # added 2014-10-26
   zdfmediathk = mediathekview; # added 2019-01-19
   gnome_user_docs = gnome-user-docs; # added 2019-11-20
+  # spidermonkey is not ABI upwards-ompatible, so only allow this for nix-shell
+  spidermonkey = spidermonkey_78; # added 2020-10-09
 
   # TODO(ekleog): add ‘wasm’ alias to ‘ocamlPackages.wasm’ after 19.03
   # branch-off
