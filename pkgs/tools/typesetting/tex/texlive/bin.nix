@@ -150,7 +150,6 @@ core = stdenv.mkDerivation rec {
       "luatex" "luajittex" "mp" "pmp" "upmp" "mf" # cairo would bring in X and more
       "xetex" "bibtexu" "bibtex8" "bibtex-x" "upmendex" # ICU isn't small
     ] ++ stdenv.lib.optional (stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) "mfluajit")
-    ++ [ "--without-system-harfbuzz" "--without-system-icu" ] # bogus configure
     ;
 
   enableParallelBuilding = true;
@@ -193,9 +192,6 @@ core = stdenv.mkDerivation rec {
     mkdir -p "$doc/doc"
     mv "$out"/share/{man,info} "$doc"/doc
   '' + cleanBrokenLinks;
-
-  # needed for poppler and xpdf
-  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++14";
 
   setupHook = ./setup-hook.sh; # TODO: maybe texmf-nix -> texmf (and all references)
   passthru = { inherit version buildInputs; };
