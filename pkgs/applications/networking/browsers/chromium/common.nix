@@ -15,7 +15,7 @@
 , glibc
 , libXScrnSaver, libXcursor, libXtst, libGLU, libGL
 , protobuf, speechd, libXdamage, cups
-, ffmpeg_3, libxslt, libxml2, at-spi2-core
+, ffmpeg, libxslt, libxml2, at-spi2-core
 , jre8
 , pipewire_0_2
 
@@ -76,11 +76,16 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "libwebp" "libxslt" "opus" "snappy" "libpng"
-    # "zlib" # version 77 reports unresolved dependency on //third_party/zlib:zlib_config
-    # "libjpeg" # fails with multiple undefined references to chromium_jpeg_*
+    "ffmpeg"
+    "flac"
+    "libjpeg"
+    "libpng"
+    "libwebp"
+    "libxslt"
+    "opus"
+    "snappy"
+    "zlib"
     # "re2" # fails with linker errors
-    # "ffmpeg" # https://crbug.com/731766
     # "harfbuzz-ng" # in versions over 63 harfbuzz and freetype are being built together
                     # so we can't build with one from system and other from source
   ];
@@ -95,7 +100,7 @@ let
     libpng libcap
     xdg_utils minizip libwebp
     libusb1 re2 zlib
-    ffmpeg_3 libxslt libxml2
+    ffmpeg libxslt libxml2
     nasm
     # harfbuzz # in versions over 63 harfbuzz and freetype are being built together
                # so we can't build with one from system and other from source
