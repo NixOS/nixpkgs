@@ -46,7 +46,7 @@ stdenv.mkDerivation (rec {
   hardeningDisable = [ "format" ];
 
   cmakeFlags = [
-    "-DCMAKE_CXX_FLAGS=-fno-rtti"
+    "-DLLVM_ENABLE_RTTI=OFF"
     "-DClang_DIR=${clang-unwrapped}/lib/cmake"
     "-DLLVM_EXTERNAL_LIT=${lit}/bin/lit"
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
