@@ -25,6 +25,8 @@ self: super: {
   hls-ghcide = self.callPackage ../tools/haskell/haskell-language-server/hls-ghcide.nix { };
   hls-brittany = self.callPackage ../tools/haskell/haskell-language-server/hls-brittany.nix { };
 
+  nix-output-monitor = self.callPackage ../../tools/nix/nix-output-monitor { };
+
   # cabal2nix --revision <rev> https://github.com/hasura/ci-info-hs.git
   ci-info = self.callPackage ../misc/haskell/hasura/ci-info {};
   # cabal2nix --revision <rev> https://github.com/hasura/pg-client-hs.git
