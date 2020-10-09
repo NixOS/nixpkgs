@@ -161,11 +161,10 @@ let
       #
       # ++ optionals (channel == "dev") [ ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" ) ]
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
-    ]; # TODO: VA-API patches (we should be able to drop enable-video-acceleration-on-linux.patch now):
-    # ++ optionals (useVaapi && versionRange "68" "86") [ # Improvements for the VA-API build:
-    #   ./patches/enable-vdpau-support-for-nvidia.patch # https://aur.archlinux.org/cgit/aur.git/tree/vdpau-support.patch?h=chromium-vaapi
-    #   ./patches/enable-video-acceleration-on-linux.patch # Can be controlled at runtime (i.e. without rebuilding Chromium)
-    # ];
+    ] ++ optionals (useVaapi) [
+      # Check for enable-accelerated-video-decode on Linux:
+      (githubPatch "54deb9811ca9bd2327def5c05ba6987b8c7a0897" "11jvxjlkzz1hm0pvfyr88j7z3zbwzplyl5idkx92l2lzv4459c8d")
+    ];
 
     postPatch = ''
       # Required for patchShebangs (unsupported interpreter directive, basename: invalid option -- '*', etc.):
