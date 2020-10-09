@@ -1,7 +1,7 @@
 { fetchurl, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
 , glib, pango, cairo, atk, gdk-pixbuf, gtk2, cups, nspr, nss, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_3, curl, zlib, gnome3
-, at-spi2-atk, at-spi2-core, libpulseaudio, libdrm
+, at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa
 }:
 
 let
@@ -40,6 +40,7 @@ let
     libnotify
     libpng
     libpulseaudio
+    mesa
     nss
     pango
     stdenv.cc.cc
