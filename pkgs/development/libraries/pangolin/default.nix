@@ -15,18 +15,18 @@ stdenv.mkDerivation {
     sha256 = "0pfbaarlsw7f7cmsppm7m13nz0k530wwwyczy2l9k448p3v7x9j0";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig doxygen ]; 
+  nativeBuildInputs = [ cmake pkgconfig doxygen ];
 
-  buildInputs = [ 
-    libGL 
-    glew 
-    xorg.libX11 
-    ffmpeg_3 
-    python3 
-    libjpeg 
-    libpng 
-    libtiff 
-    eigen 
+  buildInputs = [
+    libGL
+    glew
+    xorg.libX11
+    ffmpeg_3
+    python3
+    libjpeg
+    libpng
+    libtiff
+    eigen
   ]
   ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
 
