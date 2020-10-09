@@ -66,7 +66,7 @@ let
       stringLength sub substring tail;
     inherit (trivial) id const pipe concat or and bitAnd bitOr bitXor
       bitNot boolToString mergeAttrs flip mapNullable inNixShell min max
-      importJSON warn info showWarnings nixpkgsVersion version mod compare
+      importJSON importTOML warn info showWarnings nixpkgsVersion version mod compare
       splitByAndCompare functionArgs setFunctionArgs isFunction toHexString toBaseDigits;
     inherit (fixedPoints) fix fix' converge extends composeExtensions
       makeExtensible makeExtensibleWithCustomName;
