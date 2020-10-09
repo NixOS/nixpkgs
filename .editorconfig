@@ -56,6 +56,8 @@ indent_size = unset
 
 [deps.nix]
 insert_final_newline = unset
+[pkgs/tools/networking/dd-agent/*-deps.nix]
+insert_final_newline = unset
 
 [eggs.nix]
 trim_trailing_whitespace = unset
@@ -64,6 +66,8 @@ trim_trailing_whitespace = unset
 insert_final_newline = unset
 
 [node-{composition,packages}.nix]
+insert_final_newline = unset
+[node-packages-generated.nix]
 insert_final_newline = unset
 
 [nixos/modules/services/networking/ircd-hybrid/*.{conf,in}]
@@ -98,7 +102,7 @@ trim_trailing_whitespace = unset
 [pkgs/development/mobile/androidenv/generated/{addons,packages}.nix]
 trim_trailing_whitespace = unset
 
-[pkgs/development/node-packages/node-packages.nix]
+[pkgs/development/node-packages/composition.nix]
 insert_final_newline = unset
 
 [pkgs/servers/dict/wordnet_structures.py]
