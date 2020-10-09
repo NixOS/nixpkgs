@@ -1211,7 +1211,7 @@ self: super: {
   # we need an override because ghcide is tracking haskell-lsp closely.
   ghcide = dontCheck (super.ghcide.overrideScope (self: super: {
     hie-bios = dontCheck super.hie-bios_0_7_1;
-    lsp-test = dontCheck self.lsp-test_0_11_0_6;
+    lsp-test = dontCheck self.lsp-test_0_11_0_7;
   }));
 
   # hasn‘t bumped upper bounds
@@ -1484,7 +1484,7 @@ self: super: {
     ghcide = dontCheck hls-ghcide;
     # we are faster than stack here
     hie-bios = dontCheck super.hie-bios_0_7_1;
-    lsp-test = dontCheck super.lsp-test_0_11_0_6;
+    lsp-test = dontCheck super.lsp-test_0_11_0_7;
     # fourmolu can‘t compile with an older aeson
     aeson = dontCheck super.aeson_1_5_2_0;
     # brittany has an aeson upper bound of 1.5
