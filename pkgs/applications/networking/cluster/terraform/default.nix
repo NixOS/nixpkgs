@@ -62,21 +62,27 @@ let
 
           # Make providers available in Terraform 0.13 and 0.12 search paths.
           pluginDir = lib.concatMapStrings (pl: let
-            inherit (pl) repo version GOOS GOARCH;
-            inherit (pl.passthru) providerSourceAddress;
+            inherit (pl) version GOOS GOARCH;
+
+            pname = pl.pname or (throw "${pl.name} is missing a pname attribute");
+
+            # This is just the name, without the terraform-provider- prefix
+            plugin_name = lib.removePrefix "terraform-provider-" pname;
+
+            slug = pl.passthru.provider-source-address or "registry.terraform.io/nixpkgs/${plugin_name}";
 
             shim = writeText "shim" ''
               #!${runtimeShell}
-              exec ${pl}/bin/${repo}_v${version} \$@
+              exec ${pl}/bin/${pname}_v${version} "$@"
             '';
             in ''
-              TF_0_13_PROVIDER_PATH=$out/plugins/${providerSourceAddress}/${version}/${GOOS}_${GOARCH}/${repo}_v${version}
+              TF_0_13_PROVIDER_PATH=$out/plugins/${slug}/${version}/${GOOS}_${GOARCH}/${pname}_v${version}
               mkdir -p "$(dirname $TF_0_13_PROVIDER_PATH)"
 
               cp ${shim} "$TF_0_13_PROVIDER_PATH"
               chmod +x "$TF_0_13_PROVIDER_PATH"
 
-              TF_0_12_PROVIDER_PATH=$out/plugins/${repo}_v${version}
+              TF_0_12_PROVIDER_PATH=$out/plugins/${pname}_v${version}
 
               cp ${shim} "$TF_0_12_PROVIDER_PATH"
               chmod +x "$TF_0_12_PROVIDER_PATH"
