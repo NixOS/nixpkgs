@@ -16,21 +16,19 @@
 
 mkDerivation rec {
   pname = "ppsspp";
-  version = "1.9.4";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "hrydgard";
-    repo = "ppsspp";
+    repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0ivi0dcfxwa4nz19amki80qacnjhqr42f0ihyby1scxafl3nq55c";
+    sha256 = "sha256-W41Poq5S+opkasIGYo13SQZWQF1HjfFnH7u9DW5HNA0=";
   };
 
   postPatch = ''
-    substituteInPlace git-version.cmake \
-      --replace unknown ${src.rev}
-    substituteInPlace UI/NativeApp.cpp \
-      --replace /usr/share $out/share
+    substituteInPlace git-version.cmake --replace unknown ${src.rev}
+    substituteInPlace UI/NativeApp.cpp --replace /usr/share $out/share
   '';
 
   nativeBuildInputs = [ cmake pkgconfig python3 ];
@@ -52,6 +50,7 @@ mkDerivation rec {
     "-DUSE_SYSTEM_LIBZIP=ON"
     "-DUSE_SYSTEM_SNAPPY=ON"
     "-DUSING_QT_UI=ON"
+    "-DHEADLESS=OFF"
   ];
 
   installPhase = ''
@@ -61,9 +60,11 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A PSP emulator for Android, Windows, Mac and Linux, written in C++";
+    description = "A HLE Playstation Portable emulator, written in C++";
     homepage = "https://www.ppsspp.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.linux;
   };
 }
+# TODO: add SDL headless port
