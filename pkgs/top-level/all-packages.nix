@@ -1106,6 +1106,8 @@ in
 
   google-amber = callPackage ../tools/graphics/amber { };
 
+  hime = callPackage ../tools/inputmethods/hime {};
+
   hpe-ltfs = callPackage ../tools/backup/hpe-ltfs { };
 
   http2tcp = callPackage ../tools/networking/http2tcp { };
@@ -5616,13 +5618,6 @@ in
   mytetra = libsForQt5.callPackage ../applications/office/mytetra { };
 
   nabi = callPackage ../tools/inputmethods/nabi { };
-
-  hime = callPackage ../tools/inputmethods/hime {};
-
-  hime-all = callPackage ../tools/inputmethods/hime {
-    enableChewing = true;
-    enableAnthy = true;
-  };
 
   nahid-fonts = callPackage ../data/fonts/nahid-fonts { };
 
