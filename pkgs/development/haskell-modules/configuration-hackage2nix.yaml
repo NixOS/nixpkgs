@@ -5677,6 +5677,7 @@ broken-packages:
   - hako
   - hakyll
   - hakyll-agda
+  - hakyll-alectryon
   - hakyll-blaze-templates
   - hakyll-contrib
   - hakyll-contrib-csv
@@ -6078,6 +6079,7 @@ broken-packages:
   - hedis-tags
   - hedn-functor
   - hedra
+  - heidi
   - hein
   - heist-aeson
   - heist-async
@@ -8685,6 +8687,7 @@ broken-packages:
   - polysemy-http
   - polysemy-optics
   - polysemy-RandomFu
+  - polysemy-resume
   - polysemy-test
   - polysemy-time
   - polysemy-webserver
@@ -9657,7 +9660,9 @@ broken-packages:
   - Shpadoinkle-backend-pardiff
   - Shpadoinkle-backend-snabbdom
   - Shpadoinkle-backend-static
+  - Shpadoinkle-examples
   - Shpadoinkle-html
+  - Shpadoinkle-lens
   - Shpadoinkle-router
   - Shpadoinkle-widgets
   - shpider
