@@ -68,7 +68,7 @@ function fetchGit (outPath, url) {
   const varName = outPath.replace(/\//g, '_')
 
   const [repo, checkout] = Array.isArray(url) ? url : url.split('@')
-  append(`HASH=$(cached "${(repo + checkout).replace(/[^a-z0-9-.]/gmi, '_')}" nix-prefetch-git ${repo} ${checkout})`)
+  append(`HASH=$(cached "${(repo + checkout).replace(/[^a-z0-9-.]/gmi, '_')}" nix-prefetch-git ${repo} ${checkout} | jq -r .sha256)`)
   writeNix('SRC', `${varName} = fetchgit { url = "${repo}"; rev = "${checkout}"; sha256 = "$HASH" }`)
   writeNix('CONFIGURE', `mkdir -p ${path.dirname(outPath)} && cp -rp \${${varName}} ${outPath}`)
 }
