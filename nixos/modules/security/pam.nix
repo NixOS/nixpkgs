@@ -653,7 +653,7 @@ in
           xlink:href="https://developers.yubico.com/pam-u2f/">here</link>.
         '';
       };
-      
+
       appId = mkOption {
         default = null;
         type = with types; nullOr str;
