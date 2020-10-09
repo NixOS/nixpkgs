@@ -25,6 +25,6 @@ stdenv.mkDerivation {
     description = "Data matrix command-line utilities";
     license = stdenv.lib.licenses.lgpl2 ;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
