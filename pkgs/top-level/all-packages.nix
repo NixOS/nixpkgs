@@ -2286,6 +2286,8 @@ in
 
   nix-direnv = callPackage ../tools/misc/nix-direnv { };
 
+  nix-output-monitor = haskell.lib.justStaticExecutables (haskellPackages.nix-output-monitor);
+
   nix-template = callPackage ../tools/package-management/nix-template { };
 
   nixpkgs-pytools = with python3.pkgs; toPythonApplication nixpkgs-pytools;

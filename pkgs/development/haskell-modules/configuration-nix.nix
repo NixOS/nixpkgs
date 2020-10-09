@@ -782,6 +782,11 @@ self: super: builtins.intersectAttrs super {
     testToolDepends = [ pkgs.git pkgs.mercurial ];
   });
 
+  nix-output-monitor = overrideCabal super.nix-output-monitor {
+    # Can't ran the golden-tests with nix, because they call nix
+    testTarget = "unit-tests";
+  };
+
   haskell-language-server = overrideCabal super.haskell-language-server (drv: {
     postInstall = let
       inherit (pkgs.lib) concatStringsSep take splitString;
