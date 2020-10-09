@@ -2398,6 +2398,8 @@ in
 
   string-machine = callPackage ../applications/audio/string-machine { };
 
+  squeezer = callPackage ../applications/audio/squeezer { };
+
   bash-supergenpass = callPackage ../tools/security/bash-supergenpass { };
 
   swappy = callPackage ../applications/misc/swappy { gtk = gtk3; };
