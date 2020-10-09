@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/microsoft/onnxconverter-common/";
-    description = "functions and utilities for converting from variousAI frameworks to ONNX";
+    description = "Functions and utilities for converting from variousAI frameworks to ONNX";
     license = licenses.mit;
     maintainers = with maintainers; [ imalsogreg ];
   };
