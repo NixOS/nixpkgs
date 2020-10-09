@@ -20582,6 +20582,10 @@ in
 
   cpufrequtils = callPackage ../os-specific/linux/cpufrequtils { };
 
+  cpupower-gui = python3Packages.callPackage ../os-specific/linux/cpupower-gui {
+    inherit (pkgs) meson;
+  };
+
   cpuset = callPackage ../os-specific/linux/cpuset {
     pythonPackages = python3Packages;
   };
