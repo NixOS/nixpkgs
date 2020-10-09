@@ -1,24 +1,36 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, pythonOlder
+, fetchFromGitHub
 , oauthlib
 , requests
 , requests_oauthlib
+, freezegun
+, pytestCheckHook
+, requests-mock
 }:
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "4.0.0";
+  version = "4.1.0";
+  disabled = pythonOlder "3.5"; # uses type hints
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "148713395d51a57f1f3102eacbb9286a859fc5c18c066238a961a1acf189b930";
+  src = fetchFromGitHub {
+    owner = "jabesq";
+    repo = "netatmo-api-python";
+    rev = "v${version}";
+    sha256 = "0x3xq6ni9rl5k3vi0ydqafdzvza785ycnlgyikgqbkppbh3j33ig";
   };
 
   propagatedBuildInputs = [ oauthlib requests requests_oauthlib ];
 
-  # Upstream provides no unit tests.
-  doCheck = false;
+  checkInputs = [
+    freezegun
+    pytestCheckHook
+    requests-mock
+  ];
+
+  pythonImportsCheck = [ "pyatmo" ];
 
   meta = with lib; {
     description = "Simple API to access Netatmo weather station data";
