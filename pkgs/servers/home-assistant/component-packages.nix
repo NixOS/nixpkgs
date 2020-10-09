@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.115.6";
+  version = "0.116.2";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ ]; # missing inputs: accuweather
@@ -303,6 +303,7 @@
     "glances" = ps: with ps; [ ]; # missing inputs: glances_api
     "gntp" = ps: with ps; [ ]; # missing inputs: gntp
     "goalfeed" = ps: with ps; [ ]; # missing inputs: pysher
+    "goalzero" = ps: with ps; [ ]; # missing inputs: goalzero
     "gogogate2" = ps: with ps; [ ]; # missing inputs: gogogate2-api
     "google" = ps: with ps; [ google_api_python_client httplib2 oauth2client ];
     "google_assistant" = ps: with ps; [ aiohttp-cors ];
@@ -364,7 +365,7 @@
     "hunterdouglas_powerview" = ps: with ps; [ ]; # missing inputs: aiopvapi
     "hvv_departures" = ps: with ps; [ ]; # missing inputs: pygti
     "hydrawise" = ps: with ps; [ ]; # missing inputs: hydrawiser
-    "hyperion" = ps: with ps; [ ];
+    "hyperion" = ps: with ps; [ ]; # missing inputs: hyperion-py
     "ialarm" = ps: with ps; [ ]; # missing inputs: pyialarm
     "iammeter" = ps: with ps; [ ]; # missing inputs: iammeter
     "iaqualink" = ps: with ps; [ ]; # missing inputs: iaqualink
@@ -565,7 +566,8 @@
     "oem" = ps: with ps; [ ]; # missing inputs: oemthermostat
     "ohmconnect" = ps: with ps; [ defusedxml ];
     "ombi" = ps: with ps; [ ]; # missing inputs: pyombi
-    "onboarding" = ps: with ps; [ aiohttp-cors pillow ];
+    "omnilogic" = ps: with ps; [ ]; # missing inputs: omnilogic
+    "onboarding" = ps: with ps; [ aiohttp-cors pillow ]; # missing inputs: home-assistant-frontend
     "onewire" = ps: with ps; [ ]; # missing inputs: pyownet
     "onkyo" = ps: with ps; [ onkyo-eiscp ];
     "onvif" = ps: with ps; [ ha-ffmpeg ]; # missing inputs: WSDiscovery onvif-zeep-async
@@ -682,6 +684,7 @@
     "rpi_gpio" = ps: with ps; [ ]; # missing inputs: RPi.GPIO
     "rpi_gpio_pwm" = ps: with ps; [ ]; # missing inputs: pwmled
     "rpi_pfio" = ps: with ps; [ ]; # missing inputs: pifacecommon pifacedigitalio
+    "rpi_power" = ps: with ps; [ ]; # missing inputs: rpi-bad-power
     "rpi_rf" = ps: with ps; [ ]; # missing inputs: rpi-rf
     "rss_feed_template" = ps: with ps; [ aiohttp-cors ];
     "rtorrent" = ps: with ps; [ ];
@@ -762,7 +765,7 @@
     "spc" = ps: with ps; [ ]; # missing inputs: pyspcwebgw
     "speedtestdotnet" = ps: with ps; [ speedtest-cli ];
     "spider" = ps: with ps; [ ]; # missing inputs: spiderpy
-    "splunk" = ps: with ps; [ ];
+    "splunk" = ps: with ps; [ ]; # missing inputs: hass_splunk
     "spotcrime" = ps: with ps; [ ]; # missing inputs: spotcrime
     "spotify" = ps: with ps; [ aiohttp-cors spotipy ];
     "sql" = ps: with ps; [ sqlalchemy ];
@@ -809,7 +812,6 @@
     "tautulli" = ps: with ps; [ ]; # missing inputs: pytautulli
     "tcp" = ps: with ps; [ ];
     "ted5000" = ps: with ps; [ xmltodict ];
-    "teksavvy" = ps: with ps; [ ];
     "telegram" = ps: with ps; [ pysocks aiohttp-cors python-telegram-bot ];
     "telegram_bot" = ps: with ps; [ pysocks aiohttp-cors python-telegram-bot ];
     "tellduslive" = ps: with ps; [ ]; # missing inputs: tellduslive
@@ -957,6 +959,7 @@
     "zha" = ps: with ps; [ bellows pyserial zha-quirks zigpy-cc zigpy-deconz zigpy-xbee zigpy-zigate zigpy ]; # missing inputs: zigpy-znp
     "zhong_hong" = ps: with ps; [ ]; # missing inputs: zhong_hong_hvac
     "ziggo_mediabox_xl" = ps: with ps; [ ]; # missing inputs: ziggo-mediabox-xl
+    "zodiac" = ps: with ps; [ ];
     "zone" = ps: with ps; [ ];
     "zoneminder" = ps: with ps; [ zm-py ];
     "zwave" = ps: with ps; [ homeassistant-pyozw pydispatcher ];
