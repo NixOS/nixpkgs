@@ -8,24 +8,18 @@ let
   list = lib.importJSON ./providers.json;
 
   toDrv = name: data:
-    let
-      fallbackProviderSourceAddress = "nixpkgs/${data.owner}/${name}";
-      providerSourceAddress = data.provider-source-address or fallbackProviderSourceAddress;
-    in
-    buildGoPackage rec {
-      inherit (data) owner repo rev version sha256;
-      name = "${repo}-${version}";
-      goPackagePath = "github.com/${owner}/${repo}";
+    buildGoPackage {
+      pname = data.repo;
+      version = data.version;
+      goPackagePath = "github.com/${data.owner}/${data.repo}";
       subPackages = [ "." ];
       src = fetchFromGitHub {
-        inherit owner repo rev sha256;
+        inherit (data) owner repo rev sha256;
       };
       # Terraform allow checking the provider versions, but this breaks
       # if the versions are not provided via file paths.
-      postBuild = "mv $NIX_BUILD_TOP/go/bin/${repo}{,_v${version}}";
-      passthru = {
-        inherit providerSourceAddress;
-      };
+      postBuild = "mv $NIX_BUILD_TOP/go/bin/${data.repo}{,_v${data.version}}";
+      passthru = data;
     };
 
   # Google is now using the vendored go modules, which works a bit differently
