@@ -101,13 +101,7 @@ let
       libpng = pkgs.libpng12;
       giflib = pkgs.giflib_4_1;
     };
-    camlimages_4_1 = callPackage ../development/ocaml-modules/camlimages/4.1.nix {
-      giflib = pkgs.giflib_4_1;
-    };
-    camlimages =
-          if lib.versionOlder "4.06" ocaml.version
-          then callPackage ../development/ocaml-modules/camlimages { }
-          else camlimages_4_1;
+    camlimages = callPackage ../development/ocaml-modules/camlimages { };
 
     benchmark = callPackage ../development/ocaml-modules/benchmark { };
 
