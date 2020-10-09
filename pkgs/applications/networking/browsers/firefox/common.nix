@@ -22,7 +22,7 @@
 , ffmpegSupport ? true
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
 , waylandSupport ? true, libxkbcommon
-, ltoSupport ? true, overrideCC, buildPackages
+, ltoSupport ? stdenv.isLinux, overrideCC, buildPackages
 , gssSupport ? true, kerberos
 , pipewireSupport ? waylandSupport && webrtcSupport, pipewire
 
@@ -72,6 +72,7 @@
 
 assert stdenv.cc.libc or null != null;
 assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "pipewireSupport requires both wayland and webrtc support.";
+assert ltoSupport -> stdenv.isDarwin -> throw "LTO is broken on Darwin (see PR#19312).";
 
 let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
@@ -88,8 +89,14 @@ let
             then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
             else "/bin";
 
-  llvmPackages = buildPackages.llvmPackages_10;
+  # Darwin's stdenv provides the default llvmPackages version, match that since
+  # clang LTO on Darwin is broken so the stdenv is not being changed.
+  llvmPackages = if stdenv.isDarwin
+                 then buildPackages.llvmPackages
+                 else buildPackages.llvmPackages_10;
 
+  # When LTO for Darwin is fixed, the following will need updating as lld
+  # doesn't work on it. For now it is fine since ltoSupport implies no Darwin.
   buildStdenv = if ltoSupport
                 then overrideCC stdenv llvmPackages.lldClang
                 else stdenv;
@@ -256,7 +263,7 @@ buildStdenv.mkDerivation ({
   # LTO is done using clang and lld on Linux.
   # Darwin needs to use the default linker as lld is not supported (yet?):
   #   https://bugzilla.mozilla.org/show_bug.cgi?id=1538724
-  # elf-hack is broken when using clang:
+  # elf-hack is broken when using clang+lld:
   #   https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
   ++ lib.optionals ltoSupport [
     "--enable-lto"
