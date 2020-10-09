@@ -4,15 +4,15 @@
 }:
 
 let
-  version = "2019-09-26";
-  commit = "a9bf6bca0361b57c67e4627bf53363a7048457fd";
+  version = "2020-03-29";
+  commit = "6388a49e0f431d6d5fcbd152b8ae4fa8e87884ee";
 in stdenv.mkDerivation rec {
   pname = "wshowkeys-unstable";
   inherit version;
 
   src = fetchurl {
     url = "https://git.sr.ht/~sircmpwn/wshowkeys/archive/${commit}.tar.gz";
-    sha256 = "0b21z3csd3v4lw5b8a6lpx5gfsdk0gjmm8906sa72hyfd1p39b7g";
+    sha256 = "0iplmw13jmc8d3m307kc047zq8yqwm42kw9fpm270562i3p0qk4d";
   };
 
   nativeBuildInputs = [ meson pkg-config wayland ninja ];
@@ -30,6 +30,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://git.sr.ht/~sircmpwn/wshowkeys";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ primeos berbiche ];
   };
 }
