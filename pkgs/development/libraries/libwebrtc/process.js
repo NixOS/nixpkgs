@@ -27,6 +27,8 @@ let outScript = [`#!/bin/nix-shell
 
 set -xeuo pipefail
 
+CACHE=/tmp
+
 write_nix() {
   NIXFILE="$1"
   shift
@@ -37,6 +39,17 @@ pipe_nix() {
   NIXFILE="$1"
   shift
   cat >> "$NIXFILE"
+}
+
+cached() {
+  FILE="$CACHE/cipd_preprocess_cache_$1"
+  shift
+  if [ ! -e "$FILE".ok ]; then
+    "$@" | tee "$FILE"
+    touch "$FILE.ok"
+  else
+    cat "$FILE"
+  fi
 }
 
 `]
@@ -55,7 +68,7 @@ function fetchGit (outPath, url) {
   const varName = outPath.replace(/\//g, '_')
 
   const [repo, checkout] = Array.isArray(url) ? url : url.split('@')
-  append(`HASH=$(nix-prefetch-git ${repo} ${checkout} | jq -r .sha256)`)
+  append(`HASH=$(cached "${(repo + checkout).replace(/[^a-z0-9-.]/gmi, '_')}" nix-prefetch-git ${repo} ${checkout})`)
   writeNix('SRC', `${varName} = fetchgit { url = "${repo}"; rev = "${checkout}"; sha256 = "$HASH" }`)
   writeNix('CONFIGURE', `mkdir -p ${path.dirname(outPath)} && cp -rp \${${varName}} ${outPath}`)
 }
