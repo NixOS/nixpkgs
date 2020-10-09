@@ -1142,8 +1142,10 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
    </listitem>
    <listitem>
     <para>
-     The <literal>fontconfig</literal> module stopped generating fontconfig 2.10.x config and cache.
-     Fontconfig 2.10.x was removed from Nixpkgs - it hasn't been used in any nixpkgs package anymore.
+     The <literal>fontconfig</literal> module stopped generating config and cache files for fontconfig 2.10.x, the <filename>/etc/fonts/fonts.conf</filename> now belongs to the latest fontconfig, just like on other Linux distributions, and we will <link xlink:href="https://github.com/NixOS/nixpkgs/pull/95358">no longer</link> be versioning the config directories.
+    </para>
+    <para>
+     Fontconfig 2.10.x was removed from Nixpkgs since it hasn’t been used in any Nixpkgs package for years now.
     </para>
    </listitem>
    <listitem>
