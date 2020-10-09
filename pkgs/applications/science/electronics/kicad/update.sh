@@ -58,7 +58,6 @@ file="${here}/versions.nix"
 # just in case this runs in parallel
 tmp="${here}/,versions.nix.${RANDOM}"
 
-# libraries currently on github, move to $gitlab/libraries planned
 libs=( symbols templates footprints packages3d )
 
 get_rev="git ls-remote --heads --tags"
@@ -66,9 +65,6 @@ get_rev="git ls-remote --heads --tags"
 gitlab="https://gitlab.com/kicad"
 # append commit hash or tag
 gitlab_pre="https://gitlab.com/api/v4/projects/kicad%2Fcode%2Fkicad/repository/archive.tar.gz?sha="
-
-# append "-$lib/archive/[hash or tag].tar.gz
-github="https://github.com/kicad/kicad"
 
 # not a lib, but separate and already moved to gitlab
 i18n="${gitlab}/code/kicad-i18n.git"
@@ -147,8 +143,8 @@ for version in "${all_versions[@]}"; do
 
           for lib in "${libs[@]}"; do
             echo "Checking ${lib}" >&2
-            url="${github}-${lib}.git"
-            lib_rev="$(${get_rev} "${url}" "${version}" | cut -f1)"
+            url="${gitlab}/libraries/kicad-${lib}.git"
+            lib_rev="$(${get_rev} "${url}" "${version}" | cut -f1 | head -n1)"
             has_rev="$(grep -sm 1 "\"${pname}\"" -A 19 "${file}" | grep -sm 1 "${lib_rev}" || true)"
             has_hash="$(grep -sm 1 "\"${pname}\"" -A 20 "${file}" | grep -sm 1 "${lib}.sha256")"
             if [[ -n ${has_rev} && -n ${has_hash} && -z ${clean} ]]; then
@@ -161,7 +157,7 @@ for version in "${all_versions[@]}"; do
               esac
               printf "\"%s\";\n" "${lib_rev}"
               printf "%8s%s.sha256 =\t\"%s\";\n" "" \
-              "${lib}" "$(${prefetch} "${github}-${lib}/archive/${lib_rev}.tar.gz")"
+                "${lib}" "$(${prefetch} "https://gitlab.com/api/v4/projects/kicad%2Flibraries%2Fkicad-${lib}/repository/archive.tar.gz?sha=${lib_rev}")"
               count=$((count+1))
             fi
           done
@@ -172,7 +168,7 @@ for version in "${all_versions[@]}"; do
     printf "\nReusing old %s\n" "${pname}" >&2
     grep -sm 1 "\"${pname}\"" -A 23 "${file}"
   fi
-done 
+done
 printf "}\n"
 } > "${tmp}"
 
