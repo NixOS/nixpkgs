@@ -556,6 +556,7 @@ mapAliases ({
   source-han-serif-traditional-chinese = source-han-serif;
 
   net_snmp = net-snmp; # added 2019-12-21
+  oracleXE = throw "oracleXE has been removed, as it's heavily outdated and unmaintained."; # added 2020-10-09
   spaceOrbit = space-orbit; # addewd 2016-05-23
   speech_tools = speech-tools; # added 2018-04-25
   speedtest_cli = speedtest-cli;  # added 2015-02-17
