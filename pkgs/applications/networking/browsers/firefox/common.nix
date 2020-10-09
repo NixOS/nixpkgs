@@ -253,14 +253,15 @@ buildStdenv.mkDerivation ({
   ]
   ++ lib.optional (buildStdenv.isDarwin) "--disable-xcode-checks"
   ++ lib.optional (!ltoSupport) "--with-clang-path=${llvmPackages.clang}/bin/clang"
-  # LTO is done using clang and lld.
+  # LTO is done using clang and lld on Linux.
+  # Darwin needs to use the default linker as lld is not supported (yet?):
+  #   https://bugzilla.mozilla.org/show_bug.cgi?id=1538724
   # elf-hack is broken when using clang:
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
+  #   https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
   ++ lib.optionals ltoSupport [
     "--enable-lto"
-    "--enable-linker=lld"
     "--disable-elf-hack"
-  ]
+  ] ++ lib.optional (ltoSupport && !buildStdenv.isDarwin) "--enable-linker=lld"
 
   ++ flag alsaSupport "alsa"
   ++ flag pulseaudioSupport "pulseaudio"
