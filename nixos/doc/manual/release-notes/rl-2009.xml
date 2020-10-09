@@ -1217,5 +1217,20 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
     </para>
    </listitem>
   </itemizedlist>
+  <itemizedlist>
+    <listitem>
+      <para>
+        For AMD GPUs, Vulkan can now be used by adding <literal>amdvlk</literal>
+        to <literal>hardware.opengl.extraPackages</literal>.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        Similarly, still for AMD GPUs, the ROCm OpenCL stack can now be used by adding
+        <literal>rocm-opencl-icd</literal> to
+        <literal>hardware.opengl.extraPackages</literal>.
+      </para>
+    </listitem>
+  </itemizedlist>
  </section>
 </section>
