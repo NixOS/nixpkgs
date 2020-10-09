@@ -66,6 +66,12 @@
    </listitem>
    <listitem>
     <para>
+     Python 3.5 has reached its upstream EOL at the end of September 2020: it
+     has been removed from the list of available packages.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      Two new options, <link linkend="opt-services.openssh.authorizedKeysCommand">authorizedKeysCommand</link>
      and <link linkend="opt-services.openssh.authorizedKeysCommandUser">authorizedKeysCommandUser</link>, have
      been added to the <literal>openssh</literal> module. If you have <literal>AuthorizedKeysCommand</literal>
