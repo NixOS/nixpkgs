@@ -9497,6 +9497,8 @@ in
    enableX11 = true;
   };
 
+  miranda = callPackage ../development/compilers/miranda {};
+
   mkcl = callPackage ../development/compilers/mkcl {};
 
   mlkit = callPackage ../development/compilers/mlkit {};
