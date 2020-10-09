@@ -16425,18 +16425,15 @@ in
   };
 
   couchdb = callPackage ../servers/http/couchdb {
-    spidermonkey = spidermonkey_1_8_5;
     sphinx = python27Packages.sphinx;
     erlang = erlangR19;
   };
 
   couchdb2 = callPackage ../servers/http/couchdb/2.0.0.nix {
-    spidermonkey = spidermonkey_1_8_5;
     erlang = erlangR21;
   };
 
   couchdb3 = callPackage ../servers/http/couchdb/3.nix {
-    spidermonkey = spidermonkey_68;
     erlang = erlangR22;
   };
 
