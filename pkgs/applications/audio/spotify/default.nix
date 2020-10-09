@@ -1,7 +1,7 @@
 { fetchurl, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
 , glib, pango, cairo, atk, gdk-pixbuf, gtk2, cups, nspr, nss, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_3, curl, zlib, gnome3
-, at-spi2-atk, at-spi2-core, libpulseaudio
+, at-spi2-atk, at-spi2-core, libpulseaudio, libdrm
 }:
 
 let
@@ -19,7 +19,6 @@ let
   # https://github.com/canonical-websites/snapcraft.io/blob/master/webapp/publisher/snaps/views.py
   rev = "42";
 
-
   deps = [
     alsaLib
     atk
@@ -36,6 +35,7 @@ let
     gdk-pixbuf
     glib
     gtk2
+    libdrm
     libgcrypt
     libnotify
     libpng
