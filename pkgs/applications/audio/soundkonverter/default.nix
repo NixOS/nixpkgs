@@ -3,7 +3,7 @@
   mkDerivation, fetchFromGitHub, fetchpatch, lib, makeWrapper,
   cmake, extra-cmake-modules, pkgconfig,
   libkcddb, kconfig, kconfigwidgets, ki18n, kdelibs4support, kio, solid, kwidgetsaddons, kxmlgui,
-  qtbase, phonon, 
+  qtbase, phonon,
   taglib,
   # optional backends
   withCD ? true, cdparanoia,
@@ -43,7 +43,7 @@ let runtimeDeps = []
     ++ lib.optionals withMp3 [ lame mp3gain ]
     ++ lib.optionals withAac [  faad2 aacgain ];
 
-in 
+in
 mkDerivation rec {
   name = "soundkonverter";
   version = "3.0.1";
@@ -67,7 +67,7 @@ mkDerivation rec {
   propagatedBuildInputs = [ libkcddb kconfig kconfigwidgets ki18n kdelibs4support kio solid kwidgetsaddons kxmlgui qtbase phonon];
   buildInputs = [ taglib ] ++ runtimeDeps;
   # encoder plugins go to ${out}/lib so they're found by kbuildsycoca5
-  cmakeFlags = [ "-DCMAKE_INSTALL_PREFIX=$out" ]; 
+  cmakeFlags = [ "-DCMAKE_INSTALL_PREFIX=$out" ];
   sourceRoot = "source/src";
   # add runt-time deps to PATH
   postInstall = ''
@@ -79,26 +79,26 @@ mkDerivation rec {
     description = "Audio file converter, CD ripper and Replay Gain tool";
     longDescription = ''
       soundKonverter is a frontend to various audio converters.
-      
+
       The key features are:
       - Audio file conversion
       - Replay Gain calculation
       - CD ripping
-      
+
       soundKonverter supports reading and writing tags and covers for many formats, so they are preserved when converting files.
-      
+
       It is extendable by plugins and supports many backends including:
-      
+
       - Audio file conversion
         Backends: faac, faad, ffmpeg, flac, lame, mplayer, neroaac, timidity, fluidsynth, vorbistools, opustools, sox, twolame,
         flake, mac, shorten, wavpack and speex
         Formats: ogg vorbis, mp3, flac, wma, aac, ac3, opus, alac, mp2, als, amr nb, amr wb, ape, speex, m4a, mp1, musepack shorten,
         tta, wavpack, ra, midi, mod, 3gp, rm, avi, mkv, ogv, mpeg, mov, mp4, flv, wmv and rv
-      
+
       - Replay Gain calculation
         Backends: aacgain, metaflac, mp3gain, vorbisgain, wvgain, mpcgain
         Formats: aac, mp3, flac, ogg vorbis, wavpack, musepack
-      
+
       - CD ripping
         Backends: cdparanoia
       '';
