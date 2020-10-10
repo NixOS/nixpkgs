@@ -16,6 +16,9 @@ buildPythonApplication rec {
     sha256 = "1dskjh5qcjf4x21n4nk1zvdfivbgimsrc2lq1id85bibzps29499";
   };
 
+  # see https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
+
   nativeBuildInputs = [ wrapGAppsHook ];
 
   buildInputs = [ gtk3 gobject-introspection libappindicator-gtk3 librsvg ];
