@@ -2,12 +2,12 @@
 , enablePython ? false, python ? null,  swig ? null}:
 
 stdenv.mkDerivation rec {
-  version = "3.0.7";
+  version = "3.0.8";
   pname = "gdcm";
 
   src = fetchurl {
     url = "mirror://sourceforge/gdcm/${pname}-${version}.tar.bz2";
-    sha256 = "1mm1190fv059k2vrilh3znm8z1ilygwld1iazdgh5s04mi1qljni";
+    sha256 = "1q9p0r7wszn51yak9wdp61fd9i0wj3f8ja2frmhk7d1gxic7j1rk";
   };
 
   dontUseCmakeBuildDir = true;
