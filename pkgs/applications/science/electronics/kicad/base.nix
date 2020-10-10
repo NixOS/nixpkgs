@@ -20,11 +20,13 @@
 , libXdmcp
 , fetchpatch
 , lndir
-, callPackages
+, callPackage
 
 , stable
 , baseName
-, versions
+, kicadSrc
+, kicadVersion
+, i18n
 , withOCE
 , opencascade
 , withOCC
@@ -45,28 +47,13 @@ assert stdenv.lib.asserts.assertMsg (!(withOCE && stdenv.isAarch64)) "OCE fails 
 assert stdenv.lib.asserts.assertMsg (!(withOCC && withOCE))
   "Only one of OCC and OCE may be enabled";
 let
-  versionConfig = versions.${baseName};
-
-  libraries = callPackages ./libraries.nix versionConfig.libVersion;
-
   inherit (stdenv.lib) optional optionals;
-  versionConfig = versions.${baseName};
-  libraries = callPackages ./libraries.nix versionConfig.libVersion;
 in
 stdenv.mkDerivation rec {
-
-  i18n = libraries.i18n;
-
   pname = "kicad-base";
-  version = "${builtins.substring 0 10 versions.${baseName}.kicadVersion.src.rev}";
+  version = kicadVersion;
 
-  src = fetchFromGitLab (
-    {
-      group = "kicad";
-      owner = "code";
-      repo = "kicad";
-    } // versionConfig.kicadVersion.src
-  );
+  src = kicadSrc;
 
   # quick fix for #72248
   # should be removed if a a more permanent fix is published
