@@ -81,8 +81,8 @@ stdenv.mkDerivation rec {
     ++ optionals (scriptingSupport)
     [ python.pkgs.wrapPython ];
 
-  # wrapGAppsHook added the equivalent to ${base}/share
-  # though i noticed no difference without it
+  # We are emulating wrapGAppsHook, along with other variables to the
+  # wrapper
   makeWrapperArgs = with passthru.libraries; [
     "--prefix XDG_DATA_DIRS : ${base}/share"
     "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
