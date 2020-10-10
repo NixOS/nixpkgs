@@ -23,6 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     agate-dbf
     agate-sql
     six
+    setuptools  # `csvsql` requires pkg_resources https://github.com/NixOS/nixpkgs/issues/93594
   ];
 
   checkInputs = with python3.pkgs; [
