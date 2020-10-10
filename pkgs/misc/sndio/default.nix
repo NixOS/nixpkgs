@@ -7,6 +7,18 @@ stdenv.mkDerivation rec {
   buildInputs = stdenv.lib.optionals stdenv.isLinux [ alsaLib ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
+  # out is required but empty, see issue #16182
+  outputs = [ "bin" "dev" "devman" "lib" "man" "out" ];
+
+  setOutputFlags = false;
+
+  configureFlags =
+    [ "--bindir=${placeholder "bin"}/bin"
+      "--includedir=${placeholder "dev"}/include"
+      "--libdir=${placeholder "lib"}/lib"
+      "--mandir=${placeholder "man"}/share/man"
+    ];
+
   src = fetchurl {
     url = "http://www.sndio.org/sndio-${version}.tar.gz";
     sha256 = "0ljmac0lnjn61admgbcwjfcr5fwccrsblx9rj9bys8wlhz8f796x";
@@ -16,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.sndio.org";
     description = "Small audio and MIDI framework part of the OpenBSD project";
     license = licenses.isc;
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [ chiiruno sna ];
     platforms = platforms.all;
   };
 }
