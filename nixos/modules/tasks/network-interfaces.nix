@@ -391,6 +391,10 @@ in
         end with a letter or digit, and have as interior characters only
         letters, digits, and hyphen. The maximum length is 63 characters.
         Additionally it is recommended to only use lower-case characters.
+        If (e.g. for legacy reasons) a FQDN is required as the Linux kernel
+        network node hostname (uname --nodename) the option
+        boot.kernel.sysctl."kernel.hostname" can be used as a workaround (but
+        the 64 character limit still applies).
       '';
     };
 
@@ -470,7 +474,7 @@ in
 
     networking.search = mkOption {
       default = [];
-      example = [ "example.com" "local.domain" ];
+      example = [ "example.com" "home.arpa" ];
       type = types.listOf types.str;
       description = ''
         The list of search paths used when resolving domain names.
@@ -479,7 +483,7 @@ in
 
     networking.domain = mkOption {
       default = null;
-      example = "home";
+      example = "home.arpa";
       type = types.nullOr types.str;
       description = ''
         The domain.  It can be left empty if it is auto-detected through DHCP.

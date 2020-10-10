@@ -3319,6 +3319,12 @@
     githubId = 10654650;
     name = "Guillaume Koenig";
   };
+  guserav = {
+    email = "guserav@users.noreply.github.com";
+    github = "guserav";
+    githubId = 28863828;
+    name = "guserav";
+  };
   guyonvarch = {
     email = "joris@guyonvarch.me";
     github = "guyonvarch";

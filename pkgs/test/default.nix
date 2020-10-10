@@ -41,5 +41,7 @@ with pkgs;
 
   patch-shebangs = callPackage ./patch-shebangs {};
 
+  texlive = callPackage ./texlive {};
+
   writers = callPackage ../build-support/writers/test.nix {};
 }

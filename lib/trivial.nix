@@ -281,6 +281,12 @@ rec {
   importJSON = path:
     builtins.fromJSON (builtins.readFile path);
 
+  /* Reads a TOML file.
+
+     Type :: path -> any
+  */
+  importTOML = path:
+    builtins.fromTOML (builtins.readFile path);
 
   ## Warnings
 

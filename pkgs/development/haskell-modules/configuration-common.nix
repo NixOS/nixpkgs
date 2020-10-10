@@ -69,7 +69,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "19ipaalp9g25zhg44rialwhp2fv5n8q5fzqw72rfcjcca5iy6r72";
+      sha256 = "05yvl09ksyvzykibs95996rni9x6w03yfqyv2fadd73z1m6lq5bf";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -1211,7 +1211,7 @@ self: super: {
   # we need an override because ghcide is tracking haskell-lsp closely.
   ghcide = dontCheck (super.ghcide.overrideScope (self: super: {
     hie-bios = dontCheck super.hie-bios_0_7_1;
-    lsp-test = dontCheck self.lsp-test_0_11_0_6;
+    lsp-test = dontCheck self.lsp-test_0_11_0_7;
   }));
 
   # hasn‘t bumped upper bounds
@@ -1471,6 +1471,9 @@ self: super: {
     url = "https://github.com/jaspervdj/stylish-haskell/commit/9550aa1cd177aa6fe271d075177109d66a79e67f.patch";
     sha256 = "1ffnbd2s4fx0ylnnlcyyag119yxb32p5r20b38l39lsa0jwv229f";
   });
+
+  # The test suite attempts to read `/etc/resolv.conf`, which doesn't work in the sandbox.
+  domain-auth = dontCheck super.domain-auth;
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 
 } // (let
@@ -1481,7 +1484,7 @@ self: super: {
     ghcide = dontCheck hls-ghcide;
     # we are faster than stack here
     hie-bios = dontCheck super.hie-bios_0_7_1;
-    lsp-test = dontCheck super.lsp-test_0_11_0_6;
+    lsp-test = dontCheck super.lsp-test_0_11_0_7;
     # fourmolu can‘t compile with an older aeson
     aeson = dontCheck super.aeson_1_5_2_0;
     # brittany has an aeson upper bound of 1.5
@@ -1490,8 +1493,7 @@ self: super: {
     ghc-exactprint = dontCheck super.ghc-exactprint_0_6_3_2;
   };
   in {
-    # jailbreaking for hie-bios 0.7.0 (upstream PR: https://github.com/haskell/haskell-language-server/pull/357)
-    haskell-language-server = dontCheck (doJailbreak (super.haskell-language-server.overrideScope hlsScopeOverride));
+    haskell-language-server = dontCheck (super.haskell-language-server.overrideScope hlsScopeOverride);
     hls-ghcide = dontCheck (super.hls-ghcide.overrideScope hlsScopeOverride);
     hls-brittany = dontCheck (super.hls-brittany.overrideScope hlsScopeOverride);
     fourmolu = dontCheck (super.fourmolu.overrideScope hlsScopeOverride);
