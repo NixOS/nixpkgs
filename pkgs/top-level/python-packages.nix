@@ -1942,6 +1942,8 @@ in {
 
   exchangelib = callPackage ../development/python-modules/exchangelib { };
 
+  exdown = callPackage ../development/python-modules/exdown { };
+
   execnet = callPackage ../development/python-modules/execnet { };
 
   executing = callPackage ../development/python-modules/executing { };
