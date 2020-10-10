@@ -113,6 +113,7 @@ in
   flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
   fluentd = handleTest ./fluentd.nix {};
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
+  forked-daapd = handleTest ./forked-daapd.nix {};
   freeswitch = handleTest ./freeswitch.nix {};
   fsck = handleTest ./fsck.nix {};
   ft2-clone = handleTest ./ft2-clone.nix {};
