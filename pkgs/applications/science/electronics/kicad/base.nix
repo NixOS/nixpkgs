@@ -1,5 +1,4 @@
-{ lib
-, stdenv
+{ stdenv
 , fetchFromGitLab
 , cmake
 , libGLU
@@ -44,7 +43,6 @@
 
 assert ngspiceSupport -> libngspice != null;
 
-with lib;
 let
   versionConfig = versions.${baseName};
 
@@ -54,6 +52,7 @@ let
 
   libraries = callPackages ./libraries.nix versionConfig.libVersion;
 
+  inherit (stdenv.lib) optional optionals;
 in
 stdenv.mkDerivation rec {
 
@@ -166,7 +165,7 @@ stdenv.mkDerivation rec {
       the libraries are passed via an env var in the wrapper, default.nix
     '';
     homepage = "https://www.kicad-pcb.org/";
-    license = licenses.agpl3;
-    platforms = platforms.all;
+    license = stdenv.lib.licenses.agpl3;
+    platforms = stdenv.lib.platforms.all;
   };
 }
