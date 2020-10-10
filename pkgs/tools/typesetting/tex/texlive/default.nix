@@ -192,8 +192,6 @@ in
           addMetaAttrs rec {
             description = "TeX Live environment for ${pname}";
             platforms = lib.platforms.all;
-            hydraPlatforms = lib.optionals
-              (!lib.elem pname ["scheme-infraonly"]) platforms;
             maintainers = with lib.maintainers;  [ veprbl ];
           }
           (combine {
