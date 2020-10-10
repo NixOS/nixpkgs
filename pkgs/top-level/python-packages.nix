@@ -300,6 +300,8 @@ in {
 
   ansible = callPackage ../development/python-modules/ansible { };
 
+  ansible-base = callPackage ../development/python-modules/ansible-base { };
+
   ansible-kernel = callPackage ../development/python-modules/ansible-kernel { };
 
   ansible-lint = callPackage ../development/python-modules/ansible-lint { };
