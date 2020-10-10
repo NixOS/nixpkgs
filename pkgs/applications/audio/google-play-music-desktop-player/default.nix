@@ -72,6 +72,16 @@ stdenv.mkDerivation {
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath deps}"
   '';
 
+  postInstall = ''
+    # create desktop icons
+    for size in 16 32 48 64 72 96 128 192 512 1024; do
+      mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+      convert -resize "$size"x"$size" \
+        $out/share/pixmaps/google-play-music-desktop-player.png \
+        $out/share/icons/hicolor/"$size"x"$size"/apps/google-play-music-desktop-player.png
+    done
+  '';
+
   meta = {
     homepage = "https://www.googleplaymusicdesktopplayer.com/";
     description = "A beautiful cross platform Desktop Player for Google Play Music";
