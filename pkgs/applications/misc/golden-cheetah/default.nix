@@ -16,13 +16,13 @@ let
   };
 in mkDerivation rec {
   pname = "golden-cheetah";
-  version = "3.5-RC2X";
+  version = "3.5";
 
   src = fetchFromGitHub {
     owner = "GoldenCheetah";
     repo = "GoldenCheetah";
     rev = "V${version}";
-    sha256 = "1d85700gjbcw2badwz225rjdr954ai89900vp8sal04sk79wbr6g";
+    sha256 = "1lyd0b2s3s9c2ppj7l4hf3s4gfzscaaam2pbiaby714bi9nr0ka7";
   };
 
   buildInputs = [
