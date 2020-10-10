@@ -6182,6 +6182,8 @@ in {
 
   rhpl = disabledIf isPy3k (callPackage ../development/python-modules/rhpl { });
 
+  rich = callPackage ../development/python-modules/rich { };
+
   rig = callPackage ../development/python-modules/rig { };
 
   ripser = callPackage ../development/python-modules/ripser { };
