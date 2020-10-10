@@ -66,6 +66,12 @@
    </listitem>
    <listitem>
     <para>
+     Python 3.5 has reached its upstream EOL at the end of September 2020: it
+     has been removed from the list of available packages.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      Two new options, <link linkend="opt-services.openssh.authorizedKeysCommand">authorizedKeysCommand</link>
      and <link linkend="opt-services.openssh.authorizedKeysCommandUser">authorizedKeysCommandUser</link>, have
      been added to the <literal>openssh</literal> module. If you have <literal>AuthorizedKeysCommand</literal>
@@ -605,8 +611,8 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
    <listitem>
      <para>
        In addition to the hostname, the fully qualified domain name (FQDN),
-       which consists of <literal>${cfg.hostName}</literal> and
-       <literal>${cfg.domain}</literal> is now added to
+       which consists of <literal>${networking.hostName}</literal> and
+       <literal>${networking.domain}</literal> is now added to
        <literal>/etc/hosts</literal>, to allow local FQDN resolution, as used by the
        <literal>hostname --fqdn</literal> command and other applications that
        try to determine the FQDN. These new entries take precedence over entries
@@ -626,6 +632,10 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
        or digit, and have as interior characters only letters, digits, and
        hyphen. The maximum length is 63 characters. Additionally it is
        recommended to only use lower-case characters.
+       If (e.g. for legacy reasons) a FQDN is required as the Linux kernel network node hostname
+       (<literal>uname --nodename</literal>) the option
+       <literal>boot.kernel.sysctl."kernel.hostname"</literal>
+       can be used as a workaround (but be aware of the 64 character limit).
      </para>
    </listitem>
    <listitem>
@@ -1132,8 +1142,10 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
    </listitem>
    <listitem>
     <para>
-     The <literal>fontconfig</literal> module stopped generating fontconfig 2.10.x config and cache.
-     Fontconfig 2.10.x was removed from Nixpkgs - it hasn't been used in any nixpkgs package anymore.
+     The <literal>fontconfig</literal> module stopped generating config and cache files for fontconfig 2.10.x, the <filename>/etc/fonts/fonts.conf</filename> now belongs to the latest fontconfig, just like on other Linux distributions, and we will <link xlink:href="https://github.com/NixOS/nixpkgs/pull/95358">no longer</link> be versioning the config directories.
+    </para>
+    <para>
+     Fontconfig 2.10.x was removed from Nixpkgs since it hasn’t been used in any Nixpkgs package for years now.
     </para>
    </listitem>
    <listitem>

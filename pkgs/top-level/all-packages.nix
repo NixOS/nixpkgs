@@ -1941,6 +1941,10 @@ in
 
   f3 = callPackage ../tools/filesystems/f3 { };
 
+  f3d = callPackage ../applications/graphics/f3d {
+    inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
+  };
+
   fac = callPackage ../development/tools/fac { };
 
   facedetect = callPackage ../tools/graphics/facedetect { };
@@ -7010,7 +7014,7 @@ in
 
   sleuthkit = callPackage ../tools/system/sleuthkit {};
 
-  sleepyhead = libsForQt514.callPackage ../applications/misc/sleepyhead {};
+  sleepyhead = libsForQt512.callPackage ../applications/misc/sleepyhead {};
 
   slirp4netns = callPackage ../tools/networking/slirp4netns/default.nix { };
 
@@ -8122,6 +8126,8 @@ in
 
   xdelta = callPackage ../tools/compression/xdelta { };
   xdeltaUnstable = callPackage ../tools/compression/xdelta/unstable.nix { };
+
+  xdot = with python3Packages; toPythonApplication xdot;
 
   xdummy = callPackage ../tools/misc/xdummy { };
 
@@ -13325,6 +13331,8 @@ in
 
   libavc1394 = callPackage ../development/libraries/libavc1394 { };
 
+  libavif = callPackage ../development/libraries/libavif { };
+
   libb2 = callPackage ../development/libraries/libb2 { };
 
   libbacktrace = callPackage ../development/libraries/libbacktrace { };
@@ -15098,6 +15106,8 @@ in
     kpeoplevcard = callPackage ../development/libraries/kpeoplevcard { };
 
     kreport = callPackage ../development/libraries/kreport { };
+
+    ldutils = callPackage ../development/libraries/ldutils { };
 
     libcommuni = callPackage ../development/libraries/libcommuni { };
 
@@ -19180,6 +19190,8 @@ in
 
   marwaita-peppermint = callPackage ../data/themes/marwaita-peppermint { };
 
+  marwaita-pop_os = callPackage ../data/themes/marwaita-pop_os { };
+
   matcha-gtk-theme = callPackage ../data/themes/matcha { };
 
   materia-theme = callPackage ../data/themes/materia-theme { };
@@ -19361,6 +19373,8 @@ in
   shaderc = callPackage ../development/compilers/shaderc { };
 
   shades-of-gray-theme = callPackage ../data/themes/shades-of-gray { };
+
+  skeu = callPackage ../data/themes/skeu { };
 
   sweet = callPackage ../data/themes/sweet { };
 
@@ -24645,6 +24659,8 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  zombietrackergps = libsForQt514.callPackage ../applications/gis/zombietrackergps { };
+
   zoom-us = libsForQt514.callPackage ../applications/networking/instant-messengers/zoom-us { };
 
   zotero = callPackage ../applications/office/zotero { };
@@ -27086,7 +27102,7 @@ in
   };
 
   vector = callPackage ../tools/misc/vector {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security CoreServices;
   };
 
   epkowa = callPackage ../misc/drivers/epkowa { };

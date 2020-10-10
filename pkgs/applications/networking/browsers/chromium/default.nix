@@ -15,7 +15,7 @@
 , enablePepperFlash ? false
 , enableWideVine ? false
 , useVaapi ? false # Deprecated, use enableVaapi instead!
-, enableVaapi ? false # Disabled by default due to unofficial support and issues on radeon
+, enableVaapi ? false # Disabled by default due to unofficial support
 , useOzone ? false
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
@@ -152,8 +152,8 @@ let
       Chromium's useVaapi was replaced by enableVaapi and you don't need to pass
       "--ignore-gpu-blacklist" anymore (also no rebuilds are required anymore).
     '' else lib.optionalString
-      (!enableVaapi)
-      "--add-flags --disable-accelerated-video-decode --add-flags --disable-accelerated-video-encode";
+      (enableVaapi)
+      "--add-flags --enable-accelerated-video-decode";
 in stdenv.mkDerivation {
   name = "chromium${suffix}-${version}";
   inherit version;

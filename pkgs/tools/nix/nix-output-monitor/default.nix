@@ -28,4 +28,5 @@ mkDerivation {
   homepage = "https://github.com/maralorn/nix-output-monitor";
   description = "Parses output of nix-build to show additional information";
   license = stdenv.lib.licenses.agpl3Plus;
+  maintainers = [ stdenv.lib.maintainers.maralorn ];
 }
