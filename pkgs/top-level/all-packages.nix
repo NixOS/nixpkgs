@@ -4340,6 +4340,8 @@ in
 
   hash-slinger = callPackage ../tools/security/hash-slinger { };
 
+  haskell-language-server = callPackage ../development/tools/haskell/haskell-language-server/withWrapper.nix { };
+
   hasmail = callPackage ../applications/networking/mailreaders/hasmail { };
 
   hal-flash = callPackage ../os-specific/linux/hal-flash { };
