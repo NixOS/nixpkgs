@@ -11352,6 +11352,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  gofer = callPackage ../development/compilers/gofer {};
+
   gtk-server = callPackage ../development/interpreters/gtk-server {};
 
   # Haskell and GHC
