@@ -359,6 +359,39 @@ services.hoogle = {
 };
 ```
 
+### How to install haskell-language-server
+
+In short: Install `pkgs.haskell-language-server` and use the
+`haskell-language-server-wrapper` command to run it. See the [hls
+README](https://github.com/haskell/haskell-language-server) on how to configure
+your text editor to use hls and how to test your setup.
+
+Hls needs to be compiled with the ghc version of the project you use it on.
+
+`pkgs.haskell-language-server` provides `haskell-language-server-wrapper`,
+`haskell-language-server`, `haskell-language-server-x.x` and
+`haskell-language-server-x.x.x` binaries, where `x.x.x` is the ghc version for
+which it is compiled.  By default it includes binaries for all ghc versions
+that are provided in the binary caches. You can override that list with e.g.
+
+```nix
+pkgs.haskell-language-server.override { supportedGhcVersions = [ "884" "901" ]; }
+```
+
+When you run `haskell-language-server-wrapper` it will detect the ghc version
+used by the project you are working on (by asking e.g. cabal or stack) and pick
+the appropriate above mentioned binary from your path.
+
+Be careful when installing hls globally and using a pinned nixpkgs for a Haskell
+project in a nix-shell. If the nixpkgs versions deviate to much (e.g. use
+different `glibc` versions) hls might fail. It is recommended to then install hls
+in the nix-shell from the nixpkgs version pinned in there.
+
+If you know, that you only use one ghc version, e.g. in a project specific
+nix-shell You can either use an override as given above or simply install
+`pkgs.haskellPackages.haskell-language-server` instead of the top-level
+attribute `pkgs.haskell-language-server`.
+
 ### How to build a Haskell project using Stack
 
 [Stack](http://haskellstack.org) is a popular build tool for Haskell projects.
