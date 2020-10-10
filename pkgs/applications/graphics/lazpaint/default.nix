@@ -7,24 +7,24 @@ let
   bgrabitmap = fetchFromGitHub {
     owner = "bgrabitmap";
     repo = "bgrabitmap";
-    rev = "v11.1";
-    sha256 = "0bcmiiwly4a7w8p3m5iskzvk8rz87qhc0gcijrdvwg87cafd88gz";
+    rev = "v11.2.4";
+    sha256 = "1zk88crfn07md16wg6af4i8nlx4ikkhxq9gfk49jirwimgwbf1md";
   };
   bgracontrols = fetchFromGitHub {
     owner = "bgrabitmap";
     repo = "bgracontrols";
-    rev = "v6.7.2";
-    sha256 = "0cwxzv0rl6crkf6f67mvga5cn5pyhr6ksm8cqhpxjiqi937dnyxx";
+    rev = "v6.9";
+    sha256 = "0hwjlqlwqs4fqxlgay84hccs1lm3c6i9nmq9sxzrip410mggnjyw";
   };
 in stdenv.mkDerivation rec {
   pname = "lazpaint";
-  version = "7.1.3";
+  version = "7.1.4";
 
   src = fetchFromGitHub {
     owner = "bgrabitmap";
     repo = "lazpaint";
     rev = "v${version}";
-    sha256 = "1sfb5hmhzscz3nv4cmc192jimkg70l4z3q3yxkivhw1hwwsv9cbg";
+    sha256 = "19b0wrjjyvz3g2d2gdsz8ihc1clda5v22yb597an8j9sblp9m0nf";
   };
 
   nativeBuildInputs = [ lazarus fpc makeWrapper ];
