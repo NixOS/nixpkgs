@@ -1,0 +1,12 @@
+diff --exclude '*~' -ruN a/gmsh.py b/gmsh.py                                                         
+--- a/gmsh.py
++++ b/gmsh.py
+@@ -25,7 +25,7 @@
+ __version__ = GMSH_API_VERSION
+ 
+ oldsig = signal.signal(signal.SIGINT, signal.SIG_DFL)
+-libdir = os.path.dirname(os.path.realpath(__file__))
++libdir = "@gmshdir@/lib/"
+ if platform.system() == "Windows":
+     libpath = os.path.join(libdir, "gmsh-4.6.dll")
+ elif platform.system() == "Darwin":

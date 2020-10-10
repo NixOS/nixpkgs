@@ -2385,6 +2385,8 @@ in {
 
   gmpy = callPackage ../development/python-modules/gmpy { };
 
+  gmsh = callPackage ../development/python-modules/gmsh { };
+
   gmusicapi = callPackage ../development/python-modules/gmusicapi { };
 
   gnureadline = callPackage ../development/python-modules/gnureadline { };

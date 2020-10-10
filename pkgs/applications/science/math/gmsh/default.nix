@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake gfortran ];
 
+  cmakeFlags = [
+    "-DENABLE_BUILD_DYNAMIC=1"
+  ];
+
   meta = {
     description = "A three-dimensional finite element mesh generator";
     homepage = "http://gmsh.info/";
