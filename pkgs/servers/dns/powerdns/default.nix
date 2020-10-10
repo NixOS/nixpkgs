@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ stdenv, fetchurl, pkgconfig, nixosTests
 , boost, libyamlcpp, libsodium, sqlite, protobuf, openssl, systemd
 , mysql57, postgresql, lua, openldap, geoip, curl, opendbx, unixODBC
 }:
@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   doCheck = true;
+
+  passthru.tests = {
+    nixos = nixosTests.powerdns;
+  };
 
   meta = with stdenv.lib; {
     description = "Authoritative DNS server";
