@@ -201,7 +201,7 @@ in rec {
     src = pkgs.fetchFromGitHub {
       owner = "arcticicestudio";
       repo = "nord-tmux";
-      rev = "8cf490184259bd423571415d4d73a20d8fb1850b";
+      rev = "v${version}";
       sha256 = "14xhh49izvjw4ycwq5gx4if7a0bcnvgsf3irywc3qps6jjcf5ymk";
     };
   };
