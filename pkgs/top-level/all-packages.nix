@@ -8127,6 +8127,8 @@ in
   xdelta = callPackage ../tools/compression/xdelta { };
   xdeltaUnstable = callPackage ../tools/compression/xdelta/unstable.nix { };
 
+  xdot = with python3Packages; toPythonApplication xdot;
+
   xdummy = callPackage ../tools/misc/xdummy { };
 
   xdxf2slob = callPackage ../tools/misc/xdxf2slob { };
