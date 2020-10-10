@@ -19,11 +19,11 @@ rec {
 
   ansible_2_8 = python3Packages.toPythonApplication (python3Packages.ansible-base.overridePythonAttrs (old: rec {
     pname = "ansible";
-    version = "2.8.14";
+    version = "2.8.16";
 
     src = fetchurl {
       url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
-      sha256 = "19ga0c9qs2b216qjg5k2yknz8ksjn8qskicqspg2d4b8x2nr1294";
+      sha256 = "05mfrsncysjfxg4kbv5vllf3g58kzs01xafmviwqd16lq2jd68a2";
     };
   }));
 }
