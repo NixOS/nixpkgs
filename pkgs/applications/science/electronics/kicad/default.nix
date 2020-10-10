@@ -30,7 +30,44 @@
 , valgrind
 , with3d ? true
 , withI18n ? true
+, srcs ? { }
 }:
+
+# The `srcs` parameter can be used to override the kicad source code
+# and all libraries (including i18n), which are otherwise inaccessible
+# to overlays since most of the kicad build expression has been
+# refactored into base.nix, most of the library build expressions have
+# been refactored into libraries.nix, and most the i18n build
+# expression has been refactored into i18n.nix. Overrides are only
+# applied when building `kicad-unstable`. The `srcs` parameter has no
+# effect for stable `kicad`. `srcs` takes an attribute set in which
+# any of the following attributes are meaningful (though none are
+# mandatory): "kicad", "kicadVersion", "i18n", "symbols", "templates",
+# "footprints", "packages3d", and "libVersion". "kicadVersion" and
+# "libVersion" should be set to a string with the desired value for
+# the version attribute in kicad's `mkDerivation` and the version
+# attribute in any of the library's or i18n's `mkDerivation`,
+# respectively. "kicad", "i18n", "symbols", "templates", "footprints",
+# and "packages3d" should be set to an appropriate fetcher (e.g.,
+# `fetchFromGitLab`). So, for example, a possible overlay for kicad
+# is:
+#
+# final: prev:
+
+# {
+#   kicad-unstable = (prev.kicad-unstable.override {
+#     srcs = {
+#       kicadVersion = "2020-10-08";
+#       kicad = prev.fetchFromGitLab {
+#         group = "kicad";
+#         owner = "code";
+#         repo = "kicad";
+#         rev = "fd22fe8e374ce71d57e9f683ba996651aa69fa4e";
+#         sha256 = "sha256-F8qugru/jU3DgZSpQXQhRGNFSk0ybFRkpyWb7HAGBdc=";
+#       };
+#     };
+#   });
+# }
 
 assert withNgspice -> libngspice != null;
 assert stdenv.lib.assertMsg (!ngspiceSupport)
@@ -43,9 +80,58 @@ assert stdenv.lib.assertMsg (!withOCCT)
   "`withOCCT` was renamed to `withOCC` for the sake of consistency with upstream cmake options.";
 let
   baseName = if (stable) then "kicad" else "kicad-unstable";
+  versionsImport = import ./versions.nix;
 
-  versions = import ./versions.nix;
-  versionConfig = versions.${baseName};
+  # versions.nix does not provide us with version, src and rev. We
+  # need to turn this into approprate fetcher calls.
+  kicadSrcFetch = fetchFromGitLab {
+    group = "kicad";
+    owner = "code";
+    repo = "kicad";
+    rev = versionsImport.${baseName}.kicadVersion.src.rev;
+    sha256 = versionsImport.${baseName}.kicadVersion.src.sha256;
+  };
+
+  i18nSrcFetch = fetchFromGitLab {
+    group = "kicad";
+    owner = "code";
+    repo = "kicad-i18n";
+    rev = versionsImport.${baseName}.libVersion.libSources.i18n.rev;
+    sha256 = versionsImport.${baseName}.libVersion.libSources.i18n.sha256;
+  };
+
+  libSrcFetch = name: fetchFromGitLab {
+    group = "kicad";
+    owner = "libraries";
+    repo = "kicad-${name}";
+    rev = versionsImport.${baseName}.libVersion.libSources.${name}.rev;
+    sha256 = versionsImport.${baseName}.libVersion.libSources.${name}.sha256;
+  };
+
+  # only override `src` or `version` if building `kicad-unstable` with
+  # the appropriate attribute defined in `srcs`.
+  srcOverridep = attr: (!stable && builtins.hasAttr attr srcs);
+
+  # use default source and version (as defined in versions.nix) by
+  # default, or use the appropriate attribute from `srcs` if building
+  # unstable with `srcs` properly defined.
+  kicadSrc =
+    if srcOverridep "kicad" then srcs.kicad
+    else kicadSrcFetch;
+  kicadVersion =
+    if srcOverridep "kicadVersion" then srcs.kicadVersion
+    else versionsImport.${baseName}.kicadVersion.version;
+
+  i18nSrc = if srcOverridep "i18n" then srcs.i18n else i18nSrcFetch;
+  i18nVersion =
+    if srcOverridep "i18nVersion" then srcs.i18nVersion
+    else versionsImport.${baseName}.libVersion.version;
+
+  libSrc = name: if srcOverridep name then srcs.${name} else libSrcFetch name;
+  # TODO does it make sense to only have one version for all libs?
+  libVersion =
+    if srcOverridep "libVersion" then srcs.libVersion
+    else versionsImport.${baseName}.libVersion.version;
 
   wxGTK =
     if (stable)
@@ -69,15 +155,22 @@ let
 in
 stdenv.mkDerivation rec {
 
-  passthru.libraries = callPackages ./libraries.nix versionConfig.libVersion;
+  # Common libraries, referenced during runtime, via the wrapper.
+  passthru.libraries = callPackages ./libraries.nix { inherit libSrc libVersion; };
+  passthru.i18n = callPackage ./i18n.nix {
+    src = i18nSrc;
+    version = i18nVersion;
+  };
   base = callPackage ./base.nix {
-    inherit versions stable baseName;
+    inherit stable baseName;
+    inherit kicadSrc kicadVersion;
+    inherit (passthru) i18n;
     inherit wxGTK python wxPython;
     inherit debug withI18n withOCC withOCE withNgspice withScripting;
   };
 
   inherit pname;
-  version = versions.${baseName}.kicadVersion.version;
+  version = kicadVersion;
 
   src = base;
   dontUnpack = true;

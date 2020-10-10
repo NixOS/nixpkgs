@@ -1,34 +1,17 @@
 { stdenv
 , cmake
 , gettext
-, fetchFromGitHub
-, fetchFromGitLab
-, version
-, libSources
+, libSrc
+, libVersion
 }:
-
-# callPackage libraries {
-#   version = "unstable";
-#   libs.symbols = {
-#     rev = "09f9..";
-#     sha256 = "...";
-#   };
-# };
 let
   mkLib = name:
     stdenv.mkDerivation {
       pname = "kicad-${name}";
-      # Use the revision instead of `version` (which is an ISO 8601 date)
-      # to prevent duplicating the library when just the date changed
-      version = "${builtins.substring 0 10 libSources.${name}.rev}";
-      src = fetchFromGitHub (
-        {
-          owner = "KiCad";
-          repo = "kicad-${name}";
-          rev = version;
-          inherit name;
-        } // (libSources.${name} or { })
-      );
+      version = libVersion;
+
+      src = libSrc name;
+
       nativeBuildInputs = [ cmake ];
 
       meta = rec {
@@ -45,30 +28,4 @@ in
   templates = mkLib "templates";
   footprints = mkLib "footprints";
   packages3d = mkLib "packages3d";
-
-  # i18n is a special case, not actually a library
-  # more a part of kicad proper, but also optional and separate
-  # since their move to gitlab they're keeping it in a separate path
-  # kicad has no way to find i18n except through a path relative to its install path
-  # therefore this is being linked into ${kicad-base}/share/
-  # and defined here to make use of the rev & sha256's brought here for the libs
-  i18n = let name = "i18n"; in
-    stdenv.mkDerivation {
-      pname = "kicad-${name}";
-      version = "${builtins.substring 0 10 libSources.${name}.rev}";
-      src = fetchFromGitLab (
-        {
-          group = "kicad";
-          owner = "code";
-          repo = "kicad-${name}";
-          rev = version;
-          inherit name;
-        } // (libSources.${name} or { })
-      );
-      nativeBuildInputs = [ cmake gettext ];
-      meta = {
-        license = stdenv.lib.licenses.gpl2; # https://github.com/KiCad/kicad-i18n/issues/3
-        platforms = stdenv.lib.platforms.all;
-      };
-    };
 }
