@@ -1,16 +1,29 @@
-{ lib, stdenv, gnome3, wxGTK30, wxGTK31
+{ lib
+, stdenv
+, gnome3
+, wxGTK30
+, wxGTK31
 , makeWrapper
-, gsettings-desktop-schemas, hicolor-icon-theme
-, callPackage, callPackages
-, librsvg, cups
+, gsettings-desktop-schemas
+, hicolor-icon-theme
+, callPackage
+, callPackages
+, librsvg
+, cups
 
 , pname ? "kicad"
 , stable ? true
-, oceSupport ? false, opencascade
-, withOCCT ? true, opencascade-occt
-, ngspiceSupport ? true, libngspice
-, scriptingSupport ? true, swig, python3
-, debug ? false, valgrind
+, oceSupport ? false
+, opencascade
+, withOCCT ? true
+, opencascade-occt
+, ngspiceSupport ? true
+, libngspice
+, scriptingSupport ? true
+, swig
+, python3
+, debug ? false
+, valgrind
 , with3d ? true
 , withI18n ? true
 }:
@@ -19,18 +32,25 @@ assert ngspiceSupport -> libngspice != null;
 
 with lib;
 let
-
   baseName = if (stable) then "kicad" else "kicad-unstable";
 
-  versions =  import ./versions.nix;
+  versions = import ./versions.nix;
   versionConfig = versions.${baseName};
 
-  wxGTK = if (stable)
+  wxGTK =
+    if (stable)
     # wxGTK3x may default to withGtk2 = false, see #73145
-    then wxGTK30.override { withGtk2 = false; }
+    then
+      wxGTK30.override
+        {
+          withGtk2 = false;
+        }
     # wxGTK31 currently introduces an issue with opening the python interpreter in pcbnew
     # but brings high DPI support?
-    else wxGTK31.override { withGtk2 = false; };
+    else
+      wxGTK31.override {
+        withGtk2 = false;
+      };
 
   python = python3;
   wxPython = python.pkgs.wxPython_4_0;
@@ -59,7 +79,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ]
     ++ optionals (scriptingSupport)
-      [ python.pkgs.wrapPython ];
+    [ python.pkgs.wrapPython ];
 
   # wrapGAppsHook added the equivalent to ${base}/share
   # though i noticed no difference without it
@@ -94,17 +114,19 @@ stdenv.mkDerivation rec {
       tools = [ "kicad" "pcbnew" "eeschema" "gerbview" "pcb_calculator" "pl_editor" "bitmap2component" ];
       utils = [ "dxf2idf" "idf2vrml" "idfcyl" "idfrect" "kicad2step" "kicad-ogltest" ];
     in
-    ( concatStringsSep "\n"
-      ( flatten [
-        ( optionalString (scriptingSupport) "buildPythonPath \"${base} $pythonPath\" \n" )
+    (concatStringsSep "\n"
+      (flatten [
+        (optionalString (scriptingSupport) "buildPythonPath \"${base} $pythonPath\" \n")
 
         # wrap each of the directly usable tools
-        ( map ( tool: "makeWrapper ${base}/bin/${tool} $out/bin/${tool} $makeWrapperArgs"
-          + optionalString (scriptingSupport) " --set PYTHONPATH \"$program_PYTHONPATH\""
-            ) tools )
+        (map
+          (tool: "makeWrapper ${base}/bin/${tool} $out/bin/${tool} $makeWrapperArgs"
+            + optionalString (scriptingSupport) " --set PYTHONPATH \"$program_PYTHONPATH\""
+          )
+          tools)
 
         # link in the CLI utils
-        ( map ( util: "ln -s ${base}/bin/${util} $out/bin/${util}" ) utils )
+        (map (util: "ln -s ${base}/bin/${util} $out/bin/${util}") utils)
       ])
     )
   ;
@@ -118,9 +140,9 @@ stdenv.mkDerivation rec {
 
   meta = rec {
     description = (if (stable)
-      then "Open Source Electronics Design Automation suite"
-      else "Open Source EDA suite, development build")
-      + (if (!with3d) then ", without 3D models" else "");
+    then "Open Source Electronics Design Automation suite"
+    else "Open Source EDA suite, development build")
+    + (if (!with3d) then ", without 3D models" else "");
     homepage = "https://www.kicad-pcb.org/";
     longDescription = ''
       KiCad is an open source software suite for Electronic Design Automation.
