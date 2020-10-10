@@ -184,13 +184,24 @@ in rec {
     };
   };
 
+  dracula = mkDerivation rec {
+    pluginName = "dracula";
+    version = "unstable-2020-10-08";
+    src = pkgs.fetchFromGitHub {
+      owner = "dracula";
+      repo = "tmux";
+      rev = "8cf490184259bd423571415d4d73a20d8fb1850b";
+      sha256 = "1x7v55z1ljq0757b6xsy1rxp598k3p53pcwx0pasb7ispbs1jjir";
+    };
+  };
+
   nord = mkDerivation rec {
     pluginName = "nord";
     version = "0.3.0";
     src = pkgs.fetchFromGitHub {
       owner = "arcticicestudio";
       repo = "nord-tmux";
-      rev = "v${version}";
+      rev = "8cf490184259bd423571415d4d73a20d8fb1850b";
       sha256 = "14xhh49izvjw4ycwq5gx4if7a0bcnvgsf3irywc3qps6jjcf5ymk";
     };
   };
