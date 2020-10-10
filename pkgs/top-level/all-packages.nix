@@ -19129,6 +19129,8 @@ in
 
   junicode = callPackage ../data/fonts/junicode { };
 
+  julia-mono = callPackage ../data/fonts/julia-mono { };
+
   kanji-stroke-order-font = callPackage ../data/fonts/kanji-stroke-order-font {};
 
   kawkab-mono-font = callPackage ../data/fonts/kawkab-mono {};
