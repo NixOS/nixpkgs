@@ -22,37 +22,36 @@
 , lndir
 , callPackages
 
-, stable ? true
-, baseName ? "kicad"
-, versions ? { }
-, oceSupport ? false
+, stable
+, baseName
+, versions
+, withOCE
 , opencascade
-, withOCCT ? true
+, withOCC
 , opencascade-occt
-, ngspiceSupport ? true
+, withNgspice
 , libngspice
-, scriptingSupport ? true
+, withScripting
 , swig
 , python
 , wxPython
-, debug ? false
+, debug
 , valgrind
-, withI18n ? true
+, withI18n
 , gtk3
 }:
 
-assert ngspiceSupport -> libngspice != null;
-
+assert stdenv.lib.asserts.assertMsg (!(withOCE && stdenv.isAarch64)) "OCE fails a test on Aarch64";
+assert stdenv.lib.asserts.assertMsg (!(withOCC && withOCE))
+  "Only one of OCC and OCE may be enabled";
 let
   versionConfig = versions.${baseName};
-
-  # oce on aarch64 fails a test
-  withOCE = oceSupport && !stdenv.isAarch64;
-  withOCC = (withOCCT && !withOCE) || (oceSupport && stdenv.isAarch64);
 
   libraries = callPackages ./libraries.nix versionConfig.libVersion;
 
   inherit (stdenv.lib) optional optionals;
+  versionConfig = versions.${baseName};
+  libraries = callPackages ./libraries.nix versionConfig.libVersion;
 in
 stdenv.mkDerivation rec {
 
@@ -93,15 +92,15 @@ stdenv.mkDerivation rec {
   makeFlags = optional (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
 
   cmakeFlags =
-    optionals (scriptingSupport) [
+    optionals (withScripting) [
       "-DKICAD_SCRIPTING=ON"
       "-DKICAD_SCRIPTING_MODULES=ON"
       "-DKICAD_SCRIPTING_PYTHON3=ON"
       "-DKICAD_SCRIPTING_WXPYTHON_PHOENIX=ON"
     ]
-    ++ optional (!scriptingSupport)
+    ++ optional (!withScripting)
       "-DKICAD_SCRIPTING=OFF"
-    ++ optional (ngspiceSupport) "-DKICAD_SPICE=ON"
+    ++ optional (withNgspice) "-DKICAD_SPICE=ON"
     ++ optional (!withOCE) "-DKICAD_USE_OCE=OFF"
     ++ optional (!withOCC) "-DKICAD_USE_OCC=OFF"
     ++ optionals (withOCE) [
@@ -139,8 +138,8 @@ stdenv.mkDerivation rec {
     boost
     gtk3
   ]
-  ++ optionals (scriptingSupport) [ swig python wxPython ]
-  ++ optional (ngspiceSupport) libngspice
+  ++ optionals (withScripting) [ swig python wxPython ]
+  ++ optional (withNgspice) libngspice
   ++ optional (withOCE) opencascade
   ++ optional (withOCC) opencascade-occt
   ++ optional (debug) valgrind
