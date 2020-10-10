@@ -78,6 +78,8 @@
 , withTimedated ? true
 , withTimesyncd ? true
 , withUserDb ? true
+, withHomed ? false, p11-kit, libfido2
+# , withPortabled ? false TODO
 
   # name argument
 , pname ? "systemd"
@@ -98,8 +100,11 @@ assert withEfi -> (gnu-efi != null);
 assert withRemote -> lib.getDev curl != null;
 assert withCoredump -> withCompression;
 
+assert withHomed -> withCryptsetup;
+
 assert withCryptsetup ->
 (cryptsetup != null);
+
 let
   wantCurl = withRemote || withImportd;
 
@@ -191,18 +196,19 @@ stdenv.mkDerivation {
       pam
     ]
 
-    ++ lib.optional withApparmor libapparmor
-    ++ lib.optional wantCurl (lib.getDev curl)
+    ++ lib.optional  withApparmor libapparmor
+    ++ lib.optional  wantCurl (lib.getDev curl)
     ++ lib.optionals withCompression [ bzip2 lz4 xz ]
-    ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
-    ++ lib.optional withEfi gnu-efi
-    ++ lib.optional withKexectools kexectools
-    ++ lib.optional withLibseccomp libseccomp
-    ++ lib.optional withNetworkd iptables
-    ++ lib.optional withPCRE2 pcre2
-    ++ lib.optional withResolved libgpgerror
-    ++ lib.optional withSelinux libselinux
-    ++ lib.optional withRemote libmicrohttpd
+    ++ lib.optional  withCryptsetup (lib.getDev cryptsetup.dev)
+    ++ lib.optional  withEfi gnu-efi
+    ++ lib.optional  withKexectools kexectools
+    ++ lib.optional  withLibseccomp libseccomp
+    ++ lib.optional  withNetworkd iptables
+    ++ lib.optional  withPCRE2 pcre2
+    ++ lib.optional  withResolved libgpgerror
+    ++ lib.optional  withSelinux libselinux
+    ++ lib.optional  withRemote libmicrohttpd
+    ++ lib.optionals withHomed [ p11-kit libfido2 ]
     ;
 
   #dontAddPrefix = true;
@@ -226,7 +232,7 @@ stdenv.mkDerivation {
     "-Dgcrypt=${lib.boolToString (libgcrypt != null)}"
     "-Dimportd=${lib.boolToString withImportd}"
     "-Dlz4=${lib.boolToString withCompression}"
-    "-Dhomed=false"
+    "-Dhomed=${stdenv.lib.boolToString withHomed}"
     "-Dlogind=${lib.boolToString withLogind}"
     "-Dlocaled=${lib.boolToString withLocaled}"
     "-Dhostnamed=${lib.boolToString withHostnamed}"
