@@ -1,7 +1,7 @@
 { stdenv, fetchzip, makeWrapper, makeDesktopItem, jdk8 }:
 
 stdenv.mkDerivation rec {
-  pname = "jpexs";
+  pname = "jpexs-ffdec";
   version = "11.3.0";
 
   src = fetchzip {

@@ -11232,7 +11232,7 @@ in
 
   jenkins-job-builder = with python3Packages; toPythonApplication jenkins-job-builder;
 
-  jpexs = callPackage ../development/tools/jpexs { };
+  jpexs-ffdec = callPackage ../development/tools/jpexs-ffdec { };
 
   julius = callPackage ../games/julius { };
 
