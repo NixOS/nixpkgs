@@ -1,10 +1,21 @@
 {
   stdenv,
   fetchgit,
+  fetchpatch,
   python3Packages,
   pkgconfig,
-  gcc8Stdenv,
+  perl,
+  stow,
   boost,
+  icu,
+  fmt,
+  c-ares,
+  libtasn1,
+  xxHash,
+  lua5_3,
+  rapidjson,
+  libunistring,
+  p11-kit,
   git,
   systemd,
   gnutls,
@@ -30,31 +41,48 @@
   libtool,
   thrift
 }:
-gcc8Stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "scylladb";
-  version = "3.0.5";
+  version = "4.1.8";
 
   src = fetchgit {
     url = "https://github.com/scylladb/scylla.git";
-    rev = "403f66ecad6bc773712c69c4a80ebd172eb48b13";
-    sha256 = "14mg0kzpkrxvwqyiy19ndy4rsc7s5gnv2gwd3xdwm1lx1ln8ywsi";
+    rev = "scylla-${version}";
+    sha256 = "1iwbqkc7q2yw345z1vvxskkjvdn0g2sp633fk0jcbgjdh6mf3cq2";
     fetchSubmodules = true;
   };
 
-  patches = [ ./seastar-configure-script-paths.patch ./configure-etc-osrelease.patch ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/scylladb/scylla/commit/afd0641cc9a3b681c0a5484a182836e0c7902e77.patch";
+      sha256 = "0in6qs7achn52yd05jal69bpbb4wqzngmha8d0bdshjsfdcvfi8p";
+    })
+  ];
 
   nativeBuildInputs = [
    pkgconfig
+   perl
+   git
+   stow
    cmake
    makeWrapper
    ninja
+   antlr3
+   python3Packages.pyparsing
   ];
 
   buildInputs = [
-   antlr3
-   python3Packages.pyparsing
    boost
-   git
+   icu
+   fmt
+   c-ares
+   hwloc
+   p11-kit
+   libtasn1
+   xxHash
+   lua5_3
+   rapidjson
+   libunistring
    systemd
    gnutls
    ragel
@@ -75,28 +103,25 @@ gcc8Stdenv.mkDerivation {
    thrift
   ];
 
-  postPatch = ''
-    patchShebangs ./configure.py
-    patchShebangs seastar/json/json2code.py
-  '';
-
   configurePhase = ''
-    ./configure.py --mode=release
+    echo -e '#!/bin/sh\ncat $NIX_CC/nix-support/dynamic-linker' > reloc/get-dynamic-linker.sh
+
+    patchShebangs --build .
+
+    ./configure.py --enable-dpdk --mode=release
   '';
 
   installPhase = ''
-    mkdir $out
-    cp -r * $out/
+    install -D -m555 -t $out/bin/scylla build/release/scylla
+    install -D -m555 -t $out/bin/iotune build/release/iotune
+    cp -r dist/common/scripts $out/bin/
   '';
-
-  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with stdenv.lib; {
     description = "NoSQL data store using the seastar framework, compatible with Apache Cassandra";
     homepage = "https://scylladb.com";
     license = licenses.agpl3;
-    platforms = stdenv.lib.platforms.linux;
-    hydraPlatforms = []; # It's huge ATM, about 18 GB.
-    maintainers = [ stdenv.lib.maintainers.farlion ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.farlion ];
   };
 }
