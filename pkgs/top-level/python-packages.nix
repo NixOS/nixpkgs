@@ -4618,6 +4618,8 @@ in {
 
   protego = callPackage ../development/python-modules/protego { };
 
+  proto-plus = callPackage ../development/python-modules/proto-plus { };
+
   protobuf = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
     doCheck =
