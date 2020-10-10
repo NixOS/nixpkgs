@@ -4998,6 +4998,8 @@ in {
 
   pygments-markdown-lexer = callPackage ../development/python-modules/pygments-markdown-lexer { };
 
+  pygmsh = callPackage ../development/python-modules/pygmsh { };
+
   pygmo = callPackage ../development/python-modules/pygmo { };
 
   pygobject2 = callPackage ../development/python-modules/pygobject { inherit (pkgs) pkgconfig; };
