@@ -470,7 +470,7 @@ in
 
     networking.search = mkOption {
       default = [];
-      example = [ "example.com" "local.domain" ];
+      example = [ "example.com" "home.arpa" ];
       type = types.listOf types.str;
       description = ''
         The list of search paths used when resolving domain names.
@@ -479,7 +479,7 @@ in
 
     networking.domain = mkOption {
       default = null;
-      example = "home";
+      example = "home.arpa";
       type = types.nullOr types.str;
       description = ''
         The domain.  It can be left empty if it is auto-detected through DHCP.
