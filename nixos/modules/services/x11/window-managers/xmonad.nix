@@ -4,13 +4,15 @@ with lib;
 let
   inherit (lib) mkOption mkIf optionals literalExample;
   cfg = config.services.xserver.windowManager.xmonad;
-  xmonad = pkgs.xmonad-with-packages.override {
+
+  xmonad-vanilla = pkgs.xmonad-with-packages.override {
     ghcWithPackages = cfg.haskellPackages.ghcWithPackages;
     packages = self: cfg.extraPackages self ++
                      optionals cfg.enableContribAndExtras
                      [ self.xmonad-contrib self.xmonad-extras ];
   };
-  xmonadBin = pkgs.writers.writeHaskell "xmonad" {
+
+  xmonad-config = pkgs.writers.writeHaskellBin "xmonad" {
     ghc = cfg.haskellPackages.ghc;
     libraries = [ cfg.haskellPackages.xmonad ] ++
                 cfg.extraPackages cfg.haskellPackages ++
@@ -19,6 +21,7 @@ let
     inherit (cfg) ghcArgs;
   } cfg.config;
 
+  xmonad = if (cfg.config != null) then xmonad-config else xmonad-vanilla;
 in
 {
   options = {
@@ -101,10 +104,8 @@ in
     services.xserver.windowManager = {
       session = [{
         name = "xmonad";
-        start = let
-          xmonadCommand = if (cfg.config != null) then xmonadBin else "${xmonad}/bin/xmonad";
-        in ''
-           systemd-cat -t xmonad -- ${xmonadCommand} ${lib.escapeShellArgs cfg.xmonadCliArgs} &
+        start = ''
+           systemd-cat -t xmonad -- ${xmonad}/bin/xmonad ${lib.escapeShellArgs cfg.xmonadCliArgs} &
            waitPID=$!
         '';
       }];
