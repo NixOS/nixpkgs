@@ -370,20 +370,21 @@ Hls needs to be compiled with the ghc version of the project you use it on.
 
 `pkgs.haskell-language-server` provides `haskell-language-server-wrapper`,
 `haskell-language-server`, `haskell-language-server-x.x` and
-`haskell-language-server-x.x.x` binaries, where x.x.x is the ghc version for
+`haskell-language-server-x.x.x` binaries, where `x.x.x` is the ghc version for
 which it is compiled.  By default it includes binaries for all ghc versions
 that are provided in the binary caches. You can override that list with e.g.
 
 ```nix
 pkgs.haskell-language-server.override { supportedGhcVersions = [ "884" "901" ]; }
 ```
+
 When you run `haskell-language-server-wrapper` it will detect the ghc version
 used by the project you are working on (by asking e.g. cabal or stack) and pick
 the appropriate above mentioned binary from your path.
 
-Be careful when installing hls globally and using pinned nixpkgs for a Haskell
+Be careful when installing hls globally and using a pinned nixpkgs for a Haskell
 project in a nix-shell. If the nixpkgs versions deviate to much (e.g. use
-different `glibc` versions) hls might fail. It is recommend to then install hls
+different `glibc` versions) hls might fail. It is recommended to then install hls
 in the nix-shell from the nixpkgs version pinned in there.
 
 If you know, that you only use one ghc version, e.g. in a project specific

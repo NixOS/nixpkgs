@@ -1,5 +1,12 @@
 { lib, supportedGhcVersions ? [ "865" "884" "8102" ], stdenv, haskellPackages
 , haskell }:
+#
+# The recommended way to override this package is
+#
+# pkgs.haskell-language-server.override { supportedGhcVersions = [ "901" ]; }
+#
+# for example. Read more about this in the haskell-language-server section of the nixpkgs manual.
+#
 let
   inherit (lib) concatStringsSep concatMapStringsSep take splitString;
   getPackages = version: haskell.packages."ghc${version}";
