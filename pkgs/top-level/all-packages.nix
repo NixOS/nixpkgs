@@ -441,6 +441,8 @@ in
 
   fetchgx = callPackage ../build-support/fetchgx { };
 
+  forked-daapd = callPackage ../servers/forked-daapd { };
+
   resolveMirrorURLs = {url}: fetchurl {
     showURLs = true;
     inherit url;
