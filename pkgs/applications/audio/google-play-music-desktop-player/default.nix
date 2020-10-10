@@ -1,6 +1,6 @@
 { stdenv, alsaLib, atk, at-spi2-atk, cairo, cups, dbus, dpkg, expat, fontconfig, freetype
-, fetchurl, GConf, gdk-pixbuf, glib, gtk2, gtk3, libpulseaudio, makeWrapper, nspr
-, nss, pango, udev, xorg
+, fetchurl, GConf, gdk-pixbuf, glib, gtk2, gtk3, imagemagick, libpulseaudio, makeWrapper
+, nspr, nss, pango, udev, xorg
 }:
 
 let
@@ -54,6 +54,7 @@ stdenv.mkDerivation {
 
   dontBuild = true;
   buildInputs = [ dpkg makeWrapper ];
+  nativeBuildInputs = [ imagemagick ];
 
   unpackPhase = ''
     dpkg -x $src .
