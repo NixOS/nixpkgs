@@ -13,6 +13,8 @@ let
       sha256 = "0bb3a7x7vzmdyhm4nilm8bcn4q50pwqryggnxz21n16v6xakwjmr";
     };
 
+    enableParallelBuilding = true;
+
     nativeBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ darwin.cctools ];
 
     buildInputs = [ libck ];
@@ -30,6 +32,8 @@ stdenv.mkDerivation {
     rev = "v${version}";
     sha256 = "1vb4yaprs2bwbxmxx2zkqvysxx8r9qww2q1nqkz8yps3ji715jw7";
   };
+
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [ bootstrap ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.cctools ];
