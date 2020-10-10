@@ -1,5 +1,5 @@
-{ lib
-, stdenv
+{ stdenv
+, fetchFromGitLab
 , gnome3
 , wxGTK30
 , wxGTK31
@@ -29,8 +29,6 @@
 }:
 
 assert ngspiceSupport -> libngspice != null;
-
-with lib;
 let
   baseName = if (stable) then "kicad" else "kicad-unstable";
 
@@ -55,6 +53,7 @@ let
   python = python3;
   wxPython = python.pkgs.wxPython_4_0;
 
+  inherit (stdenv.lib) concatStringsSep flatten optionalString optionals;
 in
 stdenv.mkDerivation rec {
 
@@ -109,7 +108,7 @@ stdenv.mkDerivation rec {
   # why does $makeWrapperArgs have to be added explicitly?
   # $out and $program_PYTHONPATH don't exist when makeWrapperArgs gets set?
   # kicad-ogltest's source seems to indicate that crashing is expected behaviour...
-  installPhase = with lib;
+  installPhase =
     let
       tools = [ "kicad" "pcbnew" "eeschema" "gerbview" "pcb_calculator" "pl_editor" "bitmap2component" ];
       utils = [ "dxf2idf" "idf2vrml" "idfcyl" "idfrect" "kicad2step" "kicad-ogltest" ];
@@ -148,7 +147,7 @@ stdenv.mkDerivation rec {
       KiCad is an open source software suite for Electronic Design Automation.
       The Programs handle Schematic Capture, and PCB Layout with Gerber output.
     '';
-    license = licenses.agpl3;
+    license = stdenv.lib.licenses.agpl3;
     # berce seems inactive...
     maintainers = with stdenv.lib.maintainers; [ evils kiwi berce ];
     # kicad is cross platform

@@ -1,5 +1,4 @@
-{ lib
-, stdenv
+{ stdenv
 , cmake
 , gettext
 , fetchFromGitHub
@@ -15,7 +14,6 @@
 #     sha256 = "...";
 #   };
 # };
-with lib;
 let
   mkLib = name:
     stdenv.mkDerivation {
@@ -34,7 +32,7 @@ let
       nativeBuildInputs = [ cmake ];
 
       meta = rec {
-        license = licenses.cc-by-sa-40;
+        license = stdenv.lib.licenses.cc-by-sa-40;
         platforms = stdenv.lib.platforms.all;
         # the 3d models are a ~1 GiB download and occupy ~5 GiB in store.
         # this would exceed the hydra output limit
@@ -69,7 +67,7 @@ in
       );
       nativeBuildInputs = [ cmake gettext ];
       meta = {
-        license = licenses.gpl2; # https://github.com/KiCad/kicad-i18n/issues/3
+        license = stdenv.lib.licenses.gpl2; # https://github.com/KiCad/kicad-i18n/issues/3
         platforms = stdenv.lib.platforms.all;
       };
     };
