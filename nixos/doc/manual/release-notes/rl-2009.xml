@@ -605,8 +605,8 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
    <listitem>
      <para>
        In addition to the hostname, the fully qualified domain name (FQDN),
-       which consists of <literal>${cfg.hostName}</literal> and
-       <literal>${cfg.domain}</literal> is now added to
+       which consists of <literal>${networking.hostName}</literal> and
+       <literal>${networking.domain}</literal> is now added to
        <literal>/etc/hosts</literal>, to allow local FQDN resolution, as used by the
        <literal>hostname --fqdn</literal> command and other applications that
        try to determine the FQDN. These new entries take precedence over entries
@@ -626,6 +626,10 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
        or digit, and have as interior characters only letters, digits, and
        hyphen. The maximum length is 63 characters. Additionally it is
        recommended to only use lower-case characters.
+       If (e.g. for legacy reasons) a FQDN is required as the Linux kernel network node hostname
+       (<literal>uname --nodename</literal>) the option
+       <literal>boot.kernel.sysctl."kernel.hostname"</literal>
+       can be used as a workaround (but be aware of the 64 character limit).
      </para>
    </listitem>
    <listitem>
