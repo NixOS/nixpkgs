@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xonsh";
-  version = "0.9.22";
+  version = "0.9.23";
 
   # fetch from github because the pypi package ships incomplete tests
   src = fetchFromGitHub {
     owner  = "xonsh";
     repo   = "xonsh";
     rev    = version;
-    sha256 = "04yd8y4lksmxbgl6v6bw1k32r8v5mia3sm8y9v39cgfzjbkvys1p";
+    sha256 = "1by13ryq9ldc9wln3fk5mm6zvjp4aim57ikw49v0dfmz8irnpglp";
   };
 
   LC_ALL = "en_US.UTF-8";
