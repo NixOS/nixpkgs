@@ -14,12 +14,16 @@
 , pname ? "kicad"
 , stable ? true
 , oceSupport ? false
+, withOCE ? false
 , opencascade
-, withOCCT ? true
+, withOCCT ? false
+, withOCC ? true
 , opencascade-occt
-, ngspiceSupport ? true
+, ngspiceSupport ? false
+, withNgspice ? true
 , libngspice
-, scriptingSupport ? true
+, scriptingSupport ? false
+, withScripting ? true
 , swig
 , python3
 , debug ? false
@@ -28,7 +32,15 @@
 , withI18n ? true
 }:
 
-assert ngspiceSupport -> libngspice != null;
+assert withNgspice -> libngspice != null;
+assert stdenv.lib.assertMsg (!ngspiceSupport)
+  "`nspiceSupport` was renamed to `withNgspice` for the sake of consistency with other kicad nix arguments.";
+assert stdenv.lib.assertMsg (!oceSupport)
+  "`oceSupport` was renamed to `withOCE` for the sake of consistency with other kicad nix arguments.";
+assert stdenv.lib.assertMsg (!scriptingSupport)
+  "`scriptingSupport` was renamed to `withScripting` for the sake of consistency with other kicad nix arguments.";
+assert stdenv.lib.assertMsg (!withOCCT)
+  "`withOCCT` was renamed to `withOCC` for the sake of consistency with upstream cmake options.";
 let
   baseName = if (stable) then "kicad" else "kicad-unstable";
 
@@ -61,7 +73,7 @@ stdenv.mkDerivation rec {
   base = callPackage ./base.nix {
     inherit versions stable baseName;
     inherit wxGTK python wxPython;
-    inherit debug withI18n withOCCT oceSupport ngspiceSupport scriptingSupport;
+    inherit debug withI18n withOCC withOCE withNgspice withScripting;
   };
 
   inherit pname;
@@ -73,11 +85,11 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontFixup = true;
 
-  pythonPath = optionals (scriptingSupport)
+  pythonPath = optionals (withScripting)
     [ wxPython python.pkgs.six ];
 
   nativeBuildInputs = [ makeWrapper ]
-    ++ optionals (scriptingSupport)
+    ++ optionals (withScripting)
     [ python.pkgs.wrapPython ];
 
   # We are emulating wrapGAppsHook, along with other variables to the
@@ -99,7 +111,7 @@ stdenv.mkDerivation rec {
     "--prefix KICAD_TEMPLATE_DIR : ${footprints}/share/kicad/template"
   ]
   ++ optionals (with3d) [ "--set KISYS3DMOD ${packages3d}/share/kicad/modules/packages3d" ]
-  ++ optionals (ngspiceSupport) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
+  ++ optionals (withNgspice) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
 
   # infinisil's workaround for #39493
   ++ [ "--set GDK_PIXBUF_MODULE_FILE ${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" ]
@@ -115,12 +127,12 @@ stdenv.mkDerivation rec {
     in
     (concatStringsSep "\n"
       (flatten [
-        (optionalString (scriptingSupport) "buildPythonPath \"${base} $pythonPath\" \n")
+        (optionalString (withScripting) "buildPythonPath \"${base} $pythonPath\" \n")
 
         # wrap each of the directly usable tools
         (map
           (tool: "makeWrapper ${base}/bin/${tool} $out/bin/${tool} $makeWrapperArgs"
-            + optionalString (scriptingSupport) " --set PYTHONPATH \"$program_PYTHONPATH\""
+            + optionalString (withScripting) " --set PYTHONPATH \"$program_PYTHONPATH\""
           )
           tools)
 
