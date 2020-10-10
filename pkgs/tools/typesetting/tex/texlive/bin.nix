@@ -206,7 +206,7 @@ core = stdenv.mkDerivation rec {
 };
 
 
-inherit (core-big) metafont metapost luatex xetex;
+inherit (core-big) metafont mflua metapost luatex xetex;
 core-big = stdenv.mkDerivation { #TODO: upmendex
   pname = "texlive-core-big.bin";
   inherit version;
@@ -254,13 +254,14 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
 
   # now distribute stuff into outputs, roughly as upstream TL
   # (uninteresting stuff remains in $out, typically duplicates from `core`)
-  outputs = [ "out" "metafont" "metapost" "luatex" "xetex" ];
+  outputs = [ "out" "metafont" "mflua" "metapost" "luatex" "xetex" ];
   postInstall = ''
     for output in $outputs; do
       mkdir -p "''${!output}/bin"
     done
 
     mv "$out/bin"/{inimf,mf,mf-nowin} "$metafont/bin/"
+    mv "$out/bin"/{mflua,mflua-nowin} "$mflua/bin/"
     mv "$out/bin"/{*tomp,mfplain,*mpost} "$metapost/bin/"
     mv "$out/bin"/{luatex,texlua*} "$luatex/bin/"
     mv "$out/bin"/xetex "$xetex/bin/"
