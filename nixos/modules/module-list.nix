@@ -449,6 +449,7 @@
   ./services/misc/ethminer.nix
   ./services/misc/exhibitor.nix
   ./services/misc/felix.nix
+  ./services/misc/forked-daapd.nix
   ./services/misc/freeswitch.nix
   ./services/misc/fstrim.nix
   ./services/misc/gammu-smsd.nix
