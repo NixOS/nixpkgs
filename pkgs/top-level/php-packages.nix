@@ -66,14 +66,7 @@ in
 
     apcu_bc = callPackage ../development/php-packages/apcu_bc { };
 
-    ast = buildPecl {
-      version = "1.0.5";
-      pname = "ast";
-
-      sha256 = "16c5isldm4csjbcvz1qk2mmrhgvh24sxsp6w6f5a37xpa3vciawp";
-
-      meta.maintainers = lib.teams.php.members;
-    };
+    ast = callPackage ../development/php-packages/ast { };
 
     blackfire = pkgs.callPackage ../development/tools/misc/blackfire/php-probe.nix { inherit php; };
 
