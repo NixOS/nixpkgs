@@ -128,26 +128,7 @@ in
 
     protobuf = callPackage ../development/php-packages/protobuf { };
 
-    pthreads = let
-      version = "3.2.0";
-      src = pkgs.fetchFromGitHub ({
-        owner = "krakjoe";
-        repo = "pthreads";
-      } // (if (isPhp73) then {
-        rev = "4d1c2483ceb459ea4284db4eb06646d5715e7154";
-        sha256 = "07kdxypy0bgggrfav2h1ccbv67lllbvpa3s3zsaqci0gq4fyi830";
-      } else {
-        rev = "v3.2.0";
-        sha256 = "17hypm75d4w7lvz96jb7s0s87018yzmmap0l125d5fd7abnhzfvv";
-      }));
-    in buildPecl {
-      pname = "pthreads";
-      inherit version src;
-
-      buildInputs = [ pcre'.dev ];
-
-      meta.broken = isPhp74;
-    };
+    pthreads = callPackage ../development/php-packages/pthreads { };
 
     rdkafka = buildPecl {
       version = "4.0.3";
