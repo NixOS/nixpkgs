@@ -88,16 +88,7 @@ in
 
     oci8 = callPackage ../development/php-packages/oci8 { };
 
-    pcov = buildPecl {
-      version = "1.0.6";
-      pname = "pcov";
-
-      sha256 = "1psfwscrc025z8mziq69pcx60k4fbkqa5g2ia8lplb94mmarj0v1";
-
-      buildInputs = [ pcre' ];
-
-      meta.maintainers = lib.teams.php.members;
-    };
+    pcov = callPackage ../development/php-packages/pcov { };
 
     pcs = buildPecl {
       version = "1.3.3";
