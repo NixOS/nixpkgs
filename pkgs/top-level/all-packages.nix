@@ -26439,6 +26439,7 @@ in
     });
 
     java = openjdk11;
+    z3 = z3_4_4_0;
   };
 
   iprover = callPackage ../applications/science/logic/iprover { };
@@ -26531,6 +26532,10 @@ in
   };
 
   z3 = callPackage ../applications/science/logic/z3 { python = python2; };
+  z3_4_4_0 = callPackage ../applications/science/logic/z3/4.4.0.nix {
+    python = python2;
+    stdenv = gcc49Stdenv;
+  };
   z3-tptp = callPackage ../applications/science/logic/z3/tptp.nix {};
 
   tlaplus = callPackage ../applications/science/logic/tlaplus {
