@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage    = "https://knightos.org/";
-    description = "Assembler and linker for the Z80.";
+    description = "Assembler and linker for the Z80";
     license     = licenses.mit;
     maintainers = with maintainers; [ siraben ];
   };

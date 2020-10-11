@@ -47,7 +47,7 @@ python3Packages.buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://developers.yubico.com/yubikey-manager";
-    description = "Command line tool for configuring any YubiKey over all USB transports.";
+    description = "Command line tool for configuring any YubiKey over all USB transports";
 
     license = licenses.bsd2;
     platforms = platforms.unix;
