@@ -1,6 +1,7 @@
 { lib, stdenv, fetchhg, fetchurl, gtk2, glib, pkgconfig, unzip, ncurses, zip }:
+
 stdenv.mkDerivation rec {
-  version = "10.2";
+  version = "10.8";
   pname = "textadept";
 
   nativeBuildInputs = [ pkgconfig ];
@@ -11,17 +12,13 @@ stdenv.mkDerivation rec {
   src = fetchhg {
     url = "http://foicica.com/hg/textadept";
     rev = "textadept_${version}";
-    sha256 = "0fai8xqddkkprmbf0cf8wwgv7ccfdb1iyim30nppm2m16whkc8fl";
+    sha256 = "sha256-dEZSx2tuHTWYhk9q5iGlrWTAvDvKaM8HaHwXcFcv33s=";
   };
 
   preConfigure =
     lib.concatStringsSep "\n" (lib.mapAttrsToList (name: params:
       "ln -s ${fetchurl params} $PWD/src/${name}"
     ) (import ./deps.nix)) + ''
-
-    # work around trying to download stuff in `make deps`
-    function wget() { true; }
-    export -f wget
 
     cd src
     make deps
@@ -31,12 +28,17 @@ stdenv.mkDerivation rec {
     make curses
   '';
 
+  preInstall = ''
+    mkdir -p $out/share/applications
+    mkdir -p $out/share/pixmaps
+  '';
+
   postInstall = ''
     make curses install PREFIX=$out MAKECMDGOALS=curses
   '';
 
   makeFlags = [
-    "PREFIX=$(out)"
+    "PREFIX=$(out) WGET=true PIXMAPS_DIR=$(out)/share/pixmaps"
   ];
 
   meta = with stdenv.lib; {
