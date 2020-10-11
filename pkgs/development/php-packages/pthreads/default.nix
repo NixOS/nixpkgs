@@ -1,6 +1,10 @@
-{ buildPecl, lib, fetchFromGitHub, isPhp73, isPhp74, pcre' }:
+{ buildPecl, lib, fetchFromGitHub, php, pcre' }:
 let
   pname = "pthreads";
+
+  isPhp73 = lib.versionAtLeast php.version "7.3";
+  isPhp74 = lib.versionAtLeast php.version "7.4";
+
   version = if isPhp73 then "3.2.0-dev" else "3.2.0";
 
   src = fetchFromGitHub ({

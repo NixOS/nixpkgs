@@ -1,6 +1,9 @@
-{ buildPecl, lib, fetchFromGitHub, isPhp73 }:
+{ buildPecl, lib, fetchFromGitHub, php }:
 let
   pname = "pinba";
+
+  isPhp73 = lib.versionAtLeast php.version "7.3";
+
   version = if isPhp73 then "1.1.2-dev" else "1.1.1";
 
   src = fetchFromGitHub ({
