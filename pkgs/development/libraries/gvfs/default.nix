@@ -41,11 +41,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gvfs";
-  version = "1.46.0";
+  version = "1.46.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1sbhv7smfah5nijmv9k3chhylnyx4rnb8xn7mkiir8h9vak77fkq";
+    sha256 = "00r56kp8dhdn1ypyap66klymlwlh646n4f1ri797w2x6p70sc7k2";
   };
 
   postPatch = ''
