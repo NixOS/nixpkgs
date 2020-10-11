@@ -337,5 +337,6 @@ stdenv.mkDerivation rec {
       pierron
     ];
     platforms = platforms.linux;
+    knownVulnerabilities = [ "Support ended around Semptember 2020." ];
   };
 }
