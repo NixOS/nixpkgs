@@ -4280,6 +4280,12 @@
     githubId = 39434424;
     name = "Felix Springer";
   };
+  justinas = {
+    email = "justinas@justinas.org";
+    github = "justinas";
+    githubId = 662666;
+    name = "Justinas Stankevičius";
+  };
   justinlovinger = {
     email = "git@justinlovinger.com";
     github = "JustinLovinger";
