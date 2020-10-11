@@ -126,23 +126,7 @@ in
 
     pinba = callPackage ../development/php-packages/pinba { };
 
-    protobuf = buildPecl {
-      version = "3.11.2";
-      pname = "protobuf";
-
-      sha256 = "0bhdykdyk58ywqj940zb7jyvrlgdr6hdb4s8kn79fz3p0i79l9hz";
-
-      buildInputs = with pkgs; [ pcre' ];
-
-      meta = with pkgs.lib; {
-        description = ''
-          Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data.
-        '';
-        license = licenses.bsd3;
-        homepage = "https://developers.google.com/protocol-buffers/";
-        maintainers = teams.php.members;
-      };
-    };
+    protobuf = callPackage ../development/php-packages/protobuf { };
 
     pthreads = let
       version = "3.2.0";
