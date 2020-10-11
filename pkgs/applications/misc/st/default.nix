@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
   inherit patches;
 
   configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
-  postPatch = optionalString (conf!=null) "cp ${configFile} config.def.h";
+
+  postPatch = optionalString (conf!=null) "cp ${configFile} config.def.h"
+            + optionalString stdenv.isDarwin ''
+    substituteInPlace config.mk --replace "-lrt" ""
+  '';
 
   nativeBuildInputs = [ pkgconfig ncurses ];
   buildInputs = [ libX11 libXft ] ++ extraLibs;
@@ -28,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://st.suckless.org/";
     description = "Simple Terminal for X from Suckless.org Community";
     license = licenses.mit;
-    maintainers = with maintainers; [andsild];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ andsild ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
