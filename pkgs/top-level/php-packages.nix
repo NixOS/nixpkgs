@@ -164,20 +164,7 @@ in
 
     xdebug = callPackage ../development/php-packages/xdebug { };
 
-    yaml = buildPecl {
-      version = "2.0.4";
-      pname = "yaml";
-
-      sha256 = "1036zhc5yskdfymyk8jhwc34kvkvsn5kaf50336153v4dqwb11lp";
-
-      configureFlags = [
-        "--with-yaml=${pkgs.libyaml}"
-      ];
-
-      nativeBuildInputs = [ pkgs.pkgconfig ];
-
-      meta.maintainers = lib.teams.php.members;
-    };
+    yaml = callPackage ../development/php-packages/yaml { };
 
     zmq = buildPecl {
       version = "1.1.3";
