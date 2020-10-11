@@ -1460,14 +1460,6 @@ self: super: {
   pandoc-types = doDistribute self.pandoc-types_1_21;
   rfc5051 = doDistribute self.rfc5051_0_2;
 
-  # Upstream forgot to change the Cabal version bounds in the test suite.
-  # See: https://github.com/jaspervdj/stylish-haskell/pull/297
-  # Will be fixed whenever they next bump the version number
-  stylish-haskell = appendPatch super.stylish-haskell (pkgs.fetchpatch {
-    url = "https://github.com/jaspervdj/stylish-haskell/commit/9550aa1cd177aa6fe271d075177109d66a79e67f.patch";
-    sha256 = "1ffnbd2s4fx0ylnnlcyyag119yxb32p5r20b38l39lsa0jwv229f";
-  });
-
   # The test suite attempts to read `/etc/resolv.conf`, which doesn't work in the sandbox.
   domain-auth = dontCheck super.domain-auth;
   # INSERT NEW OVERRIDES ABOVE THIS LINE
