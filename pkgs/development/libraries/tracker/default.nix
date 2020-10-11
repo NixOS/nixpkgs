@@ -8,9 +8,7 @@
 , gobject-introspection
 , python3
 , gtk-doc
-, docbook_xsl
-, docbook_xml_dtd_412
-, docbook_xml_dtd_43
+, docbook-xsl-nons
 , docbook_xml_dtd_45
 , libxml2
 , glib
@@ -22,7 +20,6 @@
 , gnome3
 , icu
 , libuuid
-, networkmanager
 , libsoup
 , json-glib
 , systemd
@@ -59,9 +56,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     gobject-introspection
     gtk-doc
-    docbook_xsl
-    docbook_xml_dtd_412
-    docbook_xml_dtd_43
+    docbook-xsl-nons
     docbook_xml_dtd_45
     python3 # for data-generators
     systemd # used for checks to install systemd user service
@@ -73,7 +68,6 @@ stdenv.mkDerivation rec {
     libxml2
     sqlite
     icu
-    networkmanager
     libsoup
     libuuid
     json-glib
