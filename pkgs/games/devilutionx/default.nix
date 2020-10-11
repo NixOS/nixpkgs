@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, cmake, SDL2, SDL2_mixer, SDL2_ttf, libsodium, pkg-config }:
 stdenv.mkDerivation rec {
-  version = "1.0.1";
+  version = "1.1.0-nixpkg-static-sdl2";
   pname = "devilutionx";
 
   src = fetchFromGitHub {
-    owner = "diasurgical";
+    owner = "karolchmist";
     repo = "devilutionX";
     rev = version;
-    sha256 = "1jvjlch9ql5s5jx9g5y5pkc2xn62199qylsmzpqzx1jc3k2vmw5i";
+    sha256 = "11brk4b34q8083qqczbrcj6yglnwzar040b2di9g5d34lc075vb5";
   };
 
   NIX_CFLAGS_COMPILE = [
