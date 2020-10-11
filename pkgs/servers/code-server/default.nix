@@ -174,7 +174,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    description = "Run VS Code on a remote server.";
+    description = "Run VS Code on a remote server";
     longDescription = ''
       code-server is VS Code running on a remote server, accessible through the
       browser.

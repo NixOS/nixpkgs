@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A music programming language for musicians.";
+    description = "A music programming language for musicians";
     homepage = "https://alda.io";
     license = licenses.epl10;
     maintainers = [ maintainers.ericdallo ];

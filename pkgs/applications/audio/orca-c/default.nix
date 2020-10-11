@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    description = "An esoteric programming language designed to quickly create procedural sequencers.";
+    description = "An esoteric programming language designed to quickly create procedural sequencers";
     homepage = "https://github.com/hundredrabbits/Orca-c";
     license = licenses.mit;
     platforms = platforms.all;

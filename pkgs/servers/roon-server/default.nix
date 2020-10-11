@@ -59,7 +59,7 @@
     '';
 
   meta = with lib; {
-    description = "The music player for music lovers.";
+    description = "The music player for music lovers";
     homepage = "https://roonlabs.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ lovesegfault steell ];
