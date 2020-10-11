@@ -1,5 +1,5 @@
 { newScope, config, stdenv, fetchurl, makeWrapper
-, llvmPackages_10, llvmPackages_11, ed, gnugrep, coreutils, xdg_utils
+, llvmPackages_11, ed, gnugrep, coreutils, xdg_utils
 , glib, gtk3, gnome3, gsettings-desktop-schemas, gn, fetchgit
 , libva ? null
 , gcc, nspr, nss, patchelfUnstable, runCommand
@@ -14,7 +14,7 @@
 , enablePepperFlash ? false
 , enableWideVine ? false
 , useVaapi ? false # Deprecated, use enableVaapi instead!
-, enableVaapi ? false # Disabled by default due to unofficial support and issues on radeon
+, enableVaapi ? false # Disabled by default due to unofficial support
 , useOzone ? false
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
@@ -22,7 +22,7 @@
 }:
 
 let
-  llvmPackages = llvmPackages_10;
+  llvmPackages = llvmPackages_11;
   stdenv = llvmPackages.stdenv;
 
   callPackage = newScope chromium;
@@ -36,16 +36,6 @@ let
       inherit channel gnome gnomeSupport gnomeKeyringSupport proprietaryCodecs
               cupsSupport pulseSupport useOzone;
       # TODO: Remove after we can update gn for the stable channel (backward incompatible changes):
-      gnChromium = gn.overrideAttrs (oldAttrs: {
-        version = "2020-05-19";
-        src = fetchgit {
-          url = "https://gn.googlesource.com/gn";
-          rev = "d0a6f072070988e7b038496c4e7d6c562b649732";
-          sha256 = "0197msabskgfbxvhzq73gc3wlr3n9cr4bzrhy5z5irbvy05lxk17";
-        };
-      });
-    } // lib.optionalAttrs (lib.versionAtLeast upstream-info.version "86") {
-      llvmPackages = llvmPackages_11;
       gnChromium = gn.overrideAttrs (oldAttrs: {
         version = "2020-07-20";
         src = fetchgit {
@@ -163,8 +153,8 @@ let
       Chromium's useVaapi was replaced by enableVaapi and you don't need to pass
       "--ignore-gpu-blacklist" anymore (also no rebuilds are required anymore).
     '' else lib.optionalString
-      (!enableVaapi)
-      "--add-flags --disable-accelerated-video-decode --add-flags --disable-accelerated-video-encode";
+      (enableVaapi)
+      "--add-flags --enable-accelerated-video-decode";
 in stdenv.mkDerivation {
   name = "chromium${suffix}-${version}";
   inherit version;

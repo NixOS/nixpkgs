@@ -32,8 +32,8 @@ in stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
-  src = fetch pname "151c7nphn18dcw04yxyp6qdj8w19psb8nigf26djf7rhpi1fn0sh";
-  polly_src = fetch "polly" "0caxfpaxhf38nam4gkb9xqlrw20v29cm8jf95ykkbngqw64rmgij";
+  src = fetch pname "1k7i2syqdm29l10di3ws64i02snh9jhd1s2jzgh8565b0vg25wlc";
+  polly_src = fetch "polly" "0l0n09f6sy30x825w85v8n7pvya0ciq89r0abv66n8ggwmrk3rnw";
 
   unpackPhase = ''
     unpackFile $src
