@@ -295,6 +295,12 @@ in
         gnome-shell
       ];
 
+      services.udev.packages = with pkgs.gnome3; [
+        # Force enable KMS modifiers for devices that require them.
+        # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1443
+        mutter
+      ];
+
       services.avahi.enable = mkDefault true;
 
       xdg.portal.extraPortals = [
