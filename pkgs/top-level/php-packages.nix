@@ -120,18 +120,7 @@ in
       meta.maintainers = lib.teams.php.members;
     };
 
-    pdo_sqlsrv = buildPecl {
-      version = "5.8.1";
-      pname = "pdo_sqlsrv";
-
-      sha256 = "06ba4x34fgs092qq9w62y2afsm1nyasqiprirk4951ax9v5vcir0";
-
-      internalDeps = [ php.extensions.pdo ];
-
-      buildInputs = [ pkgs.unixODBC ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
-
-      meta.maintainers = lib.teams.php.members;
-    };
+    pdo_sqlsrv = callPackage ../development/php-packages/pdo_sqlsrv { };
 
     php_excel = buildPecl rec {
       version = "1.0.2";
