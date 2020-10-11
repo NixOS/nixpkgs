@@ -374,7 +374,9 @@ in
         baobab
         cheese
         eog
-        epiphany
+        /* Not in good standing on nixos:
+         * https://github.com/NixOS/nixpkgs/issues/98819
+        /* epiphany */
         gedit
         gnome-calculator
         gnome-calendar
