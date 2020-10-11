@@ -3,7 +3,7 @@
 , isPy27
 , fetchPypi
 , glibcLocales
-, pytest
+, pytestCheckHook
 , testfixtures
 , pillow
 , twisted
@@ -18,7 +18,6 @@
 , cssselect
 , zope_interface
 , protego
-, lib
 , jmespath
 , sybil
 , pytest-twisted
@@ -28,7 +27,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.3.0";
+  version = "2.4.0";
   pname = "Scrapy";
 
   disabled = isPy27;
@@ -36,7 +35,7 @@ buildPythonPackage rec {
   checkInputs = [
     glibcLocales
     jmespath
-    pytest
+    pytestCheckHook
     sybil
     testfixtures
     pillow
@@ -63,19 +62,28 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  # Disable doctest plugin—enabled in the shipped pytest.ini—because it causes pytest to hang
-  # Ignore proxy tests because requires mitmproxy
-  # Ignore utils_display tests because it requires pygments
-  # Ignore test_retry_dns_error because tries to resolve an invalid dns and weirdly fails with "Reactor was unclean"
-  # Ignore xml encoding test on darwin because lxml can't find encodings https://bugs.launchpad.net/lxml/+bug/707396
-  checkPhase = ''
+  # Disable doctest plugin because it causes pytest to hang
+  preCheck = ''
     substituteInPlace pytest.ini --replace "--doctest-modules" ""
-    pytest --ignore=tests/test_linkextractors_deprecated.py --ignore=tests/test_proxy_connect.py --ignore=tests/test_utils_display.py --deselect tests/test_crawl.py::CrawlTestCase::test_retry_dns_error ${lib.optionalString stdenv.isDarwin "--deselect tests/test_utils_iterators.py::LxmlXmliterTestCase::test_xmliter_encoding"}
   '';
+
+  pytestFlagsArray = [
+    "--ignore=tests/test_proxy_connect.py"
+    "--ignore=tests/test_utils_display.py"
+    "--ignore=tests/test_command_check.py"
+  ];
+
+  disabledTests = [
+    "FTPFeedStorageTest"
+    "test_noconnect"
+    "test_retry_dns_error"
+    "test_custom_asyncio_loop_enabled_true"
+    "test_custom_loop_asyncio"
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ "test_xmliter_encoding" ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b4d08cdacb615563c291d053ef1ba2dc08d9d4b6d81578684eaa1cf7b832f90c";
+    sha256 = "4ea7fbc902ee0b0a79b154d07a5f4e747e2146f272a748557941946000728479";
   };
 
   postInstall = ''
@@ -84,7 +92,7 @@ buildPythonPackage rec {
     install -m 644 -D extras/scrapy_zsh_completion $out/share/zsh/site-functions/_scrapy
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "A fast high-level web crawling and web scraping framework, used to crawl websites and extract structured data from their pages";
     homepage = "https://scrapy.org/";
     license = licenses.bsd3;
