@@ -1,6 +1,6 @@
 { haskellPackages, mkDerivation, fetchFromGitHub, lib
 # the following are non-haskell dependencies
-, makeWrapper, which, maude, graphviz, ocaml
+, makeWrapper, which, maude, graphviz
 }:
 
 let
@@ -71,12 +71,6 @@ mkDerivation (common "tamarin-prover" src // {
   enableSharedExecutables = false;
   postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
 
-  patches = [ ./sapic-native.patch ];
-
-  postBuild = ''
-    cd plugins/sapic && make sapic && cd ../..
-  '';
-
   # wrap the prover to be sure it can find maude, sapic, etc
   executableToolDepends = [ makeWrapper which maude graphviz ];
   postInstall = ''
@@ -85,12 +79,10 @@ mkDerivation (common "tamarin-prover" src // {
     # so that the package can be used as a vim plugin to install syntax coloration
     install -Dt $out/share/vim-plugins/tamarin-prover/syntax/ etc/syntax/spthy.vim
     install etc/filetype.vim -D $out/share/vim-plugins/tamarin-prover/ftdetect/tamarin.vim
-    install -m0755 ./plugins/sapic/sapic $out/bin/sapic
   '';
 
   checkPhase = "./dist/build/tamarin-prover/tamarin-prover test";
 
-  executableSystemDepends = [ ocaml ];
   executableHaskellDepends = (with haskellPackages; [
     binary-instances binary-orphans blaze-html conduit file-embed
     gitrev http-types lifted-base monad-control monad-unlift
