@@ -25818,6 +25818,7 @@ in
     draw-on-your-screen = callPackage ../desktops/gnome-3/extensions/draw-on-your-screen { };
     drop-down-terminal = callPackage ../desktops/gnome-3/extensions/drop-down-terminal { };
     emoji-selector = callPackage ../desktops/gnome-3/extensions/emoji-selector { };
+    freon = callPackage ../desktops/gnome-3/extensions/freon { };
     gsconnect = callPackage ../desktops/gnome-3/extensions/gsconnect { };
     icon-hider = callPackage ../desktops/gnome-3/extensions/icon-hider { };
     impatience = callPackage ../desktops/gnome-3/extensions/impatience { };
