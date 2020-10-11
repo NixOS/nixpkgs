@@ -62,7 +62,6 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-session-bus-services-dir=${placeholder "out"}/share/dbus-1/services"
     "--disable-telepathy"
   ];
 
@@ -84,7 +83,7 @@ stdenv.mkDerivation rec {
     description = "A service which logs the users’s activities and events";
     homepage = "https://zeitgeist.freedesktop.org/";
     maintainers = with maintainers; [ lethalman worldofpeace ];
-    license = licenses.gpl2;
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };
 }
