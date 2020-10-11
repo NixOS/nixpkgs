@@ -161,6 +161,11 @@
    </listitem>
    <listitem>
     <para>
+     The setting <xref linkend="opt-services.redis.bind" /> defaults to <literal>127.0.0.1</literal> now, making Redis listen on the loopback interface only, and not all public network interfaces.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      NixOS now emits a deprecation warning if systemd's <literal>StartLimitInterval</literal> setting is used in a <literal>serviceConfig</literal> section instead of in a <literal>unitConfig</literal>; that setting is deprecated and now undocumented for the service section by systemd upstream, but still effective and somewhat buggy there, which can be confusing. See <link xlink:href="https://github.com/NixOS/nixpkgs/issues/45785">#45785</link> for details.
     </para>
     <para>
