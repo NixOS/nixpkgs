@@ -913,6 +913,13 @@ CREATE ROLE postgres LOGIN SUPERUSER;
        </programlisting>
      </para>
    </listitem>
+   <listitem>
+    <para>
+      The GNOME desktop manager no longer default installs <package>gnome3.epiphany</package>.
+      It was chosen to do this as it has a usability breaking issue (see issue <link xlink:href="https://github.com/NixOS/nixpkgs/issues/98819">#98819</link>)
+      that makes it unsuitable to be a default app.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
