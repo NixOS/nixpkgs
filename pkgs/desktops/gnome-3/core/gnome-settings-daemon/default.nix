@@ -1,5 +1,4 @@
 { stdenv
-, fetchFromGitLab
 , fetchpatch
 , substituteAll
 , fetchurl
@@ -43,17 +42,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-settings-daemon";
-  version = "3.38.0";
+  version = "3.38.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0bkrsqzyrxvnw2x1p2a67k3f692ih3i5pafnxqn1kbcsmdgmpvdp";
+    sha256 = "0r010wzw3dj87mapzvq15zv93i86wg0x0rpii3x2wapq3bcj30g2";
   };
-
-  # See https://mail.gnome.org/archives/distributor-list/2020-September/msg00001.html
-  prePatch = (import ../gvc-with-ucm-prePatch.nix {
-    inherit fetchFromGitLab;
-  });
 
   patches = [
     # https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/merge_requests/202
