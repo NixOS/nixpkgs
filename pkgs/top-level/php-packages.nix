@@ -130,25 +130,7 @@ in
 
     pthreads = callPackage ../development/php-packages/pthreads { };
 
-    rdkafka = buildPecl {
-      version = "4.0.3";
-      pname = "rdkafka";
-
-      sha256 = "1g00p911raxcc7n2w9pzadxaggw5c564md6hjvqfs9ip550y5x16";
-
-      buildInputs = with pkgs; [ rdkafka pcre' ];
-
-      postPhpize = ''
-        substituteInPlace configure \
-          --replace 'SEARCH_PATH="/usr/local /usr"' 'SEARCH_PATH=${pkgs.rdkafka}'
-      '';
-
-      meta = {
-        description = "Kafka client based on librdkafka";
-        homepage = "https://github.com/arnaud-lb/php-rdkafka";
-        maintainers = lib.teams.php.members;
-      };
-    };
+    rdkafka = callPackage ../development/php-packages/rdkafka { };
 
     redis = buildPecl {
       version = "5.1.1";
