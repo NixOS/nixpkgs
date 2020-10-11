@@ -45,11 +45,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glib";
-  version = "2.66.0";
+  version = "2.66.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0v0m268qichkh0sirj8gd4awwg6258yr8k6s6p0lhmh68gqnp9n5";
+    sha256 = "0q7g70j6vjvcw4xf6bbfkm4j6mradcabdcdcy4gs5hxwkzkgysd2";
   };
 
   patches = optionals stdenv.isDarwin [
@@ -83,12 +83,6 @@ stdenv.mkDerivation rec {
     # 3. Tools for desktop environment that cannot go to $bin due to $out depending on them ($out)
     #    * gio-launch-desktop
     ./split-dev-programs.patch
-
-    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/1648
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/642baa50fa561f7abfbbfe5ac9a10351a706b95a.patch";
-      sha256 = "0mrin6x6iy9x2bplz6q7ljdq677nmvcwhns7nkahj719h0qpzn0z";
-    })
   ] ++ optional doCheck ./skip-timer-test.patch;
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
