@@ -16840,6 +16840,8 @@ in
 
   tomcat-native = callPackage ../servers/http/tomcat/tomcat-native.nix { };
 
+  pg_tileserv = callPackage ../servers/pg_tileserv { };
+
   pies = callPackage ../servers/pies { };
 
   rpcbind = callPackage ../servers/rpcbind { };
