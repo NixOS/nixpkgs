@@ -111,6 +111,8 @@ let
       done
     '';
   };
+
+  withLuaJIT = !(stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit);
 in rec { # un-indented
 
 inherit (common) cleanBrokenLinks;
@@ -206,7 +208,7 @@ core = stdenv.mkDerivation rec {
 };
 
 
-inherit (core-big) metafont mflua metapost luatex xetex;
+inherit (core-big) metafont mflua metapost luatex luajittex xetex;
 core-big = stdenv.mkDerivation { #TODO: upmendex
   pname = "texlive-core-big.bin";
   inherit version;
@@ -221,21 +223,20 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
   configureFlags = common.configureFlags
     ++ withSystemLibs [ "kpathsea" "ptexenc" "cairo" "harfbuzz" "icu" "graphite2" ]
     ++ map (prog: "--disable-${prog}") # don't build things we already have
-      [ "tex" "ptex" "eptex" "uptex" "euptex" "aleph" "pdftex"
+      ([ "tex" "ptex" "eptex" "uptex" "euptex" "aleph" "pdftex"
         "web-progs" "synctex"
-        # luajittex is mostly not needed, see:
-        # http://tex.stackexchange.com/questions/97999/when-to-use-luajittex-in-favour-of-luatex
-        "luajittex" "mfluajit"
-      ];
+      ] ++ stdenv.lib.optionals (!withLuaJIT) [ "luajittex" "mfluajit" ]);
 
   configureScript = ":";
 
   # we use static libtexlua, because it's only used by a single binary
-  postConfigure = ''
+  postConfigure = let
+    luajit = stdenv.lib.optionalString withLuaJIT ",luajit";
+  in ''
     mkdir ./WorkDir && cd ./WorkDir
-    for path in libs/{teckit,lua53} texk/web2c; do
+    for path in libs/{teckit,lua53${luajit}} texk/web2c; do
       (
-        if [[ "$path" =~ "libs/lua5" ]]; then
+        if [[ "$path" =~ "libs/lua" ]]; then
           extraConfig="--enable-static --disable-shared"
         else
           extraConfig=""
@@ -254,18 +255,29 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
 
   # now distribute stuff into outputs, roughly as upstream TL
   # (uninteresting stuff remains in $out, typically duplicates from `core`)
-  outputs = [ "out" "metafont" "mflua" "metapost" "luatex" "xetex" ];
+  outputs = [
+    "out"
+    "metafont"
+    "mflua"
+    "metapost"
+    "luatex"
+    "luajittex"
+    "xetex"
+  ];
   postInstall = ''
     for output in $outputs; do
       mkdir -p "''${!output}/bin"
     done
 
     mv "$out/bin"/{inimf,mf,mf-nowin} "$metafont/bin/"
-    mv "$out/bin"/{mflua,mflua-nowin} "$mflua/bin/"
+    mv "$out/bin"/mflua{,-nowin} "$mflua/bin/"
     mv "$out/bin"/{*tomp,mfplain,*mpost} "$metapost/bin/"
-    mv "$out/bin"/{luatex,texlua*} "$luatex/bin/"
+    mv "$out/bin"/{luatex,texlua,texluac} "$luatex/bin/"
     mv "$out/bin"/xetex "$xetex/bin/"
-  '';
+  '' + stdenv.lib.optionalString withLuaJIT ''
+    mv "$out/bin"/mfluajit{,-nowin} "$mflua/bin/"
+    mv "$out/bin"/{luajittex,texluajit,texluajitc} "$luajittex/bin/"
+  '' ;
 };
 
 
