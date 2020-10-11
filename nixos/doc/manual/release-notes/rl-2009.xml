@@ -232,29 +232,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
        <filename>testing-python.nix</filename> respectively.
      </para>
    </listitem>
-   <listitem>
-     <para>
-       The Mediatomb service declares new options. It also adapts existing
-       options to make the configuration generation lazy. The existing option
-       <literal>customCfg</literal> (defaults to false), when enabled, stops
-       the service configuration generation completely. It then expects the
-       users to provide their own correct configuration at the right location
-       (whereas the configuration was generated and not used at all before).
-       The new option <literal>transcodingOption</literal> (defaults to no)
-       allows a generated configuration. It makes the mediatomb service pulls
-       the necessary runtime dependencies in the nix store (whereas it was
-       generated with hardcoded values before). The new option
-       <literal>mediaDirectories</literal> allows the users to declare autoscan
-       media directories from their nixos configuration:
-       <programlisting>
-       services.mediatomb.mediaDirectories = [
-         { path = "/var/lib/mediatomb/pictures"; recursive = false; hidden-files = false; }
-         { path = "/var/lib/mediatomb/audio"; recursive = true; hidden-files = false; }
-       ];
-       </programlisting>
-    </para>
-   </listitem>
- </itemizedlist>
+  </itemizedlist>
  </section>
 
  <section xmlns="http://docbook.org/ns/docbook"
@@ -895,23 +873,6 @@ CREATE ROLE postgres LOGIN SUPERUSER;
       </listitem>
      </itemizedlist>
     </para>
-   </listitem>
-   <listitem>
-     <para>
-       The mediatomb service is now using the new and maintained <literal>gerbera</literal>
-       <literal>gerbera</literal> fork instead of the unmaintained
-       <literal>mediatomb</literal> package. If you want to keep the old
-       behavior, you must declare it with:
-       <programlisting>
-       services.mediatomb.package = pkgs.mediatomb;
-       </programlisting>
-       One new option <literal>openFirewall</literal> has been introduced which
-       defaults to false. If you relied on the service declaration to add the
-       firewall rules itself before, you should now declare it with:
-       <programlisting>
-       services.mediatomb.openFirewall = true;
-       </programlisting>
-     </para>
    </listitem>
    <listitem>
     <para>
