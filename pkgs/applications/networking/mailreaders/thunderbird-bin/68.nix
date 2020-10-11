@@ -179,5 +179,6 @@ stdenv.mkDerivation {
     };
     maintainers = with stdenv.lib.maintainers; [ ];
     platforms = platforms.linux;
+    knownVulnerabilities = [ "Support ended around Semptember 2020." ];
   };
 }
