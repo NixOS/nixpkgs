@@ -74,18 +74,7 @@ in
 
     event = callPackage ../development/php-packages/event { };
 
-    igbinary = buildPecl {
-      version = "3.0.1";
-      pname = "igbinary";
-
-      sha256 = "1w8jmf1qpggdvq0ndfi86n7i7cqgh1s8q6hys2lijvi37rzn0nar";
-
-      configureFlags = [ "--enable-igbinary" ];
-      makeFlags = [ "phpincludedir=$(dev)/include" ];
-      outputs = [ "out" "dev" ];
-
-      meta.maintainers = lib.teams.php.members;
-    };
+    igbinary = callPackage ../development/php-packages/igbinary { };
 
     imagick = buildPecl {
       version = "3.4.4";
