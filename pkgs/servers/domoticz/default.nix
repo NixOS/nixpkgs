@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     '';
     maintainers = with maintainers; [ edcragg ];
     homepage = "https://www.domoticz.com/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.all;
   };
 }
