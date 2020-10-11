@@ -87,6 +87,19 @@ index 69dac889a..62bda9edb 100644
  			std::string ignore;
  			uint64_t rd_ios;	/* # of reads completed */
  			//	    This is the total number of reads completed successfully.
+diff --git a/flow/Profiler.actor.cpp b/flow/Profiler.actor.cpp
+index 27af613e6..69f38c237 100644
+--- a/flow/Profiler.actor.cpp
++++ b/flow/Profiler.actor.cpp
+@@ -35,8 +35,6 @@
+ 
+ extern volatile int profilingEnabled;
+ 
+-static uint64_t gettid() { return syscall(__NR_gettid); }
+-
+ struct SignalClosure {
+ 	void (* func)(int, siginfo_t*, void*, void*);
+ 	void *userdata;
 diff --git a/flow/TDMetric.actor.h b/flow/TDMetric.actor.h
 index 5421b83b5..711a96093 100755
 --- a/flow/TDMetric.actor.h
