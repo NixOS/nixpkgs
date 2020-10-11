@@ -1,12 +1,16 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 , protobuf
+, google_api_core
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "proto-plus";
   version = "1.10.1";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -14,6 +18,8 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ protobuf ];
+
+  checkInputs = [ pytestCheckHook google_api_core ];
 
   meta = with stdenv.lib; {
     description = "Beautiful, idiomatic protocol buffers in Python";
