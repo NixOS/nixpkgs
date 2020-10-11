@@ -26,6 +26,7 @@ in
   agda = handleTest ./agda.nix {};
   atd = handleTest ./atd.nix {};
   avahi = handleTest ./avahi.nix {};
+  avahi-with-resolved = handleTest ./avahi.nix { networkd = true; };
   babeld = handleTest ./babeld.nix {};
   bazarr = handleTest ./bazarr.nix {};
   bcachefs = handleTestOn ["x86_64-linux"] ./bcachefs.nix {}; # linux-4.18.2018.10.12 is unsupported on aarch64
