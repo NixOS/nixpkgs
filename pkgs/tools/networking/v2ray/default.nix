@@ -64,7 +64,6 @@ let
 in runCommand "v2ray-${version}" {
   inherit version;
 
-  buildInputs = [ assetsDrv core ];
   nativeBuildInputs = [ makeWrapper ];
 
   meta = {
