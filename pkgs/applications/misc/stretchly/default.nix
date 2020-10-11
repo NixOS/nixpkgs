@@ -1,23 +1,33 @@
-{ stdenv, lib, fetchurl, makeWrapper, wrapGAppsHook, electron_7
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, electron_9
 , common-updater-scripts
 , writeShellScript
+, jq
+, makeDesktopItem
 }:
 
 let
-  electron = electron_7;
+  electron = electron_9;
 in
 stdenv.mkDerivation rec {
+
   pname = "stretchly";
-  version = "0.21.1";
+  version = "1.2.0";
 
   src = fetchurl {
     url = "https://github.com/hovancik/stretchly/releases/download/v${version}/stretchly-${version}.tar.xz";
-    sha256 = "0776pywyqylwd33m85l4wdr89x0q9xkrjgliag10fp1bswz844lf";
+    sha256 = "07v9yk9qgya9ladfgbfkwwnbzvczs1cv6yn3zrg9rviyv8zlqjls";
   };
 
-  nativeBuildInputs = [
-    wrapGAppsHook
-  ];
+  icon = fetchurl {
+    url = "https://raw.githubusercontent.com/hovancik/stretchly/v${version}/stretchly_128x128.png";
+    sha256 = "0whfg1fy2hjyk1lzpryikc1aj8agsjhfrb0bf7ggl6r9m8s1rvdl";
+  };
+
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
@@ -25,14 +35,14 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share/${pname}/
     mv resources/app.asar $out/share/${pname}/
 
+    mkdir -p $out/share/applications
+    ln -s ${desktopItem}/share/applications/* $out/share/applications/
+
     makeWrapper ${electron}/bin/electron $out/bin/${pname} \
-      --add-flags $out/share/${pname}/app.asar \
-      "''${gappsWrapperArgs[@]}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
+      --add-flags $out/share/${pname}/app.asar
 
     runHook postInstall
   '';
-
 
   passthru = {
     updateScript = writeShellScript "update-stretchly" ''
@@ -47,6 +57,15 @@ stdenv.mkDerivation rec {
     '';
   };
 
+  desktopItem = makeDesktopItem {
+    name = pname;
+    exec = pname;
+    icon = icon;
+    desktopName = "Stretchly";
+    genericName = "Stretchly";
+    categories = "Utility;";
+  };
+
   meta = with stdenv.lib; {
     description = "A break time reminder app";
     longDescription = ''
@@ -59,7 +78,7 @@ stdenv.mkDerivation rec {
     homepage = "https://hovancik.net/stretchly";
     downloadPage = "https://hovancik.net/stretchly/downloads/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ cdepillabout ];
+    maintainers = with maintainers; [ _1000101 ];
     platforms = platforms.linux;
   };
 }
