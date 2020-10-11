@@ -1,7 +1,10 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, pytestCheckHook
+, isPy3k
 , protobuf
+, google_api_core
 }:
 
 buildPythonPackage rec {
@@ -13,7 +16,11 @@ buildPythonPackage rec {
     sha256 = "0n8ia51jg2dkab2sf0qnh39bssqhz65ybcqr78f3zzf7ja923lkr";
   };
 
-  propagatedBuildInputs = [ protobuf ];
+  # The tests import unittest.mock, introduced in Python 3.3.
+  disabled = !isPy3k;
+
+  checkInputs = [ pytestCheckHook ];
+  propagatedBuildInputs = [ protobuf google_api_core ];
 
   meta = with stdenv.lib; {
     description = "Beautiful, idiomatic protocol buffers in Python";
