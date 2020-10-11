@@ -1,0 +1,85 @@
+# Maintainer: Frederik Schwan <freswa at archlinux dot org>
+
+pkgname=libwebrtc
+_commit=18721df
+pkgver=83.git1.${_commit}
+pkgrel=2
+pkgdesc='WebRTC library - static linked'
+arch=('x86_64')
+url='https://webrtc.org/?hl=de'
+license=('custom:BSD')
+makedepends=('git' 'gn' 'ninja' 'unzip' 'python2' 'python' 'libxrandr' 'libxcomposite' 'openssl' 'glibc' 'ffmpeg' 'libva')
+options=('staticlibs')
+source=("webrtc_src::git+https://github.com/open-webrtc-toolkit/owt-deps-webrtc.git#commit=${_commit}"
+        'https://storage.googleapis.com/chrome-infra/depot_tools.zip'
+        gclient-conf
+        args.gn
+        src.diff
+        build.diff
+        third_party.diff
+        libsrtp.diff
+        0001-IWYU-fix-missing-uint32_t-size_t-definitions.patch)
+noextract=('depot_tools.zip')
+b2sums=('SKIP'
+        'f903724dcb80904aeb85c4ba4d4140916b96e278efcba52a28c76db093801850d8d74d34c63b78374ed2f18fa8d5f649cb6fdf6879939b58142e8382bcdd77b4'
+        '25ab3e116e2f241219fe31e96166e009a233813417c6901ed3ff0cafcdc7b6bff17ae284167164028203e4a5e94548deff3e4bad00aff6c8286bd7d63cb9cdb2'
+        '3c20948f295d58df70a3b579ad33c5d92b9bb140b0a01bbb59e3157e07944978a10396c112c99fe28d57997e223eb4adebde31f41d995f47c14107bc52d443a8'
+        '923a626e69c819e550e1681257e1fb0c5c2a64160b13bd5d5a322125cba58020ba84330c8056d94a23175090055686916860d083adea08f8c8bff9e5e0ebbe01'
+        'f8af81b249989296402e8ab9fa999559b8c9e18ac78c64766554db44289fe16778795a7ce4cd902b13f6ee9aa4866e8ae112af617a32f069674eec659c84a54a'
+        'c8cbe2395066cdb639fd9cc8242ae345e4d4e2dabb3803397f162b26a0dfd170ddb888474e85c65fd2142a3462c984164fac0bc061f163128aad92d350be26ab'
+        'fb6d9de8c49667e3726f255aabe8840a60e73d0d3a2ea5fd539580cc7aa734a2486267b00a236e0114adfd852a0710833b729c153761097668fdf7f6d755de94'
+        '06bb59cb637bd896d4ee719023adb7d3595e4884c9c697b44796a88aaf575bd6bd898e2be594e007b6dcce6f5d5956dd0498ef5a611d401a075a5abb4dea2a92')
+
+prepare() {
+  mv webrtc_src src
+  unzip depot_tools.zip -d depot_tools
+  mv gclient-conf .gclient
+  DEPOT_TOOLS_UPDATE=0 "${srcdir}"/depot_tools/gclient sync --no-history
+  cd src
+  patch -Np1 < "${srcdir}"/src.diff
+  patch -Np1 < "${srcdir}"/0001-IWYU-fix-missing-uint32_t-size_t-definitions.patch
+  cd build
+  patch -Np1 < "${srcdir}"/build.diff
+  cd ../third_party
+  patch -Np1 < "${srcdir}"/third_party.diff
+  cd libsrtp
+  patch -Np1 < "${srcdir}"/libsrtp.diff
+
+  cd ../..
+  mkdir out/Release
+  cp "${srcdir}"/args.gn out/Release/args.gn
+
+  gn gen out/Release
+}
+
+build() {
+  cd src
+  
+  ninja -C out/Release webrtc
+}
+
+package() {
+  install -Dm644 -t "${pkgdir}"/usr/lib/ "${srcdir}"/src/out/Release/obj/${pkgname}.a
+  install -Dm644 -t "${pkgdir}"/usr/share/licenses/libwebrtc/ "${srcdir}"/src/LICENSE
+  mkdir -p "${pkgdir}"/usr/include/libwebrtc
+  cd src
+  shopt -s globstar
+  for i in ./**/*.h;do
+    if [[ $i =~ "./test/" || $i =~ "./build/" || $i =~ "./third_party/" ]]; then
+        continue
+    fi
+    install -Dm644 -t ${pkgdir}/usr/include/libwebrtc/$(dirname $i) $i
+  done
+  for i in third_party/abseil-cpp/**/*.h; do
+    if [[ $i =~ "/test/" || $i =~ "/build/" ]]; then
+        continue
+    fi
+    install -Dm644 -t ${pkgdir}/usr/include/libwebrtc/$(dirname $i) $i
+  done
+  for i in third_party/libyuv/**/*.h; do
+    if [[ $i =~ "/test/" || $i =~ "/build/" ]]; then
+        continue
+    fi
+    install -Dm644 -t ${pkgdir}/usr/include/libwebrtc/$(dirname $i) $i
+  done
+}

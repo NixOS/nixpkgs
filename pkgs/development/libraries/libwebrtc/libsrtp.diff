@@ -1,0 +1,14 @@
+diff --git a/BUILD.gn b/BUILD.gn
+index 6359585..0c9d2ff 100644
+--- a/BUILD.gn
++++ b/BUILD.gn
+@@ -114,9 +115,6 @@ static_library("libsrtp") {
+     "srtp/ekt.c",
+     "srtp/srtp.c",
+   ]
+-  public_deps = [
+-    "//third_party/boringssl:boringssl",
+-  ]
+ }
+ 
+ if (build_libsrtp_tests) {

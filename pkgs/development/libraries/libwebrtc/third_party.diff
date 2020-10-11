@@ -1,0 +1,75 @@
+diff --git a/BUILD.gn b/BUILD.gn
+index a62632e2c3f..ea2a9325a9c 100644
+--- a/BUILD.gn
++++ b/BUILD.gn
+@@ -11,6 +11,9 @@ assert(!is_ios, "This is not used on iOS, don't drag it in unintentionally")
+ config("system_libjpeg_config") {
+   libs = [ "jpeg" ]
+   defines = [ "USE_SYSTEM_LIBJPEG" ]
++  if (system_libjpeg_root != "") {
++    include_dirs = [ system_libjpeg_root, system_libjpeg_root + "/src" ]
++  }
+ }
+ 
+ config("libjpeg_turbo_config") {
+diff --git a/abseil-cpp/absl/meta/type_traits.h b/abseil-cpp/absl/meta/type_traits.h
+index ba87d2f0edf..b9c5340cd3c 100644
+--- a/abseil-cpp/absl/meta/type_traits.h
++++ b/abseil-cpp/absl/meta/type_traits.h
+@@ -616,8 +616,19 @@ using common_type_t = typename std::common_type<T...>::type;
+ template <typename T>
+ using underlying_type_t = typename std::underlying_type<T>::type;
+ 
++#if __cplusplus > 201703L || (defined(_MSC_VER) && _MSVC_LANG > 201703L)
++template <typename T>
++struct result_of_helper;
++template <typename F, typename ...Args>
++struct result_of_helper<F(Args...)> {
++  using type = std::invoke_result_t<F, Args...>;
++};
++template <typename T>
++using result_of_t = typename result_of_helper<T>::type;
++#else   // C++20
+ template <typename T>
+ using result_of_t = typename std::result_of<T>::type;
++#endif  // C++20
+ 
+ namespace type_traits_internal {
+ // In MSVC we can't probe std::hash or stdext::hash because it triggers a
+diff --git a/libjpeg.gni b/libjpeg.gni
+index 049348b79bd..039385c9739 100644
+--- a/libjpeg.gni
++++ b/libjpeg.gni
+@@ -6,6 +6,9 @@ declare_args() {
+   # Uses system libjpeg. If true, overrides use_libjpeg_turbo.
+   use_system_libjpeg = false
+ 
++  # Used to specify an external libjpeg root path
++  system_libjpeg_root = ""
++
+   # Uses libjpeg_turbo as the jpeg implementation. Has no effect if
+   # use_system_libjpeg is set.
+   use_libjpeg_turbo = true
+diff --git a/usrsctp/BUILD.gn b/usrsctp/BUILD.gn
+index e8a5b1f9d41..1b52f28141c 100644
+--- a/usrsctp/BUILD.gn
++++ b/usrsctp/BUILD.gn
+@@ -3,6 +3,7 @@
+ # found in the LICENSE file.
+ 
+ import("//build/toolchain/toolchain.gni")
++import("//webrtc.gni")
+ 
+ config("usrsctp_config") {
+   include_dirs = [
+@@ -145,5 +146,9 @@ static_library("usrsctp") {
+   if (is_fuchsia) {
+     defines += [ "__Userspace_os_Fuchsia" ]
+   }
+-  deps = [ "//third_party/boringssl" ]
++  if (rtc_build_ssl) {
++    deps += [ "//third_party/boringssl" ]
++  } else {
++    configs += [ "//rtc_base:external_ssl_library" ]
++  }
+ }

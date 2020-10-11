@@ -1,0 +1,11 @@
+solutions = [
+  {
+     "managed": False,
+     "name": "source",
+     "url": "https://github.com/open-webrtc-toolkit/owt-deps-webrtc.git",
+     "custom_deps": {},
+     "deps_file": "DEPS",
+     "safesync_url": "",
+  },
+]
+target_os = []
