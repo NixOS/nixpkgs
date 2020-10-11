@@ -5,7 +5,7 @@
 , sshpubkeys, weasyprint }:
 
 let
-  version = "0.50.2";
+  version = "0.51.2";
 
   buildAPI = src: buildGoModule {
     inherit src version;
@@ -20,7 +20,7 @@ in buildPythonPackage rec {
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/meta.sr.ht";
     rev = version;
-    sha256 = "utS/HMFtHPAP1QRYd4WAFApyBPRY5UD72ANmC/SU93c=";
+    sha256 = "0c9y1hzx3dj0awxrhkzrcsmy6q9fqm6v6dbp9y1ria3v47xa3nv7";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;
