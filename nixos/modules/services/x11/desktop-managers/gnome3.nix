@@ -179,6 +179,14 @@ in
 
   config = mkMerge [
     (mkIf (cfg.enable || flashbackEnabled) {
+      # Seed our configuration into nixos-generate-config
+      system.nixos-generate-config.desktopConfiguration = ''
+        # Enable the GNOME 3 Desktop Environment.
+        services.xserver.enable = true;
+        services.xserver.displayManager.gdm.enable = true;
+        services.xserver.desktopManager.gnome3.enable = true;
+      '';
+
       services.gnome3.core-os-services.enable = true;
       services.gnome3.core-shell.enable = true;
       services.gnome3.core-utilities.enable = mkDefault true;
