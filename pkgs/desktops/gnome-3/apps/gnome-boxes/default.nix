@@ -23,8 +23,8 @@
 , libsoup
 , libosinfo
 , systemd
-, tracker_2
-, tracker-miners-2
+, tracker
+, tracker-miners
 , vala
 , libcap
 , yajl
@@ -54,11 +54,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-boxes";
-  version = "3.38.0";
+  version = "3.38.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "12x38780j52bv46q2i6468va1zww28mmy83rasbl3y8sqagmjsv9";
+    sha256 = "0zrm4mihkx5i42h3pvk9lmsqf983dqz4rnfcbccwhx4ml2s4w3qv";
   };
 
   doCheck = true;
@@ -113,8 +113,8 @@ stdenv.mkDerivation rec {
     spice-gtk
     spice-protocol
     systemd
-    tracker_2
-    tracker-miners-2
+    tracker
+    tracker-miners
     vte
     webkitgtk
     xen
