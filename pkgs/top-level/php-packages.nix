@@ -19,13 +19,10 @@ let
     pname = "php-${pname}";
   });
 
-  isPhp73 = pkgs.lib.versionAtLeast php.version "7.3";
-  isPhp74 = pkgs.lib.versionAtLeast php.version "7.4";
-
   pcre' = if (lib.versionAtLeast php.version "7.3") then pcre2 else pcre;
 
   callPackage = pkgs.newScope {
-    inherit mkDerivation php isPhp73 isPhp74 buildPecl pcre';
+    inherit mkDerivation php buildPecl pcre';
   };
 in
 {
@@ -99,7 +96,7 @@ in
       internalDeps = [ php.extensions.tokenizer ];
 
       meta.maintainers = lib.teams.php.members;
-      meta.broken = isPhp73; # Runtime failure on 7.3, build error on 7.4
+      meta.broken = lib.versionAtLeast php.version "7.3"; # Runtime failure on 7.3, build error on 7.4
     };
 
     pdo_oci = buildPecl rec {
@@ -179,7 +176,7 @@ in
       nativeBuildInputs = [ pkgs.pkgconfig ];
 
       meta.maintainers = lib.teams.php.members;
-      meta.broken = isPhp73;
+      meta.broken = lib.versionAtLeast php.version "7.3";
     };
   } // (let
     # Function to build a single php extension based on the php version.
