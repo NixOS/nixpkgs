@@ -1,24 +1,22 @@
-{ stdenv, fetchFromGitHub, pkgconfig, SDL2 }:
+{ stdenv, fetchFromGitHub, pkg-config, SDL2 }:
 
-with stdenv.lib;
 stdenv.mkDerivation rec {
-
   pname = "stella";
   version = "6.3";
 
   src = fetchFromGitHub {
     owner = "stella-emu";
-    repo = "stella";
+    repo = pname;
     rev = version;
-    sha256 = "0a687qdd1qxdz2wzx557vgylv4c37cpypz2gr7p432rgymmzdcg6";
+    sha256 = "sha256-5rH2a/Uvi0HuyU/86y87g5FN/dunlP65+K3j0Bo+yCg=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ SDL2 ];
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib;{
     description = "An open-source Atari 2600 VCS emulator";
     longDescription = ''
     Stella is a multi-platform Atari 2600 VCS emulator released under
