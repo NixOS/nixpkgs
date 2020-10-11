@@ -1,5 +1,4 @@
 { fetchurl
-, fetchFromGitLab
 , fetchpatch
 , substituteAll
 , stdenv
@@ -23,7 +22,6 @@
 , librsvg
 , geoclue2
 , perl
-, docbook_xml_dtd_412
 , docbook_xml_dtd_42
 , docbook_xml_dtd_43
 , desktop-file-utils
@@ -67,19 +65,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "3.38.0";
+  version = "3.38.1";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "15qabakial0jcsqkq1xg4fsssarixq6aqqksikdfcpl7q0xl09n6";
+    sha256 = "1d0br74gxwnqbh102yjkszkc6fc4yd6p5lcs6bxcpi33chly72dp";
   };
-
-  # See https://mail.gnome.org/archives/distributor-list/2020-September/msg00001.html
-  prePatch = (import ../gvc-with-ucm-prePatch.nix {
-    inherit fetchFromGitLab;
-  });
 
   patches = [
     # Hardcode paths to various dependencies so that they can be found at runtime.
@@ -103,13 +96,6 @@ stdenv.mkDerivation rec {
       revert = true;
       sha256 = "14h7ahlxgly0n3sskzq9dhxzbyb04fn80pv74vz1526396676dzl";
     })
-
-    # Remove include of missing file preventing docs from building.
-    # https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/1448
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/84cff8920509f99be47c017bd8bdf8e45ea90535.patch";
-      sha256 = "9bFfT7bHMdxPjDUvjoIrFQ3eddQv/kXyeTOAM+7eUm8=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -118,7 +104,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     docbook-xsl-nons
-    docbook_xml_dtd_412
+    # Switch to 4.5 in the 40.
     docbook_xml_dtd_42
     docbook_xml_dtd_43
     gtk-doc
