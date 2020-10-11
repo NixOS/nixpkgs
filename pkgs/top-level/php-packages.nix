@@ -162,19 +162,7 @@ in
       meta.broken = true;
     };
 
-    xdebug = buildPecl {
-      version = "2.8.1";
-      pname = "xdebug";
-
-      sha256 = "080mwr7m72rf0jsig5074dgq2n86hhs7rdbfg6yvnm959sby72w3";
-
-      doCheck = true;
-      checkTarget = "test";
-
-      zendExtension = true;
-
-      meta.maintainers = lib.teams.php.members;
-    };
+    xdebug = callPackage ../development/php-packages/xdebug { };
 
     yaml = buildPecl {
       version = "2.0.4";
