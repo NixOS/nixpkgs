@@ -16987,6 +16987,8 @@ in
 
   tomcat-native = callPackage ../servers/http/tomcat/tomcat-native.nix { };
 
+  pg_featureserv = callPackage ../servers/pg_featureserv { };
+
   pg_tileserv = callPackage ../servers/pg_tileserv { };
 
   pies = callPackage ../servers/pies { };
