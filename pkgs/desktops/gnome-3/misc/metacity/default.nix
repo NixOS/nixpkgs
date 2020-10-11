@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "metacity";
-  version = "3.37.1";
+  version = "3.38.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "09m102lpy68730y8y7vjyaw3cavlbdbiyix6s0kgna23bbcz7ml0";
+    sha256 = "1b0i9sq6qa540f2006cv1p8i6lxg1h6w00apxwzwjpfqn0hk26c1";
   };
 
   patches = [
@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     xorg.libXres
+    xorg.libXpresent
     glib
     gsettings-desktop-schemas
     gtk3
