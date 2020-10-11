@@ -23,330 +23,37 @@ let
   isPhp74 = pkgs.lib.versionAtLeast php.version "7.4";
 
   pcre' = if (lib.versionAtLeast php.version "7.3") then pcre2 else pcre;
+
+  callPackage = pkgs.newScope {
+    inherit mkDerivation php isPhp73 isPhp74 buildPecl pcre';
+  };
 in
 {
   inherit buildPecl;
 
   # This is a set of interactive tools based on PHP.
   packages = {
-    box = mkDerivation rec {
-      version = "2.7.5";
-      pname = "box";
+    box = callPackage ../development/php-packages/box { };
 
-      src = pkgs.fetchurl {
-        url = "https://github.com/box-project/box2/releases/download/${version}/box-${version}.phar";
-        sha256 = "1zmxdadrv0i2l8cz7xb38gnfmfyljpsaz2nnkjzqzksdmncbgd18";
-      };
+    composer = callPackage ../development/php-packages/composer { };
 
-      phases = [ "installPhase" ];
-      buildInputs = [ pkgs.makeWrapper ];
+    composer2 = callPackage ../development/php-packages/composer/2.0.nix { };
 
-      installPhase = ''
-        mkdir -p $out/bin
-        install -D $src $out/libexec/box/box.phar
-        makeWrapper ${php}/bin/php $out/bin/box \
-          --add-flags "-d phar.readonly=0 $out/libexec/box/box.phar"
-      '';
+    php-cs-fixer = callPackage ../development/php-packages/php-cs-fixer { };
 
-      meta = with pkgs.lib; {
-        description = "An application for building and managing Phars";
-        license = licenses.mit;
-        homepage = "https://box-project.github.io/box2/";
-        maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
-      };
-    };
+    php-parallel-lint = callPackage ../development/php-packages/php-parallel-lint { };
 
-    composer = mkDerivation rec {
-      version = "1.10.13";
-      pname = "composer";
+    phpcbf = callPackage ../development/php-packages/phpcbf { };
 
-      src = pkgs.fetchurl {
-        url = "https://getcomposer.org/download/${version}/composer.phar";
-        sha256 = "13vhfdlkmpvmk1h30f1i688xk7sdgfj0b82am32jgpa8zmf499sw";
-      };
+    phpcs = callPackage ../development/php-packages/phpcs { };
 
-      dontUnpack = true;
+    phpmd = callPackage ../development/php-packages/phpmd { };
 
-      nativeBuildInputs = [ pkgs.makeWrapper ];
+    phpstan = callPackage ../development/php-packages/phpstan { };
 
-      installPhase = ''
-        mkdir -p $out/bin
-        install -D $src $out/libexec/composer/composer.phar
-        makeWrapper ${php}/bin/php $out/bin/composer \
-          --add-flags "$out/libexec/composer/composer.phar" \
-          --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.unzip ]}
-      '';
+    psalm = callPackage ../development/php-packages/psalm { };
 
-      meta = with pkgs.lib; {
-        description = "Dependency Manager for PHP";
-        license = licenses.mit;
-        homepage = "https://getcomposer.org/";
-        maintainers = with maintainers; [ offline ] ++ teams.php.members;
-      };
-    };
-
-    composer2 = mkDerivation rec {
-      version = "2.0.0-RC1";
-      pname = "composer";
-
-      src = pkgs.fetchurl {
-        url = "https://getcomposer.org/download/${version}/composer.phar";
-        sha256 = "0wzr360gaa59cbjpa3vw9yrpc55a4fmdv68q0rn7vj0mjnz60fhd";
-      };
-
-      dontUnpack = true;
-
-      nativeBuildInputs = [ pkgs.makeWrapper ];
-
-      installPhase = ''
-        mkdir -p $out/bin
-        install -D $src $out/libexec/composer/composer.phar
-        makeWrapper ${php}/bin/php $out/bin/composer \
-          --add-flags "$out/libexec/composer/composer.phar" \
-          --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.unzip ]}
-      '';
-
-      meta = with pkgs.lib; {
-        description = "Dependency Manager for PHP";
-        license = licenses.mit;
-        homepage = "https://getcomposer.org/";
-        maintainers = with maintainers; [ offline ] ++ teams.php.members;
-      };
-    };
-
-    php-cs-fixer = mkDerivation rec {
-      version = "2.16.4";
-      pname = "php-cs-fixer";
-
-      src = pkgs.fetchurl {
-        url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
-        sha256 = "05rdvypxc86hjs8b7id2csa7g1rf7dk2swzfvd5768abdgfasvr8";
-      };
-
-      phases = [ "installPhase" ];
-      buildInputs = [ pkgs.makeWrapper ];
-
-      installPhase = ''
-        mkdir -p $out/bin
-        install -D $src $out/libexec/php-cs-fixer/php-cs-fixer.phar
-        makeWrapper ${php}/bin/php $out/bin/php-cs-fixer \
-          --add-flags "$out/libexec/php-cs-fixer/php-cs-fixer.phar"
-      '';
-
-      meta = with pkgs.lib; {
-        description = "A tool to automatically fix PHP coding standards issues";
-        license = licenses.mit;
-        homepage = "http://cs.sensiolabs.org/";
-        maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
-      };
-    };
-
-    php-parallel-lint = mkDerivation rec {
-      version = "1.0.0";
-      pname = "php-parallel-lint";
-
-      src = pkgs.fetchFromGitHub {
-        owner = "JakubOnderka";
-        repo = "PHP-Parallel-Lint";
-        rev = "v${version}";
-        sha256 = "16nv8yyk2z3l213dg067l6di4pigg5rd8yswr5xgd18jwbys2vnw";
-      };
-
-      buildInputs = [
-        pkgs.makeWrapper
-        php.packages.composer
-        php.packages.box
-      ];
-
-      buildPhase = ''
-        composer dump-autoload
-        box build
-      '';
-
-      installPhase = ''
-        mkdir -p $out/bin
-        install -D parallel-lint.phar $out/libexec/php-parallel-lint/php-parallel-lint.phar
-        makeWrapper ${php}/bin/php $out/bin/php-parallel-lint \
-          --add-flags "$out/libexec/php-parallel-lint/php-parallel-lint.phar"
-      '';
-
-      meta = with pkgs.lib; {
-        description = "This tool check syntax of PHP files faster than serial check with fancier output";
-        license = licenses.bsd2;
-        homepage = "https://github.com/JakubOnderka/PHP-Parallel-Lint";
-        maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
-      };
-    };
-
-    phpcbf = mkDerivation rec {
-      version = "3.5.5";
-      pname = "phpcbf";
-
-      src = pkgs.fetchurl {
-        url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcbf.phar";
-        sha256 = "0hgagn70gl46migm6zpwcr39dxal07f5cdpnasrafgz5vq0gwr3g";
-      };
-
-      phases = [ "installPhase" ];
-      nativeBuildInputs = [ pkgs.makeWrapper ];
-
-      installPhase = ''
-        mkdir -p $out/bin
-        install -D $src $out/libexec/phpcbf/phpcbf.phar
-        makeWrapper ${php}/bin/php $out/bin/phpcbf \
-          --add-flags "$out/libexec/phpcbf/phpcbf.phar"
-      '';
-
-      meta = with pkgs.lib; {
-        description = "PHP coding standard beautifier and fixer";
-        license = licenses.bsd3;
-        homepage = "https://squizlabs.github.io/PHP_CodeSniffer/";
-        maintainers = with maintainers; [ cmcdragonkai ] ++ teams.php.members;
-      };
-    };
-
-    phpcs = mkDerivation rec {
-      version = "3.5.5";
-      pname = "phpcs";
-
-      src = pkgs.fetchurl {
-        url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
-        sha256 = "0jl038l55cmzn5ml61qkv4z1w4ri0h3v7h00pcb04xhz3gznlbsa";
-      };
-
-      phases = [ "installPhase" ];
-      buildInputs = [ pkgs.makeWrapper ];
-
-      installPhase = ''
-        mkdir -p $out/bin
-        install -D $src $out/libexec/phpcs/phpcs.phar
-        makeWrapper ${php}/bin/php $out/bin/phpcs \
-          --add-flags "$out/libexec/phpcs/phpcs.phar"
-      '';
-
-      meta = with pkgs.lib; {
-        description = "PHP coding standard tool";
-        license = licenses.bsd3;
-        homepage = "https://squizlabs.github.io/PHP_CodeSniffer/";
-        maintainers = with maintainers; [ javaguirre ] ++ teams.php.members;
-      };
-    };
-
-    phpmd = mkDerivation rec {
-      version = "2.8.2";
-      pname = "phpmd";
-
-      src = pkgs.fetchurl {
-        url = "https://github.com/phpmd/phpmd/releases/download/${version}/phpmd.phar";
-        sha256 = "1i8qgzxniw5d8zjpypalm384y7qfczapfq70xmg129laq6xiqlqb";
-      };
-
-      phases = [ "installPhase" ];
-      buildInputs = [ pkgs.makeWrapper ];
-
-      installPhase = ''
-        mkdir -p $out/bin
-        install -D $src $out/libexec/phpmd/phpmd.phar
-        makeWrapper ${php}/bin/php $out/bin/phpmd \
-          --add-flags "$out/libexec/phpmd/phpmd.phar"
-      '';
-
-      meta = with pkgs.lib; {
-        description = "PHP code quality analyzer";
-        license = licenses.bsd3;
-        homepage = "https://phpmd.org/";
-        maintainers = teams.php.members;
-        broken = !isPhp74;
-      };
-    };
-
-    phpstan = mkDerivation rec {
-      version = "0.12.48";
-      pname = "phpstan";
-
-      src = pkgs.fetchurl {
-        url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-        sha256 = "170yzz23lyipyckv8y2x9masv5qdmbskwwlbfc8750xb3g2q7pzl";
-      };
-
-      phases = [ "installPhase" ];
-      nativeBuildInputs = [ pkgs.makeWrapper ];
-
-      installPhase = ''
-        mkdir -p $out/bin
-        install -D $src $out/libexec/phpstan/phpstan.phar
-        makeWrapper ${php}/bin/php $out/bin/phpstan \
-          --add-flags "$out/libexec/phpstan/phpstan.phar"
-      '';
-
-      meta = with pkgs.lib; {
-        description = "PHP Static Analysis Tool";
-        longDescription = ''
-          PHPStan focuses on finding errors in your code without actually
-          running it. It catches whole classes of bugs even before you write
-          tests for the code. It moves PHP closer to compiled languages in the
-          sense that the correctness of each line of the code can be checked
-          before you run the actual line.
-        '';
-        license = licenses.mit;
-        homepage = "https://github.com/phpstan/phpstan";
-        maintainers = teams.php.members;
-      };
-    };
-
-    psalm = mkDerivation rec {
-      version = "3.11.2";
-      pname = "psalm";
-
-      src = pkgs.fetchurl {
-        url = "https://github.com/vimeo/psalm/releases/download/${version}/psalm.phar";
-        sha256 = "1ani0907whqy2ycr01sjlvrmwps4dg5igim8z1qyv8grhwvw6gb0";
-      };
-
-      phases = [ "installPhase" ];
-      nativeBuildInputs = [ pkgs.makeWrapper ];
-
-      installPhase = ''
-        mkdir -p $out/bin
-        install -D $src $out/libexec/psalm/psalm.phar
-        makeWrapper ${php}/bin/php $out/bin/psalm \
-          --add-flags "$out/libexec/psalm/psalm.phar"
-      '';
-
-      meta = with pkgs.lib; {
-        description = "A static analysis tool for finding errors in PHP applications";
-        license = licenses.mit;
-        homepage = "https://github.com/vimeo/psalm";
-        maintainers = teams.php.members;
-      };
-    };
-
-    psysh = mkDerivation rec {
-      version = "0.10.3";
-      pname = "psysh";
-
-      src = pkgs.fetchurl {
-        url = "https://github.com/bobthecow/psysh/releases/download/v${version}/psysh-v${version}.tar.gz";
-        sha256 = "0glply451fy0g7zbasyp350qvmk2aglrlcrcdd7w0igylgwfkg71";
-      };
-
-      phases = [ "installPhase" ];
-      nativeBuildInputs = [ pkgs.makeWrapper ];
-
-      installPhase = ''
-        mkdir -p $out/bin
-        tar -xzf $src -C $out/bin
-        chmod +x $out/bin/psysh
-        wrapProgram $out/bin/psysh
-      '';
-
-      meta = with pkgs.lib; {
-        description = "PsySH is a runtime developer console, interactive debugger and REPL for PHP.";
-        license = licenses.mit;
-        homepage = "https://psysh.org/";
-        maintainers = with maintainers; [ caugner ] ++ teams.php.members;
-      };
-    };
+    psysh = callPackage ../development/php-packages/psysh { };
   };
 
 
