@@ -33,7 +33,7 @@ PRERELEASES = False
 
 GIT = "git"
 
-NIXPGKS_ROOT = str(pathlib.Path(__file__).absolute().parents[5])
+NIXPGKS_ROOT = subprocess.check_output(["git", "rev-parse", "--show-toplevel"]).decode('utf-8').strip()
 
 import logging
 logging.basicConfig(level=logging.INFO)
