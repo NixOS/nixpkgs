@@ -18,7 +18,7 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   meta = with stdenv.lib; {
-    description = "Enrich `go test` outputs with text decorations.";
+    description = "Enrich `go test` outputs with text decorations";
     homepage = "https://github.com/kyoh86/richgo";
     license = licenses.mit;
     maintainers = with maintainers; [ rvolosatovs ];

@@ -62,7 +62,7 @@ mkDerivation rec {
   meta = with lib; {
     inherit (qtbase.meta) platforms;
 
-    description = "Cloud music integration for your desktop.";
+    description = "Cloud music integration for your desktop";
     homepage = "https://gitlab.com/ColinDuquesnoy/MellowPlayer";
     license = licenses.gpl2;
     maintainers = with maintainers; [ kalbasit ];

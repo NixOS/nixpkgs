@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cp pbzx $out/bin
   '';
   meta = with lib; {
-    description = "Stream parser of Apple's pbzx compression format.";
+    description = "Stream parser of Apple's pbzx compression format";
     platforms = platforms.unix;
     license = licenses.gpl3;
     maintainers = [ maintainers.matthewbauer ];

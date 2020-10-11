@@ -16,7 +16,7 @@ buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "CLI for Apache CloudStack.";
+    description = "CLI for Apache CloudStack";
     homepage = "https://cwiki.apache.org/confluence/display/CLOUDSTACK/CloudStack+cloudmonkey+CLI";
     license = [ licenses.asl20 ];
     maintainers = [ maintainers.womfoo ];

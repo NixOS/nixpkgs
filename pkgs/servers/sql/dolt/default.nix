@@ -18,7 +18,7 @@ buildGoModule rec {
   doCheck = false;
 
     meta = with lib; {
-        description = "Relational database with version control and CLI a-la Git.";
+        description = "Relational database with version control and CLI a-la Git";
         homepage = "https://github.com/liquidata-inc/dolt";
         license = licenses.asl20;
         maintainers = with maintainers; [ danbst ];

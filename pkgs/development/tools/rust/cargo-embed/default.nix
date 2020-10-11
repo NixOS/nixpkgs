@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ libusb1 ];
 
   meta = with lib; {
-    description = "A cargo extension for working with microcontrollers.";
+    description = "A cargo extension for working with microcontrollers";
     homepage = "http://probe.rs/";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ fooker ];

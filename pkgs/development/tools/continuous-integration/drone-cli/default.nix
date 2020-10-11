@@ -24,6 +24,6 @@ in buildGoModule rec {
   meta = with stdenv.lib; {
     maintainers = with maintainers; [ bricewge ];
     license = licenses.asl20;
-    description = "Command line client for the Drone continuous integration server.";
+    description = "Command line client for the Drone continuous integration server";
   };
 }

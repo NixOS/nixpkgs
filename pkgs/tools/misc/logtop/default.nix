@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    description = "Displays a real-time count of strings received from stdin.";
+    description = "Displays a real-time count of strings received from stdin";
     longDescription = ''
       logtop displays a real-time count of strings received from stdin.
       It can be useful in some cases, like getting the IP flooding your

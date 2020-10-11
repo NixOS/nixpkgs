@@ -19,7 +19,7 @@ buildGoPackage rec {
   '';
 
   meta = with lib; {
-    description = "A simple tool for generating self signed certificates.";
+    description = "A simple tool for generating self signed certificates";
     longDescription = ''
       Minica is a simple CA intended for use in situations where the CA
       operator also operates each host where a certificate will be used. It

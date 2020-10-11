@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A simple tool to calculate the overall performance of an investment portfolio.";
+    description = "A simple tool to calculate the overall performance of an investment portfolio";
     homepage = "https://www.portfolio-performance.info/";
     license = licenses.epl10;
     maintainers = with maintainers; [ elohmeier oyren ];

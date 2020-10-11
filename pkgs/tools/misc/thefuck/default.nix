@@ -30,7 +30,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/nvbn/thefuck";
-    description = "Magnificent app which corrects your previous console command.";
+    description = "Magnificent app which corrects your previous console command";
     license = licenses.mit;
     maintainers = with maintainers; [ ma27 ];
   };

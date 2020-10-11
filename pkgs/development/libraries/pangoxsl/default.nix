@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   ];
 
   meta = with stdenv.lib; {
-    description = "Implements several of the inline properties defined by XSL that are not currently implemented by Pango.";
+    description = "Implements several of the inline properties defined by XSL that are not currently implemented by Pango";
     homepage = "https://sourceforge.net/projects/pangopdf";
     platforms = platforms.unix;
     license = licenses.lgpl2;

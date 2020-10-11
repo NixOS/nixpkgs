@@ -17,7 +17,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "librarian-puppet implementation in go.";
+    description = "librarian-puppet implementation in go";
     license = licenses.mit;
     maintainers = with maintainers; [ womfoo ];
     platforms = [ "x86_64-linux" ];

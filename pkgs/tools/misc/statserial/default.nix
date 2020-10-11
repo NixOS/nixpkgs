@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = "https://sites.google.com/site/tranter/software";
-    description = "Display serial port modem status lines.";
+    description = "Display serial port modem status lines";
     license = licenses.gpl2;
 
     longDescription =

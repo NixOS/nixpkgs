@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "2-D post processing for PCB fabrication on CNC routers.";
+    description = "2-D post processing for PCB fabrication on CNC routers";
     homepage = "https://bitbucket.org/jpcgt/flatcam";
     license = licenses.mit;
     maintainers = with maintainers; [ trepetti ];

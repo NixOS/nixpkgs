@@ -36,7 +36,7 @@ mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A free and cross-platform software to control DMX or analog lighting systems like moving heads, dimmers, scanners etc.";
+    description = "A free and cross-platform software to control DMX or analog lighting systems like moving heads, dimmers, scanners etc";
     maintainers = [ maintainers.globin ];
     license = licenses.asl20;
     platforms = platforms.all;

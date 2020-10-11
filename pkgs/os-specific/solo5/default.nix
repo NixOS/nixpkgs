@@ -45,7 +45,7 @@ in stdenv.mkDerivation {
     null;
 
   meta = with lib; {
-    description = "Sandboxed execution environment.";
+    description = "Sandboxed execution environment";
     homepage = "https://github.com/solo5/solo5";
     license = licenses.isc;
     maintainers = [ maintainers.ehmry ];

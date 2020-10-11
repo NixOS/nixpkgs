@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
 
   meta = {
-    description = "Memory Efficient Serialization Library.";
+    description = "Memory Efficient Serialization Library";
     longDescription = ''
       FlatBuffers is an efficient cross platform serialization library for
       games and other memory constrained apps. It allows you to directly

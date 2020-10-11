@@ -18,7 +18,7 @@ in fetchzip {
 
   meta = with lib; {
     homepage = "http://dotcolon.net/font/vegur/";
-    description = "A humanist sans serif font.";
+    description = "A humanist sans serif font";
     platforms = platforms.all;
     maintainers = [ maintainers.samueldr ];
     license = licenses.cc0;

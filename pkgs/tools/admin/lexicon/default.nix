@@ -75,7 +75,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Manipulate DNS records on various DNS providers in a standardized way.";
+    description = "Manipulate DNS records on various DNS providers in a standardized way";
     homepage = "https://github.com/AnalogJ/lexicon";
     maintainers = with maintainers; [ flyfloh ];
     license = licenses.mit;

@@ -56,7 +56,7 @@ buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "An end-to-end encryption aware Matrix reverse proxy daemon.";
+    description = "An end-to-end encryption aware Matrix reverse proxy daemon";
     homepage = "https://github.com/matrix-org/pantalaimon";
     license = licenses.asl20;
     maintainers = with maintainers; [ valodim ];
