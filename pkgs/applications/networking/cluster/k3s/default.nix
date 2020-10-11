@@ -42,9 +42,9 @@ with lib;
 # Those pieces of software we entirely ignore upstream's handling of, and just
 # make sure they're in the path if desired.
 let
-  k3sVersion = "1.18.8+k3s1";     # k3s git tag
+  k3sVersion = "1.19.2+k3s1";     # k3s git tag
   traefikChartVersion = "1.81.0"; # taken from ./scripts/download at the above k3s tag
-  k3sRootVersion = "0.4.1";       # taken from ./scripts/download at the above k3s tag
+  k3sRootVersion = "0.6.0-rc3";   # taken from ./scripts/download at the above k3s tag
   k3sCNIVersion = "0.8.6-k3s1";   # taken from ./scripts/version.sh at the above k3s tag
   # bundled into the k3s binary
   traefikChart = fetchurl {
@@ -63,7 +63,7 @@ let
   k3sRoot = fetchzip {
     # Note: marked as apache 2.0 license
     url = "https://github.com/rancher/k3s-root/releases/download/v${k3sRootVersion}/k3s-root-amd64.tar";
-    sha256 = "0ppj8y9g410hn6mjkfgfsi2j9yv7rcpic21znpmbrkx8b2070hf0";
+    sha256 = "0xj3dcqawpzyzmz545iwh151krzbs9csnzg3zfl74lkv2kxgidk6";
     stripRoot = false;
   };
   k3sPlugins = buildGoPackage rec {
@@ -94,7 +94,7 @@ let
     url = "https://github.com/rancher/k3s";
     rev = "v${k3sVersion}";
     leaveDotGit = true; # ./scripts/version.sh depends on git
-    sha256 = "17qsvbj1lvgxqdkxayyqnjwsjs3cx06nfv2hqvixjszn4vf30qlg";
+    sha256 = "1hbnarchs9w52w061bvfjvssdh7ycnxa04camjwkcx8vr0k804h4";
   };
   # Stage 1 of the k3s build:
   # Let's talk about how k3s is structured.
