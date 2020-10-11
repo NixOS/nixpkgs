@@ -140,7 +140,6 @@ in
         # programs.gnupg.agent = {
         #   enable = true;
         #   enableSSHSupport = true;
-        #   pinentryFlavor = "gnome3";
         # };
 
         # List services that you want to enable:
