@@ -132,20 +132,7 @@ in
 
     rdkafka = callPackage ../development/php-packages/rdkafka { };
 
-    redis = buildPecl {
-      version = "5.1.1";
-      pname = "redis";
-
-      sha256 = "1041zv91fkda73w4c3pj6zdvwjgb3q7mxg6mwnq9gisl80mrs732";
-
-      internalDeps = with php.extensions; [
-        json
-        session
-      ] ++ lib.optionals (lib.versionOlder php.version "7.4") [
-        hash ];
-
-      meta.maintainers = lib.teams.php.members;
-    };
+    redis = callPackage ../development/php-packages/redis { };
 
     sqlsrv = buildPecl {
       version = "5.8.1";
