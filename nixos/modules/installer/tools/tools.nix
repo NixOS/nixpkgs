@@ -168,7 +168,7 @@ in
         # Enable touchpad support (enabled default in most desktopManager).
         # services.xserver.libinput.enable = true;
 
-        # Enable the KDE Desktop Environment.
+        # Enable the Plasma 5 Desktop Environment.
         # services.xserver.displayManager.sddm.enable = true;
         # services.xserver.desktopManager.plasma5.enable = true;
 
