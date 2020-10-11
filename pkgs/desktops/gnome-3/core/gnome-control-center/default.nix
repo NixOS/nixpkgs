@@ -69,11 +69,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
-  version = "3.38.0";
+  version = "3.38.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1nmi5mf7bffjyb7sd6kcv151j0mfmlqpzy2spaaxhf4wxywbbdpn";
+    sha256 = "09i011hf23s2i4wim43vjys7y4y43cxl3kyvrnrwqvqgc5n0144d";
   };
   # See https://mail.gnome.org/archives/distributor-list/2020-September/msg00001.html
   prePatch = (import ../gvc-with-ucm-prePatch.nix {
