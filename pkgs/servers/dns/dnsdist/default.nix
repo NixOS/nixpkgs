@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ systemd boost libsodium libedit re2 net-snmp lua openssl zlib h2o ];
 
   configureFlags = [
-    "--enable-libsodium"
-    "--enable-re2"
+    "--with-libsodium"
+    "--with-re2"
     "--enable-dnscrypt"
     "--enable-dns-over-tls"
     "--enable-dns-over-https"
