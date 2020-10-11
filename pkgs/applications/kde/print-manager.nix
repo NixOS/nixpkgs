@@ -4,7 +4,7 @@
   cups, ki18n,
   kconfig, kconfigwidgets, kdbusaddons, kiconthemes, kcmutils, kio,
   knotifications, kwidgetsaddons, kwindowsystem, kitemviews, plasma-framework,
-  qtdeclarative
+  qtdeclarative, qtquickcontrols2
 }:
 
 mkDerivation {
@@ -18,9 +18,7 @@ mkDerivation {
   propagatedBuildInputs = [
     kconfig kconfigwidgets kdbusaddons kiconthemes kcmutils knotifications
     kwidgetsaddons kitemviews kio kwindowsystem plasma-framework qtdeclarative
+    qtquickcontrols2
   ];
   outputs = [ "out" "dev" ];
-  # Fix build with cups deprecations etc.
-  # See: https://github.com/NixOS/nixpkgs/issues/73334
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations -Wno-error=format-security";
 }
