@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-mahjongg";
-  version = "3.38.1";
+  version = "3.38.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-mahjongg/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "N0LcYxD8M/NewYfwJpnfIDzVb27pS0Hz7vJdrinutkc=";
+    sha256 = "1wslwhr782pdzrvca7wa6smvyid5yr42kjlra6qd9ji5qss0i1wj";
   };
 
   nativeBuildInputs = [
