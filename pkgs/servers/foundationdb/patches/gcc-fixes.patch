@@ -67,10 +67,18 @@ index b485a8495..82541d439 100644
  FlowKnobs const* FLOW_KNOBS = new FlowKnobs();
  
 diff --git a/flow/Platform.cpp b/flow/Platform.cpp
-index 69dac889a..69b86d4ff 100644
+index 69dac889a..62bda9edb 100644
 --- a/flow/Platform.cpp
 +++ b/flow/Platform.cpp
-@@ -623,7 +623,7 @@ void getDiskStatistics(std::string const& directory, uint64_t& currentIOs, uint6
+@@ -40,6 +40,7 @@
+ #include <algorithm>
+ 
+ #include <sys/types.h>
++#include <sys/sysmacros.h>
+ #include <time.h>
+ #include <sys/stat.h>
+ #include <fcntl.h>
+@@ -623,7 +624,7 @@ void getDiskStatistics(std::string const& directory, uint64_t& currentIOs, uint6
  		unsigned int minorId;
  		disk_stream >> majorId;
  		disk_stream >> minorId;
