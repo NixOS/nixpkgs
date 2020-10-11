@@ -33,6 +33,12 @@ buildPythonPackage rec {
   checkInputs = [ swig verilog ];
 
   checkPhase = ''
+    # test expected failures actually pass because of a fix in our icarus version
+    # https://github.com/cocotb/cocotb/issues/1952
+    substituteInPlace tests/test_cases/test_discovery/test_discovery.py \
+      --replace 'def access_single_bit' $'def foo(x): pass\ndef foo' \
+      --replace 'def access_single_bit_assignment' $'def foo(x): pass\ndef foo'
+
     export PATH=$out/bin:$PATH
     make test
   '';
