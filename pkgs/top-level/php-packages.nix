@@ -23,38 +23,17 @@ let
   isPhp74 = pkgs.lib.versionAtLeast php.version "7.4";
 
   pcre' = if (lib.versionAtLeast php.version "7.3") then pcre2 else pcre;
+
+  callPackage = pkgs.newScope {
+    inherit mkDerivation php isPhp73 isPhp74 buildPecl pcre';
+  };
 in
 {
   inherit buildPecl;
 
   # This is a set of interactive tools based on PHP.
   packages = {
-    box = mkDerivation rec {
-      version = "2.7.5";
-      pname = "box";
-
-      src = pkgs.fetchurl {
-        url = "https://github.com/box-project/box2/releases/download/${version}/box-${version}.phar";
-        sha256 = "1zmxdadrv0i2l8cz7xb38gnfmfyljpsaz2nnkjzqzksdmncbgd18";
-      };
-
-      phases = [ "installPhase" ];
-      buildInputs = [ pkgs.makeWrapper ];
-
-      installPhase = ''
-        mkdir -p $out/bin
-        install -D $src $out/libexec/box/box.phar
-        makeWrapper ${php}/bin/php $out/bin/box \
-          --add-flags "-d phar.readonly=0 $out/libexec/box/box.phar"
-      '';
-
-      meta = with pkgs.lib; {
-        description = "An application for building and managing Phars";
-        license = licenses.mit;
-        homepage = "https://box-project.github.io/box2/";
-        maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
-      };
-    };
+    box = callPackage ../development/php-packages/box { };
 
     composer = mkDerivation rec {
       version = "1.10.13";
