@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "cocotb";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "118wp5sjsl99hj8pqw5n3v2lry9r949p2hv4l92p086q1n0axxk3";
+    sha256 = "0akkxcj11543c0jn4zdw4a668lk0xg7pghs8mch3xjk8nn8wfblc";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +26,7 @@ buildPythonPackage rec {
       substituteInPlace $f --replace 'shell which' 'shell command -v'
     done
 
-    # This can probably be removed in the next update after 1.3.1
+    # This can perhaps be removed in the next update after 1.3.2?
     substituteInPlace cocotb/share/makefiles/Makefile.inc --replace "-Werror" ""
   '';
 
