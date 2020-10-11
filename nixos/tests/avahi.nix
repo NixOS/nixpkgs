@@ -1,5 +1,11 @@
+{ system ? builtins.currentSystem
+, config ? {}
+, pkgs ? import ../.. { inherit system config; }
+# bool: whether to use networkd in the tests
+, networkd ? false }:
+
 # Test whether `avahi-daemon' and `libnss-mdns' work as expected.
-import ./make-test-python.nix ({ pkgs, ... } : {
+import ./make-test-python.nix ({ ... } : {
   name = "avahi";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco ];
@@ -16,6 +22,11 @@ import ./make-test-python.nix ({ pkgs, ... } : {
         publish.userServices = true;
         publish.workstation = true;
         extraServiceFiles.ssh = "${pkgs.avahi}/etc/avahi/services/ssh.service";
+      };
+    } // pkgs.lib.optionalAttrs (networkd) {
+      networking = {
+        useNetworkd = true;
+        useDHCP = false;
       };
     };
   in {
