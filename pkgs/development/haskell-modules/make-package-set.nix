@@ -311,6 +311,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
               inherit pname;
               version = "0";
               license = null;
+              doBenchmark = args.doBenchmark or false;
             } // packageInputs;
 
           in self.mkDerivation genericBuilderArgs;
