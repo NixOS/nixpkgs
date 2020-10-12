@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lounge-gtk-theme";
-  version = "1.22";
+  version = "1.24";
 
   src = fetchFromGitHub {
     owner = "monday15";
     repo = pname;
     rev = version;
-    sha256 = "1y1wkfsv2zrxqcqr53lmr9743mvzcy4swi5j6sxmk1aykx6ccs1p";
+    sha256 = "0ima0aa5j296xn4y0d1zj6vcdrdpnihqdidj7bncxzgbnli1vazs";
   };
 
   nativeBuildInputs = [ meson ninja sassc gtk3 ];
