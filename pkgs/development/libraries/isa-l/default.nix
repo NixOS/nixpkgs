@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ nasm ];
   configurePhase = "cp Makefile.unx Makefile";
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = [
+    "-f" "Makefile.unx"
+    "prefix=$(out)"
+  ];
 
   meta = with stdenv.lib; {
     description = "Intel(R) Intelligent Storage Acceleration Library";
