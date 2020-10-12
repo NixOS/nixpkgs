@@ -2168,6 +2168,8 @@ in
 
   kramdown-rfc2629 = callPackage ../tools/text/kramdown-rfc2629 { };
 
+  klipper = callPackage ../servers/klipper { };
+
   lcdproc = callPackage ../servers/monitoring/lcdproc { };
 
   languagetool = callPackage ../tools/text/languagetool {  };
