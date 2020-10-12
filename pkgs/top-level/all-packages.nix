@@ -21290,6 +21290,8 @@ in
 
   smallwm = callPackage ../applications/window-managers/smallwm { };
 
+  smos = callPackage ../applications/misc/smos { };
+
   spectrwm = callPackage ../applications/window-managers/spectrwm { };
 
   spectral = qt5.callPackage ../applications/networking/instant-messengers/spectral { };
