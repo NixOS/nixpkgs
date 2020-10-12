@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Intel(R) Intelligent Storage Acceleration Library";
-    homepage = https://github.com/intel/isa-l;
+    homepage = "https://github.com/intel/isa-l";
     license = licenses.bsd3;
     maintainers = [ maintainers.volth ];
     platforms = platforms.linux;
