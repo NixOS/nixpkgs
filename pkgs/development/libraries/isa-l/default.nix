@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ nasm ];
-  configurePhase = "cp Makefile.unx Makefile";
   makeFlags = [
     "-f" "Makefile.unx"
     "prefix=$(out)"
