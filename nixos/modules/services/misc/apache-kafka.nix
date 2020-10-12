@@ -94,14 +94,12 @@ in {
         "-server"
         "-Xmx1G"
         "-Xms1G"
-        "-XX:+UseCompressedOops"
         "-XX:+UseG1GC"
-        "-XX:+UseConcMarkSweepGC"
-        "-XX:+CMSClassUnloadingEnabled"
-        "-XX:+CMSScavengeBeforeRemark"
-        "-XX:+DisableExplicitGC"
+        "-XX:+ExplicitGCInvokesConcurrent"
+        "-XX:InitiatingHeapOccupancyPercent=35"
+        "-XX:MaxGCPauseMillis=20"
+        "-XX:InitiatingHeapOccupancyPercent=35"
         "-Djava.awt.headless=true"
-        "-Djava.net.preferIPv4Stack=true"
       ];
       type = types.listOf types.str;
       example = [
