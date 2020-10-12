@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     description = "Online freelancing platform desktop application for time tracking";
     homepage = "https://www.upwork.com/ab/downloads/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ zakkor ];
+    maintainers = with maintainers; [ zakkor wolfangaukang ];
   };
 }
