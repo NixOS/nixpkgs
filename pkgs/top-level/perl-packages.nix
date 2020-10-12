@@ -7784,6 +7784,19 @@ let
     propagatedBuildInputs = [ HTTPDate ];
   };
 
+  FileLoadLines = buildPerlPackage {
+    pname = "File-LoadLines";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JV/JV/File-LoadLines-0.02.tar.gz";
+      sha256 = "ab0c1c31cf7b694dd3c9a0707098f7483763d46b60799a7f496ea0588be46b7b";
+    };
+    meta = {
+      description = "Load lines from file";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   FileMimeInfo = buildPerlPackage {
     pname = "File-MimeInfo";
     version = "0.29";
