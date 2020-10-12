@@ -9254,6 +9254,12 @@
     githubId = 1322287;
     name = "William O'Hanley";
   };
+  wolfangaukang = {
+    email = "liquid.query960@4wrd.cc";
+    github = "wolfangaukang";
+    githubId = 8378365;
+    name = "P. R. d. O.";
+  };
   womfoo = {
     email = "kranium@gikos.net";
     github = "womfoo";
