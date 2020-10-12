@@ -62,6 +62,7 @@ let
         outputHashMode = "recursive";
         outputHash = dependencies-sha256;
         impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars ++ [ "NIX_CONNECT_TIMEOUT" ];
+        allowedReferences = [];
       };
 
       # compile the hadoop tarball from sources, it requires some patches
