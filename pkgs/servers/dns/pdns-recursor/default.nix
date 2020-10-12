@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, boost
+{ stdenv, fetchurl, pkgconfig, boost, nixosTests
 , openssl, systemd, lua, luajit, protobuf
 , enableProtoBuf ? false
 }:
@@ -8,11 +8,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "pdns-recursor";
-  version = "4.3.3";
+  version = "4.3.4";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-recursor-${version}.tar.bz2";
-    sha256 = "020mx8mh6zrixkhsc2p1c2ccl9zfypay988jjxbk6ql020flig0b";
+    sha256 = "1l98hdnki95rnpasxj3swm89xc5s2j4zhlybyqa9z7hdhcsnkp9q";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    nixos = nixosTests.pdns-recursor;
+  };
 
   meta = {
     description = "A recursive DNS server";
