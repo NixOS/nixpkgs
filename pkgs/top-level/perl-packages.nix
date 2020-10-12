@@ -18191,6 +18191,19 @@ let
     propagatedBuildInputs = [ PadWalker SafeHole ];
   };
 
+  StringInterpolateNamed = buildPerlPackage {
+    pname = "String-Interpolate-Named";
+    version = "1.00";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JV/JV/String-Interpolate-Named-1.00.tar.gz";
+      sha256 = "727299fa69258b604770e059ec4da906bfde71861fdd1e3e89e30677371c5a80";
+    };
+    meta = {
+      description = "Interpolated named arguments in string";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   StringMkPasswd = buildPerlPackage {
     pname = "String-MkPasswd";
     version = "0.05";
