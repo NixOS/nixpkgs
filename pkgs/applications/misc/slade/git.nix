@@ -1,18 +1,20 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, wxGTK, gtk2, sfml, fluidsynth, curl, freeimage, ftgl, glew, zip }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, wxGTK30-gtk3, gtk3, sfml, fluidsynth, curl, freeimage, ftgl, glew, zip, lua, fmt, mpg123, wrapGAppsHook }:
 
-stdenv.mkDerivation {
-  name = "slade-git-3.1.2.2018.01.29";
+let
+  wxGTK = wxGTK30-gtk3.override { withGtk2 = false; withWebKit = true; };
+in stdenv.mkDerivation {
+  name = "slade-git-3.2.0.2020.08.21";
 
   src = fetchFromGitHub {
     owner = "sirjuddington";
     repo = "SLADE";
-    rev = "f7409c504b40c4962f419038db934c32688ddd2e";
-    sha256 = "14icxiy0r9rlcc10skqs1ylnxm1f0f3irhzfmx4sazq0pjv5ivld";
+    rev = "b247aab888afe1127f963f5572d81a8985a55446";
+    sha256 = "1qvfs9j5hnyi9i1qdyvyfijk1dg2j5j4i1l6i84anzd191c5hpzm";
   };
 
-  cmakeFlags = ["-DNO_WEBVIEW=1"];
-  nativeBuildInputs = [ cmake pkgconfig zip ];
-  buildInputs = [ wxGTK gtk2 sfml fluidsynth curl freeimage ftgl glew ];
+  cmakeFlags = [ "-DwxWidgets_CONFIG_EXECUTABLE=${wxGTK.out}/bin/wx-config" ];
+  nativeBuildInputs = [ cmake pkgconfig zip wrapGAppsHook ];
+  buildInputs = [ wxGTK gtk3 sfml fluidsynth curl freeimage ftgl glew lua fmt mpg123 ];
 
   enableParallelBuilding = true;
 
