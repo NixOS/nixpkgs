@@ -597,6 +597,19 @@ let
     };
   };
 
+  AppPackager =  buildPerlPackage {
+    pname = "App-Packager";
+    version = "1.430.1";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JV/JV/App-Packager-1.430.1.tar.gz";
+      sha256 = "57f4d014458387f9e2ed2dfd8615d1e2545b8a6504b10af22486578d8be374a3";
+    };
+    meta = {
+      description = "Abstraction for Packagers";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Appperlbrew = buildPerlModule {
     pname = "App-perlbrew";
     version = "0.88";
