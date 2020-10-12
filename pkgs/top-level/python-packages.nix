@@ -3275,6 +3275,8 @@ in {
   else
     callPackage ../development/python-modules/libcloud { };
 
+  libcst = callPackage ../development/python-modules/libcst { };
+
   libevdev = callPackage ../development/python-modules/libevdev { };
 
   libfdt = toPythonModule (pkgs.dtc.override {
@@ -4615,6 +4617,8 @@ in {
   property-manager = callPackage ../development/python-modules/property-manager { };
 
   protego = callPackage ../development/python-modules/protego { };
+
+  proto-plus = callPackage ../development/python-modules/proto-plus { };
 
   protobuf = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
