@@ -22,8 +22,9 @@ let
   } cfg.config;
 
   xmonad = if (cfg.config != null) then xmonad-config else xmonad-vanilla;
-in
-{
+in {
+  meta.maintainers = with maintainers; [ lassulus xaverdh ];
+
   options = {
     services.xserver.windowManager.xmonad = {
       enable = mkEnableOption "xmonad";
