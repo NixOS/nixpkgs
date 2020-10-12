@@ -1,0 +1,120 @@
+This patch revert 3d169bd3f4cdc2dc3dd09eadbbc17c19214d69f3 (Add track_env_var to the proc macro server).
+
+diff --git a/crates/proc_macro_srv/src/proc_macro/bridge/client.rs b/crates/proc_macro_srv/src/proc_macro/bridge/client.rs
+index 55d6330cc..cb4b3bdb0 100644
+--- a/crates/proc_macro_srv/src/proc_macro/bridge/client.rs
++++ b/crates/proc_macro_srv/src/proc_macro/bridge/client.rs
+@@ -160,7 +160,6 @@ macro_rules! define_handles {
+ }
+ define_handles! {
+     'owned:
+-    FreeFunctions,
+     TokenStream,
+     TokenStreamBuilder,
+     TokenStreamIter,
+diff --git a/crates/proc_macro_srv/src/proc_macro/bridge/mod.rs b/crates/proc_macro_srv/src/proc_macro/bridge/mod.rs
+index b97886eb9..aeb05aad4 100644
+--- a/crates/proc_macro_srv/src/proc_macro/bridge/mod.rs
++++ b/crates/proc_macro_srv/src/proc_macro/bridge/mod.rs
+@@ -57,10 +57,6 @@ use std::thread;
+ macro_rules! with_api {
+     ($S:ident, $self:ident, $m:ident) => {
+         $m! {
+-            FreeFunctions {
+-                fn drop($self: $S::FreeFunctions);
+-                fn track_env_var(var: &str, value: Option<&str>);
+-            },
+             TokenStream {
+                 fn drop($self: $S::TokenStream);
+                 fn clone($self: &$S::TokenStream) -> $S::TokenStream;
+diff --git a/crates/proc_macro_srv/src/proc_macro/bridge/server.rs b/crates/proc_macro_srv/src/proc_macro/bridge/server.rs
+index 3acb239af..45d41ac02 100644
+--- a/crates/proc_macro_srv/src/proc_macro/bridge/server.rs
++++ b/crates/proc_macro_srv/src/proc_macro/bridge/server.rs
+@@ -11,8 +11,6 @@ use super::client::HandleStore;
+ /// Declare an associated item of one of the traits below, optionally
+ /// adjusting it (i.e., adding bounds to types and default bodies to methods).
+ macro_rules! associated_item {
+-    (type FreeFunctions) =>
+-        (type FreeFunctions: 'static;);
+     (type TokenStream) =>
+         (type TokenStream: 'static + Clone;);
+     (type TokenStreamBuilder) =>
+diff --git a/crates/proc_macro_srv/src/proc_macro/mod.rs b/crates/proc_macro_srv/src/proc_macro/mod.rs
+index fc6e7344f..ee0dc9722 100644
+--- a/crates/proc_macro_srv/src/proc_macro/mod.rs
++++ b/crates/proc_macro_srv/src/proc_macro/mod.rs
+@@ -924,25 +924,3 @@ impl fmt::Debug for Literal {
+         self.0.fmt(f)
+     }
+ }
+-
+-pub mod tracked_env {
+-    use std::env::{self, VarError};
+-    use std::ffi::OsStr;
+-
+-    /// Retrieve an environment variable and add it to build dependency info.
+-    /// Build system executing the compiler will know that the variable was accessed during
+-    /// compilation, and will be able to rerun the build when the value of that variable changes.
+-    /// Besides the dependency tracking this function should be equivalent to `env::var` from the
+-    /// standard library, except that the argument must be UTF-8.
+-    pub fn var<K: AsRef<OsStr> + AsRef<str>>(key: K) -> Result<String, VarError> {
+-        use std::ops::Deref;
+-
+-        let key: &str = key.as_ref();
+-        let value = env::var(key);
+-        super::bridge::client::FreeFunctions::track_env_var(
+-            key,
+-            value.as_ref().map(|t| t.deref()).ok(),
+-        );
+-        value
+-    }
+-}
+diff --git a/crates/proc_macro_srv/src/rustc_server.rs b/crates/proc_macro_srv/src/rustc_server.rs
+index c5fe3591e..7d1695c86 100644
+--- a/crates/proc_macro_srv/src/rustc_server.rs
++++ b/crates/proc_macro_srv/src/rustc_server.rs
+@@ -242,8 +242,6 @@ impl TokenStreamBuilder {
+     }
+ }
+
+-pub struct FreeFunctions;
+-
+ #[derive(Clone)]
+ pub struct TokenStreamIter {
+     trees: IntoIter<TokenTree>,
+@@ -256,7 +254,6 @@ pub struct Rustc {
+ }
+
+ impl server::Types for Rustc {
+-    type FreeFunctions = FreeFunctions;
+     type TokenStream = TokenStream;
+     type TokenStreamBuilder = TokenStreamBuilder;
+     type TokenStreamIter = TokenStreamIter;
+@@ -270,13 +267,6 @@ impl server::Types for Rustc {
+     type MultiSpan = Vec<Span>;
+ }
+
+-impl server::FreeFunctions for Rustc {
+-    fn track_env_var(&mut self, _var: &str, _value: Option<&str>) {
+-        // FIXME: track env var accesses
+-        // https://github.com/rust-lang/rust/pull/71858
+-    }
+-}
+-
+ impl server::TokenStream for Rustc {
+     fn new(&mut self) -> Self::TokenStream {
+         Self::TokenStream::new()
+diff --git a/xtask/src/install.rs b/xtask/src/install.rs
+index fcc4f05e4..d829790d7 100644
+--- a/xtask/src/install.rs
++++ b/xtask/src/install.rs
+@@ -7,7 +7,7 @@ use anyhow::{bail, format_err, Context, Result};
+ use crate::not_bash::{pushd, run};
+
+ // Latest stable, feel free to send a PR if this lags behind.
+-const REQUIRED_RUST_VERSION: u32 = 47;
++const REQUIRED_RUST_VERSION: u32 = 46;
+
+ pub struct InstallCmd {
+     pub client: Option<ClientOpt>,
