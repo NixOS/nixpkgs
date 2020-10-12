@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fujprog";
-  version = "4.6";
+  version = "4.8";
 
   src = fetchFromGitHub {
     owner = "kost";
     repo = "${pname}";
     rev = "v${version}";
-    sha256 = "04l5rrfrp3pflwz5ncwvb4ibbsqib2259m23bzfi8m80aj216shd";
+    sha256 = "08kzkzd5a1wfd1aycywdynxh3qy6n7z9i8lihkahmb4xac3chmz5";
   };
 
   nativeBuildInputs = [
