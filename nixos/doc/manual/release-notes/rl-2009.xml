@@ -1151,6 +1151,13 @@ CREATE ROLE postgres LOGIN SUPERUSER;
    </listitem>
    <listitem>
     <para>
+     The <literal>hardware.nvidia.optimus_prime.enable</literal> service has been renamed to
+     <literal>hardware.nvidia.prime.sync.enable</literal> and has many new enhancements.
+     Related nvidia prime settings may have also changed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      The package <package>nextcloud17</package> has been removed and <package>nextcloud18</package> was marked as insecure
      since both of them will <link xlink:href="https://docs.nextcloud.com/server/19/admin_manual/release_schedule.html">
      will be EOL (end of life) within the lifetime of 20.09</link>.
