@@ -19872,6 +19872,8 @@ in
     glew = glew110;
   };
 
+  bit = callPackage ../applications/version-management/bit { };
+
   bitkeeper = callPackage ../applications/version-management/bitkeeper {
     gperf = gperf_3_0;
   };
