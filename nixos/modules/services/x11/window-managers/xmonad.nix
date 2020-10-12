@@ -65,19 +65,50 @@ in
         default = null;
         type = with lib.types; nullOr (either path str);
         description = ''
-          Configuration from which XMonad gets compiled. If no value
-          is specified, the xmonad config from $HOME/.xmonad is taken.
-          If you use xmonad --recompile, $HOME/.xmonad will be taken as
-          the configuration, but on the next restart of display-manager
-          this config will be reapplied.
+          Configuration from which XMonad gets compiled. If no value is
+          specified, a vanilla xmonad binary is put in PATH, which will
+          attempt to recompile and exec your xmonad config from $HOME/.xmonad.
+          This setup is then analogous to other (non-NixOS) linux distributions.
+
+          If you do set this option, you likely want to use "launch" as your
+          entry point for xmonad (as in the example), to avoid xmonads
+          recompilation logic on startup. Doing so will render the default
+          "mod+q" restart key binding dysfunctional though, because that attempts
+          to call your binary with the "--restart" command line option, unless
+          you implement that yourself. You way mant to bind "mod+q" to
+          <literal>(restart "xmonad" True)</literal> instead, which will just restart
+          xmonad from PATH. This allows e.g. switching to the new xmonad binary,
+          after rebuilding your system with nixos-rebuild.
+
+          If you actually want to run xmonad with a config specified here, but
+          also be able to recompile and restart it from a copy of that source in
+          $HOME/.xmonad on the fly, you will have to implement that yourself
+          using something like "compileRestart" from the example.
+          This should allow you to switch at will between the local xmonad and
+          the one NixOS puts in your PATH.
         '';
         example = ''
           import XMonad
+          import XMonad.Util.EZConfig (additionalKeys)
+          import Text.Printf (printf)
+          import System.Posix.Process (executeFile)
+          import System.Info (arch,os)
+          import System.Environment (getArgs)
+          import System.FilePath ((</>))
+
+          compiledConfig = printf "xmonad-%s-%s" arch os
+
+          compileRestart = whenX (recompile True) . catchIO $ do
+              dir  <- getXMonadDataDir
+              args <- getArgs
+              executeFile (dir </> compiledConfig) False args Nothing
 
           main = launch defaultConfig
-                 { modMask = mod4Mask -- Use Super instead of Alt
-                 , terminal = "urxvt"
-                 }
+              { modMask = mod4Mask -- Use Super instead of Alt
+              , terminal = "urxvt" }
+              `additionalKeys`
+              [ ( (mod4Mask,xK_r), compileRestart )
+              , ( (mod4Mask,xK_q), restart "xmonad" True ) ]
         '';
       };
 
