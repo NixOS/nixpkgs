@@ -597,6 +597,28 @@ let
     };
   };
 
+  AppMusicChordPro = buildPerlPackage {
+    pname = "App-Music-ChordPro";
+    version = "0.977";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JV/JV/App-Music-ChordPro-0.977.tar.gz";
+      sha256 = "0ggip43cddi5f6rylb07f56dhkfhbcbm621lvcnjfadnn9lrbwqh";
+    };
+    buildInputs = [ PodParser ];
+    propagatedBuildInputs = [ AppPackager FileLoadLines IOString ImageInfo PDFAPI2 StringInterpolateNamed TextLayout ]
+      ++ stdenv.lib.optional (!stdenv.isDarwin) [ Wx ];
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/chordpro
+      rm $out/bin/wxchordpro # Wx not supported on darwin
+    '';
+    meta = {
+      homepage = "http://www.chordpro.org";
+      description = "A lyrics and chords formatting program";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   AppPackager =  buildPerlPackage {
     pname = "App-Packager";
     version = "1.430.1";
