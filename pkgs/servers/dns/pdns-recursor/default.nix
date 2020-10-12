@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, boost
+{ stdenv, fetchurl, pkgconfig, boost, nixosTests
 , openssl, systemd, lua, luajit, protobuf
 , enableProtoBuf ? false
 }:
@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    nixos = nixosTests.pdns-recursor;
+  };
 
   meta = {
     description = "A recursive DNS server";
