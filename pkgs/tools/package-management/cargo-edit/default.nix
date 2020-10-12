@@ -1,6 +1,14 @@
-{ stdenv, lib, darwin
-, rustPlatform, fetchFromGitHub
-, openssl, pkg-config, libiconv }:
+{ stdenv
+, lib
+, darwin
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, xcbuild
+, openssl
+, libiconv
+, zlib
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-edit";
@@ -15,8 +23,18 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1h1sy54p7zxijydnhzvkxli90d72biv1inni17licb0vb9dihmnf";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.isDarwin [
+    # The cc crate runs xcbuild. This dependency can be removed once
+    # the following PR is merged from staging into master:
+    #
+    # https://github.com/NixOS/nixpkgs/pull/97000
+    xcbuild
+  ];
+
+  buildInputs = [ openssl zlib ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   doCheck = false; # integration tests depend on changing cargo config
 
