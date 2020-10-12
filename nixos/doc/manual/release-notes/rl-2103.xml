@@ -168,6 +168,15 @@
    </listitem>
    <listitem>
     <para>
+     BorgBackup jobs now have a default runtime limit set to <literal>24h</literal>
+     to prevent silent failures through indefinite hanging.
+     This can be configured through the newly introduced
+     <xref linkend="opt-services.borgbackup.jobs.<name>.runtimeLimit" /> option.
+     The limit can be removed by setting it to <literal>infinity</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      The setting <xref linkend="opt-services.redis.bind" /> defaults to <literal>127.0.0.1</literal> now, making Redis listen on the loopback interface only, and not all public network interfaces.
     </para>
    </listitem>

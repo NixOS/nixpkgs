@@ -80,6 +80,7 @@ let
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
+        RuntimeMaxSec = cfg.runtimeLimit;
         # Only run when no other process is using CPU or disk
         CPUSchedulingPolicy = "idle";
         IOSchedulingClass = "idle";
@@ -289,6 +290,20 @@ in {
               automatically, use <literal>[ ]</literal>.
               It will generate a systemd service borgbackup-job-NAME.
               You may trigger it manually via systemctl restart borgbackup-job-NAME.
+            '';
+          };
+
+          runtimeLimit = mkOption {
+            type = types.str;
+            default = "24h";
+            description = ''
+              Maximum time for the backup job to run.
+              The corresponding service is terminated and put into a failure
+              state if the specified time limit is exceeded.
+              Must be in the time span format described in
+              <citerefentry><refentrytitle>systemd.time</refentrytitle>
+              <manvolnum>7</manvolnum></citerefentry>.
+              Use <literal>infinity</literal> to set no runtime limit.
             '';
           };
 
