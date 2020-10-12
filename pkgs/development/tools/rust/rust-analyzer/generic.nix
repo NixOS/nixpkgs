@@ -16,15 +16,16 @@ rustPlatform.buildRustPackage {
     inherit rev sha256;
   };
 
-  # FIXME: Temporary fix for our rust 1.45.0 since rust-analyzer requires 1.46.0
+  # FIXME: Temporary fixes for our rust 1.45.0
   cargoPatches = [
-    ./downgrade-smol_str.patch
+    ./downgrade-smol_str.patch # Requires rustc 1.46.0
   ];
 
   patches = [
-    # FIXME: Temporary fix for our rust 1.45.0 since rust-analyzer requires 1.46.0
-    ./no-loop-in-const-fn.patch
-    ./no-option-zip.patch
+    ./no-track_env_var.patch              # Requires rustc 1.47.0
+    ./no-match-unsizing-in-const-fn.patch # Requires rustc 1.46.0
+    ./no-loop-in-const-fn.patch           # Requires rustc 1.46.0
+    ./no-option-zip.patch                 # Requires rustc 1.46.0
   ];
 
   buildAndTestSubdir = "crates/rust-analyzer";
