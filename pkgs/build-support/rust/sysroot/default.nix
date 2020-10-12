@@ -29,7 +29,9 @@ in rustPlatform.buildRustPackage {
 
   RUSTC_BOOTSTRAP = 1;
   __internal_dontAddSysroot = true;
-  cargoSha256 = "1snkfsx3jb1p5izwlfwkgp8hxhgpa35nmx939sp5730vf9whqqwg";
+  cargoSha256 = "1l5z44dw5h7lbwmpjqax2g40cf4h27yai3wlj0p5di5v1xf25rng";
+
+  doCheck = false;
 
   installPhase = ''
     export LIBS_DIR=$out/lib/rustlib/${shortTarget}/lib
