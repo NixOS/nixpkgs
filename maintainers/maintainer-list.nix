@@ -8677,6 +8677,12 @@
     githubId = 9853194;
     name = "Philipp Bartsch";
   };
+  toastal = {
+    email = "toastal+nix@protonmail.com";
+    github = "toastal";
+    githubId = 561087;
+    name = "toastal";
+  };
   tobim = {
     email = "nix@tobim.fastmail.fm";
     github = "tobim";
