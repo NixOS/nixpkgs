@@ -1,6 +1,5 @@
 { stdenv
 , fetchurl
-, fetchpatch
 , gmp
 , readline
 , libX11
@@ -13,21 +12,12 @@ assert withThread -> libpthreadstubs != null;
 
 stdenv.mkDerivation rec {
   pname = "pari";
-  version = "2.11.3";
+  version = "2.11.4";
 
   src = fetchurl {
     url = "https://pari.math.u-bordeaux.fr/pub/pari/unix/${pname}-${version}.tar.gz";
-    sha256 = "1jd65h2psrmba2dx7rkf5qidf9ka0cwbsg20pd18k45ggr30l467";
+    sha256 = "sha256-v8iPxPc1L0hA5uNSxy8DacvqikVAOxg0piafNwmXCxw=";
   };
-
-  patches = [
-    # https://trac.sagemath.org/ticket/29313#comment:1
-    (fetchpatch {
-      name = "backport-bug-fix.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/repos/community-x86_64/c7a1d35f.patch?h=packages/pari&id=27893d227290dc3821d68aa25877d9765c204dad";
-      sha256 = "0vm0fwyzj66cr32imip6srksd47s2s2sjl1rb26ph8gpfi3nalii";
-    })
-  ];
 
   buildInputs = [
     gmp
@@ -72,20 +62,20 @@ stdenv.mkDerivation rec {
        Belabas with the help of many volunteer contributors.
 
        - PARI is a C library, allowing fast computations.
-       - gp is an easy-to-use interactive shell giving access to the
-          PARI functions.
+       - gp is an easy-to-use interactive shell giving access to the PARI
+         functions.
        - GP is the name of gp's scripting language.
-       - gp2c, the GP-to-C compiler, combines the best of both worlds
-          by compiling GP scripts to the C language and transparently loading
-          the resulting functions into gp. (gp2c-compiled scripts will typically
-          run 3 or 4 times faster.) gp2c currently only understands a subset
-           of the GP language.
+       - gp2c, the GP-to-C compiler, combines the best of both worlds by
+         compiling GP scripts to the C language and transparently loading the
+         resulting functions into gp. (gp2c-compiled scripts will typically run
+         3 or 4 times faster.) gp2c currently only understands a subset of the
+         GP language.
     '';
-    homepage    = "http://pari.math.u-bordeaux.fr";
+    homepage = "http://pari.math.u-bordeaux.fr";
     downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
-    license     = licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ertes raskin AndersonTorres timokau ];
-    platforms   = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
     updateWalker = true;
   };
 }
