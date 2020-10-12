@@ -6,16 +6,16 @@
 
 stdenv.mkDerivation rec {
   pname = "upwork";
-  version = "5.3.3-883";
+  version = "5.4.7.1";
 
   src = fetchurl {
-    url = "https://updates-desktopapp.upwork.com/binaries/v5_3_3_883_1f817bc1fefd44e7/upwork_5.3.3.883_amd64.deb";
-    sha256 = "072zns79w4h46bvbj23rvr8i12sf2l378ry0z3hchwcimkrph9wx";
+    url = "https://updates-desktopapp.upwork.com/binaries/v5_4_7_1_81f361962c74427d/${pname}_5.4.7.1_amd64.deb";
+    sha256 = "c443724d37bca942ca126b8b207846a5adb94a92ff9490370f2fe055feee347b";
   };
 
   dontWrapGApps = true;
 
-  nativeBuildInputs = [ 
+  nativeBuildInputs = [
     dpkg
     wrapGAppsHook
     autoPatchelfHook
