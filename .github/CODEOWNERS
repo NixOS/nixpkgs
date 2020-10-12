@@ -192,6 +192,7 @@
 /nixos/tests/php                         @NixOS/php
 /pkgs/build-support/build-pecl.nix       @NixOS/php
 /pkgs/development/interpreters/php       @NixOS/php
+/pkgs/development/php-packages           @NixOS/php
 /pkgs/top-level/php-packages.nix         @NixOS/php
 
 # Podman, CRI-O modules and related
