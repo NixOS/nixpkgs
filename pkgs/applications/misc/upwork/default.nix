@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   dontWrapGApps = true;
 
-  nativeBuildInputs = [ 
+  nativeBuildInputs = [
     dpkg
     wrapGAppsHook
     autoPatchelfHook
