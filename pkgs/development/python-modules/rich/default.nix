@@ -1,18 +1,25 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, typing-extensions, pygments, recommonmark, colorama }:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pytest, pytestcov, typing-extensions, pygments, recommonmark, colorama }:
 
 buildPythonPackage rec {
   pname = "rich";
   version = "8.0.0";
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "15yz7rcn5cjv233xcvka9vd573pwafl31s6z9ni54r8y4k926l0v";
+  src = fetchFromGitHub {
+    owner = "willmcgugan";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0hv27b22x7dbx1i7nzsd8y8fymmvdak2hcx9242jwk4c1a7jr151";
   };
+
+  postPatch = ''
+   sed -i 's/setuptools.setup(name="rich")/setuptools.setup(name="rich", packages=setuptools.find_packages())/g' setup.py
+  '';
 
   propagatedBuildInputs = [ typing-extensions pygments recommonmark colorama ];
 
-  doCheck = false;
+  checkInputs = [ pytest pytestcov ];
+  checkPhase = "make test";
   pythonImportsCheck = [ "rich" ];
 
   meta = with lib; {
