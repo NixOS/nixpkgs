@@ -11076,7 +11076,9 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  fujprog = callPackage ../development/tools/misc/fujprog { };
+  fujprog = callPackage ../development/tools/misc/fujprog {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   funnelweb = callPackage ../development/tools/literate-programming/funnelweb { };
 
