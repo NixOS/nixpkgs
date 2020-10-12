@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "srht";
-  version = "0.64.0";
+  version = "0.65.2";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/core.sr.ht";
     rev = version;
-    sha256 = "ubCbDh60zg88LXupWAo2EnqhE5jt0F0L9ikTBebusYQ=";
+    sha256 = "1jfp1vc8mink3c7ccacgnqx8hpkck82ipxiql38q1y9l8xcsah03";
   };
 
   node_modules = fetchNodeModules {
