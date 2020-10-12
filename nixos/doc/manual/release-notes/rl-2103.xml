@@ -77,6 +77,17 @@
       for consistency with other X11 resources.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      A number of options have been renamed in the kicad interface. <literal>oceSupport</literal>
+      has been renamed to <literal>withOCE</literal>, <literal>withOCCT</literal> has been renamed
+      to <literal>withOCC</literal>, <literal>ngspiceSupport</literal> has been renamed to
+      <literal>withNgspice</literal>, and <literal>scriptingSupport</literal> has been renamed to
+      <literal>withScripting</literal>. Additionally, <literal>kicad/base.nix</literal> no longer
+      provides default argument values since these are provided by
+      <literal>kicad/default.nix</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
