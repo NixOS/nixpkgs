@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pytest, pytestcov, typing-extensions, pygments, recommonmark, colorama }:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pytest, typing-extensions, pygments, recommonmark, colorama }:
 
 buildPythonPackage rec {
   pname = "rich";
@@ -13,13 +13,13 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-   sed -i 's/setuptools.setup(name="rich")/setuptools.setup(name="rich", packages=setuptools.find_packages())/g' setup.py
+    sed -i 's/setuptools.setup(name="rich")/setuptools.setup(name="rich", packages=setuptools.find_packages())/g' setup.py
   '';
 
   propagatedBuildInputs = [ typing-extensions pygments recommonmark colorama ];
 
-  checkInputs = [ pytest pytestcov ];
-  checkPhase = "make test";
+  checkInputs = [ pytest ];
+  checkPhase = "pytest";
   pythonImportsCheck = [ "rich" ];
 
   meta = with lib; {
