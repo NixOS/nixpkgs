@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cagebreak";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "project-repo";
     repo = "cagebreak";
     rev = version;
-    hash = "sha256-+Ww1rsUR7qe/BixLPR8GiRc3C6QmpLzWpT2wym8b4/M=";
+    hash = "sha256-iMoj++yjGK4hn3C675QntBYcsoBx0lEjjCM8fdvRJYo=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config wayland scdoc makeWrapper ];
