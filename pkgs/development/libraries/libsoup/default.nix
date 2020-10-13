@@ -1,6 +1,6 @@
 { stdenv, fetchurl, glib, libxml2, meson, ninja, pkgconfig, gnome3
 , gnomeSupport ? true, sqlite, glib-networking, gobject-introspection, vala
-, libpsl, python3, brotli }:
+, libpsl, python3, brotli, lib }:
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "-Dtls_check=false" # glib-networking is a runtime dependency, not a compile-time dependency
     "-Dgssapi=disabled"
     "-Dvapi=enabled"
-    "-Dgnome=${if gnomeSupport then "true" else "false"}"
+    "-Dgnome=${lib.boolToString gnomeSupport}"
     "-Dntlm=disabled"
   ];
 

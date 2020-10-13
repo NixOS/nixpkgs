@@ -19,6 +19,7 @@
 , gcr
 , glib
 , substituteAll
+, lib
 }:
 
 stdenv.mkDerivation rec {
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgcr=${if withGnome then "true" else "false"}"
+    "-Dgcr=${lib.boolToString withGnome}"
   ];
 
   postPatch = ''

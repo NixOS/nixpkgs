@@ -7,7 +7,7 @@
 # ln -s ~/.nix-profile/share/obs/obs-plugins/wlrobs/bin/64bit/libwlrobs.so ~/.config/obs-studio/plugins/wlrobs/bin/64bit
 { stdenv, fetchhg, wayland, obs-studio
 , meson, ninja, pkgconfig, libX11
-, dmabufSupport ? false, libdrm ? null, libGL ? null}:
+, dmabufSupport ? false, libdrm ? null, libGL ? null, lib}:
 
 assert dmabufSupport -> libdrm != null && libGL != null;
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   '';
 
   mesonFlags = [
-    "-Duse_dmabuf=${if dmabufSupport then "true" else "false"}"
+    "-Duse_dmabuf=${lib.boolToString dmabufSupport}"
   ];
 
   meta = with stdenv.lib; {

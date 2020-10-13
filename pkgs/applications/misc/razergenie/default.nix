@@ -27,8 +27,8 @@ in stdenv.mkDerivation {
   ];
 
   mesonFlags = [
-    "-Denable_experimental=${if enableExperimental then "true" else "false"}"
-    "-Dinclude_matrix_discovery=${if includeMatrixDiscovery then "true" else "false"}"
+    "-Denable_experimental=${lib.boolToString enableExperimental}"
+    "-Dinclude_matrix_discovery=${lib.boolToString includeMatrixDiscovery}"
   ];
 
   meta = with lib; {

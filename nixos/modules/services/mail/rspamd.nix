@@ -153,7 +153,7 @@ let
 
       ${concatStringsSep "\n" (mapAttrsToList (name: value: let
           includeName = if name == "rspamd_proxy" then "proxy" else name;
-          tryOverride = if value.extraConfig == "" then "true" else "false";
+          tryOverride = boolToString (value.extraConfig == "");
         in ''
         worker "${value.type}" {
           type = "${value.type}";
