@@ -24611,6 +24611,8 @@ in
 
   xtruss = callPackage ../tools/X11/xtruss { };
 
+  xtuner = callPackage ../applications/audio/xtuner { };
+
   xmacro = callPackage ../tools/X11/xmacro { };
 
   xmenu = callPackage ../applications/misc/xmenu { };
