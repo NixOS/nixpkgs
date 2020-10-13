@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dsystemd-system-unit-dir=${placeholder "out"}/etc/systemd/system"
-    "-Ddemo-agent=${if withDemoAgent then "true" else "false"}"
+    "-Ddemo-agent=${boolToString withDemoAgent}"
     "--sysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
     "-Ddbus-srv-user=geoclue"

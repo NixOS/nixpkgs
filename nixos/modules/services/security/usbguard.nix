@@ -19,13 +19,13 @@ let
     PresentDevicePolicy=${cfg.presentDevicePolicy}
     PresentControllerPolicy=${cfg.presentControllerPolicy}
     InsertedDevicePolicy=${cfg.insertedDevicePolicy}
-    RestoreControllerDeviceState=${if cfg.restoreControllerDeviceState then "true" else "false"}
+    RestoreControllerDeviceState=${boolToString cfg.restoreControllerDeviceState}
     # this does not seem useful for endusers to change
     DeviceManagerBackend=uevent
     IPCAllowedUsers=${concatStringsSep " " cfg.IPCAllowedUsers}
     IPCAllowedGroups=${concatStringsSep " " cfg.IPCAllowedGroups}
     IPCAccessControlFiles=/var/lib/usbguard/IPCAccessControl.d/
-    DeviceRulesWithPort=${if cfg.deviceRulesWithPort then "true" else "false"}
+    DeviceRulesWithPort=${boolToString cfg.deviceRulesWithPort}
     # HACK: that way audit logs still land in the journal
     AuditFilePath=/dev/null
   '';

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opaline, withShared ? true }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opaline, withShared ? true, lib }:
 
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-uchar-0.0.2";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ ocaml ocamlbuild findlib ];
   buildInputs = [ findlib ocaml ocamlbuild ];
-  buildPhase = "ocaml pkg/build.ml native=true native-dynlink=${if withShared then "true" else "false"}";
+  buildPhase = "ocaml pkg/build.ml native=true native-dynlink=${lib.boolToString withShared}";
   installPhase = "${opaline}/bin/opaline -libdir $OCAMLFIND_DESTDIR";
   configurePlatforms = [];
 
