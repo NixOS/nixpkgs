@@ -2460,6 +2460,8 @@ in {
 
   google_cloud_monitoring = callPackage ../development/python-modules/google_cloud_monitoring { };
 
+  google-cloud-org-policy = callPackage ../development/python-modules/google-cloud-org-policy { };
+
   google_cloud_pubsub = callPackage ../development/python-modules/google_cloud_pubsub { };
 
   google_cloud_redis = callPackage ../development/python-modules/google_cloud_redis { };
