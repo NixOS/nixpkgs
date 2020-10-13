@@ -3394,6 +3394,8 @@ in
 
   tridactyl-native = callPackage ../tools/networking/tridactyl-native { };
 
+  trivy = callPackage ../tools/admin/trivy { };
+
   trompeloeil = callPackage ../development/libraries/trompeloeil { };
 
   uudeview = callPackage ../tools/misc/uudeview { };
