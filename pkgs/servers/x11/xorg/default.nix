@@ -2679,11 +2679,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xorgproto = callPackage ({ stdenv, pkgconfig, fetchurl, libXt }: stdenv.mkDerivation {
-    name = "xorgproto-2019.1";
+    name = "xorgproto-2020.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/proto/xorgproto-2019.1.tar.bz2";
-      sha256 = "16yll1kaffnslik5sizlw3qrigj1gpsgfgyq6903g3mwdixamnm6";
+      url = "mirror://xorg/individual/proto/xorgproto-2020.1.tar.bz2";
+      sha256 = "1llrnrkq6iprgiqakmwlv89745s9h02xsiaq0xn3fnh377qm78al";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
