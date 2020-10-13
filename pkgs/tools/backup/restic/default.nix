@@ -1,24 +1,28 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, installShellFiles, makeWrapper
+{ stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles, makeWrapper
 , nixosTests, rclone }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "restic";
-  version = "0.9.6";
-
-  goPackagePath = "github.com/restic/restic";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "restic";
     repo = "restic";
     rev = "v${version}";
-    sha256 = "0lydll93n1lcn1fl669b9cikmzz9d6vfpc8ky3ng5fi8kj3v1dz7";
+    sha256 = "0nrh52cjymzcf093sqqa3kfw2nimnx6qwn8aw0wsci2v2r84yzzx";
   };
+
+  vendorSha256 = "1pfixq3mbfn12gyablc4g0j8r00md3887q0l8xgxy76z0d8w924s";
 
   subPackages = [ "cmd/restic" ];
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   passthru.tests.restic = nixosTests.restic;
+
+  postPatch = ''
+    rm cmd/restic/integration_fuse_test.go
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/restic --prefix PATH : '${rclone}/bin'
