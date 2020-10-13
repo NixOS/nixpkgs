@@ -7528,7 +7528,10 @@ in {
 
   wget = callPackage ../development/python-modules/wget { };
 
-  wheel = callPackage ../development/python-modules/wheel { };
+  wheel = if isPy310 then
+      callPackage ../development/python-modules/wheel/0.35.nix { }
+    else
+      callPackage ../development/python-modules/wheel { };
 
   whichcraft = callPackage ../development/python-modules/whichcraft { };
 
