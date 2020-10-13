@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, lib
-, pkgconfig, autoreconfHook
+, pkg-config, autoreconfHook
 , gtkVersion ? "3"
 , gtk2
 , gtk3
@@ -8,16 +8,16 @@
 
 stdenv.mkDerivation rec {
   pname = "libayatana-indicator-gtk${gtkVersion}";
-  version = "0.6.3";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "libayatana-indicator";
     rev = version;
-    sha256 = "1q9wmaw6pckwyrv0s7wkqzm1yrk031pbz4xbr8cwn75ixqyfcb28";
+    sha256 = "1wlqm3pj12vgz587a72widbg0vcmm1klsd2lh3mpzfy20m3vjxhj";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   buildInputs = [ ayatana-ido ]
     ++ lib.lists.optionals (gtkVersion == "2") [ gtk2 ]
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
     description = "Ayatana Indicators Shared Library";
     homepage = "https://github.com/AyatanaIndicators/libayatana-indicator";
     changelog = "https://github.com/AyatanaIndicators/libayatana-indicator/blob/${version}/ChangeLog";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = [ maintainers.nickhu ];
-    platforms = platforms.x86_64;
+    platforms = platforms.linux;
   };
 }
