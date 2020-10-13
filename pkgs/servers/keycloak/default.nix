@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, makeWrapper, jre, writeText
+{ stdenv, fetchzip, makeWrapper, jre, writeText, nixosTests
 , postgresql_jdbc ? null
 }:
 
@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/add-user-keycloak.sh --set JAVA_HOME ${jre}
     wrapProgram $out/bin/jboss-cli.sh --set JAVA_HOME ${jre}
   '';
+
+  passthru.tests = nixosTests.keycloak;
 
   meta = with stdenv.lib; {
     homepage    = "https://www.keycloak.org/";
