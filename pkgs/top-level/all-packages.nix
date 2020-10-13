@@ -12456,8 +12456,6 @@ in
 
   todoist-electron = callPackage ../applications/misc/todoist-electron { };
 
-  todolist = callPackage ../applications/misc/todolist { };
-
   travis = callPackage ../development/tools/misc/travis { };
 
   tree-sitter = callPackage ../development/tools/parsing/tree-sitter {
@@ -20574,6 +20572,8 @@ in
 
 
   ultimate-oldschool-pc-font-pack = callPackage ../data/fonts/ultimate-oldschool-pc-font-pack { };
+
+  ultralist = callPackage ../applications/misc/ultralist { };
 
   undefined-medium = callPackage ../data/fonts/undefined-medium { };
 
