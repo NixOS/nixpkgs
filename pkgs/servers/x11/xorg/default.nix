@@ -1717,11 +1717,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xf86inputlibinput = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libinput, xorgserver }: stdenv.mkDerivation {
-    name = "xf86-input-libinput-0.28.2";
+    name = "xf86-input-libinput-0.30.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-input-libinput-0.28.2.tar.bz2";
-      sha256 = "0818vr0yhk9j1y1wcbxzcd458vrvp06rrhi8k43bhqkb5jb4dcxq";
+      url = "mirror://xorg/individual/driver/xf86-input-libinput-0.30.0.tar.bz2";
+      sha256 = "1h4np66p87jf0c85ig524w8f5rbhl5gx8fww1qg0c55f87yzkizr";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
