@@ -2,7 +2,7 @@
   - source: ../../../../../doc/languages-frameworks/texlive.xml
   - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
-{ stdenv, lib, fetchurl, fetchpatch, runCommand, writeText, buildEnv
+{ stdenv, lib, fetchurl, runCommand, writeText, buildEnv
 , callPackage, ghostscriptX, harfbuzz, poppler_min
 , makeWrapper, python, ruby, perl
 , useFixedHashes ? true
@@ -57,21 +57,6 @@ let
       collection-plaingeneric = orig.collection-plaingeneric // {
         deps = orig.collection-plaingeneric.deps // { inherit (tl) xdvi; };
       };
-
-      # TODO revert for texlive 2020
-      arara = lib.recursiveUpdate orig.arara {
-        postUnpack = let
-          arara_jar_fix = fetchpatch {
-            url = "https://github.com/TeX-Live/texlive-source/commit/dbaf12f4a47dcd62bcc96346f65493fda3fec2c8.diff";
-            sha256 = "148knr8k6sm6fpyj31kdq85yxvzvwp1prjha3f07q24kbar2l830";
-          };
-        in ''
-          if [ -f "$out"/scripts/arara/arara.sh ]; then
-            cd "$out"/scripts/
-            patch -p4 <${arara_jar_fix}
-          fi
-        '';
-      };
     }); # overrides
 
     # tl =
@@ -81,7 +66,7 @@ let
 
   flatDeps = pname: attrs:
     let
-      version = attrs.version or bin.texliveYear;
+      version = attrs.version or (builtins.toString attrs.revision);
       mkPkgV = tlType: let
         pkg = attrs // {
           sha512 = attrs.sha512.${tlType};
@@ -112,15 +97,7 @@ let
       fixedHash = fixedHashes.${tlName} or null; # be graceful about missing hashes
 
       urls = args.urls or (if args ? url then [ args.url ] else
-        lib.concatMap
-          (up: [
-            # Only ~11% of packages in texlive 2019 have revisions, so
-            # the number of requests is nearly doubled if we lookup
-            # the name with revision
-            # "${up}/${urlName}.r${toString revision}.tar.xz"
-            "${up}/${urlName}.tar.xz" # TODO To be removed for texlive 2020?
-          ])
-          urlPrefixes);
+        map (up: "${up}/${urlName}.r${toString revision}.tar.xz") urlPrefixes);
 
       # The tarballs on CTAN mirrors for the current release are constantly
       # receiving updates, so we can't use those directly. Stable snapshots
@@ -129,11 +106,11 @@ let
       # (https://tug.org/historic/).
       urlPrefixes = args.urlPrefixes or [
         # tlnet-final snapshot
-        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/archive"
-        "ftp://tug.org/texlive/historic/2019/tlnet-final/archive"
+        #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/archive"
+        #"ftp://tug.org/texlive/historic/2019/tlnet-final/archive"
 
         # Daily snapshots hosted by one of the texlive release managers
-        #https://texlive.info/tlnet-archive/2019/10/19/tlnet/archive
+        https://texlive.info/tlnet-archive/2020/10/09/tlnet/archive
       ];
 
       src = fetchurl { inherit urls sha512; };
@@ -192,8 +169,6 @@ in
           addMetaAttrs rec {
             description = "TeX Live environment for ${pname}";
             platforms = lib.platforms.all;
-            hydraPlatforms = lib.optionals
-              (!lib.elem pname ["scheme-infraonly"]) platforms;
             maintainers = with lib.maintainers;  [ veprbl ];
           }
           (combine {

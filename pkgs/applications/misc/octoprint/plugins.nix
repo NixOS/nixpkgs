@@ -255,13 +255,13 @@ in {
 
   displaylayerprogress = buildPlugin rec {
     pname = "OctoPrint-DisplayLayerProgress";
-    version = "1.23.2";
+    version = "1.24.0";
 
     src = fetchFromGitHub {
       owner = "OllisGit";
       repo = pname;
       rev = version;
-      sha256 = "0yv8gy5dq0rl7zxkvqa98az391aiixl8wbzkyvbmpjar9r6whdzm";
+      sha256 = "1lbivg3rcjzv8zqvp8n8gcaczxdm7gvd5ihjb6jq0fgf958lv59n";
     };
 
     meta = with stdenv.lib; {
@@ -272,15 +272,34 @@ in {
     };
   };
 
+  octoklipper = buildPlugin rec {
+    pname = "OctoKlipper";
+    version = "0.3.2";
+
+    src = fetchFromGitHub {
+      owner = "AliceGrey";
+      repo = "OctoprintKlipperPlugin";
+      rev = version;
+      sha256 = "15yg2blbgqp2gdpsqqm8qiiznq5qaq8wss07jimkl0865vrvlz7l";
+    };
+
+    meta = with stdenv.lib; {
+      description = "A plugin for a better integration of Klipper into OctoPrint";
+      homepage = "https://github.com/AliceGrey/OctoprintKlipperPlugin";
+      license = licenses.agpl3;
+      maintainers = with maintainers; [ lovesegfault ];
+    };
+  };
+
   octoprint-dashboard = buildPlugin rec {
     pname = "OctoPrint-Dashboard";
-    version = "1.13.0";
+    version = "1.15.1";
 
     src = fetchFromGitHub {
       owner = "StefanCohen";
       repo = pname;
       rev = version;
-      sha256 = "1879l05gkkryvhxkmhr3xvd10d4m7i0cr3jk1gdcv47xwyr6q9pf";
+      sha256 = "1psk069g8xdpgbzmna51dh978vrildh33dn7kbbi5y31ry5c3gx6";
     };
 
     meta = with stdenv.lib; {

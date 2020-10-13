@@ -4,12 +4,12 @@
 
 buildPythonPackage rec {
   pname = "scmsrht";
-  version = "0.22.3";
+  version = "0.22.4";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/scm.sr.ht";
     rev = version;
-    sha256 = "MwgWDYGqOuci55gUFAiKnUfUWgLvQVP5omAMNv/2gPY=";
+    sha256 = "1djyrwa44wml9lj3njy6qbxyc3g1msswbh0y9jyjzxh2c02bl3jn";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;

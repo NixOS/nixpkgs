@@ -5,7 +5,6 @@ let
     workspaces 1
     escape C-t
     bind t exec env DISPLAY=:0 ${pkgs.xterm}/bin/xterm -cm -pc
-    bind a exec ${pkgs.alacritty}/bin/alacritty
   '';
 in
 {
@@ -20,7 +19,7 @@ in
   in {
     imports = [ ./common/user-account.nix ];
 
-    environment.systemPackages = [ pkgs.cagebreak ];
+    environment.systemPackages = [ pkgs.cagebreak pkgs.wallutils ];
     services.xserver = {
       enable = true;
       displayManager.autoLogin = {
@@ -32,7 +31,7 @@ in
       manage = "desktop";
       name = "cagebreak";
       start = ''
-        export XDG_RUNTIME_DIR=/run/user/${toString alice.uid}
+        export XDG_RUNTIME_DIR="/run/user/${toString alice.uid}"
         ${pkgs.cagebreak}/bin/cagebreak &
         waitPID=$!
       '';
@@ -74,24 +73,20 @@ in
 
   testScript = { nodes, ... }: let
     user = nodes.machine.config.users.users.alice;
+    XDG_RUNTIME_DIR = "/run/user/${toString user.uid}";
   in ''
     start_all()
     machine.wait_for_unit("multi-user.target")
-    machine.wait_for_file("/run/user/${toString user.uid}/wayland-0")
+    machine.wait_for_file("${XDG_RUNTIME_DIR}/wayland-0")
 
-    with subtest("ensure wayland works with alacritty"):
-        machine.send_key("ctrl-t")
-        machine.send_key("a")
-        machine.wait_until_succeeds("pgrep alacritty")
-        machine.wait_for_text("alice@machine")
-        machine.screenshot("screen")
-        machine.send_key("ctrl-d")
+    with subtest("ensure wayland works with wayinfo from wallutils"):
+        machine.succeed("env XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR} wayinfo")
 
     with subtest("ensure xwayland works with xterm"):
         machine.send_key("ctrl-t")
         machine.send_key("t")
         machine.wait_until_succeeds("pgrep xterm")
-        machine.wait_for_text("alice@machine")
+        machine.wait_for_text("${user.name}@machine")
         machine.screenshot("screen")
         machine.send_key("ctrl-d")
   '';
