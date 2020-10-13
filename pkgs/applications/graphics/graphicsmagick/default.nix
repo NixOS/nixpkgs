@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ bzip2 freetype ghostscript graphviz libjpeg libpng libtiff libX11 libxml2
       zlib libtool libwebp
-    ]
-    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    ];
 
-  nativeBuildInputs = [ xz ];
+  nativeBuildInputs = [ xz ]
+    ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   postInstall = ''
     sed -i 's/-ltiff.*'\'/\'/ $out/bin/*

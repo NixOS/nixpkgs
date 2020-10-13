@@ -19,8 +19,10 @@ buildGoPackage rec {
 
   propagatedBuildInputs = with darwin.apple_sdk.frameworks; [
     Cocoa
-    fixDarwinDylibNames
   ];
+
+  propagatedNativeBuildInputs =
+    stdenv.lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   meta = with stdenv.lib; {
     inherit version;

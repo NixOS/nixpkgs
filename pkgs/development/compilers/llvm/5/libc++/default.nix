@@ -25,9 +25,11 @@ stdenv.mkDerivation {
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     patchShebangs utils/cat_files.py
   '';
-  nativeBuildInputs = [ cmake ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl python3;
+  nativeBuildInputs = [ cmake ]
+    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl python3
+    ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-  buildInputs = [ libcxxabi ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  buildInputs = [ libcxxabi ];
 
   cmakeFlags = [
     "-DLIBCXX_LIBCXXABI_LIB_PATH=${libcxxabi}/lib"
