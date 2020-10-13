@@ -9710,7 +9710,9 @@ in
   };
   cargo-deps = callPackage ../tools/package-management/cargo-deps { };
   cargo-download = callPackage ../tools/package-management/cargo-download { };
-  cargo-edit = callPackage ../tools/package-management/cargo-edit { };
+  cargo-edit = callPackage ../tools/package-management/cargo-edit {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-kcov = callPackage ../tools/package-management/cargo-kcov { };
   cargo-graph = callPackage ../tools/package-management/cargo-graph { };
   cargo-license = callPackage ../tools/package-management/cargo-license { };

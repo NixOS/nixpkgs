@@ -1,12 +1,12 @@
 { stdenv
 , lib
-, darwin
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
 , xcbuild
 , openssl
 , libiconv
+, Security
 , zlib
 }:
 
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl zlib ] ++ lib.optionals stdenv.isDarwin [
     libiconv
-    darwin.apple_sdk.frameworks.Security
+    Security
   ];
 
   doCheck = false; # integration tests depend on changing cargo config
