@@ -5,6 +5,7 @@
 , fluidsynth
 , libX11
 , libjack2
+, alsaLib
 , liblo
 , libsigcxx
 , libsmf
@@ -12,18 +13,18 @@
 
 stdenv.mkDerivation rec {
   pname = "mamba";
-  version = "1.5";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "brummer10";
     repo = "Mamba";
     rev = "v${version}";
-    sha256 = "1l74ckqqrccgsdy430pfsbv4fbzny7zivx399bi2jk1lv06p4h9a";
+    sha256 = "02w47347cbfqxybh908ww5ifd9jcns8v0msycq59y9q7x0a2h6fh";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ cairo fluidsynth libX11 libjack2 liblo libsigcxx libsmf ];
+  buildInputs = [ cairo fluidsynth libX11 libjack2 alsaLib liblo libsigcxx libsmf ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
