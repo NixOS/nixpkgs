@@ -16,7 +16,7 @@ let
       "LimitNOFILE" "LimitAS" "LimitNPROC" "LimitMEMLOCK" "LimitLOCKS"
       "LimitSIGPENDING" "LimitMSGQUEUE" "LimitNICE" "LimitRTPRIO" "LimitRTTIME"
       "OOMScoreAdjust" "CPUAffinity" "Hostname" "ResolvConf" "Timezone"
-      "LinkJournal"
+      "LinkJournal" "Ephemeral"
     ])
     (assertValueOneOf "Boot" boolValues)
     (assertValueOneOf "ProcessTwo" boolValues)
@@ -156,7 +156,7 @@ in {
           systemd.services."systemd-nspawn@".serviceConfig.ExecStart = [
             ""  # deliberately empty. signals systemd to override the ExecStart
             # Only difference between upstream is that we do not pass the -U flag
-            "${config.systemd.package}/bin/systemd-nspawn --quiet --keep-unit --boot --link-journal=try-guest --network-veth --settings=override --machine=%i"
+            "${config.systemd.package}/bin/systemd-nspawn --quiet --keep-unit --boot --network-veth --settings=override --machine=%i"
           ];
         }
       ];
