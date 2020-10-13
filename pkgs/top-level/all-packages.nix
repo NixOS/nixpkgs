@@ -6337,6 +6337,8 @@ in
 
   plowshare = callPackage ../tools/misc/plowshare { };
 
+  pm2 = nodePackages.pm2;
+
   pngcheck = callPackage ../tools/graphics/pngcheck {
     zlib = zlib.override {
       static = true;
