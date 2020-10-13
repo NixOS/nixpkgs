@@ -50,7 +50,7 @@
 
 stdenv.mkDerivation {
   pname = "flashplayer-standalone";
-  version = "32.0.0.433";
+  version = "32.0.0.445";
 
   src = fetchurl {
     url =
@@ -60,9 +60,9 @@ stdenv.mkDerivation {
         "https://fpdownload.macromedia.com/pub/flashplayer/updaters/32/flash_player_sa_linux.x86_64.tar.gz";
     sha256 =
       if debug then
-        "1ys523wwhvj96jph435lnyp07qzg9f70j349l7ggwgg96rflalpf"
+        "0iqmdd222mjsf3rdbcm4z974i5q9y4i5agnhn039k0hpydi4zdcr"
       else
-        "1ycw2amis7yvidc6q87gls6rb305p89pr7mhzknc10v0nh34781m";
+        "07vz17zhwh31phccpbmwgfa3fdb2f7bnc3sf66ipsw1xcqgncpsx";
   };
 
   nativeBuildInputs = [ unzip ];
