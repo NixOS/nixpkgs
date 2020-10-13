@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, fetchpatch, pkgconfig, freetype, harfbuzz, openjpeg
 , jbig2dec, libjpeg , darwin
+, gumbo
 , enableX11 ? true, libX11, libXext, libXi, libXrandr
 , enableCurl ? true, curl, openssl
 , enableGL ? true, freeglut, libGLU
@@ -13,27 +14,28 @@ let
 
 
 in stdenv.mkDerivation rec {
-  version = "1.17.0";
+  version = "1.18.0";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    sha256 = "13nl9nrcx2awz9l83mlv2psi1lmn3hdnfwxvwgwiwbxlkjl3zqq0";
+    sha256 = "0rljl44y8p8hgaqializlyrgpij1wbnrzyp0ll5kcg7w05nylq48";
   };
 
   patches =
-    # Use shared libraries to decrease size
-    stdenv.lib.optional (!stdenv.isDarwin) ./mupdf-1.14-shared_libs.patch
-    ++ stdenv.lib.optional stdenv.isDarwin ./darwin.patch
+    stdenv.lib.optional stdenv.isDarwin ./darwin.patch
   ;
 
   postPatch = ''
     sed -i "s/__OPENJPEG__VERSION__/${openJpegVersion}/" source/fitz/load-jpx.c
   '';
 
+  # Use shared libraries to decrease size
+  buildFlags = [ "shared" ];
+
   makeFlags = [ "prefix=$(out) USE_SYSTEM_LIBS=yes" ];
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg freeglut libGLU ]
+  buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg freeglut libGLU gumbo ]
                 ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
                 ++ lib.optionals enableCurl [ curl openssl ]
                 ++ lib.optionals enableGL (
