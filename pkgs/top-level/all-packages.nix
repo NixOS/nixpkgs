@@ -3380,6 +3380,8 @@ in
 
   trompeloeil = callPackage ../development/libraries/trompeloeil { };
 
+  tsduck = callPackage ../tools/video/tsduck { };
+
   uudeview = callPackage ../tools/misc/uudeview { };
 
   uutils-coreutils = callPackage ../tools/misc/uutils-coreutils {
