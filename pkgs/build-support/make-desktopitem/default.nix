@@ -6,7 +6,7 @@
 , exec
 , icon ? null
 , comment ? null
-, terminal ? "false"
+, terminal ? false
 , desktopName # The name of the application
 , genericName ? null
 , mimeType ? null
@@ -19,20 +19,22 @@
 
 let
   # like builtins.toString, but null -> null instead of null -> ""
-  nullableToString = value: if value == null then null else builtins.toString value;
+  nullableToString = value: if value == null then null
+        else if builtins.isBool value then lib.boolToString value
+        else builtins.toString value;
 
   # The [Desktop entry] section of the desktop file, as attribute set.
   mainSection = {
     "Type" = toString type;
-    "Exec" = (nullableToString exec);
-    "Icon" = (nullableToString icon);
-    "Comment" = (nullableToString comment);
-    "Terminal" = (nullableToString terminal);
+    "Exec" = nullableToString exec;
+    "Icon" = nullableToString icon;
+    "Comment" = nullableToString comment;
+    "Terminal" = nullableToString terminal;
     "Name" = toString name;
-    "GenericName" = (nullableToString genericName);
-    "MimeType" = (nullableToString mimeType);
-    "Categories" = (nullableToString categories);
-    "StartupNotify" = (nullableToString startupNotify);
+    "GenericName" = nullableToString genericName;
+    "MimeType" = nullableToString mimeType;
+    "Categories" = nullableToString categories;
+    "StartupNotify" = nullableToString startupNotify;
   } // extraDesktopEntries;
 
   # Map all entries to a list of lines
