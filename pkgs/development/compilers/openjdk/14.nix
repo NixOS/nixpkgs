@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, bash, pkgconfig, autoconf, cpio, file, which, unzip
 , zip, perl, cups, freetype, alsaLib, libjpeg, giflib, libpng, zlib, lcms2
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
-, libXcursor, libXrandr, fontconfig, openjdk15-bootstrap
+, libXcursor, libXrandr, fontconfig, openjdk14-bootstrap
 , setJavaClassPath
 , headless ? false
 , enableJavaFX ? openjfx.meta.available, openjfx
@@ -9,8 +9,8 @@
 }:
 
 let
-  major = "15";
-  update = "";
+  major = "14";
+  update = ".0.2";
   build = "-ga";
 
   openjdk = stdenv.mkDerivation rec {
@@ -18,15 +18,15 @@ let
     version = "${major}${update}${build}";
 
     src = fetchurl {
-      url = "https://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
-      sha256 = "0dh1cx525f15h415vvnybnynnlps2w7yyws9dc7q7vygznw2v45j";
+      url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
+      sha256 = "1s1pc6ihzf0awp4hbaqfxmbica0hnrg8nr7s0yd2hfn7nan8xmf3";
     };
 
     nativeBuildInputs = [ pkgconfig autoconf ];
     buildInputs = [
       cpio file which unzip zip perl zlib cups freetype alsaLib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk15-bootstrap
+      libXi libXinerama libXcursor libXrandr fontconfig openjdk14-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
       gtk3 gnome_vfs GConf glib
     ];
@@ -54,7 +54,7 @@ let
     '';
 
     configureFlags = [
-      "--with-boot-jdk=${openjdk15-bootstrap.home}"
+      "--with-boot-jdk=${openjdk14-bootstrap.home}"
       "--enable-unlimited-crypto"
       "--with-native-debug-symbols=internal"
       "--with-libjpeg=system"
@@ -138,7 +138,7 @@ let
       done
     '';
 
-    disallowedReferences = [ openjdk15-bootstrap ];
+    disallowedReferences = [ openjdk14-bootstrap ];
 
     meta = with stdenv.lib; {
       homepage = "http://openjdk.java.net/";
@@ -151,7 +151,6 @@ let
     passthru = {
       architecture = "";
       home = "${openjdk}/lib/openjdk";
-      inherit gtk3;
     };
   };
 in openjdk

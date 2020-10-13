@@ -9420,6 +9420,8 @@ in
 
   openjfx14 = callPackage ../development/compilers/openjdk/openjfx/14.nix { };
 
+  openjfx15 = callPackage ../development/compilers/openjdk/openjfx/15.nix { };
+
   openjdk8-bootstrap =
     if adoptopenjdk-hotspot-bin-8.meta.available then
       adoptopenjdk-hotspot-bin-8
@@ -9486,15 +9488,16 @@ in
         };
       };
 
+  openjdk15-bootstrap = openjdk14;
+
   jdk11 = openjdk11;
   jdk11_headless = openjdk11_headless;
 
-  /* Latest JDK */
   openjdk14 =
     if stdenv.isDarwin then
       callPackage ../development/compilers/openjdk/darwin { }
     else
-      callPackage ../development/compilers/openjdk {
+      callPackage ../development/compilers/openjdk/14.nix {
         openjfx = openjfx14;
         inherit (gnome2) GConf gnome_vfs;
       };
@@ -9507,6 +9510,16 @@ in
 
   jdk14 = openjdk14;
   jdk14_headless = openjdk14_headless;
+
+  /* Latest JDK */
+  openjdk15 =
+    callPackage ../development/compilers/openjdk {
+      openjfx = openjfx15;
+      inherit (gnome2) GConf gnome_vfs;
+    };
+
+  jdk15 = openjdk15;
+
 
   /* default JDK */
 
