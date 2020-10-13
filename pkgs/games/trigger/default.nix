@@ -2,15 +2,26 @@
 , zlib, libGLU, libGL, glew, tinyxml-2 }:
 
 stdenv.mkDerivation rec {
-  name = "trigger-rally-0.6.6.1";
+  pname = "trigger-rally";
+  version = "0.6.6.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/trigger-rally/${name}.tar.gz";
+    url = "mirror://sourceforge/trigger-rally/${pname}-${version}.tar.gz";
     sha256 = "016bc2hczqscfmngacim870hjcsmwl8r3aq8x03vpf22s49nw23z";
   };
 
-  buildInputs =
-    [ SDL2 freealut SDL2_image openal physfs zlib libGLU libGL glew tinyxml-2 ];
+  buildInputs = [
+    SDL2
+    freealut
+    SDL2_image
+    openal
+    physfs
+    zlib
+    libGLU
+    libGL
+    glew
+    tinyxml-2
+  ];
 
   preConfigure = ''
     sed s,/usr/local,$out, -i bin/*defs
