@@ -26,7 +26,10 @@
 , gnome3
 , webkitgtk
 , python3
+, gnutls
+, cacert
 , xvfb_run
+, glibcLocales
 , dbus
 , shared-mime-info
 , libunwind
@@ -95,7 +98,10 @@ stdenv.mkDerivation rec {
 
   checkInputs = [
     dbus
+    gnutls # for certtool
+    cacert # trust store for glib-networking
     xvfb_run
+    glibcLocales # required by Geary.ImapDb.DatabaseTest/utf8_case_insensitive_collation
   ];
 
   mesonFlags = [
@@ -115,12 +121,12 @@ stdenv.mkDerivation rec {
     chmod +x desktop/geary-attach
   '';
 
-  # FIXME: fix tests
-  doCheck = false;
+  doCheck = true;
 
   checkPhase = ''
     NO_AT_BRIDGE=1 \
-    XDG_DATA_DIRS=:$XDG_DATA_DIRS:${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${shared-mime-info}/share \
+    GIO_EXTRA_MODULES=$GIO_EXTRA_MODULES:${glib-networking}/lib/gio/modules \
+    XDG_DATA_DIRS=$XDG_DATA_DIRS:${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${shared-mime-info}/share:${folks}/share/gsettings-schemas/${folks.name} \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       meson test -v --no-stdsplit
