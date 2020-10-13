@@ -10857,7 +10857,9 @@ in
 
   cmake = libsForQt5.callPackage ../development/tools/build-managers/cmake { };
 
-  cmakeMinimal = cmake.override { isBootstrap = true; };
+  cmakeMinimal = libsForQt5.callPackage ../development/tools/build-managers/cmake {
+    isBootstrap = true;
+  };
 
   cmakeCurses = cmake.override { useNcurses = true; };
 
