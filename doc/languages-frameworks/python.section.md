@@ -755,8 +755,8 @@ and in this case the `python38` interpreter is automatically used.
 
 ### Interpreters
 
-Versions 2.7, 3.6, 3.7 and 3.8 of the CPython interpreter are available as
-respectively `python27`, `python36`, `python37` and `python38`. The
+Versions 2.7, 3.6, 3.7, 3.8 and 3.9 of the CPython interpreter are available as
+respectively `python27`, `python36`, `python37`, `python38` and `python39`. The
 aliases `python2` and `python3` correspond to respectively `python27` and
 `python38`. The default interpreter, `python`, maps to `python2`. The PyPy
 interpreters compatible with Python 2.7 and 3 are available as `pypy27` and
