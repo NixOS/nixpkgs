@@ -12,6 +12,8 @@ buildGoPackage rec {
     sha256 = "18hpanfrzg6xnq1g0yws6g0lw4y191pnrqphccv13j6kqk3k10ps";
   };
 
+  subPackages = [ "." ];
+
   buildFlagsArray = ''
     -ldflags=
       -X ${goPackagePath}/version.Version=${version}
