@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , sassc
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , gtk3
 , gnome3
 , gtk-engine-murrine
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     sassc
     optipng
     inkscape
