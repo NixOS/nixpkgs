@@ -3427,6 +3427,8 @@ in
 
   buildEmscriptenPackage = callPackage ../development/em-modules/generic { };
 
+  dtapi = callPackage ../development/libraries/dtapi { };
+
   carp = callPackage ../development/compilers/carp { };
 
   cholmod-extra = callPackage ../development/libraries/science/math/cholmod-extra { };
