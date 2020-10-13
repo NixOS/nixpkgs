@@ -1048,11 +1048,6 @@ let
 
     buildOcamlJane = callPackage ../development/ocaml-modules/janestreet/buildOcamlJane.nix {};
 
-    ppx_core =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_core
-      else callPackage ../development/ocaml-modules/janestreet/ppx-core.nix {};
-
     ppx_optcomp =
       if lib.versionOlder "4.03" ocaml.version
       then janeStreet.ppx_optcomp
