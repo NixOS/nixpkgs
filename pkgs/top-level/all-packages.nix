@@ -6609,6 +6609,8 @@ in
 
   redsocks = callPackage ../tools/networking/redsocks { };
 
+  rep = callPackage ../development/tools/rep { };
+
   reredirect = callPackage ../tools/misc/reredirect { };
 
   retext = libsForQt5.callPackage ../applications/editors/retext { };
