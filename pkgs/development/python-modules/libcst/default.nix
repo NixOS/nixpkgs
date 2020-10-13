@@ -1,36 +1,43 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
-, typing-inspect
-, pyyaml
-, isPy3k
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, black, isort
+, pytestCheckHook, pyyaml, typing-extensions, typing-inspect }:
 
 buildPythonPackage rec {
   pname = "libcst";
-  version = "0.3.12";
+  version = "0.3.13";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1zgwxdbhz2ljl0yzbrn1f4f464rjphx0j6r4qq0csax3m4wp50x1";
+  # Some files for tests missing from PyPi
+  # https://github.com/Instagram/LibCST/issues/331
+  src = fetchFromGitHub {
+    owner = "instagram";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0pbddjrsqj641mr6zijk2phfn15dampbx268zcws4bhhhnrxlj65";
   };
 
-  # The library uses type annotation syntax.
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.6";
 
-  propagatedBuildInputs = [ typing-inspect pyyaml ];
+  propagatedBuildInputs = [ pyyaml typing-inspect ];
 
-  # Test fails with ValueError: No data_provider tests were created for
-  # test_type_availability! Please double check your data.
-  # The tests appear to be doing some dynamic introspection, not sure what is
-  # going on there.
-  doCheck = false;
+  checkInputs = [ black isort pytestCheckHook ];
+
+  # https://github.com/Instagram/LibCST/issues/346
+  # https://github.com/Instagram/LibCST/issues/347
+  preCheck = ''
+    python -m libcst.codegen.generate visitors
+    python -m libcst.codegen.generate return_types
+    rm libcst/tests/test_fuzz.py
+    rm libcst/tests/test_pyre_integration.py
+    rm libcst/metadata/tests/test_full_repo_manager.py
+    rm libcst/metadata/tests/test_type_inference_provider.py
+  '';
+
   pythonImportsCheck = [ "libcst" ];
 
-  meta = with stdenv.lib; {
-    description = "A concrete syntax tree parser and serializer library for Python that preserves many aspects of Python's abstract syntax tree";
-    homepage = "https://libcst.readthedocs.io/en/latest/";
-    license = with licenses; [mit asl20 psfl];
-    maintainers = [ maintainers.ruuda ];
+  meta = with lib; {
+    description =
+      "A Concrete Syntax Tree (CST) parser and serializer library for Python.";
+    homepage = "https://github.com/Instagram/libcst";
+    license = with licenses; [ mit asl20 psfl ];
+    maintainers = with maintainers; [ maintainers.ruuda ];
   };
 }
