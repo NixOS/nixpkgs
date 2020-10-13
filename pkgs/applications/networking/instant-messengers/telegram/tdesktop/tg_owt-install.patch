@@ -1,0 +1,50 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6fbc0da..414c302 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -25,7 +25,7 @@ project(tg_owt
+ )
+ set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT tg_owt)
+
+-get_filename_component(webrtc_loc "src" REALPATH)
++set(webrtc_loc @@source@@/src)
+ set(third_party_loc ${webrtc_loc}/third_party)
+
+ include(cmake/arch.cmake)
+@@ -1856,3 +1856,36 @@ configure_file(
+     "${CMAKE_CURRENT_BINARY_DIR}/tg_owtConfig.cmake"
+     COPYONLY
+ )
++
++include(GNUInstallDirs)
++
++install(
++TARGETS
++    tg_owt
++    libabsl
++    libopenh264
++    libpffft
++    librnnoise
++    libsrtp
++    libusrsctp
++    libvpx
++    ${vpx_export}
++    libwebrtcbuild
++    libyuv
++    ${platform_export}
++EXPORT tg_owtTargets
++RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
++ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
++INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
++)
++
++install(
++    EXPORT tg_owtTargets
++    NAMESPACE tg_owt::
++    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/tg_owt
++)
++install(
++    FILES ${CMAKE_CURRENT_BINARY_DIR}/tg_owtConfig.cmake
++    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/tg_owt
++)
