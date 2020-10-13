@@ -1053,11 +1053,6 @@ let
       then janeStreet.ppx_optcomp
       else callPackage ../development/ocaml-modules/janestreet/ppx-optcomp.nix {};
 
-    ppx_driver =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_driver
-      else callPackage ../development/ocaml-modules/janestreet/ppx-driver.nix {};
-
     ppx_type_conv =
       if lib.versionOlder "4.03" ocaml.version
       then janeStreet.ppx_type_conv
