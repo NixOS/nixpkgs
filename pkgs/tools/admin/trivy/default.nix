@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "1jmmx83c0qbqyppx0w8d9djz2j2i7dgibq9lb3vhdz78wc40zywy";
 
+  subPackages = [ "cmd/trivy" ];
+
   buildFlagsArray = [
     "-ldflags="
     "-s"
