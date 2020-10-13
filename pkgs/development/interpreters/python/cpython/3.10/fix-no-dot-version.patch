@@ -1,0 +1,346 @@
+From fd5a12de8e4b19dc2c3d38252c88e1afa85900f7 Mon Sep 17 00:00:00 2001
+From: mattip <matti.picus@gmail.com>
+Date: Sat, 23 May 2020 23:50:48 +0300
+Subject: [PATCH 01/13] Make py_version_nodot 3_10 not 310
+
+---
+ Lib/sysconfig.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Lib/sysconfig.py b/Lib/sysconfig.py
+index bf04ac541e6b0..ad622e3b6958a 100644
+--- a/Lib/sysconfig.py
++++ b/Lib/sysconfig.py
+@@ -86,7 +86,7 @@
+ 
+ _PY_VERSION = sys.version.split()[0]
+ _PY_VERSION_SHORT = '%d.%d' % sys.version_info[:2]
+-_PY_VERSION_SHORT_NO_DOT = '%d%d' % sys.version_info[:2]
++_PY_VERSION_SHORT_NO_DOT = '%d_%d' % sys.version_info[:2]
+ _PREFIX = os.path.normpath(sys.prefix)
+ _BASE_PREFIX = os.path.normpath(sys.base_prefix)
+ _EXEC_PREFIX = os.path.normpath(sys.exec_prefix)
+
+From 76a596c6f657d55513f4d5369090d225a58d9c1d Mon Sep 17 00:00:00 2001
+From: mattip <matti.picus@gmail.com>
+Date: Sun, 24 May 2020 01:37:18 +0300
+Subject: [PATCH 02/13] fix another place
+
+---
+ Lib/distutils/command/install.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Lib/distutils/command/install.py b/Lib/distutils/command/install.py
+index aaa300efa96e6..0ab66d99e4820 100644
+--- a/Lib/distutils/command/install.py
++++ b/Lib/distutils/command/install.py
+@@ -292,7 +292,7 @@ def finalize_options(self):
+                             'dist_fullname': self.distribution.get_fullname(),
+                             'py_version': py_version,
+                             'py_version_short': '%d.%d' % sys.version_info[:2],
+-                            'py_version_nodot': '%d%d' % sys.version_info[:2],
++                            'py_version_nodot': '%d_%d' % sys.version_info[:2],
+                             'sys_prefix': prefix,
+                             'prefix': prefix,
+                             'sys_exec_prefix': exec_prefix,
+
+From 5eb6a84e507fd08c82e071612e911469b8e7cb4d Mon Sep 17 00:00:00 2001
+From: mattip <matti.picus@gmail.com>
+Date: Mon, 25 May 2020 12:38:51 +0300
+Subject: [PATCH 03/13] fix more places that do not use py_version_nodot
+
+---
+ configure    | 4 ++--
+ configure.ac | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/configure b/configure
+index 1124412dce475..3b7036cb32f68 100755
+--- a/configure
++++ b/configure
+@@ -15295,7 +15295,7 @@ $as_echo_n "checking ABIFLAGS... " >&6; }
+ $as_echo "$ABIFLAGS" >&6; }
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking SOABI" >&5
+ $as_echo_n "checking SOABI... " >&6; }
+-SOABI='cpython-'`echo $VERSION | tr -d .`${ABIFLAGS}${PLATFORM_TRIPLET:+-$PLATFORM_TRIPLET}
++SOABI='cpython-'`echo $VERSION | tr "." "_"`${ABIFLAGS}${PLATFORM_TRIPLET:+-$PLATFORM_TRIPLET}
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SOABI" >&5
+ $as_echo "$SOABI" >&6; }
+ 
+@@ -15303,7 +15303,7 @@ $as_echo "$SOABI" >&6; }
+ if test "$Py_DEBUG" = 'true' -a "$with_trace_refs" != "yes"; then
+   # Similar to SOABI but remove "d" flag from ABIFLAGS
+ 
+-  ALT_SOABI='cpython-'`echo $VERSION | tr -d .``echo $ABIFLAGS | tr -d d`${PLATFORM_TRIPLET:+-$PLATFORM_TRIPLET}
++  ALT_SOABI='cpython-'`echo $VERSION | tr -d "." "_"``echo $ABIFLAGS | tr -d d`${PLATFORM_TRIPLET:+-$PLATFORM_TRIPLET}
+ 
+ cat >>confdefs.h <<_ACEOF
+ #define ALT_SOABI "${ALT_SOABI}"
+diff --git a/configure.ac b/configure.ac
+index 84d1f00983f89..9fdc2f69ee82b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -4737,14 +4737,14 @@ AC_SUBST(SOABI)
+ AC_MSG_CHECKING(ABIFLAGS)
+ AC_MSG_RESULT($ABIFLAGS)
+ AC_MSG_CHECKING(SOABI)
+-SOABI='cpython-'`echo $VERSION | tr -d .`${ABIFLAGS}${PLATFORM_TRIPLET:+-$PLATFORM_TRIPLET}
++SOABI='cpython-'`echo $VERSION | tr -d "." "_"`${ABIFLAGS}${PLATFORM_TRIPLET:+-$PLATFORM_TRIPLET}
+ AC_MSG_RESULT($SOABI)
+ 
+ # Release and debug (Py_DEBUG) ABI are compatible, but not Py_TRACE_REFS ABI
+ if test "$Py_DEBUG" = 'true' -a "$with_trace_refs" != "yes"; then
+   # Similar to SOABI but remove "d" flag from ABIFLAGS
+   AC_SUBST(ALT_SOABI)
+-  ALT_SOABI='cpython-'`echo $VERSION | tr -d .``echo $ABIFLAGS | tr -d d`${PLATFORM_TRIPLET:+-$PLATFORM_TRIPLET}
++  ALT_SOABI='cpython-'`echo $VERSION | tr -d "." "_"``echo $ABIFLAGS | tr -d d`${PLATFORM_TRIPLET:+-$PLATFORM_TRIPLET}
+   AC_DEFINE_UNQUOTED(ALT_SOABI, "${ALT_SOABI}",
+             [Alternative SOABI used in debug build to load C extensions built in release mode])
+ fi
+
+From 9759ea9a75f22347e69202d0842867eea0634d5d Mon Sep 17 00:00:00 2001
+From: "blurb-it[bot]" <43283697+blurb-it[bot]@users.noreply.github.com>
+Date: Mon, 25 May 2020 09:46:32 +0000
+Subject: [PATCH 04/13] =?UTF-8?q?=F0=9F=93=9C=F0=9F=A4=96=20Added=20by=20b?=
+ =?UTF-8?q?lurb=5Fit.?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ Misc/NEWS.d/next/Build/2020-05-25-09-46-32.bpo-40747.ef15ix.rst | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 Misc/NEWS.d/next/Build/2020-05-25-09-46-32.bpo-40747.ef15ix.rst
+
+diff --git a/Misc/NEWS.d/next/Build/2020-05-25-09-46-32.bpo-40747.ef15ix.rst b/Misc/NEWS.d/next/Build/2020-05-25-09-46-32.bpo-40747.ef15ix.rst
+new file mode 100644
+index 0000000000000..3d8e0b058de25
+--- /dev/null
++++ b/Misc/NEWS.d/next/Build/2020-05-25-09-46-32.bpo-40747.ef15ix.rst
+@@ -0,0 +1 @@
++The PEP 425 python tag, taken from ``py_version_nodot``, adds a ``_`` so ``cp310`` is now ``cp3_10``.
+\ No newline at end of file
+
+From b9fe6c246d770feba0ec087ac0f819303a2d96e0 Mon Sep 17 00:00:00 2001
+From: mattip <matti.picus@gmail.com>
+Date: Mon, 25 May 2020 12:54:37 +0300
+Subject: [PATCH 05/13] test SOABI and py_version_nodot agree on the python
+ version
+
+---
+ Lib/test/test_sysconfig.py | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/Lib/test/test_sysconfig.py b/Lib/test/test_sysconfig.py
+index 44e44bf5ea995..c3bad2cbb4762 100644
+--- a/Lib/test/test_sysconfig.py
++++ b/Lib/test/test_sysconfig.py
+@@ -386,6 +386,12 @@ def test_osx_ext_suffix(self):
+         suffix = sysconfig.get_config_var('EXT_SUFFIX')
+         self.assertTrue(suffix.endswith('-darwin.so'), suffix)
+ 
++    def test_SOABI_consistency(self):
++        SOABI = sysconfig.get_config_var('SOABI')
++        pynodot = sysconfig.get_config_var('py_version_nodot')
++        if SOABI is not None:
++            self.assertTrue(SOABI.split('-')[1] == pynodot)
++
+ class MakefileTests(unittest.TestCase):
+ 
+     @unittest.skipIf(sys.platform.startswith('win'),
+
+From 7149e08db2e84fde0cf80a20f57ec89eb597ba82 Mon Sep 17 00:00:00 2001
+From: mattip <matti.picus@gmail.com>
+Date: Mon, 25 May 2020 13:28:53 +0300
+Subject: [PATCH 06/13] change test
+
+---
+ Lib/test/test_sysconfig.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Lib/test/test_sysconfig.py b/Lib/test/test_sysconfig.py
+index c3bad2cbb4762..cd53173ab053e 100644
+--- a/Lib/test/test_sysconfig.py
++++ b/Lib/test/test_sysconfig.py
+@@ -390,7 +390,7 @@ def test_SOABI_consistency(self):
+         SOABI = sysconfig.get_config_var('SOABI')
+         pynodot = sysconfig.get_config_var('py_version_nodot')
+         if SOABI is not None:
+-            self.assertTrue(SOABI.split('-')[1] == pynodot)
++            self.assertEqual(SOABI.split('-')[1], pynodot)
+ 
+ class MakefileTests(unittest.TestCase):
+ 
+
+From 4f9b8693b7b81e45297f29ee319f6244299a4bc6 Mon Sep 17 00:00:00 2001
+From: mattip <matti.picus@gmail.com>
+Date: Mon, 25 May 2020 14:36:37 +0300
+Subject: [PATCH 07/13] change test, SOABI has a 'd' after the python version
+
+---
+ Lib/test/test_sysconfig.py | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/Lib/test/test_sysconfig.py b/Lib/test/test_sysconfig.py
+index cd53173ab053e..8e08cdd803c85 100644
+--- a/Lib/test/test_sysconfig.py
++++ b/Lib/test/test_sysconfig.py
+@@ -387,10 +387,11 @@ def test_osx_ext_suffix(self):
+         self.assertTrue(suffix.endswith('-darwin.so'), suffix)
+ 
+     def test_SOABI_consistency(self):
+-        SOABI = sysconfig.get_config_var('SOABI')
++        soabi = sysconfig.get_config_var('SOABI')
+         pynodot = sysconfig.get_config_var('py_version_nodot')
+-        if SOABI is not None:
+-            self.assertEqual(SOABI.split('-')[1], pynodot)
++        if soabi is not None:
++            soabi_pyver = soabi.split('-')[1]
++            self.assertTrue(soabi_pyver.startswith(pynodot))
+ 
+ class MakefileTests(unittest.TestCase):
+ 
+
+From 48ec1e91283829c9b062f172516fe04dcd4cc5e4 Mon Sep 17 00:00:00 2001
+From: mattip <matti.picus@gmail.com>
+Date: Thu, 28 May 2020 08:39:18 +0300
+Subject: [PATCH 08/13] remove '-d' from tr
+
+---
+ configure    | 4 ++--
+ configure.ac | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/configure b/configure
+index 3b7036cb32f68..fcd30aef73ad8 100755
+--- a/configure
++++ b/configure
+@@ -15295,7 +15295,7 @@ $as_echo_n "checking ABIFLAGS... " >&6; }
+ $as_echo "$ABIFLAGS" >&6; }
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking SOABI" >&5
+ $as_echo_n "checking SOABI... " >&6; }
+-SOABI='cpython-'`echo $VERSION | tr "." "_"`${ABIFLAGS}${PLATFORM_TRIPLET:+-$PLATFORM_TRIPLET}
++SOABI='cpython-'`echo $VERSION | tr . _`${ABIFLAGS}${PLATFORM_TRIPLET:+-$PLATFORM_TRIPLET}
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SOABI" >&5
+ $as_echo "$SOABI" >&6; }
+ 
+@@ -15303,7 +15303,7 @@ $as_echo "$SOABI" >&6; }
+ if test "$Py_DEBUG" = 'true' -a "$with_trace_refs" != "yes"; then
+   # Similar to SOABI but remove "d" flag from ABIFLAGS
+ 
+-  ALT_SOABI='cpython-'`echo $VERSION | tr -d "." "_"``echo $ABIFLAGS | tr -d d`${PLATFORM_TRIPLET:+-$PLATFORM_TRIPLET}
++  ALT_SOABI='cpython-'`echo $VERSION | tr . _``echo $ABIFLAGS | tr -d d`${PLATFORM_TRIPLET:+-$PLATFORM_TRIPLET}
+ 
+ cat >>confdefs.h <<_ACEOF
+ #define ALT_SOABI "${ALT_SOABI}"
+diff --git a/configure.ac b/configure.ac
+index 9fdc2f69ee82b..8704a5c448849 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -4737,16 +4737,17 @@ AC_SUBST(SOABI)
+ AC_MSG_CHECKING(ABIFLAGS)
+ AC_MSG_RESULT($ABIFLAGS)
+ AC_MSG_CHECKING(SOABI)
+-SOABI='cpython-'`echo $VERSION | tr -d "." "_"`${ABIFLAGS}${PLATFORM_TRIPLET:+-$PLATFORM_TRIPLET}
++SOABI='cpython-'`echo $VERSION | tr . _`${ABIFLAGS}${PLATFORM_TRIPLET:+-$PLATFORM_TRIPLET}
+ AC_MSG_RESULT($SOABI)
+ 
+ # Release and debug (Py_DEBUG) ABI are compatible, but not Py_TRACE_REFS ABI
+ if test "$Py_DEBUG" = 'true' -a "$with_trace_refs" != "yes"; then
+   # Similar to SOABI but remove "d" flag from ABIFLAGS
+   AC_SUBST(ALT_SOABI)
+-  ALT_SOABI='cpython-'`echo $VERSION | tr -d "." "_"``echo $ABIFLAGS | tr -d d`${PLATFORM_TRIPLET:+-$PLATFORM_TRIPLET}
++  ALT_SOABI='cpython-'`echo $VERSION | tr . _``echo $ABIFLAGS | tr -d d`${PLATFORM_TRIPLET:+-$PLATFORM_TRIPLET}
+   AC_DEFINE_UNQUOTED(ALT_SOABI, "${ALT_SOABI}",
+             [Alternative SOABI used in debug build to load C extensions built in release mode])
++  AC_MSG_RESULT($ALT_SOABI)
+ fi
+ 
+ AC_SUBST(EXT_SUFFIX)
+
+From 5e3760bd784d619812d31d0232d046758c0e3606 Mon Sep 17 00:00:00 2001
+From: mattip <matti.picus@gmail.com>
+Date: Wed, 9 Sep 2020 00:44:45 +0300
+Subject: [PATCH 10/13] dig into windows dll names and install schemes
+
+---
+ Lib/sysconfig.py           |  2 +-
+ PC/pyconfig.h              |  4 ++--
+ 5 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/Lib/sysconfig.py b/Lib/sysconfig.py
+index 8452f8fc9351e..dc9b9a5c8269d 100644
+--- a/Lib/sysconfig.py
++++ b/Lib/sysconfig.py
+@@ -545,7 +545,7 @@ def get_config_vars(*args):
+             # sys.abiflags may not be defined on all platforms.
+             _CONFIG_VARS['abiflags'] = ''
+         try:
+-            _CONFIG_VARS['py_version_nodot_plat'] = sys.winver.replace('.', '')
++            _CONFIG_VARS['py_version_nodot_plat'] = sys.winver.replace('.', '_')
+         except AttributeError:
+             _CONFIG_VARS['py_version_nodot_plat'] = ''
+ 
+diff --git a/PC/pyconfig.h b/PC/pyconfig.h
+index b29f63c35bccb..aa1464425b599 100644
+--- a/PC/pyconfig.h
++++ b/PC/pyconfig.h
+@@ -269,11 +269,11 @@ Py_NO_ENABLE_SHARED to find out.  Also support MS_NO_COREDLL for b/w compat */
+                         file in their Makefile (other compilers are
+                         generally taken care of by distutils.) */
+ #                       if defined(_DEBUG)
+-#                               pragma comment(lib,"python310_d.lib")
++#                               pragma comment(lib,"python3_10_d.lib")
+ #                       elif defined(Py_LIMITED_API)
+ #                               pragma comment(lib,"python3.lib")
+ #                       else
+-#                               pragma comment(lib,"python310.lib")
++#                               pragma comment(lib,"python3_10.lib")
+ #                       endif /* _DEBUG */
+ #               endif /* _MSC_VER */
+ #       endif /* Py_BUILD_CORE */
+
+From b549f0919b6c5c5bf33a56e864ee8b1a1aa0a450 Mon Sep 17 00:00:00 2001
+From: mattip <matti.picus@gmail.com>
+Date: Tue, 13 Oct 2020 09:35:05 +0300
+Subject: [PATCH 13/13] changes from review
+
+---
+ Doc/whatsnew/3.10.rst                       |  2 ++
+ PC/layout/support/constants.py              |  8 ++++----
+ 11 files changed, 36 insertions(+), 28 deletions(-)
+
+diff --git a/Doc/whatsnew/3.10.rst b/Doc/whatsnew/3.10.rst
+index f6f276a8bfa49..e0f4fb69d5a21 100644
+--- a/Doc/whatsnew/3.10.rst
++++ b/Doc/whatsnew/3.10.rst
+@@ -93,6 +93,8 @@ Other Language Changes
+   :meth:`~object.__index__` method).
+   (Contributed by Serhiy Storchaka in :issue:`37999`.)
+ 
++* The ``nodot`` version number has been changed to ``3_10`` for clarity
++  (:issue:`40747`)
+ 
+ New Modules
+ ===========
+diff --git a/PC/layout/support/constants.py b/PC/layout/support/constants.py
+index 6cf0fe1d34c4a..1341d281d7e13 100644
+--- a/PC/layout/support/constants.py
++++ b/PC/layout/support/constants.py
+@@ -32,11 +32,11 @@ def _get_suffix(field4):
+ VER_FIELD3 = VER_MICRO << 8 | VER_FIELD4
+ VER_DOT = "{}.{}".format(VER_MAJOR, VER_MINOR)
+ 
+-PYTHON_DLL_NAME = "python{}{}.dll".format(VER_MAJOR, VER_MINOR)
++PYTHON_DLL_NAME = "python{}_{}.dll".format(VER_MAJOR, VER_MINOR)
+ PYTHON_STABLE_DLL_NAME = "python{}.dll".format(VER_MAJOR)
+-PYTHON_ZIP_NAME = "python{}{}.zip".format(VER_MAJOR, VER_MINOR)
+-PYTHON_PTH_NAME = "python{}{}._pth".format(VER_MAJOR, VER_MINOR)
++PYTHON_ZIP_NAME = "python{}_{}.zip".format(VER_MAJOR, VER_MINOR)
++PYTHON_PTH_NAME = "python{}_{}._pth".format(VER_MAJOR, VER_MINOR)
+ 
+-PYTHON_CHM_NAME = "python{}{}{}{}.chm".format(
++PYTHON_CHM_NAME = "python{}_{}{}{}.chm".format(
+     VER_MAJOR, VER_MINOR, VER_MICRO, VER_SUFFIX
+ )
+

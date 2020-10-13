@@ -150,6 +150,11 @@ in with passthru; stdenv.mkDerivation {
           sha256 = "1h18lnpx539h5lfxyk379dxwr8m2raigcjixkf133l4xy3f4bzi2";
         }
     )
+  ] ++ optionals isPy310 [
+    # Fix for `py_version_nodot` returning 310 instead of 3_10
+    # This is significant because the python-tag for wheels is determined
+    # through this value, and will produce an incompatible wheel.
+    ./3.10/fix-no-dot-version.patch
   ] ++ [
     # LDSHARED now uses $CC instead of gcc. Fixes cross-compilation of extension modules.
     ./3.8/0001-On-all-posix-systems-not-just-Darwin-set-LDSHARED-if.patch
