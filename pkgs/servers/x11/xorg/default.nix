@@ -1431,11 +1431,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xcbproto = callPackage ({ stdenv, pkgconfig, fetchurl, python }: stdenv.mkDerivation {
-    name = "xcb-proto-1.13";
+    name = "xcb-proto-1.14.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://xcb.freedesktop.org/dist/xcb-proto-1.13.tar.bz2";
-      sha256 = "1qdxw9syhbvswiqj5dvj278lrmfhs81apzmvx6205s4vcqg7563v";
+      url = "mirror://xorg/individual/proto/xcb-proto-1.14.1.tar.xz";
+      sha256 = "1hzwazgyywd9mz4mjj1yv8ski27qqx7ypmyr27m39hrajyddsjph";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig python ];
