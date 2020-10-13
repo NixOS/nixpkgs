@@ -2402,6 +2402,8 @@ in
 
   stagit = callPackage ../development/tools/stagit { };
 
+  starboard = callPackage ../applications/networking/cluster/starboard { };
+
   statserial = callPackage ../tools/misc/statserial { };
 
   step-ca = callPackage ../tools/security/step-ca { };
