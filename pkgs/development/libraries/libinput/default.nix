@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, meson, ninja
+{ stdenv, fetchFromGitLab, pkgconfig, meson, ninja
 , libevdev, mtdev, udev, libwacom
 , documentationSupport ? false, doxygen ? null, graphviz ? null # Documentation
 , eventGUISupport ? false, cairo ? null, glib ? null, gtk3 ? null # GUI event viewer support
@@ -27,11 +27,14 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "libinput";
-  version = "1.16.1";
+  version = "1.16.2";
 
-  src = fetchurl {
-    url = "https://www.freedesktop.org/software/libinput/${pname}-${version}.tar.xz";
-    sha256 = "e6fRru3RUWi7IdF+nmKKocJ5V5Y6Qjo/6jk4pQF1hTk=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "0qii6yh3dlhgv9z970cpzbz19ii8zjvq4k7pg75sy2gmia7smwd1";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -80,7 +83,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Handles input devices in Wayland compositors and provides a generic X.Org input driver";
-    homepage    = "http://www.freedesktop.org/wiki/Software/libinput";
+    homepage    = "https://www.freedesktop.org/wiki/Software/libinput/";
     license     = licenses.mit;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ codyopel ];
