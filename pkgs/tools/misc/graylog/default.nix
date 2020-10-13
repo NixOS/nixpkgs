@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, jre_headless }:
+{ stdenv, fetchurl, makeWrapper, jre_headless, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "graylog";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper ];
   makeWrapperArgs = [ "--prefix" "PATH" ":" "${jre_headless}/bin" ];
+
+  passthru.tests = { inherit (nixosTests) graylog; };
 
   installPhase = ''
     mkdir -p $out
