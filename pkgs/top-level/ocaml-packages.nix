@@ -1103,11 +1103,6 @@ let
       then janeStreet.ppx_enumerate
       else callPackage ../development/ocaml-modules/janestreet/ppx-enumerate.nix {};
 
-    ppx_fail =
-      if lib.versionOlder "4.03" ocaml.version
-      then janeStreet.ppx_fail
-      else callPackage ../development/ocaml-modules/janestreet/ppx-fail.nix {};
-
     ppx_fields_conv =
       if lib.versionOlder "4.03" ocaml.version
       then janeStreet.ppx_fields_conv
