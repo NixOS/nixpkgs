@@ -18,7 +18,7 @@ let
   packages = ( self:
 
 let
-  inherit (python.passthru) isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
+  inherit (python.passthru) isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy310 isPy3k isPyPy pythonAtLeast pythonOlder;
 
   callPackage = pkgs.newScope self;
 
@@ -139,6 +139,8 @@ in {
 
   setuptools = if isPy27 then
     callPackage ../development/python-modules/setuptools/44.0.nix { }
+  else if isPy310 then
+    callPackage ../development/python-modules/setuptools/50.3.nix { }
   else
     callPackage ../development/python-modules/setuptools { };
 
