@@ -232,29 +232,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'mysql'@'localhost' WITH GRANT OPTION;
        <filename>testing-python.nix</filename> respectively.
      </para>
    </listitem>
-   <listitem>
-     <para>
-       The Mediatomb service declares new options. It also adapts existing
-       options to make the configuration generation lazy. The existing option
-       <literal>customCfg</literal> (defaults to false), when enabled, stops
-       the service configuration generation completely. It then expects the
-       users to provide their own correct configuration at the right location
-       (whereas the configuration was generated and not used at all before).
-       The new option <literal>transcodingOption</literal> (defaults to no)
-       allows a generated configuration. It makes the mediatomb service pulls
-       the necessary runtime dependencies in the nix store (whereas it was
-       generated with hardcoded values before). The new option
-       <literal>mediaDirectories</literal> allows the users to declare autoscan
-       media directories from their nixos configuration:
-       <programlisting>
-       services.mediatomb.mediaDirectories = [
-         { path = "/var/lib/mediatomb/pictures"; recursive = false; hidden-files = false; }
-         { path = "/var/lib/mediatomb/audio"; recursive = true; hidden-files = false; }
-       ];
-       </programlisting>
-    </para>
-   </listitem>
- </itemizedlist>
+  </itemizedlist>
  </section>
 
  <section xmlns="http://docbook.org/ns/docbook"
@@ -873,6 +851,13 @@ CREATE ROLE postgres LOGIN SUPERUSER;
    </listitem>
    <listitem>
     <para>
+     The <literal>hardware.nvidia.optimus_prime.enable</literal> service has been renamed to
+     <literal>hardware.nvidia.prime.sync.enable</literal> and has many new enhancements.
+     Related nvidia prime settings may have also changed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      The package <package>nextcloud17</package> has been removed and <package>nextcloud18</package> was marked as insecure
      since both of them will <link xlink:href="https://docs.nextcloud.com/server/19/admin_manual/release_schedule.html">
      will be EOL (end of life) within the lifetime of 20.09</link>.
@@ -897,21 +882,11 @@ CREATE ROLE postgres LOGIN SUPERUSER;
     </para>
    </listitem>
    <listitem>
-     <para>
-       The mediatomb service is now using the new and maintained <literal>gerbera</literal>
-       <literal>gerbera</literal> fork instead of the unmaintained
-       <literal>mediatomb</literal> package. If you want to keep the old
-       behavior, you must declare it with:
-       <programlisting>
-       services.mediatomb.package = pkgs.mediatomb;
-       </programlisting>
-       One new option <literal>openFirewall</literal> has been introduced which
-       defaults to false. If you relied on the service declaration to add the
-       firewall rules itself before, you should now declare it with:
-       <programlisting>
-       services.mediatomb.openFirewall = true;
-       </programlisting>
-     </para>
+    <para>
+      The GNOME desktop manager no longer default installs <package>gnome3.epiphany</package>.
+      It was chosen to do this as it has a usability breaking issue (see issue <link xlink:href="https://github.com/NixOS/nixpkgs/issues/98819">#98819</link>)
+      that makes it unsuitable to be a default app.
+    </para>
    </listitem>
   </itemizedlist>
  </section>

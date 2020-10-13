@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, rustPlatform, python3, libxcb }:
+{ lib, fetchFromGitHub, rustPlatform, python3, libxcb }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kmon";
-  version = "1.4.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1f9q4bc1kr1hgwf8byj13d6vsfs97wz7x10zwa82iv9b0wb1lr5w";
+    sha256 = "0j6w4rg2gybcy1cv812qixravy0z0xpp33snrng11q802zq3mkmq";
   };
 
-  cargoSha256 = "1xy8rkba9idd0w4bnczmv4ll9awvar99vb7s0jd25fjbzqqlz820";
+  cargoSha256 = "0x5s3yi5bv3h1k54lrgcvkpdkmfphvwhnrmk5lmk6xd9pxfh218p";
 
   nativeBuildInputs = [ python3 ];
 
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     install -D man/kmon.8 -t $out/share/man/man8/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux Kernel Manager and Activity Monitor";
     homepage = "https://github.com/orhun/kmon";
     license = with licenses; [ gpl3 ];

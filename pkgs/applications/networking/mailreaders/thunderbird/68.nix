@@ -337,5 +337,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.linux;
     license = licenses.mpl20;
+    knownVulnerabilities = [ "Support ended around Semptember 2020." ];
   };
 }

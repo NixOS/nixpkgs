@@ -1098,6 +1098,8 @@ in
 
   gremlin-console = callPackage ../applications/misc/gremlin-console { };
 
+  grex = callPackage ../tools/misc/grex { };
+
   gcsfuse = callPackage ../tools/filesystems/gcsfuse { };
 
   glyr = callPackage ../tools/audio/glyr { };
@@ -2168,6 +2170,8 @@ in
 
   kramdown-rfc2629 = callPackage ../tools/text/kramdown-rfc2629 { };
 
+  klipper = callPackage ../servers/klipper { };
+
   lcdproc = callPackage ../servers/monitoring/lcdproc { };
 
   languagetool = callPackage ../tools/text/languagetool {  };
@@ -2397,6 +2401,8 @@ in
   socklog = callPackage ../tools/system/socklog { };
 
   stagit = callPackage ../development/tools/stagit { };
+
+  starboard = callPackage ../applications/networking/cluster/starboard { };
 
   statserial = callPackage ../tools/misc/statserial { };
 
@@ -3227,6 +3233,8 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL;
   };
 
+  domoticz = callPackage ../servers/domoticz { };
+
   doomseeker = qt5.callPackage ../applications/misc/doomseeker { };
 
   doom-bcc = callPackage ../games/zdoom/bcc-git.nix { };
@@ -3387,6 +3395,8 @@ in
   };
 
   tridactyl-native = callPackage ../tools/networking/tridactyl-native { };
+
+  trivy = callPackage ../tools/admin/trivy { };
 
   trompeloeil = callPackage ../development/libraries/trompeloeil { };
 
@@ -4019,6 +4029,8 @@ in
   gnome-builder = callPackage ../applications/editors/gnome-builder { };
 
   gnome-keysign = callPackage ../tools/security/gnome-keysign { };
+
+  gnome-passwordsafe = callPackage ../applications/misc/gnome-passwordsafe { };
 
   gnome-podcasts = callPackage ../applications/audio/gnome-podcasts { };
 
@@ -4864,8 +4876,6 @@ in
   peruse = libsForQt514.callPackage ../tools/misc/peruse { };
 
   ksmoothdock = libsForQt514.callPackage ../applications/misc/ksmoothdock { };
-
-  kst = libsForQt514.callPackage ../tools/graphics/kst { gsl = gsl_1; };
 
   kstars = libsForQt514.callPackage ../applications/science/astronomy/kstars { };
 
@@ -6326,6 +6336,8 @@ in
   plotutils = callPackage ../tools/graphics/plotutils { };
 
   plowshare = callPackage ../tools/misc/plowshare { };
+
+  pm2 = nodePackages.pm2;
 
   pngcheck = callPackage ../tools/graphics/pngcheck {
     zlib = zlib.override {
@@ -9497,6 +9509,8 @@ in
    enableX11 = true;
   };
 
+  miranda = callPackage ../development/compilers/miranda {};
+
   mkcl = callPackage ../development/compilers/mkcl {};
 
   mlkit = callPackage ../development/compilers/mlkit {};
@@ -9706,7 +9720,9 @@ in
   };
   cargo-deps = callPackage ../tools/package-management/cargo-deps { };
   cargo-download = callPackage ../tools/package-management/cargo-download { };
-  cargo-edit = callPackage ../tools/package-management/cargo-edit { };
+  cargo-edit = callPackage ../tools/package-management/cargo-edit {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-kcov = callPackage ../tools/package-management/cargo-kcov { };
   cargo-graph = callPackage ../tools/package-management/cargo-graph { };
   cargo-license = callPackage ../tools/package-management/cargo-license { };
@@ -11070,7 +11086,9 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  fujprog = callPackage ../development/tools/misc/fujprog { };
+  fujprog = callPackage ../development/tools/misc/fujprog {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   funnelweb = callPackage ../development/tools/literate-programming/funnelweb { };
 
@@ -16543,6 +16561,8 @@ in
 
   gatling = callPackage ../servers/http/gatling { };
 
+  gitlab-pages = callPackage ../servers/http/gitlab-pages { };
+
   glabels = callPackage ../applications/graphics/glabels { };
 
   nats-server = callPackage ../servers/nats-server { };
@@ -16833,6 +16853,8 @@ in
   tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
 
   tomcat-native = callPackage ../servers/http/tomcat/tomcat-native.nix { };
+
+  pg_tileserv = callPackage ../servers/pg_tileserv { };
 
   pies = callPackage ../servers/pies { };
 
@@ -17842,7 +17864,7 @@ in
     ];
   };
 
-  linux_5_7 = callPackage ../os-specific/linux/kernel/linux-5.7.nix {
+  linux_5_8 = callPackage ../os-specific/linux/kernel/linux-5.8.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
@@ -17850,7 +17872,7 @@ in
     ];
   };
 
-  linux_5_8 = callPackage ../os-specific/linux/kernel/linux-5.8.nix {
+  linux_5_9 = callPackage ../os-specific/linux/kernel/linux-5.9.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
@@ -18112,8 +18134,8 @@ in
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
   linuxPackages_5_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_4);
-  linuxPackages_5_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_7);
   linuxPackages_5_8 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_8);
+  linuxPackages_5_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_9);
 
   # When adding to the list above:
   # - Update linuxPackages_latest to the latest version
@@ -18831,7 +18853,7 @@ in
 
   ant-bloody-theme = callPackage ../data/themes/ant-theme/ant-bloody.nix { };
 
-  ant-dracula-theme = callPackage ../data/themes/ant-theme/ant-dracula.nix { };
+  dracula-theme = callPackage ../data/themes/dracula-theme { };
 
   ant-nebula-theme = callPackage ../data/themes/ant-theme/ant-nebula.nix { };
 
@@ -19121,6 +19143,8 @@ in
 
   junicode = callPackage ../data/fonts/junicode { };
 
+  julia-mono = callPackage ../data/fonts/julia-mono { };
+
   kanji-stroke-order-font = callPackage ../data/fonts/kanji-stroke-order-font {};
 
   kawkab-mono-font = callPackage ../data/fonts/kawkab-mono {};
@@ -19132,6 +19156,8 @@ in
   kochi-substitute-naga10 = callPackage ../data/fonts/kochi-substitute-naga10 {};
 
   kopia = callPackage ../tools/backup/kopia { };
+
+  koreader = callPackage ../applications/misc/koreader {};
 
   lato = callPackage ../data/fonts/lato {};
 
@@ -21282,6 +21308,8 @@ in
 
   smallwm = callPackage ../applications/window-managers/smallwm { };
 
+  smos = callPackage ../applications/misc/smos { };
+
   spectrwm = callPackage ../applications/window-managers/spectrwm { };
 
   spectral = qt5.callPackage ../applications/networking/instant-messengers/spectral { };
@@ -21667,7 +21695,7 @@ in
 
   kid3 = libsForQt5.callPackage ../applications/audio/kid3 { };
 
-  kile = libsForQt5.callPackage ../applications/editors/kile { };
+  kile = libsForQt514.callPackage ../applications/editors/kile { };
 
   kino = callPackage ../applications/video/kino {
     inherit (gnome2) libglade;
@@ -22322,6 +22350,8 @@ in
 
   nwg-launchers = callPackage ../applications/misc/nwg-launchers { };
 
+  ocenaudio = callPackage ../applications/audio/ocenaudio { };
+
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
 
   openshift = callPackage ../applications/networking/cluster/openshift { };
@@ -22615,7 +22645,7 @@ in
 
   openjump = callPackage ../applications/misc/openjump { };
 
-  openorienteering-mapper = libsForQt514.callPackage ../applications/gis/openorienteering-mapper { };
+  openorienteering-mapper = libsForQt5.callPackage ../applications/gis/openorienteering-mapper { };
 
   openscad = libsForQt5.callPackage ../applications/graphics/openscad {};
 
@@ -23535,6 +23565,8 @@ in
   };
 
   sunvox = callPackage ../applications/audio/sunvox { };
+
+  swaglyrics = callPackage ../tools/misc/swaglyrics { };
 
   swh_lv2 = callPackage ../applications/audio/swh-lv2 { };
 
@@ -25813,6 +25845,7 @@ in
     draw-on-your-screen = callPackage ../desktops/gnome-3/extensions/draw-on-your-screen { };
     drop-down-terminal = callPackage ../desktops/gnome-3/extensions/drop-down-terminal { };
     emoji-selector = callPackage ../desktops/gnome-3/extensions/emoji-selector { };
+    freon = callPackage ../desktops/gnome-3/extensions/freon { };
     gsconnect = callPackage ../desktops/gnome-3/extensions/gsconnect { };
     icon-hider = callPackage ../desktops/gnome-3/extensions/icon-hider { };
     impatience = callPackage ../desktops/gnome-3/extensions/impatience { };
@@ -26460,6 +26493,7 @@ in
     });
 
     java = openjdk11;
+    z3 = z3_4_4_0;
   };
 
   iprover = callPackage ../applications/science/logic/iprover { };
@@ -26552,6 +26586,10 @@ in
   };
 
   z3 = callPackage ../applications/science/logic/z3 { python = python2; };
+  z3_4_4_0 = callPackage ../applications/science/logic/z3/4.4.0.nix {
+    python = python2;
+    stdenv = gcc49Stdenv;
+  };
   z3-tptp = callPackage ../applications/science/logic/z3/tptp.nix {};
 
   tlaplus = callPackage ../applications/science/logic/tlaplus {

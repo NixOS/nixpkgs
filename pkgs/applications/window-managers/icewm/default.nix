@@ -9,24 +9,22 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "icewm";
-  version = "1.8.1";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner  = "bbidulock";
-    repo   = "icewm";
-    rev    = version;
-    sha256 = "0qd3cakhhjc7h6xr9q3ia9f8wln6q23dlqvw19khia26c0dgyd7b";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-cTJQlUaGvbJmu1xYwFp5GPrM5NjfKBzaMc+l7FeMUP8=";
   };
 
   nativeBuildInputs = [ cmake pkgconfig perl asciidoc ];
 
   buildInputs = [
-    gettext libjpeg libtiff libungif libpng imlib expat
-    freetype fontconfig gdk-pixbuf gdk-pixbuf-xlib glib mkfontdir libX11
-    libXft libXext libXinerama libXrandr libICE libSM libXpm
-    libXdmcp libxcb libpthreadstubs pcre libsndfile fribidi
-    libXdamage libXcomposite libXfixes
-  ];
+    gettext libjpeg libtiff libungif libpng imlib expat freetype fontconfig
+    gdk-pixbuf gdk-pixbuf-xlib glib mkfontdir libX11 libXft libXext libXinerama
+    libXrandr libICE libSM libXpm libXdmcp libxcb libpthreadstubs pcre
+    libsndfile fribidi libXdamage libXcomposite libXfixes ];
 
   cmakeFlags = [ "-DPREFIX=$out" "-DCFGDIR=/etc/icewm" ];
 

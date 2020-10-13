@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
     echo -java-home ${jre.home} >>conf/sbtopts
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = stdenv.lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
-  buildInputs = [ zlib ];
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [ zlib ];
 
   installPhase = ''
     mkdir -p $out/share/sbt $out/bin

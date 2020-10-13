@@ -1376,15 +1376,11 @@ self: super: {
   # https://github.com/jgm/commonmark-hs/issues/55
   commonmark-extensions = dontCheck super.commonmark-extensions;
 
-  # Apply version-bump patch that is not contained in released version yet.
-  # Upstream PR: https://github.com/srid/neuron/pull/304
-  neuron = appendPatch super.neuron (pkgs.fetchpatch {
-    url= "https://github.com/srid/neuron/commit/9ddcb7e9d63b8266d1372ef7c14c13b6b5277990.patch";
-    sha256 = "01f9v3jnl05fnpd624wv3a0j5prcbnf62ysa16fbc0vabw19zv1b";
-    excludes = [ "commonmark-hs/github.json" ];
-    stripLen = 2;
-    extraPrefix = "";
-  });
+
+  # 2020-10-11: reflex-dom-pandoc and neuron require skylighting >= 9, which we
+  # can‘t support, because there is no pandoc release compatible with this.
+  reflex-dom-pandoc = doJailbreak super.reflex-dom-pandoc;
+  neuron = doJailbreak super.neuron;
 
   # Testsuite trying to run `which haskeline-examples-Test`
   haskeline_0_8_1_0 = dontCheck super.haskeline_0_8_1_0;
