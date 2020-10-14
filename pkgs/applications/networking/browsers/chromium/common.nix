@@ -149,7 +149,6 @@ let
       ++ optionals useOzone [ libdrm wayland mesa_drivers libxkbcommon ];
 
     patches = [
-      ./patches/remove-webp-include-69.patch
       ./patches/no-build-timestamps.patch
       ./patches/widevine-79.patch
       # Unfortunately, chromium regularly breaks on major updates and
