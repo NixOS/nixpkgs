@@ -1,6 +1,4 @@
 # Configuration for probot-stale - https://github.com/probot/stale
-# Number of days of inactivity before an issue becomes stale
-daysUntilStale: 180
 # Number of days of inactivity before a stale issue is closed
 daysUntilClose: false
 # Issues with these labels will never be considered stale
@@ -10,10 +8,12 @@ exemptLabels:
 staleLabel: "2.status: stale"
 # Comment to post when marking an issue as stale. Set to `false` to disable
 pulls:
+  # Number of days of inactivity before an issue becomes stale
+  daysUntilStale: 90
   markComment: |
     Hello, I'm a bot and I thank you in the name of the community for your contributions.
 
-    Nixpkgs is a busy repository, and unfortunately sometimes PRs get left behind for too long. Nevertheless, we'd like to help committers reach the PRs that are still important. This PR has had no activity for 180 days, and so I marked it as stale, but you can rest assured it will never be closed by a non-human.
+    Nixpkgs is a busy repository, and unfortunately sometimes PRs get left behind for too long. Nevertheless, we'd like to help committers reach the PRs that are still important. This PR has had no activity for 90 days, and so I marked it as stale, but you can rest assured it will never be closed by a non-human.
 
     If this is still important to you and you'd like to remove the stale label, we ask that you leave a comment. Your comment can be as simple as "still important to me".  But there's a bit more you can do:
 
@@ -26,10 +26,12 @@ pulls:
     Lastly, you can always ask for help at [our Discourse Forum](https://discourse.nixos.org/), or more specifically, [at this thread](https://discourse.nixos.org/t/prs-in-distress/3604) or at [#nixos' IRC channel](https://webchat.freenode.net/#nixos).
 
 issues:
+  # Number of days of inactivity before an issue becomes stale
+  daysUntilStale: 60
   markComment: |
     Hello, I'm a bot and I thank you in the name of the community for opening this issue.
 
-    To help our human contributors focus on the most-relevant reports, I check up on old issues to see if they're still relevant. This issue has had no activity for 180 days, and so I marked it as stale, but you can rest assured it will never be closed by a non-human.
+    To help our human contributors focus on the most-relevant reports, I check up on old issues to see if they're still relevant. This issue has had no activity for 60 days, and so I marked it as stale, but you can rest assured it will never be closed by a non-human.
 
     The community would appreciate your effort in checking if the issue is still valid. If it isn't, please close it.
 
