@@ -6672,6 +6672,8 @@ in
 
   replace = callPackage ../tools/text/replace { };
 
+  resvg = callPackage ../tools/graphics/resvg { };
+
   reckon = callPackage ../tools/text/reckon { };
 
   recoverjpeg = callPackage ../tools/misc/recoverjpeg { };
