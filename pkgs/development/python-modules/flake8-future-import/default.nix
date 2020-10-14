@@ -1,4 +1,4 @@
-{ lib, isPy27, fetchFromGitHub, buildPythonPackage, pythonOlder, fetchpatch, flake8, importlib-metadata, six }:
+{ lib, isPy27, isPy38, fetchFromGitHub, buildPythonPackage, pythonOlder, fetchpatch, flake8, importlib-metadata, six }:
 
 buildPythonPackage rec {
   pname = "flake8-future-import";
@@ -20,7 +20,8 @@ buildPythonPackage rec {
   # Upstream disables this test case naturally on python 3, but it also fails
   # inside NixPkgs for python 2. Since it's going to be deleted, we just skip it
   # on py2 as well.
-  patches = lib.optionals isPy27 [ ./skip-test.patch ];
+  patches = lib.optionals isPy38 [ ./fix-annotations-version.patch ]
+    ++ lib.optionals isPy27 [ ./skip-test.patch ];
 
   meta = with lib; {
     description = "A flake8 extension to check for the imported __future__ modules to make it easier to have a consistent code base";
