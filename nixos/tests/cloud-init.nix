@@ -48,7 +48,7 @@ in makeTest {
     virtualisation.qemu.options = [ "-cdrom" "${metadataDrive}/metadata.iso" ];
     services.cloud-init.enable = true;
     services.openssh.enable = true;
-
+    networking.hostName = "";
   };
   testScript = ''
     machine.wait_for_unit("cloud-init.service")
@@ -69,6 +69,14 @@ in makeTest {
     )
     machine.succeed(
         "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o IdentityFile=~/.ssh/id_snakeoil nixos@localhost 'true'"
+    )
+
+    # test changing hostname via cloud-init worked
+    assert (
+        machine.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o IdentityFile=~/.ssh/id_snakeoil nixos@localhost 'hostname'"
+        ).strip()
+        == "test"
     )
   '';
 }
