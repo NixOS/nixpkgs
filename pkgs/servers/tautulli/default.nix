@@ -1,18 +1,18 @@
-{stdenv, fetchFromGitHub, python }:
+{stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
-  version = "2.2.4";
+  version = "2.6.1";
   pname = "Tautulli";
 
-  pythonPath = [ python.pkgs.setuptools ];
-  buildInputs = [ python.pkgs.setuptools ];
-  nativeBuildInputs = [ python.pkgs.wrapPython ];
+  pythonPath = [ python3.pkgs.setuptools ];
+  buildInputs = [ python3.pkgs.setuptools ];
+  nativeBuildInputs = [ python3.pkgs.wrapPython ];
 
   src = fetchFromGitHub {
     owner = "Tautulli";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0yg7r7yscx6jbs1lnl9nbax3v9r6ppvhr4igdm3gbvd2803j8fs7";
+    sha256 = "0zpvwcvc473c16zkfvddhsjvhqv17kz0l0a701m365s6xch5ayj0";
   };
 
   buildPhase = ":";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
     # Remove superfluous Python checks from main script;
     # prepend shebang
-    echo "#!${python.interpreter}" > $out/Tautulli.py
+    echo "#!${python3.interpreter}" > $out/Tautulli.py
     tail -n +7 Tautulli.py >> $out/Tautulli.py
 
 
