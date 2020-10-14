@@ -7,7 +7,7 @@ let
   ];
   bootstrapCrossRust = stdenvNoCC.mkDerivation {
     name = "binary-redox-rust";
-    
+
     src = fetchTarball {
       name = "redox-rust-toolchain-bin.tar.gz";
       url = "https://www.dropbox.com/s/33r92en0t47l1ei/redox-rust-toolchain-bin.tar.gz?dl=1";
