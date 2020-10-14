@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, makeWrapper
-, perl, pandoc, python2Packages, git
+, perl, pandoc, python3Packages, git
 , par2cmdline ? null, par2Support ? true
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     git
-    (python2Packages.python.withPackages
+    (python3Packages.python.withPackages
       (p: with p; [ setuptools tornado ]
         ++ stdenv.lib.optionals (!stdenv.isDarwin) [ pyxattr pylibacl fuse ]))
   ];
