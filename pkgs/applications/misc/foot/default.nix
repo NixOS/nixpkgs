@@ -5,12 +5,12 @@
 
 stdenv.mkDerivation rec {
   pname = "foot";
-  version = "1.4.4";
+  version = "1.5.1";
 
   src = fetchgit {
     url = "https://codeberg.org/dnkl/foot.git";
-    rev = "${version}";
-    sha256 = "1cr4sz075v18clh8nlvgyxlbvfkhbsg0qrqgnclip5rwa24ry1lg";
+    rev = version;
+    sha256 = "sha256-GAk2qkrgCNILJOeRcn1NT4t3w+R6WFTZ1goOhBEwKwc=";
   };
 
   nativeBuildInputs = [
