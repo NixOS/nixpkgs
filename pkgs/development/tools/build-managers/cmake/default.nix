@@ -5,6 +5,7 @@
 , ps
 , isBootstrap ? false
 , useSharedLibraries ? (!isBootstrap && !stdenv.isCygwin)
+, useOpenSSL ? !isBootstrap, openssl
 , useNcurses ? false, ncurses
 , useQt4 ? false, qt4
 , withQt5 ? false, qtbase
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = []
     ++ lib.optionals useSharedLibraries [ bzip2 curl expat libarchive xz zlib libuv rhash ]
+    ++ lib.optional useOpenSSL openssl
     ++ lib.optional useNcurses ncurses
     ++ lib.optional useQt4 qt4
     ++ lib.optional withQt5 qtbase;
@@ -92,13 +94,15 @@ stdenv.mkDerivation rec {
     "-DCMAKE_AR=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
     "-DCMAKE_RANLIB=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
     "-DCMAKE_STRIP=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip"
-  ]
+
+    "-DCMAKE_USE_OPENSSL=${if useOpenSSL then "ON" else "OFF"}"
     # Avoid depending on frameworks.
-    ++ lib.optional (!useNcurses) "-DBUILD_CursesDialog=OFF";
+    "-DBUILD_CursesDialog=${if useNcurses then "ON" else "OFF"}"
+  ];
 
   # make install attempts to use the just-built cmake
   preInstall = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    sed -i 's|bin/cmake|${buildPackages.cmake}/bin/cmake|g' Makefile
+    sed -i 's|bin/cmake|${buildPackages.cmakeMinimal}/bin/cmake|g' Makefile
   '';
 
   dontUseCmakeConfigure = true;
