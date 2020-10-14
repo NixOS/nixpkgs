@@ -63,6 +63,15 @@ in
       '';
     };
 
+    hardware.nvidia.powerManagement.finegrained = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Experimental power management of PRIME offload. For more information, see
+        the NVIDIA docs, chapter 22. PCI-Express runtime power management.
+      '';
+    };
+
     hardware.nvidia.modesetting.enable = mkOption {
       type = types.bool;
       default = false;
@@ -193,6 +202,14 @@ in
         assertion = !(syncCfg.enable && offloadCfg.enable);
         message = "Only one NVIDIA PRIME solution may be used at a time.";
       }
+      {
+        assertion = !(syncCfg.enable && cfg.powerManagement.finegrained);
+        message = "Sync precludes powering down the NVIDIA GPU.";
+      }
+      {
+        assertion = cfg.powerManagement.enable -> offloadCfg.enable;
+        message = "Fine-grained power management requires offload to be enabled.";
+      }
     ];
 
     # If Optimus/PRIME is enabled, we:
@@ -228,6 +245,7 @@ in
         ''
           BusID "${pCfg.nvidiaBusId}"
           ${optionalString syncCfg.allowExternalGpu "Option \"AllowExternalGpus\""}
+          ${optionalString cfg.powerManagement.finegrained "Option \"NVreg_DynamicPowerManagement=0x02\""}
         '';
       screenSection =
         ''
@@ -315,15 +333,36 @@ in
     boot.kernelParams = optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1"
       ++ optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1";
 
-    # Create /dev/nvidia-uvm when the nvidia-uvm module is loaded.
     services.udev.extraRules =
       ''
+        # Create /dev/nvidia-uvm when the nvidia-uvm module is loaded.
         KERNEL=="nvidia", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidiactl c $$(grep nvidia-frontend /proc/devices | cut -d \  -f 1) 255'"
         KERNEL=="nvidia_modeset", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-modeset c $$(grep nvidia-frontend /proc/devices | cut -d \  -f 1) 254'"
         KERNEL=="card*", SUBSYSTEM=="drm", DRIVERS=="nvidia", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia%n c $$(grep nvidia-frontend /proc/devices | cut -d \  -f 1) %n'"
         KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
         KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm-tools c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
+      '' + optionalString cfg.powerManagement.finegrained ''
+        # Remove NVIDIA USB xHCI Host Controller devices, if present
+        ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{remove}="1"
+
+        # Remove NVIDIA USB Type-C UCSI devices, if present
+        ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c8000", ATTR{remove}="1"
+
+        # Remove NVIDIA Audio devices, if present
+        ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{remove}="1"
+
+        # Enable runtime PM for NVIDIA VGA/3D controller devices on driver bind
+        ACTION=="bind", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x030000", TEST=="power/control", ATTR{power/control}="auto"
+        ACTION=="bind", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x030200", TEST=="power/control", ATTR{power/control}="auto"
+
+        # Disable runtime PM for NVIDIA VGA/3D controller devices on driver unbind
+        ACTION=="unbind", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x030000", TEST=="power/control", ATTR{power/control}="on"
+        ACTION=="unbind", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x030200", TEST=="power/control", ATTR{power/control}="on"
       '';
+
+    boot.extraModprobeConfig = mkIf cfg.powerManagement.finegrained ''
+      options nvidia "NVreg_DynamicPowerManagement=0x02"
+    '';
 
     boot.blacklistedKernelModules = [ "nouveau" "nvidiafb" ];
 
