@@ -63,9 +63,52 @@ The fetcher will verify that the `Cargo.lock` file is in sync with the `src`
 attribute, and fail the build if not. It will also will compress the vendor
 directory into a tar.gz archive.
 
-### Building a crate for a different target
+### Cross compilation
 
-To build your crate with a different cargo `--target` simply specify the `target` attribute:
+By default, Rust packages are compiled for the host platform, just like any
+other package is.  The `--target` passed to rust tools is computed from this.
+By default, it takes the `stdenv.hostPlatform.config` and replaces components
+where they are known to differ. But there are ways to customize the argument:
+
+ - To choose a different target by name, define
+   `stdenv.hostPlatform.rustc.arch.config` as that name (a string), and that
+   name will be used instead.
+
+   For example:
+   ```nix
+   import <nixpkgs> {
+     crossSystem = (import <nixpkgs/lib>).systems.examples.armhf-embedded // {
+       rustc.arch.config = "thumbv7em-none-eabi";
+     };
+   }
+   ```
+   will result in:
+   ```shell
+   --target thumbv7em-none-eabi
+   ```
+
+ - To pass a completely custom target, define
+   `stdenv.hostPlatform.rustc.arch.config` with its name, and
+   `stdenv.hostPlatform.rustc.arch.custom` with the value.  The value will be
+   serialized to JSON in a file called
+   `${stdenv.hostPlatform.rustc.arch.config}.json`, and the path of that file
+   will be used instead.
+
+   For example:
+   ```nix
+   import <nixpkgs> {
+     crossSystem = (import <nixpkgs/lib>).systems.examples.armhf-embedded // {
+       rustc.arch.config = "thumb-crazy";
+       rustc.arch.custom = { foo = ""; bar = ""; };
+     };
+   }
+   will result in:
+   ```shell
+   --target /nix/store/asdfasdfsadf-thumb-crazy.json # contains {"foo":"","bar":""}
+   ```
+
+Finally, as an ad-hoc escape hatch, a computed target (string or JSON file
+path) can be passed directly to `buildRustPackage`:
 
 ```nix
 pkgs.rustPlatform.buildRustPackage {
@@ -73,6 +116,12 @@ pkgs.rustPlatform.buildRustPackage {
   target = "x86_64-fortanix-unknown-sgx";
 }
 ```
+
+This is useful to avoid rebuilding Rust tools, since they are actually target
+agnostic and don't need to be rebuilt. But in the future, we should always
+build the Rust tools and standard library crates separately so there is no
+reason not to take the `stdenv.hostPlatform.rustc`-modifying approach, and the
+ad-hoc escape hatch to `buildRustPackage` can be removed.
 
 ### Running package tests
 

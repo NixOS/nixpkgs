@@ -70,9 +70,9 @@ in stdenv.mkDerivation rec {
     "--set=build.cargo=${rustPlatform.rust.cargo}/bin/cargo"
     "--enable-rpath"
     "--enable-vendor"
-    "--build=${rust.toRustTarget stdenv.buildPlatform}"
-    "--host=${rust.toRustTarget stdenv.hostPlatform}"
-    "--target=${rust.toRustTarget stdenv.targetPlatform}"
+    "--build=${rust.toRustTargetSpec stdenv.buildPlatform}"
+    "--host=${rust.toRustTargetSpec stdenv.hostPlatform}"
+    "--target=${rust.toRustTargetSpec stdenv.targetPlatform}"
 
     "${setBuild}.cc=${ccForBuild}"
     "${setHost}.cc=${ccForHost}"

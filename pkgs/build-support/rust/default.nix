@@ -30,7 +30,7 @@
 , cargoBuildFlags ? []
 , buildType ? "release"
 , meta ? {}
-, target ? rust.toRustTarget stdenv.hostPlatform
+, target ? rust.toRustTargetSpec stdenv.hostPlatform
 , cargoVendorDir ? null
 , checkType ? buildType
 , depsExtraArgs ? {}

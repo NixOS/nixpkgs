@@ -41,7 +41,7 @@ in rustPlatform.buildRustPackage {
     done
 
     export RUST_SYSROOT=$(rustc --print=sysroot)
-    export HOST=${rust.toRustTarget stdenv.buildPlatform}
-    cp -r $RUST_SYSROOT/lib/rustlib/$HOST $out
+    host=${rust.toRustTarget stdenv.buildPlatform}
+    cp -r $RUST_SYSROOT/lib/rustlib/$host $out
   '';
 }
