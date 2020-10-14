@@ -4012,6 +4012,8 @@ in {
 
   nose-focus = callPackage ../development/python-modules/nose-focus { };
 
+  nose-timer = callPackage ../development/python-modules/nose-timer { };
+
   nosejs = callPackage ../development/python-modules/nosejs { };
 
   nose-of-yeti = callPackage ../development/python-modules/nose-of-yeti { };

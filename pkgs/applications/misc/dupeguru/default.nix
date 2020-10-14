@@ -40,15 +40,15 @@ python3Packages.buildPythonApplication rec {
   # Avoid double wrapping Python programs.
   dontWrapQtApps = true;
 
+  # TODO: A bug in python wrapper
+  # see https://github.com/NixOS/nixpkgs/pull/75054#discussion_r357656916
   preFixup = ''
-    # TODO: A bug in python wrapper
-    # see https://github.com/NixOS/nixpkgs/pull/75054#discussion_r357656916
     makeWrapperArgs="''${qtWrapperArgs[@]}"
   '';
 
+  # Executable in $out/bin is a symlink to $out/share/dupeguru/run.py
+  # so wrapPythonPrograms hook does not handle it automatically.
   postFixup = ''
-    # Executable in $out/bin is a symlink to $out/share/dupeguru/run.py
-    # so wrapPythonPrograms hook does not handle it automatically.
     wrapPythonProgramsIn "$out/share/dupeguru" "$out $pythonPath"
   '';
 
@@ -58,5 +58,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = [ maintainers.novoxudonoser ];
+    broken = true; # mv: cannot stat '_block.cpython-38m*.so': No such file or directory
   };
 }
