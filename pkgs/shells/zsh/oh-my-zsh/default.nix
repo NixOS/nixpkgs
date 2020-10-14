@@ -4,9 +4,9 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "2020-10-13";
+  version = "2020-10-14";
   pname = "oh-my-zsh";
-  rev = "a39bee8d11aca960651403dddbb7dba38b00183e";
+  rev = "53cbd658f5ae6874af0d804cee6748dfba69e786";
 
   src = fetchgit { inherit rev;
     url = "https://github.com/ohmyzsh/ohmyzsh";
