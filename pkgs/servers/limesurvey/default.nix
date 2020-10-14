@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "limesurvey";
-  version = "3.23.0+200813";
+  version = "3.23.7+201006";
 
   src = fetchFromGitHub {
     owner = "LimeSurvey";
     repo = "LimeSurvey";
     rev = version;
-    sha256 = "0r260z40g6b2bsfzxgfwdffbs17bl784xsc67n7q8222rs601hxf";
+    sha256 = "19p978p0flknsg3iqlrrbr76qsk5ha2a84nxywqsvjrjvqrh5jrc";
   };
 
   phpConfig = writeText "config.php" ''
