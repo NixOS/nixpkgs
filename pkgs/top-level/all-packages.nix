@@ -9688,7 +9688,8 @@ in
   rustPackages = rustPackages_1_46;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
-  inherit (rust) makeRustPlatform;
+
+  makeRustPlatform = callPackage ../development/compilers/rust/make-rust-platform.nix {};
 
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate { };
   buildRustCrateHelpers = callPackage ../build-support/rust/build-rust-crate/helpers.nix { };
@@ -22679,10 +22680,7 @@ in
 
   opusTools = callPackage ../applications/audio/opus-tools { };
 
-  orpie = callPackage ../applications/misc/orpie {
-    gsl = gsl_1;
-    ocamlPackages = ocaml-ng.ocamlPackages_4_02;
-  };
+  orpie = callPackage ../applications/misc/orpie { };
 
   osmo = callPackage ../applications/office/osmo { };
 
@@ -26357,6 +26355,8 @@ in
     fftw = fftw;
     cmake = cmakeCurses;
   });
+
+  zegrapher = libsForQt5.callPackage ../applications/science/math/zegrapher { };
 
   ### SCIENCE/MEDICINE
 

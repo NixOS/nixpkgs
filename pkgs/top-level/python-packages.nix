@@ -2422,6 +2422,8 @@ in {
 
   google-auth-oauthlib = callPackage ../development/python-modules/google-auth-oauthlib { };
 
+  google-cloud-access-context-manager = callPackage ../development/python-modules/google-cloud-access-context-manager { };
+
   google_cloud_asset = callPackage ../development/python-modules/google_cloud_asset { };
 
   google_cloud_automl = callPackage ../development/python-modules/google_cloud_automl { };
@@ -2457,6 +2459,8 @@ in {
   google_cloud_logging = callPackage ../development/python-modules/google_cloud_logging { };
 
   google_cloud_monitoring = callPackage ../development/python-modules/google_cloud_monitoring { };
+
+  google-cloud-org-policy = callPackage ../development/python-modules/google-cloud-org-policy { };
 
   google_cloud_pubsub = callPackage ../development/python-modules/google_cloud_pubsub { };
 
