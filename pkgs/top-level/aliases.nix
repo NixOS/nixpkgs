@@ -482,6 +482,7 @@ mapAliases ({
   gtk-recordmydesktop = throw "gtk-recordmydesktop has been removed from nixpkgs, as it's unmaintained and uses deprecated libraries"; # added 2019-12-10
   qt-recordmydesktop = throw "qt-recordmydesktop has been removed from nixpkgs, as it's abandoned and uses deprecated libraries"; # added 2019-12-10
   rfkill = throw "rfkill has been removed, as it's included in util-linux"; # added 2020-08-23
+  riak-cs = throw "riak-cs is not maintained anymore"; # added 2020-10-14
   rkt = throw "rkt was archived by upstream"; # added 2020-05-16
   ruby_2_0_0 = throw "ruby_2_0_0 was deprecated on 2018-02-13: use a newer version of ruby";
   ruby_2_1_0 = throw "ruby_2_1_0 was deprecated on 2018-02-13: use a newer version of ruby";
@@ -572,6 +573,7 @@ mapAliases ({
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
   squid4 = squid;  # added 2019-08-22
   sshfsFuse = sshfs-fuse; # added 2016-09
+  stanchion = throw "Stanchion was part of riak-cs which is not maintained anymore"; # added 2020-10-14
   surf-webkit2 = surf; # added 2017-04-02
   sup = throw "sup was deprecated on 2019-09-10: abandoned by upstream";
   swfdec = throw "swfdec has been removed as broken and unmaintained."; # added 2020-08-23

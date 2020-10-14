@@ -109,6 +109,16 @@
       <literal>/var/lib/powerdns</literal> to <literal>/run/pdns</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+    <package>riak-cs</package> package removed along with <varname>services.riak-cs</varname> module.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+    <package>stanchion</package> package removed along with <varname>services.stanchion</varname> module.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
