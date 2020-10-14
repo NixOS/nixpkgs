@@ -96,6 +96,16 @@ in
       '';
     };
 
+    hardware.nvidia.prime.amdgpuBusId = mkOption {
+      type = types.str;
+      default = "";
+      example = "PCI:4:0:0";
+      description = ''
+        Bus ID of the AMD APU. You can find it using lspci; for example if lspci
+	shows the AMD APU at "04:00.0", set this option to "PCI:4:0:0".
+      '';
+    };
+
     hardware.nvidia.prime.sync.enable = mkOption {
       type = types.bool;
       default = false;
@@ -153,7 +163,10 @@ in
     };
   };
 
-  config = mkIf enabled {
+  config = let
+      igpuDriver = if pCfg.intelBusId != "" then "modesetting" else "amdgpu";
+      igpuBusId = if pCfg.intelBusId != "" then pCfg.intelBusId else pCfg.amdgpuBusId;
+  in mkIf enabled {
     assertions = [
       {
         assertion = with config.services.xserver.displayManager; gdm.nvidiaWayland -> cfg.modesetting.enable;
@@ -161,7 +174,13 @@ in
       }
 
       {
-        assertion = primeEnabled -> pCfg.nvidiaBusId != "" && pCfg.intelBusId != "";
+        assertion = primeEnabled -> pCfg.intelBusId == "" || pCfg.amdgpuBusId == "";
+        message = ''
+          You cannot configure both an Intel iGPU and an AMD APU. Pick the one corresponding to your processor.
+        '';
+      }
+      {
+        assertion = primeEnabled -> pCfg.nvidiaBusId != "" && (pCfg.intelBusId != "" || pCfg.amdgpuBusId != "");
         message = ''
           When NVIDIA PRIME is enabled, the GPU bus IDs must configured.
         '';
@@ -183,18 +202,22 @@ in
     #   "nvidia" driver, in order to allow the X server to start without any outputs.
     # - Add a separate Device section for the Intel GPU, using the "modesetting"
     #   driver and with the configured BusID.
+    # - OR add a separate Device section for the AMD APU, using the "amdgpu"
+    #   driver and with the configures BusID.
     # - Reference that Device section from the ServerLayout section as an inactive
     #   device.
     # - Configure the display manager to run specific `xrandr` commands which will
-    #   configure/enable displays connected to the Intel GPU.
+    #   configure/enable displays connected to the Intel iGPU / AMD APU.
 
     services.xserver.useGlamor = mkDefault offloadCfg.enable;
 
-    services.xserver.drivers = optional primeEnabled {
-      name = "modesetting";
+    services.xserver.drivers = let
+    in optional primeEnabled {
+      name = igpuDriver;
       display = offloadCfg.enable;
+      modules = optional (igpuDriver == "amdgpu") [ pkgs.xorg.xf86videoamdgpu ];
       deviceSection = ''
-        BusID "${pCfg.intelBusId}"
+        BusID "${igpuBusId}"
         ${optionalString syncCfg.enable ''Option "AccelMethod" "none"''}
       '';
     } ++ singleton {
@@ -214,14 +237,14 @@ in
     };
 
     services.xserver.serverLayoutSection = optionalString syncCfg.enable ''
-      Inactive "Device-modesetting[0]"
+      Inactive "Device-${igpuDriver}[0]"
     '' + optionalString offloadCfg.enable ''
       Option "AllowNVIDIAGPUScreens"
     '';
 
     services.xserver.displayManager.setupCommands = optionalString syncCfg.enable ''
       # Added by nvidia configuration module for Optimus/PRIME.
-      ${pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource modesetting NVIDIA-0
+      ${pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource ${igpuDriver} NVIDIA-0
       ${pkgs.xorg.xrandr}/bin/xrandr --auto
     '';
 
