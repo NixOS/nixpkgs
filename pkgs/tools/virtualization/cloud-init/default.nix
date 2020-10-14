@@ -17,7 +17,7 @@
 , openssh
 }:
 
-let version = "20.2";
+let version = "20.3";
 
 in buildPythonApplication {
   pname = "cloud-init";
@@ -28,7 +28,7 @@ in buildPythonApplication {
     owner = "canonical";
     repo = "cloud-init";
     rev = version;
-    sha256 = "sha256-QeY/fdIIUSsp5oNxyRtZwpTB747Jf5KAJuYY9yiKUvc=";
+    sha256 = "1fmckxf4q4sxjqs758vw7ca0rnhl9hyq67cqpqzz2v3s1gqzjhm4";
   };
 
   patches = [ ./0001-add-nixos-support.patch ];
@@ -72,6 +72,8 @@ in buildPythonApplication {
     "test_dhclient_run_with_tmpdir"
     # clears path and fails because mkdir is not found
     "test_path_env_gets_set_from_main"
+    # tries to read from /etc/ca-certificates.conf while inside the sandbox
+    "test_handler_ca_certs"
   ];
 
   preCheck = ''
