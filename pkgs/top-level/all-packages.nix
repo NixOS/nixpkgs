@@ -9669,17 +9669,25 @@ in
     inherit (darwin) apple_sdk;
   };
 
-  rust_1_44 = callPackage ../development/compilers/rust/1_44.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-  };
+  # Because rustc-1.46.0 enables static PIE by default for
+  # `x86_64-unknown-linux-musl` this release will suffer from:
+  #
+  # https://github.com/NixOS/nixpkgs/issues/94228
+  #
+  # So this commit doesn't remove the 1.45.2 release.
   rust_1_45 = callPackage ../development/compilers/rust/1_45.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+    llvmPackages = llvmPackages_10;
   };
-  rust = rust_1_45;
+  rust_1_46 = callPackage ../development/compilers/rust/1_46.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+    llvmPackages = llvmPackages_10;
+  };
+  rust = rust_1_46;
 
-  rustPackages_1_44 = rust_1_44.packages.stable;
   rustPackages_1_45 = rust_1_45.packages.stable;
-  rustPackages = rustPackages_1_45;
+  rustPackages_1_46 = rust_1_46.packages.stable;
+  rustPackages = rustPackages_1_46;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
 
@@ -11734,10 +11742,9 @@ in
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo4 = texinfo413;
   texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
-  texinfo6_5 = callPackage ../development/tools/misc/texinfo/6.5.nix { };
+  texinfo6_5 = callPackage ../development/tools/misc/texinfo/6.5.nix { }; # needed for allegro
   texinfo6 = callPackage ../development/tools/misc/texinfo/6.7.nix { };
-  # Temporarily use older version on Darwin until it works.
-  texinfo = if stdenv.isDarwin then texinfo6_5 else texinfo6;
+  texinfo = texinfo6;
   texinfoInteractive = appendToName "interactive" (
     texinfo.override { interactive = true; }
   );
@@ -16858,6 +16865,8 @@ in
 
   rpcbind = callPackage ../servers/rpcbind { };
 
+  rpcsvc-proto = callPackage ../tools/misc/rpcsvc-proto { };
+
   libmysqlclient = libmysqlclient_3_1;
   libmysqlclient_3_1 = mariadb-connector-c_3_1;
   mariadb-connector-c = mariadb-connector-c_3_1;
@@ -20798,7 +20807,7 @@ in
 
   firefoxPackages = recurseIntoAttrs (callPackage ../applications/networking/browsers/firefox/packages.nix {
     callPackage = pkgs.newScope {
-      inherit (rustPackages_1_44) cargo rustc;
+      inherit (rustPackages) cargo rustc;
       libpng = libpng_apng;
       python = python2;
       gnused = gnused_422;
@@ -23693,8 +23702,9 @@ in
   thonny = callPackage ../applications/editors/thonny { };
 
   thunderbird = thunderbird-78;
+
   thunderbird-78 = callPackage ../applications/networking/mailreaders/thunderbird {
-    inherit (rustPackages_1_44) cargo rustc;
+    inherit (rustPackages) cargo rustc;
     libpng = libpng_apng;
     icu = icu67;
     libvpx = libvpx_1_8;
@@ -23702,7 +23712,7 @@ in
   };
 
   thunderbird-68 = callPackage ../applications/networking/mailreaders/thunderbird/68.nix {
-    inherit (rustPackages_1_44) cargo rustc;
+    inherit (rustPackages) cargo rustc;
     libpng = libpng_apng;
     nss = nss_3_44;
     gtk3Support = true;

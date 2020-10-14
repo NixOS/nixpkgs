@@ -1,4 +1,4 @@
-From b3bc0aa899c51d19edfb53af2b00dde64123ab06 Mon Sep 17 00:00:00 2001
+From f7c462d37063b0077345395f54377c39d1ef0590 Mon Sep 17 00:00:00 2001
 From: Nikolay Amiantov <ab@fmap.me>
 Date: Thu, 25 Jul 2019 20:45:55 +0300
 Subject: [PATCH 15/18] systemd-shutdown: execute scripts in
@@ -23,5 +23,5 @@ index 06c9710c6e..dadcc3117d 100644
          /* The log target defaults to console, but the original systemd process will pass its log target in through a
           * command line argument, which will override this default. Also, ensure we'll never log to the journal or
 -- 
-2.27.0
+2.28.0
 

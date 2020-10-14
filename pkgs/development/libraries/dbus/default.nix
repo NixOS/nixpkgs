@@ -10,6 +10,9 @@
 , libSM ? null
 , x11Support ? (stdenv.isLinux || stdenv.isDarwin)
 , dbus
+, docbook_xml_dtd_44
+, docbook-xsl-nons
+, xmlto
 }:
 
 assert
@@ -43,10 +46,13 @@ stdenv.mkDerivation rec {
       --replace 'DBUS_DAEMONDIR"/dbus-daemon"' '"/run/current-system/sw/bin/dbus-daemon"'
   '';
 
-  outputs = [ "out" "dev" "lib" "doc" ];
+  outputs = [ "out" "dev" "lib" "doc" "man" ];
 
   nativeBuildInputs = [
     pkgconfig
+    docbook_xml_dtd_44
+    docbook-xsl-nons
+    xmlto
   ];
 
   propagatedBuildInputs = [
@@ -63,6 +69,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-user-session"
+    "--enable-xml-docs"
     "--libexecdir=${placeholder ''out''}/libexec"
     "--datadir=/etc"
     "--localstatedir=/var"
