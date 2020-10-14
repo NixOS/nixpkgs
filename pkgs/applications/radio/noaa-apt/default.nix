@@ -59,6 +59,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "http://noaa-apt.mbernardi.com.ar/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ trepetti ];
+    platforms = platforms.all;
     changelog = "https://github.com/martinber/noaa-apt/releases/tag/v${version}";
   };
 }
