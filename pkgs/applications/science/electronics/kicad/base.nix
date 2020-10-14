@@ -1,46 +1,59 @@
-{ lib, stdenv, fetchFromGitLab, cmake, libGLU, libGL, zlib, wxGTK
-, libX11, gettext, glew, glm, cairo, curl, openssl, boost, pkgconfig
-, doxygen, pcre, libpthreadstubs, libXdmcp, fetchpatch, lndir, callPackages
+{ stdenv
+, fetchFromGitLab
+, cmake
+, libGLU
+, libGL
+, zlib
+, wxGTK
+, libX11
+, gettext
+, glew
+, glm
+, cairo
+, curl
+, openssl
+, boost
+, pkgconfig
+, doxygen
+, pcre
+, libpthreadstubs
+, libXdmcp
+, fetchpatch
+, lndir
+, callPackage
 
-, stable ? true
-, baseName ? "kicad"
-, versions ? { }
-, oceSupport ? false, opencascade
-, withOCCT ? true, opencascade-occt
-, ngspiceSupport ? true, libngspice
-, scriptingSupport ? true, swig, python, wxPython
-, debug ? false, valgrind
-, withI18n ? true
+, stable
+, baseName
+, kicadSrc
+, kicadVersion
+, i18n
+, withOCE
+, opencascade
+, withOCC
+, opencascade-occt
+, withNgspice
+, libngspice
+, withScripting
+, swig
+, python
+, wxPython
+, debug
+, valgrind
+, withI18n
+, gtk3
 }:
 
-assert ngspiceSupport -> libngspice != null;
-
-with lib;
+assert stdenv.lib.asserts.assertMsg (!(withOCE && stdenv.isAarch64)) "OCE fails a test on Aarch64";
+assert stdenv.lib.asserts.assertMsg (!(withOCC && withOCE))
+  "Only one of OCC and OCE may be enabled";
 let
-
-  versionConfig = versions.${baseName};
-
-  # oce on aarch64 fails a test
-  withOCE = oceSupport && !stdenv.isAarch64;
-  withOCC = (withOCCT && !withOCE) || (oceSupport && stdenv.isAarch64);
-
-  libraries = callPackages ./libraries.nix versionConfig.libVersion;
-
+  inherit (stdenv.lib) optional optionals;
 in
 stdenv.mkDerivation rec {
-
-  i18n = libraries.i18n;
-
   pname = "kicad-base";
-  version = "${builtins.substring 0 10 versions.${baseName}.kicadVersion.src.rev}";
+  version = kicadVersion;
 
-  src = fetchFromGitLab (
-    {
-      group = "kicad";
-      owner = "code";
-      repo = "kicad";
-    } // versionConfig.kicadVersion.src
-  );
+  src = kicadSrc;
 
   # quick fix for #72248
   # should be removed if a a more permanent fix is published
@@ -66,15 +79,15 @@ stdenv.mkDerivation rec {
   makeFlags = optional (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
 
   cmakeFlags =
-    optionals (scriptingSupport) [
+    optionals (withScripting) [
       "-DKICAD_SCRIPTING=ON"
       "-DKICAD_SCRIPTING_MODULES=ON"
       "-DKICAD_SCRIPTING_PYTHON3=ON"
       "-DKICAD_SCRIPTING_WXPYTHON_PHOENIX=ON"
     ]
-    ++ optional (!scriptingSupport)
+    ++ optional (!withScripting)
       "-DKICAD_SCRIPTING=OFF"
-    ++ optional (ngspiceSupport) "-DKICAD_SPICE=ON"
+    ++ optional (withNgspice) "-DKICAD_SPICE=ON"
     ++ optional (!withOCE) "-DKICAD_USE_OCE=OFF"
     ++ optional (!withOCC) "-DKICAD_USE_OCC=OFF"
     ++ optionals (withOCE) [
@@ -95,11 +108,25 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake doxygen pkgconfig lndir ];
 
   buildInputs = [
-    libGLU libGL zlib libX11 wxGTK pcre libXdmcp gettext
-    glew glm libpthreadstubs cairo curl openssl boost
+    libGLU
+    libGL
+    zlib
+    libX11
+    wxGTK
+    pcre
+    libXdmcp
+    gettext
+    glew
+    glm
+    libpthreadstubs
+    cairo
+    curl
+    openssl
+    boost
+    gtk3
   ]
-  ++ optionals (scriptingSupport) [ swig python wxPython ]
-  ++ optional (ngspiceSupport) libngspice
+  ++ optionals (withScripting) [ swig python wxPython ]
+  ++ optional (withNgspice) libngspice
   ++ optional (withOCE) opencascade
   ++ optional (withOCC) opencascade-occt
   ++ optional (debug) valgrind
@@ -124,7 +151,7 @@ stdenv.mkDerivation rec {
       the libraries are passed via an env var in the wrapper, default.nix
     '';
     homepage = "https://www.kicad-pcb.org/";
-    license = licenses.agpl3;
-    platforms = platforms.all;
+    license = stdenv.lib.licenses.agpl3;
+    platforms = stdenv.lib.platforms.all;
   };
 }

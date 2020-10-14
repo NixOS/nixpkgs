@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, mkDerivation
+{ stdenv, fetchFromGitHub, fetchpatch, mkDerivation
 , qtbase, qtsvg, qtserialport, qtwebengine, qtmultimedia, qttools
 , qtconnectivity, qtcharts, libusb-compat-0_1
 , yacc, flex, zlib, qmake, makeDesktopItem, makeWrapper
@@ -16,13 +16,13 @@ let
   };
 in mkDerivation rec {
   pname = "golden-cheetah";
-  version = "3.5-RC2X";
+  version = "3.5";
 
   src = fetchFromGitHub {
     owner = "GoldenCheetah";
     repo = "GoldenCheetah";
     rev = "V${version}";
-    sha256 = "1d85700gjbcw2badwz225rjdr954ai89900vp8sal04sk79wbr6g";
+    sha256 = "1lyd0b2s3s9c2ppj7l4hf3s4gfzscaaam2pbiaby714bi9nr0ka7";
   };
 
   buildInputs = [
@@ -30,6 +30,15 @@ in mkDerivation rec {
     qtconnectivity qtcharts libusb-compat-0_1
   ];
   nativeBuildInputs = [ flex makeWrapper qmake yacc ];
+
+  patches = [
+    # allow building with bison 3.7
+    # PR at https://github.com/GoldenCheetah/GoldenCheetah/pull/3590
+    (fetchpatch {
+      url = "https://github.com/GoldenCheetah/GoldenCheetah/commit/e1f42f8b3340eb4695ad73be764332e75b7bce90.patch";
+      sha256 = "1h0y9vfji5jngqcpzxna5nnawxs77i1lrj44w8a72j0ah0sznivb";
+    })
+  ];
 
   NIX_LDFLAGS = "-lz";
 

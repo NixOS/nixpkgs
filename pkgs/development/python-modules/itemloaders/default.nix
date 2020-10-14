@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "itemloaders";
-  version = "1.0.1";
+  version = "1.0.3";
 
   disabled = isPy27;
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "scrapy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0frs0s876ddha844vhnhhiggyk3qbhhngrwkvgg3c0mrnn282f6k";
+    sha256 = "1s8c2il7jyfixpb7h5zq0lf4s07pqwia4ycpf3slb8whcp0h8bfm";
   };
 
   propagatedBuildInputs = [ w3lib parsel jmespath itemadapter ];

@@ -4,7 +4,7 @@
 , freetype, gdk-pixbuf, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
 , libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb
-, mesa, nspr, nss, pango, systemd, libappindicator-gtk3
+, mesa, nspr, nss, pango, systemd, libappindicator-gtk3, libdbusmenu
 }:
 
 let
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
     gdk-pixbuf glib gtk3 libnotify libX11 libXcomposite libuuid
     libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
     libXtst nspr nss libxcb pango systemd libXScrnSaver
-    libappindicator-gtk3
+    libappindicator-gtk3 libdbusmenu
    ];
 
   installPhase = ''

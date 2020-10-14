@@ -1,5 +1,6 @@
 { stdenv
 , buildPythonPackage
+, isPy3k
 , fetchPypi
 , pep8
 }:
@@ -7,6 +8,8 @@
 buildPythonPackage rec {
   pname = "shortuuid";
   version = "1.0.1";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;

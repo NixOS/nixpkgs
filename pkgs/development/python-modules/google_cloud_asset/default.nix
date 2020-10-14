@@ -1,32 +1,37 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
-, enum34
-, grpc_google_iam_v1
-, google_api_core
-, pytest
-, mock
-}:
+{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, grpc_google_iam_v1
+, google_api_core, google-cloud-access-context-manager, google-cloud-org-policy
+, libcst, proto-plus, pytest, pytest-asyncio, pytestCheckHook, mock }:
 
 buildPythonPackage rec {
   pname = "google-cloud-asset";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fd4c0f7f61a8a1c5907cd6cc27a028b16236bf3d982ff412df0d2c981cef5ae5";
+    sha256 = "14r77bcxy7bmqhmz2hzcf3km2y4vivf5sfzgqjwlyynaydhn4f6j";
   };
 
-  checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ enum34 grpc_google_iam_v1 google_api_core ];
+  disabled = pythonOlder "3.6";
 
-  checkPhase = ''
-    pytest tests/unit
+  checkInputs = [ mock pytest-asyncio pytestCheckHook ];
+  disabledTests = [ "asset_service_transport_auth_adc" ];
+  propagatedBuildInputs = [
+    grpc_google_iam_v1
+    google_api_core
+    google-cloud-access-context-manager
+    google-cloud-org-policy
+    libcst
+    proto-plus
+  ];
+
+  # Remove tests intended to be run in VPC
+  preCheck = ''
+    rm -rf tests/system
   '';
 
   meta = with stdenv.lib; {
-    description = "Cloud Asset API API client library";
-    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
+    description = "Python Client for Google Cloud Asset API";
+    homepage = "https://github.com/googleapis/python-asset";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

@@ -4,7 +4,7 @@
 , srht, minio, pygit2, scmsrht }:
 
 let
-  version = "0.60.7";
+  version = "0.61.10";
 
   buildShell = src: buildGoModule {
     inherit src version;
@@ -21,13 +21,13 @@ let
   buildKeys = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-keys";
-    vendorSha256 = "0lks3js57bb41x1ry5xfadlzf0v2gm68g7h3j94gzlm6j4jfprk9";
+    vendorSha256 = "1d94cqy7x0q0agwg515xxsbl70b3qrzxbzsyjhn1pbyj532brn7f";
   };
 
   buildUpdateHook = src: buildGoModule {
     inherit src version;
     pname = "gitsrht-update-hook";
-    vendorSha256 = "06ykh9ncamd922xsd329jpn293wsq6vkqnlf3sckjlp2hm290pd8";
+    vendorSha256 = "0fwzqpjv8x5y3w3bfjd0x0cvqjjak23m0zj88hf32jpw49xmjkih";
   };
 
   buildAPI = src: buildGoModule {
@@ -42,7 +42,7 @@ in buildPythonPackage rec {
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/git.sr.ht";
     rev = version;
-    sha256 = "EdxgT6IQZgj3KeU3UC+QAQb7BilBY769NhJK633tmE4=";
+    sha256 = "0g7aj5wlns0m3kf2aajqjjb5fwk5vbb8frrkdfp4118235h3xcqy";
   };
 
   nativeBuildInputs = srht.nativeBuildInputs;

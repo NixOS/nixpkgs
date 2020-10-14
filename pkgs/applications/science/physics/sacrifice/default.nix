@@ -14,6 +14,7 @@ stdenv.mkDerivation {
 
   patches = [
     ./compat.patch
+    ./pythia83xx.patch
   ];
 
   preConfigure = ''

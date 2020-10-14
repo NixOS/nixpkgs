@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.4.0";
 
   src = fetchurl {
-    url = "https://github.com/sbt/sbt/releases/download/v${version}/sbt-${version}.tgz";
+    url =
+      "https://github.com/sbt/sbt/releases/download/v${version}/sbt-${version}.tgz";
     sha256 = "1mgfs732w1c1p7dna7h47x8h073lvjs224fqlpkkvq10153mnxxl";
   };
 
@@ -13,15 +14,17 @@ stdenv.mkDerivation rec {
     echo -java-home ${jre.home} >>conf/sbtopts
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = stdenv.lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
-  buildInputs = [ zlib ];
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [ zlib ];
 
   installPhase = ''
     mkdir -p $out/share/sbt $out/bin
     cp -ra . $out/share/sbt
     ln -sT ../share/sbt/bin/sbt $out/bin/sbt
-    ln -sT ../share/sbt/bin/sbtn-x86_64-${ if (stdenv.isDarwin) then "apple-darwin" else "pc-linux"} $out/bin/sbtn
+    ln -sT ../share/sbt/bin/sbtn-x86_64-${
+      if (stdenv.isDarwin) then "apple-darwin" else "pc-linux"
+    } $out/bin/sbtn
   '';
 
   meta = with stdenv.lib; {
