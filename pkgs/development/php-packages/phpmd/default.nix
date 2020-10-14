@@ -1,7 +1,9 @@
-{ mkDerivation, fetchurl, pkgs, lib, php, isPhp74 }:
+{ mkDerivation, fetchurl, pkgs, lib, php }:
 let
   pname = "phpmd";
   version = "2.8.2";
+
+  isPhp74 = lib.versionAtLeast php.version "7.4";
 in
 mkDerivation {
   inherit pname version;
