@@ -20926,6 +20926,20 @@ let
     buildInputs = [ FileFindRule TestPod TestPodCoverage ];
   };
 
+  TextLayout = buildPerlPackage {
+    pname = "Text-Layout";
+    version = "0.019";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JV/JV/Text-Layout-0.019.tar.gz";
+      sha256 = "a043f2a89e113b29c523a9efa71fa8398ed75edd482193901b38d08dd4a4108e";
+    };
+    buildInputs = [ PDFAPI2 ];
+    meta = {
+      description = "Pango style markup formatting";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TextLorem = buildPerlModule {
     pname = "Text-Lorem";
     version = "0.3";
