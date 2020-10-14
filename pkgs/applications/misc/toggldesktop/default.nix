@@ -139,6 +139,7 @@ buildEnv {
   paths = [ desktopItem toggldesktop-icons toggldesktop-wrapped ];
 
   meta = with lib; {
+    broken = true; # libtoggl is broken
     description = "Client for Toggl time tracking service";
     homepage = "https://github.com/toggl/toggldesktop";
     license = licenses.bsd3;

@@ -16,6 +16,7 @@ let
     type = "Application";
     categories = "Game;";
     genericName = pname;
+    fileValidation = false;
   };
 in stdenv.mkDerivation {
   name = "${pname}-${version}";
