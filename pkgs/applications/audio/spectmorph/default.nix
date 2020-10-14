@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "spectmorph";
-  version = "0.5.1";
+  version = "0.5.2";
   src = fetchurl {
     url = "http://spectmorph.org/files/releases/${pname}-${version}.tar.bz2";
-    sha256 = "06jrfx5g9c56swxn78lix0gyrjkhi21l9wqs56knp8iqcgfi3m0s";
+    sha256 = "0yrq7mknhk096wfsx0q3b6wwa2w5la0rxa113di26rrrw136xl1f";
   };
 
   buildInputs = [  libjack2 lv2 glib qt5.qtbase libao cairo libsndfile fftwFloat ];
