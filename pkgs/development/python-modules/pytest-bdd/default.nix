@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-bdd";
-  version = "3.2.1";
+  version = "4.0.1";
 
   # tests are not included in pypi tarball
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = pname;
     rev = version;
-    sha256 = "02y28l5h1m9grj54p681qvv7nrhd7ly9jkqdchyw4p0lnmcmnsrd";
+    sha256 = "1yqzz44as4pxffmg4hk9lijvnvlc2chg1maq1fbj5i4k4jpagvjz";
   };
 
   propagatedBuildInputs = [ glob2 Mako parse parse-type py pytest six ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   # Tests require extra dependencies
   checkInputs = [ execnet mock pytest ];
   checkPhase = ''
-    pytest
+    PATH=$PATH:$out/bin pytest
   '';
 
   meta = with stdenv.lib; {
