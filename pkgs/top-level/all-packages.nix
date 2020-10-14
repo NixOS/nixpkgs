@@ -15572,6 +15572,8 @@ in
 
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
 
+  unqlite = lowPrio (callPackage ../development/libraries/unqlite { });
+
   inherit (callPackage ../development/libraries/sqlite/tools.nix {
     inherit (darwin.apple_sdk.frameworks) Foundation;
   }) sqlite-analyzer sqldiff;
