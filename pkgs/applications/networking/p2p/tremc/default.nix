@@ -44,6 +44,6 @@ python3Packages.buildPythonApplication rec {
   meta = with stdenv.lib; {
     description = "Curses interface for transmission";
     homepage = "https://github.com/tremc/tremc";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
   };
 }
