@@ -1104,6 +1104,8 @@ in
 
   glyr = callPackage ../tools/audio/glyr { };
 
+  gtklp = callPackage ../tools/misc/gtklp { };
+
   google-amber = callPackage ../tools/graphics/amber { };
 
   hpe-ltfs = callPackage ../tools/backup/hpe-ltfs { };
