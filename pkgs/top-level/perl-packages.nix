@@ -597,6 +597,41 @@ let
     };
   };
 
+  AppMusicChordPro = buildPerlPackage {
+    pname = "App-Music-ChordPro";
+    version = "0.977";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JV/JV/App-Music-ChordPro-0.977.tar.gz";
+      sha256 = "0ggip43cddi5f6rylb07f56dhkfhbcbm621lvcnjfadnn9lrbwqh";
+    };
+    buildInputs = [ PodParser ];
+    propagatedBuildInputs = [ AppPackager FileLoadLines IOString ImageInfo PDFAPI2 StringInterpolateNamed TextLayout ]
+      ++ stdenv.lib.optional (!stdenv.isDarwin) [ Wx ];
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/chordpro
+      rm $out/bin/wxchordpro # Wx not supported on darwin
+    '';
+    meta = {
+      homepage = "http://www.chordpro.org";
+      description = "A lyrics and chords formatting program";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  AppPackager =  buildPerlPackage {
+    pname = "App-Packager";
+    version = "1.430.1";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JV/JV/App-Packager-1.430.1.tar.gz";
+      sha256 = "57f4d014458387f9e2ed2dfd8615d1e2545b8a6504b10af22486578d8be374a3";
+    };
+    meta = {
+      description = "Abstraction for Packagers";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Appperlbrew = buildPerlModule {
     pname = "App-perlbrew";
     version = "0.88";
@@ -7800,6 +7835,19 @@ let
       sha256 = "1xcwjlnxaiwwpn41a5yi6nz95ywh3szq5chdxiwj36kqsvy5000y";
     };
     propagatedBuildInputs = [ HTTPDate ];
+  };
+
+  FileLoadLines = buildPerlPackage {
+    pname = "File-LoadLines";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JV/JV/File-LoadLines-0.02.tar.gz";
+      sha256 = "ab0c1c31cf7b694dd3c9a0707098f7483763d46b60799a7f496ea0588be46b7b";
+    };
+    meta = {
+      description = "Load lines from file";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   FileMimeInfo = buildPerlPackage {
@@ -18234,6 +18282,19 @@ let
     propagatedBuildInputs = [ PadWalker SafeHole ];
   };
 
+  StringInterpolateNamed = buildPerlPackage {
+    pname = "String-Interpolate-Named";
+    version = "1.00";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JV/JV/String-Interpolate-Named-1.00.tar.gz";
+      sha256 = "727299fa69258b604770e059ec4da906bfde71861fdd1e3e89e30677371c5a80";
+    };
+    meta = {
+      description = "Interpolated named arguments in string";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   StringMkPasswd = buildPerlPackage {
     pname = "String-MkPasswd";
     version = "0.05";
@@ -20954,6 +21015,20 @@ let
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
     buildInputs = [ FileFindRule TestPod TestPodCoverage ];
+  };
+
+  TextLayout = buildPerlPackage {
+    pname = "Text-Layout";
+    version = "0.019";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JV/JV/Text-Layout-0.019.tar.gz";
+      sha256 = "a043f2a89e113b29c523a9efa71fa8398ed75edd482193901b38d08dd4a4108e";
+    };
+    buildInputs = [ PDFAPI2 ];
+    meta = {
+      description = "Pango style markup formatting";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   TextLorem = buildPerlModule {
