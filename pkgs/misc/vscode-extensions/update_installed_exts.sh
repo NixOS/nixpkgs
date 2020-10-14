@@ -44,7 +44,7 @@ function get_vsixpkg() {
 EOF
 }
 
-# See if we can find our code binary somewhere.
+# See if we can find our `code` binary somewhere.
 if [ $# -ne 0 ]; then
     CODE=$1
 else
