@@ -16,6 +16,7 @@ let
       nativeBuildInputs = [ cmake ];
 
       cmakeFlags = [
+        "-DSPDLOG_BUILD_SHARED=ON"
         "-DSPDLOG_BUILD_EXAMPLE=OFF"
         "-DSPDLOG_BUILD_BENCH=OFF"
         "-DSPDLOG_BUILD_TESTS=ON"
@@ -29,6 +30,7 @@ let
       '';
 
       doCheck = true;
+      preCheck = "export LD_LIBRARY_PATH=$(pwd):$LD_LIBRARY_PATH";
 
       meta = with stdenv.lib; {
         description    = "Very fast, header only, C++ logging library";
