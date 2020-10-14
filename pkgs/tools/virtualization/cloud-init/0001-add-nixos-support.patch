@@ -1,4 +1,4 @@
-From 64a767136c16aad2b94b4d9a3268b0d4deba7272 Mon Sep 17 00:00:00 2001
+From 269cc4c9558549f340ec186d9246654564b2f633 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
 Date: Tue, 18 Aug 2020 10:22:36 +0100
 Subject: [PATCH] add nixos support
@@ -14,13 +14,13 @@ Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
  create mode 100644 cloudinit/distros/nixos.py
 
 diff --git a/cloudinit/distros/__init__.py b/cloudinit/distros/__init__.py
-index c7163e1c..c147e2b3 100755
+index 2537608f..c533b585 100755
 --- a/cloudinit/distros/__init__.py
 +++ b/cloudinit/distros/__init__.py
-@@ -46,6 +46,7 @@ OSFAMILIES = {
-     'freebsd': ['freebsd'],
+@@ -47,6 +47,7 @@ OSFAMILIES = {
+     'gentoo': ['gentoo'],
+     'redhat': ['amazon', 'centos', 'fedora', 'rhel'],
      'suse': ['opensuse', 'sles'],
-     'arch': ['arch'],
 +    'nixos': ['nixos'],
  }
  
