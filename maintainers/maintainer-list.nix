@@ -6539,6 +6539,12 @@
     githubId = 1788628;
     name = "pandaman";
   };
+  panurg = {
+    email = "alexander.n.abrosimov@gmail.com";
+    github = "panurg";
+    githubId = 3534692;
+    name = "Alexander Abrosimov";
+  };
   paperdigits = {
     email = "mica@silentumbrella.com";
     github = "paperdigits";

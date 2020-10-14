@@ -9615,6 +9615,8 @@ in
 
   open-watcom-bin = callPackage ../development/compilers/open-watcom-bin { };
 
+  pawn = callPackage ../development/compilers/pawn { };
+
   pforth = callPackage ../development/compilers/pforth {};
 
   picat = callPackage ../development/compilers/picat { };
