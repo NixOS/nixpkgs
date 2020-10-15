@@ -99,6 +99,16 @@
       to <literal>/run/pdns-recursor</literal> to match upstream.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      PowerDNS has been updated from <literal>4.2.x</literal> to <literal>4.3.x</literal>. Please
+      be sure to review the <link xlink:href="https://doc.powerdns.com/authoritative/upgrading.html#x-to-4-3-0">Upgrade Notes</link>
+      provided by upstream before upgrading. Worth specifically noting is that the service now runs
+      entirely as a dedicated <literal>pdns</literal> user, instead of starting as <literal>root</literal>
+      and dropping privileges, as well as the default <literal>socket-dir</literal> location changing from
+      <literal>/var/lib/powerdns</literal> to <literal>/run/pdns</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
