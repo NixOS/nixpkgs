@@ -4,11 +4,11 @@ with python.pkgs;
 
 buildPythonApplication rec {
   pname = "rdbtools";
-  version = "0.1.14";
+  version = "0.1.15";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03vdwwkqz8py6c3wfgx402rn8pjjfn44w3gbxzr60lbkx27m63yj";
+    sha256 = "689e57e42f43bdc73ea4e893d9676819980d17968696826b69fbd951f59772de";
   };
 
   propagatedBuildInputs = [ redis python-lzf ];
