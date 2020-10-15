@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, autoconf, automake, pkgconfig, libtool, pam, libHX, libxml2, pcre, perl, openssl, cryptsetup, utillinux }:
+{ stdenv, fetchgit, autoconf, automake, pkgconfig, libtool, pam, libHX, libxml2, pcre, perl, openssl, cryptsetup, utillinux }:
 
 stdenv.mkDerivation rec {
-  name = "pam_mount-2.16";
+  name = "pam_mount-2.16-g40b6f2f";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/pam-mount/pam_mount/2.16/${name}.tar.xz";
-    sha256 = "1rvi4irb7ylsbhvx1cr6islm2xxw1a4b19q6z4a9864ndkm0f0mf";
+  src = fetchgit {
+    url    = "git://git.code.sf.net/p/pam-mount/pam-mount";
+    rev    = "40b6f2f920922ff8bbfb45d1d5dfd5a554c16f62";
+    sha256 = "01f6fdy3abld4465yqkshn1p7ja8ydglzzc48iqjw4q46hgz6rv1";
   };
 
   nativeBuildInputs = [ pkgconfig ];
