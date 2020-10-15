@@ -9780,4 +9780,10 @@
     github = "hloeffler";
     githubId = 6627191;
   };
+  wilsonehusin = {
+    name = "Wilson E. Husin";
+    email = "wilsonehusin@gmail.com";
+    github = "wilsonehusin";
+    githubId = 14004487;
+  };
 }
