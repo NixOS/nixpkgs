@@ -5714,6 +5714,8 @@ in
 
   networkmanager_strongswan = callPackage ../tools/networking/network-manager/strongswan { };
 
+  networkmanager-sstp = callPackage ../tools/networking/network-manager/sstp { };
+
   networkmanagerapplet = callPackage ../tools/networking/network-manager/applet { };
 
   libnma = callPackage ../tools/networking/network-manager/libnma { };
