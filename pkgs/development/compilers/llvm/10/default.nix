@@ -34,7 +34,6 @@ let
     llvm = callPackage ./llvm.nix { };
 
     clang-unwrapped = callPackage ./clang {
-      inherit (tools) lld;
       inherit clang-tools-extra_src;
     };
 

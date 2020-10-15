@@ -9808,7 +9808,7 @@ in
   llvmPackages_10 = callPackage ../development/compilers/llvm/10 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_10.tools;
-    targetLlvmLibraries = targetPackages.llvmPackages_10.libraries;
+    targetLlvmLibraries = targetPackages.llvmPackages_10.libraries or llvmPackages_10.libraries;
   };
 
   llvmPackages_11 = callPackage ../development/compilers/llvm/11 ({

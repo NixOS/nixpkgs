@@ -19,6 +19,7 @@
   || stdenv.isAarch32 # broken for the armv7l builder
 )
 , enablePolly ? true
+, pkgsBuildBuild
 }:
 
 let
@@ -121,6 +122,19 @@ in stdenv.mkDerivation (rec {
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DCMAKE_CROSSCOMPILING=True"
     "-DLLVM_TABLEGEN=${buildPackages.llvm_10}/bin/llvm-tblgen"
+    (
+      let
+        nativeCC = pkgsBuildBuild.stdenv.cc;
+        nativeBintools = nativeCC.bintools.bintools;
+        nativeToolchainFlags = [
+          "-DCMAKE_C_COMPILER=${nativeCC}/bin/${nativeCC.targetPrefix}cc"
+          "-DCMAKE_CXX_COMPILER=${nativeCC}/bin/${nativeCC.targetPrefix}c++"
+          "-DCMAKE_AR=${nativeBintools}/bin/${nativeBintools.targetPrefix}ar"
+          "-DCMAKE_STRIP=${nativeBintools}/bin/${nativeBintools.targetPrefix}strip"
+          "-DCMAKE_RANLIB=${nativeBintools}/bin/${nativeBintools.targetPrefix}ranlib"
+        ];
+      in "-DCROSS_TOOLCHAIN_FLAGS_NATIVE:list=${lib.concatStringsSep ";" nativeToolchainFlags}"
+    )
   ];
 
   postBuild = ''
@@ -148,6 +162,9 @@ in stdenv.mkDerivation (rec {
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM.dylib" "$lib/lib/libLLVM.dylib"
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
+  ''
+  + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    cp NATIVE/bin/llvm-config $out/bin/llvm-config-native
   '';
 
   doCheck = stdenv.isLinux && (!stdenv.isx86_32);
