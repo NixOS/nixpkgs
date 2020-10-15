@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.116.3";
+  version = "0.116.4";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ ]; # missing inputs: accuweather
@@ -570,7 +570,7 @@
     "onboarding" = ps: with ps; [ aiohttp-cors pillow ]; # missing inputs: home-assistant-frontend
     "onewire" = ps: with ps; [ ]; # missing inputs: pyownet
     "onkyo" = ps: with ps; [ onkyo-eiscp ];
-    "onvif" = ps: with ps; [ ha-ffmpeg ]; # missing inputs: WSDiscovery onvif-zeep-async
+    "onvif" = ps: with ps; [ ha-ffmpeg zeep ]; # missing inputs: WSDiscovery onvif-zeep-async
     "openalpr_cloud" = ps: with ps; [ ];
     "openalpr_local" = ps: with ps; [ ];
     "opencv" = ps: with ps; [ numpy ]; # missing inputs: opencv-python-headless
