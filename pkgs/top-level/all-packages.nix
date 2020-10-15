@@ -20226,6 +20226,8 @@ in
 
   clipgrab = libsForQt514.callPackage ../applications/video/clipgrab { };
 
+  clipcat = callPackage ../applications/misc/clipcat { };
+
   clipmenu = callPackage ../applications/misc/clipmenu { };
 
   clipit = callPackage ../applications/misc/clipit { };
