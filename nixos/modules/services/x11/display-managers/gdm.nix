@@ -183,13 +183,19 @@ in
       "systemd-udev-settle.service"
     ];
     systemd.services.display-manager.conflicts = [
-       "getty@tty${gdm.initialVT}.service"
-       # TODO: Add "plymouth-quit.service" so GDM can control when plymouth quits.
-       # Currently this breaks switching configurations while using plymouth.
+      "getty@tty${gdm.initialVT}.service"
+      "plymouth-quit.service"
     ];
     systemd.services.display-manager.onFailure = [
       "plymouth-quit.service"
     ];
+
+    # Prevent nixos-rebuild switch from bringing down the graphical
+    # session. (If multi-user.target wants plymouth-quit.service which
+    # conflicts display-manager.service, then when nixos-rebuild
+    # switch starts multi-user.target, display-manager.service is
+    # stopped so plymouth-quit.service can be started.)
+    systemd.services.plymouth-quit.wantedBy = lib.mkForce [];
 
     systemd.services.display-manager.serviceConfig = {
       # Restart = "always"; - already defined in xserver.nix
