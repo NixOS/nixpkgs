@@ -1393,12 +1393,6 @@ self: super: {
   # https://github.com/jgm/commonmark-hs/issues/55
   commonmark-extensions = dontCheck super.commonmark-extensions;
 
-
-  # 2020-10-11: reflex-dom-pandoc and neuron require skylighting >= 9, which we
-  # can‘t support, because there is no pandoc release compatible with this.
-  reflex-dom-pandoc = doJailbreak super.reflex-dom-pandoc;
-  neuron = doJailbreak super.neuron;
-
   # Testsuite trying to run `which haskeline-examples-Test`
   haskeline_0_8_1_0 = dontCheck super.haskeline_0_8_1_0;
 
@@ -1470,11 +1464,14 @@ self: super: {
   cryptonite = doDistribute self.cryptonite_0_27;
 
   # We want the latest version of Pandoc.
+  skylighting = doDistribute super.skylighting_0_10_0_2;
+  skylighting-core = doDistribute super.skylighting-core_0_10_0_2;
   hslua = doDistribute self.hslua_1_1_2;
   jira-wiki-markup = doDistribute self.jira-wiki-markup_1_3_2;
-  pandoc = doDistribute self.pandoc_2_10_1;
-  pandoc-citeproc = doDistribute self.pandoc-citeproc_0_17_0_2;
-  pandoc-types = doDistribute self.pandoc-types_1_21;
+  pandoc = doDistribute self.pandoc_2_11;
+  # jailbreaking pandoc-citeproc because it has not bumped upper bound on pandoc
+  pandoc-citeproc = doJailbreak (doDistribute self.pandoc-citeproc_0_17_0_2);
+  pandoc-types = doDistribute self.pandoc-types_1_22;
   rfc5051 = doDistribute self.rfc5051_0_2;
 
   # The test suite attempts to read `/etc/resolv.conf`, which doesn't work in the sandbox.
