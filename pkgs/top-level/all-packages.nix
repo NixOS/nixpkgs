@@ -26025,6 +26025,8 @@ in
 
   last = callPackage ../applications/science/biology/last { };
 
+  lumpy = callPackage ../applications/science/biology/lumpy { };
+
   macse = callPackage ../applications/science/biology/macse { };
 
   migrate = callPackage ../applications/science/biology/migrate { };
@@ -26100,6 +26102,10 @@ in
   raxml-mpi = appendToName "mpi" (raxml.override {
     mpi = true;
   });
+
+  sambamba = callPackage ../applications/science/biology/sambamba { };
+
+  samblaster = callPackage ../applications/science/biology/samblaster { };
 
   samtools = callPackage ../applications/science/biology/samtools { };
   samtools_0_1_19 = callPackage ../applications/science/biology/samtools/samtools_0_1_19.nix {
