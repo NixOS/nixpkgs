@@ -2986,6 +2986,8 @@ in
 
   cron = callPackage ../tools/system/cron { };
 
+  snooze = callPackage ../tools/system/snooze { };
+
   cudaPackages = recurseIntoAttrs (callPackage ../development/compilers/cudatoolkit {});
   inherit (cudaPackages)
     cudatoolkit_6
