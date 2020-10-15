@@ -150,8 +150,8 @@ in
     environment.sessionVariables.LD_LIBRARY_PATH = mkIf cfg.setLdLibraryPath
       ([ "/run/opengl-driver/lib" ] ++ optional cfg.driSupport32Bit "/run/opengl-driver-32/lib");
 
-    hardware.opengl.package = mkDefault pkgs.mesa.drivers;
-    hardware.opengl.package32 = mkDefault pkgs.pkgsi686Linux.mesa.drivers;
+    hardware.opengl.package = mkDefault pkgs.mesa_drivers;
+    hardware.opengl.package32 = mkDefault pkgs.pkgsi686Linux.mesa_drivers;
 
     boot.extraModulePackages = optional (elem "virtualbox" videoDrivers) kernelPackages.virtualboxGuestAdditions;
   };

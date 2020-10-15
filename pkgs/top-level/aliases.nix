@@ -318,7 +318,6 @@ mapAliases ({
   # gcsecurity bussiness is done: https://www.theregister.co.uk/2018/02/08/bruce_perens_grsecurity_anti_slapp/
   # floating point textures patents are expired,
   # so package reduced to alias
-  mesa_drivers = mesa.drivers;
   mesos = throw "mesos has been removed from nixpkgs, as it's unmaintained"; # added 2020-08-15
   midoriWrapper = midori; # added 2015-01
   mist = throw "mist has been removed as the upstream project has been abandoned, see https://github.com/ethereum/mist#mist-browser-deprecated"; # added 2020-08-15

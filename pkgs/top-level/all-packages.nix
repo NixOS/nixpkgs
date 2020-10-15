@@ -14677,6 +14677,15 @@ in
     inherit (darwin.apple_sdk.libs) Xplugin;
   };
 
+  # mesa_drivers is only for hardware.opengl.package!:
+  mesa_drivers = (mesa.overrideAttrs (oldAttrs: rec {
+    version = "20.2.2";
+    src = fetchurl {
+      url = "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz";
+      sha256 = "0qdqi767vshclnfg9drlsmp2pa17hi7y0172s064jwfgj08fp4qz";
+    };
+  })).drivers;
+
   mesa_glu =  callPackage ../development/libraries/mesa-glu {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
