@@ -244,10 +244,88 @@ in
         cfg.extraConfig
       ];
 
+
+      /* Produces a JBoss CLI script that creates paths and sets
+         attributes matching those described by `attrs`. When the
+         script is run, the existing settings are effectively overlayed
+         by those from `attrs`. Existing attributes can be unset by
+         defining them `null`.
+
+         JBoss paths and attributes / maps are distinguished by their
+         name, where paths follow a `key=value` scheme.
+
+         Example:
+           mkJbossScript {
+             "subsystem=keycloak-server"."spi=hostname" = {
+               "provider=fixed" = null;
+               "provider=default" = {
+                 enabled = true;
+                 properties = {
+                   inherit frontendUrl;
+                   forceBackendUrlToFrontendUrl = false;
+                 };
+               };
+             };
+           }
+           => ''
+             if (outcome != success) of /:read-resource()
+                 /:add()
+             end-if
+             if (outcome != success) of /subsystem=keycloak-server:read-resource()
+                 /subsystem=keycloak-server:add()
+             end-if
+             if (outcome != success) of /subsystem=keycloak-server/spi=hostname:read-resource()
+                 /subsystem=keycloak-server/spi=hostname:add()
+             end-if
+             if (outcome != success) of /subsystem=keycloak-server/spi=hostname/provider=default:read-resource()
+                 /subsystem=keycloak-server/spi=hostname/provider=default:add(enabled = true, properties = { forceBackendUrlToFrontendUrl = false, frontendUrl = "https://keycloak.example.com/auth" })
+             end-if
+             if (result != true) of /subsystem=keycloak-server/spi=hostname/provider=default:read-attribute(name="enabled")
+               /subsystem=keycloak-server/spi=hostname/provider=default:write-attribute(name=enabled, value=true)
+             end-if
+             if (result != false) of /subsystem=keycloak-server/spi=hostname/provider=default:read-attribute(name="properties.forceBackendUrlToFrontendUrl")
+               /subsystem=keycloak-server/spi=hostname/provider=default:write-attribute(name=properties.forceBackendUrlToFrontendUrl, value=false)
+             end-if
+             if (result != "https://keycloak.example.com/auth") of /subsystem=keycloak-server/spi=hostname/provider=default:read-attribute(name="properties.frontendUrl")
+               /subsystem=keycloak-server/spi=hostname/provider=default:write-attribute(name=properties.frontendUrl, value="https://keycloak.example.com/auth")
+             end-if
+             if (outcome != success) of /subsystem=keycloak-server/spi=hostname/provider=fixed:read-resource()
+                 /subsystem=keycloak-server/spi=hostname/provider=fixed:remove()
+             end-if
+           ''
+      */
       mkJbossScript = attrs:
         let
+          /* From a JBoss path and an attrset, produces a JBoss CLI
+             snippet that writes the corresponding attributes starting
+             at `path`. Recurses down into subattrsets as necessary,
+             producing the variable name from its full path in the
+             attrset.
+
+             Example:
+               writeAttributes "/subsystem=keycloak-server/spi=hostname/provider=default" {
+                 enabled = true;
+                 properties = {
+                   forceBackendUrlToFrontendUrl = false;
+                   frontendUrl = "https://keycloak.example.com/auth";
+                 };
+               }
+               => ''
+                 if (result != true) of /subsystem=keycloak-server/spi=hostname/provider=default:read-attribute(name="enabled")
+                   /subsystem=keycloak-server/spi=hostname/provider=default:write-attribute(name=enabled, value=true)
+                 end-if
+                 if (result != false) of /subsystem=keycloak-server/spi=hostname/provider=default:read-attribute(name="properties.forceBackendUrlToFrontendUrl")
+                   /subsystem=keycloak-server/spi=hostname/provider=default:write-attribute(name=properties.forceBackendUrlToFrontendUrl, value=false)
+                 end-if
+                 if (result != "https://keycloak.example.com/auth") of /subsystem=keycloak-server/spi=hostname/provider=default:read-attribute(name="properties.frontendUrl")
+                   /subsystem=keycloak-server/spi=hostname/provider=default:write-attribute(name=properties.frontendUrl, value="https://keycloak.example.com/auth")
+                 end-if
+               ''
+          */
           writeAttributes = path: set:
             let
+              # JBoss expressions like `${var}` need to be prefixed
+              # with `expression` to evaluate.
               prefixExpression = string:
                 let
                   match = (builtins.match ''"\$\{.*}"'' string);
@@ -286,6 +364,23 @@ in
                   (attribute: value: (writeAttribute attribute value))
                   set);
 
+
+          /* Produces an argument list for the JBoss `add()` function,
+             which adds a JBoss path and takes as its arguments the
+             required subpaths and attributes.
+
+             Example:
+               makeArgList {
+                 enabled = true;
+                 properties = {
+                   forceBackendUrlToFrontendUrl = false;
+                   frontendUrl = "https://keycloak.example.com/auth";
+                 };
+               }
+               => ''
+                 enabled = true, properties = { forceBackendUrlToFrontendUrl = false, frontendUrl = "https://keycloak.example.com/auth" }
+               ''
+          */
           makeArgList = set:
             let
               makeArg = attribute: value:
@@ -303,6 +398,13 @@ in
             in
               lib.concatStringsSep ", " (lib.mapAttrsToList makeArg set);
 
+
+          /* Recurses into the `attrs` attrset, beginning at the path
+             resolved from `state.path ++ node`; if `node` is `null`,
+             starts from `state.path`. Only subattrsets that are JBoss
+             paths, i.e. follows the `key=value` format, are recursed
+             into - the rest are considered JBoss attributes / maps.
+          */
           recurse = state: node:
             let
               path = state.path ++ (lib.optional (node != null) node);
