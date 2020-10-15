@@ -30,7 +30,7 @@ let
     "Icon" = nullableToString icon;
     "Comment" = nullableToString comment;
     "Terminal" = nullableToString terminal;
-    "Name" = toString name;
+    "Name" = toString desktopName;
     "GenericName" = nullableToString genericName;
     "MimeType" = nullableToString mimeType;
     "Categories" = nullableToString categories;
