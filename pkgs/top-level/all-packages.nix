@@ -21077,6 +21077,8 @@ in
 
   lwm = callPackage ../applications/window-managers/lwm { };
 
+  marker = callPackage ../applications/editors/marker { };
+
   musikcube = callPackage ../applications/audio/musikcube {};
 
   pinboard-notes-backup = haskell.lib.overrideCabal
