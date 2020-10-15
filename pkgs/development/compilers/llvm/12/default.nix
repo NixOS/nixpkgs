@@ -1,6 +1,5 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake, gccForLibs
 , libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith, wrapBintoolsWith
-, buildPackages
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 , darwin
@@ -27,11 +26,11 @@ let
   };
 
   tools = lib.makeExtensible (tools: let
-    callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
+    callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch buildLlvmTools; });
     mkExtraBuildCommands = cc: ''
       rsrc="$out/resource-root"
       mkdir "$rsrc"
-      ln -s "${cc}/lib/clang/${release_version}/include" "$rsrc"
+      ln -s "${cc.lib}/lib/clang/${release_version}/include" "$rsrc"
       ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
       ln -s "${targetLlvmLibraries.compiler-rt.out}/share" "$rsrc/share"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
@@ -39,22 +38,27 @@ let
 
   in {
 
-    llvm = callPackage ./llvm {
+    libllvm = callPackage ./llvm {
       inherit llvm_meta;
     };
 
-    clang-unwrapped = callPackage ./clang {
-      inherit (tools) lld;
+    # `llvm` historically had the binaries. But this migration
+    # technique also impedes `lib.get*`. Perhaps we will revisit it.
+    llvm = tools.libllvm.out;
+
+    libclang = callPackage ./clang {
       inherit clang-tools-extra_src llvm_meta;
     };
 
+    clang-unwrapped = tools.libclang.out;
+
     # disabled until recommonmark supports sphinx 3
-    #Llvm-manpages = lowPrio (tools.llvm.override {
+    #Llvm-manpages = lowPrio (tools.libllvm.override {
     #  enableManpages = true;
     #  python3 = pkgs.python3;  # don't use python-boot
     #});
 
-    clang-manpages = lowPrio (tools.clang-unwrapped.override {
+    clang-manpages = lowPrio (tools.libclang.override {
       enableManpages = true;
       python3 = pkgs.python3;  # don't use python-boot
     });
@@ -64,8 +68,6 @@ let
     #   enableManpages = true;
     #   python3 = pkgs.python3;  # don't use python-boot
     # });
-
-    libclang = tools.clang-unwrapped.lib;
 
     clang = if stdenv.cc.isGNU then tools.libstdcxxClang else tools.libcxxClang;
 

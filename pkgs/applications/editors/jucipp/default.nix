@@ -56,8 +56,8 @@ stdenv.mkDerivation rec {
     e = "\");";
     v = lib.getVersion llvmPackages.clang;
   in
-    p+llvmPackages.libcxx+"/include/c++/v1"+e
-    +p+llvmPackages.clang-unwrapped+"/lib/clang/"+v+"/include/"+e
+    p+llvmPackages.libcxx.dev+"/include/c++/v1"+e
+    +p+llvmPackages.clang-unwrapped.lib+"/lib/clang/"+v+"/include/"+e
     +p+glibc.dev+"/include"+e;
 
   preConfigure = ''

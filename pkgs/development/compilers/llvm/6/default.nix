@@ -1,6 +1,5 @@
 { lowPrio, newScope, pkgs, lib, stdenv, cmake, gccForLibs
 , libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith
-, buildPackages
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 }:
@@ -18,34 +17,43 @@ let
   clang-tools-extra_src = fetch "clang-tools-extra" "1w8ml7fyn4vyxmy59n2qm4r1k1kgwgwkaldp6m45fdv4g0kkfbhd";
 
   tools = lib.makeExtensible (tools: let
-    callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
+    callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch buildLlvmTools; });
     mkExtraBuildCommands = cc: ''
       rsrc="$out/resource-root"
       mkdir "$rsrc"
-      ln -s "${cc}/lib/clang/${release_version}/include" "$rsrc"
+      ln -s "${cc.lib}/lib/clang/${release_version}/include" "$rsrc"
       ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
     '';
+
   in {
 
-    llvm = callPackage ./llvm { };
+    libllvm = callPackage ./llvm { };
 
-    clang-unwrapped = callPackage ./clang {
+    # `llvm` historically had the binaries. But this migration
+    # technique also impedes `lib.get*`. Perhaps we will revisit it.
+    llvm = tools.libllvm.out;
+
+    libllvm-polly = callPackage ./llvm { enablePolly = true; };
+
+    llvm-polly = tools.libllvm-polly.lib;
+
+    libclang = callPackage ./clang {
       inherit clang-tools-extra_src;
     };
 
-    llvm-manpages = lowPrio (tools.llvm.override {
+    clang-unwrapped = tools.libclang.out;
+
+    llvm-manpages = lowPrio (tools.libllvm.override {
       enableManpages = true;
       enableSharedLibraries = false;
       python3 = pkgs.python3;  # don't use python-boot
     });
 
-    clang-manpages = lowPrio (tools.clang-unwrapped.override {
+    clang-manpages = lowPrio (tools.libclang.override {
       enableManpages = true;
       python3 = pkgs.python3;  # don't use python-boot
     });
-
-    libclang = tools.clang-unwrapped.lib;
 
     clang = if stdenv.cc.isGNU then tools.libstdcxxClang else tools.libcxxClang;
 

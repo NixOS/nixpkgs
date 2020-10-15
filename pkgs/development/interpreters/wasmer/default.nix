@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     "--features" "test-cranelift,test-jit"
   ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   meta = with lib; {
     description = "The Universal WebAssembly Runtime";

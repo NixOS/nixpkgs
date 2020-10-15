@@ -370,7 +370,7 @@ stdenv.mkDerivation {
       done
     ''
     + optionalString (libcxx.isLLVM or false) (''
-      echo "-isystem ${libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
+      echo "-isystem ${lib.getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
       echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
     '' + lib.optionalString stdenv.targetPlatform.isLinux ''
       echo "-lc++abi" >> $out/nix-support/libcxx-ldflags
@@ -404,7 +404,7 @@ stdenv.mkDerivation {
       echo "$ccLDFlags" >> $out/nix-support/cc-ldflags
       echo "$ccCFlags" >> $out/nix-support/cc-cflags
     '' + optionalString (targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false)) ''
-      echo " -L${libcxx}/lib" >> $out/nix-support/cc-ldflags
+      echo " -L${lib.getLib libcxx}/lib" >> $out/nix-support/cc-ldflags
     ''
 
     ##

@@ -11,14 +11,7 @@ stdenv.mkDerivation {
 
   src = fetch "libcxxabi" "1zcqxsdjhawgz1cvpk07y3jl6fg9p3ay4nl69zsirqb2ghgyhhb2";
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optional withLibunwind libunwind;
-
-  cmakeFlags = lib.optionals standalone [
-    "-DLLVM_ENABLE_LIBCXX=ON"
-  ] ++ lib.optionals (standalone && withLibunwind) [
-    "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
-  ] ++ lib.optional (!enableShared) "-DLIBCXXABI_ENABLE_SHARED=OFF";
+  outputs = [ "out" "dev" ];
 
   postUnpack = ''
     unpackFile ${libcxx.src}
@@ -29,6 +22,19 @@ stdenv.mkDerivation {
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     patch -p1 -d $(ls -d libcxx-*) -i ${../../libcxx-0001-musl-hacks.patch}
   '';
+
+  patches = [
+    ./gnu-install-dirs.patch
+  ];
+
+  nativeBuildInputs = [ cmake ];
+  buildInputs = lib.optional withLibunwind libunwind;
+
+  cmakeFlags = lib.optionals standalone [
+    "-DLLVM_ENABLE_LIBCXX=ON"
+  ] ++ lib.optionals (standalone && withLibunwind) [
+    "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
+  ] ++ lib.optional (!enableShared) "-DLIBCXXABI_ENABLE_SHARED=OFF";
 
   installPhase = if stdenv.isDarwin
     then ''

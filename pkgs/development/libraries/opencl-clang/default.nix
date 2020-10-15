@@ -32,7 +32,9 @@ let
 
   passthru = rec {
 
-    clang-unwrapped = addPatches "clang" llvmPkgs.clang-unwrapped;
+    libclang = addPatches "clang" llvmPkgs.libclang;
+
+    clang-unwrapped = libclang.out;
 
     clang = llvmPkgs.clang.override {
       cc = clang-unwrapped;
@@ -53,7 +55,7 @@ let
 
   library = let
     inherit (llvmPkgs) llvm;
-    inherit (if buildWithPatches then passthru else llvmPkgs) clang-unwrapped spirv-llvm-translator;
+    inherit (if buildWithPatches then passthru else llvmPkgs) libclang spirv-llvm-translator;
   in
     stdenv.mkDerivation rec {
       pname = "opencl-clang";
@@ -76,11 +78,11 @@ let
 
       nativeBuildInputs = [ cmake git ];
 
-      buildInputs = [ clang-unwrapped llvm spirv-llvm-translator ];
+      buildInputs = [ libclang llvm spirv-llvm-translator ];
 
       cmakeFlags = [
         "-DPREFERRED_LLVM_VERSION=${getVersion llvm}"
-        "-DOPENCL_HEADERS_DIR=${clang-unwrapped}/lib/clang/${getVersion clang-unwrapped}/include/"
+        "-DOPENCL_HEADERS_DIR=${libclang.lib}/lib/clang/${getVersion libclang}/include/"
 
         "-DLLVMSPIRV_INCLUDED_IN_LLVM=OFF"
         "-DSPIRV_TRANSLATOR_DIR=${spirv-llvm-translator}"
