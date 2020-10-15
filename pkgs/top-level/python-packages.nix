@@ -7210,6 +7210,8 @@ in {
 
   TurboCheetah = callPackage ../development/python-modules/TurboCheetah { };
 
+  tubeup = callPackage ../development/python-modules/tubeup { };
+
   tvdb_api = callPackage ../development/python-modules/tvdb_api { };
 
   tvnamer = callPackage ../development/python-modules/tvnamer { };
