@@ -8238,10 +8238,6 @@ in
 
   yeshup = callPackage ../tools/system/yeshup { };
 
-  ytop = callPackage ../tools/system/ytop {
-    inherit (darwin.apple_sdk.frameworks) IOKit;
-  };
-
   ytree = callPackage ../tools/misc/ytree { };
 
   yggdrasil = callPackage ../tools/networking/yggdrasil { };
