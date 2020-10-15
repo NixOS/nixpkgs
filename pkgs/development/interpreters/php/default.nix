@@ -177,7 +177,7 @@ let
             ++ lib.optional (!cgiSupport) "--disable-cgi"
             ++ lib.optional (!cliSupport) "--disable-cli"
             ++ lib.optional fpmSupport    "--enable-fpm"
-            ++ lib.optional pearSupport [ "--with-pear=$(out)/lib/php/pear" "--enable-xml" "--with-libxml" ]
+            ++ lib.optional pearSupport [ "--with-pear" "--enable-xml" "--with-libxml" ]
             ++ lib.optionals (pearSupport && (lib.versionOlder version "7.4")) [
               "--enable-libxml"
               "--with-libxml-dir=${libxml2.dev}"
