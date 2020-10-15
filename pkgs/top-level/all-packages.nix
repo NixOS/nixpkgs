@@ -1622,7 +1622,7 @@ in
 
   clog-cli = callPackage ../development/tools/clog-cli { };
 
-  cloud-init = callPackage ../tools/virtualization/cloud-init { };
+  cloud-init = python3.pkgs.callPackage ../tools/virtualization/cloud-init { };
 
   cloudflared = callPackage ../applications/networking/cloudflared { };
 
