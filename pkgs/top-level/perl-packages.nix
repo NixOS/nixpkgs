@@ -15978,6 +15978,20 @@ let
     };
   };
 
+  PerlCriticMoose = buildPerlPackage rec {
+    pname = "Perl-Critic-Moose";
+    version = "1.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Perl-Critic-Moose-${version}.tar.gz";
+      sha256 = "0092z583c3q3gqry693ck3ibkzby04a1g8lpw9zz2hr6qhi8xssj";
+    };
+    propagatedBuildInputs = [ PerlCritic Readonly namespaceautoclean ];
+    meta = {
+      description = "Policies for Perl::Critic concerned with using Moose";
+      license = stdenv.lib.licenses.artistic1;
+    };
+  };
+
   PerlDestructLevel = buildPerlPackage {
     pname = "Perl-Destruct-Level";
     version = "0.02";
