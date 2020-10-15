@@ -245,7 +245,7 @@ let
           mkdir -p /dev/block
           ln -s /dev/vda2 /dev/block/254:2
 
-          # Set up system profile (normally done by nixos-rebuild / nix-env --set)
+          # Set up system profile (normally done by nixos-config / nix-env --set)
           mkdir -p /nix/var/nix/profiles
           ln -s ${config.system.build.toplevel} /nix/var/nix/profiles/system-1-link
           ln -s /nix/var/nix/profiles/system-1-link /nix/var/nix/profiles/system

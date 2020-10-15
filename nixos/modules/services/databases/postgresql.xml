@@ -30,7 +30,7 @@
   </para>
 
 <!--
-<para>After running <command>nixos-rebuild</command>, you can verify
+<para>After running <command>nixos-config</command>, you can verify
 whether PostgreSQL works by running <command>psql</command>:
 
 <screen>

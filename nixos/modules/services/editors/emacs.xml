@@ -281,7 +281,7 @@ nix-env -f "<nixpkgs>" -qaP -A emacsPackages.orgPackages
    </para>
 
    <para>
-    In this case, the next <command>nixos-rebuild switch</command> will take
+    In this case, the next <command>nixos-config switch</command> will take
     care of adding your <command>emacs</command> to the <varname>PATH</varname>
     environment variable (see <xref linkend="sec-changing-config" />).
    </para>
@@ -396,7 +396,7 @@ in [...]
    <para>
     To start the daemon, execute the following:
 <screen>
-<prompt>$ </prompt>nixos-rebuild switch  # to activate the new configuration.nix
+<prompt>$ </prompt>nixos-config switch  # to activate the new configuration.nix
 <prompt>$ </prompt>systemctl --user daemon-reload        # to force systemd reload
 <prompt>$ </prompt>systemctl --user start emacs.service  # to start the Emacs daemon
 </screen>
@@ -520,7 +520,7 @@ emacsclient --create-frame --tty  # opens a new frame on the current terminal
 
    <para>
     You can use <function>woman</function> to get completion of all available
-    man pages. For example, type <literal>M-x woman &lt;RET&gt; nixos-rebuild
+    man pages. For example, type <literal>M-x woman &lt;RET&gt; nixos-config
     &lt;RET&gt;.</literal>
    </para>
   </section>

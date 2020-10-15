@@ -58,7 +58,7 @@
  <para>
   For other types of options, a merge may not be possible. For instance, if two
   modules define <xref linkend="opt-services.httpd.adminAddr"/>,
-  <command>nixos-rebuild</command> will give an error:
+  <command>nixos-config</command> will give an error:
 <screen>
 The unique option `services.httpd.adminAddr' is defined multiple times, in `/etc/nixos/httpd.nix' and `/etc/nixos/configuration.nix'.
 </screen>

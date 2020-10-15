@@ -2,20 +2,20 @@
           xmlns:xlink="http://www.w3.org/1999/xlink"
           xmlns:xi="http://www.w3.org/2001/XInclude">
  <refmeta>
-  <refentrytitle><command>nixos-rebuild</command>
+  <refentrytitle><command>nixos-config</command>
   </refentrytitle><manvolnum>8</manvolnum>
   <refmiscinfo class="source">NixOS</refmiscinfo>
 <!-- <refmiscinfo class="version"><xi:include href="version.txt" parse="text"/></refmiscinfo> -->
  </refmeta>
 
  <refnamediv>
-  <refname><command>nixos-rebuild</command></refname>
+  <refname><command>nixos-config</command></refname>
   <refpurpose>reconfigure a NixOS machine</refpurpose>
  </refnamediv>
 
  <refsynopsisdiv>
   <cmdsynopsis>
-   <command>nixos-rebuild</command><group choice='req'>
+   <command>nixos-config</command><group choice='req'>
    <arg choice='plain'>
     <option>switch</option>
    </arg>
@@ -154,7 +154,7 @@
    <filename>/etc/nixos/configuration.nix</filename> or
    <filename>/etc/nixos/flake.nix</filename>. Thus, every time you
    modify the configuration or any other NixOS module, you must run
-   <command>nixos-rebuild</command> to make the changes take
+   <command>nixos-config</command> to make the changes take
    effect. It builds the new system in
    <filename>/nix/store</filename>, runs its activation script, and
    stop and (re)starts any system services if needed. Please note that
@@ -177,7 +177,7 @@
        That is, the configuration is added to the GRUB boot menu as the default
        menu entry, so that subsequent reboots will boot the system into the new
        configuration. Previous configurations activated with
-       <command>nixos-rebuild switch</command> or <command>nixos-rebuild
+       <command>nixos-config switch</command> or <command>nixos-config
        boot</command> remain available in the GRUB menu.
       </para>
      </listitem>
@@ -190,7 +190,7 @@
      <listitem>
       <para>
        Build the new configuration and make it the boot default (as with
-       <command>nixos-rebuild switch</command>), but do not activate it. That
+       <command>nixos-config switch</command>), but do not activate it. That
        is, the system continues to run the previous configuration until the
        next reboot.
       </para>
@@ -206,8 +206,8 @@
        Build and activate the new configuration, but do not add it to the GRUB
        boot menu. Thus, if you reboot the system (or if it crashes), you will
        automatically revert to the default configuration (i.e. the
-       configuration resulting from the last call to <command>nixos-rebuild
-       switch</command> or <command>nixos-rebuild boot</command>).
+       configuration resulting from the last call to <command>nixos-config
+       switch</command> or <command>nixos-config boot</command>).
       </para>
      </listitem>
     </varlistentry>
@@ -226,7 +226,7 @@
 <prompt>$ </prompt>nix-build /path/to/nixpkgs/nixos -A system
 </screen>
        Note that you do not need to be <literal>root</literal> to run
-       <command>nixos-rebuild build</command>.
+       <command>nixos-config build</command>.
       </para>
      </listitem>
     </varlistentry>
@@ -251,7 +251,7 @@
       <para>
        Build the new configuration, but instead of activating it, show what
        changes would be performed by the activation (i.e. by
-       <command>nixos-rebuild test</command>). For instance, this command will
+       <command>nixos-config test</command>). For instance, this command will
        print which systemd units would be restarted. The list of changes is not
        guaranteed to be complete.
       </para>
@@ -282,7 +282,7 @@
        at the script that starts the VM. Thus, to test a NixOS configuration in
        a virtual machine, you should do the following:
 <screen>
-<prompt>$ </prompt>nixos-rebuild build-vm
+<prompt>$ </prompt>nixos-config build-vm
 <prompt>$ </prompt>./result/bin/run-*-vm
 </screen>
       </para>
@@ -298,7 +298,7 @@
        The VM mounts the Nix store of the host through the 9P file system. The
        host Nix store is read-only, so Nix commands that modify the Nix store
        will not work in the VM. This includes commands such as
-       <command>nixos-rebuild</command>; to change the VM’s configuration,
+       <command>nixos-config</command>; to change the VM’s configuration,
        you must halt the VM and re-run the commands above.
       </para>
 
@@ -324,7 +324,7 @@
        into the kernel and initial ramdisk of the system. This allows you to
        test whether the boot loader works correctly. However, it does not
        guarantee that your NixOS configuration will boot successfully on the
-       host hardware (i.e., after running <command>nixos-rebuild
+       host hardware (i.e., after running <command>nixos-config
        switch</command>), because the hardware and boot loader configuration in
        the VM are different. The boot loader is installed on an automatically
        generated virtual disk containing a <filename>/boot</filename>
@@ -358,7 +358,7 @@
       <para>
         In addition to the <literal>nixos</literal> channel, the root
         user's channels which have a file named
-        <literal>.update-on-nixos-rebuild</literal> in their base
+        <literal>.update-on-nixos-config</literal> in their base
         directory will also be updated.
       </para>
       <para>
@@ -386,7 +386,7 @@
     </term>
     <listitem>
      <para>
-      Normally, <command>nixos-rebuild</command> first builds the
+      Normally, <command>nixos-config</command> first builds the
       <varname>nixUnstable</varname> attribute in Nixpkgs, and uses the
       resulting instance of the Nix package manager to build the new system
       configuration. This is necessary if the NixOS modules use features not
@@ -404,7 +404,7 @@
      <para>
       Equivalent to <option>--no-build-nix</option>
       <option>--show-trace</option>. This option is useful if you call
-      <command>nixos-rebuild</command> frequently (e.g. if you’re hacking on
+      <command>nixos-config</command> frequently (e.g. if you’re hacking on
       a NixOS module).
      </para>
     </listitem>
@@ -432,7 +432,7 @@
     <listitem>
      <para>
       Allow ad-hoc remote builders for building the new system. This requires
-      the user executing <command>nixos-rebuild</command> (usually root) to be
+      the user executing <command>nixos-config</command> (usually root) to be
       configured as a trusted user in the Nix daemon. This can be achieved by
       using the <literal>nix.trustedUsers</literal> NixOS option. Examples
       values for that option are described in the <literal>Remote builds
@@ -468,7 +468,7 @@
       <filename>test.nix</filename> without affecting the default system
       profile, you would do:
 <screen>
-<prompt>$ </prompt>nixos-rebuild switch -p test -I nixos-config=./test.nix
+<prompt>$ </prompt>nixos-config switch -p test -I nixos-config=./test.nix
 </screen>
       The new configuration will appear in the GRUB 2 submenu “NixOS -
       Profile 'test'”.
@@ -538,7 +538,7 @@
     </term>
     <listitem>
      <para>
-      When set, nixos-rebuild prefixes remote commands that run on
+      When set, nixos-config prefixes remote commands that run on
       the <option>--build-host</option> and <option>--target-host</option>
       systems with <command>sudo</command>. Setting this option allows
       deploying as a non-root user.
@@ -566,7 +566,7 @@
   </variablelist>
 
   <para>
-   In addition, <command>nixos-rebuild</command> accepts various Nix-related
+   In addition, <command>nixos-config</command> accepts various Nix-related
    flags, including <option>--max-jobs</option> / <option>-j</option>,
    <option>--show-trace</option>, <option>--keep-failed</option>,
    <option>--keep-going</option>, <option>--impure</option>, and <option>--verbose</option> /
@@ -615,7 +615,7 @@
     </term>
     <listitem>
      <para>
-      If this file exists, then <command>nixos-rebuild</command> will
+      If this file exists, then <command>nixos-config</command> will
       use it as if the <option>--flake</option> option was given. This
       file may be a symlink to a <filename>flake.nix</filename> in an
       actual flake; thus <filename>/etc/nixos</filename> need not be a

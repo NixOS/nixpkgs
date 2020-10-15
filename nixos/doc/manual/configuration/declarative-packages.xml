@@ -16,7 +16,7 @@
 </programlisting>
   The effect of this specification is that the Thunderbird package from Nixpkgs
   will be built or downloaded as part of the system when you run
-  <command>nixos-rebuild switch</command>.
+  <command>nixos-config switch</command>.
  </para>
 
  <note>
@@ -45,7 +45,7 @@ nixos.firefox   firefox-23.0   Mozilla Firefox - the browser, reloaded
  <para>
   To “uninstall” a package, simply remove it from
   <xref linkend="opt-environment.systemPackages"/> and run
-  <command>nixos-rebuild switch</command>.
+  <command>nixos-config switch</command>.
  </para>
 
  <xi:include href="customizing-packages.xml" />

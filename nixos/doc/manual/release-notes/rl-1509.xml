@@ -51,7 +51,7 @@
 system.autoUpgrade.enable = true;
 </programlisting>
     This will cause the system to periodically check for updates in your
-    current channel and run <command>nixos-rebuild</command>.
+    current channel and run <command>nixos-config</command>.
    </para>
   </listitem>
   <listitem>
@@ -627,7 +627,7 @@ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.pandoc
      In case of an infinite loop, use the <command>--show-trace</command>
      command line argument and read the line just above the error message.
 <screen>
-<prompt>$ </prompt>nixos-rebuild build --show-trace
+<prompt>$ </prompt>nixos-config build --show-trace
 …
 while evaluating the module argument `pkgs' in "/etc/nixos/my-module.nix":
 infinite recursion encountered

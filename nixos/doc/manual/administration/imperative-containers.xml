@@ -105,7 +105,7 @@ Linux foo 3.4.82 #1-NixOS SMP Thu Mar 20 14:44:05 UTC 2014 x86_64 GNU/Linux
 
  <para>
   Alternatively, you can change the configuration from within the container
-  itself by running <command>nixos-rebuild switch</command> inside the
+  itself by running <command>nixos-config switch</command> inside the
   container. Note that the container by default does not have a copy of the
   NixOS channel, so you should run <command>nix-channel --update</command>
   first.

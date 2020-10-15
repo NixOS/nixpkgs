@@ -22,10 +22,10 @@ xlink:href="https://nixos.org/nixpkgs/manual">Nixpkgs
 <programlisting>
 <xref linkend="opt-environment.systemPackages"/> = [ pkgs.my-package ];
 </programlisting>
-  and you run <command>nixos-rebuild</command>, specifying your own Nixpkgs
+  and you run <command>nixos-config</command>, specifying your own Nixpkgs
   tree:
 <screen>
-<prompt># </prompt>nixos-rebuild switch -I nixpkgs=/path/to/my/nixpkgs</screen>
+<prompt># </prompt>nixos-config switch -I nixpkgs=/path/to/my/nixpkgs</screen>
  </para>
 
  <para>

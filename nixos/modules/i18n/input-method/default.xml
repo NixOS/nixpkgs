@@ -114,7 +114,7 @@ ibus.engines = with pkgs.ibus-engines; [ table table-others ];
 
   <para>
    To use any input method, the package must be added in the configuration, as
-   shown above, and also (after running <literal>nixos-rebuild</literal>) the
+   shown above, and also (after running <literal>nixos-config</literal>) the
    input method must be added from IBus' preference dialog.
   </para>
 

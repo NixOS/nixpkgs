@@ -897,7 +897,7 @@ inherit (pkgs.nixos {
    </listitem>
    <listitem>
     <para>
-     The config activation script of <literal>nixos-rebuild</literal> now
+     The config activation script of <literal>nixos-config</literal> now
      <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemctl.html#Manager%20Lifecycle%20Commands">reloads</link>
      all user units for each authenticated user.
     </para>

@@ -24,10 +24,10 @@ let
           ln -s vda1 /dev/xvda1
         '';
 
-        # Needed by nixos-rebuild due to the lack of network
+        # Needed by nixos-config due to the lack of network
         # access. Determined by trial and error.
         system.extraDependencies = with pkgs; ( [
-          # Needed for a nixos-rebuild.
+          # Needed for a nixos-config.
           busybox
           cloud-utils
           desktop-file-utils

@@ -155,7 +155,7 @@ Additional information.
         <itemizedlist>
          <listitem>
           <para>
-           You can add new module to your NixOS configuration file (usually it's <command>/etc/nixos/configuration.nix</command>). And do <command>sudo nixos-rebuild test -I nixpkgs=&lt;path to your local nixpkgs folder&gt; --fast</command>.
+           You can add new module to your NixOS configuration file (usually it's <command>/etc/nixos/configuration.nix</command>). And do <command>sudo nixos-config test -I nixpkgs=&lt;path to your local nixpkgs folder&gt; --fast</command>.
           </para>
          </listitem>
         </itemizedlist>

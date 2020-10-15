@@ -56,7 +56,7 @@
   <para>
    If your <filename>/boot</filename> partition runs out of space, after
    clearing old profiles you must rebuild your system with
-   <literal>nixos-rebuild</literal> to update the <filename>/boot</filename>
+   <literal>nixos-config</literal> to update the <filename>/boot</filename>
    partition and clear space.
   </para>
  </section>

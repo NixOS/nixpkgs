@@ -119,7 +119,7 @@ ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID78zmOyA+5uPG4Ot0hfAy+sLDPU1L4AiIoRYEIVbbQ/
   </para>
   <para>The following few commands (run as root) let you test your backup.
       <programlisting>
-> nixos-rebuild switch
+> nixos-config switch
 ...restarting the following units: polkit.service
 > systemctl restart borgbackup-job-backupToLocalServer
 > sleep 10

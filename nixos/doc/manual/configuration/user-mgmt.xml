@@ -26,13 +26,13 @@
   key. Users created in this way do not have a password by default, so they
   cannot log in via mechanisms that require a password. However, you can use
   the <command>passwd</command> program to set a password, which is retained
-  across invocations of <command>nixos-rebuild</command>.
+  across invocations of <command>nixos-config</command>.
  </para>
  <para>
   If you set <xref linkend="opt-users.mutableUsers"/> to false, then the
   contents of <literal>/etc/passwd</literal> and <literal>/etc/group</literal>
   will be congruent to your NixOS configuration. For instance, if you remove a
-  user from <xref linkend="opt-users.users"/> and run nixos-rebuild, the user
+  user from <xref linkend="opt-users.users"/> and run nixos-config, the user
   account will cease to exist. Also, imperative commands for managing users and
   groups, such as useradd, are no longer available. Passwords may still be
   assigned by setting the user's

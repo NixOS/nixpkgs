@@ -18,7 +18,7 @@ let
       { config, pkgs, ... }:
 
       {
-        # Add your own options below and run "nixos-rebuild switch".
+        # Add your own options below and run "nixos-config switch".
         # E.g.,
         #   services.openssh.enable = true;
       }

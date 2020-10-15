@@ -10,7 +10,7 @@ with lib;
       ../installer/scan/detected.nix
       ../installer/scan/not-detected.nix
 
-      # Allow "nixos-rebuild" to work properly by providing
+      # Allow "nixos-config" to work properly by providing
       # /etc/nixos/configuration.nix.
       ./clone-config.nix
 

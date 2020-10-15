@@ -304,7 +304,7 @@ let
               '')}" > /run/${n}.interfaces
 
               ${optionalString config.virtualisation.libvirtd.enable ''
-                  # Enslave dynamically added interfaces which may be lost on nixos-rebuild
+                  # Enslave dynamically added interfaces which may be lost on nixos-config
                   #
                   # if `libvirtd.service` is not running, do not use `virsh` which would try activate it via 'libvirtd.socket' and thus start it out-of-order.
                   # `libvirtd.service` will set up bridge interfaces when it will start normally.

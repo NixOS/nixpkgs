@@ -35,7 +35,7 @@ in
         branch=`(cd nixpkgs ; git branch 2>/dev/null | sed -n '/^\* / { s|^\* ||; p; }')`
         revision=`(cd nixpkgs ; git rev-parse HEAD)`
         export NIXOS_LABEL_VERSION="$today.$branch-''${revision:0:7}"
-        nixos-rebuild switch</screen>
+        nixos-config switch</screen>
       '';
     };
 

@@ -99,7 +99,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         new_etag = check_etag()
         assert old_etag != new_etag
 
-    with subtest("config is reloaded on nixos-rebuild switch"):
+    with subtest("config is reloaded on nixos-config switch"):
         webserver.succeed(
             "${justReloadSystem}/bin/switch-to-configuration test >&2"
         )
@@ -114,7 +114,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         webserver.wait_for_unit("nginx")
         webserver.succeed("journalctl -u nginx | grep -q -i stopped")
 
-    with subtest("nixos-rebuild --switch should fail when there are configuration errors"):
+    with subtest("nixos-config --switch should fail when there are configuration errors"):
         webserver.fail(
             "${reloadWithErrorsSystem}/bin/switch-to-configuration test >&2"
         )

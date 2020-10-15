@@ -210,7 +210,7 @@
     Special filesystems, like <literal>/proc</literal>, <literal>/run</literal>
     and others, now have the same mount options as recommended by systemd and
     are unified across different places in NixOS. Mount options are updated
-    during <command>nixos-rebuild switch</command> if possible. One benefit
+    during <command>nixos-config switch</command> if possible. One benefit
     from this is improved security — most such filesystems are now mounted
     with <literal>noexec</literal>, <literal>nodev</literal> and/or
     <literal>nosuid</literal> options.

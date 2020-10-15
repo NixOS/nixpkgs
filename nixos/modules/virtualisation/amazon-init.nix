@@ -7,7 +7,7 @@ let
     echo "attempting to fetch configuration from EC2 user data..."
 
     export HOME=/root
-    export PATH=${pkgs.lib.makeBinPath [ config.nix.package pkgs.systemd pkgs.gnugrep pkgs.git pkgs.gnutar pkgs.gzip pkgs.gnused config.system.build.nixos-rebuild]}:$PATH
+    export PATH=${pkgs.lib.makeBinPath [ config.nix.package pkgs.systemd pkgs.gnugrep pkgs.git pkgs.gnutar pkgs.gzip pkgs.gnused config.system.build.nixos-config]}:$PATH
     export NIX_PATH=nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:nixos-config=/etc/nixos/configuration.nix:/nix/var/nix/profiles/per-user/root/channels
 
     userData=/etc/ec2-metadata/user-data
@@ -38,7 +38,7 @@ let
       exit
     fi
 
-    nixos-rebuild switch
+    nixos-config switch
   '';
 in {
   systemd.services.amazon-init = {

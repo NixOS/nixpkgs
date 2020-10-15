@@ -505,7 +505,7 @@
       <listitem>
        <para>
         After changing the interface names, rebuild your system with
-        <literal>nixos-rebuild boot</literal> to activate the new configuration
+        <literal>nixos-config boot</literal> to activate the new configuration
         after a reboot. If you switch to the new configuration right away you
         might lose network connectivity! If using <literal>nixops</literal>,
         deploy with <literal>nixops deploy --force-reboot</literal>.

@@ -70,7 +70,7 @@ in {
                   ../modules/profiles/base.nix ];
       virtualisation.memorySize = 1300;
       # The test cannot access the network, so any packages
-      # nixos-rebuild needs must be included in the VM.
+      # nixos-config needs must be included in the VM.
       system.extraDependencies = with pkgs;
         [ sudo
           libxml2.bin
@@ -116,7 +116,7 @@ in {
         "${configFile}",
         "/etc/nixos/configuration.nix",
     )
-    machine.succeed("nixos-rebuild boot >&2")
+    machine.succeed("nixos-config boot >&2")
 
     machine.succeed("egrep 'menuentry.*debian' /boot/grub/grub.cfg")
   '';

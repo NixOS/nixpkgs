@@ -30,7 +30,7 @@
   and then running <literal>nix-env -i</literal> again. Other packages in the
   profile are <emphasis>not</emphasis> affected; this is the crucial difference
   with the declarative style of package management, where running
-  <command>nixos-rebuild switch</command> causes all packages to be updated to
+  <command>nixos-config switch</command> causes all packages to be updated to
   their current versions in the NixOS channel. You can however upgrade all
   packages for which there is a newer version by doing:
 <screen>

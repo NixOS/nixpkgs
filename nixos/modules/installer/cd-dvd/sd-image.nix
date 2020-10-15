@@ -232,7 +232,7 @@ in
         # Register the contents of the initial Nix store
         ${config.nix.package.out}/bin/nix-store --load-db < /nix-path-registration
 
-        # nixos-rebuild also requires a "system" profile and an /etc/NIXOS tag.
+        # nixos-config also requires a "system" profile and an /etc/NIXOS tag.
         touch /etc/NIXOS
         ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
 

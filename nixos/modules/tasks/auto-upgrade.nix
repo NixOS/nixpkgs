@@ -16,7 +16,7 @@ in {
         description = ''
           Whether to periodically upgrade NixOS to the latest
           version. If enabled, a systemd timer will run
-          <literal>nixos-rebuild switch --upgrade</literal> once a
+          <literal>nixos-config switch --upgrade</literal> once a
           day.
         '';
       };
@@ -54,7 +54,7 @@ in {
           "http://my-cache.example.org/"
         ];
         description = ''
-          Any additional flags passed to <command>nixos-rebuild</command>.
+          Any additional flags passed to <command>nixos-config</command>.
 
           If you are using flakes and use a local repo you can add
           <command>[ "--update-input" "nixpkgs" "--commit-lock-file" ]</command>
@@ -143,19 +143,19 @@ in {
       ];
 
       script = let
-        nixos-rebuild =
-          "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
+        nixos-config =
+          "${config.system.build.nixos-config}/bin/nixos-config";
       in if cfg.allowReboot then ''
-        ${nixos-rebuild} boot ${toString cfg.flags}
+        ${nixos-config} boot ${toString cfg.flags}
         booted="$(readlink /run/booted-system/{initrd,kernel,kernel-modules})"
         built="$(readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
         if [ "$booted" = "$built" ]; then
-          ${nixos-rebuild} switch ${toString cfg.flags}
+          ${nixos-config} switch ${toString cfg.flags}
         else
           /run/current-system/sw/bin/shutdown -r +1
         fi
       '' else ''
-        ${nixos-rebuild} switch ${toString cfg.flags}
+        ${nixos-config} switch ${toString cfg.flags}
       '';
 
       startAt = cfg.dates;

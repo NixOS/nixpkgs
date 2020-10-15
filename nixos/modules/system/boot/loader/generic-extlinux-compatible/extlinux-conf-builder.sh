@@ -115,7 +115,7 @@ addEntry() {
 tmpFile="$target/extlinux/extlinux.conf.tmp.$$"
 
 cat > $tmpFile <<EOF
-# Generated file, all changes will be lost on nixos-rebuild!
+# Generated file, all changes will be lost on nixos-config!
 
 # Change this to e.g. nixos-42 to temporarily boot to an older configuration.
 DEFAULT nixos-default

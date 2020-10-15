@@ -16,7 +16,7 @@ let
       ../modules/testing/test-instrumentation.nix
       ../modules/profiles/qemu-guest.nix
       {
-        # Needed by nixos-rebuild due to lack of network access.
+        # Needed by nixos-config due to lack of network access.
         system.extraDependencies = with pkgs; [
           stdenv
         ];

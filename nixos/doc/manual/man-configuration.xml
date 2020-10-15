@@ -16,7 +16,7 @@
   <para>
    The file <filename>/etc/nixos/configuration.nix</filename> contains the
    declarative specification of your NixOS system configuration. The command
-   <command>nixos-rebuild</command> takes this file and realises the system
+   <command>nixos-config</command> takes this file and realises the system
    configuration specified therein.
   </para>
  </refsection>

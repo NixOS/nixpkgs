@@ -9,7 +9,7 @@
   <link linkend="ch-configuration">changed something</link> in that file, you
   should do
 <screen>
-<prompt># </prompt>nixos-rebuild switch
+<prompt># </prompt>nixos-config switch
 </screen>
   to build the new configuration, make it the default configuration for
   booting, and try to realise the configuration in the running system (e.g., by
@@ -17,7 +17,7 @@
   <warning>
    <para>
     This command doesn't start/stop <link linkend="opt-systemd.user.services">user
-    services</link> automatically. <command>nixos-rebuild</command> only runs a
+    services</link> automatically. <command>nixos-config</command> only runs a
     <literal>daemon-reload</literal> for each user with running user services.
    </para>
   </warning>
@@ -31,7 +31,7 @@
  <para>
   You can also do
 <screen>
-<prompt># </prompt>nixos-rebuild test
+<prompt># </prompt>nixos-config test
 </screen>
   to build the configuration and switch the running system to it, but without
   making it the boot default. So if (say) the configuration locks up your
@@ -40,7 +40,7 @@
  <para>
   There is also
 <screen>
-<prompt># </prompt>nixos-rebuild boot
+<prompt># </prompt>nixos-config boot
 </screen>
   to build the configuration and make it the boot default, but not switch to it
   now (so it will only take effect after the next reboot).
@@ -49,7 +49,7 @@
   You can make your configuration show up in a different submenu of the GRUB 2
   boot screen by giving it a different <emphasis>profile name</emphasis>, e.g.
 <screen>
-<prompt># </prompt>nixos-rebuild switch -p test
+<prompt># </prompt>nixos-config switch -p test
 </screen>
   which causes the new configuration (and previous ones created using
   <literal>-p test</literal>) to show up in the GRUB submenu “NixOS - Profile
@@ -59,7 +59,7 @@
  <para>
   Finally, you can do
 <screen>
-<prompt>$ </prompt>nixos-rebuild build
+<prompt>$ </prompt>nixos-config build
 </screen>
   to build the configuration but nothing more. This is useful to see whether
   everything compiles cleanly.
@@ -70,7 +70,7 @@
   <emphasis>virtual machine</emphasis> that contains the desired configuration.
   Just do
 <screen>
-<prompt>$ </prompt>nixos-rebuild build-vm
+<prompt>$ </prompt>nixos-config build-vm
 <prompt>$ </prompt>./result/bin/run-*-vm
 </screen>
   The VM does not have any data from your host system, so your existing user

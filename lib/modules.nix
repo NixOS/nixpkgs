@@ -657,7 +657,7 @@ rec {
   mkOptionDefault = mkOverride 1500; # priority of option defaults
   mkDefault = mkOverride 1000; # used in config sections of non-user modules to set a default
   mkForce = mkOverride 50;
-  mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
+  mkVMOverride = mkOverride 10; # used by ‘nixos-config build-vm’
 
   mkStrict = builtins.trace "`mkStrict' is obsolete; use `mkOverride 0' instead." (mkOverride 0);
 

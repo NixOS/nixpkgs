@@ -50,7 +50,7 @@ in {
         rm /nix-path-registration
       fi
 
-      # nixos-rebuild also requires a "system" profile
+      # nixos-config also requires a "system" profile
       ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
     '';
 

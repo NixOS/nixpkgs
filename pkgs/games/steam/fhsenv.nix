@@ -248,7 +248,7 @@ in buildFHSUserEnv rec {
         cat <<EOF > /dev/stderr
     **
     WARNING: Steam is not set up. Add the following options to /etc/nixos/configuration.nix
-    and then run \`sudo nixos-rebuild switch\`:
+    and then run \`sudo nixos-config switch\`:
     {
       hardware.opengl.driSupport32Bit = true;
       hardware.pulseaudio.support32Bit = true;

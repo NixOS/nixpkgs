@@ -80,7 +80,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             old_etag, new_etag
         )
 
-    with subtest("config is reloaded on nixos-rebuild switch"):
+    with subtest("config is reloaded on nixos-config switch"):
         webserver.succeed(
             "${justReloadSystem}/bin/switch-to-configuration test >&2"
         )

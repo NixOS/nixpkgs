@@ -46,7 +46,7 @@ in {
         RemainAfterExit = true;
       };
       restartIfChanged = false;
-      path = [ pkgs.jq pkgs.gnused pkgs.gnugrep pkgs.systemd config.nix.package config.system.build.nixos-rebuild ];
+      path = [ pkgs.jq pkgs.gnused pkgs.gnugrep pkgs.systemd config.nix.package config.system.build.nixos-config ];
       environment = {
         HOME = "/root";
         NIX_PATH = concatStringsSep ":" [
@@ -84,7 +84,7 @@ in {
             exit
           fi
 
-          nixos-rebuild switch
+          nixos-config switch
         else
           echo "no user data is available"
         fi

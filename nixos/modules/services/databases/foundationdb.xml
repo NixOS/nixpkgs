@@ -44,7 +44,7 @@ services.foundationdb.package = pkgs.foundationdb52; # FoundationDB 5.2.x
   </para>
 
   <para>
-   After running <command>nixos-rebuild</command>, you can verify whether
+   After running <command>nixos-config</command>, you can verify whether
    FoundationDB is running by executing <command>fdbcli</command> (which is
    added to <option>environment.systemPackages</option>):
 <screen>

@@ -18,7 +18,7 @@
   If the corruption is in a path in the closure of the NixOS system
   configuration, you can fix it by doing
 <screen>
-<prompt># </prompt>nixos-rebuild switch --repair
+<prompt># </prompt>nixos-config switch --repair
 </screen>
   This will cause Nix to check every path in the closure, and if its
   cryptographic hash differs from the hash recorded in Nix’s database, the

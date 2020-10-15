@@ -24,7 +24,7 @@
   <command>nixos-container</command>, and declaratively, by specifying them in
   your <filename>configuration.nix</filename>. The declarative approach implies
   that containers get upgraded along with your host system when you run
-  <command>nixos-rebuild</command>, which is often not what you want. By
+  <command>nixos-config</command>, which is often not what you want. By
   contrast, in the imperative approach, containers are configured and updated
   independently from the host system.
  </para>

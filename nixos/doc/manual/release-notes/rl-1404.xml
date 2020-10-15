@@ -62,7 +62,7 @@
   xlink:href="https://www.usenix.org/legacy/event/lisa02/tech/full_papers/traugott/traugott_html/">congruent</link>
      to your NixOS configuration. For instance, if you remove a user from
      <option>users.extraUsers</option> and run
-     <command>nixos-rebuild</command>, the user account will cease to exist.
+     <command>nixos-config</command>, the user account will cease to exist.
      Also, imperative commands for managing users and groups, such as
      <command>useradd</command>, are no longer available. If
      <option>users.mutableUsers</option> is <literal>true</literal> (the

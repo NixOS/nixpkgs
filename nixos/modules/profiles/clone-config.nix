@@ -96,7 +96,7 @@ in
 
         ${optionalString config.installer.cloneConfig ''
           # Provide a configuration for the CD/DVD itself, to allow users
-          # to run nixos-rebuild to change the configuration of the
+          # to run nixos-config to change the configuration of the
           # running system on the CD/DVD.
           if ! [ -e /etc/nixos/configuration.nix ]; then
             cp ${configClone} /etc/nixos/configuration.nix

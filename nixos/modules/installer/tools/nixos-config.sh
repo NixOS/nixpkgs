@@ -8,7 +8,7 @@ set -o pipefail
 export PATH=@path@:$PATH
 
 showSyntax() {
-    exec man nixos-rebuild
+    exec man nixos-config
     exit 1
 }
 
@@ -220,7 +220,7 @@ if [ -z "$action" ]; then showSyntax; fi
 # Only run shell scripts from the Nixpkgs tree if the action is
 # "switch", "boot", or "test". With other actions (such as "build"),
 # the user may reasonably expect that no code from the Nixpkgs tree is
-# executed, so it's safe to run nixos-rebuild against a potentially
+# executed, so it's safe to run nixos-config against a potentially
 # untrusted tree.
 canRun=
 if [ "$action" = switch -o "$action" = boot -o "$action" = test ]; then
@@ -232,7 +232,7 @@ fi
 # run ‘nix-channel --update nixos’.
 if [[ -n $upgrade && -z $_NIXOS_REBUILD_REEXEC && -z $flake ]]; then
     # If --upgrade-all is passed, or there are other channels that
-    # contain a file called ".update-on-nixos-rebuild", update them as
+    # contain a file called ".update-on-nixos-config", update them as
     # well. Also upgrade the nixos channel.
 
     for channelpath in /nix/var/nix/profiles/per-user/root/channels/*; do
@@ -240,7 +240,7 @@ if [[ -n $upgrade && -z $_NIXOS_REBUILD_REEXEC && -z $flake ]]; then
 
         if [[ "$channel_name" == "nixos" ]]; then
             nix-channel --update "$channel_name"
-        elif [ -e "$channelpath/.update-on-nixos-rebuild" ]; then
+        elif [ -e "$channelpath/.update-on-nixos-config" ]; then
             nix-channel --update "$channel_name"
         elif [[ -n $upgrade_all ]] ; then
             nix-channel --update "$channel_name"
@@ -265,12 +265,12 @@ if [[ -z $flake && -e /etc/nixos/flake.nix ]]; then
     flake="$(dirname "$(readlink -f /etc/nixos/flake.nix)")"
 fi
 
-# Re-execute nixos-rebuild from the Nixpkgs tree.
-# FIXME: get nixos-rebuild from $flake.
+# Re-execute nixos-config from the Nixpkgs tree.
+# FIXME: get nixos-config from $flake.
 if [[ -z $_NIXOS_REBUILD_REEXEC && -n $canRun && -z $fast && -z $flake ]]; then
-    if p=$(nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.system.build.nixos-rebuild' "${extraBuildFlags[@]}"); then
+    if p=$(nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.system.build.nixos-config' "${extraBuildFlags[@]}"); then
         export _NIXOS_REBUILD_REEXEC=1
-        exec $p/bin/nixos-rebuild "${origArgs[@]}"
+        exec $p/bin/nixos-config "${origArgs[@]}"
         exit 1
     fi
 fi
@@ -313,7 +313,7 @@ if [ "$action" = edit ]; then
 fi
 
 
-tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
+tmpDir=$(mktemp -t -d nixos-config.XXXXXX)
 SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o ControlPersist=60"
 
 cleanup() {

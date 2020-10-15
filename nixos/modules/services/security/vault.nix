@@ -129,7 +129,7 @@ in
       after = [ "network.target" ]
            ++ optional (config.services.consul.enable && cfg.storageBackend == "consul") "consul.service";
 
-      restartIfChanged = false; # do not restart on "nixos-rebuild switch". It would seal the storage and disrupt the clients.
+      restartIfChanged = false; # do not restart on "nixos-config switch". It would seal the storage and disrupt the clients.
 
       serviceConfig = {
         User = "vault";

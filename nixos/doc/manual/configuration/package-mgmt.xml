@@ -12,7 +12,7 @@
     <para>
      <emphasis>Declarative</emphasis>, where you declare what packages you want
      in your <filename>configuration.nix</filename>. Every time you run
-     <command>nixos-rebuild</command>, NixOS will ensure that you get a
+     <command>nixos-config</command>, NixOS will ensure that you get a
      consistent set of binaries corresponding to your specification.
     </para>
    </listitem>

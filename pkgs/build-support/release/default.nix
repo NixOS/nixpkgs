@@ -95,7 +95,7 @@ rec {
       phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 
       patchPhase = stdenv.lib.optionalString isNixOS ''
-        touch .update-on-nixos-rebuild
+        touch .update-on-nixos-config
       '';
 
       installPhase = ''

@@ -67,7 +67,7 @@
   NixOS checks your option definitions for correctness. For instance, if you
   try to define an option that doesn’t exist (that is, doesn’t have a
   corresponding <emphasis>option declaration</emphasis>),
-  <command>nixos-rebuild</command> will give an error like:
+  <command>nixos-config</command> will give an error like:
 <screen>
 The option `services.httpd.enable' defined in `/etc/nixos/configuration.nix' does not exist.
 </screen>

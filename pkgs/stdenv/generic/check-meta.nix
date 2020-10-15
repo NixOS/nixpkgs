@@ -90,7 +90,7 @@ let
   };
   remediate_whitelist = allow_attr: attrs:
     ''
-      a) For `nixos-rebuild` you can set
+      a) For `nixos-config` you can set
         { nixpkgs.config.allow${allow_attr} = true; }
       in configuration.nix to override this.
 
@@ -113,7 +113,7 @@ let
 
              $ export NIXPKGS_ALLOW_INSECURE=1
 
-        b) for `nixos-rebuild` you can add ‘${getName attrs}’ to
+        b) for `nixos-config` you can add ‘${getName attrs}’ to
            `nixpkgs.config.permittedInsecurePackages` in the configuration.nix,
            like so:
 

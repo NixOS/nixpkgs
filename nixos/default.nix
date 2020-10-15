@@ -9,13 +9,13 @@ let
     modules = [ configuration ];
   };
 
-  # This is for `nixos-rebuild build-vm'.
+  # This is for `nixos-config build-vm'.
   vmConfig = (import ./lib/eval-config.nix {
     inherit system;
     modules = [ configuration ./modules/virtualisation/qemu-vm.nix ];
   }).config;
 
-  # This is for `nixos-rebuild build-vm-with-bootloader'.
+  # This is for `nixos-config build-vm-with-bootloader'.
   vmWithBootLoaderConfig = (import ./lib/eval-config.nix {
     inherit system;
     modules =

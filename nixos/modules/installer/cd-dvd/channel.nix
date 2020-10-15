@@ -10,7 +10,7 @@ let
 
   # We need a copy of the Nix expressions for Nixpkgs and NixOS on the
   # CD.  These are installed into the "nixos" channel of the root
-  # user, as expected by nixos-rebuild/nixos-install. FIXME: merge
+  # user, as expected by nixos-config/nixos-install. FIXME: merge
   # with make-channel.nix.
   channelSources = pkgs.runCommand "nixos-${config.system.nixos.version}"
     { preferLocalBuild = true; }

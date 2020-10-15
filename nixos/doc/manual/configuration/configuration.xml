@@ -10,7 +10,7 @@
    through the configuration file
    <filename>/etc/nixos/configuration.nix</filename>. As described in
    <xref linkend="sec-changing-config" />, changes to this file only take
-   effect after you run <command>nixos-rebuild</command>.
+   effect after you run <command>nixos-config</command>.
   </para>
  </partintro>
  <xi:include href="config-syntax.xml" />

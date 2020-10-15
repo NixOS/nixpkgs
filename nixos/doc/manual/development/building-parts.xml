@@ -22,7 +22,7 @@
      <para>
       The top-level option that builds the entire NixOS system. Everything else
       in your configuration is indirectly pulled in by this option. This is
-      what <command>nixos-rebuild</command> builds and what
+      what <command>nixos-config</command> builds and what
       <filename>/run/current-system</filename> points to afterwards.
      </para>
      <para>
@@ -75,7 +75,7 @@
    </varlistentry>
    <varlistentry>
     <term>
-     <varname>system.build.nixos-rebuild</varname>
+     <varname>system.build.nixos-config</varname>
     </term>
     <term>
      <varname>system.build.nixos-install</varname>

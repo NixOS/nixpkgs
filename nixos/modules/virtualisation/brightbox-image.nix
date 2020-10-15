@@ -64,12 +64,12 @@ in
           printRegistration=1 perl ${pkgs.pathsFromGraph} /tmp/xchg/closure | \
               chroot /mnt ${config.nix.package.out}/bin/nix-store --load-db --option build-users-group ""
 
-          # Create the system profile to allow nixos-rebuild to work.
+          # Create the system profile to allow nixos-config to work.
           chroot /mnt ${config.nix.package.out}/bin/nix-env \
               -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel} \
               --option build-users-group ""
 
-          # `nixos-rebuild' requires an /etc/NIXOS.
+          # `nixos-config' requires an /etc/NIXOS.
           mkdir -p /mnt/etc
           touch /mnt/etc/NIXOS
 

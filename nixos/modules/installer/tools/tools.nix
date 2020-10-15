@@ -1,4 +1,4 @@
-# This module generates nixos-install, nixos-rebuild,
+# This module generates nixos-install, nixos-config,
 # nixos-generate-config, etc.
 
 { config, lib, pkgs, ... }:
@@ -28,17 +28,24 @@ let
     ];
   };
 
-  nixos-rebuild =
+  nixos-config =
     let fallback = import ./nix-fallback-paths.nix; in
     makeProg {
-      name = "nixos-rebuild";
-      src = ./nixos-rebuild.sh;
+      name = "nixos-config";
+      src = ./nixos-config.sh;
       inherit (pkgs) runtimeShell;
       nix = config.nix.package.out;
       nix_x86_64_linux = fallback.x86_64-linux;
       nix_i686_linux = fallback.i686-linux;
       path = makeBinPath [ pkgs.jq ];
     };
+
+  # Keep `nixos-rebuild` as an alias to `nixos-config` for
+  # backward-compatibility.
+  nixos-rebuild-alias = pkgs.runCommand "nixos-rebuild-alias" {} ''
+    mkdir -p $out/bin
+    ln -s ${nixos-config}/bin/nixos-config $out/bin/nixos-rebuild
+  '';
 
   nixos-generate-config = makeProg {
     name = "nixos-generate-config";
@@ -193,14 +200,15 @@ in
     environment.systemPackages =
       [ nixos-build-vms
         nixos-install
-        nixos-rebuild
+        nixos-config
+        nixos-rebuild-alias
         nixos-generate-config
         nixos-version
         nixos-enter
       ] ++ lib.optional (nixos-option != null) nixos-option;
 
     system.build = {
-      inherit nixos-install nixos-generate-config nixos-option nixos-rebuild nixos-enter;
+      inherit nixos-install nixos-generate-config nixos-option nixos-config nixos-enter;
     };
 
   };

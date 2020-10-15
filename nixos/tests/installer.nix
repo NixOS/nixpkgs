@@ -20,7 +20,7 @@ let
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
 
-        # To ensure that we can rebuild the grub configuration on the nixos-rebuild
+        # To ensure that we can rebuild the grub configuration on the nixos-config
         system.extraDependencies = with pkgs; [ stdenvNoCC ];
 
         ${optionalString (bootLoader == "grub") ''
@@ -181,8 +181,8 @@ let
               "/etc/nixos/configuration.nix",
           )
 
-      with subtest("Check whether nixos-rebuild works"):
-          machine.succeed("nixos-rebuild switch >&2")
+      with subtest("Check whether nixos-config works"):
+          machine.succeed("nixos-config switch >&2")
 
       with subtest("Test nixos-option"):
           kernel_modules = machine.succeed("nixos-option boot.initrd.kernelModules")
@@ -208,11 +208,11 @@ let
           }",
           "/etc/nixos/configuration.nix",
       )
-      machine.succeed("nixos-rebuild boot >&2")
+      machine.succeed("nixos-config boot >&2")
       machine.shutdown()
 
       # And just to be sure, check that the machine still boots after
-      # "nixos-rebuild switch".
+      # "nixos-config switch".
       machine = create_machine_named("boot-after-rebuild-switch")
       ${preBootCommands}
       machine.wait_for_unit("network.target")

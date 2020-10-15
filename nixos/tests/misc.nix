@@ -70,8 +70,8 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
       with subtest("nixos-version"):
           machine.succeed("[ `nixos-version | wc -w` = 2 ]")
 
-      with subtest("nixos-rebuild"):
-          assert "NixOS module" in machine.succeed("nixos-rebuild --help")
+      with subtest("nixos-config"):
+          assert "NixOS module" in machine.succeed("nixos-config --help")
 
       with subtest("Sanity check for uid/gid assignment"):
           assert "4" == machine.succeed("id -u messagebus").strip()

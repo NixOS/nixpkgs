@@ -166,7 +166,7 @@
       <para>
        For users of NixOS 17.09, you will first need to upgrade Nix by setting
        <literal>nix.package = pkgs.nixStable2;</literal> and run
-       <command>nixos-rebuild switch</command> as the <literal>root</literal>
+       <command>nixos-config switch</command> as the <literal>root</literal>
        user.
       </para>
      </listitem>
@@ -644,9 +644,9 @@
      ZRAM algorithm can be changed now.
     </para>
     <para>
-     Changes to ZRAM algorithm are applied during <literal>nixos-rebuild
+     Changes to ZRAM algorithm are applied during <literal>nixos-config
      switch</literal>, so make sure you have enough swap space on disk to
-     survive ZRAM device rebuild. Alternatively, use <literal>nixos-rebuild
+     survive ZRAM device rebuild. Alternatively, use <literal>nixos-config
      boot; reboot</literal>.
     </para>
    </listitem>
@@ -760,7 +760,7 @@
    </listitem>
    <listitem>
     <para>
-     A new subcommand <command>nixos-rebuild edit</command> was added.
+     A new subcommand <command>nixos-config edit</command> was added.
     </para>
    </listitem>
   </itemizedlist>
