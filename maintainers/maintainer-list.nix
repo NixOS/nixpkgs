@@ -9508,6 +9508,12 @@
     githubId = 568532;
     name = "Christian Zagrodnick";
   };
+  zakame = {
+    email = "zakame@zakame.net";
+    github = "zakame";
+    githubId = 110625;
+    name = "Zak B. Elep";
+  };
   zalakain = {
     email = "ping@umazalakain.info";
     github = "umazalakain";
