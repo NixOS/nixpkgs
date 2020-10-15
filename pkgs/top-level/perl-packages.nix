@@ -8300,6 +8300,23 @@ let
     };
   };
 
+  FutureAsyncAwait = buildPerlModule {
+    pname = "Future-AsyncAwait";
+    version = "0.44";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-0.44.tar.gz";
+      sha256 = "131825164614ede6a49df4566e730c4cc22e3129796039b9360fa551701413fe";
+    };
+    buildInputs = [ TestRefcount ];
+    propagatedBuildInputs = [ Future XSParseSublike ];
+    perlPreHook = stdenv.lib.optionalString stdenv.isDarwin "export LD=$CC";
+    meta = {
+      description = "Deferred subroutine syntax for futures";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
+    };
+  };
+
   GamesSolitaireVerify = buildPerlModule {
     pname = "Games-Solitaire-Verify";
     version = "0.2403";
@@ -22878,6 +22895,22 @@ let
     meta = {
       description = "XS pointer backed objects using sv_magic";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  XSParseSublike = buildPerlModule {
+    pname = "XS-Parse-Sublike";
+    version = "0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Sublike-0.10.tar.gz";
+      sha256 = "99a1bdda3ffa67514adb6aa189c902fa78dca41d778a42ae7079f604a045ac43";
+    };
+    buildInputs = [ TestFatal ];
+    perlPreHook = stdenv.lib.optionalString stdenv.isDarwin "export LD=$CC";
+    meta = {
+      description = "XS functions to assist in parsing sub-like syntax";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
     };
   };
 
