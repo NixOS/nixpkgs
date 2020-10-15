@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "sha256-O7l1kj0k8bOSOtZJVzS674oVnM+X3oP00Ybs0qjb64Q=";
   };
 
-  doCheck = stdenv.is64bit;
+  doCheck = stdenv.is64bit && !stdenv.isDarwin;
 
   checkPhase = ''
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" test/external_tools/readelf
