@@ -2,7 +2,7 @@
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , SDL2
 , alsaLib
 , bullet
@@ -47,6 +47,8 @@
 , systemd
 , udev
 , utillinux
+, wayland
+, wayland-protocols
 , writeText
 , xorg
 , zlib
@@ -65,7 +67,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     gtk3
-    pkgconfig
+    pkg-config
     check
   ];
 
@@ -89,6 +91,7 @@ stdenv.mkDerivation rec {
     openssl
     systemd
     udev
+    wayland-protocols
     xorg.libX11
     xorg.libXcursor
     xorg.xorgproto
@@ -123,6 +126,7 @@ stdenv.mkDerivation rec {
     openjpeg
     poppler
     utillinux
+    wayland
     xorg.libXScrnSaver
     xorg.libXcomposite
     xorg.libXdamage
@@ -141,7 +145,6 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "--buildtype=release"
     "-D build-tests=false" # disable build tests, which are not working
-    "-D drm=true"
     "-D ecore-imf-loaders-disabler=ibus,scim" # ibus is disabled by default, scim is not availabe in nixpkgs
     "-D embedded-lz4=false"
     "-D fb=true"
@@ -149,6 +152,9 @@ stdenv.mkDerivation rec {
     "-D sdl=true"
     "-D elua=true"
     "-D bindings=lua,cxx"
+    # for wayland client support
+    "-D wl=true"
+    "-D drm=true"
   ];
 
   patches = [
@@ -197,11 +203,11 @@ stdenv.mkDerivation rec {
     patchelf --add-needed ${libsndfile.out}/lib/libsndfile.so $out/lib/libecore_audio.so
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Enlightenment foundation libraries";
     homepage = "https://enlightenment.org/";
-    license = stdenv.lib.licenses.lgpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
+    license = with licenses; [ bsd2 lgpl2Only licenses.zlib ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
   };
 }

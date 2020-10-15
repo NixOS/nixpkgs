@@ -56,10 +56,10 @@ index 4ca6333c4a..df15f7db1d 100755
  echo Building containerd-shim
  rm -f ./vendor/github.com/containerd/containerd/bin/containerd-shim
 diff --git a/scripts/package-cli b/scripts/package-cli
-index f33d8c66dd..da34397a28 100755
+index d1aad638d9..90479b6fa1 100755
 --- a/scripts/package-cli
 +++ b/scripts/package-cli
-@@ -49,16 +49,18 @@ fi
+@@ -49,15 +49,18 @@ fi
  
  CMD_NAME=dist/artifacts/k3s${BIN_SUFFIX}
  
@@ -71,17 +71,14 @@ index f33d8c66dd..da34397a28 100755
      -w -s
  "
 -STATIC="-extldflags '-static'"
+-CGO_ENABLED=0 "${GO}" build -ldflags "$LDFLAGS $STATIC" -o ${CMD_NAME} ./cmd/k3s/main.go
 +# STATIC="-extldflags '-static'"
 +# nixpkgs: we can depend on dynamic linking because we have a good package manager
- if [ "$DQLITE" = "true" ]; then
-     DQLITE_TAGS="dqlite"
- fi
--CGO_ENABLED=0 "${GO}" build -tags "$DQLITE_TAGS" -ldflags "$LDFLAGS $STATIC" -o ${CMD_NAME} ./cmd/k3s/main.go
-+"${GO}" build -tags "$DQLITE_TAGS" -ldflags "$LDFLAGS" -o ${CMD_NAME} ./cmd/k3s/main.go
++"${GO}" build -ldflags "$LDFLAGS" -o ${CMD_NAME} ./cmd/k3s/main.go
+ 
+ stat ${CMD_NAME}
  
 -./scripts/build-upload ${CMD_NAME} ${COMMIT}
 +# nixpkgs: skip uploading
 +# ./scripts/build-upload ${CMD_NAME} ${COMMIT}
--- 
-2.25.4
-
++

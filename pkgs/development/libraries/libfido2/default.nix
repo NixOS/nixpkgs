@@ -11,24 +11,16 @@
 
 stdenv.mkDerivation rec {
   pname = "libfido2";
-  version = "1.4.0";
+  version = "1.5.0";
   src = fetchurl {
     url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    sha256 = "0v1a3n0qljmrp8y9pmnmbsdsy79l3z84qmhyjx50xdsbgnz1z4md";
+    sha256 = "08iizxq3w8mpkwfrfpl59csffc20yz8x398bl3kf23rrr4izk42r";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [ hidapi libcbor openssl ]
     ++ stdenv.lib.optionals stdenv.isLinux [ udev ];
-
-  patches = [
-    # make build reproducible
-    (fetchpatch {
-      url = "https://github.com/Yubico/libfido2/commit/e79f7d7996e70d6b2ae9826fce81d61659cab4f6.patch";
-      sha256 = "0jwg69f95qqf0ym24q1ka50d3d3338cyw4fdfzpw4sab0shiaq9v";
-    })
-  ];
 
   cmakeFlags = [
     "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"

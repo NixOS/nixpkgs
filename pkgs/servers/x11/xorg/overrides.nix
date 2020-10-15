@@ -4,7 +4,7 @@
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
-  mcpp, epoxy, openssl, pkgconfig, llvm_6, python3,
+  mcpp, epoxy, openssl, pkgconfig, llvm_6, python3, libxslt,
   ApplicationServices, Carbon, Cocoa, Xplugin
 }:
 
@@ -469,7 +469,7 @@ self: super:
   });
 
   xkeyboardconfig = super.xkeyboardconfig.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [intltool];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ intltool libxslt ];
 
     configureFlags = [ "--with-xkb-rules-symlink=xorg" ];
 

@@ -122,19 +122,22 @@ let
       "--email" data.email
       "--key-type" data.keyType
     ] ++ protocolOpts
-      ++ optionals data.ocspMustStaple [ "--must-staple" ]
       ++ optionals (acmeServer != null) [ "--server" acmeServer ]
       ++ concatMap (name: [ "-d" name ]) extraDomains
       ++ data.extraLegoFlags;
 
+    # Although --must-staple is common to both modes, it is not declared as a
+    # mode-agnostic argument in lego and thus must come after the mode.
     runOpts = escapeShellArgs (
       commonOpts
       ++ [ "run" ]
+      ++ optionals data.ocspMustStaple [ "--must-staple" ]
       ++ data.extraLegoRunFlags
     );
     renewOpts = escapeShellArgs (
       commonOpts
       ++ [ "renew" "--reuse-key" ]
+      ++ optionals data.ocspMustStaple [ "--must-staple" ]
       ++ data.extraLegoRenewFlags
     );
 

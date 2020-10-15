@@ -1,14 +1,14 @@
 { stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, ApplicationServices, CoreServices }:
 
 stdenv.mkDerivation rec {
-  version = "1.38.1";
+  version = "1.40.0";
   pname = "libuv";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0cvabjhi53qw94zyjkqamx0c607ayydfb4f3djx2gj8ab2p7s29n";
+    sha256 = "1hd0x6i80ca3j0c3a7laygzab5qkgxjkz692jwzrsinsfhvbq0pg";
   };
 
   postPatch = let
@@ -66,7 +66,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A multi-platform support library with a focus on asynchronous I/O";
-    homepage    = "https://github.com/libuv/libuv";
+    homepage    = "https://libuv.org/";
+    changelog   = "https://github.com/libuv/libuv/blob/v${version}/ChangeLog";
     maintainers = with maintainers; [ cstrahan ];
     platforms   = with platforms; linux ++ darwin;
     license     = with licenses; [ mit isc bsd2 bsd3 cc-by-40 ];

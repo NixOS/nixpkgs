@@ -1,13 +1,15 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , substituteAll
-, fetchpatch
-, nose
 , six
 , withGraphviz ? true
 , graphviz
 , fontconfig
+# Tests
+, pytestCheckHook
+, nose
 }:
 
 buildPythonPackage rec {
@@ -26,10 +28,6 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [
-    nose
-  ];
-
   propagatedBuildInputs = [
     six
   ];
@@ -42,13 +40,13 @@ buildPythonPackage rec {
   # circular dependency anytree → graphviz → pango → glib → gtk-doc → anytree
   doCheck = withGraphviz;
 
-  checkPhase = ''
-    runHook preCheck
+  checkInputs = [ pytestCheckHook nose ];
 
-    nosetests
-
-    runHook postCheck
-  '';
+  pytestFlagsArray = lib.optionals (pythonOlder "3.4") [
+    # Use enums, which aren't available pre-python3.4
+    "--ignore=tests/test_resolver.py"
+    "--ignore=tests/test_search.py"
+  ];
 
   meta = with lib; {
     description = "Powerful and Lightweight Python Tree Data Structure";

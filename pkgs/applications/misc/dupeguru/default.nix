@@ -1,4 +1,4 @@
-{stdenv, python3Packages, gettext, qt5, fetchFromGitHub}:
+{stdenv, python3Packages, fetchpatch, gettext, qt5, fetchFromGitHub}:
 
 python3Packages.buildPythonApplication rec {
   pname = "dupeguru";
@@ -13,6 +13,15 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0ma4f1c6vmpz8gi4sdy43x1ik7wh42wayvk1iq520d3i714kfcpy";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # already merged to master, remove next version bump
+    (fetchpatch {
+      name = "remove-m-from-so-var.patch";
+      url = "https://github.com/arsenetar/dupeguru/commit/bd0f53bcbe463c48fe141b73af13542da36d82ba.patch";
+      sha256 = "07iisz8kcr7v8lb21inzj1avlpfhh9k8wcivbd33w49cr3mmnr26";
+    })
+  ];
 
   nativeBuildInputs = [
     gettext
@@ -58,6 +67,5 @@ python3Packages.buildPythonApplication rec {
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = [ maintainers.novoxudonoser ];
-    broken = true; # mv: cannot stat '_block.cpython-38m*.so': No such file or directory
   };
 }

@@ -70,7 +70,7 @@ let
     privateKey = testCerts.${domain}.key;
     httpPort = 80;
     tlsPort = 443;
-    ocspResponderURL = "http://0.0.0.0:4002";
+    ocspResponderURL = "http://${domain}:4002";
     strict = true;
   };
 

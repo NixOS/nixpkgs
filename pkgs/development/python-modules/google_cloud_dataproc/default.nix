@@ -4,6 +4,8 @@
 , google_api_core
 , pytest
 , mock
+, libcst
+, proto-plus
 }:
 
 buildPythonPackage rec {
@@ -16,7 +18,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ google_api_core ];
+  propagatedBuildInputs = [ google_api_core libcst proto-plus ];
 
   checkPhase = ''
     pytest tests/unit

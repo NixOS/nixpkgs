@@ -1815,6 +1815,8 @@ in {
 
   duecredit = callPackage ../development/python-modules/duecredit { };
 
+  dufte = callPackage ../development/python-modules/dufte { };
+
   dugong = callPackage ../development/python-modules/dugong { };
 
   dulwich = if isPy3k then
@@ -2420,6 +2422,8 @@ in {
 
   google-auth-oauthlib = callPackage ../development/python-modules/google-auth-oauthlib { };
 
+  google-cloud-access-context-manager = callPackage ../development/python-modules/google-cloud-access-context-manager { };
+
   google_cloud_asset = callPackage ../development/python-modules/google_cloud_asset { };
 
   google_cloud_automl = callPackage ../development/python-modules/google_cloud_automl { };
@@ -2455,6 +2459,8 @@ in {
   google_cloud_logging = callPackage ../development/python-modules/google_cloud_logging { };
 
   google_cloud_monitoring = callPackage ../development/python-modules/google_cloud_monitoring { };
+
+  google-cloud-org-policy = callPackage ../development/python-modules/google-cloud-org-policy { };
 
   google_cloud_pubsub = callPackage ../development/python-modules/google_cloud_pubsub { };
 
@@ -3308,6 +3314,8 @@ in {
     callPackage ../development/python-modules/libcloud/2.nix { }
   else
     callPackage ../development/python-modules/libcloud { };
+
+  libcst = callPackage ../development/python-modules/libcst { };
 
   libevdev = callPackage ../development/python-modules/libevdev { };
 
@@ -4662,6 +4670,8 @@ in {
   property-manager = callPackage ../development/python-modules/property-manager { };
 
   protego = callPackage ../development/python-modules/protego { };
+
+  proto-plus = callPackage ../development/python-modules/proto-plus { };
 
   protobuf = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
@@ -6176,6 +6186,8 @@ in {
 
   rhpl = disabledIf isPy3k (callPackage ../development/python-modules/rhpl { });
 
+  rich = callPackage ../development/python-modules/rich { };
+
   rig = callPackage ../development/python-modules/rig { };
 
   ripser = callPackage ../development/python-modules/ripser { };
@@ -6878,6 +6890,8 @@ in {
 
   swagger-ui-bundle = callPackage ../development/python-modules/swagger-ui-bundle { };
 
+  swspotify = callPackage ../development/python-modules/swspotify { };
+
   sybil = callPackage ../development/python-modules/sybil { };
 
   symengine = callPackage ../development/python-modules/symengine { symengine = pkgs.symengine; };
@@ -7195,6 +7209,8 @@ in {
   tunigo = callPackage ../development/python-modules/tunigo { };
 
   TurboCheetah = callPackage ../development/python-modules/TurboCheetah { };
+
+  tubeup = callPackage ../development/python-modules/tubeup { };
 
   tvdb_api = callPackage ../development/python-modules/tvdb_api { };
 

@@ -2395,6 +2395,12 @@
     githubId = 984691;
     name = "Evan Danaher";
   };
+  edcragg = {
+    email = "ed.cragg@eipi.xyz";
+    github = "nuxeh";
+    githubId = 1516017;
+    name = "Ed Cragg";
+  };
   edef = {
     email = "edef@edef.eu";
     github = "edef1c";
@@ -2722,6 +2728,12 @@
     github = "evanjs";
     githubId = 1847524;
     name = "Evan Stoll";
+  };
+  evax = {
+    email = "nixos@evax.fr";
+    github = "evax";
+    githubId = 599997;
+    name = "evax";
   };
   evck = {
     email = "eric@evenchick.com";
@@ -3318,6 +3330,12 @@
     github = "guillaumekoenig";
     githubId = 10654650;
     name = "Guillaume Koenig";
+  };
+  guserav = {
+    email = "guserav@users.noreply.github.com";
+    github = "guserav";
+    githubId = 28863828;
+    name = "guserav";
   };
   guyonvarch = {
     email = "joris@guyonvarch.me";
@@ -4267,6 +4285,12 @@
     github = "jumper149";
     githubId = 39434424;
     name = "Felix Springer";
+  };
+  justinas = {
+    email = "justinas@justinas.org";
+    github = "justinas";
+    githubId = 662666;
+    name = "Justinas Stankevičius";
   };
   justinlovinger = {
     email = "git@justinlovinger.com";
@@ -6237,6 +6261,12 @@
     githubId = 40049608;
     name = "Andy Chun";
   };
+  norfair = {
+    email = "syd@cs-syd.eu";
+    github = "NorfairKing";
+    githubId = 3521180;
+    name = "Tom Sydney Kerckhove";
+  };
   notthemessiah = {
     email = "brian.cohen.88@gmail.com";
     github = "notthemessiah";
@@ -6370,6 +6400,12 @@
     github = "omnipotententity";
     githubId = 1538622;
     name = "Michael Reilly";
+  };
+  onny = {
+    email = "onny@project-insanity.org";
+    github = "onny";
+    githubId = 757752;
+    name = "Jonas Heinrich";
   };
   OPNA2608 = {
     email = "christoph.neidahl@gmail.com";
@@ -9100,6 +9136,12 @@
     githubId = 508305;
     name = "Jaroslavas Pocepko";
   };
+  vonfry = {
+    email = "nixos@vonfry.name";
+    github = "Vonfry";
+    githubId = 3413119;
+    name = "Vonfry";
+  };
   vozz = {
     email = "oliver.huntuk@gmail.com";
     name = "Oliver Hunt";
@@ -9217,6 +9259,12 @@
     github = "wohanley";
     githubId = 1322287;
     name = "William O'Hanley";
+  };
+  wolfangaukang = {
+    email = "liquid.query960@4wrd.cc";
+    github = "wolfangaukang";
+    githubId = 8378365;
+    name = "P. R. d. O.";
   };
   womfoo = {
     email = "kranium@gikos.net";

@@ -13,10 +13,9 @@
 , bison, gperf
 , glib, gtk3, dbus-glib
 , glibc
-, xorg
 , libXScrnSaver, libXcursor, libXtst, libGLU, libGL
 , protobuf, speechd, libXdamage, cups
-, ffmpeg_3, libxslt, libxml2, at-spi2-core
+, ffmpeg, libxslt, libxml2, at-spi2-core
 , jre8
 , pipewire_0_2
 
@@ -77,11 +76,16 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "libwebp" "libxslt" "opus" "snappy" "libpng"
-    # "zlib" # version 77 reports unresolved dependency on //third_party/zlib:zlib_config
-    # "libjpeg" # fails with multiple undefined references to chromium_jpeg_*
+    "ffmpeg"
+    "flac"
+    "libjpeg"
+    "libpng"
+    "libwebp"
+    "libxslt"
+    "opus"
+    "snappy"
+    "zlib"
     # "re2" # fails with linker errors
-    # "ffmpeg" # https://crbug.com/731766
     # "harfbuzz-ng" # in versions over 63 harfbuzz and freetype are being built together
                     # so we can't build with one from system and other from source
   ];
@@ -96,7 +100,7 @@ let
     libpng libcap
     xdg_utils minizip libwebp
     libusb1 re2 zlib
-    ffmpeg_3 libxslt libxml2
+    ffmpeg libxslt libxml2
     nasm
     # harfbuzz # in versions over 63 harfbuzz and freetype are being built together
                # so we can't build with one from system and other from source
@@ -131,7 +135,6 @@ let
       ninja which python2Packages.python perl pkgconfig
       python2Packages.ply python2Packages.jinja2 nodejs
       gnutar python2Packages.setuptools
-      (xorg.xcbproto.override { python = python2Packages.python; })
     ];
 
     buildInputs = defaultDependencies ++ [
@@ -150,13 +153,9 @@ let
       ++ optional pulseSupport libpulseaudio
       ++ optionals useOzone [ libdrm wayland mesa_drivers libxkbcommon ];
 
-    patches = optionals (versionRange "68" "86") [
-      ./patches/nix_plugin_paths_68.patch
-    ] ++ [
-      ./patches/remove-webp-include-69.patch
+    patches = [
       ./patches/no-build-timestamps.patch
       ./patches/widevine-79.patch
-      ./patches/dont-use-ANGLE-by-default.patch
       # Unfortunately, chromium regularly breaks on major updates and
       # then needs various patches backported in order to be compiled with GCC.
       # Good sources for such patches and other hints:
@@ -166,18 +165,18 @@ let
       #
       # ++ optionals (channel == "dev") [ ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" ) ]
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
-    ] ++ optionals (useVaapi && versionRange "68" "86") [ # Improvements for the VA-API build:
-      ./patches/enable-vdpau-support-for-nvidia.patch # https://aur.archlinux.org/cgit/aur.git/tree/vdpau-support.patch?h=chromium-vaapi
-      ./patches/enable-video-acceleration-on-linux.patch # Can be controlled at runtime (i.e. without rebuilding Chromium)
+    ] ++ optionals (useVaapi) [
+      # Check for enable-accelerated-video-decode on Linux:
+      (githubPatch "54deb9811ca9bd2327def5c05ba6987b8c7a0897" "11jvxjlkzz1hm0pvfyr88j7z3zbwzplyl5idkx92l2lzv4459c8d")
     ];
 
-    postPatch = optionalString (!versionRange "0" "86") ''
+    postPatch = ''
       # Required for patchShebangs (unsupported interpreter directive, basename: invalid option -- '*', etc.):
       substituteInPlace native_client/SConstruct \
         --replace "#! -*- python -*-" ""
       substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
         --replace "/usr/bin/env -S make -f" "/usr/bin/make -f"
-    '' + ''
+
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
       substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \
         --replace \
@@ -194,11 +193,6 @@ let
         --replace \
           '/usr/share/locale/' \
           '${glibc}/share/locale/'
-
-      substituteInPlace ui/gfx/x/BUILD.gn \
-        --replace \
-          '/usr/share/xcb' \
-          '${xorg.xcbproto}/share/xcb/'
 
       sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg_utils}/bin/xdg-@' \
         chrome/browser/shell_integration_linux.cc
@@ -272,6 +266,7 @@ let
       is_clang = stdenv.cc.isClang;
       clang_use_chrome_plugins = false;
       blink_symbol_level = 0;
+      symbol_level = 0;
       fieldtrial_testing_like_official_build = true;
 
       # Google API keys, see:

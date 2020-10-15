@@ -65,10 +65,32 @@
    </listitem>
    <listitem>
     <para>
-      The option <option>fonts.enableFontDir</option> has been renamed to
-      <xref linkend="opt-fonts.fontDir.enable"/>. The path of font directory
-      has also been changed to <literal>/run/current-system/sw/share/X11/fonts</literal>,
-      for consistency with other X11 resources.
+     If the <varname>services.dbus</varname> module is enabled, then
+     the user D-Bus session is now always socket activated. The
+     associated options <varname>services.dbus.socketActivated</varname>
+     and <varname>services.xserver.startDbusSession</varname> have
+     therefore been removed and you will receive a warning if
+     they are present in your configuration. This change makes the
+     user D-Bus session available also for non-graphical logins.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The option <option>fonts.enableFontDir</option> has been renamed to
+     <xref linkend="opt-fonts.fontDir.enable"/>. The path of font directory
+     has also been changed to <literal>/run/current-system/sw/share/X11/fonts</literal>,
+     for consistency with other X11 resources.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      A number of options have been renamed in the kicad interface. <literal>oceSupport</literal>
+      has been renamed to <literal>withOCE</literal>, <literal>withOCCT</literal> has been renamed
+      to <literal>withOCC</literal>, <literal>ngspiceSupport</literal> has been renamed to
+      <literal>withNgspice</literal>, and <literal>scriptingSupport</literal> has been renamed to
+      <literal>withScripting</literal>. Additionally, <literal>kicad/base.nix</literal> no longer
+      provides default argument values since these are provided by
+      <literal>kicad/default.nix</literal>.
     </para>
    </listitem>
   </itemizedlist>

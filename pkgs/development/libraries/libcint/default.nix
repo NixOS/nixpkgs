@@ -4,18 +4,18 @@
 , cmake
 , blas
   # Check Inputs
-, python2
+, python
 }:
 
 stdenv.mkDerivation rec {
   pname = "libcint";
-  version = "3.1.1";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "sunqm";
     repo = "libcint";
     rev = "v${version}";
-    sha256 = "0z1gavi7aacx68fmyzy90vzv5kff844lnxc6habs6y377dr3rwwy";
+    sha256 = "0j8fkkp3vb1936qy80sc08c327b47qxh0x2aadd1225jjq6xqxmn";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -27,8 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  # Test syntax (like print statements) is written in python2. Fixed when #33 merged: https://github.com/sunqm/libcint/pull/33
-  checkInputs = [ python2.pkgs.numpy ];
+  checkInputs = [ python.pkgs.numpy ];
 
   meta = with lib; {
     description = "General GTO integrals for quantum chemistry";
@@ -39,6 +38,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://wiki.sunqm.net/libcint";
     downloadPage = "https://github.com/sunqm/libcint";
+    changelog = "https://github.com/sunqm/libcint/blob/master/ChangeLog";
     license = licenses.bsd2;
     maintainers = with maintainers; [ drewrisinger ];
   };

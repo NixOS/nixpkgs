@@ -245,6 +245,10 @@ stdenv.mkDerivation {
       --replace usr "$PREFIX"
     substituteInPlace swift-corelibs-xctest/build_script.py \
       --replace usr "$PREFIX"
+    substituteInPlace swift-corelibs-foundation/CoreFoundation/PlugIn.subproj/CFBundle_InfoPlist.c \
+      --replace "if !TARGET_OS_ANDROID" "if TARGET_OS_MAC || TARGET_OS_BSD"
+    substituteInPlace swift-corelibs-foundation/CoreFoundation/PlugIn.subproj/CFBundle_Resources.c \
+      --replace "if !TARGET_OS_ANDROID" "if TARGET_OS_MAC || TARGET_OS_BSD"
   '';
 
   configurePhase = ''

@@ -57,7 +57,7 @@
       linkend="ch-configuration"/>. Changes to a module documentation
     have to be checked to not break building the NixOS manual:
    </para>
-<screen><prompt>$ </prompt>nix-build nixos/release.nix -A manual</screen>
+<screen><prompt>$ </prompt>nix-build nixos/release.nix -A manual.x86_64-linux</screen>
   </callout>
  </calloutlist>
 </section>
