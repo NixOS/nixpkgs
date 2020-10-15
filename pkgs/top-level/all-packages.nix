@@ -9094,24 +9094,7 @@ in
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
 
-  glslang = callPackage ../development/compilers/glslang {
-    spirv-tools = spirv-tools.overrideAttrs (_: {
-      src = fetchFromGitHub {
-        owner = "KhronosGroup";
-        repo = "SPIRV-Tools";
-        rev = "5c019b5923c1f6bf00a3ac28114ec4a7b1faa0e2";
-        sha256 = "17a0kiyb7zjsg7ws12diip84vds1ajl98ni9c2wria6ymcvbvsvz";
-      };
-    });
-    spirv-headers = spirv-headers.overrideAttrs (_: {
-      src = fetchFromGitHub {
-        owner = "KhronosGroup";
-        repo = "SPIRV-Headers";
-        rev = "204cd131c42b90d129073719f2766293ce35c081";
-        sha256 = "1gp0mlbfccqnalaix97jxsa5i337xyzyr55wgssapy56p0q04wv2";
-      };
-    });
-  };
+  glslang = callPackage ../development/compilers/glslang { };
 
   go_bootstrap = if stdenv.isAarch64 then
     srcOnly {
@@ -15884,33 +15867,7 @@ in
   vulkan-headers = callPackage ../development/libraries/vulkan-headers { };
   vulkan-loader = callPackage ../development/libraries/vulkan-loader { };
   vulkan-tools = callPackage ../tools/graphics/vulkan-tools { };
-  vulkan-validation-layers = callPackage ../development/tools/vulkan-validation-layers {
-    glslang = (glslang.override {
-      spirv-tools = spirv-tools.overrideAttrs (_: {
-        src = fetchFromGitHub {
-          owner = "KhronosGroup";
-          repo = "SPIRV-Tools";
-          rev = "323a81fc5e30e43a04e5e22af4cba98ca2a161e6";
-          sha256 = "1kwyh95l02w3v1ra55c836wayzw8d0m14ab7wf0ynhhyp3k2p9hv";
-        };
-      });
-      spirv-headers = spirv-tools.overrideAttrs (_: {
-        src = fetchFromGitHub {
-          owner = "KhronosGroup";
-          repo = "SPIRV-Headers";
-          rev = "204cd131c42b90d129073719f2766293ce35c081";
-          sha256 = "1gp0mlbfccqnalaix97jxsa5i337xyzyr55wgssapy56p0q04wv2";
-        };
-      });
-    }).overrideAttrs (_: {
-      src = fetchFromGitHub {
-        owner = "KhronosGroup";
-        repo = "glslang";
-        rev = "4fc7a33910fb8e40b970d160e1b38ab3f67fe0f3";
-        sha256 = "1dghz8zl774dx2xpa4dv8xhxirbylgyn6kx18ib4qirna1njp0zg";
-      };
-    });
-  };
+  vulkan-validation-layers = callPackage ../development/tools/vulkan-validation-layers { };
 
   vtkWithQt5 = vtk.override { qtLib = qt514; };
 
