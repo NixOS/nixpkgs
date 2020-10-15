@@ -12412,7 +12412,7 @@ in
     openal = if stdenv.isDarwin then null else openal;
     libmfx = if stdenv.isDarwin then null else intel-media-sdk;
     libpulseaudio = if stdenv.isDarwin then null else libpulseaudio;
-    rav1e = if stdenv.isDarwin then null else rav1e;
+    rav1e = null;
     samba = if stdenv.isDarwin then null else samba;
     vid-stab = if stdenv.isDarwin then null else vid-stab;
     x265 = if stdenv.isDarwin then null else x265;
