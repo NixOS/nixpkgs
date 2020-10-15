@@ -2,24 +2,18 @@
 
 { shortTarget, originalCargoToml, target, RUSTFLAGS }:
 
-let rustSrc = stdenv.mkDerivation {
-    name = "rust-src";
-    src = rustPlatform.rust.rustc.src;
-    preferLocalBuild = true;
-    phases = [ "unpackPhase" "installPhase" ];
-    installPhase = "cp -r src $out";
-  };
+let
   cargoSrc = stdenv.mkDerivation {
-      name = "cargo-src";
-      preferLocalBuild = true;
-      phases = [ "installPhase" ];
-      installPhase = ''
-        RUSTC_SRC=${rustSrc} ORIG_CARGO=${originalCargoToml} \
-          ${buildPackages.python3.withPackages (ps: with ps; [ toml ])}/bin/python3 ${./cargo.py}
-        mkdir -p $out
-        cp Cargo.toml $out/Cargo.toml
-        cp ${./Cargo.lock} $out/Cargo.lock
-      '';
+    name = "cargo-src";
+    preferLocalBuild = true;
+    phases = [ "installPhase" ];
+    installPhase = ''
+      RUSTC_SRC=${rustPlatform.rustcSrc} ORIG_CARGO=${originalCargoToml} \
+        ${buildPackages.python3.withPackages (ps: with ps; [ toml ])}/bin/python3 ${./cargo.py}
+      mkdir -p $out
+      cp Cargo.toml $out/Cargo.toml
+      cp ${./Cargo.lock} $out/Cargo.lock
+    '';
   };
 in rustPlatform.buildRustPackage {
   inherit target RUSTFLAGS;
