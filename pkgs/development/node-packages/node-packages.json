@@ -18,6 +18,7 @@
 , "browserify"
 , "btc-rpc-explorer"
 , "castnow"
+, "cdk8s-cli"
 , "clean-css-cli"
 , "clubhouse-cli"
 , "coc-css"
