@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , setuptools_scm
 , cython
 , numpy
@@ -13,6 +14,7 @@
 buildPythonPackage rec {
   pname = "numcodecs";
   version = "0.7.2";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
