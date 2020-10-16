@@ -1478,6 +1478,10 @@ self: super: {
   domain-auth = dontCheck super.domain-auth;
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 
+  # stack-2.5.1 needs a more current version of pantry to compile
+  pantry = self.pantry_0_5_1_3;
+
+  # haskell-language-server needs a more current version of pantry to compile
 } // (let
   inherit (self) hls-ghcide hls-brittany;
   hlsScopeOverride = self: super: {
