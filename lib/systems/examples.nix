@@ -179,8 +179,8 @@ rec {
   iphone64 = {
     config = "aarch64-apple-ios";
     # config = "aarch64-apple-darwin14";
-    sdkVer = "13.2";
-    xcodeVer = "11.3.1";
+    sdkVer = "14.0";
+    xcodeVer = "12.0.1";
     xcodePlatform = "iPhoneOS";
     useiOSPrebuilt = true;
     platform = {};
@@ -189,8 +189,8 @@ rec {
   iphone32 = {
     config = "armv7a-apple-ios";
     # config = "arm-apple-darwin10";
-    sdkVer = "13.2";
-    xcodeVer = "11.3.1";
+    sdkVer = "14.0";
+    xcodeVer = "12.0.1";
     xcodePlatform = "iPhoneOS";
     useiOSPrebuilt = true;
     platform = {};
@@ -199,8 +199,8 @@ rec {
   iphone64-simulator = {
     config = "x86_64-apple-ios";
     # config = "x86_64-apple-darwin14";
-    sdkVer = "13.2";
-    xcodeVer = "11.3.1";
+    sdkVer = "14.0";
+    xcodeVer = "12.0.1";
     xcodePlatform = "iPhoneSimulator";
     useiOSPrebuilt = true;
     platform = {};
@@ -209,8 +209,8 @@ rec {
   iphone32-simulator = {
     config = "i686-apple-ios";
     # config = "i386-apple-darwin11";
-    sdkVer = "13.2";
-    xcodeVer = "11.3.1";
+    sdkVer = "14.0";
+    xcodeVer = "12.0.1";
     xcodePlatform = "iPhoneSimulator";
     useiOSPrebuilt = true;
     platform = {};
