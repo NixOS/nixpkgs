@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder }:
 
 # This package provides a binary "apython" which sometimes invokes
 # [sys.executable, '-m', 'aioconsole'] as a subprocess. If apython is
@@ -11,6 +11,7 @@
 buildPythonPackage rec {
   pname = "aioconsole";
   version = "0.3.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
