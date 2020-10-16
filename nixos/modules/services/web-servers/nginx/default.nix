@@ -34,7 +34,6 @@ let
     proxy_set_header        X-Forwarded-Proto $scheme;
     proxy_set_header        X-Forwarded-Host $host;
     proxy_set_header        X-Forwarded-Server $host;
-    proxy_set_header        Accept-Encoding "";
   '';
 
   upstreamConfig = toString (flip mapAttrsToList cfg.upstreams (name: upstream: ''
