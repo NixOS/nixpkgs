@@ -351,7 +351,7 @@ let
 
     buildPhase = let
       buildCommand = target: ''
-        ninja -C "${buildPath}" "${target}"
+        ninja -C "${buildPath}" -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES "${target}"
         (
           source chrome/installer/linux/common/installer.include
           PACKAGE=$packageName
