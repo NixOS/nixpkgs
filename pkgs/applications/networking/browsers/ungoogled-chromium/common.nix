@@ -350,15 +350,8 @@ let
     NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
 
     buildPhase = let
-      # Build paralelism: on Hydra the build was frequently running into memory
-      # exhaustion, and even other users might be running into similar issues.
-      # -j is halved to avoid memory problems, and -l is slightly increased
-      # so that the build gets slight preference before others
-      # (it will often be on "critical path" and at risk of timing out)
       buildCommand = target: ''
-        ninja -C "${buildPath}"  \
-          -j$(( ($NIX_BUILD_CORES+1) / 2 )) -l$(( $NIX_BUILD_CORES+1 )) \
-          "${target}"
+        ninja -C "${buildPath}" "${target}"
         (
           source chrome/installer/linux/common/installer.include
           PACKAGE=$packageName
