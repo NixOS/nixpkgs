@@ -6517,6 +6517,8 @@ in {
 
   setuptools-lint = callPackage ../development/python-modules/setuptools-lint { };
 
+  setuptools-rust = callPackage ../development/python-modules/setuptools-rust { };
+
   setuptools_scm = callPackage ../development/python-modules/setuptools_scm { };
 
   setuptools-scm-git-archive = callPackage ../development/python-modules/setuptools-scm-git-archive { };
