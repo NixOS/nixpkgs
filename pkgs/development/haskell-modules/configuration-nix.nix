@@ -645,6 +645,7 @@ self: super: builtins.intersectAttrs super {
   # Tests require internet
   http-download = dontCheck super.http-download;
   pantry = dontCheck super.pantry;
+  pantry_0_5_1_3 = dontCheck super.pantry_0_5_1_3;
 
   # gtk2hs-buildtools is listed in setupHaskellDepends, but we
   # need it during the build itself, too.
@@ -731,7 +732,7 @@ self: super: builtins.intersectAttrs super {
   primitive = dontCheck super.primitive;
 
   cut-the-crap =
-    let path = pkgs.stdenv.lib.makeBinPath [ pkgs.ffmpeg_3 ];
+    let path = pkgs.stdenv.lib.makeBinPath [ pkgs.ffmpeg_3 pkgs.youtube-dl ];
     in overrideCabal (addBuildTool super.cut-the-crap pkgs.makeWrapper) (_drv: {
       postInstall = ''
         wrapProgram $out/bin/cut-the-crap \
