@@ -18,18 +18,9 @@ in stdenv.mkDerivation {
 
   patches = [ ./tg_owt-install.patch ];
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "@@source@@" "$src"
-  '';
+  nativeBuildInputs = [ pkg-config cmake ninja yasm ];
 
-  nativeBuildInputs = [ cmake ninja yasm ];
-
-  buildInputs = [ pkg-config libjpeg openssl libopus ffmpeg alsaLib libpulseaudio ];
-
-  postInstall = ''
-    ln -s $src/src $out/include
-  '';
+  buildInputs = [ libjpeg openssl libopus ffmpeg alsaLib libpulseaudio ];
 
   meta.license = lib.licenses.bsd3;
 }

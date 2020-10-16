@@ -47,7 +47,7 @@ in mkDerivation rec {
     qtbase qtimageformats gtk3 libsForQt5.libdbusmenu enchant2 lz4 xxHash
     dee ffmpeg openalSoft minizip libopus alsaLib libpulseaudio range-v3
     tl-expected hunspell
-    tg_owt tg_owt.src # Source is used for include directories.
+    tg_owt
     # TODO: Shouldn't be required:
     pcre xorg.libpthreadstubs xorg.libXdmcp utillinux libselinux libsepol epoxy at-spi2-core libXtst
   ];
@@ -85,8 +85,8 @@ in mkDerivation rec {
   # TODO: Package mapbox-variant
 
   postFixup = ''
-    # Nuke refs to tg_owt.src
-    sed "s|$NIX_STORE/[a-z0-9]\{32\}-source|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-source|g" \
+    # Nuke refs to `tg_owt` which is introduced by `__FILE__` in headers.
+    sed -E "s|($NIX_STORE/)[a-z0-9]{32}(-${tg_owt.name})|\1eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\2|g" \
       --in-place $out/bin/telegram-desktop
 
     # This is necessary to run Telegram in a pure environment.
