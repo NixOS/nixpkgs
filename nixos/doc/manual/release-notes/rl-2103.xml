@@ -93,6 +93,28 @@
       <literal>kicad/default.nix</literal>.
     </para>
    </listitem>
+   <listitem>
+      <para>
+        <xref linkend="opt-services.wordpress._name_.database.name" /> default value has changed from <literal>"wordpress"</literal> to <literal>"wordpress-${name}"</literal> on NixOS installations where <xref linkend="opt-system.stateVersion"/> is <literal>21.03</literal> or higher.
+        This will break existing installations if you don't manually set <xref linkend="opt-services.wordpress._name_.database.name" /> back to <literal>"wordpress"</literal> or rename the database manually to the new name.
+
+        The theme and plugin directory names don't include the version any more on NixOS installations where <xref linkend="opt-system.stateVersion"/> is <literal>21.03</literal> or higher. This breaks the theme as wordpress isn't able to find it any more.
+
+        To fix this you first need to change directory into the <literal>/nix/store</literal> wordpress directory.
+
+        Before changing anything in the database you should really make a database backup. If you mistype anything you WILL break your database irrevocably. You can make a backup with:
+        <code>nix-shell -p wp-cli --command 'sudo -u wordpress -- wp db export /tmp/$(date +%s)'</code>
+        Remember to move the file to a persistent location.
+
+        The following steps only work when the theme was never loaded before without the version suffix because overriding the values will fail otherwise. In that case you would get an error like <literal>Duplicate entry 'theme_mods_twentytwenty'</literal> which means you would need to delete that old value and rename the <literal>theme_mods_twentytwenty-1.5</literal> one to it.
+        <code>
+          nix-shell -p wp-cli --command 'sudo -u wordpress -- wp db search twentytwenty'
+          nix-shell -p wp-cli --command 'sudo -u wordpress -- wp db search twentytwenty-1.5'
+          nix-shell -p wp-cli --command 'sudo -u wordpress -- wp search-replace "twentytwenty-1.5" "twentytwenty"'
+        </code>
+        It is recommended to verify that all places that are found using the search command are fine to be replaced.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 

@@ -27895,6 +27895,8 @@ in
 
   wordpress = callPackage ../servers/web-apps/wordpress { };
 
+  wordpress-core = callPackage ../servers/web-apps/wordpress/wordpress-core.nix { };
+
   wraith = callPackage ../applications/networking/irc/wraith {
     openssl = openssl_1_0_2;
   };

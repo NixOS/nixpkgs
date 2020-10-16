@@ -21,8 +21,16 @@ let
 
       # symlink the wordpress config
       ln -s ${wpConfig hostName cfg} $out/share/wordpress/wp-config.php
+
+      ${optionalString (!cfg.mutableWpContent) ''
       # symlink uploads directory
       ln -s ${cfg.uploadsDir} $out/share/wordpress/wp-content/uploads
+      ''}
+
+      ${optionalString cfg.mutableWpContent ''
+      rm -Rf $out/share/wordpress/wp-content
+      ln -s ${stateDir hostName} $out/share/wordpress/wp-content
+      ''}
 
       # https://github.com/NixOS/nixpkgs/pull/53399
       #
@@ -31,9 +39,11 @@ let
       # requests that look like: https://example.com/wp-content//nix/store/...plugin/path/some-file.js
       # Since hard linking directories is not allowed, copying is the next best thing.
 
+      ${optionalString (!cfg.mutableWpContent) ''
       # copy additional plugin(s) and theme(s)
-      ${concatMapStringsSep "\n" (theme: "cp -r ${theme} $out/share/wordpress/wp-content/themes/${theme.name}") cfg.themes}
-      ${concatMapStringsSep "\n" (plugin: "cp -r ${plugin} $out/share/wordpress/wp-content/plugins/${plugin.name}") cfg.plugins}
+      ${concatMapStringsSep "\n" (theme: "cp -r ${theme} $out/share/wordpress/wp-content/themes/${if lib.versionAtLeast config.system.stateVersion "21.03" then theme.pname else theme.name}") cfg.themes}
+      ${concatMapStringsSep "\n" (plugin: "cp -r ${plugin} $out/share/wordpress/wp-content/plugins/${if lib.versionAtLeast config.system.stateVersion "21.03" then plugin.pname else plugin.name}") cfg.plugins}
+      ''}
     '';
   };
 
@@ -48,9 +58,15 @@ let
 
       require_once('${stateDir hostName}/secret-keys.php');
 
+      ${optionalString (!cfg.mutableWpContent) ''
       # wordpress is installed onto a read-only file system
       define('DISALLOW_FILE_EDIT', true);
       define('AUTOMATIC_UPDATER_DISABLED', true);
+      ''}
+
+      ${optionalString cfg.mutableWpContent ''
+      define('FS_METHOD','direct');
+      ''}
 
       ${cfg.extraConfig}
 
@@ -80,7 +96,8 @@ let
         package = mkOption {
           type = types.package;
           default = pkgs.wordpress;
-          description = "Which WordPress package to use.";
+          example = literalExample "pkgs.wordpress-core";
+          description = "Which WordPress package to use. Use pkgs.wordpress-core for a version without the default plugins and theme.";
         };
 
         uploadsDir = mkOption {
@@ -92,12 +109,18 @@ let
           '';
         };
 
+        mutableWpContent = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Allow any modification in the wp-content directory. This usually means adding, removing and updating plugins and themes in the web interface. This is helpful for testing which themes and plugins to use. It should only be used on a test server as migrating between mutable and readonly is not easily possible.";
+        };
+
         plugins = mkOption {
           type = types.listOf types.path;
           default = [];
           description = ''
             List of path(s) to respective plugin(s) which are copied from the 'plugins' directory.
-            <note><para>These plugins need to be packaged before use, see example.</para></note>
+            <note><para>These plugins need to be packaged before use, see example. Using something like https://git.helsinki.tools/helsinki-systems/wp4nix may be a better option.</para></note>
           '';
           example = ''
             # Wordpress plugin 'embed-pdf-viewer' installation example
@@ -124,7 +147,7 @@ let
           default = [];
           description = ''
             List of path(s) to respective theme(s) which are copied from the 'theme' directory.
-            <note><para>These themes need to be packaged before use, see example.</para></note>
+            <note><para>These themes need to be packaged before use, see example. Using something like https://git.helsinki.tools/helsinki-systems/wp4nix may be a better option.</para></note>
           '';
           example = ''
             # Let's package the responsive theme
@@ -161,7 +184,7 @@ let
 
           name = mkOption {
             type = types.str;
-            default = "wordpress";
+            default = if lib.versionAtLeast config.system.stateVersion "21.03" then "wordpress-${name}" else "wordpress";
             description = "Database name.";
           };
 
@@ -219,6 +242,18 @@ let
           '';
           description = ''
             Apache configuration can be done by adapting <option>services.httpd.virtualHosts</option>.
+            When changing the <literal>hostName</literal> you also need to migrate the database.
+            Do do this you first need to switch to the wordpress <literal>/nix/store</literal> path.
+            It is strongly recommended to make a backup using
+            <code>nix-shell -p wp-cli --command 'sudo -u wordpress -- wp db export /tmp/$(date +%s)'</code>
+            and moving the file to a persistent location.
+
+            Then you can do the actual migration by executing the following commands:
+            <code>
+            nix-shell -p wp-cli --command 'sudo -u wordpress -- wp db search old.example.org
+            nix-shell -p wp-cli --command 'sudo -u wordpress -- wp search-replace "old.example.org" "new.example.org"
+            </code>
+            You should check that the search doesn't yield places that shouldn't be replaced beforehand.
           '';
         };
 
@@ -280,7 +315,7 @@ in
       ensureDatabases = mapAttrsToList (hostName: cfg: cfg.database.name) eachSite;
       ensureUsers = mapAttrsToList (hostName: cfg:
         { name = cfg.database.user;
-          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
+          ensurePermissions = { "`${cfg.database.name}`.*" = "ALL PRIVILEGES"; };
         }
       ) eachSite;
     };
@@ -298,44 +333,53 @@ in
     services.httpd = {
       enable = true;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts = mapAttrs (hostName: cfg: mkMerge [ cfg.virtualHost {
-        documentRoot = mkForce "${pkg hostName cfg}/share/wordpress";
-        extraConfig = ''
-          <Directory "${pkg hostName cfg}/share/wordpress">
-            <FilesMatch "\.php$">
-              <If "-f %{REQUEST_FILENAME}">
-                SetHandler "proxy:unix:${config.services.phpfpm.pools."wordpress-${hostName}".socket}|fcgi://localhost/"
-              </If>
-            </FilesMatch>
+      virtualHosts = mapAttrs' (hostName: cfg: (
+        nameValuePair "wordpress-${hostName}" (mkMerge [ cfg.virtualHost {
+          documentRoot = mkForce "${pkg hostName cfg}/share/wordpress";
+          extraConfig = ''
+            <Directory "${pkg hostName cfg}/share/wordpress">
+              <FilesMatch "\.php$">
+                <If "-f %{REQUEST_FILENAME}">
+                  SetHandler "proxy:unix:${config.services.phpfpm.pools."wordpress-${hostName}".socket}|fcgi://localhost/"
+                </If>
+              </FilesMatch>
 
-            # standard wordpress .htaccess contents
-            <IfModule mod_rewrite.c>
-              RewriteEngine On
-              RewriteBase /
-              RewriteRule ^index\.php$ - [L]
-              RewriteCond %{REQUEST_FILENAME} !-f
-              RewriteCond %{REQUEST_FILENAME} !-d
-              RewriteRule . /index.php [L]
-            </IfModule>
+              # standard wordpress .htaccess contents
+              <IfModule mod_rewrite.c>
+                RewriteEngine On
+                RewriteBase /
+                RewriteRule ^index\.php$ - [L]
+                RewriteCond %{REQUEST_FILENAME} !-f
+                RewriteCond %{REQUEST_FILENAME} !-d
+                RewriteRule . /index.php [L]
+              </IfModule>
 
-            DirectoryIndex index.php
-            Require all granted
-            Options +FollowSymLinks
-          </Directory>
+              DirectoryIndex index.php
+              Require all granted
+              Options +FollowSymLinks
+            </Directory>
 
-          # https://wordpress.org/support/article/hardening-wordpress/#securing-wp-config-php
-          <Files wp-config.php>
-            Require all denied
-          </Files>
-        '';
-      } ]) eachSite;
+            # https://wordpress.org/support/article/hardening-wordpress/#securing-wp-config-php
+            <Files wp-config.php>
+              Require all denied
+            </Files>
+          '';
+      } ]))) eachSite;
     };
 
     systemd.tmpfiles.rules = flatten (mapAttrsToList (hostName: cfg: [
       "d '${stateDir hostName}' 0750 ${user} ${group} - -"
       "d '${cfg.uploadsDir}' 0750 ${user} ${group} - -"
       "Z '${cfg.uploadsDir}' 0750 ${user} ${group} - -"
-    ]) eachSite);
+      ]
+      ++
+      (if cfg.mutableWpContent then [
+      "d '${stateDir hostName}/themes' 0750 ${user} ${group} - -"
+      "Z '${stateDir hostName}/themes' 0750 ${user} ${group} - -"
+      "d '${stateDir hostName}/plugins' 0750 ${user} ${group} - -"
+      "Z '${stateDir hostName}/plugins' 0750 ${user} ${group} - -"
+      ] else [])
+    ) eachSite);
 
     systemd.services = mkMerge [
       (mapAttrs' (hostName: cfg: (
