@@ -774,6 +774,8 @@ in {
 
   bap = callPackage ../development/python-modules/bap { bap = pkgs.ocaml-ng.ocamlPackages_4_07.bap; };
 
+  baron = callPackage ../development/python-modules/baron { };
+
   base58 = callPackage ../development/python-modules/base58 { };
 
   baselines = callPackage ../development/python-modules/baselines { };
