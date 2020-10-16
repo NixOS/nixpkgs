@@ -8,7 +8,7 @@ let
     preferLocalBuild = true;
     phases = [ "installPhase" ];
     installPhase = ''
-      RUSTC_SRC=${rustPlatform.rustcSrc} ORIG_CARGO=${originalCargoToml} \
+      RUSTC_SRC=${rustPlatform.rustcSrc.override { minimalContent = false; }} ORIG_CARGO=${originalCargoToml} \
         ${buildPackages.python3.withPackages (ps: with ps; [ toml ])}/bin/python3 ${./cargo.py}
       mkdir -p $out
       cp Cargo.toml $out/Cargo.toml
