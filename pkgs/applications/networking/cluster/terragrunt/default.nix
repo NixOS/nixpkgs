@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "terragrunt";
-  version = "0.23.40";
+  version = "0.25.4";
 
-   src = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gd2g1nl8dgj24mzk4qymcwnp6prbi3qxj863rkpi3k32zy2iw4k";
+    sha256 = "1c8rfx7sks8j74f3jjsl5azkhi7jvcfp8lmd9z553nal4fy8ksb6";
   };
 
   vendorSha256 = "0f466qn5vp74mwx9s4rcbw1x793w8hr5dcf2c12sgshya1bxs4nl";
@@ -17,9 +17,7 @@ buildGoModule rec {
 
   buildInputs = [ makeWrapper ];
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-X main.VERSION=v${version}")
-  '';
+  buildFlagsArray = [ "-ldflags=" "-X main.VERSION=v${version}" ];
 
   postInstall = ''
     wrapProgram $out/bin/terragrunt \
