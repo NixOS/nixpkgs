@@ -1622,7 +1622,7 @@ in
 
   clog-cli = callPackage ../development/tools/clog-cli { };
 
-  cloud-init = callPackage ../tools/virtualization/cloud-init { };
+  cloud-init = python3.pkgs.callPackage ../tools/virtualization/cloud-init { };
 
   cloudflared = callPackage ../applications/networking/cloudflared { };
 
@@ -2985,6 +2985,8 @@ in
   cromfs = callPackage ../tools/archivers/cromfs { };
 
   cron = callPackage ../tools/system/cron { };
+
+  snooze = callPackage ../tools/system/snooze { };
 
   cudaPackages = recurseIntoAttrs (callPackage ../development/compilers/cudatoolkit {});
   inherit (cudaPackages)
@@ -9364,6 +9366,10 @@ in
 
   knightos-patchrom = callPackage ../development/tools/knightos/patchrom { };
 
+  knightos-mktiupgrade = callPackage ../development/tools/knightos/mktiupgrade {
+    asciidoc = asciidoc-full;
+  };
+
   knightos-scas = callPackage ../development/tools/knightos/scas { };
 
   kotlin = callPackage ../development/compilers/kotlin { };
@@ -12412,7 +12418,7 @@ in
     openal = if stdenv.isDarwin then null else openal;
     libmfx = if stdenv.isDarwin then null else intel-media-sdk;
     libpulseaudio = if stdenv.isDarwin then null else libpulseaudio;
-    rav1e = if stdenv.isDarwin then null else rav1e;
+    rav1e = null;
     samba = if stdenv.isDarwin then null else samba;
     vid-stab = if stdenv.isDarwin then null else vid-stab;
     x265 = if stdenv.isDarwin then null else x265;
