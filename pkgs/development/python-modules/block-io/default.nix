@@ -20,12 +20,15 @@ buildPythonPackage rec {
 
   preConfigure = ''
     substituteInPlace setup.py \
-      --replace "ecdsa==0.13" "ecdsa>=0.13"
+      --replace "ecdsa==0.13" "ecdsa>=0.13" \
+      --replace "base58==1.0.3" "base58>=1.0.3"
   '';
 
   # Tests needs a BlockIO API key to run properly
   # https://github.com/BlockIo/block_io-python/blob/79006bc8974544b70a2d8e9f19c759941d32648e/test.py#L18
   doCheck = false;
+
+  pythonImportsCheck = [ "block_io" ];
 
   meta = with stdenv.lib; {
     description = "Integrate Bitcoin, Dogecoin and Litecoin in your Python applications using block.io";
