@@ -1,12 +1,14 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , nose
 }:
 
 buildPythonPackage rec {
   version = "2.0.1";
   pname = "python-json-logger";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
