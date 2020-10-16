@@ -5,7 +5,7 @@
 
 buildPythonPackage rec {
   pname = "aria2p";
-  version = "0.7.0";
+  version = "0.9.1";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "pawamoy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1inak3y2win58zbzykfzy6xp00f276sqsz69h2nfsd93mpr74wf6";
+    sha256 = "1s4kad6jnfz9p64gkqclkfq2x2bn8dbc0hyr86d1545bgn7pz672";
   };
 
   nativeBuildInputs = [ poetry ];
