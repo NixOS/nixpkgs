@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.116.2";
+  version = "0.116.4";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ ]; # missing inputs: accuweather
@@ -36,7 +36,7 @@
     "apcupsd" = ps: with ps; [ ]; # missing inputs: apcaccess
     "api" = ps: with ps; [ aiohttp-cors ];
     "apns" = ps: with ps; [ ]; # missing inputs: apns2
-    "apple_tv" = ps: with ps; [ aiohttp-cors netdisco pyatv zeroconf ];
+    "apple_tv" = ps: with ps; [ aiohttp-cors netdisco zeroconf ]; # missing inputs: pyatv
     "apprise" = ps: with ps; [ apprise ];
     "aprs" = ps: with ps; [ ]; # missing inputs: aprslib geopy
     "aqualogic" = ps: with ps; [ ]; # missing inputs: aqualogic
@@ -570,7 +570,7 @@
     "onboarding" = ps: with ps; [ aiohttp-cors pillow ]; # missing inputs: home-assistant-frontend
     "onewire" = ps: with ps; [ ]; # missing inputs: pyownet
     "onkyo" = ps: with ps; [ onkyo-eiscp ];
-    "onvif" = ps: with ps; [ ha-ffmpeg ]; # missing inputs: WSDiscovery onvif-zeep-async
+    "onvif" = ps: with ps; [ ha-ffmpeg zeep ]; # missing inputs: WSDiscovery onvif-zeep-async
     "openalpr_cloud" = ps: with ps; [ ];
     "openalpr_local" = ps: with ps; [ ];
     "opencv" = ps: with ps; [ numpy ]; # missing inputs: opencv-python-headless
