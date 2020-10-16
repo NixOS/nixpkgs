@@ -202,7 +202,7 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // {
       "CXX_${rust.toRustTarget stdenv.buildPlatform}"="${cxxForBuild}" \
       "CC_${rust.toRustTarget stdenv.hostPlatform}"="${ccForHost}" \
       "CXX_${rust.toRustTarget stdenv.hostPlatform}"="${cxxForHost}" \
-        ${stdenv.lib.optionalString
+      ${stdenv.lib.optionalString
           (targetIsJSON && !__internal_dontAddSysroot) "RUSTFLAGS=\"--sysroot ${sysroot} $RUSTFLAGS\" "
       }cargo build -j $NIX_BUILD_CORES \
         ${stdenv.lib.optionalString (buildType == "release") "--release"} \
