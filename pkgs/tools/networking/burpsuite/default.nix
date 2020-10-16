@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, runtimeShell }:
+{ stdenv, fetchurl, jre, writeShellScript, chromium, unzip }:
 
 let
   version = "2020.9.2";
@@ -7,8 +7,10 @@ let
     url = "https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar";
     sha256 = "d4a3abd973ae79fb1c21926dd1323d6d74763fa59bbc70d0105eccf7f41811ee";
   };
-  launcher = ''
-    #!${runtimeShell}
+  launcher = writeShellScript "burpsuite-launcher" ''
+    eval "$(${unzip}/bin/unzip -p ${jar} chromium.properties)"
+    mkdir -p "$HOME/.BurpSuite/burpbrowser/$linux64"
+    ln -sf "${chromium}/bin/chromium" "$HOME/.BurpSuite/burpbrowser/$linux64/chrome"
     exec ${jre}/bin/java -jar ${jar} "$@"
   '';
 in stdenv.mkDerivation {
@@ -16,8 +18,7 @@ in stdenv.mkDerivation {
   inherit version;
   buildCommand = ''
     mkdir -p $out/bin
-    echo "${launcher}" > $out/bin/burpsuite
-    chmod +x $out/bin/burpsuite
+    cp "${launcher}" $out/bin/burpsuite
   '';
 
   preferLocalBuild = true;
