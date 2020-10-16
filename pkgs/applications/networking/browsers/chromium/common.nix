@@ -238,7 +238,7 @@ let
 
     gnFlags = mkGnFlags ({
       use_lld = false;
-      use_gold = true;
+      use_gold = stdenv.buildPlatform.is64bit;  # ld.gold outs-of-memory on i686
       gold_path = "${stdenv.cc}/bin";
       is_debug = false;
 
