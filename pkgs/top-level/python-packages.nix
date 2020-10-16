@@ -6004,6 +6004,8 @@ in {
 
   recommonmark = callPackage ../development/python-modules/recommonmark { };
 
+  redbaron = callPackage ../development/python-modules/redbaron { };
+
   redis = callPackage ../development/python-modules/redis { };
 
   rednose = callPackage ../development/python-modules/rednose { };
