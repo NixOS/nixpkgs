@@ -1,4 +1,4 @@
-{ lib, stdenv, rustc, minimalContent ? true }:
+{ stdenv, rustc, minimalContent ? true }:
 
 stdenv.mkDerivation {
   name = "rust-src";
