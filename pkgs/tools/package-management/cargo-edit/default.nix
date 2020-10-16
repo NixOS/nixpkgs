@@ -3,7 +3,6 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, xcbuild
 , openssl
 , libiconv
 , Security
@@ -23,13 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1h1sy54p7zxijydnhzvkxli90d72biv1inni17licb0vb9dihmnf";
 
-  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.isDarwin [
-    # The cc crate runs xcbuild. This dependency can be removed once
-    # the following PR is merged from staging into master:
-    #
-    # https://github.com/NixOS/nixpkgs/pull/97000
-    xcbuild
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl zlib ] ++ lib.optionals stdenv.isDarwin [
     libiconv
