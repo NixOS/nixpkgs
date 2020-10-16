@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./compiler-rt-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
+    ./compiler-rt-X86-support-extension.patch # Add support for i486 i586 i686 by reusing i386 config
   ]# ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
     ++ stdenv.lib.optional stdenv.hostPlatform.isAarch32 ./compiler-rt-armv7l.patch;
 
