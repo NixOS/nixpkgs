@@ -10904,7 +10904,7 @@ in
   };
 
   # This is for e.g. LLVM libraries on linux.
-  gccForLibs =
+  gccForLibs = if (stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.useLLVM or false)) then
     # with gcc-7: undefined reference to `__divmoddi4'
     if stdenv.targetPlatform.isi686
       then gcc6.cc
@@ -10912,7 +10912,8 @@ in
     # Can only do this is in the native case, otherwise we might get infinite
     # recursion if `targetPackages.stdenv.cc.cc` itself uses `gccForLibs`.
       then targetPackages.stdenv.cc.cc
-    else gcc.cc;
+    else gcc.cc
+  else null;
 
   libstdcxx5 = callPackage ../development/libraries/gcc/libstdc++/5.nix { };
 
