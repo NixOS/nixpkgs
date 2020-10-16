@@ -2,10 +2,12 @@
 , rustPlatform
 , fetchFromGitHub
 , fetchurl
-, maturin
 , pipInstallHook
-, pytest
+, setuptools-rust
+, wheel
+, numpy
 , python
+, pytestCheckHook
 , requests
 }:
 
@@ -18,9 +20,17 @@ let
     url = "https://s3.amazonaws.com/models.huggingface.co/bert/roberta-base-merges.txt";
     sha256 = "1idd4rvkpqqbks51i2vjbd928inw7slij9l4r063w3y5fd3ndq8w";
   };
+  albertVocab = fetchurl {
+    url = "https://s3.amazonaws.com/models.huggingface.co/bert/albert-base-v1-tokenizer.json";
+    sha256 = "1hra9pn8rczx7378z88zjclw2qsdrdwq20m56sy42s2crbas6akf";
+  };
   bertVocab = fetchurl {
     url = "https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-uncased-vocab.txt";
     sha256 = "18rq42cmqa8zanydsbzrb34xwy4l6cz1y900r4kls57cbhvyvv07";
+  };
+  norvigBig = fetchurl {
+    url = "https://norvig.com/big.txt";
+    sha256 = "0yz80icdly7na03cfpl0nfk5h3j3cam55rj486n03wph81ynq1ps";
   };
   openaiVocab = fetchurl {
     url = "https://s3.amazonaws.com/models.huggingface.co/bert/openai-gpt-vocab.json";
@@ -32,38 +42,34 @@ let
   };
 in rustPlatform.buildRustPackage rec {
   pname = "tokenizers";
-  version = "0.8.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "python-v${version}";
-    sha256 = "0sxdwx05hr87j2z32rk4rgwn6a26w9r7m5fgj6ah1sgagiiyxbjw";
+    sha256 = "0rsm1g5zfq3ygdb3s8v9xqqpgfzvvkc4n5ik3ahy8sw7pyjljb4m";
   };
 
-  # Update parking_lot to be compatible with recent Rust versions, that
-  # replace asm! by llvm_asm!:
-  #
-  # https://github.com/Amanieu/parking_lot/pull/223
-  #
-  # Remove once upstream updates this dependency.
-  cargoPatches = [ ./update-parking-lot.diff ];
-
-  cargoSha256 = "0cdkxmj8z2wdspn6r62lqlpvd0sj1z0cmb1zpqaajxvr0b2kjlj8";
+  cargoSha256 = "0yn699dq9hdjh7fyci99ni8mmd5qdhzrsi80grzgf5cch8g38rbi";
 
   sourceRoot = "source/bindings/python";
 
   nativeBuildInputs = [
-    maturin
     pipInstallHook
+    setuptools-rust
+    wheel
   ];
 
   propagatedBuildInputs = [
+    numpy
     python
   ];
 
-  # tokenizers uses pyo3, which requires Rust nightly.
-  RUSTC_BOOTSTRAP = 1;
+  installCheckInputs = [
+    pytestCheckHook
+    requests
+  ];
 
   doCheck = false;
   doInstallCheck = true;
@@ -74,49 +80,19 @@ in rustPlatform.buildRustPackage rec {
     ( cd $sourceRoot/tests/data
       ln -s ${robertaVocab} roberta-base-vocab.json
       ln -s ${robertaMerges} roberta-base-merges.txt
+      ln -s ${albertVocab} albert-base-v1-tokenizer.json
       ln -s ${bertVocab} bert-base-uncased-vocab.txt
+      ln -s ${norvigBig} big.txt
       ln -s ${openaiVocab} openai-gpt-vocab.json
       ln -s ${openaiMerges} openai-gpt-merges.txt )
   '';
 
-  postPatch = ''
-    # pyo3's build check verifies that Rust is a nightly
-    # version. Disable this check.
-    substituteInPlace $NIX_BUILD_TOP/$cargoDepsCopy/pyo3/build.rs \
-      --replace "check_rustc_version()?;" ""
-
-    # Patching the vendored dependency invalidates the file
-    # checksums, so remove them. This should be safe, since
-    # this is just a copy of the vendored dependencies and
-    # the integrity of the vendored dependencies is validated
-    # by cargoSha256.
-    sed -r -i 's|"files":\{[^}]+\}|"files":{}|' \
-      $NIX_BUILD_TOP/$cargoDepsCopy/pyo3/.cargo-checksum.json
-
-    # Maturin uses the crate name as the wheel name.
-    substituteInPlace Cargo.toml \
-      --replace "tokenizers-python" "tokenizers"
-  '';
-
   buildPhase = ''
-    maturin build --release --manylinux off
+    ${python.interpreter} setup.py bdist_wheel
   '';
 
   installPhase = ''
-    # Put the wheels where the pip install hook can find them.
-    install -Dm644 -t dist target/wheels/*.whl
     pipInstallPhase
-  '';
-
-  installCheckInputs = [
-    pytest
-    requests
-  ];
-
-  installCheckPhase = ''
-    # Append paths, or the binding's tokenizer module will be
-    # used, since the test directories have __init__.py
-    pytest --import-mode=append
   '';
 
   meta = with stdenv.lib; {
