@@ -3905,6 +3905,7 @@ broken-packages:
   - cmv
   - cnc-spec-compiler
   - co-log
+  - co-log-polysemy-formatting
   - co-log-sys
   - Coadjute
   - coalpit
@@ -5688,6 +5689,7 @@ broken-packages:
   - hakyll-filestore
   - hakyll-images
   - hakyll-ogmarkup
+  - hakyll-process
   - hakyll-R
   - hakyll-sass
   - hakyll-series
@@ -7495,6 +7497,7 @@ broken-packages:
   - lol-typing
   - loli
   - longboi
+  - longshot
   - lookup-tables
   - loop-effin
   - loop-while
@@ -7932,6 +7935,7 @@ broken-packages:
   - mu-grpc-server
   - mu-kafka
   - mu-protobuf
+  - mu-servant-server
   - MuCheck
   - MuCheck-Hspec
   - MuCheck-HUnit
