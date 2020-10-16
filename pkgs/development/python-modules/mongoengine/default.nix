@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pymongo
+, isPy27
 , six
 , blinker
 , nose
@@ -12,6 +13,7 @@
 buildPythonPackage rec {
   pname = "mongoengine";
   version = "0.20.0";
+  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "MongoEngine";
