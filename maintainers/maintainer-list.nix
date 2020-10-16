@@ -3425,6 +3425,12 @@
     githubId = 2405974;
     name = "Sébastian Méric de Bellefon";
   };
+  henrikolsson = {
+    email = "henrik@fixme.se";
+    github = "henrikolsson";
+    githubId = 982322;
+    name = "Henrik Olsson";
+  };
   henrytill = {
     email = "henrytill@gmail.com";
     github = "henrytill";

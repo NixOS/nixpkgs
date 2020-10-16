@@ -14631,6 +14631,8 @@ in
 
   non = callPackage ../applications/audio/non { };
 
+  noise-suppression-for-voice = callPackage ../development/libraries/noise-suppression-for-voice { };
+
   ntl = callPackage ../development/libraries/ntl { };
 
   nspr = callPackage ../development/libraries/nspr {
