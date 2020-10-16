@@ -93,6 +93,11 @@
       <literal>kicad/default.nix</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      <literal>ns-3</literal> package has been dropped as it was not maintained anymore.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
