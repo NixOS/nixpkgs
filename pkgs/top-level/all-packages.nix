@@ -18527,6 +18527,8 @@ in
 
   roccat-tools = callPackage ../os-specific/linux/roccat-tools { };
 
+  rtsp-simple-server = callPackage ../servers/rtsp-simple-server { };
+
   rtkit = callPackage ../os-specific/linux/rtkit { };
 
   rt5677-firmware = callPackage ../os-specific/linux/firmware/rt5677 { };
