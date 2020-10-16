@@ -36,11 +36,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = lib.optional withStableFeatures "--features stable";
 
-  # Remove after https://github.com/NixOS/nixpkgs/pull/97000 lands into master
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-    unset SDKROOT
-  '';
-
   checkPhase = ''
     runHook preCheck
     echo "Running cargo test"
