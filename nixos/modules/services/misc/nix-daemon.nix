@@ -202,6 +202,14 @@ in
                 The hostname of the build machine.
               '';
             };
+            protocol = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              example = "ssh-ng";
+              description = ''
+                Which protocol to use for the remote machine.
+              '';
+            };
             system = mkOption {
               type = types.nullOr types.str;
               default = null;
@@ -500,6 +508,15 @@ in
 
   config = {
 
+    assertions = [
+      { assertion = versionOlder cfg.package.version "2.4" -> all (x: x.protocol == null) cfg.buildMachines;
+        message = ''
+          When using Nix <2.4, specifying a protocol for a buildMachine in
+          `nix.buildMachines` is not supported!
+        '';
+      }
+    ];
+
     nix.binaryCachePublicKeys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
     nix.binaryCaches = [ "https://cache.nixos.org/" ];
 
@@ -522,7 +539,8 @@ in
       { enable = cfg.buildMachines != [];
         text =
           concatMapStrings (machine:
-            "${if machine.sshUser != null then "${machine.sshUser}@" else ""}${machine.hostName} "
+            (optionalString (machine.protocol != null) "${machine.protocol}://")
+            + "${if machine.sshUser != null then "${machine.sshUser}@" else ""}${machine.hostName} "
             + (if machine.system != null then machine.system else concatStringsSep "," machine.systems)
             + " ${if machine.sshKey != null then machine.sshKey else "-"} ${toString machine.maxJobs} "
             + toString (machine.speedFactor)
