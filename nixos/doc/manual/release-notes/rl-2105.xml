@@ -36,7 +36,17 @@
      now point to an externally wrapped by default derivations, that allow you to
      also add `extraPythonPackages` to the Python interpreter used by GNURadio.
      Missing environmental variables needed for operational GUI were also added
-     (<link xlink:href="https://github.com/NixOS/nixpkgs/issues/75478">#7547</link>).
+     (<link xlink:href="https://github.com/NixOS/nixpkgs/issues/75478">#75478</link>).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <link xlink:href="https://www.gnuradio.org/">GNURadio</link> has a
+     <code>pkgs</code> attribute set, and there's a <code>gnuradio.callPackage</code>
+     function that extends <code>pkgs</code> with a <code>mkDerivation</code>, and a
+     <code>mkDerivationWith</code>, like Qt5. Now all <code>gnuradio.pkgs</code> are
+     defined with <code>gnuradio.callPackage</code> and some packages that depend
+     on gnuradio are defined with this as well.
     </para>
    </listitem>
    <listitem>

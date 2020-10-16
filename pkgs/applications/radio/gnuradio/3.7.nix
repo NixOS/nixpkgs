@@ -221,11 +221,17 @@ let
     buildInputs
     disallowedReferences
     postInstall
-    passthru
     doCheck
     dontWrapPythonPrograms
     meta
   ;
+
+  passthru = shared.passthru // {
+    # Deps that are potentially overriden and are used inside GR plugins - the same version must
+    inherit boost;
+  } // lib.optionalAttrs (hasFeature "gr-uhd" features) {
+    inherit uhd;
+  };
   cmakeFlags = shared.cmakeFlags
     # From some reason, if these are not set, libcodec2 and gsm are
     # not detected properly (slightly different then what's in

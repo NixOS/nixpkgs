@@ -1,13 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, alsaLib, boost
-, qt4, libpulseaudio, codec2, libconfig
-, gnuradio, gr-osmosdr, gsm
-, libopus, libjpeg, protobuf, qwt, speex
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, libpulseaudio
+, libconfig
+, gnuradio
+, gnuradioPackages
+, gsm
+, libopus
+, libjpeg
+, protobuf
+, speex
+, qmake4Hook
 } :
 
 let
   version = "0.5.0";
 
-in stdenv.mkDerivation {
+in mkDerivation {
   pname = "qradiolink";
   inherit version;
 
@@ -32,20 +41,17 @@ in stdenv.mkDerivation {
   '';
 
   buildInputs = [
-    qt4
-    alsaLib
-    boost
     libpulseaudio
-    codec2
     libconfig
     gsm
-    gnuradio
-    gr-osmosdr
+    gnuradioPackages.osmosdr
     libopus
     libjpeg
-    protobuf
     speex
-    qwt
+  ];
+  nativeBuildInputs = [
+    protobuf
+    qmake4Hook
   ];
 
   enableParallelBuilding = true;

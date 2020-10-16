@@ -228,6 +228,14 @@ let
     dontWrapQtApps
     meta
   ;
+  passthru = shared.passthru // {
+    # Deps that are potentially overriden and are used inside GR plugins - the same version must
+    inherit boost;
+  } // lib.optionalAttrs (hasFeature "gr-uhd" features) {
+    inherit uhd;
+  } // lib.optionalAttrs (hasFeature "gr-qtgui" features) {
+    inherit (libsForQt5) qwt;
+  };
   cmakeFlags = shared.cmakeFlags
     # From some reason, if these are not set, libcodec2 and gsm are not
     # detected properly. NOTE: qradiolink needs libcodec2 to be detected in
