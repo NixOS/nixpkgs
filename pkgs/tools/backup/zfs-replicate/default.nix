@@ -4,11 +4,11 @@
 
 buildPythonApplication rec {
   pname = "zfs-replicate";
-  version = "1.1.14";
+  version = "1.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0iqyk6q112ylcqrhrgvgbgqqvaikhwk0sb5kc7kg2wwqdc9rfwys";
+    sha256 = "1f1vjn4xw6xl11z60vsjwkv1msb2g22hvha6lha2vqd6f139vjxj";
   };
 
   checkInputs = [
