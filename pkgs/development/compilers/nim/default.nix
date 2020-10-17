@@ -4,10 +4,10 @@
 , boehmgc, sqlite, nim-unwrapped, nim }:
 
 let
-  version = "1.2.6";
+  version = "1.4.0";
   src = fetchurl {
     url = "https://nim-lang.org/download/nim-${version}.tar.xz";
-    sha256 = "0zk5qzxayqjw7kq6p92j4008g9bbyilyymhdc5xq9sln5rqym26z";
+    sha256 = "0gf2lqkqzai6mg7mf4y04gdy1ddiavans09i8aisa88ssfza5ywx";
   };
 
   meta = with lib; {
@@ -139,7 +139,7 @@ let
         local HOME=$TMPDIR
         ./bin/nim c koch
         ./koch boot $kochArgs --parallelBuild:$NIX_BUILD_CORES
-        ./koch tools $kochArgs --parallelBuild:$NIX_BUILD_CORES
+        ./koch toolsNoExternal $kochArgs --parallelBuild:$NIX_BUILD_CORES
         runHook postBuild
       '';
 
