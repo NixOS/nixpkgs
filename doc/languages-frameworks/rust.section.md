@@ -123,6 +123,9 @@ build the Rust tools and standard library crates separately so there is no
 reason not to take the `stdenv.hostPlatform.rustc`-modifying approach, and the
 ad-hoc escape hatch to `buildRustPackage` can be removed.
 
+Note that currently custom targets aren't compiled with `std`, so `cargo test`
+will fail. This can be ignored by adding `doCheck = false;` to your derivation.
+
 ### Running package tests
 
 When using `buildRustPackage`, the `checkPhase` is enabled by default and runs
