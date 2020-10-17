@@ -1,8 +1,9 @@
 {
 stdenv, fetchFromGitHub, pkgconfig, which, gtk2, gtk3, qt4, qt5, libXtst, lib,
-enableChewing ? true, libchewing,
-enableAnthy ? true, anthy,
 }:
+
+# chewing and anthy do not work well
+# so we do not enable these input method at this moment
 
 stdenv.mkDerivation {
   name = "hime";
@@ -16,25 +17,18 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ which pkgconfig ];
-  buildInputs = [ libXtst gtk2 gtk3 qt4 qt5.qtbase ]
-    ++ lib.optional enableChewing libchewing
-    ++ lib.optional enableAnthy anthy;
+  buildInputs = [ libXtst gtk2 gtk3 qt4 qt5.qtbase ];
 
-  patchPhase = ''
-    patchShebangs configure
-  '';
-
-  # The configure script already auto-detect libchewing and anthy,
-  # so we do not need additional flags for libchewing or anthy
+  preConfigure = "patchShebangs configure";
   configureFlags = [ "--disable-lib64" "--disable-qt5-immodule" ];
 
 
   meta = with stdenv.lib; {
-    homepage      = "http://hime-ime.github.io/";
-    downloadPage  = "https://github.com/hime-ime/hime/downloads";
-    description   = "A useful input method engine for Asia region";
-    license       = licenses.gpl2Plus;
-    platforms     = platforms.linux;
-    maintainers   = with maintainers; [ yanganto ];
+    homepage = "http://hime-ime.github.io/";
+    downloadPage = "https://github.com/hime-ime/hime/downloads";
+    description = "A useful input method engine for Asia region";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ yanganto ];
   };
 }
