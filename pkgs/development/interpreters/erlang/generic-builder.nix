@@ -1,5 +1,5 @@
 { pkgs, stdenv, fetchFromGitHub, makeWrapper, gawk, gnum4, gnused
-, libxml2, libxslt, ncurses, openssl, perl, autoconf
+, libxml2, libxslt, ncurses, openssl, perl, autoconf, zlib
 # TODO: use jdk https://github.com/NixOS/nixpkgs/pull/89731
 , openjdk8 ? null # javacSupport
 , unixODBC ? null # odbcSupport
@@ -45,6 +45,7 @@ let
   wxPackages2 = if stdenv.isDarwin then [ wxmac ] else wxPackages;
 
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+  hipeSupport = (enableHipe && !isCross);
 
 in stdenv.mkDerivation ({
   name = "${baseName}-${version}"
@@ -54,16 +55,17 @@ in stdenv.mkDerivation ({
   inherit src version;
 
   nativeBuildInputs = [
-    buildPackages.autoreconfHook
-    buildPackages.makeWrapper
+    autoconf
+    makeWrapper
+    # seems to get a splice error finding perl if that one is not there
     buildPackages.perl
-    buildPackages.gnum4
     buildPackages.libxslt
-    buildPackages.libxml2
+    libxml2
   ]
-    ++ optional isCross buildPackages.erlang;
+    ++ optional hipeSupport gnum4
+    ++ optional isCross buildPackages.erlang_nox;
 
-  buildInputs = [ ncurses openssl ]
+  buildInputs = [ ncurses openssl zlib ]
     ++ optionals wxSupport wxPackages2
     ++ optionals odbcSupport odbcPackages
     ++ optionals javacSupport javacPackages
@@ -76,7 +78,7 @@ in stdenv.mkDerivation ({
   enableParallelBuilding = parallelBuild;
 
   # Clang 4 (rightfully) thinks signed comparisons of pointers with NULL are nonsense
-  prePatch = ''
+  prePatch = optional wxSupport ''
     substituteInPlace lib/wx/c_src/wxe_impl.cpp --replace 'temp > NULL' 'temp != NULL'
 
     ${prePatch}
@@ -96,12 +98,13 @@ in stdenv.mkDerivation ({
     ++ optional enableThreads "--enable-threads"
     ++ optional enableSmpSupport "--enable-smp-support"
     ++ optional enableKernelPoll "--enable-kernel-poll"
-    ++ optional (enableHipe && !isCross) "--enable-hipe"
+    ++ optional hipeSupport "--enable-hipe"
     ++ optional javacSupport "--with-javac"
     ++ optional odbcSupport "--with-odbc=${unixODBC}"
     ++ optional wxSupport "--enable-wx"
     ++ optional withSystemd "--enable-systemd"
     ++ optional stdenv.isDarwin "--enable-darwin-64bit"
+    ++ optional isCross "erl_xcomp_sysroot=${stdenv.cc.libc}"
     ++ configureFlags;
 
   # install-docs will generate and install manpages and html docs
