@@ -197,13 +197,13 @@ stdenv.mkDerivation rec {
     "--prefix XDG_DATA_DIRS : ${cups}/share"
     "--prefix GIO_EXTRA_MODULES : ${gnome3.dconf}/lib/gio/modules"
 
-    "--set KISYSMOD ${footprints}/share/kicad/modules"
-    "--set KICAD_SYMBOL_DIR ${symbols}/share/kicad/library"
-    "--set KICAD_TEMPLATE_DIR ${templates}/share/kicad/template"
+    "--set-default KISYSMOD ${footprints}/share/kicad/modules"
+    "--set-default KICAD_SYMBOL_DIR ${symbols}/share/kicad/library"
+    "--set-default KICAD_TEMPLATE_DIR ${templates}/share/kicad/template"
     "--prefix KICAD_TEMPLATE_DIR : ${symbols}/share/kicad/template"
     "--prefix KICAD_TEMPLATE_DIR : ${footprints}/share/kicad/template"
   ]
-  ++ optionals (with3d) [ "--set KISYS3DMOD ${packages3d}/share/kicad/modules/packages3d" ]
+  ++ optionals (with3d) [ "--set-default KISYS3DMOD ${packages3d}/share/kicad/modules/packages3d" ]
   ++ optionals (withNgspice) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
 
   # infinisil's workaround for #39493
