@@ -27,13 +27,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.17.0.1";
+  version = "0.17.1.0";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "1i9a3ampppyzsl4sllbqlr3w43sjpb3fdfxhb1j4n49p8g0jzmf3";
+    sha256 = "07r78ipv4g3i6z822kq380vi3qwlb958rccsy6lyybkhj9y0rx84";
   };
 
   nativeBuildInputs = [
@@ -64,9 +64,6 @@ stdenv.mkDerivation rec {
     # set monero-gui version
     substituteInPlace src/version.js.in \
        --replace '@VERSION_TAG_GUI@' '${version}'
-
-    # remove this line on the next release
-    rm cmake/Version.cmake
 
     # use monerod from the monero package
     substituteInPlace src/daemon/DaemonManager.cpp \
