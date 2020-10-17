@@ -10675,6 +10675,16 @@ in
     bazel_self = bazel_3;
   };
 
+  bazel_git = callPackage ../development/tools/build-managers/bazel/bazel_git {
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
+    buildJdk = jdk8_headless;
+    buildJdkName = "jdk8";
+    runJdk = jdk11_headless;
+    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+    bazel_self = bazel_git;
+  };
+
   bazel-buildtools = callPackage ../development/tools/build-managers/bazel/buildtools { };
   buildifier = bazel-buildtools;
   buildozer = bazel-buildtools;
@@ -14929,7 +14939,9 @@ in
   };
 
   protobuf = protobuf3_13;
+  protobuf-java = protobuf-java3_13;
 
+  protobuf-java3_13 = callPackage ../development/libraries/protobuf/3.13-java.nix { };
   protobuf3_13 = callPackage ../development/libraries/protobuf/3.13.nix { };
   protobuf3_12 = callPackage ../development/libraries/protobuf/3.12.nix { };
   protobuf3_11 = callPackage ../development/libraries/protobuf/3.11.nix { };

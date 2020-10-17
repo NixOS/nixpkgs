@@ -1,0 +1,79 @@
+diff --git a/java/core/generate-sources-build.xml b/java/core/generate-sources-build.xml
+index 0996e5fff..d96246e71 100644
+--- a/java/core/generate-sources-build.xml
++++ b/java/core/generate-sources-build.xml
+@@ -1,7 +1,7 @@
+ <project name="generate-sources">
+     <echo message="Running protoc ..."/>
+     <mkdir dir="${generated.sources.dir}"/>
+-    <exec executable="${protoc}">
++    <exec executable="${protoc2}">
+         <arg value="--java_out=${generated.sources.dir}"/>
+         <arg value="--proto_path=${protobuf.source.dir}"/>
+         <arg value="${protobuf.source.dir}/google/protobuf/any.proto"/>
+@@ -17,4 +17,4 @@
+         <arg value="${protobuf.source.dir}/google/protobuf/wrappers.proto"/>
+         <arg value="${protobuf.source.dir}/google/protobuf/compiler/plugin.proto"/>
+     </exec>
+-</project>
+\ No newline at end of file
++</project>
+diff --git a/java/core/generate-test-sources-build.xml b/java/core/generate-test-sources-build.xml
+index 71a88d07b..fcba6b07d 100644
+--- a/java/core/generate-test-sources-build.xml
++++ b/java/core/generate-test-sources-build.xml
+@@ -1,6 +1,6 @@
+ <project name="generate-test-sources">
+     <mkdir dir="${generated.testsources.dir}"/>
+-    <exec executable="${protoc}">
++    <exec executable="${protoc2}">
+         <arg value="--java_out=${generated.testsources.dir}"/>
+         <arg value="--proto_path=${protobuf.source.dir}"/>
+         <arg value="--proto_path=${test.proto.dir}"/>
+@@ -51,7 +51,7 @@
+         <arg value="${test.proto.dir}/com/google/protobuf/wrappers_test.proto"/>
+     </exec>
+     <!-- Also generate some Lite protos needed for ExtensionRegistryFactoryTest -->
+-    <exec executable="${protoc}">
++    <exec executable="${protoc2}">
+         <arg value="--java_out=lite:${generated.testsources.dir}"/>
+         <arg value="--proto_path=${protobuf.source.dir}"/>
+         <arg value="--proto_path=${test.proto.dir}"/>
+diff --git a/java/lite/generate-sources-build.xml b/java/lite/generate-sources-build.xml
+index 74d96a2f1..1c54cbe0b 100644
+--- a/java/lite/generate-sources-build.xml
++++ b/java/lite/generate-sources-build.xml
+@@ -1,7 +1,7 @@
+ <project name="generate-sources">
+     <echo message="Running protoc ..."/>
+     <mkdir dir="${generated.sources.dir}"/>
+-    <exec executable="${protoc}">
++    <exec executable="${protoc2}">
+         <arg value="--java_out=lite:${generated.sources.dir}"/>
+         <arg value="--proto_path=${protobuf.source.dir}"/>
+         <arg value="${protobuf.source.dir}/google/protobuf/any.proto"/>
+diff --git a/java/lite/generate-test-sources-build.xml b/java/lite/generate-test-sources-build.xml
+index 62bca93c8..4a617235b 100644
+--- a/java/lite/generate-test-sources-build.xml
++++ b/java/lite/generate-test-sources-build.xml
+@@ -1,6 +1,6 @@
+ <project name="generate-test-sources">
+     <mkdir dir="${generated.testsources.dir}"/>
+-    <exec executable="${protoc}">
++    <exec executable="${protoc2}">
+         <arg value="--java_out=lite:${generated.testsources.dir}"/>
+         <arg value="--proto_path=${protobuf.source.dir}"/>
+         <arg value="--proto_path=${protobuf.basedir}/java/core/${test.proto.dir}"/>
+diff --git a/java/util/pom.xml b/java/util/pom.xml
+index 54dcc8690..ad5cf76e4 100644
+--- a/java/util/pom.xml
++++ b/java/util/pom.xml
+@@ -76,7 +76,7 @@
+                 <ant antfile="../core/generate-test-sources-build.xml"/>
+ 
+                 <!-- Generate additional test protos for this module -->
+-                <exec executable="${protoc}">
++                <exec executable="${protoc2}">
+                   <arg value="--java_out=${generated.testsources.dir}"/>
+                   <arg value="--proto_path=${protobuf.source.dir}"/>
+                   <arg value="--proto_path=src/test/proto"/>
