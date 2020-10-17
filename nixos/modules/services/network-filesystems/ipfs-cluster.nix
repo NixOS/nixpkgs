@@ -32,7 +32,7 @@ in {
       };
 
       consensus = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         default = null;
         description = "Consensus protocol - 'raft' or 'crdt'";
       };
