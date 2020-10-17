@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "phonopy";
-  version = "2.7.1";
+  version = "2.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "482c6ff29c058d091ac885e561e28ba3e516ea9e91c44a951cad11f3ae19856c";
+    sha256 = "28864b04adb900597705f1367a100da869af835088bdd13f1693c4382259f128";
   };
 
   propagatedBuildInputs = [ numpy pyyaml matplotlib h5py spglib ];
