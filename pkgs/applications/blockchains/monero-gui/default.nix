@@ -75,11 +75,10 @@ stdenv.mkDerivation rec {
                 'add_subdirectory(monero EXCLUDE_FROM_ALL)'
   '';
 
-  cmakeFlags = [ "-DARCH=${arch}" ];
-
   preConfigure = ''
-    # There is no interpolation in cmakeFlags
-    cmakeFlags="$cmakeFlags -DCMAKE_INSTALL_PREFIX=$out/bin"
+    # because $out needs to be expanded
+    cmakeFlagsArray+=("-DCMAKE_INSTALL_PREFIX=$out/bin")
+    cmakeFlagsArray+=("-DARCH=${arch}")
   '';
 
   desktopItem = makeDesktopItem {
