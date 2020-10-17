@@ -29,7 +29,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "a library for audio and music analysis";
     homepage = "https://aubio.org";
-    licenses = licenses.gpl3;
+    license = licenses.gpl3;
     maintainers = with maintainers; [ hexa ];
   };
 }
