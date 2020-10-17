@@ -17,25 +17,18 @@ assert trezorSupport -> all (x: x!=null) [ libusb1 protobuf python3 ];
 
 stdenv.mkDerivation rec {
   pname = "monero";
-  version = "0.17.0.1";
+  version = "0.17.1.0";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    sha256 = "1v0phvg5ralli4dr09a60nq032xqlci5d6v4zfq8304vgrn1ffgp";
+    sha256 = "1cngniv7sndy8r0fcfgk737640k53q3kwd36g891p5igcb985qdw";
     fetchSubmodules = true;
   };
 
   patches = [
     ./use-system-libraries.patch
-
-    # This fixes a bug in the monero-gui build system,
-    # remove it once the PR has been merged
-    (fetchpatch {
-      url = "https://github.com/monero-project/monero/pull/6867.patch";
-      sha256 = "0nxa6861df1fadrm9bmhqf2g6mljgr4jndsbxqp7g501hv9z51j3";
-    })
   ];
 
   postPatch = ''
