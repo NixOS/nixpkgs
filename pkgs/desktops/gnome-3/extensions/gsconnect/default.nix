@@ -1,19 +1,15 @@
 { stdenv
 , fetchFromGitHub
 , substituteAll
-, python3
 , openssl
 , gsound
 , meson
 , ninja
-, libxml2
-, pkgconfig
+, pkg-config
 , gobject-introspection
 , wrapGAppsHook
 , glib
 , gtk3
-, at-spi2-core
-, upower
 , openssh
 , gnome3
 , gjs
@@ -50,21 +46,17 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    meson ninja pkgconfig
+    meson
+    ninja
+    pkg-config
     gobject-introspection # for locating typelibs
     wrapGAppsHook # for wrapping daemons
-    libxml2 # xmllint
   ];
 
   buildInputs = [
     glib # libgobject
     gtk3
-    at-spi2-core # atspi
-    gnome3.nautilus # TODO: this contaminates the package with nautilus and gnome-autoar typelibs but it is only needed for the extension
-    gnome3.nautilus-python
     gsound
-    upower
-    gnome3.caribou
     gjs # for running daemon
     gnome3.evolution-data-server # for libebook-contacts typelib
   ];
