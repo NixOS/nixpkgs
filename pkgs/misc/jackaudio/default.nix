@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "${prefix}jack2-${version}";
-  version = "1.9.14";
+  version = "1.9.16";
 
   src = fetchFromGitHub {
     owner = "jackaudio";
     repo = "jack2";
     rev = "v${version}";
-    sha256 = "1prxg1l8wrxfp2mh7l4mvjvmml6816fciq1la88ylhwm1qnfvnax";
+    sha256 = "0pzgrjy5fi2nif2j442fs3j2bbshxpnmq9kzwcqz54wx1w8fzdfr";
   };
 
   nativeBuildInputs = [ pkgconfig python makeWrapper wafHook ];
