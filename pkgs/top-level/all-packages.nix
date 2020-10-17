@@ -2298,6 +2298,8 @@ in
 
   patdiff = callPackage ../tools/misc/patdiff { };
 
+  patool = with python3Packages; toPythonApplication patool;
+
   pbpst = callPackage ../applications/misc/pbpst { };
 
   pbzx = callPackage ../tools/compression/pbzx { };
