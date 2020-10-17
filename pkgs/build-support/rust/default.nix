@@ -109,7 +109,9 @@ in
 # See https://os.phil-opp.com/testing/ for more information.
 assert useSysroot -> !(args.doCheck or true);
 
-stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // {
+stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // stdenv.lib.optionalAttrs useSysroot {
+  RUSTFLAGS = "--sysroot ${sysroot} " + (args.RUSTFLAGS or "");
+} // {
   inherit cargoDeps;
 
   patchRegistryDeps = ./patch-registry-deps;
@@ -207,9 +209,7 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // {
       "CXX_${rust.toRustTarget stdenv.buildPlatform}"="${cxxForBuild}" \
       "CC_${rust.toRustTarget stdenv.hostPlatform}"="${ccForHost}" \
       "CXX_${rust.toRustTarget stdenv.hostPlatform}"="${cxxForHost}" \
-      ${stdenv.lib.optionalString useSysroot
-         "RUSTFLAGS=\"--sysroot ${sysroot} $RUSTFLAGS\" "
-      }cargo build -j $NIX_BUILD_CORES \
+      cargo build -j $NIX_BUILD_CORES \
         ${stdenv.lib.optionalString (buildType == "release") "--release"} \
         --target ${target} \
         --frozen ${concatStringsSep " " cargoBuildFlags}
