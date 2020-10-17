@@ -105,6 +105,10 @@ let
 
 in
 
+# Tests don't currently work for `no_std`, and all custom sysroots are currently built without `std`.
+# See https://os.phil-opp.com/testing/ for more information.
+assert useSysroot -> !(args.doCheck or true);
+
 stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // {
   inherit cargoDeps;
 
