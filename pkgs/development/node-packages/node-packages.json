@@ -20,6 +20,7 @@
 , "clean-css-cli"
 , "clubhouse-cli"
 , "coc-css"
+, "coc-diagnostic"
 , "coc-emmet"
 , "coc-eslint"
 , "coc-git"

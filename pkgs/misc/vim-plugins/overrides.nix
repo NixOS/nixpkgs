@@ -618,6 +618,7 @@ self: super: {
     nodePackageNames = [
       "coc-go"
       "coc-css"
+      "coc-diagnostic"
       "coc-emmet"
       "coc-eslint"
       "coc-git"
