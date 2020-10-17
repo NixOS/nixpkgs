@@ -229,7 +229,7 @@ args.stdenv.mkDerivation (args // {
     </listitem>
     <listitem>
      <para>
-      If a package is not a release but a commit from a repository, then the version part of the name <emphasis>must</emphasis> be the date of that (fetched) commit. The date <emphasis>must</emphasis> be in <literal>"YYYY-MM-DD"</literal> format. Also append <literal>"unstable"</literal> to the name - e.g., <literal>"pkgname-unstable-2014-09-23"</literal>.
+      If a package is not a release but a commit from a repository, then the version part of the name <emphasis>must</emphasis> be the commit date of that (fetched) commit in <literal>"YYYY-MM-DD"</literal> format, followed by <literal>"-unstable"</literal>. For example, <literal>"pkgname-2014-09-23-unstable"</literal>.
      </para>
     </listitem>
     <listitem>
