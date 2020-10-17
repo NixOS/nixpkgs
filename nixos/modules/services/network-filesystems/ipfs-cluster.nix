@@ -6,7 +6,7 @@ let
 
   # secret is by envvar, not flag
   initFlags = toString [
-    (optionalString (cfg.initPeers != null) "--peers") 
+    (optionalString (cfg.initPeers != []) "--peers") 
     (lib.strings.concatStringsSep "," cfg.initPeers)
   ];
 in {
