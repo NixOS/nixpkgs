@@ -10,6 +10,7 @@
 , scipy
 , six
 , libgpuarray
+, libredirect
 , cudaSupport ? false, cudatoolkit
 , cudnnSupport ? false, cudnn
 , nvidia_x11
@@ -68,9 +69,22 @@ in buildPythonPackage rec {
       --replace 'StrParam(default_dnn_base_path)' 'StrParam('\'''${cudnn}'\''')'
   '';
 
-  preCheck = ''
+  # Needs to be postFixup so it runs before pythonImportsCheck even when
+  # doCheck = false (meaning preCheck would be disabled).
+  # This branch is missing #97597 (and its predecessor #93560), meaning only
+  # "/tmp" is exempt from NIX_ENFORCE_PURITY's objections when theano is
+  # imported from within a nix build environment. Therefore use libredirect
+  # to convince the wrapper we are actually accessing "/tmp".
+  postFixup = ''
     mkdir -p check-phase
     export HOME=$(pwd)/check-phase
+
+    export NIX_REDIRECTS=/tmp=$TMPDIR
+    export LD_PRELOAD=${libredirect}/lib/libredirect.so
+    export TEMP=/tmp
+    export TEMPDIR=/tmp
+    export TMP=/tmp
+    export TMPDIR=/tmp
   '';
   doCheck = false;
   # takes far too long, also throws "TypeError: sort() missing 1 required positional argument: 'a'"
@@ -80,6 +94,8 @@ in buildPythonPackage rec {
   # keep Nose around since running the tests by hand is possible from Python or bash
   checkInputs = [ nose ];
   propagatedBuildInputs = [ numpy numpy.blas scipy six libgpuarray_ ];
+
+  pythonImportsCheck = [ "theano" ];
 
   meta = with stdenv.lib; {
     homepage = "http://deeplearning.net/software/theano/";
