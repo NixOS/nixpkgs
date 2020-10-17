@@ -73,6 +73,6 @@ rustPlatform.buildRustPackage rec {
     description = "Unofficial command line client for Bitwarden";
     homepage = "https://crates.io/crates/rbw";
     license = licenses.mit;
-    maintainers = with maintainers; [ albakham luc65r ];
+    maintainers = with maintainers; [ albakham luc65r marsam ];
   };
 }
