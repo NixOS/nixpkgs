@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
 
   # This breaks on Darwin because our cmake hook tries to make a build folder
   # and the wonderful bazel BUILD file is already there (yay case-insensitivity?)
-  prePatch = "rm BUILD"
-    # Upstream fixed this reference to runtime-path after the release
-    # and with this references g++ complains about invalid option -R
-    + ''
+  prePatch = ''
+      rm BUILD
 
+      # Upstream fixed this reference to runtime-path after the release
+      # and with this references g++ complains about invalid option -R
       sed -i 's/ -R''${libdir}//' scripts/libbrotli*.pc.in
       cat scripts/libbrotli*.pc.in
     '';
