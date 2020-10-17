@@ -4,6 +4,11 @@ let
   cfg = config.services.ipfs-cluster;
   opt = options.services.ipfs-cluster;
 
+  # secret is by envvar, not flag
+  initFlags = toString [
+    (optionalString (cfg.initPeers != null) "--peers") 
+    (lib.strings.concatStringsSep "," cfg.initPeers)
+  ];
 in {
 
   ###### interface
@@ -64,14 +69,7 @@ in {
 
   ###### implementation
 
-  config = let
-    # secret is by envvar, not flag
-    initFlags = toString [
-      (optionalString (cfg.initPeers != null) "--peers") 
-      (lib.strings.concatStringsSep "," cfg.initPeers)
-    ]; in
-
-  mkIf cfg.enable {
+  config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.ipfs-cluster ];
     environment.variables.IPFS_CLUSTER_PATH = cfg.dataDir;
 
