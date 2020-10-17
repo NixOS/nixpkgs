@@ -2,7 +2,7 @@ import os
 import toml
 
 rust_src = os.environ['RUSTC_SRC']
-orig_cargo = os.environ['ORIG_CARGO']
+orig_cargo = os.environ['ORIG_CARGO'] if 'ORIG_CARGO' in os.environ else None
 
 base = {
   'package': {
@@ -33,10 +33,11 @@ base = {
   },
 }
 
-with open(orig_cargo, 'r') as f:
-  src = toml.loads(f.read())
-  if 'profile' in src:
-    base['profile'] = src['profile']
+if orig_cargo is not None:
+  with open(orig_cargo, 'r') as f:
+    src = toml.loads(f.read())
+    if 'profile' in src:
+      base['profile'] = src['profile']
 
 out = toml.dumps(base)
 
