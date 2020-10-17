@@ -1,4 +1,4 @@
-{ rustPlatform, fetchFromGitHub, writeText }:
+{ lib, rustPlatform, fetchFromGitHub, writeText }:
 
 rustPlatform.buildRustPackage rec {
     name = "blog_os-sysroot-test";
@@ -38,4 +38,9 @@ rustPlatform.buildRustPackage rec {
 
     # Tests don't work for `no_std`. See https://os.phil-opp.com/testing/
     doCheck = false; 
+
+    meta = with lib; {
+        description = "Test for using custom sysroots with buildRustPackage.";
+        maintainers = with maintainers; [ aaronjanse ];
+    };
 }
