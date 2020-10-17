@@ -2414,6 +2414,8 @@ in
 
   string-machine = callPackage ../applications/audio/string-machine { };
 
+  stripe-cli = callPackage ../tools/admin/stripe-cli { };
+
   bash-supergenpass = callPackage ../tools/security/bash-supergenpass { };
 
   swappy = callPackage ../applications/misc/swappy { gtk = gtk3; };
