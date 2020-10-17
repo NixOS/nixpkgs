@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , six
 , webob
 }:
@@ -8,6 +9,7 @@
 buildPythonPackage rec {
   pname = "bugsnag";
   version = "4.0.1";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
