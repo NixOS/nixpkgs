@@ -6,7 +6,7 @@ let
 
   # secret is by envvar, not flag
   initFlags = toString [
-    (optionalString (cfg.initPeers != []) "--peers") 
+    (optionalString (cfg.initPeers != [ ]) "--peers")
     (lib.strings.concatStringsSep "," cfg.initPeers)
   ];
 in {
@@ -82,7 +82,10 @@ in {
       path = [ "/run/wrappers" pkgs.ipfs-cluster ];
       environment = {
         IPFS_CLUSTER_PATH = cfg.dataDir;
-        #CLUSTER_SECRET = cfg.secret;
+        CLUSTER_SECRET = if (cfg.secret != null) then
+          cfg.secret elseif (secretFile != null) readFile cfg.secretFile
+        else
+          null;
       };
       wantedBy = [ "default.target" ];
 
