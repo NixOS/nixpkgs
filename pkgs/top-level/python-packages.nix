@@ -452,6 +452,8 @@ in {
 
   attrs = callPackage ../development/python-modules/attrs { };
 
+  aubio = callPackage ../development/python-modules/aubio { };
+
   audio-metadata = callPackage ../development/python-modules/audio-metadata { };
 
   audioread = callPackage ../development/python-modules/audioread { };
