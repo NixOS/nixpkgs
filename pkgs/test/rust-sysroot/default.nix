@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     RUSTFLAGS = "-C link-arg=-nostartfiles";
 
     # Tests don't work for `no_std`. See https://os.phil-opp.com/testing/
-    doCheck = false; 
+    doCheck = false;
 
     meta = with lib; {
         description = "Test for using custom sysroots with buildRustPackage";
