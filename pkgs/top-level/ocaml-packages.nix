@@ -559,6 +559,8 @@ let
 
     mirage-flow-unix = callPackage ../development/ocaml-modules/mirage-flow/unix.nix { };
 
+    mirage-kv = callPackage ../development/ocaml-modules/mirage-kv { };
+
     mirage-protocols = callPackage ../development/ocaml-modules/mirage-protocols { };
 
     mirage-random = callPackage ../development/ocaml-modules/mirage-random { };
