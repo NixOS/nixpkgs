@@ -68,7 +68,9 @@ in buildPythonPackage rec {
       --replace 'StrParam(default_dnn_base_path)' 'StrParam('\'''${cudnn}'\''')'
   '';
 
-  preCheck = ''
+  # needs to be postFixup so it runs before pythonImportsCheck even when
+  # doCheck = false (meaning preCheck would be disabled)
+  postFixup = ''
     mkdir -p check-phase
     export HOME=$(pwd)/check-phase
   '';
@@ -80,6 +82,8 @@ in buildPythonPackage rec {
   # keep Nose around since running the tests by hand is possible from Python or bash
   checkInputs = [ nose ];
   propagatedBuildInputs = [ numpy numpy.blas scipy six libgpuarray_ ];
+
+  pythonImportsCheck = [ "theano" ];
 
   meta = with stdenv.lib; {
     homepage = "http://deeplearning.net/software/theano/";
