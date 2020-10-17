@@ -81,7 +81,7 @@ in {
       path = [ "/run/wrappers" pkgs.ipfs-cluster ];
       environment = {
         IPFS_CLUSTER_PATH = cfg.dataDir;
-        CLUSTER_SECRET = cfg.secret;
+        #CLUSTER_SECRET = cfg.secret;
       };
       wantedBy = [ "default.target" ];
 
