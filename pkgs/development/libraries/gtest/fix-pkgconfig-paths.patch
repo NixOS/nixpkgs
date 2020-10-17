@@ -1,0 +1,69 @@
+From 5126ff48d9ac54828d1947d1423a5ef2a8efee3b Mon Sep 17 00:00:00 2001
+From: David Seifert <soap@gentoo.org>
+Date: Sat, 5 Oct 2019 15:58:45 +0200
+Subject: [PATCH] Revert "Use pcfiledir for prefix in pkgconfig file"
+
+The change makes implicit assumptions on the layout of the install
+tree, which is going to break in many ways.
+
+The correct solution is to use the `PKG_CONFIG_SYSROOT_DIR` variable
+to inject the cross-compiled sysroot into `-I` and `-L` paths.
+---
+ googlemock/cmake/gmock.pc.in      | 5 ++---
+ googlemock/cmake/gmock_main.pc.in | 5 ++---
+ googletest/cmake/gtest.pc.in      | 5 ++---
+ googletest/cmake/gtest_main.pc.in | 5 ++---
+ 4 files changed, 8 insertions(+), 12 deletions(-)
+
+diff --git a/googlemock/cmake/gmock.pc.in b/googlemock/cmake/gmock.pc.in
+index 08e045474..2ef0fbca1 100644
+--- a/googlemock/cmake/gmock.pc.in
++++ b/googlemock/cmake/gmock.pc.in
+@@ -1,6 +1,5 @@
+-prefix=${pcfiledir}/../..
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: gmock
+ Description: GoogleMock (without main() function)
+diff --git a/googlemock/cmake/gmock_main.pc.in b/googlemock/cmake/gmock_main.pc.in
+index b22fe6148..04658fe2e 100644
+--- a/googlemock/cmake/gmock_main.pc.in
++++ b/googlemock/cmake/gmock_main.pc.in
+@@ -1,6 +1,5 @@
+-prefix=${pcfiledir}/../..
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: gmock_main
+ Description: GoogleMock (with main() function)
+diff --git a/googletest/cmake/gtest.pc.in b/googletest/cmake/gtest.pc.in
+index 9aae29e26..e7967ad56 100644
+--- a/googletest/cmake/gtest.pc.in
++++ b/googletest/cmake/gtest.pc.in
+@@ -1,6 +1,5 @@
+-prefix=${pcfiledir}/../..
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: gtest
+ Description: GoogleTest (without main() function)
+diff --git a/googletest/cmake/gtest_main.pc.in b/googletest/cmake/gtest_main.pc.in
+index 915f2973a..fe25d9c73 100644
+--- a/googletest/cmake/gtest_main.pc.in
++++ b/googletest/cmake/gtest_main.pc.in
+@@ -1,6 +1,5 @@
+-prefix=${pcfiledir}/../..
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: gtest_main
+ Description: GoogleTest (with main() function)

@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./fix-cmake-config-includedir.patch
+    ./fix-pkgconfig-paths.patch
   ];
 
   nativeBuildInputs = [ cmake ninja ];
