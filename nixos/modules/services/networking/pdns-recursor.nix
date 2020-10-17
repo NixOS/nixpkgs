@@ -189,7 +189,6 @@ in {
     users.users.pdns-recursor = {
       isSystemUser = true;
       group = "pdns-recursor";
-      uid = config.ids.uids.pdns-recursor;
       description = "PowerDNS Recursor daemon user";
     };
 
