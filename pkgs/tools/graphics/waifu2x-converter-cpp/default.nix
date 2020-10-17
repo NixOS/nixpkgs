@@ -1,4 +1,4 @@
-{ cmake, fetchFromGitHub, opencv3, stdenv, ocl-icd, opencl-headers
+{ cmake, fetchFromGitHub, makeWrapper, opencv3, stdenv, ocl-icd, opencl-headers
 , cudaSupport ? false, cudatoolkit ? null
 }:
 
@@ -19,10 +19,14 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    opencv3 opencl-headers ocl-icd
+    ocl-icd opencv3 opencl-headers
   ] ++ stdenv.lib.optional cudaSupport cudatoolkit;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake makeWrapper ];
+
+  preFixup = ''
+    wrapProgram $out/bin/waifu2x-converter-cpp --prefix LD_LIBRARY_PATH : "${ocl-icd}/lib"
+  '';
 
   meta = {
     description = "Improved fork of Waifu2X C++ using OpenCL and OpenCV";
