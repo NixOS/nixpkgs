@@ -1,0 +1,48 @@
+From 4ba35c72ff39fa1f379e7c69e8c4fd0662961df9 Mon Sep 17 00:00:00 2001
+From: Andrew Childs <lorne@cons.org.nz>
+Date: Sat, 17 Oct 2020 13:26:01 +0900
+Subject: [PATCH] dynamicHDR10: update CMakeLists.txt for aarch64 support
+
+Directly copied from the main CMakeLists.txt, which was updated in
+ec7396adaa6afd2c8aab1918cfe4bb6e384740c3
+---
+ source/dynamicHDR10/CMakeLists.txt | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
+
+diff --git a/source/dynamicHDR10/CMakeLists.txt b/source/dynamicHDR10/CMakeLists.txt
+index 22fb79d44..853378d27 100644
+--- a/source/dynamicHDR10/CMakeLists.txt
++++ b/source/dynamicHDR10/CMakeLists.txt
+@@ -43,14 +43,24 @@ if(GCC)
+         endif()
+     endif()
+     if(ARM AND CROSS_COMPILE_ARM)
+-        set(ARM_ARGS -march=armv6 -mfloat-abi=soft -mfpu=vfp -marm -fPIC)
++        if(ARM64)
++            set(ARM_ARGS -fPIC)
++        else()
++            set(ARM_ARGS -march=armv6 -mfloat-abi=soft -mfpu=vfp -marm -fPIC)
++        endif()
++        message(STATUS "cross compile arm")
+     elseif(ARM)
+-        find_package(Neon)
+-        if(CPU_HAS_NEON)
+-            set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=neon -marm -fPIC)
++        if(ARM64)
++            set(ARM_ARGS -fPIC)
+             add_definitions(-DHAVE_NEON)
+         else()
+-            set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=vfp -marm)
++            find_package(Neon)
++            if(CPU_HAS_NEON)
++                set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=neon -marm -fPIC)
++                add_definitions(-DHAVE_NEON)
++            else()
++                set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=vfp -marm)
++            endif()
+         endif()
+     endif()
+     add_definitions(${ARM_ARGS})
+-- 
+2.28.0
+

@@ -7,11 +7,11 @@
 , custatsSupport ? false # Internal profiling of encoder work
 , cliSupport ? true # Build standalone CLI application
 , unittestsSupport ? false # Unit tests
+, withHighBitDepth ? stdenv.hostPlatform.isx86_64 # requires explicit upstream support for platform
 }:
 
 let
   mkFlag = optSet: flag: if optSet then "-D${flag}=ON" else "-D${flag}=OFF";
-  inherit (stdenv) is64bit;
 
   cmakeFlagsAll = [
     "-DSTATIC_LINK_CRT=OFF"
@@ -34,9 +34,13 @@ let
     sha256 = "1jzgv2hxhcwmsdf6sbgyzm88a46dp09ll1fqj92g9vckvh9a7dsn";
   };
 
+  patches = stdenv.lib.optionals stdenv.hostPlatform.isAarch64 [
+    ./0001-dynamicHDR10-update-CMakeLists.txt-for-aarch64-suppo.patch
+  ];
+
   buildLib = has12Bit: stdenv.mkDerivation rec {
     name = "libx265-${if has12Bit then "12" else "10"}-${version}";
-    inherit src;
+    inherit src patches;
     enableParallelBuilding = true;
 
     postPatch = ''
@@ -66,7 +70,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "x265";
-  inherit version src;
+  inherit version src patches;
 
   enableParallelBuilding = true;
 
@@ -79,7 +83,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_SHARED=ON"
     "-DHIGH_BIT_DEPTH=OFF"
     "-DENABLE_HDR10_PLUS=OFF"
-  ] ++ stdenv.lib.optionals is64bit [
+  ] ++ stdenv.lib.optionals withHighBitDepth [
     "-DEXTRA_LIB=${libx265-10}/lib/libx265.a;${libx265-12}/lib/libx265.a"
     "-DLINKED_10BIT=ON"
     "-DLINKED_12BIT=ON"
