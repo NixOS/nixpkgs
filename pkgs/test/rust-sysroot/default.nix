@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
     doCheck = false; 
 
     meta = with lib; {
-        description = "Test for using custom sysroots with buildRustPackage.";
+        description = "Test for using custom sysroots with buildRustPackage";
         maintainers = with maintainers; [ aaronjanse ];
     };
 }
