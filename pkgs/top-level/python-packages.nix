@@ -5171,6 +5171,8 @@ in {
 
   pyparted = callPackage ../development/python-modules/pyparted { };
 
+  pypblib = callPackage ../development/python-modules/pypblib { };
+
   pypcap = callPackage ../development/python-modules/pypcap { };
 
   pypdf2 = callPackage ../development/python-modules/pypdf2 { };
