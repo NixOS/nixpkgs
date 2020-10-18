@@ -300,6 +300,7 @@ mapAliases ({
   mcomix = throw "mcomix has been removed from nixpkgs, as it's unmaintained"; # added 2019-12-10
   mirage = throw "mirage has been femoved from nixpkgs, as it's unmaintained"; # added 2019-12-10
   mopidy-local-images = throw "mopidy-local-images has been removed as it's unmaintained. It's functionality has been merged into the mopidy-local extension."; # added 2020-10-18
+  mopidy-local-sqlite = throw "mopidy-local-sqlite has been removed as it's unmaintained. It's functionality has been merged into the mopidy-local extension."; # added 2020-10-18
   mysql-client = hiPrio mariadb.client;
   memtest86 = memtest86plus; # added 2019-05-08
   mesa_noglu = mesa; # added 2019-05-28
