@@ -15,7 +15,7 @@ let
       (throw "services.kresd.*: incorrect address specification '${addr}'")
       [ al_v4 al_v6 al_portOnly ];
     port = last al;
-    addrSpec = if al_portOnly == null then "'${head al}'" else "{'::', '127.0.0.1'}";
+    addrSpec = if al_portOnly == null then "'${head al}'" else "{'::', '0.0.0.0'}";
     in # freebind is set for compatibility with earlier kresd services;
        # it could be configurable, for example.
       ''
