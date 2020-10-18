@@ -9259,17 +9259,7 @@ in
 
   javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
 
-  julia_07 = callPackage ../development/compilers/julia/0.7.nix {
-    gmp = gmp6;
-    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
-  };
-
   julia_10 = callPackage ../development/compilers/julia/1.0.nix {
-    gmp = gmp6;
-    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
-  };
-
-  julia_11 = callPackage ../development/compilers/julia/1.1.nix {
     gmp = gmp6;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
