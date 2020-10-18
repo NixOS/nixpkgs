@@ -603,6 +603,8 @@ self: super: {
     in ''
       ln -s ${maple-bin}/bin/maple $target/bin/maple
     '';
+
+    meta.platforms = stdenv.lib.platforms.all;
   });
 
   completion-tabnine = super.completion-tabnine.overrideAttrs(old: {
@@ -618,6 +620,7 @@ self: super: {
     nodePackageNames = [
       "coc-go"
       "coc-css"
+      "coc-diagnostic"
       "coc-emmet"
       "coc-eslint"
       "coc-git"

@@ -1106,6 +1106,8 @@ in
 
   google-amber = callPackage ../tools/graphics/amber { };
 
+  hime = callPackage ../tools/inputmethods/hime {};
+
   hpe-ltfs = callPackage ../tools/backup/hpe-ltfs { };
 
   http2tcp = callPackage ../tools/networking/http2tcp { };
@@ -2411,6 +2413,8 @@ in
   step-cli = callPackage ../tools/security/step-cli { };
 
   string-machine = callPackage ../applications/audio/string-machine { };
+
+  stripe-cli = callPackage ../tools/admin/stripe-cli { };
 
   bash-supergenpass = callPackage ../tools/security/bash-supergenpass { };
 
@@ -5616,13 +5620,6 @@ in
   mytetra = libsForQt5.callPackage ../applications/office/mytetra { };
 
   nabi = callPackage ../tools/inputmethods/nabi { };
-
-  hime = callPackage ../tools/inputmethods/hime {};
-
-  hime-all = callPackage ../tools/inputmethods/hime {
-    enableChewing = true;
-    enableAnthy = true;
-  };
 
   nahid-fonts = callPackage ../data/fonts/nahid-fonts { };
 
@@ -9328,17 +9325,7 @@ in
 
   javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
 
-  julia_07 = callPackage ../development/compilers/julia/0.7.nix {
-    gmp = gmp6;
-    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
-  };
-
   julia_10 = callPackage ../development/compilers/julia/1.0.nix {
-    gmp = gmp6;
-    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
-  };
-
-  julia_11 = callPackage ../development/compilers/julia/1.1.nix {
     gmp = gmp6;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
@@ -9373,6 +9360,8 @@ in
   };
 
   knightos-scas = callPackage ../development/tools/knightos/scas { };
+
+  knightos-z80e = callPackage ../development/tools/knightos/z80e { };
 
   kotlin = callPackage ../development/compilers/kotlin { };
 
@@ -9577,7 +9566,7 @@ in
   inherit (callPackage ../development/tools/ocaml/ocamlformat { })
     ocamlformat # latest version
     ocamlformat_0_11_0 ocamlformat_0_12 ocamlformat_0_13_0 ocamlformat_0_14_0
-    ocamlformat_0_14_1 ocamlformat_0_14_2 ocamlformat_0_15_0;
+    ocamlformat_0_14_1 ocamlformat_0_14_2 ocamlformat_0_14_3 ocamlformat_0_15_0;
 
   orc = callPackage ../development/compilers/orc { };
 
@@ -12345,7 +12334,9 @@ in
 
   egl-wayland = callPackage ../development/libraries/egl-wayland {};
 
-  elastix = callPackage ../development/libraries/science/biology/elastix { };
+  elastix = callPackage ../development/libraries/science/biology/elastix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   enchant1 = callPackage ../development/libraries/enchant/1.x.nix { };
 
@@ -14716,7 +14707,6 @@ in
     inherit (darwin.apple_sdk.frameworks) OpenCL Cocoa;
   };
   opencascade-occt = callPackage ../development/libraries/opencascade-occt { };
-  opencascade-occt730 = callPackage ../development/libraries/opencascade-occt/7.3.nix { };
 
   opencl-headers = callPackage ../development/libraries/opencl-headers { };
 
@@ -20739,7 +20729,7 @@ in
 
   gradio = callPackage ../applications/audio/gradio { };
 
-  puddletag = callPackage ../applications/audio/puddletag { };
+  puddletag = libsForQt5.callPackage ../applications/audio/puddletag { };
 
   w_scan = callPackage ../applications/video/w_scan { };
 
@@ -20854,11 +20844,6 @@ in
 
   freecad = libsForQt5.callPackage ../applications/graphics/freecad {
     mpi = openmpi;
-  };
-  freecadStable = libsForQt5.callPackage ../applications/graphics/freecad/stable.nix {
-    mpi = openmpi;
-    opencascade-occt = opencascade-occt730;
-    python3Packages = python37Packages;
   };
 
   freemind = callPackage ../applications/misc/freemind {
@@ -24170,7 +24155,9 @@ in
 
   wofi = callPackage ../applications/misc/wofi { };
 
-  wordnet = callPackage ../applications/misc/wordnet { };
+  wordnet = callPackage ../applications/misc/wordnet {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   wordgrinder = callPackage ../applications/office/wordgrinder { };
 
@@ -28309,4 +28296,5 @@ in
 
   cagebreak = callPackage ../applications/window-managers/cagebreak/default.nix {};
 
+  psftools = callPackage ../os-specific/linux/psftools {};
 }

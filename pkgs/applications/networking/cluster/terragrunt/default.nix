@@ -25,7 +25,7 @@ buildGoModule rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A thin wrapper for Terraform that supports locking for Terraform state and enforces best practices.";
+    description = "A thin wrapper for Terraform that supports locking for Terraform state and enforces best practices";
     homepage = "https://github.com/gruntwork-io/terragrunt/";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];

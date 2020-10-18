@@ -5,7 +5,7 @@
   version = "0.116.4";
   components = {
     "abode" = ps: with ps; [ abodepy ];
-    "accuweather" = ps: with ps; [ ]; # missing inputs: accuweather
+    "accuweather" = ps: with ps; [ accuweather ];
     "acer_projector" = ps: with ps; [ pyserial ];
     "acmeda" = ps: with ps; [ ]; # missing inputs: aiopulse
     "actiontec" = ps: with ps; [ ];
@@ -922,7 +922,7 @@
     "wink" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pubnubsub-handler python-wink
     "wirelesstag" = ps: with ps; [ ]; # missing inputs: wirelesstagpy
     "withings" = ps: with ps; [ aiohttp-cors ]; # missing inputs: withings-api
-    "wled" = ps: with ps; [ ]; # missing inputs: wled
+    "wled" = ps: with ps; [ wled ];
     "wolflink" = ps: with ps; [ ]; # missing inputs: wolf_smartset
     "workday" = ps: with ps; [ holidays ];
     "worldclock" = ps: with ps; [ ];

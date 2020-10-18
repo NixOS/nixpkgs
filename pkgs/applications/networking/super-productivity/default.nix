@@ -97,7 +97,7 @@ in stdenv.mkDerivation {
   dontStrip = true;
 
   meta = with stdenv.lib; {
-    description = "To Do List / Time Tracker with Jira Integration.";
+    description = "To Do List / Time Tracker with Jira Integration";
     homepage = "https://super-productivity.com";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];

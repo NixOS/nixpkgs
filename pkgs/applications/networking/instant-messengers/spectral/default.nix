@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin qtmacextras;
 
   meta = with stdenv.lib; {
-    description = "A glossy cross-platform Matrix client.";
+    description = "A glossy cross-platform Matrix client";
     homepage = "https://spectral.im";
     license = licenses.gpl3;
     platforms = with platforms; linux ++ darwin;

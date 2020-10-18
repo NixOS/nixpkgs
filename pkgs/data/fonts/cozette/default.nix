@@ -19,7 +19,7 @@ fetchzip rec {
   '';
 
   meta = with lib; {
-    description = "A bitmap programming font optimized for coziness.";
+    description = "A bitmap programming font optimized for coziness";
     homepage = "https://github.com/slavfox/cozette";
     license = licenses.mit;
     platforms = platforms.all;
