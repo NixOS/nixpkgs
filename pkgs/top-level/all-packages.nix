@@ -22116,8 +22116,7 @@ in
     mopidy
     mopidy-gmusic
     mopidy-iris
-    mopidy-local-images
-    mopidy-local-sqlite
+    mopidy-local
     mopidy-moped
     mopidy-mopify
     mopidy-mpd
