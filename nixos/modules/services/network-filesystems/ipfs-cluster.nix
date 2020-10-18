@@ -50,20 +50,20 @@ in {
         description = "Peer addresses to initialize with on first run.";
       };
 
-      secret = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description =
-          "Secret for an existing cluster; if null, a new secret is generated.";
-      };
-
       secretFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        description =
-          "File containing the secret - 'secret' and 'secretFile' should not both be set.";
-      };
+        description = ''
+          File containing the cluster secret in the format of EnvironmentFile as described by
+          <citerefentry><refentrytitle>systemd.exec</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry>. For example:
+          <programlisting>
+          IPFS_CLUSTER_SECRET=<replaceable>...</replaceable>
+          </programlisting>
 
+          if null, a new secret will be generated on first run
+        '';
+      };
     };
   };
 
@@ -76,17 +76,9 @@ in {
     systemd.tmpfiles.rules =
       [ "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -" ];
 
-    systemd.packages = [ pkgs.ipfs-cluster pkgs.coreutils ];
-
     systemd.services.ipfs-cluster-init = {
       path = [ "/run/wrappers" pkgs.ipfs-cluster ];
-      environment = {
-        IPFS_CLUSTER_PATH = cfg.dataDir;
-        CLUSTER_SECRET = if (cfg.secret != null) then
-          cfg.secret elseif (secretFile != null) readFile cfg.secretFile
-        else
-          null;
-      };
+      environment.IPFS_CLUSTER_PATH = cfg.dataDir;
       wantedBy = [ "default.target" ];
 
       serviceConfig = if cfg.consensus == null then
@@ -117,6 +109,8 @@ in {
           [ "" "${pkgs.ipfs-cluster}/bin/ipfs-cluster-service daemon" ];
         User = cfg.user;
         Group = cfg.group;
+      } // optionalAttrs (cfg.secretFile != null) {
+        EnvironmentFile = cfg.secretFile;
       };
     };
   };
