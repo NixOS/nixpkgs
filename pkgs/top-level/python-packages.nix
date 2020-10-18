@@ -3775,6 +3775,8 @@ in {
 
   manuel = callPackage ../development/python-modules/manuel { };
 
+  manticore = callPackage ../development/python-modules/manticore { inherit (pkgs) z3; };
+
   mapbox = callPackage ../development/python-modules/mapbox { };
 
   mapsplotlib = callPackage ../development/python-modules/mapsplotlib { };
