@@ -1,8 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, flask, werkzeug, setuptools_scm }:
+{ stdenv, buildPythonPackage, fetchPypi, pytest, flask, werkzeug, setuptools_scm, isPy27 }:
 
 buildPythonPackage rec {
   pname = "pytest-flask";
   version = "1.0.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
@@ -11,11 +12,8 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  buildInputs = [
-     pytest
-  ];
-
   propagatedBuildInputs = [
+    pytest
     flask
     werkzeug
   ];

@@ -10,15 +10,15 @@ let
     optional stdenv.isDarwin pbcopy
   );
 in
-python3Packages.buildPythonPackage rec {
-  version = "0.9.1";
+python3Packages.buildPythonApplication rec {
   pname = "tremc";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "tremc";
     repo = pname;
-    rev = "0.9.1";
-    sha256 = "1yhwvlcyv1s830p5a7q5x3mkb3mbvr5cn5nh7y62l5b6iyyynlvm";
+    rev = version;
+    sha256 = "1fqspp2ckafplahgba54xmx0sjidx1pdzyjaqjhz0ivh98dkx2n5";
   };
 
   buildInputs = with python3Packages; [
@@ -44,6 +44,6 @@ python3Packages.buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Curses interface for transmission";
     homepage = "https://github.com/tremc/tremc";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
   };
 }

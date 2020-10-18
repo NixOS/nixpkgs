@@ -17,7 +17,7 @@ buildGoModule rec {
 
   meta = with stdenv.lib; {
     homepage    = "https://github.com/golang-migrate/migrate";
-    description = "Database migrations. CLI and Golang library.";
+    description = "Database migrations. CLI and Golang library";
     maintainers = with maintainers; [ offline ];
     license     = licenses.mit;
   };

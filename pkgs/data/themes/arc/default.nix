@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , sassc
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , gtk3
 , gnome3
 , gtk-engine-murrine
@@ -13,18 +13,18 @@
 
 stdenv.mkDerivation rec {
   pname = "arc-theme";
-  version = "20200819";
+  version = "20201013";
 
   src = fetchFromGitHub {
     owner = "jnsh";
     repo = pname;
     rev = version;
-    sha256 = "1l5sc4r5jp3526r4p32fszny0cw6pkb45cp424hq0s0k344z9px6";
+    sha256 = "1x2l1mwjx68dwf3jb1i90c1q8nqsl1wf2zggcn8im6590k5yv39s";
   };
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
     sassc
     optipng
     inkscape
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Flat theme with transparent elements for GTK 3, GTK 2 and Gnome Shell";
     homepage = "https://github.com/jnsh/arc-theme";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ simonvandel romildo ];
   };

@@ -14,7 +14,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = with stdenv.lib; {
-    description = "A set of cross-platform tools to compute hashes.";
+    description = "A set of cross-platform tools to compute hashes";
     homepage = "https://github.com/jessek/hashdeep";
     license = licenses.gpl2;
     platforms = with platforms; linux ++ freebsd ++ openbsd;

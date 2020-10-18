@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    description = "Evolution connector for Microsoft Exchange Server protocols.";
+    description = "Evolution connector for Microsoft Exchange Server protocols";
     homepage = "https://gitlab.gnome.org/GNOME/evolution-ews";
     license = "LGPL-2.1-only OR LGPL-3.0-only"; # https://gitlab.gnome.org/GNOME/evolution-ews/issues/111
     maintainers = [ maintainers.dasj19 ];

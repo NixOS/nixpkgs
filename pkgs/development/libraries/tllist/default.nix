@@ -2,17 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "tllist";
-  version = "1.0.2";
+  version = "1.0.4";
 
   src = fetchgit {
     url = "https://codeberg.org/dnkl/tllist.git";
-    rev = "${version}";
-    sha256 = "095wly66z9n2r6h318rackgl4g1w9l1vj96367ngcw7rpva9yppl";
+    rev = version;
+    sha256 = "sha256-+u8p/VmI61SGRhZHaJBwgcVNetNOrYzg2NVQehbfRqg=";
   };
 
   nativeBuildInputs = [
     meson ninja
   ];
+
+  doCheck = true;
 
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/tllist";

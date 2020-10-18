@@ -13,6 +13,7 @@
 , CoreFoundation, Security
 , llvmPackages
 , pkgsBuildTarget, pkgsBuildBuild
+, makeRustPlatform
 } @ args:
 
 import ./default.nix {

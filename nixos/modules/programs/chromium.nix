@@ -29,7 +29,7 @@ in
           page. To install a chromium extension not included in the chrome web
           store, append to the extension id a semicolon ";" followed by a URL
           pointing to an Update Manifest XML file. See
-          <link xlink:href="https://www.chromium.org/administrators/policy-list-3#ExtensionInstallForcelist">ExtensionInstallForcelist</link>
+          <link xlink:href="https://cloud.google.com/docs/chrome-enterprise/policies/?policy=ExtensionInstallForcelist">ExtensionInstallForcelist</link>
           for additional details.
         '';
         default = [];

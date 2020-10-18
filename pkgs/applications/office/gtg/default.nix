@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
   checkPhase = "python3 ../run-tests";
 
   meta = with stdenv.lib; {
-    description = " A personal tasks and TODO-list items organizer.";
+    description = " A personal tasks and TODO-list items organizer";
     longDescription = ''
       "Getting Things GNOME" (GTG) is a personal tasks and ToDo list organizer inspired by the "Getting Things Done" (GTD) methodology.
       GTG is intended to help you track everything you need to do and need to know, from small tasks to large projects.

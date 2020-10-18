@@ -30,7 +30,7 @@ in appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "A beautiful Plex music player for audiophiles, curators, and hipsters.";
+    description = "A beautiful Plex music player for audiophiles, curators, and hipsters";
     homepage = "https://plexamp.com/";
     license = licenses.unfree;
     maintainers = with maintainers; [ killercup ];

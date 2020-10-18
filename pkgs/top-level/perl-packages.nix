@@ -597,6 +597,41 @@ let
     };
   };
 
+  AppMusicChordPro = buildPerlPackage {
+    pname = "App-Music-ChordPro";
+    version = "0.977";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JV/JV/App-Music-ChordPro-0.977.tar.gz";
+      sha256 = "0ggip43cddi5f6rylb07f56dhkfhbcbm621lvcnjfadnn9lrbwqh";
+    };
+    buildInputs = [ PodParser ];
+    propagatedBuildInputs = [ AppPackager FileLoadLines IOString ImageInfo PDFAPI2 StringInterpolateNamed TextLayout ]
+      ++ stdenv.lib.optional (!stdenv.isDarwin) [ Wx ];
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/chordpro
+      rm $out/bin/wxchordpro # Wx not supported on darwin
+    '';
+    meta = {
+      homepage = "http://www.chordpro.org";
+      description = "A lyrics and chords formatting program";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  AppPackager =  buildPerlPackage {
+    pname = "App-Packager";
+    version = "1.430.1";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JV/JV/App-Packager-1.430.1.tar.gz";
+      sha256 = "57f4d014458387f9e2ed2dfd8615d1e2545b8a6504b10af22486578d8be374a3";
+    };
+    meta = {
+      description = "Abstraction for Packagers";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Appperlbrew = buildPerlModule {
     pname = "App-perlbrew";
     version = "0.88";
@@ -7771,6 +7806,19 @@ let
     propagatedBuildInputs = [ HTTPDate ];
   };
 
+  FileLoadLines = buildPerlPackage {
+    pname = "File-LoadLines";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JV/JV/File-LoadLines-0.02.tar.gz";
+      sha256 = "ab0c1c31cf7b694dd3c9a0707098f7483763d46b60799a7f496ea0588be46b7b";
+    };
+    meta = {
+      description = "Load lines from file";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   FileMimeInfo = buildPerlPackage {
     pname = "File-MimeInfo";
     version = "0.29";
@@ -8249,6 +8297,23 @@ let
     meta = {
       description = "represent an operation awaiting completion";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  FutureAsyncAwait = buildPerlModule {
+    pname = "Future-AsyncAwait";
+    version = "0.44";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-0.44.tar.gz";
+      sha256 = "131825164614ede6a49df4566e730c4cc22e3129796039b9360fa551701413fe";
+    };
+    buildInputs = [ TestRefcount ];
+    propagatedBuildInputs = [ Future XSParseSublike ];
+    perlPreHook = stdenv.lib.optionalString stdenv.isDarwin "export LD=$CC";
+    meta = {
+      description = "Deferred subroutine syntax for futures";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -9888,6 +9953,22 @@ let
     meta = {
       description = "Asynchronous event-driven programming";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  IOAsyncSSL = buildPerlModule {
+    pname = "IO-Async-SSL";
+    version = "0.22";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-SSL-0.22.tar.gz";
+      sha256 = "0c7363a7f1a08805bd1b2cf2b1a42a950ca71914c2aedbdd985970e011331a21";
+    };
+    buildInputs = [ TestIdentity ];
+    propagatedBuildInputs = [ Future IOAsync IOSocketSSL ];
+    meta = {
+      description = "Use SSL/TLS with IO::Async";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -13057,10 +13138,10 @@ let
 
   Mojolicious = buildPerlPackage {
     pname = "Mojolicious";
-    version = "8.58";
+    version = "8.63";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-8.58.tar.gz";
-      sha256 = "0543m2g1pjm06b0yr4cffw70ki76762ria65zvrjccc2zk69pwvy";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-8.63.tar.gz";
+      sha256 = "1nw500wi6kdyawc2aq37lnx6zfkpby3sczflh5pjz623i8nw4b66";
     };
     meta = {
       homepage = "https://mojolicious.org";
@@ -14922,6 +15003,24 @@ let
      };
   };
 
+  NetServerSSPrefork = buildPerlPackage {
+     pname = "Net-Server-SS-PreFork";
+     version = "0.06pre";
+     src = fetchFromGitHub {
+       owner = "kazuho";
+       repo = "p5-Net-Server-SS-PreFork";
+       rev = "5fccc0c270e25c65ef634304630af74b48807d21";
+       sha256 = "0z02labw0dd76sdf301bhrmgnsjds0ddsg22138g8ys4az49bxx6";
+     };
+     checkInputs = [ HTTPMessage LWP TestSharedFork HTTPServerSimple TestTCP TestUNIXSock ];
+     buildInputs = [ ModuleInstall ];
+     propagatedBuildInputs = [ NetServer ServerStarter ];
+     meta = {
+       description = "A hot-deployable variant of Net::Server::PreFork";
+       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+     };
+  };
+
   NetSMTPSSL = buildPerlPackage {
     pname = "Net-SMTP-SSL";
     version = "1.04";
@@ -15927,6 +16026,20 @@ let
       homepage = "http://perlcritic.com";
       description = "Critique Perl source code for best-practices";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  PerlCriticMoose = buildPerlPackage rec {
+    pname = "Perl-Critic-Moose";
+    version = "1.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Perl-Critic-Moose-${version}.tar.gz";
+      sha256 = "0092z583c3q3gqry693ck3ibkzby04a1g8lpw9zz2hr6qhi8xssj";
+    };
+    propagatedBuildInputs = [ PerlCritic Readonly namespaceautoclean ];
+    meta = {
+      description = "Policies for Perl::Critic concerned with using Moose";
+      license = stdenv.lib.licenses.artistic1;
     };
   };
 
@@ -17925,7 +18038,7 @@ let
     };
     buildInputs = [ LWP ModuleBuildTiny TestRequires TestTCP ];
     nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
-    propagatedBuildInputs = [ DataDump HTTPParserXS NetServer Plack ];
+    propagatedBuildInputs = [ DataDump HTTPParserXS NetServer Plack NetServerSSPrefork ];
     postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
       shortenPerlShebang $out/bin/starman
     '';
@@ -18163,6 +18276,19 @@ let
       license = licenses.gpl1Plus;
     };
     propagatedBuildInputs = [ PadWalker SafeHole ];
+  };
+
+  StringInterpolateNamed = buildPerlPackage {
+    pname = "String-Interpolate-Named";
+    version = "1.00";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JV/JV/String-Interpolate-Named-1.00.tar.gz";
+      sha256 = "727299fa69258b604770e059ec4da906bfde71861fdd1e3e89e30677371c5a80";
+    };
+    meta = {
+      description = "Interpolated named arguments in string";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   StringMkPasswd = buildPerlPackage {
@@ -20461,6 +20587,21 @@ let
     buildInputs = [ TestSharedFork ];
   };
 
+  TestUNIXSock = buildPerlModule rec {
+    pname = "Test-UNIXSock";
+    version = "0.4";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/F/FU/FUJIWARA/${pname}-${version}.tar.gz";
+      sha256 = "0gwgd2w16dsppmf1r6yc17ipvs8b62ybsiz2dyzwy4il236b8c1p";
+    };
+    meta = {
+      description = "Testing UNIX domain socket program";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ TestSharedFork TestTCP ];
+  };
+
   TestTime = buildPerlPackage {
     pname = "Test-Time";
     version = "0.08";
@@ -20885,6 +21026,20 @@ let
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
     buildInputs = [ FileFindRule TestPod TestPodCoverage ];
+  };
+
+  TextLayout = buildPerlPackage {
+    pname = "Text-Layout";
+    version = "0.019";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JV/JV/Text-Layout-0.019.tar.gz";
+      sha256 = "a043f2a89e113b29c523a9efa71fa8398ed75edd482193901b38d08dd4a4108e";
+    };
+    buildInputs = [ PDFAPI2 ];
+    meta = {
+      description = "Pango style markup formatting";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   TextLorem = buildPerlModule {
@@ -22756,6 +22911,22 @@ let
     meta = {
       description = "XS pointer backed objects using sv_magic";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  XSParseSublike = buildPerlModule {
+    pname = "XS-Parse-Sublike";
+    version = "0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Sublike-0.10.tar.gz";
+      sha256 = "99a1bdda3ffa67514adb6aa189c902fa78dca41d778a42ae7079f604a045ac43";
+    };
+    buildInputs = [ TestFatal ];
+    perlPreHook = stdenv.lib.optionalString stdenv.isDarwin "export LD=$CC";
+    meta = {
+      description = "XS functions to assist in parsing sub-like syntax";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
     };
   };
 

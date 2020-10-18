@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "pysonos";
-  version = "0.0.32";
+  version = "0.0.35";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b739d20807f5fac95f8e02831faaf04023b7a8cb6f371024d89fd16c6bd8a589";
+    sha256 = "3a0f8f6eb6ba0623b93a6995c1978cf72c4eedc5fbedac194e6d89e1b6b985e4";
   };
 
   propagatedBuildInputs = [ xmltodict requests ifaddr ];
