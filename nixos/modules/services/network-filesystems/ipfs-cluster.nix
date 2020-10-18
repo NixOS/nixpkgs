@@ -58,10 +58,10 @@ in {
           <citerefentry><refentrytitle>systemd.exec</refentrytitle>
           <manvolnum>5</manvolnum></citerefentry>. For example:
           <programlisting>
-          IPFS_CLUSTER_SECRET=<replaceable>...</replaceable>
+          CLUSTER_SECRET=<replaceable>...</replaceable>
           </programlisting>
 
-          if null, a new secret will be generated on first run
+          if null, a new secret will be generated on first run.
         '';
       };
     };
@@ -97,9 +97,8 @@ in {
     };
 
     systemd.services.ipfs-cluster = {
-      path = [ "/run/wrappers" pkgs.ipfs-cluster ];
-      environment.IPFS_PATH = cfg.dataDir;
-      wantedBy = [ "default.target" ];
+      environment.IPFS_CLUSTER_PATH = cfg.dataDir;
+      wantedBy = [ "multi-user.target" ];
 
       wants = [ "ipfs-cluster-init.service" ];
       after = [ "ipfs-cluster-init.service" ];
