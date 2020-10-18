@@ -24,7 +24,7 @@ let
       --replace EnableSyslog=true EnableSyslog=false
 
     substituteInPlace $out/sesman.ini \
-      --replace LogFile=xrdp-sesman.log LogFile=/dev/null \
+      --replace LogFile=xrdp-sesman.log LogFile=${cfg.logFile} \
       --replace EnableSyslog=1 EnableSyslog=0
 
     # Ensure that clipboard works for non-ASCII characters
@@ -88,6 +88,15 @@ in
         description = ''
           The script to run when user log in, usually a window manager, e.g. "icewm", "xfce4-session"
           This is per-user overridable, if file ~/startwm.sh exists it will be used instead.
+        '';
+      };
+
+      logFile = mkOption {
+        type = types.str;
+        default = "/dev/null";
+        example = "/var/log/xrdp-sesman.log";
+        description = ''
+          location for xrdp to write its logs
         '';
       };
 
