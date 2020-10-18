@@ -12,7 +12,9 @@
   kcoreaddons, kcrash, kdeclarative, kdecoration, kglobalaccel, ki18n,
   kiconthemes, kidletime, kinit, kio, knewstuff, knotifications, kpackage,
   kscreenlocker, kservice, kwayland, kwidgetsaddons, kwindowsystem, kxmlgui,
-  plasma-framework, libcap, libdrm, mesa
+  plasma-framework, libcap, libdrm, mesa,
+  
+  lowLatencyPatch ? true, fetchpatch ? null
 }:
 
 # TODO (ttuegel): investigate qmlplugindump failure
@@ -37,7 +39,13 @@ mkDerivation {
   patches = [
     ./0001-follow-symlinks.patch
     ./0002-xwayland.patch
-  ];
+  ]++ lib.optional lowLatencyPatch (fetchpatch {
+    # WARNING: we can't depend the url on the version 
+    # so we must update this url+hash on plasma version update as described in
+    # "https://github.com/tildearrow/kwin-lowlatency#patch-format (branch depending on the Plasma version)
+    url = "https://tildearrow.zapto.org/storage/kwin-lowlatency/kwin-lowlatency-5.18.5-3.patch";
+    hash = "sha256-YsCgQxWduEpzUVMme0D4QQAEdSRs1+tiLEiZQVNgE00=";
+  });
   CXXFLAGS = [
     ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''
   ];
