@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , grpc_google_iam_v1
 , grpcio-gcp
 , google_api_core
@@ -11,12 +12,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-spanner";
-  version = "1.17.1";
+  version = "1.19.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3240a04eaa6496e9d8bf4929f4ff04de1652621fd49555eb83b743c48ed9ca04";
+    sha256 = "0b9ifh9i4hkcs19b4l6v8j8v93yd8p3j19qrrjvvf5a44bc7bhsh";
   };
+
+  disabled = pythonOlder "3.5";
 
   checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ grpcio-gcp grpc_google_iam_v1 google_api_core google_cloud_core ];
@@ -29,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Cloud Spanner API client library";
-    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
+    homepage = "https://pypi.org/project/google-cloud-spanner";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };
