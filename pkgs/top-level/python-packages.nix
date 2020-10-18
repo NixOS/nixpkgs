@@ -2787,6 +2787,8 @@ in {
 
   grequests = callPackage ../development/python-modules/grequests { };
 
+  gremlinpython = callPackage ../development/python-modules/gremlinpython { };
+
   grib-api = disabledIf (!isPy27) (toPythonModule (pkgs.grib-api.override {
     enablePython = true;
     pythonPackages = self;
