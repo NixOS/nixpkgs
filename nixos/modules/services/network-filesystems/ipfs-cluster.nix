@@ -23,45 +23,45 @@ in {
       user = mkOption {
         type = types.str;
         default = "ipfs";
-        description = "User under which the ipfs-cluster daemon runs";
+        description = "User under which the ipfs-cluster daemon runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "ipfs";
-        description = "Group under which the ipfs-cluster daemon runs";
+        description = "Group under which the ipfs-cluster daemon runs.";
       };
 
       consensus = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr types.enum [ "raft" "crdt" ];
         default = null;
-        description = "Consensus protocol - 'raft' or 'crdt'";
+        description = "Consensus protocol - 'raft' or 'crdt'.";
       };
 
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/ipfs-cluster";
-        description = "The data dir for ipfs-cluster";
+        description = "The data dir for ipfs-cluster.";
       };
 
       initPeers = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = "Peer addresses to initialize with on first run";
+        description = "Peer addresses to initialize with on first run.";
       };
 
       secret = mkOption {
         type = types.nullOr types.str;
         default = null;
         description =
-          "Secret for an existing cluster; if null, a new secret is generated";
+          "Secret for an existing cluster; if null, a new secret is generated.";
       };
 
       secretFile = mkOption {
         type = types.nullOr types.path;
         default = null;
         description =
-          "File containing the secret - 'secret' and 'secretFile' should not both be set";
+          "File containing the secret - 'secret' and 'secretFile' should not both be set.";
       };
 
     };
