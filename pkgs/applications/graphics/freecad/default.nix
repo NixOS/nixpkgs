@@ -32,6 +32,7 @@ in mkDerivation rec {
     libGLU libXmu qtbase qttools qtwebengine qtxmlpatterns
   ] ++ (with pythonPackages; [
     matplotlib pycollada shiboken2 pyside2 pyside2-tools pivy python boost
+    GitPython # for addon manager
   ]);
 
   cmakeFlags = [
