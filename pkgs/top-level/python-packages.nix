@@ -1785,6 +1785,8 @@ in {
 
   duecredit = callPackage ../development/python-modules/duecredit { };
 
+  dufte = callPackage ../development/python-modules/dufte { };
+
   dugong = callPackage ../development/python-modules/dugong { };
 
   dulwich = if isPy3k then
@@ -6116,6 +6118,8 @@ in {
   rfc7464 = callPackage ../development/python-modules/rfc7464 { };
 
   rhpl = disabledIf isPy3k (callPackage ../development/python-modules/rhpl { });
+
+  rich = callPackage ../development/python-modules/rich { };
 
   rig = callPackage ../development/python-modules/rig { };
 
