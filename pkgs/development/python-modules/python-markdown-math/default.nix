@@ -2,11 +2,13 @@
 , buildPythonPackage
 , fetchPypi
 , markdown
+, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "python-markdown-math";
   version = "0.7";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
