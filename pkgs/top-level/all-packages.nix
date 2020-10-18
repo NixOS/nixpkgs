@@ -24090,6 +24090,8 @@ in
 
   waypipe = callPackage ../applications/networking/remote/waypipe { };
 
+  waypoint = callPackage ../applications/networking/cluster/waypoint {};
+
   wayv = callPackage ../tools/X11/wayv {};
 
   wayvnc = callPackage ../applications/networking/remote/wayvnc { };
