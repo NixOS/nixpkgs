@@ -63,13 +63,10 @@ rec {
     inherit buildImage pullImage shadowSetup buildImageWithNixDb;
   };
 
-  pullImage = let
-    fixName = name: builtins.replaceStrings ["/" ":"] ["-" "-"] name;
-  in
+  pullImage =
     { imageName
-      # To find the digest of an image, you can use skopeo:
-      # see doc/functions.xml
-    , imageDigest
+    , imageTag ? null
+    , imageDigest ? null
     , sha256
     , os ? "linux"
     , arch ? buildPackages.go.GOARCH
@@ -77,28 +74,26 @@ rec {
       # This is used to set name to the pulled image
     , finalImageName ? imageName
       # This used to set a tag to the pulled image
-    , finalImageTag ? "latest"
+    , finalImageTag ? (if imageTag != null then imageTag else "latest")
 
-    , name ? fixName "docker-image-${finalImageName}-${finalImageTag}.tar"
+    , name ? lib.sanitizeDerivationName "docker-image-${finalImageName}-${finalImageTag}.tar"
     }:
+      if (imageTag == null) == (imageDigest == null) then
+        throw "pullImage: either imageTag or imageDigest must be set"
+      else
+        runCommand name {
+          impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars;
+          outputHashMode = "flat";
+          outputHashAlgo = "sha256";
+          outputHash = sha256;
 
-    runCommand name {
-      inherit imageDigest;
-      imageName = finalImageName;
-      imageTag = finalImageTag;
-      impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars;
-      outputHashMode = "flat";
-      outputHashAlgo = "sha256";
-      outputHash = sha256;
-
-      nativeBuildInputs = lib.singleton skopeo;
-      SSL_CERT_FILE = "${cacert.out}/etc/ssl/certs/ca-bundle.crt";
-
-      sourceURL = "docker://${imageName}@${imageDigest}";
-      destNameTag = "${finalImageName}:${finalImageTag}";
-    } ''
-      skopeo --insecure-policy --tmpdir=$TMPDIR --override-os ${os} --override-arch ${arch} copy "$sourceURL" "docker-archive://$out:$destNameTag"
-    '';
+          nativeBuildInputs = [ skopeo ];
+          SSL_CERT_FILE = "${cacert.out}/etc/ssl/certs/ca-bundle.crt";
+        } ''
+            skopeo --insecure-policy --tmpdir=$TMPDIR --override-os ${os} --override-arch ${arch} \
+              copy ${if (imageDigest != null) then "docker://${imageName}@${imageDigest}" else "docker://${imageName}:${imageTag}"} \
+              "docker-archive://$out:${finalImageName}:${finalImageTag}"
+       '';
 
   # We need to sum layer.tar, not a directory, hence tarsum instead of nix-hash.
   # And we cannot untar it, because then we cannot preserve permissions ecc.
