@@ -33,8 +33,7 @@ in {
       };
 
       consensus = mkOption {
-        type = types.nullOr types.enum [ "raft" "crdt" ];
-        default = null;
+        type = types.enum [ "raft" "crdt" ];
         description = "Consensus protocol - 'raft' or 'crdt'.";
       };
 
@@ -81,9 +80,7 @@ in {
       environment.IPFS_CLUSTER_PATH = cfg.dataDir;
       wantedBy = [ "default.target" ];
 
-      serviceConfig = if cfg.consensus == null then
-        throw "ipfs-cluster requires the option 'consensus' to be set"
-      else {
+      serviceConfig = {
         ExecStart = [
           ""
           "${pkgs.ipfs-cluster}/bin/ipfs-cluster-service init --consensus ${cfg.consensus} ${initFlags}"
