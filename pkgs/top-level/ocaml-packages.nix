@@ -750,6 +750,8 @@ let
 
     ounit2 = callPackage ../development/ocaml-modules/ounit2 { };
 
+    parse-argv = callPackage ../development/ocaml-modules/parse-argv { };
+
     pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
 
     phylogenetics = callPackage ../development/ocaml-modules/phylogenetics { };
