@@ -162,7 +162,7 @@ let
       };
       qtnetworkauth = callPackage ../modules/qtnetworkauth.nix {};
       qtquick1 = null;
-      qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
+      qtquickcontrols = null;
       qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
       qtscript = callPackage ../modules/qtscript.nix {};
       qtsensors = callPackage ../modules/qtsensors.nix {};
