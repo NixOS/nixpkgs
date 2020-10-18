@@ -20953,6 +20953,11 @@ in
 
   goffice = callPackage ../development/libraries/goffice { };
 
+  hydrus = python3Packages.callPackage ../applications/graphics/hydrus {
+    inherit miniupnpc_2 swftools;
+    inherit (qt5) wrapQtAppsHook;
+  };
+
   jetbrains = (recurseIntoAttrs (callPackages ../applications/editors/jetbrains {
     jdk = jetbrains.jdk;
   }) // {
