@@ -21372,6 +21372,7 @@ in
           kmag kmines kmix kmplot
           knavalbattle knetwalk knights
           kollision kolourpaint kompare konsole
+          kpat
           krdc kreversi krfb
           kshisen ksquares ksystemlog
           kteatime ktimer ktouch kturtle
