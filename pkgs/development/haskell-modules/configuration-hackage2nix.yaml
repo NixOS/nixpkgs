@@ -10001,7 +10001,6 @@ broken-packages:
   - stackage-types
   - stackage-upload
   - stackage2nix
-  - stan
   - standalone-derive-topdown
   - standalone-haddock
   - starling
