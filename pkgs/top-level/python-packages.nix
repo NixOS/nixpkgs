@@ -5201,6 +5201,8 @@ in {
 
   pyerfa = callPackage ../development/python-modules/pyerfa { };
 
+  pyevmasm = callPackage ../development/python-modules/pyevmasm { };
+
   pyexcel = callPackage ../development/python-modules/pyexcel { };
 
   pyexcelerator = callPackage ../development/python-modules/pyexcelerator { };
