@@ -15,13 +15,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gtg";
-  version = "unstable-2020-09-16";
+  version = "unstable-2020-10-18";
 
   src = fetchFromGitHub {
     owner = "getting-things-gnome";
     repo = "gtg";
-    rev = "1be991c6d7f7b2e4b8ac16f82e8a07f9dce4272f";
-    sha256 = "1f5acpjwnp08c78dds7xm22qjzcfnx2qs121yvm3rswkh27s4n23";
+    rev = "0c54594a7ddf302fdd0e19797936a950df16a614";
+    sha256 = "05947n56f4sygi3rkaasm6n3axzi6x34ad97i5z2lpfghvfq44ib";
   };
 
 
@@ -45,7 +45,6 @@ python3Packages.buildPythonApplication rec {
     pycairo
     pygobject3
     lxml
-    dbus-python
     gst-python
     liblarch
   ];
