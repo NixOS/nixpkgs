@@ -10968,6 +10968,7 @@ let
     meta = {
       description = "Perl extension to detect on which Linux distribution we are running";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -10984,6 +10985,7 @@ let
     meta = {
       description = "Linux specific special filehandles";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -10995,6 +10997,10 @@ let
       sha256 = "0crlxmaa4lsgdjm5p9ib8rdxiy70qj1s68za3q3v57v8ll6s4hfx";
     };
     propagatedBuildInputs = [ commonsense ];
+
+    meta = with stdenv.lib; {
+      platforms = platforms.linux;
+    };
   };
 
   ListAllUtils = buildPerlPackage {
