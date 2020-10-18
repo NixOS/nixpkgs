@@ -4240,6 +4240,12 @@
     githubId = 1786438;
     name = "Jonas Schievink";
   };
+  jshcmpbll = {
+    email = "me@joshuadcampbell.com";
+    github = "jshcmpbll";
+    githubId = 16374374;
+    name = "Joshua Campbell";
+  };
   jtcoolen = {
     email = "jtcoolen@pm.me";
     name = "Julien Coolen";
