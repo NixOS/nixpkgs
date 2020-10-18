@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gtk-layer-shell";
-  version = "0.2.0";
+  version = "0.3.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "wmww";
     repo = "gtk-layer-shell";
     rev = "v${version}";
-    sha256 = "0kas84z44p3vz92sljbnahh43wfj69knqsy1za729j8phrlwqdmg";
+    sha256 = "1f7hfwik7a9kzw0q1k3xc1yisrgg8lbp5pjr337phc9hm38lhq3c";
   };
 
   nativeBuildInputs = [
