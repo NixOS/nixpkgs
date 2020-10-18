@@ -7903,6 +7903,8 @@ in {
 
   wasabi = callPackage ../development/python-modules/wasabi { };
 
+  wasm = callPackage ../development/python-modules/wasm { };
+
   wasmer = callPackage ../development/python-modules/wasmer { };
 
   watchdog = callPackage ../development/python-modules/watchdog { };
