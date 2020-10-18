@@ -1,6 +1,6 @@
 nvidia_x11: sha256:
 
-{ stdenv, fetchFromGitHub, m4, pkg-config, libtirpc }:
+{ stdenv, fetchFromGitHub, m4 }:
 
 stdenv.mkDerivation rec {
   pname = "nvidia-persistenced";
@@ -13,9 +13,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ m4 pkg-config ];
-
-  buildInputs = [ libtirpc ];
+  nativeBuildInputs = [ m4 ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
