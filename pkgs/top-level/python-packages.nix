@@ -5837,6 +5837,8 @@ in {
 
   python-rtmidi = callPackage ../development/python-modules/python-rtmidi { };
 
+  python-sat = callPackage ../development/python-modules/python-sat { };
+
   python-simple-hipchat = callPackage ../development/python-modules/python-simple-hipchat { };
   python_simple_hipchat = self.python-simple-hipchat;
 
