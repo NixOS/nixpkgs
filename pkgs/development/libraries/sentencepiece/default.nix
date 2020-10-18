@@ -18,7 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "1yg55h240iigjaii0k70mjb4sh3mgg54rp2sz8bx5glnsjwys5s3";
   };
 
-  nativeBuildInputs = [ cmake ] ++ stdenv.lib.optional withGPerfTools gperftools;
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = stdenv.lib.optional withGPerfTools gperftools;
 
   cmakeFlags = [
     "-DSPM_ENABLE_SHARED=${if enableStatic then "OFF" else "ON"}"
