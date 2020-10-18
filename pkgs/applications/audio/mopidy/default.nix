@@ -16,8 +16,6 @@ let
 
     mopidy-local = callPackage ./local.nix { };
 
-    mopidy-local-sqlite = callPackage ./local-sqlite.nix { };
-
     mopidy-spotify = callPackage ./spotify.nix { };
 
     mopidy-moped = callPackage ./moped.nix { };
