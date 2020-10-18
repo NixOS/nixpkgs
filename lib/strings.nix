@@ -315,6 +315,16 @@ rec {
   */
   escapeNixString = s: escape ["$"] (builtins.toJSON s);
 
+  /* Turn a string into an exact regular expression
+
+     Type: string -> string
+
+     Example:
+       escapeRegex "[^a-z]*"
+       => "\\[\\^a-z]\\*"
+  */
+  escapeRegex = escape (stringToCharacters "\\[{()^$?*+|.");
+
   /* Quotes a string if it can't be used as an identifier directly.
 
      Type: string -> string
@@ -386,8 +396,6 @@ rec {
   /* Cut a string with a separator and produces a list of strings which
      were separated by this separator.
 
-     NOTE: this function is not performant and should never be used.
-
      Example:
        splitString "." "foo.bar.baz"
        => [ "foo" "bar" "baz" ]
@@ -396,26 +404,11 @@ rec {
   */
   splitString = _sep: _s:
     let
-      sep = addContextFrom _s _sep;
-      s = addContextFrom _sep _s;
-      sepLen = stringLength sep;
-      sLen = stringLength s;
-      lastSearch = sLen - sepLen;
-      startWithSep = startAt:
-        substring startAt sepLen s == sep;
-
-      recurse = index: startAt:
-        let cutUntil = i: [(substring startAt (i - startAt) s)]; in
-        if index <= lastSearch then
-          if startWithSep index then
-            let restartAt = index + sepLen; in
-            cutUntil index ++ recurse restartAt restartAt
-          else
-            recurse (index + 1) startAt
-        else
-          cutUntil sLen;
+      sep = builtins.unsafeDiscardStringContext _sep;
+      s = builtins.unsafeDiscardStringContext _s;
+      splits = builtins.filter builtins.isString (builtins.split (escapeRegex sep) s);
     in
-      recurse 0 0;
+      map (v: addContextFrom _sep (addContextFrom _s v)) splits;
 
   /* Return a string without the specified prefix, if the prefix matches.
 
