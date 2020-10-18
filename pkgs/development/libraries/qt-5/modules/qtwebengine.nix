@@ -1,5 +1,5 @@
 { qtModule, qtCompatVersion,
-  qtdeclarative, qtquickcontrols, qtlocation, qtwebchannel
+  qtdeclarative, qtquickcontrols2, qtlocation, qtwebchannel
 
 , bison, coreutils, flex, git, gperf, ninja, pkgconfig, python2, which
 
@@ -22,7 +22,7 @@ with stdenv.lib;
 
 qtModule {
   name = "qtwebengine";
-  qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
+  qtInputs = [ qtdeclarative qtquickcontrols2 qtlocation qtwebchannel ];
   nativeBuildInputs = [
     bison coreutils flex git gperf ninja pkgconfig python2 which gn
   ] ++ optional stdenv.isDarwin xcbuild;
