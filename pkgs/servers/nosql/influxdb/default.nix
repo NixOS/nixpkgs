@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "influxdb";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11zkia43i3in1xv84iz6rm9cfhf4k6nxn144m7dz7a7nv3chi20g";
+    sha256 = "1siv31gp7ypjphxjfv91sxzpz2rxk1nn2aj17pgk0cz7c8m59ic7";
   };
 
-  vendorSha256 = "097x3z1fhdl5s3ni2qzbqxqr60l6lqcrbikq20fs052dp287q0sp";
+  vendorSha256 = "1pylw30dg6ljxm9ykmsqapg1vq71bj1ngdq4arvmmzcdhy1nhmh0";
 
   doCheck = false;
 
