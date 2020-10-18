@@ -36,6 +36,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # Tests run in fakeroot for non-root users
+  preCheck = ''
+    if [ "$(id -u)" != "0" ]; then
+      export FAKED_MODE=1
+    fi
+  '';
+
   doCheck = !stdenv.isDarwin;
 
   installFlags = [
