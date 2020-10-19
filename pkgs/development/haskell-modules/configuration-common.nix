@@ -630,6 +630,9 @@ self: super: {
 
   # Make elisp files available at a location where people expect it.
   hindent = (overrideCabal super.hindent (drv: {
+    # 2020-10-19: needs MonadFail fix, see https://github.com/mihaimaruseac/hindent/issues/570
+    patches = [ ./patches/hindent-monadfail.patch ];
+
     # We cannot easily byte-compile these files, unfortunately, because they
     # depend on a new version of haskell-mode that we don't have yet.
     postInstall = ''
@@ -637,7 +640,6 @@ self: super: {
       mkdir -p $data/share/emacs
       ln -s $lispdir $data/share/emacs/site-lisp
     '';
-    doCheck = false; # https://github.com/chrisdone/hindent/issues/299
   }));
 
   # https://github.com/bos/configurator/issues/22

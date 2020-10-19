@@ -1,0 +1,223 @@
+diff --git a/src/HIndent/Pretty.hs b/src/HIndent/Pretty.hs
+index 46d8254..1e18473 100644
+--- a/src/HIndent/Pretty.hs
++++ b/src/HIndent/Pretty.hs
+@@ -979,17 +979,20 @@ instance Pretty Alt where
+ instance Pretty Asst where
+   prettyInternal x =
+     case x of
+-      ClassA _ name types -> spaced (pretty name : map pretty types)
+-      i@InfixA {} -> pretty' i
+       IParam _ name ty -> do
+         pretty name
+         write " :: "
+         pretty ty
++      ParenA _ asst -> parens (pretty asst)
++#if MIN_VERSION_haskell_src_exts(1,21,0)
++      TypeA _ ty -> pretty ty
++#else
++      ClassA _ name types -> spaced (pretty name : map pretty types)
++      i@InfixA {} -> pretty' i
+       EqualP _ a b -> do
+         pretty a
+         write " ~ "
+         pretty b
+-      ParenA _ asst -> parens (pretty asst)
+       AppA _ name tys ->
+         spaced (pretty name : map pretty tys)
+       WildCardA _ name ->
+@@ -998,6 +1001,7 @@ instance Pretty Asst where
+           Just n -> do
+             write "_"
+             pretty n
++#endif
+ 
+ instance Pretty BangType where
+   prettyInternal x =
+diff --git a/src/HIndent/Types.hs b/src/HIndent/Types.hs
+index 78d1ceb..0bfaf68 100644
+--- a/src/HIndent/Types.hs
++++ b/src/HIndent/Types.hs
+@@ -71,7 +71,11 @@ data Config = Config
+     }
+ 
+ -- | Parse an extension.
++#if __GLASGOW_HASKELL__ >= 808
++readExtension :: (Monad m, MonadFail m) => String -> m Extension
++#else
+ readExtension :: Monad m => String -> m Extension
++#endif
+ readExtension x =
+   case classifyExtension x -- Foo
+        of
+diff --git a/src/HIndent/Types.hs b/src/HIndent/Types.hs
+index 0bfaf68..18e35a9 100644
+--- a/src/HIndent/Types.hs
++++ b/src/HIndent/Types.hs
+@@ -1,3 +1,4 @@
++{-# OPTIONS_GHC -cpp #-}
+ {-# LANGUAGE RankNTypes #-}
+ {-# LANGUAGE OverloadedStrings #-}
+ {-# LANGUAGE GADTs #-}
+diff --git a/src/HIndent/CodeBlock.hs b/src/HIndent/CodeBlock.hs
+index b936352..2e0c164 100644
+--- a/src/HIndent/CodeBlock.hs
++++ b/src/HIndent/CodeBlock.hs
+@@ -7,7 +7,6 @@ module HIndent.CodeBlock
+ 
+ import Data.ByteString (ByteString)
+ import qualified Data.ByteString.Char8 as S8
+-import Data.Monoid
+ 
+ -- | A block of code.
+ data CodeBlock
+diff --git a/src/HIndent/CodeBlock.hs b/src/HIndent/CodeBlock.hs
+index 2e0c164..b936352 100644
+--- a/src/HIndent/CodeBlock.hs
++++ b/src/HIndent/CodeBlock.hs
+@@ -7,6 +7,7 @@ module HIndent.CodeBlock
+ 
+ import Data.ByteString (ByteString)
+ import qualified Data.ByteString.Char8 as S8
++import Data.Monoid
+ 
+ -- | A block of code.
+ data CodeBlock
+diff --git a/src/main/Test.hs b/src/main/Test.hs
+index 5a8484e..feaaab3 100644
+--- a/src/main/Test.hs
++++ b/src/main/Test.hs
+@@ -35,6 +35,12 @@ reformat cfg code =
+   either (("-- " <>) . L8.pack) L.toLazyByteString $
+   HIndent.reformat cfg (Just HIndent.defaultExtensions) Nothing code
+ 
++#if __GLASGOW_HASKELL__ >= 808
++-- Orphan instance for Spec
++-- TODO(mihaimaruseac): Rewrite to reduce preprocessing stuff
++deriving instance MonadFail Spec
++#endif
++
+ -- | Convert the Markdone document to Spec benchmarks.
+ toSpec :: [Markdone] -> Spec
+ toSpec = go
+diff --git a/src/main/Test.hs b/src/main/Test.hs
+index feaaab3..51935af 100644
+--- a/src/main/Test.hs
++++ b/src/main/Test.hs
+@@ -1,3 +1,4 @@
++{-# LANGUAGE CPP #-}
+ {-# LANGUAGE OverloadedStrings #-}
+ 
+ -- | Test the pretty printer.
+diff --git a/src/main/Test.hs b/src/main/Test.hs
+index 51935af..661c682 100644
+--- a/src/main/Test.hs
++++ b/src/main/Test.hs
+@@ -1,5 +1,6 @@
+ {-# LANGUAGE CPP #-}
+ {-# LANGUAGE OverloadedStrings #-}
++{-# LANGUAGE StandaloneDeriving #-}
+ 
+ -- | Test the pretty printer.
+ module Main where
+diff --git a/src/main/Test.hs b/src/main/Test.hs
+index 661c682..935cc1f 100644
+--- a/src/main/Test.hs
++++ b/src/main/Test.hs
+@@ -44,7 +44,7 @@ deriving instance MonadFail Spec
+ #endif
+ 
+ -- | Convert the Markdone document to Spec benchmarks.
+-toSpec :: [Markdone] -> Spec
++toSpec :: [Markdone] -> SpecM
+ toSpec = go
+   where
+     cfg = HIndent.Types.defaultConfig {configTrailingNewline = False}
+diff --git a/src/main/Test.hs b/src/main/Test.hs
+index 935cc1f..1cf6c52 100644
+--- a/src/main/Test.hs
++++ b/src/main/Test.hs
+@@ -40,11 +40,11 @@ reformat cfg code =
+ #if __GLASGOW_HASKELL__ >= 808
+ -- Orphan instance for Spec
+ -- TODO(mihaimaruseac): Rewrite to reduce preprocessing stuff
+-deriving instance MonadFail Spec
++deriving instance MonadFail SpecM
+ #endif
+ 
+ -- | Convert the Markdone document to Spec benchmarks.
+-toSpec :: [Markdone] -> SpecM
++toSpec :: [Markdone] -> Spec
+ toSpec = go
+   where
+     cfg = HIndent.Types.defaultConfig {configTrailingNewline = False}
+diff --git a/src/main/Test.hs b/src/main/Test.hs
+index 1cf6c52..2318d58 100644
+--- a/src/main/Test.hs
++++ b/src/main/Test.hs
+@@ -21,6 +21,7 @@ import           HIndent.CodeBlock
+ import           HIndent.Types
+ import           Markdone
+ import           Test.Hspec
++import           Test.Hspec.Core.Spec.Monad (SpecM)
+ 
+ -- | Main benchmarks.
+ main :: IO ()
+diff --git a/src/main/Test.hs b/src/main/Test.hs
+index 2318d58..4311ad9 100644
+--- a/src/main/Test.hs
++++ b/src/main/Test.hs
+@@ -21,7 +21,7 @@ import           HIndent.CodeBlock
+ import           HIndent.Types
+ import           Markdone
+ import           Test.Hspec
+-import           Test.Hspec.Core.Spec.Monad (SpecM)
++import           Test.Hspec.Core (SpecM)
+ 
+ -- | Main benchmarks.
+ main :: IO ()
+diff --git a/src/main/Test.hs b/src/main/Test.hs
+index 4311ad9..51660c9 100644
+--- a/src/main/Test.hs
++++ b/src/main/Test.hs
+@@ -21,7 +21,6 @@ import           HIndent.CodeBlock
+ import           HIndent.Types
+ import           Markdone
+ import           Test.Hspec
+-import           Test.Hspec.Core (SpecM)
+ 
+ -- | Main benchmarks.
+ main :: IO ()
+@@ -38,12 +37,6 @@ reformat cfg code =
+   either (("-- " <>) . L8.pack) L.toLazyByteString $
+   HIndent.reformat cfg (Just HIndent.defaultExtensions) Nothing code
+ 
+-#if __GLASGOW_HASKELL__ >= 808
+--- Orphan instance for Spec
+--- TODO(mihaimaruseac): Rewrite to reduce preprocessing stuff
+-deriving instance MonadFail SpecM
+-#endif
+-
+ -- | Convert the Markdone document to Spec benchmarks.
+ toSpec :: [Markdone] -> Spec
+ toSpec = go
+@@ -70,7 +63,7 @@ toSpec = go
+                 shouldBeReadable (reformat cfg code) (L.fromStrict codeExpect)
+               go next'
+             _ ->
+-              fail
++              error
+                 "'haskell given' block must be followed by a 'haskell expect' block"
+         "haskell pending" -> do
+           it (UTF8.toString desc) pending
+diff --git a/src/main/Test.hs b/src/main/Test.hs
+index 51660c9..750fdbf 100644
+--- a/src/main/Test.hs
++++ b/src/main/Test.hs
+@@ -1,6 +1,4 @@
+-{-# LANGUAGE CPP #-}
+ {-# LANGUAGE OverloadedStrings #-}
+-{-# LANGUAGE StandaloneDeriving #-}
+ 
+ -- | Test the pretty printer.
+ module Main where
