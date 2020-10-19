@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libtiff libjpeg zlib ];
 
+  # See https://trac.macports.org/ticket/60656
+  LDFLAGS = if stdenv.hostPlatform.isDarwin then "-Wl,-w" else null;
+
   meta = with stdenv.lib; {
     description = "Color management engine";
     homepage = "http://www.littlecms.com/";
