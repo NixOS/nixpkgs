@@ -3307,6 +3307,15 @@ let
         sha512 = "RibeMnDPvlL8bFYW5C8cs4mbI3AHfQef73tnJCQ/SgrXZHehmHnsyWUiE7qDQCAo+B1RfTapvSyFF69iPj326A==";
       };
     };
+    "@medv/blessed-2.0.1" = {
+      name = "_at_medv_slash_blessed";
+      packageName = "@medv/blessed";
+      version = "2.0.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@medv/blessed/-/blessed-2.0.1.tgz";
+        sha512 = "/NdX1Ql8hKNM0vHFJnEr/bcw6BG0ULHD3HhInpniZw5ixpl+n/QIRfMEEmLCn7acedbM1zGdZvU5ZMbn9kcF5Q==";
+      };
+    };
     "@microsoft/load-themed-styles-1.10.114" = {
       name = "_at_microsoft_slash_load-themed-styles";
       packageName = "@microsoft/load-themed-styles";
@@ -73553,6 +73562,40 @@ in
     meta = {
       description = "A simple CLI tool for ensuring that a given node script runs continuously (i.e. forever)";
       homepage = "https://github.com/foreverjs/forever#readme";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  fx = nodeEnv.buildNodePackage {
+    name = "fx";
+    packageName = "fx";
+    version = "20.0.2";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/fx/-/fx-20.0.2.tgz";
+      sha512 = "BgZNylpsDf5V0c4DwjWnre2dld9YbEbdNUnXzOC2WJv4R/AnJG8cu7mBERhkqxue3S3hgmJr3lqoqeKb2PedGQ==";
+    };
+    dependencies = [
+      sources."@medv/blessed-2.0.1"
+      sources."ansi-regex-5.0.0"
+      sources."ansi-styles-4.3.0"
+      sources."chalk-4.1.0"
+      sources."color-convert-2.0.1"
+      sources."color-name-1.1.4"
+      sources."emoji-regex-8.0.0"
+      sources."has-flag-4.0.0"
+      sources."indent-string-4.0.0"
+      sources."is-fullwidth-code-point-3.0.0"
+      sources."lossless-json-1.0.4"
+      sources."string-width-4.2.0"
+      sources."strip-ansi-6.0.0"
+      sources."supports-color-7.2.0"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Command-line JSON viewer";
+      homepage = https://fx.wtf/;
       license = "MIT";
     };
     production = true;
