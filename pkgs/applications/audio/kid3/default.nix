@@ -2,7 +2,7 @@
 , pkgconfig, cmake, python, ffmpeg_3, phonon, automoc4
 , chromaprint, docbook_xml_dtd_45, docbook_xsl, libxslt
 , id3lib, taglib, mp4v2, flac, libogg, libvorbis
-, zlib, readline , qtbase, qttools, qtmultimedia, qtquickcontrols
+, zlib, readline , qtbase, qttools, qtmultimedia, qtquickcontrols2
 , wrapQtAppsHook
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   [ pkgconfig cmake python ffmpeg_3 phonon automoc4
     chromaprint docbook_xml_dtd_45 docbook_xsl libxslt
     id3lib taglib mp4v2 flac libogg libvorbis zlib readline
-    qtbase qttools qtmultimedia qtquickcontrols ];
+    qtbase qttools qtmultimedia qtquickcontrols2 ];
 
   cmakeFlags = [ "-DWITH_APPS=Qt;CLI" ];
   NIX_LDFLAGS = "-lm -lpthread";
