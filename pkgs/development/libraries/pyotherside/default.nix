@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, python3, qmake, qtbase, qtquickcontrols, qtsvg, ncurses }:
+, python3, qmake, qtbase, qtquickcontrols2, qtsvg, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "pyotherside";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ qmake ];
   buildInputs = [
-    python3 qtbase qtquickcontrols qtsvg ncurses
+    python3 qtbase qtquickcontrols2 qtsvg ncurses
   ];
 
   patches = [ ./qml-path.patch ];
