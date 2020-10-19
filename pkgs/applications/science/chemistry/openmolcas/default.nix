@@ -23,7 +23,10 @@ in stdenv.mkDerivation {
     sha256 = "1wwqhkyyi7pw5x1ghnp83ir17zl5jsj7phhqxapybyi3bmg0i00q";
   };
 
-  patches = [ (fetchpatch {
+  patches = [
+    # Required to handle openblas multiple outputs
+    ./openblasPath.patch
+  (fetchpatch {
     name = "Fix-MPI-INT-size"; # upstream patch, fixes a Fortran compiler error
     url = "https://gitlab.com/Molcas/OpenMolcas/commit/860e3350523f05ab18e49a428febac8a4297b6e4.patch";
     sha256 = "0h96h5ikbi5l6ky41nkxmxfhjiykkiifq7vc2s3fdy1r1siv09sb";
@@ -55,7 +58,7 @@ in stdenv.mkDerivation {
     "-DTOOLS=ON"
     "-DHDF5=ON"
     "-DFDE=ON"
-    "-DOPENBLASROOT=${openblas}"
+    "-DOPENBLASROOT=${openblas.dev}"
   ];
 
   GAROOT=globalarrays;
