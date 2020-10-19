@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "osmpythontools";
-  version = "0.2.6";
+  version = "0.2.8";
 
   src = fetchPypi {
     pname = "OSMPythonTools";
     inherit version;
-    sha256 = "efc72e3963971c6c7fd94bd374704a5b78eb6c07397a4ffb5f9176c1e4aee096";
+    sha256 = "8a33adbd266127e342d12da755075fae08f398032a6f0909b5e86bef13960a85";
   };
 
   propagatedBuildInputs = [
@@ -31,8 +31,6 @@ buildPythonPackage rec {
     ujson
     xarray
   ];
-
-  patches = [ ./remove-unused-dependency.patch ];
 
   # no tests included
   doCheck = false;

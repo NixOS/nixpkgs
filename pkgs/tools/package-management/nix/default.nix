@@ -3,7 +3,6 @@
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
 , boehmgc
-, stdenv, llvmPackages_6
 }:
 
 let
@@ -190,8 +189,6 @@ in rec {
     };
 
     inherit storeDir stateDir confDir boehmgc;
-  } // stdenv.lib.optionalAttrs stdenv.cc.isClang {
-    stdenv = llvmPackages_6.stdenv;
   });
 
   nixUnstable = lib.lowPrio (callPackage common rec {

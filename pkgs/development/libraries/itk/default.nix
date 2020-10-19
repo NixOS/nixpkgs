@@ -12,6 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "1z7rmqrhgl7hfb3d0077kvp8vpi05r2zk3qyqzmv7bzbal5sqqhv";
   };
 
+  postPatch = ''
+    substituteInPlace CMake/ITKSetStandardCompilerFlags.cmake  \
+      --replace "-march=corei7" ""  \
+      --replace "-mtune=native" ""
+  '';
+
   cmakeFlags = [
     "-DBUILD_EXAMPLES=OFF"
     "-DBUILD_SHARED_LIBS=ON"

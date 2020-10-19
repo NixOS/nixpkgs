@@ -2,10 +2,10 @@
 # Do not edit!
 
 {
-  version = "0.116.2";
+  version = "0.116.4";
   components = {
     "abode" = ps: with ps; [ abodepy ];
-    "accuweather" = ps: with ps; [ ]; # missing inputs: accuweather
+    "accuweather" = ps: with ps; [ accuweather ];
     "acer_projector" = ps: with ps; [ pyserial ];
     "acmeda" = ps: with ps; [ ]; # missing inputs: aiopulse
     "actiontec" = ps: with ps; [ ];
@@ -36,7 +36,7 @@
     "apcupsd" = ps: with ps; [ ]; # missing inputs: apcaccess
     "api" = ps: with ps; [ aiohttp-cors ];
     "apns" = ps: with ps; [ ]; # missing inputs: apns2
-    "apple_tv" = ps: with ps; [ aiohttp-cors netdisco pyatv zeroconf ];
+    "apple_tv" = ps: with ps; [ aiohttp-cors netdisco zeroconf ]; # missing inputs: pyatv
     "apprise" = ps: with ps; [ apprise ];
     "aprs" = ps: with ps; [ ]; # missing inputs: aprslib geopy
     "aqualogic" = ps: with ps; [ ]; # missing inputs: aqualogic
@@ -570,7 +570,7 @@
     "onboarding" = ps: with ps; [ aiohttp-cors pillow ]; # missing inputs: home-assistant-frontend
     "onewire" = ps: with ps; [ ]; # missing inputs: pyownet
     "onkyo" = ps: with ps; [ onkyo-eiscp ];
-    "onvif" = ps: with ps; [ ha-ffmpeg ]; # missing inputs: WSDiscovery onvif-zeep-async
+    "onvif" = ps: with ps; [ ha-ffmpeg zeep ]; # missing inputs: WSDiscovery onvif-zeep-async
     "openalpr_cloud" = ps: with ps; [ ];
     "openalpr_local" = ps: with ps; [ ];
     "opencv" = ps: with ps; [ numpy ]; # missing inputs: opencv-python-headless
@@ -922,7 +922,7 @@
     "wink" = ps: with ps; [ aiohttp-cors ]; # missing inputs: pubnubsub-handler python-wink
     "wirelesstag" = ps: with ps; [ ]; # missing inputs: wirelesstagpy
     "withings" = ps: with ps; [ aiohttp-cors ]; # missing inputs: withings-api
-    "wled" = ps: with ps; [ ]; # missing inputs: wled
+    "wled" = ps: with ps; [ wled ];
     "wolflink" = ps: with ps; [ ]; # missing inputs: wolf_smartset
     "workday" = ps: with ps; [ holidays ];
     "worldclock" = ps: with ps; [ ];

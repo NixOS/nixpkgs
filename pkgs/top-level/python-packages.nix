@@ -150,6 +150,8 @@ in {
 
   absl-py = callPackage ../development/python-modules/absl-py { };
 
+  accuweather = callPackage ../development/python-modules/accuweather { };
+
   accupy = callPackage ../development/python-modules/accupy { };
 
   acebinf = callPackage ../development/python-modules/acebinf { };
@@ -451,6 +453,8 @@ in {
   attrdict = callPackage ../development/python-modules/attrdict { };
 
   attrs = callPackage ../development/python-modules/attrs { };
+
+  aubio = callPackage ../development/python-modules/aubio { };
 
   audio-metadata = callPackage ../development/python-modules/audio-metadata { };
 
@@ -2001,6 +2005,8 @@ in {
   fastparquet = callPackage ../development/python-modules/fastparquet { };
 
   fastpbkdf2 = callPackage ../development/python-modules/fastpbkdf2 { };
+
+  fastprogress = callPackage ../development/python-modules/fastprogress { };
 
   fastrlock = callPackage ../development/python-modules/fastrlock { };
 
@@ -4510,6 +4516,8 @@ in {
 
   python-csxcad = callPackage ../development/python-modules/python-csxcad { };
 
+  python-openems = callPackage ../development/python-modules/python-openems { };
+
   pkutils = callPackage ../development/python-modules/pkutils { };
 
   plac = callPackage ../development/python-modules/plac { };
@@ -5215,7 +5223,7 @@ in {
     throw "pyobjc can only be built on Mac OS";
 
   pyocr = callPackage ../development/python-modules/pyocr {
-    tesseract = pkgs.tesseract_4;
+    tesseract = pkgs.tesseract4;
   };
 
   pyodbc = callPackage ../development/python-modules/pyodbc { };
@@ -6309,6 +6317,8 @@ in {
 
   sabyenc = callPackage ../development/python-modules/sabyenc { };
 
+  sacn = callPackage ../development/python-modules/sacn { };
+
   sacremoses = callPackage ../development/python-modules/sacremoses { };
 
   safe = callPackage ../development/python-modules/safe { };
@@ -7210,6 +7220,8 @@ in {
 
   TurboCheetah = callPackage ../development/python-modules/TurboCheetah { };
 
+  tubeup = callPackage ../development/python-modules/tubeup { };
+
   tvdb_api = callPackage ../development/python-modules/tvdb_api { };
 
   tvnamer = callPackage ../development/python-modules/tvnamer { };
@@ -7543,6 +7555,8 @@ in {
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
 
   willow = callPackage ../development/python-modules/willow { };
+
+  wled = callPackage ../development/python-modules/wled { };
 
   word2vec = callPackage ../development/python-modules/word2vec { };
 

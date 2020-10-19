@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     description = "KnightOS C compiler";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ siraben ];
+    platforms   = platforms.unix;
   };
 }

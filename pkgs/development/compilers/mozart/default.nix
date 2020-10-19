@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "An open source implementation of Oz 3.";
+    description = "An open source implementation of Oz 3";
     maintainers = [ lib.maintainers.layus ];
     license = lib.licenses.bsd2;
     homepage = "https://mozart.github.io";

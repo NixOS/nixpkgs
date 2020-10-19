@@ -11,9 +11,9 @@ let
   # 1) change all these hashes
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.16.9";
-  sha256 = "sha256-e5Ft+jEpExLgBBFmiswW0VFrsKume4gmUiOiF4ODhhQ=";
-  cargoSha256 = "sha256-XbPLQEvf4JX517ddpx18eweiPrztS5E/X2pejkqmlCU=";
+  version = "0.17.1";
+  sha256 = "sha256-k61actAEyao/Ea8aw9PCm252U+1I0d43MAYC68/lui4=";
+  cargoSha256 = "sha256-Jp/Fl20ZZfaIdWinOOujNVH5JjJNtyUYHfyTrmeeoRg=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";

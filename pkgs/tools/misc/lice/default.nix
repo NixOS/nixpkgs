@@ -14,7 +14,7 @@ python3Packages.buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    description = "Print license based on selection and user options.";
+    description = "Print license based on selection and user options";
     homepage = "https://github.com/licenses/lice";
     license = licenses.bsd3;
     maintainers = with maintainers; [ swflint ];
