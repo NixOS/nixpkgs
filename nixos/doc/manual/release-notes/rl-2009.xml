@@ -1102,6 +1102,8 @@ services.transmission.settings.rpc-bind-address = "0.0.0.0";
      <package>nextcloud18</package> before upgrading to <package>nextcloud19</package>
      since Nextcloud doesn't support upgrades across multiple major versions.
     </para>
+   </listitem>
+   <listitem>
      <para>
        The <literal>nixos-run-vms</literal> script now deletes the
        previous run machines states on test startup. You can use the
