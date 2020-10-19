@@ -1,4 +1,4 @@
-{ buildPackages, pkgs, newScope }:
+{ buildPackages, pkgs, newScope, stdenv }:
 
 let
   # These are attributes in compiler and packages that don't support integer-simple.
@@ -72,7 +72,11 @@ in {
       llvmPackages = pkgs.llvmPackages_7;
     };
     ghc884 = callPackage ../development/compilers/ghc/8.8.4.nix {
-      bootPkgs = packages.ghc865Binary;
+      # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
+      bootPkgs = if stdenv.isAarch64 then
+          packages.ghc8102Binary
+        else
+          packages.ghc865Binary;
       inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_7;
       llvmPackages = pkgs.llvmPackages_7;
@@ -84,7 +88,11 @@ in {
       llvmPackages = pkgs.llvmPackages_9;
     };
     ghc8102 = callPackage ../development/compilers/ghc/8.10.2.nix {
-      bootPkgs = packages.ghc865Binary;
+      # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
+      bootPkgs = if stdenv.isAarch64 then
+          packages.ghc8102Binary
+        else
+          packages.ghc865Binary;
       inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_9;
       llvmPackages = pkgs.llvmPackages_9;
