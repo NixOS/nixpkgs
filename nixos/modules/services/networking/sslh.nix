@@ -31,7 +31,7 @@ let
       { name: "openvpn"; host: "localhost"; port: "1194"; probe: "builtin"; },
       { name: "xmpp"; host: "localhost"; port: "5222"; probe: "builtin"; },
       { name: "http"; host: "localhost"; port: "80"; probe: "builtin"; },
-      { name: "ssl"; host: "localhost"; port: "443"; probe: "builtin"; },
+      { name: "tls"; host: "localhost"; port: "443"; probe: "builtin"; },
       { name: "anyprot"; host: "localhost"; port: "443"; probe: "builtin"; }
     );
   '';
