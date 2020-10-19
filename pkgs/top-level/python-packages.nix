@@ -5472,6 +5472,8 @@ in {
 
   pysvn = callPackage ../development/python-modules/pysvn { };
 
+  pysychonaut = callPackage ../development/python-modules/pysychonaut { };
+
   pytabix = callPackage ../development/python-modules/pytabix { };
 
   pytado = callPackage ../development/python-modules/pytado { };
