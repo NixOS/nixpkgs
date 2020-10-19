@@ -160,6 +160,7 @@
 , "pyright"
 , "react-native-cli"
 , "react-tools"
+, "readability-cli"
 , "redoc-cli"
 , "reveal.js"
 , "rollup"
