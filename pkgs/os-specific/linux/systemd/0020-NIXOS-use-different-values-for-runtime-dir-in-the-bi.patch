@@ -1,0 +1,137 @@
+From 2d0b9e25f92e0f25fd54f6562b96254d189bab9a Mon Sep 17 00:00:00 2001
+From: Andreas Rammhold <andreas@rammhold.de>
+Date: Mon, 5 Oct 2020 14:31:54 +0200
+Subject: [PATCH] NIXOS: use different values for runtime dir in the binaries
+
+---
+ meson.build | 58 ++++++++++++++++++++++++++++++++---------------------
+ 1 file changed, 35 insertions(+), 23 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index b841b8031a..d20689c798 100644
+--- a/meson.build
++++ b/meson.build
+@@ -85,6 +85,11 @@ if rootprefixdir == ''
+ endif
+ rootprefixdir_noslash = rootprefixdir == '/' ? '' : rootprefixdir
+ 
++nixos_rootprefixdir = '/run/current-system/systemd/'
++nixos_rootprefixdir_noslash = '/run/current-system/systemd'
++nixos_rootlibexecdir = join_paths(nixos_rootprefixdir, 'lib/systemd')
++
++
+ have_standalone_binaries = get_option('standalone-binaries')
+ 
+ sysvinit_path = get_option('sysvinit-path')
+@@ -115,6 +120,7 @@ datadir = join_paths(prefixdir, get_option('datadir'))
+ localstatedir = join_paths('/', get_option('localstatedir'))
+ 
+ rootbindir = join_paths(rootprefixdir, 'bin')
++nixos_rootbindir = join_paths(nixos_rootprefixdir, 'bin')
+ rootsbindir = join_paths(rootprefixdir, split_bin ? 'sbin' : 'bin')
+ rootlibexecdir = join_paths(rootprefixdir, 'lib/systemd')
+ 
+@@ -141,6 +147,7 @@ pkgdatadir = join_paths(datadir, 'systemd')
+ environmentdir = join_paths(prefixdir, 'lib/environment.d')
+ pkgsysconfdir = join_paths(sysconfdir, 'systemd')
+ userunitdir = join_paths(prefixdir, 'lib/systemd/user')
++nixos_userunitdir = join_paths(nixos_rootprefixdir, 'lib/systemd/user')
+ userpresetdir = join_paths(prefixdir, 'lib/systemd/user-preset')
+ tmpfilesdir = join_paths(prefixdir, 'lib/tmpfiles.d')
+ sysusersdir = join_paths(prefixdir, 'lib/sysusers.d')
+@@ -150,12 +157,17 @@ modulesloaddir = join_paths(prefixdir, 'lib/modules-load.d')
+ networkdir = join_paths(rootprefixdir, 'lib/systemd/network')
+ pkgincludedir = join_paths(includedir, 'systemd')
+ systemgeneratordir = join_paths(rootlibexecdir, 'system-generators')
++nixos_systemgeneratordir = join_paths(nixos_rootlibexecdir, 'system-generators')
+ usergeneratordir = join_paths(prefixdir, 'lib/systemd/user-generators')
++nixos_usergeneratordir = join_paths(nixos_rootprefixdir, 'lib/systemd/user-generators')
+ systemenvgeneratordir = join_paths(prefixdir, 'lib/systemd/system-environment-generators')
++nixos_systemenvgeneratordir = join_paths(nixos_rootprefixdir, 'lib/systemd/system-environment-generators')
+ userenvgeneratordir = join_paths(prefixdir, 'lib/systemd/user-environment-generators')
++nixos_userenvgeneratordir = join_paths(nixos_rootprefixdir, 'lib/systemd/user-environment-generators')
+ systemshutdowndir = join_paths(rootlibexecdir, 'system-shutdown')
+ systemsleepdir = join_paths(rootlibexecdir, 'system-sleep')
+ systemunitdir = join_paths(rootprefixdir, 'lib/systemd/system')
++nixos_systemunitdir = join_paths(nixos_rootprefixdir, 'lib/systemd/system')
+ systempresetdir = join_paths(rootprefixdir, 'lib/systemd/system-preset')
+ udevlibexecdir = join_paths(rootprefixdir, 'lib/udev')
+ udevrulesdir = join_paths(udevlibexecdir, 'rules.d')
+@@ -209,7 +221,7 @@ status_unit_format_default = get_option('status-unit-format-default')
+ 
+ conf.set_quoted('PKGSYSCONFDIR',                              pkgsysconfdir)
+ conf.set_quoted('SYSTEM_CONFIG_UNIT_DIR',                     join_paths(pkgsysconfdir, 'system'))
+-conf.set_quoted('SYSTEM_DATA_UNIT_PATH',                      systemunitdir)
++conf.set_quoted('SYSTEM_DATA_UNIT_PATH',                      nixos_systemunitdir)
+ conf.set_quoted('SYSTEM_SYSVINIT_PATH',                       sysvinit_path)
+ conf.set_quoted('SYSTEM_SYSVRCND_PATH',                       sysvrcnd_path)
+ conf.set_quoted('RC_LOCAL_PATH',                              get_option('rc-local'))
+@@ -217,27 +229,27 @@ conf.set_quoted('RC_LOCAL_PATH',                              get_option('rc-loc
+ conf.set('ANSI_OK_COLOR',                                     'ANSI_' + get_option('ok-color').underscorify().to_upper())
+ 
+ conf.set_quoted('USER_CONFIG_UNIT_DIR',                       join_paths(pkgsysconfdir, 'user'))
+-conf.set_quoted('USER_DATA_UNIT_DIR',                         userunitdir)
++conf.set_quoted('USER_DATA_UNIT_DIR',                         nixos_userunitdir)
+ conf.set_quoted('CERTIFICATE_ROOT',                           get_option('certificate-root'))
+ conf.set_quoted('CATALOG_DATABASE',                           join_paths(catalogstatedir, 'database'))
+-conf.set_quoted('SYSTEMD_CGROUP_AGENT_PATH',                  join_paths(rootlibexecdir, 'systemd-cgroups-agent'))
+-conf.set_quoted('SYSTEMD_BINARY_PATH',                        join_paths(rootlibexecdir, 'systemd'))
+-conf.set_quoted('SYSTEMD_FSCK_PATH',                          join_paths(rootlibexecdir, 'systemd-fsck'))
+-conf.set_quoted('SYSTEMD_MAKEFS_PATH',                        join_paths(rootlibexecdir, 'systemd-makefs'))
+-conf.set_quoted('SYSTEMD_GROWFS_PATH',                        join_paths(rootlibexecdir, 'systemd-growfs'))
+-conf.set_quoted('SYSTEMD_SHUTDOWN_BINARY_PATH',               join_paths(rootlibexecdir, 'systemd-shutdown'))
+-conf.set_quoted('SYSTEMCTL_BINARY_PATH',                      join_paths(rootbindir, 'systemctl'))
+-conf.set_quoted('SYSTEMD_TTY_ASK_PASSWORD_AGENT_BINARY_PATH', join_paths(rootbindir, 'systemd-tty-ask-password-agent'))
++conf.set_quoted('SYSTEMD_CGROUP_AGENT_PATH',                  join_paths(nixos_rootlibexecdir, 'systemd-cgroups-agent'))
++conf.set_quoted('SYSTEMD_BINARY_PATH',                        join_paths(nixos_rootlibexecdir, 'systemd'))
++conf.set_quoted('SYSTEMD_FSCK_PATH',                          join_paths(nixos_rootlibexecdir, 'systemd-fsck'))
++conf.set_quoted('SYSTEMD_MAKEFS_PATH',                        join_paths(nixos_rootlibexecdir, 'systemd-makefs'))
++conf.set_quoted('SYSTEMD_GROWFS_PATH',                        join_paths(nixos_rootlibexecdir, 'systemd-growfs'))
++conf.set_quoted('SYSTEMD_SHUTDOWN_BINARY_PATH',               join_paths(nixos_rootlibexecdir, 'systemd-shutdown'))
++conf.set_quoted('SYSTEMCTL_BINARY_PATH',                      join_paths(nixos_rootbindir, 'systemctl'))
++conf.set_quoted('SYSTEMD_TTY_ASK_PASSWORD_AGENT_BINARY_PATH', join_paths(nixos_rootbindir, 'systemd-tty-ask-password-agent'))
+ conf.set_quoted('SYSTEMD_STDIO_BRIDGE_BINARY_PATH',           join_paths(bindir, 'systemd-stdio-bridge'))
+-conf.set_quoted('ROOTPREFIX',                                 rootprefixdir)
+-conf.set_quoted('ROOTPREFIX_NOSLASH',                         rootprefixdir_noslash)
++conf.set_quoted('ROOTPREFIX',                                 nixos_rootprefixdir)
++conf.set_quoted('ROOTPREFIX_NOSLASH',                         nixos_rootprefixdir_noslash)
+ conf.set_quoted('RANDOM_SEED_DIR',                            randomseeddir)
+ conf.set_quoted('RANDOM_SEED',                                join_paths(randomseeddir, 'random-seed'))
+ conf.set_quoted('SYSTEMD_CRYPTSETUP_PATH',                    join_paths(rootlibexecdir, 'systemd-cryptsetup'))
+-conf.set_quoted('SYSTEM_GENERATOR_DIR',                       systemgeneratordir)
+-conf.set_quoted('USER_GENERATOR_DIR',                         usergeneratordir)
+-conf.set_quoted('SYSTEM_ENV_GENERATOR_DIR',                   systemenvgeneratordir)
+-conf.set_quoted('USER_ENV_GENERATOR_DIR',                     userenvgeneratordir)
++conf.set_quoted('SYSTEM_GENERATOR_DIR',                       nixos_systemgeneratordir)
++conf.set_quoted('USER_GENERATOR_DIR',                         nixos_usergeneratordir)
++conf.set_quoted('SYSTEM_ENV_GENERATOR_DIR',                   nixos_systemenvgeneratordir)
++conf.set_quoted('USER_ENV_GENERATOR_DIR',                     nixos_userenvgeneratordir)
+ conf.set_quoted('SYSTEM_SHUTDOWN_PATH',                       systemshutdowndir)
+ conf.set_quoted('SYSTEM_SLEEP_PATH',                          systemsleepdir)
+ conf.set_quoted('SYSTEMD_KBD_MODEL_MAP',                      join_paths(pkgdatadir, 'kbd-model-map'))
+@@ -250,15 +262,15 @@ conf.set_quoted('LIBDIR',                                     libdir)
+ conf.set_quoted('ROOTLIBDIR',                                 rootlibdir)
+ conf.set_quoted('ROOTLIBEXECDIR',                             rootlibexecdir)
+ conf.set_quoted('BOOTLIBDIR',                                 bootlibdir)
+-conf.set_quoted('SYSTEMD_PULL_PATH',                          join_paths(rootlibexecdir, 'systemd-pull'))
+-conf.set_quoted('SYSTEMD_IMPORT_PATH',                        join_paths(rootlibexecdir, 'systemd-import'))
+-conf.set_quoted('SYSTEMD_IMPORT_FS_PATH',                     join_paths(rootlibexecdir, 'systemd-import-fs'))
+-conf.set_quoted('SYSTEMD_EXPORT_PATH',                        join_paths(rootlibexecdir, 'systemd-export'))
+-conf.set_quoted('VENDOR_KEYRING_PATH',                        join_paths(rootlibexecdir, 'import-pubring.gpg'))
++conf.set_quoted('SYSTEMD_PULL_PATH',                          join_paths(nixos_rootlibexecdir, 'systemd-pull'))
++conf.set_quoted('SYSTEMD_IMPORT_PATH',                        join_paths(nixos_rootlibexecdir, 'systemd-import'))
++conf.set_quoted('SYSTEMD_IMPORT_FS_PATH',                     join_paths(nixos_rootlibexecdir, 'systemd-import-fs'))
++conf.set_quoted('SYSTEMD_EXPORT_PATH',                        join_paths(nixos_rootlibexecdir, 'systemd-export'))
++conf.set_quoted('VENDOR_KEYRING_PATH',                        join_paths(nixos_rootlibexecdir, 'import-pubring.gpg'))
+ conf.set_quoted('USER_KEYRING_PATH',                          join_paths(pkgsysconfdir, 'import-pubring.gpg'))
+ conf.set_quoted('DOCUMENT_ROOT',                              join_paths(pkgdatadir, 'gatewayd'))
+-conf.set_quoted('SYSTEMD_HOMEWORK_PATH',                      join_paths(rootlibexecdir, 'systemd-homework'))
+-conf.set_quoted('SYSTEMD_USERWORK_PATH',                      join_paths(rootlibexecdir, 'systemd-userwork'))
++conf.set_quoted('SYSTEMD_HOMEWORK_PATH',                      join_paths(nixos_rootlibexecdir, 'systemd-homework'))
++conf.set_quoted('SYSTEMD_USERWORK_PATH',                      join_paths(nixos_rootlibexecdir, 'systemd-userwork'))
+ conf.set10('MEMORY_ACCOUNTING_DEFAULT',                       memory_accounting_default)
+ conf.set_quoted('MEMORY_ACCOUNTING_DEFAULT_YES_NO',           memory_accounting_default ? 'yes' : 'no')
+ conf.set('STATUS_UNIT_FORMAT_DEFAULT',                        'STATUS_UNIT_FORMAT_' + status_unit_format_default.to_upper())
+-- 
+2.28.0
+
