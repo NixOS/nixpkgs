@@ -147,9 +147,7 @@ in runBuildTests {
       foo = "foo"
 
       [level1]
-
       [level1.level2]
-
       [level1.level2.level3]
       level4 = "deep"
     '';
