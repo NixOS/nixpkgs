@@ -17254,7 +17254,8 @@ in
 
   inherit (callPackages ../servers/unifi { })
     unifiLTS
-    unifiStable;
+    unifiStable
+    unifiBeta;
   unifi = unifiStable;
 
   urserver = callPackage ../servers/urserver { };
