@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, python, zlib, pkgconfig, glib
-, ncurses, perl, pixman, vde2, alsaLib, texinfo, flex
+, perl, pixman, vde2, alsaLib, texinfo, flex
 , bison, lzo, snappy, libaio, gnutls, nettle, curl
 , makeWrapper
 , attr, libcap, libcap_ng
@@ -13,6 +13,7 @@
 , vncSupport ? !nixosTestRunner, libjpeg, libpng
 , smartcardSupport ? !nixosTestRunner, libcacard
 , spiceSupport ? !stdenv.isDarwin && !nixosTestRunner, spice, spice-protocol
+, ncursesSupport ? !nixosTestRunner, ncurses
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
 , cephSupport ? false, ceph
@@ -51,10 +52,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ python python.pkgs.sphinx pkgconfig flex bison ]
     ++ optionals gtkSupport [ wrapGAppsHook ];
   buildInputs =
-    [ zlib glib ncurses perl pixman
+    [ zlib glib perl pixman
       vde2 texinfo makeWrapper lzo snappy
       gnutls nettle curl
     ]
+    ++ optionals ncursesSupport [ ncurses ]
     ++ optionals stdenv.isDarwin [ CoreServices Cocoa Hypervisor rez setfile ]
     ++ optionals seccompSupport [ libseccomp ]
     ++ optionals numaSupport [ numactl ]
