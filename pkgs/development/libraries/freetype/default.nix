@@ -1,7 +1,7 @@
 { stdenv, fetchurl
 , buildPackages
 , pkgconfig, which, makeWrapper
-, zlib, bzip2, libpng, gnumake, glib
+, zlib, bzip2, libpng, gnumake, glib, libtool, xorg
 
 , # FreeType supports LCD filtering (colloquially referred to as sub-pixel rendering).
   # LCD filtering is also known as ClearType and covered by several Microsoft patents.
@@ -31,15 +31,30 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ttuegel ];
   };
 
-  src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "12rd181yzz6952cyjqaa4253f5szam93cmhw18p33rnj4l8dchqm";
-  };
+  srcs = [
+    (fetchurl {
+      url = "mirror://savannah/${pname}/${pname}-${version}.tar.xz";
+      sha256 = "12rd181yzz6952cyjqaa4253f5szam93cmhw18p33rnj4l8dchqm";
+    })
 
-  propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype
+    (fetchurl {
+      url = "mirror://savannah/freetype/ft2demos-${version}.tar.xz";
+      sha256 = "1akd5n47qfn4ldap1nvkbdj3s5pfcmbifjc5d1cqdm2kpb8nbkix";
+    })
+  ];
+
+  sourceRoot = "freetype2";
+
+  dontMakeSourcesWritable = true;
+
+  postUnpack = ''
+    mv freetype-${version} freetype2
+  '';
+
+  propagatedBuildInputs = [ zlib bzip2 libpng xorg.libX11 ]; # needed when linking against freetype
 
   # dependence on harfbuzz is looser than the reverse dependence
-  nativeBuildInputs = [ pkgconfig which makeWrapper ]
+  nativeBuildInputs = [ pkgconfig which makeWrapper libtool ]
     # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
     ++ optional (!stdenv.isLinux) gnumake;
 
@@ -48,7 +63,7 @@ in stdenv.mkDerivation rec {
     ] ++
     optional useEncumberedCode ./enable-subpixel-rendering.patch;
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "demos" ];
 
   configureFlags = [ "--bindir=$(dev)/bin" "--enable-freetype-config" ];
 
@@ -62,12 +77,33 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  postPatch = ''
+    pushd ../ft2demos-${version}
+    echo "Applying demos patches"
+    cat ${./fix-find-libX11.patch} | patch -p1
+    popd
+  '';
+
+  postBuild = ''
+    pushd ../ft2demos-${version}
+    unset preBuild postBuild
+    echo "Building demos"
+    buildPhase
+    popd
+  '';
+
   postInstall = glib.flattenInclude + ''
     substituteInPlace $dev/bin/freetype-config \
       --replace ${buildPackages.pkgconfig} ${pkgconfig}
 
     wrapProgram "$dev/bin/freetype-config" \
       --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH:$dev/lib/pkgconfig"
+
+    mkdir -p $demos/bin
+
+    for program in ../ft2demos-${version}/bin/{f,t}t*; do
+      libtool --mode=install install "$program" $demos/bin
+    done
   '';
 
 }
