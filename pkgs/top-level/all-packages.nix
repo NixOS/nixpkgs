@@ -21371,7 +21371,7 @@ in
           klettres klines
           kmag kmines kmix kmplot
           knavalbattle knetwalk knights
-          kollision kolourpaint kompare konsole
+          kollision kolourpaint kompare konsole konquest
           krdc kreversi krfb
           kshisen ksquares ksystemlog
           kteatime ktimer ktouch kturtle
