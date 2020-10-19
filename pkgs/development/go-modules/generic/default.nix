@@ -47,10 +47,6 @@ let
 
   removeExpr = refs: ''remove-references-to ${lib.concatMapStrings (ref: " -t ${ref}") refs}'';
 
-  deleteFlag = lib.boolToString deleteVendor;
-
-  vendCommand = if runVend then "${vend}/bin/vend" else "false";
-
   go-modules = if vendorSha256 != null then go.stdenv.mkDerivation (let modArgs = {
 
     name = "${name}-go-modules";
@@ -81,27 +77,26 @@ let
 
     buildPhase = args.modBuildPhase or ''
       runHook preBuild
-
-      if [ ${deleteFlag} == "true" ]; then
-        if [ ! -d vendor ]; then
-          echo "vendor folder does not exist, 'deleteVendor' is not needed"
-          exit 10
-        else
-          rm -rf vendor
-        fi
+    '' + lib.optionalString (deleteVendor == true) ''
+      if [ ! -d vendor ]; then
+        echo "vendor folder does not exist, 'deleteVendor' is not needed"
+        exit 10
+      else
+        rm -rf vendor
       fi
-
+    '' + ''
       if [ -d vendor ]; then
         echo "vendor folder exists, please set 'vendorSha256 = null;' in your expression"
         exit 10
       fi
 
-      if [ ${vendCommand} != "false" ]; then
-        echo running vend to rewrite vendor folder
-        ${vendCommand}
-      else
-        go mod vendor
-      fi
+    ${if runVend then ''
+      echo "running 'vend' to rewrite vendor folder"
+      ${vend}/bin/vend
+    '' else ''
+      go mod vendor
+    ''}
+
       mkdir -p vendor
 
       runHook postBuild
