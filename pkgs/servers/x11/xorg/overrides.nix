@@ -95,6 +95,9 @@ self: super:
     preConfigure = ''
       sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
     '';
+    postPatch = ''
+      substituteInPlace src/CrGlCur.c --replace "libXcursor.so.1" "${self.libXcursor}/lib/libXcursor.so.1"
+    '';
     postInstall =
       ''
         # Remove useless DocBook XML files.
