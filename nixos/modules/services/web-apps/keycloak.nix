@@ -564,4 +564,6 @@ in
 
         services.postgresql.enable = lib.mkDefault databaseActuallyCreateLocally;
       };
+
+  meta.doc = ./keycloak.xml;
 }
