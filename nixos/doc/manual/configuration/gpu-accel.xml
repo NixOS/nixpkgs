@@ -101,7 +101,7 @@ Platform Vendor      Advanced Micro Devices, Inc.</screen>
        configuration can be used:
 
 	      <programlisting><xref linkend="opt-hardware.opengl.extraPackages"/> = [
-  intel-compute-runtime
+  pkgs.intel-compute-runtime
 ];</programlisting>
 
       </para>
