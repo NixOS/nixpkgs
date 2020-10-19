@@ -59,6 +59,18 @@ in
         description = "If enabled, start the Murmur Mumble server.";
       };
 
+      config = mkOption {
+        type = types.str;
+        default = lib.readFile configFile;
+        description = "Contents of the murmur.ini config file";
+      };
+
+      iniPath = mkOption {
+        type = types.str;
+        default = "";
+        description = "-ini argument to pass to murmurd";
+      };
+
       autobanAttempts = mkOption {
         type = types.int;
         default = 10;
@@ -299,12 +311,15 @@ in
         Type = if forking then "forking" else "simple";
         PIDFile = mkIf forking "/run/murmur/murmurd.pid";
         EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
-        ExecStart = "${pkgs.murmur}/bin/murmurd -ini /run/murmur/murmurd.ini";
         Restart = "always";
         RuntimeDirectory = "murmur";
         RuntimeDirectoryMode = "0700";
         User = "murmur";
         Group = "murmur";
+        ExecStart = ''
+          ${pkgs.murmur}/bin/murmurd -ini \
+            ${if cfg.iniPath != "" then cfg.iniPath else configFile}
+        '';
       };
     };
   };
