@@ -16637,6 +16637,8 @@ in
 
   minio = callPackage ../servers/minio { };
 
+  mkchromecast = libsForQt5.callPackage ../applications/networking/mkchromecast { };
+
   # Backwards compatibility.
   mod_dnssd = pkgs.apacheHttpdPackages.mod_dnssd;
   mod_fastcgi = pkgs.apacheHttpdPackages.mod_fastcgi;
