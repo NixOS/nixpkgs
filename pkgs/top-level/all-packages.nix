@@ -26778,6 +26778,10 @@ in
 
   netlogo = callPackage ../applications/science/misc/netlogo { };
 
+  nextinspace = python3Packages.callPackage ../applications/science/misc/nextinspace {
+    pythonPackages = python3Packages;
+  };
+
   ns-3 = callPackage ../development/libraries/science/networking/ns-3 { python = python3; };
 
   root = callPackage ../applications/science/misc/root {
