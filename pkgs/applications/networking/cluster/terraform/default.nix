@@ -1,5 +1,6 @@
-{ stdenv, lib, buildEnv, buildGoPackage, fetchFromGitHub, makeWrapper, coreutils
-, runCommand, runtimeShell, writeText, terraform-providers, fetchpatch }:
+{ pkgs, stdenv, lib, buildEnv, buildGoPackage, fetchFromGitHub, makeWrapper
+, coreutils, runCommand, runtimeShell, writeText, terraform-providers
+, fetchpatch, nixosTests }:
 
 let
   goPackagePath = "github.com/hashicorp/terraform";
@@ -164,7 +165,24 @@ in rec {
     version = "0.13.4";
     sha256 = "1yvcz14q82v9jq4b9knn6wgnhlhrsz2ncvxv4lh9y1avn56chsqc";
     patches = [ ./provider-path.patch ];
-    passthru = { inherit plugins; };
+    passthru = {
+      inherit plugins;
+
+      tests = {
+        terraform-providers-init = let
+          mainTf = writeText "main.tf" ''
+            resource "random_id" "test" {}
+          '';
+          terraform = pkgs.terraform_0_13.withPlugins (p: [ p.random ]);
+          test = runCommand "terraform-plugin-test" {
+            buildInputs = [ terraform ];
+          } ''
+
+            exit 3
+          '';
+        in test;
+      };
+    };
   });
 
   # Tests that the plugins are being used. Terraform looks at the specific
