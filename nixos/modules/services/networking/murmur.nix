@@ -71,6 +71,18 @@ in
         description = "-ini argument to pass to murmurd";
       };
 
+      user = mkOption {
+        type = types.str;
+        default = "murmur";
+        description = "User to run murmurd as";
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "";
+        description = "Group to run murmurd as";
+      };
+
       autobanAttempts = mkOption {
         type = types.int;
         default = 10;
@@ -314,8 +326,8 @@ in
         Restart = "always";
         RuntimeDirectory = "murmur";
         RuntimeDirectoryMode = "0700";
-        User = "murmur";
-        Group = "murmur";
+        User      = cfg.user;
+        Group     = cfg.group;
         ExecStart = ''
           ${pkgs.murmur}/bin/murmurd -ini \
             ${if cfg.iniPath != "" then cfg.iniPath else configFile}
