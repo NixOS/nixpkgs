@@ -116,6 +116,10 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
     users.users.root.initialHashedPassword = mkOverride 150 "";
 
     services.xserver.displayManager.job.logToJournal = true;
+
+    # Make sure we use the Guest Agent from the QEMU package for testing
+    # to reduce the closure size required for the tests.
+    services.qemuGuest.package = pkgs.qemu_test.ga;
   };
 
 }
