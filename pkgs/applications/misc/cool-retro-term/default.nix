@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, mkDerivation, qtbase, qtquick1, qmltermwidget
-, qtquickcontrols, qtgraphicaleffects, qmake }:
+{ stdenv, fetchFromGitHub, mkDerivation, qtbase, qmltermwidget
+, qtquickcontrols2, qtgraphicaleffects, qmake }:
 
 mkDerivation rec {
   version = "1.1.1";
@@ -16,7 +16,7 @@ mkDerivation rec {
     sed -i -e '/qmltermwidget/d' cool-retro-term.pro
   '';
 
-  buildInputs = [ qtbase qtquick1 qmltermwidget qtquickcontrols qtgraphicaleffects ];
+  buildInputs = [ qtbase qmltermwidget qtquickcontrols2 qtgraphicaleffects ];
   nativeBuildInputs = [ qmake ];
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
