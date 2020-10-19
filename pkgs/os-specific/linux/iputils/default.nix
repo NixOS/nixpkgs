@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , meson, ninja, pkgconfig, gettext, libxslt, docbook_xsl_ns
-, libcap, systemd, libidn2
+, libcap, libidn2
 }:
 
 with stdenv.lib;
@@ -22,6 +22,12 @@ in stdenv.mkDerivation rec {
     sha256 = "1jhbcz75a4ij1myyyi110ma1d8d5hpm3scz9pyw7js6qym50xvh4";
   };
 
+  postPatch = ''
+    # Enable the systemd units even without systemd being an input. We set the
+    # unitdir manually anyway.
+    sed -e 's/systemd\.found()/true/g' -i meson.build
+  '';
+
   mesonFlags = [
     "-DBUILD_RARPD=true"
     "-DBUILD_TRACEROUTE6=true"
@@ -33,7 +39,7 @@ in stdenv.mkDerivation rec {
     ++ optional stdenv.hostPlatform.isMusl "-DUSE_IDN=false";
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext libxslt.bin docbook_xsl_ns ];
-  buildInputs = [ libcap systemd ]
+  buildInputs = [ libcap ]
     ++ optional (!stdenv.hostPlatform.isMusl) libidn2;
 
   meta = {
