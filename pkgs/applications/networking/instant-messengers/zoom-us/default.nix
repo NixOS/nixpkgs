@@ -2,7 +2,7 @@
 , fetchFromGitHub
 # Dynamic libraries
 , dbus, glib, libGL, libX11, libXfixes, libuuid, libxcb, qtbase, qtdeclarative
-, qtgraphicaleffects, qtimageformats, qtlocation, qtquickcontrols
+, qtgraphicaleffects, qtimageformats, qtlocation
 , qtquickcontrols2, qtscript, qtsvg , qttools, qtwayland, qtwebchannel
 , qtwebengine
 # Runtime
@@ -41,7 +41,7 @@ in mkDerivation {
 
   buildInputs = [
     dbus glib libGL libX11 libXfixes libuuid libxcb faac qtbase
-    qtdeclarative qtgraphicaleffects qtlocation qtquickcontrols qtquickcontrols2
+    qtdeclarative qtgraphicaleffects qtlocation qtquickcontrols2
     qtscript qtwebchannel qtwebengine qtimageformats qtsvg qttools qtwayland
   ];
 
