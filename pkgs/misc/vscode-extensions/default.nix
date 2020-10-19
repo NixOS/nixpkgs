@@ -194,6 +194,8 @@ in
     lldb = llvmPackages_latest.lldb;
   };
 
+  ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare-vsliveshare {};
+
   vscodevim.vim = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "vim";

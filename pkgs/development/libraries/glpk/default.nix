@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl
 , fetchpatch
+, libmysqlclient
 # Excerpt from glpk's INSTALL file:
 # This feature allows the exact simplex solver to use the GNU MP
 # bignum library. If it is disabled, the exact simplex solver uses the
@@ -21,9 +22,11 @@ stdenv.mkDerivation rec {
     sha256 = "040sfaa9jclg2nqdh83w71sv9rc1sznpnfiripjdyr48cady50a2";
   };
 
-  buildInputs = stdenv.lib.optionals withGmp [
-    gmp
-  ];
+  buildInputs =
+    [ libmysqlclient
+    ] ++ stdenv.lib.optionals withGmp [
+      gmp
+    ];
 
   configureFlags = stdenv.lib.optionals withGmp [
     "--with-gmp"
@@ -46,6 +49,13 @@ stdenv.mkDerivation rec {
       sha256 = "0z99z9gd31apb6x5n5n26411qzx0ma3s6dnznc4x61x86bhq31qf";
     })
   ];
+
+  postPatch =
+    # Do not hardcode the include path for libmysqlclient.
+    ''
+      substituteInPlace configure \
+        --replace '-I/usr/include/mysql' '$(mysql_config --include)'
+    '';
 
   doCheck = true;
 

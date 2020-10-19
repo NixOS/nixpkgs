@@ -10,8 +10,9 @@
 , buildPackages
 , newScope, callPackage
 , CoreFoundation, Security
-, llvmPackages_5
+, llvmPackages
 , pkgsBuildTarget, pkgsBuildBuild
+, makeRustPlatform
 }: rec {
   # https://doc.rust-lang.org/reference/conditional-compilation.html#target_arch
   toTargetArch = platform:
@@ -32,24 +33,6 @@
     }.${cpu.name} or cpu.name;
   in platform.rustc.config
     or "${cpu_}-${vendor.name}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
-
-  makeRustPlatform = { rustc, cargo, ... }: rec {
-    rust = {
-      inherit rustc cargo;
-    };
-
-    fetchCargoTarball = buildPackages.callPackage ../../../build-support/rust/fetchCargoTarball.nix {
-      inherit cargo;
-    };
-
-    buildRustPackage = callPackage ../../../build-support/rust {
-      inherit rustc cargo fetchCargoTarball;
-    };
-
-    rustcSrc = callPackage ./rust-src.nix {
-      inherit rustc;
-    };
-  };
 
   # This just contains tools for now. But it would conceivably contain
   # libraries too, say if we picked some default/recommended versions from
@@ -91,10 +74,10 @@
         # Use boot package set to break cycle
         rustPlatform = bootRustPlatform;
       } // lib.optionalAttrs (stdenv.cc.isClang && stdenv.hostPlatform == stdenv.buildPlatform) {
-        stdenv = llvmPackages_5.stdenv;
-        pkgsBuildBuild = pkgsBuildBuild // { targetPackages.stdenv = llvmPackages_5.stdenv; };
-        pkgsBuildHost = pkgsBuildBuild // { targetPackages.stdenv = llvmPackages_5.stdenv; };
-        pkgsBuildTarget = pkgsBuildTarget // { targetPackages.stdenv = llvmPackages_5.stdenv; };
+        stdenv = llvmPackages.stdenv;
+        pkgsBuildBuild = pkgsBuildBuild // { targetPackages.stdenv = llvmPackages.stdenv; };
+        pkgsBuildHost = pkgsBuildBuild // { targetPackages.stdenv = llvmPackages.stdenv; };
+        pkgsBuildTarget = pkgsBuildTarget // { targetPackages.stdenv = llvmPackages.stdenv; };
       });
       rustfmt = self.callPackage ./rustfmt.nix { inherit Security; };
       cargo = self.callPackage ./cargo.nix {

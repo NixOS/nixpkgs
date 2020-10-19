@@ -15,7 +15,7 @@
 , glibc
 , libXScrnSaver, libXcursor, libXtst, libGLU, libGL
 , protobuf, speechd, libXdamage, cups
-, ffmpeg_3, libxslt, libxml2, at-spi2-core
+, ffmpeg, libxslt, libxml2, at-spi2-core
 , jre8
 , pipewire_0_2
 
@@ -76,11 +76,16 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "libwebp" "libxslt" "opus" "snappy" "libpng"
-    # "zlib" # version 77 reports unresolved dependency on //third_party/zlib:zlib_config
-    # "libjpeg" # fails with multiple undefined references to chromium_jpeg_*
+    "ffmpeg"
+    "flac"
+    "libjpeg"
+    "libpng"
+    "libwebp"
+    "libxslt"
+    "opus"
+    "snappy"
+    "zlib"
     # "re2" # fails with linker errors
-    # "ffmpeg" # https://crbug.com/731766
     # "harfbuzz-ng" # in versions over 63 harfbuzz and freetype are being built together
                     # so we can't build with one from system and other from source
   ];
@@ -95,7 +100,7 @@ let
     libpng libcap
     xdg_utils minizip libwebp
     libusb1 re2 zlib
-    ffmpeg_3 libxslt libxml2
+    ffmpeg libxslt libxml2
     nasm
     # harfbuzz # in versions over 63 harfbuzz and freetype are being built together
                # so we can't build with one from system and other from source
@@ -149,7 +154,6 @@ let
       ++ optionals useOzone [ libdrm wayland mesa_drivers libxkbcommon ];
 
     patches = [
-      ./patches/remove-webp-include-69.patch
       ./patches/no-build-timestamps.patch
       ./patches/widevine-79.patch
       # Unfortunately, chromium regularly breaks on major updates and
@@ -239,7 +243,7 @@ let
 
     gnFlags = mkGnFlags ({
       use_lld = false;
-      use_gold = true;
+      use_gold = stdenv.buildPlatform.is64bit;  # ld.gold outs-of-memory on i686
       gold_path = "${stdenv.cc}/bin";
       is_debug = false;
 
@@ -262,6 +266,7 @@ let
       is_clang = stdenv.cc.isClang;
       clang_use_chrome_plugins = false;
       blink_symbol_level = 0;
+      symbol_level = 0;
       fieldtrial_testing_like_official_build = true;
 
       # Google API keys, see:

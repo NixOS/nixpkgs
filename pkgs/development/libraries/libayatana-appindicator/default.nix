@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, lib
-, pkgconfig, autoreconfHook , gtk-doc
+, pkg-config, autoreconfHook , gtk-doc
+, gobject-introspection
 , gtkVersion ? "3"
 , gtk2, libayatana-indicator-gtk2, libdbusmenu-gtk2
 , gtk3, libayatana-indicator-gtk3, libdbusmenu-gtk3
@@ -8,24 +9,24 @@
 
 stdenv.mkDerivation rec {
   pname = "libayatana-appindicator-gtk${gtkVersion}";
-  version = "0.5.4";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "libayatana-appindicator";
     rev = version;
-    sha256 = "0bqjqb7gabdk7mifk8azi630qw39z978f973fx2ylgdgr4a66j1v";
+    sha256 = "1sba0w455rdkadkhxrx4fr63m0d9blsbb1q1hcshxw1k1z2nh1gk";
   };
 
-  patchPhase = ''
+  prePatch = ''
     substituteInPlace configure.ac \
       --replace "codegendir pygtk-2.0" "codegendir pygobject-2.0"
   '';
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook gtk-doc ];
+  nativeBuildInputs = [ pkg-config autoreconfHook gtk-doc gobject-introspection python2 python2Packages.pygtk dbus-glib ];
 
-  buildInputs = [ dbus-glib python2 python2Packages.pygtk ]
-    ++ lib.lists.optional (gtkVersion == "2") libayatana-indicator-gtk2
+  buildInputs =
+    lib.lists.optional (gtkVersion == "2") libayatana-indicator-gtk2
     ++ lib.lists.optional (gtkVersion == "3") libayatana-indicator-gtk3;
 
   propagatedBuildInputs =
@@ -42,8 +43,8 @@ stdenv.mkDerivation rec {
     description = "Ayatana Application Indicators Shared Library";
     homepage = "https://github.com/AyatanaIndicators/libayatana-appindicator";
     changelog = "https://github.com/AyatanaIndicators/libayatana-appindicator/blob/${version}/ChangeLog";
-    license = [ licenses.gpl3 licenses.lgpl21 ];
+    license = [ licenses.lgpl3Plus licenses.lgpl21Plus ];
     maintainers = [ maintainers.nickhu ];
-    platforms = platforms.x86_64;
+    platforms = platforms.linux;
   };
 }

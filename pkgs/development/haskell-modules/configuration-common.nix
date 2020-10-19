@@ -77,6 +77,15 @@ self: super: {
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
   };
 
+  # Backport fix for bash: compgen: command not found
+  # which happens in nix-shell when a non-interactive bash is on PATH
+  # PR to master: https://github.com/pcapriotti/optparse-applicative/pull/408
+  optparse-applicative = appendPatch super.optparse-applicative (pkgs.fetchpatch {
+    name = "optparse-applicative-0.15.1-hercules-ci-compgen.diff";
+    url = "https://github.com/hercules-ci/optparse-applicative/compare/0.15.1...hercules-ci:0.15.1-nixpkgs-compgen.diff";
+    sha256 = "1bcp6b7gvc8pqbn1n1ybhizkkl5if7hk9ipgl746vk08v0d3xxql";
+  });
+
   # Fix test trying to access /home directory
   shell-conduit = overrideCabal super.shell-conduit (drv: {
     postPatch = "sed -i s/home/tmp/ test/Spec.hs";
@@ -136,6 +145,14 @@ self: super: {
   halive = if pkgs.stdenv.isDarwin
     then addBuildDepend super.halive pkgs.darwin.apple_sdk.frameworks.AppKit
     else super.halive;
+
+  # Test suite fails due golden tests checking text representation
+  # of normalized dhall expressions, and newer dhall versions format
+  # differently.
+  hpack-dhall =
+    if pkgs.lib.versionOlder "0.5.2" super.hpack-dhall.version
+    then throw "Drop dontCheck override for hpack-dhall > 0.5.2"
+    else dontCheck super.hpack-dhall;
 
   barbly = addBuildDepend super.barbly pkgs.darwin.apple_sdk.frameworks.AppKit;
 
@@ -1376,12 +1393,6 @@ self: super: {
   # https://github.com/jgm/commonmark-hs/issues/55
   commonmark-extensions = dontCheck super.commonmark-extensions;
 
-
-  # 2020-10-11: reflex-dom-pandoc and neuron require skylighting >= 9, which we
-  # can‘t support, because there is no pandoc release compatible with this.
-  reflex-dom-pandoc = doJailbreak super.reflex-dom-pandoc;
-  neuron = doJailbreak super.neuron;
-
   # Testsuite trying to run `which haskeline-examples-Test`
   haskeline_0_8_1_0 = dontCheck super.haskeline_0_8_1_0;
 
@@ -1453,25 +1464,24 @@ self: super: {
   cryptonite = doDistribute self.cryptonite_0_27;
 
   # We want the latest version of Pandoc.
+  skylighting = doDistribute super.skylighting_0_10_0_2;
+  skylighting-core = doDistribute super.skylighting-core_0_10_0_2;
   hslua = doDistribute self.hslua_1_1_2;
   jira-wiki-markup = doDistribute self.jira-wiki-markup_1_3_2;
-  pandoc = doDistribute self.pandoc_2_10_1;
-  pandoc-citeproc = doDistribute self.pandoc-citeproc_0_17_0_2;
-  pandoc-types = doDistribute self.pandoc-types_1_21;
+  pandoc = doDistribute self.pandoc_2_11_0_2;
+  # jailbreaking pandoc-citeproc because it has not bumped upper bound on pandoc
+  pandoc-citeproc = doJailbreak (doDistribute self.pandoc-citeproc_0_17_0_2);
+  pandoc-types = doDistribute self.pandoc-types_1_22;
   rfc5051 = doDistribute self.rfc5051_0_2;
-
-  # Upstream forgot to change the Cabal version bounds in the test suite.
-  # See: https://github.com/jaspervdj/stylish-haskell/pull/297
-  # Will be fixed whenever they next bump the version number
-  stylish-haskell = appendPatch super.stylish-haskell (pkgs.fetchpatch {
-    url = "https://github.com/jaspervdj/stylish-haskell/commit/9550aa1cd177aa6fe271d075177109d66a79e67f.patch";
-    sha256 = "1ffnbd2s4fx0ylnnlcyyag119yxb32p5r20b38l39lsa0jwv229f";
-  });
 
   # The test suite attempts to read `/etc/resolv.conf`, which doesn't work in the sandbox.
   domain-auth = dontCheck super.domain-auth;
   # INSERT NEW OVERRIDES ABOVE THIS LINE
 
+  # stack-2.5.1 needs a more current version of pantry to compile
+  pantry = self.pantry_0_5_1_3;
+
+  # haskell-language-server needs a more current version of pantry to compile
 } // (let
   inherit (self) hls-ghcide hls-brittany;
   hlsScopeOverride = self: super: {

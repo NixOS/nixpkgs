@@ -22,12 +22,11 @@
 }:
 
 mkDerivation rec {
-  name = "kile-2.9.92";
+  name = "kile-2.9.93";
 
   src = fetchurl {
     url = "mirror://sourceforge/kile/${name}.tar.bz2";
-    sha256 = "177372dc25b1d109e037a7dbfc64b5dab2efe538320c87f4a8ceada21e9097f2";
-
+    sha256 = "BEmSEv/LJPs6aCkUmnyuTGrV15WYXwgIANbfcviMXfA=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules wrapGAppsHook ];

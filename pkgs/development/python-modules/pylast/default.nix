@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "pylast";
-  version = "3.3.0";
+  version = "4.0.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1wqd23bbk5si2mcmswsi486zqnydjjf8g7924gcz6cc1x036lasd";
+    sha256 = "8ec555d6c4c1b474e9b3c96c3786abd38303a1a5716d928b0f3cfdcb4499b093";
   };
 
   nativeBuildInputs = [ setuptools_scm ];

@@ -20,7 +20,7 @@ buildGoModule rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Translation platform for developers. Upload language files, translate, integrate via API.";
+    description = "Translation platform for developers. Upload language files, translate, integrate via API";
     homepage = "https://lokalise.com";
     license = licenses.bsd3;
     maintainers = with maintainers; [ timstott ];

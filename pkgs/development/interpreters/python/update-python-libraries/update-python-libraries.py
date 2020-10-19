@@ -193,9 +193,12 @@ def _get_latest_version_github(package, extension, current_version, target):
         matches = re.findall(r"^([^0-9]*)", string)
         return next(iter(matches), "")
 
+    # when invoked as an updateScript, UPDATE_NIX_ATTR_PATH will be set
+    # this allows us to work with packages which live outside of python-modules
+    attr_path = os.environ.get("UPDATE_NIX_ATTR_PATH", f"python3Packages.{package}")
     try:
         homepage = subprocess.check_output(
-            ["nix", "eval", "-f", f"{NIXPGKS_ROOT}/default.nix", "--raw", f"python3Packages.{package}.src.meta.homepage"])\
+            ["nix", "eval", "-f", f"{NIXPGKS_ROOT}/default.nix", "--raw", f"{attr_path}.src.meta.homepage"])\
             .decode('utf-8')
     except Exception as e:
         raise ValueError(f"Unable to determine homepage: {e}")

@@ -1,6 +1,7 @@
 { stdenv
 , mkDerivation
 , fetchFromGitHub
+, substituteAll
 , gdal
 , cmake
 , ninja
@@ -18,7 +19,7 @@
 
 mkDerivation rec {
   pname = "OpenOrienteering-Mapper";
-  version = "0.9.3";
+  version = "0.9.4";
 
   buildInputs = [
     gdal
@@ -37,18 +38,14 @@ mkDerivation rec {
     owner = "OpenOrienteering";
     repo = "mapper";
     rev = "v${version}";
-    sha256 = "05bliglpc8170px6k9lfrp9ylpnb2zf47gnjns9b2bif8dv8zq0l";
+    sha256 = "13k9dirqm74lknhr8w121zr1hjd9gm1y73cj4rrj98rx44dzmk7b";
   };
 
-  patches = [
+  patches = (substituteAll {
     # See https://github.com/NixOS/nixpkgs/issues/86054
-    ./fix-qttranslations-path.diff
-  ];
-
-  postPatch = ''
-    substituteInPlace src/util/translation_util.cpp \
-      --subst-var-by qttranslations ${qttranslations}
-  '';
+    src = ./fix-qttranslations-path.diff;
+    inherit qttranslations;
+  });
 
   cmakeFlags = [
     # Building the manual and bundling licenses fails

@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation libiconv Security ];
 
   meta = with stdenv.lib; {
-    description = "A simple yet robust commandline random password generator.";
+    description = "A simple yet robust commandline random password generator";
     homepage = "https://github.com/cyplo/genpass";
     license = licenses.agpl3;
     maintainers = with maintainers; [ cyplo ];

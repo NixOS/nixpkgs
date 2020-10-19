@@ -19,13 +19,10 @@ let
     pname = "php-${pname}";
   });
 
-  isPhp73 = pkgs.lib.versionAtLeast php.version "7.3";
-  isPhp74 = pkgs.lib.versionAtLeast php.version "7.4";
-
   pcre' = if (lib.versionAtLeast php.version "7.3") then pcre2 else pcre;
 
   callPackage = pkgs.newScope {
-    inherit mkDerivation php isPhp73 isPhp74 buildPecl pcre';
+    inherit mkDerivation php buildPecl pcre';
   };
 in
 {
@@ -62,264 +59,33 @@ in
   # or php.withExtensions to extend the functionality of the PHP
   # interpreter.
   extensions = {
-    apcu = buildPecl {
-      version = "5.1.18";
-      pname = "apcu";
+    apcu = callPackage ../development/php-packages/apcu { };
 
-      sha256 = "0ayykd4hfvdzk7qnr5k6yq5scwf6rb2i05xscfv76q5dmkkynvfl";
+    apcu_bc = callPackage ../development/php-packages/apcu_bc { };
 
-      buildInputs = [ pcre' ];
-      doCheck = true;
-      checkTarget = "test";
-      checkFlagsArray = ["REPORT_EXIT_STATUS=1" "NO_INTERACTION=1"];
-      makeFlags = [ "phpincludedir=$(dev)/include" ];
-      outputs = [ "out" "dev" ];
-
-      meta.maintainers = lib.teams.php.members;
-    };
-
-    apcu_bc = buildPecl {
-      version = "1.0.5";
-      pname = "apcu_bc";
-
-      sha256 = "0ma00syhk2ps9k9p02jz7rii6x3i2p986il23703zz5npd6y9n20";
-
-      peclDeps = [ php.extensions.apcu ];
-
-      buildInputs = [
-        pcre'
-      ];
-
-      postInstall = ''
-        mv $out/lib/php/extensions/apc.so $out/lib/php/extensions/apcu_bc.so
-      '';
-
-      meta.maintainers = lib.teams.php.members;
-    };
-
-    ast = buildPecl {
-      version = "1.0.5";
-      pname = "ast";
-
-      sha256 = "16c5isldm4csjbcvz1qk2mmrhgvh24sxsp6w6f5a37xpa3vciawp";
-
-      meta.maintainers = lib.teams.php.members;
-    };
+    ast = callPackage ../development/php-packages/ast { };
 
     blackfire = pkgs.callPackage ../development/tools/misc/blackfire/php-probe.nix { inherit php; };
 
-    couchbase = buildPecl rec {
-      version = "2.6.1";
-      pname = "couchbase";
+    couchbase = callPackage ../development/php-packages/couchbase { };
 
-      src = pkgs.fetchFromGitHub {
-        owner = "couchbase";
-        repo = "php-couchbase";
-        rev = "v${version}";
-        sha256 = "0jdzgcvab1vpxai23brmmvizjjq2d2dik9aklz6bzspfb512qjd6";
-      };
+    event = callPackage ../development/php-packages/event { };
 
-      configureFlags = [ "--with-couchbase" ];
+    igbinary = callPackage ../development/php-packages/igbinary { };
 
-      buildInputs = [
-        pkgs.libcouchbase
-        pkgs.zlib
-      ];
-      internalDeps = [ php.extensions.json ];
-      peclDeps = [ php.extensions.igbinary ];
+    imagick = callPackage ../development/php-packages/imagick { };
 
-      patches = [
-        (pkgs.writeText "php-couchbase.patch" ''
-          --- a/config.m4
-          +++ b/config.m4
-          @@ -9,7 +9,7 @@ if test "$PHP_COUCHBASE" != "no"; then
-               LIBCOUCHBASE_DIR=$PHP_COUCHBASE
-             else
-               AC_MSG_CHECKING(for libcouchbase in default path)
-          -    for i in /usr/local /usr; do
-          +    for i in ${pkgs.libcouchbase}; do
-                 if test -r $i/include/libcouchbase/couchbase.h; then
-                   LIBCOUCHBASE_DIR=$i
-                   AC_MSG_RESULT(found in $i)
-          @@ -154,6 +154,8 @@ COUCHBASE_FILES=" \
-               igbinary_inc_path="$phpincludedir"
-             elif test -f "$phpincludedir/ext/igbinary/igbinary.h"; then
-               igbinary_inc_path="$phpincludedir"
-          +  elif test -f "${php.extensions.igbinary.dev}/include/ext/igbinary/igbinary.h"; then
-          +    igbinary_inc_path="${php.extensions.igbinary.dev}/include"
-             fi
-             if test "$igbinary_inc_path" = ""; then
-               AC_MSG_WARN([Cannot find igbinary.h])
-        '')
-      ];
+    mailparse = callPackage ../development/php-packages/mailparse { };
 
-      meta.maintainers = lib.teams.php.members;
-    };
+    maxminddb = callPackage ../development/php-packages/maxminddb { };
 
-    event = buildPecl {
-      version = "2.5.3";
-      pname = "event";
+    memcached = callPackage ../development/php-packages/memcached { };
 
-      sha256 = "12liry5ldvgwp1v1a6zgfq8w6iyyxmsdj4c71bp157nnf58cb8hb";
+    mongodb = callPackage ../development/php-packages/mongodb { };
 
-      configureFlags = [
-        "--with-event-libevent-dir=${pkgs.libevent.dev}"
-        "--with-event-core"
-        "--with-event-extra"
-        "--with-event-pthreads"
-      ];
+    oci8 = callPackage ../development/php-packages/oci8 { };
 
-      postPhpize = ''
-        substituteInPlace configure --replace 'as_fn_error $? "Couldn'\'''t find $phpincludedir/sockets/php_sockets.h. Please check if sockets extension installed" "$LINENO" 5' \
-                                              ':'
-      '';
-
-      nativeBuildInputs = [ pkgs.pkgconfig ];
-      buildInputs = with pkgs; [ openssl libevent ];
-      internalDeps = [ php.extensions.sockets ];
-
-      meta = with pkgs.lib; {
-        description = ''
-          This is an extension to efficiently schedule I/O, time and signal based
-          events using the best I/O notification mechanism available for specific platform.
-        '';
-        license = licenses.php301;
-        homepage = "https://bitbucket.org/osmanov/pecl-event/";
-        maintainers = teams.php.members;
-      };
-    };
-
-    igbinary = buildPecl {
-      version = "3.0.1";
-      pname = "igbinary";
-
-      sha256 = "1w8jmf1qpggdvq0ndfi86n7i7cqgh1s8q6hys2lijvi37rzn0nar";
-
-      configureFlags = [ "--enable-igbinary" ];
-      makeFlags = [ "phpincludedir=$(dev)/include" ];
-      outputs = [ "out" "dev" ];
-
-      meta.maintainers = lib.teams.php.members;
-    };
-
-    imagick = buildPecl {
-      version = "3.4.4";
-      pname = "imagick";
-
-      sha256 = "0xvhaqny1v796ywx83w7jyjyd0nrxkxf34w9zi8qc8aw8qbammcd";
-
-      configureFlags = [ "--with-imagick=${pkgs.imagemagick.dev}" ];
-      nativeBuildInputs = [ pkgs.pkgconfig ];
-      buildInputs = [ pcre' ];
-
-      meta.maintainers = lib.teams.php.members;
-    };
-
-    mailparse = buildPecl {
-      version = "3.0.3";
-      pname = "mailparse";
-      sha256 = "00nk14jbdbln93mx3ag691avc11ff94hkadrcv5pn51c6ihsxbmz";
-
-      internalDeps = [ php.extensions.mbstring ];
-      postConfigure = ''
-        echo "#define HAVE_MBSTRING 1" >> config.h
-      '';
-
-      meta.maintainers = lib.teams.php.members;
-    };
-
-    maxminddb = buildPecl rec {
-      pname = "maxminddb";
-      version = "1.7.0";
-
-      src = pkgs.fetchFromGitHub {
-        owner = "maxmind";
-        repo = "MaxMind-DB-Reader-php";
-        rev = "v${version}";
-        sha256 = "16msc9s15y43lxw89kj51aldlkd57dc8gms199i51jc984b68ljc";
-      };
-
-      buildInputs = [ pkgs.libmaxminddb ];
-      sourceRoot = "source/ext";
-
-      meta = with pkgs.lib; {
-        description = "C extension that is a drop-in replacement for MaxMind\\Db\\Reader";
-        license = with licenses; [ asl20 ];
-        maintainers = with maintainers; [ ajs124 das_j ] ++ teams.php.members;
-      };
-    };
-
-    memcached = buildPecl rec {
-      version = "3.1.5";
-      pname = "memcached";
-
-      src = fetchgit {
-        url = "https://github.com/php-memcached-dev/php-memcached";
-        rev = "v${version}";
-        sha256 = "01mbh2m3kfbdvih3c8g3g9h4vdd80r0i9g2z8b3lx3mi8mmcj380";
-      };
-
-      internalDeps = [
-        php.extensions.session
-      ] ++ lib.optionals (lib.versionOlder php.version "7.4") [
-        php.extensions.hash
-      ];
-
-      configureFlags = [
-        "--with-zlib-dir=${pkgs.zlib.dev}"
-        "--with-libmemcached-dir=${pkgs.libmemcached}"
-      ];
-
-      nativeBuildInputs = [ pkgs.pkgconfig ];
-      buildInputs = with pkgs; [ cyrus_sasl zlib ];
-
-      meta.maintainers = lib.teams.php.members;
-    };
-
-    mongodb = buildPecl {
-      pname = "mongodb";
-      version = "1.6.1";
-
-      sha256 = "1j1w4n33347j9kwvxwsrix3gvjbiqcn1s5v59pp64s536cci8q0m";
-
-      nativeBuildInputs = [ pkgs.pkgconfig ];
-      buildInputs = with pkgs; [
-        cyrus_sasl
-        icu64
-        openssl
-        snappy
-        zlib
-        pcre'
-      ] ++ lib.optional (pkgs.stdenv.isDarwin) pkgs.darwin.apple_sdk.frameworks.Security;
-
-      meta.maintainers = lib.teams.php.members;
-    };
-
-    oci8 = buildPecl {
-      version = "2.2.0";
-      pname = "oci8";
-
-      sha256 = "0jhivxj1nkkza4h23z33y7xhffii60d7dr51h1czjk10qywl7pyd";
-      buildInputs = [ pkgs.oracle-instantclient ];
-      configureFlags = [ "--with-oci8=shared,instantclient,${pkgs.oracle-instantclient.lib}/lib" ];
-
-      postPatch = ''
-        sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
-      '';
-
-      meta.maintainers = lib.teams.php.members;
-    };
-
-    pcov = buildPecl {
-      version = "1.0.6";
-      pname = "pcov";
-
-      sha256 = "1psfwscrc025z8mziq69pcx60k4fbkqa5g2ia8lplb94mmarj0v1";
-
-      buildInputs = [ pcre' ];
-
-      meta.maintainers = lib.teams.php.members;
-    };
+    pcov = callPackage ../development/php-packages/pcov { };
 
     pcs = buildPecl {
       version = "1.3.3";
@@ -330,7 +96,7 @@ in
       internalDeps = [ php.extensions.tokenizer ];
 
       meta.maintainers = lib.teams.php.members;
-      meta.broken = isPhp73; # Runtime failure on 7.3, build error on 7.4
+      meta.broken = lib.versionAtLeast php.version "7.3"; # Runtime failure on 7.3, build error on 7.4
     };
 
     pdo_oci = buildPecl rec {
@@ -351,147 +117,21 @@ in
       meta.maintainers = lib.teams.php.members;
     };
 
-    pdo_sqlsrv = buildPecl {
-      version = "5.8.1";
-      pname = "pdo_sqlsrv";
+    pdo_sqlsrv = callPackage ../development/php-packages/pdo_sqlsrv { };
 
-      sha256 = "06ba4x34fgs092qq9w62y2afsm1nyasqiprirk4951ax9v5vcir0";
+    php_excel = callPackage ../development/php-packages/php_excel { };
 
-      internalDeps = [ php.extensions.pdo ];
+    pinba = callPackage ../development/php-packages/pinba { };
 
-      buildInputs = [ pkgs.unixODBC ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
+    protobuf = callPackage ../development/php-packages/protobuf { };
 
-      meta.maintainers = lib.teams.php.members;
-    };
+    pthreads = callPackage ../development/php-packages/pthreads { };
 
-    php_excel = buildPecl rec {
-      version = "1.0.2";
-      pname = "php_excel";
-      phpVersion = "php7";
+    rdkafka = callPackage ../development/php-packages/rdkafka { };
 
-      buildInputs = [ pkgs.libxl ];
+    redis = callPackage ../development/php-packages/redis { };
 
-      src = pkgs.fetchurl {
-        url = "https://github.com/iliaal/php_excel/releases/download/Excel-1.0.2-PHP7/excel-${version}-${phpVersion}.tgz";
-        sha256 = "0dpvih9gpiyh1ml22zi7hi6kslkilzby00z1p8x248idylldzs2n";
-      };
-
-      configureFlags = [ "--with-excel" "--with-libxl-incdir=${pkgs.libxl}/include_c" "--with-libxl-libdir=${pkgs.libxl}/lib" ];
-
-      meta.maintainers = lib.teams.php.members;
-    };
-
-    pinba = let
-      version = if isPhp73 then "1.1.2-dev" else "1.1.1";
-      src = pkgs.fetchFromGitHub ({
-        owner = "tony2001";
-        repo = "pinba_extension";
-      } // (if (isPhp73) then {
-        rev = "edbc313f1b4fb8407bf7d5acf63fbb0359c7fb2e";
-        sha256 = "02sljqm6griw8ccqavl23f7w1hp2zflcv24lpf00k6pyrn9cwx80";
-      } else {
-        rev = "RELEASE_1_1_1";
-        sha256 = "1kdp7vav0y315695vhm3xifgsh6h6y6pny70xw3iai461n58khj5";
-      }));
-    in buildPecl {
-      pname = "pinba";
-      inherit version src;
-
-      meta = with pkgs.lib; {
-        description = "PHP extension for Pinba";
-        longDescription = ''
-          Pinba is a MySQL storage engine that acts as a realtime monitoring and
-          statistics server for PHP using MySQL as a read-only interface.
-        '';
-        homepage = "http://pinba.org/";
-        maintainers = teams.php.members;
-      };
-    };
-
-    protobuf = buildPecl {
-      version = "3.11.2";
-      pname = "protobuf";
-
-      sha256 = "0bhdykdyk58ywqj940zb7jyvrlgdr6hdb4s8kn79fz3p0i79l9hz";
-
-      buildInputs = with pkgs; [ pcre' ];
-
-      meta = with pkgs.lib; {
-        description = ''
-          Google's language-neutral, platform-neutral, extensible mechanism for serializing structured data.
-        '';
-        license = licenses.bsd3;
-        homepage = "https://developers.google.com/protocol-buffers/";
-        maintainers = teams.php.members;
-      };
-    };
-
-    pthreads = let
-      version = "3.2.0";
-      src = pkgs.fetchFromGitHub ({
-        owner = "krakjoe";
-        repo = "pthreads";
-      } // (if (isPhp73) then {
-        rev = "4d1c2483ceb459ea4284db4eb06646d5715e7154";
-        sha256 = "07kdxypy0bgggrfav2h1ccbv67lllbvpa3s3zsaqci0gq4fyi830";
-      } else {
-        rev = "v3.2.0";
-        sha256 = "17hypm75d4w7lvz96jb7s0s87018yzmmap0l125d5fd7abnhzfvv";
-      }));
-    in buildPecl {
-      pname = "pthreads";
-      inherit version src;
-
-      buildInputs = [ pcre'.dev ];
-
-      meta.broken = isPhp74;
-    };
-
-    rdkafka = buildPecl {
-      version = "4.0.3";
-      pname = "rdkafka";
-
-      sha256 = "1g00p911raxcc7n2w9pzadxaggw5c564md6hjvqfs9ip550y5x16";
-
-      buildInputs = with pkgs; [ rdkafka pcre' ];
-
-      postPhpize = ''
-        substituteInPlace configure \
-          --replace 'SEARCH_PATH="/usr/local /usr"' 'SEARCH_PATH=${pkgs.rdkafka}'
-      '';
-
-      meta = {
-        description = "Kafka client based on librdkafka";
-        homepage = "https://github.com/arnaud-lb/php-rdkafka";
-        maintainers = lib.teams.php.members;
-      };
-    };
-
-    redis = buildPecl {
-      version = "5.1.1";
-      pname = "redis";
-
-      sha256 = "1041zv91fkda73w4c3pj6zdvwjgb3q7mxg6mwnq9gisl80mrs732";
-
-      internalDeps = with php.extensions; [
-        json
-        session
-      ] ++ lib.optionals (lib.versionOlder php.version "7.4") [
-        hash ];
-
-      meta.maintainers = lib.teams.php.members;
-    };
-
-    sqlsrv = buildPecl {
-      version = "5.8.1";
-      pname = "sqlsrv";
-
-      sha256 = "0c9a6ghch2537vi0274vx0mn6nb1xg2qv7nprnf3xdfqi5ww1i9r";
-
-      buildInputs = [ pkgs.unixODBC ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
-
-      meta.maintainers = lib.teams.php.members;
-    };
+    sqlsrv = callPackage ../development/php-packages/sqlsrv { };
 
     v8 = buildPecl {
       version = "0.2.2";
@@ -519,34 +159,9 @@ in
       meta.broken = true;
     };
 
-    xdebug = buildPecl {
-      version = "2.8.1";
-      pname = "xdebug";
+    xdebug = callPackage ../development/php-packages/xdebug { };
 
-      sha256 = "080mwr7m72rf0jsig5074dgq2n86hhs7rdbfg6yvnm959sby72w3";
-
-      doCheck = true;
-      checkTarget = "test";
-
-      zendExtension = true;
-
-      meta.maintainers = lib.teams.php.members;
-    };
-
-    yaml = buildPecl {
-      version = "2.0.4";
-      pname = "yaml";
-
-      sha256 = "1036zhc5yskdfymyk8jhwc34kvkvsn5kaf50336153v4dqwb11lp";
-
-      configureFlags = [
-        "--with-yaml=${pkgs.libyaml}"
-      ];
-
-      nativeBuildInputs = [ pkgs.pkgconfig ];
-
-      meta.maintainers = lib.teams.php.members;
-    };
+    yaml = callPackage ../development/php-packages/yaml { };
 
     zmq = buildPecl {
       version = "1.1.3";
@@ -561,7 +176,7 @@ in
       nativeBuildInputs = [ pkgs.pkgconfig ];
 
       meta.maintainers = lib.teams.php.members;
-      meta.broken = isPhp73;
+      meta.broken = lib.versionAtLeast php.version "7.3";
     };
   } // (let
     # Function to build a single php extension based on the php version.

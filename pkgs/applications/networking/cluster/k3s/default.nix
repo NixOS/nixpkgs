@@ -150,7 +150,7 @@ let
     '';
 
     meta = {
-      description = "The various binaries that get packaged into the final k3s binary.";
+      description = "The various binaries that get packaged into the final k3s binary";
       license = licenses.asl20;
       homepage = "https://k3s.io";
       maintainers = [ maintainers.euank ];
@@ -211,7 +211,7 @@ let
     '';
 
     meta = {
-      description = "The k3s go binary which is used by the final wrapped output below.";
+      description = "The k3s go binary which is used by the final wrapped output below";
       license = licenses.asl20;
       homepage = "https://k3s.io";
       maintainers = [ maintainers.euank ];
@@ -257,7 +257,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A lightweight Kubernetes distribution.";
+    description = "A lightweight Kubernetes distribution";
     license = licenses.asl20;
     homepage = "https://k3s.io";
     maintainers = [ maintainers.euank ];

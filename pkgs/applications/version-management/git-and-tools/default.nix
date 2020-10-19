@@ -239,6 +239,8 @@ let
 
   transcrypt = callPackage ./transcrypt { };
 
+  git-vanity-hash = callPackage ./git-vanity-hash { };
+
   ydiff = pkgs.python3.pkgs.toPythonApplication pkgs.python3.pkgs.ydiff;
 
 } // lib.optionalAttrs (config.allowAliases or true) (with self; {

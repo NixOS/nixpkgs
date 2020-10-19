@@ -1,4 +1,4 @@
-From 6c12e0d2afe80563e692fc1f2f545a487c83418c Mon Sep 17 00:00:00 2001
+From 539f3af04963a6826d2b2d0ba2095af99a7a6294 Mon Sep 17 00:00:00 2001
 From: Gabriel Ebner <gebner@gebner.org>
 Date: Sun, 6 Dec 2015 14:26:36 +0100
 Subject: [PATCH 07/18] hostnamed, localed, timedated: disable methods that
@@ -104,5 +104,5 @@ index c467b85477..3e78b2f575 100644
          if (r < 0)
                  return r;
 -- 
-2.27.0
+2.28.0
 
