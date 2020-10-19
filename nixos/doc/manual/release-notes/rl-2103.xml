@@ -93,6 +93,12 @@
       <literal>kicad/default.nix</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The socket for the <literal>pdns-recursor</literal> module was moved from <literal>/var/lib/pdns-recursor</literal>
+      to <literal>/run/pdns-recursor</literal> to match upstream.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
