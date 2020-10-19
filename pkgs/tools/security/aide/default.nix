@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
     ];
 
   meta = with stdenv.lib; {
-    homepage = "http://aide.sourceforge.net/";
+    homepage = "https://aide.github.io/";
     description = "A file and directory integrity checker";
-    license = licenses.free;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.tstrobel ];
     platforms = platforms.linux;
   };
