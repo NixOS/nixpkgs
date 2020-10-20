@@ -4760,6 +4760,8 @@ in {
 
   pyaes = callPackage ../development/python-modules/pyaes { };
 
+  pyaftership = callPackage ../development/python-modules/pyaftership { };
+
   pyairvisual = callPackage ../development/python-modules/pyairvisual { };
 
   pyalgotrade = callPackage ../development/python-modules/pyalgotrade { };

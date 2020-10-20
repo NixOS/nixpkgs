@@ -3,9 +3,8 @@
 fixupOutputHooks+=(_validatePkgConfig)
 
 _validatePkgConfig() {
+    local bail=0
     for pc in $(find "$prefix" -name '*.pc'); do
-        local bail=0
-
         # Do not fail immediately. It's nice to see all errors when
         # there are multiple pkgconfig files.
         if ! pkg-config --validate "$pc"; then

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-reproducible"
-    "--with-systemd"
+    "--enable-systemd"
   ];
 
   enableParallelBuilding = true;

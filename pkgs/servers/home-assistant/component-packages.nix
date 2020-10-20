@@ -11,7 +11,7 @@
     "actiontec" = ps: with ps; [ ];
     "adguard" = ps: with ps; [ adguardhome ];
     "ads" = ps: with ps; [ pyads ];
-    "aftership" = ps: with ps; [ ]; # missing inputs: pyaftership
+    "aftership" = ps: with ps; [ pyaftership ];
     "agent_dvr" = ps: with ps; [ ]; # missing inputs: agent-py
     "air_quality" = ps: with ps; [ ];
     "airly" = ps: with ps; [ ]; # missing inputs: airly

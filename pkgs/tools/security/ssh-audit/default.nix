@@ -2,19 +2,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ssh-audit";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "jtesta";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1z1h9nsgfaxdnkr9dvc0yzc23b3wz436rg2fycg2glwjhhal8az7";
+    sha256 = "1k5nv2cdnzd3j2p729vjw6ya0gwwkxhqijs2b7p68wvp0n3y3m77";
   };
 
   postPatch = ''
-    cp ./README.md pypi/sshaudit/
-    cp ./ssh-audit.py pypi/sshaudit/sshaudit.py
-    mv pypi/* .
+    cp ./README.md packages/sshaudit/
+    cp ./ssh-audit.py packages/sshaudit/sshaudit.py
+    mv packages/* .
     ls -lah
   '';
 
@@ -39,6 +39,6 @@ python3Packages.buildPythonApplication rec {
     description = "Tool for ssh server auditing";
     homepage = "https://github.com/jtesta/ssh-audit";
     license = licenses.mit;
-    maintainers = with maintainers; [ tv ];
+    maintainers = with maintainers; [ tv SuperSandro2000 ];
   };
 }

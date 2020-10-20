@@ -520,6 +520,12 @@
     githubId = 293191;
     name = "Andres Loeh";
   };
+  andresilva = {
+    email = "andre.beat@gmail.com";
+    github = "andresilva";
+    githubId = 123550;
+    name = "André Silva";
+  };
   andrestylianos = {
     email = "andre.stylianos@gmail.com";
     github = "andrestylianos";

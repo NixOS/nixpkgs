@@ -1999,6 +1999,8 @@ in
 
   futhark = haskell.lib.justStaticExecutables haskellPackages.futhark;
 
+  inherit (nodePackages) fx;
+
   tllist = callPackage ../development/libraries/tllist { };
 
   fcft = callPackage ../development/libraries/fcft { };
@@ -2365,6 +2367,8 @@ in
   pueue = callPackage ../applications/misc/pueue { };
 
   pixiecore = callPackage ../tools/networking/pixiecore {};
+
+  waitron = callPackage ../tools/networking/waitron {};
 
   pyCA = python3Packages.callPackage ../applications/video/pyca {};
 
@@ -7369,7 +7373,7 @@ in
       inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa;
       tex = texlive.combined.scheme-small;
       extraFonts = true;
-    } else callPackage ../applications/editors/texmacs {
+    } else libsForQt5.callPackage ../applications/editors/texmacs {
       tex = texlive.combined.scheme-small;
       extraFonts = true;
     };
@@ -10015,7 +10019,7 @@ in
   inherit (beam.interpreters)
     erlang erlangR23 erlangR22 erlangR21 erlangR20 erlangR19 erlangR18
     erlang_odbc erlang_javac erlang_odbc_javac erlang_nox erlang_basho_R16B02
-    elixir elixir_1_10 elixir_1_9 elixir_1_8 elixir_1_7;
+    elixir elixir_1_11 elixir_1_10 elixir_1_9 elixir_1_8 elixir_1_7;
 
   inherit (beam.packages.erlang)
     rebar rebar3
@@ -10254,7 +10258,7 @@ in
     pkgs = pkgs.extend (final: _: {
     });
   };
-  inherit (pythonInterpreters) python27 python36 python37 python38 python39 python3Minimal pypy27 pypy36;
+  inherit (pythonInterpreters) python27 python36 python37 python38 python39 python310 python3Minimal pypy27 pypy36;
 
   # Python package sets.
   python27Packages = lib.hiPrioSet (recurseIntoAttrs python27.pkgs);
@@ -10262,6 +10266,7 @@ in
   python37Packages = recurseIntoAttrs python37.pkgs;
   python38Packages = recurseIntoAttrs python38.pkgs;
   python39Packages = python39.pkgs;
+  python310Packages = python310.pkgs;
   pypyPackages = pypy.pkgs;
   pypy2Packages = pypy2.pkgs;
   pypy27Packages = pypy27.pkgs;
@@ -12043,7 +12048,9 @@ in
   boost170 = callPackage ../development/libraries/boost/1.70.nix { };
   boost171 = callPackage ../development/libraries/boost/1.71.nix { };
   boost172 = callPackage ../development/libraries/boost/1.72.nix { };
-  boost17x = boost172;
+  boost173 = callPackage ../development/libraries/boost/1.73.nix { };
+  boost174 = callPackage ../development/libraries/boost/1.74.nix { };
+  boost17x = boost174;
   boost = boost16x;
 
   boost_process = callPackage ../development/libraries/boost-process { };
@@ -16637,6 +16644,8 @@ in
 
   minio = callPackage ../servers/minio { };
 
+  mkchromecast = libsForQt5.callPackage ../applications/networking/mkchromecast { };
+
   # Backwards compatibility.
   mod_dnssd = pkgs.apacheHttpdPackages.mod_dnssd;
   mod_fastcgi = pkgs.apacheHttpdPackages.mod_fastcgi;
@@ -17247,7 +17256,8 @@ in
 
   inherit (callPackages ../servers/unifi { })
     unifiLTS
-    unifiStable;
+    unifiStable
+    unifiBeta;
   unifi = unifiStable;
 
   urserver = callPackage ../servers/urserver { };
@@ -18520,6 +18530,8 @@ in
 
   raspberrypifw = callPackage ../os-specific/linux/firmware/raspberrypi {};
   raspberrypiWirelessFirmware = callPackage ../os-specific/linux/firmware/raspberrypi-wireless { };
+
+  raspberrypi-eeprom = callPackage ../os-specific/linux/raspberrypi-eeprom {};
 
   raspberrypi-tools = callPackage ../os-specific/linux/firmware/raspberrypi/tools.nix {};
 
@@ -20521,6 +20533,8 @@ in
   keepassx2 = callPackage ../applications/misc/keepassx/2.0.nix { };
   keepassxc = libsForQt5.callPackage ../applications/misc/keepassx/community.nix { };
 
+  keeweb = callPackage ../applications/misc/keeweb { };
+
   inherit (gnome3) evince;
   evolution-data-server = gnome3.evolution-data-server;
   evolution-ews = callPackage ../applications/networking/mailreaders/evolution/evolution-ews { };
@@ -20957,6 +20971,11 @@ in
   gnucash = callPackage ../applications/office/gnucash { };
 
   goffice = callPackage ../development/libraries/goffice { };
+
+  hydrus = python3Packages.callPackage ../applications/graphics/hydrus {
+    inherit miniupnpc_2 swftools;
+    inherit (qt5) wrapQtAppsHook;
+  };
 
   jetbrains = (recurseIntoAttrs (callPackages ../applications/editors/jetbrains {
     jdk = jetbrains.jdk;
