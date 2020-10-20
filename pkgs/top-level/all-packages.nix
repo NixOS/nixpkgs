@@ -20753,6 +20753,12 @@ in
     ubootWandboard
     ;
 
+  # Hardkernel Odroid devices firmware:
+  inherit (callPackage ../misc/uboot/hardkernel-firmware.nix {})
+    firmwareOdroidC2
+    firmwareOdroidC4
+  ;
+
   # Upstream Barebox:
   inherit (callPackage ../misc/barebox {})
     buildBarebox
