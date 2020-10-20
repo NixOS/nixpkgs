@@ -65,7 +65,7 @@ let
       lessThan listToAttrs pathExists readFile replaceStrings seq
       stringLength sub substring tail;
     inherit (self.trivial) id const pipe concat or and bitAnd bitOr bitXor
-      bitNot boolToString mergeAttrs flip mapNullable inNixShell min max
+      bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
       importJSON importTOML warn info showWarnings nixpkgsVersion version mod compare
       splitByAndCompare functionArgs setFunctionArgs isFunction toHexString toBaseDigits;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
