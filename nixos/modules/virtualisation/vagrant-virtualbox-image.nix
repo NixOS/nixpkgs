@@ -8,8 +8,13 @@
     ./virtualbox-image.nix
   ];
 
-  virtualbox.vmHasAudio = false;
-  virtualbox.vmHasUSB = false;
+  virtualbox.params = {
+    audio = "none";
+    audioin = "off";
+    audioout = "off";
+    usb = "off";
+    usbehci = "off";
+  };
   sound.enable = false;
   documentation.man.enable = false;
   documentation.nixos.enable = false;
@@ -41,6 +46,7 @@
       # 4. move the ovf to the fixed location
       mv *.ovf box.ovf
 
+      # 5. generate OVF manifest file
       rm *.mf
       touch box.mf
       for fname in *; do
@@ -48,7 +54,7 @@
         echo "SHA256($fname)= $checksum" >> box.mf
       done
 
-      # 5. compress everything back together
+      # 6. compress everything back together
       tar --owner=0 --group=0 --sort=name --numeric-owner -czf $out .
     '';
 }
