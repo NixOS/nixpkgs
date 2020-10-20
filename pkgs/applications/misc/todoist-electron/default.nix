@@ -13,7 +13,9 @@ stdenv.mkDerivation rec {
 
   desktopItem = makeDesktopItem {
     name = "Todoist";
-    exec = "todoist";
+    exec = "todoist %U";
+    icon = "todoist";
+    comment = "Todoist for Linux";
     desktopName = "Todoist";
     categories = "Utility";
   };
@@ -35,6 +37,7 @@ stdenv.mkDerivation rec {
   in ''
     mkdir -p "$out/bin"
     mv opt "$out/"
+    mv usr/share "$out/share"
 
     # Patch binary
     patchelf \
@@ -48,7 +51,8 @@ stdenv.mkDerivation rec {
 
     # Desktop item
     mkdir -p "$out/share"
-    ln -s "${desktopItem}/share/applications" "$out/share/applications"
+    rm -r "$out/share/applications"
+    cp -r "${desktopItem}/share/applications" "$out/share/applications"
   '';
 
   meta = with lib; {
