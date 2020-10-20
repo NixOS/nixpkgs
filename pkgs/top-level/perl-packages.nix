@@ -8288,10 +8288,10 @@ let
 
   Future = buildPerlModule {
     pname = "Future";
-    version = "0.45";
+    version = "0.46";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-0.45.tar.gz";
-      sha256 = "1h5609wd1m774h8brgm5vinz6pfmdszp2ms6ybxlyhs0p5msp36f";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-0.46.tar.gz";
+      sha256 = "0zx4cabzz5zyzvyvc7mvl0cc7zkslp0jnxsv41yii76dal8blcbq";
     };
     buildInputs = [ TestFatal TestIdentity TestRefcount ];
     meta = {
@@ -10984,6 +10984,7 @@ let
     meta = {
       description = "Perl extension to detect on which Linux distribution we are running";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -11000,6 +11001,7 @@ let
     meta = {
       description = "Linux specific special filehandles";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -11011,6 +11013,12 @@ let
       sha256 = "0crlxmaa4lsgdjm5p9ib8rdxiy70qj1s68za3q3v57v8ll6s4hfx";
     };
     propagatedBuildInputs = [ commonsense ];
+
+    meta = {
+      description = "Scalable directory/file change notification for Perl on Linux";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      platforms = stdenv.lib.platforms.linux;
+    };
   };
 
   ListAllUtils = buildPerlPackage {

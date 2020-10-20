@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname   = "yosys";
-  version = "2020.08.22";
+  version = "2020.10.20";
 
   src = fetchFromGitHub {
     owner  = "YosysHQ";
     repo   = "yosys";
-    rev    = "12132b6850747aec99715fdfa3184fe3ebefa015";
-    sha256 = "1v6x1y2f3r8vi7pnkgx374rrv02xgmg9yg23f61n7d1v2rd6y5cc";
+    rev    = "06347b119b08257eff37cdd10ed802e794c1a3cf";
+    sha256 = "07058r8095192gwkiy2yyvj9vxv09fcw9bqi2b39wn85lh5kx2k2";
   };
 
   enableParallelBuilding = true;

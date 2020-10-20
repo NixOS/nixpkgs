@@ -18,12 +18,11 @@
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "v0.7.4";
-
+  version = "0.7.4";
   src = fetchFromGitHub {
     owner = "postlund";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     sha256 = "17gsamn4aibsx4w50r9dwr5kr9anc7dd0f0dvmdl717rkgh13zyi";
   };
 
@@ -37,7 +36,6 @@ buildPythonPackage rec {
     cryptography
     netifaces
     zeroconf
-    pytestCheckHook
   ];
 
   checkInputs = [
@@ -45,6 +43,7 @@ buildPythonPackage rec {
     pytest
     pytest-aiohttp
     pytest-asyncio
+    pytestCheckHook
   ];
 
   meta = with stdenv.lib; {

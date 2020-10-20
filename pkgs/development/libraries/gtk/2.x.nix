@@ -12,11 +12,18 @@ assert cupsSupport -> cups != null;
 
 with stdenv.lib;
 
+let
+  pname = "gtk+";
+  version = "2.24.32"; # remove passthru on next update
+in
 stdenv.mkDerivation rec {
-  name = "gtk+-2.24.32";
+  name = "${pname}-${version}";
+
+  # passthru to prevent rebuild but allow pname and version
+  passthru = { inherit pname version; };
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk+/2.24/${name}.tar.xz";
+    url = "mirror://gnome/sources/gtk+/2.24/${pname}-${version}.tar.xz";
     sha256 = "b6c8a93ddda5eabe3bfee1eb39636c9a03d2a56c7b62828b359bf197943c582e";
   };
 

@@ -77,6 +77,7 @@
 , {"fast-cli": "1.x"}
 , "fkill-cli"
 , "forever"
+, "fx"
 , "get-graphql-schema"
 , "git-run"
 , "git-ssb"
@@ -160,6 +161,7 @@
 , "pyright"
 , "react-native-cli"
 , "react-tools"
+, "readability-cli"
 , "redoc-cli"
 , "reveal.js"
 , "rollup"

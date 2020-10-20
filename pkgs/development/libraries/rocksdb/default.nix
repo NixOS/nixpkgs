@@ -9,6 +9,7 @@
 , zlib
 , zstd
 , enableLite ? false
+, enableShared ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
         "-DFORCE_SSE42=1")
     (stdenv.lib.optional enableLite "-DROCKSDB_LITE=1")
     "-DFAIL_ON_WARNINGS=${if stdenv.hostPlatform.isMinGW then "NO" else "YES"}"
-  ];
+  ] ++ stdenv.lib.optional (!enableShared) "-DROCKSDB_BUILD_SHARED=0";
 
   # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
   hardeningDisable = stdenv.lib.optional stdenv.hostPlatform.isWindows "format";

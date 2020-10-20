@@ -1,5 +1,6 @@
 { stdenv, symlinkJoin, lib, makeWrapper
 , vimUtils
+, writeText
 , bundlerEnv, ruby
 , nodejs
 , nodePackages
@@ -110,9 +111,9 @@ let
     # https://github.com/neovim/neovim/issues/9413
     ++ lib.optionals (configure != {}) [
       "--set" "NVIM_SYSTEM_RPLUGIN_MANIFEST" "${placeholder "out"}/rplugin.vim"
-      "--add-flags" "-u ${vimUtils.vimrcFile configure}"
-    ]
-  ;
+      "--add-flags" "-u ${configFile}"
+    ];
+   configFile = writeText "init.vim" "${vimUtils.vimrcContent configure}";
   in
   symlinkJoin {
       name = "neovim-${stdenv.lib.getVersion neovim}";
@@ -181,7 +182,7 @@ let
     preferLocalBuild = true;
 
     buildInputs = [makeWrapper];
-    passthru = { unwrapped = neovim; };
+    passthru = { unwrapped = neovim; inherit configFile; };
 
     meta = neovim.meta // {
       # To prevent builds on hydra

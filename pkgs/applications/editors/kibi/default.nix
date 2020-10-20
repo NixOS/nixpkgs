@@ -5,15 +5,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kibi";
-  version = "0.2.0";
+  version = "0.2.1";
 
-  cargoSha256 = "0zyqzb3k4ak7h58zjbg9b32hz1vgbbn9i9l85j4vd4aw8mhsz0n9";
+  cargoSha256 = "1cbiidq0w5f9ynb09b6828p7p7y5xhpgz47n2jsl8mp96ydhy5lv";
 
   src = fetchFromGitHub {
     owner = "ilai-deutel";
     repo = "kibi";
     rev = "v${version}";
-    sha256 = "1cqnzw6gpsmrqcz82zn1x5i6najcr3i7shj0wnqzpwppff9a6yac";
+    sha256 = "1x5bvvq33380k2qhs1bwz3f9zl5q1sl7iic47pxfkzv24bpjnypb";
   };
 
   meta = with stdenv.lib; {
