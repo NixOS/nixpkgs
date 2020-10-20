@@ -26778,9 +26778,7 @@ in
 
   netlogo = callPackage ../applications/science/misc/netlogo { };
 
-  nextinspace = python3Packages.callPackage ../applications/science/misc/nextinspace {
-    pythonPackages = python3Packages;
-  };
+  nextinspace = python3Packages.callPackage ../applications/science/misc/nextinspace { };
 
   ns-3 = callPackage ../development/libraries/science/networking/ns-3 { python = python3; };
 

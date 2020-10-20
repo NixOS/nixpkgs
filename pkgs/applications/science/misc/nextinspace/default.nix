@@ -1,6 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi, pythonPackages }:
+{ lib, fetchPypi, python3Packages }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonPackage rec {
   pname = "nextinspace";
   version = "1.0.2";
 
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0wrvdwpxwf9aq4mq377mmdlhbgy2ngzf58frp71jdbsipkhb2kcf";
   };
 
-  pythonPath = with pythonPackages; [
+  pythonPath = with python3Packages; [
     requests
     tzlocal
     colorama
