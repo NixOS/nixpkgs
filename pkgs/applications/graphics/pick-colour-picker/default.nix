@@ -11,8 +11,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pick-colour-picker";
-  version = "unstable-2019-10-11"; # "1.5.0-3ec940"
+  pname = "pick-colour-picker-unstable";
+  version = "2019-10-11"; # "1.5.0-3ec940"
 
   src = fetchFromGitHub {
     owner = "stuartlangridge";

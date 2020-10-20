@@ -1,9 +1,9 @@
 { stdenv, fetchgit, libvirt, autoconf, ocaml, findlib }:
 
 stdenv.mkDerivation rec {
-  pname = "ocaml-libvirt";
+  pname = "ocaml-libvirt-unstable";
   rev = "bab7f84ade84ceaddb08b6948792d49b3d04b897";
-  version = "0.6.1.4.2017-11-08-unstable"; # libguestfs-1.34+ needs ocaml-libvirt newer than the latest release 0.6.1.4
+  version = "0.6.1.4.2017-11-08"; # libguestfs-1.34+ needs ocaml-libvirt newer than the latest release 0.6.1.4
 
   src = fetchgit {
     url = "git://git.annexia.org/git/ocaml-libvirt.git";

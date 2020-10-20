@@ -1,7 +1,8 @@
 { callPackage, fetchFromGitHub, gambit-unstable, gambit-support }:
 
 callPackage ./build.nix rec {
-  version = "unstable-2020-08-02";
+  pname = "gerbil-unstable";
+  version = "2020-08-02";
   git-version = "0.16-120-g3f248e13";
   src = fetchFromGitHub {
     owner = "vyzo";

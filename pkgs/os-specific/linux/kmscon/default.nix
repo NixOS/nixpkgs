@@ -14,8 +14,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "kmscon";
-  version = "unstable-2018-09-07";
+  pname = "kmscon-unstable";
+  version = "2018-09-07";
 
   src = fetchFromGitHub {
     owner = "Aetf";

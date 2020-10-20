@@ -1,8 +1,8 @@
 { stdenv, substituteAll, fetchpatch, fetchFromGitHub, glib, glib-networking, libgtop, gnome3 }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-shell-system-monitor";
-  version = "2020-04-27-unstable";
+  pname = "gnome-shell-system-monitor-unstable";
+  version = "2020-04-27";
 
   src = fetchFromGitHub {
     owner = "paradoxxxzero";

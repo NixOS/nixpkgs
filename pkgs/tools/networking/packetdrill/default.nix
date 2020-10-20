@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, bison, flex, cmake, libpcap }:
 stdenv.mkDerivation rec {
-  pname = "packetdrill";
-  version = "unstable-2020-08-22";
+  pname = "packetdrill-unstable";
+  version = "2020-08-22";
 
   src = fetchFromGitHub {
     owner = "google";

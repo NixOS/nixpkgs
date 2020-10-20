@@ -9,16 +9,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "msopenh264";
+  pname = "msopenh264-unstable";
   # Using master branch for linphone-desktop caused a chain reaction that many
   # of its dependencies needed to use master branch too.
-  version = "unstable-2020-03-03";
+  version = "2020-03-03";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
-    repo = pname;
+    repo = "msopenh264";
     rev = "2c3abf52824ad23a4caae7565ef158ef91767704";
     sha256 = "140hs5lzpshzswvl39klcypankq3v2qck41696j22my7s4wsa0hr";
   };

@@ -5,12 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pyelftools";
-  version = "unstable-2020-09-23";
+  pname = "pyelftools-unstable";
+  version = "2020-09-23";
 
   src = fetchFromGitHub {
     owner = "eliben";
-    repo = pname;
+    repo = "pyelftools";
     rev = "ab84e68837113b2d700ad379d94c1dd4a73125ea";
     sha256 = "sha256-O7l1kj0k8bOSOtZJVzS674oVnM+X3oP00Ybs0qjb64Q=";
   };

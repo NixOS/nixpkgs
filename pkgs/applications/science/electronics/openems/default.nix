@@ -24,8 +24,8 @@ assert withMPI -> openmpi != null;
 assert withHyp2mat -> hyp2mat != null;
 
 stdenv.mkDerivation {
-  pname = "openems";
-  version = "unstable-2020-02-15";
+  pname = "openems-unstable";
+  version = "2020-02-15";
 
   src = fetchFromGitHub {
     owner = "thliebig";

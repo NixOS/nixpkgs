@@ -15,8 +15,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "nmigen";
-  version = "unstable-2020-04-02";
+  pname = "nmigen-unstable";
+  version = "2020-04-02";
   # python setup.py --version
   realVersion = "0.2.dev49+g${lib.substring 0 7 src.rev}";
   disabled = pythonOlder "3.6";

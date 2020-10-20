@@ -2,8 +2,8 @@
 , result, alcotest, cohttp-lwt-unix, odoc, curl }:
 
 buildDunePackage rec {
-  pname = "curly";
-  version = "unstable-2019-11-14";
+  pname = "curly-unstable";
+  version = "2019-11-14";
 
   minimumOCamlVersion = "4.02";
 
@@ -11,7 +11,7 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner  = "rgrinberg";
-    repo   = pname;
+    repo   = "curly";
     rev    = "33a538c89ef8279d4591454a7f699a4183dde5d0";
     sha256 = "10pxbvf5xrsajaxrccxh2lqhgp3yaf61z9w03rvb2mq44nc2dggz";
   };

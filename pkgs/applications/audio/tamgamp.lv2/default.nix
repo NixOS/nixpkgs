@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, pkg-config, lv2, zita-resampler }:
 
 stdenv.mkDerivation rec {
-  pname = "tamgamp.lv2";
-  version = "unstable-2020-06-14";
+  pname = "tamgamp.lv2-unstable";
+  version = "2020-06-14";
 
   src = fetchFromGitHub {
     owner = "sadko4u";
-    repo = pname;
+    repo = "tamgamp.lv2";
     rev = "426da74142fcb6b7687a35b2b1dda3392e171b92";
     sha256 = "0dqsnim7v79rx13bkkh143gqz0xg26cpf6ya3mrwwprpf5hns2bp";
   };

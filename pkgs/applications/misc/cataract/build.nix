@@ -6,13 +6,14 @@
 , libxml2
 , exiv2
 , imagemagick
+, pname
 , version
 , sha256
 , rev }:
 
 stdenv.mkDerivation {
+  inherit pname;
   inherit version;
-  pname = "cataract";
 
   src = fetchgit {
     url = "git://git.bzatek.net/cataract";

@@ -8,12 +8,12 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "crowbar";
-  version = "unstable-2020-04-23";
+  pname = "crowbar-unstable";
+  version = "2020-04-23";
 
   src = fetchFromGitHub {
     owner = "galkan";
-    repo = pname;
+    repo = "crowbar";
     rev = "500d633ff5ddfcbc70eb6d0b4d2181e5b8d3c535";
     sha256 = "05m9vywr9976pc7il0ak8nl26mklzxlcqx0p8rlfyx1q766myqzf";
   };

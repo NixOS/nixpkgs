@@ -13,7 +13,8 @@ let param =
     version = "5.0+4.03.0";
     sha256 = "061v1fl5z7z3ywi4ppryrlcywnvnqbsw83ppq72qmkc7ma4603jg"; };
   "4.04" = {
-    version = "unstable-20161114";
+    pname = "ppx_tools-unstable";
+    version = "2016-11-14";
     rev = "49c08e2e4ea8fef88692cd1dcc1b38a9133f17ac";
     sha256 = "0ywzfkf5brj33nwh49k9if8x8v433ral25f3nbklfc9vqr06zrfl"; };
   "4.05" = {
@@ -38,7 +39,7 @@ let src = fetchFromGitHub {
       rev = param.rev or param.version;
       inherit (param) sha256;
     };
-    pname = "ppx_tools";
+    pname = param.pname or "ppx_tools";
     meta = with stdenv.lib; {
       description = "Tools for authors of ppx rewriters";
       homepage = "https://www.lexifi.com/ppx_tools";

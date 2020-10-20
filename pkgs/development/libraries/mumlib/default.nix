@@ -1,8 +1,8 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkgconfig
 , boost, openssl, log4cpp, libopus, protobuf }:
 with lib; stdenv.mkDerivation {
-  pname = "mumlib";
-  version = "unstable-2018-12-12";
+  pname = "mumlib-unstable";
+  version = "2018-12-12";
 
   src = fetchFromGitHub {
     owner = "slomkowski";

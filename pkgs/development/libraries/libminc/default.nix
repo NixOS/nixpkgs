@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, zlib, netcdf, nifticlib, hdf5 }:
 
 stdenv.mkDerivation rec {
-  pname   = "libminc";
-  version = "unstable-2020-07-17";
+  pname   = "libminc-unstable";
+  version = "2020-07-17";
 
   owner = "BIC-MNI";
 
   src = fetchFromGitHub {
     inherit owner;
-    repo   = pname;
+    repo   = "libminc";
     rev    = "ffb5fb234a852ea7e8da8bb2b3b49f67acbe56ca";
     sha256 = "0yr4ksghpvxh9zg0a4p7hvln3qirsi08plvjp5kxx2qiyj96zsdm";
   };

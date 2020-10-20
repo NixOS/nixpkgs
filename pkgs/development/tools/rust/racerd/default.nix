@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, fetchpatch, rustPlatform, makeWrapper, Security }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "racerd";
-  version = "unstable-2019-09-02";
+  pname = "racerd-unstable";
+  version = "2019-09-02";
 
   src = fetchFromGitHub {
     owner = "jwilm";

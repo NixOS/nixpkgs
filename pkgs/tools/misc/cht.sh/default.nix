@@ -8,8 +8,8 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "cht.sh";
-  version = "unstable-2020-08-06";
+  pname = "cht.sh-unstable";
+  version = "2020-08-06";
 
   nativeBuildInputs = [ makeWrapper ];
 

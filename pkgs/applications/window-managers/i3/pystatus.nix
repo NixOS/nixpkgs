@@ -10,8 +10,8 @@
 python3Packages.buildPythonApplication rec {
   # i3pystatus moved to rolling release:
   # https://github.com/enkore/i3pystatus/issues/584
-  version = "unstable-2020-06-12";
-  pname = "i3pystatus";
+  pname = "i3pystatus-unstable";
+  version = "2020-06-12";
 
   src = fetchFromGitHub {
     owner = "enkore";

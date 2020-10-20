@@ -3,8 +3,8 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "git-remote-hg";
-  version = "unstable-2020-06-12";
+  pname = "git-remote-hg-unstable";
+  version = "2020-06-12";
 
   src = fetchFromGitHub {
     owner = "mnauw";

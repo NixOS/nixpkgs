@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, zlib, nettools, nixosTests }:
 
 stdenv.mkDerivation rec {
-  pname = "iodine";
-  version = "unstable-2019-09-27";
+  pname = "iodine-unstable";
+  version = "2019-09-27";
 
   src = fetchFromGitHub {
     owner = "yarrick";

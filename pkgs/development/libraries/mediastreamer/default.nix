@@ -32,16 +32,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "mediastreamer2";
+  pname = "mediastreamer2-unstable";
   # Using master branch for linphone-desktop caused a chain reaction that many
   # of its dependencies needed to use master branch too.
-  version = "unstable-2020-03-20";
+  version = "2020-03-20";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
-    repo = pname;
+    repo = "mediastreamer2";
     rev = "c5eecb72cb44376d142949051dd0cb7c982608fb";
     sha256 = "1vp260jxvjlmrmjdl4p23prg4cjln20a7z6zq8dqvfh4iq3ya033";
   };

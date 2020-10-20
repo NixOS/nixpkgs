@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "py3buddy";
-  version = "unstable-2019-09-29";
+  pname = "py3buddy-unstable";
+  version = "2019-09-29";
 
   src = fetchFromGitHub {
     owner = "armijnhemel";
-    repo = pname;
+    repo = "py3buddy";
     rev = "2b28908454645117368ca56df67548c93f4e0b03";
     sha256 = "12ar4kbplavndarkrbibxi5i607f5sfia5myscvalqy78lc33798";
   };

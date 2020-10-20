@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, cmake, expat, nifticlib, zlib }:
 
 stdenv.mkDerivation rec {
-  pname = "gifticlib";
-  version = "unstable-2020-07-07";
+  pname = "gifticlib-unstable";
+  version = "2020-07-07";
 
   src = fetchFromGitHub {
     owner = "NIFTI-Imaging";

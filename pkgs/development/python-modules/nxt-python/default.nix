@@ -9,8 +9,8 @@
 }:
 
 buildPythonPackage {
-  version = "unstable-20160819";
-  pname = "nxt-python";
+  pname = "nxt-python-unstable";
+  version = "20160819";
   disabled = isPy3k;
 
   src = fetchgit {

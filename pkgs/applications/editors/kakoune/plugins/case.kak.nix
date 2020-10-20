@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitLab }:
 
 stdenv.mkDerivation {
-  name = "case.kak";
-  version = "unstable-2020-04-06";
+  name = "case.kak-unstable";
+  version = "2020-04-06";
 
   src = fetchFromGitLab {
     owner = "FlyingWombat";

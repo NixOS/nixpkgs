@@ -2,8 +2,8 @@
 
 
 buildGoPackage {
-  pname = "yaml2json";
-  version = "unstable-2017-05-03";
+  pname = "yaml2json-unstable";
+  version = "2017-05-03";
   goPackagePath = "github.com/bronze1man/yaml2json";
 
   goDeps = ./deps.nix;

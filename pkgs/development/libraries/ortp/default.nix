@@ -5,16 +5,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "ortp";
+  pname = "ortp-unstable";
   # Using master branch for linphone-desktop caused a chain reaction that many
   # of its dependencies needed to use master branch too.
-  version = "unstable-2020-03-17";
+  version = "2020-03-17";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
-    repo = pname;
+    repo = "ortp";
     rev = "804dfc4f90d1a4301127c7af10a74fd2935dd5d8";
     sha256 = "1yr8j8am68spyy5d9vna8zcq3qn039mi16cv9jf5n4chs9rxf7xx";
   };

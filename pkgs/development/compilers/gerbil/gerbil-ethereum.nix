@@ -1,8 +1,8 @@
 { pkgs, lib, fetchFromGitHub, gerbil-unstable, gerbil-support, gambit-support }:
 
 gerbil-support.gerbilPackage {
-  pname = "gerbil-ethereum";
-  version = "unstable-2020-08-02";
+  pname = "gerbil-ethereum-unstable";
+  version = "2020-08-02";
   git-version = "0.0-15-g7cd2dd7";
   gerbil-package = "mukn/ethereum";
   gerbil = gerbil-unstable;

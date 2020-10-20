@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, autoreconfHook }:
 stdenv.mkDerivation {
-  pname = "sta";
-  version = "unstable-2016-01-25";
+  pname = "sta-unstable";
+  version = "2016-01-25";
 
   src = fetchFromGitHub {
     owner = "simonccarter";

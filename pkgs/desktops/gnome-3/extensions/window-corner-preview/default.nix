@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, gnome3 }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-shell-extension-window-corner-preview";
-  version = "unstable-2019-04-03";
+  pname = "gnome-shell-extension-window-corner-preview-unstable";
+  version = "2019-04-03";
 
   src = fetchFromGitHub {
     owner = "medenagan";

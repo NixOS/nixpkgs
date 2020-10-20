@@ -6,8 +6,8 @@ stdenv, fetchFromGitHub, pkgconfig, which, gtk2, gtk3, qt4, qt5, libXtst, lib,
 # so we do not enable these input method at this moment
 
 stdenv.mkDerivation {
-  name = "hime";
-  version = "unstable-2020-06-27";
+  name = "hime-unstable";
+  version = "2020-06-27";
 
   src = fetchFromGitHub {
     owner = "hime-ime";

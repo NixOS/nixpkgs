@@ -1,8 +1,8 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  pname = "numworks-udev-rules";
-  version = "unstable-2020-08-31";
+  pname = "numworks-udev-rules-unstable";
+  version = "2020-08-31";
 
   udevRules = ./50-numworks-calculator.rules;
   dontUnpack = true;

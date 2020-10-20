@@ -12,8 +12,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ams";
-  version = "unstable-2019-04-27";
+  name = "ams-unstable";
+  version = "2019-04-27";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/alsamodular/ams.git";

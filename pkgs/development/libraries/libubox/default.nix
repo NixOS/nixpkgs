@@ -1,8 +1,8 @@
 { stdenv, lib, fetchgit, cmake, pkgconfig, json_c }:
 
 stdenv.mkDerivation {
-  pname = "libubox";
-  version = "unstable-2020-01-20";
+  pname = "libubox-unstable";
+  version = "2020-01-20";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/libubox.git";

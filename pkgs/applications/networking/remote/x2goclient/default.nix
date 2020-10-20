@@ -2,8 +2,8 @@
 , mkDerivation, qtbase, qtsvg, qtx11extras, qttools, phonon, pkgconfig }:
 
 mkDerivation {
-  pname = "x2goclient";
-  version = "unstable-2019-07-24";
+  pname = "x2goclient-unstable";
+  version = "2019-07-24";
 
   src = fetchgit {
    url = "git://code.x2go.org/x2goclient.git";

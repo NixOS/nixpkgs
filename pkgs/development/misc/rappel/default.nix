@@ -6,8 +6,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "rappel";
-  version = "unstable-2019-09-09";
+  pname = "rappel-unstable";
+  version = "2019-09-09";
 
   src = fetchFromGitHub {
     owner = "yrp604";

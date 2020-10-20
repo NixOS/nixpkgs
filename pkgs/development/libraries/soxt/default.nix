@@ -1,8 +1,8 @@
 { fetchhg, stdenv, cmake, coin3d, motif, xlibsWrapper, libXmu, libGLU, libGL }:
 
 stdenv.mkDerivation {
-  pname = "soxt";
-  version = "unstable-2019-06-14";
+  pname = "soxt-unstable";
+  version = "2019-06-14";
 
   src = fetchhg {
     url = "https://bitbucket.org/Coin3D/soxt";

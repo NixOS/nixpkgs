@@ -6,12 +6,12 @@
 }:
 
 buildPythonApplication rec {
-  pname = "tuijam";
-  version = "unstable-2020-06-05";
+  pname = "tuijam-unstable";
+  version = "2020-06-05";
 
   src = fetchFromGitHub {
     owner = "cfangmeier";
-    repo = pname;
+    repo = "tuijam";
     rev = "7baec6f6e80ee90da0d0363b430dd7d5695ff03b";
     sha256 = "1l0s88jvj99jkxnczw5nfj78m8vihh29g815n4mg9jblad23mgx5";
   };

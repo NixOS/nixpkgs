@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, cmake, gtest, c-ares, curl, libev }:
 
 stdenv.mkDerivation rec {
-  pname = "https-dns-proxy";
+  pname = "https-dns-proxy-unstable";
   # there are no stable releases (yet?)
-  version = "unstable-20200419";
+  version = "2020-04-19";
 
   src = fetchFromGitHub {
     owner = "aarond10";

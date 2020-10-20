@@ -1,8 +1,8 @@
 { runCommand, stdenv, cmake, fetchgit, libnl, libubox, uci, ubus, json_c }:
 
 stdenv.mkDerivation {
-  pname = "netifd";
-  version = "unstable-2020-07-11";
+  pname = "netifd-unstable";
+  version = "2020-07-11";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/netifd.git";

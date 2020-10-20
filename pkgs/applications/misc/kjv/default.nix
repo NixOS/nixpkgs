@@ -17,12 +17,12 @@ add-install-target = fetchpatch {
 in
 
 stdenv.mkDerivation rec {
-  pname = "kjv";
-  version = "unstable-2018-12-25";
+  pname = "kjv-unstable";
+  version = "2018-12-25";
 
   src = fetchFromGitHub {
     owner = "bontibon";
-    repo = pname;
+    repo = "kjv";
     rev = "fda81a610e4be0e7c5cf242de655868762dda1d4";
     sha256 = "1favfcjvd3pzz1ywwv3pbbxdg7v37s8vplgsz8ag016xqf5ykqqf";
   };

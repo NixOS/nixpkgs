@@ -25,8 +25,8 @@
 assert withGimpPlugin -> gimp != null;
 
 stdenv.mkDerivation {
-  pname = "ufraw";
-  version = "unstable-2019-06-12";
+  pname = "ufraw-unstable";
+  version = "2019-06-12";
 
   # The original ufraw repo is unmaintained and broken;
   # this is a fork that collects patches

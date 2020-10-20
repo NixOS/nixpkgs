@@ -9,8 +9,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "python-csxcad";
-  version = "unstable-2020-02-18";
+  pname = "python-csxcad-unstable";
+  version = "2020-02-18";
 
   src = fetchFromGitHub {
     owner = "thliebig";

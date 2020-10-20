@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "webmetro";
-  version = "unstable-20180426";
+  pname = "webmetro-unstable";
+  version = "20180426";
 
   src = fetchFromGitHub {
     owner = "Tangent128";
-    repo = pname;
+    repo = "webmetro";
     rev = "4f6cc00fe647bd311d00a8a4cb53ab08f20a04f9";
     sha256 = "1n2c7ygs8qsd5zgii6fqqcwg427bsij082bg4ijnzkq5630dx651";
   };

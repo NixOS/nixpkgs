@@ -12,8 +12,8 @@ let
   };
 
 in buildGoPackage rec {
-  name = "perkeep-${version}";
-  version = "unstable-2020-03-23";
+  name = "perkeep-unstable-${version}";
+  version = "2020-03-23";
 
   src = fetchFromGitHub {
     owner = "perkeep";

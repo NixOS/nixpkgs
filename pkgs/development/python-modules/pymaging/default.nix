@@ -4,8 +4,8 @@
 }:
 
 buildPythonPackage {
-  pname = "pymaging";
-  version = "unstable-2016-11-16";
+  pname = "pymaging-unstable";
+  version = "2016-11-16";
 
   src = fetchFromGitHub {
     owner = "ojii";

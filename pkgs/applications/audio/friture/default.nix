@@ -3,12 +3,12 @@
 let
   py = python3Packages;
 in py.buildPythonApplication rec {
-  pname = "friture";
-  version = "unstable-2020-02-16";
+  pname = "friture-unstable";
+  version = "2020-02-16";
 
   src = fetchFromGitHub {
     owner = "tlecomte";
-    repo = pname;
+    repo = "friture";
     rev = "4460b4e72a9c55310d6438f294424b5be74fc0aa";
     sha256 = "1pmxzq78ibifby3gbir1ah30mgsqv0y7zladf5qf3sl5r1as0yym";
   };

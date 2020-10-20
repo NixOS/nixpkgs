@@ -71,16 +71,16 @@ let
   );
 in
 stdenv.mkDerivation rec {
-  pname = "liblinphone";
+  pname = "liblinphone-unstable";
   # Using master branch for linphone-desktop caused a chain reaction that many
   # of its dependencies needed to use master branch too.
-  version = "unstable-2020-03-20";
+  version = "2020-03-20";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
-    repo = pname;
+    repo = "liblinphone";
     rev = "1d762a3e0e304aa579798aed4400d2cee2c1ffa0";
     sha256 = "0ja38payyqbd8z6q5l5w6hi7xarmfj5021gh0qdk0j832br4c6c3";
   };

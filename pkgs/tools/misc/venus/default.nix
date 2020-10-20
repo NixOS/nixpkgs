@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, python, pythonPackages, libxslt, libxml2, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  pname = "venus";
-  version = "unstable-2011-02-18";
+  pname = "venus-unstable";
+  version = "2011-02-18";
 
   src = fetchFromGitHub {
     owner = "rubys";

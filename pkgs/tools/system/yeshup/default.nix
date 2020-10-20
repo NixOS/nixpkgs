@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  pname = "yeshup";
-  version = "unstable-2013-10-29";
+  pname = "yeshup-unstable";
+  version = "2013-10-29";
 
   src = fetchFromGitHub {
     owner = "RhysU";

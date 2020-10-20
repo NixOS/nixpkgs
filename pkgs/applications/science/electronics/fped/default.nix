@@ -5,8 +5,8 @@
 
 with lib;
 stdenv.mkDerivation {
-  pname = "fped";
-  version = "unstable-2017-05-11";
+  pname = "fped-unstable";
+  version = "2017-05-11";
 
   src = fetchgit {
     url = "git://projects.qi-hardware.com/fped.git";

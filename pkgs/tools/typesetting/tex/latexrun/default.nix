@@ -1,8 +1,8 @@
 { stdenvNoCC, fetchFromGitHub, python3 }:
 
 stdenvNoCC.mkDerivation {
-  pname = "latexrun";
-  version = "unstable-2015-11-18";
+  pname = "latexrun-unstable";
+  version = "2015-11-18";
   src = fetchFromGitHub {
     owner = "aclements";
     repo = "latexrun";

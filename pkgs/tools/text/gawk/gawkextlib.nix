@@ -8,8 +8,8 @@ let
     ({ name, gawkextlib, extraBuildInputs ? [ ], doCheck ? true }:
       let is_extension = !isNull gawkextlib;
       in stdenv.mkDerivation rec {
-        pname = "gawkextlib-${name}";
-        version = "unstable-2019-11-21";
+        pname = "gawkextlib-${name}-unstable";
+        version = "2019-11-21";
 
         src = fetchgit {
           url = "git://git.code.sf.net/p/gawkextlib/code";

@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
-  pname = "viw";
-  version = "unstable-20171029";
+  pname = "viw-unstable";
+  version = "2017-10-29";
 
   src = fetchFromGitHub {
     owner = "lpan";
-    repo = pname;
+    repo = "viw";
     rev = "2cf317f6d82a6fa58f284074400297b6dc0f44c2";
     sha256 = "0bnkh57v01zay6ggk0rbddaf75i48h8z06xsv33wfbjldclaljp1";
   };

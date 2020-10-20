@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  pname = "wego";
-  version = "unstable-2019-02-11";
+  pname = "wego-unstable";
+  version = "2019-02-11";
   rev = "994e4f141759a1070d7b0c8fbe5fad2cc7ee7d45";
 
   goPackagePath = "github.com/schachmat/wego";

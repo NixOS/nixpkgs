@@ -3,16 +3,16 @@
 assert (openssl != null) == (gnutls == null);
 
 stdenv.mkDerivation {
-  version = "unstable-2018-10-08";
-  pname = "openconnect_pa";
-  
+  pname = "openconnect_pa-unstable";
+  version = "2018-10-08";
+
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "dlenski";
     repo = "openconnect";
     rev = "e5fe063a087385c5b157ad7a9a3fa874181f6e3b";
-    sha256 = "0ywacqs3nncr2gpjjcz2yc9c6v4ifjssh0vb07h0qff06whqhdax"; 
+    sha256 = "0ywacqs3nncr2gpjjcz2yc9c6v4ifjssh0vb07h0qff06whqhdax";
   };
 
   preConfigure = ''
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   propagatedBuildInputs = [ vpnc openssl gnutls gmp libxml2 stoken zlib ];
-  
+
   meta = with stdenv.lib; {
     description = "OpenConnect client extended to support Palo Alto Networks' GlobalProtect VPN";
     homepage = "https://github.com/dlenski/openconnect/";

@@ -20,7 +20,7 @@ with stdenv.lib.strings;
 
 let
 
-  version = "unstable-2020-08-27";
+  version = "2020-08-27";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
@@ -40,7 +40,7 @@ let
 
   faust = stdenv.mkDerivation {
 
-    pname = "faust";
+    pname = "faust-unstable";
     inherit version;
 
     inherit src;

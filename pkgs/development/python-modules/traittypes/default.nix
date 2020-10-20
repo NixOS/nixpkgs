@@ -13,14 +13,14 @@
 }:
 
 buildPythonPackage rec {
-  pname = "traittypes";
-  version = "unstable-2019-06-23";
+  pname = "traittypes-unstable";
+  version = "2019-06-23";
 
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "jupyter-widgets";
-    repo = pname;
+    repo = "traittypes";
     rev = "0a030b928991dec732c17a7a1cb13acbcd7650a2";
     sha256 = "0rlm5krmq6n8yi47dgdsjyrkz3m079pndpbzkz2gx98pb3jd9pjs";
   };

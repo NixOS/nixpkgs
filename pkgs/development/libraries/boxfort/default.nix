@@ -2,8 +2,8 @@
 , nanomsg, python37Packages }:
 
 stdenv.mkDerivation rec {
-  version = "unstable-2019-09-19";
-  pname = "boxfort";
+  version = "2019-09-19";
+  pname = "boxfort-unstable";
 
   src = fetchFromGitHub {
     owner = "Snaipe";

@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, cmake, openal, libvorbis, opusfile, libsndfile }:
 
 stdenv.mkDerivation rec {
-  pname = "alure2";
-  version = "unstable-2020-02-06";
+  pname = "alure2-unstable";
+  version = "2020-02-06";
 
   src = fetchFromGitHub {
     owner = "kcat";

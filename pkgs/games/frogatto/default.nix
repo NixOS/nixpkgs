@@ -14,9 +14,9 @@ let
     genericName = "frogatto";
     categories = "Game;ArcadeGame;";
   };
-  version = "unstable-2018-12-18";
+  version = "2018-12-18";
 in buildEnv {
-  name = "frogatto-${version}";
+  name = "frogatto-unstable-${version}";
 
   buildInputs = [ makeWrapper ];
   paths = [ engine data desktopItem ];

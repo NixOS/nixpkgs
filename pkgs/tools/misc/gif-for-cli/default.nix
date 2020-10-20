@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, python3Packages, ffmpeg_3, zlib, libjpeg }:
 
 python3Packages.buildPythonApplication {
-  pname = "gif-for-cli";
-  version = "unstable-2018-08-14";
+  pname = "gif-for-cli-unstable";
+  version = "2018-08-14";
 
   src = fetchFromGitHub {
     owner = "google";

@@ -4,8 +4,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "fparser";
-  version = "unstable-2015-09-25";
+  pname = "fparser-unstable";
+  version = "2015-09-25";
 
   src = fetchFromGitHub {
     owner = "thliebig";

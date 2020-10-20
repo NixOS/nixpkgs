@@ -2,14 +2,14 @@
 , alcotest, biocaml, gnuplot, lacaml, menhir, ocaml-r, owl, printbox }:
 
 buildDunePackage rec {
-  pname = "phylogenetics";
-  version = "unstable-2020-01-25";
+  pname = "phylogenetics-unstable";
+  version = "2020-01-25";
 
   useDune2 = true;
 
   src = fetchFromGitHub {
     owner  = "biocaml";
-    repo   = pname;
+    repo   = "phylogenetics";
     rev    = "752a7d0324709ba919ef43630a270afd45d6b734";
     sha256 = "1zsxpl1yjbw6y6n1q7qk3h0l7c0lxhh8yp8bkxlwnpzlkqq28ycg";
   };

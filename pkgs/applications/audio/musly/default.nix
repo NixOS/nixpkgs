@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, eigen, libav }:
 stdenv.mkDerivation {
-  pname = "musly";
-  version = "unstable-2017-04-26";
+  pname = "musly-unstable";
+  version = "2017-04-26";
   src = fetchFromGitHub {
     owner = "dominikschnitzer";
     repo = "musly";

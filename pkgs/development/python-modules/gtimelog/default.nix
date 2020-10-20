@@ -5,12 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "gtimelog";
-  version = "unstable-2020-05-16";
+  pname = "gtimelog-unstable";
+  version = "2020-05-16";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "gtimelog";
+    repo = "gtimelog";
     rev = "80682ddbf9e0d68b8c67257289784f3b49b543d8";
     sha256 = "0qv2kv7vc3qqlzxsisgg31cmrkkqgnmxspbj10c5fhdmwzzwi0i9";
   };

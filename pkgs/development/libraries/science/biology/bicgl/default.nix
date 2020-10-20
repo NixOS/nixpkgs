@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, libminc, bicpl, freeglut, mesa_glu }:
 
 stdenv.mkDerivation rec {
-  pname = "bicgl";
-  version = "unstable-2018-04-06";
+  pname = "bicgl-unstable";
+  version = "2018-04-06";
 
   owner = "BIC-MNI";
 
   src = fetchFromGitHub {
     inherit owner;
-    repo   = pname;
+    repo   = "bicgl";
     rev    = "61a035751c9244fcca1edf94d6566fa2a709ce90";
     sha256 = "0lzirdi1mf4yl8srq7vjn746sbydz7h0wjh7wy8gycy6hq04qrg4";
   };

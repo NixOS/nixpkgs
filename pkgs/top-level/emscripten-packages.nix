@@ -81,8 +81,8 @@ rec {
     });            
   
   xmlmirror = pkgs.buildEmscriptenPackage rec {
-    pname = "xmlmirror";
-    version = "unstable-2016-06-05";
+    pname = "xmlmirror-unstable";
+    version = "2016-06-05";
 
     buildInputs = [ pkgconfig autoconf automake libtool gnumake libxml2 nodejs openjdk json_c ];
     nativeBuildInputs = [ pkgconfig zlib ];

@@ -3,13 +3,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pyspinel";
-  version = "unstable-2020-06-19";  # no versioned release since 2018
+  pname = "pyspinel-unstable";
+  version = "2020-06-19";  # no versioned release since 2018
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "openthread";
-    repo = pname;
+    repo = "pyspinel";
     rev = "e0bb3f8e6f49b593ab248a75de04a71626ae8101";
     sha256 = "0nfmdkgbhmkl82dfxjpwiiarxngm6a3fvdrzpaqp60a4b17pipqg";
   };

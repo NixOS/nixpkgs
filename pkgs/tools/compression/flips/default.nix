@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, gtk3, libdivsufsort, pkg-config, wrapGAppsHook }:
 
 stdenv.mkDerivation {
-  pname = "flips";
-  version = "unstable-2020-10-02";
+  pname = "flips-unstable";
+  version = "2020-10-02";
 
   src = fetchFromGitHub {
     owner = "Alcaro";

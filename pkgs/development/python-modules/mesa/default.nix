@@ -3,9 +3,9 @@
 , pytest }:
 
 buildPythonPackage rec {
-  pname = "mesa";
+  pname = "mesa-unstable";
   # contains several fixes for networkx 2.4 bump
-  version = "unstable-2019-12-09";
+  version = "2019-12-09";
 
   # According to their docs, this library is for Python 3+.
   disabled = isPy27;

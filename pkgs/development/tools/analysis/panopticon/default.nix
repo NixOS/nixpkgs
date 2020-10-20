@@ -2,12 +2,12 @@
 , pkgconfig, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "panopticon";
-  version = "unstable-20171202";
+  pname = "panopticon-unstable";
+  version = "20171202";
 
   src = fetchFromGitHub {
     owner = "das-labor";
-    repo = pname;
+    repo = "panopticon";
     rev = "33ffec0d6d379d51b38d6ea00d040f54b1356ae4";
     sha256 = "1zv87nqhrzsxx0m891df4vagzssj3kblfv9yp7j96dw0vn9950qa";
   };

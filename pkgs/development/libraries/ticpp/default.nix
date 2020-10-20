@@ -4,8 +4,8 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "ticpp";
-  version = "unstable-2019-01-09";
+  pname = "ticpp-unstable";
+  version = "2019-01-09";
 
   src = fetchFromGitHub {
     owner = "wxFormBuilder";

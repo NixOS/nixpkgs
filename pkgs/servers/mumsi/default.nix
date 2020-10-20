@@ -1,8 +1,8 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkgconfig, boost
 , log4cpp, pjsip, openssl, alsaLib, mumlib }:
 with lib; stdenv.mkDerivation {
-  pname = "mumsi";
-  version = "unstable-2018-12-12";
+  pname = "mumsi-unstable";
+  version = "2018-12-12";
 
   src = fetchFromGitHub {
     owner = "slomkowski";

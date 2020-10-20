@@ -44,12 +44,12 @@ let
 
 in
 stdenv.mkDerivation rec {
-  pname = "amber";
-  version = "unstable-2020-09-23";
+  pname = "amber-unstable";
+  version = "2020-09-23";
 
   src = fetchFromGitHub {
     owner = "google";
-    repo = pname;
+    repo = "amber";
     rev = "0eee2d45d053dfc566baa58442a9b1b708e4f2a7";
     sha256 = "1rrbvmn9hvhj7xj89yqvy9mx0vg1qapdm5fkca8mkd3516d9f5pw";
   };

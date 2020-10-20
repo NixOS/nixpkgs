@@ -1,8 +1,8 @@
 {stdenv, fetchFromGitHub, zfs }:
 
 stdenv.mkDerivation {
-  pname = "easysnap";
-  version = "unstable-2020-04-04";
+  pname = "easysnap-unstable";
+  version = "2020-04-04";
 
   src = fetchFromGitHub {
     owner = "sjau";

@@ -17,8 +17,8 @@ let
   };
 
 in buildPythonPackage rec {
-  pname = "python-mapnik";
-  version = "unstable-2020-02-24";
+  pname = "python-mapnik-unstable";
+  version = "2020-02-24";
 
   src = pkgs.fetchFromGitHub {
     owner = "mapnik";

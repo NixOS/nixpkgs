@@ -19,8 +19,8 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "tilix";
-  version = "unstable-2019-10-02";
+  pname = "tilix-unstable";
+  version = "2019-10-02";
 
   src = fetchFromGitHub {
     owner = "gnunn1";

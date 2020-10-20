@@ -1,14 +1,14 @@
 { lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
-  pname = "cod";
-  version = "unstable-2020-09-10";
+  pname = "cod-unstable";
+  version = "2020-09-10";
 
   goPackagePath = "cod";
 
   src = fetchFromGitHub {
     owner = "dim-an";
-    repo = pname;
+    repo = "cod";
     rev = "ae68da08339471dd278d6df79abbfd6fe89a10fe";
     sha256 = "1l3gn9v8dcy72f5xq9hwbkvkis0vp4dp8qyinsrii3acmhksg9v6";
   };

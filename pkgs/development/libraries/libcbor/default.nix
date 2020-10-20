@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, cmake, cmocka }:
 
 stdenv.mkDerivation rec {
-  pname = "libcbor";
-  version = "unstable-2019-07-25";
+  pname = "libcbor-unstable";
+  version = "2019-07-25";
 
   src = fetchFromGitHub {
     owner = "PJK";
-    repo = pname;
+    repo = "libcbor";
     rev = "82512d851205fbc7f65d96a0b4a8e1bad2e4f3c6";
     sha256 = "01hy7n21gxz4gp3gdwm2ywz822p415bj2k9ccxgwz3plvncs4xa1";
   };

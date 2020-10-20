@@ -2,8 +2,8 @@
 , qtbase, qtsvg, qtwebview, qtwebkit }:
 
 stdenv.mkDerivation rec {
-  pname = "merkaartor";
-  version = "unstable-2019-11-12";
+  pname = "merkaartor-unstable";
+  version = "2019-11-12";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";

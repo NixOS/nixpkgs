@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, libminc, bicpl, arguments, pcre-cpp }:
 
 stdenv.mkDerivation rec {
-  pname = "oobicpl";
-  version = "unstable-2016-03-02";
+  pname = "oobicpl-unstable";
+  version = "2016-03-02";
 
   owner = "BIC-MNI";
 
   src = fetchFromGitHub {
     inherit owner;
-    repo   = pname;
+    repo   = "oobicpl";
     rev    = "bc062a65dead2e58461f5afb37abedfa6173f10c";
     sha256 = "05l4ml9djw17bgdnrldhcxydrzkr2f2scqlyak52ph5azj5n4zsx";
   };

@@ -18,8 +18,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "beignet";
-  version = "unstable-2018.08.20";
+  pname = "beignet-unstable";
+  version = "2018.08.20";
 
   src = fetchFromGitHub {
     owner  = "intel";

@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, gnome3 }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-shell-extension-timepp";
-  version = "unstable-2020-03-15";
+  pname = "gnome-shell-extension-timepp-unstable";
+  version = "2020-03-15";
 
   src = fetchFromGitHub {
     owner = "zagortenay333";

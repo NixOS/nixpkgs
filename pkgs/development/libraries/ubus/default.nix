@@ -1,8 +1,8 @@
 { stdenv, cmake, fetchgit, libubox, libjson }:
 
 stdenv.mkDerivation {
-  pname = "ubus";
-  version = "unstable-2020-01-05";
+  pname = "ubus-unstable";
+  version = "2020-01-05";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/ubus.git";

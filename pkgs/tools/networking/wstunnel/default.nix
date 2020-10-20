@@ -7,12 +7,12 @@
 }:
 
 mkDerivation rec {
-  pname = "wstunnel";
-  version = "unstable-2020-07-12";
+  pname = "wstunnel-unstable";
+  version = "2020-07-12";
 
   src = fetchFromGitHub {
     owner = "erebe";
-    repo = pname;
+    repo = "wstunnel";
     rev = "093a01fa3a34eee5efd8f827900e64eab9d16c05";
     sha256 = "17p9kq0ssz05qzl6fyi5a5fjbpn4bxkkwibb9si3fhzrxc508b59";
   };

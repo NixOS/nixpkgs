@@ -1,8 +1,8 @@
 { stdenvNoCC, fetchFromGitHub, gnome-themes-extra, inkscape, xcursorgen }:
 
 stdenvNoCC.mkDerivation rec {
-  pname = "bibata-cursors-translucent";
-  version = "unstable-2019-09-13";
+  pname = "bibata-cursors-translucent-unstable";
+  version = "2019-09-13";
 
   src = fetchFromGitHub {
     owner = "Silicasandwhich";

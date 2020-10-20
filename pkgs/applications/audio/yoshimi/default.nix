@@ -5,13 +5,13 @@
 assert stdenv ? glibc;
 
 stdenv.mkDerivation  rec {
-  pname = "yoshimi";
+  pname = "yoshimi-unstable";
   # Fix build with lv2 1.18: https://github.com/Yoshimi/yoshimi/pull/102/commits/86996cbb235f0fe138ae814a6758c2c8ba1c2a38
-  version = "unstable-2020-05-10";
+  version = "2020-05-10";
 
   src = fetchFromGitHub {
     owner = "Yoshimi";
-    repo = pname;
+    repo = "yoshimi";
     rev = "86996cbb235f0fe138ae814a6758c2c8ba1c2a38";
     sha256 = "0bgcc5fbgwpdjircq00wlii30pakf45yzligpbnf02a554hh4j01";
   };

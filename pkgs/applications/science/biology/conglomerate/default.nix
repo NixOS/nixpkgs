@@ -2,12 +2,12 @@
   makeWrapper }:
 
 stdenv.mkDerivation rec {
-  pname = "conglomerate";
-  version = "unstable-2017-09-10";
+  pname = "conglomerate-unstable";
+  version = "2017-09-10";
 
   src = fetchFromGitHub {
     owner  = "BIC-MNI";
-    repo   = pname;
+    repo   = "conglomerate";
     rev    = "7343238bc6215942c7ecc885a224f24433a291b0";
     sha256 = "1mlqgmy3jc13bv7d01rjwldxq0p4ayqic85xcl222hhifi3w2prr";
   };

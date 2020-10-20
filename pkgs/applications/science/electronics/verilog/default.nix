@@ -13,12 +13,12 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  pname = "iverilog";
-  version = "unstable-2020-08-24";
+  pname = "iverilog-unstable";
+  version = "2020-08-24";
 
   src = fetchFromGitHub {
     owner = "steveicarus";
-    repo = pname;
+    repo = "iverilog";
     rev = "d8556e4c86e1465b68bdc8d5ba2056ba95a42dfd";
     sha256 = "sha256-sT9j/0Q2FD5MOGpH/quMGvAuM7t7QavRHKD9lX7Elfs=";
   };

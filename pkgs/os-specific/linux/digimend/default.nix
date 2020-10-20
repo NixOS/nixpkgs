@@ -3,8 +3,8 @@
 assert stdenv.lib.versionAtLeast kernel.version "3.5";
 
 stdenv.mkDerivation rec {
-  pname = "digimend";
-  version = "unstable-2019-06-18";
+  pname = "digimend-unstable";
+  version = "2019-06-18";
 
   src = fetchFromGitHub {
     owner = "digimend";

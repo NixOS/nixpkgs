@@ -17,12 +17,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "lobster";
-  version = "unstable-2020-10-04";
+  pname = "lobster-unstable";
+  version = "2020-10-04";
 
   src = fetchFromGitHub {
     owner = "aardappel";
-    repo = pname;
+    repo = "lobster";
     rev = "4c5e78f021ce9d06592fb3a66388e5e31fac1adb";
     sha256 = "1wnbc8kr1dyfs53nlcxah22ghphmazzrlcj9z47cgkdsj1qfy84x";
   };

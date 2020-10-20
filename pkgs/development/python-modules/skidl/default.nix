@@ -12,8 +12,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "skidl";
-  version = "unstable-2020-09-15";
+  pname = "skidl-unstable";
+  version = "2020-09-15";
 
   src = fetchFromGitHub {
     owner = "xesscorp";

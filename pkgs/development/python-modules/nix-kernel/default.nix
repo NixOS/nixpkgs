@@ -7,8 +7,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "nix-kernel";
-  version = "unstable-2020-04-26";
+  pname = "nix-kernel-unstable";
+  version = "2020-04-26";
 
   src = fetchFromGitHub {
     owner = "GTrunSec";

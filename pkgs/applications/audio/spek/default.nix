@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, autoreconfHook, intltool, pkgconfig, ffmpeg, wxGTK30-gtk3, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  pname = "spek";
-  version = "unstable-2018-12-29";
+  pname = "spek-unstable";
+  version = "2018-12-29";
 
   src = fetchFromGitHub {
     owner = "alexkay";

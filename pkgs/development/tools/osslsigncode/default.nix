@@ -8,12 +8,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "osslsigncode";
-  version = "unstable-2020-08-02";
+  pname = "osslsigncode-unstable";
+  version = "2020-08-02";
 
   src = fetchFromGitHub {
     owner = "mtrojnar";
-    repo = pname;
+    repo = "osslsigncode";
     rev = "01b3fb5b542ed0b41e3860aeee7a85b735491ff2";
     sha256 = "03ynm1ycbi86blglma3xiwadck8kc5yb0gawjzlhyv90jidn680l";
   };

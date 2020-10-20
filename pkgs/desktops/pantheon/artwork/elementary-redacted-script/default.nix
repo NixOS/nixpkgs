@@ -4,8 +4,8 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "elementary-redacted-script";
-  version = "unstable-2016-06-03";
+  pname = "elementary-redacted-script-unstable";
+  version = "2016-06-03";
 
   src = fetchFromGitHub {
     owner = "png2378";

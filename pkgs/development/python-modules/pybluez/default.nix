@@ -5,14 +5,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "unstable-20160819";
-  pname = "pybluez";
+  pname = "pybluez-unstable";
+  version = "2016-08-19";
 
   propagatedBuildInputs = [ pkgs.bluez ];
 
   src = fetchFromGitHub {
     owner = "karulis";
-    repo = pname;
+    repo = "pybluez";
     rev = "a0b226a61b166e170d48539778525b31e47a4731";
     sha256 = "104dm5ngfhqisv1aszdlr3szcav2g3bhsgzmg4qfs09b3i5zj047";
   };

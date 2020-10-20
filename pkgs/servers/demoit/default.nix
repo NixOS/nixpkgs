@@ -4,8 +4,8 @@
 }:
 
 buildGoModule {
-  pname = "demoit";
-  version = "unstable-2020-06-11";
+  pname = "demoit-unstable";
+  version = "2020-06-11";
   goPackagePath = "github.com/dgageot/demoit";
 
   src = fetchFromGitHub {

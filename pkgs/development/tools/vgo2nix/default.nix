@@ -8,8 +8,8 @@
 }:
 
 buildGoPackage {
-  pname = "vgo2nix";
-  version = "unstable-2020-05-05";
+  pname = "vgo2nix-unstable";
+  version = "2020-05-05";
   goPackagePath = "github.com/adisbladis/vgo2nix";
 
   nativeBuildInputs = [ makeWrapper ];

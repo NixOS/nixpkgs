@@ -27,14 +27,14 @@
 # Packaging documentation at:
 # https://github.com/untitaker/vdirsyncer/blob/master/docs/packaging.rst
 buildPythonPackage rec {
-  version = "unstable-2018-08-05";
-  pname = "vdirsyncer";
+  version = "2018-08-05";
+  pname = "vdirsyncer-unstable";
   name = "${pname}-${version}";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "spk";
-    repo = pname;
+    repo = "vdirsyncer";
     # fix-build-style branch, see https://github.com/pimutils/vdirsyncer/pull/798
     rev = "2c62d03bd73f8b44a47c2e769ade046697896ae9";
     sha256 = "1q6xvzz5rf5sqdaj3mdvhpgwy5b16isavgg7vardgjwqwv1yal28";

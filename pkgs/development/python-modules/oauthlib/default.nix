@@ -9,13 +9,13 @@
 }:
 
 buildPythonPackage rec {
-  pname = "oauthlib";
-  version = "unstable-2020-05-08";
+  pname = "oauthlib-unstable";
+  version = "2020-05-08";
 
   # master supports pyjwt==1.7.1
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "oauthlib";
+    repo = "oauthlib";
     rev = "46647402896db5f0d979eba9594623e889739060";
     sha256 = "1wrdjdvlfcd74lckcgascnasrffg8sip0z673si4ag5kv4afiz3l";
   };

@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, postgresql }:
 
 stdenv.mkDerivation {
-  pname = "pgjwt";
-  version = "unstable-2017-04-24";
+  pname = "pgjwt-unstable";
+  version = "2017-04-24";
 
   src = fetchFromGitHub {
     owner  = "michelp";

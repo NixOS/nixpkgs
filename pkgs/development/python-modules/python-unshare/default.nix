@@ -4,10 +4,10 @@
 }:
 
 buildPythonPackage {
-  pname = "python-unshare";
+  pname = "python-unshare-unstable";
   # pypi version doesn't support Python 3 and the package didn't update for a long time:
   # https://github.com/TheTincho/python-unshare/pull/8
-  version = "unstable-2018-05-20";
+  version = "2018-05-20";
 
   src = fetchFromGitHub {
     owner = "TheTincho";

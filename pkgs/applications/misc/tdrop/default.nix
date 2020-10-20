@@ -3,8 +3,8 @@
 , gnugrep, procps }:
 
 stdenv.mkDerivation {
-  pname = "tdrop";
-  version = "unstable-2020-05-14";
+  pname = "tdrop-unstable";
+  version = "2020-05-14";
 
   src = fetchFromGitHub {
     owner = "noctuid";

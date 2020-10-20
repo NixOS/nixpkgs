@@ -1,8 +1,8 @@
 { stdenv, fetchgit, boost, gtk2, pkgconfig, python, wafHook }:
 
 stdenv.mkDerivation rec {
-  pname = "raul";
-  version = "unstable-2019-12-09";
+  pname = "raul-unstable";
+  version = "2019-12-09";
   name = "${pname}-${version}";
 
   src = fetchgit {

@@ -8,8 +8,8 @@ let
               else if stdenv.hostPlatform.isWindows then "mingw"
               else "linux";
 in stdenv.mkDerivation rec {
-  pname = "distrho-ports";
-  version = "unstable-2019-10-09";
+  pname = "distrho-ports-unstable";
+  version = "2019-10-09";
 
   src = fetchFromGitHub {
     owner = "DISTRHO";

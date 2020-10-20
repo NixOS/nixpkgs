@@ -9,8 +9,8 @@ assert httpServer -> libpng != null;
 assert client -> libX11 != null;
 
 stdenv.mkDerivation rec {
-  pname = "amule";
-  version = "unstable-20201006";
+  pname = "amule-unstable";
+  version = "20201006";
 
   src = fetchFromGitHub {
     owner = "amule-project";

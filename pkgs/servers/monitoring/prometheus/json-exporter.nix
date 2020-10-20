@@ -2,8 +2,8 @@
 { buildGoPackage, fetchFromGitHub, fetchpatch, lib, nixosTests }:
 
 buildGoPackage {
-  pname = "prometheus-json-exporter";
-  version = "unstable-2017-10-06";
+  pname = "prometheus-json-exporter-unstable";
+  version = "2017-10-06";
 
   goPackagePath = "github.com/kawamuray/prometheus-json-exporter";
 

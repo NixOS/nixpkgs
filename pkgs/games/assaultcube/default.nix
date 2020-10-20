@@ -7,8 +7,8 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   # master branch has legacy (1.2.0.2) protocol 1201 and gcc 6 fix.
-  pname = "assaultcube";
-  version = "unstable-2018-05-20";
+  pname = "assaultcube-unstable";
+  version = "2018-05-20";
 
   src = fetchFromGitHub {
     owner = "assaultcube";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       cp ${desktop}/share/applications/* $out/share/applications
       install -Dpm644 packages/misc/icon.png $out/share/icons/assaultcube.png
       install -Dpm644 packages/misc/icon.png $out/share/pixmaps/assaultcube.png
-      
+
       makeWrapper $out/bin/ac_client $out/bin/${pname} \
         --run "cd $out/$gamedatadir" --add-flags "--home=\$HOME/.assaultcube/v1.2next --init"
     fi

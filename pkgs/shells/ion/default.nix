@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "ion";
-  version = "unstable-2020-03-22";
+  pname = "ion-unstable";
+  version = "2020-03-22";
 
   src = fetchFromGitHub {
     owner = "redox-os";

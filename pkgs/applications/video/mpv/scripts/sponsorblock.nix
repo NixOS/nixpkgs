@@ -2,8 +2,8 @@
 
 # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.sponsorblock ]; }`
 stdenv.mkDerivation {
-  pname = "mpv_sponsorblock";
-  version = "unstable-2020-07-05";
+  pname = "mpv_sponsorblock-unstable";
+  version = "2020-07-05";
 
   src = fetchFromGitHub {
     owner = "po5";

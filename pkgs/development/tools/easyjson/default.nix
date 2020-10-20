@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage {
-  pname = "easyjson";
-  version = "unstable-2019-06-26";
+  pname = "easyjson-unstable";
+  version = "2019-06-26";
   goPackagePath = "github.com/mailru/easyjson";
 
   src = fetchFromGitHub {

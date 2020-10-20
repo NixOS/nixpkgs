@@ -13,8 +13,8 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "libunity";
-  version = "unstable-2019-03-19";
+  pname = "libunity-unstable";
+  version = "2019-03-19";
 
   outputs = [ "out" "dev" "py" ];
 

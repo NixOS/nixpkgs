@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, fetchpatch, kernel, bc }:
 
 stdenv.mkDerivation rec {
-  name = "rtl88x2bu-${kernel.version}-${version}";
-  version = "unstable-2020-08-20";
+  name = "rtl88x2bu-${kernel.version}-unstable-${version}";
+  version = "2020-08-20";
 
   src = fetchFromGitHub {
     owner = "cilynx";

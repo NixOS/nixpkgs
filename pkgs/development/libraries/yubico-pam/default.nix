@@ -3,11 +3,11 @@
 , pam, yubikey-personalization, libyubikey, libykclient }:
 
 stdenv.mkDerivation rec {
-  pname = "yubico-pam";
-  version = "unstable-2019-07-01";
+  pname = "yubico-pam-unstable";
+  version = "2019-07-01";
   src = fetchFromGitHub {
     owner = "Yubico";
-    repo = pname;
+    repo = "yubico-pam";
     rev = "b5bd00db81e0e0e0ecced65c684080bb56ddc35b";
     sha256 = "10dq8dqi3jldllj6p8r9hldx9sank9n82c44w8akxrs1vli6nj3m";
   };

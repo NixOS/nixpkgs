@@ -1,8 +1,8 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, nose }:
 
 buildPythonPackage {
-  pname = "ptable";
-  version = "unstable-2019-06-14";
+  pname = "ptable-unstable";
+  version = "2019-06-14";
 
   # https://github.com/kxxoling/PTable/issues/27
   src = fetchFromGitHub {

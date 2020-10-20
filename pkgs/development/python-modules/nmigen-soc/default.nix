@@ -7,8 +7,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "nmigen-soc";
-  version = "unstable-2020-02-08";
+  pname = "nmigen-soc-unstable";
+  version = "2020-02-08";
   # python setup.py --version
   realVersion = "0.1.dev24+g${lib.substring 0 7 src.rev}";
 

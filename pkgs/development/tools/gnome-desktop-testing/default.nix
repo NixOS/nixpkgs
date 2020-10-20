@@ -7,8 +7,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-desktop-testing";
-  version = "unstable-2019-12-11";
+  pname = "gnome-desktop-testing-unstable";
+  version = "2019-12-11";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";

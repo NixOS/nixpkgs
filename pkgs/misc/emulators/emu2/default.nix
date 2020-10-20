@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  pname = "emu2";
-  version = "unstable-2020-06-04";
+  pname = "emu2-unstable";
+  version = "2020-06-04";
 
   src = fetchFromGitHub {
     owner  = "dmsc";

@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, substituteAll, gjs, vte, gnome3 }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-shell-extension-drop-down-terminal";
-  version = "unstable-2020-03-25";
+  pname = "gnome-shell-extension-drop-down-terminal-unstable";
+  version = "2020-03-25";
 
   src = fetchFromGitHub {
     owner = "zzrough";

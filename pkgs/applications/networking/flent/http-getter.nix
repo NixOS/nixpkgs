@@ -2,8 +2,8 @@
 , curl, pkgconfig }:
 
 stdenv.mkDerivation {
-  pname = "http-getter";
-  version = "unstable-2018-06-06";
+  pname = "http-getter-unstable";
+  version = "2018-06-06";
 
   src = fetchFromGitHub {
     owner = "tohojo";

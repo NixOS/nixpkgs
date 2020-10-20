@@ -3,8 +3,8 @@
 with stdenv.lib;
 
 stdenv.mkDerivation {
-  pname = "b2sum";
-  version = "unstable-2018-06-11";
+  pname = "b2sum-unstable";
+  version = "2018-06-11";
 
   src = fetchzip {
     url = "https://github.com/BLAKE2/BLAKE2/archive/320c325437539ae91091ce62efec1913cd8093c2.tar.gz";

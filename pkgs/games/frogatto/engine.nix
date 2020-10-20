@@ -3,8 +3,8 @@
 , glew, zlib, icu, pkgconfig, cairo, libvpx }:
 
 stdenv.mkDerivation {
-  pname = "anura-engine";
-  version = "unstable-2018-11-28";
+  pname = "anura-engine-unstable";
+  version = "2018-11-28";
 
   src = fetchFromGitHub {
     owner = "anura-engine";

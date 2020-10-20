@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  version = "unstable-2018-10-18";
-  pname = "ps2client";
+  pname = "ps2client-unstable";
+  version = "2018-10-18";
 
   src = fetchFromGitHub {
     owner = "ps2dev";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   patchPhase = ''
    sed -i -e "s|-I/usr/include||g" -e "s|-I/usr/local/include||g" Makefile
   '';
-  
+
   installPhase = ''
     make PREFIX=$out install
   '';

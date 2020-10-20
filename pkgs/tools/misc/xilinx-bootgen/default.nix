@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, openssl }:
 
 stdenv.mkDerivation {
-  pname = "xilinx-bootgen";
-  version = "unstable-2019-10-23";
+  pname = "xilinx-bootgen-unstable";
+  version = "2019-10-23";
 
   src = fetchFromGitHub {
     owner = "xilinx";

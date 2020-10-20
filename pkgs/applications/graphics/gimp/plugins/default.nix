@@ -170,8 +170,8 @@ stdenv.lib.makeScope pkgs.newScope (self: with self; {
   ufraw = pkgs.ufraw.gimpPlugin;
 
   gimplensfun = pluginDerivation rec {
-    version = "unstable-2018-10-21";
-    name = "gimplensfun-${version}";
+    version = "2018-10-21";
+    name = "gimplensfun-unstable-${version}";
 
     src = fetchFromGitHub {
       owner = "seebk";

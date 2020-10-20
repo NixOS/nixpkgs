@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  pname = "onesixtyone";
-  version = "unstable-2019-12-26";
+  pname = "onesixtyone-unstable";
+  version = "2019-12-26";
 
   src = fetchFromGitHub {
     owner = "trailofbits";

@@ -3,8 +3,8 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  pname = "slstatus";
-  version = "unstable-2019-02-16";
+  pname = "slstatus-unstable";
+  version = "2019-02-16";
 
   src = fetchgit {
     url = "https://git.suckless.org/slstatus";

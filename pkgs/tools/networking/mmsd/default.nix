@@ -7,8 +7,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "mmsd";
-  version = "unstable-2019-07-15";
+  pname = "mmsd-unstable";
+  version = "2019-07-15";
 
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/network/ofono/mmsd.git";

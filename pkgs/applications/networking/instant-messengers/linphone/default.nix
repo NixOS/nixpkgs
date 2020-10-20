@@ -91,16 +91,16 @@ let
   };
 in
 mkDerivation rec {
-  pname = "linphone-desktop";
+  pname = "linphone-desktop-unstable";
   # Latest release is 4.1.1 old and doesn't build with the latest releases of
   # some of the dependencies so let's use the latest commit.
-  version = "unstable-2020-03-06";
+  version = "2020-03-06";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
-    repo = pname;
+    repo = "linphone-desktop";
     rev = "971997e162558d37051f89c9c34bbc240135f704";
     sha256 = "02ji4r8bpcm2kyisn9d3054m026l33g2574i1ag1cmb2dz2p8i1c";
   };

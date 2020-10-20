@@ -3,8 +3,8 @@
 , libmikmod, librsvg, libcanberra-gtk2, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
-  pname = "gweled";
-  version = "unstable-2018-02-15";
+  pname = "gweled-unstable";
+  version = "2018-02-15";
 
   src = fetchbzr {
     url = "lp:gweled";

@@ -5,12 +5,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "i3-layout-manager";
-  version = "unstable-2019-12-06";
+  pname = "i3-layout-manager-unstable";
+  version = "2019-12-06";
 
   src = fetchFromGitHub {
     owner = "klaxalk";
-    repo = pname;
+    repo = "i3-layout-manager";
     rev = "064e13959413ba2d706185478a394e5852c0dc53";
     sha256 = "1qm35sp1cfi3xj5j7xwa05dkb3353gwq4xh69ryc6382xx3wszg6";
   };

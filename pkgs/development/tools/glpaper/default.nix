@@ -2,8 +2,8 @@
 , libX11, libGL }:
 
 stdenv.mkDerivation {
-  name = "glpaper";
-  version = "unstable-2020-03-30";
+  name = "glpaper-unstable";
+  version = "2020-03-30";
 
   src = fetchhg {
     url = "https://hg.sr.ht/~scoopta/glpaper";

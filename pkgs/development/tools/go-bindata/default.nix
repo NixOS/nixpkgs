@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage {
-  pname = "go-bindata";
-  version = "unstable-2015-10-23";
+  pname = "go-bindata-unstable";
+  version = "2015-10-23";
 
   goPackagePath = "github.com/jteeuwen/go-bindata";
 

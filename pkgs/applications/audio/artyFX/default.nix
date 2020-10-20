@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub , cairomm, cmake, libjack2, libpthreadstubs, libXdmcp, libxshmfence, libsndfile, lv2, ntk, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  pname = "artyFX";
+  pname = "artyFX-unstable";
   # Fix build with lv2 1.18: https://github.com/openAVproductions/openAV-ArtyFX/pull/41/commits/492587461b50d140455aa3c98d915eb8673bebf0
-  version = "unstable-2020-04-28";
+  version = "2020-04-28";
 
   src = fetchFromGitHub {
     owner = "openAVproductions";

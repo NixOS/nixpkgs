@@ -5,16 +5,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "belr";
+  pname = "belr-unstable";
   # Using master branch for linphone-desktop caused a chain reaction that many
   # of its dependencies needed to use master branch too.
-  version = "unstable-2020-03-09";
+  version = "2020-03-09";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
-    repo = pname;
+    repo = "belr";
     rev = "326d030ca9db12525c2a6d2a65f386f36f3c2ed5";
     sha256 = "1cdblb9smncq3al0crqp5651b02k1g6whlw1ib769p61gad0rs3v";
   };

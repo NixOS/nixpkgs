@@ -7,12 +7,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "cc-tool";
-  version = "unstable-2020-05-19";
+  pname = "cc-tool-unstable";
+  version = "2020-05-19";
 
   src = fetchFromGitHub {
     owner = "dashesy";
-    repo = pname;
+    repo = "cc-tool";
     rev = "19e707eafaaddee8b996ad27a9f3e1aafcb900d2";
     hash = "sha256:1f78j498fdd36xbci57jkgh25gq14g3b6xmp76imdpar0jkpyljv";
   };

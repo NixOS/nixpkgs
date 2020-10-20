@@ -1,8 +1,8 @@
 { lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule {
-  pname = "go-neb";
-  version = "unstable-2020-04-09";
+  pname = "go-neb-unstable";
+  version = "2020-04-09";
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "go-neb";

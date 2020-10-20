@@ -1,8 +1,8 @@
 { stdenv, fetchgit, fetchurl, fetchpatch, nasm, perl, python3, libuuid, mtools, makeWrapper }:
 
 stdenv.mkDerivation {
-  pname = "syslinux";
-  version = "unstable-20190207";
+  pname = "syslinux-unstable";
+  version = "2019-02-07";
 
   # This is syslinux-6.04-pre3^1; syslinux-6.04-pre3 fails to run.
   # Same issue here https://www.syslinux.org/archives/2019-February/026330.html

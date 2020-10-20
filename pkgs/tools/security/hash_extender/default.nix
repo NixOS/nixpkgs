@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, openssl }:
 
 stdenv.mkDerivation {
-  pname = "hash_extender";
-  version = "unstable-2020-03-24";
+  pname = "hash_extender-unstable";
+  version = "2020-03-24";
 
   src = fetchFromGitHub {
     owner = "iagox86";

@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, fetchpatch, kernel, libdrm }:
 
 stdenv.mkDerivation rec {
-  pname = "evdi";
-  version = "unstable-20200416";
+  pname = "evdi-unstable";
+  version = "20200416";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
-    repo = pname;
+    repo = "evdi";
     rev = "dc595db636845aef39490496bc075f6bf067106c";
     sha256 = "1yrny6jj9403z0rxbd3nxf49xc4w0rfpl7xsq03pq32pb3vlbqw7";
   };

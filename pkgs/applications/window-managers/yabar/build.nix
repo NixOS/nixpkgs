@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, cairo, gdk-pixbuf, libconfig, pango, pkgconfig
 , xcbutilwm, alsaLib, wirelesstools, asciidoc, libxslt, makeWrapper, docbook_xsl
 , configFile ? null, lib
-, rev, sha256, version, patches ? []
+, rev, sha256, pname, version, patches ? []
 }:
 
 stdenv.mkDerivation {
-  pname = "yabar";
+  inherit pname;
   inherit version;
 
   src = fetchFromGitHub {

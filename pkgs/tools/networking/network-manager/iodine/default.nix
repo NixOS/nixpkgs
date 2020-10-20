@@ -2,8 +2,8 @@
 , withGnome ? true, gnome3, fetchpatch, libnma, glib }:
 
 let
-  pname = "NetworkManager-iodine";
-  version = "unstable-2019-11-05";
+  pname = "NetworkManager-iodine-unstable";
+  version = "2019-11-05";
 in stdenv.mkDerivation {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 

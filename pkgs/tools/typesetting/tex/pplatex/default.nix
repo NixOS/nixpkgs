@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, pcre }:
 
 stdenv.mkDerivation {
-  pname = "pplatex";
-  version = "unstable-2015-09-14";
+  pname = "pplatex-unstable";
+  version = "2015-09-14";
 
   src = fetchFromGitHub {
     owner = "stefanhepp";

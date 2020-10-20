@@ -6,12 +6,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "nbmerge";
-  version = "unstable-2017-10-23";
+  pname = "nbmerge-unstable";
+  version = "2017-10-23";
 
   src = fetchFromGitHub {
     owner = "jbn";
-    repo = pname;
+    repo = "nbmerge";
     rev = "fc0ba95e8422340317358ffec4404235defbc06a";
     sha256 = "1cn550kjadnxc1sx2xy814248fpzrj3lgvrmsbrwmk03vwaa2hmi";
   };

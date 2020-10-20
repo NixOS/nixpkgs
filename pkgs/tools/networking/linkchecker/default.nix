@@ -3,12 +3,12 @@
 with python3Packages;
 
 buildPythonApplication rec {
-  pname = "linkchecker";
-  version = "unstable-2020-08-15";
+  pname = "linkchecker-unstable";
+  version = "2020-08-15";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "linkchecker";
+    repo = "linkchecker";
     rev = "0086c28b3a419faa60562f2713346996062c03c2";
     sha256 = "0am5id8vqlqn1gb9jri0vjgiq5ffgrjq8yzdk1zc98gn2n0397wl";
   };

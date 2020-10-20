@@ -2,14 +2,14 @@
 , makeWrapper, nix-prefetch-scripts }:
 
 buildGoPackage rec {
-  pname = "dep2nix";
-  version = "unstable-2019-04-02";
+  pname = "dep2nix-unstable";
+  version = "2019-04-02";
 
   goPackagePath = "github.com/nixcloud/dep2nix";
 
   src = fetchFromGitHub {
     owner = "nixcloud";
-    repo = pname;
+    repo = "dep2nix";
     rev = "830684f920333b8ff0946d6b807e8be642eec3ef";
     sha256 = "17sjxhzhmz4893x3x054anp4xvqd1px15nv3fj2m7i6r0vbgpm0j";
   };

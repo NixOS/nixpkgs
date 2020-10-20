@@ -9,15 +9,15 @@
 }:
 
 buildPythonPackage rec {
-  pname = "transforms3d";
-  version = "unstable-2019-12-17";
+  pname = "transforms3d-unstable";
+  version = "2019-12-17";
 
   disabled = isPy27;
 
   # no Git tag or PyPI release in some time
   src = fetchFromGitHub {
     owner = "matthew-brett";
-    repo = pname;
+    repo = "transform3d";
     rev = "6b20250c610249914ca5e3a3a2964c36ca35c19a";
     sha256 = "1z789hgk71a6rj6mqp9srpzamg06g58hs2p1l1p344cfnkj5a4kc";
   };

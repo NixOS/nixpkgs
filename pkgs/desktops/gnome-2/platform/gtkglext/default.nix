@@ -16,13 +16,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "gtkglext";
-  version = "unstable-2019-12-19";
+  pname = "gtkglext-unstable";
+  version = "2019-12-19";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "Archive";
-    repo = pname;
+    repo = "gtkglext";
     # build fixes
     # https://gitlab.gnome.org/Archive/gtkglext/merge_requests/1
     rev = "ad95fbab68398f81d7a5c895276903b0695887e2";

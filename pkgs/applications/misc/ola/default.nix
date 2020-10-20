@@ -15,8 +15,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "ola";
-  version = "unstable-2020-07-17";
+  pname = "ola-unstable";
+  version = "2020-07-17";
 
   src = fetchFromGitHub {
     owner = "OpenLightingProject";

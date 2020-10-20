@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  pname = "zabbixctl";
-  version = "unstable-2019-07-06";
+  pname = "zabbixctl-unstable";
+  version = "2019-07-06";
 
   goPackagePath = "github.com/kovetskiy/zabbixctl";
 

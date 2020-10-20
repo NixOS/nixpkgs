@@ -2,12 +2,12 @@
 
 python3.pkgs.buildPythonApplication rec {
 
-  pname = "ubidump";
-  version = "unstable-2019-09-11";
+  pname = "ubidump-unstable";
+  version = "2019-09-11";
 
   src = fetchFromGitHub {
     owner = "nlitsme";
-    repo = pname;
+    repo = "ubidump";
     rev = "0691f1a9a38604c2baf8c9af6b826eb2632af74a";
     sha256 = "1hiivlgni4r3nd5n2rzl5qzw6y2wpjpmyls5lybrc8imd6rmj3w2";
   };

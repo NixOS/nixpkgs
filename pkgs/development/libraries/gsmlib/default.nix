@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 stdenv.mkDerivation rec {
-  pname = "gsmlib";
-  version = "unstable-2017-10-06";
+  pname = "gsmlib-unstable";
+  version = "2017-10-06";
   src = fetchFromGitHub {
     owner = "x-logLT";
     repo = "gsmlib";

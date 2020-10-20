@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, cmake, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  pname = "nvidia-texture-tools";
-  version = "unstable-2019-10-27";
+  pname = "nvidia-texture-tools-unstable";
+  version = "2019-10-27";
 
   src = fetchFromGitHub {
     owner = "castano";

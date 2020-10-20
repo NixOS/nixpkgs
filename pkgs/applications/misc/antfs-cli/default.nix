@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication {
-  pname = "antfs-cli";
-  version = "unstable-2017-02-11";
+  pname = "antfs-cli-unstable";
+  version = "2017-02-11";
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/Tigge/antfs-cli";

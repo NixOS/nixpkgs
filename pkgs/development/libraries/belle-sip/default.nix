@@ -10,16 +10,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "belle-sip";
+  pname = "belle-sip-unstable";
   # Using master branch for linphone-desktop caused a chain reaction that many
   # of its dependencies needed to use master branch too.
-  version = "unstable-2020-02-18";
+  version = "2020-02-18";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
-    repo = pname;
+    repo = "belle-sip";
     rev = "0dcb13416eae87edf140771b886aedaf6be8cf60";
     sha256 = "0pzxk8mkkg6zsnmj1bwggbdjv864psx89gglfm51h8s501kg11fv";
   };

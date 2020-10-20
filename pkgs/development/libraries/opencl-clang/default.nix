@@ -55,8 +55,8 @@ let
     inherit (if buildWithPatches then passthru else llvmPkgs) clang-unwrapped spirv-llvm-translator;
   in
     stdenv.mkDerivation rec {
-      pname = "opencl-clang";
-      version = "unstable-2019-08-16";
+      pname = "opencl-clang-unstable";
+      version = "2019-08-16";
 
       inherit passthru;
 

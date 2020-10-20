@@ -44,12 +44,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "anbox";
-  version = "unstable-2019-11-15";
+  pname = "anbox-unstable";
+  version = "2019-11-15";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "anbox";
+    repo = "anbox";
     rev = "0a49ae08f76de7f886a3dbed4422711c2fa39d10";
     sha256 = "09l56nv9cnyhykclfmvam6bkcxlamwbql6nrz9n022553w92hkjf";
   };

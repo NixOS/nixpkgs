@@ -10,8 +10,8 @@
 }:
 
 mkDerivation {
-  pname = "qcsxcad";
-  version = "unstable-2020-01-04";
+  pname = "qcsxcad-unstable";
+  version = "2020-01-04";
 
   src = fetchFromGitHub {
     owner = "thliebig";

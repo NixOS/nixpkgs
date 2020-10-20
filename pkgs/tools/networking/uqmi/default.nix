@@ -1,8 +1,8 @@
 { stdenv, lib, fetchgit, cmake, perl, libubox, json_c }:
 
 stdenv.mkDerivation {
-  pname = "uqmi";
-  version = "unstable-2019-06-27";
+  pname = "uqmi-unstable";
+  version = "2019-06-27";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/uqmi.git";

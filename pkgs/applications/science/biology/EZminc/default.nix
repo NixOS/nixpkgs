@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, libminc, bicpl, itk4, fftwFloat, gsl }:
 
 stdenv.mkDerivation rec {
-  pname = "EZminc";
-  version = "unstable-2019-03-12";
+  pname = "EZminc-unstable";
+  version = "2019-03-12";
 
   src = fetchFromGitHub {
     owner  = "BIC-MNI";
-    repo   = pname;
+    repo   = "EZminc";
     rev    = "5e3333ee356f914d34d66d33ea8df809c7f7fa51";
     sha256 = "0wy8cppf5xpgfqvgb3mqs1cjh81n6qzkk6zxv29wvng8nar9wsy4";
   };

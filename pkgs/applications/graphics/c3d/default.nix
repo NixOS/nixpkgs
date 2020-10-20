@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, cmake, itk4, Cocoa }:
 
 stdenv.mkDerivation rec {
-  pname   = "c3d";
-  version = "unstable-2020-10-05";
+  pname   = "c3d-unstable";
+  version = "2020-10-05";
 
   src = fetchFromGitHub {
     owner = "pyushkevich";
-    repo = pname;
+    repo = "c3d";
     rev = "0a87e3972ea403babbe2d05ec6d50855e7c06465";
     sha256 = "0wsmkifqrcfy13fnwvinmnq1m0lkqmpyg7bgbwnb37mbrlbq06wf";
   };

@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, autoreconfHook, apacheHttpd, apr, cairo, iniparser, mapnik }:
 
 stdenv.mkDerivation rec {
-  pname = "mod_tile";
-  version = "unstable-2017-01-08";
+  pname = "mod_tile-unstable";
+  version = "2017-01-08";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";

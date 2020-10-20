@@ -7,8 +7,8 @@
 , SDL
 }:
 stdenv.mkDerivation rec {
-  pname = "cheesecutter";
-  version = "unstable-2020-04-03";
+  pname = "cheesecutter-unstable";
+  version = "2020-04-03";
 
   src = fetchFromGitHub {
     owner = "theyamo";

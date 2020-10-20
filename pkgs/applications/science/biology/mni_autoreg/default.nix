@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, cmake, makeWrapper, perlPackages, libminc }:
 
 stdenv.mkDerivation rec {
-  pname = "mni_autoreg";
-  version = "unstable-2017-09-22";
+  pname = "mni_autoreg-unstable";
+  version = "2017-09-22";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";
-    repo = pname;
+    repo = "mni_autoreg";
     rev = "ab99e29987dc029737785baebf24896ec37a2d76";
     sha256 = "0axl069nv57vmb2wvqq7s9v3bfxwspzmk37bxm4973ai1irgppjq";
   };

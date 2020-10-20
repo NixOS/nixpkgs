@@ -1,8 +1,8 @@
 { stdenv, fetchurl, unzip, lv2 }:
 
 stdenv.mkDerivation {
-  pname = "molot-lite";
-  version = "unstable-2014-04-23";
+  pname = "molot-lite-unstable";
+  version = "2014-04-23";
 
   src = fetchurl {
     # fetchzip does not accept urls that do not end with .zip.

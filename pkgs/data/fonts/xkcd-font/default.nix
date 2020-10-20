@@ -1,13 +1,13 @@
 { lib, fetchFromGitHub }:
 
 let
-  pname = "xkcd-font";
-  version = "unstable-2017-08-24";
+  pname = "xkcd-font-unstable";
+  version = "2017-08-24";
 in fetchFromGitHub {
   name = "${pname}-${version}";
 
   owner = "ipython";
-  repo = pname;
+  repo = "xkcd-font";
   rev = "5632fde618845dba5c22f14adc7b52bf6c52d46d";
 
   postFetch = ''
