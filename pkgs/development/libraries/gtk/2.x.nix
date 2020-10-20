@@ -18,7 +18,7 @@ let
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  
+
   # passthru to prevent rebuild but allow pname and version
   passthru = { inherit pname version; };
 
