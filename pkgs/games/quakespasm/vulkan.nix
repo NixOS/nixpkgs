@@ -1,4 +1,4 @@
-{ stdenv, SDL2, fetchFromGitHub, makeWrapper, gzip, libvorbis, libmad, vulkan-headers, vulkan-loader }:
+{ stdenv, fetchpatch, fetchFromGitHub, makeWrapper, SDL2, gzip, libvorbis, libmad, vulkan-headers, vulkan-loader }:
 
 stdenv.mkDerivation rec {
   pname = "vkquake";
@@ -11,14 +11,28 @@ stdenv.mkDerivation rec {
     sha256 = "1ry861pk3z02hy7i0yi3xwmd1zma802qzcnlm09w6pslayd9rwbf";
   };
 
+  # patches and patchFlags can be deleted with the next release
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/Novum/vkQuake/commit/a869a22d9b51c68e57646fa20e4c40fc6db36760.patch";
+      sha256 = "sha256-ea5lcXTTlJZnuOdF1W+GCYvVgj/gW10tDNyTgfl3Kfs=";
+    })
+  ];
+  patchFlags = "-p2";
+
   sourceRoot = "source/Quake";
 
   nativeBuildInputs = [
-    makeWrapper vulkan-headers
+    makeWrapper
+    vulkan-headers
   ];
 
   buildInputs = [
-    gzip SDL2 libvorbis libmad vulkan-loader
+    gzip
+    SDL2
+    libvorbis
+    libmad
+    vulkan-loader
   ];
 
   buildFlags = [ "DO_USERDIRS=1" ];
@@ -30,12 +44,13 @@ stdenv.mkDerivation rec {
   makeFlags = [ "prefix=$(out) bindir=$(out)/bin" ];
 
   postFixup = ''
-    wrapProgram $out/bin/vkquake --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
+    wrapProgram $out/bin/vkquake \
+      --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
   '';
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Vulkan Quake port based on QuakeSpasm";
     homepage = src.meta.homepage;
     longDescription = ''
@@ -47,7 +62,7 @@ stdenv.mkDerivation rec {
       specialization constants, CPU/GPU parallelism and memory pooling.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.gnidorah ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ gnidorah ];
   };
 }
