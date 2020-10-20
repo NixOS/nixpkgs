@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation {
   pname = "picat";
-  version = "3.0";
+  version = "3.0p2";
 
   src = fetchurl {
-    url    = "http://picat-lang.org/download/picat30_src.tar.gz";
-    sha256 = "0ivqp4ifknc019rb975vx5j3rmr69x2f3ig7ybb38wm5zx5mljgg";
+    url    = "http://picat-lang.org/download/picat30_2_src.tar.gz";
+    sha256 = "0sn4fqj2ryalcndx1df5kx5rzb4pfcrza5ljlg9dkfbqv02xgxkd";
   };
 
   buildInputs = [ zlib ];
