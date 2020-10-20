@@ -1,11 +1,15 @@
 # Nixpkgs/NixOS option handling.
 { lib }:
 
-with lib.trivial;
-with lib.lists;
-with lib.attrsets;
-with lib.strings;
-
+let
+  inherit (lib)
+    isAttrs isBool isDerivation isFunction isInt isList isString
+    all collect concatMap concatLists elemAt filter foldl' head length mapAttrs optionals optional take
+    ;
+  inherit (lib.attrsets) optionalAttrs;
+  inherit (lib.strings) concatMapStrings concatStringsSep;
+  inherit (lib.types) mkOptionType;
+in
 rec {
 
   /* Returns true when the given argument is an option
