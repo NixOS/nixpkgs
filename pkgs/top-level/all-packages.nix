@@ -3427,6 +3427,8 @@ in
 
   wayland-utils = callPackage ../tools/wayland/wayland-utils { };
 
+  wayst = callPackage ../applications/misc/wayst { };
+
   wev = callPackage ../tools/misc/wev { };
 
   wl-clipboard = callPackage ../tools/misc/wl-clipboard { };
@@ -28319,4 +28321,5 @@ in
   cagebreak = callPackage ../applications/window-managers/cagebreak/default.nix {};
 
   psftools = callPackage ../os-specific/linux/psftools {};
+
 }
