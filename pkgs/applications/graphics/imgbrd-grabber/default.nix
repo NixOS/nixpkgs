@@ -70,10 +70,10 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    # move the binaries to the share/Grabber folder so 
+    # move the binaries to the share/Grabber folder so
     # some relative links can be resolved (e.g. settings.ini)
     mv $out/bin/* $out/share/Grabber/
-    
+
     cd ../..
     # run the package.sh with $out/share/Grabber as the $APP_DIR 
     sh ./scripts/package.sh $out/share/Grabber
