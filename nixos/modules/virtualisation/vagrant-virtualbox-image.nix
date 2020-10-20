@@ -41,8 +41,12 @@
       # 4. move the ovf to the fixed location
       mv *.ovf box.ovf
 
-      # TODO: fix the checksum file instead of removing it
       rm *.mf
+      touch box.mf
+      for fname in *; do
+        checksum=$(sha256sum $fname | cut -d' ' -f 1)
+        echo "SHA256($fname)= $checksum" >> box.mf
+      done
 
       # 5. compress everything back together
       tar --owner=0 --group=0 --sort=name --numeric-owner -czf $out .
