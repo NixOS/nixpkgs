@@ -2907,6 +2907,8 @@ in {
 
   infoqscraper = callPackage ../development/python-modules/infoqscraper { };
 
+  inform = callPackage ../development/python-modules/inform { };
+
   iniconfig = callPackage ../development/python-modules/iniconfig { };
 
   inifile = callPackage ../development/python-modules/inifile { };
