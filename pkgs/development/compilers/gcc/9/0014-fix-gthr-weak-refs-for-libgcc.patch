@@ -1,0 +1,51 @@
+From 51a354a0fb54165d505bfed9819c0440027312d9 Mon Sep 17 00:00:00 2001
+From: Szabolcs Nagy <nsz@port70.net>
+Date: Sun, 22 Sep 2019 23:04:48 +0000
+Subject: [PATCH] fix gthr weak refs for libgcc
+
+ideally gthr-posix.h should be fixed not to use weak refs for
+single thread detection by default since that's unsafe.
+
+currently we have to opt out explicitly from the unsafe behaviour
+in the configure machinery of each target lib that uses gthr and
+musl missed libgcc previously.
+
+related bugs and discussions
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=78017
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=87189
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91737
+https://sourceware.org/bugzilla/show_bug.cgi?id=5784
+https://sourceware.org/ml/libc-alpha/2012-09/msg00192.html
+https://sourceware.org/ml/libc-alpha/2019-08/msg00438.html
+---
+ libgcc/config.host          | 7 +++++++
+ libgcc/config/t-gthr-noweak | 2 ++
+ 2 files changed, 9 insertions(+)
+ create mode 100644 libgcc/config/t-gthr-noweak
+
+diff --git a/libgcc/config.host b/libgcc/config.host
+index 122113fc519..fe1b9ab93d5 100644
+--- a/libgcc/config.host
++++ b/libgcc/config.host
+@@ -1500,3 +1500,10 @@ aarch64*-*-*)
+ 	tm_file="${tm_file} aarch64/value-unwind.h"
+ 	;;
+ esac
++
++case ${host} in
++*-*-musl*)
++  # The gthr weak references are unsafe with static linking
++  tmake_file="$tmake_file t-gthr-noweak"
++  ;;
++esac
+diff --git a/libgcc/config/t-gthr-noweak b/libgcc/config/t-gthr-noweak
+new file mode 100644
+index 00000000000..45a21e9361d
+--- /dev/null
++++ b/libgcc/config/t-gthr-noweak
+@@ -0,0 +1,2 @@
++# Don't use weak references for single-thread detection
++HOST_LIBGCC2_CFLAGS += -DGTHREAD_USE_WEAK=0
+-- 
+2.17.1
+

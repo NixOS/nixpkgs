@@ -68,6 +68,11 @@ let majorVersion = "9";
       ++ optional langD ../libphobos.patch
       ++ optional langFortran ../gfortran-driving.patch
       ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch
+      ++ optionals (targetPlatform.libc == "musl") [
+        ./0013-invalid-tls-model.diff
+        ./0016-libstdc++-futex-time64.diff
+        ./0014-fix-gthr-weak-refs-for-libgcc.patch
+      ]
       ++ optional (!crossStageStatic && targetPlatform.isMinGW) (fetchpatch {
         url = "https://raw.githubusercontent.com/lhmouse/MINGW-packages/${import ../common/mfcgthreads-patches-repo.nix}/mingw-w64-gcc-git/9000-gcc-${majorVersion}-branch-Added-mcf-thread-model-support-from-mcfgthread.patch";
         sha256 = "1in5kvcknlpi9z1vvjw6jfmwy8k12zvbqlqfnq84qpm99r0rh00a";

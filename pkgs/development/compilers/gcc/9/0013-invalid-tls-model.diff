@@ -1,0 +1,28 @@
+diff --git a/libgomp/configure.tgt b/libgomp/configure.tgt
+index b88bf72fe3d..747d0485bf8 100644
+--- a/libgomp/configure.tgt
++++ b/libgomp/configure.tgt
+@@ -17,6 +17,9 @@ if test $gcc_cv_have_tls = yes ; then
+     *-*-k*bsd*-gnu*)
+ 	;;
+ 
++    *-*-musl*)
++	;;
++
+     *-*-linux* | *-*-gnu*)
+ 	XCFLAGS="${XCFLAGS} -ftls-model=initial-exec -DUSING_INITIAL_EXEC_TLS"
+ 	;;
+diff --git a/libitm/configure.tgt b/libitm/configure.tgt
+index 4c0b602034b..65e1c83550a 100644
+--- a/libitm/configure.tgt
++++ b/libitm/configure.tgt
+@@ -31,6 +31,9 @@
+ if test "$gcc_cv_have_tls" = yes ; then
+   case "${target}" in
+ 
++    *-*-musl*)
++	;;
++
+     # For x86, we use slots in the TCB head for most of our TLS.
+     # The setup of those slots in beginTransaction can afford to
+     # use the global-dynamic model.

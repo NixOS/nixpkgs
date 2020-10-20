@@ -1,0 +1,18 @@
+--- gcc-9.2.0/libstdc++-v3/src/c++11/futex.cc.orig	2020-01-20 14:55:05.507548334 -0500
++++ gcc-9.2.0/libstdc++-v3/src/c++11/futex.cc	2020-01-20 14:56:52.458268068 -0500
+@@ -61,7 +61,15 @@
+ 	struct timeval tv;
+ 	gettimeofday (&tv, NULL);
+ 	// Convert the absolute timeout value to a relative timeout
++#if defined(SYS_futex_time64) && SYS_futex_time64 != SYS_futex
++	struct
++	  {
++	    long tv_sec;
++	    long tv_nsec;
++	  } rt;
++#else
+ 	struct timespec rt;
++#endif
+ 	rt.tv_sec = __s.count() - tv.tv_sec;
+ 	rt.tv_nsec = __ns.count() - tv.tv_usec * 1000;
+ 	if (rt.tv_nsec < 0)
