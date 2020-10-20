@@ -3,15 +3,15 @@
 with lib;
 
 let
-  cfg = config.services.journalbeat;
+  cfg = config.services.packetbeat;
 
   lt6 = builtins.compareVersions cfg.package.version "6" < 0;
 
-  journalbeatYml = pkgs.writeText "journalbeat.yml" ''
+  packetbeatYml = pkgs.writeText "packetbeat.yml" ''
     name: ${cfg.name}
     tags: ${builtins.toJSON cfg.tags}
 
-    ${optionalString lt6 "journalbeat.cursor_state_file: /var/lib/${cfg.stateDir}/cursor-state"}
+    ${optionalString lt6 "packetbeat.cursor_state_file: /var/lib/${cfg.stateDir}/cursor-state"}
 
     ${cfg.extraConfig}
   '';
@@ -20,23 +20,23 @@ in
 {
   options = {
 
-    services.journalbeat = {
+    services.packetbeat = {
 
-      enable = mkEnableOption "journalbeat";
+      enable = mkEnableOption "packetbeat";
 
       package = mkOption {
         type = types.package;
-        default = pkgs.journalbeat;
-        defaultText = "pkgs.journalbeat";
-        example = literalExample "pkgs.journalbeat7";
+        default = pkgs.packetbeat;
+        defaultText = "pkgs.packetbeat";
+        example = literalExample "pkgs.packetbeat7";
         description = ''
-          The journalbeat package to use
+          The packetbeat package to use
         '';
       };
 
       name = mkOption {
         type = types.str;
-        default = "journalbeat";
+        default = "packetbeat";
         description = "Name of the beat";
       };
 
@@ -48,9 +48,9 @@ in
 
       stateDir = mkOption {
         type = types.str;
-        default = "journalbeat";
+        default = "packetbeat";
         description = ''
-          Directory below <literal>/var/lib/</literal> to store journalbeat's
+          Directory below <literal>/var/lib/</literal> to store packetbeat's
           own logs and other data. This directory will be created automatically
           using systemd's StateDirectory mechanism.
         '';
@@ -59,15 +59,15 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = optionalString lt6 ''
-          journalbeat:
+          packetbeat:
             seek_position: cursor
             cursor_seek_fallback: tail
             write_cursor_state: true
             cursor_flush_period: 5s
             clean_field_names: true
             convert_to_numbers: false
-            move_metadata_to_field: journal
-            default_type: journal
+            move_metadata_to_field: packet
+            default_type: packet
         '';
         description = "Any other configuration options you want to add";
       };
@@ -81,13 +81,13 @@ in
       {
         assertion = !hasPrefix "/" cfg.stateDir;
         message =
-          "The option services.journalbeat.stateDir shouldn't be an absolute directory." +
+          "The option services.packetbeat.stateDir shouldn't be an absolute directory." +
           " It should be a directory relative to /var/lib/.";
       }
     ];
 
-    systemd.services.journalbeat = {
-      description = "Journalbeat log shipper";
+    systemd.services.packetbeat = {
+      description = "Packetbeat log shipper";
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         mkdir -p ${cfg.stateDir}/data
@@ -96,8 +96,8 @@ in
       serviceConfig = {
         StateDirectory = cfg.stateDir;
         ExecStart = ''
-          ${cfg.package}/bin/journalbeat \
-            -c ${journalbeatYml} \
+          ${cfg.package}/bin/packetbeat run \
+            -c ${packetbeatYml} \
             -path.data /var/lib/${cfg.stateDir}/data \
             -path.logs /var/lib/${cfg.stateDir}/logs'';
         Restart = "always";

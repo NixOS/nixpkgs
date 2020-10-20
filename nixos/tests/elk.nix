@@ -54,7 +54,22 @@ let
                   - paths: []
                     seek: cursor
                 '');
-              };
+                };
+
+              packetbeat =
+                let lt6 = builtins.compareVersion elk.packetbeat.version "6" < 0;
+                in {
+                  enable = true;
+                  package = elk.packetbeat;
+                  extraConfig = pkgs.lib.mkOptionDefault (''
+                    output.elasticsearch:
+                      hosts: [ "127.0.0.1:9200" ]
+                    packetbeat.flows:
+                      timeout: 30s
+                      period: 10s
+                    setup.dashboards.enabled: true
+                  '');
+                };
 
               logstash = {
                 enable = true;
@@ -173,6 +188,12 @@ let
               total_hits("Supercalifragilisticexpialidocious") + " | grep -v 0"
           )
 
+      with subtest("Packetbeat's sample dashboard is imported"):
+          one.wait_for_unit("packetbeat.service")
+          one.wait_until_succeeds(
+              "curl --silent --show-error http://localhost:5601/api/kibana/dashboards/export?dashboard=MySQL-Errors-ecs"
+          )
+
       with subtest("Elasticsearch-curator works"):
           one.systemctl("stop logstash")
           one.systemctl("start elasticsearch-curator")
@@ -189,12 +210,14 @@ in pkgs.lib.mapAttrs mkElkTest {
       logstash      = pkgs.logstash6;
       kibana        = pkgs.kibana6;
       journalbeat   = pkgs.journalbeat6;
+      packetbeat    = pkgs.packetbeat6;
     }
     else {
       elasticsearch = pkgs.elasticsearch6-oss;
       logstash      = pkgs.logstash6-oss;
       kibana        = pkgs.kibana6-oss;
       journalbeat   = pkgs.journalbeat6;
+      packetbeat    = pkgs.packetbeat6;
     };
   ELK-7 =
     if enableUnfree
@@ -203,11 +226,13 @@ in pkgs.lib.mapAttrs mkElkTest {
       logstash      = pkgs.logstash7;
       kibana        = pkgs.kibana7;
       journalbeat   = pkgs.journalbeat7;
+      packetbeat    = pkgs.packetbeat7;
     }
     else {
       elasticsearch = pkgs.elasticsearch7-oss;
       logstash      = pkgs.logstash7-oss;
       kibana        = pkgs.kibana7-oss;
       journalbeat   = pkgs.journalbeat7;
+      packetbeat    = pkgs.packetbeat7;
     };
 }

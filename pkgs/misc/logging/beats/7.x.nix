@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, elk7Version, buildGoPackage, libpcap, systemd }:
+{ stdenv, lib, fetchFromGitHub, elk7Version, buildGoPackage, libpcap, systemd, python }:
 
 let beat = package : extraArgs : buildGoPackage (rec {
       name = "${package}-${version}";
@@ -38,6 +38,11 @@ in {
       your application processes, parse on the fly protocols like HTTP, MySQL,
       PostgreSQL, Redis or Thrift and correlate the messages into transactions.
     '';
+    preDistPhases = ["dashboardPhase"];
+    dashboardPhase = ''
+      cp -r ./go/src/github.com/elastic/beats/packetbeat/_meta/* $out/bin
+      ${python}/bin/python ./go/src/github.com/elastic/beats/libbeat/scripts/unpack_dashboards.py --transform encode --glob "$out/bin/kibana/7/dashboard/*.json"
+    '';
   };
   journalbeat7  = beat "journalbeat" {
     meta.description = ''
@@ -47,6 +52,11 @@ in {
     buildInputs = [ systemd.dev ];
     postFixup = let libPath = stdenv.lib.makeLibraryPath [ (lib.getLib systemd) ]; in ''
       patchelf --set-rpath ${libPath} "$out/bin/journalbeat"
+    '';
+    preDistPhases = ["dashboardPhase"];
+    dashboardPhase = ''
+      cp -r ./go/src/github.com/elastic/beats/journalbeat/_meta/* $out/bin
+      ${python}/bin/python ./go/src/github.com/elastic/beats/libbeat/scripts/unpack_dashboards.py --transform encode --glob "$out/bin/kibana/7/dashboard/*.json"
     '';
   };
 }
