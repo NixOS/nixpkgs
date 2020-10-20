@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   # fetching a .deb because there's no easy way to package this Electron app
   src = fetchurl {
     url = "https://github.com/burtonator/polar-bookshelf/releases/download/v${version}/polar-desktop-app-${version}-amd64.deb";
-    sha256 = "sha256-JyO71wyE6b0iHAYs/6/WbG+OdUVUUPpJla+ZUzg0Gng=";
+    hash = "sha256-JyO71wyE6b0iHAYs/6/WbG+OdUVUUPpJla+ZUzg0Gng=";
   };
 
   buildInputs = [
