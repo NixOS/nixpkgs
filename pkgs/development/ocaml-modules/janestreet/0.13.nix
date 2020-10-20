@@ -392,6 +392,13 @@ rec {
     propagatedBuildInputs = [ async ];
   };
 
+  async_interactive = janePackage {
+    pname = "async_interactive";
+    hash = "1ma24pi3hqzrs1k12sc0aarhf42fap8nl1h7id6k01wp6s3yqi5d";
+    meta.description = "Utilities for building simple command-line based user interfaces";
+    propagatedBuildInputs = [ async ];
+  };
+
   re2 = janePackage {
     pname = "re2";
     hash = "0hmizznlzilynn5kh6149bbpkfw2l0xi7zi1y1fxfww2ma3wpim0";
