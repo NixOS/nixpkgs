@@ -7419,6 +7419,12 @@
     githubId = 1387224;
     name = "Richard Szibele";
   };
+  rtburns-jpl = {
+    email = "rtburns@jpl.nasa.gov";
+    github = "rtburns-jpl";
+    githubId = 47790121;
+    name = "Ryan Burns";
+  };
   rtreffer = {
     email = "treffer+nixos@measite.de";
     github = "rtreffer";
