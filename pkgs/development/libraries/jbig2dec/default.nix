@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jbig2dec";
-  version = "0.18";
+  version = "0.19";
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs952/${pname}-${version}.tar.gz";
-    sha256 = "0pigfw2v0ppvr0lbysm69gx0zsa5q2q92yrb8af2j3im6x97f6cy";
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9533/${pname}-${version}.tar.gz";
+    sha256 = "0dwa24kjqyg9hmm40fh048sdxfpnasz43l2rm8wlkw1qbdlpd517";
   };
 
   postPatch = ''
