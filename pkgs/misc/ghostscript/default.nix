@@ -9,9 +9,10 @@ assert x11Support -> xlibsWrapper != null;
 assert cupsSupport -> cups != null;
 
 let
-  version = "9.${ver_min}";
-  ver_min = "52";
-  sha512 = "1ksm3v4nw8acc4j817n44l1c65ijk0mr3mp4kryy17jz41bmzzql5d8vr40h59n9dmf8b2wmnbq45bj3an1zrpfagavlf0i9s436jjc";
+  version = "9.${ver_min}.${ver_patch}";
+  ver_min = "53";
+  ver_patch = "3";
+  sha512 = "2vif3vgxa5wma16yxvhhkymk4p309y5204yykarq94r5rk890556d2lj5w7acnaa2ymkym6y0zd4vq9sy9ca2346igg2c6dxqkjr0zb";
 
   fonts = stdenv.mkDerivation {
     name = "ghostscript-fonts";
@@ -40,21 +41,17 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${ver_min}/${pname}-${version}.tar.xz";
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${ver_min}${ver_patch}/${pname}-${version}.tar.xz";
     inherit sha512;
   };
 
   patches = [
     (fetchpatch {
-      name = "CVE-2020-15900.patch";
-      url = "https://github.com/ArtifexSoftware/ghostpdl/commit/5d499272b95a6b890a1397e11d20937de000d31b.patch";
-      sha256 = "1nnnrn8q33x7nc8227ygc60f3mj4bjzrhj40sxp6dah58rb5x5jz";
+      url = "https://github.com/ArtifexSoftware/ghostpdl/commit/41ef9a0bc36b9db7115fbe9623f989bfb47bbade.patch";
+      sha256 = "1qpc6q1fpxshqc0mqgg36kng47kgljk50bmr8p7wn21jgfkh7m8w";
     })
     ./urw-font-files.patch
     ./doc-no-ref.diff
-    # rebased version of upstream http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=1b4c3669a20c,
-    # Remove on update to version > 9.52
-    ./0001-Bug-702364-Fix-missing-echogs-dependencies.patch
   ];
 
   outputs = [ "out" "man" "doc" ];
