@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${stdenv.lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "0llgq2adzn9p3bfq9rv2dhscmvzs35jp3glrfvy3vs1mrpknmsmf";
+    sha256 = "XYZNJINXoiUVRbM4ezWULeX2bkxmAT8JYutctvja4rE=";
   };
 
   patches = [
