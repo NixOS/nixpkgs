@@ -3978,6 +3978,8 @@ in {
 
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
+  nestedtext = callPackage ../development/python-modules/nestedtext { };
+
   netaddr = callPackage ../development/python-modules/netaddr { };
 
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
