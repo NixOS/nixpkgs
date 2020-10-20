@@ -8,6 +8,12 @@
     ./virtualbox-image.nix
   ];
 
+  virtualbox.vmHasAudio = false;
+  virtualbox.vmHasUSB = false;
+  sound.enable = false;
+  documentation.man.enable = false;
+  documentation.nixos.enable = false;
+
   users.extraUsers.vagrant.extraGroups = [ "vboxsf" ];
 
   # generate the box v1 format which is much easier to generate
