@@ -87,7 +87,7 @@ in
 stdenv.mkDerivation {
   inherit name;
 
-  src = fetchurl { inherit (source) url sha512; };
+  src = fetchurl { inherit (source) url sha256; };
 
   phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
 

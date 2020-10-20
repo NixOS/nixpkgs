@@ -11,6 +11,14 @@ buildPythonPackage rec {
     sha256 = "1c4mcjrdbvvq5crrfc3b9m221qb6pxp55yynijihgfnvvndz2jrr";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2020-17446.patch";
+      url = "https://github.com/MagicStack/asyncpg/commit/69bcdf5bf7696b98ee708be5408fd7d854e910d0.patch";
+      sha256 = "0br5bfzrlhwq7kqmnlgnjlizyyaq31mvgw77p3lwhxn5r0wkpnaj";
+    })
+  ];
+
   checkInputs = [
     uvloop
     postgresql

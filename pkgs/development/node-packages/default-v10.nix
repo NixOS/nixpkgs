@@ -66,6 +66,10 @@ nodePackages // {
     buildInputs = [ nodePackages.node-pre-gyp ];
   };
 
+  node-red = nodePackages.node-red.override {
+    buildInputs = [ nodePackages.node-pre-gyp ];
+  };
+
   node2nix =  nodePackages.node2nix.override {
     buildInputs = [ pkgs.makeWrapper ];
     postInstall = ''

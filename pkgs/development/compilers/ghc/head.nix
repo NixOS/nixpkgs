@@ -85,7 +85,9 @@ let
 
   targetCC = builtins.head toolsForTarget;
 
-  useLdGold = targetPlatform.isLinux && !(targetPlatform.useLLVM or false);
+  # ld.gold is disabled for musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
+  # see #84670 and #49071 for more background.
+  useLdGold = targetPlatform.isLinux && !(targetPlatform.useLLVM or false) && !targetPlatform.isMusl;
 
 in
 stdenv.mkDerivation (rec {

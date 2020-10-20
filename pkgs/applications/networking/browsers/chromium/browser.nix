@@ -13,7 +13,7 @@ mkChromiumDerivation (base: rec {
 
   installPhase = ''
     mkdir -p "$libExecPath"
-    cp -v "$buildPath/"*.pak "$buildPath/"*.bin "$libExecPath/"
+    cp -v "$buildPath/"*.so "$buildPath/"*.pak "$buildPath/"*.bin "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
     cp -v "$buildPath/chrome" "$libExecPath/$packageName"
@@ -90,5 +90,6 @@ mkChromiumDerivation (base: rec {
     platforms = platforms.linux;
     hydraPlatforms = if channel == "stable" then ["aarch64-linux" "x86_64-linux"] else [];
     timeout = 172800; # 48 hours
+    broken = channel == "dev"; # Requires LLVM 11
   };
 })

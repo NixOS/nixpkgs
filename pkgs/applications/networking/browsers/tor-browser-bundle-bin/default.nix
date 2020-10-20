@@ -46,7 +46,8 @@
 
 # Hardening
 , graphene-hardened-malloc
-, useHardenedMalloc ? graphene-hardened-malloc != null && builtins.elem stdenv.system graphene-hardened-malloc.meta.platforms
+# crashes with intel driver
+, useHardenedMalloc ? false
 
 # Whether to disable multiprocess support to work around crashing tabs
 # TODO: fix the underlying problem instead of this terrible work-around
@@ -90,19 +91,19 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "9.5";
+  version = "10.0";
 
   lang = "en-US";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
-      sha256 = "0l4fz2zkgwv2qniia4nv53a4pd79hfbgb66jn68r44diails1z08";
+      sha256 = "1l2rfknffnh6hsi16dzps1wav5s723vyk57fzv9y5vjmbcbf7l2l";
     };
 
     i686-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
-      sha256 = "1h4awhyaiws68s727pq9r32xqg2878dl2df4kbc2nmllwrl2fxq3";
+      sha256 = "0x80w02ckb6mznrm1gjdpkxk9yf2rdcl16ljjglivq358a309cl2";
     };
   };
 in

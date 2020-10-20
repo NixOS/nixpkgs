@@ -1,12 +1,23 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, gnulib, perl, autoconf, automake }:
 
 stdenv.mkDerivation rec {
-  name = "lbzip2-2.5";
+  version = "2.5";
+  name = "lbzip2-${version}";
 
-  src = fetchurl {
-    url = "http://archive.lbzip2.org/${name}.tar.gz";
-    sha256 = "1sahaqc5bw4i0iyri05syfza4ncf5cml89an033fspn97klmxis6";
+  src = fetchFromGitHub {
+    owner = "kjn";
+    repo = "lbzip2";
+    sha256 = "1h321wva6fp6khz6x0i6rqb76xh327nw6v5jhgjpcckwdarj5jv8";
+    rev = "v${version}";
   };
+
+  buildInputs = [ gnulib ];
+  nativeBuildInputs = [ autoconf automake perl ];
+
+  preConfigure = ''
+     substituteInPlace build-aux/autogen.sh --replace gnulib-tool 'gnulib-tool --symlink --more-symlink'
+    ./build-aux/autogen.sh
+  '';
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/kjn/lbzip2"; # Formerly http://lbzip2.org/
@@ -14,6 +25,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.unix;
-    broken = true;
   };
 }

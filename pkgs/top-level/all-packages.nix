@@ -477,9 +477,7 @@ in
 
   findXMLCatalogs = makeSetupHook { } ../build-support/setup-hooks/find-xml-catalogs.sh;
 
-  wrapGAppsHook = makeSetupHook {
-    deps = lib.optional (!stdenv.isDarwin) dconf.lib ++ [ gtk3 librsvg makeWrapper ];
-  } ../build-support/setup-hooks/wrap-gapps-hook.sh;
+  wrapGAppsHook = callPackage ../build-support/setup-hooks/wrap-gapps-hook { };
 
   separateDebugInfo = makeSetupHook { } ../build-support/setup-hooks/separate-debug-info.sh;
 
@@ -1688,6 +1686,12 @@ in
 
   eksctl = callPackage ../tools/admin/eksctl { };
 
+  element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix { };
+
+  element-web = callPackage ../applications/networking/instant-messengers/element/element-web.nix {
+    conf = config.element-web.conf or {};
+  };
+
   elementary-xfce-icon-theme = callPackage ../data/icons/elementary-xfce-icon-theme { };
 
   ell = callPackage ../os-specific/linux/ell { };
@@ -2115,12 +2119,6 @@ in
   rav1e = callPackage ../tools/video/rav1e { };
 
   ring-daemon = callPackage ../applications/networking/instant-messengers/ring-daemon { };
-
-  riot-desktop = callPackage ../applications/networking/instant-messengers/riot/riot-desktop.nix { };
-
-  riot-web = callPackage ../applications/networking/instant-messengers/riot/riot-web.nix {
-    conf = config.riot-web.conf or {};
-  };
 
   ripasso-cursive = callPackage ../tools/security/ripasso/cursive.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
@@ -2669,7 +2667,10 @@ in
     cudatoolkit_9_2
     cudatoolkit_10
     cudatoolkit_10_0
-    cudatoolkit_10_1;
+    cudatoolkit_10_1
+    cudatoolkit_10_2
+    cudatoolkit_11
+    cudatoolkit_11_0;
 
   cudatoolkit = cudatoolkit_10;
 
@@ -2685,7 +2686,10 @@ in
     cudnn_cudatoolkit_9_2
     cudnn_cudatoolkit_10
     cudnn_cudatoolkit_10_0
-    cudnn_cudatoolkit_10_1;
+    cudnn_cudatoolkit_10_1
+    cudnn_cudatoolkit_10_2
+    cudnn_cudatoolkit_11
+    cudnn_cudatoolkit_11_0;
 
   cudnn = cudnn_cudatoolkit_10;
 
@@ -3378,7 +3382,7 @@ in
   fontforge-gtk = fontforge.override {
     withSpiro = true;
     withGTK = true;
-    gtk2 = gtk2-x11;
+    gtk3 = gtk3-x11;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
 
@@ -7853,6 +7857,7 @@ in
   llvm-polly = llvmPackages_latest.llvm-polly;
   clang-polly = llvmPackages_latest.clang.override { cc = llvmPackages_latest.clang-polly-unwrapped; };
 
+  clang_11 = llvmPackages_11.clang;
   clang_10 = llvmPackages_10.clang;
   clang_9  = llvmPackages_9.clang;
   clang_8  = llvmPackages_8.clang;
@@ -8575,6 +8580,7 @@ in
   lld_8 = llvmPackages_8.lld;
   lld_9 = llvmPackages_9.lld;
   lld_10 = llvmPackages_10.lld;
+  lld_11 = llvmPackages_11.lld;
 
   lldb = llvmPackages.lldb;
   lldb_5 = llvmPackages_5.lldb;
@@ -8583,10 +8589,12 @@ in
   lldb_8 = llvmPackages_8.lldb;
   lldb_9 = llvmPackages_9.lldb;
   lldb_10 = llvmPackages_10.lldb;
+  lldb_11 = llvmPackages_11.lldb;
 
   llvm = llvmPackages.llvm;
   llvm-manpages = llvmPackages.llvm-manpages;
 
+  llvm_11 = llvmPackages_11.llvm;
   llvm_10 = llvmPackages_10.llvm;
   llvm_9  = llvmPackages_9.llvm;
   llvm_8  = llvmPackages_8.llvm;
@@ -8642,6 +8650,14 @@ in
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_10.tools;
     targetLlvmLibraries = targetPackages.llvmPackages_10.libraries;
+  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
+    stdenv = gcc7Stdenv;
+  });
+
+  llvmPackages_11 = callPackage ../development/compilers/llvm/11 ({
+    inherit (stdenvAdapters) overrideCC;
+    buildLlvmTools = buildPackages.llvmPackages_11.tools;
+    targetLlvmLibraries = targetPackages.llvmPackages_11.libraries;
   } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
     stdenv = gcc7Stdenv;
   });
@@ -8778,6 +8794,9 @@ in
     inherit (darwin) apple_sdk;
   };
 
+  rust_1_44 = callPackage ../development/compilers/rust/1_44.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
   rust_1_41_0 = callPackage ../development/compilers/rust/1_41_0.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
@@ -8786,6 +8805,7 @@ in
   };
   rust = rust_1_41_0;
 
+  rustPackages_1_44 = rust_1_44.packages.stable;
   rustPackages_1_41_0 = rust_1_41_0.packages.stable;
   rustPackages_1_38_0 = rust_1_38_0.packages.stable;
   rustPackages = rustPackages_1_41_0;
@@ -8879,7 +8899,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  rust-cbindgen_0_14_1 = callPackage ../development/tools/rust/cbindgen/0_14_1.nix {
+  rust-cbindgen_latest = callPackage ../development/tools/rust/cbindgen/0_14_3.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -12049,6 +12069,11 @@ in
   } // (stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
       stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
     }));
+  icu67 = callPackage ../development/libraries/icu/67.nix ({
+    nativeBuildRoot = buildPackages.icu67.override { buildRootOnly = true; };
+  } // (stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
+      stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
+    }));
 
   icu = icu64;
 
@@ -12512,6 +12537,8 @@ in
   };
 
   libfilezilla = callPackage ../development/libraries/libfilezilla { };
+
+  libfishsound = callPackage ../development/libraries/libfishsound { };
 
   libfm = callPackage ../development/libraries/libfm { };
   libfm-extra = libfm.override {
@@ -13156,6 +13183,8 @@ in
 
   libunibreak = callPackage ../development/libraries/libunibreak { };
 
+  libuninameslist = callPackage ../development/libraries/libuninameslist { };
+
   libunique = callPackage ../development/libraries/libunique { };
   libunique3 = callPackage ../development/libraries/libunique/3.x.nix { };
 
@@ -13532,8 +13561,11 @@ in
   nspr = callPackage ../development/libraries/nspr {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
+  nspr_latest = lowPrio (callPackage ../development/libraries/nspr/latest.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  });
 
-  nss_3_52 = lowPrio (callPackage ../development/libraries/nss/3_52.nix { });
+  nss_latest = lowPrio (callPackage ../development/libraries/nss/latest.nix { nspr = nspr_latest;});
   nss = lowPrio (callPackage ../development/libraries/nss { });
   nssTools = nss.tools;
 
@@ -19247,9 +19279,11 @@ in
 
   firefox-unwrapped = firefoxPackages.firefox;
   firefox-esr-68-unwrapped = firefoxPackages.firefox-esr-68;
+  firefox-esr-78-unwrapped = firefoxPackages.firefox-esr-78;
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-wayland = wrapFirefox firefox-unwrapped { gdkWayland = true; };
   firefox-esr-68 = wrapFirefox firefox-esr-68-unwrapped { };
+  firefox-esr-78 = wrapFirefox firefox-esr-78-unwrapped { };
   firefox-esr = firefox-esr-68;
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
@@ -21799,16 +21833,30 @@ in
 
   thonny = callPackage ../applications/editors/thonny { };
 
-  thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
+  thunderbird = thunderbird-78;
+  thunderbird-78 = callPackage ../applications/networking/mailreaders/thunderbird {
+    inherit (rustPackages_1_44) cargo rustc;
+    rust-cbindgen = rust-cbindgen_latest;
+    nodejs = nodejs-13_x;
+    nss = nss_latest;
+    libpng = libpng_apng;
+    icu = icu67;
+    libvpx = libvpx_1_8;
+    gtk3Support = true;
+  };
+
+  thunderbird-68 = callPackage ../applications/networking/mailreaders/thunderbird/68.nix {
     inherit (gnome2) libIDL;
-    inherit (rustPackages_1_38_0) cargo rustc;
     libpng = libpng_apng;
     gtk3Support = true;
   };
 
   thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
 
-  thunderbird-bin = callPackage ../applications/networking/mailreaders/thunderbird-bin {
+  thunderbird-bin = thunderbird-bin-78;
+  thunderbird-bin-78 = callPackage ../applications/networking/mailreaders/thunderbird-bin { };
+
+  thunderbird-bin-68 = callPackage ../applications/networking/mailreaders/thunderbird-bin/68.nix {
     gconf = pkgs.gnome2.GConf;
     inherit (pkgs.gnome2) libgnome libgnomeui;
   };
@@ -22247,7 +22295,9 @@ in
 
   wofi = callPackage ../applications/misc/wofi { };
 
-  wordnet = callPackage ../applications/misc/wordnet { };
+  wordnet = callPackage ../applications/misc/wordnet {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   wordgrinder = callPackage ../applications/office/wordgrinder { };
 

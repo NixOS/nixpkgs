@@ -14,19 +14,24 @@
 , libgnomekbd
 , libxklavier
 , xorg
+, ibus
 , switchboard
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-keyboard";
-  version = "2.3.6";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "08zpw7ygrqmwwznvxkf4xbrgwbjkbwc95sw1ikikg3143ql9qclp";
+    sha256 = "sha256-iuv5NZ7v+rXyFsKB/PvGa/7hm9MIV8E6JnTzEGROlhM=";
   };
+
+  patches = [
+    ./0001-Remove-Install-Unlisted-Engines-function.patch
+  ];
 
   passthru = {
     updateScript = pantheon.updateScript {
@@ -45,6 +50,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     granite
     gtk3
+    ibus
     libgee
     libgnomekbd
     libxklavier

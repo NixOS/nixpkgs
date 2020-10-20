@@ -1,14 +1,15 @@
 { stdenv, buildPythonPackage, fetchPypi
-, frozendict, simplejson, six
+, frozendict, simplejson, six, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "canonicaljson";
-  version = "1.1.4";
+  version = "1.4.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "45bce530ff5fd0ca93703f71bfb66de740a894a3b5dd6122398c6d8f18539725";
+    sha256 = "0c86g0vvzdcg3nrcsqnbzlfhpprc2i894p8i14hska56yl27d6w9";
   };
 
   propagatedBuildInputs = [

@@ -195,7 +195,7 @@ let
   confPkg = pkgs.runCommand "fontconfig-conf" {
     preferLocalBuild = true;
   } ''
-    support_folder=$out/etc/fonts/conf.d
+    support_folder=$out/etc/fonts/${lib.optionalString cfg.disableVersionedFontConfiguration "2.10/"}conf.d
     latest_folder=$out/etc/fonts/${latestVersion}/conf.d
 
     mkdir -p $support_folder
@@ -205,6 +205,11 @@ let
     ln -s ${supportFontsConf} $support_folder/../fonts.conf
     ln -s ${latestPkg.out}/etc/fonts/fonts.conf \
           $latest_folder/../fonts.conf
+
+    ${lib.optionalString cfg.disableVersionedFontConfiguration ''
+    ln -s $latest_folder/../fonts.conf \
+          $latest_folder/../../fonts.conf
+    ''}
 
     # fontconfig default config files
     ln -s ${supportPkg.out}/etc/fonts/conf.d/*.conf \
@@ -289,6 +294,23 @@ in
             running X11 applications or any other program that uses
             Fontconfig, you can turn this option off and prevent a
             dependency on all those fonts.
+          '';
+        };
+
+        disableVersionedFontConfiguration = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            If enabled, /etc/fonts/fonts.conf will contain configuration file
+            for the latest fontconfig, instead of the ancient 2.10 version.
+            This is necessary for using packages from Nixpkgs unstable.
+
+            Without it, running programs from unstable will populate
+            ~/.cache/fontconfig with values incompatible with
+            programs from NixOS 20.03.
+
+            Enabling this should not cause any issues as there are no programs
+            using the legacy fontconfig version since NixOS 15.03.
           '';
         };
 

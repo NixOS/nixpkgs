@@ -87,8 +87,10 @@ let
         url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qtbug-77037-workaround.patch?h=packages/qt5-webengine&id=fc77d6b3d5ec74e421b58f199efceb2593cbf951";
         sha256 = "1gv733qfdn9746nbqqxzyjx4ijjqkkb7zb71nxax49nna5bri3am";
       })
-    ]
-      ++ optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
+    ] ++ optionals stdenv.isDarwin [
+      ./qtwebengine-darwin-no-platform-check.patch
+      ./qtwebengine-darwin-fix-failed-static-assertion.patch
+    ];
     qtwebkit = [ ./qtwebkit.patch ]
       ++ optionals stdenv.isDarwin [
         ./qtwebkit-darwin-no-readline.patch

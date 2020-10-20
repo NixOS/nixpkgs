@@ -6,5 +6,5 @@ import ./jdk-linux-base.nix {
   sha256.armv7l-linux = "13dih7zyfgj90bkhnfxhpm88d9kqqrj6w5rzpidmxrjwrsnlndp9";
   sha256.aarch64-linux = "0zzhs4pcnjss2561b8zrrnacpkb8p49ca0lpdw7hzgsjjj1y146n";
   jceName = "jce_policy-8.zip";
-  sha256JCE = "0n8b6b8qmwb14lllk2lk1q1ahd3za9fnjigz5xn65mpg48whl0pk";
+  sha256JCE = "19n5wadargg3v8x76r7ayag6p2xz1bwhrgdzjs9f4i6fvxz9jr4w";
 }

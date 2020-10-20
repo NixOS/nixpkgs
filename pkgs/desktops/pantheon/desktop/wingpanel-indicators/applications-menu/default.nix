@@ -14,7 +14,7 @@
 , appstream
 , gnome-menus
 , json-glib
-, plank
+, elementary-dock
 , bamf
 , switchboard
 , libunity
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0wsfvyp0z6c612nl348dr6sar0qghhfcgkzcx3108x8v743v7rim";
+    sha256 = "sha256-NeazBzkbdQTC6OzPxxyED4OstMkNkUGtCIaZD67fTnM=";
   };
 
   passthru = {
@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bamf
+    elementary-dock
     gnome-menus
     granite
     gtk3
@@ -64,7 +65,6 @@ stdenv.mkDerivation rec {
     libhandy
     libsoup
     libunity
-    plank
     switchboard
     wingpanel
     zeitgeist

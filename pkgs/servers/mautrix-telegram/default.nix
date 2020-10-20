@@ -2,7 +2,14 @@
 
 with python3.pkgs;
 
-buildPythonPackage rec {
+let
+  # officially supported database drivers
+  dbDrivers = [
+    psycopg2
+    # sqlite driver is already shipped with python by default
+  ];
+
+in buildPythonPackage rec {
   pname = "mautrix-telegram";
   version = "0.7.2";
   disabled = pythonOlder "3.6";
@@ -32,7 +39,7 @@ buildPythonPackage rec {
     pillow
     lxml
     setuptools
-  ];
+  ] ++ dbDrivers;
 
   # `alembic` (a database migration tool) is only needed for the initial setup,
   # and not needed during the actual runtime. However `alembic` requires `mautrix-telegram`
@@ -41,7 +48,7 @@ buildPythonPackage rec {
   # Hence we need to patch away `alembic` from `mautrix-telegram` and create an `alembic`
   # which has `mautrix-telegram` in its environment.
   passthru.alembic = alembic.overrideAttrs (old: {
-    propagatedBuildInputs = old.propagatedBuildInputs ++ [
+    propagatedBuildInputs = old.propagatedBuildInputs ++ dbDrivers ++ [
       mautrix-telegram
     ];
   });

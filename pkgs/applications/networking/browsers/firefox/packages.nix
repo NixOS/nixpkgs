@@ -1,16 +1,16 @@
-{ config, stdenv, lib, callPackage, fetchurl, fetchpatch }:
+{ config, stdenv, lib, callPackage, fetchurl, fetchpatch, nodejs-13_x }:
 
 let
-  common = opts: callPackage (import ./common.nix opts) {};
+  common = opts: callPackage (import ./common.nix opts) { nodejs = nodejs-13_x; };
 in
 
 rec {
   firefox = common rec {
     pname = "firefox";
-    ffversion = "77.0.1";
+    ffversion = "82.0";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "ngLihC0YuclLJEV3iPEX+tRzDKIdBe+CCOuFxvWNo7DnX8royOvTj2m4YyWyZoTQ5UCbPTQYmP4otgfovZSe8g==";
+      sha512 = "3lbvlb6yggd5v0pkr0x6j350jc5dpclqz7bv4i06r97a5ijdgfc7c6y605966hvw24v17byxr120xc7a39ikl1wnls7a9gyzyqcwyw8";
     };
 
     patches = [
@@ -33,12 +33,40 @@ rec {
     };
   };
 
-  firefox-esr-68 = common rec {
+  firefox-esr-78 = common rec {
     pname = "firefox-esr";
-    ffversion = "68.10.0esr";
+    ffversion = "78.4.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "xcGDNWA2SFHnz46lFlm8T7YCOblgElzbIP4x90LXV//a748xT4ANyRIU7o41gDPcKvlxwIu7pHTvYVixAYgWUw==";
+      sha512 = "13640ssp1nq9dsfv8jqfw2paqk3wzwc4r47mvbhb4l9h990gzzb2chhlcjq066b7r3q9s0nq3iyk847vzi7z1yvhrhsnzfgk9g9gpnr";
+    };
+
+    patches = [
+      ./no-buildconfig-ffx76.patch
+    ];
+
+    meta = {
+      description = "A web browser built from Firefox Extended Support Release source tree";
+      homepage = "http://www.mozilla.com/en-US/firefox/";
+      maintainers = with lib.maintainers; [ eelco andir ];
+      platforms = lib.platforms.unix;
+      badPlatforms = lib.platforms.darwin;
+      broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
+                                             # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
+      license = lib.licenses.mpl20;
+    };
+    updateScript = callPackage ./update.nix {
+      attrPath = "firefox-esr-78-unwrapped";
+      versionKey = "ffversion";
+    };
+  };
+
+  firefox-esr-68 = common rec {
+    pname = "firefox-esr";
+    ffversion = "68.12.0esr";
+    src = fetchurl {
+      url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
+      sha512 = "169y4prlb4mi31jciz89kp35rpb1p2gxrk93qkwfzdk4imi9hk8mi2yvxknpr0rni3bn2x0zgrrc6ccr8swv5895sqvv1sc5r1056w3";
     };
 
     patches = [
@@ -47,6 +75,9 @@ rec {
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
+      knownVulnerabilities = [
+        "Firefox 68 ESR reached end of life with its final release 68.12esr on 2020-08-25 and was therefore marked as insecure"
+      ];
     };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-68-unwrapped";

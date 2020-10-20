@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 let
-  version = "1.5.1";
+  version = "1.5.2";
 in
 stdenv.mkDerivation {
   pname = "adns";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
       "ftp://ftp.chiark.greenend.org.uk/users/ian/adns/adns-${version}.tar.gz"
       "mirror://gnu/adns/adns-${version}.tar.gz"
     ];
-    sha256 = "1ssfh94ck6kn98nf2yy6743srpgqgd167va5ja3bwx42igqjc42v";
+    sha256 = "0z9ambw4pjnvwhn4bhxbrh20zpjsfj1ixm2lxa8x1x6w36g3ip6q";
   };
 
   preConfigure =

@@ -16,7 +16,7 @@
 , libnotify
 , libunity
 , pango
-, plank
+, elementary-dock
 , bamf
 , sqlite
 , libdbusmenu-gtk3
@@ -30,7 +30,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "4.4.3";
+  version = "4.5.0";
 
   repoName = "files";
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "14i5icgpsy78mr7w6cav38p7shfk784b6nlxz9y72rbcxky036yc";
+    sha256 = "sha256-wtQW1poX791DAlSFdVV9psnCfBDeVXI2fDZ2GcvvNn8=";
   };
 
   passthru = {
@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bamf
+    elementary-dock
     elementary-icon-theme
     granite
     gtk3
@@ -74,13 +75,12 @@ stdenv.mkDerivation rec {
     libnotify
     libunity
     pango
-    plank
     sqlite
     zeitgeist
   ];
 
   patches = [
-    ./hardcode-gsettings.patch
+    ./0001-filechooser-module-hardcode-gsettings-for-nixos.patch
   ];
 
   postPatch = ''

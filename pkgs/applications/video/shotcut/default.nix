@@ -28,7 +28,11 @@ mkDerivation rec {
   ];
 
   NIX_CFLAGS_COMPILE = "-I${libmlt}/include/mlt++ -I${libmlt}/include/mlt";
-  qmakeFlags = [ "QMAKE_LRELEASE=${stdenv.lib.getDev qttools}/bin/lrelease" "SHOTCUT_VERSION=${version}" ];
+  qmakeFlags = [
+    "QMAKE_LRELEASE=${stdenv.lib.getDev qttools}/bin/lrelease"
+    "SHOTCUT_VERSION=${version}"
+    "DEFINES+=SHOTCUT_NOUPGRADE"
+  ];
 
   prePatch = ''
     sed 's_shotcutPath, "qmelt"_"${mlt}/bin/melt"_' -i src/jobs/meltjob.cpp

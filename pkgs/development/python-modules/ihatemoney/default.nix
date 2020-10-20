@@ -33,14 +33,21 @@
 
 buildPythonPackage rec {
   pname = "ihatemoney";
-  version = "4.1";
+  version = "4.1.5";
 
   src = fetchFromGitHub {
     owner = "spiral-project";
     repo = pname;
     rev = version;
-    sha256 = "1ai7v2i2rvswzv21nwyq51fvp8lr2x2cl3n34p11br06kc1pcmin";
+    sha256 = "07lkc0rhj6f4fka4m1vimycjxa452d8wlclknviqz2566gnb998n";
   };
+
+  postPatch = ''
+    # remove patch release level pinning
+    sed -i 's/==\([0-9]*\.[0-9]*\).*"/~=\1"/' setup.py
+    # https://github.com/spiral-project/ihatemoney/issues/567
+    sed -i 's/WTForms~=2.2/WTForms>=2.1,<2.3/' setup.py
+  '';
 
   propagatedBuildInputs = [
     alembic

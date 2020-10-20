@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-calendar";
-  version = "5.0.6";
+  version = "5.1.0";
 
   repoName = "calendar";
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0lmadk4yzf1kiiqshwqcxzcyia1haq1avv6pyzvsaywxhqwdsini";
+    sha256 = "sha256-b72BmChl/Ql0ljLRcPMNbJcOV4cVqz5D2j+5BGUi4Go=";
   };
 
   passthru = {
