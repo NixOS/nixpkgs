@@ -34,6 +34,8 @@ let
 
   gh = callPackage ./gh { };
 
+  ghorg = callPackage ./ghorg { };
+
   ghq = callPackage ./ghq { };
 
   git = appendToName "minimal" gitBase;
