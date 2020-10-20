@@ -1,9 +1,9 @@
 # General list operations.
 
 { lib }:
-with lib.trivial;
 let
   inherit (lib.strings) toInt;
+  inherit (lib.trivial) compare min;
 in
 rec {
 

@@ -1,12 +1,55 @@
 { lib }:
 
-with lib.lists;
-with lib.strings;
-with lib.trivial;
-with lib.attrsets;
-with lib.options;
-with lib.debug;
-with lib.types;
+let
+  inherit (lib.attrsets)
+    mapAttrsRecursiveCond
+    ;
+  inherit (lib.lists)
+    any all concatLists concatMap
+    count filter findFirst foldl foldl'
+    head imap1 length optional
+    reverseList sort
+    ;
+  inherit (lib.options)
+    isOption
+    mkOption
+    showDefs
+    showFiles
+    showOption
+    unknownModule
+    ;
+  inherit (lib.attrsets)
+    attrByPath
+    attrNames
+    catAttrs
+    getAttrFromPath
+    mapAttrs
+    mapAttrsToList
+    optionalAttrs
+    recursiveUpdate
+    setAttrByPath
+    toList
+    ;
+  inherit (lib.types)
+    types
+    ;
+  inherit (lib.trivial)
+    flip
+    id
+    isBool
+    isFunction
+    isString
+    min
+    warn
+    ;
+  inherit (lib.strings)
+    optionalString
+    ;
+  inherit (lib)
+    elem
+    isAttrs
+    ;
+in
 
 rec {
 
@@ -616,7 +659,7 @@ rec {
   fixupOptionType = loc: opt:
     let
       options = opt.options or
-        (throw "Option `${showOption loc'}' has type optionSet but has no option attribute, in ${showFiles opt.declarations}.");
+        (throw "Option `${showOption loc}' has type optionSet but has no option attribute, in ${showFiles opt.declarations}.");
       f = tp:
         let optionSetIn = type: (tp.name == type) && (tp.functor.wrapped.name == "optionSet");
         in
