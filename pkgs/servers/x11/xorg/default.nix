@@ -1158,11 +1158,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   libxcb = callPackage ({ stdenv, pkgconfig, fetchurl, libxslt, libpthreadstubs, libXau, xcbproto, libXdmcp, python }: stdenv.mkDerivation {
-    name = "libxcb-1.13.1";
+    name = "libxcb-1.14";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://xcb.freedesktop.org/dist/libxcb-1.13.1.tar.bz2";
-      sha256 = "1i27lvrcsygims1pddpl5c4qqs6z715lm12ax0n3vx0igapvg7x8";
+      url = "mirror://xorg/individual/lib/libxcb-1.14.tar.xz";
+      sha256 = "0d2chjgyn5lr9sfhacfvqgnj9l9faz11vn322a06jd6lk3dxcpm5";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig python ];
@@ -1431,11 +1431,11 @@ lib.makeScope newScope (self: with self; {
   }) {};
 
   xcbproto = callPackage ({ stdenv, pkgconfig, fetchurl, python }: stdenv.mkDerivation {
-    name = "xcb-proto-1.13";
+    name = "xcb-proto-1.14.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://xcb.freedesktop.org/dist/xcb-proto-1.13.tar.bz2";
-      sha256 = "1qdxw9syhbvswiqj5dvj278lrmfhs81apzmvx6205s4vcqg7563v";
+      url = "mirror://xorg/individual/proto/xcb-proto-1.14.1.tar.xz";
+      sha256 = "1hzwazgyywd9mz4mjj1yv8ski27qqx7ypmyr27m39hrajyddsjph";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig python ];
