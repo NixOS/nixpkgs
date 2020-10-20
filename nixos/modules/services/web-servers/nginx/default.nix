@@ -261,10 +261,7 @@ let
             ssl_trusted_certificate ${vhost.sslTrustedCertificate};
           ''}
 
-          ${optionalString (vhost.basicAuthFile != null || vhost.basicAuth != {}) ''
-            auth_basic secured;
-            auth_basic_user_file ${if vhost.basicAuthFile != null then vhost.basicAuthFile else mkHtpasswd vhostName vhost.basicAuth};
-          ''}
+          ${mkBasicAuth vhostName vhost}
 
           ${mkLocations vhost.locations}
 
@@ -295,7 +292,16 @@ let
       ${optionalString (config.proxyPass != null && cfg.recommendedProxySettings) "include ${recommendedProxyConfig};"}
     }
   '') (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations)));
-  mkHtpasswd = vhostName: authDef: pkgs.writeText "${vhostName}.htpasswd" (
+
+  mkBasicAuth = name: zone: optionalString (zone.basicAuthFile != null || zone.basicAuth != {}) (let
+    auth_file = if zone.basicAuthFile != null
+      then zone.basicAuthFile
+      else mkHtpasswd name zone.basicAuth;
+  in ''
+    auth_basic secured;
+    auth_basic_user_file ${auth_file};
+  '');
+  mkHtpasswd = name: authDef: pkgs.writeText "${name}.htpasswd" (
     concatStringsSep "\n" (mapAttrsToList (user: password: ''
       ${user}:{PLAIN}${password}
     '') authDef)
