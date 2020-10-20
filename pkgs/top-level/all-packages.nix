@@ -27991,6 +27991,8 @@ in
 
   yadm = callPackage ../applications/version-management/yadm { };
 
+  yamale = with python3Packages; toPythonApplication yamale;
+
   yamdi = callPackage ../tools/video/yamdi { };
 
   yandex-disk = callPackage ../tools/filesystems/yandex-disk { };
