@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     mv $out/bin/* $out/share/Grabber/
 
     cd ../..
-    # run the package.sh with $out/share/Grabber as the $APP_DIR 
+    # run the package.sh with $out/share/Grabber as the $APP_DIR
     sh ./scripts/package.sh $out/share/Grabber
 
     # add symlinks for the binaries to $out/bin
