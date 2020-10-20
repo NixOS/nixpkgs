@@ -46,7 +46,7 @@ mapAliases ({
   arduino_core = arduino-core;  # added 2015-02-04
   arora = throw "arora has been removed."; # added 2020-09-09
   asciidocFull = asciidoc-full;  # added 2014-06-22
-  asterisk_15 = throw "Asterisk 15 is end of life and has been removed."; # added 2020-10-07
+  asterisk_15 = throw "asterisk_15: Asterisk 15 is end of life and has been removed."; # added 2020-10-07
   at_spi2_atk = at-spi2-atk; # added 2018-02-25
   at_spi2_core = at-spi2-core; # added 2018-02-25
   avldrums-lv2 = x42-avldrums; # added 2020-03-29
@@ -76,7 +76,7 @@ mapAliases ({
   cgmanager = throw "cgmanager was deprecated by lxc and therefore removed from nixpkgs."; # added 2020-06-05
   checkbashism = checkbashisms; # added 2016-08-16
   chronos = throw "chronos has been removed from nixpkgs, as it was unmaintained"; # added 2020-08-15
-  cide = throw "deprecated in 2019-09-11: abandoned by upstream";
+  cide = throw "cide was deprecated on 2019-09-11: abandoned by upstream";
   cinepaint = throw "cinepaint has been removed from nixpkgs, as it was unmaintained"; # added 2019-12-10
   cifs_utils = cifs-utils; # added 2016-08
   ckb = ckb-next; # added 2018-10-21
@@ -88,9 +88,9 @@ mapAliases ({
   conntrack_tools = conntrack-tools; # added 2018-05
   cool-old-term = cool-retro-term; # added 2015-01-31
   coprthr = throw "coprthr has been removed."; # added 2019-12-08
-  corebird = throw "deprecated 2019-10-02: See https://www.patreon.com/posts/corebirds-future-18921328. Please use Cawbird as replacement.";
-  coredumper = throw "coredumper has been removed: Abandoned by upstream."; # added 2019-11-16
-  cryptol = throw "cryptol was remove for prolonged broken build"; # added 2020-08-21
+  corebird = throw "corebird was deprecated 2019-10-02: See https://www.patreon.com/posts/corebirds-future-18921328. Please use Cawbird as replacement.";
+  coredumper = throw "coredumper has been removed: abandoned by upstream."; # added 2019-11-16
+  cryptol = throw "cryptol was removed due to prolonged broken build"; # added 2020-08-21
   cpp-gsl = microsoft_gsl; # added 2019-05-24
   cupsBjnp = cups-bjnp; # added 2016-01-02
   cups_filters = cups-filters; # added 2016-08
@@ -99,7 +99,7 @@ mapAliases ({
   d1x_rebirth = dxx-rebirth; # added 2018-04-25
   d2x_rebirth = dxx-rebirth; # added 2018-04-25
   dat = nodePackages.dat;
-  dbvisualizer = throw "dbvisualizer has been remove from nixpkgs, as it's unmaintained"; # added 2020-09-20
+  dbvisualizer = throw "dbvisualizer has been removed from nixpkgs, as it's unmaintained"; # added 2020-09-20
   dbus_daemon = dbus.daemon; # added 2018-04-25
   dbus_glib = dbus-glib; # added 2018-02-25
   dbus_libs = dbus; # added 2018-04-25
@@ -189,7 +189,7 @@ mapAliases ({
   go-pup = pup; # added 2017-12-19
   gobjectIntrospection = gobject-introspection; # added 2018-12-02
   goimports = gotools; # added 2018-09-16
-  gometalinter = throw "Abandoned by upstream. Consider switching to golangci-lint instead"; # added 2020-04-23
+  gometalinter = throw "gometalinter was abandoned by upstream. Consider switching to golangci-lint instead"; # added 2020-04-23
   google-gflags = gflags; # added 2019-07-25
   googleAuthenticator = google-authenticator; # added 2016-10-16
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
@@ -207,7 +207,7 @@ mapAliases ({
   gutenberg = zola;  # added 2018-11-17
   heimdalFull = heimdal; # added 2018-05-01
   hepmc = hepmc2; # added 2019-08-05
-  hexen = throw "hexen (SDL port) has been removed: Abandoned by upstream."; # added 2019-12-11
+  hexen = throw "hexen (SDL port) has been removed: abandoned by upstream."; # added 2019-12-11
   hicolor_icon_theme = hicolor-icon-theme; # added 2018-02-25
   htmlTidy = html-tidy;  # added 2014-12-06
   iana_etc = iana-etc;  # added 2017-03-08
@@ -218,12 +218,12 @@ mapAliases ({
   inotifyTools = inotify-tools;
   jasper = throw "jasper has been removed: abandoned upstream with many vulnerabilities";
   jbuilder = dune; # added 2018-09-09
-  jikes = throw "deprecated in 2019-10-07: jikes was abandoned by upstream";
+  jikes = throw "jikes was deprecated on 2019-10-07: abandoned by upstream";
   joseki = apache-jena-fuseki; # added 2016-02-28
   json_glib = json-glib; # added 2018-02-25
   kdecoration-viewer = throw "kdecoration-viewer has been removed from nixpkgs, as there is no upstream activity"; # 2020-06-16
-  julia_07 = throw "deprecated in favor of julia_10 LTS"; # added 2020-09-15
-  julia_11 = throw "deprecated in favor of latest Julia version"; # added 2020-09-15
+  julia_07 = throw "julia_07 is deprecated in favor of julia_10 LTS"; # added 2020-09-15
+  julia_11 = throw "julia_11 is deprecated in favor of latest Julia version"; # added 2020-09-15
   kdiff3-qt5 = kdiff3; # added 2017-02-18
   keepass-keefox = keepass-keepassrpc; # backwards compatibility alias, added 2018-02
   keepassx-community = keepassxc; # added 2017-11
@@ -267,8 +267,8 @@ mapAliases ({
   librecad2 = librecad;  # backwards compatibility alias, added 2015-10
   libsysfs = sysfsutils; # added 2018-04-25
   libtidy = html-tidy;  # added 2014-12-21
-  libtxc_dxtn = throw "removed 2020-03-16, now integrated in Mesa";
-  libtxc_dxtn_s2tc = throw "removed 2020-03-16, now integrated in Mesa";
+  libtxc_dxtn = throw "libtxc_dxtn was removed 2020-03-16, now integrated in Mesa";
+  libtxc_dxtn_s2tc = throw "libtxc_dxtn_s2tc was removed 2020-03-16, now integrated in Mesa";
   libudev = udev; # added 2018-04-25
   libusb = libusb1; # added 2020-04-28
   libsexy = throw "libsexy has been removed from nixpkgs, as it's abandoned and no package needed it."; # 2019-12-10
@@ -320,7 +320,7 @@ mapAliases ({
   mobile_broadband_provider_info = mobile-broadband-provider-info; # added 2018-02-25
   moby = throw "moby has been removed, merged into linuxkit in 2018.  Use linuxkit instead.";
   module_init_tools = kmod; # added 2016-04-22
-  mono-zeroconf = throw "deprecated 2019-09-20: abandoned by upstream.";
+  mono-zeroconf = throw "mono-zeroconf was deprecated on 2019-09-20: abandoned by upstream.";
   mozart = mozart2-binary; # added 2019-09-23
   mozart-binary = mozart2-binary; # added 2019-09-23
   mpich2 = mpich;  # added 2018-08-06
@@ -349,7 +349,7 @@ mapAliases ({
   nmap_graphical = nmap-graphical;  # added 2017-01-19
   nologin = shadow; # added 2018-04-25
   nxproxy = nx-libs; # added 2019-02-15
-  nylas-mail-bin = throw "deprecated in 2019-09-11: abandoned by upstream";
+  nylas-mail-bin = throw "nylas-mail-bin was deprecated on 2019-09-11: abandoned by upstream";
   opencascade_oce = opencascade; # added 2018-04-25
   oblogout = throw "oblogout has been removed from nixpkgs, as it's archived upstream."; # added 2019-12-10
   opencl-icd = ocl-icd; # added 2017-01-20
@@ -431,7 +431,7 @@ mapAliases ({
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
   postgresql95 = postgresql_9_5;
   postgresql96 = postgresql_9_6;
-  postgresql100 = throw "deprecated 2018-10-21: use postgresql_10 instead";
+  postgresql100 = throw "postgresql100 was deprecated on 2018-10-21: use postgresql_10 instead";
   # postgresql plugins
   pgjwt = postgresqlPackages.pgjwt;
   pg_repack = postgresqlPackages.pg_repack;
@@ -453,26 +453,26 @@ mapAliases ({
   pinentry_qt5 = pinentry-qt; # added 2020-02-11
   postgis = postgresqlPackages.postgis;
   # end
-  ppl-address-book = throw "deprecated in 2019-05-02: abandoned by upstream.";
+  ppl-address-book = throw "ppl-address-book deprecated on 2019-05-02: abandoned by upstream.";
   processing3 = processing; # added 2019-08-16
   procps-ng = procps; # added 2018-06-08
   pygmentex = texlive.bin.pygmentex; # added 2019-12-15
   pyo3-pack = maturin;
   pmenu = throw "pmenu has been removed from nixpkgs, as its maintainer is no longer interested in the package."; # added 2019-12-10
   pulseaudioLight = pulseaudio; # added 2018-04-25
-  phonon-backend-gstreamer = throw "Please use libsForQt5.phonon-backend-gstreamer, as Qt4 support in this package has been removed."; # added 2019-11-22
-  phonon-backend-vlc = throw "Please use libsForQt5.phonon-backend-vlc, as Qt4 support in this package has been removed."; # added 2019-11-22
-  phonon = throw "Please use libsForQt5.phonon, as Qt4 support in this package has been removed."; # added 2019-11-22
+  phonon-backend-gstreamer = throw "phonon-backend-gstreamer: Please use libsForQt5.phonon-backend-gstreamer, as Qt4 support in this package has been removed."; # added 2019-11-22
+  phonon-backend-vlc = throw "phonon-backend-vlc: Please use libsForQt5.phonon-backend-vlc, as Qt4 support in this package has been removed."; # added 2019-11-22
+  phonon = throw "phonon: Please use libsForQt5.phonon, as Qt4 support in this package has been removed."; # added 2019-11-22
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
   quake3game = ioquake3; # added 2016-01-14
   qvim = throw "qvim has been removed."; # added 2020-08-31
   qwt6 = libsForQt5.qwt;  # added 2015-12-19
-  qtpfsgui = throw "Is now luminanceHDR"; # added 2019-06-26
+  qtpfsgui = throw "qtpfsgui is now luminanceHDR"; # added 2019-06-26
   quaternion-git = throw "quaternion-git has been removed in favor of the stable version 'quaternion'"; # added 2020-04-09
   rdf4store = throw "rdf4store has been removed from nixpkgs."; # added 2019-12-21
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rdmd = dtools;  # added 2017-08-19
-  rhc = throw "deprecated in 2019-04-09: abandoned by upstream.";
+  rhc = throw "rhc was deprecated on 2019-04-09: abandoned by upstream.";
   rng_tools = rng-tools; # added 2018-10-24
   robomongo = robo3t; #added 2017-09-28
   rocm-runtime-ext = throw "rocm-runtime-ext has been removed, since its functionality was added to rocm-runtime"; #added 2020-08-21
@@ -483,16 +483,16 @@ mapAliases ({
   qt-recordmydesktop = throw "qt-recordmydesktop has been removed from nixpkgs, as it's abandoned and uses deprecated libraries"; # added 2019-12-10
   rfkill = throw "rfkill has been removed, as it's included in util-linux"; # added 2020-08-23
   rkt = throw "rkt was archived by upstream"; # added 2020-05-16
-  ruby_2_0_0 = throw "deprecated 2018-0213: use a newer version of ruby";
-  ruby_2_1_0 = throw "deprecated 2018-0213: use a newer version of ruby";
-  ruby_2_2_9 = throw "deprecated 2018-0213: use a newer version of ruby";
-  ruby_2_3_6 = throw "deprecated 2018-0213: use a newer version of ruby";
-  ruby_2_3 = throw "deprecated 2019-09-06: use a newer version of ruby";
-  ruby_2_4_3 = throw "deprecated 2018-0213: use a newer version of ruby";
-  ruby_2_4 = throw "deprecated 2019-12: use a newer version of ruby";
-  ruby_2_5_0 = throw "deprecated 2018-0213: use a newer version of ruby";
-  rubyPackages_2_4 = throw "deprecated 2019-12: use a newer version of rubyPackages instead";
-  rubygems = throw "deprecated 2016-03-02: rubygems is now bundled with ruby";
+  ruby_2_0_0 = throw "ruby_2_0_0 was deprecated on 2018-02-13: use a newer version of ruby";
+  ruby_2_1_0 = throw "ruby_2_1_0 was deprecated on 2018-02-13: use a newer version of ruby";
+  ruby_2_2_9 = throw "ruby_2_2_9 was deprecated on 2018-02-13: use a newer version of ruby";
+  ruby_2_3_6 = throw "ruby_2_3_6 was deprecated on 2018-02-13: use a newer version of ruby";
+  ruby_2_3 = throw "ruby_2_3 was deprecated on 2019-09-06: use a newer version of ruby";
+  ruby_2_4_3 = throw "ruby_2_4_3 was deprecated on 2018-02-13: use a newer version of ruby";
+  ruby_2_4 = throw "ruby_2_4 was deprecated in 2019-12: use a newer version of ruby";
+  ruby_2_5_0 = throw "ruby_2_5_0 was deprecated on 2018-02-13: use a newer version of ruby";
+  rubyPackages_2_4 = throw "rubyPackages_2_4 was deprecated in 2019-12: use a newer version of rubyPackages instead";
+  rubygems = throw "rubygems was deprecated on 2016-03-02: rubygems is now bundled with ruby";
   rxvt_unicode-with-plugins = rxvt-unicode; # added 2020-02-02
   rxvt_unicode = rxvt-unicode-unwrapped; # added 2020-02-02
   urxvt_autocomplete_all_the_things = rxvt-unicode-plugins.autocomplete-all-the-things; # added 2020-02-02
@@ -511,12 +511,12 @@ mapAliases ({
   sam = deadpixi-sam; # added 2018-04-25
   samba3 = throw "Samba 3 is discontinued, please switch to samba4"; # added 2019-10-15
   samba3_light = throw "Samba 3 is discontinued, please switch to samba4"; # added 2019-10-15
-  sambaMaster = throw "removed 2019-09-13: outdated and no longer needed";
+  sambaMaster = throw "sambaMaster was removed in 2019-09-13: outdated and no longer needed";
   samsungUnifiedLinuxDriver = samsung-unified-linux-driver; # added 2016-01-25
   saneBackends = sane-backends; # added 2016-01-02
   saneBackendsGit = sane-backends-git; # added 2016-01-02
   saneFrontends = sane-frontends; # added 2016-01-02
-  sapic = throw "deprecated 2019-1-19: sapic is bundled with 'tamarin-prover' now";
+  sapic = throw "sapic was deprecated on 2019-1-19: sapic is bundled with 'tamarin-prover' now";
   scim = sc-im; # added 2016-01-22
   scollector = bosun; # added 2018-04-25
   sdlmame = mame; # added 2019-10-30
@@ -535,7 +535,7 @@ mapAliases ({
   smbclient = samba; # added 2018-04-25
   slim = throw "slim has been removed. Please use a different display-manager"; # added 2019-11-11
   slimThemes = throw "slimThemes has been removed because slim has been also"; # added 2019-11-11
-  sundials_3 = throw "removed 2020-02. outdated and no longer needed";
+  sundials_3 = throw "sundials_3 was removed in 2020-02. outdated and no longer needed";
 
   # added 2020-02-10
   sourceHanSansPackages = {
@@ -574,11 +574,11 @@ mapAliases ({
   sshfsFuse = sshfs-fuse; # added 2016-09
   suil-qt5 = suil; # added 2018-05-01
   surf-webkit2 = surf; # added 2017-04-02
-  sup = throw "deprecated in 2019-09-10: abandoned by upstream";
+  sup = throw "sup was deprecated on 2019-09-10: abandoned by upstream";
   swfdec = throw "swfdec has been removed as broken and unmaintained."; # added 2020-08-23
   system_config_printer = system-config-printer;  # added 2016-01-03
   systemd-cryptsetup-generator = throw "systemd-cryptsetup-generator is now included in the systemd package"; # added 2020-07-12
-  systemd_with_lvm2 = throw "obsolete, enabled by default via the lvm module"; # added 2020-07-12
+  systemd_with_lvm2 = throw "systemd_with_lvm2 is obsolete, enabled by default via the lvm module"; # added 2020-07-12
   systool = sysfsutils; # added 2018-04-25
   tahoelafs = tahoe-lafs; # added 2018-03-26
   tangogps = foxtrotgps; # added 2020-01-26
@@ -599,7 +599,7 @@ mapAliases ({
   terraform-provider-lxd = terraform-providers.lxd; # added 2020-03-16
   terraform-provider-nixos = terraform-providers.nixos; # added 2018-09-28
   tesseract_4 = tesseract4; # added 2018-12-19
-  testdisk-photorec = throw "This package was a duplicate, please use testdisk or testdisk-qt instead"; # added 2019-10-13
+  testdisk-photorec = throw "testdisk-photorec: This package was a duplicate, please use testdisk or testdisk-qt instead"; # added 2019-10-13
   tex-gyre-bonum-math = tex-gyre-math.bonum; # added 2018-04-03
   tex-gyre-pagella-math = tex-gyre-math.pagella; # added 2018-04-03
   tex-gyre-schola-math = tex-gyre-math.schola; # added 2018-04-03
@@ -629,8 +629,8 @@ mapAliases ({
   usbguard-nox = usbguard; # added 2019-09-04
   uzbl = throw "uzbl has been removed from nixpkgs, as it's unmaintained and uses insecure libraries";
   v4l_utils = v4l-utils; # added 2019-08-07
-  v8_3_16_14 = throw "removed 2019-11-01: no longer referenced by other packages";
-  valadoc = throw "deprecated 2019-10-10: valadoc was merged into vala 0.38";
+  v8_3_16_14 = throw "v8_3_16_14 was removed in 2019-11-01: no longer referenced by other packages";
+  valadoc = throw "valadoc was deprecated on 2019-10-10: valadoc was merged into vala 0.38";
   vamp = { vampSDK = vamp-plugin-sdk; }; # added 2020-03-26
   vimbWrapper = vimb; # added 2015-01
   vimprobable2 = throw "vimprobable2 has been removed from nixpkgs. It relied on webkitgtk24x that has been removed."; # added 2019-12-05
@@ -701,7 +701,7 @@ mapAliases ({
   murmur_git = pkgs.murmur;
 
   # added 2020-08-17
-  zabbix44 = throw "Zabbix 4.4 is end of life, see https://www.zabbix.com/documentation/current/manual/installation/upgrade_notes_500 for details on upgrading to Zabbix 5.0.";
+  zabbix44 = throw "zabbix44: Zabbix 4.4 is end of life, see https://www.zabbix.com/documentation/current/manual/installation/upgrade_notes_500 for details on upgrading to Zabbix 5.0.";
 
   # added 2019-09-06
   zeroc_ice = pkgs.zeroc-ice;
@@ -729,12 +729,12 @@ mapAliases ({
 
   # added 2019-04-13
   # *-polly pointed to llvmPackages_latest
-  llvm-polly = throw "clang is now built with polly-plugin by default";
-  clang-polly = throw "clang is now built with polly-plugin by default";
+  llvm-polly = throw "llvm-polly: clang is now built with polly-plugin by default";
+  clang-polly = throw "clang-polly: clang is now built with polly-plugin by default";
 
   /* Cleanup before 20.09 */
   oraclejdk8psu = throw ''
-    The *psu versions of oraclejdk aren't provided by upstream anymore and were therefore removed!
+    oraclejdk8psu: The *psu versions of oraclejdk aren't provided by upstream anymore and were therefore removed!
   '';
   oraclejre8psu = oraclejdk8psu;
   oraclejdk8psu_distro = oraclejdk8psu;
@@ -742,7 +742,7 @@ mapAliases ({
   dnscrypt-proxy = throw "dnscrypt-proxy has been removed. Please use dnscrypt-proxy2."; # added 2020-02-02
   sqldeveloper_18 = throw "sqldeveloper_18 is not maintained anymore!"; # added 2020-02-04
 
-  gcc-snapshot = throw "Marked as broken for >2 years, additionally this 'snapshot' pointed to a fairly old one from gcc7.";
+  gcc-snapshot = throw "gcc-snapshot: Marked as broken for >2 years, additionally this 'snapshot' pointed to a fairly old one from gcc7.";
 
   /* Cleanup before 21.03 */
   riot-desktop = throw "riot-desktop is now element-desktop!";
