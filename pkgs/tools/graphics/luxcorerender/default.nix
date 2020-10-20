@@ -54,8 +54,8 @@ in stdenv.mkDerivation {
     "-DEMBREE_INCLUDE_PATH=${embree2}/include"
     "-DEMBREE_LIBRARY=${embree2}/lib/libembree.so"
     "-DBoost_PYTHON_LIBRARY_RELEASE=${boost_static}/lib/libboost_python3-mt.so"
-  ] ++ stdenv.lib.optional withOpenCL
-       "-DOPENCL_INCLUDE_DIR=${opencl-headers}/include";
+  ];
+
   preConfigure = ''
     NIX_CFLAGS_COMPILE+=" -isystem ${python}/include/python${python.pythonVersion}"
     NIX_LDFLAGS+=" -lpython3"
