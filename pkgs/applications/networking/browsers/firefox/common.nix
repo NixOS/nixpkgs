@@ -11,6 +11,7 @@
 , icu67, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
 , rust-cbindgen, nodejs, nasm, fetchpatch
+, gnum4
 , debugBuild ? false
 
 ### optionals
@@ -139,6 +140,7 @@ stdenv.mkDerivation ({
   ++ lib.optional  gssSupport kerberos
   ++ lib.optionals waylandSupport [ libxkbcommon ]
   ++ lib.optionals pipewireSupport [ pipewire ]
+  ++ lib.optionals (lib.versionAtLeast ffversion "82") [ gnum4 ]
   ++ lib.optionals stdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
                                      AVFoundation MediaToolbox CoreLocation
                                      Foundation libobjc AddressBook cups ];
