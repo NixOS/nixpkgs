@@ -1,6 +1,6 @@
-{ alsaLib, cmake, fetchFromGitHub, gettext, glib, gtk3, harfbuzz, libaio
-, libpcap, libpng, libxml2, makeWrapper, perl, pkgconfig, portaudio, SDL2
-, soundtouch, stdenv, udev, wrapGAppsHook, wxGTK, zlib
+{ alsaLib, cmake, fetchFromGitHub, gcc-unwrapped, gettext, glib, gtk3, harfbuzz
+, libaio, libpcap, libpng, libxml2, makeWrapper, perl, pkgconfig, portaudio
+, SDL2, soundtouch, stdenv, udev, wrapGAppsHook, wxGTK, zlib
 }:
 
 stdenv.mkDerivation {
@@ -25,11 +25,19 @@ stdenv.mkDerivation {
     "-DPACKAGE_MODE=TRUE"
     "-DPLUGIN_DIR=${placeholder "out"}/lib/pcsx2"
     "-DREBUILD_SHADER=TRUE"
+    "-DUSE_LTO=TRUE"
     "-DwxWidgets_CONFIG_EXECUTABLE=${wxGTK}/bin/wx-config"
     "-DwxWidgets_INCLUDE_DIRS=${wxGTK}/include"
     "-DwxWidgets_LIBRARIES=${wxGTK}/lib"
     "-DXDG_STD=TRUE"
   ];
+
+  postPatch = ''
+    substituteInPlace cmake/BuildParameters.cmake \
+      --replace /usr/bin/gcc-ar ${gcc-unwrapped}/bin/gcc-ar \
+      --replace /usr/bin/gcc-nm ${gcc-unwrapped}/bin/gcc-nm \
+      --replace /usr/bin/gcc-ranlib ${gcc-unwrapped}/bin/gcc-ranlib
+  '';
 
   postFixup = ''
     wrapProgram $out/bin/PCSX2 \
