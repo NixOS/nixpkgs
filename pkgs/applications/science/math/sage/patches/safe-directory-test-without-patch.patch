@@ -1,0 +1,54 @@
+diff --git a/src/sage/doctest/control.py b/src/sage/doctest/control.py
+index b3704582b9..84d04edcee 100644
+--- a/src/sage/doctest/control.py
++++ b/src/sage/doctest/control.py
+@@ -612,18 +612,6 @@ class DocTestController(SageObject):
+         """
+         Test that the given directory is safe to run Python code from.
+ 
+-        We use the check added to Python for this, which gives a
+-        warning when the current directory is considered unsafe.  We promote
+-        this warning to an error with ``-Werror``.  See
+-        ``sage/tests/cmdline.py`` for a doctest that this works, see
+-        also :trac:`13579`.
+-
+-        .. NOTE::
+-
+-            This is only relevant with Python 2, because Sage's Python
+-            2 is patched to give a warning when the current directory
+-            is unsafe, but Python 3 is not.
+-
+         TESTS::
+ 
+             sage: from sage.doctest.control import DocTestDefaults, DocTestController
+@@ -633,20 +621,20 @@ class DocTestController(SageObject):
+             sage: d = os.path.join(tmp_dir(), "test")
+             sage: os.mkdir(d)
+             sage: os.chmod(d, 0o777)
+-            sage: DC.test_safe_directory(d) # py2
++            sage: DC.test_safe_directory(d)
+             Traceback (most recent call last):
+             ...
+             RuntimeError: refusing to run doctests...
+         """
+-        import subprocess
+-        with open(os.devnull, 'w') as dev_null:
+-            if subprocess.call(['sage-python', '-Werror', '-c', ''],
+-                    stdout=dev_null, stderr=dev_null, cwd=dir) != 0:
+-                raise RuntimeError(
+-                      "refusing to run doctests from the current "
+-                      "directory '{}' since untrusted users could put files in "
+-                      "this directory, making it unsafe to run Sage code from"
+-                      .format(os.getcwd()))
++        import os
++        import stat
++        is_world_writeable = bool(os.stat(dir or os.getcwd()).st_mode & stat.S_IWOTH)
++        if is_world_writeable:
++            raise RuntimeError(
++                  "refusing to run doctests from the current "
++                  "directory '{}' since untrusted users could put files in "
++                  "this directory, making it unsafe to run Sage code from"
++                  .format(os.getcwd()))
+ 
+     def create_run_id(self):
+         """
