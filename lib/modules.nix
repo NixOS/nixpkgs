@@ -1,14 +1,43 @@
 { lib }:
 
 let
-  inherit (lib.attrsets)
+  inherit (lib)
+    all
+    any
+    attrByPath
+    attrNames
+    catAttrs
+    concatLists
+    concatMap
+    count
+    elem
+    filter
+    findFirst
+    flip
+    foldl
+    foldl'
+    getAttrFromPath
+    head
+    id
+    imap1
+    isAttrs
+    isBool
+    isFunction
+    isString
+    length
+    mapAttrs
+    mapAttrsToList
     mapAttrsRecursiveCond
-    ;
-  inherit (lib.lists)
-    any all concatLists concatMap
-    count filter findFirst foldl foldl'
-    head imap1 length optional
+    min
+    optional
+    optionalAttrs
+    optionalString
+    recursiveUpdate
     reverseList sort
+    setAttrByPath
+    toList
+    types
+    warn
     ;
   inherit (lib.options)
     isOption
@@ -17,37 +46,6 @@ let
     showFiles
     showOption
     unknownModule
-    ;
-  inherit (lib.attrsets)
-    attrByPath
-    attrNames
-    catAttrs
-    getAttrFromPath
-    mapAttrs
-    mapAttrsToList
-    optionalAttrs
-    recursiveUpdate
-    setAttrByPath
-    toList
-    ;
-  inherit (lib.types)
-    types
-    ;
-  inherit (lib.trivial)
-    flip
-    id
-    isBool
-    isFunction
-    isString
-    min
-    warn
-    ;
-  inherit (lib.strings)
-    optionalString
-    ;
-  inherit (lib)
-    elem
-    isAttrs
     ;
 in
 
