@@ -484,6 +484,20 @@ rec {
     propagatedBuildInputs = [ async expect_test_helpers_kernel ];
   };
 
+  posixat = janePackage {
+    pname = "posixat";
+    hash = "122fmd6v7fhiiivkxra539b5w3p5xkkd8mcjzvyb2msyq5zc6xa2";
+    propagatedBuildInputs = [ ppx_optcomp ppx_sexp_conv ];
+    meta.description = "Binding to the posix *at functions";
+  };
+
+  shexp = janePackage {
+    pname = "shexp";
+    hash = "0zdcyix0gdn4xmvbjzhbig63xw9jnw8ixj3ngs6g4k2vk77rs0gk";
+    propagatedBuildInputs = [ posixat spawn ];
+    meta.description = "Process library and s-expression based shell";
+  };
+
   ### Packages at version 0.11, with dependencies at version 0.12
 
   configurator = janePackage {
