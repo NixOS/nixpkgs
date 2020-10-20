@@ -11014,8 +11014,10 @@ let
     };
     propagatedBuildInputs = [ commonsense ];
 
-    meta = with stdenv.lib; {
-      platforms = platforms.linux;
+    meta = {
+      description = "Scalable directory/file change notification for Perl on Linux";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
