@@ -666,7 +666,7 @@ mapAliases ({
   xpraGtk3 = xpra; # added 2018-09-13
   xv = xxv; # added 2020-02-22
   youtubeDL = youtube-dl;  # added 2014-10-26
-  ytop = throw "Abandoned by upstream. Consider switching to bottom instead";
+  ytop = throw "ytop has been abandoned by upstream. Consider switching to bottom instead";
   zdfmediathk = mediathekview; # added 2019-01-19
   gnome_user_docs = gnome-user-docs; # added 2019-11-20
   # spidermonkey is not ABI upwards-ompatible, so only allow this for nix-shell
