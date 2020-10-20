@@ -12,9 +12,15 @@ assert cupsSupport -> cups != null;
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
+let
   pname = "gtk+";
-  version = "2.24.32";
+  version = "2.24.32"; # remove passthru on next update
+in
+stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
+  
+  # passthru to prevent rebuild but allow pname and version
+  passthru = { inherit pname version; };
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/2.24/${pname}-${version}.tar.xz";
