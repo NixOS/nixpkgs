@@ -1029,7 +1029,7 @@ let
     janeStreet =
     if lib.versionOlder "4.08" ocaml.version
     then import ../development/ocaml-modules/janestreet/0.13.nix {
-      inherit ctypes dune-configurator janePackage num octavius ppxlib re;
+      inherit ctypes dune-configurator janePackage num octavius ppxlib re zarith;
       inherit (pkgs) openssl;
     }
     else if lib.versionOlder "4.07" ocaml.version
