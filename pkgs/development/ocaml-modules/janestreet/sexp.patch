@@ -1,0 +1,30 @@
+diff --git a/lazy_list/src/dune b/lazy_list/src/dune
+index f1650ad..df90914 100644
+--- a/lazy_list/src/dune
++++ b/lazy_list/src/dune
+@@ -1,2 +1,3 @@
+ (library (name lazy_list) (libraries core_kernel)
++ (public_name sexp.lazy_list)
+  (preprocess (pps ppx_jane)))
+\ No newline at end of file
+diff --git a/sexp_app/pattern/dune b/sexp_app/pattern/dune
+index b7d2c3b..baf136b 100644
+--- a/sexp_app/pattern/dune
++++ b/sexp_app/pattern/dune
+@@ -1,4 +1,5 @@
+ (library (name sexp_app_pattern) (libraries core re2 sexplib str)
++ (public_name sexp.sexp_app_pattern)
+  (preprocess (pps ppx_jane)))
+ 
+ (ocamllex lexer)
+diff --git a/sexp_app/src/dune b/sexp_app/src/dune
+index b91ff40..a07a4e7 100644
+--- a/sexp_app/src/dune
++++ b/sexp_app/src/dune
+@@ -1,4 +1,5 @@
+ (library (name sexp_app) (libraries core lazy_list re2 sexplib str)
++ (public_name sexp.sexp_app)
+  (preprocess (pps ppx_jane -allow-unannotated-ignores)))
+ 
+ (ocamllex csv_lexeme)
+\ No newline at end of file
