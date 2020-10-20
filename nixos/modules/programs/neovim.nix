@@ -22,14 +22,12 @@ let
 
 in {
   options.programs.neovim = {
-    enable = mkEnableOption "Neovim";
-
     defaultEditor = mkOption {
       type = types.bool;
       default = false;
       description = ''
-        When enabled, installs neovim and configures neovim to be the default editor
-        using the EDITOR environment variable.
+        When enabled, configures neovim to be the default editor
+        using <option>users.defaults.editor</option>.
       '';
     };
 
@@ -82,13 +80,6 @@ in {
       default = pkgs.neovim-unwrapped;
       defaultText = literalExample "pkgs.neovim-unwrapped";
       description = "The package to use for the neovim binary.";
-    };
-
-    finalPackage = mkOption {
-      type = types.package;
-      visible = false;
-      readOnly = true;
-      description = "Resulting customized neovim package.";
     };
 
     runtime = mkOption {
@@ -146,13 +137,8 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
-    environment.systemPackages = [
-      cfg.finalPackage
-    ];
-    environment.variables = { EDITOR = mkOverride 900 "nvim"; };
-
-    programs.neovim.finalPackage = pkgs.wrapNeovim cfg.package {
+  config = mkIf cfg.defaultEditor {
+    users.defaults.editor = pkgs.wrapNeovim cfg.package {
       inherit (cfg) viAlias vimAlias;
       configure = cfg.configure // {
 
