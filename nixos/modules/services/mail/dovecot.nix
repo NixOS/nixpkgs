@@ -7,7 +7,94 @@ let
   dovecotPkg = pkgs.dovecot;
 
   baseDir = "/run/dovecot2";
-  stateDir = "/var/lib/dovecot";
+
+  sieveToPath = text:
+    # Sieve scripts can start with a block comment
+    if isString text && hasPrefix "/*" text
+      then pkgs.writeText "script.sieve" text
+    # Paths in the store are used as is
+    else if types.path.check text && hasPrefix "${builtins.storeDir}/" (toString text)
+      then text
+    # Paths outside the store get written to the store
+    else if types.path.check text
+      then pkgs.writeText "script.sieve" (fileContents text)
+    # All other is assumed to be file content
+    else pkgs.writeText "script.sieve" text;
+  scriptType = types.coercedTo types.lines sieveToPath types.path;
+
+  compileSieveScripts = pkgs.buildSieveScripts {
+    name = "dovecot2-sieveScripts";
+      plugins = cfg.sieve.plugins;
+      extensions = cfg.sieve.extensions;
+      globalExtensions = cfg.sieve.globalExtensions;
+      dontUnpack = true;
+      dontConfigure = true;
+      buildPhase = ''
+        mkdir sieve
+        cd sieve
+        ${concatStringsSep "\n" (imap1 (i: v: ''
+          if [ -d '${v}' ]; then
+            ln -s '${v}' after/${toString i}
+          else
+            mkdir -p after/${toString i}
+            ln -s '${v}' after/${toString i}/default.sieve
+          fi
+        '') cfg.sieve.afterScripts)}
+        ${concatStringsSep "\n" (imap1 (i: v: ''
+          if [ -d '${v}' ]; then
+            ln -s '${v}' before/${toString i}
+          else
+            mkdir -p before/${toString i}
+            ln -s '${v}' before/${toString i}/default.sieve
+          fi
+        '') cfg.sieve.beforeScripts)}
+        ${optionalString (cfg.sieve.defaultScript != null) ''
+          ln -s '${cfg.sieve.defaultScript}' default.sieve
+        ''}
+        ${optionalString (cfg.sieve.discardScript != null) ''
+          ln -s '${cfg.sieve.discardScript}' discard.sieve
+        ''}
+        ${concatStringsSep "\n" (imap1 (i: mb: ''
+          mkdir -p imapsieve/${toString i}
+          ${optionalString (mb.before != null)''
+            ln -s '${mb.before}' imapsieve/${toString i}/before.sieve
+          ''}
+          ${optionalString (mb.after != null)''
+            ln -s '${mb.after}' imapsieve/${toString i}/after.sieve
+          ''}
+        '') cfg.sieve.imapsieve.mailboxes)}
+      '';
+  };
+
+  listOfScripts = type: idx: config:
+    let indexName = optionalString (idx > 1) (toString idx);
+        value = config.services.dovecot2.sieveScripts."${type}${indexName}" or "";
+    in optionals (hasPrefix "/" (toString value))
+        ([value] ++ (listOfScripts type (idx + 1) config));
+
+  mapScripts = type: scripts:
+    (imap1
+      (i: v: "sieve_${type}${optionalString (i != 1) (toString i)} = ${compileSieveScripts}/sieve/${type}/${toString i}")
+      scripts);
+
+  mapImapScripts = mailboxes:
+    (imap1
+      (i: mb: ''
+        imapsieve_mailbox${toString i}_name = ${mb.name}
+        ${optionalString (mb.before != null) ''
+          imapsieve_mailbox${toString i}_before = ${compileSieveScripts}/sieve/imapsieve/${toString i}/before.sieve"
+        ''}
+        ${optionalString (mb.after != null) ''
+          imapsieve_mailbox${toString i}_after = ${compileSieveScripts}/sieve/imapsieve/${toString i}/after.sieve"
+        ''}
+        ${optionalString (mb.from != null) ''
+          imapsieve_mailbox${toString i}_from = ${mb.from}
+        ''}
+        ${optionalString (mb.causes != []) ''
+          imapsieve_mailbox${toString i}_causes = ${concatStringsSep " " mb.causes}
+        ''}
+      '')
+      mailboxes);
 
   dovecotConf = concatStrings [
     ''
@@ -75,9 +162,63 @@ let
     )
 
     (
-      optionalString (cfg.sieveScripts != {}) ''
+      optionalString cfg.sieve.enable ''
         plugin {
-          ${concatStringsSep "\n" (mapAttrsToList (to: from: "sieve_${to} = ${stateDir}/sieve/${to}") cfg.sieveScripts)}
+          ${optionalString (cfg.sieve.plugins != [])
+            "sieve_plugins = ${concatStringsSep " " (map (e: "sieve_${e}") cfg.sieve.plugins)}"}
+          ${optionalString (cfg.sieve.extensions != [])
+            "sieve_extensions = ${concatStringsSep " " cfg.sieve.extensions}"}
+          ${optionalString (cfg.sieve.globalExtensions != [])
+            "sieve_global_extensions = ${concatStringsSep " " cfg.sieve.globalExtensions}"}
+        }
+        protocol lmtp {
+          mail_plugins = $mail_plugins sieve
+        }
+        protocol lda {
+          mail_plugins = $mail_plugins sieve
+        }
+      ''
+    )
+
+    (
+      optionalString cfg.sieve.imapsieve.enable ''
+        protocol imap {
+          mail_plugins = $mail_plugins imap_sieve
+        }
+        plugin {
+          ${concatStringsSep "\n" (mapImapScripts cfg.sieve.imapsieve.mailboxes)}
+        }
+      ''
+    )
+
+    (
+      optionalString (cfg.sieve.beforeScripts != []) ''
+        plugin {
+          ${concatStringsSep "\n" (mapScripts "before" cfg.sieve.beforeScripts)}
+        }
+      ''
+    )
+
+    (
+      optionalString (cfg.sieve.defaultScript != null) ''
+        plugin {
+          sieve_default = ${compileSieveScripts}/sieve/default.sieve}
+        }
+      ''
+    )
+
+    (
+      optionalString (cfg.sieve.afterScripts != []) ''
+        plugin {
+          ${concatStringsSep "\n" (mapScripts "after" cfg.sieve.afterScripts)}
+        }
+      ''
+    )
+
+    (
+      optionalString (cfg.sieve.discardScript != null) ''
+        plugin {
+          sieve_discard = ${compileSieveScripts}/sieve/discard.sieve}
         }
       ''
     )
@@ -162,12 +303,62 @@ let
       };
     };
   };
+
+  imapsieveMailboxes = {
+    options = {
+      name = mkOption {
+        type = types.str;
+        example = "Junk";
+        description = lib.mdDoc ''
+          Name of a mailbox for which administrator scripts are configured.
+          This setting supports wildcards with a syntax compatible with the
+          IMAP LIST command, meaning that this setting can apply to multiple or
+          even all ("*") mailboxes.
+        '';
+      };
+      beforeScript = mkOption {
+        type = types.nullOr scriptType;
+        default = null;
+        description = lib.mdDoc ''
+          Sieve script to run before any user script when an IMAP event of
+          interest occurs.
+        '';
+      };
+      afterScript = mkOption {
+        type = types.nullOr scriptType;
+        default = null;
+        description = lib.mdDoc ''
+          Sieve script to run after any user script when an IMAP event of
+          interest occurs.
+        '';
+      };
+      causes = mkOption {
+        type = types.listOf (types.enum ["APPEND" "COPY" "FLAG"]);
+        default = [];
+        description = lib.mdDoc ''
+          Only execute the administrator Sieve scripts for the mailbox
+          when one of the listed IMAPSIEVE causes apply (currently either
+          APPEND, COPY, or FLAG. This has no effect on the user script, which
+          is always executed no matter the cause.
+        '';
+      };
+      from = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "*";
+        description = lib.mdDoc ''
+          Only execute the administrator Sieve scripts for the mailbox
+          configured with name option when the message originates from the
+          indicated mailbox.
+          This setting supports wildcards with a syntax compatible with the
+          IMAP LIST command, meaning that this setting can apply to multiple or
+          even all ("*") mailboxes.
+        '';
+      };
+    };
+  };
 in
 {
-  imports = [
-    (mkRemovedOptionModule [ "services" "dovecot2" "package" ] "")
-  ];
-
   options.services.dovecot2 = {
     enable = mkEnableOption (lib.mdDoc "the dovecot 2.x POP3/IMAP server");
 
@@ -304,10 +495,106 @@ in
 
     enableDHE = mkEnableOption (lib.mdDoc "ssl_dh and generation of primes for the key exchange") // { default = true; };
 
-    sieveScripts = mkOption {
-      type = types.attrsOf types.path;
-      default = {};
-      description = lib.mdDoc "Sieve scripts to be executed. Key is a sequence, e.g. 'before2', 'after' etc.";
+    sieve = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc "Whether to enable and configure sieve support";
+      };
+
+      enableManageSieve = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc "Start the ManageSieve listener (when Sieve is enabled).";
+      };
+
+      plugins = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = [ "imapsieve" "extprograms" ];
+        description = lib.mdDoc "Sieve plugins to load";
+      };
+
+      extensions = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = ["+editheader" "-duplicate"];
+        description = lib.mdDoc ''
+          Which Sieve language extensions are available to users. This can
+          either be a complete list or can be modifications to the default list
+          by prefixing with + or -.
+        '';
+      };
+
+      globalExtensions = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = ["+vnd.dovecot.pipe"];
+        description = lib.mdDoc ''
+          Which Sieve language extensions are ONLY avalable in global scripts.
+          This can be used to restrict the use of certain Sieve extensions to
+          administrator control, for instance when these extensions can cause
+          security concerns. This setting has higher precedence than the
+          extensions option, meaning that the extensions enabled with this
+          setting are never available to the user's personal script no matter
+          what is specified for the extensions option. The syntax of this
+          setting is similar to the extensions option, with the difference that
+          extensions are enabled or disabled for exclusive use in global
+          scripts.
+        '';
+      };
+
+      beforeScripts = mkOption {
+        type = types.listOf scriptType;
+        default = [];
+        description = lib.mdDoc ''
+          Sieve scripts to be executed before user script.
+        '';
+      };
+
+      defaultScript = mkOption {
+        type = types.nullOr scriptType;
+        default = null;
+        description = lib.mdDoc ''
+          Default sieve script to be executed if user has no active script.
+        '';
+      };
+
+      afterScripts = mkOption {
+        type = types.listOf scriptType;
+        default = [];
+        description = lib.mdDoc ''
+          Sieve scripts to be executed after user script.
+        '';
+      };
+
+      discardScript = mkOption {
+        type = types.nullOr scriptType;
+        default = null;
+        description = lib.mdDoc ''
+          The location of a Sieve script that is run for any message that is
+          about to be discarded; i.e., it is not delivered anywhere by the
+          normal Sieve execution. This only happens when the "implicit keep" is
+          canceled, by e.g. the "discard" action, and no actions that deliver
+          the message are executed. This "discard script" can prevent
+          discarding the message, by executing alternative actions. If the
+          discard script does nothing, the message is still discarded as it
+          would be when no discard script is configured.
+        '';
+      };
+
+      imapsieve = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = lib.mdDoc "Whether to enable imapsieve plugin.";
+        };
+        mailboxes = mkOption {
+          type = types.listOf (types.submodule imapsieveMailboxes);
+          default = [];
+          description = lib.mdDoc "Configure imapsieve mailbox rules.";
+        };
+      };
     };
 
     showPAMFailure = mkEnableOption (lib.mdDoc "showing the PAM failure message on authentication error (useful for OTPW)");
@@ -353,10 +640,13 @@ in
       enable = true;
       params.dovecot2 = {};
     };
+    services.dovecot2.modules = mkIf cfg.sieve.enable [pkgs.dovecot_pigeonhole];
+    services.dovecot2.sieve.plugins = mkIf cfg.sieve.imapsieve.enable ["imapsieve"];
     services.dovecot2.protocols =
       optional cfg.enableImap "imap"
       ++ optional cfg.enablePop3 "pop3"
-      ++ optional cfg.enableLmtp "lmtp";
+      ++ optional cfg.enableLmtp "lmtp"
+      ++ optional (cfg.sieve.enable && cfg.sieve.enableManageSieve) "sieve";
 
     services.dovecot2.mailPlugins = mkIf cfg.enableQuota {
       globally.enable = [ "quota" ];
@@ -410,29 +700,6 @@ in
         RestartSec = "1s";
         RuntimeDirectory = [ "dovecot2" ];
       };
-
-      # When copying sieve scripts preserve the original time stamp
-      # (should be 0) so that the compiled sieve script is newer than
-      # the source file and Dovecot won't try to compile it.
-      preStart = ''
-        rm -rf ${stateDir}/sieve
-      '' + optionalString (cfg.sieveScripts != {}) ''
-        mkdir -p ${stateDir}/sieve
-        ${concatStringsSep "\n" (
-        mapAttrsToList (
-          to: from: ''
-            if [ -d '${from}' ]; then
-              mkdir '${stateDir}/sieve/${to}'
-              cp -p "${from}/"*.sieve '${stateDir}/sieve/${to}'
-            else
-              cp -p '${from}' '${stateDir}/sieve/${to}'
-            fi
-            ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/sieve/${to}'
-          ''
-        ) cfg.sieveScripts
-      )}
-        chown -R '${cfg.mailUser}:${cfg.mailGroup}' '${stateDir}/sieve'
-      '';
     };
 
     environment.systemPackages = [ dovecotPkg ];
@@ -451,12 +718,36 @@ in
         assertion = cfg.showPAMFailure -> cfg.enablePAM;
         message = "dovecot is configured with showPAMFailure while enablePAM is disabled";
       }
-      {
-        assertion = cfg.sieveScripts != {} -> (cfg.mailUser != null && cfg.mailGroup != null);
-        message = "dovecot requires mailUser and mailGroup to be set when sieveScripts is set";
-      }
     ];
 
   };
-
+  imports = [
+    (mkRemovedOptionModule [ "services" "dovecot2" "package" ] "")
+    (mkMergedOptionModule
+      [ [ "services" "dovecot2" "sieveScripts" "after" ]
+        [ "services" "dovecot2" "sieveScripts" "after2" ]
+        [ "services" "dovecot2" "sieveScripts" "after3" ]
+        [ "services" "dovecot2" "sieveScripts" "after4" ]
+        [ "services" "dovecot2" "sieveScripts" "after5" ]
+        [ "services" "dovecot2" "sieveScripts" "after6" ]
+        [ "services" "dovecot2" "sieveScripts" "after7" ]
+        [ "services" "dovecot2" "sieveScripts" "after8" ]
+        [ "services" "dovecot2" "sieveScripts" "after9" ]]
+      [ "services" "dovecot2" "sieve" "afterScripts" ]
+      (listOfScripts "after" 1))
+    (mkMergedOptionModule
+      [ [ "services" "dovecot2" "sieveScripts" "before" ]
+        [ "services" "dovecot2" "sieveScripts" "before2" ]
+        [ "services" "dovecot2" "sieveScripts" "before3" ]
+        [ "services" "dovecot2" "sieveScripts" "before4" ]
+        [ "services" "dovecot2" "sieveScripts" "before5" ]
+        [ "services" "dovecot2" "sieveScripts" "before6" ]
+        [ "services" "dovecot2" "sieveScripts" "before7" ]
+        [ "services" "dovecot2" "sieveScripts" "before8" ]
+        [ "services" "dovecot2" "sieveScripts" "before9" ]]
+      [ "services" "dovecot2" "sieve" "beforeScripts" ]
+      (listOfScripts "before" 1))
+    (mkRenamedOptionModule [ "services" "dovecot2" "sieveScripts" "default" ] [ "services" "dovecot2" "sieve" "defaultScript" ])
+    (mkRenamedOptionModule [ "services" "dovecot2" "sieveScripts" "discard" ] [ "services" "dovecot2" "sieve" "discardScript" ])
+  ];
 }

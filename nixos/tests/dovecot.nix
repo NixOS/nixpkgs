@@ -15,7 +15,7 @@ import ./make-test-python.nix {
     };
     services.dovecot2 = {
       enable = true;
-      protocols = [ "imap" "pop3" "lmtp" "sieve" ];
+      protocols = [ "imap" "pop3" "lmtp" ];
       modules = [ pkgs.dovecot_pigeonhole ];
       mailUser = "vmail";
       mailGroup = "vmail";
@@ -23,22 +23,38 @@ import ./make-test-python.nix {
         specialUse = "Junk";
         auto = "subscribe";
       };
+      sieve.enable = true;
       extraConfig = ''
         mail_debug = yes
 
         protocol lmtp {
           postmaster_address = root@localhost
           auth_username_format = %n
-          mail_plugins = $mail_plugins sieve
         }
       '';
-      sieveScripts.before = pkgs.writeText "before.sieve" ''
-        require "fileinto";
-        if header :is "X-Spam" "Yes" {
-          fileinto "Junk";
-          stop;
-        }
-      '';
+      sieve.beforeScripts = [
+        (pkgs.writeText "before.sieve" ''
+          require "fileinto";
+          if header :is "X-Spam" "Yes" {
+            fileinto "Junk";
+            stop;
+          }
+        '')
+        ''
+          require "fileinto";
+          if header :is "Junk-It" "Yes" {
+            fileinto "Junk";
+            stop;
+          }
+        ''
+        ''/* test comment */
+          require "fileinto";
+          if header :is "MyJunk" "Yes" {
+            fileinto "Junk";
+            stop;
+          }
+        ''
+      ];
     };
     environment.systemPackages = let
       sendTestMail = pkgs.writeScriptBin "send-testmail" ''
