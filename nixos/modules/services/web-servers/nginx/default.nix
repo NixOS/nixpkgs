@@ -290,6 +290,7 @@ let
       ${optionalString (config.return != null) "return ${config.return};"}
       ${config.extraConfig}
       ${optionalString (config.proxyPass != null && cfg.recommendedProxySettings) "include ${recommendedProxyConfig};"}
+      ${mkBasicAuth "sublocation" config}
     }
   '') (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations)));
 

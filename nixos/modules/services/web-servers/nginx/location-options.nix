@@ -9,6 +9,31 @@ with lib;
 
 {
   options = {
+    basicAuth = mkOption {
+      type = types.attrsOf types.str;
+      default = {};
+      example = literalExample ''
+        {
+          user = "password";
+        };
+      '';
+      description = ''
+        Basic Auth protection for a vhost.
+
+        WARNING: This is implemented to store the password in plain text in the
+        nix store.
+      '';
+    };
+
+    basicAuthFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        Basic Auth password file for a vhost.
+        Can be created via: <command>htpasswd -c &lt;filename&gt; &lt;username&gt;</command>
+      '';
+    };
+
     proxyPass = mkOption {
       type = types.nullOr types.str;
       default = null;
